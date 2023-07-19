@@ -2,79 +2,90 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D74ABC0015E
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Jul 2023 03:03:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F302EB64DC
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Jul 2023 03:04:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbjGSDDM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 18 Jul 2023 23:03:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38236 "EHLO
+        id S230230AbjGSDEv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 18 Jul 2023 23:04:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbjGSDDJ (ORCPT
+        with ESMTP id S229461AbjGSDEv (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 18 Jul 2023 23:03:09 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6391BF0;
-        Tue, 18 Jul 2023 20:03:08 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-5577004e21bso2712343a12.2;
-        Tue, 18 Jul 2023 20:03:08 -0700 (PDT)
+        Tue, 18 Jul 2023 23:04:51 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4361FC1;
+        Tue, 18 Jul 2023 20:04:47 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-6689430d803so4354263b3a.0;
+        Tue, 18 Jul 2023 20:04:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689735788; x=1692327788;
+        d=gmail.com; s=20221208; t=1689735887; x=1692327887;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=O6Q4Gr5aTOSuGEpQsnLnXjoJVut5P5cv2RZkLBpYF2c=;
-        b=KdUJZCNqNtRGIW9mfRkwXt5/4suDubL/MztFLizONKQfCxMZe5a7yieLemqQJwT+zh
-         7O+XHfuKSFunySoHLcypQK9L5i90iHMM8MBeHQkPgl5QWoKZko7vSx7ApEIwtFKcAHCj
-         GQ5q93LZBVW8UExcVp2EqPZSgVnQdftdE/jFAoSUwfkqfp4fSoa57bCNxG5EdsAHTcu1
-         rRJ2kYdA4H8ZcoJG2HxU3h0Ep/t6RzXPH1O3X0PKfWBNsizTcpeDqklfXOo2UpTbYaXD
-         X5ZXL0ULJWCXYGffrRhLlar1D9nv7duEGUfixsxpTF9igmRgy45pFSTMuRakV7S3a/x1
-         esWQ==
+        bh=6ZNPhP+wj/HoMzVm6Rc/U05zyeoKOMtrG5lYVQc+XuE=;
+        b=oDF/pR/t3FvGjNFGbdz88pnVM1eIdIZA79+ljFSLHup57bVnTjXYZcs6Yx/agE0S7h
+         7pu+X17xdhW8UBu90lvLuHOXLOWXqeS7ACdGozEmVR4ZGsur1qBZKzfDrX7APULPhM/X
+         aEVDuL8N1FQeX8ZhgF2U4hDabQBilUzLhhkJV4TfTpDiwLFCr5Vqe6a+7pKM03GOFl4L
+         nZcF5Kk3Q7/Avvc70wnAdQfzID3dkUwJ5XxXtrQ5velSOcZvlT0S4g42g1kjoMQK2IaK
+         Kr+kOknggc+mBrEcIWuL0YHv1BfmmRdNdQLUUQ4S+y30JYGYJT9cAECgoJIk6+a3VULi
+         o4oA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689735788; x=1692327788;
+        d=1e100.net; s=20221208; t=1689735887; x=1692327887;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=O6Q4Gr5aTOSuGEpQsnLnXjoJVut5P5cv2RZkLBpYF2c=;
-        b=LsUy3Govuz7MhEYjFzeV2Tx7Cv9lVkR4sKFOqc/zsuNkf/2Dq+nh9mxTyVqo4NU0pB
-         PQaKkzFqiRcY3rVbYcAyT+8eIu1psR3BK0qL6BDwWOWW9jgcVrtehkB3vRpqdla3Sx4r
-         P4yu/SiVMpTpHRE9NK9opVO2EjKqjAg8+9LrsTIkHJsCHuseeGspE0vMPfoSThNaI5Gm
-         QQdPDA2UutlWiGm4ucgTpZuLsyYtI0ILWYItGu+1xaT4mrPI8S7SxVTM3RuWdmCCWoYs
-         TTRrJaJOqfqJzJFDxqSlVYDP6UBEGQFm7gj9e8CahdAcB9Q7qjxMfJzqUY9BPQO948mx
-         DLQw==
-X-Gm-Message-State: ABy/qLY6DlX8XlHFsF/JHE1I0N7hzAa49Uv2+YOzas7lAp3RREbgiNCG
-        tvKaOYRV3hLAqSVHxqaH94ww71dcbjo=
-X-Google-Smtp-Source: APBJJlEPTmQwFFpXblUkAudk+z1dg+vzkVrVSVR33gnNf2cyBqIIVokJEY8hPdxfUrNUo78ZY9xR+w==
-X-Received: by 2002:a17:902:e809:b0:1ba:1704:8a12 with SMTP id u9-20020a170902e80900b001ba17048a12mr4372188plg.45.1689735787910;
-        Tue, 18 Jul 2023 20:03:07 -0700 (PDT)
+        bh=6ZNPhP+wj/HoMzVm6Rc/U05zyeoKOMtrG5lYVQc+XuE=;
+        b=dBUgPAjbCxJvbssiRMBqet3ySF8PJ8p0P0KitpJ3Zx9M2thUQcOi+cZ0bK5+mC7nX0
+         gwi3NbYZIZy4Yfmk2Jvfjc9/EbnksADJg16GHAqwDSWyAjwdwPToQPzMnRDz7HceCJGU
+         CjCgxlVJ7WssOSgZWk8afcDtM3UJRVKtyHfLoylILZmLEoEH2DLE+bfxp+yDLsndm3oR
+         tHfa1h2SrCm9t9r5D/8NDpTjNPrq1gpQmuY2dEFljz+wAO6Y7rNqvGufX6HmJkVw8kXy
+         6d8Pc6Qc8BYRMTYhUHj88oj7X2JkN7HWMaNSzikmQcTkHr08x04uaVXpN9o69xVWjk2E
+         lAiQ==
+X-Gm-Message-State: ABy/qLbT7RH+6koEI57EvZlHjZStwqtLC7Y97XbsUa0VlW8BKT9QahqX
+        p1OUV59vZO6PMkTAKZZ+y0Zg3ax1ehQ=
+X-Google-Smtp-Source: APBJJlHNl8eQuROj3ZjQ6ZmwkEkqpxZjqZrDJK1Kyw3QbgQV7/9cUPPxozGFlvjETG5JUboVJLtM5A==
+X-Received: by 2002:a05:6a20:734d:b0:134:15df:b148 with SMTP id v13-20020a056a20734d00b0013415dfb148mr1086679pzc.29.1689735887066;
+        Tue, 18 Jul 2023 20:04:47 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id ba12-20020a170902720c00b001b9d9225b78sm2602876plb.102.2023.07.18.20.03.07
+        by smtp.gmail.com with ESMTPSA id c11-20020aa78c0b000000b0063a04905379sm2191171pfd.137.2023.07.18.20.04.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jul 2023 20:03:07 -0700 (PDT)
+        Tue, 18 Jul 2023 20:04:46 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 18 Jul 2023 20:03:06 -0700
+Date:   Tue, 18 Jul 2023 20:04:45 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Naresh Solanki <naresh.solanki@9elements.com>
 Cc:     devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         Patrick Rudolph <patrick.rudolph@9elements.com>
-Subject: Re: [PATCH v2 3/8] hwmon: (pmbus/mp2975) Prepare for MP2973 and
- MP2971
-Message-ID: <5dc4825b-3c17-42c7-b2b8-d804ba355dbc@roeck-us.net>
+Subject: Re: [PATCH v2 4/8] hwmon: (pmbus/mp2975) Simplify VOUT code
+Message-ID: <40f4b633-8f71-4760-9dff-9484f7fb74de@roeck-us.net>
 References: <20230714135124.2645339-1-Naresh.Solanki@9elements.com>
- <20230714135124.2645339-3-Naresh.Solanki@9elements.com>
+ <20230714135124.2645339-4-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230714135124.2645339-3-Naresh.Solanki@9elements.com>
+In-Reply-To: <20230714135124.2645339-4-Naresh.Solanki@9elements.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Jul 14, 2023 at 03:51:11PM +0200, Naresh Solanki wrote:
+On Fri, Jul 14, 2023 at 03:51:12PM +0200, Naresh Solanki wrote:
 > From: Patrick Rudolph <patrick.rudolph@9elements.com>
 > 
-> Add support for differntiating between the chips.
-> The following commits will make use of this mechanism.
+> In order to upstream MP2973/MP2971 simplify the code by removing support
+> for various VOUT formats. The MP2973 and MP2971 supports all PMBUS
+> supported formats for VOUT, while the MP2975 only support DIRECT and
+> VID for VOUT.
+> 
+> In DIRECT mode all chips report the voltage in 1mV/LSB.
+> 
+> Configure the chip to use DIRECT format for VOUT and drop the code
+> conversion code for other formats. The to be added chips MP2973/MP2971
+> will be configured to also report VOUT in DIRECT format.
+> 
+> The maximum voltage that can be reported in DIRECT format is 32768mV.
+> This is sufficient as the maximum output voltage for VR12/VR13 is
+> 3040 mV.
 > 
 > Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
