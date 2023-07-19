@@ -2,80 +2,77 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21A38EB64DC
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Jul 2023 02:42:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 822D7EB64DC
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Jul 2023 02:47:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbjGSCmk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 18 Jul 2023 22:42:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56130 "EHLO
+        id S229511AbjGSCrF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 18 Jul 2023 22:47:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjGSCmj (ORCPT
+        with ESMTP id S229441AbjGSCrE (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 18 Jul 2023 22:42:39 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34B4FC;
-        Tue, 18 Jul 2023 19:42:38 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-55ba5fae2e6so4892768a12.0;
-        Tue, 18 Jul 2023 19:42:38 -0700 (PDT)
+        Tue, 18 Jul 2023 22:47:04 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E37FC;
+        Tue, 18 Jul 2023 19:47:03 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-668709767b1so4738394b3a.2;
+        Tue, 18 Jul 2023 19:47:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689734557; x=1692326557;
+        d=gmail.com; s=20221208; t=1689734822; x=1692326822;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:sender
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q5KOrbgJn78bTaSZL6HNIplSuIpotz6ofRA91y3cvtM=;
-        b=KvWWPaAocCd+Taia0CPls6QtQ0nt1ZcRwIc21kFg7D7FFKu5LfqL+B1NwglFZ1aGal
-         E05D6qJCjpUzeRUf1dR0EJMvf4nk02RdZK1JUR6+bHUu4nA2de6OhF9Kz/CfW1e9nOeG
-         y+7amJ/3uftK4jH+i0Xs9vXIbhyl5j9BRC0mhC2EHvlSiNszusM6n08FKvuHBxTDWe8E
-         XHkxyJArYSKNXpqo1pyOnaavHhTeDxQodBx9xR5XSqJOplczUMVrTsls7s30hY88damW
-         Nx/gFCZY2dD933T3Ps9j+rh+jaGaiHE+CeIh2Tv8zj7Ve3boYh183awn6Fg1Jvy8bDvx
-         d6iQ==
+        bh=g3LLhHhYMtWdhdqQaQ2M8PHk7PsBJv7mS00OVrDkecY=;
+        b=nOcqibcH3xHMnvTQntcJFBLENW8p81Amh29A0itJOBhcfyhthu2A3h60NGHtBSkgAZ
+         6mT+zwCFaWiUbpXME/Qut5ZVBzVZfepjFkLU/BZx70CO9QST8PtbrDfC0SwtI0KMWW6+
+         BozF4s0c7Kfv5O+LFkTtQv2fBinmc2kVBB5Eu8mrCyosSREW3Dv5yvROjjsE5WQw9+Eu
+         oWknsSnG1CMPhNiqv6JhfsRXPJhObk0J/DMMm2RbdgO8/t5JBVYTuBdH86gsh5ohFIpu
+         LYNuBQ3ETN1z0+5rdQBE1WD8mJHd184lWRCTZMVHFVQk/0yKdkh0sydqa8lERMnavvUt
+         Y8tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689734557; x=1692326557;
+        d=1e100.net; s=20221208; t=1689734822; x=1692326822;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:sender
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q5KOrbgJn78bTaSZL6HNIplSuIpotz6ofRA91y3cvtM=;
-        b=OnTfjUIS1XBCrboZxRf3PLouDxn0vtBHQWDp40V3S6ChyAPjnLqjCJFJu2m1OUFuxM
-         OuN3CEHUVwzDsI9b/XmY3pcuQ13WIgYow8MGOW6hVv42Zf2anxm5F5lb5QE3Ux+fdvRK
-         o6qz+6b8+PbFHHd+8cbntGs11a5b+OfQEDOOflKyZettPKUE7Plp8OWl5eQieK1hoagx
-         oMMxk0OMffyUxMNq+RlBxeU2RkvrjgLSCVslLUzxnqOyxiinDjskGfvpcmy3/jKeiwJS
-         vNiqFStfHA6eS7h/UpgvrQu1uMEACh+kwYZ7G7h39Uw9O3svRgk2l2gTJKBxm270c5ai
-         +8zw==
-X-Gm-Message-State: ABy/qLaFMzhYdr8FDPpDmtc1CgG8TsHLIWqWN4OBX2FXwbHyAi1H3YS1
-        83ghalMVHduKw1pFl7GkhsuGWDitJGs=
-X-Google-Smtp-Source: APBJJlFdqrXk/9r5QOqLM9yYG1yJC1ES9jplTjdlSsAIZVtvd13RWgu5TP2rnFJybqrecuBRQBI6vw==
-X-Received: by 2002:a05:6a20:918e:b0:134:b28f:b58a with SMTP id v14-20020a056a20918e00b00134b28fb58amr1426754pzd.7.1689734557481;
-        Tue, 18 Jul 2023 19:42:37 -0700 (PDT)
+        bh=g3LLhHhYMtWdhdqQaQ2M8PHk7PsBJv7mS00OVrDkecY=;
+        b=NxoY/IGUA8NlFqgJ7f6L3NfeW0xmRHNWyggD0uhbI5HjtjO9BZ6XXi0uldzo+7d1bn
+         s1ySzCUQXLjPuMarnxZYwJsJjrvwxKiQaHL6eDB3+QdQCNqoyCIQwdsrxXDPM78xaPmv
+         Rl3XJoJY1aDZVUhbJQD7N5KLL+Mno43/T675fHXj8Ss85LR1k+oyjQ3KUZXFVCmBuX64
+         4RXxRrH4MVI27QVge5DK7Nze8fclo/e+vG+Y5zbFY1azcQmjyX8c4WS296qijOJk2Xmu
+         CipvkRCXr0GFcYM0cEXrncDa8tYqGbQ4uJxAGfJQR/2/7rCmStLiepr+lM+yY1L0QSUi
+         Fpmw==
+X-Gm-Message-State: ABy/qLYZhMtCyHqV7ledFHvn7z4F/rLK2K2qg6dbERPA5S4UzoD9bebH
+        hmeGKjPgDKKIJlmU6elW+Bc=
+X-Google-Smtp-Source: APBJJlHEoYTESmIvZxFeOchMpQUI3SWdECdrCIvD6rhf5ZDEnaMOk/cYA+0rjrz2iqsLDPk9OFoDNw==
+X-Received: by 2002:a05:6a00:181d:b0:67d:b924:54ca with SMTP id y29-20020a056a00181d00b0067db92454camr4633331pfa.34.1689734822268;
+        Tue, 18 Jul 2023 19:47:02 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l20-20020a170903005400b001b83db0bcf2sm2572446pla.141.2023.07.18.19.42.35
+        by smtp.gmail.com with ESMTPSA id d1-20020aa78e41000000b006826df9e295sm2162558pfr.113.2023.07.18.19.47.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jul 2023 19:42:36 -0700 (PDT)
+        Tue, 18 Jul 2023 19:47:01 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 18 Jul 2023 19:42:34 -0700
+Date:   Tue, 18 Jul 2023 19:47:00 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     =?iso-8859-1?Q?Joaqu=EDn_Ignacio_Aramend=EDa?= <samsagax@gmail.com>
 Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
         gregkh@linuxfoundation.org
-Subject: Re: [PATCH v2 1/2] hwmon: (oxp-sensors) Move tt_toggle attribute to
- dev_groups
-Message-ID: <bf0f1dc5-35b8-4a72-be11-692e82fe6ab9@roeck-us.net>
+Subject: Re: [PATCH v2 2/2] hwmon: (oxp-sensors) Move board detection to the
+ init function
+Message-ID: <1c5c62c1-a52c-4394-8c8c-db124452e14e@roeck-us.net>
 References: <20230717222526.229984-1-samsagax@gmail.com>
- <20230717222526.229984-2-samsagax@gmail.com>
+ <20230717222526.229984-3-samsagax@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230717222526.229984-2-samsagax@gmail.com>
+In-Reply-To: <20230717222526.229984-3-samsagax@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jul 17, 2023 at 07:25:15PM -0300, Joaquín Ignacio Aramendía wrote:
-> A driver should not be manually adding groups in its probe function (it will
-> race with userspace), so replace the call to devm_device_add_groups() to use
-> the platform dev_groups callback instead.
-> 
-> This will allow for removal of the devm_device_add_groups() function.
+On Mon, Jul 17, 2023 at 07:25:16PM -0300, Joaquín Ignacio Aramendía wrote:
+> Move detection logic to the start of init() function so we won't
+> instantiate the driver if the board is not compatible.
 > 
 > Signed-off-by: Joaquín Ignacio Aramendía <samsagax@gmail.com>
 > Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -84,85 +81,3 @@ Applied.
 
 Thanks,
 Guenter
-
-> ---
->  drivers/hwmon/oxp-sensors.c | 38 +++++++++++++++++++++++--------------
->  1 file changed, 24 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
-> index e1a907cae820..1e1cc67bcdea 100644
-> --- a/drivers/hwmon/oxp-sensors.c
-> +++ b/drivers/hwmon/oxp-sensors.c
-> @@ -220,6 +220,20 @@ static int tt_toggle_disable(void)
->  }
->  
->  /* Callbacks for turbo toggle attribute */
-> +static umode_t tt_toggle_is_visible(struct kobject *kobj,
-> +				    struct attribute *attr, int n)
-> +{
-> +	switch (board) {
-> +	case aok_zoe_a1:
-> +	case oxp_mini_amd_a07:
-> +	case oxp_mini_amd_pro:
-> +		return attr->mode;
-> +	default:
-> +		break;
-> +	}
-> +	return 0;
-> +}
-> +
->  static ssize_t tt_toggle_store(struct device *dev,
->  			       struct device_attribute *attr, const char *buf,
->  			       size_t count)
-> @@ -396,7 +410,15 @@ static struct attribute *oxp_ec_attrs[] = {
->  	NULL
->  };
->  
-> -ATTRIBUTE_GROUPS(oxp_ec);
-> +static struct attribute_group oxp_ec_attribute_group = {
-> +	.is_visible = tt_toggle_is_visible,
-> +	.attrs = oxp_ec_attrs,
-> +};
-> +
-> +static const struct attribute_group *oxp_ec_groups[] = {
-> +	&oxp_ec_attribute_group,
-> +	NULL
-> +};
->  
->  static const struct hwmon_ops oxp_ec_hwmon_ops = {
->  	.is_visible = oxp_ec_hwmon_is_visible,
-> @@ -415,7 +437,6 @@ static int oxp_platform_probe(struct platform_device *pdev)
->  	const struct dmi_system_id *dmi_entry;
->  	struct device *dev = &pdev->dev;
->  	struct device *hwdev;
-> -	int ret;
->  
->  	/*
->  	 * Have to check for AMD processor here because DMI strings are the
-> @@ -430,18 +451,6 @@ static int oxp_platform_probe(struct platform_device *pdev)
->  
->  	board = (enum oxp_board)(unsigned long)dmi_entry->driver_data;
->  
-> -	switch (board) {
-> -	case aok_zoe_a1:
-> -	case oxp_mini_amd_a07:
-> -	case oxp_mini_amd_pro:
-> -		ret = devm_device_add_groups(dev, oxp_ec_groups);
-> -		if (ret)
-> -			return ret;
-> -		break;
-> -	default:
-> -		break;
-> -	}
-> -
->  	hwdev = devm_hwmon_device_register_with_info(dev, "oxpec", NULL,
->  						     &oxp_ec_chip_info, NULL);
->  
-> @@ -451,6 +460,7 @@ static int oxp_platform_probe(struct platform_device *pdev)
->  static struct platform_driver oxp_platform_driver = {
->  	.driver = {
->  		.name = "oxp-platform",
-> +		.dev_groups = oxp_ec_groups,
->  	},
->  	.probe = oxp_platform_probe,
->  };
