@@ -2,148 +2,151 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E953DEB64DA
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Jul 2023 15:27:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94030EB64DA
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Jul 2023 15:49:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231683AbjGSP10 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 19 Jul 2023 11:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37180 "EHLO
+        id S230268AbjGSPtG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 19 Jul 2023 11:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231640AbjGSP1Y (ORCPT
+        with ESMTP id S230147AbjGSPtG (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 19 Jul 2023 11:27:24 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00333132;
-        Wed, 19 Jul 2023 08:27:23 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-55ae51a45deso4374886a12.3;
-        Wed, 19 Jul 2023 08:27:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689780443; x=1692372443;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=V0Lkx5Mu5pvkEv29AIHqZ8L4QB5hfUluGqCIAyC8ZJk=;
-        b=HEAevr00LmMycArFzDSeYVZmLznbz5oEpFZxynb5wxEGGgUx5DJJmWJH6iWfzuKQ82
-         j/q+V2GcYQdpuMBXbMONEd8GpEbKSfDPLqRmg25F/KkMg5eVxI2QOI8fQwIrDHopvaYa
-         RFFOC3WSgYIEEEhEtjGRD3oloSPeIggnizN8qbo9JMtRoHmTIG9sXqPoerng0IgakYa8
-         Qnwrqga1eh3CAoxK1uv8I2D8CXaBlmmWVOOLsi2ylOFH24sZRGbxmJF/JxVPuBjtCe+X
-         V90YgF9sr/JH/b+mEkjIbeD1ndU79utRZ1u9+zT8aVpHfdbEN4vQTVf+z7cD3xPouQju
-         lQow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689780443; x=1692372443;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=V0Lkx5Mu5pvkEv29AIHqZ8L4QB5hfUluGqCIAyC8ZJk=;
-        b=hTU4fMAi2uHIYlzUO9RNa5gY5oyLx4kdRhHjge2vJKmSFpsIOd0suvcS3lgXqFU3zG
-         MpqgMMT1T+CXELm5fE7Yb5MirTf8DbOWoYJ1XGSGXiDopoFC9as4WucEcaMFGRKH8eUD
-         gaQhp8PTSEW2rkzyTP8tRUXJtSKYGUtPacF7QATK9nIT6MwxmpwVoG7fckI9QAOiHJGn
-         N+IOQ4PR/X7SOgnH6f6aoWyTdPI7Ig7aaNy/g+eqg8p9D9Iaz0qJnnBMi7DDSdQjNg7r
-         +oN3qiVJ4YNKVi3tM2/vVwUmWM+xrAX2Quf/rhZXBwmxtUM+cYZK2p+Kd65zSPaBm7cL
-         q5vg==
-X-Gm-Message-State: ABy/qLZt8bAkk5nxY8GuyaPrsKbe52sKM/kAwMxK5OsADOr4qS/AgleM
-        Gt3BFrcTEnR2TxvN8OCNKNA=
-X-Google-Smtp-Source: APBJJlG8RhFXCinyrxXOSUSkjZx9zIQBAyDQ7O8rOLEtG9KaFfrOU9qx2/9vGw940Tvo0EIke5wzEQ==
-X-Received: by 2002:a17:90a:db03:b0:263:129e:80ac with SMTP id g3-20020a17090adb0300b00263129e80acmr2068279pjv.38.1689780443086;
-        Wed, 19 Jul 2023 08:27:23 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id in23-20020a17090b439700b00262eccfa29fsm1303446pjb.33.2023.07.19.08.27.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jul 2023 08:27:22 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b3e1208e-4b45-ad0a-25cf-941518357ebe@roeck-us.net>
-Date:   Wed, 19 Jul 2023 08:27:20 -0700
+        Wed, 19 Jul 2023 11:49:06 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F22197
+        for <linux-hwmon@vger.kernel.org>; Wed, 19 Jul 2023 08:49:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689781745; x=1721317745;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RHyJ1a9oyIwsjdZMcgIFXV3xT2HFfJmU6pYoo5BsWLQ=;
+  b=JrSuhNO9KDSeZTrOi8of7PJnjfxi6PKmtxxbOPRjMZ0JYQxCl7nCPe7c
+   DJISQEeqpfF2la/zXcBBOwrcvdSI1aXsVjjwspkqdz46dZ1gk8007QECR
+   NxYHPjIWMBCXBQoMAN2i+2oT6ncvFMbMPnWr6UV6y30hhjLDK8xEViHva
+   H6UYriDWqJswUdfW0R1NP15TZx6UWwN3IfT1EUaNonUZ25EPkc/5eq1n0
+   mCko/7ZcqNIpXhZ8uIufuwdF+IJRD0E5GiTha2lvgtDspQf1CE+2+iA7c
+   jCUWFWNkN45N9bLM7rc403jKTOrdncyWAhUzSZr1qX/71o+UuIK4cOmIr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10776"; a="430269780"
+X-IronPort-AV: E=Sophos;i="6.01,216,1684825200"; 
+   d="scan'208";a="430269780"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2023 08:49:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10776"; a="970670164"
+X-IronPort-AV: E=Sophos;i="6.01,216,1684825200"; 
+   d="scan'208";a="970670164"
+Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 19 Jul 2023 08:49:02 -0700
+Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qM9QA-000550-2r;
+        Wed, 19 Jul 2023 15:49:00 +0000
+Date:   Wed, 19 Jul 2023 23:48:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Patrick Rudolph <patrick.rudolph@9elements.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Naresh Solanki <Naresh.Solanki@9elements.com>
+Subject: [groeck-staging:hwmon-next 20/26]
+ drivers/hwmon/pmbus/mp2975.c:708:19: warning: cast to smaller integer type
+ 'enum chips' from 'const void *'
+Message-ID: <202307192338.wM4zBtXS-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v3 3/3] dt-bindings: hwmon: add sht3x devicetree binding
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        JuenKit Yip <JuenKit_Yip@hotmail.com>, jdelvare@suse.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230703140818.427403-1-JuenKit_Yip@hotmail.com>
- <DB4PR10MB6261295D96DCE88F712910B99229A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
- <948211aa-2315-5ed6-4c04-f1a795045997@linaro.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <948211aa-2315-5ed6-4c04-f1a795045997@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 7/3/23 07:39, Krzysztof Kozlowski wrote:
-> On 03/07/2023 16:08, JuenKit Yip wrote:
->> add sht3x devicetree binding files
->>
->> Signed-off-by: JuenKit Yip <JuenKit_Yip@hotmail.com>
->> ---
->> v3:
->>    - fix wildcards problem
->>    - add vdd-supply property
-> 
-> No improvements in subject.
->>
->>   .../bindings/hwmon/sensirion,sht3x.yaml       | 45 +++++++++++++++++++
->>   1 file changed, 45 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/hwmon/sensirion,sht3x.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/hwmon/sensirion,sht3x.yaml b/Documentation/devicetree/bindings/hwmon/sensirion,sht3x.yaml
->> new file mode 100644
->> index 000000000000..bef2eb492a47
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/hwmon/sensirion,sht3x.yaml
->> @@ -0,0 +1,45 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/hwmon/sensirion,sht3x.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Sensirion SHT3x-DIS humidity and temperature sensor
->> +
->> +maintainers:
->> +  - JuenKit Yip <JuenKit_Yip@hotmail.com>
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - sensirion,sht30
->> +      - sensirion,sht31
->> +      - sensirion,sht35
->> +      - sensirion,sts30
->> +      - sensirion,sts31
->> +      - sensirion,sts35
-> 
-> Your driver change suggests these are compatible, so make them such with
-> oneOf and a list.
-> 
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  vdd-supply:
->> +    description: regulator that drives the VDD pin
-> 
-> Missing reset-gpios. It's the second ignored comment.
-> 
-> This is a friendly reminder during the review process.
-> 
-> It seems my previous comments were not fully addressed. Maybe my
-> feedback got lost between the quotes, maybe you just forgot to apply it.
-> Please go back to the previous discussion and either implement all
-> requested changes or keep discussing them.
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+head:   72f5d19d9dc4c90107105e13c530854eea1aac15
+commit: 6e990f130ea09ec77150e2bd0f5c8795cd739e4b [20/26] hwmon: (pmbus/mp2975) Prepare for MP2973 and MP2971
+config: arm64-randconfig-r014-20230718 (https://download.01.org/0day-ci/archive/20230719/202307192338.wM4zBtXS-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230719/202307192338.wM4zBtXS-lkp@intel.com/reproduce)
 
-To clarify from previous replies: the properties need to be described
-(because the chip needs a supply voltage, and because it has a reset pin,
-and bindings should be complete), but that doesn't mean that the driver
-has to implement them.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307192338.wM4zBtXS-lkp@intel.com/
 
-Thanks,
-Guenter
+All warnings (new ones prefixed by >>):
 
+>> drivers/hwmon/pmbus/mp2975.c:708:19: warning: cast to smaller integer type 'enum chips' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+                   data->chip_id = (enum chips)of_device_get_match_data(&client->dev);
+                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +708 drivers/hwmon/pmbus/mp2975.c
+
+   695	
+   696	static int mp2975_probe(struct i2c_client *client)
+   697	{
+   698		struct pmbus_driver_info *info;
+   699		struct mp2975_data *data;
+   700		int ret;
+   701	
+   702		data = devm_kzalloc(&client->dev, sizeof(struct mp2975_data),
+   703				    GFP_KERNEL);
+   704		if (!data)
+   705			return -ENOMEM;
+   706	
+   707		if (client->dev.of_node)
+ > 708			data->chip_id = (enum chips)of_device_get_match_data(&client->dev);
+   709		else
+   710			data->chip_id = i2c_match_id(mp2975_id, client)->driver_data;
+   711	
+   712		memcpy(&data->info, &mp2975_info, sizeof(*info));
+   713		info = &data->info;
+   714	
+   715		/* Identify multiphase configuration for rail 2. */
+   716		ret = mp2975_identify_multiphase_rail2(client);
+   717		if (ret < 0)
+   718			return ret;
+   719	
+   720		if (ret) {
+   721			/* Two rails are connected. */
+   722			data->info.pages = MP2975_PAGE_NUM;
+   723			data->info.phases[1] = ret;
+   724			data->info.func[1] = MP2975_RAIL2_FUNC;
+   725		}
+   726	
+   727		/* Identify multiphase configuration. */
+   728		ret = mp2975_identify_multiphase(client, data, info);
+   729		if (ret)
+   730			return ret;
+   731	
+   732		/* Identify VID setting per rail. */
+   733		ret = mp2975_identify_rails_vid(client, data, info);
+   734		if (ret < 0)
+   735			return ret;
+   736	
+   737		/* Obtain current sense gain of power stage. */
+   738		ret = mp2975_current_sense_gain_get(client, data);
+   739		if (ret)
+   740			return ret;
+   741	
+   742		/* Obtain voltage reference values. */
+   743		ret = mp2975_vref_get(client, data, info);
+   744		if (ret)
+   745			return ret;
+   746	
+   747		/* Obtain vout over-voltage scales. */
+   748		ret = mp2975_vout_ov_scale_get(client, data, info);
+   749		if (ret < 0)
+   750			return ret;
+   751	
+   752		/* Obtain offsets, maximum and format for vout. */
+   753		ret = mp2975_vout_per_rail_config_get(client, data, info);
+   754		if (ret)
+   755			return ret;
+   756	
+   757		return pmbus_do_probe(client, info);
+   758	}
+   759	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
