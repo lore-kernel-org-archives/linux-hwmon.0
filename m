@@ -2,117 +2,110 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C85DFC001B0
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Jul 2023 17:40:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AC62C001B0
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Jul 2023 18:42:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbjGSRkJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 19 Jul 2023 13:40:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32900 "EHLO
+        id S229554AbjGSSmI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 19 Jul 2023 14:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjGSRkG (ORCPT
+        with ESMTP id S229674AbjGSSmH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 19 Jul 2023 13:40:06 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAEB618D;
-        Wed, 19 Jul 2023 10:40:04 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1bb1baf55f5so44164355ad.0;
-        Wed, 19 Jul 2023 10:40:04 -0700 (PDT)
+        Wed, 19 Jul 2023 14:42:07 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B592C6
+        for <linux-hwmon@vger.kernel.org>; Wed, 19 Jul 2023 11:42:06 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-3090d3e9c92so6919417f8f.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 19 Jul 2023 11:42:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689788404; x=1692380404;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4zcvJfBQoZ3LsY68xNz61DEwSh2nWYBOthwrmgBDGLE=;
-        b=Nqt/y7dZhDZukuh/FcMihVDpyhDYZU5/5m+eW2aiDDqEikKUWWq7xrtorFOtZvpDqH
-         I4Og8fTe4ohDg9cipITyxcltnLH5k7BlCVwLE9aprWW1wstJWBA0u2YaYyzlZ6TTY4wd
-         KC+BCEfBeTAO0gZDkTiivXZewky9yHuRnQmGgUKBe+8RkCu1QW6liRdHvwVyb/SJAOb2
-         hzhH2ap0c7pxE5ja+K+tPm1PMfINZuZCZQJroMc64+k+HAARI1Pi3lj8jrioQZfqXFOB
-         kkQJ448EYxfYb2JD8ELocrvWpavPmZPyzcAk2N9LoKlCvhxepZXDSuhgaDN53AZ9uypK
-         YhvQ==
+        d=9elements.com; s=google; t=1689792125; x=1692384125;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HrjkymWQEytm3ZEsWHkhp23Z4KQxMO3ORXG0AjMGsDw=;
+        b=TckggQyziPAn3xmiAQXv2PciXO8X0PSzmy1GiTSSOloJ7PmzNRhVBvXIi+OhxGxCOt
+         V1WYDpZ63YvfAhahRBeXrP/iloLgg+25SIJTIhmNG2J8MvnsroBwF+jgYI9wtWAzwfaQ
+         BM4ZD6Ti9JGApvDzpH9eRgomPW6sjk0GEvRQRsSh8tCPs+symP4f95Fseaqp1vFEAGgT
+         jEEeMuH+Hm4ORkGTHZ1C0n2ESPtJRIZsm1sPTInc2Ej+mN1VcxuOAbaCM9VaDoQnvP5A
+         ATVIwPoHgYMF/aYMu27RntJ17ZmOaqkccb5GfY8l+0P7Ve7MMHydJg8sjrpmc59lCHOc
+         PvDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689788404; x=1692380404;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4zcvJfBQoZ3LsY68xNz61DEwSh2nWYBOthwrmgBDGLE=;
-        b=hlFKe8uj7GkUhm9xn9r1Z6hzdFvFnv4FzFWuR8bsFd/yIAsgAV3chEXMgS936Mvxck
-         +enLT/zncjnG/a7TJCQR83QkgXpanaXl26me9mQhDwoOuPn4sPOpDZYF/L8IiFROMHGk
-         z/7SOpvY32pknU3JtKZVmZcIgMxSk2963cNLjqio4ZN1w0ucKRTIfejV1QXbouC8Po4j
-         viGX0szYKeFEqJHn4+nIfVKuKlBzyUwUuSMtwu+D1soKfNR3PWtKqLSIN8XLNpj34vaw
-         TW9DmGzFdCE+Px63LEZuFryeYsy7N2KYNDRoRDvaeterGVeVxEh0+Kwy8y45/2wa8hHF
-         OPRg==
-X-Gm-Message-State: ABy/qLaXvBzVyhe8qv0MmGmEoqkZVgfaVQFyYVjRSdLZM6Ky/CTMEygM
-        wB2pT7iG68+QhAP9o6AiPk0=
-X-Google-Smtp-Source: APBJJlFFiTE+0z9U4aWP809XsVIBymKGnyIWz7Qcdg5w7V0e+H49/b8WytaFUjY40hXdQRDStFVf1w==
-X-Received: by 2002:a17:902:6a8c:b0:1b8:90bd:d157 with SMTP id n12-20020a1709026a8c00b001b890bdd157mr19228012plk.26.1689788382901;
-        Wed, 19 Jul 2023 10:39:42 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x21-20020a170902ea9500b001b9c5e07bc3sm4247550plb.238.2023.07.19.10.39.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jul 2023 10:39:41 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <3a912cab-001f-a70b-394d-71370fc482e5@roeck-us.net>
-Date:   Wed, 19 Jul 2023 10:39:39 -0700
+        d=1e100.net; s=20221208; t=1689792125; x=1692384125;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HrjkymWQEytm3ZEsWHkhp23Z4KQxMO3ORXG0AjMGsDw=;
+        b=YVfVpug0Vg2NCGwp33+LvtPCi2sNKiT/JC8qq4zWzpsYYe9qHeZci7ojUvaDBYMXm/
+         fUBvuHEOh1AUrc9w9ouijOZRr97dQ2DYCNw+H1piZc7dfc9RCcFo5qfqIOEGKsFDJZei
+         hr5sRd1ViVLYarbkiMNhK1VWNTNjUV0mNguKJyTITFV/7DmK2+Z5TJp/gr12+oF3F375
+         yLBeECybjn73m86Yh8dC77wrm8ES/UXhW4nfhR136otWp7SFn+s9pEkIvODhJfSViPV2
+         FOEU5WNzT2fR51gNf9EyIwAET3W2KmvMcDTSeyDTWCp030JGo7A4mxHDXsBaKmw6vqCS
+         6CUg==
+X-Gm-Message-State: ABy/qLYL55pP9zuoadBZxdwzD8kx5DkRVH5ArwaaZPj+GiGgtE2aPesS
+        EeRR7PdINeUh+Ya1298RR6R+iA==
+X-Google-Smtp-Source: APBJJlHbdMsb7I2HjGqQtfegpmV8gfoG0PItgVLH8qX6gTM3nRUo4n++u3Rie849H2AllpORTMgs0Q==
+X-Received: by 2002:a5d:4561:0:b0:316:e325:fd92 with SMTP id a1-20020a5d4561000000b00316e325fd92mr531092wrc.55.1689792124801;
+        Wed, 19 Jul 2023 11:42:04 -0700 (PDT)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id n18-20020adffe12000000b003143be36d99sm5948877wrr.58.2023.07.19.11.42.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jul 2023 11:42:04 -0700 (PDT)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
+To:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        iwona.winiarska@intel.com, linux@roeck-us.net, jdelvare@suse.com
+Cc:     Naresh Solanki <Naresh.Solanki@9elements.com>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        openbmc@lists.ozlabs.org
+Subject: [PATCH v3 1/3] peci: cpu: Add Intel Sapphire Rapids support
+Date:   Wed, 19 Jul 2023 20:41:52 +0200
+Message-ID: <20230719184155.59375-1-Naresh.Solanki@9elements.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Content-Language: en-US
-To:     Naresh Solanki <naresh.solanki@9elements.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Marcello Sylvester Bauer <sylv@sylv.io>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230420111759.2687001-1-Naresh.Solanki@9elements.com>
- <76e57634-75dd-01e8-9c56-36ed7de17812@linaro.org>
- <c8d1b5db-318e-3401-0834-b89769831eca@9elements.com>
- <be129c4f-3ad7-c54b-936e-08b142608ebc@linaro.org>
- <88f9a008-2861-284c-76c4-7d416c107fbb@9elements.com>
- <bd45ea5d-e6e4-403a-e855-376e0f647f91@9elements.com>
- <20eb1d0e-0aa2-9d41-7ba5-2feb148748d0@linaro.org>
- <9d989c4c-7c9e-9e95-133f-03741d07198b@9elements.com>
- <80b60de0-dcb5-303f-8d13-f4b1cf7d8521@linaro.org>
- <45236017-22d2-f9f8-0069-77195e49221d@9elements.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add max6639
-In-Reply-To: <45236017-22d2-f9f8-0069-77195e49221d@9elements.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/4/23 04:36, Naresh Solanki wrote:
-> Hi Krzysztof,
-> 
-[ ... ]
->>
->> No, we cannot, because we asked you to fix things there. Your entire
->> explanation about compatible and driver is not related to the comment
->> you received: bindings should be complete. You argue that bindings do
->> not have to be complete, because of something with driver. This is not
->> related. Bindings are not for driver.
-> 
-> I understand that complete bindings are important, but as the driver is already merged and functional, my immediate goal is to enable its use on my machine. I will work on a separate patch to include the interrupts in both binding & driver.
-> 
+Add support for detection of Intel Sapphire Rapids processor based on
+CPU family & model.
 
-As a follow-up, since it came up in a separate context:
+Sapphire Rapids Xeon processors with the family set to 6 and the
+model set to INTEL_FAM6_SAPPHIRERAPIDS_X. The data field for this entry
+is "spr".
 
-Bindings and driver are independent of each other. _Bindings_
-are supposed to be complete. However, the existence of a property
-in the bindings description does not have to be reflected in
-the driver.
+Tested the patch series with AST2600 BMC with 4S Intel Sapphire Rapids
+processors & verified by reading cpu & dimm temperature.
 
-FWIW, you _could_ have added the device to the list of trivial
-devices. The only really mandatory property is vdd, and every
-chip has that. All other properties are really about configuration
-and/or fan properties, and I don't even know how to describe fan
-properties (such as pulses per revolution, pwm parameters,
-fan speed limits, the relationship between pwm outputs
-and fan inputs, the relationship between fan speed input
-and pwm output, or fan spin-up requirements) in devicetree.
+Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+---
+Changes in V3:
+- Move spr entry at end of struct peci_cpu_device_ids
+- Mention test with the patch.
+Changes in V2:
+- Refactored from previous patchset as seperate patch based on subsystem.
+---
+ drivers/peci/cpu.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Guenter
+diff --git a/drivers/peci/cpu.c b/drivers/peci/cpu.c
+index de4a7b3e5966..bd990acd92b8 100644
+--- a/drivers/peci/cpu.c
++++ b/drivers/peci/cpu.c
+@@ -323,6 +323,11 @@ static const struct peci_device_id peci_cpu_device_ids[] = {
+ 		.model	= INTEL_FAM6_ICELAKE_D,
+ 		.data	= "icxd",
+ 	},
++	{ /* Sapphire Rapids Xeon */
++		.family	= 6,
++		.model	= INTEL_FAM6_SAPPHIRERAPIDS_X,
++		.data	= "spr",
++	},
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(peci, peci_cpu_device_ids);
+
+base-commit: 4dbbaf8fbdbd13adc80731b2452257857e4c2d8b
+-- 
+2.41.0
 
