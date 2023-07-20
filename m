@@ -2,179 +2,270 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 921ADEB64DD
-	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Jul 2023 08:05:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47D33EB64DA
+	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Jul 2023 12:15:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbjGTIFP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 20 Jul 2023 04:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47936 "EHLO
+        id S230153AbjGTMPY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 20 Jul 2023 08:15:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbjGTIFO (ORCPT
+        with ESMTP id S229680AbjGTMPY (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 20 Jul 2023 04:05:14 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 756E52684
-        for <linux-hwmon@vger.kernel.org>; Thu, 20 Jul 2023 01:05:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689840313; x=1721376313;
-  h=date:from:to:cc:subject:message-id;
-  bh=tE44BbS3UbgxafuuC1TURxPZM6a7bgl7kZaOGp9rbH8=;
-  b=gBCE2tPEqPkprF48sRQh6scmg+Y//isGjV70VRWQUU/5A00fCbbK6ofb
-   yGHN1ybOQfg2xTc25pp0jCQupt5qRaxbFRd0xHbDTRyib7qG/h9VdB9eI
-   C12Kdxl4N1kp0ix4NeMO/Q6mnEurpRBYRjRqRjQ6jhbF5sK3q55npk28S
-   9a7cce/ATdyBtL/GQcoQQhqxP5lO5nQc6Opn+TaWZoi4SL+Esru4BPtwt
-   6sZC0A2vHPB2H/LbpLckbvJo6wxCdJsQtg49/DnQITRF8lwD8/Wy4K2at
-   O9YFYJOBsBbG51MjPbIJLKvwNPsAY9O53trk+etHkz3n7qLpfEurhSvrp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10776"; a="430435307"
-X-IronPort-AV: E=Sophos;i="6.01,218,1684825200"; 
-   d="scan'208";a="430435307"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2023 01:05:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10776"; a="753982095"
-X-IronPort-AV: E=Sophos;i="6.01,218,1684825200"; 
-   d="scan'208";a="753982095"
-Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 20 Jul 2023 01:05:11 -0700
-Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qMOes-0005uu-2m;
-        Thu, 20 Jul 2023 08:05:10 +0000
-Date:   Thu, 20 Jul 2023 16:04:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 8a0cf0e013294da38ef35264b25ea16e0127cbd5
-Message-ID: <202307201633.8bNPAC9J-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+        Thu, 20 Jul 2023 08:15:24 -0400
+X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 20 Jul 2023 05:15:22 PDT
+Received: from mx-out1.startmail.com (mx-out1.startmail.com [145.131.90.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2241BC6
+        for <linux-hwmon@vger.kernel.org>; Thu, 20 Jul 2023 05:15:22 -0700 (PDT)
+From:   "Marty E. Plummer" <hanetzer@startmail.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=startmail.com;
+        s=2020-07; t=1689854295;
+        bh=QcDTd84f5Syv2zlZDzVZzw50uxA1cKbNqqF+nxsaLiA=;
+        h=From:To:Subject:Date:Message-ID:Mime-Version:
+         Content-Transfer-Encoding:From:Subject:To:Date:Sender:Content-Type:
+         Content-Transfer-Encoding:Content-Disposition:Mime-Version:
+         Reply-To:In-Reply-To:References:Message-Id:Autocrypt;
+        b=DZMAEosiWQwnb2IXM3Em5+0qiKiSvnyUymUZf3gwfWy9e8w/LFXvQIl8soY2IK5hv
+         yiX+mGQRSLQMpjLQCNCzApOzAKsfKIwC137VCRUzmGrZKyP+8R5r42Lp4O8M1pEbx9
+         hAk7zA/hd8cMyCaByQO75Q9zfWMzTC9irK4bZGXvA5f7ZAiRcaUz5WL5xpcd0jCyW7
+         NXH1evjfbSZPjJZCnbOl07Ro6uJOQufv14wBKgmu3LiZQp9BEx6ykvhzMLiVR1OolT
+         pSDLQfy71G9Fi3Do4o6+aTh1Ki1t+/Afo96IIuAW44+wtSJWmNZiPcTjVuMFgcKYD2
+         UmEoctV/KFpNg==
+To:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Marty E. Plummer" <hanetzer@startmail.com>
+Subject: [PATCH] hwmon: (pmbus) Add driver fpr Infineon IR35201
+Date:   Thu, 20 Jul 2023 06:58:05 -0500
+Message-ID: <20230720115805.1510279-1-hanetzer@startmail.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 8a0cf0e013294da38ef35264b25ea16e0127cbd5  hwmon: (sht3x) convert some of sysfs interface to hwmon
+The IR35201 is a dual-loop digital multi-phase buck controller designed for CPU voltage regulation.
 
-elapsed time: 721m
+Signed-off-by: Marty E. Plummer <hanetzer@startmail.com>
+---
+ Documentation/hwmon/index.rst   |  1 +
+ Documentation/hwmon/ir35201.rst | 63 +++++++++++++++++++++++
+ drivers/hwmon/pmbus/Kconfig     |  9 ++++
+ drivers/hwmon/pmbus/Makefile    |  1 +
+ drivers/hwmon/pmbus/ir35201.c   | 89 +++++++++++++++++++++++++++++++++
+ 5 files changed, 163 insertions(+)
+ create mode 100644 Documentation/hwmon/ir35201.rst
+ create mode 100644 drivers/hwmon/pmbus/ir35201.c
 
-configs tested: 108
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r025-20230720   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r043-20230720   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r003-20230720   clang
-arm                  randconfig-r032-20230720   clang
-arm                  randconfig-r046-20230720   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r002-20230720   gcc  
-arm64                randconfig-r004-20230720   gcc  
-arm64                randconfig-r005-20230720   gcc  
-arm64                randconfig-r021-20230720   clang
-csky                                defconfig   gcc  
-hexagon              randconfig-r022-20230720   clang
-hexagon              randconfig-r041-20230720   clang
-hexagon              randconfig-r045-20230720   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r004-20230720   gcc  
-i386         buildonly-randconfig-r005-20230720   gcc  
-i386         buildonly-randconfig-r006-20230720   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230720   gcc  
-i386                 randconfig-i002-20230720   gcc  
-i386                 randconfig-i003-20230720   gcc  
-i386                 randconfig-i004-20230720   gcc  
-i386                 randconfig-i005-20230720   gcc  
-i386                 randconfig-i006-20230720   gcc  
-i386                 randconfig-i011-20230720   clang
-i386                 randconfig-i012-20230720   clang
-i386                 randconfig-i013-20230720   clang
-i386                 randconfig-i014-20230720   clang
-i386                 randconfig-i015-20230720   clang
-i386                 randconfig-i016-20230720   clang
-i386                 randconfig-r011-20230720   clang
-i386                 randconfig-r026-20230720   clang
-i386                 randconfig-r033-20230720   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r031-20230720   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r016-20230720   gcc  
-microblaze           randconfig-r034-20230720   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                 randconfig-r001-20230720   clang
-mips                 randconfig-r013-20230720   gcc  
-nios2                               defconfig   gcc  
-openrisc             randconfig-r014-20230720   gcc  
-openrisc             randconfig-r015-20230720   gcc  
-openrisc             randconfig-r035-20230720   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r036-20230720   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r006-20230720   gcc  
-riscv                randconfig-r042-20230720   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230720   clang
-sh                               allmodconfig   gcc  
-sh                   randconfig-r023-20230720   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64              randconfig-r012-20230720   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r001-20230720   gcc  
-x86_64       buildonly-randconfig-r002-20230720   gcc  
-x86_64       buildonly-randconfig-r003-20230720   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-x001-20230720   clang
-x86_64               randconfig-x002-20230720   clang
-x86_64               randconfig-x003-20230720   clang
-x86_64               randconfig-x004-20230720   clang
-x86_64               randconfig-x005-20230720   clang
-x86_64               randconfig-x006-20230720   clang
-x86_64               randconfig-x011-20230720   gcc  
-x86_64               randconfig-x012-20230720   gcc  
-x86_64               randconfig-x013-20230720   gcc  
-x86_64               randconfig-x014-20230720   gcc  
-x86_64               randconfig-x015-20230720   gcc  
-x86_64               randconfig-x016-20230720   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index 042e1cf9501b..5b44a268de0d 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -87,6 +87,7 @@ Hardware Monitoring Kernel Drivers
+    ina3221
+    inspur-ipsps1
+    intel-m10-bmc-hwmon
++   ir35201
+    ir35221
+    ir38064
+    ir36021
+diff --git a/Documentation/hwmon/ir35201.rst b/Documentation/hwmon/ir35201.rst
+new file mode 100644
+index 000000000000..6ca34d4b02a3
+--- /dev/null
++++ b/Documentation/hwmon/ir35201.rst
+@@ -0,0 +1,63 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++Kernel driver ir35201
++=====================
++
++Supported chips:
++
++  * Infineon IR35201
++
++    Prefix: ir35201
++    Addresses scanned: -
++
++    Datasheet: Publicly available at the Infineon website
++      https://www.infineon.com/dgdl/Infineon-IR35201MTRPBF-DS-v01_00-EN.pdf?fileId=5546d462576f347501579c95d19772b5
++
++Authors:
++      - Marty E. Plummer <hanetzer@startmail.com>
++
++Description
++-----------
++
++The IR35201 is a dual-loop digital multi-phase buck controller designed for
++CPU voltage regulation.
++
++Usage Notes
++-----------
++
++This driver does not probe for PMBus devices. You will have to instantiate
++devices explicitly.
++
++Sysfs attributes
++----------------
++
++======================= ===========================
++curr1_label             "iin"
++curr1_input             Measured input current
++curr1_alarm             Input fault alarm
++
++curr2_label             "iout1"
++curr2_input             Measured output current
++curr2_alarm             Output over-current alarm
++
++in1_label               "vin"
++in1_input               Measured input voltage
++in1_alarm               Input under-voltage alarm
++
++in2_label               "vout1"
++in2_input               Measured output voltage
++in2_alarm               Output over-voltage alarm
++
++power1_label            "pin"
++power1_input            Measured input power
++power1_alarm            Input under-voltage alarm
++
++power2_label            "pout1"
++power2_input            Measured output power
++
++temp1_input             Measured temperature
++temp1_alarm             Temperature alarm
++
++temp2_input             Measured other loop temperature
++temp2_alarm             Temperature alarm
++======================= ===========================
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index 270b6336b76d..7180823b15bb 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -123,6 +123,15 @@ config SENSORS_INSPUR_IPSPS
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called inspur-ipsps.
+ 
++config SENSORS_IR35201
++	tristate "Infineon IR35201"
++	help
++	  If you say yes here you get hardware monitoring support for the
++	  Infineon IR35201 controller.
++
++	  This driver can also be built as a module. If so, the module will
++	  be called ir35201.
++
+ config SENSORS_IR35221
+ 	tristate "Infineon IR35221"
+ 	help
+diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+index 84ee960a6c2d..40729dd14e7a 100644
+--- a/drivers/hwmon/pmbus/Makefile
++++ b/drivers/hwmon/pmbus/Makefile
+@@ -15,6 +15,7 @@ obj-$(CONFIG_SENSORS_FSP_3Y)	+= fsp-3y.o
+ obj-$(CONFIG_SENSORS_IBM_CFFPS)	+= ibm-cffps.o
+ obj-$(CONFIG_SENSORS_DPS920AB)	+= dps920ab.o
+ obj-$(CONFIG_SENSORS_INSPUR_IPSPS) += inspur-ipsps.o
++obj-$(CONFIG_SENSORS_IR35201)	+= ir35201.o
+ obj-$(CONFIG_SENSORS_IR35221)	+= ir35221.o
+ obj-$(CONFIG_SENSORS_IR36021)	+= ir36021.o
+ obj-$(CONFIG_SENSORS_IR38064)	+= ir38064.o
+diff --git a/drivers/hwmon/pmbus/ir35201.c b/drivers/hwmon/pmbus/ir35201.c
+new file mode 100644
+index 000000000000..77f77057175a
+--- /dev/null
++++ b/drivers/hwmon/pmbus/ir35201.c
+@@ -0,0 +1,89 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Hardware monitoring driver for Infineon IR35201
++ */
++
++#include <linux/err.h>
++#include <linux/i2c.h>
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include "pmbus.h"
++
++static struct pmbus_driver_info ir35201_info = {
++	.pages = 1,
++	.format[PSC_VOLTAGE_IN] = linear,
++	.format[PSC_VOLTAGE_OUT] = linear,
++	.format[PSC_CURRENT_IN] = linear,
++	.format[PSC_CURRENT_OUT] = linear,
++	.format[PSC_POWER] = linear,
++	.format[PSC_TEMPERATURE] = linear,
++	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT
++		| PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT
++		| PMBUS_HAVE_PIN | PMBUS_HAVE_POUT
++		| PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2
++		| PMBUS_HAVE_STATUS_TEMP,
++};
++
++static int ir35201_probe(struct i2c_client *client)
++{
++	u8 buf[I2C_SMBUS_BLOCK_MAX];
++	int ret;
++
++	if (!i2c_check_functionality(client->adapter,
++				     I2C_FUNC_SMBUS_READ_BYTE_DATA
++					 | I2C_FUNC_SMBUS_READ_WORD_DATA
++					 | I2C_FUNC_SMBUS_READ_BLOCK_DATA))
++		return -ENODEV;
++
++	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, buf);
++	if (ret < 0) {
++		dev_err(&client->dev, "Failed to read PMBUS_MFR_ID\n");
++		return ret;
++	}
++	if (ret != 2 || strncmp(buf, "IR", strlen("IR"))) {
++		dev_err(&client->dev, "MFR_ID unrecognized\n");
++		return -ENODEV;
++	}
++
++	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, buf);
++	if (ret < 0) {
++		dev_err(&client->dev, "Failed to read PMBUS_MFR_MODEL\n");
++		return ret;
++	}
++	if (ret != 1 || buf[0] != 0x50) {
++		dev_err(&client->dev, "MFR_MODEL unrecognized\n");
++		return -ENODEV;
++	}
++
++	return pmbus_do_probe(client, &ir35201_info);
++}
++
++static const struct i2c_device_id ir35201_id[] = {
++	{ "ir35201", 0},
++	{},
++};
++MODULE_DEVICE_TABLE(i2c, ir35201_id);
++
++static const struct of_device_id __maybe_unused ir35201_of_id[] = {
++	{ .compatible = "infineon,ir35201" },
++	{},
++};
++MODULE_DEVICE_TABLE(of, ir35201_of_id);
++
++static struct i2c_driver ir35201_driver = {
++	.class = I2C_CLASS_HWMON,
++	.driver = {
++		.name = "ir35201",
++		.of_match_table = of_match_ptr(ir35201_of_id),
++	},
++	.probe_new = ir35201_probe,
++	.id_table = ir35201_id,
++};
++
++module_i2c_driver(ir35201_driver);
++
++MODULE_AUTHOR("Marty E. Plummer <hanetzer@startmail.com>");
++MODULE_DESCRIPTION("PMBus driver for Infineon IR35201");
++MODULE_LICENSE("GPL");
++MODULE_IMPORT_NS(PMBUS);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.41.0
+
