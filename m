@@ -2,327 +2,187 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 517F6EB64DD
-	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Jul 2023 19:23:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CFCD0EB64DA
+	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Jul 2023 20:27:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbjGTTW7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 20 Jul 2023 15:22:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35450 "EHLO
+        id S229925AbjGTU1W (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 20 Jul 2023 16:27:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbjGTTWw (ORCPT
+        with ESMTP id S229451AbjGTU1V (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 20 Jul 2023 15:22:52 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BBE21995;
-        Thu, 20 Jul 2023 12:22:50 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-6689430d803so788087b3a.0;
-        Thu, 20 Jul 2023 12:22:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689880969; x=1690485769;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PGg26867SurNnD+Z76uNBzgA66sBrVx8xJg995G0XKI=;
-        b=aOm14nF6w/NfKu1hfoaTODjqZHhRBAhWdsfbBxEQvfD3KUPUOeHFz5yBD3EXSTmY8P
-         o6SMWYo159wLcqqETufg5FgkkB5k8YKeejF6/02RpJSa+BMP/k6S5ctNPhhy//C13WvL
-         4eVFGcy6qu+rJvKzzTcCxSgqsfKDeZRzhF9s8hU8Pta+0SHPJ69SH56F0WWdojqY6OHS
-         nUgOAOvJDtQ+kMS+eboFUcSrlDRN4cDXGgR9t4wVsT1QLIgfHrNn8OB73Lr1rVYiH+HD
-         2LjB9D1qft4E/mG5pwE7mbetCuAoIm6ScCznSXXq4U9vxrkd6wHCfKrcAM8DoSgnLsRX
-         Kwvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689880969; x=1690485769;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PGg26867SurNnD+Z76uNBzgA66sBrVx8xJg995G0XKI=;
-        b=hnPd+jLRS/24DAcBQjAIXCd1+km+g+v9z+Z72lOQggenvQNJ+LcZmcBj3eeOhzTQ/2
-         O4s2hIJUzWhdwYp/NaWmTcIjeUwniVZOgQ1G6z6D9oTPFu7h1gbJBLTA60W2N4nbYaWc
-         S2PFyLTfW00sRzl2PtgL1BYxxrbe1qUNOk/PSK7rYSHsFKHKvoBhVQZgsMvv6o7fbD4T
-         J+e3LNeKUIn+wYfwiMFwhx7NYDWIEU6W+EwDULIfnLr3xk7/ImIHc9/dFBDyP2HW/DPw
-         6ix31cuHrBlhYRF451eZUhRQWSpd22Zv8rS4OY9cDswe4jKzJFNEZgiFz5GpD3Qg3BBq
-         kjqA==
-X-Gm-Message-State: ABy/qLaSzRd1xRW1I2BN16ClqXj16zi3auW/Noct7mpwMMlVZExPhH8F
-        SvN+iqHlGlExFl0fkvsBXIQ=
-X-Google-Smtp-Source: APBJJlGw1SsoVuVB4n9SNYQcYnW6YT7TGUDJZ2vJreRL3kv+P/0B59vg1Fhf3qyRcR1YLZS36mEq7w==
-X-Received: by 2002:a05:6a20:bc9e:b0:137:2460:d3b5 with SMTP id fx30-20020a056a20bc9e00b001372460d3b5mr226735pzb.62.1689880969298;
-        Thu, 20 Jul 2023 12:22:49 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c1-20020a639601000000b00563826c66eesm36789pge.61.2023.07.20.12.22.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jul 2023 12:22:48 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <bf1be356-9e3e-6fd7-0987-03deb593131e@roeck-us.net>
-Date:   Thu, 20 Jul 2023 12:22:47 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
+        Thu, 20 Jul 2023 16:27:21 -0400
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 869199E;
+        Thu, 20 Jul 2023 13:27:19 -0700 (PDT)
+Received: from pps.filterd (m0150245.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36KI1wAW009088;
+        Thu, 20 Jul 2023 20:26:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=pps0720;
+ bh=WeSb93xc7ng0y5N8IU/zFiuSO2hMFiO1EMivOrysgMw=;
+ b=jv+9VPLeb8Nv7PrUjoMaHlisKZ56kp9IcrNT/3v1Ae26LcxaEcESRZh778cB1qqg3Njt
+ FSjEb1AUBJgVV+Vb7z7fMQ04bBhMus8GR+/XQbJkwfNlqni91QlLmjko5taXsovVmb2G
+ O9mtm7JUup+XjNhxF4NgQ8rLBcF4nbSiWw47N9RHj4NqohRxF4+lcsBbH2KspKWetHoq
+ ZaGUnMMysrDraKHGtrMin/ysfZOBL082QzyUXGYDDmHj20WQq6FdyIoYHF+/enUTOU03
+ cNzDgKl0BgzYcU2d17BfNzfCwa24o4nnX5jO/EpuHXsqpkVre9/MCCBD7qx3ObVI9h26 yw== 
+Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3ry8dt1xfp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Jul 2023 20:26:53 +0000
+Received: from p1wg14925.americas.hpqcorp.net (unknown [10.119.18.114])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id 4F3CCD2C8;
+        Thu, 20 Jul 2023 20:26:53 +0000 (UTC)
+Received: from p1wg14925.americas.hpqcorp.net (10.119.18.114) by
+ p1wg14925.americas.hpqcorp.net (10.119.18.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 20 Jul 2023 08:26:53 -1200
+Received: from p1wg14921.americas.hpqcorp.net (16.230.19.124) by
+ p1wg14925.americas.hpqcorp.net (10.119.18.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42
+ via Frontend Transport; Thu, 20 Jul 2023 08:26:53 -1200
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (192.58.206.35)
+ by edge.it.hpe.com (16.230.19.124) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 20 Jul 2023 08:26:52 -1200
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SFzquXnlxs1jRMYZihCKBaof6pSM9Bkto6jMcLEKk+8ZcqPjYaHRwrkp0i+LHaZIhEbGDnIrKEKe5Erow+9veE1/KZ5p6PAnCp6eOV8lT6mEd37rcE5t8eLR2zREXjb9L6HbA5DaUJ5bGSGQmgPzhstNLhvYSMAU2YC0EdAykUHT2o16IW9zsnO23rYixw3LTuR2bZ7Rts9VNHad4Tuad0fwyJpyXjFeEbRLrO3Ln4mnL+Qwx7GEtOAyRbAiTN0hsiBEj7HA9+aM1mj7MMyTar+4Tk9QuUErqyLOgbxXdMi7NCR4RavF9m3EgFbRDcBsD+k1oLbd1+kBBeLpDpeiTA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WeSb93xc7ng0y5N8IU/zFiuSO2hMFiO1EMivOrysgMw=;
+ b=U2ekmn80D2DBYYW7TO4/fcZsol+HMwxsseNNknyyKmYU1ubXAao53Tls8uePjElA3PakTveq1cGxVBZ73fVmn/QE9lZ/eS1I1B+tUNPRZCfmCMDEDt1jewIT+xWKCLJy/vOLFMgRmiB1IgzuJTrAHih03EUZMuYkwhCV0+Qi6bRHAJCNLr95RDf86MByulKZObn+yEX5cQB2uqrWnY9V8JXXH6vJo24hNhHLQ5DgNoCGpeox89eS2Hey5rlGrqQdEf5CVRyNgyuLQuHn0akDIn72IGshrCdfKMUTRzHF4vccriRVDLuXfKyM+WFmalU7PsQMi4G+BmK2Yz+v6F2v0A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
+ header.d=hpe.com; arc=none
+Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:8:4e::10) by
+ MW4PR84MB1705.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:303:1a4::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6609.28; Thu, 20 Jul
+ 2023 20:26:51 +0000
+Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::20b7:769e:3974:f17e]) by DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::20b7:769e:3974:f17e%4]) with mapi id 15.20.6588.031; Thu, 20 Jul 2023
+ 20:26:51 +0000
+From:   "Hawkins, Nick" <nick.hawkins@hpe.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+CC:     "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: Re: [PATCH v5 2/5] gpio: gxp: Add HPE GXP GPIO PL
+Thread-Topic: [PATCH v5 2/5] gpio: gxp: Add HPE GXP GPIO PL
+Thread-Index: AQHZr3nkvwU+fup1gkuuDGe/x7XoX6/C2kcAgAAD+gA=
+Date:   Thu, 20 Jul 2023 20:26:51 +0000
+Message-ID: <9EABEF68-9261-416F-87FA-6DFDF7A5376A@hpe.com>
+References: <20230705194544.100370-1-nick.hawkins@hpe.com>
+ <20230705194544.100370-3-nick.hawkins@hpe.com>
+ <CAMRc=MfaEfaZ7yYrFtc+XChzPX1C1AV1xAZPRZyJKA+z7D6-vw@mail.gmail.com>
+In-Reply-To: <CAMRc=MfaEfaZ7yYrFtc+XChzPX1C1AV1xAZPRZyJKA+z7D6-vw@mail.gmail.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     "Marty E. Plummer" <hanetzer@startmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>
-References: <20230720115805.1510279-1-hanetzer@startmail.com>
- <b86e19ed-12af-e488-3c21-002be2ad5914@roeck-us.net>
- <axue7wmaxbj7vurapabuwtvqk3br3zt2g373d6ako4m24wzaxf@2uvgmasdd7dk>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] hwmon: (pmbus) Add driver fpr Infineon IR35201
-In-Reply-To: <axue7wmaxbj7vurapabuwtvqk3br3zt2g373d6ako4m24wzaxf@2uvgmasdd7dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Microsoft-MacOutlook/16.75.23071400
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR84MB1927:EE_|MW4PR84MB1705:EE_
+x-ms-office365-filtering-correlation-id: 518d8e5e-5c19-468d-3cd8-08db895fa69f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: JIkfPpxFRdBRFCCxNtKlYvCafi89H7Yj1zW7cWv3Ua3vXmdKKYXzcEiAlX9uh4zh2WvQ1UBm5qOT0IG035tR9ciDc6RAUOD+nukXmdYq61khcz8c2imU0KGjEPe8q7GeYpP6Ru0lUqr5HAoAwMcYA+bLFE/jf70zp+1Q+9Uv6rLFEjuFmuWw2/9UkvzBFHyGvR+Q71xkTdPlex6QHsHrHhJb0LhmVCwT/3UPxyymwKmgsAfXXfJFDjt0ZtB4t8XH2xbr9PjsvI6GXnso5tNDLZFCNDmH0a/9UL0uvX3H+8Od4sweqBl923G1IxMJZY0VwCdMpOau9UR+jUv3+RRI/uXIyoJPo359zST+KHWRd7eCN1nOoL8VKPc7HsYeI/OvPcAuq585WxfrxUnITV026j9R1WuEZ2667OJh7WGd2afZqhSZpLI0AhwZTxZcIabKjT1QOo/Bd+0VwCS9f8b7DGcrqWqMRNb+g2tWdZA3jCDJuyxyhZtlDfd65WBH84c9vZT7W9QIXN2HX0iOtNRJtHXrhAf3YHwLPBH4ZhYS/HJ1UuHP77BqUCJ1KYJ7OySvkGoKFkY7Uf3nrBYNsl7KbiEKIHOTduaaEdL6E8f5izRxno26rBTu7NeL7nT5caLIl00GP+VROgc393ZqwOPJ/w==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(376002)(136003)(396003)(346002)(366004)(39860400002)(451199021)(82960400001)(478600001)(122000001)(83380400001)(186003)(2616005)(6506007)(71200400001)(6486002)(6916009)(91956017)(76116006)(4326008)(64756008)(38100700002)(54906003)(6512007)(66556008)(66476007)(66446008)(66946007)(4744005)(7416002)(5660300002)(33656002)(41300700001)(38070700005)(8936002)(2906002)(316002)(8676002)(86362001)(36756003)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aTJoV2g3NjRhMXNhQ1dJY1QyTGZKODBqVzZuQlBOSGlwOXpmeFhTcDltd3FU?=
+ =?utf-8?B?Sy92cEt2ZUhJaytHbWxOb3ZtQnErWjdEbkt4OFMxVFNDcVdXaHU3a1NZZHJl?=
+ =?utf-8?B?cGhxTGswLytJMmsvdmdJRVYyRXpLVmlNTy9tQ2JPMDRnT2JIVlQ1elpxUkhM?=
+ =?utf-8?B?WWVqTUdhOFBJYjQ3Nm03MGNqZnkvRFZ6NVJXL3VwakV5YURtd3I3Z3pFd1dB?=
+ =?utf-8?B?N21ROWphRzFkMlNsc3NSVGVWNjN6WkhrQllBTEIwTHpVMlhFK0tnRFEyM2Ir?=
+ =?utf-8?B?WGJmbGZ0U0VmR1Jhakp0VVIxMGJhdEd4bkFwUHF2aExMWWprTXdQdFllblpD?=
+ =?utf-8?B?SytwWE1qdENmSThEWFlXdTVwem02QVVqdkFldmYxRWZQRDIvVS8xNFpZMGlz?=
+ =?utf-8?B?SkNQR0dIUytEWXZCeEF5QTZHdWU4bUp6WkM1UjdGVjhMbXphdE5ZaVB2S0VJ?=
+ =?utf-8?B?blNNZDFxajJMWWZpK3Q3QUhLaU5waWFyejF6ZzBsRGhxVktYdlNPaTg4eDNx?=
+ =?utf-8?B?S0xmZ1U5RTJEQ01rNWRkVzFBTkx6ME5ITXNpNVZCTkxoalB3YkVLeDVOemNM?=
+ =?utf-8?B?cFRjYWZuckdlRUh0cjViRFNqMjBpZzhNZk5IenEzamRxVEJJc2V6TGxWR3RU?=
+ =?utf-8?B?SU82WlBiM1RWTHBWK0tiTnIvTll2SjliUG0zN1FzeUdaNUJRRkU2Y1pIZkJ6?=
+ =?utf-8?B?QzAwa3FPMHJ5MDBoZm9aVVVjcTQzRENtQW16OVJ5Zjd5Wjl6TFJ3OGVOdU5x?=
+ =?utf-8?B?NDhoUmQ4RUJRVFZ0WjF4UVhuR1hkRnpFaEd4QWtob0NvQTZhdHhWU1BrN3Vs?=
+ =?utf-8?B?b1VUMVNxQVRnUE0rZDcyQm9sWU1lamk0K01WWVB3RWRCK2hmUFQ1cGtwcUtr?=
+ =?utf-8?B?VUJZQlZ2UjlNNkZ5QVNFcW9MWE5NL3Q3MmJhT25rNnlZRkhWVkY2Q3JkejdL?=
+ =?utf-8?B?UWpGcGtlOTQ3Y3cweC9ZODhZemNnUVAyeks1dDN1UnhJZWRmWVc5aldJbnBD?=
+ =?utf-8?B?Uk1FWEV0TGxPQ1djdHh1UWg3TGFENExTcnc0dGc3OUZMMXU1QzlYT2pJTVJN?=
+ =?utf-8?B?UTlZb1JRdDljMGg2aXJDTFFNTzg1QXExUUFOVndlOXowUnpFekVSaFNaS0cv?=
+ =?utf-8?B?QWVIWmR5UTZZSTVmZ0o4R3dNMEdxM1ZqTXBua0laOGV2TjMyM0kzS2U1QU5H?=
+ =?utf-8?B?K0lTZ3F6WWdhcTlFekdvSjkyNmRCaldwNjBGWEZLaGZLMlpHSEZqd0paS1p1?=
+ =?utf-8?B?Q09id24xbS9SODJ0S3ZlZjFiMEZWRkxsN0Z5aE1yVG5obTZyUjVNR0tGV2hN?=
+ =?utf-8?B?VlZzNVpMbGhrb0RSUFRobEVHVzJaeHRPZnRBOHNZSHdIQ3FPQkdyOUpFbG9K?=
+ =?utf-8?B?Sy9vcnphOGFacnRnT3lvY08xVkN2TFFNVDFRQVhrWG1HQ2hIblVWbE1ia0Uy?=
+ =?utf-8?B?S3dITlk5NFVUZk9wbE1DYXExK1ErWVNrZ2hDSU1Ub2l5ejI0MXFzMWdSZHow?=
+ =?utf-8?B?MzE2bmdUaXl0ZWpIVjF3OUtHZmN0UjF2ZkpSckNmVCtLL3hiQVdmd2FRZmZN?=
+ =?utf-8?B?VFF3QXkvN1ZDQmVpZGxhaUx5eEJ5ZVJ0R1lQOElCRy9QNkVybjBtenFTM0lh?=
+ =?utf-8?B?aDFaMW9TVTk2UmU3MWh1L2lnWXdGQVVtY2tYZmlXUldjb3l2NXpXUlNwUkNG?=
+ =?utf-8?B?a2p6RlNYd2xmaFdPTyt1eTZiM0xXTDdtME1KcEgyYWtXaEwvOGxwKzg3QVRQ?=
+ =?utf-8?B?M0l6eHNFOVpBZEp2YndNUnRVTk9JQnNzNThCTTdHdVRuZlpBbFVLd1NaVTAv?=
+ =?utf-8?B?dm0zRjF4eVNVd21YdHFBRmtFRWlmcE05K3VtUWdjMDJicnVTS2dDcUVmb0Ru?=
+ =?utf-8?B?ZWV6MzYyZkxrTEJaK3RTbEZUUEUwSmV0RkEraFFBVjEyZnFVNS9TQ0d6M1d6?=
+ =?utf-8?B?bERJMXJnWFdWL0ZmVTE0Q00zTkQ3bjNTdEtpSnlrdmU4QWN1MEg2LzgzaTJq?=
+ =?utf-8?B?Q3Y0TUdhay9ncTk5bHpPZ21TYXVRdFBDbldGV1VkWkthR3VEYzVKL1hGdEJy?=
+ =?utf-8?B?dzIyMTk5ZmdWSWtlQjFJa29TYmJyOFUvZWV2QWVkbjFESEN0QXlKM2loSTh5?=
+ =?utf-8?B?NkpXWkJ2R1lEdWFNNVplRVZ4MFoxL2ErbnJ1VkZLRFkvbEhUM0gvOFp3cTdM?=
+ =?utf-8?B?dlE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <91C052A11B740D4A897EAB1C87D5F34E@NAMPRD84.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 518d8e5e-5c19-468d-3cd8-08db895fa69f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jul 2023 20:26:51.3185
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: OGA6dpUvw7P/xF1LlV2taQvXbsL1eEAiTW459SaFxstqOI0wSZq/kUdv6v+Ti9u2ZPLJT56E+ec2gC7JQjT2Ag==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR84MB1705
+X-OriginatorOrg: hpe.com
+X-Proofpoint-ORIG-GUID: zTF2PCVqcmcjwKBnMk8SYkO5SWa_ySai
+X-Proofpoint-GUID: zTF2PCVqcmcjwKBnMk8SYkO5SWa_ySai
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-20_10,2023-07-20_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 mlxlogscore=594 clxscore=1011 mlxscore=0 spamscore=0
+ suspectscore=0 bulkscore=0 lowpriorityscore=0 impostorscore=0
+ malwarescore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2306200000 definitions=main-2307200174
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 7/20/23 11:35, Marty E. Plummer wrote:
-> On Thu, Jul 20, 2023 at 07:00:39AM -0700, Guenter Roeck wrote:
->>
-> Maybe.On 7/20/23 04:58, Marty E. Plummer wrote:
->>> The IR35201 is a dual-loop digital multi-phase buck controller designed for CPU voltage regulation.
->>>
->>> Signed-off-by: Marty E. Plummer <hanetzer@startmail.com>
->>> ---
->>>    Documentation/hwmon/index.rst   |  1 +
->>>    Documentation/hwmon/ir35201.rst | 63 +++++++++++++++++++++++
->>>    drivers/hwmon/pmbus/Kconfig     |  9 ++++
->>>    drivers/hwmon/pmbus/Makefile    |  1 +
->>>    drivers/hwmon/pmbus/ir35201.c   | 89 +++++++++++++++++++++++++++++++++
->>>    5 files changed, 163 insertions(+)
->>>    create mode 100644 Documentation/hwmon/ir35201.rst
->>>    create mode 100644 drivers/hwmon/pmbus/ir35201.c
->>>
->>> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
->>> index 042e1cf9501b..5b44a268de0d 100644
->>> --- a/Documentation/hwmon/index.rst
->>> +++ b/Documentation/hwmon/index.rst
->>> @@ -87,6 +87,7 @@ Hardware Monitoring Kernel Drivers
->>>       ina3221
->>>       inspur-ipsps1
->>>       intel-m10-bmc-hwmon
->>> +   ir35201
->>>       ir35221
->>>       ir38064
->>>       ir36021
->>> diff --git a/Documentation/hwmon/ir35201.rst b/Documentation/hwmon/ir35201.rst
->>> new file mode 100644
->>> index 000000000000..6ca34d4b02a3
->>> --- /dev/null
->>> +++ b/Documentation/hwmon/ir35201.rst
->>> @@ -0,0 +1,63 @@
->>> +.. SPDX-License-Identifier: GPL-2.0
->>> +
->>> +Kernel driver ir35201
->>> +=====================
->>> +
->>> +Supported chips:
->>> +
->>> +  * Infineon IR35201
->>> +
->>> +    Prefix: ir35201
->>> +    Addresses scanned: -
->>> +
->>> +    Datasheet: Publicly available at the Infineon website
->>> +      https://www.infineon.com/dgdl/Infineon-IR35201MTRPBF-DS-v01_00-EN.pdf?fileId=5546d462576f347501579c95d19772b5
->>> +
->>> +Authors:
->>> +      - Marty E. Plummer <hanetzer@startmail.com>
->>> +
->>> +Description
->>> +-----------
->>> +
->>> +The IR35201 is a dual-loop digital multi-phase buck controller designed for
->>> +CPU voltage regulation.
->>> +
->>> +Usage Notes
->>> +-----------
->>> +
->>> +This driver does not probe for PMBus devices. You will have to instantiate
->>> +devices explicitly.
->>> +
->>> +Sysfs attributes
->>> +----------------
->>> +
->>> +======================= ===========================
->>> +curr1_label             "iin"
->>> +curr1_input             Measured input current
->>> +curr1_alarm             Input fault alarm
->>> +
->>> +curr2_label             "iout1"
->>> +curr2_input             Measured output current
->>> +curr2_alarm             Output over-current alarm
->>> +
->>> +in1_label               "vin"
->>> +in1_input               Measured input voltage
->>> +in1_alarm               Input under-voltage alarm
->>> +
->>> +in2_label               "vout1"
->>> +in2_input               Measured output voltage
->>> +in2_alarm               Output over-voltage alarm
->>> +
->>> +power1_label            "pin"
->>> +power1_input            Measured input power
->>> +power1_alarm            Input under-voltage alarm
->>> +
->>> +power2_label            "pout1"
->>> +power2_input            Measured output power
->>> +
->>> +temp1_input             Measured temperature
->>> +temp1_alarm             Temperature alarm
->>> +
->>> +temp2_input             Measured other loop temperature
->>> +temp2_alarm             Temperature alarm
->>> +======================= ===========================
->>> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
->>> index 270b6336b76d..7180823b15bb 100644
->>> --- a/drivers/hwmon/pmbus/Kconfig
->>> +++ b/drivers/hwmon/pmbus/Kconfig
->>> @@ -123,6 +123,15 @@ config SENSORS_INSPUR_IPSPS
->>>    	  This driver can also be built as a module. If so, the module will
->>>    	  be called inspur-ipsps.
->>> +config SENSORS_IR35201
->>> +	tristate "Infineon IR35201"
->>> +	help
->>> +	  If you say yes here you get hardware monitoring support for the
->>> +	  Infineon IR35201 controller.
->>> +
->>> +	  This driver can also be built as a module. If so, the module will
->>> +	  be called ir35201.
->>> +
->>>    config SENSORS_IR35221
->>>    	tristate "Infineon IR35221"
->>>    	help
->>> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
->>> index 84ee960a6c2d..40729dd14e7a 100644
->>> --- a/drivers/hwmon/pmbus/Makefile
->>> +++ b/drivers/hwmon/pmbus/Makefile
->>> @@ -15,6 +15,7 @@ obj-$(CONFIG_SENSORS_FSP_3Y)	+= fsp-3y.o
->>>    obj-$(CONFIG_SENSORS_IBM_CFFPS)	+= ibm-cffps.o
->>>    obj-$(CONFIG_SENSORS_DPS920AB)	+= dps920ab.o
->>>    obj-$(CONFIG_SENSORS_INSPUR_IPSPS) += inspur-ipsps.o
->>> +obj-$(CONFIG_SENSORS_IR35201)	+= ir35201.o
->>>    obj-$(CONFIG_SENSORS_IR35221)	+= ir35221.o
->>>    obj-$(CONFIG_SENSORS_IR36021)	+= ir36021.o
->>>    obj-$(CONFIG_SENSORS_IR38064)	+= ir38064.o
->>> diff --git a/drivers/hwmon/pmbus/ir35201.c b/drivers/hwmon/pmbus/ir35201.c
->>> new file mode 100644
->>> index 000000000000..77f77057175a
->>> --- /dev/null
->>> +++ b/drivers/hwmon/pmbus/ir35201.c
->>> @@ -0,0 +1,89 @@
->>> +// SPDX-License-Identifier: GPL-2.0+
->>> +/*
->>> + * Hardware monitoring driver for Infineon IR35201
->>> + */
->>> +
->>> +#include <linux/err.h>
->>> +#include <linux/i2c.h>
->>> +#include <linux/init.h>
->>> +#include <linux/kernel.h>
->>> +#include <linux/module.h>
->>> +#include "pmbus.h"
->>> +
->>> +static struct pmbus_driver_info ir35201_info = {
->>> +	.pages = 1,
->>> +	.format[PSC_VOLTAGE_IN] = linear,
->>> +	.format[PSC_VOLTAGE_OUT] = linear,
->>> +	.format[PSC_CURRENT_IN] = linear,
->>> +	.format[PSC_CURRENT_OUT] = linear,
->>> +	.format[PSC_POWER] = linear,
->>> +	.format[PSC_TEMPERATURE] = linear,
->>> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT
->>> +		| PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT
->>> +		| PMBUS_HAVE_PIN | PMBUS_HAVE_POUT
->>> +		| PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2
->>> +		| PMBUS_HAVE_STATUS_TEMP,
->>
->> Several supported status registers are missing.
->>
-> Maybe. Did the best I could with this and another datasheet (ir36* iirc)
-> open at the same time and both source files open for comparison, and the
-> output from sensors with this patch, with allowances for variations
-> in temps, matches more or less what HWINFO64 outputs on a windows pe
-> based build of hiren's boot cd.
-
-STATUS_INPUT, STATUS_IOUT, and STATUS_VOUT are supported according
-to the datasheet. Do you have reason to believe that this is incorrect ?
-If so, I would want to see a comment in the driver explaining that the
-datasheet is wrong and doesn't support those registers.
-
->>> +};
->>> +
->>> +static int ir35201_probe(struct i2c_client *client)
->>> +{
->>> +	u8 buf[I2C_SMBUS_BLOCK_MAX];
->>> +	int ret;
->>> +
->>> +	if (!i2c_check_functionality(client->adapter,
->>> +				     I2C_FUNC_SMBUS_READ_BYTE_DATA
->>> +					 | I2C_FUNC_SMBUS_READ_WORD_DATA
->>> +					 | I2C_FUNC_SMBUS_READ_BLOCK_DATA))
->>> +		return -ENODEV;
->>> +
->>> +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, buf);
->>> +	if (ret < 0) {
->>> +		dev_err(&client->dev, "Failed to read PMBUS_MFR_ID\n");
->>> +		return ret;
->>> +	}
->>> +	if (ret != 2 || strncmp(buf, "IR", strlen("IR"))) {
->>> +		dev_err(&client->dev, "MFR_ID unrecognized\n");
->>> +		return -ENODEV;
->>> +	}
->>> +
->>
->> Did you actually test this ? Datasheet says it is "ASCII 52 49" which
->> would make it "RI" like IR35221, not "IR". Problem though is that it
->> seems like the register is writeable via some USER programming,
->> making it unreliable.
->>
-> Yes, I did. And strangely enough, it reads 'backwards' or so, relative
-> to the 35221. I almost sent this along without removing the debugging
-> pr_infos I had in this area to check that. drove me bonkers a bit.
->>> +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, buf);
->>> +	if (ret < 0) {
->>> +		dev_err(&client->dev, "Failed to read PMBUS_MFR_MODEL\n");
->>> +		return ret;
->>> +	}
->>> +	if (ret != 1 || buf[0] != 0x50) {
->>> +		dev_err(&client->dev, "MFR_MODEL unrecognized\n");
->>> +		return -ENODEV;
->>> +	}
->>> +
->>
->> The datasheet suggests that PMBUS_MFR_ID and PMBUS_MFR_MODEL can differ based
->> on some USER register programming. I would suggest to read IC_DEVICE_ID instead
->> and compare against that (which s supposed to be 0x4d).
->>
-> Somehow I missed that, but it was on my 'to-check' list. I think the
-> issue may have arose from my datasheet comparison, as the ir36* doesn't
-> have such a register listed.
-
-Different series, probably different microcontroller and different microcode.
-
->> On a higher level, I don't see anything special in this chip. Would it be possible
->> to just add it to pmbus.c ? Something like
->>
->> 	{"ir35201", (kernel_ulong_t)&pmbus_info_one},
->>
-> Honestly, I was wondering about folding this and the other very similar
-> IR3* chips into one driver. Should be doable? But I guess this approach
-> works as well; in fact, during my investigation phase I stuck the pmbus
-> driver onto the correct i2c address to get an easy way to read stuff
-> from the chip (tbh I'm surprised that this far along in linux we don't
-> have anything other than pmbus_peek to poke for info; maybe i2c-tools
-> can do it but I can't seem to make it work like I'd expect).
-
-This isn't about "doable". We don't want to add new drivers just for fun
-and/or "because it works as well". A new driver should only be added if
-needed. It was done, for example, for IR35221 because that chip has
-non-standard registers which we want to have supported.
-
-Unless I am missing something, IR35201 only supports standard commands.
-So the question is: Is the new driver really needed ? It appears you are
-saying that, no, it isn't needed. Add the chip to pmbus.c as I suggested above.
-If and only if that doesn't work we can talk about a new driver.
-
-Thanks,
-Guenter
-
+DQo+ID4gKw0KPiA+ICsvKg0KPiA+ICsgKiBXaGVuIGFuIGludGVycnVwdCBmaXJlcyBmb3IgYSBQ
+U1UgY29uZmlnIGNoYW5nZQ0KPiA+ICsgKiB0aGVyZSBpcyBhIG5lZWQgdG8ga25vdyB0aGUgcHJl
+dmlvdXMgUFNVIGNvbmZpZ3VyYXRpb24NCj4gPiArICogc28gdGhhdCB0aGUgYXBwcm9wcmlhdGUg
+Z3BpbyBsaW5lIGlzIGludGVycnVwdGVkIGZvcg0KPiA+ICsgKiB0aGUgY29ycmVjdCBQU1UuIElu
+IG9yZGVyIHRvIGtlZXAgdGhpcyB2YXJpYWJsZSB1cCB0bw0KPiA+ICsgKiBkYXRlIGl0IGlzIGds
+b2JhbCBzbyB0aGF0IGl0IGNhbiBiZSBzZXQgYXQgaW5pdCBhbmQNCj4gPiArICogZWFjaCB0aW1l
+IHRoZSBpbnRlcnJ1cHQgZmlyZXMuDQo+ID4gKyAqLw0KPiA+ICt1OCBwc3VfcHJlc2VuY2U7DQoN
+Cj4gSSdtIG5vdCBidXlpbmcgaXQuIFRoZXJlJ3Mgbm8gdXNlciBvZiB0aGlzIHZhcmlhYmxlIG91
+dHNpZGUgb2YgdGhpcw0KPiBjb21waWxhdGlvbiB1bml0LCBpcyB0aGVyZT8gSWYgdGhlcmUgd2Fz
+IC0gdGhlIG5hbWUgc2hvdWxkIGhhdmUgc29tZQ0KPiBwcmVmaXggYnV0IGV2ZW4gdGhlbiwgSSBk
+b24ndCBzZWUgYSBuZWVkIGZvciB0aGlzIHRvIGJlIGdsb2JhbC4gV2h5DQo+IGRvbid0IHlvdSBw
+dXQgaXQgaW4gc3RydWN0IGd4cF9ncGlvX2RydmRhdGE/DQoNCkhpIEJhcnQsDQoNCllvdSBhcmUg
+Y29ycmVjdCB0aGlzIHNob3VsZCBub3QgYmUgZ2xvYmFsLiBJdCB3aWxsIGJlIHBsYWNlZCBpbiAN
+Cmd4cF9ncGlvX2RydmRhdGEuDQoNClRoYW5rIHlvdSBmb3IgY2F0Y2hpbmcgdGhpcyBhbmQgdGhl
+IGFzc2lzdGFuY2UsDQoNCi1OaWNrIEhhd2tpbnMNCg0K
