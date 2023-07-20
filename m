@@ -2,82 +2,101 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 005C3EB64DA
-	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Jul 2023 14:48:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7F05EB64DC
+	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Jul 2023 15:13:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231151AbjGTOsW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 20 Jul 2023 10:48:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37766 "EHLO
+        id S230153AbjGTPNA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 20 Jul 2023 11:13:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231517AbjGTOsV (ORCPT
+        with ESMTP id S232469AbjGTPMw (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 20 Jul 2023 10:48:21 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43DDE26B2
-        for <linux-hwmon@vger.kernel.org>; Thu, 20 Jul 2023 07:48:18 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-6686708c986so762786b3a.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 20 Jul 2023 07:48:18 -0700 (PDT)
+        Thu, 20 Jul 2023 11:12:52 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55B726BF
+        for <linux-hwmon@vger.kernel.org>; Thu, 20 Jul 2023 08:12:49 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b703cbfaf5so13488951fa.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 20 Jul 2023 08:12:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689864498; x=1690469298;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qpzT27zKe+4sRj/CeeQND6n0p7j6R1yCRT9rnyE+1Is=;
-        b=ownJWAbocXsWgNt08P0uxqj5gdwTf1x7JJJGMD3VN7tPeaow6EI1hCh1r/vvkLqa81
-         n4cf4UlBqT4CigRfXuXkla/XbnDuAi5/mrB1Vyey0QH5tAVbAZ0Sfru2VgjKBruihpFO
-         1O1AYc7TgfPr5IlTJwJAicYxuBZOfw5KggxhthybRPj+d/xpOgZOYephnyvZs3bLgRit
-         m3REfY4ZxeVb6z13pMO3XK+AIqZaR2FwESssASE2lfp2u+9FTLoIu7E7iN9Mmjax/5Xl
-         deoGrfGP56+7XOAXBHVSU6+nvuwIdpXESvNx78Ozb+7U0kQVn37ZiHumIn3KmmHweo0B
-         TtxA==
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1689865968; x=1690470768;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OR4CnZp6F7D4KAQ0BL845tbrVz9ugD0EX7S7dGF5yAU=;
+        b=pO+ADtc6up0M6npJq2D7M9CPM5XSRbEjmN5kw5Y4sDaVIw4SufxISznRG33rqAeTsh
+         ftacbyqghje6LEWXp/IKmIU5EhuTv/MbhZQw3VPCCGNJ2m/0ZQAoIGltOSrSgCQI6g27
+         0Wqb8CBXCVZplCfldJV3FFKjzhU8nTv4mtH+2H7aoytnEvu/51SwQqU9aOLWvHAgMAGc
+         HOEN7wicYJsN1vEIANEbT5zGlCt6Ps6tbvH9wTddAGSrC31GU/XjkCKDCfTORxnPRMa3
+         tYVsOkmdnpL+HYvFzx7IIbN5fBXbjpVVfLpV/PiplICvCcPuc0ErMi69HFGzT5QpHEt6
+         PpKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689864498; x=1690469298;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1689865968; x=1690470768;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qpzT27zKe+4sRj/CeeQND6n0p7j6R1yCRT9rnyE+1Is=;
-        b=RB336s6pmpbEySvazBYaWKbUFCb/KMscZr/dnyHj0REXhR2cSwmFY0Pv9GZvyARTBT
-         CmzLd10z3Q12H7D+IWPtSuIJ17MhzFoSWr5PzuZwuE5vSvJPC6HdjvnvG4rJGDLgHXC/
-         Gedq0l+jCp91i0bG/0A2PS+HvT32LGS+NTxCYJNLnsJOnHLjXS9yr24/j5xQ9TW8Mlr+
-         7Wf5mjXds7xJ5ATsr5VRhXxCxspfpmGv2ZeAeABoqQEJnB9n5DHRou8lhqL1mlN2zvWf
-         gB+lYRdk7GvQ596vKRXGKKjQXYMpqu3I6+sYYaLR7Ix4hJihaBjXL5xaO7/xZU7f0GLG
-         oLyQ==
-X-Gm-Message-State: ABy/qLZpQMdddUX0bjvFhlZT0HxP18dbO+MX/oR4C3TGOXYtQTf0dekU
-        OyOMu8t05kmkwmRiA/Hq6nE=
-X-Google-Smtp-Source: APBJJlGYpk7SyMCBLkwuRpFOQtY7tmqzXq9RG9cE3CieeuX+3hkDJwgeLysBiZGGYPdov1LWyY8rDA==
-X-Received: by 2002:a05:6a20:12cc:b0:133:e31f:e7d6 with SMTP id v12-20020a056a2012cc00b00133e31fe7d6mr3362321pzg.55.1689864497732;
-        Thu, 20 Jul 2023 07:48:17 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m26-20020a056a00165a00b00682b2fbd20fsm1293927pfc.31.2023.07.20.07.48.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jul 2023 07:48:17 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 20 Jul 2023 07:48:16 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Ahmad Khalifa <ahmad@khalifa.ws>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3] hwmon: (nct6775) Add support for 18 IN readings for
- nct6799
-Message-ID: <1377cf68-297d-4113-be2c-102a47d8372d@roeck-us.net>
-References: <20230719224142.411237-1-ahmad@khalifa.ws>
+        bh=OR4CnZp6F7D4KAQ0BL845tbrVz9ugD0EX7S7dGF5yAU=;
+        b=JCN6upADVuzMDUJoXiw16TjI/5TUBfkt11Db6DpdqsGqEXuUYR9/PzfV4uSMdDx3Li
+         8Fh1he3wZcFkBx0Jmu3RBflhlakyleNwCkLcRjD4Aq/arkLo/ZfMFQWdRvvSFG/Glq7J
+         08MdhA+z62MxnwHJouGeMfX288IM7CiGprDZio5DagCtBK16S8EK0eoQEYGMW5NpuXqQ
+         m7sOrPFEZi7qnxb3p6lZB7Xb1OkiPmQkXi0IAC8b2u3V1UtifTdOloy64RhXixwlmP8Q
+         knhmfGt1xxKN8loBLIKhD3nEQ5O3xgQVcLpAYFGOJG9GeRIEy7JHkizB1N8L3RfVf1NO
+         Z3dQ==
+X-Gm-Message-State: ABy/qLapL1yJF31gYaTqZVedBrxqzviqFk3B7gOjbtOIkiGqyM2wdIQf
+        EsmTeHN3BTRqOwPEqpp2s+RxHjnS4jbRkZXIcgtzWpwIksDPvPJEYrI=
+X-Google-Smtp-Source: APBJJlGGvCyKQ0is6wgjsQg1NXCvU3HK0pcsuXhP+KW9UwSvuyAY7ouvvwRHKVbH8WSa7H+UhgqxHSJYFfpzCfSMQNU=
+X-Received: by 2002:a2e:870d:0:b0:2b5:8bb9:4dd6 with SMTP id
+ m13-20020a2e870d000000b002b58bb94dd6mr2539937lji.12.1689865968242; Thu, 20
+ Jul 2023 08:12:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230719224142.411237-1-ahmad@khalifa.ws>
+References: <20230705194544.100370-1-nick.hawkins@hpe.com> <20230705194544.100370-3-nick.hawkins@hpe.com>
+In-Reply-To: <20230705194544.100370-3-nick.hawkins@hpe.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 20 Jul 2023 17:12:36 +0200
+Message-ID: <CAMRc=MfaEfaZ7yYrFtc+XChzPX1C1AV1xAZPRZyJKA+z7D6-vw@mail.gmail.com>
+Subject: Re: [PATCH v5 2/5] gpio: gxp: Add HPE GXP GPIO PL
+To:     nick.hawkins@hpe.com
+Cc:     verdun@hpe.com, linus.walleij@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jdelvare@suse.com,
+        linux@roeck-us.net, andy.shevchenko@gmail.com,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Jul 19, 2023 at 11:41:42PM +0100, Ahmad Khalifa wrote:
-> * Add additional VIN/IN_MIN/IN_MAX register values
-> * Separate ALARM/BEEP bits for nct6799
-> * Update scaling factors for nct6799
-> 
-> Registers/alarms match for NCT6796D-S and NCT6799D-R
-> Tested on NCT6799D-R for new IN/MIN/MAX and ALARMS
-> 
-> Signed-off-by: Ahmad Khalifa <ahmad@khalifa.ws>
+On Wed, Jul 5, 2023 at 9:49=E2=80=AFPM <nick.hawkins@hpe.com> wrote:
+>
+> From: Nick Hawkins <nick.hawkins@hpe.com>
+>
+> The GXP SoC supports GPIO on multiple interfaces. The interfaces are
+> CPLD and Host. The gpio-gxp-pl driver covers the CPLD which takes
+> physical I/O from the board and shares it with GXP via a proprietary
+> interface that maps the I/O onto a specific register area of the GXP.
+> This driver supports interrupts from the CPLD.
+>
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+>
 
-Applied.
+[snip]
 
-Thanks,
-Guenter
+> +
+> +/*
+> + * When an interrupt fires for a PSU config change
+> + * there is a need to know the previous PSU configuration
+> + * so that the appropriate gpio line is interrupted for
+> + * the correct PSU. In order to keep this variable up to
+> + * date it is global so that it can be set at init and
+> + * each time the interrupt fires.
+> + */
+> +u8 psu_presence;
+
+I'm not buying it. There's no user of this variable outside of this
+compilation unit, is there? If there was - the name should have some
+prefix but even then, I don't see a need for this to be global. Why
+don't you put it in struct gxp_gpio_drvdata?
+
+Bart
+
+[snip]
