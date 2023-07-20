@@ -2,319 +2,82 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD1C1EB64DC
-	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Jul 2023 14:00:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 005C3EB64DA
+	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Jul 2023 14:48:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231790AbjGTOAo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 20 Jul 2023 10:00:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39306 "EHLO
+        id S231151AbjGTOsW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 20 Jul 2023 10:48:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231773AbjGTOAn (ORCPT
+        with ESMTP id S231517AbjGTOsV (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 20 Jul 2023 10:00:43 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C4D1FC8;
-        Thu, 20 Jul 2023 07:00:42 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-668711086f4so591401b3a.1;
-        Thu, 20 Jul 2023 07:00:42 -0700 (PDT)
+        Thu, 20 Jul 2023 10:48:21 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43DDE26B2
+        for <linux-hwmon@vger.kernel.org>; Thu, 20 Jul 2023 07:48:18 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-6686708c986so762786b3a.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 20 Jul 2023 07:48:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689861641; x=1690466441;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=U2HPdD+d9XvbmzcaBg97eWI4FwW6fi1mZZee8wqO980=;
-        b=RF3gXCPxsugEwn/S3iDUy2B27o3bFuAAcPv4PTJdXwnikS2JH3lxZin8WoDMmK55uT
-         96DmlLN1NZmkg7cT2HeAMvp3uRXsrtqPNcKSQRPTKEngfyRwrQh6qIkWBPq0f/+/lEvi
-         hRDfG7v0Fm3AY4TsmL2RnLd1xZx2K5zJpR91qgXg2BwaAUgMdPY76THyCbbYMjwaeRoC
-         pNKdhVS4GywTcByWJmikbM7Ojloy72BIxYboeG22YNo3LJpwQt4OzAAZIcJZh/aZ/WhU
-         qsWXpjp4isJ+uxBf3nKSs+8AD/AT2FfLu5sJET6MNWO5n1huWtjwDz2GFrll7vnOPF3O
-         EnZA==
+        d=gmail.com; s=20221208; t=1689864498; x=1690469298;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qpzT27zKe+4sRj/CeeQND6n0p7j6R1yCRT9rnyE+1Is=;
+        b=ownJWAbocXsWgNt08P0uxqj5gdwTf1x7JJJGMD3VN7tPeaow6EI1hCh1r/vvkLqa81
+         n4cf4UlBqT4CigRfXuXkla/XbnDuAi5/mrB1Vyey0QH5tAVbAZ0Sfru2VgjKBruihpFO
+         1O1AYc7TgfPr5IlTJwJAicYxuBZOfw5KggxhthybRPj+d/xpOgZOYephnyvZs3bLgRit
+         m3REfY4ZxeVb6z13pMO3XK+AIqZaR2FwESssASE2lfp2u+9FTLoIu7E7iN9Mmjax/5Xl
+         deoGrfGP56+7XOAXBHVSU6+nvuwIdpXESvNx78Ozb+7U0kQVn37ZiHumIn3KmmHweo0B
+         TtxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689861641; x=1690466441;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U2HPdD+d9XvbmzcaBg97eWI4FwW6fi1mZZee8wqO980=;
-        b=dzoEzNKDBlQlok1n0ulwND9a3m6bKCwn4HeiUMPdPecLskdGHWy4RjKbcltPtxFVk6
-         Z0cnKszQdMyfgys/7xgQkBgC5vYhF5/49830SzWmp83Ot0z//Fl1PmC6LcotKC76yN6I
-         mgF6nCQTMihXnED3kxkbRn0EkQ2HqWwGKP8YHmwmN9WfeJNr2/iq0kB22niOz79aaGAe
-         /jKJacAKhjfNMHNSgRYNY0RhPvKn7X0PuwmTM1tKe8lHO030EsxrkeTYthn1fLA3K3GU
-         eFLt1AEL43ULab1E0LJLtY6kZCoT42r9CRmBlpLDNeM8D1Sgak1W01U64I+ElhQSi2Jv
-         XrNA==
-X-Gm-Message-State: ABy/qLZAbzzMenEGTg5rtBHDV29owmPyVZt6O2YDh2ZUwBIY6BdmRGQS
-        gZT0hp3sC4saf72JwzATPMA=
-X-Google-Smtp-Source: APBJJlFv7/5I7AWXqBrqjH99G0yw42Ln/KvWfi8tWAVrdTKQLIl0JKoCcclYyrclOqdTiytefdYlVw==
-X-Received: by 2002:a05:6a00:1409:b0:684:bb4a:b86e with SMTP id l9-20020a056a00140900b00684bb4ab86emr6744234pfu.1.1689861640837;
-        Thu, 20 Jul 2023 07:00:40 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id ey4-20020a056a0038c400b0065438394fa4sm1237964pfb.90.2023.07.20.07.00.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jul 2023 07:00:40 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1689864498; x=1690469298;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qpzT27zKe+4sRj/CeeQND6n0p7j6R1yCRT9rnyE+1Is=;
+        b=RB336s6pmpbEySvazBYaWKbUFCb/KMscZr/dnyHj0REXhR2cSwmFY0Pv9GZvyARTBT
+         CmzLd10z3Q12H7D+IWPtSuIJ17MhzFoSWr5PzuZwuE5vSvJPC6HdjvnvG4rJGDLgHXC/
+         Gedq0l+jCp91i0bG/0A2PS+HvT32LGS+NTxCYJNLnsJOnHLjXS9yr24/j5xQ9TW8Mlr+
+         7Wf5mjXds7xJ5ATsr5VRhXxCxspfpmGv2ZeAeABoqQEJnB9n5DHRou8lhqL1mlN2zvWf
+         gB+lYRdk7GvQ596vKRXGKKjQXYMpqu3I6+sYYaLR7Ix4hJihaBjXL5xaO7/xZU7f0GLG
+         oLyQ==
+X-Gm-Message-State: ABy/qLZpQMdddUX0bjvFhlZT0HxP18dbO+MX/oR4C3TGOXYtQTf0dekU
+        OyOMu8t05kmkwmRiA/Hq6nE=
+X-Google-Smtp-Source: APBJJlGYpk7SyMCBLkwuRpFOQtY7tmqzXq9RG9cE3CieeuX+3hkDJwgeLysBiZGGYPdov1LWyY8rDA==
+X-Received: by 2002:a05:6a20:12cc:b0:133:e31f:e7d6 with SMTP id v12-20020a056a2012cc00b00133e31fe7d6mr3362321pzg.55.1689864497732;
+        Thu, 20 Jul 2023 07:48:17 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m26-20020a056a00165a00b00682b2fbd20fsm1293927pfc.31.2023.07.20.07.48.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Jul 2023 07:48:17 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b86e19ed-12af-e488-3c21-002be2ad5914@roeck-us.net>
-Date:   Thu, 20 Jul 2023 07:00:39 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Content-Language: en-US
-To:     "Marty E. Plummer" <hanetzer@startmail.com>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>
-References: <20230720115805.1510279-1-hanetzer@startmail.com>
+Date:   Thu, 20 Jul 2023 07:48:16 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] hwmon: (pmbus) Add driver fpr Infineon IR35201
-In-Reply-To: <20230720115805.1510279-1-hanetzer@startmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To:     Ahmad Khalifa <ahmad@khalifa.ws>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v3] hwmon: (nct6775) Add support for 18 IN readings for
+ nct6799
+Message-ID: <1377cf68-297d-4113-be2c-102a47d8372d@roeck-us.net>
+References: <20230719224142.411237-1-ahmad@khalifa.ws>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230719224142.411237-1-ahmad@khalifa.ws>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 7/20/23 04:58, Marty E. Plummer wrote:
-> The IR35201 is a dual-loop digital multi-phase buck controller designed for CPU voltage regulation.
+On Wed, Jul 19, 2023 at 11:41:42PM +0100, Ahmad Khalifa wrote:
+> * Add additional VIN/IN_MIN/IN_MAX register values
+> * Separate ALARM/BEEP bits for nct6799
+> * Update scaling factors for nct6799
 > 
-> Signed-off-by: Marty E. Plummer <hanetzer@startmail.com>
-> ---
->   Documentation/hwmon/index.rst   |  1 +
->   Documentation/hwmon/ir35201.rst | 63 +++++++++++++++++++++++
->   drivers/hwmon/pmbus/Kconfig     |  9 ++++
->   drivers/hwmon/pmbus/Makefile    |  1 +
->   drivers/hwmon/pmbus/ir35201.c   | 89 +++++++++++++++++++++++++++++++++
->   5 files changed, 163 insertions(+)
->   create mode 100644 Documentation/hwmon/ir35201.rst
->   create mode 100644 drivers/hwmon/pmbus/ir35201.c
+> Registers/alarms match for NCT6796D-S and NCT6799D-R
+> Tested on NCT6799D-R for new IN/MIN/MAX and ALARMS
 > 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index 042e1cf9501b..5b44a268de0d 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -87,6 +87,7 @@ Hardware Monitoring Kernel Drivers
->      ina3221
->      inspur-ipsps1
->      intel-m10-bmc-hwmon
-> +   ir35201
->      ir35221
->      ir38064
->      ir36021
-> diff --git a/Documentation/hwmon/ir35201.rst b/Documentation/hwmon/ir35201.rst
-> new file mode 100644
-> index 000000000000..6ca34d4b02a3
-> --- /dev/null
-> +++ b/Documentation/hwmon/ir35201.rst
-> @@ -0,0 +1,63 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +Kernel driver ir35201
-> +=====================
-> +
-> +Supported chips:
-> +
-> +  * Infineon IR35201
-> +
-> +    Prefix: ir35201
-> +    Addresses scanned: -
-> +
-> +    Datasheet: Publicly available at the Infineon website
-> +      https://www.infineon.com/dgdl/Infineon-IR35201MTRPBF-DS-v01_00-EN.pdf?fileId=5546d462576f347501579c95d19772b5
-> +
-> +Authors:
-> +      - Marty E. Plummer <hanetzer@startmail.com>
-> +
-> +Description
-> +-----------
-> +
-> +The IR35201 is a dual-loop digital multi-phase buck controller designed for
-> +CPU voltage regulation.
-> +
-> +Usage Notes
-> +-----------
-> +
-> +This driver does not probe for PMBus devices. You will have to instantiate
-> +devices explicitly.
-> +
-> +Sysfs attributes
-> +----------------
-> +
-> +======================= ===========================
-> +curr1_label             "iin"
-> +curr1_input             Measured input current
-> +curr1_alarm             Input fault alarm
-> +
-> +curr2_label             "iout1"
-> +curr2_input             Measured output current
-> +curr2_alarm             Output over-current alarm
-> +
-> +in1_label               "vin"
-> +in1_input               Measured input voltage
-> +in1_alarm               Input under-voltage alarm
-> +
-> +in2_label               "vout1"
-> +in2_input               Measured output voltage
-> +in2_alarm               Output over-voltage alarm
-> +
-> +power1_label            "pin"
-> +power1_input            Measured input power
-> +power1_alarm            Input under-voltage alarm
-> +
-> +power2_label            "pout1"
-> +power2_input            Measured output power
-> +
-> +temp1_input             Measured temperature
-> +temp1_alarm             Temperature alarm
-> +
-> +temp2_input             Measured other loop temperature
-> +temp2_alarm             Temperature alarm
-> +======================= ===========================
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index 270b6336b76d..7180823b15bb 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -123,6 +123,15 @@ config SENSORS_INSPUR_IPSPS
->   	  This driver can also be built as a module. If so, the module will
->   	  be called inspur-ipsps.
->   
-> +config SENSORS_IR35201
-> +	tristate "Infineon IR35201"
-> +	help
-> +	  If you say yes here you get hardware monitoring support for the
-> +	  Infineon IR35201 controller.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called ir35201.
-> +
->   config SENSORS_IR35221
->   	tristate "Infineon IR35221"
->   	help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index 84ee960a6c2d..40729dd14e7a 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -15,6 +15,7 @@ obj-$(CONFIG_SENSORS_FSP_3Y)	+= fsp-3y.o
->   obj-$(CONFIG_SENSORS_IBM_CFFPS)	+= ibm-cffps.o
->   obj-$(CONFIG_SENSORS_DPS920AB)	+= dps920ab.o
->   obj-$(CONFIG_SENSORS_INSPUR_IPSPS) += inspur-ipsps.o
-> +obj-$(CONFIG_SENSORS_IR35201)	+= ir35201.o
->   obj-$(CONFIG_SENSORS_IR35221)	+= ir35221.o
->   obj-$(CONFIG_SENSORS_IR36021)	+= ir36021.o
->   obj-$(CONFIG_SENSORS_IR38064)	+= ir38064.o
-> diff --git a/drivers/hwmon/pmbus/ir35201.c b/drivers/hwmon/pmbus/ir35201.c
-> new file mode 100644
-> index 000000000000..77f77057175a
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/ir35201.c
-> @@ -0,0 +1,89 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Hardware monitoring driver for Infineon IR35201
-> + */
-> +
-> +#include <linux/err.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include "pmbus.h"
-> +
-> +static struct pmbus_driver_info ir35201_info = {
-> +	.pages = 1,
-> +	.format[PSC_VOLTAGE_IN] = linear,
-> +	.format[PSC_VOLTAGE_OUT] = linear,
-> +	.format[PSC_CURRENT_IN] = linear,
-> +	.format[PSC_CURRENT_OUT] = linear,
-> +	.format[PSC_POWER] = linear,
-> +	.format[PSC_TEMPERATURE] = linear,
-> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT
-> +		| PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT
-> +		| PMBUS_HAVE_PIN | PMBUS_HAVE_POUT
-> +		| PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2
-> +		| PMBUS_HAVE_STATUS_TEMP,
+> Signed-off-by: Ahmad Khalifa <ahmad@khalifa.ws>
 
-Several supported status registers are missing.
-
-> +};
-> +
-> +static int ir35201_probe(struct i2c_client *client)
-> +{
-> +	u8 buf[I2C_SMBUS_BLOCK_MAX];
-> +	int ret;
-> +
-> +	if (!i2c_check_functionality(client->adapter,
-> +				     I2C_FUNC_SMBUS_READ_BYTE_DATA
-> +					 | I2C_FUNC_SMBUS_READ_WORD_DATA
-> +					 | I2C_FUNC_SMBUS_READ_BLOCK_DATA))
-> +		return -ENODEV;
-> +
-> +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, buf);
-> +	if (ret < 0) {
-> +		dev_err(&client->dev, "Failed to read PMBUS_MFR_ID\n");
-> +		return ret;
-> +	}
-> +	if (ret != 2 || strncmp(buf, "IR", strlen("IR"))) {
-> +		dev_err(&client->dev, "MFR_ID unrecognized\n");
-> +		return -ENODEV;
-> +	}
-> +
-
-Did you actually test this ? Datasheet says it is "ASCII 52 49" which
-would make it "RI" like IR35221, not "IR". Problem though is that it
-seems like the register is writeable via some USER programming,
-making it unreliable.
-
-> +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, buf);
-> +	if (ret < 0) {
-> +		dev_err(&client->dev, "Failed to read PMBUS_MFR_MODEL\n");
-> +		return ret;
-> +	}
-> +	if (ret != 1 || buf[0] != 0x50) {
-> +		dev_err(&client->dev, "MFR_MODEL unrecognized\n");
-> +		return -ENODEV;
-> +	}
-> +
-
-The datasheet suggests that PMBUS_MFR_ID and PMBUS_MFR_MODEL can differ based
-on some USER register programming. I would suggest to read IC_DEVICE_ID instead
-and compare against that (which s supposed to be 0x4d).
-
-On a higher level, I don't see anything special in this chip. Would it be possible
-to just add it to pmbus.c ? Something like
-
-	{"ir35201", (kernel_ulong_t)&pmbus_info_one},
-
-should do.
+Applied.
 
 Thanks,
 Guenter
-
-> +	return pmbus_do_probe(client, &ir35201_info);
-> +}
-> +
-> +static const struct i2c_device_id ir35201_id[] = {
-> +	{ "ir35201", 0},
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(i2c, ir35201_id);
-> +
-> +static const struct of_device_id __maybe_unused ir35201_of_id[] = {
-> +	{ .compatible = "infineon,ir35201" },
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(of, ir35201_of_id);
-> +
-> +static struct i2c_driver ir35201_driver = {
-> +	.class = I2C_CLASS_HWMON,
-> +	.driver = {
-> +		.name = "ir35201",
-> +		.of_match_table = of_match_ptr(ir35201_of_id),
-> +	},
-> +	.probe_new = ir35201_probe,
-> +	.id_table = ir35201_id,
-> +};
-> +
-> +module_i2c_driver(ir35201_driver);
-> +
-> +MODULE_AUTHOR("Marty E. Plummer <hanetzer@startmail.com>");
-> +MODULE_DESCRIPTION("PMBus driver for Infineon IR35201");
-> +MODULE_LICENSE("GPL");
-> +MODULE_IMPORT_NS(PMBUS);
-
