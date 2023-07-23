@@ -2,182 +2,307 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80B5EC001B0
-	for <linux-hwmon@archiver.kernel.org>; Sun, 23 Jul 2023 06:46:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22F47C001DF
+	for <linux-hwmon@archiver.kernel.org>; Sun, 23 Jul 2023 22:07:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbjGWGqQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 23 Jul 2023 02:46:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38508 "EHLO
+        id S229553AbjGWWHd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 23 Jul 2023 18:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjGWGqP (ORCPT
+        with ESMTP id S229470AbjGWWHc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 23 Jul 2023 02:46:15 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5BE10EC
-        for <linux-hwmon@vger.kernel.org>; Sat, 22 Jul 2023 23:46:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690094773; x=1721630773;
-  h=date:from:to:cc:subject:message-id;
-  bh=U9Dtif/5tTQ6rc6RrIN1HSMfa9LFnEFB8KYJuaFy4dg=;
-  b=CElEIChv9fowIKsP7jk3rl+L0qYwKZ39mDf9LLUZ52bJKTpoMIvmjqmC
-   RYj7shh1Vc1rwTGWiKMxAkgvNvKiavYTYBLzf0ixbr9Eaelr/Epj2Hqux
-   wuUZDnVcrYbDpqDm9980ko5prZHj90U8GxJdHjDn+kaUlCd/zmXjgU0q6
-   erFQZU5QT8Btlam74RundhqSbCmGkD2bw9mdnFne9TeABt0FW8b/LLgkv
-   dtkGc3vYPDoirmytv5OCS4ruxbJY/lOUw/WJPZOLtoYGKmDuF2WZZz8Xx
-   uMEX5CjCKl1ca5onb9vB6JyDE0BFKONWpg7bAWS5oumnGTRDrHRbAsbLD
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10779"; a="398152397"
-X-IronPort-AV: E=Sophos;i="6.01,226,1684825200"; 
-   d="scan'208";a="398152397"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2023 23:46:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10779"; a="760427328"
-X-IronPort-AV: E=Sophos;i="6.01,226,1684825200"; 
-   d="scan'208";a="760427328"
-Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 22 Jul 2023 23:46:11 -0700
-Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qNSr4-0008ti-1m;
-        Sun, 23 Jul 2023 06:46:10 +0000
-Date:   Sun, 23 Jul 2023 14:45:42 +0800
-From:   kernel test robot <lkp@intel.com>
+        Sun, 23 Jul 2023 18:07:32 -0400
+Received: from mx-out2.startmail.com (mx-out2.startmail.com [145.131.90.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B17A2E5C;
+        Sun, 23 Jul 2023 15:07:28 -0700 (PDT)
+Date:   Sun, 23 Jul 2023 17:07:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=startmail.com;
+        s=2020-07; t=1690150046;
+        bh=Pzhbdmi+Q4cAPO2nJq3dihfzBgR3qM8T9EVB24WXGeE=;
+        h=Date:From:To:Subject:Message-ID:References:Mime-Version:
+         Content-Type:Content-Disposition:In-Reply-To:From:Subject:To:Date:
+         Sender:Content-Type:Content-Transfer-Encoding:Content-Disposition:
+         Mime-Version:Reply-To:In-Reply-To:References:Message-Id:Autocrypt;
+        b=Fsi7v8rCqO8VBaD+2fAY45r8W9+Cxydl7tdq66yA5syYPQ4NZYMoRAv89z5wXhx9t
+         U9wUtRa+dyfXmFZtcnKbwAQzJkrKaC2LCmrNFdPU3qZRMyG+xVWzdonOJxgBXEW13V
+         kuIutoJh/KpEXc3L8xrBwEMJRG445/zcyr7K/n4GBCEnxBWDDXpl2sI9IWdX/SANVY
+         xebjc8aa+NdyzdnUgvjEiDUTk6K/EpBi4TFP12XkFD8izbaHgREevuA+z9oWNTevLL
+         oRHn7VnGQi//wQvKBLTZu81NPmfxTDKDFzoZFDns/rgu6VM6dmmOWMTK4tJw8zPIOr
+         Kba6d6Zv4wyEg==
+From:   "Marty E. Plummer" <hanetzer@startmail.com>
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 261e411dbbf9364b3af2daf67714a3a5237aff68
-Message-ID: <202307231440.exA6rkMR-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [PATCH] hwmon: (pmbus) Add driver fpr Infineon IR35201
+Message-ID: <izfbs2b72mmy6hgwugq5pnilon6626up7yp5quta6dd6tnlusx@bkuyfpenkb4f>
+References: <20230720115805.1510279-1-hanetzer@startmail.com>
+ <b86e19ed-12af-e488-3c21-002be2ad5914@roeck-us.net>
+ <axue7wmaxbj7vurapabuwtvqk3br3zt2g373d6ako4m24wzaxf@2uvgmasdd7dk>
+ <bf1be356-9e3e-6fd7-0987-03deb593131e@roeck-us.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bf1be356-9e3e-6fd7-0987-03deb593131e@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 261e411dbbf9364b3af2daf67714a3a5237aff68  hwmon: (hp-wmi-sensors) Get WMI instance count from WMI driver core
-
-elapsed time: 726m
-
-configs tested: 111
-configs skipped: 6
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r031-20230723   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r005-20230723   gcc  
-arc                  randconfig-r043-20230723   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                        mvebu_v7_defconfig   gcc  
-arm                  randconfig-r046-20230723   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r004-20230723   clang
-csky                                defconfig   gcc  
-hexagon              randconfig-r016-20230723   clang
-hexagon              randconfig-r041-20230723   clang
-hexagon              randconfig-r045-20230723   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r004-20230723   clang
-i386         buildonly-randconfig-r005-20230723   clang
-i386         buildonly-randconfig-r006-20230723   clang
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230723   clang
-i386                 randconfig-i002-20230723   clang
-i386                 randconfig-i003-20230723   clang
-i386                 randconfig-i004-20230723   clang
-i386                 randconfig-i005-20230723   clang
-i386                 randconfig-i006-20230723   clang
-i386                 randconfig-i011-20230723   gcc  
-i386                 randconfig-i012-20230723   gcc  
-i386                 randconfig-i013-20230723   gcc  
-i386                 randconfig-i014-20230723   gcc  
-i386                 randconfig-i015-20230723   gcc  
-i386                 randconfig-i016-20230723   gcc  
-i386                 randconfig-r014-20230723   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r006-20230723   gcc  
-m68k                 randconfig-r035-20230723   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                           ip27_defconfig   clang
-mips                     loongson1b_defconfig   gcc  
-nios2                         10m50_defconfig   gcc  
-nios2                               defconfig   gcc  
-openrisc             randconfig-r021-20230723   gcc  
-openrisc             randconfig-r025-20230723   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r001-20230723   gcc  
-parisc               randconfig-r012-20230723   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                  iss476-smp_defconfig   gcc  
-powerpc              randconfig-r033-20230723   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r042-20230723   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230723   gcc  
-sh                               allmodconfig   gcc  
-sh                         microdev_defconfig   gcc  
-sh                   randconfig-r022-20230723   gcc  
-sh                   randconfig-r023-20230723   gcc  
-sh                   randconfig-r032-20230723   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r003-20230723   gcc  
-sparc64              randconfig-r002-20230723   gcc  
-sparc64              randconfig-r011-20230723   gcc  
-sparc64              randconfig-r015-20230723   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r001-20230723   clang
-x86_64       buildonly-randconfig-r002-20230723   clang
-x86_64       buildonly-randconfig-r003-20230723   clang
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-x001-20230723   gcc  
-x86_64               randconfig-x002-20230723   gcc  
-x86_64               randconfig-x003-20230723   gcc  
-x86_64               randconfig-x004-20230723   gcc  
-x86_64               randconfig-x005-20230723   gcc  
-x86_64               randconfig-x006-20230723   gcc  
-x86_64               randconfig-x011-20230723   clang
-x86_64               randconfig-x012-20230723   clang
-x86_64               randconfig-x013-20230723   clang
-x86_64               randconfig-x014-20230723   clang
-x86_64               randconfig-x015-20230723   clang
-x86_64               randconfig-x016-20230723   clang
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r013-20230723   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On Thu, Jul 20, 2023 at 12:22:47PM -0700, Guenter Roeck wrote:
+> On 7/20/23 11:35, Marty E. Plummer wrote:
+> > On Thu, Jul 20, 2023 at 07:00:39AM -0700, Guenter Roeck wrote:
+> > > 
+> > Maybe.On 7/20/23 04:58, Marty E. Plummer wrote:
+> > > > The IR35201 is a dual-loop digital multi-phase buck controller designed for CPU voltage regulation.
+> > > > 
+> > > > Signed-off-by: Marty E. Plummer <hanetzer@startmail.com>
+> > > > ---
+> > > >    Documentation/hwmon/index.rst   |  1 +
+> > > >    Documentation/hwmon/ir35201.rst | 63 +++++++++++++++++++++++
+> > > >    drivers/hwmon/pmbus/Kconfig     |  9 ++++
+> > > >    drivers/hwmon/pmbus/Makefile    |  1 +
+> > > >    drivers/hwmon/pmbus/ir35201.c   | 89 +++++++++++++++++++++++++++++++++
+> > > >    5 files changed, 163 insertions(+)
+> > > >    create mode 100644 Documentation/hwmon/ir35201.rst
+> > > >    create mode 100644 drivers/hwmon/pmbus/ir35201.c
+> > > > 
+> > > > diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+> > > > index 042e1cf9501b..5b44a268de0d 100644
+> > > > --- a/Documentation/hwmon/index.rst
+> > > > +++ b/Documentation/hwmon/index.rst
+> > > > @@ -87,6 +87,7 @@ Hardware Monitoring Kernel Drivers
+> > > >       ina3221
+> > > >       inspur-ipsps1
+> > > >       intel-m10-bmc-hwmon
+> > > > +   ir35201
+> > > >       ir35221
+> > > >       ir38064
+> > > >       ir36021
+> > > > diff --git a/Documentation/hwmon/ir35201.rst b/Documentation/hwmon/ir35201.rst
+> > > > new file mode 100644
+> > > > index 000000000000..6ca34d4b02a3
+> > > > --- /dev/null
+> > > > +++ b/Documentation/hwmon/ir35201.rst
+> > > > @@ -0,0 +1,63 @@
+> > > > +.. SPDX-License-Identifier: GPL-2.0
+> > > > +
+> > > > +Kernel driver ir35201
+> > > > +=====================
+> > > > +
+> > > > +Supported chips:
+> > > > +
+> > > > +  * Infineon IR35201
+> > > > +
+> > > > +    Prefix: ir35201
+> > > > +    Addresses scanned: -
+> > > > +
+> > > > +    Datasheet: Publicly available at the Infineon website
+> > > > +      https://www.infineon.com/dgdl/Infineon-IR35201MTRPBF-DS-v01_00-EN.pdf?fileId=5546d462576f347501579c95d19772b5
+> > > > +
+> > > > +Authors:
+> > > > +      - Marty E. Plummer <hanetzer@startmail.com>
+> > > > +
+> > > > +Description
+> > > > +-----------
+> > > > +
+> > > > +The IR35201 is a dual-loop digital multi-phase buck controller designed for
+> > > > +CPU voltage regulation.
+> > > > +
+> > > > +Usage Notes
+> > > > +-----------
+> > > > +
+> > > > +This driver does not probe for PMBus devices. You will have to instantiate
+> > > > +devices explicitly.
+> > > > +
+> > > > +Sysfs attributes
+> > > > +----------------
+> > > > +
+> > > > +======================= ===========================
+> > > > +curr1_label             "iin"
+> > > > +curr1_input             Measured input current
+> > > > +curr1_alarm             Input fault alarm
+> > > > +
+> > > > +curr2_label             "iout1"
+> > > > +curr2_input             Measured output current
+> > > > +curr2_alarm             Output over-current alarm
+> > > > +
+> > > > +in1_label               "vin"
+> > > > +in1_input               Measured input voltage
+> > > > +in1_alarm               Input under-voltage alarm
+> > > > +
+> > > > +in2_label               "vout1"
+> > > > +in2_input               Measured output voltage
+> > > > +in2_alarm               Output over-voltage alarm
+> > > > +
+> > > > +power1_label            "pin"
+> > > > +power1_input            Measured input power
+> > > > +power1_alarm            Input under-voltage alarm
+> > > > +
+> > > > +power2_label            "pout1"
+> > > > +power2_input            Measured output power
+> > > > +
+> > > > +temp1_input             Measured temperature
+> > > > +temp1_alarm             Temperature alarm
+> > > > +
+> > > > +temp2_input             Measured other loop temperature
+> > > > +temp2_alarm             Temperature alarm
+> > > > +======================= ===========================
+> > > > diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> > > > index 270b6336b76d..7180823b15bb 100644
+> > > > --- a/drivers/hwmon/pmbus/Kconfig
+> > > > +++ b/drivers/hwmon/pmbus/Kconfig
+> > > > @@ -123,6 +123,15 @@ config SENSORS_INSPUR_IPSPS
+> > > >    	  This driver can also be built as a module. If so, the module will
+> > > >    	  be called inspur-ipsps.
+> > > > +config SENSORS_IR35201
+> > > > +	tristate "Infineon IR35201"
+> > > > +	help
+> > > > +	  If you say yes here you get hardware monitoring support for the
+> > > > +	  Infineon IR35201 controller.
+> > > > +
+> > > > +	  This driver can also be built as a module. If so, the module will
+> > > > +	  be called ir35201.
+> > > > +
+> > > >    config SENSORS_IR35221
+> > > >    	tristate "Infineon IR35221"
+> > > >    	help
+> > > > diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> > > > index 84ee960a6c2d..40729dd14e7a 100644
+> > > > --- a/drivers/hwmon/pmbus/Makefile
+> > > > +++ b/drivers/hwmon/pmbus/Makefile
+> > > > @@ -15,6 +15,7 @@ obj-$(CONFIG_SENSORS_FSP_3Y)	+= fsp-3y.o
+> > > >    obj-$(CONFIG_SENSORS_IBM_CFFPS)	+= ibm-cffps.o
+> > > >    obj-$(CONFIG_SENSORS_DPS920AB)	+= dps920ab.o
+> > > >    obj-$(CONFIG_SENSORS_INSPUR_IPSPS) += inspur-ipsps.o
+> > > > +obj-$(CONFIG_SENSORS_IR35201)	+= ir35201.o
+> > > >    obj-$(CONFIG_SENSORS_IR35221)	+= ir35221.o
+> > > >    obj-$(CONFIG_SENSORS_IR36021)	+= ir36021.o
+> > > >    obj-$(CONFIG_SENSORS_IR38064)	+= ir38064.o
+> > > > diff --git a/drivers/hwmon/pmbus/ir35201.c b/drivers/hwmon/pmbus/ir35201.c
+> > > > new file mode 100644
+> > > > index 000000000000..77f77057175a
+> > > > --- /dev/null
+> > > > +++ b/drivers/hwmon/pmbus/ir35201.c
+> > > > @@ -0,0 +1,89 @@
+> > > > +// SPDX-License-Identifier: GPL-2.0+
+> > > > +/*
+> > > > + * Hardware monitoring driver for Infineon IR35201
+> > > > + */
+> > > > +
+> > > > +#include <linux/err.h>
+> > > > +#include <linux/i2c.h>
+> > > > +#include <linux/init.h>
+> > > > +#include <linux/kernel.h>
+> > > > +#include <linux/module.h>
+> > > > +#include "pmbus.h"
+> > > > +
+> > > > +static struct pmbus_driver_info ir35201_info = {
+> > > > +	.pages = 1,
+> > > > +	.format[PSC_VOLTAGE_IN] = linear,
+> > > > +	.format[PSC_VOLTAGE_OUT] = linear,
+> > > > +	.format[PSC_CURRENT_IN] = linear,
+> > > > +	.format[PSC_CURRENT_OUT] = linear,
+> > > > +	.format[PSC_POWER] = linear,
+> > > > +	.format[PSC_TEMPERATURE] = linear,
+> > > > +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT
+> > > > +		| PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT
+> > > > +		| PMBUS_HAVE_PIN | PMBUS_HAVE_POUT
+> > > > +		| PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2
+> > > > +		| PMBUS_HAVE_STATUS_TEMP,
+> > > 
+> > > Several supported status registers are missing.
+> > > 
+> > Maybe. Did the best I could with this and another datasheet (ir36* iirc)
+> > open at the same time and both source files open for comparison, and the
+> > output from sensors with this patch, with allowances for variations
+> > in temps, matches more or less what HWINFO64 outputs on a windows pe
+> > based build of hiren's boot cd.
+> 
+> STATUS_INPUT, STATUS_IOUT, and STATUS_VOUT are supported according
+> to the datasheet. Do you have reason to believe that this is incorrect ?
+> If so, I would want to see a comment in the driver explaining that the
+> datasheet is wrong and doesn't support those registers.
+> 
+> > > > +};
+> > > > +
+> > > > +static int ir35201_probe(struct i2c_client *client)
+> > > > +{
+> > > > +	u8 buf[I2C_SMBUS_BLOCK_MAX];
+> > > > +	int ret;
+> > > > +
+> > > > +	if (!i2c_check_functionality(client->adapter,
+> > > > +				     I2C_FUNC_SMBUS_READ_BYTE_DATA
+> > > > +					 | I2C_FUNC_SMBUS_READ_WORD_DATA
+> > > > +					 | I2C_FUNC_SMBUS_READ_BLOCK_DATA))
+> > > > +		return -ENODEV;
+> > > > +
+> > > > +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, buf);
+> > > > +	if (ret < 0) {
+> > > > +		dev_err(&client->dev, "Failed to read PMBUS_MFR_ID\n");
+> > > > +		return ret;
+> > > > +	}
+> > > > +	if (ret != 2 || strncmp(buf, "IR", strlen("IR"))) {
+> > > > +		dev_err(&client->dev, "MFR_ID unrecognized\n");
+> > > > +		return -ENODEV;
+> > > > +	}
+> > > > +
+> > > 
+> > > Did you actually test this ? Datasheet says it is "ASCII 52 49" which
+> > > would make it "RI" like IR35221, not "IR". Problem though is that it
+> > > seems like the register is writeable via some USER programming,
+> > > making it unreliable.
+> > > 
+> > Yes, I did. And strangely enough, it reads 'backwards' or so, relative
+> > to the 35221. I almost sent this along without removing the debugging
+> > pr_infos I had in this area to check that. drove me bonkers a bit.
+> > > > +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, buf);
+> > > > +	if (ret < 0) {
+> > > > +		dev_err(&client->dev, "Failed to read PMBUS_MFR_MODEL\n");
+> > > > +		return ret;
+> > > > +	}
+> > > > +	if (ret != 1 || buf[0] != 0x50) {
+> > > > +		dev_err(&client->dev, "MFR_MODEL unrecognized\n");
+> > > > +		return -ENODEV;
+> > > > +	}
+> > > > +
+> > > 
+> > > The datasheet suggests that PMBUS_MFR_ID and PMBUS_MFR_MODEL can differ based
+> > > on some USER register programming. I would suggest to read IC_DEVICE_ID instead
+> > > and compare against that (which s supposed to be 0x4d).
+> > > 
+> > Somehow I missed that, but it was on my 'to-check' list. I think the
+> > issue may have arose from my datasheet comparison, as the ir36* doesn't
+> > have such a register listed.
+> 
+> Different series, probably different microcontroller and different microcode.
+> 
+> > > On a higher level, I don't see anything special in this chip. Would it be possible
+> > > to just add it to pmbus.c ? Something like
+> > > 
+> > > 	{"ir35201", (kernel_ulong_t)&pmbus_info_one},
+> > > 
+> > Honestly, I was wondering about folding this and the other very similar
+> > IR3* chips into one driver. Should be doable? But I guess this approach
+> > works as well; in fact, during my investigation phase I stuck the pmbus
+> > driver onto the correct i2c address to get an easy way to read stuff
+> > from the chip (tbh I'm surprised that this far along in linux we don't
+> > have anything other than pmbus_peek to poke for info; maybe i2c-tools
+> > can do it but I can't seem to make it work like I'd expect).
+> 
+> This isn't about "doable". We don't want to add new drivers just for fun
+> and/or "because it works as well". A new driver should only be added if
+> needed. It was done, for example, for IR35221 because that chip has
+> non-standard registers which we want to have supported.
+> 
+> Unless I am missing something, IR35201 only supports standard commands.
+> So the question is: Is the new driver really needed ? It appears you are
+> saying that, no, it isn't needed. Add the chip to pmbus.c as I suggested above.
+> If and only if that doesn't work we can talk about a new driver.
+> 
+Binding the pmbus subdriver (I guess you could call it that) for the
+"adp4000", which shares the same pmbus_device_info struct you suggested
+results in sensible output in lm_sensors. I'll whip up a new patch and
+send it in.
+> Thanks,
+> Guenter
+> 
