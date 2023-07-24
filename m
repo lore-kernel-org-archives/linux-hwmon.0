@@ -2,487 +2,202 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28B9BC001B0
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Jul 2023 14:15:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A77FC00528
+	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Jul 2023 17:44:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231145AbjGXOPt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 24 Jul 2023 10:15:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43364 "EHLO
+        id S231371AbjGXRoC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 24 Jul 2023 13:44:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231956AbjGXOPo (ORCPT
+        with ESMTP id S231157AbjGXRny (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 24 Jul 2023 10:15:44 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FD81BC5;
-        Mon, 24 Jul 2023 07:15:20 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-666e6541c98so4176887b3a.2;
-        Mon, 24 Jul 2023 07:15:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690208120; x=1690812920;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iMYT+mstsGp85W+J8rzmlRp6rQJVsxaIefscdcQjJWM=;
-        b=UxbP8H+27WGsDHOdb8r2ZtiEktRYnvaR52/QNTGCnig833aNgjNXVv6acPf65a4F4k
-         i+BWSQmVGkfeQNMqLHZ6CfrbS1V3O8OV3zNr9cj/7jRFvIl8YzohuWavSdQ6D1T8gL6z
-         +u8qJoRTgUKYXBEqvvs/t6+nXCLESHdOtEm0qKPyuWBwYeDFU5wVD2QlMbf18rjGZoE2
-         LlZzpJB2Q9fuoXnzCcJycFfCxIoDBB+gfR1DxinfjH9slq69RA/iLanIMDg/RBpi+vTg
-         BGkUBbESJAzhC3hwQYlOKeds7hpz905IXQwCT1zHj8tOKBUnqhhr4d9hVzFZJXCkWBIW
-         dpNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690208120; x=1690812920;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iMYT+mstsGp85W+J8rzmlRp6rQJVsxaIefscdcQjJWM=;
-        b=Pmo4yKOWY3VtaV1oR3up6tS9vxq6ioTVUyffT1FyBYE5GrybkjRUMSkQZmR/X19Erg
-         hiseRcyi/LSfBskQfnPp4dd7JEcm9m2wGwRgd0AEZpMl8emF2Djay0+C1g6JVIHia2TT
-         F1wrIFsp+2wdmMB8rC9KtS2LEbqzjasmbDyAZIC0+jE2/2SAYH8nYK65ntrH03D1HWz5
-         eBFvk4OUULdED9Nym/PO8KEDBH73k8xAZJLcqyN7+XPhayjQPANIShFMlgBbaCJjbhJo
-         d4WROjCUOCEjdpO9dTz0h4ptVd4vRteK885bIZIV7l9wZIM1V4puf6vVj7uy8NgmTuYq
-         GFDA==
-X-Gm-Message-State: ABy/qLY4326cY+z/8hvJqOld+3i4uX0ofMvkPzIGP8nKUj2y6DjU98hf
-        3tMVE5benklJY6B3xZohMRs=
-X-Google-Smtp-Source: APBJJlHv6spdJ6KW+l7I14pOAnUmtgNRHOCr3+mXUMJN4WTWnk8/9T970jkw+bxE7T6yMyY1r93TXw==
-X-Received: by 2002:a05:6a20:914f:b0:133:83b5:c3cd with SMTP id x15-20020a056a20914f00b0013383b5c3cdmr11721217pzc.53.1690208119656;
-        Mon, 24 Jul 2023 07:15:19 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v11-20020a62a50b000000b00682a16f0b00sm7711455pfm.210.2023.07.24.07.15.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jul 2023 07:15:19 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 24 Jul 2023 07:15:18 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     werneazc@gmail.com
-Cc:     jdelvare@suse.com, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, robh+dt@kernel.org,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Andre Werner <andre.werner@systec-electronic.com>
-Subject: Re: [PATCH v5 2/2] hwmon: (hs3001) Add driver for Renesas HS3001
-Message-ID: <0f32155b-bcc1-4d9e-bba9-058d63194abc@roeck-us.net>
-References: <20230724062923.22122-2-andre.werner@systec-electronic.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230724062923.22122-2-andre.werner@systec-electronic.com>
+        Mon, 24 Jul 2023 13:43:54 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88ABC1702;
+        Mon, 24 Jul 2023 10:43:52 -0700 (PDT)
+Message-ID: <20230724155329.474037902@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1690220630;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=x0/YxfQ7KycD3cE3OrPXPIszM9wkw+ZpilEoSpWAuFg=;
+        b=Jx8F+1qIV/RGTyVkOzfnDcLC62XmPX7bXKtGtISTgk1sG3J2QfAYkjFkCmx3xtdwVQHUM1
+        V4RL1ttMTCHXD1oVAPt1xA7mQbIJIx1EZxvQHkTsqY+Pb4Hlv38vbMfxJhiSHN+sqM2wED
+        VlyS8y2t7xB4rsifZc7d5WBs0kBzzMk/wbYGEbkwISIIRy1b8S/u4TFervAtBds/1VMtxk
+        9N43EGGKJgJP8t2T5entdUybG/5rjk+l2K/uRbm07/vo2paaoFyV2KH2IYJ2i23htM6tN+
+        afTyRHRvTaAEh/dxOCVIDauANzXZ+Q9dJSn8T3Ik2wT8PQov/wDCCjjLEywrcw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1690220630;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=x0/YxfQ7KycD3cE3OrPXPIszM9wkw+ZpilEoSpWAuFg=;
+        b=NY6Sj68bJiuzUoSEOZuvhu53pQhB1UEyUse7mVx0GXYydmSIElcW0UW5H9lGjY3V0jXUCU
+        MZjKNPMnf7+8SUAg==
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     x86@kernel.org, Tom Lendacky <thomas.lendacky@amd.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Arjan van de Ven <arjan@linux.intel.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        James Smart <james.smart@broadcom.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Huang Rui <ray.huang@amd.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Steve Wahl <steve.wahl@hpe.com>,
+        Mike Travis <mike.travis@hpe.com>,
+        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
+        Russ Anderson <russ.anderson@hpe.com>
+Subject: [patch 00/29] x86/cpu: Rework the topology evaluation
+Date:   Mon, 24 Jul 2023 19:43:50 +0200 (CEST)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jul 24, 2023 at 08:29:23AM +0200, werneazc@gmail.com wrote:
-> From: Andre Werner <andre.werner@systec-electronic.com>
-> 
-> Add base support for Renesas HS3001 temperature
-> and humidity sensors and its compatibles HS3002,
-> HS3003 and HS3004.
-> 
-> The sensor has a fix I2C address 0x44. The resolution
-> is fixed to 14bit (ref. Missing feature).
-> 
-> Missing feature:
-> - Accessing non-volatile memory: Custom board has no
->   possibility to control voltage supply of sensor. Thus,
->   we cannot send the necessary control commands within
->   the first 10ms after power-on.
-> 
-> Signed-off-by: Andre Werner <andre.werner@systec-electronic.com>
+Hi!
 
-I was about to apply the patch, but unfortunately found another problem.
-Sorry for not noticing earlier. See inline.
+A recent commit to the CPUID leaf 0xb/0x1f parser made me look deeper at
+the way how topology is evaluated. That "fix" is just yet another cure the
+sypmtom hack which completely ignores the underlying disaster.
 
-> ---
-> Changelog:
-> v1: Initial version
-> v2: Extensive refactoring following recommendations of reviewers:
->  - Delete unused defines and device properties. These are added in
->    the initial version because the device supports a programming mode,
->    but I was not able to implement it, because the custom board was
->    not able to control the power supply of the device and so I cannot
->    enter the programming mode of the device.
->  - Correct misunderstanding comments for defines.
->  - Delete mutexes for data and I2C bus accesses.
->  - Replace attributes with recommended chip-info structure. In the
->    initial version I followed the sth3x.c implementation that uses
->    files and attributes in sysfs. The show functions are replaced by
->    is_visible and read callbacks from the HWMON ABI. I also  delete pointless
->    function argument checks.
->  - Correct Yoda programming.
->  - Refactor probe function and delete sleep and measurement of humidity
->    and temperature in probe function. I kept an initial I2C
->    communication to ensure that the device is accessible during probe.
->  - Reduce the number of attributes to humidity and temperature input.
->  v3: Delete chip data because it is unused.
->  v4: Refactor driver as follows:
->  - Delete further unused defines
->  - Replace masks and operations with GENMASK and FIELD_GET macros
->  - Add mutex to protect chip wakeup and data transfer operations on bus
->  - Reformat driver as requested
->  - Make hs3001_is_visible and hs3001_read function static
->  v5: Drop i2c access in probe; Correct precession lost in conversion
->  function for physical values
-> ---
->  Documentation/hwmon/hs3001.rst |  37 +++++
->  MAINTAINERS                    |   6 +
->  drivers/hwmon/Kconfig          |  10 ++
->  drivers/hwmon/Makefile         |   1 +
->  drivers/hwmon/hs3001.c         | 243 +++++++++++++++++++++++++++++++++
->  5 files changed, 297 insertions(+)
->  create mode 100644 Documentation/hwmon/hs3001.rst
->  create mode 100644 drivers/hwmon/hs3001.c
-> 
-> diff --git a/Documentation/hwmon/hs3001.rst b/Documentation/hwmon/hs3001.rst
-> new file mode 100644
-> index 000000000000..703fb9c45313
-> --- /dev/null
-> +++ b/Documentation/hwmon/hs3001.rst
-> @@ -0,0 +1,37 @@
-> +.. SPDX-License-Identifier: GPL-2.0-or-later
-> +
-> +Kernel driver HS3001
-> +===================
-> +
-> +Supported chips:
-> +
-> +  * Renesas HS3001, HS3002, HS3003, HS3004
-> +
-> +    Prefix: 'hs3001'
-> +
-> +    Addresses scanned: -
-> +
-> +    Datasheet: https://www.renesas.com/us/en/document/dst/hs300x-datasheet?r=417401
-> +
-> +Author:
-> +
-> +  - Andre Werner <andre.werner@systec-electronic.com>
-> +
-> +Description
-> +-----------
-> +
-> +This driver implements support for the Renesas HS3001 chips, a humidity
-> +and temperature family. Temperature is measured in degrees celsius, relative
-> +humidity is expressed as a percentage. In the sysfs interface, all values are
-> +scaled by 1000, i.e. the value for 31.5 degrees celsius is 31500.
-> +
-> +The device communicates with the I2C protocol. Sensors have the I2C
-> +address 0x44 by default.
-> +
-> +sysfs-Interface
-> +---------------
-> +
-> +===============================================================================
-> +temp1_input:        temperature input
-> +humidity1_input:    humidity input
-> +===============================================================================
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index d516295978a4..46c97769eb05 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -9496,6 +9496,12 @@ S:	Maintained
->  W:	http://artax.karlin.mff.cuni.cz/~mikulas/vyplody/hpfs/index-e.cgi
->  F:	fs/hpfs/
->  
-> +HS3001 Hardware Temperature and Humidity Sensor
-> +M:	Andre Werner <andre.werner@systec-electronic.com>
-> +L:	linux-hwmon@vger.kernel.org
-> +S:	Maintained
-> +F:	drivers/hwmon/hs3001.c
-> +
->  HSI SUBSYSTEM
->  M:	Sebastian Reichel <sre@kernel.org>
->  S:	Maintained
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 307477b8a371..ca6be5a23271 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -734,6 +734,16 @@ config SENSORS_HIH6130
->  	  This driver can also be built as a module. If so, the module
->  	  will be called hih6130.
->  
-> +config SENSORS_HS3001
-> +	tristate "Renesas HS3001 humidity and temperature sensors"
-> +	depends on I2C
-> +	help
-> +	  If you say yes here you get support for the Renesas HS3001,
-> +	  to HS3004 humidity and temperature sensors.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called hs3001.
-> +
->  config SENSORS_IBMAEM
->  	tristate "IBM Active Energy Manager temperature/power sensors and control"
->  	select IPMI_SI
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index 3f4b0fda0998..cdae4e1fc919 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -86,6 +86,7 @@ obj-$(CONFIG_SENSORS_GSC)	+= gsc-hwmon.o
->  obj-$(CONFIG_SENSORS_GPIO_FAN)	+= gpio-fan.o
->  obj-$(CONFIG_SENSORS_GXP_FAN_CTRL) += gxp-fan-ctrl.o
->  obj-$(CONFIG_SENSORS_HIH6130)	+= hih6130.o
-> +obj-$(CONFIG_SENSORS_HS3001)	+= hs3001.o
->  obj-$(CONFIG_SENSORS_ULTRA45)	+= ultra45_env.o
->  obj-$(CONFIG_SENSORS_I5500)	+= i5500_temp.o
->  obj-$(CONFIG_SENSORS_I5K_AMB)	+= i5k_amb.o
-> diff --git a/drivers/hwmon/hs3001.c b/drivers/hwmon/hs3001.c
-> new file mode 100644
-> index 000000000000..dec4271c78a6
-> --- /dev/null
-> +++ b/drivers/hwmon/hs3001.c
-> @@ -0,0 +1,243 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * This is a non-complete driver implementation for the
-> + * HS3001 humidity and temperature sensor and compatibles. It does not include
-> + * the configuration possibilities, where it needs to be set to 'programming mode'
-> + * during power-up.
-> + *
-> + *
-> + * Copyright (C) 2023 SYS TEC electronic AG
-> + * Author: Andre Werner <andre.werner@systec-electronic.com>
-> + */
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/delay.h>
-> +#include <linux/err.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/slab.h>
-> +#include <linux/types.h>
-> +
-> +/* Measurement times */
-> +#define HS3001_WAKEUP_TIME	100	/* us */
-> +#define HS3001_8BIT_RESOLUTION	550	/* us */
-> +#define HS3001_10BIT_RESOLUTION	1310	/* us */
-> +#define HS3001_12BIT_RESOLUTION	4500	/* us */
-> +#define HS3001_14BIT_RESOLUTION	16900	/* us */
-> +
-> +#define HS3001_RESPONSE_LENGTH	4
-> +
-> +#define HS3001_FIXPOINT_ARITH	1000U
-> +
-> +#define HS3001_MASK_HUMIDITY_0X3FFF	GENMASK(13, 0)
-> +#define HS3001_MASK_STATUS_0XC0	GENMASK(7, 6)
-> +
-> +/* Definitions for Status Bits of A/D Data */
-> +#define HS3001_DATA_VALID	0x00	/* Valid Data */
-> +#define HS3001_DATA_STALE	0x01	/* Stale Data */
-> +
-> +struct hs3001_data {
-> +	struct i2c_client *client;
-> +	struct mutex i2c_lock; /* lock for sending i2c commands */
-> +	u32 wait_time;		/* in us */
-> +	int temperature;	/* in milli degree */
-> +	u32 humidity;		/* in milli % */
-> +};
-> +
-> +static int hs3001_extract_temperature(u16 raw)
-> +{
-> +	/* fixpoint arithmetic 1 digit */
-> +	u32 temp = (raw >> 2) * HS3001_FIXPOINT_ARITH * 165;
-> +
-> +	temp /= (1 << 14) - 1;
-> +
-> +	return (int)temp - 40 * HS3001_FIXPOINT_ARITH;
-> +}
-> +
-> +static u32 hs3001_extract_humidity(u16 raw)
-> +{
-> +	u32 hum = (raw & HS3001_MASK_HUMIDITY_0X3FFF) * HS3001_FIXPOINT_ARITH * 100;
-> +
-> +	return hum /= (1 << 14) - 1;
-> +}
-> +
-> +static int hs3001_data_fetch_command(struct i2c_client *client,
-> +				     struct hs3001_data *data)
-> +{
-> +	int ret;
-> +	u8 buf[HS3001_RESPONSE_LENGTH];
-> +	u8 hs3001_status;
-> +
-> +	ret = i2c_master_recv(client, buf, HS3001_RESPONSE_LENGTH);
-> +	if (ret != HS3001_RESPONSE_LENGTH) {
-> +		ret = ret < 0 ? ret : -EIO;
-> +		dev_dbg(&client->dev,
-> +			"Error in i2c communication. Error code: %d.\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	hs3001_status = FIELD_GET(HS3001_MASK_STATUS_0XC0, buf[0]);
-> +	if (hs3001_status == HS3001_DATA_STALE) {
-> +		dev_dbg(&client->dev, "Sensor busy.\n");
-> +		return -EBUSY;
-> +	}
-> +	if (hs3001_status != HS3001_DATA_VALID) {
-> +		dev_dbg(&client->dev, "Data invalid.\n");
-> +		return -EIO;
-> +	}
-> +
-> +	data->humidity =
-> +		hs3001_extract_humidity(be16_to_cpup((__be16 *)&buf[0]));
-> +	data->temperature =
-> +		hs3001_extract_temperature(be16_to_cpup((__be16 *)&buf[2]));
-> +
-> +	return 0;
-> +}
-> +
-> +static umode_t hs3001_is_visible(const void *data, enum hwmon_sensor_types type,
-> +				 u32 attr, int channel)
-> +{
-> +	/* Both, humidity and temperature can only be read. */
-> +	return 0444;
-> +}
-> +
-> +static int hs3001_read(struct device *dev, enum hwmon_sensor_types type,
-> +		       u32 attr, int channel, long *val)
-> +{
-> +	struct hs3001_data *data = dev_get_drvdata(dev);
-> +	struct i2c_client *client = data->client;
-> +	int ret;
-> +
-> +	/* Protected section beginn */
+The way how topology evaluation works is to overwrite the relevant
+variables as often as possible. E.g. smp_num_siblings gets overwritten a
+gazillion times, which is wrong to begin with. The boot CPU writes it 3
+times, each AP two times.
 
-Nit: begin, but the comment is really unnecessary.
-That is obvious from the function call.
+What's worse is that this just works by chance on hybrid systems due to the
+fact that the existing ones all seem to boot on a P-Core which has
+SMT. Would it boot on a E-Core which has no SMT, then parts of the early
+topology evaluation including the primary thread mask which is required for
+parallel CPU bringup would be completely wrong. Overwriting it later on
+with the correct value does not help at all.
 
-> +	mutex_lock(&data->i2c_lock);
-> +	ret = i2c_master_send(client, NULL, 0);
-> +	if (ret < 0)
-> +		return ret;
+What's wrong today with hybrid already is the number of cores per package.
+On an ADL with 8 P-Cores and 8 E-cores the resulting number of cores per
+package is evaluated to be 12. Which is not further surprising because the
+CPUID 0xb/0x1f parser looks at the number of logical processors at core
+level and divides them by the number of SMP siblings.
 
-This needs to unlock before returning.
+   24 / 2 = 12
 
-> +
-> +	/*
-> +	 * Sensor needs some time to process measurement depending on
-> +	 * resolution (ref. datasheet)
-> +	 */
-> +	fsleep(data->wait_time);
-> +
-> +	ret = hs3001_data_fetch_command(client, data);
-> +	mutex_unlock(&data->i2c_lock);
-> +	/* Protected section end */
+Just that this CPU has obviously 16 cores not 12.
 
-Nit: Pointless comment (this is obvious)
+It's is even clearly documented in the SDM that this is wrong.
 
-> +
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		switch (attr) {
-> +		case hwmon_temp_input:
-> +			*val = data->temperature;
-> +			break;
-> +		default:
-> +			return -EINVAL;
-> +		}
-> +		break;
-> +	case hwmon_humidity:
-> +		switch (attr) {
-> +		case hwmon_humidity_input:
-> +			*val = data->humidity;
-> +			break;
-> +		default:
-> +			return -EINVAL;
-> +		}
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct hwmon_channel_info *hs3001_info[] = {
-> +	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
-> +	HWMON_CHANNEL_INFO(humidity, HWMON_H_INPUT),
-> +	NULL
-> +};
-> +
-> +static const struct hwmon_ops hs3001_hwmon_ops = {
-> +	.is_visible = hs3001_is_visible,
-> +	.read = hs3001_read,
-> +};
-> +
-> +static const struct hwmon_chip_info hs3001_chip_info = {
-> +	.ops = &hs3001_hwmon_ops,
-> +	.info = hs3001_info,
-> +};
-> +
-> +/* device ID table */
-> +static const struct i2c_device_id hs3001_ids[] = {
-> +	{ "hs3001", 0 },
-> +	{ },
-> +};
-> +
-> +MODULE_DEVICE_TABLE(i2c, hs3001_ids);
-> +
-> +static const struct of_device_id hs3001_of_match[] = {
-> +	{.compatible = "renesas,hs3001"},
-> +	{ },
-> +};
-> +
-> +MODULE_DEVICE_TABLE(of, hs3001_of_match);
-> +
-> +static int hs3001_probe(struct i2c_client *client)
-> +{
-> +	struct hs3001_data *data;
-> +	struct device *hwmon_dev;
-> +	struct device *dev = &client->dev;
-> +	int ret;
-> +
-> +	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
-> +		return -EOPNOTSUPP;
-> +
-> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->client = client;
-> +
-> +	/*
-> +	 * Measurement time = wake-up time + measurement time temperature
-> +	 * + measurment time humidity. This is currently static, because
+ "Bits 15-00: The number of logical processors across all instances of this
+  domain within the next higher- scoped domain relative to this current
+  logical processor. (For example, in a processor socket/package comprising
+  "M" dies of "N" cores each, where each core has "L" processors, the
+  "die" domain subleaf value of this field would be M*N*L. In an asymmetric
+  topology this would be the summation of the value across the lower domain
+  level instances to create each upper domain level instance.) This number
+  reflects configuration as shipped by Intel. Note, software must not use
+  this field to enumerate processor topology.
 
-Nit: measurement
+  Software must not use the value of EBX[15:0] to enumerate processor topology
+  of the system. The value is only intended for display and diagnostic purposes.
+  The actual number of logical processors available to BIOS/OS/Applications
+  may be different from the value of EBX[15:0], depending on software and
+  platform hardware configurations."
 
-> +	 * enabling programming mode is not supported, yet.
-> +	 */
-> +	data->wait_time = (HS3001_WAKEUP_TIME + HS3001_14BIT_RESOLUTION +
-> +			   HS3001_14BIT_RESOLUTION);
-> +
-> +	mutex_init(&data->i2c_lock);
-> +
-> +	hwmon_dev = devm_hwmon_device_register_with_info(dev,
-> +							 client->name,
-> +							 data,
-> +							 &hs3001_chip_info,
-> +							 NULL);
-> +
-> +	if (IS_ERR(hwmon_dev))
-> +		return dev_err_probe(dev, PTR_ERR(hwmon_dev),
-> +				     "Unable to register hwmon device.\n");
-> +
-> +	return 0;
-> +}
-> +
-> +static struct i2c_driver hs3001_i2c_driver = {
-> +	.driver = {
-> +		   .name = "hs3001",
-> +		   .of_match_table = hs3001_of_match,
-> +	},
-> +	.probe_new = hs3001_probe,
-> +	.id_table = hs3001_ids,
-> +};
-> +
-> +module_i2c_driver(hs3001_i2c_driver);
-> +
-> +MODULE_AUTHOR("Andre Werner <andre.werner@systec-electronic.com>");
-> +MODULE_DESCRIPTION("HS3001 humidity and temperature sensor base driver");
-> +MODULE_LICENSE("GPL");
+This "_NOT_ to use for topology evaluation" sentence existed even before
+hybrid came along and got ignored. The code worked by chance, but with
+hybrid all bets are off. The code completely falls apart once CPUID leaf
+0x1f enumerates any topology level between CORE and DIE, but that's not a
+suprise.
+
+The proper thing to do is to actually evaluate the full topology including
+the non-present (hotpluggable) CPUs based on the APICIDs which are provided
+by the firmware and a proper topology domain level parser. This can exactly
+tell the number of physical packages, logical packages etc. _before_ even
+booting a single AP. All of that can be evaluated upfront.
+
+Aside of that there are too many places which do their own topology
+evaluation, but there is absolutely no central point which can actually
+provide all of that information in a consistent way. This needs to change.
+
+This series implements another piece towards this: sane CPUID evaluation,
+which is done at _one_ place in a proper well defined order instead of
+having it sprinkled all over the CPUID evaluation code.
+
+At the end of this series this is pretty much bug compatible with the
+current CPUID evaluation code in respect to the cores per package
+evaluation, but it gets rid of overwriting things like smp_num_siblings,
+which is now written once, but is still not capable to work correctly on a
+hybrid machine which boots from a non SMT core. These things can only be
+fixed up in the next step(s).
+
+When I tried to go further with this I ran into yet another pile of
+historical layers of duct tape and haywire with a gazillion of random
+variables sprinkled all over the place. That's still work in progress.  It
+actually works, but the last step which switches over is not yet in a shape
+that can be easily reviewed. Stay tuned.
+
+The series is based on the APIC cleanup series:
+
+  https://lore.kernel.org/lkml/20230724131206.500814398@linutronix.de
+
+and also available on top of that from git:
+
+ git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git topo-cpuid-v1
+
+Thanks,
+
+	tglx
+---
+ arch/x86/kernel/cpu/topology.c              |  168 --------------------
+ b/Documentation/arch/x86/topology.rst       |   12 -
+ b/arch/x86/events/amd/core.c                |    2 
+ b/arch/x86/events/amd/uncore.c              |    2 
+ b/arch/x86/events/intel/uncore.c            |    2 
+ b/arch/x86/include/asm/apic.h               |    1 
+ b/arch/x86/include/asm/cacheinfo.h          |    3 
+ b/arch/x86/include/asm/cpuid.h              |   32 +++
+ b/arch/x86/include/asm/processor.h          |   58 ++++--
+ b/arch/x86/include/asm/smp.h                |    2 
+ b/arch/x86/include/asm/topology.h           |   51 +++++-
+ b/arch/x86/include/asm/x86_init.h           |    2 
+ b/arch/x86/kernel/amd_nb.c                  |    8 
+ b/arch/x86/kernel/apic/apic_flat_64.c       |    7 
+ b/arch/x86/kernel/apic/apic_noop.c          |    3 
+ b/arch/x86/kernel/apic/apic_numachip.c      |   11 -
+ b/arch/x86/kernel/apic/bigsmp_32.c          |    6 
+ b/arch/x86/kernel/apic/local.h              |    1 
+ b/arch/x86/kernel/apic/probe_32.c           |    6 
+ b/arch/x86/kernel/apic/x2apic_cluster.c     |    1 
+ b/arch/x86/kernel/apic/x2apic_phys.c        |    6 
+ b/arch/x86/kernel/apic/x2apic_uv_x.c        |   63 +------
+ b/arch/x86/kernel/cpu/Makefile              |    5 
+ b/arch/x86/kernel/cpu/amd.c                 |  156 ------------------
+ b/arch/x86/kernel/cpu/cacheinfo.c           |   51 ++----
+ b/arch/x86/kernel/cpu/centaur.c             |    4 
+ b/arch/x86/kernel/cpu/common.c              |  108 +-----------
+ b/arch/x86/kernel/cpu/cpu.h                 |   14 +
+ b/arch/x86/kernel/cpu/debugfs.c             |   98 +++++++++++
+ b/arch/x86/kernel/cpu/hygon.c               |  133 ---------------
+ b/arch/x86/kernel/cpu/intel.c               |   38 ----
+ b/arch/x86/kernel/cpu/mce/amd.c             |    4 
+ b/arch/x86/kernel/cpu/mce/apei.c            |    4 
+ b/arch/x86/kernel/cpu/mce/core.c            |    4 
+ b/arch/x86/kernel/cpu/mce/inject.c          |    7 
+ b/arch/x86/kernel/cpu/proc.c                |    8 
+ b/arch/x86/kernel/cpu/topology.h            |   51 ++++++
+ b/arch/x86/kernel/cpu/topology_amd.c        |  179 +++++++++++++++++++++
+ b/arch/x86/kernel/cpu/topology_common.c     |  233 ++++++++++++++++++++++++++++
+ b/arch/x86/kernel/cpu/topology_ext.c        |  136 ++++++++++++++++
+ b/arch/x86/kernel/cpu/zhaoxin.c             |   18 --
+ b/arch/x86/kernel/smpboot.c                 |   64 ++++---
+ b/arch/x86/kernel/vsmp_64.c                 |   13 -
+ b/arch/x86/mm/amdtopology.c                 |   35 +---
+ b/arch/x86/xen/apic.c                       |    8 
+ b/drivers/edac/amd64_edac.c                 |    4 
+ b/drivers/edac/mce_amd.c                    |    4 
+ b/drivers/gpu/drm/amd/amdkfd/kfd_topology.c |    2 
+ b/drivers/hwmon/fam15h_power.c              |    7 
+ b/drivers/scsi/lpfc/lpfc_init.c             |    8 
+ b/drivers/virt/acrn/hsm.c                   |    2 
+ 51 files changed, 964 insertions(+), 881 deletions(-)
+
+
+
+
