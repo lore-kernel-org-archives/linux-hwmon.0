@@ -2,37 +2,37 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45C03C00528
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Jul 2023 17:47:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2ABFC001DF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Jul 2023 17:47:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231858AbjGXRrH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 24 Jul 2023 13:47:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45074 "EHLO
+        id S231248AbjGXRrJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 24 Jul 2023 13:47:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbjGXRqB (ORCPT
+        with ESMTP id S231664AbjGXRqB (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Mon, 24 Jul 2023 13:46:01 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4B626B8;
-        Mon, 24 Jul 2023 10:44:31 -0700 (PDT)
-Message-ID: <20230724172845.093176653@linutronix.de>
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D49A726B9;
+        Mon, 24 Jul 2023 10:44:32 -0700 (PDT)
+Message-ID: <20230724172844.922152119@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1690220669;
+        s=2020; t=1690220664;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=v1jagm3qezJbhLi1KwbMq1PXX83lXTZZ+4TGqrP0z90=;
-        b=OkHXybNQQevV6glW3A2Mf6eoeYhUxke0k0HD+rpOPjuVGZ6TnXuObV/WYGTB64PHH2z3ea
-        HKFaPqZYT853uTM64gPVidE0jWdQ4rQuVCJKKalORZrp9hHAYwlhHTj+iBbaqiBEhh6SXd
-        ArO94NdNMJ0a51RGjo1LXON+xvjiOrqRuLw2sgYS+c3btuMJ3EYIg1YK+Z9BecLZPgCv+3
-        FF+blwmBHA96byoG9OJ4DhB0YaHiA4xKnwwjFJOYNT9oQJ8PWlXdNCzshp6MzEIr9uWSiD
-        Hit5O2GsziwCczYaPPleJ7HzSPxFiais1FI+8wBBR+8cmp0oAI7OPuJuQmgtnQ==
+         references:references; bh=4pQHURzHcwcFZ9S0vbzPTsi43pbiloyiG3aJ+/xAmII=;
+        b=HOSlRNRENtX+6xkRO1N3OyyDeOhy2LFaKHXTp8rqFB0QwKy/QwpRCsy0Qd9DoecBO5w37O
+        I/HkCr57Zqx1F3wkWeLKCZsiZsbntE4tXkpj9x8IfmkDUigq1rbo/08Cn7w3k4NR2KkqAH
+        EvigQWvLJJmKSIemeRMuC1nsudNRcQOxEaCmpvBgqYUiygyLd3UKGmY09kx9KTjVfrD8ZZ
+        MpZC7zZGJcssGdb3oZxIxVb6dUG0cUOyGrsdzJisvHe4hX0mZDgNUNIJ6iRlgb+9A+3KGt
+        6yA5nW/06KEfQ+HSPPDWwdpgckhqs4MXnnScRSp3kLXVh7rO6izszPdHQ5aqMw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1690220669;
+        s=2020e; t=1690220664;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=v1jagm3qezJbhLi1KwbMq1PXX83lXTZZ+4TGqrP0z90=;
-        b=fZcd3cXW+uJASR5ZGQiUcmQm8+REqm2w/l2vqi5pQrVP+FlvnSet/BUrcyOfC1rL0YC633
-        fCiPh7LmDSwkmECg==
+         references:references; bh=4pQHURzHcwcFZ9S0vbzPTsi43pbiloyiG3aJ+/xAmII=;
+        b=H1G7mKqnvQfHFb5aBTJRYlKkWHmZVAYoVwWl8jg5lQH06BxuaJG7j3E7mBVujBTqsKf7AT
+        C/0kC4xcSeO4U9Ag==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     x86@kernel.org, Tom Lendacky <thomas.lendacky@amd.com>,
@@ -50,83 +50,50 @@ Cc:     x86@kernel.org, Tom Lendacky <thomas.lendacky@amd.com>,
         Mike Travis <mike.travis@hpe.com>,
         Dimitri Sivanich <dimitri.sivanich@hpe.com>,
         Russ Anderson <russ.anderson@hpe.com>
-Subject: [patch 24/29] x86/mm/numa: Use core domain size on AMD
+Subject: [patch 21/29] x86/smpboot: Teach it about topo.amd_node_id
 References: <20230724155329.474037902@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 24 Jul 2023 19:44:28 +0200 (CEST)
+Date:   Mon, 24 Jul 2023 19:44:23 +0200 (CEST)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-cpuinfo::topo::x86_coreid_bits is about to be phased out. Use the core
-domain size from the topology information.
-
-Add a comment why the early MPTABLE parsing is required and decrapify the
-loop which sets the APIC ID to node map.
+When switching AMD over to the new topology parser then the match functions
+need to look for AMD systems with the extended topology feature at the new
+topo.amd_node_id member which is then holding the node id information.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- arch/x86/mm/amdtopology.c |   35 ++++++++++++++++-------------------
- 1 file changed, 16 insertions(+), 19 deletions(-)
+ arch/x86/kernel/smpboot.c |   12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
---- a/arch/x86/mm/amdtopology.c
-+++ b/arch/x86/mm/amdtopology.c
-@@ -54,13 +54,11 @@ static __init int find_northbridge(void)
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -486,6 +486,7 @@ static bool match_smt(struct cpuinfo_x86
  
- int __init amd_numa_init(void)
+ 		if (c->topo.pkg_id == o->topo.pkg_id &&
+ 		    c->topo.die_id == o->topo.die_id &&
++		    c->topo.amd_node_id == o->topo.amd_node_id &&
+ 		    per_cpu_llc_id(cpu1) == per_cpu_llc_id(cpu2)) {
+ 			if (c->topo.core_id == o->topo.core_id)
+ 				return topology_sane(c, o, "smt");
+@@ -507,10 +508,13 @@ static bool match_smt(struct cpuinfo_x86
+ 
+ static bool match_die(struct cpuinfo_x86 *c, struct cpuinfo_x86 *o)
  {
--	u64 start = PFN_PHYS(0);
-+	unsigned int numnodes, cores, apicid;
-+	u64 prevbase, start = PFN_PHYS(0);
- 	u64 end = PFN_PHYS(max_pfn);
--	unsigned numnodes;
--	u64 prevbase;
--	int i, j, nb;
- 	u32 nodeid, reg;
--	unsigned int bits, cores, apicid_base;
-+	int i, j, nb;
- 
- 	if (!early_pci_allowed())
- 		return -EINVAL;
-@@ -158,26 +156,25 @@ int __init amd_numa_init(void)
- 		return -ENOENT;
- 
- 	/*
--	 * We seem to have valid NUMA configuration.  Map apicids to nodes
--	 * using the coreid bits from early_identify_cpu.
-+	 * We seem to have valid NUMA configuration. Map apicids to nodes
-+	 * using the size of the core domain in the APIC space.
- 	 */
--	bits = boot_cpu_data.x86_coreid_bits;
--	cores = 1 << bits;
--	apicid_base = 0;
-+	cores = topology_get_domain_size(TOPO_CORE_DOMAIN);
- 
- 	/*
--	 * get boot-time SMP configuration:
-+	 * Scan MPTABLE to map the local APIC and ensure that the boot CPU
-+	 * APIC ID is valid. This is required because on pre ACPI/SRAT
-+	 * systems IO-APICs are mapped before the boot CPU.
- 	 */
- 	early_get_smp_config();
- 
--	if (boot_cpu_physical_apicid > 0) {
--		pr_info("BSP APIC ID: %02x\n", boot_cpu_physical_apicid);
--		apicid_base = boot_cpu_physical_apicid;
-+	apicid = boot_cpu_physical_apicid;
-+	if (apicid > 0)
-+		pr_info("BSP APIC ID: %02x\n", apicid);
+-	if (c->topo.pkg_id == o->topo.pkg_id &&
+-	    c->topo.die_id == o->topo.die_id)
+-		return true;
+-	return false;
++	if (c->topo.pkg_id != o->topo.pkg_id || c->topo.die_id != o->topo.die_id)
++		return false;
 +
-+	for_each_node_mask(i, numa_nodes_parsed) {
-+		for (j = 0; j < cores; j++, apicid++)
-+			set_apicid_to_node(apicid, i);
- 	}
--
--	for_each_node_mask(i, numa_nodes_parsed)
--		for (j = apicid_base; j < cores + apicid_base; j++)
--			set_apicid_to_node((i << bits) + j, i);
--
- 	return 0;
++	if (boot_cpu_has(X86_FEATURE_TOPOEXT) && topology_amd_nodes_per_pkg() > 1)
++		return c->topo.amd_node_id == o->topo.amd_node_id;
++
++	return true;
  }
+ 
+ static bool match_l2c(struct cpuinfo_x86 *c, struct cpuinfo_x86 *o)
 
