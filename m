@@ -2,307 +2,332 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22F47C001DF
-	for <linux-hwmon@archiver.kernel.org>; Sun, 23 Jul 2023 22:07:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0343C001DE
+	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Jul 2023 01:20:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbjGWWHd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 23 Jul 2023 18:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51404 "EHLO
+        id S230133AbjGXBUn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 23 Jul 2023 21:20:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjGWWHc (ORCPT
+        with ESMTP id S229836AbjGXBUf (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 23 Jul 2023 18:07:32 -0400
-Received: from mx-out2.startmail.com (mx-out2.startmail.com [145.131.90.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B17A2E5C;
-        Sun, 23 Jul 2023 15:07:28 -0700 (PDT)
-Date:   Sun, 23 Jul 2023 17:07:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=startmail.com;
-        s=2020-07; t=1690150046;
-        bh=Pzhbdmi+Q4cAPO2nJq3dihfzBgR3qM8T9EVB24WXGeE=;
-        h=Date:From:To:Subject:Message-ID:References:Mime-Version:
-         Content-Type:Content-Disposition:In-Reply-To:From:Subject:To:Date:
-         Sender:Content-Type:Content-Transfer-Encoding:Content-Disposition:
-         Mime-Version:Reply-To:In-Reply-To:References:Message-Id:Autocrypt;
-        b=Fsi7v8rCqO8VBaD+2fAY45r8W9+Cxydl7tdq66yA5syYPQ4NZYMoRAv89z5wXhx9t
-         U9wUtRa+dyfXmFZtcnKbwAQzJkrKaC2LCmrNFdPU3qZRMyG+xVWzdonOJxgBXEW13V
-         kuIutoJh/KpEXc3L8xrBwEMJRG445/zcyr7K/n4GBCEnxBWDDXpl2sI9IWdX/SANVY
-         xebjc8aa+NdyzdnUgvjEiDUTk6K/EpBi4TFP12XkFD8izbaHgREevuA+z9oWNTevLL
-         oRHn7VnGQi//wQvKBLTZu81NPmfxTDKDFzoZFDns/rgu6VM6dmmOWMTK4tJw8zPIOr
-         Kba6d6Zv4wyEg==
-From:   "Marty E. Plummer" <hanetzer@startmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH] hwmon: (pmbus) Add driver fpr Infineon IR35201
-Message-ID: <izfbs2b72mmy6hgwugq5pnilon6626up7yp5quta6dd6tnlusx@bkuyfpenkb4f>
-References: <20230720115805.1510279-1-hanetzer@startmail.com>
- <b86e19ed-12af-e488-3c21-002be2ad5914@roeck-us.net>
- <axue7wmaxbj7vurapabuwtvqk3br3zt2g373d6ako4m24wzaxf@2uvgmasdd7dk>
- <bf1be356-9e3e-6fd7-0987-03deb593131e@roeck-us.net>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bf1be356-9e3e-6fd7-0987-03deb593131e@roeck-us.net>
+        Sun, 23 Jul 2023 21:20:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8A1E53;
+        Sun, 23 Jul 2023 18:20:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 403BB60F0C;
+        Mon, 24 Jul 2023 01:18:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89045C433C8;
+        Mon, 24 Jul 2023 01:18:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690161519;
+        bh=xM3V1BhhnC+IlUeJkZSthqS7smX1WbC4G+VGgkiSEYw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=rDmtsdPYOow57m3aFfvUBATn5ynGlr6CEQcW54BdW7xj4gpp6dl3JiSqKHYTMz6Hw
+         WiD5+5ovrCsrhwpjCPLjJfOCQQrifJYNghLkO4c/XoZ730Q7iL/JH8Gr0WbNRB6a2j
+         ZUWQLRuEgQg8jBUK81FBYZYHmAdHt0UWwJSoiylbmm26J04+3dgZTxBnVigcndBsRC
+         fFPzCjtAf0L2w3maVgNUqwIqtnsIE5LtDuACABOA52e+7IQesdHow/+2uSxRdxpRgJ
+         oLZin4MTVhmY7AX035qzDr9IIrXUhtfdzAIBBvpklBrourN5vCp+rp3RUb0wCJXAZM
+         slJ/AZ7rKzL4w==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Aleksa Savic <savicaleksa83@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sasha Levin <sashal@kernel.org>, me@jackdoan.com,
+        jdelvare@suse.com, corbet@lwn.net, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.4 33/58] hwmon: (aquacomputer_d5next) Add support for Aquacomputer Leakshield
+Date:   Sun, 23 Jul 2023 21:13:01 -0400
+Message-Id: <20230724011338.2298062-33-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230724011338.2298062-1-sashal@kernel.org>
+References: <20230724011338.2298062-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.4.5
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Jul 20, 2023 at 12:22:47PM -0700, Guenter Roeck wrote:
-> On 7/20/23 11:35, Marty E. Plummer wrote:
-> > On Thu, Jul 20, 2023 at 07:00:39AM -0700, Guenter Roeck wrote:
-> > > 
-> > Maybe.On 7/20/23 04:58, Marty E. Plummer wrote:
-> > > > The IR35201 is a dual-loop digital multi-phase buck controller designed for CPU voltage regulation.
-> > > > 
-> > > > Signed-off-by: Marty E. Plummer <hanetzer@startmail.com>
-> > > > ---
-> > > >    Documentation/hwmon/index.rst   |  1 +
-> > > >    Documentation/hwmon/ir35201.rst | 63 +++++++++++++++++++++++
-> > > >    drivers/hwmon/pmbus/Kconfig     |  9 ++++
-> > > >    drivers/hwmon/pmbus/Makefile    |  1 +
-> > > >    drivers/hwmon/pmbus/ir35201.c   | 89 +++++++++++++++++++++++++++++++++
-> > > >    5 files changed, 163 insertions(+)
-> > > >    create mode 100644 Documentation/hwmon/ir35201.rst
-> > > >    create mode 100644 drivers/hwmon/pmbus/ir35201.c
-> > > > 
-> > > > diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> > > > index 042e1cf9501b..5b44a268de0d 100644
-> > > > --- a/Documentation/hwmon/index.rst
-> > > > +++ b/Documentation/hwmon/index.rst
-> > > > @@ -87,6 +87,7 @@ Hardware Monitoring Kernel Drivers
-> > > >       ina3221
-> > > >       inspur-ipsps1
-> > > >       intel-m10-bmc-hwmon
-> > > > +   ir35201
-> > > >       ir35221
-> > > >       ir38064
-> > > >       ir36021
-> > > > diff --git a/Documentation/hwmon/ir35201.rst b/Documentation/hwmon/ir35201.rst
-> > > > new file mode 100644
-> > > > index 000000000000..6ca34d4b02a3
-> > > > --- /dev/null
-> > > > +++ b/Documentation/hwmon/ir35201.rst
-> > > > @@ -0,0 +1,63 @@
-> > > > +.. SPDX-License-Identifier: GPL-2.0
-> > > > +
-> > > > +Kernel driver ir35201
-> > > > +=====================
-> > > > +
-> > > > +Supported chips:
-> > > > +
-> > > > +  * Infineon IR35201
-> > > > +
-> > > > +    Prefix: ir35201
-> > > > +    Addresses scanned: -
-> > > > +
-> > > > +    Datasheet: Publicly available at the Infineon website
-> > > > +      https://www.infineon.com/dgdl/Infineon-IR35201MTRPBF-DS-v01_00-EN.pdf?fileId=5546d462576f347501579c95d19772b5
-> > > > +
-> > > > +Authors:
-> > > > +      - Marty E. Plummer <hanetzer@startmail.com>
-> > > > +
-> > > > +Description
-> > > > +-----------
-> > > > +
-> > > > +The IR35201 is a dual-loop digital multi-phase buck controller designed for
-> > > > +CPU voltage regulation.
-> > > > +
-> > > > +Usage Notes
-> > > > +-----------
-> > > > +
-> > > > +This driver does not probe for PMBus devices. You will have to instantiate
-> > > > +devices explicitly.
-> > > > +
-> > > > +Sysfs attributes
-> > > > +----------------
-> > > > +
-> > > > +======================= ===========================
-> > > > +curr1_label             "iin"
-> > > > +curr1_input             Measured input current
-> > > > +curr1_alarm             Input fault alarm
-> > > > +
-> > > > +curr2_label             "iout1"
-> > > > +curr2_input             Measured output current
-> > > > +curr2_alarm             Output over-current alarm
-> > > > +
-> > > > +in1_label               "vin"
-> > > > +in1_input               Measured input voltage
-> > > > +in1_alarm               Input under-voltage alarm
-> > > > +
-> > > > +in2_label               "vout1"
-> > > > +in2_input               Measured output voltage
-> > > > +in2_alarm               Output over-voltage alarm
-> > > > +
-> > > > +power1_label            "pin"
-> > > > +power1_input            Measured input power
-> > > > +power1_alarm            Input under-voltage alarm
-> > > > +
-> > > > +power2_label            "pout1"
-> > > > +power2_input            Measured output power
-> > > > +
-> > > > +temp1_input             Measured temperature
-> > > > +temp1_alarm             Temperature alarm
-> > > > +
-> > > > +temp2_input             Measured other loop temperature
-> > > > +temp2_alarm             Temperature alarm
-> > > > +======================= ===========================
-> > > > diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> > > > index 270b6336b76d..7180823b15bb 100644
-> > > > --- a/drivers/hwmon/pmbus/Kconfig
-> > > > +++ b/drivers/hwmon/pmbus/Kconfig
-> > > > @@ -123,6 +123,15 @@ config SENSORS_INSPUR_IPSPS
-> > > >    	  This driver can also be built as a module. If so, the module will
-> > > >    	  be called inspur-ipsps.
-> > > > +config SENSORS_IR35201
-> > > > +	tristate "Infineon IR35201"
-> > > > +	help
-> > > > +	  If you say yes here you get hardware monitoring support for the
-> > > > +	  Infineon IR35201 controller.
-> > > > +
-> > > > +	  This driver can also be built as a module. If so, the module will
-> > > > +	  be called ir35201.
-> > > > +
-> > > >    config SENSORS_IR35221
-> > > >    	tristate "Infineon IR35221"
-> > > >    	help
-> > > > diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> > > > index 84ee960a6c2d..40729dd14e7a 100644
-> > > > --- a/drivers/hwmon/pmbus/Makefile
-> > > > +++ b/drivers/hwmon/pmbus/Makefile
-> > > > @@ -15,6 +15,7 @@ obj-$(CONFIG_SENSORS_FSP_3Y)	+= fsp-3y.o
-> > > >    obj-$(CONFIG_SENSORS_IBM_CFFPS)	+= ibm-cffps.o
-> > > >    obj-$(CONFIG_SENSORS_DPS920AB)	+= dps920ab.o
-> > > >    obj-$(CONFIG_SENSORS_INSPUR_IPSPS) += inspur-ipsps.o
-> > > > +obj-$(CONFIG_SENSORS_IR35201)	+= ir35201.o
-> > > >    obj-$(CONFIG_SENSORS_IR35221)	+= ir35221.o
-> > > >    obj-$(CONFIG_SENSORS_IR36021)	+= ir36021.o
-> > > >    obj-$(CONFIG_SENSORS_IR38064)	+= ir38064.o
-> > > > diff --git a/drivers/hwmon/pmbus/ir35201.c b/drivers/hwmon/pmbus/ir35201.c
-> > > > new file mode 100644
-> > > > index 000000000000..77f77057175a
-> > > > --- /dev/null
-> > > > +++ b/drivers/hwmon/pmbus/ir35201.c
-> > > > @@ -0,0 +1,89 @@
-> > > > +// SPDX-License-Identifier: GPL-2.0+
-> > > > +/*
-> > > > + * Hardware monitoring driver for Infineon IR35201
-> > > > + */
-> > > > +
-> > > > +#include <linux/err.h>
-> > > > +#include <linux/i2c.h>
-> > > > +#include <linux/init.h>
-> > > > +#include <linux/kernel.h>
-> > > > +#include <linux/module.h>
-> > > > +#include "pmbus.h"
-> > > > +
-> > > > +static struct pmbus_driver_info ir35201_info = {
-> > > > +	.pages = 1,
-> > > > +	.format[PSC_VOLTAGE_IN] = linear,
-> > > > +	.format[PSC_VOLTAGE_OUT] = linear,
-> > > > +	.format[PSC_CURRENT_IN] = linear,
-> > > > +	.format[PSC_CURRENT_OUT] = linear,
-> > > > +	.format[PSC_POWER] = linear,
-> > > > +	.format[PSC_TEMPERATURE] = linear,
-> > > > +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT
-> > > > +		| PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT
-> > > > +		| PMBUS_HAVE_PIN | PMBUS_HAVE_POUT
-> > > > +		| PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2
-> > > > +		| PMBUS_HAVE_STATUS_TEMP,
-> > > 
-> > > Several supported status registers are missing.
-> > > 
-> > Maybe. Did the best I could with this and another datasheet (ir36* iirc)
-> > open at the same time and both source files open for comparison, and the
-> > output from sensors with this patch, with allowances for variations
-> > in temps, matches more or less what HWINFO64 outputs on a windows pe
-> > based build of hiren's boot cd.
-> 
-> STATUS_INPUT, STATUS_IOUT, and STATUS_VOUT are supported according
-> to the datasheet. Do you have reason to believe that this is incorrect ?
-> If so, I would want to see a comment in the driver explaining that the
-> datasheet is wrong and doesn't support those registers.
-> 
-> > > > +};
-> > > > +
-> > > > +static int ir35201_probe(struct i2c_client *client)
-> > > > +{
-> > > > +	u8 buf[I2C_SMBUS_BLOCK_MAX];
-> > > > +	int ret;
-> > > > +
-> > > > +	if (!i2c_check_functionality(client->adapter,
-> > > > +				     I2C_FUNC_SMBUS_READ_BYTE_DATA
-> > > > +					 | I2C_FUNC_SMBUS_READ_WORD_DATA
-> > > > +					 | I2C_FUNC_SMBUS_READ_BLOCK_DATA))
-> > > > +		return -ENODEV;
-> > > > +
-> > > > +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, buf);
-> > > > +	if (ret < 0) {
-> > > > +		dev_err(&client->dev, "Failed to read PMBUS_MFR_ID\n");
-> > > > +		return ret;
-> > > > +	}
-> > > > +	if (ret != 2 || strncmp(buf, "IR", strlen("IR"))) {
-> > > > +		dev_err(&client->dev, "MFR_ID unrecognized\n");
-> > > > +		return -ENODEV;
-> > > > +	}
-> > > > +
-> > > 
-> > > Did you actually test this ? Datasheet says it is "ASCII 52 49" which
-> > > would make it "RI" like IR35221, not "IR". Problem though is that it
-> > > seems like the register is writeable via some USER programming,
-> > > making it unreliable.
-> > > 
-> > Yes, I did. And strangely enough, it reads 'backwards' or so, relative
-> > to the 35221. I almost sent this along without removing the debugging
-> > pr_infos I had in this area to check that. drove me bonkers a bit.
-> > > > +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, buf);
-> > > > +	if (ret < 0) {
-> > > > +		dev_err(&client->dev, "Failed to read PMBUS_MFR_MODEL\n");
-> > > > +		return ret;
-> > > > +	}
-> > > > +	if (ret != 1 || buf[0] != 0x50) {
-> > > > +		dev_err(&client->dev, "MFR_MODEL unrecognized\n");
-> > > > +		return -ENODEV;
-> > > > +	}
-> > > > +
-> > > 
-> > > The datasheet suggests that PMBUS_MFR_ID and PMBUS_MFR_MODEL can differ based
-> > > on some USER register programming. I would suggest to read IC_DEVICE_ID instead
-> > > and compare against that (which s supposed to be 0x4d).
-> > > 
-> > Somehow I missed that, but it was on my 'to-check' list. I think the
-> > issue may have arose from my datasheet comparison, as the ir36* doesn't
-> > have such a register listed.
-> 
-> Different series, probably different microcontroller and different microcode.
-> 
-> > > On a higher level, I don't see anything special in this chip. Would it be possible
-> > > to just add it to pmbus.c ? Something like
-> > > 
-> > > 	{"ir35201", (kernel_ulong_t)&pmbus_info_one},
-> > > 
-> > Honestly, I was wondering about folding this and the other very similar
-> > IR3* chips into one driver. Should be doable? But I guess this approach
-> > works as well; in fact, during my investigation phase I stuck the pmbus
-> > driver onto the correct i2c address to get an easy way to read stuff
-> > from the chip (tbh I'm surprised that this far along in linux we don't
-> > have anything other than pmbus_peek to poke for info; maybe i2c-tools
-> > can do it but I can't seem to make it work like I'd expect).
-> 
-> This isn't about "doable". We don't want to add new drivers just for fun
-> and/or "because it works as well". A new driver should only be added if
-> needed. It was done, for example, for IR35221 because that chip has
-> non-standard registers which we want to have supported.
-> 
-> Unless I am missing something, IR35201 only supports standard commands.
-> So the question is: Is the new driver really needed ? It appears you are
-> saying that, no, it isn't needed. Add the chip to pmbus.c as I suggested above.
-> If and only if that doesn't work we can talk about a new driver.
-> 
-Binding the pmbus subdriver (I guess you could call it that) for the
-"adp4000", which shares the same pmbus_device_info struct you suggested
-results in sensible output in lm_sensors. I'll whip up a new patch and
-send it in.
-> Thanks,
-> Guenter
-> 
+From: Aleksa Savic <savicaleksa83@gmail.com>
+
+[ Upstream commit b3d3be6c4cd1908b9ffdb3d347de232a6c34a0a9 ]
+
+Extend aquacomputer_d5next driver to expose various hardware sensors of the
+Aquacomputer Leakshield leak prevention system, which communicates
+through a proprietary USB HID protocol. Implemented by Noah Bergbauer [1].
+
+Two temperature sensors are exposed, along with pressure (current, min, max
+and target), reservoir volume (total and filled), pump speed and flow. Pump
+speed and flow values are user provided and allow the Leakshield to
+optimize its operation. Writing them to the device is subject of future
+patches.
+
+[1] https://github.com/aleksamagicka/aquacomputer_d5next-hwmon/pull/41
+
+Originally-from: Noah Bergbauer <main@ehvag.de>
+Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
+Link: https://lore.kernel.org/r/20230520095447.509287-3-savicaleksa83@gmail.com
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ Documentation/hwmon/aquacomputer_d5next.rst |   9 ++
+ drivers/hwmon/aquacomputer_d5next.c         | 109 +++++++++++++++++++-
+ 2 files changed, 114 insertions(+), 4 deletions(-)
+
+diff --git a/Documentation/hwmon/aquacomputer_d5next.rst b/Documentation/hwmon/aquacomputer_d5next.rst
+index 14b37851af0ca..94dc2d93d1808 100644
+--- a/Documentation/hwmon/aquacomputer_d5next.rst
++++ b/Documentation/hwmon/aquacomputer_d5next.rst
+@@ -12,6 +12,7 @@ Supported devices:
+ * Aquacomputer Octo fan controller
+ * Aquacomputer Quadro fan controller
+ * Aquacomputer High Flow Next sensor
++* Aquacomputer Leakshield leak prevention system
+ * Aquacomputer Aquastream XT watercooling pump
+ * Aquacomputer Aquastream Ultimate watercooling pump
+ * Aquacomputer Poweradjust 3 fan controller
+@@ -57,6 +58,11 @@ The High Flow Next exposes +5V voltages, water quality, conductivity and flow re
+ A temperature sensor can be connected to it, in which case it provides its reading
+ and an estimation of the dissipated/absorbed power in the liquid cooling loop.
+ 
++The Leakshield exposes two temperature sensors and coolant pressure (current, min, max and
++target readings). It also exposes the estimated reservoir volume and how much of it is
++filled with coolant. Pump RPM and flow can be set to enhance on-device calculations,
++but this is not yet implemented here.
++
+ The Aquastream XT pump exposes temperature readings for the coolant, external sensor
+ and fan IC. It also exposes pump and fan speeds (in RPM), voltages, as well as pump
+ current.
+@@ -83,6 +89,9 @@ Sysfs entries
+ temp[1-20]_input Physical/virtual temperature sensors (in millidegrees Celsius)
+ temp[1-8]_offset Temperature sensor correction offset (in millidegrees Celsius)
+ fan[1-8]_input   Pump/fan speed (in RPM) / Flow speed (in dL/h)
++fan1_min         Minimal fan speed (in RPM)
++fan1_max         Maximal fan speed (in RPM)
++fan1_target      Target fan speed (in RPM)
+ fan5_pulses      Quadro flow sensor pulses
+ power[1-8]_input Pump/fan power (in micro Watts)
+ in[0-7]_input    Pump/fan voltage (in milli Volts)
+diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
+index a4fcd4ebf76c2..ecd0a8ea5bd78 100644
+--- a/drivers/hwmon/aquacomputer_d5next.c
++++ b/drivers/hwmon/aquacomputer_d5next.c
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0+
+ /*
+  * hwmon driver for Aquacomputer devices (D5 Next, Farbwerk, Farbwerk 360, Octo,
+- * Quadro, High Flow Next, Aquaero, Aquastream Ultimate)
++ * Quadro, High Flow Next, Aquaero, Aquastream Ultimate, Leakshield)
+  *
+  * Aquacomputer devices send HID reports (with ID 0x01) every second to report
+  * sensor values, except for devices that communicate through the
+@@ -29,6 +29,7 @@
+ #define USB_PRODUCT_ID_FARBWERK360	0xf010
+ #define USB_PRODUCT_ID_OCTO		0xf011
+ #define USB_PRODUCT_ID_HIGHFLOWNEXT	0xf012
++#define USB_PRODUCT_ID_LEAKSHIELD	0xf014
+ #define USB_PRODUCT_ID_AQUASTREAMXT	0xf0b6
+ #define USB_PRODUCT_ID_AQUASTREAMULT	0xf00b
+ #define USB_PRODUCT_ID_POWERADJUST3	0xf0bd
+@@ -36,7 +37,7 @@
+ enum kinds {
+ 	d5next, farbwerk, farbwerk360, octo, quadro,
+ 	highflownext, aquaero, poweradjust3, aquastreamult,
+-	aquastreamxt
++	aquastreamxt, leakshield
+ };
+ 
+ static const char *const aqc_device_names[] = {
+@@ -46,6 +47,7 @@ static const char *const aqc_device_names[] = {
+ 	[octo] = "octo",
+ 	[quadro] = "quadro",
+ 	[highflownext] = "highflownext",
++	[leakshield] = "leakshield",
+ 	[aquastreamxt] = "aquastreamxt",
+ 	[aquaero] = "aquaero",
+ 	[aquastreamult] = "aquastreamultimate",
+@@ -236,6 +238,21 @@ static u16 quadro_ctrl_fan_offsets[] = { 0x37, 0x8c, 0xe1, 0x136 }; /* Fan speed
+ #define HIGHFLOWNEXT_5V_VOLTAGE		97
+ #define HIGHFLOWNEXT_5V_VOLTAGE_USB	99
+ 
++/* Specs of the Leakshield */
++#define LEAKSHIELD_NUM_SENSORS		2
++
++/* Sensor report offsets for Leakshield */
++#define LEAKSHIELD_PRESSURE_ADJUSTED	285
++#define LEAKSHIELD_TEMPERATURE_1	265
++#define LEAKSHIELD_TEMPERATURE_2	287
++#define LEAKSHIELD_PRESSURE_MIN		291
++#define LEAKSHIELD_PRESSURE_TARGET	293
++#define LEAKSHIELD_PRESSURE_MAX		295
++#define LEAKSHIELD_PUMP_RPM_IN		101
++#define LEAKSHIELD_FLOW_IN		111
++#define LEAKSHIELD_RESERVOIR_VOLUME	313
++#define LEAKSHIELD_RESERVOIR_FILLED	311
++
+ /* Specs of the Aquastream XT pump */
+ #define AQUASTREAMXT_SERIAL_START		0x3a
+ #define AQUASTREAMXT_FIRMWARE_VERSION		0x32
+@@ -411,6 +428,20 @@ static const char *const label_highflownext_voltage[] = {
+ 	"+5V USB voltage"
+ };
+ 
++/* Labels for Leakshield */
++static const char *const label_leakshield_temp_sensors[] = {
++	"Temperature 1",
++	"Temperature 2"
++};
++
++static const char *const label_leakshield_fan_speed[] = {
++	"Pressure [ubar]",
++	"User-Provided Pump Speed",
++	"User-Provided Flow [dL/h]",
++	"Reservoir Volume [ml]",
++	"Reservoir Filled [ml]",
++};
++
+ /* Labels for Aquastream XT */
+ static const char *const label_aquastreamxt_temp_sensors[] = {
+ 	"Fan IC temp",
+@@ -529,7 +560,10 @@ struct aqc_data {
+ 
+ 	/* Sensor values */
+ 	s32 temp_input[20];	/* Max 4 physical and 16 virtual or 8 physical and 12 virtual */
+-	u16 speed_input[8];
++	s32 speed_input[8];
++	u32 speed_input_min[1];
++	u32 speed_input_target[1];
++	u32 speed_input_max[1];
+ 	u32 power_input[8];
+ 	u16 voltage_input[8];
+ 	u16 current_input[8];
+@@ -747,6 +781,11 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
+ 				if (channel < 3)
+ 					return 0444;
+ 				break;
++			case leakshield:
++				/* Special case for Leakshield sensors */
++				if (channel < 5)
++					return 0444;
++				break;
+ 			case aquaero:
+ 			case quadro:
+ 				/* Special case to support flow sensors */
+@@ -764,6 +803,13 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
+ 			if (priv->kind == quadro && channel == priv->num_fans)
+ 				return 0644;
+ 			break;
++		case hwmon_fan_min:
++		case hwmon_fan_max:
++		case hwmon_fan_target:
++			/* Special case for Leakshield pressure sensor */
++			if (priv->kind == leakshield && channel == 0)
++				return 0444;
++			break;
+ 		default:
+ 			break;
+ 		}
+@@ -938,8 +984,20 @@ static int aqc_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+ 	case hwmon_fan:
+ 		switch (attr) {
+ 		case hwmon_fan_input:
++			if (priv->speed_input[channel] == -ENODATA)
++				return -ENODATA;
++
+ 			*val = priv->speed_input[channel];
+ 			break;
++		case hwmon_fan_min:
++			*val = priv->speed_input_min[channel];
++			break;
++		case hwmon_fan_max:
++			*val = priv->speed_input_max[channel];
++			break;
++		case hwmon_fan_target:
++			*val = priv->speed_input_target[channel];
++			break;
+ 		case hwmon_fan_pulses:
+ 			ret = aqc_get_ctrl_val(priv, priv->flow_pulses_ctrl_offset,
+ 					       val, AQC_BE16);
+@@ -1151,7 +1209,8 @@ static const struct hwmon_channel_info * const aqc_info[] = {
+ 			   HWMON_T_INPUT | HWMON_T_LABEL,
+ 			   HWMON_T_INPUT | HWMON_T_LABEL),
+ 	HWMON_CHANNEL_INFO(fan,
+-			   HWMON_F_INPUT | HWMON_F_LABEL,
++			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_MIN | HWMON_F_MAX |
++			   HWMON_F_TARGET,
+ 			   HWMON_F_INPUT | HWMON_F_LABEL,
+ 			   HWMON_F_INPUT | HWMON_F_LABEL,
+ 			   HWMON_F_INPUT | HWMON_F_LABEL,
+@@ -1314,6 +1373,28 @@ static int aqc_raw_event(struct hid_device *hdev, struct hid_report *report, u8
+ 		priv->speed_input[1] = get_unaligned_be16(data + HIGHFLOWNEXT_WATER_QUALITY);
+ 		priv->speed_input[2] = get_unaligned_be16(data + HIGHFLOWNEXT_CONDUCTIVITY);
+ 		break;
++	case leakshield:
++		priv->speed_input[0] =
++		    ((s16)get_unaligned_be16(data + LEAKSHIELD_PRESSURE_ADJUSTED)) * 100;
++		priv->speed_input_min[0] = get_unaligned_be16(data + LEAKSHIELD_PRESSURE_MIN) * 100;
++		priv->speed_input_target[0] =
++		    get_unaligned_be16(data + LEAKSHIELD_PRESSURE_TARGET) * 100;
++		priv->speed_input_max[0] = get_unaligned_be16(data + LEAKSHIELD_PRESSURE_MAX) * 100;
++
++		priv->speed_input[1] = get_unaligned_be16(data + LEAKSHIELD_PUMP_RPM_IN);
++		if (priv->speed_input[1] == AQC_SENSOR_NA)
++			priv->speed_input[1] = -ENODATA;
++
++		priv->speed_input[2] = get_unaligned_be16(data + LEAKSHIELD_FLOW_IN);
++		if (priv->speed_input[2] == AQC_SENSOR_NA)
++			priv->speed_input[2] = -ENODATA;
++
++		priv->speed_input[3] = get_unaligned_be16(data + LEAKSHIELD_RESERVOIR_VOLUME);
++		priv->speed_input[4] = get_unaligned_be16(data + LEAKSHIELD_RESERVOIR_FILLED);
++
++		/* Second temp sensor is not positioned after the first one, read it here */
++		priv->temp_input[1] = get_unaligned_be16(data + LEAKSHIELD_TEMPERATURE_2) * 10;
++		break;
+ 	default:
+ 		break;
+ 	}
+@@ -1571,6 +1652,25 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 		priv->power_label = label_highflownext_power;
+ 		priv->voltage_label = label_highflownext_voltage;
+ 		break;
++	case USB_PRODUCT_ID_LEAKSHIELD:
++		/*
++		 * Choose the right Leakshield device, because
++		 * the other one acts as a keyboard
++		 */
++		if (hdev->type != 2) {
++			ret = -ENODEV;
++			goto fail_and_close;
++		}
++
++		priv->kind = leakshield;
++
++		priv->num_fans = 0;
++		priv->num_temp_sensors = LEAKSHIELD_NUM_SENSORS;
++		priv->temp_sensor_start_offset = LEAKSHIELD_TEMPERATURE_1;
++
++		priv->temp_label = label_leakshield_temp_sensors;
++		priv->speed_label = label_leakshield_fan_speed;
++		break;
+ 	case USB_PRODUCT_ID_AQUASTREAMXT:
+ 		priv->kind = aquastreamxt;
+ 
+@@ -1707,6 +1807,7 @@ static const struct hid_device_id aqc_table[] = {
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_OCTO) },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_QUADRO) },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_HIGHFLOWNEXT) },
++	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_LEAKSHIELD) },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_AQUASTREAMXT) },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_AQUASTREAMULT) },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_POWERADJUST3) },
+-- 
+2.39.2
+
