@@ -2,54 +2,54 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E75DC001DF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Jul 2023 12:50:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26BC9C0015E
+	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Jul 2023 12:54:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231802AbjGYMua (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 25 Jul 2023 08:50:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34076 "EHLO
+        id S233344AbjGYMym (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 25 Jul 2023 08:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232331AbjGYMuA (ORCPT
+        with ESMTP id S232343AbjGYMyi (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 25 Jul 2023 08:50:00 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67DA3DB
-        for <linux-hwmon@vger.kernel.org>; Tue, 25 Jul 2023 05:49:59 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-992e22c09edso802066766b.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 25 Jul 2023 05:49:59 -0700 (PDT)
+        Tue, 25 Jul 2023 08:54:38 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8BC919A7
+        for <linux-hwmon@vger.kernel.org>; Tue, 25 Jul 2023 05:54:34 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-52229d3b8c8so3423303a12.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 25 Jul 2023 05:54:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1690289398; x=1690894198;
+        d=9elements.com; s=google; t=1690289673; x=1690894473;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xD2BSNpw0ozN3thb1dtWBEB8CA/Y2iCKwoB9ihfmKUM=;
-        b=CyA3oOnxu6kKFadEHW0nl87UpGvrgxftxDTDoXqbGMsHE4Cg/jm0vshSVPLmZg+Zed
-         ukEjtajE/L52c49bGBEIAY3AsizeBwaSoGR8qtTAsPBFfcyG2XjT5xl+l8DNURtesPd8
-         V4D/GiatML/j4CGnL2xwc/VZoPaJRz8MCd2pR8EhgcZKmv6XCnCfQRhRH4XOB33Gzz77
-         skKwgd7MtV57ot/CuiLGPhuD7SVLTrNUOLWwQmKmzDscrYb2qSHFePgeRlzItlF7HO+h
-         fNXALOL+jVQ2mNzqFcQNFVB58Lz8h6AQv9IJUC9OX3sM18xuNiF+XFh6Y2yYRAp+BL7b
-         ojaA==
+        bh=EaZID9rRMTJ2nmqmshf6LreUn/mdy/eKyS3ZjSfkijA=;
+        b=QSQREnbbcdT7o53ADS7jLKT3qpIMWfe8RoV5g6qY46jVm0R51waOSQqdRJg0ApFLMm
+         SQYG6EayMQTwqlWpmU/lCKee37xrNSTeHtIpw9NCMV4SATK1rkGVEPq8k/5tsjY3gpOf
+         FlVysqLRBLFbcyquWxI4A695NSz8VIYItgUMNqAFzOsBu5ecSTzuE7/S1BKtb7ifrwmk
+         uBpYecLbeVg9ZYL3632aUsWqOn8nxHMLI3mA7YztEdx8GJ3oSL7MFd6WvZgegSVn9QKZ
+         Grj7heTImBj3d7hyFxKbpD0/MEJz3K0Fgh37yVJj1Se8w4MmuzOqKM6MRf4ViOM5aRpL
+         Vdtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690289398; x=1690894198;
+        d=1e100.net; s=20221208; t=1690289673; x=1690894473;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xD2BSNpw0ozN3thb1dtWBEB8CA/Y2iCKwoB9ihfmKUM=;
-        b=A4UJkCmpwlzeDNsLNLKLwjgVQHJIFg/Zx+JCNMrlfvqNi1A8EJXSINCj9anof6lrZb
-         2X7qpnD9guvmM1gIAYARZd1eZHW3LWNLIXkgPXyO5CKZUOqqbybZb9yuWVv4xm1fdneu
-         HPmVh9Qg50CTQwXkqac1kcVxaOC+efwIHPfjda+sgetuNQ3xgdB3dwa1KtKnYEws2mxg
-         d480ewBBATp51cKd67I2TuWQmp21FkNOT5/euuPQGpTnhdNqxakl/CxaUjOHHkXn7BrE
-         z07V6Y1vTfkMeX3Vr8cyguSxrV6caj+I8H3Aiy0aYgPDA7GzwiQr5sw9kU9W+hJSechU
-         8VIg==
-X-Gm-Message-State: ABy/qLadqlplgzTeOM3pcsBp5spJGQGTp6i8Imlg0Yk1SwZ/WTIWamc2
-        LPdGkYz1P5AcammSe1/3AoZNsw==
-X-Google-Smtp-Source: APBJJlH/tXsXGJIg2N12sB8I8FJLfQp1OsrtZ/qwRqpCJrIY7lSBsnsEl7zMMes9pll+6uW+9uX9kQ==
-X-Received: by 2002:a17:906:76d0:b0:991:d05c:f065 with SMTP id q16-20020a17090676d000b00991d05cf065mr13329973ejn.52.1690289398013;
-        Tue, 25 Jul 2023 05:49:58 -0700 (PDT)
+        bh=EaZID9rRMTJ2nmqmshf6LreUn/mdy/eKyS3ZjSfkijA=;
+        b=j7+fSza4WtyQXKgVBdcPqP6phgUySguSINk/QwZBldD7MPyxSpBDT1iLPcjbLw3gAS
+         Ofr5pz6xWZHgS//2h8FnfAhQpt5BOoNP8/MvAgHhN0A+++b0DQVihbO/MEMdWOpuOoG6
+         2lra8FDmmgnbcfmfBbKviJr0EkgjMOAjc9hkxKa1+bfTJcybyGep87vt4uvXiXaeq81d
+         GOD9W53NDcZhLK8TkJdLQJZLIynuFyfGhiZ4ZYNy8EjM5diX5BJo9SSqKGGJ18Odna/r
+         DId6Y9kh5hAprNIGn7czlQRjl/+kEbkCZLFdk6174nAilfcqsHPNvTfNi1Uju8UXvKcl
+         J7TA==
+X-Gm-Message-State: ABy/qLZ+80tPPIrat3mq26hHX31wmDdf2Hc99LE1lbpFB9PRQVatEoro
+        vGE6Ct5H8u45Kbp2jnN2XGJBcg==
+X-Google-Smtp-Source: APBJJlFJOFr4Uo7wpRe7n2jDpOndOddkIBxsVclB5xlern0T4yJlEHsPydZm0qieojTKD5j5MFRMyw==
+X-Received: by 2002:aa7:d354:0:b0:522:2b76:1985 with SMTP id m20-20020aa7d354000000b005222b761985mr4711832edr.2.1690289673250;
+        Tue, 25 Jul 2023 05:54:33 -0700 (PDT)
 Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id pk15-20020a170906d7af00b00997e8b6eaa1sm8133283ejb.41.2023.07.25.05.49.57
+        by smtp.gmail.com with ESMTPSA id u11-20020a056402064b00b0051dfa2e30b2sm7516682edx.9.2023.07.25.05.54.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jul 2023 05:49:57 -0700 (PDT)
+        Tue, 25 Jul 2023 05:54:32 -0700 (PDT)
 From:   Naresh Solanki <naresh.solanki@9elements.com>
 X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
 To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
@@ -57,12 +57,12 @@ To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
 Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
         Naresh Solanki <Naresh.Solanki@9elements.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 2/3] pmbus_core: Fix NULL pointer dereference
-Date:   Tue, 25 Jul 2023 14:49:51 +0200
-Message-ID: <20230725124954.3824954-2-Naresh.Solanki@9elements.com>
+Subject: [PATCH v2 2/3] pmbus_core: Fix NULL pointer dereference
+Date:   Tue, 25 Jul 2023 14:54:26 +0200
+Message-ID: <20230725125428.3966803-2-Naresh.Solanki@9elements.com>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230725124954.3824954-1-Naresh.Solanki@9elements.com>
-References: <20230725124954.3824954-1-Naresh.Solanki@9elements.com>
+In-Reply-To: <20230725125428.3966803-1-Naresh.Solanki@9elements.com>
+References: <20230725125428.3966803-1-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -80,11 +80,14 @@ _pmbus_get_flags.
 Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 ---
- drivers/hwmon/pmbus/pmbus_core.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+Changes in V2:
+- Fix build error.
+---
+ drivers/hwmon/pmbus/pmbus_core.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 42fb7286805b..1f7df36c48a8 100644
+index 42fb7286805b..30aeb59062a5 100644
 --- a/drivers/hwmon/pmbus/pmbus_core.c
 +++ b/drivers/hwmon/pmbus/pmbus_core.c
 @@ -2745,9 +2745,8 @@ static const struct pmbus_status_category __maybe_unused pmbus_status_flag_map[]
@@ -124,6 +127,18 @@ index 42fb7286805b..1f7df36c48a8 100644
  		if (status & PB_STATUS_OFF) {
  			*flags |= REGULATOR_ERROR_FAIL;
  			*event |= REGULATOR_EVENT_FAIL;
+@@ -2898,7 +2896,10 @@ static int __maybe_unused pmbus_get_flags(struct pmbus_data *data, u8 page, unsi
+ #if IS_ENABLED(CONFIG_REGULATOR)
+ static int pmbus_regulator_is_enabled(struct regulator_dev *rdev)
+ {
+-	return pmbus_is_enabled(rdev_get_dev(rdev), rdev_get_id(rdev));
++	struct device *dev = rdev_get_dev(rdev);
++	struct i2c_client *client = to_i2c_client(dev->parent);
++
++	return pmbus_is_enabled(client, rdev_get_id(rdev));
+ }
+ 
+ static int _pmbus_regulator_on_off(struct regulator_dev *rdev, bool enable)
 -- 
 2.41.0
 
