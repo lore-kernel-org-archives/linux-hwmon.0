@@ -2,116 +2,484 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E70DEC0015E
-	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Jul 2023 15:19:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C3E7C001DF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Jul 2023 15:23:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233083AbjGYPT5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 25 Jul 2023 11:19:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46408 "EHLO
+        id S233320AbjGYPXM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 25 Jul 2023 11:23:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232924AbjGYPT4 (ORCPT
+        with ESMTP id S232895AbjGYPXF (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 25 Jul 2023 11:19:56 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB74D1BF9;
-        Tue, 25 Jul 2023 08:19:50 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1bbc2e1c6b2so3218025ad.3;
-        Tue, 25 Jul 2023 08:19:50 -0700 (PDT)
+        Tue, 25 Jul 2023 11:23:05 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF345E2;
+        Tue, 25 Jul 2023 08:23:03 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b8ad8383faso42912765ad.0;
+        Tue, 25 Jul 2023 08:23:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690298390; x=1690903190;
+        d=gmail.com; s=20221208; t=1690298583; x=1690903383;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=LVqB/OLB43pJtSZQsnoujE+pyOVuCDBgWkJZYpdI0zY=;
-        b=A1nzV7buPe4RypyKfFqKtpzNmXZ+pUD2IcFbHeE57r+f1QLV1WNjJl6yzYv74tquOR
-         BbfYh5z7GyEZ2dgt/gn50rz5nMtWRF51RYtK9EoYU/Cwd1hwLqMPOHl+GZ7cTDqHMFWI
-         vZiW1YjXbMcMj7DE6SplENJBxxVGTTzI/RuObWFU0FLV8Ix+XSWDsqgOzoN9qAoXwnmt
-         MlfLN3TDYBzlXhg4wjuywXcL7ivZTrjfvIobQgeGRzjErSVI7EkIXFuz4dW++kn/LPre
-         cPYD4LPF1UClRlC/J9V2Ik/Yrein6LBnPuKWHgUt0+Y/XvMqP29GUeFiZo5e7CRbPklB
-         VEmw==
+        bh=L+kILmYLuFrWdCHjCUM4hNEdqxj8PgmXtuTx7RTAAl0=;
+        b=lp7n15pB61b36RjJ2JRDOyyLVEzH//4HWnbIhsy73K8wOl5rs//oWVBwUW73tv3F3P
+         JTKuwigHhoOv49OtozxaKn7v4zVH0FFa6ixTgAGzgc2Asy5suI4JapZkJ9CJRAVk5PBQ
+         1w6P1OmBNwDyqmL58JbuKYjGDBd0B0/+JjvjcwmCmEvCCL73ntT4GldynEur/04HRcpH
+         jUUZ9uahltWzjs7P3N9MT+oAK/bS16A7BHBJPVWBgZrmpwrzvgS1QooMU+Y2YVddEA2R
+         E95zHBoEeivFSmXmrNwH3mulIe0RnvHYgcMLhjhPqKQelGWnj+IEYtyWCdg2drWktpk+
+         Vnyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690298390; x=1690903190;
+        d=1e100.net; s=20221208; t=1690298583; x=1690903383;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LVqB/OLB43pJtSZQsnoujE+pyOVuCDBgWkJZYpdI0zY=;
-        b=Ei8+1kkjBBlIEt2IbwUpD+uTp7IG1oMeinD844emjc3VOdnDTv1prP0eM7opYXKiCS
-         kGjibEaP8Du+evq39/lHtt7XJ5diVSdzTNU5xpgGMiUhVC4dch1kv4jqlNTudr6pmA3j
-         H2aS7QqcIjwy0w3B5gZ1nNCaY9/0bKwqC99Hs6Yoa30Iw8caPCQXoG7sySCG4KTfuqrB
-         UXkABZG+AiJDY5hqv3eR/5Rsw/f3mjr5drfGmWw045o2RhvGif7bdX6lU9QVrAS9Sfuf
-         GgMFnnEnHIeJli+oyixVAyiTNEl9r3MAaVQZi8WwrzBESU9dpolFpja1ZFjvFQ2NmyDe
-         i+8g==
-X-Gm-Message-State: ABy/qLYnrlSacG++415oOjie4oeDnM/xGx+Wlk3L9ernyRAwG6RvN2JZ
-        NsX+dfpzR5M4y2QpRt1TnqI=
-X-Google-Smtp-Source: APBJJlEIDHUozeXKv8CobU8KbiZxUWpc+fGO6kGcJo6rJ/K1hNFEOriuQohfeHL0NQja2/8YncuGdQ==
-X-Received: by 2002:a17:902:7403:b0:1bb:ad56:a831 with SMTP id g3-20020a170902740300b001bbad56a831mr3941862pll.36.1690298390136;
-        Tue, 25 Jul 2023 08:19:50 -0700 (PDT)
+        bh=L+kILmYLuFrWdCHjCUM4hNEdqxj8PgmXtuTx7RTAAl0=;
+        b=XuZ9VGVWyi31G/sD01HB0MulyZ3oUSUNdseB1fv8x0DZRRG8gxvkrRGNcXsrb64pBv
+         xMiFufYLMmzlY2XcEME2IuqWg/kQMjWdyDHTh37qurpsguzn+yZhrDhu+jzQhHYmAL4J
+         Q7xZ8LUwED82XkvNI/WWGz9oIikYd2CsOj4ECka6NMJo3B+n2rrIHCVu6XwQyvS6seYv
+         nXQIHPrT3U7siSA3KyHmSFlgY5TgnT2mhpyYUEdbdtz5njaQhTEyqtVc+ma/UTJuq25w
+         NjYBookL4EaYdIZ5XaTeODhjgSf5Fw8UX8bbeJWN0QrIlyI7Kz1gysznyEgf+5BpbPo+
+         VRfw==
+X-Gm-Message-State: ABy/qLaMUV79pfkmTBD/TzXWDKUOKifAYxusV6jWo4jmzAqnRbmNNxfG
+        xYKoJXmjPtzN7uEqXoRo1Os=
+X-Google-Smtp-Source: APBJJlFo0HyC7cEhyVbBFwHU/poipm9YpAgAk7B4xImt9Ri+OizY7iuCsltoB+oXwUjyY1RiSuEbwA==
+X-Received: by 2002:a17:902:cec6:b0:1b8:53b5:8518 with SMTP id d6-20020a170902cec600b001b853b58518mr19153101plg.63.1690298583071;
+        Tue, 25 Jul 2023 08:23:03 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d5-20020a170902c18500b001bb20380bf2sm11248399pld.13.2023.07.25.08.19.49
+        by smtp.gmail.com with ESMTPSA id jf15-20020a170903268f00b001b077301a58sm11291069plb.79.2023.07.25.08.23.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jul 2023 08:19:49 -0700 (PDT)
+        Tue, 25 Jul 2023 08:23:02 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 25 Jul 2023 08:19:48 -0700
+Date:   Tue, 25 Jul 2023 08:23:01 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Andre Werner <werneazc@gmail.com>
+To:     werneazc@gmail.com
 Cc:     jdelvare@suse.com, krzysztof.kozlowski+dt@linaro.org,
         conor+dt@kernel.org, robh+dt@kernel.org,
         linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Andre Werner <andre.werner@systec-electronic.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: Add description for new hwmon
- driver hs3001
-Message-ID: <0340a749-7073-4002-ada4-c1866f90054d@roeck-us.net>
-References: <20230718112810.21322-1-andre.werner@systec-electronic.com>
+Subject: Re: [PATCH v6 2/2] hwmon: (hs3001) Add driver for Renesas HS3001
+Message-ID: <10df99fb-e3a4-4c11-a77c-50f3573ecf6a@roeck-us.net>
+References: <0f32155b-bcc1-4d9e-bba9-058d63194abc@roeck-us.net>
+ <20230725042207.22310-2-andre.werner@systec-electronic.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230718112810.21322-1-andre.werner@systec-electronic.com>
+In-Reply-To: <20230725042207.22310-2-andre.werner@systec-electronic.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jul 18, 2023 at 01:28:09PM +0200, Andre Werner wrote:
-> This is the initial description.
+On Tue, Jul 25, 2023 at 06:22:07AM +0200, werneazc@gmail.com wrote:
+> From: Andre Werner <andre.werner@systec-electronic.com>
+> 
+> Add base support for Renesas HS3001 temperature
+> and humidity sensors and its compatibles HS3002,
+> HS3003 and HS3004.
+> 
+> The sensor has a fix I2C address 0x44. The resolution
+> is fixed to 14bit (ref. Missing feature).
+> 
+> Missing feature:
+> - Accessing non-volatile memory: Custom board has no
+>   possibility to control voltage supply of sensor. Thus,
+>   we cannot send the necessary control commands within
+>   the first 10ms after power-on.
 > 
 > Signed-off-by: Andre Werner <andre.werner@systec-electronic.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-checkpatch:
+For my reference:
 
-WARNING: From:/Signed-off-by: email address mismatch: 'From: Andre Werner <werneazc@gmail.com>' != 'Signed-off-by: Andre Werner <andre.werner@systec-electronic.com>'
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Sorry, you'll have to resend this. The e-mail addresses need to match.
-
-Note that, when doing so, I would suggest to add a sensible description.
-"This is the initial description." is not a useful description.
-"Add binding for Renesas HS3001 Temperature and Relative Humidity Sensor"
-would be more sensible. Also, regarding the subject: bindings don't describe
-the driver, they describe the chip.
+Please send an updated version of the bindings patch so I can apply
+the two patches together.
 
 Thanks,
 Guenter
 
 > ---
-> v1: Using separate dt-binding hs300x.yaml
-> v2: Reviewer recommends documentation of driver dt-binding in
-> trivial-devices.yaml because the driver has no special properties
-> to describe.
-> v3: Simplify description of sensors compatible
+> Changelog:
+> v1: Initial version
+> v2: Extensive refactoring following recommendations of reviewers:
+>  - Delete unused defines and device properties. These are added in
+>    the initial version because the device supports a programming mode,
+>    but I was not able to implement it, because the custom board was
+>    not able to control the power supply of the device and so I cannot
+>    enter the programming mode of the device.
+>  - Correct misunderstanding comments for defines.
+>  - Delete mutexes for data and I2C bus accesses.
+>  - Replace attributes with recommended chip-info structure. In the
+>    initial version I followed the sth3x.c implementation that uses
+>    files and attributes in sysfs. The show functions are replaced by
+>    is_visible and read callbacks from the HWMON ABI. I also  delete pointless
+>    function argument checks.
+>  - Correct Yoda programming.
+>  - Refactor probe function and delete sleep and measurement of humidity
+>    and temperature in probe function. I kept an initial I2C
+>    communication to ensure that the device is accessible during probe.
+>  - Reduce the number of attributes to humidity and temperature input.
+>  v3: Delete chip data because it is unused.
+>  v4: Refactor driver as follows:
+>  - Delete further unused defines
+>  - Replace masks and operations with GENMASK and FIELD_GET macros
+>  - Add mutex to protect chip wakeup and data transfer operations on bus
+>  - Reformat driver as requested
+>  - Make hs3001_is_visible and hs3001_read function static
+>  v5: Drop i2c access in probe; Correct precession lost in conversion
+>  function for physical values
+>  v6: Correct mutex unlock in case of early function return. Correct
+>  typo. Delete unnecessary comments.
 > ---
->  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+>  Documentation/hwmon/hs3001.rst |  37 +++++
+>  MAINTAINERS                    |   6 +
+>  drivers/hwmon/Kconfig          |  10 ++
+>  drivers/hwmon/Makefile         |   1 +
+>  drivers/hwmon/hs3001.c         | 243 +++++++++++++++++++++++++++++++++
+>  5 files changed, 297 insertions(+)
+>  create mode 100644 Documentation/hwmon/hs3001.rst
+>  create mode 100644 drivers/hwmon/hs3001.c
 > 
-> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-> index ba2bfb547909..96eb59e56eb7 100644
-> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
-> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-> @@ -315,6 +315,8 @@ properties:
->            - plx,pex8648
->              # Pulsedlight LIDAR range-finding sensor
->            - pulsedlight,lidar-lite-v2
-> +            # Renesas HS3001 Temperature and Relative Humidity Sensors
-> +          - renesas,hs3001
->              # Renesas ISL29501 time-of-flight sensor
->            - renesas,isl29501
->              # Rohm DH2228FV
+> diff --git a/Documentation/hwmon/hs3001.rst b/Documentation/hwmon/hs3001.rst
+> new file mode 100644
+> index 000000000000..703fb9c45313
+> --- /dev/null
+> +++ b/Documentation/hwmon/hs3001.rst
+> @@ -0,0 +1,37 @@
+> +.. SPDX-License-Identifier: GPL-2.0-or-later
+> +
+> +Kernel driver HS3001
+> +===================
+> +
+> +Supported chips:
+> +
+> +  * Renesas HS3001, HS3002, HS3003, HS3004
+> +
+> +    Prefix: 'hs3001'
+> +
+> +    Addresses scanned: -
+> +
+> +    Datasheet: https://www.renesas.com/us/en/document/dst/hs300x-datasheet?r=417401
+> +
+> +Author:
+> +
+> +  - Andre Werner <andre.werner@systec-electronic.com>
+> +
+> +Description
+> +-----------
+> +
+> +This driver implements support for the Renesas HS3001 chips, a humidity
+> +and temperature family. Temperature is measured in degrees celsius, relative
+> +humidity is expressed as a percentage. In the sysfs interface, all values are
+> +scaled by 1000, i.e. the value for 31.5 degrees celsius is 31500.
+> +
+> +The device communicates with the I2C protocol. Sensors have the I2C
+> +address 0x44 by default.
+> +
+> +sysfs-Interface
+> +---------------
+> +
+> +===============================================================================
+> +temp1_input:        temperature input
+> +humidity1_input:    humidity input
+> +===============================================================================
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index d516295978a4..46c97769eb05 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -9496,6 +9496,12 @@ S:	Maintained
+>  W:	http://artax.karlin.mff.cuni.cz/~mikulas/vyplody/hpfs/index-e.cgi
+>  F:	fs/hpfs/
+>  
+> +HS3001 Hardware Temperature and Humidity Sensor
+> +M:	Andre Werner <andre.werner@systec-electronic.com>
+> +L:	linux-hwmon@vger.kernel.org
+> +S:	Maintained
+> +F:	drivers/hwmon/hs3001.c
+> +
+>  HSI SUBSYSTEM
+>  M:	Sebastian Reichel <sre@kernel.org>
+>  S:	Maintained
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 307477b8a371..ca6be5a23271 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -734,6 +734,16 @@ config SENSORS_HIH6130
+>  	  This driver can also be built as a module. If so, the module
+>  	  will be called hih6130.
+>  
+> +config SENSORS_HS3001
+> +	tristate "Renesas HS3001 humidity and temperature sensors"
+> +	depends on I2C
+> +	help
+> +	  If you say yes here you get support for the Renesas HS3001,
+> +	  to HS3004 humidity and temperature sensors.
+> +
+> +	  This driver can also be built as a module. If so, the module
+> +	  will be called hs3001.
+> +
+>  config SENSORS_IBMAEM
+>  	tristate "IBM Active Energy Manager temperature/power sensors and control"
+>  	select IPMI_SI
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index 3f4b0fda0998..cdae4e1fc919 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -86,6 +86,7 @@ obj-$(CONFIG_SENSORS_GSC)	+= gsc-hwmon.o
+>  obj-$(CONFIG_SENSORS_GPIO_FAN)	+= gpio-fan.o
+>  obj-$(CONFIG_SENSORS_GXP_FAN_CTRL) += gxp-fan-ctrl.o
+>  obj-$(CONFIG_SENSORS_HIH6130)	+= hih6130.o
+> +obj-$(CONFIG_SENSORS_HS3001)	+= hs3001.o
+>  obj-$(CONFIG_SENSORS_ULTRA45)	+= ultra45_env.o
+>  obj-$(CONFIG_SENSORS_I5500)	+= i5500_temp.o
+>  obj-$(CONFIG_SENSORS_I5K_AMB)	+= i5k_amb.o
+> diff --git a/drivers/hwmon/hs3001.c b/drivers/hwmon/hs3001.c
+> new file mode 100644
+> index 000000000000..17c3455922eb
+> --- /dev/null
+> +++ b/drivers/hwmon/hs3001.c
+> @@ -0,0 +1,243 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * This is a non-complete driver implementation for the
+> + * HS3001 humidity and temperature sensor and compatibles. It does not include
+> + * the configuration possibilities, where it needs to be set to 'programming mode'
+> + * during power-up.
+> + *
+> + *
+> + * Copyright (C) 2023 SYS TEC electronic AG
+> + * Author: Andre Werner <andre.werner@systec-electronic.com>
+> + */
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/delay.h>
+> +#include <linux/err.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/i2c.h>
+> +#include <linux/init.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/slab.h>
+> +#include <linux/types.h>
+> +
+> +/* Measurement times */
+> +#define HS3001_WAKEUP_TIME	100	/* us */
+> +#define HS3001_8BIT_RESOLUTION	550	/* us */
+> +#define HS3001_10BIT_RESOLUTION	1310	/* us */
+> +#define HS3001_12BIT_RESOLUTION	4500	/* us */
+> +#define HS3001_14BIT_RESOLUTION	16900	/* us */
+> +
+> +#define HS3001_RESPONSE_LENGTH	4
+> +
+> +#define HS3001_FIXPOINT_ARITH	1000U
+> +
+> +#define HS3001_MASK_HUMIDITY_0X3FFF	GENMASK(13, 0)
+> +#define HS3001_MASK_STATUS_0XC0	GENMASK(7, 6)
+> +
+> +/* Definitions for Status Bits of A/D Data */
+> +#define HS3001_DATA_VALID	0x00	/* Valid Data */
+> +#define HS3001_DATA_STALE	0x01	/* Stale Data */
+> +
+> +struct hs3001_data {
+> +	struct i2c_client *client;
+> +	struct mutex i2c_lock; /* lock for sending i2c commands */
+> +	u32 wait_time;		/* in us */
+> +	int temperature;	/* in milli degree */
+> +	u32 humidity;		/* in milli % */
+> +};
+> +
+> +static int hs3001_extract_temperature(u16 raw)
+> +{
+> +	/* fixpoint arithmetic 1 digit */
+> +	u32 temp = (raw >> 2) * HS3001_FIXPOINT_ARITH * 165;
+> +
+> +	temp /= (1 << 14) - 1;
+> +
+> +	return (int)temp - 40 * HS3001_FIXPOINT_ARITH;
+> +}
+> +
+> +static u32 hs3001_extract_humidity(u16 raw)
+> +{
+> +	u32 hum = (raw & HS3001_MASK_HUMIDITY_0X3FFF) * HS3001_FIXPOINT_ARITH * 100;
+> +
+> +	return hum /= (1 << 14) - 1;
+> +}
+> +
+> +static int hs3001_data_fetch_command(struct i2c_client *client,
+> +				     struct hs3001_data *data)
+> +{
+> +	int ret;
+> +	u8 buf[HS3001_RESPONSE_LENGTH];
+> +	u8 hs3001_status;
+> +
+> +	ret = i2c_master_recv(client, buf, HS3001_RESPONSE_LENGTH);
+> +	if (ret != HS3001_RESPONSE_LENGTH) {
+> +		ret = ret < 0 ? ret : -EIO;
+> +		dev_dbg(&client->dev,
+> +			"Error in i2c communication. Error code: %d.\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	hs3001_status = FIELD_GET(HS3001_MASK_STATUS_0XC0, buf[0]);
+> +	if (hs3001_status == HS3001_DATA_STALE) {
+> +		dev_dbg(&client->dev, "Sensor busy.\n");
+> +		return -EBUSY;
+> +	}
+> +	if (hs3001_status != HS3001_DATA_VALID) {
+> +		dev_dbg(&client->dev, "Data invalid.\n");
+> +		return -EIO;
+> +	}
+> +
+> +	data->humidity =
+> +		hs3001_extract_humidity(be16_to_cpup((__be16 *)&buf[0]));
+> +	data->temperature =
+> +		hs3001_extract_temperature(be16_to_cpup((__be16 *)&buf[2]));
+> +
+> +	return 0;
+> +}
+> +
+> +static umode_t hs3001_is_visible(const void *data, enum hwmon_sensor_types type,
+> +				 u32 attr, int channel)
+> +{
+> +	/* Both, humidity and temperature can only be read. */
+> +	return 0444;
+> +}
+> +
+> +static int hs3001_read(struct device *dev, enum hwmon_sensor_types type,
+> +		       u32 attr, int channel, long *val)
+> +{
+> +	struct hs3001_data *data = dev_get_drvdata(dev);
+> +	struct i2c_client *client = data->client;
+> +	int ret;
+> +
+> +	mutex_lock(&data->i2c_lock);
+> +	ret = i2c_master_send(client, NULL, 0);
+> +	if (ret < 0) {
+> +		mutex_unlock(&data->i2c_lock);
+> +		return ret;
+> +	}
+> +
+> +	/*
+> +	 * Sensor needs some time to process measurement depending on
+> +	 * resolution (ref. datasheet)
+> +	 */
+> +	fsleep(data->wait_time);
+> +
+> +	ret = hs3001_data_fetch_command(client, data);
+> +	mutex_unlock(&data->i2c_lock);
+> +
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	switch (type) {
+> +	case hwmon_temp:
+> +		switch (attr) {
+> +		case hwmon_temp_input:
+> +			*val = data->temperature;
+> +			break;
+> +		default:
+> +			return -EINVAL;
+> +		}
+> +		break;
+> +	case hwmon_humidity:
+> +		switch (attr) {
+> +		case hwmon_humidity_input:
+> +			*val = data->humidity;
+> +			break;
+> +		default:
+> +			return -EINVAL;
+> +		}
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct hwmon_channel_info *hs3001_info[] = {
+> +	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
+> +	HWMON_CHANNEL_INFO(humidity, HWMON_H_INPUT),
+> +	NULL
+> +};
+> +
+> +static const struct hwmon_ops hs3001_hwmon_ops = {
+> +	.is_visible = hs3001_is_visible,
+> +	.read = hs3001_read,
+> +};
+> +
+> +static const struct hwmon_chip_info hs3001_chip_info = {
+> +	.ops = &hs3001_hwmon_ops,
+> +	.info = hs3001_info,
+> +};
+> +
+> +/* device ID table */
+> +static const struct i2c_device_id hs3001_ids[] = {
+> +	{ "hs3001", 0 },
+> +	{ },
+> +};
+> +
+> +MODULE_DEVICE_TABLE(i2c, hs3001_ids);
+> +
+> +static const struct of_device_id hs3001_of_match[] = {
+> +	{.compatible = "renesas,hs3001"},
+> +	{ },
+> +};
+> +
+> +MODULE_DEVICE_TABLE(of, hs3001_of_match);
+> +
+> +static int hs3001_probe(struct i2c_client *client)
+> +{
+> +	struct hs3001_data *data;
+> +	struct device *hwmon_dev;
+> +	struct device *dev = &client->dev;
+> +	int ret;
+> +
+> +	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
+> +		return -EOPNOTSUPP;
+> +
+> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	data->client = client;
+> +
+> +	/*
+> +	 * Measurement time = wake-up time + measurement time temperature
+> +	 * + measurement time humidity. This is currently static, because
+> +	 * enabling programming mode is not supported, yet.
+> +	 */
+> +	data->wait_time = (HS3001_WAKEUP_TIME + HS3001_14BIT_RESOLUTION +
+> +			   HS3001_14BIT_RESOLUTION);
+> +
+> +	mutex_init(&data->i2c_lock);
+> +
+> +	hwmon_dev = devm_hwmon_device_register_with_info(dev,
+> +							 client->name,
+> +							 data,
+> +							 &hs3001_chip_info,
+> +							 NULL);
+> +
+> +	if (IS_ERR(hwmon_dev))
+> +		return dev_err_probe(dev, PTR_ERR(hwmon_dev),
+> +				     "Unable to register hwmon device.\n");
+> +
+> +	return 0;
+> +}
+> +
+> +static struct i2c_driver hs3001_i2c_driver = {
+> +	.driver = {
+> +		   .name = "hs3001",
+> +		   .of_match_table = hs3001_of_match,
+> +	},
+> +	.probe_new = hs3001_probe,
+> +	.id_table = hs3001_ids,
+> +};
+> +
+> +module_i2c_driver(hs3001_i2c_driver);
+> +
+> +MODULE_AUTHOR("Andre Werner <andre.werner@systec-electronic.com>");
+> +MODULE_DESCRIPTION("HS3001 humidity and temperature sensor base driver");
+> +MODULE_LICENSE("GPL");
