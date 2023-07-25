@@ -2,66 +2,69 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43D1AC41513
-	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Jul 2023 10:44:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF462C001DF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Jul 2023 11:41:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233287AbjGYKoD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 25 Jul 2023 06:44:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55608 "EHLO
+        id S234949AbjGYLlA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 25 Jul 2023 07:41:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233678AbjGYKoC (ORCPT
+        with ESMTP id S235012AbjGYLkt (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 25 Jul 2023 06:44:02 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71CC210CC
-        for <linux-hwmon@vger.kernel.org>; Tue, 25 Jul 2023 03:44:01 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-31297125334so3449470f8f.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 25 Jul 2023 03:44:01 -0700 (PDT)
+        Tue, 25 Jul 2023 07:40:49 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316EF1FCC
+        for <linux-hwmon@vger.kernel.org>; Tue, 25 Jul 2023 04:40:35 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-99b9161b94aso345490066b.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 25 Jul 2023 04:40:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1690281840; x=1690886640;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eT1M70QmPWlyzzTGWLB186I5SL8oEeXWy/zvh7U5jHs=;
-        b=L87nMl2y4zHHvKG2Q/04w0rgX8wiQVuIlX1wAVjnD/6D7rHkMbT3w1U1NhRm5guLUa
-         BQuKqSr1f0PicazKlUci5tzrYQ7sPCFfkFqLnN8WYgNsXvS3HX3z7hqCC1EbLpux3n8C
-         SuhXu1hSpzKVP91FpSg7VMB14+my8uIISA9x6jrB4rX3+/7NJDp9+vVVIjPVgAi0Pbvb
-         RNARHoLnAoc6Y5n1Y6aeAcjqKwunWAcduAvrFsOYc9APD3Kdm5/kypIUBRdJovFo3RBi
-         89cM0f2k+yJisuaiAu/tw4s/d0oLwqHACUh/E/cZgCgXlJbp9qK42EoueWccBZiS5FIh
-         FpMA==
+        d=9elements.com; s=google; t=1690285233; x=1690890033;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OCWWBBRJa0PORsLtnTWiKQp9jCoJ7Z5w0rr05I0MhAM=;
+        b=A65PLuZvDWSYYYDsjc1F+ZXpzZI+oamgjXR5RgxTp9cRoQ9Dne5I+Jh8psRSH78myb
+         A7gqN0mwwpj20DcWesnpkiRR1y/0oDoxMW2YQF6jriAms+leXGFKjnklt/4wJaInyHnD
+         pANYTfJu/uKiRwA8tPws/g+LXN+6so5TwwTgN30x8YjP+2P4iX0Bf5VzI49W5Rey7lcA
+         m+dK9+9YHD//oL23pNz9tydLv7vA2IQtnvHSTwKcSe98dC3zblljuMHuDEsOVINXb535
+         AI/BqWNjgFBPXrudag3p1/C1VjTcqKp+5yXHOVTkDkb3pRnZ1VohwoBv+4VrR4mJoCB8
+         HKBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690281840; x=1690886640;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eT1M70QmPWlyzzTGWLB186I5SL8oEeXWy/zvh7U5jHs=;
-        b=L3Nc2WVZCDEL3VBNv7cPLGBZ2/Q+7jtyN7P7ZQ2f1maSASTYjGW4LMhm9idGXzdrlb
-         sef1wy1vSFy4PRasGRD3WJBDmT0ZIfGSE0h+uhCbirQmQTIe+YNSDds6NrIkTeuXJymW
-         qIRXrSHBHQcUB9jidKhzuG2eK1b7sPYRmf7PHM7XCYp/Bkei3GlKU2Pv26WT2aNGGyNo
-         w4gbazDHJbuDeHV373guG+7YeobfBpLafMWaHt+d1hG+LEGNIXIyo4rQfIgX9mcnr2kf
-         CD1mwTyeIF32RL7B/Qdh4b9bl/On4K6ujs8L2IY3z5D3076DVh5DXg/hAcgm2dDqH5o1
-         cbbA==
-X-Gm-Message-State: ABy/qLY68rRFSmeKRridlehrv+u4OEHLjP3m+27a58rXBz2Hq2ScH0bO
-        EWqQy4G8J6Mc2Z7EnDPfh2rGIw==
-X-Google-Smtp-Source: APBJJlGYrXsJBuwSkiRKpG5r9PXBP687z9chJuTDG3nvnLpp3zgOEBxhHUTkRfNKUDSicbyR6/z5fA==
-X-Received: by 2002:a5d:660d:0:b0:317:6734:c2ae with SMTP id n13-20020a5d660d000000b003176734c2aemr1704572wru.11.1690281840081;
-        Tue, 25 Jul 2023 03:44:00 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1690285233; x=1690890033;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OCWWBBRJa0PORsLtnTWiKQp9jCoJ7Z5w0rr05I0MhAM=;
+        b=JCSCvGyITdgnHGKz/mraBL70I0NPA971mvIQGxdyT/j/ftl3IVryt7NpTCRCqjfjYL
+         yoJ9offp4iLDLP7ojZnxkWICAZAhqogeKrZHB0rGVOI/2GVXHCMwVzd/FenUsFQ68eWW
+         NqywfPCB13WrB+yE2BvuIlQw83vJjj99Y88eNLhDZ5QcVErvmXtkPu9F5MYNY2dgkFj1
+         gtPKg0wWRj0GW8pBNvsHmgcxNfsfDgNtPWCwh2LD0i9Xtz2UqIIGGkTd7o94OcD675Q2
+         p+Y9VcF6zgkZp3eGpAIiGgqBBvUh9Y2D0k3OwasfyHKDwtFUJ9ymmVtHlJ3TA+bMvhvq
+         7X6w==
+X-Gm-Message-State: ABy/qLaRK8nYe4JqUTovxzRsBDsA+nMddAxlkqmYxrTjlgoiYetHmmFG
+        aS0dWtd4+S8GRoYiWpFmpaqbmw==
+X-Google-Smtp-Source: APBJJlFS6kYrnmiucY9eWirPBclgdbF4vnVSeCw6/ChNL+5oAgMp6DRN0T580c2uPfxcC++hVTOUoQ==
+X-Received: by 2002:a17:906:9bdd:b0:99b:4e75:52bb with SMTP id de29-20020a1709069bdd00b0099b4e7552bbmr12428460ejc.69.1690285233475;
+        Tue, 25 Jul 2023 04:40:33 -0700 (PDT)
 Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id n12-20020a5d6b8c000000b003143c6e09ccsm15793723wrx.16.2023.07.25.03.43.59
+        by smtp.gmail.com with ESMTPSA id d6-20020a1709067f0600b009925cbafeaasm8088206ejr.100.2023.07.25.04.40.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jul 2023 03:43:59 -0700 (PDT)
+        Tue, 25 Jul 2023 04:40:32 -0700 (PDT)
 From:   Naresh Solanki <naresh.solanki@9elements.com>
 X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
-To:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        iwona.winiarska@intel.com, linux@roeck-us.net, jdelvare@suse.com
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Naresh Solanki <Naresh.Solanki@9elements.com>
-Subject: [PATCH v4 3/3] hwmon: (peci/dimmtemp) Add Sapphire Rapids support
-Date:   Tue, 25 Jul 2023 12:43:53 +0200
-Message-ID: <20230725104354.33920-3-Naresh.Solanki@9elements.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        krzysztof.kozlowski+dt@linaro.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Naresh Solanki <Naresh.Solanki@9elements.com>,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] dt-bindings: hwmon: Add Infineon TDA38640
+Date:   Tue, 25 Jul 2023 13:40:26 +0200
+Message-ID: <20230725114030.1860571-1-Naresh.Solanki@9elements.com>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230725104354.33920-1-Naresh.Solanki@9elements.com>
-References: <20230725104354.33920-1-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -70,114 +73,96 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-Extend the functionality of hwmon (peci/dimmtemp) for Sapphire Rapids
-platform.
+The TDA38640 has a bug in SVID mode and to enable a workaround
+remove the TDA38640 from trivial-devices and add a complete schema.
 
-Add the corresponding Sapphire Rapids ID and threshold code.
+The schema adds the custom property 'infineon,en-pin-fixed-level' to
+signal a fixed level on the ENABLE pin and to enable the workaround.
+When the ENABLE pin is left floating it's internally pulled low.
 
-The patch has been tested on a 4S system with 64 DIMMs installed.
-Verified read of DIMM temperature thresholds & temperature.
+If not specified the driver will continue to use the PMBUS_OPERATION
+register to enable the regulator. When specified the driver will use
+the PMBUS_ON_OFF_CONFIG register to enable the regulator.
 
 Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-Acked-by: Guenter Roeck <linux@roeck-us.net>
 ---
-Changes in V4:
-- Instead of using hard coded dimm temperature threshold, read from mmio
-  offset.
-- Change CHAN_RANK_MAX_ON_SPR to 8
-- Restore #define CHAN_RANK_MAX to previous assignment.
-- Update commit message.
-Changes in V3:
-- Update Acked-by in commit message.
-Changes in V2:
-- Update subject.
----
- drivers/hwmon/peci/dimmtemp.c | 50 +++++++++++++++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
+ .../hwmon/pmbus/infineon,tda38640.yaml        | 50 +++++++++++++++++++
+ .../devicetree/bindings/trivial-devices.yaml  |  2 -
+ 2 files changed, 50 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.yaml
 
-diff --git a/drivers/hwmon/peci/dimmtemp.c b/drivers/hwmon/peci/dimmtemp.c
-index ce89da3937a0..5ca4d04e4b14 100644
---- a/drivers/hwmon/peci/dimmtemp.c
-+++ b/drivers/hwmon/peci/dimmtemp.c
-@@ -30,6 +30,8 @@
- #define DIMM_IDX_MAX_ON_ICX	2
- #define CHAN_RANK_MAX_ON_ICXD	4
- #define DIMM_IDX_MAX_ON_ICXD	2
-+#define CHAN_RANK_MAX_ON_SPR	8
-+#define DIMM_IDX_MAX_ON_SPR	2
- 
- #define CHAN_RANK_MAX		CHAN_RANK_MAX_ON_HSX
- #define DIMM_IDX_MAX		DIMM_IDX_MAX_ON_HSX
-@@ -534,6 +536,43 @@ read_thresholds_icx(struct peci_dimmtemp *priv, int dimm_order, int chan_rank, u
- 	return 0;
- }
- 
-+static int
-+read_thresholds_spr(struct peci_dimmtemp *priv, int dimm_order, int chan_rank, u32 *data)
-+{
-+	u32 reg_val;
-+	u64 offset;
-+	int ret;
-+	u8 dev;
+diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.yaml
+new file mode 100644
+index 000000000000..520112e4e271
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.yaml
+@@ -0,0 +1,50 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
 +
-+	ret = peci_ep_pci_local_read(priv->peci_dev, 0, 30, 0, 2, 0xd4, &reg_val);
-+	if (ret || !(reg_val & BIT(31)))
-+		return -ENODATA; /* Use default or previous value */
++$id: http://devicetree.org/schemas/hwmon/pmbus/infineon,tda38640.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+	ret = peci_ep_pci_local_read(priv->peci_dev, 0, 30, 0, 2, 0xd0, &reg_val);
-+	if (ret)
-+		return -ENODATA; /* Use default or previous value */
++title: Infineon TDA38640 Synchronous Buck Regulator with SVID and I2C
 +
-+	/*
-+	 * Device 26, Offset 219a8: IMC 0 channel 0 -> rank 0
-+	 * Device 26, Offset 299a8: IMC 0 channel 1 -> rank 1
-+	 * Device 27, Offset 219a8: IMC 1 channel 0 -> rank 2
-+	 * Device 27, Offset 299a8: IMC 1 channel 1 -> rank 3
-+	 * Device 28, Offset 219a8: IMC 2 channel 0 -> rank 4
-+	 * Device 28, Offset 299a8: IMC 2 channel 1 -> rank 5
-+	 * Device 29, Offset 219a8: IMC 3 channel 0 -> rank 6
-+	 * Device 29, Offset 299a8: IMC 3 channel 1 -> rank 7
-+	 */
-+	dev = 26 + chan_rank / 2;
-+	offset = 0x219a8 + dimm_order * 4 + (chan_rank % 2) * 0x8000;
++description: |
++  The Infineon TDA38640 is a 40A Single-voltage Synchronous Buck
++  Regulator with SVID and I2C designed for Industrial use.
 +
-+	ret = peci_mmio_read(priv->peci_dev, 0, GET_CPU_SEG(reg_val), GET_CPU_BUS(reg_val),
-+			     dev, 0, offset, data);
-+	if (ret)
-+		return ret;
++  Datasheet: https://www.infineon.com/dgdl/Infineon-TDA38640-0000-DataSheet-v02_04-EN.pdf?fileId=8ac78c8c80027ecd018042f2337f00c9
 +
-+	return 0;
-+}
++properties:
++  compatible:
++    enum:
++      - infineon,tda38640
 +
- static const struct dimm_info dimm_hsx = {
- 	.chan_rank_max	= CHAN_RANK_MAX_ON_HSX,
- 	.dimm_idx_max	= DIMM_IDX_MAX_ON_HSX,
-@@ -576,6 +615,13 @@ static const struct dimm_info dimm_icxd = {
- 	.read_thresholds = &read_thresholds_icx,
- };
- 
-+static const struct dimm_info dimm_spr = {
-+	.chan_rank_max	= CHAN_RANK_MAX_ON_SPR,
-+	.dimm_idx_max	= DIMM_IDX_MAX_ON_SPR,
-+	.min_peci_revision = 0x40,
-+	.read_thresholds = &read_thresholds_spr,
-+};
++  reg:
++    maxItems: 1
 +
- static const struct auxiliary_device_id peci_dimmtemp_ids[] = {
- 	{
- 		.name = "peci_cpu.dimmtemp.hsx",
-@@ -601,6 +647,10 @@ static const struct auxiliary_device_id peci_dimmtemp_ids[] = {
- 		.name = "peci_cpu.dimmtemp.icxd",
- 		.driver_data = (kernel_ulong_t)&dimm_icxd,
- 	},
-+	{
-+		.name = "peci_cpu.dimmtemp.spr",
-+		.driver_data = (kernel_ulong_t)&dimm_spr,
-+	},
- 	{ }
- };
- MODULE_DEVICE_TABLE(auxiliary, peci_dimmtemp_ids);
++  infineon,en-pin-fixed-level:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      Fixed level of the ENABLE pin. When specified the PMBUS_ON_OFF_CONFIG
++      register is used to enable the regulator instead of the PMBUS_OPERATION
++      register to workaround a bug of the tda38640 when operating in SVID-mode.
++      If the ENABLE pin is left floating the internal pull-down causes a low
++      level on the pin.
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        tda38640@40 {
++            compatible = "infineon,tda38640";
++            reg = <0x40>;
++        };
++    };
++
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index 6e24c4d25ec3..2b1fbb2a672b 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -151,8 +151,6 @@ properties:
+           - infineon,slb9645tt
+             # Infineon SLB9673 I2C TPM 2.0
+           - infineon,slb9673
+-            # Infineon TDA38640 Voltage Regulator
+-          - infineon,tda38640
+             # Infineon TLV493D-A1B6 I2C 3D Magnetic Sensor
+           - infineon,tlv493d-a1b6
+             # Infineon Multi-phase Digital VR Controller xdpe11280
+
+base-commit: 55612007f16b5d7b1fb83a7b0f5bb686829db7c7
 -- 
 2.41.0
 
