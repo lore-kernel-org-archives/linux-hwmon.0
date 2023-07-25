@@ -2,116 +2,116 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 808EEC41513
-	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Jul 2023 15:12:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E70DEC0015E
+	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Jul 2023 15:19:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231809AbjGYPMD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 25 Jul 2023 11:12:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42002 "EHLO
+        id S233083AbjGYPT5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 25 Jul 2023 11:19:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230376AbjGYPMC (ORCPT
+        with ESMTP id S232924AbjGYPT4 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 25 Jul 2023 11:12:02 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2346F128;
-        Tue, 25 Jul 2023 08:12:02 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-563de62f861so7157a12.1;
-        Tue, 25 Jul 2023 08:12:02 -0700 (PDT)
+        Tue, 25 Jul 2023 11:19:56 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB74D1BF9;
+        Tue, 25 Jul 2023 08:19:50 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1bbc2e1c6b2so3218025ad.3;
+        Tue, 25 Jul 2023 08:19:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690297921; x=1690902721;
+        d=gmail.com; s=20221208; t=1690298390; x=1690903190;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=1K+i7mlSf2+UQsadMuz2ht79KN5VhwZVnNbPb9Y0ncE=;
-        b=Fuw2K/IiWZgWLZow/It4IMeAsOn9oA0KIRavpmmuefFzF0OEMS37Q0+sD9gLbhbn9M
-         baSNjKDfZybqhKMUmhHqUm/yYKWARfQqGHZALVfbgcxMvdztBlgm5P+64f6/KGT1rmhw
-         X1LzS6JF+VY59pm/0MMKt8cj/wkWIeheS2TEgP1NLRoJedV6xf8ujOxI3M/wQL5iv0TD
-         hISaaM+6w9lIF80bmnb/8TBiGC4lHI3POsuOzSp3U0HtNgRFLXkJAIEY8JaJMnB2RGUm
-         FkcL21SeZmjlzl6lyAf/odFonpohMDz2BdrBbwiTKtqYZozhp2lEUpu0mBheBx2pDBMr
-         /veA==
+        bh=LVqB/OLB43pJtSZQsnoujE+pyOVuCDBgWkJZYpdI0zY=;
+        b=A1nzV7buPe4RypyKfFqKtpzNmXZ+pUD2IcFbHeE57r+f1QLV1WNjJl6yzYv74tquOR
+         BbfYh5z7GyEZ2dgt/gn50rz5nMtWRF51RYtK9EoYU/Cwd1hwLqMPOHl+GZ7cTDqHMFWI
+         vZiW1YjXbMcMj7DE6SplENJBxxVGTTzI/RuObWFU0FLV8Ix+XSWDsqgOzoN9qAoXwnmt
+         MlfLN3TDYBzlXhg4wjuywXcL7ivZTrjfvIobQgeGRzjErSVI7EkIXFuz4dW++kn/LPre
+         cPYD4LPF1UClRlC/J9V2Ik/Yrein6LBnPuKWHgUt0+Y/XvMqP29GUeFiZo5e7CRbPklB
+         VEmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690297921; x=1690902721;
+        d=1e100.net; s=20221208; t=1690298390; x=1690903190;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1K+i7mlSf2+UQsadMuz2ht79KN5VhwZVnNbPb9Y0ncE=;
-        b=hIHC6JaqqswLppq6awKk66+T1BgDcyNhtwCfT00275S3gcKKY4IgeaDHnPmhml/GKd
-         X3E1BTF8xnb9oQwDK3PKFbUHWwTqLeVrVoW+hU7xQfCuTn1BCtWXtl24hDLewSU23ZJO
-         wcEqhvtrByz7cLIyPfZ4C/6++rwwTFtjXngpEOtOiemudKHClIsjjvGvI2sRTK7bp5zd
-         kbQvAhmdBDQ/xs09+TMUmvNvw6ArIE83FgM9HeDLSteY07h6knBqFVoOEDllLlfKn2hh
-         c2ZVtYB6EaFumtdmKUOhSc3SQfRmCIn+5LQvQfc7OVCaRuXp0XfhVfR0WZoC3i/frcJo
-         9zxg==
-X-Gm-Message-State: ABy/qLZyRnIelF+dHorQCgLHHQxpyeA2zGlyJSschPIbKHdpyXZ7Q1ys
-        J73CTpa9EMuSWcfrepNzNgA=
-X-Google-Smtp-Source: APBJJlFzRkJFGHJD6i4My0dQn8buh5u10emnPTWynCNoKwvLzyLDMgHocPqch0Xif0RMyK/R1W7D5A==
-X-Received: by 2002:a05:6a00:9a0:b0:686:baf2:35f4 with SMTP id u32-20020a056a0009a000b00686baf235f4mr388055pfg.29.1690297921510;
-        Tue, 25 Jul 2023 08:12:01 -0700 (PDT)
+        bh=LVqB/OLB43pJtSZQsnoujE+pyOVuCDBgWkJZYpdI0zY=;
+        b=Ei8+1kkjBBlIEt2IbwUpD+uTp7IG1oMeinD844emjc3VOdnDTv1prP0eM7opYXKiCS
+         kGjibEaP8Du+evq39/lHtt7XJ5diVSdzTNU5xpgGMiUhVC4dch1kv4jqlNTudr6pmA3j
+         H2aS7QqcIjwy0w3B5gZ1nNCaY9/0bKwqC99Hs6Yoa30Iw8caPCQXoG7sySCG4KTfuqrB
+         UXkABZG+AiJDY5hqv3eR/5Rsw/f3mjr5drfGmWw045o2RhvGif7bdX6lU9QVrAS9Sfuf
+         GgMFnnEnHIeJli+oyixVAyiTNEl9r3MAaVQZi8WwrzBESU9dpolFpja1ZFjvFQ2NmyDe
+         i+8g==
+X-Gm-Message-State: ABy/qLYnrlSacG++415oOjie4oeDnM/xGx+Wlk3L9ernyRAwG6RvN2JZ
+        NsX+dfpzR5M4y2QpRt1TnqI=
+X-Google-Smtp-Source: APBJJlEIDHUozeXKv8CobU8KbiZxUWpc+fGO6kGcJo6rJ/K1hNFEOriuQohfeHL0NQja2/8YncuGdQ==
+X-Received: by 2002:a17:902:7403:b0:1bb:ad56:a831 with SMTP id g3-20020a170902740300b001bbad56a831mr3941862pll.36.1690298390136;
+        Tue, 25 Jul 2023 08:19:50 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m7-20020aa79007000000b006636c4f57a6sm9793039pfo.27.2023.07.25.08.12.00
+        by smtp.gmail.com with ESMTPSA id d5-20020a170902c18500b001bb20380bf2sm11248399pld.13.2023.07.25.08.19.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jul 2023 08:12:01 -0700 (PDT)
+        Tue, 25 Jul 2023 08:19:49 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 25 Jul 2023 08:12:00 -0700
+Date:   Tue, 25 Jul 2023 08:19:48 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     James Seo <james@equiv.tech>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (hp-wmi-sensors) Initialize pevents in
- hp_wmi_sensors_init()
-Message-ID: <46734914-d323-44b3-8e97-b34aa4fc9f89@roeck-us.net>
-References: <20230725094817.588640-1-james@equiv.tech>
+To:     Andre Werner <werneazc@gmail.com>
+Cc:     jdelvare@suse.com, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, robh+dt@kernel.org,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Andre Werner <andre.werner@systec-electronic.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: Add description for new hwmon
+ driver hs3001
+Message-ID: <0340a749-7073-4002-ada4-c1866f90054d@roeck-us.net>
+References: <20230718112810.21322-1-andre.werner@systec-electronic.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230725094817.588640-1-james@equiv.tech>
+In-Reply-To: <20230718112810.21322-1-andre.werner@systec-electronic.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jul 25, 2023 at 02:48:17AM -0700, James Seo wrote:
-> The following warning is given by the Smatch static checker:
+On Tue, Jul 18, 2023 at 01:28:09PM +0200, Andre Werner wrote:
+> This is the initial description.
 > 
->   drivers/hwmon/hp-wmi-sensors.c:1937 hp_wmi_sensors_init()
->   error: uninitialized symbol 'pevents'.
-> 
-> If there are no instances of the HPBIOS_PlatformEvents WMI object
-> available, init_platform_events() never initializes this pointer,
-> which may then be passed to hp_wmi_debugfs_init() uninitialized.
-> 
-> The impact should be limited because hp_wmi_debugfs_init() uses this
-> pointer only if the count of HPBIOS_PlatformEvents instances is _not_
-> zero, while conversely, it will be uninitialized only if the count of
-> such instances _is_ zero. However, passing it uninitialized still
-> constitutes a bug.
-> 
-> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-> Closes: https://lore.kernel.org/linux-hwmon/f72c129b-8c57-406a-bf41-bd889b65ea0f@moroto.mountain/
-> Signed-off-by: James Seo <james@equiv.tech>
+> Signed-off-by: Andre Werner <andre.werner@systec-electronic.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Applied.
+checkpatch:
+
+WARNING: From:/Signed-off-by: email address mismatch: 'From: Andre Werner <werneazc@gmail.com>' != 'Signed-off-by: Andre Werner <andre.werner@systec-electronic.com>'
+
+Sorry, you'll have to resend this. The e-mail addresses need to match.
+
+Note that, when doing so, I would suggest to add a sensible description.
+"This is the initial description." is not a useful description.
+"Add binding for Renesas HS3001 Temperature and Relative Humidity Sensor"
+would be more sensible. Also, regarding the subject: bindings don't describe
+the driver, they describe the chip.
 
 Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/hp-wmi-sensors.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> v1: Using separate dt-binding hs300x.yaml
+> v2: Reviewer recommends documentation of driver dt-binding in
+> trivial-devices.yaml because the driver has no special properties
+> to describe.
+> v3: Simplify description of sensors compatible
+> ---
+>  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> 
-> base-commit: 55612007f16b5d7b1fb83a7b0f5bb686829db7c7
-> 
-> diff --git a/drivers/hwmon/hp-wmi-sensors.c b/drivers/hwmon/hp-wmi-sensors.c
-> index 3a99cc5f44b2..17ae62f88bbf 100644
-> --- a/drivers/hwmon/hp-wmi-sensors.c
-> +++ b/drivers/hwmon/hp-wmi-sensors.c
-> @@ -1913,7 +1913,7 @@ static bool add_event_handler(struct hp_wmi_sensors *state)
->  static int hp_wmi_sensors_init(struct hp_wmi_sensors *state)
->  {
->  	struct hp_wmi_info *connected[HP_WMI_MAX_INSTANCES];
-> -	struct hp_wmi_platform_events *pevents;
-> +	struct hp_wmi_platform_events *pevents = NULL;
->  	struct device *dev = &state->wdev->dev;
->  	struct hp_wmi_info *info;
->  	struct device *hwdev;
+> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+> index ba2bfb547909..96eb59e56eb7 100644
+> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> @@ -315,6 +315,8 @@ properties:
+>            - plx,pex8648
+>              # Pulsedlight LIDAR range-finding sensor
+>            - pulsedlight,lidar-lite-v2
+> +            # Renesas HS3001 Temperature and Relative Humidity Sensors
+> +          - renesas,hs3001
+>              # Renesas ISL29501 time-of-flight sensor
+>            - renesas,isl29501
+>              # Rohm DH2228FV
