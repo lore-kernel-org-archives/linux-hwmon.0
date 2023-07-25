@@ -2,42 +2,41 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88C14C0015E
-	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Jul 2023 06:51:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62CC4C0015E
+	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Jul 2023 07:46:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231749AbjGYGvR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 25 Jul 2023 02:51:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58430 "EHLO
+        id S232258AbjGYHq0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 25 Jul 2023 03:46:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231187AbjGYGvQ (ORCPT
+        with ESMTP id S230428AbjGYHq0 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 25 Jul 2023 02:51:16 -0400
+        Tue, 25 Jul 2023 03:46:26 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB10BD;
-        Mon, 24 Jul 2023 23:51:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281AF97;
+        Tue, 25 Jul 2023 00:46:25 -0700 (PDT)
 From:   Thomas Gleixner <tglx@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1690267873;
+        s=2020; t=1690271183;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=qTSiGFdzDyf1mwg76cDRV4nFA1LBdaWOeq/VwaKIiXQ=;
-        b=gugcPXUsURN8CiK4gBblLM8WprgclBunxGBjioeu0mP2lJgVKud+4wII4ChSIKvsaNcTpm
-        iqvMelH1IG0ENaS7X0FC+yHmn74aljtxc1JiKvoDb+z6ToAd0KClYAuxUXP0Jfx+TPm6ZX
-        6J0UehC7IeTAWKl62CyNzj5UTbl3Mh8LDD22lx6lN3lrfrMP/3gY6m06uQHzfkTy+lru3A
-        al1YUmzbuVaT6eeYUxexb5OLkAIuL5E35d1mI3iagp82RY9eAia7/q/JsteVd7C+3sQdm8
-        qumt/8+WVlbFDWz3Ec2djWWWj/4aMnHcMj9rnspNnsWZCANCzzmwncUf4xzVag==
+        bh=MwlQeCse0p+PDVAUpXy5OS86DdcWiW2W0yctq9JW4YU=;
+        b=UV5iHfgs84Vzben7Ls/EN8AacDD4keKPQa6CkpOHdqYXxXKmW4QbOtGxhQ+RWU740YNYDm
+        xoplp+6QwC/iwzLhLxxHFOsdr3Zs61Wcn6s3GQdBooOrQvRUMCIR0arURIqr8ykUoPyFuA
+        2fdPYc9hFKn+I0B6tP9P/CAbyTOSEPsiXOJss88yFxmpeVfhF5yZZnJYq3Mr3UFw1zFt5d
+        5qxL5SMeIdkjn5l6aQms8LF2buK+HKS+U8KrBMadgTrGH81vmYp7qmtXruuIuQzuzIsUza
+        xgjtAx65WpTFajlfmqHTDGEZJ5ib+Xj5yOTxfiIfw7G66ZymwCFZQPJ16qVlkA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1690267873;
+        s=2020e; t=1690271183;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=qTSiGFdzDyf1mwg76cDRV4nFA1LBdaWOeq/VwaKIiXQ=;
-        b=ZIJyz3EHuhOHXV5TbBCQJvJ6IxAQUYjVqwLnNxOTSl/LKu+0yOvmitEHAINhkGkvG7WmKe
-        nDOEuof05OYfuNDA==
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Tom Lendacky <thomas.lendacky@amd.com>,
+        bh=MwlQeCse0p+PDVAUpXy5OS86DdcWiW2W0yctq9JW4YU=;
+        b=L6pYgAhSdpmx7S0bNGsgkCM3d/UYiFUS7u3Ilt+BnxOEVnP/BmE0LRZHRyAgKEOB1KWeqI
+        9EXhBYcSVw8dV+Cg==
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     x86@kernel.org, Tom Lendacky <thomas.lendacky@amd.com>,
         Andrew Cooper <andrew.cooper3@citrix.com>,
         Arjan van de Ven <arjan@linux.intel.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
@@ -52,57 +51,65 @@ Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         Mike Travis <mike.travis@hpe.com>,
         Dimitri Sivanich <dimitri.sivanich@hpe.com>,
         Russ Anderson <russ.anderson@hpe.com>
-Subject: Re: [patch 17/29] x86/cpu: Provide a sane leaf 0xb/0x1f parser
-In-Reply-To: <20230724204942.GD3745454@hirez.programming.kicks-ass.net>
+Subject: Re: [patch 01/29] x86/cpu: Encapsulate topology information in
+ cpuinfo_x86
+In-Reply-To: <20230724172843.757723854@linutronix.de>
 References: <20230724155329.474037902@linutronix.de>
- <20230724172844.690165660@linutronix.de>
- <20230724204942.GD3745454@hirez.programming.kicks-ass.net>
-Date:   Tue, 25 Jul 2023 08:51:12 +0200
-Message-ID: <87a5vktrfj.ffs@tglx>
+ <20230724172843.757723854@linutronix.de>
+Date:   Tue, 25 Jul 2023 09:46:23 +0200
+Message-ID: <877cqotovk.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jul 24 2023 at 22:49, Peter Zijlstra wrote:
-> On Mon, Jul 24, 2023 at 07:44:17PM +0200, Thomas Gleixner wrote:
->
->> +static inline bool topo_subleaf(struct topo_scan *tscan, u32 leaf, u32 subleaf)
->> +{
->> +	unsigned int dom, maxtype = leaf == 0xb ? CORE_TYPE + 1 : MAX_TYPE;
->> +	struct {
->> +		// eax
->> +		u32	x2apic_shift	:  5, // Number of bits to shift APIC ID right
->> +					      // for the topology ID at the next level
->> +			__rsvd0		: 27; // Reserved
->> +					      // ebx
->> +		u32	num_processors	: 16, // Number of processors at current level
->> +			__rsvd1		: 16; // Reserved
->> +					      // ecx
->> +		u32	level		:  8, // Current topology level. Same as sub leaf number
->> +			type		:  8, // Level type. If 0, invalid
->> +			__rsvd2		: 16; // Reserved
->> +					      // edx
->> +		u32	x2apic_id	: 32; // X2APIC ID of the current logical processor
->
-> That comment seems inconsistent, either have then all aligned or move
-> all register names left.
+On Mon, Jul 24 2023 at 19:43, Thomas Gleixner wrote:
+> +struct cpuinfo_topology {
+> +	u16			apicid;
+> +	u16			initial_apicid;
 
-Bah. I had all the register names left at some point. No idea how I lost
-that again. Probably when I rolled back to some earlier version after
-screwing up :)
+There was an offlist question whether these should be u32 because with
+X2APIC the APIC ID is 32bit wide.
 
->> +
->> +	/* Read all available subleafs and populate the levels */
->> +	for (subleaf = 0; topo_subleaf(tscan, leaf, subleaf); subleaf++);
->
-> Personally I prefer:
->
-> 	for (;;)
-> 		;
->
-> that is, have the semicolon on it's own line, but meh.
+The answer is yes, no, maybe. Why?
 
-:)
+In practice there are limitations, both on the hardware side and on the
+kernel side.
 
+The kernel limits the max. APIC ID to 32768 and the maximum number of
+CPUs to 8192 right now. Increasing the maximum APIC ID is possible, but
+that needs some deep thoughts as we have one array which is
+MAX_LOCAL_APIC sized and a bitmap of that size too. Even the bitmap
+would require (1 << 32)/8 = 5.36871e+08 B = 512MB of memory. With a limit
+of 32768 it's a reasonable 4KB. :)
+
+On the hardware side the topology information is in the APIC ID:
+
+      [PKGID][DIEID]...[COREID][THREADID]
+
+where everything below the PKGID is relative to the package. Right now
+the vendors have that space packed, i.e. the number of bits below PKGID
+is sized that its the next power of 2 which allows to fit the actual
+number of logical processors.
+
+There have been systems where the PKGID shift was larger than that which
+caused us to do the logical package mapping because we ended up with
+package ID gaps. That was caused by incorrect information in leaf
+0xB/0x1F, i.e. the package shift enumerated was smaller than the actual
+one.
+
+So with an upper limit of 8192 CPUs the limitation to 32K APIC IDs
+should be really sufficient. The largest package shift I've seen so far
+is 8, i.e. 256 logical processors per package. That means 32 packages
+max. That should be sufficient for a while, right? The HPE/UV people
+might have a word to say here though.
+
+So no, u16 is fine, but yes, we can make it u32 just for simplicity
+sake, which still does not allow you to have an APIC ID >= 32k, but
+makes it easy enough to expand that to e.g. 64K or 128K if the need ever
+arises. Let me rework that accordingly.
+
+Thanks,
+
+        tglx
