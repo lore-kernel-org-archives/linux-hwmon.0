@@ -2,83 +2,111 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75023C41513
-	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Jul 2023 09:48:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2015EC0015E
+	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Jul 2023 10:44:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232128AbjGYJsw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 25 Jul 2023 05:48:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51824 "EHLO
+        id S232598AbjGYKoB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 25 Jul 2023 06:44:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232447AbjGYJsp (ORCPT
+        with ESMTP id S230405AbjGYKoA (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 25 Jul 2023 05:48:45 -0400
-Received: from rs227.mailgun.us (rs227.mailgun.us [209.61.151.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6291E1AA
-        for <linux-hwmon@vger.kernel.org>; Tue, 25 Jul 2023 02:48:42 -0700 (PDT)
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=equiv.tech; q=dns/txt;
- s=mx; t=1690278521; x=1690285721; h=Content-Transfer-Encoding: MIME-Version:
- Message-Id: Date: Subject: Subject: Cc: To: To: From: From: Sender: Sender;
- bh=a7euifVUehZsKlaZIpC9d5sGc1HeYiQSbpWf0EJ7QP8=;
- b=aMwyHjc1Ie3XzN3jSnYF0T6fY+zfs44bBdIaPzPeija+U4Ejh8SuJD9bgUd4Orwl45uUqrhiwTCXAerA/Kqe3rKEc6Z8XghNoEPbAPc3SBPf8T6kSAoTIDcZDShYvrQ0bV8MUCw2Xo/xxhioZSuaEtrcYBKGwBPrWtxX8ylAyAPqyy0G9L9eV7u/+LLNn4FvezaY7Y30ze/rGeRu3YBzTgfCGHDY/OMEtzEyPo2WyaXaefBAHMHDyI8cAeU+oNe7LhSFKDAIYixlHkbqszOsFhrgqAAaopRed09nfdW5MdFUGHx97yWTASh8A4WyITgsuOqr7PsbZx+VToUlYipfIA==
-X-Mailgun-Sending-Ip: 209.61.151.227
-X-Mailgun-Sid: WyJkOWUwNSIsImxpbnV4LWh3bW9uQHZnZXIua2VybmVsLm9yZyIsIjkzZDVhYiJd
-Received: from mail.equiv.tech (equiv.tech [142.93.28.83]) by 292765024a19 with SMTP id
- 64bf9a7995a6293efb65da64 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 25 Jul 2023 09:48:41 GMT
-Sender: james@equiv.tech
-From:   James Seo <james@equiv.tech>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     James Seo <james@equiv.tech>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (hp-wmi-sensors) Initialize pevents in hp_wmi_sensors_init()
-Date:   Tue, 25 Jul 2023 02:48:17 -0700
-Message-Id: <20230725094817.588640-1-james@equiv.tech>
+        Tue, 25 Jul 2023 06:44:00 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211D910CC
+        for <linux-hwmon@vger.kernel.org>; Tue, 25 Jul 2023 03:43:59 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3fbd33a57dcso52808465e9.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 25 Jul 2023 03:43:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1690281837; x=1690886637;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y2+LOkmbRzocNLGHFc65c1vCZRpwTkaqodGNOPSIAJU=;
+        b=QRAUr/fNWYjB0sOxrI8MMRk87D1j2LMRs7ByIWGHV02Y+iFcHv5AnkKaJ4jo/3WkQQ
+         gTIpW4yMlpTKWW00bLhLpD9HCS08121iceRfhHIFqs4FQoAxpigzlblcApJfliU0DLu1
+         Fww/vuWbs/HhGvYYWb0vhdVa2Ygo7nbMcT200KrrjHVYquOhuDxB6vu0knKLJaamkmLp
+         ToUTTPiG5CFN1T18MkEQofHAuNUr9aUIqLf7fmmDz8GMJKr0Rfb3QZvr8yZDcaRveY3u
+         mIaZBorI1JvKm28Eb+aGIMu9mZCvSisgna8BS0deWIhMMwlk4OuZgBewSalsTvHtKZ8n
+         Qt+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690281837; x=1690886637;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Y2+LOkmbRzocNLGHFc65c1vCZRpwTkaqodGNOPSIAJU=;
+        b=jG1RAr2Dx4prM+kQDZcDZp+uBo7EtNVjiI8YE3MLX2gVwSrsoP2764iE7Wo3nTrOjz
+         bXHN89DVXOtmj2uq9n3TdbMCFBCeZQ1dqSkXt0mvA9ZcDQCdG0BqBy4QCCpur2Y1j7Jj
+         e+kqXEme6YI/Rrxq7OutXMo2S59OGP732gyv57e1P+aJ79ktVY44eD2PDg4MIGH+BupH
+         6Tn+j4JZF2aTWn8U8jLlHKUxJhAuTChIHbpdN2p1hCncbz8ILpi4enp1uKdBzwMBmYuC
+         N39/349XdrEeTBSziHmQCeBfWj7Ca6UFR4ptUY4gWTaDISBWqYIy6D4AbGHckTJPLi7p
+         uNog==
+X-Gm-Message-State: ABy/qLYkswP5bjgBISaoCeACZBPNQ64TPt92LAs7qkDBhsZg9NJkMRVG
+        uVRehVOuU/cV5rCvLENldIL8ehtnKikbzikb/c2CtQ==
+X-Google-Smtp-Source: APBJJlFgnYys6xLwEPqvMSaNFLz0aaGFAQiC1lUMCbKi1QUfpXLwHlZMzXcC3NjQhAM4FS+FHyhNCQ==
+X-Received: by 2002:a05:600c:2a54:b0:3fb:a917:b769 with SMTP id x20-20020a05600c2a5400b003fba917b769mr9567467wme.21.1690281837646;
+        Tue, 25 Jul 2023 03:43:57 -0700 (PDT)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id n12-20020a5d6b8c000000b003143c6e09ccsm15793723wrx.16.2023.07.25.03.43.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jul 2023 03:43:57 -0700 (PDT)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
+To:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        iwona.winiarska@intel.com, linux@roeck-us.net, jdelvare@suse.com
+Cc:     Naresh Solanki <Naresh.Solanki@9elements.com>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        openbmc@lists.ozlabs.org
+Subject: [PATCH v4 1/3] peci: cpu: Add Intel Sapphire Rapids support
+Date:   Tue, 25 Jul 2023 12:43:51 +0200
+Message-ID: <20230725104354.33920-1-Naresh.Solanki@9elements.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The following warning is given by the Smatch static checker:
+Add support for detection of Intel Sapphire Rapids processor based on
+CPU family & model.
 
-  drivers/hwmon/hp-wmi-sensors.c:1937 hp_wmi_sensors_init()
-  error: uninitialized symbol 'pevents'.
+Sapphire Rapids Xeon processors with the family set to 6 and the
+model set to INTEL_FAM6_SAPPHIRERAPIDS_X. The data field for this entry
+is "spr".
 
-If there are no instances of the HPBIOS_PlatformEvents WMI object
-available, init_platform_events() never initializes this pointer,
-which may then be passed to hp_wmi_debugfs_init() uninitialized.
+Tested the patch series with AST2600 BMC with 4S Intel Sapphire Rapids
+processors & verified by reading cpu & dimm temperature.
 
-The impact should be limited because hp_wmi_debugfs_init() uses this
-pointer only if the count of HPBIOS_PlatformEvents instances is _not_
-zero, while conversely, it will be uninitialized only if the count of
-such instances _is_ zero. However, passing it uninitialized still
-constitutes a bug.
-
-Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-Closes: https://lore.kernel.org/linux-hwmon/f72c129b-8c57-406a-bf41-bd889b65ea0f@moroto.mountain/
-Signed-off-by: James Seo <james@equiv.tech>
+Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+Reviewed-by: Iwona Winiarska <iwona.winiarska@intel.com>
 ---
- drivers/hwmon/hp-wmi-sensors.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes in V3:
+- Move spr entry at end of struct peci_cpu_device_ids
+- Mention test with the patch.
+Changes in V2:
+- Refactored from previous patchset as seperate patch based on subsystem.
+---
+ drivers/peci/cpu.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/hwmon/hp-wmi-sensors.c b/drivers/hwmon/hp-wmi-sensors.c
-index 3a99cc5f44b2..17ae62f88bbf 100644
---- a/drivers/hwmon/hp-wmi-sensors.c
-+++ b/drivers/hwmon/hp-wmi-sensors.c
-@@ -1913,7 +1913,7 @@ static bool add_event_handler(struct hp_wmi_sensors *state)
- static int hp_wmi_sensors_init(struct hp_wmi_sensors *state)
- {
- 	struct hp_wmi_info *connected[HP_WMI_MAX_INSTANCES];
--	struct hp_wmi_platform_events *pevents;
-+	struct hp_wmi_platform_events *pevents = NULL;
- 	struct device *dev = &state->wdev->dev;
- 	struct hp_wmi_info *info;
- 	struct device *hwdev;
+diff --git a/drivers/peci/cpu.c b/drivers/peci/cpu.c
+index de4a7b3e5966..bd990acd92b8 100644
+--- a/drivers/peci/cpu.c
++++ b/drivers/peci/cpu.c
+@@ -323,6 +323,11 @@ static const struct peci_device_id peci_cpu_device_ids[] = {
+ 		.model	= INTEL_FAM6_ICELAKE_D,
+ 		.data	= "icxd",
+ 	},
++	{ /* Sapphire Rapids Xeon */
++		.family	= 6,
++		.model	= INTEL_FAM6_SAPPHIRERAPIDS_X,
++		.data	= "spr",
++	},
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(peci, peci_cpu_device_ids);
 
 base-commit: 55612007f16b5d7b1fb83a7b0f5bb686829db7c7
 -- 
-2.39.2
+2.41.0
 
