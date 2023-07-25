@@ -2,114 +2,58 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62CC4C0015E
-	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Jul 2023 07:46:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A16D0C001DF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Jul 2023 07:56:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232258AbjGYHq0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 25 Jul 2023 03:46:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60498 "EHLO
+        id S229558AbjGYH4v (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 25 Jul 2023 03:56:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230428AbjGYHq0 (ORCPT
+        with ESMTP id S231714AbjGYH4v (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 25 Jul 2023 03:46:26 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281AF97;
-        Tue, 25 Jul 2023 00:46:25 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1690271183;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MwlQeCse0p+PDVAUpXy5OS86DdcWiW2W0yctq9JW4YU=;
-        b=UV5iHfgs84Vzben7Ls/EN8AacDD4keKPQa6CkpOHdqYXxXKmW4QbOtGxhQ+RWU740YNYDm
-        xoplp+6QwC/iwzLhLxxHFOsdr3Zs61Wcn6s3GQdBooOrQvRUMCIR0arURIqr8ykUoPyFuA
-        2fdPYc9hFKn+I0B6tP9P/CAbyTOSEPsiXOJss88yFxmpeVfhF5yZZnJYq3Mr3UFw1zFt5d
-        5qxL5SMeIdkjn5l6aQms8LF2buK+HKS+U8KrBMadgTrGH81vmYp7qmtXruuIuQzuzIsUza
-        xgjtAx65WpTFajlfmqHTDGEZJ5ib+Xj5yOTxfiIfw7G66ZymwCFZQPJ16qVlkA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1690271183;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MwlQeCse0p+PDVAUpXy5OS86DdcWiW2W0yctq9JW4YU=;
-        b=L6pYgAhSdpmx7S0bNGsgkCM3d/UYiFUS7u3Ilt+BnxOEVnP/BmE0LRZHRyAgKEOB1KWeqI
-        9EXhBYcSVw8dV+Cg==
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     x86@kernel.org, Tom Lendacky <thomas.lendacky@amd.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Arjan van de Ven <arjan@linux.intel.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        James Smart <james.smart@broadcom.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Huang Rui <ray.huang@amd.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Steve Wahl <steve.wahl@hpe.com>,
-        Mike Travis <mike.travis@hpe.com>,
-        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
-        Russ Anderson <russ.anderson@hpe.com>
-Subject: Re: [patch 01/29] x86/cpu: Encapsulate topology information in
- cpuinfo_x86
-In-Reply-To: <20230724172843.757723854@linutronix.de>
-References: <20230724155329.474037902@linutronix.de>
- <20230724172843.757723854@linutronix.de>
-Date:   Tue, 25 Jul 2023 09:46:23 +0200
-Message-ID: <877cqotovk.ffs@tglx>
+        Tue, 25 Jul 2023 03:56:51 -0400
+Received: from mail.strategicvision.pl (mail.strategicvision.pl [217.61.105.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830C6C4
+        for <linux-hwmon@vger.kernel.org>; Tue, 25 Jul 2023 00:56:50 -0700 (PDT)
+Received: by mail.strategicvision.pl (Postfix, from userid 1002)
+        id 4EC8E83A0E; Tue, 25 Jul 2023 09:56:24 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=strategicvision.pl;
+        s=mail; t=1690271809;
+        bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
+        h=Date:From:To:Subject:From;
+        b=tFFtGrFEqPmlfFU+s+IAHFeHQwfF6zmCiyEMcZKRiKMrE6TqxP+kcy8lfDTLiSQrL
+         fojRWhoNP7GzxmOAmZAMhz00KhV8+MuRj07TfaGIPdNesQrDEhYWGxjfxPA0K2ISIT
+         gcSkzsXWmEbjJjS+v4l4fUVa130Zbun+z8gKHE0QjvN+s8s6gOWeotBREg1wCeyU8S
+         jsfoPInDae2Bq7/fv6STXJXuIRgqbz69hrNDuat2WdhS1IlHWq8z63vWVuM8uZPkDV
+         v0SVZH6Ykzh5ZEZJp5yqfwyymCatn3F4jCzsjv6aapz/ZHM5S2+u+zRGDmWCGQncS/
+         SNWMjNV16Grag==
+Received: by mail.strategicvision.pl for <linux-hwmon@vger.kernel.org>; Tue, 25 Jul 2023 07:55:47 GMT
+Message-ID: <20230725084500-0.1.j.8e79.0.en27caczi0@strategicvision.pl>
+Date:   Tue, 25 Jul 2023 07:55:47 GMT
+From:   "Adam Charachuta" <adam.charachuta@strategicvision.pl>
+To:     <linux-hwmon@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
+X-Mailer: mail.strategicvision.pl
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jul 24 2023 at 19:43, Thomas Gleixner wrote:
-> +struct cpuinfo_topology {
-> +	u16			apicid;
-> +	u16			initial_apicid;
+Dzie=C5=84 dobry,
 
-There was an offlist question whether these should be u32 because with
-X2APIC the APIC ID is 32bit wide.
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
 
-The answer is yes, no, maybe. Why?
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
 
-In practice there are limitations, both on the hardware side and on the
-kernel side.
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
 
-The kernel limits the max. APIC ID to 32768 and the maximum number of
-CPUs to 8192 right now. Increasing the maximum APIC ID is possible, but
-that needs some deep thoughts as we have one array which is
-MAX_LOCAL_APIC sized and a bitmap of that size too. Even the bitmap
-would require (1 << 32)/8 = 5.36871e+08 B = 512MB of memory. With a limit
-of 32768 it's a reasonable 4KB. :)
 
-On the hardware side the topology information is in the APIC ID:
-
-      [PKGID][DIEID]...[COREID][THREADID]
-
-where everything below the PKGID is relative to the package. Right now
-the vendors have that space packed, i.e. the number of bits below PKGID
-is sized that its the next power of 2 which allows to fit the actual
-number of logical processors.
-
-There have been systems where the PKGID shift was larger than that which
-caused us to do the logical package mapping because we ended up with
-package ID gaps. That was caused by incorrect information in leaf
-0xB/0x1F, i.e. the package shift enumerated was smaller than the actual
-one.
-
-So with an upper limit of 8192 CPUs the limitation to 32K APIC IDs
-should be really sufficient. The largest package shift I've seen so far
-is 8, i.e. 256 logical processors per package. That means 32 packages
-max. That should be sufficient for a while, right? The HPE/UV people
-might have a word to say here though.
-
-So no, u16 is fine, but yes, we can make it u32 just for simplicity
-sake, which still does not allow you to have an APIC ID >= 32k, but
-makes it easy enough to expand that to e.g. 64K or 128K if the need ever
-arises. Let me rework that accordingly.
-
-Thanks,
-
-        tglx
+Pozdrawiam
+Adam Charachuta
