@@ -2,65 +2,65 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ABCFBC001DE
-	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Jul 2023 14:42:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FB34C41513
+	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Jul 2023 14:42:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbjGYOmh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 25 Jul 2023 10:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53244 "EHLO
+        id S232416AbjGYOmi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 25 Jul 2023 10:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232416AbjGYOmf (ORCPT
+        with ESMTP id S233298AbjGYOmf (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Tue, 25 Jul 2023 10:42:35 -0400
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8585619BA
-        for <linux-hwmon@vger.kernel.org>; Tue, 25 Jul 2023 07:42:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29CE3E77
+        for <linux-hwmon@vger.kernel.org>; Tue, 25 Jul 2023 07:42:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690296137; x=1721832137;
+  t=1690296138; x=1721832138;
   h=date:from:to:cc:subject:message-id;
-  bh=LWQL34unIfkX1VRO39XBUNJGYJk5lm5FkLDM7tCsLfY=;
-  b=UKsukUr4aQk7yyXECd7CSLL3ucPEWN8uTn9oU1IdlLsSr1lSs2pQpy2r
-   3hCTUCtPnYOC5ch4G0OA2t4zP2KowbWljZXyWT9LW1zHH3hM5ZDMUHKdh
-   EI61dQr02b/og96mniThMGIF9WxtjqXb5JmELcLhozebnb0o89CF97DKc
-   rdiLGynA8RhnC0w8zvAQxU67ANBeTBmMbs3Ib6YC2IIRgi0B7uOFId1yX
-   XF8eMfY8NGTUXLkEUIbkbirAhyiwZDuWZKdubbrY18fWYnoeNkvaHaNdp
-   4loYv78it4/mH9evPdSWDefScgRb3bj3NzwcFiyS3bJocmDPYMzLBA1Ih
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="433997021"
+  bh=+RWAmE3fBKLMZyjvGLGAqy/fk8JK6mw1crlprUDg2ys=;
+  b=kKEMyKZ24mDBcjLetwg2Sf2BnU7wX/fmAyAWuNCR++jGigSZCE5bzGcW
+   A13iVm/45DmRqHQldqNqRw8Tq2XCUkY7pRc2ZzIe62JKnWut9fUDwsAsw
+   UHeQNtpVwMlYc+EpnZeP2jLd2Q5NtKMBEeme+ptupsur2Da9c3Hb3ShhY
+   jFmN3YP2iiDalG1ziNvkQCiuwGVZWZX0LPkMhshGZN4Tcg/u9Fd3MD9xe
+   BQEep+9HSZSpjGkQ4S41gPTTzkIFTg76qutF/pZEvDmZPNCIiPb3qGOg9
+   ojSHtb9CnR6JHZSHdgI8krtnZpWyN3a9lqoFARwMQXpTdw8+ZqNVHZpgT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="433997023"
 X-IronPort-AV: E=Sophos;i="6.01,230,1684825200"; 
-   d="scan'208";a="433997021"
+   d="scan'208";a="433997023"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
   by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2023 07:41:30 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="791419854"
+X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="791419856"
 X-IronPort-AV: E=Sophos;i="6.01,230,1684825200"; 
-   d="scan'208";a="791419854"
+   d="scan'208";a="791419856"
 Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
   by fmsmga008.fm.intel.com with ESMTP; 25 Jul 2023 07:41:29 -0700
 Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1qOJDq-00003N-0A;
-        Tue, 25 Jul 2023 14:41:24 +0000
-Date:   Tue, 25 Jul 2023 22:34:52 +0800
+        id 1qOJE8-00003X-1R;
+        Tue, 25 Jul 2023 14:41:28 +0000
+Date:   Tue, 25 Jul 2023 22:35:21 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 55612007f16b5d7b1fb83a7b0f5bb686829db7c7
-Message-ID: <202307252249.fKhXblRT-lkp@intel.com>
+Subject: [groeck-staging:hwmon] BUILD SUCCESS
+ 54685abe660a59402344d5045ce08c43c6a5ac42
+Message-ID: <202307252219.u97B6W8l-lkp@intel.com>
 User-Agent: s-nail v14.9.24
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 55612007f16b5d7b1fb83a7b0f5bb686829db7c7  hwmon: (hp-wmi-sensors) Get WMI instance count from WMI driver core
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
+branch HEAD: 54685abe660a59402344d5045ce08c43c6a5ac42  hwmon: (nct7802) Fix for temp6 (PECI1) processed even if PECI1 disabled
 
-elapsed time: 1443m
+elapsed time: 1444m
 
-configs tested: 254
-configs skipped: 20
+configs tested: 263
+configs skipped: 21
 
 The following configs have been built successfully.
 More configs may be tested in the coming days.
@@ -80,6 +80,7 @@ arc                  randconfig-r006-20230725   gcc
 arc                  randconfig-r023-20230725   gcc  
 arc                  randconfig-r024-20230725   gcc  
 arc                  randconfig-r036-20230725   gcc  
+arc                  randconfig-r043-20230724   gcc  
 arc                  randconfig-r043-20230725   gcc  
 arm                              allmodconfig   gcc  
 arm                              allyesconfig   gcc  
@@ -96,22 +97,23 @@ arm                  randconfig-r003-20230725   gcc
 arm                  randconfig-r011-20230724   gcc  
 arm                  randconfig-r012-20230724   gcc  
 arm                  randconfig-r031-20230725   gcc  
+arm                  randconfig-r046-20230724   gcc  
 arm                           stm32_defconfig   gcc  
 arm                         wpcm450_defconfig   gcc  
 arm64                            allyesconfig   gcc  
 arm64                               defconfig   gcc  
 arm64                randconfig-r012-20230725   gcc  
 arm64                randconfig-r014-20230725   gcc  
-arm64                randconfig-r015-20230724   clang
+arm64                randconfig-r023-20230724   clang
 arm64                randconfig-r026-20230725   gcc  
 arm64                randconfig-r031-20230724   gcc  
 arm64                randconfig-r032-20230725   clang
 csky                                defconfig   gcc  
+csky                 randconfig-r011-20230724   gcc  
 csky                 randconfig-r011-20230725   gcc  
 csky                 randconfig-r031-20230725   gcc  
 csky                 randconfig-r036-20230725   gcc  
 hexagon              randconfig-r002-20230724   clang
-hexagon              randconfig-r016-20230724   clang
 hexagon              randconfig-r041-20230724   clang
 hexagon              randconfig-r045-20230724   clang
 i386                             allyesconfig   gcc  
@@ -166,6 +168,7 @@ m68k                                defconfig   gcc
 m68k                        m5272c3_defconfig   gcc  
 m68k                 randconfig-r002-20230725   gcc  
 m68k                 randconfig-r014-20230724   gcc  
+m68k                 randconfig-r015-20230724   gcc  
 m68k                 randconfig-r023-20230724   gcc  
 m68k                 randconfig-r035-20230724   gcc  
 m68k                 randconfig-r035-20230725   gcc  
@@ -187,6 +190,7 @@ nios2                         3c120_defconfig   gcc
 nios2                               defconfig   gcc  
 nios2                randconfig-r001-20230724   gcc  
 nios2                randconfig-r023-20230725   gcc  
+nios2                randconfig-r025-20230724   gcc  
 nios2                randconfig-r025-20230725   gcc  
 openrisc             randconfig-r005-20230725   gcc  
 openrisc             randconfig-r012-20230724   gcc  
@@ -209,7 +213,6 @@ powerpc                   currituck_defconfig   gcc
 powerpc                      ppc40x_defconfig   gcc  
 powerpc              randconfig-r004-20230725   clang
 powerpc              randconfig-r006-20230724   gcc  
-powerpc              randconfig-r013-20230724   clang
 powerpc              randconfig-r022-20230725   gcc  
 powerpc              randconfig-r023-20230724   clang
 powerpc                  storcenter_defconfig   gcc  
@@ -219,6 +222,7 @@ riscv                             allnoconfig   gcc
 riscv                            allyesconfig   gcc  
 riscv                               defconfig   gcc  
 riscv                randconfig-r004-20230724   gcc  
+riscv                randconfig-r013-20230724   clang
 riscv                randconfig-r042-20230724   clang
 riscv                randconfig-r042-20230725   gcc  
 riscv                          rv32_defconfig   gcc  
@@ -227,6 +231,9 @@ s390                             allyesconfig   gcc
 s390                                defconfig   gcc  
 s390                 randconfig-r006-20230725   clang
 s390                 randconfig-r011-20230725   gcc  
+s390                 randconfig-r021-20230724   clang
+s390                 randconfig-r022-20230724   clang
+s390                 randconfig-r026-20230724   clang
 s390                 randconfig-r033-20230724   gcc  
 s390                 randconfig-r044-20230724   clang
 s390                 randconfig-r044-20230725   gcc  
@@ -260,6 +267,7 @@ um                                  defconfig   gcc
 um                             i386_defconfig   gcc  
 um                   randconfig-r003-20230724   clang
 um                   randconfig-r006-20230724   clang
+um                   randconfig-r024-20230724   gcc  
 um                   randconfig-r032-20230725   gcc  
 um                   randconfig-r033-20230725   gcc  
 um                           x86_64_defconfig   gcc  
@@ -278,6 +286,7 @@ x86_64                                  kexec   gcc
 x86_64               randconfig-r006-20230724   gcc  
 x86_64               randconfig-r011-20230724   clang
 x86_64               randconfig-r013-20230724   clang
+x86_64               randconfig-r016-20230724   clang
 x86_64               randconfig-r016-20230725   gcc  
 x86_64               randconfig-r022-20230725   gcc  
 x86_64               randconfig-r025-20230725   gcc  
