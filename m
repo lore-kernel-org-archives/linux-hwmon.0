@@ -2,94 +2,124 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CAB33C001DC
-	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Jul 2023 05:25:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 424ADC04FE0
+	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Jul 2023 10:33:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230219AbjGZFZf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 26 Jul 2023 01:25:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60634 "EHLO
+        id S233914AbjGZKdh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 26 Jul 2023 06:33:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjGZFZe (ORCPT
+        with ESMTP id S233876AbjGZKdc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 26 Jul 2023 01:25:34 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1EC1212D;
-        Tue, 25 Jul 2023 22:25:33 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id 46e09a7af769-6b9f47214a3so5793001a34.0;
-        Tue, 25 Jul 2023 22:25:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690349133; x=1690953933;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1lHvF+ZP+0haOLHn0VbIkloIdVOeWuG2FX3VUkNfPwo=;
-        b=UCgmIBrBIBIx5CELpPEkhMO8rxqk8S3p/aAG3/pDxhSzUtsaLQR8Ux94khw7OWBh4W
-         I9/WiI8mkPCkfcPLT5nqVSsoNbj6nr2muQsxg/0POCEeRXgRVyIzyVyYETdhxSGR+AP6
-         EUQpr3MNyxJYjgXEpbXpXpklEEq6PO5Tv/p4ZzGXLhzX2ARJLqYAFOIPvtiRMFg/zJ54
-         E+YstzhXL3wtkajKtHdePx0RvrqpobpcccF0oY8Pkx+BnZy5q0Ed9r1wbj/NZiuo/SXV
-         qhjIxPxZnrCY14o1xlnJbkCZNAbzDpVATSy5yiK5DfwIfGmRfikQzp2D0LnmPMUSyFMT
-         +HIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690349133; x=1690953933;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1lHvF+ZP+0haOLHn0VbIkloIdVOeWuG2FX3VUkNfPwo=;
-        b=JeJoumlv/9rtXkB2eBqTinsFgsFY8EtjOHM31Jbnw/lM/lnACdkArGwcYkeJJaRG/C
-         opu3KLXk58/COqXwTrA/WR/beqCo2krCoN83Ey07ysAqpHIYhlTktxsQC3Hm/0xqhUuU
-         jzeGb5c8qUbrI3AZ9oGk8tDvHm1yBYBvF4sF5/NvVzb8eYRjm8XySExIV2vOnxwUvGsG
-         2WaSDRKovUaMpeaHSs10fbZZf1UlMFI0CvpkfpIaiGTAVZICYE+kFrOOCN71HZdO4tcd
-         8pd55XT7cAjkYlHTxWYZGWHo5zQU7MbSNZpAXVYv9mHsfcJ6zs6Pdfnubz/HhUJlhYQq
-         tKMA==
-X-Gm-Message-State: ABy/qLaCYqh1qj8pbM/hTJXSVr6IrJk0ZCK8NLS7bG+ziw3o0ISc4TNc
-        P+PoZbwzdNz1+PAOOV4YuqACofBpbaw=
-X-Google-Smtp-Source: APBJJlFx5uPk2u2KKQW2qyBYvhoEmXAc4H0jW8UfEEThFzsyc1v5RAw/+R2kgj/yBAMsL9UP3uFuDw==
-X-Received: by 2002:a05:6358:5919:b0:135:acfd:8786 with SMTP id g25-20020a056358591900b00135acfd8786mr1140120rwf.3.1690349132813;
-        Tue, 25 Jul 2023 22:25:32 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n26-20020a638f1a000000b0055b61cd99a1sm11682812pgd.81.2023.07.25.22.25.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jul 2023 22:25:31 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 25 Jul 2023 22:25:30 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     werneazc@gmail.com
-Cc:     jdelvare@suse.com, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, robh+dt@kernel.org,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Andre Werner <andre.werner@systec-electronic.com>
-Subject: Re: [PATCH v6 2/2] hwmon: (hs3001) Add driver for Renesas HS3001
-Message-ID: <a3406e39-8580-4ad7-b7ad-19e24eb33526@roeck-us.net>
-References: <0f32155b-bcc1-4d9e-bba9-058d63194abc@roeck-us.net>
- <20230725042207.22310-2-andre.werner@systec-electronic.com>
+        Wed, 26 Jul 2023 06:33:32 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 199892126
+        for <linux-hwmon@vger.kernel.org>; Wed, 26 Jul 2023 03:33:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690367611; x=1721903611;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ma7Y8/vUnvW/H0KkZpS1QwM5cpFyjSj8/uPBI9YabWk=;
+  b=LsjttFDTOamSuLMBOcQqGzjv+M8Fxo+QRJNrATq2mjWITsnBQDN0BMQn
+   ZRjkiKnHCCq1uoL5TS27QXc//W1j7Tf7phF/eRoimSnNquNLo4MO4kZaa
+   T8ahEWe0++diLKOaPE4eOBGifP3+Di94GAQwliuDI0um3xCDSlD8VVCZ3
+   +HW+qudnTinBIgV6mofdBN1HCZVWsi+Y3FMhmQBogseNUcsbewnduNF9Q
+   BKjLanBnH62Zny+b2lhXRipDZ12BwMesyHsmGdF08H9RCBSycFmMoLeHJ
+   0ucjGrSFNDWprn8flvDoRPtSdYW80kGSFwAZmMjEWeBJP22klzyQkEldl
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="348255762"
+X-IronPort-AV: E=Sophos;i="6.01,231,1684825200"; 
+   d="scan'208";a="348255762"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2023 03:33:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="900367128"
+X-IronPort-AV: E=Sophos;i="6.01,231,1684825200"; 
+   d="scan'208";a="900367128"
+Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 26 Jul 2023 03:33:03 -0700
+Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qObpD-0000tT-2O;
+        Wed, 26 Jul 2023 10:33:03 +0000
+Date:   Wed, 26 Jul 2023 18:32:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andre Werner <andre.werner@systec-electronic.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [groeck-staging:hwmon-next 35/35] drivers/hwmon/hs3001.c:196:13:
+ warning: unused variable 'ret'
+Message-ID: <202307261819.VMDuxZOM-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230725042207.22310-2-andre.werner@systec-electronic.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jul 25, 2023 at 06:22:07AM +0200, werneazc@gmail.com wrote:
-> From: Andre Werner <andre.werner@systec-electronic.com>
-> 
-> Add base support for Renesas HS3001 temperature
-> and humidity sensors and its compatibles HS3002,
-> HS3003 and HS3004.
-> 
-> The sensor has a fix I2C address 0x44. The resolution
-> is fixed to 14bit (ref. Missing feature).
-> 
-> Missing feature:
-> - Accessing non-volatile memory: Custom board has no
->   possibility to control voltage supply of sensor. Thus,
->   we cannot send the necessary control commands within
->   the first 10ms after power-on.
-> 
-> Signed-off-by: Andre Werner <andre.werner@systec-electronic.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+head:   33faa6fcc93f78e6b0e9b5aaf986446ac3c34047
+commit: 33faa6fcc93f78e6b0e9b5aaf986446ac3c34047 [35/35] hwmon: Add driver for Renesas HS3001
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230726/202307261819.VMDuxZOM-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce: (https://download.01.org/0day-ci/archive/20230726/202307261819.VMDuxZOM-lkp@intel.com/reproduce)
 
-Applied.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307261819.VMDuxZOM-lkp@intel.com/
 
-Thanks,
-Guenter
+All warnings (new ones prefixed by >>):
+
+   drivers/hwmon/hs3001.c: In function 'hs3001_probe':
+>> drivers/hwmon/hs3001.c:196:13: warning: unused variable 'ret' [-Wunused-variable]
+     196 |         int ret;
+         |             ^~~
+
+
+vim +/ret +196 drivers/hwmon/hs3001.c
+
+   190	
+   191	static int hs3001_probe(struct i2c_client *client)
+   192	{
+   193		struct hs3001_data *data;
+   194		struct device *hwmon_dev;
+   195		struct device *dev = &client->dev;
+ > 196		int ret;
+   197	
+   198		if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
+   199			return -EOPNOTSUPP;
+   200	
+   201		data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+   202		if (!data)
+   203			return -ENOMEM;
+   204	
+   205		data->client = client;
+   206	
+   207		/*
+   208		 * Measurement time = wake-up time + measurement time temperature
+   209		 * + measurement time humidity. This is currently static, because
+   210		 * enabling programming mode is not supported, yet.
+   211		 */
+   212		data->wait_time = (HS3001_WAKEUP_TIME + HS3001_14BIT_RESOLUTION +
+   213				   HS3001_14BIT_RESOLUTION);
+   214	
+   215		mutex_init(&data->i2c_lock);
+   216	
+   217		hwmon_dev = devm_hwmon_device_register_with_info(dev,
+   218								 client->name,
+   219								 data,
+   220								 &hs3001_chip_info,
+   221								 NULL);
+   222	
+   223		if (IS_ERR(hwmon_dev))
+   224			return dev_err_probe(dev, PTR_ERR(hwmon_dev),
+   225					     "Unable to register hwmon device.\n");
+   226	
+   227		return 0;
+   228	}
+   229	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
