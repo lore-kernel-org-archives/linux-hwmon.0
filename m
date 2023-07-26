@@ -2,114 +2,246 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E08DFEB64DD
-	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Jul 2023 23:51:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38B46C001B0
+	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Jul 2023 03:49:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbjGYXvt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 25 Jul 2023 19:51:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48566 "EHLO
+        id S231214AbjGZDtM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 25 Jul 2023 23:49:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbjGYXvr (ORCPT
+        with ESMTP id S230340AbjGZDtL (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 25 Jul 2023 19:51:47 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9BFE2;
-        Tue, 25 Jul 2023 16:51:46 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id 5614622812f47-3a04e5baffcso4226093b6e.3;
-        Tue, 25 Jul 2023 16:51:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690329106; x=1690933906;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cmL3jdsD2794K6zfOGkD4whNhD1loW+1ORVFHG9hOz4=;
-        b=KHoom7OjBgwQ22Ucv09mRZlfO1w8XMPFHSagwVgOf8fF6NWFF+ANefSBctT7SHKcwL
-         ySDGnb9TFpNQ8vTcssXQgA8tZfzTqN1pB8pdFSlw5qczSJgfn8Mxvbiy7owCcsdQvtNL
-         799bDw8eTtQf67CTrF22jJMqCh5BHEHLMVLl/De0kjgHx63BVzq5zxHYETwtOxXSUr0A
-         uPvM/RQiFnboXqpCaX9oskf2oQfTOpZ4WHu7Q0fh9axY79G/lYjU6Svtway80enGYVyI
-         3rLs2Aej735lotxTIr2+1kitPowVHY9Cg4TXWoGfMVzTJAvUF00cmUGEHV0FTZR+6/H3
-         i3yQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690329106; x=1690933906;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cmL3jdsD2794K6zfOGkD4whNhD1loW+1ORVFHG9hOz4=;
-        b=QE33FnFyqJJ7DC/szR3yE/1NS3aD/CUMVOrAhMvDKhVgeG9tQ1cUTR6eQwqwzgzf4G
-         YSYJJaxFGkkfyM3K//I5+19XJylvlibEG+VWeNw8mdQr2VaFQhjjYEt8iHhfbk4bZg5Z
-         IGIMey3UdMRHkg2xfKICEhgUVSRbHu7gs7rvXkYAWp0FjGIsnxDucl6vjFwWVHTKWqFf
-         c5fUb7COfsfbHrDYW9hFCz0yfI+DhlmSv2iJg4F8jIz+hWCysar/iIcd5ncbej2/U9au
-         U5tumjX/P7hR7/mtl47t5JjrPsso6qmuMY+8BkD7OxIPEahPCy7kheAHnVkrJJEUbBkF
-         9Lrw==
-X-Gm-Message-State: ABy/qLbLIsJKU4eC0EbedGFF08RCi+TIovfAkPwJab9PBJ8wNgZpE/Kj
-        wZzX1anbk9fkoBRs31e7hns=
-X-Google-Smtp-Source: APBJJlGUZvJeQlbNa6wi+9fDLG0eijp0Kze6XwcxOJGA287A9uJXVYWSfQJg6Y3Gevq38sU/87eczA==
-X-Received: by 2002:a05:6808:f03:b0:3a3:61fc:f913 with SMTP id m3-20020a0568080f0300b003a361fcf913mr602994oiw.0.1690329105778;
-        Tue, 25 Jul 2023 16:51:45 -0700 (PDT)
-Received: from ?IPV6:2600:6c56:7d00:582f::64e? ([2600:6c56:7d00:582f::64e])
-        by smtp.googlemail.com with ESMTPSA id o5-20020a05680803c500b003a41484b23dsm5657475oie.46.2023.07.25.16.51.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jul 2023 16:51:45 -0700 (PDT)
-Message-ID: <11603db1-97c7-cfa0-ab1e-dbf5225ea6eb@gmail.com>
-Date:   Tue, 25 Jul 2023 18:51:44 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-To:     james@equiv.tech
-Cc:     corbet@lwn.net, jdelvare@suse.com, linux-doc@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux@roeck-us.net
-References: <20230504075752.1320967-4-james@equiv.tech>
-Subject: Re: [RFC 03/11] hwmon: (core) Revise kerneldoc comments
-Content-Language: en-US
-From:   Russell Haley <yumpusamongus@gmail.com>
-In-Reply-To: <20230504075752.1320967-4-james@equiv.tech>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Tue, 25 Jul 2023 23:49:11 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E1132697
+        for <linux-hwmon@vger.kernel.org>; Tue, 25 Jul 2023 20:49:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690343350; x=1721879350;
+  h=date:from:to:cc:subject:message-id;
+  bh=Ua/m9kMP3+hOti932CMkL5VxKRS+pDPf6tBL7Qnxp0I=;
+  b=YedMKHzdujTb13NL3qnCFSeS9M2eOmENhvgHeUSyDvq9tbMglYeWPVFg
+   83hCjhyoB0Hh2scn6joKZ9AqQ2r6U7TO52Tq4eD1Bq8r4f6jLoF9zlu/c
+   vI4a9FKOZF7SfaJcpfuih+DyLhHSZpHW8umK4RBk/iIkXoszZcjNaF8YX
+   c+dqUWv1zeifRB3pfjNMjC5Da7SIHWlamFlj+ByOavs3I/R+x7GYvM+hK
+   oTFdAx5pGN+El1vY9b4ANIC99flstWsFfQI914pypoVKboYa5/roTdbZm
+   yZKI3d3F3jjzeroEPvA7J4SU3LJWvnwSP3OOeEJktGDxn8c22wZBab7fk
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="431708508"
+X-IronPort-AV: E=Sophos;i="6.01,231,1684825200"; 
+   d="scan'208";a="431708508"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2023 20:49:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="791649476"
+X-IronPort-AV: E=Sophos;i="6.01,231,1684825200"; 
+   d="scan'208";a="791649476"
+Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 25 Jul 2023 20:49:08 -0700
+Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qOVWN-0000bj-1m;
+        Wed, 26 Jul 2023 03:49:07 +0000
+Date:   Wed, 26 Jul 2023 11:48:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ ad0f768007f4a533ea7abb489be731e2ad296140
+Message-ID: <202307261151.9QiROga8-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-> @@ -888,18 +891,25 @@ hwmon_device_register_with_groups(struct device *dev, const char *name,
->  EXPORT_SYMBOL_GPL(hwmon_device_register_with_groups);
->  
->  /**
-> - * hwmon_device_register_with_info - register w/ hwmon
-> - * @dev: the parent device (mandatory)
-> - * @name: hwmon name attribute (mandatory)
-> - * @drvdata: driver data to attach to created device (optional)
-> - * @chip: pointer to hwmon chip information (mandatory)
-> - * @extra_groups: pointer to list of additional non-standard attribute groups
-> - *	(optional)
-> + * hwmon_device_register_with_info - Register a hardware monitoring device.
-> + * @dev: A pointer to the parent device (mandatory).
-> + * @name: The ``hwmon`` device name (mandatory).
-> + * @drvdata: A pointer to the private driver data structure.
-> + * @chip: A pointer to the chip descriptor (mandatory).
-> + * @extra_groups: A pointer to a ``NULL``-terminated list of additional
-> + *	non-standard ``sysfs`` attribute groups.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: ad0f768007f4a533ea7abb489be731e2ad296140  hwmon: (hp-wmi-sensors) Initialize pevents in hp_wmi_sensors_init()
 
-This function has no @groups parameter, only @extra_groups.
+elapsed time: 721m
 
->   *
-> - * hwmon_device_unregister() must be called when the device is no
-> - * longer needed.
-> + * Creates the standard ``sysfs`` attributes in the hardware monitoring core,
-> + * letting the driver focus on reading from and writing to the chip instead of
-> + * having to bother with ``sysfs`` attributes.
->   *
-> - * Returns the pointer to the new device.
-> + * The result is a newly allocated ``hwmon`` device with standard ``sysfs``
-> + * attributes as specified by @name and @groups and additional attributes as
+configs tested: 175
+configs skipped: 10
 
-But here a @groups parameter is mentioned.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> + * specified by @extra_groups.
-> + *
-> + * Return: On success, a pointer to the new ``hwmon`` device.
-> + * hwmon_device_unregister() must be called on it when it is no longer needed.
-> + * On failure, a &PTR_ERR.
->   */
->  struct device *
->  hwmon_device_register_with_info(struct device *dev, const char *name,
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r001-20230725   gcc  
+alpha                randconfig-r012-20230725   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r013-20230725   gcc  
+arc                  randconfig-r014-20230725   gcc  
+arc                  randconfig-r016-20230725   gcc  
+arc                  randconfig-r043-20230725   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r001-20230725   gcc  
+arm                  randconfig-r003-20230725   gcc  
+arm                  randconfig-r021-20230725   clang
+arm                  randconfig-r024-20230725   clang
+arm                  randconfig-r046-20230725   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r003-20230725   clang
+arm64                randconfig-r004-20230725   clang
+arm64                randconfig-r023-20230725   gcc  
+arm64                randconfig-r024-20230725   gcc  
+arm64                randconfig-r035-20230725   clang
+csky                                defconfig   gcc  
+csky                 randconfig-r006-20230725   gcc  
+csky                 randconfig-r016-20230725   gcc  
+csky                 randconfig-r023-20230725   gcc  
+hexagon              randconfig-r004-20230725   clang
+hexagon              randconfig-r005-20230725   clang
+hexagon              randconfig-r023-20230725   clang
+hexagon              randconfig-r041-20230725   clang
+hexagon              randconfig-r041-20230726   clang
+hexagon              randconfig-r045-20230725   clang
+hexagon              randconfig-r045-20230726   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r004-20230725   clang
+i386         buildonly-randconfig-r005-20230725   clang
+i386         buildonly-randconfig-r006-20230725   clang
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230725   clang
+i386                 randconfig-i002-20230725   clang
+i386                 randconfig-i003-20230725   clang
+i386                 randconfig-i004-20230725   clang
+i386                 randconfig-i005-20230725   clang
+i386                 randconfig-i006-20230725   clang
+i386                 randconfig-i011-20230725   gcc  
+i386                 randconfig-i012-20230725   gcc  
+i386                 randconfig-i013-20230725   gcc  
+i386                 randconfig-i014-20230725   gcc  
+i386                 randconfig-i015-20230725   gcc  
+i386                 randconfig-i016-20230725   gcc  
+i386                 randconfig-r001-20230725   clang
+i386                 randconfig-r003-20230725   clang
+i386                 randconfig-r026-20230725   gcc  
+i386                 randconfig-r036-20230725   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r013-20230725   gcc  
+loongarch            randconfig-r015-20230725   gcc  
+loongarch            randconfig-r016-20230725   gcc  
+loongarch            randconfig-r021-20230725   gcc  
+loongarch            randconfig-r024-20230725   gcc  
+loongarch            randconfig-r031-20230725   gcc  
+loongarch            randconfig-r032-20230725   gcc  
+loongarch            randconfig-r034-20230725   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r001-20230725   gcc  
+m68k                 randconfig-r021-20230725   gcc  
+m68k                 randconfig-r026-20230725   gcc  
+m68k                 randconfig-r036-20230725   gcc  
+microblaze           randconfig-r002-20230725   gcc  
+microblaze           randconfig-r012-20230725   gcc  
+microblaze           randconfig-r025-20230725   gcc  
+microblaze           randconfig-r033-20230725   gcc  
+microblaze           randconfig-r035-20230725   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                 randconfig-r005-20230725   gcc  
+mips                 randconfig-r022-20230725   clang
+mips                 randconfig-r033-20230725   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r005-20230725   gcc  
+nios2                randconfig-r021-20230725   gcc  
+nios2                randconfig-r026-20230725   gcc  
+openrisc             randconfig-r003-20230725   gcc  
+openrisc             randconfig-r031-20230725   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r013-20230725   gcc  
+parisc               randconfig-r016-20230725   gcc  
+parisc               randconfig-r025-20230725   gcc  
+parisc               randconfig-r036-20230725   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r006-20230725   clang
+powerpc              randconfig-r012-20230725   gcc  
+powerpc              randconfig-r023-20230725   gcc  
+powerpc              randconfig-r032-20230725   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r002-20230725   clang
+riscv                randconfig-r012-20230725   gcc  
+riscv                randconfig-r034-20230725   clang
+riscv                randconfig-r042-20230725   gcc  
+riscv                randconfig-r042-20230726   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r014-20230725   gcc  
+s390                 randconfig-r026-20230725   gcc  
+s390                 randconfig-r031-20230725   clang
+s390                 randconfig-r044-20230725   gcc  
+s390                 randconfig-r044-20230726   clang
+sh                               allmodconfig   gcc  
+sh                   randconfig-r014-20230725   gcc  
+sh                   randconfig-r016-20230725   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r003-20230725   gcc  
+sparc                randconfig-r015-20230725   gcc  
+sparc64              randconfig-r005-20230725   gcc  
+sparc64              randconfig-r006-20230725   gcc  
+sparc64              randconfig-r014-20230725   gcc  
+sparc64              randconfig-r022-20230725   gcc  
+sparc64              randconfig-r025-20230725   gcc  
+sparc64              randconfig-r034-20230725   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                   randconfig-r002-20230725   gcc  
+um                   randconfig-r004-20230725   gcc  
+um                   randconfig-r016-20230725   clang
+um                   randconfig-r025-20230725   clang
+um                   randconfig-r026-20230725   clang
+um                   randconfig-r032-20230725   gcc  
+um                   randconfig-r034-20230725   gcc  
+um                   randconfig-r036-20230725   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r001-20230725   clang
+x86_64       buildonly-randconfig-r002-20230725   clang
+x86_64       buildonly-randconfig-r003-20230725   clang
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-r011-20230725   gcc  
+x86_64               randconfig-r015-20230725   gcc  
+x86_64               randconfig-r024-20230725   gcc  
+x86_64               randconfig-x001-20230725   gcc  
+x86_64               randconfig-x002-20230725   gcc  
+x86_64               randconfig-x003-20230725   gcc  
+x86_64               randconfig-x004-20230725   gcc  
+x86_64               randconfig-x005-20230725   gcc  
+x86_64               randconfig-x006-20230725   gcc  
+x86_64               randconfig-x011-20230725   clang
+x86_64               randconfig-x012-20230725   clang
+x86_64               randconfig-x013-20230725   clang
+x86_64               randconfig-x014-20230725   clang
+x86_64               randconfig-x015-20230725   clang
+x86_64               randconfig-x016-20230725   clang
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r013-20230725   gcc  
+xtensa               randconfig-r033-20230725   gcc  
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
