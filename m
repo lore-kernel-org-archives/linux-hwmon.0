@@ -2,62 +2,62 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29750C0015E
-	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Jul 2023 18:27:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FB84C001E0
+	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Jul 2023 18:59:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231702AbjGZS1O (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 26 Jul 2023 14:27:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59960 "EHLO
+        id S229798AbjGZS7s (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 26 Jul 2023 14:59:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjGZS1N (ORCPT
+        with ESMTP id S229995AbjGZS7r (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 26 Jul 2023 14:27:13 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0C41FC2
-        for <linux-hwmon@vger.kernel.org>; Wed, 26 Jul 2023 11:27:11 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-314172bac25so93582f8f.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 26 Jul 2023 11:27:11 -0700 (PDT)
+        Wed, 26 Jul 2023 14:59:47 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1236E271C;
+        Wed, 26 Jul 2023 11:59:46 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id ca18e2360f4ac-77acb04309dso4255139f.2;
+        Wed, 26 Jul 2023 11:59:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690396030; x=1691000830;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20221208; t=1690397985; x=1691002785;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=hzqLjK8Xkeivl0wa82o9EWmkTswR7UuotwLLOVNsxDI=;
-        b=XIeExHC3gE95BlPr7LcDASW+2lbz9h6J603EJA7u/73d3JODLmmjMLlEbUbx4I/+q3
-         1f+y0Cxq2PWBooI0+1TmIA+UOOyU2im1uQl05kqLJRB3Dkh6pk5+hvEM3cx2F+5zkjWQ
-         jDyY1pZYFvxQ+AiqaxYDsi3+84ACj0qze363zDYWIZ6atuz0KmLiS/XTzsZmkeD3psAb
-         QohvsTdKueeG8UD2kN5XnsJ0cv1ucAVlANsSih5w7WXcnye5p+QQOq2fME2Nsx3OCzSi
-         ueSgn//FAL5MSXcICy/VI0JNHiebjYd4vd4UQ8GRzMyNjuWayfgv1NArR9oPi7mH2vv+
-         rVDA==
+        bh=8y5YvDZr0jjiu3/y0974ovQSLFkCl5NQeYqNXCpGzXo=;
+        b=oK5BXokR9oSfhTRm6EdvIIlfjCVAgBhIuH/a/9AFGISI058T6VlNIRSbcReVX9j2el
+         ar1vyJ73Fd6bDTvuPS0ZFrD+4EsXMqc7ccezjYgrOdTbDPEH8vK2ziyTDg1bnKQUye/8
+         XGsiNpppAtxN4RNTBV1v3iMLfNUJ000gZhSUPS2QpRPx2hgby1JjVW9Fdyu6ApFkGADj
+         cEEDDY94fDHl2TBpC5sJvfZBriFRRGy5JEo8f4vv0MHfrEXkneB7qGe6XuddDrvekOns
+         4Ei0XWdpaTG761546F0w69yFYVVznNYIWSZCWqK2eqYsdWiS3DsyKs5vZDJoUMzpsBPu
+         IKbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690396030; x=1691000830;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1690397985; x=1691002785;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hzqLjK8Xkeivl0wa82o9EWmkTswR7UuotwLLOVNsxDI=;
-        b=hV/YI0HWlxBCeBuAlszoNjrlH7aiOOZZit87VO9fEX08Yj2Wvy6BH6rFXoXle5YCED
-         YeQwXDu45Jei1KUUWoOr6/DUPkyA2ca7R7X1/vYhu8m9CaDJKwGEVDweT1vLBplHSYuH
-         iTpMQ3RFEI3tG/LaWgsH5jBtVUWjMm4UTtoE5OypgoWCuDau2e11i694yZZLzqFsBSPz
-         vW0Mi/XjDXO9lC5jUMVthIQvikhMPEd0ZehMoY5zdPZbY1zMLs/IJoievfeBvQaZNzVF
-         Grdxc/3N2LOZGvdLU2952ULUKKxa8Kg5QnV/Zb59HnkzBiuWZYGTK+Ka3JqJ/8MKqUkp
-         RAEw==
-X-Gm-Message-State: ABy/qLYbokKEFT8FJDNmLneN9m7xtB7RjAsuww1vC3f0SEAWNEqhT7Em
-        c1K4j/oWrY3AASKkPEh1X/Rcsg==
-X-Google-Smtp-Source: APBJJlGl9LY0jYBeuOLBKY/QOl/1k5dmLtdC/W/SevHXT9DXZyuU6rQZUTHdpsXNOj0X1NBGoz+fNA==
-X-Received: by 2002:a5d:5142:0:b0:317:3f64:4901 with SMTP id u2-20020a5d5142000000b003173f644901mr1899720wrt.41.1690396030280;
-        Wed, 26 Jul 2023 11:27:10 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id b10-20020a170906038a00b009929ab17bdfsm9914020eja.168.2023.07.26.11.27.09
+        bh=8y5YvDZr0jjiu3/y0974ovQSLFkCl5NQeYqNXCpGzXo=;
+        b=H2WVBQkps9La6Lc2cOEa2rNmnCxqfT7Y2eTmE7qaLSvFSmEl9VWdHon1sueCnYQhhm
+         wpCURxmKYYT2+h/OnCn7JuTh9uunTI6eAKFJ7AH/zLGrxbN6pT9JJp6Q5mZLxDOrfrxF
+         X39wGaAoO9Rn3yZBd8Yyy8S6/oYOx/g51iKDDvYIw+3LqhxBPgwk7lyIC7rf1NsihAd4
+         Vzc0baMSas2ZYZSzBUGNJt+gJTltuX32lWTGl+qFppEbDoGKLnFlB3bDP7SOCVxfIadO
+         s6o5sXYcoFmHeg3mcAm5bEnFaTFS7H3JFYb85C9by0FcVraaYH0JG32mBjmEFQnOn57x
+         2vDw==
+X-Gm-Message-State: ABy/qLYx+9dCl+H/Vhobtngz5HaC9Asdy2sGP5u6ld+sjyj96klda3Th
+        7Bn4Bg2HGt+0uZbUdwGbb64=
+X-Google-Smtp-Source: APBJJlHAQDJ+gcWVgI/owV13GKJvkOdPS2rkMbRnxiGpmVgE5m/Uj9Y2os1VFKbhndp1omz8tk4LaQ==
+X-Received: by 2002:a5d:8701:0:b0:787:1557:3834 with SMTP id u1-20020a5d8701000000b0078715573834mr2899551iom.20.1690397985267;
+        Wed, 26 Jul 2023 11:59:45 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f23-20020a6be817000000b0078b9d1653a8sm3860522ioh.42.2023.07.26.11.59.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jul 2023 11:27:09 -0700 (PDT)
-Message-ID: <7a44e513-2b6b-aed3-3d71-e56bd0be2417@linaro.org>
-Date:   Wed, 26 Jul 2023 20:27:08 +0200
+        Wed, 26 Jul 2023 11:59:44 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <7091e719-4d9f-246c-262a-02ad91fd790d@roeck-us.net>
+Date:   Wed, 26 Jul 2023 11:59:42 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH 2/2] dt-bindings: hwmon: add renesas,isl28022
 Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         =?UTF-8?Q?Carsten_Spie=c3=9f?= <mail@carsten-spiess.de>,
         Jean Delvare <jdelvare@suse.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -71,34 +71,46 @@ References: <20230726152235.249569-1-mail@carsten-spiess.de>
  <20230726152235.249569-3-mail@carsten-spiess.de>
  <82628237-e087-269e-9673-cf3873fe4b35@linaro.org>
  <4105d77e-e011-8df7-35bf-bbfca0b640da@roeck-us.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <4105d77e-e011-8df7-35bf-bbfca0b640da@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
+ <7a44e513-2b6b-aed3-3d71-e56bd0be2417@linaro.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 2/2] dt-bindings: hwmon: add renesas,isl28022
+In-Reply-To: <7a44e513-2b6b-aed3-3d71-e56bd0be2417@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 26/07/2023 20:19, Guenter Roeck wrote:
+On 7/26/23 11:27, Krzysztof Kozlowski wrote:
+> On 26/07/2023 20:19, Guenter Roeck wrote:
+>>>
+>>>> +    enum: [1, 2, 4, 8]
+>>>> +
+>>>> +  average:
+>>>> +    description: |
+>>>> +      Number of samples to be used to report voltage, current and power values.
+>>>> +      defaults to <0> when not set
+>>>> +    enum: [0, 1, 2, 4, 8, 16, 32, 64, 128]
+>>>
+>>> I am sure hwmon has some property for this. Are you sure it is called
+>>> "average"?
+>>>
 >>
->>> +    enum: [1, 2, 4, 8]
->>> +
->>> +  average:
->>> +    description: |
->>> +      Number of samples to be used to report voltage, current and power values.
->>> +      defaults to <0> when not set
->>> +    enum: [0, 1, 2, 4, 8, 16, 32, 64, 128]
->>
->> I am sure hwmon has some property for this. Are you sure it is called
->> "average"?
->>
+>> Something with samples. adi,power-sample-average is similar. Others
+>> use average-samples, qcom,avg-samples, touchscreen-average-samples.
 > 
-> Something with samples. adi,power-sample-average is similar. Others
-> use average-samples, qcom,avg-samples, touchscreen-average-samples.
+> So probably it's a time to come with something generic, e.g.:
+> average-samples in some hwmon.yaml
+> 
 
-So probably it's a time to come with something generic, e.g.:
-average-samples in some hwmon.yaml
+Maybe, but that is going to take a lot of time. Many configuration options
+of hardware monitoring chips (such as the thermal sensor type, the ideality
+factor of a thermal diode, or the number of pulses per revolution reported
+by fans) are actually properties of the connected device, and Rob has made
+clear that he expects such properties to be associated with the actual
+device (fan, thermal sensor, etc). I don't even know how to model that,
+and I really don't have the time (nor, really, the expertise) to come up
+with acceptable generic bindings.
 
-Best regards,
-Krzysztof
+Guenter
 
