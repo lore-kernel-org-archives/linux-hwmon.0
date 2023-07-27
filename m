@@ -2,132 +2,111 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 015CFC001DE
-	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Jul 2023 23:53:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F21D3C001DE
+	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Jul 2023 03:37:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbjGZXxj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 26 Jul 2023 19:53:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57046 "EHLO
+        id S231391AbjG0Dhn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 26 Jul 2023 23:37:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjGZXxi (ORCPT
+        with ESMTP id S231574AbjG0Dh1 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 26 Jul 2023 19:53:38 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EF8AA;
-        Wed, 26 Jul 2023 16:53:37 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id 98e67ed59e1d1-2683add3662so281893a91.1;
-        Wed, 26 Jul 2023 16:53:37 -0700 (PDT)
+        Wed, 26 Jul 2023 23:37:27 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4157A2137
+        for <linux-hwmon@vger.kernel.org>; Wed, 26 Jul 2023 20:37:11 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id af79cd13be357-76714caf466so44478685a.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 26 Jul 2023 20:37:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690415617; x=1691020417;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=NRyGMlHg9fFAepKXgOzg271kQtVxYUgZIbTQ9lTP6NY=;
-        b=kcU/e5pFPS9y31sgQTgN08WUZfesShj2GqSEle0SCoWqdkhc7YUOJtOKdLhRlJdguK
-         Kg51Q1W0ynLcNxX8sjoXQwEq09CgOYc3roQbSzDEJDOD87TLyDaS7dmarlV3JnRtaSnc
-         iqJEvUHvgyYq9mQd0L/m62HTZkFmtby/dPmuYX2i1BVjZyZxrPBV/8EzKdyYscLJ/ehW
-         clrlrF41NDR11L30O8IJomqwl068TuGk32n21SLibFj3JN/Dmz8j12H71ZScudMmPbnf
-         rQDgdwZ6BWppAGA49tUceBhP84L2RcQqMBpR5Uzr7sZHQyahKcYiNx286ylU/lxMZko7
-         2uxw==
+        d=gmail.com; s=20221208; t=1690429030; x=1691033830;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=jIj3XbCluPedak2cjTRqnF4TWL+1e6DYx/siw7DGYG4=;
+        b=LOri5vwpLAj4Jl9e6hzziz28+3y3trZ+uACrGoI3i02Cs8jCFXhnBCEX4DZuDhu3rK
+         DpLpA4vu0xyFuMPzR2KaeRfuYf3Au1SUHtep3HFTwBqXjhx8JRsgfgUTaFA/SUeGt+GS
+         5/1ybTi9g1VDipMCr2f6kL6EqnR94Zf8HsmBEIH5XFjAaycMKkMG1cd+lWZFzasIj3je
+         qmk/WnYP2w/cHGRSVhkNam027JEZQ98Fufpnmy/T3ej+9HFp15imwYvdcMmcYdTCd7t3
+         9SsUUP5Jf81YsqBEUdF5TpDdSMyxYmkUtdbS4UncYcEd22eJkux3u/L3lZOH9t9DJu9b
+         szHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690415617; x=1691020417;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NRyGMlHg9fFAepKXgOzg271kQtVxYUgZIbTQ9lTP6NY=;
-        b=j+aL6minmB4LAzWe/LT6eq1kpcQes3vBdpZ+/Qk1O/GmI78WaWzbuozpDea7XdVrWZ
-         TC5KOSheGPW/2Q4uCuVgt5RlP4xPWfaLTcmCphwbTMmtgd3d5X/y2aCl/vlSrxpcYYUi
-         OwAQDbDVNfxZgJJ5EkRS7/zeAEI14G+DLcAN+/xKfyGBXvzkcX26rqWhLLrG+alFMpOa
-         ti2Qoucvop3/F4gPVaOuMoOluodfDZNtpjsGpCUP3lVKs1xVjknB0y7uVMwqC6qbrltH
-         Wn+tgme7sTKFph0qNL9PfbygaFZm5eMNlkB1qwVFaGzkxXu5FhMQeLFzNWY0hDT1lRAr
-         Q1Ig==
-X-Gm-Message-State: ABy/qLYu2dAFlIySqFHGLbxfzMZQAaVuKXQtVYZu4uodSKKiQNrjHHMy
-        GKELM2OXdqZi4M/dnlSJg8cbKv+K0hk=
-X-Google-Smtp-Source: APBJJlGO7XI1TFSDP3DUo347+WApNWEmMsvb6JH5QETEM2KOi/mude959dCNNT9+edQ0H6fNew6wBw==
-X-Received: by 2002:a17:90b:4b8f:b0:261:2a59:dc38 with SMTP id lr15-20020a17090b4b8f00b002612a59dc38mr3614225pjb.25.1690415617026;
-        Wed, 26 Jul 2023 16:53:37 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id ep11-20020a17090ae64b00b00262eccfa29fsm1711028pjb.33.2023.07.26.16.53.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jul 2023 16:53:36 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1690429030; x=1691033830;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jIj3XbCluPedak2cjTRqnF4TWL+1e6DYx/siw7DGYG4=;
+        b=TLSWvXkcd+iljFyQv3yS9BR7sMRbCwMtMzC6syANsX4M+cPWoodAKrQHMWWU+XcAc8
+         M1qcNMcFq5fput4M34NB+ni6/3F+orZr2ii2ZjK84VMjO5LuAak2ZUXhbLvuru8s5MPH
+         PoSW21J/+rI07ySTRCWU4yz0CHg7OrbZd6w7cxrVceeCqp45mOxdS9zyQ8aA8/2zT1sV
+         82KBWZtuHiY9FJ+iPbZIRfZAXDefVhyabqkiIxoSWwP9VJYeNPt0NBZF4zJQ5lvG786c
+         FfgbbbVHPPD/xpa7/lUHq8xgW2qXXYX9MIzi5xlG4gAOf5QbaYh8b/Gw/JKyc6t5pq7Z
+         kjwg==
+X-Gm-Message-State: ABy/qLao3PZHaSb/CxUxwZxOpm2OO7WizIgobJQWXwSFRWFUF+3ytHX7
+        wD7vY+sZt/UbxrWjbKUSex04FxBW6ls=
+X-Google-Smtp-Source: APBJJlHA4jnomFSsZazpu3TVtN9kGAWMITZxzil5Ebl+savh/w0GxhaBU3Bo9unfZucnZhG3PYcGoA==
+X-Received: by 2002:a05:620a:24e:b0:765:ad52:7a4f with SMTP id q14-20020a05620a024e00b00765ad527a4fmr4185177qkn.59.1690429029677;
+        Wed, 26 Jul 2023 20:37:09 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n16-20020a17090ade9000b00264040322desm272595pjv.40.2023.07.26.20.37.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jul 2023 20:37:09 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f67f7165-bad6-3e77-2ec1-f9c37eb3ac0d@roeck-us.net>
-Date:   Wed, 26 Jul 2023 16:53:35 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [groeck-staging:hwmon-next 35/36] htmldocs:
- Documentation/hwmon/hs3001.rst:4: WARNING: Title underline too short.
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>,
-        Andre Werner <andre.werner@systec-electronic.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <202307270449.YQ4vCUwO-lkp@intel.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <202307270449.YQ4vCUwO-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Naresh Solanki <Naresh.Solanki@9elements.com>
+Subject: [PATCH] hwmon: (pmbus_core) Fix Deadlock in pmbus_regulator_get_status
+Date:   Wed, 26 Jul 2023 20:37:06 -0700
+Message-Id: <20230727033706.3500722-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 7/26/23 13:39, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-> head:   c944c8c532f7bd6d9e52ee3e2e97dcdd9c6014c0
-> commit: 33faa6fcc93f78e6b0e9b5aaf986446ac3c34047 [35/36] hwmon: Add driver for Renesas HS3001
-> reproduce: (https://download.01.org/0day-ci/archive/20230727/202307270449.YQ4vCUwO-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202307270449.YQ4vCUwO-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->>> Documentation/hwmon/hs3001.rst:4: WARNING: Title underline too short.
->>> Documentation/hwmon/hs3001.rst:34: WARNING: Missing matching underline for section title overline.
-> 
+pmbus_regulator_get_status() acquires update_lock.
+pmbus_regulator_get_error_flags() acquires it again, resulting in an
+immediate deadlock.
 
-Andre - no need to send a fix. I fixed it up.
+Call _pmbus_get_flags() from pmbus_regulator_get_status() directly
+to avoid the problem.
 
-Guenter
+Reported-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+Closes: https://lore.kernel.org/linux-hwmon/b7a3ad85-aab4-4718-a001-1d8b1c0eef36@roeck-us.net/T/#u
+Cc: Naresh Solanki <Naresh.Solanki@9elements.com>
+Fixes: c05f477c4ba3 ("hwmon: (pmbus/core) Implement regulator get_status")
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+I want to send this in a pull request this week, and I have not heard back
+from the reporters. Patrick, Naresh, please feel free to submit a similar
+patch by Thursday EOB this week. Otherwise I'll send this one upstream. 
 
-> vim +4 Documentation/hwmon/hs3001.rst
-> 
->       2	
->       3	Kernel driver HS3001
->     > 4	===================
->       5	
->       6	Supported chips:
->       7	
->       8	  * Renesas HS3001, HS3002, HS3003, HS3004
->       9	
->      10	    Prefix: 'hs3001'
->      11	
->      12	    Addresses scanned: -
->      13	
->      14	    Datasheet: https://www.renesas.com/us/en/document/dst/hs300x-datasheet?r=417401
->      15	
->      16	Author:
->      17	
->      18	  - Andre Werner <andre.werner@systec-electronic.com>
->      19	
->      20	Description
->      21	-----------
->      22	
->      23	This driver implements support for the Renesas HS3001 chips, a humidity
->      24	and temperature family. Temperature is measured in degrees celsius, relative
->      25	humidity is expressed as a percentage. In the sysfs interface, all values are
->      26	scaled by 1000, i.e. the value for 31.5 degrees celsius is 31500.
->      27	
->      28	The device communicates with the I2C protocol. Sensors have the I2C
->      29	address 0x44 by default.
->      30	
->      31	sysfs-Interface
->      32	---------------
->      33	
->    > 34	===============================================================================
-> 
+ drivers/hwmon/pmbus/pmbus_core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 30aeb59062a5..69a4e62b6c8d 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -2946,6 +2946,7 @@ static int pmbus_regulator_get_status(struct regulator_dev *rdev)
+ 	struct pmbus_data *data = i2c_get_clientdata(client);
+ 	u8 page = rdev_get_id(rdev);
+ 	int status, ret;
++	int event;
+ 
+ 	mutex_lock(&data->update_lock);
+ 	status = pmbus_get_status(client, page, PMBUS_STATUS_WORD);
+@@ -2965,7 +2966,7 @@ static int pmbus_regulator_get_status(struct regulator_dev *rdev)
+ 		goto unlock;
+ 	}
+ 
+-	ret = pmbus_regulator_get_error_flags(rdev, &status);
++	ret = _pmbus_get_flags(data, rdev_get_id(rdev), &status, &event, false);
+ 	if (ret)
+ 		goto unlock;
+ 
+-- 
+2.39.2
 
