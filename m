@@ -2,96 +2,168 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72D20C001DC
-	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Jul 2023 15:28:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AEBECC0015E
+	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Jul 2023 16:22:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231642AbjG0P25 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 27 Jul 2023 11:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40978 "EHLO
+        id S232380AbjG0QWt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 27 Jul 2023 12:22:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjG0P25 (ORCPT
+        with ESMTP id S231838AbjG0QWt (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 27 Jul 2023 11:28:57 -0400
-Received: from wp534.webpack.hosteurope.de (wp534.webpack.hosteurope.de [80.237.130.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C77991BE4;
-        Thu, 27 Jul 2023 08:28:55 -0700 (PDT)
-Received: from [2001:a61:6209:7f40:c80a:ff:fe00:4098] (helo=cs-office3.lan.local); authenticated
-        by wp534.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        id 1qP2v5-0008UE-9I; Thu, 27 Jul 2023 17:28:51 +0200
-Date:   Thu, 27 Jul 2023 17:28:42 +0200
-From:   Carsten =?UTF-8?B?U3BpZcOf?= <mail@carsten-spiess.de>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH 1/2] hwmon: (isl28022) new driver for ISL28022 power
- monitor
-Message-ID: <20230727172842.3fe20026.mail@carsten-spiess.de>
-In-Reply-To: <bbf1aba4-48ce-289d-aaa9-bc861effaffd@roeck-us.net>
-References: <20230726152235.249569-1-mail@carsten-spiess.de>
- <20230726152235.249569-2-mail@carsten-spiess.de>
- <bbf1aba4-48ce-289d-aaa9-bc861effaffd@roeck-us.net>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Thu, 27 Jul 2023 12:22:49 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2088.outbound.protection.outlook.com [40.107.96.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDFBA1984;
+        Thu, 27 Jul 2023 09:22:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SvmSQXwtOFRj0uxiLtT0U0zEqnv3u+q8p4vEVqjb8yuVtTbSdiFGkc7oFP6lz8DQFrASREnzVCgZ8wn+6kPk3kKe5Wn47+KCCT/8KqP8FtvG18pJuW31yAeU9pmIHfjq7lJ47e8eSb5+xy8BAp4HryFvbhFY5Gkp+zmFsk8HagAJ/JoR7EwUfy1FbD/pz/sOHtlx8QZoIIlZTTRpeuHT9HkcI7Iiq6Ma54kXvZKbm/p5jU4ev2dD0+waaIiQJFZoeWsH5HTc771+MDNdtbvuQ/UKTX20OimhVxzLMPYs+QTupP0XBIJXthmIDPsMu4ELoW4oQBHYib8AQG0CU60e9g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bOwvML5RTFNmFXFjCDBDvHt8TmESfzTFxj9zYvtwsXs=;
+ b=UV+7OWAZGtoNwc6J5vERmmO8l69fDnBxDVxAUxO4EzP0JpIrzqNpAVrqX1ovhunuvLF6DL6nThHFm9RpWUhVSEL3XcHHqRoVkl+X+wmofT6/uBMTUWzWf6yVVHr8Cc/YDI2WRnH0YiS/BgocI7Ouwn2N8v88JwTHK0I/wtIu8VNrkHX4X4EOqX9YHVWjnOlYDeYhwLwvDpzcIpmjPAua/SOZ342SL2Q2diZROX0gkSybp/gv7+S8qaY377p2ORR/NHz221iwjJSpGed7iUPRUnVFv47j366OhD7pPWbQPbocVtvZAl3aEXYHstEGXIFjaYNtx07ltrOR339SV6WnYA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=ladisch.de smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bOwvML5RTFNmFXFjCDBDvHt8TmESfzTFxj9zYvtwsXs=;
+ b=Jp6F0DzBc7+vcwffYscxVufu3WUPh898t0LdufSVpXW70wwdHEO/epIGMT3Jy8oSjAvfQZ4Y8GVJ7+xBTMxMtnGag66Amwc5St01sbpxa8wctHYdVVHYSVsVzXdHpfKf4AYAd75dFQcrHv+JxUu2ByQH/3IPpVXkXmE1CSmwBGs=
+Received: from MW4P221CA0015.NAMP221.PROD.OUTLOOK.COM (2603:10b6:303:8b::20)
+ by MW3PR12MB4378.namprd12.prod.outlook.com (2603:10b6:303:52::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.29; Thu, 27 Jul
+ 2023 16:22:45 +0000
+Received: from CO1NAM11FT060.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8b:cafe::43) by MW4P221CA0015.outlook.office365.com
+ (2603:10b6:303:8b::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.29 via Frontend
+ Transport; Thu, 27 Jul 2023 16:22:45 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT060.mail.protection.outlook.com (10.13.175.132) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6631.29 via Frontend Transport; Thu, 27 Jul 2023 16:22:44 +0000
+Received: from amd-ETHANOL-X.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 27 Jul
+ 2023 11:22:43 -0500
+From:   Baskaran Kannan <Baski.Kannan@amd.com>
+To:     <babu.moger@amd.com>, <Mario.Limonciello@amd.com>,
+        <baski.kannan@amd.com>, <clemens@ladisch.de>, <jdelvare@suse.com>,
+        <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Baskaran Kannan <Baski.Kannan@amd.com>
+Subject: [PATCH v4] hwmon: (k10temp) Enable AMD3255 Proc to show negative temperature
+Date:   Thu, 27 Jul 2023 11:21:59 -0500
+Message-ID: <20230727162159.1056136-1-Baski.Kannan@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/VKN5LQy7FMPezGOzlhGiZtM";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-bounce-key: webpack.hosteurope.de;mail@carsten-spiess.de;1690471736;7dc0dfdb;
-X-HE-SMSGID: 1qP2v5-0008UE-9I
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT060:EE_|MW3PR12MB4378:EE_
+X-MS-Office365-Filtering-Correlation-Id: a65a9f85-ed20-45cf-9e7f-08db8ebdb587
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: QjI/6ZnqzDJxvyYEdq0FT8Z2RHhV30pmzxKPSNnJ8GsVczyHfKuTpu6yI25z3hMkCA6VLWjmmNec+IwclseYKkFMESy0y1r8Q3yFm7J8DWyOIMVdBvn0iVoWPPqvWXPsWQ2fdSS/QKXCAlq/0O4vawhdIL0BlJ9cXRnjnrC0bnIJc1m8sjL2t4vbendpzFJHFLveJXltEHJscOetC6VVOEEkPmUnkyHd3RPQWLu3+9xVPqALBueF17vcxBAeGB3cUXzyaJ2rYRqpZLWtox60TitwOcQ7qSjnx+tLdhwV93B6ELZFUn1sf/LRExClmlBEhUWqqZUffwvtebGlHi4Tlr3GTw7J0Oa+32LxyJrUdlyx/dh/43THlWvu45xpN+WKqELgwQPdNoX8BCF/SFFr9p+C4rkQdHttVzY9HKH0sgP6sn2Ws/OCZCHRRdxcW5qxUknoJLf8J1mr+yCIXrjMK3VZblwqtFCKKjyXDyfQW6KEnoxb3EN7BBROvtTzzQVxne+QdiFKe2f/6DqAuvHgPg0UK3B7pI9OrEjBCK0Tvt5lYdgsCKRu2FSkWVNfVBeZQWPy3OIld7r+p0LYrG9aVk+X5tHGqp7Miy9aFQ1lBneKK9wfbSMsIPm1K3+sInQmlK8qnGLXieh6lYEVNRynI6TkvtUcxVc1r4QfKbSSEEtt+Xcn9/v9osrlE//qb+aAu0yhxmvhhmGKdTHqnjllhjUlBBEOdjSKyWKloqV41NwZX47esmKuL4MdkqOoT0cl0fofd2VI6B+qqjmPUWBJ5JuExej/jM1/k2V4v4TgPzc=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(396003)(39860400002)(376002)(451199021)(82310400008)(40470700004)(46966006)(36840700001)(40460700003)(110136005)(6666004)(7696005)(81166007)(356005)(36756003)(2906002)(478600001)(82740400003)(316002)(8936002)(8676002)(5660300002)(41300700001)(40480700001)(70206006)(70586007)(4326008)(26005)(36860700001)(86362001)(1076003)(426003)(83380400001)(2616005)(47076005)(186003)(16526019)(336012)(966005)(36900700001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jul 2023 16:22:44.7178
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a65a9f85-ed20-45cf-9e7f-08db8ebdb587
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT060.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4378
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
---Sig_/VKN5LQy7FMPezGOzlhGiZtM
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Industrial processor i3255 supports temperatures -40 deg celcius
+to 105 deg Celcius. The current implementation of k10temp_read_temp
+rounds off any negative temperatures to '0'. To fix this,
+the following changes have been made.
 
+A flag 'disp_negative' is added to struct k10temp_data to support
+AMD i3255 processors. Flag 'disp_negative' is set if 3255 processor
+is found during k10temp_probe.  Flag 'disp_negative' is used to
+determine whether to round off negative temperatures to '0' in
+k10temp_read_temp.
 
-> On 7/26/23 18:19, Guenter Roeck wrote:
-> I strongly suspect that the conversions will result in overflows and that=
- they are not always correct.
-> I'll want to write unit test code before accepting the driver.
-I changed the conversion for current to=20
-				*val =3D ((long)regval * 1250L * (long)data->gain) /
-					(long)data->shunt;
+Signed-off-by: Baskaran Kannan <Baski.Kannan@amd.com>
+---
+V4: Changed probe from model number to model id.
+V3: https://lore.kernel.org/all/20230619165413.806450-1-Baski.Kannan@amd.com/
 
-The term (1250 * gain) will be 10000 max, fits to 14 bit.
-So no risk for 32bit overflow when multiply with 16bit value.
+ drivers/hwmon/k10temp.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-And changed the conversion for power to=20
-				*val =3D ((51200000L * ((long)data->gain)) /
-					(long)data->shunt) * (long)regval;
+diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+index 7b177b9fbb09..18c4deae82ba 100644
+--- a/drivers/hwmon/k10temp.c
++++ b/drivers/hwmon/k10temp.c
+@@ -77,6 +77,12 @@ static DEFINE_MUTEX(nb_smu_ind_mutex);
+ #define ZEN_CUR_TEMP_RANGE_SEL_MASK		BIT(19)
+ #define ZEN_CUR_TEMP_TJ_SEL_MASK		GENMASK(17, 16)
+ 
++/* AMD's Industrial processor 3255 supports temperature from -40 deg to 105 deg Celsius.
++ * Use the model name to identify 3255 CPUs and set a flag to display negative temperature.
++ * Do not round off to zero for negative Tctl or Tdie values if the flag is set
++ */
++#define AMD_I3255_STR				"3255"
++
+ struct k10temp_data {
+ 	struct pci_dev *pdev;
+ 	void (*read_htcreg)(struct pci_dev *pdev, u32 *regval);
+@@ -86,6 +92,7 @@ struct k10temp_data {
+ 	u32 show_temp;
+ 	bool is_zen;
+ 	u32 ccd_offset;
++	bool disp_negative;
+ };
+ 
+ #define TCTL_BIT	0
+@@ -204,12 +211,12 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
+ 		switch (channel) {
+ 		case 0:		/* Tctl */
+ 			*val = get_raw_temp(data);
+-			if (*val < 0)
++			if (*val < 0 && !data->disp_negative)
+ 				*val = 0;
+ 			break;
+ 		case 1:		/* Tdie */
+ 			*val = get_raw_temp(data) - data->temp_offset;
+-			if (*val < 0)
++			if (*val < 0 && !data->disp_negative)
+ 				*val = 0;
+ 			break;
+ 		case 2 ... 13:		/* Tccd{1-12} */
+@@ -405,6 +412,11 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	data->pdev = pdev;
+ 	data->show_temp |= BIT(TCTL_BIT);	/* Always show Tctl */
+ 
++	if (boot_cpu_data.x86 == 0x17 &&
++	    strstr(boot_cpu_data.x86_model_id, AMD_I3255_STR)) {
++		data->disp_negative = true;
++	}
++
+ 	if (boot_cpu_data.x86 == 0x15 &&
+ 	    ((boot_cpu_data.x86_model & 0xf0) == 0x60 ||
+ 	     (boot_cpu_data.x86_model & 0xf0) == 0x70)) {
+-- 
+2.25.1
 
-The first term (51200000 * gain / shunt) will be larger than 16bit when=20
-(shunt/gain) is less than ~800. So min values for shunt are=20
-- 6400 =C2=B5Ohm for 320 mV range
-- 3200 =C2=B5Ohm for 160 mV range
-- 1600 =C2=B5Ohm for 80 mV range
-- 800 =C2=B5Ohm for 40 mV range
-Can i set this conditionally in the .yaml file?
-
-Regards Carsten
-
---Sig_/VKN5LQy7FMPezGOzlhGiZtM
-Content-Type: application/pgp-signature
-Content-Description: Digitale Signatur von OpenPGP
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEWM+MlUpz/bWsZllTM1JQzV9LKSwFAmTCjSoACgkQM1JQzV9L
-KSxNEQ//Zl3WGNjRRHcZX/AnLzHLLmhKq3QZw9OreJLcnES+G85wGIqyXVg6gFYx
-1dSzoUgMJWN/DL8PyjR8AnJayQ0cLbQPqQF0xG/Ki7y2/CmvaQxc1Yy/vc9fDj0N
-sFnuqjBTATNIiKpbGNG8WBBmWRZMD1v9AezG4YqHXxRyiAV+394BrAj4K5ectyxI
-ZpQgYzGwXntGpf9LU3MyEvNaVyWK7SchOOXvBf8b60D2bUnLZft304UTKBoe6isw
-7bI7nY5ENeZJK41l1mYK6LDyqJiuCL7QuMaRuQkTBr4EbXrsvUA+xxXDnQ+CfGID
-yb3jAjfHyWUy9gajeBJGpsQqEjCGHlOnzb8n/6EdfXmrtLD+XShX3pj/Hm1Udkzr
-PUl++5gnu23nLppwB8XaNh/ssyx1tFxs7Fs1oOdBVe59PRSJvf4YKBaFb6J5ZH6r
-eQQj2owJy/vKPl1ASigwUVIVYg6bm/TlVZWdbMn2LXDZCWIOZjqZw2dS0SO7/sbm
-8J2BewTiX9M4vqBM716CIj/7Z++iA9bTHPlhG1LI0Q+nbPEgez68mz2kgMGNxIFB
-LVE7OzFac95rI7REi7rJadDi8DufWama2M1UycM1uUii1feDPYoJ5eCTPBq1AeuQ
-EShQ0pHmiph0Pn2Po3ALEMSJbay4jgGEQDNhZclWC/gjRhDPVnE=
-=QSkV
------END PGP SIGNATURE-----
-
---Sig_/VKN5LQy7FMPezGOzlhGiZtM--
