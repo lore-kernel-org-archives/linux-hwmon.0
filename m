@@ -2,95 +2,98 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BEB98C001E0
-	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Jul 2023 07:44:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA111C04E69
+	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Jul 2023 08:14:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231927AbjG0HoG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 27 Jul 2023 03:44:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
+        id S232198AbjG0IOU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 27 Jul 2023 04:14:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233627AbjG0HnS (ORCPT
+        with ESMTP id S233818AbjG0IMX (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 27 Jul 2023 03:43:18 -0400
-Received: from wp534.webpack.hosteurope.de (wp534.webpack.hosteurope.de [80.237.130.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2576F6A40;
-        Thu, 27 Jul 2023 00:37:22 -0700 (PDT)
-Received: from [2001:a61:6209:7f40:c80a:ff:fe00:4098] (helo=cs-office3.lan.local); authenticated
-        by wp534.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        id 1qOvXT-0001KS-Ho; Thu, 27 Jul 2023 09:35:59 +0200
-Date:   Thu, 27 Jul 2023 09:35:48 +0200
-From:   Carsten =?UTF-8?B?U3BpZcOf?= <mail@carsten-spiess.de>
-To:     Guenter Roeck <linux@roeck-us.net>,
+        Thu, 27 Jul 2023 04:12:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06D4658A;
+        Thu, 27 Jul 2023 01:08:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 15D9E61D96;
+        Thu, 27 Jul 2023 08:07:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 154E2C433C9;
+        Thu, 27 Jul 2023 08:07:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690445234;
+        bh=kEMX5vYmAK+1z5HfoJdExkrb1Pppilb2DBlJXxEWNAc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=N/uBNuy2WeU8HhMnrHUKVPbQolOoxTBdaarY5kQnlUYV1vDjrcCdkWiXeFb4JbIIh
+         RrFBo2yI4ChpO7AW/5Vy4vLPG2Mo/JGcgwryfIKV1F7vKl0p2x0s6+qHNOdCrApIjm
+         Ru6Z/Bj4Pbpkj0F85ts5pzR6lt4kgad4Qhm8fFtJrZ5kX3dQ0q1HrKas/FNBeIfjI8
+         D2b8IOwh9np2ryPHAX7rDyT6+WTUQlrvXAjkygs9V/QsnkQZkBFyfOl1s767jvcIQx
+         ismyg+MeD3MOPrCyM+YmhibPZMbdoAM7OHzeMlRjZRKRmQ4ei1p1dJmCoaswN9re4i
+         BhY8jg0uJnJAQ==
+Date:   Thu, 27 Jul 2023 09:07:09 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Carsten =?iso-8859-1?Q?Spie=DF?= <mail@carsten-spiess.de>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Magnus Damm <magnus.damm@gmail.com>,
-        linux-hwmon@vger.kernel.org
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH 1/2] hwmon: (isl28022) new driver for ISL28022 power
- monitor
-Message-ID: <20230727093548.0cb0d6e8.mail@carsten-spiess.de>
-In-Reply-To: <bbf1aba4-48ce-289d-aaa9-bc861effaffd@roeck-us.net>
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH 2/2] dt-bindings: hwmon: add renesas,isl28022
+Message-ID: <20230727-prong-crimp-0c758681172c@spud>
 References: <20230726152235.249569-1-mail@carsten-spiess.de>
- <20230726152235.249569-2-mail@carsten-spiess.de>
- <bbf1aba4-48ce-289d-aaa9-bc861effaffd@roeck-us.net>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+ <20230726152235.249569-3-mail@carsten-spiess.de>
+ <f8fdc8d7-6ac5-5e20-10ef-7417d79c1b91@roeck-us.net>
+ <20230727093528.594ce3a7.mail@carsten-spiess.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Lp+eURiMW8MUrBzpr8v_GGg";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-bounce-key: webpack.hosteurope.de;mail@carsten-spiess.de;1690443444;f83c0e10;
-X-HE-SMSGID: 1qOvXT-0001KS-Ho
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="OPtzLY3pv5H2w5QG"
+Content-Disposition: inline
+In-Reply-To: <20230727093528.594ce3a7.mail@carsten-spiess.de>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
---Sig_/Lp+eURiMW8MUrBzpr8v_GGg
-Content-Type: text/plain; charset=US-ASCII
+
+--OPtzLY3pv5H2w5QG
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
- On 7/26/23 18:19, Guenter Roeck wrote:
-> Please provide a register dump (using i2cdump) for this chip.=20
+On Thu, Jul 27, 2023 at 09:35:28AM +0200, Carsten Spie=DF wrote:
 
-# i2cdump -y -r 0-9 1 0x40 w
-     0,8  1,9  2,a  3,b  4,c  5,d  6,e  7,f
-00: ff67 ca00 a25d c803 5006 0080 817f 00ff=20
-08: 0000 0000 =20
+> On 7/26/23 18:14, Krzysztof Kozlowski wrote:
+> >> +  shunt-gain: =20
+> > 1. Missing vendor prefix (does not look like generic property)
+> > 2. -microvolt
+> > And then enum is for 40, 80, 160 and 320.
+> replaced with
+>   renesas,shunt-range-milli-volts:
+>     description: |
+>       maximal shunt voltage range of 40mV, 80mV, 160mV or 320mV
+>     $ref: /schemas/types.yaml#/definitions/uint32-array
+>     default: 320
+>     enum: [40, 80, 160, 320]
 
-Please note that due to big vs.- little endian bytes are swapped,
-should be read as:
-00: 67ff 00ca 5da2 03c8 0650 8000 7f81 ff00
-08: 0000 0000 =20
+The point of using -microvolt is that it is a standard suffix:
+https://github.com/devicetree-org/dt-schema/blob/c1e73ebea9fc07f7d7848f3043=
+01f755f1278a67/dtschema/schemas/property-units.yaml#L101
 
-corresponding sensor values are about (not read at same time):
-in0:           1.99 V =20
-in1:          23.97 V =20
-power1:        6.10 W =20
-curr1:       248.00 mA=20
-
-in0 should be read as mV
-
-Regards, Carsten
-
---Sig_/Lp+eURiMW8MUrBzpr8v_GGg
-Content-Type: application/pgp-signature
-Content-Description: Digitale Signatur von OpenPGP
+--OPtzLY3pv5H2w5QG
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEEWM+MlUpz/bWsZllTM1JQzV9LKSwFAmTCHlQACgkQM1JQzV9L
-KSzWMg/+Mp/CNQhmKivVvjjhWPjXYqNHF0t2T6dOh8hVJA6JaMfiGML0OmIFeLtj
-SmXBWHTi8ZE8OotBAx4yMIJPxnGa9pxCkvZ33WJsq9w4aUmVqymu1TbMcXkWuKPJ
-U+jGl7ZhSycI8r+wOjgm59hybz9KU+aDi8uibvFxXUo0PflIufO2ZbqTEPkmaYjc
-mUUOtkgcN/WbZ0CkG0Fdzj6lsCNzLRITHqOE7aTfa0ju8JJQgqSdxVSSFgN8/8gF
-Lsf3WgU7EOtBRarz0H/AW1Cp0nNYRQT+mnbqU544aUC+FC7BNh706ROIKiji6vE2
-Vsrn32o3cyYOK6xG2z/kJy3T3UAWHdMBgmpmB48spAdMjM3J2dRxP/cUNVAOUd24
-dEw40bPZ5qrvDTyGzdqCTqacZtBlnhLEjB8rq7zaLNMvJ0Ytb49B4npsLHQDi7c0
-e70FKnY6t5jMyEtPCQqCKM+WtJu2ac4E6S+T3LQSt9CVs4nY/qpz2g6hrXiqD55+
-tuYltPTVyimPlSOzw9Uxd3JGwPUdFSlFDJmb2D6pskCwHzSx1KRf8LmhrzA/AhNr
-trRFVGz9CIQjDfDu1+TMmnt/kTXuOqRZ8pLPlLlMH/S2G/V+6kF58LrmjovVguwy
-LcxnkEd+a9Eg5OLLc/csEBDNTLF5n8QXSkjEpJbBIyZUTLEYsrg=
-=RTpb
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZMIlrQAKCRB4tDGHoIJi
+0ldLAQDY89Fp4G5KjdiAN0mlbIPAAe8VYldm167TUVgvOTUW9QEAmtxt6mqt+AaN
+DKSnofC/QUzAU666DQGiCG7Uknrv+wA=
+=Oiex
 -----END PGP SIGNATURE-----
 
---Sig_/Lp+eURiMW8MUrBzpr8v_GGg--
+--OPtzLY3pv5H2w5QG--
