@@ -2,151 +2,113 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FBEBC0015E
-	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Jul 2023 17:17:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C249CC00528
+	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Jul 2023 18:39:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbjG0RRa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 27 Jul 2023 13:17:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49976 "EHLO
+        id S230004AbjG0SjL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 27 Jul 2023 14:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjG0RR3 (ORCPT
+        with ESMTP id S229866AbjG0SjL (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 27 Jul 2023 13:17:29 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D23AF7;
-        Thu, 27 Jul 2023 10:17:28 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id e9e14a558f8ab-348c47ca963so4546185ab.0;
-        Thu, 27 Jul 2023 10:17:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690478248; x=1691083048;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+y+p/lZ0A7TPbjqRqcdjde8B6RMpTawfHps5YA67cyw=;
-        b=qKXQnzBTqsSsjIOM4Gqwp8pIRNsE4QGSA8981WiZp6RfpfIgs5lcCkCwi7NfIlCUcx
-         Xd2ghiF/nMCDQGb1MuJBs9tUaj46Xl2HPf3Jt67dHyYmcDq73JLVAK4Zl9y/QbUIebs1
-         zG0BtRdYvvruxS0Zekd0P2IzDD04sIfmYJ1FS8pTX3qAw5bHgX1ENsXXMg3UpWi7oxul
-         CVYEwuvJ1rziLb8gzMp+BcA6lE/QG8STaZMsQwQ1F7YaXcZz4WuYdGa0s+pDToGEl24X
-         LQo1PukK8E/cTU+E1TY2TjO8/7N2oChVLJvDJ/gJIArwJlrClYHOukpdWPqVqLsdCrEz
-         JMfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690478248; x=1691083048;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+y+p/lZ0A7TPbjqRqcdjde8B6RMpTawfHps5YA67cyw=;
-        b=OyVq6Un7ZzHUrf1h5NJNXFbdY6zBbksSaue456dxkicfsDl95wU8Aah+/KU9bXcy6p
-         UvgvIXQbdJqJcQA6K/t2DvFq2vTeITxDnG/3aWquWGa1FlfxaOad8la1lIrlXei2ib+z
-         SUByIJiiVRQP370iTwstKQ3+b7/aUEhBH+I90E6uvV+MfsMgO8D7+YELK43/+AyytFhN
-         K7scZyM+QE+2QrfSYZcbrOjXp5zqgFEiGR1vfQkfNy6ugWID8UdP4/Uvg74DbmU/hquO
-         8t1tjX19QiSDPWn2xHyiupJin1F4lHFXiCq19MKbFmgyImvPwjL4rJ/z0nFZCgeGa2jH
-         SUIw==
-X-Gm-Message-State: ABy/qLZBrBLBWwOCOZMbkIgiCntGsb3hhhxYXHacHb1EME2PWo8EyhSs
-        3pkV3wlkjkHq2aw9/HYmNnU=
-X-Google-Smtp-Source: APBJJlFKvDRxj4T5hYYHqck5VsvJU1STUkWcYDxH+py9wod67e56mJZSry89eXBCUzgkmKDOAe1VoA==
-X-Received: by 2002:a05:6e02:eef:b0:348:936f:820f with SMTP id j15-20020a056e020eef00b00348936f820fmr41539ilk.16.1690478247729;
-        Thu, 27 Jul 2023 10:17:27 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m16-20020a92c530000000b003488ded11edsm610674ili.11.2023.07.27.10.17.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Jul 2023 10:17:27 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d21d005d-569d-6105-e89c-7e6a7e84c701@roeck-us.net>
-Date:   Thu, 27 Jul 2023 10:17:25 -0700
+        Thu, 27 Jul 2023 14:39:11 -0400
+Received: from mx11.pro-ite.de (ox4u.de [212.118.221.216])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F26E78
+        for <linux-hwmon@vger.kernel.org>; Thu, 27 Jul 2023 11:39:08 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mx11.pro-ite.de (Postfix) with ESMTP id 8A2EE18FE0D90;
+        Thu, 27 Jul 2023 20:39:02 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at ox4u.de
+Received: from mx11.pro-ite.de ([127.0.0.1])
+        by localhost (ox4u.de [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id xt4TdylGL16Z; Thu, 27 Jul 2023 20:39:01 +0200 (CEST)
+Received: from ws-565760.systec.local (unknown [212.185.67.148])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mx11.pro-ite.de (Postfix) with ESMTPSA id 8E4F018FE0D84;
+        Thu, 27 Jul 2023 20:39:00 +0200 (CEST)
+Date:   Thu, 27 Jul 2023 20:38:47 +0200 (CEST)
+From:   Andre Werner <andre.werner@systec-electronic.com>
+Reply-To: Andre Werner <andre.werner@systec-electronic.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+cc:     =?ISO-8859-15?Q?Uwe_Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Andre Werner <andre.werner@systec-electronic.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH] hwmon: (hs3001) Switch to use i2c_driver's probe
+ callback
+In-Reply-To: <36f9d274-1272-7360-1885-b57fa3479cec@roeck-us.net>
+Message-ID: <9ab97b9c-e7a7-e3d8-77f7-45316dd347c2@systec-electronic.com>
+References: <20230727071123.512966-1-u.kleine-koenig@pengutronix.de> <7ab9f3c0-5677-ceb5-b9af-81af12a32cbc@roeck-us.net> <20230727163936.dnhav2mfho3ilubf@pengutronix.de> <36f9d274-1272-7360-1885-b57fa3479cec@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Content-Language: en-US
-To:     Baskaran Kannan <Baski.Kannan@amd.com>, babu.moger@amd.com,
-        Mario.Limonciello@amd.com, clemens@ladisch.de, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230727162159.1056136-1-Baski.Kannan@amd.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v4] hwmon: (k10temp) Enable AMD3255 Proc to show negative
- temperature
-In-Reply-To: <20230727162159.1056136-1-Baski.Kannan@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="-1463788022-1322919513-1690483144=:2834"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 7/27/23 09:21, Baskaran Kannan wrote:
-> Industrial processor i3255 supports temperatures -40 deg celcius
-> to 105 deg Celcius. The current implementation of k10temp_read_temp
-> rounds off any negative temperatures to '0'. To fix this,
-> the following changes have been made.
-> 
-> A flag 'disp_negative' is added to struct k10temp_data to support
-> AMD i3255 processors. Flag 'disp_negative' is set if 3255 processor
-> is found during k10temp_probe.  Flag 'disp_negative' is used to
-> determine whether to round off negative temperatures to '0' in
-> k10temp_read_temp.
-> 
-> Signed-off-by: Baskaran Kannan <Baski.Kannan@amd.com>
-> ---
-> V4: Changed probe from model number to model id.
-> V3: https://lore.kernel.org/all/20230619165413.806450-1-Baski.Kannan@amd.com/
-> 
->   drivers/hwmon/k10temp.c | 16 ++++++++++++++--
->   1 file changed, 14 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-> index 7b177b9fbb09..18c4deae82ba 100644
-> --- a/drivers/hwmon/k10temp.c
-> +++ b/drivers/hwmon/k10temp.c
-> @@ -77,6 +77,12 @@ static DEFINE_MUTEX(nb_smu_ind_mutex);
->   #define ZEN_CUR_TEMP_RANGE_SEL_MASK		BIT(19)
->   #define ZEN_CUR_TEMP_TJ_SEL_MASK		GENMASK(17, 16)
->   
-> +/* AMD's Industrial processor 3255 supports temperature from -40 deg to 105 deg Celsius.
-> + * Use the model name to identify 3255 CPUs and set a flag to display negative temperature.
-> + * Do not round off to zero for negative Tctl or Tdie values if the flag is set
-> + */
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-This is not the networking subsystem. Please use standard multi-line comments.
-Never mind, applied after fixing the comment style.
+---1463788022-1322919513-1690483144=:2834
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 
-Guenter
+On Thu, 27 Jul 2023, Guenter Roeck wrote:
 
-> +#define AMD_I3255_STR				"3255"
-> +
->   struct k10temp_data {
->   	struct pci_dev *pdev;
->   	void (*read_htcreg)(struct pci_dev *pdev, u32 *regval);
-> @@ -86,6 +92,7 @@ struct k10temp_data {
->   	u32 show_temp;
->   	bool is_zen;
->   	u32 ccd_offset;
-> +	bool disp_negative;
->   };
->   
->   #define TCTL_BIT	0
-> @@ -204,12 +211,12 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
->   		switch (channel) {
->   		case 0:		/* Tctl */
->   			*val = get_raw_temp(data);
-> -			if (*val < 0)
-> +			if (*val < 0 && !data->disp_negative)
->   				*val = 0;
->   			break;
->   		case 1:		/* Tdie */
->   			*val = get_raw_temp(data) - data->temp_offset;
-> -			if (*val < 0)
-> +			if (*val < 0 && !data->disp_negative)
->   				*val = 0;
->   			break;
->   		case 2 ... 13:		/* Tccd{1-12} */
-> @@ -405,6 +412,11 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->   	data->pdev = pdev;
->   	data->show_temp |= BIT(TCTL_BIT);	/* Always show Tctl */
->   
-> +	if (boot_cpu_data.x86 == 0x17 &&
-> +	    strstr(boot_cpu_data.x86_model_id, AMD_I3255_STR)) {
-> +		data->disp_negative = true;
-> +	}
-> +
->   	if (boot_cpu_data.x86 == 0x15 &&
->   	    ((boot_cpu_data.x86_model & 0xf0) == 0x60 ||
->   	     (boot_cpu_data.x86_model & 0xf0) == 0x70)) {
+> On 7/27/23 09:39, Uwe Kleine-K=C3=B6nig wrote:
+>>  On Thu, Jul 27, 2023 at 06:34:14AM -0700, Guenter Roeck wrote:
+>>>  On 7/27/23 00:11, Uwe Kleine-K=C3=B6nig wrote:
+>>>>  The previous mass switch of hwmon drivers done in commit 1975d16786=
+9e
+>>>>  ("hwmon: Switch i2c drivers back to use .probe()") was based on
+>>>>  v6.4-rc1. Since then this driver was added which needs to be conver=
+ted
+>>>>  back in the same way before eventually .probe_new() can be dropped =
+from
+>>>>  struct i2c_driver.
+>>>>
+>>>>  Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.d=
+e>
+>>>>  ---
+>>>>  Hello,
+>>>>
+>>>>  this driver appeared in next today. It would be great if this patch
+>>>>  could be added on top to not interfere with the quest to remove
+>>>>  .probe_new directly after v6.6-rc1.
+>>>>
+>>>  I just made the change in the original patch.
+>>
+>>  fine for me.
+>>
+>>>  Thanks, and sorry for not noticing.
+>>
+>>  If that helps: this wasn't the first recent commit reintroducing a
+>>  .probe_new :-) Actually I wanted to drop .probe_new already in the la=
+st
+>>  cycle but didn't pay attention between v6.4 and v6.5-rc1 which
+>>  introduced a few more of these. In the current cycle this was already
+>>  the fifth.
+>>=20
+>
+> Sorry, I didn't pay attention. I'll try to do better. I may need my own
+> version of checkpatch ...
+>
+> Guenter
+>
+>
 
+Hello Uwe, hello Guenter,
+
+maybe it's because I needed to test the driver in Linux 5.10 on my custom
+embedded device. I compiled the driver also in the new Kernel, always
+rebasing on the latest master but testing its behavior was done in 5.10.=20
+So thats maybe why the deprecated probe_new function pointer was still in=
+ the driver.
+So also from my side, sorry for the extra effort.
+
+Regards,
+
+Andre
+---1463788022-1322919513-1690483144=:2834--
