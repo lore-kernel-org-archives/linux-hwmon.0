@@ -2,159 +2,95 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1804FC04FE0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BEB98C001E0
 	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Jul 2023 07:44:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232109AbjG0HoG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S231927AbjG0HoG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Thu, 27 Jul 2023 03:44:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52398 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233657AbjG0HnV (ORCPT
+        with ESMTP id S233627AbjG0HnS (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 27 Jul 2023 03:43:21 -0400
+        Thu, 27 Jul 2023 03:43:18 -0400
 Received: from wp534.webpack.hosteurope.de (wp534.webpack.hosteurope.de [80.237.130.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7A36A5B;
-        Thu, 27 Jul 2023 00:37:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2576F6A40;
+        Thu, 27 Jul 2023 00:37:22 -0700 (PDT)
 Received: from [2001:a61:6209:7f40:c80a:ff:fe00:4098] (helo=cs-office3.lan.local); authenticated
         by wp534.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        id 1qOvXS-0001KS-TP; Thu, 27 Jul 2023 09:35:58 +0200
-Date:   Thu, 27 Jul 2023 09:35:28 +0200
+        id 1qOvXT-0001KS-Ho; Thu, 27 Jul 2023 09:35:59 +0200
+Date:   Thu, 27 Jul 2023 09:35:48 +0200
 From:   Carsten =?UTF-8?B?U3BpZcOf?= <mail@carsten-spiess.de>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH 2/2] dt-bindings: hwmon: add renesas,isl28022
-Message-ID: <20230727093528.594ce3a7.mail@carsten-spiess.de>
-In-Reply-To: <f8fdc8d7-6ac5-5e20-10ef-7417d79c1b91@roeck-us.net>
+        Magnus Damm <magnus.damm@gmail.com>,
+        linux-hwmon@vger.kernel.org
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH 1/2] hwmon: (isl28022) new driver for ISL28022 power
+ monitor
+Message-ID: <20230727093548.0cb0d6e8.mail@carsten-spiess.de>
+In-Reply-To: <bbf1aba4-48ce-289d-aaa9-bc861effaffd@roeck-us.net>
 References: <20230726152235.249569-1-mail@carsten-spiess.de>
- <20230726152235.249569-3-mail@carsten-spiess.de>
- <f8fdc8d7-6ac5-5e20-10ef-7417d79c1b91@roeck-us.net>
+ <20230726152235.249569-2-mail@carsten-spiess.de>
+ <bbf1aba4-48ce-289d-aaa9-bc861effaffd@roeck-us.net>
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/e/q7Xi+4mzcxvn1ecSyofAo";
+Content-Type: multipart/signed; boundary="Sig_/Lp+eURiMW8MUrBzpr8v_GGg";
  protocol="application/pgp-signature"; micalg=pgp-sha512
-X-bounce-key: webpack.hosteurope.de;mail@carsten-spiess.de;1690443451;3e94405d;
-X-HE-SMSGID: 1qOvXS-0001KS-TP
+X-bounce-key: webpack.hosteurope.de;mail@carsten-spiess.de;1690443444;f83c0e10;
+X-HE-SMSGID: 1qOvXT-0001KS-Ho
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
---Sig_/e/q7Xi+4mzcxvn1ecSyofAo
+--Sig_/Lp+eURiMW8MUrBzpr8v_GGg
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-thanks all for your input.
-I conclude here in one answer:
+ On 7/26/23 18:19, Guenter Roeck wrote:
+> Please provide a register dump (using i2cdump) for this chip.=20
 
-On 7/26/23 18:14, Krzysztof Kozlowski wrote:
-> It does not look like you tested the bindings, at least after quick
-> look. Please run `make dt_binding_check` (see
-sorry i missed that, fixed for [Patch v2].
+# i2cdump -y -r 0-9 1 0x40 w
+     0,8  1,9  2,a  3,b  4,c  5,d  6,e  7,f
+00: ff67 ca00 a25d c803 5006 0080 817f 00ff=20
+08: 0000 0000 =20
 
+Please note that due to big vs.- little endian bytes are swapped,
+should be read as:
+00: 67ff 00ca 5da2 03c8 0650 8000 7f81 ff00
+08: 0000 0000 =20
 
-On 7/26/23 18:14, Krzysztof Kozlowski wrote:
->> +  shunt-gain: =20
-> 1. Missing vendor prefix (does not look like generic property)
-> 2. -microvolt
-> And then enum is for 40, 80, 160 and 320.
-replaced with
-  renesas,shunt-range-milli-volts:
-    description: |
-      maximal shunt voltage range of 40mV, 80mV, 160mV or 320mV
-    $ref: /schemas/types.yaml#/definitions/uint32-array
-    default: 320
-    enum: [40, 80, 160, 320]
+corresponding sensor values are about (not read at same time):
+in0:           1.99 V =20
+in1:          23.97 V =20
+power1:        6.10 W =20
+curr1:       248.00 mA=20
 
-On 26/07/2023 18:16, Guenter Roeck wrote:
->> +  shunt-resistor-micro-ohms:
->> +    description:
->> +      Shunt resistor value in micro-Ohm
->> +      defaults to <0> when not set
->> +      monitoring of current and power not supported when <0>
-> + =20
-> Should not default to 0 (disabled).
-When shunt resistor value is not known, current and power calculation can n=
-ot be done,
-but the shunt voltage still can be measured.
-As the resistor is externaly connected to the ISL28022 chip there is no def=
-ault.
-When i set default to any value (e.g 1000 micro Ohm), current and power cal=
-culation
-will give wrong results (except when the shunt _is_ 1000 micro Ohm)
-
-On 26/07/2023 18:16, Guenter Roeck wrote:
->> +  average:
->> +    description: |
->> +      Number of samples to be used to report voltage, current and power=
- values.
->> +      defaults to <0> when not set
->> +    enum: [0, 1, 2, 4, 8, 16, 32, 64, 128] =20
-> Should not default to 0 (disabled).
-=46rom datasheet table 6 on page 15 there are two similar ADC modes:
-  3 - without samples
-  8 - with one? sample
-I intended enum 0 to ADC mode 3, 1 to ADC mode 8,
-but i can live without ADC mode 3.
-
-On 26/07/2023 20:59, Guenter Roeck wrote:
-> On 7/26/23 11:27, Krzysztof Kozlowski wrote: =20
->> On 26/07/2023 20:19, Guenter Roeck wrote: =20
->>>>> +  average:
->>>>> +    enum: [0, 1, 2, 4, 8, 16, 32, 64, 128] =20
->>>>
->>>> I am sure hwmon has some property for this. Are you sure it is called
->>>> "average"?
->>>> =20
->>>
->>> Something with samples. adi,power-sample-average is similar. Others
->>> use average-samples, qcom,avg-samples, touchscreen-average-samples. =20
->>
->> So probably it's a time to come with something generic, e.g.:
->> average-samples in some hwmon.yaml
-
-As there's no generic yet, replaced with
-  renesas,average-samples:
-    description: |
-      Number of samples to be used to report voltage, current and power val=
-ues.
-    default: 1
-    $ref: /schemas/types.yaml#/definitions/uint32-array
-    enum: [1, 2, 4, 8, 16, 32, 64, 128]
-
-
-
-On 26/07/2023 19:13, Rob Herring wrote:
-> My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-Fixed for [Patch v2], runs without errors or warnings
+in0 should be read as mV
 
 Regards, Carsten
 
---Sig_/e/q7Xi+4mzcxvn1ecSyofAo
+--Sig_/Lp+eURiMW8MUrBzpr8v_GGg
 Content-Type: application/pgp-signature
 Content-Description: Digitale Signatur von OpenPGP
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEEWM+MlUpz/bWsZllTM1JQzV9LKSwFAmTCHkAACgkQM1JQzV9L
-KSw/sQ//YfEBYzZ21ij/3yDpY81XyOVnjsICovJPxeClmxPbvA92RC+q9v+k8a+7
-jcAvaTKVr8gFeMoUQe9jQ6br9M+tx8TH3CzWW8oGw7dSWCr+y6yofqeAGxpSuL9V
-Hce6sEe//lQgHgVWUaqVHmo4jJBY2RsBBJuNHYz45noRv/ESekq+vnIgKyERlpcQ
-/bwwdO/nEyR76sNsPyMXepaipRjKsRDZA+0RysCAby3D8MDf+e7nIvUhgyvt37ne
-dpI78cEJ05JF7ZYvXUfXC2q67Qr6VsaNwsDVaXEFxA//Cy88rVlSb/bN70qoSutf
-3pwczGGln9vJNx7dG6fgXSo0o3QZKC/ifCfey7nkVbKonBIKvNhoJKeGBrO4ETIG
-c3yZ69O1Sb+hdinXrOXTjBFciieSP4OIqUnHBSywNjM+u1WmAaP3tt6GgyXMu84X
-A1K9hgmD/1cbbBabFTa750LEud/q17OU+B9h+IiS2nARWDEvjl2cWKB290s3AFP7
-wjmdr3FCczVTRq1OpbwLieromZ6yaiXfgTJXenhclaHo3lh7n+LGOiSMT0MIDs4Z
-iV/X06ad6wzp1AfgSdtOYhtJL6Z+RZoJoRqoTD6E2Wzl5uYZrv5BbjIdFm2C1qEw
-uwZmK6aGVmGMiTt9XuhjIExWzt06krZRtbFtUh27R8xsASXk6qw=
-=KFij
+iQIzBAEBCgAdFiEEWM+MlUpz/bWsZllTM1JQzV9LKSwFAmTCHlQACgkQM1JQzV9L
+KSzWMg/+Mp/CNQhmKivVvjjhWPjXYqNHF0t2T6dOh8hVJA6JaMfiGML0OmIFeLtj
+SmXBWHTi8ZE8OotBAx4yMIJPxnGa9pxCkvZ33WJsq9w4aUmVqymu1TbMcXkWuKPJ
+U+jGl7ZhSycI8r+wOjgm59hybz9KU+aDi8uibvFxXUo0PflIufO2ZbqTEPkmaYjc
+mUUOtkgcN/WbZ0CkG0Fdzj6lsCNzLRITHqOE7aTfa0ju8JJQgqSdxVSSFgN8/8gF
+Lsf3WgU7EOtBRarz0H/AW1Cp0nNYRQT+mnbqU544aUC+FC7BNh706ROIKiji6vE2
+Vsrn32o3cyYOK6xG2z/kJy3T3UAWHdMBgmpmB48spAdMjM3J2dRxP/cUNVAOUd24
+dEw40bPZ5qrvDTyGzdqCTqacZtBlnhLEjB8rq7zaLNMvJ0Ytb49B4npsLHQDi7c0
+e70FKnY6t5jMyEtPCQqCKM+WtJu2ac4E6S+T3LQSt9CVs4nY/qpz2g6hrXiqD55+
+tuYltPTVyimPlSOzw9Uxd3JGwPUdFSlFDJmb2D6pskCwHzSx1KRf8LmhrzA/AhNr
+trRFVGz9CIQjDfDu1+TMmnt/kTXuOqRZ8pLPlLlMH/S2G/V+6kF58LrmjovVguwy
+LcxnkEd+a9Eg5OLLc/csEBDNTLF5n8QXSkjEpJbBIyZUTLEYsrg=
+=RTpb
 -----END PGP SIGNATURE-----
 
---Sig_/e/q7Xi+4mzcxvn1ecSyofAo--
+--Sig_/Lp+eURiMW8MUrBzpr8v_GGg--
