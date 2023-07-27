@@ -2,63 +2,139 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62D7EEB64DD
-	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Jul 2023 20:03:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82743EB64DD
+	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Jul 2023 20:03:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231483AbjG0UD1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 27 Jul 2023 16:03:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41708 "EHLO
+        id S232263AbjG0UDe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 27 Jul 2023 16:03:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233009AbjG0UD0 (ORCPT
+        with ESMTP id S231304AbjG0UDd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 27 Jul 2023 16:03:26 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C4B30DA;
-        Thu, 27 Jul 2023 13:02:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=uoBz22zvA+qLFiterr5fZWk0KWLV8flawrD3Na3jQmk=; b=RKm4hBMGG6P0W1llheMcaUYQ+p
-        g9/U8eZXu7+k7VkJ61RHJC1denMqivdMbc6GUYAbHKLWy6T9Zrf4+v4h7vaHvKlGZ14lg67Eamwqp
-        AFNnQHoUxO+/vHidtWEhBZ5GGAqdnVYf4uvukAc2ZuWd8xdxSGQyWRrNz1CBKRjxiYCM=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1qP7Bs-002U7H-8b; Thu, 27 Jul 2023 22:02:28 +0200
-Date:   Thu, 27 Jul 2023 22:02:28 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Saeed Mahameed <saeed@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Saeed Mahameed <saeedm@nvidia.com>, netdev@vger.kernel.org,
-        Tariq Toukan <tariqt@nvidia.com>, linux-hwmon@vger.kernel.org,
+        Thu, 27 Jul 2023 16:03:33 -0400
+X-Greylist: delayed 101955 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 27 Jul 2023 13:02:53 PDT
+Received: from wp534.webpack.hosteurope.de (wp534.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8238::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A77C30E9;
+        Thu, 27 Jul 2023 13:02:53 -0700 (PDT)
+Received: from [2001:a61:6209:7f01:c80a:ff:fe00:19d] (helo=cs-wrt.lan.local); authenticated
+        by wp534.webpack.hosteurope.de running ExIM with esmtpa
+        id 1qP7CA-0005S7-M0; Thu, 27 Jul 2023 22:02:46 +0200
+From:   =?UTF-8?q?Carsten=20Spie=C3=9F?= <mail@carsten-spiess.de>
+To:     =?UTF-8?q?Carsten=20Spie=C3=9F?= <mail@carsten-spiess.de>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Adham Faris <afaris@nvidia.com>, Gal Pressman <gal@nvidia.com>
-Subject: Re: [PATCH net-next 1/2] net/mlx5: Expose
- port.c/mlx5_query_module_num() function
-Message-ID: <432a3e69-42e2-42fd-91f1-9889a881e23d@lunn.ch>
-References: <20230727185922.72131-1-saeed@kernel.org>
- <20230727185922.72131-2-saeed@kernel.org>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v2 2/2] dt-bindings: hwmon: add renesas,isl28022
+Date:   Thu, 27 Jul 2023 22:02:34 +0200
+Message-Id: <20230727200234.2245395-1-mail@carsten-spiess.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230727185922.72131-2-saeed@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;mail@carsten-spiess.de;1690488173;57f17ea2;
+X-HE-SMSGID: 1qP7CA-0005S7-M0
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Jul 27, 2023 at 11:59:21AM -0700, Saeed Mahameed wrote:
-> From: Adham Faris <afaris@nvidia.com>
-> 
-> Make mlx5_query_module_num() defined in port.c, a non-static, so it can
-> be used by other files.
-> 
-> Issue: 3451280
+Add dt-bindings for Renesas ISL28022 power monitor.
 
-Which public bug tracker is this from?
+Signed-off-by: Carsten Spieß <mail@carsten-spiess.de>
+---
+ .../bindings/hwmon/renesas,isl28022.yaml      | 65 +++++++++++++++++++
+ MAINTAINERS                                   |  1 +
+ 2 files changed, 66 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/renesas,isl28022.yaml
 
-      Andrew
+diff --git a/Documentation/devicetree/bindings/hwmon/renesas,isl28022.yaml b/Documentation/devicetree/bindings/hwmon/renesas,isl28022.yaml
+new file mode 100644
+index 000000000000..1e0971287941
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/renesas,isl28022.yaml
+@@ -0,0 +1,65 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/renesas,isl28022.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Renesas ISL28022 power monitor
++
++maintainers:
++  - Carsten Spieß <mail@carsten-spiess.de>
++
++description: |
++  The ISL28022 is a power monitor with I2C interface. The device monitors
++  voltage, current via shunt resistor and calculated power.
++
++  Datasheets:
++    https://www.renesas.com/us/en/www/doc/datasheet/isl28022.pdf
++
++properties:
++  compatible:
++    enum:
++      - renesas,isl28022
++
++  reg:
++    maxItems: 1
++
++  shunt-resistor-micro-ohms:
++    description: |
++      Shunt resistor value in micro-Ohm
++    minimum: 800
++    default: 10000
++
++  renesas,shunt-range-microvolt:
++    description: |
++      Maximal shunt voltage range of +/- 40 mV, 80 mV, 160 mV or 320 mV
++    default: 320000
++    enum: [40000, 80000, 160000, 320000]
++
++  renesas,average-samples:
++    description: |
++      Number of samples to be used to report voltage, current and power values.
++    default: 1
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [1, 2, 4, 8, 16, 32, 64, 128]
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        power-monitor@40 {
++            compatible = "renesas,isl28022";
++            reg = <0x40>;
++            shunt-resistor-micro-ohms = <8000>;
++            renesas,shunt-range-microvolt = <40000>;
++            renesas,average-samples = <128>;
++        };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index b02e3b991676..23b8e8183ece 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11069,6 +11069,7 @@ ISL28022 HARDWARE MONITORING DRIVER
+ M:	Carsten Spieß <mail@carsten-spiess.de>
+ L:	linux-hwmon@vger.kernel.org
+ S:	Maintained
++F:	Documentation/devicetree/bindings/hwmon/renesas,isl28022.yaml
+ F:	Documentation/hwmon/isl28022.rst
+ F:	drivers/hwmon/isl28022.c
+ 
+-- 
+2.34.1
+
