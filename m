@@ -2,272 +2,100 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45C58C04A94
-	for <linux-hwmon@archiver.kernel.org>; Fri, 28 Jul 2023 12:13:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66F1EC001E0
+	for <linux-hwmon@archiver.kernel.org>; Fri, 28 Jul 2023 12:13:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235516AbjG1MNF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 28 Jul 2023 08:13:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60046 "EHLO
+        id S234882AbjG1MND (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 28 Jul 2023 08:13:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234764AbjG1MMt (ORCPT
+        with ESMTP id S234849AbjG1MMv (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 28 Jul 2023 08:12:49 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C242686;
-        Fri, 28 Jul 2023 05:12:47 -0700 (PDT)
-Message-ID: <20230728120929.833540176@linutronix.de>
+        Fri, 28 Jul 2023 08:12:51 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CFD526BC;
+        Fri, 28 Jul 2023 05:12:50 -0700 (PDT)
+Message-ID: <20230728120929.944578301@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1690546366;
+        s=2020; t=1690546369;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=bc5Q0JSTqg9+ffQ7s8oKfLAz7DN9aGciy8PBD8PIdfE=;
-        b=mv41NMlBAaxhGOiELLJOWdF+5WAlkrsqca4XRQ+z8XHjOdgOb5w3YqiJr320cRvDd4wrA9
-        LXn1K1NrcSyPye0qJ8Id8lGlk5zZWrQru4ksPNvvcqFrkA3FeDQb2WIud9w10GZV8ivZ5C
-        xdSWWvYMy8OkJ1xqoiGFqa93UbUGMNaNE+25cQsokLXkHgPGkbDEd61KUYWyEKqpFiI7pa
-        PZMzjoH3PWFC2XGHXgtVES6E8NWPSZMR9H1/+bsnorwhuETU0Kmv9R5XSkyUQIR5dAIIl7
-        q/Q9GgZ+5ZCc6b0duWrabmbZKnmYcTFwV4n6ru7rjGviFO+yv7QsPG+aoq3oWA==
+         references:references; bh=W37gGs0lCrcES4uNg1Zl0+g2c0hE6iWg5mZxC7Tosgc=;
+        b=LOYZuo50rp6pzKVY1Fnas4hlljh8Dcx+O7JxDpCZVwY11odiab00Z6zUTMe+C4rORSDShX
+        Av7wImZZKDcpWsxz3EkDneqXmmnUZ9Iejm33NVM0rAFEtQyelifeUwUha2v7ye+T4FRXfs
+        LfsXr5/faRsUZXuIId3JcEZtF4HkhhQQBnomZe4DKT/Lab0wyfg90a+uu2pJxO7/lp8tL1
+        dkSoME+zzHBeiccBod+V90gGSV8C3Tp/3MIDMBFioEm9MkDrSvpqQm575nG+ajbIrf18TA
+        EUnfcb1aaj4cWghdBfukHif7u9I4JsSNY8MP1z8ybxlEhaOp/FRIJCrdsMPNXQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1690546366;
+        s=2020e; t=1690546369;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=bc5Q0JSTqg9+ffQ7s8oKfLAz7DN9aGciy8PBD8PIdfE=;
-        b=a2p3cgpWx6ISKZo1DGTjbDDI7IFU2b1wiX8XM4+EIyQ1GyuyWEwh1K7zTw6u6bb/jRsyQS
-        lA58EA0+34Xf8pAg==
+         references:references; bh=W37gGs0lCrcES4uNg1Zl0+g2c0hE6iWg5mZxC7Tosgc=;
+        b=a6l8K8mqvplkdOJM9DVMpMo/hwRXJORjx2hRIi6zSgLhEApv/7A8+HtV7z6NdaPzjKqpot
+        V/O2k2hBSmH97IDw==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     x86@kernel.org, Tom Lendacky <thomas.lendacky@amd.com>,
         Andrew Cooper <andrew.cooper3@citrix.com>,
         Arjan van de Ven <arjan@linux.intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Huang Rui <ray.huang@amd.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         Dick Kennedy <dick.kennedy@broadcom.com>,
         James Smart <james.smart@broadcom.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Huang Rui <ray.huang@amd.com>, Juergen Gross <jgross@suse.com>,
+        linux-scsi@vger.kernel.org, Juergen Gross <jgross@suse.com>,
         Steve Wahl <steve.wahl@hpe.com>,
         Mike Travis <mike.travis@hpe.com>,
         Dimitri Sivanich <dimitri.sivanich@hpe.com>,
         Russ Anderson <russ.anderson@hpe.com>
-Subject: [patch v2 03/38] x86/cpu: Move cpu_die_id into topology info
+Subject: [patch v2 05/38] hwmon: (fam15h_power) Use topology_core_id()
 References: <20230728105650.565799744@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 28 Jul 2023 14:12:46 +0200 (CEST)
+Date:   Fri, 28 Jul 2023 14:12:48 +0200 (CEST)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Move the next member.
-
-No functional change.
+Use the provided topology helper function instead of fiddling in cpu_data.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Huang Rui <ray.huang@amd.com>
 ---
- Documentation/arch/x86/topology.rst |    4 ++--
- arch/x86/include/asm/processor.h    |    4 +++-
- arch/x86/include/asm/topology.h     |    2 +-
- arch/x86/kernel/cpu/amd.c           |    8 ++++----
- arch/x86/kernel/cpu/cacheinfo.c     |    2 +-
- arch/x86/kernel/cpu/common.c        |    2 +-
- arch/x86/kernel/cpu/hygon.c         |    8 ++++----
- arch/x86/kernel/cpu/topology.c      |    2 +-
- arch/x86/kernel/smpboot.c           |   10 +++++-----
- 9 files changed, 22 insertions(+), 20 deletions(-)
+ drivers/hwmon/fam15h_power.c |    7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
---- a/Documentation/arch/x86/topology.rst
-+++ b/Documentation/arch/x86/topology.rst
-@@ -55,7 +55,7 @@ AMD nomenclature for package is 'Node'.
+--- a/drivers/hwmon/fam15h_power.c
++++ b/drivers/hwmon/fam15h_power.c
+@@ -17,6 +17,7 @@
+ #include <linux/cpumask.h>
+ #include <linux/time.h>
+ #include <linux/sched.h>
++#include <linux/topology.h>
+ #include <asm/processor.h>
+ #include <asm/msr.h>
  
-     The number of dies in a package. This information is retrieved via CPUID.
- 
--  - cpuinfo_x86.cpu_die_id:
-+  - cpuinfo_x86.topo_die_id:
- 
-     The physical ID of the die. This information is retrieved via CPUID.
- 
-@@ -65,7 +65,7 @@ AMD nomenclature for package is 'Node'.
-     and deduced from the APIC IDs of the cores in the package.
- 
-     Modern systems use this value for the socket. There may be multiple
--    packages within a socket. This value may differ from cpu_die_id.
-+    packages within a socket. This value may differ from topo.die_id.
- 
-   - cpuinfo_x86.logical_proc_id:
- 
---- a/arch/x86/include/asm/processor.h
-+++ b/arch/x86/include/asm/processor.h
-@@ -85,6 +85,9 @@ struct cpuinfo_topology {
- 
- 	// Physical package ID
- 	u32			pkg_id;
-+
-+	// Physical die ID on AMD, Relative on Intel
-+	u32			die_id;
- };
- 
- struct cpuinfo_x86 {
-@@ -140,7 +143,6 @@ struct cpuinfo_x86 {
- 	u16			logical_proc_id;
- 	/* Core id: */
- 	u16			cpu_core_id;
--	u16			cpu_die_id;
- 	u16			logical_die_id;
- 	/* Index into per_cpu list: */
- 	u16			cpu_index;
---- a/arch/x86/include/asm/topology.h
-+++ b/arch/x86/include/asm/topology.h
-@@ -108,7 +108,7 @@ extern const struct cpumask *cpu_cluster
- #define topology_logical_package_id(cpu)	(cpu_data(cpu).logical_proc_id)
- #define topology_physical_package_id(cpu)	(cpu_data(cpu).topo.pkg_id)
- #define topology_logical_die_id(cpu)		(cpu_data(cpu).logical_die_id)
--#define topology_die_id(cpu)			(cpu_data(cpu).cpu_die_id)
-+#define topology_die_id(cpu)			(cpu_data(cpu).topo.die_id)
- #define topology_core_id(cpu)			(cpu_data(cpu).cpu_core_id)
- #define topology_ppin(cpu)			(cpu_data(cpu).ppin)
- 
---- a/arch/x86/kernel/cpu/amd.c
-+++ b/arch/x86/kernel/cpu/amd.c
-@@ -338,7 +338,7 @@ static void amd_get_topology(struct cpui
- 
- 		cpuid(0x8000001e, &eax, &ebx, &ecx, &edx);
- 
--		c->cpu_die_id  = ecx & 0xff;
-+		c->topo.die_id  = ecx & 0xff;
- 
- 		if (c->x86 == 0x15)
- 			c->cu_id = ebx & 0xff;
-@@ -364,9 +364,9 @@ static void amd_get_topology(struct cpui
- 		u64 value;
- 
- 		rdmsrl(MSR_FAM10H_NODE_ID, value);
--		c->cpu_die_id = value & 7;
-+		c->topo.die_id = value & 7;
- 
--		per_cpu(cpu_llc_id, cpu) = c->cpu_die_id;
-+		per_cpu(cpu_llc_id, cpu) = c->topo.die_id;
- 	} else
- 		return;
- 
-@@ -391,7 +391,7 @@ static void amd_detect_cmp(struct cpuinf
- 	/* Convert the initial APIC ID into the socket ID */
- 	c->topo.pkg_id = c->topo.initial_apicid >> bits;
- 	/* use socket ID also for last level cache */
--	per_cpu(cpu_llc_id, cpu) = c->cpu_die_id = c->topo.pkg_id;
-+	per_cpu(cpu_llc_id, cpu) = c->topo.die_id = c->topo.pkg_id;
- }
- 
- u32 amd_get_nodes_per_socket(void)
---- a/arch/x86/kernel/cpu/cacheinfo.c
-+++ b/arch/x86/kernel/cpu/cacheinfo.c
-@@ -672,7 +672,7 @@ void cacheinfo_amd_init_llc_id(struct cp
- 
- 	if (c->x86 < 0x17) {
- 		/* LLC is at the node level. */
--		per_cpu(cpu_llc_id, cpu) = c->cpu_die_id;
-+		per_cpu(cpu_llc_id, cpu) = c->topo.die_id;
- 	} else if (c->x86 == 0x17 && c->x86_model <= 0x1F) {
- 		/*
- 		 * LLC is at the core complex level.
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -1768,7 +1768,7 @@ static void validate_apic_and_package_id
- 		       cpu, apicid, c->topo.initial_apicid);
- 	}
- 	BUG_ON(topology_update_package_map(c->topo.pkg_id, cpu));
--	BUG_ON(topology_update_die_map(c->cpu_die_id, cpu));
-+	BUG_ON(topology_update_die_map(c->topo.die_id, cpu));
- #else
- 	c->logical_proc_id = 0;
- #endif
---- a/arch/x86/kernel/cpu/hygon.c
-+++ b/arch/x86/kernel/cpu/hygon.c
-@@ -72,7 +72,7 @@ static void hygon_get_topology(struct cp
- 
- 		cpuid(0x8000001e, &eax, &ebx, &ecx, &edx);
- 
--		c->cpu_die_id  = ecx & 0xff;
-+		c->topo.die_id  = ecx & 0xff;
- 
- 		c->cpu_core_id = ebx & 0xff;
- 
-@@ -95,9 +95,9 @@ static void hygon_get_topology(struct cp
- 		u64 value;
- 
- 		rdmsrl(MSR_FAM10H_NODE_ID, value);
--		c->cpu_die_id = value & 7;
-+		c->topo.die_id = value & 7;
- 
--		per_cpu(cpu_llc_id, cpu) = c->cpu_die_id;
-+		per_cpu(cpu_llc_id, cpu) = c->topo.die_id;
- 	} else
- 		return;
- 
-@@ -120,7 +120,7 @@ static void hygon_detect_cmp(struct cpui
- 	/* Convert the initial APIC ID into the socket ID */
- 	c->topo.pkg_id = c->topo.initial_apicid >> bits;
- 	/* use socket ID also for last level cache */
--	per_cpu(cpu_llc_id, cpu) = c->cpu_die_id = c->topo.pkg_id;
-+	per_cpu(cpu_llc_id, cpu) = c->topo.die_id = c->topo.pkg_id;
- }
- 
- static void srat_detect_node(struct cpuinfo_x86 *c)
---- a/arch/x86/kernel/cpu/topology.c
-+++ b/arch/x86/kernel/cpu/topology.c
-@@ -150,7 +150,7 @@ int detect_extended_topology(struct cpui
- 				ht_mask_width) & core_select_mask;
- 
- 	if (die_level_present) {
--		c->cpu_die_id = apic->phys_pkg_id(c->topo.initial_apicid,
-+		c->topo.die_id = apic->phys_pkg_id(c->topo.initial_apicid,
- 					core_plus_mask_width) & die_select_mask;
- 	}
- 
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -368,7 +368,7 @@ static int topology_phys_to_logical_die(
- 	for_each_possible_cpu(cpu) {
- 		struct cpuinfo_x86 *c = &cpu_data(cpu);
- 
--		if (c->initialized && c->cpu_die_id == die_id &&
-+		if (c->initialized && c->topo.die_id == die_id &&
- 		    c->topo.pkg_id == proc_id)
- 			return c->logical_die_id;
- 	}
-@@ -430,7 +430,7 @@ void __init smp_store_boot_cpu_info(void
- 	*c = boot_cpu_data;
- 	c->cpu_index = id;
- 	topology_update_package_map(c->topo.pkg_id, id);
--	topology_update_die_map(c->cpu_die_id, id);
-+	topology_update_die_map(c->topo.die_id, id);
- 	c->initialized = true;
- }
- 
-@@ -485,7 +485,7 @@ static bool match_smt(struct cpuinfo_x86
- 		int cpu1 = c->cpu_index, cpu2 = o->cpu_index;
- 
- 		if (c->topo.pkg_id == o->topo.pkg_id &&
--		    c->cpu_die_id == o->cpu_die_id &&
-+		    c->topo.die_id == o->topo.die_id &&
- 		    per_cpu(cpu_llc_id, cpu1) == per_cpu(cpu_llc_id, cpu2)) {
- 			if (c->cpu_core_id == o->cpu_core_id)
- 				return topology_sane(c, o, "smt");
-@@ -497,7 +497,7 @@ static bool match_smt(struct cpuinfo_x86
- 		}
- 
- 	} else if (c->topo.pkg_id == o->topo.pkg_id &&
--		   c->cpu_die_id == o->cpu_die_id &&
-+		   c->topo.die_id == o->topo.die_id &&
- 		   c->cpu_core_id == o->cpu_core_id) {
- 		return topology_sane(c, o, "smt");
- 	}
-@@ -508,7 +508,7 @@ static bool match_smt(struct cpuinfo_x86
- static bool match_die(struct cpuinfo_x86 *c, struct cpuinfo_x86 *o)
+@@ -134,15 +135,13 @@ static DEVICE_ATTR_RO(power1_crit);
+ static void do_read_registers_on_cu(void *_data)
  {
- 	if (c->topo.pkg_id == o->topo.pkg_id &&
--	    c->cpu_die_id == o->cpu_die_id)
-+	    c->topo.die_id == o->topo.die_id)
- 		return true;
- 	return false;
- }
+ 	struct fam15h_power_data *data = _data;
+-	int cpu, cu;
+-
+-	cpu = smp_processor_id();
++	int cu;
+ 
+ 	/*
+ 	 * With the new x86 topology modelling, cpu core id actually
+ 	 * is compute unit id.
+ 	 */
+-	cu = cpu_data(cpu).cpu_core_id;
++	cu = topology_core_id(smp_processor_id());
+ 
+ 	rdmsrl_safe(MSR_F15H_CU_PWR_ACCUMULATOR, &data->cu_acc_power[cu]);
+ 	rdmsrl_safe(MSR_F15H_PTSC, &data->cpu_sw_pwr_ptsc[cu]);
 
