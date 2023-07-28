@@ -2,139 +2,184 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82743EB64DD
-	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Jul 2023 20:03:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6ABB7C0015E
+	for <linux-hwmon@archiver.kernel.org>; Fri, 28 Jul 2023 05:20:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232263AbjG0UDe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 27 Jul 2023 16:03:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41750 "EHLO
+        id S231297AbjG1FUk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 28 Jul 2023 01:20:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbjG0UDd (ORCPT
+        with ESMTP id S231270AbjG1FUi (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 27 Jul 2023 16:03:33 -0400
-X-Greylist: delayed 101955 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 27 Jul 2023 13:02:53 PDT
-Received: from wp534.webpack.hosteurope.de (wp534.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8238::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A77C30E9;
-        Thu, 27 Jul 2023 13:02:53 -0700 (PDT)
-Received: from [2001:a61:6209:7f01:c80a:ff:fe00:19d] (helo=cs-wrt.lan.local); authenticated
-        by wp534.webpack.hosteurope.de running ExIM with esmtpa
-        id 1qP7CA-0005S7-M0; Thu, 27 Jul 2023 22:02:46 +0200
-From:   =?UTF-8?q?Carsten=20Spie=C3=9F?= <mail@carsten-spiess.de>
-To:     =?UTF-8?q?Carsten=20Spie=C3=9F?= <mail@carsten-spiess.de>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v2 2/2] dt-bindings: hwmon: add renesas,isl28022
-Date:   Thu, 27 Jul 2023 22:02:34 +0200
-Message-Id: <20230727200234.2245395-1-mail@carsten-spiess.de>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;mail@carsten-spiess.de;1690488173;57f17ea2;
-X-HE-SMSGID: 1qP7CA-0005S7-M0
+        Fri, 28 Jul 2023 01:20:38 -0400
+Received: from mgamail.intel.com (unknown [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8183B30D6
+        for <linux-hwmon@vger.kernel.org>; Thu, 27 Jul 2023 22:20:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690521637; x=1722057637;
+  h=date:from:to:cc:subject:message-id;
+  bh=WY7XyBv6MNuLg/AZcF07c4NWUP/phCimJKsNHTp7twg=;
+  b=FssTc6JczaWZNaINTe021V877QQDowjhfObs+ujkfHyQUhUVkNpri7gv
+   3C2chWWihDWUfuNuf0DjGm/PbLhncQlDN8UZr20Vaym2qOGxBeWO9+r11
+   7we8c/XLIcCGYkwnocjQ83Wx26r2jegCQ2Ci10+mrb5OdbBmUbrZsbSU6
+   dkeZcmW0+snsvg/hw7A/3yvBmGbKNzpYK68j18HAG4p4lt7BtmLiBP4Ta
+   PZpSfzRLxB67mfR8kJVv02SaP9ERAUB8ZZkro4Qa7Rp9XuNBZ3Fg2Toc9
+   TPUBFopQf5NfWiMBsaYbRBJpJAh2GWfhirpQ+VetWG1dMxjOH06eOiD/F
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="432321461"
+X-IronPort-AV: E=Sophos;i="6.01,236,1684825200"; 
+   d="scan'208";a="432321461"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2023 22:20:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="901088940"
+X-IronPort-AV: E=Sophos;i="6.01,236,1684825200"; 
+   d="scan'208";a="901088940"
+Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 27 Jul 2023 22:20:33 -0700
+Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qPFtw-0002uR-0s;
+        Fri, 28 Jul 2023 05:20:32 +0000
+Date:   Fri, 28 Jul 2023 13:20:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ a4bb1ce5b9e3ca403c04e20ebeae77fd6447cb11
+Message-ID: <202307281329.F3CezhIP-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add dt-bindings for Renesas ISL28022 power monitor.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: a4bb1ce5b9e3ca403c04e20ebeae77fd6447cb11  hwmon: Add driver for Renesas HS3001
 
-Signed-off-by: Carsten Spieß <mail@carsten-spiess.de>
----
- .../bindings/hwmon/renesas,isl28022.yaml      | 65 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 66 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/renesas,isl28022.yaml
+elapsed time: 727m
 
-diff --git a/Documentation/devicetree/bindings/hwmon/renesas,isl28022.yaml b/Documentation/devicetree/bindings/hwmon/renesas,isl28022.yaml
-new file mode 100644
-index 000000000000..1e0971287941
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/renesas,isl28022.yaml
-@@ -0,0 +1,65 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwmon/renesas,isl28022.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Renesas ISL28022 power monitor
-+
-+maintainers:
-+  - Carsten Spieß <mail@carsten-spiess.de>
-+
-+description: |
-+  The ISL28022 is a power monitor with I2C interface. The device monitors
-+  voltage, current via shunt resistor and calculated power.
-+
-+  Datasheets:
-+    https://www.renesas.com/us/en/www/doc/datasheet/isl28022.pdf
-+
-+properties:
-+  compatible:
-+    enum:
-+      - renesas,isl28022
-+
-+  reg:
-+    maxItems: 1
-+
-+  shunt-resistor-micro-ohms:
-+    description: |
-+      Shunt resistor value in micro-Ohm
-+    minimum: 800
-+    default: 10000
-+
-+  renesas,shunt-range-microvolt:
-+    description: |
-+      Maximal shunt voltage range of +/- 40 mV, 80 mV, 160 mV or 320 mV
-+    default: 320000
-+    enum: [40000, 80000, 160000, 320000]
-+
-+  renesas,average-samples:
-+    description: |
-+      Number of samples to be used to report voltage, current and power values.
-+    default: 1
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [1, 2, 4, 8, 16, 32, 64, 128]
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        power-monitor@40 {
-+            compatible = "renesas,isl28022";
-+            reg = <0x40>;
-+            shunt-resistor-micro-ohms = <8000>;
-+            renesas,shunt-range-microvolt = <40000>;
-+            renesas,average-samples = <128>;
-+        };
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b02e3b991676..23b8e8183ece 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11069,6 +11069,7 @@ ISL28022 HARDWARE MONITORING DRIVER
- M:	Carsten Spieß <mail@carsten-spiess.de>
- L:	linux-hwmon@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/hwmon/renesas,isl28022.yaml
- F:	Documentation/hwmon/isl28022.rst
- F:	drivers/hwmon/isl28022.c
- 
+configs tested: 113
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r006-20230727   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r015-20230727   gcc  
+arc                  randconfig-r021-20230727   gcc  
+arc                  randconfig-r034-20230727   gcc  
+arc                  randconfig-r043-20230727   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r003-20230727   gcc  
+arm                  randconfig-r026-20230727   clang
+arm                  randconfig-r046-20230727   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+hexagon              randconfig-r041-20230727   clang
+hexagon              randconfig-r045-20230727   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r004-20230727   clang
+i386         buildonly-randconfig-r005-20230727   clang
+i386         buildonly-randconfig-r006-20230727   clang
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230727   clang
+i386                 randconfig-i002-20230727   clang
+i386                 randconfig-i003-20230727   clang
+i386                 randconfig-i004-20230727   clang
+i386                 randconfig-i005-20230727   clang
+i386                 randconfig-i006-20230727   clang
+i386                 randconfig-i011-20230727   gcc  
+i386                 randconfig-i012-20230727   gcc  
+i386                 randconfig-i013-20230727   gcc  
+i386                 randconfig-i014-20230727   gcc  
+i386                 randconfig-i015-20230727   gcc  
+i386                 randconfig-i016-20230727   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r024-20230727   gcc  
+loongarch            randconfig-r032-20230727   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze           randconfig-r024-20230727   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r035-20230727   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r016-20230727   gcc  
+parisc               randconfig-r023-20230727   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r004-20230727   clang
+riscv                randconfig-r022-20230727   gcc  
+riscv                randconfig-r036-20230727   clang
+riscv                randconfig-r042-20230727   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r005-20230727   clang
+s390                 randconfig-r044-20230727   gcc  
+sh                               allmodconfig   gcc  
+sh                   randconfig-r001-20230727   gcc  
+sh                   randconfig-r002-20230727   gcc  
+sh                   randconfig-r012-20230727   gcc  
+sh                   randconfig-r025-20230727   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r014-20230727   gcc  
+sparc                randconfig-r033-20230727   gcc  
+sparc64              randconfig-r025-20230727   gcc  
+sparc64              randconfig-r026-20230727   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r001-20230727   clang
+x86_64       buildonly-randconfig-r002-20230727   clang
+x86_64       buildonly-randconfig-r003-20230727   clang
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-r013-20230727   gcc  
+x86_64               randconfig-r031-20230727   clang
+x86_64               randconfig-x001-20230727   gcc  
+x86_64               randconfig-x002-20230727   gcc  
+x86_64               randconfig-x003-20230727   gcc  
+x86_64               randconfig-x004-20230727   gcc  
+x86_64               randconfig-x005-20230727   gcc  
+x86_64               randconfig-x006-20230727   gcc  
+x86_64               randconfig-x011-20230727   clang
+x86_64               randconfig-x012-20230727   clang
+x86_64               randconfig-x013-20230727   clang
+x86_64               randconfig-x014-20230727   clang
+x86_64               randconfig-x015-20230727   clang
+x86_64               randconfig-x016-20230727   clang
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r011-20230727   gcc  
+xtensa               randconfig-r021-20230727   gcc  
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
