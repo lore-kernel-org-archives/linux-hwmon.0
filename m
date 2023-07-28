@@ -2,86 +2,110 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C701DEB64DD
-	for <linux-hwmon@archiver.kernel.org>; Fri, 28 Jul 2023 06:50:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3506C04A94
+	for <linux-hwmon@archiver.kernel.org>; Fri, 28 Jul 2023 07:11:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233465AbjG1GuK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 28 Jul 2023 02:50:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59272 "EHLO
+        id S233545AbjG1HLq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 28 Jul 2023 03:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232849AbjG1Gtz (ORCPT
+        with ESMTP id S233948AbjG1HL2 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 28 Jul 2023 02:49:55 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CD835A0
-        for <linux-hwmon@vger.kernel.org>; Thu, 27 Jul 2023 23:49:49 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fd190065a8so19990855e9.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 27 Jul 2023 23:49:49 -0700 (PDT)
+        Fri, 28 Jul 2023 03:11:28 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164F13C26
+        for <linux-hwmon@vger.kernel.org>; Fri, 28 Jul 2023 00:11:02 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-99b9421aaebso240997066b.2
+        for <linux-hwmon@vger.kernel.org>; Fri, 28 Jul 2023 00:11:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690526988; x=1691131788;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
+        d=linaro.org; s=google; t=1690528260; x=1691133060;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=pNocJZIscVVvupCUD8NKwKROVK3u209IVEq8pLniQbA=;
-        b=SOBfA982SmYW+j+nHnszBR9ZcS66yi1EsHNOFcLrC8B8Lx4baNXtBHmlMMXLAXRXhG
-         HP85kEPGnyAzJyXDSJsPZVlpW/EhCffaQHskCjXlvod6Y4d4cOlC6rOLfopYGIfHIV4D
-         7swqBd9MQiMZ8Op7/nR7UvdqQn1toqt/R2DG6s1GW/FaToMz6379nqbcgfEveGu3NCi6
-         0Xc+mzO43vWoAWDd4MwktjQP2wJ/JNb2koOyL+0pYakuO03Ev6hQcj8/yEl9P1rbN/bJ
-         Bc+rzVUV2PvZCJJK0WRYoty2xeruIIOaFWGHgkim2S7VezCkb6uylfCm9T/TLa2ejggd
-         RPng==
+        bh=m6/65k5swW0BKp3wzBZg4774CGDmkxniUqOsEfQe6Uw=;
+        b=bL0nctVDX3DnxRGMycIWRdVNkXQa5rwaM09e7gtVjJykGhMN19+Dp6H2Ee0AU5fzpi
+         dGvQeRNQSNkiSNJv7jPZRu0i5SAM/75wj1BCZh1mZCjdrpnFTVRCtlUeNZNzfnVWpVfm
+         htpYrN5HcVcnOcrVDM3yrBTXihWQ4skJD61GDH6xedOS7UEB+0+KmdTmE/UaEVZUejDA
+         bLxyy2/BQn807HId7792L6+78qu1B8tigZvxA1TFcZaQi3GlE8p6OOsY9t/bxFNwhz5w
+         FMZaUTkBR0fxpSRzTZ7QihjkEa3bI5VrbPv6bNbXLHjzlPTprrKA/paCB4Lquiai6UzE
+         aVuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690526988; x=1691131788;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
+        d=1e100.net; s=20221208; t=1690528260; x=1691133060;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pNocJZIscVVvupCUD8NKwKROVK3u209IVEq8pLniQbA=;
-        b=ClK0XNdYA0oOmRTHpiYxtB/D/agrqcSaqm55+ju6OoyO/qkops/jL78lXy4G27cZVQ
-         3IPZU/M9G2CpF0Fv2QQtXRJfUBLMd3OTIRCO6IBr0/BUDqXBq2kiEIvbzX2HwwK5vbbU
-         o9GrkynKh5ojQLuaM/phet4xXudQmA/snqcQ8gRPRpj5o0D+ifKj/C7pRAUOIXqfl/IU
-         McAogeePGEbmgHPWpJt1AqjcdE2fl0VXf4ylELg4o7BIaZG2ij2d9DhmzxvqON60DTg6
-         gGipeMrQcifhTU72tROU9xNcPxyD9uqIcw0F3d4XipWxbP0i0eVLb3HGrURtGTseOLnm
-         lt0A==
-X-Gm-Message-State: ABy/qLZ1f2jCtudQdmuC5wqMIKmPeI0GiJQKzdyDkgI8TqPfsFqQ2d6l
-        8NiZIdbBOfWvaLDij5x2eLhrU7k5fbg=
-X-Google-Smtp-Source: APBJJlGkAOs1OCtVBvNhZF7rn6+XyndCNT+oCduEGxWXSc8oQqaNr/uIEpOc+CvxK7e3cQ+t8TF9bQ==
-X-Received: by 2002:a05:600c:acc:b0:3fd:30cb:18bd with SMTP id c12-20020a05600c0acc00b003fd30cb18bdmr1187962wmr.15.1690526988014;
-        Thu, 27 Jul 2023 23:49:48 -0700 (PDT)
-Received: from daniel-Precision-5530 ([5.2.194.157])
-        by smtp.gmail.com with ESMTPSA id h14-20020a05600c260e00b003fbca942499sm6366162wma.14.2023.07.27.23.49.47
-        for <linux-hwmon@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jul 2023 23:49:47 -0700 (PDT)
-Date:   Fri, 28 Jul 2023 09:49:45 +0300
-From:   Daniel Matyas <daniel.matyas23@gmail.com>
-To:     linux-hwmon@vger.kernel.org
-Subject: Functional enhancement of max31827
-Message-ID: <ZMNlCTsslxeYjj/4@daniel-Precision-5530>
+        bh=m6/65k5swW0BKp3wzBZg4774CGDmkxniUqOsEfQe6Uw=;
+        b=ZoRXzwzP3Yfvy4H5x4xQPBUEsZr+pZ6HmTgtm4ercyIA/2weP30mrNd/Ahc7VFVcqr
+         zuIVnB7m+zyRTV2yPrPy4rw5mPMl9afzFJJYEkkAtjvJFBqfTYgIHgFDUr//F6NsrJ1V
+         QHCPeNHkZv1v6dBtk5QZhPdiyitmbiPhKYG4b8IVURwpc8/0WddORBXHABocZTWtvsUG
+         qh89pRR50f8ZbROaAyF9xHlOl5R/lxpLrKcXAzFPmiZWqCpzEj3mxKxf5LoyWcMH053O
+         CkOs20ilwCkSb5EYbkzcVHh67ab9CdffELgRCLhHXpvP0CeSlr2Z9KVqJ64KO32Dve81
+         y7cQ==
+X-Gm-Message-State: ABy/qLbm/HdDC93vix9PNDmDvz+RgTlqMC/2mm4RIYULanhxMpey51Lp
+        c3w++05+gN8MTWh5btb0zxaMUhP2ll7Y0lhYcFRsJg==
+X-Google-Smtp-Source: APBJJlFNUDRbBrJQrURZlqPNy8h7vIf5frzfxBJOWvaZxlJEn+aYgzPtDvceQhB6M3RrzIY1XCOaLw==
+X-Received: by 2002:a17:906:5a4b:b0:993:d920:87d3 with SMTP id my11-20020a1709065a4b00b00993d92087d3mr1028608ejc.25.1690528260498;
+        Fri, 28 Jul 2023 00:11:00 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id u7-20020a170906408700b0098de7d28c34sm1678442ejj.193.2023.07.28.00.10.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Jul 2023 00:11:00 -0700 (PDT)
+Message-ID: <26d662cc-30ce-ddd6-bfe7-d0e230fdd600@linaro.org>
+Date:   Fri, 28 Jul 2023 09:10:57 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v2 2/2] dt-bindings: hwmon: add renesas,isl28022
+Content-Language: en-US
+To:     =?UTF-8?Q?Carsten_Spie=c3=9f?= <mail@carsten-spiess.de>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+References: <20230727200234.2245395-1-mail@carsten-spiess.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230727200234.2245395-1-mail@carsten-spiess.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Dear hwmon community,
+On 27/07/2023 22:02, Carsten Spieß wrote:
+> Add dt-bindings for Renesas ISL28022 power monitor.
+> 
+> Signed-off-by: Carsten Spieß <mail@carsten-spiess.de>
+> ---
 
-I developed the driver for the max31827 temperature sensor, but when
-doing so I omitted some functionalities of the chip, namely: PEC Error,
-Fault Queue, Comp/Int, Alarm Polarity, Resolution, Timeout and PEC
-Enable. I did not implement these, because there are no predefined
-attributes in the linux kernel which have similar meaning to these
-funcionalities.
+This is v2, so what changed? Where is the changelog? Which changes did
+you implement, or maybe nothing changed and there is no point to review?
 
-I recently got a request from the client to implement these
-functionalities. I want to use SENSOR_DEVICE_ATTR to implement these. I
-did some reading and saw that using debufs is also a possibility.
 
-I would be really greatful, if you could provide me with some advices.
-Should I proceed with device attributes defined by me? Should I use
-debufs? Maybe there is another and better way...
 
-Thank you in advance for your response!
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Kind regards,
-Daniel
 
-Link to driver: https://github.com/torvalds/linux/blob/master/drivers/hwmon/max31827.c
-Link to datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/MAX31827-MAX31829.pdf#page=13&zoom=220,-9,487
+---
+
+This is an automated instruction, just in case, because many review tags
+are being ignored. If you know the process, you can skip it (please do
+not feel offended by me posting it here - no bad intentions intended).
+If you do not know the process, here is a short explanation:
+
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions, under or above your Signed-off-by tag. Tag is "received", when
+provided in a message replied to you on the mailing list. Tools like b4
+can help here. However, there's no need to repost patches *only* to add
+the tags. The upstream maintainer will do that for tags received on the
+version they apply.
+
+https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
+
+Best regards,
+Krzysztof
+
