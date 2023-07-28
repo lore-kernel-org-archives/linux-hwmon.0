@@ -2,212 +2,186 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 638CDC001DE
-	for <linux-hwmon@archiver.kernel.org>; Fri, 28 Jul 2023 15:42:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9505DC0015E
+	for <linux-hwmon@archiver.kernel.org>; Fri, 28 Jul 2023 16:59:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237419AbjG1Pmh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 28 Jul 2023 11:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33480 "EHLO
+        id S235127AbjG1Q7w (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 28 Jul 2023 12:59:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237405AbjG1Pmg (ORCPT
+        with ESMTP id S232810AbjG1Q7u (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 28 Jul 2023 11:42:36 -0400
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5679810FA;
-        Fri, 28 Jul 2023 08:42:35 -0700 (PDT)
-Received: from pps.filterd (m0134424.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36SEW6hf023510;
-        Fri, 28 Jul 2023 15:41:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pps0720; bh=D4UU4pH4kUAWMPAHS8HIBDWEphUtaRF7nkbbuvO28Ek=;
- b=Q43reYUrBosJ+Iy6LQ6JBbZGpgsQSc7Lhx6WkCXaCgnOuN/8ELuytsRmYDnhUIkHkHu7
- ZRD2uA8Wk2vaEjtnZ+Mxz+QVj/i3Io5zU2lL8k0GkaF5xr5eO7hkkj9ebQ5+wYneIro8
- QJV2XN3v4aulaSXMD7nTXuUpB2xwzEvU2l6AuJeVCXGEbjSALYWJqxG1+YfwfeYqEBF9
- X6CYjlxWolqUNGvA8FlCiyPqx0fOJyzWBA7xe9ZJESP7Gjj/A8hFviWUAdev6WrDrN9B
- 9kNugsD2ECpez3k5V55/nIpcwmyWn7OcfrdfnAFLyNa7vDt0R0xJ1Wcq3PVMsZk6CGNc zg== 
-Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3s48wkbyh6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Jul 2023 15:41:54 +0000
-Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by p1lg14881.it.hpe.com (Postfix) with ESMTPS id 6DD9A803718;
-        Fri, 28 Jul 2023 15:41:31 +0000 (UTC)
-Received: from hpe.com (unknown [16.231.227.39])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTPS id A42BA80A27F;
-        Fri, 28 Jul 2023 15:41:28 +0000 (UTC)
-Date:   Fri, 28 Jul 2023 10:41:26 -0500
-From:   Dimitri Sivanich <sivanich@hpe.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Arjan van de Ven <arjan@linux.intel.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        James Smart <james.smart@broadcom.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Huang Rui <ray.huang@amd.com>, Juergen Gross <jgross@suse.com>,
-        Steve Wahl <steve.wahl@hpe.com>,
-        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
-        Russ Anderson <russ.anderson@hpe.com>
-Subject: Re: [patch v2 00/38] x86/cpu: Rework the topology evaluation
-Message-ID: <20230728154047.GA21214@hpe.com>
-References: <20230728105650.565799744@linutronix.de>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230728105650.565799744@linutronix.de>
-X-Proofpoint-GUID: M3diYXEsN13Z6X2mEEsSKlMLV6D1v-80
-X-Proofpoint-ORIG-GUID: M3diYXEsN13Z6X2mEEsSKlMLV6D1v-80
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 28 Jul 2023 12:59:50 -0400
+Received: from smtp.smtpout.orange.fr (smtp-26.smtpout.orange.fr [80.12.242.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E28F7E4F
+        for <linux-hwmon@vger.kernel.org>; Fri, 28 Jul 2023 09:59:45 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id PQcJquo3y6LOdPQcJq6tXb; Fri, 28 Jul 2023 18:47:11 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1690562831;
+        bh=j/7aKHnWITVgoZ/UNzvyxCcfFQnF58gRdXlJW5zlNSM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=bVNuVfMew/ZG1k8SfRJox25DBH4WnyOEvUZd2GUrGCIM/q1tWtGFcPyAUeuCig43c
+         ZHD5QYOC/CoQhTRY5IumE/ZuCmQcdDZ4E+brZ5Z1KF/KEu3Hxnyxu44j3tznKOIHTZ
+         5al5JCfNJk7qdx789ylDq+nsLNcx2PYSpao1lR5wqDp6SY/pU+woIokU+5PwUNyIpC
+         k8T/76BzBfUpxt2r6/ncPW4ag9ERqENXIOjAi74vP3RNbODbO4bbyOsDmYRmYYMC48
+         ggjAVZNPWTwxbKutxzej6Z7sh/Org/G1I0T4KaEQXQQkXgtMf+ZT6nXT0vh+455+Ns
+         fgPMJiWjLhH2Q==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 28 Jul 2023 18:47:11 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <08469a96-24f2-2099-0a0a-019cb81f976b@wanadoo.fr>
+Date:   Fri, 28 Jul 2023 18:47:03 +0200
 MIME-Version: 1.0
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-27_10,2023-07-26_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- adultscore=0 impostorscore=0 bulkscore=0 spamscore=0 priorityscore=1501
- clxscore=1011 suspectscore=0 mlxscore=0 lowpriorityscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2306200000
- definitions=main-2307280143
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: RE: [PATCH] Add Silicom Platform Driver
+To:     Huibin Shi <henrys@silicom-usa.com>,
+        Henry Shi <henryshi2018@gmail.com>,
+        "hbshi69@hotmail.com" <hbshi69@hotmail.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "markgross@kernel.org" <markgross@kernel.org>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Cc:     "hb_shi2003@yahoo.com" <hb_shi2003@yahoo.com>,
+        Wen Wang <wenw@silicom-usa.com>
+References: <20230718160104.2716-1-henryshi2018@gmail.com>
+ <fb62b2e7-7c7c-dc2e-768d-3393f151eb32@wanadoo.fr>
+ <PA4PR04MB92225B65A45868A9CBE25B999A06A@PA4PR04MB9222.eurprd04.prod.outlook.com>
+Content-Language: fr, en-US
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <PA4PR04MB92225B65A45868A9CBE25B999A06A@PA4PR04MB9222.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-I successfully booted the same 32-socket, 3840 cpu HPE Sapphire Rapids system
-with the V2 update found here:
-  git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git topo-cpuid-v2
+Le 28/07/2023 à 14:59, Huibin Shi a écrit :
+> Christophe,
+> 
+> Thanks for the comments. See my comments below.
+> 
+> Updated patch will be sent out later after review comments from other reviewers are addressed.
+> 
+> Henry
+> -----Original Message-----
+> From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Sent: Tuesday, July 25, 2023 5:03 PM
+> To: Henry Shi <henryshi2018@gmail.com>; hbshi69@hotmail.com; tglx@linutronix.de; mingo@redhat.com; bp@alien8.de; dave.hansen@linux.intel.com; x86@kernel.org; hpa@zytor.com; hdegoede@redhat.com; markgross@kernel.org; jdelvare@suse.com; linux@roeck-us.net; linux-kernel@vger.kernel.org; platform-driver-x86@vger.kernel.org; linux-hwmon@vger.kernel.org
+> Cc: hb_shi2003@yahoo.com; Huibin Shi <henrys@silicom-usa.com>; Wen Wang <wenw@silicom-usa.com>
+> Subject: Re: [PATCH] Add Silicom Platform Driver
+> 
+> Caution: This is an external email. Please take care when clicking links or opening attachments.
+> 
+> 
+> Le 18/07/2023 à 18:01, Henry Shi a écrit :
+>> The Silicom platform (silicom-platform) Linux driver for Swisscom
+>> Business Box (Swisscom BB) as well as Cordoba family products is a
+>> software solution designed to facilitate the efficient management and
+>> control of devices through the integration of various Linux
+>> frameworks. This platform driver provides seamless support for device
+>> management via the Linux LED framework, GPIO framework, Hardware
+>> Monitoring (HWMON), and device attributes. The Silicom platform
+>> driver's compatibility with these Linux frameworks allows applications
+>> to access and control Cordoba family devices using existing software
+>> that is compatible with these frameworks. This compatibility
+>> simplifies the development process, reduces dependencies on
+>> proprietary solutions, and promotes interoperability with other
+>> Linux-based systems and software.
+>>
+>> Signed-off-by: Henry Shi <henryshi2018@gmail.com>
+>> ---
+> 
+> [...]
+> 
+>> +static int __init silicom_mc_leds_register(struct device *dev,
+>> +                                        const struct led_classdev_mc
+>> +*mc_leds) {
+>> +     struct led_classdev_mc *led;
+>> +     int i, err;
+>> +
+>> +     for (i = 0; mc_leds[i].led_cdev.name; i++) {
+>> +             /* allocate and copy data from the init constansts */
+>> +             led = devm_kzalloc(dev, sizeof(struct led_classdev_mc),
+>> + GFP_KERNEL);
+> 
+> sizeof(*led) is shorter.
+> Mostly a matter of taste.
+> 
+> Maybe even devm_kmemdup()?
+> 
+> Henry: thanks. Devm_kmemdup() API requires additional argument that is not necessary of this driver. I prefer devm_kzalloc for now.
 
-# cat /sys/kernel/debug/x86/topo/cpus/3839
-initial_apicid:      ff7
-apicid:              ff7
-pkg_id:              31
-die_id:              31
-cu_id:               255
-core_id:             59
-logical_pkg_id:      31
-logical_die_id:      31
-llc_id:              3968
-l2c_id:              4086
-amd_node_id:         0
-amd_nodes_per_pkg:   0
-max_cores:           60
-max_die_per_pkg:     1
-smp_num_siblings:    2
+CJ: The only additionnal parameter I can think of are the one of 
+memcpy() ...
 
-On Fri, Jul 28, 2023 at 02:12:42PM +0200, Thomas Gleixner wrote:
-> Hi!
 > 
-> This is the follow up to V1:
+>> +             if (IS_ERR_OR_NULL(led)) {
 > 
->   https://lore.kernel.org/lkml/20230724155329.474037902@linutronix.de
+> if (!led)
+> is enough.
 > 
-> which addresses the review feedback and some minor fallout I observed in my
-> testing of the work based on top.
+> Henry: OK, changed
 > 
-> TLDR:
+>> +                     dev_err(dev, "Failed to alloc
+>> + led_classdev_mc[%d]: %ld\n", i, PTR_ERR(led));
 > 
-> This reworks the way how topology information is evaluated via CPUID
-> in preparation for a larger topology management overhaul to address
-> shortcomings of the current code vs. hybrid systems and systems which make
-> use of the extended topology domains in leaf 0x1f. Aside of that it's an
-> overdue spring cleaning to get rid of accumulated layers of duct tape and
-> haywire.
+> This kind of message is useless and should be removed (checkpatch should warn about it)
 > 
-> What changed vs. V1:
+> Henry: OK, removed.
 > 
->   - Fixed an issue vs. the logical die/pkg management as the current
->     code (ab)uses cpuinfo for persistant storage.
+>> +                     return -ENOMEM;
+>> +             }
+>> +             memcpy(led, &mc_leds[i], sizeof(*led));
+
+... here.
+
+devm_kzalloc() + this memcpy() could be done with only devm_kmemdup().
+
+This is mostly a matter of taste.
+
+>> +
+>> +             led->subled_info = devm_kzalloc(dev, led->num_colors * sizeof(struct mc_subled),
+>> +                                             GFP_KERNEL);
 > 
->   - Consolidated APIC ID usage on u32 and ditched the u16 limitation
+> Maybe even devm_kmemdup()?
+
+Same...
+
 > 
->   - Addressed the review feedback from Peter and Arjan
+>> +             if (IS_ERR_OR_NULL(led->subled_info)) {
 > 
->   - Added a new patch which gets rid of XENPV fiddling in the cpuinfo
->     state. That needs some testing on XENPV obviously. The relevant
->     patches are #22 and #37
+> if (!led->subled_info)
+> is enough.
 > 
-> I did not pick up any of the tested by tags yet. I hope people can run it
-> once more. Neither did I add the Ack from Peter.
+> Henry: OK, changed.
 > 
-> The series is based on the APIC cleanup series:
+>> +                     dev_err(dev, "Failed to alloc subled_info[%d]: %ld\n",
+>> +                             i, PTR_ERR(led->subled_info));
 > 
->   https://lore.kernel.org/lkml/20230724131206.500814398@linutronix.de
+> This kind of message is useless and should be removed (checkpatch should warn about it)
 > 
-> and also available on top of that from git:
+> Henry: OK, removed.
 > 
->  git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git topo-cpuid-v2
-> 
-> Thanks,
-> 
-> 	tglx
-> ---
->  Documentation/arch/x86/topology.rst       |   12 -
->  a/arch/x86/kernel/cpu/topology.c          |  168 ---------------------
->  arch/x86/events/amd/core.c                |    2 
->  arch/x86/events/amd/uncore.c              |    2 
->  arch/x86/events/intel/uncore.c            |    2 
->  arch/x86/hyperv/hv_vtl.c                  |    2 
->  arch/x86/include/asm/apic.h               |   32 +---
->  arch/x86/include/asm/cacheinfo.h          |    3 
->  arch/x86/include/asm/cpuid.h              |   32 ++++
->  arch/x86/include/asm/mpspec.h             |    2 
->  arch/x86/include/asm/processor.h          |   60 +++++--
->  arch/x86/include/asm/smp.h                |    4 
->  arch/x86/include/asm/topology.h           |   51 +++++-
->  arch/x86/include/asm/x86_init.h           |    2 
->  arch/x86/kernel/acpi/boot.c               |    4 
->  arch/x86/kernel/amd_nb.c                  |    8 -
->  arch/x86/kernel/apic/apic.c               |   14 -
->  arch/x86/kernel/apic/apic_common.c        |    4 
->  arch/x86/kernel/apic/apic_flat_64.c       |   13 -
->  arch/x86/kernel/apic/apic_noop.c          |    9 -
->  arch/x86/kernel/apic/apic_numachip.c      |   21 --
->  arch/x86/kernel/apic/bigsmp_32.c          |   10 -
->  arch/x86/kernel/apic/local.h              |    6 
->  arch/x86/kernel/apic/probe_32.c           |   10 -
->  arch/x86/kernel/apic/x2apic_cluster.c     |    1 
->  arch/x86/kernel/apic/x2apic_phys.c        |   10 -
->  arch/x86/kernel/apic/x2apic_uv_x.c        |   67 +-------
->  arch/x86/kernel/cpu/Makefile              |    5 
->  arch/x86/kernel/cpu/amd.c                 |  156 --------------------
->  arch/x86/kernel/cpu/cacheinfo.c           |   51 ++----
->  arch/x86/kernel/cpu/centaur.c             |    4 
->  arch/x86/kernel/cpu/common.c              |  111 +-------------
->  arch/x86/kernel/cpu/cpu.h                 |   14 +
->  arch/x86/kernel/cpu/hygon.c               |  133 -----------------
->  arch/x86/kernel/cpu/intel.c               |   38 ----
->  arch/x86/kernel/cpu/mce/amd.c             |    4 
->  arch/x86/kernel/cpu/mce/apei.c            |    4 
->  arch/x86/kernel/cpu/mce/core.c            |    4 
->  arch/x86/kernel/cpu/mce/inject.c          |    7 
->  arch/x86/kernel/cpu/proc.c                |    8 -
->  arch/x86/kernel/cpu/zhaoxin.c             |   18 --
->  arch/x86/kernel/kvm.c                     |    6 
->  arch/x86/kernel/sev.c                     |    2 
->  arch/x86/kernel/smpboot.c                 |   97 +++++++-----
->  arch/x86/kernel/vsmp_64.c                 |   13 -
->  arch/x86/mm/amdtopology.c                 |   35 ++--
->  arch/x86/mm/numa.c                        |    4 
->  arch/x86/xen/apic.c                       |   14 -
->  arch/x86/xen/smp_pv.c                     |    3 
->  b/arch/x86/kernel/cpu/debugfs.c           |   97 ++++++++++++
->  b/arch/x86/kernel/cpu/topology.h          |   51 ++++++
->  b/arch/x86/kernel/cpu/topology_amd.c      |  179 +++++++++++++++++++++++
->  b/arch/x86/kernel/cpu/topology_common.c   |  233 ++++++++++++++++++++++++++++++
->  b/arch/x86/kernel/cpu/topology_ext.c      |  136 +++++++++++++++++
->  drivers/edac/amd64_edac.c                 |    4 
->  drivers/edac/mce_amd.c                    |    4 
->  drivers/gpu/drm/amd/amdkfd/kfd_topology.c |    2 
->  drivers/hwmon/fam15h_power.c              |    7 
->  drivers/scsi/lpfc/lpfc_init.c             |    8 -
->  drivers/virt/acrn/hsm.c                   |    2 
->  60 files changed, 1049 insertions(+), 956 deletions(-)
+>> +                     return -ENOMEM;
+>> +             }
+>> +             memcpy(led->subled_info, mc_leds[i].subled_info,
+>> +                     led->num_colors * sizeof(struct mc_subled));
+
+... here.
+
+CJ
+
+
