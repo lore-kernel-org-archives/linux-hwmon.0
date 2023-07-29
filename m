@@ -2,158 +2,133 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 991C5C001DC
-	for <linux-hwmon@archiver.kernel.org>; Sat, 29 Jul 2023 12:51:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9EC5C001DC
+	for <linux-hwmon@archiver.kernel.org>; Sat, 29 Jul 2023 13:32:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbjG2Mvd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 29 Jul 2023 08:51:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59456 "EHLO
+        id S229685AbjG2NcD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 29 Jul 2023 09:32:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjG2Mvc (ORCPT
+        with ESMTP id S229459AbjG2NcC (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 29 Jul 2023 08:51:32 -0400
-Received: from mgamail.intel.com (unknown [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F16E6A;
-        Sat, 29 Jul 2023 05:51:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690635091; x=1722171091;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Logke5jGkCA3/7hxc2IPFDsWV1n65Ev/SRiHfDeV8Mk=;
-  b=Klb/c0Sv4zB+kwDNF2NftNL1GkCezMi/+2QMZ3sjmkz0BxsEYItwMILI
-   YeAJV2FqvMMjHsmmC0NTNTw7o0ELan4Hr5Y1VqEiIQ/RIugJ6BYmMCUqt
-   SdJ9R7LJTlB9MitAOOoWVnJik1uWUXtvQsqkBIhu8bWbEA9ftTcrZ828G
-   fu3zpdxfNF8jqI/her4nrVhAp67DK2yTRILkJn3a5dnVUoGE7Lq6lHFzX
-   zvk06Zw59GdgJ5FFsYrOySPLmd2teomOXpaSPd0oYD2hGs734hzc0P5+A
-   GypVi5lpilKHbSBMNrKweJnDKm7x5oxMXVR9U+qEofeVU+wRpTH1FkuGt
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10786"; a="399703152"
-X-IronPort-AV: E=Sophos;i="6.01,240,1684825200"; 
-   d="scan'208";a="399703152"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2023 05:51:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10786"; a="757450492"
-X-IronPort-AV: E=Sophos;i="6.01,240,1684825200"; 
-   d="scan'208";a="757450492"
-Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 29 Jul 2023 05:51:28 -0700
-Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qPjPr-00042N-1j;
-        Sat, 29 Jul 2023 12:51:27 +0000
-Date:   Sat, 29 Jul 2023 20:50:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Aleksa Savic <savicaleksa83@gmail.com>, linux-hwmon@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Aleksa Savic <savicaleksa83@gmail.com>, stable@vger.kernel.org,
+        Sat, 29 Jul 2023 09:32:02 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2BCA3A96;
+        Sat, 29 Jul 2023 06:32:00 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-992e22c09edso416599466b.2;
+        Sat, 29 Jul 2023 06:32:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1690637519; x=1691242319;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ehQrsxvgL4zxhUTLst8f/NRMbcO61HuKHbTD88GGtUI=;
+        b=G9nNiSDOiJ9LAKD0Qvu3u9inL5ltgCDzPfd2gHAKlGyNe7RaeU9VpxVvHxyT2c/UBy
+         x5mqe7j0cZxpgtKFN3yXaFyMvhiZukVE1KM3BrhIj2ZhhxZ58H2pOxr16omZLWtztU15
+         6uPKCrXwa5MLVeWPb+WFN13RQy7AgLK5TKdJ/guHeksJ/5exHJZF68cDMNM52MO5eLNa
+         E5cnooLCTyLgTol+b0BgBEGoxaSfSgqkaLgsbOWVoBA94fIXt9g/vEuvJ0FCag7lluAD
+         fmiFkTL1GyJs2kEvMeghZLZykf/osQPs1Y4op6Xu1f7LTbCrBNUXg2GQz/X0c6K/0n6Z
+         Dwzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690637519; x=1691242319;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ehQrsxvgL4zxhUTLst8f/NRMbcO61HuKHbTD88GGtUI=;
+        b=A27miCaHWs2oH6XYAvniq3gdPhEZrqh4XdVcfQ8XGXXdJLvENnEOMZb+iZhTc1P5Xv
+         GiQZezMBJzfi+zS4PkK9XtGBl+VVbaa3n0ipnGdZ+1zznfUvHPwHGBThCnQk6E6NmYFU
+         lE29MFuNN6gHKkVjnvXl+DgxWRi/oHnsf/cJVtp7mEiMjRZeaSAKDaYMfVTNPsIjo0wu
+         Sk8GbYvHhWK1m61Sq9xEKz0FmR8udW9tv4kyzxNxnBRhhGRWt9vZEse+KiMubZsXUv/k
+         J8nz+ySyvPeOpAG54om96jAw/hhtItFOXKvo6ooPBTl8ga1FZYCaEf96EFjWKridtV+m
+         x6OQ==
+X-Gm-Message-State: ABy/qLa7i0g6INdVy8ofKmn2B3tTJzwcZ81imsY1cc7TmHKKdaCkaeeJ
+        leTusQ3C+LdnpyaKlQZ3xFdV2xH1v52Rtg==
+X-Google-Smtp-Source: APBJJlGU6ii/ivn+os7zQ58aKo3m/UbjN8Ga6xPx3Xr3nelhBJdmHartEUmc/SmOp/RFyCVHr99YVg==
+X-Received: by 2002:a17:906:76ce:b0:99b:d594:8f8a with SMTP id q14-20020a17090676ce00b0099bd5948f8amr2316498ejn.0.1690637518993;
+        Sat, 29 Jul 2023 06:31:58 -0700 (PDT)
+Received: from fedora.. (cable-178-148-234-71.dynamic.sbb.rs. [178.148.234.71])
+        by smtp.gmail.com with ESMTPSA id br7-20020a170906d14700b0098ce63e36e9sm3336245ejb.16.2023.07.29.06.31.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 29 Jul 2023 06:31:58 -0700 (PDT)
+From:   Aleksa Savic <savicaleksa83@gmail.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     Aleksa Savic <savicaleksa83@gmail.com>,
         Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Add selective 200ms delay
- after sending ctrl report
-Message-ID: <202307292011.c34ZumSF-lkp@intel.com>
-References: <20230729112732.5516-1-savicaleksa83@gmail.com>
+Subject: [PATCH v2] hwmon: (aquacomputer_d5next) Add selective 200ms delay after sending ctrl report
+Date:   Sat, 29 Jul 2023 15:31:12 +0200
+Message-ID: <20230729133112.462023-1-savicaleksa83@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230729112732.5516-1-savicaleksa83@gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Aleksa,
+Add a 200ms delay after sending a ctrl report to Quadro,
+Octo, D5 Next and Aquaero to give them enough time to
+process the request and save the data to memory. Otherwise,
+under heavier userspace loads where multiple sysfs entries
+are usually set in quick succession, a new ctrl report could
+be requested from the device while it's still processing the
+previous one and fail with -EPIPE.
 
-kernel test robot noticed the following build errors:
+Reported by a user on Github [1] and tested by both of us.
 
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on linus/master v6.5-rc3 next-20230728]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[1] https://github.com/aleksamagicka/aquacomputer_d5next-hwmon/issues/82
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Aleksa-Savic/hwmon-aquacomputer_d5next-Add-selective-200ms-delay-after-sending-ctrl-report/20230729-193038
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20230729112732.5516-1-savicaleksa83%40gmail.com
-patch subject: [PATCH] hwmon: (aquacomputer_d5next) Add selective 200ms delay after sending ctrl report
-config: arm-randconfig-r005-20230729 (https://download.01.org/0day-ci/archive/20230729/202307292011.c34ZumSF-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230729/202307292011.c34ZumSF-lkp@intel.com/reproduce)
+Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
+---
+Changes in v2:
+- Added missing <linux/delay.h> include
+---
+ drivers/hwmon/aquacomputer_d5next.c | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307292011.c34ZumSF-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/hwmon/aquacomputer_d5next.c: In function 'aqc_send_ctrl_data':
->> drivers/hwmon/aquacomputer_d5next.c:674:17: error: implicit declaration of function 'msleep' [-Werror=implicit-function-declaration]
-     674 |                 msleep(200);
-         |                 ^~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +/msleep +674 drivers/hwmon/aquacomputer_d5next.c
-
-   627	
-   628	/* Expects the mutex to be locked */
-   629	static int aqc_send_ctrl_data(struct aqc_data *priv)
-   630	{
-   631		int ret;
-   632		u16 checksum;
-   633	
-   634		/* Checksum is not needed for Aquaero */
-   635		if (priv->kind != aquaero) {
-   636			/* Init and xorout value for CRC-16/USB is 0xffff */
-   637			checksum = crc16(0xffff, priv->buffer + priv->checksum_start,
-   638					 priv->checksum_length);
-   639			checksum ^= 0xffff;
-   640	
-   641			/* Place the new checksum at the end of the report */
-   642			put_unaligned_be16(checksum, priv->buffer + priv->checksum_offset);
-   643		}
-   644	
-   645		/* Send the patched up report back to the device */
-   646		ret = hid_hw_raw_request(priv->hdev, priv->ctrl_report_id, priv->buffer, priv->buffer_size,
-   647					 HID_FEATURE_REPORT, HID_REQ_SET_REPORT);
-   648		if (ret < 0)
-   649			return ret;
-   650	
-   651		/* The official software sends this report after every change, so do it here as well */
-   652		ret = hid_hw_raw_request(priv->hdev, priv->secondary_ctrl_report_id,
-   653					 priv->secondary_ctrl_report, priv->secondary_ctrl_report_size,
-   654					 HID_FEATURE_REPORT, HID_REQ_SET_REPORT);
-   655		if (ret < 0)
-   656			return ret;
-   657	
-   658		/*
-   659		 * Wait 200ms before returning to make sure that the device actually processed both reports
-   660		 * and saved ctrl data to memory. Otherwise, an aqc_get_ctrl_data() call made shortly after
-   661		 * may fail with -EPIPE because the device is still busy and can't provide data. This can
-   662		 * happen when userspace tools, such as fancontrol or liquidctl, write to sysfs entries in
-   663		 * quick succession.
-   664		 *
-   665		 * 200ms was found to be the sweet spot between fixing the issue and not significantly
-   666		 * prolonging the call. Quadro, Octo, D5 Next and Aquaero are currently known to be
-   667		 * affected.
-   668		 */
-   669		switch (priv->kind) {
-   670		case quadro:
-   671		case octo:
-   672		case d5next:
-   673		case aquaero:
- > 674			msleep(200);
-   675			break;
-   676		default:
-   677			break;
-   678		}
-   679	
-   680		return ret;
-   681	}
-   682	
-
+diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
+index a997dbcb563f..6ec0ab58a289 100644
+--- a/drivers/hwmon/aquacomputer_d5next.c
++++ b/drivers/hwmon/aquacomputer_d5next.c
+@@ -13,6 +13,7 @@
+ 
+ #include <linux/crc16.h>
+ #include <linux/debugfs.h>
++#include <linux/delay.h>
+ #include <linux/hid.h>
+ #include <linux/hwmon.h>
+ #include <linux/jiffies.h>
+@@ -652,6 +653,31 @@ static int aqc_send_ctrl_data(struct aqc_data *priv)
+ 	ret = hid_hw_raw_request(priv->hdev, priv->secondary_ctrl_report_id,
+ 				 priv->secondary_ctrl_report, priv->secondary_ctrl_report_size,
+ 				 HID_FEATURE_REPORT, HID_REQ_SET_REPORT);
++	if (ret < 0)
++		return ret;
++
++	/*
++	 * Wait 200ms before returning to make sure that the device actually processed both reports
++	 * and saved ctrl data to memory. Otherwise, an aqc_get_ctrl_data() call made shortly after
++	 * may fail with -EPIPE because the device is still busy and can't provide data. This can
++	 * happen when userspace tools, such as fancontrol or liquidctl, write to sysfs entries in
++	 * quick succession.
++	 *
++	 * 200ms was found to be the sweet spot between fixing the issue and not significantly
++	 * prolonging the call. Quadro, Octo, D5 Next and Aquaero are currently known to be
++	 * affected.
++	 */
++	switch (priv->kind) {
++	case quadro:
++	case octo:
++	case d5next:
++	case aquaero:
++		msleep(200);
++		break;
++	default:
++		break;
++	}
++
+ 	return ret;
+ }
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.41.0
+
