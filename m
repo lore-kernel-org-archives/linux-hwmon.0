@@ -2,77 +2,76 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56C3EC001DC
-	for <linux-hwmon@archiver.kernel.org>; Sat, 29 Jul 2023 13:42:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3B32C001E0
+	for <linux-hwmon@archiver.kernel.org>; Sat, 29 Jul 2023 13:45:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbjG2Nmx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 29 Jul 2023 09:42:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37642 "EHLO
+        id S231770AbjG2Npa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 29 Jul 2023 09:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjG2Nmw (ORCPT
+        with ESMTP id S231319AbjG2NpM (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 29 Jul 2023 09:42:52 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA389CA;
-        Sat, 29 Jul 2023 06:42:50 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-997c4107d62so421043366b.0;
-        Sat, 29 Jul 2023 06:42:50 -0700 (PDT)
+        Sat, 29 Jul 2023 09:45:12 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CFB44222;
+        Sat, 29 Jul 2023 06:44:47 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-686f090316dso2063854b3a.2;
+        Sat, 29 Jul 2023 06:44:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690638169; x=1691242969;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:cc:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20221208; t=1690638274; x=1691243074;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=u4ZkdZcNSkn4KYrs0rpO5END+0pEqIEjvI/iJp6BL4Y=;
-        b=PZheVjVHjG6uP7ztujdA46LOGBJMfGFJeFemOKtOTulyYvSdFTyKQ7hPCoJtHy7B1L
-         iAs5u6PTSK51u8UkWr0DYW0hOJLgjMXohKC8cVqKlDUh+eUMHLR2dwY5hDhgpM/xZpdV
-         2nKN6kwoG/UIilNP5uCmOuV79YETq6nJXT9REyQmojigpxJsux37UR3dnxJmeL+YjSO6
-         5LpOUVCceG6u8U0WhfOHdA9/dDqEoAUYvLFdghQWJqsZUpL25o8/nmin8tsfesb9CHvY
-         W6+0jBJsMm75e2yqx35K4r8QqH1oDVzu6U5NZnIh4v0mi1CLMQq5d+UvM26T6ZcDZPgL
-         IsCA==
+        bh=sev6PZB5p9j4diKzuo/6/Fhl8pFz5mbhHBi6Dw/7j98=;
+        b=sQEJRbxbsdl14knNrD1vZKgQYKJQb55liyRsLwlgVmAJMyglVoHzPh3sUxonF7BpIF
+         GbPJ6ZJ4ox5l8plv1IGQ/DpOKUvduEK3oeBs9LFGhH/77ix4b+p7agJkN8DS6GNtgF3O
+         QWMkGSEgr+RZGYyztEDVIY94xMbbWH0k+GQtS+hBgKLS07DE+n4lFMKkyUtRwlPdHldg
+         QhmYpPGj5tauu44PMyrkNn8/GZ5FvyOpdtpW8RooSG2J5fTqh6V+gasQM2k+csf+d79f
+         nXhPMeifCsoHnya5QBLXyi6XgCGTZjzNlexiGejgPTceBTL/y3YUckpd4Yz/QIETet5W
+         qdDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690638169; x=1691242969;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:cc:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1690638274; x=1691243074;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u4ZkdZcNSkn4KYrs0rpO5END+0pEqIEjvI/iJp6BL4Y=;
-        b=IPWOSDh7j9If87v5U198nC30nN2oyB+754bwEVB1MLowST74D2N7u5nVQ0uDCrer26
-         50bEsbqvwVVcECDLY+K62ojdixMeHUCuWwGygkojImV5rv8ua9214q5t5cx0sfO8mDX4
-         /7wWwTHpY3nncybY0zLcw74JIBd/Yrx43J/I4QlxTIKDbKpx0q3CF4uE3v1Q/3Pz0ay9
-         ROvF+jaQ0skRyFYo3qsbL+8WzmU+orVfwm08g1ECCi0wc+ikv+2tu7ITvik7NGBSqRgf
-         J4NhFNm/4ryJEekXTIrfPAYXCugMiMZilhIuGir56PE2Krx3pgWsbLdfYsdlgSTnwdZe
-         B0jA==
-X-Gm-Message-State: ABy/qLa3v+PZe3kH4evPJJqlmd4lWGJ2VGybNeOQDY0DQWDSjSbpTCKa
-        CRaw01awi3xBLHsF7Nq54GfhxuP3m9+irw==
-X-Google-Smtp-Source: APBJJlHLwiRvjJCDb8fQ+dClwxLzUqp98D1KV1rfOmk2xUrRMRKQvwJHG3Q3nOQ/iIL+gUCtLLeibw==
-X-Received: by 2002:a17:906:64cc:b0:993:eef2:5d5d with SMTP id p12-20020a17090664cc00b00993eef25d5dmr2315998ejn.27.1690638168884;
-        Sat, 29 Jul 2023 06:42:48 -0700 (PDT)
-Received: from [192.168.0.28] (cable-178-148-234-71.dynamic.sbb.rs. [178.148.234.71])
-        by smtp.gmail.com with ESMTPSA id ci18-20020a170906c35200b0099bd682f317sm3264875ejb.206.2023.07.29.06.42.48
+        bh=sev6PZB5p9j4diKzuo/6/Fhl8pFz5mbhHBi6Dw/7j98=;
+        b=ALT/Y2XMfer8qIXpU9yMXH8fHUuaZ3+scgsS2lpYRpzmAkjCm0W16mO/Vro6sGkjXv
+         wIxPSIbBUojVrbkX9Imti0wb6qpsTmIef/bMcxslV2eMy6QCB+gYj5dQ1LM4NdBHlHxc
+         d5z6RpqJCBxz0Fv0mIglSrXkOM91NeRkNNfrVFl0lzfjKHCrLv1wYPUauXdU4NdhPeyB
+         29On//Y60asMsDmKZIZg1C3rbgC1d/WlvTq6dOsCLvuivIDnnnXhjovHPvUqUqaU2gDm
+         nQ8tNbv/2rHVAsImCOmOxAiyhha9IKI1ot6ynaYGN1683mxSrmKz4csUwRRJxoOChTIO
+         HOeQ==
+X-Gm-Message-State: ABy/qLY3r5peFBATPypeDI6reYOq39tl5V5Cqis1nqUpWiXXe2gYIuBb
+        jrd6ztNNVzAS4QtixyVVfGf+vmlUn58=
+X-Google-Smtp-Source: APBJJlGg/FvtwXBo9Qu1/M9v56UrqhfesW8KOSMc3Qne7V7oZVh5CFlW+WOzSqaYEh7+1WDgg6LTAA==
+X-Received: by 2002:a05:6a21:3e0c:b0:133:e3e3:dc07 with SMTP id bk12-20020a056a213e0c00b00133e3e3dc07mr4439349pzc.49.1690638273816;
+        Sat, 29 Jul 2023 06:44:33 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f9-20020a639c09000000b005572d796b9esm5204396pge.88.2023.07.29.06.44.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 29 Jul 2023 06:42:48 -0700 (PDT)
-Message-ID: <d7ea15aa-5348-3fd0-b399-ec03af438c85@gmail.com>
-Date:   Sat, 29 Jul 2023 15:42:47 +0200
+        Sat, 29 Jul 2023 06:44:33 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <5b988c94-0de3-95fd-de39-66b52a59cdd6@roeck-us.net>
+Date:   Sat, 29 Jul 2023 06:44:32 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Cc:     savicaleksa83@gmail.com, Jack Doan <me@jackdoan.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: (aquacomputer_d5next) Add selective 200ms delay
- after sending ctrl report
 Content-Language: en-US
-To:     linux-hwmon@vger.kernel.org
-References: <20230729133112.462023-1-savicaleksa83@gmail.com>
-From:   Aleksa Savic <savicaleksa83@gmail.com>
-In-Reply-To: <20230729133112.462023-1-savicaleksa83@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Aleksa Savic <savicaleksa83@gmail.com>, linux-hwmon@vger.kernel.org
+Cc:     stable@vger.kernel.org, Jack Doan <me@jackdoan.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
+References: <20230729112732.5516-1-savicaleksa83@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Add selective 200ms delay
+ after sending ctrl report
+In-Reply-To: <20230729112732.5516-1-savicaleksa83@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2023-07-29 15:31:12 GMT+02:00, Aleksa Savic wrote:
+On 7/29/23 04:27, Aleksa Savic wrote:
 > Add a 200ms delay after sending a ctrl report to Quadro,
 > Octo, D5 Next and Aquaero to give them enough time to
 > process the request and save the data to memory. Otherwise,
@@ -85,13 +84,55 @@ On 2023-07-29 15:31:12 GMT+02:00, Aleksa Savic wrote:
 > 
 > [1] https://github.com/aleksamagicka/aquacomputer_d5next-hwmon/issues/82
 > 
+> Cc: stable@vger.kernel.org
 > Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
 > ---
-> Changes in v2:
-> - Added missing <linux/delay.h> include
-> ---
-Sorry for the noise, I didn't include the Cc: stable@vger.kernel.org
-line from v1 in v2. Do I need to resend?
+>   drivers/hwmon/aquacomputer_d5next.c | 25 +++++++++++++++++++++++++
+>   1 file changed, 25 insertions(+)
+> 
+> diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
+> index a997dbcb563f..9cb55d51185a 100644
+> --- a/drivers/hwmon/aquacomputer_d5next.c
+> +++ b/drivers/hwmon/aquacomputer_d5next.c
+> @@ -652,6 +652,31 @@ static int aqc_send_ctrl_data(struct aqc_data *priv)
+>   	ret = hid_hw_raw_request(priv->hdev, priv->secondary_ctrl_report_id,
+>   				 priv->secondary_ctrl_report, priv->secondary_ctrl_report_size,
+>   				 HID_FEATURE_REPORT, HID_REQ_SET_REPORT);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/*
+> +	 * Wait 200ms before returning to make sure that the device actually processed both reports
+> +	 * and saved ctrl data to memory. Otherwise, an aqc_get_ctrl_data() call made shortly after
+> +	 * may fail with -EPIPE because the device is still busy and can't provide data. This can
+> +	 * happen when userspace tools, such as fancontrol or liquidctl, write to sysfs entries in
+> +	 * quick succession.
+> +	 *
+> +	 * 200ms was found to be the sweet spot between fixing the issue and not significantly
+> +	 * prolonging the call. Quadro, Octo, D5 Next and Aquaero are currently known to be
+> +	 * affected.
+> +	 */
+> +	switch (priv->kind) {
+> +	case quadro:
+> +	case octo:
+> +	case d5next:
+> +	case aquaero:
+> +		msleep(200);
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+>   	return ret;
+>   }
+>   
 
-Thanks in advance,
-Aleksa
+This would force writes to sleep even if there is no subsequent operation.
+Please make this conditional by saving the most recent access time and wait
+on the subsequent operation. I would also suggest to store the wait time
+in struct aqc_data to avoid the switch statement in the data path. An example
+for a driver doing something similar is drivers/hwmon/pmbus/zl6100.c.
+
+Thanks,
+Guenter
+
