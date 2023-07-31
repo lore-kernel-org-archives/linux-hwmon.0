@@ -2,83 +2,149 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D76A7C001DE
-	for <linux-hwmon@archiver.kernel.org>; Mon, 31 Jul 2023 13:47:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4F1AC07E8A
+	for <linux-hwmon@archiver.kernel.org>; Mon, 31 Jul 2023 13:53:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbjGaNrJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 31 Jul 2023 09:47:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40806 "EHLO
+        id S232031AbjGaNx1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 31 Jul 2023 09:53:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbjGaNrJ (ORCPT
+        with ESMTP id S233014AbjGaNxE (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 31 Jul 2023 09:47:09 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB161708;
-        Mon, 31 Jul 2023 06:47:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690811228; x=1722347228;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=nHF5W/WdqQq71KtethdkPzIq2ti8gzSk3md7KHrp0EI=;
-  b=AZS3RVNUF987Fp/el6o6nuIeFVXyOmTx5Spgh761j5Y0GOzQddmDVnCG
-   YYn1eM+KGyY7Cu9vTDAPX47mpa7nmXHwmkbj8dGBAnVfXs1z/QJLycTXE
-   97GlBK6fpA3iYOtA/4/8qof22vGiyuvgB/Cx57SpQESF21ilIqNgPFzNC
-   FNSPJ6g47nWCRvurdTHcsdDAwj3fgDCwDUtMQeGgagS9caWX6OUM78WwB
-   o6+69Flsh7ltuEFT3rpDOHxmRLnWHuC7IINs5Hoi/eFLbju6Jv4vFzDUB
-   n9mMRSZU1H7HUvj//fRpfm7Jr8R9KxYul182Miiv6cYFpN61aOE6wzL0T
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10788"; a="435331032"
-X-IronPort-AV: E=Sophos;i="6.01,244,1684825200"; 
-   d="scan'208";a="435331032"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2023 06:47:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10788"; a="1058936280"
-X-IronPort-AV: E=Sophos;i="6.01,244,1684825200"; 
-   d="scan'208";a="1058936280"
-Received: from nikithas-mobl.amr.corp.intel.com (HELO [10.212.216.144]) ([10.212.216.144])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2023 06:47:06 -0700
-Message-ID: <af4c8d30-7072-6196-a467-bc8c8dbb5a2f@linux.intel.com>
-Date:   Mon, 31 Jul 2023 06:47:05 -0700
+        Mon, 31 Jul 2023 09:53:04 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7221991;
+        Mon, 31 Jul 2023 06:52:14 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id e9e14a558f8ab-34914684b62so7014565ab.3;
+        Mon, 31 Jul 2023 06:52:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1690811533; x=1691416333;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3+BGX12rEZmO+eX68NKoc53wkrA6jDJOTyW13wKmAQs=;
+        b=gxFckBXvN+ViFd+2GkW3w28FV3UEeg30V3/Dt0TXduUWz3E3hjuulEetDl3dxRM+KX
+         /B5VvCxwTH4kGk4qv1wCaznmJ+tmcf5BWOZuf2z+k54zaI4P8BWt94ZhXM4zgF4qMnMz
+         ejv0MxDv6lKof4hVbtilG+D3adl0jlNN7cHneNz3327BGRZWxNyioPF+lnNuQ4LavQ77
+         XAHC4BBv2mhn9bh0dsDzIaB2jxpWunDvz9Zym10W9pJzzDVlhPLYXQZb0FCLzOzIAo3V
+         fbrfDTpq4r+g9A9w/EtcNw26icobnqwMLcBX7dHGBpmiJu4umptOh6UpoRMOyC0H2eYA
+         jaFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690811533; x=1691416333;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3+BGX12rEZmO+eX68NKoc53wkrA6jDJOTyW13wKmAQs=;
+        b=jnCyyfMfMzcLV34dvxK4/8yqs6N4j+cD72nhksTPOHcB72fNYbezGVuudqDiUhsOm1
+         NFRTAF0W/ZgGA8RQr/Y6R5lDgcvknIdPuGBl5B6lEP/X+CHTu7MxVKBu21jmc9HFg5oP
+         9qArVW5cbHAfZhSc6XNBKEZDl3C9LnWB6Ap5OZZhLPHXA/wSQ23sSr8NsWefDSOiutuD
+         O5V5iODJbfgqH05b/WMCYn61f9NXocA7NjQmcyLU7o3KVROj+QNsMC27e+eNSfJx1Mmv
+         AwfzhbkNVkf2C50zWaW7R7KSthAyWKDGl3A6nzevRD4rEsR4DzHHFneBgy6MJuvvfX0W
+         FafA==
+X-Gm-Message-State: ABy/qLa5/mswoHacXD954BnJgec2S2N7NR0aBZie7RXaMGWrjao860KD
+        Mo/C8qJli4dzH/hNuXYGYDc=
+X-Google-Smtp-Source: APBJJlHer3n3A7Q6OSdK0AlXm3MTs0aOpYkULQ2tOETxnKp4meaupWxFyOMrfhn7jAp4mya7JG/+EA==
+X-Received: by 2002:a92:c54e:0:b0:348:d89b:268 with SMTP id a14-20020a92c54e000000b00348d89b0268mr10405126ilj.7.1690811533581;
+        Mon, 31 Jul 2023 06:52:13 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h12-20020a02cd2c000000b0042b10d42c90sm3022784jaq.113.2023.07.31.06.52.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jul 2023 06:52:13 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <0080432d-f77f-7fd5-34fe-f8ae9bcc0c23@roeck-us.net>
+Date:   Mon, 31 Jul 2023 06:52:11 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [patch v2 21/38] x86/cpu: Provide cpu_init/parse_topology()
 Content-Language: en-US
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     "x86@kernel.org" <x86@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        James Smart <james.smart@broadcom.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
+To:     Vadim Pasternak <vadimp@nvidia.com>,
+        Naresh Solanki <naresh.solanki@9elements.com>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
         "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Huang Rui <ray.huang@amd.com>, Juergen Gross <jgross@suse.com>,
-        Steve Wahl <steve.wahl@hpe.com>,
-        Mike Travis <mike.travis@hpe.com>,
-        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
-        Russ Anderson <russ.anderson@hpe.com>
-References: <20230728105650.565799744@linutronix.de>
- <20230728120930.839913695@linutronix.de>
- <BYAPR21MB16889FD224344B1B28BE22A1D705A@BYAPR21MB1688.namprd21.prod.outlook.com>
-From:   Arjan van de Ven <arjan@linux.intel.com>
-In-Reply-To: <BYAPR21MB16889FD224344B1B28BE22A1D705A@BYAPR21MB1688.namprd21.prod.outlook.com>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230731092204.2933045-1-Naresh.Solanki@9elements.com>
+ <BN9PR12MB53819FE51F98D80CE6F5A724AF05A@BN9PR12MB5381.namprd12.prod.outlook.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2] hwmon: (pmbus/mp2975) Fix PGOOD in READ_STATUS_WORD
+In-Reply-To: <BN9PR12MB53819FE51F98D80CE6F5A724AF05A@BN9PR12MB5381.namprd12.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 7/30/2023 9:05 PM, Michael Kelley (LINUX) wrote:
-> Does anyone have suggestions on a different way to handle
-> this that's better than the above diff?  Other thoughts?
+On 7/31/23 02:54, Vadim Pasternak wrote:
+> 
+> 
+>> -----Original Message-----
+>> From: Naresh Solanki <naresh.solanki@9elements.com>
+>> Sent: Monday, 31 July 2023 12:22
+>> To: Guenter Roeck <linux@roeck-us.net>; Jean Delvare <jdelvare@suse.com>
+>> Cc: Vadim Pasternak <vadimp@nvidia.com>; Patrick Rudolph
+>> <patrick.rudolph@9elements.com>; Naresh Solanki
+>> <Naresh.Solanki@9elements.com>; linux-hwmon@vger.kernel.org; linux-
+>> kernel@vger.kernel.org
+>> Subject: [PATCH v2] hwmon: (pmbus/mp2975) Fix PGOOD in
+>> READ_STATUS_WORD
+>>
+>> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+>>
+>> MP2973 & MP2971 returns PGOOD instead of PB_STATUS_POWER_GOOD_N.
+>> Fix that in the read_word_data hook.
+>> MP2975 might be affected but needs verification.
+> 
+> Hi,
+> 
+> According to MP2975 regmap datasheet for STATUS_WORD, bit 11 reports:
+>   11	 POWER_GOOD_N	1’b0: PG is active.
+> 				1’b1: PG not active has occurred
+> Is it the same what stays MP2971 and MP2973 docs?
+> 
 
-how badly do you need xapic ? Meaning, can x2apic just be used instead always
+I don't have a datasheet for any of the chips, so I can not confirm
+either way. The above looks like the standard definition, suggesting
+that MP2975 would not be affected.
+
+If that is the case, the commit should say that MP2975 is not affected
+according to the datasheet, but that this has not been confirmed on
+real hardware (unless you can confirm it).
+
+Thanks,
+Guenter
+
+> Thanks,
+> Vadim.
+> 
+>>
+>> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+>> ---
+>>   drivers/hwmon/pmbus/mp2975.c | 5 +++++
+>>   1 file changed, 5 insertions(+)
+>>
+>> diff --git a/drivers/hwmon/pmbus/mp2975.c
+>> b/drivers/hwmon/pmbus/mp2975.c index 28f33f4618fa..27bb39370662
+>> 100644
+>> --- a/drivers/hwmon/pmbus/mp2975.c
+>> +++ b/drivers/hwmon/pmbus/mp2975.c
+>> @@ -297,6 +297,11 @@ static int mp2973_read_word_data(struct i2c_client
+>> *client, int page,
+>>   	int ret;
+>>
+>>   	switch (reg) {
+>> +	case PMBUS_STATUS_WORD:
+>> +		/* MP2973 & MP2971 returns PGOOD instead of
+>> PB_STATUS_POWER_GOOD_N. */
+>> +		ret = pmbus_read_word_data(client, page, phase, reg);
+>> +		ret ^= PB_STATUS_POWER_GOOD_N;
+>> +		break;
+>>   	case PMBUS_OT_FAULT_LIMIT:
+>>   		ret = mp2975_read_word_helper(client, page, phase, reg,
+>>   					      GENMASK(7, 0));
+>>
+>> base-commit: cb7022b8976e3c4d12cea2e7bb820a2944e2fd7b
+>> --
+>> 2.41.0
+> 
 
