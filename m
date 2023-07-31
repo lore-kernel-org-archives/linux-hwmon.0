@@ -2,156 +2,191 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B955AC001DE
-	for <linux-hwmon@archiver.kernel.org>; Mon, 31 Jul 2023 09:55:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0363C001DE
+	for <linux-hwmon@archiver.kernel.org>; Mon, 31 Jul 2023 12:34:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231285AbjGaJzt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 31 Jul 2023 05:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40238 "EHLO
+        id S232359AbjGaMeo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 31 Jul 2023 08:34:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231261AbjGaJzS (ORCPT
+        with ESMTP id S229922AbjGaMen (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 31 Jul 2023 05:55:18 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2070.outbound.protection.outlook.com [40.107.100.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142B71BC1;
-        Mon, 31 Jul 2023 02:54:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hK6cJMELj9iWxC/fposouBEUArAEyyZFRHqhAPPu7N/6lV792zFoYdA5f7YTJ8AzQxVBzVm3pCDXwByq2YVZfAmSFfZ453SXn7LWHxIADnpJWus1ynugQE4XPNyOTkumqM7mg9uQaDOz2jgEjkvkGgxDk00dwsA7wWB/mz/aNLgLx3rXGHn4pSRfTr2bdTi15kZZq0qst/v9n3Uat7NYFpQrX6ppfKAywff0CoeRzwfpoGZqc56JgmOw+NNuLDOp2xHOXa7y2lirkQEz2UXFLEOm/SU7Z04fypyHbKvb67tPJrbNTGrzyyc4QnekK/0+kEHOqFoDNqrkmmR3jpIKRg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gUQIKyQcyY5OfowyIgBIy8V/x7Nzp7Jp/02mNOxnAzw=;
- b=QJB+eV01Buvgwu0rLqwvNiiQAD9m2kAc1HuL0FIYjY7yAC3JG7y9epV3BXv3LndCf7kee1M3P8cEUtvvnB0l/Hh0z9Ox3TaQNpXWMr+NR+UHdYtRqUqNfLQP7yvGrICccXwU89BD3CXJA+bHrbo4tJtr4xJ6FTE5qF5oCc773P7gzFNOegOr9IgGomUEm0P2+zQX8oipwL/uZ1weazsu9LAf6qUnsB3bUQzV2YVdMteTilCPMI5fZLWN76esiS/VGkZZmaIVzTgZxqL+eTG9IrbJAgcaP+26LkmRKY8B/p/5UHbq4HCGhmD00bF45+FGZAhzbjjgXVVq0larefuxcg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gUQIKyQcyY5OfowyIgBIy8V/x7Nzp7Jp/02mNOxnAzw=;
- b=JRE+UH9qPoR/nVsgGEZsICMZVF6YFG8nUzae0nlcoKS1d0QOiHveMufA5WQtrmNbaTpGiuTuSeK5Rr1i+rzXL5t9HWcH2+Sv7TyGqmmojFXdkkALogONe6Bn/cfZkaPj0/YzBWTpDYA1xLfuKCrxradDCmBuQVKk/15ojXY5awIHjpw5mOQd8cXvhvwLqJk3Z+xlUPAARYs2VxkaSh12zgV4Qp1Eq2jvLknphpD/8cjKmcL7TAAlTL/RIgRniKtyc8iSuVuoPpk6BdsaoXvQHUza4AORQEQa88/mgCWG6l9uyMiI/JA5vGWjFqXD9renT7mzbsuO14lNGX97WD2jcQ==
-Received: from BN9PR12MB5381.namprd12.prod.outlook.com (2603:10b6:408:102::24)
- by SA1PR12MB8724.namprd12.prod.outlook.com (2603:10b6:806:38b::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6609.32; Mon, 31 Jul
- 2023 09:54:48 +0000
-Received: from BN9PR12MB5381.namprd12.prod.outlook.com
- ([fe80::5fa6:31e7:e6fb:3beb]) by BN9PR12MB5381.namprd12.prod.outlook.com
- ([fe80::5fa6:31e7:e6fb:3beb%4]) with mapi id 15.20.6631.043; Mon, 31 Jul 2023
- 09:54:46 +0000
-From:   Vadim Pasternak <vadimp@nvidia.com>
-To:     Naresh Solanki <naresh.solanki@9elements.com>,
+        Mon, 31 Jul 2023 08:34:43 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1123139;
+        Mon, 31 Jul 2023 05:34:41 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1690806879;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=26bNPteWLKWX+IXb6CXn0F6iXGIdt9GmgAnDVbyNoUc=;
+        b=uDXkw2Ay5rxDMiOgBXNnZOMctMLa1CZfO0YQ8FiSGypGhqCA3YfCB8QO2bcWKTBHwXPon1
+        4SG2jZnu7h2E7IgvCIIkNvArtILo3wCcp3CKPy5vKXHlEu9kl9xoiEgt2/OZrSk5zQt9qK
+        hhyYL1L7z2rvJwtBDzahacKFKUkKRQhzoI1+IG3DQTmICoVIKPsVfm8lRHhcYiLm/X/Yck
+        xPrqyPUakMrE+ZKueCEgPUEM1omfO9aN/m3xm7S88c+ATcmuN5rTFRnaSriVrj6PapaEe7
+        2T704/PZ4VFKJNeIGkqSvC/L8Han350umiQssr78hOhSnZRAm3MGYcH6f02J6g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1690806879;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=26bNPteWLKWX+IXb6CXn0F6iXGIdt9GmgAnDVbyNoUc=;
+        b=1w9HP+LRa/uXwBirEj5ZNjtThhek9E5qaTN8T6DYClnfLEm8+4TGDNsMvPGktEuJjF8s8B
+        56/kKbxH3Nbb1oCQ==
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     "x86@kernel.org" <x86@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Arjan van de Ven <arjan@linux.intel.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        James Smart <james.smart@broadcom.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-CC:     Patrick Rudolph <patrick.rudolph@9elements.com>,
         "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2] hwmon: (pmbus/mp2975) Fix PGOOD in READ_STATUS_WORD
-Thread-Topic: [PATCH v2] hwmon: (pmbus/mp2975) Fix PGOOD in READ_STATUS_WORD
-Thread-Index: AQHZw5B9uXDBK89VZ0SfeBirFhIhHa/TofOA
-Date:   Mon, 31 Jul 2023 09:54:46 +0000
-Message-ID: <BN9PR12MB53819FE51F98D80CE6F5A724AF05A@BN9PR12MB5381.namprd12.prod.outlook.com>
-References: <20230731092204.2933045-1-Naresh.Solanki@9elements.com>
-In-Reply-To: <20230731092204.2933045-1-Naresh.Solanki@9elements.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR12MB5381:EE_|SA1PR12MB8724:EE_
-x-ms-office365-filtering-correlation-id: bce83862-a24b-45ab-7375-08db91ac2c6f
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: b/uQdeHl1XOulBA2YHa2fTXlZ7EVQLgk9BDGGV31sBkbxfzA00R/3WSXUU9cb2oiqSvwc/ll2oSsWGH0BurinyehdFzDLYz+JpJBQtdn5WzoNnu3pN7S4qA8ymuuZ/LaMfXr3fGNnVZTYfpFDXDhgMka8qoftrxFQQiA15Yv+nOfdhBDFX6hjJPMTK/dlH5jNm7R87D7svOPgh9hbPFoME/SXNoBZW6C2g4cMj0eiMMdbSlTfm/Z2qvnmrMCZ1AM3M60TY6xq4lKwMUcw3IYZIEHOYXN9xC+sB0JKt3+YQ+FwFOt0WKOburc1xSO4UEko0THWBdPjISMHx5TGT7oTcAqCL9G/kfWXwTl+tHJyarjfn+ro8kQCLqCYHdSQXxcSGLyfpQ4lia7RNlL7w1juwgf2f+mFLlrWd2Vlfyw/cPwWY1061CHDn4xkjP4ioDyjy3vsdaF/5w2eH6cMpO4Y3MZgq7qZafvTpfpgDg0qQ+z0U3yTnP/MuZLpzRBgC2hFtSeQoqRCeApZnLqKBEimK8hOxglgZ0g61zsMGu3HSmqBUosyo9kYnfZCBZZdNwXqnDcihCZSFUOrIMz4g1nDed3mRZGDvflgwc/56rgNcX67IPYPKligwmPf278rBbJ
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5381.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(39860400002)(376002)(396003)(346002)(451199021)(53546011)(71200400001)(33656002)(478600001)(55016003)(6506007)(186003)(9686003)(7696005)(83380400001)(2906002)(66476007)(122000001)(4326008)(76116006)(66946007)(38100700002)(66556008)(8676002)(8936002)(316002)(110136005)(86362001)(66446008)(5660300002)(52536014)(64756008)(54906003)(38070700005)(41300700001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OWpCekNBejFVSjNJYlFxbWw1bS90UGE1Qmp2QmlFSDcwc2hyVGNQS0plZmMv?=
- =?utf-8?B?SjI5MHk4ZHg1UTAwZlFSSFhBNVNkVEtnNXJraHg3ZE1QaThiRW11cE0xOS9a?=
- =?utf-8?B?RDgxNGJCaStNQTJKTGM0UnVJYzlRbW1Wb3IrWEpXblBacU02elhkQTl3ZWtJ?=
- =?utf-8?B?cXYwOGRlRlFrY2JDc3ZpdkpoR2RId3MrKzcyeXZ6WCt2Vm9MaGx1dkdMT2t4?=
- =?utf-8?B?MmUvRnBEWFNnZWtuWVFnbWtXaDNod1U2MXQrRTduRSt6bUdvZTBhcncwNjNY?=
- =?utf-8?B?bVc2S1BzM2xDK2xXc2czdUJDZ3lPNHhPbXl0SGpBenN3My9jNDVUWU9JUEJL?=
- =?utf-8?B?YmdmMmdML0lLWkF3UnkwR0hOZ2tpZFFYWloya3Z3d01IYU9KODFlSU0zM3k0?=
- =?utf-8?B?RHJsZmtQTEZEbmo0ZjhrUmRweTNiNDVKZlBNUDIvLy9iRUFmTkdjenYyY08y?=
- =?utf-8?B?cUdJS1A2OW5KSUx5djJWdDBNQ1puRFlIak5RN3ZGRGxLK0txY2RrMU1KWkFu?=
- =?utf-8?B?ZXBBNGZmMm52OExGV01XTGFqSy9UcVR2RFZHUTQ4RGt1eUh6Tmo4a0l6eG5H?=
- =?utf-8?B?SEhqY2VjYkhVTEI0ZEorVEtpSWhhN0J0bkRuMzBmYWN1ZFhtandJaEV0c2gw?=
- =?utf-8?B?aFIvUVBkVEJCYjNmcHBrbjV2SXJtaDZGMnZzRlVhVW5ZUzV3WGRSSEJOOUJM?=
- =?utf-8?B?Z2htMHhGekFVSzVtbVZHWnNzYkVQQk1XczRYc0tSUUdlcTZML0M0T3BQOEZW?=
- =?utf-8?B?TTdFQlVzQ3RKNWI1ZW50VHdvR24xZjJtT1dHWmhkOStxKzIwT1BWbEJUdnpR?=
- =?utf-8?B?OGdIc0lDc3MwV2VuWVFST0xvU1lINjR4TWQzdVhPOWZ6dXpGSmNUdGZNSW55?=
- =?utf-8?B?ZHgrYnVtYW9ibXhhRGpFMVp2R1pRNk16RVVoVGdhbHlKbkkrMHpPT1F0ODVS?=
- =?utf-8?B?UzlBVjJHenVVbmFyTmNERlVDNEc4YzVuaVpjbWxOT3VCV051MHBxVTVkRVJ3?=
- =?utf-8?B?REI0em1iSWRMb0U0TFdFVUh2YmxCcUVrNGtNVkc5S3I4enJsdGZTSkJTUlIx?=
- =?utf-8?B?MS9KanlLSXRKRUZsNlVwaEl3cGZBb1NaYW9Zc1VIdXNaK1pWTTdMTVVJUmJk?=
- =?utf-8?B?RXBOaFNNWHN1c2JWL1hNZjZYNkwxZW1BTUFiQnFmM1lWbEZRbm1LMGVROTNZ?=
- =?utf-8?B?NTVjbkFHYVRhQ1IzZ05Wd1FUQUNXcHJGekoyR3RCK29mNFA4UDFzemdUSUJN?=
- =?utf-8?B?NUpzdFRhbUJ4K1ExcVF3Zk9WN0xKY1Y1SSthbktCbHk5WWVYem1SRU9lSHRE?=
- =?utf-8?B?VFNKMFNZM0tKQnBlM3RxWkpScE81OFplV3V4R2xrNzJ2VTZFVEFBTjRFSExQ?=
- =?utf-8?B?T2dycE9PK2RnLzc4NUJudjltaDVYV1krb2FUejA1LzQ5N2t1WU5zV3Q5LzJo?=
- =?utf-8?B?bXdnOFYvMkNIZkNCRzFvRDh1bVpZWS9EMldxZFFMekJXYldrZm93djZtd0Nz?=
- =?utf-8?B?Q0pLZHlIRDM1NHJWUmhPUHoyaTg4Rkd0VFJyQ1VqcnJOcExqTUEycU5waSs2?=
- =?utf-8?B?VlNsamFFeDBIczhpWDFhZ3hKTW5ITG5OeTdkbElUL1lQcStDdlhsOEo2ZjVE?=
- =?utf-8?B?ck8vZjZKZUNoYmlYcXg0Ni8zaHFyZjhHWGpCM2lrNTRlZUl4Y3NDcXJ6KzR0?=
- =?utf-8?B?a0h1QVpTb1o1UUkxdHNtckE5Y0E0VFlTRi80MTdvLzY3WFNZUm5ieTcvamJu?=
- =?utf-8?B?aEVmR3k2UTIrTVlVS0xTNjhwRktiSEZJb2FuOHdON2ZTWVpWZGlKbE1NZFpD?=
- =?utf-8?B?cDJONkhFSDZsQUVEdTM3eEVVd1ZIWkNiQlQ0c1g0KzJQdjc1T1JJeXJqSG82?=
- =?utf-8?B?SXNtYk9UcW1acWYxc0llMVRMWUxZcUFQNnFTSG5QV1dLNm05K3Z0YSt2Slh4?=
- =?utf-8?B?OW1RTlhkbnByR3FNMm84dlVIeE16TDNZMFcvWXBVRXk4cWl0aDJlWHhtU3ZQ?=
- =?utf-8?B?WVYvbStpT2p3eWFtV2huOGw1c2V0Tll4M2FTT1NlaW0xSjlWRkpIOHl2QnMr?=
- =?utf-8?B?TTRrUFdqSkxhUm5tellvZWJ2R1pLTy8xOXN6dz09?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Jean Delvare <jdelvare@suse.com>,
+        Huang Rui <ray.huang@amd.com>, Juergen Gross <jgross@suse.com>,
+        Steve Wahl <steve.wahl@hpe.com>,
+        Mike Travis <mike.travis@hpe.com>,
+        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
+        Russ Anderson <russ.anderson@hpe.com>
+Subject: RE: [patch v2 21/38] x86/cpu: Provide cpu_init/parse_topology()
+In-Reply-To: <BYAPR21MB16889FD224344B1B28BE22A1D705A@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <20230728105650.565799744@linutronix.de>
+ <20230728120930.839913695@linutronix.de>
+ <BYAPR21MB16889FD224344B1B28BE22A1D705A@BYAPR21MB1688.namprd21.prod.outlook.com>
+Date:   Mon, 31 Jul 2023 14:34:39 +0200
+Message-ID: <871qgop8dc.ffs@tglx>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5381.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bce83862-a24b-45ab-7375-08db91ac2c6f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Jul 2023 09:54:46.8348
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 8XKzr2lgFv8NEMClJu4hfq4yDLJcsOOPk7Aqe/6tU1AiIHloE+UJ4AQimT6mop+eEeRJZ9AsuiXbm1fXjPuFlQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB8724
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogTmFyZXNoIFNvbGFua2kg
-PG5hcmVzaC5zb2xhbmtpQDllbGVtZW50cy5jb20+DQo+IFNlbnQ6IE1vbmRheSwgMzEgSnVseSAy
-MDIzIDEyOjIyDQo+IFRvOiBHdWVudGVyIFJvZWNrIDxsaW51eEByb2Vjay11cy5uZXQ+OyBKZWFu
-IERlbHZhcmUgPGpkZWx2YXJlQHN1c2UuY29tPg0KPiBDYzogVmFkaW0gUGFzdGVybmFrIDx2YWRp
-bXBAbnZpZGlhLmNvbT47IFBhdHJpY2sgUnVkb2xwaA0KPiA8cGF0cmljay5ydWRvbHBoQDllbGVt
-ZW50cy5jb20+OyBOYXJlc2ggU29sYW5raQ0KPiA8TmFyZXNoLlNvbGFua2lAOWVsZW1lbnRzLmNv
-bT47IGxpbnV4LWh3bW9uQHZnZXIua2VybmVsLm9yZzsgbGludXgtDQo+IGtlcm5lbEB2Z2VyLmtl
-cm5lbC5vcmcNCj4gU3ViamVjdDogW1BBVENIIHYyXSBod21vbjogKHBtYnVzL21wMjk3NSkgRml4
-IFBHT09EIGluDQo+IFJFQURfU1RBVFVTX1dPUkQNCj4gDQo+IEZyb206IFBhdHJpY2sgUnVkb2xw
-aCA8cGF0cmljay5ydWRvbHBoQDllbGVtZW50cy5jb20+DQo+IA0KPiBNUDI5NzMgJiBNUDI5NzEg
-cmV0dXJucyBQR09PRCBpbnN0ZWFkIG9mIFBCX1NUQVRVU19QT1dFUl9HT09EX04uDQo+IEZpeCB0
-aGF0IGluIHRoZSByZWFkX3dvcmRfZGF0YSBob29rLg0KPiBNUDI5NzUgbWlnaHQgYmUgYWZmZWN0
-ZWQgYnV0IG5lZWRzIHZlcmlmaWNhdGlvbi4NCg0KSGksDQoNCkFjY29yZGluZyB0byBNUDI5NzUg
-cmVnbWFwIGRhdGFzaGVldCBmb3IgU1RBVFVTX1dPUkQsIGJpdCAxMSByZXBvcnRzOg0KIDExCSBQ
-T1dFUl9HT09EX04JMeKAmWIwOiBQRyBpcyBhY3RpdmUuDQoJCQkJMeKAmWIxOiBQRyBub3QgYWN0
-aXZlIGhhcyBvY2N1cnJlZA0KSXMgaXQgdGhlIHNhbWUgd2hhdCBzdGF5cyBNUDI5NzEgYW5kIE1Q
-Mjk3MyBkb2NzPw0KDQpUaGFua3MsDQpWYWRpbS4NCg0KPiANCj4gU2lnbmVkLW9mZi1ieTogUGF0
-cmljayBSdWRvbHBoIDxwYXRyaWNrLnJ1ZG9scGhAOWVsZW1lbnRzLmNvbT4NCj4gU2lnbmVkLW9m
-Zi1ieTogTmFyZXNoIFNvbGFua2kgPE5hcmVzaC5Tb2xhbmtpQDllbGVtZW50cy5jb20+DQo+IC0t
-LQ0KPiAgZHJpdmVycy9od21vbi9wbWJ1cy9tcDI5NzUuYyB8IDUgKysrKysNCj4gIDEgZmlsZSBj
-aGFuZ2VkLCA1IGluc2VydGlvbnMoKykNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2h3bW9u
-L3BtYnVzL21wMjk3NS5jDQo+IGIvZHJpdmVycy9od21vbi9wbWJ1cy9tcDI5NzUuYyBpbmRleCAy
-OGYzM2Y0NjE4ZmEuLjI3YmIzOTM3MDY2Mg0KPiAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9od21v
-bi9wbWJ1cy9tcDI5NzUuYw0KPiArKysgYi9kcml2ZXJzL2h3bW9uL3BtYnVzL21wMjk3NS5jDQo+
-IEBAIC0yOTcsNiArMjk3LDExIEBAIHN0YXRpYyBpbnQgbXAyOTczX3JlYWRfd29yZF9kYXRhKHN0
-cnVjdCBpMmNfY2xpZW50DQo+ICpjbGllbnQsIGludCBwYWdlLA0KPiAgCWludCByZXQ7DQo+IA0K
-PiAgCXN3aXRjaCAocmVnKSB7DQo+ICsJY2FzZSBQTUJVU19TVEFUVVNfV09SRDoNCj4gKwkJLyog
-TVAyOTczICYgTVAyOTcxIHJldHVybnMgUEdPT0QgaW5zdGVhZCBvZg0KPiBQQl9TVEFUVVNfUE9X
-RVJfR09PRF9OLiAqLw0KPiArCQlyZXQgPSBwbWJ1c19yZWFkX3dvcmRfZGF0YShjbGllbnQsIHBh
-Z2UsIHBoYXNlLCByZWcpOw0KPiArCQlyZXQgXj0gUEJfU1RBVFVTX1BPV0VSX0dPT0RfTjsNCj4g
-KwkJYnJlYWs7DQo+ICAJY2FzZSBQTUJVU19PVF9GQVVMVF9MSU1JVDoNCj4gIAkJcmV0ID0gbXAy
-OTc1X3JlYWRfd29yZF9oZWxwZXIoY2xpZW50LCBwYWdlLCBwaGFzZSwgcmVnLA0KPiAgCQkJCQkg
-ICAgICBHRU5NQVNLKDcsIDApKTsNCj4gDQo+IGJhc2UtY29tbWl0OiBjYjcwMjJiODk3NmUzYzRk
-MTJjZWEyZTdiYjgyMGEyOTQ0ZTJmZDdiDQo+IC0tDQo+IDIuNDEuMA0KDQo=
+On Mon, Jul 31 2023 at 04:05, Michael Kelley wrote:
+>> +	/*
+>> +	 * The initial invocation from early_identify_cpu() happens before
+>> +	 * the APIC is mapped or X2APIC enabled. For establishing the
+>> +	 * topology, that's not required. Use the initial APIC ID.
+>> +	 */
+>> +	if (early)
+>> +		c->topo.apicid =3D c->topo.initial_apicid;
+>> +	else
+>> +		c->topo.apicid =3D read_apic_id();
+>
+> Using the value from the local APIC ID reg turns out to cause a problem in
+> some Hyper-V VM configurations.  If a VM has multiple L3 caches (probably
+> due to multiple NUMA nodes) and the # of CPUs in the span of the L3 cache
+> is not a power of 2, the APIC IDs for the CPUs in the span of the 1st L3 =
+cache
+> are sequential starting with 0.  But then there is a gap before starting =
+the
+> APIC IDs for the CPUs in the span of the 2nd L3 cache.  The gap is
+> repeated if there are additional L3 caches.
+>
+> The CPUID instruction executed on a guest vCPU correctly reports the APIC
+> IDs.  However, the ACPI MADT assigns the APIC IDs sequentially with no
+> gaps, and the guest firmware sets the APIC_ID register for each local APIC
+> to match the MADT.  When parse_topology() sets the apicid field based on
+> reading the local APIC ID register, the value it sets is different from t=
+he
+> initial_apicid value for CPUs in the span of the 2nd and subsequent L3
+> caches, because there's no gap in the APIC IDs read from the local APIC.
+> Linux boots and runs, but the topology is set up with the wrong span for
+> the L3 cache and for the associated scheduling domains.
+
+TBH. That's an insanity. MADT and the actual APIC ID determine the
+topology. So the gaps should be reflected in MADT and the actual APIC
+IDs should be set correctly if the intent is to provide topology
+information.
+
+Just for the record. This hack works only on Intel today, because AMD
+init sets topo.apicid =3D read_apic_id() unconditionally. So this is
+inconsistent already, no?
+
+> The old code derives the apicid from the initial_apicid via the
+> phys_pkg_id() callback, so these bad Hyper-V VM configs skate by.  The
+> wrong value in the local APIC ID register and MADT does not affect
+> anything, except that the check in validate_apic_and_package_id() fails
+> during boot, and a set of "Firmware bug:" messages is correctly
+> output.
+
+So instead of fixing the firmware bugs, hyper-v just moves on and
+pretends that everything works fine, right?
+
+> Three thoughts:
+>
+> 1)  Are Hyper-V VMs the only place where the local APIC ID register might
+> have a bogus value?  Probably so, but you never know what might crawl
+> out.
+
+Define bogus. MADT is the primary source of information because that's
+how we know how many CPUs (APICs) are there and what their APIC ID is
+which we can use to wake them up. So there is a reasonable expectation
+that this information is consistent with the rest of the system.
+
+The Intel SDM clearly says in Vol 3A section 9.4.5 Identifying Logical
+Processors in an MP System:
+
+  "After the BIOS has completed the MP initialization protocol, each
+   logical processor can be uniquely identified by its local APIC
+   ID. Software can access these APIC IDs in either of the following
+   ways:"
+
+These ways include read from APIC, read MADT, read CPUID and implies
+that this must be consistent. For X2APIC it's actually written out:
+
+  "If the local APIC unit supports x2APIC and is operating in x2APIC
+   mode, 32-bit APIC ID can be read by executing a RDMSR instruction to
+   read the processor=E2=80=99s x2APIC ID register. This method is equivale=
+nt to
+   executing CPUID leaf 0BH described below."
+
+AMD has not been following that in the early 64bit systems as they moved
+the APIC ID space to start at 32 for the first CPU in the first socket
+for whatever reasons. But since then the kernel reads back the APIC ID
+on AMD systems into topo.apicid. But that was long ago and can easily be
+dealt with because at least the real APIC ID and the MADT/MPTABLE
+entries are consistent.
+
+Hypervisors have their own CPUID space to override functionality with
+their own magic stuff, but imposing their nutbolt ideas on the
+architectural part of the system is not only wrong, it's disrespectful
+against the OS developers who try to keep their system sane.
+
+> 2) The natural response is "Well, fix Hyper-V!"  I first had this convers=
+ation
+> with the Hyper-V team about 5 years ago.  Some cases of the problem were
+> fixed, but some cases remain unfixed.  It's a long story.
+>
+> 3)  Since Hyper-V code in Linux already has an override for the apic->rea=
+d()
+> function, it's possible to do a hack in that override so that apicid gets=
+ set to
+> the same value as initial_apicid, which matches the old code.  Here's the=
+ diff:
+
+This collides massively with the other work I'm doing, which uses the
+MADT provided information to actually evaluate various topology related
+things upfront and later during bringup. Thats badly needed because lots
+of todays infrastructure is based on heuristics and guesswork.
+
+But it seems I wasted a month on reworking all of this just to be
+stopped cold in the tracks by completely undocumented and unnecessary
+hyper-v abuse.
+
+So if Hyper-V insists on abusing the initial APIC ID as read from CPUID
+for topology information related to L3, then hyper-v should override the
+cache topology mechanism and not impose this insanity on the basic
+topology evaluation infrastructure.
+
+Yours seriously grumpy
+
+      tglx
