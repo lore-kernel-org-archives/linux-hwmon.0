@@ -2,62 +2,307 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D903C04A94
-	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Aug 2023 10:40:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 487F9C001DF
+	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Aug 2023 12:35:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232231AbjHAKkb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 1 Aug 2023 06:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54540 "EHLO
+        id S232097AbjHAMfF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 1 Aug 2023 08:35:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231982AbjHAKka (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 1 Aug 2023 06:40:30 -0400
-X-Greylist: delayed 4201 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 01 Aug 2023 03:40:29 PDT
-Received: from mail.cothiafon.pl (mail.cothiafon.pl [217.61.106.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78070DB
-        for <linux-hwmon@vger.kernel.org>; Tue,  1 Aug 2023 03:40:29 -0700 (PDT)
-Received: by mail.cothiafon.pl (Postfix, from userid 1002)
-        id 87C8A83B81; Mon, 31 Jul 2023 10:36:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=cothiafon.pl; s=mail;
-        t=1690792656; bh=dwoca0X6C9VXklO/zRgFQCPapTk5LFz4tKaENdvy6Po=;
-        h=Date:From:To:Subject:From;
-        b=fN+NDBIxPtaNlQkAJnC7QrXoi3c+UVBxM+hDC8M8gcCvzWYYKHKGgR6AOKLBRcV2K
-         YZH593TFN6YC9JuisfDq4/+IjZl2XU6qHZKS4yRVNAQHODr1e0E3UADEUP46p9FPwq
-         2ZtwfN21vgSwi7G4xQS1U6BrDF55b3op1ZM4x1vM+vSwoxDShDARPSVD8YPgmwIM09
-         rIHMuh2BjrJ6HdFDOoEE95hunXyQQ23XPHbDxI+p/kLHqHRxCFtXDrlpHWyth8jlP4
-         UIpHJ9oW5nqGRbAhgm1vYjJ8/o1gQOC1PQMuEokcJmh50s03MNOIQZ3Thnu+hBVDdZ
-         PFc6zIGw+gt8A==
-Received: by mail.cothiafon.pl for <linux-hwmon@vger.kernel.org>; Mon, 31 Jul 2023 08:35:48 GMT
-Message-ID: <20230731095940-0.1.28.onnx.0.c5p2gfoe1g@cothiafon.pl>
-Date:   Mon, 31 Jul 2023 08:35:48 GMT
-From:   =?UTF-8?Q? "Rados=C5=82aw_Grabowski" ?= 
-        <radoslaw.grabowski@cothiafon.pl>
-To:     <linux-hwmon@vger.kernel.org>
-Subject: W sprawie samochodu
-X-Mailer: mail.cothiafon.pl
+        with ESMTP id S229837AbjHAMfE (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 1 Aug 2023 08:35:04 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A34B1FCA
+        for <linux-hwmon@vger.kernel.org>; Tue,  1 Aug 2023 05:35:02 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-52cb8e5e9f5so3587303a12.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 01 Aug 2023 05:35:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1690893301; x=1691498101;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=VHSVdPgjixCyawH/oxZHoDJ8XeN+UtODsgWA/Uc7BmY=;
+        b=EFEk4h1zbBmJb+3eXBDeDCdCNlcL1jhBIBmyWqCdHdAYg0ISJZzBZ4k3H/40+PSSXm
+         R/zr34I4pB3cHxPnzHaSl0wcG/N0rj3eDmhphCIeJRjqtNqJpUt4M89z60sxo6XcAZDf
+         i1UCJ1KvvCIT0kvvyJoRMxMjMX3vz6bR9u5+KBS6XN7ZLG0YOxzwEAlb3G6uUyWVrRsb
+         ISy/IXDa24SEu9WcTnnlUO3fXFgdCnqbhMrFiAY1+uq5G1Vanvktcz8ysG0iye/kEu4B
+         fih5Kr/bYcXDag4NmSPXS/CfqsYpujxxXG0Hj6mIgqhEZS5nsA3QsRNmjcFAzv7j2RSq
+         GiGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690893301; x=1691498101;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VHSVdPgjixCyawH/oxZHoDJ8XeN+UtODsgWA/Uc7BmY=;
+        b=ixUDt1k9KumP/nOq5HCZwfQ+HUqDPpaaX+dAfThsd2RCHZEIaMOcP4CydfZRV+jOnm
+         eJbr3yuUWiWlGzdXlDxnaYmCWndtnxN53C0yRt/VAqU50poSpb1F3J8EHPyoVqBIluic
+         KU0cKfKdb49EgIfbUzn3uZBlV5CdztsIdgVSsrPmRQbty8mRjXHnKmjYRLKC0C2cV7Kc
+         R4s9fCC8WGPQtcAIec1OchQssEuj3jBl0C+i5UhU0RzhsKcz4EaMYSOS5OYjMGBQ92yO
+         qd3kMrxOO1i92EdXfj7OddHdmtgatpVWw1+4ZlzaabCPyFhxlH2fjIv7jvft17wmYh7y
+         WnRg==
+X-Gm-Message-State: ABy/qLYI8/VKZ1YVmDb3zjLxA7CrWgD7cTvSAeoPmB8DKPN1lwoMeXQ0
+        ydKru7vEKC4hplKg1wJMQfe6J4vdBYhZFxcUj2EuPQ==
+X-Google-Smtp-Source: APBJJlGdtHt3O0jwPOTO/pweA/Fhhb9oRqDA0o4vmbf2AhycKP5/jabv0FPFWl6mf2OYZyDNT/0ucis1tkbgiMgUuqg=
+X-Received: by 2002:a17:90b:3b8d:b0:268:e3d:1251 with SMTP id
+ pc13-20020a17090b3b8d00b002680e3d1251mr15515134pjb.20.1690893301467; Tue, 01
+ Aug 2023 05:35:01 -0700 (PDT)
 MIME-Version: 1.0
+References: <20230727091358.3274620-1-Naresh.Solanki@9elements.com>
+ <20230727091358.3274620-2-Naresh.Solanki@9elements.com> <41a8ae4b-0f96-9f26-f25b-b1554b2695d6@roeck-us.net>
+In-Reply-To: <41a8ae4b-0f96-9f26-f25b-b1554b2695d6@roeck-us.net>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+Date:   Tue, 1 Aug 2023 18:04:51 +0530
+Message-ID: <CABqG17jKoJ8FJdA-vpX8uda9yi_ir3f2FxFAiE7GTaVM7Mb2aA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] hwmon: (pmbus/tda38640) Add workaround for bug in
+ SVID mode
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        krzysztof.kozlowski+dt@linaro.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Hi Guenter,
 
-chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
-, je=C5=9Bli chodzi o system monitoringu GPS.
+On Thu, 27 Jul 2023 at 22:46, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 7/27/23 02:13, Naresh Solanki wrote:
+> > From: Patrick Rudolph <patrick.rudolph@9elements.com>
+> >
+> > Introduce a workaround to handle the issue where the regulator cannot be
+> > enabled using BIT7 of the OPERATION(01h) register when in SVID mode.
+> >
+> > It works when in PMBUS mode. In SVID mode the regulator only cares
+> > about the ENABLE pin.
+> >
+> > Determine if chip is in SVID mode by checking BIT15 of MTP memory offset
+> > 0x44 as described in the datasheet.
+> >
+> > If chip is in SVID mode then apply the workaround by
+> > 1. Determine EN pin level
+> > 2. Maps BIT7 of OPERATION(01h) to EN_PIN_POLARITY(BIT1) of
+> >     PB_ON_OFF_CONFIG.
+> >
+> > Tested working of TDA38640 in both SVID & PMBus mode.
+> >
+> > Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> > ----
+> > Changes in V2:
+> > - Remove dependency on DT propery,
+> > - Runtime determine SVID mode & ENABLE pin level,
+> > - Update commit message.
+> > ---
+> >   drivers/hwmon/pmbus/tda38640.c | 151 ++++++++++++++++++++++++++++++++-
+> >   1 file changed, 149 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/hwmon/pmbus/tda38640.c b/drivers/hwmon/pmbus/tda38640.c
+> > index 450b0273fb59..daaf77f8bf82 100644
+> > --- a/drivers/hwmon/pmbus/tda38640.c
+> > +++ b/drivers/hwmon/pmbus/tda38640.c
+> > @@ -18,6 +18,127 @@ static const struct regulator_desc __maybe_unused tda38640_reg_desc[] = {
+> >       PMBUS_REGULATOR("vout", 0),
+> >   };
+> >
+> > +struct tda38640_data {
+> > +     struct pmbus_driver_info info;
+> > +     u32 en_pin_lvl;
+> > +};
+> > +
+> > +#define to_tda38640_data(x)  container_of(x, struct tda38640_data, info)
+> > +
+> > +/*
+> > + * Map PB_ON_OFF_CONFIG_POLARITY_HIGH to PB_OPERATION_CONTROL_ON.
+> > + */
+> > +static int tda38640_read_byte_data(struct i2c_client *client, int page, int reg)
+> > +{
+> > +     const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
+> > +     struct tda38640_data *data = to_tda38640_data(info);
+> > +     int ret, on_off_config, enabled;
+> > +
+> > +     if (reg != PMBUS_OPERATION)
+> > +             return -ENODATA;
+> > +
+> > +     ret = pmbus_read_byte_data(client, page, reg);
+> > +     if (ret < 0)
+> > +             return ret;
+> > +
+> > +     on_off_config = pmbus_read_byte_data(client, page,
+> > +                                          PMBUS_ON_OFF_CONFIG);
+> > +     if (on_off_config < 0)
+> > +             return on_off_config;
+> > +
+> > +     enabled = !!(on_off_config & PB_ON_OFF_CONFIG_POLARITY_HIGH);
+> > +
+> > +     enabled ^= data->en_pin_lvl;
+> > +     if (enabled)
+> > +             ret &= ~PB_OPERATION_CONTROL_ON;
+> > +     else
+> > +             ret |= PB_OPERATION_CONTROL_ON;
+> > +
+> > +     return ret;
+> > +}
+> > +
+> > +/*
+> > + * Map PB_OPERATION_CONTROL_ON to PB_ON_OFF_CONFIG_POLARITY_HIGH.
+> > + */
+> > +static int tda38640_write_byte_data(struct i2c_client *client, int page,
+> > +                                 int reg, u8 byte)
+> > +{
+> > +     const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
+> > +     struct tda38640_data *data = to_tda38640_data(info);
+> > +     int enable, ret;
+> > +
+> > +     if (reg != PMBUS_OPERATION)
+> > +             return -ENODATA;
+> > +
+> > +     enable = !!(byte & PB_OPERATION_CONTROL_ON);
+> > +
+> > +     byte &= ~PB_OPERATION_CONTROL_ON;
+> > +     ret = pmbus_write_byte_data(client, page, reg, byte);
+> > +     if (ret < 0)
+> > +             return ret;
+> > +
+> > +     enable ^= data->en_pin_lvl;
+> > +
+> > +     return pmbus_update_byte_data(client, page, PMBUS_ON_OFF_CONFIG,
+> > +                                   PB_ON_OFF_CONFIG_POLARITY_HIGH,
+> > +                                   enable ? 0 : PB_ON_OFF_CONFIG_POLARITY_HIGH);
+> > +}
+> > +
+> > +static int svid_mode(struct i2c_client *client, struct tda38640_data *data)
+> > +{
+> > +     /* PMBUS_MFR_READ(0xD0) + MTP Address offset */
+> > +     u8 write_buf[] = {0xd0, 0x44, 0x00};
+> > +     u8 read_buf[2];
+> > +     int ret, svid;
+> > +     bool off, reg_en_pin_pol;
+> > +
+> > +     struct i2c_msg msgs[2] = {
+> > +             {
+> > +                     .addr = client->addr,
+> > +                     .flags = 0,
+> > +                     .buf = write_buf,
+> > +                     .len = sizeof(write_buf),
+> > +             },
+> > +             {
+> > +                     .addr = client->addr,
+> > +                     .flags = I2C_M_RD,
+> > +                     .buf = read_buf,
+> > +                     .len = sizeof(read_buf),
+> > +             }
+> > +     };
+> > +
+> > +     ret = i2c_transfer(client->adapter, msgs, 2);
+> > +     if (ret < 0) {
+> > +             dev_err(&client->dev, "i2c_transfer failed. %d", ret);
+> > +             return ret;
+> > +     }
+> > +
+> > +     /*
+> > +      * 0x44[15] determines PMBus Operating Mode
+> > +      * If bit is set then it is SVID mode.
+> > +      */
+> > +     svid = !!(read_buf[1] & BIT(7));
+> > +
+> > +     /*
+> > +      * Determine EN pin level for use in SVID mode.
+> > +      * This is done with help of STATUS_BYTE bit 6(OFF) & ON_OFF_CONFIG bit 2(EN pin polarity).
+> > +      */
+> > +     if (svid) {
+> > +             ret = i2c_smbus_read_byte_data(client, PMBUS_STATUS_BYTE);
+> > +             if (ret < 0)
+> > +                     return ret;
+> > +             off = !!(ret & PB_STATUS_OFF);
+> > +
+> > +             ret = i2c_smbus_read_byte_data(client, PMBUS_ON_OFF_CONFIG);
+> > +             if (ret < 0)
+> > +                     return ret;
+> > +             reg_en_pin_pol = !!(ret & PB_ON_OFF_CONFIG_POLARITY_HIGH);
+> > +             data->en_pin_lvl = off ^ reg_en_pin_pol;
+> > +     }
+> > +
+> > +     return svid;
+> > +}
+> > +
+> >   static struct pmbus_driver_info tda38640_info = {
+> >       .pages = 1,
+> >       .format[PSC_VOLTAGE_IN] = linear,
+> > @@ -26,7 +147,6 @@ static struct pmbus_driver_info tda38640_info = {
+> >       .format[PSC_CURRENT_IN] = linear,
+> >       .format[PSC_POWER] = linear,
+> >       .format[PSC_TEMPERATURE] = linear,
+> > -
+> >       .func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT
+> >           | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
+> >           | PMBUS_HAVE_IIN
+> > @@ -41,7 +161,34 @@ static struct pmbus_driver_info tda38640_info = {
+> >
+> >   static int tda38640_probe(struct i2c_client *client)
+> >   {
+> > -     return pmbus_do_probe(client, &tda38640_info);
+> > +     struct tda38640_data *data;
+> > +     int svid;
+> > +
+> > +     data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
+> > +     if (!data)
+> > +             return -ENOMEM;
+> > +     memcpy(&data->info, &tda38640_info, sizeof(tda38640_info));
+> > +
+> > +     svid = svid_mode(client, data);
+> > +     if (svid < 0) {
+> > +             dev_err_probe(&client->dev, svid, "Could not determine operating mode.");
+> > +             return svid;
+> > +     }
+> > +
+> > +     if (IS_ENABLED(CONFIG_SENSORS_TDA38640_REGULATOR) || svid) {
+>
+> If you hide this behind IS_ENABLED(CONFIG_SENSORS_TDA38640_REGULATOR), reading
+> svid outside the if() statement has no value.
+svid mode check is needed only when regulator is enabled for on/off
+control later.
+Will align the code such that if svid_mode check is done only when
+REGULATOR config is enabled
+& if it is in svid mode then apply the WA.
 
-Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
-e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
-a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
+>
+> > +             /*
+> > +              * Apply ON_OFF_CONFIG workaround as enabling the regulator using the
+> > +              * OPERATION register doesn't work in SVID mode.
+> > +              *
+> > +              * One should configure PMBUS_ON_OFF_CONFIG here, but
+> > +              * PB_ON_OFF_CONFIG_POWERUP_CONTROL and PB_ON_OFF_CONFIG_EN_PIN_REQ
+> > +              * are ignored by the device.
+> > +              * Only PB_ON_OFF_CONFIG_POLARITY_HIGH has an effect.
+>
+> Hmm, maybe I start to understand. This is really weird, since it changes
+> the polarity of the EN input pin, effectively reverting its value.
+> In other words, what really happens is that it is not possible to disable
+> the chip with PMBUS_ON_OFF_CONFIG in SVID mode, and that reverting
+> the EN pin polarity effectively simulates turning the chip on or off by
+> software. Maybe software enable is disabled on purpose in VID mode.
+> Is that really a bug or is it a feature, and is it really a good idea to
+> override it ?
+By design, SVID mode only has HW control enabled.
+This was with the assumption that PGOOD will be used for controlling
+Enable of another rail in Hardware.
 
-Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
-dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
-szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
-mne znaczenie.
+Since my use case needs the complete PMBUS based control,
+EN pin polarity flipping can be used for controlling output.
 
-Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
-b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
-
-
-Pozdrawiam
-Rados=C5=82aw Grabowski
+>
+> AN_2203_PL12_2204_184108 might really help here.
+>
+> Guenter
+>
+> > +              */
+> > +             data->info.read_byte_data = tda38640_read_byte_data;
+> > +             data->info.write_byte_data = tda38640_write_byte_data;
+> > +     }
+> > +     return pmbus_do_probe(client, &data->info);
+> >   }
+> >
+> >   static const struct i2c_device_id tda38640_id[] = {
+>
