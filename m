@@ -2,61 +2,59 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E86EC04FDF
-	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Aug 2023 14:14:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 663F0C04E69
+	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Aug 2023 14:15:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232710AbjHBOOr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 2 Aug 2023 10:14:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55114 "EHLO
+        id S232713AbjHBOPI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 2 Aug 2023 10:15:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232713AbjHBOOr (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Aug 2023 10:14:47 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E2326A8
-        for <linux-hwmon@vger.kernel.org>; Wed,  2 Aug 2023 07:14:45 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id ca18e2360f4ac-790b95beeedso83452439f.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 02 Aug 2023 07:14:45 -0700 (PDT)
+        with ESMTP id S229788AbjHBOPH (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Aug 2023 10:15:07 -0400
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A2126A3
+        for <linux-hwmon@vger.kernel.org>; Wed,  2 Aug 2023 07:15:05 -0700 (PDT)
+Received: by mail-il1-x133.google.com with SMTP id e9e14a558f8ab-348ccbf27eeso31041725ab.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 02 Aug 2023 07:15:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690985684; x=1691590484;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=5+W7ERMSRwa38xE6BUgJJIvcLx9/r6K1xBjHFeFJcPo=;
-        b=AkVtqZiyNf7VBRUvnOI2oTNYMTHUkbPswk/yE6M2YqSroegZ5xIxCtZ7sCX/Cb8IpE
-         wZRHHc/joHQsEAv5oW9lPCZAq4UiKwHr5bx0tSClQ+0T7Ebcwzn4fxD+d+dm03n4dzxG
-         gxlq1vW0G5xYZLeV0he2HLXDRfCQFSeg37BbtW7DgjRirYm7Wr5Zynq0RwAozCBJlqr4
-         S+3IdztBWPDpa8Ogw3ew993DKQVZoRaYK68zG1hALsfl9+6JUUOXQ010NXkQP+b/uXcM
-         gPgvGWgh3ZOETEXiu3cNWMVXzdD4DHLnRdMlumZo9EfzwIWvmJvHyCiW2OT9xLePMois
-         TNzg==
+        d=gmail.com; s=20221208; t=1690985705; x=1691590505;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UwCnlAPKhLtAH5NwQSSuuJAOXvBPJ+1xzh6zZ/WllQ4=;
+        b=q/ptiYBh0qOBl5hnOoNWMXHPlBMAO5E7RQRwsCDqf9n5IVWVmZTR0laPVQCJe49Jp6
+         0AKgfYJr18Id6YOLI+pxTiN8evo344hyt+BURj8drKQ8usuSasGZr/fBDSaQs+O9jX5s
+         7mcQQ6n3Pka1AuT0rnWsolR7a88ICh5ShJPWDb5u5I8lVLR8AFGZtJdZgHNXyp6apgKw
+         RFz4bryzAqZPKzObS7gby2XzV6DAUYCvvTxSXhcX9Cyl+MumBnilcrQMpAZCq8S9JhSX
+         t6dUYX/YmB7naNY4dLtGs5AW/szgUOmYfUkgVqmLWXcZZ36yAZlMn0ko9TWy+d6a6mUw
+         AGbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690985684; x=1691590484;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5+W7ERMSRwa38xE6BUgJJIvcLx9/r6K1xBjHFeFJcPo=;
-        b=TGn3CaocV1wvJuj0QijyyUkOlYWXKp/TEYDaYeg+24etjz1zEtSSaC4jenRY/a+GoP
-         e3oZulk9bQBFrnKgnHAdSNMmw4RztP8nuu/eO86DILSprKp5v2oRdgciIYTksbeS+gS7
-         NoQrkA8iH7V2kiNEohj/w7FimgTJfHuqNZZMl+3j9NWidM2U5TbjF0mpcdNy+XG31Yk7
-         KFIZuRqlzCQo2/Ee67ba1T3FbqQpThxFV72Eadf3ZybV2qXGOUWBbZtfQRNvWbLlSKBK
-         bVvpl7r/BeQPLbbTtWNT0+TEHUq8YMHJL1qJPMN6CEm0RlndvDR73iZMWghgQB688P+g
-         qMng==
-X-Gm-Message-State: ABy/qLYNG8O3NiUidWXN+vbSU5wdy4CYkxP2Xc+I2NoRKxwk6G7Uif5R
-        FyQmLWe2Bye1CDm4EaJBkT4=
-X-Google-Smtp-Source: APBJJlEoEPsucXwb0RZcs6fceByICBzVZ47X+Ufk2g8zQBpZ0g/v3GdjICYUGNxlxiAPg0y7+IzwrA==
-X-Received: by 2002:a5d:9481:0:b0:783:5452:e335 with SMTP id v1-20020a5d9481000000b007835452e335mr16382265ioj.6.1690985684107;
-        Wed, 02 Aug 2023 07:14:44 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1690985705; x=1691590505;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UwCnlAPKhLtAH5NwQSSuuJAOXvBPJ+1xzh6zZ/WllQ4=;
+        b=B54rL1gqBuX2c2BzCqbwftT8tlmgZ1gcCqo94bUMHNEFaHeiODYt6aVgp404/iRoDu
+         FDnsln582jAkxnwsXfRezWIOgvHn8CGzAbVpItAvp7XWni4XY3s+RF3gBB+MLcpSx9SK
+         MbDPrRETdLtVEl5GtztZmP1kYEQa8DPTFeblqrl7EyrGQ5gAtEhr/vlEdB2bJ6/uiBJ8
+         LGAWj6YRSnfqgYeRhxolBX2BKi0npV8GwUrM4gNRYX9/9Pc79GkeYyxbGuteOk4zrBi1
+         djk/1FWUXF77zciyZjLYe5cnP6VxKRLVVtV9hZaIVSf3/R5HoW9MBdxqXTknHjsNcroX
+         l7RQ==
+X-Gm-Message-State: ABy/qLYm9fNwlzgWM3rTN5gZWzMs4k/EpahF9GpuWTrJfare/CCHaV8c
+        edMHdo4iEIMgdyZGHUbyPlY=
+X-Google-Smtp-Source: APBJJlEEG107Lg+tkvsMO2Cfx+KSWDlXg+dIzd+As2w+pquxRZC1+zYClBtE4p/5j1xo3NS8unXkcw==
+X-Received: by 2002:a05:6e02:1805:b0:348:8576:15b5 with SMTP id a5-20020a056e02180500b00348857615b5mr12374654ilv.3.1690985705075;
+        Wed, 02 Aug 2023 07:15:05 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q9-20020a0566380ec900b0042b35c7b8c5sm4539863jas.61.2023.08.02.07.14.42
+        by smtp.gmail.com with ESMTPSA id r17-20020a92ce91000000b0034267d3fcc5sm4537623ilo.55.2023.08.02.07.15.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Aug 2023 07:14:43 -0700 (PDT)
+        Wed, 02 Aug 2023 07:15:04 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <fb6ed7c9-1a1e-bd0d-0954-7ebd8d38a3f4@roeck-us.net>
-Date:   Wed, 2 Aug 2023 07:14:42 -0700
+Message-ID: <5deda843-a9e6-2fe8-ed85-41cd70b287ae@roeck-us.net>
+Date:   Wed, 2 Aug 2023 07:15:03 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH v3 5/6] drm/xe/hwmon: Expose hwmon energy attribute
 Content-Language: en-US
 To:     Badal Nilawar <badal.nilawar@intel.com>,
         intel-xe@lists.freedesktop.org, linux-hwmon@vger.kernel.org
@@ -64,430 +62,291 @@ Cc:     anshuman.gupta@intel.com, ashutosh.dixit@intel.com,
         andi.shyti@linux.intel.com, riana.tauro@intel.com,
         matthew.brost@intel.com
 References: <20230802135241.458855-1-badal.nilawar@intel.com>
- <20230802135241.458855-6-badal.nilawar@intel.com>
+ <20230802135241.458855-2-badal.nilawar@intel.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230802135241.458855-6-badal.nilawar@intel.com>
+Subject: Re: [PATCH v3 1/6] drm/xe/hwmon: Add HWMON infrastructure
+In-Reply-To: <20230802135241.458855-2-badal.nilawar@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 On 8/2/23 06:52, Badal Nilawar wrote:
-> Expose hwmon energy attribute to show device level and gt
-> level energy usage
+> The xe HWMON module will be used to expose voltage, power and energy
+> values for dGfx. Here we set up xe hwmon infrastructure including xe
+> hwmon registration, basic data structures and functions.
 > 
 > v2:
->    - %s/hwm_/hwmon_/
->    - %s/tile_/gt_
->    - Convert enums to upper case
->    - Print error info for hwmon_gt devices
+>    - Fix review comments (Riana)
+> v3:
+>    - %s/hwm_/hwmon/ (Matt Brost)
+>    - Use drmm_mutex_init (Matt Brost)
+>    - Print error value (Matt Brost)
+>    - %s/hwmon_drvdata/xe_hwmon_data/
+>    - Move rpm (xe_device_mem_access_get/put) calls
+>      to this patch (Matt Brost)
 > 
 > Signed-off-by: Badal Nilawar <badal.nilawar@intel.com>
 > ---
->   .../ABI/testing/sysfs-driver-intel-xe-hwmon   |  12 +
->   drivers/gpu/drm/xe/regs/xe_gt_regs.h          |   2 +
->   drivers/gpu/drm/xe/regs/xe_mchbar_regs.h      |   3 +
->   drivers/gpu/drm/xe/xe_hwmon.c                 | 216 +++++++++++++++++-
->   4 files changed, 229 insertions(+), 4 deletions(-)
+>   drivers/gpu/drm/xe/Makefile          |   3 +
+>   drivers/gpu/drm/xe/xe_device.c       |   5 +
+>   drivers/gpu/drm/xe/xe_device_types.h |   2 +
+>   drivers/gpu/drm/xe/xe_hwmon.c        | 150 +++++++++++++++++++++++++++
+>   drivers/gpu/drm/xe/xe_hwmon.h        |  22 ++++
+>   5 files changed, 182 insertions(+)
+>   create mode 100644 drivers/gpu/drm/xe/xe_hwmon.c
+>   create mode 100644 drivers/gpu/drm/xe/xe_hwmon.h
 > 
-> diff --git a/Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon b/Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon
-> index 167bd9480602..4b2d6e1d0c7f 100644
-> --- a/Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon
-> +++ b/Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon
-> @@ -52,3 +52,15 @@ Description:	RO. Current Voltage in millivolt.
+> diff --git a/drivers/gpu/drm/xe/Makefile b/drivers/gpu/drm/xe/Makefile
+> index 4ea9e3150c20..831be23e000b 100644
+> --- a/drivers/gpu/drm/xe/Makefile
+> +++ b/drivers/gpu/drm/xe/Makefile
+> @@ -116,6 +116,9 @@ xe-y += xe_bb.o \
+>   	xe_wa.o \
+>   	xe_wopcm.o
 >   
->   		Only supported for particular Intel xe graphics platforms.
->   
-> +What:		/sys/devices/.../hwmon/hwmon<i>/energy1_input
-> +Date:		August 2023
-> +KernelVersion:	6.4
-> +Contact:	intel-xe@lists.freedesktop.org
-> +Description:	RO. Energy input of device or gt in microjoules.
+> +# graphics hardware monitoring (HWMON) support
+> +xe-$(CONFIG_HWMON) += xe_hwmon.o
 > +
-> +		For xe device level hwmon devices (name "xe") this
-> +		reflects energy input for the entire device. For gt level
-> +		hwmon devices (name "xe_gtN") this reflects energy input
-> +		for the gt.
+>   # i915 Display compat #defines and #includes
+>   subdir-ccflags-$(CONFIG_DRM_XE_DISPLAY) += \
+>   	-I$(srctree)/$(src)/display/ext \
+> diff --git a/drivers/gpu/drm/xe/xe_device.c b/drivers/gpu/drm/xe/xe_device.c
+> index 5409cf7895d3..01bd08812514 100644
+> --- a/drivers/gpu/drm/xe/xe_device.c
+> +++ b/drivers/gpu/drm/xe/xe_device.c
+> @@ -34,6 +34,7 @@
+>   #include "xe_vm.h"
+>   #include "xe_vm_madvise.h"
+>   #include "xe_wait_user_fence.h"
+> +#include "xe_hwmon.h"
+>   
+>   #ifdef CONFIG_LOCKDEP
+>   struct lockdep_map xe_device_mem_access_lockdep_map = {
+> @@ -335,6 +336,8 @@ int xe_device_probe(struct xe_device *xe)
+>   
+>   	xe_debugfs_register(xe);
+>   
+> +	xe_hwmon_register(xe);
 > +
-> +		Only supported for particular Intel xe graphics platforms.
-> diff --git a/drivers/gpu/drm/xe/regs/xe_gt_regs.h b/drivers/gpu/drm/xe/regs/xe_gt_regs.h
-> index cc452ec999fc..8819b934a592 100644
-> --- a/drivers/gpu/drm/xe/regs/xe_gt_regs.h
-> +++ b/drivers/gpu/drm/xe/regs/xe_gt_regs.h
-> @@ -400,8 +400,10 @@
->   #define XEHPC_BCS5_BCS6_INTR_MASK		XE_REG(0x190118)
->   #define XEHPC_BCS7_BCS8_INTR_MASK		XE_REG(0x19011c)
+>   	err = drmm_add_action_or_reset(&xe->drm, xe_device_sanitize, xe);
+>   	if (err)
+>   		return err;
+> @@ -361,6 +364,8 @@ static void xe_device_remove_display(struct xe_device *xe)
 >   
-> +#define PVC_GT0_PACKAGE_ENERGY_STATUS		XE_REG(0x281004)
->   #define PVC_GT0_PACKAGE_RAPL_LIMIT		XE_REG(0x281008)
->   #define PVC_GT0_PACKAGE_POWER_SKU_UNIT		XE_REG(0x281068)
-> +#define PVC_GT0_PLATFORM_ENERGY_STATUS		XE_REG(0x28106c)
->   #define PVC_GT0_PACKAGE_POWER_SKU		XE_REG(0x281080)
->   
->   #endif
-> diff --git a/drivers/gpu/drm/xe/regs/xe_mchbar_regs.h b/drivers/gpu/drm/xe/regs/xe_mchbar_regs.h
-> index cb2d49b5c8a9..473a44bd7c56 100644
-> --- a/drivers/gpu/drm/xe/regs/xe_mchbar_regs.h
-> +++ b/drivers/gpu/drm/xe/regs/xe_mchbar_regs.h
-> @@ -25,6 +25,9 @@
->   
->   #define PCU_CR_PACKAGE_POWER_SKU_UNIT		XE_REG(MCHBAR_MIRROR_BASE_SNB + 0x5938)
->   #define   PKG_PWR_UNIT				REG_GENMASK(3, 0)
-> +#define   PKG_ENERGY_UNIT			REG_GENMASK(12, 8)
-> +
-> +#define PCU_CR_PACKAGE_ENERGY_STATUS		XE_REG(MCHBAR_MIRROR_BASE_SNB + 0x593c)
->   
->   #define PCU_CR_PACKAGE_RAPL_LIMIT		XE_REG(MCHBAR_MIRROR_BASE_SNB + 0x59a0)
->   #define   PKG_PWR_LIM_1				REG_GENMASK(14, 0)
-> diff --git a/drivers/gpu/drm/xe/xe_hwmon.c b/drivers/gpu/drm/xe/xe_hwmon.c
-> index 3e69cd79c1e2..a337edcebae5 100644
-> --- a/drivers/gpu/drm/xe/xe_hwmon.c
-> +++ b/drivers/gpu/drm/xe/xe_hwmon.c
-> @@ -22,6 +22,8 @@ enum hwmon_reg_name {
->   	REG_PKG_POWER_SKU,
->   	REG_PKG_POWER_SKU_UNIT,
->   	REG_GT_PERF_STATUS,
-> +	REG_ENERGY_STATUS_ALL,
-> +	REG_ENERGY_STATUS_GT,
->   };
->   
->   enum hwmon_reg_operation {
-> @@ -30,31 +32,50 @@ enum hwmon_reg_operation {
->   	REG_RMW,
->   };
->   
-> +enum xe_hwmon_device_type {
-> +	HWMON_GT,
-> +	HWMON_DEVICE,
-> +};
-> +
->   /*
->    * SF_* - scale factors for particular quantities according to hwmon spec.
->    * - power  - microwatts
->    * - curr   - milliamperes
->    * - voltage  - millivolts
-> + * - energy - microjoules
->    */
->   #define SF_POWER	1000000
->   #define SF_CURR		1000
->   #define SF_VOLTAGE	1000
-> +#define SF_ENERGY	1000000
-> +
-> +struct hwmon_energy_info {
-> +	u32 reg_val_prev;
-> +	long accum_energy;		/* Accumulated energy for energy1_input */
-> +};
->   
->   struct xe_hwmon_data {
->   	struct device *hwmon_dev;
->   	struct xe_gt *gt;
->   	char name[12];
-> +	struct hwmon_energy_info ei;	/*  Energy info for energy1_input */
-> +	enum xe_hwmon_device_type type;
->   };
->   
->   struct xe_hwmon {
->   	struct xe_hwmon_data ddat;
-> +	struct xe_hwmon_data ddat_gt[XE_MAX_TILES_PER_DEVICE];
->   	struct mutex hwmon_lock; /* rmw operations*/
->   	bool reset_in_progress;
->   	wait_queue_head_t waitq;
->   	int scl_shift_power;
-> +	int scl_shift_energy;
->   };
->   
-> -#define ddat_to_xe_hwmon(ddat)	({ container_of(ddat, struct xe_hwmon, ddat); })
-> +#define ddat_to_xe_hwmon(ddat)	\
-> +	({ ddat->type == HWMON_GT ?	\
-> +		container_of(ddat, struct xe_hwmon, ddat_gt[ddat->gt->info.id]) :	\
-> +		container_of(ddat, struct xe_hwmon, ddat); })
->   
->   static u32 hwmon_get_reg(struct xe_hwmon_data *ddat, enum hwmon_reg_name reg_name)
+>   void xe_device_remove(struct xe_device *xe)
 >   {
-> @@ -84,6 +105,16 @@ static u32 hwmon_get_reg(struct xe_hwmon_data *ddat, enum hwmon_reg_name reg_nam
->   		if (xe->info.platform == XE_DG2)
->   			reg = GT_PERF_STATUS;
->   		break;
-> +	case REG_ENERGY_STATUS_ALL:
-> +		if (xe->info.platform == XE_DG2)
-> +			reg = PCU_CR_PACKAGE_ENERGY_STATUS;
-> +		else if (xe->info.platform == XE_PVC)
-> +			reg = PVC_GT0_PLATFORM_ENERGY_STATUS;
-> +		break;
-> +	case REG_ENERGY_STATUS_GT:
-> +		if (xe->info.platform == XE_PVC)
-> +			reg = PVC_GT0_PACKAGE_ENERGY_STATUS;
-> +		break;
->   	default:
->   		XE_MISSING_CASE(reg_name);
->   		break;
-> @@ -228,10 +259,69 @@ static int hwmon_power_rated_max_read(struct xe_hwmon_data *ddat, long *value)
->   	return 0;
->   }
+> +	xe_hwmon_unregister(xe);
+> +
+>   	xe_device_remove_display(xe);
 >   
+>   	xe_display_unlink(xe);
+> diff --git a/drivers/gpu/drm/xe/xe_device_types.h b/drivers/gpu/drm/xe/xe_device_types.h
+> index b156f69d7320..dd06eba815ec 100644
+> --- a/drivers/gpu/drm/xe/xe_device_types.h
+> +++ b/drivers/gpu/drm/xe/xe_device_types.h
+> @@ -376,6 +376,8 @@ struct xe_device {
+>   	 */
+>   	struct task_struct *pm_callback_task;
+>   
+> +	struct xe_hwmon *hwmon;
+> +
+>   	/* private: */
+>   
+>   #if IS_ENABLED(CONFIG_DRM_XE_DISPLAY)
+> diff --git a/drivers/gpu/drm/xe/xe_hwmon.c b/drivers/gpu/drm/xe/xe_hwmon.c
+> new file mode 100644
+> index 000000000000..5e35128a61a8
+> --- /dev/null
+> +++ b/drivers/gpu/drm/xe/xe_hwmon.c
+> @@ -0,0 +1,150 @@
+> +// SPDX-License-Identifier: MIT
 > +/*
-> + * hwmon_energy_get - Obtain energy value
-> + *
-> + * The underlying energy hardware register is 32-bits and is subject to
-> + * overflow. How long before overflow? For example, with an example
-> + * scaling bit shift of 14 bits (see register *PACKAGE_POWER_SKU_UNIT) and
-> + * a power draw of 1000 watts, the 32-bit counter will overflow in
-> + * approximately 4.36 minutes.
-> + *
-> + * Examples:
-> + *    1 watt:  (2^32 >> 14) /    1 W / (60 * 60 * 24) secs/day -> 3 days
-> + * 1000 watts: (2^32 >> 14) / 1000 W / 60             secs/min -> 4.36 minutes
-> + *
-> + * The function significantly increases overflow duration (from 4.36
-> + * minutes) by accumulating the energy register into a 'long' as allowed by
-> + * the hwmon API. Using x86_64 128 bit arithmetic (see mul_u64_u32_shr()),
-> + * a 'long' of 63 bits, SF_ENERGY of 1e6 (~20 bits) and
-> + * hwmon->scl_shift_energy of 14 bits we have 57 (63 - 20 + 14) bits before
-> + * energy1_input overflows. This at 1000 W is an overflow duration of 278 years.
+> + * Copyright © 2023 Intel Corporation
 > + */
-> +static void
-> +hwmon_energy_get(struct xe_hwmon_data *ddat, long *energy)
-> +{
-> +	struct xe_hwmon *hwmon = ddat_to_xe_hwmon(ddat);
-> +	struct hwmon_energy_info *ei = &ddat->ei;
-> +	u32 reg_val;
 > +
-> +	xe_device_mem_access_get(gt_to_xe(ddat->gt));
+> +#include <linux/hwmon.h>
 > +
-> +	mutex_lock(&hwmon->hwmon_lock);
+> +#include <drm/drm_managed.h>
+> +#include "regs/xe_gt_regs.h"
+> +#include "xe_device.h"
+> +#include "xe_hwmon.h"
 > +
-> +	if (ddat->type == HWMON_GT)
-> +		process_hwmon_reg(ddat, REG_ENERGY_STATUS_GT, REG_READ,
-> +				  &reg_val, 0, 0);
-> +	else
-> +		process_hwmon_reg(ddat, REG_ENERGY_STATUS_ALL, REG_READ,
-> +				  &reg_val, 0, 0);
+> +struct xe_hwmon_data {
+> +	struct device *hwmon_dev;
+> +	struct xe_gt *gt;
+> +	char name[12];
+> +};
 > +
-> +	if (reg_val >= ei->reg_val_prev)
-> +		ei->accum_energy += reg_val - ei->reg_val_prev;
-> +	else
-> +		ei->accum_energy += UINT_MAX - ei->reg_val_prev + reg_val;
+> +struct xe_hwmon {
+> +	struct xe_hwmon_data ddat;
+> +	struct mutex hwmon_lock;
+> +};
 > +
-> +	ei->reg_val_prev = reg_val;
-> +
-> +	*energy = mul_u64_u32_shr(ei->accum_energy, SF_ENERGY,
-> +				  hwmon->scl_shift_energy);
-> +
-> +	mutex_unlock(&hwmon->hwmon_lock);
-> +
-> +	xe_device_mem_access_put(gt_to_xe(ddat->gt));
-> +}
-> +
->   static const struct hwmon_channel_info *hwmon_info[] = {
->   	HWMON_CHANNEL_INFO(power, HWMON_P_MAX | HWMON_P_RATED_MAX | HWMON_P_CRIT),
->   	HWMON_CHANNEL_INFO(curr, HWMON_C_CRIT),
->   	HWMON_CHANNEL_INFO(in, HWMON_I_INPUT),
-> +	HWMON_CHANNEL_INFO(energy, HWMON_E_INPUT),
+> +static const struct hwmon_channel_info *hwmon_info[] = {
 > +	NULL
 > +};
 > +
-> +static const struct hwmon_channel_info *hwmon_gt_info[] = {
-> +	HWMON_CHANNEL_INFO(energy, HWMON_E_INPUT),
->   	NULL
->   };
->   
-> @@ -449,6 +539,32 @@ hwmon_in_read(struct xe_hwmon_data *ddat, u32 attr, long *val)
->   	return ret;
->   }
->   
 > +static umode_t
-> +hwmon_energy_is_visible(struct xe_hwmon_data *ddat, u32 attr)
-> +{
-> +	switch (attr) {
-> +	case hwmon_energy_input:
-> +		if (ddat->type == HWMON_GT)
-> +			return hwmon_get_reg(ddat, REG_ENERGY_STATUS_GT) ? 0444 : 0;
-> +		else
-> +			return hwmon_get_reg(ddat, REG_ENERGY_STATUS_ALL) ? 0444 : 0;
-> +	default:
-> +		return 0;
-> +	}
-> +}
-> +
-> +static int
-> +hwmon_energy_read(struct xe_hwmon_data *ddat, u32 attr, long *val)
-> +{
-> +	switch (attr) {
-> +	case hwmon_energy_input:
-> +		hwmon_energy_get(ddat, val);
-> +		return 0;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
->   static umode_t
->   hwmon_is_visible(const void *drvdata, enum hwmon_sensor_types type,
->   		 u32 attr, int channel)
-> @@ -468,6 +584,9 @@ hwmon_is_visible(const void *drvdata, enum hwmon_sensor_types type,
->   	case hwmon_in:
->   		ret = hwmon_in_is_visible(ddat, attr);
->   		break;
-> +	case hwmon_energy:
-> +		ret = hwmon_energy_is_visible(ddat, attr);
-> +		break;
->   	default:
->   		ret = 0;
->   		break;
-> @@ -497,6 +616,9 @@ hwmon_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
->   	case hwmon_in:
->   		ret = hwmon_in_read(ddat, attr, val);
->   		break;
-> +	case hwmon_energy:
-> +		ret = hwmon_energy_read(ddat, attr, val);
-> +		break;
->   	default:
->   		ret = -EOPNOTSUPP;
->   		break;
-> @@ -544,12 +666,53 @@ static const struct hwmon_chip_info hwmon_chip_info = {
->   	.info = hwmon_info,
->   };
->   
-> +static umode_t
-> +hwmon_gt_is_visible(const void *drvdata, enum hwmon_sensor_types type,
-> +		    u32 attr, int channel)
+> +hwmon_is_visible(const void *drvdata, enum hwmon_sensor_types type,
+> +		 u32 attr, int channel)
 > +{
 > +	struct xe_hwmon_data *ddat = (struct xe_hwmon_data *)drvdata;
+> +	int ret;
+> +
+> +	xe_device_mem_access_get(gt_to_xe(ddat->gt));
 > +
 > +	switch (type) {
-> +	case hwmon_energy:
-> +		return hwmon_energy_is_visible(ddat, attr);
 > +	default:
-> +		return 0;
+> +		ret = 0;
+> +		break;
 > +	}
+> +
+> +	xe_device_mem_access_put(gt_to_xe(ddat->gt));
+> +
+> +	return ret;
 > +}
 > +
 > +static int
-> +hwmon_gt_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
-> +	      int channel, long *val)
+> +hwmon_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+> +	   int channel, long *val)
 > +{
 > +	struct xe_hwmon_data *ddat = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	xe_device_mem_access_get(gt_to_xe(ddat->gt));
 > +
 > +	switch (type) {
-> +	case hwmon_energy:
-> +		return hwmon_energy_read(ddat, attr, val);
 > +	default:
-> +		return -EOPNOTSUPP;
+> +		ret = -EOPNOTSUPP;
+> +		break;
 > +	}
+> +
+> +	xe_device_mem_access_put(gt_to_xe(ddat->gt));
+> +
+> +	return ret;
 > +}
 > +
-> +static const struct hwmon_ops hwmon_gt_ops = {
-> +	.is_visible = hwmon_gt_is_visible,
-> +	.read = hwmon_gt_read,
-> +};
+> +static int
+> +hwmon_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+> +	    int channel, long val)
+> +{
+> +	struct xe_hwmon_data *ddat = dev_get_drvdata(dev);
+> +	int ret;
 > +
-> +static const struct hwmon_chip_info hwmon_gt_chip_info = {
-> +	.ops = &hwmon_gt_ops,
-> +	.info = hwmon_gt_info,
-> +};
+> +	xe_device_mem_access_get(gt_to_xe(ddat->gt));
 > +
->   static void
->   hwmon_get_preregistration_info(struct xe_device *xe)
->   {
->   	struct xe_hwmon *hwmon = xe->hwmon;
->   	struct xe_hwmon_data *ddat = &hwmon->ddat;
-> +	struct xe_gt *gt;
-> +	long energy;
->   	u32 val_sku_unit = 0;
-> +	u8 id;
->   	int ret;
->   
->   	ret = process_hwmon_reg(ddat, REG_PKG_POWER_SKU_UNIT, REG_READ, &val_sku_unit, 0, 0);
-> @@ -557,8 +720,22 @@ hwmon_get_preregistration_info(struct xe_device *xe)
->   	 * The contents of register PKG_POWER_SKU_UNIT do not change,
->   	 * so read it once and store the shift values.
->   	 */
-> -	if (!ret)
-> +	if (!ret) {
->   		hwmon->scl_shift_power = REG_FIELD_GET(PKG_PWR_UNIT, val_sku_unit);
-> +		hwmon->scl_shift_energy = REG_FIELD_GET(PKG_ENERGY_UNIT, val_sku_unit);
+> +	switch (type) {
+> +	default:
+> +		ret = -EOPNOTSUPP;
+> +		break;
 > +	}
 > +
-> +	/*
-> +	 * Initialize 'struct hwmon_energy_info', i.e. set fields to the
-> +	 * first value of the energy register read
-> +	 */
-> +	if (hwmon_is_visible(ddat, hwmon_energy, hwmon_energy_input, 0))
-> +		hwmon_energy_get(ddat, &energy);
+> +	xe_device_mem_access_put(gt_to_xe(ddat->gt));
 > +
-> +	for_each_gt(gt, xe, id)
-> +		if (hwmon_gt_is_visible(&hwmon->ddat_gt[id], hwmon_energy,
-> +					hwmon_energy_input, 0))
-> +			hwmon_energy_get(&hwmon->ddat_gt[id], &energy);
->   }
->   
->   void xe_hwmon_register(struct xe_device *xe)
-> @@ -567,6 +744,9 @@ void xe_hwmon_register(struct xe_device *xe)
->   	struct xe_hwmon *hwmon;
->   	struct device *hwmon_dev;
->   	struct xe_hwmon_data *ddat;
-> +	struct xe_hwmon_data *ddat_gt;
-> +	struct xe_gt *gt;
-> +	u8 id;
->   
->   	/* hwmon is available only for dGfx */
->   	if (!IS_DGFX(xe))
-> @@ -583,13 +763,21 @@ void xe_hwmon_register(struct xe_device *xe)
->   
->   	/* primary GT to access device level properties */
->   	ddat->gt = xe->tiles[0].primary_gt;
-> +	ddat->type = HWMON_DEVICE;
->   
->   	snprintf(ddat->name, sizeof(ddat->name), "xe");
->   
-> -	hwmon_get_preregistration_info(xe);
-> -
->   	init_waitqueue_head(&hwmon->waitq);
->   
-> +	for_each_gt(gt, xe, id) {
-> +		ddat_gt = hwmon->ddat_gt + id;
-> +		ddat_gt->gt = gt;
-> +		snprintf(ddat_gt->name, sizeof(ddat_gt->name), "xe_gt%u", id);
-> +		ddat_gt->type = HWMON_GT;
-> +	}
+> +	return ret;
+> +}
+> +
+> +static const struct hwmon_ops hwmon_ops = {
+> +	.is_visible = hwmon_is_visible,
+> +	.read = hwmon_read,
+> +	.write = hwmon_write,
+> +};
+> +
+> +static const struct hwmon_chip_info hwmon_chip_info = {
+> +	.ops = &hwmon_ops,
+> +	.info = hwmon_info,
+> +};
+> +
+> +static void
+> +hwmon_get_preregistration_info(struct xe_device *xe)
+> +{
+> +}
+> +
+> +void xe_hwmon_register(struct xe_device *xe)
+> +{
+> +	struct device *dev = xe->drm.dev;
+> +	struct xe_hwmon *hwmon;
+> +	struct device *hwmon_dev;
+> +	struct xe_hwmon_data *ddat;
+> +
+> +	/* hwmon is available only for dGfx */
+> +	if (!IS_DGFX(xe))
+> +		return;
+> +
+> +	hwmon = devm_kzalloc(dev, sizeof(*hwmon), GFP_KERNEL);
+> +	if (!hwmon)
+> +		return;
+> +
+> +	xe->hwmon = hwmon;
+> +	drmm_mutex_init(&xe->drm, &hwmon->hwmon_lock);
+> +
+> +	ddat = &hwmon->ddat;
+> +
+> +	/* primary GT to access device level properties */
+> +	ddat->gt = xe->tiles[0].primary_gt;
+> +
+> +	snprintf(ddat->name, sizeof(ddat->name), "xe");
+
+Why not just pass "xe" as string to devm_hwmon_device_register_with_info() ?
+
 > +
 > +	hwmon_get_preregistration_info(xe);
 > +
->   	drm_dbg(&xe->drm, "Register xe hwmon interface\n");
->   
->   	/* hwmon_dev points to device hwmon<i> */
-> @@ -605,6 +793,26 @@ void xe_hwmon_register(struct xe_device *xe)
->   	}
->   
->   	ddat->hwmon_dev = hwmon_dev;
+> +	drm_dbg(&xe->drm, "Register xe hwmon interface\n");
 > +
-> +	for_each_gt(gt, xe, id) {
-> +		ddat_gt = hwmon->ddat_gt + id;
-> +		/*
-> +		 * Create per-gt directories only if a per-gt attribute is
-> +		 * visible. Currently this is only energy
-> +		 */
-> +		if (!hwmon_gt_is_visible(ddat_gt, hwmon_energy, hwmon_energy_input, 0))
-> +			continue;
-> +
-> +		hwmon_dev = devm_hwmon_device_register_with_info(dev, ddat_gt->name,
-> +								 ddat_gt,
-> +								 &hwmon_gt_chip_info,
-> +								 NULL);
-> +		if (IS_ERR(hwmon_dev))
-> +			drm_warn(&xe->drm, "Fail to register xe_gt %d hwmon, Err:%ld\n",
-> +				 id, PTR_ERR(hwmon_dev));
-> +		else
-> +			ddat_gt->hwmon_dev = hwmon_dev;
+> +	/*  hwmon_dev points to device hwmon<i> */
+> +	hwmon_dev = devm_hwmon_device_register_with_info(dev, ddat->name,
+> +							 ddat,
+> +							 &hwmon_chip_info,
+> +							 NULL);
+> +	if (IS_ERR(hwmon_dev)) {
+> +		drm_warn(&xe->drm, "Fail to register xe hwmon, Err:%ld\n", PTR_ERR(hwmon_dev));
+> +		xe->hwmon = NULL;
+> +		return;
 > +	}
+> +
 
-There should be just one hardware monitoring device. Just use energyN
-and reference the input with an appropriate sensor label.
+What is xe->hwmon used for other than for setting it to NULL
+in xe_hwmon_unregister() ?
 
-Guenter
+> +	ddat->hwmon_dev = hwmon_dev;
+> +}
+> +
+> +void xe_hwmon_unregister(struct xe_device *xe)
+> +{
+> +	xe->hwmon = NULL;
+> +}
 
->   }
->   
->   void xe_hwmon_unregister(struct xe_device *xe)
+Not sure I understand why this function is needed. Please explain.
+
+> diff --git a/drivers/gpu/drm/xe/xe_hwmon.h b/drivers/gpu/drm/xe/xe_hwmon.h
+> new file mode 100644
+> index 000000000000..a078eeb0a68b
+> --- /dev/null
+> +++ b/drivers/gpu/drm/xe/xe_hwmon.h
+> @@ -0,0 +1,22 @@
+> +/* SPDX-License-Identifier: MIT */
+> +
+> +/*
+> + * Copyright © 2023 Intel Corporation
+> + */
+> +
+> +#ifndef __XE_HWMON_H__
+> +#define __XE_HWMON_H__
+> +
+> +#include <linux/types.h>
+> +
+> +struct xe_device;
+> +
+> +#if IS_REACHABLE(CONFIG_HWMON)
+> +void xe_hwmon_register(struct xe_device *xe);
+> +void xe_hwmon_unregister(struct xe_device *xe);
+> +#else
+> +static inline void xe_hwmon_register(struct xe_device *xe) { };
+> +static inline void xe_hwmon_unregister(struct xe_device *xe) { };
+> +#endif
+> +
+> +#endif /* __XE_HWMON_H__ */
 
