@@ -2,237 +2,299 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F39FC001E0
-	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Aug 2023 13:46:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D5BFC04A6A
+	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Aug 2023 13:46:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234088AbjHBNqj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 2 Aug 2023 09:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39932 "EHLO
+        id S234215AbjHBNqt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 2 Aug 2023 09:46:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234057AbjHBNqi (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Aug 2023 09:46:38 -0400
+        with ESMTP id S234057AbjHBNqn (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Aug 2023 09:46:43 -0400
 Received: from mgamail.intel.com (unknown [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DAC1269A
-        for <linux-hwmon@vger.kernel.org>; Wed,  2 Aug 2023 06:46:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB1ACF5
+        for <linux-hwmon@vger.kernel.org>; Wed,  2 Aug 2023 06:46:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690983997; x=1722519997;
+  t=1690984002; x=1722520002;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=DUqf6MegFnAPJZwt0euXTGiy+mpwCvNmFNQIl9yL1f4=;
-  b=n1paOmC7ysi4EdvHWFMzUOxmBqWxgEwIUX5zQNhYRf1eBpNoLz8Qe6BH
-   nWDGY502T1q3vLTzQtDGWCube4zRwlrxjxWGvvsPV4XV40xDuQ8k8rO5q
-   N2y2Q2x/qVXUT4l1S+zKrFku+YmXbbCxzjHsr1kSIwqjwxMzr35RrDlOD
-   BgSnNh5u3J9eiPJ4CkY7vUgqz/aypnMnTbPUXB7KsixW36B3SsP+YpTWC
-   bWyFZOBiNQZx4s07j/Va3puigcN6muwiNGwO+ifrHzo2Vih2H7aJj7rnT
-   69ShqAJkgR7SFNyKXhakZfHV7HTCsmJgbg22i44goBXn9jtGdWcvjW+mm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10789"; a="400534962"
+  bh=FGKYVa4sL2FP4TbBC95+bNIONvGOXW5ddaPs6VBGCrU=;
+  b=WDguVctZiInMnXTtwlBlzVSbihzoMl8ONHjgs6+vfHvDbNoj51EiGlck
+   zb2rHyFt9edi/dg415C2QN41rhePGBh3ZnZIGRsf4tJYBf1YrkjdFQeC+
+   16DS+91NYrrb2kgjtTib+80KWi5iMV8tmUk5tPCBljFj3eSsoDVg4t9+I
+   tyfeZS1AKoLEI5W+lvUmaajJP2s7/1rNY6mmDwfhGicgAAZm9d+YAim/m
+   KTGD+CTIb24ustcqkf0z8nUuMiYzBPa6iWyeJs7ihzNJFgQkWhtQ/3IAm
+   viab7ApCuDhNB0iyJyigMnO5fKyI0C0l/E017sRFxFYK/t4Y7nBYVSx+l
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10789"; a="400534998"
 X-IronPort-AV: E=Sophos;i="6.01,249,1684825200"; 
-   d="scan'208";a="400534962"
+   d="scan'208";a="400534998"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2023 06:46:36 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2023 06:46:42 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10789"; a="852873945"
+X-IronPort-AV: E=McAfee;i="6600,9927,10789"; a="852873984"
 X-IronPort-AV: E=Sophos;i="6.01,249,1684825200"; 
-   d="scan'208";a="852873945"
+   d="scan'208";a="852873984"
 Received: from bnilawar-desk1.iind.intel.com ([10.145.169.158])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2023 06:46:33 -0700
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2023 06:46:39 -0700
 From:   Badal Nilawar <badal.nilawar@intel.com>
 To:     intel-xe@lists.freedesktop.org, linux-hwmon@vger.kernel.org
 Cc:     anshuman.gupta@intel.com, ashutosh.dixit@intel.com,
         linux@roeck-us.net, andi.shyti@linux.intel.com,
         riana.tauro@intel.com, matthew.brost@intel.com
-Subject: [PATCH v3 4/6] drm/xe/hwmon: Expose input voltage attribute
-Date:   Wed,  2 Aug 2023 19:22:39 +0530
-Message-Id: <20230802135241.458855-5-badal.nilawar@intel.com>
+Subject: [PATCH v3 6/6] drm/xe/hwmon: Expose power1_max_interval
+Date:   Wed,  2 Aug 2023 19:22:41 +0530
+Message-Id: <20230802135241.458855-7-badal.nilawar@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230802135241.458855-1-badal.nilawar@intel.com>
 References: <20230802135241.458855-1-badal.nilawar@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Use Xe HWMON subsystem to display the input voltage.
+Expose power1_max_interval, that is the tau corresponding to PL1, as a
+custom hwmon attribute. Some bit manipulation is needed because of the
+format of PKG_PWR_LIM_1_TIME in
+PACKAGE_RAPL_LIMIT register (1.x * power(2,y))
 
-v2:
-  - Rename hwm_get_vltg to hwm_get_voltage (Riana)
-  - Use scale factor SF_VOLTAGE (Riana)
-v3:
-  - %s/hwm_/hwmon/
-  - %s/gt_perf_status/REG_GT_PERF_STATUS/
-  - Remove platform check from hwmon_get_voltage()
+v2: Get rpm wake ref while accessing power1_max_interval
 
 Signed-off-by: Badal Nilawar <badal.nilawar@intel.com>
 ---
- .../ABI/testing/sysfs-driver-intel-xe-hwmon   |  6 ++
- drivers/gpu/drm/xe/regs/xe_gt_regs.h          |  3 +
- drivers/gpu/drm/xe/xe_hwmon.c                 | 59 +++++++++++++++++++
- 3 files changed, 68 insertions(+)
+ .../ABI/testing/sysfs-driver-intel-xe-hwmon   |  11 ++
+ drivers/gpu/drm/xe/regs/xe_mchbar_regs.h      |   8 +
+ drivers/gpu/drm/xe/xe_hwmon.c                 | 139 +++++++++++++++++-
+ 3 files changed, 157 insertions(+), 1 deletion(-)
 
 diff --git a/Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon b/Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon
-index ea60add73743..167bd9480602 100644
+index 4b2d6e1d0c7f..3be1e55bfac0 100644
 --- a/Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon
 +++ b/Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon
-@@ -44,5 +44,11 @@ Description:	RW. Card reactive critical (I1) power limit in milliamperes.
- 		the operating frequency if the power averaged over a window
- 		exceeds this limit.
+@@ -64,3 +64,14 @@ Description:	RO. Energy input of device or gt in microjoules.
+ 		for the gt.
  
-+What:		/sys/devices/.../hwmon/hwmon<i>/in0_input
+ 		Only supported for particular Intel xe graphics platforms.
++
++What:		/sys/devices/.../hwmon/hwmon<i>/power1_max_interval
 +Date:		August 2023
 +KernelVersion:	6.4
 +Contact:	intel-xe@lists.freedesktop.org
-+Description:	RO. Current Voltage in millivolt.
++Description:	RW. Sustained power limit interval (Tau in PL1/Tau) in
++		milliseconds over which sustained power is averaged.
 +
- 		Only supported for particular Intel xe graphics platforms.
- 
-diff --git a/drivers/gpu/drm/xe/regs/xe_gt_regs.h b/drivers/gpu/drm/xe/regs/xe_gt_regs.h
-index eb7210afbd2c..cc452ec999fc 100644
---- a/drivers/gpu/drm/xe/regs/xe_gt_regs.h
-+++ b/drivers/gpu/drm/xe/regs/xe_gt_regs.h
-@@ -364,6 +364,9 @@
- #define GT_GFX_RC6_LOCKED			XE_REG(0x138104)
- #define GT_GFX_RC6				XE_REG(0x138108)
- 
-+#define GT_PERF_STATUS				XE_REG(0x1381b4)
-+#define   VOLTAGE_MASK				REG_GENMASK(10, 0)
++		Only supported for particular Intel xe graphics platforms.
 +
- #define GT_INTR_DW(x)				XE_REG(0x190018 + ((x) * 4))
++
+diff --git a/drivers/gpu/drm/xe/regs/xe_mchbar_regs.h b/drivers/gpu/drm/xe/regs/xe_mchbar_regs.h
+index 473a44bd7c56..6897fe70b243 100644
+--- a/drivers/gpu/drm/xe/regs/xe_mchbar_regs.h
++++ b/drivers/gpu/drm/xe/regs/xe_mchbar_regs.h
+@@ -22,16 +22,24 @@
+ #define   PKG_PKG_TDP				GENMASK_ULL(14, 0)
+ #define   PKG_MIN_PWR				GENMASK_ULL(30, 16)
+ #define   PKG_MAX_PWR				GENMASK_ULL(46, 32)
++#define   PKG_MAX_WIN				GENMASK_ULL(54, 48)
++#define     PKG_MAX_WIN_X			GENMASK_ULL(54, 53)
++#define     PKG_MAX_WIN_Y			GENMASK_ULL(52, 48)
++
  
- #define GUC_SG_INTR_ENABLE			XE_REG(0x190038)
+ #define PCU_CR_PACKAGE_POWER_SKU_UNIT		XE_REG(MCHBAR_MIRROR_BASE_SNB + 0x5938)
+ #define   PKG_PWR_UNIT				REG_GENMASK(3, 0)
+ #define   PKG_ENERGY_UNIT			REG_GENMASK(12, 8)
++#define   PKG_TIME_UNIT				REG_GENMASK(19, 16)
+ 
+ #define PCU_CR_PACKAGE_ENERGY_STATUS		XE_REG(MCHBAR_MIRROR_BASE_SNB + 0x593c)
+ 
+ #define PCU_CR_PACKAGE_RAPL_LIMIT		XE_REG(MCHBAR_MIRROR_BASE_SNB + 0x59a0)
+ #define   PKG_PWR_LIM_1				REG_GENMASK(14, 0)
+ #define   PKG_PWR_LIM_1_EN			REG_BIT(15)
++#define   PKG_PWR_LIM_1_TIME			REG_GENMASK(23, 17)
++#define   PKG_PWR_LIM_1_TIME_X			REG_GENMASK(23, 22)
++#define   PKG_PWR_LIM_1_TIME_Y			REG_GENMASK(21, 17)
+ 
+ #endif
+ 
 diff --git a/drivers/gpu/drm/xe/xe_hwmon.c b/drivers/gpu/drm/xe/xe_hwmon.c
-index ceab142f6d42..3e69cd79c1e2 100644
+index a337edcebae5..f10b43e24db0 100644
 --- a/drivers/gpu/drm/xe/xe_hwmon.c
 +++ b/drivers/gpu/drm/xe/xe_hwmon.c
-@@ -3,7 +3,9 @@
-  * Copyright © 2023 Intel Corporation
-  */
- 
-+#include <linux/hwmon-sysfs.h>
- #include <linux/hwmon.h>
-+#include <linux/types.h>
- 
- #include <drm/drm_managed.h>
- #include "regs/xe_mchbar_regs.h"
-@@ -19,6 +21,7 @@ enum hwmon_reg_name {
- 	REG_PKG_RAPL_LIMIT,
- 	REG_PKG_POWER_SKU,
- 	REG_PKG_POWER_SKU_UNIT,
-+	REG_GT_PERF_STATUS,
- };
- 
- enum hwmon_reg_operation {
-@@ -31,9 +34,11 @@ enum hwmon_reg_operation {
-  * SF_* - scale factors for particular quantities according to hwmon spec.
-  * - power  - microwatts
-  * - curr   - milliamperes
-+ * - voltage  - millivolts
-  */
- #define SF_POWER	1000000
+@@ -48,6 +48,7 @@ enum xe_hwmon_device_type {
  #define SF_CURR		1000
-+#define SF_VOLTAGE	1000
+ #define SF_VOLTAGE	1000
+ #define SF_ENERGY	1000000
++#define SF_TIME		1000
  
- struct xe_hwmon_data {
- 	struct device *hwmon_dev;
-@@ -75,6 +80,10 @@ static u32 hwmon_get_reg(struct xe_hwmon_data *ddat, enum hwmon_reg_name reg_nam
- 		else if (xe->info.platform == XE_PVC)
- 			reg = PVC_GT0_PACKAGE_POWER_SKU_UNIT;
- 		break;
-+	case REG_GT_PERF_STATUS:
-+		if (xe->info.platform == XE_DG2)
-+			reg = GT_PERF_STATUS;
-+		break;
- 	default:
- 		XE_MISSING_CASE(reg_name);
- 		break;
-@@ -222,6 +231,7 @@ static int hwmon_power_rated_max_read(struct xe_hwmon_data *ddat, long *value)
- static const struct hwmon_channel_info *hwmon_info[] = {
- 	HWMON_CHANNEL_INFO(power, HWMON_P_MAX | HWMON_P_RATED_MAX | HWMON_P_CRIT),
- 	HWMON_CHANNEL_INFO(curr, HWMON_C_CRIT),
-+	HWMON_CHANNEL_INFO(in, HWMON_I_INPUT),
- 	NULL
+ struct hwmon_energy_info {
+ 	u32 reg_val_prev;
+@@ -70,6 +71,7 @@ struct xe_hwmon {
+ 	wait_queue_head_t waitq;
+ 	int scl_shift_power;
+ 	int scl_shift_energy;
++	int scl_shift_time;
  };
  
-@@ -244,6 +254,18 @@ static int hwmon_pcode_write_i1(struct xe_gt *gt, u32 uval)
- 			      uval);
+ #define ddat_to_xe_hwmon(ddat)	\
+@@ -312,6 +314,140 @@ hwmon_energy_get(struct xe_hwmon_data *ddat, long *energy)
+ 	xe_device_mem_access_put(gt_to_xe(ddat->gt));
  }
  
-+static int hwmon_get_voltage(struct xe_hwmon_data *ddat, long *value)
++static ssize_t
++hwmon_power1_max_interval_show(struct device *dev, struct device_attribute *attr,
++			       char *buf)
 +{
-+	u32 reg_val;
-+
-+	process_hwmon_reg(ddat, REG_GT_PERF_STATUS,
-+			  REG_READ, &reg_val, 0, 0);
-+	/* HW register value in units of 2.5 millivolt */
-+	*value = DIV_ROUND_CLOSEST(REG_FIELD_GET(VOLTAGE_MASK, reg_val) * 2500, SF_VOLTAGE);
-+
-+	return 0;
-+}
-+
- static umode_t
- hwmon_power_is_visible(struct xe_hwmon_data *ddat, u32 attr, int chan)
- {
-@@ -396,6 +418,37 @@ hwmon_curr_write(struct xe_hwmon_data *ddat, u32 attr, long val)
- 	}
- }
- 
-+static umode_t
-+hwmon_in_is_visible(struct xe_hwmon_data *ddat, u32 attr)
-+{
-+	switch (attr) {
-+	case hwmon_in_input:
-+		return hwmon_get_reg(ddat, REG_GT_PERF_STATUS) ? 0444 : 0;
-+	default:
-+		return 0;
-+	}
-+}
-+
-+static int
-+hwmon_in_read(struct xe_hwmon_data *ddat, u32 attr, long *val)
-+{
-+	int ret;
++	struct xe_hwmon_data *ddat = dev_get_drvdata(dev);
++	struct xe_hwmon *hwmon = container_of(ddat, struct xe_hwmon, ddat);
++	u32 r, x, y, x_w = 2; /* 2 bits */
++	u64 tau4, out;
 +
 +	xe_device_mem_access_get(gt_to_xe(ddat->gt));
 +
-+	switch (attr) {
-+	case hwmon_in_input:
-+		ret = hwmon_get_voltage(ddat, val);
-+		break;
-+	default:
-+		ret = -EOPNOTSUPP;
++	process_hwmon_reg(ddat, REG_PKG_RAPL_LIMIT,
++			  REG_READ, &r, 0, 0);
++
++	xe_device_mem_access_put(gt_to_xe(ddat->gt));
++
++	x = REG_FIELD_GET(PKG_PWR_LIM_1_TIME_X, r);
++	y = REG_FIELD_GET(PKG_PWR_LIM_1_TIME_Y, r);
++	/*
++	 * tau = 1.x * power(2,y), x = bits(23:22), y = bits(21:17)
++	 *     = (4 | x) << (y - 2)
++	 * where (y - 2) ensures a 1.x fixed point representation of 1.x
++	 * However because y can be < 2, we compute
++	 *     tau4 = (4 | x) << y
++	 * but add 2 when doing the final right shift to account for units
++	 */
++	tau4 = ((1 << x_w) | x) << y;
++	/* val in hwmon interface units (millisec) */
++	out = mul_u64_u32_shr(tau4, SF_TIME, hwmon->scl_shift_time + x_w);
++
++	return sysfs_emit(buf, "%llu\n", out);
++}
++
++static ssize_t
++hwmon_power1_max_interval_store(struct device *dev, struct device_attribute *attr,
++				const char *buf, size_t count)
++{
++	struct xe_hwmon_data *ddat = dev_get_drvdata(dev);
++	struct xe_hwmon *hwmon = container_of(ddat, struct xe_hwmon, ddat);
++	u32 x, y, rxy, x_w = 2; /* 2 bits */
++	u64 tau4, r, max_win;
++	unsigned long val;
++	int ret;
++
++	ret = kstrtoul(buf, 0, &val);
++	if (ret)
++		return ret;
++
++	/*
++	 * Max HW supported tau in '1.x * power(2,y)' format, x = 0, y = 0x12
++	 * The hwmon->scl_shift_time default of 0xa results in a max tau of 256 seconds
++	 */
++#define PKG_MAX_WIN_DEFAULT 0x12ull
++
++	/*
++	 * val must be < max in hwmon interface units. The steps below are
++	 * explained in hwmon_power1_max_interval_show()
++	 */
++	r = FIELD_PREP(PKG_MAX_WIN, PKG_MAX_WIN_DEFAULT);
++	x = REG_FIELD_GET(PKG_MAX_WIN_X, r);
++	y = REG_FIELD_GET(PKG_MAX_WIN_Y, r);
++	tau4 = ((1 << x_w) | x) << y;
++	max_win = mul_u64_u32_shr(tau4, SF_TIME, hwmon->scl_shift_time + x_w);
++
++	if (val > max_win)
++		return -EINVAL;
++
++	/* val in hw units */
++	val = DIV_ROUND_CLOSEST_ULL((u64)val << hwmon->scl_shift_time, SF_TIME);
++	/* Convert to 1.x * power(2,y) */
++	if (!val) {
++		/* Avoid ilog2(0) */
++		y = 0;
++		x = 0;
++	} else {
++		y = ilog2(val);
++		/* x = (val - (1 << y)) >> (y - 2); */
++		x = (val - (1ul << y)) << x_w >> y;
 +	}
++
++	rxy = REG_FIELD_PREP(PKG_PWR_LIM_1_TIME_X, x) | REG_FIELD_PREP(PKG_PWR_LIM_1_TIME_Y, y);
++
++	xe_device_mem_access_get(gt_to_xe(ddat->gt));
++
++	mutex_lock(&hwmon->hwmon_lock);
++
++	process_hwmon_reg(ddat, REG_PKG_RAPL_LIMIT, REG_RMW, (u32 *)&r,
++			  PKG_PWR_LIM_1_TIME, rxy);
++
++	mutex_unlock(&hwmon->hwmon_lock);
++
++	xe_device_mem_access_put(gt_to_xe(ddat->gt));
++
++	return count;
++}
++
++static SENSOR_DEVICE_ATTR(power1_max_interval, 0664,
++			  hwmon_power1_max_interval_show,
++			  hwmon_power1_max_interval_store, 0);
++
++static struct attribute *hwmon_attributes[] = {
++	&sensor_dev_attr_power1_max_interval.dev_attr.attr,
++	NULL
++};
++
++static umode_t hwmon_attributes_visible(struct kobject *kobj,
++					struct attribute *attr, int index)
++{
++	struct device *dev = kobj_to_dev(kobj);
++	struct xe_hwmon_data *ddat = dev_get_drvdata(dev);
++	u32 reg_val;
++	int ret = 0;
++
++	xe_device_mem_access_get(gt_to_xe(ddat->gt));
++
++	if (attr == &sensor_dev_attr_power1_max_interval.dev_attr.attr)
++		ret =  process_hwmon_reg(ddat, REG_PKG_RAPL_LIMIT,
++					 REG_READ, &reg_val, 0, 0) ? 0 : attr->mode;
 +
 +	xe_device_mem_access_put(gt_to_xe(ddat->gt));
 +
 +	return ret;
 +}
 +
- static umode_t
- hwmon_is_visible(const void *drvdata, enum hwmon_sensor_types type,
- 		 u32 attr, int channel)
-@@ -412,6 +465,9 @@ hwmon_is_visible(const void *drvdata, enum hwmon_sensor_types type,
- 	case hwmon_curr:
- 		ret = hwmon_curr_is_visible(ddat, attr);
- 		break;
-+	case hwmon_in:
-+		ret = hwmon_in_is_visible(ddat, attr);
-+		break;
- 	default:
- 		ret = 0;
- 		break;
-@@ -438,6 +494,9 @@ hwmon_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
- 	case hwmon_curr:
- 		ret = hwmon_curr_read(ddat, attr, val);
- 		break;
-+	case hwmon_in:
-+		ret = hwmon_in_read(ddat, attr, val);
-+		break;
- 	default:
- 		ret = -EOPNOTSUPP;
- 		break;
++static const struct attribute_group hwmon_attrgroup = {
++	.attrs = hwmon_attributes,
++	.is_visible = hwmon_attributes_visible,
++};
++
++static const struct attribute_group *hwmon_groups[] = {
++	&hwmon_attrgroup,
++	NULL
++};
++
+ static const struct hwmon_channel_info *hwmon_info[] = {
+ 	HWMON_CHANNEL_INFO(power, HWMON_P_MAX | HWMON_P_RATED_MAX | HWMON_P_CRIT),
+ 	HWMON_CHANNEL_INFO(curr, HWMON_C_CRIT),
+@@ -723,6 +859,7 @@ hwmon_get_preregistration_info(struct xe_device *xe)
+ 	if (!ret) {
+ 		hwmon->scl_shift_power = REG_FIELD_GET(PKG_PWR_UNIT, val_sku_unit);
+ 		hwmon->scl_shift_energy = REG_FIELD_GET(PKG_ENERGY_UNIT, val_sku_unit);
++		hwmon->scl_shift_time = REG_FIELD_GET(PKG_TIME_UNIT, val_sku_unit);
+ 	}
+ 
+ 	/*
+@@ -784,7 +921,7 @@ void xe_hwmon_register(struct xe_device *xe)
+ 	hwmon_dev = devm_hwmon_device_register_with_info(dev, ddat->name,
+ 							 ddat,
+ 							 &hwmon_chip_info,
+-							 NULL);
++							 hwmon_groups);
+ 
+ 	if (IS_ERR(hwmon_dev)) {
+ 		drm_warn(&xe->drm, "Fail to register xe hwmon, Err:%ld\n", PTR_ERR(hwmon_dev));
 -- 
 2.25.1
 
