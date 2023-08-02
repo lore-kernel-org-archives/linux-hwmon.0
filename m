@@ -2,49 +2,50 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93F04C00528
-	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Aug 2023 12:11:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 353BDC001DF
+	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Aug 2023 12:17:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232701AbjHBMLD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 2 Aug 2023 08:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44346 "EHLO
+        id S229806AbjHBMR4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 2 Aug 2023 08:17:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231171AbjHBMLB (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Aug 2023 08:11:01 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2078.outbound.protection.outlook.com [40.107.100.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A01E81BFD;
-        Wed,  2 Aug 2023 05:11:00 -0700 (PDT)
+        with ESMTP id S229656AbjHBMRz (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Aug 2023 08:17:55 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2048.outbound.protection.outlook.com [40.107.93.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A014BE1;
+        Wed,  2 Aug 2023 05:17:54 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RF3r3q7JXq20i6sGqKryTir/vkOMvUIirPoNd7jwOXbsWKOr4/Y/OY0Jcnv042pWsuTMcHJUt91KTkyFmnuZYuh+g6LOHrccsVkgAo51XRCV3ASm/q81LtAcfokIKpfapjxsZmE27vhHp5cd6DpHUQ6j00p9DD/zjUTCe5diENqpPEUzNs3g6nZNRhtgzH+mdT8ZaF4Yy6mXUQQbVNRVQwAk8seppMNGxgYPIY1Wc1JgKrN50yk4640xCx+eeDk4QSJFJ7AZEOPFi5IP1n6ZZNpq8GVVSCiIrOpoidKjBI4yNpVZVy+PkiiUUAfRNmVTq5VVXFVswVKoVpUclXhSnA==
+ b=E07kC9a1Vw/v+tn8r5pxdf8ZA0QKLyZGk4ts2L8n74tpWWBVIGV3gk7GXXS2F+8G5cmF6ZyPBaXEQTccCDvuU8nLbvyoIJmSTawAIKr+LAEqpx68vnkNaKIS1WVxxugYeOi5A2nsuCC9Ck2czy+fBAUCGn7W0iwaAIyoOpxng3SaSgNnfUIgpO2ruX8vSkdoKP7I/DUBDr810GX4en7rc3vSWKKd0GA8MffE0IQjdiOF4+hW2zn++r8D0SXy1hMJnBNAr/3qH9nsK7OVGvNn5JiJ7LDd0aTl+x41PclnCmEjoPAZVEJt6d08MyMC3qe7y+hcKH7RKlMngsKIacT74g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=i5EL05FF+i0/d/mWZssBydcaTcmI1K76e/mSL6dDCrg=;
- b=lfiO7nO1+0K6/E0w2W4/spH+nHVlkR/Z2kbw8LfLqu9u86KmfCfGGCIvMI0JDassyxZZDnQzYHUDWboDFuVpL4GJbP+glSMI2RaFuZZnIeof7MoiqS+ZN6wbZt7Y3GMnuchfNSkFooPvSmUydm5tv54jaS+HsoZHz4syyNg/uEUZXF7TVcv7H4ohVBl1AsHFhMLIK7s57Ye7JCXNJaIPpf5fkudwevYSscQ6guXSEOnhN3Pjr/u1LoFs2LxznQOje2kAnrtcK45F03guvSJMJtG6EdLBSreSRjHWaVcxDX78OAx/oBP5gG+vf22S2jU+o92dG846PdMxtJQW2I2MHg==
+ bh=UYHajiT0V0Cp2OgghZjUS1aVIlkurL2gLai/n3461OA=;
+ b=gRIsaETzVEkmdAIC8f1RzMVZgLlVmYOii3DZnu1mezj9jm8zn8vzh+M5d3fy5A+KgrvgzLfZIc2PMKBkK7XcXVZhqwTKAwO6gGmMwUDh/BVA6x0Q+hbMHViapGmPucVpXiD/uNsYhsEakTKbApS8uQY5/Mke0jJ7LT7q3SHuf1iOqR4nTA0QeO+Bh2oTlggGBpLDuOyVNbnhl5Eqt8+9RELaBre65+UyOPqKftxsC5FJ4/YUuTHcsWxD4q5E1gFFEqolKe/tSmZvWafEMKA1B2jY5OdLqBpLBbe6t/Az2XH5X0S7GwrbnQDO14gewZWd+J2pv1bNaLKLyIJ/w6WrYQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=i5EL05FF+i0/d/mWZssBydcaTcmI1K76e/mSL6dDCrg=;
- b=UjO3ZzeMgUWqGhVOL7xL++upwK6nH0TAHIAcWd7EcvM2sdHftXWOWzl6ExNSI9/NEiKWSOaGe4PxGzc8aT8yGdTZT3KhKWX4Flv4rXUm6NF2ioohuunjLeNlotY3i/GmRkTcvRLtFjx27Q4DWJK9jXmQtTytnn8PmTOaOj6Eh4IlXS8hcgNVavrbBCGpWd6ujoLzorVxP+RtkiAvQRy/hJmCDuvej8+9v54L9qtdK3+db3Jx6N+WDMBg8jjeKkUiFrFeN8Om+EePWd7zxPWZF9PvsKAPbwWkjXhrTz/3YhlFWjD8d5/kQMu1pVovboksvFxZchq4VC3AkqhbcdY4pw==
+ bh=UYHajiT0V0Cp2OgghZjUS1aVIlkurL2gLai/n3461OA=;
+ b=N8JrN4GskEp2RXTKQrEIhKo5/MlTPh/w5SJVpOAtX9Xc7yaGXIkYhWEdOv0HY/RJBztrdxm0hTDgmx3smMuPXBKzXVj+B+Kv6tt6uoi4+InxFPffnatvS3nuBZSgdqSRlibgIs3H9i8GE0bEjukszr6vmHB7NnDMxM1aQ7em8CV1IQolqwA4KLncr20rfG+n/vqD0BPSz84/SesmPWisCVxeqj2XQCWfRB/aiqO3fD9QZIZIWSPczZbbmBvXIu1e/fD76y09Kxs9pWdHYwXbaZ28tS3bcuctTrSUeKZr6UUznE5lx6Ar9kDLEjgEeMbj10gcWBix5G3lseRF835Qeg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from DS7PR12MB6288.namprd12.prod.outlook.com (2603:10b6:8:93::7) by
- MN2PR12MB4063.namprd12.prod.outlook.com (2603:10b6:208:1dc::8) with Microsoft
+ SA0PR12MB4558.namprd12.prod.outlook.com (2603:10b6:806:72::20) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6631.45; Wed, 2 Aug 2023 12:10:58 +0000
+ 15.20.6631.45; Wed, 2 Aug 2023 12:17:52 +0000
 Received: from DS7PR12MB6288.namprd12.prod.outlook.com
  ([fe80::2666:236b:2886:d78b]) by DS7PR12MB6288.namprd12.prod.outlook.com
  ([fe80::2666:236b:2886:d78b%7]) with mapi id 15.20.6631.045; Wed, 2 Aug 2023
- 12:10:58 +0000
-Message-ID: <a3a996a3-81e3-5476-6cdf-ca034a7398e4@nvidia.com>
-Date:   Wed, 2 Aug 2023 15:10:49 +0300
+ 12:17:52 +0000
+Message-ID: <df565ce5-3de1-c9a1-abd6-d8efb9444433@nvidia.com>
+Date:   Wed, 2 Aug 2023 15:17:42 +0300
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
+ Thunderbird/102.14.0
 Subject: Re: [PATCH net-next 2/2] net/mlx5: Expose NIC temperature via
  hardware monitoring kernel API
+From:   Gal Pressman <gal@nvidia.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Saeed Mahameed <saeed@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
@@ -58,184 +59,112 @@ Cc:     Saeed Mahameed <saeedm@nvidia.com>, netdev@vger.kernel.org,
 References: <20230727185922.72131-1-saeed@kernel.org>
  <20230727185922.72131-3-saeed@kernel.org>
  <9479d3cb-0e1c-a55a-ca07-97f4205c46c8@roeck-us.net>
+ <a3a996a3-81e3-5476-6cdf-ca034a7398e4@nvidia.com>
 Content-Language: en-US
-From:   Gal Pressman <gal@nvidia.com>
-In-Reply-To: <9479d3cb-0e1c-a55a-ca07-97f4205c46c8@roeck-us.net>
+In-Reply-To: <a3a996a3-81e3-5476-6cdf-ca034a7398e4@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR2P281CA0083.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9b::7) To DS7PR12MB6288.namprd12.prod.outlook.com
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: VI1PR07CA0254.eurprd07.prod.outlook.com
+ (2603:10a6:803:b4::21) To DS7PR12MB6288.namprd12.prod.outlook.com
  (2603:10b6:8:93::7)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB6288:EE_|MN2PR12MB4063:EE_
-X-MS-Office365-Filtering-Correlation-Id: 89a5bdf5-3568-455c-2e48-08db935187df
+X-MS-TrafficTypeDiagnostic: DS7PR12MB6288:EE_|SA0PR12MB4558:EE_
+X-MS-Office365-Filtering-Correlation-Id: be857083-788e-42d2-0cde-08db93527e92
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kHcb/P9N3jnGhIvd7gQlWSCR4Jd0aT73rXg7Ni0RnST3tLV4YFjUbt9nye2UDzRy09XDJgvVNtTJ51P35QCypptHe43A3MnHHztFTI9x9N3jAQZW0oidkjl5rbPNquLBJs8EALL2npt+AyweCRX7VAjY+OGRoNzVwI7/RRu1bjV4859K9I8fY7WK4eSrytyL/ZTbtVwuPxQFXJr/5mZXHUEt2SA+hQDW+OZkjgJna+aBzrilivVNmlLX1CwYYzHQqcDG7OmAT5jw2bIQWQ76wslYliXI7KwgXJlw18Lj2lszc01wAt48n5QXVb3fe5h+xtcW+dWe/xL1cCM9IpXJGY/sQLxLGT/KMXJCCKbPBX/KzChcaP92N2dDzcQ83a+0XatkQD/UH7rPg4bIJWIaTk9ORtB8dS9UY62XBuHyOW+5e+ZjkIMU97L30H5qfuYjOBKAv1EPL0sSArYums9nEw1WIt7vmQ62YG+0W4OrtNY2T4S5S9EcOUokCkoC3P8sFmR4+DVy8kfvwIBcmgMoiCH2OfBRToocGs01wdSucz8dqYzx7Xs+w5oGRaEpOwC1CKSPANxOOLwJ0+GlLcJyzWiP44JPun0bar/weSRYDh0l94wDuYI1WFPqyt0jHkm39NtLXmkSOmT1VksXRHcllg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6288.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(39860400002)(366004)(396003)(376002)(346002)(451199021)(66556008)(4326008)(66476007)(2906002)(38100700002)(66946007)(2616005)(53546011)(186003)(6506007)(26005)(54906003)(110136005)(86362001)(31696002)(107886003)(36756003)(478600001)(6512007)(6666004)(6486002)(41300700001)(8936002)(8676002)(5660300002)(31686004)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: aFsI4uo2PjDDPni8dRFriD9IMVkLjYF5gaCnE4fdGJTmYfFtxtltMaV4twDm66QTASDYJNWrYl5fhEZdSU0GChIJcMyNR/956m39rKax3s+H0FBNn0/SZiCac70KcFpMAA6oAavWHKMcqUlzvdaVrnZDlaR4x/3HtCaFbrNtO/uKjEGDMEmh6Fip6GieUXJ9zvuZqiibJhS4ms8X9hFG8puYkipQAPzHgcq2Y5otYPlAiBkYG2d5ey6sm9n3ZnUkTAshZ+g8TPvPwF4I+dRTSpDajDe5WnGLmoTx+1k/mDp1tIJT0FROMG68Sf8yyTkzLgxdEWIZFVXu1BTrzitVI71TL55EVc0A3tTRGuXuCQv8+D3xCEh+HOL5MBufeNmCzXDl5v984dwCINn3xMHYwXDbbcWjhxcqBHF8AWZ5cYl7xQvQiBfX8iP51W4KnSz9+WFzr0/zwMDuCVMofuPPhUOhKLqkKG8wHAdwJkJ45hVZ7+Sx8fPmW6n0qI+2b2ggUoAAW0nk88FTIJTsx6PrCR/bsE0cmU54+SsDROB15oz/5QOMuMXZgkEGtSoRaOmRxGHE4P7aiQPzx/32I2nqRQU+YjK8Fu/MPse6uEKer+ET0hUFXIXlxv6Iu2NvFA3lsk94Y0C8ai/CXTxNh8IvLA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6288.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(136003)(366004)(376002)(39860400002)(451199021)(8936002)(8676002)(31686004)(41300700001)(107886003)(5660300002)(2906002)(83380400001)(2616005)(186003)(86362001)(478600001)(54906003)(110136005)(316002)(53546011)(26005)(6506007)(38100700002)(66946007)(6666004)(66476007)(66556008)(31696002)(6486002)(4326008)(6512007)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WDJsdGczM2tlbDhsdUJwWTlmRFVFU3FxT3lsU0VOUWVKZnNSY2hDSHFrQlRw?=
- =?utf-8?B?Y2dTaWE3V3YrNy9sN3U2UTFNbnNFRHk3anpHemhPRXYweFRxSTNWdTF2YlB6?=
- =?utf-8?B?L3FuVTFHeUM1MVI1U1ZOcnU1cVU4TXZIb2ljQ3NjRXNWYnRFczUrbU1KUEdZ?=
- =?utf-8?B?SjdhbCtDRkhGd0I0c1orMVNidExYdG5lakVqbXN6REdBa05wZXp6UjVTWGU4?=
- =?utf-8?B?ZGZRcXg4UnFySDBTYWtJQ0k0MDFqSkhleEQ5eHpWWGdhVGkzUEo1Nk9JZFd0?=
- =?utf-8?B?MTE4dXliVU5xd2x2UmJTOWYxSjBFSWkxcmlHcVBKZHVFaDdJQ3J6YkFLaU81?=
- =?utf-8?B?SHhsQmVUajcyR1VTU2tUYTgyM1RhRmIxV1pHNTdFdEZPUC8xeGljVG5aYWh4?=
- =?utf-8?B?djM3eDM1eTJnbkE0UTRNcHMzRWxUSDc0NVNOTzFwV0VNSXo4Q3BmSEdIMDFH?=
- =?utf-8?B?VUhFQlFCWlQzOTJjKzU5amV4cEtJb0UvQTRwZk5kOWd6QTRKWnRwZ3lwbnZK?=
- =?utf-8?B?c0xXOVY5NUxvK1RVajVaTWthZlllVHdkK1p1cy9IbGVwcU1FMUlHQ0NzanQx?=
- =?utf-8?B?VGdEMlZCYkx5NUhZSWQ2UytRdTdNMEhkRGNEZzcwZk1YWmxNRnJqZGd6WlZn?=
- =?utf-8?B?UXI2bmxYS3lTNndOM3ZCU0JkcFZibEZXaDQ4aUJTUThqNWU3QzMrU3YwZHpF?=
- =?utf-8?B?RGxoa3l3MzBleTJWTks0MG1waUpuSm43S21uQzg1aHJiOXliUGcrdDRDRWdG?=
- =?utf-8?B?SUo0ZVdUTXh3b2FUSzh6SWdBUFN4VWF6SlQ3K1ZlVGRyMDZDaFFETnBMYStB?=
- =?utf-8?B?MnZPMEZlNUV3WTBEZDZpbU1FTWZMdmtXOTNTTnU5TTRyOERTV2JPaGQ5MUQ3?=
- =?utf-8?B?WnRFV2xVZGxVOHp6QXAwWXJLdCttdC9xdG9hZHdIRTJvL2ptUEtaR1k1dnBj?=
- =?utf-8?B?R3BKUjREaUVHaS9yY05DVVFCbVpvSnZiSW51VkJtWFhBeGV6cW5VRk1mM3Vn?=
- =?utf-8?B?NjVwRmpraElRQnlkVWhrUGV1RmZ0YmtldVhLS0NMVm1VRUVjMTBIUVFWMUdQ?=
- =?utf-8?B?eUtaTk1RMGE1OENTTjRxL2NMT3ByalgyM3ViRXovM0ZPVHM3Q3pIVTA1aWR4?=
- =?utf-8?B?U1NtV3oySmVpbVFucVBFMXo5Q084Q0NvTjZJaTdueGRXeDJjOG5iVitJTFlP?=
- =?utf-8?B?WStva2lzdkhBYkM5YUloOFJKSzJuTUN0MlU3RlNsUVh6MHQzNW1NUXlRVlNO?=
- =?utf-8?B?YzFzR3h6VUNFcVdiVkpheG1PWUplaTFoSWJUOENtWUhvaUo5UGh1SzdaQnhr?=
- =?utf-8?B?bmxJTGx0cVVkNkRDSS9VWi9UR2ttV2NYck1qb2o3bHo5ZTFTUkd4akZUT1Qz?=
- =?utf-8?B?NkRKS1BtY0dEb2tVREs4QmdxK3JaMlZCc3V6TlVObXVOeEpJczEyc0dubXZq?=
- =?utf-8?B?UlQ0WlVtOExUTXQyeGtNREdOcGx6QXI0U2VrUFNPL3gvcTdYRFBzcXBXMUpP?=
- =?utf-8?B?a0p2bHg0UlJsaDQ3ZW1aRjl0UGg1d1YyU2xzdCs5N09YQldHRVhOQ1BXVkNj?=
- =?utf-8?B?dmJza1l1QXFFMEhkSnpOcmx2VmtlNGpjandRV3RWa1A1c3RjZ0YyTGdOaUk0?=
- =?utf-8?B?MUlSbFQ3Yk1QUWxDeTNTWVQ1T1ZTZ1BIM29QaTdrMVJsdXNlNDZNUkpzWXhp?=
- =?utf-8?B?eFZuMStNSStBOWlaOVY2d0daMUwxeitSSGlYb1ZjejVLNCtpaEE4RjIyNWty?=
- =?utf-8?B?NEp3NHpMeUJoWW5nNE1ucFVVQXpSQWNsWUkySVBmaDVGNVYyWmZLRHhjNnhq?=
- =?utf-8?B?SnNsM3VBMDNCUjFHcHorMzhrb1RTME1ESEtGd3RWcUhmSXlXdVBzQlArZTVt?=
- =?utf-8?B?RGFsUW13bmJGYUwzU3ZvaUlwQ3BWWFkwRWlXVXF1UC84T3VtV0swS2FZeWdL?=
- =?utf-8?B?N0sxRGliSGE5clJoT29xNkk5dFhYblViUjloNk9kS2FDaXJQZ3FXOTE2dWIz?=
- =?utf-8?B?RkViOWNSaW9PanoxOEttMHp6SmR3MXR1eE1uMVNySDJHdEh3VDZxVHZIZHpP?=
- =?utf-8?B?dHllYW5GSEdMWEo3TXlKTlBMU1hIeWsvUGdBeFB2V3NtOXBKQzd1TE9McDlY?=
- =?utf-8?Q?WTDTHECktgc5Mv9bifA9reWbw?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?S09aY1ovMkZvbEVkNWhoSTgwT2pTdFBqVEpMTzVWOXFtKzBBbWIzVnhsd2FN?=
+ =?utf-8?B?NE5kQUF5ajJOb25LZGNuR1hBQ1VXZ1o4RDNPTy80NjkxUXZWNEhhaHNRSDlC?=
+ =?utf-8?B?OU5QWFh2Rk03Q3pMZzY2enhxd01haHlGSmxkVEl3dUROclphM1dtelRQcjdL?=
+ =?utf-8?B?YUZJMkxpM0hKL1dSYWJ6cHNqVDBDcmEzNzh1MFZ1S1orM2xxTFpPTVV0Zmwz?=
+ =?utf-8?B?MThKM2JrWnBtZDM3cGdlMzhzRTFVRUwrUXVUZmRTMXdHaHZZSE9yQVEyVi9w?=
+ =?utf-8?B?c1NnTVVMejVqY0xxN1Iyc1NOa0REL1gzWkVOWnhwQVhYWEt0d3dJTHpwMW9H?=
+ =?utf-8?B?djF2WHBGNFZIR2IzZjRYdFFBbUhlQUl5VzJjMVVqM1Y5ekt1YThnQUZHanhm?=
+ =?utf-8?B?bFFPTVQ5QlF1WnZNUnBQKzA0eHhBNlhIMFdMRGVydGF1Um81SUM2WGtLOXZq?=
+ =?utf-8?B?L1V6SjNWbzMxKzNlNTJWSXdCcXdQRUJyU3RDbXFWUEVad0pmRlhoMGE4WXI3?=
+ =?utf-8?B?a1NJcFpKdlJOQUFaTzlRbWFVWmcyL2x2ZXdidWdaeWR0WU9qY3ZuNjFlUFJ0?=
+ =?utf-8?B?bit1UWlKSVV4TExCT3d3MXVRb3ozc1pnYmdZOVlFWWRpN2pMWU4zbXdTL0pQ?=
+ =?utf-8?B?dzl4SGtuWHJrMENSSzQvUW8zbG1HdFBLWlhkUkpUQW1BaWQ0eTZEZGJ2OGts?=
+ =?utf-8?B?dE1jcWg2YkZUR2tzZGhUK3gzbEFLNitjcDJkMUEvaDVoQ2dCTWpKeTFDUmVn?=
+ =?utf-8?B?MDJGNDJoSXJDNlo4SlE5MGJYM2JydGRYRTIyblFLc0g2bjZMbThHWmM4SDl1?=
+ =?utf-8?B?bVNld3FrSHlOTTRJVnB1bmJUbXVYV3ZGVVFLRDNOYlkvRGN6cVUrMlpxT0dp?=
+ =?utf-8?B?cC9VbnNsM1ZVOC92RXNUYzh4a241TXg2RTdBRTNzK3NRd0RpUmpqTmZZWGxV?=
+ =?utf-8?B?STJVZ0pLRHhpOWgwcjBOOXBmT0xUL2FLYTJuV3JoY3NOUlhpWVY3TGtodHRO?=
+ =?utf-8?B?dE9YcGswcEhDRnp6NnpBN0hxdmVWaHhpd2NnUmIrSlU2K2dkbDN6VkRLUmE3?=
+ =?utf-8?B?UlBEZUpoVElhTGVHb0FNVnoxOWhXR0VJYnllNzd2V1dROEtqQjZlSHJrTWNQ?=
+ =?utf-8?B?THMzb1VvdVFjVHRjeEZUSWRkU05CZEthWXdJTVJoN2U1UGVPUXlzS0JmdXRS?=
+ =?utf-8?B?bkRIaXQ1WDA5UUY0QVMzVUVUNUczL3EvZ2kvbTJTWHRUYXhFa3ZLcjU1ZXlJ?=
+ =?utf-8?B?Y1ZMcC9KV01PN0J4TVZTY2dkMWRjdlNHOG9XaCtkT1JodTFaZ2ozeDFsTTRt?=
+ =?utf-8?B?OFZwVDA2bzFnZmJRSHUrWDN2SFZ3SGhPVU5nTWdoSUN0NithNTNnTzBqME5q?=
+ =?utf-8?B?OVcrbU84cFNueE1ZbndxOXlXbVZhYUp4cFY0TUlQZFRkdDFKYStBa3U5dXl3?=
+ =?utf-8?B?UUlXRkxpVi96cXd4OEhVT2t3Z3VqMzczb0NsblJHVjNHNTBjd2NIbzl3RXgz?=
+ =?utf-8?B?TkNVTWtsMkRCRXFWUzcxWkI5NHFud2d2eHo2UU5CNXVJZnN6clV0N2cvTHVk?=
+ =?utf-8?B?MDEvMDJPRjhZNHJ2bXRpRHRkSmU5SWZ0TUpJbHpScDJJc0ZQblNPNnU1ZC9F?=
+ =?utf-8?B?RHkybnhuOFM4dXpqd1c2bUpwaTdWelZJZ3N5bkJlMTJ6SGxKWHlvZklxa1hC?=
+ =?utf-8?B?QXUrYmNReGZyY05kY3RiWktpd2ZXWE9jNDNlcDNRNHNUOHJHOG5XMi9oUVk2?=
+ =?utf-8?B?Q0gxV0dSRjlrVmdUVEhxVk90d3UrTmtxbTJ3TUpTUlc2Vk9IdEIyOGtYbEdu?=
+ =?utf-8?B?SCtKcFpCTzRGalhhbmNSQ1FvK2RSM3VrbUR2UjRvS1dzeHZQZ012dHJpSklt?=
+ =?utf-8?B?MEdqV0FNRWJqRmlYNXVoZlYrQlZXUHQ5clpJUUVaekI2bkxIY21IT1ZFMnZ0?=
+ =?utf-8?B?YXBRd1dFb1dqbHEyU2d2eGR2R3kxUEZ1TWlEbFg0TmxnRFFMZi9DSUtSQ1JX?=
+ =?utf-8?B?a21iTWdWSGdzaVlwcW11QmRNRmZuNGxwNUl1QTgwb0pSaTIzbEtBZ2FBNEln?=
+ =?utf-8?B?N2lKc1VwdDJ6c29tMi9kYXZkWmMxZ25zbFV6eDhTTlk0dm5jY0lCOXBNa2tZ?=
+ =?utf-8?Q?O9fWfnaHUYldXBUFsJ33QMTkT?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 89a5bdf5-3568-455c-2e48-08db935187df
+X-MS-Exchange-CrossTenant-Network-Message-Id: be857083-788e-42d2-0cde-08db93527e92
 X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6288.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2023 12:10:58.6668
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2023 12:17:52.5594
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jz8Qwl9RfeB/Q2W9N3kMpEE7wNy/AbDtzLfsGhkcsbb0l6ZTJF9jO/RpC6R24Pvo
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4063
+X-MS-Exchange-CrossTenant-UserPrincipalName: oRD/VbaIur585Fc87iWfCZpyJ50TEc8igdUoxQVKpe4DTgag9d9RhBj09Iob5yB7
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4558
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Guenter,
-
-On 27/07/2023 22:54, Guenter Roeck wrote:
-> On 7/27/23 11:59, Saeed Mahameed wrote:
->> From: Adham Faris <afaris@nvidia.com>
->> $ grep -H -d skip . /sys/class/hwmon/hwmon0/*
+On 02/08/2023 15:10, Gal Pressman wrote:
+> Hi Guenter,
+> 
+> On 27/07/2023 22:54, Guenter Roeck wrote:
+>> On 7/27/23 11:59, Saeed Mahameed wrote:
+>>> From: Adham Faris <afaris@nvidia.com>
+>>> $ grep -H -d skip . /sys/class/hwmon/hwmon0/*
+>>>
+>>> Output
+>>> =======================================================================
+>>> /sys/class/hwmon/hwmon0/name:0000:08:00.0
 >>
->> Output
->> =======================================================================
->> /sys/class/hwmon/hwmon0/name:0000:08:00.0
+>> That name doesn't seem to be very useful. You might want to consider
+>> using a different name, such as a simple "mlx5". Since the parent is
+>> a pci device, the "sensors" command would translate that into something
+>> like "mlx5-pci-XXXX" which would be much more useful than the
+>> "0000:08:00.0-pci-0000" which is what you'll see with the current
+>> name.
+>>
+>>> /sys/class/hwmon/hwmon0/temp1_crit:105000
+>>> /sys/class/hwmon/hwmon0/temp1_highest:68000
+>>> /sys/class/hwmon/hwmon0/temp1_input:68000
+>>> /sys/class/hwmon/hwmon0/temp1_label:sensor0
+>>
+>> I don't really see the value of that label. A label provided by the driver
+>> should be meaningful and indicate something such as the sensor location.
+>> Otherwise the default of "temp1" seems to be just as useful to me.
 > 
-> That name doesn't seem to be very useful. You might want to consider
-> using a different name, such as a simple "mlx5". Since the parent is
-> a pci device, the "sensors" command would translate that into something
-> like "mlx5-pci-XXXX" which would be much more useful than the
-> "0000:08:00.0-pci-0000" which is what you'll see with the current
-> name.
-> 
->> /sys/class/hwmon/hwmon0/temp1_crit:105000
->> /sys/class/hwmon/hwmon0/temp1_highest:68000
->> /sys/class/hwmon/hwmon0/temp1_input:68000
->> /sys/class/hwmon/hwmon0/temp1_label:sensor0
-> 
-> I don't really see the value of that label. A label provided by the driver
-> should be meaningful and indicate something such as the sensor location.
-> Otherwise the default of "temp1" seems to be just as useful to me.
+> Agree, will change.
 
-Agree, will change.
+Sorry, this reply refers to your previous comment about the name (use
+"mlx5").
 
->> +int mlx5_hwmon_dev_register(struct mlx5_core_dev *mdev)
->> +{
->> +    struct device *dev = mdev->device;
->> +    struct mlx5_hwmon *hwmon;
->> +    int err;
->> +
->> +    if (!MLX5_CAP_MCAM_REG(mdev, mtmp))
->> +        return 0;
->> +
->> +    hwmon = mlx5_hwmon_alloc(mdev);
->> +    if (IS_ERR(hwmon))
->> +        return PTR_ERR(hwmon);
->> +
->> +    err = mlx5_hwmon_dev_init(hwmon);
->> +    if (err)
->> +        goto err_free_hwmon;
->> +
->> +    hwmon->hwmon_dev = hwmon_device_register_with_info(dev, hwmon->name,
->> +                               hwmon,
->> +                               &hwmon->chip,
->> +                               NULL);
->> +    if (IS_ERR(hwmon->hwmon_dev)) {
->> +        err = PTR_ERR(hwmon->hwmon_dev);
->> +        goto err_free_hwmon;
->> +    }
->> +
->> +    mdev->hwmon = hwmon;
->> +    return 0;
->> +
->> +err_free_hwmon:
->> +    mlx5_hwmon_free(hwmon);
->> +    return err;
->> +}
->> +
-> 
-> At first glance it seems to me that the hwmon device lifetime matches
-> the lifetime of the pci device. If so, it would be much easier and safe
-> to use devm_ functions and to tie unregistration to pci device removal.
-> Is there a reason for not doing that ?
+The label used here is meaningful, to clarify, when new firmware is used
+the label you'll see here is the actual name of the sensor (we'll put it
+in the commit message).
+For older firmware versions, the index used is not a simple incrementing
+counter, it indicates the index of the sensor as defined by our HW spec.
 
-You're right, but devm_ interface isn't used in anywhere mlx5, we'd
-rather not mix it just for hwmon.
-
-> 
-> Thanks,
-> Guenter
-> 
->> +void mlx5_hwmon_dev_unregister(struct mlx5_core_dev *mdev)
->> +{
->> +    struct mlx5_hwmon *hwmon = mdev->hwmon;
->> +
->> +    if (!hwmon)
->> +        return;
->> +
->> +    hwmon_device_unregister(hwmon->hwmon_dev);
->> +    mlx5_hwmon_free(hwmon);
->> +    mdev->hwmon = NULL;
->> +}
->> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/hwmon.h
->> b/drivers/net/ethernet/mellanox/mlx5/core/hwmon.h
->> new file mode 100644
->> index 000000000000..999654a9b9da
->> --- /dev/null
->> +++ b/drivers/net/ethernet/mellanox/mlx5/core/hwmon.h
->> @@ -0,0 +1,24 @@
->> +/* SPDX-License-Identifier: GPL-2.0 OR Linux-OpenIB
->> + * Copyright (c) 2023, NVIDIA CORPORATION & AFFILIATES. All rights
->> reserved
->> + */
->> +#ifndef __MLX5_HWMON_H__
->> +#define __MLX5_HWMON_H__
->> +
->> +#include <linux/mlx5/driver.h>
->> +
->> +#if IS_ENABLED(CONFIG_HWMON)
-> 
-> This may need IS_REACHABLE() - unless I am missing something, it is
-> possible to configure the mlx5 core with =y even if hwmon is built
-> as module. An alternative would be to add a dependency such as
->     depends on HWMON || HWMON=n
-> to "config MLX5_CORE".
-
-Ack.
+Both cases are better than the default label.
