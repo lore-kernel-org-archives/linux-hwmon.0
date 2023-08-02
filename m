@@ -2,116 +2,93 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49DC5C001DE
-	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Aug 2023 07:48:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F238CC00528
+	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Aug 2023 10:21:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233393AbjHBHsT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 2 Aug 2023 03:48:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48984 "EHLO
+        id S233784AbjHBKVr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 2 Aug 2023 06:21:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233677AbjHBHrw (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Aug 2023 03:47:52 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97EA74201;
-        Wed,  2 Aug 2023 00:44:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1690962287; x=1722498287;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2szau/+aok62TKXNIGTEyyDGMJzaRmIjwYE4GSf6VkE=;
-  b=k3qUberxhzxTnE1hKlltBJ8v3lNf130epX2s2nE+sopKkSXfcbBWiNWl
-   My8ApH7Obj2HFhBud/mBigPpCYs29xW/nIJ6XVNsxpMKfYrSU8bIRHZN4
-   iD7aUsXExsfcomsYyIO6eW1Tsv3zSDMSbG+dErngu7oWGQxQ1FR8TmWy8
-   uwK/aJOgouY6uFO72BwFDTkSnk7Mtf7axW4I/c139joEIzcUZD1NXsP3K
-   fccAmsZQvvmWGVUQM446L+4VdiTtvHL0jhhS1rxr3zuuldB+UxxkfLZXJ
-   RAa2dzNEj2NxB0dUiCChatAPDSVyeIEkK7DV9Pi1g1RFtK0VuqdffSEXH
-   A==;
-X-IronPort-AV: E=Sophos;i="6.01,248,1684825200"; 
-   d="asc'?scan'208";a="227771449"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Aug 2023 00:44:38 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 2 Aug 2023 00:44:37 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Wed, 2 Aug 2023 00:44:35 -0700
-Date:   Wed, 2 Aug 2023 08:43:59 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Carsten =?iso-8859-1?Q?Spie=DF?= <mail@carsten-spiess.de>
-CC:     Conor Dooley <conor@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+        with ESMTP id S232728AbjHBKVR (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Aug 2023 06:21:17 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C8A2720;
+        Wed,  2 Aug 2023 03:21:10 -0700 (PDT)
+Message-ID: <20230802101933.104722355@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1690971669;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         references:references; bh=W37gGs0lCrcES4uNg1Zl0+g2c0hE6iWg5mZxC7Tosgc=;
+        b=F+C9H0DtgncTnkKKBoGxFVPsR6sHb0qwuu7W+vof+Q/fWU0keEEA+c/rOi4bZSuoDiaiXP
+        oYt/1oPQsa8rXyPAUwBncl1m7T/6ut3RVLIuIxsC2nMsxHJdLdMpz9SCzWoBW9I4rJrjt2
+        BoBpbBoBA0LSCLnAY+5EX6gNiTiK62C7Drb7EQV+gqf+XYzYr73P6OD1OpTDAygwQBX4cd
+        BFxZi2MYFacfwyZuB3UynU1qPO14p72U2rUpWDBwOL5advuWSVgXeIiBt79x23CEHVDjBD
+        xdjcA6e7bNRdpjwDfHuSacW44OECgcf35t5mYoDfv1Coh3aMgGVSFKYVUm8rKg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1690971669;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         references:references; bh=W37gGs0lCrcES4uNg1Zl0+g2c0hE6iWg5mZxC7Tosgc=;
+        b=aR/ClK7pK4d9Nw2NUuBu457SIW7LhYP+u61EVLZ0/hmwVXpsc9Nc7pYCjXgLciQPL8W47x
+        UEnwG0GlNyzhmhBA==
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     x86@kernel.org, Tom Lendacky <thomas.lendacky@amd.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Arjan van de Ven <arjan@linux.intel.com>,
+        Huang Rui <ray.huang@amd.com>, Juergen Gross <jgross@suse.com>,
+        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH v3 2/2] dt-bindings: hwmon: add renesas,isl28022
-Message-ID: <20230802-sandbar-crudely-78a4b8a351b0@wendy>
-References: <20230801163546.3170-1-mail@carsten-spiess.de>
- <20230801163546.3170-3-mail@carsten-spiess.de>
- <20230801-implicate-mullets-bd160bbda4b2@spud>
- <20230802093023.1a926c9f.mail@carsten-spiess.de>
+        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
+Subject: [patch V3 07/40] hwmon: (fam15h_power) Use topology_core_id()
+References: <20230802101635.459108805@linutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="rvwxYB0l/gGvqvqZ"
-Content-Disposition: inline
-In-Reply-To: <20230802093023.1a926c9f.mail@carsten-spiess.de>
+Content-Type: text/plain; charset=UTF-8
+Date:   Wed,  2 Aug 2023 12:21:08 +0200 (CEST)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
---rvwxYB0l/gGvqvqZ
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Use the provided topology helper function instead of fiddling in cpu_data.
 
-On Wed, Aug 02, 2023 at 09:30:23AM +0200, Carsten Spie=DF wrote:
->=20
-> On 8/1/23 22:52, Conor Dooley wrote:
-> > On Tue, Aug 01, 2023 at 06:35:46PM +0200, Carsten Spie=DF wrote:
-> > > Add dt-bindings for Renesas ISL28022 power monitor.
-> > > +properties:
-> > > +  compatible:
-> > > +    enum:
-> > > +      - renesas,isl28022 =20
-> >=20
-> > You've only got one compatible, why the enum? Will there be more similar
-> > devices that have an incompatible programming model?
-> Yes, there are isl28023 and isl28025 with different register addresses,
-> might be supported in future releases.
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Huang Rui <ray.huang@amd.com>
+---
+ drivers/hwmon/fam15h_power.c |    7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-Right. Unless that's a very strong "might", const: will do the trick
-here just fine.
+--- a/drivers/hwmon/fam15h_power.c
++++ b/drivers/hwmon/fam15h_power.c
+@@ -17,6 +17,7 @@
+ #include <linux/cpumask.h>
+ #include <linux/time.h>
+ #include <linux/sched.h>
++#include <linux/topology.h>
+ #include <asm/processor.h>
+ #include <asm/msr.h>
+ 
+@@ -134,15 +135,13 @@ static DEVICE_ATTR_RO(power1_crit);
+ static void do_read_registers_on_cu(void *_data)
+ {
+ 	struct fam15h_power_data *data = _data;
+-	int cpu, cu;
+-
+-	cpu = smp_processor_id();
++	int cu;
+ 
+ 	/*
+ 	 * With the new x86 topology modelling, cpu core id actually
+ 	 * is compute unit id.
+ 	 */
+-	cu = cpu_data(cpu).cpu_core_id;
++	cu = topology_core_id(smp_processor_id());
+ 
+ 	rdmsrl_safe(MSR_F15H_CU_PWR_ACCUMULATOR, &data->cu_acc_power[cu]);
+ 	rdmsrl_safe(MSR_F15H_PTSC, &data->cpu_sw_pwr_ptsc[cu]);
 
-Otherwise,
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-
-> > > +  renesas,shunt-range-microvolt:
-> > > +    description: | =20
-> >=20
-> > You don't need these |s if you have no formatting to preserve in the
-> > text.
-> Will fix in v4.
-
-There's no need to send a v4 for that alone.
-
---rvwxYB0l/gGvqvqZ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZMoJMwAKCRB4tDGHoIJi
-0tMPAQDjQ697+EDhnCuyxLgCr9usLC3Co7rI5JVp14gTVjUuZgEAvAae+pGt9k8D
-JU5YHsjUkBO+KWZi/AFxYKh1cmMOmwE=
-=s4Ye
------END PGP SIGNATURE-----
-
---rvwxYB0l/gGvqvqZ--
