@@ -2,337 +2,237 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E83AC04A6A
-	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Aug 2023 13:46:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F39FC001E0
+	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Aug 2023 13:46:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234007AbjHBNqg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 2 Aug 2023 09:46:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39896 "EHLO
+        id S234088AbjHBNqj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 2 Aug 2023 09:46:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233965AbjHBNqf (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Aug 2023 09:46:35 -0400
+        with ESMTP id S234057AbjHBNqi (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Aug 2023 09:46:38 -0400
 Received: from mgamail.intel.com (unknown [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1688410B
-        for <linux-hwmon@vger.kernel.org>; Wed,  2 Aug 2023 06:46:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DAC1269A
+        for <linux-hwmon@vger.kernel.org>; Wed,  2 Aug 2023 06:46:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690983994; x=1722519994;
+  t=1690983997; x=1722519997;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=LLdEHZz+vsWcxofmQ9Iuf0r3bGpNq1R56Tmk4GFeD4Q=;
-  b=mWqU2vqhu5u+vBKGP6gl94ANZGPsUum7OvksJHk/Qydv5hqYuoxw7vCX
-   eZpD2msYpr78JDy12JdZkAfrEKqkz0ObK31ACjoqYGLYaMn4eMj3QHlXH
-   rmZ7o6xnjVeLv5JoB3+D7pmR439WCAu/hs7AW2vggjs+fZ5LAAJLGv04d
-   hmluiq/koBqdrhgGl8Fk600NW9EdzprVvBNcUticA49MVCwj9cYElKlMT
-   qEwr01pkH1BcoYr7oY0bw5jhoeATJ4aeD7pOTXVLVwXa/Sq2ZScy6dggk
-   7TIKZ6g6tlCoctLfs5kdLc6mWFK7VvmS3udzrpYA/RL95fSugvwOL8tto
+  bh=DUqf6MegFnAPJZwt0euXTGiy+mpwCvNmFNQIl9yL1f4=;
+  b=n1paOmC7ysi4EdvHWFMzUOxmBqWxgEwIUX5zQNhYRf1eBpNoLz8Qe6BH
+   nWDGY502T1q3vLTzQtDGWCube4zRwlrxjxWGvvsPV4XV40xDuQ8k8rO5q
+   N2y2Q2x/qVXUT4l1S+zKrFku+YmXbbCxzjHsr1kSIwqjwxMzr35RrDlOD
+   BgSnNh5u3J9eiPJ4CkY7vUgqz/aypnMnTbPUXB7KsixW36B3SsP+YpTWC
+   bWyFZOBiNQZx4s07j/Va3puigcN6muwiNGwO+ifrHzo2Vih2H7aJj7rnT
+   69ShqAJkgR7SFNyKXhakZfHV7HTCsmJgbg22i44goBXn9jtGdWcvjW+mm
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10789"; a="400534951"
+X-IronPort-AV: E=McAfee;i="6600,9927,10789"; a="400534962"
 X-IronPort-AV: E=Sophos;i="6.01,249,1684825200"; 
-   d="scan'208";a="400534951"
+   d="scan'208";a="400534962"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2023 06:46:33 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2023 06:46:36 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10789"; a="852873930"
+X-IronPort-AV: E=McAfee;i="6600,9927,10789"; a="852873945"
 X-IronPort-AV: E=Sophos;i="6.01,249,1684825200"; 
-   d="scan'208";a="852873930"
+   d="scan'208";a="852873945"
 Received: from bnilawar-desk1.iind.intel.com ([10.145.169.158])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2023 06:46:31 -0700
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2023 06:46:33 -0700
 From:   Badal Nilawar <badal.nilawar@intel.com>
 To:     intel-xe@lists.freedesktop.org, linux-hwmon@vger.kernel.org
 Cc:     anshuman.gupta@intel.com, ashutosh.dixit@intel.com,
         linux@roeck-us.net, andi.shyti@linux.intel.com,
         riana.tauro@intel.com, matthew.brost@intel.com
-Subject: [PATCH v3 3/6] drm/xe/hwmon: Expose card reactive critical power
-Date:   Wed,  2 Aug 2023 19:22:38 +0530
-Message-Id: <20230802135241.458855-4-badal.nilawar@intel.com>
+Subject: [PATCH v3 4/6] drm/xe/hwmon: Expose input voltage attribute
+Date:   Wed,  2 Aug 2023 19:22:39 +0530
+Message-Id: <20230802135241.458855-5-badal.nilawar@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230802135241.458855-1-badal.nilawar@intel.com>
 References: <20230802135241.458855-1-badal.nilawar@intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Expose the card reactive critical (I1) power. I1 is exposed as
-power1_crit in microwatts (typically for client products) or as
-curr1_crit in milliamperes (typically for server).
+Use Xe HWMON subsystem to display the input voltage.
 
 v2:
-  - Move PCODE_MBOX macro to pcode file (Riana)
+  - Rename hwm_get_vltg to hwm_get_voltage (Riana)
+  - Use scale factor SF_VOLTAGE (Riana)
 v3:
-  - %s/hwm_/hwmon_/ (Matt Brost)
-  - s/IS_DG2/(gt_to_xe(gt)->info.platform == XE_DG2)
+  - %s/hwm_/hwmon/
+  - %s/gt_perf_status/REG_GT_PERF_STATUS/
+  - Remove platform check from hwmon_get_voltage()
 
 Signed-off-by: Badal Nilawar <badal.nilawar@intel.com>
 ---
- .../ABI/testing/sysfs-driver-intel-xe-hwmon   |  26 +++++
- drivers/gpu/drm/xe/xe_hwmon.c                 | 106 +++++++++++++++++-
- drivers/gpu/drm/xe/xe_pcode.h                 |   5 +
- drivers/gpu/drm/xe/xe_pcode_api.h             |   7 ++
- 4 files changed, 143 insertions(+), 1 deletion(-)
+ .../ABI/testing/sysfs-driver-intel-xe-hwmon   |  6 ++
+ drivers/gpu/drm/xe/regs/xe_gt_regs.h          |  3 +
+ drivers/gpu/drm/xe/xe_hwmon.c                 | 59 +++++++++++++++++++
+ 3 files changed, 68 insertions(+)
 
 diff --git a/Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon b/Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon
-index d48d98f903ed..ea60add73743 100644
+index ea60add73743..167bd9480602 100644
 --- a/Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon
 +++ b/Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon
-@@ -20,3 +20,29 @@ Description:	RO. Card default power limit (default TDP setting).
+@@ -44,5 +44,11 @@ Description:	RW. Card reactive critical (I1) power limit in milliamperes.
+ 		the operating frequency if the power averaged over a window
+ 		exceeds this limit.
  
++What:		/sys/devices/.../hwmon/hwmon<i>/in0_input
++Date:		August 2023
++KernelVersion:	6.4
++Contact:	intel-xe@lists.freedesktop.org
++Description:	RO. Current Voltage in millivolt.
++
  		Only supported for particular Intel xe graphics platforms.
  
-+What:		/sys/devices/.../hwmon/hwmon<i>/power1_crit
-+Date:		August 2023
-+KernelVersion:	6.4
-+Contact:	intel-xe@lists.freedesktop.org
-+Description:	RW. Card reactive critical (I1) power limit in microwatts.
+diff --git a/drivers/gpu/drm/xe/regs/xe_gt_regs.h b/drivers/gpu/drm/xe/regs/xe_gt_regs.h
+index eb7210afbd2c..cc452ec999fc 100644
+--- a/drivers/gpu/drm/xe/regs/xe_gt_regs.h
++++ b/drivers/gpu/drm/xe/regs/xe_gt_regs.h
+@@ -364,6 +364,9 @@
+ #define GT_GFX_RC6_LOCKED			XE_REG(0x138104)
+ #define GT_GFX_RC6				XE_REG(0x138108)
+ 
++#define GT_PERF_STATUS				XE_REG(0x1381b4)
++#define   VOLTAGE_MASK				REG_GENMASK(10, 0)
 +
-+		Card reactive critical (I1) power limit in microwatts is exposed
-+		for client products. The power controller will throttle the
-+		operating frequency if the power averaged over a window exceeds
-+		this limit.
-+
-+		Only supported for particular Intel xe graphics platforms.
-+
-+What:		/sys/devices/.../hwmon/hwmon<i>/curr1_crit
-+Date:		August 2023
-+KernelVersion:	6.4
-+Contact:	intel-xe@lists.freedesktop.org
-+Description:	RW. Card reactive critical (I1) power limit in milliamperes.
-+
-+		Card reactive critical (I1) power limit in milliamperes is
-+		exposed for server products. The power controller will throttle
-+		the operating frequency if the power averaged over a window
-+		exceeds this limit.
-+
-+		Only supported for particular Intel xe graphics platforms.
-+
+ #define GT_INTR_DW(x)				XE_REG(0x190018 + ((x) * 4))
+ 
+ #define GUC_SG_INTR_ENABLE			XE_REG(0x190038)
 diff --git a/drivers/gpu/drm/xe/xe_hwmon.c b/drivers/gpu/drm/xe/xe_hwmon.c
-index ce8dac2168f6..ceab142f6d42 100644
+index ceab142f6d42..3e69cd79c1e2 100644
 --- a/drivers/gpu/drm/xe/xe_hwmon.c
 +++ b/drivers/gpu/drm/xe/xe_hwmon.c
-@@ -12,6 +12,8 @@
- #include "xe_hwmon.h"
- #include "xe_mmio.h"
- #include "xe_gt.h"
-+#include "xe_pcode.h"
-+#include "xe_pcode_api.h"
+@@ -3,7 +3,9 @@
+  * Copyright © 2023 Intel Corporation
+  */
  
- enum hwmon_reg_name {
++#include <linux/hwmon-sysfs.h>
+ #include <linux/hwmon.h>
++#include <linux/types.h>
+ 
+ #include <drm/drm_managed.h>
+ #include "regs/xe_mchbar_regs.h"
+@@ -19,6 +21,7 @@ enum hwmon_reg_name {
  	REG_PKG_RAPL_LIMIT,
-@@ -28,8 +30,10 @@ enum hwmon_reg_operation {
- /*
+ 	REG_PKG_POWER_SKU,
+ 	REG_PKG_POWER_SKU_UNIT,
++	REG_GT_PERF_STATUS,
+ };
+ 
+ enum hwmon_reg_operation {
+@@ -31,9 +34,11 @@ enum hwmon_reg_operation {
   * SF_* - scale factors for particular quantities according to hwmon spec.
   * - power  - microwatts
-+ * - curr   - milliamperes
+  * - curr   - milliamperes
++ * - voltage  - millivolts
   */
  #define SF_POWER	1000000
-+#define SF_CURR		1000
+ #define SF_CURR		1000
++#define SF_VOLTAGE	1000
  
  struct xe_hwmon_data {
  	struct device *hwmon_dev;
-@@ -216,18 +220,43 @@ static int hwmon_power_rated_max_read(struct xe_hwmon_data *ddat, long *value)
- }
- 
+@@ -75,6 +80,10 @@ static u32 hwmon_get_reg(struct xe_hwmon_data *ddat, enum hwmon_reg_name reg_nam
+ 		else if (xe->info.platform == XE_PVC)
+ 			reg = PVC_GT0_PACKAGE_POWER_SKU_UNIT;
+ 		break;
++	case REG_GT_PERF_STATUS:
++		if (xe->info.platform == XE_DG2)
++			reg = GT_PERF_STATUS;
++		break;
+ 	default:
+ 		XE_MISSING_CASE(reg_name);
+ 		break;
+@@ -222,6 +231,7 @@ static int hwmon_power_rated_max_read(struct xe_hwmon_data *ddat, long *value)
  static const struct hwmon_channel_info *hwmon_info[] = {
--	HWMON_CHANNEL_INFO(power, HWMON_P_MAX | HWMON_P_RATED_MAX),
-+	HWMON_CHANNEL_INFO(power, HWMON_P_MAX | HWMON_P_RATED_MAX | HWMON_P_CRIT),
-+	HWMON_CHANNEL_INFO(curr, HWMON_C_CRIT),
+ 	HWMON_CHANNEL_INFO(power, HWMON_P_MAX | HWMON_P_RATED_MAX | HWMON_P_CRIT),
+ 	HWMON_CHANNEL_INFO(curr, HWMON_C_CRIT),
++	HWMON_CHANNEL_INFO(in, HWMON_I_INPUT),
  	NULL
  };
  
-+/* I1 is exposed as power_crit or as curr_crit depending on bit 31 */
-+static int hwmon_pcode_read_i1(struct xe_gt *gt, u32 *uval)
+@@ -244,6 +254,18 @@ static int hwmon_pcode_write_i1(struct xe_gt *gt, u32 uval)
+ 			      uval);
+ }
+ 
++static int hwmon_get_voltage(struct xe_hwmon_data *ddat, long *value)
 +{
-+	/* Avoid Illegal Subcommand error */
-+	if (gt_to_xe(gt)->info.platform == XE_DG2)
-+		return -ENXIO;
++	u32 reg_val;
 +
-+	return xe_pcode_read(gt, PCODE_MBOX(PCODE_POWER_SETUP,
-+			     POWER_SETUP_SUBCOMMAND_READ_I1, 0),
-+			     uval, 0);
-+}
++	process_hwmon_reg(ddat, REG_GT_PERF_STATUS,
++			  REG_READ, &reg_val, 0, 0);
++	/* HW register value in units of 2.5 millivolt */
++	*value = DIV_ROUND_CLOSEST(REG_FIELD_GET(VOLTAGE_MASK, reg_val) * 2500, SF_VOLTAGE);
 +
-+static int hwmon_pcode_write_i1(struct xe_gt *gt, u32 uval)
-+{
-+	return xe_pcode_write(gt, PCODE_MBOX(PCODE_POWER_SETUP,
-+			      POWER_SETUP_SUBCOMMAND_WRITE_I1, 0),
-+			      uval);
++	return 0;
 +}
 +
  static umode_t
  hwmon_power_is_visible(struct xe_hwmon_data *ddat, u32 attr, int chan)
  {
-+	u32 uval;
-+
- 	switch (attr) {
- 	case hwmon_power_max:
- 		return hwmon_get_reg(ddat, REG_PKG_RAPL_LIMIT) ? 0664 : 0;
- 	case hwmon_power_rated_max:
- 		return hwmon_get_reg(ddat, REG_PKG_POWER_SKU) ? 0444 : 0;
-+	case hwmon_power_crit:
-+		return (hwmon_pcode_read_i1(ddat->gt, &uval) ||
-+			!(uval & POWER_SETUP_I1_WATTS)) ? 0 : 0644;
- 	default:
- 		return 0;
+@@ -396,6 +418,37 @@ hwmon_curr_write(struct xe_hwmon_data *ddat, u32 attr, long val)
  	}
-@@ -236,11 +265,23 @@ hwmon_power_is_visible(struct xe_hwmon_data *ddat, u32 attr, int chan)
- static int
- hwmon_power_read(struct xe_hwmon_data *ddat, u32 attr, int chan, long *val)
- {
-+	int ret;
-+	u32 uval;
-+
- 	switch (attr) {
- 	case hwmon_power_max:
- 		return hwmon_power_max_read(ddat, val);
- 	case hwmon_power_rated_max:
- 		return hwmon_power_rated_max_read(ddat, val);
-+	case hwmon_power_crit:
-+		ret = hwmon_pcode_read_i1(ddat->gt, &uval);
-+		if (ret)
-+			return ret;
-+		if (!(uval & POWER_SETUP_I1_WATTS))
-+			return -ENODEV;
-+		*val = mul_u64_u32_shr(REG_FIELD_GET(POWER_SETUP_I1_DATA_MASK, uval),
-+				       SF_POWER, POWER_SETUP_I1_SHIFT);
-+		return 0;
- 	default:
- 		return -EOPNOTSUPP;
- 	}
-@@ -249,9 +290,14 @@ hwmon_power_read(struct xe_hwmon_data *ddat, u32 attr, int chan, long *val)
- static int
- hwmon_power_write(struct xe_hwmon_data *ddat, u32 attr, int chan, long val)
- {
-+	u32 uval;
-+
- 	switch (attr) {
- 	case hwmon_power_max:
- 		return hwmon_power_max_write(ddat, val);
-+	case hwmon_power_crit:
-+		uval = DIV_ROUND_CLOSEST_ULL(val << POWER_SETUP_I1_SHIFT, SF_POWER);
-+		return hwmon_pcode_write_i1(ddat->gt, uval);
- 	default:
- 		return -EOPNOTSUPP;
- 	}
-@@ -301,6 +347,55 @@ void xe_hwmon_power_max_restore(struct xe_device *xe, bool old)
- 	mutex_unlock(&hwmon->hwmon_lock);
  }
  
 +static umode_t
-+hwmon_curr_is_visible(const struct xe_hwmon_data *ddat, u32 attr)
++hwmon_in_is_visible(struct xe_hwmon_data *ddat, u32 attr)
 +{
-+	u32 uval;
-+
 +	switch (attr) {
-+	case hwmon_curr_crit:
-+		return (hwmon_pcode_read_i1(ddat->gt, &uval) ||
-+			(uval & POWER_SETUP_I1_WATTS)) ? 0 : 0644;
++	case hwmon_in_input:
++		return hwmon_get_reg(ddat, REG_GT_PERF_STATUS) ? 0444 : 0;
 +	default:
 +		return 0;
 +	}
 +}
 +
 +static int
-+hwmon_curr_read(struct xe_hwmon_data *ddat, u32 attr, long *val)
++hwmon_in_read(struct xe_hwmon_data *ddat, u32 attr, long *val)
 +{
 +	int ret;
-+	u32 uval;
++
++	xe_device_mem_access_get(gt_to_xe(ddat->gt));
 +
 +	switch (attr) {
-+	case hwmon_curr_crit:
-+		ret = hwmon_pcode_read_i1(ddat->gt, &uval);
-+		if (ret)
-+			return ret;
-+		if (uval & POWER_SETUP_I1_WATTS)
-+			return -ENODEV;
-+		*val = mul_u64_u32_shr(REG_FIELD_GET(POWER_SETUP_I1_DATA_MASK, uval),
-+				       SF_CURR, POWER_SETUP_I1_SHIFT);
-+		return 0;
++	case hwmon_in_input:
++		ret = hwmon_get_voltage(ddat, val);
++		break;
 +	default:
-+		return -EOPNOTSUPP;
++		ret = -EOPNOTSUPP;
 +	}
-+}
 +
-+static int
-+hwmon_curr_write(struct xe_hwmon_data *ddat, u32 attr, long val)
-+{
-+	u32 uval;
++	xe_device_mem_access_put(gt_to_xe(ddat->gt));
 +
-+	switch (attr) {
-+	case hwmon_curr_crit:
-+		uval = DIV_ROUND_CLOSEST_ULL(val << POWER_SETUP_I1_SHIFT, SF_CURR);
-+		return hwmon_pcode_write_i1(ddat->gt, uval);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
++	return ret;
 +}
 +
  static umode_t
  hwmon_is_visible(const void *drvdata, enum hwmon_sensor_types type,
  		 u32 attr, int channel)
-@@ -314,6 +409,9 @@ hwmon_is_visible(const void *drvdata, enum hwmon_sensor_types type,
- 	case hwmon_power:
- 		ret = hwmon_power_is_visible(ddat, attr, channel);
+@@ -412,6 +465,9 @@ hwmon_is_visible(const void *drvdata, enum hwmon_sensor_types type,
+ 	case hwmon_curr:
+ 		ret = hwmon_curr_is_visible(ddat, attr);
  		break;
-+	case hwmon_curr:
-+		ret = hwmon_curr_is_visible(ddat, attr);
++	case hwmon_in:
++		ret = hwmon_in_is_visible(ddat, attr);
 +		break;
  	default:
  		ret = 0;
  		break;
-@@ -337,6 +435,9 @@ hwmon_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
- 	case hwmon_power:
- 		ret = hwmon_power_read(ddat, attr, channel, val);
+@@ -438,6 +494,9 @@ hwmon_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+ 	case hwmon_curr:
+ 		ret = hwmon_curr_read(ddat, attr, val);
  		break;
-+	case hwmon_curr:
-+		ret = hwmon_curr_read(ddat, attr, val);
++	case hwmon_in:
++		ret = hwmon_in_read(ddat, attr, val);
 +		break;
  	default:
  		ret = -EOPNOTSUPP;
  		break;
-@@ -360,6 +461,9 @@ hwmon_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
- 	case hwmon_power:
- 		ret = hwmon_power_write(ddat, attr, channel, val);
- 		break;
-+	case hwmon_curr:
-+		ret = hwmon_curr_write(ddat, attr, val);
-+		break;
- 	default:
- 		ret = -EOPNOTSUPP;
- 		break;
-diff --git a/drivers/gpu/drm/xe/xe_pcode.h b/drivers/gpu/drm/xe/xe_pcode.h
-index 3b4aa8c1a3ba..08cb1d047cba 100644
---- a/drivers/gpu/drm/xe/xe_pcode.h
-+++ b/drivers/gpu/drm/xe/xe_pcode.h
-@@ -22,4 +22,9 @@ int xe_pcode_write_timeout(struct xe_gt *gt, u32 mbox, u32 val,
- int xe_pcode_request(struct xe_gt *gt, u32 mbox, u32 request,
- 		     u32 reply_mask, u32 reply, int timeout_ms);
- 
-+#define PCODE_MBOX(mbcmd, param1, param2)\
-+	(FIELD_PREP(PCODE_MB_COMMAND, mbcmd)\
-+	| FIELD_PREP(PCODE_MB_PARAM1, param1)\
-+	| FIELD_PREP(PCODE_MB_PARAM2, param2))
-+
- #endif
-diff --git a/drivers/gpu/drm/xe/xe_pcode_api.h b/drivers/gpu/drm/xe/xe_pcode_api.h
-index 837ff7c71280..5935cfe30204 100644
---- a/drivers/gpu/drm/xe/xe_pcode_api.h
-+++ b/drivers/gpu/drm/xe/xe_pcode_api.h
-@@ -35,6 +35,13 @@
- #define     DGFX_GET_INIT_STATUS	0x0
- #define     DGFX_INIT_STATUS_COMPLETE	0x1
- 
-+#define   PCODE_POWER_SETUP			0x7C
-+#define     POWER_SETUP_SUBCOMMAND_READ_I1	0x4
-+#define     POWER_SETUP_SUBCOMMAND_WRITE_I1	0x5
-+#define	    POWER_SETUP_I1_WATTS		REG_BIT(31)
-+#define	    POWER_SETUP_I1_SHIFT		6	/* 10.6 fixed point format */
-+#define	    POWER_SETUP_I1_DATA_MASK		REG_GENMASK(15, 0)
-+
- struct pcode_err_decode {
- 	int errno;
- 	const char *str;
 -- 
 2.25.1
 
