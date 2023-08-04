@@ -2,154 +2,145 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 804EDC001DF
-	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Aug 2023 15:56:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B751C001DE
+	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Aug 2023 16:03:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbjHDP4g (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 4 Aug 2023 11:56:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51196 "EHLO
+        id S232273AbjHDQD3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 4 Aug 2023 12:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjHDP4e (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Aug 2023 11:56:34 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501CBB2;
-        Fri,  4 Aug 2023 08:56:33 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1bb775625e2so15892775ad.1;
-        Fri, 04 Aug 2023 08:56:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691164593; x=1691769393;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9u4RND7EcPo+OWHsAS1xl3llbbmhoUWKI06kDT5GXQA=;
-        b=f9TVjbsQnqdTOVtBDcddw/eT28VsyM3GH4zgMl8jUs2Ex+Iu+6/UH99gPlD3sce1hu
-         nsNb8DNhOetzXbl8JUBwkMzL9xyjjBKUNZYilYi8g44YnJTUa/D6LebkRHp+EfRUgnFI
-         hOsnDHg5xFsCx+7+vWkf5kM61YQpZwi+cPSaGaBtvdnZo9jmwA2/8DJTMlc8Sr2vy3Uo
-         wvbVn1+9VcpvBzYFHZXdyaWtzuXNDemIeuOY/XoBtIcHjWUTEKz48vneslLPMBvS3CxO
-         jsr9pGrMK/B+WCPtYlH7BQje7h9qkJbZqutxI6VNfPj6+Zm7ejPpWZE0KKYxinBAE01y
-         eTYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691164593; x=1691769393;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9u4RND7EcPo+OWHsAS1xl3llbbmhoUWKI06kDT5GXQA=;
-        b=LwVxNcD6rJZuCToly3dWiWdlzVUJn3vtZDr7NjE/8ZTwTSYpUDT8pklvPJjZu5Eal0
-         v0MB9//YLPtLKm34b4LyxXUSKOSoeK9HIylx95mE4y+LZxKSkhbJmEjLB4eLaOmh4PBg
-         cR4tf8ymd9iLJPzDFTQfEiIVyvV5DBgvML3zxR7U8V5mqGL/VkZkJQFWKXB1Z2kjdXbM
-         AsH6gEyYXuZHm/bU8PJTKxk55bp0klbc0EYqq9IMw35ZWRMbTx8gb38z5xdXAonYJnoM
-         BxQV9D9ithSN1RXvDzGSkNQ4z+1Mxk5SQ8rE+XgsH0hwvc17FhM1dWloCz5xMz8lfGMy
-         toYw==
-X-Gm-Message-State: AOJu0YznjSuyd2oN+2DSbEvhppd/csvpwji2qBtWxsb+1/KxjlMRKqhO
-        ZJz/FbB3k0fINhdcKhQ1+5IPtBvBjE4=
-X-Google-Smtp-Source: AGHT+IE+Tztu7bMsg6TruhEs+WPJAVgGUhYxNm5Ur4SydSLd6SpXKMbv1j+c37TJnXD/76t6rZHf8Q==
-X-Received: by 2002:a17:902:e88a:b0:1b8:5bca:8256 with SMTP id w10-20020a170902e88a00b001b85bca8256mr50661plg.31.1691164592698;
-        Fri, 04 Aug 2023 08:56:32 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v22-20020a17090331d600b001ac2be26340sm1929528ple.222.2023.08.04.08.56.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Aug 2023 08:56:32 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <22f6364c-611c-ffb6-451c-9ddc20418d0a@roeck-us.net>
-Date:   Fri, 4 Aug 2023 08:56:30 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
+        with ESMTP id S232279AbjHDQD0 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Aug 2023 12:03:26 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on20600.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5b::600])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE5FD4C21;
+        Fri,  4 Aug 2023 09:03:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RBLcY6IzEwKQ+7FDsBZ+ONvy0oJq2eF9HfvOmwX6drrUU5ad/0963h4iuuA1Mxnx7B4c/oN5iArQ5JJt22+AZ7ZLxpZuWNK7R468TCw4wps47DeZtUbRw+1klTLf0124zOqkOK14laGruY/SVa3v70/EFTCi6JCWJBG+9LUyXw5jf35zeGYH67+mYbl228ulkfiNdxbtFnblpbqJ7vijGrXee6BSb92EvBDH999lit3oa1F7cBk6dMpN32OiJZP6wdHYWk9Q1PjcuXo6gotMFe1RY59Z1nmIFl9RJwhEHFwDr8nvsGOCgGn/GcnRF1Ei+C3mJVjPtecuhwk38FkLTA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JlOQsI9UCgfpWrKBWF019vaPw4cmNXrgt52C7jJqbp4=;
+ b=IfpPGhXjPcLUq3K/kTEZ0kTMUfjX3LRH5BbRqj/iSTipi6aeIOfPAoRBXc3cQiaQrXb4vRTMSUyVIrtKzs+ANW7PQ02eCHbQ6sZ5n6m/ZkrPvwQHOO29dVg6U1sYwjjARViT5TouueO+waZK4Rw2C6Yh2DfUMi/rxOlh8Sd37sj1Lw7cJp8X2gZuRndV7uMVyyDx7Aohd7ocJN8LZaPZj5KhauxtoPdfXG20vgs7HaaAnrou/VfqQ3R26G8y9MaG7cwRP8Bdf8kM+Bp1QjGu5eeXUZUSRebfXCFuc1+0IdYx3p3sVPrGfZxyrBhHg9IIIN4/FVKlhhyZ0eszZCwfBw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JlOQsI9UCgfpWrKBWF019vaPw4cmNXrgt52C7jJqbp4=;
+ b=fdh2IkerFUqTMy8TGjgYfL0GrDeYp+u0yHUHVkz7La4Mq2ny76xLJ2GU7cQj0Y1yw09x8zqhMA3ZAHERuv2cTYzorximOJvuZnBEsI1fJfsHsFmRCqPXSQOnJMzeDBfJZqyVn+cCmf+0uucAx0zE9qmXXgqYbbAF2fbUnC+8Fqw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by DM6PR12MB4155.namprd12.prod.outlook.com (2603:10b6:5:221::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.20; Fri, 4 Aug
+ 2023 16:03:08 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::36f9:ffa7:c770:d146]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::36f9:ffa7:c770:d146%7]) with mapi id 15.20.6631.046; Fri, 4 Aug 2023
+ 16:03:08 +0000
+Message-ID: <1606f9f9-5d5a-788d-b058-ec218fb73712@amd.com>
+Date:   Fri, 4 Aug 2023 11:03:04 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 3/3] EDAC/amd64: Add support for AMD Family 1Ah Models
+ 00h-1Fh and 40h-4Fh
 Content-Language: en-US
-To:     Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>
-Cc:     "patrick@stwcx.xyz" <patrick@stwcx.xyz>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230424101352.28117-1-Delphine_CC_Chiu@Wiwynn.com>
- <20230424101352.28117-2-Delphine_CC_Chiu@Wiwynn.com>
- <321a84c6-6d74-4042-a6ce-6229073c8d30@roeck-us.net>
- <SG2PR04MB55436F03F6CAD6D415FDEE40A102A@SG2PR04MB5543.apcprd04.prod.outlook.com>
- <e093a52d-e36f-ec26-e218-1e3b3b400e34@roeck-us.net>
- <SG2PR04MB55438E9C5E61ACB9330D829AA10BA@SG2PR04MB5543.apcprd04.prod.outlook.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v1 1/2] dt-bindings: hwmon: Add lltc ltc4286 driver
- bindings
-In-Reply-To: <SG2PR04MB55438E9C5E61ACB9330D829AA10BA@SG2PR04MB5543.apcprd04.prod.outlook.com>
+To:     Yazen Ghannam <yazen.ghannam@amd.com>,
+        Avadhut Naik <avadhut.naik@amd.com>, bp@alien8.de,
+        linux@roeck-us.net, x86@kernel.org, linux-hwmon@vger.kernel.org,
+        linux-edac@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, avadnaik@amd.com
+References: <20230706171323.3722900-1-avadhut.naik@amd.com>
+ <20230706171323.3722900-4-avadhut.naik@amd.com>
+ <e5b0063a-ae41-41ab-b3a7-2084dfa7f816@amd.com>
+From:   "Limonciello, Mario" <mario.limonciello@amd.com>
+In-Reply-To: <e5b0063a-ae41-41ab-b3a7-2084dfa7f816@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SA1PR02CA0004.namprd02.prod.outlook.com
+ (2603:10b6:806:2cf::8) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DM6PR12MB4155:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7ed8f2f5-37cb-4f47-b0a0-08db95044b6c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FwzZkLP2jAQ0TG1TH00k9kWGnv+0a1fAKlDn7xr/Bfxw9CARskWPdrcM/o8Zk8kcw5IsStCYv/SQPD2vBc3KYyt8N3uNUQsWjZKrdeq40rZqjWdMxdnxLrDqexReB/semBovifopzkqs3WoMGM2PkulskQKD0ul+5OlntlKGkMPupOKkFoItW8T5eXuOgpzJ94WtzMesk3mskJdtcOGEVpYSh5OPIMuOzX8WmJ/pAg6+WCrc3cHmwtCOHMvk0pksB7a9uCVkIh2x7zNb4lPNfOrQckZU4jOEF4kv3Volz8r5qGwwpP8YNFSqaPIF/W1PxrpsP8OdvwTlb9Vhm2RJlHTTRBkDwO5zVa+W/OXVZotcxhXcS7B+zzKlQfRXT8veaAUAh2ID90wSkz+IOcQo/MJ5Cr5BonqjRdyOlNS2PfUekPGiJb8zQptAtZY0+O8UkG+JMKm9iLi3FEepkPO9SfSUOWNVmj3USvUHhlqnHuXXLpQGP4x5Uke78/e4vX21qViSScTkV+3Ioxfon0+/YT1GQNuSbXfNVxIcu4CoHTClYc2i7WqEYXbF9aR9i5/MGXnjT+Ker03jEduggfR3Bo9PpxOer+6lrQBc+O8bYbN6jPBkHMTwU6EVGwpn7jv5eRl2JxJKDnySqp7cb5j0Rg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(396003)(39860400002)(346002)(136003)(186006)(1800799003)(451199021)(36756003)(86362001)(31696002)(31686004)(478600001)(110136005)(38100700002)(8676002)(2616005)(26005)(6506007)(53546011)(6512007)(6666004)(41300700001)(8936002)(6486002)(4744005)(316002)(2906002)(66556008)(66476007)(4326008)(5660300002)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Wmc1NzNhMWhwV1JUY2xwMklEeVM5Sis5ejdYYUZ5ZmlHWVNPUWxBTW9YVEdF?=
+ =?utf-8?B?MXZXdllXTDF2TXZManJ6RnBRa0FsWmlGZWhRMHE2TzFKQkhzaE5GZFNPeHg0?=
+ =?utf-8?B?OVJQM3FZMTBLQ0V1dGJlbkdHVHpYa1FOQjkwdmxrZXRkbVppSkZXUEZrL0VX?=
+ =?utf-8?B?OGhTZTlOVTlwNzdDRTdpRXZ4bk8zaE5VVTFsallYUzlkeXR6SGthVmlScUZo?=
+ =?utf-8?B?bFVuMmkxck1MRTlDYmlJQlVSMTRHTWlxZXJTUW1IRm9CeU5yTS9lUkd3TVF0?=
+ =?utf-8?B?dGlLQXpOYVorVmd0Z2o4dXFCVDI0VC9UTXM3ZTlzalFkOVdCVm1Hazh4cE4x?=
+ =?utf-8?B?SmhMaHkrZHQ0RzJzcGxaZ3I2UndBQXA3QjlDOXpvUHlRaFczajYyYm5DSXRn?=
+ =?utf-8?B?MTF3cElLaU5qa0VINnhDcVdkS0VDWFh4ZlFvbTltVVlUL1JaNFJQZVRHM3dD?=
+ =?utf-8?B?R05GUGtyQlU4cXp3UnJXaC8zMUZSdGtqQkNMNTh5cHFDaFZzUXAra0VxME91?=
+ =?utf-8?B?ZHQzMURCcmc3K1dGd0s4Z1pMb091eTJlRHk1QjVGMXBrODVlZUdaQTk1cDU1?=
+ =?utf-8?B?djQzeFh4TndnM0lqVWNuQ3NaeWZiK2hXQzJKczJrdFZUU013eVNYMVhieVRK?=
+ =?utf-8?B?MVV0S2FFbGdtMHJMdG9LUkVWdVRQc2lIMEhVOW9YYTNOWGo3TnlOZGtQWWhk?=
+ =?utf-8?B?c1lSekFZZDRoNjZiOXVBZnRsR0RBaFd6TE9DRm5HUGJ3blF0b3NkQ2NMU0lJ?=
+ =?utf-8?B?a205MHZ6c2NFT1Y0ejR3dkJrbnlHN3NJR2hBaUswWHhmZEUvaEQxYTlETHZ6?=
+ =?utf-8?B?NHhaNisrWGF4ODd1cE5zZkEvVmtEd04yZVpWNzdsbTBLcENrbjdYcU81SUFq?=
+ =?utf-8?B?eEtQejFIeVBIaWNxc0tmMDFneUxrWjltMG45ZWxwdHFlZFBtVkx2OHJucERl?=
+ =?utf-8?B?ZXh2Ync1S0NUTDIvdloyLys2NFkxaWJGdmxEWG9BNnQzNlJYRWlMMVRydS94?=
+ =?utf-8?B?REZsQXJ1UUtrRDlXV2tEMFZsNEd6bFk3ZVNtODg3SjQ3WTVyNXFJWjBSZGVh?=
+ =?utf-8?B?SHplN1RFSVV0cXI2MWFVeFlFSlRnbW51WGVtUUN0RnROM1FQZW9vRVA0TXdu?=
+ =?utf-8?B?dDVNZEpSdUhKUEpjVnMza2VaUmFIdVB5UlYvTnBZS2tpU29IY2EyNDR0VURJ?=
+ =?utf-8?B?YWQ0R1FwR2Y2MEV1NFRydyt6V0Y0MXMvYUg1NHJJNlRTRWRTWkNzNkR3MmhS?=
+ =?utf-8?B?Mlo1T3ZVMWUyU3kzS0QxUVF4eE1LSnFQRy9NbXpkaHEvbXlsb0UwTCtDUGt4?=
+ =?utf-8?B?SGlreUVQR0p4VDZlL1oxZ05WQmZBU1JPOWZWbjZlYXJ3YjJjZnE0Wm5ib2VB?=
+ =?utf-8?B?emFtR1dzU2pYeldvT2tvMm8vbnVrYW15UDY0c1UrYmF6bHdKa2FkU2pGOHpL?=
+ =?utf-8?B?UUQyNld5bkVSVzQvaDdydVlEVDZadFdaUWVEcVJiTVRUS3cvV3FyMGhudTFw?=
+ =?utf-8?B?czFITXF5RVVSV0xXSGh0K1BTRTMxSEdMeEFBaHR0OFpjejVFRUpaSnJlUmtV?=
+ =?utf-8?B?R09NVHVBNVVBWG5Sejh0VUJVS0d3MnFyTmlYRVZmRlVvZS9pd29iS0hESkF6?=
+ =?utf-8?B?clFpdGtKV0ozbTBjc1VsdzJ6VmNUUnJ1UnpEZTN2bG1jVG41RXpSRWcyMEJ2?=
+ =?utf-8?B?Mm5iY0U3SmtidUwrRGQxWGZWU0NVUDRXTDdENXBHWTI1QkNwMjVGRmVIQ1My?=
+ =?utf-8?B?bkR4dlNTV3ZyUjZTZC9yN2gzTi9ocFV1V3pvNy9yU2xPQ3VYRG9vQ3g0R25P?=
+ =?utf-8?B?enBpa0VMOEJvdngwZDFQNFBFaE1aTnhEZzI4UXRaTUJDS0ZJYkNiTlh5cHFx?=
+ =?utf-8?B?eHhEWk53ODl1ZFo1MHlkQVFKdDlDWjNyczlLQnJyaGx0R3lPOExEZzF4SFE5?=
+ =?utf-8?B?Z2NSbTdtRk5BdURrQ2pOMWJqUElLZDdDNi9UeFJGSTFFTll5NC9sbkhBZ0ZB?=
+ =?utf-8?B?NjV3VWJSRHV0aHRyMUdIdzJHSVlXM2ZXVEV3UkxtNkJkNmxnZ0FNOVVjSFY2?=
+ =?utf-8?B?bkFJVEdpN05FNm0vSVE5NFFGNjRjYXNsTCsrLzBxaHpmbzJ6WjVybWJ4Smxo?=
+ =?utf-8?Q?6gQ1WEzF7WEn3ab9VVlidMMJH?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7ed8f2f5-37cb-4f47-b0a0-08db95044b6c
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Aug 2023 16:03:08.2622
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kg3fFYqKjYdXAoEj5bbR33WM68GV5Os02KRMkmPh46wHoeVAj+z1a5ysJPodSoIjpyZGIYiXGc2vYcpUcJmbpA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4155
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 8/1/23 22:31, Delphine_CC_Chiu/WYHQ/Wiwynn wrote:
->> -----Original Message-----
->> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
->> Sent: Monday, July 24, 2023 11:22 AM
->> To: Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>
->> Cc: patrick@stwcx.xyz; Jean Delvare <jdelvare@suse.com>; Rob Herring
->> <robh+dt@kernel.org>; Krzysztof Kozlowski
->> <krzysztof.kozlowski+dt@linaro.org>; linux-i2c@vger.kernel.org;
->> linux-hwmon@vger.kernel.org; devicetree@vger.kernel.org;
->> linux-kernel@vger.kernel.org
->> Subject: Re: [PATCH v1 1/2] dt-bindings: hwmon: Add lltc ltc4286 driver
->> bindings
+
+
+On 8/3/2023 7:25 PM, Yazen Ghannam wrote:
+> On 7/6/2023 1:13 PM, Avadhut Naik wrote:
+>> From: Avadhut Naik <Avadhut.Naik@amd.com>
 >>
->>    Security Reminder: Please be aware that this email is sent by an external
->> sender.
->>
->> On 7/23/23 19:12, Delphine_CC_Chiu/WYHQ/Wiwynn wrote:
->>
->>>>> +properties:
->>>>> +  compatible:
->>>>> +    enum:
->>>>> +      - lltc,ltc4286
->>>>> +      - lltc,ltc4287
->>>>
->>>> There is no LTC4287, at least according to the Analog website.
->>> It has been announced on Analog Devices website.
->>> Please refer to this link:
->>> https://apc01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.
->>>
->> analog.com%2Fen%2Fproducts%2Fltc2487.html%23product-overview&data=0
->> 5%7
->>>
->> C01%7CWayne_SC_Liu%40wiwynn.com%7Cd97a86a696a54f28a26408db8bf52
->> 23d%7Cd
->>>
->> a6e0628fc834caf9dd273061cbab167%7C0%7C0%7C638257657193005539%7C
->> Unknown
->>>
->> %7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haW
->> wiLCJ
->>>
->> XVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=XrdlzCyq0pcjfv3M6QNX73Ieux0w
->> rfNKzNvv
->>> HgVSH40%3D&reserved=0
->>>
->>
->> No, that is wrong. You are pointing to ltc2487, which is something completely
->> different.
+>> Add the necessary support in the module for AMD's new Family 1Ah-based
+>> models 00h-1Fh and 40h-4Fh.
 >>
 > 
-> We have sent e-mail to query about the release date for LTC4287 chip.
-> Analog Device reply that they will release this chip in last week of Sep, 2023.
-> Please refer to the attachment to review their reply.
+> The first patch in this set adds PCI IDs for models starting at 20h. And 
+> this patch adds support for models 40h-4Fh.
+> 
+> Can you please elaborate on the discrepancy?
+> 
+> Thanks,
+> Yazen
 > 
 
-At least according to the driver code, LTC4286 and the LTC4287 are functionally
-identical. I am kind of puzzled why you insist mentioning the not-yet-existing
-LTC4287; instantiating LTC4287 as LTC4286 should work perfectly fine. LTC4287
-can always be added as devicetree reference if/when it officially exists.
+Model 40h-4fh shares some of the same design as some other platforms.
 
-Care to explain ?
-
-Note: If the chips are _not_ functionally identical, and a follow-up patch will
-be needed to add full LTC4287 support to the driver after the chip has been
-published, it would be inappropriate to make partial/incomplete changes now.
-With that possibility in mind, I am not inclined to accept a driver that is
-even mentioning LTC4287 without access to its datasheet because I think it
-is important for me to understand the differences and similarities between
-the two chips.
-
-Guenter
-
+The root port ID PCI_DEVICE_ID_AMD_19H_M60H_ROOT and DF_F3 ID 
+PCI_DEVICE_ID_AMD_19H_M60H_DF_F3 covers it.
