@@ -2,160 +2,123 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AEEBBC41513
-	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Aug 2023 16:10:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6274EC04A94
+	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Aug 2023 22:14:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbjHDQKn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 4 Aug 2023 12:10:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32992 "EHLO
+        id S230332AbjHDWOL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 4 Aug 2023 18:14:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjHDQKm (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Aug 2023 12:10:42 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E69EB2;
-        Fri,  4 Aug 2023 09:10:39 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-2682b4ca7b7so1279819a91.3;
-        Fri, 04 Aug 2023 09:10:39 -0700 (PDT)
+        with ESMTP id S229723AbjHDWOJ (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Aug 2023 18:14:09 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09EC510E6;
+        Fri,  4 Aug 2023 15:14:09 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1bb775625e2so18030885ad.1;
+        Fri, 04 Aug 2023 15:14:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691165439; x=1691770239;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kUioFZ7tXMJEvu9BOB44xCzuGpOwtxseq1YU/H9f2GY=;
-        b=Bu8zWvC/pNAwG2ZDB65BogeFW6RHuCyK9yLNSZovbdS0DTP1e1VCDsQLqJSP6JUHWx
-         rNwntmzjIRpxLV8HSBsD+lW9PaC98+9JJFSlT7q0ktD9FO8fYVJqmSuFp0uPifsDIgz6
-         8wSkJtd1R5dtD19PKK4ibKld/tT71nfOKrguWrys3yG+2A9eApu5WFd1fdtH6R7tFJFV
-         phK8+NiQ0g1mxxfnz4qzSctExwM8DjX7zDkT84afrFPRvWO7EAxxYVuGIgzXoXJStvLC
-         RsedEKJb/wt1VNw5UcO/SLn3b3iATl0u0StR3b90KC9TLJplyiy8kUQu6LjViMXBgfAb
-         N9kg==
+        d=gmail.com; s=20221208; t=1691187248; x=1691792048;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MCGHoL2HjRolVuFapg3wsPgWGn6Us8frIVMV2s7TjRc=;
+        b=KJuxSQEet6lhAZGrG3E4EvZX6ZzngqJFC6Ki8ROPd7mhXl0F0n5pe+KfowTbHmaTtL
+         32VrPt1d4uMvtpw5xE/wtzsL6vdWVrqOZ5oWwZxtsQN13xmPDjrbrtUndq+Q2eoEduVg
+         x0RbNfOQv919oqujt1hHMTWcOOfAOMsvTyKadqA/N2Whqor699+oosRa5aJoCMMtse+u
+         NTGHMuMi0qM50DQFSjaOiblP4HKtHjUTRHGz6ysUPrMebokhR1r+2nZosTuEp8i/yUX9
+         OC7Fjamf4ACuvC8lAg+jmaDvQA+jECCU5IRLVkUFu6cJII0Q1MuOcczU2vTbtuxEw72r
+         /Z2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691165439; x=1691770239;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kUioFZ7tXMJEvu9BOB44xCzuGpOwtxseq1YU/H9f2GY=;
-        b=dWycs8Bh2Ht+VDYHseJoR6l6s6y3F0M2BhwC1SGhYL5SARRpovBAxRPJBpQZLE5WFB
-         UxEN6vbKgLugmXcoZz6bHWDMx7r8mjuhXdfyXKbq07EiKJdJJLqevz5LywZmxy3aj//o
-         lmvVIDKTd4JnMouTnyMgNvwGm12Hzy4hxKaSJwZWINNc95qwp4CWpLxdUxwgRFeAZ4Bj
-         BRbo9lmqW875n6uG2WOMmWYoO4pBCTctCSt6FcsQs9NRCU/ePnQ2L1iwRZXmKmtiWaSs
-         VnQyTa27j3CJsVdafhK1Wbp3bGKxVNZHBUuuQnIDWg1ILFqdCdzWS2YvB2SN6fXtUeec
-         lgIQ==
-X-Gm-Message-State: AOJu0YwHyZYsnrWWWTMrTN4s9OiYC+pNcUbUtlvkxE6EtQtZrGez/PMb
-        6JbKx8JEj7J1MF8GM/LnzTw=
-X-Google-Smtp-Source: AGHT+IEstIfZLC3v30nXj54vSiBMNfdSyHE8UD/YLEqRYAvJE1jjq0xd2rI5iSfBKY+yqSRALloHNg==
-X-Received: by 2002:a17:90a:3004:b0:263:72c5:9ac6 with SMTP id g4-20020a17090a300400b0026372c59ac6mr1768740pjb.11.1691165438701;
-        Fri, 04 Aug 2023 09:10:38 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m1-20020a170902db0100b001bb3beb2bc6sm71067plx.65.2023.08.04.09.10.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Aug 2023 09:10:38 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <3f947ad6-eed6-59ff-e4e6-8b21d90eb803@roeck-us.net>
-Date:   Fri, 4 Aug 2023 09:10:37 -0700
+        d=1e100.net; s=20221208; t=1691187248; x=1691792048;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MCGHoL2HjRolVuFapg3wsPgWGn6Us8frIVMV2s7TjRc=;
+        b=kNLi38hlffZFI17i2RxIcc7a+qYxbxZgU2NU+ndrZDoe4TWL7eFz1xxr4MKQflMb52
+         4pSXQcJnH+7K8r2CB8nLfBjxaLz4E5aoqkZwuPrfzBA+nKDNhTCLUGQbuTH8rjEiN2R3
+         p6qKhKBxDdEDQjNyIw13I/tFGp2lDTocIMutooMlkVSAsifx2ZfKO3nHcwu7VU9+TE8g
+         RtzyhSZYK0OV2JcMVfKPjgT15+QDmXuL2cw7AXycYdfR3kYDIxa2Z77pbzSPLC5UDxBm
+         us0/6iAGXX1y70iyl5NsrlNlzICVn8+qWVCeqXIF4CrAXBm6ZraXjtoUHV53sM2T7z3T
+         1BDg==
+X-Gm-Message-State: AOJu0Yyym/pE8keMjcA81pVCQZMiUtCZb36bomNPdMA4Hdiy+0mqrvxn
+        QDg9cKONO+lIAXohsg9DaJU=
+X-Google-Smtp-Source: AGHT+IHpZr8hkqGA/na6UMgvLi389VBGghzRz3wYbvUQ10fblHgNqUIctgg0/EP6D+NZh77CEhhTxw==
+X-Received: by 2002:a17:902:c211:b0:1b6:783d:9ba7 with SMTP id 17-20020a170902c21100b001b6783d9ba7mr947360pll.27.1691187248329;
+        Fri, 04 Aug 2023 15:14:08 -0700 (PDT)
+Received: from localhost.localdomain ([76.132.59.39])
+        by smtp.gmail.com with ESMTPSA id m14-20020a170902db0e00b001a6f7744a27sm2229235plx.87.2023.08.04.15.14.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Aug 2023 15:14:07 -0700 (PDT)
+From:   rentao.bupt@gmail.com
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, taoren@meta.com
+Cc:     Tao Ren <rentao.bupt@gmail.com>
+Subject: [PATCH v2] hwmon: (pmbus/bel-pfe) Enable PMBUS_SKIP_STATUS_CHECK for pfe1100
+Date:   Fri,  4 Aug 2023 15:14:03 -0700
+Message-Id: <20230804221403.28931-1-rentao.bupt@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>,
-        Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Marcello Sylvester Bauer <sylv@sylv.io>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230803144401.1151065-1-Naresh.Solanki@9elements.com>
- <20230804-tamper-numbness-0117bb53a921@spud>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: Add MAX6639
-In-Reply-To: <20230804-tamper-numbness-0117bb53a921@spud>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 8/4/23 08:48, Conor Dooley wrote:
-> On Thu, Aug 03, 2023 at 04:43:59PM +0200, Naresh Solanki wrote:
->> From: Marcello Sylvester Bauer <sylv@sylv.io>
->>
->> Add binding documentation for Maxim MAX6639 fan-speed controller.
->>
->> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
->> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
->> ---
->> Changes in V3:
->> - Update title
->> - Add pulses-per-revolution, supplies & interrupts
->> Changes in V2:
->> - Update subject
->> - Drop blank lines
->> ---
->>   .../bindings/hwmon/maxim,max6639.yaml         | 60 +++++++++++++++++++
->>   1 file changed, 60 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
->> new file mode 100644
->> index 000000000000..b3292061ca58
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
->> @@ -0,0 +1,60 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Maxim MAX6639 Fan Controller
->> +
->> +maintainers:
->> +  - Naresh Solanki <Naresh.Solanki@9elements.com>
->> +
->> +description: |
->> +  The MAX6639 is a 2-channel temperature monitor with dual, automatic, PWM
->> +  fan-speed controller.  It monitors its own temperature and one external
->> +  diode-connected transistor or the temperatures of two external diode-connected
->> +  transistors, typically available in CPUs, FPGAs, or GPUs.
-> 
->> +  fan-supply:
->> +    description: Phandle to the regulator that provides power to the fan.
-> 
->> +  pulses-per-revolution:
->> +    description:
->> +      Define the number of pulses per fan revolution for each tachometer
->> +      input as an integer.
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    enum: [1, 2, 3, 4]
->> +    default: 2
-> 
-> Apologies if I am digging up old wounds here, since there was quite a
-> bit of back and forth on the last version, but these two newly added
-> properties look to be common with the "pwm-fan" and with
-> "adi,axi-fan-control". At what point should these live in a common
-> schema instead?
-> 
-> Otherwise, this looks okay to me, although I'll leave things to
-> Krzysztof since he had a lot to say about the previous version.
-> 
+From: Tao Ren <rentao.bupt@gmail.com>
 
-Rob has said that he won't accept any fan controller bindings without a generic
-schema. At the same time he has said that he expects properties such as the
-number of pulses per revolution to be attached to a 'fan' description, and he
-wants pwm related properties of fan controllers to be modeled as pwm controllers.
-And now we have a notion of a regulator providing power to the fan (which again
-would be the fan controller, at least in cases where the fan controller
-provides direct voltage to the fan). On top of that, this fan-supply property
-should presumably, again, be part of a fan description and not be part of the
-controller description. I don't think anyone knows how to make this all work
-(I for sure don't), so it is very unlikely we'll see a generic fan controller
-schema anytime soon.
+Skip status check for both pfe1100 and pfe3000 because the communication
+error is also observed on pfe1100 devices.
 
-Given that neither fan-supply nor pulses-per-revolution is implemented in the
-driver, and given that I am not aware of any fans which would have a value for
-pulses-per-revolution other than 2, my personal suggestion would be to add the
-chip to trivial devices and be done with it for the time being.
+Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
+---
+ Changes in v2:
+   - improving comments.
+   - removing unnecessary {}
 
-Guenter
+ drivers/hwmon/pmbus/bel-pfe.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/hwmon/pmbus/bel-pfe.c b/drivers/hwmon/pmbus/bel-pfe.c
+index fa5070ae26bc..7c5f4b10a7c1 100644
+--- a/drivers/hwmon/pmbus/bel-pfe.c
++++ b/drivers/hwmon/pmbus/bel-pfe.c
+@@ -17,12 +17,13 @@
+ enum chips {pfe1100, pfe3000};
+ 
+ /*
+- * Disable status check for pfe3000 devices, because some devices report
+- * communication error (invalid command) for VOUT_MODE command (0x20)
+- * although correct VOUT_MODE (0x16) is returned: it leads to incorrect
+- * exponent in linear mode.
++ * Disable status check because some devices report communication error
++ * (invalid command) for VOUT_MODE command (0x20) although the correct
++ * VOUT_MODE (0x16) is returned: it leads to incorrect exponent in linear
++ * mode.
++ * This affects both pfe3000 and pfe1100.
+  */
+-static struct pmbus_platform_data pfe3000_plat_data = {
++static struct pmbus_platform_data pfe_plat_data = {
+ 	.flags = PMBUS_SKIP_STATUS_CHECK,
+ };
+ 
+@@ -94,16 +95,15 @@ static int pfe_pmbus_probe(struct i2c_client *client)
+ 	int model;
+ 
+ 	model = (int)i2c_match_id(pfe_device_id, client)->driver_data;
++	client->dev.platform_data = &pfe_plat_data;
+ 
+ 	/*
+ 	 * PFE3000-12-069RA devices may not stay in page 0 during device
+ 	 * probe which leads to probe failure (read status word failed).
+ 	 * So let's set the device to page 0 at the beginning.
+ 	 */
+-	if (model == pfe3000) {
+-		client->dev.platform_data = &pfe3000_plat_data;
++	if (model == pfe3000)
+ 		i2c_smbus_write_byte_data(client, PMBUS_PAGE, 0);
+-	}
+ 
+ 	return pmbus_do_probe(client, &pfe_driver_info[model]);
+ }
+-- 
+2.40.1
 
