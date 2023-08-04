@@ -2,56 +2,54 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E74C2C04A94
-	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Aug 2023 08:49:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CAC24C001DF
+	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Aug 2023 09:06:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbjHDItA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 4 Aug 2023 04:49:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42422 "EHLO
+        id S230123AbjHDJGq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 4 Aug 2023 05:06:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbjHDIse (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Aug 2023 04:48:34 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D36830EA;
-        Fri,  4 Aug 2023 01:48:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691138913; x=1722674913;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=SxjVHGiN7hS1KZCKUjEw/sIjBaSoR9+Z8Xrm4m78es4=;
-  b=cMhTfAUQPH9hnKnP6rR5BklNP4TQBhVWDb/JMUAGDdOETpmw7GU8bKns
-   OQGeYA6s4I6HtTtpcYFRuICW+jOT/UVNm+mkyQWgZzaF8hNXHPANM+wHO
-   Qf8r7jr1n4wh1Fi22wlmTbsjxpUdQYMFrA5+/rkgD42yfbDCaZ2pexweh
-   0a1VJMhBEk6EZdtpt/K8th43jmoYMMFB4EBoiwjTJ9HpmSN8s33FeW6pn
-   ciDnNn878lsRBOMAew6JcA7mAx80qgQVZR6kd7BCVr+V/hRtVIgEktZ6P
-   HvBfDYfaAn2O0EVX8L+3Ru5XwjouPnqlDh6Efqd5/2Xy7wkNg11R0BYru
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10791"; a="456478823"
-X-IronPort-AV: E=Sophos;i="6.01,254,1684825200"; 
-   d="scan'208";a="456478823"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2023 01:48:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10791"; a="765018428"
-X-IronPort-AV: E=Sophos;i="6.01,254,1684825200"; 
-   d="scan'208";a="765018428"
-Received: from yongliang-ubuntu20-ilbpg12.png.intel.com ([10.88.229.33])
-  by orsmga001.jf.intel.com with ESMTP; 04 Aug 2023 01:47:57 -0700
-From:   Choong Yong Liang <yong.liang.choong@linux.intel.com>
-To:     Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+        with ESMTP id S229659AbjHDJGN (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Aug 2023 05:06:13 -0400
+Received: from pandora.armlinux.org.uk (unknown [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F9349FF;
+        Fri,  4 Aug 2023 02:03:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Qf2nlPt4v7aUf9lUAfeJGAwTZszOxnIID/uXD0x3Dg8=; b=FEX8LW7ZWgWlDBfNCVJqykaVs4
+        ui3uSCSPrdKQjxRgAA1AVTCL4cr7N8EmaYUasFXu8Lub2Mlteg8GIQIFHN80Tj0Ir32LacOQ6kP68
+        xUSS43q5IQngTYC67by/kpTAx4aU2oTLrfnSRgrJPlXOAlE8/uMjP4V9vUr3rUvcBUXvA+k2MMvrQ
+        WHT1sLFIBqnuEoflX2BwPqgOri3m13R3K6Zrz7FUzsrmSQEwWuR2Y9OdkBBd0OqqmJ21k2QSA/rrZ
+        RIBwOqjYl5vGpzoEEwA1vZCrfosAm19eFvOz7x8Ao0soXUBeFpYHU+8wqUx+Qjfiz6C/bnfY/OTG+
+        RCpNqsmw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:41564)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.96)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1qRqhl-0008NN-24;
+        Fri, 04 Aug 2023 10:02:41 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1qRqhf-0003pC-52; Fri, 04 Aug 2023 10:02:35 +0100
+Date:   Fri, 4 Aug 2023 10:02:35 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Choong Yong Liang <yong.liang.choong@linux.intel.com>
+Cc:     Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
         David E Box <david.e.box@linux.intel.com>,
         Hans de Goede <hdegoede@redhat.com>,
         Mark Gross <markgross@kernel.org>,
         Jose Abreu <Jose.Abreu@synopsys.com>,
         Andrew Lunn <andrew@lunn.ch>,
         Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
         "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Giuseppe Cavallaro <peppe.cavallaro@st.com>,
@@ -70,8 +68,8 @@ To:     Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
         Revanth Kumar Uppala <ruppala@nvidia.com>,
         Shenwei Wang <shenwei.wang@nxp.com>,
         Andrey Konovalov <andrey.konovalov@linaro.org>,
-        Jochen Henneberg <jh@henneberg-systemdesign.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jochen Henneberg <jh@henneberg-systemdesign.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org,
         platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
@@ -79,110 +77,99 @@ Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         Tan Tee Min <tee.min.tan@linux.intel.com>,
         Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
         Lai Peter Jun Ann <jun.ann.lai@intel.com>
-Subject: [PATCH net-next v2 5/5] stmmac: intel: Add 1G/2.5G auto-negotiation support for ADL-N
-Date:   Fri,  4 Aug 2023 16:45:27 +0800
-Message-Id: <20230804084527.2082302-6-yong.liang.choong@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230804084527.2082302-1-yong.liang.choong@linux.intel.com>
+Subject: Re: [PATCH net-next v2 3/5] net: phy: update in-band AN mode when
+ changing interface by PHY driver
+Message-ID: <ZMy+q84hVAbTQIk5@shell.armlinux.org.uk>
 References: <20230804084527.2082302-1-yong.liang.choong@linux.intel.com>
+ <20230804084527.2082302-4-yong.liang.choong@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230804084527.2082302-4-yong.liang.choong@linux.intel.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add modphy register lane to have 1G/2.5G auto-negotiation support for
-ADL-N.
+On Fri, Aug 04, 2023 at 04:45:25PM +0800, Choong Yong Liang wrote:
+> From: "Tan, Tee Min" <tee.min.tan@linux.intel.com>
+> 
+> Add cur_link_an_mode into phy_device struct for PHY drivers to
+> communicate the in-band AN mode setting with phylink framework.
+> 
+> As there is a mechanism in PHY drivers to switch the PHY interface
+> between SGMII and 2500BaseX according to link speed. In this case,
+> the in-band AN mode should be switching based on the PHY interface
+> as well, if the PHY interface has been changed/updated by PHY driver.
+> 
+> For e.g., disable in-band AN in 2500BaseX mode, or enable in-band AN
+> back for SGMII mode (10/100/1000Mbps).
+> 
+> Signed-off-by: Tan, Tee Min <tee.min.tan@linux.intel.com>
+> Signed-off-by: Choong Yong Liang <yong.liang.choong@linux.intel.com>
+> ---
+>  drivers/net/phy/marvell10g.c | 6 ++++++
+>  drivers/net/phy/phylink.c    | 4 ++++
+>  include/linux/phy.h          | 3 +++
+>  3 files changed, 13 insertions(+)
+> 
+> diff --git a/drivers/net/phy/marvell10g.c b/drivers/net/phy/marvell10g.c
+> index d4bb90d76881..a9df19278618 100644
+> --- a/drivers/net/phy/marvell10g.c
+> +++ b/drivers/net/phy/marvell10g.c
+> @@ -30,6 +30,7 @@
+>  #include <linux/phy.h>
+>  #include <linux/sfp.h>
+>  #include <linux/netdevice.h>
+> +#include <linux/phylink.h>
+>  
+>  #define MV_PHY_ALASKA_NBT_QUIRK_MASK	0xfffffffe
+>  #define MV_PHY_ALASKA_NBT_QUIRK_REV	(MARVELL_PHY_ID_88X3310 | 0xa)
+> @@ -946,6 +947,9 @@ static void mv3310_update_interface(struct phy_device *phydev)
+>  	 * xaui / rxaui modes according to the speed.
+>  	 * Florian suggests setting phydev->interface to communicate this to the
+>  	 * MAC. Only do this if we are already in one of the above modes.
+> +	 * In-band Auto-negotiation is not supported in 2500BASE-X.
+> +	 * Setting phydev->cur_link_an_mode to communicate this to the
+> +	 * phylink framework.
+>  	 */
+>  	switch (phydev->speed) {
+>  	case SPEED_10000:
+> @@ -956,11 +960,13 @@ static void mv3310_update_interface(struct phy_device *phydev)
+>  		break;
+>  	case SPEED_2500:
+>  		phydev->interface = PHY_INTERFACE_MODE_2500BASEX;
+> +		phydev->cur_link_an_mode = MLO_AN_PHY;
+>  		break;
+>  	case SPEED_1000:
+>  	case SPEED_100:
+>  	case SPEED_10:
+>  		phydev->interface = PHY_INTERFACE_MODE_SGMII;
+> +		phydev->cur_link_an_mode = MLO_AN_INBAND;
+>  		break;
+>  	default:
+>  		break;
+> diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
+> index 4f1c8bb199e9..f9cbb6d7e134 100644
+> --- a/drivers/net/phy/phylink.c
+> +++ b/drivers/net/phy/phylink.c
+> @@ -1720,6 +1720,8 @@ static void phylink_phy_change(struct phy_device *phydev, bool up)
+>  		pl->phy_state.pause |= MLO_PAUSE_RX;
+>  	pl->phy_state.interface = phydev->interface;
+>  	pl->phy_state.link = up;
+> +	pl->cur_link_an_mode = phydev->cur_link_an_mode;
+> +	pl->cfg_link_an_mode = phydev->cur_link_an_mode;
+>  	mutex_unlock(&pl->state_mutex);
+>  
+>  	phylink_run_resolve(pl);
+> @@ -1824,6 +1826,8 @@ static int phylink_bringup_phy(struct phylink *pl, struct phy_device *phy,
+>  	if (pl->config->mac_managed_pm)
+>  		phy->mac_managed_pm = true;
+>  
+> +	pl->phydev->cur_link_an_mode = pl->cur_link_an_mode;
 
-Signed-off-by: Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
-Signed-off-by: Choong Yong Liang <yong.liang.choong@linux.intel.com>
----
- .../net/ethernet/stmicro/stmmac/dwmac-intel.c | 49 ++++++++++++++++++-
- .../net/ethernet/stmicro/stmmac/dwmac-intel.h |  2 +
- 2 files changed, 50 insertions(+), 1 deletion(-)
+I am really not happy with exposing phylink's AN mode into phylib.
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-index 9f560f18132a..437c7697640f 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-@@ -960,6 +960,53 @@ static int adls_sgmii_phy1_data(struct pci_dev *pdev,
- static struct stmmac_pci_info adls_sgmii1g_phy1_info = {
- 	.setup = adls_sgmii_phy1_data,
- };
-+
-+static int adln_common_data(struct pci_dev *pdev,
-+			    struct plat_stmmacenet_data *plat)
-+{
-+	struct intel_priv_data *intel_priv = plat->bsp_priv;
-+
-+	plat->rx_queues_to_use = 6;
-+	plat->tx_queues_to_use = 4;
-+	plat->clk_ptp_rate = 204800000;
-+
-+	plat->safety_feat_cfg->tsoee = 1;
-+	plat->safety_feat_cfg->mrxpee = 0;
-+	plat->safety_feat_cfg->mestee = 1;
-+	plat->safety_feat_cfg->mrxee = 1;
-+	plat->safety_feat_cfg->mtxee = 1;
-+	plat->safety_feat_cfg->epsi = 0;
-+	plat->safety_feat_cfg->edpp = 0;
-+	plat->safety_feat_cfg->prtyen = 0;
-+	plat->safety_feat_cfg->tmouten = 0;
-+
-+	intel_priv->tsn_lane_registers = adln_tsn_lane_registers;
-+	intel_priv->max_tsn_lane_registers = ARRAY_SIZE(adln_tsn_lane_registers);
-+
-+	return intel_mgbe_common_data(pdev, plat);
-+}
-+
-+static int adln_sgmii_phy0_data(struct pci_dev *pdev,
-+				struct plat_stmmacenet_data *plat)
-+{
-+	struct intel_priv_data *intel_priv = plat->bsp_priv;
-+
-+	plat->bus_id = 1;
-+	plat->phy_interface = PHY_INTERFACE_MODE_SGMII;
-+	plat->max_speed = SPEED_2500;
-+	plat->serdes_powerup = intel_serdes_powerup;
-+	plat->serdes_powerdown = intel_serdes_powerdown;
-+	plat->config_serdes = intel_config_serdes;
-+
-+	intel_priv->pid_modphy = PID_MODPHY1;
-+
-+	return adln_common_data(pdev, plat);
-+}
-+
-+static struct stmmac_pci_info adln_sgmii1g_phy0_info = {
-+	.setup = adln_sgmii_phy0_data,
-+};
-+
- static const struct stmmac_pci_func_data galileo_stmmac_func_data[] = {
- 	{
- 		.func = 6,
-@@ -1342,7 +1389,7 @@ static const struct pci_device_id intel_eth_pci_id_table[] = {
- 	{ PCI_DEVICE_DATA(INTEL, TGLH_SGMII1G_1, &tgl_sgmii1g_phy1_info) },
- 	{ PCI_DEVICE_DATA(INTEL, ADLS_SGMII1G_0, &adls_sgmii1g_phy0_info) },
- 	{ PCI_DEVICE_DATA(INTEL, ADLS_SGMII1G_1, &adls_sgmii1g_phy1_info) },
--	{ PCI_DEVICE_DATA(INTEL, ADLN_SGMII1G, &tgl_sgmii1g_phy0_info) },
-+	{ PCI_DEVICE_DATA(INTEL, ADLN_SGMII1G, &adln_sgmii1g_phy0_info) },
- 	{ PCI_DEVICE_DATA(INTEL, RPLP_SGMII1G, &tgl_sgmii1g_phy0_info) },
- 	{}
- };
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.h b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.h
-index 75a336cf8af1..349c160c17b3 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.h
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.h
-@@ -124,8 +124,10 @@ static const struct pmc_serdes_regs pid_modphy1_2p5g_regs[] = {
- 	{}
- };
- 
-+static const int adln_tsn_lane_registers[] = {6};
- static const int ehl_tsn_lane_registers[] = {7, 8, 9, 10, 11};
- #else
-+static const int adln_tsn_lane_registers[] = {};
- static const int ehl_tsn_lane_registers[] = {};
- #endif /* CONFIG_INTEL_PMC_CORE */
- 
 -- 
-2.25.1
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
