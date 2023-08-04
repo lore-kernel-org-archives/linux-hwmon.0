@@ -2,143 +2,154 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9DE9C001DB
-	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Aug 2023 15:48:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 804EDC001DF
+	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Aug 2023 15:56:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232125AbjHDPsx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 4 Aug 2023 11:48:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45696 "EHLO
+        id S229917AbjHDP4g (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 4 Aug 2023 11:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232172AbjHDPsq (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Aug 2023 11:48:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB1249E5;
-        Fri,  4 Aug 2023 08:48:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A3D662096;
-        Fri,  4 Aug 2023 15:48:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA2E9C433C8;
-        Fri,  4 Aug 2023 15:48:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691164120;
-        bh=g530ErRoPbHPWkxCzst6RTK4AQ20MUM55oWKx67Ir20=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Nxt2TW/H8CicYGxtKYh5tylW6wOEpw6k8QKEnaSQK8wO183JlnaCLJhvZ4k/dnNlI
-         YJQDaf/C2Y7PjM+x66439QIOjA5lGqN7c8yxd15alHPBf/yuSPKyJgaQUqWErH5HDJ
-         ZrIRDXmnZo4sqnIHrwNxSAO72uVxNL3LaMSeVbTPgYV44pT8pQyPa/OLv/qAKlMm2u
-         hbd6/I7cDkjahoeu+gJUXDrEARLnegdebY2nckHE/HU15hCgvf0ZD60sUr8M+eAbp2
-         T7YswR6+cC/FSPOcZkpxxk18C5zuAatg9+s4RW1z2/AcFib8TGi+3DJsd8+sy4zCO4
-         pobsbwKwQ/zYQ==
-Date:   Fri, 4 Aug 2023 16:48:35 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        krzysztof.kozlowski+dt@linaro.org,
+        with ESMTP id S229632AbjHDP4e (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Aug 2023 11:56:34 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501CBB2;
+        Fri,  4 Aug 2023 08:56:33 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1bb775625e2so15892775ad.1;
+        Fri, 04 Aug 2023 08:56:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1691164593; x=1691769393;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9u4RND7EcPo+OWHsAS1xl3llbbmhoUWKI06kDT5GXQA=;
+        b=f9TVjbsQnqdTOVtBDcddw/eT28VsyM3GH4zgMl8jUs2Ex+Iu+6/UH99gPlD3sce1hu
+         nsNb8DNhOetzXbl8JUBwkMzL9xyjjBKUNZYilYi8g44YnJTUa/D6LebkRHp+EfRUgnFI
+         hOsnDHg5xFsCx+7+vWkf5kM61YQpZwi+cPSaGaBtvdnZo9jmwA2/8DJTMlc8Sr2vy3Uo
+         wvbVn1+9VcpvBzYFHZXdyaWtzuXNDemIeuOY/XoBtIcHjWUTEKz48vneslLPMBvS3CxO
+         jsr9pGrMK/B+WCPtYlH7BQje7h9qkJbZqutxI6VNfPj6+Zm7ejPpWZE0KKYxinBAE01y
+         eTYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691164593; x=1691769393;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9u4RND7EcPo+OWHsAS1xl3llbbmhoUWKI06kDT5GXQA=;
+        b=LwVxNcD6rJZuCToly3dWiWdlzVUJn3vtZDr7NjE/8ZTwTSYpUDT8pklvPJjZu5Eal0
+         v0MB9//YLPtLKm34b4LyxXUSKOSoeK9HIylx95mE4y+LZxKSkhbJmEjLB4eLaOmh4PBg
+         cR4tf8ymd9iLJPzDFTQfEiIVyvV5DBgvML3zxR7U8V5mqGL/VkZkJQFWKXB1Z2kjdXbM
+         AsH6gEyYXuZHm/bU8PJTKxk55bp0klbc0EYqq9IMw35ZWRMbTx8gb38z5xdXAonYJnoM
+         BxQV9D9ithSN1RXvDzGSkNQ4z+1Mxk5SQ8rE+XgsH0hwvc17FhM1dWloCz5xMz8lfGMy
+         toYw==
+X-Gm-Message-State: AOJu0YznjSuyd2oN+2DSbEvhppd/csvpwji2qBtWxsb+1/KxjlMRKqhO
+        ZJz/FbB3k0fINhdcKhQ1+5IPtBvBjE4=
+X-Google-Smtp-Source: AGHT+IE+Tztu7bMsg6TruhEs+WPJAVgGUhYxNm5Ur4SydSLd6SpXKMbv1j+c37TJnXD/76t6rZHf8Q==
+X-Received: by 2002:a17:902:e88a:b0:1b8:5bca:8256 with SMTP id w10-20020a170902e88a00b001b85bca8256mr50661plg.31.1691164592698;
+        Fri, 04 Aug 2023 08:56:32 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v22-20020a17090331d600b001ac2be26340sm1929528ple.222.2023.08.04.08.56.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Aug 2023 08:56:32 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <22f6364c-611c-ffb6-451c-9ddc20418d0a@roeck-us.net>
+Date:   Fri, 4 Aug 2023 08:56:30 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Content-Language: en-US
+To:     Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>
+Cc:     "patrick@stwcx.xyz" <patrick@stwcx.xyz>,
         Jean Delvare <jdelvare@suse.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Marcello Sylvester Bauer <sylv@sylv.io>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: Add MAX6639
-Message-ID: <20230804-tamper-numbness-0117bb53a921@spud>
-References: <20230803144401.1151065-1-Naresh.Solanki@9elements.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="sN8NPFS9+3FUypYE"
-Content-Disposition: inline
-In-Reply-To: <20230803144401.1151065-1-Naresh.Solanki@9elements.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230424101352.28117-1-Delphine_CC_Chiu@Wiwynn.com>
+ <20230424101352.28117-2-Delphine_CC_Chiu@Wiwynn.com>
+ <321a84c6-6d74-4042-a6ce-6229073c8d30@roeck-us.net>
+ <SG2PR04MB55436F03F6CAD6D415FDEE40A102A@SG2PR04MB5543.apcprd04.prod.outlook.com>
+ <e093a52d-e36f-ec26-e218-1e3b3b400e34@roeck-us.net>
+ <SG2PR04MB55438E9C5E61ACB9330D829AA10BA@SG2PR04MB5543.apcprd04.prod.outlook.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v1 1/2] dt-bindings: hwmon: Add lltc ltc4286 driver
+ bindings
+In-Reply-To: <SG2PR04MB55438E9C5E61ACB9330D829AA10BA@SG2PR04MB5543.apcprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On 8/1/23 22:31, Delphine_CC_Chiu/WYHQ/Wiwynn wrote:
+>> -----Original Message-----
+>> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
+>> Sent: Monday, July 24, 2023 11:22 AM
+>> To: Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>
+>> Cc: patrick@stwcx.xyz; Jean Delvare <jdelvare@suse.com>; Rob Herring
+>> <robh+dt@kernel.org>; Krzysztof Kozlowski
+>> <krzysztof.kozlowski+dt@linaro.org>; linux-i2c@vger.kernel.org;
+>> linux-hwmon@vger.kernel.org; devicetree@vger.kernel.org;
+>> linux-kernel@vger.kernel.org
+>> Subject: Re: [PATCH v1 1/2] dt-bindings: hwmon: Add lltc ltc4286 driver
+>> bindings
+>>
+>>    Security Reminder: Please be aware that this email is sent by an external
+>> sender.
+>>
+>> On 7/23/23 19:12, Delphine_CC_Chiu/WYHQ/Wiwynn wrote:
+>>
+>>>>> +properties:
+>>>>> +  compatible:
+>>>>> +    enum:
+>>>>> +      - lltc,ltc4286
+>>>>> +      - lltc,ltc4287
+>>>>
+>>>> There is no LTC4287, at least according to the Analog website.
+>>> It has been announced on Analog Devices website.
+>>> Please refer to this link:
+>>> https://apc01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.
+>>>
+>> analog.com%2Fen%2Fproducts%2Fltc2487.html%23product-overview&data=0
+>> 5%7
+>>>
+>> C01%7CWayne_SC_Liu%40wiwynn.com%7Cd97a86a696a54f28a26408db8bf52
+>> 23d%7Cd
+>>>
+>> a6e0628fc834caf9dd273061cbab167%7C0%7C0%7C638257657193005539%7C
+>> Unknown
+>>>
+>> %7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haW
+>> wiLCJ
+>>>
+>> XVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=XrdlzCyq0pcjfv3M6QNX73Ieux0w
+>> rfNKzNvv
+>>> HgVSH40%3D&reserved=0
+>>>
+>>
+>> No, that is wrong. You are pointing to ltc2487, which is something completely
+>> different.
+>>
+> 
+> We have sent e-mail to query about the release date for LTC4287 chip.
+> Analog Device reply that they will release this chip in last week of Sep, 2023.
+> Please refer to the attachment to review their reply.
+> 
 
---sN8NPFS9+3FUypYE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+At least according to the driver code, LTC4286 and the LTC4287 are functionally
+identical. I am kind of puzzled why you insist mentioning the not-yet-existing
+LTC4287; instantiating LTC4287 as LTC4286 should work perfectly fine. LTC4287
+can always be added as devicetree reference if/when it officially exists.
 
-On Thu, Aug 03, 2023 at 04:43:59PM +0200, Naresh Solanki wrote:
-> From: Marcello Sylvester Bauer <sylv@sylv.io>
->=20
-> Add binding documentation for Maxim MAX6639 fan-speed controller.
->=20
-> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> ---
-> Changes in V3:
-> - Update title
-> - Add pulses-per-revolution, supplies & interrupts
-> Changes in V2:
-> - Update subject
-> - Drop blank lines
-> ---
->  .../bindings/hwmon/maxim,max6639.yaml         | 60 +++++++++++++++++++
->  1 file changed, 60 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639=
-=2Eyaml
->=20
-> diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml b=
-/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
-> new file mode 100644
-> index 000000000000..b3292061ca58
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
-> @@ -0,0 +1,60 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Maxim MAX6639 Fan Controller
-> +
-> +maintainers:
-> +  - Naresh Solanki <Naresh.Solanki@9elements.com>
-> +
-> +description: |
-> +  The MAX6639 is a 2-channel temperature monitor with dual, automatic, P=
-WM
-> +  fan-speed controller.  It monitors its own temperature and one external
-> +  diode-connected transistor or the temperatures of two external diode-c=
-onnected
-> +  transistors, typically available in CPUs, FPGAs, or GPUs.
+Care to explain ?
 
-> +  fan-supply:
-> +    description: Phandle to the regulator that provides power to the fan.
+Note: If the chips are _not_ functionally identical, and a follow-up patch will
+be needed to add full LTC4287 support to the driver after the chip has been
+published, it would be inappropriate to make partial/incomplete changes now.
+With that possibility in mind, I am not inclined to accept a driver that is
+even mentioning LTC4287 without access to its datasheet because I think it
+is important for me to understand the differences and similarities between
+the two chips.
 
-> +  pulses-per-revolution:
-> +    description:
-> +      Define the number of pulses per fan revolution for each tachometer
-> +      input as an integer.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [1, 2, 3, 4]
-> +    default: 2
+Guenter
 
-Apologies if I am digging up old wounds here, since there was quite a
-bit of back and forth on the last version, but these two newly added
-properties look to be common with the "pwm-fan" and with
-"adi,axi-fan-control". At what point should these live in a common
-schema instead?
-
-Otherwise, this looks okay to me, although I'll leave things to
-Krzysztof since he had a lot to say about the previous version.
-
-Thanks,
-Conor.
-
---sN8NPFS9+3FUypYE
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZM0d0wAKCRB4tDGHoIJi
-0mH7AQDBInAjsrZfZac0XzETGrZ+PttnYaYh09UYHDLHd39geQD9GnXkAmCktfbd
-YjgvCATLL8jElmPIYkCiFurNDe/w1w8=
-=Aesl
------END PGP SIGNATURE-----
-
---sN8NPFS9+3FUypYE--
