@@ -2,49 +2,40 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CAC24C001DF
-	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Aug 2023 09:06:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22F0EC001DB
+	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Aug 2023 12:05:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbjHDJGq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 4 Aug 2023 05:06:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55658 "EHLO
+        id S229612AbjHDMFY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 4 Aug 2023 08:05:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjHDJGN (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Aug 2023 05:06:13 -0400
-Received: from pandora.armlinux.org.uk (unknown [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F9349FF;
-        Fri,  4 Aug 2023 02:03:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Qf2nlPt4v7aUf9lUAfeJGAwTZszOxnIID/uXD0x3Dg8=; b=FEX8LW7ZWgWlDBfNCVJqykaVs4
-        ui3uSCSPrdKQjxRgAA1AVTCL4cr7N8EmaYUasFXu8Lub2Mlteg8GIQIFHN80Tj0Ir32LacOQ6kP68
-        xUSS43q5IQngTYC67by/kpTAx4aU2oTLrfnSRgrJPlXOAlE8/uMjP4V9vUr3rUvcBUXvA+k2MMvrQ
-        WHT1sLFIBqnuEoflX2BwPqgOri3m13R3K6Zrz7FUzsrmSQEwWuR2Y9OdkBBd0OqqmJ21k2QSA/rrZ
-        RIBwOqjYl5vGpzoEEwA1vZCrfosAm19eFvOz7x8Ao0soXUBeFpYHU+8wqUx+Qjfiz6C/bnfY/OTG+
-        RCpNqsmw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:41564)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.96)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1qRqhl-0008NN-24;
-        Fri, 04 Aug 2023 10:02:41 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1qRqhf-0003pC-52; Fri, 04 Aug 2023 10:02:35 +0100
-Date:   Fri, 4 Aug 2023 10:02:35 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+        with ESMTP id S229510AbjHDMFX (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Aug 2023 08:05:23 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C75B1;
+        Fri,  4 Aug 2023 05:05:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=BF7IxsJwwF3H6hTxOnnRHhHm2pxerHz0TwcwSYZ5mmo=; b=hn
+        ITZz2x2U9gv8VyS3tbPuS1qJb2s+QdLDombVGgJBuIMp94B/jdNGHm1K8rEfkYkMQ3+ewn5LIO6kF
+        LbiK6e4ZLwcXUaPHNQrnsjqHyQv9cFjU/JmA3DscTJjlqurbFbCQLAHvCpreRbwfhm9fptZMUrUZ6
+        wuSJ327BFnrmpP0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1qRtXG-0034lQ-BA; Fri, 04 Aug 2023 14:04:02 +0200
+Date:   Fri, 4 Aug 2023 14:04:02 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
 To:     Choong Yong Liang <yong.liang.choong@linux.intel.com>
 Cc:     Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
         David E Box <david.e.box@linux.intel.com>,
         Hans de Goede <hdegoede@redhat.com>,
         Mark Gross <markgross@kernel.org>,
         Jose Abreu <Jose.Abreu@synopsys.com>,
-        Andrew Lunn <andrew@lunn.ch>,
         Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
         "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
@@ -77,99 +68,39 @@ Cc:     Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
         Tan Tee Min <tee.min.tan@linux.intel.com>,
         Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
         Lai Peter Jun Ann <jun.ann.lai@intel.com>
-Subject: Re: [PATCH net-next v2 3/5] net: phy: update in-band AN mode when
- changing interface by PHY driver
-Message-ID: <ZMy+q84hVAbTQIk5@shell.armlinux.org.uk>
+Subject: Re: [PATCH net-next v2 0/5] TSN auto negotiation between 1G and 2.5G
+Message-ID: <5bd05ba2-fd88-4e5c-baed-9971ff917484@lunn.ch>
 References: <20230804084527.2082302-1-yong.liang.choong@linux.intel.com>
- <20230804084527.2082302-4-yong.liang.choong@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230804084527.2082302-4-yong.liang.choong@linux.intel.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230804084527.2082302-1-yong.liang.choong@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Aug 04, 2023 at 04:45:25PM +0800, Choong Yong Liang wrote:
-> From: "Tan, Tee Min" <tee.min.tan@linux.intel.com>
-> 
-> Add cur_link_an_mode into phy_device struct for PHY drivers to
-> communicate the in-band AN mode setting with phylink framework.
-> 
-> As there is a mechanism in PHY drivers to switch the PHY interface
-> between SGMII and 2500BaseX according to link speed. In this case,
-> the in-band AN mode should be switching based on the PHY interface
-> as well, if the PHY interface has been changed/updated by PHY driver.
-> 
-> For e.g., disable in-band AN in 2500BaseX mode, or enable in-band AN
-> back for SGMII mode (10/100/1000Mbps).
-> 
-> Signed-off-by: Tan, Tee Min <tee.min.tan@linux.intel.com>
-> Signed-off-by: Choong Yong Liang <yong.liang.choong@linux.intel.com>
-> ---
->  drivers/net/phy/marvell10g.c | 6 ++++++
->  drivers/net/phy/phylink.c    | 4 ++++
->  include/linux/phy.h          | 3 +++
->  3 files changed, 13 insertions(+)
-> 
-> diff --git a/drivers/net/phy/marvell10g.c b/drivers/net/phy/marvell10g.c
-> index d4bb90d76881..a9df19278618 100644
-> --- a/drivers/net/phy/marvell10g.c
-> +++ b/drivers/net/phy/marvell10g.c
-> @@ -30,6 +30,7 @@
->  #include <linux/phy.h>
->  #include <linux/sfp.h>
->  #include <linux/netdevice.h>
-> +#include <linux/phylink.h>
->  
->  #define MV_PHY_ALASKA_NBT_QUIRK_MASK	0xfffffffe
->  #define MV_PHY_ALASKA_NBT_QUIRK_REV	(MARVELL_PHY_ID_88X3310 | 0xa)
-> @@ -946,6 +947,9 @@ static void mv3310_update_interface(struct phy_device *phydev)
->  	 * xaui / rxaui modes according to the speed.
->  	 * Florian suggests setting phydev->interface to communicate this to the
->  	 * MAC. Only do this if we are already in one of the above modes.
-> +	 * In-band Auto-negotiation is not supported in 2500BASE-X.
-> +	 * Setting phydev->cur_link_an_mode to communicate this to the
-> +	 * phylink framework.
->  	 */
->  	switch (phydev->speed) {
->  	case SPEED_10000:
-> @@ -956,11 +960,13 @@ static void mv3310_update_interface(struct phy_device *phydev)
->  		break;
->  	case SPEED_2500:
->  		phydev->interface = PHY_INTERFACE_MODE_2500BASEX;
-> +		phydev->cur_link_an_mode = MLO_AN_PHY;
->  		break;
->  	case SPEED_1000:
->  	case SPEED_100:
->  	case SPEED_10:
->  		phydev->interface = PHY_INTERFACE_MODE_SGMII;
-> +		phydev->cur_link_an_mode = MLO_AN_INBAND;
->  		break;
->  	default:
->  		break;
-> diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
-> index 4f1c8bb199e9..f9cbb6d7e134 100644
-> --- a/drivers/net/phy/phylink.c
-> +++ b/drivers/net/phy/phylink.c
-> @@ -1720,6 +1720,8 @@ static void phylink_phy_change(struct phy_device *phydev, bool up)
->  		pl->phy_state.pause |= MLO_PAUSE_RX;
->  	pl->phy_state.interface = phydev->interface;
->  	pl->phy_state.link = up;
-> +	pl->cur_link_an_mode = phydev->cur_link_an_mode;
-> +	pl->cfg_link_an_mode = phydev->cur_link_an_mode;
->  	mutex_unlock(&pl->state_mutex);
->  
->  	phylink_run_resolve(pl);
-> @@ -1824,6 +1826,8 @@ static int phylink_bringup_phy(struct phylink *pl, struct phy_device *phy,
->  	if (pl->config->mac_managed_pm)
->  		phy->mac_managed_pm = true;
->  
-> +	pl->phydev->cur_link_an_mode = pl->cur_link_an_mode;
+On Fri, Aug 04, 2023 at 04:45:22PM +0800, Choong Yong Liang wrote:
+> Intel platforms’ integrated Gigabit Ethernet controllers support
+> 2.5Gbps mode statically using BIOS programming. In the current
+> implementation, the BIOS menu provides an option to select between
+> 10/100/1000Mbps and 2.5Gbps modes. Based on the selection, the BIOS
+> programs the Phase Lock Loop (PLL) registers. The BIOS also read the
+> TSN lane registers from Flexible I/O Adapter (FIA) block and provided
+> 10/100/1000Mbps/2.5Gbps information to the stmmac driver. But
+> auto-negotiation between 10/100/1000Mbps and 2.5Gbps is not allowed.
+> The new proposal is to support auto-negotiation between 10/100/1000Mbps
+> and 2.5Gbps . Auto-negotiation between 10, 100, 1000Mbps will use
+> in-band auto negotiation. Auto-negotiation between 10/100/1000Mbps and
+> 2.5Gbps will work as the following proposed flow, the stmmac driver reads
+> the PHY link status registers then identifies the negotiated speed.
+> Based on the speed stmmac driver will identify TSN lane registers from
+> FIA then send IPC command to the Power Management controller (PMC)
+> through PMC driver/API. PMC will act as a proxy to programs the
+> PLL registers.
 
-I am really not happy with exposing phylink's AN mode into phylib.
+Have you considered using out of band for all link modes? You might
+end up with a cleaner architecture, and not need any phylink/phylib
+hacks.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+	Andrew
