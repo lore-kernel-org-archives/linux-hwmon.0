@@ -2,123 +2,133 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6274EC04A94
-	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Aug 2023 22:14:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D64C4C00528
+	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Aug 2023 22:17:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbjHDWOL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 4 Aug 2023 18:14:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34642 "EHLO
+        id S230040AbjHDWR1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 4 Aug 2023 18:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbjHDWOJ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Aug 2023 18:14:09 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09EC510E6;
-        Fri,  4 Aug 2023 15:14:09 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1bb775625e2so18030885ad.1;
-        Fri, 04 Aug 2023 15:14:09 -0700 (PDT)
+        with ESMTP id S230092AbjHDWR0 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Aug 2023 18:17:26 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1776170D;
+        Fri,  4 Aug 2023 15:17:18 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1b8ad8383faso22690265ad.0;
+        Fri, 04 Aug 2023 15:17:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691187248; x=1691792048;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=MCGHoL2HjRolVuFapg3wsPgWGn6Us8frIVMV2s7TjRc=;
-        b=KJuxSQEet6lhAZGrG3E4EvZX6ZzngqJFC6Ki8ROPd7mhXl0F0n5pe+KfowTbHmaTtL
-         32VrPt1d4uMvtpw5xE/wtzsL6vdWVrqOZ5oWwZxtsQN13xmPDjrbrtUndq+Q2eoEduVg
-         x0RbNfOQv919oqujt1hHMTWcOOfAOMsvTyKadqA/N2Whqor699+oosRa5aJoCMMtse+u
-         NTGHMuMi0qM50DQFSjaOiblP4HKtHjUTRHGz6ysUPrMebokhR1r+2nZosTuEp8i/yUX9
-         OC7Fjamf4ACuvC8lAg+jmaDvQA+jECCU5IRLVkUFu6cJII0Q1MuOcczU2vTbtuxEw72r
-         /Z2A==
+        d=gmail.com; s=20221208; t=1691187438; x=1691792238;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PE4QZNuuu7C0bSqFySHaBYQN1XQz2ilfd/lPvByw4oA=;
+        b=fljTr62Qp0eBVEhKJWUVlRWTmGhmLxy7KMtkV9HjZr5dZEC+fJfM/W1p3i9yBPc3s7
+         U1qrW5yVOzDFoXqHfUpJqu8l946Y0lBC7ElENxJxwmV6NbKVLgBNlUyWK4sasocfBD/1
+         THT7NHsGy4Wx/64r0cG+V212cJ38fUYJW/+3YmOHV7kqE1CQEDmrf/AYwnkmyEhxg9U3
+         VaQfrmpiEtkFI1PNZHNjPH+yJ+a/wWcjmdOEdLWsXP3boNAUYZBez8bUutfcY08ZkoH7
+         mtLq6FPSAz9a5Fmqc4TOfm1hyLrROVQyZT5DT4YiCeaMJXkH6F+DiL/OFMQYjs8aKImN
+         +OSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691187248; x=1691792048;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MCGHoL2HjRolVuFapg3wsPgWGn6Us8frIVMV2s7TjRc=;
-        b=kNLi38hlffZFI17i2RxIcc7a+qYxbxZgU2NU+ndrZDoe4TWL7eFz1xxr4MKQflMb52
-         4pSXQcJnH+7K8r2CB8nLfBjxaLz4E5aoqkZwuPrfzBA+nKDNhTCLUGQbuTH8rjEiN2R3
-         p6qKhKBxDdEDQjNyIw13I/tFGp2lDTocIMutooMlkVSAsifx2ZfKO3nHcwu7VU9+TE8g
-         RtzyhSZYK0OV2JcMVfKPjgT15+QDmXuL2cw7AXycYdfR3kYDIxa2Z77pbzSPLC5UDxBm
-         us0/6iAGXX1y70iyl5NsrlNlzICVn8+qWVCeqXIF4CrAXBm6ZraXjtoUHV53sM2T7z3T
-         1BDg==
-X-Gm-Message-State: AOJu0Yyym/pE8keMjcA81pVCQZMiUtCZb36bomNPdMA4Hdiy+0mqrvxn
-        QDg9cKONO+lIAXohsg9DaJU=
-X-Google-Smtp-Source: AGHT+IHpZr8hkqGA/na6UMgvLi389VBGghzRz3wYbvUQ10fblHgNqUIctgg0/EP6D+NZh77CEhhTxw==
-X-Received: by 2002:a17:902:c211:b0:1b6:783d:9ba7 with SMTP id 17-20020a170902c21100b001b6783d9ba7mr947360pll.27.1691187248329;
-        Fri, 04 Aug 2023 15:14:08 -0700 (PDT)
-Received: from localhost.localdomain ([76.132.59.39])
-        by smtp.gmail.com with ESMTPSA id m14-20020a170902db0e00b001a6f7744a27sm2229235plx.87.2023.08.04.15.14.07
+        d=1e100.net; s=20221208; t=1691187438; x=1691792238;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PE4QZNuuu7C0bSqFySHaBYQN1XQz2ilfd/lPvByw4oA=;
+        b=XVtZ6PXUjBoCN48E0jfxVNDJE8lN/PAZaoFTVIlFMHspnvI9Si1Xgi8bdoIHIhPdp7
+         txgxIUdiJVrHnDYw2bdc789+bzqZdng1uHOY2aK4zTAXMjJT6OY/+YZmTIfIHGzz2u+9
+         VUMt6IAEVyysAga5u8n09r2e6uowX4JIyeIaXyGZ/Kov0mm3HFf8dvXCGeimHUlDFHPL
+         jP21TuxDghiPVPapo7Lwx360vAFAgkbyVZienaibYWWhHhkYms7XLxNS1LKXcmhaouC0
+         uMeAtAn8i/GgmpNxVY6nWHTaIIL1HNJ3gP+ifUECO0ZiFouRPzjfmaDemw4dOmfsx25L
+         I4tw==
+X-Gm-Message-State: AOJu0Yyi/kCX+Tsgf5F0hWO6vvw9zE6/+HROTnTL429LtavdAe7RmtdY
+        K5b/kpVmYmmFSBciIfn7uXs=
+X-Google-Smtp-Source: AGHT+IFTmHMFb8yGeTx3OG7yCNaLjfL6n2xu/FMB5EEKux3lC6JIUIE2IitVf3qABXJHQkcIBB2y9w==
+X-Received: by 2002:a17:903:18c:b0:1bc:532f:1bf8 with SMTP id z12-20020a170903018c00b001bc532f1bf8mr2242421plg.45.1691187437944;
+        Fri, 04 Aug 2023 15:17:17 -0700 (PDT)
+Received: from taoren-fedora-PC23YAB4 ([76.132.59.39])
+        by smtp.gmail.com with ESMTPSA id ja4-20020a170902efc400b001b8013ed362sm2233229plb.96.2023.08.04.15.17.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Aug 2023 15:14:07 -0700 (PDT)
-From:   rentao.bupt@gmail.com
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Fri, 04 Aug 2023 15:17:17 -0700 (PDT)
+Date:   Fri, 4 Aug 2023 15:17:15 -0700
+From:   Tao Ren <rentao.bupt@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org, taoren@meta.com
-Cc:     Tao Ren <rentao.bupt@gmail.com>
-Subject: [PATCH v2] hwmon: (pmbus/bel-pfe) Enable PMBUS_SKIP_STATUS_CHECK for pfe1100
-Date:   Fri,  4 Aug 2023 15:14:03 -0700
-Message-Id: <20230804221403.28931-1-rentao.bupt@gmail.com>
-X-Mailer: git-send-email 2.40.1
+Subject: Re: [PATCH] hwmon: (pmbus/bel-pfe) Enable PMBUS_SKIP_STATUS_CHECK
+ for pfe1100
+Message-ID: <ZM1460GZM8bkOxTe@taoren-fedora-PC23YAB4>
+References: <20230803235536.798166-1-rentao.bupt@gmail.com>
+ <eaff724f-fceb-c50e-3ff5-58f61b396d02@roeck-us.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <eaff724f-fceb-c50e-3ff5-58f61b396d02@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Tao Ren <rentao.bupt@gmail.com>
+Hi Guenter,
 
-Skip status check for both pfe1100 and pfe3000 because the communication
-error is also observed on pfe1100 devices.
+Thank you for the quick review, and I've addressed your comments in v2.
 
-Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
----
- Changes in v2:
-   - improving comments.
-   - removing unnecessary {}
 
- drivers/hwmon/pmbus/bel-pfe.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+Cheers,
+Tao
 
-diff --git a/drivers/hwmon/pmbus/bel-pfe.c b/drivers/hwmon/pmbus/bel-pfe.c
-index fa5070ae26bc..7c5f4b10a7c1 100644
---- a/drivers/hwmon/pmbus/bel-pfe.c
-+++ b/drivers/hwmon/pmbus/bel-pfe.c
-@@ -17,12 +17,13 @@
- enum chips {pfe1100, pfe3000};
- 
- /*
-- * Disable status check for pfe3000 devices, because some devices report
-- * communication error (invalid command) for VOUT_MODE command (0x20)
-- * although correct VOUT_MODE (0x16) is returned: it leads to incorrect
-- * exponent in linear mode.
-+ * Disable status check because some devices report communication error
-+ * (invalid command) for VOUT_MODE command (0x20) although the correct
-+ * VOUT_MODE (0x16) is returned: it leads to incorrect exponent in linear
-+ * mode.
-+ * This affects both pfe3000 and pfe1100.
-  */
--static struct pmbus_platform_data pfe3000_plat_data = {
-+static struct pmbus_platform_data pfe_plat_data = {
- 	.flags = PMBUS_SKIP_STATUS_CHECK,
- };
- 
-@@ -94,16 +95,15 @@ static int pfe_pmbus_probe(struct i2c_client *client)
- 	int model;
- 
- 	model = (int)i2c_match_id(pfe_device_id, client)->driver_data;
-+	client->dev.platform_data = &pfe_plat_data;
- 
- 	/*
- 	 * PFE3000-12-069RA devices may not stay in page 0 during device
- 	 * probe which leads to probe failure (read status word failed).
- 	 * So let's set the device to page 0 at the beginning.
- 	 */
--	if (model == pfe3000) {
--		client->dev.platform_data = &pfe3000_plat_data;
-+	if (model == pfe3000)
- 		i2c_smbus_write_byte_data(client, PMBUS_PAGE, 0);
--	}
- 
- 	return pmbus_do_probe(client, &pfe_driver_info[model]);
- }
--- 
-2.40.1
-
+On Fri, Aug 04, 2023 at 08:19:40AM -0700, Guenter Roeck wrote:
+> On 8/3/23 16:55, rentao.bupt@gmail.com wrote:
+> > From: Tao Ren <rentao.bupt@gmail.com>
+> > 
+> > Enable PMBUS_SKIP_STATUS_CHECK flag for both pfe1100 and pfe3000 because
+> > the similar communication error is observed on pfe1100 devices.
+> > 
+> > Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
+> > ---
+> >   drivers/hwmon/pmbus/bel-pfe.c | 6 +++---
+> >   1 file changed, 3 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/hwmon/pmbus/bel-pfe.c b/drivers/hwmon/pmbus/bel-pfe.c
+> > index fa5070ae26bc..8280d274da3f 100644
+> > --- a/drivers/hwmon/pmbus/bel-pfe.c
+> > +++ b/drivers/hwmon/pmbus/bel-pfe.c
+> > @@ -17,12 +17,12 @@
+> >   enum chips {pfe1100, pfe3000};
+> >   /*
+> > - * Disable status check for pfe3000 devices, because some devices report
+> > + * Disable status check for pfexxxx devices, because some devices report
+> >    * communication error (invalid command) for VOUT_MODE command (0x20)
+> >    * although correct VOUT_MODE (0x16) is returned: it leads to incorrect
+> >    * exponent in linear mode.
+> >    */
+> 
+> Rephrase to something like
+> 
+>  Disable status check because some devices ... linear mode.
+>  This affects both pfe3000 and pfe1100.
+> 
+> We don't know if other pfe devices will be supported by the driver in the
+> future, and we don't know if those will be affected, so we should not make
+> any claims about such devices.
+> 
+> > -static struct pmbus_platform_data pfe3000_plat_data = {
+> > +static struct pmbus_platform_data pfe_plat_data = {
+> >   	.flags = PMBUS_SKIP_STATUS_CHECK,
+> >   };
+> > @@ -94,6 +94,7 @@ static int pfe_pmbus_probe(struct i2c_client *client)
+> >   	int model;
+> >   	model = (int)i2c_match_id(pfe_device_id, client)->driver_data;
+> > +	client->dev.platform_data = &pfe_plat_data;
+> >   	/*
+> >   	 * PFE3000-12-069RA devices may not stay in page 0 during device
+> > @@ -101,7 +102,6 @@ static int pfe_pmbus_probe(struct i2c_client *client)
+> >   	 * So let's set the device to page 0 at the beginning.
+> >   	 */
+> >   	if (model == pfe3000) {
+> > -		client->dev.platform_data = &pfe3000_plat_data;
+> >   		i2c_smbus_write_byte_data(client, PMBUS_PAGE, 0);
+> >   	}
+> 
+> { } is no longer needed.
+> 
+> Thanks,
+> Guenter
+> 
