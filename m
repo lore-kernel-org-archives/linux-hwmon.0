@@ -2,103 +2,164 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB90BC0015E
-	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Aug 2023 20:25:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4FE5C001DB
+	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Aug 2023 20:26:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229584AbjHEUZB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 5 Aug 2023 16:25:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37270 "EHLO
+        id S229717AbjHEU0Z (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 5 Aug 2023 16:26:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjHEUZA (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 5 Aug 2023 16:25:00 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4951BE5
-        for <linux-hwmon@vger.kernel.org>; Sat,  5 Aug 2023 13:24:51 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-51bece5d935so4285609a12.1
-        for <linux-hwmon@vger.kernel.org>; Sat, 05 Aug 2023 13:24:51 -0700 (PDT)
+        with ESMTP id S229545AbjHEU0Z (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 5 Aug 2023 16:26:25 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A131BCA
+        for <linux-hwmon@vger.kernel.org>; Sat,  5 Aug 2023 13:26:22 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-99c4923195dso453774466b.2
+        for <linux-hwmon@vger.kernel.org>; Sat, 05 Aug 2023 13:26:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691267090; x=1691871890;
+        d=linaro.org; s=google; t=1691267181; x=1691871981;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=I9u1JIe+S+ZRsZagR23AwndpCmmekGj2y2aYKsRIq1c=;
-        b=EwIxppLa2LKK3fjD/dxA9a6GuV4Oo+n+2rzY01GYbTgL7T7LX1jcv5hEeeMF+jT3Ze
-         byp7a/wZxjfARR5EQPgR/oj3UbdvPwuxWxQhKAkz/hJBS3mQeVl+YmYkmleKZ0Xp9Ku9
-         6+j6WubW5uD/lWP8I0qlXPhEEr694fQNxE1kQNZaibcCkJmuvapOcQ6TgABsJmX5HHFm
-         H+pq9212UUnm+nkijnqaJn2Vs0Ps1qtindkPDnYsaS00AkknAZAibAaokYhwjmTDlib2
-         5uVCOHbbzUt8qS2iynvlLcwG/LymkJH5aCemgPgUmX0sxfwnfAN2h5SaABSWwlWF3YAF
-         m4Nw==
+        bh=QAz255BT1WAd5rdSTPS0g8lSyWT42ZSsNJRJpO6M4DQ=;
+        b=v5XYHEGfJJGxE2sv+IcdbZf7UDfptunfq2jK3aS6gIxAf/NdA8csOgV650Nck4uF0Z
+         36nun/djtlUzrFtKKKCYdBQBu8hresLkWuMVFeFRWxwde5lnIndWnhEKQPxlsOR9LvRj
+         n0DlPvJVyQFhBxyYf+uwceAdQQbFB7/iY8v9nJAyikMPw7LT5pCezXS8HHb/ElzakH/s
+         /oMTyntb0ELMn0/7WE7YOUrUmicHkfDghpFJQOvfSyyuLW6ABR/UsS0l3R/IeqBvJOlX
+         J0wMl5jfulcsR4oCZ3LZb13SOW96g1pEo87j2ty7a67S4OqvxwwaVaFC1x2e+T8lc9p9
+         UZwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691267090; x=1691871890;
+        d=1e100.net; s=20221208; t=1691267181; x=1691871981;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I9u1JIe+S+ZRsZagR23AwndpCmmekGj2y2aYKsRIq1c=;
-        b=ShIrS+GMsGYYEp7i0UVpaYscUFQ63wbIvmkwwtNbmfY4Kd+CfWHnBRGQxoFIjgJEhx
-         Dj/Icu0BGFi8Sbi++VBtgEUy0FshKah1Om7W4jQB2Q2r1HQy3HxPpKKRFu5SGwDs04EJ
-         A0y3aa2rvpjVoKru7FsnrmWwuLCVEFZxo2DdGcEzzc+cS9XBcKd0qAKjm6DLYTiARmK6
-         1cgzhWF8rKH41KphBjLIZ4+iuZ8zkOsBR4LVzSN0su0bsd41BRDemFsKuVIgP6rkVltW
-         j/pXvhDX+Ee+bUGr4e4WNC1cYcnL1yHyvi8qcLgMiVXqEzr0q7ORqtwmpSKfvHZWDQMN
-         6k9g==
-X-Gm-Message-State: AOJu0Yxz+kAEQJlmFukC6Lw9EOFytT8o29HbcqkC7ayiY0kGqXzCBOBH
-        zcCS9VV0lueevUbg6O4tfIeWvhgO1R5WTh33Cx4=
-X-Google-Smtp-Source: AGHT+IEfVWd3dsC8eI5sDNM1yTcX/YzszOsEXK+ozLfSVWr5dRe21ZxsGYN59D5YL6ALLfqvOX5hpQ==
-X-Received: by 2002:aa7:c383:0:b0:522:219b:ce05 with SMTP id k3-20020aa7c383000000b00522219bce05mr5199384edq.7.1691267090247;
-        Sat, 05 Aug 2023 13:24:50 -0700 (PDT)
+        bh=QAz255BT1WAd5rdSTPS0g8lSyWT42ZSsNJRJpO6M4DQ=;
+        b=GScJeS8rci6D5Ftp10N8jCGTIDcwoz/PiJn1SuBXU7OagKOVaTEVmOmqEEsCilK0JE
+         N3VFO7/fj/hLZPNqsWror8LNT87DGB2miVUPW+Hrs9QGN9ZVet6cusGJM2qEb65W7lVj
+         s1YClwq2WgenuA0U5ULjWPYbsG2ZvDPi+UclkFVZ0qPVYLs6eK5usxMHjKBuFQ6IQmOO
+         F6dmOvjkh5QpnhjLSCFqkraUUmBVdGRF94anZyk8frkLU3k1fRqXn6B9bmXrxMNZOh1Z
+         OsIOWxcrBjBZSILk3tKP2NveBfn1zWCZvFVdn/QLBiRbS3cmQyzkqskWDeubCEhUNc2z
+         3tgg==
+X-Gm-Message-State: AOJu0Yw0eyV2HmqL2lnSpc4diznBUFNlCFZmsgkFwkDfoV1DAv6T5FPF
+        Z33TQjjXbIT1qSOcRbNkfOi1Wg==
+X-Google-Smtp-Source: AGHT+IFbhS/cauLdtL9VOjxZ7i1FT0GuhqIHFL+9PJhLRc33p48fvYVc9wjgRx6Cgg0kA80miKBrFQ==
+X-Received: by 2002:a17:906:7388:b0:99b:d2a9:99f5 with SMTP id f8-20020a170906738800b0099bd2a999f5mr4863494ejl.6.1691267181362;
+        Sat, 05 Aug 2023 13:26:21 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.222.245])
-        by smtp.gmail.com with ESMTPSA id d19-20020aa7d693000000b0051ded17b30bsm3057965edr.40.2023.08.05.13.24.48
+        by smtp.gmail.com with ESMTPSA id y16-20020a170906071000b00992d122af63sm3076421ejb.89.2023.08.05.13.26.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Aug 2023 13:24:49 -0700 (PDT)
-Message-ID: <fbf6f9b0-dafe-8a4e-f3fe-f4a99c421abb@linaro.org>
-Date:   Sat, 5 Aug 2023 22:24:48 +0200
+        Sat, 05 Aug 2023 13:26:21 -0700 (PDT)
+Message-ID: <7d7b53e8-fe48-f87c-24b2-ccf64e29eeb2@linaro.org>
+Date:   Sat, 5 Aug 2023 22:26:19 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.14.0
 Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: Add MAX6639
 Content-Language: en-US
-To:     Naresh Solanki <naresh.solanki@9elements.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        krzysztof.kozlowski+dt@linaro.org,
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Conor Dooley <conor@kernel.org>,
+        Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     krzysztof.kozlowski+dt@linaro.org,
         Jean Delvare <jdelvare@suse.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Marcello Sylvester Bauer <sylv@sylv.io>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Marcello Sylvester Bauer <sylv@sylv.io>,
         linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20230803144401.1151065-1-Naresh.Solanki@9elements.com>
+ <20230804-tamper-numbness-0117bb53a921@spud>
+ <3f947ad6-eed6-59ff-e4e6-8b21d90eb803@roeck-us.net>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230803144401.1151065-1-Naresh.Solanki@9elements.com>
+In-Reply-To: <3f947ad6-eed6-59ff-e4e6-8b21d90eb803@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 03/08/2023 16:43, Naresh Solanki wrote:
-> From: Marcello Sylvester Bauer <sylv@sylv.io>
+On 04/08/2023 18:10, Guenter Roeck wrote:
+> On 8/4/23 08:48, Conor Dooley wrote:
+>> On Thu, Aug 03, 2023 at 04:43:59PM +0200, Naresh Solanki wrote:
+>>> From: Marcello Sylvester Bauer <sylv@sylv.io>
+>>>
+>>> Add binding documentation for Maxim MAX6639 fan-speed controller.
+>>>
+>>> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+>>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+>>> ---
+>>> Changes in V3:
+>>> - Update title
+>>> - Add pulses-per-revolution, supplies & interrupts
+>>> Changes in V2:
+>>> - Update subject
+>>> - Drop blank lines
+>>> ---
+>>>   .../bindings/hwmon/maxim,max6639.yaml         | 60 +++++++++++++++++++
+>>>   1 file changed, 60 insertions(+)
+>>>   create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>>> new file mode 100644
+>>> index 000000000000..b3292061ca58
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>>> @@ -0,0 +1,60 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Maxim MAX6639 Fan Controller
+>>> +
+>>> +maintainers:
+>>> +  - Naresh Solanki <Naresh.Solanki@9elements.com>
+>>> +
+>>> +description: |
+>>> +  The MAX6639 is a 2-channel temperature monitor with dual, automatic, PWM
+>>> +  fan-speed controller.  It monitors its own temperature and one external
+>>> +  diode-connected transistor or the temperatures of two external diode-connected
+>>> +  transistors, typically available in CPUs, FPGAs, or GPUs.
+>>
+>>> +  fan-supply:
+>>> +    description: Phandle to the regulator that provides power to the fan.
+>>
+>>> +  pulses-per-revolution:
+>>> +    description:
+>>> +      Define the number of pulses per fan revolution for each tachometer
+>>> +      input as an integer.
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>> +    enum: [1, 2, 3, 4]
+>>> +    default: 2
+>>
+>> Apologies if I am digging up old wounds here, since there was quite a
+>> bit of back and forth on the last version, but these two newly added
+>> properties look to be common with the "pwm-fan" and with
+>> "adi,axi-fan-control". At what point should these live in a common
+>> schema instead?
+>>
+>> Otherwise, this looks okay to me, although I'll leave things to
+>> Krzysztof since he had a lot to say about the previous version.
+>>
 > 
-> Add binding documentation for Maxim MAX6639 fan-speed controller.
+> Rob has said that he won't accept any fan controller bindings without a generic
+> schema. At the same time he has said that he expects properties such as the
+> number of pulses per revolution to be attached to a 'fan' description, and he
+> wants pwm related properties of fan controllers to be modeled as pwm controllers.
+> And now we have a notion of a regulator providing power to the fan (which again
+> would be the fan controller, at least in cases where the fan controller
+> provides direct voltage to the fan). On top of that, this fan-supply property
+> should presumably, again, be part of a fan description and not be part of the
+> controller description. I don't think anyone knows how to make this all work
+> (I for sure don't), so it is very unlikely we'll see a generic fan controller
+> schema anytime soon.
 > 
-> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> ---
+> Given that neither fan-supply nor pulses-per-revolution is implemented in the
+> driver, and given that I am not aware of any fans which would have a value for
+> pulses-per-revolution other than 2, my personal suggestion would be to add the
+> chip to trivial devices and be done with it for the time being.
 
-...
-
-> +examples:
-> +  - |
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      fan-controller@10 {
-> +        compatible = "maxim,max6639";
-> +        reg = <0x10>;
-
-I wished the examples were a bit more complete (not only 40% of your
-properties). Well, that's not a stopper, so:
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Yeah, this also would work.
 
 Best regards,
 Krzysztof
