@@ -2,165 +2,131 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4FE5C001DB
-	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Aug 2023 20:26:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8C2FC0015E
+	for <linux-hwmon@archiver.kernel.org>; Sun,  6 Aug 2023 13:23:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbjHEU0Z (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 5 Aug 2023 16:26:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38484 "EHLO
+        id S229848AbjHFNXx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 6 Aug 2023 09:23:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjHEU0Z (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 5 Aug 2023 16:26:25 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A131BCA
-        for <linux-hwmon@vger.kernel.org>; Sat,  5 Aug 2023 13:26:22 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-99c4923195dso453774466b.2
-        for <linux-hwmon@vger.kernel.org>; Sat, 05 Aug 2023 13:26:22 -0700 (PDT)
+        with ESMTP id S229456AbjHFNXx (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 6 Aug 2023 09:23:53 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458E0B3;
+        Sun,  6 Aug 2023 06:23:52 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-68706d67ed9so2532007b3a.2;
+        Sun, 06 Aug 2023 06:23:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691267181; x=1691871981;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QAz255BT1WAd5rdSTPS0g8lSyWT42ZSsNJRJpO6M4DQ=;
-        b=v5XYHEGfJJGxE2sv+IcdbZf7UDfptunfq2jK3aS6gIxAf/NdA8csOgV650Nck4uF0Z
-         36nun/djtlUzrFtKKKCYdBQBu8hresLkWuMVFeFRWxwde5lnIndWnhEKQPxlsOR9LvRj
-         n0DlPvJVyQFhBxyYf+uwceAdQQbFB7/iY8v9nJAyikMPw7LT5pCezXS8HHb/ElzakH/s
-         /oMTyntb0ELMn0/7WE7YOUrUmicHkfDghpFJQOvfSyyuLW6ABR/UsS0l3R/IeqBvJOlX
-         J0wMl5jfulcsR4oCZ3LZb13SOW96g1pEo87j2ty7a67S4OqvxwwaVaFC1x2e+T8lc9p9
-         UZwA==
+        d=gmail.com; s=20221208; t=1691328232; x=1691933032;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BFy9i322sOQx8+EXEqZM+C720OychdWRKaaq1jrom80=;
+        b=rg99jTykmU8n71TW8MC0uuJCkF9j+nfsXHa68Xgi/5oWP4osaY2bB9Y8TIOurLkATP
+         RN1zzM9xh5wOptdRe/IXBf6W7YnDedngX3T4OtlZFBvxuz/8InwwdNqLUc8shamxgVJN
+         Vaa7sLEkzWwgFvvQB44JuGaoYgw7eWGpsjWDho/Ngd2tttgwkCBNkUYA9PcAxMtzzWG8
+         2EM3Ci36cRHFZI/Blf/vPiMnMHvsX/NX3n+MIJ5zSz3b7ESspmxp9x/mhgYMdYFyQCbw
+         8hP+1Lc23lrj15QiLqD4LgP2i7nrcUL4tt6KawJ97UijmEEqwwEBAZ2Sc35ifUezcY1F
+         hKVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691267181; x=1691871981;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QAz255BT1WAd5rdSTPS0g8lSyWT42ZSsNJRJpO6M4DQ=;
-        b=GScJeS8rci6D5Ftp10N8jCGTIDcwoz/PiJn1SuBXU7OagKOVaTEVmOmqEEsCilK0JE
-         N3VFO7/fj/hLZPNqsWror8LNT87DGB2miVUPW+Hrs9QGN9ZVet6cusGJM2qEb65W7lVj
-         s1YClwq2WgenuA0U5ULjWPYbsG2ZvDPi+UclkFVZ0qPVYLs6eK5usxMHjKBuFQ6IQmOO
-         F6dmOvjkh5QpnhjLSCFqkraUUmBVdGRF94anZyk8frkLU3k1fRqXn6B9bmXrxMNZOh1Z
-         OsIOWxcrBjBZSILk3tKP2NveBfn1zWCZvFVdn/QLBiRbS3cmQyzkqskWDeubCEhUNc2z
-         3tgg==
-X-Gm-Message-State: AOJu0Yw0eyV2HmqL2lnSpc4diznBUFNlCFZmsgkFwkDfoV1DAv6T5FPF
-        Z33TQjjXbIT1qSOcRbNkfOi1Wg==
-X-Google-Smtp-Source: AGHT+IFbhS/cauLdtL9VOjxZ7i1FT0GuhqIHFL+9PJhLRc33p48fvYVc9wjgRx6Cgg0kA80miKBrFQ==
-X-Received: by 2002:a17:906:7388:b0:99b:d2a9:99f5 with SMTP id f8-20020a170906738800b0099bd2a999f5mr4863494ejl.6.1691267181362;
-        Sat, 05 Aug 2023 13:26:21 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.222.245])
-        by smtp.gmail.com with ESMTPSA id y16-20020a170906071000b00992d122af63sm3076421ejb.89.2023.08.05.13.26.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Aug 2023 13:26:21 -0700 (PDT)
-Message-ID: <7d7b53e8-fe48-f87c-24b2-ccf64e29eeb2@linaro.org>
-Date:   Sat, 5 Aug 2023 22:26:19 +0200
+        d=1e100.net; s=20221208; t=1691328232; x=1691933032;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BFy9i322sOQx8+EXEqZM+C720OychdWRKaaq1jrom80=;
+        b=UBaACxCXd4Wg2ysHTiXR/Af0sFiaYrcb772FKTH79eF61s58gcDcJJgXafou7Msgcm
+         e7VqVzicUGCD4Apb70ScrL8s89AV+AiGI3NPZA70tNjFepX3wg34biBOYO8PivsA1ygS
+         2UkfJlm8NxYU+Bleu7BLFJiYdcVArIxu4dFT2aAizaY61So9uwYdMDZ7yrXVyqrJ4Hs4
+         ElaOrzf40hasj+k1G7GpVl/G9uRWqVad8blHpBaMrL5hTNSk9WY8cqK43HZJEatSWXfD
+         PLonSx19AEBp7PYyuXzhFA+6TpUNqh0ih7JoAnjLIk/ih+cygpW32CjC+Mz9qpRZQRPv
+         3UMQ==
+X-Gm-Message-State: AOJu0Yw/22Knz9q4pS0SQ/unFoZ7SgW/VBKGSLMscmTCfWIxLemIL2rr
+        +97eDM0r+IndVuFFJVJMGVhlJTwbL+8=
+X-Google-Smtp-Source: AGHT+IGG4bJjl2qs/xmtMNiubyrhoVTb2A+J7ESIY7IyVMZv1WvoEETR9KRW25E2C1dXWZgL7b0jIw==
+X-Received: by 2002:a05:6a20:1008:b0:13f:7c0e:dc6c with SMTP id gs8-20020a056a20100800b0013f7c0edc6cmr5710750pzc.38.1691328231665;
+        Sun, 06 Aug 2023 06:23:51 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c4-20020a631c44000000b005646e6634dcsm3644145pgm.83.2023.08.06.06.23.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Aug 2023 06:23:51 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 6 Aug 2023 06:23:50 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     rentao.bupt@gmail.com
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, taoren@meta.com
+Subject: Re: [PATCH v2] hwmon: (pmbus/bel-pfe) Enable PMBUS_SKIP_STATUS_CHECK
+ for pfe1100
+Message-ID: <b14cb363-e232-4251-8ecb-1393634dfcda@roeck-us.net>
+References: <20230804221403.28931-1-rentao.bupt@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: Add MAX6639
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Conor Dooley <conor@kernel.org>,
-        Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Marcello Sylvester Bauer <sylv@sylv.io>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230803144401.1151065-1-Naresh.Solanki@9elements.com>
- <20230804-tamper-numbness-0117bb53a921@spud>
- <3f947ad6-eed6-59ff-e4e6-8b21d90eb803@roeck-us.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <3f947ad6-eed6-59ff-e4e6-8b21d90eb803@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230804221403.28931-1-rentao.bupt@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 04/08/2023 18:10, Guenter Roeck wrote:
-> On 8/4/23 08:48, Conor Dooley wrote:
->> On Thu, Aug 03, 2023 at 04:43:59PM +0200, Naresh Solanki wrote:
->>> From: Marcello Sylvester Bauer <sylv@sylv.io>
->>>
->>> Add binding documentation for Maxim MAX6639 fan-speed controller.
->>>
->>> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
->>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
->>> ---
->>> Changes in V3:
->>> - Update title
->>> - Add pulses-per-revolution, supplies & interrupts
->>> Changes in V2:
->>> - Update subject
->>> - Drop blank lines
->>> ---
->>>   .../bindings/hwmon/maxim,max6639.yaml         | 60 +++++++++++++++++++
->>>   1 file changed, 60 insertions(+)
->>>   create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
->>> new file mode 100644
->>> index 000000000000..b3292061ca58
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
->>> @@ -0,0 +1,60 @@
->>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Maxim MAX6639 Fan Controller
->>> +
->>> +maintainers:
->>> +  - Naresh Solanki <Naresh.Solanki@9elements.com>
->>> +
->>> +description: |
->>> +  The MAX6639 is a 2-channel temperature monitor with dual, automatic, PWM
->>> +  fan-speed controller.  It monitors its own temperature and one external
->>> +  diode-connected transistor or the temperatures of two external diode-connected
->>> +  transistors, typically available in CPUs, FPGAs, or GPUs.
->>
->>> +  fan-supply:
->>> +    description: Phandle to the regulator that provides power to the fan.
->>
->>> +  pulses-per-revolution:
->>> +    description:
->>> +      Define the number of pulses per fan revolution for each tachometer
->>> +      input as an integer.
->>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>> +    enum: [1, 2, 3, 4]
->>> +    default: 2
->>
->> Apologies if I am digging up old wounds here, since there was quite a
->> bit of back and forth on the last version, but these two newly added
->> properties look to be common with the "pwm-fan" and with
->> "adi,axi-fan-control". At what point should these live in a common
->> schema instead?
->>
->> Otherwise, this looks okay to me, although I'll leave things to
->> Krzysztof since he had a lot to say about the previous version.
->>
+On Fri, Aug 04, 2023 at 03:14:03PM -0700, rentao.bupt@gmail.com wrote:
+> From: Tao Ren <rentao.bupt@gmail.com>
 > 
-> Rob has said that he won't accept any fan controller bindings without a generic
-> schema. At the same time he has said that he expects properties such as the
-> number of pulses per revolution to be attached to a 'fan' description, and he
-> wants pwm related properties of fan controllers to be modeled as pwm controllers.
-> And now we have a notion of a regulator providing power to the fan (which again
-> would be the fan controller, at least in cases where the fan controller
-> provides direct voltage to the fan). On top of that, this fan-supply property
-> should presumably, again, be part of a fan description and not be part of the
-> controller description. I don't think anyone knows how to make this all work
-> (I for sure don't), so it is very unlikely we'll see a generic fan controller
-> schema anytime soon.
+> Skip status check for both pfe1100 and pfe3000 because the communication
+> error is also observed on pfe1100 devices.
 > 
-> Given that neither fan-supply nor pulses-per-revolution is implemented in the
-> driver, and given that I am not aware of any fans which would have a value for
-> pulses-per-revolution other than 2, my personal suggestion would be to add the
-> chip to trivial devices and be done with it for the time being.
+> Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
 
-Yeah, this also would work.
+Applied.
 
-Best regards,
-Krzysztof
+Thanks,
+Guenter
 
+> ---
+>  Changes in v2:
+>    - improving comments.
+>    - removing unnecessary {}
+> 
+>  drivers/hwmon/pmbus/bel-pfe.c | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/bel-pfe.c b/drivers/hwmon/pmbus/bel-pfe.c
+> index fa5070ae26bc..7c5f4b10a7c1 100644
+> --- a/drivers/hwmon/pmbus/bel-pfe.c
+> +++ b/drivers/hwmon/pmbus/bel-pfe.c
+> @@ -17,12 +17,13 @@
+>  enum chips {pfe1100, pfe3000};
+>  
+>  /*
+> - * Disable status check for pfe3000 devices, because some devices report
+> - * communication error (invalid command) for VOUT_MODE command (0x20)
+> - * although correct VOUT_MODE (0x16) is returned: it leads to incorrect
+> - * exponent in linear mode.
+> + * Disable status check because some devices report communication error
+> + * (invalid command) for VOUT_MODE command (0x20) although the correct
+> + * VOUT_MODE (0x16) is returned: it leads to incorrect exponent in linear
+> + * mode.
+> + * This affects both pfe3000 and pfe1100.
+>   */
+> -static struct pmbus_platform_data pfe3000_plat_data = {
+> +static struct pmbus_platform_data pfe_plat_data = {
+>  	.flags = PMBUS_SKIP_STATUS_CHECK,
+>  };
+>  
+> @@ -94,16 +95,15 @@ static int pfe_pmbus_probe(struct i2c_client *client)
+>  	int model;
+>  
+>  	model = (int)i2c_match_id(pfe_device_id, client)->driver_data;
+> +	client->dev.platform_data = &pfe_plat_data;
+>  
+>  	/*
+>  	 * PFE3000-12-069RA devices may not stay in page 0 during device
+>  	 * probe which leads to probe failure (read status word failed).
+>  	 * So let's set the device to page 0 at the beginning.
+>  	 */
+> -	if (model == pfe3000) {
+> -		client->dev.platform_data = &pfe3000_plat_data;
+> +	if (model == pfe3000)
+>  		i2c_smbus_write_byte_data(client, PMBUS_PAGE, 0);
+> -	}
+>  
+>  	return pmbus_do_probe(client, &pfe_driver_info[model]);
+>  }
