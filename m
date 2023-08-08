@@ -2,142 +2,160 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E1F0C001E0
-	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Aug 2023 22:07:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C725BC001DB
+	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Aug 2023 22:09:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbjHHWHr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 8 Aug 2023 18:07:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42618 "EHLO
+        id S230136AbjHHWJJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 8 Aug 2023 18:09:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjHHWHr (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Aug 2023 18:07:47 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C219AE51
-        for <linux-hwmon@vger.kernel.org>; Tue,  8 Aug 2023 15:07:46 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id ca18e2360f4ac-78666f06691so220149339f.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 08 Aug 2023 15:07:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691532466; x=1692137266;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=nAl9mXlCAoqJmbkSyh7LvdK1vER3jiX0bR73EtdOQiE=;
-        b=JMT9fRCboNXWP/Hg6eDM5J9QJ5hZug2fXEbSJH5Fwwn+S99peoRNaGJ8zbioN5JWMo
-         UaUBpnN7oTXWbOE6YfLLdMpS6I1un3X6qzcoxW7DaajbKbG0LELwAm6EcreOSQ8/YnuD
-         bMHRTNJnVjVg0HJ4T3cCxG7FSImyLXwgAv5XNUlB2aYFFLD520RPcY31cqJ/4OU2o+i1
-         FSitRHy28c3UXFu9P+woJYxpsDMN39gOli5lb7lEf2114tclurFNbjhUqm/sPe38Hm5W
-         MFdDQPvjV648L3cFqDJm4E7vuOy28wYoiMkgQrZsMUreWjcbx03ENGDp/J45KQqu7Le2
-         rtlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691532466; x=1692137266;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nAl9mXlCAoqJmbkSyh7LvdK1vER3jiX0bR73EtdOQiE=;
-        b=Tt71R1Gdtx0qaIBbs/VuhtS1BOfCUz5qY8Y68VfAVBQmpTcv0khdaEc055gXZCDBnb
-         zy7AYraLL1lZOxXWqLs9AjmGlT3nu6esG5OKGit2862/IEANuDSrum4pzW3wed+8C9Wc
-         NkgcwPK8z+daRVjwBkdymx9wYXXjwdrHeidbwHfWLnqigzT/ZtU7a2+kU3RAFgq/ML4W
-         mNkxo7HywPVYd3wzqK83z9HCkCrvZBE0bifKGvIgUcCasy/9zb/1ilgtfiSRPMhuYwJT
-         G1NWY+lw5W+M+1cy8p5qd5CiF20pwVSkBaF8g9yGt94aBep6PmlbkRV+fn7QpDOK2e24
-         Y8hw==
-X-Gm-Message-State: AOJu0YxzEprhaDburAWmDbe5MJUyXlqyhCC5dtNwyzklI2aWksuMo5AP
-        3XwtyS1OrSU9vZ4g79keu619El9GuD4=
-X-Google-Smtp-Source: AGHT+IGHv9R5kUFE+6e1/2lIdq35xjKyn2Re57/28+kYA7Ez1mJyEFP8S8naFFtoLYVLdXBvKjlMOg==
-X-Received: by 2002:a05:6602:3358:b0:786:e612:72f8 with SMTP id c24-20020a056602335800b00786e61272f8mr900675ioz.21.1691532465969;
-        Tue, 08 Aug 2023 15:07:45 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n12-20020a056638120c00b004302370a169sm3444261jas.157.2023.08.08.15.07.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Aug 2023 15:07:45 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <a95b0703-b3cd-23ae-7ba7-40aab960320a@roeck-us.net>
-Date:   Tue, 8 Aug 2023 15:07:43 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [Intel-xe] [PATCH v3 1/6] drm/xe/hwmon: Add HWMON infrastructure
+        with ESMTP id S231802AbjHHWIq (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Aug 2023 18:08:46 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2083.outbound.protection.outlook.com [40.107.93.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B64DE72;
+        Tue,  8 Aug 2023 15:08:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KPa+G4YXzABcILqS+nAsuCgUTYQcHSsWMRI888GMqwn1Fh9b+VbzI9ve3BKCi6QFS1YvCgvcieOr0hMEpFruJBRuJkQGy+l3ptknHsPH1MyHvkGF39PLbE4Sz9cQRjTQsw2+eDodoeOCkPcJTXS35NtzOY+Nzpd6rLd32PAraXi3aFvaYD5hoUewa4ZZYe2gQ+emeEtFcZp6qKVJlFsavIUGpQyCeCribCubX7OL74EFgXgY542eKlbiAPplF0JGWQqH3hMdBakuHT3fL7jFBqksCPJucs1z2PlRasiaMhkREikTJJWvUu7QTiI/Wg3dgdGCiH8AHIo7rmJMAD5IvQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Fh75j7M5vUV6ksQqLdSM2ySPCzs+5xTywmD3orORUSk=;
+ b=Or6g/PsldXip1jt/8WgaV4TyMW0RLjbKr13Db4MSf0lsGgsqYKJrFcRg5qFEHyVbr9wSSyUVjml+yQWwytBLyT1PWYCO2E//0EgXL1ctYAeDkhnOYIICTJiDJ+rhADVp/VPkvOVeBcrquNanfFv9lgYvLnLX6XzfS+CP30ZBGui2zXAlKspnZTjPMjebiyL2SgF71g5Ara4LVwUiIgtcN0oRmU7C9YASKDtYhh1JhGma5+W4XpxB/5nkGOiw2cWrOqydrQClXttKn/MxX5K5DS4UfJpDYjRpKORyuXvo0Jzifj1uQCfTTZrXrYQ9ngx1MQyBLby/eqiNM85x8mUk9A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Fh75j7M5vUV6ksQqLdSM2ySPCzs+5xTywmD3orORUSk=;
+ b=fJnQIeDnhRiV6nNZt9NPS4f0DoEmhjcnV68kKu/ZSnTufICfkMT/2ZJL4DpJOk7JF9rlcRjbp4fIFXZr26tpNf5rYNtVQddsDkJVKLhy73g+8FbMoXRjVRYMtRHh/ezz+a7ImQU6KRCFJFhBKMHlSEmcG4lL7XTb16oVa9Fck5Y=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CY5PR12MB6203.namprd12.prod.outlook.com (2603:10b6:930:24::17)
+ by BN9PR12MB5177.namprd12.prod.outlook.com (2603:10b6:408:11a::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.27; Tue, 8 Aug
+ 2023 22:08:43 +0000
+Received: from CY5PR12MB6203.namprd12.prod.outlook.com
+ ([fe80::48cb:8b61:d51e:3582]) by CY5PR12MB6203.namprd12.prod.outlook.com
+ ([fe80::48cb:8b61:d51e:3582%7]) with mapi id 15.20.6652.026; Tue, 8 Aug 2023
+ 22:08:43 +0000
+Message-ID: <2a8ece3c-76cb-c922-1ecc-3a4515aa406f@amd.com>
+Date:   Tue, 8 Aug 2023 17:08:40 -0500
+User-Agent: Mozilla Thunderbird
+Subject: [PATCH v1 3/3] EDAC/amd64: Add support for AMD Family 1Ah Models
+ 00h-1Fh and 40h-4Fh
 Content-Language: en-US
-To:     Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        "Nilawar, Badal" <badal.nilawar@intel.com>
-Cc:     Andi Shyti <andi.shyti@linux.intel.com>,
-        linux-hwmon@vger.kernel.org, intel-xe@lists.freedesktop.org
-References: <20230802135241.458855-1-badal.nilawar@intel.com>
- <20230802135241.458855-2-badal.nilawar@intel.com>
- <ZMrbZXOVsyT133D8@ashyti-mobl2.lan>
- <d8258e4d-4cc4-78e2-7858-78409f47774f@roeck-us.net>
- <436c15bf-c031-9f72-c4cc-c7ff1600fdbf@intel.com>
- <55da1781-3ea7-b3bc-05f8-8af25e5ea143@roeck-us.net>
- <710b7d67-2882-a077-cbd8-ab42c41aa3ca@intel.com> <ZNK0NzoBlGt6chs2@intel.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <ZNK0NzoBlGt6chs2@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     Yazen Ghannam <yazen.ghannam@amd.com>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>,
+        Avadhut Naik <avadhut.naik@amd.com>, bp@alien8.de,
+        linux@roeck-us.net, x86@kernel.org, linux-hwmon@vger.kernel.org,
+        linux-edac@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20230706171323.3722900-1-avadhut.naik@amd.com>
+ <20230706171323.3722900-4-avadhut.naik@amd.com>
+ <e5b0063a-ae41-41ab-b3a7-2084dfa7f816@amd.com>
+ <1606f9f9-5d5a-788d-b058-ec218fb73712@amd.com>
+ <36bff484-f41a-4eed-bcd6-a96539b905b8@amd.com>
+From:   Avadhut Naik <avadnaik@amd.com>
+In-Reply-To: <36bff484-f41a-4eed-bcd6-a96539b905b8@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: DM6PR11CA0011.namprd11.prod.outlook.com
+ (2603:10b6:5:190::24) To CY5PR12MB6203.namprd12.prod.outlook.com
+ (2603:10b6:930:24::17)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR12MB6203:EE_|BN9PR12MB5177:EE_
+X-MS-Office365-Filtering-Correlation-Id: e0d54ad2-150f-4341-8624-08db985c0743
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2Wygd9e/eNZTzEZOC8pKbPsOciOyJ6tCLmQXZZ6fbWpTNnQXIHUqv5ci5Sdv7HyouaeZJ3ZToeWGYZwD92yyhSftrLKPX0U8r/cigD6ld07996uuYmWFvOftWLTPtwBmsWeYnxZFBHSEuyODD3ECc7rVz29msgjff6GHI6967JO9P0w4dU+n0ZiQLnNEUmdvvi3wnUvmUYBuEIVhhj6RBa5d2kwooYbDGm0gWUeX9As+EnZiuGeEcpV9sfVNTms0aKjhmgI7FhHApkrZ+oEdG0XWc1hieGbGIb7tuJEreFW1Nc6LthpP7ZMVplyBbgOQ/x0T0MDvnlpSjyMGyB64xegv2CAxOf+Kd4TOMedu2YMDA3br3B/tH2/kk2970yg8BXrKP5HIYVIsswK5YoGABspaQQZarwfHMG9IvrULtxO9i54/pl0pSjfRm7VyRGnuJgXEZncehKA2rlJ20Km2V8UFSxyinzwLaITrGt1wQkCJDosgUjEMsNHrsPmwERPk3gMRcK4ttUzWRV/uliuQUyjmtorrK5bWZTZpVX/dMgnNaVyxE/eg/LpIRQap8BulKGI/0BtIXVozCdMvSuQrqg6qIukt4Q3VNzAJ4l7WQ40xQ+DcdKqcxeHbNYDD7WiOlDN2sDOmsfj0gf1VSrAalQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6203.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(376002)(39860400002)(346002)(136003)(451199021)(1800799003)(186006)(4744005)(2906002)(83380400001)(41300700001)(5660300002)(8676002)(8936002)(36756003)(31696002)(110136005)(478600001)(38100700002)(31686004)(6512007)(26005)(6486002)(53546011)(6506007)(66476007)(66556008)(66946007)(4326008)(2616005)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VHJ0UGNxR296Ui9RaXk4OHFwSW8xTCtReWUrWG5ZeG92ME9na0tKbDVMc296?=
+ =?utf-8?B?SXJBdHdnUVN2ZmFBYzJUeWpmaU5DSHR0THNMdnRFdlpTUFZxalJ1emRUeXlw?=
+ =?utf-8?B?UFUwd1QyaDZsdFY1VjdsVDAxOUtyMGthZnhxSVpFTFRtSXlqK3FqR0tZcHlp?=
+ =?utf-8?B?M0VhdGtZQUtXZ3k1cU45VjlRSVV1dmxFYTQvUnl3RFVOYXoxeDhaWFZQQVNx?=
+ =?utf-8?B?ODVVZ1U3eDVDY0hFblF2UkdXMVdVa2s4OGhQQVRPeCtnSnBmeExLanBJbDhX?=
+ =?utf-8?B?aXRiNVBGclFrUTdmTHE3SVRNWXlvRml2SURwUTBjRkdVUUpmaWlYM1htOUM5?=
+ =?utf-8?B?a1N2aFZBL1RYTWthTG5qUERUZmhTa2lrTWpLY1hyNHVoeGQ3QStnSWdhaWZk?=
+ =?utf-8?B?cVo5cnkvQ1dneVdzUGlpRE52MU9rZmtCUEZyTVpJS1J6ZG5wSTVVWE9BbGtW?=
+ =?utf-8?B?emtobGpSTVdacWdPUFhDR1pIS2x5Z2hORUNtbkYwZ3VJWit2SC9GMnZkbVky?=
+ =?utf-8?B?U1p0QncrdXNFekhQWk5ZMW45aWJOZmhWTVBpcUVRSllVTXhxaDRVektmaUZz?=
+ =?utf-8?B?Y2swRk4zWmg3NzVpNWI3Y0dYWmhKVDJFUERoMHBRRjIveTNnc3ZwZm5IRUs0?=
+ =?utf-8?B?Zmp1TjVLRTEwOXJlaWJCNjFBK2g5cjNZN1M4QnVyWnUySy91YURuQldoTDN1?=
+ =?utf-8?B?MGhUZG9XRUFCSk52KzgwMzRoeXFrTDY3akNOZ0E4YjFGQ1BxUzJVZEZ5R0ZY?=
+ =?utf-8?B?NDVWMWxrNFA0R3ZhUEhoVTQwbUVJbFZ0YUZqditVLzNvT2Y0bWN4K05DdEh5?=
+ =?utf-8?B?THYvQ2VrRDAyT2JFeC9XQ1RNcEd1TWpiclR5Q2dreEtMTkQwMHdCSTJCYVQx?=
+ =?utf-8?B?aTZVZXJTM21nbm5WM1ExN3h4M2J4S0JoSENlMFdoTllaWVNjNEY2T2VON2Jo?=
+ =?utf-8?B?a2dwUGFTWU4yQ0R6YmxkS3dEMVJUOEk4bWZQOHFwRXQyeWdiRFlxWmMzeHVB?=
+ =?utf-8?B?WVZYUUVXaTVEdXEzV2U5RE0xUVpsVUxRZEhkRFVPUjZueFJyZVR1dDFwbFZj?=
+ =?utf-8?B?a0o4UnE0NlAra2dQL0RrU0xmenJQSEFnUmJQMGhnYzYxdlBVd3NzaGQyNEMx?=
+ =?utf-8?B?SWRhNWU0aExWT1dpN21OVlFlRXE0MWVQN0M0OEZhM3Z1UXIwL2RNWFBtM2la?=
+ =?utf-8?B?cHppQUtUODBSdlhDbmErbGpUZ1hJQ09lcWNGbjVLZTUxeHl6WUpjZXE2UFZF?=
+ =?utf-8?B?U3FPcTc2L0VpcmNsMlB6NzJESjFzTjYrNkFHUGdNNUdrK3lCZjZ2eUNhOVBS?=
+ =?utf-8?B?S1Aya05CWS9XL2hBNlRkS05VejF4aDBmc2dBbEZWRURZdjN3cHlMVTBhd2U2?=
+ =?utf-8?B?ZTM4K0dXWmFDMFgxMWVoTzM2TTZObDFlSFpiaENVRUowSitLVXhvUDl4cE9s?=
+ =?utf-8?B?RUJqWlB3WUdoWWRkR0c2SVlrMk94RldBa1h0SWNCOXNYQ0hEWUZGb01QK0Js?=
+ =?utf-8?B?T09xN05HY3BnYkFCK1k5UzR1OG1jM2NjU3R2UVV1VzdmM0c5cE05ckpVZVlK?=
+ =?utf-8?B?cExtWXU1YTVkVmtKUWNob25odmJqTVFTVm1JbGV5L2xXRW5MRVdBRWZja3dz?=
+ =?utf-8?B?QW1lcTdrMGdlSExScHExMGxMTnFUQ2ZuU2JucnphVHJsak0ranlYNElETzFh?=
+ =?utf-8?B?VUQ1a2NHTWdrV1hxU0xmWFlsblRXWnhDSVNkZXRXV2xQL2ZDSTlhQjR5Y0Rs?=
+ =?utf-8?B?dmVQeGVhYUYwcEJoNmhXRTMySTdqR0NaV0lpaE1xN2xFM3dIU2NTYXlRZHBM?=
+ =?utf-8?B?amVPUklQZjR5MVovTjVZYlhJa3dRdHZmWHNTcmc1ZWpoT0pHc3dDTHE4UXAr?=
+ =?utf-8?B?WFBoMS8zVlhtbVpwQ2dJYXVsNzRId2hyei91bzZIc01vZnNBSW5kSldobm9M?=
+ =?utf-8?B?Nm85bC9iUFdQN2hYZU9vdXZLT2tLaGV0MVBjWlVETHUwalNqbnJVWk1XOHM1?=
+ =?utf-8?B?UmRKb1dUNTFsZURISzR0MUJoZWk0QUZidG5GbklEeVhjNzVvRm9saFh2dkZL?=
+ =?utf-8?B?dFdkRzdEWDY2dkJJc29LY0hxVEVDUk4xOVZOeUlrN2tpKzdxNUNZN0pqMEJz?=
+ =?utf-8?Q?2WEnxpwinN4zk34czghKSV48M?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e0d54ad2-150f-4341-8624-08db985c0743
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6203.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Aug 2023 22:08:43.0798
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: KWp9SVIhSyVvDxM0I/VCGaygzgD5gr2jwC54WvFOv43S829V3lxZmdZO2hN5ovGgZrrHawL/8rlGBy8D3XE4kg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5177
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 8/8/23 14:31, Rodrigo Vivi wrote:
-> On Fri, Aug 04, 2023 at 08:06:22PM +0530, Nilawar, Badal wrote:
+Hi,
+
+On 8/7/2023 08:48, Yazen Ghannam wrote:
+> On 8/4/2023 12:03 PM, Limonciello, Mario wrote:
 >>
 >>
->> On 04-08-2023 19:56, Guenter Roeck wrote:
->>> On 8/4/23 06:19, Nilawar, Badal wrote:
+>> On 8/3/2023 7:25 PM, Yazen Ghannam wrote:
+>>> On 7/6/2023 1:13 PM, Avadhut Naik wrote:
+>>>> From: Avadhut Naik <Avadhut.Naik@amd.com>
 >>>>
->>>> Hi Guenter,
->>>> On 03-08-2023 04:42, Guenter Roeck wrote:
->>>>> On 8/2/23 15:40, Andi Shyti wrote:
->>>>>> Hi Badal,
->>>>>>
->>>>>> [...]
->>>>>>
->>>>>>> +struct xe_hwmon_data {
->>>>>>> +    struct device *hwmon_dev;
->>>>>>> +    struct xe_gt *gt;
->>>>>>> +    char name[12];
->>>>>>> +};
->>>>>>> +
->>>>>>> +struct xe_hwmon {
->>>>>>> +    struct xe_hwmon_data ddat;
->>>>>>> +    struct mutex hwmon_lock;
->>>>>>> +};
->>>>>>
->>>>>> why do we need two structures here? Can we merge them?
->>>>>>
->>>>>
->>>>> A later patch adds multiple hwmon devices which makes use of it.
->>>>> I think that is flawed, and I am not inclined to accept it.
->>>> Is there any obvious reason that there shouldn't be multiple
->>>> devices? In i915 we are doing the same.
->>>> https://patchwork.freedesktop.org/patch/497324/?series=104278&rev=3
+>>>> Add the necessary support in the module for AMD's new Family 1Ah-based
+>>>> models 00h-1Fh and 40h-4Fh.
 >>>>
 >>>
->>> Technically you can do whatever you like as long as the code doesn't reside
->>> in drivers/hwmon. I won't NACK it, but I won't give it a Reviewed-by:
->>> either. i915 shouldn't do it, but I didn't realize what they are doing
->>> at the time. Other drivers doing it wrong is not an argument. You can't
->>> argue that you may drive faster than the speed limit because others do it
->>> or because police didn't stop you last time you did either.
+>>> The first patch in this set adds PCI IDs for models starting at 20h. And this patch adds support for models 40h-4Fh.
 >>>
->>> One chip, one hwmon device. Do you have separate parent devices for
->>> all your hwmon devices ? If yes, you can argue that having multiple hwmon
->>> devices make sense. If not, you can't.
->> Thanks for clarification. There is only one parent device. So will try to
->> accommodate single hwmon device.
+>>> Can you please elaborate on the discrepancy?
+>>>
+>>> Thanks,
+>>> Yazen
+>>>
+>>
+>> Model 40h-4fh shares some of the same design as some other platforms.
+>>
+>> The root port ID PCI_DEVICE_ID_AMD_19H_M60H_ROOT and DF_F3 ID PCI_DEVICE_ID_AMD_19H_M60H_DF_F3 covers it.
 > 
-> Well, it is one PCI device, but under 1 pci device we can have multiple "tiles"
-> that can duplicate many components. Inside each tile we can even have multiple
-> "gt"s.
+> That's fair. Can these details be included in the commit message?
 > 
-> But back to the tile, each tile has its own metrics. It's own power delivery,
-> own sensors and all. They can even be seen as independent devices from this
-> angle.
-> 
-> I'm afraid that the attempt to put everything as one device, but all the
-> entries duplicated per tile/gt we might end up with a messed api.
-> 
+	Sure thing! Will include these details in the commit message of the first patch where PCI IDs are being defined.
+> Thanks,
+> Yazen
 
-Your argument does not make sense. I am not asking to duplicate anything.
-
-Guenter
-
+-- 
+Thanks,
+Avadhut Naik
