@@ -2,111 +2,116 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 945F5C001DB
-	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Aug 2023 15:47:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05C31C001B0
+	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Aug 2023 16:06:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbjHHPrv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 8 Aug 2023 11:47:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41330 "EHLO
+        id S231761AbjHHQGp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 8 Aug 2023 12:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbjHHPqb (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Aug 2023 11:46:31 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514DE3C34;
-        Tue,  8 Aug 2023 08:41:01 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 4452B5C005A;
-        Tue,  8 Aug 2023 03:55:05 -0400 (EDT)
-Received: from imap41 ([10.202.2.91])
-  by compute6.internal (MEProxy); Tue, 08 Aug 2023 03:55:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=traverse.com.au;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1691481305; x=
-        1691567705; bh=J/IA1zqHqkiiLAD9E9JcF57MbkkOt6dgvLaok0SXp/o=; b=Q
-        hCNFgWfjmdIMFirny+vegJe9Ck01gJPMBgR80BP6RGvB/H5YLwr5llmeK29EjUds
-        K97Nr5ABiDSzOMF4ROMXyeUEDr7iEu5wZjJ+EzwxQFDIshLH+MLWpy5oEditIXB4
-        LzIcncxcFBtTq/JXP4ZIJ7xLJVNoMCTeSkvgAcpokvABIonfCXPT2nd2WmvkExlU
-        iI2dhv4IdR0Kcsr9DIV3JpNlwGpyjelcqaVl3MRGYLg49tuVEXuiHiCNzJnxqcLs
-        jKKMsB6DoyHDLg9j/vWOfUit0oiY3NMg1DTIkSCXquQtCsV3ms+RJTzuS6FfTyfp
-        QZVzwLFXK+m44KGrF4x1Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1691481305; x=1691567705; bh=J/IA1zqHqkiiL
-        AD9E9JcF57MbkkOt6dgvLaok0SXp/o=; b=XfVWeYL2WYtYTHGoCrpemnxP3vLlM
-        HtsTFy/FVVE22v0MLwMSucT3QFgAJcsSByQRgQHy2D9r4BnAOzEd/6u+OtZqaqOk
-        hhgKAx1K9p1+DhEGUd6GbphQk6DEghT4BLzVvwiZRdIhI+Prl5+CRZtrEesSlcdl
-        Pw5ElTvmSuy7MEb6Q5EuIWJ23rGmsZFX431TAL9rP5PyS4eCzFbqLHzGKDSuCrNp
-        mSLrze3z6hscieF0S/qa2dhKiZkIQi/nF4rqvZGaTdxhEXnZLW066SMCJd39D2fh
-        lu5dluAxhRY432M8xYsIKVFMHDHulzkhIqfNnFXcwyTBCMLUQfmfXNhMQ==
-X-ME-Sender: <xms:2PTRZEJb1FjWcaPf2mP6AWtHE11tsyqqJb2s-N-KPOwbnhwvu7hsfA>
-    <xme:2PTRZEJDNkF4mzyJiciL7itc9AnNmrXi7EUYDMlrLGOHkq06EF15DihjwTXg9s8sF
-    AOOxF4nfUn1uv3uVpM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrledugdduvddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfofgr
-    thhhvgifucfotgeurhhiuggvfdcuoehmrghtthesthhrrghvvghrshgvrdgtohhmrdgruh
-    eqnecuggftrfgrthhtvghrnhepheeitdehfffhudefheefffeivdffjedtfefhueffgfff
-    geethfeivdetjefhgeetnecuffhomhgrihhnpehgihhtlhgrsgdrtghomhdpkhgvrhhnvg
-    hlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhho
-    mhepmhgrthhtsehtrhgrvhgvrhhsvgdrtghomhdrrghu
-X-ME-Proxy: <xmx:2PTRZEtHwLgD_VGn0dovKlZe1Dd310qFvfvKjxNcBFsID2AXRttmZQ>
-    <xmx:2PTRZBYp83GQIz_w26WjxFJrRATNIQORFRU_-wvqLbz-SVhFfd7wdQ>
-    <xmx:2PTRZLYG_iu_qwLOETA2hPVnGhDHFa-XVVI_KpPygcxKhWziRyioUA>
-    <xmx:2fTRZHEL3a7SIS2OIR9_9n-NCn7oTJgC3SqsUenRaUDqN-rqeTcANw>
-Feedback-ID: i426947f3:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 88388234007E; Tue,  8 Aug 2023 03:55:04 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-624-g7714e4406d-fm-20230801.001-g7714e440
-Mime-Version: 1.0
-Message-Id: <b84c2fba-1bbe-4842-a861-525784d8a361@app.fastmail.com>
-In-Reply-To: <0248d597-b72a-5b7c-63a4-6d72384f9854@kernel.org>
-References: <20230808013157.80913-1-mark.tomlinson@alliedtelesis.co.nz>
- <0248d597-b72a-5b7c-63a4-6d72384f9854@kernel.org>
-Date:   Tue, 08 Aug 2023 17:54:41 +1000
-From:   "Mathew McBride" <matt@traverse.com.au>
-To:     "Krzysztof Kozlowski" <krzk@kernel.org>,
-        "Mark Tomlinson" <mark.tomlinson@alliedtelesis.co.nz>,
-        "Jean Delvare" <jdelvare@suse.com>,
-        "Guenter Roeck" <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 1/2] hwmon: Add driver for EMC181x temperature sensors
-Content-Type: text/plain
+        with ESMTP id S231426AbjHHQFe (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Aug 2023 12:05:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49FE30C7;
+        Tue,  8 Aug 2023 08:45:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E0F86259F;
+        Tue,  8 Aug 2023 14:28:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D866C433C7;
+        Tue,  8 Aug 2023 14:28:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691504894;
+        bh=qMriDtXrpLpfOWzb5+F5aOCYEZhH3+5fP0nhoxADdxA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tV/68gEXuyvM/3aR/Qp/99bWWBgEJWNV2ioFTuNK7maHxoA1B+jr4legADPGIpFmC
+         TdlpfRfEciPYC863Fr1g9haSn9B6FuQ3YFQQcWcYtAr3XM1PDaDLeJYHG3t47A4Chw
+         UePvtRvh7fol4x07yLv8vsqeQn8LoyKEuJWEzMceYnNDdk/UBRmeCnS3r3upT33N7F
+         wef4uKoHfk0fO2u7TR874aKZ8TochZneW8BekRHnLwTLS+D9DmohjHcNFHmugnARaT
+         Cmqda5nh8N4n+7M0qOsDiPlx8rWolfpIt/xBVePqjkzPi25YffJO9H1VE4N+DFwxnH
+         oZQs+tSbh3JXA==
+Date:   Tue, 8 Aug 2023 15:28:10 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Naresh Solanki <naresh.solanki@9elements.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        krzysztof.kozlowski+dt@linaro.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] dt-bindings: hwmon: Add Infineon TDA38640
+Message-ID: <20230808-esquire-epidemic-f9bd74ffde25@spud>
+References: <20230802193155.2170935-1-Naresh.Solanki@9elements.com>
+ <20230808-stand-cheddar-b76b0b7509a0@spud>
+ <eced746a-1181-bd8f-6828-4a4eeb79727c@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="XfJu5TZS5xk5xqji"
+Content-Disposition: inline
+In-Reply-To: <eced746a-1181-bd8f-6828-4a4eeb79727c@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Krzysztof,
 
-On Tue, Aug 8, 2023, at 5:38 PM, Krzysztof Kozlowski wrote:
-> On 08/08/2023 03:31, Mark Tomlinson wrote:
-> > This patch adds a HWMON driver for the EMC1812, EMC1813, EMC1814,
-> > EMC1815 and EMC1833 temperature sensor chips from microchip. Does not
-> > currently support the alert outputs.
-> > 
-> > Signed-off-by: Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
-> > Co-developed-by: Mathew McBride <matt@traverse.com.au>
-> > Signed-off-by: Mathew McBride <matt@traverse.com.au>
-> 
-> The order of these tags is clearly not correct. It says Mathew is
-> sending, but you are not Mathew?
+--XfJu5TZS5xk5xqji
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Just to clarify, Mark has developed this version based off something I wrote a while ago:
+On Tue, Aug 08, 2023 at 07:10:08AM -0700, Guenter Roeck wrote:
+> On 8/8/23 04:46, Conor Dooley wrote:
+> > On Wed, Aug 02, 2023 at 09:31:51PM +0200, Naresh Solanki wrote:
+> > > From: Patrick Rudolph <patrick.rudolph@9elements.com>
+> > >=20
+> > > The TDA38640 chip has different output control mechanisms depending on
+> > > its mode of operation. When the chip is in SVID mode, only
+> > > hardware-based output control is supported via ENABLE pin. However, w=
+hen
+> > > it operates in PMBus mode, software control works perfectly.
+> > >=20
+> > > To enable software control as a workaround in SVID mode, add the DT
+> > > property 'infineon,en-svid-control'. This property will enable the
+> > > workaround, which utilizes ENABLE pin polarity flipping for output wh=
+en
+> > > the chip is in SVID mode.
+> >=20
+> > Why do you need a custom property for this? How come it is not possible
+> > to determine what bus you are on?
+> >=20
+>=20
+> That is not the point. Yes, it can be detected if the control method is
+> PMBus or SVID. However, in SVID mode, SVID is supposed to control the
+> output, not PMBUs. This is bypassed by controlling the polarity of the
+> (physical) output enable signal. We do _not_ want this enabled automatica=
+lly
+> in SVID mode. Its side effects on random boards using this chip are unkno=
+wn.
+> Thus, this needs a property which specifically enables this functionality
+> for users who _really_ need to use it and (hopefully) know what they are
+> doing.
 
-https://gitlab.com/traversetech/ls1088firmware/traverse-sensors/-/blob/master/emc181x/emc181x.c?ref_type=heads
+Hmm, reading this it makes a lot more sense why this is a property - I
+guess I just struggled to understand the commit message here,
+particularly what the benefit of using the workaround is. I'm still
+having difficulty parsing the commit & property text though - its
+unclear to me when you would need to use it - so I will stay out
+of the way & let Rob or Krzysztof handle things.
 
-Hence my copyright is listed in the header.
+--XfJu5TZS5xk5xqji
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I advised him to list the authors in that order following the example in the kernel's "submitting patches" guide [2] which provides an example of such a situation:
+-----BEGIN PGP SIGNATURE-----
 
-https://docs.kernel.org/process/submitting-patches.html#when-to-use-acked-by-cc-and-co-developed-by
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZNJQ+gAKCRB4tDGHoIJi
+0rsaAP4p4HX4bMrdis5l4TikUX588o40cMUso+iMzqcRc+4sBQEAiZOIdiIzqofV
+HE+wZrIM/ImGNTwKIwWUHO0dKzccKg8=
+=+V64
+-----END PGP SIGNATURE-----
 
-If I interpreted the guidelines incorrectly, happy to be corrected.
-
-Best Regards,
-Matt
+--XfJu5TZS5xk5xqji--
