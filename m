@@ -2,165 +2,291 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CF9BC41513
-	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Aug 2023 21:10:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ABE6AC001DB
+	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Aug 2023 21:16:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235939AbjHHVKW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 8 Aug 2023 17:10:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53974 "EHLO
+        id S236424AbjHHVQl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 8 Aug 2023 17:16:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235292AbjHHVKH (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Aug 2023 17:10:07 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2091.outbound.protection.outlook.com [40.107.8.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC3AE10C6;
-        Tue,  8 Aug 2023 13:39:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YIrMHzYcwQeA1r/71LBCDXU800N98Z7j4ON3h7ljtU7Dhrf5V8/mRmxtaEtH/8vKV6LIPZ28pyq2cBB1UyiWmD1oXvidFZiXsZmiNBMwhTTaqZQTINxto3x+hZb55K7EJ17TBRiVWC0JgHRs73tXs0chZWQUFzu7ddJxZWJnTErwk+qAH8ez0vJYvchrIWpleRwGv+CYdhL3JPzT/iKlScDyP6Nl007zD4f+EQYXkQ598YQ9rFlHcj9639w8J+lXGurnIY8sLSW5ogxE1m11iarsXNPThtN5iVO6YteaMj2vXkc4LJXfiJ2GbcCbnWRgIlaJIg3HkZSAiByqdJjztA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rsmLJpmiyjbvMy1bhSEQLRpIBdpezc5FQRZuWuew1Cs=;
- b=aDKs5I4170ckVz+UQzmfADMIs4Yw8QHPsaf4VpAcLpm/wtV8p15KFR1ahGFIYGPjD0m9TPsaBXvGERreZ6xUvxFh2BQkLZq/pWDHbz3mOobFEj+PIG6rjuLkfwN1CCGyMjtfE6SDEuVe/p1u58BwfMCMQ04kFcELl/O11yLYBeZ24VMQqj/O1lD8qNHJGP6TIgD59ZyoKiMNrmPMF+MyZdXT+48YY5fOX5WNkyUbC8GfPj0iFWmBgmqOhXBbfon6e0Aep2TlyEXRW14qPUh+DcqNvo0IoOlUM+7Ls2hUXADVxhd2pqVVgfjNDQFEpGCYt3e53drPNInMxzAiAAWE4Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=silicom-usa.com; dmarc=pass action=none
- header.from=silicom-usa.com; dkim=pass header.d=silicom-usa.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=SILICOMLTD.onmicrosoft.com; s=selector2-SILICOMLTD-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rsmLJpmiyjbvMy1bhSEQLRpIBdpezc5FQRZuWuew1Cs=;
- b=wW+K1UU9OqZ6SRk/YlWq/bIlEbRazVSChmxe8y8yF7VpkV6243CDAumOUasP9PMDLFMeVGpPw+TN8W4vgqBYoD7LgIebdt4bAXKbOcxacoqM5FDXFXPPSS5jG6TdLdsGYgUOKlI97exhEhcS8AzzU6YRdlMZxVSNgEnVQKYAvcE=
-Received: from PA4PR04MB9222.eurprd04.prod.outlook.com (2603:10a6:102:2a1::18)
- by AS8PR04MB9128.eurprd04.prod.outlook.com (2603:10a6:20b:44b::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.27; Tue, 8 Aug
- 2023 20:39:14 +0000
-Received: from PA4PR04MB9222.eurprd04.prod.outlook.com
- ([fe80::d62d:f67e:ba75:b5dc]) by PA4PR04MB9222.eurprd04.prod.outlook.com
- ([fe80::d62d:f67e:ba75:b5dc%4]) with mapi id 15.20.6652.022; Tue, 8 Aug 2023
- 20:39:14 +0000
-From:   Huibin Shi <henrys@silicom-usa.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Henry Shi <henryshi2018@gmail.com>,
-        "hbshi69@hotmail.com" <hbshi69@hotmail.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "markgross@kernel.org" <markgross@kernel.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-CC:     "hb_shi2003@yahoo.com" <hb_shi2003@yahoo.com>,
-        Wen Wang <wenw@silicom-usa.com>
-Subject: RE: [PATCH] Add Silicom Platform Driver
-Thread-Topic: [PATCH] Add Silicom Platform Driver
-Thread-Index: AQHZuZEcSTfJXOh+tEO5M8hB8nDqzq/LA4yAgAK8ytCAAYwdgIARmeKggAAFgwCAABEpoA==
-Date:   Tue, 8 Aug 2023 20:39:14 +0000
-Message-ID: <PA4PR04MB92222D4A70BC88DD24E6B8499A0DA@PA4PR04MB9222.eurprd04.prod.outlook.com>
-References: <20230718160104.2716-1-henryshi2018@gmail.com>
- <fb62b2e7-7c7c-dc2e-768d-3393f151eb32@wanadoo.fr>
- <PA4PR04MB92225B65A45868A9CBE25B999A06A@PA4PR04MB9222.eurprd04.prod.outlook.com>
- <8686c5c3-81b0-278f-d81b-0c906bac62a8@roeck-us.net>
- <PA4PR04MB922285C2DC1BB0BDBDD602B39A0DA@PA4PR04MB9222.eurprd04.prod.outlook.com>
- <c46e24e0-b054-e59f-34bc-e5ddcb93b6d8@roeck-us.net>
-In-Reply-To: <c46e24e0-b054-e59f-34bc-e5ddcb93b6d8@roeck-us.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=silicom-usa.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PA4PR04MB9222:EE_|AS8PR04MB9128:EE_
-x-ms-office365-filtering-correlation-id: c08e8f20-83a8-4c02-2238-08db984f877a
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Bik4koyaYLIcAy8t1zmyFxFwGJaYKNhvh7Xgtupq31HiumeAevVtdbE36gfIyAoG3STRV2c2C+zR+NjAlC7ae9tGXTfgoY/GdSsIuBOuXllGTSMCxrpffxt8S1I1znfXrmVZOU2m9raJabotEFHYKMshKLtQmc87s/djICf5LYUHBXPQ1TfUwS/YaSzVU6Xk7+PjoohljdEkpRqvzxcDTYusqhYA2pKBcgRYVGcABtxe7XAU/nxy6moT/0R2EujJzL1Rq2/ZJeB3FE4LMV2+mpIHQ4D+JFseRNTkIWjTtMsanZODiF5mO2MPB037vgStZOWaDmmcfSNnSKIKljIuiwE/uJQ/EJcooGOHhE7iNMSQXdloLZ9uFHaFhYwXgjvpFtzoaT78t2T21EysmIFU1Y2SZF7QHRWdkxtZ1LTkVriL27J18J9ZeoPVMUvqoabeJw8QVB5HuCf3ZiT0H6fn6zErrzGNj0I3h0ffu5D1kj+d/W2aBUaaUinstULfCiREBZFKqvqrMDWBFa4ZbjzECTnDtHCItUREZUDOcS2dPm4ArfbQbytpEJuqyUSoFArjxekQ3+08rtbObCbOi9SB/oMQovqk5/B50fnh4WqQl+ZaLQbFuS2I0C/YVzQs4soV
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9222.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(346002)(396003)(136003)(39850400004)(376002)(186006)(1800799003)(451199021)(122000001)(478600001)(45080400002)(921005)(83380400001)(66556008)(9686003)(53546011)(107886003)(6506007)(55016003)(33656002)(64756008)(41300700001)(76116006)(316002)(8676002)(4326008)(8936002)(66946007)(66446008)(2906002)(7696005)(71200400001)(54906003)(110136005)(38100700002)(66476007)(38070700005)(86362001)(7416002)(5660300002)(52536014);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?djQza081czM2ZjROdEFQMjFCaFg1WU5MMEl2cE44S1VFQ3U3aUpxOHp2WDhR?=
- =?utf-8?B?dHVzMjhDaCtoSjRlMk5haTVvelNhYU9ScktUaFpQSHdxUEZ2czJEWXhuM1Fn?=
- =?utf-8?B?RDdZUEwwbW1yNFY2VjM2bWNOVkZRbzZZeVdlb3RhNjZudjdqRnF1Q3IwVFk0?=
- =?utf-8?B?NzBoMGNiemUrZlY0MmtZMWJOWCttTGRiMXhJdzd5TUlCK1ZsUGhTNUVjZ2NL?=
- =?utf-8?B?RXJiTUpseUZWbzRYOTczeDl0cS94aUpQN2FtU3hyQ0VUeDNCNFViUDZwMnNC?=
- =?utf-8?B?cHE5U2Z6Z3F3K2NzdXFpN1dJU2VJSDlTczluTjJhTjFaV3dVZjZqZ01XdlhX?=
- =?utf-8?B?Z3laYnY1Zkk4aExXYWVmdFRvb3BrM09rZUdDclgxMDZjeWZ5ZUF0bmtiVmxD?=
- =?utf-8?B?eGFPSXg0cW9LNHhGRDJJblk1UHBqdDZZMmtPbTBRYjJFdSsxVFZSOEYwazhF?=
- =?utf-8?B?R1RwVFRTNDNROVJkMzEwQWJSa0RyUWJTeE1Pa0hCWjQ4OElmQkRaVm1zM3I5?=
- =?utf-8?B?QjAxS1ZMRDI5SExPL3JVRnBwbW56MW5LcjR6VUJoT0FJMTc3b2N3OVhScm9h?=
- =?utf-8?B?SHdvOHc1bkdNMjhsWjJDSVFqZk9saVBkLzd0TndTRFJJc1hHTVpFOEYvNjBL?=
- =?utf-8?B?VTNxU25KQTFla2cwOEtxbjNsZ1pKUTNTWVI1a3F5cGYyaEY2VFZCcVJFMVA4?=
- =?utf-8?B?THBpd0lYQWV2Y2ZBaTVHdnA3bjNCMTlaN3lpeXgzdWVCN0FlM3FaVnFTUDNp?=
- =?utf-8?B?cU1jTjdTM3hSelVVNlVYVTZrTm9qdDlQamdNU3JrOXlrVzZyUmVqM1YyUzlT?=
- =?utf-8?B?YzhIVjg2ZHJCYUd4M1N4VzZoczRmSGQwWDZVcWVKUWFyN2ZyMW44RHJpQ0dU?=
- =?utf-8?B?U3A3NFMzQVR0OXFIZEVzTjR5NVZXT08zTEEyVEsrNjU1TVBUMlZCaWNzQ004?=
- =?utf-8?B?T0ljNkVNRmUrVVBhTVlaRXlpUjZTcXM0K0RwQ2FLMXlacmdweFNRek5QN2lR?=
- =?utf-8?B?aWlwSGEvb2NkRWh3MFNNclF1clZhNFA0TTBGTzlHRnVZbUJjTHE4T3FFN2VZ?=
- =?utf-8?B?a3F6emg1T0g2Y2R1R2ZQRnAyd3B3OFRabWprSUJNR0hBOXFpTktuamtrSTk4?=
- =?utf-8?B?TjlkTHR3bW56ajh1Z1QvdHZTNVU4ZTYvRXA5Q2l2bVlKUlJ6RjF6U1liWEhJ?=
- =?utf-8?B?R1ZPdzZBNGw1S2JFS0lMR0l0TU0vNWNhbVhFUmNlUDA2MllkSWs2QkkzV3Nx?=
- =?utf-8?B?cmRBb1RTR2ZIQ2czMXhNZ2lXMXdKVjE2Rm1nRzQ5ZXpyRktXSjh4NEJDVFZS?=
- =?utf-8?B?WkkwLzVmaHhzUEcyMDI1WEJrNDBFd09mclVnMTFwQmlWYlMzNTNnNjVRUnNN?=
- =?utf-8?B?RGFQV29zeVNRbW5OTkxkQzlsWkNEOXJoeFJEZGxBMkpMR2xPT3Q5T1dCR1pO?=
- =?utf-8?B?L1BDeFh5U1NDMmJheGlCZys4VTZiSDQ4UzJUaGhpdzlKUVFJVXFBYlowbzlO?=
- =?utf-8?B?UWhvMy82YXlrblRBS3RPRDRZb3NmL2VGSUFWK3VkTnVNKzFIU3VqMEc0bDdx?=
- =?utf-8?B?bGdDMjcvdWkvZnJ0Q0syNk9rSFVXQzVFd04yelI2V1orSXNiNkNCQWR1RS9W?=
- =?utf-8?B?UHdoUFpFN0pLczE2NDB4YmxraS8zdEM2TjFUdjVEZVYzVVpiZ3QrUkF6dHVR?=
- =?utf-8?B?U3ozd1pRQXpYNnVUWCt2c2MwL0xseTFyYWEwN2k3M0kwbjdyMElFMDNaNmNk?=
- =?utf-8?B?Zk9PcE9kMkQvT1Bud281bEwyK3ZLMUZuR3NLRm5rT2JEM1hZNnpxN3F4ZXhU?=
- =?utf-8?B?UmgrTGR4cE9GOFRpRFl4OW5qb2x0WU9PZHVCWHFRY0hvUnlPb1RhOXd5VlJl?=
- =?utf-8?B?ZjRaK0xuemswRnNMU2pkK3h0WDlnWEFOcUsybjN2Sm9ZZlNLUzVSbjVZMGNz?=
- =?utf-8?B?M1E0SGlJb01XTXl4N0MyYVhZMUgrKzJHSDBXaXhPSHN0clZrTmprb1hHR1N2?=
- =?utf-8?B?K3htMW9jQUVjaXBiN0N3MkJMb1RvdmpoTDYzYW9LVlowTTZ0Rk96TDlRVjlk?=
- =?utf-8?B?UTM3blZmT2lQQ3E5UW5sTHNwZ0pQbkU4QmlPdWF2akRtK1l0b3FlaVlIOTlB?=
- =?utf-8?B?a0VvcDFrcDg4eE1RNG5uRmpEOTdHR1JjLzVUQkdEekpWUUlTQjhCZUh5ZElF?=
- =?utf-8?Q?bmnwfzVtn2ETZpXcrdLROq5BDV3I80GpIn0H5Q7nW8xo?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S236220AbjHHVQ3 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Aug 2023 17:16:29 -0400
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD94212587;
+        Tue,  8 Aug 2023 13:15:53 -0700 (PDT)
+Received: from pps.filterd (m0150245.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 378HsB2N004465;
+        Tue, 8 Aug 2023 20:15:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pps0720; bh=uJ7RzQT3zXD+UEmtt+D+6A5jLOijAAO8k6MEF+PEAxs=;
+ b=Lgi+MEnUMxSTHZ4SDD++JNJMFz9GccbLG5s2LvkccmX54/FEojk8ivUUhdKNgwDPXxn2
+ y6GtlIIc3mVs1WsrAaCnet3lAEBtsbh6YNjudoDPaqXDgE2nnl0Nz5OtDCL9AZOMukq4
+ 1gIOtiYWegW1Be1aXPfeLGAjpPu27ERwf3pPcbnO9jADcHv0ppdfDuc7zADiXcHSbYmt
+ TegKxIAn6pkwYsTiMUgO1pW40DSDuNkr1hLlH0zh2yCDTkBTp62uXmE2S23FAye4e59R
+ 1L+GfuUlU28JzTbiF34dO4qKA1Ro6zz136hLJ5M4m1gN+sQ89A2tcWt+dDrA5hAnMeDG Xg== 
+Received: from p1lg14879.it.hpe.com ([16.230.97.200])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3sbtgvh1g5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Aug 2023 20:15:14 +0000
+Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 91050D2D3;
+        Tue,  8 Aug 2023 20:15:13 +0000 (UTC)
+Received: from swahl-home.5wahls.com (unknown [16.231.227.36])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTPS id 71002810615;
+        Tue,  8 Aug 2023 20:15:11 +0000 (UTC)
+Date:   Tue, 8 Aug 2023 15:15:09 -0500
+From:   Steve Wahl <steve.wahl@hpe.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Arjan van de Ven <arjan@linux.intel.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        James Smart <james.smart@broadcom.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Huang Rui <ray.huang@amd.com>, Juergen Gross <jgross@suse.com>,
+        Steve Wahl <steve.wahl@hpe.com>,
+        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
+        Russ Anderson <russ.anderson@hpe.com>
+Subject: Re: [patch v2 16/38] x86/apic: Use u32 for [gs]et_apic_id()
+Message-ID: <ZNKiTR5eytSLFN28@swahl-home.5wahls.com>
+References: <20230728105650.565799744@linutronix.de>
+ <20230728120930.562193563@linutronix.de>
 MIME-Version: 1.0
-X-OriginatorOrg: silicom-usa.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9222.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c08e8f20-83a8-4c02-2238-08db984f877a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Aug 2023 20:39:14.5787
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c9e326d8-ce47-4930-8612-cc99d3c87ad1
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FhNDWLbLKnrIokmecxLKbN0dSsXBpNmeUMkxF9hbH4mL2CUKa/H1AO002RM7PN0dn2g+OdtBeQzGHGvKhlRyIA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB9128
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230728120930.562193563@linutronix.de>
+X-Proofpoint-GUID: k0Ciz9iHQQC9SP3ewSrVEYKpz_fV04Zi
+X-Proofpoint-ORIG-GUID: k0Ciz9iHQQC9SP3ewSrVEYKpz_fV04Zi
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-08_18,2023-08-08_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ clxscore=1015 priorityscore=1501 impostorscore=0 suspectscore=0
+ bulkscore=0 mlxscore=0 mlxlogscore=999 spamscore=0 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2308080179
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-SSBtZWFuIHRoaXMgaXMgdGhlIGtlcm5lbCBpbXBsZW1lbnRhdGlvbiBvZiBkZXZtX2ttZW1kdXAo
-KSBmdW5jdGlvbiBpbiAvZHJpdmVyL2Jhc2UvZGV2cmVzLmMuIA0KDQpIZW5yeQ0KLS0tLS1Pcmln
-aW5hbCBNZXNzYWdlLS0tLS0NCkZyb206IEd1ZW50ZXIgUm9lY2sgPGdyb2VjazdAZ21haWwuY29t
-PiBPbiBCZWhhbGYgT2YgR3VlbnRlciBSb2Vjaw0KU2VudDogVHVlc2RheSwgQXVndXN0IDgsIDIw
-MjMgMzozNiBQTQ0KVG86IEh1aWJpbiBTaGkgPGhlbnJ5c0BzaWxpY29tLXVzYS5jb20+OyBDaHJp
-c3RvcGhlIEpBSUxMRVQgPGNocmlzdG9waGUuamFpbGxldEB3YW5hZG9vLmZyPjsgSGVucnkgU2hp
-IDxoZW5yeXNoaTIwMThAZ21haWwuY29tPjsgaGJzaGk2OUBob3RtYWlsLmNvbTsgdGdseEBsaW51
-dHJvbml4LmRlOyBtaW5nb0ByZWRoYXQuY29tOyBicEBhbGllbjguZGU7IGRhdmUuaGFuc2VuQGxp
-bnV4LmludGVsLmNvbTsgeDg2QGtlcm5lbC5vcmc7IGhwYUB6eXRvci5jb207IGhkZWdvZWRlQHJl
-ZGhhdC5jb207IG1hcmtncm9zc0BrZXJuZWwub3JnOyBqZGVsdmFyZUBzdXNlLmNvbTsgbGludXgt
-a2VybmVsQHZnZXIua2VybmVsLm9yZzsgcGxhdGZvcm0tZHJpdmVyLXg4NkB2Z2VyLmtlcm5lbC5v
-cmc7IGxpbnV4LWh3bW9uQHZnZXIua2VybmVsLm9yZw0KQ2M6IGhiX3NoaTIwMDNAeWFob28uY29t
-OyBXZW4gV2FuZyA8d2Vud0BzaWxpY29tLXVzYS5jb20+DQpTdWJqZWN0OiBSZTogW1BBVENIXSBB
-ZGQgU2lsaWNvbSBQbGF0Zm9ybSBEcml2ZXINCg0KQ2F1dGlvbjogVGhpcyBpcyBhbiBleHRlcm5h
-bCBlbWFpbC4gUGxlYXNlIHRha2UgY2FyZSB3aGVuIGNsaWNraW5nIGxpbmtzIG9yIG9wZW5pbmcg
-YXR0YWNobWVudHMuDQoNCg0KT24gOC84LzIzIDEyOjE5LCBIdWliaW4gU2hpIHdyb3RlOg0KPiBH
-dWVudGVyLA0KPg0KPiBIZXJlIGlzIHRoZSBpbXBsZW1lbnRhdGlvbiBvZiAgZGV2bV9rbWVtZHVw
-KCksICpzcmMgaXMgdGhlIGV4dHJhIA0KPiBhcmd1bWVudA0KPg0KPiB2b2lkICpkZXZtX2ttZW1k
-dXAoc3RydWN0IGRldmljZSAqZGV2LCBjb25zdCB2b2lkICpzcmMsIHNpemVfdCBsZW4sIA0KPiBn
-ZnBfdCBnZnApIHsNCj4gICAgICAgdm9pZCAqcDsNCj4NCj4gICAgICAgcCA9IGRldm1fa21hbGxv
-YyhkZXYsIGxlbiwgZ2ZwKTsNCj4gICAgICAgaWYgKHApDQo+ICAgICAgICAgICAgICAgbWVtY3B5
-KHAsIHNyYywgbGVuKTsNCj4NCj4gICAgICAgcmV0dXJuIHA7DQo+IH0NCj4NCg0KU28geW91IGRv
-bid0IHdhbnQgdG8gdXNlIGRldm1fa21lbWR1cCgpIGJlY2F1c2Ugb2YgaXRzICdzcmMnIGFyZ3Vt
-ZW50LCBhbmQgaW5zdGVhZCByZS1pbXBsZW1lbnQgaXQgbG9jYWxseSBieSB1c2luZyBkZXZtX2t6
-YWxsb2MoKSBmb2xsb3dlZCBieSBtZW1jcHkoKSA/IFJlYWxseSA/DQoNCkd1ZW50ZXINCg0K
+Reviewed-by: Steve Wahl <steve.wahl@hpe.com>
+
+On Fri, Jul 28, 2023 at 02:13:02PM +0200, Thomas Gleixner wrote:
+> APIC IDs are used with random data types u16, u32, int, unsigned int,
+> unsigned long.
+> 
+> Make it all consistently use u32 because that reflects the hardware
+> register width.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> ---
+>  arch/x86/include/asm/apic.h          |   14 ++------------
+>  arch/x86/kernel/apic/apic_flat_64.c  |    4 ++--
+>  arch/x86/kernel/apic/apic_noop.c     |    2 +-
+>  arch/x86/kernel/apic/apic_numachip.c |    8 ++++----
+>  arch/x86/kernel/apic/bigsmp_32.c     |    2 +-
+>  arch/x86/kernel/apic/local.h         |    4 ++--
+>  arch/x86/kernel/apic/probe_32.c      |   10 ++++++++++
+>  arch/x86/kernel/apic/x2apic_phys.c   |    4 ++--
+>  arch/x86/kernel/apic/x2apic_uv_x.c   |    2 +-
+>  arch/x86/xen/apic.c                  |    4 ++--
+>  10 files changed, 27 insertions(+), 27 deletions(-)
+> 
+> --- a/arch/x86/include/asm/apic.h
+> +++ b/arch/x86/include/asm/apic.h
+> @@ -298,8 +298,8 @@ struct apic {
+>  	u32	(*cpu_present_to_apicid)(int mps_cpu);
+>  	u32	(*phys_pkg_id)(u32 cpuid_apic, int index_msb);
+>  
+> -	u32	(*get_apic_id)(unsigned long x);
+> -	u32	(*set_apic_id)(unsigned int id);
+> +	u32	(*get_apic_id)(u32 id);
+> +	u32	(*set_apic_id)(u32 apicid);
+>  
+>  	/* wakeup_secondary_cpu */
+>  	int	(*wakeup_secondary_cpu)(int apicid, unsigned long start_eip);
+> @@ -493,16 +493,6 @@ static inline bool lapic_vector_set_in_i
+>  	return !!(irr & (1U << (vector % 32)));
+>  }
+>  
+> -static inline unsigned default_get_apic_id(unsigned long x)
+> -{
+> -	unsigned int ver = GET_APIC_VERSION(apic_read(APIC_LVR));
+> -
+> -	if (APIC_XAPIC(ver) || boot_cpu_has(X86_FEATURE_EXTD_APICID))
+> -		return (x >> 24) & 0xFF;
+> -	else
+> -		return (x >> 24) & 0x0F;
+> -}
+> -
+>  /*
+>   * Warm reset vector position:
+>   */
+> --- a/arch/x86/kernel/apic/apic_flat_64.c
+> +++ b/arch/x86/kernel/apic/apic_flat_64.c
+> @@ -56,12 +56,12 @@ flat_send_IPI_mask_allbutself(const stru
+>  	_flat_send_IPI_mask(mask, vector);
+>  }
+>  
+> -static unsigned int flat_get_apic_id(unsigned long x)
+> +static u32 flat_get_apic_id(u32 x)
+>  {
+>  	return (x >> 24) & 0xFF;
+>  }
+>  
+> -static u32 set_apic_id(unsigned int id)
+> +static u32 set_apic_id(u32 id)
+>  {
+>  	return (id & 0xFF) << 24;
+>  }
+> --- a/arch/x86/kernel/apic/apic_noop.c
+> +++ b/arch/x86/kernel/apic/apic_noop.c
+> @@ -30,7 +30,7 @@ static void noop_apic_icr_write(u32 low,
+>  static int noop_wakeup_secondary_cpu(int apicid, unsigned long start_eip) { return -1; }
+>  static u64 noop_apic_icr_read(void) { return 0; }
+>  static u32 noop_phys_pkg_id(u32 cpuid_apic, int index_msb) { return 0; }
+> -static unsigned int noop_get_apic_id(unsigned long x) { return 0; }
+> +static u32 noop_get_apic_id(u32 apicid) { return 0; }
+>  static void noop_apic_eoi(void) { }
+>  
+>  static u32 noop_apic_read(u32 reg)
+> --- a/arch/x86/kernel/apic/apic_numachip.c
+> +++ b/arch/x86/kernel/apic/apic_numachip.c
+> @@ -25,7 +25,7 @@ static const struct apic apic_numachip1;
+>  static const struct apic apic_numachip2;
+>  static void (*numachip_apic_icr_write)(int apicid, unsigned int val) __read_mostly;
+>  
+> -static unsigned int numachip1_get_apic_id(unsigned long x)
+> +static u32 numachip1_get_apic_id(u32 x)
+>  {
+>  	unsigned long value;
+>  	unsigned int id = (x >> 24) & 0xff;
+> @@ -38,12 +38,12 @@ static unsigned int numachip1_get_apic_i
+>  	return id;
+>  }
+>  
+> -static u32 numachip1_set_apic_id(unsigned int id)
+> +static u32 numachip1_set_apic_id(u32 id)
+>  {
+>  	return (id & 0xff) << 24;
+>  }
+>  
+> -static unsigned int numachip2_get_apic_id(unsigned long x)
+> +static u32 numachip2_get_apic_id(u32 x)
+>  {
+>  	u64 mcfg;
+>  
+> @@ -51,7 +51,7 @@ static unsigned int numachip2_get_apic_i
+>  	return ((mcfg >> (28 - 8)) & 0xfff00) | (x >> 24);
+>  }
+>  
+> -static u32 numachip2_set_apic_id(unsigned int id)
+> +static u32 numachip2_set_apic_id(u32 id)
+>  {
+>  	return id << 24;
+>  }
+> --- a/arch/x86/kernel/apic/bigsmp_32.c
+> +++ b/arch/x86/kernel/apic/bigsmp_32.c
+> @@ -13,7 +13,7 @@
+>  
+>  #include "local.h"
+>  
+> -static unsigned bigsmp_get_apic_id(unsigned long x)
+> +static u32 bigsmp_get_apic_id(u32 x)
+>  {
+>  	return (x >> 24) & 0xFF;
+>  }
+> --- a/arch/x86/kernel/apic/local.h
+> +++ b/arch/x86/kernel/apic/local.h
+> @@ -15,8 +15,8 @@
+>  
+>  /* X2APIC */
+>  void __x2apic_send_IPI_dest(unsigned int apicid, int vector, unsigned int dest);
+> -unsigned int x2apic_get_apic_id(unsigned long id);
+> -u32 x2apic_set_apic_id(unsigned int id);
+> +u32 x2apic_get_apic_id(u32 id);
+> +u32 x2apic_set_apic_id(u32 id);
+>  u32 x2apic_phys_pkg_id(u32 initial_apicid, int index_msb);
+>  
+>  void x2apic_send_IPI_all(int vector);
+> --- a/arch/x86/kernel/apic/probe_32.c
+> +++ b/arch/x86/kernel/apic/probe_32.c
+> @@ -23,6 +23,16 @@ static u32 default_phys_pkg_id(u32 cpuid
+>  	return cpuid_apic >> index_msb;
+>  }
+>  
+> +static u32 default_get_apic_id(u32 x)
+> +{
+> +	unsigned int ver = GET_APIC_VERSION(apic_read(APIC_LVR));
+> +
+> +	if (APIC_XAPIC(ver) || boot_cpu_has(X86_FEATURE_EXTD_APICID))
+> +		return (x >> 24) & 0xFF;
+> +	else
+> +		return (x >> 24) & 0x0F;
+> +}
+> +
+>  /* should be called last. */
+>  static int probe_default(void)
+>  {
+> --- a/arch/x86/kernel/apic/x2apic_phys.c
+> +++ b/arch/x86/kernel/apic/x2apic_phys.c
+> @@ -124,12 +124,12 @@ static int x2apic_phys_probe(void)
+>  	return apic == &apic_x2apic_phys;
+>  }
+>  
+> -unsigned int x2apic_get_apic_id(unsigned long id)
+> +u32 x2apic_get_apic_id(u32 id)
+>  {
+>  	return id;
+>  }
+>  
+> -u32 x2apic_set_apic_id(unsigned int id)
+> +u32 x2apic_set_apic_id(u32 id)
+>  {
+>  	return id;
+>  }
+> --- a/arch/x86/kernel/apic/x2apic_uv_x.c
+> +++ b/arch/x86/kernel/apic/x2apic_uv_x.c
+> @@ -780,7 +780,7 @@ static void uv_send_IPI_all(int vector)
+>  	uv_send_IPI_mask(cpu_online_mask, vector);
+>  }
+>  
+> -static u32 set_apic_id(unsigned int id)
+> +static u32 set_apic_id(u32 id)
+>  {
+>  	return id;
+>  }
+> --- a/arch/x86/xen/apic.c
+> +++ b/arch/x86/xen/apic.c
+> @@ -33,13 +33,13 @@ static unsigned int xen_io_apic_read(uns
+>  	return 0xfd;
+>  }
+>  
+> -static u32 xen_set_apic_id(unsigned int x)
+> +static u32 xen_set_apic_id(u32 x)
+>  {
+>  	WARN_ON(1);
+>  	return x;
+>  }
+>  
+> -static unsigned int xen_get_apic_id(unsigned long x)
+> +static u32 xen_get_apic_id(u32 x)
+>  {
+>  	return ((x)>>24) & 0xFFu;
+>  }
+> 
+
+-- 
+Steve Wahl, Hewlett Packard Enterprise
