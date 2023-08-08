@@ -2,90 +2,184 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E801BC04A6A
-	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Aug 2023 19:10:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5550C04A94
+	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Aug 2023 19:14:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234622AbjHHTK2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 8 Aug 2023 15:10:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42942 "EHLO
+        id S235235AbjHHTON (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 8 Aug 2023 15:14:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233734AbjHHTKI (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Aug 2023 15:10:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A96B30A40;
-        Tue,  8 Aug 2023 09:31:49 -0700 (PDT)
+        with ESMTP id S231650AbjHHTNx (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Aug 2023 15:13:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 447C5F1DA5;
+        Tue,  8 Aug 2023 09:36:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 42BDB6242E;
-        Tue,  8 Aug 2023 08:10:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F7D8C433C8;
-        Tue,  8 Aug 2023 08:10:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7209A624E7;
+        Tue,  8 Aug 2023 11:47:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 862FAC433C8;
+        Tue,  8 Aug 2023 11:47:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691482231;
-        bh=S2XJDdh0DarfOWU0otgnt+QQKAmvWNfqK2c/4JVKZ1o=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=q7YVjgYHCPEvv9Mgunx2m9+gZ8OZEE/udTwzkebBLO3w4e11UgTWdA134OtMlyNVk
-         VEq0hsRs2KL5R1WfHxBMbg4BPHSL4OX0poTmNLFBogaO0lCSONPtWr3hqFFGa96NZD
-         +k12kmSI9JuPPeyTBqMFx5S/txOhKF7MRWfd1g9jxJN6oWm7f8ZsoiIItJ3FI76aGq
-         XtVwMzclF7Moinrik4wRG6j3Xx6bFI07YFDtmh0F/gFrlpPxzGapZ2woPOVLPPC13V
-         sbbG84GC1XclyzWrQNC9X4oh1BWC88sPT6n5pgfxYuR5E/WOxqGzdr2HNLb+E1v1qz
-         KUWQKjFmkzOYA==
-Message-ID: <4c682c3d-7066-108f-4e40-8127adf160e0@kernel.org>
-Date:   Tue, 8 Aug 2023 10:10:26 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH 1/2] hwmon: Add driver for EMC181x temperature sensors
-Content-Language: en-US
-To:     Mathew McBride <matt@traverse.com.au>,
-        Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>,
+        s=k20201202; t=1691495223;
+        bh=fsKdjuu1D9SXsD/rabsdXdoZeYRFssXezltWuSzdU6Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uT15AzUXG4SSVrwWwG7RVftiqLMX1mFVZjr8iQCIomfGTWXxZWZ61YyCupj82IU6R
+         wSOONNdw4uMFZiUlTDTFbPO821VYPpppz+Tdpaeb9lGf3+pDQpIHtbMT4ClfT6R27A
+         L+xKH3RKiY3NOA8v4HQc1w71115obvSLl1xAh0WITFPtdvVKUclJy8e0QK+o8vUvYc
+         8PEE6jNs2r5/RVZo70o++qRzhdSMtRoH6wNHCzOfCJBRZTGxUPCuq8zzKcRA438MOB
+         A04X27o1cI+nHRggTZcsxozZtIyEZV0C/SIDbLuF9ZxetDo2UVDuMKsxOMSR5gU+uP
+         lxn+58xw9mPZQ==
+Date:   Tue, 8 Aug 2023 12:46:59 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-References: <20230808013157.80913-1-mark.tomlinson@alliedtelesis.co.nz>
- <0248d597-b72a-5b7c-63a4-6d72384f9854@kernel.org>
- <b84c2fba-1bbe-4842-a861-525784d8a361@app.fastmail.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <b84c2fba-1bbe-4842-a861-525784d8a361@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        krzysztof.kozlowski+dt@linaro.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] dt-bindings: hwmon: Add Infineon TDA38640
+Message-ID: <20230808-stand-cheddar-b76b0b7509a0@spud>
+References: <20230802193155.2170935-1-Naresh.Solanki@9elements.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="wOzG1MUcVESOEa63"
+Content-Disposition: inline
+In-Reply-To: <20230802193155.2170935-1-Naresh.Solanki@9elements.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 08/08/2023 09:54, Mathew McBride wrote:
-> Hi Krzysztof,
-> 
-> On Tue, Aug 8, 2023, at 5:38 PM, Krzysztof Kozlowski wrote:
->> On 08/08/2023 03:31, Mark Tomlinson wrote:
->>> This patch adds a HWMON driver for the EMC1812, EMC1813, EMC1814,
->>> EMC1815 and EMC1833 temperature sensor chips from microchip. Does not
->>> currently support the alert outputs.
->>>
->>> Signed-off-by: Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
->>> Co-developed-by: Mathew McBride <matt@traverse.com.au>
->>> Signed-off-by: Mathew McBride <matt@traverse.com.au>
->>
->> The order of these tags is clearly not correct. It says Mathew is
->> sending, but you are not Mathew?
-> 
-> Just to clarify, Mark has developed this version based off something I wrote a while ago:
-> 
-> https://gitlab.com/traversetech/ls1088firmware/traverse-sensors/-/blob/master/emc181x/emc181x.c?ref_type=heads
-> 
-> Hence my copyright is listed in the header.
-> 
-> I advised him to list the authors in that order following the example in the kernel's "submitting patches" guide [2] which provides an example of such a situation:
-> 
-> https://docs.kernel.org/process/submitting-patches.html#when-to-use-acked-by-cc-and-co-developed-by
 
-The last entry is:
-Signed-off-by: From Author <from@author.example.org>
+--wOzG1MUcVESOEa63
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-So it is expected to be Mark.
+On Wed, Aug 02, 2023 at 09:31:51PM +0200, Naresh Solanki wrote:
+> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+>=20
+> The TDA38640 chip has different output control mechanisms depending on
+> its mode of operation. When the chip is in SVID mode, only
+> hardware-based output control is supported via ENABLE pin. However, when
+> it operates in PMBus mode, software control works perfectly.
+>=20
+> To enable software control as a workaround in SVID mode, add the DT
+> property 'infineon,en-svid-control'. This property will enable the
+> workaround, which utilizes ENABLE pin polarity flipping for output when
+> the chip is in SVID mode.
 
-Best regards,
-Krzysztof
+Why do you need a custom property for this? How come it is not possible
+to determine what bus you are on?
 
+Thanks,
+Conor.
+
+>=20
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> ---
+>  .../hwmon/pmbus/infineon,tda38640.yaml        | 51 +++++++++++++++++++
+>  .../devicetree/bindings/trivial-devices.yaml  |  2 -
+>  2 files changed, 51 insertions(+), 2 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/infineo=
+n,tda38640.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38=
+640.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.=
+yaml
+> new file mode 100644
+> index 000000000000..c5924ddf1b47
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.yaml
+> @@ -0,0 +1,51 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +
+> +$id: http://devicetree.org/schemas/hwmon/pmbus/infineon,tda38640.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Infineon TDA38640 Synchronous Buck Regulator with SVID and I2C
+> +
+> +maintainers:
+> +  - Naresh Solanki <naresh.solanki@9elements.com>
+> +
+> +description: |
+> +  The Infineon TDA38640 is a 40A Single-voltage Synchronous Buck
+> +  Regulator with SVID and I2C designed for Industrial use.
+> +
+> +  Datasheet: https://www.infineon.com/dgdl/Infineon-TDA38640-0000-DataSh=
+eet-v02_04-EN.pdf?fileId=3D8ac78c8c80027ecd018042f2337f00c9
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - infineon,tda38640
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  infineon,en-svid-control:
+> +    description: |
+> +      When enabled, it allows the chip to utilize workaround for
+> +      software control of output when operating in SVID mode where
+> +      hardware-based output control is the default behavior.
+> +    type: boolean
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells =3D <1>;
+> +        #size-cells =3D <0>;
+> +
+> +        tda38640@40 {
+> +            compatible =3D "infineon,tda38640";
+> +            reg =3D <0x40>;
+> +        };
+> +    };
+> +
+> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Doc=
+umentation/devicetree/bindings/trivial-devices.yaml
+> index 40bc475ee7e1..86c7d34f63bf 100644
+> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> @@ -151,8 +151,6 @@ properties:
+>            - infineon,slb9645tt
+>              # Infineon SLB9673 I2C TPM 2.0
+>            - infineon,slb9673
+> -            # Infineon TDA38640 Voltage Regulator
+> -          - infineon,tda38640
+>              # Infineon TLV493D-A1B6 I2C 3D Magnetic Sensor
+>            - infineon,tlv493d-a1b6
+>              # Infineon Multi-phase Digital VR Controller xdpe11280
+>=20
+> base-commit: cb7022b8976e3c4d12cea2e7bb820a2944e2fd7b
+> --=20
+> 2.41.0
+>=20
+
+--wOzG1MUcVESOEa63
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZNIrMwAKCRB4tDGHoIJi
+0oihAQDj+TOikxFnTJr9hRj3GdkLvkr1bJiGSGFjK1mCCOJCbAEA3Dq+TaOnDgP+
+M79wjQU9b0QTgFchLF7bORvLXSTn1QI=
+=mWrL
+-----END PGP SIGNATURE-----
+
+--wOzG1MUcVESOEa63--
