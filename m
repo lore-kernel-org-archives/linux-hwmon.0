@@ -2,413 +2,280 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1060C001DB
-	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Aug 2023 01:33:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DB02C001DB
+	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Aug 2023 02:35:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbjHHBc7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 7 Aug 2023 21:32:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33458 "EHLO
+        id S230040AbjHHCfi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 7 Aug 2023 22:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230052AbjHHBcz (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 7 Aug 2023 21:32:55 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8554E1FEB
-        for <linux-hwmon@vger.kernel.org>; Mon,  7 Aug 2023 18:32:32 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 68AFC2C023C;
-        Tue,  8 Aug 2023 13:32:23 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1691458343;
-        bh=odut2rMybDUaZwiPlXJk/jPXgTPLSa53DePx4z5p/hs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=BvZYiafPFnXHdRPanRiCO1KOgc/lfBA+CAAwzgk58AsILf3fCAr7ahZgbe3QvEWU4
-         27z7PYDx9BY8kFgdnUzthXgU9A5I7v7jRvoGaKcolzZ44Y6HqfhkkJIDcrFFxoZOOa
-         GKgm8aEGuxHgGWgm2ZF8VGsFoHIeY4Y/rptV7c6kfaKfRdQppHWM0AaCH0UT0JViYa
-         mcDEY5GNTWdgFRakxT+6ldwSJ77n/I4uJt87xp4o2Qb7NaH7cI9TFw2M0jFm3iKXk2
-         f40WTfW23VLOUGjqt80dK1dw8H0yJA/ouaXK+WESNLJJ2h/gDUAWWTfPDXWDLf924D
-         St4u/daosoN3w==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B64d19b270000>; Tue, 08 Aug 2023 13:32:23 +1200
-Received: from markto-dl.ws.atlnz.lc (markto-dl.ws.atlnz.lc [10.33.23.10])
-        by pat.atlnz.lc (Postfix) with ESMTP id 43A4F13ED7B;
-        Tue,  8 Aug 2023 13:32:23 +1200 (NZST)
-Received: by markto-dl.ws.atlnz.lc (Postfix, from userid 1155)
-        id 4702644495; Tue,  8 Aug 2023 13:32:23 +1200 (NZST)
-From:   Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Mathew McBride <matt@traverse.com.au>,
-        Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
-Subject: [PATCH 1/2] hwmon: Add driver for EMC181x temperature sensors
-Date:   Tue,  8 Aug 2023 13:31:56 +1200
-Message-ID: <20230808013157.80913-1-mark.tomlinson@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.41.0
-MIME-Version: 1.0
+        with ESMTP id S229604AbjHHCfh (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 7 Aug 2023 22:35:37 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2048.outbound.protection.outlook.com [40.107.255.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B7F172A;
+        Mon,  7 Aug 2023 19:35:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kt6Admzr68UvQTGMbqITfFCRx1vfyPPh8ASk/xiPG21WGWb7RrF+HLrrbOzxiunzFEIlSj9oTDtlmvMdr34u/Owz8hEknxAyIBNp6QKi8JG46VCvrtRmdclEIRmMnVBiFYTS113oaS9mQiEDAcQxFH+488bLPXnt5Fkmmn6C7XAuuNzF78DwSgsuC+tgfkt1zduj2vq/5ztHxWG9j2ZUkpNqcY/xtX2YCOxcqzasbmEcd7Kg3KbFC/Kx+3It8xjz3ECtbqJvs4G661pmACJnVd9DjE0sEIKAEJSDvDoCm9ZymrQ8YV7vHV0wlV2nLQ55PlhDOofiGxx1mDztvsUUFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RjPH0KAouhb2NIocEFqGc6WvN1g4DLAOU7UxQEFC7uA=;
+ b=NrWpSlKGPFJztsHWRCZptNmzhHFkbcxCZC5hcplY4A8GrkPr2LNwNa9b/b5ogj3IinkXZqAKyUnlFmTu2/6iet0zHYS1M3subo0TzqNoLkSVHHPRdB2OI8wtdlafS1jN3woYYkQ4h0vKYxZIPlXS5mm9eO6pmz459Y54KmT2leeEquBowtJlhwjJSwIw4MWtGdH3RSjDzrVhlPXd/J0NzvJb1kRdRVEDZdzqmq0TqLXVNpKtD6l7J2sidtJMulMzH6mBnwE7kRxuM+CEMvVvSvkg21mgOmm99SlPTS+wv6SeCr8ueVP88uatonId3QCLfTlWMCgJkiDL6PPS62unjA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wiwynn.com; dmarc=pass action=none header.from=wiwynn.com;
+ dkim=pass header.d=wiwynn.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RjPH0KAouhb2NIocEFqGc6WvN1g4DLAOU7UxQEFC7uA=;
+ b=bpLcTpdcfNGbnwPIMZQKGPRodDb8e2dD/eeG1maWrcIJkXVv4kCfKweVHLNypAJKx9C3PYq/ArsnNt2KmxXGrW2/t4GdjtJft2lTFfO3o67ozEaFmbO67tjw3vfCO9PH0CheMw6UJcrD0D3kjedwDQacbC0xWlIP5K4tchil9+xgsrWhOabLwEwrrYBV80zvs+p4sQIWF5FW+BfVODh1+N0JE8lpwpR22qsX/87KY5ZdFD130OjapVYc+sYkjASxRuCQXG0/YY/FkY/twg49YmI4UntIznjghWgffmGSGZbV27T6GgC4VAu7JYLANNaU9gkr7yM/hG+sqevc57TaYA==
+Received: from SG2PR04MB5543.apcprd04.prod.outlook.com (2603:1096:4:172::14)
+ by SEZPR04MB6947.apcprd04.prod.outlook.com (2603:1096:101:e3::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.26; Tue, 8 Aug
+ 2023 02:35:25 +0000
+Received: from SG2PR04MB5543.apcprd04.prod.outlook.com
+ ([fe80::819:57b:cc1b:f5f0]) by SG2PR04MB5543.apcprd04.prod.outlook.com
+ ([fe80::819:57b:cc1b:f5f0%7]) with mapi id 15.20.6652.026; Tue, 8 Aug 2023
+ 02:35:25 +0000
+From:   Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>
+To:     Rob Herring <robh@kernel.org>,
+        Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>
+CC:     "patrick@stwcx.xyz" <patrick@stwcx.xyz>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 1/2] dt-bindings: hwmon: Add lltc ltc4286 driver bindings
+Thread-Topic: [PATCH 1/2] dt-bindings: hwmon: Add lltc ltc4286 driver bindings
+Thread-Index: AQHZvhZd1wsVsRaNXkO6Clu94rA/A6/MRJWAgBN/aUA=
+Date:   Tue, 8 Aug 2023 02:35:25 +0000
+Message-ID: <SG2PR04MB55437853C9DDAE2DB6E51A79A10DA@SG2PR04MB5543.apcprd04.prod.outlook.com>
+References: <20230424101352.28117-1-Delphine_CC_Chiu@Wiwynn.com>
+ <20230724100514.1028061-1-Delphine_CC_Chiu@Wiwynn.com>
+ <20230726164401.GA1563534-robh@kernel.org>
+In-Reply-To: <20230726164401.GA1563534-robh@kernel.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wiwynn.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SG2PR04MB5543:EE_|SEZPR04MB6947:EE_
+x-ms-office365-filtering-correlation-id: 141cf1d8-00ab-4b9f-af5d-08db97b81ede
+x-ms-exchange-atpmessageproperties: SA
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 1dO0bwFmaJk9xqFw12pN2RpMnLO9h0Mkm7Ls+XE2+Toi3uooZZvqFqzfIDuP53Qab6iIepqLk975M9Z+a2ILwa94LiBrr9RWZD07iRUU+xAKeD8ri9eLv5YYFUvmYXakQe6sPjBsVMzv2Fpo9eHYL67iYz3KP7LEhHeXwncs3/eP8K3PTMH19Rb+OHz4A7ZqcUnYnt1urhVb4CPGQBPbu8p5dcdnbWLxRA6RNvjOp+TWZ6KZiZGt8Ss96gTypmgijmTZoYVRshOjyOuJo3ca4F6BlMsyI2G5AXI2aJ9IfGm/gqHHTkVnMo++xJ/+wGAAz/ol/FebAKOpKe7w+TFG87gXhpP94cnQwtM516NWbfVkBif1S9Q+bWA+xB2txVOpCjQ2gUTlzEMYCZ+YKcLNIrcQ3R4KDaWzlbmcJgT9TPVQMCTn71GjrpSippJoT9Kdsin/dLBhMz2M4kWoi9HmvxtM654ORIeRz/1NnD5gNpbq1fMVcs55xpEFc+TUUdWYF6fsjl5ti4MjtfWSnRjz4xxFS4oF1ROYXmmI7jO84I2u3JXzlIw3WTg9XLelJny5mQ0CkviMQQKHFDXrIrnTU5NHucmxlySpYzh1tAMFcaldyn9hnh0babMFL5BCcQwneJFYNneoJgBjt1KMqktZGZR5A3u+mcGsnW6uRwxHmzjcvGPv4nNUihExjTnTwNOs
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR04MB5543.apcprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(136003)(39860400002)(366004)(376002)(90011799007)(451199021)(90021799007)(1800799003)(186006)(9686003)(26005)(6506007)(55016003)(53546011)(110136005)(54906003)(38100700002)(5660300002)(7416002)(38070700005)(52536014)(86362001)(4326008)(2906002)(66556008)(76116006)(66476007)(64756008)(41300700001)(33656002)(66446008)(8676002)(316002)(8936002)(66946007)(71200400001)(7696005)(122000001)(478600001)(45080400002)(83380400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?VLg25m0IE718fac6KcIDaAQgSOVOpdzLaeBkL6ox0kLD55QJCxfPpx89JScx?=
+ =?us-ascii?Q?04yjQC/DoRJX48CfJvqferdSuBTV9KlNREnoDzzjq1oJs7LyZkfhXtLrHA+D?=
+ =?us-ascii?Q?VN4Kpded+qChuhxwNITPNa0VK47vupSQmPKZLgPtivFEQ1vjsxtqVFzJoCxs?=
+ =?us-ascii?Q?3RHc7DuDE0MVyiDAquCTWfyS++2+VD6tzjkHtgq0QoG5fp487mr+IH+VcqVI?=
+ =?us-ascii?Q?k2MaPFEXo0jGb+KZGQmbSvtkltxUR97kFdwuVyIKjvToAo9p7QMBiLQcJyXC?=
+ =?us-ascii?Q?qmaWm0DTrL/bXikFHDhBXWDpt3jBbRBGC/1T06ues+vKddAQmuCph4vwXL3w?=
+ =?us-ascii?Q?XZOfnTzyw9Vsu8NmcTsK+jOZGIE3XBAL9uta11sF1SKPJhFn8z3qK2MGxank?=
+ =?us-ascii?Q?wVYrerQC+2Tf2cue/t/mznvtGDHUomYATA26tobkHqfeYnt0P/BTryPUoNyK?=
+ =?us-ascii?Q?6WWoiaA+DJ57M1g+erhSmo/70g43CAo9wLjRR1AZbAzI4b9t5Ylddt1V1L32?=
+ =?us-ascii?Q?zbKiZI8F9cpePS8SDjI8oFFfCkktJgtD2cz7noPJ1yvWrhAFWoFzCL6Aiu11?=
+ =?us-ascii?Q?xZcg3GjL+RT2rMUQaKDrlfqQMirs0KunWxnNEBdir8reTGpPYWRWj/JOPXBL?=
+ =?us-ascii?Q?y0ruXGCrEyCpI1wXWp8fFzRxhFzdpnBkhxmoAYb206j5tq1TYrrWwcE8IB75?=
+ =?us-ascii?Q?+bTwSq2wq5hE13ncd1PULCyDFfMGdyyPjMAetXehFcQwLWTNy4aIGjuwmxjO?=
+ =?us-ascii?Q?gD5eVulkQxf7La0pFwI3NfZHHQNc7Zd/amWixXxTVzrrCHIyiPMwSbcsYbSU?=
+ =?us-ascii?Q?A+J92Wm3wmV2kvBxkuKOtBNWj7WEgWBbCabhybYyaond15FJUYYd+p6b+B2n?=
+ =?us-ascii?Q?FvGIq5bIYRU5skA9DHbwTnn1X230B3rPo9pC/23VfBKF4WXlUTIdnDkr32Cu?=
+ =?us-ascii?Q?EY4iTRjvei+TjhuGXCpIQ6z4axzha/pNJX4q0AbDAo2QUGhHaU+0OP12IRec?=
+ =?us-ascii?Q?cDL+sYN9GbEhO3PyGVmhBHEgHQHM4NAhtTw6Fh+/fXoiLWSabs/Rgqh0N2Tu?=
+ =?us-ascii?Q?Lj4HSrFgpA2hMUO0jTF7Nw3V5mbG+q+yFu/l3vD+xZ5vgjmeflkrkixtU+iB?=
+ =?us-ascii?Q?UcbGOHdPivZ5VZd0o8tn3CHUAJR44SDYE3SjyhwV8stiutVbmKh4W+VDCgNh?=
+ =?us-ascii?Q?q2qmdfDFI4jtAwuDisg+ESAAgZvk07Kgkps6Wa40LfSHtPG/2eFv2dPA8YWJ?=
+ =?us-ascii?Q?ad1kNQ/YpbnW+uJUMZY8gz45kjN+ORk41HY0fR3vjeFHQfvVI9HynQV59TCG?=
+ =?us-ascii?Q?kYE+gXsBFxlhjLmICs1z7bTfzeOQ4WJfn9y+3p8dF/VDYWAfkyQwV1dHRoox?=
+ =?us-ascii?Q?TZRNwYrnTh4ON8eWdPqXI+EVEc8tMgzwm8BORpvKt84INWhxkxtVadRx55Dl?=
+ =?us-ascii?Q?hMenhrYWYDYqPg4iSb2rCfjtf2OXDZKUE/sLqi+0sSzbnC9qsOr7suKE88cH?=
+ =?us-ascii?Q?Lan+/pm84aoXSsw0QbpulUAldVC90DdaTAxXsE0noxiVq7AWlpEYO0KRg73a?=
+ =?us-ascii?Q?EJJakD8pZUym5sesnCXjQlA8JknDKpw0G5t5PMpt?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=boIy+3Si c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=UttIx32zK-AA:10 a=X7RGDZ3zAAAA:8 a=BH4MrEww_7vcI7yO7vkA:9 a=gtnApEKZh2gql3vmNaCt:22
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
+MIME-Version: 1.0
+X-OriginatorOrg: wiwynn.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR04MB5543.apcprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 141cf1d8-00ab-4b9f-af5d-08db97b81ede
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Aug 2023 02:35:25.0386
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: da6e0628-fc83-4caf-9dd2-73061cbab167
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: bgupMTmkhobHqaU9eD0kz0HKt6tPypn4EfeICpzffoG/hrdyuSudF2tZmHLMx8vO+5zc0nAt9+i1UhRSQaGuMA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR04MB6947
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This patch adds a HWMON driver for the EMC1812, EMC1813, EMC1814,
-EMC1815 and EMC1833 temperature sensor chips from microchip. Does not
-currently support the alert outputs.
+> -----Original Message-----
+> From: Rob Herring <robh@kernel.org>
+> Sent: Thursday, July 27, 2023 12:44 AM
+> To: Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>
+> Cc: patrick@stwcx.xyz; Jean Delvare <jdelvare@suse.com>; Guenter Roeck
+> <linux@roeck-us.net>; Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.=
+org>;
+> Conor Dooley <conor+dt@kernel.org>; linux-i2c@vger.kernel.org;
+> linux-hwmon@vger.kernel.org; devicetree@vger.kernel.org;
+> linux-kernel@vger.kernel.org
+> Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Add lltc ltc4286 driver bind=
+ings
+>=20
+>   Security Reminder: Please be aware that this email is sent by an extern=
+al
+> sender.
+>=20
+> On Mon, Jul 24, 2023 at 06:05:11PM +0800, Delphine CC Chiu wrote:
+> > Add a device tree bindings for ltc4286 driver.
+> >
+> > Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+> > ---
+> >  .../bindings/hwmon/lltc,ltc4286.yaml          | 49
+> +++++++++++++++++++
+> >  MAINTAINERS                                   |  9 ++++
+> >  2 files changed, 58 insertions(+)
+> >  create mode 100644
+> > Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml
+> > b/Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml
+> > new file mode 100644
+> > index 000000000000..ad7f6ad888e4
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml
+> > @@ -0,0 +1,49 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) %YAML 1.2
+> > +---
+> > +$id:
+> > +https://apc01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fdev=
+i
+> >
+> +cetree.org%2Fschemas%2Fhwmon%2Flltc%2Cltc4286.yaml%23&data=3D05%7C
+> 01%7C
+> >
+> +Wayne_SC_Liu%40wiwynn.com%7Cd2e29aed8bdc47a743e508db8df786ac%7
+> Cda6e06
+> >
+> +28fc834caf9dd273061cbab167%7C0%7C0%7C638259866495880680%7CUnkn
+> own%7CT
+> >
+> +WFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJ
+> XVC
+> >
+> +I6Mn0%3D%7C3000%7C%7C%7C&sdata=3Dn%2FyZyYnSEoCOcUgQFI6BERAgkKa
+> zYA%2FmAt
+> > +2NAlr1Xdo%3D&reserved=3D0
+> > +$schema:
+> > +https://apc01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fdev=
+i
+> >
+> +cetree.org%2Fmeta-schemas%2Fcore.yaml%23&data=3D05%7C01%7CWayne_S
+> C_Liu%
+> >
+> +40wiwynn.com%7Cd2e29aed8bdc47a743e508db8df786ac%7Cda6e0628fc834
+> caf9dd
+> >
+> +273061cbab167%7C0%7C0%7C638259866495880680%7CUnknown%7CTWFp
+> bGZsb3d8ey
+> >
+> +JWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%
+> 7C30
+> >
+> +00%7C%7C%7C&sdata=3DfAA2CUAxdK6MJugvQ1ZRZ1hvB%2FfS%2B8SEOwQ3R
+> Z2HEXo%3D&
+> > +reserved=3D0
+> > +
+> > +title: LTC4286 power monitors
+> > +
+> > +maintainers:
+> > +  - Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - lltc,ltc4286
+> > +      - lltc,ltc4287
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  vrange_select_25p6:
+>=20
+> Needs a vendor prefix and don't use '_'.
 
-Signed-off-by: Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
-Co-developed-by: Mathew McBride <matt@traverse.com.au>
-Signed-off-by: Mathew McBride <matt@traverse.com.au>
----
- drivers/hwmon/Kconfig   |  10 ++
- drivers/hwmon/Makefile  |   1 +
- drivers/hwmon/emc181x.c | 296 ++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 307 insertions(+)
- create mode 100644 drivers/hwmon/emc181x.c
+We will revise as adi,vrange-select-25p6
 
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 307477b8a371..196d91494536 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -1820,6 +1820,16 @@ config SENSORS_EMC1403
- 	  Threshold values can be configured using sysfs.
- 	  Data from the different diodes are accessible via sysfs.
-=20
-+config SENSORS_EMC181X
-+	tristate "SMSC EMC181X thermal sensor"
-+	depends on I2C
-+	select REGMAP_I2C
-+	help
-+	  If you say yes here you get support for the SMSC EMC181X
-+	  temperature monitoring chip.
-+
-+	  Data from the different diodes are accessible via sysfs.
-+
- config SENSORS_EMC2103
- 	tristate "SMSC EMC2103"
- 	depends on I2C
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index 3f4b0fda0998..bcea887dfe17 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -69,6 +69,7 @@ obj-$(CONFIG_SENSORS_DRIVETEMP)	+=3D drivetemp.o
- obj-$(CONFIG_SENSORS_DS620)	+=3D ds620.o
- obj-$(CONFIG_SENSORS_DS1621)	+=3D ds1621.o
- obj-$(CONFIG_SENSORS_EMC1403)	+=3D emc1403.o
-+obj-$(CONFIG_SENSORS_EMC181X)	+=3D emc181x.o
- obj-$(CONFIG_SENSORS_EMC2103)	+=3D emc2103.o
- obj-$(CONFIG_SENSORS_EMC2305)	+=3D emc2305.o
- obj-$(CONFIG_SENSORS_EMC6W201)	+=3D emc6w201.o
-diff --git a/drivers/hwmon/emc181x.c b/drivers/hwmon/emc181x.c
-new file mode 100644
-index 000000000000..364d2bfb15ca
---- /dev/null
-+++ b/drivers/hwmon/emc181x.c
-@@ -0,0 +1,296 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Driver for the Microchip/SMSC EMC181x Temperature monitor
-+ *
-+ * Copyright (C) 2018-2019 Traverse Technologies
-+ * Author: Mathew McBride <matt@traverse.com.au>
-+ *
-+ * Copyright (C) 2023 Allied Telesis Labs
-+ * Author: Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
-+ *
-+ */
-+
-+#include <linux/err.h>
-+#include <linux/hwmon.h>
-+#include <linux/hwmon-sysfs.h>
-+#include <linux/of_device.h>
-+#include <linux/i2c.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+
-+#define EMC1812_ID	0x81
-+#define EMC1813_ID	0x87
-+#define EMC1814_ID	0x84
-+#define EMC1815_ID	0x85
-+#define EMC1833_ID	0x83
-+
-+#define MICROCHIP_ID	0x54
-+
-+#define EMC181X_STATUS_REG	0x02
-+#define EMC181X_CONFIG_REG	0x03
-+#define EMC181X_DIODE_DATA_BASE	0x60
-+#define EMC181X_PID_REG		0xfd
-+#define EMC181X_SMSC_ID_REG	0xfe
-+#define EMC181X_REVISION_REG	0xff
-+
-+/* Adjustable address type is 0x7c, 0x5c, 0x4c, 0x6c, 0x1c, 0x3c */
-+/* Fixed address is either 0x4c or 0x45 */
-+static const unsigned short emc181x_address_list[] =3D {
-+	0x7c, 0x5c, 0x4c, 0x6c, 0x1c, 0x3c, 0x45, I2C_CLIENT_END
-+};
-+
-+enum chips {
-+	emc1812, emc1813,
-+	emc1814, emc1815,
-+	emc1833,
-+};
-+
-+struct emc181x_data {
-+	struct i2c_client *i2c;
-+	enum chips type;
-+	bool is_extended_range;
-+};
-+
-+static int emc181x_read(struct device *dev, enum hwmon_sensor_types type=
-,
-+			u32 attr, int channel, long *val)
-+{
-+	struct emc181x_data *data =3D dev_get_drvdata(dev);
-+	struct i2c_client *i2c =3D data->i2c;
-+
-+	u8 channel_reg =3D 0;
-+	s32 channel_deg =3D 0;
-+	s32 channel_frac =3D 0;
-+
-+	if (type !=3D hwmon_temp)
-+		return -EOPNOTSUPP;
-+	if (channel > 4)
-+		return -EINVAL;
-+
-+	channel_reg =3D EMC181X_DIODE_DATA_BASE + (channel * 0x02);
-+	channel_deg =3D i2c_smbus_read_byte_data(i2c, channel_reg);
-+	if (channel_deg < 0)
-+		return channel_deg;
-+	if (data->is_extended_range)
-+		channel_deg -=3D 64;
-+
-+	channel_frac =3D i2c_smbus_read_byte_data(i2c, channel_reg + 0x01);
-+	if (channel_frac < 0)
-+		return channel_frac;
-+
-+	*val =3D ((channel_deg << 3) | (channel_frac >> 5)) * 125;
-+	return 0;
-+}
-+
-+static umode_t emc181x_is_visible(const void *drvdata, enum hwmon_sensor=
-_types type,
-+				  u32 attr, int channel)
-+{
-+	if (type =3D=3D hwmon_temp && attr =3D=3D hwmon_temp_input)
-+		return 0444;
-+	else
-+		return 0;
-+}
-+
-+static const struct hwmon_channel_info *emc1812_info[] =3D {
-+	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
-+	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT, HWMON_T_INPUT),
-+	NULL
-+};
-+
-+static const struct hwmon_channel_info *emc1813_info[] =3D {
-+	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
-+	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT, HWMON_T_INPUT, HWMON_T_INPUT),
-+	NULL
-+};
-+
-+static const struct hwmon_channel_info *emc1814_info[] =3D {
-+	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
-+	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT, HWMON_T_INPUT, HWMON_T_INPUT,
-+			   HWMON_T_INPUT),
-+	NULL
-+};
-+
-+static const struct hwmon_channel_info *emc1815_info[] =3D {
-+	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
-+	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT, HWMON_T_INPUT, HWMON_T_INPUT,
-+			   HWMON_T_INPUT, HWMON_T_INPUT),
-+	NULL
-+};
-+
-+static const struct hwmon_ops emc181x_ops =3D {
-+	.is_visible =3D emc181x_is_visible,
-+	.read =3D emc181x_read,
-+};
-+
-+static const struct hwmon_chip_info emc181x_chip_info[] =3D {
-+	[emc1812] =3D {
-+		.ops =3D &emc181x_ops,
-+		.info =3D emc1812_info,
-+	},
-+	[emc1813] =3D {
-+		.ops =3D &emc181x_ops,
-+		.info =3D emc1813_info,
-+	},
-+	[emc1814] =3D {
-+		.ops =3D &emc181x_ops,
-+		.info =3D emc1814_info,
-+	},
-+	[emc1815] =3D {
-+		.ops =3D &emc181x_ops,
-+		.info =3D emc1815_info,
-+	},
-+	[emc1833] =3D {
-+		.ops =3D &emc181x_ops,
-+		.info =3D emc1813_info,
-+	},
-+};
-+
-+static const struct i2c_device_id emc181x_i2c_id[] =3D {
-+	{ "emc1812", emc1812 },
-+	{ "emc1813", emc1813 },
-+	{ "emc1814", emc1814 },
-+	{ "emc1815", emc1815 },
-+	{ "emc1833", emc1833 },
-+	{}
-+};
-+
-+MODULE_DEVICE_TABLE(i2c, emc181x_i2c_id);
-+
-+/* Return 0 if detection is successful, -ENODEV otherwise */
-+static int emc181x_i2c_detect(struct i2c_client *client,
-+		       struct i2c_board_info *info)
-+{
-+	struct i2c_adapter *adapter =3D client->adapter;
-+	int pid, id, rev;
-+	const char *name;
-+
-+	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE_DATA |
-+				     I2C_FUNC_SMBUS_WORD_DATA))
-+		return -ENODEV;
-+
-+	/* Determine the chip type */
-+	id =3D i2c_smbus_read_byte_data(client, EMC181X_SMSC_ID_REG);
-+	if (id < 0)
-+		return id;
-+	if (id !=3D MICROCHIP_ID)
-+		return -ENODEV;
-+	pid =3D i2c_smbus_read_byte_data(client, EMC181X_PID_REG);
-+	if (pid < 0)
-+		return pid;
-+	rev =3D i2c_smbus_read_byte_data(client, EMC181X_REVISION_REG);
-+	if (rev < 0)
-+		return rev;
-+
-+	switch (pid) {
-+	case EMC1812_ID:
-+		name =3D emc181x_i2c_id[emc1812].name;
-+		break;
-+	case EMC1813_ID:
-+		name =3D emc181x_i2c_id[emc1813].name;
-+		break;
-+	case EMC1814_ID:
-+		name =3D emc181x_i2c_id[emc1814].name;
-+		break;
-+	case EMC1815_ID:
-+		name =3D emc181x_i2c_id[emc1815].name;
-+		break;
-+	case EMC1833_ID:
-+		name =3D emc181x_i2c_id[emc1833].name;
-+		break;
-+	default:
-+		return -ENODEV;
-+	}
-+	strscpy(info->type, name, I2C_NAME_SIZE);
-+
-+	dev_dbg(&client->dev,
-+		"Detected device %s at 0x%02x with COMPANY: 0x%02x and PID: 0x%02x REV=
-: 0x%02x\n",
-+		name, client->addr, id, pid, rev);
-+
-+	return 0;
-+}
-+
-+static int emc181x_i2c_probe(struct i2c_client *client)
-+{
-+	struct device *dev =3D &client->dev;
-+	struct device *hwmon_dev;
-+	struct emc181x_data *data;
-+	s32 regval;
-+	u8 config;
-+
-+	data =3D devm_kzalloc(dev, sizeof(struct emc181x_data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	data->i2c =3D client;
-+	if (dev_fwnode(dev)) {
-+		data->type =3D (enum chips)device_get_match_data(dev);
-+		data->is_extended_range =3D device_property_present(dev, "emc181x,exte=
-nded-range");
-+	} else
-+		data->type =3D i2c_match_id(emc181x_i2c_id, client)->driver_data;
-+
-+	regval =3D i2c_smbus_read_byte_data(client, EMC181X_CONFIG_REG);
-+	if (regval < 0) {
-+		dev_dbg(dev, "Failed to read config reg %d", regval);
-+		return regval;
-+	}
-+
-+	/* By default, extended range is disabled in the EMC181X,
-+	 * if enabled we need to set this in the CONFIG register.
-+	 */
-+	config =3D regval & ~0x04;
-+	if (data->is_extended_range)
-+		config |=3D 0x04;
-+
-+	dev_dbg(dev, "EMC181X setting CONFIG to %d\n", config);
-+	if (config !=3D regval)
-+		i2c_smbus_write_byte_data(client, EMC181X_CONFIG_REG, config);
-+
-+	hwmon_dev =3D devm_hwmon_device_register_with_info(dev,
-+			client->name,
-+			data,
-+			&emc181x_chip_info[data->type],
-+			NULL);
-+
-+	return PTR_ERR_OR_ZERO(hwmon_dev);
-+}
-+
-+static const struct of_device_id __maybe_unused emc181x_of_match[] =3D {
-+	{
-+		.compatible =3D "microchip,emc1812",
-+		.data =3D (void *)emc1812
-+	},
-+	{
-+		.compatible =3D "microchip,emc1813",
-+		.data =3D (void *)emc1813
-+	},
-+	{
-+		.compatible =3D "microchip,emc1814",
-+		.data =3D (void *)emc1814
-+	},
-+	{
-+		.compatible =3D "microchip,emc1815",
-+		.data =3D (void *)emc1815
-+	},
-+	{
-+		.compatible =3D "microchip,emc1833",
-+		.data =3D (void *)emc1833
-+	},
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, emc181x_of_match);
-+
-+static struct i2c_driver emc181x_i2c_driver =3D {
-+	.driver =3D {
-+		.name =3D "emc181x",
-+		.of_match_table =3D of_match_ptr(emc181x_of_match),
-+	},
-+	.probe =3D emc181x_i2c_probe,
-+	.id_table =3D emc181x_i2c_id,
-+	.detect =3D emc181x_i2c_detect,
-+	.address_list =3D emc181x_address_list,
-+};
-+
-+module_i2c_driver(emc181x_i2c_driver);
-+
-+MODULE_DESCRIPTION("EMC181X Sensor Driver");
-+MODULE_AUTHOR("Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>");
-+MODULE_LICENSE("GPL");
---=20
-2.41.0
+>=20
+> > +    description:
+> > +      This property is a bool parameter to represent the
+>=20
+> We have types, don't define the type in free form text.
 
+We will revise as below
+description:
+  Specifies which voltage range is used, 25.6 or 102.4.
+type: boolean
+
+>=20
+> > +      voltage range is 25.6 or not for this chip.
+> > +
+> > +  shunt-resistor-micro-ohms:
+> > +    description:
+> > +      Resistor value in micro-Ohm
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - shunt-resistor-micro-ohms
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    i2c {
+> > +        #address-cells =3D <1>;
+> > +        #size-cells =3D <0>;
+> > +
+> > +        power-sensor@40 {
+> > +            compatible =3D "lltc,ltc4286";
+> > +            reg =3D <0x40>;
+> > +            vrange_select_25p6;
+> > +            shunt-resistor-micro-ohms =3D <300>;
+> > +        };
+> > +    };
+> > diff --git a/MAINTAINERS b/MAINTAINERS index
+> > d516295978a4..7c1cb9bd4f45 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -12344,6 +12344,15 @@ S:   Maintained
+> >  F:   Documentation/hwmon/ltc4261.rst
+> >  F:   drivers/hwmon/ltc4261.c
+> >
+> > +LTC4286 HARDWARE MONITOR DRIVER
+> > +M:   Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+> > +L:   linux-i2c@vger.kernel.org
+> > +S:   Maintained
+> > +F:   Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml
+> > +F:   drivers/hwmon/pmbus/Kconfig
+> > +F:   drivers/hwmon/pmbus/Makefile
+> > +F:   drivers/hwmon/pmbus/ltc4286.c
+> > +
+> >  LTC4306 I2C MULTIPLEXER DRIVER
+> >  M:   Michael Hennerich <michael.hennerich@analog.com>
+> >  L:   linux-i2c@vger.kernel.org
+> > --
+> > 2.25.1
+> >
