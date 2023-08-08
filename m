@@ -2,148 +2,111 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A4DBC001DB
-	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Aug 2023 15:44:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 945F5C001DB
+	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Aug 2023 15:47:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbjHHPor (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 8 Aug 2023 11:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38876 "EHLO
+        id S230086AbjHHPrv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 8 Aug 2023 11:47:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbjHHPnV (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Aug 2023 11:43:21 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB0D273F;
-        Mon,  7 Aug 2023 20:54:12 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-564b326185bso2354492a12.2;
-        Mon, 07 Aug 2023 20:54:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691466852; x=1692071652;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wSsR6neICq2IPDxtf2SFrKDfgJjY79Gnl+/HMGkjnHw=;
-        b=DNeBHpVZnHVbdzo0q9/FilvKcCIVYNDb4r4r5ijxJoo7gMtyLo1+iEqGhJgIKCHo8G
-         8Bf4wJjBGHfagGcCo2Zk7PTcZ4uGiZt5n4/d7I9vIgwQRWO/I3FjixYVN5w/muo4FnUE
-         omIX0hILceBlgD6xWhaNOAbSSL16ersSHve3OUoWhUHBxA1a02WcArvQxF1/yeZgeSk1
-         I7n1dqFyNp08Azls76QDqQ0e8CA1h3aT/OW+9b2vn6FprOpb4TBSTX66S7ZXYFbsWH4F
-         SvHq58xsihwxjEe4zA3+OAr9+UWl2GvY0aZ4tg7O33NKAsud+QTKcFOcr9O5S3czDknd
-         0lZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691466852; x=1692071652;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wSsR6neICq2IPDxtf2SFrKDfgJjY79Gnl+/HMGkjnHw=;
-        b=g7iwIpF3BIhkhsSzggzQxUm6+2qW20uRsnIT2Db8McLEt+PSb4apZ/0IerQVyj4vdi
-         w+nQPgMdAb04nDOH5MSNeQsKhzbqwQfgC7ivU6uCFd8J1gqw3jbHIHuwuWrQK24SNJHw
-         NP6dSYeObwtV4r/bD9B46KI9PGnyDaTAWp4A3FNTHr3DPR6C25qNRLSsGgbF13jFp3KZ
-         SnvD4mTkMtHPTMad5oUnaQ0EJ5ktS1vMFzjZn7wbxf0n5/ww03hvVqdXGNAZwMM8Dq3w
-         tsPMQvrQdCTO6AGiSVMSrewZX9MWOPcZ5NsY/6et9IXh6ViCHuZwiVl4LDyJj8yhUHqe
-         znIA==
-X-Gm-Message-State: AOJu0YyNdFa8TTFafGLKv32DXkZLWZ1+XsPQIU6kWn52NaxFgcz/HF+l
-        6k/64GT8BAn8Hae4oUrVAtwwqZ2/I9w=
-X-Google-Smtp-Source: AGHT+IEBNx4cJkpnnEBaf0JG55S5daRW4F+43BHqH2kCyjpXkA4rAmfLKiySxmR3tcBK4fjtNC0h0A==
-X-Received: by 2002:a05:6a20:13cd:b0:137:47d0:b76b with SMTP id ho13-20020a056a2013cd00b0013747d0b76bmr9210032pzc.26.1691466852245;
-        Mon, 07 Aug 2023 20:54:12 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 6-20020a170902c24600b001b9df74bac6sm7696605plg.260.2023.08.07.20.54.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Aug 2023 20:54:11 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <42021fd9-484a-e761-6da8-f972cb562917@roeck-us.net>
-Date:   Mon, 7 Aug 2023 20:54:10 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Content-Language: en-US
-To:     Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Mathew McBride <matt@traverse.com.au>
+        with ESMTP id S229928AbjHHPqb (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Aug 2023 11:46:31 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514DE3C34;
+        Tue,  8 Aug 2023 08:41:01 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 4452B5C005A;
+        Tue,  8 Aug 2023 03:55:05 -0400 (EDT)
+Received: from imap41 ([10.202.2.91])
+  by compute6.internal (MEProxy); Tue, 08 Aug 2023 03:55:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=traverse.com.au;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1691481305; x=
+        1691567705; bh=J/IA1zqHqkiiLAD9E9JcF57MbkkOt6dgvLaok0SXp/o=; b=Q
+        hCNFgWfjmdIMFirny+vegJe9Ck01gJPMBgR80BP6RGvB/H5YLwr5llmeK29EjUds
+        K97Nr5ABiDSzOMF4ROMXyeUEDr7iEu5wZjJ+EzwxQFDIshLH+MLWpy5oEditIXB4
+        LzIcncxcFBtTq/JXP4ZIJ7xLJVNoMCTeSkvgAcpokvABIonfCXPT2nd2WmvkExlU
+        iI2dhv4IdR0Kcsr9DIV3JpNlwGpyjelcqaVl3MRGYLg49tuVEXuiHiCNzJnxqcLs
+        jKKMsB6DoyHDLg9j/vWOfUit0oiY3NMg1DTIkSCXquQtCsV3ms+RJTzuS6FfTyfp
+        QZVzwLFXK+m44KGrF4x1Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1691481305; x=1691567705; bh=J/IA1zqHqkiiL
+        AD9E9JcF57MbkkOt6dgvLaok0SXp/o=; b=XfVWeYL2WYtYTHGoCrpemnxP3vLlM
+        HtsTFy/FVVE22v0MLwMSucT3QFgAJcsSByQRgQHy2D9r4BnAOzEd/6u+OtZqaqOk
+        hhgKAx1K9p1+DhEGUd6GbphQk6DEghT4BLzVvwiZRdIhI+Prl5+CRZtrEesSlcdl
+        Pw5ElTvmSuy7MEb6Q5EuIWJ23rGmsZFX431TAL9rP5PyS4eCzFbqLHzGKDSuCrNp
+        mSLrze3z6hscieF0S/qa2dhKiZkIQi/nF4rqvZGaTdxhEXnZLW066SMCJd39D2fh
+        lu5dluAxhRY432M8xYsIKVFMHDHulzkhIqfNnFXcwyTBCMLUQfmfXNhMQ==
+X-ME-Sender: <xms:2PTRZEJb1FjWcaPf2mP6AWtHE11tsyqqJb2s-N-KPOwbnhwvu7hsfA>
+    <xme:2PTRZEJDNkF4mzyJiciL7itc9AnNmrXi7EUYDMlrLGOHkq06EF15DihjwTXg9s8sF
+    AOOxF4nfUn1uv3uVpM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrledugdduvddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfofgr
+    thhhvgifucfotgeurhhiuggvfdcuoehmrghtthesthhrrghvvghrshgvrdgtohhmrdgruh
+    eqnecuggftrfgrthhtvghrnhepheeitdehfffhudefheefffeivdffjedtfefhueffgfff
+    geethfeivdetjefhgeetnecuffhomhgrihhnpehgihhtlhgrsgdrtghomhdpkhgvrhhnvg
+    hlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhho
+    mhepmhgrthhtsehtrhgrvhgvrhhsvgdrtghomhdrrghu
+X-ME-Proxy: <xmx:2PTRZEtHwLgD_VGn0dovKlZe1Dd310qFvfvKjxNcBFsID2AXRttmZQ>
+    <xmx:2PTRZBYp83GQIz_w26WjxFJrRATNIQORFRU_-wvqLbz-SVhFfd7wdQ>
+    <xmx:2PTRZLYG_iu_qwLOETA2hPVnGhDHFa-XVVI_KpPygcxKhWziRyioUA>
+    <xmx:2fTRZHEL3a7SIS2OIR9_9n-NCn7oTJgC3SqsUenRaUDqN-rqeTcANw>
+Feedback-ID: i426947f3:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 88388234007E; Tue,  8 Aug 2023 03:55:04 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-624-g7714e4406d-fm-20230801.001-g7714e440
+Mime-Version: 1.0
+Message-Id: <b84c2fba-1bbe-4842-a861-525784d8a361@app.fastmail.com>
+In-Reply-To: <0248d597-b72a-5b7c-63a4-6d72384f9854@kernel.org>
 References: <20230808013157.80913-1-mark.tomlinson@alliedtelesis.co.nz>
- <20230808013157.80913-2-mark.tomlinson@alliedtelesis.co.nz>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 2/2] dt-bindings: hwmon: add EMC181x
-In-Reply-To: <20230808013157.80913-2-mark.tomlinson@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+ <0248d597-b72a-5b7c-63a4-6d72384f9854@kernel.org>
+Date:   Tue, 08 Aug 2023 17:54:41 +1000
+From:   "Mathew McBride" <matt@traverse.com.au>
+To:     "Krzysztof Kozlowski" <krzk@kernel.org>,
+        "Mark Tomlinson" <mark.tomlinson@alliedtelesis.co.nz>,
+        "Jean Delvare" <jdelvare@suse.com>,
+        "Guenter Roeck" <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 1/2] hwmon: Add driver for EMC181x temperature sensors
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 8/7/23 18:31, Mark Tomlinson wrote:
-> The EMC181x range are I2C temperature sensors with a varying number of
-> sensors in each device. Each has one internal sensor, and one to four
-> external sensor diodes.
+Hi Krzysztof,
+
+On Tue, Aug 8, 2023, at 5:38 PM, Krzysztof Kozlowski wrote:
+> On 08/08/2023 03:31, Mark Tomlinson wrote:
+> > This patch adds a HWMON driver for the EMC1812, EMC1813, EMC1814,
+> > EMC1815 and EMC1833 temperature sensor chips from microchip. Does not
+> > currently support the alert outputs.
+> > 
+> > Signed-off-by: Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
+> > Co-developed-by: Mathew McBride <matt@traverse.com.au>
+> > Signed-off-by: Mathew McBride <matt@traverse.com.au>
 > 
-> The default range is from 0°C to +127°C, but can be extended to -64°C to
-> +191°C.
-> 
-> Signed-off-by: Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
-> ---
->   .../bindings/hwmon/microchip,emc181x.yaml     | 45 +++++++++++++++++++
->   1 file changed, 45 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,emc181x.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/microchip,emc181x.yaml b/Documentation/devicetree/bindings/hwmon/microchip,emc181x.yaml
-> new file mode 100644
-> index 000000000000..5967f98ad7ba
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/microchip,emc181x.yaml
-> @@ -0,0 +1,45 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +
-> +$id: http://devicetree.org/schemas/hwmon/microchip,emc181x.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Microchip EMC1812/EMC1813/EMC1814/EMC1815/EMC1833 temperature sensors
-> +
-> +maintainers:
-> +  - Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - microchip,emc1812
-> +      - microchip,emc1813
-> +      - microchip,emc1814
-> +      - microchip,emc1815
-> +      - microchip,emc1833
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  emc181x,extended-range:
-> +    description: Allow for reading of extended temperature range (-64-192C)
-> +
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
+> The order of these tags is clearly not correct. It says Mathew is
+> sending, but you are not Mathew?
 
-The chip has various other configuration options. I would have expected to see
-at least beta compensation, ideality factor, resistance error correction,
-and anti-parallel diode operation.
+Just to clarify, Mark has developed this version based off something I wrote a while ago:
 
-Yes, I understand you probably don't plan to implement those in the driver,
-but the devicetree property description should at least try to be complete.
+https://gitlab.com/traversetech/ls1088firmware/traverse-sensors/-/blob/master/emc181x/emc181x.c?ref_type=heads
 
-Guenter
+Hence my copyright is listed in the header.
 
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        temperature-sensor@7c {
-> +            compatible = "microchip,emc1812";
-> +            reg = <0x7c>;
-> +        };
-> +    };
+I advised him to list the authors in that order following the example in the kernel's "submitting patches" guide [2] which provides an example of such a situation:
 
+https://docs.kernel.org/process/submitting-patches.html#when-to-use-acked-by-cc-and-co-developed-by
+
+If I interpreted the guidelines incorrectly, happy to be corrected.
+
+Best Regards,
+Matt
