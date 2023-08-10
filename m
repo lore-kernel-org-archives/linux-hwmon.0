@@ -2,83 +2,96 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C579BC001B0
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Aug 2023 16:17:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9942C001B0
+	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Aug 2023 16:18:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234118AbjHJQRr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 10 Aug 2023 12:17:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54296 "EHLO
+        id S235040AbjHJQSv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 10 Aug 2023 12:18:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234494AbjHJQRq (ORCPT
+        with ESMTP id S234494AbjHJQSu (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 10 Aug 2023 12:17:46 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487B9E75;
-        Thu, 10 Aug 2023 09:17:46 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1bc65360648so9704155ad.1;
-        Thu, 10 Aug 2023 09:17:46 -0700 (PDT)
+        Thu, 10 Aug 2023 12:18:50 -0400
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65937E53
+        for <linux-hwmon@vger.kernel.org>; Thu, 10 Aug 2023 09:18:46 -0700 (PDT)
+Received: by mail-ot1-x32b.google.com with SMTP id 46e09a7af769-6bca857accbso1010543a34.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 10 Aug 2023 09:18:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691684266; x=1692289066;
+        d=gmail.com; s=20221208; t=1691684325; x=1692289125;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zOF4rikTAqnSet00nnYs1BlFsNV8We9b+hBH5WP3K1Q=;
-        b=NW7PtI2omRJQwz5j9I47xVSpBtuM0r/jvQSVAu20fW7F6jYOgD7jVMZ/2UpILCqstG
-         uAlX5ozKpT6/QTfTRH603TRC2mdKsevqzSoVtMjG2l1kDfgAFUj916IcuCgQ4Id2aqD1
-         vjJcZzCdV+TKVoCNAUT0Aa3icjIJo28kYxI4JFgb0cA5d/ACpe96+gkrik5avD+ZVO6K
-         N9tYnkKonoKtd74+JkYCS6H4me+tYpcMCKdojau5RsVHv/A/zSB0BYHPZfIJflzPsCsh
-         /Lo2pLTwG4dUdqYC6vEZnga+RgbXvlS1UVdZwAxg26ZomVm2XyJa8kfUZrUb+0gMaSAm
-         DYOQ==
+        bh=WehWiSYBzWbyr2koxZsYuwUhdPIR1gTPp0gnTc3B5zA=;
+        b=DCcKhOrCz++FLdL2pDl1o8wpuuOy5Kzo216lZ1qlE/7OkLDpH4edP8o0L1HpV8jrPA
+         7TIArD4Liw1JdYjtexDbB6cmMT8ce6fDQgc21DZRS0XxLzt6zDwdG8NjnXiykYedIAhV
+         snNMFT5HKgGuP43J6s1Y7JfUBQNqVduedgDyWDvR6OwgfGmHNf7tkCo3045/zLyRiqpa
+         K5DCt5lNNjxmpOCtjDDxAbaMtqMkLU3AFonhFl/iX8TYMsFELSP23cJD93QA3me0l93H
+         Xbx17px9Nb6YqWg+iLr4laTVgfI+qmt5dZdsXQb9F2jiw7KcZVPSSpWAwKMf8qwZxlXW
+         s3ZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691684266; x=1692289066;
+        d=1e100.net; s=20221208; t=1691684325; x=1692289125;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zOF4rikTAqnSet00nnYs1BlFsNV8We9b+hBH5WP3K1Q=;
-        b=Un1E6Yk/fCiYEZHoSu9TiTj77GKEik+IKy92nC2DulSgyAi66lNItAQj/3XmhkPstS
-         tYBnZ0DvbkToJznEGCKh94XLplhH83jRrl0+oZiUXQROPvWDEHCSBauZMApU4n91we5z
-         5bDS79RBeKNapRwUI61OeRKYC/QXZUIAXXPBYVyt7XkjWu3/ViMxgtjuHBlQ/tNBu+Vc
-         eJatE9CTUtBrXE/bcdi/+Y2C0M9nYpytkE+sRnDahfdiQudk2UlDLVn9ic18KD1nfQme
-         U3FNLkZh4EIrmncL541sxDyfBzred+OBY5d0ahu9qynWjIUnUaIVV9WICs17KrYxhevJ
-         jfMA==
-X-Gm-Message-State: AOJu0YzG/hz/8SHBkQikhtGSDXdWWfHrHJdDhA15FDFVxaOjTvna6Unp
-        l096sdOAFnLK0MkVdNlqOBI=
-X-Google-Smtp-Source: AGHT+IFtdnD0Wc5kd3GPuzylx11TdYN81tnwP0NDmtwwhPTKPCCtmkPEWp/DV4T0w7rvUTr6ukuIYg==
-X-Received: by 2002:a17:903:489:b0:1b8:475d:ebf6 with SMTP id jj9-20020a170903048900b001b8475debf6mr2870573plb.0.1691684265713;
-        Thu, 10 Aug 2023 09:17:45 -0700 (PDT)
+        bh=WehWiSYBzWbyr2koxZsYuwUhdPIR1gTPp0gnTc3B5zA=;
+        b=l47mvJ/pzNTWozMplii0ftbhrx+VkuMl2LREx+ZD7NBZxKWwmqPDv7aB3zEe8UbrI+
+         bHftWkntqjx7DAp9jaQ0CzWDo/eXIiKVe8iMVIxXDOc8MKjDfuAUC7Ds+KHMt7s5VaRB
+         k4/ibMZ1jFrq328EW2XDr0QBr31y9EwSBLEAjNvxYoLYWcF5X1XBCNloxBkgXj7Ht7KQ
+         RSIml1DQDfdil2LwqLuKlv+BhWAIIZvcrE5+bher7Om6EsPZUahV9offa3Tyx6HOO10E
+         ZS7e35ZUOSFlXV9Y8Yt4h9/Ax4Jcv2PxpK2RX+09gXSZK0ilmhmmJhaYXOCTzUw66XHd
+         Id8A==
+X-Gm-Message-State: AOJu0Yw7TXaE+C4PVnvhx8onfvKHQuutvDLEzyOk9cfqetxutd0Wu6N2
+        NzcuXlvlJy/0KOlZXcBOrAAh9LrCf28=
+X-Google-Smtp-Source: AGHT+IEOTFuYRv5umYhu0AT2o0nvyl41cqPxsqj5dEg5Ja1zieV7zw3ZGk/nnhqlUvH9aapCQIv9Zg==
+X-Received: by 2002:a05:6870:e889:b0:1c0:fcbd:2345 with SMTP id q9-20020a056870e88900b001c0fcbd2345mr1413605oan.20.1691684325629;
+        Thu, 10 Aug 2023 09:18:45 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z17-20020a170903019100b001bbb25dd3a7sm1968197plg.187.2023.08.10.09.17.45
+        by smtp.gmail.com with ESMTPSA id pc16-20020a17090b3b9000b00263154aab24sm1678335pjb.57.2023.08.10.09.18.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Aug 2023 09:17:45 -0700 (PDT)
+        Thu, 10 Aug 2023 09:18:45 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 10 Aug 2023 09:17:44 -0700
+Date:   Thu, 10 Aug 2023 09:18:44 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Eric Tremblay <etremblay@distech-controls.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andi Shyti <andi.shyti@kernel.org>
-Subject: Re: [PATCH 01/15] hwmon: (adt7475) fix Wvoid-pointer-to-enum-cast
- warning
-Message-ID: <905ce7b7-4b74-42d5-a0d1-f433a7b6cf2a@roeck-us.net>
-References: <20230810093157.94244-1-krzysztof.kozlowski@linaro.org>
+To:     Ruan Jinjie <ruanjinjie@huawei.com>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
+Subject: Re: [PATCH -next] hwmon: (nsa320-hwmon) Remove redundant
+ of_match_ptr()
+Message-ID: <c0172785-4c02-4479-bd93-30a84d76b808@roeck-us.net>
+References: <20230810062635.1947552-1-ruanjinjie@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230810093157.94244-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230810062635.1947552-1-ruanjinjie@huawei.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Aug 10, 2023 at 11:31:43AM +0200, Krzysztof Kozlowski wrote:
-> 'chip' is an enum, thus cast of pointer on 64-bit compile test with W=1
-> causes:
+On Thu, Aug 10, 2023 at 02:26:35PM +0800, Ruan Jinjie wrote:
+> The driver depends on CONFIG_OF, it is not necessary to use
+> of_match_ptr() here.
 > 
->   adt7475.c:1655:10: error: cast to smaller integer type 'enum chips' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
 
-Series applied.
+Applied.
 
 Thanks,
 Guenter
+
+> ---
+>  drivers/hwmon/nsa320-hwmon.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/nsa320-hwmon.c b/drivers/hwmon/nsa320-hwmon.c
+> index e26334469549..18076ba7fc14 100644
+> --- a/drivers/hwmon/nsa320-hwmon.c
+> +++ b/drivers/hwmon/nsa320-hwmon.c
+> @@ -191,7 +191,7 @@ static struct platform_driver nsa320_hwmon_driver = {
+>  	.probe = nsa320_hwmon_probe,
+>  	.driver = {
+>  		.name = "nsa320-hwmon",
+> -		.of_match_table = of_match_ptr(of_nsa320_hwmon_match),
+> +		.of_match_table = of_nsa320_hwmon_match,
+>  	},
+>  };
+>  
