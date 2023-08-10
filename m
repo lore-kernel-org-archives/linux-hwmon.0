@@ -2,114 +2,94 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA3C2C001B0
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Aug 2023 04:03:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BF9BC001E0
+	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Aug 2023 04:09:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230120AbjHJEDX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 10 Aug 2023 00:03:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57106 "EHLO
+        id S232670AbjHJEJR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 10 Aug 2023 00:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjHJEDW (ORCPT
+        with ESMTP id S230008AbjHJEJQ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 10 Aug 2023 00:03:22 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3672AFD;
-        Wed,  9 Aug 2023 21:03:22 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id ca18e2360f4ac-78bb7b89cabso16556639f.1;
-        Wed, 09 Aug 2023 21:03:22 -0700 (PDT)
+        Thu, 10 Aug 2023 00:09:16 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F52125;
+        Wed,  9 Aug 2023 21:09:15 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-1bfc2b68090so401311fac.3;
+        Wed, 09 Aug 2023 21:09:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691640201; x=1692245001;
+        d=gmail.com; s=20221208; t=1691640555; x=1692245355;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=9X4weC6EmV/6BRjaDA/sQHx2C0WkVUVfjxnnNcvUVsk=;
-        b=fcqkUZT+3UlpGQfJpKbu2UooRRNtzslQLImGAYbzxjz7l/8+7dnlKqv9nbsR/r0wqD
-         PZ7hv6q3sxCMBAQrrU6cKOYXI/9vgnEXMl0cFSwQi/yCSemfBZXFtvrpeEBqEzmBpJNg
-         mi/BK5M6I7MyA+t0MI+iFvYYnU/MxDJkW35LZBi61l28f47OWa2MsS23WO5kJVy5rrvX
-         Y36wQCxJIsQShzgGliHYpKwfdw1VN67XqDTgbyxQJjTxU5E607RyC09qHVjHdgCwezlL
-         jEMpSH91Y0VRvFlYBUu9rneNA079g0VODQoinGLug4nO1I22fTyyIQ2DiEWdNnZVe2ml
-         +6og==
+        bh=SaEqxEmWXmmnQfHDAh8ti6GbWeGVMhX+XD8AXGXHMh4=;
+        b=EP4h2XaVXP2Ur5CXiFk8iw3eAW4duWiCsoPrjguCXSmaMRAdoWRk1/zqKn6YDxVC3X
+         3MUShDOJd7Tv2zbiPt4RstVXWlbxpZM+OJjkrCjDrjF9mDHQZSWWjIHxVDVVCEQPUA4J
+         fRppvEKpQXkPnNjD8HWW9xp1iaRnfPsydE7CMKWDPBAac1QAgMYcqRG7uMry8XYaesi9
+         st04q7qQaiGvCC9W1g+EqiSWC8n/WKck98Vjms/dF0t2EV+HtJ4FW1Ukb1o0sJ5mZyQp
+         1E95YZK71zpvJt7zsYrXyGMz6NuwzxjDA7DndtcOFIT4oWxm9rKblP4uy7wdnXF0CRXn
+         B+vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691640201; x=1692245001;
+        d=1e100.net; s=20221208; t=1691640555; x=1692245355;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9X4weC6EmV/6BRjaDA/sQHx2C0WkVUVfjxnnNcvUVsk=;
-        b=hkffefen1akY+KqDcT9y6YEDN16V39IT7AFwiGSM9sQnN73pN/RZeSjYoyh3d+5oNl
-         pzKjH+oR5UhUvTKsBnbHcaLauJdg3Y7NK/OeQCCc163qQj1PDS5EzHOQVijYBxE7TxKp
-         ZtvnJenRnxVZHUKiaKT+H9lXzKo1OSXr7d1YW9HYx237aBIgS7M0NCoXQ4aryGtLB6yb
-         R9o9VoP+j2rFqnlEMdn8OkNGMCvZ/iX697Suc+06QmCE78AGzuteBLLn8Xbr0mREkmI2
-         mE+/DhvbVIQRnEi+glLJI1uxwDlOfb5xtPk82FsNvLl45esw+a2zM/YeZ3QYBOWAK6vI
-         TSPQ==
-X-Gm-Message-State: AOJu0YwUUGkfdXVUv64wbUiYpJRQU93NfhENYlbjNufcoswNTLPa7NzG
-        Vr4+n2OQemXkt2MwkwUh0qzZk4Kw/gM=
-X-Google-Smtp-Source: AGHT+IF3+HVSaWE0jLkUL97mTYSLvykSHqqosBViMOn98lH1Tks5Yhr6WQNkJcymoK92+mO/7UxbFQ==
-X-Received: by 2002:a5e:8912:0:b0:780:c787:637b with SMTP id k18-20020a5e8912000000b00780c787637bmr1664775ioj.0.1691640201508;
-        Wed, 09 Aug 2023 21:03:21 -0700 (PDT)
+        bh=SaEqxEmWXmmnQfHDAh8ti6GbWeGVMhX+XD8AXGXHMh4=;
+        b=Kmkg6IhLKGKz8vlF/EQN8xeoGH7Hm9jG1vNZt3vw8nhQdzXPC7yOMECsRk3qJtzUxp
+         Eckjzys/JfaFFaRsT8/ZRdMnFeImIscLavjVvbVRqXCsVzMAlPzZPFAj1qZb7pt7R9Cm
+         et4qgGMUhqQAFwhW0s+JpbPUED+8RGKgcZPLRSUOmm+O/CALwgQBlrrbIJfKrImgOMNq
+         tVEEKGoK6MfGQx8XZ/7A/GpmQslt2xvsjU/v7vgrULanw0fShlA5QTYeyxgqVd+1JP2e
+         5F631dZCmUOnTMx1DmoY55w4dEPit5o5/yTztq4uZ0xQ6D1iELCM/nbbum5PPMBrmYyd
+         02SA==
+X-Gm-Message-State: AOJu0Yzl7y9DFVxLJ/e0mhs4QipuUiWWnimW37H+NGr3Ru21xfwTM6+f
+        luF+vUleZCnzk3budIxDUkc=
+X-Google-Smtp-Source: AGHT+IEDMcerwKOYmHeYrwBU4B2rrzvU0jHFfLxqv8QIP+qARmSwSnEhQcJXnxOOUXEbQMBVykjx+g==
+X-Received: by 2002:a05:6870:240f:b0:1ba:617f:5f26 with SMTP id n15-20020a056870240f00b001ba617f5f26mr1392916oap.51.1691640554925;
+        Wed, 09 Aug 2023 21:09:14 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v5-20020a02cba5000000b0042ad6abe0bbsm165685jap.20.2023.08.09.21.03.20
+        by smtp.gmail.com with ESMTPSA id gg19-20020a056638691300b0042b0ce92dddsm164132jab.161.2023.08.09.21.09.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Aug 2023 21:03:21 -0700 (PDT)
+        Wed, 09 Aug 2023 21:09:14 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 9 Aug 2023 21:03:19 -0700
+Date:   Wed, 9 Aug 2023 21:09:13 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] hwmon: (max6639) Add compatible string
-Message-ID: <eb7101f6-0bfe-4e43-bb12-3be86692d8da@roeck-us.net>
-References: <20230803144401.1151065-1-Naresh.Solanki@9elements.com>
- <20230803144401.1151065-2-Naresh.Solanki@9elements.com>
+To:     Aleksa Savic <savicaleksa83@gmail.com>
+Cc:     linux-hwmon@vger.kernel.org, Jack Doan <me@jackdoan.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] hwmon: (aquacomputer_d5next) Add selective 200ms
+ delay after sending ctrl report
+Message-ID: <c151d464-da26-4c53-ba7a-d16bb8fca949@roeck-us.net>
+References: <20230807172004.456968-1-savicaleksa83@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230803144401.1151065-2-Naresh.Solanki@9elements.com>
+In-Reply-To: <20230807172004.456968-1-savicaleksa83@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Aug 03, 2023 at 04:44:00PM +0200, Naresh Solanki wrote:
-> Use maxim,max6639 as compatible string for the driver.
+On Mon, Aug 07, 2023 at 07:20:03PM +0200, Aleksa Savic wrote:
+> Add a 200ms delay after sending a ctrl report to Quadro,
+> Octo, D5 Next and Aquaero to give them enough time to
+> process the request and save the data to memory. Otherwise,
+> under heavier userspace loads where multiple sysfs entries
+> are usually set in quick succession, a new ctrl report could
+> be requested from the device while it's still processing the
+> previous one and fail with -EPIPE. The delay is only applied
+> if two ctrl report operations are near each other in time.
 > 
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> Reported by a user on Github [1] and tested by both of us.
+> 
+> [1] https://github.com/aleksamagicka/aquacomputer_d5next-hwmon/issues/82
+> 
+> Fixes: 752b927951ea ("hwmon: (aquacomputer_d5next) Add support for Aquacomputer Octo")
+> Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
 
-Applied to hwmon-next, but please consider updating your e-mail
-addresses to either all say Naresh.Solanki@9elements.com or
-naresh.nolanki@9elements.com to avoid nuisance checkpatch
-warnings in the future.
+I would have suggested to use fsleep() to avoid unnecessary
+sleep times if they are small, bt I guess it doesn't make much
+of a difference.
+
+Applied.
 
 Thanks,
 Guenter
-
-> ---
-> Changes in V3:
-> - None
-> Changes in V2:
-> - None, Updated DT patch
-> ---
->  drivers/hwmon/max6639.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/hwmon/max6639.c b/drivers/hwmon/max6639.c
-> index caf527154fca..aa7f21ab2395 100644
-> --- a/drivers/hwmon/max6639.c
-> +++ b/drivers/hwmon/max6639.c
-> @@ -618,11 +618,17 @@ MODULE_DEVICE_TABLE(i2c, max6639_id);
->  
->  static DEFINE_SIMPLE_DEV_PM_OPS(max6639_pm_ops, max6639_suspend, max6639_resume);
->  
-> +static const struct of_device_id max6639_of_match[] = {
-> +	{ .compatible = "maxim,max6639", },
-> +	{ },
-> +};
-> +
->  static struct i2c_driver max6639_driver = {
->  	.class = I2C_CLASS_HWMON,
->  	.driver = {
->  		   .name = "max6639",
->  		   .pm = pm_sleep_ptr(&max6639_pm_ops),
-> +		   .of_match_table = max6639_of_match,
->  		   },
->  	.probe = max6639_probe,
->  	.id_table = max6639_id,
