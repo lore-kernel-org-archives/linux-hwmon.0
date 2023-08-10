@@ -2,109 +2,152 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4BA4C001B0
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Aug 2023 18:15:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98A84C001B0
+	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Aug 2023 23:11:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234549AbjHJSPf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 10 Aug 2023 14:15:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55278 "EHLO
+        id S230139AbjHJXLq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 10 Aug 2023 19:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231330AbjHJSPe (ORCPT
+        with ESMTP id S229485AbjHJXLq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 10 Aug 2023 14:15:34 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 124172718;
-        Thu, 10 Aug 2023 11:15:34 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4fe0d5f719dso1915524e87.2;
-        Thu, 10 Aug 2023 11:15:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691691332; x=1692296132;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:cc:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FHTmSLH18ZieAXbWyRp9gaSEWxvQuArU48jM7LRzZSU=;
-        b=IA5sWRDSeXTW2n01lyEDBLPpFT6dsjGTdkysd/vCuUFc8klKS2X193tWX6X4MrCy5p
-         rsPiW6D8YpzkWv1VUsXRdI7BFO228h3M1R6UOj62h/SkzI/x8dMVzS9pddEtpVvMOz6Q
-         s3Phqi0lJKhm9uwL7I0hfQrLhadj+PMWmMyNRTLVl+4kkyUlL0gWFHj4qVaVJ387VqJk
-         Va7hqeROhdyhTJTyZoUjWRJIeYFZ7LyupZy7WKvJlrQYkqJKBoWI4zkUBa4BUuvIXVcO
-         7R6ZdqEgu45DvZzhYApwAj0W4rJheeq2ERefxxyk6cL0GQa5YWdJel3v8Iqp7khcCUUw
-         Nk4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691691332; x=1692296132;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:cc:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FHTmSLH18ZieAXbWyRp9gaSEWxvQuArU48jM7LRzZSU=;
-        b=hYk6I1M7r7iV6TF+oMB2KZf9PhQtMZ70E5eGbChfqFm3iDxBk4/8gIUdCCdg97hnXC
-         e3d0Zr0Fv31NHPKa8ImsSO5ERn5B66NTnJa5rB5jsqGHciXLxzTN0I1hoxhhL2T3LdFj
-         /8NKF20xkm3OWPYkS+Mz/ExGW2ASPuijTDv11yohrg1fbD/7+U8AUKodrFA8N5qLqcs+
-         meqVSWJuhse5C+ylR7PJsHl/BqtrSuWxGbepAkWm8l0JH0pZHUhj93mrWAKKKaPFfzGP
-         9IMnrYZZIaJigg5wEtK3cdVDzjP+8fREupkj09vWTs0ysTdsN3MxfR/U+gidfs0AyJds
-         BcPw==
-X-Gm-Message-State: AOJu0Yxn+8RnSSUmQ9PxU9eI8GryXPndNairLvTQTml3wKs5C0HVuMX/
-        sR+uAn3sFrPx5uQXjMWWK8g=
-X-Google-Smtp-Source: AGHT+IEjJa/JtzKG9l6FJ43pIZz+0MCfvVWKDhvHqE1i/cXYYG4FEMAodjXL6+DCyDiepuSju/oI0Q==
-X-Received: by 2002:ac2:5f92:0:b0:4fe:1f27:8856 with SMTP id r18-20020ac25f92000000b004fe1f278856mr2147011lfe.7.1691691331937;
-        Thu, 10 Aug 2023 11:15:31 -0700 (PDT)
-Received: from [192.168.0.28] (cable-178-148-234-71.dynamic.sbb.rs. [178.148.234.71])
-        by smtp.gmail.com with ESMTPSA id r25-20020aa7da19000000b005233625e7a5sm1092467eds.75.2023.08.10.11.15.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Aug 2023 11:15:31 -0700 (PDT)
-Message-ID: <e7bcf401-991c-808c-66df-65664940bf22@gmail.com>
-Date:   Thu, 10 Aug 2023 20:15:30 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Cc:     savicaleksa83@gmail.com, linux-hwmon@vger.kernel.org,
-        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] hwmon: (aquacomputer_d5next) Add selective 200ms delay
- after sending ctrl report
+        Thu, 10 Aug 2023 19:11:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98241BF7;
+        Thu, 10 Aug 2023 16:11:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C5D164822;
+        Thu, 10 Aug 2023 23:11:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E87E3C433C7;
+        Thu, 10 Aug 2023 23:11:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691709104;
+        bh=t9u4okjPRplZKfcartS5jfdBSPagd8caxqSTAtJcsqo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jU0LpY7aNkyLQsIa5pOpkn7jVmn1GDKiuMwBGB7KB4cZE1rH6RWIHWO82EkHIdZwc
+         ShVcADxe8ypX14C2RjvwBl9uPrR+8ZJLYntuEyTxhusZiGgfIZtgs02iR+9cRAXyn+
+         DbWGnqUhq8cIi2+uJfpM25WnfHWbIGZEd1xPNDBZMGDqzEeTAnTSe+hmrflQoz3NUl
+         oVh44y5ifMMUj0V891TdfUS8VV++cRgzmxc0RqBzy0ylvm/8MlQYqoQN53TFiuwIyg
+         RiPizeqZPbVTHzf/r2B34kNEn283q1aiVUXh2WzS9xPI1EKArLnPFGX6EdAEWxemck
+         InEQGTkUjy5tQ==
+Received: (nullmailer pid 1534590 invoked by uid 1000);
+        Thu, 10 Aug 2023 23:11:42 -0000
+Date:   Thu, 10 Aug 2023 17:11:42 -0600
+From:   Rob Herring <robh@kernel.org>
 To:     Guenter Roeck <linux@roeck-us.net>
-References: <20230807172004.456968-1-savicaleksa83@gmail.com>
- <c151d464-da26-4c53-ba7a-d16bb8fca949@roeck-us.net>
-Content-Language: en-US
-From:   Aleksa Savic <savicaleksa83@gmail.com>
-In-Reply-To: <c151d464-da26-4c53-ba7a-d16bb8fca949@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc:     Conor Dooley <conor@kernel.org>,
+        Naresh Solanki <naresh.solanki@9elements.com>,
+        krzysztof.kozlowski+dt@linaro.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Marcello Sylvester Bauer <sylv@sylv.io>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: Add MAX6639
+Message-ID: <20230810231142.GA1506309-robh@kernel.org>
+References: <20230803144401.1151065-1-Naresh.Solanki@9elements.com>
+ <20230804-tamper-numbness-0117bb53a921@spud>
+ <3f947ad6-eed6-59ff-e4e6-8b21d90eb803@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3f947ad6-eed6-59ff-e4e6-8b21d90eb803@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2023-08-10 06:09:13 GMT+02:00, Guenter Roeck wrote:
-> On Mon, Aug 07, 2023 at 07:20:03PM +0200, Aleksa Savic wrote:
->> Add a 200ms delay after sending a ctrl report to Quadro,
->> Octo, D5 Next and Aquaero to give them enough time to
->> process the request and save the data to memory. Otherwise,
->> under heavier userspace loads where multiple sysfs entries
->> are usually set in quick succession, a new ctrl report could
->> be requested from the device while it's still processing the
->> previous one and fail with -EPIPE. The delay is only applied
->> if two ctrl report operations are near each other in time.
->>
->> Reported by a user on Github [1] and tested by both of us.
->>
->> [1] https://github.com/aleksamagicka/aquacomputer_d5next-hwmon/issues/82
->>
->> Fixes: 752b927951ea ("hwmon: (aquacomputer_d5next) Add support for Aquacomputer Octo")
->> Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
+On Fri, Aug 04, 2023 at 09:10:37AM -0700, Guenter Roeck wrote:
+> On 8/4/23 08:48, Conor Dooley wrote:
+> > On Thu, Aug 03, 2023 at 04:43:59PM +0200, Naresh Solanki wrote:
+> > > From: Marcello Sylvester Bauer <sylv@sylv.io>
+> > > 
+> > > Add binding documentation for Maxim MAX6639 fan-speed controller.
+> > > 
+> > > Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+> > > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> > > ---
+> > > Changes in V3:
+> > > - Update title
+> > > - Add pulses-per-revolution, supplies & interrupts
+> > > Changes in V2:
+> > > - Update subject
+> > > - Drop blank lines
+> > > ---
+> > >   .../bindings/hwmon/maxim,max6639.yaml         | 60 +++++++++++++++++++
+> > >   1 file changed, 60 insertions(+)
+> > >   create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+> > > new file mode 100644
+> > > index 000000000000..b3292061ca58
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+> > > @@ -0,0 +1,60 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Maxim MAX6639 Fan Controller
+> > > +
+> > > +maintainers:
+> > > +  - Naresh Solanki <Naresh.Solanki@9elements.com>
+> > > +
+> > > +description: |
+> > > +  The MAX6639 is a 2-channel temperature monitor with dual, automatic, PWM
+> > > +  fan-speed controller.  It monitors its own temperature and one external
+> > > +  diode-connected transistor or the temperatures of two external diode-connected
+> > > +  transistors, typically available in CPUs, FPGAs, or GPUs.
+> > 
+> > > +  fan-supply:
+> > > +    description: Phandle to the regulator that provides power to the fan.
+> > 
+> > > +  pulses-per-revolution:
+> > > +    description:
+> > > +      Define the number of pulses per fan revolution for each tachometer
+> > > +      input as an integer.
+> > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > +    enum: [1, 2, 3, 4]
+> > > +    default: 2
+> > 
+> > Apologies if I am digging up old wounds here, since there was quite a
+> > bit of back and forth on the last version, but these two newly added
+> > properties look to be common with the "pwm-fan" and with
+> > "adi,axi-fan-control". At what point should these live in a common
+> > schema instead?
+> > 
+> > Otherwise, this looks okay to me, although I'll leave things to
+> > Krzysztof since he had a lot to say about the previous version.
+> > 
 > 
-> I would have suggested to use fsleep() to avoid unnecessary
-> sleep times if they are small, bt I guess it doesn't make much
-> of a difference.
+> Rob has said that he won't accept any fan controller bindings without a generic
+> schema. At the same time he has said that he expects properties such as the
+> number of pulses per revolution to be attached to a 'fan' description, and he
+> wants pwm related properties of fan controllers to be modeled as pwm controllers.
+> And now we have a notion of a regulator providing power to the fan (which again
+> would be the fan controller, at least in cases where the fan controller
+> provides direct voltage to the fan). On top of that, this fan-supply property
+> should presumably, again, be part of a fan description and not be part of the
+> controller description. I don't think anyone knows how to make this all work
+> (I for sure don't), so it is very unlikely we'll see a generic fan controller
+> schema anytime soon.
 
-Will keep that in mind.
+I thought what was done earlier in this series was somewhat close. And 
+there are some bindings that already look pretty close to what a common 
+binding should. But it seems no one wants to worry about more than their 
+1 device.
 
-> 
-> Applied.
+In case it's not clear, as-is, this binding is a NAK for me.
 
-Will this patch perhaps be marked for stable?
+> Given that neither fan-supply nor pulses-per-revolution is implemented in the
+> driver, and given that I am not aware of any fans which would have a value for
+> pulses-per-revolution other than 2, my personal suggestion would be to add the
+> chip to trivial devices and be done with it for the time being.
 
-Thanks,
-Aleksa
+I'm fine with that too. Just keep kicking that can...
 
-> 
-> Thanks,
-> Guenter
-
+Rob
