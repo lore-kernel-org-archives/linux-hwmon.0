@@ -2,96 +2,402 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9942C001B0
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Aug 2023 16:18:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71755C41513
+	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Aug 2023 16:44:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235040AbjHJQSv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 10 Aug 2023 12:18:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33334 "EHLO
+        id S229994AbjHJQnn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 10 Aug 2023 12:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234494AbjHJQSu (ORCPT
+        with ESMTP id S234645AbjHJQn3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 10 Aug 2023 12:18:50 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65937E53
-        for <linux-hwmon@vger.kernel.org>; Thu, 10 Aug 2023 09:18:46 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id 46e09a7af769-6bca857accbso1010543a34.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 10 Aug 2023 09:18:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691684325; x=1692289125;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WehWiSYBzWbyr2koxZsYuwUhdPIR1gTPp0gnTc3B5zA=;
-        b=DCcKhOrCz++FLdL2pDl1o8wpuuOy5Kzo216lZ1qlE/7OkLDpH4edP8o0L1HpV8jrPA
-         7TIArD4Liw1JdYjtexDbB6cmMT8ce6fDQgc21DZRS0XxLzt6zDwdG8NjnXiykYedIAhV
-         snNMFT5HKgGuP43J6s1Y7JfUBQNqVduedgDyWDvR6OwgfGmHNf7tkCo3045/zLyRiqpa
-         K5DCt5lNNjxmpOCtjDDxAbaMtqMkLU3AFonhFl/iX8TYMsFELSP23cJD93QA3me0l93H
-         Xbx17px9Nb6YqWg+iLr4laTVgfI+qmt5dZdsXQb9F2jiw7KcZVPSSpWAwKMf8qwZxlXW
-         s3ZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691684325; x=1692289125;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WehWiSYBzWbyr2koxZsYuwUhdPIR1gTPp0gnTc3B5zA=;
-        b=l47mvJ/pzNTWozMplii0ftbhrx+VkuMl2LREx+ZD7NBZxKWwmqPDv7aB3zEe8UbrI+
-         bHftWkntqjx7DAp9jaQ0CzWDo/eXIiKVe8iMVIxXDOc8MKjDfuAUC7Ds+KHMt7s5VaRB
-         k4/ibMZ1jFrq328EW2XDr0QBr31y9EwSBLEAjNvxYoLYWcF5X1XBCNloxBkgXj7Ht7KQ
-         RSIml1DQDfdil2LwqLuKlv+BhWAIIZvcrE5+bher7Om6EsPZUahV9offa3Tyx6HOO10E
-         ZS7e35ZUOSFlXV9Y8Yt4h9/Ax4Jcv2PxpK2RX+09gXSZK0ilmhmmJhaYXOCTzUw66XHd
-         Id8A==
-X-Gm-Message-State: AOJu0Yw7TXaE+C4PVnvhx8onfvKHQuutvDLEzyOk9cfqetxutd0Wu6N2
-        NzcuXlvlJy/0KOlZXcBOrAAh9LrCf28=
-X-Google-Smtp-Source: AGHT+IEOTFuYRv5umYhu0AT2o0nvyl41cqPxsqj5dEg5Ja1zieV7zw3ZGk/nnhqlUvH9aapCQIv9Zg==
-X-Received: by 2002:a05:6870:e889:b0:1c0:fcbd:2345 with SMTP id q9-20020a056870e88900b001c0fcbd2345mr1413605oan.20.1691684325629;
-        Thu, 10 Aug 2023 09:18:45 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id pc16-20020a17090b3b9000b00263154aab24sm1678335pjb.57.2023.08.10.09.18.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Aug 2023 09:18:45 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 10 Aug 2023 09:18:44 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Ruan Jinjie <ruanjinjie@huawei.com>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH -next] hwmon: (nsa320-hwmon) Remove redundant
- of_match_ptr()
-Message-ID: <c0172785-4c02-4479-bd93-30a84d76b808@roeck-us.net>
-References: <20230810062635.1947552-1-ruanjinjie@huawei.com>
+        Thu, 10 Aug 2023 12:43:29 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B58D10C4;
+        Thu, 10 Aug 2023 09:43:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691685808; x=1723221808;
+  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=r7+pRLOhmCU2mY1+yp43/cT6YSLlci8CmLi2j4cMZDM=;
+  b=a7b4p0prZDMNt18PH5rRzljbNrrJfQGyyvuROzBm1LFttHstKjunoOdt
+   hoNWUhvQeuyuceWq/n5VRdm8v4l/7yvODAVrLkVHsfKS0ZhVpfaoRq83h
+   CbnfcgRMgPdMx/ib1NTPnGzROBUhNifxXn9hCu5L9p9hYxA1SrXM16f2W
+   vsGWEXBuhoBq3BO+2C9nj1TgJi++vgjwjQVKD05O1dR/r7ZORBbMScnyL
+   tZV+L9IhtFngAvRhdk94a0ksFG6bKfqcYWTFnuWpPhTM0X5aByhKa6Uex
+   HvlCyk9xMf8aRjg4x4+Fi3a13wze2fzI2AyIHWhlJOT7iUUoxxGrTOnYv
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10798"; a="351776957"
+X-IronPort-AV: E=Sophos;i="6.01,162,1684825200"; 
+   d="scan'208";a="351776957"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2023 09:36:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10798"; a="855987630"
+X-IronPort-AV: E=Sophos;i="6.01,162,1684825200"; 
+   d="scan'208";a="855987630"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga004.jf.intel.com with ESMTP; 10 Aug 2023 09:36:15 -0700
+Received: from tphi-mobl.amr.corp.intel.com (tphi-mobl.amr.corp.intel.com [10.209.57.169])
+        by linux.intel.com (Postfix) with ESMTP id 47411580AFF;
+        Thu, 10 Aug 2023 09:36:15 -0700 (PDT)
+Message-ID: <b14b087d8905297504dde89920d8d0a67b7544e8.camel@linux.intel.com>
+Subject: Re: [PATCH net-next v2 1/5] platform/x86: intel_pmc_core: Add IPC
+ mailbox accessor function and add SoC register access
+From:   "David E. Box" <david.e.box@linux.intel.com>
+Reply-To: david.e.box@linux.intel.com
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Choong Yong Liang <yong.liang.choong@linux.intel.com>,
+        Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        Jose Abreu <Jose.Abreu@synopsys.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Marek =?ISO-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Wong Vee Khee <veekhee@apple.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Shenwei Wang <shenwei.wang@nxp.com>,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Jochen Henneberg <jh@henneberg-systemdesign.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        bpf@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
+        Tan Tee Min <tee.min.tan@linux.intel.com>,
+        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
+        Lai Peter Jun Ann <jun.ann.lai@intel.com>
+Date:   Thu, 10 Aug 2023 09:36:15 -0700
+In-Reply-To: <145d7375-0e58-b7cf-6240-5d8bc16b0344@redhat.com>
+References: <20230804084527.2082302-1-yong.liang.choong@linux.intel.com>
+         <20230804084527.2082302-2-yong.liang.choong@linux.intel.com>
+         <145d7375-0e58-b7cf-6240-5d8bc16b0344@redhat.com>
+Organization: David E. Box
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230810062635.1947552-1-ruanjinjie@huawei.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Aug 10, 2023 at 02:26:35PM +0800, Ruan Jinjie wrote:
-> The driver depends on CONFIG_OF, it is not necessary to use
-> of_match_ptr() here.
-> 
-> Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
+Hi Hans,
 
-Applied.
+On Mon, 2023-08-07 at 13:02 +0200, Hans de Goede wrote:
+> > Hi David,
+> >=20
+> > On 8/4/23 10:45, Choong Yong Liang wrote:
+> > > > From: "David E. Box" <david.e.box@linux.intel.com>
+> > > >=20
+> > > > - Exports intel_pmc_core_ipc() for host access to the PMC IPC mailb=
+ox
+> > > > - Add support to use IPC command allows host to access SoC register=
+s
+> > > > through PMC firmware that are otherwise inaccessible to the host du=
+e to
+> > > > security policies.
+> > > >=20
+> > > > Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+> > > > Signed-off-by: Chao Qin <chao.qin@intel.com>
+> > > > Signed-off-by: Choong Yong Liang <yong.liang.choong@linux.intel.com=
+>
+> >=20
+> > The new exported intel_pmc_core_ipc() function does not seem to
+> > depend on any existing PMC code.
+> >=20
+> > IMHO it would be better to put this in a new .c file under
+> > arch/x86/platform/intel/ this is where similar helpers like
+> > the iosf_mbi functions also live.
+> >=20
+> > This also avoids Kconfig complications. Currently the
+> > drivers/platform/x86/intel/pmc/core.c code is only
+> > build if CONFIG_X86_PLATFORM_DEVICES and
+> > CONFIG_INTEL_PMC_CORE are both set. So if a driver
+> > wants to make sure this is enabled by selecting them
+> > then it needs to select both.
 
-Thanks,
-Guenter
+Yeah, makes sense. This is an old patch. Once upon a time the PMC driver wa=
+s
+going to use the IPC to access some registers but we were able to get them =
+from
+elsewhere. The patch was brought back for the TSN use case. But you're corr=
+ect
+that arch/x86/platform/intel makes more sense if the function is to be expo=
+rted
+now and doesn't require to PMC driver to discover the interface. We'll do t=
+hat.
 
-> ---
->  drivers/hwmon/nsa320-hwmon.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/nsa320-hwmon.c b/drivers/hwmon/nsa320-hwmon.c
-> index e26334469549..18076ba7fc14 100644
-> --- a/drivers/hwmon/nsa320-hwmon.c
-> +++ b/drivers/hwmon/nsa320-hwmon.c
-> @@ -191,7 +191,7 @@ static struct platform_driver nsa320_hwmon_driver = {
->  	.probe = nsa320_hwmon_probe,
->  	.driver = {
->  		.name = "nsa320-hwmon",
-> -		.of_match_table = of_match_ptr(of_nsa320_hwmon_match),
-> +		.of_match_table = of_nsa320_hwmon_match,
->  	},
->  };
->  
+> >=20
+> > Talking about Kconfig:
+> >=20
+> > #if IS_ENABLED(CONFIG_INTEL_PMC_CORE)
+> > int intel_pmc_core_ipc(struct pmc_ipc_cmd *ipc_cmd, u32 *rbuf);
+> > #else
+> > static inline int intel_pmc_core_ipc(struct pmc_ipc_cmd *ipc_cmd, u32 *=
+rbuf)
+> > {
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return -ENODEV;
+> > }
+> > #endif /* CONFIG_INTEL_PMC_CORE */
+> >=20
+> > Notice that CONFIG_INTEL_PMC_CORE is a tristate, so pmc might be build =
+as a
+> > > module where as a consumer of intel_pmc_core_ipc() might end up built=
+in in
+> > > which case this will not work without extra Kconfig protection. And i=
+f you
+> > are > going to add extra Kconfig you might just as well select or depen=
+d on
+> > > INTEL_PMC_CORE and drop the #if .
+
+Sure. Thanks.
+
+David
+
+> >=20
+> > Regards,
+> >=20
+> > Hans
+> >=20
+> >=20
+> >=20
+> >=20
+> >=20
+> >=20
+> > > > ---
+> > > > =C2=A0MAINTAINERS=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 |=C2=A0 1 +
+> > > > =C2=A0drivers/platform/x86/intel/pmc/core.c=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 | 60 +++++++++++++++++++
+> > > > =C2=A0.../linux/platform_data/x86/intel_pmc_core.h=C2=A0 | 41 +++++=
+++++++++
+> > > > =C2=A03 files changed, 102 insertions(+)
+> > > > =C2=A0create mode 100644 include/linux/platform_data/x86/intel_pmc_=
+core.h
+> > > >=20
+> > > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > > index 069e176d607a..8a034dee9da9 100644
+> > > > --- a/MAINTAINERS
+> > > > +++ b/MAINTAINERS
+> > > > @@ -10648,6 +10648,7 @@ L:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0platf=
+orm-driver-x86@vger.kernel.org
+> > > > =C2=A0S:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Maintained
+> > > > =C2=A0F:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Documentation/ABI/testing/sys=
+fs-platform-intel-pmc
+> > > > =C2=A0F:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0drivers/platform/x86/intel/pm=
+c/
+> > > > +F:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0linux/platform_data/x86/intel_pmc_=
+core.h
+> > > > =C2=A0
+> > > > =C2=A0INTEL PMIC GPIO DRIVERS
+> > > > =C2=A0M:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Andy Shevchenko <andy@kernel.=
+org>
+> > > > diff --git a/drivers/platform/x86/intel/pmc/core.c > >
+> > > > b/drivers/platform/x86/intel/pmc/core.c
+> > > > index 5a36b3f77bc5..6fb1b0f453d8 100644
+> > > > --- a/drivers/platform/x86/intel/pmc/core.c
+> > > > +++ b/drivers/platform/x86/intel/pmc/core.c
+> > > > @@ -20,6 +20,7 @@
+> > > > =C2=A0#include <linux/pci.h>
+> > > > =C2=A0#include <linux/slab.h>
+> > > > =C2=A0#include <linux/suspend.h>
+> > > > +#include <linux/platform_data/x86/intel_pmc_core.h>
+> > > > =C2=A0
+> > > > =C2=A0#include <asm/cpu_device_id.h>
+> > > > =C2=A0#include <asm/intel-family.h>
+> > > > @@ -28,6 +29,8 @@
+> > > > =C2=A0
+> > > > =C2=A0#include "core.h"
+> > > > =C2=A0
+> > > > +#define PMC_IPCS_PARAM_COUNT=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 7
+> > > > +
+> > > > =C2=A0/* Maximum number of modes supported by platfoms that has low=
+ power
+> > > > mode > > capability */
+> > > > =C2=A0const char *pmc_lpm_modes[] =3D {
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0"S0i2.0",
+> > > > @@ -53,6 +56,63 @@ const struct pmc_bit_map msr_map[] =3D {
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{}
+> > > > =C2=A0};
+> > > > =C2=A0
+> > > > +int intel_pmc_core_ipc(struct pmc_ipc_cmd *ipc_cmd, u32 *rbuf)
+> > > > +{
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct acpi_buffer buffe=
+r =3D { ACPI_ALLOCATE_BUFFER, NULL };
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0union acpi_object params=
+[PMC_IPCS_PARAM_COUNT] =3D {
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0{.type =3D ACPI_TYPE_INTEGER,},
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0{.type =3D ACPI_TYPE_INTEGER,},
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0{.type =3D ACPI_TYPE_INTEGER,},
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0{.type =3D ACPI_TYPE_INTEGER,},
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0{.type =3D ACPI_TYPE_INTEGER,},
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0{.type =3D ACPI_TYPE_INTEGER,},
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0{.type =3D ACPI_TYPE_INTEGER,},
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0};
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct acpi_object_list =
+arg_list =3D { PMC_IPCS_PARAM_COUNT,
+> > > > params };
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0union acpi_object *obj;
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int status;
+> > > > +
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!ipc_cmd || !rbuf)
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0return -EINVAL;
+> > > > +
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * 0: IPC Command
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * 1: IPC Sub Command
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * 2: Size
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * 3-6: Write Buffer for=
+ offset
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0params[0].integer.value =
+=3D ipc_cmd->cmd;
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0params[1].integer.value =
+=3D ipc_cmd->sub_cmd;
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0params[2].integer.value =
+=3D ipc_cmd->size;
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0params[3].integer.value =
+=3D ipc_cmd->wbuf[0];
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0params[4].integer.value =
+=3D ipc_cmd->wbuf[1];
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0params[5].integer.value =
+=3D ipc_cmd->wbuf[2];
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0params[6].integer.value =
+=3D ipc_cmd->wbuf[3];
+> > > > +
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0status =3D acpi_evaluate=
+_object(NULL, "\\IPCS", &arg_list,
+> > > > &buffer);
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (ACPI_FAILURE(status)=
+)
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0return -ENODEV;
+> > > > +
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0obj =3D buffer.pointer;
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Check if the number o=
+f elements in package is 5 */
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (obj && obj->type =3D=
+=3D ACPI_TYPE_PACKAGE && obj->package.count
+> > > > =3D=3D > > 5) {
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0const union acpi_object *objs =3D obj->package.elem=
+ents;
+> > > > +
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0if ((u8)objs[0].integer.value !=3D 0)
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret=
+urn -EINVAL;
+> > > > +
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0rbuf[0] =3D objs[1].integer.value;
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0rbuf[1] =3D objs[2].integer.value;
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0rbuf[2] =3D objs[3].integer.value;
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0rbuf[3] =3D objs[4].integer.value;
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0} else {
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0return -EINVAL;
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> > > > +
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
+> > > > +}
+> > > > +EXPORT_SYMBOL(intel_pmc_core_ipc);
+> > > > +
+> > > > =C2=A0static inline u32 pmc_core_reg_read(struct pmc *pmc, int reg_=
+offset)
+> > > > =C2=A0{
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return readl(pmc->r=
+egbase + reg_offset);
+> > > > diff --git a/include/linux/platform_data/x86/intel_pmc_core.h > >
+> > > > b/include/linux/platform_data/x86/intel_pmc_core.h
+> > > > new file mode 100644
+> > > > index 000000000000..9bb3394fedcf
+> > > > --- /dev/null
+> > > > +++ b/include/linux/platform_data/x86/intel_pmc_core.h
+> > > > @@ -0,0 +1,41 @@
+> > > > +/* SPDX-License-Identifier: GPL-2.0 */
+> > > > +/*
+> > > > + * Intel Core SoC Power Management Controller Header File
+> > > > + *
+> > > > + * Copyright (c) 2023, Intel Corporation.
+> > > > + * All Rights Reserved.
+> > > > + *
+> > > > + * Authors: Choong Yong Liang <yong.liang.choong@linux.intel.com>
+> > > > + *=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 David E. =
+Box <david.e.box@linux.intel.com>
+> > > > + */
+> > > > +#ifndef INTEL_PMC_CORE_H
+> > > > +#define INTEL_PMC_CORE_H
+> > > > +
+> > > > +#define IPC_SOC_REGISTER_ACCESS=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A00xAA
+> > > > +#define IPC_SOC_SUB_CMD_READ=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A00x00
+> > > > +#define IPC_SOC_SUB_CMD_WRITE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A00x0=
+1
+> > > > +
+> > > > +struct pmc_ipc_cmd {
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 cmd;
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 sub_cmd;
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 size;
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 wbuf[4];
+> > > > +};
+> > > > +
+> > > > +#if IS_ENABLED(CONFIG_INTEL_PMC_CORE)
+> > > > +/**
+> > > > + * intel_pmc_core_ipc() - PMC IPC Mailbox accessor
+> > > > + * @ipc_cmd:=C2=A0 struct pmc_ipc_cmd prepared with input to send
+> > > > + * @rbuf:=C2=A0=C2=A0=C2=A0=C2=A0 Allocated u32[4] array for retur=
+ned IPC data
+> > > > + *
+> > > > + * Return: 0 on success. Non-zero on mailbox error
+> > > > + */
+> > > > +int intel_pmc_core_ipc(struct pmc_ipc_cmd *ipc_cmd, u32 *rbuf);
+> > > > +#else
+> > > > +static inline int intel_pmc_core_ipc(struct pmc_ipc_cmd *ipc_cmd, =
+u32 >
+> > > > > *rbuf)
+> > > > +{
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return -ENODEV;
+> > > > +}
+> > > > +#endif /* CONFIG_INTEL_PMC_CORE */
+> > > > +
+> > > > +#endif /* INTEL_PMC_CORE_H */
+> >=20
+
