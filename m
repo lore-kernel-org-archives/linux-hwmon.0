@@ -2,54 +2,54 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D05DBC001DE
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Aug 2023 09:32:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8778EC001DB
+	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Aug 2023 09:32:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234402AbjHJJcp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 10 Aug 2023 05:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50534 "EHLO
+        id S235055AbjHJJcx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 10 Aug 2023 05:32:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234996AbjHJJcb (ORCPT
+        with ESMTP id S235064AbjHJJcc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 10 Aug 2023 05:32:31 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C651AB
-        for <linux-hwmon@vger.kernel.org>; Thu, 10 Aug 2023 02:32:19 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-99c1f6f3884so106218766b.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 10 Aug 2023 02:32:19 -0700 (PDT)
+        Thu, 10 Aug 2023 05:32:32 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20AA926A9
+        for <linux-hwmon@vger.kernel.org>; Thu, 10 Aug 2023 02:32:21 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-99c4923195dso102901066b.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 10 Aug 2023 02:32:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691659937; x=1692264737;
+        d=linaro.org; s=google; t=1691659939; x=1692264739;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=f7z4Syk6Kc3ZzVPMxaba4/zHmV32qqbPQTetDpsNyfg=;
-        b=GkX2UOPCjS5i4pCGriaKQrDIrthcnHQzBJI063ghyBphmn7uLsR/zwgt0qdZFvJK3u
-         ja8la5nmD3V/LZsAzWHRSCW9CPnrk1K6CT2dNRM/OBP12GDNhLof9IsMuHxSjm+Eyis3
-         KdrrCLglWakMyijgEU3w4NxgMQ90TlIeHmL0x/w9zHvwJcMkPP7Qt5wWy5+EKaNsL6DS
-         crnywPkQ20rDByE+ueturRU72Opbxbnk4nrDNOmQ5BmGjfEZMtLJQAbg2wyXpztUXm2c
-         jhWrPPetG7TEmcCuh6aNFN0T59nDRu180tuPQ2PmSXc30GW/ablJdsW9qDpLyAzfinsi
-         /G5A==
+        bh=2v+GRu6WDJvM0/2vgpI60e4B3OmPCtheyKzDBXMk+w8=;
+        b=o4jgiMwMVX0IiDCQPHUJ6qSwSFOILMQCYj4lC3GhVWDoy3MWB9fMV70SgjJUh8xEVj
+         wniAvKl0MSU7+zoPkTG5yuSe7zscSLxzqGGnaR4uPoYEtag8PPCHuR2yGHGsQHtqFTOG
+         2Ye/fqUAmxRf7V9k+W4w69VNPDmWKZu9O70OUs832sEHmjSGcVq/vFnZCJr893LyOrxk
+         LNCHz+GWH/vgqakvzYAXW5jQb5sUPJXXUcrPp8BGzu/bIASkkc7IGdA931HD4tgjBj0d
+         j6vYxF/V6cBJ2J2G6VwuujX0fFsI1JAgQl/jAxc5yqkPoFLYXPnoMzqd0qlPowB3lvVs
+         bbsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691659937; x=1692264737;
+        d=1e100.net; s=20221208; t=1691659939; x=1692264739;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=f7z4Syk6Kc3ZzVPMxaba4/zHmV32qqbPQTetDpsNyfg=;
-        b=RQKvWKbtt4r+CFLfbGCuU8xeUWqG11MSuKCRn4sOFe8TeuckSJUMf6chkVmaVMHv5s
-         tJJT+3M2krDzBJQq/lM90hxcrELS9g+lJr+D53vCHJvlBWIO2/t+j1k8zNSBarmpQlQG
-         HdyUD6BdSG+yJRBdBhPOPBXfCw8xFzW3SYL+tiQqEFsRwJ36g9JHLybVtsSHVzvGmrF/
-         rQIbPhYnaLLODQOUZuuSE+46Qw7REAUf7oDqp/i1VCm3mDxwLLrB2EQfVHWXQwxSVKGs
-         HJIESHdk0jTSTfFJA4uDkdW9qDIVosXKz4AFbopnvlp6jxJVSxpNP2/24lwF9g/gYH9n
-         a7wA==
-X-Gm-Message-State: AOJu0YyQO6Zw1WzdB0xmj3kQtAMpyqP+LzcowM0DZZjxsKJMBvudeXAx
-        Ii3YvRq+o/PDOczXocXcdCaJDQ==
-X-Google-Smtp-Source: AGHT+IGfkD1OBaq0SF/L7Hmb6rUDvdLJKCcLd0lwn6cW8ToP7m/fkwTkVwiGv2XmSu8FuLTXaVnwew==
-X-Received: by 2002:a17:906:5daa:b0:993:f996:52d2 with SMTP id n10-20020a1709065daa00b00993f99652d2mr1511716ejv.20.1691659937736;
-        Thu, 10 Aug 2023 02:32:17 -0700 (PDT)
+        bh=2v+GRu6WDJvM0/2vgpI60e4B3OmPCtheyKzDBXMk+w8=;
+        b=aiG4ZWOBHQsItcZUH05ENIR2I0rOmzVUSboDsaGMSbguFgy13qOi4xWUjI8G6YAJpW
+         OKosu1+27+KuEjBfpo4PwfOg998f9e9SKzDKVc8gsAVMsgIzmcGG5+BKZRwr5vu9y2AL
+         HPFW/BDHJ9Z2WbenQsfIGAhp4Zs16pHXKUpDraaJqON9DPzkODxQG9X6m23mbDDzrenV
+         s+ZyYkhqU9SfnSWvf+35cMuAD3TvyNk0AwuEp3xsJeBV2OKkgNsthiAcg/meJ3TbF0+Z
+         94ICTYGOYCzuyh8TkgKRs4dGNSJBU/mg3tqvmOWv7c7PKhII6TXZr0kqPo0Swun1IxoF
+         K/tQ==
+X-Gm-Message-State: AOJu0Yxc+TXcVmO7tA1+3BwO3p4J6P0Xq9OyfRybCn4+P1inlBTbzbzI
+        m5X+fcKCVcE6QBcgfU5p9/bBqg==
+X-Google-Smtp-Source: AGHT+IFCMVjABixV3IsTADinp1g9DSc/LsoKu78Jm61rtsCfnVREq1+p8G36qoH6UON4ybbfTIJglQ==
+X-Received: by 2002:a17:906:5357:b0:992:c5ad:18bc with SMTP id j23-20020a170906535700b00992c5ad18bcmr1902845ejo.70.1691659939768;
+        Thu, 10 Aug 2023 02:32:19 -0700 (PDT)
 Received: from krzk-bin.. ([178.197.222.113])
-        by smtp.gmail.com with ESMTPSA id e22-20020a170906249600b0098e2969ed44sm667642ejb.45.2023.08.10.02.32.16
+        by smtp.gmail.com with ESMTPSA id e22-20020a170906249600b0098e2969ed44sm667642ejb.45.2023.08.10.02.32.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Aug 2023 02:32:17 -0700 (PDT)
+        Thu, 10 Aug 2023 02:32:18 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -57,9 +57,9 @@ To:     Jean Delvare <jdelvare@suse.com>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Andi Shyti <andi.shyti@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 12/15] hwmon: (pmbus/ibm-cffps) fix Wvoid-pointer-to-enum-cast warning
-Date:   Thu, 10 Aug 2023 11:31:54 +0200
-Message-Id: <20230810093157.94244-12-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 13/15] hwmon: (pmbus/tps53679) fix Wvoid-pointer-to-enum-cast warning
+Date:   Thu, 10 Aug 2023 11:31:55 +0200
+Message-Id: <20230810093157.94244-13-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230810093157.94244-1-krzysztof.kozlowski@linaro.org>
 References: <20230810093157.94244-1-krzysztof.kozlowski@linaro.org>
@@ -69,29 +69,29 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-'vs' is an enum, thus cast of pointer on 64-bit compile test with W=1
+'chip_id' is an enum, thus cast of pointer on 64-bit compile test with W=1
 causes:
 
-  ibm-cffps.c:492:8: error: cast to smaller integer type 'enum versions' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
+  tps53679.c:238:13: error: cast to smaller integer type 'enum chips' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/hwmon/pmbus/ibm-cffps.c | 2 +-
+ drivers/hwmon/pmbus/tps53679.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
-index 5b11aacda4d2..1ba4c5e95820 100644
---- a/drivers/hwmon/pmbus/ibm-cffps.c
-+++ b/drivers/hwmon/pmbus/ibm-cffps.c
-@@ -489,7 +489,7 @@ static int ibm_cffps_probe(struct i2c_client *client)
- 	const struct i2c_device_id *id;
+diff --git a/drivers/hwmon/pmbus/tps53679.c b/drivers/hwmon/pmbus/tps53679.c
+index e77b12f342b4..5c9466244d70 100644
+--- a/drivers/hwmon/pmbus/tps53679.c
++++ b/drivers/hwmon/pmbus/tps53679.c
+@@ -235,7 +235,7 @@ static int tps53679_probe(struct i2c_client *client)
+ 	enum chips chip_id;
  
- 	if (md) {
--		vs = (enum versions)md;
-+		vs = (uintptr_t)md;
- 	} else {
- 		id = i2c_match_id(ibm_cffps_id, client);
- 		if (id)
+ 	if (dev->of_node)
+-		chip_id = (enum chips)of_device_get_match_data(dev);
++		chip_id = (uintptr_t)of_device_get_match_data(dev);
+ 	else
+ 		chip_id = i2c_match_id(tps53679_id, client)->driver_data;
+ 
 -- 
 2.34.1
 
