@@ -2,128 +2,89 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60107C001DB
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Aug 2023 09:52:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7257BC001DB
+	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Aug 2023 12:30:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbjHJJw1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 10 Aug 2023 05:52:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49222 "EHLO
+        id S235184AbjHJMan (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 10 Aug 2023 08:30:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjHJJw0 (ORCPT
+        with ESMTP id S233719AbjHJMan (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 10 Aug 2023 05:52:26 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D7C211B;
-        Thu, 10 Aug 2023 02:52:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691661146; x=1723197146;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=0QXCdnIeDvNVhe3zDIXfKLHqjJhkR646hmb6U9XbWSc=;
-  b=Pjlp4NDNGMDyCcIa4mvhaYddipIjoLKEoU5aZ743tqoSdWpB/EFe93YC
-   PW4KbQoE49DrQauDTH5Zm3y530T+5hZs219c+a0Ped1oK/LL8NUi4hRcw
-   Fnv4C39ySNuZo1tD5ygw23FBfajZpb2uxT4Yu48+JWMComWWWKV67RvpJ
-   AQbEb8N9WYR3jjAYDVqoF1HwpyNRuRXHkIxBB/1AdPzEuOtVGO0GfU8/r
-   cU4Rat2tPxkc93+R6QRwyrVufvSbI+MI+rgowaolTB+5T1TBvy5ZA3Mgl
-   LxhgiU0eljl8u1Tx9DcVp6oPhuu2IZKcxRbbyp8R0obCcgQzcB9zDTUnj
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="368810604"
-X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
-   d="scan'208";a="368810604"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2023 02:52:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="732142399"
-X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
-   d="scan'208";a="732142399"
-Received: from choongyo-mobl.gar.corp.intel.com (HELO [10.213.42.193]) ([10.213.42.193])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2023 02:52:13 -0700
-Message-ID: <5e113258-7cb4-e503-5009-e46cd3aa5bee@linux.intel.com>
-Date:   Thu, 10 Aug 2023 17:52:10 +0800
+        Thu, 10 Aug 2023 08:30:43 -0400
+X-Greylist: delayed 451 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Aug 2023 05:30:42 PDT
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78BA81B4;
+        Thu, 10 Aug 2023 05:30:42 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 68D1B40E0140;
+        Thu, 10 Aug 2023 12:23:09 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+        header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id XdxG51TOhWJ6; Thu, 10 Aug 2023 12:23:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+        t=1691670186; bh=sxlOpm3tyscnmVpjnj81p/XnNYwJIE085156LxuZ3NY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B+NkGEi9csIUpEqRCe1925nuoX17pjhzTWny7oM37Y1+dhDYDoMHiwIhhNxhwip2u
+         uAZGF53CkN1mfskcDNHA+0lIDqKP9P9OT2K2YE0bQkrtkHmtOFyPUDkd4D86jr1Wkk
+         IwVoVXCf1zdYIgwnHaCWD3CkIPJfjYGzS3PDh9n5Aw5HXk0KzNSwphUo1IWdG+w62s
+         z3ZId9RetOJEG7cMKXOdgtRxTSaOF9U9Nuds8DWpbN6uDRaCvgZ9+l5iC8Rgj2USAH
+         YlWll5Hd7A0HcEKXJv8o1Mb5WJ8vZHoIfJ7+L65m7me7+X5XgE0PyZhzHVMR4LG1Nu
+         8vnwX6yKeT0GLotf2x2sv2aSawV97en7kzdbEen2jiQ61oCYtCVqbCSJjk8A8y7fSg
+         vAVf+sY9QPB+3z5XUh83Sq604EC4en2gshIaCZkF31LVBEs8QslLh/6alVFNFB6Bcl
+         r8OYpvvtRKFM0UkOLqrd95hL6FWB/MK4CtAebP3b7GkywvOSXYKJvfr6vdzqTYz0Pm
+         QTrs0Jn+GvgqsxEftgTAwVW/0Ykz8N6DQQu6ed1264UPbPVW/aL3W77xeE8ieMVis0
+         fi3u9HS1ZfpAA+3l9h53JmVBVmuAxhN515z9SDbkixzt9i1vOVpd10CC2BrL2R/rmi
+         /4hNWUKjaVdb7tAHk+trvpM0=
+Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+        (No client certificate requested)
+        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 706BE40E0185;
+        Thu, 10 Aug 2023 12:22:57 +0000 (UTC)
+Date:   Thu, 10 Aug 2023 14:22:52 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Avadhut Naik <avadhut.naik@amd.com>
+Cc:     x86@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mario.limonciello@amd.com,
+        yazen.ghannam@amd.com, linux@roeck-us.net,
+        linux-hwmon@vger.kernel.org, avadnaik@amd.com
+Subject: Re: [PATCH v2 1/3] x86/amd_nb: Add PCI IDs for AMD Family 1Ah-based
+ models
+Message-ID: <20230810122252.GHZNTWnBcBquML7or9@fat_crate.local>
+References: <20230809035244.2722455-1-avadhut.naik@amd.com>
+ <20230809035244.2722455-2-avadhut.naik@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH net-next v2 0/5] TSN auto negotiation between 1G and 2.5G
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
-        David E Box <david.e.box@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Jose Abreu <Jose.Abreu@synopsys.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Wong Vee Khee <veekhee@apple.com>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Revanth Kumar Uppala <ruppala@nvidia.com>,
-        Shenwei Wang <shenwei.wang@nxp.com>,
-        Andrey Konovalov <andrey.konovalov@linaro.org>,
-        Jochen Henneberg <jh@henneberg-systemdesign.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        bpf@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
-        Tan Tee Min <tee.min.tan@linux.intel.com>,
-        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
-        Lai Peter Jun Ann <jun.ann.lai@intel.com>
-References: <20230804084527.2082302-1-yong.liang.choong@linux.intel.com>
- <5bd05ba2-fd88-4e5c-baed-9971ff917484@lunn.ch>
-From:   Choong Yong Liang <yong.liang.choong@linux.intel.com>
-In-Reply-To: <5bd05ba2-fd88-4e5c-baed-9971ff917484@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230809035244.2722455-2-avadhut.naik@amd.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-
-
-On 4/8/2023 8:04 pm, Andrew Lunn wrote:
-> On Fri, Aug 04, 2023 at 04:45:22PM +0800, Choong Yong Liang wrote:
->> Intel platforms’ integrated Gigabit Ethernet controllers support
->> 2.5Gbps mode statically using BIOS programming. In the current
->> implementation, the BIOS menu provides an option to select between
->> 10/100/1000Mbps and 2.5Gbps modes. Based on the selection, the BIOS
->> programs the Phase Lock Loop (PLL) registers. The BIOS also read the
->> TSN lane registers from Flexible I/O Adapter (FIA) block and provided
->> 10/100/1000Mbps/2.5Gbps information to the stmmac driver. But
->> auto-negotiation between 10/100/1000Mbps and 2.5Gbps is not allowed.
->> The new proposal is to support auto-negotiation between 10/100/1000Mbps
->> and 2.5Gbps . Auto-negotiation between 10, 100, 1000Mbps will use
->> in-band auto negotiation. Auto-negotiation between 10/100/1000Mbps and
->> 2.5Gbps will work as the following proposed flow, the stmmac driver reads
->> the PHY link status registers then identifies the negotiated speed.
->> Based on the speed stmmac driver will identify TSN lane registers from
->> FIA then send IPC command to the Power Management controller (PMC)
->> through PMC driver/API. PMC will act as a proxy to programs the
->> PLL registers.
+On Tue, Aug 08, 2023 at 10:52:42PM -0500, Avadhut Naik wrote:
+> From: Avadhut Naik <Avadhut.Naik@amd.com>
 > 
-> Have you considered using out of band for all link modes? You might
-> end up with a cleaner architecture, and not need any phylink/phylib
-> hacks.
+> Add new PCI Device IDs, required to support AMD's new Family 1Ah-based
+> models 00h-1Fh, 20h and 40h-4Fh.
 > 
-> 	Andrew
-Hi Andrew,
+> Since, models 40h-4Fh and model 20h share some design aspects, the PCI
+> IDs defined in this patch for model 20h are shared by models 40h-4Fh.
 
-Thank you for your feedback.
-I will study the feasibility of the out-of-band (OOB) approach.
+Avoid having "This patch" or "This commit" in the commit message. It is
+tautologically useless.
+
+Also, do
+
+$ git grep 'This patch' Documentation/process
+
+for more details.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
