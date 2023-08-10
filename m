@@ -2,89 +2,83 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7257BC001DB
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Aug 2023 12:30:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C579BC001B0
+	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Aug 2023 16:17:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235184AbjHJMan (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 10 Aug 2023 08:30:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39978 "EHLO
+        id S234118AbjHJQRr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 10 Aug 2023 12:17:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233719AbjHJMan (ORCPT
+        with ESMTP id S234494AbjHJQRq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 10 Aug 2023 08:30:43 -0400
-X-Greylist: delayed 451 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Aug 2023 05:30:42 PDT
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78BA81B4;
-        Thu, 10 Aug 2023 05:30:42 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 68D1B40E0140;
-        Thu, 10 Aug 2023 12:23:09 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id XdxG51TOhWJ6; Thu, 10 Aug 2023 12:23:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1691670186; bh=sxlOpm3tyscnmVpjnj81p/XnNYwJIE085156LxuZ3NY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B+NkGEi9csIUpEqRCe1925nuoX17pjhzTWny7oM37Y1+dhDYDoMHiwIhhNxhwip2u
-         uAZGF53CkN1mfskcDNHA+0lIDqKP9P9OT2K2YE0bQkrtkHmtOFyPUDkd4D86jr1Wkk
-         IwVoVXCf1zdYIgwnHaCWD3CkIPJfjYGzS3PDh9n5Aw5HXk0KzNSwphUo1IWdG+w62s
-         z3ZId9RetOJEG7cMKXOdgtRxTSaOF9U9Nuds8DWpbN6uDRaCvgZ9+l5iC8Rgj2USAH
-         YlWll5Hd7A0HcEKXJv8o1Mb5WJ8vZHoIfJ7+L65m7me7+X5XgE0PyZhzHVMR4LG1Nu
-         8vnwX6yKeT0GLotf2x2sv2aSawV97en7kzdbEen2jiQ61oCYtCVqbCSJjk8A8y7fSg
-         vAVf+sY9QPB+3z5XUh83Sq604EC4en2gshIaCZkF31LVBEs8QslLh/6alVFNFB6Bcl
-         r8OYpvvtRKFM0UkOLqrd95hL6FWB/MK4CtAebP3b7GkywvOSXYKJvfr6vdzqTYz0Pm
-         QTrs0Jn+GvgqsxEftgTAwVW/0Ykz8N6DQQu6ed1264UPbPVW/aL3W77xeE8ieMVis0
-         fi3u9HS1ZfpAA+3l9h53JmVBVmuAxhN515z9SDbkixzt9i1vOVpd10CC2BrL2R/rmi
-         /4hNWUKjaVdb7tAHk+trvpM0=
-Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-        (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 706BE40E0185;
-        Thu, 10 Aug 2023 12:22:57 +0000 (UTC)
-Date:   Thu, 10 Aug 2023 14:22:52 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Avadhut Naik <avadhut.naik@amd.com>
-Cc:     x86@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mario.limonciello@amd.com,
-        yazen.ghannam@amd.com, linux@roeck-us.net,
-        linux-hwmon@vger.kernel.org, avadnaik@amd.com
-Subject: Re: [PATCH v2 1/3] x86/amd_nb: Add PCI IDs for AMD Family 1Ah-based
- models
-Message-ID: <20230810122252.GHZNTWnBcBquML7or9@fat_crate.local>
-References: <20230809035244.2722455-1-avadhut.naik@amd.com>
- <20230809035244.2722455-2-avadhut.naik@amd.com>
+        Thu, 10 Aug 2023 12:17:46 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487B9E75;
+        Thu, 10 Aug 2023 09:17:46 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1bc65360648so9704155ad.1;
+        Thu, 10 Aug 2023 09:17:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1691684266; x=1692289066;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zOF4rikTAqnSet00nnYs1BlFsNV8We9b+hBH5WP3K1Q=;
+        b=NW7PtI2omRJQwz5j9I47xVSpBtuM0r/jvQSVAu20fW7F6jYOgD7jVMZ/2UpILCqstG
+         uAlX5ozKpT6/QTfTRH603TRC2mdKsevqzSoVtMjG2l1kDfgAFUj916IcuCgQ4Id2aqD1
+         vjJcZzCdV+TKVoCNAUT0Aa3icjIJo28kYxI4JFgb0cA5d/ACpe96+gkrik5avD+ZVO6K
+         N9tYnkKonoKtd74+JkYCS6H4me+tYpcMCKdojau5RsVHv/A/zSB0BYHPZfIJflzPsCsh
+         /Lo2pLTwG4dUdqYC6vEZnga+RgbXvlS1UVdZwAxg26ZomVm2XyJa8kfUZrUb+0gMaSAm
+         DYOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691684266; x=1692289066;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zOF4rikTAqnSet00nnYs1BlFsNV8We9b+hBH5WP3K1Q=;
+        b=Un1E6Yk/fCiYEZHoSu9TiTj77GKEik+IKy92nC2DulSgyAi66lNItAQj/3XmhkPstS
+         tYBnZ0DvbkToJznEGCKh94XLplhH83jRrl0+oZiUXQROPvWDEHCSBauZMApU4n91we5z
+         5bDS79RBeKNapRwUI61OeRKYC/QXZUIAXXPBYVyt7XkjWu3/ViMxgtjuHBlQ/tNBu+Vc
+         eJatE9CTUtBrXE/bcdi/+Y2C0M9nYpytkE+sRnDahfdiQudk2UlDLVn9ic18KD1nfQme
+         U3FNLkZh4EIrmncL541sxDyfBzred+OBY5d0ahu9qynWjIUnUaIVV9WICs17KrYxhevJ
+         jfMA==
+X-Gm-Message-State: AOJu0YzG/hz/8SHBkQikhtGSDXdWWfHrHJdDhA15FDFVxaOjTvna6Unp
+        l096sdOAFnLK0MkVdNlqOBI=
+X-Google-Smtp-Source: AGHT+IFtdnD0Wc5kd3GPuzylx11TdYN81tnwP0NDmtwwhPTKPCCtmkPEWp/DV4T0w7rvUTr6ukuIYg==
+X-Received: by 2002:a17:903:489:b0:1b8:475d:ebf6 with SMTP id jj9-20020a170903048900b001b8475debf6mr2870573plb.0.1691684265713;
+        Thu, 10 Aug 2023 09:17:45 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z17-20020a170903019100b001bbb25dd3a7sm1968197plg.187.2023.08.10.09.17.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Aug 2023 09:17:45 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 10 Aug 2023 09:17:44 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Eric Tremblay <etremblay@distech-controls.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andi Shyti <andi.shyti@kernel.org>
+Subject: Re: [PATCH 01/15] hwmon: (adt7475) fix Wvoid-pointer-to-enum-cast
+ warning
+Message-ID: <905ce7b7-4b74-42d5-a0d1-f433a7b6cf2a@roeck-us.net>
+References: <20230810093157.94244-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230809035244.2722455-2-avadhut.naik@amd.com>
+In-Reply-To: <20230810093157.94244-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Aug 08, 2023 at 10:52:42PM -0500, Avadhut Naik wrote:
-> From: Avadhut Naik <Avadhut.Naik@amd.com>
+On Thu, Aug 10, 2023 at 11:31:43AM +0200, Krzysztof Kozlowski wrote:
+> 'chip' is an enum, thus cast of pointer on 64-bit compile test with W=1
+> causes:
 > 
-> Add new PCI Device IDs, required to support AMD's new Family 1Ah-based
-> models 00h-1Fh, 20h and 40h-4Fh.
+>   adt7475.c:1655:10: error: cast to smaller integer type 'enum chips' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
 > 
-> Since, models 40h-4Fh and model 20h share some design aspects, the PCI
-> IDs defined in this patch for model 20h are shared by models 40h-4Fh.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Avoid having "This patch" or "This commit" in the commit message. It is
-tautologically useless.
+Series applied.
 
-Also, do
-
-$ git grep 'This patch' Documentation/process
-
-for more details.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks,
+Guenter
