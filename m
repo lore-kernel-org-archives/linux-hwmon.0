@@ -2,94 +2,66 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BF9BC001E0
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Aug 2023 04:09:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A104EC04A6A
+	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Aug 2023 06:27:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232670AbjHJEJR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 10 Aug 2023 00:09:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38810 "EHLO
+        id S233147AbjHJG10 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 10 Aug 2023 02:27:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbjHJEJQ (ORCPT
+        with ESMTP id S229765AbjHJG10 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 10 Aug 2023 00:09:16 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F52125;
-        Wed,  9 Aug 2023 21:09:15 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-1bfc2b68090so401311fac.3;
-        Wed, 09 Aug 2023 21:09:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691640555; x=1692245355;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SaEqxEmWXmmnQfHDAh8ti6GbWeGVMhX+XD8AXGXHMh4=;
-        b=EP4h2XaVXP2Ur5CXiFk8iw3eAW4duWiCsoPrjguCXSmaMRAdoWRk1/zqKn6YDxVC3X
-         3MUShDOJd7Tv2zbiPt4RstVXWlbxpZM+OJjkrCjDrjF9mDHQZSWWjIHxVDVVCEQPUA4J
-         fRppvEKpQXkPnNjD8HWW9xp1iaRnfPsydE7CMKWDPBAac1QAgMYcqRG7uMry8XYaesi9
-         st04q7qQaiGvCC9W1g+EqiSWC8n/WKck98Vjms/dF0t2EV+HtJ4FW1Ukb1o0sJ5mZyQp
-         1E95YZK71zpvJt7zsYrXyGMz6NuwzxjDA7DndtcOFIT4oWxm9rKblP4uy7wdnXF0CRXn
-         B+vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691640555; x=1692245355;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SaEqxEmWXmmnQfHDAh8ti6GbWeGVMhX+XD8AXGXHMh4=;
-        b=Kmkg6IhLKGKz8vlF/EQN8xeoGH7Hm9jG1vNZt3vw8nhQdzXPC7yOMECsRk3qJtzUxp
-         Eckjzys/JfaFFaRsT8/ZRdMnFeImIscLavjVvbVRqXCsVzMAlPzZPFAj1qZb7pt7R9Cm
-         et4qgGMUhqQAFwhW0s+JpbPUED+8RGKgcZPLRSUOmm+O/CALwgQBlrrbIJfKrImgOMNq
-         tVEEKGoK6MfGQx8XZ/7A/GpmQslt2xvsjU/v7vgrULanw0fShlA5QTYeyxgqVd+1JP2e
-         5F631dZCmUOnTMx1DmoY55w4dEPit5o5/yTztq4uZ0xQ6D1iELCM/nbbum5PPMBrmYyd
-         02SA==
-X-Gm-Message-State: AOJu0Yzl7y9DFVxLJ/e0mhs4QipuUiWWnimW37H+NGr3Ru21xfwTM6+f
-        luF+vUleZCnzk3budIxDUkc=
-X-Google-Smtp-Source: AGHT+IEDMcerwKOYmHeYrwBU4B2rrzvU0jHFfLxqv8QIP+qARmSwSnEhQcJXnxOOUXEbQMBVykjx+g==
-X-Received: by 2002:a05:6870:240f:b0:1ba:617f:5f26 with SMTP id n15-20020a056870240f00b001ba617f5f26mr1392916oap.51.1691640554925;
-        Wed, 09 Aug 2023 21:09:14 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id gg19-20020a056638691300b0042b0ce92dddsm164132jab.161.2023.08.09.21.09.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Aug 2023 21:09:14 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 9 Aug 2023 21:09:13 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Aleksa Savic <savicaleksa83@gmail.com>
-Cc:     linux-hwmon@vger.kernel.org, Jack Doan <me@jackdoan.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] hwmon: (aquacomputer_d5next) Add selective 200ms
- delay after sending ctrl report
-Message-ID: <c151d464-da26-4c53-ba7a-d16bb8fca949@roeck-us.net>
-References: <20230807172004.456968-1-savicaleksa83@gmail.com>
+        Thu, 10 Aug 2023 02:27:26 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA9B910F5
+        for <linux-hwmon@vger.kernel.org>; Wed,  9 Aug 2023 23:27:25 -0700 (PDT)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RLxhS2y80zJsYk;
+        Thu, 10 Aug 2023 14:23:52 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by kwepemi500008.china.huawei.com
+ (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 10 Aug
+ 2023 14:27:21 +0800
+From:   Ruan Jinjie <ruanjinjie@huawei.com>
+To:     <linux-hwmon@vger.kernel.org>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+CC:     <ruanjinjie@huawei.com>
+Subject: [PATCH -next] hwmon: (nsa320-hwmon) Remove redundant of_match_ptr()
+Date:   Thu, 10 Aug 2023 14:26:35 +0800
+Message-ID: <20230810062635.1947552-1-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230807172004.456968-1-savicaleksa83@gmail.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.90.53.73]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemi500008.china.huawei.com (7.221.188.139)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Aug 07, 2023 at 07:20:03PM +0200, Aleksa Savic wrote:
-> Add a 200ms delay after sending a ctrl report to Quadro,
-> Octo, D5 Next and Aquaero to give them enough time to
-> process the request and save the data to memory. Otherwise,
-> under heavier userspace loads where multiple sysfs entries
-> are usually set in quick succession, a new ctrl report could
-> be requested from the device while it's still processing the
-> previous one and fail with -EPIPE. The delay is only applied
-> if two ctrl report operations are near each other in time.
-> 
-> Reported by a user on Github [1] and tested by both of us.
-> 
-> [1] https://github.com/aleksamagicka/aquacomputer_d5next-hwmon/issues/82
-> 
-> Fixes: 752b927951ea ("hwmon: (aquacomputer_d5next) Add support for Aquacomputer Octo")
-> Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
+The driver depends on CONFIG_OF, it is not necessary to use
+of_match_ptr() here.
 
-I would have suggested to use fsleep() to avoid unnecessary
-sleep times if they are small, bt I guess it doesn't make much
-of a difference.
+Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
+---
+ drivers/hwmon/nsa320-hwmon.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied.
+diff --git a/drivers/hwmon/nsa320-hwmon.c b/drivers/hwmon/nsa320-hwmon.c
+index e26334469549..18076ba7fc14 100644
+--- a/drivers/hwmon/nsa320-hwmon.c
++++ b/drivers/hwmon/nsa320-hwmon.c
+@@ -191,7 +191,7 @@ static struct platform_driver nsa320_hwmon_driver = {
+ 	.probe = nsa320_hwmon_probe,
+ 	.driver = {
+ 		.name = "nsa320-hwmon",
+-		.of_match_table = of_match_ptr(of_nsa320_hwmon_match),
++		.of_match_table = of_nsa320_hwmon_match,
+ 	},
+ };
+ 
+-- 
+2.34.1
 
-Thanks,
-Guenter
