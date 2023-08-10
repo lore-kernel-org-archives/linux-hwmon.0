@@ -2,179 +2,109 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E503C001B0
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Aug 2023 18:01:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4BA4C001B0
+	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Aug 2023 18:15:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233027AbjHJSBe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 10 Aug 2023 14:01:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36012 "EHLO
+        id S234549AbjHJSPf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 10 Aug 2023 14:15:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232779AbjHJSBd (ORCPT
+        with ESMTP id S231330AbjHJSPe (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 10 Aug 2023 14:01:33 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C6DA10C0;
-        Thu, 10 Aug 2023 11:01:32 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-686ea67195dso898720b3a.2;
-        Thu, 10 Aug 2023 11:01:32 -0700 (PDT)
+        Thu, 10 Aug 2023 14:15:34 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 124172718;
+        Thu, 10 Aug 2023 11:15:34 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4fe0d5f719dso1915524e87.2;
+        Thu, 10 Aug 2023 11:15:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691690492; x=1692295292;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=JoXLzjGi/iLguEZkDKCbxYQhyAAHoV9nL8nrSqpg4FY=;
-        b=YwXhuvp8VMBqRhu/Ax+rXBuJ95fHDTPZ1s8/pXdkIIpPSipcd/d53KVOCoEofFic9W
-         V/9DmbNTsGJd61jw93oe8CRz1OiRMJS6sbRm0U1ESGpAadlsaurTSj62ZS1AJhYZrAIO
-         zG9v39Uo6nEjCJB7Ip3pokiAfqi2gznB0nqPkvt2fwEl18uiTAAS5MUIm5h2JMykGGKQ
-         q3DClG+rdQ9J7sgn+jZVVZjGgnNdaXOH3dJU04D3nvoooSfP0pq67pZymESSLVTHG/Xa
-         ejuaMXZsgLxnLErxDG3afMn72XuwpxWn1qVQ3PaFJ4SUMiT9o2hNgt8aPkMVrY9rX/UK
-         b0IA==
+        d=gmail.com; s=20221208; t=1691691332; x=1692296132;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:cc:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FHTmSLH18ZieAXbWyRp9gaSEWxvQuArU48jM7LRzZSU=;
+        b=IA5sWRDSeXTW2n01lyEDBLPpFT6dsjGTdkysd/vCuUFc8klKS2X193tWX6X4MrCy5p
+         rsPiW6D8YpzkWv1VUsXRdI7BFO228h3M1R6UOj62h/SkzI/x8dMVzS9pddEtpVvMOz6Q
+         s3Phqi0lJKhm9uwL7I0hfQrLhadj+PMWmMyNRTLVl+4kkyUlL0gWFHj4qVaVJ387VqJk
+         Va7hqeROhdyhTJTyZoUjWRJIeYFZ7LyupZy7WKvJlrQYkqJKBoWI4zkUBa4BUuvIXVcO
+         7R6ZdqEgu45DvZzhYApwAj0W4rJheeq2ERefxxyk6cL0GQa5YWdJel3v8Iqp7khcCUUw
+         Nk4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691690492; x=1692295292;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JoXLzjGi/iLguEZkDKCbxYQhyAAHoV9nL8nrSqpg4FY=;
-        b=hgLuuGa8wnuGWp0Ds+oe4/OG2J6oduTG4QMhjbg2wpj/lYCBiEcZDq58n7tanSVXqg
-         N80zUVmfBTvuLe4Q5KRu0YO2FWvNYEDIyWs6uVDQva+j8oUymPqd11w+Fq0WxeYV61DT
-         Dhch5H8n8R9oOoMAWYlvBmBJkxvl3dlHBxoJRDvGqlAwisevWiXp44pGtpXu+6v7isGz
-         Pw0HegI1l8rkx3ImTR18tzJc9EnsI8Qk612dHyj+hJAXT74wcQv0h9Tur2OEqKYDhx9x
-         UJoGcHjieEi65EvNY3vriSjbndIxNetUYQM2BZDVCHte16Wa3RRdWVNb5Af/p03qJYW1
-         mG8w==
-X-Gm-Message-State: AOJu0Ywi10/cRXd8mQH1XU6hbUjQEPtP9pp+FovQGJeCCxzzxO6H3FSM
-        aQSxZVSLzKNxrIvT0hXDf/9JI8eHvVE=
-X-Google-Smtp-Source: AGHT+IHJYYKuWVHTmU0a/0HYDIkQFgy6HOLdjSIHLGPmF2bKpzDzVMzOznPUopVPgCLn5n48Ldv6Yw==
-X-Received: by 2002:a05:6a00:1994:b0:67d:22a6:2f54 with SMTP id d20-20020a056a00199400b0067d22a62f54mr3374763pfl.31.1691690491666;
-        Thu, 10 Aug 2023 11:01:31 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e9-20020aa78249000000b005d22639b577sm1806394pfn.165.2023.08.10.11.01.29
+        d=1e100.net; s=20221208; t=1691691332; x=1692296132;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:cc:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FHTmSLH18ZieAXbWyRp9gaSEWxvQuArU48jM7LRzZSU=;
+        b=hYk6I1M7r7iV6TF+oMB2KZf9PhQtMZ70E5eGbChfqFm3iDxBk4/8gIUdCCdg97hnXC
+         e3d0Zr0Fv31NHPKa8ImsSO5ERn5B66NTnJa5rB5jsqGHciXLxzTN0I1hoxhhL2T3LdFj
+         /8NKF20xkm3OWPYkS+Mz/ExGW2ASPuijTDv11yohrg1fbD/7+U8AUKodrFA8N5qLqcs+
+         meqVSWJuhse5C+ylR7PJsHl/BqtrSuWxGbepAkWm8l0JH0pZHUhj93mrWAKKKaPFfzGP
+         9IMnrYZZIaJigg5wEtK3cdVDzjP+8fREupkj09vWTs0ysTdsN3MxfR/U+gidfs0AyJds
+         BcPw==
+X-Gm-Message-State: AOJu0Yxn+8RnSSUmQ9PxU9eI8GryXPndNairLvTQTml3wKs5C0HVuMX/
+        sR+uAn3sFrPx5uQXjMWWK8g=
+X-Google-Smtp-Source: AGHT+IEjJa/JtzKG9l6FJ43pIZz+0MCfvVWKDhvHqE1i/cXYYG4FEMAodjXL6+DCyDiepuSju/oI0Q==
+X-Received: by 2002:ac2:5f92:0:b0:4fe:1f27:8856 with SMTP id r18-20020ac25f92000000b004fe1f278856mr2147011lfe.7.1691691331937;
+        Thu, 10 Aug 2023 11:15:31 -0700 (PDT)
+Received: from [192.168.0.28] (cable-178-148-234-71.dynamic.sbb.rs. [178.148.234.71])
+        by smtp.gmail.com with ESMTPSA id r25-20020aa7da19000000b005233625e7a5sm1092467eds.75.2023.08.10.11.15.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Aug 2023 11:01:30 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <2322cf5f-66e2-cba1-a95a-83bceb3aa2c8@roeck-us.net>
-Date:   Thu, 10 Aug 2023 11:01:29 -0700
+        Thu, 10 Aug 2023 11:15:31 -0700 (PDT)
+Message-ID: <e7bcf401-991c-808c-66df-65664940bf22@gmail.com>
+Date:   Thu, 10 Aug 2023 20:15:30 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH] Add Silicom Platform Driver
+Cc:     savicaleksa83@gmail.com, linux-hwmon@vger.kernel.org,
+        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] hwmon: (aquacomputer_d5next) Add selective 200ms delay
+ after sending ctrl report
+To:     Guenter Roeck <linux@roeck-us.net>
+References: <20230807172004.456968-1-savicaleksa83@gmail.com>
+ <c151d464-da26-4c53-ba7a-d16bb8fca949@roeck-us.net>
 Content-Language: en-US
-To:     Huibin Shi <henrys@silicom-usa.com>,
-        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "markgross@kernel.org" <markgross@kernel.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "hb_shi2003@yahoo.com" <hb_shi2003@yahoo.com>,
-        Wen Wang <wenw@silicom-usa.com>
-References: <20230718160104.2716-1-henryshi2018@gmail.com>
- <94cbb7d-68a-765-8bdf-5c8f8e41891@linux.intel.com>
- <PA4PR04MB922224D96319862CF987FE459A06A@PA4PR04MB9222.eurprd04.prod.outlook.com>
- <58da791d-866c-ce2f-94bb-1feff8506c2@linux.intel.com>
- <PA4PR04MB922238E924D10FE9A5B2625D9A13A@PA4PR04MB9222.eurprd04.prod.outlook.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <PA4PR04MB922238E924D10FE9A5B2625D9A13A@PA4PR04MB9222.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From:   Aleksa Savic <savicaleksa83@gmail.com>
+In-Reply-To: <c151d464-da26-4c53-ba7a-d16bb8fca949@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 8/10/23 10:48, Huibin Shi wrote:
-> Ilpo,
-> 
-> See my comments below.
-> 
-> Thanks.
-> Henry
-> ----Original Message-----
-> From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> Sent: Thursday, August 3, 2023 8:07 AM
-> To: Huibin Shi <henrys@silicom-usa.com>
-> Cc: tglx@linutronix.de; mingo@redhat.com; bp@alien8.de; dave.hansen@linux.intel.com; x86@kernel.org; hpa@zytor.com; hdegoede@redhat.com; markgross@kernel.org; jdelvare@suse.com; linux@roeck-us.net; linux-kernel@vger.kernel.org; platform-driver-x86@vger.kernel.org; linux-hwmon@vger.kernel.org; hb_shi2003@yahoo.com; Wen Wang <wenw@silicom-usa.com>
-> Subject: RE: [PATCH] Add Silicom Platform Driver
-> 
-> Caution: This is an external email. Please take care when clicking links or opening attachments.
-> 
-> 
-> On Fri, 28 Jul 2023, Huibin Shi wrote:
-> 
->> Ilpo,
+On 2023-08-10 06:09:13 GMT+02:00, Guenter Roeck wrote:
+> On Mon, Aug 07, 2023 at 07:20:03PM +0200, Aleksa Savic wrote:
+>> Add a 200ms delay after sending a ctrl report to Quadro,
+>> Octo, D5 Next and Aquaero to give them enough time to
+>> process the request and save the data to memory. Otherwise,
+>> under heavier userspace loads where multiple sysfs entries
+>> are usually set in quick succession, a new ctrl report could
+>> be requested from the device while it's still processing the
+>> previous one and fail with -EPIPE. The delay is only applied
+>> if two ctrl report operations are near each other in time.
 >>
->> Thanks for the comments. See my comments below.
+>> Reported by a user on Github [1] and tested by both of us.
 >>
->> Updated patch will be sent out later after review comments from other reviewer are addressed.
+>> [1] https://github.com/aleksamagicka/aquacomputer_d5next-hwmon/issues/82
 >>
->> Henry
->> -----Original Message-----
->> From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
->> Sent: Wednesday, July 19, 2023 8:13 AM
->> To: Henry Shi <henryshi2018@gmail.com>
->> Cc: hbshi69@hotmail.com; tglx@linutronix.de; mingo@redhat.com;
->> bp@alien8.de; dave.hansen@linux.intel.com; x86@kernel.org;
->> hpa@zytor.com; hdegoede@redhat.com; markgross@kernel.org;
->> jdelvare@suse.com; linux@roeck-us.net; LKML
->> <linux-kernel@vger.kernel.org>; platform-driver-x86@vger.kernel.org;
->> linux-hwmon@vger.kernel.org; hb_shi2003@yahoo.com; Huibin Shi
->> <henrys@silicom-usa.com>; Wen Wang <wenw@silicom-usa.com>
->> Subject: Re: [PATCH] Add Silicom Platform Driver
->>
->> Caution: This is an external email. Please take care when clicking links or opening attachments.
->>
->>
->> On Tue, 18 Jul 2023, Henry Shi wrote:
->>
->>> The Silicom platform (silicom-platform) Linux driver for Swisscom
->>> Business Box (Swisscom BB) as well as Cordoba family products is a
->>> software solution designed to facilitate the efficient management
->>> and control of devices through the integration of various Linux
->>> frameworks. This platform driver provides seamless support for
->>> device management via the Linux LED framework, GPIO framework,
->>> Hardware Monitoring (HWMON), and device attributes. The Silicom
->>> platform driver's compatibility with these Linux frameworks allows
->>> applications to access and control Cordoba family devices using
->>> existing software that is compatible with these frameworks. This
->>> compatibility simplifies the development process, reduces
->>> dependencies on proprietary solutions, and promotes interoperability
->>> with other Linux-based systems and software.
->>>
->>> Signed-off-by: Henry Shi <henryshi2018@gmail.com>
->>> ---
->>>   drivers/platform/x86/Kconfig            |   12 +
->>>   drivers/platform/x86/Makefile           |    1 +
->>>   drivers/platform/x86/silicom-platform.c | 1123
->>> +++++++++++++++++++++++
->>>   3 files changed, 1136 insertions(+)  create mode 100644
->>> drivers/platform/x86/silicom-platform.c
->>>
+>> Fixes: 752b927951ea ("hwmon: (aquacomputer_d5next) Add support for Aquacomputer Octo")
+>> Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
 > 
->>> +void lock_io_modules(void)
->>> +{
->>> +     mutex_lock(&mec_io_mutex);
->>> +}
->>> +EXPORT_SYMBOL(lock_io_modules);
->>> +
->>> +void unlock_io_modules(void)
->>> +{
->>> +     mutex_unlock(&mec_io_mutex);
->>> +}
->>> +EXPORT_SYMBOL(unlock_io_modules);
-> 
-> These are unused.
-> 
-> Henry: This will be used by another Silicom driver, which source code is not pushed to kernel repository.
-> 
+> I would have suggested to use fsleep() to avoid unnecessary
+> sleep times if they are small, bt I guess it doesn't make much
+> of a difference.
 
-Besides, those function names are _way_ too generic for public symbols,
-and even more so for exports.
+Will keep that in mind.
 
-Guenter
+> 
+> Applied.
+
+Will this patch perhaps be marked for stable?
+
+Thanks,
+Aleksa
+
+> 
+> Thanks,
+> Guenter
 
