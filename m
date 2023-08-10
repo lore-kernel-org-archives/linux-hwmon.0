@@ -2,96 +2,128 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3E9DC001DB
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Aug 2023 09:33:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60107C001DB
+	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Aug 2023 09:52:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235072AbjHJJd0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 10 Aug 2023 05:33:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35484 "EHLO
+        id S229994AbjHJJw1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 10 Aug 2023 05:52:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234936AbjHJJdP (ORCPT
+        with ESMTP id S229619AbjHJJw0 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 10 Aug 2023 05:33:15 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B01F35BD
-        for <linux-hwmon@vger.kernel.org>; Thu, 10 Aug 2023 02:32:46 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-99bdf08860dso387619566b.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 10 Aug 2023 02:32:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691659961; x=1692264761;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vAUHyC66z7nc30Y9XWG6TM6gua2fmA0h+hpvdL87oQA=;
-        b=SIc9Vy+JFPOPoOiR2XBsSQpfLsN7tRlkgT0YcgkFinNzyV0DHaPo8a01y66TdJj/T7
-         wFPHJJEghR2vWS32YRlegJiP1fVhXQpKMNA9ksQGlJsqsz8JyRIJ+kAnDVgbeWQSNXU9
-         W6qD9VbuVObn/oSvhSD3aCBmkQDxF7U+XTZWJoMHYnaxn7Tngu+6W2TAzi1dU5r/ZlqJ
-         xpIGYxbWW8WIwZ7hJ2+wH1RUnOHJEjLJDZ+j7gixkmFHvJ5b9tsNEDaLqyF9lXrhMKua
-         C5FDRpX7T3Vrmbu/I1qTfuyP3mfhkrKjA+sHIFRoY9FPNmi0YUkJ0jewRQYIbJ7K7yK3
-         lvdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691659961; x=1692264761;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vAUHyC66z7nc30Y9XWG6TM6gua2fmA0h+hpvdL87oQA=;
-        b=GnRLlQEHeO6c9AOtdiEmlCNy4D0OUl3wxnG/9O2qDqwMRMKGPy2IwlCr0BUHJ5z9G1
-         EUQCmKFar2P4M5nMS4kLRxfBrB4k1qv9E0jfxSiNoifQ61Wy7NWTwZ6UUZ69w03k8/Fi
-         emGsaqjlhqB3Pj181dcXLbxb6fsOxUWttFsCIWEDE4FseLmAUmjawgpUAPBJ5EoLlI9h
-         iURv6xhSCXaCE3i1W3yai+n8NS24tOzXsryJv6Ze6yggiPOK33e9cFaH+rLBnMeC3Zor
-         ZRGDPDApBvHAZ0Lg8/cpxOIgIdRF6it6RMNVVOGYUWl4nPp/k3rTXJS2zF3Fb8qC3w/I
-         qfPA==
-X-Gm-Message-State: AOJu0YyCgLU6LH8W/2Ktqb8hUX2MrPxZUoF7HTn0iSFRvKWsmRQ0BIIu
-        yYL4WbPOPod/5sSFgfq42qAv4WQLPVwwJR6tjQPiRg==
-X-Google-Smtp-Source: AGHT+IGNF/Vs6kB3N3MLb9XZ6oEiQnvfsiUtTgSjQi50K9OZa3V1kADiyNra0EjkW7lomY6apVyZVw==
-X-Received: by 2002:a17:907:3f9c:b0:992:103c:43fa with SMTP id hr28-20020a1709073f9c00b00992103c43famr1820080ejc.30.1691659941241;
-        Thu, 10 Aug 2023 02:32:21 -0700 (PDT)
-Received: from krzk-bin.. ([178.197.222.113])
-        by smtp.gmail.com with ESMTPSA id e22-20020a170906249600b0098e2969ed44sm667642ejb.45.2023.08.10.02.32.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Aug 2023 02:32:20 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Eric Tremblay <etremblay@distech-controls.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Andi Shyti <andi.shyti@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 14/15] hwmon: (pmbus/ucd9000) fix Wvoid-pointer-to-enum-cast warning
-Date:   Thu, 10 Aug 2023 11:31:56 +0200
-Message-Id: <20230810093157.94244-14-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230810093157.94244-1-krzysztof.kozlowski@linaro.org>
-References: <20230810093157.94244-1-krzysztof.kozlowski@linaro.org>
+        Thu, 10 Aug 2023 05:52:26 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D7C211B;
+        Thu, 10 Aug 2023 02:52:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691661146; x=1723197146;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=0QXCdnIeDvNVhe3zDIXfKLHqjJhkR646hmb6U9XbWSc=;
+  b=Pjlp4NDNGMDyCcIa4mvhaYddipIjoLKEoU5aZ743tqoSdWpB/EFe93YC
+   PW4KbQoE49DrQauDTH5Zm3y530T+5hZs219c+a0Ped1oK/LL8NUi4hRcw
+   Fnv4C39ySNuZo1tD5ygw23FBfajZpb2uxT4Yu48+JWMComWWWKV67RvpJ
+   AQbEb8N9WYR3jjAYDVqoF1HwpyNRuRXHkIxBB/1AdPzEuOtVGO0GfU8/r
+   cU4Rat2tPxkc93+R6QRwyrVufvSbI+MI+rgowaolTB+5T1TBvy5ZA3Mgl
+   LxhgiU0eljl8u1Tx9DcVp6oPhuu2IZKcxRbbyp8R0obCcgQzcB9zDTUnj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="368810604"
+X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
+   d="scan'208";a="368810604"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2023 02:52:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="732142399"
+X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
+   d="scan'208";a="732142399"
+Received: from choongyo-mobl.gar.corp.intel.com (HELO [10.213.42.193]) ([10.213.42.193])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2023 02:52:13 -0700
+Message-ID: <5e113258-7cb4-e503-5009-e46cd3aa5bee@linux.intel.com>
+Date:   Thu, 10 Aug 2023 17:52:10 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH net-next v2 0/5] TSN auto negotiation between 1G and 2.5G
+Content-Language: en-US
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+        David E Box <david.e.box@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Jose Abreu <Jose.Abreu@synopsys.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Wong Vee Khee <veekhee@apple.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Revanth Kumar Uppala <ruppala@nvidia.com>,
+        Shenwei Wang <shenwei.wang@nxp.com>,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Jochen Henneberg <jh@henneberg-systemdesign.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        bpf@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
+        Tan Tee Min <tee.min.tan@linux.intel.com>,
+        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
+        Lai Peter Jun Ann <jun.ann.lai@intel.com>
+References: <20230804084527.2082302-1-yong.liang.choong@linux.intel.com>
+ <5bd05ba2-fd88-4e5c-baed-9971ff917484@lunn.ch>
+From:   Choong Yong Liang <yong.liang.choong@linux.intel.com>
+In-Reply-To: <5bd05ba2-fd88-4e5c-baed-9971ff917484@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-'chip' is an enum, thus cast of pointer on 64-bit compile test with W=1
-causes:
 
-  ucd9000.c:591:10: error: cast to smaller integer type 'enum chips' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/hwmon/pmbus/ucd9000.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 4/8/2023 8:04 pm, Andrew Lunn wrote:
+> On Fri, Aug 04, 2023 at 04:45:22PM +0800, Choong Yong Liang wrote:
+>> Intel platforms’ integrated Gigabit Ethernet controllers support
+>> 2.5Gbps mode statically using BIOS programming. In the current
+>> implementation, the BIOS menu provides an option to select between
+>> 10/100/1000Mbps and 2.5Gbps modes. Based on the selection, the BIOS
+>> programs the Phase Lock Loop (PLL) registers. The BIOS also read the
+>> TSN lane registers from Flexible I/O Adapter (FIA) block and provided
+>> 10/100/1000Mbps/2.5Gbps information to the stmmac driver. But
+>> auto-negotiation between 10/100/1000Mbps and 2.5Gbps is not allowed.
+>> The new proposal is to support auto-negotiation between 10/100/1000Mbps
+>> and 2.5Gbps . Auto-negotiation between 10, 100, 1000Mbps will use
+>> in-band auto negotiation. Auto-negotiation between 10/100/1000Mbps and
+>> 2.5Gbps will work as the following proposed flow, the stmmac driver reads
+>> the PHY link status registers then identifies the negotiated speed.
+>> Based on the speed stmmac driver will identify TSN lane registers from
+>> FIA then send IPC command to the Power Management controller (PMC)
+>> through PMC driver/API. PMC will act as a proxy to programs the
+>> PLL registers.
+> 
+> Have you considered using out of band for all link modes? You might
+> end up with a cleaner architecture, and not need any phylink/phylib
+> hacks.
+> 
+> 	Andrew
+Hi Andrew,
 
-diff --git a/drivers/hwmon/pmbus/ucd9000.c b/drivers/hwmon/pmbus/ucd9000.c
-index b1d1d4214e69..8d9d422450e5 100644
---- a/drivers/hwmon/pmbus/ucd9000.c
-+++ b/drivers/hwmon/pmbus/ucd9000.c
-@@ -588,7 +588,7 @@ static int ucd9000_probe(struct i2c_client *client)
- 	}
- 
- 	if (client->dev.of_node)
--		chip = (enum chips)of_device_get_match_data(&client->dev);
-+		chip = (uintptr_t)of_device_get_match_data(&client->dev);
- 	else
- 		chip = mid->driver_data;
- 
--- 
-2.34.1
-
+Thank you for your feedback.
+I will study the feasibility of the out-of-band (OOB) approach.
