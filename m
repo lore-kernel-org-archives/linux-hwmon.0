@@ -2,163 +2,102 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 08AAFC001B0
-	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Aug 2023 18:49:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67C6CC41513
+	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Aug 2023 23:05:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231948AbjHKStH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 11 Aug 2023 14:49:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60634 "EHLO
+        id S235628AbjHKXE6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 11 Aug 2023 19:04:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbjHKStG (ORCPT
+        with ESMTP id S235890AbjHKXDi (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 11 Aug 2023 14:49:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADFFC30E7
-        for <linux-hwmon@vger.kernel.org>; Fri, 11 Aug 2023 11:49:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C156678C3
-        for <linux-hwmon@vger.kernel.org>; Fri, 11 Aug 2023 18:49:05 +0000 (UTC)
-Received: from rdvivi-mobl4 (unknown [192.55.54.52])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp.kernel.org (Postfix) with ESMTPSA id EB5AEC433C8;
-        Fri, 11 Aug 2023 18:49:02 +0000 (UTC)
-Date:   Fri, 11 Aug 2023 14:48:59 -0400
-From:   Rodrigo Vivi <rodrigo.vivi@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        "Nilawar, Badal" <badal.nilawar@intel.com>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        linux-hwmon@vger.kernel.org, intel-xe@lists.freedesktop.org
-Subject: Re: [Intel-xe] [PATCH v3 1/6] drm/xe/hwmon: Add HWMON infrastructure
-Message-ID: <ZNaCmz3iydAb7coz@rdvivi-mobl4>
-References: <20230802135241.458855-2-badal.nilawar@intel.com>
- <ZMrbZXOVsyT133D8@ashyti-mobl2.lan>
- <d8258e4d-4cc4-78e2-7858-78409f47774f@roeck-us.net>
- <436c15bf-c031-9f72-c4cc-c7ff1600fdbf@intel.com>
- <55da1781-3ea7-b3bc-05f8-8af25e5ea143@roeck-us.net>
- <710b7d67-2882-a077-cbd8-ab42c41aa3ca@intel.com>
- <ZNK0NzoBlGt6chs2@intel.com>
- <a95b0703-b3cd-23ae-7ba7-40aab960320a@roeck-us.net>
- <ZNZbY0OAa2GvETUd@rdvivi-mobl4>
- <ebe68c94-65ed-dfa2-13d5-10c06661601b@roeck-us.net>
+        Fri, 11 Aug 2023 19:03:38 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE66D3A81;
+        Fri, 11 Aug 2023 16:01:45 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id e9e14a558f8ab-34977c2dc27so9070945ab.2;
+        Fri, 11 Aug 2023 16:01:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1691794905; x=1692399705;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=qH48f5Rauhy4XHNHiCzl0hFwNsntFmy/BGkbt5h6IgE=;
+        b=TA2HfW508CzNE3QGjhlPYmndgQhZs3pRUoA9Gre13gj7Pk+8AkZUQpxL0QeiB0k7k2
+         5vfRhYirTzjVMRnYpb3BSgraqtYyJ0/wtyqAy7TmfoF36F1duwKtlHoYKBMnoFTy7cxX
+         oJGJAMmMipo9zK799UDw+1g++KHyZlBT6wVBPCVulslh7u30oJrGjWPzfXciWK7NlvGm
+         8rD/f80PMsPO4Hfkf3JVsvvTxlni1iwVB5e2K/DDjV+AwpmQedp9c7H9fdfk7QPccivn
+         wMHVGnEjL8gKSTcF6cdBVhBrDbyx0+i/AmCRZKh2sehE077gKc2S+ShlCkcVAbKrBGbj
+         r1pA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691794905; x=1692399705;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qH48f5Rauhy4XHNHiCzl0hFwNsntFmy/BGkbt5h6IgE=;
+        b=GURs0MCw8xljRaspsqUMBY6AAWbvHqidmhBWJG5wkuXxa/Is7OZsjcIs2/0PgV9a+P
+         1tnqXiGao3kUq//kNJ1QB0Q95c1yFtccNiT88REaQJrO45q/sNNgpU+NfAZhfMTKL1H9
+         e/runB5FD523SQYDiQo+VmO3H6o3FHHfAZh2H3ByVXjd7Ud1WG7I0Fn0o1LI8joXHfW4
+         iPsJScxKRJ7xMhzptH/VIDQdE1e+sLv7qJhPaAodQp5ApL6rztBiQI9OuJLZScpH3iQ0
+         Xkn5Efyk4WrNBLMiZYCMrXyIimzesDcEMbs+X/wq8j6XJcVnbKzuEOHxOhS+Ay+Ws8mV
+         jlRA==
+X-Gm-Message-State: AOJu0YyhlbSPIf95hvPUuumDBOeCKGc9RVOyebsBgKVle0UVF/QE843E
+        v2o0jKnSyuVF75wU8XZVo7vzDKmn67M=
+X-Google-Smtp-Source: AGHT+IHNjuN2Yz8k8ESxlvp0AeCvzu357qz0rm7F+GmnI4qiYi/LK4oOkR7bYTjaBh0oF+iVVireqQ==
+X-Received: by 2002:a05:6e02:156a:b0:348:6736:6605 with SMTP id k10-20020a056e02156a00b0034867366605mr4358469ilu.9.1691794905018;
+        Fri, 11 Aug 2023 16:01:45 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m16-20020a92cad0000000b003493a5b3858sm1421955ilq.34.2023.08.11.16.01.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Aug 2023 16:01:44 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v6.5-rc6
+Date:   Fri, 11 Aug 2023 16:01:42 -0700
+Message-Id: <20230811230142.2291484-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ebe68c94-65ed-dfa2-13d5-10c06661601b@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Aug 11, 2023 at 10:39:00AM -0700, Guenter Roeck wrote:
-> On 8/11/23 09:01, Rodrigo Vivi wrote:
-> > On Tue, Aug 08, 2023 at 03:07:43PM -0700, Guenter Roeck wrote:
-> > > On 8/8/23 14:31, Rodrigo Vivi wrote:
-> > > > On Fri, Aug 04, 2023 at 08:06:22PM +0530, Nilawar, Badal wrote:
-> > > > > 
-> > > > > 
-> > > > > On 04-08-2023 19:56, Guenter Roeck wrote:
-> > > > > > On 8/4/23 06:19, Nilawar, Badal wrote:
-> > > > > > > 
-> > > > > > > Hi Guenter,
-> > > > > > > On 03-08-2023 04:42, Guenter Roeck wrote:
-> > > > > > > > On 8/2/23 15:40, Andi Shyti wrote:
-> > > > > > > > > Hi Badal,
-> > > > > > > > > 
-> > > > > > > > > [...]
-> > > > > > > > > 
-> > > > > > > > > > +struct xe_hwmon_data {
-> > > > > > > > > > +    struct device *hwmon_dev;
-> > > > > > > > > > +    struct xe_gt *gt;
-> > > > > > > > > > +    char name[12];
-> > > > > > > > > > +};
-> > > > > > > > > > +
-> > > > > > > > > > +struct xe_hwmon {
-> > > > > > > > > > +    struct xe_hwmon_data ddat;
-> > > > > > > > > > +    struct mutex hwmon_lock;
-> > > > > > > > > > +};
-> > > > > > > > > 
-> > > > > > > > > why do we need two structures here? Can we merge them?
-> > > > > > > > > 
-> > > > > > > > 
-> > > > > > > > A later patch adds multiple hwmon devices which makes use of it.
-> > > > > > > > I think that is flawed, and I am not inclined to accept it.
-> > > > > > > Is there any obvious reason that there shouldn't be multiple
-> > > > > > > devices? In i915 we are doing the same.
-> > > > > > > https://patchwork.freedesktop.org/patch/497324/?series=104278&rev=3
-> > > > > > > 
-> > > > > > 
-> > > > > > Technically you can do whatever you like as long as the code doesn't reside
-> > > > > > in drivers/hwmon. I won't NACK it, but I won't give it a Reviewed-by:
-> > > > > > either. i915 shouldn't do it, but I didn't realize what they are doing
-> > > > > > at the time. Other drivers doing it wrong is not an argument. You can't
-> > > > > > argue that you may drive faster than the speed limit because others do it
-> > > > > > or because police didn't stop you last time you did either.
-> > > > > > 
-> > > > > > One chip, one hwmon device. Do you have separate parent devices for
-> > > > > > all your hwmon devices ? If yes, you can argue that having multiple hwmon
-> > > > > > devices make sense. If not, you can't.
-> > > > > Thanks for clarification. There is only one parent device. So will try to
-> > > > > accommodate single hwmon device.
-> > > > 
-> > > > Well, it is one PCI device, but under 1 pci device we can have multiple "tiles"
-> > > > that can duplicate many components. Inside each tile we can even have multiple
-> > > > "gt"s.
-> > > > 
-> > > > But back to the tile, each tile has its own metrics. It's own power delivery,
-> > > > own sensors and all. They can even be seen as independent devices from this
-> > > > angle.
-> > > > 
-> > > > I'm afraid that the attempt to put everything as one device, but all the
-> > > > entries duplicated per tile/gt we might end up with a messed api.
-> > > > 
-> > > 
-> > > Your argument does not make sense. I am not asking to duplicate anything.
-> > 
-> > Okay, I'm sorry, maybe 'duplication' was a bad choice of words from my part.
-> > 
-> > You had told that having multiple hwmon device for a single chip was not
-> > acceptable.
-> > 
-> > But I'm trying to explain that we have a hardware architecture where the graphics
-> > is duplicated in 'tiles' inside the same PCI card. Each tile with its
-> > own sensors and monitoring systems. And also an extra sensors monitoring the
-> > entire 'package' that includes the tiles and the SoC.
-> > So 1 hwmon device per gt-tile and package sound the appropriated way to me.
-> > 
-> 
-> No, it isn't. Next you are going to tell me to split CPU temperature devices
-> in the same way because they are split in "tiles" on the same CPU core.
+Hi Linus,
 
-okay, let's align with coretemp then.
+Please pull hwmon fixes for Linux v6.5-rc6 from signed tag:
 
-> 
-> > Your lines had convinced Badal to get them all and merge in a single hwmon
-> > device. If we do this, the API will get messed up.
-> > 
-> > And this is what I meant by 'messed up':
-> > quoting Badal:
-> > """
-> > With single device energy entries will look like hwmonxx/energy1_input,
-> > energy2_input, energy3_input.
-> > To identify which entry for what need to expose additional entry energyX_lable
-> > which will contain ("package", "gtN")
-> 
-> So what is the problem with that ? That is a description and not "messed up".
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.5-rc6
 
-From the user space perspective it would be easier to get an unique handle
-for the subdevice (directory) and then inspect each property (files) with single
-and direct access, without having to inspect every single 'label' file of that
-property in the directory to match the desired sub-device.
+Thanks,
+Guenter
+------
 
-But nevermind. Let's have a single hwmon per device with multiple label files
-and aligning with cputemp.
+The following changes since commit 5d0c230f1de8c7515b6567d9afba1f196fb4e2f4:
 
-> 
-> Guenter
-> 
+  Linux 6.5-rc4 (2023-07-30 13:23:47 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.5-rc6
+
+for you to fetch changes up to 56b930dcd88c2adc261410501c402c790980bdb5:
+
+  hwmon: (aquacomputer_d5next) Add selective 200ms delay after sending ctrl report (2023-08-09 21:09:47 -0700)
+
+----------------------------------------------------------------
+hwmon fixes for v6.5-rc6
+
+* Fix sporadic comunication errors in pmbus/bel-pfe and
+  aquacomputer_d5next drivers
+
+----------------------------------------------------------------
+Aleksa Savic (1):
+      hwmon: (aquacomputer_d5next) Add selective 200ms delay after sending ctrl report
+
+Tao Ren (1):
+      hwmon: (pmbus/bel-pfe) Enable PMBUS_SKIP_STATUS_CHECK for pfe1100
+
+ drivers/hwmon/aquacomputer_d5next.c | 37 ++++++++++++++++++++++++++++++++++++-
+ drivers/hwmon/pmbus/bel-pfe.c       | 16 ++++++++--------
+ 2 files changed, 44 insertions(+), 9 deletions(-)
