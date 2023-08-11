@@ -2,175 +2,196 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2CDCC04A6A
-	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Aug 2023 10:42:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB2BDC001B0
+	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Aug 2023 12:32:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234439AbjHKKm3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 11 Aug 2023 06:42:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40310 "EHLO
+        id S236244AbjHKMcs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 11 Aug 2023 08:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjHKKm3 (ORCPT
+        with ESMTP id S235686AbjHKMco (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 11 Aug 2023 06:42:29 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 787E910D
-        for <linux-hwmon@vger.kernel.org>; Fri, 11 Aug 2023 03:42:28 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-56530cfee38so1227069a12.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 11 Aug 2023 03:42:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1691750548; x=1692355348;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qYA1iNOdZVJpj3OPfnwO45/gsMVIQDNWbkZ3zGXB3GI=;
-        b=JiepBe3WMoCqwCRY18Uu3PFgmiY5SXx/aLVlXzjYYHTCVh+Towp8JcI+0/Qwc6jSzi
-         v8j7X41vkHKLwJPv+LGET0Y163CMJd/03vaUUJUs7khw6wjN/w5qNvlNeBpfj7tJeDZL
-         Kzolt7uyEDghagAKuB6rbpvDCOxmslAEgu4eFH0EFQY82cPfAvDjCW8lzrj0TKbOOmUc
-         WCBTXfWt4xYeN8DOMb+Gue2/h33Kg5PQa0smV5phrMIychRglNhK0Nv5REfG3dOUpUNL
-         CPob/j+UYtt7E0lrDxyX16VvqSHs8hEvBPUrlRWO+rfWj+DRFi6fnmJ3iGakYeff7uCu
-         L6AQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691750548; x=1692355348;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qYA1iNOdZVJpj3OPfnwO45/gsMVIQDNWbkZ3zGXB3GI=;
-        b=Dtva9mu3aa3m8ZSXNnBYhuW4nyE2Z+5/UNAOFR4qkvQzy0FPy1oV1GZ3jijvmma1h2
-         LRtClm1oUa8PzSKtIbQnN5n2zzxF3RrN9y9JWQATjic84qwfgXbd5dmup6kHcGTwPjV2
-         17Gh5Z0dU0n8ucQxYAxMiClZEB4vkMNaDfyW+ZlD9nH2bmspztk6ABx6KecihWpiSDA9
-         WmBGuj8eW57RPUKRpOi0YMpoxvkTKTwsEG2B5DPLZrgRV7fKwzLFFnck44bBsu4TjRLU
-         Nlsokt694AsKPyQFBAseIOqCiUe7YnVVsB7jsdjT6nsxW5HwqOm7wsXRB5bp7vt0ki6N
-         Zycg==
-X-Gm-Message-State: AOJu0Yzz8PJRsrvTNaGvr9ZnB02jX26WgVIbshzYMmHQbKjpohAxkbbK
-        M3p0OobruWfidkhm4tiLvzCZCleIxNHsBUeaHvGY9Q==
-X-Google-Smtp-Source: AGHT+IGOnefdVaHW0OP86gn8IWJab70m3Ff9dUcKRomfTG1N5U2HOK6fszRhsfwloDKXmrXTLIg6gAqvgES+w8qyhxs=
-X-Received: by 2002:a17:90a:db55:b0:268:36a2:bd0 with SMTP id
- u21-20020a17090adb5500b0026836a20bd0mr774080pjx.8.1691750547480; Fri, 11 Aug
- 2023 03:42:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230803144401.1151065-1-Naresh.Solanki@9elements.com>
- <20230804-tamper-numbness-0117bb53a921@spud> <3f947ad6-eed6-59ff-e4e6-8b21d90eb803@roeck-us.net>
- <20230810231142.GA1506309-robh@kernel.org>
-In-Reply-To: <20230810231142.GA1506309-robh@kernel.org>
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-Date:   Fri, 11 Aug 2023 16:12:18 +0530
-Message-ID: <CABqG17hzvyVLFkNRHSs2ye5k2+dp7XkLk0MC3OmwSguz1uG0rg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: Add MAX6639
-To:     Rob Herring <robh@kernel.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Conor Dooley <conor@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Marcello Sylvester Bauer <sylv@sylv.io>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 11 Aug 2023 08:32:44 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0A82717
+        for <linux-hwmon@vger.kernel.org>; Fri, 11 Aug 2023 05:32:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691757163; x=1723293163;
+  h=date:from:to:cc:subject:message-id;
+  bh=M8Gcx3JI6nNgOWba1llSh6GoRM4fntSU9LJb73Z+oEI=;
+  b=RsfhtuhZbgFg3TI5wBmIQDZwaKLG0eFi0myDcduaByGPsscufXOzP2/U
+   HYxaHj+5ZwZdePA5sBpTv3mkGkiEOCG0WM7DzLU9VQpsao/xstcMAqBcJ
+   EXKwpT2AE1Fgy/n9/KXR3m9liAq7VHfNVEUFLnbGtJnQqiHlNPiuf9Dn4
+   tGj5LxYZ0SoDdCmLIe39mKY3LBeRdCBMkObfFll616WJL1mvyeWVE7Ml9
+   F5WzTn9nZrwwoMeE4jhBXRJoM0N3y1L4iuE+icDX53DO3eHfxUKagjdkp
+   ktNcMYSQX2LCYBYAaWWB0GIj9rYTNjw/6X/iQqULnGiS+IhBZLB2PPWUd
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10798"; a="361806005"
+X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
+   d="scan'208";a="361806005"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2023 05:32:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10798"; a="802655658"
+X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
+   d="scan'208";a="802655658"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 11 Aug 2023 05:32:42 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qURJp-0007n5-1o;
+        Fri, 11 Aug 2023 12:32:41 +0000
+Date:   Fri, 11 Aug 2023 20:32:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ fc8df28be7155ddcf8731b4c85fd3372811ba5ac
+Message-ID: <202308112011.tFmDRkIN-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Rob,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: fc8df28be7155ddcf8731b4c85fd3372811ba5ac  hwmon: (nsa320-hwmon) Remove redundant of_match_ptr()
 
+elapsed time: 753m
 
-On Fri, 11 Aug 2023 at 04:41, Rob Herring <robh@kernel.org> wrote:
->
-> On Fri, Aug 04, 2023 at 09:10:37AM -0700, Guenter Roeck wrote:
-> > On 8/4/23 08:48, Conor Dooley wrote:
-> > > On Thu, Aug 03, 2023 at 04:43:59PM +0200, Naresh Solanki wrote:
-> > > > From: Marcello Sylvester Bauer <sylv@sylv.io>
-> > > >
-> > > > Add binding documentation for Maxim MAX6639 fan-speed controller.
-> > > >
-> > > > Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> > > > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> > > > ---
-> > > > Changes in V3:
-> > > > - Update title
-> > > > - Add pulses-per-revolution, supplies & interrupts
-> > > > Changes in V2:
-> > > > - Update subject
-> > > > - Drop blank lines
-> > > > ---
-> > > >   .../bindings/hwmon/maxim,max6639.yaml         | 60 +++++++++++++++++++
-> > > >   1 file changed, 60 insertions(+)
-> > > >   create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
-> > > >
-> > > > diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
-> > > > new file mode 100644
-> > > > index 000000000000..b3292061ca58
-> > > > --- /dev/null
-> > > > +++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
-> > > > @@ -0,0 +1,60 @@
-> > > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > > > +%YAML 1.2
-> > > > +---
-> > > > +$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
-> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > +
-> > > > +title: Maxim MAX6639 Fan Controller
-> > > > +
-> > > > +maintainers:
-> > > > +  - Naresh Solanki <Naresh.Solanki@9elements.com>
-> > > > +
-> > > > +description: |
-> > > > +  The MAX6639 is a 2-channel temperature monitor with dual, automatic, PWM
-> > > > +  fan-speed controller.  It monitors its own temperature and one external
-> > > > +  diode-connected transistor or the temperatures of two external diode-connected
-> > > > +  transistors, typically available in CPUs, FPGAs, or GPUs.
-> > >
-> > > > +  fan-supply:
-> > > > +    description: Phandle to the regulator that provides power to the fan.
-> > >
-> > > > +  pulses-per-revolution:
-> > > > +    description:
-> > > > +      Define the number of pulses per fan revolution for each tachometer
-> > > > +      input as an integer.
-> > > > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > > > +    enum: [1, 2, 3, 4]
-> > > > +    default: 2
-> > >
-> > > Apologies if I am digging up old wounds here, since there was quite a
-> > > bit of back and forth on the last version, but these two newly added
-> > > properties look to be common with the "pwm-fan" and with
-> > > "adi,axi-fan-control". At what point should these live in a common
-> > > schema instead?
-> > >
-> > > Otherwise, this looks okay to me, although I'll leave things to
-> > > Krzysztof since he had a lot to say about the previous version.
-> > >
-> >
-> > Rob has said that he won't accept any fan controller bindings without a generic
-> > schema. At the same time he has said that he expects properties such as the
-> > number of pulses per revolution to be attached to a 'fan' description, and he
-> > wants pwm related properties of fan controllers to be modeled as pwm controllers.
-> > And now we have a notion of a regulator providing power to the fan (which again
-> > would be the fan controller, at least in cases where the fan controller
-> > provides direct voltage to the fan). On top of that, this fan-supply property
-> > should presumably, again, be part of a fan description and not be part of the
-> > controller description. I don't think anyone knows how to make this all work
-> > (I for sure don't), so it is very unlikely we'll see a generic fan controller
-> > schema anytime soon.
->
-> I thought what was done earlier in this series was somewhat close. And
-> there are some bindings that already look pretty close to what a common
-> binding should. But it seems no one wants to worry about more than their
-> 1 device.
+configs tested: 125
+configs skipped: 4
 
-The DT binding for common fan properties is:
-https://lore.kernel.org/lkml/20221130144626.GA2647609@roeck-us.net/t/#m15ce07c3c43c46506acc389bf24d616646e05653
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-I wasn't sure on how to address properties for DC controlled fans.
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r004-20230811   gcc  
+arc                  randconfig-r034-20230811   gcc  
+arc                  randconfig-r043-20230811   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                       aspeed_g4_defconfig   clang
+arm                                 defconfig   gcc  
+arm                            dove_defconfig   gcc  
+arm                       imx_v4_v5_defconfig   clang
+arm                  randconfig-r046-20230811   clang
+arm                         s5pv210_defconfig   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r023-20230811   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r013-20230811   gcc  
+csky                 randconfig-r031-20230811   gcc  
+hexagon              randconfig-r041-20230811   clang
+hexagon              randconfig-r045-20230811   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r004-20230811   clang
+i386         buildonly-randconfig-r005-20230811   clang
+i386         buildonly-randconfig-r006-20230811   clang
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230811   clang
+i386                 randconfig-i002-20230811   clang
+i386                 randconfig-i003-20230811   clang
+i386                 randconfig-i004-20230811   clang
+i386                 randconfig-i005-20230811   clang
+i386                 randconfig-i006-20230811   clang
+i386                 randconfig-i011-20230811   gcc  
+i386                 randconfig-i012-20230811   gcc  
+i386                 randconfig-i013-20230811   gcc  
+i386                 randconfig-i014-20230811   gcc  
+i386                 randconfig-i015-20230811   gcc  
+i386                 randconfig-i016-20230811   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r011-20230811   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                       m5275evb_defconfig   gcc  
+microblaze           randconfig-r024-20230811   gcc  
+microblaze           randconfig-r035-20230811   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                 randconfig-r005-20230811   gcc  
+mips                 randconfig-r006-20230811   gcc  
+mips                 randconfig-r016-20230811   clang
+mips                 randconfig-r025-20230811   clang
+mips                 randconfig-r036-20230811   gcc  
+mips                       rbtx49xx_defconfig   clang
+nios2                               defconfig   gcc  
+openrisc             randconfig-r015-20230811   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r003-20230811   gcc  
+parisc               randconfig-r012-20230811   gcc  
+parisc               randconfig-r022-20230811   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                       holly_defconfig   gcc  
+powerpc                     kilauea_defconfig   clang
+powerpc                   microwatt_defconfig   clang
+powerpc                 mpc8313_rdb_defconfig   gcc  
+powerpc               mpc834x_itxgp_defconfig   clang
+powerpc                     rainier_defconfig   gcc  
+powerpc              randconfig-r033-20230811   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                    nommu_virt_defconfig   clang
+riscv                randconfig-r001-20230811   clang
+riscv                randconfig-r042-20230811   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r044-20230811   gcc  
+sh                               allmodconfig   gcc  
+sh                          rsk7203_defconfig   gcc  
+sh                   sh7724_generic_defconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r002-20230811   gcc  
+sparc                randconfig-r021-20230811   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r001-20230811   clang
+x86_64       buildonly-randconfig-r002-20230811   clang
+x86_64       buildonly-randconfig-r003-20230811   clang
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-r014-20230811   gcc  
+x86_64               randconfig-r032-20230811   clang
+x86_64               randconfig-x001-20230811   gcc  
+x86_64               randconfig-x002-20230811   gcc  
+x86_64               randconfig-x003-20230811   gcc  
+x86_64               randconfig-x004-20230811   gcc  
+x86_64               randconfig-x005-20230811   gcc  
+x86_64               randconfig-x006-20230811   gcc  
+x86_64               randconfig-x011-20230811   clang
+x86_64               randconfig-x012-20230811   clang
+x86_64               randconfig-x013-20230811   clang
+x86_64               randconfig-x014-20230811   clang
+x86_64               randconfig-x015-20230811   clang
+x86_64               randconfig-x016-20230811   clang
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                  cadence_csp_defconfig   gcc  
+xtensa                          iss_defconfig   gcc  
 
-Regards,
-Naresh
->
-> In case it's not clear, as-is, this binding is a NAK for me.
->
-> > Given that neither fan-supply nor pulses-per-revolution is implemented in the
-> > driver, and given that I am not aware of any fans which would have a value for
-> > pulses-per-revolution other than 2, my personal suggestion would be to add the
-> > chip to trivial devices and be done with it for the time being.
->
-> I'm fine with that too. Just keep kicking that can...
->
-> Rob
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
