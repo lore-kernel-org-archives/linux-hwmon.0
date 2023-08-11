@@ -2,185 +2,175 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DD44EB64DD
-	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Aug 2023 08:32:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2CDCC04A6A
+	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Aug 2023 10:42:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbjHKIci (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 11 Aug 2023 04:32:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41574 "EHLO
+        id S234439AbjHKKm3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 11 Aug 2023 06:42:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjHKIch (ORCPT
+        with ESMTP id S229546AbjHKKm3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 11 Aug 2023 04:32:37 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE4B2728
-        for <linux-hwmon@vger.kernel.org>; Fri, 11 Aug 2023 01:32:37 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3fe5695b180so14883495e9.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 11 Aug 2023 01:32:37 -0700 (PDT)
+        Fri, 11 Aug 2023 06:42:29 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 787E910D
+        for <linux-hwmon@vger.kernel.org>; Fri, 11 Aug 2023 03:42:28 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-56530cfee38so1227069a12.2
+        for <linux-hwmon@vger.kernel.org>; Fri, 11 Aug 2023 03:42:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691742755; x=1692347555;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h4h0dqoBDh+43z9f7Y6u21biVjgdfDsXNnYwGUjHByA=;
-        b=Lbgjx5NoKmUYwxFnvhURaoHGACQxO3xTElXaKHLlAcwZd7rtdLfHnyqNT4GhhWAiw8
-         3RdZ/54DjMIoCefFpwYu8SIR+zMiKdrh77l6ArPeauqYntTtFGwEiWxjhsapVCk9oIs9
-         xBR9PIlTcf49oV1SPYeJI/y5+jSM0OMQjnde0S4Y6Lbaz9hlaVryc9uHXTOf9AMT628x
-         BnQHDEdQF7wuFAIlVNs6Z8gqpNf1KLP5gr68Pqcl8kNIxd7aB1QSEYxFC0YDxKQOsstz
-         7r04i8gHrwKCxGiMtWeKeQsbqMLhdbRyBrUMPPtYR6BOHaI9Vr3ENyBcwju6NPQ2De1/
-         Z30Q==
+        d=9elements.com; s=google; t=1691750548; x=1692355348;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qYA1iNOdZVJpj3OPfnwO45/gsMVIQDNWbkZ3zGXB3GI=;
+        b=JiepBe3WMoCqwCRY18Uu3PFgmiY5SXx/aLVlXzjYYHTCVh+Towp8JcI+0/Qwc6jSzi
+         v8j7X41vkHKLwJPv+LGET0Y163CMJd/03vaUUJUs7khw6wjN/w5qNvlNeBpfj7tJeDZL
+         Kzolt7uyEDghagAKuB6rbpvDCOxmslAEgu4eFH0EFQY82cPfAvDjCW8lzrj0TKbOOmUc
+         WCBTXfWt4xYeN8DOMb+Gue2/h33Kg5PQa0smV5phrMIychRglNhK0Nv5REfG3dOUpUNL
+         CPob/j+UYtt7E0lrDxyX16VvqSHs8hEvBPUrlRWO+rfWj+DRFi6fnmJ3iGakYeff7uCu
+         L6AQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691742755; x=1692347555;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=h4h0dqoBDh+43z9f7Y6u21biVjgdfDsXNnYwGUjHByA=;
-        b=ApxlOzXj6YXJd8GygRELVrXcTjcmo6Chjf58xjAz/ftEFiliVsh/5bj1n7qoVGBSp8
-         uG2oIA7sdQHlNXmSxPqTSjv7uWD1/Txzb4Ib35ECx1uKyXGE2bDdafykuHhBy8Uy6yPA
-         AMUkk4u8vs76v7Qx82IY9dYSQwXrKgupgnwJx9bebFwwDy/coAIt9k2ZWtKy7Yk1Z3rV
-         IpbEqZFisSuKxowDbXeNra5Fa2MgPtFmLWwEDpcxJM3HMTe/8TaFtK63vA356NylhgO4
-         U5raiyUzNWwRKVvYrdA6lFZEa2OLn+9u5vn4uepwudp8FMUHtDUKe6KuxFlGlmSWwbjR
-         Dq9A==
-X-Gm-Message-State: AOJu0YwxJs7Mdk6bnskx3eF2BOxJvNsnt3N0uy7nbnJQ2LqFdvYw5y8F
-        PIzlPoqKz5ZwBO43r20joiXWwu+FaDU4Cw==
-X-Google-Smtp-Source: AGHT+IHkD+pTPHSIiYB/3FVQusL4088JlvWgOcIQ3QIcd9x9Dxab4KGlGHgFHOyill5eKOuByC2EVw==
-X-Received: by 2002:a05:600c:218f:b0:3fc:e7d:ca57 with SMTP id e15-20020a05600c218f00b003fc0e7dca57mr1115410wme.2.1691742755103;
-        Fri, 11 Aug 2023 01:32:35 -0700 (PDT)
-Received: from aura15.fritz.box ([2a0a:a547:9f55:0:8ea8:a136:a31f:7266])
-        by smtp.gmail.com with ESMTPSA id y24-20020a05600c365800b003fe2b081661sm7306983wmq.30.2023.08.11.01.32.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Aug 2023 01:32:34 -0700 (PDT)
-From:   Lothar Felten <lothar.felten@gmail.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux@roeck-us.net, jdelvare@suse.com,
-        Lothar Felten <lothar.felten@gmail.com>
-Subject: [PATCH v1 2/2] dt-bindings: hwmon: add adi,ltc4271
-Date:   Fri, 11 Aug 2023 10:32:22 +0200
-Message-Id: <20230811083222.15978-2-lothar.felten@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230811083222.15978-1-lothar.felten@gmail.com>
-References: <20230811083222.15978-1-lothar.felten@gmail.com>
+        d=1e100.net; s=20221208; t=1691750548; x=1692355348;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qYA1iNOdZVJpj3OPfnwO45/gsMVIQDNWbkZ3zGXB3GI=;
+        b=Dtva9mu3aa3m8ZSXNnBYhuW4nyE2Z+5/UNAOFR4qkvQzy0FPy1oV1GZ3jijvmma1h2
+         LRtClm1oUa8PzSKtIbQnN5n2zzxF3RrN9y9JWQATjic84qwfgXbd5dmup6kHcGTwPjV2
+         17Gh5Z0dU0n8ucQxYAxMiClZEB4vkMNaDfyW+ZlD9nH2bmspztk6ABx6KecihWpiSDA9
+         WmBGuj8eW57RPUKRpOi0YMpoxvkTKTwsEG2B5DPLZrgRV7fKwzLFFnck44bBsu4TjRLU
+         Nlsokt694AsKPyQFBAseIOqCiUe7YnVVsB7jsdjT6nsxW5HwqOm7wsXRB5bp7vt0ki6N
+         Zycg==
+X-Gm-Message-State: AOJu0Yzz8PJRsrvTNaGvr9ZnB02jX26WgVIbshzYMmHQbKjpohAxkbbK
+        M3p0OobruWfidkhm4tiLvzCZCleIxNHsBUeaHvGY9Q==
+X-Google-Smtp-Source: AGHT+IGOnefdVaHW0OP86gn8IWJab70m3Ff9dUcKRomfTG1N5U2HOK6fszRhsfwloDKXmrXTLIg6gAqvgES+w8qyhxs=
+X-Received: by 2002:a17:90a:db55:b0:268:36a2:bd0 with SMTP id
+ u21-20020a17090adb5500b0026836a20bd0mr774080pjx.8.1691750547480; Fri, 11 Aug
+ 2023 03:42:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230803144401.1151065-1-Naresh.Solanki@9elements.com>
+ <20230804-tamper-numbness-0117bb53a921@spud> <3f947ad6-eed6-59ff-e4e6-8b21d90eb803@roeck-us.net>
+ <20230810231142.GA1506309-robh@kernel.org>
+In-Reply-To: <20230810231142.GA1506309-robh@kernel.org>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+Date:   Fri, 11 Aug 2023 16:12:18 +0530
+Message-ID: <CABqG17hzvyVLFkNRHSs2ye5k2+dp7XkLk0MC3OmwSguz1uG0rg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: Add MAX6639
+To:     Rob Herring <robh@kernel.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Conor Dooley <conor@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Marcello Sylvester Bauer <sylv@sylv.io>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add dt-bindings for Analog Devices LTC4271 PoE PSE.
+Hi Rob,
 
-Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
----
- .../bindings/hwmon/adi,ltc4271.example.dts    | 28 ++++++++++
- .../bindings/hwmon/adi,ltc4271.yaml           | 51 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 3 files changed, 80 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/adi,ltc4271.example.dts
- create mode 100644 Documentation/devicetree/bindings/hwmon/adi,ltc4271.yaml
 
-diff --git a/Documentation/devicetree/bindings/hwmon/adi,ltc4271.example.dts b/Documentation/devicetree/bindings/hwmon/adi,ltc4271.example.dts
-new file mode 100644
-index 000000000..829f7c5a9
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/adi,ltc4271.example.dts
-@@ -0,0 +1,28 @@
-+// SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+/dts-v1/;
-+/plugin/; // silence any missing phandle references
-+
-+/{
-+	compatible = "foo";
-+model = "foo";
-+	#address-cells = <1>;
-+	#size-cells = <1>;
-+
-+	example-0 {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+
-+		i2c {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			ltc4271@20 {
-+				compatible = "adi,ltc4271";
-+				reg = <0x20>;
-+				shunt-resistor-micro-ohms = <250000>;
-+			};
-+		};
-+
-+	};
-+};
-+
-diff --git a/Documentation/devicetree/bindings/hwmon/adi,ltc4271.yaml b/Documentation/devicetree/bindings/hwmon/adi,ltc4271.yaml
-new file mode 100644
-index 000000000..696e91a8e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/adi,ltc4271.yaml
-@@ -0,0 +1,51 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+
-+$id: http://devicetree.org/schemas/hwmon/adi,ltc4271.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Analog Devices LTC4271 PoE PSE
-+
-+maintainers:
-+  - Lothar Felten <lothar.felten@gmail.com>
-+
-+description: |
-+  The LTC4271 is a IEEE 802.3at Quad Port Power-over-Ethernet PSE Controller.
-+
-+  Datasheets:
-+  https://www.analog.com/en/products/ltc4271.html
-+
-+
-+properties:
-+  compatible:
-+    enum:
-+      - adi,ltc4271
-+
-+  reg:
-+    maxItems: 1
-+
-+  shunt-resistor-micro-ohms:
-+    description: The value of current sense resistor in microohms.
-+    default: 250000
-+    minimum: 250000
-+    maximum: 500000
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        ltc4271@20 {
-+            compatible = "adi,ltc4271";
-+            reg = <0x20>;
-+            shunt-resistor-micro-ohms = <250000>;
-+        };
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 789742390..483956f76 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12187,6 +12187,7 @@ LTC4271 ANALOG DEVICES PoE PSE DRIVER
- M:	Lothar Felten <lothar.felten@gmail.com>
- L:	linux-hwmon@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/hwmon/adi,ltc4271.yaml
- F:	Documentation/hwmon/ltc4271.rst
- F:	drivers/hwmon/ltc4271.c
- 
--- 
-2.39.2
+On Fri, 11 Aug 2023 at 04:41, Rob Herring <robh@kernel.org> wrote:
+>
+> On Fri, Aug 04, 2023 at 09:10:37AM -0700, Guenter Roeck wrote:
+> > On 8/4/23 08:48, Conor Dooley wrote:
+> > > On Thu, Aug 03, 2023 at 04:43:59PM +0200, Naresh Solanki wrote:
+> > > > From: Marcello Sylvester Bauer <sylv@sylv.io>
+> > > >
+> > > > Add binding documentation for Maxim MAX6639 fan-speed controller.
+> > > >
+> > > > Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+> > > > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> > > > ---
+> > > > Changes in V3:
+> > > > - Update title
+> > > > - Add pulses-per-revolution, supplies & interrupts
+> > > > Changes in V2:
+> > > > - Update subject
+> > > > - Drop blank lines
+> > > > ---
+> > > >   .../bindings/hwmon/maxim,max6639.yaml         | 60 +++++++++++++++++++
+> > > >   1 file changed, 60 insertions(+)
+> > > >   create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+> > > >
+> > > > diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+> > > > new file mode 100644
+> > > > index 000000000000..b3292061ca58
+> > > > --- /dev/null
+> > > > +++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+> > > > @@ -0,0 +1,60 @@
+> > > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > > > +%YAML 1.2
+> > > > +---
+> > > > +$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
+> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > +
+> > > > +title: Maxim MAX6639 Fan Controller
+> > > > +
+> > > > +maintainers:
+> > > > +  - Naresh Solanki <Naresh.Solanki@9elements.com>
+> > > > +
+> > > > +description: |
+> > > > +  The MAX6639 is a 2-channel temperature monitor with dual, automatic, PWM
+> > > > +  fan-speed controller.  It monitors its own temperature and one external
+> > > > +  diode-connected transistor or the temperatures of two external diode-connected
+> > > > +  transistors, typically available in CPUs, FPGAs, or GPUs.
+> > >
+> > > > +  fan-supply:
+> > > > +    description: Phandle to the regulator that provides power to the fan.
+> > >
+> > > > +  pulses-per-revolution:
+> > > > +    description:
+> > > > +      Define the number of pulses per fan revolution for each tachometer
+> > > > +      input as an integer.
+> > > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > > +    enum: [1, 2, 3, 4]
+> > > > +    default: 2
+> > >
+> > > Apologies if I am digging up old wounds here, since there was quite a
+> > > bit of back and forth on the last version, but these two newly added
+> > > properties look to be common with the "pwm-fan" and with
+> > > "adi,axi-fan-control". At what point should these live in a common
+> > > schema instead?
+> > >
+> > > Otherwise, this looks okay to me, although I'll leave things to
+> > > Krzysztof since he had a lot to say about the previous version.
+> > >
+> >
+> > Rob has said that he won't accept any fan controller bindings without a generic
+> > schema. At the same time he has said that he expects properties such as the
+> > number of pulses per revolution to be attached to a 'fan' description, and he
+> > wants pwm related properties of fan controllers to be modeled as pwm controllers.
+> > And now we have a notion of a regulator providing power to the fan (which again
+> > would be the fan controller, at least in cases where the fan controller
+> > provides direct voltage to the fan). On top of that, this fan-supply property
+> > should presumably, again, be part of a fan description and not be part of the
+> > controller description. I don't think anyone knows how to make this all work
+> > (I for sure don't), so it is very unlikely we'll see a generic fan controller
+> > schema anytime soon.
+>
+> I thought what was done earlier in this series was somewhat close. And
+> there are some bindings that already look pretty close to what a common
+> binding should. But it seems no one wants to worry about more than their
+> 1 device.
 
+The DT binding for common fan properties is:
+https://lore.kernel.org/lkml/20221130144626.GA2647609@roeck-us.net/t/#m15ce07c3c43c46506acc389bf24d616646e05653
+
+I wasn't sure on how to address properties for DC controlled fans.
+
+Regards,
+Naresh
+>
+> In case it's not clear, as-is, this binding is a NAK for me.
+>
+> > Given that neither fan-supply nor pulses-per-revolution is implemented in the
+> > driver, and given that I am not aware of any fans which would have a value for
+> > pulses-per-revolution other than 2, my personal suggestion would be to add the
+> > chip to trivial devices and be done with it for the time being.
+>
+> I'm fine with that too. Just keep kicking that can...
+>
+> Rob
