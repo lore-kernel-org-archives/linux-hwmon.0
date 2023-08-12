@@ -2,111 +2,88 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF4C3C001DB
-	for <linux-hwmon@archiver.kernel.org>; Sat, 12 Aug 2023 12:33:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35304C001B0
+	for <linux-hwmon@archiver.kernel.org>; Sat, 12 Aug 2023 18:49:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236078AbjHLMdJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 12 Aug 2023 08:33:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52658 "EHLO
+        id S229512AbjHLStu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 12 Aug 2023 14:49:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbjHLMdI (ORCPT
+        with ESMTP id S229451AbjHLStu (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 12 Aug 2023 08:33:08 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B8F195;
-        Sat, 12 Aug 2023 05:33:12 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id e9e14a558f8ab-34992fd567bso5476465ab.1;
-        Sat, 12 Aug 2023 05:33:12 -0700 (PDT)
+        Sat, 12 Aug 2023 14:49:50 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53DE51725;
+        Sat, 12 Aug 2023 11:49:53 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3fe8a1591c8so14339395e9.3;
+        Sat, 12 Aug 2023 11:49:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691843591; x=1692448391;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=buTwmFs6G1iGf0RG6iTrknTs+Tb6evZxD/fZtLpTWjQ=;
-        b=MhlnN4IguU0L30QlPIUd/ceuZRiwQaPko8CjIbfXbU5AtB++rfQantIqwqMIxtsmuF
-         ed4UoeDHz6M0l6t2kTieUez+QFZUCJIGH64rDaazKADE8j4lbZzKhxS0vbdiGNDNfaan
-         NXXxRc4hEBO6Hch+aohXtRlMTeHnDinWshFHYp1QsfBykKeHfQjjGPi/+8URRqJ9Dlg+
-         uIu6XugEDJiWyvLMADPpT+/SWuM7WQ8k3EGiqFr5i++Xt2l0ovcFhxtkvwWGa5emw6Yk
-         LLkFbNMjpakrbNmgFRzSf51iUGMD/mIfV0Nv+aNVI3R5FaqVnIji4EJp3FVNIEAjLr8S
-         vANA==
+        d=gmail.com; s=20221208; t=1691866192; x=1692470992;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:cc:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MTN1CvlcH9t+nwKcdvlh4dzk/jTUcp/DpsWEKs3HU+Y=;
+        b=qf2nsyR2zUOTa1wAh0tyqjbP5xORgsItoYL6zU3bbxjWG21WzBoPW86thfFwrthO78
+         NOneeVWaxbtp4x038PQQoOuup7lRbk7xvaWQTYR4R6a94X/i9BlXDb4O7ZZHgBgQbYHJ
+         u/smuXkm4lsOPuO1RKSP4ly3tGuMknFgytxyA7+sYNopObeJXgytlMENKp0+qq6tmR0A
+         5hP4Ab5W1st5EBSh0VjEZ908m5bUMILTLe/idkm0ocZeDNTaVgUwfJZ6fiQFbID6ybwA
+         W6FaBrWk1RHkAgoE/RUatRXkGaHLwX+J/g5jQwhuCaXcmLToExTg3bvTV4rV5FsuDD7A
+         VkDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691843591; x=1692448391;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=buTwmFs6G1iGf0RG6iTrknTs+Tb6evZxD/fZtLpTWjQ=;
-        b=EU+iM01ZYdFp507hoHwP8AENffHaTR8d2MX47VjhasXZn99zTSqBzz/Jt/ZSCU2P+V
-         mW6Uat916rH6bqOaqCUHdBJw6K01EYT+OuiZEjhA9T3GhbuTAmTMZ7T9P8K6tGGLQ/3r
-         jY6F6zXFHtqarRVzOgbMlbS2L2zKlSOa8UTTf8KQxh2ahCoiDCXWV6Qzh0lTHxceGFdm
-         wbrwLQdGTBFDtt9iReuMGeThbaNpIf2W0xiKg0FvmUwRaOl+UphORzonhS8RD5dxRR2x
-         S38ANr6midjpeOUVFxnylirAsyH1yRqPOI38WLgvG8ewLUEgggTGvskP/SgYDNg41uZJ
-         T/+g==
-X-Gm-Message-State: AOJu0YxBcRIvRqydmQfPnLpNFomSS+8qE/7ASv+vyto/xV35QEx71D5e
-        VieaJahd1bsh6TibnV9jYTE=
-X-Google-Smtp-Source: AGHT+IGf1Dlhj9ZcajRjK+XCTF10UNHSIvJolynSGJQNxbcIeYY4T6FqkmmZEcMk8bMtenOqqztkIw==
-X-Received: by 2002:a05:6e02:1542:b0:348:a537:8e99 with SMTP id j2-20020a056e02154200b00348a5378e99mr10445894ilu.1.1691843591324;
-        Sat, 12 Aug 2023 05:33:11 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h8-20020a02cd28000000b0042b3ad1656bsm1749690jaq.45.2023.08.12.05.33.10
+        d=1e100.net; s=20221208; t=1691866192; x=1692470992;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:cc:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MTN1CvlcH9t+nwKcdvlh4dzk/jTUcp/DpsWEKs3HU+Y=;
+        b=jvUGFpT6fAthFoiJPU48K9tnEXl3dRVAmpMBezuPmufPpul1bGaZODlNWV/SkqfeWV
+         DN9yh2AkJiZuC1/vaI29cSQGKuV9XLku8nM3sh6YADxd3BnXs4jj/Ircof/GbPD27bHI
+         8gwDWQTLhZaa2vO5RyRSKxskI23sIYvRwRM1fJumRA5busmzzlTCCGrAg/ANvu+/Nlt9
+         IukwE1jxfQKBJXsbipFxhyF9s/UGV4AGXOlQv7pzCNqRGdl9xTFHnwg3MBVt9vSR8cwU
+         YwK9sO+ZJHEiDdfKdFRAn42hZVF58GDdeFYSV7P6axd2PdH3HQEKbz/7tmU4CPgfpMS7
+         FEkQ==
+X-Gm-Message-State: AOJu0YwRuSm8VvGGUyqLa2sbT8ZPlysWRC7/ByPpAQ0k5q2H1ytSwsJR
+        cwaPXh+G8bOnvMf1DnbRFC6Z+IFiAyIJrg==
+X-Google-Smtp-Source: AGHT+IGslzcP6wNNQ6BHGVw7rPncJCe8IY/smKZhYPg8nW7jcOen635j4ECFJ4cdTdOjlAOOyZ2FVQ==
+X-Received: by 2002:adf:e8d1:0:b0:313:f5f8:b6d2 with SMTP id k17-20020adfe8d1000000b00313f5f8b6d2mr4105835wrn.48.1691866191534;
+        Sat, 12 Aug 2023 11:49:51 -0700 (PDT)
+Received: from [192.168.0.28] (cable-178-148-234-71.dynamic.sbb.rs. [178.148.234.71])
+        by smtp.gmail.com with ESMTPSA id b5-20020aa7c6c5000000b005224d960e66sm3513404eds.96.2023.08.12.11.49.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 12 Aug 2023 05:33:10 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f3711620-d828-ed1b-f676-e5eea8fbe8a6@roeck-us.net>
-Date:   Sat, 12 Aug 2023 05:33:09 -0700
+        Sat, 12 Aug 2023 11:49:50 -0700 (PDT)
+Message-ID: <932973d5-812b-8bf4-26f0-d167f51f997d@gmail.com>
+Date:   Sat, 12 Aug 2023 20:49:49 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH v3 3/3] hwmon: (pmbus/tda38640) Add workaround for bug in
- SVID mode
-Content-Language: en-US
-To:     Naresh Solanki <naresh.solanki@9elements.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
+Cc:     savicaleksa83@gmail.com, linux-hwmon@vger.kernel.org,
+        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
         linux-kernel@vger.kernel.org
-References: <20230802193155.2170935-1-Naresh.Solanki@9elements.com>
- <20230802193155.2170935-3-Naresh.Solanki@9elements.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230802193155.2170935-3-Naresh.Solanki@9elements.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH v3] hwmon: (aquacomputer_d5next) Add selective 200ms delay
+ after sending ctrl report
+To:     Guenter Roeck <linux@roeck-us.net>
+References: <20230807172004.456968-1-savicaleksa83@gmail.com>
+ <c151d464-da26-4c53-ba7a-d16bb8fca949@roeck-us.net>
+ <e7bcf401-991c-808c-66df-65664940bf22@gmail.com>
+ <0d94544e-59d7-1860-2cc4-1a9130023b2f@roeck-us.net>
+Content-Language: en-US
+From:   Aleksa Savic <savicaleksa83@gmail.com>
+In-Reply-To: <0d94544e-59d7-1860-2cc4-1a9130023b2f@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 8/2/23 12:31, Naresh Solanki wrote:
-> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+On 2023-08-12 01:05:19 GMT+02:00, Guenter Roeck wrote:
 > 
-> TDA38640 can operate in either PMBus mode or SVID mode.
-> In SVID mode, by design ENABLE pin is the only option for controlling
-> the output rail.
+> It has a Fixes: tag, so it will be applied to affected stable releases
+> automatically, at least if it applies cleanly. I could have added Cc:
+> stable@ to make it explicit, but I had pushed it already, and I didn't
+> want to rebase the branch just for that.
 > 
-> In scenarios that utilizes the chip in SVID mode with ENABLE pin either
-> grounded or tied to logic high & software control is desired then use
-> dt property 'infineon,en-svid-control' to enable the below workaround.
+> Guenter
 > 
-> The workaround utilizes ENABLE pin polarity flipping to control
-> output rail.
-> 
-> If property 'infineon,en-svid-control' is specified then
-> determine if chip is in SVID mode by checking BIT15 of MTP memory offset
-> 0x44 as described in the datasheet.
-> 
-> If chip is in SVID mode then apply the workaround by
-> 1. Determine EN pin level
-> 2. Maps BIT7 of OPERATION(01h) to EN_PIN_POLARITY(BIT1) of
->     PB_ON_OFF_CONFIG.
-> 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 
-For my reference:
+Didn't know explicit Cc wasn't necessary, thanks.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-We still have to wait for dt patch approval.
-
-Guenter
-
+Aleksa
