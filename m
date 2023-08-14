@@ -2,88 +2,137 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35304C001B0
-	for <linux-hwmon@archiver.kernel.org>; Sat, 12 Aug 2023 18:49:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4E2EC001DB
+	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Aug 2023 06:07:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbjHLStu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 12 Aug 2023 14:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50578 "EHLO
+        id S233025AbjHNGG6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 14 Aug 2023 02:06:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjHLStu (ORCPT
+        with ESMTP id S233732AbjHNGGH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 12 Aug 2023 14:49:50 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53DE51725;
-        Sat, 12 Aug 2023 11:49:53 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3fe8a1591c8so14339395e9.3;
-        Sat, 12 Aug 2023 11:49:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691866192; x=1692470992;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:cc:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MTN1CvlcH9t+nwKcdvlh4dzk/jTUcp/DpsWEKs3HU+Y=;
-        b=qf2nsyR2zUOTa1wAh0tyqjbP5xORgsItoYL6zU3bbxjWG21WzBoPW86thfFwrthO78
-         NOneeVWaxbtp4x038PQQoOuup7lRbk7xvaWQTYR4R6a94X/i9BlXDb4O7ZZHgBgQbYHJ
-         u/smuXkm4lsOPuO1RKSP4ly3tGuMknFgytxyA7+sYNopObeJXgytlMENKp0+qq6tmR0A
-         5hP4Ab5W1st5EBSh0VjEZ908m5bUMILTLe/idkm0ocZeDNTaVgUwfJZ6fiQFbID6ybwA
-         W6FaBrWk1RHkAgoE/RUatRXkGaHLwX+J/g5jQwhuCaXcmLToExTg3bvTV4rV5FsuDD7A
-         VkDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691866192; x=1692470992;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:cc:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MTN1CvlcH9t+nwKcdvlh4dzk/jTUcp/DpsWEKs3HU+Y=;
-        b=jvUGFpT6fAthFoiJPU48K9tnEXl3dRVAmpMBezuPmufPpul1bGaZODlNWV/SkqfeWV
-         DN9yh2AkJiZuC1/vaI29cSQGKuV9XLku8nM3sh6YADxd3BnXs4jj/Ircof/GbPD27bHI
-         8gwDWQTLhZaa2vO5RyRSKxskI23sIYvRwRM1fJumRA5busmzzlTCCGrAg/ANvu+/Nlt9
-         IukwE1jxfQKBJXsbipFxhyF9s/UGV4AGXOlQv7pzCNqRGdl9xTFHnwg3MBVt9vSR8cwU
-         YwK9sO+ZJHEiDdfKdFRAn42hZVF58GDdeFYSV7P6axd2PdH3HQEKbz/7tmU4CPgfpMS7
-         FEkQ==
-X-Gm-Message-State: AOJu0YwRuSm8VvGGUyqLa2sbT8ZPlysWRC7/ByPpAQ0k5q2H1ytSwsJR
-        cwaPXh+G8bOnvMf1DnbRFC6Z+IFiAyIJrg==
-X-Google-Smtp-Source: AGHT+IGslzcP6wNNQ6BHGVw7rPncJCe8IY/smKZhYPg8nW7jcOen635j4ECFJ4cdTdOjlAOOyZ2FVQ==
-X-Received: by 2002:adf:e8d1:0:b0:313:f5f8:b6d2 with SMTP id k17-20020adfe8d1000000b00313f5f8b6d2mr4105835wrn.48.1691866191534;
-        Sat, 12 Aug 2023 11:49:51 -0700 (PDT)
-Received: from [192.168.0.28] (cable-178-148-234-71.dynamic.sbb.rs. [178.148.234.71])
-        by smtp.gmail.com with ESMTPSA id b5-20020aa7c6c5000000b005224d960e66sm3513404eds.96.2023.08.12.11.49.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 12 Aug 2023 11:49:50 -0700 (PDT)
-Message-ID: <932973d5-812b-8bf4-26f0-d167f51f997d@gmail.com>
-Date:   Sat, 12 Aug 2023 20:49:49 +0200
+        Mon, 14 Aug 2023 02:06:07 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2FEF199B;
+        Sun, 13 Aug 2023 23:05:38 -0700 (PDT)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37E5dnKn028174;
+        Sun, 13 Aug 2023 23:04:53 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=pfpt0220; bh=2e/DgbPH5Z735BTpVc79AFms8kX4Gp8CjDRy+gF54Og=;
+ b=E/8P5/+jNOFDXnIeAK6eLktq00L60xiKYdb2qKHYNE+xCpg5uzwBma5HNeeDm5+xDr/z
+ PtUPN2CVxipoL7xIRglPjHM0nr73ebcCfiBNHKO+ejsrYpyGT1z5owXlVZBvcqnjQTMi
+ xVpi7MTLbBxFyMgVXN2gotRa8b8ZGbhZzCnaie9FgVwAx0KVLDEe3Z0Hs/va3cj30eI3
+ bQep63FV2AJCT9K2ToAglpvTN/WgrwwX8gb7FG8I4boMHs0BV/6m7+XurB6k5AN7oOOW
+ iqus7BoMwgqKR+ia384IF8M69kir+dL0CX57DDgO8auPhc0KzwAXvTjo5NFnI/q/asdB kQ== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3se9kj4xs9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Sun, 13 Aug 2023 23:04:52 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sun, 13 Aug
+ 2023 23:04:50 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Sun, 13 Aug 2023 23:04:50 -0700
+Received: from marvell-OptiPlex-7090.marvell.com (unknown [10.28.36.165])
+        by maili.marvell.com (Postfix) with ESMTP id A95D13F707E;
+        Sun, 13 Aug 2023 23:04:25 -0700 (PDT)
+From:   Ratheesh Kannoth <rkannoth@marvell.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <hawk@kernel.org>, <john.fastabend@gmail.com>,
+        <jiawenwu@trustnetic.com>, <mengyuanlou@net-swift.com>,
+        <yang.lee@linux.alibaba.com>, <error27@gmail.com>,
+        <linyunsheng@huawei.com>, <linux-hyperv@vger.kernel.org>,
+        <kys@microsoft.com>, <haiyangz@microsoft.com>,
+        <wei.liu@kernel.org>, <decui@microsoft.com>,
+        <longli@microsoft.com>, <shradhagupta@linux.microsoft.com>,
+        <linux-hwmon@vger.kernel.org>, <michael.chan@broadcom.com>,
+        <richardcochran@gmail.com>, <jdelvare@suse.com>,
+        <linux@roeck-us.net>, <yisen.zhuang@huawei.com>,
+        <salil.mehta@huawei.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <nbd@nbd.name>,
+        <john@phrozen.org>, <sean.wang@mediatek.com>,
+        <Mark-MC.Lee@mediatek.com>, <lorenzo@kernel.org>,
+        <matthias.bgg@gmail.com>,
+        <angelogioacchino.delregno@collabora.com>, <linux@armlinux.org.uk>,
+        <linux-rdma@vger.kernel.org>, <saeedm@nvidia.com>,
+        <leon@kernel.org>, <gerhard@engleder-embedded.com>,
+        <maciej.fijalkowski@intel.com>, <alexanderduyck@fb.com>,
+        <wei.fang@nxp.com>, <shenwei.wang@nxp.com>,
+        <xiaoning.wang@nxp.com>, <linux-imx@nxp.com>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>,
+        <jaswinder.singh@linaro.org>, <ilias.apalodimas@linaro.org>,
+        <UNGLinuxDriver@microchip.com>, <horatiu.vultur@microchip.com>,
+        <linux-omap@vger.kernel.org>, <grygorii.strashko@ti.com>,
+        <simon.horman@corigine.com>, <vladimir.oltean@nxp.com>,
+        <rkannoth@marvell.com>, <aleksander.lobakin@intel.com>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <alexandre.torgue@foss.st.com>, <joabreu@synopsys.com>,
+        <mcoquelin.stm32@gmail.com>, <p.zabel@pengutronix.de>,
+        <thomas.petazzoni@bootlin.com>, <mw@semihalf.com>,
+        <sgoutham@marvell.com>, <gakula@marvell.com>,
+        <sbhatta@marvell.com>, <hkelam@marvell.com>,
+        <xen-devel@lists.xenproject.org>, <jgross@suse.com>,
+        <sstabellini@kernel.org>, <oleksandr_tyshchenko@epam.com>,
+        <linux-wireless@vger.kernel.org>, <ryder.lee@mediatek.com>,
+        <shayne.chen@mediatek.com>, <kvalo@kernel.org>,
+        <andrii@kernel.org>, <martin.lau@linux.dev>, <song@kernel.org>,
+        <yonghong.song@linux.dev>, <kpsingh@kernel.org>, <sdf@google.com>,
+        <haoluo@google.com>, <jolsa@kernel.org>
+Subject: [PATCH v1 net] page_pool: Cap queue size to 32k.
+Date:   Mon, 14 Aug 2023 11:34:11 +0530
+Message-ID: <20230814060411.2401817-1-rkannoth@marvell.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Cc:     savicaleksa83@gmail.com, linux-hwmon@vger.kernel.org,
-        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] hwmon: (aquacomputer_d5next) Add selective 200ms delay
- after sending ctrl report
-To:     Guenter Roeck <linux@roeck-us.net>
-References: <20230807172004.456968-1-savicaleksa83@gmail.com>
- <c151d464-da26-4c53-ba7a-d16bb8fca949@roeck-us.net>
- <e7bcf401-991c-808c-66df-65664940bf22@gmail.com>
- <0d94544e-59d7-1860-2cc4-1a9130023b2f@roeck-us.net>
-Content-Language: en-US
-From:   Aleksa Savic <savicaleksa83@gmail.com>
-In-Reply-To: <0d94544e-59d7-1860-2cc4-1a9130023b2f@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: aFZU2RAx_UAE8R4K6KZZzbh7PQU3_GNE
+X-Proofpoint-ORIG-GUID: aFZU2RAx_UAE8R4K6KZZzbh7PQU3_GNE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-13_24,2023-08-10_01,2023-05-22_02
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2023-08-12 01:05:19 GMT+02:00, Guenter Roeck wrote:
-> 
-> It has a Fixes: tag, so it will be applied to affected stable releases
-> automatically, at least if it applies cleanly. I could have added Cc:
-> stable@ to make it explicit, but I had pushed it already, and I didn't
-> want to rebase the branch just for that.
-> 
-> Guenter
-> 
+Clamp to 32k instead of returning error.
 
-Didn't know explicit Cc wasn't necessary, thanks.
+Please find discussion at
+https://lore.kernel.org/lkml/
+CY4PR1801MB1911E15D518A77535F6E51E2D308A@CY4PR1801MB1911.
+namprd18.prod.outlook.com/T/
 
-Aleksa
+Fixes: ff7d6b27f894 ("page_pool: refurbish version of page_pool code")
+Signed-off-by: Ratheesh Kannoth <rkannoth@marvell.com>
+
+---
+ChangeLog:
+v0 -> v1: Rebase && commit message changes
+---
+ net/core/page_pool.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+index a3e12a61d456..e9dc8d8966ad 100644
+--- a/net/core/page_pool.c
++++ b/net/core/page_pool.c
+@@ -171,9 +171,10 @@ static int page_pool_init(struct page_pool *pool,
+ 	if (pool->p.pool_size)
+ 		ring_qsize = pool->p.pool_size;
+ 
+-	/* Sanity limit mem that can be pinned down */
++	/* Cap queue size to 32k */
+ 	if (ring_qsize > 32768)
+-		return -E2BIG;
++		ring_qsize = 32768;
++
+ 
+ 	/* DMA direction is either DMA_FROM_DEVICE or DMA_BIDIRECTIONAL.
+ 	 * DMA_BIDIRECTIONAL is for allowing page used for DMA sending,
+-- 
+2.25.1
+
