@@ -2,103 +2,102 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E421C41513
-	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Aug 2023 08:34:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89A3FC001B0
+	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Aug 2023 08:41:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231397AbjHNIeP convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 14 Aug 2023 04:34:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51668 "EHLO
+        id S232026AbjHNIkp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 14 Aug 2023 04:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233115AbjHNIeI (ORCPT
+        with ESMTP id S230138AbjHNIkM (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 14 Aug 2023 04:34:08 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13B29C
-        for <linux-hwmon@vger.kernel.org>; Mon, 14 Aug 2023 01:34:05 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-148-mMDgg5w-NhK19ckygkrlbg-1; Mon, 14 Aug 2023 09:34:03 +0100
-X-MC-Unique: mMDgg5w-NhK19ckygkrlbg-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 14 Aug
- 2023 09:33:31 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Mon, 14 Aug 2023 09:33:31 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Krzysztof Kozlowski' <krzysztof.kozlowski@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Eric Tremblay <etremblay@distech-controls.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Andi Shyti <andi.shyti@kernel.org>
-Subject: RE: [PATCH 04/15] hwmon: (ina2xx) fix Wvoid-pointer-to-enum-cast
- warning
-Thread-Topic: [PATCH 04/15] hwmon: (ina2xx) fix Wvoid-pointer-to-enum-cast
- warning
-Thread-Index: AQHZy22PDAQ6/HNzf0aAlEc1QR4MGa/pfLdA
-Date:   Mon, 14 Aug 2023 08:33:31 +0000
-Message-ID: <e13c70334dce4bfa9e5ea11126d4eb86@AcuMS.aculab.com>
-References: <20230810093157.94244-1-krzysztof.kozlowski@linaro.org>
- <20230810093157.94244-4-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230810093157.94244-4-krzysztof.kozlowski@linaro.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 14 Aug 2023 04:40:12 -0400
+X-Greylist: delayed 2603 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Aug 2023 01:40:10 PDT
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:242:246e::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD1FBF;
+        Mon, 14 Aug 2023 01:40:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=2P1CtK0EpHYNB0bkUEbNbkfg4BjOcYJ3BMKesAvDyvc=;
+        t=1692002410; x=1693212010; b=b+lgM10B1Ch71jXvK0waAeTapoeUIh1e1FLcgFiR3ksab1x
+        01x3rbg8flpkCpRWXbk6srcmQmZEEXG4S/84J8KtgtEf7Z+qbAjBDdtigVXjxrTu1n8ckaze/cddn
+        Ju5e9frlbN1K2Nq7H8Lx2q5l1V+ePpa7pkoyDSa14USbLK3ogWvZNWOoD7Kl/kmVmTlv4HkbPl+Rm
+        2WnwtHNTMJMmU4pK56Sv2qR1jD1wm143bkG3ErhIhPlZtRItZ8nTHhAtZlq1Ef053aYIPwEK81qII
+        ECxyiiYrv7BxdMwt7F+Wz87khGXXDipoS6smf8cvm8Jlb29EbFy2sgfkB/jUjJNA==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1qVSQ8-006VTj-1d;
+        Mon, 14 Aug 2023 09:55:24 +0200
+Message-ID: <8c6d19da5c4c38062b7a4e500de1d5dc1280fbc8.camel@sipsolutions.net>
+Subject: Re: [PATCH v1 net] page_pool: Cap queue size to 32k.
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Ratheesh Kannoth <rkannoth@marvell.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
+        hawk@kernel.org, john.fastabend@gmail.com, jiawenwu@trustnetic.com,
+        mengyuanlou@net-swift.com, yang.lee@linux.alibaba.com,
+        error27@gmail.com, linyunsheng@huawei.com,
+        linux-hyperv@vger.kernel.org, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        longli@microsoft.com, shradhagupta@linux.microsoft.com,
+        linux-hwmon@vger.kernel.org, michael.chan@broadcom.com,
+        richardcochran@gmail.com, jdelvare@suse.com, linux@roeck-us.net,
+        yisen.zhuang@huawei.com, salil.mehta@huawei.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, nbd@nbd.name, john@phrozen.org,
+        sean.wang@mediatek.com, Mark-MC.Lee@mediatek.com,
+        lorenzo@kernel.org, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, linux@armlinux.org.uk,
+        linux-rdma@vger.kernel.org, saeedm@nvidia.com, leon@kernel.org,
+        gerhard@engleder-embedded.com, maciej.fijalkowski@intel.com,
+        alexanderduyck@fb.com, wei.fang@nxp.com, shenwei.wang@nxp.com,
+        xiaoning.wang@nxp.com, linux-imx@nxp.com, lgirdwood@gmail.com,
+        broonie@kernel.org, jaswinder.singh@linaro.org,
+        ilias.apalodimas@linaro.org, UNGLinuxDriver@microchip.com,
+        horatiu.vultur@microchip.com, linux-omap@vger.kernel.org,
+        grygorii.strashko@ti.com, simon.horman@corigine.com,
+        vladimir.oltean@nxp.com, aleksander.lobakin@intel.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
+        mcoquelin.stm32@gmail.com, p.zabel@pengutronix.de,
+        thomas.petazzoni@bootlin.com, mw@semihalf.com,
+        sgoutham@marvell.com, gakula@marvell.com, sbhatta@marvell.com,
+        hkelam@marvell.com, xen-devel@lists.xenproject.org,
+        jgross@suse.com, sstabellini@kernel.org,
+        oleksandr_tyshchenko@epam.com, linux-wireless@vger.kernel.org,
+        ryder.lee@mediatek.com, shayne.chen@mediatek.com, kvalo@kernel.org,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yonghong.song@linux.dev, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org
+Date:   Mon, 14 Aug 2023 09:54:56 +0200
+In-Reply-To: <20230814060411.2401817-1-rkannoth@marvell.com>
+References: <20230814060411.2401817-1-rkannoth@marvell.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+X-malware-bazaar: not-scanned
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Krzysztof Kozlowski
-> Sent: 10 August 2023 10:32
-> 
-> 'chip' is an enum, thus cast of pointer on 64-bit compile test with W=1
-> causes:
-> 
->   ina2xx.c:627:10: error: cast to smaller integer type 'enum ina2xx_ids' from 'const void *' [-
-> Werror,-Wvoid-pointer-to-enum-cast]
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  drivers/hwmon/ina2xx.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
-> index a47973e2d606..d8415d1f21fc 100644
-> --- a/drivers/hwmon/ina2xx.c
-> +++ b/drivers/hwmon/ina2xx.c
-> @@ -624,7 +624,7 @@ static int ina2xx_probe(struct i2c_client *client)
->  enum ina2xx_ids chip;
-> 
->  if (client->dev.of_node)
-> -chip = (enum ina2xx_ids)of_device_get_match_data(&client->dev);
-> +chip = (uintptr_t)of_device_get_match_data(&client->dev);
+On Mon, 2023-08-14 at 11:34 +0530, Ratheesh Kannoth wrote:
+> Clamp to 32k instead of returning error.
+>=20
+> Please find discussion at
+> https://lore.kernel.org/lkml/
+> CY4PR1801MB1911E15D518A77535F6E51E2D308A@CY4PR1801MB1911.
+> namprd18.prod.outlook.com/T/
+>=20
 
-The kernel type would be 'long' not uintptr_t.
-But this all looks like something horrid is being done.
+I'm not the one who's going to apply this, but honestly, I don't think
+that will work as a commit message for such a change ...
 
-(And you've clearly lost all the tabs)
+Sure, link to it by all means, but also summarize it and make sense of
+it for the commit message?
 
-	David
-
->  else
->  chip = i2c_match_id(ina2xx_id, client)->driver_data;
-> 
-> --
-> 2.34.1
-> 
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+johannes
