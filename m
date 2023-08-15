@@ -2,325 +2,351 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02B68C41513
-	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Aug 2023 04:58:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E185DC04A94
+	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Aug 2023 06:33:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234326AbjHOE6K (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 15 Aug 2023 00:58:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41570 "EHLO
+        id S235055AbjHOGdD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 15 Aug 2023 02:33:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234469AbjHOE5a (ORCPT
+        with ESMTP id S235061AbjHOGcx (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 15 Aug 2023 00:57:30 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF59127
-        for <linux-hwmon@vger.kernel.org>; Mon, 14 Aug 2023 21:57:27 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id af79cd13be357-7659cb9c42aso334836485a.3
-        for <linux-hwmon@vger.kernel.org>; Mon, 14 Aug 2023 21:57:27 -0700 (PDT)
+        Tue, 15 Aug 2023 02:32:53 -0400
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1811173F;
+        Mon, 14 Aug 2023 23:32:51 -0700 (PDT)
+Received: by mail-ot1-x330.google.com with SMTP id 46e09a7af769-6b9cf1997c4so4322903a34.3;
+        Mon, 14 Aug 2023 23:32:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1692075447; x=1692680247;
-        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mgJ2q0SuKzngBgeOTGAr78clseqxlSR5jZWB2Ms4jrI=;
-        b=DbD0gMOk5CdBBvqVTmS5CN6Ax5ClWraRJ6nWWzqjTpyRbBEncD2QhVi2PO4sHLPxij
-         X9RDGZaIStLZq7qaYBmmXtZ1lOrVsbyejIr+6y0mbWnMC74/kWUDRe+JI0K4EUo0HyW+
-         bEyXJE6gpXEX2ZxtqArRM9xRCOsH039g8vnAs=
+        d=gmail.com; s=20221208; t=1692081171; x=1692685971;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AXyT0KU7mlgwdolM1slTRqIWpl1oaIGWyvpE5anceUg=;
+        b=k84xQmkASS5F995UZgmnC6LbbGavBDa7l2s9k71XK0MokU0Qt+6LsX3YVqLfZi1sy8
+         9762VTUxfE5Fbb0ihlzt24vTXZN+/L9ALcGOqEA30ICl/wTG7v7jOJ1DgQzAl3UXwvfb
+         FNKzHLSZbgRH3VqIk6Y4PiVVrESUj0vD4vURekRVtRKDBrUbFaYC61v0PwBzHpO6gNPP
+         fZwj3xVxkKnE4kTULo87nbBix6VsmWcIDgyw1F3len1VXb2LEsum71Hnm5q0nRgVFIkJ
+         SSGC5RKiHuxDCfAtBbbnH0XK+CuE31RCgN7CxL6wGMyCzgg784NwznNRYdKjmwZTAGEp
+         EXjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692075447; x=1692680247;
-        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mgJ2q0SuKzngBgeOTGAr78clseqxlSR5jZWB2Ms4jrI=;
-        b=dpGUwOk9+kCc0mPyZRTcmWwCbJeQnNGeYAMO4rsXiPRGBcEQ6Qm+nflhtCaN+BNfDD
-         hefGmqNihZ31xr9gxzwNuT5DBbCQkbf3X9k0S3OMwsRTBclc/P6foulnxwSPkB7Jxsoo
-         xwYjEgm9ND/ChC+mUmo7shBq5B2ykFYS9idenDOl/zIq9b49tzq7lHznmvDmkNagayN4
-         kLnNAVggj2DTpE1D0G3TLMqe4cdoGVY8CH+tN5rkW1UEFW0S9AczIO8kLFULnw5gUUdQ
-         rvAdJZzB7ubUo/DjiXuK9G49A5Vpp6VdxoKCid/EMxWDNfb118S27XZ/hdElnH6dkgZg
-         snLw==
-X-Gm-Message-State: AOJu0Ywz8IzyZVIzBZ8rRx9wn6AYLQ9NuNWVQuDDU252J4mOC07qCkn7
-        vkv5ZnihK6yF9DT+EedsWvW35g==
-X-Google-Smtp-Source: AGHT+IEDCu7rmxNzJJkCYPPRnnGmiNw2b8lskJpSEnSDj1bsFO+rGrUIfrMuc5hzEBT/Dojn/waO8g==
-X-Received: by 2002:a05:620a:850:b0:768:efd:2685 with SMTP id u16-20020a05620a085000b007680efd2685mr12167630qku.33.1692075446789;
-        Mon, 14 Aug 2023 21:57:26 -0700 (PDT)
-Received: from lvnvda5233.lvn.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id k28-20020a05620a143c00b00767cbd5e942sm3516575qkj.72.2023.08.14.21.57.25
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 14 Aug 2023 21:57:26 -0700 (PDT)
-From:   Michael Chan <michael.chan@broadcom.com>
-To:     davem@davemloft.net
-Cc:     netdev@vger.kernel.org, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, gospo@broadcom.com,
-        Kalesh AP <kalesh-anakkur.purayil@broadcom.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH net-next 11/12] bnxt_en: Expose threshold temperatures through hwmon
-Date:   Mon, 14 Aug 2023 21:56:57 -0700
-Message-Id: <20230815045658.80494-12-michael.chan@broadcom.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20230815045658.80494-1-michael.chan@broadcom.com>
-References: <20230815045658.80494-1-michael.chan@broadcom.com>
+        d=1e100.net; s=20221208; t=1692081171; x=1692685971;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AXyT0KU7mlgwdolM1slTRqIWpl1oaIGWyvpE5anceUg=;
+        b=CLt1mQ4AxPa23K/n+DYjCcFHSaoo/6lVEotkUm6ED7NXv/33OznS4gpTFoOmz7N3SA
+         pr51RrJbT91nXa/xaHEwnfD71oNQSkQjG7ONqPwxbAhgXFL22hTlOHTdpnrHvg9xskbK
+         EDXgXp/EPJQfZkBUTlY6ULG4S8lzP9uJ2e4PJOFbQge9RtzKDTIvXbqYnVmqJ9/AV+l0
+         7jN2VhdY6UbuPva8FRoSivayH68gBRvKDC+YlSC8Ct9fOBnLNOLGPDdfwH1CfbtHcikM
+         gUPxU8ULaKbIGhQ3jqPUePAYgSL+9n5TK9EVhuKvBdfpcThDbIy2QK68EzUWiULrysVg
+         AFVg==
+X-Gm-Message-State: AOJu0Yx8ST4KkdtjVjglyuOg6K6KK/HM6XyY04zzO/Lw8yjZ3+sFsAQd
+        oJ7ZnrbZp+WOtoYxp8nu1lXHKL/g/8X6NiJSY0s=
+X-Google-Smtp-Source: AGHT+IFDi2OxwWt6jyRqikG/vM1XoLDHRV3Fww5fww8bst+rx3w3FUWw8m3l8Y9ihCnHJUb0Wd3U2xhBp2AnXxvVCpg=
+X-Received: by 2002:a05:6870:9343:b0:1bf:43d2:526c with SMTP id
+ j3-20020a056870934300b001bf43d2526cmr11907847oak.15.1692081171162; Mon, 14
+ Aug 2023 23:32:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000f66e900602ef03f9"
+References: <7b198d57-ddec-3074-314a-3e5e5b8f48f9@roeck-us.net>
+ <CAGUgbhDbFedVe-pc+muD_NtDpjHpGqMDdrS3A73C-QbxeHn4oQ@mail.gmail.com>
+ <cf91edc9-1093-495b-48eb-6b05198c2541@linaro.org> <7a69bda1-5f4c-5b1f-8eb6-6fd58917a9b1@roeck-us.net>
+ <CAGUgbhCTDPGt_vpbfaEreX+iuLJ3WUBqt4kppxyaFZQus9Zf0Q@mail.gmail.com>
+ <b22b2ccc-6760-0db6-067b-109c3864d2e8@linaro.org> <CAGUgbhDmXnyxYCL9h9C0P4ByDSTstWnGqW=uFoDVVHeK3BerHA@mail.gmail.com>
+ <3756dffd-1407-d656-485a-9cf1eefd9ae1@linaro.org> <ZLYziWcIWcNnzMXR@orome>
+ <709d738c-3bf3-d808-4172-468d7ad947d7@roeck-us.net> <ZLY779Bc4LpJ0TER@orome>
+In-Reply-To: <ZLY779Bc4LpJ0TER@orome>
+From:   =?UTF-8?B?6JSh5om/6YGU?= <billyking19920205@gmail.com>
+Date:   Tue, 15 Aug 2023 14:32:39 +0800
+Message-ID: <CAGUgbhCPhG1q-VXihaPbASkkigdmhd8Lo6ynCTEayLV83Y+=VQ@mail.gmail.com>
+Subject: Re: [v6 2/4] dt-bindings: hwmon: Add ASPEED TACH Control documentation
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "patrick@stwcx.xyz" <patrick@stwcx.xyz>,
+        Billy Tsai <billy_tsai@aspeedtech.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
---000000000000f66e900602ef03f9
-Content-Transfer-Encoding: 8bit
+Thierry Reding <thierry.reding@gmail.com> =E6=96=BC 2023=E5=B9=B47=E6=9C=88=
+18=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=883:14=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+>
+> On Mon, Jul 17, 2023 at 11:54:26PM -0700, Guenter Roeck wrote:
+> > On 7/17/23 23:39, Thierry Reding wrote:
+> > > On Tue, Jul 18, 2023 at 08:04:24AM +0200, Krzysztof Kozlowski wrote:
+> > > > On 18/07/2023 06:01, =E8=94=A1=E6=89=BF=E9=81=94 wrote:
+> > > > > >
+> > > > > > On 17/07/2023 11:01, =E8=94=A1=E6=89=BF=E9=81=94 wrote:
+> > > > > > > Guenter Roeck <linux@roeck-us.net> =E6=96=BC 2023=E5=B9=B47=
+=E6=9C=8817=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8A=E5=8D=881:00=E5=AF=AB=E9=
+=81=93=EF=BC=9A
+> > > > > > > >
+> > > > > > > > On 7/16/23 09:08, Krzysztof Kozlowski wrote:
+> > > > > > > >
+> > > > > > > > [ ... ]
+> > > > > > > >
+> > > > > > > > > >
+> > > > > > > > > > This patch serial doesn't use to binding the fan contro=
+l h/w. It is
+> > > > > > > > > > used to binding the two independent h/w blocks.
+> > > > > > > > > > One is used to provide pwm output and another is used t=
+o monitor the
+> > > > > > > > > > speed of the input.
+> > > > > > > > > > My patch is used to point out that the pwm and the tach=
+ is the
+> > > > > > > > > > different function and don't need to
+> > > > > > > > > > bind together. You can not only combine them as the fan=
+ usage but also
+> > > > > > > > > > treat them as the individual module for
+> > > > > > > > > > use. For example: the pwm can use to be the beeper (pwm=
+-beeper.c), the
+> > > > > > > > > > tach can be used to monitor the heart beat signal.
+> > > > > > > > >
+> > > > > > > > > Isn't this exactly the same as in every other SoC? PWMs c=
+an be used in
+> > > > > > > > > different ways?
+> > > > > > > > >
+> > > > > > > >
+> > > > > > > > ... and in every fan controller. Not that it really makes s=
+ense because
+> > > > > > > > normally the pwm controller part of such chips is tied to t=
+he fan input,
+> > > > > > > > to enable automatic fan control, but it is technically poss=
+ible.
+> > > > > > > > In many cases this is also the case in SoCs, for example, i=
+n ast2500.
+> > > > > > > > Apparently this was redesigned in ast2600 where they two bl=
+ocks are
+> > > > > > > > only lightly coupled (there are two pwm status bits in the =
+fan status
+> > > > > > > > register, but I have no idea what those mean). If the block=
+s are tightly
+> > > > > > > > coupled, separate drivers don't really make sense.
+> > > > > > > >
+> > > > > > > > There are multiple ways to separate the pwm controller part=
+ from the
+> > > > > > > > fan inputs if that is really necessary. One would be to pro=
+vide a
+> > > > > > > > sequence of address mappings, the other would be to pass th=
+e memory
+> > > > > > > > region from an mfd driver. It is not necessary to have N in=
+stances
+> > > > > > > > of the fan controller, even if the address space is not con=
+tinuous.
+> > > > > > > >
+> > > > > > >
+> > > > > > > Hi Guenter,
+> > > > > > >
+> > > > > > > May I ask about the meaning of the sequence of address mappin=
+gs? It appears
+> > > > > > > to consist of multiple tuples within the 'reg' property, indi=
+cating
+> > > > > > > the usage of PWM/Tach
+> > > > > > > registers within a single instance. After that I can use the =
+dts like following:
+> > > > > > >
+> > > > > > > pwm: pwm@1e610000 {
+> > > > > > > ...
+> > > > > > > reg =3D <0x1e610000 0x8
+> > > > > > > 0x1e610010 0x8
+> > > > > > > 0x1e610020 0x8
+> > > > > > > 0x1e610030 0x8
+> > > > > > > 0x1e610040 0x8
+> > > > > > > 0x1e610050 0x8
+> > > > > > > 0x1e610060 0x8
+> > > > > > > 0x1e610070 0x8
+> > > > > > > 0x1e610080 0x8
+> > > > > > > 0x1e610090 0x8
+> > > > > > > 0x1e6100A0 0x8
+> > > > > > > 0x1e6100B0 0x8
+> > > > > > > 0x1e6100C0 0x8
+> > > > > > > 0x1e6100D0 0x8
+> > > > > > > 0x1e6100E0 0x8
+> > > > > > > 0x1e6100F0 0x8>;
+> > > > > >
+> > > > > >
+> > > > > > Uh, no... I mean, why? We keep pointing out that this should no=
+t be done
+> > > > > > differently than any other SoC. Open any other SoC PWM controll=
+er and
+> > > > > > tell me why this is different? Why this cannot be one address s=
+pace?
+> > > > >
+> > > > > Hi Krzysztof,
+> > > > >
+> > > > > This is because the register layout for PWM and Tach is not conti=
+nuous.
+> > > > > Each PWM/Tach instance has its own set of controller registers, a=
+nd they
+> > > > > are independent of each other.
+> > > >
+> > > > Register layout is not continuous in many other devices, so again -=
+ why
+> > > > this must be different?
+> > > >
+> > > > >
+> > > > > For example:
+> > > > > PWM0 uses registers 0x0 and 0x4, while Tach0 uses registers 0x8 a=
+nd 0xc.
+> > > > > PWM1 uses registers 0x10 and 0x14, while Tach1 uses registers 0x1=
+8 and 0x1c.
+> > > > > ...
+> > > > >
+> > > > > To separate the PWM controller part from the fan inputs, Guenter =
+has
+> > > > > provided two methods.
+> > > > > The first method involves passing the memory region from an MFD
+> > > > > driver, which was the
+> > > >
+> > > > I have no clue how can you pass memory region
+> > > > (Documentation/devicetree/bindings/reserved-memory/) from MFD and w=
+hy
+> > > > does it make sense here.
+> > > >
+> > > > > initial method I intended to use. However, it seems that this met=
+hod
+> > > > > does not make sense to you.
+> > > > >
+> > > > > Therefore, I would like to explore the second method suggested by
+> > > > > Guenter, which involves providing
+> > > > > a sequence of address mappings.
+> > >
+> > > At the risk of saying what others have said: given that there's a sin=
+gle
+> > > reset line and a single clock line controlling all of these channels =
+and
+> > > given what I recall of how address demuxers work in chips, everything
+> > > indicates that this is a single hardware block/device.
+> > >
+> > > So the way that this should be described in DT is:
+> > >
+> > >     pwm@1e610000 {
+> > >             reg =3D <0x1e610000 0x100>;
+> > >             clocks =3D ...;
+> > >             resets =3D ...
+> > >     };
+> > >
+> > > That'd be the most accurate representation of this hardware in DT. It=
+ is
+> > > then up to the driver to expose this in any way you see fit. For Linu=
+x
+> > > it may make sense to expose this as 16 PWM channels and 16 hardware
+> > > monitoring devices. Other operating systems using the same DT may cho=
+ose
+> >
+> > It is single chip. It should be a single hardware monitoring device wit=
+h
+> > 16 channels. I don't even want to think about the mess we'd get if peop=
+le
+> > start modeling a single chip as N hardware monitoring devices, one for
+> > each monitoring channel supported by that chip. It would be even more m=
+essy
+> > if the driver supporting those N devices would be marked for asynchrono=
+us
+> > probe, which would result in random hwmon device assignments.
+>
+> Sorry, I badly worded it. What I meant to say was: one hardware
+> monitoring device with 16 channels.
+>
+> > > to expose this differently, depending on their frameworks, etc. A sim=
+ple
+> > > operating system may not expose this as separate resources at all but
+> > > instead directly program individual registers from this block.
+> > >
+> > > I'd also like to add that I think trying to split this up into multip=
+le
+> > > drivers in Linux is a bit overkill. In my opinion, though I know not
+> > > everyone shares this view, it's perfectly fine for one driver to expo=
+se
+> > > multiple types of resources. There's plenty of use-cases across the
+> > > kernel where tightly coupled devices like this have a single driver t=
+hat
+> > > registers with multiple subsystems. Going through MFD only because th=
+is
+> > > particular hardware doesn't split registers nicely along Linux subsys=
+tem
+> > > boundaries.
+> > >
+> > > So FWIW, I'm fine carrying hwmon code in a PWM driver and I'm equally
+> > > fine if PWM code ends up in a hwmon driver (or any other subsystem
+> > > really) if that makes sense for a given hardware.
+> > >
+> >
+> > I am fine either way as well, as long as we are talking about a single
+> > hwmon device and not 16 of them.
+>
+> Excellent. Should make it pretty clear in which direction this should
+> go.
+>
+Hi Thierry,
 
-From: Kalesh AP <kalesh-anakkur.purayil@broadcom.com>
+Thank you for organizing and providing guidance on this patch series.
+I'd like to
+confirm my understanding of the next steps. Based on the previous discussio=
+ns,
+I should proceed by combining the PWM and TACH drivers into a single driver=
+.
+This consolidated driver would then be exposed to both the hwmon and
+pwm subsystems.
+Base on this driver the dts node of this would like following:
 
-HWRM_TEMP_MONITOR_QUERY response now indicates various
-threshold temperatures. Expose these threshold temperatures
-through the hwmon sysfs.
-Also, provide temp1_max_alarm through which the user can check
-whether the threshold temperature has been reached or not.
+pwm_tach: pwm-tach-controller@1e610000 {
+compatible =3D "aspeed,ast2600-pwm-tach"
+reg =3D <0x1e610000 0x100>;
+clocks =3D <&syscon ASPEED_CLK_AHB>;
+resets =3D <&syscon ASPEED_RESET_PWM>;
+#pwm-cells =3D <3>;
+#address-cells =3D <1>;
+#size-cells =3D <0>;
+fan@0 {
+aspeed,fan-tach-ch =3D /bits/ 8 <0x00>;
+};
+fan@1 {
+aspeed,fan-tach-ch =3D /bits/ 8 <0x01, 0x02>;
+};
+};
 
-Example:
-cat /sys/class/hwmon/hwmon3/temp1_input
-75000
-cat /sys/class/hwmon/hwmon3/temp1_max
-105000
-cat /sys/class/hwmon/hwmon3/temp1_max_alarm
-0
+The subnode of the fan is utilized to create the hwmon interface,
+which facilitates monitoring
+the speed of the input tach pin.
+If users wish to employ PWM for fan or beeper control, they can create
+the necessary configuration
+through the following DTS declaration:
+fan0: pwm-fan0 {
+compatible =3D "pwm-fan";
+pwms =3D <&pwm_tach 0 40000 0>; /* Target freq:25 kHz */
+cooling-min-state =3D <0>;
+cooling-max-state =3D <3>;
+#cooling-cells =3D <2>;
+cooling-levels =3D <0 15 128 255>;
+};
 
-Cc: Jean Delvare <jdelvare@suse.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Signed-off-by: Kalesh AP <kalesh-anakkur.purayil@broadcom.com>
-Signed-off-by: Michael Chan <michael.chan@broadcom.com>
----
- drivers/net/ethernet/broadcom/bnxt/bnxt.h     |  7 ++
- .../net/ethernet/broadcom/bnxt/bnxt_hwmon.c   | 71 +++++++++++++++++--
- 2 files changed, 73 insertions(+), 5 deletions(-)
+buzzer {
+compatible =3D "pwm-beeper";
+pwms =3D <&pwm_tach 1 500000 0>;
+};
 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.h b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
-index 84cbcfa61bc1..43a07d84f815 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt.h
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
-@@ -2013,6 +2013,7 @@ struct bnxt {
- 	#define BNXT_FW_CAP_RING_MONITOR		BIT_ULL(30)
- 	#define BNXT_FW_CAP_DBG_QCAPS			BIT_ULL(31)
- 	#define BNXT_FW_CAP_PTP				BIT_ULL(32)
-+	#define BNXT_FW_CAP_THRESHOLD_TEMP_SUPPORTED	BIT_ULL(33)
- 
- 	u32			fw_dbg_cap;
- 
-@@ -2185,7 +2186,13 @@ struct bnxt {
- 	struct bnxt_tc_info	*tc_info;
- 	struct list_head	tc_indr_block_list;
- 	struct dentry		*debugfs_pdev;
-+#ifdef CONFIG_BNXT_HWMON
- 	struct device		*hwmon_dev;
-+	u8			warn_thresh_temp;
-+	u8			crit_thresh_temp;
-+	u8			fatal_thresh_temp;
-+	u8			shutdown_thresh_temp;
-+#endif
- 	enum board_idx		board_idx;
- };
- 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.c
-index 20381b7b1d78..f5affac1169a 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.c
-@@ -34,6 +34,15 @@ static int bnxt_hwrm_temp_query(struct bnxt *bp, u8 *temp)
- 
- 	if (temp)
- 		*temp = resp->temp;
-+
-+	if (resp->flags & TEMP_MONITOR_QUERY_RESP_FLAGS_THRESHOLD_VALUES_AVAILABLE) {
-+		if (!temp)
-+			bp->fw_cap |= BNXT_FW_CAP_THRESHOLD_TEMP_SUPPORTED;
-+		bp->warn_thresh_temp = resp->warn_threshold;
-+		bp->crit_thresh_temp = resp->critical_threshold;
-+		bp->fatal_thresh_temp = resp->fatal_threshold;
-+		bp->shutdown_thresh_temp = resp->shutdown_threshold;
-+	}
- err:
- 	hwrm_req_drop(bp, req);
- 	return rc;
-@@ -42,12 +51,30 @@ static int bnxt_hwrm_temp_query(struct bnxt *bp, u8 *temp)
- static umode_t bnxt_hwmon_is_visible(const void *_data, enum hwmon_sensor_types type,
- 				     u32 attr, int channel)
- {
-+	const struct bnxt *bp = _data;
-+
- 	if (type != hwmon_temp)
- 		return 0;
- 
- 	switch (attr) {
- 	case hwmon_temp_input:
- 		return 0444;
-+	case hwmon_temp_lcrit:
-+	case hwmon_temp_crit:
-+	case hwmon_temp_emergency:
-+	case hwmon_temp_lcrit_alarm:
-+	case hwmon_temp_crit_alarm:
-+	case hwmon_temp_emergency_alarm:
-+		if (~bp->fw_cap & BNXT_FW_CAP_THRESHOLD_TEMP_SUPPORTED)
-+			return 0;
-+		return 0444;
-+	/* Max temperature setting in NVM is optional */
-+	case hwmon_temp_max:
-+	case hwmon_temp_max_alarm:
-+		if (~bp->fw_cap & BNXT_FW_CAP_THRESHOLD_TEMP_SUPPORTED ||
-+		    !bp->shutdown_thresh_temp)
-+			return 0;
-+		return 0444;
- 	default:
- 		return 0;
- 	}
-@@ -66,6 +93,38 @@ static int bnxt_hwmon_read(struct device *dev, enum hwmon_sensor_types type, u32
- 		if (!rc)
- 			*val = temp * 1000;
- 		return rc;
-+	case hwmon_temp_lcrit:
-+		*val = bp->warn_thresh_temp * 1000;
-+		return 0;
-+	case hwmon_temp_crit:
-+		*val = bp->crit_thresh_temp * 1000;
-+		return 0;
-+	case hwmon_temp_emergency:
-+		*val = bp->fatal_thresh_temp * 1000;
-+		return 0;
-+	case hwmon_temp_max:
-+		*val = bp->shutdown_thresh_temp * 1000;
-+		return 0;
-+	case hwmon_temp_lcrit_alarm:
-+		rc = bnxt_hwrm_temp_query(bp, &temp);
-+		if (!rc)
-+			*val = temp >= bp->warn_thresh_temp;
-+		return rc;
-+	case hwmon_temp_crit_alarm:
-+		rc = bnxt_hwrm_temp_query(bp, &temp);
-+		if (!rc)
-+			*val = temp >= bp->crit_thresh_temp;
-+		return rc;
-+	case hwmon_temp_emergency_alarm:
-+		rc = bnxt_hwrm_temp_query(bp, &temp);
-+		if (!rc)
-+			*val = temp >= bp->fatal_thresh_temp;
-+		return rc;
-+	case hwmon_temp_max_alarm:
-+		rc = bnxt_hwrm_temp_query(bp, &temp);
-+		if (!rc)
-+			*val = temp >= bp->shutdown_thresh_temp;
-+		return rc;
- 	default:
- 		return -EOPNOTSUPP;
- 	}
-@@ -73,7 +132,11 @@ static int bnxt_hwmon_read(struct device *dev, enum hwmon_sensor_types type, u32
- 
- static const struct hwmon_channel_info *bnxt_hwmon_info[] = {
- 	HWMON_CHANNEL_INFO(temp,
--			   HWMON_T_INPUT),
-+			   HWMON_T_INPUT |
-+			   HWMON_T_MAX | HWMON_T_LCRIT |
-+			   HWMON_T_CRIT | HWMON_T_EMERGENCY |
-+			   HWMON_T_CRIT_ALARM | HWMON_T_LCRIT_ALARM |
-+			   HWMON_T_MAX_ALARM | HWMON_T_EMERGENCY_ALARM),
- 	NULL
- };
- 
-@@ -97,13 +160,11 @@ void bnxt_hwmon_uninit(struct bnxt *bp)
- 
- void bnxt_hwmon_init(struct bnxt *bp)
- {
--	struct hwrm_temp_monitor_query_input *req;
- 	struct pci_dev *pdev = bp->pdev;
- 	int rc;
- 
--	rc = hwrm_req_init(bp, req, HWRM_TEMP_MONITOR_QUERY);
--	if (!rc)
--		rc = hwrm_req_send_silent(bp, req);
-+	/* temp1_xxx is only sensor, ensure not registered if it will fail */
-+	rc = bnxt_hwrm_temp_query(bp, NULL);
- 	if (rc == -EACCES || rc == -EOPNOTSUPP) {
- 		bnxt_hwmon_uninit(bp);
- 		return;
--- 
-2.30.1
-
-
---000000000000f66e900602ef03f9
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIQbQYJKoZIhvcNAQcCoIIQXjCCEFoCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-gg3EMIIFDTCCA/WgAwIBAgIQeEqpED+lv77edQixNJMdADANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA5MTYwMDAwMDBaFw0yODA5MTYwMDAwMDBaMFsxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBS
-MyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
-vbCmXCcsbZ/a0fRIQMBxp4gJnnyeneFYpEtNydrZZ+GeKSMdHiDgXD1UnRSIudKo+moQ6YlCOu4t
-rVWO/EiXfYnK7zeop26ry1RpKtogB7/O115zultAz64ydQYLe+a1e/czkALg3sgTcOOcFZTXk38e
-aqsXsipoX1vsNurqPtnC27TWsA7pk4uKXscFjkeUE8JZu9BDKaswZygxBOPBQBwrA5+20Wxlk6k1
-e6EKaaNaNZUy30q3ArEf30ZDpXyfCtiXnupjSK8WU2cK4qsEtj09JS4+mhi0CTCrCnXAzum3tgcH
-cHRg0prcSzzEUDQWoFxyuqwiwhHu3sPQNmFOMwIDAQABo4IB2jCCAdYwDgYDVR0PAQH/BAQDAgGG
-MGAGA1UdJQRZMFcGCCsGAQUFBwMCBggrBgEFBQcDBAYKKwYBBAGCNxQCAgYKKwYBBAGCNwoDBAYJ
-KwYBBAGCNxUGBgorBgEEAYI3CgMMBggrBgEFBQcDBwYIKwYBBQUHAxEwEgYDVR0TAQH/BAgwBgEB
-/wIBADAdBgNVHQ4EFgQUljPR5lgXWzR1ioFWZNW+SN6hj88wHwYDVR0jBBgwFoAUj/BLf6guRSSu
-TVD6Y5qL3uLdG7wwegYIKwYBBQUHAQEEbjBsMC0GCCsGAQUFBzABhiFodHRwOi8vb2NzcC5nbG9i
-YWxzaWduLmNvbS9yb290cjMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5j
-b20vY2FjZXJ0L3Jvb3QtcjMuY3J0MDYGA1UdHwQvMC0wK6ApoCeGJWh0dHA6Ly9jcmwuZ2xvYmFs
-c2lnbi5jb20vcm9vdC1yMy5jcmwwWgYDVR0gBFMwUTALBgkrBgEEAaAyASgwQgYKKwYBBAGgMgEo
-CjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAN
-BgkqhkiG9w0BAQsFAAOCAQEAdAXk/XCnDeAOd9nNEUvWPxblOQ/5o/q6OIeTYvoEvUUi2qHUOtbf
-jBGdTptFsXXe4RgjVF9b6DuizgYfy+cILmvi5hfk3Iq8MAZsgtW+A/otQsJvK2wRatLE61RbzkX8
-9/OXEZ1zT7t/q2RiJqzpvV8NChxIj+P7WTtepPm9AIj0Keue+gS2qvzAZAY34ZZeRHgA7g5O4TPJ
-/oTd+4rgiU++wLDlcZYd/slFkaT3xg4qWDepEMjT4T1qFOQIL+ijUArYS4owpPg9NISTKa1qqKWJ
-jFoyms0d0GwOniIIbBvhI2MJ7BSY9MYtWVT5jJO3tsVHwj4cp92CSFuGwunFMzCCA18wggJHoAMC
-AQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUAMEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9v
-dCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWduMRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5
-MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEgMB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENB
-IC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzARBgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqG
-SIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0E
-XyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuul9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+J
-J5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJpij2aTv2y8gokeWdimFXN6x0FNx04Druci8u
-nPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTv
-riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
-QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
-UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
-M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
-Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
-14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
-a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
-XzCCBUwwggQ0oAMCAQICDF5AaMOe0cZvaJpCQjANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
-RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
-UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAwODIxMzhaFw0yNTA5MTAwODIxMzhaMIGO
-MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
-BgNVBAoTDUJyb2FkY29tIEluYy4xFTATBgNVBAMTDE1pY2hhZWwgQ2hhbjEoMCYGCSqGSIb3DQEJ
-ARYZbWljaGFlbC5jaGFuQGJyb2FkY29tLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC
-ggEBALhEmG7egFWvPKcrDxuNhNcn2oHauIHc8AzGhPyJxU4S6ZUjHM/psoNo5XxlMSRpYE7g7vLx
-J4NBefU36XTEWVzbEkAuOSuJTuJkm98JE3+wjeO+aQTbNF3mG2iAe0AZbAWyqFxZulWitE8U2tIC
-9mttDjSN/wbltcwuti7P57RuR+WyZstDlPJqUMm1rJTbgDqkF2pnvufc4US2iexnfjGopunLvioc
-OnaLEot1MoQO7BIe5S9H4AcCEXXcrJJiAtMCl47ARpyHmvQFQFFTrHgUYEd9V+9bOzY7MBIGSV1N
-/JfsT1sZw6HT0lJkSQefhPGpBniAob62DJP3qr11tu8CAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
-BB0wG4EZbWljaGFlbC5jaGFuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
-HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQU31rAyTdZweIF0tJTFYwfOv2w
-L4QwDQYJKoZIhvcNAQELBQADggEBACcuyaGmk0NSZ7Kio7O7WSZ0j0f9xXcBnLbJvQXFYM7JI5uS
-kw5ozATEN5gfmNIe0AHzqwoYjAf3x8Dv2w7HgyrxWdpjTKQFv5jojxa3A5LVuM8mhPGZfR/L5jSk
-5xc3llsKqrWI4ov4JyW79p0E99gfPA6Waixoavxvv1CZBQ4Stu7N660kTu9sJrACf20E+hdKLoiU
-hd5wiQXo9B2ncm5P3jFLYLBmPltIn/uzdiYpFj+E9kS9XYDd+boBZhN1Vh0296zLQZobLfKFzClo
-E6IFyTTANonrXvCRgodKS+QJEH8Syu2jSKe023aVemkuZjzvPK7o9iU7BKkPG2pzLPgxggJtMIIC
-aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
-EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxeQGjDntHGb2iaQkIw
-DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIN44ovTSaE56EC9MTsl20jlAMfkDWnIH
-ex/4d0yrxHgsMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDgx
-NTA0NTcyN1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
-ATANBgkqhkiG9w0BAQEFAASCAQCem9SF7GPF+ACxfddL0AAEb+yOcxXBAeCrkc0VW6LdsUJDtsua
-LnvMqD0CPA/gCT2wlSbaXNE35Xy2EPH6TEv49TrE9bLZR2UR7Dt/Zh6q5arDb4nlClKDwdkOyudS
-c6rk3DOeJ5gNQ1CC2yr1o9QIr4SzJAqMq7+ybwzdh5ACxaKrpnIH7SDKdINlqfR29THlNGWZjfEw
-gmiHjqXDADRbuX1nYgo8fUMnLPVrYx/Yz6RxwW0AWxNFbVf1czZVRt3e4Tj5Loj55zRkvviZIhAt
-b4O7BH8Sj45QOGLdqORn8ghMDOgRsXr/SiwIrJcsvyLc83FS9hCgXZOz9176U/m9
---000000000000f66e900602ef03f9--
+Thanks
+Best Regards,
+Billy Tsai
