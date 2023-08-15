@@ -2,188 +2,99 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AEB7C001B0
-	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Aug 2023 15:46:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01805C0015E
+	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Aug 2023 16:01:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234140AbjHOPpx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 15 Aug 2023 11:45:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43172 "EHLO
+        id S233916AbjHOQA7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 15 Aug 2023 12:00:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238281AbjHOPpm (ORCPT
+        with ESMTP id S238485AbjHOQAv (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 15 Aug 2023 11:45:42 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC3410FF;
-        Tue, 15 Aug 2023 08:45:41 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id e9e14a558f8ab-3490cce329bso12932845ab.0;
-        Tue, 15 Aug 2023 08:45:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692114341; x=1692719141;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AolyIW6tstki/bK3nO0nCYiOm1GCDbV1AqXISy+qNQU=;
-        b=KIcvToH45hj1aIzaF/gTzjl7gWRs0wm63jp3rmOWSrEHDGDEzG4tQF7dq3jxFUxn7E
-         V7sLcHxZdz9oJvk/CBLEHlygyc3hmXHH+iFYaBtzOsFPSRZtVBiDrf+0KSO83ZerCdVw
-         SNyjT54UbAuw90wYbNuGnRZqZ0kLqMO4g7RTFUgBdVifHCB/gzZGo74O74rVuIgDM/Gu
-         69ev71trf6HdrEIMiZVtnBL/qM+S/pQ+zdCMVtKOutnu+he5MKevZh15Q1spkpVSu+zL
-         Ji7xhs6HKbmm+8j1vPTfOz7V0D7/GTuJaEvxKM26P+pK895iFp9TsNek6Utk55vKXJ4q
-         dTnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692114341; x=1692719141;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AolyIW6tstki/bK3nO0nCYiOm1GCDbV1AqXISy+qNQU=;
-        b=MU1o/2DmxQswyHw5/QLa2kg9NiMF/OiIT6NmPAMrashjDhkaEN62yIFT/J9sCZ/e/M
-         fdG/h1Q+MhDg8seBlSOhOnEmEp/SS9af8ic48axMTcjAOBwA5WZP21cSUfQ/2SsakyzO
-         KlAEM3opTM03DFarDZjfBYsoqLPDgCDfDJwCg1h3J+Ny4g6RQJ1LCHGWEdjcwUx/mi2u
-         iRoBJThx6/J3T2t5x0bF+pTTtQiPNWO9wOo1fMlknG9K/IC3/gIdnCD6L9V46NkjX/aT
-         rjgGdGw5ZBQMr0Y7V/Ithh0k6G2UVeN39nk5OxO1udKl+H50DiQk/Y6f/SP/A5A1gBqI
-         MRAg==
-X-Gm-Message-State: AOJu0Yxv8CJ0VPR66RfaZCf0LxT6v94tosWlHB3zwSnFO8vao49iycjZ
-        yUjwu6j4cLMMuwYU7Rg7hQ8=
-X-Google-Smtp-Source: AGHT+IFcR1Ai3g2UIS6hZDhKt/nHjYejPR3RC19UI0xYRwrQUwG87hd8pgi3EjH4S+I5PMTUOzh+fw==
-X-Received: by 2002:a05:6e02:1527:b0:348:7f18:68be with SMTP id i7-20020a056e02152700b003487f1868bemr3235840ilu.4.1692114340927;
-        Tue, 15 Aug 2023 08:45:40 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t17-20020a02ab91000000b00430a20ce88bsm3696891jan.174.2023.08.15.08.45.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Aug 2023 08:45:40 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 15 Aug 2023 08:45:39 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Loic Guegan <manzerbredes@mailbox.org>
-Cc:     jdelvare@suse.com, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] Adding a driver for the INA260 chip of Texas Instrument.
- It follows the hardware monitoring kernel API.
-Message-ID: <2ee4bac8-8114-4c72-9b6c-6038869fb9f2@roeck-us.net>
-References: <ZNtWl_Jyj2PWBYpf@lguegan-thinkpad>
+        Tue, 15 Aug 2023 12:00:51 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBDF9127;
+        Tue, 15 Aug 2023 09:00:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692115250; x=1723651250;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=s1vDqhBD78d5dFi8FLwZ+C7F8GGkuDRSb/H+ET+fVig=;
+  b=DOlaJII4ci7JoWaqo4yUWjLAi7GaX8GbUJZYnCEAjbQ9D+Me6eE2+AWT
+   YLS4iK0Znry9yJb5YedheONjOTGL1iR66q3UG9t09cyjhOzTaFDocKOy3
+   eIb800NOn+WCmUBpYI81N/YmFYRV/4zxOXFqoynPcdTjZYKgBCJLsmK0D
+   LtBxsjMv74akdNbL4Nup74uLhxvFsdvOXtiCo3ytwbm4uNpq9bduyYPXo
+   nDhBjRm+i624Yu86wdxR7v880fqNczyv6bFHsFoE0xU+UAs2dwP7MVpAH
+   xQTEppiaRMQhObGHhFyeUUaLIOFVohSL3ioFqTwfGSi/9REKUqcmDv7jg
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="376043584"
+X-IronPort-AV: E=Sophos;i="6.01,174,1684825200"; 
+   d="scan'208";a="376043584"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2023 09:00:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="1064511283"
+X-IronPort-AV: E=Sophos;i="6.01,174,1684825200"; 
+   d="scan'208";a="1064511283"
+Received: from lkp-server02.sh.intel.com (HELO b5fb8d9e1ffc) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 15 Aug 2023 09:00:47 -0700
+Received: from kbuild by b5fb8d9e1ffc with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qVwSh-00014X-0w;
+        Tue, 15 Aug 2023 16:00:17 +0000
+Date:   Tue, 15 Aug 2023 23:58:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Ober <dober6023@gmail.com>, linux-hwmon@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net,
+        dober@lenovo.com, mpearson@lenovo.com,
+        David Ober <dober6023@gmail.com>
+Subject: Re: [PATCH] hwmon: add in watchdog for nct6686
+Message-ID: <202308152354.OmOTyX2r-lkp@intel.com>
+References: <20230815115515.286142-1-dober6023@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZNtWl_Jyj2PWBYpf@lguegan-thinkpad>
+In-Reply-To: <20230815115515.286142-1-dober6023@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Aug 15, 2023 at 12:42:31PM +0200, Loic Guegan wrote:
-> Signed-off-by: Loic Guegan <manzerbredes@mailbox.org>
+Hi David,
 
-Subject and description are all wrong. I would suggest to read
-and understand the documentation in Documentation/process
-as well as Documentation/hwmon/submitting-patches.rst
-before resubmitting.
+kernel test robot noticed the following build errors:
 
-> ---
->  drivers/staging/Kconfig         |   2 +
->  drivers/staging/Makefile        |   1 +
->  drivers/staging/ina260/Kconfig  |   6 +
->  drivers/staging/ina260/Makefile |   6 +
->  drivers/staging/ina260/TODO     |   2 +
->  drivers/staging/ina260/ina260.c | 261 ++++++++++++++++++++++++++++++++
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on linus/master v6.5-rc6 next-20230815]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-No hwmon patches in drivers/staging/, please.
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Ober/hwmon-add-in-watchdog-for-nct6686/20230815-195946
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20230815115515.286142-1-dober6023%40gmail.com
+patch subject: [PATCH] hwmon: add in watchdog for nct6686
+config: x86_64-randconfig-r006-20230815 (https://download.01.org/0day-ci/archive/20230815/202308152354.OmOTyX2r-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230815/202308152354.OmOTyX2r-lkp@intel.com/reproduce)
 
->  6 files changed, 278 insertions(+)
->  create mode 100644 drivers/staging/ina260/Kconfig
->  create mode 100644 drivers/staging/ina260/Makefile
->  create mode 100644 drivers/staging/ina260/TODO
->  create mode 100755 drivers/staging/ina260/ina260.c
-> 
-> diff --git a/drivers/staging/Kconfig b/drivers/staging/Kconfig
-> index f9aef39ca..e173e4353 100644
-> --- a/drivers/staging/Kconfig
-> +++ b/drivers/staging/Kconfig
-> @@ -78,4 +78,6 @@ source "drivers/staging/qlge/Kconfig"
->  
->  source "drivers/staging/vme_user/Kconfig"
->  
-> +source "drivers/staging/ina260/Kconfig"
-> +
->  endif # STAGING
-> diff --git a/drivers/staging/Makefile b/drivers/staging/Makefile
-> index ffa70dda4..a1d7e1ddb 100644
-> --- a/drivers/staging/Makefile
-> +++ b/drivers/staging/Makefile
-> @@ -28,3 +28,4 @@ obj-$(CONFIG_PI433)		+= pi433/
->  obj-$(CONFIG_XIL_AXIS_FIFO)	+= axis-fifo/
->  obj-$(CONFIG_FIELDBUS_DEV)     += fieldbus/
->  obj-$(CONFIG_QLGE)		+= qlge/
-> +obj-$(CONFIG_INA260)		+= ina260/
-> \ No newline at end of file
-> diff --git a/drivers/staging/ina260/Kconfig b/drivers/staging/ina260/Kconfig
-> new file mode 100644
-> index 000000000..e873abc9d
-> --- /dev/null
-> +++ b/drivers/staging/ina260/Kconfig
-> @@ -0,0 +1,6 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +config INA260
-> +	tristate "Support for INA260 Power Monitoring i2c chip"
-> +	depends on I2C && REGMAP_I2C
-> +	help
-> +	  Support for the Texas Instrument INA260 power monitoring chip with precision integrated shunt.
-> diff --git a/drivers/staging/ina260/Makefile b/drivers/staging/ina260/Makefile
-> new file mode 100644
-> index 000000000..d4eeba95e
-> --- /dev/null
-> +++ b/drivers/staging/ina260/Makefile
-> @@ -0,0 +1,6 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +#
-> +# Makefile for the Texas Instruments INA260 drivers
-> +#
-> +
-> +obj-$(CONFIG_INA260) += ina260.o
-> diff --git a/drivers/staging/ina260/TODO b/drivers/staging/ina260/TODO
-> new file mode 100644
-> index 000000000..2ed5b80c3
-> --- /dev/null
-> +++ b/drivers/staging/ina260/TODO
-> @@ -0,0 +1,2 @@
-> +Created on: 15 August 2023
-> +Contact: Loic GUEGAN <loic.guegan@mailbox.org>
-> \ No newline at end of file
-> diff --git a/drivers/staging/ina260/ina260.c b/drivers/staging/ina260/ina260.c
-> new file mode 100755
-> index 000000000..f827236b8
-> --- /dev/null
-> +++ b/drivers/staging/ina260/ina260.c
-> @@ -0,0 +1,261 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Driver for Texas Instruments INA260 power monitor chip
-> + * with precision integrated shunt.
-> + * Datasheet: https://www.ti.com/lit/gpn/INA260
-> + *
-> + * Copyright (C) 2023 GUEGAN Loic <loic.guegan@mailbox.org>
-> + */
-> +
-> +#include "linux/module.h"
-> +#include "linux/uaccess.h"
-> +#include "linux/i2c.h"
-> +#include "linux/kobject.h"
-> +#include "linux/slab.h"
-> +#include "linux/kernel.h"
-> +#include <linux/sysfs.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/regmap.h>
-> +
-> +// INA260 registers
-> +#define INA260_REG_CONFIGURATION  0x00
-> +#define INA260_REG_CURRENT        0x01
-> +#define INA260_REG_VOLTAGE        0x02
-> +#define INA260_REG_POWER          0x03
-> +#define INA260_REG_MASKENABLE     0x06
-> +#define INA260_REG_ALERTLIMIT     0x07
-> +#define INA260_REG_MANUFACTURER   0xFE
-> +#define INA260_REG_DIE            0xFF
-> +
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308152354.OmOTyX2r-lkp@intel.com/
 
-The register map is very much identical to ina219, ina220, ina226, ina230,
-and ina231, all of which are supported by drivers/hwmon/ina2xx.c.
-Please consider adding support for ina260 to that driver.
+All errors (new ones prefixed by >>):
 
-Guenter
+>> ld.lld: error: undefined symbol: watchdog_init_timeout
+   >>> referenced by nct6683.c:1514 (drivers/hwmon/nct6683.c:1514)
+   >>>               drivers/hwmon/nct6683.o:(nct6683_probe) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: devm_watchdog_register_device
+   >>> referenced by nct6683.c:1524 (drivers/hwmon/nct6683.c:1524)
+   >>>               drivers/hwmon/nct6683.o:(nct6683_probe) in archive vmlinux.a
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
