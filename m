@@ -2,91 +2,80 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0E40C001DB
-	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Aug 2023 15:06:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 136EDC04A6A
+	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Aug 2023 15:17:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237711AbjHOPF3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 15 Aug 2023 11:05:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47676 "EHLO
+        id S237823AbjHOPRX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 15 Aug 2023 11:17:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237625AbjHOPFF (ORCPT
+        with ESMTP id S237929AbjHOPQ7 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 15 Aug 2023 11:05:05 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98596138;
-        Tue, 15 Aug 2023 08:05:03 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id ca18e2360f4ac-7910b9bb891so177731139f.2;
-        Tue, 15 Aug 2023 08:05:03 -0700 (PDT)
+        Tue, 15 Aug 2023 11:16:59 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284B21BD0;
+        Tue, 15 Aug 2023 08:16:35 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id e9e14a558f8ab-34984bff431so17606975ab.2;
+        Tue, 15 Aug 2023 08:16:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692111903; x=1692716703;
+        d=gmail.com; s=20221208; t=1692112593; x=1692717393;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=C15dfbyaPCqUx0eSRs2F9I2Y/k4M/cVBWlOvNZGqVdo=;
-        b=dwCMArsZfYi5nteJatAUcHS7Ezg/Nxg2NbBJuZWyvH+kS3ebqtR8sJeI9hVHR59xu3
-         qO9YV5bkoEx956F/O5iEyM9VIj7GN7hKpt6AqZFQ+J18wb34W7EoGaL3MXdFiPXhyx/K
-         804grLRZEvMU3kxURVMoDHGEsoJTN0x32dSGQQVwZQ0Erqips7aDJ3SD3UrDy2BOijsI
-         OIuHw8N1Z85v5In/KGPCsSdtbntro0mNyMo9gCbEr+jZWIXtE4aWmR22M7HaVXXg2G+n
-         6q4YMxOct/dxOINlzhIckXJQR02lsdq8Frvcg1/oP5dovpz5dB/7mXWP699Wnk1wPdRy
-         fV8g==
+        bh=0jq72e3gv9obDkYlmkmR/28Rn69ZDFoeuMxfVLnIkIs=;
+        b=gw/4ig3q5lkqnyM8L6NCj9SnRsIYjzG11Uh0xVlMsbq3/pIDWzLpX+AiDwOOo0MbEi
+         D9eEz7ZV9y3lUt8JT/XzMeFLu83HWzzcImWf+5tSM4HjKfvZwDenL3mOQf4asXgwyvkP
+         zNNruOPoP1q8rxNdwCobj2pNL8dNgZc4d8mB70ODoU33RZLdwfavn8qwM287VwSE7Zy7
+         LsqLAa74F/8E6WVSApOrgPGQgq0MJDfKEnhLIrXRK/N4rhy9+vuk7/s1hKVKkLQNd715
+         TuBUuAo0tUHf9y78gslp4JYssorNw2Pxo/qB8hUxST58UmXvZ64iMGUJ3szNhpV1duSw
+         kMtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692111903; x=1692716703;
+        d=1e100.net; s=20221208; t=1692112593; x=1692717393;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=C15dfbyaPCqUx0eSRs2F9I2Y/k4M/cVBWlOvNZGqVdo=;
-        b=fTdHcOp8qhRjLQvgMt7ivayf0LR7im+vhbYhtjyEbV/hnUI3WKBX+v54uzc115v0Dg
-         J62cC0ZpDXMZH4Y6FhrbHZkjg3lXIciyvt84IaZS55Hki/KIMBvaZDZIoHC6mQ4pKQlm
-         +MZbKtbd6eMbrVUan3Jn5DsRYTScLAN7ttVwCkKp3+RXd5t41c0yQGpxPCm0wl/D27LG
-         2GiaEGdGvJkEgACC8yQA3l3JzLRpAf8O1tSyHvCP643FJ3EX8a0GbL4NWxeNQ7N89TaO
-         mq+MKZgQ4pCQiZpie5PIWSSU/9DyWKmsvhL7b9qaM8BGUgngAhk/W9ah133rlqeqYkr6
-         qigg==
-X-Gm-Message-State: AOJu0YxBDxRiPB287TK+E65QkLHUmA8v8N3jwtAc4Cukc/KYlOZcedAI
-        Tmk3//yzdpoYmVV30yLoR6E=
-X-Google-Smtp-Source: AGHT+IFbh1lIZ1o+4tSmuL6NIEH8obSbxkyXTWfEyJ61hKXXXnFyoCadxxg6FsLMA3M19uJxDfdGdQ==
-X-Received: by 2002:a05:6e02:1be2:b0:348:1a1d:79a5 with SMTP id y2-20020a056e021be200b003481a1d79a5mr21058271ilv.15.1692111902612;
-        Tue, 15 Aug 2023 08:05:02 -0700 (PDT)
+        bh=0jq72e3gv9obDkYlmkmR/28Rn69ZDFoeuMxfVLnIkIs=;
+        b=Wff6oLi0YaFKg9YygLpaExuZ3iLq8H2DnJe5zaKiiyYz/zQ6DBx5np3gTNSY/anDdB
+         9cG0DPffQHolf8TD9Zn5Ex8jRNvuTJNETAz4omhxIoQY29T7A9svYj3U7e/Dzs4aIW1R
+         d4hTxRc77+Q95iR0C2OV46Cjgz/wVWESNeuHsyzpmSBCA4cYm6UgtdYZcZVSmb/BEW07
+         8VfwXMg8CIo4E3tgJlTkhvZ8EHWgEf2LxypKtaz8JtuFqC3OuUKI8euxYLgXhvYSsGtc
+         xiMDtmCvvEK0HMITsLf1sl9Bwn8Sihffz5rQ3WyySCt8M5aKNuUTJFVZnuf8dr8VFe+7
+         leyw==
+X-Gm-Message-State: AOJu0YxzSlnrbEkDxmKriK0sjDs65Df3VCCMfFyTbIjOxXxQFYCSNRO+
+        S/Q/5+z/YG4X6iWS8MgJAqA=
+X-Google-Smtp-Source: AGHT+IHSk8ljvenaCQ7eS9jxcAoBh0EUHhkt+iV5SRr3YUHVzSo5yL2wJAcsdNbT5j7Q3+yMy6ucqw==
+X-Received: by 2002:a05:6e02:dc1:b0:348:8b42:47d with SMTP id l1-20020a056e020dc100b003488b42047dmr14116907ilj.28.1692112593286;
+        Tue, 15 Aug 2023 08:16:33 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s17-20020a92cc11000000b00345d3f2bb6asm3980504ilp.56.2023.08.15.08.05.01
+        by smtp.gmail.com with ESMTPSA id t23-20020a05663801f700b0041a9022c3dasm3538227jaq.118.2023.08.15.08.16.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Aug 2023 08:05:02 -0700 (PDT)
+        Tue, 15 Aug 2023 08:16:32 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 15 Aug 2023 08:05:00 -0700
+Date:   Tue, 15 Aug 2023 08:16:31 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Michael Chan <michael.chan@broadcom.com>
 Cc:     davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
         kuba@kernel.org, pabeni@redhat.com, gospo@broadcom.com,
         Kalesh AP <kalesh-anakkur.purayil@broadcom.com>,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH net-next 11/12] bnxt_en: Expose threshold temperatures
- through hwmon
-Message-ID: <c6f3a05e-f75c-4051-8892-1c2dee2804b0@roeck-us.net>
+Subject: Re: [PATCH net-next 12/12] bnxt_en: Event handler for Thermal event
+Message-ID: <58848214-55a1-474c-a7fa-954552ea4019@roeck-us.net>
 References: <20230815045658.80494-1-michael.chan@broadcom.com>
- <20230815045658.80494-12-michael.chan@broadcom.com>
+ <20230815045658.80494-13-michael.chan@broadcom.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230815045658.80494-12-michael.chan@broadcom.com>
+In-Reply-To: <20230815045658.80494-13-michael.chan@broadcom.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Aug 14, 2023 at 09:56:57PM -0700, Michael Chan wrote:
+On Mon, Aug 14, 2023 at 09:56:58PM -0700, Michael Chan wrote:
 > From: Kalesh AP <kalesh-anakkur.purayil@broadcom.com>
 > 
-> HWRM_TEMP_MONITOR_QUERY response now indicates various
-> threshold temperatures. Expose these threshold temperatures
-> through the hwmon sysfs.
-> Also, provide temp1_max_alarm through which the user can check
-> whether the threshold temperature has been reached or not.
-> 
-> Example:
-> cat /sys/class/hwmon/hwmon3/temp1_input
-> 75000
-> cat /sys/class/hwmon/hwmon3/temp1_max
-> 105000
-> cat /sys/class/hwmon/hwmon3/temp1_max_alarm
-> 0
+> Newer FW will send a new async event when it detects that
+> the chip's temperature has crossed the configured threshold value.
+> The driver will now notify hwmon and will log a warning message.
 > 
 > Cc: Jean Delvare <jdelvare@suse.com>
 > Cc: Guenter Roeck <linux@roeck-us.net>
@@ -94,198 +83,120 @@ On Mon, Aug 14, 2023 at 09:56:57PM -0700, Michael Chan wrote:
 > Signed-off-by: Kalesh AP <kalesh-anakkur.purayil@broadcom.com>
 > Signed-off-by: Michael Chan <michael.chan@broadcom.com>
 > ---
->  drivers/net/ethernet/broadcom/bnxt/bnxt.h     |  7 ++
->  .../net/ethernet/broadcom/bnxt/bnxt_hwmon.c   | 71 +++++++++++++++++--
->  2 files changed, 73 insertions(+), 5 deletions(-)
+>  drivers/net/ethernet/broadcom/bnxt/bnxt.c     | 44 +++++++++++++++++++
+>  .../net/ethernet/broadcom/bnxt/bnxt_hwmon.c   |  8 ++++
+>  .../net/ethernet/broadcom/bnxt/bnxt_hwmon.h   |  5 +++
+>  3 files changed, 57 insertions(+)
 > 
-> diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.h b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
-> index 84cbcfa61bc1..43a07d84f815 100644
-> --- a/drivers/net/ethernet/broadcom/bnxt/bnxt.h
-> +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
-> @@ -2013,6 +2013,7 @@ struct bnxt {
->  	#define BNXT_FW_CAP_RING_MONITOR		BIT_ULL(30)
->  	#define BNXT_FW_CAP_DBG_QCAPS			BIT_ULL(31)
->  	#define BNXT_FW_CAP_PTP				BIT_ULL(32)
-> +	#define BNXT_FW_CAP_THRESHOLD_TEMP_SUPPORTED	BIT_ULL(33)
+> diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> index 5e97a3d93e87..c8e04c9501ee 100644
+> --- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> @@ -2130,6 +2130,17 @@ static u16 bnxt_agg_ring_id_to_grp_idx(struct bnxt *bp, u16 ring_id)
+>  	return INVALID_HW_RING_ID;
+>  }
 >  
->  	u32			fw_dbg_cap;
->  
-> @@ -2185,7 +2186,13 @@ struct bnxt {
->  	struct bnxt_tc_info	*tc_info;
->  	struct list_head	tc_indr_block_list;
->  	struct dentry		*debugfs_pdev;
-> +#ifdef CONFIG_BNXT_HWMON
->  	struct device		*hwmon_dev;
-> +	u8			warn_thresh_temp;
-> +	u8			crit_thresh_temp;
-> +	u8			fatal_thresh_temp;
-> +	u8			shutdown_thresh_temp;
-> +#endif
->  	enum board_idx		board_idx;
->  };
->  
+> +#define BNXT_EVENT_THERMAL_CURRENT_TEMP(data2)				\
+> +	((data2) & ASYNC_EVENT_CMPL_ERROR_REPORT_THERMAL_EVENT_DATA2_CURRENT_TEMP_MASK)
+> +
+> +#define BNXT_EVENT_THERMAL_THRESHOLD_TEMP(data2)					\
+> +	(((data2) &									\
+> +	  ASYNC_EVENT_CMPL_ERROR_REPORT_THERMAL_EVENT_DATA2_THRESHOLD_TEMP_MASK) >>	\
+> +	 ASYNC_EVENT_CMPL_ERROR_REPORT_THERMAL_EVENT_DATA2_THRESHOLD_TEMP_SFT)
+> +
+> +#define EVENT_DATA1_THERMAL_THRESHOLD_TYPE(data1)			\
+> +	((data1) & ASYNC_EVENT_CMPL_ERROR_REPORT_THERMAL_EVENT_DATA1_THRESHOLD_TYPE_MASK)
+> +
+>  static void bnxt_event_error_report(struct bnxt *bp, u32 data1, u32 data2)
+>  {
+>  	u32 err_type = BNXT_EVENT_ERROR_REPORT_TYPE(data1);
+> @@ -2145,6 +2156,39 @@ static void bnxt_event_error_report(struct bnxt *bp, u32 data1, u32 data2)
+>  	case ASYNC_EVENT_CMPL_ERROR_REPORT_BASE_EVENT_DATA1_ERROR_TYPE_DOORBELL_DROP_THRESHOLD:
+>  		netdev_warn(bp->dev, "One or more MMIO doorbells dropped by the device!\n");
+>  		break;
+> +	case ASYNC_EVENT_CMPL_ERROR_REPORT_BASE_EVENT_DATA1_ERROR_TYPE_THERMAL_THRESHOLD: {
+> +		char *threshold_type;
+> +		u32 attr;
+> +
+> +		switch (EVENT_DATA1_THERMAL_THRESHOLD_TYPE(data1)) {
+> +		case ASYNC_EVENT_CMPL_ERROR_REPORT_THERMAL_EVENT_DATA1_THRESHOLD_TYPE_WARN:
+> +			attr = hwmon_temp_lcrit_alarm;
+
+As with previous patch, wrong attribute
+
+> +			threshold_type = "warning";
+> +			break;
+> +		case ASYNC_EVENT_CMPL_ERROR_REPORT_THERMAL_EVENT_DATA1_THRESHOLD_TYPE_CRITICAL:
+> +			attr = hwmon_temp_crit_alarm;
+> +			threshold_type = "critical";
+> +			break;
+> +		case ASYNC_EVENT_CMPL_ERROR_REPORT_THERMAL_EVENT_DATA1_THRESHOLD_TYPE_FATAL:
+> +			attr = hwmon_temp_emergency_alarm;
+> +			threshold_type = "fatal";
+> +			break;
+> +		case ASYNC_EVENT_CMPL_ERROR_REPORT_THERMAL_EVENT_DATA1_THRESHOLD_TYPE_SHUTDOWN:
+> +			attr = hwmon_temp_max_alarm;
+
+Same here.
+
+Overall it seems to me it would be better to keep hwmon internals out
+of this file and just pass the threshold type to the hwmon code.
+
+> +			threshold_type = "shutdown";
+> +			break;
+> +		default:
+> +			netdev_err(bp->dev, "Unknown Thermal threshold type event\n");
+> +			return;
+> +		}
+> +		netdev_warn(bp->dev, "Chip temperature has crossed the %s thermal threshold!\n",
+> +			    threshold_type);
+> +		netdev_warn(bp->dev, "Temperature (In Celsius), Current: %lu, threshold: %lu\n",
+> +			    BNXT_EVENT_THERMAL_CURRENT_TEMP(data2),
+> +			    BNXT_EVENT_THERMAL_THRESHOLD_TEMP(data2));
+> +		bnxt_hwmon_notify_event(bp, attr);
+> +		break;
+> +	}
+>  	default:
+>  		netdev_err(bp->dev, "FW reported unknown error type %u\n",
+>  			   err_type);
 > diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.c
-> index 20381b7b1d78..f5affac1169a 100644
+> index f5affac1169a..483571264276 100644
 > --- a/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.c
 > +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.c
-> @@ -34,6 +34,15 @@ static int bnxt_hwrm_temp_query(struct bnxt *bp, u8 *temp)
+> @@ -18,6 +18,14 @@
+>  #include "bnxt_hwrm.h"
+>  #include "bnxt_hwmon.h"
 >  
->  	if (temp)
->  		*temp = resp->temp;
+> +void bnxt_hwmon_notify_event(struct bnxt *bp, u32 attr)
+> +{
+> +	if (!bp->hwmon_dev)
+> +		return;
 > +
-> +	if (resp->flags & TEMP_MONITOR_QUERY_RESP_FLAGS_THRESHOLD_VALUES_AVAILABLE) {
-> +		if (!temp)
-> +			bp->fw_cap |= BNXT_FW_CAP_THRESHOLD_TEMP_SUPPORTED;
-
-The if statement seems unnecessary. If the flag was not set
-during initialization, the limit attributes won't be visible anyway,
-so it doesn't make a difference if it is set now or not.
-
-> +		bp->warn_thresh_temp = resp->warn_threshold;
-> +		bp->crit_thresh_temp = resp->critical_threshold;
-> +		bp->fatal_thresh_temp = resp->fatal_threshold;
-> +		bp->shutdown_thresh_temp = resp->shutdown_threshold;
-
-Are those temperatures expected to change during runtime ? If not it might
-make sense to only execute the entire if condition if temp == NULL to
-avoid unnecessary reassignments whenever the temperature is read.
-
-> +	}
->  err:
->  	hwrm_req_drop(bp, req);
->  	return rc;
-> @@ -42,12 +51,30 @@ static int bnxt_hwrm_temp_query(struct bnxt *bp, u8 *temp)
->  static umode_t bnxt_hwmon_is_visible(const void *_data, enum hwmon_sensor_types type,
->  				     u32 attr, int channel)
->  {
-> +	const struct bnxt *bp = _data;
+> +	hwmon_notify_event(&bp->pdev->dev, hwmon_temp, attr, 0);
+> +}
 > +
->  	if (type != hwmon_temp)
->  		return 0;
->  
->  	switch (attr) {
->  	case hwmon_temp_input:
->  		return 0444;
-> +	case hwmon_temp_lcrit:
-> +	case hwmon_temp_crit:
-> +	case hwmon_temp_emergency:
-> +	case hwmon_temp_lcrit_alarm:
-> +	case hwmon_temp_crit_alarm:
-> +	case hwmon_temp_emergency_alarm:
-> +		if (~bp->fw_cap & BNXT_FW_CAP_THRESHOLD_TEMP_SUPPORTED)
-
-Seems to me that
-		if (!(bp->fw_cap & BNXT_FW_CAP_THRESHOLD_TEMP_SUPPORTED))
-would be much easier to understand.
-
-> +			return 0;
-> +		return 0444;
-> +	/* Max temperature setting in NVM is optional */
-> +	case hwmon_temp_max:
-> +	case hwmon_temp_max_alarm:
-> +		if (~bp->fw_cap & BNXT_FW_CAP_THRESHOLD_TEMP_SUPPORTED ||
-> +		    !bp->shutdown_thresh_temp)
-> +			return 0;
-
-Wrong use of the 'max' attribute. More on that below.
-
-> +		return 0444;
->  	default:
->  		return 0;
->  	}
-> @@ -66,6 +93,38 @@ static int bnxt_hwmon_read(struct device *dev, enum hwmon_sensor_types type, u32
->  		if (!rc)
->  			*val = temp * 1000;
->  		return rc;
-> +	case hwmon_temp_lcrit:
-> +		*val = bp->warn_thresh_temp * 1000;
-> +		return 0;
-> +	case hwmon_temp_crit:
-> +		*val = bp->crit_thresh_temp * 1000;
-> +		return 0;
-> +	case hwmon_temp_emergency:
-> +		*val = bp->fatal_thresh_temp * 1000;
-> +		return 0;
-> +	case hwmon_temp_max:
-> +		*val = bp->shutdown_thresh_temp * 1000;
-> +		return 0;
-> +	case hwmon_temp_lcrit_alarm:
-> +		rc = bnxt_hwrm_temp_query(bp, &temp);
-> +		if (!rc)
-> +			*val = temp >= bp->warn_thresh_temp;
-
-That is wrong. lcrit is the _lower_ critical temperature, ie the
-temperature is critically low. This is not a "high temperature"
-alarm.
-
-> +		return rc;
-> +	case hwmon_temp_crit_alarm:
-> +		rc = bnxt_hwrm_temp_query(bp, &temp);
-> +		if (!rc)
-> +			*val = temp >= bp->crit_thresh_temp;
-> +		return rc;
-> +	case hwmon_temp_emergency_alarm:
-> +		rc = bnxt_hwrm_temp_query(bp, &temp);
-> +		if (!rc)
-> +			*val = temp >= bp->fatal_thresh_temp;
-> +		return rc;
-> +	case hwmon_temp_max_alarm:
-> +		rc = bnxt_hwrm_temp_query(bp, &temp);
-> +		if (!rc)
-> +			*val = temp >= bp->shutdown_thresh_temp;
-
-Hmm, that isn't really the purpose of alarm attributes. The expectation
-would be that the chip sets alarm flags and the driver reports it.
-I guess there is some value in having it, so I won't object.
-
-Anyway, the ordering is wrong. max_alarm should be the lowest
-alarm level, followed by crit and emergency. So
-		max_alarm -> temp >= bp->warn_thresh_temp
-		crit_alarm -> temp >= bp->crit_thresh_temp
-		emergency_alarm -> temp >= bp->fatal_thresh_temp
-				or temp >= bp->shutdown_thresh_temp
-
-There are only three levels of upper temperature alarms.
-Abusing lcrit as 4th upper alarm is most definitely wrong.
-
-> +		return rc;
->  	default:
->  		return -EOPNOTSUPP;
->  	}
-> @@ -73,7 +132,11 @@ static int bnxt_hwmon_read(struct device *dev, enum hwmon_sensor_types type, u32
->  
->  static const struct hwmon_channel_info *bnxt_hwmon_info[] = {
->  	HWMON_CHANNEL_INFO(temp,
-> -			   HWMON_T_INPUT),
-> +			   HWMON_T_INPUT |
-> +			   HWMON_T_MAX | HWMON_T_LCRIT |
-> +			   HWMON_T_CRIT | HWMON_T_EMERGENCY |
-> +			   HWMON_T_CRIT_ALARM | HWMON_T_LCRIT_ALARM |
-> +			   HWMON_T_MAX_ALARM | HWMON_T_EMERGENCY_ALARM),
->  	NULL
->  };
->  
-> @@ -97,13 +160,11 @@ void bnxt_hwmon_uninit(struct bnxt *bp)
->  
->  void bnxt_hwmon_init(struct bnxt *bp)
+>  static int bnxt_hwrm_temp_query(struct bnxt *bp, u8 *temp)
 >  {
-> -	struct hwrm_temp_monitor_query_input *req;
->  	struct pci_dev *pdev = bp->pdev;
->  	int rc;
+>  	struct hwrm_temp_monitor_query_output *resp;
+> diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.h b/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.h
+> index af310066687c..5cf127702764 100644
+> --- a/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.h
+> +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.h
+> @@ -11,9 +11,14 @@
+>  #define BNXT_HWMON_H
 >  
-> -	rc = hwrm_req_init(bp, req, HWRM_TEMP_MONITOR_QUERY);
-> -	if (!rc)
-> -		rc = hwrm_req_send_silent(bp, req);
-> +	/* temp1_xxx is only sensor, ensure not registered if it will fail */
-> +	rc = bnxt_hwrm_temp_query(bp, NULL);
-
-Ah, that is the reason for the check in bnxt_hwrm_temp_query().
-The check in that function should really be added here, not in the
-previous patch.
-
->  	if (rc == -EACCES || rc == -EOPNOTSUPP) {
->  		bnxt_hwmon_uninit(bp);
->  		return;
+>  #ifdef CONFIG_BNXT_HWMON
+> +void bnxt_hwmon_notify_event(struct bnxt *bp, u32 attr);
+>  void bnxt_hwmon_uninit(struct bnxt *bp);
+>  void bnxt_hwmon_init(struct bnxt *bp);
+>  #else
+> +static inline void bnxt_hwmon_notify_event(struct bnxt *bp, u32 attr)
+> +{
+> +}
+> +
+>  static inline void bnxt_hwmon_uninit(struct bnxt *bp)
+>  {
+>  }
 > -- 
 > 2.30.1
 > 
