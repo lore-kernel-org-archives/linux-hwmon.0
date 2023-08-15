@@ -2,188 +2,148 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F180C04A6A
-	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Aug 2023 16:30:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12243C0015E
+	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Aug 2023 16:57:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238476AbjHOQaW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 15 Aug 2023 12:30:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35548 "EHLO
+        id S233501AbjHOQ45 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 15 Aug 2023 12:56:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238550AbjHOQaR (ORCPT
+        with ESMTP id S238621AbjHOQ4Y (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 15 Aug 2023 12:30:17 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B4710E3;
-        Tue, 15 Aug 2023 09:30:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692117016; x=1723653016;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kB0+uw89rlc/HY5J1IEM0QZjixKE2caKHcevwQ588Dk=;
-  b=WXNI4YljyOb5fuGvjt5IOG92UGYnZ1fHGZ0DpygnDPJim0NRiiZoJmzx
-   pj4SHuV+8NUBiisjhcu96NFsHzP18jER+OyHIYkK7LlQh6bKZlSQdxwo+
-   ueVYLekqWGkSfiaOj7u/lUP5feFkwZKhCWdMDbm/iOG3UvvkrsYWJ4QRa
-   7NCEfdCVUEQGbx1csTlSXyFrh8zILBdX62w0tzjiKTg3XHBk1ICpJEdBw
-   E+NrthTTuaOZ6helytK5B4NmmvzIAU5G1VXayDzuem1ipuzRmCCoCG+NP
-   wXRAkTMoINzWwVOI4LrZdO3JELUFsnjqfdeezqxrPandd0bymXjnwDTex
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="458671841"
-X-IronPort-AV: E=Sophos;i="6.01,175,1684825200"; 
-   d="scan'208";a="458671841"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2023 09:30:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="683716966"
-X-IronPort-AV: E=Sophos;i="6.01,175,1684825200"; 
-   d="scan'208";a="683716966"
-Received: from lkp-server02.sh.intel.com (HELO b5fb8d9e1ffc) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 15 Aug 2023 09:30:12 -0700
-Received: from kbuild by b5fb8d9e1ffc with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qVwvQ-00015h-07;
-        Tue, 15 Aug 2023 16:29:54 +0000
-Date:   Wed, 16 Aug 2023 00:29:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Ober <dober6023@gmail.com>, linux-hwmon@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jdelvare@suse.com,
-        linux@roeck-us.net, corbet@lwn.net, dober@lenovo.com,
-        mpearson@lenovo.com, David Ober <dober6023@gmail.com>
-Subject: Re: [PATCH] hwmon: add in watchdog for nct6686
-Message-ID: <202308160001.hx3WQNSU-lkp@intel.com>
-References: <20230815115515.286142-1-dober6023@gmail.com>
+        Tue, 15 Aug 2023 12:56:24 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30EEB3;
+        Tue, 15 Aug 2023 09:56:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
+ s=s31663417; t=1692118565; x=1692723365; i=w_armin@gmx.de;
+ bh=d/izCvn2UZizEZVbi3BAVdaO3sRXpnlIPV7lvNiO0O8=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+ b=QDCgPBh9xK99X4sqLZ+v13QbKneIfjJFTBZOwdhd1f4N9jum+zHZfMcLpKCnRQmhYW1EaUP
+ X7LvJiJiWyfdTvMRmLGSRfIjOlaUz0HKXNjamFVF49uf0txIxHcplB/W4cb/aYlax/84dVAUM
+ 1Suy0LFblNRY8LRCidGidXc7y7hOnmgNAU8lSBBOYTvKZrjTsbLQGi4anSeF9EJrby3IP8MRs
+ 5ZaJUeA9apwFsLU/hhiQz+36OsVJdhDUcZlYXC6LSbLh12aSXQB3BtSP2rHdm5I5wvv4cdemR
+ 2tcK+kqKw47Cy+F1DvY7CgS4Wjsfq12fh83quaiJsC9hwIt9ydkw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from mx-amd-b650.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1M7Jza-1qQSd70SRY-007o5W; Tue, 15 Aug 2023 18:56:05 +0200
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     hdegoede@redhat.com
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] hwmon: (sch5627) Disallow write access if virtual registers are locked
+Date:   Tue, 15 Aug 2023 18:55:57 +0200
+Message-Id: <20230815165558.4176-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230815115515.286142-1-dober6023@gmail.com>
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:2oULqiHNdug9VCvmj+Y1WEj0tIZwELrv8UfjiFY1IpkY3obchrz
+ Fkd4zd0SZGS8MLoFqWvFaKLxUlwOaanAmhYAL2jR+OCDt7kO9CLt53k4guJG4Jtxl0nn1ZP
+ SHkAH24R3ERcesCGw5zIJRcfa4VbrOr5K1pFD7YKMuQQFaeG5eKDodsw6GHdW4uiDAX2OFy
+ hitUgdOtIw8pJMZU3IQzw==
+UI-OutboundReport: notjunk:1;M01:P0:iGyHKw3EiXQ=;XDHHElRA8z2gTPQolL0EAENoasE
+ FKVLTDjz9XKTcxRfpoSb0CHWUiDlD+aCUFQosuakZhSCYpbWrUVSM2ccVlmqb3YWeQyL+x2y6
+ yboN8xd8z9o6dN+IQfZxxqy2F3FaQDlwbitVaN2UQaZh7TtMzcv7WUvFglh8354TuOjB3OBmP
+ 8U2xDQ+WNemPNjO7pNz/hxLWv1v+huwat00OQfIxLf3Ie2ijfMF0tyYUC09smRQcuLlVPAAyp
+ dqnGLxvoUNoRZtFOmLrWbFnUsqf+CbGz8bK+xDKGaTiFtcrndA86R3aubYOSYV7I+ASXmYXJT
+ 7UpfKUcg0YGZe1oe2wSTI6XIdMxyN/olh0TI5gnn/FZO9qtOXAsgWuykdigEWAopXY8UCJWFU
+ hkFum0MvNNLxxwIkUYOnbUk4pPUQ9Zd7OvVgFrtxzvlDyx8jwgLPd2/dGBEsd29qXOVLVhSJn
+ IynZ4yoaW3XHENmiHy2iiFnNWlEpkrUtV00m1TsH2RdLgxpGqAkhXrnYC566EmyTdCse407O+
+ YdwF+s/eW2DnqyY15yKu9up2/+AwUIY+24bly9epb9tLQExHM+iCR3LTH/NAk6vZVDcOZY86x
+ GKyrhEIitnfiKtjYiuEEQJggNwFhnwQafxhP6zmTWph5r4CYuOMcaXrsSLZ+veRf63vv8xdTv
+ IheLTMjOQG7uwJvZC7Ce/kXqc4OPvaOEUjYgHTKJ53NMWLj3pSz+HvNYsm8yRgpEpHMuSdlj0
+ TApRLPpnUEgzdfvxcUgp2eSudrH3Yvfft5G6y+t0kOzDjCpWOIX103ByVoOVFHCQQtCCrXIij
+ XY9OpZCBDg+o/ogOrP7xnF5fFkjDASQaI/2o/lVEVQd/XZzI7GCFl0EBeW3XBEj4f+2jI+Zj4
+ jkznGR3k/VMcZ81oeMiQvEThWxvHpQ/MBBtEipshPvyjc1Mtgy1dYpfVLfNXI9hmB2SHRC3+J
+ 5mYFuBftbSr5xLU/RKJofZ1HEHA=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi David,
+When the lock bit inside SCH5627_REG_CTRL is set, then the virtual
+registers become read-only until the next power cycle.
+Disallow write access to those registers in such a case.
 
-kernel test robot noticed the following build errors:
+Tested on a Fujitsu Esprimo P720.
 
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on linus/master v6.5-rc6 next-20230815]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Fixes: aa9f833dfc12 ("hwmon: (sch5627) Add pwmX_auto_channels_temp support=
+")
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ drivers/hwmon/sch5627.c | 21 +++++++++++++++++----
+ 1 file changed, 17 insertions(+), 4 deletions(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Ober/hwmon-add-in-watchdog-for-nct6686/20230815-195946
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20230815115515.286142-1-dober6023%40gmail.com
-patch subject: [PATCH] hwmon: add in watchdog for nct6686
-config: i386-randconfig-i013-20230815 (https://download.01.org/0day-ci/archive/20230816/202308160001.hx3WQNSU-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20230816/202308160001.hx3WQNSU-lkp@intel.com/reproduce)
+diff --git a/drivers/hwmon/sch5627.c b/drivers/hwmon/sch5627.c
+index 1bbda3b05532..bf408e35e2c3 100644
+=2D-- a/drivers/hwmon/sch5627.c
++++ b/drivers/hwmon/sch5627.c
+@@ -6,6 +6,7 @@
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308160001.hx3WQNSU-lkp@intel.com/
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
++#include <linux/bits.h>
+ #include <linux/module.h>
+ #include <linux/mod_devicetable.h>
+ #include <linux/init.h>
+@@ -32,6 +33,10 @@
+ #define SCH5627_REG_PRIMARY_ID		0x3f
+ #define SCH5627_REG_CTRL		0x40
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in vmlinux.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/locking/locktorture.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/rcutorture.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/rcuscale.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/refscale.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/torture.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nfs/nfsv4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp437.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp852.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp863.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp866.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp869.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp932.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_euc-jp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp936.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp949.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-6.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-7.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-9.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-14.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_utf8.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-greek.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-iceland.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-romanian.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/smb/common/cifs_arc4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/smb/common/cifs_md4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in security/keys/trusted-keys/trusted.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in crypto/ecc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in crypto/curve25519-generic.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in block/t10-pi.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/crypto/libdes.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/asn1_decoder.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/asn1_encoder.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/video/backlight/rt4831-backlight.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/virtio/virtio_dma_buf.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/regulator/rt4831-regulator.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/tty/serial/8250/serial_cs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/tty/synclink_gt.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/agp/intel-gtt.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tiny/cirrus.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/drm_panel_orientation_quirks.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-i2c.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-slimbus.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/block/loop.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/arizona.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/timberdale.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/rt4831.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cxl/cxl_mem.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cxl/cxl_pmem.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/scsi_common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/aha1542.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/aha1740.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/isci/isci.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/g_NCR5380.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/atp870u.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvme/target/nvmet.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cdrom/cdrom.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/touchscreen/cyttsp_i2c_common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/i2c/busses/i2c-ccgx-ucsi.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-apple.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-dr.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-emsff.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-maltron.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-pl.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-petalynx.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-semitek.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-speedlink.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-sunplus.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-tivo.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-twinhan.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-xinmo.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-zydacron.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-viewsonic.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-waltop.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_simpleondemand.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_performance.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/parport/parport.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvdimm/libnvdimm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvdimm/nd_pmem.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvdimm/nd_e820.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/chips/cfi_util.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/chips/cfi_cmdset_0020.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/maps/map_funcs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio_cif.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio_aec.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio_netx.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwmon/corsair-cpro.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mtty.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mdpy.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mbochs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/bytestream-example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/dma-example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/inttype-example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/record-example.o
->> ERROR: modpost: "watchdog_init_timeout" [drivers/hwmon/nct6683.ko] undefined!
->> ERROR: modpost: "devm_watchdog_register_device" [drivers/hwmon/nct6683.ko] undefined!
++#define SCH5627_CTRL_START		BIT(0)
++#define SCH5627_CTRL_LOCK		BIT(1)
++#define SCH5627_CTRL_VBAT		BIT(4)
++
+ #define SCH5627_NO_TEMPS		8
+ #define SCH5627_NO_FANS			4
+ #define SCH5627_NO_IN			5
+@@ -147,7 +152,8 @@ static int sch5627_update_in(struct sch5627_data *data=
+)
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+ 	/* Trigger a Vbat voltage measurement every 5 minutes */
+ 	if (time_after(jiffies, data->last_battery + 300 * HZ)) {
+-		sch56xx_write_virtual_reg(data->addr, SCH5627_REG_CTRL, data->control |=
+ 0x10);
++		sch56xx_write_virtual_reg(data->addr, SCH5627_REG_CTRL,
++					  data->control | SCH5627_CTRL_VBAT);
+ 		data->last_battery =3D jiffies;
+ 	}
+
+@@ -226,6 +232,14 @@ static int reg_to_rpm(u16 reg)
+ static umode_t sch5627_is_visible(const void *drvdata, enum hwmon_sensor_=
+types type, u32 attr,
+ 				  int channel)
+ {
++	const struct sch5627_data *data =3D drvdata;
++
++	/* Once the lock bit is set, the virtual registers become read-only
++	 * until the next power cycle.
++	 */
++	if (data->control & SCH5627_CTRL_LOCK)
++		return 0444;
++
+ 	if (type =3D=3D hwmon_pwm && attr =3D=3D hwmon_pwm_auto_channels_temp)
+ 		return 0644;
+
+@@ -483,14 +497,13 @@ static int sch5627_probe(struct platform_device *pde=
+v)
+ 		return val;
+
+ 	data->control =3D val;
+-	if (!(data->control & 0x01)) {
++	if (!(data->control & SCH5627_CTRL_START)) {
+ 		pr_err("hardware monitoring not enabled\n");
+ 		return -ENODEV;
+ 	}
+ 	/* Trigger a Vbat voltage measurement, so that we get a valid reading
+ 	   the first time we read Vbat */
+-	sch56xx_write_virtual_reg(data->addr, SCH5627_REG_CTRL,
+-				  data->control | 0x10);
++	sch56xx_write_virtual_reg(data->addr, SCH5627_REG_CTRL, data->control | =
+SCH5627_CTRL_VBAT);
+ 	data->last_battery =3D jiffies;
+
+ 	/*
+=2D-
+2.39.2
+
