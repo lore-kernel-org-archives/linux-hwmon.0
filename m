@@ -2,105 +2,147 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFF2BC04A94
-	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Aug 2023 03:37:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69EE1C001E0
+	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Aug 2023 08:52:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241597AbjHPDgj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 15 Aug 2023 23:36:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52116 "EHLO
+        id S242956AbjHPIwF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 16 Aug 2023 04:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241608AbjHPDeH (ORCPT
+        with ESMTP id S243215AbjHPIvb (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 15 Aug 2023 23:34:07 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6352719;
-        Tue, 15 Aug 2023 20:32:15 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id 46e09a7af769-6bcd4b5ebbaso5278987a34.1;
-        Tue, 15 Aug 2023 20:32:15 -0700 (PDT)
+        Wed, 16 Aug 2023 04:51:31 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6213B1BEE
+        for <linux-hwmon@vger.kernel.org>; Wed, 16 Aug 2023 01:51:21 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-2685bcd046eso3437456a91.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 16 Aug 2023 01:51:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692156734; x=1692761534;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BL/F/X8bC3GTds988AutPOHQC46oxwdLAdPac8xjblg=;
-        b=NC3+uCjJWXs55QZdoTpPOmV1Ji5h/xsfV3h/BLeZ4EMM8N9tjXYl9ijOXOvyXN1oi/
-         I6mffbS7ohPjrmpLdtEd/bd+QLGsJaJKHGZF7QtwegH/DzC+JnMDZyszxmrEN6LY2EA3
-         wMUC3YbovdgIFpHHh8fD9e0HE2CEYiaoCkC9HkiludDb2S9VrIFRZAtSRpfEyJpxVinU
-         ssWWorBJQrDx5RnzFGtniwMXQU1gmY7GlDB7X/SQZ5jU/REUAP+pn7lveN4LhlsYLTa2
-         Wysd8twYZmj82pGv4PNtPj9Z+qm9tGCI5oS/nRTBDM4wBETAiR3Ac9i4DZqTQ6VRxpVF
-         olYw==
+        d=9elements.com; s=google; t=1692175881; x=1692780681;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bZbysPazkjRhmks1IeUNmvykR7eRQx0d/X7/8WZ+7ns=;
+        b=UNktGYDPEt7aDrm/3sA72EUocrwVrFxHkHcCoE/h5yVVwlW6TUBPnPa7MeA/k8PchC
+         zH76nNw08VwxLaOSl2ML/AXULrFg7GGtsNwnJ3JSR0dN7mFMEIG1BV5mdkIXCYf31GXR
+         QXJquhubfzlxBWBCianFswA+r/PIe+SQJ9FS9/2pC+2805M6sQDjJ7Y0bMFyYR1mVmG4
+         13lS9h7MJPK6CQAgEyEVSuESePPhxagMyt8begU0x5QA5VfVTMwmufvFgGDbCwLiYdBw
+         pTlBNMh7x8oNc8trpHE80It9ElW6RkDvognWqNcY4KpL8g8AAO+oPPX6y71QGZgj2Yhw
+         81lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692156734; x=1692761534;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BL/F/X8bC3GTds988AutPOHQC46oxwdLAdPac8xjblg=;
-        b=a0g3jPzQ0YK0fYc9JUfoFgq0ScDaPO8lrnkywdDtbUTLuLAdoOI+cW1xy/GmfeUOGc
-         0k+bo7JMiYX3dA8k3br2AFEus+DWbHs/gwH42dwKXhh5ggWuQZHCjd7Y7LL2biyUsXjZ
-         0Pxb+xXJQLClp5pBlLjBLshyx+RnarFmT04vtEzepE4GivJrbkrOxZWl8zZNIsv0Qekk
-         IiXkdzi9MziQezEjzn3+ERVS3S09uYpqJcjSgR9gdV9ZsYEDhQST5eeGTjg40X1e1u9o
-         a3Ycbb2t0h78hEg77aqZGGtfReBH3X4nVH75OCB3tcaOHEWbBdexSRIFS9kCpmGxnZw6
-         dspw==
-X-Gm-Message-State: AOJu0YwqRvsxbAePPeRzsDReSHDVodXbbUaUUZ/ksbsd9ihI9roMZ3AM
-        YzA4uQ2tuG33aAapHtVgxfI=
-X-Google-Smtp-Source: AGHT+IHwwEZLJtvTSLrvqU+elcRjoZRAZnKEzs4FKKKjO1s6M+lXRjpifXkHOpKiOwnBOKqOOE5sAQ==
-X-Received: by 2002:a9d:6381:0:b0:6b9:9018:6ea with SMTP id w1-20020a9d6381000000b006b9901806eamr831995otk.20.1692156734278;
-        Tue, 15 Aug 2023 20:32:14 -0700 (PDT)
-Received: from debian.me ([103.124.138.83])
-        by smtp.gmail.com with ESMTPSA id v2-20020a1709029a0200b001bbcf43e120sm11891302plp.95.2023.08.15.20.32.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Aug 2023 20:32:13 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 23B178232E98; Wed, 16 Aug 2023 10:32:12 +0700 (WIB)
-Date:   Wed, 16 Aug 2023 10:32:12 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Loic Guegan <manzerbredes@mailbox.org>
-Cc:     jdelvare@suse.com, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] Adding a driver for the INA260 chip of Texas Instrument.
- It follows the hardware monitoring kernel API.
-Message-ID: <ZNxDPGUgW_CC4HrZ@debian.me>
-References: <ZNtWl_Jyj2PWBYpf@lguegan-thinkpad>
- <2ee4bac8-8114-4c72-9b6c-6038869fb9f2@roeck-us.net>
+        d=1e100.net; s=20221208; t=1692175881; x=1692780681;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bZbysPazkjRhmks1IeUNmvykR7eRQx0d/X7/8WZ+7ns=;
+        b=YokZWqkC3dFIjCKvfDWmMEP+GW7ARHA4yz/mQRnG66KuxTlO0nd8KjaBrF//YdsXcA
+         DMlEgLUkL2+Z66XReuC1PRrBQk4EpKnCXHgBdTymPAjxmyRezkmC0+mfv7BCGfNKiyxz
+         waNwGI8Nru9BHtkH96pIQslNzQk3gZvqAx0JWq2WVpgInteXhY+HGtxVqoSYF38dOYfJ
+         BTmOO0DIM4CypjRa/uIFsSmN2tUr8PCNhDKQR7uuDdIV+763WBo1002C7UlMJax4gTSW
+         vmOLgrimkTUpDiyjsPipSC1CIwEd9Rds4HxH75pUnpvPrvKkoFJqiNE7nlFZgYSX5WNN
+         jcDQ==
+X-Gm-Message-State: AOJu0Yzg/SvRxoHSTRDCkZef6My3rTvfTPigFx9Xqdl3+Lo9QqI2jw8r
+        JcpcBkfkbnL0KBgsFwgBsTuw561HoDHNaS1VYJHd9Q==
+X-Google-Smtp-Source: AGHT+IFsUZjyjXObg+iLKULtW6QOLkO4lbcerlgQV/yiCE7R3y6zgmYqGlZG84cBFdQiPnKL0lhOGKv2qnM9Ci5QGeo=
+X-Received: by 2002:a17:90a:15d0:b0:269:1860:c3bd with SMTP id
+ w16-20020a17090a15d000b002691860c3bdmr714615pjd.19.1692175880812; Wed, 16 Aug
+ 2023 01:51:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Aol3dnsz0xFnCEmt"
-Content-Disposition: inline
-In-Reply-To: <2ee4bac8-8114-4c72-9b6c-6038869fb9f2@roeck-us.net>
+References: <20230802193155.2170935-1-Naresh.Solanki@9elements.com>
+ <20230808-stand-cheddar-b76b0b7509a0@spud> <eced746a-1181-bd8f-6828-4a4eeb79727c@roeck-us.net>
+ <20230808-esquire-epidemic-f9bd74ffde25@spud> <CABqG17jm938MaEeqS03WeryVWSRBS7Bqq2Vwq9SL4QOGqXU43A@mail.gmail.com>
+ <b3eebd2b-c73b-fdc7-2b2b-07e97db26d92@linaro.org>
+In-Reply-To: <b3eebd2b-c73b-fdc7-2b2b-07e97db26d92@linaro.org>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+Date:   Wed, 16 Aug 2023 14:21:10 +0530
+Message-ID: <CABqG17hgU44H9KbALy_336Sb+YOiEOzbnAihiox1OEuVnNiayQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] dt-bindings: hwmon: Add Infineon TDA38640
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Conor Dooley <conor@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        krzysztof.kozlowski+dt@linaro.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+Hi Krzysztof,
 
---Aol3dnsz0xFnCEmt
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, 15 Aug 2023 at 01:02, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 11/08/2023 18:00, Naresh Solanki wrote:
+> > Hi,
+> >
+> > On Tue, 8 Aug 2023 at 19:58, Conor Dooley <conor@kernel.org> wrote:
+> >>
+> >> On Tue, Aug 08, 2023 at 07:10:08AM -0700, Guenter Roeck wrote:
+> >>> On 8/8/23 04:46, Conor Dooley wrote:
+> >>>> On Wed, Aug 02, 2023 at 09:31:51PM +0200, Naresh Solanki wrote:
+> >>>>> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+> >>>>>
+> >>>>> The TDA38640 chip has different output control mechanisms depending on
+> >>>>> its mode of operation. When the chip is in SVID mode, only
+> >>>>> hardware-based output control is supported via ENABLE pin. However, when
+> >>>>> it operates in PMBus mode, software control works perfectly.
+> >>>>>
+> >>>>> To enable software control as a workaround in SVID mode, add the DT
+> >>>>> property 'infineon,en-svid-control'. This property will enable the
+> >>>>> workaround, which utilizes ENABLE pin polarity flipping for output when
+> >>>>> the chip is in SVID mode.
+> >>>>
+> >>>> Why do you need a custom property for this? How come it is not possible
+> >>>> to determine what bus you are on?
+> >>>>
+> >>>
+> >>> That is not the point. Yes, it can be detected if the control method is
+> >>> PMBus or SVID. However, in SVID mode, SVID is supposed to control the
+> >>> output, not PMBUs. This is bypassed by controlling the polarity of the
+> >>> (physical) output enable signal. We do _not_ want this enabled automatically
+> >>> in SVID mode. Its side effects on random boards using this chip are unknown.
+> >>> Thus, this needs a property which specifically enables this functionality
+> >>> for users who _really_ need to use it and (hopefully) know what they are
+> >>> doing.
+> >>
+> >> Hmm, reading this it makes a lot more sense why this is a property - I
+> >> guess I just struggled to understand the commit message here,
+> >> particularly what the benefit of using the workaround is. I'm still
+> >> having difficulty parsing the commit & property text though - its
+> >> unclear to me when you would need to use it - so I will stay out
+> >> of the way & let Rob or Krzysztof handle things.
+> >
+> > To provide context, my system employs a unique power sequence
+> > strategy utilizing a BMC (Baseboard Management Controller),
+> > rendering the reliance on the ENABLE pin unnecessary.
+> > In this configuration, the ENABLE pin is grounded in the hardware.
+> > While most regulators facilitate PMBus Operation for output control,
+> > the TDA38640 chip, when in SVID mode, is constrained by the
+> > ENABLE pin to align with Intel specifications.
+> > My communication with Infineon confirmed that the recommended
+> > approach is to invert the Enable Pin for my use case.
+> >
+> > Since this is not typically the use case for most setup & hence DT property
+> > is must for enabling the special case.
+> >
+> > For further insight into my setup's power sequence strategy, you can
+> > refer to the following link: https://github.com/9elements/pwrseqd
+> >
+>
+> This justifies to me the property, but still you described desired
+> driver behavior, not the hardware characteristic. Don't describe what
+> you want to control, but describe the entire system.
+I guess by entire system you mean how the regulators(including
+TDA38640) connected & operated in our setup ?
 
-On Tue, Aug 15, 2023 at 08:45:39AM -0700, Guenter Roeck wrote:
-> On Tue, Aug 15, 2023 at 12:42:31PM +0200, Loic Guegan wrote:
-> > Signed-off-by: Loic Guegan <manzerbredes@mailbox.org>
->=20
-> Subject and description are all wrong. I would suggest to read
-> and understand the documentation in Documentation/process
-> as well as Documentation/hwmon/submitting-patches.rst
-> before resubmitting.
-
-And when submitting patches, do not GPG-sign them like ordinary emails,
-but rather use patatt instead.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---Aol3dnsz0xFnCEmt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZNxDOwAKCRD2uYlJVVFO
-ownKAPwNzqKAocSrIpLnXw68P0IVWgO3hWjv3qxZ+fCoLia8hQEA0SuSaWFC58uo
-XN8SJRbeJKC03BPgKkZowIQ6O8BdXwo=
-=wx1r
------END PGP SIGNATURE-----
-
---Aol3dnsz0xFnCEmt--
+Regards,
+Naresh
+>
+> Best regards,
+> Krzysztof
+>
