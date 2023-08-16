@@ -2,147 +2,129 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69EE1C001E0
-	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Aug 2023 08:52:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DFABC001E0
+	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Aug 2023 12:14:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242956AbjHPIwF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 16 Aug 2023 04:52:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39632 "EHLO
+        id S243258AbjHPMOA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 16 Aug 2023 08:14:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243215AbjHPIvb (ORCPT
+        with ESMTP id S244998AbjHPMN7 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 16 Aug 2023 04:51:31 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6213B1BEE
-        for <linux-hwmon@vger.kernel.org>; Wed, 16 Aug 2023 01:51:21 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-2685bcd046eso3437456a91.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 16 Aug 2023 01:51:21 -0700 (PDT)
+        Wed, 16 Aug 2023 08:13:59 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA342136;
+        Wed, 16 Aug 2023 05:13:58 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1bc63ef9959so54020925ad.2;
+        Wed, 16 Aug 2023 05:13:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1692175881; x=1692780681;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bZbysPazkjRhmks1IeUNmvykR7eRQx0d/X7/8WZ+7ns=;
-        b=UNktGYDPEt7aDrm/3sA72EUocrwVrFxHkHcCoE/h5yVVwlW6TUBPnPa7MeA/k8PchC
-         zH76nNw08VwxLaOSl2ML/AXULrFg7GGtsNwnJ3JSR0dN7mFMEIG1BV5mdkIXCYf31GXR
-         QXJquhubfzlxBWBCianFswA+r/PIe+SQJ9FS9/2pC+2805M6sQDjJ7Y0bMFyYR1mVmG4
-         13lS9h7MJPK6CQAgEyEVSuESePPhxagMyt8begU0x5QA5VfVTMwmufvFgGDbCwLiYdBw
-         pTlBNMh7x8oNc8trpHE80It9ElW6RkDvognWqNcY4KpL8g8AAO+oPPX6y71QGZgj2Yhw
-         81lA==
+        d=gmail.com; s=20221208; t=1692188037; x=1692792837;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3qmXn2ewlnvZ6CiUg5F1hGWulWuQ6Cj0sIq/1TLnfZ4=;
+        b=nshUr+43amUm18xBi+a6Xyq5RDGpXvUTh+z2ta3KjeXa2R0DEU8SK68GnbRihpoui3
+         c5dqSO/ir2Yb0NViOhWN82buZvLvfqASbT3QKTWrwitizM5p14YunABpblQpcsSJSgZF
+         vbm3lj/AgGzPItttE5IWRT9tYENsGCrPHcEiP4F4Xf/3ic6cn/hQpHizQBr1m0K/6oDe
+         TsEUw4AwOEQHKvmAgv1lEOsBNv6wcIpf2sRckNLnCYTDZO/82TKk3hWcevb4g+3bY32Y
+         KpffUBt0wUfiSRAylfFyw1pLYdZeIL3+/xSMjojjxla9RdUwdugQgc/pSBNGlQ67yBa7
+         c5Bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692175881; x=1692780681;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bZbysPazkjRhmks1IeUNmvykR7eRQx0d/X7/8WZ+7ns=;
-        b=YokZWqkC3dFIjCKvfDWmMEP+GW7ARHA4yz/mQRnG66KuxTlO0nd8KjaBrF//YdsXcA
-         DMlEgLUkL2+Z66XReuC1PRrBQk4EpKnCXHgBdTymPAjxmyRezkmC0+mfv7BCGfNKiyxz
-         waNwGI8Nru9BHtkH96pIQslNzQk3gZvqAx0JWq2WVpgInteXhY+HGtxVqoSYF38dOYfJ
-         BTmOO0DIM4CypjRa/uIFsSmN2tUr8PCNhDKQR7uuDdIV+763WBo1002C7UlMJax4gTSW
-         vmOLgrimkTUpDiyjsPipSC1CIwEd9Rds4HxH75pUnpvPrvKkoFJqiNE7nlFZgYSX5WNN
-         jcDQ==
-X-Gm-Message-State: AOJu0Yzg/SvRxoHSTRDCkZef6My3rTvfTPigFx9Xqdl3+Lo9QqI2jw8r
-        JcpcBkfkbnL0KBgsFwgBsTuw561HoDHNaS1VYJHd9Q==
-X-Google-Smtp-Source: AGHT+IFsUZjyjXObg+iLKULtW6QOLkO4lbcerlgQV/yiCE7R3y6zgmYqGlZG84cBFdQiPnKL0lhOGKv2qnM9Ci5QGeo=
-X-Received: by 2002:a17:90a:15d0:b0:269:1860:c3bd with SMTP id
- w16-20020a17090a15d000b002691860c3bdmr714615pjd.19.1692175880812; Wed, 16 Aug
- 2023 01:51:20 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1692188037; x=1692792837;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3qmXn2ewlnvZ6CiUg5F1hGWulWuQ6Cj0sIq/1TLnfZ4=;
+        b=GOI4/DBlpPK2ybM9Pxe0lFa2QXmVX82pVy5H9wkbtwD5i9kE5m5NVLVA55nu1lejlA
+         +B1KmexeCnLD9r4BjEDqmAwYKiUpu4w2sOSOys1PWb08sX03wE5+M7ogATYhor/MEw9X
+         VtRT+/qlUnfoJagQZ6smxMr2+dna7loHIQzk31ILPahf9qAfexdv24BzqEJMD0SPUA9b
+         emWq2sAqEvIOPMZUTin42IzQPCHQU6M4ET3pcr5yMLFsSJ+EeKTa9Fp1DlqH4Kkr3pEK
+         BKxVLaZGUrXyDAoJJr7s8DUza5uj9wHik5gXjE7+Q49QLvXbH1Dfv0AmBzdfuIAMtAJW
+         FmWg==
+X-Gm-Message-State: AOJu0YxQfMAzvLuk5T95CK35jZr7IGJjz+obEBv3OumzVvdl6r6ko8kT
+        HAOxToIi1DP1EEVLBPuxP74=
+X-Google-Smtp-Source: AGHT+IHY8C5UlhqoOQAHNfwLvADr+O5asQd9I8l4yWkocJeEVZd0V9lFFdt12ifwqtJwQABfUmpGww==
+X-Received: by 2002:a17:903:1208:b0:1be:eef7:98e0 with SMTP id l8-20020a170903120800b001beeef798e0mr1984099plh.35.1692188037272;
+        Wed, 16 Aug 2023 05:13:57 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u9-20020a170902a60900b001b8b2b95068sm12937375plq.204.2023.08.16.05.13.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Aug 2023 05:13:56 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 16 Aug 2023 05:13:55 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Kalesh Anakkur Purayil <kalesh-anakkur.purayil@broadcom.com>
+Cc:     Michael Chan <michael.chan@broadcom.com>, davem@davemloft.net,
+        netdev@vger.kernel.org, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, gospo@broadcom.com,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH net-next 11/12] bnxt_en: Expose threshold temperatures
+ through hwmon
+Message-ID: <3d70325b-6b6a-482f-8745-36aceb6b2818@roeck-us.net>
+References: <20230815045658.80494-1-michael.chan@broadcom.com>
+ <20230815045658.80494-12-michael.chan@broadcom.com>
+ <c6f3a05e-f75c-4051-8892-1c2dee2804b0@roeck-us.net>
+ <CAH-L+nM4MvWODLcApzFB1Xjr4dauii+pBErOZ=frT+eiP8PgVg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230802193155.2170935-1-Naresh.Solanki@9elements.com>
- <20230808-stand-cheddar-b76b0b7509a0@spud> <eced746a-1181-bd8f-6828-4a4eeb79727c@roeck-us.net>
- <20230808-esquire-epidemic-f9bd74ffde25@spud> <CABqG17jm938MaEeqS03WeryVWSRBS7Bqq2Vwq9SL4QOGqXU43A@mail.gmail.com>
- <b3eebd2b-c73b-fdc7-2b2b-07e97db26d92@linaro.org>
-In-Reply-To: <b3eebd2b-c73b-fdc7-2b2b-07e97db26d92@linaro.org>
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-Date:   Wed, 16 Aug 2023 14:21:10 +0530
-Message-ID: <CABqG17hgU44H9KbALy_336Sb+YOiEOzbnAihiox1OEuVnNiayQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] dt-bindings: hwmon: Add Infineon TDA38640
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Conor Dooley <conor@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        krzysztof.kozlowski+dt@linaro.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAH-L+nM4MvWODLcApzFB1Xjr4dauii+pBErOZ=frT+eiP8PgVg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Krzysztof,
+On Wed, Aug 16, 2023 at 03:58:34PM +0530, Kalesh Anakkur Purayil wrote:
+> Thank you Guenter for the review and the suggestions.
+> 
+> Please see my response inline.
+> 
+> On Tue, Aug 15, 2023 at 8:35 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> 
+[ ... ]
 
-On Tue, 15 Aug 2023 at 01:02, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 11/08/2023 18:00, Naresh Solanki wrote:
-> > Hi,
 > >
-> > On Tue, 8 Aug 2023 at 19:58, Conor Dooley <conor@kernel.org> wrote:
-> >>
-> >> On Tue, Aug 08, 2023 at 07:10:08AM -0700, Guenter Roeck wrote:
-> >>> On 8/8/23 04:46, Conor Dooley wrote:
-> >>>> On Wed, Aug 02, 2023 at 09:31:51PM +0200, Naresh Solanki wrote:
-> >>>>> From: Patrick Rudolph <patrick.rudolph@9elements.com>
-> >>>>>
-> >>>>> The TDA38640 chip has different output control mechanisms depending on
-> >>>>> its mode of operation. When the chip is in SVID mode, only
-> >>>>> hardware-based output control is supported via ENABLE pin. However, when
-> >>>>> it operates in PMBus mode, software control works perfectly.
-> >>>>>
-> >>>>> To enable software control as a workaround in SVID mode, add the DT
-> >>>>> property 'infineon,en-svid-control'. This property will enable the
-> >>>>> workaround, which utilizes ENABLE pin polarity flipping for output when
-> >>>>> the chip is in SVID mode.
-> >>>>
-> >>>> Why do you need a custom property for this? How come it is not possible
-> >>>> to determine what bus you are on?
-> >>>>
-> >>>
-> >>> That is not the point. Yes, it can be detected if the control method is
-> >>> PMBus or SVID. However, in SVID mode, SVID is supposed to control the
-> >>> output, not PMBUs. This is bypassed by controlling the polarity of the
-> >>> (physical) output enable signal. We do _not_ want this enabled automatically
-> >>> in SVID mode. Its side effects on random boards using this chip are unknown.
-> >>> Thus, this needs a property which specifically enables this functionality
-> >>> for users who _really_ need to use it and (hopefully) know what they are
-> >>> doing.
-> >>
-> >> Hmm, reading this it makes a lot more sense why this is a property - I
-> >> guess I just struggled to understand the commit message here,
-> >> particularly what the benefit of using the workaround is. I'm still
-> >> having difficulty parsing the commit & property text though - its
-> >> unclear to me when you would need to use it - so I will stay out
-> >> of the way & let Rob or Krzysztof handle things.
+> > Hmm, that isn't really the purpose of alarm attributes. The expectation
+> > would be that the chip sets alarm flags and the driver reports it.
+> > I guess there is some value in having it, so I won't object.
 > >
-> > To provide context, my system employs a unique power sequence
-> > strategy utilizing a BMC (Baseboard Management Controller),
-> > rendering the reliance on the ENABLE pin unnecessary.
-> > In this configuration, the ENABLE pin is grounded in the hardware.
-> > While most regulators facilitate PMBus Operation for output control,
-> > the TDA38640 chip, when in SVID mode, is constrained by the
-> > ENABLE pin to align with Intel specifications.
-> > My communication with Infineon confirmed that the recommended
-> > approach is to invert the Enable Pin for my use case.
+> > Anyway, the ordering is wrong. max_alarm should be the lowest
+> > alarm level, followed by crit and emergency. So
+> >                 max_alarm -> temp >= bp->warn_thresh_temp
+> >                 crit_alarm -> temp >= bp->crit_thresh_temp
+> >                 emergency_alarm -> temp >= bp->fatal_thresh_temp
+> >                                 or temp >= bp->shutdown_thresh_temp
 > >
-> > Since this is not typically the use case for most setup & hence DT property
-> > is must for enabling the special case.
+> > There are only three levels of upper temperature alarms.
+> > Abusing lcrit as 4th upper alarm is most definitely wrong.
 > >
-> > For further insight into my setup's power sequence strategy, you can
-> > refer to the following link: https://github.com/9elements/pwrseqd
-> >
->
-> This justifies to me the property, but still you described desired
-> driver behavior, not the hardware characteristic. Don't describe what
-> you want to control, but describe the entire system.
-I guess by entire system you mean how the regulators(including
-TDA38640) connected & operated in our setup ?
+> [Kalesh]: Thank you for the clarification.
+> bnxt_en driver wants to expose 4 threshold temperatures to the user through
+> hwmon sysfs.
+> 1. warning threshold temperature
+> 2. critical threshold temperature
+> 3. fatal threshold temperature
+> 4. shutdown threshold temperature
+> 
+> I will use the following mapping:
+> 
+> hwmon_temp_max : warning threshold temperature
+> hwmon_temp_crit : critical threshold temperature
+> hwmon_temp_emergency : fatal threshold temperature
+> 
+> hwmon_temp_max_alarm : temp >= bp->warn_thresh_temp
+> hwmon_temp_crit_alarm : temp >= bp->crit_thresh_temp
+> hwmon_temp_emergency_alarm : temp >= bp->fatal_thresh_temp
+> 
+> Is it OK to map the shutdown threshold temperature to "hwmon_temp_fault"?
 
-Regards,
-Naresh
->
-> Best regards,
-> Krzysztof
->
+That is a flag, not a temperature, and it is intended to signal
+a problem ith the sensor.
+
+> If not, can you please suggest an alternative?
+> 
+
+The only one I can think of is to add non-standard attributes
+such as temp1_shutdown and temp1_shutdown_alarm.
+
+Guenter
