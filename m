@@ -2,76 +2,83 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D556EC678DC
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Aug 2023 11:23:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BD9DC71156
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Aug 2023 13:56:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239536AbjHRLXA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 18 Aug 2023 07:23:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44860 "EHLO
+        id S1377483AbjHRN4G (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 18 Aug 2023 09:56:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376641AbjHRLWf (ORCPT
+        with ESMTP id S1377537AbjHRNzx (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 18 Aug 2023 07:22:35 -0400
-Received: from proxmox-new.maurer-it.com (proxmox-new.maurer-it.com [94.136.29.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBC4449F;
-        Fri, 18 Aug 2023 04:22:13 -0700 (PDT)
-Received: from proxmox-new.maurer-it.com (localhost.localdomain [127.0.0.1])
-        by proxmox-new.maurer-it.com (Proxmox) with ESMTP id 90689427C1;
-        Fri, 18 Aug 2023 13:22:11 +0200 (CEST)
-Message-ID: <49c2e556-fd75-751e-3b0c-c51c3245f94c@proxmox.com>
-Date:   Fri, 18 Aug 2023 13:22:10 +0200
+        Fri, 18 Aug 2023 09:55:53 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D6E10D9
+        for <linux-hwmon@vger.kernel.org>; Fri, 18 Aug 2023 06:55:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692366933; x=1723902933;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5l+TLt5jJBfvVH9wRW+tq76gc6Dv0LogxMlFhQsQZiE=;
+  b=lNJdSDZHyzXjeLs13sI0v5NVLvdWepQ+G+qjW78RXId+idnelUZ7CIFg
+   zPO6ac5XBWmYhn2rF3l8BEYUECL0QVcWqaNEOnOk4RIhJh/PAJGYJtdNz
+   nHP/qi/+m66IzRfQ16qHdb9JelOwJumw7+HGBAMo1ATbwkXfp+/iLXdPl
+   b+7vyc9RLHPFKT0yBZVKaAwaaYn24GkzrxCgYtAZV/DiuVvmceYdLA2sE
+   O0uGFtN5wC+bArxeJTROXVKPr6AAsseaLIUMwaSkp4u+edZ+Ho9eE1oxd
+   Io5XZRqw1zWL4q3/8UEkGWhcQK1E1nKdVd77xhSI+50NP2mU8wfIWP/is
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10806"; a="372006118"
+X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
+   d="scan'208";a="372006118"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2023 06:55:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10806"; a="858706980"
+X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
+   d="scan'208";a="858706980"
+Received: from esavax-mobl.ger.corp.intel.com (HELO intel.com) ([10.249.41.4])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2023 06:55:29 -0700
+Date:   Fri, 18 Aug 2023 15:55:27 +0200
+From:   Andi Shyti <andi.shyti@linux.intel.com>
+To:     "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
+Cc:     Andi Shyti <andi.shyti@linux.intel.com>,
+        Matthew Brost <matthew.brost@intel.com>,
+        Badal Nilawar <badal.nilawar@intel.com>,
+        intel-xe@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
+        anshuman.gupta@intel.com, linux@roeck-us.net, riana.tauro@intel.com
+Subject: Re: [PATCH v2 2/6] drm/xe/hwmon: Expose power attributes
+Message-ID: <ZN94TxNikUSKS6GN@ashyti-mobl2.lan>
+References: <20230627183043.2024530-1-badal.nilawar@intel.com>
+ <20230627183043.2024530-3-badal.nilawar@intel.com>
+ <ZJzNuq/WaxjZ8YH/@DUT025-TGLU.fm.intel.com>
+ <ZJ2Qm0UcAidCEArX@ashyti-mobl2.lan>
+ <87zg2rsxj9.wl-ashutosh.dixit@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: "Use slab_build_skb() instead" deprecation warning triggered by
- tg3
-Content-Language: en-US
-To:     Bagas Sanjaya <bagasdotme@gmail.com>, linux-kernel@vger.kernel.org
-Cc:     siva.kallam@broadcom.com, prashant@broadcom.com,
-        mchan@broadcom.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, richardcochran@gmail.com,
-        jdelvare@suse.com, Guenter Roeck <linux@roeck-us.net>,
-        netdev@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        keescook@chromium.org,
-        Linux Regressions <regressions@lists.linux.dev>
-References: <1bd4cb9c-4eb8-3bdb-3e05-8689817242d1@proxmox.com>
- <ZN9SId_KNgI3dfVI@debian.me>
-From:   Fiona Ebner <f.ebner@proxmox.com>
-In-Reply-To: <ZN9SId_KNgI3dfVI@debian.me>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87zg2rsxj9.wl-ashutosh.dixit@intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Am 18.08.23 um 13:12 schrieb Bagas Sanjaya:
-> On Fri, Aug 18, 2023 at 10:05:11AM +0200, Fiona Ebner wrote:
->> Hi,
->> we've got a user report about the WARN_ONCE introduced by ce098da1497c
->> ("skbuff: Introduce slab_build_skb()") [0]. The stack trace indicates
->> that the call comes from the tg3 module. While this is still kernel 6.2
->> and I can't verify that the issue is still there with newer kernels, I
->> don't see related changes in drivers/net/ethernet/broadcom/tg3.* after
->> ce098da1497c, so I thought I should let you know.
->>
-> 
-> Thanks for the regression report. I'm adding it to regzbot:
-> 
-> #regzbot ^introduced: ce098da1497c6d
-> #regzbot link: https://forum.proxmox.com/threads/132338/
-> 
-> PS: The proxmox forum link (except full dmesg log pasted there) is in
-> German, so someone fluent in the language can be helpful here.
-> 
+Hi Ashutosh,
 
-At the moment, there is not much other text: The user says that they got
-the trace after a recent upgrade, but cannot notice any real problems
-and I'm telling them that it's a deprecation warning and that I reported
-it upstream. If I should ask for some specific information, please let
-me know :) But not sure if more information from the user is even
-required here or if the fix will just be similar to the one in
-8c495270845d ("bnx2x: use the right build_skb() helper").
+> > >
+> > > Also the the loop which acquires hwmon->hwmon_lock is confusing too.
+> 
+> Confusing but correct.
 
-Best Regards,
-Fiona
+Confusing is implicitely not correct.
 
+Might be correct now, but in some moenths someone else might miss
+the point because it's confusing, mis-interpret and send the
+wrong code.
+
+Reviewers, going through the +/- commit will have a tough time
+figuring out.
+
+Let's keep things easy and simple... there are easier paths for
+locking here and we've been discussing them with Badal.
+
+Andi
