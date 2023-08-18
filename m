@@ -2,54 +2,51 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E24FBC001DE
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Aug 2023 08:26:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1085C71145
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Aug 2023 09:03:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358571AbjHRIZ1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 18 Aug 2023 04:25:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
+        id S1358888AbjHRJC5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 18 Aug 2023 05:02:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358647AbjHRIZR (ORCPT
+        with ESMTP id S1358928AbjHRJCa (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 18 Aug 2023 04:25:17 -0400
-X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 18 Aug 2023 01:25:14 PDT
-Received: from proxmox-new.maurer-it.com (proxmox-new.maurer-it.com [94.136.29.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E032A2684;
-        Fri, 18 Aug 2023 01:25:13 -0700 (PDT)
-Received: from proxmox-new.maurer-it.com (localhost.localdomain [127.0.0.1])
-        by proxmox-new.maurer-it.com (Proxmox) with ESMTP id 6705042627;
-        Fri, 18 Aug 2023 10:05:17 +0200 (CEST)
-Message-ID: <1bd4cb9c-4eb8-3bdb-3e05-8689817242d1@proxmox.com>
-Date:   Fri, 18 Aug 2023 10:05:11 +0200
+        Fri, 18 Aug 2023 05:02:30 -0400
+X-Greylist: delayed 1477 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 18 Aug 2023 02:02:05 PDT
+Received: from mail.leachkin.pl (mail.leachkin.pl [217.61.97.203])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648F84230
+        for <linux-hwmon@vger.kernel.org>; Fri, 18 Aug 2023 02:02:05 -0700 (PDT)
+Received: by mail.leachkin.pl (Postfix, from userid 1001)
+        id 4556183CE4; Fri, 18 Aug 2023 09:16:00 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=leachkin.pl; s=mail;
+        t=1692346561; bh=elHzctRz/z3PfTIhGYJKd0TeBTmca98Y+JNgX4gfsPI=;
+        h=Date:From:To:Subject:From;
+        b=jt6RPCuLubkNoo7KbjeG32uj45SbHQZFVNGs5ANxrWI6VQegi51Yb2dvGpbPtNNJo
+         MJV4IWJwgiS143cfCXbNIiNLIStTG2kT/1Jl1RjX3C8MotFEoLnCJAaV0K920BO54a
+         fpBDKwMcrwEXsuJf2bHSlgX2PdhvtiSFgM/gxmfT9INJyE+Bx/scQT2JeIM5eksv81
+         Wi51qIQ8UMML6niteuqYGaWWsU8nt4K5OssdQGxzATHL5ArrWTSqgWjwxnV7Qob9kM
+         YrhQyXw7K08vmBIf231l43b9yw3yteSDArBNehud9Z1GKnhilSBN1KdKV7PpVAMEgF
+         OROCqd8BcEL9g==
+Received: by mail.leachkin.pl for <linux-hwmon@vger.kernel.org>; Fri, 18 Aug 2023 08:15:51 GMT
+Message-ID: <20230818074501-0.1.4u.ctrz.0.d3a1a999b5@leachkin.pl>
+Date:   Fri, 18 Aug 2023 08:15:51 GMT
+From:   "Jakub Lemczak" <jakub.lemczak@leachkin.pl>
+To:     <linux-hwmon@vger.kernel.org>
+Subject: =?UTF-8?Q?Pytanie_o_samoch=C3=B3d?=
+X-Mailer: mail.leachkin.pl
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Content-Language: en-US
-From:   Fiona Ebner <f.ebner@proxmox.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     siva.kallam@broadcom.com, prashant@broadcom.com,
-        mchan@broadcom.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, richardcochran@gmail.com,
-        jdelvare@suse.com, Guenter Roeck <linux@roeck-us.net>,
-        netdev@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        keescook@chromium.org
-Subject: "Use slab_build_skb() instead" deprecation warning triggered by tg3
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
-we've got a user report about the WARN_ONCE introduced by ce098da1497c
-("skbuff: Introduce slab_build_skb()") [0]. The stack trace indicates
-that the call comes from the tg3 module. While this is still kernel 6.2
-and I can't verify that the issue is still there with newer kernels, I
-don't see related changes in drivers/net/ethernet/broadcom/tg3.* after
-ce098da1497c, so I thought I should let you know.
+Dzie=C5=84 dobry,
 
-[0]: https://forum.proxmox.com/threads/132338/
+Czy interesuje Pa=C5=84stwa rozwi=C4=85zanie umo=C5=BCliwiaj=C4=85ce moni=
+torowanie samochod=C3=B3w firmowych oraz optymalizacj=C4=99 koszt=C3=B3w =
+ich utrzymania?=20
 
-Best Regards,
-Fiona
 
+Pozdrawiam,
+Jakub Lemczak
