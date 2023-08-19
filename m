@@ -2,151 +2,1207 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E526CEE4993
-	for <linux-hwmon@archiver.kernel.org>; Sat, 19 Aug 2023 12:22:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8939EE49A5
+	for <linux-hwmon@archiver.kernel.org>; Sat, 19 Aug 2023 12:41:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232336AbjHSMWE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 19 Aug 2023 08:22:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39756 "EHLO
+        id S232463AbjHSMlr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 19 Aug 2023 08:41:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232334AbjHSMWD (ORCPT
+        with ESMTP id S232196AbjHSMlq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 19 Aug 2023 08:22:03 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8728A5EC;
-        Sat, 19 Aug 2023 05:19:22 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-688731c6331so1387298b3a.3;
-        Sat, 19 Aug 2023 05:19:22 -0700 (PDT)
+        Sat, 19 Aug 2023 08:41:46 -0400
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA43A2BAA0;
+        Sat, 19 Aug 2023 05:41:07 -0700 (PDT)
+Received: by mail-ot1-x32b.google.com with SMTP id 46e09a7af769-6bcd4b5ebbaso1410948a34.1;
+        Sat, 19 Aug 2023 05:41:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692447562; x=1693052362;
+        d=gmail.com; s=20221208; t=1692448867; x=1693053667;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Zi3fLIF3cGkVGZeEalT4geZlr93ZgMT5amDrzmJ86OY=;
-        b=At99HNtuapecOOibNo6Xw4mNJPidJtHCQdgdpFupob2NHTpTOp/Tp6KL4z80/bpX6N
-         hPHMs0A9SkMEZo7SuqLoG51Rn+Ro1MPk3R93YBnRb8lUw9j4G0++aedCJ6UF+i9bZ6vc
-         KGFwu5fZHQtm+9/8XVlUvRYIrjX2mHkbSESMLQPf1TIOYP6Yyaz95ym7bCn1bxHrzg4b
-         U+Wc7wnrEdy85xtmT8bNRxGmSE0FPucw3K4me3GQaa7K4ru7YWKtmDu8K8XpEazoakVi
-         7q5pWzshLb6W96IzAdrAwQL5PxvpAkhVMm0yVAE60HHm6UcVYXFZjApLzeLgFmWQbrNQ
-         8bXQ==
+        bh=r7qFhHO2z98DHPl0rDZXSXypx8Eus41kF0NpbjcVij0=;
+        b=a0B6FQPvcIJ1njOqgzvoA+u+4kxqnKwEljFsSWrl1+KQ7iy9zaOygtE/YLpYMzpQhS
+         yS4wJdC3XvFKPRDsc1qK/udredkSQHXq4VKW2TBj2sC+DBx8xRJ59zue/N/sYkh+mlQh
+         C0fyOAMQAGAUl/x7o+HGd/N2A/wZDHW9r7Ix9YbOh1n+Wp5sQ4qd8vv6OU5AK5AOfrOj
+         ob+6i34/pJdv8DSw3gL9wkqjYbJ8bPTKUU2ESa2ZH4R984hIg2awe9fINj99Se2/Cuqo
+         UPbUntVvxMrAmdSuwgW6kkv/hltrlA6+4ESHGzJeTrlDSVba9otAeEZl5sZGKELv9NQl
+         DrFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692447562; x=1693052362;
+        d=1e100.net; s=20221208; t=1692448867; x=1693053667;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Zi3fLIF3cGkVGZeEalT4geZlr93ZgMT5amDrzmJ86OY=;
-        b=BdhrE0NAM93L6mvoVKlhPWrhZj2E7a/yHLmLDTt5kV/UyFjUvequWENn65QpH1Ltku
-         1jo4I3nEfFDm25av0x1a/IXbWf7MsK+RHcsVlyTUWgFpgnJIKTL1bZM0B31u/lHC4h0j
-         kXEb7wMknZ9muXz14HufCxOW+Zlu+aJq2KYet/5JSJTaTFlDdMvX0oyL/rDVRTy8VX4e
-         oU27kFTwVMtXZcJIPr5R1dLCXr7n255EN82uzEdN6sSw0UCxXVT/gJiDbb23vlejQ17a
-         w7JYsUgUEyZpTKBhQLUdI6iLGT3heIrW7hn0ibrCdx93SUD6BGgX4cpAVcyKWoFvPqYT
-         20GA==
-X-Gm-Message-State: AOJu0YzBn9rHg0YPGyHCfhRdKPGWOxw1LUxMdHOvrNR0F6NqLtY8+6Fu
-        YimgOMweKR2hTmU2ROisDOTwj9mrutY=
-X-Google-Smtp-Source: AGHT+IH2ZoDgEZsGdXUAYiSmLcOV0RHSayrQCyb1RFijJsXGT/RtxCGa9Llls0ynFR1Z+OASSf283w==
-X-Received: by 2002:a05:6a20:8f09:b0:137:2281:944f with SMTP id b9-20020a056a208f0900b001372281944fmr1738987pzk.40.1692447562160;
-        Sat, 19 Aug 2023 05:19:22 -0700 (PDT)
+        bh=r7qFhHO2z98DHPl0rDZXSXypx8Eus41kF0NpbjcVij0=;
+        b=IMtyMd2eu/Mwa2nqeOLE0pwzgP3SjnugFZYs2OdCXtjxxi4QvSlYbaZdhZ99TpDG+/
+         mrkH01wwRl95TL48Fa9PfwxWJnVlHo2XIiuT55We1Z6D40PONqP/gx/C/ATuYFZgOavM
+         uZB57rlv0jq3LhzFgSaQmniLTo5tRFomLbJERC/qA9Urwr138JhJ8c5D0Q3B6MJdAku2
+         aijWVMFXKHRqghs3cKWTQL8w24TeoJCr6j/hTjn2dwHCN6DGavZJx2NJir2bOevEC9yB
+         2NXQeoMpOHkIBWFd0Nfc/IdEvKKEnW2Qb8f5CNf37f4esKponuwculbC2Uhz3/ybRi+Z
+         K6mg==
+X-Gm-Message-State: AOJu0Ywe96SQVB04hOHD0lefvcaVP8ndDxlhTeaFBnOZu2q2pVeWCQK6
+        88AywUKXxhHQ7r3HdIl83/0=
+X-Google-Smtp-Source: AGHT+IFL1+/9leodBgTPGoD9ySvaNXkQJWeRzzBOY4H9S3YWswsVm0ndocmoB/8kn7d2AidsULwrKg==
+X-Received: by 2002:a05:6830:60a:b0:6bb:1020:5303 with SMTP id w10-20020a056830060a00b006bb10205303mr2594320oti.16.1692448867049;
+        Sat, 19 Aug 2023 05:41:07 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h8-20020a170902ac8800b001b80de83b10sm3506628plr.301.2023.08.19.05.19.21
+        by smtp.gmail.com with ESMTPSA id v10-20020a63ac0a000000b0055b61cd99a1sm3222437pge.81.2023.08.19.05.41.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Aug 2023 05:19:21 -0700 (PDT)
+        Sat, 19 Aug 2023 05:41:06 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 19 Aug 2023 05:19:20 -0700
+Date:   Sat, 19 Aug 2023 05:41:05 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] hwmon: pmbus: Fix -EIO seen on pli1209
-Message-ID: <bc0f5e1a-36f9-491b-a4e5-03dc4441976c@roeck-us.net>
-References: <20230817092527.808631-1-Naresh.Solanki@9elements.com>
- <20230817092527.808631-3-Naresh.Solanki@9elements.com>
+To:     Henry Shi <henryshi2018@gmail.com>
+Cc:     hbshi69@hotmail.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, hdegoede@redhat.com, markgross@kernel.org,
+        jdelvare@suse.com, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        hb_shi2003@yahoo.com, henrys@silicom-usa.com, wenw@silicom-usa.com
+Subject: Re: [PATCH] Add Silicom Platform Driver
+Message-ID: <8b8b0503-8f8f-4615-97ab-11d2c0e1a960@roeck-us.net>
+References: <20230818154341.20553-1-henryshi2018@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230817092527.808631-3-Naresh.Solanki@9elements.com>
+In-Reply-To: <20230818154341.20553-1-henryshi2018@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Aug 17, 2023 at 11:25:26AM +0200, Naresh Solanki wrote:
-> From: Patrick Rudolph <patrick.rudolph@9elements.com>
-> 
-> After doing performance optimizations the pli1209 driver failed to
-> probe with a probabilty of 2%. It wasn't able to read the PMBUS_OPERATION
-> register due to an -EIO error.
-> 
-> An investigation showed that the PLI1209 takes 230 usec to execute the
-> CLEAR_FAULTS command. During that time it's busy and NACKs all requests
-> on the SMBUS interface. It also NACKs reads on PMBUS_STATUS_BYTE
-> making it impossible to poll the BUSY flag.
-> 
-> Add a custom write_data function to just wait for not BUSY unconditionally
-> after sending a CLEAR_FAULTS command.
-> 
-> TEST: Verified using an I2C bus analyser that no more NACKs are seen after
->       sending a CLEAR_FAULTS command.
-> 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+On Fri, Aug 18, 2023 at 11:43:41AM -0400, Henry Shi wrote:
 
-Applied.
+Description missing.
 
-Thanks,
-Guenter
+This is at least v4 of this patch. No versioning, no change log.
+That was commented on before. This is the last time I am going
+to provide feedback, even more so since most of my previous
+feedback was ignored.
 
+Note that my comments only refer to problems in hwmon code and
+do by no means suggest that the rest of the code may be acceptable.
+ 
+> Signed-off-by: Henry Shi <henryshi2018@gmail.com>
 > ---
->  drivers/hwmon/pmbus/pli1209bc.c | 26 ++++++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
+>  drivers/platform/x86/Kconfig            |   11 +
+>  drivers/platform/x86/Makefile           |    1 +
+>  drivers/platform/x86/silicom-platform.c | 1046 +++++++++++++++++++++++
+>  3 files changed, 1058 insertions(+)
+>  create mode 100644 drivers/platform/x86/silicom-platform.c
 > 
-> diff --git a/drivers/hwmon/pmbus/pli1209bc.c b/drivers/hwmon/pmbus/pli1209bc.c
-> index 7d8bd3167b21..c95433790b11 100644
-> --- a/drivers/hwmon/pmbus/pli1209bc.c
-> +++ b/drivers/hwmon/pmbus/pli1209bc.c
-> @@ -5,6 +5,7 @@
->   * Copyright (c) 2022 9elements GmbH
->   */
+> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+> index 22052031c719..7680c0dbcd8d 100644
+> --- a/drivers/platform/x86/Kconfig
+> +++ b/drivers/platform/x86/Kconfig
+> @@ -188,6 +188,17 @@ config ACER_WMI
+>  	  If you have an ACPI-WMI compatible Acer/ Wistron laptop, say Y or M
+>  	  here.
 >  
-> +#include <linux/delay.h>
->  #include <linux/i2c.h>
->  #include <linux/module.h>
->  #include <linux/pmbus.h>
-> @@ -53,6 +54,30 @@ static int pli1209bc_read_word_data(struct i2c_client *client, int page,
->  	}
->  }
->  
-> +static int pli1209bc_write_byte(struct i2c_client *client, int page, u8 reg)
-> +{
-> +	int ret;
+> +config SILICOM_PLATFORM
+> +	tristate "Silicom Edge Networking device support"
+> +	depends on DMI
+> +	select LEDS_CLASS_MULTICOLOR
+> +	select GPIOLIB
+> +	help
+> +	  This option enables support for the LEDs/GPIO/etc downstream of the
+> +	  embedded controller on Silicom "Cordoba" hardware and derivatives.
 > +
-> +	switch (reg) {
-> +	case PMBUS_CLEAR_FAULTS:
-> +		ret = pmbus_write_byte(client, page, reg);
-> +		/*
-> +		 * PLI1209 takes 230 usec to execute the CLEAR_FAULTS command.
-> +		 * During that time it's busy and NACKs all requests on the
-> +		 * SMBUS interface. It also NACKs reads on PMBUS_STATUS_BYTE
-> +		 * making it impossible to poll the BUSY flag.
-> +		 *
-> +		 * Just wait for not BUSY unconditionally.
-> +		 */
-> +		usleep_range(250, 300);
-> +		break;
-> +	default:
-> +		ret = -ENODATA;
-> +		break;
-> +	}
-> +	return ret;
+> +	  If you have a Silicom network appliance, say Y or M here.
+> +
+>  source "drivers/platform/x86/amd/Kconfig"
+>  
+>  config ADV_SWBUTTON
+> diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
+> index 2cafe51ec4d8..9355ebbc56ca 100644
+> --- a/drivers/platform/x86/Makefile
+> +++ b/drivers/platform/x86/Makefile
+> @@ -113,6 +113,7 @@ obj-$(CONFIG_SERIAL_MULTI_INSTANTIATE)	+= serial-multi-instantiate.o
+>  obj-$(CONFIG_MLX_PLATFORM)		+= mlx-platform.o
+>  obj-$(CONFIG_TOUCHSCREEN_DMI)		+= touchscreen_dmi.o
+>  obj-$(CONFIG_WIRELESS_HOTKEY)		+= wireless-hotkey.o
+> +obj-$(CONFIG_SILICOM_PLATFORM)		+= silicom-platform.o
+>  obj-$(CONFIG_X86_ANDROID_TABLETS)	+= x86-android-tablets/
+>  
+>  # Intel uncore drivers
+> diff --git a/drivers/platform/x86/silicom-platform.c b/drivers/platform/x86/silicom-platform.c
+> new file mode 100644
+> index 000000000000..ddf9961e2b9e
+> --- /dev/null
+> +++ b/drivers/platform/x86/silicom-platform.c
+> @@ -0,0 +1,1046 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +//
+> +// silicom-platform.c - Silicom MEC170x platform driver
+> +//
+> +// Copyright (C) 2023 Henry Shi <henrys@silicom-usa.com>
+> +
+> +#include <linux/dmi.h>
+> +#include <linux/gpio/driver.h>
+> +#include <linux/init.h>
+> +#include <linux/ioport.h>
+> +#include <linux/io.h>
+> +#include <linux/kernel.h>
+> +#include <linux/led-class-multicolor.h>
+> +#include <linux/module.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/mutex.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/string.h>
+> +#include <linux/kobject.h>
+> +#include <linux/sysfs.h>
+> +#include <linux/bits.h>
+> +#include <linux/bitfield.h>
+> +
+> +#define MEC_ADDR ((mec_io_base) + 0x02)
+> +#define MEC_DATA(offset) ((mec_io_base) + 0x04 + (offset))
+> +#define EC_ADDR_LSB MEC_ADDR
+> +#define EC_ADDR_MSB ((mec_io_base) + 0x03)
+> +#define SILICOM_MEC_MAGIC 0x5a
+> +#define OFFSET_BIT_TO_CHANNEL(off, bit) ((((off) + 0x014) << 3) | (bit))
+> +#define CHANNEL_TO_OFFSET(chan) (((chan) >> 3) - 0x14)
+> +#define MEC_VERSION_MAJOR GENMASK(15, 14)
+> +#define MEC_VERSION_MINOR GENMASK(13, 8)
+> +#define IO_REG_BANK 0
+> +#define DEFAULT_CHAN_LO 0
+> +#define DEFAULT_CHAN_HI 0
+> +#define MEC_EFUSE_LSB_ADDR 0x28
+> +#define MEC_POWER_CYCLE_ADDR 0x24
+> +
+> +static DEFINE_MUTEX(mec_io_mutex);
+> +static int mec_io_base, mec_io_len;
+> +static struct device *my_dev;
+> +static int efuse_status;
+> +static int mec_uc_version;
+> +static int power_cycle;
+> +
+> +struct silicom_fan_control_data {
+> +	struct   device *hdev;
+
+Unnecessary.
+
+> +	int      temp;
+
+Unused
+
+> +	int      fan_speed;
+
+Unnecessary.
+
+> +};
+
+This entire data structure is unnecessary. I did comment on that before.
+
+> +
+> +static const struct hwmon_channel_info *silicom_fan_control_info[] = {
+> +	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT | HWMON_F_LABEL),
+> +	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_LABEL),
+> +	NULL
+> +};
+> +
+> +struct silicom_platform_info {
+> +	int io_base;
+> +	int io_len;
+> +	struct led_classdev_mc *led_info;
+> +	struct gpio_chip *gpiochip;
+> +	u8 *gpio_channels;
+> +	u16 ngpio;
+> +};
+> +
+> +static const char * const plat_0222_gpio_names[] = {
+> +	"AUTOM0_SFP_TX_FAULT",
+> +	"SLOT2_LED_OUT",
+> +	"SIM_M2_SLOT2_B_DET",
+> +	"SIM_M2_SLOT2_A_DET",
+> +	"SLOT1_LED_OUT",
+> +	"SIM_M2_SLOT1_B_DET",
+> +	"SIM_M2_SLOT1_A_DET",
+> +	"SLOT0_LED_OUT",
+> +	"WAN_SFP0_RX_LOS",
+> +	"WAN_SFP0_PRSNT_N",
+> +	"WAN_SFP0_TX_FAULT",
+> +	"AUTOM1_SFP_RX_LOS",
+> +	"AUTOM1_SFP_PRSNT_N",
+> +	"AUTOM1_SFP_TX_FAULT",
+> +	"AUTOM0_SFP_RX_LOS",
+> +	"AUTOM0_SFP_PRSNT_N",
+> +	"WAN_SFP1_RX_LOS",
+> +	"WAN_SFP1_PRSNT_N",
+> +	"WAN_SFP1_TX_FAULT",
+> +	"SIM_M2_SLOT1_MUX_SEL",
+> +	"W_DISABLE_M2_SLOT1_N",
+> +	"W_DISABLE_MPCIE_SLOT0_N",
+> +	"W_DISABLE_M2_SLOT0_N",
+> +	"BT_COMMAND_MODE",
+> +	"WAN_SFP1_TX_DISABLE",
+> +	"WAN_SFP0_TX_DISABLE",
+> +	"AUTOM1_SFP_TX_DISABLE",
+> +	"AUTOM0_SFP_TX_DISABLE",
+> +	"SIM_M2_SLOT2_MUX_SEL",
+> +	"W_DISABLE_M2_SLOT2_N",
+> +	"RST_CTL_M2_SLOT_1_N",
+> +	"RST_CTL_M2_SLOT_2_N",
+> +	"PM_USB_PWR_EN_BOT",
+> +	"PM_USB_PWR_EN_TOP",
+> +};
+> +
+> +static u8 plat_0222_gpio_channels[] = {
+> +	OFFSET_BIT_TO_CHANNEL(0x00, 0),
+> +	OFFSET_BIT_TO_CHANNEL(0x00, 1),
+> +	OFFSET_BIT_TO_CHANNEL(0x00, 2),
+> +	OFFSET_BIT_TO_CHANNEL(0x00, 3),
+> +	OFFSET_BIT_TO_CHANNEL(0x00, 4),
+> +	OFFSET_BIT_TO_CHANNEL(0x00, 5),
+> +	OFFSET_BIT_TO_CHANNEL(0x00, 6),
+> +	OFFSET_BIT_TO_CHANNEL(0x00, 7),
+> +	OFFSET_BIT_TO_CHANNEL(0x01, 0),
+> +	OFFSET_BIT_TO_CHANNEL(0x01, 1),
+> +	OFFSET_BIT_TO_CHANNEL(0x01, 2),
+> +	OFFSET_BIT_TO_CHANNEL(0x01, 3),
+> +	OFFSET_BIT_TO_CHANNEL(0x01, 4),
+> +	OFFSET_BIT_TO_CHANNEL(0x01, 5),
+> +	OFFSET_BIT_TO_CHANNEL(0x01, 6),
+> +	OFFSET_BIT_TO_CHANNEL(0x01, 7),
+> +	OFFSET_BIT_TO_CHANNEL(0x02, 0),
+> +	OFFSET_BIT_TO_CHANNEL(0x02, 1),
+> +	OFFSET_BIT_TO_CHANNEL(0x02, 2),
+> +	OFFSET_BIT_TO_CHANNEL(0x09, 0),
+> +	OFFSET_BIT_TO_CHANNEL(0x09, 1),
+> +	OFFSET_BIT_TO_CHANNEL(0x09, 2),
+> +	OFFSET_BIT_TO_CHANNEL(0x09, 3),
+> +	OFFSET_BIT_TO_CHANNEL(0x0a, 0),
+> +	OFFSET_BIT_TO_CHANNEL(0x0a, 1),
+> +	OFFSET_BIT_TO_CHANNEL(0x0a, 2),
+> +	OFFSET_BIT_TO_CHANNEL(0x0a, 3),
+> +	OFFSET_BIT_TO_CHANNEL(0x0a, 4),
+> +	OFFSET_BIT_TO_CHANNEL(0x0a, 5),
+> +	OFFSET_BIT_TO_CHANNEL(0x0a, 6),
+> +	OFFSET_BIT_TO_CHANNEL(0x0b, 0),
+> +	OFFSET_BIT_TO_CHANNEL(0x0b, 1),
+> +	OFFSET_BIT_TO_CHANNEL(0x0b, 2),
+> +	OFFSET_BIT_TO_CHANNEL(0x0b, 3),
+> +};
+> +
+> +static struct platform_device *silicom_platform_dev;
+> +static struct led_classdev_mc *silicom_led_info __initdata;
+> +static struct gpio_chip *silicom_gpiochip __initdata;
+> +static u8 *silicom_gpio_channels __initdata;
+> +
+> +static int silicom_mec_port_get(unsigned int offset)
+> +{
+> +	u8 reg;
+> +
+> +	mutex_lock(&mec_io_mutex);
+> +	/* Get the dword offset from the channel */
+> +	outb((offset >> 3) & 0xfc, MEC_ADDR);
+> +
+> +	/* Get the current register */
+> +	reg = inb(MEC_DATA((offset >> 3) & 0x03));
+> +	mutex_unlock(&mec_io_mutex);
+> +
+> +	return (reg >> (offset & 0x7)) & 0x01;
 > +}
 > +
->  #if IS_ENABLED(CONFIG_SENSORS_PLI1209BC_REGULATOR)
->  static const struct regulator_desc pli1209bc_reg_desc = {
->  	.name = "vout2",
-> @@ -102,6 +127,7 @@ static struct pmbus_driver_info pli1209bc_info = {
->  	    | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
->  	    | PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_INPUT,
->  	.read_word_data = pli1209bc_read_word_data,
-> +	.write_byte = pli1209bc_write_byte,
->  #if IS_ENABLED(CONFIG_SENSORS_PLI1209BC_REGULATOR)
->  	.num_regulators = 1,
->  	.reg_desc = &pli1209bc_reg_desc,
+> +static enum led_brightness silicom_mec_led_get(int channel)
+> +{
+> +	/* Outputs are active low */
+> +	return silicom_mec_port_get(channel) ? LED_OFF : LED_ON;
+> +}
+> +
+> +static void silicom_mec_port_set(int channel, int on)
+> +{
+> +	u8 reg;
+> +
+> +	mutex_lock(&mec_io_mutex);
+> +	/* Get the dword offset from the channel */
+> +	outb((channel >> 3) & 0xfc, MEC_ADDR);
+> +	/* Get the current port settings */
+> +	reg = inb(MEC_DATA((channel >> 3) & 0x03));
+> +	/* Outputs are active low, so clear the bit for on, or set it for off */
+> +	if (on)
+> +		reg &= ~(1 << (channel & 0x7));
+> +	else
+> +		reg |= 1 << (channel & 0x7);
+> +	/* Write back the updated register */
+> +	outb(reg, MEC_DATA((channel >> 3) & 0x03));
+> +	mutex_unlock(&mec_io_mutex);
+> +}
+> +
+> +static enum led_brightness silicom_mec_led_mc_brightness_get(struct led_classdev *led_cdev)
+> +{
+> +	struct led_classdev_mc *mc_cdev = lcdev_to_mccdev(led_cdev);
+> +	enum led_brightness brightness = LED_OFF;
+> +	int i;
+> +
+> +	for (i = 0; i < mc_cdev->num_colors; i++) {
+> +		mc_cdev->subled_info[i].brightness =
+> +			silicom_mec_led_get(mc_cdev->subled_info[i].channel);
+> +		/* Mark the overall brightness as LED_ON if any of the subleds are on */
+> +		if (mc_cdev->subled_info[i].brightness != LED_OFF)
+> +			brightness = LED_ON;
+> +	}
+> +
+> +	return brightness;
+> +}
+> +
+> +static void silicom_mec_led_mc_brightness_set(struct led_classdev *led_cdev,
+> +											enum led_brightness brightness)
+> +{
+> +	struct led_classdev_mc *mc_cdev = lcdev_to_mccdev(led_cdev);
+> +	int i;
+> +
+> +	led_mc_calc_color_components(mc_cdev, brightness);
+> +	for (i = 0; i < mc_cdev->num_colors; i++) {
+> +		silicom_mec_port_set(mc_cdev->subled_info[i].channel,
+> +		mc_cdev->subled_info[i].brightness);
+> +	}
+> +}
+> +
+> +static int silicom_gpio_get_direction(struct gpio_chip *gc, unsigned int offset)
+> +{
+> +	u8 *channels = gpiochip_get_data(gc);
+> +
+> +	/* Input registers have offsets between [0x00, 0x07] */
+> +	if (CHANNEL_TO_OFFSET(channels[offset]) < 0x08)
+> +		return GPIO_LINE_DIRECTION_IN;
+> +
+> +	return GPIO_LINE_DIRECTION_OUT;
+> +}
+> +
+> +static int silicom_gpio_direction_input(struct gpio_chip *gc, unsigned int offset)
+> +{
+> +	int direction = silicom_gpio_get_direction(gc, offset);
+> +
+> +	return direction == GPIO_LINE_DIRECTION_IN ? 0 : -EINVAL;
+> +}
+> +
+> +static void silicom_gpio_set(struct gpio_chip *gc, unsigned int offset, int value)
+> +{
+> +	u8 *channels = gpiochip_get_data(gc);
+> +	int direction = silicom_gpio_get_direction(gc, offset);
+> +	int channel = channels[offset];
+> +
+> +	if (direction == GPIO_LINE_DIRECTION_IN)
+> +		return;
+> +
+> +	if (value)
+> +		silicom_mec_port_set(channel, 0);
+> +	else if (value == 0)
+> +		silicom_mec_port_set(channel, 1);
+> +	else
+> +		pr_err("Wrong argument value: %d\n", value);
+> +}
+> +
+> +static int silicom_gpio_direction_output(struct gpio_chip *gc, unsigned int offset, int value)
+> +{
+> +	int direction = silicom_gpio_get_direction(gc, offset);
+> +
+> +	if (direction == GPIO_LINE_DIRECTION_IN)
+> +		return -EINVAL;
+> +
+> +	silicom_gpio_set(gc, offset, value);
+> +
+> +	return 0;
+> +}
+> +
+> +static int silicom_gpio_get(struct gpio_chip *gc, unsigned int offset)
+> +{
+> +	u8 *channels = gpiochip_get_data(gc);
+> +	int channel = channels[offset];
+> +
+> +	return silicom_mec_port_get(channel);
+> +}
+> +
+> +
+> +static struct mc_subled plat_0222_wan_mc_subled_info[] __initdata = {
+> +	{
+> +		.color_index = LED_COLOR_ID_WHITE,
+> +		.brightness = 1,
+> +		.intensity = 0,
+> +		.channel = OFFSET_BIT_TO_CHANNEL(0x0c, 7),
+> +	},
+> +	{
+> +		.color_index = LED_COLOR_ID_YELLOW,
+> +		.brightness = 1,
+> +		.intensity = 0,
+> +		.channel = OFFSET_BIT_TO_CHANNEL(0x0c, 6),
+> +	},
+> +	{
+> +		.color_index = LED_COLOR_ID_RED,
+> +		.brightness = 1,
+> +		.intensity = 0,
+> +		.channel = OFFSET_BIT_TO_CHANNEL(0x0c, 5),
+> +	},
+> +};
+> +
+> +static struct mc_subled plat_0222_sys_mc_subled_info[] __initdata = {
+> +	{
+> +		.color_index = LED_COLOR_ID_WHITE,
+> +		.brightness = 1,
+> +		.intensity = 0,
+> +		.channel = OFFSET_BIT_TO_CHANNEL(0x0c, 4),
+> +	},
+> +	{
+> +		.color_index = LED_COLOR_ID_AMBER,
+> +		.brightness = 1,
+> +		.intensity = 0,
+> +		.channel = OFFSET_BIT_TO_CHANNEL(0x0c, 3),
+> +	},
+> +	{
+> +		.color_index = LED_COLOR_ID_RED,
+> +		.brightness = 1,
+> +		.intensity = 0,
+> +		.channel = OFFSET_BIT_TO_CHANNEL(0x0c, 2),
+> +	},
+> +};
+> +
+> +static struct mc_subled plat_0222_stat1_mc_subled_info[] __initdata = {
+> +	{
+> +		.color_index = LED_COLOR_ID_RED,
+> +		.brightness = 1,
+> +		.intensity = 0,
+> +		.channel = OFFSET_BIT_TO_CHANNEL(0x0c, 1),
+> +	},
+> +	{
+> +		.color_index = LED_COLOR_ID_GREEN,
+> +		.brightness = 1,
+> +		.intensity = 0,
+> +		.channel = OFFSET_BIT_TO_CHANNEL(0x0c, 0),
+> +	},
+> +	{
+> +		.color_index = LED_COLOR_ID_BLUE,
+> +		.brightness = 1,
+> +		.intensity = 0,
+> +		.channel = OFFSET_BIT_TO_CHANNEL(0x0d, 7),
+> +	},
+> +	{
+> +		.color_index = LED_COLOR_ID_YELLOW,
+> +		.brightness = 1,
+> +		.intensity = 0,
+> +		.channel = OFFSET_BIT_TO_CHANNEL(0x0d, 6),
+> +	},
+> +};
+> +
+> +static struct mc_subled plat_0222_stat2_mc_subled_info[] __initdata = {
+> +	{
+> +		.color_index = LED_COLOR_ID_RED,
+> +		.brightness = 1,
+> +		.intensity = 0,
+> +		.channel = OFFSET_BIT_TO_CHANNEL(0x0d, 5),
+> +	},
+> +	{
+> +		.color_index = LED_COLOR_ID_GREEN,
+> +		.brightness = 1,
+> +		.intensity = 0,
+> +		.channel = OFFSET_BIT_TO_CHANNEL(0x0d, 4),
+> +	},
+> +	{
+> +		.color_index = LED_COLOR_ID_BLUE,
+> +		.brightness = 1,
+> +		.intensity = 0,
+> +		.channel = OFFSET_BIT_TO_CHANNEL(0x0d, 3),
+> +	},
+> +	{
+> +		.color_index = LED_COLOR_ID_YELLOW,
+> +		.brightness = 1,
+> +		.intensity = 0,
+> +		.channel = OFFSET_BIT_TO_CHANNEL(0x0d, 2),
+> +	},
+> +};
+> +
+> +static struct mc_subled plat_0222_stat3_mc_subled_info[] __initdata = {
+> +	{
+> +		.color_index = LED_COLOR_ID_RED,
+> +		.brightness = 1,
+> +		.intensity = 0,
+> +		.channel = OFFSET_BIT_TO_CHANNEL(0x0d, 1),
+> +	},
+> +	{
+> +		.color_index = LED_COLOR_ID_GREEN,
+> +		.brightness = 1,
+> +		.intensity = 0,
+> +		.channel = OFFSET_BIT_TO_CHANNEL(0x0d, 0),
+> +	},
+> +	{
+> +		.color_index = LED_COLOR_ID_BLUE,
+> +		.brightness = 1,
+> +		.intensity = 0,
+> +		.channel = OFFSET_BIT_TO_CHANNEL(0x0e, 1),
+> +	},
+> +	{
+> +		.color_index = LED_COLOR_ID_YELLOW,
+> +		.brightness = 1,
+> +		.intensity = 0,
+> +		.channel = OFFSET_BIT_TO_CHANNEL(0x0e, 0),
+> +	},
+> +};
+> +
+> +static struct led_classdev_mc plat_0222_mc_led_info[] __initdata = {
+> +	{
+> +		.led_cdev = {
+> +			.name = "multicolor:wan",
+> +			.brightness = 0,
+> +			.max_brightness = 1,
+> +			.brightness_set = silicom_mec_led_mc_brightness_set,
+> +			.brightness_get = silicom_mec_led_mc_brightness_get,
+> +		},
+> +		.num_colors = ARRAY_SIZE(plat_0222_wan_mc_subled_info),
+> +		.subled_info = plat_0222_wan_mc_subled_info,
+> +	},
+> +	{
+> +		.led_cdev = {
+> +			.name = "multicolor:sys",
+> +			.brightness = 0,
+> +			.max_brightness = 1,
+> +			.brightness_set = silicom_mec_led_mc_brightness_set,
+> +			.brightness_get = silicom_mec_led_mc_brightness_get,
+> +		},
+> +		.num_colors = ARRAY_SIZE(plat_0222_sys_mc_subled_info),
+> +		.subled_info = plat_0222_sys_mc_subled_info,
+> +	},
+> +	{
+> +		.led_cdev = {
+> +			.name = "multicolor:stat1",
+> +			.brightness = 0,
+> +			.max_brightness = 1,
+> +			.brightness_set = silicom_mec_led_mc_brightness_set,
+> +			.brightness_get = silicom_mec_led_mc_brightness_get,
+> +		},
+> +		.num_colors = ARRAY_SIZE(plat_0222_stat1_mc_subled_info),
+> +		.subled_info = plat_0222_stat1_mc_subled_info,
+> +	},
+> +	{
+> +		.led_cdev = {
+> +			.name = "multicolor:stat2",
+> +			.brightness = 0,
+> +			.max_brightness = 1,
+> +			.brightness_set = silicom_mec_led_mc_brightness_set,
+> +			.brightness_get = silicom_mec_led_mc_brightness_get,
+> +		},
+> +		.num_colors = ARRAY_SIZE(plat_0222_stat2_mc_subled_info),
+> +		.subled_info = plat_0222_stat2_mc_subled_info,
+> +	},
+> +	{
+> +		.led_cdev = {
+> +			.name = "multicolor:stat3",
+> +			.brightness = 0,
+> +			.max_brightness = 1,
+> +			.brightness_set = silicom_mec_led_mc_brightness_set,
+> +			.brightness_get = silicom_mec_led_mc_brightness_get,
+> +		},
+> +		.num_colors = ARRAY_SIZE(plat_0222_stat3_mc_subled_info),
+> +		.subled_info = plat_0222_stat3_mc_subled_info,
+> +	},
+> +	{ },
+> +};
+> +
+> +static struct gpio_chip silicom_gpio_chip = {
+> +	.label = "silicom-gpio",
+> +	.get_direction = silicom_gpio_get_direction,
+> +	.direction_input = silicom_gpio_direction_input,
+> +	.direction_output = silicom_gpio_direction_output,
+> +	.get = silicom_gpio_get,
+> +	.set = silicom_gpio_set,
+> +	.base = -1,
+> +	.ngpio = ARRAY_SIZE(plat_0222_gpio_channels),
+> +	.names = plat_0222_gpio_names,
+> +	/* We're using a mutex to protect the indirect access, so we can sleep if the
+> +	 * lock blocks
+> +	 */
+> +	.can_sleep = true,
+> +};
+> +
+> +static struct silicom_platform_info silicom_plat_0222_cordoba_info __initdata = {
+> +	.io_base = 0x800,
+> +	.io_len = 8,
+> +	.led_info = plat_0222_mc_led_info,
+> +	.gpiochip = &silicom_gpio_chip,
+> +	.gpio_channels = plat_0222_gpio_channels,
+> +	/* The original generic cordoba does not have the last 4 outputs of the plat_0222
+> +	 * BB variant, the rest are the same, so use the same longer list, but ignore the
+> +	 * last entries here
+> +	 */
+> +	.ngpio = ARRAY_SIZE(plat_0222_gpio_channels),
+> +
+> +};
+> +
+> +static struct mc_subled cordoba_fp_left_mc_subled_info[] __initdata = {
+> +	{
+> +		.color_index = LED_COLOR_ID_RED,
+> +		.brightness = 1,
+> +		.intensity = 0,
+> +		.channel = OFFSET_BIT_TO_CHANNEL(0x08, 6),
+> +	},
+> +	{
+> +		.color_index = LED_COLOR_ID_GREEN,
+> +		.brightness = 1,
+> +		.intensity = 0,
+> +		.channel = OFFSET_BIT_TO_CHANNEL(0x08, 5),
+> +	},
+> +	{
+> +		.color_index = LED_COLOR_ID_BLUE,
+> +		.brightness = 1,
+> +		.intensity = 0,
+> +		.channel = OFFSET_BIT_TO_CHANNEL(0x09, 7),
+> +	},
+> +	{
+> +		.color_index = LED_COLOR_ID_AMBER,
+> +		.brightness = 1,
+> +		.intensity = 0,
+> +		.channel = OFFSET_BIT_TO_CHANNEL(0x09, 4),
+> +	},
+> +};
+> +
+> +static struct mc_subled cordoba_fp_center_mc_subled_info[] __initdata = {
+> +	{
+> +		.color_index = LED_COLOR_ID_RED,
+> +		.brightness = 1,
+> +		.intensity = 0,
+> +		.channel = OFFSET_BIT_TO_CHANNEL(0x08, 7),
+> +	},
+> +	{
+> +		.color_index = LED_COLOR_ID_GREEN,
+> +		.brightness = 1,
+> +		.intensity = 0,
+> +		.channel = OFFSET_BIT_TO_CHANNEL(0x08, 4),
+> +	},
+> +	{
+> +		.color_index = LED_COLOR_ID_BLUE,
+> +		.brightness = 1,
+> +		.intensity = 0,
+> +		.channel = OFFSET_BIT_TO_CHANNEL(0x08, 3),
+> +	},
+> +	{
+> +		.color_index = LED_COLOR_ID_AMBER,
+> +		.brightness = 1,
+> +		.intensity = 0,
+> +		.channel = OFFSET_BIT_TO_CHANNEL(0x09, 6),
+> +	},
+> +};
+> +
+> +static struct mc_subled cordoba_fp_right_mc_subled_info[] __initdata = {
+> +	{
+> +		.color_index = LED_COLOR_ID_RED,
+> +		.brightness = 1,
+> +		.intensity = 0,
+> +		.channel = OFFSET_BIT_TO_CHANNEL(0x08, 2),
+> +	},
+> +	{
+> +		.color_index = LED_COLOR_ID_GREEN,
+> +		.brightness = 1,
+> +		.intensity = 0,
+> +		.channel = OFFSET_BIT_TO_CHANNEL(0x08, 1),
+> +	},
+> +	{
+> +		.color_index = LED_COLOR_ID_BLUE,
+> +		.brightness = 1,
+> +		.intensity = 0,
+> +		.channel = OFFSET_BIT_TO_CHANNEL(0x08, 0),
+> +	},
+> +	{
+> +		.color_index = LED_COLOR_ID_AMBER,
+> +		.brightness = 1,
+> +		.intensity = 0,
+> +		.channel = OFFSET_BIT_TO_CHANNEL(0x09, 5),
+> +	},
+> +};
+> +
+> +static struct led_classdev_mc cordoba_mc_led_info[] __initdata = {
+> +	{
+> +		.led_cdev = {
+> +			.name = "multicolor:fp_left",
+> +			.brightness = 0,
+> +			.max_brightness = 1,
+> +			.brightness_set = silicom_mec_led_mc_brightness_set,
+> +			.brightness_get = silicom_mec_led_mc_brightness_get,
+> +		},
+> +		.num_colors = ARRAY_SIZE(cordoba_fp_left_mc_subled_info),
+> +		.subled_info = cordoba_fp_left_mc_subled_info,
+> +	},
+> +	{
+> +		.led_cdev = {
+> +			.name = "multicolor:fp_center",
+> +			.brightness = 0,
+> +			.max_brightness = 1,
+> +			.brightness_set = silicom_mec_led_mc_brightness_set,
+> +			.brightness_get = silicom_mec_led_mc_brightness_get,
+> +		},
+> +		.num_colors = ARRAY_SIZE(cordoba_fp_center_mc_subled_info),
+> +		.subled_info = cordoba_fp_center_mc_subled_info,
+> +	},
+> +	{
+> +		.led_cdev = {
+> +			.name = "multicolor:fp_right",
+> +			.brightness = 0,
+> +			.max_brightness = 1,
+> +			.brightness_set = silicom_mec_led_mc_brightness_set,
+> +			.brightness_get = silicom_mec_led_mc_brightness_get,
+> +		},
+> +		.num_colors = ARRAY_SIZE(cordoba_fp_right_mc_subled_info),
+> +		.subled_info = cordoba_fp_right_mc_subled_info,
+> +	},
+> +	{ },
+> +};
+> +
+> +static struct silicom_platform_info silicom_generic_cordoba_info __initdata = {
+> +	.io_base = 0x800,
+> +	.io_len = 8,
+> +	.led_info = cordoba_mc_led_info,
+> +	.gpiochip = &silicom_gpio_chip,
+> +	.gpio_channels = plat_0222_gpio_channels,
+> +	.ngpio = ARRAY_SIZE(plat_0222_gpio_channels),
+> +};
+> +
+> +static struct platform_driver silicom_platform_driver = {
+> +	.driver = {
+> +		.name = "silicom-platform",
+> +	},
+> +};
+> +
+> +static ssize_t efuse_status_show(struct device *dev, struct device_attribute *attr,
+> +								char *buf)
+> +{
+> +	u32 reg;
+> +
+> +	mutex_lock(&mec_io_mutex);
+> +	/* Select memory region */
+> +	outb(IO_REG_BANK, EC_ADDR_MSB);
+> +	outb(MEC_EFUSE_LSB_ADDR, EC_ADDR_LSB);
+> +
+> +	/* Get current data from the address */
+> +	reg = inl(MEC_DATA(DEFAULT_CHAN_LO));
+> +	mutex_unlock(&mec_io_mutex);
+> +
+> +	efuse_status = reg & 0x1;
+> +
+> +	return sprintf(buf, "%d\n", efuse_status);
+> +}
+> +
+> +static ssize_t uc_version_show(struct device *dev,
+> +					struct device_attribute *attr,
+> +					char *buf)
+> +{
+> +	u32 reg;
+> +	int uc_version;
+> +
+> +	mutex_lock(&mec_io_mutex);
+> +	outb(IO_REG_BANK, EC_ADDR_MSB);
+> +	outb(DEFAULT_CHAN_LO, EC_ADDR_LSB);
+> +
+> +	reg = inl(MEC_DATA(DEFAULT_CHAN_LO));
+> +	mutex_unlock(&mec_io_mutex);
+> +	uc_version = FIELD_GET(GENMASK(15, 8), reg);
+> +	if (uc_version >= 192)
+> +		pr_err("uc version not supported\n");
+> +
+> +	uc_version = FIELD_GET(MEC_VERSION_MAJOR, reg) * 100 +
+> +				FIELD_GET(MEC_VERSION_MINOR, reg);
+> +
+> +	mec_uc_version = uc_version;
+> +	return sprintf(buf, "%d\n", mec_uc_version);
+> +}
+> +
+> +static ssize_t power_cycle_show(struct device *dev,
+> +				struct device_attribute *attr,
+> +				char *buf)
+> +{
+> +	return sprintf(buf, "%d\n", power_cycle);
+> +}
+> +
+> +static void powercycle_uc(void)
+> +{
+> +	mutex_lock(&mec_io_mutex);
+> +	/* Select memory region */
+> +	outb(IO_REG_BANK, EC_ADDR_MSB);
+> +	outb(MEC_POWER_CYCLE_ADDR, EC_ADDR_LSB);
+> +
+> +	/* Set to 1 for current data from the address */
+> +	outb(1, MEC_DATA(DEFAULT_CHAN_LO));
+> +	mutex_unlock(&mec_io_mutex);
+> +}
+> +
+> +static ssize_t power_cycle_store(struct device *dev, struct device_attribute *attr,
+> +				 const char *buf, size_t count)
+> +{
+> +	if (sscanf(buf, "%du", &power_cycle) != 1) {
+> +		dev_err(dev, "Failed to read power_cycle\n");
+> +		return -EINVAL;
+> +	}
+> +	if (power_cycle > 0)
+> +		powercycle_uc();
+> +
+> +	return count;
+> +}
+> +
+> +static struct device_attribute my_dev_attr[] = {
+> +	{
+> +		.attr = {.name = "efuse_status", .mode = 0644},
+> +		.show = efuse_status_show,
+> +		.store = NULL
+> +	},
+> +	{
+> +		.attr = {.name = "uc_version", .mode = 0644},
+> +		.show = uc_version_show,
+> +		.store = NULL
+> +	},
+> +	{
+> +		.attr = {.name = "power_cycle", .mode = 0644},
+> +		.show = power_cycle_show,
+> +		.store = power_cycle_store
+> +	},
+> +};
+> +
+> +static int __init silicom_mc_leds_register(struct device *dev,
+> +					   const struct led_classdev_mc *mc_leds)
+> +{
+> +	struct led_classdev_mc *led;
+> +	int i, err;
+> +
+> +	for (i = 0; mc_leds[i].led_cdev.name; i++) {
+> +		led = devm_kzalloc(dev, sizeof(struct led_classdev_mc), GFP_KERNEL);
+> +		if (!led)
+> +			return -ENOMEM;
+> +		memcpy(led, &mc_leds[i], sizeof(*led));
+> +
+> +		led->subled_info = devm_kzalloc(dev, led->num_colors * sizeof(struct mc_subled), GFP_KERNEL);
+> +		if (!led->subled_info)
+> +			return -ENOMEM;
+> +		memcpy(led->subled_info, mc_leds[i].subled_info, led->num_colors * sizeof(struct mc_subled));
+> +
+> +		err = devm_led_classdev_multicolor_register(dev, led);
+> +		if (err) {
+> +			dev_err(dev, "Failed to register[%d]: %d\n", i, err);
+> +			return err;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static u32 rpm_get(void)
+> +{
+> +	u32 reg;
+> +
+> +	mutex_lock(&mec_io_mutex);
+> +	/* Select memory region */
+> +	outb(IO_REG_BANK, EC_ADDR_MSB);
+> +	outb(0xc, EC_ADDR_LSB);
+> +	/* Get current data from the address */
+> +	reg = inw(MEC_DATA(DEFAULT_CHAN_LO));
+> +	mutex_unlock(&mec_io_mutex);
+> +
+> +	return reg;
+> +}
+> +
+> +static u32 temp_get(void)
+> +{
+> +	u32 reg;
+> +
+> +	mutex_lock(&mec_io_mutex);
+> +	/* Select memory region */
+> +	outb(IO_REG_BANK, EC_ADDR_MSB);
+> +	outb(0xc, EC_ADDR_LSB);
+> +	/* Get current data from the address */
+> +	reg = inl(MEC_DATA(DEFAULT_CHAN_LO));
+> +	mutex_unlock(&mec_io_mutex);
+> +
+> +	return (reg >> 16) / 10;
+
+The hwmon ABI expects temperatures to be reported in milli-degrees C.
+The above sets the maximum temperature to 65,535 / 10 = 6,553
+milli-degrees or 6.553 degrees C. It is very unlikely that this
+is correct.
+
+Again, I commented on this before.
+
+> +}
+> +
+> +static umode_t silicom_fan_control_fan_is_visible(const u32 attr)
+> +{
+> +	switch (attr) {
+> +	case hwmon_fan_input:
+> +	case hwmon_fan_label:
+> +		return 0444;
+> +	default:
+> +		return 0;
+> +	}
+> +}
+> +
+> +static umode_t silicom_fan_control_temp_is_visible(const u32 attr)
+> +{
+> +	switch (attr) {
+> +	case hwmon_temp_input:
+> +	case hwmon_temp_label:
+> +		return 0444;
+> +	default:
+> +		return 0;
+> +	}
+> +}
+> +
+> +static int silicom_fan_control_read_fan(struct device *dev, u32 attr, long *val)
+> +{
+> +	struct silicom_fan_control_data *ctl = dev_get_drvdata(dev);
+> +
+> +	switch (attr) {
+> +	case hwmon_fan_input:
+> +		ctl->fan_speed = rpm_get();
+> +		*val = ctl->fan_speed;
+
+Storing data in fan_speed is unnecessary.
+
+> +		return 0;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static int silicom_fan_control_read_temp(struct device *dev, u32 attr, long *val)
+> +{
+> +	switch (attr) {
+> +	case hwmon_temp_input:
+> +		*val = temp_get();
+> +		return 0;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static umode_t silicom_fan_control_is_visible(const void *data,
+> +					  enum hwmon_sensor_types type,
+> +					  u32 attr, int channel)
+> +{
+> +	switch (type) {
+> +	case hwmon_fan:
+> +		return silicom_fan_control_fan_is_visible(attr);
+> +	case hwmon_temp:
+> +		return silicom_fan_control_temp_is_visible(attr);
+> +	default:
+> +		return 0;
+> +	}
+> +}
+> +
+> +static int silicom_fan_control_read(struct device *dev, enum hwmon_sensor_types type,
+> +				    u32 attr, int channel, long *val)
+> +{
+> +	switch (type) {
+> +	case hwmon_fan:
+> +		return silicom_fan_control_read_fan(dev, attr, val);
+> +	case hwmon_temp:
+> +		return silicom_fan_control_read_temp(dev, attr, val);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static int silicom_fan_control_read_labels(struct device *dev, enum hwmon_sensor_types type,
+> +					   u32 attr, int channel, const char **str)
+> +{
+> +	switch (type) {
+> +	case hwmon_fan:
+> +		*str = "Fan Speed";
+> +		return 0;
+> +	case hwmon_temp:
+> +		*str = "Thermostat Sensor";
+> +		return 0;
+
+Those labels have no practical value.
+
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static const struct hwmon_ops silicom_fan_control_hwmon_ops = {
+> +	.is_visible = silicom_fan_control_is_visible,
+> +	.read = silicom_fan_control_read,
+> +	.write = NULL,
+
+Unnecessary.
+
+> +	.read_string = silicom_fan_control_read_labels,
+> +};
+> +
+> +static const struct hwmon_chip_info silicom_chip_info = {
+> +	.ops = &silicom_fan_control_hwmon_ops,
+> +	.info = silicom_fan_control_info,
+> +};
+> +
+> +static int __init silicom_platform_probe(struct platform_device *device)
+> +{
+> +	int i, err;
+> +	u8 magic, ver;
+> +	struct silicom_fan_control_data *ctl;
+> +	const char *name = "Silocom_Fan_Monitor";
+> +	const char *dev_name = "Silicom_platform";
+> +
+> +	mec_io_base = 0x0800;
+> +	mec_io_len = 8;
+> +	if (!devm_request_region(&device->dev, mec_io_base, mec_io_len, "mec")) {
+> +		dev_err(&device->dev, "couldn't reserve MEC io ports\n");
+> +		return -EBUSY;
+> +	}
+> +
+> +	/* Sanity check magic number read for EC */
+> +	outb(0x00, MEC_ADDR);
+> +	magic = inb(MEC_DATA(DEFAULT_CHAN_LO));
+> +	ver = inb(MEC_DATA(DEFAULT_CHAN_HI));
+> +	dev_dbg(&device->dev, "EC magic 0x%02x, version 0x%02x\n", magic, ver);
+> +
+> +	if (magic != SILICOM_MEC_MAGIC) {
+> +		dev_err(&device->dev, "Bad EC magic 0x%02x!\n", magic);
+> +		return -ENODEV;
+> +	}
+> +
+> +	err = silicom_mc_leds_register(&device->dev, silicom_led_info);
+> +	if (err) {
+> +		dev_err(&device->dev, "Failed to register LEDs\n");
+> +		return err;
+> +	}
+> +
+> +	err = devm_gpiochip_add_data(&device->dev, silicom_gpiochip, silicom_gpio_channels);
+> +	if (err) {
+> +		dev_err(&device->dev, "Failed to register gpiochip: %d\n", err);
+> +		return err;
+> +	}
+> +
+> +	ctl = devm_kzalloc(&device->dev, sizeof(*ctl), GFP_KERNEL);
+> +	if (!ctl)
+> +		return -ENOMEM;
+> +
+> +	ctl->hdev = devm_hwmon_device_register_with_info(&device->dev, name, ctl,
+> +				&silicom_chip_info, NULL);
+> +
+> +	my_dev = root_device_register(dev_name);
+> +	for (i = 0; i < ARRAY_SIZE(my_dev_attr); i++) {
+> +		err = sysfs_create_file(&my_dev->kobj, &my_dev_attr[i].attr);
+> +		if (err) {
+> +			pr_debug("failed to create the foo file in /sys/devices/Silicom_platform\n");
+> +			break;
+> +		}
+> +	}
+> +
+> +	return err;
+> +}
+> +
+> +static int __init silicom_platform_info_init(const struct dmi_system_id *id)
+> +{
+> +	struct silicom_platform_info *info = id->driver_data;
+> +
+> +	dev_info(&silicom_platform_dev->dev, "Detected %s\n", id->ident);
+> +
+> +	mec_io_base = info->io_base;
+> +	mec_io_len = info->io_len;
+> +	silicom_led_info = info->led_info;
+> +	silicom_gpio_channels = info->gpio_channels;
+> +	silicom_gpiochip = info->gpiochip;
+> +	if (silicom_gpiochip)
+> +		silicom_gpiochip->ngpio = info->ngpio;
+> +
+> +	return 1;
+> +}
+> +
+> +static const struct dmi_system_id silicom_dmi_ids[] __initconst = {
+> +	{
+> +		.callback = silicom_platform_info_init,
+> +		.ident = "Silicom Cordoba (Generic)",
+> +		.matches = {
+> +			DMI_MATCH(DMI_BOARD_VENDOR, "Silicom"),
+> +			DMI_MATCH(DMI_BOARD_NAME, "80300-0214-G"),
+> +		},
+> +		.driver_data = &silicom_generic_cordoba_info,
+> +	},
+> +	{
+> +		.callback = silicom_platform_info_init,
+> +		.ident = "Silicom Cordoba (Generic)",
+> +		.matches = {
+> +			DMI_MATCH(DMI_BOARD_VENDOR, "Silicom"),
+> +			DMI_MATCH(DMI_BOARD_NAME, "80500-0214-G"),
+> +		},
+> +		.driver_data = &silicom_generic_cordoba_info,
+> +	},
+> +	{
+> +		 .callback = silicom_platform_info_init,
+> +		 .ident = "Silicom Cordoba (plat_0222)",
+> +		 .matches = {
+> +			DMI_MATCH(DMI_BOARD_VENDOR, "Silicom"),
+> +			DMI_MATCH(DMI_BOARD_NAME, "80300-0222-G"),
+> +		 },
+> +		.driver_data = &silicom_plat_0222_cordoba_info,
+> +	},
+> +	{ },
+> +};
+> +
+> +static int __init silicom_platform_init(void)
+> +{
+> +	struct device *dev;
+> +	int err;
+> +
+> +	/* register a platform device to act as the parent for LEDS, etc. */
+> +	silicom_platform_dev = platform_device_register_simple("silicom-platform", -1, NULL, 0);
+> +	if (IS_ERR(silicom_platform_dev)) {
+> +		err = PTR_ERR(silicom_platform_dev);
+> +		pr_err("failed to register silicom-platform device: %d\n", err);
+> +		goto silicom_init_register_err;
+> +	}
+> +	dev = &silicom_platform_dev->dev;
+> +
+> +	err = dmi_check_system(silicom_dmi_ids);
+> +	if (err == 0) {
+> +		dev_err(dev, "No DMI match for this platform\n");
+> +		err = -ENODEV;
+> +		goto silicom_init_probe_err;
+> +	}
+> +
+> +	/* Directly probe the platform driver in init since this isn't a
+> +	 * hotpluggable device.  That means we don't need to register a driver
+> +	 * that needs to wait around in memory on the chance a matching device
+> +	 * would get added.  Instead run once in __init so that we can free all
+> +	 * those resources when the __init region is wiped
+> +	 */
+> +	err = platform_driver_probe(&silicom_platform_driver, silicom_platform_probe);
+> +	if (err) {
+> +		dev_err(dev, "Failed to probe platform driver %d\n", err);
+> +		goto silicom_init_probe_err;
+> +	}
+> +
+> +	return 0;
+> +
+> +silicom_init_probe_err:
+> +	if (silicom_platform_dev) {
+> +		platform_device_unregister(silicom_platform_dev);
+> +		silicom_platform_dev = NULL;
+> +	}
+> +	if (my_dev) {
+> +		root_device_unregister(my_dev);
+> +		my_dev = NULL;
+> +	}
+> +
+> +silicom_init_register_err:
+> +	return err;
+> +}
+> +
+> +static void __exit silicom_platform_exit(void)
+> +{
+> +	int i;
+> +
+> +	if (silicom_platform_dev) {
+> +		platform_device_unregister(silicom_platform_dev);
+> +		platform_driver_unregister(&silicom_platform_driver);
+> +	}
+> +
+> +	if (my_dev) {
+> +		for (i = 0; i < ARRAY_SIZE(my_dev_attr); i++)
+> +			sysfs_remove_file(&my_dev->kobj, &my_dev_attr[i].attr);
+> +		root_device_unregister(my_dev);
+> +	}
+> +	mutex_destroy(&mec_io_mutex);
+> +}
+> +
+> +module_init(silicom_platform_init);
+> +module_exit(silicom_platform_exit);
+> +
+> +MODULE_LICENSE("GPL");
+> +MODULE_AUTHOR("Henry Shi <henrys@silicom-usa.com>");
+> +MODULE_DESCRIPTION("Platform driver for Silicom network appliances");
+> +
+> +MODULE_DEVICE_TABLE(dmi, silicom_dmi_ids);
