@@ -2,171 +2,109 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC3E5EE49AB
-	for <linux-hwmon@archiver.kernel.org>; Sun, 20 Aug 2023 12:54:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40A44EE49A4
+	for <linux-hwmon@archiver.kernel.org>; Sun, 20 Aug 2023 14:04:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231180AbjHTMyB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 20 Aug 2023 08:54:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48704 "EHLO
+        id S230330AbjHTOEG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 20 Aug 2023 10:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231200AbjHTMx5 (ORCPT
+        with ESMTP id S230034AbjHTOEF (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 20 Aug 2023 08:53:57 -0400
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E0C484239;
-        Sun, 20 Aug 2023 05:49:19 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="6.01,188,1684767600"; 
-   d="scan'208";a="177088866"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 20 Aug 2023 21:49:18 +0900
-Received: from localhost.localdomain (unknown [10.226.92.18])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 364064001DDB;
-        Sun, 20 Aug 2023 21:49:15 +0900 (JST)
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Eric Tremblay <etremblay@distech-controls.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-hwmon@vger.kernel.org,
+        Sun, 20 Aug 2023 10:04:05 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0F83C00;
+        Sun, 20 Aug 2023 07:03:54 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-68a3cae6df9so147327b3a.2;
+        Sun, 20 Aug 2023 07:03:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692540234; x=1693145034;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2JycbWyuWr3RRr6cmZeAMjPDQ3fLyzw41zO2/maFpBk=;
+        b=COwWRgeratyfGXybNmEhCW0hFf5AaYrHkCqTJQWDIhbhfXIz5nFSd2rjvpGPUV0/ZY
+         Hx6dDsfGJT4bymcMqz9MB2m35TVTXJGAGv7RqFzOgB83z4vWUgYZEdV93FpbRAVXDkD7
+         MtIzp0TJOuMQ6JR+6o0uhmSvI5mP6wtBZ8VjCrFVf9AZYxk9pvRAb13hZexrqFJlXCIw
+         UAQhCRcUNsv+o9cC1g+fUBZz1R9YmlreRjQ8qF9ZLBzjBrIy0jsHCH2tiaYwICuzK38F
+         KqeihGxcZmq80AnkNfwPD+0VbDEKGILcq3VrIM/l6UAYYWep+qjc1f0CZy5rJ4foKBU5
+         Alxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692540234; x=1693145034;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2JycbWyuWr3RRr6cmZeAMjPDQ3fLyzw41zO2/maFpBk=;
+        b=VzHyy+DGC4XOsQ47Bwl0TbR4/yULH0iJ7LE5eFh6rcuiaFGLkf/u5U12ZVDptXkvUk
+         w2D5L4H8s/OEl7kB1waqPjfY2O3aissynvSJLaRsNUGD3Z3yaKPByMgE7ZkuT55eCE0L
+         PnJGVAHGTTyB6FJnWzgslfGfJohM+JegMPFbWFplK+qt+SfroPw2XYzfWeaFS82TIBO1
+         kXQchmzCFrOW49GHd7wU+uiWsamjFdA7dfIBEdyFPzBQSYJ05QD0rZdcnxApqNQNhMZl
+         WJiQogO/Pr35L06G7vpvmlMj8y1vuvNXqsDc+hqEPTjRrqpKrLNDmGsFid7+gBCj6IQG
+         Y0JA==
+X-Gm-Message-State: AOJu0YwLfd+Ldb111Am7xPzIbtVfuaMubNAf1rN5B6ElhDDxIa8Twneu
+        o9nUDYsZas4A1HsL4nZg4Hw2s+r00AQ=
+X-Google-Smtp-Source: AGHT+IEmekty0yD90UbY5IHvVOCHJVTraDwpNl8j19x6VlIJj42t0dt2SsxtLg3oktRGbCpwpfSQNA==
+X-Received: by 2002:a05:6a00:1788:b0:687:42be:a274 with SMTP id s8-20020a056a00178800b0068742bea274mr3693933pfg.5.1692540233854;
+        Sun, 20 Aug 2023 07:03:53 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h26-20020aa786da000000b0067777e960d9sm4501736pfo.155.2023.08.20.07.03.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Aug 2023 07:03:53 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 20 Aug 2023 07:03:51 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Eric Tremblay <etremblay@distech-controls.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-renesas-soc@vger.kernel.org
-Subject: [PATCH 1/2] hwmon: tmp513: Convert enum->pointer for data in the match tables
-Date:   Sun, 20 Aug 2023 13:49:09 +0100
-Message-Id: <20230820124910.71526-2-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230820124910.71526-1-biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH 0/2] Convert enum->pointer for data in the tmp51x match
+ tables
+Message-ID: <ce30e9ad-67e8-4dfb-93f9-e9a6a89d6bbe@roeck-us.net>
 References: <20230820124910.71526-1-biju.das.jz@bp.renesas.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230820124910.71526-1-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Convert enum->pointer for data in the match tables, so that
-device_get_match_data() can do match against OF/ACPI/I2C tables, once i2c
-bus type match support added to it.
+On Sun, Aug 20, 2023 at 01:49:08PM +0100, Biju Das wrote:
+> Convert enum->pointer for data in the match tables, so that
+> device_get_match_data() can do match against OF/ACPI/I2C tables, once i2c
+> bus type match support added to it.
+> 
 
-Introduce struct tmp51x_info with encum chips and replace enum chips with
-struct *tmp51x_info in struct lm85_data. Replace enum->struct *tmp51x_info
-for data in the match table. Simplify the probe() by replacing
-device_get_match_data() and ID lookup for retrieving data by
-i2c_get_match_data().
+I don't see why this would be necessary. You don't explain why the current
+implementation would no longer work. Various other drivers implement the
+same mechanism as this driver, i.e., type cast the return value of
+device_get_match_data() to a non-pointer. I'd argue that changing the
+functionality of device_get_match_data() such that this is no longer
+possible would be inherently flawed and would introduce unnecessary
+complexity to drivers using that mechanism today. If
+device_get_match_data() is enhanced to include the functionality of
+i2c_match_id(), it should be done in a way that doesn't mandate
+such an API change.
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
----
- drivers/hwmon/tmp513.c | 43 ++++++++++++++++++++++--------------------
- 1 file changed, 23 insertions(+), 20 deletions(-)
+> This patch series is only compile tested.
 
-diff --git a/drivers/hwmon/tmp513.c b/drivers/hwmon/tmp513.c
-index 7db5d0fc24a4..22f6000bc50a 100644
---- a/drivers/hwmon/tmp513.c
-+++ b/drivers/hwmon/tmp513.c
-@@ -156,6 +156,10 @@ enum tmp51x_ids {
- 	tmp512, tmp513
- };
- 
-+struct tmp51x_info {
-+	enum tmp51x_ids id;
-+};
-+
- struct tmp51x_data {
- 	u16 shunt_config;
- 	u16 pga_gain;
-@@ -169,7 +173,7 @@ struct tmp51x_data {
- 	u32 curr_lsb_ua;
- 	u32 pwr_lsb_uw;
- 
--	enum tmp51x_ids id;
-+	const struct tmp51x_info *info;
- 	struct regmap *regmap;
- };
- 
-@@ -434,7 +438,7 @@ static umode_t tmp51x_is_visible(const void *_data,
- 
- 	switch (type) {
- 	case hwmon_temp:
--		if (data->id == tmp512 && channel == 4)
-+		if (data->info->id == tmp512 && channel == 4)
- 			return 0;
- 		switch (attr) {
- 		case hwmon_temp_input:
-@@ -585,7 +589,7 @@ static int tmp51x_init(struct tmp51x_data *data)
- 	if (ret < 0)
- 		return ret;
- 
--	if (data->id == tmp513) {
-+	if (data->info->id == tmp513) {
- 		ret = regmap_write(data->regmap, TMP513_N_FACTOR_3,
- 				   data->nfactor[2] << 8);
- 		if (ret < 0)
-@@ -600,22 +604,24 @@ static int tmp51x_init(struct tmp51x_data *data)
- 	return regmap_read(data->regmap, TMP51X_STATUS, &regval);
- }
- 
-+static const struct tmp51x_info tmp512_info = {
-+	.id = tmp512,
-+};
-+
-+static const struct tmp51x_info tmp513_info = {
-+	.id = tmp513,
-+};
-+
- static const struct i2c_device_id tmp51x_id[] = {
--	{ "tmp512", tmp512 },
--	{ "tmp513", tmp513 },
-+	{ "tmp512", (kernel_ulong_t)&tmp512_info },
-+	{ "tmp513", (kernel_ulong_t)&tmp513_info },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, tmp51x_id);
- 
- static const struct of_device_id tmp51x_of_match[] = {
--	{
--		.compatible = "ti,tmp512",
--		.data = (void *)tmp512
--	},
--	{
--		.compatible = "ti,tmp513",
--		.data = (void *)tmp513
--	},
-+	{ .compatible = "ti,tmp512", .data = &tmp512_info },
-+	{ .compatible = "ti,tmp513", .data = &tmp513_info },
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, tmp51x_of_match);
-@@ -674,9 +680,9 @@ static int tmp51x_read_properties(struct device *dev, struct tmp51x_data *data)
- 		return ret;
- 
- 	ret = device_property_read_u32_array(dev, "ti,nfactor", nfactor,
--					    (data->id == tmp513) ? 3 : 2);
-+					    (data->info->id == tmp513) ? 3 : 2);
- 	if (ret >= 0)
--		memcpy(data->nfactor, nfactor, (data->id == tmp513) ? 3 : 2);
-+		memcpy(data->nfactor, nfactor, (data->info->id == tmp513) ? 3 : 2);
- 
- 	// Check if shunt value is compatible with pga-gain
- 	if (data->shunt_uohms > data->pga_gain * 40 * 1000 * 1000) {
-@@ -698,7 +704,7 @@ static void tmp51x_use_default(struct tmp51x_data *data)
- static int tmp51x_configure(struct device *dev, struct tmp51x_data *data)
- {
- 	data->shunt_config = TMP51X_SHUNT_CONFIG_DEFAULT;
--	data->temp_config = (data->id == tmp513) ?
-+	data->temp_config = (data->info->id == tmp513) ?
- 			TMP513_TEMP_CONFIG_DEFAULT : TMP512_TEMP_CONFIG_DEFAULT;
- 
- 	if (dev->of_node)
-@@ -720,10 +726,7 @@ static int tmp51x_probe(struct i2c_client *client)
- 	if (!data)
- 		return -ENOMEM;
- 
--	if (client->dev.of_node)
--		data->id = (uintptr_t)device_get_match_data(&client->dev);
--	else
--		data->id = i2c_match_id(tmp51x_id, client)->driver_data;
-+	data->info = i2c_get_match_data(client);
- 
- 	ret = tmp51x_configure(dev, data);
- 	if (ret < 0) {
--- 
-2.25.1
+I assume that means you don't have access to the chip. Is this correct ?
+Just asking, because it would be great to have a register dump which
+would enable me to write unit test code.
 
+Thanks,
+Guenter
+
+> 
+> Biju Das (2):
+>   hwmon: tmp513: Convert enum->pointer for data in the match tables
+>   hwmon: tmp513: Add temp_config to struct tmp51x_info
+> 
+>  drivers/hwmon/tmp513.c | 51 ++++++++++++++++++++++--------------------
+>  1 file changed, 27 insertions(+), 24 deletions(-)
+> 
+> -- 
+> 2.25.1
+> 
