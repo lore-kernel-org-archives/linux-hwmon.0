@@ -2,43 +2,43 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79E1FEE49A4
-	for <linux-hwmon@archiver.kernel.org>; Sun, 20 Aug 2023 17:01:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57F8BEE49A5
+	for <linux-hwmon@archiver.kernel.org>; Sun, 20 Aug 2023 17:41:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231508AbjHTRBG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 20 Aug 2023 13:01:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37814 "EHLO
+        id S230184AbjHTRlC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 20 Aug 2023 13:41:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231494AbjHTRBB (ORCPT
+        with ESMTP id S230054AbjHTRlB (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 20 Aug 2023 13:01:01 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2095.outbound.protection.outlook.com [40.107.114.95])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34832128;
-        Sun, 20 Aug 2023 09:57:01 -0700 (PDT)
+        Sun, 20 Aug 2023 13:41:01 -0400
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2122.outbound.protection.outlook.com [40.107.114.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DDDC421B;
+        Sun, 20 Aug 2023 10:36:06 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LiuMXwF555DSkc5LZeQ+ANhhP1Sv9mknHDJglL7gqmTwzZWol1xibrjhaMvoyIAcb78uGKuXShn5lhbyH8u8/wt9mkjtiw44cglA+rltntoJt0MkwUr2wKwduEpdE7iS8RDPlkZ5uEHBBorDB0HDMz68HW5bOlB52wAw6qof6vPECcSFtw24x4rcVK8zJP+Ij8Nlp5iEiYtRZO/82sKfJeISAJHRmNRAr0ndxAa3jt3BsvQ483pC94ElK1DHAMCun2fMcEuMxP6n+Yfko2hvCQsfx/Pf1fSXj1MxVtqyqbpeFbfZPdqIof2c/DE0uxCy4C6j6XXldKGZlxC/3/teHw==
+ b=fub3Xa2P6LoKT5Sb3xlT9y1t29sjdlX1tPJfsffk0yFudbsgIfKIvGHcq2g+ad7yGGiJaFYGPgkydcBAT3Hg8a0rou+qLhPTsu2JWncj+A2IYD1ygEGlz2ehl6CLY7qM6A2NwVF2cQPkh1VirFMOXcAtPo19BjbhWVk7vGEuFGd4/b/vO/V4Ti7VOUiisAnk5dNGtbXAjzRCSA8yms8TCs4MEPq4zUI1qjDejizbYB8gmTduuy8R1rY4yaM2JUmeSd6KgV5kiKsv71nQk6Sqcx1j7XmvIlHRnX8vLyjc24bW1hlc9P85SI0A4C5UdsTpM3rBLjxxpxSZDRbYpC4Puw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qNPhvoFWVYlqUXQoSSf9DSqpwirfICTeeckI/X34fvw=;
- b=YHZS0Cc1qeb7M8N796PePP8l6YbUB2DDTFiyhwyTpe74qWZHDgScSkga9XrtPvkZipX/dsPhkDmsSXu+e6RcdKEkU9ujCoXC2CUymESQTHuAzLUqkkah6WSSUdunPQZGER/H18vJn9Aue6TcI8wdxGdCwtwV0tk2RlD3zJ0VZ2O5RGuI8bx9s7qiHMRwYGEAE6+xtVs+Lzd8kuVh0XyBioL7uaFSaw/23yjyrouYeg0xvXxjgSsRk8TnBe9F55pAUO4U4tGHfib+4VNNSy8driQ2a7yifPMCIy0hn1IcULqSr7yYpfwhQbyKWZVC4id3PrS2kebqzaKaC8pmpIiT8g==
+ bh=YP5KANZZVYHNZqvcy1AZrmkimKiEy2Zf+zUZJRSCL+I=;
+ b=MEe20fweC83p0bqsI7X9nB7etYxRfx+wAvfZY9HFN6f7UkUhHNhYNnIgFfVr6h4G0UoDM2a1FyuHzV3Ym5EkZzrqdMhjih5alPp4W/CHy1O2oa/wSNw5L8ZPh5DY+n4vagke6sxq1wnhNitmxhybKblpolX1rDIlIUOkqrSy/vG3SzyVYmvG6SbVjs5+FqwJXNE1JMfcDcr4ICfAD+DI1EUoWx7uSbcUbuszf3Q/6mIlIOs45k1pN4Q6s6BWzHphWyUo7uitIYN01BHDfnQR0tpqCWL1/sTWY3Cw0GagzvG4EIoqnjxvgw31CvAA5R/QOxX0cZpSbjHYLHyXtJ4cvA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
  header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qNPhvoFWVYlqUXQoSSf9DSqpwirfICTeeckI/X34fvw=;
- b=A+OMPiys7jmGL/3hdw1sMe/R7CgVW6x80cOvENjVH7sO+rsGthx+oAs3ONZl6vLZxFXsoVivm+zXwPPoUMjscfj6gK8HW1igcxq0gTfQjYxREyB1WUlUXkrvguG2FQLrUyTy+mndH0BQIFdOiWGAp+t2/35ngrlNk9xLf+lOUcM=
+ bh=YP5KANZZVYHNZqvcy1AZrmkimKiEy2Zf+zUZJRSCL+I=;
+ b=R4x0FMArM/BQojX7/WPlBb5MwSGk/HD053c255Yj6pJYtMZq8l2J8+WdLXYojO3PuYqXtElDbToZdJOGlt4Ljne54eVJyzhLht7O/xPgM5+1il/Aicm9SlcEpMGcMSn5fyqV5BUGW1ETyYmf7F43fKXTWPixBFyHcPPqmlEwZMk=
 Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by TYVPR01MB10782.jpnprd01.prod.outlook.com (2603:1096:400:2af::7) with
+ by TYBPR01MB5567.jpnprd01.prod.outlook.com (2603:1096:404:802c::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.20; Sun, 20 Aug
- 2023 16:56:56 +0000
+ 2023 17:36:02 +0000
 Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
  ([fe80::2168:623e:e186:4cf0]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
  ([fe80::2168:623e:e186:4cf0%7]) with mapi id 15.20.6699.020; Sun, 20 Aug 2023
- 16:56:56 +0000
+ 17:36:02 +0000
 From:   Biju Das <biju.das.jz@bp.renesas.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 CC:     Eric Tremblay <etremblay@distech-controls.com>,
@@ -54,14 +54,15 @@ Subject: RE: [PATCH 0/2] Convert enum->pointer for data in the tmp51x match
  tables
 Thread-Topic: [PATCH 0/2] Convert enum->pointer for data in the tmp51x match
  tables
-Thread-Index: AQHZ02S7TE7/pX8dqUyN+2Y9gszHrq/zN4GAgAAK7oCAABQ2AIAAC5Qg
-Date:   Sun, 20 Aug 2023 16:56:56 +0000
-Message-ID: <OS0PR01MB5922C02D0984F36C8CDE98888619A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+Thread-Index: AQHZ02S7TE7/pX8dqUyN+2Y9gszHrq/zN4GAgAAK7oCAABQ2AIAAC5QggAAPnfA=
+Date:   Sun, 20 Aug 2023 17:36:02 +0000
+Message-ID: <OS0PR01MB5922A79C02FF9D934767307E8619A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
 References: <20230820124910.71526-1-biju.das.jz@bp.renesas.com>
  <ce30e9ad-67e8-4dfb-93f9-e9a6a89d6bbe@roeck-us.net>
  <OS0PR01MB592225A290451B07E5BA42698619A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
  <ea0eccc0-a29f-41e4-9049-a1a13f8b16f1@roeck-us.net>
-In-Reply-To: <ea0eccc0-a29f-41e4-9049-a1a13f8b16f1@roeck-us.net>
+ <OS0PR01MB5922C02D0984F36C8CDE98888619A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+In-Reply-To: <OS0PR01MB5922C02D0984F36C8CDE98888619A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
 Accept-Language: en-GB, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -69,223 +70,103 @@ X-MS-TNEF-Correlator:
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=bp.renesas.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TYVPR01MB10782:EE_
-x-ms-office365-filtering-correlation-id: 7f591d08-8434-43a4-2b4a-08dba19e7651
+x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TYBPR01MB5567:EE_
+x-ms-office365-filtering-correlation-id: 030c6c5b-de81-4dc2-7a2a-08dba1a3ec65
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: rpluD3YNdZ8Joij7vCx00n/1IZCIJnbYIQ6cW/zbW2Zz7xEjEiVBy61g3GZj+OuGMMiqr3FzhIB8j8yY72cyrqb+E/gdav479MLZhGv1MKhRZEozTd5TTf0XMJCl4LrVK1TygVs2UbQBqOSpKXacV6506MR3iFCDdSfuNTL5SfF7JpujoyQar+zHlMWw3dZXpY52htwPLErvYsyUyPCQyUvS0NPfPwVFcmZcuTCi7sO9aWYidHD3JIFFybSOIix+390eHpw4orYRq3iTzXgzzMJ6FNW2n73v85p2T+ENe91c2epeaYO/rwf/owbxhrltz9o1oVXTutD5Z0uQCL9DQWaAQBpYaa7F+qE7Ot1F/3ZeUjdKGVVFuiS3k24AvXzidZy3Tv3ojOMx59FdeuHqalPcRotPiQ7IsNpqpep8BSD7rJK0hv59HFT2o+fq2EZyuMW1ZuSl9dFmzE3G5gYC4IWyrQ3kx3ndvxsNKYd9JzsCxg8aj1zPrgFhbHDy5PYOqYOQ304zidDUqY4JaiQ5bBV7zeMQg+A6X5jNiauX/jE6w4zWpFuMfs+zWcLkRdYKRqksKFT6Z3uftzKCNEeL6EM6ASPxfYdfaAY/j6pOERUOhSavfLvSyk1BHN3E6LGq
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(376002)(396003)(366004)(136003)(346002)(451199024)(1800799009)(186009)(86362001)(76116006)(64756008)(5660300002)(33656002)(41300700001)(316002)(2906002)(66946007)(6916009)(66556008)(54906003)(66446008)(66476007)(8936002)(4326008)(52536014)(8676002)(478600001)(71200400001)(9686003)(38100700002)(38070700005)(7696005)(6506007)(122000001)(26005)(83380400001)(55016003);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: JWTI7rGb9kEubNgS1hN6RP7YDZEYZzaeNYCIQcg/ZrhmlJWKL/+kF9WuEgu5KkiKzZK6Ejiav9FR7uonqYl8hCMafqQ0bQaDCBRYcZU3hPPyFPVa071a0M8Hh8rwP1pfXvjMiVZD3KhJ+lcYdq78STO8NeKSl1eyQqoHAjPyKo6Af9EpFFBKFjoIToEJLJmVHBdaouwNyUK/CIbc0BVyIQiEqs+Fgllw53+uf3eLtoz8elIfOa6dtivOYanbajf70cAiEMouPOM53ULVld2UrAa3CPM0VBb1qN8jVPGQ7n4vkBl8vvmvYOFLNp1UnlAE2XKVz13fVPWUkHmTmlQbqgjXG+QGaBWN7Mrk0+x6Fk1LqjPYKjdNmDT6o9QauMTYL99+bZjvVPAMmAaCHD0oAoTMgf+M2KjfPLtLDdLP6wa4E+CkLPh6rx6T9ZaOnXPFmR5+vUtAQD90AvYe6QvT/IhgRr0xVF0/aDCPxuC/fHKFmOHYf4mc/5mL9BtCiOQId7BYX2HiWHbaVNDU10XRkk9ee58b+ut7tY2Ahv6OG7Y6yIw3KUq9/A3ClEjz+4w+mS/k4amcBv1Bue762XH4AAKfBml1WZhpoDYBwOYmC0ac54n0EWXewlVsQByRYE13
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(376002)(396003)(366004)(136003)(346002)(451199024)(1800799009)(186009)(86362001)(76116006)(64756008)(5660300002)(33656002)(41300700001)(316002)(2906002)(66946007)(6916009)(66556008)(54906003)(66446008)(66476007)(8936002)(4326008)(52536014)(8676002)(478600001)(71200400001)(9686003)(38100700002)(38070700005)(7696005)(6506007)(122000001)(26005)(2940100002)(83380400001)(55016003);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Y1wAdZ7iCrGhuzyxl5ld5UjO/OmxqJq11AF4W0G+mLwx2PPyJ55SGZ3a0Mu8?=
- =?us-ascii?Q?hEqBH5ECmv1j4OkIZ4GTIgtSU2TUcm+IZte9tt+sODpcJyno+EH92UXLvqfN?=
- =?us-ascii?Q?T33FgiYu+OVevbJEzbZzlZC7nzr9aoAc3rPEifaseZnAR7/plUs0VY3ie+eL?=
- =?us-ascii?Q?+3HiVmAeDlOt2fcL4C3mrRsM55FWCIch1WkcCNbOno/KKznDgfhKuH/wzckT?=
- =?us-ascii?Q?ek9RGL5s3pdk+7MdAUvUtESNfuJRrgPswugewCkZv7CHJmvbib1Jbg/tliGD?=
- =?us-ascii?Q?Kk0UQAgfoV8IdR1w57Pd+FEQIfHzYlYt0Q4meXhFHNrScQ4sx4Do1NdbmQpN?=
- =?us-ascii?Q?PYplalUKFF/59opC+wR4cMBntnuvCLsnOuBzKZVwdexFByS8wkkH3RXC7jvY?=
- =?us-ascii?Q?sI0UpWAvQSUR0ZxjFiLXJTmHCTB3eBw/poed8/xsNb5nq1TBv+L1R2pkgIHq?=
- =?us-ascii?Q?FDhJlfbjzBCkZ6MrmHxmQGyEe9tzrlFz7Y4UnIRQNs9LprEVtJ7mfviMIpb2?=
- =?us-ascii?Q?nMFs9qCYYAmzwaBRYkUo2Rp9o0y5tT2OWb6kXfDFzqK/TtxmPnQ7bZ/imT1l?=
- =?us-ascii?Q?EJ0ope2OfoN6c9arHoShYca1WosvUeeNGerdUgnuABOx0KzB/h3kWXJqu7cS?=
- =?us-ascii?Q?ijxdk6AjApopRWYFOHmGW10+cbkDLoXVP7dChMZqSCDdjxJAYWySVat9w6Ku?=
- =?us-ascii?Q?pJ9vC5fuVUjQ+/Fkgm5Qrp6E15l6HTRqaSJ3wuGPGKdARwd0O61ucoBh72H6?=
- =?us-ascii?Q?cicQmMVEQ7Ax0D+3wmADafx5VJdmUsT40nurfoHmGMT9usPD8tgoLvjaexZY?=
- =?us-ascii?Q?/x8N81Ggq5II/E928yjW5OFUAij8fT3m6JpIqzz18plZAS43Ab4Htofm1NWH?=
- =?us-ascii?Q?pcEkx1HB2BPEJFNUksZn2Yelt+B9TE4SKNusFSkMqlPN7aG589gx37xddpJk?=
- =?us-ascii?Q?8cqy8NTsckwN1ur6RY8sAesxfMF1rmpCCBPG8EXeOJezGfOR4qFC5PNREDiM?=
- =?us-ascii?Q?HUCyZRJx+imS0rSGGjqhA4s4BEdkKLMi+f4LL7hFRkNwlg/wK1iplMYrlUIK?=
- =?us-ascii?Q?H5LnsIIWflgHpB2zBIzQX5GxNGzZjJoiHQQltZnJmlifeQ94+6ivdGpMcqQc?=
- =?us-ascii?Q?j+cpG7L2WSqZbEmfwyDeTRQ18oJTrVr9YBd5R9G/Pk+Qu9+TDBQpcY8Vt7Kh?=
- =?us-ascii?Q?EB9AWsy90vuUZuLr4k0GERpC8vSCM2ypagdKiS1LqcG7WYFm2S7O48FyV+0n?=
- =?us-ascii?Q?G1IwkKMsBH1gGd86sFGei/aS+vKRRVqCVefLX0hb+rQJFkZ086Y7GRzmohBx?=
- =?us-ascii?Q?qLBvehpLk4e9KR138UmcZt5QD4uKse717ns7R9y3ToVGCfnb+Ror4Gpl1Z1B?=
- =?us-ascii?Q?8WqzQsy+6maiwhRwn7YWJYsIazLJpSByCb+AWUA6mrP3EZgGJeptuU5fedGn?=
- =?us-ascii?Q?6Uglu+Uc3BexrXu6tWJyXLbu/JzWOoRfYv9Wwa4iZCa6H0u94oRsxjHN9r55?=
- =?us-ascii?Q?yFgOcBJqiftfmte6kqEuE4B9/SXV89vEfPCucUP4iEbl/WhFQSHTmfa+vDiT?=
- =?us-ascii?Q?k4xKFScApTkPKB11JBWfZEJWF6sNMDAY5CmqYKhA?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?nMWyixJ/qKKsYy8yhaHjGPcWHzoAUDtluJuD23b0ZCyQKWhIiM0Wum7iYWPy?=
+ =?us-ascii?Q?FKIjCqkbuV0b8Xkq4Me4zY22M3f9FAP1mJHb7tzCBg6nqqDvSpfNGijupvcM?=
+ =?us-ascii?Q?7MSNqagADtCLnqs5OBcJHGXxsSrM7c0NzPacqOs/MkpBN9oZmdC+jkupxW1H?=
+ =?us-ascii?Q?6oyQf6B8qyz9a9mGTTi1hhMVuKARU82ytt3D1NWDWyM3doRmZK5LlcZOC8Ze?=
+ =?us-ascii?Q?ylHqM8/sX5/nO8JrRHioc+p9aRGKzokurGPluvnO1DCg0/WBj1C+qZnXJpMf?=
+ =?us-ascii?Q?lLakactHts7bQZR4lhpwMvF/aGbBnYJFpZa5JEg/bfLoNRca72bzybSXzu4d?=
+ =?us-ascii?Q?RtdNTX7+v6+BvZzJfmFMiJ1Ipp4qlLwnAbYXdca2DU/kmqoTgukrI2TvHnTj?=
+ =?us-ascii?Q?hsHxaglXyO+fsdNnI+Cipt96MkHzOz03P+JzifTr9TT2G718lVvYAt5WNc/B?=
+ =?us-ascii?Q?PEFZrYXph9G8Li1dijrSqsKg3gDTHNjKqlWWtznpFZ34mzxLsLUtWcUydSKZ?=
+ =?us-ascii?Q?i8xiWZIwDxuEYI3zDwIpi0TTQrJsWWrjljkrV+FX4Y51HHuwn5zONgcJCjNx?=
+ =?us-ascii?Q?miFL5ThbcvoaQHi1QlOKMLWKsTlD4rwOu+V/3mNBcUiuhufWge86etCpZTFy?=
+ =?us-ascii?Q?C7n2n5WlIp12BwpV5NLf6WlwToeNO9CoVk+kzWAJkdjKM3GT+R15YVUY4dBz?=
+ =?us-ascii?Q?j+k4RbAoNwyI0xPB/j7bUCCf+Czws/8nL6MSlnfF7vqTUJY2VUA875CwRraQ?=
+ =?us-ascii?Q?eQbE278eoPJI1nDLcFn2XN6i0UeHAlpglKEkiBAsX9oTEW998GU4CkB/5gYd?=
+ =?us-ascii?Q?tWSmkbZ+9MMlxjLEl9HuUhO+juj978TvoQoPl8IsLtjFD45XWctPL5NFXxZi?=
+ =?us-ascii?Q?YazZMsBuIm8xHLU0xxRRW+OGWq2sPvFb7Su9rjb0Bs+QQWA2fbYI87nmP8zl?=
+ =?us-ascii?Q?/93Iru9sJY/Ugq0mDPePaIjr6xZc7eDQjjR59HQzktAXKnbHraxZxvAxbcLY?=
+ =?us-ascii?Q?2Jq/NGaK3PYTn8xNA1tyd5br/NWxshmG9lKvsLAGK6TsrYFp9VODtEZAqHy3?=
+ =?us-ascii?Q?kIdDS8cUpysafr5vGTYb1R+bvwP+bnxv4X3YOIuJ1TFzyNAKvpNF75yX4xkP?=
+ =?us-ascii?Q?Np65KHqSN/GOiBPbew71Mv5an4Z6RRGemz53uYgYKYPuQzyi3R3BLg0kjWcK?=
+ =?us-ascii?Q?D7tdF8qjITSLrhBHcQptMx025ODvTInOwFz77ex6W23WiKxfEc2maOlohjZ8?=
+ =?us-ascii?Q?fsqPZ10k1/ZATUb2Z3EI1JrFRKUeiGivLrpGl6u/c70t4NsRuGy4fYFqFTKX?=
+ =?us-ascii?Q?bUu7Uu3v5pZs6S7UyyAnhCfBGnGYpuTzjc1832/WlorJnSR830W16CtUOnxm?=
+ =?us-ascii?Q?1RxVe0oulUn2VtMdiwnaFmzJE2cqjnxJrq78ZHnbA142HuCzhbtbd5zRFq7i?=
+ =?us-ascii?Q?nrP8OdjcY3xtp+sq/GEWX+Ds3CWdPGKgF22L3pfsF145Wsm7MoOOGBomuYnr?=
+ =?us-ascii?Q?Y2jB8TjiMPKPTprCC+iN5oIXlztd6nEo2wBY2WtR72n9P6oweRG1cyc4QeNx?=
+ =?us-ascii?Q?+081Zbmzdgy7IgXkjPpqbhCeth38IlYEuclyGgfU?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: bp.renesas.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7f591d08-8434-43a4-2b4a-08dba19e7651
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Aug 2023 16:56:56.4378
+X-MS-Exchange-CrossTenant-Network-Message-Id: 030c6c5b-de81-4dc2-7a2a-08dba1a3ec65
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Aug 2023 17:36:02.0714
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 3t1tvc4F7YP5eU4tYf3Fky0lLmgxMgzMlL69jWZZXEMpy9ZAIkAend+YFULsURoULVgIHBF7TLa43bYevT/39uGTDhqCrm02iCLKHlFDzV0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYVPR01MB10782
+X-MS-Exchange-CrossTenant-userprincipalname: TVAB0TqFWNKnxmo8u8PuDdeUTGbDE0P1RnSmgCvWcl5LcNZXOLpsgEyn54r0XVAzrv5ZfNOd+mcAnCFddS/6qOBcdoM9rzsfBaZ8TqMcrQ4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYBPR01MB5567
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 Hi Guenter Roeck,
 
-Thanks for the feedback.
-
-> Subject: Re: [PATCH 0/2] Convert enum->pointer for data in the tmp51x mat=
+> Subject: RE: [PATCH 0/2] Convert enum->pointer for data in the tmp51x mat=
 ch
 > tables
 >=20
-> On Sun, Aug 20, 2023 at 02:55:08PM +0000, Biju Das wrote:
-> > Hi Guenter Roeck,
-> >
-> > Thanks for the feedback.
-> >
-> > > Subject: Re: [PATCH 0/2] Convert enum->pointer for data in the
-> > > tmp51x match tables
-> > >
-> > > On Sun, Aug 20, 2023 at 01:49:08PM +0100, Biju Das wrote:
-> > > > Convert enum->pointer for data in the match tables, so that
-> > > > device_get_match_data() can do match against OF/ACPI/I2C tables,
-> > > > once i2c bus type match support added to it.
-> > > >
-> > >
-> > > I don't see why this would be necessary. You don't explain why the
-> > > current implementation would no longer work. Various other drivers
-> > > implement the same mechanism as this driver, i.e., type cast the
-> > > return value of
-> > > device_get_match_data() to a non-pointer. I'd argue that changing
-> > > the functionality of device_get_match_data() such that this is no
-> > > longer possible would be inherently flawed and would introduce
-> > > unnecessary complexity to drivers using that mechanism today. If
-> > > device_get_match_data() is enhanced to include the functionality of
-> > > i2c_match_id(), it should be done in a way that doesn't mandate such
-> > > an API change.
-> >
-> > Currently nothing is broken. There is a helper function to do
-> > OF/ACPI/ID match(i2c_get_match_data). But Dmitry proposed to extend
-> > device_get_match_data() to buses  so that we can get rid of
-> > i2c_get_match_data  and future it can be extended to SPI aswell. see [1=
-].
-> >
-> > While doing this Jonathan found an issue where it won't work if OF
-> > table is using pointer and ID is using enum in the match data.
-> Moreover,the proposed API returns NULL for non-match.
+> Hi Guenter Roeck,
 >=20
-> I think that is may be problem because many drivers don't have a value in
-> the driver_data field. Maybe that doesn't matter because such drivers wou=
-ld
-> normally not call device_get_match_data() or i2c_match_id(),
-
-Yes, that is correct.
-
- but it would
-> create some ambiguity because those functions would no longer work for al=
-l
-> cases.
+> Thanks for the feedback.
 >=20
+> > Subject: Re: [PATCH 0/2] Convert enum->pointer for data in the tmp51x
+> > match tables
 > >
-> > So Andy proposed to convert the valid enums to non-zero or use a pointe=
-r.
+> > Either case, I would want to keep temp_config and the number of
+> > channels in struct tmp51x_data to avoid repeated double dereferences
+> > and because temp_config could change (resistance correction
+> > enabled/disabled should be a devicetree property, conversion rate as
+> > well as channel enable should be sysfs attributes, and channel
+> > enable/disable should also be devicetree properties). The value could
+> > also be used to support suspend/resume in the driver if someone wants t=
+o
+> add that at some point.
 > >
-> There are _lots_ of drivers where the chip ID is in driver_data and start=
-s
-> with 0, or with the field not used. It is not my call to make, but I real=
-ly
-> think that demanding that this field is always !=3D 0 is just wrong.
-
-For hwmon subsystem, this is the only i2c client driver using device_match_=
-data(), other hwmon drivers are using of_device_get_match_data() and ID loo=
-kup.
-
+> > In this context,
+> > 		if (data->id =3D=3D tmp512 && channel =3D=3D 4)
+> > 			return 0;
+> > is wrong because there are 3 or 4 channels, meaning the channel
+> > numbers are
+> > 0..3 and there is no channel 4. This should be "channel =3D=3D 3"
+> > to disable the 4th channel on tmp512. Interesting that no one
+> > (including me ;-) noticed this.
 >=20
-> > In this case, pointer makes sense as the hardware differences between
-> > the chips are compared against type rather than using feature and
-> > driver data. In the second patch, I just used a driver data to avoid
-> > one such case.
-> >
-> > [1]
-> >
->=20
-> The suggested changes do make some sense independently of the API change,
-> but not as suggested. I'd be inclined to accept the changes if the number
-> of channels is kept in the configuration data. With that, the chip ID wou=
-ld
-> no longer be needed. TMP513_TEMP_CONFIG_DEFAULT and
-> TMP512_TEMP_CONFIG_DEFAULT are not really needed in the configuration dat=
-a
-> since the value can be derived from the number of channels instead of the
-> chip type.
+> If I am correct, as per above, only max number channels supported by the
+> chip can go to device data. That is the only HW difference between these =
+2
+> chips and other chip specific data can be derived from this.
 
-Yep, instead of using chip type for HW differences,
-we can use a macro to get default value based on the number of channels sup=
-ported by the chip.
+I guess, the below initial values for temp_config
+is chip specific apart from the number of supported channels
+as we won't be able to derive from number of channels??
 
->=20
-> According to what you said earlier, that suggests that the only necessary
-> change would be to report the number of channels in driver_data / data
-> because that would never be 0.
-
-OK. Since the value is less than 16, there won't be any issue.
-device_get_match_data() first look for match against firmware
-nodes, and will fallback to ID lookup().
-
->=20
-> Either case, I would want to keep temp_config and the number of channels =
-in
-> struct tmp51x_data to avoid repeated double dereferences and because
-> temp_config could change (resistance correction enabled/disabled should b=
-e
-> a devicetree property, conversion rate as well as channel enable should b=
-e
-> sysfs attributes, and channel enable/disable should also be devicetree
-> properties). The value could also be used to support suspend/resume in th=
-e
-> driver if someone wants to add that at some point.
->=20
-> In this context,
-> 		if (data->id =3D=3D tmp512 && channel =3D=3D 4)
-> 			return 0;
-> is wrong because there are 3 or 4 channels, meaning the channel numbers a=
-re
-> 0..3 and there is no channel 4. This should be "channel =3D=3D 3"
-> to disable the 4th channel on tmp512. Interesting that no one (including
-> me ;-) noticed this.
-
-If I am correct, as per above, only max number channels
-supported by the chip can go to device data. That is
-the only HW difference between these 2 chips and other
-chip specific data can be derived from this.
+#define TMP512_TEMP_CONFIG_DEFAULT	0xBF80
+#define TMP513_TEMP_CONFIG_DEFAULT	0xFF80
 
 Cheers,
 Biju
 
->=20
-> > >
-> > > > This patch series is only compile tested.
-> > >
-> > > I assume that means you don't have access to the chip. Is this
-> correct ?
-> > > Just asking, because it would be great to have a register dump which
-> > > would enable me to write unit test code.
-> >
-> > That is correct, I don't have access to the chip.
-> >
->=20
-> Too bad. Eric, if you are still around, would it be possible to send me
-> register dumps ?
->=20
-> Thanks,
-> Guenter
->=20
->=20
-> > Cheers,
-> > Biju
-> >
-> > >
-> > > >
-> > > > Biju Das (2):
-> > > >   hwmon: tmp513: Convert enum->pointer for data in the match tables
-> > > >   hwmon: tmp513: Add temp_config to struct tmp51x_info
-> > > >
-> > > >  drivers/hwmon/tmp513.c | 51
-> > > > ++++++++++++++++++++++--------------------
-> > > >  1 file changed, 27 insertions(+), 24 deletions(-)
-> > > >
-> > > > --
-> > > > 2.25.1
-> > > >
