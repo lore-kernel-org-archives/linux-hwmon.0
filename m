@@ -2,97 +2,131 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C9ADEE49AA
-	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Aug 2023 11:54:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87F73EE4996
+	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Aug 2023 13:00:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232122AbjHULyf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 21 Aug 2023 07:54:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36006 "EHLO
+        id S235110AbjHUNAC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 21 Aug 2023 09:00:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233827AbjHULyf (ORCPT
+        with ESMTP id S230486AbjHUNAC (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 21 Aug 2023 07:54:35 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6EF7B4;
-        Mon, 21 Aug 2023 04:54:33 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3fe1e1142caso32295915e9.0;
-        Mon, 21 Aug 2023 04:54:33 -0700 (PDT)
+        Mon, 21 Aug 2023 09:00:02 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A4BB1;
+        Mon, 21 Aug 2023 05:59:59 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-688787570ccso2121559b3a.2;
+        Mon, 21 Aug 2023 05:59:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692618872; x=1693223672;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vfo3UfcHq3qTP7xq69y2LHXVdBJZiALzOur1Qe3EZWs=;
-        b=ite4L3075LUlwoSK5AcOoalNM78E5yOfOaQyHG8MLmnRh0QZxJlDHHZ3RBIVku0yyI
-         MIs3YVK6XFWs+VYTTCKSNJgcKUZADgXrstvP4FjAPuarMibmgxNNmDf+IeXXIOsOi7DN
-         SURkZcvD+MIWCEGDCl6zg43UrkHq1WoPZJFihcCaq0w0wwHJT9eb8FYD/nY+EJpST+DM
-         9invXp8Scp5UO1qJIAg4XO5FRASVb2BfYNR1/7TFP17lk5d1Xc2WiMm8MU0S4EphD5A0
-         odzip3a2/iHqdoEheNx6pWDg7Db2kvEZdSXTYrQMgQYsuRUaTWT/nIHMUiP5d/Pcjicm
-         1pdw==
+        d=gmail.com; s=20221208; t=1692622799; x=1693227599;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OOeP6KP3gJcc/NYFebYI51QAqR1tb+q4pIiKU1Jf+9A=;
+        b=HqeNSgWZGJPyRSy4VC5OWM/3OqsVCjPg1qn6Cj3jkQ2xHVgro/ZHmr4DqNSWzawjAT
+         VIJFrOCFYIMyhU1ZiWS3AqVZQipTlmu9ByeOG9xcMtJR6v/FNIRJgxDyh612vOHIIzyX
+         yztisdG6vt5MZB0LMWOY89faAt1vB9eNjU3EoXZ3h3TKXwHLH4mTeSVwuJj8HyIDU1W2
+         pCZkPZdpNj1FZxDRLPmsUOzfNrfPKBvXyw1KIztU/eREvHtREW2ih1YlB3KhUl/vas9s
+         EwdL8xNH0l8VgEWPYHuOXvMGlj/Urd/c/p6++Y44spV8+RXjJ6Q/vpU6ATUnvhdK3A9r
+         n2ZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692618872; x=1693223672;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1692622799; x=1693227599;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vfo3UfcHq3qTP7xq69y2LHXVdBJZiALzOur1Qe3EZWs=;
-        b=iv/Rtl9kPneFT7u7/W4/z+Rb/RJUQic81d60tnVq1D3SvlIiBFLjDVaWjwZ4/pjcwm
-         8f9pJ97IfPIxMvVRQpKdA+glsmtqBSy1y/tomGwkpjKohsxDWZqMZ9fFwAaOmM49QYlG
-         N3GdyDeqCCIjhEJk6PMTvj5eA2DWXiLwC2pZsbJGccYOHNacxuuwbb+1Yc9GwNDM7JUf
-         wzC23Es95Ml0j9/ErJTJ01ogtk9h12+Ma6+B72E1bV+/CaFXVYeYuc1302v5kRxI7xKa
-         j21DgttzAfA3BN7H+qGM4gF2VKN2Jf/q/w8fx5bbt5wn9EgpKswTUj3O79npLfPrrosb
-         +JeQ==
-X-Gm-Message-State: AOJu0YwdRPbn7jyitjN0sE6h3biISIED/P2AkMaAfiUOXkrYbNJMSKOm
-        p6pGKV8vPcTZ0K9m4qOyohBgQyln6weJMQ==
-X-Google-Smtp-Source: AGHT+IECqc8E3xfu3L0n3UoU9QVvP6Ck/Iu6AMAOmYMP2UfNF+5gUwvJbhOPhDNm8RenOMiCt9EUag==
-X-Received: by 2002:a7b:cbc8:0:b0:3fe:e1e:5041 with SMTP id n8-20020a7bcbc8000000b003fe0e1e5041mr5045789wmi.32.1692618872378;
-        Mon, 21 Aug 2023 04:54:32 -0700 (PDT)
-Received: from caracal.museclub.art (p200300cf9f1e5c0018f3132f38fbfb3b.dip0.t-ipconnect.de. [2003:cf:9f1e:5c00:18f3:132f:38fb:fb3b])
-        by smtp.googlemail.com with ESMTPSA id w3-20020a05600c014300b003fe0a0e03fcsm15954649wmm.12.2023.08.21.04.54.31
+        bh=OOeP6KP3gJcc/NYFebYI51QAqR1tb+q4pIiKU1Jf+9A=;
+        b=b7QrzuXwJzVfOttH/RaDtPdXZ555QF+T8qTXsuDd2K827TUrCu3HzFHmzt8CT0Wz0t
+         n2Ilah81BJb9UWQGQOCHkHkpcs4IQGk8FiOcSgGPGg9S2oSJEot5p/kjklSYrwi5bOlt
+         nMGcdMnmj1Q3cGnoZNXSPWKCRSiU0uWFihB2+PxhkNX9g/eYq4fbCwCa+lkIqzHiwF5X
+         3wsn7TfHuj2anjiqp/lRrfAW+JM+5QnPylDHO1XMq63miXfcy8MymEzjXv4u02yEGg4N
+         0lGK1t1plnbhb+I4vj9rZ7/UdPmJCmJpIAtzJTOgpojDpnDjNsuc1IVspXslrSO2ujBW
+         ZX0Q==
+X-Gm-Message-State: AOJu0YwwZPQ7VMeUphZh5TAyGaVCBTsFj5VmVx74Fkcf//3IxyKhOBKZ
+        NMNapc33lSOlh/1UAk7Qliw=
+X-Google-Smtp-Source: AGHT+IFKWYzPRyG/tL5T+exRXcRMss/VYX5xg4ioRVt8x2TrHFSlmjHsPYjwBaGJlDE6xdQ3S29zlQ==
+X-Received: by 2002:a05:6a00:b8e:b0:68a:530d:a39b with SMTP id g14-20020a056a000b8e00b0068a530da39bmr2082645pfj.8.1692622798943;
+        Mon, 21 Aug 2023 05:59:58 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id fm25-20020a056a002f9900b00682868714fdsm1405891pfb.95.2023.08.21.05.59.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Aug 2023 04:54:31 -0700 (PDT)
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-To:     eugene.shalygin@gmail.com
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Michael Carns <mike@carns.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/1] hwmon: (asus-ec-sensosrs) fix mutex path for X670E Hero
-Date:   Mon, 21 Aug 2023 13:52:35 +0200
-Message-ID: <20230821115418.25733-2-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230821115418.25733-1-eugene.shalygin@gmail.com>
-References: <20230821115418.25733-1-eugene.shalygin@gmail.com>
+        Mon, 21 Aug 2023 05:59:58 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 21 Aug 2023 05:59:57 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Eric Tremblay <etremblay@distech-controls.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>
+Subject: Re: [PATCH 0/2] Convert enum->pointer for data in the tmp51x match
+ tables
+Message-ID: <5392e46f-8174-4c14-96f6-04a61a2ccacc@roeck-us.net>
+References: <20230820124910.71526-1-biju.das.jz@bp.renesas.com>
+ <ce30e9ad-67e8-4dfb-93f9-e9a6a89d6bbe@roeck-us.net>
+ <OS0PR01MB592225A290451B07E5BA42698619A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <ea0eccc0-a29f-41e4-9049-a1a13f8b16f1@roeck-us.net>
+ <ZOMrrrxto6TtJQzt@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZOMrrrxto6TtJQzt@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-A user reported that they observe race condition warning [1] and after
-looking once again into the DSDT source it was found that wrong mutex
-was used.
+On Mon, Aug 21, 2023 at 12:17:34PM +0300, Andy Shevchenko wrote:
+> On Sun, Aug 20, 2023 at 08:55:18AM -0700, Guenter Roeck wrote:
+> > On Sun, Aug 20, 2023 at 02:55:08PM +0000, Biju Das wrote:
+> > > > On Sun, Aug 20, 2023 at 01:49:08PM +0100, Biju Das wrote:
+> 
+> ...
+> 
+> > > While doing this Jonathan found an issue where it won't work if OF table is
+> > > using pointer and ID is using enum in the match data. Moreover,the proposed
+> > > API returns NULL for non-match.
+> > 
+> > I think that is may be problem because many drivers don't have a value
+> > in the driver_data field. Maybe that doesn't matter because such drivers
+> > would normally not call device_get_match_data() or i2c_match_id(),
+> > but it would create some ambiguity because those functions would no
+> > longer work for all cases.
+> 
+> Are you talking here about the cases where 0 / NULL makes things optional?
+> Like when driver data is defined, we use its value, otherwise apply some
+> defaults? If so, where do you see a problem?
+> 
 
-[1] https://github.com/zeule/asus-ec-sensors/issues/43
+The fact that you have to change lots of drivers to make this work should prove
+my point.
 
-Fixes: 790dec13c012 ("hwmon: (asus-ec-sensors) add ROG Crosshair X670E Hero.")
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
----
- drivers/hwmon/asus-ec-sensors.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> > > So Andy proposed to convert the valid enums to non-zero or use a pointer.
+> > > 
+> > There are _lots_ of drivers where the chip ID is in driver_data and starts
+> > with 0, or with the field not used. It is not my call to make, but I really
+> > think that demanding that this field is always != 0 is just wrong.
+> 
+> Those drivers are hackishly abusing OF ID tables. Those, that have _no_ OF ID
+> tables are okay.
 
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index f52a539eb33e..51f9c2db403e 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -340,7 +340,7 @@ static const struct ec_board_info board_info_crosshair_x670e_hero = {
- 	.sensors = SENSOR_TEMP_CPU | SENSOR_TEMP_CPU_PACKAGE |
- 		SENSOR_TEMP_MB | SENSOR_TEMP_VRM |
- 		SENSOR_SET_TEMP_WATER,
--	.mutex_path = ASUS_HW_ACCESS_MUTEX_RMTW_ASMX,
-+	.mutex_path = ACPI_GLOBAL_LOCK_PSEUDO_PATH,
- 	.family = family_amd_600_series,
- };
- 
--- 
-2.41.0
+This is what you are saying. That doesn't make it true. With the same logic
+I could claim that drivers providing a pointer in i2c_device_id would
+hackishly abuse i2c_device_id tables.
 
+Guenter
+
+> 
+> Moreover this approach allows to have the driver data to be const, and keep it
+> that way which now is problematic and in some cases may even be broken (due to
+> wrong assumptions made by drivers). I.o.w. this makes code more robust against
+> the possible mangling of driver data contents at runtime.
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
