@@ -2,111 +2,125 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06B43EE49A8
-	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Aug 2023 09:17:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5975EE49A6
+	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Aug 2023 10:40:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234299AbjHUJRn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 21 Aug 2023 05:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40766 "EHLO
+        id S232086AbjHUKkV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 21 Aug 2023 06:40:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231397AbjHUJRm (ORCPT
+        with ESMTP id S230050AbjHUKkU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 21 Aug 2023 05:17:42 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED21C9;
-        Mon, 21 Aug 2023 02:17:40 -0700 (PDT)
+        Mon, 21 Aug 2023 06:40:20 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C409D9;
+        Mon, 21 Aug 2023 03:40:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692609460; x=1724145460;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hPYdVIS7EEAfOKyVDfo5dggoqfeqmlZB/rwYlbrSeZM=;
-  b=a9XewLUtaSC971tRgbPWfFX46uZ8tyrevqcX/GG7hnEaVtDrDSv6DqQi
-   qXFRTxf8GB8zTz6N0ohbw9MaO9x39AnDOzvaxxyHmgZKsXIvmMwt95shw
-   +JafuPnU04urskC5OIMoawKzvPg3x2JiFx9Jn+xwsWjX5BFAty8pSHr9K
-   +41Df2T77s7LssHZd1iUJIwLpRmkNf6+xWDD5bowqO4SgQLMCi0OLIbeP
-   LNOEuYEcYYPBN/CW+E/Ub7+oBgLpDBTR6Iu7VlHoy2FzXkoczUJvMJpNP
-   ZLNoNnCnVDdKZwipYh1yr54bcYOw58/FMyGcImAdl47hH64ALkjM1oo2x
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10808"; a="353859564"
+  t=1692614419; x=1724150419;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=T3pqH57YeRysEQczHrN7LymfQeIVRRCVLyFCg4RwBgM=;
+  b=fp7y7dUpU631MgHWai5Y3qyxWrhVFuyIMW4ivjBiijk0jGFmdR29MJOQ
+   aMmY66q+0O5weOW+Hvrj3BNJceasxPABG2+gPqGisOC/bBunjhdnnmlxF
+   oUJu/uAy935gaFThedr/WcXjSUvEcU/Ub7SEyKmtSUR+4yzIubZRNMQo8
+   KnCnXrnS1Xc1chQazAEi19bo0NR7xRNoBUG0YD+3I0+82ioJy1nG1JgRh
+   DoqWuZcMfoPCu8ElA3iv5xQv1fmrxP6MThTzEQzItylCD06YxBAW44o0Z
+   yct3+oNmxym4sWsVjKM2Yb0VKAbfXHm3Z3bf77Q6CyOknkDvWKg/WkpyT
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10808"; a="370987904"
 X-IronPort-AV: E=Sophos;i="6.01,189,1684825200"; 
-   d="scan'208";a="353859564"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2023 02:17:39 -0700
+   d="scan'208";a="370987904"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2023 03:40:03 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10808"; a="735788607"
+X-IronPort-AV: E=McAfee;i="6600,9927,10808"; a="729380551"
 X-IronPort-AV: E=Sophos;i="6.01,189,1684825200"; 
-   d="scan'208";a="735788607"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 21 Aug 2023 02:17:36 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qY12U-007JfC-2Y;
-        Mon, 21 Aug 2023 12:17:34 +0300
-Date:   Mon, 21 Aug 2023 12:17:34 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Eric Tremblay <etremblay@distech-controls.com>,
-        Jean Delvare <jdelvare@suse.com>,
+   d="scan'208";a="729380551"
+Received: from nsnaveen-mobl.gar.corp.intel.com ([10.252.54.252])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2023 03:39:57 -0700
+Date:   Mon, 21 Aug 2023 13:39:55 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Huibin Shi <henrys@silicom-usa.com>
+cc:     Henry Shi <henryshi2018@gmail.com>,
+        "hbshi69@hotmail.com" <hbshi69@hotmail.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "markgross@kernel.org" <markgross@kernel.org>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
         "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>
-Subject: Re: [PATCH 0/2] Convert enum->pointer for data in the tmp51x match
- tables
-Message-ID: <ZOMrrrxto6TtJQzt@smile.fi.intel.com>
-References: <20230820124910.71526-1-biju.das.jz@bp.renesas.com>
- <ce30e9ad-67e8-4dfb-93f9-e9a6a89d6bbe@roeck-us.net>
- <OS0PR01MB592225A290451B07E5BA42698619A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <ea0eccc0-a29f-41e4-9049-a1a13f8b16f1@roeck-us.net>
+        "hb_shi2003@yahoo.com" <hb_shi2003@yahoo.com>,
+        Wen Wang <wenw@silicom-usa.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] Add Silicom Platform Driver
+In-Reply-To: <7f537cef-d5cd-4816-a07b-9df27954ef93@roeck-us.net>
+Message-ID: <1ecd7ad-3878-c826-45a5-7123e55d8527@linux.intel.com>
+References: <20230818154341.20553-1-henryshi2018@gmail.com> <8b8b0503-8f8f-4615-97ab-11d2c0e1a960@roeck-us.net> <PA4PR04MB9222910BAC2754A073A70E609A18A@PA4PR04MB9222.eurprd04.prod.outlook.com> <7f537cef-d5cd-4816-a07b-9df27954ef93@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ea0eccc0-a29f-41e4-9049-a1a13f8b16f1@roeck-us.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Aug 20, 2023 at 08:55:18AM -0700, Guenter Roeck wrote:
-> On Sun, Aug 20, 2023 at 02:55:08PM +0000, Biju Das wrote:
-> > > On Sun, Aug 20, 2023 at 01:49:08PM +0100, Biju Das wrote:
+On Sat, 19 Aug 2023, Guenter Roeck wrote:
 
-...
-
-> > While doing this Jonathan found an issue where it won't work if OF table is
-> > using pointer and ID is using enum in the match data. Moreover,the proposed
-> > API returns NULL for non-match.
-> 
-> I think that is may be problem because many drivers don't have a value
-> in the driver_data field. Maybe that doesn't matter because such drivers
-> would normally not call device_get_match_data() or i2c_match_id(),
-> but it would create some ambiguity because those functions would no
-> longer work for all cases.
-
-Are you talking here about the cases where 0 / NULL makes things optional?
-Like when driver data is defined, we use its value, otherwise apply some
-defaults? If so, where do you see a problem?
-
-> > So Andy proposed to convert the valid enums to non-zero or use a pointer.
+> On Sat, Aug 19, 2023 at 02:20:32PM +0000, Huibin Shi wrote:
+> > Hi Guenter,
 > > 
-> There are _lots_ of drivers where the chip ID is in driver_data and starts
-> with 0, or with the field not used. It is not my call to make, but I really
-> think that demanding that this field is always != 0 is just wrong.
+> > Thanks for your comments. Probably, I should not resubmit patch too rushed. I will add version number to subject and change log in cover letter for next resubmission.
+> > 
+> > See my comments below. Please let me know whether you accept my explanation.
+> > 
+> > Henry
+> > -----Original Message-----
+> [ ... ]
+> 
+> > > +
+> > > +static u32 temp_get(void)
+> > > +{
+> > > +     u32 reg;
+> > > +
+> > > +     mutex_lock(&mec_io_mutex);
+> > > +     /* Select memory region */
+> > > +     outb(IO_REG_BANK, EC_ADDR_MSB);
+> > > +     outb(0xc, EC_ADDR_LSB);
+> > > +     /* Get current data from the address */
+> > > +     reg = inl(MEC_DATA(DEFAULT_CHAN_LO));
+> > > +     mutex_unlock(&mec_io_mutex);
+> > > +
+> > > +     return (reg >> 16) / 10;
+> > 
+> > The hwmon ABI expects temperatures to be reported in milli-degrees C.
+> > The above sets the maximum temperature to 65,535 / 10 = 6,553 milli-degrees or 6.553 degrees C. It is very unlikely that this is correct.
+> > 
+> > Again, I commented on this before.
+> > 
+> > Henry: this is due to an internal implementation of MIcor-controller firmware, instead of putting real temperature to the register, it put (real temperature * 10 ) to the register. So, in order to report correct temperature to user space application, the read value is divided by 10, then report to user space. 
+> > 
+> > Please let me know if you accept this. If not, I can change the code, but let user space application to do adjustment. 
+> 
+> No, I do not accept this. I do not believe that the maximum temperature
+> reported by the microcontroller is 6.553 degrees C. I suspect it reports
+> 10th of degrees C. In that case, the number reported should be multiplied
+> by 100 to make it milli-degrees C as expected by the ABI.
 
-Those drivers are hackishly abusing OF ID tables. Those, that have _no_ OF ID
-tables are okay.
+...And for that multiplication, please use the constant defined in 
+include/linux/units.h instead of a literal.
 
-Moreover this approach allows to have the driver data to be const, and keep it
-that way which now is problematic and in some cases may even be broken (due to
-wrong assumptions made by drivers). I.o.w. this makes code more robust against
-the possible mangling of driver data contents at runtime.
+
+And please do version the patches properly, it's getting messy to track 
+which version is which (if something is new or not). If you use git 
+format-patch, it has an argument that can be used to add the version, no 
+need to add it by hand.
+
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+ i.
 
