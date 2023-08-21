@@ -2,131 +2,105 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87F73EE4996
-	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Aug 2023 13:00:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8598EEE4993
+	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Aug 2023 13:06:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235110AbjHUNAC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 21 Aug 2023 09:00:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49334 "EHLO
+        id S235183AbjHUNGJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 21 Aug 2023 09:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230486AbjHUNAC (ORCPT
+        with ESMTP id S235213AbjHUNGI (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 21 Aug 2023 09:00:02 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A4BB1;
-        Mon, 21 Aug 2023 05:59:59 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-688787570ccso2121559b3a.2;
-        Mon, 21 Aug 2023 05:59:59 -0700 (PDT)
+        Mon, 21 Aug 2023 09:06:08 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED54D1;
+        Mon, 21 Aug 2023 06:06:03 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1bdbf10333bso25769025ad.1;
+        Mon, 21 Aug 2023 06:06:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692622799; x=1693227599;
+        d=gmail.com; s=20221208; t=1692623163; x=1693227963;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=OOeP6KP3gJcc/NYFebYI51QAqR1tb+q4pIiKU1Jf+9A=;
-        b=HqeNSgWZGJPyRSy4VC5OWM/3OqsVCjPg1qn6Cj3jkQ2xHVgro/ZHmr4DqNSWzawjAT
-         VIJFrOCFYIMyhU1ZiWS3AqVZQipTlmu9ByeOG9xcMtJR6v/FNIRJgxDyh612vOHIIzyX
-         yztisdG6vt5MZB0LMWOY89faAt1vB9eNjU3EoXZ3h3TKXwHLH4mTeSVwuJj8HyIDU1W2
-         pCZkPZdpNj1FZxDRLPmsUOzfNrfPKBvXyw1KIztU/eREvHtREW2ih1YlB3KhUl/vas9s
-         EwdL8xNH0l8VgEWPYHuOXvMGlj/Urd/c/p6++Y44spV8+RXjJ6Q/vpU6ATUnvhdK3A9r
-         n2ZA==
+        bh=Wm3czYHGgkqpz3RmJdUIA+WpCMH7PJFnjwMwuvDzHjA=;
+        b=nt0EQQ84VcMJBWCNbXHX2qE8+sRfg6Ivwejnxrn8lW9Cv5HfV/W00yEBFxqn3TNC22
+         C0B7aUnL3Djbb0GNMah5fwkSvPDXGwQTM5sa6Ted9XEF9DxAaJr8WsqFNHt4Kg39hAY7
+         LJbo76pyMM9lIeZX2ifriNiJjqPSbQhM2KR0EjU1hFSyfpc4LPNLLSqpTyDWXOiPrJCB
+         8TYhyCpM3+FAypzT5c6iLMuy5/uwI+wtQopsVXlgm1bHL+v8q4WOZgtKX3coJzpwayN+
+         +6kGABaZaLh2/roJidkNP5qTld6zF2roHqRwyQZ5/WG9hK6hHQ5itVVpOdWg+L2ZT0WI
+         MP5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692622799; x=1693227599;
+        d=1e100.net; s=20221208; t=1692623163; x=1693227963;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OOeP6KP3gJcc/NYFebYI51QAqR1tb+q4pIiKU1Jf+9A=;
-        b=b7QrzuXwJzVfOttH/RaDtPdXZ555QF+T8qTXsuDd2K827TUrCu3HzFHmzt8CT0Wz0t
-         n2Ilah81BJb9UWQGQOCHkHkpcs4IQGk8FiOcSgGPGg9S2oSJEot5p/kjklSYrwi5bOlt
-         nMGcdMnmj1Q3cGnoZNXSPWKCRSiU0uWFihB2+PxhkNX9g/eYq4fbCwCa+lkIqzHiwF5X
-         3wsn7TfHuj2anjiqp/lRrfAW+JM+5QnPylDHO1XMq63miXfcy8MymEzjXv4u02yEGg4N
-         0lGK1t1plnbhb+I4vj9rZ7/UdPmJCmJpIAtzJTOgpojDpnDjNsuc1IVspXslrSO2ujBW
-         ZX0Q==
-X-Gm-Message-State: AOJu0YwwZPQ7VMeUphZh5TAyGaVCBTsFj5VmVx74Fkcf//3IxyKhOBKZ
-        NMNapc33lSOlh/1UAk7Qliw=
-X-Google-Smtp-Source: AGHT+IFKWYzPRyG/tL5T+exRXcRMss/VYX5xg4ioRVt8x2TrHFSlmjHsPYjwBaGJlDE6xdQ3S29zlQ==
-X-Received: by 2002:a05:6a00:b8e:b0:68a:530d:a39b with SMTP id g14-20020a056a000b8e00b0068a530da39bmr2082645pfj.8.1692622798943;
-        Mon, 21 Aug 2023 05:59:58 -0700 (PDT)
+        bh=Wm3czYHGgkqpz3RmJdUIA+WpCMH7PJFnjwMwuvDzHjA=;
+        b=JTHaSIJvt7+3brsEZjIVlTNw0iXJq8a+8Ox7bM3qRAbpjCpy0BRkp0wdlNvqr6fJE9
+         y4tjOKTy7uitS9csp0na+SbaKQDbqK+/xzYBlvbDIzSgVdjn84gC0gHtf5OWRkCsy9hr
+         eUpHyJKoyfMDmD8hjlVADD8jiqPgR5WtLTsnIOK8ESsJf+W9FU2I7p8RcDzGbB02mcXE
+         UGcm3sMWnQUh654BT75vBFQulOtinsfUwuE6LPoV3kMvOcByozA1D6Dghx4DCwl02C5Y
+         O9wCbFTz2FLuyu6qgRyJ35l5A6jWylbNUfdy7QI4Zwi2AWRcO4ZSGKwmEuqNieMKLAWW
+         KQcA==
+X-Gm-Message-State: AOJu0Yx6M8R3j/I3hCs1FlS5K9t1zU8kYbGA+s1NrenXS662keTWwiMI
+        7TU24LtJCUoa0iIdfOuPnN7GSdnls0c=
+X-Google-Smtp-Source: AGHT+IEEGVYmArB1e4+BhMUqn6f9H5MQI6K4DuyqOscySXZ2Hnao1zAS0UVF89Dooc8oqIhbHYMRwA==
+X-Received: by 2002:a17:902:e9c2:b0:1bb:a522:909a with SMTP id 2-20020a170902e9c200b001bba522909amr7124946plk.37.1692623162737;
+        Mon, 21 Aug 2023 06:06:02 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id fm25-20020a056a002f9900b00682868714fdsm1405891pfb.95.2023.08.21.05.59.57
+        by smtp.gmail.com with ESMTPSA id g9-20020a170902c38900b001b8b26fa6a9sm7022804plg.19.2023.08.21.06.06.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Aug 2023 05:59:58 -0700 (PDT)
+        Mon, 21 Aug 2023 06:06:02 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 21 Aug 2023 05:59:57 -0700
+Date:   Mon, 21 Aug 2023 06:06:01 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Eric Tremblay <etremblay@distech-controls.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>
-Subject: Re: [PATCH 0/2] Convert enum->pointer for data in the tmp51x match
- tables
-Message-ID: <5392e46f-8174-4c14-96f6-04a61a2ccacc@roeck-us.net>
-References: <20230820124910.71526-1-biju.das.jz@bp.renesas.com>
- <ce30e9ad-67e8-4dfb-93f9-e9a6a89d6bbe@roeck-us.net>
- <OS0PR01MB592225A290451B07E5BA42698619A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <ea0eccc0-a29f-41e4-9049-a1a13f8b16f1@roeck-us.net>
- <ZOMrrrxto6TtJQzt@smile.fi.intel.com>
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, Michael Carns <mike@carns.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] hwmon: (asus-ec-sensosrs) fix mutex path for
+ X670E Hero
+Message-ID: <dadc5c5e-28f1-49c1-8872-645e46462d9d@roeck-us.net>
+References: <20230821115418.25733-1-eugene.shalygin@gmail.com>
+ <20230821115418.25733-2-eugene.shalygin@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZOMrrrxto6TtJQzt@smile.fi.intel.com>
+In-Reply-To: <20230821115418.25733-2-eugene.shalygin@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Aug 21, 2023 at 12:17:34PM +0300, Andy Shevchenko wrote:
-> On Sun, Aug 20, 2023 at 08:55:18AM -0700, Guenter Roeck wrote:
-> > On Sun, Aug 20, 2023 at 02:55:08PM +0000, Biju Das wrote:
-> > > > On Sun, Aug 20, 2023 at 01:49:08PM +0100, Biju Das wrote:
+On Mon, Aug 21, 2023 at 01:52:35PM +0200, Eugene Shalygin wrote:
+> A user reported that they observe race condition warning [1] and after
+> looking once again into the DSDT source it was found that wrong mutex
+> was used.
 > 
-> ...
+> [1] https://github.com/zeule/asus-ec-sensors/issues/43
 > 
-> > > While doing this Jonathan found an issue where it won't work if OF table is
-> > > using pointer and ID is using enum in the match data. Moreover,the proposed
-> > > API returns NULL for non-match.
-> > 
-> > I think that is may be problem because many drivers don't have a value
-> > in the driver_data field. Maybe that doesn't matter because such drivers
-> > would normally not call device_get_match_data() or i2c_match_id(),
-> > but it would create some ambiguity because those functions would no
-> > longer work for all cases.
-> 
-> Are you talking here about the cases where 0 / NULL makes things optional?
-> Like when driver data is defined, we use its value, otherwise apply some
-> defaults? If so, where do you see a problem?
-> 
+> Fixes: 790dec13c012 ("hwmon: (asus-ec-sensors) add ROG Crosshair X670E Hero.")
+> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
 
-The fact that you have to change lots of drivers to make this work should prove
-my point.
+Applied.
 
-> > > So Andy proposed to convert the valid enums to non-zero or use a pointer.
-> > > 
-> > There are _lots_ of drivers where the chip ID is in driver_data and starts
-> > with 0, or with the field not used. It is not my call to make, but I really
-> > think that demanding that this field is always != 0 is just wrong.
-> 
-> Those drivers are hackishly abusing OF ID tables. Those, that have _no_ OF ID
-> tables are okay.
+Note that you don't have to (and should not) send an introduction
+for a 1-patch "series". Add the change log after "---" instead.
 
-This is what you are saying. That doesn't make it true. With the same logic
-I could claim that drivers providing a pointer in i2c_device_id would
-hackishly abuse i2c_device_id tables.
-
+Thanks,
 Guenter
 
+> ---
+>  drivers/hwmon/asus-ec-sensors.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Moreover this approach allows to have the driver data to be const, and keep it
-> that way which now is problematic and in some cases may even be broken (due to
-> wrong assumptions made by drivers). I.o.w. this makes code more robust against
-> the possible mangling of driver data contents at runtime.
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
+> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+> index f52a539eb33e..51f9c2db403e 100644
+> --- a/drivers/hwmon/asus-ec-sensors.c
+> +++ b/drivers/hwmon/asus-ec-sensors.c
+> @@ -340,7 +340,7 @@ static const struct ec_board_info board_info_crosshair_x670e_hero = {
+>  	.sensors = SENSOR_TEMP_CPU | SENSOR_TEMP_CPU_PACKAGE |
+>  		SENSOR_TEMP_MB | SENSOR_TEMP_VRM |
+>  		SENSOR_SET_TEMP_WATER,
+> -	.mutex_path = ASUS_HW_ACCESS_MUTEX_RMTW_ASMX,
+> +	.mutex_path = ACPI_GLOBAL_LOCK_PSEUDO_PATH,
+>  	.family = family_amd_600_series,
+>  };
+>  
