@@ -2,105 +2,99 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8598EEE4993
-	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Aug 2023 13:06:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75388EE4993
+	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Aug 2023 13:19:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235183AbjHUNGJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 21 Aug 2023 09:06:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49646 "EHLO
+        id S232296AbjHUNTi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 21 Aug 2023 09:19:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235213AbjHUNGI (ORCPT
+        with ESMTP id S232013AbjHUNTi (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 21 Aug 2023 09:06:08 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED54D1;
-        Mon, 21 Aug 2023 06:06:03 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1bdbf10333bso25769025ad.1;
-        Mon, 21 Aug 2023 06:06:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692623163; x=1693227963;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Wm3czYHGgkqpz3RmJdUIA+WpCMH7PJFnjwMwuvDzHjA=;
-        b=nt0EQQ84VcMJBWCNbXHX2qE8+sRfg6Ivwejnxrn8lW9Cv5HfV/W00yEBFxqn3TNC22
-         C0B7aUnL3Djbb0GNMah5fwkSvPDXGwQTM5sa6Ted9XEF9DxAaJr8WsqFNHt4Kg39hAY7
-         LJbo76pyMM9lIeZX2ifriNiJjqPSbQhM2KR0EjU1hFSyfpc4LPNLLSqpTyDWXOiPrJCB
-         8TYhyCpM3+FAypzT5c6iLMuy5/uwI+wtQopsVXlgm1bHL+v8q4WOZgtKX3coJzpwayN+
-         +6kGABaZaLh2/roJidkNP5qTld6zF2roHqRwyQZ5/WG9hK6hHQ5itVVpOdWg+L2ZT0WI
-         MP5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692623163; x=1693227963;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Wm3czYHGgkqpz3RmJdUIA+WpCMH7PJFnjwMwuvDzHjA=;
-        b=JTHaSIJvt7+3brsEZjIVlTNw0iXJq8a+8Ox7bM3qRAbpjCpy0BRkp0wdlNvqr6fJE9
-         y4tjOKTy7uitS9csp0na+SbaKQDbqK+/xzYBlvbDIzSgVdjn84gC0gHtf5OWRkCsy9hr
-         eUpHyJKoyfMDmD8hjlVADD8jiqPgR5WtLTsnIOK8ESsJf+W9FU2I7p8RcDzGbB02mcXE
-         UGcm3sMWnQUh654BT75vBFQulOtinsfUwuE6LPoV3kMvOcByozA1D6Dghx4DCwl02C5Y
-         O9wCbFTz2FLuyu6qgRyJ35l5A6jWylbNUfdy7QI4Zwi2AWRcO4ZSGKwmEuqNieMKLAWW
-         KQcA==
-X-Gm-Message-State: AOJu0Yx6M8R3j/I3hCs1FlS5K9t1zU8kYbGA+s1NrenXS662keTWwiMI
-        7TU24LtJCUoa0iIdfOuPnN7GSdnls0c=
-X-Google-Smtp-Source: AGHT+IEEGVYmArB1e4+BhMUqn6f9H5MQI6K4DuyqOscySXZ2Hnao1zAS0UVF89Dooc8oqIhbHYMRwA==
-X-Received: by 2002:a17:902:e9c2:b0:1bb:a522:909a with SMTP id 2-20020a170902e9c200b001bba522909amr7124946plk.37.1692623162737;
-        Mon, 21 Aug 2023 06:06:02 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g9-20020a170902c38900b001b8b26fa6a9sm7022804plg.19.2023.08.21.06.06.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Aug 2023 06:06:02 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 21 Aug 2023 06:06:01 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Michael Carns <mike@carns.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] hwmon: (asus-ec-sensosrs) fix mutex path for
- X670E Hero
-Message-ID: <dadc5c5e-28f1-49c1-8872-645e46462d9d@roeck-us.net>
-References: <20230821115418.25733-1-eugene.shalygin@gmail.com>
- <20230821115418.25733-2-eugene.shalygin@gmail.com>
+        Mon, 21 Aug 2023 09:19:38 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 124BCEC;
+        Mon, 21 Aug 2023 06:19:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692623970; x=1724159970;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1wYeJYw71qbCvfIz8mkJJd6mGYKVHhE9MzqLAXOdvcY=;
+  b=EjOb/k10nkED41XK1ku5jMXnCcza08I3FSeQGzeO+Mkd7ZFMW5nzb0bO
+   uiOM8hD5WWT6A44d/ZithDt0o8mgQ5kG23AWkxrv0/8hN2/ums5ntyzy+
+   gjrwipU4uK/CnYuB5UMdcla7+FTE6wvjG4WbNuy5xeO2g0WJIBwq6TwDJ
+   g/GN18O0nQoveJYEUNI2ywIoKWPRN9XWSwsC8Yo9SKHr3YS0NF0M0msp2
+   DOgMIIRU2UFn0w6NBt9uD/1t8EfnDtvlQejNK2ZtzIeOQH/5mOgDL0obf
+   gvX0IPwBV93EsH2pQeazQs4tM9hpGq3rRv6iATzOf/TKZKMV7gfLkZ5yJ
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="376336619"
+X-IronPort-AV: E=Sophos;i="6.01,190,1684825200"; 
+   d="scan'208";a="376336619"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2023 06:19:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="825920231"
+X-IronPort-AV: E=Sophos;i="6.01,190,1684825200"; 
+   d="scan'208";a="825920231"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by FMSMGA003.fm.intel.com with ESMTP; 21 Aug 2023 06:19:26 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qY4oW-00FYqX-1h;
+        Mon, 21 Aug 2023 16:19:24 +0300
+Date:   Mon, 21 Aug 2023 16:19:24 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Eric Tremblay <etremblay@distech-controls.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>
+Subject: Re: [PATCH 0/2] Convert enum->pointer for data in the tmp51x match
+ tables
+Message-ID: <ZONkXO0HS5C9awfR@smile.fi.intel.com>
+References: <20230820124910.71526-1-biju.das.jz@bp.renesas.com>
+ <ce30e9ad-67e8-4dfb-93f9-e9a6a89d6bbe@roeck-us.net>
+ <OS0PR01MB592225A290451B07E5BA42698619A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <ea0eccc0-a29f-41e4-9049-a1a13f8b16f1@roeck-us.net>
+ <ZOMrrrxto6TtJQzt@smile.fi.intel.com>
+ <5392e46f-8174-4c14-96f6-04a61a2ccacc@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230821115418.25733-2-eugene.shalygin@gmail.com>
+In-Reply-To: <5392e46f-8174-4c14-96f6-04a61a2ccacc@roeck-us.net>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Aug 21, 2023 at 01:52:35PM +0200, Eugene Shalygin wrote:
-> A user reported that they observe race condition warning [1] and after
-> looking once again into the DSDT source it was found that wrong mutex
-> was used.
+On Mon, Aug 21, 2023 at 05:59:57AM -0700, Guenter Roeck wrote:
+> On Mon, Aug 21, 2023 at 12:17:34PM +0300, Andy Shevchenko wrote:
+> > On Sun, Aug 20, 2023 at 08:55:18AM -0700, Guenter Roeck wrote:
+
+...
+
+> > Those drivers are hackishly abusing OF ID tables. Those, that have _no_ OF ID
+> > tables are okay.
 > 
-> [1] https://github.com/zeule/asus-ec-sensors/issues/43
-> 
-> Fixes: 790dec13c012 ("hwmon: (asus-ec-sensors) add ROG Crosshair X670E Hero.")
-> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+> This is what you are saying. That doesn't make it true. With the same logic
+> I could claim that drivers providing a pointer in i2c_device_id would
+> hackishly abuse i2c_device_id tables.
 
-Applied.
+...because kernel_ulong_t was poorly chosen type for that to begin with?
 
-Note that you don't have to (and should not) send an introduction
-for a 1-patch "series". Add the change log after "---" instead.
+Abusing pointer is much worse than using long as a pointer holder. Moreover
+the latter is valid case (okay, not as kernel_ulong_t, but unsigned long)
+in many places in the kernel, starting from the memory manager, so your
+argument doesn't look like a good one to me.
 
-Thanks,
-Guenter
+-- 
+With Best Regards,
+Andy Shevchenko
 
-> ---
->  drivers/hwmon/asus-ec-sensors.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-> index f52a539eb33e..51f9c2db403e 100644
-> --- a/drivers/hwmon/asus-ec-sensors.c
-> +++ b/drivers/hwmon/asus-ec-sensors.c
-> @@ -340,7 +340,7 @@ static const struct ec_board_info board_info_crosshair_x670e_hero = {
->  	.sensors = SENSOR_TEMP_CPU | SENSOR_TEMP_CPU_PACKAGE |
->  		SENSOR_TEMP_MB | SENSOR_TEMP_VRM |
->  		SENSOR_SET_TEMP_WATER,
-> -	.mutex_path = ASUS_HW_ACCESS_MUTEX_RMTW_ASMX,
-> +	.mutex_path = ACPI_GLOBAL_LOCK_PSEUDO_PATH,
->  	.family = family_amd_600_series,
->  };
->  
+
