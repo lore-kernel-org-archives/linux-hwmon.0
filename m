@@ -2,130 +2,111 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01320EE49A5
-	for <linux-hwmon@archiver.kernel.org>; Sun, 20 Aug 2023 18:01:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06B43EE49A8
+	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Aug 2023 09:17:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231516AbjHTSBt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 20 Aug 2023 14:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54870 "EHLO
+        id S234299AbjHUJRn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 21 Aug 2023 05:17:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231442AbjHTSBs (ORCPT
+        with ESMTP id S231397AbjHUJRm (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 20 Aug 2023 14:01:48 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D9C2723;
-        Sun, 20 Aug 2023 10:58:57 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1bf7423ef3eso1439345ad.3;
-        Sun, 20 Aug 2023 10:58:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692554336; x=1693159136;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0vWOJYzMEdARgdU+SCyIcUY2NQEHvYI9NDh/eIJ030M=;
-        b=WNYbHn4NdvP6EUKF7aYTh82fhH6evXtJURnPeMFGruptSO3Q1ekCVcssx2CYsO5KES
-         8axprnoVGGfdsYMzGA3wFefBlyV065MQUogCKnlSMiXmRo6I4JVyEyaiSeolUEKamogL
-         ZnE0vWYsaIFckca+klo9qbAJthaPG8zj1gg0m+5C7AESXGyW9XNLbYBeA2A5E3p4pxzC
-         W9EiLX49om2k+BjwnxjPlF6C09s4vqxqW2kA8uil40PKCNIqurCSplkOd4pgZ+/nIt6t
-         +n2ENOmWGveVGteZJhFzsitcsPiib+ZeWiGC6cRhfggKJbDg2scYqmQ81wnzJxs+TIqs
-         SogQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692554336; x=1693159136;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0vWOJYzMEdARgdU+SCyIcUY2NQEHvYI9NDh/eIJ030M=;
-        b=g6z+v+kjfdBjra/xXN1SfbwtteCW6u1bZCTGgotmhK2s+KOZI+QC7aIG/pZ7tWnjNr
-         ZCjgJl4vAiDwzFaFRyM04cVRYYOWGOdvUjm/iwbZ/HT+z1WdZEU5LwDrJAk6xD6F6JKD
-         uZPqL1fnvkXtEBMBE1NdvmGxxDkVaFkyEkVHltEa5QUpufgkakjhSN56ZNo0J9PrVW2u
-         CgoR67ZVndevXO9MvQLub2ozjUQmtz4Ty5DDbW+Nh9r6K8VA0P8fc6AuAC1Tn1o1flq4
-         pUgtq6k8/Vkcol4GYT7PgqZpdvI8RoXA86dPKcpWnhpwvjtUyDzdeBKLmpj3GXZzSVuh
-         dEFw==
-X-Gm-Message-State: AOJu0YwTFuQD/pE/JMMzC5VmSP9+1FI0L0HnRXxNytN+LDdFIHTG9WKv
-        zXa/txbRVJjR8SdmJDs6b6Y=
-X-Google-Smtp-Source: AGHT+IHsEAttgzpiQG0IguRGxNtHMaTizd4bD6NAO6E1fu40m3p6wkzEDNKsRMCBKycb1Ed0TRktlw==
-X-Received: by 2002:a17:902:f542:b0:1b7:c166:f197 with SMTP id h2-20020a170902f54200b001b7c166f197mr3318687plf.29.1692554336463;
-        Sun, 20 Aug 2023 10:58:56 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u18-20020a17090341d200b001b9d95945afsm5392358ple.155.2023.08.20.10.58.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Aug 2023 10:58:55 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 20 Aug 2023 10:58:54 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Eric Tremblay <etremblay@distech-controls.com>,
+        Mon, 21 Aug 2023 05:17:42 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED21C9;
+        Mon, 21 Aug 2023 02:17:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692609460; x=1724145460;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hPYdVIS7EEAfOKyVDfo5dggoqfeqmlZB/rwYlbrSeZM=;
+  b=a9XewLUtaSC971tRgbPWfFX46uZ8tyrevqcX/GG7hnEaVtDrDSv6DqQi
+   qXFRTxf8GB8zTz6N0ohbw9MaO9x39AnDOzvaxxyHmgZKsXIvmMwt95shw
+   +JafuPnU04urskC5OIMoawKzvPg3x2JiFx9Jn+xwsWjX5BFAty8pSHr9K
+   +41Df2T77s7LssHZd1iUJIwLpRmkNf6+xWDD5bowqO4SgQLMCi0OLIbeP
+   LNOEuYEcYYPBN/CW+E/Ub7+oBgLpDBTR6Iu7VlHoy2FzXkoczUJvMJpNP
+   ZLNoNnCnVDdKZwipYh1yr54bcYOw58/FMyGcImAdl47hH64ALkjM1oo2x
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10808"; a="353859564"
+X-IronPort-AV: E=Sophos;i="6.01,189,1684825200"; 
+   d="scan'208";a="353859564"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2023 02:17:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10808"; a="735788607"
+X-IronPort-AV: E=Sophos;i="6.01,189,1684825200"; 
+   d="scan'208";a="735788607"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 21 Aug 2023 02:17:36 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qY12U-007JfC-2Y;
+        Mon, 21 Aug 2023 12:17:34 +0300
+Date:   Mon, 21 Aug 2023 12:17:34 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Eric Tremblay <etremblay@distech-controls.com>,
         Jean Delvare <jdelvare@suse.com>,
         "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         "linux-renesas-soc@vger.kernel.org" 
         <linux-renesas-soc@vger.kernel.org>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Jonathan Cameron <jic23@kernel.org>
 Subject: Re: [PATCH 0/2] Convert enum->pointer for data in the tmp51x match
  tables
-Message-ID: <8199dbe3-4fe7-48f0-93c4-6cb3d12542b1@roeck-us.net>
+Message-ID: <ZOMrrrxto6TtJQzt@smile.fi.intel.com>
 References: <20230820124910.71526-1-biju.das.jz@bp.renesas.com>
  <ce30e9ad-67e8-4dfb-93f9-e9a6a89d6bbe@roeck-us.net>
  <OS0PR01MB592225A290451B07E5BA42698619A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
  <ea0eccc0-a29f-41e4-9049-a1a13f8b16f1@roeck-us.net>
- <OS0PR01MB5922C02D0984F36C8CDE98888619A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <OS0PR01MB5922A79C02FF9D934767307E8619A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <OS0PR01MB5922A79C02FF9D934767307E8619A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+In-Reply-To: <ea0eccc0-a29f-41e4-9049-a1a13f8b16f1@roeck-us.net>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Aug 20, 2023 at 05:36:02PM +0000, Biju Das wrote:
-> Hi Guenter Roeck,
-> 
-> > Subject: RE: [PATCH 0/2] Convert enum->pointer for data in the tmp51x match
-> > tables
-> > 
-> > Hi Guenter Roeck,
-> > 
-> > Thanks for the feedback.
-> > 
-> > > Subject: Re: [PATCH 0/2] Convert enum->pointer for data in the tmp51x
-> > > match tables
-> > >
-> > > Either case, I would want to keep temp_config and the number of
-> > > channels in struct tmp51x_data to avoid repeated double dereferences
-> > > and because temp_config could change (resistance correction
-> > > enabled/disabled should be a devicetree property, conversion rate as
-> > > well as channel enable should be sysfs attributes, and channel
-> > > enable/disable should also be devicetree properties). The value could
-> > > also be used to support suspend/resume in the driver if someone wants to
-> > add that at some point.
-> > >
-> > > In this context,
-> > > 		if (data->id == tmp512 && channel == 4)
-> > > 			return 0;
-> > > is wrong because there are 3 or 4 channels, meaning the channel
-> > > numbers are
-> > > 0..3 and there is no channel 4. This should be "channel == 3"
-> > > to disable the 4th channel on tmp512. Interesting that no one
-> > > (including me ;-) noticed this.
-> > 
-> > If I am correct, as per above, only max number channels supported by the
-> > chip can go to device data. That is the only HW difference between these 2
-> > chips and other chip specific data can be derived from this.
-> 
-> I guess, the below initial values for temp_config
-> is chip specific apart from the number of supported channels
-> as we won't be able to derive from number of channels??
-> 
-> #define TMP512_TEMP_CONFIG_DEFAULT	0xBF80
-> #define TMP513_TEMP_CONFIG_DEFAULT	0xFF80
-> 
-Bit 3-6 enable temperature sensors. The difference in bit 6
-is that the 3rd external temperature sensor (which only exists for
-tmp513) is enabled if the bit is set. So the base value for
-TMP513_TEMP_CONFIG_DEFAULT would be 0xBF80 with bit 6 set if
-the chip has four temperature sensors.
+On Sun, Aug 20, 2023 at 08:55:18AM -0700, Guenter Roeck wrote:
+> On Sun, Aug 20, 2023 at 02:55:08PM +0000, Biju Das wrote:
+> > > On Sun, Aug 20, 2023 at 01:49:08PM +0100, Biju Das wrote:
 
-Guenter
+...
+
+> > While doing this Jonathan found an issue where it won't work if OF table is
+> > using pointer and ID is using enum in the match data. Moreover,the proposed
+> > API returns NULL for non-match.
+> 
+> I think that is may be problem because many drivers don't have a value
+> in the driver_data field. Maybe that doesn't matter because such drivers
+> would normally not call device_get_match_data() or i2c_match_id(),
+> but it would create some ambiguity because those functions would no
+> longer work for all cases.
+
+Are you talking here about the cases where 0 / NULL makes things optional?
+Like when driver data is defined, we use its value, otherwise apply some
+defaults? If so, where do you see a problem?
+
+> > So Andy proposed to convert the valid enums to non-zero or use a pointer.
+> > 
+> There are _lots_ of drivers where the chip ID is in driver_data and starts
+> with 0, or with the field not used. It is not my call to make, but I really
+> think that demanding that this field is always != 0 is just wrong.
+
+Those drivers are hackishly abusing OF ID tables. Those, that have _no_ OF ID
+tables are okay.
+
+Moreover this approach allows to have the driver data to be const, and keep it
+that way which now is problematic and in some cases may even be broken (due to
+wrong assumptions made by drivers). I.o.w. this makes code more robust against
+the possible mangling of driver data contents at runtime.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
