@@ -2,50 +2,50 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AFA0C27C40
-	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Aug 2023 17:15:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47FA9C71153
+	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Aug 2023 17:19:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbjHXROq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 24 Aug 2023 13:14:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57072 "EHLO
+        id S236882AbjHXRSa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 24 Aug 2023 13:18:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241772AbjHXROo (ORCPT
+        with ESMTP id S242579AbjHXRSW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 24 Aug 2023 13:14:44 -0400
+        Thu, 24 Aug 2023 13:18:22 -0400
 Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82614199D
-        for <linux-hwmon@vger.kernel.org>; Thu, 24 Aug 2023 10:14:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C581E12C
+        for <linux-hwmon@vger.kernel.org>; Thu, 24 Aug 2023 10:18:19 -0700 (PDT)
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 3AE9F5C0247
-        for <linux-hwmon@vger.kernel.org>; Thu, 24 Aug 2023 13:14:39 -0400 (EDT)
+        by mailout.nyi.internal (Postfix) with ESMTP id 428DB5C01A7
+        for <linux-hwmon@vger.kernel.org>; Thu, 24 Aug 2023 13:18:19 -0400 (EDT)
 Received: from imap44 ([10.202.2.94])
-  by compute6.internal (MEProxy); Thu, 24 Aug 2023 13:14:39 -0400
+  by compute6.internal (MEProxy); Thu, 24 Aug 2023 13:18:19 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=system76.com; h=
         cc:content-type:content-type:date:date:from:from:in-reply-to
         :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm1; t=1692897279; x=1692983679; bh=GfQviLX6xTF/JzdtwuCQe8ddv
-        czN33wJEO0mcpwTEUI=; b=BUS0noqTrAok9lzygbf9i7P7jmAmEF34BZZ6upwGm
-        9ZHjXMGSKka/+9yUYEXe7V3zzp4HDUCvWX8H5EOMBvh+7wMJOBRM5GKxJvfEsxHB
-        5M+oANkWVTtLSKPN50OHBfbsT473MJm1eZaqyz1e1VIFlBnvt1FuUExD4rbeIixi
-        09WEiAipUldKr+vr9Zi4AJBV7EHcvEaOY2LvwJ5tpHomgyLEtjiUdYUXbTSf3wuX
-        PmpiqQzKmF7ODxnmN2mJMeE8rUkoEU6FYXHwR/JhiwQsfydQjF2gjk/jLFSKclIT
-        2237OFXjnO4QRG9SmUsrLzXEyCddT4h4jdUQwAj6sczBA==
+         s=fm1; t=1692897499; x=1692983899; bh=GfQviLX6xTF/JzdtwuCQe8ddv
+        czN33wJEO0mcpwTEUI=; b=txuhd+HE/H1lMblzNTy+BxjpL39eBfGSUq38FZ1gY
+        pbcPrcgQYiUdhSKNRSDWn4txCEiUZC32yWAscqNqGFDEN+/NAcN/hDzWPjrWTmd6
+        BAc/sr50DKmObYg6yqG9xvcC01xLGvvqFIrl+4rtUQtEh87P0od2qKVxVnOpi4gd
+        S7tQm7FoKbqmEnGhHDUkggoGi0oA4L558rhy07ls/P2En8IbKDUlA9DZMjy2dvOB
+        L0M856ttcPqfIXA1GjzXzP7tgEh6I+q5R8JM2OwpylCUE4vM5ZWr8kN/MbpwlkkP
+        Mfi2mgKTThh3k4gj7qa85p6ftu5nrmuHGl0eaAFB7pVqg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-type:content-type:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:message-id
         :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
         :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1692897279; x=1692983679; bh=GfQviLX6xTF/JzdtwuCQe8ddvczN33wJEO0
-        mcpwTEUI=; b=tticHJAA1grpPtAQ3DoHFBn8RaEXyC01Ya6cszdj8Zm1VXi7pqx
-        f5yP1BJaP790CQFXBi4KtVVeedXXoUQ0QKmI2CPuAWD+L4/fMj8dap8AkEttAEPb
-        QViNWmgrxIXjerZ94QJinh1l1WBI7YQJ/kYIhlrGd3b06TMrXCbJ43LgekKmrQS9
-        JPNa38Vvp6r/67MQx95MVrocNRUuSmLlBX4XpFWinKR/hPwiBQS1/DGLm+RO9Seq
-        sAUOvBUJnY4YaxMVVhZFsowqWWzDTfwQzBbZrkc0MnZz1l6WIzOaLOwcCmNnpO5I
-        TZxKGmSZnrs33hdUrbRRBlvcaN8UG8GQsxw==
-X-ME-Sender: <xms:_4_nZEr1dnTEJekG_t9KvguQIPUPG1sM5LMsk0yBaRTAv0pOIk6Hgg>
-    <xme:_4_nZKoINQtldKHyQKG8_NkD_Ud18_uB72slACHXUTXta8tCQplqKI9jiLCme2FQi
-    7a9iy4Wjec0gAODlQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedruddviedguddtkecutefuodetggdotefrod
+        1692897499; x=1692983899; bh=GfQviLX6xTF/JzdtwuCQe8ddvczN33wJEO0
+        mcpwTEUI=; b=tjVF8X1rAKPNztUZ1bzWMumkFO/Sabhgs7fEWaYOFdILYceXlKE
+        Ma1mkGvLrM7ZChqBO6AD9mbhBqE7pX16Y9+8foyKgYG1ExjPQiQz1i31D21FTqQR
+        mvj7+I4lZ/7C4B/ujK4ytvUVl6sZDGyRRIcukuY1tIeUI5PKkq1+7r9yKDhFZU/5
+        abY6i42mv/Js907KA0wYYvnXfaCBy8eby9GthKGhYfaWzVFw5ZJ2SLzQ1hcB31oA
+        fD9sQCP21jK19VnNyi7UvpXm+Pni8NdbymAa3oHmIDYOtiGpDYMqNORLv2IolUv9
+        Jilb+V5oM1LHaFJkbSefzWnWcNKom/pKRsA==
+X-ME-Sender: <xms:25DnZOcE1AaKrh8Smn7C36iUr6u4jsRpx77qPOJ0NcugcXJbXa3Vfw>
+    <xme:25DnZIO8l4MVZsPanI1ydRJWEehCxD9jzU3y2GcLx15_PpiGbW-wOkzgndeLj9CLD
+    kZWR9t6gLDXAM27Pg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedruddviedguddtlecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecunecujfgurhepofgfggfkfffhvffutgesthdtre
     dtreertdenucfhrhhomhepfdflvghrvghmhicuufholhhlvghrfdcuoehjvghrvghmhies
@@ -53,21 +53,21 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedruddviedguddtkecutefuodetgg
     efgfehfeekjeejiefhgfdtgfeuvdevueehkeehgffgkeenucevlhhushhtvghrufhiiigv
     pedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjvghrvghmhiesshihshhtvghmjeeird
     gtohhm
-X-ME-Proxy: <xmx:_4_nZJPEdctBesdSt4SOFzd6qGz9y_4rtLBvtjk0mn0iJTVd2TwWbQ>
-    <xmx:_4_nZL4wKGZu9oib5EKCoHA_X6KxWgEEcYIavbpmn3iGFywykxZ7Ag>
-    <xmx:_4_nZD45U4o88BO3gUUXCJR0uvqeNn23qEStZEHg5A_YJo7kiMvwWA>
-    <xmx:_4_nZFH_sNseJJ0Inklldyj1Q6OzbWySOE-gStjAAWQrVWERiydskQ>
+X-ME-Proxy: <xmx:25DnZPhNHbVtYSisxap1Lp5JgL5vgv0C38jgSoRS2NMZzp-jnYdK2w>
+    <xmx:25DnZL9uCqdPGnjMw-JjgkwHghibH2XKNT0xooPdP2BGzMvm0PpN4A>
+    <xmx:25DnZKuFSHWCFyVFSIvl3zYeNR__xmbaSUJES4RM1C4eGG0rONiPYw>
+    <xmx:25DnZI6FE0sAH2LofjBiavxnfJd9_YWYuV7ZnbhmcdqokvsM6nSK2w>
 Feedback-ID: ic629427b:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id EE25F36A0075; Thu, 24 Aug 2023 13:14:38 -0400 (EDT)
+        id 19EC236A0075; Thu, 24 Aug 2023 13:18:19 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-647-g545049cfe6-fm-20230814.001-g545049cf
 Mime-Version: 1.0
-Message-Id: <0c047f18-edf2-4e74-9116-1203921176c0@app.fastmail.com>
-Date:   Thu, 24 Aug 2023 11:14:06 -0600
+Message-Id: <84162cdd-cf70-4148-96ea-2a9d28a37ae2@app.fastmail.com>
+Date:   Thu, 24 Aug 2023 11:17:58 -0600
 From:   "Jeremy Soller" <jeremy@system76.com>
 To:     linux-hwmon@vger.kernel.org
-Subject: hwmon: Add System76 Thelio Io driver
+Subject: [PATCH] hwmon: Add System76 Thelio Io driver
 Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
