@@ -2,51 +2,51 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48E48C6FA8F
-	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Aug 2023 20:35:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63965C3DA6F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Aug 2023 20:40:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243523AbjHXUer (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 24 Aug 2023 16:34:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49858 "EHLO
+        id S243514AbjHXUjm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 24 Aug 2023 16:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243570AbjHXUe3 (ORCPT
+        with ESMTP id S243550AbjHXUj0 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 24 Aug 2023 16:34:29 -0400
+        Thu, 24 Aug 2023 16:39:26 -0400
 Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17ADDE7D
-        for <linux-hwmon@vger.kernel.org>; Thu, 24 Aug 2023 13:34:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160E410E0
+        for <linux-hwmon@vger.kernel.org>; Thu, 24 Aug 2023 13:39:24 -0700 (PDT)
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 79D53320031A;
-        Thu, 24 Aug 2023 16:34:26 -0400 (EDT)
+        by mailout.west.internal (Postfix) with ESMTP id 7730D3200946;
+        Thu, 24 Aug 2023 16:39:23 -0400 (EDT)
 Received: from imap44 ([10.202.2.94])
-  by compute6.internal (MEProxy); Thu, 24 Aug 2023 16:34:26 -0400
+  by compute6.internal (MEProxy); Thu, 24 Aug 2023 16:39:23 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=system76.com; h=
         cc:cc:content-type:content-type:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1692909265; x=1692995665; bh=FS
-        Ug+dPG3ZPg5catW9VcgZaZ2R8YuYwsSat78fU41Hw=; b=IOhmQmdZE+Ki4/Y8aY
-        8XbHLxpTgA9cPh8N8pijX9hmmrUrdkabqyHiWoUvJWbbuUomRuQK4SEnod6TmnnY
-        uISHU6db3yF+faxKLo6U3uTcinBVImF8MZSHI/VmrHxdtbz2B/Srwi6RSlVYY0lk
-        uYddygw2nVCFQmMdNMh40WnflPVzgcAi9HfGE01oOJdgepdH44j1A799xJAtnSC7
-        gIeNtksM+ICwikEfBWml4OIeR+ap8HVHdvF0zAoSU9O/u9vAKoIVRjvZEiSJFK5U
-        In1ZI5NwB8kNFL1B3JoXJr8N7m0KBFfmZpxIEmZXju7zkjBf6W1x8YeLOJUfLq2G
-        Xvvw==
+        :subject:subject:to:to; s=fm1; t=1692909562; x=1692995962; bh=vR
+        VwavJEHP83+p+FwDvtSwQ5JtML4npiUg6A3OocMdQ=; b=JTV0EbJqWNFUgDFJ8h
+        0eEoRCJrbMmkSyaqRrgdkfpkZiJ0sdKQ323tu6TEHNPNTMO78xujgfRLaeIuI0Pg
+        IMrlPbZ927OnXtMq3sQSqsbPpMSz+l6Bc0Xfx/KWckctZzBG5Uax1gdnJUK7mKqU
+        69CVegv6u8BK1UEgtBF/UgaLYBIJm7c3idUYYOhCawNhUsu6MLOBTfrYUbCPsTlE
+        Yne6tnXZWH2gAlAt0WYZ9a4AVQ+1ENMYuonFUaDP4HQz+IC6FB68jTz61Oz9Pi/Z
+        ZGfNwGCaXfElQYmuE2/4qvtpqD6unDHrhR7nfyCTwJryYHJ0jGaq8rMqI/ul6axS
+        cbmQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:content-type:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1692909265; x=1692995665; bh=FSUg+dPG3ZPg5
-        catW9VcgZaZ2R8YuYwsSat78fU41Hw=; b=H9q4YiQb/qnYS8ACIaQPajFeSS0pw
-        +NTpQDYPWEBjY8OEQoW5Mn5CG9lsUakxXEVq9yYwJ/KKJSeUUeEGVDyZqtRIqXHT
-        +9o8TGooIXgDZe4/XM//iyEc6M7dJwKj7E7Hc+fDq0MphDwerMe06G7acnmUFvQz
-        5GoYnsm8+yUHK6EIdyS8lbv8FtD8wqM879UJOoIhcTY+IeQQoGBHcCKgqngMQSMz
-        tREMFnT5QqzfkMS2cNRGubB44lVP6n74f7ZH/tgc4JPj9KgENftCs0jCOY6e7Zye
-        D+QaLHv+o0S6sf5mQdNZKIvjb08PJ6cbFsN3HQvSKLFzjikBH7DzQElJA==
-X-ME-Sender: <xms:0b7nZPQwSW5Uglj0fqNYz6ePQVP8ggXCc-_bxi0-k_VEEYInvYox1Q>
-    <xme:0b7nZAwsC7he9dtI_3Ck0cuA1iBofiyUMTp6i-nlXzAma-zaeDekab6wYwyhPOP45
-    owmUkCQiFn7uKXJug>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedruddviedgudegkecutefuodetggdotefrod
+        :x-sasl-enc; s=fm1; t=1692909562; x=1692995962; bh=vRVwavJEHP83+
+        p+FwDvtSwQ5JtML4npiUg6A3OocMdQ=; b=kYm0aVpkqruQ7bPR9rYc/UIhyjd25
+        35JV/UgWUmFTOfyrT9QRpLRVBHgKp8arInxESzUkrTNLXHpCV2MHA8JopvVOQz2H
+        8rsZhLpp8NWLLeY4KT+XoePOMhE6Sq1RWWTnOFTWVVanuVTCr9mDq7vFerXs6yPN
+        yN/FhsnJWR1O7HLVZ6LDMslNmCe2s/BT3Ub8a5xDqYIRuE/1lpS731XmVx75IJZz
+        Q2Mu/Zeagt5bG/t1TzeMhVl+ewcoFuUNUjkNRgyOLItKYcV2yOlG0qOJX+/4pY2A
+        HhGb97eF+5+dKMZbEdcSW1RLsyxASR7MGE1BVk1xnd+EynkTk//uti78Q==
+X-ME-Sender: <xms:-r_nZC5xvbU4EMQ2fghjcnPSFGS6b0DjkEKg0aFip4nKYN7G9JuzBQ>
+    <xme:-r_nZL6gthciTKNQuH6hbqXATuX3-PG2rAiK4KaKm-G9XsqFmDNvwaDl_gohYnFJj
+    8URuCx-VqVAOrNe9g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedruddviedgudeglecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecunecujfgurhepofgfggfkjghffffhvfevufgtse
     httdertderredtnecuhfhrohhmpedflfgvrhgvmhihucfuohhllhgvrhdfuceojhgvrhgv
@@ -54,27 +54,28 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedruddviedgudegkecutefuodetgg
     egjeevteehhfevgfefvdegueegudfhhfehuedvleejvdelkedunecuvehluhhsthgvrhfu
     ihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhgvrhgvmhihsehshihsthgvmh
     ejiedrtghomh
-X-ME-Proxy: <xmx:0b7nZE3hxGDGhENivqvleJ9S2voKeGPWMMIoG-FsiNQBDvly4PwBgA>
-    <xmx:0b7nZPCHHtQZmW5j6ADbpdrwnKv6gzKXN9kFhJU7AxluYALviEZkiw>
-    <xmx:0b7nZIhFpWwMHWAmOTj5v3ISB2nUDoVIB3T7O_y80m5qLK5FFEgDlQ>
-    <xmx:0b7nZGdUTOs4nJep_UutzZjU2QAP4M-9_j79W8VT3v9baQqdZyluNw>
+X-ME-Proxy: <xmx:-r_nZBd9tRd3Iu0gzUrsv7lKW54dLK1rxDp7SjPLh8T6dBPahWfk-A>
+    <xmx:-r_nZPJYwK6seLaDIfDnE9HMKe575nqn4aGYM6sg2Zsao3kk2YnlBQ>
+    <xmx:-r_nZGIPK081yOdeQAZ6zC5tt-cU2sDYp52eI9U0EzVcPGEXB5Cw2g>
+    <xmx:-r_nZFntminl1JInan0lSRBbMa_Q0e0BKl2MPcntfwirWIowEzJlng>
 Feedback-ID: ic629427b:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id B469A36A0075; Thu, 24 Aug 2023 16:34:25 -0400 (EDT)
+        id BAF6C36A0076; Thu, 24 Aug 2023 16:39:22 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-647-g545049cfe6-fm-20230814.001-g545049cf
 Mime-Version: 1.0
-Message-Id: <fc68960f-609e-4fe4-a3e9-c23023717beb@app.fastmail.com>
-In-Reply-To: <a2cc2fea-ae5c-4c03-8cf6-a913d39c253d@app.fastmail.com>
+Message-Id: <4d3dff93-5c70-4ca1-b819-7f0eca3a8b38@app.fastmail.com>
+In-Reply-To: <fc68960f-609e-4fe4-a3e9-c23023717beb@app.fastmail.com>
 References: <84162cdd-cf70-4148-96ea-2a9d28a37ae2@app.fastmail.com>
  <a3af270b-d432-4cf2-b896-2512dc6b3a1d@roeck-us.net>
  <e50f3375-b3d2-40e8-bfa3-5e0bbb0f386f@app.fastmail.com>
  <a2cc2fea-ae5c-4c03-8cf6-a913d39c253d@app.fastmail.com>
-Date:   Thu, 24 Aug 2023 14:34:04 -0600
+ <fc68960f-609e-4fe4-a3e9-c23023717beb@app.fastmail.com>
+Date:   Thu, 24 Aug 2023 14:39:02 -0600
 From:   "Jeremy Soller" <jeremy@system76.com>
 To:     "Guenter Roeck" <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [PATCH v3] hwmon: Add System76 Thelio Io driver
+Subject: [PATCH v4] hwmon: Add System76 Thelio Io driver
 Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
@@ -86,13 +87,52 @@ and sending the system suspend/resume state.
 
 Signed-off-by: Jeremy Soller <jeremy@system76.com>
 ---
- MAINTAINERS                        |   7 +
- drivers/hwmon/Kconfig              |  10 +
- drivers/hwmon/Makefile             |   1 +
- drivers/hwmon/system76-thelio-io.c | 424 +++++++++++++++++++++++++++++
- 4 files changed, 442 insertions(+)
+ Documentation/hwmon/system76-thelio-io.rst |  31 ++
+ MAINTAINERS                                |   7 +
+ drivers/hwmon/Kconfig                      |  10 +
+ drivers/hwmon/Makefile                     |   1 +
+ drivers/hwmon/system76-thelio-io.c         | 424 +++++++++++++++++++++
+ 5 files changed, 473 insertions(+)
+ create mode 100644 Documentation/hwmon/system76-thelio-io.rst
  create mode 100644 drivers/hwmon/system76-thelio-io.c
 
+diff --git a/Documentation/hwmon/system76-thelio-io.rst b/Documentation/hwmon/system76-thelio-io.rst
+new file mode 100644
+index 000000000000..7ca34bb47bbb
+--- /dev/null
++++ b/Documentation/hwmon/system76-thelio-io.rst
+@@ -0,0 +1,31 @@
++.. SPDX-License-Identifier: GPL-2.0-or-later
++
++Kernel driver system76-thelio-io
++==========================
++
++Supported devices:
++
++  * System76 Thelio Io (thelio_io_2)
++
++Author: Jeremy Soller
++
++Description
++-----------
++
++This driver implements the sysfs interface for the System76 Thelio Io.
++The System76 Thelio Io is a USB device with 4 fan connectors and a
++power button LED.
++
++Usage Notes
++-----------
++
++Since it is a USB device, hotswapping is possible. The device is autodetected.
++
++Sysfs entries
++-------------
++
++======================= =====================================================================
++fan[1-4]_input		Connected fan rpm.
++fan[1-4]_label		Shows fan connector name.
++pwm[1-4]		Sets the fan speed. Values from 0-255.
++======================= =====================================================================
 diff --git a/MAINTAINERS b/MAINTAINERS
 index 48abe1a281f2..f4e8f7bdd1f5 100644
 --- a/MAINTAINERS
