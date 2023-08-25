@@ -2,235 +2,235 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A719CC7EE2C
-	for <linux-hwmon@archiver.kernel.org>; Fri, 25 Aug 2023 06:46:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8569AC71133
+	for <linux-hwmon@archiver.kernel.org>; Fri, 25 Aug 2023 07:37:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240655AbjHYGpf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 25 Aug 2023 02:45:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41588 "EHLO
+        id S233049AbjHYHgf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 25 Aug 2023 03:36:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234441AbjHYGpF (ORCPT
+        with ESMTP id S239227AbjHYHg0 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 25 Aug 2023 02:45:05 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2137.outbound.protection.outlook.com [40.107.114.137])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F81CD5;
-        Thu, 24 Aug 2023 23:45:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a8l5jyGPZYrJvnhqKh5gW03PcmT8q+kY3Wl6tPFLJHr5YBHJxyE5x8GyN0/SC0dzbXUMsq9vn4+vmFTNc86IP3LTbInKZqkw12XJgDOsSj/mufwhtlKYz2mqcB76+7IpDMMUGa+To29CyoMXMOuGn7/PyQz725MutO/31nV6PzUyWdk1sn37SmUwyislDBEwtFhdHtaODUMSTC0I1SppEp0fdkO0nr1/lNw6PofBy2ZW2pbdm5vHdstKSAMOWGmFHkEKjW1foEgl+xAZveSdXbRtnPki1V+M0C3ifk9e6C0+uJpsGcvamsS1aiXndF3xFJWfve9qKd6ZYSxGuT2lUQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=itHx4tGOW+b0QBia4b3xFkTzaWdIDCM3D96jPWBkh7I=;
- b=R7DYnNcYIUWHWGO7cJH8CEx/H7m6eg52mLFt514HqUmr+UnRqxy37wR7H30wBcF0eZNX1CsUYSF1sq47JYEkeeqm6as6TXHW1xIKN4GlsiwPlKppzd3QI1iO9rty0Nq5aZqLO1i+SIJj9ToMYZyYvag9AWFsONpxGKyGIM9M+FUjO8Mi8k+3/3JxsDeg9emm/cXd7E2CtsqO6+gSP9CqilnvN503/6b+Xz8y7CJ0t9f6amRFkvYWHqKiXeRRnxB5ZzxBh37U7sEF/ISfYYAkiTxlzylKMXyUKHuXYnpzRqt4+Jgbuc0oSUUg/pd0XCsnY/0eOa4z2UMul7L/15E/Lg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=itHx4tGOW+b0QBia4b3xFkTzaWdIDCM3D96jPWBkh7I=;
- b=fADIgB8maW/EVGneAV5wfS3nRmFt3jBylmdTRayysKtriI30u2aOcz946KXx19y3JUBkS8MQkoyAWS9FKhZ3ikCR3J3C7oIJEdMquXslEtXyZeFvl2aQzR7L0TuiVOat3MF2nuyWfXtqEGm8hj/EOSLmAqqichIFR06Df+/3g5Q=
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by TY3PR01MB10077.jpnprd01.prod.outlook.com (2603:1096:400:1dd::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.29; Fri, 25 Aug
- 2023 06:44:58 +0000
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::9d23:32f5:9325:3706]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::9d23:32f5:9325:3706%4]) with mapi id 15.20.6699.028; Fri, 25 Aug 2023
- 06:44:56 +0000
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     Eric Tremblay <etremblay@distech-controls.com>,
+        Fri, 25 Aug 2023 03:36:26 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3671BFA;
+        Fri, 25 Aug 2023 00:36:23 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-26fc5a218daso392051a91.1;
+        Fri, 25 Aug 2023 00:36:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692948983; x=1693553783;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qj4pHAC/Taa90g3Isk4tCrfiaWOtHQATobRZ+hy8KXE=;
+        b=AvWOADbn0DMevAHL502YpBXyWg8QYZHVO2vhPIAWYl/WUy8LoGv1z9PA7KVjzXN7zp
+         rH7TVuvm1oAmATnFnAn+GsfbLFHcQ8/SzmjXuU+Crd2jAGiQBRmWjH49v+niTLCrtnYe
+         9dUh0FLDQmRHmHeFIrRGy6QR8YNyXGTCbyXNaQP9R8hLewcz6P629aBh9JZPqFYvAeo1
+         RXQ0YUdK2xtYKVronuRhwCkVJkdgUR2c3G+beD/W4dMB91h3/17R6IYi1ricWGVS33NA
+         EbNm00hwHDkAf18haf2tnl+INsFRH+cnplmzhQrTl1cPgQBznzW+l2akgO/U8X09uObs
+         SI+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692948983; x=1693553783;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qj4pHAC/Taa90g3Isk4tCrfiaWOtHQATobRZ+hy8KXE=;
+        b=W8WxLsu/F7qN2YV9AVChavUBY+OKk//jmlVEn61hcTFms7nF+2Ykgnb8MDD6Cj/wdi
+         YPhHbVJ7Xp+Zcs6gRJFXwq+FSMA8tOIZR29LV9qlfp/XKqoHCX56PjLkZCvnWRXJDXON
+         XwI93xmbUM4MfCutC3ArOIqVkCGGB2o3JvKXWoj+oYKnXvruwU6qGzlaPIhZifSozhx8
+         V3fAPQ0RF00OlJON9b6PVg+lzCJpJJDqrTvsMaqRBqS52F6tP+r6ht8tSkak80Fl/Rqn
+         L7D4hC8OUrAfMr+w5+EADnFce8L++cvsC5V02hoAcOHhdfybEMpMWhaX01CwakYKqiqE
+         2O5A==
+X-Gm-Message-State: AOJu0YztzVzxekD7uIWTp05yxczYLe6NFijw7yKxe+O3+UW4XcVvd8W0
+        FFI6luDjA6VQNr9/X7bCD849rRI5b4A=
+X-Google-Smtp-Source: AGHT+IGQbmAWe+6yygp3azAvuQw01i0ypD72G510AL4WjTvILfu6QRC4oiO53crS7hGYRuKczEynYg==
+X-Received: by 2002:a17:90b:108d:b0:26d:a83:79cc with SMTP id gj13-20020a17090b108d00b0026d0a8379ccmr14150536pjb.11.1692948982996;
+        Fri, 25 Aug 2023 00:36:22 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 21-20020a17090a19d500b00263f5ac814esm2969229pjj.38.2023.08.25.00.36.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Aug 2023 00:36:22 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 25 Aug 2023 00:36:21 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Eric Tremblay <etremblay@distech-controls.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
         "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         "linux-renesas-soc@vger.kernel.org" 
         <linux-renesas-soc@vger.kernel.org>
-Subject: RE: [PATCH v2 3/3] hwmon: tmp513: Replace tmp51x_ids->max_channels in
- struct tmp51x_data
-Thread-Topic: [PATCH v2 3/3] hwmon: tmp513: Replace tmp51x_ids->max_channels
+Subject: Re: [PATCH v2 3/3] hwmon: tmp513: Replace tmp51x_ids->max_channels
  in struct tmp51x_data
-Thread-Index: AQHZ1svkkdmhxgyETUGBTR5QFUiEPK/6SO8AgAA9eoA=
-Date:   Fri, 25 Aug 2023 06:44:56 +0000
-Message-ID: <OS0PR01MB592292B941414BF452B14AB086E3A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+Message-ID: <258bae5d-3602-4625-8ac1-375856d9b334@roeck-us.net>
 References: <20230824204456.401580-1-biju.das.jz@bp.renesas.com>
  <20230824204456.401580-4-biju.das.jz@bp.renesas.com>
  <ZOgQ2Fc1J8V7rdm4@smile.fi.intel.com>
-In-Reply-To: <ZOgQ2Fc1J8V7rdm4@smile.fi.intel.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TY3PR01MB10077:EE_
-x-ms-office365-filtering-correlation-id: 188a270f-7c59-47c6-ad71-08dba536cbc7
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: B1sYrnbMAnBc+S8MdKoui2cR/4E0gzocK+yHBJP+kWHLKTNBHZA+2K680YPyN3JtibMnTrK+yxUfyND4IjRBvgW9a7WQ1zwm1QfSZm97GYDOCwgf6t2BCvMtrOMkJOKlMZHupZ5+ltBKoNjbG+7WWAx1RjA4CpKuRwcdQ9UFzmsqW/G5lnllx5yGkBXj5oA6g0nvwjAlcHn2eXOwTnYu33HS2MuDznGTjGWpu08GK9Nsn45YHNSIAnKgJgxlk9bAFY+wIZ5iJREngT9CRtyzDO/VaDIfcG2nADTJxUfab7+A2kzTIBgaEoJeltL46lAaF8FN/mNDbqdt760RwsewdmM6JxDwu6OonasKYbpHk0SFRm5+1EPuFdi90kS5UYf8PYqBpLSfOIAUC5FYOfmwpOVpxiID+O6Km1Rt79CQWLEpkx/9n8rHb2WkhmyJGlA7oWeHOEYeep0OQItx6twdT6iOSbDo8OexBy9TBaTl5vLJniheXGaQxMu65Jr3knL+mgduDpIZTNouke/0a8RDdTghwuMHL0HNL8zHSfSoooNUT85zqkEWU6N3KsZbago3M31Dkg3CcI67IRAXzBpfD/5t0xFF9MRkWIO9Dz3/KOqiEO/TXM6ARP22EV+jKHrO
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(346002)(136003)(376002)(39860400002)(366004)(1800799009)(451199024)(186009)(83380400001)(9686003)(26005)(478600001)(55016003)(5660300002)(52536014)(2906002)(8936002)(4326008)(8676002)(38070700005)(38100700002)(122000001)(6916009)(66476007)(66556008)(66946007)(76116006)(86362001)(71200400001)(41300700001)(64756008)(54906003)(6506007)(66446008)(7696005)(33656002)(316002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?uoR4Z8lFN9dOw58eMzvriGxIriNPmQHXSpHwKVkBCqeTthRy6JeoKCv9ThYE?=
- =?us-ascii?Q?EZck81mINcpGrX3LqMw7pAwNUu8eZY7L20CpeIfa+6hWWzY0UBob8fL558yh?=
- =?us-ascii?Q?SIW3lx5+Kpt8edCz8EPQ42CXVvtslOFeQcI9YAKnZli6O82qZwJtGMg4W/aV?=
- =?us-ascii?Q?oQAk0Lw5WgbsoV+ysFBY2EU/e21paed0kQRxstGniL2yBINMK4ZcE9d48yNn?=
- =?us-ascii?Q?1QQKbDJiD75Y/79hBnfLr4JAaF3fR0hW4mm5BVddeknCU68SP9IUT7YMuweL?=
- =?us-ascii?Q?bTkqllYfITqjLTzmMtbNlvzFw1tyWgEjYs0G+pnJ1QDJ3r/E45aEkqSOTlGM?=
- =?us-ascii?Q?iT8XoY/CvCSWx+HqsvELJiy5PWJlFvUuKZC4n6hqj4FXRSMCRmTI7outDIJT?=
- =?us-ascii?Q?aUse5LFUN4Ehg50pBU8OVvE2ktKPYgWeWfOByDsn2iDpiKJpazXQBDM+9Z6K?=
- =?us-ascii?Q?V6AsMXczoarOVAYQtMo8o2qEQr/x43nm3TV93pdFQFoHNDH8AzzirXRvwIIc?=
- =?us-ascii?Q?xCIkCiSJ8uxGr6Y54z/Yy1gY6aWsFEXR0S4e9KbIKnCqWyUTzXdUvdAbs51a?=
- =?us-ascii?Q?b/WODqRr8jjuG+5dxmL97rWWGf8lzdlWj57XwekudgsUlUb8gQNKMBWz0DDy?=
- =?us-ascii?Q?e8bpK1PHctB7q/TPH8JAkxdOTfNY/fskSilD247tbXwjywFJGmJtRt1Hwni7?=
- =?us-ascii?Q?GAQp5A7qBXOrlXhPTi6Znyz01wIutQKtjnW7DwNIGFf4iXuApFPoBsRPE9qD?=
- =?us-ascii?Q?xI+lYO8EFTfaroTZEdurexESt4bhvoVfIIw3KMc5YoGu/B3I3J2ZDJBmTgoK?=
- =?us-ascii?Q?hxrLpAy+oPr6D+olS8zgPi2mFuk7L+WbaxdyCGOx9h8qLqip7nj0GtTGVMX6?=
- =?us-ascii?Q?LuGeW0a0VSJudshaA6WBhupY8QmjWB7HhziLAItLXe4JaeDh6cDWf5UgrRNO?=
- =?us-ascii?Q?ZVzEdvTAtn7AR0UWTIbLBapzNrCSFL3Ln3j0SomhRKJ7kXgPl8j7ljdPnfYu?=
- =?us-ascii?Q?a9grpWzYoG3vra9nElo5BPmBnbXS3JP9eiyrgUuLexfX3UJEVWzOdLsQT012?=
- =?us-ascii?Q?oZKZByUgIEU4XrhN8N9pD1EEIVB0GYNX8ySB/ytBvFgNTGu7X3QlFO/uEx6P?=
- =?us-ascii?Q?H7bl8ZdQl3j+GOArnKQ1a/SEqeKgWhsfHAZ01ckoGHpkftLTGiQIJHDzE6dY?=
- =?us-ascii?Q?kyKtjzO5GW6RZmHX8qaDG/96NQ3pjjlMhGnhvTvD64N1HTqSunaszTC5mRj/?=
- =?us-ascii?Q?776jo6nWOO6bLBscUkOo/v0WyHuEOxj3cgwY7FuVL6WVpue+VsAR93KsaKRF?=
- =?us-ascii?Q?CYbW1EzGCtM4HFgUZhWPQDWyk4m+YLsWc9ovEMmwaC4m8CNhzt4ffJ82aDLf?=
- =?us-ascii?Q?zg+2EYJ1xyeMrRazuh9fYqB2YxmTQzt/T0/bW7ExPjDXc0FIsdHqqMLO+Wc8?=
- =?us-ascii?Q?EZSjxvJ7pQ1N50AnUNOh80GKRlUuhqXIPAvLStx2enk1bzkfgdy48FZc/CFk?=
- =?us-ascii?Q?DM/hP+bnwfg0IhsZ7nIbTRFfiHJynCR6vp4hvaN/c/NPqcUPDJG7iMU3ch/M?=
- =?us-ascii?Q?hAWq7Io5Foe29tYNZtK2UvFmWiVpL+ynj8lF06rE?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ <OS0PR01MB592292B941414BF452B14AB086E3A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 188a270f-7c59-47c6-ad71-08dba536cbc7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Aug 2023 06:44:56.8425
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: eXWxrAB6dR8aC9d6ID0iakRlHXUw3URQ/pVeuF2Sapu6lqru7KspnyPXWdgrFoe7fdNoQ3e5ez9zaDL5et4Hgs3NwPnulKWeka4boz62VZ4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY3PR01MB10077
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <OS0PR01MB592292B941414BF452B14AB086E3A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Andy Shevchenko,
+On Fri, Aug 25, 2023 at 06:44:56AM +0000, Biju Das wrote:
+> Hi Andy Shevchenko,
+> 
+> Thanks for the feedback.
+> 
+> > Subject: Re: [PATCH v2 3/3] hwmon: tmp513: Replace tmp51x_ids->max_channels
+> > in struct tmp51x_data
+> > 
+> > On Thu, Aug 24, 2023 at 09:44:56PM +0100, Biju Das wrote:
+> > > The tmp512 chip has 3 channels whereas tmp513 has 4 channels. Avoid
+> > > using tmp51x_ids for this HW difference by replacing
+> > > tmp51x_ids->max_channels in struct tmp51x_data and drop
+> > 
+> > You don't replace it, you replaced "id" by it.
+>  You are correct "id->max_channels"
+> 
 
-Thanks for the feedback.
+"replacing tmp51x_ids->max_channels" is a bit difficult to read.
 
-> Subject: Re: [PATCH v2 3/3] hwmon: tmp513: Replace tmp51x_ids->max_channe=
-ls
-> in struct tmp51x_data
->=20
-> On Thu, Aug 24, 2023 at 09:44:56PM +0100, Biju Das wrote:
-> > The tmp512 chip has 3 channels whereas tmp513 has 4 channels. Avoid
-> > using tmp51x_ids for this HW difference by replacing
-> > tmp51x_ids->max_channels in struct tmp51x_data and drop
->=20
-> You don't replace it, you replaced "id" by it.
- You are correct "id->max_channels"
+> > 
+> > > enum tmp51x_ids as there is no user.
+> > 
+> > ...
+> > 
+> > > +#define TMP51X_TEMP_CONFIG_DEFAULT(a) (0x8780 | GENMASK(11 + (a) - 1,
+> > > +11))
+> > 
+> > This seems fragile ("a" can't be 0, and can't be > 4) and will give not
 
->=20
-> > enum tmp51x_ids as there is no user.
->=20
-> ...
->=20
-> > +#define TMP51X_TEMP_CONFIG_DEFAULT(a) (0x8780 | GENMASK(11 + (a) - 1,
-> > +11))
->=20
-> This seems fragile ("a" can't be 0, and can't be > 4) and will give not
-> good code generation (for GENMASK() use), besides it has 0x8780 magic. Wh=
-at
-> is that?
-> Two bit field masks?
->=20
-> 	(BIT(15) | (GENMASK((a) - 1, 0) << 11) | GENMASK(10, 7))
->=20
-> ?
+Not really, because it is the number of channels and well known.
+We should not optimize the code for something that won't ever happen.
+The number of channels is 3 or 4, and the generated mask needs to be
+0x3800 or 0x7800 depending on the chip. We could maybe have something
+like
+	#define CHANNEL_MASK(channels) (...)
+and or in the other bits separately.
 
-Looks good to me.
+Anyway, maybe "a" is not the best variable name. Maybe use "channels"
+or "n".
 
->=20
-> Also add a comment to explain "a" and other bits.
 
-I don't have access to user manual to explain these bits.
-May be Guenter/Eric can help on this.
+> > good code generation (for GENMASK() use), besides it has 0x8780 magic. What
+> > is that?
+> > Two bit field masks?
+> > 
+> > 	(BIT(15) | (GENMASK((a) - 1, 0) << 11) | GENMASK(10, 7))
+> > 
 
->=20
-> ...
->=20
-> >  	case hwmon_temp:
-> > -		if (data->id =3D=3D tmp512 && channel =3D=3D 3)
-> > +		if (data->max_channels =3D=3D channel)
->=20
-> This is not the same as it was previously. And looks like this kind of fi=
-x
-> (if I understood the previous patch correctly) should be done there.
+Probably better to split out resistance correction (bit 10)
+and conversion rate (bit 7..9) instead of a single mask.
+Just for completeness - bit 15 is "continuous conversion".
+Bit 3..6 are unused, and bit 0..2 are used to configure
+the gpio pin which is currently not supported by the driver.
 
-Logic wise it checks for invalid channels. But newer logic
-check for invalid channels for both tmp512 and tmp513.
-compared to only for tmp512 in previous case. For me it looks
-like an improvement.
+> > ?
+> 
+> Looks good to me.
+> 
+> > 
+> > Also add a comment to explain "a" and other bits.
+> 
+> I don't have access to user manual to explain these bits.
+> May be Guenter/Eric can help on this.
+> 
 
-You mean split this into 2.  First patch with just this logic (channel >=3D=
- data->max_channels) and keep data->id in remaining
-Places and Second patch is to replace the id and use max_channels instead.
+https://www.ti.com/lit/gpn/tmp513
 
->=20
-> Btw, avoid Yoda style
->=20
-> 		if (channel =3D=3D data->max_channels)
+Configuration register 2 is documented on page 35 and 36.
 
-OK, it should be (channel >=3D data->max_channels)
+If you change this, please consider using defines for the
+various bits.
 
->=20
-> >  			return 0;
->=20
-> ...
->=20
-> >  	ret =3D device_property_read_u32_array(dev, "ti,nfactor", nfactor,
-> > -					    (data->id =3D=3D tmp513) ? 3 : 2);
-> > +					    data->max_channels - 1);
-> >  	if (ret >=3D 0)
-> > -		memcpy(data->nfactor, nfactor, (data->id =3D=3D tmp513) ? 3 : 2);
-> > +		memcpy(data->nfactor, nfactor, data->max_channels - 1);
->=20
-> It looks like data->nfactor is of the same type as nfactor, right?
-> Why this can't be simplified to just
->=20
-> 	device_property_read_u32_array(dev, "ti,nfactor",
-> 				       data->nfactor, data->max_channels - 1);
+> > 
+> > ...
+> > 
+> > >  	case hwmon_temp:
+> > > -		if (data->id == tmp512 && channel == 3)
+> > > +		if (data->max_channels == channel)
+> > 
+> > This is not the same as it was previously. And looks like this kind of fix
+> > (if I understood the previous patch correctly) should be done there.
+> 
+> Logic wise it checks for invalid channels. But newer logic
+> check for invalid channels for both tmp512 and tmp513.
+> compared to only for tmp512 in previous case. For me it looks
+> like an improvement.
+> 
+> You mean split this into 2.  First patch with just this logic (channel >= data->max_channels) and keep data->id in remaining
+> Places and Second patch is to replace the id and use max_channels instead.
+> 
 
-Yes, I think you are correct. The below code doesn't makes sense. I guess t=
-his should be another patch.
+There is only one field available in struct i2c_device_id.
+Splitting this patch in 2 seems overkill because the first patch
+would have to introduce code (set max_channels based on
+enum tmp51x_ids) only to remove it in the second patch.
 
-	if (ret >=3D 0)
-		memcpy(data->nfactor, nfactor, data->max_channels - 1);
+> > 
+> > Btw, avoid Yoda style
+> > 
+> > 		if (channel == data->max_channels)
+> 
+> OK, it should be (channel >= data->max_channels)
+> 
+> > 
+> > >  			return 0;
+> > 
+> > ...
+> > 
+> > >  	ret = device_property_read_u32_array(dev, "ti,nfactor", nfactor,
+> > > -					    (data->id == tmp513) ? 3 : 2);
+> > > +					    data->max_channels - 1);
+> > >  	if (ret >= 0)
+> > > -		memcpy(data->nfactor, nfactor, (data->id == tmp513) ? 3 : 2);
+> > > +		memcpy(data->nfactor, nfactor, data->max_channels - 1);
+> > 
+> > It looks like data->nfactor is of the same type as nfactor, right?
+> > Why this can't be simplified to just
+> > 
+> > 	device_property_read_u32_array(dev, "ti,nfactor",
+> > 				       data->nfactor, data->max_channels - 1);
+> 
+> Yes, I think you are correct. The below code doesn't makes sense. I guess this should be another patch.
+> 
 
->=20
-> ...
->=20
-> > -	data->temp_config =3D (data->id =3D=3D tmp513) ?
-> > -			TMP513_TEMP_CONFIG_DEFAULT : TMP512_TEMP_CONFIG_DEFAULT;
->=20
-> Are those still being in use?
+"doesn't make sense" is a bit strong, but I agree that the code
+is unnecessarily complex. And, yes, that would be a separate patch.
 
-Nope. Will remove it.
+> 	if (ret >= 0)
+> 		memcpy(data->nfactor, nfactor, data->max_channels - 1);
+> 
+> > 
+> > ...
+> > 
+> > > -	data->temp_config = (data->id == tmp513) ?
+> > > -			TMP513_TEMP_CONFIG_DEFAULT : TMP512_TEMP_CONFIG_DEFAULT;
+> > 
+> > Are those still being in use?
+> 
+> Nope. Will remove it.
+> 
+Not sure I understand. The above lines _are_ being removed
+(- in 1st column). What else is there to remove ?
 
-Cheers,
-Biju
+Thanks,
+Guenter
 
->=20
-> > +	data->temp_config =3D TMP51X_TEMP_CONFIG_DEFAULT(data->max_channels);
->=20
-> --
-> With Best Regards,
-> Andy Shevchenko
->=20
-
+> Cheers,
+> Biju
+> 
+> > 
+> > > +	data->temp_config = TMP51X_TEMP_CONFIG_DEFAULT(data->max_channels);
+> > 
+> > --
+> > With Best Regards,
+> > Andy Shevchenko
+> > 
+> 
