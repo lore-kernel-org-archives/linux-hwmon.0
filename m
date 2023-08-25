@@ -2,79 +2,108 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A09B2C3DA66
-	for <linux-hwmon@archiver.kernel.org>; Fri, 25 Aug 2023 13:23:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 632C9C3DA66
+	for <linux-hwmon@archiver.kernel.org>; Fri, 25 Aug 2023 13:26:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244065AbjHYNWm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 25 Aug 2023 09:22:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51202 "EHLO
+        id S232801AbjHYN01 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 25 Aug 2023 09:26:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245106AbjHYNWX (ORCPT
+        with ESMTP id S245071AbjHYNZ7 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 25 Aug 2023 09:22:23 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05FE198A
-        for <linux-hwmon@vger.kernel.org>; Fri, 25 Aug 2023 06:22:21 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-68a3f1d8be2so772772b3a.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 25 Aug 2023 06:22:21 -0700 (PDT)
+        Fri, 25 Aug 2023 09:25:59 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75086272A;
+        Fri, 25 Aug 2023 06:25:27 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-68becf931d0so760331b3a.3;
+        Fri, 25 Aug 2023 06:25:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692969741; x=1693574541;
+        d=gmail.com; s=20221208; t=1692969926; x=1693574726;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7E6lxW56tjIH/hIJslkrTuhwu7IiD4VL1t0sFL6KruI=;
-        b=Wdvxzf/h4MbhmA09wLtXWlzREZZY8EoDiescI5g+wwYcQpL7/dGrlRUjGGt83/5PDh
-         6J2mmbDZ3PJQakOXGXjm9gAr9euXMiL7Ie9o6n/gACtoMP1b3yWuBHPqX8MjLZzWGEMx
-         /URYwLkBC5MDa4DsmyBqFIWHkZTFyjTupxVgZflfX5v3K5G16uhCaLsbILzgci5DqhJh
-         M9eTf8tG86kSmShtfHSv5tf08v8NQzVJrxhOQ8oVKJDhA4UC2dtCsTBNsMqnUWilBcsX
-         +cshAdc86yItHjsUxFnKIcxcHWjfeWr6Pba/pBxOka+mLchQ8OC2GLAwYAeXZaxO0lM6
-         zyqQ==
+        bh=t/+eFeQANgoDs6BDH6E1eMtzqI4quQex5h6vYPQFVmI=;
+        b=YyY4/70jJdDnQwL6grdE2X0EiGJecqndms19PKo4nILsKk32X7dye5mL7jeUCCIWxG
+         7LUXnmLj5WwB0fUpHDCWAf1BUHaDp73zlcVw0/IcaAg2UddJ4b6JfxRuP8gEOHVFq6Sl
+         SzRwXTsRG/AgN+Ug+OXX8w914naxoOMqx1tQq8Co6ni7rhTqljOZzMfbVpuaKtM9SYS2
+         cHzkIMXCAq6rAj7RF//AnZCDqWwSovm8FX5/V+/IP9DUolgR7mXtrVkPqw5m9XJ+FxwA
+         13+aJTeXsg9WpgwDnh3fIv5QXzzjAtErUqXE+XjfWlcoB47jUDOyFxYGIrevRXCAw78h
+         8RbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692969741; x=1693574541;
+        d=1e100.net; s=20221208; t=1692969926; x=1693574726;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7E6lxW56tjIH/hIJslkrTuhwu7IiD4VL1t0sFL6KruI=;
-        b=TQLsauJi3UprZ+iZeShZeUMPmfqpYX1mcU3H5zx0s5z5BxDqA/ge8TPSX8T3tTVB3K
-         phfOQUDuRez3PhWpcO9GcKj3FMWH29TGIKlzI9wa3e26XkhD94sAaJizl5prkteDdzE7
-         VbbbXcRLoXz0Q1jvbqHHa2CnMjnO8gZYU0hXvg5lb8qwqVWEl/QAvSjLqibSvzYY9IEt
-         ByKDdTPpgfhuzn5C4TIiyG5SvUvNZAJBZXriquw6vEzrkwhMByBvvb/29IYVt+gtwgli
-         Sme8HSYLfhPlnlzXq245qNuU9styUA/b0euzsWkFDAUO+diiDhR70EwKpngfqEwbCfm6
-         9Rmw==
-X-Gm-Message-State: AOJu0YyLshVD7qmfryCpkg2rmpROJMa8HzBeuFQZPX6Y/ROVMAG7Ctxn
-        b7V7wwUN7YcFspU/TL86eas=
-X-Google-Smtp-Source: AGHT+IGmSgrs0cBqmBy+uR0d9YlEoqFKegoj9U95zx2ArbLIrJ/MlcExzU8wzX7lE2RLTCTMy0Y0Mw==
-X-Received: by 2002:a05:6a00:21cc:b0:68a:5449:7436 with SMTP id t12-20020a056a0021cc00b0068a54497436mr17240103pfj.32.1692969741196;
-        Fri, 25 Aug 2023 06:22:21 -0700 (PDT)
+        bh=t/+eFeQANgoDs6BDH6E1eMtzqI4quQex5h6vYPQFVmI=;
+        b=FetitdBBug13jTsdRKlIepF3A3pFL44K2Lh+sy1zl54QqHIoqGJ8KVm+GvKm7cpDtN
+         DKhJNKsYp6F//7wH0dPUdAhD7ByGzKec8Msx2Rx/QBhaxLmlFOG2JyFS/Hszj2R7IqIW
+         ldeSf8jYSMq0rKy/MUxlfJ5QGLAwcy7hwXXkqxTV57cBsgrVbx99blIDyfRpiEoLmJ9K
+         OhDK9MK86u1rU/fv0UwU+Nmes5pdVL341GN3qRHf2ezylQNNUD4vZI5MNJl+zJFCmxix
+         z3yVAuQGdlXqAP3SFVU2YoNNidBRyx2gm8lN0BSSEM4axQA0hCAGjqjascgjmic//Hjm
+         9uow==
+X-Gm-Message-State: AOJu0YzFf+ekuDUTy0fvvOiCMzPCJFjkM/tkfAhCeolxKpBjkh/sTRF0
+        KBI+SBGkTeKbTqz/c7det0FcRtfChvM=
+X-Google-Smtp-Source: AGHT+IHhEVdN020fIPu86aadYFKpL2xmpfC9KZXvY0oHwrK9osnUCn2UgWGzE13kmKVNGKIGvAnScA==
+X-Received: by 2002:a05:6a00:1a13:b0:68a:4bef:5f9a with SMTP id g19-20020a056a001a1300b0068a4bef5f9amr15376622pfv.0.1692969926124;
+        Fri, 25 Aug 2023 06:25:26 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s9-20020aa78d49000000b0067f2f7eccdcsm1505690pfe.193.2023.08.25.06.22.20
+        by smtp.gmail.com with ESMTPSA id d3-20020aa78143000000b00682868714fdsm1569741pfn.95.2023.08.25.06.25.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Aug 2023 06:22:20 -0700 (PDT)
+        Fri, 25 Aug 2023 06:25:25 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 25 Aug 2023 06:22:19 -0700
+Date:   Fri, 25 Aug 2023 06:25:24 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Vadim Pasternak <vadimp@nvidia.com>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH hwmon-next 1/1] hwmon: (mlxreg-fan) Extend number of
- supporetd fans
-Message-ID: <3a205000-8c0d-4a99-b84c-152e61e8f6da@roeck-us.net>
-References: <20230824164006.26868-1-vadimp@nvidia.com>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Eric Tremblay <etremblay@distech-controls.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] hwmon: tmp513: Fix the channel number in
+ tmp51x_is_visible()
+Message-ID: <3baafb4e-58c8-40dc-b1bc-aeb227bbe5f9@roeck-us.net>
+References: <20230824204456.401580-1-biju.das.jz@bp.renesas.com>
+ <20230824204456.401580-2-biju.das.jz@bp.renesas.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230824164006.26868-1-vadimp@nvidia.com>
+In-Reply-To: <20230824204456.401580-2-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Aug 24, 2023 at 04:40:06PM +0000, Vadim Pasternak wrote:
-> Some new big modular systems can be equipped with up to 24 fans.
-> Extend maximum number of fans accordingly.
+On Thu, Aug 24, 2023 at 09:44:54PM +0100, Biju Das wrote:
+> The supported channels for this driver are {0..3}. Fix the incorrect
+> channel in tmp51x_is_visible().
 > 
-> Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
-> ---
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Closes: https://lore.kernel.org/all/ea0eccc0-a29f-41e4-9049-a1a13f8b16f1@roeck-us.net/
+> Fixes: 59dfa75e5d82 ("hwmon: Add driver for Texas Instruments TMP512/513 sensor chips.")
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 
 Applied.
 
 Thanks,
 Guenter
+
+> ---
+> v2:
+>  * New patch
+> ---
+>  drivers/hwmon/tmp513.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/tmp513.c b/drivers/hwmon/tmp513.c
+> index 7db5d0fc24a4..8ee6e02b02e3 100644
+> --- a/drivers/hwmon/tmp513.c
+> +++ b/drivers/hwmon/tmp513.c
+> @@ -434,7 +434,7 @@ static umode_t tmp51x_is_visible(const void *_data,
+>  
+>  	switch (type) {
+>  	case hwmon_temp:
+> -		if (data->id == tmp512 && channel == 4)
+> +		if (data->id == tmp512 && channel == 3)
+>  			return 0;
+>  		switch (attr) {
+>  		case hwmon_temp_input:
