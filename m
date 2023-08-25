@@ -2,189 +2,106 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69E67C3DA6F
-	for <linux-hwmon@archiver.kernel.org>; Fri, 25 Aug 2023 14:22:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A676DC7EE2C
+	for <linux-hwmon@archiver.kernel.org>; Fri, 25 Aug 2023 14:30:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343775AbjHYOVy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 25 Aug 2023 10:21:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36148 "EHLO
+        id S1343658AbjHYO36 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 25 Aug 2023 10:29:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343753AbjHYOVd (ORCPT
+        with ESMTP id S1343915AbjHYO3p (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 25 Aug 2023 10:21:33 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF10FD3
-        for <linux-hwmon@vger.kernel.org>; Fri, 25 Aug 2023 07:21:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692973289; x=1724509289;
-  h=date:from:to:cc:subject:message-id;
-  bh=1gIlpYmA+p3IB2TQYP/Fae2pe3+DYnXU7ZhWEQxXTxA=;
-  b=d7heTk+K4qkexk0pkwYp9HK1QaC9IQo1hFpeHUlnEnfHYZhmFWfO3EhL
-   GKWWnDBMScQtDwb3ndqOyZldC5bAk0nJuRIuRBWqsWsmdpKrFnY52UBhG
-   qmgqpRxR40tk04aFYmVxNotD9H83yUIvuwxypBzMCM2M0XM93gjLxj6zJ
-   D1KP3FiQSSOqIZRfWnG/0gBgsDgssk8BrwtGFqdhpzaE+ENg35ESf7Cl0
-   vOeD/Lr7ILKKPmKrgUYyzNVkHWiob1VbcHOPeraLwQnR1UpfYP/TnZhd3
-   fotruTFJHOIzsi7aWkMmHUxvawJzsM0I23r9lyeyxkg1b64Vy1FikRlkf
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="355051528"
-X-IronPort-AV: E=Sophos;i="6.02,195,1688454000"; 
-   d="scan'208";a="355051528"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2023 07:21:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="772483805"
-X-IronPort-AV: E=Sophos;i="6.02,195,1688454000"; 
-   d="scan'208";a="772483805"
-Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 25 Aug 2023 07:21:24 -0700
-Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qZXgh-0003fy-0s;
-        Fri, 25 Aug 2023 14:21:23 +0000
-Date:   Fri, 25 Aug 2023 22:21:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:watchdog-next] BUILD SUCCESS
- ec0421688259fc43ab399727196c222a77428d42
-Message-ID: <202308252213.CEXNS2SR-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+        Fri, 25 Aug 2023 10:29:45 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBBDD1995;
+        Fri, 25 Aug 2023 07:29:43 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-68a3f1d8be2so835703b3a.3;
+        Fri, 25 Aug 2023 07:29:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692973783; x=1693578583;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hTXWmefAxL/7rw5HDKxNWuL5Xr538rX+4SeTiv8Nx2g=;
+        b=kZBzzZDtC5v6mG046blUvHHvssCDlMfRQDryjQhhB04DLNCzuyEL2dZVshqJ65bJ+S
+         tPvPX5W8XsnOJcwvaNDq0Yt9HIKkzsHu7M8wzJv4EFscOi7eT4xIdnPJMFWuhZfLwq1W
+         nus0zZW/0DPH2oZmYV+/f5Ih65E3fRWRnxVGBRb+KceRRtibq/44z/f8Kwj5Iseq7gHD
+         OKczqCl4J39TliFy+IqzkHsETMoxO0AbaeFI2PFqyH/reo1Oyd+Mmj8iGd3YfeUSKHYL
+         OyYZtuYxoK5Qd81qPSRcBir8FxCPj/YSud8AJeKOxcjm4qk0LA0LZzcKKSIW9CWC9F4u
+         UHpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692973783; x=1693578583;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hTXWmefAxL/7rw5HDKxNWuL5Xr538rX+4SeTiv8Nx2g=;
+        b=J5KohamiU3zsHUBt+DSXre2JWVbHz2pwpJgXXqb1nPHsphOMdaTFB6GhxBu+ijx2H8
+         HtFKKx25eUDgow2RDv70PV8pPGSsCliX6VlQSHV/guH2p6s+ANxM/+TIhIAFf9OehtpH
+         W0/QhFsdjOdTA+eTF2BB7O9FtBj5e+LdGhmf7wZybSEl3algRF17DSNaaPWruTR8PpFx
+         mvqGxk5Ugk653qSBcx8m0NZgXH/ce/7Zwulh+jfvTFiZcNRJQ3ShTTzh09D8xZ62EQHC
+         QxZRY1zZIg6CrNdEIzVd7amOBIkYpnfICEu8KClKuT7SjREDlmfe9ZfGj9W0vJyFnXk+
+         SVow==
+X-Gm-Message-State: AOJu0YxYlHn6XP/E1HQNH4TPvN3tUCrpQmwUwjMktMoe6WSYNeQ4sG4Z
+        iohesskCu3EjGRkBDMo0fJtyKBYnSTM=
+X-Google-Smtp-Source: AGHT+IHdRNfrK1Qmd0lUIkmUBZKdUIl9Q7GPWYf1g4kOHX2bBYJ/4hBoSeu/O/Wl14x0vGy/i+24uw==
+X-Received: by 2002:a05:6a21:279b:b0:137:a3c9:aaa2 with SMTP id rn27-20020a056a21279b00b00137a3c9aaa2mr17566747pzb.30.1692973783331;
+        Fri, 25 Aug 2023 07:29:43 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id k12-20020aa7820c000000b0068beb77468esm1633322pfi.0.2023.08.25.07.29.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Aug 2023 07:29:42 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 25 Aug 2023 07:29:41 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Eric Tremblay <etremblay@distech-controls.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCH v2 3/3] hwmon: tmp513: Replace tmp51x_ids->max_channels
+ in struct tmp51x_data
+Message-ID: <5a3c48e4-ade8-4563-be75-f594be68cf2e@roeck-us.net>
+References: <20230824204456.401580-1-biju.das.jz@bp.renesas.com>
+ <20230824204456.401580-4-biju.das.jz@bp.renesas.com>
+ <ZOgQ2Fc1J8V7rdm4@smile.fi.intel.com>
+ <OS0PR01MB592292B941414BF452B14AB086E3A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <258bae5d-3602-4625-8ac1-375856d9b334@roeck-us.net>
+ <OS0PR01MB59224BF249A2B17ADC6EE23686E3A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <OS0PR01MB59224BF249A2B17ADC6EE23686E3A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
-branch HEAD: ec0421688259fc43ab399727196c222a77428d42  watchdog: Add support for Amlogic-T7 SoCs
+On Fri, Aug 25, 2023 at 08:01:49AM +0000, Biju Das wrote:
+> > >
+> > > You mean split this into 2.  First patch with just this logic (channel
+> > > >= data->max_channels) and keep data->id in remaining Places and Second
+> > patch is to replace the id and use max_channels instead.
+> > >
+> > 
+> > There is only one field available in struct i2c_device_id.
+> > Splitting this patch in 2 seems overkill because the first patch would have
+> > to introduce code (set max_channels based on enum tmp51x_ids) only to
+> > remove it in the second patch.
+> 
+> The plan was,
+> 
+> First patch will replace id->max_channels in the table
+> and will fill the id based on max_channels and fix the logic for invalid channels.
+> 
+> The Second patch is to remove id altogether.
+> 
+> I am ok with doing it in the same patch. Please let me know.
+> 
+Same here. You can try with your two-step approach, but please do not
+introduce code in step 1 only to remove it in step 2.
 
-elapsed time: 2751m
-
-configs tested: 118
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20230824   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                   randconfig-001-20230824   gcc  
-arm                  randconfig-r013-20230824   gcc  
-arm                  randconfig-r016-20230824   gcc  
-arm                  randconfig-r026-20230824   gcc  
-arm64                            allmodconfig   gcc  
-arm64                             allnoconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r011-20230824   gcc  
-hexagon               randconfig-001-20230824   clang
-hexagon               randconfig-002-20230824   clang
-hexagon              randconfig-r035-20230824   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-r025-20230824   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20230824   gcc  
-loongarch            randconfig-r005-20230824   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                 randconfig-r012-20230824   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r001-20230824   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-openrisc             randconfig-r034-20230824   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r003-20230824   gcc  
-parisc               randconfig-r033-20230824   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   gcc  
-powerpc              randconfig-r015-20230824   clang
-powerpc              randconfig-r032-20230824   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                 randconfig-001-20230824   gcc  
-riscv                randconfig-r024-20230824   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20230824   clang
-s390                 randconfig-r036-20230824   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                   randconfig-r014-20230824   gcc  
-sh                   randconfig-r023-20230824   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r002-20230824   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64              randconfig-r022-20230824   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                   randconfig-r031-20230824   clang
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64               randconfig-r004-20230824   gcc  
-x86_64               randconfig-r006-20230824   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
-xtensa               randconfig-r021-20230824   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Guenter
