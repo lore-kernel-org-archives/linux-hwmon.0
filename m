@@ -2,140 +2,183 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EC83EE49AB
-	for <linux-hwmon@archiver.kernel.org>; Fri, 25 Aug 2023 21:10:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2BEAEE49B3
+	for <linux-hwmon@archiver.kernel.org>; Fri, 25 Aug 2023 22:10:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230405AbjHYVJl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 25 Aug 2023 17:09:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43980 "EHLO
+        id S229684AbjHYWKR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 25 Aug 2023 18:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbjHYVJY (ORCPT
+        with ESMTP id S230153AbjHYWJ6 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 25 Aug 2023 17:09:24 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695B72114;
-        Fri, 25 Aug 2023 14:09:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692997762; x=1724533762;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9KgjcJf3oUFZsCckYwsRBIZm34FJhS+OzL6mTSQHt9U=;
-  b=P6jSh3p2IWtgunZMEG9Vs4OWNkm+FzMThejfMuf+chUpfjgnhBrq8pqf
-   EFNb8l7sbCa8wUjO5cuzy28fTzVB8gNgaOZcB3dz2YjBnUT1Ou1Nd6VQA
-   maCTDLToXJLuYu8hb4SQLkHCMQ/5m+yWKimu9KQMTEJnviihY1e6Lb/f4
-   6qv81rniG3XpnGi363ARF0/5E6Pskgll8gRSPc1V6S8snNloBvBRt/Vzg
-   VS+e2FjmW8bpAPYxolLcpGia3s6EvUjIYUzUbcnsBFKxc/BCojMYqoUe/
-   X7UPGtNCtV3Tp7cKFc31MefMZzEhXMDfV78hBz3ryg/OlkO0f2bLaVJXH
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="461167749"
-X-IronPort-AV: E=Sophos;i="6.02,202,1688454000"; 
-   d="scan'208";a="461167749"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2023 14:09:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="827717088"
-X-IronPort-AV: E=Sophos;i="6.02,202,1688454000"; 
-   d="scan'208";a="827717088"
-Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 25 Aug 2023 14:09:18 -0700
-Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qZe3S-00040B-0A;
-        Fri, 25 Aug 2023 21:09:18 +0000
-Date:   Sat, 26 Aug 2023 05:08:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ninad Malwade <nmalwade@nvidia.com>, jdelvare@suse.com,
-        linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, Ninad Malwade <nmalwade@nvidia.com>,
-        Rajkumar Kasirajan <rkasirajan@nvidia.com>
-Subject: Re: [PATCH V2 3/4] hwmon: ina3221: add support for summation channel
- control
-Message-ID: <202308260438.7OwsGAd8-lkp@intel.com>
-References: <20230825164249.22860-4-nmalwade@nvidia.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230825164249.22860-4-nmalwade@nvidia.com>
+        Fri, 25 Aug 2023 18:09:58 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948822120
+        for <linux-hwmon@vger.kernel.org>; Fri, 25 Aug 2023 15:09:54 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-58d37b541a2so20806107b3.2
+        for <linux-hwmon@vger.kernel.org>; Fri, 25 Aug 2023 15:09:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1693001394; x=1693606194;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=IdHKEBf6LNa2SDLafbTePlchXJqRhBXEEMD76f6TFqQ=;
+        b=Q81oK/zkDH876XIfN0sPNVNN5z8b6L18X4x/1+1qY92QqqQw7RJRN82Vwabqzz8jrz
+         yHCgVzhl9GVIhGnnLQxocTR0yqRL9v3b5FA/IwncCsNRSrd/ESpv2nYwsG1l/hZ1Y2J4
+         uAyCLHE/pmVmYzGGkJ/Q7H8MW0nyoHLw8eYch6DINFcG0D/1UDyS0q72RiLzlfOFcJjN
+         OW6JujW6FHIXebrZScvsrviTCqEUJM/XiL0dfIQC2KEGrZgt8q6eM6oS8v0a0eSnq5vn
+         VPEFVNM9NG39LxSIl2Fk+Vlv+A7ZelyFFuFC1HzNShnlt7pZVtaN0Sm07XZ1Uiv1FDCA
+         YpjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693001394; x=1693606194;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IdHKEBf6LNa2SDLafbTePlchXJqRhBXEEMD76f6TFqQ=;
+        b=JjB9Xms67BDXn1r/mrh1MbzxtdZFeOd57hCP62ojBX/WZUBbyf4L+U8kZ9fpvadJWU
+         uNhR5nBvQKDJsuF7za80XYu8gdOVUMKyk7zyn8eM9tUxKP9jG0DC9qzWM6vHLVUA0/9q
+         LmHR9D0WP7CRm7SUL7PFteJ/G7RAXzfAM1xW4ox8YoYJtgQjnTl3j51x5vxWuhjQOtaj
+         1yx+LSYoHQi+dSuMAsC00TFUTaMVm6fATXlt/W/jErEmm+ALOJtFlSyyynJUR9p9sVzY
+         haLrYOJDGcrE9AnV371dyrO+yX13HAak16dOTf1xlY83jXbvBiGvySyyZcdsoyf1xvnY
+         5kTA==
+X-Gm-Message-State: AOJu0YzILHcTRE6+z3qYuDtlKAWwcmlzrOvvI5kVSWcX1IrI7V3SU1Ez
+        cKGKo2zPLJurTpeXxqeH8S6kiIkAr1UtBAiW6g==
+X-Google-Smtp-Source: AGHT+IHtHRJ7fRcrma2Kt5JyL7K7aUmRWz+4dgMzIzO4z3FEZfOjTLnf+nN/dtoeAPuD6wy6OK9GjuCLAJHjuYGHxg==
+X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
+ (user=justinstitt job=sendgmr) by 2002:a81:ae06:0:b0:569:e04a:238f with SMTP
+ id m6-20020a81ae06000000b00569e04a238fmr475035ywh.4.1693001393869; Fri, 25
+ Aug 2023 15:09:53 -0700 (PDT)
+Date:   Fri, 25 Aug 2023 22:09:51 +0000
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAK4m6WQC/x3MwQqDMAwA0F+RnBdoqxO3Xxk7pG3UwBalkbEh/
+ rtlx3d5OxgXYYN7s0Phj5gsWuEvDaSZdGKUXA3BhdYN4Yq2FU3rD2eKpPSiaJiWdxTljKlro8/ e33rHUIe18Cjf//54HscJfImEpm0AAAA=
+X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1693001392; l=5014;
+ i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
+ bh=F1dg9ALegRSZFeyfAqDYuZEhvE32uhDXNyNHIraocuA=; b=3yMl0CQziwtRieL23Jknw+VaM6GOX8JUpBH9l1dlLv9vmV7gcjOFiB3EcfL6Q7IDaNoZziNU+
+ AYzlvo2lvZlCy8qmFlE1zcPe8wLsY2EG7W3nj6zGmEYx2OgYbFLym4q
+X-Mailer: b4 0.12.3
+Message-ID: <20230825-strncpy-habanalabs-combined-v1-1-daa05a89b7e3@google.com>
+Subject: [PATCH] accel/habanalabs: refactor deprecated strncpy to strscpy_pad
+From:   Justin Stitt <justinstitt@google.com>
+To:     Oded Gabbay <ogabbay@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        linux-hardening@vger.kernel.org,
+        Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Ninad,
+`strncpy` is deprecated for use on NUL-terminated destination strings [1].
 
-kernel test robot noticed the following build warnings:
+We see that `prop->cpucp_info.card_name` is supposed to be
+NUL-terminated based on its usage within `__hwmon_device_register()`
+(wherein it's called "name"):
+|	if (name && (!strlen(name) || strpbrk(name, "-* \t\n")))
+|		dev_warn(dev,
+|			 "hwmon: '%s' is not a valid name attribute, please fix\n",
+|			 name);
 
-[auto build test WARNING on next-20230825]
-[also build test WARNING on linus/master v6.5-rc7]
-[cannot apply to groeck-staging/hwmon-next robh/for-next v6.5-rc7 v6.5-rc6 v6.5-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+A suitable replacement is `strscpy_pad` [2] due to the fact that it
+guarantees both NUL-termination and NUL-padding on its destination
+buffer.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ninad-Malwade/dt-bindings-hwmon-ina3221-Convert-to-json-schema/20230826-004606
-base:   next-20230825
-patch link:    https://lore.kernel.org/r/20230825164249.22860-4-nmalwade%40nvidia.com
-patch subject: [PATCH V2 3/4] hwmon: ina3221: add support for summation channel control
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230826/202308260438.7OwsGAd8-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 13.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20230826/202308260438.7OwsGAd8-lkp@intel.com/reproduce)
+NUL-padding on `prop->cpucp_info.card_name` is not strictly necessary as
+`hdev->prop` is explicitly zero-initialized but should be used
+regardless as it gets copied out to userspace directly -- as per Kees' suggestion.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308260438.7OwsGAd8-lkp@intel.com/
+Link: www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings[1]
+Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html [2]
+Link: https://github.com/KSPP/linux/issues/90
+Cc: linux-hardening@vger.kernel.org
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+Suggested-by: Kees Cook <keescook@chromium.org>
+---
+Note: build-tested only
 
-All warnings (new ones prefixed by >>):
+This patch combines three previous strncpy refactor patches into one.
+1) https://lore.kernel.org/all/20230824-strncpy-drivers-accel-habanalabs-gaudi-gaudi-c-v1-1-a7fb9054734c@google.com/
+2) https://lore.kernel.org/all/20230824-strncpy-drivers-accel-habanalabs-gaudi2-gaudi2-c-v1-1-1a37b65576b4@google.com/
+3) https://lore.kernel.org/all/20230824-strncpy-drivers-accel-habanalabs-goya-goya-c-v1-1-b81d5639e7a3@google.com/
+---
+ drivers/accel/habanalabs/gaudi/gaudi.c   | 4 ++--
+ drivers/accel/habanalabs/gaudi2/gaudi2.c | 4 ++--
+ drivers/accel/habanalabs/goya/goya.c     | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
->> drivers/hwmon/ina3221.c:108: warning: Function parameter or member 'summation_bypass' not described in 'ina3221_input'
->> drivers/hwmon/ina3221.c:132: warning: Function parameter or member 'summation_channel_control' not described in 'ina3221_data'
+diff --git a/drivers/accel/habanalabs/gaudi/gaudi.c b/drivers/accel/habanalabs/gaudi/gaudi.c
+index 056e2ef44afb..1b5fe4d0cf5d 100644
+--- a/drivers/accel/habanalabs/gaudi/gaudi.c
++++ b/drivers/accel/habanalabs/gaudi/gaudi.c
+@@ -660,7 +660,7 @@ static int gaudi_set_fixed_properties(struct hl_device *hdev)
+ 	prop->pcie_dbi_base_address = mmPCIE_DBI_BASE;
+ 	prop->pcie_aux_dbi_reg_addr = CFG_BASE + mmPCIE_AUX_DBI;
+ 
+-	strncpy(prop->cpucp_info.card_name, GAUDI_DEFAULT_CARD_NAME,
++	strscpy_pad(prop->cpucp_info.card_name, GAUDI_DEFAULT_CARD_NAME,
+ 					CARD_NAME_MAX_LEN);
+ 
+ 	prop->max_pending_cs = GAUDI_MAX_PENDING_CS;
+@@ -8000,7 +8000,7 @@ static int gaudi_cpucp_info_get(struct hl_device *hdev)
+ 		return rc;
+ 
+ 	if (!strlen(prop->cpucp_info.card_name))
+-		strncpy(prop->cpucp_info.card_name, GAUDI_DEFAULT_CARD_NAME,
++		strscpy_pad(prop->cpucp_info.card_name, GAUDI_DEFAULT_CARD_NAME,
+ 				CARD_NAME_MAX_LEN);
+ 
+ 	hdev->card_type = le32_to_cpu(hdev->asic_prop.cpucp_info.card_type);
+diff --git a/drivers/accel/habanalabs/gaudi2/gaudi2.c b/drivers/accel/habanalabs/gaudi2/gaudi2.c
+index 20c4583f12b0..2ba7a50103bc 100644
+--- a/drivers/accel/habanalabs/gaudi2/gaudi2.c
++++ b/drivers/accel/habanalabs/gaudi2/gaudi2.c
+@@ -2431,7 +2431,7 @@ static int gaudi2_set_fixed_properties(struct hl_device *hdev)
+ 	prop->pcie_dbi_base_address = CFG_BASE + mmPCIE_DBI_BASE;
+ 	prop->pcie_aux_dbi_reg_addr = CFG_BASE + mmPCIE_AUX_DBI;
+ 
+-	strncpy(prop->cpucp_info.card_name, GAUDI2_DEFAULT_CARD_NAME, CARD_NAME_MAX_LEN);
++	strscpy_pad(prop->cpucp_info.card_name, GAUDI2_DEFAULT_CARD_NAME, CARD_NAME_MAX_LEN);
+ 
+ 	prop->mme_master_slave_mode = 1;
+ 
+@@ -2884,7 +2884,7 @@ static int gaudi2_cpucp_info_get(struct hl_device *hdev)
+ 	}
+ 
+ 	if (!strlen(prop->cpucp_info.card_name))
+-		strncpy(prop->cpucp_info.card_name, GAUDI2_DEFAULT_CARD_NAME, CARD_NAME_MAX_LEN);
++		strscpy_pad(prop->cpucp_info.card_name, GAUDI2_DEFAULT_CARD_NAME, CARD_NAME_MAX_LEN);
+ 
+ 	/* Overwrite binning masks with the actual binning values from F/W */
+ 	hdev->dram_binning = prop->cpucp_info.dram_binning_mask;
+diff --git a/drivers/accel/habanalabs/goya/goya.c b/drivers/accel/habanalabs/goya/goya.c
+index 7c685e6075f6..024ccf2e159b 100644
+--- a/drivers/accel/habanalabs/goya/goya.c
++++ b/drivers/accel/habanalabs/goya/goya.c
+@@ -466,7 +466,7 @@ int goya_set_fixed_properties(struct hl_device *hdev)
+ 	prop->pcie_dbi_base_address = mmPCIE_DBI_BASE;
+ 	prop->pcie_aux_dbi_reg_addr = CFG_BASE + mmPCIE_AUX_DBI;
+ 
+-	strncpy(prop->cpucp_info.card_name, GOYA_DEFAULT_CARD_NAME,
++	strscpy_pad(prop->cpucp_info.card_name, GOYA_DEFAULT_CARD_NAME,
+ 		CARD_NAME_MAX_LEN);
+ 
+ 	prop->max_pending_cs = GOYA_MAX_PENDING_CS;
+@@ -5122,7 +5122,7 @@ int goya_cpucp_info_get(struct hl_device *hdev)
+ 	}
+ 
+ 	if (!strlen(prop->cpucp_info.card_name))
+-		strncpy(prop->cpucp_info.card_name, GOYA_DEFAULT_CARD_NAME,
++		strscpy_pad(prop->cpucp_info.card_name, GOYA_DEFAULT_CARD_NAME,
+ 				CARD_NAME_MAX_LEN);
+ 
+ 	return 0;
 
+---
+base-commit: 706a741595047797872e669b3101429ab8d378ef
+change-id: 20230825-strncpy-habanalabs-combined-c43b1d11960e
 
-vim +108 drivers/hwmon/ina3221.c
+Best regards,
+--
+Justin Stitt <justinstitt@google.com>
 
-7cb6dcff1956ec Andrew F. Davis 2016-06-10   96  
-a9e9dd9c6de5d8 Nicolin Chen    2018-10-01   97  /**
-a9e9dd9c6de5d8 Nicolin Chen    2018-10-01   98   * struct ina3221_input - channel input source specific information
-a9e9dd9c6de5d8 Nicolin Chen    2018-10-01   99   * @label: label of channel input source
-a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  100   * @shunt_resistor: shunt resistor value of channel input source
-a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  101   * @disconnected: connection status of channel input source
-a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  102   */
-a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  103  struct ina3221_input {
-a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  104  	const char *label;
-a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  105  	int shunt_resistor;
-a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  106  	bool disconnected;
-3aab5d0b835881 Ninad Malwade   2023-08-26  107  	bool summation_bypass;
-a9e9dd9c6de5d8 Nicolin Chen    2018-10-01 @108  };
-a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  109  
-7cb6dcff1956ec Andrew F. Davis 2016-06-10  110  /**
-7cb6dcff1956ec Andrew F. Davis 2016-06-10  111   * struct ina3221_data - device specific information
-323aeb0eb5d9a6 Nicolin Chen    2018-11-05  112   * @pm_dev: Device pointer for pm runtime
-7cb6dcff1956ec Andrew F. Davis 2016-06-10  113   * @regmap: Register map of the device
-7cb6dcff1956ec Andrew F. Davis 2016-06-10  114   * @fields: Register fields of the device
-a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  115   * @inputs: Array of channel input source specific structures
-87625b24986bc2 Nicolin Chen    2018-11-05  116   * @lock: mutex lock to serialize sysfs attribute accesses
-59d608e152e582 Nicolin Chen    2018-09-29  117   * @reg_config: Register value of INA3221_CONFIG
-2057bdfb7184e9 Nicolin Chen    2019-10-16  118   * @summation_shunt_resistor: equivalent shunt resistor value for summation
-43dece162de047 Nicolin Chen    2019-01-17  119   * @single_shot: running in single-shot operating mode
-7cb6dcff1956ec Andrew F. Davis 2016-06-10  120   */
-7cb6dcff1956ec Andrew F. Davis 2016-06-10  121  struct ina3221_data {
-323aeb0eb5d9a6 Nicolin Chen    2018-11-05  122  	struct device *pm_dev;
-7cb6dcff1956ec Andrew F. Davis 2016-06-10  123  	struct regmap *regmap;
-7cb6dcff1956ec Andrew F. Davis 2016-06-10  124  	struct regmap_field *fields[F_MAX_FIELDS];
-a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  125  	struct ina3221_input inputs[INA3221_NUM_CHANNELS];
-87625b24986bc2 Nicolin Chen    2018-11-05  126  	struct mutex lock;
-59d608e152e582 Nicolin Chen    2018-09-29  127  	u32 reg_config;
-2057bdfb7184e9 Nicolin Chen    2019-10-16  128  	int summation_shunt_resistor;
-3aab5d0b835881 Ninad Malwade   2023-08-26  129  	u32 summation_channel_control;
-43dece162de047 Nicolin Chen    2019-01-17  130  
-43dece162de047 Nicolin Chen    2019-01-17  131  	bool single_shot;
-7cb6dcff1956ec Andrew F. Davis 2016-06-10 @132  };
-7cb6dcff1956ec Andrew F. Davis 2016-06-10  133  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
