@@ -2,85 +2,134 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5F31C6787B
-	for <linux-hwmon@archiver.kernel.org>; Fri, 25 Aug 2023 19:05:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40E23EE49AB
+	for <linux-hwmon@archiver.kernel.org>; Fri, 25 Aug 2023 20:54:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229479AbjHYTFN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 25 Aug 2023 15:05:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60188 "EHLO
+        id S231253AbjHYUyI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 25 Aug 2023 16:54:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231292AbjHYTEl (ORCPT
+        with ESMTP id S230515AbjHYUx4 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 25 Aug 2023 15:04:41 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9413F2137;
-        Fri, 25 Aug 2023 12:04:23 -0700 (PDT)
-Received: from tundra.lovozera (unknown [83.149.199.65])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 19AE640F1DD2;
-        Fri, 25 Aug 2023 19:04:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 19AE640F1DD2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1692990260;
-        bh=HOjQG4CO6mnS8bovh06OkveWowgxs5Vdjds2wSVYyBo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=A4pejQaX5waupoG1rPPOAkeLrru+8B/2KDbQ4TvPAAl5gn8u4JLQKgM/2V7rjX+mv
-         e1CgynrK6ktYFtiyRB9eIZu2GzdSZVKYCXJwKkRn6nju4SJRSMr4bjcENOXXyWrsD4
-         LH/2ry9plKHTqwhg1YhWJrD1N32b/Q5G4p2stMaU=
-From:   Mikhail Kobuk <m.kobuk@ispras.ru>
-To:     Siva Reddy Kallam <siva.kallam@broadcom.com>
-Cc:     Mikhail Kobuk <m.kobuk@ispras.ru>,
-        Prashant Sreedharan <prashant@broadcom.com>,
-        Michael Chan <mchan@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>,
+        Fri, 25 Aug 2023 16:53:56 -0400
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B34981FF0;
+        Fri, 25 Aug 2023 13:53:54 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="6.02,201,1688396400"; 
+   d="scan'208";a="177704970"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie6.idc.renesas.com with ESMTP; 26 Aug 2023 05:53:54 +0900
+Received: from localhost.localdomain (unknown [10.226.92.49])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 9957C4001976;
+        Sat, 26 Aug 2023 05:53:51 +0900 (JST)
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Eric Tremblay <etremblay@distech-controls.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        lvc-project@linuxtesting.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>
-Subject: [PATCH] ethernet: tg3: remove unreachable code
-Date:   Fri, 25 Aug 2023 22:04:41 +0300
-Message-ID: <20230825190443.48375-1-m.kobuk@ispras.ru>
-X-Mailer: git-send-email 2.42.0
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-hwmon@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v3 1/3] hwmon: tmp513: Add max_channels variable to struct tmp51x_data
+Date:   Fri, 25 Aug 2023 21:53:43 +0100
+Message-Id: <20230825205345.632792-2-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230825205345.632792-1-biju.das.jz@bp.renesas.com>
+References: <20230825205345.632792-1-biju.das.jz@bp.renesas.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-'tp->irq_max' value is either 1 [L16336] or 5 [L16354], as indicated in
-tg3_get_invariants(). Therefore, 'i' can't exceed 4 in tg3_init_one()
-that makes (i <= 4) always true. Moreover, 'intmbx' value set at the
-last iteration is not used later in it's scope.
+The tmp512 chip has 3 channels whereas tmp513 has 4 channels. Avoid
+using tmp51x_ids for this HW difference by replacing OF/ID table
+data with maximum channels supported by the device.
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+Add max_channels variable to struct tmp51x_data and fix the logic for
+invalid channel in tmp51x_is_visible().
 
-Fixes: 78f90dcf184b ("tg3: Move napi_add calls below tg3_get_invariants")
-Signed-off-by: Mikhail Kobuk <m.kobuk@ispras.ru>
-Reviewed-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 ---
- drivers/net/ethernet/broadcom/tg3.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+v3:
+ * New patch split from patch #3
+ * Avoided Yoda style logic.
+ * Replaced OF/ID data from tmp51x_ids->max_channels
+---
+ drivers/hwmon/tmp513.c | 26 ++++++++++++++------------
+ 1 file changed, 14 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/net/ethernet/broadcom/tg3.c b/drivers/net/ethernet/broadcom/tg3.c
-index 5ef073a79ce9..6b6da2484dfe 100644
---- a/drivers/net/ethernet/broadcom/tg3.c
-+++ b/drivers/net/ethernet/broadcom/tg3.c
-@@ -17792,10 +17792,7 @@ static int tg3_init_one(struct pci_dev *pdev,
- 		tnapi->tx_pending = TG3_DEF_TX_RING_PENDING;
+diff --git a/drivers/hwmon/tmp513.c b/drivers/hwmon/tmp513.c
+index 9a180b1030c9..99f66f9d5f19 100644
+--- a/drivers/hwmon/tmp513.c
++++ b/drivers/hwmon/tmp513.c
+@@ -113,6 +113,9 @@
  
- 		tnapi->int_mbox = intmbx;
--		if (i <= 4)
--			intmbx += 0x8;
--		else
--			intmbx += 0x4;
-+		intmbx += 0x8;
+ #define MAX_TEMP_HYST			127500
  
- 		tnapi->consmbox = rcvmbx;
- 		tnapi->prodmbox = sndmbx;
++#define TMP512_MAX_CHANNELS		3
++#define TMP513_MAX_CHANNELS		4
++
+ static const u8 TMP51X_TEMP_INPUT[4] = {
+ 	TMP51X_LOCAL_TEMP_RESULT,
+ 	TMP51X_REMOTE_TEMP_RESULT_1,
+@@ -170,6 +173,7 @@ struct tmp51x_data {
+ 	u32 pwr_lsb_uw;
+ 
+ 	enum tmp51x_ids id;
++	u8 max_channels;
+ 	struct regmap *regmap;
+ };
+ 
+@@ -434,7 +438,7 @@ static umode_t tmp51x_is_visible(const void *_data,
+ 
+ 	switch (type) {
+ 	case hwmon_temp:
+-		if (data->id == tmp512 && channel == 3)
++		if (channel >= data->max_channels)
+ 			return 0;
+ 		switch (attr) {
+ 		case hwmon_temp_input:
+@@ -601,21 +605,15 @@ static int tmp51x_init(struct tmp51x_data *data)
+ }
+ 
+ static const struct i2c_device_id tmp51x_id[] = {
+-	{ "tmp512", tmp512 },
+-	{ "tmp513", tmp513 },
++	{ "tmp512", TMP512_MAX_CHANNELS },
++	{ "tmp513", TMP513_MAX_CHANNELS },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, tmp51x_id);
+ 
+ static const struct of_device_id tmp51x_of_match[] = {
+-	{
+-		.compatible = "ti,tmp512",
+-		.data = (void *)tmp512
+-	},
+-	{
+-		.compatible = "ti,tmp513",
+-		.data = (void *)tmp513
+-	},
++	{ .compatible = "ti,tmp512", .data = (void *)TMP512_MAX_CHANNELS },
++	{ .compatible = "ti,tmp513", .data = (void *)TMP513_MAX_CHANNELS },
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(of, tmp51x_of_match);
+@@ -720,7 +718,11 @@ static int tmp51x_probe(struct i2c_client *client)
+ 	if (!data)
+ 		return -ENOMEM;
+ 
+-	data->id = (uintptr_t)i2c_get_match_data(client);
++	data->max_channels = (uintptr_t)i2c_get_match_data(client);
++	if (data->max_channels == TMP513_MAX_CHANNELS)
++		data->id = tmp513;
++	else
++		data->id = tmp512;
+ 
+ 	ret = tmp51x_configure(dev, data);
+ 	if (ret < 0) {
 -- 
-2.42.0
+2.25.1
 
