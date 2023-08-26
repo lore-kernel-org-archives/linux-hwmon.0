@@ -2,97 +2,171 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 530A1EE49B3
-	for <linux-hwmon@archiver.kernel.org>; Fri, 25 Aug 2023 22:14:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72258C83F0C
+	for <linux-hwmon@archiver.kernel.org>; Sat, 26 Aug 2023 02:06:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjHYWOE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 25 Aug 2023 18:14:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46118 "EHLO
+        id S231666AbjHZCF5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 25 Aug 2023 22:05:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbjHYWNk (ORCPT
+        with ESMTP id S229581AbjHZCFb (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 25 Aug 2023 18:13:40 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE622704
-        for <linux-hwmon@vger.kernel.org>; Fri, 25 Aug 2023 15:13:36 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1bf7423ef3eso10498665ad.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 25 Aug 2023 15:13:36 -0700 (PDT)
+        Fri, 25 Aug 2023 22:05:31 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467C4213A;
+        Fri, 25 Aug 2023 19:05:29 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-68a3082c771so1082637b3a.0;
+        Fri, 25 Aug 2023 19:05:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1693001616; x=1693606416;
+        d=gmail.com; s=20221208; t=1693015529; x=1693620329;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0BjJU4w8nwIph8eNiwGoKfedSYPjcFpwJfo8NljTIRk=;
-        b=UzpkgeTaNjwZqWYnvXJmrH8H4MUBGOgP+qcXrveK7VV6mTIdR8ZfSUrAHzEPSuyfuX
-         o9BsMJ3X0CdwVZ4rkN2AHMiMAaSi3CXp1kpBkuRzhJgyWiEhy4DWSzan1srRbI+Myo2u
-         uBa1JWaJlqpuwQtD6KqyrTfE00cTSwFSnQeOk=
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gbCYtg0vOko1eWDjOnwC8EEgo363vCFPLmjBeNY6Hvo=;
+        b=ayIb6O1xOCtnHWq9JlP+nxRnrXIjAzeOOIKnAM39OFNtYUMeou6npnBKazGGd5kgrA
+         cBxrmCQDGFo4MT2Cs8xJyZ5B83H1YXGTl7OSb237NW5cNTC6EWdqI3BIuqTqozGKt+JS
+         d32aWImYvPcXfGPxLwGpOqdXZ0YZoGDOxRJ8utyvZRjiEedvebwAvp7ipCPo6ZODfZmk
+         Gs4wHKlupOPfNZdjbgeCRR/LCb9wCdZXWPfI/Ya7VR/Few33FRi+/tvXpUOTXPhefnyt
+         k6oKGAWTcInoDA/kk2TbEQQ9mnbRgJPo2GJX61tmHMV9Y9et9k8GViCrKm8jW4dnCmN7
+         JVFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693001616; x=1693606416;
+        d=1e100.net; s=20221208; t=1693015529; x=1693620329;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0BjJU4w8nwIph8eNiwGoKfedSYPjcFpwJfo8NljTIRk=;
-        b=UoPYhTLTEqx111Rc1LqdeFtuMHY67abV3D35aOdPwS6IieV8b5qvp/WnMYlJU8VJqb
-         /QbwNbhxVNrMTqb0XrsV8EQWCmMBRKhydP1NKxMq78fpYZsrw34rZKzJyvsdk/s5z6R7
-         /X3r5Mqbti1V3AYLDp+p6jZjJVo7VsbNOWNXkxolam5S2e4VVhukMQkrliciz0JIkSz7
-         7+k67jSJTFYuhxE2F+wt3SUyJrEU8xgyg+NjOeLUyIjRQX6x9PNKG4lI6HMKIq7WsOfB
-         9SpzjnVn4HkfRDtOhjTDGuiGfto0S6tTspzvSdPX6y55W4P7fmLo553mFB0FcbwArn0i
-         jvZA==
-X-Gm-Message-State: AOJu0YyD6/HyAxWKZ2LqjIEFUbs+pZKsQs/A4MLwIX6GIdpalAgA6Q89
-        zgpbCDRBbM1qt3DZx6se4JlztcdoBDMpanetPNI=
-X-Google-Smtp-Source: AGHT+IHmApoYxQ/QPGNvuqZJJuCLA/kYG9vprDv9WbQh/uIwdR0ryLsfErzUUgIKN0tApgQ21jWq/Q==
-X-Received: by 2002:a17:903:1109:b0:1bb:3a7:6af7 with SMTP id n9-20020a170903110900b001bb03a76af7mr22568511plh.23.1693001616232;
-        Fri, 25 Aug 2023 15:13:36 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id o15-20020a170902d4cf00b001b9e86e05b7sm2261569plg.0.2023.08.25.15.13.35
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gbCYtg0vOko1eWDjOnwC8EEgo363vCFPLmjBeNY6Hvo=;
+        b=abSHrc66DdwAxf9zozngwjGLgb4NZZ7ITdbYYtWCcSSYMOfFI5F485MBDET2EV7a90
+         BJKzhLKzeOVFmMLXe6c/IFbVZPAYSLidjt4J1uyClEy8NHX0hF2Ka/UpckfhRBGpKYWv
+         BWf4Gr/HU1lpf+jUh9B0eXBacazyTJGuUigeQzqsmI8CTDPXt29YfOk9IhEUr9R4B9cT
+         k+AXX/vwv7BUucb1c372GBrjOsIPWrzC5zsP0BVB1yKhoVMrQ8of+KwZaJmgnEkm2qOj
+         GJd3xiox7AW6SkICLYeS6QqlDXZJnlSpaniH/IkeLdpzuoevnZpjb3GizqwzyTLIaxF+
+         WogQ==
+X-Gm-Message-State: AOJu0YyO7uqF4fB8wZebKAtS9kZeIfpYlHGP8NZ8Jeexxp9tS/19j92w
+        PXP6imoZX/+fLfRv7L3qhAY=
+X-Google-Smtp-Source: AGHT+IFMvstKx+NYhyR1h839F9UGkJbZzeYvZtek3tRXwEVur6E9dMoj7pu4P6/Sj512FUYmwMzIGg==
+X-Received: by 2002:a05:6a00:1818:b0:68a:55ff:3a1c with SMTP id y24-20020a056a00181800b0068a55ff3a1cmr28883945pfa.7.1693015528501;
+        Fri, 25 Aug 2023 19:05:28 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bm2-20020a056a00320200b00687196f369esm2230721pfb.62.2023.08.25.19.05.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Aug 2023 15:13:35 -0700 (PDT)
-Date:   Fri, 25 Aug 2023 15:13:35 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Justin Stitt <justinstitt@google.com>
-Cc:     Oded Gabbay <ogabbay@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] accel/habanalabs: refactor deprecated strncpy to
- strscpy_pad
-Message-ID: <202308251513.0F6BF9FEE6@keescook>
-References: <20230825-strncpy-habanalabs-combined-v1-1-daa05a89b7e3@google.com>
+        Fri, 25 Aug 2023 19:05:27 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 25 Aug 2023 19:05:26 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Eric Tremblay <etremblay@distech-controls.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] hwmon: tmp513: Add max_channels variable to
+ struct tmp51x_data
+Message-ID: <bf401e42-320b-4d8f-a9e5-f76b4c7d855d@roeck-us.net>
+References: <20230825205345.632792-1-biju.das.jz@bp.renesas.com>
+ <20230825205345.632792-2-biju.das.jz@bp.renesas.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230825-strncpy-habanalabs-combined-v1-1-daa05a89b7e3@google.com>
+In-Reply-To: <20230825205345.632792-2-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Aug 25, 2023 at 10:09:51PM +0000, Justin Stitt wrote:
-> `strncpy` is deprecated for use on NUL-terminated destination strings [1].
+On Fri, Aug 25, 2023 at 09:53:43PM +0100, Biju Das wrote:
+> The tmp512 chip has 3 channels whereas tmp513 has 4 channels. Avoid
+> using tmp51x_ids for this HW difference by replacing OF/ID table
+> data with maximum channels supported by the device.
 > 
-> We see that `prop->cpucp_info.card_name` is supposed to be
-> NUL-terminated based on its usage within `__hwmon_device_register()`
-> (wherein it's called "name"):
-> |	if (name && (!strlen(name) || strpbrk(name, "-* \t\n")))
-> |		dev_warn(dev,
-> |			 "hwmon: '%s' is not a valid name attribute, please fix\n",
-> |			 name);
-> 
-> A suitable replacement is `strscpy_pad` [2] due to the fact that it
-> guarantees both NUL-termination and NUL-padding on its destination
-> buffer.
-> 
-> NUL-padding on `prop->cpucp_info.card_name` is not strictly necessary as
-> `hdev->prop` is explicitly zero-initialized but should be used
-> regardless as it gets copied out to userspace directly -- as per Kees' suggestion.
-> 
-> Link: www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings[1]
-> Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html [2]
-> Link: https://github.com/KSPP/linux/issues/90
-> Cc: linux-hardening@vger.kernel.org
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
+> Add max_channels variable to struct tmp51x_data and fix the logic for
+> invalid channel in tmp51x_is_visible().
 
-Thanks for the consolidation and refresh. :)
+This patch does not fix anything. The existing logic in tmp51x_is_visible()
+is perfectly fine.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Guenter
 
--- 
-Kees Cook
+> 
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> ---
+> v3:
+>  * New patch split from patch #3
+>  * Avoided Yoda style logic.
+>  * Replaced OF/ID data from tmp51x_ids->max_channels
+> ---
+>  drivers/hwmon/tmp513.c | 26 ++++++++++++++------------
+>  1 file changed, 14 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/hwmon/tmp513.c b/drivers/hwmon/tmp513.c
+> index 9a180b1030c9..99f66f9d5f19 100644
+> --- a/drivers/hwmon/tmp513.c
+> +++ b/drivers/hwmon/tmp513.c
+> @@ -113,6 +113,9 @@
+>  
+>  #define MAX_TEMP_HYST			127500
+>  
+> +#define TMP512_MAX_CHANNELS		3
+> +#define TMP513_MAX_CHANNELS		4
+> +
+>  static const u8 TMP51X_TEMP_INPUT[4] = {
+>  	TMP51X_LOCAL_TEMP_RESULT,
+>  	TMP51X_REMOTE_TEMP_RESULT_1,
+> @@ -170,6 +173,7 @@ struct tmp51x_data {
+>  	u32 pwr_lsb_uw;
+>  
+>  	enum tmp51x_ids id;
+> +	u8 max_channels;
+>  	struct regmap *regmap;
+>  };
+>  
+> @@ -434,7 +438,7 @@ static umode_t tmp51x_is_visible(const void *_data,
+>  
+>  	switch (type) {
+>  	case hwmon_temp:
+> -		if (data->id == tmp512 && channel == 3)
+> +		if (channel >= data->max_channels)
+>  			return 0;
+>  		switch (attr) {
+>  		case hwmon_temp_input:
+> @@ -601,21 +605,15 @@ static int tmp51x_init(struct tmp51x_data *data)
+>  }
+>  
+>  static const struct i2c_device_id tmp51x_id[] = {
+> -	{ "tmp512", tmp512 },
+> -	{ "tmp513", tmp513 },
+> +	{ "tmp512", TMP512_MAX_CHANNELS },
+> +	{ "tmp513", TMP513_MAX_CHANNELS },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(i2c, tmp51x_id);
+>  
+>  static const struct of_device_id tmp51x_of_match[] = {
+> -	{
+> -		.compatible = "ti,tmp512",
+> -		.data = (void *)tmp512
+> -	},
+> -	{
+> -		.compatible = "ti,tmp513",
+> -		.data = (void *)tmp513
+> -	},
+> +	{ .compatible = "ti,tmp512", .data = (void *)TMP512_MAX_CHANNELS },
+> +	{ .compatible = "ti,tmp513", .data = (void *)TMP513_MAX_CHANNELS },
+>  	{ },
+>  };
+>  MODULE_DEVICE_TABLE(of, tmp51x_of_match);
+> @@ -720,7 +718,11 @@ static int tmp51x_probe(struct i2c_client *client)
+>  	if (!data)
+>  		return -ENOMEM;
+>  
+> -	data->id = (uintptr_t)i2c_get_match_data(client);
+> +	data->max_channels = (uintptr_t)i2c_get_match_data(client);
+> +	if (data->max_channels == TMP513_MAX_CHANNELS)
+> +		data->id = tmp513;
+> +	else
+> +		data->id = tmp512;
+>  
+>  	ret = tmp51x_configure(dev, data);
+>  	if (ret < 0) {
+> -- 
+> 2.25.1
+> 
