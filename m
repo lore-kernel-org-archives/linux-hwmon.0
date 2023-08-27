@@ -2,139 +2,199 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7390CC83F11
-	for <linux-hwmon@archiver.kernel.org>; Sat, 26 Aug 2023 08:58:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7840EC83F12
+	for <linux-hwmon@archiver.kernel.org>; Sun, 27 Aug 2023 14:15:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232099AbjHZI52 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 26 Aug 2023 04:57:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44704 "EHLO
+        id S230247AbjH0OPL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 27 Aug 2023 10:15:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231361AbjHZI5D (ORCPT
+        with ESMTP id S230096AbjH0OOz (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 26 Aug 2023 04:57:03 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58B0B0
-        for <linux-hwmon@vger.kernel.org>; Sat, 26 Aug 2023 01:56:59 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-5009d4a4897so2543757e87.0
-        for <linux-hwmon@vger.kernel.org>; Sat, 26 Aug 2023 01:56:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693040218; x=1693645018;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7yGXBVcB5RgIvR3q2K2OKjd17MwrMmfxUPp5m1Q3U6U=;
-        b=O8/tV3d+PU+KQonm+fa1RT4kWPTirjw72aePQSJKw29KICS8rHEoXfEPgsamAXweRh
-         4GzPmu+OUe9M9fn6X8xDhHhw5YYSYkQgEHWYhErCtGNKBNfOM440ypHxcpMe+ZzjyiHZ
-         syGStyvWB6ab6ySnXRKw+uNTgJ62cignepIJ0pkzG03awsZBNAMBYlO/AUhAKP+NNMvv
-         bqL2Gy9vxU3xLkGb84jL+t5eq1/D5Ag6RN7cPsa2CoXOTPyWeqWY8c2kQQ3rWAznRLeF
-         +UUipb+ZFGGET/0hARFoetuZgt/5Bu8OdgMk6YWZW2JCDpmMCZnsL/NhBGJ4oE3zkipu
-         uYfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693040218; x=1693645018;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7yGXBVcB5RgIvR3q2K2OKjd17MwrMmfxUPp5m1Q3U6U=;
-        b=PxpRMk/nFAzamXfvUfLjKWPYnnxcpb4nyy6uq/N89wmIPyqKCfIzqBpjFOCUv+zPw0
-         +DnJ7YeqUXAn1M47Q2YClYVjkn82sTEaDmru6o4D+eLjqHupNWYV61lLB8m5/vmelivO
-         QfFCiD5NamrgXzbe76ekWlPTVuQ5ynMP/o6E+8TlAWNhOmsMH06op4vBZTDz9PSZs7s3
-         As2N72z/uxU174s8hztgebPF8y/FSfYUT5Tpxk96KXW7FAJ8umM4IHgNoXUGMi8ssSrX
-         O5a2BC1HUqLvSPMQlgDTZdAcmIzOgMMIsylEkSllMBZ08B+I/CmxvLopB6yXrqi8AVW0
-         wQMA==
-X-Gm-Message-State: AOJu0Yy8HikSQl1pzdOBH6RsRIuEBbMurVxwFvIg5uy49+aXKeLDNOiS
-        RW0MIN8+r8zku3iyou8vtikRIw==
-X-Google-Smtp-Source: AGHT+IHvpksc/T0dDbtHLsxsdzmiLQ+zqP/zITpPHVj1AB5lTzNQAw5NjqmaRus9ritM1INyoRW28A==
-X-Received: by 2002:ac2:4a6e:0:b0:4fd:fedc:2ce5 with SMTP id q14-20020ac24a6e000000b004fdfedc2ce5mr14964274lfp.36.1693040217821;
-        Sat, 26 Aug 2023 01:56:57 -0700 (PDT)
-Received: from [192.168.0.22] ([77.252.47.198])
-        by smtp.gmail.com with ESMTPSA id q3-20020aa7d443000000b00525c01f91b0sm1893154edr.42.2023.08.26.01.56.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Aug 2023 01:56:57 -0700 (PDT)
-Message-ID: <7595f0d3-7a59-9837-ef6b-627be3688667@linaro.org>
-Date:   Sat, 26 Aug 2023 10:56:56 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH V2 2/4] dt-bindings: hwmon: ina3221: Add summation-bypass
-Content-Language: en-US
-To:     Ninad Malwade <nmalwade@nvidia.com>, jdelvare@suse.com,
-        linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-References: <20230825164249.22860-1-nmalwade@nvidia.com>
- <20230825164249.22860-3-nmalwade@nvidia.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230825164249.22860-3-nmalwade@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Sun, 27 Aug 2023 10:14:55 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F1511C
+        for <linux-hwmon@vger.kernel.org>; Sun, 27 Aug 2023 07:14:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693145693; x=1724681693;
+  h=date:from:to:cc:subject:message-id;
+  bh=2RQwv63S/LwJrWJ56eEMRXOdIgnv64Dc2IlslDe+68Q=;
+  b=ZAV2pn2Wcdne8VfpUll8A8Hv0v7VFEsYGdlLs/pmKN21j+p2hjQoMNuo
+   02OZAaG4mbimbEctQhLSDc4n6lC4wrhejbXP9woFn/kxXZSpsLYXZ8dOd
+   XtUdswuahjpT307rm5cLoKozqhoTnHqUReQ5d0zHFr0xZAHjEAaUkLiuJ
+   XAtEILuB3ehWRsxTyY4OtqJ+gTv57LcIWLI4mu1qAvHwE7cBoOIU+kMcW
+   lBFJKyiLREbC/Ch5GKj7OdKxQYzFkhryP2QGlB8tknLrLM5vRI8MYjmMd
+   a5qnwJ5bC1KxE7+EqOw1s8dM6SUDrJpNg3djWeDhAPivh/szvkI5nDLBc
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="354473286"
+X-IronPort-AV: E=Sophos;i="6.02,205,1688454000"; 
+   d="scan'208";a="354473286"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2023 07:14:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="911767986"
+X-IronPort-AV: E=Sophos;i="6.02,205,1688454000"; 
+   d="scan'208";a="911767986"
+Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 27 Aug 2023 07:14:51 -0700
+Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qaGXP-0005sf-1w;
+        Sun, 27 Aug 2023 14:14:48 +0000
+Date:   Sun, 27 Aug 2023 22:14:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD REGRESSION
+ 919a83d020a8dfa1411c1dc1cff23a833f0f5268
+Message-ID: <202308272217.pxa98ozc-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 25/08/2023 18:42, Ninad Malwade wrote:
-> The INA3221 has a critical alert pin that can be controlled by the
-> summation control function. This function adds the single
-> shunt-voltage conversions for the desired channels in order to
-> compare the combined sum to the programmed limit. The Shunt-Voltage
-> Sum Limit register contains the programmed value that is compared
-> to the value in the Shunt-Voltage Sum register in order to
-> determine if the total summed limit is exceeded. If the
-> shunt-voltage sum limit value is exceeded, the critical alert pin
-> pulls low.
-> 
-> For the summation limit to have a meaningful value, it is necessary
-> to use the same shunt-resistor value on all included channels. Add a
-> new property, 'summation-bypass', to allow specific channels to be
-> excluded from the summation control function if the shunt resistor
-> is different to other channels.
-> 
-> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
-> Signed-off-by: Ninad Malwade <nmalwade@nvidia.com>
-> ---
->  .../devicetree/bindings/hwmon/ti,ina3221.yaml  | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml b/Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml
-> index 0c6d41423d8c..20c23febf575 100644
-> --- a/Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml
-> @@ -55,6 +55,24 @@ patternProperties:
->        shunt-resistor-micro-ohms:
->          description: shunt resistor value in micro-Ohm
->  
-> +      summation-bypass:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 919a83d020a8dfa1411c1dc1cff23a833f0f5268  hwmon: (tmp513) Simplify probe()
 
-What is the type? There is no vendor prefix here, so you added it as a
-generic property. Which other devices use or can use it?
+Unverified Error/Warning (likely false positive, please contact us if interested):
 
-> +        description: |
-> +          The INA3221 has a critical alert pin that can be controlled by the
-> +          summation control function. This function adds the single
-> +          shunt-voltage conversions for the desired channels in order to
-> +          compare the combined sum to the programmed limit. The Shunt-Voltage
-> +          Sum Limit register contains the programmed value that is compared
-> +          to the value in the Shunt-Voltage Sum register in order to
-> +          determine if the total summed limit is exceeded. If the
-> +          shunt-voltage sum limit value is exceeded, the critical alert pin
-> +          pulls low.
-> +
-> +          For the summation limit to have a meaningful value, it is necessary
-> +          to use the same shunt-resistor value on all included channels. If
-> +          this is not the case for specific channels, then the
-> +          'summation-bypass' can be populated for a specific channel to
-> +          exclude from the summation control function.
+sh4-linux-gcc: internal compiler error: Segmentation fault signal terminated program cc1
+{standard input}: Warning: end of file not at end of a line; newline inserted
+{standard input}:608: Error: pcrel too far
+{standard input}:667: Warning: overflow in branch to .L84; converted into longer instruction sequence
 
-I don't understand what this property does. You described feature in the
-device, that's good, but how does it map to the property? Bypass means
-disable?
+Error/Warning ids grouped by kconfigs:
 
-> +
->      additionalProperties: false
->  
->      required:
+gcc_recent_errors
+`-- sh-randconfig-r006-20230826
+    |-- sh4-linux-gcc:internal-compiler-error:Segmentation-fault-signal-terminated-program-cc1
+    |-- standard-input:Error:pcrel-too-far
+    |-- standard-input:Warning:end-of-file-not-at-end-of-a-line-newline-inserted
+    `-- standard-input:Warning:overflow-in-branch-to-.L84-converted-into-longer-instruction-sequence
 
-Best regards,
-Krzysztof
+elapsed time: 2796m
 
+configs tested: 115
+configs skipped: 2
+
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20230826   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                   randconfig-001-20230826   gcc  
+arm                  randconfig-r021-20230826   gcc  
+arm                  randconfig-r032-20230825   gcc  
+arm64                            allmodconfig   gcc  
+arm64                             allnoconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+hexagon               randconfig-001-20230826   clang
+hexagon               randconfig-002-20230826   clang
+i386         buildonly-randconfig-001-20230826   gcc  
+i386         buildonly-randconfig-002-20230826   gcc  
+i386         buildonly-randconfig-003-20230826   gcc  
+i386         buildonly-randconfig-004-20230826   gcc  
+i386         buildonly-randconfig-005-20230826   gcc  
+i386         buildonly-randconfig-006-20230826   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-r006-20230825   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                        allyesconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20230826   gcc  
+loongarch            randconfig-r031-20230825   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r025-20230826   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+microblaze           randconfig-r005-20230825   gcc  
+microblaze           randconfig-r035-20230825   gcc  
+mips                             allmodconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+openrisc                         allmodconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+openrisc             randconfig-r001-20230825   gcc  
+openrisc             randconfig-r033-20230825   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   gcc  
+powerpc64            randconfig-r022-20230826   clang
+powerpc64            randconfig-r026-20230826   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                 randconfig-001-20230826   gcc  
+riscv                randconfig-r002-20230825   clang
+riscv                randconfig-r034-20230825   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                              allnoconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                  randconfig-001-20230826   clang
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                   randconfig-r004-20230825   gcc  
+sh                   randconfig-r023-20230826   gcc  
+sh                   randconfig-r036-20230825   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r024-20230826   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64               randconfig-r003-20230825   clang
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                            allnoconfig   gcc  
+xtensa                           allyesconfig   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
