@@ -2,199 +2,75 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7840EC83F12
-	for <linux-hwmon@archiver.kernel.org>; Sun, 27 Aug 2023 14:15:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2E62C83F10
+	for <linux-hwmon@archiver.kernel.org>; Sun, 27 Aug 2023 16:48:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230247AbjH0OPL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 27 Aug 2023 10:15:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39298 "EHLO
+        id S229875AbjH0Qrr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 27 Aug 2023 12:47:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbjH0OOz (ORCPT
+        with ESMTP id S229966AbjH0Qrd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 27 Aug 2023 10:14:55 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F1511C
-        for <linux-hwmon@vger.kernel.org>; Sun, 27 Aug 2023 07:14:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693145693; x=1724681693;
-  h=date:from:to:cc:subject:message-id;
-  bh=2RQwv63S/LwJrWJ56eEMRXOdIgnv64Dc2IlslDe+68Q=;
-  b=ZAV2pn2Wcdne8VfpUll8A8Hv0v7VFEsYGdlLs/pmKN21j+p2hjQoMNuo
-   02OZAaG4mbimbEctQhLSDc4n6lC4wrhejbXP9woFn/kxXZSpsLYXZ8dOd
-   XtUdswuahjpT307rm5cLoKozqhoTnHqUReQ5d0zHFr0xZAHjEAaUkLiuJ
-   XAtEILuB3ehWRsxTyY4OtqJ+gTv57LcIWLI4mu1qAvHwE7cBoOIU+kMcW
-   lBFJKyiLREbC/Ch5GKj7OdKxQYzFkhryP2QGlB8tknLrLM5vRI8MYjmMd
-   a5qnwJ5bC1KxE7+EqOw1s8dM6SUDrJpNg3djWeDhAPivh/szvkI5nDLBc
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="354473286"
-X-IronPort-AV: E=Sophos;i="6.02,205,1688454000"; 
-   d="scan'208";a="354473286"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2023 07:14:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="911767986"
-X-IronPort-AV: E=Sophos;i="6.02,205,1688454000"; 
-   d="scan'208";a="911767986"
-Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 27 Aug 2023 07:14:51 -0700
-Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qaGXP-0005sf-1w;
-        Sun, 27 Aug 2023 14:14:48 +0000
-Date:   Sun, 27 Aug 2023 22:14:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD REGRESSION
- 919a83d020a8dfa1411c1dc1cff23a833f0f5268
-Message-ID: <202308272217.pxa98ozc-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+        Sun, 27 Aug 2023 12:47:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173D9115;
+        Sun, 27 Aug 2023 09:47:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8052461505;
+        Sun, 27 Aug 2023 16:47:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 967D0C433C7;
+        Sun, 27 Aug 2023 16:47:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693154849;
+        bh=vDhsXRw3WVqEe39LN1DWXuIBT6/LQlWm8E1xNI3unqI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hjg+7F1GSWyFtE+DXiaCPlKeKcw26jUadcoTS3brl8EMyhipIeakexij739QMZJaU
+         7IJqklE3/IHn56kBX8W4wzzPPL0btzpqBrH/Cg9jv1RGfBAGRWZG6a5gBIYWayLFoP
+         9IOQ4XJNSL1Tmhymjb5AVnEolL8LZ+SGdJkGntFudRyq68ia2E+mbZHQblPNjFyyK4
+         5IIYvtgHuE0Z+g6oFEHTXVSEjhHzpeprl8QTs7sS00AyrNDfJTl+uzq4f4MrohNyLB
+         LAgKbmLSDKiQR/t9KRGF/c64Wf/HUrCVw2KT832sInQDcdlrhfCXGrb5+l4KI8nb2z
+         lDPFR90KnWjvA==
+Date:   Sun, 27 Aug 2023 18:47:13 +0200
+From:   Simon Horman <horms@kernel.org>
+To:     Mikhail Kobuk <m.kobuk@ispras.ru>
+Cc:     Siva Reddy Kallam <siva.kallam@broadcom.com>,
+        Prashant Sreedharan <prashant@broadcom.com>,
+        Michael Chan <mchan@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        lvc-project@linuxtesting.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>
+Subject: Re: [PATCH] ethernet: tg3: remove unreachable code
+Message-ID: <20230827164713.GU3523530@kernel.org>
+References: <20230825190443.48375-1-m.kobuk@ispras.ru>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230825190443.48375-1-m.kobuk@ispras.ru>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 919a83d020a8dfa1411c1dc1cff23a833f0f5268  hwmon: (tmp513) Simplify probe()
+On Fri, Aug 25, 2023 at 10:04:41PM +0300, Mikhail Kobuk wrote:
+> 'tp->irq_max' value is either 1 [L16336] or 5 [L16354], as indicated in
+> tg3_get_invariants(). Therefore, 'i' can't exceed 4 in tg3_init_one()
+> that makes (i <= 4) always true. Moreover, 'intmbx' value set at the
+> last iteration is not used later in it's scope.
+> 
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> 
+> Fixes: 78f90dcf184b ("tg3: Move napi_add calls below tg3_get_invariants")
+> Signed-off-by: Mikhail Kobuk <m.kobuk@ispras.ru>
+> Reviewed-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
 
-Unverified Error/Warning (likely false positive, please contact us if interested):
+Reviewed-by: Simon Horman <horms@kernel.org>
 
-sh4-linux-gcc: internal compiler error: Segmentation fault signal terminated program cc1
-{standard input}: Warning: end of file not at end of a line; newline inserted
-{standard input}:608: Error: pcrel too far
-{standard input}:667: Warning: overflow in branch to .L84; converted into longer instruction sequence
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-`-- sh-randconfig-r006-20230826
-    |-- sh4-linux-gcc:internal-compiler-error:Segmentation-fault-signal-terminated-program-cc1
-    |-- standard-input:Error:pcrel-too-far
-    |-- standard-input:Warning:end-of-file-not-at-end-of-a-line-newline-inserted
-    `-- standard-input:Warning:overflow-in-branch-to-.L84-converted-into-longer-instruction-sequence
-
-elapsed time: 2796m
-
-configs tested: 115
-configs skipped: 2
-
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20230826   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                   randconfig-001-20230826   gcc  
-arm                  randconfig-r021-20230826   gcc  
-arm                  randconfig-r032-20230825   gcc  
-arm64                            allmodconfig   gcc  
-arm64                             allnoconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-hexagon               randconfig-001-20230826   clang
-hexagon               randconfig-002-20230826   clang
-i386         buildonly-randconfig-001-20230826   gcc  
-i386         buildonly-randconfig-002-20230826   gcc  
-i386         buildonly-randconfig-003-20230826   gcc  
-i386         buildonly-randconfig-004-20230826   gcc  
-i386         buildonly-randconfig-005-20230826   gcc  
-i386         buildonly-randconfig-006-20230826   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-r006-20230825   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20230826   gcc  
-loongarch            randconfig-r031-20230825   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r025-20230826   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-microblaze           randconfig-r005-20230825   gcc  
-microblaze           randconfig-r035-20230825   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-openrisc             randconfig-r001-20230825   gcc  
-openrisc             randconfig-r033-20230825   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   gcc  
-powerpc64            randconfig-r022-20230826   clang
-powerpc64            randconfig-r026-20230826   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                 randconfig-001-20230826   gcc  
-riscv                randconfig-r002-20230825   clang
-riscv                randconfig-r034-20230825   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20230826   clang
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                   randconfig-r004-20230825   gcc  
-sh                   randconfig-r023-20230826   gcc  
-sh                   randconfig-r036-20230825   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r024-20230826   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64               randconfig-r003-20230825   clang
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
