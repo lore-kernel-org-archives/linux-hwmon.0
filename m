@@ -2,106 +2,142 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D6B7C83F16
-	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Aug 2023 10:37:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D22DC83F15
+	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Aug 2023 15:04:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231528AbjH1KhI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 28 Aug 2023 06:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46622 "EHLO
+        id S229514AbjH1PDj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 28 Aug 2023 11:03:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231666AbjH1KhB (ORCPT
+        with ESMTP id S232131AbjH1PDG (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 28 Aug 2023 06:37:01 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9486FAB;
-        Mon, 28 Aug 2023 03:36:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693219019; x=1724755019;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Aq3/gK81Dgx0YuzZbiFuBZsQ3QfEivtZe/N8WMO0YCs=;
-  b=B2TL5LX0CQNXUik2WMySmn3SgzYhJJT5WxEnwpoQaVxT36MwH1tlJ3Cf
-   HZp8IF5JaKLVcZw3Ivf5ZUcY/aQSndczQ42st/0XHNDR3TUrJhizoekrv
-   2i/Oxs97nNkIsgXNvY5u3U9BvuI7hcUcZOlPL2t4piZsc8d7Dyw9SWqiP
-   /evw5e1LGEmJ2TwaenhNTh6C5tcwYVGL2zyrOe5T8J0iigvMA4b3q4dbm
-   W7pfhaIBN+gesj12JLX1DlMyF+THAqsAiQYNi8uVKXNGM1rWLlh9mCinH
-   heyKW6NiqXYHpcyrn6Q2kE56OFqJzwKCFcDKStwuonL17IEaqwfagIRR6
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="360066393"
-X-IronPort-AV: E=Sophos;i="6.02,207,1688454000"; 
-   d="scan'208";a="360066393"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2023 03:36:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="731778213"
-X-IronPort-AV: E=Sophos;i="6.02,207,1688454000"; 
-   d="scan'208";a="731778213"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP; 28 Aug 2023 03:36:56 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qaZc6-00EUoe-2e;
-        Mon, 28 Aug 2023 13:36:54 +0300
-Date:   Mon, 28 Aug 2023 13:36:54 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Eric Tremblay <etremblay@distech-controls.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org,
+        Mon, 28 Aug 2023 11:03:06 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC0DCC;
+        Mon, 28 Aug 2023 08:03:04 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id e9e14a558f8ab-34ca22e3b3dso11570365ab.3;
+        Mon, 28 Aug 2023 08:03:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1693234983; x=1693839783;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VwNIZBavXMZo1akHKZTjOyuetxIq1qrOPfRzCXAyJaw=;
+        b=eeu+jRET8twmVPrNLzZhzjXd35HZJNSaMDo0KWlrW+ryQC4Ucg9kgPP9/2FQcIBkd4
+         r0whdupaVjskodqtqs2NSEbIhnORsSQxo6zS5L4O+tla+MVw1x/0QHrVeDngtmX4RiWc
+         tSIewY7ZS7/VWMk0uLNrQMxy+XOJ3mSup5A2m1yjEBWnAcIGyYUXTTMIoIeGdvLnXOwK
+         nIN7PWuNfwUz5KA6oichoZSZlT6DtW8qK/QN/Y+Jb7dD1PI5b+Gxpj046Y7LeVXcOpPc
+         fyxeJ71NKOQEb6/h1OzFsqV+KC1gPfL9qfh3Xsc95vtTZrojNJiq6Lpbi2AvdSNkDhcg
+         q41g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693234983; x=1693839783;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VwNIZBavXMZo1akHKZTjOyuetxIq1qrOPfRzCXAyJaw=;
+        b=FxUXaiH1z/TBqxLjF2qDpl2fxm1uTZQPZOdPOyw3zQuI78A9acG1Et9UfUM0csLvdJ
+         K2Gcmt054bBYtn0yx8am1w/QTPkJ5g6Ifq0BuKz8rLgBnul4iEnwpWKZvZXJcSWMk50Y
+         58UKbhtZPu2RwemEaNJI4YFiPdfd3DMZRsQxc7xc5lEENT2bPbKbZlIUYRfzIVeBMGze
+         yFDh6+YoQHVJMKkVvdXTlNa6vtsnsDmNg0BWizpLjsAqLyMCOP7yOiaf/4oscGaWD+Cb
+         kpXJCVgm2iW7nAX+4cRYRSWo7WLi1QSkOKhvv4ponOh2veJR1vw9bH29Sc3UKMLMVUtT
+         movg==
+X-Gm-Message-State: AOJu0YwhOE9ll90+NRONnEbIwxFdcLGpMzNVLSQLS6HS/09i7rZzpBxY
+        6ClK+oMSbPdoTyWhsvw9b5yYXFf9jy8=
+X-Google-Smtp-Source: AGHT+IHxuAXeAKESABQAMyOc89nh/dB41UduiD4bgrkStCyTgDNKW06l5xJdZHUks9kjikTyZCD2VA==
+X-Received: by 2002:a05:6e02:152f:b0:346:d51:9922 with SMTP id i15-20020a056e02152f00b003460d519922mr17884072ilu.13.1693234983415;
+        Mon, 28 Aug 2023 08:03:03 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t9-20020a92dc09000000b0034a93f0709esm2496223iln.37.2023.08.28.08.03.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Aug 2023 08:03:02 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 28 Aug 2023 08:03:00 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Eric Tremblay <etremblay@distech-controls.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] hwmon: tmp513: Simplify tmp51x_read_properties()
-Message-ID: <ZOx4xlc8bFfXQbUx@smile.fi.intel.com>
+Subject: Re: [PATCH v3 2/3] hwmon: tmp513: Drop enum tmp51x_ids and variable
+ id from struct tmp51x_data
+Message-ID: <01b19c73-d158-401b-8a0b-3fdef61294c0@roeck-us.net>
 References: <20230825205345.632792-1-biju.das.jz@bp.renesas.com>
- <20230825205345.632792-4-biju.das.jz@bp.renesas.com>
- <CAMuHMdWESYVB2UXAHrKuBNway2zDzm-D-7rX8bz0OESAACK+OA@mail.gmail.com>
+ <20230825205345.632792-3-biju.das.jz@bp.renesas.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMuHMdWESYVB2UXAHrKuBNway2zDzm-D-7rX8bz0OESAACK+OA@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20230825205345.632792-3-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Aug 28, 2023 at 09:45:17AM +0200, Geert Uytterhoeven wrote:
-> On Fri, Aug 25, 2023 at 10:54 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> > Simplify tmp51x_read_properties() by replacing 'nfactor' ->'data->nfactor'
-> > in device_property_read_u32_array() and drop the local variable as it is
-> > unused.
-
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-...
-
-> > -       ret = device_property_read_u32_array(dev, "ti,nfactor", nfactor,
-> > -                                           data->max_channels - 1);
-> > -       if (ret >= 0)
-> > -               memcpy(data->nfactor, nfactor, data->max_channels - 1);
-> > +       device_property_read_u32_array(dev, "ti,nfactor", data->nfactor,
-> > +                                      data->max_channels - 1);
+On Fri, Aug 25, 2023 at 09:53:44PM +0100, Biju Das wrote:
+> Drop variable id from struct tmp51x_data and enum tmp51x_ids as all the
+> hw differences can be handled by max_channels.
 > 
-> My first thought was that this could cause a small change in behavior.
-> However, the comments for of_property_read_u32_array() and
-> of_property_read_variable_u32_array() state:
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> ---
+> v2->v3:
+>  * Updated the macro TMP51X_TEMP_CONFIG_DEFAULT by adding bit definitions.
+>  * Dropped unused macros TMP51{2,3}_TEMP_CONFIG_DEFAULT.
+> ---
 
-I don't know how the latter is relevant here (or even anything from of_*()
-specific APIs). The device property APIs should give behaviour described
-in their own docs (although it must be compatible with the existing OF one).
+[ ... ]
 
->  * The out_values is modified only if a valid u32 value can be decoded.
-> 
-> and the implementation behaves that way.
-> 
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+I had another look at those. First of all, using MASK and FIELD_PREP
+for single-bit fields doesn't add value. Just drop the _MASK from
+all those and just use BIT().
 
--- 
-With Best Regards,
-Andy Shevchenko
+> +#define TMP51X_TEMP_CONFIG_GPM_MASK	BIT(2)
 
+GPM is bit 0 and 1, so this is wrong. This should probably
+be TMP51X_TEMP_CONFIG_GP which is bit 2. It is also a read-only
+value, so setting it is never warranted.
 
+> +#define TMP51X_TEMP_CONFIG_RC_MASK	BIT(10)
+> +#define TMP51X_TEMP_CONFIG_CONT_MASK	BIT(15)
+
+Drop _MASK.
+
+> +
+> +#define TMP51X_TEMP_CONFIG_GPM		FIELD_PREP(GENMASK(1, 0), 0)
+
+Technically, using a 2-bit field here is misleading, since bit 1 defines
+if the gpio bit is an input or output, and bit 0 defines the state of
+the pin if it is an output.  This would have to change if and when gpio
+support is added to the driver, so it is best to not define anything GP
+related in the first place.
+
+> +#define TMP51X_TEMP_CONFIG_GP		FIELD_PREP(TMP51X_TEMP_CONFIG_GPM_MASK, 0)
+> +#define TMP51X_TEMP_CONFIG_CONV_RATE	FIELD_PREP(GENMASK(9, 7), 0x7)
+> +#define TMP51X_TEMP_CONFIG_RC		FIELD_PREP(TMP51X_TEMP_CONFIG_RC_MASK, 1)
+
+Those are really the values to be put into the configuration register,
+which I find is just confusing. But define the register bits, set the bit
+if needed, and otherwise keep it alone.
+
+> +#define TMP51X_TEMP_CHANNEL_MASK(n)	FIELD_PREP(GENMASK(14, 11), GENMASK(n, 0) > 1)
+
+This is wrong. Either s/>/>>/ or GENMASK((n) - 1, 0). I personally prefer
+the latter since I find it easier to understand.
+
+> +#define TMP51X_TEMP_CONFIG_CONT		FIELD_PREP(TMP51X_TEMP_CONFIG_CONT_MASK, 1)
+> +
+> +#define TMP51X_TEMP_CONFIG_DEFAULT(n) \
+> +			(TMP51X_TEMP_CONFIG_GPM | TMP51X_TEMP_CONFIG_GP | \
+> +			 TMP51X_TEMP_CONFIG_CONV_RATE | TMP51X_TEMP_CONFIG_RC | \
+> +			 TMP51X_TEMP_CHANNEL_MASK(n) | TMP51X_TEMP_CONFIG_CONT)
+> +
+
+I would very much prefer something like
+
+#define TMP51X_TEMP_CONFIG_DEFAULT(n)	(TMP51X_TEMP_CONFIG_CONT | \
+			TMP51X_TEMP_CHANNEL_MASK(n) \
+			TMP51X_TEMP_CONFIG_CONV_RATE | TMP51X_TEMP_CONFIG_RC)
+
+and drop the unnecessary complexity of defining single bit values with
+FIELD_PREP().
+
+Guenter
