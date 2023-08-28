@@ -2,96 +2,103 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D156C83F16
-	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Aug 2023 10:35:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D6B7C83F16
+	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Aug 2023 10:37:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbjH1Ke2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 28 Aug 2023 06:34:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35942 "EHLO
+        id S231528AbjH1KhI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 28 Aug 2023 06:37:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231475AbjH1Kd7 (ORCPT
+        with ESMTP id S231666AbjH1KhB (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 28 Aug 2023 06:33:59 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACEC7CF5;
-        Mon, 28 Aug 2023 03:33:38 -0700 (PDT)
+        Mon, 28 Aug 2023 06:37:01 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9486FAB;
+        Mon, 28 Aug 2023 03:36:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693218818; x=1724754818;
+  t=1693219019; x=1724755019;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sdSYV7PP0v0+b2NAwnX056871im1ZjuNdn/JF8Sj3jo=;
-  b=F4t0dunV5GcJpK+8LmgIOPGTRMundpNcZqyyI6QFt/y1W7co609A93qy
-   7+fCaeKmVtjhxz4mbRpRKuj4MFh8cfhheou6TCfVboWolujb5y+u5M8u4
-   fDljg+tUjixIZ82arq6z99OB25vJlXsyn5fq9EKKU5tFq89tpL6XakzbY
-   kP9KtUd+eM0sYON8nY5d1/VUleQvuHvWjnqs5gpj+vf2y77+Ahm66tYjT
-   KyIgr7k0tmNFoUyKIGRgr0jJLSVgJuITHZiWdqOJQMZWenAZxXFCZUbb2
-   CKBXfzrkJiV0/W5eymwSFZT3T3r67rOkWoLVu3CEdOsyZEYohSOHLf7kb
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="372475895"
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=Aq3/gK81Dgx0YuzZbiFuBZsQ3QfEivtZe/N8WMO0YCs=;
+  b=B2TL5LX0CQNXUik2WMySmn3SgzYhJJT5WxEnwpoQaVxT36MwH1tlJ3Cf
+   HZp8IF5JaKLVcZw3Ivf5ZUcY/aQSndczQ42st/0XHNDR3TUrJhizoekrv
+   2i/Oxs97nNkIsgXNvY5u3U9BvuI7hcUcZOlPL2t4piZsc8d7Dyw9SWqiP
+   /evw5e1LGEmJ2TwaenhNTh6C5tcwYVGL2zyrOe5T8J0iigvMA4b3q4dbm
+   W7pfhaIBN+gesj12JLX1DlMyF+THAqsAiQYNi8uVKXNGM1rWLlh9mCinH
+   heyKW6NiqXYHpcyrn6Q2kE56OFqJzwKCFcDKStwuonL17IEaqwfagIRR6
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="360066393"
 X-IronPort-AV: E=Sophos;i="6.02,207,1688454000"; 
-   d="scan'208";a="372475895"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2023 03:33:29 -0700
+   d="scan'208";a="360066393"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2023 03:36:59 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="1068991675"
+X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="731778213"
 X-IronPort-AV: E=Sophos;i="6.02,207,1688454000"; 
-   d="scan'208";a="1068991675"
+   d="scan'208";a="731778213"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga005.fm.intel.com with ESMTP; 28 Aug 2023 03:33:27 -0700
+  by orsmga007.jf.intel.com with ESMTP; 28 Aug 2023 03:36:56 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.96)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qaZYj-00ENiZ-1U;
-        Mon, 28 Aug 2023 13:33:25 +0300
-Date:   Mon, 28 Aug 2023 13:33:25 +0300
+        id 1qaZc6-00EUoe-2e;
+        Mon, 28 Aug 2023 13:36:54 +0300
+Date:   Mon, 28 Aug 2023 13:36:54 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Eric Tremblay <etremblay@distech-controls.com>,
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Eric Tremblay <etremblay@distech-controls.com>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] hwmon: tmp513: Drop enum tmp51x_ids and variable
- id from struct tmp51x_data
-Message-ID: <ZOx39USpLOkk33gT@smile.fi.intel.com>
+Subject: Re: [PATCH v3 3/3] hwmon: tmp513: Simplify tmp51x_read_properties()
+Message-ID: <ZOx4xlc8bFfXQbUx@smile.fi.intel.com>
 References: <20230825205345.632792-1-biju.das.jz@bp.renesas.com>
- <20230825205345.632792-3-biju.das.jz@bp.renesas.com>
+ <20230825205345.632792-4-biju.das.jz@bp.renesas.com>
+ <CAMuHMdWESYVB2UXAHrKuBNway2zDzm-D-7rX8bz0OESAACK+OA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230825205345.632792-3-biju.das.jz@bp.renesas.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMuHMdWESYVB2UXAHrKuBNway2zDzm-D-7rX8bz0OESAACK+OA@mail.gmail.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Aug 25, 2023 at 09:53:44PM +0100, Biju Das wrote:
+On Mon, Aug 28, 2023 at 09:45:17AM +0200, Geert Uytterhoeven wrote:
+> On Fri, Aug 25, 2023 at 10:54 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> > Simplify tmp51x_read_properties() by replacing 'nfactor' ->'data->nfactor'
+> > in device_property_read_u32_array() and drop the local variable as it is
+> > unused.
+
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
 ...
 
-> +#define TMP51X_TEMP_CONFIG_GPM		FIELD_PREP(GENMASK(1, 0), 0)
-> +#define TMP51X_TEMP_CONFIG_GP		FIELD_PREP(TMP51X_TEMP_CONFIG_GPM_MASK, 0)
+> > -       ret = device_property_read_u32_array(dev, "ti,nfactor", nfactor,
+> > -                                           data->max_channels - 1);
+> > -       if (ret >= 0)
+> > -               memcpy(data->nfactor, nfactor, data->max_channels - 1);
+> > +       device_property_read_u32_array(dev, "ti,nfactor", data->nfactor,
+> > +                                      data->max_channels - 1);
+> 
+> My first thought was that this could cause a small change in behavior.
+> However, the comments for of_property_read_u32_array() and
+> of_property_read_variable_u32_array() state:
 
-> +#define TMP51X_TEMP_CONFIG_CONV_RATE	FIELD_PREP(GENMASK(9, 7), 0x7)
+I don't know how the latter is relevant here (or even anything from of_*()
+specific APIs). The device property APIs should give behaviour described
+in their own docs (although it must be compatible with the existing OF one).
 
-How is this different from (GENMASK(2, 0) << 7)?
-
-> +#define TMP51X_TEMP_CONFIG_RC		FIELD_PREP(TMP51X_TEMP_CONFIG_RC_MASK, 1)
-> +#define TMP51X_TEMP_CHANNEL_MASK(n)	FIELD_PREP(GENMASK(14, 11), GENMASK(n, 0) > 1)
-> +#define TMP51X_TEMP_CONFIG_CONT		FIELD_PREP(TMP51X_TEMP_CONFIG_CONT_MASK, 1)
-
-Looking at these I believe the FIELD_PREP() is overkill.
-
-...
-
-> +#define TMP51X_TEMP_CONFIG_DEFAULT(n) \
-> +			(TMP51X_TEMP_CONFIG_GPM | TMP51X_TEMP_CONFIG_GP | \
-> +			 TMP51X_TEMP_CONFIG_CONV_RATE | TMP51X_TEMP_CONFIG_RC | \
-> +			 TMP51X_TEMP_CHANNEL_MASK(n) | TMP51X_TEMP_CONFIG_CONT)
-
-Too many TABs
+>  * The out_values is modified only if a valid u32 value can be decoded.
+> 
+> and the implementation behaves that way.
+> 
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
 -- 
 With Best Regards,
