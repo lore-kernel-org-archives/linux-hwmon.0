@@ -2,112 +2,256 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB374C83F12
-	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Aug 2023 07:46:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB97AC83F16
+	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Aug 2023 07:54:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbjH1Hpt convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 28 Aug 2023 03:45:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52296 "EHLO
+        id S229802AbjH1Hxx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 28 Aug 2023 03:53:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbjH1Hpd (ORCPT
+        with ESMTP id S229936AbjH1Hxs (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 28 Aug 2023 03:45:33 -0400
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F25F3;
-        Mon, 28 Aug 2023 00:45:30 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-5921a962adfso34346837b3.1;
-        Mon, 28 Aug 2023 00:45:30 -0700 (PDT)
+        Mon, 28 Aug 2023 03:53:48 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586AA11C
+        for <linux-hwmon@vger.kernel.org>; Mon, 28 Aug 2023 00:53:45 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 41be03b00d2f7-56b2e689968so1283567a12.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 28 Aug 2023 00:53:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1693209225; x=1693814025;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=yc5/64aDDHimpalFyKo/sDYTTFjFL1PiUBqmUUqNYNY=;
+        b=EVNyxX2D6EZ5nzDDCwGTnaKtkt4faXDCrRZB+EWpBULWw6ZofaARnr23A2UfkDFslR
+         VTHjtWH1hVnX6DCHF8Z9iAxLt1b1Tmgg0KwRSx0eTxhQlrrGKB+GRJb+qt+Mp637iu+1
+         djvqqUloB8V3bujW+Mdax+wO37dYgmDLV9XdQZtqymlzzMqCS4QgC6eYtcdeHu2gOPIW
+         42igJq3p/nyBsOyk6dUQ8NMZex3pu71WtSsJKnvwJsXe1yNt3w5luvk/LkE9tHSskA6Q
+         8aYzN4CS3gI9Wvqe8y2VYcVR/yC2qROUREGW0D7O+jxuWsNG/Ttr6n+Pykn3HQTP6FJv
+         Egvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693208729; x=1693813529;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=omFQ1a+8ec2563b9X8NA9taUjJt9oDMi0qwccvgcoAQ=;
-        b=DWPejEPapUP7wvF/19dCRCSquBxnT4op1b9GX1k5EoogvxWp+YOuWx+6QosewVRWAd
-         s9pGZxTYRFVU1fLSi1TTtVv3FeS0wtTvm63SHqv5/aL5dw23W2dw5hyLroaYEkjkd1eJ
-         wo8cfksgMswI/bgmAdif2SocBR2w96eWpdavku1q+v/0lbKUQgXfPkbbRwSgOR2Uwax2
-         Rb//OG+n4XQFZDEep+OVUoM3VpSDCCT/w/HrwCCAl11WPXYuHjmNCJoOffVoqWa+GVzO
-         NyZZLrlAxbkQAO7ARPjUxAy+K4/NCoMAhvzKV2SZ0LCaRJ5PfQXrt1yMmcs0LCiL7l9t
-         eSfQ==
-X-Gm-Message-State: AOJu0Ywv20+nCwW3eV8IH7Xd4NWiI7At3qUXRqJcFXGfO7Z9Tl8U9oip
-        4xE3+uVgqKCBsSufbgxgnyp62uy9wNkBUA==
-X-Google-Smtp-Source: AGHT+IFyxiPaWKituSdp+HInlri+9crUV/qdsYYGdtSxti068XTPV7tpfyhqTdPwIxzFP5fboh0vnw==
-X-Received: by 2002:a81:99d2:0:b0:592:9035:8356 with SMTP id q201-20020a8199d2000000b0059290358356mr9797783ywg.26.1693208729479;
-        Mon, 28 Aug 2023 00:45:29 -0700 (PDT)
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
-        by smtp.gmail.com with ESMTPSA id gz2-20020a05690c470200b0059511008958sm765773ywb.76.2023.08.28.00.45.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Aug 2023 00:45:28 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-58d31f142eeso34591057b3.0;
-        Mon, 28 Aug 2023 00:45:28 -0700 (PDT)
-X-Received: by 2002:a25:d78c:0:b0:d73:e979:d5c8 with SMTP id
- o134-20020a25d78c000000b00d73e979d5c8mr25921990ybg.34.1693208728597; Mon, 28
- Aug 2023 00:45:28 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1693209225; x=1693814025;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yc5/64aDDHimpalFyKo/sDYTTFjFL1PiUBqmUUqNYNY=;
+        b=FbPD+0aBTdFkQxsDywNqr7isHL9C+jTjyUGYTSjbiKC3uvdG0ZEM8yyho0qxtSSjCy
+         7pD3SBPcn9wEKO/guQGcu2h5AV3sg0DyIbQPaQ95kdKVKol7blaI6SfzXkYZO+HmW99y
+         7i6vFijSJbqSAVizjdaO8TKMbRdWNzaHnC7ItZb4IKyNX+NMzynjPHBvuGqLVmk0UtQT
+         pkmhzPnCSpZL5g5AHOeUfHJ0AY0La6V4cGD0/p73iUyZlpdwUodpMVSNcVvKEoKbo+4A
+         Uu9wYK8FZdMsxFTnbpZRG5qdc+8clHts+VJMxOmhmDdsPPwqU+gnc378gpcgxvOfCA8d
+         PiGw==
+X-Gm-Message-State: AOJu0YykJZhV/mB/WZRQnXSGxwGEqnK6C2sia2obR4bkG06s7ljYCRx1
+        MxC+PxAwMPSPip8QAvYyND0zGksqtMTltzY5wOdNlQ==
+X-Google-Smtp-Source: AGHT+IE4ZTuCbpfSd2u26y/GnloivJyZc/YSoHKEwSl0YpsN37Q/7zIWDf5qfNHHW8SlBatqk5kJBNfX4i4HRUvRd2I=
+X-Received: by 2002:a17:90a:3ec1:b0:26d:4642:1bd7 with SMTP id
+ k59-20020a17090a3ec100b0026d46421bd7mr18663702pjc.34.1693209224797; Mon, 28
+ Aug 2023 00:53:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230825205345.632792-1-biju.das.jz@bp.renesas.com> <20230825205345.632792-4-biju.das.jz@bp.renesas.com>
-In-Reply-To: <20230825205345.632792-4-biju.das.jz@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 28 Aug 2023 09:45:17 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWESYVB2UXAHrKuBNway2zDzm-D-7rX8bz0OESAACK+OA@mail.gmail.com>
-Message-ID: <CAMuHMdWESYVB2UXAHrKuBNway2zDzm-D-7rX8bz0OESAACK+OA@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] hwmon: tmp513: Simplify tmp51x_read_properties()
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Eric Tremblay <etremblay@distech-controls.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
+References: <20230817120029.221484-1-billy_tsai@aspeedtech.com>
+ <20230817120029.221484-2-billy_tsai@aspeedtech.com> <20230823131334.GA2059582-robh@kernel.org>
+ <SG2PR06MB33659FFB0CBFFA55295E6A098B1DA@SG2PR06MB3365.apcprd06.prod.outlook.com>
+In-Reply-To: <SG2PR06MB33659FFB0CBFFA55295E6A098B1DA@SG2PR06MB3365.apcprd06.prod.outlook.com>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+Date:   Mon, 28 Aug 2023 13:23:33 +0530
+Message-ID: <CABqG17g-s4h810JO-MO_TRRJhPkP=RMLDm7Jq6Sx4Gm1hRKqLg@mail.gmail.com>
+Subject: Re: [PATCH v7 1/2] dt-bindings: hwmon: Support Aspeed g6 PWM TACH Control
+To:     Billy Tsai <billy_tsai@aspeedtech.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
+        BMC-SW <BMC-SW@aspeedtech.com>,
+        "patrick@stwcx.xyz" <patrick@stwcx.xyz>,
+        Luke Chen <luke_chen@aspeedtech.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Biju,
+Hi Billy,
 
-On Fri, Aug 25, 2023 at 10:54 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> Simplify tmp51x_read_properties() by replacing 'nfactor' ->'data->nfactor'
-> in device_property_read_u32_array() and drop the local variable as it is
-> unused.
+
+On Mon, 28 Aug 2023 at 09:33, Billy Tsai <billy_tsai@aspeedtech.com> wrote:
 >
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-
-Thanks for your patch!
-
-> --- a/drivers/hwmon/tmp513.c
-> +++ b/drivers/hwmon/tmp513.c
-> @@ -680,10 +679,8 @@ static int tmp51x_read_properties(struct device *dev, struct tmp51x_data *data)
->         if (ret < 0)
->                 return ret;
+> On Thu, Aug 17, 2023 at 08:00:28PM +0800, Billy Tsai wrote:
 >
-> -       ret = device_property_read_u32_array(dev, "ti,nfactor", nfactor,
-> -                                           data->max_channels - 1);
-> -       if (ret >= 0)
-> -               memcpy(data->nfactor, nfactor, data->max_channels - 1);
-> +       device_property_read_u32_array(dev, "ti,nfactor", data->nfactor,
-> +                                      data->max_channels - 1);
+> >> Document the compatible for aspeed,ast2600-pwm-tach device, which can
+>
+> >> support upto 16 PWM outputs and 16 fan tach input.
+>
+> >>
+>
+> >> Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
+>
+> >> ---
+>
+> >>  .../bindings/hwmon/aspeed,g6-pwm-tach.yaml    | 57 +++++++++++++++++++
+>
+> >>  1 file changed, 57 insertions(+)
+>
+> >>  create mode 100644 Documentation/devicetree/bindings/hwmon/aspeed,g6-pwm-tach.yaml
+>
+> >>
+>
+> >> diff --git a/Documentation/devicetree/bindings/hwmon/aspeed,g6-pwm-tach.yaml b/Documentation/devicetree/bindings/hwmon/aspeed,g6-pwm-tach.yaml
+>
+> >> new file mode 100644
+>
+> >> index 000000000000..1666304d0b0f
+>
+> >> --- /dev/null
+>
+> >> +++ b/Documentation/devicetree/bindings/hwmon/aspeed,g6-pwm-tach.yaml
+>
+> >> @@ -0,0 +1,57 @@
+>
+> >> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>
+> >> +# Copyright (C) 2021 Aspeed, Inc.
+>
+> >> +%YAML 1.2
+>
+> >> +---
+>
+> >> +$id: http://devicetree.org/schemas/hwmon/aspeed,g6-pwm-tach.yaml#
+>
+> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>
+> >> +
+>
+> >> +title: ASPEED G6 PWM and Fan Tach controller device driver
+>
+> >> +
+>
+> >> +maintainers:
+>
+> >> +  - Billy Tsai <billy_tsai@aspeedtech.com>
+>
+> >> +
+>
+> >> +description: |
+>
+> >> +  The ASPEED PWM controller can support upto 16 PWM outputs.
+>
+> >> +  The ASPEED Fan Tacho controller can support upto 16 fan tach input.
+>
+> >> +
+>
+> >> +properties:
+>
+> >> +  compatible:
+>
+> >> +    enum:
+>
+> >> +      - aspeed,ast2600-pwm-tach
+>
+> >> +
+>
+> >> +  reg:
+>
+> >> +    maxItems: 1
+>
+> >> +
+>
+> >> +  clocks:
+>
+> >> +    maxItems: 1
+>
+> >> +
+>
+> >> +  resets:
+>
+> >> +    maxItems: 1
+>
+> >> +
+>
+> >> +  "#pwm-cells":
+>
+> >> +    const: 3
+>
+> >> +
+>
+> >> +  aspeed,fan-tach-ch:
+>
+> >> +    description: Specify the Fan tach input channels.
+>
+> >> +    $ref: "/schemas/types.yaml#/definitions/uint8-array"
+>
+>
+>
+> >This property is already defined in aspeed-pwm-tacho.txt as a single u8
+>
+> >that goes in a fan node. You can't redefine its type and location here.
+>
+>
+>
+> Hi Rob,
+>
+>
+>
+> I didn't redefine the type of property. The type of the aspeed,fan-tach-ch is unit8-array
+>
+> in aspeed-pwm-tacho.txt.
+>
+> https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt#L48
+>
+> https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt#L71
+>
+>
+>
+> >To repeat what I've said in previous versions, work with others to
+>
+> >define a common fan and fan controller binding. Otherwise, anything new
+>
+> >with fan related properties is simply going to be rejected.
+>
+>
+>
+> Okay I will try to work with Naresh for defining a common fan binding.
+>
+>
+>
+> Thanks for your suggestion.
+>
+>
+>
+> Hi Naresh,
+>
+>
+>
+> As Rob mentioned, it would be advisable for my dt-bindings to reference the common fan bindings instead of introducing specific properties.
+>
+> I noticed that you have already submitted a related patch to the community, which seems to be pending for around 10 months.
+>
+> https://lore.kernel.org/lkml/20221116213615.1256297-2-Naresh.Solanki@9elements.com/
+>
+> Do you have plans to send the next version of the patch? Alternatively, can I proceed to cherry-pick this version of the patch and continue with
+>
+> the upstreaming process in my patch serial?
+Sure, go ahead.
 
-My first thought was that this could cause a small change in behavior.
-However, the comments for of_property_read_u32_array() and
-of_property_read_variable_u32_array() state:
-
- * The out_values is modified only if a valid u32 value can be decoded.
-
-and the implementation behaves that way.
-
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Regards,
+Naresh
+>
+>
+>
+> Thanks
+>
+> Best Regards,
+>
+> Billy Tsai
