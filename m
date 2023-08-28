@@ -2,104 +2,99 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6248C71153
-	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Aug 2023 09:45:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D156C83F16
+	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Aug 2023 10:35:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbjH1Jo6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 28 Aug 2023 05:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52340 "EHLO
+        id S229766AbjH1Ke2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 28 Aug 2023 06:34:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230192AbjH1Job (ORCPT
+        with ESMTP id S231475AbjH1Kd7 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 28 Aug 2023 05:44:31 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A1D107
-        for <linux-hwmon@vger.kernel.org>; Mon, 28 Aug 2023 02:44:28 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qaYmy-0006ra-8t; Mon, 28 Aug 2023 11:44:04 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qaYmv-002BLV-LR; Mon, 28 Aug 2023 11:44:01 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qaYmv-00GkIv-1x; Mon, 28 Aug 2023 11:44:01 +0200
-Date:   Mon, 28 Aug 2023 11:43:57 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Carsten =?utf-8?B?U3BpZcOf?= <mail@carsten-spiess.de>
-Cc:     Jean Delvare <jdelvare@suse.com>,
+        Mon, 28 Aug 2023 06:33:59 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACEC7CF5;
+        Mon, 28 Aug 2023 03:33:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693218818; x=1724754818;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sdSYV7PP0v0+b2NAwnX056871im1ZjuNdn/JF8Sj3jo=;
+  b=F4t0dunV5GcJpK+8LmgIOPGTRMundpNcZqyyI6QFt/y1W7co609A93qy
+   7+fCaeKmVtjhxz4mbRpRKuj4MFh8cfhheou6TCfVboWolujb5y+u5M8u4
+   fDljg+tUjixIZ82arq6z99OB25vJlXsyn5fq9EKKU5tFq89tpL6XakzbY
+   kP9KtUd+eM0sYON8nY5d1/VUleQvuHvWjnqs5gpj+vf2y77+Ahm66tYjT
+   KyIgr7k0tmNFoUyKIGRgr0jJLSVgJuITHZiWdqOJQMZWenAZxXFCZUbb2
+   CKBXfzrkJiV0/W5eymwSFZT3T3r67rOkWoLVu3CEdOsyZEYohSOHLf7kb
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="372475895"
+X-IronPort-AV: E=Sophos;i="6.02,207,1688454000"; 
+   d="scan'208";a="372475895"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2023 03:33:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="1068991675"
+X-IronPort-AV: E=Sophos;i="6.02,207,1688454000"; 
+   d="scan'208";a="1068991675"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga005.fm.intel.com with ESMTP; 28 Aug 2023 03:33:27 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qaZYj-00ENiZ-1U;
+        Mon, 28 Aug 2023 13:33:25 +0300
+Date:   Mon, 28 Aug 2023 13:33:25 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Eric Tremblay <etremblay@distech-controls.com>,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
+        linux-hwmon@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v5 1/2] hwmon: (isl28022) new driver for ISL28022 power
- monitor
-Message-ID: <20230828094357.tdlzntuycsehsmu6@pengutronix.de>
-References: <cover.1692623638.git.mail@carsten-spiess.de>
- <d510d6f7f65c95d5cff1b8e8a4dcd5675bd100fd.1692623638.git.mail@carsten-spiess.de>
+Subject: Re: [PATCH v3 2/3] hwmon: tmp513: Drop enum tmp51x_ids and variable
+ id from struct tmp51x_data
+Message-ID: <ZOx39USpLOkk33gT@smile.fi.intel.com>
+References: <20230825205345.632792-1-biju.das.jz@bp.renesas.com>
+ <20230825205345.632792-3-biju.das.jz@bp.renesas.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mxh2tttbileuzupu"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d510d6f7f65c95d5cff1b8e8a4dcd5675bd100fd.1692623638.git.mail@carsten-spiess.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
+In-Reply-To: <20230825205345.632792-3-biju.das.jz@bp.renesas.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On Fri, Aug 25, 2023 at 09:53:44PM +0100, Biju Das wrote:
 
---mxh2tttbileuzupu
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+...
 
-Hello Carsten,
+> +#define TMP51X_TEMP_CONFIG_GPM		FIELD_PREP(GENMASK(1, 0), 0)
+> +#define TMP51X_TEMP_CONFIG_GP		FIELD_PREP(TMP51X_TEMP_CONFIG_GPM_MASK, 0)
 
-On Mon, Aug 21, 2023 at 06:40:03PM +0200, Carsten Spie=DF wrote:
-> +static struct i2c_driver isl28022_driver =3D {
-> +	.class		=3D I2C_CLASS_HWMON,
-> +	.driver =3D {
-> +		.name	=3D "isl28022",
-> +	},
-> +	.probe_new	=3D isl28022_probe,
+> +#define TMP51X_TEMP_CONFIG_CONV_RATE	FIELD_PREP(GENMASK(9, 7), 0x7)
 
-Please use .probe instead of .probe_new. Apart from s/probe_new/probe/
-here nothing further is needed.
+How is this different from (GENMASK(2, 0) << 7)?
 
-My plan is to drop .probe_new in next soon after v6.6-rc1.
+> +#define TMP51X_TEMP_CONFIG_RC		FIELD_PREP(TMP51X_TEMP_CONFIG_RC_MASK, 1)
+> +#define TMP51X_TEMP_CHANNEL_MASK(n)	FIELD_PREP(GENMASK(14, 11), GENMASK(n, 0) > 1)
+> +#define TMP51X_TEMP_CONFIG_CONT		FIELD_PREP(TMP51X_TEMP_CONFIG_CONT_MASK, 1)
 
-Best regards
-Uwe
+Looking at these I believe the FIELD_PREP() is overkill.
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+...
 
---mxh2tttbileuzupu
-Content-Type: application/pgp-signature; name="signature.asc"
+> +#define TMP51X_TEMP_CONFIG_DEFAULT(n) \
+> +			(TMP51X_TEMP_CONFIG_GPM | TMP51X_TEMP_CONFIG_GP | \
+> +			 TMP51X_TEMP_CONFIG_CONV_RATE | TMP51X_TEMP_CONFIG_RC | \
+> +			 TMP51X_TEMP_CHANNEL_MASK(n) | TMP51X_TEMP_CONFIG_CONT)
 
------BEGIN PGP SIGNATURE-----
+Too many TABs
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmTsbFwACgkQj4D7WH0S
-/k7a7wf+MaXh0uwDFsbCNb8ohW72XaVnEiUzpn9onziOrbvabzMctWIStLwRBTl2
-2qZ24HmPbzF9vzEakBb9fMZkFEb5bjnxLf59jR9Z/Gvwe9WHgm0qvezeUS6zEcs3
-VAEslFSwAzgv+47YwNrNZkaxIyD5U9x8Nb4YbQaGxGnYb3mRjuNZXao+Gzbcn8wo
-N50vH/s9vlrgPGx2lhdncP1sFlYGB9sc7rqfG0Gr/gbtiZYRPiX9pVaQ//HgIGQW
-53xnUn+dw/AuFspgc6tG0VhWIj8Mra50/zseBrrigIRLk2vl0F5XahTQqR94JjTy
-wnkzqfohOOmH3evW3Y5BOkuljakd6w==
-=Ub8Z
------END PGP SIGNATURE-----
+-- 
+With Best Regards,
+Andy Shevchenko
 
---mxh2tttbileuzupu--
+
