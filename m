@@ -2,252 +2,224 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 488DEC83F18
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Aug 2023 13:28:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 276C4C71153
+	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Aug 2023 14:11:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236010AbjH2N2R (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 29 Aug 2023 09:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47594 "EHLO
+        id S236520AbjH2OLE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 29 Aug 2023 10:11:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236136AbjH2N17 (ORCPT
+        with ESMTP id S236904AbjH2OLA (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 29 Aug 2023 09:27:59 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61EEE1BB;
-        Tue, 29 Aug 2023 06:27:56 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1bf6ea270b2so26878315ad.0;
-        Tue, 29 Aug 2023 06:27:56 -0700 (PDT)
+        Tue, 29 Aug 2023 10:11:00 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864B5EC
+        for <linux-hwmon@vger.kernel.org>; Tue, 29 Aug 2023 07:10:56 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1c1f8aaab9aso10162705ad.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 29 Aug 2023 07:10:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693315676; x=1693920476;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KZdC0qkZ5z6tjDALZF8Uye7Xemxb62imgRWO87UTMUk=;
-        b=ssZZUzKZL9fdA5DErd5YFknCsswcvJz6I5/0w5BD3TnAc06bmreosNaj92J+aHMWW3
-         BFO0uz4pmu2NSjHW7TKYaF8QLD7hf/mefNKDMtgJqRU/w33552jqAWxeSlC8/HGaUUCX
-         B1eaHogYioTPsaW3IkDUl/mpP0RXv69ySuToPE6Kgw4tTh4Z2ciaEfJGyseEJyPS1ybl
-         DAZMt7wi6nQTmKsDlOpq+X3Z4qmQtB6a9gbixxH35O+/2Q1McHPorKtJqRUgZ/G5OqG+
-         iHD3/TjX5GjElxoU6GgzDsS05nx1UgXNTVldl5cWhPhIet/x1LYeQ4lOEg5xPTqskXNP
-         GUqw==
+        d=9elements.com; s=google; t=1693318256; x=1693923056;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=AGedbPt6gMi8Qg7Af4Eb+I75VsPSmA4WvkXy1kRzYfA=;
+        b=GS1ZH6yRX5huw10hvbCF0hJ3EOXWlQdiMQWHHTbTi4F7sFiW4oxHiqH14jYfa8cJXF
+         EO5/pgqg0kDs3wWCfhBPT+LI4h9QGlb0nKemmTCTp1s5A7i457vU+zJITCk3rsA14YlC
+         1CQHg52mAQ6ysvHIp5t+Ryt7oU8ZB/0pA8vRXOAbnThJbH/Fd9xFbSzRum/2jojXDRUk
+         aRyTCzGztXiP/1Z0W5PABIOCnqOVqZ338SBJg1VISsA9bjaGMNAvYOrfux1eR3bTLBcr
+         b2qrNRU4xG/niTkukOWLy/RhOhwtblDZwtcElWFKS8KyvcW+MvGbmD2BOB75qgOnj/Ak
+         PnAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693315676; x=1693920476;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KZdC0qkZ5z6tjDALZF8Uye7Xemxb62imgRWO87UTMUk=;
-        b=g/Mdr36UcL32+TSHgy5FpK1iVE5P1RO2FsgQYq/3v9Vb48H0y2X+BpQVEF546MOev3
-         oC9UtGfSY/AGJJr3wnVVxJyJEMZyz7f/LadsdzgHvhEJwenrJDfy/eiAAyCc4H+4bBMO
-         h449TtKBVNrBrsY9fV/evgD3LvnHDZBfumoxucHpOvLahOkIRX3e0VjlC3i2DKw2GQdG
-         VeSI4gun4fzOvdtJM/XgPB3NsKPWAvpOaCprv0W3bhQX+RmNTTuSW0MiFV+YH4RZ+CZ5
-         pA6AhaFFFnneFDwb2lYjW4V/mat4vZGFdtKp91qnCpgwmALHFAc+FATgTVd9fZl4lSZk
-         4JPA==
-X-Gm-Message-State: AOJu0YyIhf8iN/fsk5n6cMyj9akQ3A9AtampqjGB4R5Nt40f1Bph4Ko8
-        DGyKWZM3vuIwoJV2EttgX58=
-X-Google-Smtp-Source: AGHT+IGSw9CjWFGZ/PIdZRDXukv7MXzSaqzYnrVZbhrW3L010Op/nnF9OhcpBvdyuVos3xn8N0ZoJQ==
-X-Received: by 2002:a17:903:11cc:b0:1bf:3c10:1d72 with SMTP id q12-20020a17090311cc00b001bf3c101d72mr28313286plh.66.1693315675608;
-        Tue, 29 Aug 2023 06:27:55 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id ix5-20020a170902f80500b001bde65894d5sm9301145plb.109.2023.08.29.06.27.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Aug 2023 06:27:54 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 29 Aug 2023 06:27:53 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Ninad Malwade <nmalwade@nvidia.com>
-Cc:     jdelvare@suse.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org,
-        Rajkumar Kasirajan <rkasirajan@nvidia.com>
-Subject: Re: [PATCH V2 3/4] hwmon: ina3221: add support for summation channel
- control
-Message-ID: <035044de-be6f-45c9-911f-44799ddf2fff@roeck-us.net>
-References: <20230825164249.22860-1-nmalwade@nvidia.com>
- <20230825164249.22860-4-nmalwade@nvidia.com>
+        d=1e100.net; s=20221208; t=1693318256; x=1693923056;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AGedbPt6gMi8Qg7Af4Eb+I75VsPSmA4WvkXy1kRzYfA=;
+        b=Gwg0EEfndvs9EEwhvWlI7cYYyzAUPFp10wTQjUfBnPcAk5jNEGu/PXuocf+HVLTXda
+         eBekXx7YjwNntTD+UEXxF4qYES7QrGlHCM26p42Q7PrpfU4CXgskRXDxkmlW4DoWvmrM
+         ytYby7zvs0/6reIEPAsAwknDILlBriOEsnnI0yl1wg2d31J/TzS6817wnRu3UAAL2J8z
+         1y1Yw9PaYzun2jMWQsg1TBfft9CRwQDrf/1NEUMv+k0wubgyIc4JvwO1l2i+engJlPT9
+         eedfsfP+lBIp8i8Y0FpmkLvKdhDTTSSkfzQk33Wy1GaekoGyFz4lg29OtVrqQ55JBa7d
+         vrdQ==
+X-Gm-Message-State: AOJu0YzCzV2081tbIqSdJsN+JK1Q0PcKIAbIKdBrKhxMX6ABEvxOWH61
+        46HVMBhI31AJAeWlh6A6IsolRy01IBJqtcv/f+Iw6Q==
+X-Google-Smtp-Source: AGHT+IGkxbeGNEXamVzyA7IwynY7dVSuIdUtv5cMODd8wtPii8f1wI7mZH9ORNDww1a9/MW9bFxSi7ka1kxNBF7HrK8=
+X-Received: by 2002:a17:90b:1956:b0:268:dad:2fdc with SMTP id
+ nk22-20020a17090b195600b002680dad2fdcmr26926812pjb.21.1693318255914; Tue, 29
+ Aug 2023 07:10:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230825164249.22860-4-nmalwade@nvidia.com>
+References: <20230808-stand-cheddar-b76b0b7509a0@spud> <eced746a-1181-bd8f-6828-4a4eeb79727c@roeck-us.net>
+ <20230808-esquire-epidemic-f9bd74ffde25@spud> <CABqG17jm938MaEeqS03WeryVWSRBS7Bqq2Vwq9SL4QOGqXU43A@mail.gmail.com>
+ <b3eebd2b-c73b-fdc7-2b2b-07e97db26d92@linaro.org> <CABqG17hgU44H9KbALy_336Sb+YOiEOzbnAihiox1OEuVnNiayQ@mail.gmail.com>
+ <5cde8986-1b12-a85e-b2fe-e1aa1087b429@linaro.org> <CABqG17gL7XL0nKZ0QEYkF672AvfJQXapExw3p1iGm88U9idq=w@mail.gmail.com>
+ <05ec3dc2-3ed5-4b04-8062-c10777e0a181@roeck-us.net> <CABqG17hKcCwH7=AQq0-JtdeY0tmf=s_nWCoE3F-vh=ZPUBjObg@mail.gmail.com>
+ <c6ab0452-f976-469c-be85-9b065db46361@roeck-us.net> <CABqG17iv4SPgfF4LRy5sMzGSU4EPGJ0YPOu3_1XzV-NTcGn+qA@mail.gmail.com>
+In-Reply-To: <CABqG17iv4SPgfF4LRy5sMzGSU4EPGJ0YPOu3_1XzV-NTcGn+qA@mail.gmail.com>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+Date:   Tue, 29 Aug 2023 19:40:45 +0530
+Message-ID: <CABqG17iKVEZ6+f8UctpK1A6VeRL9u+yYyfV7we=QsQ8vEi4+cA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] dt-bindings: hwmon: Add Infineon TDA38640
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Conor Dooley <conor@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        krzysztof.kozlowski+dt@linaro.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Aug 26, 2023 at 12:42:48AM +0800, Ninad Malwade wrote:
-> The INA3221 allows the Critical alert pin to be controlled
-> by the summation control function. This function adds the
-> single shunt-voltage conversions for the desired channels
-> in order to compare the combined sum to the programmed limit.
-> The Shunt-Voltage Sum Limit register contains the programmed
-> value that is compared to the value in the Shunt-Voltage Sum
-> register in order to determine if the total summed limit is
-> exceeded. If the shunt-voltage sum limit value is exceeded,
-> the Critical alert pin pulls low.
-> 
-> For the summation limit to have a meaningful value,
-> we have to use the same shunt-resistor value on all included
-> channels. Unless equal shunt-resistor values are used for
-> each channel, we can't use summation control function to add
-> the individual conversion values directly together in the
-> Shunt-Voltage Sum register to report the total current.
-> 
-> To address this we add support to BYPASS channels
-> via kernel device tree property "summation-bypass".
-> 
-> The channel which has this property would be excluded from
-> the calculation of summation control function, so we can easily
-> exclude the one which uses different shunt-resistor value or
-> bus voltage.
-> 
-> For example, summation control function calculates
-> Shunt-Voltage Sum like
-> - input_shunt_voltage_summaion = input_shunt_voltage_channel1
+Hi
 
-summation
 
->                                + input_shunt_voltage_channel2
->                                + input_shunt_voltage_channel3
-> 
-> But if we want the summation to consider only channel1
-> and channel3, we can add 'summation-bypass' property
-> in device tree node of channel2.
-> 
-> Then the calculation will skip channel2.
-> - input_shunt_voltage_summaion = input_shunt_voltage_channel1
->                                + input_shunt_voltage_channel3
-> 
-summation
+On Tue, 22 Aug 2023 at 23:08, Naresh Solanki
+<naresh.solanki@9elements.com> wrote:
+>
+> Hi.
+>
+> On Tue, 22 Aug 2023 at 22:20, Guenter Roeck <linux@roeck-us.net> wrote:
+> >
+> > On Tue, Aug 22, 2023 at 09:41:48PM +0530, Naresh Solanki wrote:
+> > > Hi,
+> > >
+> > > On Tue, 22 Aug 2023 at 18:47, Guenter Roeck <linux@roeck-us.net> wrote:
+> > > >
+> > > > On Tue, Aug 22, 2023 at 02:32:31PM +0530, Naresh Solanki wrote:
+> > > > > Hi
+> > > > >
+> > > > > On Fri, 18 Aug 2023 at 14:53, Krzysztof Kozlowski
+> > > > > <krzysztof.kozlowski@linaro.org> wrote:
+> > > > > >
+> > > > > > On 16/08/2023 10:51, Naresh Solanki wrote:
+> > > > > > > Hi Krzysztof,
+> > > > > > >
+> > > > > > > On Tue, 15 Aug 2023 at 01:02, Krzysztof Kozlowski
+> > > > > > > <krzysztof.kozlowski@linaro.org> wrote:
+> > > > > > >>
+> > > > > > >> On 11/08/2023 18:00, Naresh Solanki wrote:
+> > > > > > >>> Hi,
+> > > > > > >>>
+> > > > > > >>> On Tue, 8 Aug 2023 at 19:58, Conor Dooley <conor@kernel.org> wrote:
+> > > > > > >>>>
+> > > > > > >>>> On Tue, Aug 08, 2023 at 07:10:08AM -0700, Guenter Roeck wrote:
+> > > > > > >>>>> On 8/8/23 04:46, Conor Dooley wrote:
+> > > > > > >>>>>> On Wed, Aug 02, 2023 at 09:31:51PM +0200, Naresh Solanki wrote:
+> > > > > > >>>>>>> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+> > > > > > >>>>>>>
+> > > > > > >>>>>>> The TDA38640 chip has different output control mechanisms depending on
+> > > > > > >>>>>>> its mode of operation. When the chip is in SVID mode, only
+> > > > > > >>>>>>> hardware-based output control is supported via ENABLE pin. However, when
+> > > > > > >>>>>>> it operates in PMBus mode, software control works perfectly.
+> > > > > > >>>>>>>
+> > > > > > >>>>>>> To enable software control as a workaround in SVID mode, add the DT
+> > > > > > >>>>>>> property 'infineon,en-svid-control'. This property will enable the
+> > > > > > >>>>>>> workaround, which utilizes ENABLE pin polarity flipping for output when
+> > > > > > >>>>>>> the chip is in SVID mode.
+> > > > > > >>>>>>
+> > > > > > >>>>>> Why do you need a custom property for this? How come it is not possible
+> > > > > > >>>>>> to determine what bus you are on?
+> > > > > > >>>>>>
+> > > > > > >>>>>
+> > > > > > >>>>> That is not the point. Yes, it can be detected if the control method is
+> > > > > > >>>>> PMBus or SVID. However, in SVID mode, SVID is supposed to control the
+> > > > > > >>>>> output, not PMBUs. This is bypassed by controlling the polarity of the
+> > > > > > >>>>> (physical) output enable signal. We do _not_ want this enabled automatically
+> > > > > > >>>>> in SVID mode. Its side effects on random boards using this chip are unknown.
+> > > > > > >>>>> Thus, this needs a property which specifically enables this functionality
+> > > > > > >>>>> for users who _really_ need to use it and (hopefully) know what they are
+> > > > > > >>>>> doing.
+> > > > > > >>>>
+> > > > > > >>>> Hmm, reading this it makes a lot more sense why this is a property - I
+> > > > > > >>>> guess I just struggled to understand the commit message here,
+> > > > > > >>>> particularly what the benefit of using the workaround is. I'm still
+> > > > > > >>>> having difficulty parsing the commit & property text though - its
+> > > > > > >>>> unclear to me when you would need to use it - so I will stay out
+> > > > > > >>>> of the way & let Rob or Krzysztof handle things.
+> > > > > > >>>
+> > > > > > >>> To provide context, my system employs a unique power sequence
+> > > > > > >>> strategy utilizing a BMC (Baseboard Management Controller),
+> > > > > > >>> rendering the reliance on the ENABLE pin unnecessary.
+> > > > > > >>> In this configuration, the ENABLE pin is grounded in the hardware.
+> > > > > > >>> While most regulators facilitate PMBus Operation for output control,
+> > > > > > >>> the TDA38640 chip, when in SVID mode, is constrained by the
+> > > > > > >>> ENABLE pin to align with Intel specifications.
+> > > > > > >>> My communication with Infineon confirmed that the recommended
+> > > > > > >>> approach is to invert the Enable Pin for my use case.
+> > > > > > >>>
+> > > > > > >>> Since this is not typically the use case for most setup & hence DT property
+> > > > > > >>> is must for enabling the special case.
+> > > > > > >>>
+> > > > > > >>> For further insight into my setup's power sequence strategy, you can
+> > > > > > >>> refer to the following link: https://github.com/9elements/pwrseqd
+> > > > > > >>>
+> > > > > > >>
+> > > > > > >> This justifies to me the property, but still you described desired
+> > > > > > >> driver behavior, not the hardware characteristic. Don't describe what
+> > > > > > >> you want to control, but describe the entire system.
+> > > > > > > I guess by entire system you mean how the regulators(including
+> > > > > > > TDA38640) connected & operated in our setup ?
+> > > > > >
+> > > > > > I mean, property name and description should say what is the
+> > > > > > characteristic of the hardware/firmware/entire system.
+> > > > > Based on your feedback, will update to below:
+> > > > > infineon,fixed-level-en-pin:
+> > > > >     description: |
+> > > > >       Indicate the ENABLE pin is set at fixed level or left
+> > > > >       unconnected(has internal pull-up).
+> > > > >     type: boolean
+> > > >
+> > > > Messy, because while it reflects physical connectivity, it doesn't reflect
+> > > > its use in the system at all. The pin may be at fixed level or left
+> > > > unconnected, but the system vendor doesn't want to give users the
+> > > > means to control output power (which would be the normal situation).
+> > > Maybe this would be better ?
+> > > infineon,svid-mode-fixed-en-pin
+> > >   description: |
+> > >     Indicate the ENABLE pin is set at fixed level or left
+> > >     unconnected(has internal pull-up) which chip in
+> > >     SVID mode.
+> >
+> > which chip ? Do you mean "with the chip" ?
+> Yep. sorry for the typo.
+> >
+> > I don't think that makes a difference. It still doesn't describe
+> > your use case (which is something like "the chip is in SVID mode,
+> > its enable pin is set to fixed level, and we need to manipulate its
+> > interpretation by the chip so we can control the enable status from
+> > software). I have no idea how to express that in a way that would be
+> > acceptable as devicetree property.
+> In typical use case when chip is in SVID mode ,the ENABLE pin
+> isn't fixed i.e., either connected power good or FPGA pin.
+> If this property is explicitly specified then its clear in the hardware that
+> 1. chip is in SVID mode,
+> 2. ENABLE pin is fixed.
+> 3. Intent to use the workaround.
+>
+> @Krzysztof , Is this acceptable ? Can you please recommend a way
+> forward please.
 
-> Please note that we only want the channel to be skipped
-> for summation control function rather than completely disabled.
-> Therefore, even if we add the device tree node, the functionality
-> of the single channel would still be retained.
-> 
-> The below sysfs nodes are added to check if the channel is included
-> or excluded from the summation control function.
-> 
-> in*_sum_bypass = 0 --> channel voltage is included for sum of
->                        shunt voltages.
-> 
-> in*_sum_bypass = 1 --> channel voltage is excluded for sum
->                        of shunt voltages.
-> 
-This is not an acceptable sysfs attribute. Use debugfs.
+I guess the below change in property should be fine. Will push V4 based on it.
+infineon,svid-mode-fixed-en-pin
+  description: |
+    Indicate the ENABLE pin is set at fixed level or left
+    unconnected(has internal pull-up) with the chip in
+    SVID mode.
 
-> Signed-off-by: Rajkumar Kasirajan <rkasirajan@nvidia.com>
-> Signed-off-by: Ninad Malwade <nmalwade@nvidia.com>
-> ---
->  drivers/hwmon/ina3221.c | 39 ++++++++++++++++++++++++++++++++++-----
->  1 file changed, 34 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
-> index 5ab944056ec0..093ebf9f1f8d 100644
-> --- a/drivers/hwmon/ina3221.c
-> +++ b/drivers/hwmon/ina3221.c
-> @@ -104,6 +104,7 @@ struct ina3221_input {
->  	const char *label;
->  	int shunt_resistor;
->  	bool disconnected;
-> +	bool summation_bypass;
->  };
->  
->  /**
-> @@ -125,6 +126,7 @@ struct ina3221_data {
->  	struct mutex lock;
->  	u32 reg_config;
->  	int summation_shunt_resistor;
-> +	u32 summation_channel_control;
->  
->  	bool single_shot;
->  };
-> @@ -154,7 +156,8 @@ static inline int ina3221_summation_shunt_resistor(struct ina3221_data *ina)
->  	int i, shunt_resistor = 0;
->  
->  	for (i = 0; i < INA3221_NUM_CHANNELS; i++) {
-> -		if (input[i].disconnected || !input[i].shunt_resistor)
-> +		if (input[i].disconnected || !input[i].shunt_resistor ||
-> +		    input[i].summation_bypass)
->  			continue;
->  		if (!shunt_resistor) {
->  			/* Found the reference shunt resistor value */
-> @@ -731,10 +734,29 @@ static SENSOR_DEVICE_ATTR_RW(shunt1_resistor, ina3221_shunt, INA3221_CHANNEL1);
->  static SENSOR_DEVICE_ATTR_RW(shunt2_resistor, ina3221_shunt, INA3221_CHANNEL2);
->  static SENSOR_DEVICE_ATTR_RW(shunt3_resistor, ina3221_shunt, INA3221_CHANNEL3);
->  
-> +static ssize_t ina3221_summation_bypass_show(struct device *dev,
-> +		struct device_attribute *attr, char *buf)
-> +{
-> +	struct sensor_device_attribute *sd_attr = to_sensor_dev_attr(attr);
-> +	struct ina3221_data *ina = dev_get_drvdata(dev);
-> +	unsigned int channel = sd_attr->index;
-> +	struct ina3221_input *input = &ina->inputs[channel];
-> +
-> +	return sysfs_emit(buf, "%d\n", input->summation_bypass);
-> +}
-> +
-> +/* summation bypass */
-> +static SENSOR_DEVICE_ATTR_RO(in1_sum_bypass, ina3221_summation_bypass, INA3221_CHANNEL1);
-> +static SENSOR_DEVICE_ATTR_RO(in2_sum_bypass, ina3221_summation_bypass, INA3221_CHANNEL2);
-> +static SENSOR_DEVICE_ATTR_RO(in3_sum_bypass, ina3221_summation_bypass, INA3221_CHANNEL3);
-> +
-
-As mentioned, use debugfs to display this information.
-
->  static struct attribute *ina3221_attrs[] = {
->  	&sensor_dev_attr_shunt1_resistor.dev_attr.attr,
->  	&sensor_dev_attr_shunt2_resistor.dev_attr.attr,
->  	&sensor_dev_attr_shunt3_resistor.dev_attr.attr,
-> +	&sensor_dev_attr_in1_sum_bypass.dev_attr.attr,
-> +	&sensor_dev_attr_in2_sum_bypass.dev_attr.attr,
-> +	&sensor_dev_attr_in3_sum_bypass.dev_attr.attr,
->  	NULL,
->  };
->  ATTRIBUTE_GROUPS(ina3221);
-> @@ -786,6 +808,9 @@ static int ina3221_probe_child_from_dt(struct device *dev,
->  	/* Save the connected input label if available */
->  	of_property_read_string(child, "label", &input->label);
->  
-> +	/* summation channel control */
-> +	input->summation_bypass = of_property_read_bool(child, "summation-bypass");
-> +
->  	/* Overwrite default shunt resistor value optionally */
->  	if (!of_property_read_u32(child, "shunt-resistor-micro-ohms", &val)) {
->  		if (val < 1 || val > INT_MAX) {
-> @@ -873,6 +898,10 @@ static int ina3221_probe(struct i2c_client *client)
->  
->  	/* Initialize summation_shunt_resistor for summation channel control */
->  	ina->summation_shunt_resistor = ina3221_summation_shunt_resistor(ina);
-> +	for (i = 0; i < INA3221_NUM_CHANNELS; i++) {
-> +		if (!ina->inputs[i].summation_bypass)
-> +			ina->summation_channel_control |= (BIT(14 - i));
-
-Unnecessary ( ) around BIT().
-
-> +	}
->  
->  	ina->pm_dev = dev;
->  	mutex_init(&ina->lock);
-> @@ -978,13 +1007,13 @@ static int ina3221_resume(struct device *dev)
->  	/* Initialize summation channel control */
->  	if (ina->summation_shunt_resistor) {
->  		/*
-> -		 * Take all three channels into summation by default
-> -		 * Shunt measurements of disconnected channels should
-> -		 * be 0, so it does not matter for summation.
-> +		 * Sum only channels that are not 'bypassed' for summation
-> +		 * by default. Shunt measurements of disconnected channels
-
-Drop "by default".
-
-> +		 * should be 0, so it does not matter for summation.
->  		 */
->  		ret = regmap_update_bits(ina->regmap, INA3221_MASK_ENABLE,
->  					 INA3221_MASK_ENABLE_SCC_MASK,
-> -					 INA3221_MASK_ENABLE_SCC_MASK);
-> +					 ina->summation_channel_control);
->  		if (ret) {
->  			dev_err(dev, "Unable to control summation channel\n");
->  			return ret;
-> -- 
-> 2.17.1
-> 
+Regards,
+Naresh
+>
+> Regards,
+> Naresh
+> >
+> > It doesn't seem to me that we are making much progress here.
+> > I know it isn't supposed to be done, and I don't really like it,
+> > but could you use a module parameter in your system ? I'd be
+> > open to accept that to make progress.
+> >
+> > Thanks,
+> > Guenter
