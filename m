@@ -2,261 +2,159 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5604C6FA8F
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Aug 2023 19:57:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55EF0C6FA8F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Aug 2023 20:01:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239194AbjH3T5I (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 30 Aug 2023 15:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37590 "EHLO
+        id S240295AbjH3UBM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Aug 2023 16:01:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239010AbjH3T4i (ORCPT
+        with ESMTP id S239137AbjH3UAt (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Aug 2023 15:56:38 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C2D56B8
-        for <linux-hwmon@vger.kernel.org>; Wed, 30 Aug 2023 12:28:38 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1bdf4752c3cso35705ad.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 30 Aug 2023 12:28:38 -0700 (PDT)
+        Wed, 30 Aug 2023 16:00:49 -0400
+Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1C11736
+        for <linux-hwmon@vger.kernel.org>; Wed, 30 Aug 2023 12:37:01 -0700 (PDT)
+Received: by mail-ua1-f54.google.com with SMTP id a1e0cc1a2514c-7a50bd29064so70722241.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 30 Aug 2023 12:37:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1693423630; x=1694028430; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HGvmAnYANPHouVA+BdJfC0MXGgtwfV2UgiyZIn2PRsI=;
-        b=VcpFCpRB8s2cEEOchce0BXS9IVqHIrJzT7NcPaH9c322NqBlKxs8IEijgZ9z+lKfjR
-         oNL5MLAFrfl2qhoqUnNAOaQQdsGy/+WtnMQvgfHvSIrcJbH8qB458ZuX27aWmDjIK47W
-         obWzjk4CqXylYP1stu2UM+DwFek6FFQlq/g8+ThXQbIvuqVcslku7uszhq9IgXZJCEnl
-         sGLg0goRTMngWbY+8da5F7uY/a5qPR5uZtBiIuFqLFDG1clxUitAjqhlqFhq4QAf7b4Q
-         5x4F0/8eRKzWzhonJwELqkEaPa3++ShVm9sNOmm3hhR7ZfylUtqeWiEjtVER3UY6u4Nn
-         +TFQ==
+        d=gmail.com; s=20221208; t=1693424095; x=1694028895; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=femUbnNkI0dPgRYRrDdrRsJ5hRpAu998V7jEmuAfMrw=;
+        b=g73fJn6H38Pkm7rwBvv5S8bpgVMcV5I3+RupYUh2+3jknr751Yi+KTl1NqRMr4jnfi
+         RhMw+mytlvk/OpkarvTf2pPgEU35NDUCHkDFmnWIIBYL2xye5OjegfHKPR9Ev9L/kLj1
+         cEMyyymV9gamoHybQ4OWLIeho5NsHBrMjEuSDm80QvJpmZyn9XMKSn/1qanOpLKkyne+
+         EBNkZQEpnVWLS6MJFjGnZVNEGIKLrDX6P71/S1y+i+MfHi8dJLC0kgIKWz2Mqo7kLNVx
+         QeVm8NEsn0OpNpMBgWoaTuEaXcWYF+1voQ/m5U2y9VIAf6krfcRj7IJYB9JmdekMbqgv
+         qZpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693423630; x=1694028430;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HGvmAnYANPHouVA+BdJfC0MXGgtwfV2UgiyZIn2PRsI=;
-        b=E+4ptJ3e7voH4QUTcfRacklS9crLi2xJI9palwADjEmWG8IuEe6rnjf6eMdGhIJ/Wm
-         8jmIiX9ZCH2RWSj/QDVsSSteoi/Bk3vAgZrOmIJ86PytaxnG9IxHHGCh02hhPX0wUTqO
-         8efEyJElrWSmpjcLJm4inPHUbzsZpUuLs4vk7mFOgmTd/zcssYPFcf/imnZrLzwbjVpn
-         xLQAsG9pgiRjCi+mbM324VRb7NC9mvmMic2jl6VeZ8rAIYF/xEp3YcWUx/n0vL/KfEDa
-         Y+VMoTX0ECIT93wIUzJOFX4nVY5RnCeVT/cT4C6UgNGfr9EvoyHv0wzFi4TXJ7rO7kcM
-         QGwg==
-X-Gm-Message-State: AOJu0YyrTGpZvn0W/0K8UcKJCuliI14wf3ICw2i5aM6OxLGqKpI+cPc+
-        erXT5Y1GN/SSkNIDb8NkFkF0F1SckHlDRX6wwHdxftVhJzcqYlWh6zGsbA==
-X-Google-Smtp-Source: AGHT+IFAARw8v1UFiFy5BY+Jwg3667PEy/UO72QjYBKljjXc7Hi5OYjANU6LOXgIEcoktmjI6GsRSRfpcd8/MvLOM3g=
-X-Received: by 2002:a17:90b:e07:b0:263:f62b:3601 with SMTP id
- ge7-20020a17090b0e0700b00263f62b3601mr2848202pjb.10.1693422895963; Wed, 30
- Aug 2023 12:14:55 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1693424095; x=1694028895;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=femUbnNkI0dPgRYRrDdrRsJ5hRpAu998V7jEmuAfMrw=;
+        b=R21aeyMceS8wjFPloybM5VGJRPG4QiRmS7YbtVdfn036yx2iyzTVBmMXrsknS2pT3g
+         moiamTc769ttaZON6QI5shAecbISJDRJ4aZe2l5PpIA5NKHOSbmcMZ9nYUDWbHN3BzNS
+         6A+ucYFz0FkHySaFj6ERZ2lUfAZ92Q0zam5fnont2BCfOT4ueC7MFtG4NAx/XTWhJogQ
+         enW3yZizXPW0gdRelifWsdy7bGSeotgPU1+4+pYyn2N1OfvOGproYrHO8dN5co++8dec
+         /Dj9CrcXydtkut35i43uCsGnnwS8tSIRzZXd+B4kbDMzT/Pa4l9q/jofNuPCqWyLMQjU
+         82Gg==
+X-Gm-Message-State: AOJu0Yy6BAbthIGmj23Dt8GF2/YRnARRvXsdeCDaeBDmsyTdxDYOincW
+        k3m7Xa+0CTyPQ5XcM47LKDlZqyeMgVviKFEErVBk7bb7
+X-Google-Smtp-Source: AGHT+IFia5ollVps8fAWA2izAZcbD2vMJY6o+IbWybBDjiGt+MAhLxVXY1ew+u7HRnri1BYyUPCxLPoVtCLHXmN1flU=
+X-Received: by 2002:a67:f98d:0:b0:44e:8ef9:336d with SMTP id
+ b13-20020a67f98d000000b0044e8ef9336dmr2765521vsq.1.1693424094794; Wed, 30 Aug
+ 2023 12:34:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230830111319.3882281-1-Naresh.Solanki@9elements.com> <0bfbbbb3-6144-fc9a-c8ab-423a8865591b@roeck-us.net>
-In-Reply-To: <0bfbbbb3-6144-fc9a-c8ab-423a8865591b@roeck-us.net>
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-Date:   Thu, 31 Aug 2023 00:44:45 +0530
-Message-ID: <CABqG17ig1VRJYqbrOvPKAYS8iUFwY9J3tYcgYGtnnXw+vrnoRA@mail.gmail.com>
-Subject: Re: [PATCH] regulator (max5970): Add hwmon support
+References: <CAOdCjQtTzQpsko+vqkF9zW5RPe1520r4B5kFsJzHjSkK+KxvMw@mail.gmail.com>
+ <CAOdCjQv-dCsd_EDnmWN786H57=cN2U8GBZLS96gXme6hfYpC4A@mail.gmail.com>
+ <d41992ac-9670-44af-963b-d171bfcdd8f9@roeck-us.net> <CAOdCjQvEvqoQQQLUX3tuLzuY0sedi2mGzA=aMJg4UY+uMtcr0g@mail.gmail.com>
+ <a148cb9e-e108-5513-39f1-b307d517d8b2@roeck-us.net>
+In-Reply-To: <a148cb9e-e108-5513-39f1-b307d517d8b2@roeck-us.net>
+From:   Pankaj Pandey <pankaj.embedded@gmail.com>
+Date:   Thu, 31 Aug 2023 01:04:43 +0530
+Message-ID: <CAOdCjQuMU9kJq_KhM2Z6pjqSwVVTm_o8C3-GGtvgAQMQzaxpSg@mail.gmail.com>
+Subject: Re: Fwd: Regarding pmbus_core.c
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>, zev@bewilderbeest.net,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Cc:     linux-hwmon@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi
+Thanks for the suggestion !!
 
-
-On Wed, 30 Aug 2023 at 21:26, Guenter Roeck <linux@roeck-us.net> wrote:
+On Wed, Aug 30, 2023 at 8:56=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
+wrote:
 >
-> On 8/30/23 04:13, Naresh Solanki wrote:
-> > Utilize the integrated 10-bit ADC in Max5970/Max5978 to enable voltage
-> > and current monitoring. This feature is seamlessly integrated through
-> > the hwmon subsystem.
+> Pankaj,
+>
+> On 8/30/23 02:28, Pankaj Pandey wrote:
+> > Hi Guenter,
 > >
-> > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> > ---
-> >   drivers/regulator/max5970-regulator.c | 119 ++++++++++++++++++++++++++
-> >   1 file changed, 119 insertions(+)
+> > Thanks for the pointer. Actually during bmr454 probing during kernel bo=
+ots-up it
+> > called system reset/crash. For reference please find bmr454 probing log=
+ below:
 > >
-> > diff --git a/drivers/regulator/max5970-regulator.c b/drivers/regulator/max5970-regulator.c
-> > index b56a174cde3d..3a6f7c293526 100644
-> > --- a/drivers/regulator/max5970-regulator.c
-> > +++ b/drivers/regulator/max5970-regulator.c
-> > @@ -10,6 +10,7 @@
-> >   #include <linux/bitops.h>
-> >   #include <linux/device.h>
-> >   #include <linux/err.h>
-> > +#include <linux/hwmon.h>
-> >   #include <linux/module.h>
-> >   #include <linux/io.h>
-> >   #include <linux/of.h>
-> > @@ -32,6 +33,116 @@ enum max597x_regulator_id {
-> >       MAX597X_SW1,
-> >   };
+>
+> First of all, please don't top-post.
+>
+> > [   14.910630] pmbus 7-0010: bmr454 BMR status word : 0x2
+> > [   14.922945] pmbus 7-0010: bmr454 BMR status cml : 0x2
 > >
-> > +static int max5970_read_adc(struct regmap *regmap, int reg, long *val)
-> > +{
-> > +     u8 reg_data[2];
-> > +     int ret;
-> > +
-> > +     ret = regmap_bulk_read(regmap, reg, &reg_data[0], 2);
-> > +     if (ret < 0)
-> > +             return ret;
-> > +
-> > +     *val = (reg_data[0] << 2) | (reg_data[1] & 3);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int max5970_read(struct device *dev, enum hwmon_sensor_types type,
-> > +                     u32 attr, int channel, long *val)
-> > +{
-> > +     struct max5970_data *ddata = dev_get_drvdata(dev);
-> > +     struct regmap *regmap = dev_get_regmap(dev->parent, NULL);
-> > +     int ret;
-> > +
-> > +     switch (type) {
-> > +     case hwmon_curr:
-> > +             switch (attr) {
-> > +             case hwmon_curr_input:
-> > +                     ret = max5970_read_adc(regmap, MAX5970_REG_CURRENT_H(channel), val);
-> > +                     /*
-> > +                      * Calculate current from ADC value, IRNG range & shunt resistor value.
-> > +                      * ddata->irng holds the voltage corresponding to the maximum value the
-> > +                      * 10-bit ADC can measure.
-> > +                      * To obtain the output, multiply the ADC value by the IRNG range (in
-> > +                      * millivolts) and then divide it by the maximum value of the 10-bit ADC.
-> > +                      */
-> > +                     *val = (*val * ddata->irng[channel]) >> 10;
-> > +                     /* Convert the voltage meansurement across shunt resistor to current */
-> > +                     *val = (*val * 1000) / ddata->shunt_micro_ohms[channel];
-> > +                     return ret;
-> > +             default:
-> > +                     return -EOPNOTSUPP;
-> > +             }
-> > +
-> > +     case hwmon_in:
-> > +             switch (attr) {
-> > +             case hwmon_in_input:
-> > +                     ret = max5970_read_adc(regmap, MAX5970_REG_VOLTAGE_H(channel), val);
-> > +                     /*
-> > +                      * Calculate voltage from ADC value and MON range.
-> > +                      * ddata->mon_rng holds the voltage corresponding to the maximum value the
-> > +                      * 10-bit ADC can measure.
-> > +                      * To obtain the output, multiply the ADC value by the MON range (in
-> > +                      * microvolts) and then divide it by the maximum value of the 10-bit ADC.
-> > +                      */
-> > +                     *val = mul_u64_u32_shr(*val, ddata->mon_rng[channel], 10);
 >
-> Why do you use mul_u64_u32_shr() here but a direct shift above ?
-There is possibility of overflow due to large value of ddata->mon_rng
+> Bit 1 of the CML status register suggests that there is a communication
+> problem. Per PMBus standard:
 >
-> > +                     /* uV to mV */
-> > +                     *val = *val / 1000;
-> > +                     return ret;
-> > +             default:
-> > +                     return -EOPNOTSUPP;
-> > +             }
-> > +     default:
-> > +             return -EOPNOTSUPP;
-> > +     }
-> > +}
-> > +
-> > +static umode_t max5970_is_visible(const void *data,
-> > +                               enum hwmon_sensor_types type,
-> > +                               u32 attr, int channel)
-> > +{
-> > +     struct max5970_data *ddata = (struct max5970_data *)data;
-> > +
-> > +     if (channel >= ddata->num_switches)
-> > +             return 0;
-> > +
-> > +     switch (type) {
-> > +     case hwmon_in:
-> > +             switch (attr) {
-> > +             case hwmon_in_input:
-> > +                     return 0444;
+> Bit 1 - A communication fault other than the ones listed in this table ha=
+s occurred
 >
->                 default:
->                         break;
-Ack
->
-> > +             }
-> > +             break;
-> > +     case hwmon_curr:
-> > +             switch (attr) {
-> > +             case hwmon_curr_input:
-> > +                     /* Current measurement requires knowledge of the shunt resistor value. */
-> > +                     if (ddata->shunt_micro_ohms[channel])
-> > +                             return 0444;
->                 default:
->                         break;
-Ack
->
-> > +             }
-> > +             break;
-> > +     default:
-> > +             break;
-> > +     }
-> > +     return 0;
-> > +}
-> > +
-> > +static const struct hwmon_ops max5970_hwmon_ops = {
-> > +     .is_visible = max5970_is_visible,
-> > +     .read = max5970_read,
-> > +};
-> > +
-> > +static const struct hwmon_channel_info *max5970_info[] = {
-> > +     HWMON_CHANNEL_INFO(in, HWMON_I_INPUT, HWMON_I_INPUT),
-> > +     HWMON_CHANNEL_INFO(curr, HWMON_C_INPUT, HWMON_C_INPUT),
->
-> Your call, but the chip does support limit and status registers, so you
-> could add reporting those as well since you are at it, possibly even including
-> notifications.
-Will consider separate set of patch for this.
->
-> > +     NULL
-> > +};
-> > +
-> > +static const struct hwmon_chip_info max5970_chip_info = {
-> > +     .ops = &max5970_hwmon_ops,
-> > +     .info = max5970_info,
-> > +};
-> > +
-> >   static int max597x_uvp_ovp_check_mode(struct regulator_dev *rdev, int severity)
-> >   {
-> >       int ret, reg;
-> > @@ -432,6 +543,7 @@ static int max597x_regulator_probe(struct platform_device *pdev)
-> >       struct regulator_config config = { };
-> >       struct regulator_dev *rdev;
-> >       struct regulator_dev *rdevs[MAX5970_NUM_SWITCHES];
-> > +     struct device *hwmon_dev;
-> >       int num_switches;
-> >       int ret, i;
+> > ---> Immediately after above bmr454 probing it reset/crash the system
+> > and jump to u-boot.
 > >
-> > @@ -485,6 +597,13 @@ static int max597x_regulator_probe(struct platform_device *pdev)
-> >               max597x->shunt_micro_ohms[i] = data->shunt_micro_ohms;
-> >       }
+>
+> I don't think anything _called_ system reset/crash. There is no code
+> in the driver that would do that.
+>
+> > Using debug prints I observed system got resettted after reaching to
+> > _pmbus_write_byte  function. But
+> > sometimes probing is fine, not observing any system reset/crash.
 > >
-> > +     hwmon_dev = devm_hwmon_device_register_with_info(&i2c->dev, "max5970_hwmon", max597x,
-> > +                                                      &max5970_chip_info, NULL);
 >
-> This makes the driver dependent on hwmon, so you either need a strict
->         depends on HWMON
-> in Kconfig, or
->         depends on HWMON || HWMON=n
-> and add #if IS_ENABLED(CONFIG_HWMON) as appropriate into the code.
-Sure, will update accordingly. Thanks
+> My best guess is that the i2c communication with the chip is unstable,
+> and that the write causes it to do something that causes the reset.
+> How it would do that - I don't know. Maybe one of the module pins is wire=
+d
+> to the system's reset pin (though I can not imagine why that would be
+> the case), or the miscommunication causes a chip reset. Either case,
+> maybe the problem is in the I2C bus speed. If you can, I would suggest
+> to lower it to 100 KHz to see if that makes a difference.
+>
+> Guenter
 >
 >
-> > +     if (IS_ERR(hwmon_dev)) {
-> > +             return dev_err_probe(&i2c->dev, PTR_ERR(hwmon_dev), \
-> > +                                  "Unable to register hwmon device\n");
-> > +     }
-> > +
-> >       if (i2c->irq) {
-> >               ret =
-> >                   max597x_setup_irq(&i2c->dev, i2c->irq, rdevs, num_switches,
+> > Regards,
+> > Pankaj Pandey
 > >
-> > base-commit: 35d0d2350d774fecf596cfb2fb050559fe5e1850
+> >
+> > On Wed, Aug 30, 2023 at 7:38=E2=80=AFAM Guenter Roeck <linux@roeck-us.n=
+et> wrote:
+> >>
+> >> On Wed, Aug 30, 2023 at 07:16:46AM +0530, Pankaj Pandey wrote:
+> >>> ---------- Forwarded message ---------
+> >>> From: Pankaj Pandey <pankaj.embedded@gmail.com>
+> >>> Date: Wed, Aug 30, 2023 at 4:42=E2=80=AFAM
+> >>> Subject: Regarding pmbus_core.c
+> >>> To: <linux@roeck-us.net>
+> >>>
+> >>>
+> >>> Hi Guenter Roeck,
+> >>>
+> >>> I am facing an issue at drivers/hwmon/pmbus/pmbus_core.c of linux-5.1=
+0 kernel.
+> >>> I am using the bm454 driver from drivers/hwmon/pmbus/pmbus.c.
+> >>> Observed sometimes my Powepc based target board called for reset from
+> >>> inside int pmbus_write_byte_data(struct i2c_client *client, int page,
+> >>> u8 reg, u8 value)  function.  It is not consistent, sometimes not
+> >>
+> >> Sorry, I don't understand what you mean with "called for reset from
+> >> inside int pmbus_write_byte_data". Please clarify.
+> >>
+> >> If I recall correctly, bmr454 is very picky when it comes to i2c bus
+> >> speed. If it acts up, you might have some success with picking a diffe=
+rent
+> >> bus speed.
+> >>
+> >> Thanks,
+> >> Guenter
+> >>
+> >>> observed any reset and bmr454 initialized fine.  Please suggest any
+> >>> pointers to debug this issue.
+> >>>
+> >>> Regards,
+> >>> Pankaj Pandey
 >
