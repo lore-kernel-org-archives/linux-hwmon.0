@@ -2,121 +2,191 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AF69C6FA8F
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Aug 2023 18:48:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55914C83F18
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Aug 2023 18:48:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243183AbjH3SrE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 30 Aug 2023 14:47:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45416 "EHLO
+        id S243230AbjH3SrI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Aug 2023 14:47:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242742AbjH3J3H (ORCPT
+        with ESMTP id S245602AbjH3PkG (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Aug 2023 05:29:07 -0400
-Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E73CCB
-        for <linux-hwmon@vger.kernel.org>; Wed, 30 Aug 2023 02:29:04 -0700 (PDT)
-Received: by mail-vk1-xa33.google.com with SMTP id 71dfb90a1353d-48d0eb04c8cso1654648e0c.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 30 Aug 2023 02:29:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693387744; x=1693992544; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ua10WRdnN+RWxN4RDGFmwcoDFTemva9EtdTfd5rYkW0=;
-        b=MYXqpdvQ4Yj3Nf/ERhEtaHO6jgkrb6KyjJT6SOER++CXO0yBnMn/DYG00emi0MpMx1
-         PND2pnlfsCC8uYkqoXHVgY0ZfTbQbAABRbUiVHpihvaPJFUeG6jYN07T9MXPfNkvn6e7
-         ImMMxAUD3SvbRELu/96gEkJVDUyJ4MtbDTRKZn2BHD9KDvfKiJXkQiRtYURvahtcwMFT
-         5gTrrrWmkDd7Z6gmxu0o2ZEHNK2THmQRRKNX4lcGAfSSXuwuIDUJSO8g8nZ50cgZi2Za
-         3TDWVPUQNGIFEeIiK7lmZbRb64xfiLB/siMn4pPeRhBpmlF4qcqgW8RTodK5jylkQMAg
-         c2zQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693387744; x=1693992544;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ua10WRdnN+RWxN4RDGFmwcoDFTemva9EtdTfd5rYkW0=;
-        b=g6seXwplAtRXWXlnJZ7jagnyN3AKZYvlwev1abu6PzbqQRlm5DBGOtXB8A8q/LaS1i
-         3bYKVxeJ0kmNelAxwdRVjXZxi/aX4AY9A9ATMcVC68Sl8At6RsUAwZwhYU0+Cq3R8j0G
-         O2aOV9vi8EBpFm5Tpcc8OPaeJJrgD306RfwlJTViZY42S7ORQi0xSi0iHDzaE7Rfcv/3
-         Ad5qtwh63m8y6ApRrMDC+3wpIqq+91xxJdUJGaghhKlrenAxceSuB8lTl5UvAx2dina/
-         tJ2QQgWjBTc4q3Fsia7en2VSDn5i/7e9VghkIuKYz4uYJILUqHMyUQ0/bcl2zXERSGzd
-         nxMw==
-X-Gm-Message-State: AOJu0Ywj9cm2FSdSijgjJhV9AFw8TlEWgE2SKqKiBpFgdoiiRlMB0e/G
-        zYrykihyHhwoNJc7nLW4XIIgROTwcT3vxP8G1g2GzcFLwD0=
-X-Google-Smtp-Source: AGHT+IG32hmtOjb3+AwcXeiJ4ZuT7ja3p3wxWcrVIIwQlHh8gO3kMLvOiM3gXadJKziZhU2+vqs9dKkuFETlWUOzXKk=
-X-Received: by 2002:a1f:4886:0:b0:48d:d3b:7dcc with SMTP id
- v128-20020a1f4886000000b0048d0d3b7dccmr1094566vka.5.1693387743635; Wed, 30
- Aug 2023 02:29:03 -0700 (PDT)
+        Wed, 30 Aug 2023 11:40:06 -0400
+X-Greylist: delayed 477 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 30 Aug 2023 08:40:02 PDT
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFFF7122;
+        Wed, 30 Aug 2023 08:40:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 41247CE1E10;
+        Wed, 30 Aug 2023 15:32:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E7D7C433C8;
+        Wed, 30 Aug 2023 15:32:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693409522;
+        bh=q+lAuD5dRw51fzzTSy7vM4auYOiDp+R00JGIAir3fTU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qqdF/FdbiABSXYZavvjiTq0BbgUXiEHAKYG02qdaRaencSVBdtZLQNIsepOE3j95v
+         kF0TtP1izgJRYao1QPhFJCkuMcn6ZGYCVmlFLQVDs1hkcAIu/2Vj0F7jrp2BXmROFz
+         NAE7ONflYtGfIxs1h5n/5Ly1gNk/DbVafG2k2boJerlirYtAyXi+FSTyroJzmklWV+
+         mrUwJTI+UzrkXGMo+c0QMN5V606Am2bLn8nX2Ou5AiMws9KoaxEVi5UynNw83+PHaB
+         XgXg8dY41J9t/b065T1QlXea4MioF4nRp///nI9SKcsbLqlGlZPts0Bv7mr1dgAbx/
+         loeoDdtCPHbNQ==
+Date:   Wed, 30 Aug 2023 16:31:57 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        krzysztof.kozlowski+dt@linaro.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] dt-bindings: hwmon: Add Infineon TDA38640
+Message-ID: <20230830-waving-stinky-d510fefbbf82@spud>
+References: <20230830103620.3611761-1-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
-References: <CAOdCjQtTzQpsko+vqkF9zW5RPe1520r4B5kFsJzHjSkK+KxvMw@mail.gmail.com>
- <CAOdCjQv-dCsd_EDnmWN786H57=cN2U8GBZLS96gXme6hfYpC4A@mail.gmail.com> <d41992ac-9670-44af-963b-d171bfcdd8f9@roeck-us.net>
-In-Reply-To: <d41992ac-9670-44af-963b-d171bfcdd8f9@roeck-us.net>
-From:   Pankaj Pandey <pankaj.embedded@gmail.com>
-Date:   Wed, 30 Aug 2023 14:58:52 +0530
-Message-ID: <CAOdCjQvEvqoQQQLUX3tuLzuY0sedi2mGzA=aMJg4UY+uMtcr0g@mail.gmail.com>
-Subject: Re: Fwd: Regarding pmbus_core.c
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="kHaL/qAdQGB4T+WR"
+Content-Disposition: inline
+In-Reply-To: <20230830103620.3611761-1-Naresh.Solanki@9elements.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Guenter,
 
-Thanks for the pointer. Actually during bmr454 probing during kernel boots-=
-up it
-called system reset/crash. For reference please find bmr454 probing log bel=
-ow:
+--kHaL/qAdQGB4T+WR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[   14.910630] pmbus 7-0010: bmr454 BMR status word : 0x2
-[   14.922945] pmbus 7-0010: bmr454 BMR status cml : 0x2
+Hey,
 
----> Immediately after above bmr454 probing it reset/crash the system
-and jump to u-boot.
+On Wed, Aug 30, 2023 at 12:36:16PM +0200, Naresh Solanki wrote:
+> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+>=20
+> Add the DT property 'infineon,en-pin-fixed-level' to
+> indicated that the chip ENABLE pin is at fixed level
+> or left unconnected(has internal pull-down).
+>=20
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> ----
+> Changes in V4:
+> - Update property name & description.
+> - Update commit message.
+> ---
+>  .../hwmon/pmbus/infineon,tda38640.yaml        | 50 +++++++++++++++++++
+>  .../devicetree/bindings/trivial-devices.yaml  |  2 -
+>  2 files changed, 50 insertions(+), 2 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/infineo=
+n,tda38640.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38=
+640.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.=
+yaml
+> new file mode 100644
+> index 000000000000..1df40ee7454a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.yaml
+> @@ -0,0 +1,50 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +
+> +$id: http://devicetree.org/schemas/hwmon/pmbus/infineon,tda38640.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Infineon TDA38640 Synchronous Buck Regulator with SVID and I2C
+> +
+> +maintainers:
+> +  - Naresh Solanki <naresh.solanki@9elements.com>
+> +
+> +description: |
+> +  The Infineon TDA38640 is a 40A Single-voltage Synchronous Buck
+> +  Regulator with SVID and I2C designed for Industrial use.
+> +
+> +  Datasheet: https://www.infineon.com/dgdl/Infineon-TDA38640-0000-DataSh=
+eet-v02_04-EN.pdf?fileId=3D8ac78c8c80027ecd018042f2337f00c9
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - infineon,tda38640
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  infineon,en-pin-fixed-level:
+> +    description: |
 
-Using debug prints I observed system got resettted after reaching to
-_pmbus_write_byte  function. But
-sometimes probing is fine, not observing any system reset/crash.
+The | isn't needed when there is no formatting requiring preservation.
 
-Regards,
-Pankaj Pandey
+> +      Indicates that the chip ENABLE pin is at fixed level or left
+> +      unconnected(has internal pull-down).
 
+Maybe you've already been over this, but if the pin is called "enable"
+why not use the same wording in the property?
 
-On Wed, Aug 30, 2023 at 7:38=E2=80=AFAM Guenter Roeck <linux@roeck-us.net> =
-wrote:
->
-> On Wed, Aug 30, 2023 at 07:16:46AM +0530, Pankaj Pandey wrote:
-> > ---------- Forwarded message ---------
-> > From: Pankaj Pandey <pankaj.embedded@gmail.com>
-> > Date: Wed, Aug 30, 2023 at 4:42=E2=80=AFAM
-> > Subject: Regarding pmbus_core.c
-> > To: <linux@roeck-us.net>
-> >
-> >
-> > Hi Guenter Roeck,
-> >
-> > I am facing an issue at drivers/hwmon/pmbus/pmbus_core.c of linux-5.10 =
-kernel.
-> > I am using the bm454 driver from drivers/hwmon/pmbus/pmbus.c.
-> > Observed sometimes my Powepc based target board called for reset from
-> > inside int pmbus_write_byte_data(struct i2c_client *client, int page,
-> > u8 reg, u8 value)  function.  It is not consistent, sometimes not
->
-> Sorry, I don't understand what you mean with "called for reset from
-> inside int pmbus_write_byte_data". Please clarify.
->
-> If I recall correctly, bmr454 is very picky when it comes to i2c bus
-> speed. If it acts up, you might have some success with picking a differen=
-t
-> bus speed.
->
-> Thanks,
-> Guenter
->
-> > observed any reset and bmr454 initialized fine.  Please suggest any
-> > pointers to debug this issue.
-> >
-> > Regards,
-> > Pankaj Pandey
+> +    type: boolean
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells =3D <1>;
+> +        #size-cells =3D <0>;
+> +
+> +        tda38640@40 {
+
+Use a generic node name please.
+
+Thanks,
+Conor.
+
+> +            compatible =3D "infineon,tda38640";
+> +            reg =3D <0x40>;
+> +        };
+> +    };
+> +
+> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Doc=
+umentation/devicetree/bindings/trivial-devices.yaml
+> index 40bc475ee7e1..86c7d34f63bf 100644
+> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> @@ -151,8 +151,6 @@ properties:
+>            - infineon,slb9645tt
+>              # Infineon SLB9673 I2C TPM 2.0
+>            - infineon,slb9673
+> -            # Infineon TDA38640 Voltage Regulator
+> -          - infineon,tda38640
+>              # Infineon TLV493D-A1B6 I2C 3D Magnetic Sensor
+>            - infineon,tlv493d-a1b6
+>              # Infineon Multi-phase Digital VR Controller xdpe11280
+>=20
+> base-commit: 919a83d020a8dfa1411c1dc1cff23a833f0f5268
+> --=20
+> 2.41.0
+>=20
+
+--kHaL/qAdQGB4T+WR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZO9g7QAKCRB4tDGHoIJi
+0u+aAQC8ygkZk6Q0Upfi+JtbBzEKVdCMdwNFeK+0+VpOEw6clgEAwbEePBwKZZ2v
+WEZTCH/FkEzhsyrqLUENLozn8jMyqgc=
+=Qn0W
+-----END PGP SIGNATURE-----
+
+--kHaL/qAdQGB4T+WR--
