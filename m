@@ -2,191 +2,105 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55914C83F18
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Aug 2023 18:48:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29CE3C83F1C
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Aug 2023 18:48:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243230AbjH3SrI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 30 Aug 2023 14:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58538 "EHLO
+        id S243213AbjH3SrF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Aug 2023 14:47:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245602AbjH3PkG (ORCPT
+        with ESMTP id S243284AbjH3Kge (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Aug 2023 11:40:06 -0400
-X-Greylist: delayed 477 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 30 Aug 2023 08:40:02 PDT
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFFF7122;
-        Wed, 30 Aug 2023 08:40:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 41247CE1E10;
-        Wed, 30 Aug 2023 15:32:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E7D7C433C8;
-        Wed, 30 Aug 2023 15:32:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693409522;
-        bh=q+lAuD5dRw51fzzTSy7vM4auYOiDp+R00JGIAir3fTU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qqdF/FdbiABSXYZavvjiTq0BbgUXiEHAKYG02qdaRaencSVBdtZLQNIsepOE3j95v
-         kF0TtP1izgJRYao1QPhFJCkuMcn6ZGYCVmlFLQVDs1hkcAIu/2Vj0F7jrp2BXmROFz
-         NAE7ONflYtGfIxs1h5n/5Ly1gNk/DbVafG2k2boJerlirYtAyXi+FSTyroJzmklWV+
-         mrUwJTI+UzrkXGMo+c0QMN5V606Am2bLn8nX2Ou5AiMws9KoaxEVi5UynNw83+PHaB
-         XgXg8dY41J9t/b065T1QlXea4MioF4nRp///nI9SKcsbLqlGlZPts0Bv7mr1dgAbx/
-         loeoDdtCPHbNQ==
-Date:   Wed, 30 Aug 2023 16:31:57 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Wed, 30 Aug 2023 06:36:34 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006D719A
+        for <linux-hwmon@vger.kernel.org>; Wed, 30 Aug 2023 03:36:30 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-99357737980so705852866b.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 30 Aug 2023 03:36:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1693391789; x=1693996589; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4EsAms/GBsK+1iUec9cOrJls/H2UjnYhAk3txEAwGRk=;
+        b=IFqN6fcI14SmKLJbSqFU0GfgHP50LPqgXXuffoVNziQ9/tGlC/oEJNsoinbrhqL+oF
+         iWEWFt8q/rmG6SwQUv7tqoCuHbuoQUG3JEvDHZx25oAdZEvdPhPkrBbrSJTJ5OL8U6Mn
+         q6vSq+0j2N2F2Y2W5wzbVW25oml7jO0nyUFd9Q5ovY3VfYLRtCGDqloWeML+oMyncBJP
+         J+KbTxJGn2MYs2K5l0zk4cfJPcPv7XcsDPx/dc0Z62pdpcLB5oH+POO275XQDigET+kA
+         idpT7jbrsgp15SpUMQrMp2KQ/PF0mrq2P5wCEqwytiF5gFNcEpK2ldFoTATmAyNMfC/+
+         Raew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693391789; x=1693996589;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4EsAms/GBsK+1iUec9cOrJls/H2UjnYhAk3txEAwGRk=;
+        b=JfWtQ+fC9cFNbUcSfzQMqXw8WEmxiQJ6wEW33w4mE0VRwRDwLARlfJVx/ZDPMYTCqp
+         ADnvLAPsaBTgaAphIRXMo2B2/XpfX+9ejraTWUvYw7BbhAXtZhmXE+KS6o0AtcwRZ9lW
+         008212vNfE7RW5C/AIZwucZcP+qqAqpTPMEUo5lzAgMnsdXcW1K/75WByx5+MrcLXRhi
+         ChGhzHPsRim3iZkXJnpvzqOSSMzZ7EAyX6Ci2oA7EyyQoEPitrfTsb3GvYc4QD0KNUQt
+         kpkVIbtnHRk4qLjzzvQk4JdmysPHXnBvzKQYHLmrkoFlyZ6H64EvSKbAGe4192lrgvxD
+         dGlA==
+X-Gm-Message-State: AOJu0YyUQOa12JJLxBCYrXF56VONOITZoRpRaAT/oafcCwukWaWdDhqC
+        rIA0GqJJIU901ux1Ig5uvRoSN8M3MwsU6u2snGIJeQ==
+X-Google-Smtp-Source: AGHT+IE/SnSPHAg/GcOvam5TY1r6/qYU5l+HI0OuRJBzs+e9T7fHkMR8XLJCwn4a61EDkKh4aQ7CKw==
+X-Received: by 2002:a17:906:10ca:b0:9a1:f426:bba9 with SMTP id v10-20020a17090610ca00b009a1f426bba9mr1298905ejv.74.1693391789587;
+        Wed, 30 Aug 2023 03:36:29 -0700 (PDT)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id s11-20020a170906354b00b00992bea2e9d2sm7027620eja.62.2023.08.30.03.36.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Aug 2023 03:36:29 -0700 (PDT)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
-        krzysztof.kozlowski+dt@linaro.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-hwmon@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-hwmon@vger.kernel.org,
         Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        Naresh Solanki <Naresh.Solanki@9elements.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] dt-bindings: hwmon: Add Infineon TDA38640
-Message-ID: <20230830-waving-stinky-d510fefbbf82@spud>
+Subject: [PATCH v4 2/3] hwmon: (pmbus) Add ON_OFF_CONFIG register bits
+Date:   Wed, 30 Aug 2023 12:36:17 +0200
+Message-ID: <20230830103620.3611761-2-Naresh.Solanki@9elements.com>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230830103620.3611761-1-Naresh.Solanki@9elements.com>
 References: <20230830103620.3611761-1-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="kHaL/qAdQGB4T+WR"
-Content-Disposition: inline
-In-Reply-To: <20230830103620.3611761-1-Naresh.Solanki@9elements.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
---kHaL/qAdQGB4T+WR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Add bits found in the ON_OFF_CONFIG register.
 
-Hey,
+Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+---
+ drivers/hwmon/pmbus/pmbus.h | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-On Wed, Aug 30, 2023 at 12:36:16PM +0200, Naresh Solanki wrote:
-> From: Patrick Rudolph <patrick.rudolph@9elements.com>
->=20
-> Add the DT property 'infineon,en-pin-fixed-level' to
-> indicated that the chip ENABLE pin is at fixed level
-> or left unconnected(has internal pull-down).
->=20
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> ----
-> Changes in V4:
-> - Update property name & description.
-> - Update commit message.
-> ---
->  .../hwmon/pmbus/infineon,tda38640.yaml        | 50 +++++++++++++++++++
->  .../devicetree/bindings/trivial-devices.yaml  |  2 -
->  2 files changed, 50 insertions(+), 2 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/infineo=
-n,tda38640.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38=
-640.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.=
-yaml
-> new file mode 100644
-> index 000000000000..1df40ee7454a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.yaml
-> @@ -0,0 +1,50 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +
-> +$id: http://devicetree.org/schemas/hwmon/pmbus/infineon,tda38640.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Infineon TDA38640 Synchronous Buck Regulator with SVID and I2C
-> +
-> +maintainers:
-> +  - Naresh Solanki <naresh.solanki@9elements.com>
-> +
-> +description: |
-> +  The Infineon TDA38640 is a 40A Single-voltage Synchronous Buck
-> +  Regulator with SVID and I2C designed for Industrial use.
-> +
-> +  Datasheet: https://www.infineon.com/dgdl/Infineon-TDA38640-0000-DataSh=
-eet-v02_04-EN.pdf?fileId=3D8ac78c8c80027ecd018042f2337f00c9
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - infineon,tda38640
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  infineon,en-pin-fixed-level:
-> +    description: |
+diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+index b0832a4c690d..7a28bac7f171 100644
+--- a/drivers/hwmon/pmbus/pmbus.h
++++ b/drivers/hwmon/pmbus/pmbus.h
+@@ -243,6 +243,15 @@ enum pmbus_regs {
+  */
+ #define PB_OPERATION_CONTROL_ON		BIT(7)
+ 
++/*
++ * ON_OFF_CONFIG
++ */
++#define PB_ON_OFF_CONFIG_POWERUP_CONTROL	BIT(4)
++#define PB_ON_OFF_CONFIG_OPERATION_REQ		BIT(3)
++#define PB_ON_OFF_CONFIG_EN_PIN_REQ		BIT(2)
++#define PB_ON_OFF_CONFIG_POLARITY_HIGH		BIT(1)
++#define PB_ON_OFF_CONFIG_TURN_OFF_FAST		BIT(0)
++
+ /*
+  * WRITE_PROTECT
+  */
+-- 
+2.41.0
 
-The | isn't needed when there is no formatting requiring preservation.
-
-> +      Indicates that the chip ENABLE pin is at fixed level or left
-> +      unconnected(has internal pull-down).
-
-Maybe you've already been over this, but if the pin is called "enable"
-why not use the same wording in the property?
-
-> +    type: boolean
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells =3D <1>;
-> +        #size-cells =3D <0>;
-> +
-> +        tda38640@40 {
-
-Use a generic node name please.
-
-Thanks,
-Conor.
-
-> +            compatible =3D "infineon,tda38640";
-> +            reg =3D <0x40>;
-> +        };
-> +    };
-> +
-> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Doc=
-umentation/devicetree/bindings/trivial-devices.yaml
-> index 40bc475ee7e1..86c7d34f63bf 100644
-> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
-> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-> @@ -151,8 +151,6 @@ properties:
->            - infineon,slb9645tt
->              # Infineon SLB9673 I2C TPM 2.0
->            - infineon,slb9673
-> -            # Infineon TDA38640 Voltage Regulator
-> -          - infineon,tda38640
->              # Infineon TLV493D-A1B6 I2C 3D Magnetic Sensor
->            - infineon,tlv493d-a1b6
->              # Infineon Multi-phase Digital VR Controller xdpe11280
->=20
-> base-commit: 919a83d020a8dfa1411c1dc1cff23a833f0f5268
-> --=20
-> 2.41.0
->=20
-
---kHaL/qAdQGB4T+WR
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZO9g7QAKCRB4tDGHoIJi
-0u+aAQC8ygkZk6Q0Upfi+JtbBzEKVdCMdwNFeK+0+VpOEw6clgEAwbEePBwKZZ2v
-WEZTCH/FkEzhsyrqLUENLozn8jMyqgc=
-=Qn0W
------END PGP SIGNATURE-----
-
---kHaL/qAdQGB4T+WR--
