@@ -2,69 +2,70 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FC4CC83F17
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Aug 2023 18:48:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB8F1C83F20
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Aug 2023 18:48:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243266AbjH3SrW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 30 Aug 2023 14:47:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56936 "EHLO
+        id S243256AbjH3SrU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Aug 2023 14:47:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243287AbjH3Kgf (ORCPT
+        with ESMTP id S243281AbjH3Kgd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Aug 2023 06:36:35 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5421B7
-        for <linux-hwmon@vger.kernel.org>; Wed, 30 Aug 2023 03:36:32 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-523100882f2so6996679a12.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 30 Aug 2023 03:36:32 -0700 (PDT)
+        Wed, 30 Aug 2023 06:36:33 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195961B7
+        for <linux-hwmon@vger.kernel.org>; Wed, 30 Aug 2023 03:36:30 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-529fb04a234so7094053a12.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 30 Aug 2023 03:36:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1693391791; x=1693996591; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A4gcF63fe1TKqOf9MhohsxK7SINhHLw9bxgMUJq7sfo=;
-        b=XcebUdpkpREnKUrmXXeHno0wR/GKAU3Npq48IfeNOP5Td8HSdZBgN8AGOgrKh0sxWS
-         RKqljFbJLVYyaa6z/A/El5gnuswvpAG7/PZuPPlljryLouELr3f2mtLTo8PX77QNGqdK
-         fNWTkdHLoiL6LnZ6vwM8yD4MFKXrVcbxvPdToW3lTJIvSyGeEAp951NZQawYuTlh3rgX
-         /qPWdIei3PxzSaQlLAARg5pZWkY+3ZBQ7Pu0lKao/WBk0mMHvVEZ1XKHYw7Ur7Tlp6RK
-         tVfDz45eyqjAfOnlJ5bdb9C3Xk+3CocDwdcPyaOBBKRUVZQBa5i039m9EBoq96FFkW7G
-         HMGA==
+        d=9elements.com; s=google; t=1693391788; x=1693996588; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HZcO54s6dPOvHTKozhAJ9zybhhO9IlHmOjEttCcJ4Fc=;
+        b=C0prIXeHgKDHDYl3xGT74jVJ+7LpPwuKQ9ApXGCbHlvskrYIbeES4cXYboTamDKCMC
+         bA7mmoX1Kk/fzujWZ5VfqofnorAHCPB7/qciijCBZNFGrynvnbAinPacxkx2c+MUsXYW
+         sV1L0KkqQVRBjvSbnDymg/GHfIDTgp/9G69zhzrR2S0xOIvtu+x41dDbllwytpKJ4Lee
+         7VCplc89rhLJHm2LohAl5Wpc04xGDlLEj57VNmaxInvKaQK7xxUv61LMGyrTODCmXO7C
+         nZhHHSpt10QEoAmMCcFuscT20FcRqjNaurGZsof454w3eSxx5nohOlU2TSv6Qvd41vH4
+         lcTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693391791; x=1693996591;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=A4gcF63fe1TKqOf9MhohsxK7SINhHLw9bxgMUJq7sfo=;
-        b=ThRS9HSBsE78/N7urrjROEf4WnWTbKDzc7aZwFIRTlHooyQa2Y8vhDP8Q20AEwtnel
-         lDVOXgp1y+Ji1ABvFw2N5tBJ3R6JDgdYUjOL9e2BUq6APJEXKHBhMyewkzBn7hMYKrC6
-         o9knfIRomfpB3RpNavec5D9z2laFIhtcFAFaGPaHKM27UyIX9tEe4xI4pzMEn+7hK4q/
-         2cBOoX+8BJ/R7qx4IoUM98scygJMcPqKxKS3g+1s0bqklqt5yVw2dANf9o/5JYo7fb5G
-         GknDKXcfVoWvIbMHyqx6wKR0TlOvvj0WvD8afw9qQOfUcGtwSntaASi1hSvjmcrRJey6
-         M6sg==
-X-Gm-Message-State: AOJu0YzD3d3WmAKwZeXvWDpk93mpHunOcrFPeEhMDxAS3iqnM1I6my9J
-        gJlxIqY+Ly4bgFyWPPGKMa63Hg==
-X-Google-Smtp-Source: AGHT+IF76+9hldlskjqC7pLsmnE2/a2NSFWqx+2nnc0wgV0yGIxasR7Jf3rNt3XO8xSKL8J7ufT+Qg==
-X-Received: by 2002:a17:906:7683:b0:9a5:d657:47ec with SMTP id o3-20020a170906768300b009a5d65747ecmr1217086ejm.64.1693391790963;
-        Wed, 30 Aug 2023 03:36:30 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1693391788; x=1693996588;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HZcO54s6dPOvHTKozhAJ9zybhhO9IlHmOjEttCcJ4Fc=;
+        b=T05GOvjPFtWKEEWgWrG2sxaFjszfsJCmYIHjcmaXDA7yT1R+Xl20+jC8LiQVsG9Jko
+         z40ZqdPkGeWT/gbriW+rQzOzI5G4c8z7LXeS3yLERTg29SosbDqvuKKZy8zR4YuT0ges
+         K/WHKG3UV4473j/FDHFVm/dlz7GGB3HtdNp+Weg6LjCb2Dt8Sy8zVhvJekZtGHoixwm1
+         MZva83NbOwPxtO3dYfk3gXOVVgBGwVZmTszzbiCYwTaKk2UHe2QwuoVLQnjmQJI/gNKs
+         E+8IGLzspjTe2dymaQ1Qf14l3OgwDUnSk1bbQbVk54ygfcLmwehL2Jpc3LSBswuj7MM+
+         aGkw==
+X-Gm-Message-State: AOJu0Yxx+0gaUehuWxafS9E1PsSQMXvysZLX/rppgTwRsACH/qIaQfe6
+        XLlFMGcm4YV/4/k9l6y1GRlurA==
+X-Google-Smtp-Source: AGHT+IGiBHH+VCjnIyveBq5dLYGOcHJ2s6Xflu3d/0Pw3YF2Fpdun5D9Au3Dso27zqC14dGTODLPfQ==
+X-Received: by 2002:a17:907:60c7:b0:9a5:8eab:49de with SMTP id hv7-20020a17090760c700b009a58eab49demr1376125ejc.17.1693391788390;
+        Wed, 30 Aug 2023 03:36:28 -0700 (PDT)
 Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id s11-20020a170906354b00b00992bea2e9d2sm7027620eja.62.2023.08.30.03.36.30
+        by smtp.gmail.com with ESMTPSA id s11-20020a170906354b00b00992bea2e9d2sm7027620eja.62.2023.08.30.03.36.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Aug 2023 03:36:30 -0700 (PDT)
+        Wed, 30 Aug 2023 03:36:27 -0700 (PDT)
 From:   Naresh Solanki <naresh.solanki@9elements.com>
 X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
-        krzysztof.kozlowski+dt@linaro.org
+        krzysztof.kozlowski+dt@linaro.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Naresh Solanki <naresh.solanki@9elements.com>
 Cc:     linux-hwmon@vger.kernel.org,
         Patrick Rudolph <patrick.rudolph@9elements.com>,
         Naresh Solanki <Naresh.Solanki@9elements.com>,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 3/3] hwmon: (pmbus/tda38640) Add workaround for SVID mode
-Date:   Wed, 30 Aug 2023 12:36:18 +0200
-Message-ID: <20230830103620.3611761-3-Naresh.Solanki@9elements.com>
+Subject: [PATCH v4 1/3] dt-bindings: hwmon: Add Infineon TDA38640
+Date:   Wed, 30 Aug 2023 12:36:16 +0200
+Message-ID: <20230830103620.3611761-1-Naresh.Solanki@9elements.com>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230830103620.3611761-1-Naresh.Solanki@9elements.com>
-References: <20230830103620.3611761-1-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -73,224 +74,93 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-TDA38640 can operate in either PMBus mode or SVID mode.
-
-In SVID mode, by design ENABLE pin is the only option for controlling
-the output rail i.e., ENABLE pin is chained to power good of another
-reglator & FPGA.
-
-In cases where the chip is configured for SVID mode, and the ENABLE pin
-is set at a fixed level or is left unconnected (with an internal
-pull-down), while requiring software control, the following
-workaround is necessary.
-
-The workaround utilizes ENABLE pin polarity flipping to control
-output rail.
-
-If property 'infineon,en-pin-fixed-level' is specified then
-determine if chip is in SVID mode by checking BIT15 of MTP memory offset
-0x44 as described in the datasheet.
-
-If chip is in SVID mode then apply the workaround by
-1. Determine EN pin level
-2. Maps BIT7 of OPERATION(01h) to EN_PIN_POLARITY(BIT1) of
-   PB_ON_OFF_CONFIG.
+Add the DT property 'infineon,en-pin-fixed-level' to
+indicated that the chip ENABLE pin is at fixed level
+or left unconnected(has internal pull-down).
 
 Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 ----
 Changes in V4:
-- Update DT property name
-- Commit message update
-Changes in V3:
-- Use dt property to determine if workaround is needed.
-Changes in V2:
-- Remove dependency on DT propery,
-- Runtime determine SVID mode & ENABLE pin level,
+- Update property name & description.
 - Update commit message.
 ---
- drivers/hwmon/pmbus/tda38640.c | 154 ++++++++++++++++++++++++++++++++-
- 1 file changed, 152 insertions(+), 2 deletions(-)
+ .../hwmon/pmbus/infineon,tda38640.yaml        | 50 +++++++++++++++++++
+ .../devicetree/bindings/trivial-devices.yaml  |  2 -
+ 2 files changed, 50 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.yaml
 
-diff --git a/drivers/hwmon/pmbus/tda38640.c b/drivers/hwmon/pmbus/tda38640.c
-index 450b0273fb59..c238330d2e6c 100644
---- a/drivers/hwmon/pmbus/tda38640.c
-+++ b/drivers/hwmon/pmbus/tda38640.c
-@@ -18,6 +18,127 @@ static const struct regulator_desc __maybe_unused tda38640_reg_desc[] = {
- 	PMBUS_REGULATOR("vout", 0),
- };
- 
-+struct tda38640_data {
-+	struct pmbus_driver_info info;
-+	u32 en_pin_lvl;
-+};
+diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.yaml
+new file mode 100644
+index 000000000000..1df40ee7454a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.yaml
+@@ -0,0 +1,50 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
 +
-+#define to_tda38640_data(x)  container_of(x, struct tda38640_data, info)
++$id: http://devicetree.org/schemas/hwmon/pmbus/infineon,tda38640.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+/*
-+ * Map PB_ON_OFF_CONFIG_POLARITY_HIGH to PB_OPERATION_CONTROL_ON.
-+ */
-+static int tda38640_read_byte_data(struct i2c_client *client, int page, int reg)
-+{
-+	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-+	struct tda38640_data *data = to_tda38640_data(info);
-+	int ret, on_off_config, enabled;
++title: Infineon TDA38640 Synchronous Buck Regulator with SVID and I2C
 +
-+	if (reg != PMBUS_OPERATION)
-+		return -ENODATA;
++maintainers:
++  - Naresh Solanki <naresh.solanki@9elements.com>
 +
-+	ret = pmbus_read_byte_data(client, page, reg);
-+	if (ret < 0)
-+		return ret;
++description: |
++  The Infineon TDA38640 is a 40A Single-voltage Synchronous Buck
++  Regulator with SVID and I2C designed for Industrial use.
 +
-+	on_off_config = pmbus_read_byte_data(client, page,
-+					     PMBUS_ON_OFF_CONFIG);
-+	if (on_off_config < 0)
-+		return on_off_config;
++  Datasheet: https://www.infineon.com/dgdl/Infineon-TDA38640-0000-DataSheet-v02_04-EN.pdf?fileId=8ac78c8c80027ecd018042f2337f00c9
 +
-+	enabled = !!(on_off_config & PB_ON_OFF_CONFIG_POLARITY_HIGH);
++properties:
++  compatible:
++    enum:
++      - infineon,tda38640
 +
-+	enabled ^= data->en_pin_lvl;
-+	if (enabled)
-+		ret &= ~PB_OPERATION_CONTROL_ON;
-+	else
-+		ret |= PB_OPERATION_CONTROL_ON;
++  reg:
++    maxItems: 1
 +
-+	return ret;
-+}
++  infineon,en-pin-fixed-level:
++    description: |
++      Indicates that the chip ENABLE pin is at fixed level or left
++      unconnected(has internal pull-down).
++    type: boolean
 +
-+/*
-+ * Map PB_OPERATION_CONTROL_ON to PB_ON_OFF_CONFIG_POLARITY_HIGH.
-+ */
-+static int tda38640_write_byte_data(struct i2c_client *client, int page,
-+				    int reg, u8 byte)
-+{
-+	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-+	struct tda38640_data *data = to_tda38640_data(info);
-+	int enable, ret;
++required:
++  - compatible
++  - reg
 +
-+	if (reg != PMBUS_OPERATION)
-+		return -ENODATA;
++additionalProperties: false
 +
-+	enable = !!(byte & PB_OPERATION_CONTROL_ON);
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
 +
-+	byte &= ~PB_OPERATION_CONTROL_ON;
-+	ret = pmbus_write_byte_data(client, page, reg, byte);
-+	if (ret < 0)
-+		return ret;
++        tda38640@40 {
++            compatible = "infineon,tda38640";
++            reg = <0x40>;
++        };
++    };
 +
-+	enable ^= data->en_pin_lvl;
-+
-+	return pmbus_update_byte_data(client, page, PMBUS_ON_OFF_CONFIG,
-+				      PB_ON_OFF_CONFIG_POLARITY_HIGH,
-+				      enable ? 0 : PB_ON_OFF_CONFIG_POLARITY_HIGH);
-+}
-+
-+static int svid_mode(struct i2c_client *client, struct tda38640_data *data)
-+{
-+	/* PMBUS_MFR_READ(0xD0) + MTP Address offset */
-+	u8 write_buf[] = {0xd0, 0x44, 0x00};
-+	u8 read_buf[2];
-+	int ret, svid;
-+	bool off, reg_en_pin_pol;
-+
-+	struct i2c_msg msgs[2] = {
-+		{
-+			.addr = client->addr,
-+			.flags = 0,
-+			.buf = write_buf,
-+			.len = sizeof(write_buf),
-+		},
-+		{
-+			.addr = client->addr,
-+			.flags = I2C_M_RD,
-+			.buf = read_buf,
-+			.len = sizeof(read_buf),
-+		}
-+	};
-+
-+	ret = i2c_transfer(client->adapter, msgs, 2);
-+	if (ret < 0) {
-+		dev_err(&client->dev, "i2c_transfer failed. %d", ret);
-+		return ret;
-+	}
-+
-+	/*
-+	 * 0x44[15] determines PMBus Operating Mode
-+	 * If bit is set then it is SVID mode.
-+	 */
-+	svid = !!(read_buf[1] & BIT(7));
-+
-+	/*
-+	 * Determine EN pin level for use in SVID mode.
-+	 * This is done with help of STATUS_BYTE bit 6(OFF) & ON_OFF_CONFIG bit 2(EN pin polarity).
-+	 */
-+	if (svid) {
-+		ret = i2c_smbus_read_byte_data(client, PMBUS_STATUS_BYTE);
-+		if (ret < 0)
-+			return ret;
-+		off = !!(ret & PB_STATUS_OFF);
-+
-+		ret = i2c_smbus_read_byte_data(client, PMBUS_ON_OFF_CONFIG);
-+		if (ret < 0)
-+			return ret;
-+		reg_en_pin_pol = !!(ret & PB_ON_OFF_CONFIG_POLARITY_HIGH);
-+		data->en_pin_lvl = off ^ reg_en_pin_pol;
-+	}
-+
-+	return svid;
-+}
-+
- static struct pmbus_driver_info tda38640_info = {
- 	.pages = 1,
- 	.format[PSC_VOLTAGE_IN] = linear,
-@@ -26,7 +147,6 @@ static struct pmbus_driver_info tda38640_info = {
- 	.format[PSC_CURRENT_IN] = linear,
- 	.format[PSC_POWER] = linear,
- 	.format[PSC_TEMPERATURE] = linear,
--
- 	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT
- 	    | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
- 	    | PMBUS_HAVE_IIN
-@@ -41,7 +161,37 @@ static struct pmbus_driver_info tda38640_info = {
- 
- static int tda38640_probe(struct i2c_client *client)
- {
--	return pmbus_do_probe(client, &tda38640_info);
-+	struct tda38640_data *data;
-+	int svid;
-+
-+	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+	memcpy(&data->info, &tda38640_info, sizeof(tda38640_info));
-+
-+	if (IS_ENABLED(CONFIG_SENSORS_TDA38640_REGULATOR) && \
-+	    of_property_read_bool(client->dev.of_node, "infineon,en-pin-fixed-level")) {
-+		svid = svid_mode(client, data);
-+		if (svid < 0) {
-+			dev_err_probe(&client->dev, svid, "Could not determine operating mode.");
-+			return svid;
-+		}
-+
-+		/*
-+		 * Apply ON_OFF_CONFIG workaround as enabling the regulator using the
-+		 * OPERATION register doesn't work in SVID mode.
-+		 *
-+		 * One should configure PMBUS_ON_OFF_CONFIG here, but
-+		 * PB_ON_OFF_CONFIG_POWERUP_CONTROL and PB_ON_OFF_CONFIG_EN_PIN_REQ
-+		 * are ignored by the device.
-+		 * Only PB_ON_OFF_CONFIG_POLARITY_HIGH has an effect.
-+		 */
-+		if (svid) {
-+			data->info.read_byte_data = tda38640_read_byte_data;
-+			data->info.write_byte_data = tda38640_write_byte_data;
-+		}
-+	}
-+	return pmbus_do_probe(client, &data->info);
- }
- 
- static const struct i2c_device_id tda38640_id[] = {
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index 40bc475ee7e1..86c7d34f63bf 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -151,8 +151,6 @@ properties:
+           - infineon,slb9645tt
+             # Infineon SLB9673 I2C TPM 2.0
+           - infineon,slb9673
+-            # Infineon TDA38640 Voltage Regulator
+-          - infineon,tda38640
+             # Infineon TLV493D-A1B6 I2C 3D Magnetic Sensor
+           - infineon,tlv493d-a1b6
+             # Infineon Multi-phase Digital VR Controller xdpe11280
+
+base-commit: 919a83d020a8dfa1411c1dc1cff23a833f0f5268
 -- 
 2.41.0
 
