@@ -2,159 +2,184 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55EF0C6FA8F
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Aug 2023 20:01:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7855EC6FA8F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Aug 2023 20:20:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240295AbjH3UBM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 30 Aug 2023 16:01:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36510 "EHLO
+        id S232126AbjH3UU6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Aug 2023 16:20:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239137AbjH3UAt (ORCPT
+        with ESMTP id S236857AbjH3UAB (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Aug 2023 16:00:49 -0400
-Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1C11736
-        for <linux-hwmon@vger.kernel.org>; Wed, 30 Aug 2023 12:37:01 -0700 (PDT)
-Received: by mail-ua1-f54.google.com with SMTP id a1e0cc1a2514c-7a50bd29064so70722241.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 30 Aug 2023 12:37:01 -0700 (PDT)
+        Wed, 30 Aug 2023 16:00:01 -0400
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E736C76EE9
+        for <linux-hwmon@vger.kernel.org>; Wed, 30 Aug 2023 12:34:09 -0700 (PDT)
+Received: by mail-ua1-x92a.google.com with SMTP id a1e0cc1a2514c-79d8edd6d99so76209241.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 30 Aug 2023 12:34:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693424095; x=1694028895; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=femUbnNkI0dPgRYRrDdrRsJ5hRpAu998V7jEmuAfMrw=;
-        b=g73fJn6H38Pkm7rwBvv5S8bpgVMcV5I3+RupYUh2+3jknr751Yi+KTl1NqRMr4jnfi
-         RhMw+mytlvk/OpkarvTf2pPgEU35NDUCHkDFmnWIIBYL2xye5OjegfHKPR9Ev9L/kLj1
-         cEMyyymV9gamoHybQ4OWLIeho5NsHBrMjEuSDm80QvJpmZyn9XMKSn/1qanOpLKkyne+
-         EBNkZQEpnVWLS6MJFjGnZVNEGIKLrDX6P71/S1y+i+MfHi8dJLC0kgIKWz2Mqo7kLNVx
-         QeVm8NEsn0OpNpMBgWoaTuEaXcWYF+1voQ/m5U2y9VIAf6krfcRj7IJYB9JmdekMbqgv
-         qZpA==
+        d=9elements.com; s=google; t=1693423983; x=1694028783; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=J6hWfbIynnUP5BUpdi9sNEghPSzuJ8hcWhPiubhMdyQ=;
+        b=hEtKAyrtHGM+lgyOOPnFBn6wQ4+6ikkIr72KvPBnaju0TkcE1+q9+Vae/3KeYySZ0k
+         vLSMRxhGs6Q3St+bAKZKb0HP70ZgUbXSRtrT38BJk5HOStWTPcQZ65u2lwYE3l3AvUQs
+         MKA7Up8/dAx2jQfsY7boydIbZoL4iDOds6APPS7wcILsLOkYqyGSZ6icaqwpBBL5r9Ht
+         +WXcpdwnkJ859ojz8XLzul3I/QHkxnY0MpTcGLXPWxgmLFpYEsGu6v9nCCFeXwCKsmA9
+         yMe2INb0Nb6Wgh7V3Iq8EXAf86DoVrm5EqCU2xlmFLkB5mGAwxcOuhpim6hUrybs3NiR
+         kCiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693424095; x=1694028895;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=femUbnNkI0dPgRYRrDdrRsJ5hRpAu998V7jEmuAfMrw=;
-        b=R21aeyMceS8wjFPloybM5VGJRPG4QiRmS7YbtVdfn036yx2iyzTVBmMXrsknS2pT3g
-         moiamTc769ttaZON6QI5shAecbISJDRJ4aZe2l5PpIA5NKHOSbmcMZ9nYUDWbHN3BzNS
-         6A+ucYFz0FkHySaFj6ERZ2lUfAZ92Q0zam5fnont2BCfOT4ueC7MFtG4NAx/XTWhJogQ
-         enW3yZizXPW0gdRelifWsdy7bGSeotgPU1+4+pYyn2N1OfvOGproYrHO8dN5co++8dec
-         /Dj9CrcXydtkut35i43uCsGnnwS8tSIRzZXd+B4kbDMzT/Pa4l9q/jofNuPCqWyLMQjU
-         82Gg==
-X-Gm-Message-State: AOJu0Yy6BAbthIGmj23Dt8GF2/YRnARRvXsdeCDaeBDmsyTdxDYOincW
-        k3m7Xa+0CTyPQ5XcM47LKDlZqyeMgVviKFEErVBk7bb7
-X-Google-Smtp-Source: AGHT+IFia5ollVps8fAWA2izAZcbD2vMJY6o+IbWybBDjiGt+MAhLxVXY1ew+u7HRnri1BYyUPCxLPoVtCLHXmN1flU=
-X-Received: by 2002:a67:f98d:0:b0:44e:8ef9:336d with SMTP id
- b13-20020a67f98d000000b0044e8ef9336dmr2765521vsq.1.1693424094794; Wed, 30 Aug
- 2023 12:34:54 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1693423983; x=1694028783;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=J6hWfbIynnUP5BUpdi9sNEghPSzuJ8hcWhPiubhMdyQ=;
+        b=TvRQY8lOeL+I4X/8NRnpmTu2zIudcQaZsrDQ9MplPJeddXTx90Do+sJyVBvkLXVX47
+         VlYrF2jb7ooKGetYVWNrc7U1rIDkCXxReS6JQCTdwHk+D1tE9cth6bESzbPvAR3wh8YX
+         zFCxUhEPaRL6i7nciYYycr4X7WSp8clNFzmAs7lJ17wp1Yon3AdsrDlL7dJlyN+FYaa3
+         4tJ1d4dSwkYwyY5SUa4b3TvobgOCHejbMXZGoB9X+u53UK+Kt74xf3BIzv78sJreB11T
+         98RabrTg2rcQL1PHQm+xw1BfXZqjV6D7qQsCHsnJfxeQjX+ZxR0sxLJS6+32cBrRx6XE
+         qfTA==
+X-Gm-Message-State: AOJu0YyA6cWGZvJqcH8r7GQaMC37o2Giy1EKHhqoS7M1NBX7Xj/SmuHA
+        8zvJa2SJlYNmfhsozW1imLtSodJG7Q2CpGpTVw0LJQxptDCrzV8qdew=
+X-Google-Smtp-Source: AGHT+IFJ1DxDSDn+rxq1FvriBdkBpWWLRYcjePAYy/X7OVYKimW7wLrpeqNTC6UptcyifchQtbuSRLu3srnYZpvyNiE=
+X-Received: by 2002:a17:90b:38c3:b0:26d:49c8:78aa with SMTP id
+ nn3-20020a17090b38c300b0026d49c878aamr3089232pjb.32.1693423182647; Wed, 30
+ Aug 2023 12:19:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAOdCjQtTzQpsko+vqkF9zW5RPe1520r4B5kFsJzHjSkK+KxvMw@mail.gmail.com>
- <CAOdCjQv-dCsd_EDnmWN786H57=cN2U8GBZLS96gXme6hfYpC4A@mail.gmail.com>
- <d41992ac-9670-44af-963b-d171bfcdd8f9@roeck-us.net> <CAOdCjQvEvqoQQQLUX3tuLzuY0sedi2mGzA=aMJg4UY+uMtcr0g@mail.gmail.com>
- <a148cb9e-e108-5513-39f1-b307d517d8b2@roeck-us.net>
-In-Reply-To: <a148cb9e-e108-5513-39f1-b307d517d8b2@roeck-us.net>
-From:   Pankaj Pandey <pankaj.embedded@gmail.com>
-Date:   Thu, 31 Aug 2023 01:04:43 +0530
-Message-ID: <CAOdCjQuMU9kJq_KhM2Z6pjqSwVVTm_o8C3-GGtvgAQMQzaxpSg@mail.gmail.com>
-Subject: Re: Fwd: Regarding pmbus_core.c
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
+References: <20230830103620.3611761-1-Naresh.Solanki@9elements.com> <20230830-waving-stinky-d510fefbbf82@spud>
+In-Reply-To: <20230830-waving-stinky-d510fefbbf82@spud>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+Date:   Thu, 31 Aug 2023 00:49:32 +0530
+Message-ID: <CABqG17hvSYbsnYYGOQxVsiXsqLXFnovXvkhgc=pYR9osgF0-1g@mail.gmail.com>
+Subject: Re: [PATCH v4 1/3] dt-bindings: hwmon: Add Infineon TDA38640
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        krzysztof.kozlowski+dt@linaro.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Thanks for the suggestion !!
+Hi
 
-On Wed, Aug 30, 2023 at 8:56=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
-wrote:
+On Wed, 30 Aug 2023 at 21:02, Conor Dooley <conor@kernel.org> wrote:
 >
-> Pankaj,
+> Hey,
 >
-> On 8/30/23 02:28, Pankaj Pandey wrote:
-> > Hi Guenter,
+> On Wed, Aug 30, 2023 at 12:36:16PM +0200, Naresh Solanki wrote:
+> > From: Patrick Rudolph <patrick.rudolph@9elements.com>
 > >
-> > Thanks for the pointer. Actually during bmr454 probing during kernel bo=
-ots-up it
-> > called system reset/crash. For reference please find bmr454 probing log=
- below:
+> > Add the DT property 'infineon,en-pin-fixed-level' to
+> > indicated that the chip ENABLE pin is at fixed level
+> > or left unconnected(has internal pull-down).
 > >
->
-> First of all, please don't top-post.
->
-> > [   14.910630] pmbus 7-0010: bmr454 BMR status word : 0x2
-> > [   14.922945] pmbus 7-0010: bmr454 BMR status cml : 0x2
+> > Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> > ----
+> > Changes in V4:
+> > - Update property name & description.
+> > - Update commit message.
+> > ---
+> >  .../hwmon/pmbus/infineon,tda38640.yaml        | 50 +++++++++++++++++++
+> >  .../devicetree/bindings/trivial-devices.yaml  |  2 -
+> >  2 files changed, 50 insertions(+), 2 deletions(-)
+> >  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.yaml
 > >
+> > diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.yaml
+> > new file mode 100644
+> > index 000000000000..1df40ee7454a
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.yaml
+> > @@ -0,0 +1,50 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +
+> > +$id: http://devicetree.org/schemas/hwmon/pmbus/infineon,tda38640.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Infineon TDA38640 Synchronous Buck Regulator with SVID and I2C
+> > +
+> > +maintainers:
+> > +  - Naresh Solanki <naresh.solanki@9elements.com>
+> > +
+> > +description: |
+> > +  The Infineon TDA38640 is a 40A Single-voltage Synchronous Buck
+> > +  Regulator with SVID and I2C designed for Industrial use.
+> > +
+> > +  Datasheet: https://www.infineon.com/dgdl/Infineon-TDA38640-0000-DataSheet-v02_04-EN.pdf?fileId=8ac78c8c80027ecd018042f2337f00c9
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - infineon,tda38640
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  infineon,en-pin-fixed-level:
+> > +    description: |
 >
-> Bit 1 of the CML status register suggests that there is a communication
-> problem. Per PMBus standard:
+> The | isn't needed when there is no formatting requiring preservation.
+Sure will remove.
 >
-> Bit 1 - A communication fault other than the ones listed in this table ha=
-s occurred
+> > +      Indicates that the chip ENABLE pin is at fixed level or left
+> > +      unconnected(has internal pull-down).
 >
-> > ---> Immediately after above bmr454 probing it reset/crash the system
-> > and jump to u-boot.
+> Maybe you've already been over this, but if the pin is called "enable"
+> why not use the same wording in the property?
+EN & ENABLE is used interchangeably in the datasheet.
+Just to keep property name short I use EN.
+>
+> > +    type: boolean
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    i2c {
+> > +        #address-cells = <1>;
+> > +        #size-cells = <0>;
+> > +
+> > +        tda38640@40 {
+>
+> Use a generic node name please.
+>
+> Thanks,
+> Conor.
+>
+> > +            compatible = "infineon,tda38640";
+> > +            reg = <0x40>;
+> > +        };
+> > +    };
+> > +
+> > diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+> > index 40bc475ee7e1..86c7d34f63bf 100644
+> > --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> > +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> > @@ -151,8 +151,6 @@ properties:
+> >            - infineon,slb9645tt
+> >              # Infineon SLB9673 I2C TPM 2.0
+> >            - infineon,slb9673
+> > -            # Infineon TDA38640 Voltage Regulator
+> > -          - infineon,tda38640
+> >              # Infineon TLV493D-A1B6 I2C 3D Magnetic Sensor
+> >            - infineon,tlv493d-a1b6
+> >              # Infineon Multi-phase Digital VR Controller xdpe11280
 > >
->
-> I don't think anything _called_ system reset/crash. There is no code
-> in the driver that would do that.
->
-> > Using debug prints I observed system got resettted after reaching to
-> > _pmbus_write_byte  function. But
-> > sometimes probing is fine, not observing any system reset/crash.
+> > base-commit: 919a83d020a8dfa1411c1dc1cff23a833f0f5268
+> > --
+> > 2.41.0
 > >
->
-> My best guess is that the i2c communication with the chip is unstable,
-> and that the write causes it to do something that causes the reset.
-> How it would do that - I don't know. Maybe one of the module pins is wire=
-d
-> to the system's reset pin (though I can not imagine why that would be
-> the case), or the miscommunication causes a chip reset. Either case,
-> maybe the problem is in the I2C bus speed. If you can, I would suggest
-> to lower it to 100 KHz to see if that makes a difference.
->
-> Guenter
->
->
-> > Regards,
-> > Pankaj Pandey
-> >
-> >
-> > On Wed, Aug 30, 2023 at 7:38=E2=80=AFAM Guenter Roeck <linux@roeck-us.n=
-et> wrote:
-> >>
-> >> On Wed, Aug 30, 2023 at 07:16:46AM +0530, Pankaj Pandey wrote:
-> >>> ---------- Forwarded message ---------
-> >>> From: Pankaj Pandey <pankaj.embedded@gmail.com>
-> >>> Date: Wed, Aug 30, 2023 at 4:42=E2=80=AFAM
-> >>> Subject: Regarding pmbus_core.c
-> >>> To: <linux@roeck-us.net>
-> >>>
-> >>>
-> >>> Hi Guenter Roeck,
-> >>>
-> >>> I am facing an issue at drivers/hwmon/pmbus/pmbus_core.c of linux-5.1=
-0 kernel.
-> >>> I am using the bm454 driver from drivers/hwmon/pmbus/pmbus.c.
-> >>> Observed sometimes my Powepc based target board called for reset from
-> >>> inside int pmbus_write_byte_data(struct i2c_client *client, int page,
-> >>> u8 reg, u8 value)  function.  It is not consistent, sometimes not
-> >>
-> >> Sorry, I don't understand what you mean with "called for reset from
-> >> inside int pmbus_write_byte_data". Please clarify.
-> >>
-> >> If I recall correctly, bmr454 is very picky when it comes to i2c bus
-> >> speed. If it acts up, you might have some success with picking a diffe=
-rent
-> >> bus speed.
-> >>
-> >> Thanks,
-> >> Guenter
-> >>
-> >>> observed any reset and bmr454 initialized fine.  Please suggest any
-> >>> pointers to debug this issue.
-> >>>
-> >>> Regards,
-> >>> Pankaj Pandey
->
