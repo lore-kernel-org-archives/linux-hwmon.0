@@ -2,107 +2,100 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E794C83F32
-	for <linux-hwmon@archiver.kernel.org>; Thu, 31 Aug 2023 13:10:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 577D4C83F01
+	for <linux-hwmon@archiver.kernel.org>; Thu, 31 Aug 2023 15:54:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237919AbjHaNKU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 31 Aug 2023 09:10:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45188 "EHLO
+        id S1343745AbjHaPyk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 31 Aug 2023 11:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232913AbjHaNKU (ORCPT
+        with ESMTP id S1345659AbjHaPyj (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 31 Aug 2023 09:10:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A382BC;
-        Thu, 31 Aug 2023 06:10:17 -0700 (PDT)
+        Thu, 31 Aug 2023 11:54:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB57E63;
+        Thu, 31 Aug 2023 08:54:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1EC09B8229B;
-        Thu, 31 Aug 2023 13:10:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE6DAC433CA;
-        Thu, 31 Aug 2023 13:10:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 792A96303F;
+        Thu, 31 Aug 2023 15:54:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F603C433C7;
+        Thu, 31 Aug 2023 15:54:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693487414;
-        bh=Tx7w8FI/pLlA3uFq5GwLia/GR2hgOf2fgjsGhZzl+sk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=iGIOjWFaoc2o3+D9pAiu+tKS35mKl+S0jaHg8kypiV3yFq21+2GVITjISQhWfpAdv
-         bCcRVTXC++Bq4bS/DAS9XrufWeAlZf2Z50hk/OFSA35ImHW9DBOmxOEwrl/m/BmpkM
-         9JveujHt2tgFXJjAiqLHHXP5lvXIKa+o6txV7VcCQN8qEnP6WAMnbiUlfU9KjpZ5tr
-         YCKbxu71rqllAEenrYcz/5UKmN2n+DVJm0UHlFflCh5sIdP4j7KIOCfHFVJ+XdfFTD
-         rDByGBAUoq+TwyJkqDDPbYuC+W2PsII4MlqFItMcYoshcRexmdKL+gG55NqyXn8W1X
-         h9Ot5ry6gTl+w==
-Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-6bcade59b24so692956a34.0;
-        Thu, 31 Aug 2023 06:10:14 -0700 (PDT)
-X-Gm-Message-State: AOJu0YzeH3h4OxsxfGVO42ZgqsV7r0pqSmQjKzTUrghg0huT+GEbPXte
-        KfcwZtgJhGpQpE9Anlvy3btH4foE/HGW53AUzwI=
-X-Google-Smtp-Source: AGHT+IG8i3WbP148tu9tcR8zh6tpPXpF5XXUrFtO3K953V/IifgX01VT9BiDyttjPL/yAvgZZMXCRFBxgo8FSTUsb7I=
-X-Received: by 2002:a05:6830:606:b0:6bd:bba9:2d63 with SMTP id
- w6-20020a056830060600b006bdbba92d63mr5298073oti.9.1693487413878; Thu, 31 Aug
- 2023 06:10:13 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230825-strncpy-habanalabs-combined-v1-1-daa05a89b7e3@google.com>
- <202308251513.0F6BF9FEE6@keescook>
-In-Reply-To: <202308251513.0F6BF9FEE6@keescook>
-From:   Oded Gabbay <ogabbay@kernel.org>
-Date:   Thu, 31 Aug 2023 16:09:47 +0300
-X-Gmail-Original-Message-ID: <CAFCwf12yWnz6wP+3Th=QiTkeMhiPjn6c4sg2b3-2fE55w3pyEQ@mail.gmail.com>
-Message-ID: <CAFCwf12yWnz6wP+3Th=QiTkeMhiPjn6c4sg2b3-2fE55w3pyEQ@mail.gmail.com>
-Subject: Re: [PATCH] accel/habanalabs: refactor deprecated strncpy to strscpy_pad
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Justin Stitt <justinstitt@google.com>,
+        s=k20201202; t=1693497274;
+        bh=utWCl4di2E0c8+B6XfoLjlyezr54F2TWyx2lJDu8LXs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YLMox02tzT/Xf8O7Qmf2whCC4gzNsHKPTaJ8DsfveT8E8rIc5pxtRZkGHeA88ls41
+         jWo+ID4K+My6+Yk6Txj9s1IMQ4pQ37a5eNCQlYVNoXBR9FdLRj5ur6TIZBnNg+C9nV
+         QEK7Za8T5ZfB/P40InQ14RXGEuj3KLwrU21cHt/gNeW2dmIpHy118mkKh8xqCUoKI7
+         pbDLVNYWWHFs2qNNijIfhuK/7o2sRbf60hiGTiQ2cprKsPcOOyzCe1NqIWKdylNaCY
+         je0Fmk4jGSnIpDG4lcU31G1Ts1Ci/ILGnkZlHCHTplN2zeeMMz4X2U3zrx6pEcO9vh
+         g76zaP9GNO3YA==
+Date:   Thu, 31 Aug 2023 16:54:30 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        krzysztof.kozlowski+dt@linaro.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] dt-bindings: hwmon: Add Infineon TDA38640
+Message-ID: <20230831-defrost-rebalance-5efda5e5ff5c@spud>
+References: <20230830103620.3611761-1-Naresh.Solanki@9elements.com>
+ <20230830-waving-stinky-d510fefbbf82@spud>
+ <CABqG17hvSYbsnYYGOQxVsiXsqLXFnovXvkhgc=pYR9osgF0-1g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="O1fh9UNgJ3s4p8a/"
+Content-Disposition: inline
+In-Reply-To: <CABqG17hvSYbsnYYGOQxVsiXsqLXFnovXvkhgc=pYR9osgF0-1g@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Aug 26, 2023 at 1:13=E2=80=AFAM Kees Cook <keescook@chromium.org> w=
-rote:
->
-> On Fri, Aug 25, 2023 at 10:09:51PM +0000, Justin Stitt wrote:
-> > `strncpy` is deprecated for use on NUL-terminated destination strings [=
-1].
-> >
-> > We see that `prop->cpucp_info.card_name` is supposed to be
-> > NUL-terminated based on its usage within `__hwmon_device_register()`
-> > (wherein it's called "name"):
-> > |     if (name && (!strlen(name) || strpbrk(name, "-* \t\n")))
-> > |             dev_warn(dev,
-> > |                      "hwmon: '%s' is not a valid name attribute, plea=
-se fix\n",
-> > |                      name);
-> >
-> > A suitable replacement is `strscpy_pad` [2] due to the fact that it
-> > guarantees both NUL-termination and NUL-padding on its destination
-> > buffer.
-> >
-> > NUL-padding on `prop->cpucp_info.card_name` is not strictly necessary a=
-s
-> > `hdev->prop` is explicitly zero-initialized but should be used
-> > regardless as it gets copied out to userspace directly -- as per Kees' =
-suggestion.
-> >
-> > Link: www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on=
--nul-terminated-strings[1]
-> > Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en=
-.html [2]
-> > Link: https://github.com/KSPP/linux/issues/90
-> > Cc: linux-hardening@vger.kernel.org
-> > Signed-off-by: Justin Stitt <justinstitt@google.com>
->
-> Thanks for the consolidation and refresh. :)
->
-> Reviewed-by: Kees Cook <keescook@chromium.org>
->
-> --
-> Kees Cook
-Pushed to habanalabs-next-6.7
 
-Thanks for the patch,
-Oded.
+--O1fh9UNgJ3s4p8a/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Aug 31, 2023 at 12:49:32AM +0530, Naresh Solanki wrote:
+> Hi
+>=20
+> On Wed, 30 Aug 2023 at 21:02, Conor Dooley <conor@kernel.org> wrote:
+> > On Wed, Aug 30, 2023 at 12:36:16PM +0200, Naresh Solanki wrote:
+
+> > > +      Indicates that the chip ENABLE pin is at fixed level or left
+> > > +      unconnected(has internal pull-down).
+> >
+> > Maybe you've already been over this, but if the pin is called "enable"
+> > why not use the same wording in the property?
+> EN & ENABLE is used interchangeably in the datasheet.
+
+Maybe we can go 1 for 2 in terms of consistency then, rather than 0 for
+2.
+
+> Just to keep property name short I use EN.
+
+Consistency & readability trump brevity. Please pick one term, or point
+out that this is called two things in the datasheet.
+
+
+--O1fh9UNgJ3s4p8a/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZPC3tgAKCRB4tDGHoIJi
+0vXlAP0RUs5Q+UPtuiUUIIYh8V3uiABYhs8EIOVx51t+Sc2UpgEA30+M0Z1uzNoF
+VoEdVvlU2zzYPyg3LvNdK79mokJJsgw=
+=wh5+
+-----END PGP SIGNATURE-----
+
+--O1fh9UNgJ3s4p8a/--
