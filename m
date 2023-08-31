@@ -2,97 +2,389 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 455ACC6FA8F
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Aug 2023 20:29:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1DA4C83F29
+	for <linux-hwmon@archiver.kernel.org>; Thu, 31 Aug 2023 08:45:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239281AbjH3U3D (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 30 Aug 2023 16:29:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58294 "EHLO
+        id S237111AbjHaIpb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 31 Aug 2023 04:45:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239566AbjH3U2y (ORCPT
+        with ESMTP id S237008AbjHaIpa (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Aug 2023 16:28:54 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A59873052;
-        Wed, 30 Aug 2023 12:33:07 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id ca18e2360f4ac-792623074edso30088739f.1;
-        Wed, 30 Aug 2023 12:33:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693423937; x=1694028737; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=phKhrjG7sXSAjhn653McWF0Xp9kDLF4E5/rGNJ97Y4k=;
-        b=iaqimD4gB7qmOLd6a3coQzU+ciA8nwIbWgq+ir17l5uJDP2hFTmBHaqHVUuPZHqg3g
-         +kNunaCZrj988vhf+P9ZBR/yoQ+fn09FFzQf/NSbgzKlaBEkrFJ2I2GMR5mIir24M2KX
-         8U/TrSr59Ik6bezjgbY6nMQHaFOsCnTr1FnwxHR+XXVRueObfVxAl7YkqJbBHxZLnGkN
-         IxDohJkUfDlXOdGX3DsTyw4KKvskSbbDxesDRnU5Cikh/KXzp6sU5tvvYSyjByZObhh/
-         sON2tEq2DEwNLxbk1p8EJp9GYI90L+U7nJcF/NWc17fJbeYSEkIpDCABf6M9+JpHIt9e
-         viJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693423937; x=1694028737;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=phKhrjG7sXSAjhn653McWF0Xp9kDLF4E5/rGNJ97Y4k=;
-        b=E7HL6iCX29ETcqp/WZWPy3RgVPD/HVboXPApbXqjAjSbHayriblvv82LH1ggVbM//N
-         JP2HKRy2FSTNw3E0qcy5Nlw5CN7vtWPSnlYaxzPPXjm6X8SqcEjBK0Ni89VILxCirIsP
-         hhwE7btA93aY3d91ra+noNH7a53URF+4qb0v7ARI2SE452Oib/us866ockymUtdKCg/i
-         91uD4e8KR2vQeJJyiG7bJnTfEZtXA9+scBPLW3Gp030oFQ/Yk7t73NR8UC211pd/Arkk
-         bA7d7tfXdbFKUHKocQFjElgp+F5iTH87Jh0C44sx20OqUFwZPQ5eR/nKT61FTzRi2Xp8
-         tRIA==
-X-Gm-Message-State: AOJu0YwFV8PAxX4GITjV2MomyeHPWdDCHJw53jUdVUMQPzNseiAqTn7a
-        1+vsd0fAQuwvrOwYDbcaFQx6PpSCNWE=
-X-Google-Smtp-Source: AGHT+IE31EKHM80PdXHF58NCuY7SQ8l1WyQLE2oZUZir0KdXHAlu86zL4NC4+NFUHfHufL2C15OPsA==
-X-Received: by 2002:a05:6e02:184e:b0:34d:ecbb:9cc4 with SMTP id b14-20020a056e02184e00b0034decbb9cc4mr529528ilv.3.1693423936749;
-        Wed, 30 Aug 2023 12:32:16 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id ft19-20020a056638661300b0042b0de0b976sm3900085jab.154.2023.08.30.12.32.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Aug 2023 12:32:16 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <1efe9234-a97f-6df2-c47d-e153dc362599@roeck-us.net>
-Date:   Wed, 30 Aug 2023 12:32:14 -0700
+        Thu, 31 Aug 2023 04:45:30 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13362CE7;
+        Thu, 31 Aug 2023 01:45:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1693471525;
+        bh=TOpHrg+THcLjDGrTsyHrj4Fe/3SIuVeJALTfT8X71I0=;
+        h=From:Date:Subject:To:Cc:From;
+        b=pfg1mULBM51414DN6H6SAo+iDSXQ6WNEjWg85FUSwg6DgmfYjL3r2SOyBPv9ynh8N
+         Z97xOfOpEEqdZjsTqPgRUUXa7mTE0lC7xYinkwvD45o1y2PxGj/uuG3G76DIIV4IFP
+         jg/H58GndOOLN3r+cJRV7A/+I5LtyXV+wka0wDb4=
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Date:   Thu, 31 Aug 2023 10:44:48 +0200
+Subject: [PATCH] hwmon: add POWER-Z driver
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] regulator (max5970): Add hwmon support
-Content-Language: en-US
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>, zev@bewilderbeest.net,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-References: <20230830111319.3882281-1-Naresh.Solanki@9elements.com>
- <0bfbbbb3-6144-fc9a-c8ab-423a8865591b@roeck-us.net>
- <CABqG17ig1VRJYqbrOvPKAYS8iUFwY9J3tYcgYGtnnXw+vrnoRA@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <CABqG17ig1VRJYqbrOvPKAYS8iUFwY9J3tYcgYGtnnXw+vrnoRA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20230831-powerz-v1-1-03979e519f52@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAP9S8GQC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI2MDC2ND3YL88tSiKl2j5OQkS3OLRItUU3MloOKCotS0zAqwQdGxtbUAfPg
+ X61gAAAA=
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1693471524; l=10059;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=TOpHrg+THcLjDGrTsyHrj4Fe/3SIuVeJALTfT8X71I0=;
+ b=hyCLX2cfHW5yCX7NKzClmr8fP4PwHpiMP7RJYItFAjlrtSHUwbBPioPZQ8E8JIuz6lyCxJ4AG
+ IgRuV1TQBykDkFAIdiAnaiA9bXRyCOINu225U15Vpf5f+LiV31VWO2V
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 8/30/23 12:14, Naresh Solanki wrote:
-> Hi
-> 
-[ ... ]
->>> +                     /*
->>> +                      * Calculate voltage from ADC value and MON range.
->>> +                      * ddata->mon_rng holds the voltage corresponding to the maximum value the
->>> +                      * 10-bit ADC can measure.
->>> +                      * To obtain the output, multiply the ADC value by the MON range (in
->>> +                      * microvolts) and then divide it by the maximum value of the 10-bit ADC.
->>> +                      */
->>> +                     *val = mul_u64_u32_shr(*val, ddata->mon_rng[channel], 10);
->>
->> Why do you use mul_u64_u32_shr() here but a direct shift above ?
-> There is possibility of overflow due to large value of ddata->mon_rng
+POWER-Z is a series of devices to monitor power characteristics of USB-C
+connections and display those on a on-device display.
+Some of the devices, notably KM002C and KM003C, contain an additional
+port which exposes the measurements via USB.
 
-Does the right shift guarantee that the result fits into 32 bit ?
+This is a driver for this monitor port.
 
-Thanks,
-Guenter
+It was developed and tested with the KM003C.
+
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ MAINTAINERS            |   6 ++
+ drivers/hwmon/Kconfig  |  10 ++
+ drivers/hwmon/Makefile |   1 +
+ drivers/hwmon/powerz.c | 258 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 275 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 4e3419c04f27..12bcf14597c4 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4795,6 +4795,12 @@ X:	drivers/char/ipmi/
+ X:	drivers/char/random.c
+ X:	drivers/char/tpm/
+ 
++CHARGERLAB POWER-Z HARDWARE MONITOR DRIVER
++M:	Thomas Weißschuh <linux@weissschuh.net>
++L:	linux-hwmon@vger.kernel.org
++S:	Maintained
++F:	drivers/hwmon/powerz.c
++
+ CHECKPATCH
+ M:	Andy Whitcroft <apw@canonical.com>
+ M:	Joe Perches <joe@perches.com>
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index ec38c8892158..a055f9cdef16 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -839,6 +839,16 @@ config SENSORS_JC42
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called jc42.
+ 
++config SENSORS_POWERZ
++	tristate "ChargerLAB POWER-Z USB-C tester");
++	depends on USB
++	help
++	  If you say yes here you get support for ChargerLAB POWER-Z series of
++	  USB-C charging testers.
++
++	  This driver can also be built as a module. If so, the module
++	  will be called powerz.
++
+ config SENSORS_POWR1220
+ 	tristate "Lattice POWR1220 Power Monitoring"
+ 	depends on I2C
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index 4ac9452b5430..019189500e5d 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -176,6 +176,7 @@ obj-$(CONFIG_SENSORS_OXP) += oxp-sensors.o
+ obj-$(CONFIG_SENSORS_PC87360)	+= pc87360.o
+ obj-$(CONFIG_SENSORS_PC87427)	+= pc87427.o
+ obj-$(CONFIG_SENSORS_PCF8591)	+= pcf8591.o
++obj-$(CONFIG_SENSORS_POWERZ)	+= powerz.o
+ obj-$(CONFIG_SENSORS_POWR1220)  += powr1220.o
+ obj-$(CONFIG_SENSORS_PWM_FAN)	+= pwm-fan.o
+ obj-$(CONFIG_SENSORS_RASPBERRYPI_HWMON)	+= raspberrypi-hwmon.o
+diff --git a/drivers/hwmon/powerz.c b/drivers/hwmon/powerz.c
+new file mode 100644
+index 000000000000..898ab4c2516d
+--- /dev/null
++++ b/drivers/hwmon/powerz.c
+@@ -0,0 +1,258 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ *  Copyright (C) 2023 Thomas Weißschuh <linux@weissschuh.net>
++ */
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++
++#include <linux/completion.h>
++#include <linux/hwmon.h>
++#include <linux/module.h>
++#include <linux/usb.h>
++
++#define DRIVER_NAME	"powerz"
++#define POWERZ_EP_CMD_OUT	0x01
++#define POWERZ_EP_DATA_IN	0x81
++
++struct powerz_sensor_data {
++	u8 _unknown_1[8];
++	__le32 Vbus;
++	__le32 Ibus;
++	__le32 Vbus_avg;
++	__le32 Ibus_avg;
++	u8 _unknown_2[8];
++	u8 temp[2];
++	__le16 cc1;
++	__le16 cc2;
++	__le16 dp;
++	__le16 dm;
++	u8 _unknown_3[6];
++} __packed;
++
++struct powerz_priv {
++	struct device *hwmon_dev;
++	struct usb_interface *intf;
++};
++
++static const struct hwmon_channel_info * const powerz_info[] = {
++	HWMON_CHANNEL_INFO(in,
++			   HWMON_I_INPUT | HWMON_I_LABEL | HWMON_I_AVERAGE,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL),
++	HWMON_CHANNEL_INFO(curr, HWMON_C_INPUT | HWMON_C_LABEL | HWMON_C_AVERAGE),
++	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_LABEL),
++	NULL
++};
++
++static umode_t powerz_is_visible(const void *data, enum hwmon_sensor_types type,
++				 u32 attr, int channel)
++{
++	return 0444;
++}
++
++static int powerz_read_string(struct device *dev, enum hwmon_sensor_types type,
++			      u32 attr, int channel, const char **str)
++{
++	if (type == hwmon_curr && attr == hwmon_curr_label)
++		*str = "bus";
++	else if (type == hwmon_in && attr == hwmon_in_label && channel == 0)
++		*str = "bus";
++	else if (type == hwmon_in && attr == hwmon_in_label && channel == 1)
++		*str = "cc1";
++	else if (type == hwmon_in && attr == hwmon_in_label && channel == 2)
++		*str = "cc2";
++	else if (type == hwmon_in && attr == hwmon_in_label && channel == 3)
++		*str = "dp";
++	else if (type == hwmon_in && attr == hwmon_in_label && channel == 4)
++		*str = "dm";
++	else if (type == hwmon_temp && attr == hwmon_temp_label)
++		*str = "temp";
++	else
++		return -EINVAL;
++
++	return 0;
++}
++
++struct powerz_usb_ctx {
++	char transfer_buffer[64];
++	struct completion completion;
++	int status;
++};
++
++static void powerz_usb_data_complete(struct urb *urb)
++{
++	struct powerz_usb_ctx *ctx = urb->context;
++
++	ctx->status = 0;
++	complete(&ctx->completion);
++}
++
++static void powerz_usb_cmd_complete(struct urb *urb)
++{
++	struct powerz_usb_ctx *ctx = urb->context;
++	int ret;
++
++	usb_fill_bulk_urb(urb, urb->dev, usb_rcvbulkpipe(urb->dev, POWERZ_EP_DATA_IN),
++			  ctx->transfer_buffer, sizeof(ctx->transfer_buffer),
++			  powerz_usb_data_complete, ctx);
++
++	ret = usb_submit_urb(urb, GFP_ATOMIC);
++	if (ret) {
++		usb_free_urb(urb);
++		ctx->status = ret;
++		complete(&ctx->completion);
++	}
++}
++
++static struct powerz_sensor_data *powerz_read_data(struct usb_device *udev,
++						   struct powerz_usb_ctx *ctx)
++{
++	struct urb *urb;
++	int r;
++
++	ctx->status = -ETIMEDOUT;
++	init_completion(&ctx->completion);
++
++	urb = usb_alloc_urb(0, GFP_KERNEL);
++	if (!urb)
++		return ERR_PTR(-ENOMEM);
++
++	ctx->transfer_buffer[0] = 0x0c;
++	ctx->transfer_buffer[1] = 0x00;
++	ctx->transfer_buffer[2] = 0x02;
++	ctx->transfer_buffer[3] = 0x00;
++
++	usb_fill_bulk_urb(urb, udev, usb_sndbulkpipe(udev, POWERZ_EP_CMD_OUT),
++			  ctx->transfer_buffer, 4, powerz_usb_cmd_complete, ctx);
++	r = usb_submit_urb(urb, GFP_KERNEL);
++	if (r) {
++		usb_free_urb(urb);
++		return ERR_PTR(r);
++	}
++
++	if (!wait_for_completion_interruptible_timeout(&ctx->completion, msecs_to_jiffies(5))) {
++		usb_kill_urb(urb);
++		usb_free_urb(urb);
++		return ERR_PTR(-EIO);
++	}
++
++	if (ctx->status) {
++		usb_free_urb(urb);
++		return ERR_PTR(ctx->status);
++	}
++
++	if (urb->actual_length < (sizeof(struct powerz_sensor_data))) {
++		usb_free_urb(urb);
++		return ERR_PTR(-EIO);
++	}
++
++	usb_free_urb(urb);
++	return (struct powerz_sensor_data *)(ctx->transfer_buffer);
++}
++
++static int powerz_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
++		       int channel, long *val)
++{
++	struct usb_interface *intf = to_usb_interface(dev->parent);
++	struct usb_device *udev = interface_to_usbdev(intf);
++	struct powerz_sensor_data *data;
++	struct powerz_usb_ctx *ctx;
++
++	ctx = kmalloc(sizeof(*ctx), GFP_KERNEL);
++	if (!ctx)
++		return -ENOMEM;
++
++	data = powerz_read_data(udev, ctx);
++	if (IS_ERR(data)) {
++		kfree(ctx);
++		return PTR_ERR(data);
++	}
++
++	if (type == hwmon_curr && attr == hwmon_curr_input)
++		*val =  ((s32)le32_to_cpu(data->Ibus)) / 1000;
++	else if (type == hwmon_curr && attr == hwmon_curr_average)
++		*val =  ((s32)le32_to_cpu(data->Ibus_avg)) / 1000;
++	else if (type == hwmon_in && attr == hwmon_in_input && channel == 0)
++		*val =  le32_to_cpu(data->Vbus) / 1000;
++	else if (type == hwmon_in && attr == hwmon_in_average && channel == 0)
++		*val =  le32_to_cpu(data->Vbus_avg) / 1000;
++	else if (type == hwmon_in && attr == hwmon_in_input && channel == 1)
++		*val =  le16_to_cpu(data->cc1) / 10;
++	else if (type == hwmon_in && attr == hwmon_in_input && channel == 2)
++		*val =  le16_to_cpu(data->cc2) / 10;
++	else if (type == hwmon_in && attr == hwmon_in_input && channel == 3)
++		*val =  le16_to_cpu(data->dp) / 10;
++	else if (type == hwmon_in && attr == hwmon_in_input && channel == 4)
++		*val =  le16_to_cpu(data->dm) / 10;
++	else if (type == hwmon_temp && attr == hwmon_temp_input)
++		*val = ((long)data->temp[1]) * 2000 + ((long)data->temp[0]) * 1000 / 128;
++	else
++		return -EINVAL;
++
++	kfree(ctx);
++
++	return 0;
++}
++
++static const struct hwmon_ops powerz_hwmon_ops = {
++	.is_visible  = powerz_is_visible,
++	.read        = powerz_read,
++	.read_string = powerz_read_string,
++};
++
++static const struct hwmon_chip_info powerz_chip_info = {
++	.ops  = &powerz_hwmon_ops,
++	.info = powerz_info,
++};
++
++static int powerz_probe(struct usb_interface *intf, const struct usb_device_id *id)
++{
++	struct usb_device *udev = interface_to_usbdev(intf);
++	struct powerz_priv *priv;
++	struct device *parent;
++	const char *name;
++	int ret;
++
++	parent = &intf->dev;
++
++	priv = devm_kzalloc(parent, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	name = devm_hwmon_sanitize_name(parent, udev->product ?: DRIVER_NAME);
++	priv->hwmon_dev = hwmon_device_register_with_info(parent, name,
++							  priv,
++							  &powerz_chip_info,
++							  NULL);
++	ret = PTR_ERR_OR_ZERO(priv->hwmon_dev);
++	priv->intf = intf;
++	usb_set_intfdata(intf, priv);
++
++	return ret;
++}
++
++static void powerz_disconnect(struct usb_interface *intf)
++{
++	struct powerz_priv *priv = usb_get_intfdata(intf);
++
++	hwmon_device_unregister(priv->hwmon_dev);
++}
++
++static const struct usb_device_id powerz_id_table[] = {
++	{ USB_DEVICE_INTERFACE_NUMBER(0x5FC9, 0x0063, 0x00) }, /* ChargerLAB POWER-Z KM003C */
++	{ }
++};
++MODULE_DEVICE_TABLE(usb, powerz_id_table);
++
++static struct usb_driver powerz_driver = {
++	.name       = DRIVER_NAME,
++	.id_table   = powerz_id_table,
++	.probe      = powerz_probe,
++	.disconnect = powerz_disconnect,
++};
++module_usb_driver(powerz_driver);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Thomas Weißschuh <linux@weissschuh.net>");
++MODULE_DESCRIPTION("ChargerLAB POWER-Z USB-C tester");
+
+---
+base-commit: b97d64c722598ffed42ece814a2cb791336c6679
+change-id: 20230831-powerz-2ccb978a8e57
+
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
 
