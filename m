@@ -2,272 +2,185 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE838CA0FE5
-	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Sep 2023 15:23:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 146BECA0FE6
+	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Sep 2023 15:45:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234942AbjIAPXI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 1 Sep 2023 11:23:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33560 "EHLO
+        id S230440AbjIAPpv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 1 Sep 2023 11:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236999AbjIAPXH (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 1 Sep 2023 11:23:07 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EECA10FA;
-        Fri,  1 Sep 2023 08:22:42 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id ca18e2360f4ac-79289fefdbeso75177139f.3;
-        Fri, 01 Sep 2023 08:22:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693581762; x=1694186562; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DNII0s1sofIWcbvHAAzUd17gnj57olBPO0rA54JWsCA=;
-        b=PIILvaRG0ANflRgJQyaSR9pY9lEp212FIVmOPsZi10421gGWVfUrKsfDplwws1hq+C
-         dKsF5FMpwoALbt3rzBNLTDFjrhAn6PttPhbt0dnkPenlh8uMD1hwWOeRxzS+p4EvM6Y/
-         KJhIx4vuQI16936T5jzaQMk+5+/8+BDAu1IdKRt0X0tFgq82iUrIYtOP045rqEFIubm2
-         4xv6mQd8vb2ugO2VwxNWcKAdMgNFlkClwihBoJJLek4qYsJsBgEzJxuwS45Vb6CxmTlK
-         bXJv2yURZO9vwV7USRz0ncIFuyBiC89twy9mKBzLBhM99oNkEEN5ru4qj4HSvJnI7Ea0
-         lFSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693581762; x=1694186562;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DNII0s1sofIWcbvHAAzUd17gnj57olBPO0rA54JWsCA=;
-        b=Sfpo+i/bLDa37c7/S2QvYj84AV5tVWEiAV6oTa2NllBE7Adx0aUeFi1is4iHiKo201
-         ksjeisVtdcRvSKVy6FMRn39EtrDPMhKS1KZ/hwAWAERkO0bu7e2T9mEo0X/77mWEQWv9
-         KgAnFMPYqIfRelHKTYukI/B/Va6G9K9S9LyWARi+9VFNBDoG5p6F11uYqof2w/A8IJbS
-         G9rV1p+RaABKRlOErJFsw/ekLDCWhnshCL4uco5Up8aQrREjva9q0O4zqSdi1tYPM63I
-         160zhYpbgAc7y4A1aryUndx5oa6BG0VgGVAGykjZKMbh7vHkfl7Ywx6SX9xJn/vjf3MO
-         WnLg==
-X-Gm-Message-State: AOJu0YxXD5vxJAK4YzHJPtFZ5J5Dx9WLtvwcLAOzuRwMcPPtgR3XF3wQ
-        jERrdFACPtc2ulkp3tgifPE=
-X-Google-Smtp-Source: AGHT+IFahJpWa11g4EvgBD1fWsDRiald08+fWgKR+a2RUrhBaMjRdOASfGwhlr3/aEONOJSGY9Ilzw==
-X-Received: by 2002:a6b:d607:0:b0:794:d833:4a8a with SMTP id w7-20020a6bd607000000b00794d8334a8amr2673934ioa.0.1693581760093;
-        Fri, 01 Sep 2023 08:22:40 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g20-20020a05663811d400b0042b3ad1656bsm1152921jas.45.2023.09.01.08.22.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Sep 2023 08:22:39 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <83f2afcc-aa9a-2d60-f5e2-971f7d669e00@roeck-us.net>
-Date:   Fri, 1 Sep 2023 08:22:37 -0700
+        with ESMTP id S237120AbjIAPpu (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 1 Sep 2023 11:45:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E3510EC;
+        Fri,  1 Sep 2023 08:45:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 15CFF61B0F;
+        Fri,  1 Sep 2023 15:45:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37CE0C433C8;
+        Fri,  1 Sep 2023 15:45:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693583146;
+        bh=H6ARSJFoDsSPV83VjPgwPt2VOUG00bEhvrkCXa2AQZw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=X4+FStK24nYpfln7ViuJUzT3AKUyEtRob7ObVtpW/ELbndiXKNs9pdTPGNlgmX8sd
+         WTOsBjtlQ7HQfVFvrIrwx0QKaqS0gJgR/8sbelZHjcYX+o36d8AQkCNMVTuAs08ZtY
+         0s6ij6QQtFw05kKhfSyLxuPfC7xG0aMOofHCD0ZUuFnH2PayV9ets4i5zSSIHP1I7W
+         FZPeCIxCj4rwOrx1Sc9NZyfxBfUPvfkWPhNbTlAAnRLzSjn/tV1Lj5A7WzZgrrdmi9
+         RcfcagLFe6XQNyoT+NrT0sl3QJ3EM25hmUXBbr4fNBS/+Y5yKOV0n646cHZWs3cn3g
+         GB74H0xfcMofw==
+Date:   Fri, 1 Sep 2023 16:45:41 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        krzysztof.kozlowski+dt@linaro.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/3] dt-bindings: hwmon: Add Infineon TDA38640
+Message-ID: <20230901-likely-bucktooth-6d2d399f172d@spud>
+References: <20230831190731.265099-1-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Content-Language: en-US
-To:     Naresh Solanki <naresh.solanki@9elements.com>, broonie@kernel.org,
-        zev@bewilderbeest.net, Liam Girdwood <lgirdwood@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-References: <20230901093449.838414-1-Naresh.Solanki@9elements.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2] regulator (max5970): Add hwmon support
-In-Reply-To: <20230901093449.838414-1-Naresh.Solanki@9elements.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="9rCByC659KURaw0t"
+Content-Disposition: inline
+In-Reply-To: <20230831190731.265099-1-Naresh.Solanki@9elements.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 9/1/23 02:34, Naresh Solanki wrote:
-> Utilize the integrated 10-bit ADC in Max5970/Max5978 to enable voltage
-> and current monitoring. This feature is seamlessly integrated through
-> the hwmon subsystem.
-> 
+
+--9rCByC659KURaw0t
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Aug 31, 2023 at 09:07:27PM +0200, Naresh Solanki wrote:
+> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+>=20
+> Add the DT property 'infineon,en-pin-fixed-level' to
+> indicated that the chip EN pin is at fixed level
+> or left unconnected(has internal pull-down).
+>=20
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 
-Nit, but you still have this:
+If there's another revision, please add some of the context as to why
+the property is needed to the commit message. Otherwise, this looks okay
+to me.
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-CHECK: From:/Signed-off-by: email comments mismatch: 'From: Naresh Solanki <naresh.solanki@9elements.com>' != 'Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>'
+Thanks,
+Conor.
 
+> ----
+> Changes in V5:
+> - Update pin name to align with datasheet
+> Changes in V4:
+> - Update property name & description.
+> - Update commit message.
 > ---
-> Changes in V2:
-> - default case added for switch statement
-> - Add dependency on HWMON
-> ---
->   drivers/regulator/Kconfig             |   1 +
->   drivers/regulator/max5970-regulator.c | 123 ++++++++++++++++++++++++++
->   2 files changed, 124 insertions(+)
-> 
-> diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
-> index 965d4f0c18a6..ab245893033d 100644
-> --- a/drivers/regulator/Kconfig
-> +++ b/drivers/regulator/Kconfig
-> @@ -559,6 +559,7 @@ config REGULATOR_MAX5970
->   	depends on I2C
->   	depends on OF
->   	depends on MFD_MAX5970
-> +	depends on HWMON
+>  .../hwmon/pmbus/infineon,tda38640.yaml        | 50 +++++++++++++++++++
+>  .../devicetree/bindings/trivial-devices.yaml  |  2 -
+>  2 files changed, 50 insertions(+), 2 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/infineo=
+n,tda38640.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38=
+640.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.=
+yaml
+> new file mode 100644
+> index 000000000000..9eecfae5dfcf
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.yaml
+> @@ -0,0 +1,50 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +
+> +$id: http://devicetree.org/schemas/hwmon/pmbus/infineon,tda38640.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Infineon TDA38640 Synchronous Buck Regulator with SVID and I2C
+> +
+> +maintainers:
+> +  - Naresh Solanki <naresh.solanki@9elements.com>
+> +
+> +description: |
+> +  The Infineon TDA38640 is a 40A Single-voltage Synchronous Buck
+> +  Regulator with SVID and I2C designed for Industrial use.
+> +
+> +  Datasheet: https://www.infineon.com/dgdl/Infineon-TDA38640-0000-DataSh=
+eet-v02_04-EN.pdf?fileId=3D8ac78c8c80027ecd018042f2337f00c9
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - infineon,tda38640
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  infineon,en-pin-fixed-level:
+> +    description:
+> +      Indicates that the chip EN pin is at fixed level or left
+> +      unconnected(has internal pull-down).
+> +    type: boolean
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells =3D <1>;
+> +        #size-cells =3D <0>;
+> +
+> +        tda38640@40 {
+> +            compatible =3D "infineon,tda38640";
+> +            reg =3D <0x40>;
+> +        };
+> +    };
+> +
+> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Doc=
+umentation/devicetree/bindings/trivial-devices.yaml
+> index 40bc475ee7e1..86c7d34f63bf 100644
+> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> @@ -151,8 +151,6 @@ properties:
+>            - infineon,slb9645tt
+>              # Infineon SLB9673 I2C TPM 2.0
+>            - infineon,slb9673
+> -            # Infineon TDA38640 Voltage Regulator
+> -          - infineon,tda38640
+>              # Infineon TLV493D-A1B6 I2C 3D Magnetic Sensor
+>            - infineon,tlv493d-a1b6
+>              # Infineon Multi-phase Digital VR Controller xdpe11280
+>=20
+> base-commit: 919a83d020a8dfa1411c1dc1cff23a833f0f5268
+> --=20
+> 2.41.0
+>=20
 
-Not sure if that is acceptable. The maintainer will have to decide.
+--9rCByC659KURaw0t
+Content-Type: application/pgp-signature; name="signature.asc"
 
->   	help
->   	  This driver controls a Maxim 5970/5978 switch via I2C bus.
->   	  The MAX5970/5978 is a smart switch with no output regulation, but
-> diff --git a/drivers/regulator/max5970-regulator.c b/drivers/regulator/max5970-regulator.c
-> index b56a174cde3d..c337044e1523 100644
-> --- a/drivers/regulator/max5970-regulator.c
-> +++ b/drivers/regulator/max5970-regulator.c
-> @@ -10,6 +10,7 @@
->   #include <linux/bitops.h>
->   #include <linux/device.h>
->   #include <linux/err.h>
-> +#include <linux/hwmon.h>
->   #include <linux/module.h>
->   #include <linux/io.h>
->   #include <linux/of.h>
-> @@ -32,6 +33,120 @@ enum max597x_regulator_id {
->   	MAX597X_SW1,
->   };
->   
-> +static int max5970_read_adc(struct regmap *regmap, int reg, long *val)
-> +{
-> +	u8 reg_data[2];
-> +	int ret;
-> +
-> +	ret = regmap_bulk_read(regmap, reg, &reg_data[0], 2);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	*val = (reg_data[0] << 2) | (reg_data[1] & 3);
-> +
-> +	return 0;
-> +}
-> +
-> +static int max5970_read(struct device *dev, enum hwmon_sensor_types type,
-> +			u32 attr, int channel, long *val)
-> +{
-> +	struct max5970_data *ddata = dev_get_drvdata(dev);
-> +	struct regmap *regmap = dev_get_regmap(dev->parent, NULL);
-> +	int ret;
-> +
-> +	switch (type) {
-> +	case hwmon_curr:
-> +		switch (attr) {
-> +		case hwmon_curr_input:
-> +			ret = max5970_read_adc(regmap, MAX5970_REG_CURRENT_H(channel), val);
-> +			/*
-> +			 * Calculate current from ADC value, IRNG range & shunt resistor value.
-> +			 * ddata->irng holds the voltage corresponding to the maximum value the
-> +			 * 10-bit ADC can measure.
-> +			 * To obtain the output, multiply the ADC value by the IRNG range (in
-> +			 * millivolts) and then divide it by the maximum value of the 10-bit ADC.
-> +			 */
-> +			*val = (*val * ddata->irng[channel]) >> 10;
-> +			/* Convert the voltage meansurement across shunt resistor to current */
-> +			*val = (*val * 1000) / ddata->shunt_micro_ohms[channel];
-> +			return ret;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +
-> +	case hwmon_in:
-> +		switch (attr) {
-> +		case hwmon_in_input:
-> +			ret = max5970_read_adc(regmap, MAX5970_REG_VOLTAGE_H(channel), val);
-> +			/*
-> +			 * Calculate voltage from ADC value and MON range.
-> +			 * ddata->mon_rng holds the voltage corresponding to the maximum value the
-> +			 * 10-bit ADC can measure.
-> +			 * To obtain the output, multiply the ADC value by the MON range (in
-> +			 * microvolts) and then divide it by the maximum value of the 10-bit ADC.
-> +			 */
-> +			*val = mul_u64_u32_shr(*val, ddata->mon_rng[channel], 10);
-> +			/* uV to mV */
-> +			*val = *val / 1000;
-> +			return ret;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static umode_t max5970_is_visible(const void *data,
-> +				  enum hwmon_sensor_types type,
-> +				  u32 attr, int channel)
-> +{
-> +	struct max5970_data *ddata = (struct max5970_data *)data;
-> +
-> +	if (channel >= ddata->num_switches)
-> +		return 0;
-> +
-> +	switch (type) {
-> +	case hwmon_in:
-> +		switch (attr) {
-> +		case hwmon_in_input:
-> +			return 0444;
-> +		default:
-> +			break;
-> +		}
-> +		break;
-> +	case hwmon_curr:
-> +		switch (attr) {
-> +		case hwmon_curr_input:
-> +			/* Current measurement requires knowledge of the shunt resistor value. */
-> +			if (ddata->shunt_micro_ohms[channel])
-> +				return 0444;
+-----BEGIN PGP SIGNATURE-----
 
-missing break;
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZPIHJQAKCRB4tDGHoIJi
+0uLkAP94BgZ0S0sCuSI4UKEGvrRITGPitc4jESpy9pPyx3CC5AD+OzjWrn/ts6Ut
+7J5jGY/iMVN+uDykI5p0VcjPhKvRDAc=
+=sHr+
+-----END PGP SIGNATURE-----
 
-Interesting, I thought the compiler would complain about that nowadays,
-but apparently it doesn't.
-
-Guenter
-
-> +		default:
-> +			break;
-> +		}
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static const struct hwmon_ops max5970_hwmon_ops = {
-> +	.is_visible = max5970_is_visible,
-> +	.read = max5970_read,
-> +};
-> +
-> +static const struct hwmon_channel_info *max5970_info[] = {
-> +	HWMON_CHANNEL_INFO(in, HWMON_I_INPUT, HWMON_I_INPUT),
-> +	HWMON_CHANNEL_INFO(curr, HWMON_C_INPUT, HWMON_C_INPUT),
-> +	NULL
-> +};
-> +
-> +static const struct hwmon_chip_info max5970_chip_info = {
-> +	.ops = &max5970_hwmon_ops,
-> +	.info = max5970_info,
-> +};
-> +
->   static int max597x_uvp_ovp_check_mode(struct regulator_dev *rdev, int severity)
->   {
->   	int ret, reg;
-> @@ -432,6 +547,7 @@ static int max597x_regulator_probe(struct platform_device *pdev)
->   	struct regulator_config config = { };
->   	struct regulator_dev *rdev;
->   	struct regulator_dev *rdevs[MAX5970_NUM_SWITCHES];
-> +	struct device *hwmon_dev;
->   	int num_switches;
->   	int ret, i;
->   
-> @@ -485,6 +601,13 @@ static int max597x_regulator_probe(struct platform_device *pdev)
->   		max597x->shunt_micro_ohms[i] = data->shunt_micro_ohms;
->   	}
->   
-> +	hwmon_dev = devm_hwmon_device_register_with_info(&i2c->dev, "max5970_hwmon", max597x,
-> +							 &max5970_chip_info, NULL);
-> +	if (IS_ERR(hwmon_dev)) {
-> +		return dev_err_probe(&i2c->dev, PTR_ERR(hwmon_dev), \
-> +				     "Unable to register hwmon device\n");
-> +	}
-> +
->   	if (i2c->irq) {
->   		ret =
->   		    max597x_setup_irq(&i2c->dev, i2c->irq, rdevs, num_switches,
-> 
-> base-commit: 35d0d2350d774fecf596cfb2fb050559fe5e1850
-
+--9rCByC659KURaw0t--
