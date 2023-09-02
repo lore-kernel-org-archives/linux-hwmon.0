@@ -2,59 +2,106 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48AE9C71153
-	for <linux-hwmon@archiver.kernel.org>; Sat,  2 Sep 2023 14:20:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C318C71153
+	for <linux-hwmon@archiver.kernel.org>; Sat,  2 Sep 2023 16:43:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231968AbjIBOUd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 2 Sep 2023 10:20:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56040 "EHLO
+        id S231881AbjIBQnz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 2 Sep 2023 12:43:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbjIBOUd (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 2 Sep 2023 10:20:33 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA14593;
-        Sat,  2 Sep 2023 07:20:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1693664427;
-        bh=VaN/dytRrQdGSJIWxxYi4CPLw8Rb6mvSbrXc1sYi+0g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kx2IrsvQlxciM92qnZN2HZGpSGLnCdwbPgv5rkgquEc9zAkXv3z6JjjiN4E/33sMP
-         p4dcgFL1K9+neHzx3XPyV7npKcxbwgjm7dhAh4r39RKdnPv94GfDEEtEhyrWQ/zw5r
-         6tai0RpJ19ePjJwpllHstQtubyAxbR5Ee7G5ysJ0=
-Date:   Sat, 2 Sep 2023 16:20:27 +0200
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-usb@vger.kernel.org,
-        Douglas Gilbert <dgilbert@interlog.com>
-Subject: Re: [PATCH v4] hwmon: add POWER-Z driver
-Message-ID: <55fbc98b-8251-44b3-b5a0-a26d123ac932@t-8ch.de>
-References: <20230902-powerz-v4-1-7ec2c1440687@weissschuh.net>
- <56da4837-cfe3-4234-96f7-e7b67358dcdb@roeck-us.net>
+        with ESMTP id S234625AbjIBQny (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 2 Sep 2023 12:43:54 -0400
+X-Greylist: delayed 450 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 02 Sep 2023 09:43:51 PDT
+Received: from smtp.smtpout.orange.fr (smtp-15.smtpout.orange.fr [80.12.242.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 93B64CED
+        for <linux-hwmon@vger.kernel.org>; Sat,  2 Sep 2023 09:43:51 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id cTbdqr0ADIQx7cTbeqHwkd; Sat, 02 Sep 2023 18:36:20 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1693672580;
+        bh=zi8b3GsNrC+jALwD2EUeiIS6wT/yD6bkTNGFEJTuaMg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=a3sgYwvSOAasPXqcs6KhuBoCv9DqhJOaysrCDaA5dsBEjO039vHHmFlSTmlY9AqdM
+         pF/9TvjS+e2ufE3m6vKzQnpY447A049KfZf9xJtTfZR58NeDV8EeYHvv6xpRuUhDu6
+         SQZyNrirF/QqouYKH4Hni8bJJh2e3XNlXbzC00W1z3zX5lrnwPmSMRV3N8HN2NXgN+
+         UAWBYy1LgasWz2wMY9c/6En0aJ0tYUSEwbcvAC5WqW81OkrYVVmOnA23PxhjzMDiwy
+         5TDBUCAOcFvH1pNU+ccmrpWmaacP5c/ucr0v3PSCsdSaK3l219sQr44CUeokKJHebW
+         tAaPKUuAwPi5A==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 02 Sep 2023 18:36:20 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <36a3daf7-d519-7669-13bf-4c59c11c2b97@wanadoo.fr>
+Date:   Sat, 2 Sep 2023 18:36:17 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v4] hwmon: add POWER-Z driver
+Content-Language: fr
+To:     =?UTF-8?Q?linux=40weissschuh=2enet_=3e=3e_Thomas_Wei=c3=9fschuh?= 
+        <linux@weissschuh.net>
+Cc:     dgilbert@interlog.com, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux@roeck-us.net
+References: <20230902-powerz-v4-1-7ec2c1440687@weissschuh.net>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20230902-powerz-v4-1-7ec2c1440687@weissschuh.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <56da4837-cfe3-4234-96f7-e7b67358dcdb@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2023-09-02 07:10:24-0700, Guenter Roeck wrote:
-> On Sat, Sep 02, 2023 at 09:47:01AM +0200, Thomas Weißschuh wrote:
-> > POWER-Z is a series of devices to monitor power characteristics of
-> > USB-C connections and display those on a on-device display.
-> > Some of the devices, notably KM002C and KM003C, contain an additional
-> > port which exposes the measurements via USB.
-> > 
-> > This is a driver for this monitor port.
-> > 
-> > It was developed and tested with the KM003C.
-> > 
-> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+Le 02/09/2023 à 09:47, Thomas Weißschuh a écrit :
+> POWER-Z is a series of devices to monitor power characteristics of
+> USB-C connections and display those on a on-device display.
+> Some of the devices, notably KM002C and KM003C, contain an additional
+> port which exposes the measurements via USB.
 > 
-> Applied to hwmon-next.
+> This is a driver for this monitor port.
+> 
+> It was developed and tested with the KM003C.
+> 
+> Signed-off-by: Thomas Weißschuh <linux-9XfqOkM5JgxKQ7RDE2T8Pw@public.gmane.org>
+> ---
 
-Thanks!
+...
 
-Thomas
+> +static int powerz_probe(struct usb_interface *intf,
+> +			const struct usb_device_id *id)
+> +{
+> +	struct powerz_priv *priv;
+> +	struct device *hwmon_dev;
+> +	struct device *parent;
+> +
+> +	parent = &intf->dev;
+> +
+> +	priv = devm_kzalloc(parent, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->urb = usb_alloc_urb(0, GFP_KERNEL);
+> +	if (!priv->urb)
+> +		return -ENOMEM;
+> +	mutex_init(&priv->mutex);
+> +	priv->status = -ETIMEDOUT;
+> +	init_completion(&priv->completion);
+> +
+> +	hwmon_dev =
+> +	    devm_hwmon_device_register_with_info(parent, DRIVER_NAME, priv,
+> +						 &powerz_chip_info, NULL);
+> +	usb_set_intfdata(intf, priv);
+> +
+> +	return PTR_ERR_OR_ZERO(hwmon_dev);
+
+Hi,
+
+If 'hwmon_dev' is an PTR_ERR, priv->urb leaks.
+
+CJ
+
+> +}
+> +
+
+...
