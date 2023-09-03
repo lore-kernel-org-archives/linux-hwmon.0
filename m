@@ -2,172 +2,183 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D55C3C83F2C
-	for <linux-hwmon@archiver.kernel.org>; Sun,  3 Sep 2023 11:46:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45E86C71153
+	for <linux-hwmon@archiver.kernel.org>; Sun,  3 Sep 2023 14:00:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236625AbjICLq5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 3 Sep 2023 07:46:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46558 "EHLO
+        id S231377AbjICOAx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 3 Sep 2023 10:00:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbjICLq5 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 3 Sep 2023 07:46:57 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B2F11A;
-        Sun,  3 Sep 2023 04:46:53 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-51b4ef5378bso433805a12.1;
-        Sun, 03 Sep 2023 04:46:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693741613; x=1694346413; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=2LypU5GSb/5xrBeSN38szQSr44gNgGcSYviD7xvx9mo=;
-        b=cNPpCJjRHq3qcceuA4je81mgM9DReB1cLlhFqtYYb0i/wHWhdG6RIjO1MfXrspCD+i
-         q1ncaO2W4Z483NLBvLBNKLkXm4PFz0jEHfSb01KaP/0qNd+/Mg6fMXeefmdIUzZzlN3w
-         6966cGDFHyNXZ7qZBnAikDeng6G6BehaEAnaUoi8U6eSJt//826yi33qTgPtNWPlJMhs
-         0a9iydaZR4cs/VEZ/WX2BBaw48di6A+Sluasxm35dvEmIC2baMW8G4rm9h7+GnpotWRm
-         xh3jJODNOLRfM9f8mYwEchc+60C/GMMTqpXfRWylKHvYPO9SHjTZHP+xrnEY+udG+YMJ
-         ijmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693741613; x=1694346413;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2LypU5GSb/5xrBeSN38szQSr44gNgGcSYviD7xvx9mo=;
-        b=YSRNaAfM52KYFmc6ldEEs5J8KZ5Hfk+ziHXJlByx5s7b5xzjePZSueR4ak/rETAfCf
-         xoOYPZ+bUxSuuzg6hhwWqwInqjuf5jdhRW/6uEYE419M+zIfVTXkDzFi3YYiCX3/ILpG
-         h940NgL2Mco+VSwWhky5VJm686WEelAMUvnCWpRRJUy/F1NInVnKZhloJBoJ/3Eg0Xzi
-         VVTn7fFvaGKN04b4IWiT5wdnYrWJzKsGMQ6dFLhTkbN7/weW7Gbcm8jIjFC0wAS4zGZT
-         PjYdX3QUF8+pBNFdZUlZsMZiokQxWPLtKQkAWMC4BLWisPFb6TK4WRr4wM8z/6t6Iiey
-         5rSw==
-X-Gm-Message-State: AOJu0YzoGG3/purvf7bRZJa1rtuD866/Y0AW1wCQ13Ikg06PTLQEfmeF
-        XymdULAHlmMjjHdmSq+ILFc=
-X-Google-Smtp-Source: AGHT+IGekt8ho0aAPwahya8w6Nh7WewIKbiP7Q0IEe6ccqXTtgd85PJFKCrErfLuUYO8fwTIlz78lw==
-X-Received: by 2002:a17:902:8b8b:b0:1bb:d048:3173 with SMTP id ay11-20020a1709028b8b00b001bbd0483173mr7739267plb.61.1693741612789;
-        Sun, 03 Sep 2023 04:46:52 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id jg7-20020a17090326c700b001bc87e6e26bsm5784198plb.222.2023.09.03.04.46.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 03 Sep 2023 04:46:52 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <9151ab86-305e-9bb3-ee46-bfa8fd998c12@roeck-us.net>
-Date:   Sun, 3 Sep 2023 04:46:50 -0700
+        with ESMTP id S229545AbjICOAw (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 3 Sep 2023 10:00:52 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0CEE8
+        for <linux-hwmon@vger.kernel.org>; Sun,  3 Sep 2023 07:00:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Q07P3Jqxsz/0ov099Hkf0iTElQ20jc5/F4826nbgVxSUpIpbbbRf59enipZTTxvPjTX71okccW8DsDqLCy2TVyX2xc8b6mHnGrl9f5xowS93fRv3ryd7rokcE/OiEKtqyfKFtuLlQq113L9vC4LPFTt+Z9FK6EZnRbb5pAtGkUhJoHYlGnzlZOBpgys57L1vEffBKUJhPuDh85eNG17hEF5zW8o+dD3tC642p8R3CwGPXmsOGzKMsO0gE44cchzagX+vy6AvAJtvLTQUocztwPxLD2y6dqRfrKnU9X1/bP645x1YonEfuuy4s3uPvRGs7s10zt44wOuDiVSApZtS3Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RV8p19CRxKzOL9KYZGF69fiWPOzqFnoOR578N9FOKL8=;
+ b=DKN//A9auX6Q3S81dRXbDsNI5MmWK2VMFZxQlM+1TocM4efKZQ8wpq3rlWJF4VUNfl3Jwe8dkSYzRYgVCG6XEAJJ3GbTlbp/ypp4HoM06NXVIlJ9gWM/77aAkPPlZ6jUbfceca/7IAJQmSh8qtfwR8iglHNJm8/QugadH88RKT+8maEKnH74yPQCfUkHwbGOMNkdZ48/cH9/jyz0un+0b3iywx8DSVRguV8bo/CrYkqkpRTS8jNpFIYxFv67B6O6Wwist0Ci0cgk5LxZX4hJZhPuL/ErfrzInl2enr4oLE6FRJNoqAh+mjJryx2AOfKYJmx09D7FsUtLCaeSajCskA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RV8p19CRxKzOL9KYZGF69fiWPOzqFnoOR578N9FOKL8=;
+ b=Ko9c45+ofb74PhoZ562fvbER6RLAvY/HFx1gJ/eYUdJo7ckjp0jmwUCXMrBnKigEiVqICE4WWNkGK/vhVYQBxHImmbPkbQ0k1hxPndSGU1NhrL3CH9n4nwjgU67sULdsrb+72kpTiz9NxL0lVpjZ+XeIzsBTSaUTZ3EK6bbxHfrqsEk/amze3rWkDFpZaC6fRDiN1xuRRpZGPPs4f3OqjrlnLoMUIGxgaFR3lKXTLMMFdGCozaNcP8Al7wep6VL7MIhPZVjJhx5Vu00aKAy+Id8fTX9e3q8obADJx/Jmvz2KEAkTXGEbBTMjDrtYCCK5AEl4qlYKvJenlSa81Ury+Q==
+Received: from MW2PR16CA0040.namprd16.prod.outlook.com (2603:10b6:907:1::17)
+ by DM4PR12MB6010.namprd12.prod.outlook.com (2603:10b6:8:6a::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6745.30; Sun, 3 Sep 2023 14:00:45 +0000
+Received: from CO1PEPF000044F4.namprd05.prod.outlook.com
+ (2603:10b6:907:1:cafe::a9) by MW2PR16CA0040.outlook.office365.com
+ (2603:10b6:907:1::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.32 via Frontend
+ Transport; Sun, 3 Sep 2023 14:00:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CO1PEPF000044F4.mail.protection.outlook.com (10.167.241.74) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6745.17 via Frontend Transport; Sun, 3 Sep 2023 14:00:44 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Sun, 3 Sep 2023
+ 07:00:30 -0700
+Received: from r-build-bsp-02.mtr.labs.mlnx (10.126.231.35) by
+ rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.37; Sun, 3 Sep 2023 07:00:28 -0700
+From:   Vadim Pasternak <vadimp@nvidia.com>
+To:     <linux@roeck-us.net>
+CC:     <linux-hwmon@vger.kernel.org>, Vadim Pasternak <vadimp@nvidia.com>
+Subject: [PATCH hwmon 1/1] hwmon: (mlxreg-fan) Separate methods of fan setting coming from different subsystems
+Date:   Sun, 3 Sep 2023 14:00:13 +0000
+Message-ID: <20230903140013.49030-1-vadimp@nvidia.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v4] hwmon: add POWER-Z driver
-Content-Language: en-US
-To:     dgilbert@interlog.com,
-        =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20230902-powerz-v4-1-7ec2c1440687@weissschuh.net>
- <36a3daf7-d519-7669-13bf-4c59c11c2b97@wanadoo.fr>
- <46d3194a-af79-4076-b0a2-561d713a406e@t-8ch.de>
- <2776f856-94e4-1481-508a-db80db573be0@roeck-us.net>
- <290ebce4-54f0-8ac1-2a13-cbc806d80d64@interlog.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <290ebce4-54f0-8ac1-2a13-cbc806d80d64@interlog.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.126.231.35]
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF000044F4:EE_|DM4PR12MB6010:EE_
+X-MS-Office365-Filtering-Correlation-Id: a3ceeb9d-1d44-4893-7af1-08dbac862ab5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Pq1S08von1A9Pdp7jLVKL4QHMXZdl+jjy/l2IjpI6cQtKmm+uX1JJuuthf6R6kNOBfj5QLcBVKfKcU34frC5Dba6EQ8dGa4MtgEHqIZDDsYKAYSCpOiiohH3DlL39g8/vO/hZELRoepCSjES+Wj+jF8qHAzZXtbKOR/ZknQ6mkwGFuIQsa+815x5zuxW2UBtTQ5sYaZvg8E5DD3KExSro45wLMTMM+EutnuQ8PAIBBXOgNIvAR/Mlyq3jObijH+40ATLYn/5NllgkXSP9+/3F3UutGSQ2wKLeOP6mrbyWdp/wjAfaPKR8VyO5aEdvgJZ22/ft9m7uaJBaxHGPsDLsnVG4n9bSK+mIj+IsQJ5ajAZSLeyv706pKTZ8roAmpdk7/bx5rdpgMIwCojGKadyoTFhY+9QLQpeaF5xx1wdvVIZxZkpg7CwoTudU2Z4USrqImyrwQSrhCKc9GhDfR+RMFbqEPxlzAsOuLMLMelD3tyNecxDG3+k0tQhxGG2xmEAJJJvmewvGjjdp9ICAVtG9pvSmZyHCQgP3TUT2f7brGqweO36PkA62JiWogwgs5BAoI7MxcO5tZ59cT/YiJxPiH3CYfa+UeIkYbnE+hEfGhllmCzBXrl/QpslRkjUwNm7RU29emp7rbJ1/EoFPcYdwmZwfzRVVTCfUZBDC/RCjx38QFv4YIdNcn47/KtoSwzUbgdz3L1KwmfCGDptOMfb1s5BrzFaEE/DtfbvSNHotQWiloRiLyHdvMbbu8va+Hxd
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(346002)(376002)(396003)(39860400002)(136003)(186009)(1800799009)(82310400011)(451199024)(40470700004)(46966006)(36840700001)(40460700003)(41300700001)(356005)(7636003)(82740400003)(6666004)(86362001)(478600001)(2616005)(83380400001)(47076005)(336012)(426003)(26005)(16526019)(107886003)(1076003)(36860700001)(40480700001)(70586007)(70206006)(54906003)(36756003)(2906002)(6916009)(316002)(8936002)(8676002)(5660300002)(4326008);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Sep 2023 14:00:44.4251
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a3ceeb9d-1d44-4893-7af1-08dbac862ab5
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000044F4.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6010
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 9/2/23 22:54, Douglas Gilbert wrote:
-> On 2023-09-02 18:56, Guenter Roeck wrote:
->> On 9/2/23 15:29, Thomas Weißschuh wrote:
->>> Hi,
->>>
->>> On 2023-09-02 18:36:17+0200, Christophe JAILLET wrote:
->>>> Le 02/09/2023 à 09:47, Thomas Weißschuh a écrit :
->>>>> POWER-Z is a series of devices to monitor power characteristics of
->>>>> USB-C connections and display those on a on-device display.
->>>>> Some of the devices, notably KM002C and KM003C, contain an additional
->>>>> port which exposes the measurements via USB.
->>>>>
->>>>> This is a driver for this monitor port.
->>>>>
->>>>> It was developed and tested with the KM003C.
->>>>>
->>>>> Signed-off-by: Thomas Weißschuh <linux-9XfqOkM5JgxKQ7RDE2T8Pw@public.gmane.org>
->>>>> ---
->>>>
->>>> ...
->>>>
->>>>> +static int powerz_probe(struct usb_interface *intf,
->>>>> +            const struct usb_device_id *id)
->>>>> +{
->>>>> +    struct powerz_priv *priv;
->>>>> +    struct device *hwmon_dev;
->>>>> +    struct device *parent;
->>>>> +
->>>>> +    parent = &intf->dev;
->>>>> +
->>>>> +    priv = devm_kzalloc(parent, sizeof(*priv), GFP_KERNEL);
->>>>> +    if (!priv)
->>>>> +        return -ENOMEM;
->>>>> +
->>>>> +    priv->urb = usb_alloc_urb(0, GFP_KERNEL);
->>>>> +    if (!priv->urb)
->>>>> +        return -ENOMEM;
->>>>> +    mutex_init(&priv->mutex);
->>>>> +    priv->status = -ETIMEDOUT;
->>>>> +    init_completion(&priv->completion);
->>>>> +
->>>>> +    hwmon_dev =
->>>>> +        devm_hwmon_device_register_with_info(parent, DRIVER_NAME, priv,
->>>>> +                         &powerz_chip_info, NULL);
->>>>> +    usb_set_intfdata(intf, priv);
->>>>> +
->>>>> +    return PTR_ERR_OR_ZERO(hwmon_dev);
->>>>
->>>> Hi,
->>>>
->>>> If 'hwmon_dev' is an PTR_ERR, priv->urb leaks.
->>>
->>> Good catch, thanks!
->>>
->>>
->>> Guenter,
->>>
->>> it seems the new hwmon-next with this driver has not yet been pushed to
->>> git.kernel.org, so I can't generate the Fixes tag.
->>>
->>
->> Rule is that I must not push anything into linux-next until
->> after v6.6-rc1 has been released.
->>
->>> Can you modify the commit to also contain the changes below?
->>> Or let me know if you prefer something else.
->>>
->>
->> I'll update the patch and make the change.
-> 
-> Hi,
-> While you are at it, you can make the driver detect the earlier model KM002C:
-> 
+Distinct between fan speed setting request coming for hwmon and
+thermal subsystems.
 
-Please send a separate patch to do that.
+There are fields 'last_hwmon_state' and 'last_thermal_state' in the
+structure 'mlxreg_fan_pwm', which respectively store the cooling state
+set by the 'hwmon' and 'thermal' subsystem.
+The purpose is to make arbitration of fan speed setting. For example, if
+fan speed required to be not lower than some limit, such setting is to
+be performed through 'hwmon' subsystem, thus 'thermal' subsystem will
+not set fan below this limit.
 
-Thanks,
-Guenter
+Currently, the 'last_thermal_state' is also be updated by 'hwmon' causing
+cooling state to never be set to a lower value.
 
-> --- powerz.c_orig    2023-09-02 13:47:14.754705791 -0400
-> +++ powerz.c    2023-09-02 23:22:54.783856587 -0400
-> @@ -250,6 +250,7 @@
-> 
->   static const struct usb_device_id powerz_id_table[] = {
->       { USB_DEVICE_INTERFACE_NUMBER(0x5FC9, 0x0063, 0x00) },    /* ChargerLAB POWER-Z KM003C */
-> +    { USB_DEVICE_INTERFACE_NUMBER(0x5FC9, 0x0061, 0x00) },    /* ChargerLAB POWER-Z KM002C */
->       { }
->   };
-> 
-> Do you want a "Tested-by" on the patch as well?
-> 
-> Doug Gilbert
-> 
-> 
+Eliminate update of 'last_thermal_state', when request is coming from
+'hwmon' subsystem.
+
+Fixes: da74944d3a46 ("hwmon: (mlxreg-fan) Use pwm attribute for setting fan speed low limit")
+Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
+---
+ drivers/hwmon/mlxreg-fan.c | 24 ++++++++++++++++--------
+ 1 file changed, 16 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/hwmon/mlxreg-fan.c b/drivers/hwmon/mlxreg-fan.c
+index c2a96468c9b4..9a84a41b158f 100644
+--- a/drivers/hwmon/mlxreg-fan.c
++++ b/drivers/hwmon/mlxreg-fan.c
+@@ -113,8 +113,8 @@ struct mlxreg_fan {
+ 	int divider;
+ };
+ 
+-static int mlxreg_fan_set_cur_state(struct thermal_cooling_device *cdev,
+-				    unsigned long state);
++static int _mlxreg_fan_set_cur_state(struct thermal_cooling_device *cdev,
++				     unsigned long state, bool thermal);
+ 
+ static int
+ mlxreg_fan_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+@@ -224,8 +224,9 @@ mlxreg_fan_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+ 				 * last thermal state.
+ 				 */
+ 				if (pwm->last_hwmon_state >= pwm->last_thermal_state)
+-					return mlxreg_fan_set_cur_state(pwm->cdev,
+-									pwm->last_hwmon_state);
++					return _mlxreg_fan_set_cur_state(pwm->cdev,
++									 pwm->last_hwmon_state,
++									 false);
+ 				return 0;
+ 			}
+ 			return regmap_write(fan->regmap, pwm->reg, val);
+@@ -347,9 +348,8 @@ static int mlxreg_fan_get_cur_state(struct thermal_cooling_device *cdev,
+ 	return 0;
+ }
+ 
+-static int mlxreg_fan_set_cur_state(struct thermal_cooling_device *cdev,
+-				    unsigned long state)
+-
++static int _mlxreg_fan_set_cur_state(struct thermal_cooling_device *cdev,
++				     unsigned long state, bool thermal)
+ {
+ 	struct mlxreg_fan_pwm *pwm = cdev->devdata;
+ 	struct mlxreg_fan *fan = pwm->fan;
+@@ -359,7 +359,8 @@ static int mlxreg_fan_set_cur_state(struct thermal_cooling_device *cdev,
+ 		return -EINVAL;
+ 
+ 	/* Save thermal state. */
+-	pwm->last_thermal_state = state;
++	if (thermal)
++		pwm->last_thermal_state = state;
+ 
+ 	state = max_t(unsigned long, state, pwm->last_hwmon_state);
+ 	err = regmap_write(fan->regmap, pwm->reg,
+@@ -371,6 +372,13 @@ static int mlxreg_fan_set_cur_state(struct thermal_cooling_device *cdev,
+ 	return 0;
+ }
+ 
++static int mlxreg_fan_set_cur_state(struct thermal_cooling_device *cdev,
++				    unsigned long state)
++
++{
++	return _mlxreg_fan_set_cur_state(cdev, state, true);
++}
++
+ static const struct thermal_cooling_device_ops mlxreg_fan_cooling_ops = {
+ 	.get_max_state	= mlxreg_fan_get_max_state,
+ 	.get_cur_state	= mlxreg_fan_get_cur_state,
+-- 
+2.20.1
 
