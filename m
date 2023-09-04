@@ -2,96 +2,63 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BFC1CA0FE2
-	for <linux-hwmon@archiver.kernel.org>; Tue,  5 Sep 2023 16:26:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFF2ACA0FFB
+	for <linux-hwmon@archiver.kernel.org>; Tue,  5 Sep 2023 16:26:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351499AbjIEQ0D (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 5 Sep 2023 12:26:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36828 "EHLO
+        id S1351562AbjIEQ0G (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 5 Sep 2023 12:26:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353554AbjIEGma (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 5 Sep 2023 02:42:30 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94D1CC2
-        for <linux-hwmon@vger.kernel.org>; Mon,  4 Sep 2023 23:42:26 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-99de884ad25so323215666b.3
-        for <linux-hwmon@vger.kernel.org>; Mon, 04 Sep 2023 23:42:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693896145; x=1694500945; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7ugyMfJxNvEDJjj/a2Xl7UVxjq+twvGg0NQ9wiJcmDU=;
-        b=qByfCK5bKVcWHpUgY+YhvyppRbQqUjIQXvn8tuHvAmsLqHL88eBLUcFj+KlGcPDWe6
-         pvHqm0++fPkTM2qMEhzC0AbvrybhSnqzhUGKEX/rUGEY/EDMjEjqscMJS7BypUwERExu
-         JR2laMcMLt2BrH0stGbmvFKgf+Yn7R1AVdhCueMhKozGprXX8oVsw4U1xnPuaIiHAlPd
-         nELOVtfWVqwZh3TA2AzlyA36PZm+C3UNA6Ix58grVnGCWc+VDgH+Cz6e3AiOBCXCZUwK
-         btO7EpIkTC6DYP/0zBcH2oZFKHWT0lpHRHaZk6EZNPmCbRHQviowsdTpJOEW9me9JH59
-         sD/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693896145; x=1694500945;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7ugyMfJxNvEDJjj/a2Xl7UVxjq+twvGg0NQ9wiJcmDU=;
-        b=BkUoqWV67JPnHX4lLYa9cdUatjny2rD/cDNAcOzB8bJiOTXmUs9XNwiHKdHLwHdPKy
-         rpCEUmBSJOm3eWkkFngS3zo6OEtVh7acTK2vY6VVIQSMkLgQTsmIrA8Cf03DAiXffyU9
-         B8nWeHvl1/qNpafIKnIRcKkUBB9htOPCXoPPYpngKkBOoqz2uHytsEgn/UD5K+UJkEtb
-         XusU6LLmTu1ahJfWE3kEoaYw6f8nj1OPiTd6Hb9T7po5jtb60Oq5Ti2Vbi7d0avhNyN0
-         TVUECA8Kxb/BMar43NS6fPMiNd1a8VLLCJf6NA7S4zxpd7ixxcPQ8JWmoQbgDMmuyPfb
-         rtiw==
-X-Gm-Message-State: AOJu0Yzbnysy+iobtIYulx+Xb00N7tcdUTDNSj/BQmz5z4ZGU63OUQN0
-        EwCI3nknQuyAWuVdNIFZq0X/bg==
-X-Google-Smtp-Source: AGHT+IFSmevS7/xXWVuQyFeT07AMl+yZq3VbNuqQ8OMhjg5tonqxRjiTIhrioHj1GnVBbyaP7zS7+Q==
-X-Received: by 2002:a17:906:ef8f:b0:9a5:8eab:49da with SMTP id ze15-20020a170906ef8f00b009a58eab49damr8369843ejb.19.1693896145502;
-        Mon, 04 Sep 2023 23:42:25 -0700 (PDT)
-Received: from [192.168.0.22] (77-252-46-238.static.ip.netia.com.pl. [77.252.46.238])
-        by smtp.gmail.com with ESMTPSA id lo6-20020a170906fa0600b0099bd453357esm7077134ejb.41.2023.09.04.23.42.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Sep 2023 23:42:25 -0700 (PDT)
-Message-ID: <36680e91-f8f2-12e1-900b-48e6166bc7f2@linaro.org>
-Date:   Tue, 5 Sep 2023 08:42:23 +0200
+        with ESMTP id S1354087AbjIEJf1 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 5 Sep 2023 05:35:27 -0400
+X-Greylist: delayed 4326 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Sep 2023 02:35:23 PDT
+Received: from mail.equinoxrise.pl (mail.equinoxrise.pl [217.61.112.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF211A7
+        for <linux-hwmon@vger.kernel.org>; Tue,  5 Sep 2023 02:35:23 -0700 (PDT)
+Received: by mail.equinoxrise.pl (Postfix, from userid 1002)
+        id A23D183656; Mon,  4 Sep 2023 09:41:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=equinoxrise.pl;
+        s=mail; t=1693813346;
+        bh=v6OgBfK5dN7P5dQ0wCu59rOfZaiqziJeLNblJ8dOcGI=;
+        h=Date:From:To:Subject:From;
+        b=X0cr7H4zP6wmWbeSZLzIe3qNCs6BJIM+/4omJcZBOd+iGGc8k9EgZQ2jwdMC5dXYS
+         TCiWqYuRYRyO9D70opVr9/PvnSFpWvnsnJMSksgLttX2capCIYZ0z8iPo8sWt15nQ4
+         ZQcXcdX74Q1vkSEFJ13bQ1f1v/kTVA2srLPRpCMcBcCC99LYxSrSoaVx2yWkLyAMfB
+         Z0NGdBND4c1XYyc9mUlOrV7mMM2jhVyUHqNo7yjeTaq6MbDbaF3suLQS16/9KG/e1F
+         D7thtJzzTLUh4ThMDzZL+/TVCox3GJMRyABnRDupIHIk4lroNlfrbRRc1Yv0qh+v0v
+         axER2Wgq7cxGQ==
+Received: by mail.equinoxrise.pl for <linux-hwmon@vger.kernel.org>; Mon,  4 Sep 2023 07:40:34 GMT
+Message-ID: <20230904084500-0.1.7.r84.0.li13lyu2qr@equinoxrise.pl>
+Date:   Mon,  4 Sep 2023 07:40:34 GMT
+From:   "Mateusz Talaga" <mateusz.talaga@equinoxrise.pl>
+To:     <linux-hwmon@vger.kernel.org>
+Subject: Prezentacja
+X-Mailer: mail.equinoxrise.pl
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH v5 1/3] dt-bindings: hwmon: Add Infineon TDA38640
-Content-Language: en-US
-To:     Naresh Solanki <naresh.solanki@9elements.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        krzysztof.kozlowski+dt@linaro.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230831190731.265099-1-Naresh.Solanki@9elements.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230831190731.265099-1-Naresh.Solanki@9elements.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 31/08/2023 21:07, Naresh Solanki wrote:
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        tda38640@40 {
+Dzie=C5=84 dobry!
 
-Any reason why you ignored Conor's comment here?
+Czy m=C3=B3g=C5=82bym przedstawi=C4=87 rozwi=C4=85zanie, kt=C3=B3re umo=C5=
+=BCliwia monitoring ka=C5=BCdego auta w czasie rzeczywistym w tym jego po=
+zycj=C4=99, zu=C5=BCycie paliwa i przebieg?
 
-Best regards,
-Krzysztof
+Dodatkowo nasze narz=C4=99dzie minimalizuje koszty utrzymania samochod=C3=
+=B3w, skraca czas przejazd=C3=B3w, a tak=C5=BCe tworzenie planu tras czy =
+dostaw.
 
+Z naszej wiedzy i do=C5=9Bwiadczenia korzysta ju=C5=BC ponad 49 tys. Klie=
+nt=C3=B3w. Monitorujemy 809 000 pojazd=C3=B3w na ca=C5=82ym =C5=9Bwiecie,=
+ co jest nasz=C4=85 najlepsz=C4=85 wizyt=C3=B3wk=C4=85.
+
+Bardzo prosz=C4=99 o e-maila zwrotnego, je=C5=9Bli mogliby=C5=9Bmy wsp=C3=
+=B3lnie om=C3=B3wi=C4=87 potencja=C5=82 wykorzystania takiego rozwi=C4=85=
+zania w Pa=C5=84stwa firmie.
+
+
+Pozdrawiam
+Mateusz Talaga
