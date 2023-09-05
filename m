@@ -2,298 +2,184 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C420C83F33
-	for <linux-hwmon@archiver.kernel.org>; Mon,  4 Sep 2023 18:16:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D8C5C83F2C
+	for <linux-hwmon@archiver.kernel.org>; Tue,  5 Sep 2023 16:26:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236498AbjIDSQb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 4 Sep 2023 14:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57344 "EHLO
+        id S1351479AbjIEQZ7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 5 Sep 2023 12:25:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjIDSQa (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 4 Sep 2023 14:16:30 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43051B7
-        for <linux-hwmon@vger.kernel.org>; Mon,  4 Sep 2023 11:16:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693851382; x=1725387382;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=c7aOo3pwp2P/s/lYq4e499qLFiG7/hg1DBfvLZ9w6ys=;
-  b=Kdu6S3cZeeUQ8g2ixREDu+IDilZOL2VeAO5NdWwrP2U/npW3F9Y50sTS
-   EJMSQl66PYCGaJ1HI43PlkYSHj1VsJFrauv7OAqxbR5ugbiLqhVdZVbRh
-   /vIAQUiYXt5hrk9FSg36xk+ZTAZfGI/fAmekuQOHLmZ76QS8N179IzNm0
-   kd4V5RQq+IKfLRVfa9tpAHMCUKvn5WMQsolGIgI1F2Olx+zSxwgdlwU8P
-   UN8TOfiPhjiVLctb2eDx4aqyCen1zOhTWEEFjpuQv6vvq/+uyyoT9qil9
-   R6l8RBk1uH05w2rT9qSYD9RKewduq+NKLOo5yNxdBHhEWe73KvQ6yJcIL
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10823"; a="366867404"
-X-IronPort-AV: E=Sophos;i="6.02,227,1688454000"; 
-   d="scan'208";a="366867404"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2023 11:16:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10823"; a="1071692771"
-X-IronPort-AV: E=Sophos;i="6.02,227,1688454000"; 
-   d="scan'208";a="1071692771"
-Received: from bnilawar-desk1.iind.intel.com ([10.145.169.158])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2023 11:16:19 -0700
-From:   Badal Nilawar <badal.nilawar@intel.com>
-To:     intel-xe@lists.freedesktop.org, linux-hwmon@vger.kernel.org
-Cc:     anshuman.gupta@intel.com, ashutosh.dixit@intel.com,
-        linux@roeck-us.net, andi.shyti@linux.intel.com,
-        riana.tauro@intel.com, matthew.brost@intel.com
-Subject: [PATCH v4 6/6] drm/xe/hwmon: Expose power1_max_interval
-Date:   Mon,  4 Sep 2023 23:52:58 +0530
-Message-Id: <20230904182258.2291881-7-badal.nilawar@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230904182258.2291881-1-badal.nilawar@intel.com>
-References: <20230904182258.2291881-1-badal.nilawar@intel.com>
+        with ESMTP id S1354531AbjIEMVs (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 5 Sep 2023 08:21:48 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2082.outbound.protection.outlook.com [40.107.96.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738561A8;
+        Tue,  5 Sep 2023 05:21:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=F33mDBmxG76z2J37NN77eh+0Y7ZHWF5EcTPhsLJle9Ub32Gw55IdnBzC+nyAY7RbGqBhup9zlvYDJPfDZkdJXBBXlX1/Evg3mYJL6AGJynZPrQ446cPHpnufOOkef6Fzy80LfynEVYGjL2mrwD81CqVQjLurcw+JBRQ0sblzjm1Rl6worgf/cgQnV9/av36YIuHsVkvLuIBTlB7YeYXj+xhtLXs7pNqNmLxr07+zxyyeujIeLdqoq3AL+wQDf2NZVDneIie1LuVmg/okO+QlPYrl1PfTolGf3o4MHRVilLXOdbptMEri9v/GdOz3DrVmf0zDnbLL0lo4W4tylicu7w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hsENG1o+fhOjfq+5Qo8+9Zn64RSORuO0XroinhaIGDI=;
+ b=Yrd+o+rjKL8OSeh2UIvZRsdy5+I1lE2kOQGsvRTj7S3BIPZ4sQq8UYmhGX6Gy7bldiuUWUOmuhmTE+oMHUE168MsnebCcLKDPR/ogiBSorI1WFjHPFRcXLBeNIDsc0oUAyNLGEG5QoJPWdgwDN0A/nMPS56YyXnSywFMAZR2jqAEYbyABx0j9QjlXOyX3S4sjkhnKuVmXXzZFQRx0XgM2JqeK4b5e660C2VcZGU7umURb5MyiGavgOMQR6EOwnTekFnLi6epDMTDNn6n0Uhd6kOFcSMP2z8+EN2pqe6RtevBMQpTd9fqxwiLneMBtuFvH/aRDY5O1qS59A0ehVK+Pg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hsENG1o+fhOjfq+5Qo8+9Zn64RSORuO0XroinhaIGDI=;
+ b=HuHhSxUjQ5PA0LDcFv/dmEk/bkmLjz92f1St6C71ui7epdNcBoFmB30E5abJ7K4me+CvGGMrgXHCqSr0cs2A5INiF+1dBKi8qRI7ab7sIQ+pMntZtBGdlUDslMIIDICcUXx9Vd8e9poE/a3kIEaunJpmTQqawWz7CdnyMh6d36lkEZEezzV9TNCBAd9qRLMYo6KzIcE88hEwhGX19oyADQRik/5teZDgxpqPDKI3+Nzj9fqJakKzANnxmFlDyazKZZL7s5cnVCB+0bQrye2qSyoOA/ILxZAfp4ERPnGYzaMzyi4BpwnqvjsUshGTWmbDzxLRCa6hP626UTHptyurew==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
+ DM6PR12MB4076.namprd12.prod.outlook.com (2603:10b6:5:213::15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6745.33; Tue, 5 Sep 2023 12:21:39 +0000
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::1d1b:2ca4:1600:a865]) by CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::1d1b:2ca4:1600:a865%4]) with mapi id 15.20.6745.030; Tue, 5 Sep 2023
+ 12:21:39 +0000
+Message-ID: <056cbb5d-c7f5-a163-8903-3da81a573e1b@nvidia.com>
+Date:   Tue, 5 Sep 2023 13:21:32 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH V2 1/4] dt-bindings: hwmon: ina3221: Convert to
+ json-schema
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Ninad Malwade <nmalwade@nvidia.com>, jdelvare@suse.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, thierry.reding@gmail.com,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, Thierry Reding <treding@nvidia.com>
+References: <20230825164249.22860-1-nmalwade@nvidia.com>
+ <20230825164249.22860-2-nmalwade@nvidia.com>
+ <05c115cc-ce7a-747a-2f91-045bb87db706@linaro.org>
+ <00faf6d0-e84b-20f6-1c8b-8e0e8d610f16@nvidia.com>
+ <20f55b16-f4df-4bdf-ba60-0c6c64efadee@roeck-us.net>
+From:   Jon Hunter <jonathanh@nvidia.com>
+In-Reply-To: <20f55b16-f4df-4bdf-ba60-0c6c64efadee@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO6P265CA0014.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:339::12) To CO6PR12MB5444.namprd12.prod.outlook.com
+ (2603:10b6:5:35e::8)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|DM6PR12MB4076:EE_
+X-MS-Office365-Filtering-Correlation-Id: 56bf0382-277c-4eb0-0410-08dbae0aa804
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rKQvEu9vWejphcenw4uOItRaKJy5bIZTRmYYj/aejJNqAXXBAy2wPTM57pbeHaB9ou8cribCTyW9XI8cW8k61OjhvKEJ88GM0+JtDkH7BhT0XDJ1pmFzmd7IDQGPSo/i23hwwJaFqtheExZqJ1ZBmrZxtL5ozlTcXAPihCz7yMrquyTA6LIXBnmHmANygqFePQSuICTFSUgYSZvBY4Cpbbc7A/1xdWGraCCcRiN6TP1miNuaN+CD4MnlQftCtIarX2QMyOA7cvHgwoXV0Cdu7l66hz9DK3BH3ETorEk1PMhUWq/sd6cFNqO8cRVhLQo+42ktO4msuCTbGGTnuya7LoB2/aUXtb8cchKWOaLy4xwJJXSkD5n41Wx0eu0J0gH93vg4h93t4dOwtiAAN+1D/x1CUnSoebty8E8OKPe6sZ0QlbCX18hIvHYR7qCpxQpVYpiGQLbu25hhXbEJ9rcna6KGG8ps0A3MHA+koL8XKxsrM4Lrem4NllbV9LtDudndG2KsfsWHPFMKrjyqggBCdxAKaATlLRcpMkoxrsl5gKTRSnq6WHv+IKdGNyWLlfeyyEpxMTn1dTAZddhUg+Z6FTFd+4vDeQAYZQ/+DB7uWOQrHIG7j75csV2Iaw032EH8tZtDevzSb+4Rpb8JaTGFCw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(346002)(136003)(376002)(366004)(39860400002)(1800799009)(186009)(451199024)(26005)(5660300002)(2616005)(107886003)(8676002)(4326008)(8936002)(7416002)(2906002)(31696002)(83380400001)(86362001)(38100700002)(36756003)(6506007)(6486002)(55236004)(53546011)(6666004)(6916009)(66946007)(66556008)(54906003)(66476007)(478600001)(31686004)(6512007)(41300700001)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OGs5U0ZSNXdrK2JORUVIdXNSbnhWMHhscnZ3b3puQ0RDamFOVzFtU1dSRmNX?=
+ =?utf-8?B?U0xwWlhXUVBQc1RHTHc0cWZHTDhXQXFUV0FQdDYycmlrWEt0Q2xNay9aQ3ov?=
+ =?utf-8?B?c3VKU1ZreFpUUFkvRGtGbERjTDI0WHZVUUozUllOSThSZVZCRE53VnVRZCts?=
+ =?utf-8?B?SlZzcHdSK0ZJWTFiOGp6RXpYaWdTT3RoK0JORkhqNjExL2hUOU1YUkJEUWhP?=
+ =?utf-8?B?U2JXdE50S09PRk51K0c5Mzc3WmtQSUljSDJxVmJmUXJMMDhuTW1PQXlyU3U2?=
+ =?utf-8?B?NzlGY3ZnVnl4ZW5lREZkdVZLaEtMamNndzBWQy9xRjV4UXdWeVBXbFNCd05F?=
+ =?utf-8?B?dnlXU1hWejhpUWlBWkk4NFlRdStZNnRrNjJjRXplR0J2d2R3VmtqNGFUbWNr?=
+ =?utf-8?B?M2FrWDhDeFh6NG9CUE0wa3BGOEtqOWlSMzdGSkcrS0lMNkMyUWU4aFVDT3RP?=
+ =?utf-8?B?Nk94UGdvaXZFM3NUOStZTUVhYjRsV3M3TFNSOU54cTJEZUdPOVVwSmVpWUR6?=
+ =?utf-8?B?N1UzYmdSR2MzZEV1aVFCTzU5WjhETHV4QzZRb2s1V0FzL2g5cTRwU2ZDYk42?=
+ =?utf-8?B?eHdHQml2TTMrUGdpRkdWMm9YZkQwR1JrZW5vc3lDemU2TFhLTDRLM3IzbGZR?=
+ =?utf-8?B?RTg1VGVyMnpQdTZmc240a0pYZ1FYeFBqRUJRS0xWUDlwcXhaYkR1TkV4TTZX?=
+ =?utf-8?B?VDZvZEN5N2VSZTZhRVF0Z1MzQXd3T3NhQTNVQUNvcUJnR2I5aFVyRE9sM3F6?=
+ =?utf-8?B?MnBPbEU0VXZqcytEYXdOMTJFYlptWHdpNmxwS2lvdVlNa0dob0NNYzBHQ3VX?=
+ =?utf-8?B?Tjc2UXhYSzhNN0NuTHRTWWp4MW4vWi8rSEI2bktDV0pXalNUR1Vwd2Q0SDBH?=
+ =?utf-8?B?SzRSWlkxZi9Pb3pDVVJuKzFzeFQ0alhjUVFvbVRhcTlYcXBqS3R3bmRPSmwx?=
+ =?utf-8?B?VDFZMlNnWlBmNlUwaklHclA0VXJaR3VrTS9pQlpPZ1dkRFNibTJWWk5uSEkv?=
+ =?utf-8?B?TDU1LzZlL252L1VvNFRUbGdZbHZZUTZuRGRtQ0YrenVUS1p4M3JMSS9jcmZL?=
+ =?utf-8?B?RVFtc1NIUncxQjhYTWd1NVFwUkVsZ0EyUXY1QUR2WGtpZzUrVFRJYk5UNFhn?=
+ =?utf-8?B?bVgveVljKytnNEJaYVNBVDd4UUNEM2t3TWg0Qlh0Y3RFNU5xemFyVldHaVVw?=
+ =?utf-8?B?VGxPT1NLSWd5ZzYxa2xhQkhvTG5RUkNpN1h6K1RLeGw1cXp6b1pnWUFGeWhj?=
+ =?utf-8?B?K09FUUpzWWFZVERVT2ptRWtHTVFyVm5vWEVnL205QVNucUxWNEszSCt2aUdI?=
+ =?utf-8?B?eTZGVWdmL2NUb2EzVWFSSnI0WExBVkV6VGE2V1puY1pCeGc0QmNVYVpqNEVP?=
+ =?utf-8?B?cG1XU1VucmhiVWlCSnU3NGhWN0l2ZnZQSHJtVVV0WkhiZEtPQUtYbHROTmth?=
+ =?utf-8?B?MHIzZEtzWWhSaDA0U2dhYlkwVnN0MTl2RHFZYnJhR0lyRHZSQTFDVXVyNXpz?=
+ =?utf-8?B?WXVXTWhCVE16SGdFRzY2Y01qRmJvZ3krRlJIWXVQVG4rU2dQQ1JXbWVJT1Vq?=
+ =?utf-8?B?R3dhTmg5ZUNjdGJwN2Rkdm9EL1lpanRFbGpKOWErMWtlVGlkaUtyY3hDbG5w?=
+ =?utf-8?B?dmhZcHFWbjVPUERSRkkvUzMzMkF6bjdaUjMwQkZhM0VIR0h1MjBZRzlJTTdm?=
+ =?utf-8?B?ZVQ5SUYxSFZIVndaWG54T1Y2cnlZUnBRbzAzTW1IdU8zUVF2NUtWRlNReDdo?=
+ =?utf-8?B?eGxKOFFpbTltZUs5SVE1cWRCSUtsQk9HLzZzVWk3RTVtZmZ2RzVLai90c2dz?=
+ =?utf-8?B?YWlFL25IblYxbWQzSTZTT2dqUVorMGdwWUowYjg3U2JCUzJoWFA0eFdQNjBy?=
+ =?utf-8?B?cDdVU2ViNDlST2U4Rm8vSlJqTlNtalB5SHBFSGRocmY2eUI3R0NTNHpHc0F2?=
+ =?utf-8?B?YkF6QVFhek4vWXpaL1d3L0doQVdIOUoxazRsbTBuQXdiYTBiblNvcXEvTjFv?=
+ =?utf-8?B?N3ZxNVJzRWpXR0FZcU1XM3pFZ2ZERVAyM0VUYWdkWm1xV0NmU2hrckN5ZHR2?=
+ =?utf-8?B?NkJzZ21IaDVjS1VOMTV1M3ZsMG9OTFJuTGt3am5WY1htQUt6ZjVENTJTQ2pt?=
+ =?utf-8?Q?Kd47he/wJZIcg2VvYOEO8huJm?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 56bf0382-277c-4eb0-0410-08dbae0aa804
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2023 12:21:39.7366
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: VZvoSHVx8/5ePWZkwhJSk0NmwpUbukUbBvwKPoGguR2E26EVfzBE8+m2GeIqP20QDdoUAwrlergJcP2IvyVD/A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4076
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Expose power1_max_interval, that is the tau corresponding to PL1, as a
-custom hwmon attribute. Some bit manipulation is needed because of the
-format of PKG_PWR_LIM_1_TIME in
-PACKAGE_RAPL_LIMIT register (1.x * power(2,y))
 
-v2: Get rpm wake ref while accessing power1_max_interval
-v3: %s/hwmon/xe_hwmon/
+On 01/09/2023 17:44, Guenter Roeck wrote:
+> On Fri, Sep 01, 2023 at 05:34:00PM +0100, Jon Hunter wrote:
+>>
+>> On 26/08/2023 09:53, Krzysztof Kozlowski wrote:
+>>> On 25/08/2023 18:42, Ninad Malwade wrote:
+>>>> Convert the TI INA3221 bindings from the free-form text format to
+>>>> json-schema.
+>>>>
+>>>> Signed-off-by: Thierry Reding <treding@nvidia.com>
+>>>> Signed-off-by: Ninad Malwade <nmalwade@nvidia.com>
+>>
+>> ...
+>>
+>>>> +            compatible = "ti,ina3221";
+>>>> +            reg = <0x40>;
+>>>> +            #address-cells = <1>;
+>>>> +            #size-cells = <0>;
+>>>> +
+>>>> +            input@0 {
+>>>> +                reg = <0x0>;
+>>>> +                status = "disabled";
+>>>
+>>> Why is this node present? Binding said nodes are optional, so I assume
+>>> it can be just skipped. If all children must be there, then you should
+>>> actually require them in the binding (and mention it briefly in commit msg).
+>>
+>>
+>> I have taken a look at this and if the 'input@0' is omitted above the driver
+>> still enables it. It only disables it or marks as disconnected if the node
+>> is present but no enabled. So we can mark these as required.
+>>
+>> Is there a better way to mark them as required apart from listing all input
+>> channels under required?
+>>
+> 
+> Channels should by default be enabled because they are enabled by default
+> in the chip. Requiring that all nodes be listed in devicetree just to
+> select the default behavior would be overkill.
+> 
+> Jusat because the chip has the ability to disable channels, that should
+> really not be made the default.
 
-Signed-off-by: Badal Nilawar <badal.nilawar@intel.com>
----
- .../ABI/testing/sysfs-driver-intel-xe-hwmon   |  11 ++
- drivers/gpu/drm/xe/regs/xe_mchbar_regs.h      |   8 +
- drivers/gpu/drm/xe/xe_hwmon.c                 | 138 +++++++++++++++++-
- 3 files changed, 156 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon b/Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon
-index 1a7a6c23e141..9ceb9c04b52b 100644
---- a/Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon
-+++ b/Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon
-@@ -59,3 +59,14 @@ Contact:	intel-xe@lists.freedesktop.org
- Description:	RO. Energy input of device in microjoules.
- 
- 		Only supported for particular Intel xe graphics platforms.
-+
-+What:		/sys/devices/.../hwmon/hwmon<i>/power1_max_interval
-+Date:		September 2023
-+KernelVersion:	6.5
-+Contact:	intel-xe@lists.freedesktop.org
-+Description:	RW. Sustained power limit interval (Tau in PL1/Tau) in
-+		milliseconds over which sustained power is averaged.
-+
-+		Only supported for particular Intel xe graphics platforms.
-+
-+
-diff --git a/drivers/gpu/drm/xe/regs/xe_mchbar_regs.h b/drivers/gpu/drm/xe/regs/xe_mchbar_regs.h
-index d9d3115ade37..4a51da6ea1d7 100644
---- a/drivers/gpu/drm/xe/regs/xe_mchbar_regs.h
-+++ b/drivers/gpu/drm/xe/regs/xe_mchbar_regs.h
-@@ -22,15 +22,23 @@
- #define   PKG_PKG_TDP				GENMASK_ULL(14, 0)
- #define   PKG_MIN_PWR				GENMASK_ULL(30, 16)
- #define   PKG_MAX_PWR				GENMASK_ULL(46, 32)
-+#define   PKG_MAX_WIN				GENMASK_ULL(54, 48)
-+#define     PKG_MAX_WIN_X			GENMASK_ULL(54, 53)
-+#define     PKG_MAX_WIN_Y			GENMASK_ULL(52, 48)
-+
- 
- #define PCU_CR_PACKAGE_POWER_SKU_UNIT		XE_REG(MCHBAR_MIRROR_BASE_SNB + 0x5938)
- #define   PKG_PWR_UNIT				REG_GENMASK(3, 0)
- #define   PKG_ENERGY_UNIT			REG_GENMASK(12, 8)
-+#define   PKG_TIME_UNIT				REG_GENMASK(19, 16)
- 
- #define PCU_CR_PACKAGE_ENERGY_STATUS		XE_REG(MCHBAR_MIRROR_BASE_SNB + 0x593c)
- 
- #define PCU_CR_PACKAGE_RAPL_LIMIT		XE_REG(MCHBAR_MIRROR_BASE_SNB + 0x59a0)
- #define   PKG_PWR_LIM_1				REG_GENMASK(14, 0)
- #define   PKG_PWR_LIM_1_EN			REG_BIT(15)
-+#define   PKG_PWR_LIM_1_TIME			REG_GENMASK(23, 17)
-+#define   PKG_PWR_LIM_1_TIME_X			REG_GENMASK(23, 22)
-+#define   PKG_PWR_LIM_1_TIME_Y			REG_GENMASK(21, 17)
- 
- #endif /* _XE_MCHBAR_REGS_H_ */
-diff --git a/drivers/gpu/drm/xe/xe_hwmon.c b/drivers/gpu/drm/xe/xe_hwmon.c
-index e2677e916824..507aff124e5c 100644
---- a/drivers/gpu/drm/xe/xe_hwmon.c
-+++ b/drivers/gpu/drm/xe/xe_hwmon.c
-@@ -39,6 +39,7 @@ enum xe_hwmon_reg_operation {
- #define SF_CURR		1000		/* milliamperes */
- #define SF_VOLTAGE	1000		/* millivolts */
- #define SF_ENERGY	1000000		/* microjoules */
-+#define SF_TIME		1000		/* milliseconds */
- 
- struct hwmon_energy_info {
- 	u32 reg_val_prev;
-@@ -53,6 +54,7 @@ struct xe_hwmon {
- 	wait_queue_head_t waitq;
- 	int scl_shift_power;
- 	int scl_shift_energy;
-+	int scl_shift_time;
- 	struct hwmon_energy_info ei;	/*  Energy info for energy1_input */
- };
- 
-@@ -262,6 +264,138 @@ xe_hwmon_energy_get(struct xe_hwmon *hwmon, long *energy)
- 	xe_device_mem_access_put(gt_to_xe(hwmon->gt));
- }
- 
-+static ssize_t
-+xe_hwmon_power1_max_interval_show(struct device *dev, struct device_attribute *attr,
-+				  char *buf)
-+{
-+	struct xe_hwmon *hwmon = dev_get_drvdata(dev);
-+	u32 r, x, y, x_w = 2; /* 2 bits */
-+	u64 tau4, out;
-+
-+	xe_device_mem_access_get(gt_to_xe(hwmon->gt));
-+
-+	xe_hwmon_process_reg(hwmon, REG_PKG_RAPL_LIMIT,
-+			     REG_READ, &r, 0, 0);
-+
-+	xe_device_mem_access_put(gt_to_xe(hwmon->gt));
-+
-+	x = REG_FIELD_GET(PKG_PWR_LIM_1_TIME_X, r);
-+	y = REG_FIELD_GET(PKG_PWR_LIM_1_TIME_Y, r);
-+	/*
-+	 * tau = 1.x * power(2,y), x = bits(23:22), y = bits(21:17)
-+	 *     = (4 | x) << (y - 2)
-+	 * where (y - 2) ensures a 1.x fixed point representation of 1.x
-+	 * However because y can be < 2, we compute
-+	 *     tau4 = (4 | x) << y
-+	 * but add 2 when doing the final right shift to account for units
-+	 */
-+	tau4 = ((1 << x_w) | x) << y;
-+	/* val in hwmon interface units (millisec) */
-+	out = mul_u64_u32_shr(tau4, SF_TIME, hwmon->scl_shift_time + x_w);
-+
-+	return sysfs_emit(buf, "%llu\n", out);
-+}
-+
-+static ssize_t
-+xe_hwmon_power1_max_interval_store(struct device *dev, struct device_attribute *attr,
-+				   const char *buf, size_t count)
-+{
-+	struct xe_hwmon *hwmon = dev_get_drvdata(dev);
-+	u32 x, y, rxy, x_w = 2; /* 2 bits */
-+	u64 tau4, r, max_win;
-+	unsigned long val;
-+	int ret;
-+
-+	ret = kstrtoul(buf, 0, &val);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * Max HW supported tau in '1.x * power(2,y)' format, x = 0, y = 0x12
-+	 * The hwmon->scl_shift_time default of 0xa results in a max tau of 256 seconds
-+	 */
-+#define PKG_MAX_WIN_DEFAULT 0x12ull
-+
-+	/*
-+	 * val must be < max in hwmon interface units. The steps below are
-+	 * explained in xe_hwmon_power1_max_interval_show()
-+	 */
-+	r = FIELD_PREP(PKG_MAX_WIN, PKG_MAX_WIN_DEFAULT);
-+	x = REG_FIELD_GET(PKG_MAX_WIN_X, r);
-+	y = REG_FIELD_GET(PKG_MAX_WIN_Y, r);
-+	tau4 = ((1 << x_w) | x) << y;
-+	max_win = mul_u64_u32_shr(tau4, SF_TIME, hwmon->scl_shift_time + x_w);
-+
-+	if (val > max_win)
-+		return -EINVAL;
-+
-+	/* val in hw units */
-+	val = DIV_ROUND_CLOSEST_ULL((u64)val << hwmon->scl_shift_time, SF_TIME);
-+	/* Convert to 1.x * power(2,y) */
-+	if (!val) {
-+		/* Avoid ilog2(0) */
-+		y = 0;
-+		x = 0;
-+	} else {
-+		y = ilog2(val);
-+		/* x = (val - (1 << y)) >> (y - 2); */
-+		x = (val - (1ul << y)) << x_w >> y;
-+	}
-+
-+	rxy = REG_FIELD_PREP(PKG_PWR_LIM_1_TIME_X, x) | REG_FIELD_PREP(PKG_PWR_LIM_1_TIME_Y, y);
-+
-+	xe_device_mem_access_get(gt_to_xe(hwmon->gt));
-+
-+	mutex_lock(&hwmon->hwmon_lock);
-+
-+	xe_hwmon_process_reg(hwmon, REG_PKG_RAPL_LIMIT, REG_RMW, (u32 *)&r,
-+			     PKG_PWR_LIM_1_TIME, rxy);
-+
-+	mutex_unlock(&hwmon->hwmon_lock);
-+
-+	xe_device_mem_access_put(gt_to_xe(hwmon->gt));
-+
-+	return count;
-+}
-+
-+static SENSOR_DEVICE_ATTR(power1_max_interval, 0664,
-+			  xe_hwmon_power1_max_interval_show,
-+			  xe_hwmon_power1_max_interval_store, 0);
-+
-+static struct attribute *hwmon_attributes[] = {
-+	&sensor_dev_attr_power1_max_interval.dev_attr.attr,
-+	NULL
-+};
-+
-+static umode_t xe_hwmon_attributes_visible(struct kobject *kobj,
-+					   struct attribute *attr, int index)
-+{
-+	struct device *dev = kobj_to_dev(kobj);
-+	struct xe_hwmon *hwmon = dev_get_drvdata(dev);
-+	u32 reg_val;
-+	int ret = 0;
-+
-+	xe_device_mem_access_get(gt_to_xe(hwmon->gt));
-+
-+	if (attr == &sensor_dev_attr_power1_max_interval.dev_attr.attr)
-+		ret =  xe_hwmon_process_reg(hwmon, REG_PKG_RAPL_LIMIT,
-+					    REG_READ, &reg_val, 0, 0) ? 0 : attr->mode;
-+
-+	xe_device_mem_access_put(gt_to_xe(hwmon->gt));
-+
-+	return ret;
-+}
-+
-+static const struct attribute_group hwmon_attrgroup = {
-+	.attrs = hwmon_attributes,
-+	.is_visible = xe_hwmon_attributes_visible,
-+};
-+
-+static const struct attribute_group *hwmon_groups[] = {
-+	&hwmon_attrgroup,
-+	NULL
-+};
-+
- static const struct hwmon_channel_info *hwmon_info[] = {
- 	HWMON_CHANNEL_INFO(power, HWMON_P_MAX | HWMON_P_RATED_MAX | HWMON_P_CRIT),
- 	HWMON_CHANNEL_INFO(curr, HWMON_C_CRIT),
-@@ -580,6 +714,7 @@ xe_hwmon_get_preregistration_info(struct xe_device *xe)
- 	if (!ret) {
- 		hwmon->scl_shift_power = REG_FIELD_GET(PKG_PWR_UNIT, val_sku_unit);
- 		hwmon->scl_shift_energy = REG_FIELD_GET(PKG_ENERGY_UNIT, val_sku_unit);
-+		hwmon->scl_shift_time = REG_FIELD_GET(PKG_TIME_UNIT, val_sku_unit);
- 	}
- 
- 	/*
-@@ -621,7 +756,8 @@ void xe_hwmon_register(struct xe_device *xe)
- 								"xe",
- 								hwmon,
- 								&hwmon_chip_info,
--								NULL);
-+								hwmon_groups);
-+
- 	if (IS_ERR(hwmon->hwmon_dev)) {
- 		drm_warn(&xe->drm, "Fail to register xe hwmon (%pe)\n", hwmon->hwmon_dev);
- 		xe->hwmon = NULL;
+Yes and that is fine. What we are trying to sort out here is what should 
+the example contain in the dt-binding doc? The original example from the 
+text binding doc was replicated to the yaml version and based upon the 
+above that seems like a valid example.
+
+What I could do is add an extra comment under the 'input' property that 
+"Input channels default to enabled in the chip. Unless channels are 
+explicitly disabled in device-tree, input channels will be enabled".
+
+Jon
+
 -- 
-2.25.1
-
+nvpublic
