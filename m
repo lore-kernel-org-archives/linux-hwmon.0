@@ -2,63 +2,141 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AFF2ACA0FFB
-	for <linux-hwmon@archiver.kernel.org>; Tue,  5 Sep 2023 16:26:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88CECCA0FFE
+	for <linux-hwmon@archiver.kernel.org>; Tue,  5 Sep 2023 16:27:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351562AbjIEQ0G (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 5 Sep 2023 12:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42594 "EHLO
+        id S1351536AbjIEQ0E (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 5 Sep 2023 12:26:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354087AbjIEJf1 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 5 Sep 2023 05:35:27 -0400
-X-Greylist: delayed 4326 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Sep 2023 02:35:23 PDT
-Received: from mail.equinoxrise.pl (mail.equinoxrise.pl [217.61.112.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF211A7
-        for <linux-hwmon@vger.kernel.org>; Tue,  5 Sep 2023 02:35:23 -0700 (PDT)
-Received: by mail.equinoxrise.pl (Postfix, from userid 1002)
-        id A23D183656; Mon,  4 Sep 2023 09:41:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=equinoxrise.pl;
-        s=mail; t=1693813346;
-        bh=v6OgBfK5dN7P5dQ0wCu59rOfZaiqziJeLNblJ8dOcGI=;
-        h=Date:From:To:Subject:From;
-        b=X0cr7H4zP6wmWbeSZLzIe3qNCs6BJIM+/4omJcZBOd+iGGc8k9EgZQ2jwdMC5dXYS
-         TCiWqYuRYRyO9D70opVr9/PvnSFpWvnsnJMSksgLttX2capCIYZ0z8iPo8sWt15nQ4
-         ZQcXcdX74Q1vkSEFJ13bQ1f1v/kTVA2srLPRpCMcBcCC99LYxSrSoaVx2yWkLyAMfB
-         Z0NGdBND4c1XYyc9mUlOrV7mMM2jhVyUHqNo7yjeTaq6MbDbaF3suLQS16/9KG/e1F
-         D7thtJzzTLUh4ThMDzZL+/TVCox3GJMRyABnRDupIHIk4lroNlfrbRRc1Yv0qh+v0v
-         axER2Wgq7cxGQ==
-Received: by mail.equinoxrise.pl for <linux-hwmon@vger.kernel.org>; Mon,  4 Sep 2023 07:40:34 GMT
-Message-ID: <20230904084500-0.1.7.r84.0.li13lyu2qr@equinoxrise.pl>
-Date:   Mon,  4 Sep 2023 07:40:34 GMT
-From:   "Mateusz Talaga" <mateusz.talaga@equinoxrise.pl>
-To:     <linux-hwmon@vger.kernel.org>
-Subject: Prezentacja
-X-Mailer: mail.equinoxrise.pl
+        with ESMTP id S1354155AbjIEJ5o (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 5 Sep 2023 05:57:44 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E488CC2
+        for <linux-hwmon@vger.kernel.org>; Tue,  5 Sep 2023 02:57:39 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-50091b91a83so3823369e87.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 05 Sep 2023 02:57:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1693907857; x=1694512657; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=AKHR62ul+UyAMBBLZNZLoFrH8efwjpri67YRyIEqGb8=;
+        b=ZM7D1UmPDfVFkSSO4UqZcDHdPUJVxtVWoKpFrg9rxoI0cQFhOlP0vjw7q3kBalQ/EZ
+         F6UCW83dzlPQN4XyfMOlpe4nFgqLsDbKfzhjP1CGGY+MyrIqXsLq9FMjBqsU4DDbRZnr
+         a9bmE4vOoB2APZkjtjBxV0+H35cYjQ9ZomvklF7I10LV6vRUA9OgYP2JDckETwzLeJep
+         rVSGqiVLgMxatcZ4zWEuBe5OI7Vhe+6Qv3attJa6sxREpOAfdh59Y5JRV3TnDn0f8XIQ
+         aY6Av2gK635lnE8nw43ojaYeQM7D3SEqhfH75kRNZuBkLy9IQoJPGg9+SAirYzM7EScr
+         mRbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693907857; x=1694512657;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AKHR62ul+UyAMBBLZNZLoFrH8efwjpri67YRyIEqGb8=;
+        b=ZzP4sgU8BlsB8VwkyH9RYifnzVowXrJgfAPHXb6/GQxQwkhPT7dVB9ZRkhp7dMidRx
+         BMxsA+LoJ96HgNV8SPDZKrrd/qfhSVHknAVzTyuCNiqpWU5ymbqiB97zOgjQHXO6uw6z
+         RQ0hVgQrGeqk6D94qmUGG8Zbp4nE5qCC6rSwUUqWNm/i2UA5Ssr6kf0qfnw1/GdiSFHL
+         dblKf928KefWoe3/3/3YQFNrnff/1F48MyXEtYpf+IwTRf/d+5+4mH2SPtvoaGQikv7Z
+         3lriops3lOPwEx6Kol3dHqpucy+p4fpcPxgR7VkQxLt+vgckfgSyimw5dRK5QND9MzuQ
+         Jt7g==
+X-Gm-Message-State: AOJu0YxzP3Ho5HqaNcRt8w4kfMbNbFw2vVdGi+dSD/zJE98jT4GN1xKo
+        2gOHHAObyto4zy62ZMoZE2MC4w==
+X-Google-Smtp-Source: AGHT+IF/Krv9XoaHXmgTX6hA95PT3mrsyeECELy7hFWygISVfjLi7nO3m0A/foR0u3zSojYLTMDlFA==
+X-Received: by 2002:a19:8c09:0:b0:500:9d6c:913e with SMTP id o9-20020a198c09000000b005009d6c913emr7472258lfd.52.1693907857446;
+        Tue, 05 Sep 2023 02:57:37 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id o3-20020a5d4083000000b0031435731dfasm16913703wrp.35.2023.09.05.02.57.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Sep 2023 02:57:37 -0700 (PDT)
+Date:   Tue, 5 Sep 2023 12:57:34 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Ratheesh Kannoth <rkannoth@marvell.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
+        hawk@kernel.org, john.fastabend@gmail.com, jiawenwu@trustnetic.com,
+        mengyuanlou@net-swift.com, yang.lee@linux.alibaba.com,
+        error27@gmail.com, linyunsheng@huawei.com,
+        linux-hyperv@vger.kernel.org, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        longli@microsoft.com, shradhagupta@linux.microsoft.com,
+        linux-hwmon@vger.kernel.org, michael.chan@broadcom.com,
+        richardcochran@gmail.com, jdelvare@suse.com, linux@roeck-us.net,
+        yisen.zhuang@huawei.com, salil.mehta@huawei.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, nbd@nbd.name, john@phrozen.org,
+        sean.wang@mediatek.com, Mark-MC.Lee@mediatek.com,
+        lorenzo@kernel.org, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, linux@armlinux.org.uk,
+        linux-rdma@vger.kernel.org, saeedm@nvidia.com, leon@kernel.org,
+        gerhard@engleder-embedded.com, maciej.fijalkowski@intel.com,
+        alexanderduyck@fb.com, wei.fang@nxp.com, shenwei.wang@nxp.com,
+        xiaoning.wang@nxp.com, linux-imx@nxp.com, lgirdwood@gmail.com,
+        broonie@kernel.org, jaswinder.singh@linaro.org,
+        ilias.apalodimas@linaro.org, UNGLinuxDriver@microchip.com,
+        horatiu.vultur@microchip.com, linux-omap@vger.kernel.org,
+        grygorii.strashko@ti.com, simon.horman@corigine.com,
+        vladimir.oltean@nxp.com, aleksander.lobakin@intel.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
+        mcoquelin.stm32@gmail.com, p.zabel@pengutronix.de,
+        thomas.petazzoni@bootlin.com, mw@semihalf.com,
+        sgoutham@marvell.com, gakula@marvell.com, sbhatta@marvell.com,
+        hkelam@marvell.com, xen-devel@lists.xenproject.org,
+        jgross@suse.com, sstabellini@kernel.org,
+        oleksandr_tyshchenko@epam.com, linux-wireless@vger.kernel.org,
+        ryder.lee@mediatek.com, shayne.chen@mediatek.com, kvalo@kernel.org,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yonghong.song@linux.dev, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org
+Subject: Re: [PATCH v1 net] page_pool: Cap queue size to 32k.
+Message-ID: <75bcd331-9a62-486f-a15f-6aebf4d1838b@kadam.mountain>
+References: <20230814060411.2401817-1-rkannoth@marvell.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230814060411.2401817-1-rkannoth@marvell.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Dzie=C5=84 dobry!
+On Mon, Aug 14, 2023 at 11:34:11AM +0530, Ratheesh Kannoth wrote:
+> Clamp to 32k instead of returning error.
 
-Czy m=C3=B3g=C5=82bym przedstawi=C4=87 rozwi=C4=85zanie, kt=C3=B3re umo=C5=
-=BCliwia monitoring ka=C5=BCdego auta w czasie rzeczywistym w tym jego po=
-zycj=C4=99, zu=C5=BCycie paliwa i przebieg?
+What is the motivation here?  What is the real world impact for the
+users?
 
-Dodatkowo nasze narz=C4=99dzie minimalizuje koszty utrzymania samochod=C3=
-=B3w, skraca czas przejazd=C3=B3w, a tak=C5=BCe tworzenie planu tras czy =
-dostaw.
+> 
+> Please find discussion at
+> https://lore.kernel.org/lkml/
+> CY4PR1801MB1911E15D518A77535F6E51E2D308A@CY4PR1801MB1911.
+> namprd18.prod.outlook.com/T/
 
-Z naszej wiedzy i do=C5=9Bwiadczenia korzysta ju=C5=BC ponad 49 tys. Klie=
-nt=C3=B3w. Monitorujemy 809 000 pojazd=C3=B3w na ca=C5=82ym =C5=9Bwiecie,=
- co jest nasz=C4=85 najlepsz=C4=85 wizyt=C3=B3wk=C4=85.
+Please don't break the URL up like this.  I think normally we would just
+write up a normal commit message and use the Link: tag.
 
-Bardzo prosz=C4=99 o e-maila zwrotnego, je=C5=9Bli mogliby=C5=9Bmy wsp=C3=
-=B3lnie om=C3=B3wi=C4=87 potencja=C5=82 wykorzystania takiego rozwi=C4=85=
-zania w Pa=C5=84stwa firmie.
+Fixes: ff7d6b27f894 ("page_pool: refurbish version of page_pool code")
+Link: https://lore.kernel.org/lkml/CY4PR1801MB1911E15D518A77535F6E51E2D308A@CY4PR1801MB1911.namprd18.prod.outlook.com/
+Signed-off-by:
 
+> @@ -171,9 +171,10 @@ static int page_pool_init(struct page_pool *pool,
+>  	if (pool->p.pool_size)
+>  		ring_qsize = pool->p.pool_size;
+>  
+> -	/* Sanity limit mem that can be pinned down */
+> +	/* Cap queue size to 32k */
+>  	if (ring_qsize > 32768)
+> -		return -E2BIG;
+> +		ring_qsize = 32768;
+> +
+>  
+>  	/* DMA direction is either DMA_FROM_DEVICE or DMA_BIDIRECTIONAL.
 
-Pozdrawiam
-Mateusz Talaga
+Don't introduce a blank line here.  Checkpatch will complain if you
+have to blank lines in a row.  It won't complain about the patch but it
+will complain if you apply the patch and then re-run checkpatch -f on
+the file.  (I didn't test this but it's wrong either way. :P).
+
+regards,
+dan carpenter
+
