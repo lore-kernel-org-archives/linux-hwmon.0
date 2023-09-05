@@ -2,141 +2,168 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88CECCA0FFE
-	for <linux-hwmon@archiver.kernel.org>; Tue,  5 Sep 2023 16:27:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20B7DCA0FE2
+	for <linux-hwmon@archiver.kernel.org>; Tue,  5 Sep 2023 17:39:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351536AbjIEQ0E (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 5 Sep 2023 12:26:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43086 "EHLO
+        id S239277AbjIERjo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 5 Sep 2023 13:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354155AbjIEJ5o (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 5 Sep 2023 05:57:44 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E488CC2
-        for <linux-hwmon@vger.kernel.org>; Tue,  5 Sep 2023 02:57:39 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-50091b91a83so3823369e87.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 05 Sep 2023 02:57:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693907857; x=1694512657; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AKHR62ul+UyAMBBLZNZLoFrH8efwjpri67YRyIEqGb8=;
-        b=ZM7D1UmPDfVFkSSO4UqZcDHdPUJVxtVWoKpFrg9rxoI0cQFhOlP0vjw7q3kBalQ/EZ
-         F6UCW83dzlPQN4XyfMOlpe4nFgqLsDbKfzhjP1CGGY+MyrIqXsLq9FMjBqsU4DDbRZnr
-         a9bmE4vOoB2APZkjtjBxV0+H35cYjQ9ZomvklF7I10LV6vRUA9OgYP2JDckETwzLeJep
-         rVSGqiVLgMxatcZ4zWEuBe5OI7Vhe+6Qv3attJa6sxREpOAfdh59Y5JRV3TnDn0f8XIQ
-         aY6Av2gK635lnE8nw43ojaYeQM7D3SEqhfH75kRNZuBkLy9IQoJPGg9+SAirYzM7EScr
-         mRbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693907857; x=1694512657;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AKHR62ul+UyAMBBLZNZLoFrH8efwjpri67YRyIEqGb8=;
-        b=ZzP4sgU8BlsB8VwkyH9RYifnzVowXrJgfAPHXb6/GQxQwkhPT7dVB9ZRkhp7dMidRx
-         BMxsA+LoJ96HgNV8SPDZKrrd/qfhSVHknAVzTyuCNiqpWU5ymbqiB97zOgjQHXO6uw6z
-         RQ0hVgQrGeqk6D94qmUGG8Zbp4nE5qCC6rSwUUqWNm/i2UA5Ssr6kf0qfnw1/GdiSFHL
-         dblKf928KefWoe3/3/3YQFNrnff/1F48MyXEtYpf+IwTRf/d+5+4mH2SPtvoaGQikv7Z
-         3lriops3lOPwEx6Kol3dHqpucy+p4fpcPxgR7VkQxLt+vgckfgSyimw5dRK5QND9MzuQ
-         Jt7g==
-X-Gm-Message-State: AOJu0YxzP3Ho5HqaNcRt8w4kfMbNbFw2vVdGi+dSD/zJE98jT4GN1xKo
-        2gOHHAObyto4zy62ZMoZE2MC4w==
-X-Google-Smtp-Source: AGHT+IF/Krv9XoaHXmgTX6hA95PT3mrsyeECELy7hFWygISVfjLi7nO3m0A/foR0u3zSojYLTMDlFA==
-X-Received: by 2002:a19:8c09:0:b0:500:9d6c:913e with SMTP id o9-20020a198c09000000b005009d6c913emr7472258lfd.52.1693907857446;
-        Tue, 05 Sep 2023 02:57:37 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id o3-20020a5d4083000000b0031435731dfasm16913703wrp.35.2023.09.05.02.57.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Sep 2023 02:57:37 -0700 (PDT)
-Date:   Tue, 5 Sep 2023 12:57:34 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Ratheesh Kannoth <rkannoth@marvell.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
-        hawk@kernel.org, john.fastabend@gmail.com, jiawenwu@trustnetic.com,
-        mengyuanlou@net-swift.com, yang.lee@linux.alibaba.com,
-        error27@gmail.com, linyunsheng@huawei.com,
-        linux-hyperv@vger.kernel.org, kys@microsoft.com,
-        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        longli@microsoft.com, shradhagupta@linux.microsoft.com,
-        linux-hwmon@vger.kernel.org, michael.chan@broadcom.com,
-        richardcochran@gmail.com, jdelvare@suse.com, linux@roeck-us.net,
-        yisen.zhuang@huawei.com, salil.mehta@huawei.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, nbd@nbd.name, john@phrozen.org,
-        sean.wang@mediatek.com, Mark-MC.Lee@mediatek.com,
-        lorenzo@kernel.org, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, linux@armlinux.org.uk,
-        linux-rdma@vger.kernel.org, saeedm@nvidia.com, leon@kernel.org,
-        gerhard@engleder-embedded.com, maciej.fijalkowski@intel.com,
-        alexanderduyck@fb.com, wei.fang@nxp.com, shenwei.wang@nxp.com,
-        xiaoning.wang@nxp.com, linux-imx@nxp.com, lgirdwood@gmail.com,
-        broonie@kernel.org, jaswinder.singh@linaro.org,
-        ilias.apalodimas@linaro.org, UNGLinuxDriver@microchip.com,
-        horatiu.vultur@microchip.com, linux-omap@vger.kernel.org,
-        grygorii.strashko@ti.com, simon.horman@corigine.com,
-        vladimir.oltean@nxp.com, aleksander.lobakin@intel.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
-        mcoquelin.stm32@gmail.com, p.zabel@pengutronix.de,
-        thomas.petazzoni@bootlin.com, mw@semihalf.com,
-        sgoutham@marvell.com, gakula@marvell.com, sbhatta@marvell.com,
-        hkelam@marvell.com, xen-devel@lists.xenproject.org,
-        jgross@suse.com, sstabellini@kernel.org,
-        oleksandr_tyshchenko@epam.com, linux-wireless@vger.kernel.org,
-        ryder.lee@mediatek.com, shayne.chen@mediatek.com, kvalo@kernel.org,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yonghong.song@linux.dev, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org
-Subject: Re: [PATCH v1 net] page_pool: Cap queue size to 32k.
-Message-ID: <75bcd331-9a62-486f-a15f-6aebf4d1838b@kadam.mountain>
-References: <20230814060411.2401817-1-rkannoth@marvell.com>
+        with ESMTP id S239978AbjIERjf (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 5 Sep 2023 13:39:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC55395DE;
+        Tue,  5 Sep 2023 10:15:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 14762B815B4;
+        Tue,  5 Sep 2023 17:07:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9F2FC433C7;
+        Tue,  5 Sep 2023 17:07:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693933658;
+        bh=wvydTW5tlFfjmX77STi/JFlf00/5kzHytlOiPmKMEV0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uXlbNU97DMqwAC9ZNu5M7ajd6mDymvsmtCU7vrn1VzmDTcTpbt0vvMp1v641v2IQZ
+         SgVsL37pQLJ/Gp4U5eQffjkCedFKhKlriLxtQAh7m7RFlWBXj13W1YVwXqPfOmfJZF
+         vx1JCiQ4Ylx48/d2kHSiqhU93FzLfhAIaKFUhqGmoddtVvktDjJGF3LkiQJlVL++Q0
+         1zVL4u23WIIDcAaP3kxgwZwe32m2/F5Uh6SiFLBZWOUUp8D3ZxzkN+s25HRuMfDEpX
+         VwMPqEwD8llmszk0BL/HJOAZevfkwn64EsM4CTipbwOMQo+5pLTtFrkQYZhoHcNMIG
+         IRFBOOwr4tiIA==
+Received: (nullmailer pid 3568796 invoked by uid 1000);
+        Tue, 05 Sep 2023 17:07:35 -0000
+Date:   Tue, 5 Sep 2023 12:07:35 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Billy Tsai <billy_tsai@aspeedtech.com>
+Cc:     jdelvare@suse.com, linux@roeck-us.net,
+        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
+        corbet@lwn.net, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, p.zabel@pengutronix.de,
+        naresh.solanki@9elements.com, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-pwm@vger.kernel.org,
+        BMC-SW@aspeedtech.com, patrick@stwcx.xyz
+Subject: Re: [PATCH v8 2/3] dt-bindings: hwmon: Support Aspeed g6 PWM TACH
+ Control
+Message-ID: <20230905170735.GA3528724-robh@kernel.org>
+References: <20230830123202.3408318-1-billy_tsai@aspeedtech.com>
+ <20230830123202.3408318-3-billy_tsai@aspeedtech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230814060411.2401817-1-rkannoth@marvell.com>
+In-Reply-To: <20230830123202.3408318-3-billy_tsai@aspeedtech.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Aug 14, 2023 at 11:34:11AM +0530, Ratheesh Kannoth wrote:
-> Clamp to 32k instead of returning error.
-
-What is the motivation here?  What is the real world impact for the
-users?
-
+On Wed, Aug 30, 2023 at 08:32:01PM +0800, Billy Tsai wrote:
+> Document the compatible for aspeed,ast2600-pwm-tach device, which can
+> support up to 16 PWM outputs and 16 fan tach input.
 > 
-> Please find discussion at
-> https://lore.kernel.org/lkml/
-> CY4PR1801MB1911E15D518A77535F6E51E2D308A@CY4PR1801MB1911.
-> namprd18.prod.outlook.com/T/
+> Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
+> ---
+>  .../bindings/hwmon/aspeed,g6-pwm-tach.yaml    | 67 +++++++++++++++++++
+>  1 file changed, 67 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/aspeed,g6-pwm-tach.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/aspeed,g6-pwm-tach.yaml b/Documentation/devicetree/bindings/hwmon/aspeed,g6-pwm-tach.yaml
+> new file mode 100644
+> index 000000000000..95bac5588c04
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/aspeed,g6-pwm-tach.yaml
+> @@ -0,0 +1,67 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright (C) 2021 Aspeed, Inc.
 
-Please don't break the URL up like this.  I think normally we would just
-write up a normal commit message and use the Link: tag.
+A few years out of date.
 
-Fixes: ff7d6b27f894 ("page_pool: refurbish version of page_pool code")
-Link: https://lore.kernel.org/lkml/CY4PR1801MB1911E15D518A77535F6E51E2D308A@CY4PR1801MB1911.namprd18.prod.outlook.com/
-Signed-off-by:
-
-> @@ -171,9 +171,10 @@ static int page_pool_init(struct page_pool *pool,
->  	if (pool->p.pool_size)
->  		ring_qsize = pool->p.pool_size;
->  
-> -	/* Sanity limit mem that can be pinned down */
-> +	/* Cap queue size to 32k */
->  	if (ring_qsize > 32768)
-> -		return -E2BIG;
-> +		ring_qsize = 32768;
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/aspeed,g6-pwm-tach.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
->  
->  	/* DMA direction is either DMA_FROM_DEVICE or DMA_BIDIRECTIONAL.
+> +title: ASPEED G6 PWM and Fan Tach controller device driver
+> +
+> +maintainers:
+> +  - Billy Tsai <billy_tsai@aspeedtech.com>
+> +
+> +description: |
+> +  The ASPEED PWM controller can support up to 16 PWM outputs.
+> +  The ASPEED Fan Tacho controller can support up to 16 fan tach input.
 
-Don't introduce a blank line here.  Checkpatch will complain if you
-have to blank lines in a row.  It won't complain about the patch but it
-will complain if you apply the patch and then re-run checkpatch -f on
-the file.  (I didn't test this but it's wrong either way. :P).
+Are PWM and tach channels independent? Would be useful to know here.
 
-regards,
-dan carpenter
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - aspeed,ast2600-pwm-tach
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  "#pwm-cells":
+> +    const: 3
+> +
+> +patternProperties:
+> +  "^fan[0-9a-f]_hwmon+$":
 
+Drop 'hwmon'. Standard practice for naming without 'reg' is 
+'^fan-[0-9]+$'.
+
+> +    $ref: fan-common.yaml#
+
+       unevaluatedProperties: false
+
+> +    required:
+> +      - tach-ch
+> +
+> +required:
+> +  - reg
+> +  - clocks
+> +  - resets
+> +  - "#pwm-cells"
+> +  - compatible
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/aspeed-clock.h>
+> +    pwm_tach: pwm-tach-controller@1e610000 {
+> +      compatible = "aspeed,ast2600-pwm-tach";
+> +      reg = <0x1e610000 0x100>;
+> +      clocks = <&syscon ASPEED_CLK_AHB>;
+> +      resets = <&syscon ASPEED_RESET_PWM>;
+> +      #pwm-cells = <3>;
+
+Blank line.
+
+> +      fan0_hwmon {
+> +        tach-ch = <0x0>;
+
+Don't you need 'pwms'?
+
+> +      };
+
+Blank line.
+
+> +      fan1_hwmon {
+> +        tach-ch = <0x1>;
+> +      };
+> +      fan2_hwmon {
+> +        tach-ch = <0x2>;
+> +      };
+> +    };
+> -- 
+> 2.25.1
+> 
