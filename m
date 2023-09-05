@@ -2,74 +2,86 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A626CC83F3E
-	for <linux-hwmon@archiver.kernel.org>; Tue,  5 Sep 2023 18:56:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36BF8CA0FF7
+	for <linux-hwmon@archiver.kernel.org>; Tue,  5 Sep 2023 18:57:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233495AbjIES4n (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 5 Sep 2023 14:56:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56366 "EHLO
+        id S232277AbjIES5C (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 5 Sep 2023 14:57:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230112AbjIES4l (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 5 Sep 2023 14:56:41 -0400
+        with ESMTP id S231944AbjIES47 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 5 Sep 2023 14:56:59 -0400
 Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E48441BB;
-        Tue,  5 Sep 2023 11:56:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D8ECE1AB;
+        Tue,  5 Sep 2023 11:56:31 -0700 (PDT)
 X-IronPort-AV: E=Sophos;i="6.02,229,1688396400"; 
-   d="scan'208";a="175109479"
+   d="scan'208";a="175109488"
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 06 Sep 2023 03:42:57 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 06 Sep 2023 03:43:03 +0900
 Received: from localhost.localdomain (unknown [10.226.92.194])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id D7C57400A65B;
-        Wed,  6 Sep 2023 03:42:54 +0900 (JST)
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 11D104005E2C;
+        Wed,  6 Sep 2023 03:43:00 +0900 (JST)
 From:   Biju Das <biju.das.jz@bp.renesas.com>
 To:     Eric Tremblay <etremblay@distech-controls.com>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
 Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org, Biju Das <biju.das.au@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v4 0/2] Enhancements for tmp51x driver
-Date:   Tue,  5 Sep 2023 19:42:50 +0100
-Message-Id: <20230905184252.222742-1-biju.das.jz@bp.renesas.com>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH v4 2/2] hwmon: tmp513: Simplify tmp51x_read_properties()
+Date:   Tue,  5 Sep 2023 19:42:52 +0100
+Message-Id: <20230905184252.222742-3-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230905184252.222742-1-biju.das.jz@bp.renesas.com>
+References: <20230905184252.222742-1-biju.das.jz@bp.renesas.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This patch series aims to add enhancements for tmp51x driver.
- * patch#1 Adds max_channels variable to struct tmp51x_data for HW
-           differences.
- * Patch#2 Simplify tmp51x_read_properties()
+Simplify tmp51x_read_properties() by replacing 'nfactor' ->'data->nfactor'
+in device_property_read_u32_array() and drop the local variable as it is
+unused.
 
-This patch series is only compile tested.
-
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
 v3->v4:
- * Updated commit description for patch#1
- * Updated macros TMP51X_TEMP_CONFIG_DEFAULT and TMP51X_TEMP_CHANNEL_MASK.
- * Removed trailing comma in the terminator entry for OF table.
- * Added Rb tag from Geert and Andy for patch#2.
-v2->v3:
- * Dropped patch#1 and patch#2 as it is accepted
- * Split patch#3 into 3.
- * Avoided Yoda style logic in tmp51x_is_visible().
- * Replaced OF/ID data from tmp51x_ids->max_channels
- * Updated the macro TMP51X_TEMP_CONFIG_DEFAULT by adding bit definitions
-   for Configuration register 2.
- * Dropped unused macros TMP51{2,3}_TEMP_CONFIG_DEFAULT.
-v1->v2:
- * Created 2 new patches. Patch#1 for fixing channel number in
-   tmp51x_is_visible() and patch#3 avoids using enum chip id for HW
-   differences and improves the code by avoiding checks.
+ * Added Rb tag from Geert and Andy.
+v3:
+ * New patch.
+---
+ drivers/hwmon/tmp513.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-Biju Das (2):
-  hwmon: tmp513: Add max_channels variable to struct tmp51x_data
-  hwmon: tmp513: Simplify tmp51x_read_properties()
-
- drivers/hwmon/tmp513.c | 54 +++++++++++++++++++-----------------------
- 1 file changed, 25 insertions(+), 29 deletions(-)
-
+diff --git a/drivers/hwmon/tmp513.c b/drivers/hwmon/tmp513.c
+index 7c531fa4453e..43f4c96ecf3d 100644
+--- a/drivers/hwmon/tmp513.c
++++ b/drivers/hwmon/tmp513.c
+@@ -655,7 +655,6 @@ static int tmp51x_pga_gain_to_reg(struct device *dev, struct tmp51x_data *data)
+ static int tmp51x_read_properties(struct device *dev, struct tmp51x_data *data)
+ {
+ 	int ret;
+-	u32 nfactor[3];
+ 	u32 val;
+ 
+ 	ret = device_property_read_u32(dev, "shunt-resistor-micro-ohms", &val);
+@@ -673,10 +672,8 @@ static int tmp51x_read_properties(struct device *dev, struct tmp51x_data *data)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	ret = device_property_read_u32_array(dev, "ti,nfactor", nfactor,
+-					    data->max_channels - 1);
+-	if (ret >= 0)
+-		memcpy(data->nfactor, nfactor, data->max_channels - 1);
++	device_property_read_u32_array(dev, "ti,nfactor", data->nfactor,
++				       data->max_channels - 1);
+ 
+ 	// Check if shunt value is compatible with pga-gain
+ 	if (data->shunt_uohms > data->pga_gain * 40 * 1000 * 1000) {
 -- 
 2.25.1
 
