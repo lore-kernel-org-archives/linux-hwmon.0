@@ -2,88 +2,94 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43E87EE14C5
-	for <linux-hwmon@archiver.kernel.org>; Wed,  6 Sep 2023 18:08:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D30AEE14D7
+	for <linux-hwmon@archiver.kernel.org>; Wed,  6 Sep 2023 19:56:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243685AbjIFSIz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 6 Sep 2023 14:08:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35828 "EHLO
+        id S242952AbjIFT4y (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 6 Sep 2023 15:56:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbjIFSIy (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 6 Sep 2023 14:08:54 -0400
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B6D5A10F7;
-        Wed,  6 Sep 2023 11:08:49 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="6.02,232,1688396400"; 
-   d="scan'208";a="178945663"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 07 Sep 2023 03:08:49 +0900
-Received: from localhost.localdomain (unknown [10.226.92.21])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id C1767404A6D7;
-        Thu,  7 Sep 2023 03:08:46 +0900 (JST)
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Eric Tremblay <etremblay@distech-controls.com>,
+        with ESMTP id S242904AbjIFT4x (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 6 Sep 2023 15:56:53 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5727F171A;
+        Wed,  6 Sep 2023 12:56:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694030210; x=1725566210;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bTfo7kz2LXmpr32HaWGS1Sx15Bua+NE3xKYiot9REO8=;
+  b=n3VhyupGJ00lpfZBxYUmPZC1xEdAplKvMwgNiQoIHhCNMiGqtdZuzcFz
+   XizE8sXAPNeX2Rlb7XFG4GocE9Bp1q3XcZSgVFqwgcpC+zM99wbWEVm21
+   OjFv8w34V2MZBv4Ra/epbSX/8s/q8KSat5390IwD2O4Rmhrwi1rTTs9Y3
+   3cQ6AYlzbNoFJ6lf75LiZi/4hM+zSnCAngNy0e5P6ET7iCrcVI3nCanv0
+   n1/bM71u5Syn381T8UOy1exmBYfmeiwmslvU1l+yyaBqoHGW85YoZv8T4
+   yvp4Pgw1aB6WRxG1BWw0VF0d3rGfERAhVE6uH0LDlUunk70lSScHOAakn
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="356650796"
+X-IronPort-AV: E=Sophos;i="6.02,233,1688454000"; 
+   d="scan'208";a="356650796"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2023 12:56:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="856593052"
+X-IronPort-AV: E=Sophos;i="6.02,233,1688454000"; 
+   d="scan'208";a="856593052"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2023 12:56:47 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qdydp-0078zK-0H;
+        Wed, 06 Sep 2023 22:56:45 +0300
+Date:   Wed, 6 Sep 2023 22:56:44 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Eric Tremblay <etremblay@distech-controls.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Biju Das <biju.das.au@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v5 2/2] hwmon: tmp513: Simplify tmp51x_read_properties()
-Date:   Wed,  6 Sep 2023 19:08:37 +0100
-Message-Id: <20230906180837.284743-3-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230906180837.284743-1-biju.das.jz@bp.renesas.com>
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.au@gmail.com>
+Subject: Re: [PATCH v5 1/2] hwmon: tmp513: Add max_channels variable to
+ struct tmp51x_data
+Message-ID: <ZPjZfK7+4jW3AFEB@smile.fi.intel.com>
 References: <20230906180837.284743-1-biju.das.jz@bp.renesas.com>
+ <20230906180837.284743-2-biju.das.jz@bp.renesas.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230906180837.284743-2-biju.das.jz@bp.renesas.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Simplify tmp51x_read_properties() by replacing 'nfactor' ->'data->nfactor'
-in device_property_read_u32_array() and drop the local variable as it is
-unused.
+On Wed, Sep 06, 2023 at 07:08:36PM +0100, Biju Das wrote:
+> The tmp512 chip has 3 channels whereas tmp513 has 4 channels. Avoid
+> using tmp51x_ids for this HW difference by replacing OF/ID table
+> data with maximum channels supported by the device.
+> 
+> Replace id->max_channels variable from struct tmp51x_data and drop the
+> macros TMP51{2,3}_TEMP_CONFIG_DEFAULT as it can be derived from the macro
+> TMP51X_TEMP_CONFIG_DEFAULT and update the logic in tmp51x_is_visible(),
+> tmp51x_read_properties() and tmp51x_init() using max_channels.
+> 
+> While at it, drop enum tmp51x_ids as there is no user and remove
+> trailing comma in the terminator entry for OF table.
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v4->v5:
- * No change.
-v3->v4:
- * Added Rb tag from Geert and Andy.
-v3:
- * New patch.
----
- drivers/hwmon/tmp513.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+...
 
-diff --git a/drivers/hwmon/tmp513.c b/drivers/hwmon/tmp513.c
-index 290390c842e6..f32a2310380b 100644
---- a/drivers/hwmon/tmp513.c
-+++ b/drivers/hwmon/tmp513.c
-@@ -654,7 +654,6 @@ static int tmp51x_pga_gain_to_reg(struct device *dev, struct tmp51x_data *data)
- static int tmp51x_read_properties(struct device *dev, struct tmp51x_data *data)
- {
- 	int ret;
--	u32 nfactor[3];
- 	u32 val;
- 
- 	ret = device_property_read_u32(dev, "shunt-resistor-micro-ohms", &val);
-@@ -672,10 +671,8 @@ static int tmp51x_read_properties(struct device *dev, struct tmp51x_data *data)
- 	if (ret < 0)
- 		return ret;
- 
--	ret = device_property_read_u32_array(dev, "ti,nfactor", nfactor,
--					    data->max_channels - 1);
--	if (ret >= 0)
--		memcpy(data->nfactor, nfactor, data->max_channels - 1);
-+	device_property_read_u32_array(dev, "ti,nfactor", data->nfactor,
-+				       data->max_channels - 1);
- 
- 	// Check if shunt value is compatible with pga-gain
- 	if (data->shunt_uohms > data->pga_gain * 40 * 1000 * 1000) {
+> +#define TMP51X_TEMP_CONFIG_CONV_RATE	FIELD_PREP(GENMASK(9, 7), 0x7)
+
+I also commented on this one. Any explanation why you didn't accept recommended
+variant?
+
+...
+
+Otherwise looks good to me.
+
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 
