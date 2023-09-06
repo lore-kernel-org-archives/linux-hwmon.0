@@ -2,113 +2,125 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 911C6EE14A1
-	for <linux-hwmon@archiver.kernel.org>; Wed,  6 Sep 2023 15:00:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7694EE14A5
+	for <linux-hwmon@archiver.kernel.org>; Wed,  6 Sep 2023 15:21:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241735AbjIFPAF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 6 Sep 2023 11:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56706 "EHLO
+        id S239023AbjIFPVV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 6 Sep 2023 11:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233482AbjIFPAF (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 6 Sep 2023 11:00:05 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE98BE49;
-        Wed,  6 Sep 2023 08:00:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694012401; x=1725548401;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=K0zzGgMQikPv3yIIAmBS05foEO0ENZKMi/sYapbhWsQ=;
-  b=IzbPYnC2DOZt+bINe1PiqicwDBdu8siLzLBD1VdjN3XouSZESZT/rUuk
-   lAjUY7bt5eTjms0aoBuwYmvCvpvYj8z/L/Y0aeAW0HytuTcZfL7YcVTN2
-   Eo0TXrZtzSkpvxhZ+zSz12GYd8v/8W7lIEp5jO6P6nGGqE7Gmk8ii5lMo
-   Sl/4YbrNuCvU8ssJh+Au8XUtR9YlDm+PYHVPHvmT8uAdgZrb9oiAeasH3
-   unmkXgXE+RBuZCa1yzH88M8TcH4OcU9UtS7OPRikaGgobWdh6LsLDyUFI
-   C212Cbu13Ju5aMJJuVelYVXq362to/CpL+ClY1mfvyFZ+ol5dTo/3mbi0
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="367312076"
-X-IronPort-AV: E=Sophos;i="6.02,232,1688454000"; 
-   d="scan'208";a="367312076"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2023 08:00:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="1072412683"
-X-IronPort-AV: E=Sophos;i="6.02,232,1688454000"; 
-   d="scan'208";a="1072412683"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2023 07:59:58 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qdu0Z-006yBd-36;
-        Wed, 06 Sep 2023 17:59:55 +0300
-Date:   Wed, 6 Sep 2023 17:59:55 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Eric Tremblay <etremblay@distech-controls.com>,
+        with ESMTP id S229703AbjIFPVU (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 6 Sep 2023 11:21:20 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991EF1724;
+        Wed,  6 Sep 2023 08:21:16 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-56c2e882416so2337961a12.3;
+        Wed, 06 Sep 2023 08:21:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1694013676; x=1694618476; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2L9GRjR364WCUyawO5k8E+dewUfnR/NDRPvmW9pij2I=;
+        b=k8zNmkz1ihqkhAlFvTmvsWhnp/2xZIASXOSmX4e/X77kVyFQ2WsdpDBKMnR2+atfOK
+         nJzGkzGaePfrm9NwdeozZYd1V5bKlrqsAOTZ7hI3xLC6iBON5YzMnhdq0UucM4pmP1iu
+         ObGHO3HmQPi3pbX8ogsT2ZQEfiLpLx+mzIDYBuKLocExzSMODA4j3muKyLrzw+Sj3Hbk
+         TDd7/DjK6ktpG2vdBbtCuAp3M1A+P8sFcYfgedBOC79kxh7KGl8B2X3tvBXdCOsoel2/
+         1NydowfLEhc3x0s9rq1dMD1eV7HD7FLuE9CErD5LDXJozN3ptCL84K76HPM4GVyJYQWJ
+         v42g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1694013676; x=1694618476;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2L9GRjR364WCUyawO5k8E+dewUfnR/NDRPvmW9pij2I=;
+        b=A0ygYchK0dz0rb8WreA15JBvzH3eF9xoBj7uBOmh9DSLFPC+40DT2ZYh/hI5/9ZYfr
+         f1jq+Jb/HXKf2ttiylj0DpLytYwmUitT8OEBD1NYBf3yIR72zRG+flUMaOGSk6cDcehg
+         OqFaZB5mdsOsjcLdAXsKh6Fknie65NfQlCqNJ9VH55MiYGV+38lHPBZa7T8YZKpiOUD2
+         sDAyluOR/oRADXNcZTd06jfUWpruJM2W798oYUcQdqXub5TGFXoaR12ojNhDmff1URzX
+         LU1iK5s9FqKVR8c0Z8CrsD1Yl/WjFtKU8iyAy+hcUUtefg1Q8kpoTcKvQQdm71trP0MT
+         m/IA==
+X-Gm-Message-State: AOJu0Yw0o+SiCE1Y80LNIUzEVNpMH2NrG77r9mSVB4fwlyMtaMw1TAEh
+        GDfqxPrXjBJMZZB0+0Is7DQ=
+X-Google-Smtp-Source: AGHT+IES8cBWsR7Fv4U3nDHZ/CT3HL0Z9k44+4M1+YtWuZNEqRPl+IwhNFWfAZGvAWSEyWnyQgKZpQ==
+X-Received: by 2002:a05:6a20:9691:b0:140:c838:2b2e with SMTP id hp17-20020a056a20969100b00140c8382b2emr12678175pzc.22.1694013675947;
+        Wed, 06 Sep 2023 08:21:15 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g18-20020aa78192000000b0068718aadda7sm10945777pfi.108.2023.09.06.08.21.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Sep 2023 08:21:14 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 6 Sep 2023 08:21:13 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Eric Tremblay <etremblay@distech-controls.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
         "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Biju Das <biju.das.au@gmail.com>
 Subject: Re: [PATCH v4 1/2] hwmon: tmp513: Add max_channels variable to
  struct tmp51x_data
-Message-ID: <ZPiT606wpCDsNVPC@smile.fi.intel.com>
+Message-ID: <329b6717-6bba-42c4-94a7-7466d3d0f411@roeck-us.net>
 References: <20230905184252.222742-1-biju.das.jz@bp.renesas.com>
  <20230905184252.222742-2-biju.das.jz@bp.renesas.com>
  <ZPiPVZKXeDfLsU64@smile.fi.intel.com>
  <OS0PR01MB592218CADC2F90290B0B727D86EFA@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <ZPiT606wpCDsNVPC@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <OS0PR01MB592218CADC2F90290B0B727D86EFA@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <ZPiT606wpCDsNVPC@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Sep 06, 2023 at 02:46:37PM +0000, Biju Das wrote:
-> > On Tue, Sep 05, 2023 at 07:42:51PM +0100, Biju Das wrote:
-
-...
-
-> > > +#define TMP51X_TEMP_CONFIG_CONV_RATE	FIELD_PREP(GENMASK(9, 7), 0x7)
-> > > +#define TMP51X_TEMP_CONFIG_RC		BIT(10)
-> > > +#define TMP51X_TEMP_CHANNEL_MASK(n)	FIELD_PREP(GENMASK(14, 11), \
-> > > +						   GENMASK((n) - 1, 0))
-> > 
-> > Why do you need FIELD_PREP() for the pure constants here? Why can you
-> > simply define the constants in the proper place?
+On Wed, Sep 06, 2023 at 05:59:55PM +0300, Andy Shevchenko wrote:
+> On Wed, Sep 06, 2023 at 02:46:37PM +0000, Biju Das wrote:
+> > > On Tue, Sep 05, 2023 at 07:42:51PM +0100, Biju Das wrote:
 > 
-> I think one can clearly understand the bit definitions and value from FIELD_PREP.
-
-I think it is clear over engineering. In the first one the constant can't be
-more than the field, in the second the defensive programming that is discouraged
-in the kernel.
-
-#define TMP51X_TEMP_CHANNEL_MASK(n)	(GENMASK((n) - 1, 0) << 11)
-
-would suffice and much easier to understand.
-
-...
-
-> > > +#define TMP51X_TEMP_CONFIG_DEFAULT(n)	(TMP51X_TEMP_CONFIG_CONT | \
-> > > +			TMP51X_TEMP_CHANNEL_MASK(n) | \
-> > > +			TMP51X_TEMP_CONFIG_CONV_RATE | TMP51X_TEMP_CONFIG_RC)
-> > 
-> > This is better to read in a form of
-> > 
-> > #define TMP51X_TEMP_CONFIG_DEFAULT(n)					\
-> > 	(TMP51X_TEMP_CHANNEL_MASK(n) | TMP51X_TEMP_CONFIG_CONT |	\
-> > 	 TMP51X_TEMP_CONFIG_CONV_RATE | TMP51X_TEMP_CONFIG_RC)
-> > 
+> ...
 > 
-> I just used the indentation suggested by Guenter.
+> > > > +#define TMP51X_TEMP_CONFIG_CONV_RATE	FIELD_PREP(GENMASK(9, 7), 0x7)
+> > > > +#define TMP51X_TEMP_CONFIG_RC		BIT(10)
+> > > > +#define TMP51X_TEMP_CHANNEL_MASK(n)	FIELD_PREP(GENMASK(14, 11), \
+> > > > +						   GENMASK((n) - 1, 0))
+> > > 
+> > > Why do you need FIELD_PREP() for the pure constants here? Why can you
+> > > simply define the constants in the proper place?
+> > 
+> > I think one can clearly understand the bit definitions and value from FIELD_PREP.
+> 
+> I think it is clear over engineering. In the first one the constant can't be
+> more than the field, in the second the defensive programming that is discouraged
+> in the kernel.
+> 
+> #define TMP51X_TEMP_CHANNEL_MASK(n)	(GENMASK((n) - 1, 0) << 11)
+> 
+> would suffice and much easier to understand.
+> 
 
-But wouldn't my proposal be sightly better to read?
+I agree.
 
--- 
-With Best Regards,
-Andy Shevchenko
+> ...
+> 
+> > > > +#define TMP51X_TEMP_CONFIG_DEFAULT(n)	(TMP51X_TEMP_CONFIG_CONT | \
+> > > > +			TMP51X_TEMP_CHANNEL_MASK(n) | \
+> > > > +			TMP51X_TEMP_CONFIG_CONV_RATE | TMP51X_TEMP_CONFIG_RC)
+> > > 
+> > > This is better to read in a form of
+> > > 
+> > > #define TMP51X_TEMP_CONFIG_DEFAULT(n)					\
+> > > 	(TMP51X_TEMP_CHANNEL_MASK(n) | TMP51X_TEMP_CONFIG_CONT |	\
+> > > 	 TMP51X_TEMP_CONFIG_CONV_RATE | TMP51X_TEMP_CONFIG_RC)
+> > > 
+> > 
+> > I just used the indentation suggested by Guenter.
+> 
+> But wouldn't my proposal be sightly better to read?
 
+I'd have to look up what specifically I had asked for, but it wasn't meant
+to exclude better formatting. I agree that the formatting you suggested
+is better.
 
+Guenter
