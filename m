@@ -2,174 +2,742 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 724F6EB8FAF
-	for <linux-hwmon@archiver.kernel.org>; Wed,  6 Sep 2023 08:49:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CCBF8EB8FB7
+	for <linux-hwmon@archiver.kernel.org>; Wed,  6 Sep 2023 10:23:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235978AbjIFItQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 6 Sep 2023 04:49:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47478 "EHLO
+        id S230307AbjIFKXp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 6 Sep 2023 06:23:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235968AbjIFItD (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 6 Sep 2023 04:49:03 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2082.outbound.protection.outlook.com [40.107.117.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63C410C9;
-        Wed,  6 Sep 2023 01:48:51 -0700 (PDT)
+        with ESMTP id S229824AbjIFKXo (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 6 Sep 2023 06:23:44 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984E510C7
+        for <linux-hwmon@vger.kernel.org>; Wed,  6 Sep 2023 03:23:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693995819; x=1725531819;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=XRuN52fKoGtQKRT9ACUswg3tSRRdHPLORBmO1xmEwRc=;
+  b=TVrFs50138yWocKmeZ0ZynRaH2G+t9Xw89HwnExiVljUFT1v+/JK67Cj
+   lt8pLRR5hudLDQgToa2ewD1Z00L7wQdhu9ygU1MfgltozKB6uB9hmlFdi
+   hzTV6aWxLHiuQwsPKccF44flL6rCEyipZZMdPVhE1F5G9V/sMSjoLlwGh
+   EwCdKRwVKOfwAumCUeed31gsfcLxNkpCvQoPphG/sESMa6s2peo1vMLkY
+   GUr6alDzqUxKP+1mebgw03aNdRFhrYfRblIn94ENXO+OqrAh0AhLuoQZy
+   EmuwC6/PxZ44vYEy6NxCraaPLuawg6zewrN/21ggbDNh3rJ2ZyGfLlllz
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10824"; a="374422888"
+X-IronPort-AV: E=Sophos;i="6.02,231,1688454000"; 
+   d="scan'208";a="374422888"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2023 03:23:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10824"; a="1072331385"
+X-IronPort-AV: E=Sophos;i="6.02,231,1688454000"; 
+   d="scan'208";a="1072331385"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga005.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 06 Sep 2023 03:23:36 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Wed, 6 Sep 2023 03:23:36 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Wed, 6 Sep 2023 03:23:36 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.105)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Wed, 6 Sep 2023 03:23:31 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X2/DUXnS4+8DqecJS90oVYuzbJcGirkwEXy9hJmPZWa2zjSgbknMLgU6IQCuGX+GXnzMlxPnysQd8mOFfFOnl4BLyjzXIiROJSJ/FFIxLU+lrx9b/FySyf2cZPMtSi11+oQUwU6pkMIlqZFcntpfsajkyTVnjbajNtlu4hbEvaKWNYo9pitLaZmSbgL9Tu+FOk3zYxBriJBBlho0wOS5UsV7FERK5vw7nphLq7LPh/wg3U1OuQoEO9k5LXqCv/3Tfuu+sZkTS3wyCHesgHy6m4N8RjyGjTBdGRz9egmL1P0Antac9dKWVzbsWdiHh/XQaSiPoNH42VgPsSrf/D2dZg==
+ b=DvG1YJUucp1zI4Dam5RTd4sx8Ff+z24MIXb4CA1Si0+w4arELxvMrw+Mel8adoG3zwjvEanzTEXQJLrRS6PV4e8dJi6k73diTu8ZOyRHsoKzcPdK5UL6iv7eApwxIA73JUiTCzWhuwxtn9SYr+zUJp5umR5vEG2k9yWaBM5eAA8wvDXzfBdUQow/V6A1v5v8cbGeDfncpoieb4/rnAd9bNbeEiY5Gq3rj4aBNW7MMo+kYt/64IW1EbOqY1lzfPf10VushSEnFELSxEEvydH5Ylxa+Sw+58ao4ufENDJ30uphIF1vhNJFdJFgL4pjsXvDIIB9TueYD9NSOAJ9/tEP/A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kKXNr/oe2wYvRQjWCId679VfS7TWHLak1NRImP25ofg=;
- b=K6Piq7Xz2nNaw+8PaEtsBnew06pftaH6WTp4Nd0qr/5kCq5iEGu2u9Zc6YRoCgLjiB0PW1xHAkEoVSgUKeVBoKCu/UUBUev+yeC+RFnEp2oq9C5l1Tae2Y4q+9pxwI0ZRDqMhQekphiZDE/uhKNi7rXhPQWj+/Cr0Ubzu7LmzwSyDXZ+zwGV2cyx6ojU2LWK/+3AmpKarLcQ0o9hkMc3ZnnHw/hh6uic6rs7cF10eIvxi6ZR2nJSB1ICCdQKntfmeoXeHycdEMmvsmP5VlrBDnV8P9+KRnN66BAWupMNAxuy8vRF2NORraMj5WGRw9/J+z3BRfnol7ix1VQq3mCiyQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 211.20.1.79) smtp.rcpttodomain=stwcx.xyz smtp.mailfrom=wiwynn.com; dmarc=fail
- (p=quarantine sp=quarantine pct=100) action=quarantine
- header.from=wiwynn.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kKXNr/oe2wYvRQjWCId679VfS7TWHLak1NRImP25ofg=;
- b=vh64jZrv5W6by7FRLtUwQG4gmn1cg0DToeVmRMQ5DBQiOEolzEy95I+3O7JspnEfz/cX8Exa4WCYG73BAtdNXV0kvWVndgWDZEgHdQmYTZea80i4Ny72SE30UjhqpEl+XsGvi6UTC/7Uuhg/UvWtdSZh/b0pdK9IWt5jvMITGWEfV6T/1DqiwkwGK0z5J4YbZF5MB83bt1YxJRLd6+iQM4bYElhYNl3UTeaL4abtpJgPSomJIZOy49Q1+E7Qlc9NHZ1If77dVEz+l1lw+SCX2/ROH1XK8ImVzsiN4jkd7zTla/mXx1eu6lIcBaMMctlhvwKwjRj0a+P+bBWLDBHkNw==
-Received: from SI1PR02CA0055.apcprd02.prod.outlook.com (2603:1096:4:1f5::16)
- by SEZPR04MB5897.apcprd04.prod.outlook.com (2603:1096:101:7d::7) with
+ bh=GYaUAp6/y8E3VgSDKIFXpEbtbzpx5h1lGhojUdLj9Y8=;
+ b=dZCJnkqYEdNYMbOM3JnrEmyt2KjCcngfg/U31/OJOs54725uCA7TUphQEeq1NLSQu0DEt1DOeb5rlsV9ze3mNG5aaMQ3LHOi+Y993cy3sMCncz1CyzZMOVqkhDpjPn0ndJX/m05anrVx2OvsBmGKiIfyYUGrD40ljXfgHjwlWv8VbUfVVXOk3ijiHlY8eQcjSC/EJkYAq08YctU9YO3xY9aWqYPGRpPMMyJ8DnM2qPJHG5XgnRT54+V2WpIlTIFGDoJtr2mbXxsEbvo8cr+C1MvRaixVV7Q1v5HkXayZEOpsy+thCqEjRJefJJjygwF2S9x9r7J92SiMVB6Sabtydw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS0PR11MB7958.namprd11.prod.outlook.com (2603:10b6:8:f9::19) by
+ BL1PR11MB5381.namprd11.prod.outlook.com (2603:10b6:208:308::23) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.30; Wed, 6 Sep
- 2023 08:48:47 +0000
-Received: from HK2PEPF00006FB4.apcprd02.prod.outlook.com
- (2603:1096:4:1f5:cafe::85) by SI1PR02CA0055.outlook.office365.com
- (2603:1096:4:1f5::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.34 via Frontend
- Transport; Wed, 6 Sep 2023 08:48:47 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 211.20.1.79)
- smtp.mailfrom=wiwynn.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=quarantine header.from=wiwynn.com;
-Received-SPF: Fail (protection.outlook.com: domain of wiwynn.com does not
- designate 211.20.1.79 as permitted sender) receiver=protection.outlook.com;
- client-ip=211.20.1.79; helo=localhost.localdomain;
-Received: from localhost.localdomain (211.20.1.79) by
- HK2PEPF00006FB4.mail.protection.outlook.com (10.167.8.10) with Microsoft SMTP
- Server id 15.20.6768.25 via Frontend Transport; Wed, 6 Sep 2023 08:48:47
- +0000
-From:   Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
-To:     patrick@stwcx.xyz, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 1/1] hwmon: max31790: support to config PWM as TACH
-Date:   Wed,  6 Sep 2023 16:48:35 +0800
-Message-Id: <20230906084837.3043030-2-Delphine_CC_Chiu@wiwynn.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230906084837.3043030-1-Delphine_CC_Chiu@wiwynn.com>
-References: <20230906084837.3043030-1-Delphine_CC_Chiu@wiwynn.com>
-MIME-Version: 1.0
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.34; Wed, 6 Sep
+ 2023 10:23:29 +0000
+Received: from DS0PR11MB7958.namprd11.prod.outlook.com
+ ([fe80::6b9:384:8202:b294]) by DS0PR11MB7958.namprd11.prod.outlook.com
+ ([fe80::6b9:384:8202:b294%7]) with mapi id 15.20.6745.034; Wed, 6 Sep 2023
+ 10:23:29 +0000
+Message-ID: <c362dcd0-771f-39fa-9ab5-3a137dd3d51f@intel.com>
+Date:   Wed, 6 Sep 2023 15:53:15 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.15.0
+Subject: Re: [PATCH v4 2/6] drm/xe/hwmon: Expose power attributes
+Content-Language: en-US
+To:     Badal Nilawar <badal.nilawar@intel.com>,
+        <intel-xe@lists.freedesktop.org>, <linux-hwmon@vger.kernel.org>
+CC:     <anshuman.gupta@intel.com>, <ashutosh.dixit@intel.com>,
+        <linux@roeck-us.net>, <andi.shyti@linux.intel.com>,
+        <matthew.brost@intel.com>
+References: <20230904182258.2291881-1-badal.nilawar@intel.com>
+ <20230904182258.2291881-3-badal.nilawar@intel.com>
+From:   Riana Tauro <riana.tauro@intel.com>
+In-Reply-To: <20230904182258.2291881-3-badal.nilawar@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
+X-ClientProxiedBy: PN3PR01CA0043.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:98::19) To DS0PR11MB7958.namprd11.prod.outlook.com
+ (2603:10b6:8:f9::19)
+MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: HK2PEPF00006FB4:EE_|SEZPR04MB5897:EE_
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: 88363c6c-2264-4478-03bd-08dbaeb615c2
-X-MS-Exchange-AtpMessageProperties: SA
+X-MS-TrafficTypeDiagnostic: DS0PR11MB7958:EE_|BL1PR11MB5381:EE_
+X-MS-Office365-Filtering-Correlation-Id: 971fdac7-4d0e-498e-99f2-08dbaec34fd0
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4Ush1z/y5wMsEsuBOCFDf9x/2gXj/a4P1Du4L56LiIXRxz2lyJFPM7yYj7ojzvzgiZ4TDLuRKGoLox1k1EuHa6weO75oW0xX52tYvbnRv607Hw+Ix7hk05RJhjb/1kMgKU6agH5HegtfkE3X/5ahaIDTuTUX30nFj44acCqXanU0ZdzxrPPlvefUE6Kp9QoupvS6goSlRuW/foXLeFT9n69ffFCrl4iARoowQx/1ZGXTHdasDHuR7d1/npfbvExkTau6sOYb22dPA1A+u3qDhffBcFHj+KLg+/apBRqyGrqHkHwUcJEZlxSjpryA3MwDJr4veLkIQaSFMtQqJhWFVINITOBmwtlw6GKZjO07/YkxIgu5rjwU7Y2eTqNXlM0xGeilrPqMX9Ky1xwRglcxIPClZrUrtKQLR6h3bwMu+x+gK1zJ0IRyguqkaWEEKdpG8b2dgQtmwYM/yqvVnNGp13jSfiklUxYNTFmQ7uA7rqBDya1Hpv8dpGjB0muZKvSmOVmUzvQSjyuYcJq5IEb3kXPfuoXBINUSp/bCjRbI4WELfXtDSJzAlBV0KTYvXjNfF2UwFszwBFspGKxACZaZX1PmBN1pnUePv56hf4XEEOc+yZgTct0B6nupsdZIxWihQQ5lPadipBRCHlAw4Jn0Y8KrnLFxeH0q0fgoCrW08cM4cTiHRezkpP5fB9vRybxgD9vZWwJOXmlxOGQCWV6Pkg==
-X-Forefront-Antispam-Report: CIP:211.20.1.79;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:localhost.localdomain;PTR:211-20-1-79.hinet-ip.hinet.net;CAT:NONE;SFS:(13230031)(6069001)(4636009)(39860400002)(396003)(376002)(136003)(346002)(451199024)(186009)(1800799009)(82310400011)(46966006)(36840700001)(110136005)(36756003)(36736006)(86362001)(9316004)(70586007)(70206006)(316002)(2906002)(40480700001)(5660300002)(8936002)(4326008)(8676002)(41300700001)(47076005)(26005)(83380400001)(336012)(1076003)(956004)(2616005)(36860700001)(6486002)(6512007)(81166007)(356005)(82740400003)(478600001)(6506007)(6666004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: wiwynn.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2023 08:48:47.4124
+X-Microsoft-Antispam-Message-Info: hOk2Deci043OQR0hiiatEXEP/a/dS8Oxx/wsczYsrzKL57fXbBG6B3hdGeBRT9bhyFn2bCR6qBOyvmhmxgR73IlQwvlFs6RB+tEY9Fp/kRtxdd/pd58ycpU4aKTGULvN1nS4JzvqlOYoXObJ3rPQyoHw9TEb56WNdW0HgVVmTVX0yLiVDt4SFHne3eqTak7r6Mnv9qJeaQ75QzLb3L2aKb2bcL55O4BKdyZbm+qIw9/YFcvSR0lWEuDEr++BQuxEr5oh24DbJRvC3V8CGld2u0wNnAIo0hWr+1/0YqU3efiTnqZNz2U74pG826GshfWoEyzYqN9sWsCTp5KNuL6uvt/DWDd0EdlE4XyHZuZNHG2H8sU3XNR8xGpWF3ozHqEmorulJTCZKexUkcCz8J0jypp1u0KnfSThwjlDnZY4lkQmuQdtlAuyi/P286w2RauN4R5v7JH5JOsKhnz8KZENWGxlHytj6LwXA9ytY1kPSaqJ090cJ9vrYy5jtbkcyys91IwVlOhnBwRpV8MtntM2/U0YRhLNHbZJSJS8ialYgmfBAPLGv5q4H8b5m2ud+rRfRBiZ2/s31gu9xU/pHsgpeskuvQsJ8DHFM6HIqgEHQezUMJYY3R7ZmSXWfAl6C09AwcZhV5/7sGaJAaiI7ksOVQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7958.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(39860400002)(366004)(136003)(396003)(376002)(186009)(1800799009)(451199024)(82960400001)(2616005)(38100700002)(26005)(6486002)(6506007)(53546011)(6512007)(36756003)(83380400001)(31686004)(478600001)(4326008)(8676002)(30864003)(8936002)(66946007)(66556008)(5660300002)(44832011)(66476007)(31696002)(86362001)(316002)(6666004)(2906002)(41300700001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bEU4TlNEdGxPa0h2YzFKZGRSdWt5a0dMeWJHQ2NZeUVJMWd3WVRXT0ZGKzla?=
+ =?utf-8?B?OEwxTk94ejRkMTZvQWoyRHltVXluaTFnVkZQcGZCWVFYZjdodE1pdzBaZDl6?=
+ =?utf-8?B?b0RGUzNBRmpXRlFWbEk3YnBuOElKV0FKWm1JY1UvdklUVURqeVhWWUFwRnJy?=
+ =?utf-8?B?T0tHZkRHUGh2c1lGSXNVMEVXN1FJZnUvejBra1lpbEJjN2t4VEF4UTdCN3RW?=
+ =?utf-8?B?NFZLZHhvclpXOXlkN2dZbzBSYS9NVmtGRzJ0OGErL2VveVllT2dMMnBqZm5j?=
+ =?utf-8?B?dEdCYzRDRFZKTXRZM0xOaUp1NnVTWTFpT1NsU1dIejdmV0Rkc1Q4eDg5SzUv?=
+ =?utf-8?B?Q294Yy84N1JDTGlGTzlyL09qR0ZxcEIvdXZWV3dnK3lpcWJJeERyMUs4dzZy?=
+ =?utf-8?B?MCtpU0xaRXhlaFVHaHFxeU5seW9EQkQ5ckhpK2pSYU1sUVB0bTArbEFRK2Y3?=
+ =?utf-8?B?KzBLK1ZmTkpTN2hza0paVkFHZU51QXlITm1iTzNFcGdXWllSTUVsY0IxMWE3?=
+ =?utf-8?B?MzZ5U0hIdnpsdWVrUWhCQUJqbmU5YlNRVlRMRUVhSjdHTkJyWkVzcjRNK3lV?=
+ =?utf-8?B?TVd1RTNOSHdEbG1idFVtYXcxNStrN0tmUXdkMUdwZk9pWTMzNklEYkx6Tm93?=
+ =?utf-8?B?V04zRFgySTk2NlZWcjZwVTJ2RUlxOUNhVmVIZC9OTFYzZWlkcEhscDNGNmtQ?=
+ =?utf-8?B?ODVSNFdXT2VITzhlWWJGSkR0MUtzN0x3UE5SbjlYbXRYWFhjeU5iek1qNXZp?=
+ =?utf-8?B?MDhOaEVhMjFvN1JTc0Z4ZEVsWjNuQVdxbittSEVJOVlLN1pEZU5BdlNUSHU1?=
+ =?utf-8?B?VjlKSHpFUDFlYzBpVWpiY3JSMGZqU0N3RFBSTm9BemRTaEJxNkVQOXlMZXRy?=
+ =?utf-8?B?NE1xVUtMTW1wWEhOcWNTektjMFJtSzIwVGcrRVNKcER6TlZoQlAyMTlhOXdj?=
+ =?utf-8?B?WEVHS0ZSMXRWbFNSdEIzdE5hblpnUFZWSkFHOWRtbzRUZXUyVXlCZm5rUVZK?=
+ =?utf-8?B?cGRWVHdTeFo1UXd0M2hKb2NETjAxL1Ywb3puMTFuTzltQTA5VG9LTlgrSTNP?=
+ =?utf-8?B?K1VkUWo2djhrbzFsQ2l4ZkxjeEoyNDFSbWwyRHlYTk5WYmdPVytGdkVmUHY1?=
+ =?utf-8?B?a3RHVHA0WEQ4ektVWmtyLzZ5c1N4dEQyQ2JBc3VLUi9LUFhKTmZ6TnNzM1ln?=
+ =?utf-8?B?WVRhdzFCREoxMWV2RDcxNm5iNG9FYXR5M3BoK0FmNDl2Tm0rbEhJRmd2ejNp?=
+ =?utf-8?B?c3JZTWNsM0J6U2k0c2lCUU9mdzA1bEVrV0NGTDRMcFExTVNlakxaWURzTEx0?=
+ =?utf-8?B?VkxtN2l6UXpzQlNBRnhaMGJzNUUzYm80dExCQUk5SFlTT1NtT1FKUU8wZ0x5?=
+ =?utf-8?B?S043WnFyRU5leDZQYlcyNWs4STJ2SzJ2dlg4ejNqOHdFZnA1ZG41aSt3S0Y4?=
+ =?utf-8?B?WUFPWVRQY1FjRVNhWjcwMkFvYi80bUhtd0s3bk14blNFeFdIUGdra3d6NkFC?=
+ =?utf-8?B?VG5xL3Z3cDk0VTMyWk1NZ3FRVTRXU0wxbFhhMFRLeGI0Q0t2d3lMc0ZrNVdQ?=
+ =?utf-8?B?bXVLRDZSUnlvOVFkNTB1U3J3S1pYemR3MVpZdUVzTU5YWC9VanI4TnZ3Mllp?=
+ =?utf-8?B?WHU1UG9nK3JSbXZyeDVIN1lWeGgyeG9odzF2WGxwMTd3NkIvczVFaGM1emZk?=
+ =?utf-8?B?SjZUZFFOVmRFeGExMzE2S3lqS3FsbkJyS2wrUFlGU203Y1VqZ1R1U3MvdU5h?=
+ =?utf-8?B?dGNGRjZ1NTNsSXkrT3hkVTd6VGxXSUl4ektCTVI1a3plWE1qRGg3QW1xVU9E?=
+ =?utf-8?B?VGFYU1JCK0paNEwycjh5dEZyd2ZWb3lBSUFJTW50NDRiWm5rSGdmZjNQdzJ3?=
+ =?utf-8?B?R09zT3M3ek8zYVJNU3U3SGFza0RGaUFZSG15dE9iYmZ4cFQ5WU51bFVzWDgy?=
+ =?utf-8?B?WElkeVB3VXJRVDVyNDdlT09XL1I2ZERHMkhYa3Btamdzelc0eUhLblU0UmIw?=
+ =?utf-8?B?MDZSYllrR3NVbVRocnFxcmpsSVVkdXNyMitWSXp4blRqbDlhUXczbVdQeEpl?=
+ =?utf-8?B?ZTdWOEdWVWI5UGZvN3lMUWkxZ0YvZGZZeWhUejlCZnR0U2hwUnBVSmU2eTdy?=
+ =?utf-8?Q?m1t3GSSNIMVWUITy3Zii7YFUT?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 971fdac7-4d0e-498e-99f2-08dbaec34fd0
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB7958.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2023 10:23:28.5815
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 88363c6c-2264-4478-03bd-08dbaeb615c2
-X-MS-Exchange-CrossTenant-Id: da6e0628-fc83-4caf-9dd2-73061cbab167
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=da6e0628-fc83-4caf-9dd2-73061cbab167;Ip=[211.20.1.79];Helo=[localhost.localdomain]
-X-MS-Exchange-CrossTenant-AuthSource: HK2PEPF00006FB4.apcprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR04MB5897
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LSe6PkcMOAvvq2AEO8XOqdnCTQCxGXZ7NcnHbDc7D0MpnXgtadAhsgvHYiV84BrV9eHIgRMqBU5KGvn7Nw/iYQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5381
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The PWM outputs of max31790 could be used as tachometer inputs by
-setting the fan configuration register, but the driver doesn't support
-to config the PWM outputs as tachometer inputs currently.
 
-Add a function to get properties of the setting of max31790 to config
-PWM outputs as tachometer inputs before initializing max31790.
-For example: set `pwm-as-tach = /bits/ 8 <2 5>` in DTS for max31790 and
-the driver will config PWMOUT2 and PWMOUT5 as TACH8 and TACH11.
+Hi Badal
 
-Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
----
- drivers/hwmon/max31790.c | 50 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
+On 9/4/2023 11:52 PM, Badal Nilawar wrote:
+> Expose Card reactive sustained (pl1) power limit as power_max and
+> card default power limit (tdp) as power_rated_max.
+> 
+> v2:
+>    - Fix review comments (Riana)
+> v3:
+>    - Use drmm_mutex_init (Matt Brost)
+>    - Print error value (Matt Brost)
+>    - Convert enums to uppercase (Matt Brost)
+>    - Avoid extra reg read in hwmon_is_visible function (Riana)
+>    - Use xe_device_assert_mem_access when applicable (Matt Brost)
+>    - Add intel-xe@lists.freedesktop.org in Documentation (Matt Brost)
+> v4:
+>    - Use prefix xe_hwmon prefix for all functions (Matt Brost/Andi)
+>    - %s/hwmon_reg/xe_hwmon_reg (Andi)
+>    - Fix review comments (Guenter/Andi)
+> 
+> Signed-off-by: Badal Nilawar <badal.nilawar@intel.com>
+> ---
+>   .../ABI/testing/sysfs-driver-intel-xe-hwmon   |  22 ++
+>   drivers/gpu/drm/xe/Makefile                   |   3 +
+>   drivers/gpu/drm/xe/regs/xe_gt_regs.h          |   4 +
+>   drivers/gpu/drm/xe/regs/xe_mchbar_regs.h      |  33 ++
+>   drivers/gpu/drm/xe/xe_device.c                |   3 +
+>   drivers/gpu/drm/xe/xe_device_types.h          |   2 +
+>   drivers/gpu/drm/xe/xe_hwmon.c                 | 362 ++++++++++++++++++
+>   drivers/gpu/drm/xe/xe_hwmon.h                 |  20 +
+>   drivers/gpu/drm/xe/xe_uc.c                    |   1 +
+>   9 files changed, 450 insertions(+)
+>   create mode 100644 Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon
+>   create mode 100644 drivers/gpu/drm/xe/regs/xe_mchbar_regs.h
+>   create mode 100644 drivers/gpu/drm/xe/xe_hwmon.c
+>   create mode 100644 drivers/gpu/drm/xe/xe_hwmon.h
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon b/Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon
+> new file mode 100644
+> index 000000000000..da0197a29fe4
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon
+> @@ -0,0 +1,22 @@
+> +What:		/sys/devices/.../hwmon/hwmon<i>/power1_max
+> +Date:		September 2023
+> +KernelVersion:	6.5
+> +Contact:	intel-xe@lists.freedesktop.org
+> +Description:	RW. Card reactive sustained  (PL1) power limit in microwatts.
+> +
+> +		The power controller will throttle the operating frequency
+> +		if the power averaged over a window (typically seconds)
+> +		exceeds this limit. A read value of 0 means that the PL1
+> +		power limit is disabled, writing 0 disables the
+> +		limit. Writing values > 0 and <= TDP will enable the power limit.
+> +
+> +		Only supported for particular Intel xe graphics platforms.
+> +
+> +What:		/sys/devices/.../hwmon/hwmon<i>/power1_rated_max
+> +Date:		September 2023
+> +KernelVersion:	6.5
+> +Contact:	intel-xe@lists.freedesktop.org
+> +Description:	RO. Card default power limit (default TDP setting).
+> +
+> +		Only supported for particular Intel xe graphics platforms.
+> +
+> diff --git a/drivers/gpu/drm/xe/Makefile b/drivers/gpu/drm/xe/Makefile
+> index 9d2311f8141f..c86577c6e222 100644
+> --- a/drivers/gpu/drm/xe/Makefile
+> +++ b/drivers/gpu/drm/xe/Makefile
+> @@ -117,6 +117,9 @@ xe-y += xe_bb.o \
+>   	xe_wa.o \
+>   	xe_wopcm.o
+>   
+> +# graphics hardware monitoring (HWMON) support
+> +xe-$(CONFIG_HWMON) += xe_hwmon.o
+> +
+>   # i915 Display compat #defines and #includes
+>   subdir-ccflags-$(CONFIG_DRM_XE_DISPLAY) += \
+>   	-I$(srctree)/$(src)/display/ext \
+> diff --git a/drivers/gpu/drm/xe/regs/xe_gt_regs.h b/drivers/gpu/drm/xe/regs/xe_gt_regs.h
+> index 271ed0cdbe21..32adfce8b2db 100644
+> --- a/drivers/gpu/drm/xe/regs/xe_gt_regs.h
+> +++ b/drivers/gpu/drm/xe/regs/xe_gt_regs.h
+> @@ -405,4 +405,8 @@
+>   #define XEHPC_BCS5_BCS6_INTR_MASK		XE_REG(0x190118)
+>   #define XEHPC_BCS7_BCS8_INTR_MASK		XE_REG(0x19011c)
+>   
+> +#define PVC_GT0_PACKAGE_RAPL_LIMIT		XE_REG(0x281008)
+> +#define PVC_GT0_PACKAGE_POWER_SKU_UNIT		XE_REG(0x281068)
+> +#define PVC_GT0_PACKAGE_POWER_SKU		XE_REG(0x281080)
+> +
+>   #endif
+> diff --git a/drivers/gpu/drm/xe/regs/xe_mchbar_regs.h b/drivers/gpu/drm/xe/regs/xe_mchbar_regs.h
+> new file mode 100644
+> index 000000000000..6cd39a721bf2
+> --- /dev/null
+> +++ b/drivers/gpu/drm/xe/regs/xe_mchbar_regs.h
+> @@ -0,0 +1,33 @@
+> +/* SPDX-License-Identifier: MIT */
+> +/*
+> + * Copyright © 2023 Intel Corporation
+> + */
+> +
+> +#ifndef _XE_MCHBAR_REGS_H_
+> +#define _XE_MCHBAR_REGS_H_
+> +
+> +#include "regs/xe_reg_defs.h"
+> +
+> +/*
+> + * MCHBAR mirror.
+> + *
+> + * This mirrors the MCHBAR MMIO space whose location is determined by
+> + * device 0 function 0's pci config register 0x44 or 0x48 and matches it in
+> + * every way.
+> + */
+> +
+> +#define MCHBAR_MIRROR_BASE_SNB			0x140000
+> +
+> +#define PCU_CR_PACKAGE_POWER_SKU		XE_REG(MCHBAR_MIRROR_BASE_SNB + 0x5930)
+> +#define   PKG_PKG_TDP				GENMASK_ULL(14, 0)
+PKG_PKG doesn't seem right. Should this renamed to PKG_TDP ?
+> +#define   PKG_MIN_PWR				GENMASK_ULL(30, 16)
+> +#define   PKG_MAX_PWR				GENMASK_ULL(46, 32)
+> +
+> +#define PCU_CR_PACKAGE_POWER_SKU_UNIT		XE_REG(MCHBAR_MIRROR_BASE_SNB + 0x5938)
+> +#define   PKG_PWR_UNIT				REG_GENMASK(3, 0)
+> +
+> +#define PCU_CR_PACKAGE_RAPL_LIMIT		XE_REG(MCHBAR_MIRROR_BASE_SNB + 0x59a0)
+> +#define   PKG_PWR_LIM_1				REG_GENMASK(14, 0)
+> +#define   PKG_PWR_LIM_1_EN			REG_BIT(15)
+> +
+> +#endif /* _XE_MCHBAR_REGS_H_ */
+> diff --git a/drivers/gpu/drm/xe/xe_device.c b/drivers/gpu/drm/xe/xe_device.c
+> index 109aeb25d19c..e851b8773b54 100644
+> --- a/drivers/gpu/drm/xe/xe_device.c
+> +++ b/drivers/gpu/drm/xe/xe_device.c
+> @@ -34,6 +34,7 @@
+>   #include "xe_vm.h"
+>   #include "xe_vm_madvise.h"
+>   #include "xe_wait_user_fence.h"
+> +#include "xe_hwmon.h"
+Should be alphabetical
+>   
+>   #ifdef CONFIG_LOCKDEP
+>   struct lockdep_map xe_device_mem_access_lockdep_map = {
+> @@ -335,6 +336,8 @@ int xe_device_probe(struct xe_device *xe)
+>   
+>   	xe_debugfs_register(xe);
+>   
+> +	xe_hwmon_register(xe);
+> +
+>   	err = drmm_add_action_or_reset(&xe->drm, xe_device_sanitize, xe);
+>   	if (err)
+>   		return err;
+> diff --git a/drivers/gpu/drm/xe/xe_device_types.h b/drivers/gpu/drm/xe/xe_device_types.h
+> index 750e1f0d3339..7ea5704048bc 100644
+> --- a/drivers/gpu/drm/xe/xe_device_types.h
+> +++ b/drivers/gpu/drm/xe/xe_device_types.h
+> @@ -361,6 +361,8 @@ struct xe_device {
+>   	 */
+>   	struct task_struct *pm_callback_task;
+>   
+> +	struct xe_hwmon *hwmon;
+> +
+>   	/* private: */
+>   
+>   #if IS_ENABLED(CONFIG_DRM_XE_DISPLAY)
+> diff --git a/drivers/gpu/drm/xe/xe_hwmon.c b/drivers/gpu/drm/xe/xe_hwmon.c
+> new file mode 100644
+> index 000000000000..d66d633724a5
+> --- /dev/null
+> +++ b/drivers/gpu/drm/xe/xe_hwmon.c
+> @@ -0,0 +1,362 @@
+> +// SPDX-License-Identifier: MIT
+> +/*
+> + * Copyright © 2023 Intel Corporation
+> + */
+> +
+> +#include <linux/hwmon.h>
+> +
+> +#include <drm/drm_managed.h>
+> +#include "regs/xe_mchbar_regs.h"
+> +#include "regs/xe_gt_regs.h"
+Should be alphabetical
+> +#include "xe_device.h"
+> +#include "xe_gt.h"
+> +#include "xe_hwmon.h"
+> +#include "xe_mmio.h"
+> +
+> +enum xe_hwmon_reg {
+> +	REG_PKG_RAPL_LIMIT,
+> +	REG_PKG_POWER_SKU,
+> +	REG_PKG_POWER_SKU_UNIT,
+> +};
+Should this enum have the prefix REG?
+> +
+> +enum xe_hwmon_reg_operation {
+> +	REG_READ,
+> +	REG_WRITE,
+> +	REG_RMW,
+> +};
+> +
+> +/*
+> + * SF_* - scale factors for particular quantities according to hwmon spec.
+> + */
+> +#define SF_POWER	1000000		/* microwatts */
+> +
+> +struct xe_hwmon {
+> +	struct device *hwmon_dev;
+> +	struct xe_gt *gt;
+> +	struct mutex hwmon_lock; /* rmw operations*/
+> +	bool reset_in_progress;
+> +	wait_queue_head_t waitq;
+reset_in_progress & waitq not used in the below code
+> +	int scl_shift_power;
+> +};
+> +
+> +static u32 xe_hwmon_get_reg(struct xe_hwmon *hwmon, enum xe_hwmon_reg hwmon_reg)
+> +{
+> +	struct xe_device *xe = gt_to_xe(hwmon->gt);
+> +	struct xe_reg reg = XE_REG(0);
+> +
+> +	switch (hwmon_reg) {
+> +	case REG_PKG_RAPL_LIMIT:
+> +		if (xe->info.platform == XE_DG2)
+> +			reg = PCU_CR_PACKAGE_RAPL_LIMIT;
+> +		else if (xe->info.platform == XE_PVC)
+> +			reg = PVC_GT0_PACKAGE_RAPL_LIMIT;
+> +		break;
+> +	case REG_PKG_POWER_SKU:
+> +		if (xe->info.platform == XE_DG2)
+> +			reg = PCU_CR_PACKAGE_POWER_SKU;
+> +		else if (xe->info.platform == XE_PVC)
+> +			reg = PVC_GT0_PACKAGE_POWER_SKU;
+> +		break;
+> +	case REG_PKG_POWER_SKU_UNIT:
+> +		if (xe->info.platform == XE_DG2)
+> +			reg = PCU_CR_PACKAGE_POWER_SKU_UNIT;
+> +		else if (xe->info.platform == XE_PVC)
+> +			reg = PVC_GT0_PACKAGE_POWER_SKU_UNIT;
+> +		break;
+> +	default:
+> +		XE_MISSING_CASE(hwmon_reg);
+> +		break;
+> +	}
+> +
+> +	return reg.raw;
+> +}
+> +
+> +static int xe_hwmon_process_reg(struct xe_hwmon *hwmon, enum xe_hwmon_reg hwmon_reg,
+> +				enum xe_hwmon_reg_operation operation, u32 *value,
+> +				u32 clr, u32 set)
+> +{
+> +	struct xe_reg reg;
+> +
+> +	reg.raw = xe_hwmon_get_reg(hwmon, hwmon_reg);
+> +
+> +	if (!reg.raw)
+> +		return -EOPNOTSUPP;
+> +
+> +	switch (operation) {
+> +	case REG_READ:
+> +		*value = xe_mmio_read32(hwmon->gt, reg);
+> +		return 0;
+> +	case REG_WRITE:
+> +		xe_mmio_write32(hwmon->gt, reg, *value);
+> +		return 0;
+> +	case REG_RMW:
+> +		*value = xe_mmio_rmw32(hwmon->gt, reg, clr, set);
+> +		return 0;
+> +	default:
+> +		XE_MISSING_CASE(operation);
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +int xe_hwmon_process_reg_read64(struct xe_hwmon *hwmon, enum xe_hwmon_reg hwmon_reg, u64 *value)
+> +{
+> +	struct xe_reg reg;
+> +
+> +	reg.raw = xe_hwmon_get_reg(hwmon, hwmon_reg);
+> +
+> +	if (!reg.raw)
+> +		return -EOPNOTSUPP;
+> +
+> +	*value = xe_mmio_read64_2x32(hwmon->gt, reg);
+> +
+> +	return 0;
+> +}
+> +
+> +#define PL1_DISABLE 0
+> +
+> +/*
+> + * HW allows arbitrary PL1 limits to be set but silently clamps these values to
+> + * "typical but not guaranteed" min/max values in rg.PKG_POWER_SKU. Follow the
+%s/rg.PKG_POWER_SKU/REG_PKG_POWER_SKU 
 
-diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
-index 0cd44c1e998a..0f8fe911539b 100644
---- a/drivers/hwmon/max31790.c
-+++ b/drivers/hwmon/max31790.c
-@@ -480,6 +480,52 @@ static const struct hwmon_chip_info max31790_chip_info = {
- 	.info = max31790_info,
- };
- 
-+static int max31790_config_pwm_as_tach(struct device *dev,
-+				       struct i2c_client *client)
-+{
-+	struct device_node *np = dev->of_node;
-+	int i, ret = 0, size, channel;
-+	u8 pwm_index[NR_CHANNEL] = { 0 };
-+	u8 fan_config;
-+
-+	size = of_property_count_u8_elems(np, "pwm-as-tach");
-+
-+	if ((size > 0) && (size <= NR_CHANNEL)) {
-+		ret = of_property_read_u8_array(np, "pwm-as-tach", pwm_index,
-+						size);
-+		if (ret) {
-+			dev_err(dev,
-+				"Property 'pwm-as-tach' cannot be read.\n");
-+			return ret;
-+		}
-+
-+		for (i = 0; i < size; i++) {
-+			if ((pwm_index[i] == 0) ||
-+			    (pwm_index[i] > NR_CHANNEL)) {
-+				continue;
-+			}
-+
-+			channel = pwm_index[i] - 1;
-+			fan_config = i2c_smbus_read_byte_data(
-+				client, MAX31790_REG_FAN_CONFIG(channel));
-+			if (fan_config < 0) {
-+				dev_err(dev,
-+					"Read fan config for channel %d failed.\n",
-+					channel);
-+				return fan_config;
-+			}
-+
-+			fan_config |= (MAX31790_FAN_CFG_CTRL_MON |
-+				       MAX31790_FAN_CFG_TACH_INPUT);
-+			i2c_smbus_write_byte_data(
-+				client, MAX31790_REG_FAN_CONFIG(channel),
-+				fan_config);
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static int max31790_init_client(struct i2c_client *client,
- 				struct max31790_data *data)
- {
-@@ -521,6 +567,10 @@ static int max31790_probe(struct i2c_client *client)
- 	data->client = client;
- 	mutex_init(&data->update_lock);
- 
-+	err = max31790_config_pwm_as_tach(dev, client);
-+	if (err)
-+		dev_crit(dev, "Config PWM as TACH failed.\n");
-+
- 	/*
- 	 * Initialize the max31790 chip
- 	 */
--- 
-2.25.1
+> + * same pattern for sysfs, allow arbitrary PL1 limits to be set but display
+> + * clamped values when read.
+> + */
+> +static int xe_hwmon_power_max_read(struct xe_hwmon *hwmon, long *value)
+> +{
+> +	u32 reg_val;
+> +	u64 r, min, max;
+meaningful name instead of r
+> +
+> +	xe_hwmon_process_reg(hwmon, REG_PKG_RAPL_LIMIT, REG_READ, &reg_val, 0, 0);
+> +	/* Check if PL1 limit is disabled */
+> +	if (!(reg_val & PKG_PWR_LIM_1_EN)) {
+> +		*value = PL1_DISABLE;
+> +		return 0;
+> +	}
+> +
+> +	reg_val = REG_FIELD_GET(PKG_PWR_LIM_1, reg_val);
+> +	*value = mul_u64_u32_shr(reg_val, SF_POWER, hwmon->scl_shift_power);
+> +
+> +	xe_hwmon_process_reg_read64(hwmon, REG_PKG_POWER_SKU, &r);
+> +	min = REG_FIELD_GET(PKG_MIN_PWR, r);
+> +	min = mul_u64_u32_shr(min, SF_POWER, hwmon->scl_shift_power);
+> +	max = REG_FIELD_GET(PKG_MAX_PWR, r);
+> +	max = mul_u64_u32_shr(max, SF_POWER, hwmon->scl_shift_power);
+> +
+> +	if (min && max)
+> +		*value = clamp_t(u64, *value, min, max);
+> +
+> +	return 0;
+> +}
+> +
+> +static int xe_hwmon_power_max_write(struct xe_hwmon *hwmon, long value)
+> +{
+> +	u32 nval;
+meaningful name instead of nval
+> +
+> +	/* Disable PL1 limit and verify, as limit cannot be disabled on all platforms */
+> +	if (value == PL1_DISABLE) {
+> +		xe_hwmon_process_reg(hwmon, REG_PKG_RAPL_LIMIT, REG_RMW, &nval,
+> +				     PKG_PWR_LIM_1_EN, 0);
+> +		xe_hwmon_process_reg(hwmon, REG_PKG_RAPL_LIMIT, REG_READ, &nval,
+> +				     PKG_PWR_LIM_1_EN, 0);
+> +
+> +		if (nval & PKG_PWR_LIM_1_EN)
+> +			return -ENODEV;
+> +	}
+> +
+> +	/* Computation in 64-bits to avoid overflow. Round to nearest. */
+> +	nval = DIV_ROUND_CLOSEST_ULL((u64)value << hwmon->scl_shift_power, SF_POWER);
+> +	nval = PKG_PWR_LIM_1_EN | REG_FIELD_PREP(PKG_PWR_LIM_1, nval);
+> +
+> +	xe_hwmon_process_reg(hwmon, REG_PKG_RAPL_LIMIT, REG_RMW, &nval,
+> +			     PKG_PWR_LIM_1_EN | PKG_PWR_LIM_1, nval);
+> +
+> +	return 0;
+> +}
+> +
+> +static int xe_hwmon_power_rated_max_read(struct xe_hwmon *hwmon, long *value)
+> +{
+> +	u32 reg_val;
+> +
+> +	xe_hwmon_process_reg(hwmon, REG_PKG_POWER_SKU, REG_READ, &reg_val, 0, 0);
+> +	reg_val = REG_FIELD_GET(PKG_PKG_TDP, reg_val);
+> +	*value = mul_u64_u32_shr(reg_val, SF_POWER, hwmon->scl_shift_power);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct hwmon_channel_info *hwmon_info[] = {
+> +	HWMON_CHANNEL_INFO(power, HWMON_P_MAX | HWMON_P_RATED_MAX),
+> +	NULL
+> +};
+> +
+> +static umode_t
+> +xe_hwmon_power_is_visible(struct xe_hwmon *hwmon, u32 attr, int chan)
+> +{
+> +	switch (attr) {
+> +	case hwmon_power_max:
+> +		return xe_hwmon_get_reg(hwmon, REG_PKG_RAPL_LIMIT) ? 0664 : 0;
+> +	case hwmon_power_rated_max:
+> +		return xe_hwmon_get_reg(hwmon, REG_PKG_POWER_SKU) ? 0444 : 0;
+> +	default:
+> +		return 0;
+> +	}
+> +}
+> +
+> +static int
+> +xe_hwmon_power_read(struct xe_hwmon *hwmon, u32 attr, int chan, long *val)
+> +{
+> +	switch (attr) {
+> +	case hwmon_power_max:
+> +		return xe_hwmon_power_max_read(hwmon, val);
+> +	case hwmon_power_rated_max:
+> +		return xe_hwmon_power_rated_max_read(hwmon, val);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static int
+> +xe_hwmon_power_write(struct xe_hwmon *hwmon, u32 attr, int chan, long val)
+> +{
+> +	switch (attr) {
+> +	case hwmon_power_max:
+> +		return xe_hwmon_power_max_write(hwmon, val);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static umode_t
+> +xe_hwmon_is_visible(const void *drvdata, enum hwmon_sensor_types type,
+> +		    u32 attr, int channel)
+> +{
+> +	struct xe_hwmon *hwmon = (struct xe_hwmon *)drvdata;
+> +	int ret;
+> +
+> +	xe_device_mem_access_get(gt_to_xe(hwmon->gt));
+> +
+> +	switch (type) {
+> +	case hwmon_power:
+> +		ret = xe_hwmon_power_is_visible(hwmon, attr, channel);
+> +		break;
+> +	default:
+> +		ret = 0;
+> +		break;
+> +	}
+> +
+> +	xe_device_mem_access_put(gt_to_xe(hwmon->gt));
+> +
+> +	return ret;
+> +}
+> +
+> +static int
+> +xe_hwmon_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+> +	      int channel, long *val)
+> +{
+> +	struct xe_hwmon *hwmon = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	xe_device_mem_access_get(gt_to_xe(hwmon->gt));
+> +
+> +	switch (type) {
+> +	case hwmon_power:
+> +		ret = xe_hwmon_power_read(hwmon, attr, channel, val);
+> +		break;
+> +	default:
+> +		ret = -EOPNOTSUPP;
+> +		break;
+> +	}
+> +
+> +	xe_device_mem_access_put(gt_to_xe(hwmon->gt));
+> +
+> +	return ret;
+> +}
+> +
+> +static int
+> +xe_hwmon_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+> +	       int channel, long val)
+> +{
+> +	struct xe_hwmon *hwmon = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	xe_device_mem_access_get(gt_to_xe(hwmon->gt));
+> +
+> +	switch (type) {
+> +	case hwmon_power:
+> +		ret = xe_hwmon_power_write(hwmon, attr, channel, val);
+> +		break;
+> +	default:
+> +		ret = -EOPNOTSUPP;
+> +		break;
+> +	}
+> +
+> +	xe_device_mem_access_put(gt_to_xe(hwmon->gt));
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct hwmon_ops hwmon_ops = {
+> +	.is_visible = xe_hwmon_is_visible,
+> +	.read = xe_hwmon_read,
+> +	.write = xe_hwmon_write,
+> +};
+> +
+> +static const struct hwmon_chip_info hwmon_chip_info = {
+> +	.ops = &hwmon_ops,
+> +	.info = hwmon_info,
+> +};
+> +
+> +static void
+> +xe_hwmon_get_preregistration_info(struct xe_device *xe)
+> +{
+> +	struct xe_hwmon *hwmon = xe->hwmon;
+> +	u32 val_sku_unit = 0;
+> +	int ret;
+> +
+> +	ret = xe_hwmon_process_reg(hwmon, REG_PKG_POWER_SKU_UNIT, REG_READ, &val_sku_unit, 0, 0);
+> +	/*
+> +	 * The contents of register PKG_POWER_SKU_UNIT do not change,
+> +	 * so read it once and store the shift values.
+> +	 */
+> +	if (!ret)
+> +		hwmon->scl_shift_power = REG_FIELD_GET(PKG_PWR_UNIT, val_sku_unit);
+> +}
+> +
+> +void xe_hwmon_register(struct xe_device *xe)
+> +{
+> +	struct device *dev = xe->drm.dev;
+> +	struct xe_hwmon *hwmon;
+> +
+> +	/* hwmon is available only for dGfx */
+> +	if (!IS_DGFX(xe))
+> +		return;
+> +
+> +	hwmon = devm_kzalloc(dev, sizeof(*hwmon), GFP_KERNEL);
+> +	if (!hwmon)
+> +		return;
+Since there is no error code returned. Should have a warning here?
+> +
+> +	xe->hwmon = hwmon;
+> +
+> +	drmm_mutex_init(&xe->drm, &hwmon->hwmon_lock);
+> +
+> +	/* primary GT to access device level properties */
+> +	hwmon->gt = xe->tiles[0].primary_gt;
+> +
+> +	xe_hwmon_get_preregistration_info(xe);
+> +
+> +	init_waitqueue_head(&hwmon->waitq);
+waitq not used in this patch. Add along with the patch that uses it
+> +
+> +	drm_dbg(&xe->drm, "Register xe hwmon interface\n");
+> +
+> +	/*  hwmon_dev points to device hwmon<i> */
+> +	hwmon->hwmon_dev = devm_hwmon_device_register_with_info(dev,
+> +								"xe",
+> +								hwmon,
+> +								&hwmon_chip_info,
+> +								NULL);
+> +	if (IS_ERR(hwmon->hwmon_dev)) {
+> +		drm_warn(&xe->drm, "Fail to register xe hwmon (%pe)\n", hwmon->hwmon_dev);
+> +		xe->hwmon = NULL;
+> +		return;
+> +	}
+> +}
+> +
+> diff --git a/drivers/gpu/drm/xe/xe_hwmon.h b/drivers/gpu/drm/xe/xe_hwmon.h
+> new file mode 100644
+> index 000000000000..1ec45cf1d19b
+> --- /dev/null
+> +++ b/drivers/gpu/drm/xe/xe_hwmon.h
+> @@ -0,0 +1,20 @@
+> +/* SPDX-License-Identifier: MIT */
+> +
+> +/*
+> + * Copyright © 2023 Intel Corporation
+> + */
+> +
+> +#ifndef _XE_HWMON_H_
+> +#define _XE_HWMON_H_
+> +
+> +#include <linux/types.h>
+> +
+> +struct xe_device;
+> +
+> +#if IS_REACHABLE(CONFIG_HWMON)
+> +void xe_hwmon_register(struct xe_device *xe);
+> +#else
+> +static inline void xe_hwmon_register(struct xe_device *xe) { };
+> +#endif
+Add space between if else and contents as suggested by Andi in previous 
+rev comments
+> +
+> +#endif /* _XE_HWMON_H_ */
+> diff --git a/drivers/gpu/drm/xe/xe_uc.c b/drivers/gpu/drm/xe/xe_uc.c
+> index 9c8ce504f4da..e82c7304724b 100644
+> --- a/drivers/gpu/drm/xe/xe_uc.c
+> +++ b/drivers/gpu/drm/xe/xe_uc.c
+> @@ -13,6 +13,7 @@
+>   #include "xe_huc.h"
+>   #include "xe_uc_fw.h"
+>   #include "xe_wopcm.h"
+> +#include "xe_hwmon.h"
+include statement not used
 
+Thanks
+Riana
+>   
+>   static struct xe_gt *
+>   uc_to_gt(struct xe_uc *uc)
