@@ -2,125 +2,89 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7694EE14A5
-	for <linux-hwmon@archiver.kernel.org>; Wed,  6 Sep 2023 15:21:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DA86EE14AC
+	for <linux-hwmon@archiver.kernel.org>; Wed,  6 Sep 2023 16:11:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239023AbjIFPVV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 6 Sep 2023 11:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46926 "EHLO
+        id S233582AbjIFQL4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 6 Sep 2023 12:11:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbjIFPVU (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 6 Sep 2023 11:21:20 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991EF1724;
-        Wed,  6 Sep 2023 08:21:16 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-56c2e882416so2337961a12.3;
-        Wed, 06 Sep 2023 08:21:16 -0700 (PDT)
+        with ESMTP id S232071AbjIFQL4 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 6 Sep 2023 12:11:56 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E0610C7;
+        Wed,  6 Sep 2023 09:11:50 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id 98e67ed59e1d1-26f57f02442so2459682a91.0;
+        Wed, 06 Sep 2023 09:11:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694013676; x=1694618476; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2L9GRjR364WCUyawO5k8E+dewUfnR/NDRPvmW9pij2I=;
-        b=k8zNmkz1ihqkhAlFvTmvsWhnp/2xZIASXOSmX4e/X77kVyFQ2WsdpDBKMnR2+atfOK
-         nJzGkzGaePfrm9NwdeozZYd1V5bKlrqsAOTZ7hI3xLC6iBON5YzMnhdq0UucM4pmP1iu
-         ObGHO3HmQPi3pbX8ogsT2ZQEfiLpLx+mzIDYBuKLocExzSMODA4j3muKyLrzw+Sj3Hbk
-         TDd7/DjK6ktpG2vdBbtCuAp3M1A+P8sFcYfgedBOC79kxh7KGl8B2X3tvBXdCOsoel2/
-         1NydowfLEhc3x0s9rq1dMD1eV7HD7FLuE9CErD5LDXJozN3ptCL84K76HPM4GVyJYQWJ
-         v42g==
+        d=gmail.com; s=20221208; t=1694016710; x=1694621510; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=dB58pkVoIwjiWud2KnolMWuExLTjjvxyLWmvQTfD5qM=;
+        b=HN4V0fMXZC2IPgFFwxRifvRVdjw4lOpnKIB+safgJ2oM0dqmSwj4u09Jp2v1FaFByT
+         9RR5m+ZVpn5jvzwP4fDtb62kq0Wv8GE6dxyEJibGyRSoYPzMHcH9OaU6i4l05P+VOPax
+         o6YNjOfSLGDP/DKzgepnaD5HWMH6WaWXgddCOla/orFKv7C1i/THnZVY6BwD8MPwHF+w
+         xIwwcpMBwt8PlX+lje0bCF6rAG/idnby37zTOYK4zYR03wx8PA1IpkDjKp3XNJxx5W5S
+         +h0phqG+cNtKn/oEk12uh3RB6IHOD39OFD3h0d+QKf7MVbSQIxAXee54fu7c49vuRw0Y
+         RC+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1694013676; x=1694618476;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2L9GRjR364WCUyawO5k8E+dewUfnR/NDRPvmW9pij2I=;
-        b=A0ygYchK0dz0rb8WreA15JBvzH3eF9xoBj7uBOmh9DSLFPC+40DT2ZYh/hI5/9ZYfr
-         f1jq+Jb/HXKf2ttiylj0DpLytYwmUitT8OEBD1NYBf3yIR72zRG+flUMaOGSk6cDcehg
-         OqFaZB5mdsOsjcLdAXsKh6Fknie65NfQlCqNJ9VH55MiYGV+38lHPBZa7T8YZKpiOUD2
-         sDAyluOR/oRADXNcZTd06jfUWpruJM2W798oYUcQdqXub5TGFXoaR12ojNhDmff1URzX
-         LU1iK5s9FqKVR8c0Z8CrsD1Yl/WjFtKU8iyAy+hcUUtefg1Q8kpoTcKvQQdm71trP0MT
-         m/IA==
-X-Gm-Message-State: AOJu0Yw0o+SiCE1Y80LNIUzEVNpMH2NrG77r9mSVB4fwlyMtaMw1TAEh
-        GDfqxPrXjBJMZZB0+0Is7DQ=
-X-Google-Smtp-Source: AGHT+IES8cBWsR7Fv4U3nDHZ/CT3HL0Z9k44+4M1+YtWuZNEqRPl+IwhNFWfAZGvAWSEyWnyQgKZpQ==
-X-Received: by 2002:a05:6a20:9691:b0:140:c838:2b2e with SMTP id hp17-20020a056a20969100b00140c8382b2emr12678175pzc.22.1694013675947;
-        Wed, 06 Sep 2023 08:21:15 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g18-20020aa78192000000b0068718aadda7sm10945777pfi.108.2023.09.06.08.21.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Sep 2023 08:21:14 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1694016710; x=1694621510;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dB58pkVoIwjiWud2KnolMWuExLTjjvxyLWmvQTfD5qM=;
+        b=XVdI4nh2/oxpqc4eX6i3UdpOiICI6mygjlfqRuUgEWP0m3gzzFD40An9ton12hVUS8
+         d8c+JsKqZjjKlPdqgRuZuZPPTwfNM1MRYUvL2E4FLeN8svTGNG1TF3IyFf7M1yhWIBMF
+         cj2gche7RNx7qJrPvCUoZ4fqp82oAU/O+f2CI7S2KsCQaPC4wSVzRqYPhZWyo14ghvAJ
+         5KgdO4OyCkTngaOH2jHu+YId6YFkGDs3wjWWJv7lMnAWAE5PbFXgBmtJOVCgg+4erlhz
+         nxIMlEuF1Y8X1qCX+QZa5CQ4D+kfig7vyUpKGXEB+DTdu1+CmKJHQi4qS5iU6QOAqLBG
+         fXNg==
+X-Gm-Message-State: AOJu0YxGcciJKrXqpsPR1KS4gpNmlttsUFyf7IU9QaDwTRipovGfC57g
+        TVxVIFLfsp5zPo3dJHu5MLyDWsY+mtM=
+X-Google-Smtp-Source: AGHT+IFGNcpCnCqeji0A5QnaU4hNO2vwGroWMiaFWURzCnHSB+4JDHE7SpKqB4yLR1Wt0zGLwnQHDg==
+X-Received: by 2002:a17:90a:5184:b0:262:ecd9:ed09 with SMTP id u4-20020a17090a518400b00262ecd9ed09mr13698254pjh.33.1694016709948;
+        Wed, 06 Sep 2023 09:11:49 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 30-20020a17090a001e00b00271c5811019sm11995695pja.38.2023.09.06.09.11.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Sep 2023 09:11:49 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 6 Sep 2023 08:21:13 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Eric Tremblay <etremblay@distech-controls.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.au@gmail.com>
-Subject: Re: [PATCH v4 1/2] hwmon: tmp513: Add max_channels variable to
- struct tmp51x_data
-Message-ID: <329b6717-6bba-42c4-94a7-7466d3d0f411@roeck-us.net>
-References: <20230905184252.222742-1-biju.das.jz@bp.renesas.com>
- <20230905184252.222742-2-biju.das.jz@bp.renesas.com>
- <ZPiPVZKXeDfLsU64@smile.fi.intel.com>
- <OS0PR01MB592218CADC2F90290B0B727D86EFA@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <ZPiT606wpCDsNVPC@smile.fi.intel.com>
+Message-ID: <cdce397e-716f-7478-4426-7583242386d2@roeck-us.net>
+Date:   Wed, 6 Sep 2023 09:11:47 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZPiT606wpCDsNVPC@smile.fi.intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v1 0/1] hwmon: max31790: support to config PWM as TACH
+Content-Language: en-US
+To:     Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, patrick@stwcx.xyz
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230906084837.3043030-1-Delphine_CC_Chiu@wiwynn.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230906084837.3043030-1-Delphine_CC_Chiu@wiwynn.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Sep 06, 2023 at 05:59:55PM +0300, Andy Shevchenko wrote:
-> On Wed, Sep 06, 2023 at 02:46:37PM +0000, Biju Das wrote:
-> > > On Tue, Sep 05, 2023 at 07:42:51PM +0100, Biju Das wrote:
+On 9/6/23 01:48, Delphine CC Chiu wrote:
+> v1 - Support to config PWM as TACH in max31790 driver
 > 
-> ...
+> Delphine CC Chiu (1):
+>    hwmon: max31790: support to config PWM as TACH
 > 
-> > > > +#define TMP51X_TEMP_CONFIG_CONV_RATE	FIELD_PREP(GENMASK(9, 7), 0x7)
-> > > > +#define TMP51X_TEMP_CONFIG_RC		BIT(10)
-> > > > +#define TMP51X_TEMP_CHANNEL_MASK(n)	FIELD_PREP(GENMASK(14, 11), \
-> > > > +						   GENMASK((n) - 1, 0))
-> > > 
-> > > Why do you need FIELD_PREP() for the pure constants here? Why can you
-> > > simply define the constants in the proper place?
-> > 
-> > I think one can clearly understand the bit definitions and value from FIELD_PREP.
-> 
-> I think it is clear over engineering. In the first one the constant can't be
-> more than the field, in the second the defensive programming that is discouraged
-> in the kernel.
-> 
-> #define TMP51X_TEMP_CHANNEL_MASK(n)	(GENMASK((n) - 1, 0) << 11)
-> 
-> would suffice and much easier to understand.
+>   drivers/hwmon/max31790.c | 50 ++++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 50 insertions(+)
 > 
 
-I agree.
+An introduction email is not necessary for a single patch.
+_If_ you insist sending it anyway, it should contain the rationale.
 
-> ...
-> 
-> > > > +#define TMP51X_TEMP_CONFIG_DEFAULT(n)	(TMP51X_TEMP_CONFIG_CONT | \
-> > > > +			TMP51X_TEMP_CHANNEL_MASK(n) | \
-> > > > +			TMP51X_TEMP_CONFIG_CONV_RATE | TMP51X_TEMP_CONFIG_RC)
-> > > 
-> > > This is better to read in a form of
-> > > 
-> > > #define TMP51X_TEMP_CONFIG_DEFAULT(n)					\
-> > > 	(TMP51X_TEMP_CHANNEL_MASK(n) | TMP51X_TEMP_CONFIG_CONT |	\
-> > > 	 TMP51X_TEMP_CONFIG_CONV_RATE | TMP51X_TEMP_CONFIG_RC)
-> > > 
-> > 
-> > I just used the indentation suggested by Guenter.
-> 
-> But wouldn't my proposal be sightly better to read?
-
-I'd have to look up what specifically I had asked for, but it wasn't meant
-to exclude better formatting. I agree that the formatting you suggested
-is better.
+Please do not send both numbered and unnumbered patches like you
+did. I have no idea which one is current.
 
 Guenter
+
