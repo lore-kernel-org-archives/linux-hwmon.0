@@ -2,99 +2,86 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56F5EEE14D9
-	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Sep 2023 05:27:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7466CEC873E
+	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Sep 2023 15:37:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244767AbjIGF1Q (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 7 Sep 2023 01:27:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52822 "EHLO
+        id S234281AbjIGPhs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 7 Sep 2023 11:37:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240385AbjIGF1O (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 7 Sep 2023 01:27:14 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322C51BC6;
-        Wed,  6 Sep 2023 22:27:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
- s=s31663417; t=1694064412; x=1694669212; i=w_armin@gmx.de;
- bh=SDoJ1qMnGGCF705mx2danL58jWUrhbUadtlO+JoIdEg=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
- b=PDDWwnf0seZYJElIw75lF/kUOmMKVt10AhhpSrnhITidM+DAYyOVogvgol+NXWNj7iHbk85
- FJVYmhh7PZCLO3JGg3MDS7bBHsgs89lS+L3t+5FRqM0BE/9rXAJdxQmhinNv3hriMEfUg4ANH
- 8L1fOGvQwUBNKHBp7ibWesxNtSYxTi2h4i2RhiA45arvAeXd244NKpJQA8IFEz9vpP6cIhh1z
- W6WDR9Qpccdzka6pPKKs7c0vMLjJG5qDJHhrio3YbQl0MG2NvegL9FBmOmXgG+i7EJ3xuYhXr
- CHfw1HJDCv+yh+5xgtO8q7R0oWJ1yMpvBHtCIvvoFVgT9lmvFwGQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from mx-amd-b650.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1M2O6Y-1qdYVW2D7u-003yhB; Thu, 07 Sep 2023 07:26:52 +0200
-From:   Armin Wolf <W_Armin@gmx.de>
-To:     hdegoede@redhat.com
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 5/5] hwmon: (sch5627) Document behaviour of limit registers
-Date:   Thu,  7 Sep 2023 07:26:39 +0200
-Message-Id: <20230907052639.16491-6-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230907052639.16491-1-W_Armin@gmx.de>
-References: <20230907052639.16491-1-W_Armin@gmx.de>
+        with ESMTP id S245668AbjIGP35 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 7 Sep 2023 11:29:57 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4F8171C;
+        Thu,  7 Sep 2023 08:29:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694100568; x=1725636568;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hD3LejHxGSj1Y4O7RxxMtwEUlF2sJ4z4g4K8ODPu3sY=;
+  b=KaVLjZF6ZgH0ifcU1nwqydEai3CeOp16k+eTqEd3g/5pfDecwP2j+sYZ
+   NQPy1H7Xxirib9J+xKAhdXtAd75spx+2t3e8jxvscJj899erH4yEFMTo4
+   +Mv7lRZVM2NvLXelVFA8aTrMMuwcHCYH0fu9665YrYz7m7OPolZfa6OiU
+   u3STG8jpHWx1dnsKwolgYN/r96k8TTp0eyOiNPg928vZiyPd5q9CgWbwO
+   HINZGqIQBHXlsFrAbAV7oH0D0ZoiVt1hEb0l7To6a/InsQHiTZRbrDwCx
+   n6i7+1lUQ9vrboDguu4P97/nUPKQMHr1Wc4YZ/4Etii3hxdPIF8qVwPtc
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10826"; a="357675749"
+X-IronPort-AV: E=Sophos;i="6.02,235,1688454000"; 
+   d="scan'208";a="357675749"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2023 07:11:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10826"; a="735514227"
+X-IronPort-AV: E=Sophos;i="6.02,235,1688454000"; 
+   d="scan'208";a="735514227"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2023 07:11:18 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qeFj1-007KK9-1d;
+        Thu, 07 Sep 2023 17:11:15 +0300
+Date:   Thu, 7 Sep 2023 17:11:15 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Eric Tremblay <etremblay@distech-controls.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.au@gmail.com>
+Subject: Re: [PATCH v6 1/2] hwmon: tmp513: Add max_channels variable to
+ struct tmp51x_data
+Message-ID: <ZPnaA4xp2THUVqCy@smile.fi.intel.com>
+References: <20230907071404.24334-1-biju.das.jz@bp.renesas.com>
+ <20230907071404.24334-2-biju.das.jz@bp.renesas.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:MediO2xoNHuYZ+J2gpFvJo5Yw3HQt7z9lo3eGzlWwPV0L/tDwYr
- d5DNXYjIRdAQmg3KNeEEKSjBjD5Yj/4e4kzTXbwIxLboyYi6Yp4gSDfeNZlqd25yEwyizAw
- da/U4RBJAPjMfypfk3aNZfKN0831a3GW3Yq3JPCK/r1V2xVRkRjT+A5z2TSxP9IT4zVZGXQ
- 81Rrh3twPrseMpxpV4hNw==
-UI-OutboundReport: notjunk:1;M01:P0:0CYJA/7Oxe0=;szh2cPWMDtxCBza8+eBbie74N2g
- qo1q/xGRFJjv8bVE9PdyT2aMSE4aUEZliud5ECymbhtBVkfUlPINfFV4OwhkHG714znuyUuvU
- E5gEswzc8F2kDZhE+I7LGq+3AzzJMJhFTeiUkHQkqMRrcX7mWwMqinu454UWpoBBc3bb8+dv2
- RIO7sC6WcDYAsRqxWkre4J0U9azsD7P6T2khafrirLKgNrIQPZ4yaHAN71g8ZTcF4+9jbwxGn
- CObACG9X37Aj+gGB2R/qJk0DGr56MngLhbIcJqt079Qt4oENWIc2/PzL2ozbM4wuFucDBaSvK
- praTHqcOUgOSyxNvu1h5NAkhVO+21YIpCPw1F1Qo2YkXhImQV9L45p0ceTwC2CVVzzPw+1S4U
- CRyE9TkIsnZ6fjYdRYBeEkzNq64u8CvHSu0J/BvwFbtHEqGZGdtmoNT6f95ZYA4tsBMd+Q/iY
- AoswUPU9se+Zv0RIQPn6Zi9uX+CGNugNvpDzpkwj8+8cFIUrpb4aYt/tk7/zjHRS8pWgB28U2
- 3glaU81cbFr+mPdyVpdYrpdK/3FVFLX9U/jcRvXPJ+gi46NN+GMckRTHCh4yRnIrbpLeqpH8l
- HpkCwZwtpJ/A5rXmG9sjPvBkFeDowyM7DvT/N135o6p7clmvem6AmFLtejyjEhKnbcdRCfI5j
- lir9s6roAcYL/+Poi+1itEDDiGL0dp7I3/MbUV3SAhnp2qxA54ZbIEffrLo75CGBrdA48DNje
- Os4I++492rUj62J7WiQOanY0TyeRzfmfGFOG7CE32DS3xFIwWXAtwAodAKuVQbH2Kzd/JQWz4
- JcGzRPXpbkfOBEOML44t4R2KXksw+p44uBQajftERcOcxPaput3XkBKw3vEc4Z1wevQPbmp1M
- wOQYjCREFRt/M+wpqfldJyvY6Wf+CfM77A38HdpKSqPjKYGVjjvZa2IA8fk/AkgQsRF1m+Cl4
- j4+r3KVDHvcSrCqvA+0X+B8RBP4=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230907071404.24334-2-biju.das.jz@bp.renesas.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The values of the limit registers affect the fan speed in a
-particular way. Document this behaviour so that future users
-can exploit it if required.
+On Thu, Sep 07, 2023 at 08:14:03AM +0100, Biju Das wrote:
+> The tmp512 chip has 3 channels whereas tmp513 has 4 channels. Avoid
+> using tmp51x_ids for this HW difference by replacing OF/ID table
+> data with maximum channels supported by the device.
+> 
+> Replace id->max_channels variable from struct tmp51x_data and drop the
+> macros TMP51{2,3}_TEMP_CONFIG_DEFAULT as it can be derived from the macro
+> TMP51X_TEMP_CONFIG_DEFAULT and update the logic in tmp51x_is_visible(),
+> tmp51x_read_properties() and tmp51x_init() using max_channels.
+> 
+> While at it, drop enum tmp51x_ids as there is no user and remove
+> trailing comma in the terminator entry for OF table.
 
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- Documentation/hwmon/sch5627.rst | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+LGTM, FWIW,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-diff --git a/Documentation/hwmon/sch5627.rst b/Documentation/hwmon/sch5627=
-.rst
-index ecb4fc84d045..8639dff234fc 100644
-=2D-- a/Documentation/hwmon/sch5627.rst
-+++ b/Documentation/hwmon/sch5627.rst
-@@ -33,3 +33,13 @@ The hardware monitoring part of the SMSC SCH5627 is acc=
-essed by talking
- through an embedded microcontroller. An application note describing the
- protocol for communicating with the microcontroller is available upon
- request. Please mail me if you want a copy.
-+
-+
-+Controlling fan speed
-+---------------------
-+
-+The SCH5627 allows for partially controlling the fan speed. If a temperat=
-ure
-+channel excedes tempX_max, all fans are forced to maximum speed. The same=
- is not
-+true for tempX_crit, presumably some other measures to cool down the syst=
-em are
-+take in this case.
-+In which way the value of fanX_min affects the fan speed is currently unk=
-nown.
-=2D-
-2.39.2
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
