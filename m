@@ -2,149 +2,209 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03157EC873E
-	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Sep 2023 15:38:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CDC65EC8743
+	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Sep 2023 16:46:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236169AbjIGPiC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 7 Sep 2023 11:38:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40288 "EHLO
+        id S242851AbjIGQq2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 7 Sep 2023 12:46:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237019AbjIGPXY (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 7 Sep 2023 11:23:24 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2116.outbound.protection.outlook.com [40.107.113.116])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C88ACA;
-        Thu,  7 Sep 2023 08:23:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Mcy1rWc7luXI+9el4kzgFaJDIWuXJOXLXzaiInKQh+/nQeslK6KwoI/0rdFacuf3RiAfPkfPJc0xLQxlUhx7zemiEOHZWwX4k0Urof3uDvBfN7LHFV4idrgvMbIbDe5Yo4hxFui106ZaD83cU7+oxv6G/fzOWSv/xjZWM8Sn0QiQtMPySplXCnM6XaZMnD4YWAwdMEnIFnDEMSOApKXc3Zzej2P3Cl39qBalL3Fkas3clEhUKXscF88gHyQ5pd0K8pbix2yKN+aQ0WHDEgZQBYrOg+hxUoT9ViqXel7tNfPjQbxN7f7CNqd2dQQBYpWireOFgNYDbvO3GxLJNpwjSw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uSx6t3bT4KimUzRI1hhDLWFcuwdhoukQNP2Snqrq8eU=;
- b=KolSDC4oO7xPLLxgcyyV2hb6ZkjwL8NtmSMEkSZjqSSX4awWfVejccOMqRJ7QCGGret/Rxleufj1GFp/yQceOl/ln2LIhpa1mZIs4OY223/hysSkxppKHIx1wN4M1MXTlWgsvyjBer3YdAPkK59niMeaavECnqyl3wDzXH8Hq50AUOHA7Txrf0ztdyie8Dgj7m0eGI7wPYnFe6BztJ6klwcaMNyz2o/LIebR6gS5gmg+BUSZFaibMrN2LPhWJEYNvu7NHMUSPxZiAkuzPMVqJe9CYcdqYEaYdJuRS+q0sbMzBSUQcHTLQ/Dgt0dQMvQLbzhIiIANCvMZdq+NSbModQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uSx6t3bT4KimUzRI1hhDLWFcuwdhoukQNP2Snqrq8eU=;
- b=uT7yBUJ9RqLISjDzMKFR16MgLu5FkGd4PgZOvaKIvavF518vZTV8sm/AIqh+bl8qHqyE6G6HUE9OEoL8mzZm/RvDmMs4BA6fKUAeFocqpqTMrN7NrjdGMKh4nVsB1/SYks2WkgVCVGqPAkNweXv/QgNTd+PSKYEHTpKVYhVvcI0=
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by TYBPR01MB5328.jpnprd01.prod.outlook.com (2603:1096:404:801f::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.34; Thu, 7 Sep
- 2023 06:46:09 +0000
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::9d23:32f5:9325:3706]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::9d23:32f5:9325:3706%5]) with mapi id 15.20.6745.035; Thu, 7 Sep 2023
- 06:46:09 +0000
+        with ESMTP id S243385AbjIGQqS (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 7 Sep 2023 12:46:18 -0400
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BABEB524E;
+        Thu,  7 Sep 2023 09:21:41 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="6.02,234,1688396400"; 
+   d="scan'208";a="179023738"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie6.idc.renesas.com with ESMTP; 07 Sep 2023 16:14:13 +0900
+Received: from localhost.localdomain (unknown [10.226.92.56])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id E73BC4010076;
+        Thu,  7 Sep 2023 16:14:10 +0900 (JST)
 From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     Eric Tremblay <etremblay@distech-controls.com>,
+To:     Eric Tremblay <etremblay@distech-controls.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.au@gmail.com>
-Subject: RE: [PATCH v5 1/2] hwmon: tmp513: Add max_channels variable to struct
- tmp51x_data
-Thread-Topic: [PATCH v5 1/2] hwmon: tmp513: Add max_channels variable to
- struct tmp51x_data
-Thread-Index: AQHZ4O0u2EbbAKg7d0mHQloM6sSWybAONqsAgAC1SqA=
-Date:   Thu, 7 Sep 2023 06:46:09 +0000
-Message-ID: <OS0PR01MB59225E213906BF426C3AC98686EEA@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-References: <20230906180837.284743-1-biju.das.jz@bp.renesas.com>
- <20230906180837.284743-2-biju.das.jz@bp.renesas.com>
- <ZPjZfK7+4jW3AFEB@smile.fi.intel.com>
-In-Reply-To: <ZPjZfK7+4jW3AFEB@smile.fi.intel.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TYBPR01MB5328:EE_
-x-ms-office365-filtering-correlation-id: 19975214-305e-47a1-7eef-08dbaf6e1ea8
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: YOEX6YEohNZ9b97PY/4DaaAWXdW+ZxO+0MNGmKZh21Z+PFqWYDJWNdtiIsv3QfsIQn5Y8hraIbdQ1CSSvv43cW8DytsWQyP03g9W0GpsStKtvP0XekmQhvRpt/r7XakwGmikpzTUeJbrcyhG/Nx83TTx5BIvdJnbY962qSON1NfVNA0icMgTWmzOOU9XMn74Xf45EauzngWN/xwNEDw3gywsRxoK7O7b7+6RtRZwRkYjpyj+zRyLJKl2cVXUAQzOJgpo+SRIhMYYmOZPRDJd2j8x0WmDNd2L0Oz0RFFhTvMEDe1Rwrm/3KcyBDIX2a91nNtqt7Hof1gOSKWPCCHff4GdAcliTEzY+RbmFd4LVPAuroeStP6lTaAkztBmB+tMN89sCiGMOHGsfo3DvrL5JJTWQ7nqO8m+VOvkwRrg6P+pY58nIVDglR18U2Clz1LtKBNTJ+D/zrfzhRupAObQEsvHv5fUJSR0sCUSVSl0oZhCW6VmfEP88RmvkGLRtfQEMuByWE0O7Adqxlo2CPhYC2cqD6KnlmRZkYneqIZBujr0CH9kNzbtMmGRgwogx1wvDpwrN3oHJNojii3DiJAtUbrYScxAJzlACVCPWb1bqVhcSjB7m6dYgAgBGL68aez4
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(396003)(366004)(136003)(39860400002)(346002)(451199024)(1800799009)(186009)(122000001)(6506007)(7696005)(9686003)(8936002)(71200400001)(33656002)(55016003)(86362001)(38070700005)(38100700002)(478600001)(26005)(2906002)(83380400001)(52536014)(4326008)(41300700001)(54906003)(316002)(8676002)(5660300002)(66476007)(6916009)(76116006)(64756008)(66556008)(66446008)(66946007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?lQ9UmJOa5NO2qUcs8XcMdfurhLK5cxyNnJNyq6Y9sYQv+3tlXLA020MK3Zud?=
- =?us-ascii?Q?Ph2p/xmB8slVtkqy1b12qiKIGaFSSPup0nzOlzY8c5mQ6H6H6RXoTHIwJd95?=
- =?us-ascii?Q?A3Cyr+wBTAUyPtNEmoMRPyf3do3meM01T+hAiP8pCUPRBahxqrQFjX8NLotw?=
- =?us-ascii?Q?1be8Dr3UaK5j0MjoratGjIMG/OBGizuccT62uuulVYc7b6kVs8hw9rwjs9rw?=
- =?us-ascii?Q?9geQvVi/enczP6Ix5aMvAKvmFZQLVKdTUeFndQRv97C5NyEeDAJShBoBpQCI?=
- =?us-ascii?Q?/hF2SBRiKkkDVYzjMWmx07kUBgLhcg0EqQGXh/N9djmVqvElbJVarFhTtxAg?=
- =?us-ascii?Q?8Mg3RvXPib+rdKQeT8SwvqlVW/dtmcxuYxYq156gZnZQ0tEt2pPlT0mY4kKK?=
- =?us-ascii?Q?F/DY15ZrMynCtmWjahVeKUse1yqPfBZCK4gNlRlhPb5levPSdqHAfv/sEYVX?=
- =?us-ascii?Q?uR9i3ciI3YXHY+qEnaz0mYmR//eGzVGCNCs3hmv+WVwX0ukelcFMkk4nM32V?=
- =?us-ascii?Q?elFQ1RCCjSGgaEcdlMLMwqqdpYBhsizg0M54aTDSrv0i3aMO8WCp5HnvyD8J?=
- =?us-ascii?Q?tCM3pplRo3Nnk7g/x0UXkDCA735cEFo/Ga8n/qhwws2AJSGH6vTLYA2XOSF7?=
- =?us-ascii?Q?Nr+G/0b1xkFXQEz3A2cKYKLAL5IU6KJufkiyP9hM6KYWHchh4qNdWXFqCJTM?=
- =?us-ascii?Q?QEEdPxLAU54DjFdrZ2MyFZBgciLdg4EtMgqfgapmmaviM9Opt00qjYRECnWT?=
- =?us-ascii?Q?4XoNa+oCSefpPSC8d7LAzQffBilKa8uxFmN8ntL1UKCsH3hdA4Gx1tlEW38I?=
- =?us-ascii?Q?LIjPfSRCxLlkCs/UOuotlj4xIUyG+xBVHiI+4uPGgGAVZXbFOSmzNiI9hahc?=
- =?us-ascii?Q?2X6fKCfjU1lA9LlmwOM5TyCQQ/AWKheMe8Y4lhsewGd25M5V1IQElryrvSvT?=
- =?us-ascii?Q?xSe0oQ2UsSa6kgNCbGQkzoKkMouJwNmPSewmmhe35qzsvrQYU81VSwIbN89I?=
- =?us-ascii?Q?ZiRiDYlHy1aF2ClMPFP0bX+/UXzUOmZ2V5CbWc8gfFzF7Zh9OCBVJMCJ/SwO?=
- =?us-ascii?Q?rg0xXsEd9k5xO+7dSE91JTqdVhomNDxySGHFEJWoMvil65pCj2cUSgy0fcH1?=
- =?us-ascii?Q?dzLeBK8nkvACAEfD0DSPseLf85MnHnKGZDIgBr/ztbOmsx2qsONiwm3dbXX3?=
- =?us-ascii?Q?t+eVCp9wpVMbMw94teArKjiURM9tScFo+O17tJAlCAzTqyaIwi+lNtec/1sn?=
- =?us-ascii?Q?CwGQB02oV7Ww36p6B4ryLM0+h7igPaAp/gL8zyFlHIzJRAxuDKNc7kV9FcJB?=
- =?us-ascii?Q?PlAGlkdNtGlIcsITULKWm6MH/unR/oYF5umrWfrjMD+/XW5jYR68Qg6fbKgk?=
- =?us-ascii?Q?3y4SJOeh9sTy6HI3x+Y9NqxjTCJiKmwt/0n+Yfk3EwBt3/N0j9CYVX17XcHS?=
- =?us-ascii?Q?Ip2wOADVMQ8BEwRxVwqoDrXkdBTO6mr8pq2/tGAcDJPAJVg2z9100yjqyWsf?=
- =?us-ascii?Q?I+h7hxLiuuYK3PBjpOx+OF0T43PAwTWI3pGBg6Z6b1qvHyLowezD+GdBg1/I?=
- =?us-ascii?Q?LKJbic+5YiQzwyYuTQSaHsd9G90ghTBbeCWZXwC35MxNvkwr3uzdNBmfkxEn?=
- =?us-ascii?Q?oQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Biju Das <biju.das.au@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v6 1/2] hwmon: tmp513: Add max_channels variable to struct tmp51x_data
+Date:   Thu,  7 Sep 2023 08:14:03 +0100
+Message-Id: <20230907071404.24334-2-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230907071404.24334-1-biju.das.jz@bp.renesas.com>
+References: <20230907071404.24334-1-biju.das.jz@bp.renesas.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 19975214-305e-47a1-7eef-08dbaf6e1ea8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Sep 2023 06:46:09.8083
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: RTk+zRbrXLLrlw/KsNZ+d/t29KFXFar1Iq71bGUMMFvsAhcJ2MqRqgseL9XKwYdVKVTZlHLU3agmFmJH11gQLWijt57NzzFEBCuvHbvHmIc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYBPR01MB5328
-X-OriginatorOrg: bp.renesas.com
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Andy Shevchenko,
+The tmp512 chip has 3 channels whereas tmp513 has 4 channels. Avoid
+using tmp51x_ids for this HW difference by replacing OF/ID table
+data with maximum channels supported by the device.
 
-> Subject: Re: [PATCH v5 1/2] hwmon: tmp513: Add max_channels variable to
-> struct tmp51x_data
->=20
-> On Wed, Sep 06, 2023 at 07:08:36PM +0100, Biju Das wrote:
-> > The tmp512 chip has 3 channels whereas tmp513 has 4 channels. Avoid
-> > using tmp51x_ids for this HW difference by replacing OF/ID table data
-> > with maximum channels supported by the device.
-> >
-> > Replace id->max_channels variable from struct tmp51x_data and drop the
-> > macros TMP51{2,3}_TEMP_CONFIG_DEFAULT as it can be derived from the
-> > macro TMP51X_TEMP_CONFIG_DEFAULT and update the logic in
-> > tmp51x_is_visible(),
-> > tmp51x_read_properties() and tmp51x_init() using max_channels.
-> >
-> > While at it, drop enum tmp51x_ids as there is no user and remove
-> > trailing comma in the terminator entry for OF table.
->=20
-> ...
->=20
-> > +#define TMP51X_TEMP_CONFIG_CONV_RATE	FIELD_PREP(GENMASK(9, 7), 0x7)
->=20
-> I also commented on this one. Any explanation why you didn't accept
-> recommended variant?
+Replace id->max_channels variable from struct tmp51x_data and drop the
+macros TMP51{2,3}_TEMP_CONFIG_DEFAULT as it can be derived from the macro
+TMP51X_TEMP_CONFIG_DEFAULT and update the logic in tmp51x_is_visible(),
+tmp51x_read_properties() and tmp51x_init() using max_channels.
 
-I missed it. Will send v6.
+While at it, drop enum tmp51x_ids as there is no user and remove
+trailing comma in the terminator entry for OF table.
 
-Cheers,
-Biju
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+---
+v5->v6:
+ * Updated TMP51X_TEMP_CONFIG_CONV_RATE macro by removing FIELD_PREP macro
+   and just use GENMASK(9, 7).
+ * Dropped bitfield.h as there is no user.
+v4->v5:
+ * Updated the TMP51X_TEMP_CHANNEL_MASK macro.
+ * Updated the indentation for TMP51X_TEMP_CONFIG_DEFAULT macro.
+v3->v4:
+ * Updated commit description
+ * Updated macros TMP51X_TEMP_CONFIG_DEFAULT and TMP51X_TEMP_CHANNEL_MASK.
+ * Removed trailing comma in the terminator entry for OF table.
+v2->v3:
+ * Updated the macro TMP51X_TEMP_CONFIG_DEFAULT by adding bit definitions.
+ * Dropped unused macros TMP51{2,3}_TEMP_CONFIG_DEFAULT.
+ * Avoided Yoda style logic.
+ * Replaced OF/ID data from tmp51x_ids->max_channels
+v2:
+ * New patch.
+---
+ drivers/hwmon/tmp513.c | 49 ++++++++++++++++++++----------------------
+ 1 file changed, 23 insertions(+), 26 deletions(-)
+
+diff --git a/drivers/hwmon/tmp513.c b/drivers/hwmon/tmp513.c
+index 9a180b1030c9..b336b95298ab 100644
+--- a/drivers/hwmon/tmp513.c
++++ b/drivers/hwmon/tmp513.c
+@@ -73,9 +73,6 @@
+ #define TMP51X_PGA_DEFAULT		8
+ #define TMP51X_MAX_REGISTER_ADDR	0xFF
+ 
+-#define TMP512_TEMP_CONFIG_DEFAULT	0xBF80
+-#define TMP513_TEMP_CONFIG_DEFAULT	0xFF80
+-
+ // Mask and shift
+ #define CURRENT_SENSE_VOLTAGE_320_MASK	0x1800
+ #define CURRENT_SENSE_VOLTAGE_160_MASK	0x1000
+@@ -113,6 +110,17 @@
+ 
+ #define MAX_TEMP_HYST			127500
+ 
++#define TMP512_MAX_CHANNELS		3
++#define TMP513_MAX_CHANNELS		4
++
++#define TMP51X_TEMP_CONFIG_CONV_RATE	GENMASK(9, 7)
++#define TMP51X_TEMP_CONFIG_RC		BIT(10)
++#define TMP51X_TEMP_CHANNEL_MASK(n)	(GENMASK((n) - 1, 0) << 11)
++#define TMP51X_TEMP_CONFIG_CONT		BIT(15)
++#define TMP51X_TEMP_CONFIG_DEFAULT(n)					\
++	(TMP51X_TEMP_CHANNEL_MASK(n) | TMP51X_TEMP_CONFIG_CONT |	\
++	 TMP51X_TEMP_CONFIG_CONV_RATE | TMP51X_TEMP_CONFIG_RC)
++
+ static const u8 TMP51X_TEMP_INPUT[4] = {
+ 	TMP51X_LOCAL_TEMP_RESULT,
+ 	TMP51X_REMOTE_TEMP_RESULT_1,
+@@ -152,10 +160,6 @@ static struct regmap_config tmp51x_regmap_config = {
+ 	.max_register = TMP51X_MAX_REGISTER_ADDR,
+ };
+ 
+-enum tmp51x_ids {
+-	tmp512, tmp513
+-};
+-
+ struct tmp51x_data {
+ 	u16 shunt_config;
+ 	u16 pga_gain;
+@@ -169,7 +173,7 @@ struct tmp51x_data {
+ 	u32 curr_lsb_ua;
+ 	u32 pwr_lsb_uw;
+ 
+-	enum tmp51x_ids id;
++	u8 max_channels;
+ 	struct regmap *regmap;
+ };
+ 
+@@ -434,7 +438,7 @@ static umode_t tmp51x_is_visible(const void *_data,
+ 
+ 	switch (type) {
+ 	case hwmon_temp:
+-		if (data->id == tmp512 && channel == 3)
++		if (channel >= data->max_channels)
+ 			return 0;
+ 		switch (attr) {
+ 		case hwmon_temp_input:
+@@ -585,7 +589,7 @@ static int tmp51x_init(struct tmp51x_data *data)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	if (data->id == tmp513) {
++	if (data->max_channels == TMP513_MAX_CHANNELS) {
+ 		ret = regmap_write(data->regmap, TMP513_N_FACTOR_3,
+ 				   data->nfactor[2] << 8);
+ 		if (ret < 0)
+@@ -601,22 +605,16 @@ static int tmp51x_init(struct tmp51x_data *data)
+ }
+ 
+ static const struct i2c_device_id tmp51x_id[] = {
+-	{ "tmp512", tmp512 },
+-	{ "tmp513", tmp513 },
++	{ "tmp512", TMP512_MAX_CHANNELS },
++	{ "tmp513", TMP513_MAX_CHANNELS },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, tmp51x_id);
+ 
+ static const struct of_device_id tmp51x_of_match[] = {
+-	{
+-		.compatible = "ti,tmp512",
+-		.data = (void *)tmp512
+-	},
+-	{
+-		.compatible = "ti,tmp513",
+-		.data = (void *)tmp513
+-	},
+-	{ },
++	{ .compatible = "ti,tmp512", .data = (void *)TMP512_MAX_CHANNELS },
++	{ .compatible = "ti,tmp513", .data = (void *)TMP513_MAX_CHANNELS },
++	{ }
+ };
+ MODULE_DEVICE_TABLE(of, tmp51x_of_match);
+ 
+@@ -674,9 +672,9 @@ static int tmp51x_read_properties(struct device *dev, struct tmp51x_data *data)
+ 		return ret;
+ 
+ 	ret = device_property_read_u32_array(dev, "ti,nfactor", nfactor,
+-					    (data->id == tmp513) ? 3 : 2);
++					    data->max_channels - 1);
+ 	if (ret >= 0)
+-		memcpy(data->nfactor, nfactor, (data->id == tmp513) ? 3 : 2);
++		memcpy(data->nfactor, nfactor, data->max_channels - 1);
+ 
+ 	// Check if shunt value is compatible with pga-gain
+ 	if (data->shunt_uohms > data->pga_gain * 40 * 1000 * 1000) {
+@@ -698,8 +696,7 @@ static void tmp51x_use_default(struct tmp51x_data *data)
+ static int tmp51x_configure(struct device *dev, struct tmp51x_data *data)
+ {
+ 	data->shunt_config = TMP51X_SHUNT_CONFIG_DEFAULT;
+-	data->temp_config = (data->id == tmp513) ?
+-			TMP513_TEMP_CONFIG_DEFAULT : TMP512_TEMP_CONFIG_DEFAULT;
++	data->temp_config = TMP51X_TEMP_CONFIG_DEFAULT(data->max_channels);
+ 
+ 	if (dev->of_node)
+ 		return tmp51x_read_properties(dev, data);
+@@ -720,7 +717,7 @@ static int tmp51x_probe(struct i2c_client *client)
+ 	if (!data)
+ 		return -ENOMEM;
+ 
+-	data->id = (uintptr_t)i2c_get_match_data(client);
++	data->max_channels = (uintptr_t)i2c_get_match_data(client);
+ 
+ 	ret = tmp51x_configure(dev, data);
+ 	if (ret < 0) {
+-- 
+2.25.1
+
