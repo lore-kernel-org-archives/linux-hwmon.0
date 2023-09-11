@@ -2,125 +2,162 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 019EFEE7FF4
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Sep 2023 06:41:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3429AEE801F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Sep 2023 07:12:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231509AbjIKGlt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 11 Sep 2023 02:41:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57586 "EHLO
+        id S233417AbjIKHM4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 11 Sep 2023 03:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234445AbjIKGls (ORCPT
+        with ESMTP id S233350AbjIKHMy (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 11 Sep 2023 02:41:48 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53BFE12C;
-        Sun, 10 Sep 2023 23:41:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694414503; x=1725950503;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AdaezQUleKG+/B6n1dXDyf5XHTCTu/yKGrZTURQZxD4=;
-  b=eOuMhg63bhAfGJjUrzKq0KHW5lXRfaa5zYdW8GxaZOU83eVkqqD5kUfa
-   tm5yxF+q8zouQt7iLtDj9bn1qE5OLdisfrYjw+kN0YnBNS7ybkzc0IJX7
-   Lmu9XajqChBAJzl2CWgUBPSFJszBwv12xq5FjGrdUU7vTqot5i6evEy4O
-   ibEv/BYtD/bAy9R8+0SV1LPC5zqGzVzt1svl5hiFkgg9jKQOgalQKNym9
-   RUlsQg0TYEFboVz49b4Icuq+uvJMTNKM9pAKXBirXUPjCk+8L2WxoKD56
-   OVSdskhaWhJjQzRPIuEoJ/5/QATlbIUcyX0RM9GtGCNpGxYTnhQ55nHbg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10829"; a="381809446"
-X-IronPort-AV: E=Sophos;i="6.02,243,1688454000"; 
-   d="scan'208";a="381809446"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2023 23:41:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10829"; a="692981431"
-X-IronPort-AV: E=Sophos;i="6.02,243,1688454000"; 
-   d="scan'208";a="692981431"
-Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 10 Sep 2023 23:41:38 -0700
-Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qfac3-0005uD-2V;
-        Mon, 11 Sep 2023 06:41:35 +0000
-Date:   Mon, 11 Sep 2023 14:40:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Saravanan Sekar <saravanan@linumiz.com>, sravanhome@gmail.com,
-        lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        linux@roeck-us.net, jdelvare@suse.com
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-hwmon@vger.kernel.org,
-        Saravanan Sekar <saravanan@linumiz.com>
-Subject: Re: [PATCH 1/3] hwmon: (pmbus/mpq7932) Get page count based on chip
- info
-Message-ID: <202309111406.BSKHGe9U-lkp@intel.com>
-References: <20230911034150.181880-2-saravanan@linumiz.com>
+        Mon, 11 Sep 2023 03:12:54 -0400
+Received: from omta034.useast.a.cloudfilter.net (omta034.useast.a.cloudfilter.net [44.202.169.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B5A2CE8
+        for <linux-hwmon@vger.kernel.org>; Mon, 11 Sep 2023 00:12:42 -0700 (PDT)
+Received: from eig-obgw-6006a.ext.cloudfilter.net ([10.0.30.182])
+        by cmsmtp with ESMTP
+        id fZpHqBfbyez0Cfb5oqQS5M; Mon, 11 Sep 2023 07:12:20 +0000
+Received: from md-in-79.webhostbox.net ([43.225.55.182])
+        by cmsmtp with ESMTPS
+        id fb66qDHhFchuBfb68qxblg; Mon, 11 Sep 2023 07:12:41 +0000
+X-Authority-Analysis: v=2.4 cv=QYx1A+Xv c=1 sm=1 tr=0 ts=64febde9
+ a=LfuyaZh/8e9VOkaVZk0aRw==:117 a=CKMxHAookNUaJbGn3r6bzg==:17
+ a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
+ a=IkcTkHD0fZMA:10 a=zNV7Rl7Rt7sA:10 a=oz0wMknONp8A:10 a=vU9dKmh3AAAA:8
+ a=gEfo2CItAAAA:8 a=6mVVujuaWLD2RSIlgPwA:9 a=QEXdDO2ut3YA:10
+ a=rsP06fVo5MYu2ilr0aT5:22 a=sptkURWiP4Gy88Gu7hUp:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=linumiz.com
+        ; s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=QwK69sTp47zzTxJYCYeDtYYJkekjiU87kUvd/a6irY0=; b=FK8SkZGaN1qDF2eagOyHMzuz7q
+        0zemE53JshI4zJKlOwsaKtJzgHHMzUTgDTUZqTF9C9UmF+Lz5ANZaFfa3JjhDE5Cmc7QywK5OC/Sb
+        uM0zkzQBOohF0GNAWJ/UtnoBjpH+sFfBkww3QIc7aAKCB5bMec0Rsgt7hv/vGq+Q1w1FqWCOwfpCQ
+        fmCRtIqoNkhuijNIdTP4XRmaGushDzvS1IT4gsYE61dKo8WyXrXJVxmgB5M6b/BggWhlziJuBDjJb
+        N1d9jjkVyPKb25ZFFehA1fS6fuFP17fLP2jS/C++Cz6GYWUh6sbkxsls4EvP6lhjshurJRvDUl7Qk
+        wYu+2fHA==;
+Received: from [103.163.95.214] (port=49564 helo=[192.168.1.105])
+        by md-in-79.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.96)
+        (envelope-from <saravanan@linumiz.com>)
+        id 1qfb61-001Jaz-1T;
+        Mon, 11 Sep 2023 12:42:33 +0530
+Message-ID: <d7eb272e-8abb-c307-4aa8-b0af3f943453@linumiz.com>
+Date:   Mon, 11 Sep 2023 12:42:29 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230911034150.181880-2-saravanan@linumiz.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH 2/3] dt-bindings: regulator: Add mps,mpq2286
+ power-management IC
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        sravanhome@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, linux@roeck-us.net, jdelvare@suse.com
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+References: <20230911034150.181880-1-saravanan@linumiz.com>
+ <20230911034150.181880-3-saravanan@linumiz.com>
+ <34ede760-d612-4628-17e6-600c133ee878@linaro.org>
+Content-Language: en-US
+From:   Saravanan Sekar <saravanan@linumiz.com>
+In-Reply-To: <34ede760-d612-4628-17e6-600c133ee878@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - md-in-79.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - linumiz.com
+X-BWhitelist: no
+X-Source-IP: 103.163.95.214
+X-Source-L: No
+X-Exim-ID: 1qfb61-001Jaz-1T
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([192.168.1.105]) [103.163.95.214]:49564
+X-Source-Auth: saravanan@linumiz.com
+X-Email-Count: 1
+X-Org:  HG=dishared_whb_net_legacy;ORG=directi;
+X-Source-Cap: bGludW1jbWM7aG9zdGdhdG9yO21kLWluLTc5LndlYmhvc3Rib3gubmV0
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfENgQLmKrisB2rcdRSLm72TuWGTzkG6gEVTjyBnjWTHMZO+iH+RgybR4JmXQ4fWlyx/Rr5SFLg2CfHkNEx705kUJpxbU/NML2mLUTTRkwlt3q76cKw7o
+ g+kdgjVn8t2c0WdJclZlWT6XUkA0iiSaQtUaURimu+XffQYAzLvoToIKHIs+xDcXn0X27FXbMP1UWquP03PFGc1LqpYWFaPQYLI=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Saravanan,
+On 11/09/23 11:56, Krzysztof Kozlowski wrote:
+> On 11/09/2023 05:41, Saravanan Sekar wrote:
+>> Document mpq2286 power-management IC
+>>
+>> Signed-off-by: Saravanan Sekar <saravanan@linumiz.com>
+> 
+> Please use subject prefixes matching the subsystem. You can get them for
+> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+> your patch is touching. It's: regulator: dt-bindings:
 
-kernel test robot noticed the following build warnings:
+Thanks for your time to review. git log has mix of "regulator: 
+dt-bindings" and "dt-bindings: regualtor". I had referred my own 
+accepted driver regulator/mps,mpq7932.yaml
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on broonie-regulator/for-next linus/master v6.6-rc1 next-20230911]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+>> ---
+>>   .../bindings/regulator/mps,mpq2286.yaml       | 59 +++++++++++++++++++
+>>   1 file changed, 59 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/regulator/mps,mpq2286.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/regulator/mps,mpq2286.yaml b/Documentation/devicetree/bindings/regulator/mps,mpq2286.yaml
+>> new file mode 100644
+>> index 000000000000..d00d887870a9
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/regulator/mps,mpq2286.yaml
+>> @@ -0,0 +1,59 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/regulator/mps,mpq2286.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Monolithic Power System MPQ2286 PMIC
+>> +
+>> +maintainers:
+>> +  - Saravanan Sekar <saravanan@linumiz.com>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - mps,mpq2286
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  regulators:
+>> +    type: object
+>> +
+>> +    properties:
+>> +      "buck0":
+> 
+> You did not test it... Sigh. Anyway, there is no need for entire
+> regulators node for one regulator. Can the device do anything else than
+> being a regulator?
+> 
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Saravanan-Sekar/hwmon-pmbus-mpq7932-Get-page-count-based-on-chip-info/20230911-114451
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20230911034150.181880-2-saravanan%40linumiz.com
-patch subject: [PATCH 1/3] hwmon: (pmbus/mpq7932) Get page count based on chip info
-config: x86_64-randconfig-005-20230911 (https://download.01.org/0day-ci/archive/20230911/202309111406.BSKHGe9U-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230911/202309111406.BSKHGe9U-lkp@intel.com/reproduce)
+I tested it, but documentation is not updated with test findings (buck0).
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309111406.BSKHGe9U-lkp@intel.com/
+Other chipset has multiple regulator so dts has regulators node to keep 
+the driver common
 
-All warnings (new ones prefixed by >>):
+Primarily device is a regulator with pmbus capability like fault status 
+(OV,OC, VIN, VOUT, Power good status), temperature status.
 
->> drivers/hwmon/pmbus/mpq7932.c:108:16: warning: cast to smaller integer type 'int' from 'const void *' [-Wvoid-pointer-to-int-cast]
-           info->pages = (int)device_get_match_data(&client->dev);
-                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+> Best regards,
+> Krzysztof
+>
+Thanks,
+Saravanan
 
 
-vim +108 drivers/hwmon/pmbus/mpq7932.c
-
-    95	
-    96	static int mpq7932_probe(struct i2c_client *client)
-    97	{
-    98		struct mpq7932_data *data;
-    99		struct pmbus_driver_info *info;
-   100		struct device *dev = &client->dev;
-   101		int i;
-   102	
-   103		data = devm_kzalloc(dev, sizeof(struct mpq7932_data), GFP_KERNEL);
-   104		if (!data)
-   105			return -ENOMEM;
-   106	
-   107		info = &data->info;
- > 108		info->pages = (int)device_get_match_data(&client->dev);
-   109		info->format[PSC_VOLTAGE_OUT] = direct;
-   110		info->m[PSC_VOLTAGE_OUT] = 160;
-   111		info->b[PSC_VOLTAGE_OUT] = -33;
-   112		for (i = 0; i < info->pages; i++) {
-   113			info->func[i] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-   114					| PMBUS_HAVE_STATUS_TEMP;
-   115		}
-   116	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
