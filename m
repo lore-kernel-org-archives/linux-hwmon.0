@@ -2,141 +2,91 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 63342EEB562
-	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Sep 2023 18:41:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D675BEE49A4
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Sep 2023 00:46:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235246AbjIHSmB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 8 Sep 2023 14:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36012 "EHLO
+        id S231720AbjIKAqf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 10 Sep 2023 20:46:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237749AbjIHSmA (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 8 Sep 2023 14:42:00 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDEF81BF4;
-        Fri,  8 Sep 2023 11:41:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694198480; x=1725734480;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QPLINnlBu9wjGkIIvfYqrRJ4j0WIW2UBVJYhir95sJ8=;
-  b=KeV+TH4WbTYOpQbOe3yH2PlGo+Eue+zDZWf/KK46Lx6uG0IB482l2Brv
-   ykrBri2Ard5zsaF3G+1yVgU/uN8BrZEQx1ZzZgX6b+A7d1v0lhrzNGWZl
-   5KFyTthCXu5b6LVyVG66OxQuR/IOV78Wdeht7m4x6TFyBwcu/d2NDFBCA
-   BvNpLoISxoS87l00mGluhQLRbZ0bDwhqMAOU/H74Qv4Yh2cLwHQjUXw8o
-   PHS/7bWw0nEXts7kypgiFJlyt5MALkTFRcdkfQNIG9azhea3e4SpHRCvM
-   7Yv74BtT/NkbmRz7ukGQ2kT6A18fdjQ4k9Q+LJB1gUSIlg0e3jrqcsg+1
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="444151350"
-X-IronPort-AV: E=Sophos;i="6.02,237,1688454000"; 
-   d="scan'208";a="444151350"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2023 11:39:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="832746957"
-X-IronPort-AV: E=Sophos;i="6.02,237,1688454000"; 
-   d="scan'208";a="832746957"
-Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 08 Sep 2023 11:39:18 -0700
-Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qegNv-0002WK-2g;
-        Fri, 08 Sep 2023 18:39:15 +0000
-Date:   Sat, 9 Sep 2023 02:38:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, patrick@stwcx.xyz,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: max31790: support to config PWM as TACH
-Message-ID: <202309090228.2bSFmAO8-lkp@intel.com>
-References: <20230906084837.3043030-3-Delphine_CC_Chiu@wiwynn.com>
+        with ESMTP id S229493AbjIKAqf (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 10 Sep 2023 20:46:35 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5920D9;
+        Sun, 10 Sep 2023 17:46:30 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1bdbf10333bso31986815ad.1;
+        Sun, 10 Sep 2023 17:46:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1694393190; x=1694997990; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sNC3iO34R8W9MONsZ2q/3XRN471AayEfOSPYXRzgL+U=;
+        b=EwtIKtUA5UOC0mdcIc1fSSzMZN0nXFGLqtoxRCL4IKhBsfe2LooLajvBABqeFP30iC
+         mWf8PRkypyt0tpzfeXWWVLkswyd8xHNXWuEyaPzw4drEFBv7yILfs+oIgmRpxzPCCQ8S
+         M4SwO6cNLefhb+nw996o93+xnPTspwcCcv5NoAtrdMtIV6LFoBrzGZ++zOa+XUOYZ4Ts
+         YawcVnpmSdXV5Qx3Whp+yYs8gAYDcCkmS7QkPyl9OGc9WrGnky7YaGWB9DsIK4p+NJeX
+         HnNZu0CshL/uoE3tsYahn5/8VNyLXjOvJUF+Xe4wPM7Hpg7zDq0QjdSTzDHePP5IXCuK
+         ATvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694393190; x=1694997990;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sNC3iO34R8W9MONsZ2q/3XRN471AayEfOSPYXRzgL+U=;
+        b=DFYFXKp3u1Z2l+UB5xOg7wT9sa7VhPVC31/CCcYwMV9ob4Z5MBZF42GyOx9IdI+RZh
+         Ehvn7U6EG5npVasn1qTBVDT12mQZiIc2kRuRNMwETSuaDbgLsvOohnvi8BDuvDuLl0/p
+         MoeG5wj58a+VAfo4AwNsp2Meu5/VYfJ9ARhDJayrmjGIzeFpQY/v/nTgSjGyWffe9UCf
+         imZhjhxCGZ1JGdEZcAATC0D9OQmU3reAtbgE1aCM1ZzGPnVsDUWGU+XRM3ZJ7vwRBv4d
+         oS5rrK4UkMWHqrOuCZAIm7lTZfHRy68e08VIgFRVtv+JyozHXUru/pMPACvhcXZlCN9p
+         WAJw==
+X-Gm-Message-State: AOJu0YylqvQODHj9Kq9PEWzoZKGFnONJWKaa28Fu8MXY6aJvJGdHucLw
+        53lGeg6eM/VxhG1t5KKb7lI=
+X-Google-Smtp-Source: AGHT+IEAJXPl7ddD9w8uIr3+HH1N/PXN2vXp20paGG1PRgFexc9VSLD44M7opDCW8eNFlk7Z7g39gA==
+X-Received: by 2002:a17:902:ce92:b0:1c3:a215:a9ba with SMTP id f18-20020a170902ce9200b001c3a215a9bamr5146478plg.33.1694393190246;
+        Sun, 10 Sep 2023 17:46:30 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j12-20020a17090276cc00b001bc68602e54sm5097410plt.142.2023.09.10.17.46.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Sep 2023 17:46:29 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 10 Sep 2023 17:46:28 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Eric Tremblay <etremblay@distech-controls.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Biju Das <biju.das.au@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v6 1/2] hwmon: tmp513: Add max_channels variable to
+ struct tmp51x_data
+Message-ID: <85a8d9a6-712b-4fd8-a2bd-0c30ea9cd670@roeck-us.net>
+References: <20230907071404.24334-1-biju.das.jz@bp.renesas.com>
+ <20230907071404.24334-2-biju.das.jz@bp.renesas.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230906084837.3043030-3-Delphine_CC_Chiu@wiwynn.com>
+In-Reply-To: <20230907071404.24334-2-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Delphine,
+On Thu, Sep 07, 2023 at 08:14:03AM +0100, Biju Das wrote:
+> The tmp512 chip has 3 channels whereas tmp513 has 4 channels. Avoid
+> using tmp51x_ids for this HW difference by replacing OF/ID table
+> data with maximum channels supported by the device.
+> 
+> Replace id->max_channels variable from struct tmp51x_data and drop the
+> macros TMP51{2,3}_TEMP_CONFIG_DEFAULT as it can be derived from the macro
+> TMP51X_TEMP_CONFIG_DEFAULT and update the logic in tmp51x_is_visible(),
+> tmp51x_read_properties() and tmp51x_init() using max_channels.
+> 
+> While at it, drop enum tmp51x_ids as there is no user and remove
+> trailing comma in the terminator entry for OF table.
+> 
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 
-kernel test robot noticed the following build warnings:
+Applied.
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linus/master v6.5 next-20230908]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Delphine-CC-Chiu/hwmon-max31790-support-to-config-PWM-as-TACH/20230906-165344
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20230906084837.3043030-3-Delphine_CC_Chiu%40wiwynn.com
-patch subject: [PATCH] hwmon: max31790: support to config PWM as TACH
-config: x86_64-randconfig-161-20230907 (https://download.01.org/0day-ci/archive/20230909/202309090228.2bSFmAO8-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20230909/202309090228.2bSFmAO8-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309090228.2bSFmAO8-lkp@intel.com/
-
-smatch warnings:
-drivers/hwmon/max31790.c:511 max31790_config_pwm_as_tach() warn: unsigned 'fan_config' is never less than zero.
-
-vim +/fan_config +511 drivers/hwmon/max31790.c
-
-   482	
-   483	static int max31790_config_pwm_as_tach(struct device *dev,
-   484					       struct i2c_client *client)
-   485	{
-   486		struct device_node *np = dev->of_node;
-   487		int i, ret = 0, size, channel;
-   488		u8 pwm_index[NR_CHANNEL] = { 0 };
-   489		u8 fan_config;
-   490	
-   491		size = of_property_count_u8_elems(np, "pwm-as-tach");
-   492	
-   493		if ((size > 0) && (size <= NR_CHANNEL)) {
-   494			ret = of_property_read_u8_array(np, "pwm-as-tach", pwm_index,
-   495							size);
-   496			if (ret) {
-   497				dev_err(dev,
-   498					"Property 'pwm-as-tach' cannot be read.\n");
-   499				return ret;
-   500			}
-   501	
-   502			for (i = 0; i < size; i++) {
-   503				if ((pwm_index[i] == 0) ||
-   504				    (pwm_index[i] > NR_CHANNEL)) {
-   505					continue;
-   506				}
-   507	
-   508				channel = pwm_index[i] - 1;
-   509				fan_config = i2c_smbus_read_byte_data(
-   510					client, MAX31790_REG_FAN_CONFIG(channel));
- > 511				if (fan_config < 0) {
-   512					dev_err(dev,
-   513						"Read fan config for channel %d failed.\n",
-   514						channel);
-   515					return fan_config;
-   516				}
-   517	
-   518				fan_config |= (MAX31790_FAN_CFG_CTRL_MON |
-   519					       MAX31790_FAN_CFG_TACH_INPUT);
-   520				i2c_smbus_write_byte_data(
-   521					client, MAX31790_REG_FAN_CONFIG(channel),
-   522					fan_config);
-   523			}
-   524		}
-   525	
-   526		return 0;
-   527	}
-   528	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Guenter
