@@ -2,88 +2,126 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64A0CEE7FF4
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Sep 2023 04:11:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6CC9C71153
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Sep 2023 04:23:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232453AbjIKELE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 11 Sep 2023 00:11:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42544 "EHLO
+        id S231219AbjIKEXj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 11 Sep 2023 00:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233610AbjIKEKn (ORCPT
+        with ESMTP id S229593AbjIKEXj (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 11 Sep 2023 00:10:43 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B236EE7F;
-        Sun, 10 Sep 2023 21:10:31 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39338C433C9;
-        Mon, 11 Sep 2023 04:10:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694405431;
-        bh=S41KxFRM7F/NmmMk//E+BluTJ5Y6UZiLpvFzn731U5A=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=eh0r4fiKVmf9rUYQaIZPdBHfJ0u363MVuSpO6iNV4jS+5kiBzDyZvWcYcJ5xBNs29
-         D1QpHGQUGO/XNuE1dz6ta789d4UaxQz8LS4qkuTyvjQ+OJx0TbYEfSKlwS3QM7KYHi
-         Rw5Ql5tWT8JVJhDnU7BdNi+FcyVl+6HhhFwMQUQTCVokI7cRhoMAH0e6yROLRZDnGw
-         4hk8x1ALxF3OFe5M7Nwvb1QqAswtFTkoTPQo9iO5XFzQn+FrtE7gmN/MUjwQnOXWdB
-         Dalz0As4ITxK0cvzFxl6oxpfLj0BUKqg+pCgG6dA1+HKF7U/lFMQSHV7eA0ipNvFNb
-         oHT7lFe6/VsGA==
-Received: (nullmailer pid 380490 invoked by uid 1000);
-        Mon, 11 Sep 2023 04:10:29 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Mon, 11 Sep 2023 00:23:39 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678BA106;
+        Sun, 10 Sep 2023 21:23:34 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id ca18e2360f4ac-7950fac19f2so154553639f.3;
+        Sun, 10 Sep 2023 21:23:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1694406213; x=1695011013; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZwezSlz+P0+Z2mHsdJjGRZIZ23KKBUbArptodkuCCLA=;
+        b=DSh+3ypCeDiXkYqFcSQbHWFVV+zM+aKANtHGzr8K+egYS0pTFagFZUeQFA5Hx+NB92
+         X9Z2w31JldD5SFq81vPkJzMaTk79xbcsAYEM7JSSlUWKoiD/xSQ1ux1C/mY+MBUHHp9V
+         vuh4rirfn4MQ9gt0aZfy1gkCudQyI887wo37do/N1hlxH8yEK5+j7W767eLF30Bcpqjc
+         +N/FUY8lciBD75NO9jilM8sxrURHPfJB/fj/ceGo9vKGEjIa9QlPQt900uwN90gIcA4h
+         mTdislaY1zZbZdpRGJw32LXlxDbwA0xfe4ZRdZvK47iMi34vq5hqgub2D1YHLDwEG9sa
+         5jUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694406213; x=1695011013;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZwezSlz+P0+Z2mHsdJjGRZIZ23KKBUbArptodkuCCLA=;
+        b=X+Mlx29aSyHD2054czN45w2aQTVpk3DGQCiP288/oNnVGPp0Bi4vP5b4Rl16CR3MYs
+         AyJ6vKdXMiI3GO3vzxjjaK6aRY7heXMKK5eQBfmaFZKBvpRgL0iM4Wr5BoEymfj44oeZ
+         G+ET5ZXceHiss3uqZ48rGlSQDvFVV5Y4paY/MTQfU+yYkbnMqIuzEgXLyKQ1a8nd+4BY
+         Vy4xBSRvfyQNII/lytCWTYvwMtgCeGMs1Wlx37gsNWrP2UEi9aTGLD29TEBR4CsLH1PL
+         2BZQjkbQuclfxSgWeNlmTTbwDe2HSM+UN7xXqRz5ipVarliY+3epaO0vNPKzIGeBYY++
+         Jdgw==
+X-Gm-Message-State: AOJu0YyYsEjSLCDw0hB50RXCHHnqF/lHdfGCz8vm4RbcbPpr8dmzuw2k
+        mjdaKFa/CJMjiQBvf0K0NiQ=
+X-Google-Smtp-Source: AGHT+IFPotVSX268QJNoA1xH2Nf34ADPSLxJtflUJsCH7TRnOtT7edLvJ2am/yD7hGinw2WC2yPt8A==
+X-Received: by 2002:a92:c568:0:b0:34f:784f:f214 with SMTP id b8-20020a92c568000000b0034f784ff214mr2238827ilj.9.1694406213616;
+        Sun, 10 Sep 2023 21:23:33 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r6-20020a92c506000000b0034ab4a2e0d5sm2136172ilg.70.2023.09.10.21.23.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 10 Sep 2023 21:23:32 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <5acb9307-2be1-dcd2-fdb7-b2842c7ff24d@roeck-us.net>
+Date:   Sun, 10 Sep 2023 21:23:30 -0700
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Saravanan Sekar <saravanan@linumiz.com>
-Cc:     sravanhome@gmail.com, lgirdwood@gmail.com,
-        linux-kernel@vger.kernel.org, broonie@kernel.org,
-        devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux@roeck-us.net, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org, jdelvare@suse.com, conor+dt@kernel.org
-In-Reply-To: <20230911034150.181880-3-saravanan@linumiz.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Content-Language: en-US
+To:     Saravanan Sekar <saravanan@linumiz.com>, sravanhome@gmail.com,
+        lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jdelvare@suse.com
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
 References: <20230911034150.181880-1-saravanan@linumiz.com>
- <20230911034150.181880-3-saravanan@linumiz.com>
-Message-Id: <169440542910.380472.16578898431474841864.robh@kernel.org>
-Subject: Re: [PATCH 2/3] dt-bindings: regulator: Add mps,mpq2286
- power-management IC
-Date:   Sun, 10 Sep 2023 23:10:29 -0500
+ <20230911034150.181880-4-saravanan@linumiz.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 3/3] hwmon: (pmbus/mpq2286) Add a support for mpq2286
+ Power Management IC
+In-Reply-To: <20230911034150.181880-4-saravanan@linumiz.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-
-On Mon, 11 Sep 2023 09:11:49 +0530, Saravanan Sekar wrote:
-> Document mpq2286 power-management IC
+On 9/10/23 20:41, Saravanan Sekar wrote:
+> The MPQ2286 is a programmable, high frequency synchronous buck regulator
+> designed to power a variety of Automotive system peripherals. Single buck
+> converters with hardware monitoring capability is configurable over PMBus
+> interface.
 > 
 > Signed-off-by: Saravanan Sekar <saravanan@linumiz.com>
 > ---
->  .../bindings/regulator/mps,mpq2286.yaml       | 59 +++++++++++++++++++
->  1 file changed, 59 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/regulator/mps,mpq2286.yaml
+>   drivers/hwmon/pmbus/mpq7932.c | 3 +++
+>   1 file changed, 3 insertions(+)
 > 
+> diff --git a/drivers/hwmon/pmbus/mpq7932.c b/drivers/hwmon/pmbus/mpq7932.c
+> index af3e5e9590c8..3ffeece28e2d 100644
+> --- a/drivers/hwmon/pmbus/mpq7932.c
+> +++ b/drivers/hwmon/pmbus/mpq7932.c
+> @@ -21,6 +21,7 @@
+>   #define MPQ7932_N_VOLTAGES		256
+>   #define MPQ7932_VOUT_MAX		0xFF
+>   #define MPQ7932_NUM_PAGES		6
+> +#define MPQ2286_NUM_PAGES		1
+>   
+>   #define MPQ7932_TON_DELAY		0x60
+>   #define MPQ7932_VOUT_STARTUP_SLEW	0xA3
+> @@ -130,12 +131,14 @@ static int mpq7932_probe(struct i2c_client *client)
+>   
+>   static const struct of_device_id mpq7932_of_match[] = {
+>   	{ .compatible = "mps,mpq7932", .data = (void *)MPQ7932_NUM_PAGES },
+> +	{ .compatible = "mps,mpq2286", .data = (void *)MPQ2286_NUM_PAGES },
+>   	{},
+>   };
+>   MODULE_DEVICE_TABLE(of, mpq7932_of_match);
+>   
+>   static const struct i2c_device_id mpq7932_id[] = {
+>   	{ "mpq7932", },
+> +	{ "mpq2286", },
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Please keep alphabetic order.
 
-yamllint warnings/errors:
+>   	{ },
+>   };
+>   MODULE_DEVICE_TABLE(i2c, mpq7932_id);
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/regulator/mps,mpq2286.example.dtb: pmic@3: regulators: 'buck' does not match any of the regexes: 'pinctrl-[0-9]+'
-	from schema $id: http://devicetree.org/schemas/regulator/mps,mpq2286.yaml#
+This is one of those super-secret automotive chips where almost no information
+is available to the public. I'll need authoritative confirmation that all the
+various parameters (b. m, output voltage format, minimum and maximum output
+voltage, step size) match mpq7932 exactly. That is rarely the case, so consider
+me skeptic.
 
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230911034150.181880-3-saravanan@linumiz.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+Guenter
 
