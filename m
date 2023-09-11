@@ -2,250 +2,270 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A891DCA0EC7
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Sep 2023 21:21:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8145FCA0EC9
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Sep 2023 21:21:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235640AbjIKVQV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 11 Sep 2023 17:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47354 "EHLO
+        id S238662AbjIKVQr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 11 Sep 2023 17:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242636AbjIKP73 (ORCPT
+        with ESMTP id S236431AbjIKKhr (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 11 Sep 2023 11:59:29 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AECE71AE
-        for <linux-hwmon@vger.kernel.org>; Mon, 11 Sep 2023 08:59:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694447964; x=1725983964;
-  h=date:from:to:cc:subject:message-id;
-  bh=4771JjZRsNiZs2ojyfoOiwpHSekzjLsJIf5osN7pwqU=;
-  b=NZ3cFYnm1aE6SjXhaWGbl48NTuIEa19rVCKtX00xooMad1y66tPQltAu
-   nEEXjp8T9jufFr0eyFFZxSGhCokqkzaJDqnlUtZzRvP5+C5dUqu3NeB79
-   SCDndJqQoKycN13WFHVJs9bcOWlCNhMYchRxsnjyiawH6MYTFU2f3eaO4
-   DD0EO0Ncyt8qKqfFHdQP57HnwVE4uX6Tr/2am3X94LUxyvMjKFy67557B
-   AytUCAZrFKVYXtOiyIAGgOE4ChVAgP5sLMxO/9rIOtFWDDVCmYCG+7gzG
-   3nr54ERnESRHEpyJx9T939Dj49jIF6aUDu+QrnnFbvG1stxMOpd4ZuozB
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="378037752"
-X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
-   d="scan'208";a="378037752"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 08:59:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="772633207"
-X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
-   d="scan'208";a="772633207"
-Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 11 Sep 2023 08:59:20 -0700
-Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qfjJl-0006QQ-2s;
-        Mon, 11 Sep 2023 15:59:17 +0000
-Date:   Mon, 11 Sep 2023 23:58:48 +0800
-From:   kernel test robot <lkp@intel.com>
+        Mon, 11 Sep 2023 06:37:47 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EFBE5F
+        for <linux-hwmon@vger.kernel.org>; Mon, 11 Sep 2023 03:37:42 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-273527a8fdeso2738932a91.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 11 Sep 2023 03:37:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1694428662; x=1695033462; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Po8IS4DRMtQvmgPVXjH58qy9Rqo/kKZSvAUadebqBp4=;
+        b=F5+2kUx330xrTBjysIEeGshORGE1FhL24CGmIHwUzCrJblsIpZ/H2Psn2ChN7KXU+8
+         6dh5n3pwOr3Eb7F+UQxAdjI86fqnThoR0hBdtby5E+ssxCBqBoA6z97zkKhAsheyna3I
+         GTuaxnq+s+Z5HiLWy87YxBOV7oSW6OisCNKluEqhq9arL8CsULm0ZORTMc0IsABgHDtD
+         l/bEfLRvX7MTLxMkuSG9orwUMK9FZPuyK2GBP3zab1R9K1tVEJoJk++GFLQ+2xeyliIi
+         woJAfZZROzBWZukqneM2mQqGnldxV7JGaGW0S+c4qRaZxPAGYX7lEB8GWsskMvItRYT3
+         qG4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694428662; x=1695033462;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Po8IS4DRMtQvmgPVXjH58qy9Rqo/kKZSvAUadebqBp4=;
+        b=PFHD/7BVap+cK7zNeq/PgiiLSG1tzY/aLdybDQplYUFMOiqqmF5oirFQJJfehJt1bj
+         okOecNdJNWmgZTi6l7esHQTYm2FfWcZAR4KfLFKi9CManq1qWSkilowIpPxxGJm6+gTF
+         hnNZ0CaPYbq9GYeyUTyLTqVMOQXUbTITH3ymkEbwQq+5DeYlg0lw2VLBowp7g/TIqJMi
+         1xd8ulBACMQZ9laeXkms59thRVZSJu0POtWxHxY0R/hjiY76+hEt0ON0IxJZOEELcynE
+         uufAKiSE9VuJsN1qT1iNmChoPgSNlPIvSy0Jnv5dwF5pfB/4CBjZYVgeAPLaFGw8Kdhp
+         9PfQ==
+X-Gm-Message-State: AOJu0YyBrYJUY8i/eSfP7Fk0DkpQyRxdjTmCfXEPFvucaZvFyKUUV5ct
+        2JtMBDOiXfW7Xj/8iFFjdYrRuQjqz5MGCar2n7hUfQ==
+X-Google-Smtp-Source: AGHT+IHmOIqa/z6dMpq8pdMxxAGEDuHNj5xcEgKDzqBAe8nBbBBoEdwfdK2+IK8kAeHSnZ6SVg4Hu4N7waaldgyLK1Q=
+X-Received: by 2002:a17:90a:4ce4:b0:263:1f1c:ef4d with SMTP id
+ k91-20020a17090a4ce400b002631f1cef4dmr7075991pjh.10.1694428662010; Mon, 11
+ Sep 2023 03:37:42 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230901093449.838414-1-Naresh.Solanki@9elements.com> <83f2afcc-aa9a-2d60-f5e2-971f7d669e00@roeck-us.net>
+In-Reply-To: <83f2afcc-aa9a-2d60-f5e2-971f7d669e00@roeck-us.net>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+Date:   Mon, 11 Sep 2023 16:07:31 +0530
+Message-ID: <CABqG17iOLLb8qJkMRc7YCLMLE5mL9AV0fu7ckQz==FihFOUsKQ@mail.gmail.com>
+Subject: Re: [PATCH v2] regulator (max5970): Add hwmon support
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD REGRESSION
- 80369d9e1f2f16993ae6d148553c37bf65a209e4
-Message-ID: <202309112345.THoy63Mm-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+Cc:     broonie@kernel.org, zev@bewilderbeest.net,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 80369d9e1f2f16993ae6d148553c37bf65a209e4  hwmon: (sch5627) Document behaviour of limit registers
+Hi
 
-Unverified Error/Warning (likely false positive, please contact us if interested):
-
-sh4-linux-gcc: internal compiler error: Segmentation fault signal terminated program cc1
-{standard input}: Warning: end of file not at end of a line; newline inserted
-{standard input}:1095: Error: pcrel too far
-{standard input}:611: Warning: end of file not at end of a line; newline inserted
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- sh-allmodconfig
-|   |-- sh4-linux-gcc:internal-compiler-error:Segmentation-fault-signal-terminated-program-cc1
-|   |-- standard-input:Error:pcrel-too-far
-|   `-- standard-input:Warning:end-of-file-not-at-end-of-a-line-newline-inserted
-`-- sh-allyesconfig
-    |-- sh4-linux-gcc:internal-compiler-error:Segmentation-fault-signal-terminated-program-cc1
-    |-- standard-input:Error:pcrel-too-far
-    `-- standard-input:Warning:end-of-file-not-at-end-of-a-line-newline-inserted
-
-elapsed time: 879m
-
-configs tested: 162
-configs skipped: 2
-
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                      axs103_smp_defconfig   gcc  
-arc                                 defconfig   gcc  
-arc                        nsimosci_defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                         axm55xx_defconfig   gcc  
-arm                                 defconfig   clang
-arm                                 defconfig   gcc  
-arm                          exynos_defconfig   gcc  
-arm                   milbeaut_m10v_defconfig   clang
-arm                  randconfig-r032-20230911   clang
-arm                         vf610m4_defconfig   gcc  
-arm64                            allmodconfig   gcc  
-arm64                             allnoconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r035-20230911   gcc  
-arm64                randconfig-r036-20230911   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r023-20230911   gcc  
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-006-20230911   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                  randconfig-001-20230911   gcc  
-i386                  randconfig-002-20230911   gcc  
-i386                  randconfig-003-20230911   gcc  
-i386                  randconfig-004-20230911   gcc  
-i386                  randconfig-005-20230911   gcc  
-i386                  randconfig-006-20230911   gcc  
-i386                  randconfig-011-20230911   clang
-i386                  randconfig-012-20230911   clang
-i386                  randconfig-013-20230911   clang
-i386                  randconfig-014-20230911   clang
-i386                  randconfig-015-20230911   clang
-i386                  randconfig-016-20230911   clang
-i386                 randconfig-r012-20230911   clang
-i386                 randconfig-r014-20230911   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20230911   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r025-20230911   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                          ath25_defconfig   clang
-mips                        bcm47xx_defconfig   gcc  
-mips                 randconfig-r003-20230911   clang
-mips                 randconfig-r024-20230911   gcc  
-mips                          rb532_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r002-20230911   gcc  
-nios2                randconfig-r016-20230911   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r033-20230911   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   gcc  
-powerpc                      ep88xc_defconfig   gcc  
-powerpc                 mpc836x_rdk_defconfig   clang
-powerpc                      pcm030_defconfig   gcc  
-powerpc                      pmac32_defconfig   clang
-powerpc              randconfig-r022-20230911   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r011-20230911   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20230911   clang
-s390                 randconfig-r015-20230911   clang
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                   randconfig-r021-20230911   gcc  
-sh                   randconfig-r034-20230911   gcc  
-sh                           se7751_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r013-20230911   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64              randconfig-r004-20230911   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                   randconfig-r006-20230911   clang
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-001-20230911   gcc  
-x86_64       buildonly-randconfig-002-20230911   gcc  
-x86_64       buildonly-randconfig-003-20230911   gcc  
-x86_64       buildonly-randconfig-004-20230911   gcc  
-x86_64       buildonly-randconfig-005-20230911   gcc  
-x86_64       buildonly-randconfig-006-20230911   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20230911   clang
-x86_64                randconfig-002-20230911   clang
-x86_64                randconfig-003-20230911   clang
-x86_64                randconfig-004-20230911   clang
-x86_64                randconfig-005-20230911   clang
-x86_64                randconfig-006-20230911   clang
-x86_64                randconfig-011-20230911   gcc  
-x86_64                randconfig-013-20230911   gcc  
-x86_64                randconfig-014-20230911   gcc  
-x86_64                randconfig-071-20230911   gcc  
-x86_64                randconfig-072-20230911   gcc  
-x86_64                randconfig-073-20230911   gcc  
-x86_64                randconfig-074-20230911   gcc  
-x86_64                randconfig-075-20230911   gcc  
-x86_64                randconfig-076-20230911   gcc  
-x86_64               randconfig-r005-20230911   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
-xtensa                              defconfig   gcc  
-xtensa               randconfig-r026-20230911   gcc  
-xtensa               randconfig-r031-20230911   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On Fri, 1 Sept 2023 at 20:52, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 9/1/23 02:34, Naresh Solanki wrote:
+> > Utilize the integrated 10-bit ADC in Max5970/Max5978 to enable voltage
+> > and current monitoring. This feature is seamlessly integrated through
+> > the hwmon subsystem.
+> >
+> > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+>
+> Nit, but you still have this:
+>
+> CHECK: From:/Signed-off-by: email comments mismatch: 'From: Naresh Solanki <naresh.solanki@9elements.com>' != 'Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>'
+Ack. Will fix it in V3.
+>
+> > ---
+> > Changes in V2:
+> > - default case added for switch statement
+> > - Add dependency on HWMON
+> > ---
+> >   drivers/regulator/Kconfig             |   1 +
+> >   drivers/regulator/max5970-regulator.c | 123 ++++++++++++++++++++++++++
+> >   2 files changed, 124 insertions(+)
+> >
+> > diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
+> > index 965d4f0c18a6..ab245893033d 100644
+> > --- a/drivers/regulator/Kconfig
+> > +++ b/drivers/regulator/Kconfig
+> > @@ -559,6 +559,7 @@ config REGULATOR_MAX5970
+> >       depends on I2C
+> >       depends on OF
+> >       depends on MFD_MAX5970
+> > +     depends on HWMON
+>
+> Not sure if that is acceptable. The maintainer will have to decide.
+>
+> >       help
+> >         This driver controls a Maxim 5970/5978 switch via I2C bus.
+> >         The MAX5970/5978 is a smart switch with no output regulation, but
+> > diff --git a/drivers/regulator/max5970-regulator.c b/drivers/regulator/max5970-regulator.c
+> > index b56a174cde3d..c337044e1523 100644
+> > --- a/drivers/regulator/max5970-regulator.c
+> > +++ b/drivers/regulator/max5970-regulator.c
+> > @@ -10,6 +10,7 @@
+> >   #include <linux/bitops.h>
+> >   #include <linux/device.h>
+> >   #include <linux/err.h>
+> > +#include <linux/hwmon.h>
+> >   #include <linux/module.h>
+> >   #include <linux/io.h>
+> >   #include <linux/of.h>
+> > @@ -32,6 +33,120 @@ enum max597x_regulator_id {
+> >       MAX597X_SW1,
+> >   };
+> >
+> > +static int max5970_read_adc(struct regmap *regmap, int reg, long *val)
+> > +{
+> > +     u8 reg_data[2];
+> > +     int ret;
+> > +
+> > +     ret = regmap_bulk_read(regmap, reg, &reg_data[0], 2);
+> > +     if (ret < 0)
+> > +             return ret;
+> > +
+> > +     *val = (reg_data[0] << 2) | (reg_data[1] & 3);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int max5970_read(struct device *dev, enum hwmon_sensor_types type,
+> > +                     u32 attr, int channel, long *val)
+> > +{
+> > +     struct max5970_data *ddata = dev_get_drvdata(dev);
+> > +     struct regmap *regmap = dev_get_regmap(dev->parent, NULL);
+> > +     int ret;
+> > +
+> > +     switch (type) {
+> > +     case hwmon_curr:
+> > +             switch (attr) {
+> > +             case hwmon_curr_input:
+> > +                     ret = max5970_read_adc(regmap, MAX5970_REG_CURRENT_H(channel), val);
+> > +                     /*
+> > +                      * Calculate current from ADC value, IRNG range & shunt resistor value.
+> > +                      * ddata->irng holds the voltage corresponding to the maximum value the
+> > +                      * 10-bit ADC can measure.
+> > +                      * To obtain the output, multiply the ADC value by the IRNG range (in
+> > +                      * millivolts) and then divide it by the maximum value of the 10-bit ADC.
+> > +                      */
+> > +                     *val = (*val * ddata->irng[channel]) >> 10;
+> > +                     /* Convert the voltage meansurement across shunt resistor to current */
+> > +                     *val = (*val * 1000) / ddata->shunt_micro_ohms[channel];
+> > +                     return ret;
+> > +             default:
+> > +                     return -EOPNOTSUPP;
+> > +             }
+> > +
+> > +     case hwmon_in:
+> > +             switch (attr) {
+> > +             case hwmon_in_input:
+> > +                     ret = max5970_read_adc(regmap, MAX5970_REG_VOLTAGE_H(channel), val);
+> > +                     /*
+> > +                      * Calculate voltage from ADC value and MON range.
+> > +                      * ddata->mon_rng holds the voltage corresponding to the maximum value the
+> > +                      * 10-bit ADC can measure.
+> > +                      * To obtain the output, multiply the ADC value by the MON range (in
+> > +                      * microvolts) and then divide it by the maximum value of the 10-bit ADC.
+> > +                      */
+> > +                     *val = mul_u64_u32_shr(*val, ddata->mon_rng[channel], 10);
+> > +                     /* uV to mV */
+> > +                     *val = *val / 1000;
+> > +                     return ret;
+> > +             default:
+> > +                     return -EOPNOTSUPP;
+> > +             }
+> > +     default:
+> > +             return -EOPNOTSUPP;
+> > +     }
+> > +}
+> > +
+> > +static umode_t max5970_is_visible(const void *data,
+> > +                               enum hwmon_sensor_types type,
+> > +                               u32 attr, int channel)
+> > +{
+> > +     struct max5970_data *ddata = (struct max5970_data *)data;
+> > +
+> > +     if (channel >= ddata->num_switches)
+> > +             return 0;
+> > +
+> > +     switch (type) {
+> > +     case hwmon_in:
+> > +             switch (attr) {
+> > +             case hwmon_in_input:
+> > +                     return 0444;
+> > +             default:
+> > +                     break;
+> > +             }
+> > +             break;
+> > +     case hwmon_curr:
+> > +             switch (attr) {
+> > +             case hwmon_curr_input:
+> > +                     /* Current measurement requires knowledge of the shunt resistor value. */
+> > +                     if (ddata->shunt_micro_ohms[channel])
+> > +                             return 0444;
+>
+> missing break;
+>
+> Interesting, I thought the compiler would complain about that nowadays,
+> but apparently it doesn't.
+>
+> Guenter
+>
+> > +             default:
+> > +                     break;
+> > +             }
+> > +             break;
+> > +     default:
+> > +             break;
+> > +     }
+> > +     return 0;
+> > +}
+> > +
+> > +static const struct hwmon_ops max5970_hwmon_ops = {
+> > +     .is_visible = max5970_is_visible,
+> > +     .read = max5970_read,
+> > +};
+> > +
+> > +static const struct hwmon_channel_info *max5970_info[] = {
+> > +     HWMON_CHANNEL_INFO(in, HWMON_I_INPUT, HWMON_I_INPUT),
+> > +     HWMON_CHANNEL_INFO(curr, HWMON_C_INPUT, HWMON_C_INPUT),
+> > +     NULL
+> > +};
+> > +
+> > +static const struct hwmon_chip_info max5970_chip_info = {
+> > +     .ops = &max5970_hwmon_ops,
+> > +     .info = max5970_info,
+> > +};
+> > +
+> >   static int max597x_uvp_ovp_check_mode(struct regulator_dev *rdev, int severity)
+> >   {
+> >       int ret, reg;
+> > @@ -432,6 +547,7 @@ static int max597x_regulator_probe(struct platform_device *pdev)
+> >       struct regulator_config config = { };
+> >       struct regulator_dev *rdev;
+> >       struct regulator_dev *rdevs[MAX5970_NUM_SWITCHES];
+> > +     struct device *hwmon_dev;
+> >       int num_switches;
+> >       int ret, i;
+> >
+> > @@ -485,6 +601,13 @@ static int max597x_regulator_probe(struct platform_device *pdev)
+> >               max597x->shunt_micro_ohms[i] = data->shunt_micro_ohms;
+> >       }
+> >
+> > +     hwmon_dev = devm_hwmon_device_register_with_info(&i2c->dev, "max5970_hwmon", max597x,
+> > +                                                      &max5970_chip_info, NULL);
+> > +     if (IS_ERR(hwmon_dev)) {
+> > +             return dev_err_probe(&i2c->dev, PTR_ERR(hwmon_dev), \
+> > +                                  "Unable to register hwmon device\n");
+> > +     }
+> > +
+> >       if (i2c->irq) {
+> >               ret =
+> >                   max597x_setup_irq(&i2c->dev, i2c->irq, rdevs, num_switches,
+> >
+> > base-commit: 35d0d2350d774fecf596cfb2fb050559fe5e1850
+>
