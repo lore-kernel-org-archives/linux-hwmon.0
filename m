@@ -2,77 +2,228 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6E78CA0ECA
-	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Sep 2023 10:17:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 198A0CA0EF7
+	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Sep 2023 15:11:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234317AbjILKRb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 12 Sep 2023 06:17:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36076 "EHLO
+        id S236236AbjILPLg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 12 Sep 2023 11:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234260AbjILKRO (ORCPT
+        with ESMTP id S236355AbjILPLe (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 12 Sep 2023 06:17:14 -0400
+        Tue, 12 Sep 2023 11:11:34 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E29E272E;
-        Tue, 12 Sep 2023 03:16:50 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A395C433C8;
-        Tue, 12 Sep 2023 10:16:47 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3939115;
+        Tue, 12 Sep 2023 08:11:30 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EE9DC433C7;
+        Tue, 12 Sep 2023 15:11:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694513809;
-        bh=WSr9qSl2S1ubmYIrZpcXmHxSn6EHq34MSINK8cbXato=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=DjpOBF8QYlMldwfuCfivS8FDAipLd8nz0g0k8U617/n0FwUiYh76S4/JyMVDC+rxM
-         pD+JOX+mpH/G4vU6ZDawXaCgtiqlWlkWJWY47vX6cS/ZM43M53ZtMz/OQ5uRVUI1aS
-         83O7dFEyD+VZ60uSh+Tphkx1fxJ+G5kBP33y8CQAXAyvKyPl5IPd69JvzxjztXG62h
-         Tf/+28qObCekHDgZ88E5aNaHzBCYrLwf41vhXBO17ufRCOyUyQt4YJbzAsg15/Qn0C
-         1cNvt2p0FuNr2TYL5lgU2+F2jm/ts56CDdAWUa87JZaOucBMUXMYZchy/Ciz4+Gqrh
-         Af2FCuEdmf02g==
-Message-ID: <351927e6-2ddf-186c-78ae-1b0d639b9ea7@kernel.org>
-Date:   Tue, 12 Sep 2023 12:16:43 +0200
+        s=k20201202; t=1694531490;
+        bh=XvqdyTkbzYdmIFvzaFz0sUeabWQuIJEg/eBAxc9nVRQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OP3qBhadnTTrB4c6LnMwpMtXpd4trRfjk9GCUS0TFWfaopUqFNZnW7UJz/P2KamPy
+         bQUZqhV/yMRPKcymm9Tw9LBFhQ50yeAxFoJUk8g1X2QPycP7h0M8AeKKjbTi2n0r2x
+         PjKLjVEDvxGvZLO0m1qbWm8Qx6MvtOrvbzmXLBCuewZ7qI6ujXgzbhq5uNUIjFhTPA
+         2fujaj+jQ22/XPML+ropjSomHtLx4H0hNgIoTJ7+jMjQL0/D6QJhVarlKnXKbm+MF/
+         jsINXr7R7mHL49BZVRMNaYZB7YvVS/UQrbQhsSrupWHzyecnNGKEQhFOtyf/EVxD64
+         LT+BBefVm8Icg==
+Received: (nullmailer pid 809556 invoked by uid 1000);
+        Tue, 12 Sep 2023 15:11:27 -0000
+Date:   Tue, 12 Sep 2023 10:11:27 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Billy Tsai <billy_tsai@aspeedtech.com>
+Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "naresh.solanki@9elements.com" <naresh.solanki@9elements.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
+        BMC-SW <BMC-SW@aspeedtech.com>,
+        "patrick@stwcx.xyz" <patrick@stwcx.xyz>
+Subject: Re: [PATCH v8 1/3] dt-bindings: hwmon: fan: Add fan binding to schema
+Message-ID: <20230912151127.GA752403-robh@kernel.org>
+References: <20230830123202.3408318-1-billy_tsai@aspeedtech.com>
+ <20230830123202.3408318-2-billy_tsai@aspeedtech.com>
+ <20230905170010.GA3505375-robh@kernel.org>
+ <SG2PR06MB336567E43537C7F4947E342F8BEEA@SG2PR06MB3365.apcprd06.prod.outlook.com>
+ <20230907194351.GA2033402-robh@kernel.org>
+ <SG2PR06MB3365B916E3AD2CE331A0D4258BEDA@SG2PR06MB3365.apcprd06.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Describe changes to the device
- tree
-Content-Language: en-US
-To:     Daniel Matyas <daniel.matyas@analog.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20230911083735.11795-1-daniel.matyas@analog.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20230911083735.11795-1-daniel.matyas@analog.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <SG2PR06MB3365B916E3AD2CE331A0D4258BEDA@SG2PR06MB3365.apcprd06.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 11/09/2023 10:37, Daniel Matyas wrote:
-> Added new attributes to the device tree:
-
-Subject: it's meaningless. You said there absolutely nothing. Instead
-saying "Describe changes to the device tree" please describe the changes
-you are making.
-
-> 	- adi,comp-int
-> 	- adi,alrm-pol
-> 	- adi,flt-q
+On Fri, Sep 08, 2023 at 08:49:25AM +0000, Billy Tsai wrote:
+> On Thu, Sep 07, 2023 at 07:17:55AM +0000, Billy Tsai wrote:
+> > > On Wed, Aug 30, 2023 at 08:32:00PM +0800, Billy Tsai wrote:
+> > > >> From: Naresh Solanki <naresh.solanki@9elements.com>
+> > > >> 
+> > > >> Add common fan properties bindings to a schema.
+> > > >> 
+> > > >> Bindings for fan controllers can reference the common schema for the
+> > > >> fan
 > 
-> These modify the corresponding bits in the configuration register.
 > 
-> Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
-> ---
->  .../bindings/hwmon/adi,max31827.yaml          | 21 +++++++++++++++++++
+> > > >> +properties:
+> > > >> +  max-rpm:
+> > > >> +    description:
+> > > >> +      Max RPM supported by fan.
+> > > >> +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > 
+> > > > Physics will limit this to something much less than 2^32. Add some 
+> > > > constraints. 10000?
+> > > 
+> > > 
+> > > >> +
+> > > >> +  min-rpm:
+> > > >> +    description:
+> > > >> +      Min RPM supported by fan.
+> > > >> +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > 
+> > > > ditto
+> > > 
+> > > >> +
+> > > >> +  pulses-per-revolution:
+> > > >> +    description:
+> > > >> +      The number of pulse from fan sensor per revolution.
+> > > >> +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > 
+> > > >Needs constraints. I assume this is never more than 4 (or 2 even)?
+> > > 
+> > > Do you think we should add the contraint in the common binding?
+> > > In my option, the limit of the max/min rpm should be declared by
+> > > the binding if necessary, because the usage of each fan monitor is
+> > > based on the connection of the tach pin.
+> 
+> > Yes, I think we should have default limits.
+> 
+> > Unless we go as far as a schema for every specific fan model, then there 
+> > is actually no way we can have specific limits unless the fan 
+> > controllers have some limits.
+> 
+> > The most I see in tree for pulses-per-revolution is 2. There's no value 
+> > in more. So set the max to 4 and then if anyone needs more they can bump 
+> > the value.
+> 
+> > Or maybe there's some electrical/mechanical design reason fans are 1 or 
+> > 2 pulses and we'll never see anything else? This document[1] seems to 
+> > indicate that is indeed the case. (First hit googling "fan tach signal 
+> > pulses")
+> 
+> OK, I will add the maximum value for the max-rpm, min-rpm and pulses-per-revolution.
+> 
+> > > 
+> > > 
+> > > >> +  div:
+> > > 
+> > > > Too generic of a name.
+> > > 
+> > > >> +    description:
+> > > >> +      Fan clock divisor
+> > > 
+> > > > But what is a fan clock?
+> > > 
+> > > This is the divisor for the tachometer sampling clock, which determines the sensitivity of the tach pin.
+> > > So, if the name of the property changes to 'tach-div,' is it acceptable to you?
+> 
+> > That sounds like a property of the controller, not the fan, so it 
+> > belongs in the controller binding. Is this really a common thing?
+> 
+> Yes, I believe this is a common feature for fans. You can refer to the Documentation/hwmon/sysfs-interface.rst,
+> where the fan divisor is defined for users, determining the fan's sensitivity.
 
-Please work on latest upstream, not some old vendor code. This means
-that you should checkout latest mainline tree (or linux-next or
-maintainer's tree) and make your edits there. Once you do it, you use
-get_maintainers.pl on that tree, not on that ancient vendor's stuff.
+It's a feature of the controller, but I guess since it may be a per 
+fan or tach channel setting having it in the fan node is fine. 
+'tach-div' is fine.
 
-Best regards,
-Krzysztof
+>  
+> > > >> +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > >> +
+> > > >> +  target-rpm:
+> > > >> +    description:
+> > > >> +      Target RPM the fan should be configured during driver probe.
+> > > 
+> > > > What driver? By the time the OS driver runs, a bunch of other boot 
+> > > > software has already run on modern systems. So this value would likely 
+> > > > be used much earlier. The point is that when exactly is outside the 
+> > > > scope of DT. This is "what RPM do I use in case of no other information 
+> > > > (e.g. temperature)".
+> > > 
+> > > So, the description should be changed to 'The default desired fan speed in RPM,'
+> > > and we shouldn't mention the timing of the property's operation in the DT, is that correct?
+> 
+> > Correct.
+> 
+> > > 
+> > > >> +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > >> +
+> > > >> +  mode:
+> > > 
+> > > > Too generic.
+> > > 
+> > > >> +    description:
+> > > >> +      Select the operational mode of the fan.
+> > > 
+> > > > What are modes? Spin and don't spin?
+> > > 
+> > > The mode is used to indicate the driving mode of the fan (DC, PWM and so on).
+> > > So, if the name of the property changes to 'fan-driving-mode,' is it acceptable to you?
+> 
+> > I tend to think that should be implied from the parent node and/or other 
+> > properties. PWM if "pwms" property is present. DC if the supply is 
+> > variable. We could also use compatible strings in the fan nodes if 
+> > there's a need.
+> 
+> So, it looks that this property isn't necessary for the fan. And it should be determined by the
+> present of the driving source. is that correct?
 
+Looking back, I see Guenter asked for something like this. So I guess it 
+is fine to keep if he still thinks we need it. I think it could also be 
+implied a bit more clearly if we do 'cooling-levels' as below. The fan 
+controller should know what modes it can do. Duty cycle vs. voltage in 
+uV is pretty easy to distinguish.
+
+> 
+> > That reminds me, both of these modes probably need a table of 
+> > voltage/duty-cycle to RPMs. I imagine it's not always a linear response.  
+> > Naresh also privately sent me (don't do that) an updated common binding 
+> > which we discussed the need for this. I expect him to comment further 
+> > with details.
+> 
+> For this purpose, we should add the speed-map like the usage of the gpio-fan, right?
+> https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/hwmon/gpio-fan.txt
+
+That should be fine. I guess it comes down to whether we want one 
+property or 3 depending on whether the control is voltage, duty-cycle, 
+GPIO pins state, etc. Unfortunately, it's "gpio-fan,speed-map", not 
+"speed-map", so we can't use that as-is. There's also "cooling-levels" 
+which can accomplish the same thing. We don't know RPMs with that, but 
+do we need to? Maybe, as it seems some drivers want to set speed in RPMs 
+from userspace. Could also do something like this:
+
+cooling-levels = < 33   66  100>;
+rpm-levels =     <500 1000 1500>;
+
+"rpm-levels" would replace the min-rpm/max-rpm properties.
+
+
+Also, looking at gpio-fan.txt, it looks like you should add 
+"#cooling-cells" as well.
+
+Rob
