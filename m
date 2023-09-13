@@ -2,664 +2,218 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AEE04EE3F0C
-	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Sep 2023 18:43:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B63E2CA550A
+	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Sep 2023 08:51:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbjILSnx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 12 Sep 2023 14:43:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60220 "EHLO
+        id S239109AbjIMIvY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 13 Sep 2023 04:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjILSnx (ORCPT
+        with ESMTP id S239092AbjIMIvY (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 12 Sep 2023 14:43:53 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B79810D3;
-        Tue, 12 Sep 2023 11:43:49 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-5774b3de210so2259531a12.0;
-        Tue, 12 Sep 2023 11:43:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694544229; x=1695149029; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EQg8x9T6SZ/rHbFr8r3Pw4wg9esHX9b0m4YXnwMsBtg=;
-        b=Z2pW7m85ZZJzD1TVL4rRfpH2D5VKfXp6bWFXfQHGTCtezeRQ31Zg8cYuTxbOYv4nBV
-         pkSlkauv4J/PEy+LE6aR1yA6dYZiS5FBFSYsIvcTV4x1FaVtGm5zALrEG9XCd02GDz+v
-         YXvHIRRPsB2yk5L2RxtW4jJvAUBu7DXppfqBt+PFnDm7yp73YVh1EFrFb4o1vhE4fBqK
-         4R+kGAbYdrRYwLkSAXAQUauqdwHG884a3uQz32eBHbr02HsEckJZagpZ8lugzsI2bmkc
-         E8dU6QpQW+1tBXUU6oMUSih7kTxWGER28favBuoAcTg/7vEG2R/eBDCEKtLJey85a8g/
-         gxaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694544229; x=1695149029;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EQg8x9T6SZ/rHbFr8r3Pw4wg9esHX9b0m4YXnwMsBtg=;
-        b=B1CPofv92CCJ9cTHV2vUhopUz8oay/0Y2JFI32JBklYMtyhDVyfGPWVUBAiJX6F+AP
-         Mjvk2+KJ2l3V5M3IhShdArUwoc1ausGIB2XxHG6Wiwf7bWvu2ixVUMEQoIoIhzZ1uqOL
-         Hm7APz4klqy02rouH3a7g7fY9sSQAldAU9P6QJd8DL8CON40qlbV0DZOAS/f4YHkJMMd
-         iEO4an3xRLMpGVx8XsM8kTXHr65hAO2wc7wBXsGB634fpVhJWzzUunFy7BqZ8XjMxeNo
-         XSGuOsYlbTO6fjoDuPvDX/TpdjGjc52OwH4thf5ZdTFo/Z6+ekYiUKkE1gX1Lj0TdhKD
-         2gYg==
-X-Gm-Message-State: AOJu0Yw9hwOS2HYdTcCfQl4eIfHJ346QNFRa5GMzNPeWgqeehTVWfPFj
-        9WeRKEWz3FQtZwHfCsCPzTp0xy46lQ4=
-X-Google-Smtp-Source: AGHT+IGf+jwDdvX07oERxnn/Rxzx5U5FHqClfwLy+E+J941GGtFOZsJlv9a5vWL5RKzzrG9iVhFDyg==
-X-Received: by 2002:a17:90b:4c11:b0:273:fa72:ba83 with SMTP id na17-20020a17090b4c1100b00273fa72ba83mr71829pjb.47.1694544228797;
-        Tue, 12 Sep 2023 11:43:48 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q60-20020a17090a17c200b00263f8915aa3sm10244375pja.31.2023.09.12.11.43.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Sep 2023 11:43:48 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 12 Sep 2023 11:43:47 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Matyas, Daniel" <Daniel.Matyas@analog.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH 2/2] hwmon: max31827: Functional enhancement of the driver
-Message-ID: <74f1d80d-46ed-40f8-926c-fb40fc93d00f@roeck-us.net>
-References: <20230911083735.11795-1-daniel.matyas@analog.com>
- <20230911083735.11795-2-daniel.matyas@analog.com>
- <27bc5a74-531d-696e-f218-a755172af9e9@roeck-us.net>
- <PH0PR03MB6771E189FF6F7B50264C09DD89F1A@PH0PR03MB6771.namprd03.prod.outlook.com>
+        Wed, 13 Sep 2023 04:51:24 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2048.outbound.protection.outlook.com [40.107.255.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F80196;
+        Wed, 13 Sep 2023 01:51:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ThcEJ+GOMH9209MTA82veABKi2onquL0ie7hlv18XUy4zGEJZCJg2y1DnR33C/Lf9XGFyyP6k7kDO8nJUDm6kIbT3e6YV+EBwXhIaV2t3kSsKrCuLpC1mUw3xA0QHkA9nAtxiG14nG8dqLN/6VFHR2xT33+XSDenVj7cR0ESyPvKRwx/bevxENsOSLVKntKdw6b5ZmZEgTDj2s3qyEYv3IpAgiTN1kGwlt1qEHKNmjTYa5+TQZBJEQMKRnb4zOrApUGoVqcZUkyCZ0+K7PWApxmqgWxof7jYMUSz6aYFve7EJUqyIVj5+pIpbo32ZjWbc35WilCSg5zd5xEohaYK9w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Kc+GZ4U40PrEyiljHLaQGpoafJyu8xzyNOvXlSt97N0=;
+ b=hqSIGPsuggiVB7Ej4wzrI8VwXxrRzU7NuTQ4fKJ6/nsa7L/em1TXOWsnigCxoWLkgl5P3TTF/3bvcSlQ99QhyOe23z7bWipisZtkpij475EgoOtfy83IAemQYYVeNcZYUiVqxK/y+cVnwNr5I+rMyVMBjShToVUVWQvH59HPOUsEIsr+FAajWqz89Wpn4pv4dkeoxH/S7pxIJR/zSLRiXgriodyR29jTwalMuCEa/1zi383B0vmww/soqfUDOIZFG2P28DsUw2r03L7jr7FH8WzUjD00De1RfgYQgBDzBh4Y7XtTVSd9pPFQBSuO60IJsWps0kg3TqLNeOBLBx3qCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wiwynn.com; dmarc=pass action=none header.from=wiwynn.com;
+ dkim=pass header.d=wiwynn.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Kc+GZ4U40PrEyiljHLaQGpoafJyu8xzyNOvXlSt97N0=;
+ b=yUyrMWQK06GvOkF5S+XgfI/Wxa/4VoYxGDKlX+Kv/22dnKKwsJQ2dKDD1lOJMoSqh6IfTNTzYRiMPCF6MwyKeReNb4o5Tk1iAoQv1VEe4OK5K/4V9isNlp7aJ2WuIKhTPpYQym5EVM640dRWVo5NPt1BjEmSNNeRv+hTf/4CMRH5CWytA6v64wWTOyp265UQq2dqwzdpsUH4nIi4DuERHOXJR0/UGseZslQZyUASlv0RMePP1dPzprrJadWPC8Jx7k8zh4SpAnrJF9kQdFU4d/RPAdRh6fFIvM1Q4Ed2ovP3bW+tvGyb0KmFs1vB5U9Fk8DrA/hfBVj5/LxS8sgA7g==
+Received: from TYZPR04MB5853.apcprd04.prod.outlook.com (2603:1096:400:1f3::5)
+ by TYSPR04MB7082.apcprd04.prod.outlook.com (2603:1096:400:481::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.19; Wed, 13 Sep
+ 2023 08:51:14 +0000
+Received: from TYZPR04MB5853.apcprd04.prod.outlook.com
+ ([fe80::5be7:ddc6:bdfa:73e4]) by TYZPR04MB5853.apcprd04.prod.outlook.com
+ ([fe80::5be7:ddc6:bdfa:73e4%4]) with mapi id 15.20.6768.029; Wed, 13 Sep 2023
+ 08:51:14 +0000
+From:   Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>,
+        "patrick@stwcx.xyz" <patrick@stwcx.xyz>,
+        Jean Delvare <jdelvare@suse.com>
+CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] hwmon: max31790: support to config PWM as TACH
+Thread-Topic: [PATCH] hwmon: max31790: support to config PWM as TACH
+Thread-Index: AQHZ4J74hgtrGBuSsE+/2qt904rcN7AN+tyAgAp5vZA=
+Date:   Wed, 13 Sep 2023 08:51:14 +0000
+Message-ID: <TYZPR04MB58533E15AA65FCDA0F603FA3D6F0A@TYZPR04MB5853.apcprd04.prod.outlook.com>
+References: <20230906084837.3043030-1-Delphine_CC_Chiu@wiwynn.com>
+ <20230906084837.3043030-3-Delphine_CC_Chiu@wiwynn.com>
+ <8a3b41a2-0ab2-6213-04a1-54ab7263c647@roeck-us.net>
+In-Reply-To: <8a3b41a2-0ab2-6213-04a1-54ab7263c647@roeck-us.net>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wiwynn.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYZPR04MB5853:EE_|TYSPR04MB7082:EE_
+x-ms-office365-filtering-correlation-id: b2a9992b-ed9a-4416-4823-08dbb4369615
+x-ms-exchange-atpmessageproperties: SA
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: NnN2+8RsJlP+Kt89TwFot1RajHuFp0TBCYTS31OrvY0rBFiOOueBS7UMMMp32n0EOjoYOysuBEl45skD9DIz7cZenJG73jNX9FmIZ/5vOQX2OwIT9mvlnJ3E4ymGrHjRkDTbNB7Th298JRjhRIxrfSG8okfEPIfUMHpNaO63Z6LYNOBdgfbKb9MLwCZ3IV0STFHvBPB6gOWQ6e+GIvcN8eT4H7B5mNti4Wi/3WU7OSphlZm+Y4UxYdZfpyQAIXhNe5w/c/b8lKeCBuNk09GPMPAAHlwWZB2xhhDz+UvJ0LHaVXHYuA/AKpS2HKf+Z6BBDfuZN81D5I+tsMzPaMmzqOc6XLl2p+/+zOE3Y2HktjWFEzREU9ybWmUSpbL/yePY3sH01sfTB2X56SRGgHZKAoPPCrucPfU906GYiufj05lM7JZKQLBladVan95uTxKm8Blf46zc4L9WW5rmJtEj2KuCymR4EOhldYJF73fPt3cgsVRFGvdf+O1bUJUB22ng1NbHwPIag9q/3QIW3zfnJEzFEFCYxaI48sqh7TU1p3e/+nUQWB8I9OYuCvOMDvrWZgrAofeJtjzFaqNcaTKNdIDDXizhRigL2sEN5X5BWAadY2yp8MNjFP4mEGf4bF0n
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR04MB5853.apcprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(376002)(39860400002)(366004)(136003)(396003)(451199024)(186009)(1800799009)(71200400001)(6506007)(53546011)(7696005)(122000001)(33656002)(86362001)(38100700002)(38070700005)(55016003)(26005)(2906002)(9686003)(478600001)(83380400001)(316002)(5660300002)(52536014)(4326008)(110136005)(76116006)(8676002)(41300700001)(8936002)(64756008)(66556008)(66446008)(66946007)(54906003)(66476007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SlpBay9TSk1oNktSMXRwWTNHLzZqbVNlQTFrdVlBYzBlUDdpVnhCMHlONGFK?=
+ =?utf-8?B?TVp4VSt0NkZWNjl2WXJBYVAzVmtYTm50Z3FIaFptTmF2MFVwOFEwSHNCa0Rp?=
+ =?utf-8?B?eDUwRm9hbWVGa1AzbWdlVzhsQkppL1praVF4bFBWcldqVnlqUkNJazRZVk5t?=
+ =?utf-8?B?U0JlWnNPOWc5Uk1ha0dPQTlGQy9qcFhtRmtPVjRyV2Q1b1c2SElCNlZZRmtm?=
+ =?utf-8?B?ZVVhdWhublROREtORzZHQXZWNGdTbEtFeFEzZEV6d2dEc3k4R1pDUllGVnMy?=
+ =?utf-8?B?NjltWngxaHFHbGtiUnIxV3UrY3orWGFwbjBSSWhMdDcvSGZ3NjgyOHd5SUdt?=
+ =?utf-8?B?eGJLc0dQZkFzb3hiOUZPQjU3NjlqWUp5YkkwUHpadU04dkNVODlNcEFSRzVU?=
+ =?utf-8?B?bm1ZdHF0amNEQ3lObVBJcm12VTJOM1J6cG5xTzlSUWFOVERyM0dXUWt0NHVU?=
+ =?utf-8?B?T1VJTGFBbHg0bU9BVjNhSHVOZXREck9MUVdyN0RFUVNKd1ZjNVpTTk5iazBZ?=
+ =?utf-8?B?YlcvTGtiTnRFMDBPN3JHb2U1L0owT0hWMWlnZm1Lbk9ETlVTSVpXTmVuVXU2?=
+ =?utf-8?B?YUg5ZlFJbGFjbmFMSGVxWm9CK1BBODZWRmhJY28zKzZuSGlkUk1HUU5hQTQr?=
+ =?utf-8?B?VC9OQ29lblU4N0t1R1pDL2p5SHJzVWpMWk1NczAweHkrbENFVFJzMVpta0JJ?=
+ =?utf-8?B?bGZ6K2VGSXN3UjdxY2ZzTlVCOUtuaEZ2K1VDZDBRaG1McjZEUVdiL2J5MWd2?=
+ =?utf-8?B?d0QwVFd5cTR2NGMzdFB2RFlsNGdKL2p3bktWcnRyanQwaUkwQStKZjlOelBt?=
+ =?utf-8?B?YU1IRnRsM2p6OXV5dDBqQnl6UWNCQjNKWUg0RFpwQzJud0hDTjQvNzJVekFR?=
+ =?utf-8?B?MlRPSE5sN0hDRjhIVE5iNnVVMkpQS3JYSTNBZlp2WnViYzBRZVEyeXhzTEFN?=
+ =?utf-8?B?ZnVXUVIwSFJpS3NwVUVzSURucmVmS0t1N2VBdkl3WkxYaEFMcXFqZ0JUUWhW?=
+ =?utf-8?B?VWE4VmdzbldXeHBrUGEvM2JKbGV5dHdqa2p6OVhPeW1qZ2JudEZnMnA4WjIz?=
+ =?utf-8?B?UE5GbnJ5TGtTRWg3VXpGa3lFVTN0c2k5b1R3ZHpWOTlwUjIrbnVJZytneC9y?=
+ =?utf-8?B?bUV3UVpOd1UzcDU2OEhTeDZ6eDhvVXl5eWV1Y3U3TFhqRC9udTc1R1o1LzMy?=
+ =?utf-8?B?c3RHMVhMMzB5cEFXZEF4WlJKek0yV3UwSElMc0RGd2Y4YmZ2amZITnVmUmZp?=
+ =?utf-8?B?L0YxN0o2bm1MY1B6YjFWS05MK09oRGhET3NJQUJkeG9nL09FbjhqcmdXRVFV?=
+ =?utf-8?B?SDdKNXhWb2liNmg4Smt6NU5pRTk0MkhsUGhtREtuRzJIanJCTEtUaGk3YU93?=
+ =?utf-8?B?MUFVYkx0bDVuNVdQUzYvVy9EMUY0Y3NYOVpDcEJqdk9JSHNCcG9rMU43RWpT?=
+ =?utf-8?B?VUFMMDB4OXgxczZzbi9FZ1A4VGI4UVlPbFZFVSt1Um9KWDNybmgydHRZNUtY?=
+ =?utf-8?B?SDY2MWRaanVXYUtvUktFTmdwUVNFSVVuMnJhdmFMMmZId1N3NEpKRUVYd1J5?=
+ =?utf-8?B?clhrOU10d3BNYlkvT2dOQmFINDdVSTZJdnNkT3Q1akhsMzdmTkwrZ2d0WnNG?=
+ =?utf-8?B?M3lGSWdyU2dkTU04QS9kZ2x2WEFkNzdoMjc3MDFBYWxPcmZGVEJuL1BrbFhK?=
+ =?utf-8?B?NmwwOTJWbS9VQUk1Qm5LLzlMYjNPOXpDMDRVK3dHZ3BqTXZBU0hBK3ZvMzQz?=
+ =?utf-8?B?MnVKQjMzWGJxenlwbUdUeGkxZFE1dEVpb09OQU83cm90T0t6cmg0U0k4bEt2?=
+ =?utf-8?B?OHJmRjVBT1RFcytCQ0JCbCt2dDlwK1oxYUZ1L21KTzNzaEFDT0xzYnlBbXRv?=
+ =?utf-8?B?VlY0MUR0NW9uYU85OWVjMHloV0pnbi9LMUJodkhrOUU3VUhPTmh6azhNUG51?=
+ =?utf-8?B?L3VVNkpyWnBTRkdYTUQ1S2w2RmJ0MlZodlNZdlpHa1MzRUZFa0grVFd3djZq?=
+ =?utf-8?B?eG0xbXEzQnRiaGZqZGlLeDdQdUJObGQvdkJsRTVkRTNCV2dDYis3NkFOQkZ5?=
+ =?utf-8?B?MVZuUWd4Yks3MlliYVAzb1Y3THAwbTZ0WFRHbW5RNXJUQTcxQldnRGFXZzZS?=
+ =?utf-8?Q?ZmkmVgnqtUDSQWe95oF9ikxp6?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR03MB6771E189FF6F7B50264C09DD89F1A@PH0PR03MB6771.namprd03.prod.outlook.com>
+X-OriginatorOrg: wiwynn.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR04MB5853.apcprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b2a9992b-ed9a-4416-4823-08dbb4369615
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Sep 2023 08:51:14.1947
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: da6e0628-fc83-4caf-9dd2-73061cbab167
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: xIOnlkoDrgcBujBsQHWxvPhAujzqXmlDj4k5+HgBcBx9pWbU/pp39yOiD8PLiy/Zdf6+E6Uy0aPVa5AFAvLqmw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYSPR04MB7082
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Sep 12, 2023 at 07:58:51AM +0000, Matyas, Daniel wrote:
-> 
-> 
-> > -----Original Message-----
-> > From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter
-> > Roeck
-> > Sent: Monday, September 11, 2023 4:46 PM
-> > To: Matyas, Daniel <Daniel.Matyas@analog.com>
-> > Cc: Jean Delvare <jdelvare@suse.com>; Rob Herring
-> > <robh+dt@kernel.org>; Jonathan Corbet <corbet@lwn.net>; linux-
-> > hwmon@vger.kernel.org; devicetree@vger.kernel.org; linux-
-> > kernel@vger.kernel.org; linux-doc@vger.kernel.org
-> > Subject: Re: [PATCH 2/2] hwmon: max31827: Functional enhancement of
-> > the driver
-> > 
-> > [External]
-> > 
-> > On 9/11/23 01:37, Daniel Matyas wrote:
-> > > Modify some bits depending on the device tree.
-> > >
-> > 
-> > The subject and the above sentence are meaningless. Please improve.
-> > 
-> > > Added custom device attributes for resolution and timeout. The wait
-> > > time for a conversion in one-shot mode (enable = 0) depends on the
-> > > resolution.
-> > >
-> > > Used enums and static const arrays in order to remove nested switch
-> > > blocks.
-> > >
-> > 
-> > One logical change per patch, please. Do not mix no-trivial cleanups with
-> > functional changes.
-> > 
-> > > Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
-> > > ---
-> > >   Documentation/hwmon/max31827.rst |  65 ++++--
-> > >   drivers/hwmon/max31827.c         | 326
-> > ++++++++++++++++++++++++-------
-> > >   2 files changed, 306 insertions(+), 85 deletions(-)
-> > >
-> > > diff --git a/Documentation/hwmon/max31827.rst
-> > > b/Documentation/hwmon/max31827.rst
-> > > index b0971d05b8a4..ae884e9e6085 100644
-> > > --- a/Documentation/hwmon/max31827.rst
-> > > +++ b/Documentation/hwmon/max31827.rst
-> > > @@ -52,13 +52,21 @@ MAX31827 has low and over temperature
-> > alarms with an effective value and a
-> > >   hysteresis value: -40 and -30 degrees for under temperature alarm
-> > and +100 and
-> > >   +90 degrees for over temperature alarm.
-> > >
-> > > -The alarm can be configured in comparator and interrupt mode.
-> > > Currently only -comparator mode is implemented. In Comparator
-> > mode,
-> > > the OT/UT status bits have a -value of 1 when the temperature rises
-> > > above the TH value or falls below TL, -which is also subject to the
-> > > Fault Queue selection. OT status returns to 0 when -the temperature
-> > drops below the TH_HYST value or when shutdown mode is entered.
-> > > -Similarly, UT status returns to 0 when the temperature rises above
-> > > TL_HYST value -or when shutdown mode is entered.
-> > > +The alarm can be configured in comparator and interrupt mode from
-> > the
-> > > +devicetree. In Comparator mode, the OT/UT status bits have a value
-> > of
-> > > +1 when the temperature rises above the TH value or falls below TL,
-> > > +which is also subject to the Fault Queue selection. OT status returns
-> > > +to 0 when the temperature drops below the TH_HYST value or when
-> > > +shutdown mode is entered. Similarly, UT status returns to 0 when the
-> > > +temperature rises above TL_HYST value or when shutdown mode is
-> > entered.
-> > > +
-> > > +In interrupt mode exceeding TH also sets OT status to 1, which
-> > > +remains set until a read operation is performed on the
-> > > +configuration/status register (max or min attribute); at this point,
-> > > +it returns to 0. Once OT status is set to 1 from exceeding TH and
-> > > +reset, it is set to 1 again only when the temperature drops below
-> > > +TH_HYST. The output remains asserted until it is reset by a read. It
-> > > +is set again if the temperature rises above TH, and so on. The same
-> > logic applies to the operation of the UT status bit.
-> > >
-> > >   Putting the MAX31827 into shutdown mode also resets the OT/UT
-> > status bits. Note
-> > >   that if the mode is changed while OT/UT status bits are set, an
-> > > OT/UT status @@ -68,13 +76,32 @@ clear the status bits before
-> > changing the operating mode.
-> > >
-> > >   The conversions can be manual with the one-shot functionality and
-> > automatic with
-> > >   a set frequency. When powered on, the chip measures temperatures
-> > with 1 conv/s.
-> > > +The conversion rate can be modified with update_interval attribute of
-> > the chip.
-> > > +Conversion/second = 1/update_interval. Thus, the available options
-> > > +according to the data sheet are:
-> > > +	- 64000 (ms) = 1 conv/64 sec
-> > > +	- 32000 (ms) = 1 conv/32 sec
-> > > +	- 16000 (ms) = 1 conv/16 sec
-> > > +	- 4000 (ms) = 1 conv/4 sec
-> > > +	- 1000 (ms) = 1 conv/sec (default)
-> > > +	- 250 (ms) = 4 conv/sec
-> > > +	- 125 (ms) = 8 conv/sec
-> > > +
-> > >   Enabling the device when it is already enabled has the side effect of
-> > setting
-> > >   the conversion frequency to 1 conv/s. The conversion time varies
-> > > depending on -the resolution. The conversion time doubles with every
-> > > bit of increased -resolution. For 10 bit resolution 35ms are needed,
-> > > while for 12 bit resolution
-> > > -(default) 140ms. When chip is in shutdown mode and a read operation
-> > > is -requested, one-shot is triggered, the device waits for 140
-> > > (conversion time) + 1
-> > > -(error) ms, and only after that is the temperature value register read.
-> > > +the resolution.
-> > > +
-> > > +The conversion time doubles with every bit of increased resolution.
-> > > +The available resolutions are:
-> > > +	- 8 bit -> 8.75 ms conversion time
-> > > +	- 9 bit -> 17.5 ms conversion time
-> > > +	- 10 bit -> 35 ms conversion time
-> > > +	- 12 bit (default) -> 140 ms conversion time
-> > > +
-> > > +When chip is in shutdown mode and a read operation is requested,
-> > > +one-shot is triggered, the device waits for <conversion time> ms, and
-> > > +only after that is the temperature value register read. Note that the
-> > > +conversion times are rounded up to the nearest possible integer.
-> > >
-> > >   The LSB of the temperature values is 0.0625 degrees Celsius, but the
-> > values of
-> > >   the temperatures are displayed in milli-degrees. This means, that
-> > > some data is @@ -83,8 +110,18 @@ in the writing of alarm values too.
-> > For positive numbers the user-input value
-> > >   will always be rounded down to the nearest possible value, for
-> > negative numbers
-> > >   the user-input will always be rounded up to the nearest possible
-> > value.
-> > >
-> > > +Bus timeout resets the I2C-compatible interface when SCL is low for
-> > > +more than 30ms (nominal).
-> > > +
-> > > +Alarm polarity determines if the active state of the alarm is low or
-> > > +high. The behavior for both settings is dependent on the Fault Queue
-> > > +setting. The ALARM pin is an open-drain output and requires a pullup
-> > resistor to operate.
-> > > +
-> > > +The Fault Queue bits select how many consecutive temperature
-> > faults
-> > > +must occur before overtemperature or undertemperature faults are
-> > > +indicated in the corresponding status bits.
-> > > +
-> > >   Notes
-> > >   -----
-> > >
-> > > -Currently fault queue, alarm polarity and resolution cannot be
-> > modified.
-> > > -PEC is not implemented either.
-> > > +PEC is not implemented.
-> > > diff --git a/drivers/hwmon/max31827.c b/drivers/hwmon/max31827.c
-> > index
-> > > 66f5fcf937ff..9f48dec99b7f 100644
-> > > --- a/drivers/hwmon/max31827.c
-> > > +++ b/drivers/hwmon/max31827.c
-> > > @@ -12,6 +12,18 @@
-> > >   #include <linux/i2c.h>
-> > >   #include <linux/mutex.h>
-> > >   #include <linux/regmap.h>
-> > > +#include <linux/hwmon-sysfs.h>
-> > > +
-> > > +/*
-> > > + * gcc turns __builtin_ffsll() into a call to __ffsdi2(), which is
-> > > +not provided
-> > > + * by every architecture. __ffs64() is available on all
-> > > +architectures, but the
-> > > + * result is not defined if no bits are set.
-> > > + */
-> > > +#define max31827__bf_shf(x)			 \
-> > > +	({					 \
-> > > +		typeof(x) x_ = (x);		 \
-> > > +		((x_) != 0) ? __ffs64(x_) : 0x0; \
-> > > +	})
-> > >
-> > >   #define MAX31827_T_REG	0x0
-> > >   #define MAX31827_CONFIGURATION_REG	0x2
-> > > @@ -22,22 +34,120 @@
-> > >
-> > >   #define MAX31827_CONFIGURATION_1SHOT_MASK	BIT(0)
-> > >   #define MAX31827_CONFIGURATION_CNV_RATE_MASK
-> > 	GENMASK(3, 1)
-> > > +#define MAX31827_CONFIGURATION_TIMEOUT_MASK	BIT(5)
-> > > +#define MAX31827_CONFIGURATION_RESOLUTION_MASK
-> > 	GENMASK(7, 6)
-> > > +#define MAX31827_CONFIGURATION_ALRM_POL_MASK	BIT(8)
-> > > +#define MAX31827_CONFIGURATION_COMP_INT_MASK	BIT(9)
-> > > +#define MAX31827_CONFIGURATION_FLT_Q_MASK
-> > 	GENMASK(11, 10)
-> > >   #define MAX31827_CONFIGURATION_U_TEMP_STAT_MASK BIT(14)
-> > >   #define MAX31827_CONFIGURATION_O_TEMP_STAT_MASK BIT(15)
-> > >
-> > > -#define MAX31827_12_BIT_CNV_TIME	141
-> > > -
-> > > -#define MAX31827_CNV_1_DIV_64_HZ	0x1
-> > > -#define MAX31827_CNV_1_DIV_32_HZ	0x2
-> > > -#define MAX31827_CNV_1_DIV_16_HZ	0x3
-> > > -#define MAX31827_CNV_1_DIV_4_HZ		0x4
-> > > -#define MAX31827_CNV_1_HZ	0x5
-> > > -#define MAX31827_CNV_4_HZ	0x6
-> > > -#define MAX31827_CNV_8_HZ	0x7
-> > > +#define MAX31827_8_BIT_CNV_TIME		9
-> > > +#define MAX31827_9_BIT_CNV_TIME		18
-> > > +#define MAX31827_10_BIT_CNV_TIME	35
-> > > +#define MAX31827_12_BIT_CNV_TIME	140
-> > >
-> > >   #define MAX31827_16_BIT_TO_M_DGR(x)	(sign_extend32(x, 15) *
-> > 1000 / 16)
-> > >   #define MAX31827_M_DGR_TO_16_BIT(x)	(((x) << 4) / 1000)
-> > >   #define MAX31827_DEVICE_ENABLE(x)	((x) ? 0xA : 0x0)
-> > > +#define MAX31827_FLT_Q
-> > > +
-> > > +enum max31827_cnv {
-> > > +	MAX31827_CNV_1_DIV_64_HZ = 1,
-> > > +	MAX31827_CNV_1_DIV_32_HZ,
-> > > +	MAX31827_CNV_1_DIV_16_HZ,
-> > > +	MAX31827_CNV_1_DIV_4_HZ,
-> > > +	MAX31827_CNV_1_HZ,
-> > > +	MAX31827_CNV_4_HZ,
-> > > +	MAX31827_CNV_8_HZ,
-> > > +};
-> > > +
-> > > +static const u16 max31827_conversions[] = {
-> > > +	[MAX31827_CNV_1_DIV_64_HZ] = 64000,
-> > > +	[MAX31827_CNV_1_DIV_32_HZ] = 32000,
-> > > +	[MAX31827_CNV_1_DIV_16_HZ] = 16000,
-> > > +	[MAX31827_CNV_1_DIV_4_HZ] = 4000,
-> > > +	[MAX31827_CNV_1_HZ] = 1000,
-> > > +	[MAX31827_CNV_4_HZ] = 250,
-> > > +	[MAX31827_CNV_8_HZ] = 125,
-> > > +};
-> > > +
-> > > +enum max31827_resolution {
-> > > +	MAX31827_RES_8_BIT = 0,
-> > > +	MAX31827_RES_9_BIT,
-> > > +	MAX31827_RES_10_BIT,
-> > > +	MAX31827_RES_12_BIT,
-> > > +};
-> > > +
-> > > +static const u16 max31827_resolutions[] = {
-> > > +	[MAX31827_RES_8_BIT] = 8,
-> > > +	[MAX31827_RES_9_BIT] = 9,
-> > > +	[MAX31827_RES_10_BIT] = 10,
-> > > +	[MAX31827_RES_12_BIT] = 12,
-> > > +};
-> > > +
-> > > +enum cfg_index {
-> > > +	cfg_timeout_idx = 0,
-> > > +	cfg_res_idx,
-> > > +	cfg_num
-> > > +};
-> > > +
-> > > +static const unsigned int cfg_masks[cfg_num] = {
-> > > +	[cfg_timeout_idx] =
-> > MAX31827_CONFIGURATION_TIMEOUT_MASK,
-> > > +	[cfg_res_idx] =
-> > MAX31827_CONFIGURATION_RESOLUTION_MASK,
-> > > +};
-> > > +
-> > > +enum max31827_cnv {
-> > > +	MAX31827_CNV_1_DIV_64_HZ = 1,
-> > > +	MAX31827_CNV_1_DIV_32_HZ,
-> > > +	MAX31827_CNV_1_DIV_16_HZ,
-> > > +	MAX31827_CNV_1_DIV_4_HZ,
-> > > +	MAX31827_CNV_1_HZ,
-> > > +	MAX31827_CNV_4_HZ,
-> > > +	MAX31827_CNV_8_HZ,
-> > > +};
-> > > +
-> > > +static const u16 max31827_conversions[] = {
-> > > +	[MAX31827_CNV_1_DIV_64_HZ] = 64000,
-> > > +	[MAX31827_CNV_1_DIV_32_HZ] = 32000,
-> > > +	[MAX31827_CNV_1_DIV_16_HZ] = 16000,
-> > > +	[MAX31827_CNV_1_DIV_4_HZ] = 4000,
-> > > +	[MAX31827_CNV_1_HZ] = 1000,
-> > > +	[MAX31827_CNV_4_HZ] = 250,
-> > > +	[MAX31827_CNV_8_HZ] = 125,
-> > > +};
-> > > +
-> > > +enum max31827_resolution {
-> > > +	MAX31827_RES_8_BIT = 0,
-> > > +	MAX31827_RES_9_BIT,
-> > > +	MAX31827_RES_10_BIT,
-> > > +	MAX31827_RES_12_BIT,
-> > > +};
-> > > +
-> > > +static const u16 max31827_resolutions[] = {
-> > > +	[MAX31827_RES_8_BIT] = 8,
-> > > +	[MAX31827_RES_9_BIT] = 9,
-> > > +	[MAX31827_RES_10_BIT] = 10,
-> > > +	[MAX31827_RES_12_BIT] = 12,
-> > > +};
-> > > +
-> > > +static const u16 max31827_conv_times[] = {
-> > > +	[MAX31827_RES_8_BIT] = MAX31827_8_BIT_CNV_TIME,
-> > > +	[MAX31827_RES_9_BIT] = MAX31827_9_BIT_CNV_TIME,
-> > > +	[MAX31827_RES_10_BIT] = MAX31827_10_BIT_CNV_TIME,
-> > > +	[MAX31827_RES_12_BIT] = MAX31827_12_BIT_CNV_TIME, };
-> > > +
-> > > +enum cfg_index {
-> > > +	cfg_timeout_idx = 0,
-> > > +	cfg_res_idx,
-> > > +	cfg_num
-> > > +};
-> > > +
-> > > +static const unsigned int cfg_masks[cfg_num] = {
-> > > +	[cfg_timeout_idx] =
-> > MAX31827_CONFIGURATION_TIMEOUT_MASK,
-> > > +	[cfg_res_idx] =
-> > MAX31827_CONFIGURATION_RESOLUTION_MASK,
-> > > +};
-> > >
-> > >   struct max31827_state {
-> > >   	/*
-> > > @@ -46,6 +156,7 @@ struct max31827_state {
-> > >   	struct mutex lock;
-> > >   	struct regmap *regmap;
-> > >   	bool enable;
-> > > +	unsigned int resolution;
-> > >   };
-> > >
-> > >   static const struct regmap_config max31827_regmap = { @@ -166,8
-> > > +277,7 @@ static int max31827_read(struct device *dev, enum
-> > hwmon_sensor_types type,
-> > >   					mutex_unlock(&st->lock);
-> > >   					return ret;
-> > >   				}
-> > > -
-> > > -				msleep(MAX31827_12_BIT_CNV_TIME);
-> > > +				msleep(max31827_conv_times[st-
-> > >resolution]);
-> > >   			}
-> > >   			ret = regmap_read(st->regmap,
-> > MAX31827_T_REG, &uval);
-> > >
-> > > @@ -243,32 +353,7 @@ static int max31827_read(struct device *dev,
-> > enum
-> > > hwmon_sensor_types type,
-> > >
-> > >   			uval =
-> > FIELD_GET(MAX31827_CONFIGURATION_CNV_RATE_MASK,
-> > >   					 uval);
-> > > -			switch (uval) {
-> > > -			case MAX31827_CNV_1_DIV_64_HZ:
-> > > -				*val = 64000;
-> > > -				break;
-> > > -			case MAX31827_CNV_1_DIV_32_HZ:
-> > > -				*val = 32000;
-> > > -				break;
-> > > -			case MAX31827_CNV_1_DIV_16_HZ:
-> > > -				*val = 16000;
-> > > -				break;
-> > > -			case MAX31827_CNV_1_DIV_4_HZ:
-> > > -				*val = 4000;
-> > > -				break;
-> > > -			case MAX31827_CNV_1_HZ:
-> > > -				*val = 1000;
-> > > -				break;
-> > > -			case MAX31827_CNV_4_HZ:
-> > > -				*val = 250;
-> > > -				break;
-> > > -			case MAX31827_CNV_8_HZ:
-> > > -				*val = 125;
-> > > -				break;
-> > > -			default:
-> > > -				*val = 0;
-> > > -				break;
-> > > -			}
-> > > +			*val = max31827_conversions[uval];
-> > >   		}
-> > >   		break;
-> > >
-> > > @@ -284,6 +369,7 @@ static int max31827_write(struct device *dev,
-> > enum hwmon_sensor_types type,
-> > >   			  u32 attr, int channel, long val)
-> > >   {
-> > >   	struct max31827_state *st = dev_get_drvdata(dev);
-> > > +	int res = 1;
-> > >   	int ret;
-> > >
-> > >   	switch (type) {
-> > > @@ -333,39 +419,27 @@ static int max31827_write(struct device *dev,
-> > enum hwmon_sensor_types type,
-> > >   			if (!st->enable)
-> > >   				return -EOPNOTSUPP;
-> > >
-> > > -			switch (val) {
-> > > -			case 125:
-> > > -				val = MAX31827_CNV_8_HZ;
-> > > -				break;
-> > > -			case 250:
-> > > -				val = MAX31827_CNV_4_HZ;
-> > > -				break;
-> > > -			case 1000:
-> > > -				val = MAX31827_CNV_1_HZ;
-> > > -				break;
-> > > -			case 4000:
-> > > -				val = MAX31827_CNV_1_DIV_4_HZ;
-> > > -				break;
-> > > -			case 16000:
-> > > -				val = MAX31827_CNV_1_DIV_16_HZ;
-> > > -				break;
-> > > -			case 32000:
-> > > -				val = MAX31827_CNV_1_DIV_32_HZ;
-> > > -				break;
-> > > -			case 64000:
-> > > -				val = MAX31827_CNV_1_DIV_64_HZ;
-> > > -				break;
-> > > -			default:
-> > > +			/*
-> > > +			 * Convert the desired conversion rate into
-> > register
-> > > +			 * bits. res is already initialized with 1.
-> > > +			 *
-> > > +			 * This was inspired by lm73 driver.
-> > > +			 */
-> > > +			while (res < ARRAY_SIZE(max31827_conversions)
-> > &&
-> > > +			       val < max31827_conversions[res])
-> > > +				res++;
-> > > +
-> > > +			if (res == ARRAY_SIZE(max31827_conversions) ||
-> > > +			    val != max31827_conversions[res])
-> > >   				return -EOPNOTSUPP;
-> > > -			}
-> > >
-> > > -			val =
-> > FIELD_PREP(MAX31827_CONFIGURATION_CNV_RATE_MASK,
-> > > -					 val);
-> > > +			res =
-> > FIELD_PREP(MAX31827_CONFIGURATION_CNV_RATE_MASK,
-> > > +					 res);
-> > >
-> > >   			return regmap_update_bits(st->regmap,
-> > >
-> > MAX31827_CONFIGURATION_REG,
-> > >
-> > MAX31827_CONFIGURATION_CNV_RATE_MASK,
-> > > -						  val);
-> > > +						  res);
-> > >   		}
-> > >   		break;
-> > >
-> > > @@ -376,14 +450,121 @@ static int max31827_write(struct device
-> > *dev, enum hwmon_sensor_types type,
-> > >   	return -EOPNOTSUPP;
-> > >   }
-> > >
-> > > -static int max31827_init_client(struct max31827_state *st)
-> > > +static ssize_t cfg_show(struct device *dev, struct device_attribute
-> > *devattr,
-> > > +			char *buf)
-> > >   {
-> > > +	struct sensor_device_attribute *attr =
-> > to_sensor_dev_attr(devattr);
-> > > +	struct max31827_state *st = dev_get_drvdata(dev);
-> > > +	const unsigned int mask = cfg_masks[attr->index];
-> > > +	unsigned int val, res;
-> > > +	int ret;
-> > > +
-> > > +	ret = regmap_read(st->regmap,
-> > MAX31827_CONFIGURATION_REG, &val);
-> > > +	/*
-> > > +	 * FIELD_GET did not work because mask is not a compile time
-> > constant.
-> > > +	 * There is no bitfield check now.
-> > > +	 */
-> > > +	val = (val & mask) >> max31827__bf_shf(mask);
-> > > +
-> > > +	if (attr->index == cfg_res_idx)
-> > > +		res = max31827_resolutions[val];
-> > > +	else
-> > > +		res = !val;
-> > > +
-> > > +	return scnprintf(buf, PAGE_SIZE, "%u\n", res); }
-> > > +
-> > > +static ssize_t cfg_store(struct device *dev, struct device_attribute
-> > *devattr,
-> > > +			 const char *buf, size_t count)
-> > > +{
-> > > +	struct sensor_device_attribute *attr =
-> > to_sensor_dev_attr(devattr);
-> > > +	struct max31827_state *st = dev_get_drvdata(dev);
-> > > +	const unsigned int mask = cfg_masks[attr->index];
-> > > +	unsigned int res = 0;
-> > > +	unsigned int val;
-> > > +	int ret;
-> > > +
-> > > +	ret = kstrtouint(buf, 10, &val);
-> > > +	if (ret)
-> > > +		return ret;
-> > > +
-> > > +	if (attr->index == cfg_res_idx) {
-> > > +		/*
-> > > +		 * Convert the desired conversion rate into register
-> > > +		 * bits. res is already initialized with 1.
-> > > +		 *
-> > > +		 * This was inspired by lm73 driver.
-> > > +		 */
-> > > +		while (res < ARRAY_SIZE(max31827_resolutions) &&
-> > > +		       val > max31827_resolutions[res])
-> > > +			res++;
-> > > +
-> > > +		if (res == ARRAY_SIZE(max31827_resolutions) ||
-> > > +		    val != max31827_resolutions[res])
-> > > +			return -EOPNOTSUPP;
-> > > +
-> > > +		st->resolution = res;
-> > > +	} else {
-> > > +		res = !val;
-> > > +	}
-> > > +
-> > > +	/*
-> > > +	 * FIELD_PREP did not work because mask is not a compile time
-> > constant.
-> > > +	 * There is no bitfield check now.
-> > > +	 */
-> > > +	res = (res << max31827__bf_shf(mask)) & mask;
-> > > +	ret = regmap_update_bits(st->regmap,
-> > MAX31827_CONFIGURATION_REG,
-> > > +				 cfg_masks[attr->index], res);
-> > > +
-> > > +	return (ret) ? ret : count;
-> > > +}
-> > > +
-> > > +static SENSOR_DEVICE_ATTR_RW(cfg_resolution, cfg, cfg_res_idx);
-> > > +static SENSOR_DEVICE_ATTR_RW(cfg_timeout, cfg, cfg_timeout_idx);
-> > > +
-> > > +static struct attribute *max31827_attrs[] = {
-> > > +	&sensor_dev_attr_cfg_resolution.dev_attr.attr,
-> > > +	&sensor_dev_attr_cfg_timeout.dev_attr.attr,
-> > 
-> > 
-> > Those attributes are not acceptable. First of all, the cfg_ prefix is useless.
-> > The timeout is system related and should be a devicetree property.
-> > The resolution maps into the number of conversions per second, and
-> > therefore the standard update_interval property can be used.
-> > 
-> > Guenter
-> > 
-> 
-> The cfg_ prefix is used, because both timeout and resolution can be modified
-> from the configuration register. I can set timeout to be a devicetree property,
-> then I would not need the cfg_ prefix.
-> 
-
-The name of a sysfs attribute has nothing to do with how it is interpreted.
-Those prefixes are not acceptable.
-
-> However, I am not sure about setting the resolution mapping into the update
-> interval. Only the 12-bit resolution's nominal conversion time (140 ms) and the
-> 8 conv/sec conversion rate (update interval = 125 ms) are comparable (this is
-> something that I recently observed, and I will handle this case in the next patch).
-> In the rest of cases, the conversion time is much smaller, than the update interval,
-> thus, it can be neglected.
-> 
-> The conversion time induced by the resolution is only relevant, when the device is
-> disabled and a read is performed. In this case, one-shot is triggered, the driver sleeps
-> for the time needed to do the conversion, and finally does the read of the temperature
-> data.
-> 
-> In fact, you were the one who suggested using a sysfs attribute for resolution, instead
-> of update interval:
-> https://marc.info/?l=linux-i2c&m=169201795715687&w=2
-> 
-
-Good point. But then I also said
-
-"ec related attributes should be attached to the i2c interface. Other
-drivers already do that; look for pec_{show,store}. The same is true
-                                                    ^^^^^^^^^^^^^^^^
-for timeout."
-^^^^^^^^^^^
-
-Resolution as sysfs attribute would have to use a well defined unit.
-Just using a number doesn't help, since "number of bits" may or may not
-include the sign and doesn't say how many of those bits reflect full
-degrees C. I'd be inclined to accept a "resolution" attribute if
-specified in milli-degrees C. This would have to have a temp_ prefix
-since, after all, we could have something similar for other sensor
-types.
-
-Guenter
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogR3VlbnRlciBSb2VjayA8
+Z3JvZWNrN0BnbWFpbC5jb20+IE9uIEJlaGFsZiBPZiBHdWVudGVyIFJvZWNrDQo+IFNlbnQ6IFRo
+dXJzZGF5LCBTZXB0ZW1iZXIgNywgMjAyMyAxMjoyMCBBTQ0KPiBUbzogRGVscGhpbmVfQ0NfQ2hp
+dS9XWUhRL1dpd3lubiA8RGVscGhpbmVfQ0NfQ2hpdUB3aXd5bm4uY29tPjsNCj4gcGF0cmlja0Bz
+dHdjeC54eXo7IEplYW4gRGVsdmFyZSA8amRlbHZhcmVAc3VzZS5jb20+DQo+IENjOiBsaW51eC1o
+d21vbkB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNCj4gU3Vi
+amVjdDogUmU6IFtQQVRDSF0gaHdtb246IG1heDMxNzkwOiBzdXBwb3J0IHRvIGNvbmZpZyBQV00g
+YXMgVEFDSA0KPiANCj4gICBTZWN1cml0eSBSZW1pbmRlcjogUGxlYXNlIGJlIGF3YXJlIHRoYXQg
+dGhpcyBlbWFpbCBpcyBzZW50IGJ5IGFuIGV4dGVybmFsDQo+IHNlbmRlci4NCj4gDQo+IE9uIDkv
+Ni8yMyAwMTo0OCwgRGVscGhpbmUgQ0MgQ2hpdSB3cm90ZToNCj4gPiBUaGUgUFdNIG91dHB1dHMg
+b2YgbWF4MzE3OTAgY291bGQgYmUgdXNlZCBhcyB0YWNob21ldGVyIGlucHV0cyBieQ0KPiA+IHNl
+dHRpbmcgdGhlIGZhbiBjb25maWd1cmF0aW9uIHJlZ2lzdGVyLCBidXQgdGhlIGRyaXZlciBkb2Vz
+bid0IHN1cHBvcnQNCj4gPiB0byBjb25maWcgdGhlIFBXTSBvdXRwdXRzIGFzIHRhY2hvbWV0ZXIg
+aW5wdXRzIGN1cnJlbnRseS4NCj4gPg0KPiA+IEFkZCBhIGZ1bmN0aW9uIHRvIGdldCBwcm9wZXJ0
+aWVzIG9mIHRoZSBzZXR0aW5nIG9mIG1heDMxNzkwIHRvIGNvbmZpZw0KPiA+IFBXTSBvdXRwdXRz
+IGFzIHRhY2hvbWV0ZXIgaW5wdXRzIGJlZm9yZSBpbml0aWFsaXppbmcgbWF4MzE3OTAuDQo+ID4g
+Rm9yIGV4YW1wbGU6IHNldCBgcHdtLWFzLXRhY2ggPSAvYml0cy8gOCA8MiA1PmAgaW4gRFRTIGZv
+ciBtYXgzMTc5MA0KPiA+IGFuZCB0aGUgZHJpdmVyIHdpbGwgY29uZmlnIFBXTU9VVDIgYW5kIFBX
+TU9VVDUgYXMgVEFDSDggYW5kDQo+IFRBQ0gxMS4NCj4gPg0KPiANCj4gRGV2aWNldHJlZSBwcm9w
+ZXJ0aWVzIGhhdmUgdG8gYmUgZG9jdW1lbnRlZCBpbiBhIHByb3BlcnR5IGZpbGUgYW5kIGhhdmUg
+dG8NCj4gYmUgYXBwcm92ZWQgYnkgYSBkZXZpY2V0cmVlIG1haW50YWluZXIuDQo+IA0KPiBQZXJz
+b25hbGx5IEkgZG9uJ3QgdGhpbmsgdGhpcyBpcyB0aGUgcHJvcGVyIHdheSBvZiBjb25maWd1cmlu
+ZyB0aGlzLCBidXQgSSdsbCBsZXQNCj4gZGV2aWNldHJlZSBtYWludGFpbmVycyBkZWNpZGUuDQo+
+IA0KVGhhbmtzIGZvciB5b3VyIHJlcGx5Lg0KV2Ugd2lsbCBhZGQgZG9jdW1lbnQgb2YgbWF4MzE3
+OTAgaW4gdjIgcGF0Y2guDQoNCj4gPiBTaWduZWQtb2ZmLWJ5OiBEZWxwaGluZSBDQyBDaGl1IDxE
+ZWxwaGluZV9DQ19DaGl1QHdpd3lubi5jb20+DQo+ID4gLS0tDQo+ID4gICBkcml2ZXJzL2h3bW9u
+L21heDMxNzkwLmMgfCA1MA0KPiArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
+KysrDQo+ID4gICAxIGZpbGUgY2hhbmdlZCwgNTAgaW5zZXJ0aW9ucygrKQ0KPiA+DQo+ID4gZGlm
+ZiAtLWdpdCBhL2RyaXZlcnMvaHdtb24vbWF4MzE3OTAuYyBiL2RyaXZlcnMvaHdtb24vbWF4MzE3
+OTAuYw0KPiBpbmRleA0KPiA+IDBjZDQ0YzFlOTk4YS4uMGY4ZmU5MTE1MzliIDEwMDY0NA0KPiA+
+IC0tLSBhL2RyaXZlcnMvaHdtb24vbWF4MzE3OTAuYw0KPiA+ICsrKyBiL2RyaXZlcnMvaHdtb24v
+bWF4MzE3OTAuYw0KPiA+IEBAIC00ODAsNiArNDgwLDUyIEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3Qg
+aHdtb25fY2hpcF9pbmZvDQo+IG1heDMxNzkwX2NoaXBfaW5mbyA9IHsNCj4gPiAgICAgICAuaW5m
+byA9IG1heDMxNzkwX2luZm8sDQo+ID4gICB9Ow0KPiA+DQo+ID4gK3N0YXRpYyBpbnQgbWF4MzE3
+OTBfY29uZmlnX3B3bV9hc190YWNoKHN0cnVjdCBkZXZpY2UgKmRldiwNCj4gPiArICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgc3RydWN0IGkyY19jbGllbnQgKmNsaWVudCkgew0K
+PiA+ICsgICAgIHN0cnVjdCBkZXZpY2Vfbm9kZSAqbnAgPSBkZXYtPm9mX25vZGU7DQo+ID4gKyAg
+ICAgaW50IGksIHJldCA9IDAsIHNpemUsIGNoYW5uZWw7DQo+ID4gKyAgICAgdTggcHdtX2luZGV4
+W05SX0NIQU5ORUxdID0geyAwIH07DQo+ID4gKyAgICAgdTggZmFuX2NvbmZpZzsNCj4gPiArDQo+
+ID4gKyAgICAgc2l6ZSA9IG9mX3Byb3BlcnR5X2NvdW50X3U4X2VsZW1zKG5wLCAicHdtLWFzLXRh
+Y2giKTsNCj4gPiArDQo+ID4gKyAgICAgaWYgKChzaXplID4gMCkgJiYgKHNpemUgPD0gTlJfQ0hB
+Tk5FTCkpIHsNCj4gDQo+IFBsZWFzZSByZWZyYWluIGZyb20gdW5uZWNlc3NhcnkgKCApLg0KPiAN
+CldpbGwgcmVtb3ZlIGluIHRoZSB2MiBwYXRjaC4NCg0KPiA+ICsgICAgICAgICAgICAgcmV0ID0g
+b2ZfcHJvcGVydHlfcmVhZF91OF9hcnJheShucCwgInB3bS1hcy10YWNoIiwNCj4gcHdtX2luZGV4
+LA0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzaXpl
+KTsNCj4gPiArICAgICAgICAgICAgIGlmIChyZXQpIHsNCj4gPiArICAgICAgICAgICAgICAgICAg
+ICAgZGV2X2VycihkZXYsDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIlByb3Bl
+cnR5ICdwd20tYXMtdGFjaCcgY2Fubm90IGJlDQo+IHJlYWQuXG4iKTsNCj4gPiArICAgICAgICAg
+ICAgICAgICAgICAgcmV0dXJuIHJldDsNCj4gPiArICAgICAgICAgICAgIH0NCj4gPiArDQo+ID4g
+KyAgICAgICAgICAgICBmb3IgKGkgPSAwOyBpIDwgc2l6ZTsgaSsrKSB7DQo+ID4gKyAgICAgICAg
+ICAgICAgICAgICAgIGlmICgocHdtX2luZGV4W2ldID09IDApIHx8DQo+ID4gKyAgICAgICAgICAg
+ICAgICAgICAgICAgICAocHdtX2luZGV4W2ldID4gTlJfQ0hBTk5FTCkpIHsNCj4gPiArICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICBjb250aW51ZTsNCj4gPiArICAgICAgICAgICAgICAgICAg
+ICAgfQ0KPiANCj4gU2lsZW50bHkgYWNjZXB0aW5nIGJhZCBkYXRhIHNlZW1zIGxpa2UgYSBiYWQg
+aWRlYSB0byBtZS4NCj4gDQpBZGQgZXJyb3IgaGFuZGxpbmcgaW4gdjIgcGF0Y2guDQoNCj4gPiAr
+DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgIGNoYW5uZWwgPSBwd21faW5kZXhbaV0gLSAxOw0K
+PiA+ICsgICAgICAgICAgICAgICAgICAgICBmYW5fY29uZmlnID0gaTJjX3NtYnVzX3JlYWRfYnl0
+ZV9kYXRhKA0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNsaWVudCwNCj4gTUFY
+MzE3OTBfUkVHX0ZBTl9DT05GSUcoY2hhbm5lbCkpOw0KPiA+ICsgICAgICAgICAgICAgICAgICAg
+ICBpZiAoZmFuX2NvbmZpZyA8IDApIHsNCj4gDQo+IEFuIHU4IGlzIG5ldmVyIDwgMA0KPiANClVz
+ZSBpbnRlZ2VyIHRvIGdldCB0aGUgcmV0dXJuIHZhbHVlIGZpcnN0IGFuZCBzZXQgdG8gZmFuX2Nv
+bmZpZyBpbiB2MiBwYXRjaC4NCg0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGRl
+dl9lcnIoZGV2LA0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIlJl
+YWQgZmFuIGNvbmZpZyBmb3IgY2hhbm5lbA0KPiAlZCBmYWlsZWQuXG4iLA0KPiA+ICsgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY2hhbm5lbCk7DQo+ID4gKyAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgcmV0dXJuIGZhbl9jb25maWc7DQo+ID4gKyAgICAgICAgICAgICAg
+ICAgICAgIH0NCj4gPiArDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgIGZhbl9jb25maWcgfD0N
+Cj4gKE1BWDMxNzkwX0ZBTl9DRkdfQ1RSTF9NT04gfA0KPiA+ICsNCj4gTUFYMzE3OTBfRkFOX0NG
+R19UQUNIX0lOUFVUKTsNCj4gDQo+IFRoaXMgYXNzdW1lcyB0aGF0IHRoZSBjaGFubmVsIGlzIGNv
+bmZpZ3VyZWQgYXMgcHdtLg0KPiBXaGF0IGlmIHRoZSBCSU9TIC8gUk9NTU9OIGNvbmZpZ3VyZWQg
+YW5vdGhlciBjaGFubmVsIHdoaWNoIHlvdSB3YW50IGFzDQo+IHB3bSBjaGFubmVsIGFzIGZhbiBp
+bnB1dCBjaGFubmVsID8NCj4gDQpUaGlzIHdpbGwgY29uZmlnIHRoZSBjaGFubmVsIGFzIFRBQ0gu
+DQpDb3VsZCB5b3UgcHJvdmlkZSBtb3JlIGluZm9ybWF0aW9uIGFib3V0IHRoZSBzY2VuYXJpbyB5
+b3UgbWVudGlvbmVkPw0KSW4gb3VyIHN5c3RlbSwgdGhlcmUgaXMgb25seSBCTUMgdGhhdCB3aWxs
+IHNldCB0aGUgY29uZmlnIG9mIGZhbiBkZXZpY2UuDQo+ID4gKyAgICAgICAgICAgICAgICAgICAg
+IGkyY19zbWJ1c193cml0ZV9ieXRlX2RhdGEoDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgY2xpZW50LA0KPiBNQVgzMTc5MF9SRUdfRkFOX0NPTkZJRyhjaGFubmVsKSwNCj4gPiAr
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBmYW5fY29uZmlnKTsNCj4gPiArICAgICAgICAg
+ICAgIH0NCj4gPiArICAgICB9DQo+IA0KPiBTaWxlbnRseSBpZ25vcmluZyBlcnJvcnMgc2VlbXMg
+bGlrZSBhIGJhZCBpZGVhLg0KPiANCkFkZCBlcnJvciBoYW5kbGluZyBpbiB2MiBwYXRjaC4NCg0K
+PiA+ICsNCj4gPiArICAgICByZXR1cm4gMDsNCj4gPiArfQ0KPiA+ICsNCj4gPiAgIHN0YXRpYyBp
+bnQgbWF4MzE3OTBfaW5pdF9jbGllbnQoc3RydWN0IGkyY19jbGllbnQgKmNsaWVudCwNCj4gPiAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJ1Y3QgbWF4MzE3OTBfZGF0YSAqZGF0YSkN
+Cj4gPiAgIHsNCj4gPiBAQCAtNTIxLDYgKzU2NywxMCBAQCBzdGF0aWMgaW50IG1heDMxNzkwX3By
+b2JlKHN0cnVjdCBpMmNfY2xpZW50DQo+ICpjbGllbnQpDQo+ID4gICAgICAgZGF0YS0+Y2xpZW50
+ID0gY2xpZW50Ow0KPiA+ICAgICAgIG11dGV4X2luaXQoJmRhdGEtPnVwZGF0ZV9sb2NrKTsNCj4g
+Pg0KPiA+ICsgICAgIGVyciA9IG1heDMxNzkwX2NvbmZpZ19wd21fYXNfdGFjaChkZXYsIGNsaWVu
+dCk7DQo+ID4gKyAgICAgaWYgKGVycikNCj4gPiArICAgICAgICAgICAgIGRldl9jcml0KGRldiwg
+IkNvbmZpZyBQV00gYXMgVEFDSCBmYWlsZWQuXG4iKTsNCj4gPiArDQo+ID4gICAgICAgLyoNCj4g
+PiAgICAgICAgKiBJbml0aWFsaXplIHRoZSBtYXgzMTc5MCBjaGlwDQo+ID4gICAgICAgICovDQoN
+Cg==
