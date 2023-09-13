@@ -2,181 +2,99 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5C56CA5534
-	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Sep 2023 10:28:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98DFEEDEC50
+	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Sep 2023 13:37:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbjIMK2a (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 13 Sep 2023 06:28:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46262 "EHLO
+        id S240987AbjIMNh2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 13 Sep 2023 09:37:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232818AbjIMK23 (ORCPT
+        with ESMTP id S239451AbjIMNh2 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 13 Sep 2023 06:28:29 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BFA519B6;
-        Wed, 13 Sep 2023 03:28:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694600905; x=1726136905;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BOm7IybDAePeWd4TLpHqIfUxkm0hIFIrRWXa31Z5Nis=;
-  b=F23BHJmf145ATC4Q8X0mTTw7o5wV2wZOmxyCt9jv1zD+LO9k9pBjeKWY
-   P01QGG7gRtx5IzTkFEXZh6EHR0cuvwqLuXE3Bct8lCo6UWu0LwJ/Wp5zy
-   aGRTk7jTt1pOwC8ECAYp+22eKaUBm/LSftclGYtgaLac+PoZBogz26Upw
-   bt3xyvoiG/Zt63ixyonJbZVvr0xMCLjltrDALfIlhK7MLObbh1Ab7CEWd
-   MGDKi3D3j55+ur6imyZZThYCqdpZ/vIsx7yWifAo1d0XVtu3SMhwEJvfl
-   SX2iDhXOILANZ8Vs1panmmnROiwYYLFyW3fhvlYvJbJZbOQxqzsdBUokq
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="363652640"
-X-IronPort-AV: E=Sophos;i="6.02,142,1688454000"; 
-   d="scan'208";a="363652640"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 03:28:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="917773493"
-X-IronPort-AV: E=Sophos;i="6.02,142,1688454000"; 
-   d="scan'208";a="917773493"
-Received: from lkp-server02.sh.intel.com (HELO cf13c67269a2) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 13 Sep 2023 03:28:22 -0700
-Received: from kbuild by cf13c67269a2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qgN6Z-0000Oh-2V;
-        Wed, 13 Sep 2023 10:28:19 +0000
-Date:   Wed, 13 Sep 2023 18:28:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Naresh Solanki <naresh.solanki@9elements.com>, broonie@kernel.org,
-        zev@bewilderbeest.net, Liam Girdwood <lgirdwood@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Naresh Solanki <naresh.solanki@9elements.com>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3] regulator (max5970): Add hwmon support
-Message-ID: <202309131847.4GIyTQIO-lkp@intel.com>
-References: <20230911113647.1259204-1-naresh.solanki@9elements.com>
+        Wed, 13 Sep 2023 09:37:28 -0400
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C37F19B1;
+        Wed, 13 Sep 2023 06:37:24 -0700 (PDT)
+Received: by mail-oo1-xc35.google.com with SMTP id 006d021491bc7-573921661a6so4056379eaf.1;
+        Wed, 13 Sep 2023 06:37:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1694612243; x=1695217043; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=mcgD0Ewsr/9q6i+3hzurksNbRO1+jgjaSl9HYyWGZo4=;
+        b=sq1v/bzsGLWkRRucN9AvRSWrGkHXufwQt2+ar+VNlLzlavth5jdHynhsv+IpWKB1dx
+         x4S1xg0ub4G6kaWLYLN/YwL47UXWBlEjfI5Q74f7AnkZ+QhwATETj512IVs7IdiXuAkT
+         Es6O82KIt/6KhIP+643nL4GAixB0w08i8gL10QxDFObogNhN2UIAwXA+ffRZuAlJe6Hs
+         ztAVqcgq6jAVb9gz7aYmhKgVl4qQt0bwSgoosiaZCi7NAfw29BzF7r5mQHPJDyUHa0oM
+         OICm+TKGiRLquW7y+0jfRz52B3jVIs97TGVQre+zNkM3JVVg4ul/bW1nEGR7Ch9uNLa/
+         i9gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694612243; x=1695217043;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mcgD0Ewsr/9q6i+3hzurksNbRO1+jgjaSl9HYyWGZo4=;
+        b=GJe9F1xzEuC77jhQuCKRRunKSahD0RK6qhtClTIU3FB5+ccJx11HeWwCdOPetURdY1
+         10Zf3TUx/iUJr0aS4Lu9ZKxIDn9sdB2hftS2iM9apnk4U0OYVv93RiMb7eGUyPtHwUIv
+         TvPJ4KCjWzBt2cJAiNKb3sDjlng2A5+E+DufQOxXCUIONhE5+AVwQ2oVkesBe+G52cCs
+         j5aQtPVLLYMctgEhhxaW3fEMVNCNZBDArrFFL74gIh3knogeLAKssqW2qwh/wlGOcAkb
+         OlCHawwfz4D/Y6GPeBB6c4lmWhrTV4cfAhhLB4TlIZr9vn+msemT384jLgRwKvXLRJKm
+         /Z1Q==
+X-Gm-Message-State: AOJu0YwU0TIT7P0zsCfJ/UIGx6E4bLJYooF2rGuMDFqAFsfNlymE/9IO
+        AaIY4iriXyN+UKQgBWYCv7h9xxVPPIQ=
+X-Google-Smtp-Source: AGHT+IFQ3x6iFxJ+MomknNL5UtqI+O6dlEwbOiZeDCE0/go3o7I3KRFg1tVQtPfDbFVV3sme9riTOw==
+X-Received: by 2002:a05:6358:99a1:b0:140:ff29:7057 with SMTP id j33-20020a05635899a100b00140ff297057mr2640539rwb.7.1694612243328;
+        Wed, 13 Sep 2023 06:37:23 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h8-20020a62b408000000b0068a0b5df6b2sm9128737pfn.196.2023.09.13.06.37.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Sep 2023 06:37:22 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <29e27f2a-3347-b6f4-2dd9-4c93afea87b7@roeck-us.net>
+Date:   Wed, 13 Sep 2023 06:37:21 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230911113647.1259204-1-naresh.solanki@9elements.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH] hwmon: max31790: support to config PWM as TACH
+Content-Language: en-US
+To:     Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>,
+        "patrick@stwcx.xyz" <patrick@stwcx.xyz>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230906084837.3043030-1-Delphine_CC_Chiu@wiwynn.com>
+ <20230906084837.3043030-3-Delphine_CC_Chiu@wiwynn.com>
+ <8a3b41a2-0ab2-6213-04a1-54ab7263c647@roeck-us.net>
+ <TYZPR04MB58533E15AA65FCDA0F603FA3D6F0A@TYZPR04MB5853.apcprd04.prod.outlook.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <TYZPR04MB58533E15AA65FCDA0F603FA3D6F0A@TYZPR04MB5853.apcprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Naresh,
+On 9/13/23 01:51, Delphine_CC_Chiu/WYHQ/Wiwynn wrote:
 
-kernel test robot noticed the following build errors:
+[ ... ]
 
-[auto build test ERROR on 41f02a383ac652f1a0b5538c5901b7ec93e37290]
+>>
+>> This assumes that the channel is configured as pwm.
+>> What if the BIOS / ROMMON configured another channel which you want as
+>> pwm channel as fan input channel ?
+>>
+> This will config the channel as TACH.
+> Could you provide more information about the scenario you mentioned?
+> In our system, there is only BMC that will set the config of fan device.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Naresh-Solanki/regulator-max5970-Add-hwmon-support/20230912-072321
-base:   41f02a383ac652f1a0b5538c5901b7ec93e37290
-patch link:    https://lore.kernel.org/r/20230911113647.1259204-1-naresh.solanki%409elements.com
-patch subject: [PATCH v3] regulator (max5970): Add hwmon support
-config: i386-randconfig-062-20230913 (https://download.01.org/0day-ci/archive/20230913/202309131847.4GIyTQIO-lkp@intel.com/config)
-compiler: gcc-7 (Ubuntu 7.5.0-6ubuntu2) 7.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230913/202309131847.4GIyTQIO-lkp@intel.com/reproduce)
+Please keep in mind that upstream code is not intended to only support
+your specific use case, but the use case of others as well. Your system
+(the one you have today) may only use the chip for fan speed
+measurement. Others may use it use it to control fans, or your hardware
+might tomorrow build another system where the chip us used to control
+the fans as well. Those use cases should be covered by your patch as well.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309131847.4GIyTQIO-lkp@intel.com/
+Guenter
 
-All errors (new ones prefixed by >>):
-
-   ld: drivers/regulator/max5970-regulator.o: in function `max597x_regulator_probe':
->> drivers/regulator/max5970-regulator.c:606: undefined reference to `devm_hwmon_device_register_with_info'
-
-
-vim +606 drivers/regulator/max5970-regulator.c
-
-   541	
-   542	static int max597x_regulator_probe(struct platform_device *pdev)
-   543	{
-   544		struct max5970_data *max597x;
-   545		struct regmap *regmap = dev_get_regmap(pdev->dev.parent, NULL);
-   546		struct max5970_regulator *data;
-   547		struct i2c_client *i2c = to_i2c_client(pdev->dev.parent);
-   548		struct regulator_config config = { };
-   549		struct regulator_dev *rdev;
-   550		struct regulator_dev *rdevs[MAX5970_NUM_SWITCHES];
-   551		struct device *hwmon_dev;
-   552		int num_switches;
-   553		int ret, i;
-   554	
-   555		if (!regmap)
-   556			return -EPROBE_DEFER;
-   557	
-   558		max597x = devm_kzalloc(&i2c->dev, sizeof(struct max5970_data), GFP_KERNEL);
-   559		if (!max597x)
-   560			return -ENOMEM;
-   561	
-   562		i2c_set_clientdata(i2c, max597x);
-   563	
-   564		if (of_device_is_compatible(i2c->dev.of_node, "maxim,max5978"))
-   565			max597x->num_switches = MAX5978_NUM_SWITCHES;
-   566		else if (of_device_is_compatible(i2c->dev.of_node, "maxim,max5970"))
-   567			max597x->num_switches = MAX5970_NUM_SWITCHES;
-   568		else
-   569			return -ENODEV;
-   570	
-   571		i2c_set_clientdata(i2c, max597x);
-   572		num_switches = max597x->num_switches;
-   573	
-   574		for (i = 0; i < num_switches; i++) {
-   575			data =
-   576			    devm_kzalloc(&i2c->dev, sizeof(struct max5970_regulator),
-   577					 GFP_KERNEL);
-   578			if (!data)
-   579				return -ENOMEM;
-   580	
-   581			data->num_switches = num_switches;
-   582			data->regmap = regmap;
-   583	
-   584			ret = max597x_adc_range(regmap, i, &max597x->irng[i], &max597x->mon_rng[i]);
-   585			if (ret < 0)
-   586				return ret;
-   587	
-   588			data->irng = max597x->irng[i];
-   589			data->mon_rng = max597x->mon_rng[i];
-   590	
-   591			config.dev = &i2c->dev;
-   592			config.driver_data = (void *)data;
-   593			config.regmap = data->regmap;
-   594			rdev = devm_regulator_register(&i2c->dev,
-   595						       &regulators[i], &config);
-   596			if (IS_ERR(rdev)) {
-   597				dev_err(&i2c->dev, "failed to register regulator %s\n",
-   598					regulators[i].name);
-   599				return PTR_ERR(rdev);
-   600			}
-   601			rdevs[i] = rdev;
-   602			max597x->shunt_micro_ohms[i] = data->shunt_micro_ohms;
-   603		}
-   604	
-   605		if (IS_ENABLED(CONFIG_HWMON)) {
- > 606			hwmon_dev = devm_hwmon_device_register_with_info(&i2c->dev, "max5970", max597x,
-   607									 &max5970_chip_info, NULL);
-   608			if (IS_ERR(hwmon_dev)) {
-   609				return dev_err_probe(&i2c->dev, PTR_ERR(hwmon_dev),
-   610						     "Unable to register hwmon device\n");
-   611			}
-   612		}
-   613	
-   614		if (i2c->irq) {
-   615			ret =
-   616			    max597x_setup_irq(&i2c->dev, i2c->irq, rdevs, num_switches,
-   617					      data);
-   618			if (ret) {
-   619				dev_err(&i2c->dev, "IRQ setup failed");
-   620				return ret;
-   621			}
-   622		}
-   623	
-   624		return ret;
-   625	}
-   626	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
