@@ -2,115 +2,166 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B4FCEEAA41
-	for <linux-hwmon@archiver.kernel.org>; Thu, 14 Sep 2023 13:53:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82BB3EEAA50
+	for <linux-hwmon@archiver.kernel.org>; Thu, 14 Sep 2023 14:42:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239192AbjINNxy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 14 Sep 2023 09:53:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33594 "EHLO
+        id S240188AbjINOmK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 14 Sep 2023 10:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239107AbjINNxy (ORCPT
+        with ESMTP id S234071AbjINOmK (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 14 Sep 2023 09:53:54 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C98B1AE;
-        Thu, 14 Sep 2023 06:53:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694699630; x=1726235630;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NEKocQoGfcfZKQftz4/7uTx3WA4f8EK2S6Mq45SyuhI=;
-  b=MCAlWSpQxmUGpvKeDHE6KwFPz5yOyjByNV7iHxaFenZV4R0GybF3bktc
-   js8q9/eqxQXv3JmNzdXYIEaIu3PEi8RNrZQd/ZG0gULpncEIfd0XfbYbs
-   9pyEQDfrHp8lp18WFi3eIWLBDddejWR0O9+3NKm9ITVq72P+QzN/4ocbU
-   V4T7Uznyrrfb7VfB1PZZ2uYmoEWOWuwg3JtexDOmJ08ZH/94RaG6ZqzmK
-   uOSkVidtP7RRr4N5QxbhuWBC1eYlY5G6LdgzOe8KSF3Si4kjSWzUhsBmr
-   g+1oF4os88mSCQg599EDdPjbMsQWoqbmGzicNveAiX6EmEBRIfHnarVaS
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="364000235"
-X-IronPort-AV: E=Sophos;i="6.02,146,1688454000"; 
-   d="scan'208";a="364000235"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2023 06:36:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="991389372"
-X-IronPort-AV: E=Sophos;i="6.02,146,1688454000"; 
-   d="scan'208";a="991389372"
-Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 14 Sep 2023 06:36:02 -0700
-Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qgmVO-0001dF-0q;
-        Thu, 14 Sep 2023 13:36:00 +0000
-Date:   Thu, 14 Sep 2023 21:34:39 +0800
-From:   kernel test robot <lkp@intel.com>
+        Thu, 14 Sep 2023 10:42:10 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 228E71BE1;
+        Thu, 14 Sep 2023 07:42:06 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 801DBC433C7;
+        Thu, 14 Sep 2023 14:42:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694702525;
+        bh=O9w4R0Iu6/XNvjfu2aj/DjJkGOobrTu4cV0g3uZvCyc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ed497R3ieIebv7g5fw/xSOgE3pjwdUxNHnBc/LRisrd3WOhjfXkVlP1xUfG6GZ1dh
+         yhMvzh0fLaKCjCh9EIfdwFf5u+um7WgmHDVhRcKGUU8HNwl3JZqr4ynQ08IuGfWizT
+         TK+ihlUxtec6fRDNTjfobbb5uPVC+wIxfXiOsu0rKFDCdIsGCjMC8v5JkXv0uWl9Q+
+         kPvHCkw3F4uvq3l8umHhUpVRUnhHc646iJA50d96tmNV8KJ3Mrgf74hC0AkTtpa1cy
+         AXDOAs05ebD2GTWCm/eg+6nwKZXz5cn0jjAxYqNt1bcv43PD4BVh4C7CVkkXZUq4mr
+         7UI9/X2DP/L+Q==
+Date:   Thu, 14 Sep 2023 15:42:01 +0100
+From:   Conor Dooley <conor@kernel.org>
 To:     Daniel Matyas <daniel.matyas@analog.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Daniel Matyas <daniel.matyas@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
+Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: Re: [PATCH 4/4] hwmon: max31827: Add custom attribute for resolution
-Message-ID: <202309142140.qvHsiLc3-lkp@intel.com>
-References: <20230913152135.457892-5-daniel.matyas@analog.com>
+Subject: Re: [PATCH v3 2/5] dt-bindings: hwmon: Add possible new properties
+ to max31827 bindings
+Message-ID: <20230914-qualify-ragweed-b06b7b7923c9@spud>
+References: <20230914075948.208046-1-daniel.matyas@analog.com>
+ <20230914075948.208046-2-daniel.matyas@analog.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="71snxAjsMqH/MtRQ"
 Content-Disposition: inline
-In-Reply-To: <20230913152135.457892-5-daniel.matyas@analog.com>
+In-Reply-To: <20230914075948.208046-2-daniel.matyas@analog.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Daniel,
 
-kernel test robot noticed the following build warnings:
+--71snxAjsMqH/MtRQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linus/master v6.6-rc1 next-20230914]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On Thu, Sep 14, 2023 at 10:59:45AM +0300, Daniel Matyas wrote:
+> These modify the corresponding bits in the configuration register.
+>=20
+> adi,comp-int is a hardware property, because it affects the behavior
+> of the interrupt signal and whatever it is connected to.
+>=20
+> adi,timeout-enable is a hardware property, because it affects i2c
+> bus operation.
+>=20
+> Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
+> ---
+>=20
+> v2 -> v3: Changed commit subject and message
+>=20
+> v1 -> v2: Added adi,timeout-enable property to binding. Fixed
+> dt_binding_check errors.
+>=20
+>  .../bindings/hwmon/adi,max31827.yaml          | 35 +++++++++++++++++++
+>  1 file changed, 35 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml b/=
+Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+> index 2dc8b07b4d3b..6bde71bdb8dd 100644
+> --- a/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+> @@ -32,6 +32,37 @@ properties:
+>        Must have values in the interval (1.6V; 3.6V) in order for the dev=
+ice to
+>        function correctly.
+> =20
+> +  adi,comp-int:
+> +    description:
+> +      If present interrupt mode is used. If not present comparator mode =
+is used
+> +      (default).
+> +    type: boolean
+> +
+> +  adi,alrm-pol:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Matyas/hwmon-max31827-Make-code-cleaner/20230913-232729
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20230913152135.457892-5-daniel.matyas%40analog.com
-patch subject: [PATCH 4/4] hwmon: max31827: Add custom attribute for resolution
-reproduce: (https://download.01.org/0day-ci/archive/20230914/202309142140.qvHsiLc3-lkp@intel.com/reproduce)
+Characters are not at a premium, is there a reason not to use the full
+words? "flt-q" in particular would be quite cryptic if I saw it in a
+dts.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309142140.qvHsiLc3-lkp@intel.com/
+> +    description:
+> +      Sets the alarms active state.
+> +            - 0 =3D active low
+> +            - 1 =3D active high
+> +      For max31827 and max31828 the default alarm polarity is low. For m=
+ax31829
+> +      it is high.
 
-All warnings (new ones prefixed by >>):
+This constraint can be expressed in the binding, rather than in free
+form text like done here. Ditto below.
 
->> Documentation/hwmon/max31827.rst:107: WARNING: Bullet list ends without a blank line; unexpected unindent.
+Thanks,
+Conor.
 
-vim +107 Documentation/hwmon/max31827.rst
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [0, 1]
+> +
+> +  adi,flt-q:
+> +    description:
+> +      Select how many consecutive temperature faults must occur before
+> +      overtemperature or undertemperature faults are indicated in the
+> +      corresponding status bits.
+> +      For max31827 default fault queue is 1. For max31828 and max31829 i=
+t is 4.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [1, 2, 4, 8]
+> +
+> +  adi,timeout-enable:
+> +    description:
+> +      Enables timeout. Bus timeout resets the I2C-compatible interface w=
+hen SCL
+> +      is low for more than 30ms (nominal).
+> +    type: boolean
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -49,6 +80,10 @@ examples:
+>              compatible =3D "adi,max31827";
+>              reg =3D <0x42>;
+>              vref-supply =3D <&reg_vdd>;
+> +            adi,comp-int;
+> +            adi,alrm-pol =3D <0>;
+> +            adi,flt-q =3D <1>;
+> +            adi,timeout-enable;
+>          };
+>      };
+>  ...
+> --=20
+> 2.34.1
+>=20
 
-    93	
-    94	The conversion time doubles with every bit of increased resolution. The
-    95	available resolutions are:
-    96		- 8 bit -> 8.75 ms conversion time
-    97		- 9 bit -> 17.5 ms conversion time
-    98		- 10 bit -> 35 ms conversion time
-    99		- 12 bit (default) -> 140 ms conversion time
-   100	
-   101	There is a temp1_resolution attribute which indicates the unit change in the
-   102	input temperature in milli-degrees C.
-   103		- 1000 mC -> 8 bit
-   104		- 500 mC -> 9 bit
-   105		- 250 mC -> 10 bit
-   106		- 62 mC -> 12 bit (default) - actually this is 62.5, but the file
- > 107		returns 62
-   108	
+--71snxAjsMqH/MtRQ
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZQMbuQAKCRB4tDGHoIJi
+0gqiAQDbZmcqv2uLoYCOMuAvkhjjcMC3XJyStjoO3fVxrPd9BQEA4h/jctruYGgi
+yrh/mEKmKTQtA3z6WR3RqxXxaJ2mowA=
+=RMiX
+-----END PGP SIGNATURE-----
+
+--71snxAjsMqH/MtRQ--
