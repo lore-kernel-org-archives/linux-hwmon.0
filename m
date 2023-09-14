@@ -2,185 +2,193 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 942B9EDE982
-	for <linux-hwmon@archiver.kernel.org>; Thu, 14 Sep 2023 05:43:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2313EDE985
+	for <linux-hwmon@archiver.kernel.org>; Thu, 14 Sep 2023 06:07:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234864AbjINFoA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 14 Sep 2023 01:44:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34328 "EHLO
+        id S235216AbjINGHp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 14 Sep 2023 02:07:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234895AbjINFn7 (ORCPT
+        with ESMTP id S232171AbjINGHn (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 14 Sep 2023 01:43:59 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23CB4CE
-        for <linux-hwmon@vger.kernel.org>; Wed, 13 Sep 2023 22:43:55 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-403004a96a4so5845775e9.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 13 Sep 2023 22:43:55 -0700 (PDT)
+        Thu, 14 Sep 2023 02:07:43 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1A3E3;
+        Wed, 13 Sep 2023 23:07:39 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id 46e09a7af769-6bf04263dc8so343935a34.3;
+        Wed, 13 Sep 2023 23:07:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694670233; x=1695275033; darn=vger.kernel.org;
+        d=gmail.com; s=20221208; t=1694671659; x=1695276459; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Gboc+yTSlTpqo4O2hT0cAj0WNACoksBEekqcz7Hl4Y0=;
-        b=qj/foAC6JHM58o+shEjt5deuS1KouDYNa66h/L+Hp/4Rl+MkS77NG9jwg7M6byduLw
-         CetU5Jvm+5EshWFqJm+5ZtBsP1znN0aE5Ll6yGcoTAv2T5h4NY7lgeq7Sk7EFzCoKcsD
-         T74mCJGRCP2tKrS0u+OAhd0EhXRvYR09lrAQ5ZSEWLbwl6zcv/Cqqew9Iyk7j+t9EOGK
-         2Oahcp0itVZXqM4uqD11vJKj9Q+h+hU9SQFYXfDNMA7ka4mMnZIA5EZKr70c5+HD5bJl
-         UR/iDwPSpboJtLpLZoHMsTGVE9n3snQYZGfhUdtKDQqaNkEL5elX8RhE55n3MFpgR/fW
-         6niA==
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gku+wBib/CGo0C7ZubXdhdqL37D/jrXhwRwbctlzppw=;
+        b=D9YCtyqJaWwonIlbTg2sDPHbySix1425AKiTY4/f4rUiQuy59SBiL70/KFXgYq3Qpz
+         3fJ9ySQ4uWAsFTzEfNwHuBXIUDJ0xjZ79RYjXZ+wUsUQSv4+f+Z+//n/YtEiNLUdOyS/
+         /LzfuoHAQTuk1Usp11tfRsBWDErfYpe8CK6O8sCzyhmgRm/4XCPPJA4L5ZwtCJkyu98K
+         MqvPHeESST/jqyqsK9dzrG2JhlB+NbSmbNDZ3pha4fL2fN6qkCb7aseaDQ0aEHZSVL/9
+         yPBKBbWGE0RPzhrsmZkqEAWbbQc27ZYzFyqF27HXLAwBjFeENVtCiE+28+AOLGM6KGEK
+         MfxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694670233; x=1695275033;
+        d=1e100.net; s=20230601; t=1694671659; x=1695276459;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gboc+yTSlTpqo4O2hT0cAj0WNACoksBEekqcz7Hl4Y0=;
-        b=MCFioJ1f7elsxkSx/QiC+qRXq0sarVROxh5ZPk5/3NZMOCaPwfOAHWkZBR8HVmno41
-         kRifJQhFlS8Ri01ex9SkxSe4+MrdEKXC508DnWWFe418sYfEIHsmvfP3TdEXkFXQqBuF
-         fUqJYC06SP6GX9EEwcpqws3f4PaH/vxBkkiMuCx2MCTzHeZEvNxmJZwNfmvKerjsjyoJ
-         bwZS7/Zfr1URzWc/8RIrkFdejokYyrAT/jT7al4TiaNLCn6jF6rKu7GU+e47wHiYEkhB
-         AbVTK0NnNldc56GARrWvGONoqvk0WWpJ9Q5nPr6+YdYxRzJOH+DcDhjPJqIq7wJQUNTD
-         ql/g==
-X-Gm-Message-State: AOJu0Yx05DP/EeZIBcThGDf5KFj006NNEsIE8TOSXgNQZn5jtefZPvb3
-        2VoKho3K3ZrdHtaNfLD7JkDk9Q==
-X-Google-Smtp-Source: AGHT+IHhTwruxbWAJnFseDhN3IBL74tiH5GdBHD333uhU9mBS+pwEm+niM0SFeeTRHH3WUdznGqUtQ==
-X-Received: by 2002:a5d:444c:0:b0:318:7bc:122e with SMTP id x12-20020a5d444c000000b0031807bc122emr3500282wrr.23.1694670233432;
-        Wed, 13 Sep 2023 22:43:53 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.214.188])
-        by smtp.gmail.com with ESMTPSA id k8-20020a5d4288000000b00317a29af4b2sm709967wrq.68.2023.09.13.22.43.51
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Gku+wBib/CGo0C7ZubXdhdqL37D/jrXhwRwbctlzppw=;
+        b=J8Fgj6PSmQXeQZf2EFnvTAL6TuBmFWyFKK+V8UiLCZYZH1PYhZzvHccILGqcy4AOHj
+         Ct3BZoBGzSIwfP1Iby4Es9a2VZHl3IS83i8gst7MLQNoPivVyLqirObyiMW6deVQG6I/
+         IzrGIsXmXaz6YkjFSnH7yphK8vQa+OGF+OUg0ErZrKXXq3qR62037gLjHAgy+TjsPhSl
+         aOK2VIAqaa1NMo7JHCLTxckGG6OT/v5A4Wsa6q0K8/s5hhO+YbPN7I+exXu6LPV6H4BB
+         J6/j8QCQZ8AhyJ+hxKP9nnVpL5UrsRZRAVT9LRP4sVFgitCwP6r8WtWPwyaoD621R9sk
+         D7vQ==
+X-Gm-Message-State: AOJu0YxPNuW4Of1Mi5wLxfZoXo9pSOslQeNfWzjWiQO/G45+V4QZhGiq
+        W5I2L/6/92lXR4HK5BM6guzFe457LfE=
+X-Google-Smtp-Source: AGHT+IG5gCNqXEgX7N1IDqPGoZOxmQCsj/HAtAHyh1WRx3672wz1s+mLn7BSM7jQofrLPYIRtRGfLA==
+X-Received: by 2002:a05:6358:719:b0:139:cdc2:e618 with SMTP id e25-20020a056358071900b00139cdc2e618mr4177975rwj.8.1694671658832;
+        Wed, 13 Sep 2023 23:07:38 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z16-20020a656650000000b00565dd935938sm395039pgv.85.2023.09.13.23.07.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Sep 2023 22:43:52 -0700 (PDT)
-Message-ID: <c3ad0911-72eb-9054-a0b5-397ecdae3205@linaro.org>
-Date:   Thu, 14 Sep 2023 07:43:50 +0200
+        Wed, 13 Sep 2023 23:07:37 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <19c6413c-8837-d4cf-a692-b2846ea47a2c@roeck-us.net>
+Date:   Wed, 13 Sep 2023 23:07:36 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.0
 Subject: Re: [PATCH 2/4] dt-bindings: hwmon: Added new properties to the
  devicetree
 Content-Language: en-US
-To:     "Matyas, Daniel" <Daniel.Matyas@analog.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Daniel Matyas <daniel.matyas@analog.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
 References: <20230913152135.457892-1-daniel.matyas@analog.com>
  <20230913152135.457892-3-daniel.matyas@analog.com>
  <177ef05b-0cca-be25-afad-ac518d9f6473@linaro.org>
- <PH0PR03MB67716A8AA5139C407BB0712989F0A@PH0PR03MB6771.namprd03.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <PH0PR03MB67716A8AA5139C407BB0712989F0A@PH0PR03MB6771.namprd03.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
+ <823b9820-9225-fc24-ff86-1056a1a43cc3@roeck-us.net>
+ <c05d0ae9-1711-867e-2595-d5e542d4fa18@linaro.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <c05d0ae9-1711-867e-2595-d5e542d4fa18@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 13/09/2023 17:48, Matyas, Daniel wrote:
+On 9/13/23 22:41, Krzysztof Kozlowski wrote:
+> On 13/09/2023 18:43, Guenter Roeck wrote:
+>> On 9/13/23 08:40, Krzysztof Kozlowski wrote:
+>>> On 13/09/2023 17:21, Daniel Matyas wrote:
+>>>
+>>> Subject: not much improved. I am sorry, but you are not adding new
+>>> properties to entire devicetree of entire world. You are actually not
+>>> adding anything to any devicetree, because these are bindings (which is
+>>> obvious, as said by prefix).
+>>>
+>>> You got comments on this.
+>>>
+>>>> These attributes are:
+>>>> 	- adi,comp-int - boolean property
+>>>> 	- adi,alrm-pol - can be 0, 1 (if not present, default value)
+>>>> 	- adi,flt-q - can be 1, 2, 4, 8 (if not present, default value)
+>>>> 	- adi,timeout-enable - boolean property
+>>>
+>>> Don't repeat what the code does. Explain why you are adding it, what is
+>>> the purpose.
+>>>
+>>>>
+>>>> These modify the corresponding bits in the configuration register.
+>>>>
+>>>> Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
+>>>> ---
+>>>>    .../bindings/hwmon/adi,max31827.yaml          | 35 +++++++++++++++++++
+>>>>    1 file changed, 35 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+>>>> index 2dc8b07b4d3b..6bde71bdb8dd 100644
+>>>> --- a/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+>>>> +++ b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+>>>> @@ -32,6 +32,37 @@ properties:
+>>>>          Must have values in the interval (1.6V; 3.6V) in order for the device to
+>>>>          function correctly.
+>>>>    
+>>>> +  adi,comp-int:
+>>>> +    description:
+>>>> +      If present interrupt mode is used. If not present comparator mode is used
+>>>> +      (default).
+>>>
+>>> Why this is a property of hardware?
+>>>
+>>
+>> Because it affects the behavior of the interrupt signal and whatever
+>> it is connected to. For example, it could be connected to an interrupt
+>> controller (interupt mode), or it could be connected to a fan which is
+>> enabled while the signal is active (comparator mode).
 > 
+> That makes sense. Pardon my naive questions, I just could not figure out
+> use case out of the field description. Based on this very short
+> description itself, I could imagine sysfs entry.
 > 
->> -----Original Message-----
->> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Sent: Wednesday, September 13, 2023 6:41 PM
->> To: Matyas, Daniel <Daniel.Matyas@analog.com>
->> Cc: Jean Delvare <jdelvare@suse.com>; Guenter Roeck <linux@roeck-
->> us.net>; Rob Herring <robh+dt@kernel.org>; Krzysztof Kozlowski
->> <krzysztof.kozlowski+dt@linaro.org>; Conor Dooley
->> <conor+dt@kernel.org>; Jonathan Corbet <corbet@lwn.net>; linux-
->> hwmon@vger.kernel.org; devicetree@vger.kernel.org; linux-
->> kernel@vger.kernel.org; linux-doc@vger.kernel.org
->> Subject: Re: [PATCH 2/4] dt-bindings: hwmon: Added new properties to
->> the devicetree
 >>
->> [External]
->>
->> On 13/09/2023 17:21, Daniel Matyas wrote:
->>
->> Subject: not much improved. I am sorry, but you are not adding new
->> properties to entire devicetree of entire world. You are actually not
->> adding anything to any devicetree, because these are bindings (which is
->> obvious, as said by prefix).
->>
->> You got comments on this.
->>
->>> These attributes are:
->>> 	- adi,comp-int - boolean property
->>> 	- adi,alrm-pol - can be 0, 1 (if not present, default value)
->>> 	- adi,flt-q - can be 1, 2, 4, 8 (if not present, default value)
->>> 	- adi,timeout-enable - boolean property
->>
->> Don't repeat what the code does. Explain why you are adding it, what is
->> the purpose.
->>
+>>>> +    type: boolean
+>>>> +
+>>>> +  adi,alrm-pol:
+>>>> +    description:
+>>>> +      Sets the alarms active state.
+>>>> +            - 0 = active low
+>>>> +            - 1 = active high
+>>>> +      For max31827 and max31828 the default alarm polarity is low. For max31829
+>>>> +      it is high.
+>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>>> +    enum: [0, 1]
+>>>> +
+>>>> +  adi,flt-q:
+>>>> +    description:
+>>>> +      Select how many consecutive temperature faults must occur before
+>>>> +      overtemperature or undertemperature faults are indicated in the
+>>>> +      corresponding status bits.
+>>>> +      For max31827 default fault queue is 1. For max31828 and max31829 it is 4.
+>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>>> +    enum: [1, 2, 4, 8]
+>>>> +
+>>>> +  adi,timeout-enable:
+>>>> +    description:
+>>>> +      Enables timeout. Bus timeout resets the I2C-compatible interface when SCL
+>>>> +      is low for more than 30ms (nominal).
 >>>
->>> These modify the corresponding bits in the configuration register.
+>>> Why this is a property of hardware?
 >>>
->>> Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
->>> ---
->>>  .../bindings/hwmon/adi,max31827.yaml          | 35
->> +++++++++++++++++++
->>>  1 file changed, 35 insertions(+)
->>>
->>> diff --git
->> a/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
->>> b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
->>> index 2dc8b07b4d3b..6bde71bdb8dd 100644
->>> --- a/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
->>> +++
->> b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
->>> @@ -32,6 +32,37 @@ properties:
->>>        Must have values in the interval (1.6V; 3.6V) in order for the device
->> to
->>>        function correctly.
->>>
->>> +  adi,comp-int:
->>> +    description:
->>> +      If present interrupt mode is used. If not present comparator mode
->> is used
->>> +      (default).
 >>
->> Why this is a property of hardware?
+>> Because it affects i2c bus operation.
 >>
->>> +    type: boolean
->>> +
->>> +  adi,alrm-pol:
->>> +    description:
->>> +      Sets the alarms active state.
->>> +            - 0 = active low
->>> +            - 1 = active high
->>> +      For max31827 and max31828 the default alarm polarity is low. For
->> max31829
->>> +      it is high.
->>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>> +    enum: [0, 1]
->>> +
->>> +  adi,flt-q:
->>> +    description:
->>> +      Select how many consecutive temperature faults must occur
->> before
->>> +      overtemperature or undertemperature faults are indicated in the
->>> +      corresponding status bits.
->>> +      For max31827 default fault queue is 1. For max31828 and max31829
->> it is 4.
->>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>> +    enum: [1, 2, 4, 8]
->>> +
->>> +  adi,timeout-enable:
->>> +    description:
->>> +      Enables timeout. Bus timeout resets the I2C-compatible interface
->> when SCL
->>> +      is low for more than 30ms (nominal).
+>> I am not sure I understand what you are trying to say here.
+>> This is a much a "hardware" property as the i2c bus speed
+>> and many similar properties, and the need for it is system
+>> dependent (for example, a system with many devices on the
+>> i2c bus or with a less than perfect i2c controller may need
+>> it because the bus tends to get stuck).
 >>
->> Why this is a property of hardware?
+>> Those are not properties where one would, at runtime,
+>> decide to enable bus timeout or the interrupt mode or
+>> the bus speed. Typically that kind of functionality
+>> has to be configured early when the system is started.
+>> If devicetree must not or no longer be used to describe the
+>> system to a point where it can be configured to get it
+>> to a working state, what is the suggested alternative ?
+> 
+> I could imagine enabling it always, unconditionally. I wanted to
+> understand why different boards with this chip will have it enabled or
+> disabled.
+> 
 
-Code is okay, after Guenter's explanation. However please fix the
-subject and improve the commit msg.
+Some boards may need a larger timeout, for example if there is
+a chip on the same bus which supports clock stretching.
 
-Best regards,
-Krzysztof
+Guenter
 
