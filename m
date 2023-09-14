@@ -2,64 +2,66 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D03AAEEAA7A
-	for <linux-hwmon@archiver.kernel.org>; Thu, 14 Sep 2023 22:50:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E468EEAA7B
+	for <linux-hwmon@archiver.kernel.org>; Thu, 14 Sep 2023 23:10:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbjINWu0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 14 Sep 2023 18:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55268 "EHLO
+        id S230118AbjINXKk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 14 Sep 2023 19:10:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbjINWuZ (ORCPT
+        with ESMTP id S230061AbjINXKk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 14 Sep 2023 18:50:25 -0400
+        Thu, 14 Sep 2023 19:10:40 -0400
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8655726BC
-        for <linux-hwmon@vger.kernel.org>; Thu, 14 Sep 2023 15:50:21 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-d814a1f7378so4654774276.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 14 Sep 2023 15:50:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E466A1BFA
+        for <linux-hwmon@vger.kernel.org>; Thu, 14 Sep 2023 16:10:35 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-d7ec535fe42so1679845276.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 14 Sep 2023 16:10:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1694731820; x=1695336620; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1694733035; x=1695337835; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=wrenr5WHs2dK5hnlbbyL0EycRKjoEDbDNwq7CnxxIaU=;
-        b=BxugndSsenTM9NF1aOCW4ZO/a1jXQgUDDQ9ubb3sKS1Ev0pBTHSqm//oPKCUZG33dn
-         +IDUP66N300o9+XksnMg5cDPIFDFxkcsPwO2j+tzjfvqooIFtT61kpn2waKHY164Bgsg
-         dFgkaZzbCbvTJsGmT2sQ79BXa4Ns1A/gSs1VZFHipi7fzgvaCLBeDxDKFjY4FY1EPqsy
-         3dEmTXoLOBlv6XJVimtn6xD6xix+mSWXcbD3goZCRcw0ftb6DoPrqdngHUk+j+NeqbsL
-         rPFs63g3CQlzsY9Gx+TF9cQ+wqvv6x/G3jgAmhXDbhyiFrH3SbMi17bZxVurW/BLWAAS
-         81eA==
+        bh=KF0ypLEqc8BBDWzXbz6oiYZjtdi3CP4D2nc6vcNdwQ8=;
+        b=dcm6mUs6NrlRr3+Bv4MU/6hRlV8JryV0LkFeM1Rs87sn8Y2hKrFJH9CBA3ZYg6rEUD
+         qotPg+8AlWD4BihnV0IeVn/O0sWC0oxVgqBV4ekk6Bzmzm2sDZcR2AgQK+xCjswEcEZy
+         T75X+lKpFPb5PZQtmkx43qdHMBMcauFmJa8ae3znI1T8xk2IMvOEajy+bVL5DlT3ILhx
+         htKAqPXAcQg/+bAdrySOK2/MRvzieRTxrAiieZIi6qXaOd3rQHX9qJdItganmcF8SDAS
+         8iTPDSmgUGWVKOLNDMFTmhtwVzj4NT2mkVRriapokM5smLE69wGvGYgSg58bo+/ePLqh
+         w+0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694731821; x=1695336621;
+        d=1e100.net; s=20230601; t=1694733035; x=1695337835;
         h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=wrenr5WHs2dK5hnlbbyL0EycRKjoEDbDNwq7CnxxIaU=;
-        b=rJXiRIKihtIHCNMwAPYvGDk2OHUlJjByrfcm0kFpDM4Rer7mSEOrZBUqZEF4sa4smA
-         C7itUJfrc0ynlIEMG9VrCe5G2isgL6C/B0ej8U3lcIw1W86BzX97UqpU/eRubE2JkwDD
-         bZNJ6wxcuKYRLBnfthrsCYWWD5Gu0FobvpisRaHLaDm8eCgsL7yaF/N1VS6CLfoI1Pna
-         ZD5hp6WqqoiQc0fE3MAMmg2kOWIREC30hIwu9gLXJdJI4V7bI9SAKoeuliOhWeC7PZW5
-         sFjQbB6CIn0Jjxawljs9K7p+M+yRYgLsFukNbVrM6v9tozh0BoTPmc0vi474JaTd0UcB
-         VN8g==
-X-Gm-Message-State: AOJu0Yz44BIV2zt4RWj+ffjde0ehD2DwzZ/PPGpMjVafanBl4RoXba7/
-        u9fvgZu4aWHYDpzV5u8PE0cnXarQRcAGhJIlcw==
-X-Google-Smtp-Source: AGHT+IFqrDocdDDYwMpT4qE4iWOo5ZoiN4++kHE+CY4yKvqynUceKA1T5/Jq8WXi8hvg81Z+gTnwNQ1IpfMPouoe0w==
+        bh=KF0ypLEqc8BBDWzXbz6oiYZjtdi3CP4D2nc6vcNdwQ8=;
+        b=R7VgYgprnRVIvAsIV+GkTjhkWuZ0X4gJFH6+W2udS9Uu52W+rOw2txPHbrM2i5jOSG
+         9SFXNw1pp8EgIEsA2WfdMpFj2k1TL1ppslrzD9Y6T9C69UgptKxGkBQMiOrJAdIrfHBg
+         UDKlUFVp33kTvrOtwXCjtoveC3NEPV/JIZR91hK5YTOT4s9CXdlui9vHSdjPXtG/XxO1
+         KHhOZePvp9Qi/FPZcBvhMfP+e5Rq09eOg6XH7F9ORWXqNnxY+cgrA63Pn0Ybxfop6Kog
+         sfYHMhMFMy+7/QqkQX90Trmh0sQgx/VmwBA7daE8VULw2A2T7ipDPjTd5gnkH3oqYxm1
+         iMyw==
+X-Gm-Message-State: AOJu0Ywh6xF+1+pFojIlEoRWhAsVLHb/ZxrP3ZS4U8ZobzZqWCjPYmr4
+        o83h17/Qu7U2zRbb+2xpBgtnhXHd5JN52jk8sw==
+X-Google-Smtp-Source: AGHT+IEILjzGGETs9OgY3sII6tzaC1e1gmqUd3mwSZtiyvhjJac1glb0Y6mJhrCOidnIMcdGRfBU+6AqAxMZUqgzow==
 X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
- (user=justinstitt job=sendgmr) by 2002:a25:c748:0:b0:d15:53b5:509f with SMTP
- id w69-20020a25c748000000b00d1553b5509fmr85146ybe.2.1694731820834; Thu, 14
- Sep 2023 15:50:20 -0700 (PDT)
-Date:   Thu, 14 Sep 2023 22:50:15 +0000
+ (user=justinstitt job=sendgmr) by 2002:a05:6902:684:b0:d81:8e4d:b681 with
+ SMTP id i4-20020a056902068400b00d818e4db681mr80330ybt.12.1694733035150; Thu,
+ 14 Sep 2023 16:10:35 -0700 (PDT)
+Date:   Thu, 14 Sep 2023 23:10:34 +0000
 Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIACaOA2UC/x3NwQqDMAyA4VeRnBeodYO5VxlDXJrOHGxLIuoQ3
- 31lx+/y/wcYq7DBozlAeRWTnCraSwM0jenDKKEavPOd69sr2qKJyheDyspqOG1zTjhSkaHkjXW YeWFFQuqjD3d3694coeaKcpT9v3q+zvMHDxSl8XoAAAA=
+X-B4-Tracking: v=1; b=H4sIAOmSA2UC/x2NQQqDMBAAvyJ77kJiQ4v9SikSkm3dgxvZrVoR/
+ 27oceYws4ORMhk8mh2UFjYuUsFfGkhDlA8h58rQuvbqOh/Qvipp2jArL6SGwzoWwWiz9evIvZF YqToheUeuCzHc7hlqblJ68++/er6O4wQmV5npegAAAA==
 X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1694731820; l=1404;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1694733034; l=1557;
  i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
- bh=K3iZ/hNNCktU+LFT+e2eCRR8wtHujlZPGvgREL3k5N0=; b=AMgFe1H+bSBII/rO5u6ibPsdFEANAgzsVzlwm/0r26kBLn7wO36XET/m1sJz644C8oxgiiZ7R
- YlZOH5dfwGzCrRlgTODJ7YveNEm/+t8Y38//F6Nts1+INz+B7Gxxjzc
+ bh=1iP5Kt48YlJbVGCF4UiawrlrXPZCOJ+oBhMz4zjhzn8=; b=STd1ZyVgYq02tF3XVQ/Irb/McEXI8g01pYBzaUJmsnLEJJxLiij7ySF3piV/6RfuxFPDTD0hi
+ 6RSnhuI3LY9A89UlMBC96MAOPsGwzwiEx7mkwcGty1+A9V8bdZgr5gx
 X-Mailer: b4 0.12.3
-Message-ID: <20230914-strncpy-drivers-hwmon-acpi_power_meter-c-v1-1-905297479fe8@google.com>
-Subject: [PATCH] hwmon: refactor deprecated strncpy
+Message-ID: <20230914-strncpy-drivers-hwmon-asus_wmi_sensors-c-v1-1-e1703cf91693@google.com>
+Subject: [PATCH] hwmon: (asus_wmi_sensors) refactor deprecated strncpy
 From:   Justin Stitt <justinstitt@google.com>
-To:     Jean Delvare <jdelvare@suse.com>,
+To:     Ed Brindley <kernel@maidavale.org>,
+        Denis Pauk <pauk.denis@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-hardening@vger.kernel.org,
@@ -73,8 +75,10 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 We should prefer more robust and less ambiguous string interfaces.
 
-A suitable replacement is `strscpy` [2] due to the fact that it guarantees
-NUL-termination on the destination buffer without unnecessarily NUL-padding.
+A suitable replacement is `strscpy` [2] due to the fact that it
+guarantees NUL-termination on the destination buffer without
+unnecessarily NUL-padding. If, for any reason, NUL-padding is needed
+let's opt for `strscpy_pad`.
 
 Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
 Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html [2]
@@ -82,26 +86,26 @@ Link: https://github.com/KSPP/linux/issues/90
 Cc: linux-hardening@vger.kernel.org
 Signed-off-by: Justin Stitt <justinstitt@google.com>
 ---
- drivers/hwmon/acpi_power_meter.c | 2 +-
+ drivers/hwmon/asus_wmi_sensors.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
-index fa28d447f0df..9bafe7c85ff7 100644
---- a/drivers/hwmon/acpi_power_meter.c
-+++ b/drivers/hwmon/acpi_power_meter.c
-@@ -803,7 +803,7 @@ static int read_capabilities(struct acpi_power_meter_resource *resource)
- 			goto error;
- 		}
- 
--		strncpy(*str, element->string.pointer, element->string.length);
-+		strscpy(*str, element->string.pointer, element->string.length);
- 		str++;
+diff --git a/drivers/hwmon/asus_wmi_sensors.c b/drivers/hwmon/asus_wmi_sensors.c
+index 6e8a908171f0..c2dd7ff882f2 100644
+--- a/drivers/hwmon/asus_wmi_sensors.c
++++ b/drivers/hwmon/asus_wmi_sensors.c
+@@ -300,7 +300,7 @@ static int asus_wmi_sensor_info(int index, struct asus_wmi_sensor_info *s)
+ 		goto out_free_obj;
  	}
  
+-	strncpy(s->name, name_obj.string.pointer, sizeof(s->name) - 1);
++	strscpy(s->name, name_obj.string.pointer, sizeof(s->name));
+ 
+ 	data_type_obj = obj->package.elements[1];
+ 	if (data_type_obj.type != ACPI_TYPE_INTEGER) {
 
 ---
 base-commit: 3669558bdf354cd352be955ef2764cde6a9bf5ec
-change-id: 20230914-strncpy-drivers-hwmon-acpi_power_meter-c-c9f2d8053bef
+change-id: 20230914-strncpy-drivers-hwmon-asus_wmi_sensors-c-e10e094a467d
 
 Best regards,
 --
