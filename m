@@ -2,309 +2,115 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AEF9EDE994
-	for <linux-hwmon@archiver.kernel.org>; Thu, 14 Sep 2023 08:01:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B4FCEEAA41
+	for <linux-hwmon@archiver.kernel.org>; Thu, 14 Sep 2023 13:53:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236238AbjINIBI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 14 Sep 2023 04:01:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52770 "EHLO
+        id S239192AbjINNxy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 14 Sep 2023 09:53:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236171AbjINIBG (ORCPT
+        with ESMTP id S239107AbjINNxy (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 14 Sep 2023 04:01:06 -0400
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D941FC6;
-        Thu, 14 Sep 2023 01:00:59 -0700 (PDT)
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 38E5aPK8016860;
-        Thu, 14 Sep 2023 04:00:34 -0400
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3t2y8k26nj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 14 Sep 2023 04:00:33 -0400 (EDT)
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 38E80WXf031691
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 14 Sep 2023 04:00:32 -0400
-Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
- ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Thu, 14 Sep 2023 04:00:31 -0400
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
- ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Thu, 14 Sep 2023 04:00:31 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Thu, 14 Sep 2023 04:00:30 -0400
-Received: from daniel-Precision-5530.ad.analog.com ([10.48.65.230])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 38E7xpmX002387;
-        Thu, 14 Sep 2023 04:00:22 -0400
-From:   Daniel Matyas <daniel.matyas@analog.com>
-CC:     Daniel Matyas <daniel.matyas@analog.com>,
-        kernel test robot <lkp@intel.com>,
+        Thu, 14 Sep 2023 09:53:54 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C98B1AE;
+        Thu, 14 Sep 2023 06:53:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694699630; x=1726235630;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NEKocQoGfcfZKQftz4/7uTx3WA4f8EK2S6Mq45SyuhI=;
+  b=MCAlWSpQxmUGpvKeDHE6KwFPz5yOyjByNV7iHxaFenZV4R0GybF3bktc
+   js8q9/eqxQXv3JmNzdXYIEaIu3PEi8RNrZQd/ZG0gULpncEIfd0XfbYbs
+   9pyEQDfrHp8lp18WFi3eIWLBDddejWR0O9+3NKm9ITVq72P+QzN/4ocbU
+   V4T7Uznyrrfb7VfB1PZZ2uYmoEWOWuwg3JtexDOmJ08ZH/94RaG6ZqzmK
+   uOSkVidtP7RRr4N5QxbhuWBC1eYlY5G6LdgzOe8KSF3Si4kjSWzUhsBmr
+   g+1oF4os88mSCQg599EDdPjbMsQWoqbmGzicNveAiX6EmEBRIfHnarVaS
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="364000235"
+X-IronPort-AV: E=Sophos;i="6.02,146,1688454000"; 
+   d="scan'208";a="364000235"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2023 06:36:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="991389372"
+X-IronPort-AV: E=Sophos;i="6.02,146,1688454000"; 
+   d="scan'208";a="991389372"
+Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 14 Sep 2023 06:36:02 -0700
+Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qgmVO-0001dF-0q;
+        Thu, 14 Sep 2023 13:36:00 +0000
+Date:   Thu, 14 Sep 2023 21:34:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Matyas <daniel.matyas@analog.com>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Daniel Matyas <daniel.matyas@analog.com>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>
-Subject: [PATCH v3 3/5] hwmon: max31827: Handle new properties from the devicetree
-Date:   Thu, 14 Sep 2023 10:59:46 +0300
-Message-ID: <20230914075948.208046-3-daniel.matyas@analog.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230914075948.208046-1-daniel.matyas@analog.com>
-References: <20230914075948.208046-1-daniel.matyas@analog.com>
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH 4/4] hwmon: max31827: Add custom attribute for resolution
+Message-ID: <202309142140.qvHsiLc3-lkp@intel.com>
+References: <20230913152135.457892-5-daniel.matyas@analog.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-ORIG-GUID: l0P6wITDAbwVSTbCfERn5Kwq3750l6M6
-X-Proofpoint-GUID: l0P6wITDAbwVSTbCfERn5Kwq3750l6M6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-14_05,2023-09-13_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- clxscore=1011 lowpriorityscore=0 bulkscore=0 adultscore=0 mlxlogscore=999
- suspectscore=0 priorityscore=1501 impostorscore=0 mlxscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2308100000
- definitions=main-2309140069
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230913152135.457892-5-daniel.matyas@analog.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Used fwnode to retrieve data from the devicetree in the init_client
-function.
+Hi Daniel,
 
-If the uint32 properties are not present, the default values are used
-for max31827 chip.
+kernel test robot noticed the following build warnings:
 
-Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
----
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on linus/master v6.6-rc1 next-20230914]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-v2 -> v3: Separated patch into 2. Fixed 'WARNING: Unexpected
-indentation.'
-Reported-by: kernel test robot <lkp@intel.com>
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Matyas/hwmon-max31827-Make-code-cleaner/20230913-232729
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20230913152135.457892-5-daniel.matyas%40analog.com
+patch subject: [PATCH 4/4] hwmon: max31827: Add custom attribute for resolution
+reproduce: (https://download.01.org/0day-ci/archive/20230914/202309142140.qvHsiLc3-lkp@intel.com/reproduce)
 
-v2: Added patch
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309142140.qvHsiLc3-lkp@intel.com/
 
- Documentation/hwmon/max31827.rst | 48 ++++++++++++++----
- drivers/hwmon/max31827.c         | 85 +++++++++++++++++++++++++++++---
- 2 files changed, 116 insertions(+), 17 deletions(-)
+All warnings (new ones prefixed by >>):
 
-diff --git a/Documentation/hwmon/max31827.rst b/Documentation/hwmon/max31827.rst
-index 9a1055a007cf..a8bbfb85dd02 100644
---- a/Documentation/hwmon/max31827.rst
-+++ b/Documentation/hwmon/max31827.rst
-@@ -52,13 +52,21 @@ MAX31827 has low and over temperature alarms with an effective value and a
- hysteresis value: -40 and -30 degrees for under temperature alarm and +100 and
- +90 degrees for over temperature alarm.
- 
--The alarm can be configured in comparator and interrupt mode. Currently only
--comparator mode is implemented. In Comparator mode, the OT/UT status bits have a
--value of 1 when the temperature rises above the TH value or falls below TL,
--which is also subject to the Fault Queue selection. OT status returns to 0 when
--the temperature drops below the TH_HYST value or when shutdown mode is entered.
--Similarly, UT status returns to 0 when the temperature rises above TL_HYST value
--or when shutdown mode is entered.
-+The alarm can be configured in comparator and interrupt mode from the
-+devicetree. In Comparator mode, the OT/UT status bits have a value of 1 when the
-+temperature rises above the TH value or falls below TL, which is also subject to
-+the Fault Queue selection. OT status returns to 0 when the temperature drops
-+below the TH_HYST value or when shutdown mode is entered. Similarly, UT status
-+returns to 0 when the temperature rises above TL_HYST value or when shutdown
-+mode is entered.
-+
-+In interrupt mode exceeding TH also sets OT status to 1, which remains set until
-+a read operation is performed on the configuration/status register (max or min
-+attribute); at this point, it returns to 0. Once OT status is set to 1 from
-+exceeding TH and reset, it is set to 1 again only when the temperature drops
-+below TH_HYST. The output remains asserted until it is reset by a read. It is
-+set again if the temperature rises above TH, and so on. The same logic applies
-+to the operation of the UT status bit.
- 
- Putting the MAX31827 into shutdown mode also resets the OT/UT status bits. Note
- that if the mode is changed while OT/UT status bits are set, an OT/UT status
-@@ -68,6 +76,18 @@ clear the status bits before changing the operating mode.
- 
- The conversions can be manual with the one-shot functionality and automatic with
- a set frequency. When powered on, the chip measures temperatures with 1 conv/s.
-+The conversion rate can be modified with update_interval attribute of the chip.
-+Conversion/second = 1/update_interval. Thus, the available options according to
-+the data sheet are:
-+
-+- 64000 (ms) = 1 conv/64 sec
-+- 32000 (ms) = 1 conv/32 sec
-+- 16000 (ms) = 1 conv/16 sec
-+- 4000 (ms) = 1 conv/4 sec
-+- 1000 (ms) = 1 conv/sec (default)
-+- 250 (ms) = 4 conv/sec
-+- 125 (ms) = 8 conv/sec
-+
- Enabling the device when it is already enabled has the side effect of setting
- the conversion frequency to 1 conv/s. The conversion time varies depending on
- the resolution. The conversion time doubles with every bit of increased
-@@ -83,8 +103,18 @@ in the writing of alarm values too. For positive numbers the user-input value
- will always be rounded down to the nearest possible value, for negative numbers
- the user-input will always be rounded up to the nearest possible value.
- 
-+Bus timeout resets the I2C-compatible interface when SCL is low for more than
-+30ms (nominal).
-+
-+Alarm polarity determines if the active state of the alarm is low or high. The
-+behavior for both settings is dependent on the Fault Queue setting. The ALARM
-+pin is an open-drain output and requires a pullup resistor to operate.
-+
-+The Fault Queue bits select how many consecutive temperature faults must occur
-+before overtemperature or undertemperature faults are indicated in the
-+corresponding status bits.
-+
- Notes
- -----
- 
--Currently fault queue, alarm polarity and resolution cannot be modified.
--PEC is not implemented either.
-+PEC and resolution are not implemented.
-diff --git a/drivers/hwmon/max31827.c b/drivers/hwmon/max31827.c
-index f05762219995..41c440b8a474 100644
---- a/drivers/hwmon/max31827.c
-+++ b/drivers/hwmon/max31827.c
-@@ -12,6 +12,19 @@
- #include <linux/i2c.h>
- #include <linux/mutex.h>
- #include <linux/regmap.h>
-+#include <linux/hwmon-sysfs.h>
-+#include <linux/of_device.h>
-+
-+/*
-+ * gcc turns __builtin_ffsll() into a call to __ffsdi2(), which is not provided
-+ * by every architecture. __ffs64() is available on all architectures, but the
-+ * result is not defined if no bits are set.
-+ */
-+#define max31827__bf_shf(x)			 \
-+	({					 \
-+		typeof(x) x_ = (x);		 \
-+		((x_) != 0) ? __ffs64(x_) : 0x0; \
-+	})
- 
- #define MAX31827_T_REG			0x0
- #define MAX31827_CONFIGURATION_REG	0x2
-@@ -22,11 +35,19 @@
- 
- #define MAX31827_CONFIGURATION_1SHOT_MASK	BIT(0)
- #define MAX31827_CONFIGURATION_CNV_RATE_MASK	GENMASK(3, 1)
--#define MAX31827_CONFIGURATION_U_TEMP_STAT_MASK	BIT(14)
--#define MAX31827_CONFIGURATION_O_TEMP_STAT_MASK	BIT(15)
-+#define MAX31827_CONFIGURATION_TIMEOUT_MASK	BIT(5)
-+#define MAX31827_CONFIGURATION_RESOLUTION_MASK	GENMASK(7, 6)
-+#define MAX31827_CONFIGURATION_ALRM_POL_MASK	BIT(8)
-+#define MAX31827_CONFIGURATION_COMP_INT_MASK	BIT(9)
-+#define MAX31827_CONFIGURATION_FLT_Q_MASK	GENMASK(11, 10)
-+#define MAX31827_CONFIGURATION_U_TEMP_STAT_MASK BIT(14)
-+#define MAX31827_CONFIGURATION_O_TEMP_STAT_MASK BIT(15)
- 
- #define MAX31827_12_BIT_CNV_TIME	140
- 
-+#define MAX31827_ALRM_POL_LOW	0x0
-+#define MAX31827_FLT_Q_1	0x0
-+
- #define MAX31827_16_BIT_TO_M_DGR(x)	(sign_extend32(x, 15) * 1000 / 16)
- #define MAX31827_M_DGR_TO_16_BIT(x)	(((x) << 4) / 1000)
- #define MAX31827_DEVICE_ENABLE(x)	((x) ? 0xA : 0x0)
-@@ -58,6 +79,7 @@ struct max31827_state {
- 	struct mutex lock;
- 	struct regmap *regmap;
- 	bool enable;
-+	struct i2c_client *client;
- };
- 
- static const struct regmap_config max31827_regmap = {
-@@ -361,14 +383,57 @@ static int max31827_write(struct device *dev, enum hwmon_sensor_types type,
- 	return -EOPNOTSUPP;
- }
- 
--static int max31827_init_client(struct max31827_state *st)
-+static int max31827_init_client(struct max31827_state *st,
-+				struct fwnode_handle *fwnode)
- {
-+	bool prop;
-+	u32 data, lsb_idx;
-+	unsigned int res = 0;
-+	int ret;
-+
- 	st->enable = true;
-+	res |= MAX31827_DEVICE_ENABLE(1);
-+
-+	res |= MAX31827_CONFIGURATION_RESOLUTION_MASK;
-+
-+	prop = fwnode_property_read_bool(fwnode, "adi,comp-int");
-+	res |= FIELD_PREP(MAX31827_CONFIGURATION_COMP_INT_MASK, prop);
-+
-+	prop = fwnode_property_read_bool(fwnode, "adi,timeout-enable");
-+	res |= FIELD_PREP(MAX31827_CONFIGURATION_TIMEOUT_MASK, !prop);
-+
-+	if (fwnode_property_present(fwnode, "adi,alrm-pol")) {
-+		ret = fwnode_property_read_u32(fwnode, "adi,alrm-pol", &data);
-+		if (ret)
-+			return ret;
- 
--	return regmap_update_bits(st->regmap, MAX31827_CONFIGURATION_REG,
--				  MAX31827_CONFIGURATION_1SHOT_MASK |
--					  MAX31827_CONFIGURATION_CNV_RATE_MASK,
--				  MAX31827_DEVICE_ENABLE(1));
-+		res |= FIELD_PREP(MAX31827_CONFIGURATION_ALRM_POL_MASK, !!data);
-+	} else {
-+		res |= FIELD_PREP(MAX31827_CONFIGURATION_ALRM_POL_MASK,
-+				  MAX31827_ALRM_POL_LOW);
-+	}
-+
-+	if (fwnode_property_present(fwnode, "adi,flt-q")) {
-+		ret = fwnode_property_read_u32(fwnode, "adi,flt-q", &data);
-+		if (ret)
-+			return ret;
-+
-+		/*
-+		 * Convert the desired fault queue into register bits.
-+		 */
-+		lsb_idx = max31827__bf_shf(data);
-+		if (lsb_idx > 3 || data != BIT(lsb_idx)) {
-+			dev_err(&st->client->dev, "Invalid data in fault queue\n");
-+			return -EOPNOTSUPP;
-+		}
-+
-+		res |= FIELD_PREP(MAX31827_CONFIGURATION_FLT_Q_MASK, lsb_idx);
-+	} else {
-+		res |= FIELD_PREP(MAX31827_CONFIGURATION_FLT_Q_MASK,
-+				  MAX31827_FLT_Q_1);
-+	}
-+
-+	return regmap_write(st->regmap, MAX31827_CONFIGURATION_REG, res);
- }
- 
- static const struct hwmon_channel_info *max31827_info[] = {
-@@ -396,6 +461,7 @@ static int max31827_probe(struct i2c_client *client)
- 	struct device *dev = &client->dev;
- 	struct device *hwmon_dev;
- 	struct max31827_state *st;
-+	struct fwnode_handle *fwnode;
- 	int err;
- 
- 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_WORD_DATA))
-@@ -412,7 +478,10 @@ static int max31827_probe(struct i2c_client *client)
- 		return dev_err_probe(dev, PTR_ERR(st->regmap),
- 				     "Failed to allocate regmap.\n");
- 
--	err = max31827_init_client(st);
-+	st->client = client;
-+	fwnode = dev_fwnode(dev);
-+
-+	err = max31827_init_client(st, fwnode);
- 	if (err)
- 		return err;
- 
+>> Documentation/hwmon/max31827.rst:107: WARNING: Bullet list ends without a blank line; unexpected unindent.
+
+vim +107 Documentation/hwmon/max31827.rst
+
+    93	
+    94	The conversion time doubles with every bit of increased resolution. The
+    95	available resolutions are:
+    96		- 8 bit -> 8.75 ms conversion time
+    97		- 9 bit -> 17.5 ms conversion time
+    98		- 10 bit -> 35 ms conversion time
+    99		- 12 bit (default) -> 140 ms conversion time
+   100	
+   101	There is a temp1_resolution attribute which indicates the unit change in the
+   102	input temperature in milli-degrees C.
+   103		- 1000 mC -> 8 bit
+   104		- 500 mC -> 9 bit
+   105		- 250 mC -> 10 bit
+   106		- 62 mC -> 12 bit (default) - actually this is 62.5, but the file
+ > 107		returns 62
+   108	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
