@@ -2,122 +2,117 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8270BEE021D
-	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Sep 2023 05:40:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D855EE3F2F
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Sep 2023 06:29:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbjIOFkq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 15 Sep 2023 01:40:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55024 "EHLO
+        id S232032AbjIOG3k (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 15 Sep 2023 02:29:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjIOFkq (ORCPT
+        with ESMTP id S230101AbjIOG3k (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 15 Sep 2023 01:40:46 -0400
-Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12AF1BF8;
-        Thu, 14 Sep 2023 22:40:40 -0700 (PDT)
-Received: by mail-oo1-xc2e.google.com with SMTP id 006d021491bc7-57128297bd7so1084168eaf.0;
-        Thu, 14 Sep 2023 22:40:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1694756440; x=1695361240; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=m4W9/G5aL/Wgi4GOf9IacY40VhRxR066lrHQZEMg5zA=;
-        b=SdLmrb1cn3tvsELHg5Fs5whNsKnGDc6yV9YqAEqf3D+pbaxDyVL6H7eVjZYaHpMBuR
-         2zjEtqEtJ6Efu0FrRqv4tgU/9RZi34G4xh6PKTqCZgLvkaH5sj+QsTVVDi38uq+ixQtU
-         0v3qTZn8q1Y95KWvEhvd3EsXgM2juDy78f1a89OAijS13dAJYUAvIrxjKJeBzauHRKVV
-         iAm9wP18C1wEBmHTqQR3iifEgGBO9aywg26MJZqGyXqiPJsdqZIJ6AH08+Uz6Y6rhCtH
-         zleCcid+j1zpbodlNpub/8CN05cnYMWWYd1yyjtP75lF8nzTVVsqPyHosKd647XXWSEa
-         1aIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694756440; x=1695361240;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=m4W9/G5aL/Wgi4GOf9IacY40VhRxR066lrHQZEMg5zA=;
-        b=g1uFqvG8vvdNXk7YDmGS0lSC/wofqTSeQJg60pJNqzb0HtHbDTF4K8zuGAGJyBJKGE
-         3Zny8KScjSIe7FFiAwrfnwxzYw9BXhm0QX6Qefij7jPds4roHv8x28isHOnLeG9Svdc3
-         LklxkXsgJdmvEx6uL87pmRwSJxh1lQv8B6rKZtvHb5A6Pco5YUvbW0RxAdJjGfMrdLTK
-         NQRViZ5fC7INHZpZI9aNi2hKuuBLhZ41tNDheiKHkckB79krtmHb6MS2HBzSk2FoSRS4
-         aWWK7ftErQZCx7cMjHMM1aLriJfwesoMjhOnxA6bI68Mla7xSH7TcOt2STFgyog+Rnjg
-         4j6Q==
-X-Gm-Message-State: AOJu0YyfPsddL34pyxActdOjDft302XfVo9jt80zltLLNBabQ9OD/7ql
-        L9lv6ffqI8/aHqXCWtmW5BI=
-X-Google-Smtp-Source: AGHT+IEG8UEvEp28b8+DTHwOJTny12gqBiHiLY4gWmnUqfwyXprN3AV2QabKyhkUgir7z6HVC8JKfA==
-X-Received: by 2002:a05:6870:c214:b0:1b7:4655:2ac9 with SMTP id z20-20020a056870c21400b001b746552ac9mr923260oae.6.1694756440061;
-        Thu, 14 Sep 2023 22:40:40 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x10-20020a63b34a000000b00553dcfc2179sm1762184pgt.52.2023.09.14.22.40.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Sep 2023 22:40:39 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4b490305-0ab7-403f-7bec-a08fb8f20b56@roeck-us.net>
-Date:   Thu, 14 Sep 2023 22:40:37 -0700
+        Fri, 15 Sep 2023 02:29:40 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2088.outbound.protection.outlook.com [40.107.255.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D3901FE0;
+        Thu, 14 Sep 2023 23:29:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OXZQ5+4oEHKiOzUItDZEzDIjlD/9Bhxr3VyFK6QpWYlq6Dz6sjal/9VFJ/3ZwiMm0r27iCiY8mJv6ZS/I4B/j04sjElvd4ft7/fZ/daqjXusNs7hTJbpxTVLiwJ7A5tAeHT2Uj6qdHiqBJI7M15i8DEgsGCresaPJZ3SZ/X1KaXBdsISkMjiVpIsBHmyAETtyp2QH36+XHA8h8nallbZwdfc1G9Vt2r90SqBhKpFvVJfapqhoIE2o1JJTZV7K5MDauC5k7SFu57KQvqoDuAic+eucRxQDiA1PQUtjhB95jem9NJ2hc2BuH3jkkeVjaBNhCSox9aBKCOThQCvWBZbyw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kgexxNRe/NC/MpCosgyZ5Nd9Wd1bZHY4ntWodx60VBw=;
+ b=FyZkBYzKktohQtwNDDq6zqXEevCiVInuco2Y9BII3TIv/WZsHSnufiJMf9VkGpSgvoIIm5GscI1JIEZjF6U2H0VL+ibcTiMODmNBpYeUZoMiRuI47+spLRaSa3tAADHA8s7NtyUlqSHcm+SDLf5EjWK48TmIULRZESicDLHsOYaOsxZ1LdzvDx2fUQrvlKElPC0dCDEJ0GcQI/Gy5Mx8vq/g5A3Knbs+5jV58hm5r84jUWXhOqCdoutOk3ZlLs4DytHf0RVWcxCEOSgChAnL2mYMXhEP9oGKcAwpGU2J3uDvctbAZDnVQ3h8p3j7JujVzEeZzG3qF6PmhflMLOnlTA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 211.20.1.79) smtp.rcpttodomain=stwcx.xyz smtp.mailfrom=wiwynn.com; dmarc=fail
+ (p=quarantine sp=quarantine pct=100) action=quarantine
+ header.from=wiwynn.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kgexxNRe/NC/MpCosgyZ5Nd9Wd1bZHY4ntWodx60VBw=;
+ b=RMZ3UmrDBaCqBcsag6eJqqYicB494fFNxS28fr+3QAYHPNj/i6mSffGdQOjGMmwDVF86b1Ly0E1klgMXayCv9cF0klrovE0NojotKi41tzFuDCMBIqZY0ICUw2YQxDG76jjXS4UU8/pyc044CPBxvCi+Mw9Z3cL63VzzQH4WmrF+he7WHZ+Dk1f5PhDtY+H2+N2dJy0mFMveZ2nZm6ZU1RzTpX8ZqQR7GqlJVHJYhkBaS99keMgqzrnl8w4MYPCSGmCbuFRLC0Yi0yWmhQ89Rhgj5QrmA1H3H90iwEn3hWj0WD2OE8a082At7FdQchv2Ec+BrPtZ2Mn4lLV+XgJfiA==
+Received: from SG2PR02CA0039.apcprd02.prod.outlook.com (2603:1096:3:18::27) by
+ KL1PR04MB7210.apcprd04.prod.outlook.com (2603:1096:820:fe::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.21; Fri, 15 Sep 2023 06:29:31 +0000
+Received: from SG1PEPF000082E1.apcprd02.prod.outlook.com
+ (2603:1096:3:18:cafe::5c) by SG2PR02CA0039.outlook.office365.com
+ (2603:1096:3:18::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.21 via Frontend
+ Transport; Fri, 15 Sep 2023 06:29:31 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 211.20.1.79)
+ smtp.mailfrom=wiwynn.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=quarantine header.from=wiwynn.com;
+Received-SPF: Fail (protection.outlook.com: domain of wiwynn.com does not
+ designate 211.20.1.79 as permitted sender) receiver=protection.outlook.com;
+ client-ip=211.20.1.79; helo=localhost.localdomain;
+Received: from localhost.localdomain (211.20.1.79) by
+ SG1PEPF000082E1.mail.protection.outlook.com (10.167.240.4) with Microsoft
+ SMTP Server id 15.20.6792.20 via Frontend Transport; Fri, 15 Sep 2023
+ 06:29:30 +0000
+From:   Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+To:     patrick@stwcx.xyz
+Cc:     Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] hwmon: max31790: support to config PWM as TACH
+Date:   Fri, 15 Sep 2023 14:29:22 +0800
+Message-Id: <20230915062926.2460502-1-Delphine_CC_Chiu@wiwynn.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>,
-        Justin Stitt <justinstitt@google.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-hwmon@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20230914-strncpy-drivers-hwmon-ibmpowernv-c-v1-1-ba6b7f42c98c@google.com>
- <202309142223.D16446A30D@keescook>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] hwmon: (ibmpowernv) refactor deprecated strncpy
-In-Reply-To: <202309142223.D16446A30D@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SG1PEPF000082E1:EE_|KL1PR04MB7210:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 778c726b-30c5-47a3-85a7-08dbb5b51ee8
+X-MS-Exchange-AtpMessageProperties: SA
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: njewxRjxWB/z5AHsxWlApPve4v6wTLvhuhrKDENOuREeGmoLZKyroWPunsXf5aQqT+RAG6PjiSk8pfdq4v/6lv+kGfDIMtD0yaq6LwRJbUoZK1sqr4SssOW3DyQsIVyNagzcIs+7tgKqGVA4pg/QVhFMT71bETpODAtmuLKvxtpZrhZ4HwvIcHN2UKHz6Wn+u9kShwIQ7pcQEUqbRIrJEnqRdU6t5Rj9iSDWJuga7ENuuA55/z8cL0oOV/OOyocncABqtvluqtHh5tp5ekjh5Rs9FrI1377WwP52x+F9FG066xTOHjg3PRzLtHambU1LksjKnhiJaKNvQrayr9Wfu17ySiU35C6qx9R6mO5zk8uaoKYPSE2wZiDDipUA2JFqL044DthQQKa2+2zFt1MuGwvVlvoqAw3xqLJNzOMfzLfcGrZx3a+HtcPKNZgzioDlEqqK9SqZ/WuMPUd7NKeD6jKCvBOqnzv1Q5kexYDEg2HPAwkfONBaSRcJY51HpSAcj3RU9ByX07Nlh23VSm3srsrtkfJZTilNPAQ2AYmSKUF3rFkrJaOkegyL4ori1uKJ1smtNWkvpZgR2a+T+vKkZkxnWBM61tk8LXlSgXUDoyc0y30bXXV9xMYiYCIExU/F2c3esLgut6ttAuFjgPDJhD7eMiedCDKzFWU2qL0epcakZVg78K9MPUs7ZbSFoDlqIT0F19qPEDMEEdlZwYai8g==
+X-Forefront-Antispam-Report: CIP:211.20.1.79;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:localhost.localdomain;PTR:211-20-1-79.hinet-ip.hinet.net;CAT:NONE;SFS:(13230031)(6069001)(4636009)(396003)(346002)(136003)(39860400002)(376002)(82310400011)(451199024)(186009)(1800799009)(36840700001)(46966006)(6666004)(6506007)(6486002)(6512007)(26005)(2616005)(956004)(4744005)(336012)(2906002)(8936002)(54906003)(70206006)(47076005)(70586007)(36736006)(8676002)(9316004)(4326008)(41300700001)(6916009)(5660300002)(316002)(1076003)(86362001)(36860700001)(36756003)(82740400003)(40480700001)(356005)(81166007)(478600001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: wiwynn.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Sep 2023 06:29:30.9226
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 778c726b-30c5-47a3-85a7-08dbb5b51ee8
+X-MS-Exchange-CrossTenant-Id: da6e0628-fc83-4caf-9dd2-73061cbab167
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=da6e0628-fc83-4caf-9dd2-73061cbab167;Ip=[211.20.1.79];Helo=[localhost.localdomain]
+X-MS-Exchange-CrossTenant-AuthSource: SG1PEPF000082E1.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR04MB7210
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 9/14/23 22:24, Kees Cook wrote:
-> On Thu, Sep 14, 2023 at 11:21:06PM +0000, Justin Stitt wrote:
->> `strncpy` is deprecated for use on NUL-terminated destination strings [1].
->>
->> We should prefer more robust and less ambiguous string interfaces.
->>
->> A suitable replacement is `strscpy` [2] due to the fact that it
->> guarantees NUL-termination on the destination buffer without
->> unnecessarily NUL-padding since `buf` is already zero-initialized.
->>
->> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
->> Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html [2]
->> Link: https://github.com/KSPP/linux/issues/90
->> Cc: linux-hardening@vger.kernel.org
->> Signed-off-by: Justin Stitt <justinstitt@google.com>
->> ---
->>   drivers/hwmon/ibmpowernv.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/hwmon/ibmpowernv.c b/drivers/hwmon/ibmpowernv.c
->> index 594254d6a72d..57d829dbcda6 100644
->> --- a/drivers/hwmon/ibmpowernv.c
->> +++ b/drivers/hwmon/ibmpowernv.c
->> @@ -234,7 +234,7 @@ static int get_sensor_index_attr(const char *name, u32 *index, char *attr)
->>   	if (copy_len >= sizeof(buf))
->>   		return -EINVAL;
->>   
->> -	strncpy(buf, hash_pos + 1, copy_len);
->> +	strscpy(buf, hash_pos + 1, copy_len);
-> 
-> This is another case of precise byte copying -- this just needs to be
-> memcpy. Otherwise this truncates the trailing character. Imagine a name
-> input of "fan#2-data". "buf" wants to get "2". copy_len is 1, and
-> strscpy would eat it. :)
-> 
+Support to config PWM as TACH in MAX31790 driver.
+Add binding document for MAX31790 driver.
 
-It is really sad that the submitters of such "cleanup" patches can't be bothered
-to check what they are doing. They can't even be bothered to write a coccinelle
-script that would avoid pitfalls like this one, and they expect others to do their
-homework for them.
+---
+Changelog:
+v2 - Remove unnecessary parentheses.
+   - Add more error handling.
+   - Change the type of "pwm-as-tach" from u8 to u32 to match binding
+     document.
+   - Add dt-bindings for the MAXIM MAX31790.
+v1 - Support to config PWM as TACH
 
-And then people wonder why there is maintainer burnout. I am so tired of that.
+Delphine CC Chiu (2):
+  hwmon: max31790: support to config PWM as TACH
+  dt-bindings: hwmon: add MAX31790
 
-Guenter
+ .../bindings/hwmon/maxim,max31790.yaml        | 59 +++++++++++++++++++
+ MAINTAINERS                                   |  6 ++
+ drivers/hwmon/max31790.c                      | 58 ++++++++++++++++++
+ 3 files changed, 123 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max31790.yaml
+
+-- 
+2.25.1
 
