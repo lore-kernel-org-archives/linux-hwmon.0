@@ -2,200 +2,183 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F31F1EE6457
-	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Sep 2023 14:29:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 748C4EE3F2F
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Sep 2023 14:50:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235633AbjIOO3O (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 15 Sep 2023 10:29:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35078 "EHLO
+        id S235733AbjIOOui (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 15 Sep 2023 10:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235654AbjIOO3O (ORCPT
+        with ESMTP id S235401AbjIOOuh (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 15 Sep 2023 10:29:14 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0F5268A
-        for <linux-hwmon@vger.kernel.org>; Fri, 15 Sep 2023 07:28:57 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1c3d8fb23d9so18625185ad.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 15 Sep 2023 07:28:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google; t=1694788137; x=1695392937; darn=vger.kernel.org;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=nmMqGf0vNjjg1iwJSId+Lz9wQoqmo+DmAfvsA+ggwI0=;
-        b=JpvkvUYTY9AXq4GKBbmq0o48tz/naN/8L3JhyvBs6FWU+sZoBhiR4XW6ao5dQncOmB
-         xW3k4/DC1Be82wE7PVzvjVYJoneJ+MNaXAUtqpVVxj0l2nR0dr4EFAL3eK1YKDyGv4PX
-         oDKp25NXmiadzEKSfpqn7LaUbVI3hyHcroVIcdExXntVAjSL6REnk7BBX6u3QKTtlT7R
-         2km7UvGWaz89j1Jghn4RnD1DBvaLtfTDNbMiqyLejNUWk0xc800NQ9jiSYn22geeIpBI
-         pCfhNZhoJBCAfci+4QPBBWG7wk4lrZ/ijMNf7grObHjeUYc8icqZ0yeZznYOMPIkWMbf
-         Inlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694788137; x=1695392937;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nmMqGf0vNjjg1iwJSId+Lz9wQoqmo+DmAfvsA+ggwI0=;
-        b=FPHe7yP7Uqil7eKL8vJ2ljcY/fdDr46TflF5PN2WoML8lmjEHkm2NZc1K/gpFXcxOT
-         MhlVT6fv4bD3zxP6KDcDQkow3Y9RuF79xVY8LEDLcRsaBlLpWQ3VjxiZHFT9y8lhGyrK
-         3EzfkzCcNC3zrwgvTopHY510ucnXwGdLJ1kdw8XYT5PGA6yVUtU6/dFrpGjjLXN8qX+6
-         GTNE7KBRO4DQCG7AZCnVfORJkwVZbcLpem7O0lvcg9efda8r0aTryuLQlmbIHtOQEY/E
-         QsA4kxVZo5epC37X4tq02AX7iFH9QmPscWljabA6WzTGZZq/pdPw8lw/Pi1fVDiKuAl5
-         RXAQ==
-X-Gm-Message-State: AOJu0YyR8rYNSBGiogKBJs0m5WYmKr1dLESSlVGPMXLRoh3UqyuhblBA
-        f9zv3v8H7zh1kXBfm38DmldfZjz6zhe5PGUov+Q=
-X-Google-Smtp-Source: AGHT+IGTWSggEQru9Bnn5ai8dk9ctN9rzTQIScb97ofy7DBowbzLZupyR4f5ApwcAbKSin2l211z2w==
-X-Received: by 2002:a17:902:ab8d:b0:1c3:ed30:cdf4 with SMTP id f13-20020a170902ab8d00b001c3ed30cdf4mr1690769plr.4.1694788136926;
-        Fri, 15 Sep 2023 07:28:56 -0700 (PDT)
-Received: from DougS18 (s66-183-142-209.bc.hsia.telus.net. [66.183.142.209])
-        by smtp.gmail.com with ESMTPSA id h12-20020a170902748c00b001b246dcffb7sm3560509pll.300.2023.09.15.07.28.56
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 15 Sep 2023 07:28:56 -0700 (PDT)
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Ahmad Khalifa'" <ahmad@khalifa.ws>,
-        "'Guenter Roeck'" <linux@roeck-us.net>
-Cc:     "Doug Smythies" <dsmythies@telus.net>,
-        "'Jean Delvare'" <jdelvare@suse.com>, <linux-hwmon@vger.kernel.org>
-Subject: hwmon: (nct6775) Regression Bisected
-Date:   Fri, 15 Sep 2023 07:28:57 -0700
-Message-ID: <002101d9e7e0$f67c4490$e374cdb0$@telus.net>
+        Fri, 15 Sep 2023 10:50:37 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB65B1FD2;
+        Fri, 15 Sep 2023 07:50:31 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F84DC433C8;
+        Fri, 15 Sep 2023 14:50:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694789431;
+        bh=+7a/yilTLV3BMiTCUiFOpBcqKwXaHi/uJzXAg9+YPtQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NwpEnu7H/3Yo77ctlj+KSVShzHRotD5z4emCwm2QBSN0l8eFaqEk5iFeAE/Q7kNwG
+         7QY7O7QpiyMGsgi/21vOWy8FLlOrvw1XbCO5kWdp8sk48gXvhME8PIOhiwahTs4LDg
+         o3PBuISTzKbilibvTjOtXzUfiSkGSkZqHs+dSlQMqbzbpUEOcvzmmMNj1O6DuvLzB/
+         KA3p0HRCYWvMoJHBNYWWh2oGyct8Ygv/p+vhER6EZlg7b1mqUasuBxlW7hixy9Lypv
+         cbjVEqtXAQ/nX+il78lIg2QeF4Hz2M/2XRU+fCmFVlW9FMFkABmw46/VCxZHD+gGC+
+         ZoqKPqnOP27xg==
+Date:   Fri, 15 Sep 2023 15:50:27 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+Cc:     patrick@stwcx.xyz, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] dt-bindings: hwmon: add MAX31790
+Message-ID: <20230915-quench-left-8fbc1ca3b1da@spud>
+References: <20230915062926.2460502-1-Delphine_CC_Chiu@wiwynn.com>
+ <20230915062926.2460502-3-Delphine_CC_Chiu@wiwynn.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-ca
-Thread-Index: Adnn22Bdy9oJVQMxQkua3w2sYJcYCA==
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="j20GgGeCJk1fE9k9"
+Content-Disposition: inline
+In-Reply-To: <20230915062926.2460502-3-Delphine_CC_Chiu@wiwynn.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Kernel 6.6-rc1 has an error during boot. The guilty commit is:
-b7f1f7b2523a6a4382f12fe953380b847b80e09d
-hwmon: (nct6775) Additional TEMP registers for nct6799
 
-There seems to be confusion between the indexes into
-the NCT6799_ALARM_BITS array or the
-NCT6779_ALARM_BITS array. I do not understand the code
-and do not know if it is the indexing that is reversed or the
-wrong table is being used.
+--j20GgGeCJk1fE9k9
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The error from kern.log (edited):
+Yo,
 
-================================================================================
-UBSAN: shift-out-of-bounds in drivers/hwmon/nct6775-core.c:1757:39
-shift exponent -1 is negative
-CPU: 9 PID: 822 Comm: sensors Not tainted 6.6.0-rc1-stock2 #1165
-Hardware name: ASUS System Product Name/PRIME Z490-A, BIOS 9902 09/15/2021
-Call Trace:
-<TASK>
-dump_stack_lvl+0x48/0x70
-dump_stack+0x10/0x20
-ubsan_epilogue+0x9/0x40
-__ubsan_handle_shift_out_of_bounds+0x10f/0x170
-...
+On Fri, Sep 15, 2023 at 02:29:24PM +0800, Delphine CC Chiu wrote:
+> Add dt-bindings for the MAXIM MAX31790.
+>=20
+> Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+> ---
+> Changelog:
+> v2 - Add dt-bindings for the MAXIM MAX31790.
+> ---
+>  .../bindings/hwmon/maxim,max31790.yaml        | 59 +++++++++++++++++++
+>  MAINTAINERS                                   |  6 ++
+>  2 files changed, 65 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max3179=
+0.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max31790.yaml =
+b/Documentation/devicetree/bindings/hwmon/maxim,max31790.yaml
+> new file mode 100644
+> index 000000000000..2bd455b36b3f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/maxim,max31790.yaml
+> @@ -0,0 +1,59 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +
+> +$id: http://devicetree.org/schemas/hwmon/maxim,max31790.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Maxim max31790
+> +
+> +maintainers:
+> +  - Delphine CC Chiu  <Delphine_CC_Chiu@wiwynn.com>
+> +
+> +description: |
+> +  The MAX31790 controls the speeds of up to six fans using
+> +  six independent PWM outputs. The desired fan speeds (or PWM duty cycle=
+s)
+> +  are written through the I2C	interface.
+> +  The outputs drive =E2=80=9C4-wire=E2=80=9D fans directly, or can be us=
+ed to modulate
+> +  the fan=E2=80=99s power terminals using an external pass transistor.
+> +
+> +  Datasheets:
+> +    https://datasheets.maximintegrated.com/en/ds/MAX31790.pdf
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - maxim,max31790
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  pwm-as-tach:
 
-I added a "pr_info" line (in the below it was as of the prior commit,
-43fbe66dc216 hwmon: Add driver for Renesas HS3001):
+I don't see any other users of this in-tree, so you'd need a vendor
+prefix. That said, I'm once bitten, twice shy about fan related
+properties in hwmon, so I would definitely like Rob to comment on this
+whole binding.
 
-doug@s19:~/kernel/linux$ git diff
-diff --git a/drivers/hwmon/nct6775-core.c b/drivers/hwmon/nct6775-core.c
-index 33533d95cf48..12e3df84c034 100644
---- a/drivers/hwmon/nct6775-core.c
-+++ b/drivers/hwmon/nct6775-core.c
-@@ -1727,6 +1727,7 @@ nct6775_show_alarm(struct device *dev, struct device_attribute *attr, char *buf)
-                return PTR_ERR(data);
+> +    description: |
+> +      There are 6 PWM output channel in MAX31790 that allows to be confi=
+gured
+> +      as a TACH input by setting the Fan Configuration register.
+> +      Config PWM output channels in the array as tachometer inputs.
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    minItems: 1
+> +    maxItems: 6
+> +    items:
+> +      enum: [1, 2, 3, 4, 5, 6]
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +      #address-cells =3D <1>;
+> +      #size-cells =3D <0>;
+> +
+> +      pwm@20 {
+> +        compatible =3D "maxim,max31790";
+> +        reg =3D <0x20>;
+> +        pwm-as-tach =3D <2 5>;
 
-        nr = data->ALARM_BITS[sattr->index];
-+       pr_info("doug: nr: %d  ; index %d\n", nr, sattr->index);
-        return sprintf(buf, "%u\n",
-                       (unsigned int)((data->alarms >> nr) & 0x01));
- }
+This would be <2>, <5>; no?
 
-And for b7f1f7b2523a got (edited):
+> +      };
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index c8fdd0d03907..97e13b6bf51d 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -1371,6 +1371,12 @@ F:	Documentation/devicetree/bindings/hwmon/adi,max=
+31760.yaml
+>  F:	Documentation/hwmon/max31760.rst
+>  F:	drivers/hwmon/max31760.c
+> =20
+> +ANALOG DEVICES INC MAX31790 DRIVER
+> +M:	Delphine CC Chiu  <Delphine_CC_Chiu@wiwynn.com>
+> +S:	Odd Fixes
 
-nct6775_core: doug: nr: 0  ; index 0
-nct6775_core: doug: nr: 1  ; index 1
-nct6775_core: doug: nr: 2  ; index 2
-nct6775_core: doug: nr: 3  ; index 3
-nct6775_core: doug: nr: 8  ; index 4
-nct6775_core: doug: nr: -1  ; index 5
-================================================================================
-UBSAN: shift-out-of-bounds in drivers/hwmon/nct6775-core.c:1758:39
-shift exponent -1 is negative
-...
-nct6775_core: doug: nr: 20  ; index 6
-nct6775_core: doug: nr: 16  ; index 7
-nct6775_core: doug: nr: 17  ; index 8
-nct6775_core: doug: nr: 24  ; index 9
-nct6775_core: doug: nr: 25  ; index 10
-nct6775_core: doug: nr: 26  ; index 11
-nct6775_core: doug: nr: 27  ; index 12
-nct6775_core: doug: nr: 28  ; index 13
-nct6775_core: doug: nr: 29  ; index 14
-nct6775_core: doug: nr: 6  ; index 24
-nct6775_core: doug: nr: 7  ; index 25
-nct6775_core: doug: nr: 11  ; index 26
-nct6775_core: doug: nr: 10  ; index 27
-nct6775_core: doug: nr: 23  ; index 28
-nct6775_core: doug: nr: 33  ; index 29
-nct6775_core: doug: nr: 12  ; index 48
-nct6775_core: doug: nr: 9  ; index 49
+This is a pretty odd status for something you're newly adding.
+How come it's not going to be maintained?
 
-Observe that the table seems to be
-NCT6799_ALARM_BITS
-But the indexes seem to be for
-NCT6779_ALARM_BITS
-
-static const s8 NCT6799_ALARM_BITS[NUM_ALARM_BITS] = {
-         0,  1,  2,  3,  8, -1, 20, 16, 17, 24, 25, 26,   /* in0-in11     */
-        27, 28, 29, 30, 31, -1, -1, -1, -1, -1, -1, -1,   /* in12-in23    */
-         6,  7, 11, 10, 23, 33, -1, -1, -1, -1, -1, -1,   /* fan1-fan12   */
-         4,  5, 40, 41, 42, 43, 44, -1, -1, -1, -1, -1,   /* temp1-temp12 */
-        12,  9,                                           /* intr0-intr1  */
-};
-
-Now repeat the test as of 43fbe66dc216:
-
-nct6775_core: doug: nr: 0  ; index 0
-nct6775_core: doug: nr: 1  ; index 1
-nct6775_core: doug: nr: 2  ; index 2
-nct6775_core: doug: nr: 3  ; index 3
-nct6775_core: doug: nr: 8  ; index 4
-nct6775_core: doug: nr: 21  ; index 5
-nct6775_core: doug: nr: 20  ; index 6
-nct6775_core: doug: nr: 16  ; index 7
-nct6775_core: doug: nr: 17  ; index 8
-nct6775_core: doug: nr: 24  ; index 9
-nct6775_core: doug: nr: 25  ; index 10
-nct6775_core: doug: nr: 26  ; index 11
-nct6775_core: doug: nr: 27  ; index 12
-nct6775_core: doug: nr: 28  ; index 13
-nct6775_core: doug: nr: 29  ; index 14
-nct6775_core: doug: nr: 6  ; index 24
-nct6775_core: doug: nr: 7  ; index 25
-nct6775_core: doug: nr: 11  ; index 26
-nct6775_core: doug: nr: 10  ; index 27
-nct6775_core: doug: nr: 23  ; index 28
-nct6775_core: doug: nr: 33  ; index 29
-nct6775_core: doug: nr: 12  ; index 48
-nct6775_core: doug: nr: 9  ; index 49
-
-Observe that the table seems to be
-NCT6779_ALARM_BITS
-And the indexing seems to be for that
-Table.
-
-static const s8 NCT6779_ALARM_BITS[NUM_ALARM_BITS] = {
-         0,  1,  2,  3,  8, 21, 20, 16, 17, 24, 25, 26,   /* in0-in11     */
-        27, 28, 29, -1, -1, -1, -1, -1, -1, -1, -1, -1,   /* in12-in23    */
-         6,  7, 11, 10, 23, -1, -1, -1, -1, -1, -1, -1,   /* fan1-fan12   */
-         4,  5, 13, -1, -1, -1, -1, -1, -1, -1, -1, -1,   /* temp1-temp12 */
-        12,  9,                                           /* intr0-intr1  */
-};
-
-You probably need this information:
-nct6775: Found NCT6798D or compatible chip at 0x2e:0x290
-
-... Doug
+Thanks,
+Conor.
 
 
+--j20GgGeCJk1fE9k9
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZQRvMwAKCRB4tDGHoIJi
+0i3ZAP98nZfLp3xX8XszvOrnl9Qt3XVP8P1i2pSLZPHZs0B3TAD/XGC0hnOt22Oj
+sm+07JZPIK/YS2QOTChE8LW5bR5NlAM=
+=iyxw
+-----END PGP SIGNATURE-----
+
+--j20GgGeCJk1fE9k9--
