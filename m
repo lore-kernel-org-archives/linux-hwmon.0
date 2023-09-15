@@ -2,108 +2,114 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A95F7EED61E
-	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Sep 2023 18:36:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1BABC46CA1
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Sep 2023 21:20:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235290AbjIOSgJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 15 Sep 2023 14:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47732 "EHLO
+        id S236551AbjIOVUH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 15 Sep 2023 17:20:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236447AbjIOSfm (ORCPT
+        with ESMTP id S237845AbjIOVUD (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 15 Sep 2023 14:35:42 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B752105;
-        Fri, 15 Sep 2023 11:35:35 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id e9e14a558f8ab-34fcbb4a097so1568185ab.1;
-        Fri, 15 Sep 2023 11:35:35 -0700 (PDT)
+        Fri, 15 Sep 2023 17:20:03 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6130186;
+        Fri, 15 Sep 2023 14:19:55 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1c1e3a4a06fso21909105ad.3;
+        Fri, 15 Sep 2023 14:19:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1694802935; x=1695407735; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1694812795; x=1695417595; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=rhh/wBpFLk2YxTCyHBvIz67adRAxBtDWaMESKiiC4/U=;
-        b=UIlTjq+Sz8pRYbeKRw0Y2zmhMjlIavv5FOl2IK22e7bfA4m8cVrZb1WfhH/jmFiI06
-         U9O8zR7PY0cCvavCbBx90MeAHu+YTb/tR5Bx+GHKr9IK377mSMbmkcr/FWl10bAo2VG7
-         bV2Vt/X6z4B8YQr+J6/FIt+TREZzum/Q41Xi0clUzI2+tklFJwJuxvmz3CP7hvyCDmWk
-         2yhnYaj4NYm9JDUsJeMwkyMSmr0mThI152W77Ptk7Vas5JB0+VIT+bUWMZdIg8NmCV1r
-         n01XO1quE5OlE7dmic56cl4W/vvA0nqo5NTvtwViQJXe69Crskom9Lv7yN04XqSEo/7L
-         c75g==
+        bh=Iw52vl+Z+yGr72ggsy+mqPbqGnewTwN16MWm8ruh5F0=;
+        b=jkeTzA8dFgV5aBQIFDSnd1B/G8ZaoBz3z8S6nqhosfzWZsy00eOuNnn+DVR0BytN4O
+         3MoIKGW5Vc7bZ3TmFEJbJ4FuaEfHV8nQa1m1g2K44Qmvpbb3kwX/JHv2vRHotaoMmkuj
+         6E6bcmOIdzJ/VkaCdQM3fih+vNAglNWAlPoYWYMmPsJbrWipswtB6F4EdsHnJYF6Hf71
+         CWr896VIUsrzhCWl3MedHN5wjzJLcjF0nzJOZK6tOq5mEc9+lWSoUXDubhFy04FXYJSp
+         rbM+aP9Llj/K/ftx9cX24QvD0WdgvQTr3dZqPiT3trltSNzje4fQklqgTD9om177JYDE
+         JfYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694802935; x=1695407735;
+        d=1e100.net; s=20230601; t=1694812795; x=1695417595;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rhh/wBpFLk2YxTCyHBvIz67adRAxBtDWaMESKiiC4/U=;
-        b=dBHlhiGEICAmJLKGXRXap2bGMnL6QXZD6+zyJIcvSoT47aDkEPBjoWRmCVz/+r/unQ
-         VESbmHoPZRLayCz1zqIOjvIxWnUZ0s5TGprd76ivCYdnl8Tp0wGhLfEpVxjmhdyvH9aS
-         iK5KfJSVSFmsOyZ+ww10DcTe7SATdozlLsJPHuhJISF7qLS7BfIirUuviA/DVTgY6Ksv
-         nRf5tUZFxiqHoKRzh0dN2ddmXdzpZ5CU8Fhmf5SR+v+M99AIHY+avk+K6jId0Q6e5FFh
-         Ablg6lOq534GmS0jfi+D/ERE2l0lonH6SBylr+lDGcJ6p5372sOLHvUVQHyObMoswGO7
-         QXXQ==
-X-Gm-Message-State: AOJu0YxZ4HhwkJs46Z5SnLj+io2Z0c46VdVGkv+aegBf3R236OaHbpJI
-        akj2PmcMWVCa/3sHghRk/vQ=
-X-Google-Smtp-Source: AGHT+IFdWJGEojY/3icYzoleS4JW9eTiHbqoewNZRCdZVj1F67Fil/HcDOWYBfT/p+U99GmpGJEf1w==
-X-Received: by 2002:a05:6e02:13d3:b0:34f:8039:a3b5 with SMTP id v19-20020a056e0213d300b0034f8039a3b5mr3136303ilj.26.1694802935093;
-        Fri, 15 Sep 2023 11:35:35 -0700 (PDT)
+        bh=Iw52vl+Z+yGr72ggsy+mqPbqGnewTwN16MWm8ruh5F0=;
+        b=HdcSXb+kC2diM++ViQ0gp/+kH6QSzHpKxx23DRFTPrAIhogaLV7Q9WFxdS2Y6Mq3Cf
+         CEAa88B0MtNc6A4fMOIh+yn/UJjtWMlFI4DcS2DnuD3WEmBpEDHA1KCqhvG8Zlk8g2uA
+         bcJDnhDmUQVDnY7ntLU609jS0kZ4INdRpV5p3wtnL49+mtm6FVEkpAmCeHz3RJG5isKn
+         SYh3smOMp5xR6i8W0KF+CHI1L1XNsR/sXTTonZRCyoPPAfmMo8s0eOepSfI1IjWyc2h+
+         SNZKdnllgnEDoibu/htKZc5MjqJvSrnqY6v+rL933cv442fRT6LM71gVitSaYqBo0oIP
+         DHsA==
+X-Gm-Message-State: AOJu0YwbKdhbK2K7EqxhuLo3NtSMYDb/I5uYqgTaH79rzsg/RZovthgv
+        ugZBvvr2qrgmqPFZTWF6pGw=
+X-Google-Smtp-Source: AGHT+IGJEvixLhBQnqBK5nGDCqIx0gyypqZITE/hp4lvlRPtD6bVQk4UKPJ6k/vTcWGQ4lNzcV9GhA==
+X-Received: by 2002:a17:903:120f:b0:1bc:e6a:205f with SMTP id l15-20020a170903120f00b001bc0e6a205fmr3131079plh.20.1694812795125;
+        Fri, 15 Sep 2023 14:19:55 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e24-20020a02a518000000b0042bae96eba7sm1199696jam.7.2023.09.15.11.35.33
+        by smtp.gmail.com with ESMTPSA id f4-20020a170902ab8400b001c0af36dd64sm3918112plr.162.2023.09.15.14.19.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Sep 2023 11:35:34 -0700 (PDT)
+        Fri, 15 Sep 2023 14:19:54 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 15 Sep 2023 11:35:32 -0700
+Date:   Fri, 15 Sep 2023 14:19:52 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Justin Stitt <justinstitt@google.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] hwmon: pmbus: refactor deprecated strncpy
-Message-ID: <0b5ddd1e-2f78-4ef6-aadd-88ea53bbb9b2@roeck-us.net>
-References: <20230915-strncpy-drivers-hwmon-pmbus-pmbus_core-c-v1-1-fca2cbca41ea@google.com>
+To:     David Ober <dober6023@gmail.com>
+Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jdelvare@suse.com, corbet@lwn.net,
+        dober@lenovo.com, mpearson@lenovo.com
+Subject: Re: [PATCH] hwmon:Add MEC172x Micro Chip driver for Lenovo
+ motherboards
+Message-ID: <8a566102-5ea6-4449-9083-8feebe711065@roeck-us.net>
+References: <20230915150340.301067-1-dober6023@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230915-strncpy-drivers-hwmon-pmbus-pmbus_core-c-v1-1-fca2cbca41ea@google.com>
+In-Reply-To: <20230915150340.301067-1-dober6023@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Sep 15, 2023 at 06:28:41PM +0000, Justin Stitt wrote:
-> `strncpy` is deprecated for use on NUL-terminated destination strings [1].
+On Fri, Sep 15, 2023 at 11:03:40AM -0400, David Ober wrote:
+> This addition adds in the ability for the system to scan the
+> MEC172x EC chip in Lenovo ThinkStation systems to get the
+> current fan RPM speeds and the Maximum speed value for each
+> fan also provides the current CPU and DIMM thermal status
 > 
-> We should prefer more robust and less ambiguous string interfaces.
+> Signed-off-by: David Ober <dober6023@gmail.com>
 > 
-> A suitable replacement is `strscpy` [2] due to the fact that it guarantees
-> NUL-termination on the destination buffer without unnecessarily NUL-padding.
-> 
-> `label` is zero-allocated and as such the NUL-padding behavior of
-> strncpy is not required here.
-> 
-> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
-> Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html [2]
-> Link: https://github.com/KSPP/linux/issues/90
-> Cc: linux-hardening@vger.kernel.org
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
+> Written by David Ober from Lenovo using this gmail address since
+> my corporate email address does not comply with git email
+
+FWIW, this needs to be after '---'
+
+Anyway, thinking about this submission makes me even more concerned.
+
+This isn't really a driver for MEC172x; it is simply a driver
+accessing an EC on a set of PCs and/or laptops from Lenovo
+which uses a vertain API for communication between EC and main
+CPU.
+
+Such ECs are typically accessed through ACPI. Yet, in this driver
+there is no mention of ACPI, much less any protection against
+parallel use by ACPI code (that access lock in get_ec_reg() doesn't
+even protect against parallel access from userspace, much less
+against parallel access from other drivers or ACPI, for example
+by using request_region() to reserve the used memory ranges).
+
+There needs to be explanations and clarifications 
+- Why this driver will only be used for communication with MEC172X
+  based chips, and why the exact EC chip is relevant in the first place
+  to be mentioned as much as it is.
+- How it is guaranteed that the EC is not and will never be accessed
+  through ACPI.
+- How it is guaranteed that there will never be any other kernel drivers
+  accessing the chip.
+
 > ---
->  drivers/hwmon/pmbus/pmbus_core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 1363d9f89181..dcc8b12387cc 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -1394,7 +1394,7 @@ static int pmbus_add_label(struct pmbus_data *data,
->  	snprintf(label->name, sizeof(label->name), "%s%d_label", name, seq);
->  	if (!index) {
->  		if (phase == 0xff)
-> -			strncpy(label->label, lstring,
-> +			strscpy(label->label, lstring,
->  				sizeof(label->label) - 1);
+>  drivers/hwmon/Kconfig             |  10 +
+>  drivers/hwmon/Makefile            |   1 +
+>  drivers/hwmon/lenovo-ec-sensors.c | 471 ++++++++++++++++++++++++++++++
 
-'label' is allocated with kzalloc(), and, by copying one byte less
-than the size of the field into label->label, it is guaranteed to be
-terminated. Using strscpy() instead of strncpy() results in dropping
-the last character of lstring if its length is sizeof(label->label) - 1.
-
-Really, I am not going to accept any of your patches, sorry.
+Documentation missing.
 
 Guenter
