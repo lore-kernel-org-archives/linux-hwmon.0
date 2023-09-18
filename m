@@ -2,25 +2,25 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D29B6CD37B0
-	for <linux-hwmon@archiver.kernel.org>; Mon, 18 Sep 2023 06:42:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6753BCD13D1
+	for <linux-hwmon@archiver.kernel.org>; Mon, 18 Sep 2023 06:42:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239894AbjIRGlq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 18 Sep 2023 02:41:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48964 "EHLO
+        id S239854AbjIRGlr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 18 Sep 2023 02:41:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239889AbjIRGlY (ORCPT
+        with ESMTP id S239851AbjIRGlY (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Mon, 18 Sep 2023 02:41:24 -0400
-Received: from TWMBX03.aspeed.com (mail.aspeedtech.com [211.20.114.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B88E6;
+Received: from TWMBX02.aspeed.com (mail.aspeedtech.com [211.20.114.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C1010E;
         Sun, 17 Sep 2023 23:41:16 -0700 (PDT)
-Received: from TWMBX02.aspeed.com (192.168.0.24) by TWMBX03.aspeed.com
- (192.168.0.62) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 18 Sep
+Received: from TWMBX02.aspeed.com (192.168.0.24) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 18 Sep
  2023 14:41:14 +0800
 Received: from twmbx02.aspeed.com (192.168.10.10) by TWMBX02.aspeed.com
  (192.168.0.24) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 18 Sep 2023 14:41:15 +0800
+ Transport; Mon, 18 Sep 2023 14:41:14 +0800
 From:   Billy Tsai <billy_tsai@aspeedtech.com>
 To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
         <krzysztof.kozlowski+dt@linaro.org>, <joel@jms.id.au>,
@@ -32,103 +32,116 @@ To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
         <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
         <linux-doc@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
         <BMC-SW@aspeedtech.com>, <patrick@stwcx.xyz>
-Subject: [PATCH v9 2/3] dt-bindings: hwmon: Support Aspeed g6 PWM TACH Control
-Date:   Mon, 18 Sep 2023 14:41:10 +0800
-Message-ID: <20230918064111.2221594-3-billy_tsai@aspeedtech.com>
+Subject: [PATCH v9 0/3] Support pwm/tach driver for aspeed ast26xx
+Date:   Mon, 18 Sep 2023 14:41:08 +0800
+Message-ID: <20230918064111.2221594-1-billy_tsai@aspeedtech.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230918064111.2221594-1-billy_tsai@aspeedtech.com>
-References: <20230918064111.2221594-1-billy_tsai@aspeedtech.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
+Received-SPF: Fail (TWMBX02.aspeed.com: domain of billy_tsai@aspeedtech.com
+ does not designate 192.168.10.10 as permitted sender)
+ receiver=TWMBX02.aspeed.com; client-ip=192.168.10.10;
+ helo=twmbx02.aspeed.com;
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Document the compatible for aspeed,ast2600-pwm-tach device, which can
-support up to 16 PWM outputs and 16 fan tach input.
+Unlike the old design that the register setting of the TACH should based
+on the configure of the PWM. In ast26xx, the dependency between pwm and
+tach controller is eliminated and becomes a separate hardware block. One
+is used to provide pwm output and another is used to monitor the frequency
+of the input. This driver implements them by exposing two kernel
+subsystems: PWM and HWMON. The PWM subsystem can be utilized alongside
+existing drivers for controlling elements such as fans (pwm-fan.c),
+beepers (pwm-beeper.c) and so on. Through the HWMON subsystem, the driver
+provides sysfs interfaces for fan.
 
-Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
----
- .../bindings/hwmon/aspeed,g6-pwm-tach.yaml    | 69 +++++++++++++++++++
- 1 file changed, 69 insertions(+)
+Changes since v8:
+Fix the fail of fan div register setting. (FIELD_GET -> FIELD_PREP)
+Change the type of tach-ch from uint32_t to uint8-array
+Add additional properties and apply constraints to certain properties.
+
+Changes since v7:
+Cherry-pick the fan-common.yaml and add the following properties:
+- min-rpm
+- div
+- mode
+- tach-ch
+Fix the warning which is reported by the kernel test robot.
+
+Changes since v6:
+Consolidate the PWM and TACH functionalities into a unified driver.
+
+Changes since v5:
+- pwm/tach:
+  - Remove the utilization of common resources from the parent node.
+  - Change the concept to 16 PWM/TACH controllers, each with one channel,
+  instead of 1 PWM/TACH controller with 16 channels.
+- dt-binding:
+  - Eliminate the usage of simple-mfd.
+
+Changes since v4:
+- pwm:
+  - Fix the return type of get_status function.
+- tach:
+  - read clk source once and re-use it
+  - Remove the constants variables
+  - Allocate tach_channel as array
+  - Use dev->parent
+- dt-binding:
+  - Fix the order of the patches
+  - Add example and description for tach child node
+  - Remove pwm extension property
+
+Changes since v3:
+- pwm:
+  - Remove unnecessary include header
+  - Fix warning Prefer "GPL" over "GPL v2"
+- tach:
+  - Remove the paremeter min_rpm and max_rpm and return the tach value 
+  directly without any polling or delay.
+  - Fix warning Prefer "GPL" over "GPL v2"
+- dt-binding:
+  - Replace underscore in node names with dashes
+  - Split per subsystem
+
+Changes since v2:
+- pwm:
+  - Use devm_* api to simplify the error cleanup
+  - Fix the multi-line alignment problem
+- tach:
+  - Add tach-aspeed-ast2600 to index.rst
+  - Fix the multi-line alignment problem
+  - Remove the tach enable/disable when read the rpm
+  - Fix some coding format issue
+
+Changes since v1:
+- tach:
+  - Add the document tach-aspeed-ast2600.rst
+  - Use devm_* api to simplify the error cleanup.
+  - Change hwmon register api to devm_hwmon_device_register_with_info
+
+Billy Tsai (2):
+  dt-bindings: hwmon: Support Aspeed g6 PWM TACH Control
+  hwmon: (aspeed-g6-pwm-tacho): Support for ASPEED g6 PWM/Fan tach
+
+Naresh Solanki (1):
+  dt-bindings: hwmon: fan: Add fan binding to schema
+
+ .../bindings/hwmon/aspeed,g6-pwm-tach.yaml    |  69 +++
+ .../devicetree/bindings/hwmon/fan-common.yaml |  78 +++
+ Documentation/hwmon/aspeed-g6-pwm-tach.rst    |  26 +
+ Documentation/hwmon/index.rst                 |   1 +
+ drivers/hwmon/Kconfig                         |  11 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/aspeed-g6-pwm-tach.c            | 539 ++++++++++++++++++
+ 7 files changed, 725 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/hwmon/aspeed,g6-pwm-tach.yaml
+ create mode 100644 Documentation/devicetree/bindings/hwmon/fan-common.yaml
+ create mode 100644 Documentation/hwmon/aspeed-g6-pwm-tach.rst
+ create mode 100644 drivers/hwmon/aspeed-g6-pwm-tach.c
 
-diff --git a/Documentation/devicetree/bindings/hwmon/aspeed,g6-pwm-tach.yaml b/Documentation/devicetree/bindings/hwmon/aspeed,g6-pwm-tach.yaml
-new file mode 100644
-index 000000000000..5a679f4ad2fa
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/aspeed,g6-pwm-tach.yaml
-@@ -0,0 +1,69 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+# Copyright (C) 2023 Aspeed, Inc.
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwmon/aspeed,g6-pwm-tach.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: ASPEED G6 PWM and Fan Tach controller device driver
-+
-+maintainers:
-+  - Billy Tsai <billy_tsai@aspeedtech.com>
-+
-+description: |
-+  The ASPEED PWM controller can support up to 16 PWM outputs.
-+  The ASPEED Fan Tacho controller can support up to 16 fan tach input.
-+  They are independent hardware blocks, which are different from the
-+  previous version of the ASPEED chip.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - aspeed,ast2600-pwm-tach
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+  "#pwm-cells":
-+    const: 3
-+
-+patternProperties:
-+  "^fan-[0-9a-f]+$":
-+    $ref: fan-common.yaml#
-+    unevaluatedProperties: false
-+    required:
-+      - tach-ch
-+
-+required:
-+  - reg
-+  - clocks
-+  - resets
-+  - "#pwm-cells"
-+  - compatible
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/aspeed-clock.h>
-+    pwm_tach: pwm-tach-controller@1e610000 {
-+      compatible = "aspeed,ast2600-pwm-tach";
-+      reg = <0x1e610000 0x100>;
-+      clocks = <&syscon ASPEED_CLK_AHB>;
-+      resets = <&syscon ASPEED_RESET_PWM>;
-+      #pwm-cells = <3>;
-+
-+      fan-0 {
-+        tach-ch = /bits/ 8 <0x0>;
-+      };
-+
-+      fan-1 {
-+        tach-ch = /bits/ 8 <0x1 0x2>;
-+      };
-+    };
 -- 
 2.25.1
 
