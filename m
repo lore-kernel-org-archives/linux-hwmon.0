@@ -2,68 +2,71 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7910BCD3437
-	for <linux-hwmon@archiver.kernel.org>; Tue, 19 Sep 2023 05:08:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1568ACD343C
+	for <linux-hwmon@archiver.kernel.org>; Tue, 19 Sep 2023 05:23:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230473AbjISFIF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 19 Sep 2023 01:08:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43364 "EHLO
+        id S230430AbjISFXG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 19 Sep 2023 01:23:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbjISFIF (ORCPT
+        with ESMTP id S231178AbjISFXF (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 19 Sep 2023 01:08:05 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD20212F
-        for <linux-hwmon@vger.kernel.org>; Mon, 18 Sep 2023 22:07:57 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-d81841ef79bso5903170276.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 18 Sep 2023 22:07:57 -0700 (PDT)
+        Tue, 19 Sep 2023 01:23:05 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 212D3FF
+        for <linux-hwmon@vger.kernel.org>; Mon, 18 Sep 2023 22:22:58 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-594e1154756so64411807b3.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 18 Sep 2023 22:22:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695100076; x=1695704876; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1695100977; x=1695705777; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=4oTsRSgwJtZLa+M83Y1yWR55/2t80oAcXHVnltbxXw8=;
-        b=MdkDS/DpRm2IX1lscdC+KprOcZen/xiKsCehm0ncKUGp2zzoQMvA4q+YGARRBNTvdr
-         TrQho4gVurgwzPK0e7vaK38IY5awbtrVMLcDXS+FsjLSXlI/KuAAdgJvIaryltijc3Ze
-         nkf84sjlEaoVgE7R8KVn4u5dGy2sVhoiUWSxqG+er6BWyKJEq7bInHdINHDAfrH31Xpf
-         sAYVEgiXID1ioBv5ZkqBoXURko7fzlfC9U36l8A5ij/Fe2Ipchvq0y2cmWlO3il8khf6
-         oOHl8mc7TTT6NBfSYNbrRl+W+eAagXA15r+Ea3+ECzit0NWo0U0JilSuO/Y6QIIV3gen
-         1sZQ==
+        bh=oNNrBnYfOYV0KaxSsoYAY7HFcM1nxRdVcxEdAxuQSek=;
+        b=X+qwkmjrE/m6Y3db1xSgyl7S3kPbEGcalxftA7fkNKww/+j3oG2nC+qCVDMT6/mseQ
+         Wi6AhHSmeLIMc7GR9I4i2vlQAXVIksyrOvifL5k+byDfZcshn2JyFVtBTXdRy48tEyJm
+         HpS/om+iLyrB18/P3Gwhpj3FZhNipILnVPUu/mkVvP5hOxdMuZJIRlYt7uC45Pf9AKtN
+         zXHd64CMMOlzHC9kUzeupQCAeZDi2Cqqa5uN0Uy5ZH50Jgu8LNlXXcFVSAuHqgJOiNRe
+         ZuD0NXROCCVTiXMWmaZ5+tbUuJJxrdtnfzWX7FGV7pSMM+PWpQgzaN3Ea2rgi026lxA1
+         930w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695100076; x=1695704876;
+        d=1e100.net; s=20230601; t=1695100977; x=1695705777;
         h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=4oTsRSgwJtZLa+M83Y1yWR55/2t80oAcXHVnltbxXw8=;
-        b=RbieD6GyZbYjUOFV1XAyun3ffrpmtCLWA4dMHrTRRrVGZa23jZz2Gr2yZ+8upS0WIM
-         Ix8P1A7iKuySBW6d31cLYq5OZjeKvAH0TLf1IqBPIecrXmtmPJWISpEtlMjuygp1pjV8
-         eD4QaEkp/gw6eOARuNGnCSolMdqhEpZF9Q0xGGODQHsXqcfBljQzjnbVEPE7JfmfnSOV
-         BBeXhqypSin8a31foa8ag0TF67QRzlAR6lkMGgdKtfnn0JmAZ9K3CNLx3Rwtn2oxIkGT
-         ZouYfaYgrGrAw7tedggBrpBi4c6lvjpkigeGKy5Hvc6EnCouFm+xuPpyADAO50bSNxwM
-         gzlQ==
-X-Gm-Message-State: AOJu0YzMdOLqSGN1GmIJZQfS4BYsCZdYaUKMDV6BUICn5Gn/fDMTFq6d
-        BeaxGZn/3JIqjqLgbKsVQ29cqjuEvI8N8Rm7xw==
-X-Google-Smtp-Source: AGHT+IHgpdy40SXoJZs8x8Y4QEC2s+vjPTRr0VVLfIHsdj+ODF/YWJhdnuTQigcgAmLTqleeB0ARpcklz9o8GiGVgQ==
+        bh=oNNrBnYfOYV0KaxSsoYAY7HFcM1nxRdVcxEdAxuQSek=;
+        b=Z/grGqbpoGCC9cdADBVWlmfxJBlNdgdkrJ1pxY3zlIaO9YGhnMmTCAe6xY9aDxv3G7
+         VgCG2kgKRusfp1ojVdUfmXXEWmqDDiazayjQDJDr0WpAQvW/yvHq4hq6GMdhXOeUdvvT
+         OTazjr0WMg2RvcH8AkGEeHN/1ZqNw8oAmW7HNZdEisbueBTX5bpM5miNjXQOe2URZEQp
+         P4xZDbBZIvGdkOC8DDw1paWSH2c87/Sf6IVXqHWbaBxbDGP4xqDMIha1RYsgQXvN6yp+
+         UcmbrcEA5ApMQi/Yj1nebet5wfkERTY+ArxK+ZOrQYWck6/nlUScSfK4Fnoi0X7Mclu4
+         mZLw==
+X-Gm-Message-State: AOJu0Yx8xB1kr7KvQBIZLuLFjGgefIorgLodsc8VHjpkESwFai1fNtG5
+        hj8SF+2IIRj91LvXgLPV9bhRbK2xz4bIFE+xAg==
+X-Google-Smtp-Source: AGHT+IG9VOZ8zzSUvNNcCsXcq/7ZmSP6vcfwDpombAcNa9QU+2UY0m040xo/bdOp7q8pB9p79XxGurEYq/YEnQlOsw==
 X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
- (user=justinstitt job=sendgmr) by 2002:a25:254:0:b0:d63:8364:328 with SMTP id
- 81-20020a250254000000b00d6383640328mr221186ybc.5.1695100076655; Mon, 18 Sep
- 2023 22:07:56 -0700 (PDT)
-Date:   Tue, 19 Sep 2023 05:07:55 +0000
+ (user=justinstitt job=sendgmr) by 2002:a25:cbc3:0:b0:d07:7001:495b with SMTP
+ id b186-20020a25cbc3000000b00d077001495bmr246617ybg.11.1695100977385; Mon, 18
+ Sep 2023 22:22:57 -0700 (PDT)
+Date:   Tue, 19 Sep 2023 05:22:51 +0000
 Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAKosCWUC/53NQQ6DIBCF4as0rDsNoEbpqvdojLE4KEkFMhisM
- d691CN0+b/F+3YWkSxGdr/sjDDZaL3LIa8XpqfejQh2yM0klwVXooS4kNNhg4FsQoowrbN30Ot
- gu+BXpG7GBQk0aGXk0PCqeKFh+S4QGvs5qWebe7Jx8bSdchK/9Q8kCRCgeCVVXdbKYPMYvR/fe NN+Zu1xHF9hZvJM4QAAAA==
+X-B4-Tracking: v=1; b=H4sIACowCWUC/5WNQQ6DIBAAv2I4dxtAY7Un/9F4QFx1kwpmMVhj/
+ HupP+hx5jBziIBMGMQzOwRjpEDeJdC3TNjJuBGB+sRCS53LWhUQVnZ22aFnisgBpm32DqibF78
+ huwgWKmlkPqiyr3MjUmhhHOhzTV5t4onC6nm/nlH97F/5qEBBZ8ruMRTa1pVtRu/HN96tn0V7n ucXgTQnLdUAAAA=
 X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1695100075; l=1462;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1695100976; l=1508;
  i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
- bh=D6HTLPFYfWZS31qXNBGXxqODI77MOGRmlaVNX/fxtHc=; b=D6DC0vgDrZzaJzQDLWiKywgRxB5iAFc/QksLGR+tSu6mt9uzXKVKMNW2nu+M6UmN7tlvBElSF
- oJhKhaQS5nlD0HudNvcFHlGqsrWQGMvC0+d6jLD36ypMnbyggbbga8S
+ bh=OAz/JRiRID2OTRUyttHDX/ZpXIkZrNearv6uLWj/7bU=; b=x26VBNt6hCJK6tE9iCypOq5ZUv1fkpkRwGDtfS8IE17RETDDR0O83LqmzEj+caTfyJBrLb4x5
+ WBI5kzz6P7aCpbLgI0Es1r5kYhqhQdKrtYkMYnrEgathKQdL8i+TK6m
 X-Mailer: b4 0.12.3
-Message-ID: <20230919-strncpy-drivers-hwmon-acpi_power_meter-c-v2-1-8348432d6442@google.com>
-Subject: [PATCH v2] hwmon: refactor deprecated strncpy
+Message-ID: <20230919-strncpy-drivers-hwmon-ibmpowernv-c-v2-1-37d3e64172bc@google.com>
+Subject: [PATCH v2] hwmon: (ibmpowernv) refactor deprecated strncpy
 From:   Justin Stitt <justinstitt@google.com>
 To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     linux-hwmon@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
         Justin Stitt <justinstitt@google.com>
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
@@ -72,39 +75,41 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 `strncpy` is deprecated for use on NUL-terminated destination strings [1].
 
-A trailing zero is already handled by the kcalloc
-|	*str = kcalloc(element->string.length + 1, sizeof(u8), GFP_KERNEL);
-... which makes memcpy() a suitable replacement to strncpy.
+A suitable replacement is `memcpy` as we've already precisely calculated
+the number of bytes to copy while `buf` has been explicitly
+zero-initialized:
+| 	char buf[8] = { 0 };
 
 Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
+Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html [2]
 Link: https://github.com/KSPP/linux/issues/90
 Cc: linux-hardening@vger.kernel.org
 Signed-off-by: Justin Stitt <justinstitt@google.com>
 ---
 Changes in v2:
-- use memcpy over strscpy (thanks Kees)
-- Link to v1: https://lore.kernel.org/r/20230914-strncpy-drivers-hwmon-acpi_power_meter-c-v1-1-905297479fe8@google.com
+- prefer memcpy to strscpy (thanks Kees)
+- Link to v1: https://lore.kernel.org/r/20230914-strncpy-drivers-hwmon-ibmpowernv-c-v1-1-ba6b7f42c98c@google.com
 ---
- drivers/hwmon/acpi_power_meter.c | 2 +-
+ drivers/hwmon/ibmpowernv.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
-index fa28d447f0df..82e99aec4a33 100644
---- a/drivers/hwmon/acpi_power_meter.c
-+++ b/drivers/hwmon/acpi_power_meter.c
-@@ -803,7 +803,7 @@ static int read_capabilities(struct acpi_power_meter_resource *resource)
- 			goto error;
- 		}
+diff --git a/drivers/hwmon/ibmpowernv.c b/drivers/hwmon/ibmpowernv.c
+index 594254d6a72d..70ca833259ab 100644
+--- a/drivers/hwmon/ibmpowernv.c
++++ b/drivers/hwmon/ibmpowernv.c
+@@ -234,7 +234,7 @@ static int get_sensor_index_attr(const char *name, u32 *index, char *attr)
+ 	if (copy_len >= sizeof(buf))
+ 		return -EINVAL;
  
--		strncpy(*str, element->string.pointer, element->string.length);
-+		memcpy(*str, element->string.pointer, element->string.length);
- 		str++;
- 	}
+-	strncpy(buf, hash_pos + 1, copy_len);
++	memcpy(buf, hash_pos + 1, copy_len);
  
+ 	err = kstrtou32(buf, 10, index);
+ 	if (err)
 
 ---
 base-commit: 3669558bdf354cd352be955ef2764cde6a9bf5ec
-change-id: 20230914-strncpy-drivers-hwmon-acpi_power_meter-c-c9f2d8053bef
+change-id: 20230914-strncpy-drivers-hwmon-ibmpowernv-c-80a03f16d93a
 
 Best regards,
 --
