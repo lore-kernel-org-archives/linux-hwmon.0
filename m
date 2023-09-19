@@ -2,223 +2,290 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2213CD548C
-	for <linux-hwmon@archiver.kernel.org>; Tue, 19 Sep 2023 07:42:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9317CD54AC
+	for <linux-hwmon@archiver.kernel.org>; Tue, 19 Sep 2023 09:35:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231808AbjISHmj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 19 Sep 2023 03:42:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45654 "EHLO
+        id S231178AbjISJfz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 19 Sep 2023 05:35:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231827AbjISHmh (ORCPT
+        with ESMTP id S230209AbjISJfy (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 19 Sep 2023 03:42:37 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C9F119
-        for <linux-hwmon@vger.kernel.org>; Tue, 19 Sep 2023 00:42:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695109352; x=1726645352;
-  h=date:from:to:cc:subject:message-id;
-  bh=k5RxGsG7tvf5T94IZtDfzPSJXveMumAUrE9yYxrkC6Q=;
-  b=hbNbZ20MFe16S4AP+EBSZkcOWjkBZfM87Ko4nW6eWPO6n/QU6JkUMliJ
-   DC/kdqzUuUBqiLEWYjkVUtpqbE7V8eQFbwXe7lcfloaa4SkDFQNhs7L7I
-   j6Q3sH0sWKDEO+51fAvL3a2Qn939yq+p4CABuIqkcktvIJb0uaa6yy3+F
-   QV5GpoMLjVejYPei32h2O1ezYjPIreK1JnUF8hV/Zp1fDNXWfIFPFnoti
-   kay+XldkLZ2TGLb3g9uQVzFbL4H9D2loPDYT/27dwJ4/8D6mHzGYDtqV4
-   dwsJyYSaAuqI/yrzEE4Efhr6MsO7JZ618Pu/UpfpPGhS5U8+piKGVQcjp
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10837"; a="466206109"
-X-IronPort-AV: E=Sophos;i="6.02,158,1688454000"; 
-   d="scan'208";a="466206109"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2023 00:42:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10837"; a="816348393"
-X-IronPort-AV: E=Sophos;i="6.02,158,1688454000"; 
-   d="scan'208";a="816348393"
-Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 19 Sep 2023 00:42:29 -0700
-Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qiVNL-00073t-1l;
-        Tue, 19 Sep 2023 07:42:27 +0000
-Date:   Tue, 19 Sep 2023 15:40:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD REGRESSION
- e5dffc20d3637b3e65d55be597f973523d563673
-Message-ID: <202309191515.kw7zZItU-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+        Tue, 19 Sep 2023 05:35:54 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76DEBE4;
+        Tue, 19 Sep 2023 02:35:48 -0700 (PDT)
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 38J9Wwxo008779;
+        Tue, 19 Sep 2023 05:35:20 -0400
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3t5s7kn4hq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 19 Sep 2023 05:35:20 -0400 (EDT)
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 38J9ZJoW054837
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 19 Sep 2023 05:35:19 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Tue, 19 Sep
+ 2023 05:35:18 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Tue, 19 Sep 2023 05:35:18 -0400
+Received: from daniel-Precision-5530.ad.analog.com ([10.48.65.230])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 38J9Z1d6030605;
+        Tue, 19 Sep 2023 05:35:04 -0400
+From:   Daniel Matyas <daniel.matyas@analog.com>
+CC:     Daniel Matyas <daniel.matyas@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>
+Subject: [PATCH v4 1/7] hwmon: max31827: Make code cleaner
+Date:   Tue, 19 Sep 2023 12:34:49 +0300
+Message-ID: <20230919093456.10592-1-daniel.matyas@analog.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: lWtAzz9lqoLdxFBHdQp3FxJ70A47brQS
+X-Proofpoint-ORIG-GUID: lWtAzz9lqoLdxFBHdQp3FxJ70A47brQS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-19_04,2023-09-18_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
+ mlxscore=0 clxscore=1015 bulkscore=0 priorityscore=1501 impostorscore=0
+ mlxlogscore=999 spamscore=0 lowpriorityscore=0 adultscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2308100000
+ definitions=main-2309190080
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: e5dffc20d3637b3e65d55be597f973523d563673  hwmon: (adt7475) Add support for Imon readout on ADT7490
+Used enums and while loops to replace switch for selecting and getting
+update interval from conversion rate bits.
 
-Unverified Error/Warning (likely false positive, please contact us if interested):
+Divided the write_alarm_val function into 2 functions. The new function
+is more generic: it can be used not only for alarm writes, but for any
+kind of writes which require the device to be in shutdown mode.
 
-sh4-linux-gcc: internal compiler error: Segmentation fault signal terminated program cc1
-{standard input}: Warning: end of file not at end of a line; newline inserted
-{standard input}:1095: Error: pcrel too far
-{standard input}:611: Warning: end of file not at end of a line; newline inserted
+Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
+---
 
-Error/Warning ids grouped by kconfigs:
+v3 -> v4: Put the wait time modification in another patch.
 
-gcc_recent_errors
-|-- sh-allmodconfig
-|   |-- sh4-linux-gcc:internal-compiler-error:Segmentation-fault-signal-terminated-program-cc1
-|   |-- standard-input:Error:pcrel-too-far
-|   `-- standard-input:Warning:end-of-file-not-at-end-of-a-line-newline-inserted
-`-- sh-allyesconfig
-    |-- sh4-linux-gcc:internal-compiler-error:Segmentation-fault-signal-terminated-program-cc1
-    |-- standard-input:Error:pcrel-too-far
-    `-- standard-input:Warning:end-of-file-not-at-end-of-a-line-newline-inserted
+v2 -> v3: No change.
 
-elapsed time: 722m
+v2: Added patch.
 
-configs tested: 136
-configs skipped: 2
+ drivers/hwmon/max31827.c | 125 +++++++++++++++++----------------------
+ 1 file changed, 55 insertions(+), 70 deletions(-)
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20230919   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                   randconfig-001-20230919   gcc  
-arm64                            allmodconfig   gcc  
-arm64                             allnoconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20230919   gcc  
-i386         buildonly-randconfig-002-20230919   gcc  
-i386         buildonly-randconfig-003-20230919   gcc  
-i386         buildonly-randconfig-004-20230919   gcc  
-i386         buildonly-randconfig-005-20230919   gcc  
-i386         buildonly-randconfig-006-20230919   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                  randconfig-001-20230919   gcc  
-i386                  randconfig-002-20230919   gcc  
-i386                  randconfig-003-20230919   gcc  
-i386                  randconfig-004-20230919   gcc  
-i386                  randconfig-005-20230919   gcc  
-i386                  randconfig-006-20230919   gcc  
-i386                  randconfig-011-20230919   gcc  
-i386                  randconfig-012-20230919   gcc  
-i386                  randconfig-013-20230919   gcc  
-i386                  randconfig-014-20230919   gcc  
-i386                  randconfig-015-20230919   gcc  
-i386                  randconfig-016-20230919   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20230919   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                 randconfig-001-20230919   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20230919   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                 randconfig-001-20230919   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-001-20230919   gcc  
-x86_64       buildonly-randconfig-002-20230919   gcc  
-x86_64       buildonly-randconfig-003-20230919   gcc  
-x86_64       buildonly-randconfig-004-20230919   gcc  
-x86_64       buildonly-randconfig-005-20230919   gcc  
-x86_64       buildonly-randconfig-006-20230919   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20230919   gcc  
-x86_64                randconfig-002-20230919   gcc  
-x86_64                randconfig-003-20230919   gcc  
-x86_64                randconfig-004-20230919   gcc  
-x86_64                randconfig-005-20230919   gcc  
-x86_64                randconfig-006-20230919   gcc  
-x86_64                randconfig-011-20230919   gcc  
-x86_64                randconfig-012-20230919   gcc  
-x86_64                randconfig-013-20230919   gcc  
-x86_64                randconfig-014-20230919   gcc  
-x86_64                randconfig-015-20230919   gcc  
-x86_64                randconfig-016-20230919   gcc  
-x86_64                randconfig-071-20230919   gcc  
-x86_64                randconfig-072-20230919   gcc  
-x86_64                randconfig-073-20230919   gcc  
-x86_64                randconfig-074-20230919   gcc  
-x86_64                randconfig-075-20230919   gcc  
-x86_64                randconfig-076-20230919   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
-
+diff --git a/drivers/hwmon/max31827.c b/drivers/hwmon/max31827.c
+index 602f4e4f81ff..47124d665fa7 100644
+--- a/drivers/hwmon/max31827.c
++++ b/drivers/hwmon/max31827.c
+@@ -27,18 +27,30 @@
+ 
+ #define MAX31827_12_BIT_CNV_TIME	141
+ 
+-#define MAX31827_CNV_1_DIV_64_HZ	0x1
+-#define MAX31827_CNV_1_DIV_32_HZ	0x2
+-#define MAX31827_CNV_1_DIV_16_HZ	0x3
+-#define MAX31827_CNV_1_DIV_4_HZ		0x4
+-#define MAX31827_CNV_1_HZ		0x5
+-#define MAX31827_CNV_4_HZ		0x6
+-#define MAX31827_CNV_8_HZ		0x7
+-
+ #define MAX31827_16_BIT_TO_M_DGR(x)	(sign_extend32(x, 15) * 1000 / 16)
+ #define MAX31827_M_DGR_TO_16_BIT(x)	(((x) << 4) / 1000)
+ #define MAX31827_DEVICE_ENABLE(x)	((x) ? 0xA : 0x0)
+ 
++enum max31827_cnv {
++	MAX31827_CNV_1_DIV_64_HZ = 1,
++	MAX31827_CNV_1_DIV_32_HZ,
++	MAX31827_CNV_1_DIV_16_HZ,
++	MAX31827_CNV_1_DIV_4_HZ,
++	MAX31827_CNV_1_HZ,
++	MAX31827_CNV_4_HZ,
++	MAX31827_CNV_8_HZ,
++};
++
++static const u16 max31827_conversions[] = {
++	[MAX31827_CNV_1_DIV_64_HZ] = 64000,
++	[MAX31827_CNV_1_DIV_32_HZ] = 32000,
++	[MAX31827_CNV_1_DIV_16_HZ] = 16000,
++	[MAX31827_CNV_1_DIV_4_HZ] = 4000,
++	[MAX31827_CNV_1_HZ] = 1000,
++	[MAX31827_CNV_4_HZ] = 250,
++	[MAX31827_CNV_8_HZ] = 125,
++};
++
+ struct max31827_state {
+ 	/*
+ 	 * Prevent simultaneous access to the i2c client.
+@@ -54,15 +66,13 @@ static const struct regmap_config max31827_regmap = {
+ 	.max_register = 0xA,
+ };
+ 
+-static int write_alarm_val(struct max31827_state *st, unsigned int reg,
+-			   long val)
++static int shutdown_write(struct max31827_state *st, unsigned int reg,
++			  unsigned int val)
+ {
+ 	unsigned int cfg;
+-	unsigned int tmp;
++	unsigned int cnv_rate;
+ 	int ret;
+ 
+-	val = MAX31827_M_DGR_TO_16_BIT(val);
+-
+ 	/*
+ 	 * Before the Temperature Threshold Alarm and Alarm Hysteresis Threshold
+ 	 * register values are changed over I2C, the part must be in shutdown
+@@ -82,9 +92,10 @@ static int write_alarm_val(struct max31827_state *st, unsigned int reg,
+ 	if (ret)
+ 		goto unlock;
+ 
+-	tmp = cfg & ~(MAX31827_CONFIGURATION_1SHOT_MASK |
++	cnv_rate = MAX31827_CONFIGURATION_CNV_RATE_MASK & cfg;
++	cfg = cfg & ~(MAX31827_CONFIGURATION_1SHOT_MASK |
+ 		      MAX31827_CONFIGURATION_CNV_RATE_MASK);
+-	ret = regmap_write(st->regmap, MAX31827_CONFIGURATION_REG, tmp);
++	ret = regmap_write(st->regmap, MAX31827_CONFIGURATION_REG, cfg);
+ 	if (ret)
+ 		goto unlock;
+ 
+@@ -92,13 +103,23 @@ static int write_alarm_val(struct max31827_state *st, unsigned int reg,
+ 	if (ret)
+ 		goto unlock;
+ 
+-	ret = regmap_write(st->regmap, MAX31827_CONFIGURATION_REG, cfg);
++	ret = regmap_update_bits(st->regmap, MAX31827_CONFIGURATION_REG,
++				 MAX31827_CONFIGURATION_CNV_RATE_MASK,
++				 cnv_rate);
+ 
+ unlock:
+ 	mutex_unlock(&st->lock);
+ 	return ret;
+ }
+ 
++static int write_alarm_val(struct max31827_state *st, unsigned int reg,
++			   long val)
++{
++	val = MAX31827_M_DGR_TO_16_BIT(val);
++
++	return shutdown_write(st, reg, val);
++}
++
+ static umode_t max31827_is_visible(const void *state,
+ 				   enum hwmon_sensor_types type, u32 attr,
+ 				   int channel)
+@@ -243,32 +264,7 @@ static int max31827_read(struct device *dev, enum hwmon_sensor_types type,
+ 
+ 			uval = FIELD_GET(MAX31827_CONFIGURATION_CNV_RATE_MASK,
+ 					 uval);
+-			switch (uval) {
+-			case MAX31827_CNV_1_DIV_64_HZ:
+-				*val = 64000;
+-				break;
+-			case MAX31827_CNV_1_DIV_32_HZ:
+-				*val = 32000;
+-				break;
+-			case MAX31827_CNV_1_DIV_16_HZ:
+-				*val = 16000;
+-				break;
+-			case MAX31827_CNV_1_DIV_4_HZ:
+-				*val = 4000;
+-				break;
+-			case MAX31827_CNV_1_HZ:
+-				*val = 1000;
+-				break;
+-			case MAX31827_CNV_4_HZ:
+-				*val = 250;
+-				break;
+-			case MAX31827_CNV_8_HZ:
+-				*val = 125;
+-				break;
+-			default:
+-				*val = 0;
+-				break;
+-			}
++			*val = max31827_conversions[uval];
+ 		}
+ 		break;
+ 
+@@ -284,6 +280,7 @@ static int max31827_write(struct device *dev, enum hwmon_sensor_types type,
+ 			  u32 attr, int channel, long val)
+ {
+ 	struct max31827_state *st = dev_get_drvdata(dev);
++	int res = 1;
+ 	int ret;
+ 
+ 	switch (type) {
+@@ -333,39 +330,27 @@ static int max31827_write(struct device *dev, enum hwmon_sensor_types type,
+ 			if (!st->enable)
+ 				return -EINVAL;
+ 
+-			switch (val) {
+-			case 125:
+-				val = MAX31827_CNV_8_HZ;
+-				break;
+-			case 250:
+-				val = MAX31827_CNV_4_HZ;
+-				break;
+-			case 1000:
+-				val = MAX31827_CNV_1_HZ;
+-				break;
+-			case 4000:
+-				val = MAX31827_CNV_1_DIV_4_HZ;
+-				break;
+-			case 16000:
+-				val = MAX31827_CNV_1_DIV_16_HZ;
+-				break;
+-			case 32000:
+-				val = MAX31827_CNV_1_DIV_32_HZ;
+-				break;
+-			case 64000:
+-				val = MAX31827_CNV_1_DIV_64_HZ;
+-				break;
+-			default:
+-				return -EINVAL;
+-			}
++			/*
++			 * Convert the desired conversion rate into register
++			 * bits. res is already initialized with 1.
++			 *
++			 * This was inspired by lm73 driver.
++			 */
++			while (res < ARRAY_SIZE(max31827_conversions) &&
++			       val < max31827_conversions[res])
++				res++;
++
++			if (res == ARRAY_SIZE(max31827_conversions) ||
++			    val != max31827_conversions[res])
++				return -EOPNOTSUPP;
+ 
+-			val = FIELD_PREP(MAX31827_CONFIGURATION_CNV_RATE_MASK,
+-					 val);
++			res = FIELD_PREP(MAX31827_CONFIGURATION_CNV_RATE_MASK,
++					 res);
+ 
+ 			return regmap_update_bits(st->regmap,
+ 						  MAX31827_CONFIGURATION_REG,
+ 						  MAX31827_CONFIGURATION_CNV_RATE_MASK,
+-						  val);
++						  res);
+ 		}
+ 		break;
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
