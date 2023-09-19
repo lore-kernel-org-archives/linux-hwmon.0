@@ -2,84 +2,51 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11B3ECD3447
-	for <linux-hwmon@archiver.kernel.org>; Tue, 19 Sep 2023 07:03:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4902DCD5488
+	for <linux-hwmon@archiver.kernel.org>; Tue, 19 Sep 2023 07:38:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbjISHDJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 19 Sep 2023 03:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
+        id S231937AbjISHiN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 19 Sep 2023 03:38:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbjISHDJ (ORCPT
+        with ESMTP id S231906AbjISHh5 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 19 Sep 2023 03:03:09 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F1F100;
-        Tue, 19 Sep 2023 00:03:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1695106970; bh=UaVoSUP+GmU9uEDaDrAjnF2PtCRtnQJ7nj017va/XkU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kKwISfgwXmbn1gUQGj4NP6Zq45Iw/o0RMKYXWtvlYaQHmFyj9QaO+waiUEo3TFNR+
-         pjQnf+bgwsX985INWTlKmv8jDoIrm0+SCK0RQgZ0xml3AoVX6pXKb4mfuFZPaR994Y
-         RJHk+lD4koPprUjkygu8sNaUYYxSxXPOYBPz5O0A=
-Date:   Tue, 19 Sep 2023 09:02:49 +0200
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Justin Stitt <justinstitt@google.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: refactor deprecated strncpy
-Message-ID: <987d843b-d451-4f85-85b2-00ec18c75cca@t-8ch.de>
-References: <20230919-strncpy-drivers-hwmon-acpi_power_meter-c-v2-1-8348432d6442@google.com>
+        Tue, 19 Sep 2023 03:37:57 -0400
+X-Greylist: delayed 409 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 19 Sep 2023 00:37:50 PDT
+Received: from mail.leeswilly.pl (mail.leeswilly.pl [89.116.26.225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC575182
+        for <linux-hwmon@vger.kernel.org>; Tue, 19 Sep 2023 00:37:50 -0700 (PDT)
+Received: by mail.leeswilly.pl (Postfix, from userid 1001)
+        id 09888761334; Tue, 19 Sep 2023 09:30:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=leeswilly.pl; s=mail;
+        t=1695108660; bh=qCQG4c3C0tvkuSSy6okg6Td4OKi9mrw7rI9pE9SwJ9g=;
+        h=Date:From:To:Subject:From;
+        b=YLFETCzjKxtGCf4Lp8zEM4cAhDpfR88Y5fOhK1LfCWE5yQyykLwPYUad0yhH1Js3q
+         PIoigHl57ea+sSdyv6+88vUm/Vpk+syAt0owtuuaaclza/9FR0pJR4XtBgMAvZyaoP
+         LyGvSn7AbV6/L1LGsUKIKCasRflmF/ZKqHPCZfkHS8uLT1kRcJOXOscZdTHoTykCfS
+         cYLsOV9zyOmtRzODyw/VrwDqtWajnt7FczhtPDR4z5dhULHgCaqaHcD4moO/pSLhvq
+         O/r7IYmSEFnujXML+oMEjF0Pl04zSDQ8uFwO3D1G/BPYFyvCymogUeDbTilgBB+x5j
+         4UgbfUuh58TbQ==
+Received: by mail.leeswilly.pl for <linux-hwmon@vger.kernel.org>; Tue, 19 Sep 2023 07:30:18 GMT
+Message-ID: <20230919084500-0.1.3z.bc32.0.6kn8kbq724@leeswilly.pl>
+Date:   Tue, 19 Sep 2023 07:30:18 GMT
+From:   "Jakub Lemczak" <jakub.lemczak@leeswilly.pl>
+To:     <linux-hwmon@vger.kernel.org>
+Subject: =?UTF-8?Q?Pytanie_o_samoch=C3=B3d?=
+X-Mailer: mail.leeswilly.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230919-strncpy-drivers-hwmon-acpi_power_meter-c-v2-1-8348432d6442@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2023-09-19 05:07:55+0000, Justin Stitt wrote:
-> `strncpy` is deprecated for use on NUL-terminated destination strings [1].
-> 
-> A trailing zero is already handled by the kcalloc
-> |	*str = kcalloc(element->string.length + 1, sizeof(u8), GFP_KERNEL);
-> ... which makes memcpy() a suitable replacement to strncpy.
-> 
-> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
-> Link: https://github.com/KSPP/linux/issues/90
-> Cc: linux-hardening@vger.kernel.org
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
-> ---
-> Changes in v2:
-> - use memcpy over strscpy (thanks Kees)
-> - Link to v1: https://lore.kernel.org/r/20230914-strncpy-drivers-hwmon-acpi_power_meter-c-v1-1-905297479fe8@google.com
-> ---
->  drivers/hwmon/acpi_power_meter.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
-> index fa28d447f0df..82e99aec4a33 100644
-> --- a/drivers/hwmon/acpi_power_meter.c
-> +++ b/drivers/hwmon/acpi_power_meter.c
-> @@ -803,7 +803,7 @@ static int read_capabilities(struct acpi_power_meter_resource *resource)
->  			goto error;
->  		}
->  
-> -		strncpy(*str, element->string.pointer, element->string.length);
-> +		memcpy(*str, element->string.pointer, element->string.length);
+Dzie=C5=84 dobry,
 
-Isn't this now essentially the same as kmemdup_nul()?
+Czy interesuje Pa=C5=84stwa rozwi=C4=85zanie umo=C5=BCliwiaj=C4=85ce moni=
+torowanie samochod=C3=B3w firmowych oraz optymalizacj=C4=99 koszt=C3=B3w =
+ich utrzymania?=20
 
->  		str++;
->  	}
->  
-> 
-> ---
-> base-commit: 3669558bdf354cd352be955ef2764cde6a9bf5ec
-> change-id: 20230914-strncpy-drivers-hwmon-acpi_power_meter-c-c9f2d8053bef
-> 
-> Best regards,
-> --
-> Justin Stitt <justinstitt@google.com>
-> 
+
+Pozdrawiam
+Jakub Lemczak
