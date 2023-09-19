@@ -2,195 +2,102 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C88ECD54B3
-	for <linux-hwmon@archiver.kernel.org>; Tue, 19 Sep 2023 11:00:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E627CCE79A9
+	for <linux-hwmon@archiver.kernel.org>; Tue, 19 Sep 2023 17:15:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231898AbjISLAp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 19 Sep 2023 07:00:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34740 "EHLO
+        id S231226AbjISRPg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 19 Sep 2023 13:15:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231877AbjISLAm (ORCPT
+        with ESMTP id S231955AbjISRPf (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 19 Sep 2023 07:00:42 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457EB114;
-        Tue, 19 Sep 2023 04:00:36 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 917D4C433C8;
-        Tue, 19 Sep 2023 11:00:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695121235;
-        bh=ozaaNy4A2j0mALWUaebh6QEMAgfZg8sTwwxTOEiQSmg=;
+        Tue, 19 Sep 2023 13:15:35 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 616F0DC;
+        Tue, 19 Sep 2023 10:15:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1695143727;
+        bh=ZECM0iIszLRK6JxiliXqM6gNdR0WNCsq3C/p8MYEDtA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pgRh1Q2aQOq7MkEWZtc6silnhIXVu7ssk1lrCtjWGpOId4D15+051Hs3CCNp6B5dJ
-         6rULnREK+E9yR50coftq4rcIfbH+Z8G/yN094LrU6ZswWL5i50UJOdNZI8+g/fG8EA
-         F4tLJfJpr1wD9KVw9/gLot3EbTYRvFaGOm6B3I/GjOqYFYPqMyEP90DSrIMorYqoF0
-         ADJu1688mVobT6eH3ZbXIjj3u7XmTMj4DcfNNU+KHnn+odTMko6ZHsKsDB+6053q39
-         x7w7X+MZIB/XbNHODn7DuLQOaZmYlqjmBPGXuGfPlSXgD4HtqMowGWBs+Q+x/8cpdh
-         I7CnvXsPLBQEQ==
-Date:   Tue, 19 Sep 2023 12:00:30 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Daniel Matyas <daniel.matyas@analog.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v4 3/7] dt-bindings: hwmon: Add possible new properties
- to max31827 bindings
-Message-ID: <20230919-f2858c937249f5c6746d416b@fedora>
-References: <20230919093456.10592-1-daniel.matyas@analog.com>
- <20230919093456.10592-3-daniel.matyas@analog.com>
+        b=NA4gmUrCEKYQddDUZXd/IG9YM0AXgGNaSlKLK8/w1YkDZQXw7fwfCaizBBStqeue9
+         +pKLBUwYqivwKCj9Hya/nMDUr3pbnQHKyLF2jZN7aqP9DTEYIMUrOzllYY3ZF/IyBa
+         gSJ7L2VFysnmXQsdb9w1p+xHK69oaOsWhwFO+I+Q=
+Date:   Tue, 19 Sep 2023 19:15:25 +0200
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Douglas Gilbert <dgilbert@interlog.com>
+Subject: Re: [PATCH] hwmon: powerz: add support for ChargerLAB KM002C
+Message-ID: <5fb278c7-df91-4f02-ab5f-baa47d27507f@t-8ch.de>
+References: <20230911-powerz-km002c-v1-1-898bd79b9bae@weissschuh.net>
+ <6e5eff10-949c-4f17-a3f3-347b85b89e11@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+bnDgX8rN5Rak+ZZ"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230919093456.10592-3-daniel.matyas@analog.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6e5eff10-949c-4f17-a3f3-347b85b89e11@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-
---+bnDgX8rN5Rak+ZZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hey,
-
-On Tue, Sep 19, 2023 at 12:34:51PM +0300, Daniel Matyas wrote:
-> These modify the corresponding bits in the configuration register.
->=20
-> adi,comp-int is a hardware property, because it affects the behavior
-> of the interrupt signal and whatever it is connected to.
->=20
-> adi,timeout-enable is a hardware property, because it affects i2c
-> bus operation.
->=20
-> Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
-
-Thanks for the updates. This looks okay to me now.
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+On 2023-09-18 12:05:19-0700, Guenter Roeck wrote:
+> On Mon, Sep 11, 2023 at 07:44:42AM +0200, Thomas Weißschuh wrote:
+> > The KM002C is similar to the KM003C and seems to use the same
+> > protocol and firmware.
+> > 
+> > Reported-by: Douglas Gilbert <dgilbert@interlog.com>
+> > Closes: https://lore.kernel.org/lkml/290ebce4-54f0-8ac1-2a13-cbc806d80d64@interlog.com/
+> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> > ---
+> > 
+> > This patch is based on hwmon-next,
+> > commit 80369d9e1f2f ("hwmon: (sch5627) Document behaviour of limit registers").
+> > 
+> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> 
+> Applied, but please be more careful with your comments and Signed-off-by:
+> tags. There should only be one '---', and one signature. 
 
 Thanks,
-Conor.
 
-> ---
->=20
-> v3 -> v4: Changed property names (adi,flt-q =3D adi,fault-q; adi,alrm-pol
-> =3D adi,alarm-pol). Expressed default values in binding.
->=20
-> v2 -> v3: Changed commit subject and message
->=20
-> v1 -> v2: Added adi,timeout-enable property to binding. Fixed
-> dt_binding_check errors.
->=20
->  .../bindings/hwmon/adi,max31827.yaml          | 66 +++++++++++++++++++
->  1 file changed, 66 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml b/=
-Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
-> index 2dc8b07b4d3b..f60e06ab7d0a 100644
-> --- a/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
-> @@ -32,6 +32,68 @@ properties:
->        Must have values in the interval (1.6V; 3.6V) in order for the dev=
-ice to
->        function correctly.
-> =20
-> +  adi,comp-int:
-> +    description:
-> +      If present interrupt mode is used. If not present comparator mode =
-is used
-> +      (default).
-> +    type: boolean
-> +
-> +  adi,alarm-pol:
-> +    description:
-> +      Sets the alarms active state.
-> +            - 0 =3D active low
-> +            - 1 =3D active high
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [0, 1]
-> +
-> +  adi,fault-q:
-> +    description:
-> +      Select how many consecutive temperature faults must occur before
-> +      overtemperature or undertemperature faults are indicated in the
-> +      corresponding status bits.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [1, 2, 4, 8]
-> +
-> +  adi,timeout-enable:
-> +    description:
-> +      Enables timeout. Bus timeout resets the I2C-compatible interface w=
-hen SCL
-> +      is low for more than 30ms (nominal).
-> +    type: boolean
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: adi,max31829
-> +
-> +    then:
-> +      properties:
-> +        adi,alarm-pol:
-> +          default: 1
-> +
-> +    else:
-> +      properties:
-> +        adi,alarm-pol:
-> +          default: 0
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: adi,max31827
-> +
-> +    then:
-> +      properties:
-> +        adi,fault-q:
-> +          default: 1
-> +
-> +    else:
-> +      properties:
-> +        adi,fault-q:
-> +          default: 4
-> +
-> +
->  required:
->    - compatible
->    - reg
-> @@ -49,6 +111,10 @@ examples:
->              compatible =3D "adi,max31827";
->              reg =3D <0x42>;
->              vref-supply =3D <&reg_vdd>;
-> +            adi,comp-int;
-> +            adi,alarm-pol =3D <0>;
-> +            adi,fault-q =3D <1>;
-> +            adi,timeout-enable;
->          };
->      };
->  ...
-> --=20
-> 2.34.1
->=20
+the duplicate Signed-off-by is indeed an oversight which I'll
+try to avoid in the future.
 
---+bnDgX8rN5Rak+ZZ
-Content-Type: application/pgp-signature; name="signature.asc"
+As for the '---':
 
------BEGIN PGP SIGNATURE-----
+Two of them are generated by the 'b4' tool and I added one manually with
+the hwmon-next information.
+For other subsystems this wasn't an issue so far.
 
-iHUEARYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZQl/SwAKCRB4tDGHoIJi
-0lIhAQDC5V+WeEqVcdnL49Hgv0BWfJn95IGYtTsh6LaOMhVwqgEA/vjkH07s3R7P
-N+WNivHH24dE+u4jHH20ugjnxuDoegY=
-=JfNV
------END PGP SIGNATURE-----
+Are these duplicate sections a problem for your personal tooling or is
+it affecting something more widespread?
 
---+bnDgX8rN5Rak+ZZ--
+I can try to avoid these issues when sending patches to you specifically
+or maybe changes in b4 in general are the correct solution.
+
+Thomas
+
+> > ---
+> >  drivers/hwmon/powerz.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > 
+> > ---
+> > base-commit: 80369d9e1f2f16993ae6d148553c37bf65a209e4
+> > change-id: 20230911-powerz-km002c-94afb4d3d645
+> > 
+> > Best regards,
+> > 
+> > diff --git a/drivers/hwmon/powerz.c b/drivers/hwmon/powerz.c
+> > index 2b9693aee6f6..cfb635f94d66 100644
+> > --- a/drivers/hwmon/powerz.c
+> > +++ b/drivers/hwmon/powerz.c
+> > @@ -254,6 +254,7 @@ static void powerz_disconnect(struct usb_interface *intf)
+> >  }
+> >  
+> >  static const struct usb_device_id powerz_id_table[] = {
+> > +	{ USB_DEVICE_INTERFACE_NUMBER(0x5FC9, 0x0061, 0x00) },	/* ChargerLAB POWER-Z KM002C */
+> >  	{ USB_DEVICE_INTERFACE_NUMBER(0x5FC9, 0x0063, 0x00) },	/* ChargerLAB POWER-Z KM003C */
+> >  	{ }
+> >  };
