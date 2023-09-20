@@ -2,148 +2,110 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1175ECE79AC
-	for <linux-hwmon@archiver.kernel.org>; Wed, 20 Sep 2023 01:53:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EB60CE79AD
+	for <linux-hwmon@archiver.kernel.org>; Wed, 20 Sep 2023 05:47:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbjITBx6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 19 Sep 2023 21:53:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33166 "EHLO
+        id S232902AbjITFr6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 20 Sep 2023 01:47:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjITBx6 (ORCPT
+        with ESMTP id S230021AbjITFr5 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 19 Sep 2023 21:53:58 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EDF3B3;
-        Tue, 19 Sep 2023 18:53:51 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 9D6743200961;
-        Tue, 19 Sep 2023 21:53:49 -0400 (EDT)
-Received: from imap52 ([10.202.2.102])
-  by compute5.internal (MEProxy); Tue, 19 Sep 2023 21:53:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1695174829; x=1695261229; bh=pf
-        3dqBAG8Fi2hvI1Z04qSxkshW+L8GPDkCLrFzofr/4=; b=YuP/CXWXJx3KqVqZDU
-        z+D4dcpoF9UKySgMt6mvJCoCTKTMgIu5HL7eL/J76cWAjx6AK7ihSdcHQWjSS/MZ
-        9BztnAfDrCk0g1cURcwWWbBMnKyVp23ubbT14pcG2vsNrAef7/gRrCZ4XwWvgZKR
-        dHerZP2+J2klR93Hr90Uu32038Z3AAbG7IbZjTSVBrMJLJy8cVPWdCIklWJJDjdd
-        rRzCq4ZIHY2OhJjbTMpqjIbqu9w0rH9FxLziIYxWq6fdL3Cm8QrVSRG6IpQn6DG5
-        59TNKueTQkYHKnPi/7Q74eAYwN/O0SXSBpjWjLHyDk3aOQS8ZtF2GJ1SocH3OUWN
-        C6ag==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1695174829; x=1695261229; bh=pf3dqBAG8Fi2h
-        vI1Z04qSxkshW+L8GPDkCLrFzofr/4=; b=Ogc/eRYOXNM8cdNmidqZsCx9WI+Xy
-        4NviLeDXrKIu9Gm1VfDnce1U3FUCATBRl05iRo2khLsA8f290D9IG9aB36wl7h7y
-        Cp+5dno03ewWm0HXEFH4Lp7dgJZU/oo5ImuX0NDxD71YARU++3BJ6DcutyCMNu0g
-        PiFSX1p6l5esKop2Ngo6FAH3HRya0po+AEw+Nsnx648jLeoeFux9N/bgPUPGPxGv
-        hUl7/OHrK2VvbnhyEVxdvi9wOQzv/OvUe7/A9hpHJwo5y0Or4D10Qi8XeBgEdSpl
-        u3aoSFOJFicZAiE2O48wOXdgB38IiiRcky4Bw/QKXQzxNtr9sywMr0BAg==
-X-ME-Sender: <xms:rFAKZQNAzvPx62TD839x4YrK1j_SgHIMZ0Zt8UuQol9u6z6kC8PouQ>
-    <xme:rFAKZW8PDgHs87Y3u_bfSo7GshZz4KBlaAkecmpCXCeDGTTUiwnjb70puTA8JESay
-    s_4tg6Mt7UFP1PPbRw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudekvddghedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfofgr
-    rhhkucfrvggrrhhsohhnfdcuoehmphgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssg
-    drtggrqeenucggtffrrghtthgvrhhnpeeiueefjeeiveetuddvkeetfeeltdevffevudeh
-    ffefjedufedvieejgedugeekhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehmphgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssgdrtggr
-X-ME-Proxy: <xmx:rFAKZXSkjojpck9C8LthQfe7GJQ2i1rdbP02JSAdAtDPXD2C_nNwgQ>
-    <xmx:rFAKZYupT8Ry-NNtEHhclQyZhz27p-AOMtWOX0kHoH2a4vAxwrisgg>
-    <xmx:rFAKZYfWpTqmi4QdePw4PakJMUcsfAfDDbdOvx_jzErU9xRmR1yWew>
-    <xmx:rVAKZQSsp1CbE_hb-2YqnL33OUCTEWGgvtY67i1IWK2ZQeVerzuxxQ>
-Feedback-ID: ibe194615:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id A12F2C6008B; Tue, 19 Sep 2023 21:53:48 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-761-gece9e40c48-fm-20230913.001-gece9e40c
+        Wed, 20 Sep 2023 01:47:57 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2085.outbound.protection.outlook.com [40.107.117.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A9393;
+        Tue, 19 Sep 2023 22:47:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HA20jYAz8m2UvnSCAOhn4YQbOv4gLagMEfwrgVgtnZHeUql+OOxBACE4ocTXw0T2hxRFdXnGRil1O2quEfaRRJ+OVQgNgo3spxKCu1ZXtAJnXjOJYHvWFWtKExE7o1aCglkV74+fJERRPSae8OjwCIcClx4aAGiI5gAetNOH5i1StClIPXZjGDIUf2RzreVCnrpltWBgx1bVWpPCUGbNziEIYs5kJNTPZtnwBeNSQOGRBsubbrApLx2SbPqbMJsEiYem2r+NGF8U5Zj5JRegNj2qWzQr+ex/6YE9qmMXUPwvMM8+GuapQp6awx2qgNgLP0x7xfHE/ScWQZyhoa8drQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hgLkFCWT7nkGgUDGF/zHs3uKX3rb29raA1zYy7JdVhM=;
+ b=lMHAPHvkAxqckaEdYhcKsfMY1T0b1ydmCe6GgK8K9qp9A5vYEutpLCqktJE/igGz4tpRIDE21lYX6UTPhYH6LW6AdS6aCBwZxogFwv7/qCgGw+qKyMBITyUp4Z8h79CkMjehQRBXyKjEBW1/e10XgxEaLhWRDDqNcQEnRHOzkvAIGyJGR6ChuyFbXW2+/awuMStK+OSzf2oW7dMrrxrB1GwKJuxEhMJisn8IRMuCUfagkvyk0Nf5X2kx5cwCrxdQ+3lNccSFVBFA66XuZOK2PPP8gWWEUz1FQnIwejm/ycK5m8x0dF57Alf0s7W1pH9lIJFb7kjdEvK3agUVRlacsQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 211.20.1.79) smtp.rcpttodomain=stwcx.xyz smtp.mailfrom=wiwynn.com; dmarc=fail
+ (p=quarantine sp=quarantine pct=100) action=quarantine
+ header.from=wiwynn.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hgLkFCWT7nkGgUDGF/zHs3uKX3rb29raA1zYy7JdVhM=;
+ b=wxTpkM3XfueqeaiwQUBiNvG2869mvjXl8s2yJ4e/jjwB0zB09pS7bvqcq8+XfNrCMgM1QcbYdvoq8jfUGfqOkSxrDTRaVyDfBAnV70KSanabNHrNr97i+BsR3wJYIrEopFKsFHSADVxQK593l6j6dxBnj+xr4bOxpJQSf0ZXt0mEtRf/emhHWGMue5Ak/jja/TvC1xEFpgKjDIHjgbFkHfqg2vAuj1JEGzy2QbfRfnBywEx8fy4seQFVmNhZqp1g59wEvPWxQQvfexf/ctZuuTmMQsoMG3otGKf6UbELjwkiwT57OO5Z2MvfI8SImnQPmHH4zwoyukZOoOanLw1iKQ==
+Received: from SG2PR04CA0173.apcprd04.prod.outlook.com (2603:1096:4::35) by
+ SEYPR04MB7361.apcprd04.prod.outlook.com (2603:1096:101:1ad::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.27; Wed, 20 Sep 2023 05:47:42 +0000
+Received: from SG2PEPF000B66D0.apcprd03.prod.outlook.com
+ (2603:1096:4:0:cafe::6f) by SG2PR04CA0173.outlook.office365.com
+ (2603:1096:4::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.29 via Frontend
+ Transport; Wed, 20 Sep 2023 05:47:42 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 211.20.1.79)
+ smtp.mailfrom=wiwynn.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=quarantine header.from=wiwynn.com;
+Received-SPF: Fail (protection.outlook.com: domain of wiwynn.com does not
+ designate 211.20.1.79 as permitted sender) receiver=protection.outlook.com;
+ client-ip=211.20.1.79; helo=localhost.localdomain;
+Received: from localhost.localdomain (211.20.1.79) by
+ SG2PEPF000B66D0.mail.protection.outlook.com (10.167.240.26) with Microsoft
+ SMTP Server id 15.20.6792.20 via Frontend Transport; Wed, 20 Sep 2023
+ 05:47:41 +0000
+From:   Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+To:     patrick@stwcx.xyz
+Cc:     Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/2] hwmon: ina233: add ina233 support
+Date:   Wed, 20 Sep 2023 13:47:35 +0800
+Message-Id: <20230920054739.1561080-1-Delphine_CC_Chiu@wiwynn.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Message-Id: <b4ba5401-6604-4790-85cf-f8ae22f73543@app.fastmail.com>
-In-Reply-To: <68c6df3f-f83b-48da-9ee2-351995479915@roeck-us.net>
-References: <20230915150340.301067-1-dober6023@gmail.com>
- <8a566102-5ea6-4449-9083-8feebe711065@roeck-us.net>
- <TYZPR03MB59949F797738F5B1B8638278BDF6A@TYZPR03MB5994.apcprd03.prod.outlook.com>
- <55f22980-b47a-4a22-8f19-2b0a5b4e6a1a@app.fastmail.com>
- <68c6df3f-f83b-48da-9ee2-351995479915@roeck-us.net>
-Date:   Tue, 19 Sep 2023 21:53:23 -0400
-From:   "Mark Pearson" <mpearson-lenovo@squebb.ca>
-To:     "Guenter Roeck" <linux@roeck-us.net>
-Cc:     "Guenter Roeck" <groeck7@gmail.com>,
-        "David Ober" <dober6023@gmail.com>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jdelvare@suse.com, corbet@lwn.net, "David Ober" <dober@lenovo.com>
-Subject: Re: [PATCH] hwmon:Add MEC172x Micro Chip driver for Lenovo motherboards
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SG2PEPF000B66D0:EE_|SEYPR04MB7361:EE_
 Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: c61c4956-bfca-4a32-314b-08dbb99d1b23
+X-MS-Exchange-AtpMessageProperties: SA
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xB9/b8zshmP4Jvjq+BQJS2z3rDGYvMGlr/HZNKhqMXtTXceC43SQ/Heoa0dNztuQ//ZJEoau3MkJ56l0boX7Bjwnc7HBSFLvU4K6SOE0knz9na4p5sR3zsWH+f4bzseMk53Y+AKuUkAVxIeaTcDsvOuoZWACUBK/vNS8KD0F4JSfgRTieCfSyrDn1HP4D3yMyAic5w9/BBxHpxzQw9mOsUo42lzItmIfjZh3ranTg85uK8FHRnyxiCxudZ3TEioY0eJb02y0FiAVQHQF9RcP5Kddt43mMnU0LQW1zZ2xYMRO3P9ES+a9yQLuDxXiMZzJQjt2Mnv126H7aR1VoPTcitmovbiLEBRJgnwRT4KPuqeaIJ55PV1vE8b/7D3dPYNKGlSGXj2cWP+jdgUs5ul+g1wJAYnqY0qEgvu4OmYjd4iFxAatewEd7SD1NJVZ11mKwDgGIGsFbp/zZPS6MBnPX8zTCyJep5RaSwMno7bV9vhvBxxJqKQ7ANIKB48DUTDH6GpTNNTs/JIWdSI+Ngu/J6TYzavWBzchYpJnHTEoMywqJqIRkacNeuIRiIi3+cbLX3tYOjDUvdzRet+Fvhss5Ia9tLykA6DFcdtw19WTzJeOKdtOMEA7IYxJPrFPl+ZGb4YNt6RJNnFWmj1ShqdPBOYRAeq+vtK1otKKFxptYYID4ldtdzbVMNUC0MZRk1a5h9DCgFg5+VPejhVUU/BH5+cYcseSAT95bSdTcva6P/ZU25mwSpBcd2zVpArdht0s
+X-Forefront-Antispam-Report: CIP:211.20.1.79;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:localhost.localdomain;PTR:211-20-1-79.hinet-ip.hinet.net;CAT:NONE;SFS:(13230031)(6069001)(4636009)(136003)(396003)(346002)(39860400002)(376002)(82310400011)(1800799009)(451199024)(186009)(46966006)(36840700001)(4744005)(2906002)(5660300002)(4326008)(26005)(1076003)(41300700001)(36736006)(8936002)(316002)(54906003)(6916009)(70586007)(8676002)(70206006)(6486002)(6666004)(6506007)(36756003)(956004)(2616005)(336012)(478600001)(6512007)(40480700001)(36860700001)(47076005)(356005)(82740400003)(81166007)(9316004)(86362001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: wiwynn.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2023 05:47:41.3258
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c61c4956-bfca-4a32-314b-08dbb99d1b23
+X-MS-Exchange-CrossTenant-Id: da6e0628-fc83-4caf-9dd2-73061cbab167
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=da6e0628-fc83-4caf-9dd2-73061cbab167;Ip=[211.20.1.79];Helo=[localhost.localdomain]
+X-MS-Exchange-CrossTenant-AuthSource: SG2PEPF000B66D0.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR04MB7361
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Guenter,
+Support ina233 driver with binding documents for Meta Yosemite V4 using
 
-On Fri, Sep 15, 2023, at 6:56 PM, Guenter Roeck wrote:
-> On Fri, Sep 15, 2023 at 06:43:02PM -0400, Mark Pearson wrote:
->> Hi Guenter,
->> 
->> > From: Guenter Roeck <groeck7@gmail.com> on behalf of Guenter Roeck 
->> > On Fri, Sep 15, 2023 at 11:03:40AM -0400, David Ober wrote:
->> >> This addition adds in the ability for the system to scan the
->> >> MEC172x EC chip in Lenovo ThinkStation systems to get the
->> >> current fan RPM speeds and the Maximum speed value for each
->> >> fan also provides the current CPU and DIMM thermal status
->> >>
->> >> Signed-off-by: David Ober <dober6023@gmail.com>
->> >>
->> >> Written by David Ober from Lenovo using this gmail address since
->> >> my corporate email address does not comply with git email
->> >
->> > FWIW, this needs to be after '---'
->> >
->> > Anyway, thinking about this submission makes me even more concerned.
->> >
->> > This isn't really a driver for MEC172x; it is simply a driver
->> > accessing an EC on a set of PCs and/or laptops from Lenovo
->> > which uses a vertain API for communication between EC and main
->> > CPU.
->> >
->> > Such ECs are typically accessed through ACPI. Yet, in this driver
->> > there is no mention of ACPI, much less any protection against
->> > parallel use by ACPI code (that access lock in get_ec_reg() doesn't
->> > even protect against parallel access from userspace, much less
->> > against parallel access from other drivers or ACPI, for example
->> > by using request_region() to reserve the used memory ranges).
->> >
->> > There needs to be explanations and clarifications
->> > - Why this driver will only be used for communication with MEC172X
->> >   based chips, and why the exact EC chip is relevant in the first place
->> >   to be mentioned as much as it is.
->> > - How it is guaranteed that the EC is not and will never be accessed
->> >   through ACPI.
->> > - How it is guaranteed that there will never be any other kernel drivers
->> >   accessing the chip.
->> >
->> I assume for this we just need confirmation from the BIOS team that this is how it will be handled and it's intentional by design?
->> 
->> Agreed this is normally done by ACPI, but my understanding is that it's not the case on these particular workstation platforms. FWIW Windows is also doing access by a separate driver. 
->> I'm not sure why the design is done this way but will confirm to make sure.
->> 
->> With regards to guaranteeing that no other kernel drivers access the chip - I'm not sure how we can ensure that. Or do you mean if another vendor is using this chip but with different platform IDs and want to use a similar driver? 
->> For this case we can make the driver generic (rename it mec172x.c) so others could add their platform support in the future (the platform IDs will be unique). Either that or I can confirm with Microchip if this particular chip is Lenovo specific.
->
-> This has nothing to do with the microcontroller you use as EC,
-> and you can not tell anyone that they must not use the same
-> microcontroller in their system.
->
-> If the chip is not accessed from another driver, you can use
-> request_region() to reserve the memory space used by the chip.
->
-Thanks - sounds good and we'll do that.
+Delphine CC Chiu (2):
+  dt-bindings: hwmon: add INA233 binding documents
+  hwmon: Add support for ina233
 
-I confirmed with the FW team that there is no plan for the BIOS to access this chip. On Windows it is done from the OS too.
+ .../devicetree/bindings/hwmon/ina233.txt      | 27 ++++++
+ MAINTAINERS                                   |  6 ++
+ drivers/hwmon/pmbus/Kconfig                   |  9 ++
+ drivers/hwmon/pmbus/Makefile                  |  1 +
+ drivers/hwmon/pmbus/ina233.c                  | 89 +++++++++++++++++++
+ 5 files changed, 132 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/ina233.txt
+ create mode 100644 drivers/hwmon/pmbus/ina233.c
 
-Mark
+-- 
+2.25.1
+
