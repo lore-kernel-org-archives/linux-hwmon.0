@@ -2,86 +2,72 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D858CE79AB
-	for <linux-hwmon@archiver.kernel.org>; Wed, 20 Sep 2023 08:54:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9FD7CE79C2
+	for <linux-hwmon@archiver.kernel.org>; Wed, 20 Sep 2023 10:35:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231269AbjITIys (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 20 Sep 2023 04:54:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49108 "EHLO
+        id S233376AbjITKfy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 20 Sep 2023 06:35:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233885AbjITIyr (ORCPT
+        with ESMTP id S234384AbjITKfj (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 20 Sep 2023 04:54:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40787B4
-        for <linux-hwmon@vger.kernel.org>; Wed, 20 Sep 2023 01:54:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1695200039;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6Y+0MU2P/iTSNtK0DfnedPwW56D6Duxwj1jgDx5KGqk=;
-        b=Py/5wyeQTKpINCOU3cf3yDx69qMw9Ayv/gzhwYj9WfwIizmPYWxJCXLG7gmq2iIQjGiTbO
-        Uv9XSMf89j0T9ulsMFCEUpCN/b9wSGooOrfQ/fcK1Hd5vrkrL5a8YaTpbsalQJrhI3K1lZ
-        U2c2sLESKO3x4JFLmd284caONi63RUU=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-93-vhD_tCAdN3KsanyuHOkjPQ-1; Wed, 20 Sep 2023 04:53:57 -0400
-X-MC-Unique: vhD_tCAdN3KsanyuHOkjPQ-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-9ae2b98729dso131575666b.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 20 Sep 2023 01:53:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695200036; x=1695804836;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6Y+0MU2P/iTSNtK0DfnedPwW56D6Duxwj1jgDx5KGqk=;
-        b=Az2osfNwNAWdOmUHtB6eKSGGH7ve8U3iBJ4UPk7uJle85jE8oPLFhMYM20DQkcUIeL
-         9Hi968QYv6mjjfhXa0DuzIG+LjE49pH866gruF4mDKJoSrHrzZGxvTEHcNHpPr+v2hKF
-         y8B/dJQNKT+/oofeJ05Z8KG6zqwps1qGcC8zrrSyPnWD96Bm+Fj09OJzqfHtJOBLmWKI
-         ZXOH4Uk8/YfEAfZFtnkR4vP7HOaNk0F9VLj4yXIUnqyDvLbMoy4ZUUjhwx9wVKfvJHyP
-         dAVTpMPwpkFzrI4c3H5nFqkaAFhABjtCZ48isyUevuYuNiZ/laVMriIVQtpbRhAcODZ6
-         MbbA==
-X-Gm-Message-State: AOJu0YxSrvFM5uO3/gmSnTk6E8oLwsfBrIL9NKUeLUpHkEVz2hqG6Lgc
-        l0GfoQRdTu28Dufc7R6XiWzhIIiuGwgeRXHNy7T0kt4bGTzjjsGmjp7Un3tyNbzXHf+LjvhYozK
-        RY/6HruGyvKSZXQpA7ymPYMo=
-X-Received: by 2002:a17:907:762b:b0:9a2:2841:7908 with SMTP id jy11-20020a170907762b00b009a228417908mr1453932ejc.24.1695200036305;
-        Wed, 20 Sep 2023 01:53:56 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGOpBzJ4/TDifcrkvtzmkHUYRvovqMwQsVftNX8aYInrWpF3JEKyfDtn+5yDofD3c7581RcJA==
-X-Received: by 2002:a17:907:762b:b0:9a2:2841:7908 with SMTP id jy11-20020a170907762b00b009a228417908mr1453905ejc.24.1695200035695;
-        Wed, 20 Sep 2023 01:53:55 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id ox11-20020a170907100b00b00997c1d125fasm9130948ejb.170.2023.09.20.01.53.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Sep 2023 01:53:55 -0700 (PDT)
-Message-ID: <69a6279d-a191-e294-3db2-8041c4208783@redhat.com>
-Date:   Wed, 20 Sep 2023 10:53:54 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v7] platform/x86: Add Silicom Platform Driver
-Content-Language: en-US, nl
-To:     Henry Shi <henryshi2018@gmail.com>, hbshi69@hotmail.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        Wed, 20 Sep 2023 06:35:39 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65FA694;
+        Wed, 20 Sep 2023 03:35:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695206130; x=1726742130;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=5f4HCxvISHoyV+sJE0rk4befjacmuYLJiadaWMEz5m0=;
+  b=Hf9iZrPYAWTR0YnQxHL+N+azdHRKy+yxNEMf7xOPdmSMkO9qk+XNPwz+
+   MpAwotfYtar8Ia0PVtPL1zxksP6mSkBXO4Hjf1syo5OzRrTl5jd0430bA
+   2iLtCE3PEGQoAhulwpLVcafQ0RcgDtqSsAJ+kI3YbnNgXZabWAAMaI+J3
+   MeSyd+fmQA9apkKuVelUma+v90lz/kFtVHga9AaurCtGC5kNON9wqj7ft
+   u3I8h5s53cKVyxGZpif4MpldQX/WLl56+aZP8X++vw9oBImT66q/h6rr8
+   rj8NO1bP77ccXOY83IXG8sxV6XPUsrpwAcZIt8zG19O4cgt+DanVq+jM1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10838"; a="411130124"
+X-IronPort-AV: E=Sophos;i="6.02,161,1688454000"; 
+   d="scan'208";a="411130124"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2023 03:35:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10838"; a="723223149"
+X-IronPort-AV: E=Sophos;i="6.02,161,1688454000"; 
+   d="scan'208";a="723223149"
+Received: from swegrzyn-mobl.ger.corp.intel.com ([10.252.52.91])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2023 03:35:24 -0700
+Date:   Wed, 20 Sep 2023 13:35:18 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Henry Shi <henryshi2018@gmail.com>
+cc:     hbshi69@hotmail.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, Hans de Goede <hdegoede@redhat.com>,
         markgross@kernel.org, jdelvare@suse.com, linux@roeck-us.net,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Cc:     hb_shi2003@yahoo.com, henrys@silicom-usa.com, wenw@silicom-usa.com
-References: <20230919211650.25325-1-henryshi2018@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
+        LKML <linux-kernel@vger.kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        hb_shi2003@yahoo.com, henrys@silicom-usa.com, wenw@silicom-usa.com
+Subject: Re: [PATCH v7] platform/x86: Add Silicom Platform Driver
 In-Reply-To: <20230919211650.25325-1-henryshi2018@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Message-ID: <81161eda-dc57-4732-9fa6-f9c82ce86335@linux.intel.com>
+References: <20230919211650.25325-1-henryshi2018@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="8323329-644801291-1695206128=:1961"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Henry,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-On 9/19/23 23:16, Henry Shi wrote:
+--8323329-644801291-1695206128=:1961
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+
+On Tue, 19 Sep 2023, Henry Shi wrote:
+
 > The Silicom platform (silicom-platform) Linux driver for Swisscom
 > Business Box (Swisscom BB) as well as Cordoba family products is a 
 > software solution designed to facilitate the efficient management
@@ -223,19 +209,6 @@ On 9/19/23 23:16, Henry Shi wrote:
 > changes suggested by Hans de Goede <hdegoede@redhat.com>:
 > .Usa a proper subsystem prefix for this patch subject:
 > Subject: platform/x86: Add Silicom Platform Driver.
-
-In my last reply I asked for a lot more changes then just adding
-the subsystem prefix to the Subject.
-
-Please fully read my last reply and address all the other remarks
-I made there in a new version.
-
-Regards,
-
-Hans
-
-
-
 > 
 > Signed-off-by: Henry Shi <henryshi2018@gmail.com>
 > ---
@@ -453,6 +426,16 @@ Hans
 > +
 > +	/* Get the current register */
 > +	reg = inb(MEC_DATA_OFFSET(FIELD_GET(GENMASK(31, 3), offset) & MEC_DATA_OFFSET_MASK));
+
+There are still way too many GENMASK() within to code itself. Usually 
+there shouldn't any in the functions part of the .c file. You should put 
+them as #defines before the functions (with name for each that describes 
+its purpose).
+
+-- 
+ i.
+
+
 > +	mutex_unlock(&mec_io_mutex);
 > +
 > +	return (reg >> (offset & MEC_PORT_CHANNEL_MASK)) & 0x01;
@@ -1351,4 +1334,5 @@ Hans
 > +MODULE_DESCRIPTION("Platform driver for Silicom network appliances");
 > +
 > +MODULE_DEVICE_TABLE(dmi, silicom_dmi_ids);
-
+> 
+--8323329-644801291-1695206128=:1961--
