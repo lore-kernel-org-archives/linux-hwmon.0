@@ -2,49 +2,49 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D34C4E7D0A4
-	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Sep 2023 19:05:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 643B8E7D0A7
+	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Sep 2023 19:27:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbjIUTFo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 21 Sep 2023 15:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40102 "EHLO
+        id S229903AbjIUT1z (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 21 Sep 2023 15:27:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231543AbjIUTFB (ORCPT
+        with ESMTP id S230129AbjIUT1b (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 21 Sep 2023 15:05:01 -0400
+        Thu, 21 Sep 2023 15:27:31 -0400
 Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3408C625;
-        Thu, 21 Sep 2023 10:54:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C313A1505;
+        Thu, 21 Sep 2023 10:57:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
         List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=GhMoIAPgQCKJ2wdzruWvhIESRnzObv34y1rzTZCaGfs=; b=jOwla4wSicj5QITXQqyN6Y6ZUK
-        YZrdeLZYjbeLa+ZxVE+nEO3Y7OCwneLpSMeZypAhOUmtkLxmURie3dLLZAvKxSeo0zZYcTXCdTCdu
-        QpuMqw0G9TRJM5IBXU35OqfEu8Gn+wgbo1WOiP1zXqLd9F1/NnlB0H7JqI/YGu7cRZR8ulw78J0pG
-        P978Iqr3K6p7CVySLjAeWDIh+tBN3C6OFk9UQ5KUWe4D9nBcsla66SnN7NlcASjtnVp55mXIJD6Fv
-        3QehZoFgLjZ3k1BTsWks4d4df5f5wsHnePBZ5Jgd4kuY9vRk3GGc12ITEebpkwYdPm5l49R5PF/Ak
-        UI8PTmiw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:51610)
+        bh=CC2gkTGhITx2Tkn4hzBnyxcQlVD3H0K9p7hCx7iKc0I=; b=RX/Dh/JlHN7+Dr2mKIx1OHw08j
+        abawgMlrvxjDlsbIPFGzplofhq7VcEHhhGFZr5v8TUs2rmkpzNCwTdiU/ex1Izqw2rmGLteOf6T3b
+        rafTyBkIl6Vl7p+9BVOfWbBV6ztXErezBRlJ0k1UNn9OTHkTcAr7tQi0CZZ2getl6yCEM4qAHxcUF
+        0KrBEHNL0Z7sRA9uEwAO55WvgagpdOLapZsmOUsOq3ojQ/D5eDQ9JBA++gwR1mHYPfVN/hpVeI3CF
+        AADotTfqbGiEqrhzLlKFo3aGvIzijqZ5x69wIwORuvfZRHh61rlcTaxBdznV8HpM6ZdVxWJ73Kr2f
+        hqa/s60A==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56250)
         by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.96)
         (envelope-from <linux@armlinux.org.uk>)
-        id 1qjL5N-0004wv-0s;
-        Thu, 21 Sep 2023 15:55:21 +0100
+        id 1qjJk4-0004de-0F;
+        Thu, 21 Sep 2023 14:29:16 +0100
 Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
         (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1qjL5J-0003dB-V1; Thu, 21 Sep 2023 15:55:17 +0100
-Date:   Thu, 21 Sep 2023 15:55:17 +0100
+        id 1qjJjc-0003ZN-MP; Thu, 21 Sep 2023 14:28:48 +0100
+Date:   Thu, 21 Sep 2023 14:28:48 +0100
 From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Choong Yong Liang <yong.liang.choong@linux.intel.com>,
-        Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+To:     Choong Yong Liang <yong.liang.choong@linux.intel.com>
+Cc:     Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
         David E Box <david.e.box@linux.intel.com>,
         Hans de Goede <hdegoede@redhat.com>,
         Mark Gross <markgross@kernel.org>,
         Jose Abreu <Jose.Abreu@synopsys.com>,
+        Andrew Lunn <andrew@lunn.ch>,
         Heiner Kallweit <hkallweit1@gmail.com>,
         "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
@@ -70,6 +70,10 @@ Cc:     Choong Yong Liang <yong.liang.choong@linux.intel.com>,
         Shenwei Wang <shenwei.wang@nxp.com>,
         Andrey Konovalov <andrey.konovalov@linaro.org>,
         Jochen Henneberg <jh@henneberg-systemdesign.com>,
+        David E Box <david.e.box@intel.com>,
+        Andrew Halaney <ahalaney@redhat.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org,
@@ -78,62 +82,45 @@ Cc:     Choong Yong Liang <yong.liang.choong@linux.intel.com>,
         Tan Tee Min <tee.min.tan@linux.intel.com>,
         Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
         Lai Peter Jun Ann <jun.ann.lai@intel.com>
-Subject: Re: [PATCH net-next v2 0/5] TSN auto negotiation between 1G and 2.5G
-Message-ID: <ZQxZVbmdcAN6UI2G@shell.armlinux.org.uk>
-References: <20230804084527.2082302-1-yong.liang.choong@linux.intel.com>
- <5bd05ba2-fd88-4e5c-baed-9971ff917484@lunn.ch>
- <f9b21a9d-4ae2-1f91-b621-2e27f746f661@linux.intel.com>
- <37fe9352-ec84-47b8-bb49-9441987ca1b9@lunn.ch>
- <ZQxPQ9t8/TKcjlo8@shell.armlinux.org.uk>
- <0098eaf3-717a-4b50-b2a0-4b28b75b0735@lunn.ch>
+Subject: Re: [PATCH net-next v3 4/5] net: stmmac: enable Intel mGbE 1G/2.5G
+ auto-negotiation support
+Message-ID: <ZQxFEChbKJtsGm2w@shell.armlinux.org.uk>
+References: <20230921121946.3025771-1-yong.liang.choong@linux.intel.com>
+ <20230921121946.3025771-5-yong.liang.choong@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0098eaf3-717a-4b50-b2a0-4b28b75b0735@lunn.ch>
+In-Reply-To: <20230921121946.3025771-5-yong.liang.choong@linux.intel.com>
 Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Sep 21, 2023 at 04:41:20PM +0200, Andrew Lunn wrote:
-> On Thu, Sep 21, 2023 at 03:12:19PM +0100, Russell King (Oracle) wrote:
-> > On Thu, Sep 21, 2023 at 03:21:00PM +0200, Andrew Lunn wrote:
-> > > > Hi Andrew,
-> > > > 
-> > > > After conducting a comprehensive study, it seems that implementing
-> > > > out-of-band for all link modes might not be feasible. I may have missed some
-> > > > key aspects during my analysis.
-> > > > 
-> > > > Would you be open to sharing a high-level idea of how we could potentially
-> > > > make this feasible? Your insights would be greatly appreciated.
-> > > 
-> > > stmmac_mac_link_up() gets passed interface, speed and duplex. That
-> > > tells you what the PHY has negotiated. Is there anything else you need
-> > > to know?
-> > 
-> > The problem is... the stmmac driver is utter bollocks - that information
-> > is *not* passed to the BSP. Instead, stmmac parse and store information
-> > such as the PHY interface mode at initialisation time. BSPs also re-
-> > parse and store e.g. the PHY interface mode at initialisation time.
-> > The driver ignores what it gets from phylink.
-> > 
-> > The driver is basically utter crap. That's an area I _had_ patches to
-> > clean up. I no longer do. stmmac is crap crap crap and will stay crap
-> > until they become more receptive to patches to fix it, even if the
-> > patches are not 100% to their liking but are in fact correct. Maybe
-> > if I ever decide to touch that driver in the future. Which I doubt
-> > given my recent experience.
-> 
-> Hi Russell
-> 
-> You pointed out the current proposal will break stuff. Do you see a
-> way forward for this patchset which does not first involve actually
-> cleaning up of this driver?
+On Thu, Sep 21, 2023 at 08:19:45PM +0800, Choong Yong Liang wrote:
+> +#if IS_ENABLED(CONFIG_INTEL_PMC_IPC)
 
-As I said in one of my replies, it would really help if the author can
-provide a table showing what is attempting to be achieved here. With
-that, we should be able to work out exactly what is required, what
-needs to change in stmmac, etc.
+There shouldn't be any need to make this conditional.
+
+> +static int stmmac_mac_prepare(struct phylink_config *config, unsigned int mode,
+> +			      phy_interface_t interface)
+> +{
+> +	struct net_device *ndev = to_net_dev(config->dev);
+> +	struct stmmac_priv *priv = netdev_priv(ndev);
+> +	int ret = 0;
+> +
+> +	priv->plat->phy_interface = interface;
+> +
+> +	if (priv->plat->config_serdes)
+> +		ret = priv->plat->config_serdes(ndev, priv->plat->bsp_priv);
+
+Please call this "phylink_mac_prepare" and pass the parameters that
+phylink passes you to this function, so we don't end up at a later
+date with people needing to extend this function to do other stuff,
+thus repeating mistakes from earlier.
+
+This is what has led to some very yucky code in all those
+"fix_mac_speed" implementations, with duplicated data in the BSPs
+to get the PHY mode and store it separately, etc.
 
 -- 
 RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
