@@ -2,145 +2,277 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70787E7D0AD
-	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Sep 2023 21:36:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FBD9E7D0AB
+	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Sep 2023 22:15:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232653AbjIUVg1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 21 Sep 2023 17:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44986 "EHLO
+        id S232012AbjIUWPz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 21 Sep 2023 18:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231381AbjIUVgP (ORCPT
+        with ESMTP id S232297AbjIUWP3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 21 Sep 2023 17:36:15 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645601FFD;
-        Thu, 21 Sep 2023 14:11:36 -0700 (PDT)
+        Thu, 21 Sep 2023 18:15:29 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D41E851F7A;
+        Thu, 21 Sep 2023 10:17:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695330696; x=1726866696;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3+eI3UgLms590aA+oWQf7NdcqV5rfD94OQLXjXGtl2c=;
-  b=h9T4dD49rl0pcFqa3FiFUxodBFD679CGr3Kqn1JaamQzPBRRkLNOZvbx
-   tK248atdPqm8qyZqxILFA/HKIdgn+tthFb7xIN/eolpQYV/cMm9Djxr1X
-   us8WWNYrZqT13LtzIDKMMPkQOD8QelsU3YawgTq7y31g6K7iaXuUK73+c
-   120EJ2RlaUfgsUIn1NrIGTJYWCpz39UKN/xX/kIQcj5U9SXUQHXgUqMu9
-   R5yreM6dn6g8b+t0kmOsFc21UC0AORVA7NvudYZQp/+vIU8LeGrOYIu8K
-   t9zowhHgrBZh6BaLZSSdWr4+Wg3XUmUfAXtjO1s6eZ/FefdMGCDIBSDzh
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10840"; a="447144823"
-X-IronPort-AV: E=Sophos;i="6.03,166,1694761200"; 
-   d="scan'208";a="447144823"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 14:11:35 -0700
+  t=1695316628; x=1726852628;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=8OopbPLd2PLuBzWXbD5OoXxEWQBz7+T1Q1+Yh3tIdx8=;
+  b=V95QsCdPjyyhPyUIwK5cZ4f2HYUd5Felu0d6Dgxaw2DhyjMucY9X256P
+   TlgRACOLpCwvuZ2kPVBodQWZBTUlrDIPMAWJUVeAw2H9ezxKbu11RPrJL
+   QEANBhA2tYot3kMXLCEpgcZg4XnUXMDW1HxqbB8MWVbXO92skcBJW+j9d
+   QnEPbvupOsTfNJOdVpol3VfhHfscBsGNelI2W/Z+pDOrSyHOJGz1IbyGW
+   RSf59+s8VXA6PN21b8dKSEno3xOzB/+ud4t49B73Wpo22k7aA07GizZXV
+   vEy8m307alt/nmJYeROC7Kej2qTzL6N45/6m/Jv/hSTcWrqvNhBcaf85g
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="444608195"
+X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
+   d="scan'208";a="444608195"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 05:20:47 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10840"; a="870992745"
-X-IronPort-AV: E=Sophos;i="6.03,166,1694761200"; 
-   d="scan'208";a="870992745"
-Received: from lkp-server02.sh.intel.com (HELO b77866e22201) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 21 Sep 2023 14:11:31 -0700
-Received: from kbuild by b77866e22201 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qjQxM-0000PY-2M;
-        Thu, 21 Sep 2023 21:11:28 +0000
-Date:   Fri, 22 Sep 2023 05:11:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jon Hunter <jonathanh@nvidia.com>,
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="862441839"
+X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
+   d="scan'208";a="862441839"
+Received: from yongliang-ubuntu20-ilbpg12.png.intel.com ([10.88.229.33])
+  by fmsmga002.fm.intel.com with ESMTP; 21 Sep 2023 05:20:37 -0700
+From:   Choong Yong Liang <yong.liang.choong@linux.intel.com>
+To:     Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+        David E Box <david.e.box@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Jose Abreu <Jose.Abreu@synopsys.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        Ninad Malwade <nmalwade@nvidia.com>,
-        Rajkumar Kasirajan <rkasirajan@nvidia.com>,
-        Jon Hunter <jonathanh@nvidia.com>
-Subject: Re: [PATCH V3 3/4] hwmon: ina3221: Add support for channel summation
- disable
-Message-ID: <202309220454.kCi2xD48-lkp@intel.com>
-References: <20230921130818.21247-4-jonathanh@nvidia.com>
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Wong Vee Khee <veekhee@apple.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Revanth Kumar Uppala <ruppala@nvidia.com>,
+        Shenwei Wang <shenwei.wang@nxp.com>,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Jochen Henneberg <jh@henneberg-systemdesign.com>
+Cc:     David E Box <david.e.box@intel.com>,
+        Andrew Halaney <ahalaney@redhat.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        bpf@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
+        Tan Tee Min <tee.min.tan@linux.intel.com>,
+        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
+        Lai Peter Jun Ann <jun.ann.lai@intel.com>
+Subject: [PATCH net-next v3 2/5] net: pcs: xpcs: combine C37 SGMII AN and 2500BASEX for Intel mGbE controller
+Date:   Thu, 21 Sep 2023 20:19:43 +0800
+Message-Id: <20230921121946.3025771-3-yong.liang.choong@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230921121946.3025771-1-yong.liang.choong@linux.intel.com>
+References: <20230921121946.3025771-1-yong.liang.choong@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230921130818.21247-4-jonathanh@nvidia.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Jon,
+From: "Tan, Tee Min" <tee.min.tan@linux.intel.com>
 
-kernel test robot noticed the following build warnings:
+This commit introduces xpcs_sgmii_2500basex_features[] that combine
+xpcs_sgmii_features[] and xpcs_2500basex_features[] for Intel mGbE
+controller that desire to interchange the speed mode of
+10/100/1000/2500Mbps at runtime.
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on robh/for-next linus/master v6.6-rc2 next-20230921]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Also, we introduce xpcs_config_aneg_c37_sgmii_2500basex() function
+which is called by the xpcs_do_config() with the new AN mode:
+DW_SGMII_2500BASEX, and this new function will proceed next-level
+calling to perform C37 SGMII AN/2500BASEX configuration based on
+the PHY interface updated by PHY driver.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jon-Hunter/dt-bindings-hwmon-ina3221-Add-ti-summation-disable/20230922-011119
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20230921130818.21247-4-jonathanh%40nvidia.com
-patch subject: [PATCH V3 3/4] hwmon: ina3221: Add support for channel summation disable
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230922/202309220454.kCi2xD48-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230922/202309220454.kCi2xD48-lkp@intel.com/reproduce)
+Signed-off-by: Tan, Tee Min <tee.min.tan@linux.intel.com>
+Signed-off-by: Choong Yong Liang <yong.liang.choong@linux.intel.com>
+---
+ drivers/net/pcs/pcs-xpcs.c   | 72 ++++++++++++++++++++++++++++++------
+ include/linux/pcs/pcs-xpcs.h |  1 +
+ 2 files changed, 62 insertions(+), 11 deletions(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309220454.kCi2xD48-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/hwmon/ina3221.c:109: warning: Function parameter or member 'summation_disable' not described in 'ina3221_input'
->> drivers/hwmon/ina3221.c:134: warning: Function parameter or member 'debugfs' not described in 'ina3221_data'
->> drivers/hwmon/ina3221.c:134: warning: Function parameter or member 'summation_channel_control' not described in 'ina3221_data'
-
-
-vim +109 drivers/hwmon/ina3221.c
-
-7cb6dcff1956ec Andrew F. Davis 2016-06-10   97  
-a9e9dd9c6de5d8 Nicolin Chen    2018-10-01   98  /**
-a9e9dd9c6de5d8 Nicolin Chen    2018-10-01   99   * struct ina3221_input - channel input source specific information
-a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  100   * @label: label of channel input source
-a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  101   * @shunt_resistor: shunt resistor value of channel input source
-a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  102   * @disconnected: connection status of channel input source
-a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  103   */
-a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  104  struct ina3221_input {
-a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  105  	const char *label;
-a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  106  	int shunt_resistor;
-a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  107  	bool disconnected;
-ac0a832fd3617c Ninad Malwade   2023-09-21  108  	bool summation_disable;
-a9e9dd9c6de5d8 Nicolin Chen    2018-10-01 @109  };
-a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  110  
-7cb6dcff1956ec Andrew F. Davis 2016-06-10  111  /**
-7cb6dcff1956ec Andrew F. Davis 2016-06-10  112   * struct ina3221_data - device specific information
-323aeb0eb5d9a6 Nicolin Chen    2018-11-05  113   * @pm_dev: Device pointer for pm runtime
-7cb6dcff1956ec Andrew F. Davis 2016-06-10  114   * @regmap: Register map of the device
-7cb6dcff1956ec Andrew F. Davis 2016-06-10  115   * @fields: Register fields of the device
-a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  116   * @inputs: Array of channel input source specific structures
-87625b24986bc2 Nicolin Chen    2018-11-05  117   * @lock: mutex lock to serialize sysfs attribute accesses
-59d608e152e582 Nicolin Chen    2018-09-29  118   * @reg_config: Register value of INA3221_CONFIG
-2057bdfb7184e9 Nicolin Chen    2019-10-16  119   * @summation_shunt_resistor: equivalent shunt resistor value for summation
-43dece162de047 Nicolin Chen    2019-01-17  120   * @single_shot: running in single-shot operating mode
-7cb6dcff1956ec Andrew F. Davis 2016-06-10  121   */
-7cb6dcff1956ec Andrew F. Davis 2016-06-10  122  struct ina3221_data {
-323aeb0eb5d9a6 Nicolin Chen    2018-11-05  123  	struct device *pm_dev;
-7cb6dcff1956ec Andrew F. Davis 2016-06-10  124  	struct regmap *regmap;
-7cb6dcff1956ec Andrew F. Davis 2016-06-10  125  	struct regmap_field *fields[F_MAX_FIELDS];
-a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  126  	struct ina3221_input inputs[INA3221_NUM_CHANNELS];
-87625b24986bc2 Nicolin Chen    2018-11-05  127  	struct mutex lock;
-ac0a832fd3617c Ninad Malwade   2023-09-21  128  	struct dentry *debugfs;
-59d608e152e582 Nicolin Chen    2018-09-29  129  	u32 reg_config;
-2057bdfb7184e9 Nicolin Chen    2019-10-16  130  	int summation_shunt_resistor;
-ac0a832fd3617c Ninad Malwade   2023-09-21  131  	u32 summation_channel_control;
-43dece162de047 Nicolin Chen    2019-01-17  132  
-43dece162de047 Nicolin Chen    2019-01-17  133  	bool single_shot;
-7cb6dcff1956ec Andrew F. Davis 2016-06-10 @134  };
-7cb6dcff1956ec Andrew F. Davis 2016-06-10  135  
-
+diff --git a/drivers/net/pcs/pcs-xpcs.c b/drivers/net/pcs/pcs-xpcs.c
+index 4dbc21f604f2..60d90191677d 100644
+--- a/drivers/net/pcs/pcs-xpcs.c
++++ b/drivers/net/pcs/pcs-xpcs.c
+@@ -104,6 +104,21 @@ static const int xpcs_2500basex_features[] = {
+ 	__ETHTOOL_LINK_MODE_MASK_NBITS,
+ };
+ 
++static const int xpcs_sgmii_2500basex_features[] = {
++	ETHTOOL_LINK_MODE_Pause_BIT,
++	ETHTOOL_LINK_MODE_Asym_Pause_BIT,
++	ETHTOOL_LINK_MODE_Autoneg_BIT,
++	ETHTOOL_LINK_MODE_10baseT_Half_BIT,
++	ETHTOOL_LINK_MODE_10baseT_Full_BIT,
++	ETHTOOL_LINK_MODE_100baseT_Half_BIT,
++	ETHTOOL_LINK_MODE_100baseT_Full_BIT,
++	ETHTOOL_LINK_MODE_1000baseT_Half_BIT,
++	ETHTOOL_LINK_MODE_1000baseT_Full_BIT,
++	ETHTOOL_LINK_MODE_2500baseX_Full_BIT,
++	ETHTOOL_LINK_MODE_2500baseT_Full_BIT,
++	__ETHTOOL_LINK_MODE_MASK_NBITS,
++};
++
+ static const phy_interface_t xpcs_usxgmii_interfaces[] = {
+ 	PHY_INTERFACE_MODE_USXGMII,
+ };
+@@ -133,6 +148,12 @@ static const phy_interface_t xpcs_2500basex_interfaces[] = {
+ 	PHY_INTERFACE_MODE_MAX,
+ };
+ 
++static const phy_interface_t xpcs_sgmii_2500basex_interfaces[] = {
++	PHY_INTERFACE_MODE_SGMII,
++	PHY_INTERFACE_MODE_2500BASEX,
++	PHY_INTERFACE_MODE_MAX,
++};
++
+ enum {
+ 	DW_XPCS_USXGMII,
+ 	DW_XPCS_10GKR,
+@@ -141,6 +162,7 @@ enum {
+ 	DW_XPCS_SGMII,
+ 	DW_XPCS_1000BASEX,
+ 	DW_XPCS_2500BASEX,
++	DW_XPCS_SGMII_2500BASEX,
+ 	DW_XPCS_INTERFACE_MAX,
+ };
+ 
+@@ -290,6 +312,7 @@ static int xpcs_soft_reset(struct dw_xpcs *xpcs,
+ 	case DW_AN_C37_SGMII:
+ 	case DW_2500BASEX:
+ 	case DW_AN_C37_1000BASEX:
++	case DW_SGMII_2500BASEX:
+ 		dev = MDIO_MMD_VEND2;
+ 		break;
+ 	default:
+@@ -748,6 +771,8 @@ static int xpcs_config_aneg_c37_sgmii(struct dw_xpcs *xpcs,
+ 	if (xpcs->dev_flag == DW_DEV_TXGBE)
+ 		ret |= DW_VR_MII_DIG_CTRL1_PHY_MODE_CTRL;
+ 
++	/* Disable 2.5G GMII for SGMII C37 mode */
++	ret &= ~DW_VR_MII_DIG_CTRL1_2G5_EN;
+ 	ret = xpcs_write(xpcs, MDIO_MMD_VEND2, DW_VR_MII_DIG_CTRL1, ret);
+ 	if (ret < 0)
+ 		return ret;
+@@ -848,6 +873,26 @@ static int xpcs_config_2500basex(struct dw_xpcs *xpcs)
+ 	return xpcs_write(xpcs, MDIO_MMD_VEND2, DW_VR_MII_MMD_CTRL, ret);
+ }
+ 
++static int xpcs_config_aneg_c37_sgmii_2500basex(struct dw_xpcs *xpcs,
++						unsigned int neg_mode,
++						phy_interface_t interface)
++{
++	int ret = -EOPNOTSUPP;
++
++	switch (interface) {
++	case PHY_INTERFACE_MODE_SGMII:
++		ret = xpcs_config_aneg_c37_sgmii(xpcs, neg_mode);
++		break;
++	case PHY_INTERFACE_MODE_2500BASEX:
++		ret = xpcs_config_2500basex(xpcs);
++		break;
++	default:
++		break;
++	}
++
++	return ret;
++}
++
+ int xpcs_do_config(struct dw_xpcs *xpcs, phy_interface_t interface,
+ 		   const unsigned long *advertising, unsigned int neg_mode)
+ {
+@@ -890,6 +935,12 @@ int xpcs_do_config(struct dw_xpcs *xpcs, phy_interface_t interface,
+ 		if (ret)
+ 			return ret;
+ 		break;
++	case DW_SGMII_2500BASEX:
++		ret = xpcs_config_aneg_c37_sgmii_2500basex(xpcs, neg_mode,
++							   interface);
++		if (ret)
++			return ret;
++		break;
+ 	default:
+ 		return -1;
+ 	}
+@@ -1114,6 +1165,11 @@ static void xpcs_get_state(struct phylink_pcs *pcs,
+ 		}
+ 		break;
+ 	case DW_AN_C37_SGMII:
++	case DW_SGMII_2500BASEX:
++		/* 2500BASEX is not supported for in-band AN mode. */
++		if (state->interface == PHY_INTERFACE_MODE_2500BASEX)
++			break;
++
+ 		ret = xpcs_get_state_c37_sgmii(xpcs, state);
+ 		if (ret) {
+ 			pr_err("xpcs_get_state_c37_sgmii returned %pe\n",
+@@ -1266,23 +1322,17 @@ static const struct xpcs_compat synopsys_xpcs_compat[DW_XPCS_INTERFACE_MAX] = {
+ 		.num_interfaces = ARRAY_SIZE(xpcs_10gbaser_interfaces),
+ 		.an_mode = DW_10GBASER,
+ 	},
+-	[DW_XPCS_SGMII] = {
+-		.supported = xpcs_sgmii_features,
+-		.interface = xpcs_sgmii_interfaces,
+-		.num_interfaces = ARRAY_SIZE(xpcs_sgmii_interfaces),
+-		.an_mode = DW_AN_C37_SGMII,
+-	},
+ 	[DW_XPCS_1000BASEX] = {
+ 		.supported = xpcs_1000basex_features,
+ 		.interface = xpcs_1000basex_interfaces,
+ 		.num_interfaces = ARRAY_SIZE(xpcs_1000basex_interfaces),
+ 		.an_mode = DW_AN_C37_1000BASEX,
+ 	},
+-	[DW_XPCS_2500BASEX] = {
+-		.supported = xpcs_2500basex_features,
+-		.interface = xpcs_2500basex_interfaces,
+-		.num_interfaces = ARRAY_SIZE(xpcs_2500basex_interfaces),
+-		.an_mode = DW_2500BASEX,
++	[DW_XPCS_SGMII_2500BASEX] = {
++		.supported = xpcs_sgmii_2500basex_features,
++		.interface = xpcs_sgmii_2500basex_interfaces,
++		.num_interfaces = ARRAY_SIZE(xpcs_sgmii_2500basex_features),
++		.an_mode = DW_SGMII_2500BASEX,
+ 	},
+ };
+ 
+diff --git a/include/linux/pcs/pcs-xpcs.h b/include/linux/pcs/pcs-xpcs.h
+index da3a6c30f6d2..f075d2fca54a 100644
+--- a/include/linux/pcs/pcs-xpcs.h
++++ b/include/linux/pcs/pcs-xpcs.h
+@@ -19,6 +19,7 @@
+ #define DW_2500BASEX			3
+ #define DW_AN_C37_1000BASEX		4
+ #define DW_10GBASER			5
++#define DW_SGMII_2500BASEX		6
+ 
+ /* device vendor OUI */
+ #define DW_OUI_WX			0x0018fc80
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.25.1
+
