@@ -2,43 +2,43 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB26BE7D0A2
-	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Sep 2023 20:00:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFB79E7D0A7
+	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Sep 2023 20:12:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbjIUUBB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 21 Sep 2023 16:01:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42902 "EHLO
+        id S229969AbjIUUML (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 21 Sep 2023 16:12:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjIUUAm (ORCPT
+        with ESMTP id S231136AbjIUULs (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 21 Sep 2023 16:00:42 -0400
+        Thu, 21 Sep 2023 16:11:48 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BE751F7B;
-        Thu, 21 Sep 2023 10:17:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B23551F54;
+        Thu, 21 Sep 2023 10:16:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695316628; x=1726852628;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=lTXXgtikZK8fOV2paXgb9h3Lt1o9zA5yS/eHowFJJOE=;
-  b=KRDmTtOpSMmjsqzHqliaUmm1/gPNKHP9zItXGpAmm3GSIo190LktVyMS
-   MFX+oi4UUxD/tcunceT50U5RjLrV8tAaSv1Z6P8VkiYRtIu731xR3Az8T
-   rUx5ozMX+yj8aehngSm4fuE4u7vbINM+5ZnmxjuLXltnU+QcbWaFtoGXF
-   uUtzUMlNM4C92ZoO1BbqKl2DCzmU2tke41q3asfKGXF/7d+49Yob3kYRb
-   7l+NH4DQowtbGOLKStDdHoPcl68w8b3voNcgpcTKzQqE7zTQWJxib5GXW
-   W24uGTchsFLgpv7Ys2OQstkOaW83HA4cDQqHjOoX4t5m6l/duXBlavBiP
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="444608265"
+  t=1695316619; x=1726852619;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=6hzWF6t3usS5DT5I810V3jYMFYBjf/9WntyNrqaTQuo=;
+  b=bJ2vQwqqvZUSlPQef5CO7qJl7hpl60lcNGbtiepil+vDOyE23iqnsvjZ
+   H7zkCcVHvqSwcypLhDNlwLZ54wSS1+8xJfjNzdE1vXSYvsfSRkxVh34eM
+   O2Cngk1Rgx4fPh3dw1G6aisXoiElqyZGzi2EVbLpbduE02b+LXisOuUQk
+   IMYrjpOJLF0ns1TO3cDk0t4xUPYqLcwEMwZH25mCgNbn/ldbS9XjVXnFc
+   OWSUyOhYUuGfxhfY5nsDskRSA/VnF9VW4SWmOeylepvNlHL0GowqnPRM7
+   GmS0AO9h/cctYPyXDZ5THol3YJtVszkXIap6NGeW+S5yPfh+m7IZohWaE
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="444608109"
 X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
-   d="scan'208";a="444608265"
+   d="scan'208";a="444608109"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 05:20:59 -0700
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 05:20:23 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="862441935"
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="862441612"
 X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
-   d="scan'208";a="862441935"
+   d="scan'208";a="862441612"
 Received: from yongliang-ubuntu20-ilbpg12.png.intel.com ([10.88.229.33])
-  by fmsmga002.fm.intel.com with ESMTP; 21 Sep 2023 05:20:48 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 21 Sep 2023 05:20:13 -0700
 From:   Choong Yong Liang <yong.liang.choong@linux.intel.com>
 To:     Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
         David E Box <david.e.box@linux.intel.com>,
@@ -84,79 +84,81 @@ Cc:     David E Box <david.e.box@intel.com>,
         Tan Tee Min <tee.min.tan@linux.intel.com>,
         Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
         Lai Peter Jun Ann <jun.ann.lai@intel.com>
-Subject: [PATCH net-next v3 3/5] net: phy: update in-band AN mode when changing interface by PHY driver
-Date:   Thu, 21 Sep 2023 20:19:44 +0800
-Message-Id: <20230921121946.3025771-4-yong.liang.choong@linux.intel.com>
+Subject: [PATCH net-next v3 0/5] TSN auto negotiation between 1G and 2.5G
+Date:   Thu, 21 Sep 2023 20:19:41 +0800
+Message-Id: <20230921121946.3025771-1-yong.liang.choong@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230921121946.3025771-1-yong.liang.choong@linux.intel.com>
-References: <20230921121946.3025771-1-yong.liang.choong@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-As there is a mechanism in PHY drivers to switch the PHY interface
-between SGMII and 2500BaseX according to link speed. In this case,
-the in-band AN mode should be switching based on the PHY interface
-as well, if the PHY interface has been changed/updated by PHY driver.
+Intel platforms’ integrated Gigabit Ethernet controllers support
+2.5Gbps mode statically using BIOS programming. In the current
+implementation, the BIOS menu provides an option to select between
+10/100/1000Mbps and 2.5Gbps modes. Based on the selection, the BIOS
+programs the Phase Lock Loop (PLL) registers. The BIOS also read the
+TSN lane registers from Flexible I/O Adapter (FIA) block and provided
+10/100/1000Mbps/2.5Gbps information to the stmmac driver. But
+auto-negotiation between 10/100/1000Mbps and 2.5Gbps is not allowed.
+The new proposal is to support auto-negotiation between 10/100/1000Mbps
+and 2.5Gbps . Auto-negotiation between 10, 100, 1000Mbps will use
+in-band auto negotiation. Auto-negotiation between 10/100/1000Mbps and
+2.5Gbps will work as the following proposed flow, the stmmac driver reads
+the PHY link status registers then identifies the negotiated speed.
+Based on the speed stmmac driver will identify TSN lane registers from
+FIA then send IPC command to the Power Management controller (PMC)
+through PMC driver/API. PMC will act as a proxy to programs the
+PLL registers.
+changelog:
 
-For e.g., disable in-band AN in 2500BaseX mode, or enable in-band AN
-back for SGMII mode (10/100/1000Mbps).
+v1 -> v2: 
+ - Add static to pmc_lpm_modes declaration
+ - Add cur_link_an_mode to the kernel doc
+ - Combine 2 commits i.e. "stmmac: intel: Separate driver_data of ADL-N
+ from TGL" and "net: stmmac: Add 1G/2.5G auto-negotiation
+ support for ADL-N" into 1 commit.
 
-Signed-off-by: Choong Yong Liang <yong.liang.choong@linux.intel.com>
+v2 -> v3:
+ - Create `pmc_ipc.c` file for `intel_pmc_ipc()` function and 
+ allocate the file in `arch/x86/platform/intel/` directory.
+ - Update phylink's AN mode during phy interface change and 
+ not exposing phylink's AN mode into phylib.
+
 ---
- drivers/net/phy/phylink.c | 30 +++++++++++++++++++++++++++++-
- 1 file changed, 29 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
-index 0d7354955d62..5811c8086149 100644
---- a/drivers/net/phy/phylink.c
-+++ b/drivers/net/phy/phylink.c
-@@ -1723,6 +1723,34 @@ bool phylink_expects_phy(struct phylink *pl)
- }
- EXPORT_SYMBOL_GPL(phylink_expects_phy);
- 
-+/**
-+ * phylink_interface_change() - update both cfg_link_an_mode and
-+ * cur_link_an_mode when there is a change in the interface.
-+ * @phydev: pointer to &struct phy_device
-+ *
-+ * When the PHY interface switches between SGMII and 2500BaseX in
-+ * accordance with the link speed, the in-band AN mode should also switch
-+ * based on the PHY interface
-+ */
-+static void phylink_interface_change(struct phy_device *phydev)
-+{
-+	struct phylink *pl = phydev->phylink;
-+
-+	if (pl->phy_state.interface != phydev->interface) {
-+		/* Fallback to the correct AN mode. */
-+		if (phy_interface_mode_is_8023z(phydev->interface) &&
-+		    pl->cfg_link_an_mode == MLO_AN_INBAND) {
-+			pl->cfg_link_an_mode = MLO_AN_PHY;
-+			pl->cur_link_an_mode = MLO_AN_PHY;
-+		} else if (pl->config->ovr_an_inband) {
-+			pl->cfg_link_an_mode = MLO_AN_INBAND;
-+			pl->cur_link_an_mode = MLO_AN_INBAND;
-+		}
-+
-+		pl->phy_state.interface = phydev->interface;
-+	}
-+}
-+
- static void phylink_phy_change(struct phy_device *phydev, bool up)
- {
- 	struct phylink *pl = phydev->phylink;
-@@ -1739,7 +1767,7 @@ static void phylink_phy_change(struct phy_device *phydev, bool up)
- 		pl->phy_state.pause |= MLO_PAUSE_TX;
- 	if (rx_pause)
- 		pl->phy_state.pause |= MLO_PAUSE_RX;
--	pl->phy_state.interface = phydev->interface;
-+	phylink_interface_change(phydev);
- 	pl->phy_state.link = up;
- 	mutex_unlock(&pl->state_mutex);
- 
+Choong Yong Liang (2):
+  net: phy: update in-band AN mode when changing interface by PHY driver
+  stmmac: intel: Add 1G/2.5G auto-negotiation support for ADL-N
+
+David E. Box (1):
+  arch: x86: Add IPC mailbox accessor function and add SoC register
+    access
+
+Tan, Tee Min (2):
+  net: pcs: xpcs: combine C37 SGMII AN and 2500BASEX for Intel mGbE
+    controller
+  net: stmmac: enable Intel mGbE 1G/2.5G auto-negotiation support
+
+ MAINTAINERS                                   |   2 +
+ arch/x86/Kconfig                              |   9 +
+ arch/x86/platform/intel/Makefile              |   1 +
+ arch/x86/platform/intel/pmc_ipc.c             |  75 +++++++
+ drivers/net/ethernet/stmicro/stmmac/Kconfig   |   1 +
+ .../net/ethernet/stmicro/stmmac/dwmac-intel.c | 183 +++++++++++++++++-
+ .../net/ethernet/stmicro/stmmac/dwmac-intel.h |  81 ++++++++
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c |  20 ++
+ drivers/net/pcs/pcs-xpcs.c                    |  72 +++++--
+ drivers/net/phy/phylink.c                     |  30 ++-
+ include/linux/pcs/pcs-xpcs.h                  |   1 +
+ .../linux/platform_data/x86/intel_pmc_ipc.h   |  34 ++++
+ include/linux/stmmac.h                        |   1 +
+ 13 files changed, 493 insertions(+), 17 deletions(-)
+ create mode 100644 arch/x86/platform/intel/pmc_ipc.c
+ create mode 100644 include/linux/platform_data/x86/intel_pmc_ipc.h
+
 -- 
 2.25.1
 
