@@ -2,43 +2,43 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74668E7D0A3
-	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Sep 2023 17:29:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E88E8E7D0A5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Sep 2023 17:50:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbjIUR3g (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 21 Sep 2023 13:29:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55146 "EHLO
+        id S230098AbjIURuo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 21 Sep 2023 13:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230340AbjIUR2x (ORCPT
+        with ESMTP id S230029AbjIURuJ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 21 Sep 2023 13:28:53 -0400
+        Thu, 21 Sep 2023 13:50:09 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD06651F78;
-        Thu, 21 Sep 2023 10:17:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAAC354925;
+        Thu, 21 Sep 2023 10:17:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695316627; x=1726852627;
+  t=1695316633; x=1726852633;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=R6y5ULZ42+b9n+Td0nzhf02tFYyolYBgBUdtJDkDQwc=;
-  b=AQ2vavD7J3BjyQbxfpKodl0gLS0KngsreL+wI3xurF8H1hjSpAEwApc9
-   E+bX2IbP6GI+BYUxgMCrj6iKrSnEnCa3MlI8LVR19//PogXHqte7fSgps
-   OeNug+XzAeIO0ZV0DjrM19o6Ja2chCyTXqidv7tjoV0TrdFU5qXupTTUi
-   le0L1KOjoYhhR908RzQtjDl1+fRHNpbmrunFcze2iSjIuEm1Pt/PPAIAP
-   cBP8+a9ydKg0AHW8Zd6GWN+mHlmd+/3g0LA4vurmz4aa4QhG5WnLMWZ8e
-   s21MdqOUodlW+cktJMDrHptVfReXETyNKu0XWuFvwyHREXrb0mmQiVu7L
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="444608167"
+  bh=A586LM0+gOXd/iEXjaMd75qtDywyXfu3CO1tYPaBTEU=;
+  b=EGyrJUi6MWNaAgyLgzFST1Cw8KC9HLwVF/MDSOQ1DwRqEEtMoghOcJx8
+   aBSLporeERcX2a7FzdJNv6i9tkNUQSO0E43uKg3jFHgZyND+5xO86TPOm
+   aT6RPGdn+1zAL5D6cNzUGOM/rlNhomdtuuctBKMMVgqnhjxX3ckrayL5M
+   TBCZXG4XlGkF6RAFmRCrTC+TY1DPJLLikXSztng/pwbV92B+Fhp9YNVCs
+   gPEV7+1j3eckDTE9tEn5brf2J0EEKwUaSP5CTC5NkI85EbtH4Zj5viFZY
+   G2vXiikhUY65LItYksI0n8apto+zFcMOCBFdjegAez7VmEnDwXK9Olkn3
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="444608385"
 X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
-   d="scan'208";a="444608167"
+   d="scan'208";a="444608385"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 05:20:35 -0700
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 05:21:21 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="862441720"
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="862442142"
 X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
-   d="scan'208";a="862441720"
+   d="scan'208";a="862442142"
 Received: from yongliang-ubuntu20-ilbpg12.png.intel.com ([10.88.229.33])
-  by fmsmga002.fm.intel.com with ESMTP; 21 Sep 2023 05:20:26 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 21 Sep 2023 05:21:11 -0700
 From:   Choong Yong Liang <yong.liang.choong@linux.intel.com>
 To:     Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
         David E Box <david.e.box@linux.intel.com>,
@@ -84,9 +84,9 @@ Cc:     David E Box <david.e.box@intel.com>,
         Tan Tee Min <tee.min.tan@linux.intel.com>,
         Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
         Lai Peter Jun Ann <jun.ann.lai@intel.com>
-Subject: [PATCH net-next v3 1/5] arch: x86: Add IPC mailbox accessor function and add SoC register access
-Date:   Thu, 21 Sep 2023 20:19:42 +0800
-Message-Id: <20230921121946.3025771-2-yong.liang.choong@linux.intel.com>
+Subject: [PATCH net-next v3 5/5] stmmac: intel: Add 1G/2.5G auto-negotiation support for ADL-N
+Date:   Thu, 21 Sep 2023 20:19:46 +0800
+Message-Id: <20230921121946.3025771-6-yong.liang.choong@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230921121946.3025771-1-yong.liang.choong@linux.intel.com>
 References: <20230921121946.3025771-1-yong.liang.choong@linux.intel.com>
@@ -96,191 +96,98 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: "David E. Box" <david.e.box@linux.intel.com>
+Add modphy register lane to have 1G/2.5G auto-negotiation support for
+ADL-N.
 
-- Exports intel_pmc_ipc() for host access to the PMC IPC mailbox
-- Add support to use IPC command allows host to access SoC registers
-through PMC firmware that are otherwise inaccessible to the host due to
-security policies.
-
-Signed-off-by: David E. Box <david.e.box@linux.intel.com>
-Signed-off-by: Chao Qin <chao.qin@intel.com>
+Signed-off-by: Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
 Signed-off-by: Choong Yong Liang <yong.liang.choong@linux.intel.com>
 ---
- MAINTAINERS                                   |  2 +
- arch/x86/Kconfig                              |  9 +++
- arch/x86/platform/intel/Makefile              |  1 +
- arch/x86/platform/intel/pmc_ipc.c             | 75 +++++++++++++++++++
- .../linux/platform_data/x86/intel_pmc_ipc.h   | 34 +++++++++
- 5 files changed, 121 insertions(+)
- create mode 100644 arch/x86/platform/intel/pmc_ipc.c
- create mode 100644 include/linux/platform_data/x86/intel_pmc_ipc.h
+ .../net/ethernet/stmicro/stmmac/dwmac-intel.c | 49 ++++++++++++++++++-
+ .../net/ethernet/stmicro/stmmac/dwmac-intel.h |  2 +
+ 2 files changed, 50 insertions(+), 1 deletion(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 3dde038545d8..f608668fdfa6 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10730,8 +10730,10 @@ M:	Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>
- M:	David E Box <david.e.box@intel.com>
- L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
-+F:	arch/x86/platform/intel/pmc_ipc.c
- F:	Documentation/ABI/testing/sysfs-platform-intel-pmc
- F:	drivers/platform/x86/intel/pmc/
-+F:	linux/platform_data/x86/intel_pmc_ipc.h
- 
- INTEL PMIC GPIO DRIVERS
- M:	Andy Shevchenko <andy@kernel.org>
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 982b777eadc7..31fc8ece2b46 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -666,6 +666,15 @@ config X86_AMD_PLATFORM_DEVICE
- 	  I2C and UART depend on COMMON_CLK to set clock. GPIO driver is
- 	  implemented under PINCTRL subsystem.
- 
-+config INTEL_PMC_IPC
-+	tristate "Intel Core SoC Power Management Controller IPC mailbox"
-+	depends on ACPI
-+	help
-+	  This option enables sideband register access support for Intel SoC
-+	  power management controller IPC mailbox.
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
+index a211f42914a2..bece46faa710 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
+@@ -961,6 +961,53 @@ static int adls_sgmii_phy1_data(struct pci_dev *pdev,
+ static struct stmmac_pci_info adls_sgmii1g_phy1_info = {
+ 	.setup = adls_sgmii_phy1_data,
+ };
 +
-+	  If you don't require the option or are in doubt, say N.
-+
- config IOSF_MBI
- 	tristate "Intel SoC IOSF Sideband support for SoC platforms"
- 	depends on PCI
-diff --git a/arch/x86/platform/intel/Makefile b/arch/x86/platform/intel/Makefile
-index dbee3b00f9d0..470fc68de6ba 100644
---- a/arch/x86/platform/intel/Makefile
-+++ b/arch/x86/platform/intel/Makefile
-@@ -1,2 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0-only
- obj-$(CONFIG_IOSF_MBI)			+= iosf_mbi.o
-+obj-$(CONFIG_INTEL_PMC_IPC)		+= pmc_ipc.o
-\ No newline at end of file
-diff --git a/arch/x86/platform/intel/pmc_ipc.c b/arch/x86/platform/intel/pmc_ipc.c
-new file mode 100644
-index 000000000000..a96234982710
---- /dev/null
-+++ b/arch/x86/platform/intel/pmc_ipc.c
-@@ -0,0 +1,75 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Intel Core SoC Power Management Controller IPC mailbox
-+ *
-+ * Copyright (c) 2023, Intel Corporation.
-+ * All Rights Reserved.
-+ *
-+ * Authors: Choong Yong Liang <yong.liang.choong@linux.intel.com>
-+ *          David E. Box <david.e.box@linux.intel.com>
-+ */
-+#include <linux/module.h>
-+#include <linux/acpi.h>
-+#include <linux/platform_data/x86/intel_pmc_ipc.h>
-+
-+#define PMC_IPCS_PARAM_COUNT           7
-+
-+int intel_pmc_ipc(struct pmc_ipc_cmd *ipc_cmd, u32 *rbuf)
++static int adln_common_data(struct pci_dev *pdev,
++			    struct plat_stmmacenet_data *plat)
 +{
-+	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
-+	union acpi_object params[PMC_IPCS_PARAM_COUNT] = {
-+		{.type = ACPI_TYPE_INTEGER,},
-+		{.type = ACPI_TYPE_INTEGER,},
-+		{.type = ACPI_TYPE_INTEGER,},
-+		{.type = ACPI_TYPE_INTEGER,},
-+		{.type = ACPI_TYPE_INTEGER,},
-+		{.type = ACPI_TYPE_INTEGER,},
-+		{.type = ACPI_TYPE_INTEGER,},
-+	};
-+	struct acpi_object_list arg_list = { PMC_IPCS_PARAM_COUNT, params };
-+	union acpi_object *obj;
-+	int status;
++	struct intel_priv_data *intel_priv = plat->bsp_priv;
 +
-+	if (!ipc_cmd || !rbuf)
-+		return -EINVAL;
++	plat->rx_queues_to_use = 6;
++	plat->tx_queues_to_use = 4;
++	plat->clk_ptp_rate = 204800000;
 +
-+	/*
-+	 * 0: IPC Command
-+	 * 1: IPC Sub Command
-+	 * 2: Size
-+	 * 3-6: Write Buffer for offset
-+	 */
-+	params[0].integer.value = ipc_cmd->cmd;
-+	params[1].integer.value = ipc_cmd->sub_cmd;
-+	params[2].integer.value = ipc_cmd->size;
-+	params[3].integer.value = ipc_cmd->wbuf[0];
-+	params[4].integer.value = ipc_cmd->wbuf[1];
-+	params[5].integer.value = ipc_cmd->wbuf[2];
-+	params[6].integer.value = ipc_cmd->wbuf[3];
++	plat->safety_feat_cfg->tsoee = 1;
++	plat->safety_feat_cfg->mrxpee = 0;
++	plat->safety_feat_cfg->mestee = 1;
++	plat->safety_feat_cfg->mrxee = 1;
++	plat->safety_feat_cfg->mtxee = 1;
++	plat->safety_feat_cfg->epsi = 0;
++	plat->safety_feat_cfg->edpp = 0;
++	plat->safety_feat_cfg->prtyen = 0;
++	plat->safety_feat_cfg->tmouten = 0;
 +
-+	status = acpi_evaluate_object(NULL, "\\IPCS", &arg_list, &buffer);
-+	if (ACPI_FAILURE(status))
-+		return -ENODEV;
++	intel_priv->tsn_lane_registers = adln_tsn_lane_registers;
++	intel_priv->max_tsn_lane_registers = ARRAY_SIZE(adln_tsn_lane_registers);
 +
-+	obj = buffer.pointer;
-+	/* Check if the number of elements in package is 5 */
-+	if (obj && obj->type == ACPI_TYPE_PACKAGE && obj->package.count == 5) {
-+		const union acpi_object *objs = obj->package.elements;
-+
-+		if ((u8)objs[0].integer.value != 0)
-+			return -EINVAL;
-+
-+		rbuf[0] = objs[1].integer.value;
-+		rbuf[1] = objs[2].integer.value;
-+		rbuf[2] = objs[3].integer.value;
-+		rbuf[3] = objs[4].integer.value;
-+	} else {
-+		return -EINVAL;
-+	}
-+
-+	return 0;
++	return intel_mgbe_common_data(pdev, plat);
 +}
-+EXPORT_SYMBOL(intel_pmc_ipc);
 +
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("Intel PMC IPC Mailbox accessor");
-diff --git a/include/linux/platform_data/x86/intel_pmc_ipc.h b/include/linux/platform_data/x86/intel_pmc_ipc.h
-new file mode 100644
-index 000000000000..25ba57b8a7ea
---- /dev/null
-+++ b/include/linux/platform_data/x86/intel_pmc_ipc.h
-@@ -0,0 +1,34 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Intel Core SoC Power Management Controller Header File
-+ *
-+ * Copyright (c) 2023, Intel Corporation.
-+ * All Rights Reserved.
-+ *
-+ * Authors: Choong Yong Liang <yong.liang.choong@linux.intel.com>
-+ *          David E. Box <david.e.box@linux.intel.com>
-+ */
-+#ifndef INTEL_PMC_IPC_H
-+#define INTEL_PMC_IPC_H
++static int adln_sgmii_phy0_data(struct pci_dev *pdev,
++				struct plat_stmmacenet_data *plat)
++{
++	struct intel_priv_data *intel_priv = plat->bsp_priv;
 +
-+#define IPC_SOC_REGISTER_ACCESS			0xAA
-+#define IPC_SOC_SUB_CMD_READ			0x00
-+#define IPC_SOC_SUB_CMD_WRITE			0x01
++	plat->bus_id = 1;
++	plat->phy_interface = PHY_INTERFACE_MODE_SGMII;
++	plat->max_speed = SPEED_2500;
++	plat->serdes_powerup = intel_serdes_powerup;
++	plat->serdes_powerdown = intel_serdes_powerdown;
++	plat->config_serdes = intel_config_serdes;
 +
-+struct pmc_ipc_cmd {
-+	u32 cmd;
-+	u32 sub_cmd;
-+	u32 size;
-+	u32 wbuf[4];
++	intel_priv->pid_modphy = PID_MODPHY1;
++
++	return adln_common_data(pdev, plat);
++}
++
++static struct stmmac_pci_info adln_sgmii1g_phy0_info = {
++	.setup = adln_sgmii_phy0_data,
 +};
 +
-+/**
-+ * intel_pmc_core_ipc() - PMC IPC Mailbox accessor
-+ * @ipc_cmd:  struct pmc_ipc_cmd prepared with input to send
-+ * @rbuf:     Allocated u32[4] array for returned IPC data
-+ *
-+ * Return: 0 on success. Non-zero on mailbox error
-+ */
-+int intel_pmc_ipc(struct pmc_ipc_cmd *ipc_cmd, u32 *rbuf);
-+
-+#endif /* INTEL_PMC_IPC_H */
+ static const struct stmmac_pci_func_data galileo_stmmac_func_data[] = {
+ 	{
+ 		.func = 6,
+@@ -1343,7 +1390,7 @@ static const struct pci_device_id intel_eth_pci_id_table[] = {
+ 	{ PCI_DEVICE_DATA(INTEL, TGLH_SGMII1G_1, &tgl_sgmii1g_phy1_info) },
+ 	{ PCI_DEVICE_DATA(INTEL, ADLS_SGMII1G_0, &adls_sgmii1g_phy0_info) },
+ 	{ PCI_DEVICE_DATA(INTEL, ADLS_SGMII1G_1, &adls_sgmii1g_phy1_info) },
+-	{ PCI_DEVICE_DATA(INTEL, ADLN_SGMII1G, &tgl_sgmii1g_phy0_info) },
++	{ PCI_DEVICE_DATA(INTEL, ADLN_SGMII1G, &adln_sgmii1g_phy0_info) },
+ 	{ PCI_DEVICE_DATA(INTEL, RPLP_SGMII1G, &tgl_sgmii1g_phy0_info) },
+ 	{}
+ };
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.h b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.h
+index 093eed977ab0..2c6b50958988 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.h
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.h
+@@ -124,8 +124,10 @@ static const struct pmc_serdes_regs pid_modphy1_2p5g_regs[] = {
+ 	{}
+ };
+ 
++static const int adln_tsn_lane_registers[] = {6};
+ static const int ehl_tsn_lane_registers[] = {7, 8, 9, 10, 11};
+ #else
++static const int adln_tsn_lane_registers[] = {};
+ static const int ehl_tsn_lane_registers[] = {};
+ #endif /* CONFIG_INTEL_PMC_IPC */
+ 
 -- 
 2.25.1
 
