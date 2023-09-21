@@ -2,57 +2,55 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E88E8E7D0A5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Sep 2023 17:50:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96916E7D0A8
+	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Sep 2023 18:10:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbjIURuo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 21 Sep 2023 13:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37988 "EHLO
+        id S230099AbjIUSKo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 21 Sep 2023 14:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbjIURuJ (ORCPT
+        with ESMTP id S229744AbjIUSKk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 21 Sep 2023 13:50:09 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAAC354925;
-        Thu, 21 Sep 2023 10:17:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695316633; x=1726852633;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=A586LM0+gOXd/iEXjaMd75qtDywyXfu3CO1tYPaBTEU=;
-  b=EGyrJUi6MWNaAgyLgzFST1Cw8KC9HLwVF/MDSOQ1DwRqEEtMoghOcJx8
-   aBSLporeERcX2a7FzdJNv6i9tkNUQSO0E43uKg3jFHgZyND+5xO86TPOm
-   aT6RPGdn+1zAL5D6cNzUGOM/rlNhomdtuuctBKMMVgqnhjxX3ckrayL5M
-   TBCZXG4XlGkF6RAFmRCrTC+TY1DPJLLikXSztng/pwbV92B+Fhp9YNVCs
-   gPEV7+1j3eckDTE9tEn5brf2J0EEKwUaSP5CTC5NkI85EbtH4Zj5viFZY
-   G2vXiikhUY65LItYksI0n8apto+zFcMOCBFdjegAez7VmEnDwXK9Olkn3
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="444608385"
-X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
-   d="scan'208";a="444608385"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 05:21:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="862442142"
-X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
-   d="scan'208";a="862442142"
-Received: from yongliang-ubuntu20-ilbpg12.png.intel.com ([10.88.229.33])
-  by fmsmga002.fm.intel.com with ESMTP; 21 Sep 2023 05:21:11 -0700
-From:   Choong Yong Liang <yong.liang.choong@linux.intel.com>
-To:     Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+        Thu, 21 Sep 2023 14:10:40 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43D4897F0;
+        Thu, 21 Sep 2023 10:52:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=y80U+ROzdWFAGesuJv0fAWCJugjaoZUvkVKbCL8UtRM=; b=J1yh53DeBNARTsqqU8MHBzo9Oa
+        t0+dRp/RaWdqEqR/zlkiuTCdTMvV7LfZBpgaPOo9mz3Ar25SG5iPMKXPJ1Pakv7POYEio6eyu3imp
+        Jue1paSBhwzjv0GVy6aou42CWQp6vSIlPYV8hlPJ5VHamcRnA8qcdTN4cPrFGpVz1BTCn704A78vE
+        WKxVrydWMewhT15+u9bny+bRHgeZaaqgcYNfslcWse8SCYpLZxpj04q12Qq2mZevEQIJk5Ji3lybk
+        draQ9SuAvOjf/F8wS4j1zOR8oS4A/59eybSt0kjrpVaKBQ211JZ5hMg5lAiocOJweLC8GJ5sJOtgz
+        HfWLrfPQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:54404)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.96)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1qjKIb-0004k2-1O;
+        Thu, 21 Sep 2023 15:04:57 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1qjKIX-0003an-Lu; Thu, 21 Sep 2023 15:04:53 +0100
+Date:   Thu, 21 Sep 2023 15:04:53 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Choong Yong Liang <yong.liang.choong@linux.intel.com>
+Cc:     Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
         David E Box <david.e.box@linux.intel.com>,
         Hans de Goede <hdegoede@redhat.com>,
         Mark Gross <markgross@kernel.org>,
         Jose Abreu <Jose.Abreu@synopsys.com>,
         Andrew Lunn <andrew@lunn.ch>,
         Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
         "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Giuseppe Cavallaro <peppe.cavallaro@st.com>,
@@ -71,8 +69,8 @@ To:     Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
         Revanth Kumar Uppala <ruppala@nvidia.com>,
         Shenwei Wang <shenwei.wang@nxp.com>,
         Andrey Konovalov <andrey.konovalov@linaro.org>,
-        Jochen Henneberg <jh@henneberg-systemdesign.com>
-Cc:     David E Box <david.e.box@intel.com>,
+        Jochen Henneberg <jh@henneberg-systemdesign.com>,
+        David E Box <david.e.box@intel.com>,
         Andrew Halaney <ahalaney@redhat.com>,
         Simon Horman <simon.horman@corigine.com>,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
@@ -84,110 +82,85 @@ Cc:     David E Box <david.e.box@intel.com>,
         Tan Tee Min <tee.min.tan@linux.intel.com>,
         Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
         Lai Peter Jun Ann <jun.ann.lai@intel.com>
-Subject: [PATCH net-next v3 5/5] stmmac: intel: Add 1G/2.5G auto-negotiation support for ADL-N
-Date:   Thu, 21 Sep 2023 20:19:46 +0800
-Message-Id: <20230921121946.3025771-6-yong.liang.choong@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230921121946.3025771-1-yong.liang.choong@linux.intel.com>
+Subject: Re: [PATCH net-next v3 3/5] net: phy: update in-band AN mode when
+ changing interface by PHY driver
+Message-ID: <ZQxNhYcusHfrJvxM@shell.armlinux.org.uk>
 References: <20230921121946.3025771-1-yong.liang.choong@linux.intel.com>
+ <20230921121946.3025771-4-yong.liang.choong@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230921121946.3025771-4-yong.liang.choong@linux.intel.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add modphy register lane to have 1G/2.5G auto-negotiation support for
-ADL-N.
+On Thu, Sep 21, 2023 at 08:19:44PM +0800, Choong Yong Liang wrote:
+> As there is a mechanism in PHY drivers to switch the PHY interface
+> between SGMII and 2500BaseX according to link speed. In this case,
+> the in-band AN mode should be switching based on the PHY interface
+> as well, if the PHY interface has been changed/updated by PHY driver.
+> 
+> For e.g., disable in-band AN in 2500BaseX mode, or enable in-band AN
+> back for SGMII mode (10/100/1000Mbps).
+> 
+> Signed-off-by: Choong Yong Liang <yong.liang.choong@linux.intel.com>
 
-Signed-off-by: Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
-Signed-off-by: Choong Yong Liang <yong.liang.choong@linux.intel.com>
----
- .../net/ethernet/stmicro/stmmac/dwmac-intel.c | 49 ++++++++++++++++++-
- .../net/ethernet/stmicro/stmmac/dwmac-intel.h |  2 +
- 2 files changed, 50 insertions(+), 1 deletion(-)
+This approach is *going* to break existing setups, sorry.
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-index a211f42914a2..bece46faa710 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-@@ -961,6 +961,53 @@ static int adls_sgmii_phy1_data(struct pci_dev *pdev,
- static struct stmmac_pci_info adls_sgmii1g_phy1_info = {
- 	.setup = adls_sgmii_phy1_data,
- };
-+
-+static int adln_common_data(struct pci_dev *pdev,
-+			    struct plat_stmmacenet_data *plat)
-+{
-+	struct intel_priv_data *intel_priv = plat->bsp_priv;
-+
-+	plat->rx_queues_to_use = 6;
-+	plat->tx_queues_to_use = 4;
-+	plat->clk_ptp_rate = 204800000;
-+
-+	plat->safety_feat_cfg->tsoee = 1;
-+	plat->safety_feat_cfg->mrxpee = 0;
-+	plat->safety_feat_cfg->mestee = 1;
-+	plat->safety_feat_cfg->mrxee = 1;
-+	plat->safety_feat_cfg->mtxee = 1;
-+	plat->safety_feat_cfg->epsi = 0;
-+	plat->safety_feat_cfg->edpp = 0;
-+	plat->safety_feat_cfg->prtyen = 0;
-+	plat->safety_feat_cfg->tmouten = 0;
-+
-+	intel_priv->tsn_lane_registers = adln_tsn_lane_registers;
-+	intel_priv->max_tsn_lane_registers = ARRAY_SIZE(adln_tsn_lane_registers);
-+
-+	return intel_mgbe_common_data(pdev, plat);
-+}
-+
-+static int adln_sgmii_phy0_data(struct pci_dev *pdev,
-+				struct plat_stmmacenet_data *plat)
-+{
-+	struct intel_priv_data *intel_priv = plat->bsp_priv;
-+
-+	plat->bus_id = 1;
-+	plat->phy_interface = PHY_INTERFACE_MODE_SGMII;
-+	plat->max_speed = SPEED_2500;
-+	plat->serdes_powerup = intel_serdes_powerup;
-+	plat->serdes_powerdown = intel_serdes_powerdown;
-+	plat->config_serdes = intel_config_serdes;
-+
-+	intel_priv->pid_modphy = PID_MODPHY1;
-+
-+	return adln_common_data(pdev, plat);
-+}
-+
-+static struct stmmac_pci_info adln_sgmii1g_phy0_info = {
-+	.setup = adln_sgmii_phy0_data,
-+};
-+
- static const struct stmmac_pci_func_data galileo_stmmac_func_data[] = {
- 	{
- 		.func = 6,
-@@ -1343,7 +1390,7 @@ static const struct pci_device_id intel_eth_pci_id_table[] = {
- 	{ PCI_DEVICE_DATA(INTEL, TGLH_SGMII1G_1, &tgl_sgmii1g_phy1_info) },
- 	{ PCI_DEVICE_DATA(INTEL, ADLS_SGMII1G_0, &adls_sgmii1g_phy0_info) },
- 	{ PCI_DEVICE_DATA(INTEL, ADLS_SGMII1G_1, &adls_sgmii1g_phy1_info) },
--	{ PCI_DEVICE_DATA(INTEL, ADLN_SGMII1G, &tgl_sgmii1g_phy0_info) },
-+	{ PCI_DEVICE_DATA(INTEL, ADLN_SGMII1G, &adln_sgmii1g_phy0_info) },
- 	{ PCI_DEVICE_DATA(INTEL, RPLP_SGMII1G, &tgl_sgmii1g_phy0_info) },
- 	{}
- };
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.h b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.h
-index 093eed977ab0..2c6b50958988 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.h
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.h
-@@ -124,8 +124,10 @@ static const struct pmc_serdes_regs pid_modphy1_2p5g_regs[] = {
- 	{}
- };
- 
-+static const int adln_tsn_lane_registers[] = {6};
- static const int ehl_tsn_lane_registers[] = {7, 8, 9, 10, 11};
- #else
-+static const int adln_tsn_lane_registers[] = {};
- static const int ehl_tsn_lane_registers[] = {};
- #endif /* CONFIG_INTEL_PMC_IPC */
- 
+> +/**
+> + * phylink_interface_change() - update both cfg_link_an_mode and
+> + * cur_link_an_mode when there is a change in the interface.
+> + * @phydev: pointer to &struct phy_device
+> + *
+> + * When the PHY interface switches between SGMII and 2500BaseX in
+> + * accordance with the link speed, the in-band AN mode should also switch
+> + * based on the PHY interface
+> + */
+> +static void phylink_interface_change(struct phy_device *phydev)
+> +{
+> +	struct phylink *pl = phydev->phylink;
+> +
+> +	if (pl->phy_state.interface != phydev->interface) {
+> +		/* Fallback to the correct AN mode. */
+> +		if (phy_interface_mode_is_8023z(phydev->interface) &&
+> +		    pl->cfg_link_an_mode == MLO_AN_INBAND) {
+> +			pl->cfg_link_an_mode = MLO_AN_PHY;
+> +			pl->cur_link_an_mode = MLO_AN_PHY;
+
+1. Why are you changing both cfg_link_an_mode (configured link AN mode)
+and cur_link_an_mode (current link AN mode) ?
+
+The "configured" link AN mode is supposed to be whatever was configured
+at phylink creation time, and it's never supposed to change. The
+"current" link AN mode can change, but changing that must be followed
+by a major reconfiguration to ensure everything is correctly setup.
+That will happen only because the change to the current link AN mode
+can only happen when pl->phy_state.interface has changed, and the
+change of pl->phy_state.interface triggers the reconfiguration.
+
+2. You force this behaviour on everyone, so now everyone with a SFP
+module that operates in 802.3z mode will be switched out of inband mode
+whether they want that or not. This is likely to cause some breakage.
+
+> +		} else if (pl->config->ovr_an_inband) {
+> +			pl->cfg_link_an_mode = MLO_AN_INBAND;
+> +			pl->cur_link_an_mode = MLO_AN_INBAND;
+
+Here you force inband when not 802.3z mode and ovr_an_inband is set.
+There are SFP modules that do *not* support in-band at all, and this
+will break these modules when combined with a driver that sets
+ovr_an_inband. So more breakage.
+
+Please enumerate the PHY interface modes that you are trying to support
+with this patch set, and indicate whether you want in-band for that
+mode or not, and where the restriction for whether in-band can be used
+comes from (PHY, PCS or MAC) so that it's possible to better understand
+what you're trying to achieve.
+
+Thanks.
+
 -- 
-2.25.1
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
