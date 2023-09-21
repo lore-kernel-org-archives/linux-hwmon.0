@@ -2,63 +2,73 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 822F8E7D0A2
-	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Sep 2023 19:28:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B5B0E7D0A7
+	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Sep 2023 19:41:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230402AbjIUT2k (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 21 Sep 2023 15:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43700 "EHLO
+        id S229477AbjIUTlX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 21 Sep 2023 15:41:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230415AbjIUT2Z (ORCPT
+        with ESMTP id S229648AbjIUTlW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 21 Sep 2023 15:28:25 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437D86A4C;
-        Thu, 21 Sep 2023 10:10:08 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AE479C433CD;
-        Thu, 21 Sep 2023 17:10:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695316207;
-        bh=U9zZ09uXyoXXSUyFPKcYObsYfa/kMWbxZwUKl6YhkHw=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=dmrj+0g1LdhWc+xmSrg53ESNqFSfstDP4DNkfP7uSnfmtcoKQm3woqxZj81UBAsbd
-         3wng837Zi/dbK4+HCXURtOxIcLvZ3oXsEIa+G3eDjAqaqHfwUm0aK8hP6QIYPpn2VZ
-         0VJpGRJn6jQnO7SRdZ9b2+GHJjVj0+vW1gqKZCR4rNEcCeF9d2KVedJT+5U5NybO2c
-         Huzr6bVV5rfR14yNONi0gfBIE6L1wvsRhUw6g4qtpb3FrVqlsWzbhEaLk8q0Ry/OnE
-         KPDGflQcR+OEzQL0CDTcxTlZK1VltoOh62UQES7J/4T85HrDAhMFiJQdWgk463xPrV
-         v2adrfREZnKoQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7CDD1E11F79;
-        Thu, 21 Sep 2023 17:10:07 +0000 (UTC)
-Subject: Re: [GIT PULL] hwmon fixes for v6.6-rc3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230921050647.4048805-1-linux@roeck-us.net>
-References: <20230921050647.4048805-1-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-hwmon.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230921050647.4048805-1-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.6-rc3
-X-PR-Tracked-Commit-Id: 2dd1d862817b850787f4755c05d55e5aeb76dd08
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: b300c0fdf0045ede109a349aa9c79f81bfae086a
-Message-Id: <169531620742.32358.15288942471103702375.pr-tracker-bot@kernel.org>
-Date:   Thu, 21 Sep 2023 17:10:07 +0000
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+        Thu, 21 Sep 2023 15:41:22 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F04819E;
+        Thu, 21 Sep 2023 12:41:16 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1qjFlH-0004qZ-T2; Thu, 21 Sep 2023 11:14:15 +0200
+Message-ID: <e583d026-9401-482d-8f3d-025a952c32c4@leemhuis.info>
+Date:   Thu, 21 Sep 2023 11:14:14 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: hwmon: (nct6775) Regression Bisected
+Content-Language: en-US, de-DE
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Doug Smythies <dsmythies@telus.net>,
+        'Ahmad Khalifa' <ahmad@khalifa.ws>,
+        'Guenter Roeck' <linux@roeck-us.net>
+Cc:     'Jean Delvare' <jdelvare@suse.com>,
+        Linux Hardware Monitoring <linux-hwmon@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <002101d9e7e0$f67c4490$e374cdb0$@telus.net>
+ <ZQVzdlHgWdFhOVyQ@debian.me>
+From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <ZQVzdlHgWdFhOVyQ@debian.me>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1695325276;4635f031;
+X-HE-SMSGID: 1qjFlH-0004qZ-T2
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The pull request you sent on Wed, 20 Sep 2023 22:06:47 -0700:
+[TLDR: This mail in primarily relevant for Linux kernel regression
+tracking. See link in footer if these mails annoy you.]
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.6-rc3
+On 16.09.23 11:20, Bagas Sanjaya wrote:
+> On Fri, Sep 15, 2023 at 07:28:57AM -0700, Doug Smythies wrote:
+>> Kernel 6.6-rc1 has an error during boot. The guilty commit is:
+>> b7f1f7b2523a6a4382f12fe953380b847b80e09d
+>> hwmon: (nct6775) Additional TEMP registers for nct6799
+> [...]
+> Thanks for the regression report. I'm adding it to regzbot:
+> 
+> #regzbot ^introduced: b7f1f7b2523a6a
+> #regzbot title: shift out-of-bounds in nct6799's additional TEMP registers
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/b300c0fdf0045ede109a349aa9c79f81bfae086a
+Fix doesn't use a link regzbot is able to handle, thus point to it manually:
 
-Thank you!
+#regzbot fix: hwmon: (nct6775) Fix non-existent ALARM warning
+#regzbot ignore-activity
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
+
+
