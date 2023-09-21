@@ -2,493 +2,414 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2347E7D0A2
-	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Sep 2023 17:29:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A7CCE7D0A5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Sep 2023 17:29:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbjIUR3Y (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 21 Sep 2023 13:29:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53570 "EHLO
+        id S230038AbjIUR3h (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 21 Sep 2023 13:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbjIUR2u (ORCPT
+        with ESMTP id S230062AbjIUR2z (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 21 Sep 2023 13:28:50 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E14154903;
-        Thu, 21 Sep 2023 10:17:08 -0700 (PDT)
+        Thu, 21 Sep 2023 13:28:55 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC89F54907
+        for <linux-hwmon@vger.kernel.org>; Thu, 21 Sep 2023 10:17:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1695316629; x=1726852629;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=UKg+X6Op5cASxXwGUeFtTyF/wDyM/yKi1ZuAir9nXgg=;
-  b=P51JNEHwKo6mppy3GG5ZE2goYqd8JI/hbgjJYpTidMJZ+OK03CreTy2Z
-   VP1le3IG+Ho7SOl9tl22dLu5Nt+ehnqBXeeQ1WIcTg+jE2ZJeFeGGIz6j
-   fQhgbh0v0ASvUp6TwfFAlAUcldlZ1Qk/n9Z0tVMbUauciz866Ffrw0aZc
-   yhcKeikvhGDRU/H0T93/Y47kbm32yY9JsA8BX9Ts5rdS5uFiMKjnRz9ql
-   Zf0fM0GDJFxNWfiQnuA91CSlT3b4dQjwIA7PJyCADHBQNBfpLdf9a21v2
-   FyUUs+URmxHEZWe/25+cO/fmi4rr2TOAQrOjg99EKX+TQvmiF695Hr6Fa
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="444608334"
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=vSuqBx1dLAO4E9D3i0J3xhqpToCEfluHZRnjfQWKV70=;
+  b=mmGk6QAzYti7PMNgjFx/L4FRUxhCgInzG8m1LAIAAdGdVEtnYDw9UV3S
+   KSNHt+H3xW41HkNfS038jrfcN12wiSFrdygSSvdvDleavNZ4K21LsSdmg
+   ZHdypmB2P9NUQTB39MQNGAZ5QdPwBFaN8/W1MZhihOPemjNLcaAvKngtQ
+   CHgiaFSijGy2yIMN9TlGCMTTpFUjZasLtncaq15sXkBJDGN0zBhMKNIIP
+   zLW1ALFhZh+c94SOuXgJ89OD/QuRpR+PJ3hvWt0Z6K3DKHi8dCVzeE+W4
+   AyX+j9XK1/QxvdClFfvjgCM/lDHsZ67FF+GgRyYhS7rO3MGafV2PBoxRR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10840"; a="380438472"
 X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
-   d="scan'208";a="444608334"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 05:21:12 -0700
+   d="scan'208";a="380438472"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 07:09:39 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="862442052"
+X-IronPort-AV: E=McAfee;i="6600,9927,10840"; a="747126711"
 X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
-   d="scan'208";a="862442052"
-Received: from yongliang-ubuntu20-ilbpg12.png.intel.com ([10.88.229.33])
-  by fmsmga002.fm.intel.com with ESMTP; 21 Sep 2023 05:21:00 -0700
-From:   Choong Yong Liang <yong.liang.choong@linux.intel.com>
-To:     Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
-        David E Box <david.e.box@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Jose Abreu <Jose.Abreu@synopsys.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Wong Vee Khee <veekhee@apple.com>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Revanth Kumar Uppala <ruppala@nvidia.com>,
-        Shenwei Wang <shenwei.wang@nxp.com>,
-        Andrey Konovalov <andrey.konovalov@linaro.org>,
-        Jochen Henneberg <jh@henneberg-systemdesign.com>
-Cc:     David E Box <david.e.box@intel.com>,
-        Andrew Halaney <ahalaney@redhat.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        bpf@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
-        Tan Tee Min <tee.min.tan@linux.intel.com>,
-        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
-        Lai Peter Jun Ann <jun.ann.lai@intel.com>
-Subject: [PATCH net-next v3 4/5] net: stmmac: enable Intel mGbE 1G/2.5G auto-negotiation support
-Date:   Thu, 21 Sep 2023 20:19:45 +0800
-Message-Id: <20230921121946.3025771-5-yong.liang.choong@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230921121946.3025771-1-yong.liang.choong@linux.intel.com>
-References: <20230921121946.3025771-1-yong.liang.choong@linux.intel.com>
+   d="scan'208";a="747126711"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga002.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 21 Sep 2023 07:09:38 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Thu, 21 Sep 2023 07:09:38 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32 via Frontend Transport; Thu, 21 Sep 2023 07:09:38 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.171)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.32; Thu, 21 Sep 2023 07:09:38 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lTIABQ0+tM1eaiDh2XslfSHRJpqqU8MXsOU9ByWGkief2pAVS9BJ6Nwrde72DXf/ZUlTlk4YoYGgP4XMZhrNB8qSDgPu/1DESoyWiVU84sxQFR//TLJ54T5n9sNXxeV4wKZ7CMEH34CAxRc+a+8QSmncHcA8eCAzP5Hs7bDcXGyTWrifnuJrdCLLn8M6eEThhhMY8kZsuF4aq+iIdw9s2rIpJbP2kKYkc+nMLlTLN+LXznVehZzpyxn9+I28+xTM333L+vYm6mlXIMAUVxHJVLcAiGn6N96WxjcdKNnWjzVBfYCnmCIg1HtygWbOdG3DGMAIBDmspRhkuQ+FnqPtFw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=h27fxy5WueY9Ei8oApWzItwHlmCS1slDb/w3OYbtm38=;
+ b=FnwKXVj/+0PmLjcXfgmDwKvgswHlQxljvBwdpnlatRuF1x1+nxrDUzj4RMsQ1tV1NmhOH6QlKQZsMejjl12q+v6rpJ03DumPWJapX/Arnq+5FALRICalwAYcxeALfX8iynQ1dOFP49p6Wobs40yDFfcstv/svYBKuNMCkqjzc6i1gS/YQUBqpSva+J/T0cTc+916GbJoA47PtCWFJ91aXOvgPgvniWf7JMv6mivVAK3QDyzSMmA1ddXFZtHZHDmY6BjfkL5L5lHPwYF2qcdBViQDTMmUgSti3MdD94Ygk10trrPDiWRplMxsbEcoAB8p+kpW42adCL2IlmPIpuT8TQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS0PR11MB7958.namprd11.prod.outlook.com (2603:10b6:8:f9::19) by
+ DM4PR11MB6143.namprd11.prod.outlook.com (2603:10b6:8:b1::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.27; Thu, 21 Sep 2023 14:09:36 +0000
+Received: from DS0PR11MB7958.namprd11.prod.outlook.com
+ ([fe80::6b9:384:8202:b294]) by DS0PR11MB7958.namprd11.prod.outlook.com
+ ([fe80::6b9:384:8202:b294%7]) with mapi id 15.20.6792.026; Thu, 21 Sep 2023
+ 14:09:35 +0000
+Message-ID: <ae591302-4c1b-227a-5a4e-b8e726144447@intel.com>
+Date:   Thu, 21 Sep 2023 19:39:23 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.15.1
+Subject: Re: [PATCH v5 5/6] drm/xe/hwmon: Expose hwmon energy attribute
+To:     Badal Nilawar <badal.nilawar@intel.com>,
+        <intel-xe@lists.freedesktop.org>, <linux-hwmon@vger.kernel.org>
+CC:     <anshuman.gupta@intel.com>, <ashutosh.dixit@intel.com>,
+        <linux@roeck-us.net>, <andi.shyti@linux.intel.com>,
+        <matthew.brost@intel.com>, <rodrigo.vivi@intel.com>
+References: <20230921102519.3355538-1-badal.nilawar@intel.com>
+ <20230921102519.3355538-6-badal.nilawar@intel.com>
+Content-Language: en-US
+From:   Riana Tauro <riana.tauro@intel.com>
+In-Reply-To: <20230921102519.3355538-6-badal.nilawar@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN2PR01CA0089.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:23::34) To DS0PR11MB7958.namprd11.prod.outlook.com
+ (2603:10b6:8:f9::19)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR11MB7958:EE_|DM4PR11MB6143:EE_
+X-MS-Office365-Filtering-Correlation-Id: a5de4779-792e-4631-ee0d-08dbbaac624b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: cpVy/7gc7eSCg6YTgrg64qPztUPWiTrtrvQ2bi3d+VEPG0o8GufkXC8wNgsOa03f9xv92Ny7EthMw7EtRvo7enS5MnWqiIfFas1fyCITTuBUN0Yb+NJp/tnVrRY7odSB1CaWlSzGDRTqfTEI+B03q+Ohi/QKacT5VFucjlimusEq4SC9u/Am1iFKDLOvn4vqUbw+H2Zh4T8U3hp1ChZhrjrP3PIy2JXGGyaThZZqmNbmAPzDWYh+LFhknQ3hPusr5RNYE09e+n3bw0/uUNvWrYUpMGGp82pTuWm5CSRujKTV6FelzNxkoLR64xvyDolrXenjRtIbkI3/l4cLtVBhG3jgfwds0HQD1gpdBmjiRlEa3ys1eGLwi2UqgShcu1KMa0Eg+pzYuJ0jh8Fl22ZIP3BI77Hh0zVLaUqmP5WdjQB33sToYlr0dtWU86muJt9C/XEJGYsXrzcunhSVoQ38eXkmD91neQHu/i74zkb9vP4o68WlTeg7cfDAtG7e+W3P/6H+Uo/jQIR2g66WvjZjWKJxops61103fy1w8ZyqChE1Q/GxRh+Y2xv0am30iYrACRKv18IW7xn/rG3IZ8x8XpvND1em32+//dIYKg6awEzJQ83HEK6r4Myl6D+VA23+GI5EHl085xV6o3cwP9rQuA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7958.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(346002)(376002)(136003)(366004)(396003)(451199024)(186009)(1800799009)(478600001)(6512007)(6486002)(44832011)(5660300002)(6506007)(53546011)(86362001)(66946007)(66476007)(38100700002)(41300700001)(316002)(66556008)(31686004)(6666004)(82960400001)(26005)(8936002)(2616005)(83380400001)(31696002)(36756003)(4326008)(8676002)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZjdVWDdnbkl6VkFrVVYzQzB1SytCbGFIdkI3a0xjM2dQN3lvQ3NZdHlhaExC?=
+ =?utf-8?B?Q01HaWNwbzVvemZEV2g1cHBucTU1MFlGcVJEWnA3eFMwVkp1b1FiTFpIRVhn?=
+ =?utf-8?B?SkxndFYxbFQrRzltZlhIZ0lrZkQrelAxdkt0RExzRnBOUVhuakJIa2ZxaHIx?=
+ =?utf-8?B?RWlib3hNV3V3T1BiazRXelZ1dzRZbnliQzJKcElhWWJXdklDcUNqTHlFSjZR?=
+ =?utf-8?B?c2NKWi9oOFhpemROaGttOW04UzEzaE13Vm5XS3pWQlkrb2NIT3hwdEpFRlJC?=
+ =?utf-8?B?UE5aMlRGcGErWUlIdXNIT09WT1k1ZzhqU3l6NzB0M3ZPU1QxbnlFRUdUdjZZ?=
+ =?utf-8?B?akp0SVVsNzdjMTRFVE8zTXc2b2M3a1hHcHNXdml1R2E2alBlM0o1cjB4VVUy?=
+ =?utf-8?B?RCs0akFUR1htM0tJZmxBS0FpZi9tMnhla0xMc1IvdDZKLzZhNGtDY0N1SVhk?=
+ =?utf-8?B?THB4bXNIbFgxRllnSzFQR29nWHdiblkwZnpvSjdBYzg3cStCSlI4ZjdnVjlF?=
+ =?utf-8?B?TE5CZ1hPdEdEYXZxamk2cm9ORERrbXZNMkNqZjdBdGN1MFQveGRKQnpSdTJk?=
+ =?utf-8?B?U0xwZGRpRnQ5d1d2VWpiVUpVYy9rbWV0RmZYelFuYjZRZFBXNUV4cVpwOWFC?=
+ =?utf-8?B?TGdGRUlZV0I1N0tPRmVCY21kd2kxL0NHOTVIRHlWM2NLaHIxVkErSlBvZ3dG?=
+ =?utf-8?B?TDVDZXFKZi9Ka3hxTVZ4RUc1Mys4MnhDRkh3NVV3OTd6dDVlbjQ2Y2UxZzk2?=
+ =?utf-8?B?TE1zTmhwVVI4V1l6REkzTGpTSnlLTFBRSjNQanFxbDNBemU5QjRyL3ZFdnlW?=
+ =?utf-8?B?QzdjdDFQQ1llbTRLTkx5SDZRZXZkUHBSTVliamdUZGZEblh6TC83T0pscFFi?=
+ =?utf-8?B?alNkanZIZzROV3B6ajMwL213djZHSnRoSzhldDA2UzhITml4eWJWeUJaV0NS?=
+ =?utf-8?B?bWcySTcycHpCdHFtWjlmQ09pL05tNEhVT01ENGlCNzg2WFBFaWYyK0l3QnQ1?=
+ =?utf-8?B?YWZjSS9DYlhzcUlZK3ZOa08wWmZSSk1sYW9jVXJZT0F1TTRnRTFXaEcvN3Ex?=
+ =?utf-8?B?M0t2QkN2L2RVV0ZRTXRLeW5ZYk5ZQ1ptQVluTzJrbllwSUNiUEszUDVqR0x6?=
+ =?utf-8?B?UWJ6d3dVZzJoWFhFeVI3TVRoL1FOMml6Qmx3UW9PeG5JYmZ3V05PcXU1anlv?=
+ =?utf-8?B?bEcySGVTelpFTllaMFZKcFgvTzlqaW5YUHBEZThkYThTYS9icVlXSXlCcjh4?=
+ =?utf-8?B?K2R4eitacXorWGsyaTJaYW9YZFlsSmgzaXJlZlF3a2N6ZTVVNmpBU1ppbjg1?=
+ =?utf-8?B?WXZmelIwcDVIS0FRd2l2K2p2RkpUbmxjSGRVTU1TRGdxUkxzMjZkVktjZGg0?=
+ =?utf-8?B?ZkRNbVJnUkdvTTNGanBjNVhkMFI4SzRadk5TdGY3MXVZdGFlMHBmbHorODVO?=
+ =?utf-8?B?M1lYd05jOGJscDBEOW5KdWpJSlFjM0s3U3J4N1NId1pPN0I2YWVwZkk2TXZm?=
+ =?utf-8?B?RlBzbXdkWTl0ZG84ejFmaGNReklKWEQyT1VoTlorOTF3TUlaMG9XY25SK0kx?=
+ =?utf-8?B?bUZXeTJHbDB3b01ZZ2tLMlRRbnhOUmlicXI4dHNuWWZNRHdLWk83MnJkZDVK?=
+ =?utf-8?B?bk9mVkRyZ0dDaHVpeXcwcmpkbVVBVWRJNmphWDFQSnpZUVhRQkVCK29hb3Ra?=
+ =?utf-8?B?bmpNUlVtanNaMDdvWEdNZmZqQ1NGVU14dE5IV0dCaEswSXZvNzJuV0JMa3Vv?=
+ =?utf-8?B?SDR2RitVNkE4V0MxbmJkTzhaVzloMkY4R0pka09WOGRjTVc5Q084Y1czOUly?=
+ =?utf-8?B?SVRINUlkOXltdFJHVUoyTXpWYjRVZDZ2TXllV3RrTzRySjJRNi8xeDdhVDNQ?=
+ =?utf-8?B?a3V5b3J2UU1uVDFTZ1RQSEhkdlJFWDZBZnI0VDFOYUZLVE8zOUQ2cVYxc01L?=
+ =?utf-8?B?T2Z6Z1VUWUtObStjTk9tMlRiYmVoeUdCZWZVazQzLzBpQ1AraDZpbjB2SDNq?=
+ =?utf-8?B?UW5xM3kzRW1QK09WTnhkc1FpMFF6VzVRU2tNOEg4eEo4bmd2WDBwTDFsWUxR?=
+ =?utf-8?B?djg5emNreU5BbzkweVVpN3d6ZDF5cjdIaTM2ZmtuQWJEUHJvRmYrakdqWktI?=
+ =?utf-8?Q?lE1p+q0yVnHQAerZZYZpL3jeC?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: a5de4779-792e-4631-ee0d-08dbbaac624b
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB7958.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Sep 2023 14:09:35.3588
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gIsfHhEe1W1weHSvt2/bGmyTXnuUR66p+oBgxBBxfU5TWp+uwh3l+qYxxkqgA2fPBVqATQiL/dEfvPtpI82Xfg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6143
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: "Tan, Tee Min" <tee.min.tan@linux.intel.com>
+Hi Badal
 
-Initially, Intel mGbE was only able to configure the overclocking of 2.5
-times clock rate to enable 2.5Gbps in the BIOS during boot time. Kernel
-driver had no access to modify the clock rate for 1G/2.5G mode at runtime.
+On 9/21/2023 3:55 PM, Badal Nilawar wrote:
+> Expose hwmon energy attribute to show device level energy usage
+> 
+> v2:
+>    - %s/hwm_/hwmon_/
+>    - Convert enums to upper case
+> v3:
+>    - %s/hwmon_/xe_hwmon
+>    - Remove gt specific hwmon attributes
+> v4:
+>   - %s/REG_PKG_ENERGY_STATUS/REG_ENERGY_STATUS_ALL (Riana)
+> 
+> Signed-off-by: Badal Nilawar <badal.nilawar@intel.com>
+> ---
+>   .../ABI/testing/sysfs-driver-intel-xe-hwmon   |   7 ++
+>   drivers/gpu/drm/xe/regs/xe_gt_regs.h          |   2 +
+>   drivers/gpu/drm/xe/regs/xe_mchbar_regs.h      |   3 +
+>   drivers/gpu/drm/xe/xe_hwmon.c                 | 105 +++++++++++++++++-
+>   4 files changed, 116 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon b/Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon
+> index 7f9407c20864..1a7a6c23e141 100644
+> --- a/Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon
+> +++ b/Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon
+> @@ -52,3 +52,10 @@ Description:	RO. Current Voltage in millivolt.
+>   
+>   		Only supported for particular Intel xe graphics platforms.
+>   
+> +What:		/sys/devices/.../hwmon/hwmon<i>/energy1_input
+> +Date:		September 2023
+> +KernelVersion:	6.5
+> +Contact:	intel-xe@lists.freedesktop.org
+> +Description:	RO. Energy input of device in microjoules.
+> +
+> +		Only supported for particular Intel xe graphics platforms.
+> diff --git a/drivers/gpu/drm/xe/regs/xe_gt_regs.h b/drivers/gpu/drm/xe/regs/xe_gt_regs.h
+> index 102663cbc320..9e6ce74fdd68 100644
+> --- a/drivers/gpu/drm/xe/regs/xe_gt_regs.h
+> +++ b/drivers/gpu/drm/xe/regs/xe_gt_regs.h
+> @@ -413,8 +413,10 @@
+>   #define XEHPC_BCS5_BCS6_INTR_MASK		XE_REG(0x190118)
+>   #define XEHPC_BCS7_BCS8_INTR_MASK		XE_REG(0x19011c)
+>   
+> +#define PVC_GT0_PACKAGE_ENERGY_STATUS		XE_REG(0x281004)
+This is not used in the file
+>   #define PVC_GT0_PACKAGE_RAPL_LIMIT		XE_REG(0x281008)
+>   #define PVC_GT0_PACKAGE_POWER_SKU_UNIT		XE_REG(0x281068)
+> +#define PVC_GT0_PLATFORM_ENERGY_STATUS		XE_REG(0x28106c)
+>   #define PVC_GT0_PACKAGE_POWER_SKU		XE_REG(0x281080)
+>   
+>   #endif
+> diff --git a/drivers/gpu/drm/xe/regs/xe_mchbar_regs.h b/drivers/gpu/drm/xe/regs/xe_mchbar_regs.h
+> index 27f1d42baf6d..d8ecbe1858d1 100644
+> --- a/drivers/gpu/drm/xe/regs/xe_mchbar_regs.h
+> +++ b/drivers/gpu/drm/xe/regs/xe_mchbar_regs.h
+> @@ -25,6 +25,9 @@
+>   
+>   #define PCU_CR_PACKAGE_POWER_SKU_UNIT		XE_REG(MCHBAR_MIRROR_BASE_SNB + 0x5938)
+>   #define   PKG_PWR_UNIT				REG_GENMASK(3, 0)
+> +#define   PKG_ENERGY_UNIT			REG_GENMASK(12, 8)
+> +
+> +#define PCU_CR_PACKAGE_ENERGY_STATUS		XE_REG(MCHBAR_MIRROR_BASE_SNB + 0x593c)
+>   
+>   #define PCU_CR_PACKAGE_RAPL_LIMIT		XE_REG(MCHBAR_MIRROR_BASE_SNB + 0x59a0)
+>   #define   PKG_PWR_LIM_1				REG_GENMASK(14, 0)
+> diff --git a/drivers/gpu/drm/xe/xe_hwmon.c b/drivers/gpu/drm/xe/xe_hwmon.c
+> index 431995045faa..cb75b9a386c0 100644
+> --- a/drivers/gpu/drm/xe/xe_hwmon.c
+> +++ b/drivers/gpu/drm/xe/xe_hwmon.c
+> @@ -22,6 +22,7 @@ enum xe_hwmon_reg {
+>   	REG_PKG_POWER_SKU,
+>   	REG_PKG_POWER_SKU_UNIT,
+>   	REG_GT_PERF_STATUS,
+> +	REG_PKG_ENERGY_STATUS,
+PVC register above has it PLATFORM. Is PKG okay incase the other 
+register is added later?
+>   };
+>   
+>   enum xe_hwmon_reg_operation {
+> @@ -36,12 +37,20 @@ enum xe_hwmon_reg_operation {
+>   #define SF_POWER	1000000		/* microwatts */
+>   #define SF_CURR		1000		/* milliamperes */
+>   #define SF_VOLTAGE	1000		/* millivolts */
+> +#define SF_ENERGY	1000000		/* microjoules */
+> +
+> +struct hwmon_energy_info {
+Better to retain xe prefix since all the enums and structs have the 
+prefix across the file
 
-Now, this patch enables the runtime 1G/2.5G auto-negotiation support to
-gets rid of the dependency on BIOS to change the 1G/2.5G clock rate.
+With the above changes
 
-This patch adds several new functions below:-
-- intel_tsn_interface_is_available(): This new function reads FIA lane
-  ownership registers and common lane registers through IPC commands
-  to know which lane the mGbE port is assigned to.
-- stmmac_mac_prepare(): To obtain the latest PHY interface from phylink
-  during initialization and call intel_config_serdes() to proceed with
-  SERDES configuration.
-- intel_config_serdes(): To configure the SERDES based on the assigned
-  lane and latest PHY interface, it sends IPC command to the PMC through
-  PMC driver/API. The PMC acts as a proxy for R/W on behalf of the driver.
-- intel_set_reg_access(): Set the register access to the available TSN
-  interface.
+Reviewed-by: Riana Tauro <riana.tauro@intel.com>
 
-Signed-off-by: Tan, Tee Min <tee.min.tan@linux.intel.com>
-Signed-off-by: Choong Yong Liang <yong.liang.choong@linux.intel.com>
----
- drivers/net/ethernet/stmicro/stmmac/Kconfig   |   1 +
- .../net/ethernet/stmicro/stmmac/dwmac-intel.c | 134 +++++++++++++++++-
- .../net/ethernet/stmicro/stmmac/dwmac-intel.h |  79 +++++++++++
- .../net/ethernet/stmicro/stmmac/stmmac_main.c |  20 +++
- include/linux/stmmac.h                        |   1 +
- 5 files changed, 231 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/Kconfig b/drivers/net/ethernet/stmicro/stmmac/Kconfig
-index a2b9e289aa36..4340efd9bd50 100644
---- a/drivers/net/ethernet/stmicro/stmmac/Kconfig
-+++ b/drivers/net/ethernet/stmicro/stmmac/Kconfig
-@@ -273,6 +273,7 @@ config DWMAC_INTEL
- 	default X86
- 	depends on X86 && STMMAC_ETH && PCI
- 	depends on COMMON_CLK
-+	select INTEL_PMC_IPC
- 	help
- 	  This selects the Intel platform specific bus support for the
- 	  stmmac driver. This driver is used for Intel Quark/EHL/TGL.
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-index a3a249c63598..a211f42914a2 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-@@ -5,6 +5,7 @@
- #include <linux/clk-provider.h>
- #include <linux/pci.h>
- #include <linux/dmi.h>
-+#include <linux/platform_data/x86/intel_pmc_ipc.h>
- #include "dwmac-intel.h"
- #include "dwmac4.h"
- #include "stmmac.h"
-@@ -14,6 +15,9 @@ struct intel_priv_data {
- 	int mdio_adhoc_addr;	/* mdio address for serdes & etc */
- 	unsigned long crossts_adj;
- 	bool is_pse;
-+	const int *tsn_lane_registers;
-+	int max_tsn_lane_registers;
-+	int pid_modphy;
- };
- 
- /* This struct is used to associate PCI Function of MAC controller on a board,
-@@ -93,7 +97,7 @@ static int intel_serdes_powerup(struct net_device *ndev, void *priv_data)
- 	data &= ~SERDES_RATE_MASK;
- 	data &= ~SERDES_PCLK_MASK;
- 
--	if (priv->plat->max_speed == 2500)
-+	if (priv->plat->phy_interface == PHY_INTERFACE_MODE_2500BASEX)
- 		data |= SERDES_RATE_PCIE_GEN2 << SERDES_RATE_PCIE_SHIFT |
- 			SERDES_PCLK_37p5MHZ << SERDES_PCLK_SHIFT;
- 	else
-@@ -414,6 +418,106 @@ static void intel_mgbe_pse_crossts_adj(struct intel_priv_data *intel_priv,
- 	}
- }
- 
-+#if IS_ENABLED(CONFIG_INTEL_PMC_IPC)
-+static bool intel_tsn_interface_is_available(struct net_device *ndev,
-+					     struct intel_priv_data *intel_priv)
-+{
-+	struct stmmac_priv *priv = netdev_priv(ndev);
-+	struct pmc_ipc_cmd tmp = {0};
-+	u32 rbuf[4] = {0};
-+	int ret, i, j;
-+
-+	if (priv->plat->serdes_powerup) {
-+		tmp.cmd = IPC_SOC_REGISTER_ACCESS;
-+		tmp.sub_cmd = IPC_SOC_SUB_CMD_READ;
-+
-+		for (i = 0; i < 5; i++) {
-+			tmp.wbuf[0] = R_PCH_FIA_15_PCR_LOS1_REG_BASE + i;
-+
-+			ret = intel_pmc_ipc(&tmp, rbuf);
-+			if (ret < 0) {
-+				netdev_info(priv->dev,
-+					    "Failed to read from PMC.\n");
-+				return false;
-+			}
-+
-+			for (j = 0; j <= intel_priv->max_tsn_lane_registers; j++)
-+				if ((rbuf[0] >>
-+				    (4 * (intel_priv->tsn_lane_registers[j] % 8)) &
-+				     B_PCH_FIA_PCR_L0O) == 0xB)
-+					return true;
-+		}
-+	}
-+	return false;
-+}
-+
-+static int intel_set_reg_access(const struct pmc_serdes_regs *regs, int max_regs)
-+{
-+	int ret = 0, i;
-+
-+	for (i = 0; i < max_regs; i++) {
-+		struct pmc_ipc_cmd tmp = {0};
-+		u32 buf[4] = {0};
-+
-+		tmp.cmd = IPC_SOC_REGISTER_ACCESS;
-+		tmp.sub_cmd = IPC_SOC_SUB_CMD_WRITE;
-+		tmp.wbuf[0] = (u32)regs[i].index;
-+		tmp.wbuf[1] = regs[i].val;
-+
-+		ret = intel_pmc_ipc(&tmp, buf);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
-+	return ret;
-+}
-+
-+static int intel_config_serdes(struct net_device *ndev, void *intel_data)
-+{
-+	struct intel_priv_data *intel_priv = intel_data;
-+	struct stmmac_priv *priv = netdev_priv(ndev);
-+	int ret = 0;
-+
-+	if (!intel_tsn_interface_is_available(ndev, intel_priv)) {
-+		netdev_info(priv->dev,
-+			    "No TSN interface available to set the registers.\n");
-+		goto pmc_read_error;
-+	}
-+
-+	if (intel_priv->pid_modphy == PID_MODPHY1) {
-+		if (priv->plat->phy_interface == PHY_INTERFACE_MODE_2500BASEX) {
-+			ret = intel_set_reg_access(pid_modphy1_2p5g_regs,
-+						   ARRAY_SIZE(pid_modphy1_2p5g_regs));
-+		} else {
-+			ret = intel_set_reg_access(pid_modphy1_1g_regs,
-+						   ARRAY_SIZE(pid_modphy1_1g_regs));
-+		}
-+	} else {
-+		if (priv->plat->phy_interface == PHY_INTERFACE_MODE_2500BASEX) {
-+			ret = intel_set_reg_access(pid_modphy3_2p5g_regs,
-+						   ARRAY_SIZE(pid_modphy3_2p5g_regs));
-+		} else {
-+			ret = intel_set_reg_access(pid_modphy3_1g_regs,
-+						   ARRAY_SIZE(pid_modphy3_1g_regs));
-+		}
-+	}
-+
-+	if (ret < 0)
-+		goto pmc_read_error;
-+
-+pmc_read_error:
-+	intel_serdes_powerdown(ndev, intel_priv);
-+	intel_serdes_powerup(ndev, intel_priv);
-+
-+	return ret;
-+}
-+#else
-+static int intel_config_serdes(struct net_device *ndev, void *intel_data)
-+{
-+	return -EOPNOTSUPP;
-+}
-+#endif /* CONFIG_INTEL_PMC_IPC */
-+
- static void common_default_data(struct plat_stmmacenet_data *plat)
- {
- 	plat->clk_csr = 2;	/* clk_csr_i = 20-35MHz & MDC = clk_csr_i/16 */
-@@ -624,6 +728,8 @@ static int intel_mgbe_common_data(struct pci_dev *pdev,
- static int ehl_common_data(struct pci_dev *pdev,
- 			   struct plat_stmmacenet_data *plat)
- {
-+	struct intel_priv_data *intel_priv = plat->bsp_priv;
-+
- 	plat->rx_queues_to_use = 8;
- 	plat->tx_queues_to_use = 8;
- 	plat->flags |= STMMAC_FLAG_USE_PHY_WOL;
-@@ -639,20 +745,28 @@ static int ehl_common_data(struct pci_dev *pdev,
- 	plat->safety_feat_cfg->prtyen = 0;
- 	plat->safety_feat_cfg->tmouten = 0;
- 
-+	intel_priv->tsn_lane_registers = ehl_tsn_lane_registers;
-+	intel_priv->max_tsn_lane_registers = ARRAY_SIZE(ehl_tsn_lane_registers);
-+
- 	return intel_mgbe_common_data(pdev, plat);
- }
- 
- static int ehl_sgmii_data(struct pci_dev *pdev,
- 			  struct plat_stmmacenet_data *plat)
- {
-+	struct intel_priv_data *intel_priv = plat->bsp_priv;
-+
- 	plat->bus_id = 1;
- 	plat->phy_interface = PHY_INTERFACE_MODE_SGMII;
--	plat->speed_mode_2500 = intel_speed_mode_2500;
-+	plat->max_speed = SPEED_2500;
- 	plat->serdes_powerup = intel_serdes_powerup;
- 	plat->serdes_powerdown = intel_serdes_powerdown;
-+	plat->config_serdes = intel_config_serdes;
- 
- 	plat->clk_ptp_rate = 204800000;
- 
-+	intel_priv->pid_modphy = PID_MODPHY3;
-+
- 	return ehl_common_data(pdev, plat);
- }
- 
-@@ -705,10 +819,16 @@ static struct stmmac_pci_info ehl_pse0_rgmii1g_info = {
- static int ehl_pse0_sgmii1g_data(struct pci_dev *pdev,
- 				 struct plat_stmmacenet_data *plat)
- {
-+	struct intel_priv_data *intel_priv = plat->bsp_priv;
-+
- 	plat->phy_interface = PHY_INTERFACE_MODE_SGMII;
--	plat->speed_mode_2500 = intel_speed_mode_2500;
-+	plat->max_speed = SPEED_2500;
- 	plat->serdes_powerup = intel_serdes_powerup;
- 	plat->serdes_powerdown = intel_serdes_powerdown;
-+	plat->config_serdes = intel_config_serdes;
-+
-+	intel_priv->pid_modphy = PID_MODPHY1;
-+
- 	return ehl_pse0_common_data(pdev, plat);
- }
- 
-@@ -746,10 +866,16 @@ static struct stmmac_pci_info ehl_pse1_rgmii1g_info = {
- static int ehl_pse1_sgmii1g_data(struct pci_dev *pdev,
- 				 struct plat_stmmacenet_data *plat)
- {
-+	struct intel_priv_data *intel_priv = plat->bsp_priv;
-+
- 	plat->phy_interface = PHY_INTERFACE_MODE_SGMII;
--	plat->speed_mode_2500 = intel_speed_mode_2500;
-+	plat->max_speed = SPEED_2500;
- 	plat->serdes_powerup = intel_serdes_powerup;
- 	plat->serdes_powerdown = intel_serdes_powerdown;
-+	plat->config_serdes = intel_config_serdes;
-+
-+	intel_priv->pid_modphy = PID_MODPHY1;
-+
- 	return ehl_pse1_common_data(pdev, plat);
- }
- 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.h b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.h
-index 0a37987478c1..093eed977ab0 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.h
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.h
-@@ -50,4 +50,83 @@
- #define PCH_PTP_CLK_FREQ_19_2MHZ	(GMAC_GPO0)
- #define PCH_PTP_CLK_FREQ_200MHZ		(0)
- 
-+#define	PID_MODPHY1 0xAA
-+#define	PID_MODPHY3 0xA8
-+
-+#if IS_ENABLED(CONFIG_INTEL_PMC_IPC)
-+struct pmc_serdes_regs {
-+	u8 index;
-+	u32 val;
-+};
-+
-+/* Modphy Register index */
-+#define R_PCH_FIA_15_PCR_LOS1_REG_BASE			8
-+#define R_PCH_FIA_15_PCR_LOS2_REG_BASE			9
-+#define R_PCH_FIA_15_PCR_LOS3_REG_BASE			10
-+#define R_PCH_FIA_15_PCR_LOS4_REG_BASE			11
-+#define R_PCH_FIA_15_PCR_LOS5_REG_BASE			12
-+#define B_PCH_FIA_PCR_L0O				GENMASK(3, 0)
-+#define PID_MODPHY1_B_MODPHY_PCR_LCPLL_DWORD0		13
-+#define PID_MODPHY1_N_MODPHY_PCR_LCPLL_DWORD2		14
-+#define PID_MODPHY1_N_MODPHY_PCR_LCPLL_DWORD7		15
-+#define PID_MODPHY1_N_MODPHY_PCR_LPPLL_DWORD10		16
-+#define PID_MODPHY1_N_MODPHY_PCR_CMN_ANA_DWORD30	17
-+#define PID_MODPHY3_B_MODPHY_PCR_LCPLL_DWORD0		18
-+#define PID_MODPHY3_N_MODPHY_PCR_LCPLL_DWORD2		19
-+#define PID_MODPHY3_N_MODPHY_PCR_LCPLL_DWORD7		20
-+#define PID_MODPHY3_N_MODPHY_PCR_LPPLL_DWORD10		21
-+#define PID_MODPHY3_N_MODPHY_PCR_CMN_ANA_DWORD30	22
-+
-+#define B_MODPHY_PCR_LCPLL_DWORD0_1G		0x46AAAA41
-+#define N_MODPHY_PCR_LCPLL_DWORD2_1G		0x00000139
-+#define N_MODPHY_PCR_LCPLL_DWORD7_1G		0x002A0003
-+#define N_MODPHY_PCR_LPPLL_DWORD10_1G		0x00170008
-+#define N_MODPHY_PCR_CMN_ANA_DWORD30_1G		0x0000D4AC
-+#define B_MODPHY_PCR_LCPLL_DWORD0_2P5G		0x58555551
-+#define N_MODPHY_PCR_LCPLL_DWORD2_2P5G		0x0000012D
-+#define N_MODPHY_PCR_LCPLL_DWORD7_2P5G		0x001F0003
-+#define N_MODPHY_PCR_LPPLL_DWORD10_2P5G		0x00170008
-+#define N_MODPHY_PCR_CMN_ANA_DWORD30_2P5G	0x8200ACAC
-+
-+static const struct pmc_serdes_regs pid_modphy3_1g_regs[] = {
-+	{ PID_MODPHY3_B_MODPHY_PCR_LCPLL_DWORD0,	B_MODPHY_PCR_LCPLL_DWORD0_1G },
-+	{ PID_MODPHY3_N_MODPHY_PCR_LCPLL_DWORD2,	N_MODPHY_PCR_LCPLL_DWORD2_1G },
-+	{ PID_MODPHY3_N_MODPHY_PCR_LCPLL_DWORD7,	N_MODPHY_PCR_LCPLL_DWORD7_1G },
-+	{ PID_MODPHY3_N_MODPHY_PCR_LPPLL_DWORD10,	N_MODPHY_PCR_LPPLL_DWORD10_1G },
-+	{ PID_MODPHY3_N_MODPHY_PCR_CMN_ANA_DWORD30,	N_MODPHY_PCR_CMN_ANA_DWORD30_1G },
-+	{}
-+};
-+
-+static const struct pmc_serdes_regs pid_modphy3_2p5g_regs[] = {
-+	{ PID_MODPHY3_B_MODPHY_PCR_LCPLL_DWORD0,	B_MODPHY_PCR_LCPLL_DWORD0_2P5G },
-+	{ PID_MODPHY3_N_MODPHY_PCR_LCPLL_DWORD2,	N_MODPHY_PCR_LCPLL_DWORD2_2P5G },
-+	{ PID_MODPHY3_N_MODPHY_PCR_LCPLL_DWORD7,	N_MODPHY_PCR_LCPLL_DWORD7_2P5G },
-+	{ PID_MODPHY3_N_MODPHY_PCR_LPPLL_DWORD10,	N_MODPHY_PCR_LPPLL_DWORD10_2P5G },
-+	{ PID_MODPHY3_N_MODPHY_PCR_CMN_ANA_DWORD30,	N_MODPHY_PCR_CMN_ANA_DWORD30_2P5G },
-+	{}
-+};
-+
-+static const struct pmc_serdes_regs pid_modphy1_1g_regs[] = {
-+	{ PID_MODPHY1_B_MODPHY_PCR_LCPLL_DWORD0,	B_MODPHY_PCR_LCPLL_DWORD0_1G },
-+	{ PID_MODPHY1_N_MODPHY_PCR_LCPLL_DWORD2,	N_MODPHY_PCR_LCPLL_DWORD2_1G },
-+	{ PID_MODPHY1_N_MODPHY_PCR_LCPLL_DWORD7,	N_MODPHY_PCR_LCPLL_DWORD7_1G },
-+	{ PID_MODPHY1_N_MODPHY_PCR_LPPLL_DWORD10,	N_MODPHY_PCR_LPPLL_DWORD10_1G },
-+	{ PID_MODPHY1_N_MODPHY_PCR_CMN_ANA_DWORD30,	N_MODPHY_PCR_CMN_ANA_DWORD30_1G },
-+	{}
-+};
-+
-+static const struct pmc_serdes_regs pid_modphy1_2p5g_regs[] = {
-+	{ PID_MODPHY1_B_MODPHY_PCR_LCPLL_DWORD0,	B_MODPHY_PCR_LCPLL_DWORD0_2P5G },
-+	{ PID_MODPHY1_N_MODPHY_PCR_LCPLL_DWORD2,	N_MODPHY_PCR_LCPLL_DWORD2_2P5G },
-+	{ PID_MODPHY1_N_MODPHY_PCR_LCPLL_DWORD7,	N_MODPHY_PCR_LCPLL_DWORD7_2P5G },
-+	{ PID_MODPHY1_N_MODPHY_PCR_LPPLL_DWORD10,	N_MODPHY_PCR_LPPLL_DWORD10_2P5G },
-+	{ PID_MODPHY1_N_MODPHY_PCR_CMN_ANA_DWORD30,	N_MODPHY_PCR_CMN_ANA_DWORD30_2P5G },
-+	{}
-+};
-+
-+static const int ehl_tsn_lane_registers[] = {7, 8, 9, 10, 11};
-+#else
-+static const int ehl_tsn_lane_registers[] = {};
-+#endif /* CONFIG_INTEL_PMC_IPC */
-+
- #endif /* __DWMAC_INTEL_H__ */
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 9201ed778ebc..75765cf52cd1 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -1103,11 +1103,31 @@ static void stmmac_mac_link_up(struct phylink_config *config,
- 		stmmac_hwtstamp_correct_latency(priv, priv);
- }
- 
-+#if IS_ENABLED(CONFIG_INTEL_PMC_IPC)
-+static int stmmac_mac_prepare(struct phylink_config *config, unsigned int mode,
-+			      phy_interface_t interface)
-+{
-+	struct net_device *ndev = to_net_dev(config->dev);
-+	struct stmmac_priv *priv = netdev_priv(ndev);
-+	int ret = 0;
-+
-+	priv->plat->phy_interface = interface;
-+
-+	if (priv->plat->config_serdes)
-+		ret = priv->plat->config_serdes(ndev, priv->plat->bsp_priv);
-+
-+	return ret;
-+}
-+#endif
-+
- static const struct phylink_mac_ops stmmac_phylink_mac_ops = {
- 	.mac_select_pcs = stmmac_mac_select_pcs,
- 	.mac_config = stmmac_mac_config,
- 	.mac_link_down = stmmac_mac_link_down,
- 	.mac_link_up = stmmac_mac_link_up,
-+#if IS_ENABLED(CONFIG_INTEL_PMC_IPC)
-+	.mac_prepare = stmmac_mac_prepare,
-+#endif
- };
- 
- /**
-diff --git a/include/linux/stmmac.h b/include/linux/stmmac.h
-index c0079a7574ae..aa7d4d96391c 100644
---- a/include/linux/stmmac.h
-+++ b/include/linux/stmmac.h
-@@ -275,6 +275,7 @@ struct plat_stmmacenet_data {
- 	int (*serdes_powerup)(struct net_device *ndev, void *priv);
- 	void (*serdes_powerdown)(struct net_device *ndev, void *priv);
- 	void (*speed_mode_2500)(struct net_device *ndev, void *priv);
-+	int (*config_serdes)(struct net_device *ndev, void *priv);
- 	void (*ptp_clk_freq_config)(struct stmmac_priv *priv);
- 	int (*init)(struct platform_device *pdev, void *priv);
- 	void (*exit)(struct platform_device *pdev, void *priv);
--- 
-2.25.1
 
+> +	u32 reg_val_prev;
+> +	long accum_energy;		/* Accumulated energy for energy1_input */
+> +};
+>   
+>   struct xe_hwmon {
+>   	struct device *hwmon_dev;
+>   	struct xe_gt *gt;
+>   	struct mutex hwmon_lock; /* rmw operations*/
+>   	int scl_shift_power;
+> +	int scl_shift_energy;
+> +	struct hwmon_energy_info ei;	/*  Energy info for energy1_input */
+>   };
+>   
+>   static u32 xe_hwmon_get_reg(struct xe_hwmon *hwmon, enum xe_hwmon_reg hwmon_reg)
+> @@ -72,6 +81,12 @@ static u32 xe_hwmon_get_reg(struct xe_hwmon *hwmon, enum xe_hwmon_reg hwmon_reg)
+>   		if (xe->info.platform == XE_DG2)
+>   			reg = GT_PERF_STATUS;
+>   		break;
+> +	case REG_PKG_ENERGY_STATUS:
+> +		if (xe->info.platform == XE_DG2)
+> +			reg = PCU_CR_PACKAGE_ENERGY_STATUS;
+> +		else if (xe->info.platform == XE_PVC)
+> +			reg = PVC_GT0_PLATFORM_ENERGY_STATUS;
+> +		break;
+>   	default:
+>   		XE_MISSING_CASE(hwmon_reg);
+>   		break;
+> @@ -192,10 +207,59 @@ static int xe_hwmon_power_rated_max_read(struct xe_hwmon *hwmon, long *value)
+>   	return 0;
+>   }
+>   
+> +/*
+> + * xe_hwmon_energy_get - Obtain energy value
+> + *
+> + * The underlying energy hardware register is 32-bits and is subject to
+> + * overflow. How long before overflow? For example, with an example
+> + * scaling bit shift of 14 bits (see register *PACKAGE_POWER_SKU_UNIT) and
+> + * a power draw of 1000 watts, the 32-bit counter will overflow in
+> + * approximately 4.36 minutes.
+> + *
+> + * Examples:
+> + *    1 watt:  (2^32 >> 14) /    1 W / (60 * 60 * 24) secs/day -> 3 days
+> + * 1000 watts: (2^32 >> 14) / 1000 W / 60             secs/min -> 4.36 minutes
+> + *
+> + * The function significantly increases overflow duration (from 4.36
+> + * minutes) by accumulating the energy register into a 'long' as allowed by
+> + * the hwmon API. Using x86_64 128 bit arithmetic (see mul_u64_u32_shr()),
+> + * a 'long' of 63 bits, SF_ENERGY of 1e6 (~20 bits) and
+> + * hwmon->scl_shift_energy of 14 bits we have 57 (63 - 20 + 14) bits before
+> + * energy1_input overflows. This at 1000 W is an overflow duration of 278 years.
+> + */
+> +static void
+> +xe_hwmon_energy_get(struct xe_hwmon *hwmon, long *energy)
+> +{
+> +	struct hwmon_energy_info *ei = &hwmon->ei;
+> +	u32 reg_val;
+> +
+> +	xe_device_mem_access_get(gt_to_xe(hwmon->gt));
+> +
+> +	mutex_lock(&hwmon->hwmon_lock);
+> +
+> +	xe_hwmon_process_reg(hwmon, REG_PKG_ENERGY_STATUS, REG_READ,
+> +			     &reg_val, 0, 0);
+> +
+> +	if (reg_val >= ei->reg_val_prev)
+> +		ei->accum_energy += reg_val - ei->reg_val_prev;
+> +	else
+> +		ei->accum_energy += UINT_MAX - ei->reg_val_prev + reg_val;
+> +
+> +	ei->reg_val_prev = reg_val;
+> +
+> +	*energy = mul_u64_u32_shr(ei->accum_energy, SF_ENERGY,
+> +				  hwmon->scl_shift_energy);
+> +
+> +	mutex_unlock(&hwmon->hwmon_lock);
+> +
+> +	xe_device_mem_access_put(gt_to_xe(hwmon->gt));
+> +}
+> +
+>   static const struct hwmon_channel_info *hwmon_info[] = {
+>   	HWMON_CHANNEL_INFO(power, HWMON_P_MAX | HWMON_P_RATED_MAX | HWMON_P_CRIT),
+>   	HWMON_CHANNEL_INFO(curr, HWMON_C_CRIT),
+>   	HWMON_CHANNEL_INFO(in, HWMON_I_INPUT),
+> +	HWMON_CHANNEL_INFO(energy, HWMON_E_INPUT),
+>   	NULL
+>   };
+>   
+> @@ -369,6 +433,29 @@ xe_hwmon_in_read(struct xe_hwmon *hwmon, u32 attr, long *val)
+>   	return ret;
+>   }
+>   
+> +static umode_t
+> +xe_hwmon_energy_is_visible(struct xe_hwmon *hwmon, u32 attr)
+> +{
+> +	switch (attr) {
+> +	case hwmon_energy_input:
+> +		return xe_hwmon_get_reg(hwmon, REG_PKG_ENERGY_STATUS) ? 0444 : 0;
+> +	default:
+> +		return 0;
+> +	}
+> +}
+> +
+> +static int
+> +xe_hwmon_energy_read(struct xe_hwmon *hwmon, u32 attr, long *val)
+> +{
+> +	switch (attr) {
+> +	case hwmon_energy_input:
+> +		xe_hwmon_energy_get(hwmon, val);
+> +		return 0;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+>   static umode_t
+>   xe_hwmon_is_visible(const void *drvdata, enum hwmon_sensor_types type,
+>   		    u32 attr, int channel)
+> @@ -388,6 +475,9 @@ xe_hwmon_is_visible(const void *drvdata, enum hwmon_sensor_types type,
+>   	case hwmon_in:
+>   		ret = xe_hwmon_in_is_visible(hwmon, attr);
+>   		break;
+> +	case hwmon_energy:
+> +		ret = xe_hwmon_energy_is_visible(hwmon, attr);
+> +		break;
+>   	default:
+>   		ret = 0;
+>   		break;
+> @@ -417,6 +507,9 @@ xe_hwmon_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+>   	case hwmon_in:
+>   		ret = xe_hwmon_in_read(hwmon, attr, val);
+>   		break;
+> +	case hwmon_energy:
+> +		ret = xe_hwmon_energy_read(hwmon, attr, val);
+> +		break;
+>   	default:
+>   		ret = -EOPNOTSUPP;
+>   		break;
+> @@ -468,6 +561,7 @@ static void
+>   xe_hwmon_get_preregistration_info(struct xe_device *xe)
+>   {
+>   	struct xe_hwmon *hwmon = xe->hwmon;
+> +	long energy;
+>   	u32 val_sku_unit = 0;
+>   	int ret;
+>   
+> @@ -476,8 +570,17 @@ xe_hwmon_get_preregistration_info(struct xe_device *xe)
+>   	 * The contents of register PKG_POWER_SKU_UNIT do not change,
+>   	 * so read it once and store the shift values.
+>   	 */
+> -	if (!ret)
+> +	if (!ret) {
+>   		hwmon->scl_shift_power = REG_FIELD_GET(PKG_PWR_UNIT, val_sku_unit);
+> +		hwmon->scl_shift_energy = REG_FIELD_GET(PKG_ENERGY_UNIT, val_sku_unit);
+> +	}
+> +
+> +	/*
+> +	 * Initialize 'struct hwmon_energy_info', i.e. set fields to the
+> +	 * first value of the energy register read
+> +	 */
+> +	if (xe_hwmon_is_visible(hwmon, hwmon_energy, hwmon_energy_input, 0))
+> +		xe_hwmon_energy_get(hwmon, &energy);
+>   }
+>   
+>   void xe_hwmon_register(struct xe_device *xe)
