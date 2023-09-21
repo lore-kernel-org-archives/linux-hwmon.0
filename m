@@ -2,155 +2,145 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C6F1E7D0AB
-	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Sep 2023 21:13:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70787E7D0AD
+	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Sep 2023 21:36:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbjIUVNG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 21 Sep 2023 17:13:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33780 "EHLO
+        id S232653AbjIUVg1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 21 Sep 2023 17:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232266AbjIUVMY (ORCPT
+        with ESMTP id S231381AbjIUVgP (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 21 Sep 2023 17:12:24 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5078E98A72;
-        Thu, 21 Sep 2023 10:56:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=etZ2gpA0uz+JRPag03uqb6cfh/kPa8Z3gAMOKitX9GI=; b=XJFeAWsJK6qNPSOEXR7+0kE+V4
-        4M/gOJKBPlGa+X30hfCd+WanZJzjvHIg3FOF+0PiDMyYKdq2GmP3ET7jaqP+coWsJhapZAKkw8XBp
-        YXoEu+OSuRKJy8kMvQA+1uK6bnykQqT3wiDi16tAorZtuVizYtC0+q1DOQqAlh1wAjC8THQ5j1tBb
-        n/IVlVmgzyC3E/JOKzyKNxwUAzemhr/7mg2Mnn9ljY2801G2xkTtLiqJpDZMyMiXD40F4Rjw8bpZ1
-        iLzGICk+q44J1b1OKypm+kQ/qteOXGLyEtKJFXgJpGWWDjwMCPUvm9uR4EZYSUOWmQK0fR8ZT1pgq
-        aMWFFDyg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:46552)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.96)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1qjJuR-0004g0-21;
-        Thu, 21 Sep 2023 14:39:59 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1qjJuO-0003aT-Te; Thu, 21 Sep 2023 14:39:56 +0100
-Date:   Thu, 21 Sep 2023 14:39:56 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Choong Yong Liang <yong.liang.choong@linux.intel.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
-        David E Box <david.e.box@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Jose Abreu <Jose.Abreu@synopsys.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        Thu, 21 Sep 2023 17:36:15 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645601FFD;
+        Thu, 21 Sep 2023 14:11:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695330696; x=1726866696;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3+eI3UgLms590aA+oWQf7NdcqV5rfD94OQLXjXGtl2c=;
+  b=h9T4dD49rl0pcFqa3FiFUxodBFD679CGr3Kqn1JaamQzPBRRkLNOZvbx
+   tK248atdPqm8qyZqxILFA/HKIdgn+tthFb7xIN/eolpQYV/cMm9Djxr1X
+   us8WWNYrZqT13LtzIDKMMPkQOD8QelsU3YawgTq7y31g6K7iaXuUK73+c
+   120EJ2RlaUfgsUIn1NrIGTJYWCpz39UKN/xX/kIQcj5U9SXUQHXgUqMu9
+   R5yreM6dn6g8b+t0kmOsFc21UC0AORVA7NvudYZQp/+vIU8LeGrOYIu8K
+   t9zowhHgrBZh6BaLZSSdWr4+Wg3XUmUfAXtjO1s6eZ/FefdMGCDIBSDzh
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10840"; a="447144823"
+X-IronPort-AV: E=Sophos;i="6.03,166,1694761200"; 
+   d="scan'208";a="447144823"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 14:11:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10840"; a="870992745"
+X-IronPort-AV: E=Sophos;i="6.03,166,1694761200"; 
+   d="scan'208";a="870992745"
+Received: from lkp-server02.sh.intel.com (HELO b77866e22201) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 21 Sep 2023 14:11:31 -0700
+Received: from kbuild by b77866e22201 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qjQxM-0000PY-2M;
+        Thu, 21 Sep 2023 21:11:28 +0000
+Date:   Fri, 22 Sep 2023 05:11:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jon Hunter <jonathanh@nvidia.com>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Wong Vee Khee <veekhee@apple.com>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Revanth Kumar Uppala <ruppala@nvidia.com>,
-        Shenwei Wang <shenwei.wang@nxp.com>,
-        Andrey Konovalov <andrey.konovalov@linaro.org>,
-        Jochen Henneberg <jh@henneberg-systemdesign.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        bpf@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
-        Tan Tee Min <tee.min.tan@linux.intel.com>,
-        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
-        Lai Peter Jun Ann <jun.ann.lai@intel.com>
-Subject: Re: [PATCH net-next v2 0/5] TSN auto negotiation between 1G and 2.5G
-Message-ID: <ZQxHrPS5C13SfTfA@shell.armlinux.org.uk>
-References: <20230804084527.2082302-1-yong.liang.choong@linux.intel.com>
- <5bd05ba2-fd88-4e5c-baed-9971ff917484@lunn.ch>
- <f9b21a9d-4ae2-1f91-b621-2e27f746f661@linux.intel.com>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        Ninad Malwade <nmalwade@nvidia.com>,
+        Rajkumar Kasirajan <rkasirajan@nvidia.com>,
+        Jon Hunter <jonathanh@nvidia.com>
+Subject: Re: [PATCH V3 3/4] hwmon: ina3221: Add support for channel summation
+ disable
+Message-ID: <202309220454.kCi2xD48-lkp@intel.com>
+References: <20230921130818.21247-4-jonathanh@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f9b21a9d-4ae2-1f91-b621-2e27f746f661@linux.intel.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <20230921130818.21247-4-jonathanh@nvidia.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Sep 21, 2023 at 08:25:05PM +0800, Choong Yong Liang wrote:
-> 
-> 
-> On 4/8/2023 8:04 pm, Andrew Lunn wrote:
-> > On Fri, Aug 04, 2023 at 04:45:22PM +0800, Choong Yong Liang wrote:
-> > > Intel platforms’ integrated Gigabit Ethernet controllers support
-> > > 2.5Gbps mode statically using BIOS programming. In the current
-> > > implementation, the BIOS menu provides an option to select between
-> > > 10/100/1000Mbps and 2.5Gbps modes. Based on the selection, the BIOS
-> > > programs the Phase Lock Loop (PLL) registers. The BIOS also read the
-> > > TSN lane registers from Flexible I/O Adapter (FIA) block and provided
-> > > 10/100/1000Mbps/2.5Gbps information to the stmmac driver. But
-> > > auto-negotiation between 10/100/1000Mbps and 2.5Gbps is not allowed.
-> > > The new proposal is to support auto-negotiation between 10/100/1000Mbps
-> > > and 2.5Gbps . Auto-negotiation between 10, 100, 1000Mbps will use
-> > > in-band auto negotiation. Auto-negotiation between 10/100/1000Mbps and
-> > > 2.5Gbps will work as the following proposed flow, the stmmac driver reads
-> > > the PHY link status registers then identifies the negotiated speed.
-> > > Based on the speed stmmac driver will identify TSN lane registers from
-> > > FIA then send IPC command to the Power Management controller (PMC)
-> > > through PMC driver/API. PMC will act as a proxy to programs the
-> > > PLL registers.
-> > 
-> > Have you considered using out of band for all link modes? You might
-> > end up with a cleaner architecture, and not need any phylink/phylib
-> > hacks.
-> > 
-> > 	Andrew
-> Hi Andrew,
-> 
-> After conducting a comprehensive study, it seems that implementing
-> out-of-band for all link modes might not be feasible. I may have missed some
-> key aspects during my analysis.
+Hi Jon,
 
-You need to provide details of why you think it's not feasible, because
-you're making those reading your message have to guess.
+kernel test robot noticed the following build warnings:
 
-We _do_ have cases where this is already supported. The DM7052 SFP
-module for example has a BCM84881 PHY on board that has no in-band
-support, so always has to use out-of-band. This module supports 10G,
-5G, 2.5G, 1G, 100M and 10M speeds. It switches its interface between
-10G, 2500base-X and SGMII mode. It's been supported in Linux for a
-while with MAC/PCS that implement phylink _correctly_.
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on robh/for-next linus/master v6.6-rc2 next-20230921]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I wouldn't call stmmac a proper phylink implementation, especially
-when it comes to switching between different interfaces.
+url:    https://github.com/intel-lab-lkp/linux/commits/Jon-Hunter/dt-bindings-hwmon-ina3221-Add-ti-summation-disable/20230922-011119
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20230921130818.21247-4-jonathanh%40nvidia.com
+patch subject: [PATCH V3 3/4] hwmon: ina3221: Add support for channel summation disable
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230922/202309220454.kCi2xD48-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230922/202309220454.kCi2xD48-lkp@intel.com/reproduce)
 
-My attempt at starting to clean up the stmmac code was thwarted by
-niggly review comments (over whether %u or %d should be used to print
-a _signed integer_ that stmmac stupidly implicitly casts to an unsigned
-integer. That lead me to decide that stmmac was beyond being cleaned
-up, so I junked the large patch set of improvements that I had - along
-with multiple issues that I had found in the driver.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309220454.kCi2xD48-lkp@intel.com/
 
-Someone else needs to sort stmmac out, and I suspect that may be a
-pre-requisit for your changes so that stmmac operates _correctly_ with
-phylink.
+All warnings (new ones prefixed by >>):
+
+>> drivers/hwmon/ina3221.c:109: warning: Function parameter or member 'summation_disable' not described in 'ina3221_input'
+>> drivers/hwmon/ina3221.c:134: warning: Function parameter or member 'debugfs' not described in 'ina3221_data'
+>> drivers/hwmon/ina3221.c:134: warning: Function parameter or member 'summation_channel_control' not described in 'ina3221_data'
+
+
+vim +109 drivers/hwmon/ina3221.c
+
+7cb6dcff1956ec Andrew F. Davis 2016-06-10   97  
+a9e9dd9c6de5d8 Nicolin Chen    2018-10-01   98  /**
+a9e9dd9c6de5d8 Nicolin Chen    2018-10-01   99   * struct ina3221_input - channel input source specific information
+a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  100   * @label: label of channel input source
+a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  101   * @shunt_resistor: shunt resistor value of channel input source
+a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  102   * @disconnected: connection status of channel input source
+a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  103   */
+a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  104  struct ina3221_input {
+a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  105  	const char *label;
+a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  106  	int shunt_resistor;
+a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  107  	bool disconnected;
+ac0a832fd3617c Ninad Malwade   2023-09-21  108  	bool summation_disable;
+a9e9dd9c6de5d8 Nicolin Chen    2018-10-01 @109  };
+a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  110  
+7cb6dcff1956ec Andrew F. Davis 2016-06-10  111  /**
+7cb6dcff1956ec Andrew F. Davis 2016-06-10  112   * struct ina3221_data - device specific information
+323aeb0eb5d9a6 Nicolin Chen    2018-11-05  113   * @pm_dev: Device pointer for pm runtime
+7cb6dcff1956ec Andrew F. Davis 2016-06-10  114   * @regmap: Register map of the device
+7cb6dcff1956ec Andrew F. Davis 2016-06-10  115   * @fields: Register fields of the device
+a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  116   * @inputs: Array of channel input source specific structures
+87625b24986bc2 Nicolin Chen    2018-11-05  117   * @lock: mutex lock to serialize sysfs attribute accesses
+59d608e152e582 Nicolin Chen    2018-09-29  118   * @reg_config: Register value of INA3221_CONFIG
+2057bdfb7184e9 Nicolin Chen    2019-10-16  119   * @summation_shunt_resistor: equivalent shunt resistor value for summation
+43dece162de047 Nicolin Chen    2019-01-17  120   * @single_shot: running in single-shot operating mode
+7cb6dcff1956ec Andrew F. Davis 2016-06-10  121   */
+7cb6dcff1956ec Andrew F. Davis 2016-06-10  122  struct ina3221_data {
+323aeb0eb5d9a6 Nicolin Chen    2018-11-05  123  	struct device *pm_dev;
+7cb6dcff1956ec Andrew F. Davis 2016-06-10  124  	struct regmap *regmap;
+7cb6dcff1956ec Andrew F. Davis 2016-06-10  125  	struct regmap_field *fields[F_MAX_FIELDS];
+a9e9dd9c6de5d8 Nicolin Chen    2018-10-01  126  	struct ina3221_input inputs[INA3221_NUM_CHANNELS];
+87625b24986bc2 Nicolin Chen    2018-11-05  127  	struct mutex lock;
+ac0a832fd3617c Ninad Malwade   2023-09-21  128  	struct dentry *debugfs;
+59d608e152e582 Nicolin Chen    2018-09-29  129  	u32 reg_config;
+2057bdfb7184e9 Nicolin Chen    2019-10-16  130  	int summation_shunt_resistor;
+ac0a832fd3617c Ninad Malwade   2023-09-21  131  	u32 summation_channel_control;
+43dece162de047 Nicolin Chen    2019-01-17  132  
+43dece162de047 Nicolin Chen    2019-01-17  133  	bool single_shot;
+7cb6dcff1956ec Andrew F. Davis 2016-06-10 @134  };
+7cb6dcff1956ec Andrew F. Davis 2016-06-10  135  
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
