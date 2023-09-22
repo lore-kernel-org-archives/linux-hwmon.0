@@ -2,157 +2,99 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06036E6FE3C
-	for <linux-hwmon@archiver.kernel.org>; Fri, 22 Sep 2023 14:42:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06EA0E6FE4E
+	for <linux-hwmon@archiver.kernel.org>; Fri, 22 Sep 2023 15:16:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231592AbjIVOmy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 22 Sep 2023 10:42:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46690 "EHLO
+        id S229986AbjIVPQo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 22 Sep 2023 11:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231549AbjIVOmv (ORCPT
+        with ESMTP id S231209AbjIVPQn (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 22 Sep 2023 10:42:51 -0400
-Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395B61AD;
-        Fri, 22 Sep 2023 07:42:45 -0700 (PDT)
-Received: by mail-oo1-xc31.google.com with SMTP id 006d021491bc7-57359e85e9bso1098881eaf.2;
-        Fri, 22 Sep 2023 07:42:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695393764; x=1695998564; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6nqMzhPbNr8RLZEXVHoQWk3F1U8K2ekWVPTnLuWZ6u0=;
-        b=GXxiQ8tD86aENwV4iVOaGzeMO5LpjcJJginTUnH3gGJKd+bKMFuszBHwgflpzEQomW
-         +mJn5a8t6IZb0uNXowf6lPh6R+t5cYv9gVu6j7dEKd1s7iTL3QLcllTwxJxMvN7EueFa
-         BH1NqbBb1O0ghFWPjQaNa1HNxT5tr2lWr0ri/eX4c6ah2c35ayUmf2EbGZO5fE9uyWQK
-         FJZw5/3ia4ttkOUrpYBpYWAewQoCFWTH+zwSdzlVjfqe8D7yz8I8+AZ7W/xLb5V3i4oA
-         0kGUmFj/bnxXSS9oEpfwI1PahVPG6RzowhE/NqBsAr9igYNWQtc6icUNB/BqfowD+wKY
-         c7uA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695393764; x=1695998564;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6nqMzhPbNr8RLZEXVHoQWk3F1U8K2ekWVPTnLuWZ6u0=;
-        b=oBgyJqxRNVlRdC3l2sHZFd06kLGICTgf0FTSKLLECLFCpBfMyfks6YVCDbMOMT3bvX
-         m7cwa7yIR/njZ3jXLdl0ZDda5zb2P4DZuaEpMNNkhRgwNCdoXZoxqd7gJ87wg7g6KOXc
-         qjMZ3XUha8EUCr2n8UcBYstAciWw+A/gMyZqn9h0T5r8feBA7DaDjae0pkpxU/SCLo26
-         FqMMo+amSPWNqpRy+EYaoZyOP9ZCvZy86W5+nMIuxHjRXoKEbsvWMZZllaWjmtnfGDvS
-         nToqSMaxOMbWpSmzJAmEYkp7c5aG9NJ843VyoGHqvAZqNW8mqUBPVorJgfZTTP0xdllG
-         2hMQ==
-X-Gm-Message-State: AOJu0YwOB9KC2ot19p8ySEUUqCBqFfiwf7e/JgdZrIbkRD34K/GyqY38
-        CG7Jkm/QTRbWxJFSrNh6AlI=
-X-Google-Smtp-Source: AGHT+IErb4fP6iB04EKS9z5eo37yfXxKUQp6mTQIYz2oHpTlfaLWzbmrcgutHVeqXMhtd7KrJvHIwA==
-X-Received: by 2002:a05:6870:4395:b0:1d1:425b:8026 with SMTP id r21-20020a056870439500b001d1425b8026mr9267161oah.26.1695393764236;
-        Fri, 22 Sep 2023 07:42:44 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b28-20020a63715c000000b00578b40a4903sm573936pgn.22.2023.09.22.07.42.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Sep 2023 07:42:43 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ceea0b12-9165-a9f6-cbd1-b25c07c75efb@roeck-us.net>
-Date:   Fri, 22 Sep 2023 07:42:42 -0700
+        Fri, 22 Sep 2023 11:16:43 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC915A3
+        for <linux-hwmon@vger.kernel.org>; Fri, 22 Sep 2023 08:16:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695395796; x=1726931796;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=plevMaCrcoSQiunOePJWM19KJ9OivzRDaLpXHbn/S1E=;
+  b=aoqASf6WqW5X7f5hTU7bzGFr6nSg4wwry6msouQ8WN7To5G9AxiG6SxL
+   oM3Zvi+VXrOcRpOe7Uq08yQK1ArQKTTm43NeIK4OoW+KqSS7whwAoVqFp
+   +B3+CPY+/xHWUyuEhHy5iaQhbidPVm0sakFPImn0DaxJMu+Qx0erOZxj0
+   S0lEUmisihOCI7zLwCx8H6runpx0niBiSP1zBkdoV8EZSFsM+nJyaKyeY
+   bxJVEAqAYKzg79BLjv2BYj9uRN/1+w3DXgAXZhDScFOP51A5Tp29IDyRK
+   BRXAB+5NhyYNYnBjy3TNTlw7eeoV+8/e1bYmHPAMIkbhn89cDCDXU6ley
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10841"; a="379729614"
+X-IronPort-AV: E=Sophos;i="6.03,167,1694761200"; 
+   d="scan'208";a="379729614"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2023 08:16:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10841"; a="697217719"
+X-IronPort-AV: E=Sophos;i="6.03,167,1694761200"; 
+   d="scan'208";a="697217719"
+Received: from velangov-mobl.gar.corp.intel.com (HELO intel.com) ([10.214.174.70])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2023 08:16:29 -0700
+Date:   Fri, 22 Sep 2023 17:16:23 +0200
+From:   Andi Shyti <andi.shyti@linux.intel.com>
+To:     Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc:     Badal Nilawar <badal.nilawar@intel.com>,
+        intel-xe@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
+        anshuman.gupta@intel.com, ashutosh.dixit@intel.com,
+        linux@roeck-us.net, andi.shyti@linux.intel.com,
+        riana.tauro@intel.com, matthew.brost@intel.com
+Subject: Re: [PATCH v5 1/6] drm/xe: Add XE_MISSING_CASE macro
+Message-ID: <ZQ2vx6CNgDwWW8SU@ashyti-mobl2.lan>
+References: <20230921102519.3355538-1-badal.nilawar@intel.com>
+ <20230921102519.3355538-2-badal.nilawar@intel.com>
+ <ZQxpTss3+OYdbJks@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>,
-        Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        "patrick@stwcx.xyz" <patrick@stwcx.xyz>,
-        Jean Delvare <jdelvare@suse.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230915062926.2460502-1-Delphine_CC_Chiu@wiwynn.com>
- <20230915062926.2460502-3-Delphine_CC_Chiu@wiwynn.com>
- <20230915-quench-left-8fbc1ca3b1da@spud>
- <CAL_JsqKWRfT71k56uMUJtU_abzFuicW01OBo-iScYash4Jrd2w@mail.gmail.com>
- <TYZPR04MB58530C4CB0386DF02D29E216D6FFA@TYZPR04MB5853.apcprd04.prod.outlook.com>
- <20230922-washday-primer-af8dcf1cde7d@spud>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 2/2] dt-bindings: hwmon: add MAX31790
-In-Reply-To: <20230922-washday-primer-af8dcf1cde7d@spud>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZQxpTss3+OYdbJks@intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 9/22/23 02:53, Conor Dooley wrote:
-> On Fri, Sep 22, 2023 at 02:33:06AM +0000, Delphine_CC_Chiu/WYHQ/Wiwynn wrote:
->>>> On Fri, Sep 15, 2023 at 02:29:24PM +0800, Delphine CC Chiu wrote:
-> 
->>>>> +  pwm-as-tach:
->>>>
->>>> I don't see any other users of this in-tree, so you'd need a vendor
->>>> prefix. That said, I'm once bitten, twice shy about fan related
->>>> properties in hwmon, so I would definitely like Rob to comment on this
->>>> whole binding.
->>>
->>> Please see this[1] and comment on it to ensure it meets your needs.
->>> Otherwise, omit any fan related properties for now.
->>>
->> This property could only be used in max31790 driver. Would it be ok if we add
->> vendor prefix like "maxim, pwm-as-tach"?
-> 
-> I think the answer to this is a pretty straightforward no. The goal is
-> to create a set of common fan properties that works for multiple
-> usecases, not create one specifically for each user...
-> 
+Hi Rodrigo,
 
-Another chip with configurable channel configuration is nct7802, where
-individual channels can be configured as temperature or voltage sensor.
-We are using sensor-type to select the mode in that driver. Maybe something
-similar would make sense / be acceptable here.
-
->>>> +examples:
->>>> +  - |
->>>> +    i2c {
->>>> +      #address-cells = <1>;
->>>> +      #size-cells = <0>;
->>>> +
->>>> +      pwm@20 {
->>>> +        compatible = "maxim,max31790";
->>>> +        reg = <0x20>;
->>>> +        pwm-as-tach = <2 5>;
->>>
->>> This would be <2>, <5>; no?
->>>
->> I refer to the other binding documents in hwmon and most of them were using
->> the format like <2 5> as an array.
+On Thu, Sep 21, 2023 at 12:03:26PM -0400, Rodrigo Vivi wrote:
+> On Thu, Sep 21, 2023 at 03:55:14PM +0530, Badal Nilawar wrote:
+> > Add XE_MISSING_CASE macro to handle missing switch case
+> > 
+> > v2: Add comment about macro usage (Himal)
+> > 
+> > Cc: Andi Shyti <andi.shyti@linux.intel.com>
+> > Signed-off-by: Badal Nilawar <badal.nilawar@intel.com>
+> > Reviewed-by: Himal Prasad Ghimiray <himal.prasad.ghimiray@intel.com>
+> > ---
+> >  drivers/gpu/drm/xe/xe_macros.h | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/drivers/gpu/drm/xe/xe_macros.h b/drivers/gpu/drm/xe/xe_macros.h
+> > index daf56c846d03..6c74c69920ed 100644
+> > --- a/drivers/gpu/drm/xe/xe_macros.h
+> > +++ b/drivers/gpu/drm/xe/xe_macros.h
+> > @@ -15,4 +15,8 @@
+> >  			    "Ioctl argument check failed at %s:%d: %s", \
+> >  			    __FILE__, __LINE__, #cond), 1))
+> >  
+> > +/* Parameter to macro should be a variable name */
+> > +#define XE_MISSING_CASE(x) WARN(1, "Missing case (%s == %ld)\n", \
+> > +				__stringify(x), (long)(x))
+> > +
 > 
-> Which also makes this moot, since it'll be going away.
-> 
->>>> diff --git a/MAINTAINERS b/MAINTAINERS index
->>>> c8fdd0d03907..97e13b6bf51d 100644
->>>> --- a/MAINTAINERS
->>>> +++ b/MAINTAINERS
->>>> @@ -1371,6 +1371,12 @@ F:
->>>        Documentation/devicetree/bindings/hwmon/adi,max31760.yaml
->>>>   F: Documentation/hwmon/max31760.rst
->>>>   F: drivers/hwmon/max31760.c
->>>>
->>>> +ANALOG DEVICES INC MAX31790 DRIVER
->>>> +M: Delphine CC Chiu  <Delphine_CC_Chiu@wiwynn.com>
->>>> +S: Odd Fixes
->>>
->>> This is a pretty odd status for something you're newly adding.
->>> How come it's not going to be maintained?
->>>
->> We are not the authors of this driver but we want to add a feature to
->> config PWM as TACH that was descripted in the datasheet of MAX31790.
->> Should we set the status to maintained?
-> 
-> It's really up to you. I just found it curious & wanted to ask why it
-> was that way.
-> 
+> No, please! Let's not add unnecessary macros.
 
-It is misleading because it downgrades the driver from "supported"
-(like all other hwmon drivers) to "odd fixes".
+it's not a bad idea, actually... in i915 we have the MISSING_CASE
+for switch cases with a defined number of cases and print
+warnings in case none if them is the one inside the switch.
 
-Guenter
+It's so widely used and actually nice to have that I thought many
+times to move it to some core kernel libraries.
 
+Andi
