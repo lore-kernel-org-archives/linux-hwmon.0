@@ -2,116 +2,67 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF3AACD4846
-	for <linux-hwmon@archiver.kernel.org>; Fri, 22 Sep 2023 17:25:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40AC3CD484C
+	for <linux-hwmon@archiver.kernel.org>; Fri, 22 Sep 2023 18:34:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbjIVRZI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 22 Sep 2023 13:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48868 "EHLO
+        id S232377AbjIVSeO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 22 Sep 2023 14:34:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjIVRZH (ORCPT
+        with ESMTP id S229802AbjIVSeO (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 22 Sep 2023 13:25:07 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE778F1
-        for <linux-hwmon@vger.kernel.org>; Fri, 22 Sep 2023 10:25:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695403501; x=1726939501;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/SroJ1aFo6ArEMp71YqeEGAaEDS7S5qASa1V5RBkrho=;
-  b=kVJxedF/NEUcicKd9EpWx4OR94aH6KBVC3GGM52ta5PxsuRLuHVWtnjM
-   jFTIIqQjXEOMqon+QdlfnajptFUN0xIoabWzLyJaJ4Rt/hJSds0zYDQLU
-   x3U+1SdAKBtP1o1DVOLkjxYd7DwlOAm2I/GMUGXKpqr+l7TYLOeUQLoMQ
-   n8fenLknLfVJEZZYAMzqs+iH/J5CUYbJQmV3TsPYdoetOG1ob4EBjD9pU
-   lTfXAUhcfBdhPuZGWBE6EaXCxTLzNKZUJP8L2IqF6APcRIqi/p2uHRrwv
-   bc1iT5nPDLBc2UdcKQfkFl+YlBxD/Yll+lPv4/zNCEOLhM1NKTEECJIAb
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10841"; a="361140147"
-X-IronPort-AV: E=Sophos;i="6.03,169,1694761200"; 
-   d="scan'208";a="361140147"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2023 10:24:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10841"; a="871317483"
-X-IronPort-AV: E=Sophos;i="6.03,169,1694761200"; 
-   d="scan'208";a="871317483"
-Received: from velangov-mobl.gar.corp.intel.com (HELO intel.com) ([10.214.174.70])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2023 10:24:52 -0700
-Date:   Fri, 22 Sep 2023 19:24:46 +0200
-From:   Andi Shyti <andi.shyti@linux.intel.com>
-To:     Badal Nilawar <badal.nilawar@intel.com>
-Cc:     intel-xe@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
-        anshuman.gupta@intel.com, ashutosh.dixit@intel.com,
-        linux@roeck-us.net, andi.shyti@linux.intel.com,
-        riana.tauro@intel.com, matthew.brost@intel.com,
-        rodrigo.vivi@intel.com
-Subject: Re: [PATCH v5 2/6] drm/xe/hwmon: Expose power attributes
-Message-ID: <ZQ3N3vvbkh9xPX40@ashyti-mobl2.lan>
-References: <20230921102519.3355538-1-badal.nilawar@intel.com>
- <20230921102519.3355538-3-badal.nilawar@intel.com>
+        Fri, 22 Sep 2023 14:34:14 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825C7AF;
+        Fri, 22 Sep 2023 11:34:08 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-d7ec71ad608so518120276.0;
+        Fri, 22 Sep 2023 11:34:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695407647; x=1696012447; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=gKtn9+rFdpk3ajP5WBvOmlCpZp5eroyqsozE3t3DMsY=;
+        b=OJQQzW4egoeQgwgj6Lj0npgMyhA1hD1GaLRo9ytUWgnSSgMtKlrgq8Vh/NtRYoi+Ta
+         uVo5eyjFxRi59L11+Ltxovf61WJ9lfbbay337GE/U1CcdHzsW0RAelODdlu5jSkyHkmr
+         MAno5WZ11h6eLQXF9AfOTyxqbhr3buDfRC44rie1uqMXfbrcKfglAQRIzXnYx54Gtfvf
+         56H+0c15qIgTdUOg3Y614o+OhcnRhIc6CbdyUmi2q/L1KI1C0yCi52oKqMyZ7b42P4xZ
+         gAUvP0W4FEVxZQuBMFVgYratG7An2i2pelQ2/a92OgxMVgI9T3ipU2VFnnAdqDFAJXUC
+         AJlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695407647; x=1696012447;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gKtn9+rFdpk3ajP5WBvOmlCpZp5eroyqsozE3t3DMsY=;
+        b=YfiZo5K4KKx7ak1+o79nHUg7MbPx+2zG96cCdgMig/n8JwYX1oqByeMT/eumCzotfx
+         rb7ozMt9OIT2xepDF1/nMO1xLr3dYAKifnZT0vbpCAs8wpWFHlqRtZxJcUlUY2tt8/+x
+         zJoHlknbHuHeWLEAQSQFMb3wm4GXL/SWHAm/ve+tgfM31+IF8vrL7g8QcjC+i2x4U3sS
+         yluRKPTfzhj6Noq+BP3D8b8YN+o185OGhdgBOMCVyY80GdeeS4WilNO6sOh0bWAW7hgf
+         eSigsMPp9WwmNPkeTaaA3vb7GVJmyCDdtwn638fFmspAa3OnOUIm4n6FwRpTR9pEPrKv
+         Yahg==
+X-Gm-Message-State: AOJu0YzzQce5hNBpNZcvic2MmGI8ESF3kUkitqFhSmajs0/0txXMuXLj
+        duWrJecuvhDRrH8VCYluKLjO2644m8bUCIjKwkdACLaZe6k=
+X-Google-Smtp-Source: AGHT+IHcCtoygHnTfPFy4wDc/Wm1ZfJeXGc6LBWIErZ07MdlDrPTRK0Df/bUbZMSm6r/ppd24nwv5Wup+3Jrj/CQWgQ=
+X-Received: by 2002:a25:ac46:0:b0:d7a:bdfa:57b1 with SMTP id
+ r6-20020a25ac46000000b00d7abdfa57b1mr91981ybd.2.1695407647359; Fri, 22 Sep
+ 2023 11:34:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230921102519.3355538-3-badal.nilawar@intel.com>
+From:   Aleksandr Mezin <mezin.alexander@gmail.com>
+Date:   Fri, 22 Sep 2023 21:33:56 +0300
+Message-ID: <CADnvcfJn--J-51tjOVe2Z55Y8CxnXePXmP9V_j9HkVOt-RH4LA@mail.gmail.com>
+Subject: hwmon: (nzxt-smart2) backport device ids to v6.1
+To:     stable@vger.kernel.org
+Cc:     linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Badal,
+Please pick the following commits:
 
-[...]
+- e247510e1baad04e9b7b8ed7190dbb00989387b9 hwmon: (nzxt-smart2) Add device id
+- 4a148e9b1ee04e608263fa9536a96214d5561220 hwmon: (nzxt-smart2) add
+another USB ID
 
-> +static int xe_hwmon_power_max_write(struct xe_hwmon *hwmon, long value)
-> +{
-> +	u32 reg_val;
-> +
-> +	/* Disable PL1 limit and verify, as limit cannot be disabled on all platforms */
-> +	if (value == PL1_DISABLE) {
-> +		xe_hwmon_process_reg(hwmon, REG_PKG_RAPL_LIMIT, REG_RMW, &reg_val,
-> +				     PKG_PWR_LIM_1_EN, 0);
-> +		xe_hwmon_process_reg(hwmon, REG_PKG_RAPL_LIMIT, REG_READ, &reg_val,
-> +				     PKG_PWR_LIM_1_EN, 0);
-> +
-> +		if (reg_val & PKG_PWR_LIM_1_EN)
-> +			return -ENODEV;
-
-so, here you are trying to disable PL1 and check then if it's
-disabled. Shall we try at least twice before returning error?
-
-And why ENODEV? It might be that we failed to write on the
-register but it doesn't mean that the device is wrong.
-
-> +	}
-> +
-> +	/* Computation in 64-bits to avoid overflow. Round to nearest. */
-> +	reg_val = DIV_ROUND_CLOSEST_ULL((u64)value << hwmon->scl_shift_power, SF_POWER);
-> +	reg_val = PKG_PWR_LIM_1_EN | REG_FIELD_PREP(PKG_PWR_LIM_1, reg_val);
-> +
-> +	xe_hwmon_process_reg(hwmon, REG_PKG_RAPL_LIMIT, REG_RMW, &reg_val,
-> +			     PKG_PWR_LIM_1_EN | PKG_PWR_LIM_1, reg_val);
-> +
-> +	return 0;
-> +}
-
-[...]
-
-> +	/*  hwmon_dev points to device hwmon<i> */
-> +	hwmon->hwmon_dev = devm_hwmon_device_register_with_info(dev,
-> +								"xe",
-> +								hwmon,
-> +								&hwmon_chip_info,
-> +								NULL);
-
-here the allignment is a bit fancy... in this cases I wouldn't
-mind going up to 100 characters or not align under the bracket.
-
-I would write it like this
-
-	hwmon->hwmon_dev = devm_hwmon_device_register_with_info(dev,
-					"xe", hwmon, &hwmon_chip_info, NULL);
-
-but, of course, it's a matter of taste. Up to you.
-
-Andi
+into v6.1 stable kernel. They add device ids for nzxt-smart2 hwmon
+driver, and they don't require any other code changes. This will
+synchronize the driver code with v6.3.
