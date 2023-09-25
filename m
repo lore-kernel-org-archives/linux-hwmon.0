@@ -2,134 +2,128 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 898D3CE7A94
-	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Sep 2023 11:57:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 070D3CE7A94
+	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Sep 2023 12:08:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbjIYL5I (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 25 Sep 2023 07:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60662 "EHLO
+        id S231391AbjIYMIw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 25 Sep 2023 08:08:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbjIYL5H (ORCPT
+        with ESMTP id S231405AbjIYMIi (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 25 Sep 2023 07:57:07 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9F79B
-        for <linux-hwmon@vger.kernel.org>; Mon, 25 Sep 2023 04:57:01 -0700 (PDT)
+        Mon, 25 Sep 2023 08:08:38 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81F9CC2
+        for <linux-hwmon@vger.kernel.org>; Mon, 25 Sep 2023 05:08:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695643021; x=1727179021;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iKmcxrBTKRQniQjUYkXRgNdZm/YyFEElXABxPdax5tg=;
-  b=NXjf5zGufix5vrv7770aPJlEywboj3rqhoHDlmLipPdV6MciwPLl2ylH
-   svOoAZZ2GuIUNo4dni3dXAOFBgR+ZvJ4ErnD2WN3v1P5+q7O05ddUem7S
-   hvW8BgEpD6+JRK/VMxfGa2v22P6L7DSZUlQumY/EyVaWDxw56svIP3WpS
-   6thfV7z+6JI88NVBB6DQ0I5IdvGbYyLNLcGcgUOKo9zvn8q0RW4XrUyDy
-   AJJk7KLFGoSkPILoagKSrqH6Ryy9FCSnn4Q4HXTxW3GJdJxVd8nRsitIn
-   nKN9PevBORpPK1YxKJoFigpFJkIG4AWe96jPkP4u6VXdXP0vhtHN8rDGu
+  t=1695643692; x=1727179692;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=Esft+rDKLhiMoWZ3I/PgnC7bwFHvyGh6+NmReGKWAF0=;
+  b=kgn9wPrNUiqEBSI+pnccOQlq0Z7JV0MIRT0zg8Q8DYH2/KjAWZlgL0/O
+   V87PQCERbRo/mBmRskF5EiBHG0NQeS93B10KbpzqmAQVNIC9o93BUJz9a
+   WiZUhAmA98ui2XlzbVuXFyzZxgL9U81QxNJ1TmR1cFLc17dD2IeaEmOzv
+   n7MJ3tGZu/0K0+JxP0Oa4uauMh1iWznPo3K5nG02+utqMXSEfOujHnUit
+   6yxhHTuvAOp8/HANkCkRqUjisvDZIT4VUg2poKZjsCQFk3PVF1d3XtbSP
+   +/LypXXiFHARi0Nq9Kz3NkD/hpxxAVCwsMLbg0FlDw8g06xxsgSFPJR3a
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="385061181"
+X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="378501725"
 X-IronPort-AV: E=Sophos;i="6.03,174,1694761200"; 
-   d="scan'208";a="385061181"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2023 04:57:00 -0700
+   d="scan'208";a="378501725"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2023 05:08:12 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="891655869"
+X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="863857641"
 X-IronPort-AV: E=Sophos;i="6.03,174,1694761200"; 
-   d="scan'208";a="891655869"
-Received: from nurqayrx-mobl2.gar.corp.intel.com (HELO intel.com) ([10.213.34.118])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2023 04:55:52 -0700
-Date:   Mon, 25 Sep 2023 13:56:47 +0200
-From:   Andi Shyti <andi.shyti@linux.intel.com>
-To:     Badal Nilawar <badal.nilawar@intel.com>
-Cc:     intel-xe@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
-        anshuman.gupta@intel.com, ashutosh.dixit@intel.com,
-        linux@roeck-us.net, andi.shyti@linux.intel.com,
-        riana.tauro@intel.com, matthew.brost@intel.com,
-        rodrigo.vivi@intel.com
-Subject: Re: [PATCH v6 5/5] drm/xe/hwmon: Expose power1_max_interval
-Message-ID: <ZRF1f2OsC1pr5hFd@ashyti-mobl2.lan>
-References: <20230925081842.3566834-1-badal.nilawar@intel.com>
- <20230925081842.3566834-6-badal.nilawar@intel.com>
+   d="scan'208";a="863857641"
+Received: from smgotth-mobl.ger.corp.intel.com (HELO localhost) ([10.252.40.46])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2023 05:08:10 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     "Gupta, Anshuman" <anshuman.gupta@intel.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>
+Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "intel-xe@lists.freedesktop.org" <intel-xe@lists.freedesktop.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>
+Subject: Re: [Intel-xe] [PATCH v5 1/6] drm/xe: Add XE_MISSING_CASE macro
+In-Reply-To: <CY5PR11MB6211E9C38F74EBB728448AFD95FFA@CY5PR11MB6211.namprd11.prod.outlook.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230921102519.3355538-1-badal.nilawar@intel.com>
+ <20230921102519.3355538-2-badal.nilawar@intel.com>
+ <ZQxpTss3+OYdbJks@intel.com> <ZQ2vx6CNgDwWW8SU@ashyti-mobl2.lan>
+ <CY5PR11MB6211E9C38F74EBB728448AFD95FFA@CY5PR11MB6211.namprd11.prod.outlook.com>
+Date:   Mon, 25 Sep 2023 15:08:08 +0300
+Message-ID: <871qemo3pz.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230925081842.3566834-6-badal.nilawar@intel.com>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Badal,
+On Fri, 22 Sep 2023, "Gupta, Anshuman" <anshuman.gupta@intel.com> wrote:
+>> -----Original Message-----
+>> From: Andi Shyti <andi.shyti@linux.intel.com>
+>> Sent: Friday, September 22, 2023 8:46 PM
+>> To: Vivi, Rodrigo <rodrigo.vivi@intel.com>
+>> Cc: Nilawar, Badal <badal.nilawar@intel.com>; intel-xe@lists.freedesktop.org;
+>> linux-hwmon@vger.kernel.org; Gupta, Anshuman
+>> <anshuman.gupta@intel.com>; Dixit, Ashutosh <ashutosh.dixit@intel.com>;
+>> linux@roeck-us.net; andi.shyti@linux.intel.com; Tauro, Riana
+>> <riana.tauro@intel.com>; Brost, Matthew <matthew.brost@intel.com>
+>> Subject: Re: [PATCH v5 1/6] drm/xe: Add XE_MISSING_CASE macro
+>> 
+>> Hi Rodrigo,
+>> 
+>> On Thu, Sep 21, 2023 at 12:03:26PM -0400, Rodrigo Vivi wrote:
+>> > On Thu, Sep 21, 2023 at 03:55:14PM +0530, Badal Nilawar wrote:
+>> > > Add XE_MISSING_CASE macro to handle missing switch case
+>> > >
+>> > > v2: Add comment about macro usage (Himal)
+>> > >
+>> > > Cc: Andi Shyti <andi.shyti@linux.intel.com>
+>> > > Signed-off-by: Badal Nilawar <badal.nilawar@intel.com>
+>> > > Reviewed-by: Himal Prasad Ghimiray <himal.prasad.ghimiray@intel.com>
+>> > > ---
+>> > >  drivers/gpu/drm/xe/xe_macros.h | 4 ++++
+>> > >  1 file changed, 4 insertions(+)
+>> > >
+>> > > diff --git a/drivers/gpu/drm/xe/xe_macros.h
+>> > > b/drivers/gpu/drm/xe/xe_macros.h index daf56c846d03..6c74c69920ed
+>> > > 100644
+>> > > --- a/drivers/gpu/drm/xe/xe_macros.h
+>> > > +++ b/drivers/gpu/drm/xe/xe_macros.h
+>> > > @@ -15,4 +15,8 @@
+>> > >  			    "Ioctl argument check failed at %s:%d: %s", \
+>> > >  			    __FILE__, __LINE__, #cond), 1))
+>> > >
+>> > > +/* Parameter to macro should be a variable name */ #define
+>> > > +XE_MISSING_CASE(x) WARN(1, "Missing case (%s == %ld)\n", \
+>> > > +				__stringify(x), (long)(x))
+>> > > +
+>> >
+>> > No, please! Let's not add unnecessary macros.
+>> 
+>> it's not a bad idea, actually... in i915 we have the MISSING_CASE for switch
+>> cases with a defined number of cases and print warnings in case none if them
+>> is the one inside the switch.
+> IMHO Our CI aborts the on MISSING_CASE, which is not recoverable, drm_warn would
+> Be better alternative here.
 
-[...]
+The whole point is that it aborts, so it won't get ignored. It's only
+for cases like this.
 
-> +static ssize_t
-> +xe_hwmon_power1_max_interval_store(struct device *dev, struct device_attribute *attr,
-> +				   const char *buf, size_t count)
-> +{
-> +	struct xe_hwmon *hwmon = dev_get_drvdata(dev);
-> +	u32 x, y, rxy, x_w = 2; /* 2 bits */
-> +	u64 tau4, r, max_win;
-> +	unsigned long val;
-> +	int ret;
-> +
-> +	ret = kstrtoul(buf, 0, &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/*
-> +	 * Max HW supported tau in '1.x * power(2,y)' format, x = 0, y = 0x12
-> +	 * The hwmon->scl_shift_time default of 0xa results in a max tau of 256 seconds
-> +	 */
-> +#define PKG_MAX_WIN_DEFAULT 0x12ull
-> +
-> +	/*
-> +	 * val must be < max in hwmon interface units. The steps below are
-> +	 * explained in xe_hwmon_power1_max_interval_show()
-> +	 */
-> +	r = FIELD_PREP(PKG_MAX_WIN, PKG_MAX_WIN_DEFAULT);
-> +	x = REG_FIELD_GET(PKG_MAX_WIN_X, r);
-> +	y = REG_FIELD_GET(PKG_MAX_WIN_Y, r);
-> +	tau4 = ((1 << x_w) | x) << y;
-> +	max_win = mul_u64_u32_shr(tau4, SF_TIME, hwmon->scl_shift_time + x_w);
-> +
-> +	if (val > max_win)
-> +		return -EINVAL;
-> +
-> +	/* val in hw units */
-> +	val = DIV_ROUND_CLOSEST_ULL((u64)val << hwmon->scl_shift_time, SF_TIME);
-> +	/* Convert to 1.x * power(2,y) */
-> +	if (!val) {
-> +		/* Avoid ilog2(0) */
-> +		y = 0;
-> +		x = 0;
-> +	} else {
-> +		y = ilog2(val);
-> +		/* x = (val - (1 << y)) >> (y - 2); */
+BR,
+Jani.
 
-this is some spurious development comment, can you please remove
-it?
 
-> +		x = (val - (1ul << y)) << x_w >> y;
-> +	}
-> +
-> +	rxy = REG_FIELD_PREP(PKG_PWR_LIM_1_TIME_X, x) | REG_FIELD_PREP(PKG_PWR_LIM_1_TIME_Y, y);
-> +
-> +	xe_device_mem_access_get(gt_to_xe(hwmon->gt));
-> +
-> +	mutex_lock(&hwmon->hwmon_lock);
-> +
-> +	xe_hwmon_process_reg(hwmon, REG_PKG_RAPL_LIMIT, REG_RMW, (u32 *)&r,
-> +			     PKG_PWR_LIM_1_TIME, rxy);
-> +
-> +	mutex_unlock(&hwmon->hwmon_lock);
+> Thanks,
+> Anshuman Gupta.
+>> 
+>> It's so widely used and actually nice to have that I thought many times to
+>> move it to some core kernel libraries.
+>> 
+>> Andi
 
-why are we locking here?
-
-Andi
-
-> +
-> +	xe_device_mem_access_put(gt_to_xe(hwmon->gt));
-> +
-> +	return count;
-> +}
+-- 
+Jani Nikula, Intel
