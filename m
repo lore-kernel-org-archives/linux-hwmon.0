@@ -2,112 +2,131 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43F8BCE7A8A
-	for <linux-hwmon@archiver.kernel.org>; Sun, 24 Sep 2023 12:02:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A65E0CE7A89
+	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Sep 2023 03:43:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbjIXMCZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 24 Sep 2023 08:02:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37938 "EHLO
+        id S230350AbjIYDnd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 24 Sep 2023 23:43:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjIXMCZ (ORCPT
+        with ESMTP id S229843AbjIYDnc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 24 Sep 2023 08:02:25 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60B7103;
-        Sun, 24 Sep 2023 05:02:17 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id e9e14a558f8ab-3512f905f6cso4468335ab.3;
-        Sun, 24 Sep 2023 05:02:17 -0700 (PDT)
+        Sun, 24 Sep 2023 23:43:32 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2B3C6
+        for <linux-hwmon@vger.kernel.org>; Sun, 24 Sep 2023 20:43:25 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-d85fc108f0eso7683279276.2
+        for <linux-hwmon@vger.kernel.org>; Sun, 24 Sep 2023 20:43:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695556937; x=1696161737; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AozxdM/eQ8ffY41x90FSUIOrIa5FeaNEfJtd13a8iWY=;
-        b=fg0I7SGN6xY/VdxlIc9TPNHV5+Q5eLbx485qv7FVbKKJ9PKyjEVJ54sFq2iUXoHO4y
-         DmlkywcR/zV0zkSI3j4PH4hVop+c4JETEKpGHvYei0LKNUMyhq3Oa1VjTQFoufJNFlkW
-         SCYunG7HHAxUOdooX5nfv5fYorOJZMssrpql6fsMcZnZBfKkoU4r5x7uLUHjI+nP7AvQ
-         SshsApzOfVhBcfGRyHwIcHbOg6dSxVzcz4chktThG3NAHRqejjpoxvq3ehdsYvGQONBf
-         lrz2/LYMBu/De4ZLvhDgPwunQXSSKIqFlrItqKB7tu7e+un15N6yW8st2ohl9tBXNspq
-         h1Vw==
+        d=google.com; s=20230601; t=1695613404; x=1696218204; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=kGi+l4riuiaECjqmxxM9T013wn7H2VmKYNQkmtyxbEM=;
+        b=fJC5qr8gg57/YeN024dGxE569nrPQ7n7Ms7eT+oerUUINbPVOFDA+JdoOzRv4WkVhd
+         UpajUvo2i8wDGjuBdiyKPPMbFc2ZTqdHIti2kmRE3XglI+x436aTA528ItrdB1CsGWqG
+         R5i//U/uAvW7T/EwiAT8+TciTyicA02YT6BJ1qlJ770XUZT5H2sN1Hg68lEHZzqf1s3J
+         YIHbnTx87ZBvqCm52BOPE9cvwS3VbUlbkWrVklaJeQozxvKt0JTZQNx90cutgN126vS0
+         jzBH7QZfQBRIn7nggv5MgqLeju2k7VpIN5BebkrlU0Cln4PdH3EAh6Y3Xp9disVKr3Ta
+         CiOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695556937; x=1696161737;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AozxdM/eQ8ffY41x90FSUIOrIa5FeaNEfJtd13a8iWY=;
-        b=udnfuNuq0ARdHQ/DnwwH9E99f6Rh8Ylco0avaKobMRN4nZdgA3dQ9NbNoYfU6Djqea
-         vb++80GtACF3z2tsZPaPziXWJ1S1l5/Z3X5ebdKnzf+6LItkrhq8WLBSdovesGOKT+i9
-         YtIeIMcWzBXdlu0UdpHd2L7LKYGwhI/iePOXoDLNHDXVwIhmEBAhpy1NfEHHYWy36lDf
-         Yb0kKnd7SF1sDHzSwKGlUUs5sEzn52igpfuBUIOLIFi76TeLoLHgXTj33Edl5X7rSNvb
-         sJt5tf4941rPVltxeyZSpo32IKTgtso+PiD/gF0sNtgc32md1DLxS4oJ+I5Olcb0aZip
-         QtMw==
-X-Gm-Message-State: AOJu0Yzn7E0Pqlh+EjDnneLsGVuVWM5wshLpgWKdHyF6nwCwyIxvd5jC
-        WNQyh6h0srlR5zw56Gb44cw=
-X-Google-Smtp-Source: AGHT+IGa0R7AGF43U53WRQyGs/AJuGDJ0Ykql9xq/cyo/pYAMMMFcvu4wYGUvUyqRGoX46ZA1WwDlQ==
-X-Received: by 2002:a05:6e02:ec5:b0:34f:1028:ff9f with SMTP id i5-20020a056e020ec500b0034f1028ff9fmr4699339ilk.18.1695556937102;
-        Sun, 24 Sep 2023 05:02:17 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t21-20020a63b255000000b00578e9751b88sm6143014pgo.1.2023.09.24.05.02.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Sep 2023 05:02:16 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 24 Sep 2023 05:02:14 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Miclaus, Antoniu" <Antoniu.Miclaus@analog.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        "Matyas, Daniel" <Daniel.Matyas@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: max31827: use supply pin name
-Message-ID: <0cb70677-6dfd-43e0-a3c5-cae3b861a7d1@roeck-us.net>
-References: <20230921142005.102263-1-antoniu.miclaus@analog.com>
- <20230922211201.GA3600661-robh@kernel.org>
- <CY4PR03MB3399B818487F87D7297EC33F9BFEA@CY4PR03MB3399.namprd03.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CY4PR03MB3399B818487F87D7297EC33F9BFEA@CY4PR03MB3399.namprd03.prod.outlook.com>
+        d=1e100.net; s=20230601; t=1695613404; x=1696218204;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kGi+l4riuiaECjqmxxM9T013wn7H2VmKYNQkmtyxbEM=;
+        b=vhI9kOA7COqjuL/yo7aMrw4Mz/n5FnT6AZb9liM57PHkBsO7ssVWV2yuey66UrhSV9
+         F2q+WR/k59JLOTLWDPm/Tgz79Gzb0Ipl4dU4lDNvwBEN2YwWEu5LdnbsA58jxmP76iYR
+         v5kYiiwRKY73RHznaSTeQFeYA05q2n06FhJtWNFjMuR//N6fi5uMh3focHdDXCvA6TAj
+         Nxx47lL5PUL+N/EUnhc75dLfm9Uuuq6aJdbUIr2pwElEWW3esjeUg4rjP+iGOlzj28u0
+         u1VIiE2CX3NimdW3CmRGd6voFswQL6dxbvF6B34VJlrocgreBHYuODkMCw3ZtqiSdo52
+         2nTQ==
+X-Gm-Message-State: AOJu0Yw9HxGZb0B89mcMv0BM2WzwQqE1dcyJK2+exGVQFwTATNGv2Uf3
+        dnXroshx/jsKWILrwyYNs5Zr506A8LmQ9xU77A==
+X-Google-Smtp-Source: AGHT+IHCPc5EgxxRujqxihGGDCVQM4hAhwT+dn65Q42IWRVfZlIOVbw1xYKDwpW15j1rDyTCgAi3WLfG/J+Ani0eUA==
+X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
+ (user=justinstitt job=sendgmr) by 2002:a25:5050:0:b0:d81:7617:a397 with SMTP
+ id e77-20020a255050000000b00d817617a397mr54759ybb.9.1695613404635; Sun, 24
+ Sep 2023 20:43:24 -0700 (PDT)
+Date:   Mon, 25 Sep 2023 03:43:23 +0000
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIANoBEWUC/53NQW7CMBCF4asgrzuVPXZIzKr3qBACZ5xYauJoH
+ BmiKHfHsKLqii7fW3z/KhJxoCQOu1Uw5ZBCHMswHzvh+vPYEYS2bIEStbTKQJp5dNMCLYdMnKC
+ /DnGEs5vCaYpX4tNAMzE4cNZj28hKX8iLwk1MPtyeqe9j2X1Ic+TlWc7q8f4jkhUosLJCW5vae
+ mq+uhi7H/p0cRCPSsZX2b4hY5EbbRqjsd0bg39k/SKjekPWRdayrip0e3La/5K3bbsDahucXJU BAAA=
+X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1695613403; l=2092;
+ i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
+ bh=ioSkjFW6xO8Zk6Hy0g0yjtRiiK1nC4uSchEb5oNum5w=; b=fMjWVGvcSh9yNcffpjEcUdHXCUXqgO+uc1xT2SyEgz2oCVkPicvItUudYEWRwJTfU561WP+ua
+ RdtVThBRACuA8mljVOy6FIl3jboq2056DJkW4IqXe500CvQqhMj6Crn
+X-Mailer: b4 0.12.3
+Message-ID: <20230925-strncpy-drivers-hwmon-acpi_power_meter-c-v4-1-3bac7534f10f@google.com>
+Subject: [PATCH v4] hwmon: (acpi_power_meter) replace open-coded kmemdup_nul
+From:   Justin Stitt <justinstitt@google.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Sep 23, 2023 at 02:19:45PM +0000, Miclaus, Antoniu wrote:
-> 
-> 
-> > On Thu, Sep 21, 2023 at 05:20:03PM +0300, Antoniu Miclaus wrote:
-> > > The actual hardware pin name for the supply of max31827 is vdd.
-> > > Update the dt-binding to reflect the hardware properties accordingly.
-> > 
-> > Changing this breaks the ABI. I see the old one wasn't used by the
-> > driver, but that's just one driver potentially. You need some
-> > justification here why it's okay to break the ABI.
-> > 
-> As I mentioned also in the commit description, the supply should match the
-> actual hardware pin name. Otherwise it might create confusion. Usually vref
-> refers to an external voltage reference pin used for ADC/DACs which is not
-> exactly the case for this part, taking into account that there is no "reference"
-> word mentioned in the datasheet at all. VREF and VDD are usually separate
-> hardware pins. There is a hint indeed in the dts example that the vref-supply 
-> might be referenced to a vdd regulator node, but from my point of view
-> that is not enough. Moreover the current vref-supply is not handled at all in
-> the driver, it is only mentioned in the dt-binding (That's why I added a second
-> patch in the series handling the supply).
-> 
-> If the justification is not enough to apply this change, then I can keep only the
-> second patch, which handles the regulator in the driver and use the  old `vref`
-> naming which currently appears only in the dt-binding.
-> 
+`strncpy` is deprecated for use on NUL-terminated destination strings [1].
 
-That would have been a good argument when the property was introduced, but if
-there are any systems with existing bindings out there they will use the old
-name and fail after this change is applied.
+Let's refactor this kcalloc() + strncpy() into a kmemdup_nul() which has
+more obvious behavior and is less error prone.
 
-I don't thnk it is mandated that every system in the world would publish their
-devicetree bindings in the kernel. That would not scale. So any argument along
-the line of "this binding is not used" is not really a valid argument.
+Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
+Link: https://github.com/KSPP/linux/issues/90
+Cc: linux-hardening@vger.kernel.org
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+---
+Changes in v4:
+- drop +1 from length arg (thanks Kees)
+- reword subject line (thanks Kees)
+- rebase onto 6465e260f4879080
+- Link to v3: https://lore.kernel.org/r/20230921-strncpy-drivers-hwmon-acpi_power_meter-c-v3-1-307552c6ec3f@google.com
 
-Guenter
+Changes in v3:
+- refactor to use kmemdup_nul() (thanks Thomas and Kees)
+- change commit msg to reflect ^
+- rebase onto 2cf0f71562387282
+- Link to v2: https://lore.kernel.org/r/20230919-strncpy-drivers-hwmon-acpi_power_meter-c-v2-1-8348432d6442@google.com
+
+Changes in v2:
+- use memcpy over strscpy (thanks Kees)
+- Link to v1: https://lore.kernel.org/r/20230914-strncpy-drivers-hwmon-acpi_power_meter-c-v1-1-905297479fe8@google.com
+---
+ drivers/hwmon/acpi_power_meter.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
+index fa28d447f0df..c13b5c8a0433 100644
+--- a/drivers/hwmon/acpi_power_meter.c
++++ b/drivers/hwmon/acpi_power_meter.c
+@@ -796,14 +796,13 @@ static int read_capabilities(struct acpi_power_meter_resource *resource)
+ 			goto error;
+ 		}
+ 
+-		*str = kcalloc(element->string.length + 1, sizeof(u8),
+-			       GFP_KERNEL);
++		*str = kmemdup_nul(element->string.pointer, element->string.length,
++						 GFP_KERNEL);
+ 		if (!*str) {
+ 			res = -ENOMEM;
+ 			goto error;
+ 		}
+ 
+-		strncpy(*str, element->string.pointer, element->string.length);
+ 		str++;
+ 	}
+ 
+
+---
+base-commit: 6465e260f48790807eef06b583b38ca9789b6072
+change-id: 20230914-strncpy-drivers-hwmon-acpi_power_meter-c-c9f2d8053bef
+
+Best regards,
+--
+Justin Stitt <justinstitt@google.com>
+
