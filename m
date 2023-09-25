@@ -2,97 +2,119 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27AECCE7A81
-	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Sep 2023 12:30:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A3F7CE7AB5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Sep 2023 18:02:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231487AbjIYMaT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 25 Sep 2023 08:30:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51856 "EHLO
+        id S230415AbjIYSCO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 25 Sep 2023 14:02:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjIYMaS (ORCPT
+        with ESMTP id S229735AbjIYSCN (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 25 Sep 2023 08:30:18 -0400
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC510C0;
-        Mon, 25 Sep 2023 05:30:12 -0700 (PDT)
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 38PBObSo027417;
-        Mon, 25 Sep 2023 08:29:56 -0400
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3tad5feqd3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Sep 2023 08:29:55 -0400 (EDT)
-Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 38PCTss9063111
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 25 Sep 2023 08:29:54 -0400
-Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
- ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Mon, 25 Sep 2023 08:29:53 -0400
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
- ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Mon, 25 Sep 2023 08:29:53 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Mon, 25 Sep 2023 08:29:53 -0400
-Received: from amiclaus-VirtualBox.ad.analog.com (AMICLAUS-L02.ad.analog.com [10.48.65.172])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 38PCTfV2020584;
-        Mon, 25 Sep 2023 08:29:44 -0400
-From:   Antoniu Miclaus <antoniu.miclaus@analog.com>
-To:     Daniel Matyas <daniel.matyas@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
+        Mon, 25 Sep 2023 14:02:13 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C467E111
+        for <linux-hwmon@vger.kernel.org>; Mon, 25 Sep 2023 11:02:06 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1c5ff5f858dso21371265ad.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 25 Sep 2023 11:02:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1695664926; x=1696269726; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8eSsSBJ8Vq4Qi6ZMfaWUsInrqRpqyqKIrqUaEPasYuI=;
+        b=BI5J06qjkQ7ljgnowfX42qKmMVLVqjKY9nFTkGMX+7kt2qyLHxaU8AHwc8CMMbQTHq
+         EMkXck8eAHwtyetfitVwakO3E8PSKHpQ/NASXyVOj4TgzGVaeJlfZe1bE7oTHtmX9kCt
+         /s5Zl8J292KOITX6AqFJbfYlWR2kjXivcBexo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695664926; x=1696269726;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8eSsSBJ8Vq4Qi6ZMfaWUsInrqRpqyqKIrqUaEPasYuI=;
+        b=G/f/JEwTAZGurvpMg0gei9DKMe8pVbun48D7v9Ec9YDEPjvVE0y5yeiOSyJovqqGsB
+         L5fPUwp6pjqAZw5bviCAWepsQQcfvUUSmRbrYGx0a2ig+tbCkoB6isNmW2RAVU+mq2fi
+         CW2Oe1GS/+1hM08e07Uivb556+QHyAZXZcnbFkHG+HAqo7LAYqoDplf+CMQ0bCGdsKoQ
+         4QPioxt/PvPPbnzr5o9BgANEOXqtLAH1vNFIsXCJ5Cfo4leX8if0TnmbtpvWsQxvmbXS
+         kHMJsK9rcP7MadgGonLR2UiPdI3teZ/nuPMaBvWf6qkKLfuQNFfA7y095Ga3+paUxWhq
+         K9pg==
+X-Gm-Message-State: AOJu0YxRl+b0DULf+Q8/dz1EiMDw7vkfpi+rhHjzk/iSouwOngy53l5E
+        QYO13LF2flxbKMfqHzzR7dahYlKNXwh6qaek7l8=
+X-Google-Smtp-Source: AGHT+IHld3ZFV0+XNf/j9xLn/Bc27rzyru1qiqAoZ2oWmrXp9wmOwRx86JiK/FA3B/MoWE1xxRrRCg==
+X-Received: by 2002:a17:903:2308:b0:1c6:2acc:62ea with SMTP id d8-20020a170903230800b001c62acc62eamr1069374plh.57.1695664926254;
+        Mon, 25 Sep 2023 11:02:06 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id a11-20020a170902eccb00b001bb28b9a40dsm9161300plh.11.2023.09.25.11.02.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Sep 2023 11:02:05 -0700 (PDT)
+Date:   Mon, 25 Sep 2023 11:02:05 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Justin Stitt <justinstitt@google.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Antoniu Miclaus <antoniu.miclaus@analog.com>
-Subject: [PATCH v4] drivers: hwmon: max31827: handle vref regulator
-Date:   Mon, 25 Sep 2023 15:29:28 +0300
-Message-ID: <20230925122929.10610-1-antoniu.miclaus@analog.com>
-X-Mailer: git-send-email 2.42.0
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v4] hwmon: (acpi_power_meter) replace open-coded
+ kmemdup_nul
+Message-ID: <202309251101.1544F5F@keescook>
+References: <20230925-strncpy-drivers-hwmon-acpi_power_meter-c-v4-1-3bac7534f10f@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: OaQ_Y4r6A72vnxIVElSJQH4IrUSTg87U
-X-Proofpoint-ORIG-GUID: OaQ_Y4r6A72vnxIVElSJQH4IrUSTg87U
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-09-25_08,2023-09-25_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 bulkscore=0
- phishscore=0 lowpriorityscore=0 mlxscore=0 malwarescore=0 impostorscore=0
- suspectscore=0 spamscore=0 mlxlogscore=757 priorityscore=1501
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2309180000 definitions=main-2309250093
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230925-strncpy-drivers-hwmon-acpi_power_meter-c-v4-1-3bac7534f10f@google.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add missing implementation for the max31827 supply regulator.
-This is a hardware required property that is not handled.
+On Mon, Sep 25, 2023 at 03:43:23AM +0000, Justin Stitt wrote:
+> `strncpy` is deprecated for use on NUL-terminated destination strings [1].
+> 
+> Let's refactor this kcalloc() + strncpy() into a kmemdup_nul() which has
+> more obvious behavior and is less error prone.
+> 
+> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
+> Link: https://github.com/KSPP/linux/issues/90
+> Cc: linux-hardening@vger.kernel.org
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
+> ---
+> Changes in v4:
+> - drop +1 from length arg (thanks Kees)
+> - reword subject line (thanks Kees)
+> - rebase onto 6465e260f4879080
+> - Link to v3: https://lore.kernel.org/r/20230921-strncpy-drivers-hwmon-acpi_power_meter-c-v3-1-307552c6ec3f@google.com
+> 
+> Changes in v3:
+> - refactor to use kmemdup_nul() (thanks Thomas and Kees)
+> - change commit msg to reflect ^
+> - rebase onto 2cf0f71562387282
+> - Link to v2: https://lore.kernel.org/r/20230919-strncpy-drivers-hwmon-acpi_power_meter-c-v2-1-8348432d6442@google.com
+> 
+> Changes in v2:
+> - use memcpy over strscpy (thanks Kees)
+> - Link to v1: https://lore.kernel.org/r/20230914-strncpy-drivers-hwmon-acpi_power_meter-c-v1-1-905297479fe8@google.com
+> ---
+>  drivers/hwmon/acpi_power_meter.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
+> index fa28d447f0df..c13b5c8a0433 100644
+> --- a/drivers/hwmon/acpi_power_meter.c
+> +++ b/drivers/hwmon/acpi_power_meter.c
+> @@ -796,14 +796,13 @@ static int read_capabilities(struct acpi_power_meter_resource *resource)
+>  			goto error;
+>  		}
+>  
+> -		*str = kcalloc(element->string.length + 1, sizeof(u8),
+> -			       GFP_KERNEL);
+> +		*str = kmemdup_nul(element->string.pointer, element->string.length,
+> +						 GFP_KERNEL);
 
-Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
----
-changes in v4:
- - remove "vref" from the dev_err_probe string.
- drivers/hwmon/max31827.c | 4 ++++
- 1 file changed, 4 insertions(+)
+This whitespace looks weird -- I'd expect this to line up with
+"element", like this:
 
-diff --git a/drivers/hwmon/max31827.c b/drivers/hwmon/max31827.c
-index 602f4e4f81ff..0508b020a408 100644
---- a/drivers/hwmon/max31827.c
-+++ b/drivers/hwmon/max31827.c
-@@ -427,6 +427,10 @@ static int max31827_probe(struct i2c_client *client)
- 		return dev_err_probe(dev, PTR_ERR(st->regmap),
- 				     "Failed to allocate regmap.\n");
- 
-+	err = devm_regulator_get_enable(dev, "vref");
-+	if (err)
-+		return dev_err_probe(dev, err, "failed to enable regulator\n");
-+
- 	err = max31827_init_client(st);
- 	if (err)
- 		return err;
+> +		*str = kmemdup_nul(element->string.pointer, element->string.length,
+> +				   GFP_KERNEL);
+
+Otherwise, yes, looks correct.
+
 -- 
-2.42.0
-
+Kees Cook
