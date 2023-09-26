@@ -2,145 +2,205 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97D89E7E62F
-	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Sep 2023 12:42:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57C48E7E638
+	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Sep 2023 14:08:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234611AbjIZMmZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 26 Sep 2023 08:42:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37340 "EHLO
+        id S229807AbjIZOJA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 26 Sep 2023 10:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234536AbjIZMmZ (ORCPT
+        with ESMTP id S229519AbjIZOJA (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 26 Sep 2023 08:42:25 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33A7EB;
-        Tue, 26 Sep 2023 05:42:18 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id ca18e2360f4ac-79f92726f47so291539539f.3;
-        Tue, 26 Sep 2023 05:42:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695732138; x=1696336938; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KwZZXUR06hKxqMjAtAVkXjuDv/1BvCb8Sk0gpiHu+5I=;
-        b=T0cQYIVX/Wv2kEiqHtAk+y7maIKtmPtURs04EdORtH2qRakTjKk0r9y+vBJVi7jfLE
-         4wDJEM/nxcvBylOELVMfNkXhRQX1M9tnU5mmtpa6BrCWd0Bn127m9f8mST1J2KsDT2NN
-         mwQzXMmByaurHXFuUS4eyJg+k9dd3MIDIxUVlMnulm6hWvpHAjq/CVQZeBBM4O1SRO4e
-         7B37RiYUYX5MoIvJwjBOigRdu9wlg5yygl++IQ79LuZQJs4aGtlBQes0eczzJ8eQ2fr/
-         pnxdEpgJjLgdmhQz98OSqqZZc6cyh3aeALy6MVo9FX6mtoLNu7x0MCMFds0i8o8tqYP+
-         p9/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695732138; x=1696336938;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KwZZXUR06hKxqMjAtAVkXjuDv/1BvCb8Sk0gpiHu+5I=;
-        b=tpOCQtOR/TARsNC1yQtkPmXhHw6bpomn1NJFp8URKRw0w/vb665ITp1dWGEzayEpq7
-         wTQaH0TV9ByQH+gQ0ID9yMNGWLnkRJIcKIswFVn29lU8zwLXvMuJJM/e6XSXRTsmU8gG
-         1lg1yH8ShPXE7DoYUMDFdCNGfvwR1DyDNjERWJ3qvconIIBUnCppuNwvTANEYTih/6He
-         VMoB6HnAGRIBGBzSpFNAFsCbuxFUsm7DyDiOl4gCaqwYPuZ51sIHmjyGs1p0qU65hHRL
-         ln0T0yjUAf4tlZSr4QJLLKYcuMz1AqQODKVGCitUxDnyPNL4yG7yBsYQe56/CdJ6sf8e
-         KaZQ==
-X-Gm-Message-State: AOJu0YzyFVDZMdQh2mAKxMRMJI9qfO4Y+A1biKUMYUhCmU5QZdulpUA+
-        A/NSlVILXjbvhTGspeMn12M=
-X-Google-Smtp-Source: AGHT+IEOiSkG0mndUGYjrWRyD1gPI2GcUvEPRN/qCsJi6tg1cwQOicv8XV55FV90Nh5byZmbTyqpHw==
-X-Received: by 2002:a05:6e02:1946:b0:34b:aef9:60d4 with SMTP id x6-20020a056e02194600b0034baef960d4mr12605847ilu.27.1695732138129;
-        Tue, 26 Sep 2023 05:42:18 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m13-20020a056638408d00b0042b326ed1ebsm9584jam.48.2023.09.26.05.42.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Sep 2023 05:42:17 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 26 Sep 2023 05:42:16 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH 3/3] hwmon: (xgene) Migrate to use generic PCC shmem
- related macros
-Message-ID: <667915e2-3c3f-4afd-a055-d010d55b741e@roeck-us.net>
-References: <20230926-pcc_defines-v1-0-0f925a1658fd@arm.com>
- <20230926-pcc_defines-v1-3-0f925a1658fd@arm.com>
+        Tue, 26 Sep 2023 10:09:00 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0ACB101;
+        Tue, 26 Sep 2023 07:08:53 -0700 (PDT)
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 38QDe2TP032200;
+        Tue, 26 Sep 2023 10:08:37 -0400
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3tbx5xs6dh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 Sep 2023 10:08:36 -0400 (EDT)
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 38QE7V5L048058
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 26 Sep 2023 10:07:31 -0400
+Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
+ ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Tue, 26 Sep 2023 10:07:30 -0400
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
+ ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Tue, 26 Sep 2023 10:07:30 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Tue, 26 Sep 2023 10:07:30 -0400
+Received: from amiclaus-VirtualBox.ad.analog.com (AMICLAUS-L02.ad.analog.com [10.48.65.194])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 38QE7Gh8009810;
+        Tue, 26 Sep 2023 10:07:19 -0400
+From:   Antoniu Miclaus <antoniu.miclaus@analog.com>
+To:     Antoniu Miclaus <antoniu.miclaus@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>
+Subject: [PATCH 1/2] dt-bindings: hwmon: ltc2991: add bindings
+Date:   Tue, 26 Sep 2023 17:05:29 +0300
+Message-ID: <20230926140544.80934-1-antoniu.miclaus@analog.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230926-pcc_defines-v1-3-0f925a1658fd@arm.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-ORIG-GUID: 0imFy5U2fkCxeEN4rjH8_SvFYCuj7IFn
+X-Proofpoint-GUID: 0imFy5U2fkCxeEN4rjH8_SvFYCuj7IFn
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-09-26_10,2023-09-26_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
+ phishscore=0 mlxlogscore=999 spamscore=0 adultscore=0 bulkscore=0
+ clxscore=1015 malwarescore=0 suspectscore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2309180000 definitions=main-2309260124
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Sep 26, 2023 at 01:28:02PM +0100, Sudeep Holla wrote:
-> Use the newly defined common and generic PCC shared memory region
-> related macros in this driver to replace the locally defined ones.
-> 
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+Add dt-bindings for ltc2991 octal i2c voltage, current and temperature
+monitor.
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+---
+ .../bindings/hwmon/adi,ltc2991.yaml           | 114 ++++++++++++++++++
+ 1 file changed, 114 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml
 
-> ---
->  drivers/hwmon/xgene-hwmon.c | 16 +++++-----------
->  1 file changed, 5 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
-> index 78d9f52e2a71..1ccdd61b6d13 100644
-> --- a/drivers/hwmon/xgene-hwmon.c
-> +++ b/drivers/hwmon/xgene-hwmon.c
-> @@ -57,12 +57,6 @@
->  	(MSG_TYPE_SET(MSG_TYPE_PWRMGMT) | \
->  	MSG_SUBTYPE_SET(hndl) | TPC_CMD_SET(cmd) | type)
->  
-> -/* PCC defines */
-> -#define PCC_SIGNATURE_MASK		0x50424300
-> -#define PCCC_GENERATE_DB_INT		BIT(15)
-> -#define PCCS_CMD_COMPLETE		BIT(0)
-> -#define PCCS_SCI_DOORBEL		BIT(1)
-> -#define PCCS_PLATFORM_NOTIFICATION	BIT(3)
->  /*
->   * Arbitrary retries in case the remote processor is slow to respond
->   * to PCC commands
-> @@ -142,15 +136,15 @@ static int xgene_hwmon_pcc_rd(struct xgene_hwmon_dev *ctx, u32 *msg)
->  
->  	/* Write signature for subspace */
->  	WRITE_ONCE(generic_comm_base->signature,
-> -		   cpu_to_le32(PCC_SIGNATURE_MASK | ctx->mbox_idx));
-> +		   cpu_to_le32(PCC_SIGNATURE | ctx->mbox_idx));
->  
->  	/* Write to the shared command region */
->  	WRITE_ONCE(generic_comm_base->command,
-> -		   cpu_to_le16(MSG_TYPE(msg[0]) | PCCC_GENERATE_DB_INT));
-> +		   cpu_to_le16(MSG_TYPE(msg[0]) | PCC_CMD_GENERATE_DB_INTR));
->  
->  	/* Flip CMD COMPLETE bit */
->  	val = le16_to_cpu(READ_ONCE(generic_comm_base->status));
-> -	val &= ~PCCS_CMD_COMPLETE;
-> +	val &= ~PCC_STATUS_CMD_COMPLETE;
->  	WRITE_ONCE(generic_comm_base->status, cpu_to_le16(val));
->  
->  	/* Copy the message to the PCC comm space */
-> @@ -544,7 +538,7 @@ static void xgene_hwmon_pcc_rx_cb(struct mbox_client *cl, void *msg)
->  	msg = generic_comm_base + 1;
->  	/* Check if platform sends interrupt */
->  	if (!xgene_word_tst_and_clr(&generic_comm_base->status,
-> -				    PCCS_SCI_DOORBEL))
-> +				    PCC_STATUS_SCI_DOORBELL))
->  		return;
->  
->  	/*
-> @@ -566,7 +560,7 @@ static void xgene_hwmon_pcc_rx_cb(struct mbox_client *cl, void *msg)
->  	      TPC_CMD(((u32 *)msg)[0]) == TPC_ALARM))) {
->  		/* Check if platform completes command */
->  		if (xgene_word_tst_and_clr(&generic_comm_base->status,
-> -					   PCCS_CMD_COMPLETE)) {
-> +					   PCC_STATUS_CMD_COMPLETE)) {
->  			ctx->sync_msg.msg = ((u32 *)msg)[0];
->  			ctx->sync_msg.param1 = ((u32 *)msg)[1];
->  			ctx->sync_msg.param2 = ((u32 *)msg)[2];
-> 
-> -- 
-> 2.42.0
-> 
+diff --git a/Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml b/Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml
+new file mode 100644
+index 000000000000..6174e0113ef8
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml
+@@ -0,0 +1,114 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++
++$id: http://devicetree.org/schemas/hwmon/adi,ltc2991.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Analog Devices LTC2991 Octal I2C Voltage, Current and Temperature Monitor
++
++maintainers:
++  - Antoniu Miclaus <antoniu.miclaus@analog.com>
++
++description: |
++  The LTC2991 is used to monitor system temperatures, voltages and currents.
++  Through the I2C serial interface, the eight monitors can individually measure
++  supply voltages and can be paired for differential measurements of current
++  sense resistors or temperature sensing transistors.
++
++  Datasheet:
++    https://www.analog.com/en/products/ltc2991.html
++
++properties:
++  compatible:
++    enum:
++      - adi,ltc2991
++
++  reg:
++    maxItems: 1
++
++  '#address-cells':
++    const: 1
++
++  '#size-cells':
++    const: 0
++
++  vcc-supply: true
++
++patternProperties:
++  "^channel@[0-3]$":
++    type: object
++    description: |
++      Represents the differential/temperature channels.
++
++    properties:
++      reg:
++        description: |
++          The channel number. LTC2992 can monitor 4 currents/temperatures.
++        items:
++          minimum: 0
++          maximum: 3
++
++      shunt-resistor-mili-ohms:
++        description:
++          The value of curent sense resistor in miliohms. Enables differential
++          input pair.
++
++      temperature-enable:
++        description:
++          Enables temperature readings for a input pair.
++
++required:
++  - compatible
++  - reg
++  - vcc-supply
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        hwmon@48 {
++            compatible = "adi,ltc2991";
++            reg = <0x48>;
++            vcc-supply = <&vcc>;
++        };
++    };
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        hwmon@48 {
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            compatible = "adi,ltc2991";
++            reg = <0x48>;
++            vcc-supply = <&vcc>;
++
++            channel@0 {
++                    reg = <0x0>;
++                    shunt-resistor-mili-ohms = <100>;
++            };
++
++            channel@1 {
++                    reg = <0x1>;
++                    shunt-resistor-mili-ohms = <100>;
++            };
++
++            channel@2 {
++                    reg = <0x2>;
++                    temperature-enable;
++            };
++
++            channel@3 {
++                    reg = <0x3>;
++                    temperature-enable;
++            };
++        };
++    };
++...
+-- 
+2.42.0
+
