@@ -2,234 +2,95 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04734E82CA1
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Sep 2023 15:19:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F42BE82CB0
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Sep 2023 16:26:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232338AbjI0PTe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 27 Sep 2023 11:19:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43068 "EHLO
+        id S231659AbjI0Q0n (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 27 Sep 2023 12:26:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230274AbjI0PTe (ORCPT
+        with ESMTP id S231657AbjI0Q0n (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 27 Sep 2023 11:19:34 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1581AA;
-        Wed, 27 Sep 2023 08:19:31 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CEDFC433C7;
-        Wed, 27 Sep 2023 15:19:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695827970;
-        bh=KMukbBBeXV+l1cuq0Jp1Wo0ccigkbIimAikppeeUBdo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G89s4vfLyLbRHxXx784woGm8pxlfza/V2sFYJjv8+uizc/xzGdCPdbR3lMo4D1xFh
-         Zc1Mv0GuT0foHxGRV27J4PRopQVoQ2DR2QIuX4d0qQqkpYzwGzv0UVkc0lNa99D8Tp
-         /1zbmrvFTealguaZAdaE5va8auj5qpgGhXstXoz3yYxzCROEHE0nm/yPVtJs/I68pq
-         8YznlGWm8GV8bccFmcs2gCM+xWo2L1idm7fkLyN1BZW5UAo1iz8KMl0oAAIhw4ULHs
-         emrcjptFlj7UU/hf+TguuP4d2Que/MrSTMxhiLuekfgLhWcxUcqEmi/ToTHkb5n3Ln
-         tv4IaJVK+WKog==
-Date:   Wed, 27 Sep 2023 16:19:26 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Antoniu Miclaus <antoniu.miclaus@analog.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: ltc2991: add bindings
-Message-ID: <20230927-curve-trodden-5f8f150aa738@spud>
-References: <20230926140544.80934-1-antoniu.miclaus@analog.com>
+        Wed, 27 Sep 2023 12:26:43 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 87DCCE6;
+        Wed, 27 Sep 2023 09:26:41 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 707A21FB;
+        Wed, 27 Sep 2023 09:27:19 -0700 (PDT)
+Received: from e103737-lin.cambridge.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1AA363F59C;
+        Wed, 27 Sep 2023 09:26:40 -0700 (PDT)
+From:   Sudeep Holla <sudeep.holla@arm.com>
+Subject: [PATCH v2 0/4] ACPI: PCC: Define and use the common PCC shared
+ memory regions related macros
+Date:   Wed, 27 Sep 2023 17:26:09 +0100
+Message-Id: <20230927-pcc_defines-v2-0-0b8ffeaef2e5@arm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="iuF1VGb0w26bLJMI"
-Content-Disposition: inline
-In-Reply-To: <20230926140544.80934-1-antoniu.miclaus@analog.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAKJXFGUC/22MwQ7CIBAFf6XZsxgKQqyn/odpDIXF7qHQgCGah
+ n8Xe/Y472Vmh4yJMMOt2yFhoUwxNBCnDuxiwhMZucYguJB8EJpt1j4cegqYmbjMqFDKWXsJzdh
+ SO95H7T41Xii/Yvoc8dL/1v+d0jPOuB+EMr1WV+9Gk9azjStMtdYvP/zP7qQAAAA=
+To:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Huisong Li <lihuisong@huawei.com>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1339; i=sudeep.holla@arm.com;
+ h=from:subject:message-id; bh=lwT8ZnKV+w+WbSm9j2obr3XMxv9qHzx8UZUyVSqGOk4=;
+ b=owEBbQKS/ZANAwAIAQBBurwxfuKYAcsmYgBlFFe/GK8S35+7w73n13E+CWi7SnJXnak49uWZd
+ KPcDX+7sHiJAjMEAAEIAB0WIQS6ceUSBvMeskPdk+EAQbq8MX7imAUCZRRXvwAKCRAAQbq8MX7i
+ mB7PD/9GdBYmtGCqO/u6bYiAspw2Jk7CK5hdy7XxEu3RAaB1ojcdnNS87mc28fF7z+EvCfuYrDO
+ eA2OX2Jpz3XWXmDCVFi0hCHxGjXPUETYwut8AteGPNb0Q4WZHcCPsakFSu5m4WjrCbQ5bcav+7T
+ J/zY5lIyaw+xB+7zu5Lu2+5vTDvUaHlQMPb/VANx8jDahjIK2X/sSP7F1KJqHnC2k0Z/hG6wphs
+ Ro2XfOb0c8Mg3H3jrcWRjvggNoP7plggYwGocwTiJVmqLILnMQW+OVIEf1RcryDCjyIVddtaNUo
+ 8Mjv9DYm35gIMA6rM7GzEoGGCsHEX2p40/Pan33NI6myfdTVnumh2ml+03D5HhZnFrdXpiTpxl0
+ oGv/2abXj+SQD9s0ZzOGdV4jL9IAPsdW+9s8xmJyaRG7JB59+jIrH9qO+6gTkjE4OVu6M7UT4Ir
+ cB67bUJ22oz8ksu8WGZ7esgXnqv4TOcLHIynxcwiQAQWKaXNS9ahwOR/NarGzS8/fsjyVuNxo3N
+ eBypEzKSTHqgrha1KXfq85OGPhsrecXEGsLQtmdiN4ADheoDUyQJQI6GbQdPydzyRz5ymyhfDFu
+ Tj6oHnjhznO1cZeyhRBVvPsHdXsEy5Tgba0dskTMoUs/gmXhRdFdbdk4qaHALTkPJwBWRgT1otc
+ iFOW/9awPLBz/Ew==
+X-Developer-Key: i=sudeep.holla@arm.com; a=openpgp;
+ fpr=7360A21742ADF5A11767C1C139CFD4755FE2D5B4
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+This set of 3 small patches intend to consolidate and replace the existing
+locally defined macros within couple of PCC client drivers when accessing
+the command and status bitfields.
 
---iuF1VGb0w26bLJMI
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+---
+Changes in v2:
+- Added review/ack tags from Andi Shyti(I2C) and Guenter Roeck(hwmon)
+- Added bitfields for Initiator Responder Communications Channel flags as well
+- Migrated kunpeng_hccs soc driver to use generic PCC shmem related macros
+- Link to v1: https://lore.kernel.org/r/20230926-pcc_defines-v1-0-0f925a1658fd@arm.com
 
-Hi,
+---
+Sudeep Holla (4):
+      ACPI: PCC: Add PCC shared memory region command and status bitfields
+      i2c: xgene-slimpro: Migrate to use generic PCC shmem related macros
+      hwmon: (xgene) Migrate to use generic PCC shmem related macros
+      soc: kunpeng_hccs: Migrate to use generic PCC shmem related macros
 
-On Tue, Sep 26, 2023 at 05:05:29PM +0300, Antoniu Miclaus wrote:
-> Add dt-bindings for ltc2991 octal i2c voltage, current and temperature
-> monitor.
->=20
-> Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
-> ---
->  .../bindings/hwmon/adi,ltc2991.yaml           | 114 ++++++++++++++++++
->  1 file changed, 114 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/adi,ltc2991.y=
-aml
->=20
-> diff --git a/Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml b/D=
-ocumentation/devicetree/bindings/hwmon/adi,ltc2991.yaml
-> new file mode 100644
-> index 000000000000..6174e0113ef8
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml
-> @@ -0,0 +1,114 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +
-> +$id: http://devicetree.org/schemas/hwmon/adi,ltc2991.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Analog Devices LTC2991 Octal I2C Voltage, Current and Temperature=
- Monitor
-> +
-> +maintainers:
-> +  - Antoniu Miclaus <antoniu.miclaus@analog.com>
-> +
-> +description: |
-> +  The LTC2991 is used to monitor system temperatures, voltages and curre=
-nts.
-> +  Through the I2C serial interface, the eight monitors can individually =
-measure
-> +  supply voltages and can be paired for differential measurements of cur=
-rent
-> +  sense resistors or temperature sensing transistors.
-> +
-> +  Datasheet:
-> +    https://www.analog.com/en/products/ltc2991.html
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - adi,ltc2991
+ drivers/hwmon/xgene-hwmon.c            | 16 +++++-----------
+ drivers/i2c/busses/i2c-xgene-slimpro.c | 16 ++++------------
+ drivers/soc/hisilicon/kunpeng_hccs.c   |  8 ++------
+ include/acpi/pcc.h                     | 13 +++++++++++++
+ 4 files changed, 24 insertions(+), 29 deletions(-)
+---
+base-commit: 6465e260f48790807eef06b583b38ca9789b6072
+change-id: 20230926-pcc_defines-24be5e33b6f3
 
-if you aren't expecting to add other devices that can share the binding,
-make this const: rather than enum:.
+Best regards,
+-- 
+Regards,
+Sudeep
 
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
-> +
-> +  vcc-supply: true
-> +
-> +patternProperties:
-> +  "^channel@[0-3]$":
-> +    type: object
-> +    description: |
-
-The |s are only needed when you have formatting to preserve.
-
-> +      Represents the differential/temperature channels.
-> +
-> +    properties:
-> +      reg:
-> +        description: |
-> +          The channel number. LTC2992 can monitor 4 currents/temperature=
-s.
-> +        items:
-> +          minimum: 0
-> +          maximum: 3
-> +
-> +      shunt-resistor-mili-ohms:
-
-The standard properties here are ohms and micro-ohms. Also, "milli" has
-2 ls.
-
-> +        description:
-> +          The value of curent sense resistor in miliohms. Enables differ=
-ential
-> +          input pair.
-> +
-> +      temperature-enable:
-
-This seems like a vendor property that should have a vendor prefix?
-
-> +        description:
-> +          Enables temperature readings for a input pair.
-
-TBH, this seems like it is used just to control software behaviour.
-Why would you want to actually disable this in DT?
-
-Cheers,
-Conor.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - vcc-supply
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells =3D <1>;
-> +        #size-cells =3D <0>;
-> +
-> +        hwmon@48 {
-> +            compatible =3D "adi,ltc2991";
-> +            reg =3D <0x48>;
-> +            vcc-supply =3D <&vcc>;
-> +        };
-> +    };
-> +  - |
-> +    i2c {
-> +        #address-cells =3D <1>;
-> +        #size-cells =3D <0>;
-> +
-> +        hwmon@48 {
-> +            #address-cells =3D <1>;
-> +            #size-cells =3D <0>;
-> +
-> +            compatible =3D "adi,ltc2991";
-> +            reg =3D <0x48>;
-> +            vcc-supply =3D <&vcc>;
-> +
-> +            channel@0 {
-> +                    reg =3D <0x0>;
-> +                    shunt-resistor-mili-ohms =3D <100>;
-> +            };
-> +
-> +            channel@1 {
-> +                    reg =3D <0x1>;
-> +                    shunt-resistor-mili-ohms =3D <100>;
-> +            };
-> +
-> +            channel@2 {
-> +                    reg =3D <0x2>;
-> +                    temperature-enable;
-> +            };
-> +
-> +            channel@3 {
-> +                    reg =3D <0x3>;
-> +                    temperature-enable;
-> +            };
-> +        };
-> +    };
-> +...
-> --=20
-> 2.42.0
->=20
-
---iuF1VGb0w26bLJMI
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZRRH/QAKCRB4tDGHoIJi
-0qHwAQCiWCU/Tlc8g1FHrSZV758HOtDVXDLRKZCW+A9AyAh69wEAuzrvI4A+tcmf
-x7zyh1FMSN2R7D9AznlAoNIKPIT60A8=
-=g7xt
------END PGP SIGNATURE-----
-
---iuF1VGb0w26bLJMI--
