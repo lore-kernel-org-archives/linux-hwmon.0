@@ -2,406 +2,104 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A21DEE80A89
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Sep 2023 05:27:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD3C3E80A8B
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Sep 2023 05:34:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbjI0F1G (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 27 Sep 2023 01:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43950 "EHLO
+        id S229867AbjI0Fej (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 27 Sep 2023 01:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbjI0F0S (ORCPT
+        with ESMTP id S229669AbjI0FeE (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 27 Sep 2023 01:26:18 -0400
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AAF34EC2
-        for <linux-hwmon@vger.kernel.org>; Tue, 26 Sep 2023 20:58:08 -0700 (PDT)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-1bba7717d3bso5315103fac.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 26 Sep 2023 20:58:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1695787088; x=1696391888; darn=vger.kernel.org;
-        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=HeNg9BOBda4ztu4d27HvpMlM+0NY6mpdQHBZPKjimxw=;
-        b=CO48JDmMzwBtZVuvxQgFm7njT/kiCG4tU9p5CmpGvtNKPzVnLFJNsqab0EUevePJWX
-         qNXnZJbxB7g3AsJ/4qRYe9Oyib5wcschiWuuv9g+4eNo33SG8Go9cwN7reRGc7YUI0qU
-         Puovh0Vy7TjlsVFrEg+Iu6UnjOEYTGii44L84=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695787088; x=1696391888;
-        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HeNg9BOBda4ztu4d27HvpMlM+0NY6mpdQHBZPKjimxw=;
-        b=s5cppXenI5JNzWYPP3vyTFK1S5sOzhkNxum3vzn7st9hNjfFvkxFBB4Pazgkywa4f6
-         8erzq5Fcs7qtlvWkblLM7gD6+fPhPN0vpy64nRuxr6yQdYUPatXYzijP8bmSuqt+UADY
-         14W0ZRFv8V8k25QWMX1LBFmXcB0my+F50lJjsEv48HYgt8mE01T+FR0fgayj1sqQAKtv
-         kYhwvBa+kngZiFQrykOGq6Vq0X+dZqSFUun+vyMao7UDVJ5HOXVBoOe+6ZpcO0laf2uV
-         W0N2juL4Eqwkt5vPBy4++MBK5d/3TynJAxAKz0467XJOcM7Sl38qmrsoamp9x4UilKJ5
-         W98w==
-X-Gm-Message-State: AOJu0Yy1dYTKPPpOSokIp0SzBMhOcVhskNapWNZEOq0tB3eDThQHomTg
-        HMRGAUG3SQR+WrLy/o515h381Q==
-X-Google-Smtp-Source: AGHT+IF+l/zG89/pGz7aUi1JMmgZvmaYs1tcGg7qVJaCM928uxzbjkXuSq7HYXW13TYvxbN1sN1K3w==
-X-Received: by 2002:a05:6870:9a1b:b0:1d5:f070:d518 with SMTP id fo27-20020a0568709a1b00b001d5f070d518mr1334275oab.52.1695787087498;
-        Tue, 26 Sep 2023 20:58:07 -0700 (PDT)
-Received: from lvnvda5233.lvn.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id k67-20020a633d46000000b00577bc070c6bsm9736097pga.68.2023.09.26.20.58.06
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 26 Sep 2023 20:58:07 -0700 (PDT)
-From:   Michael Chan <michael.chan@broadcom.com>
-To:     davem@davemloft.net
-Cc:     netdev@vger.kernel.org, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, gospo@broadcom.com,
-        Kalesh AP <kalesh-anakkur.purayil@broadcom.com>,
-        Andy Gospodarek <andrew.gospodarek@broadcom.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH net-next v2 3/9] bnxt_en: Move hwmon functions into a dedicated file
-Date:   Tue, 26 Sep 2023 20:57:28 -0700
-Message-Id: <20230927035734.42816-4-michael.chan@broadcom.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20230927035734.42816-1-michael.chan@broadcom.com>
-References: <20230927035734.42816-1-michael.chan@broadcom.com>
+        Wed, 27 Sep 2023 01:34:04 -0400
+Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2EDC72A9
+        for <linux-hwmon@vger.kernel.org>; Tue, 26 Sep 2023 20:40:16 -0700 (PDT)
+Received: from eig-obgw-5009a.ext.cloudfilter.net ([10.0.29.176])
+        by cmsmtp with ESMTP
+        id lH8BqYe7xQFHRlLPMqOGme; Wed, 27 Sep 2023 03:40:16 +0000
+Received: from md-in-79.webhostbox.net ([43.225.55.182])
+        by cmsmtp with ESMTPS
+        id lLPKqnO7uPsTZlLPLqRrCA; Wed, 27 Sep 2023 03:40:16 +0000
+X-Authority-Analysis: v=2.4 cv=eaguwpIH c=1 sm=1 tr=0 ts=6513a420
+ a=LfuyaZh/8e9VOkaVZk0aRw==:117 a=CKMxHAookNUaJbGn3r6bzg==:17
+ a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
+ a=zNV7Rl7Rt7sA:10 a=oz0wMknONp8A:10 a=LxWt8M_ywhtm8WUVVfYA:9
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=linumiz.com
+        ; s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject
+        :Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=U4js+SM1U11yyB4riZ8YLEuGYKTsQkErTf8a0N1JnLc=; b=MC+WRP1pn4KkCodttFQzJrqd3W
+        FvA0tc+tRbMmV5uB1xCJT6FTCp6pYY8L4fpP0NPXFXz3Fq8xCSMmK06Q92ytYnFbKzl65BOxDMige
+        yeXIwoDUaf+yrJp9dA2Bpk++zBcPpjYPXumU3y5qRUJUWHTIjdBuk85t7zOnBw8JXj7+NGTPmDjYP
+        uz1PPEVZVWDt9vC3tpTORuUtlv5Hlolifr+hM4NuyDGMK6QFYNc7tb+0k7FUmMaJrUvbr0OGg1ZXg
+        sWfi3INxpzyBUltWOjwpXCjKfyN6RA7l87yVOymzy6Bng0yL96eqKomii20rQnY3CJdpFwP5sXjA7
+        DYmvTvHw==;
+Received: from [103.163.95.214] (port=59728 helo=discovery..)
+        by md-in-79.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.96)
+        (envelope-from <saravanan@linumiz.com>)
+        id 1qlLPG-000tFx-26;
+        Wed, 27 Sep 2023 09:10:10 +0530
+From:   Saravanan Sekar <saravanan@linumiz.com>
+To:     sravanhome@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, linux@roeck-us.net, jdelvare@suse.com
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Saravanan Sekar <saravanan@linumiz.com>
+Subject: [PATCH v2 0/3] Add support for mpq2286 PMIC IC
+Date:   Wed, 27 Sep 2023 09:09:50 +0530
+Message-Id: <20230927033953.1503440-1-saravanan@linumiz.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000015ab806064f3387"
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - md-in-79.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - linumiz.com
+X-BWhitelist: no
+X-Source-IP: 103.163.95.214
+X-Source-L: No
+X-Exim-ID: 1qlLPG-000tFx-26
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (discovery..) [103.163.95.214]:59728
+X-Source-Auth: saravanan@linumiz.com
+X-Email-Count: 1
+X-Org:  HG=dishared_whb_net_legacy;ORG=directi;
+X-Source-Cap: bGludW1jbWM7aG9zdGdhdG9yO21kLWluLTc5LndlYmhvc3Rib3gubmV0
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfByR8TBObxe/ITPsj3Gn0YjxJR1mCddAySl6lfLSfRlFP0EnYFdPS75XsIwU2m0H4JXOr0Y3rc1j95zjhEYP1OOZs5O6wXpD4DziMYthDIDeJyi+n8yn
+ i5FkCWvT6iJiWjD2flPFe0MTg5No/wjSGJYuSAFxuQts0zRc/OG9N++rQ5d2oTn5b3ByATHxj84d8GSsPKPSCZ4LeNvXGwGERuE=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
---000000000000015ab806064f3387
-Content-Transfer-Encoding: 8bit
+changes in v2:
+ - fix dt check warnings
+ - fix compiler warning on cast device_get_match_data and lexicological order of compatible
 
-From: Kalesh AP <kalesh-anakkur.purayil@broadcom.com>
 
-This is in preparation for upcoming patches in the series.
-Driver has to expose more threshold temperatures through the
-hwmon sysfs interface. More code will be added and do not
-want to overload bnxt.c.
 
-Reviewed-by: Andy Gospodarek <andrew.gospodarek@broadcom.com>
-Cc: Jean Delvare <jdelvare@suse.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Signed-off-by: Kalesh AP <kalesh-anakkur.purayil@broadcom.com>
-Signed-off-by: Michael Chan <michael.chan@broadcom.com>
----
- drivers/net/ethernet/broadcom/bnxt/Makefile   |  1 +
- drivers/net/ethernet/broadcom/bnxt/bnxt.c     | 76 +----------------
- .../net/ethernet/broadcom/bnxt/bnxt_hwmon.c   | 82 +++++++++++++++++++
- .../net/ethernet/broadcom/bnxt/bnxt_hwmon.h   | 25 ++++++
- 4 files changed, 109 insertions(+), 75 deletions(-)
- create mode 100644 drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.c
- create mode 100644 drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.h
+The MPQ2286 is a programmable, high frequency synchronous buck regulator with
+integrated internal high side and low side power MOSFET. Application in
+Automotive compenents such as ADAS, Infotainment, SOC System core, DDR memory.
 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/Makefile b/drivers/net/ethernet/broadcom/bnxt/Makefile
-index 2bc2b707d6ee..ba6c239d52fa 100644
---- a/drivers/net/ethernet/broadcom/bnxt/Makefile
-+++ b/drivers/net/ethernet/broadcom/bnxt/Makefile
-@@ -4,3 +4,4 @@ obj-$(CONFIG_BNXT) += bnxt_en.o
- bnxt_en-y := bnxt.o bnxt_hwrm.o bnxt_sriov.o bnxt_ethtool.o bnxt_dcb.o bnxt_ulp.o bnxt_xdp.o bnxt_ptp.o bnxt_vfr.o bnxt_devlink.o bnxt_dim.o bnxt_coredump.o
- bnxt_en-$(CONFIG_BNXT_FLOWER_OFFLOAD) += bnxt_tc.o
- bnxt_en-$(CONFIG_DEBUG_FS) += bnxt_debugfs.o
-+bnxt_en-$(CONFIG_BNXT_HWMON) += bnxt_hwmon.o
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-index 785084147994..b83f8de0a015 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-@@ -52,8 +52,6 @@
- #include <linux/cpu_rmap.h>
- #include <linux/cpumask.h>
- #include <net/pkt_cls.h>
--#include <linux/hwmon.h>
--#include <linux/hwmon-sysfs.h>
- #include <net/page_pool/helpers.h>
- #include <linux/align.h>
- #include <net/netdev_queues.h>
-@@ -71,6 +69,7 @@
- #include "bnxt_tc.h"
- #include "bnxt_devlink.h"
- #include "bnxt_debugfs.h"
-+#include "bnxt_hwmon.h"
- 
- #define BNXT_TX_TIMEOUT		(5 * HZ)
- #define BNXT_DEF_MSG_ENABLE	(NETIF_MSG_DRV | NETIF_MSG_HW | \
-@@ -10250,79 +10249,6 @@ static void bnxt_get_wol_settings(struct bnxt *bp)
- 	} while (handle && handle != 0xffff);
- }
- 
--#ifdef CONFIG_BNXT_HWMON
--static ssize_t bnxt_show_temp(struct device *dev,
--			      struct device_attribute *devattr, char *buf)
--{
--	struct hwrm_temp_monitor_query_output *resp;
--	struct hwrm_temp_monitor_query_input *req;
--	struct bnxt *bp = dev_get_drvdata(dev);
--	u32 len = 0;
--	int rc;
--
--	rc = hwrm_req_init(bp, req, HWRM_TEMP_MONITOR_QUERY);
--	if (rc)
--		return rc;
--	resp = hwrm_req_hold(bp, req);
--	rc = hwrm_req_send(bp, req);
--	if (!rc)
--		len = sprintf(buf, "%u\n", resp->temp * 1000); /* display millidegree */
--	hwrm_req_drop(bp, req);
--	if (rc)
--		return rc;
--	return len;
--}
--static SENSOR_DEVICE_ATTR(temp1_input, 0444, bnxt_show_temp, NULL, 0);
--
--static struct attribute *bnxt_attrs[] = {
--	&sensor_dev_attr_temp1_input.dev_attr.attr,
--	NULL
--};
--ATTRIBUTE_GROUPS(bnxt);
--
--static void bnxt_hwmon_uninit(struct bnxt *bp)
--{
--	if (bp->hwmon_dev) {
--		hwmon_device_unregister(bp->hwmon_dev);
--		bp->hwmon_dev = NULL;
--	}
--}
--
--static void bnxt_hwmon_init(struct bnxt *bp)
--{
--	struct hwrm_temp_monitor_query_input *req;
--	struct pci_dev *pdev = bp->pdev;
--	int rc;
--
--	rc = hwrm_req_init(bp, req, HWRM_TEMP_MONITOR_QUERY);
--	if (!rc)
--		rc = hwrm_req_send_silent(bp, req);
--	if (rc == -EACCES || rc == -EOPNOTSUPP) {
--		bnxt_hwmon_uninit(bp);
--		return;
--	}
--
--	if (bp->hwmon_dev)
--		return;
--
--	bp->hwmon_dev = hwmon_device_register_with_groups(&pdev->dev,
--							  DRV_MODULE_NAME, bp,
--							  bnxt_groups);
--	if (IS_ERR(bp->hwmon_dev)) {
--		bp->hwmon_dev = NULL;
--		dev_warn(&pdev->dev, "Cannot register hwmon device\n");
--	}
--}
--#else
--static void bnxt_hwmon_uninit(struct bnxt *bp)
--{
--}
--
--static void bnxt_hwmon_init(struct bnxt *bp)
--{
--}
--#endif
--
- static bool bnxt_eee_config_ok(struct bnxt *bp)
- {
- 	struct ethtool_eee *eee = &bp->eee;
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.c
-new file mode 100644
-index 000000000000..476616d97071
---- /dev/null
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.c
-@@ -0,0 +1,82 @@
-+/* Broadcom NetXtreme-C/E network driver.
-+ *
-+ * Copyright (c) 2023 Broadcom Limited
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License as published by
-+ * the Free Software Foundation.
-+ */
-+
-+#include <linux/dev_printk.h>
-+#include <linux/errno.h>
-+#include <linux/hwmon.h>
-+#include <linux/hwmon-sysfs.h>
-+#include <linux/pci.h>
-+
-+#include "bnxt_hsi.h"
-+#include "bnxt.h"
-+#include "bnxt_hwrm.h"
-+#include "bnxt_hwmon.h"
-+
-+static ssize_t bnxt_show_temp(struct device *dev,
-+			      struct device_attribute *devattr, char *buf)
-+{
-+	struct hwrm_temp_monitor_query_output *resp;
-+	struct hwrm_temp_monitor_query_input *req;
-+	struct bnxt *bp = dev_get_drvdata(dev);
-+	u32 len = 0;
-+	int rc;
-+
-+	rc = hwrm_req_init(bp, req, HWRM_TEMP_MONITOR_QUERY);
-+	if (rc)
-+		return rc;
-+	resp = hwrm_req_hold(bp, req);
-+	rc = hwrm_req_send(bp, req);
-+	if (!rc)
-+		len = sprintf(buf, "%u\n", resp->temp * 1000); /* display millidegree */
-+	hwrm_req_drop(bp, req);
-+	if (rc)
-+		return rc;
-+	return len;
-+}
-+static SENSOR_DEVICE_ATTR(temp1_input, 0444, bnxt_show_temp, NULL, 0);
-+
-+static struct attribute *bnxt_attrs[] = {
-+	&sensor_dev_attr_temp1_input.dev_attr.attr,
-+	NULL
-+};
-+ATTRIBUTE_GROUPS(bnxt);
-+
-+void bnxt_hwmon_uninit(struct bnxt *bp)
-+{
-+	if (bp->hwmon_dev) {
-+		hwmon_device_unregister(bp->hwmon_dev);
-+		bp->hwmon_dev = NULL;
-+	}
-+}
-+
-+void bnxt_hwmon_init(struct bnxt *bp)
-+{
-+	struct hwrm_temp_monitor_query_input *req;
-+	struct pci_dev *pdev = bp->pdev;
-+	int rc;
-+
-+	rc = hwrm_req_init(bp, req, HWRM_TEMP_MONITOR_QUERY);
-+	if (!rc)
-+		rc = hwrm_req_send_silent(bp, req);
-+	if (rc == -EACCES || rc == -EOPNOTSUPP) {
-+		bnxt_hwmon_uninit(bp);
-+		return;
-+	}
-+
-+	if (bp->hwmon_dev)
-+		return;
-+
-+	bp->hwmon_dev = hwmon_device_register_with_groups(&pdev->dev,
-+							  DRV_MODULE_NAME, bp,
-+							  bnxt_groups);
-+	if (IS_ERR(bp->hwmon_dev)) {
-+		bp->hwmon_dev = NULL;
-+		dev_warn(&pdev->dev, "Cannot register hwmon device\n");
-+	}
-+}
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.h b/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.h
-new file mode 100644
-index 000000000000..af310066687c
---- /dev/null
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.h
-@@ -0,0 +1,25 @@
-+/* Broadcom NetXtreme-C/E network driver.
-+ *
-+ * Copyright (c) 2023 Broadcom Limited
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License as published by
-+ * the Free Software Foundation.
-+ */
-+
-+#ifndef BNXT_HWMON_H
-+#define BNXT_HWMON_H
-+
-+#ifdef CONFIG_BNXT_HWMON
-+void bnxt_hwmon_uninit(struct bnxt *bp);
-+void bnxt_hwmon_init(struct bnxt *bp);
-+#else
-+static inline void bnxt_hwmon_uninit(struct bnxt *bp)
-+{
-+}
-+
-+static inline void bnxt_hwmon_init(struct bnxt *bp)
-+{
-+}
-+#endif
-+#endif
+Saravanan Sekar (3):
+  hwmon: (pmbus/mpq7932) Get page count based on chip info
+  regulator: dt-bindings: Add mps,mpq2286 power-management IC
+  hwmon: (pmbus/mpq2286) Add a support for mpq2286 Power Management IC
+
+ .../bindings/regulator/mps,mpq2286.yaml       | 59 +++++++++++++++++++
+ drivers/hwmon/pmbus/mpq7932.c                 |  9 ++-
+ 2 files changed, 65 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/regulator/mps,mpq2286.yaml
+
 -- 
-2.30.1
+2.34.1
 
-
---000000000000015ab806064f3387
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-OnaLEot1MoQO7BIe5S9H4AcCEXXcrJJiAtMCl47ARpyHmvQFQFFTrHgUYEd9V+9bOzY7MBIGSV1N
-/JfsT1sZw6HT0lJkSQefhPGpBniAob62DJP3qr11tu8CAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
-BB0wG4EZbWljaGFlbC5jaGFuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
-HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQU31rAyTdZweIF0tJTFYwfOv2w
-L4QwDQYJKoZIhvcNAQELBQADggEBACcuyaGmk0NSZ7Kio7O7WSZ0j0f9xXcBnLbJvQXFYM7JI5uS
-kw5ozATEN5gfmNIe0AHzqwoYjAf3x8Dv2w7HgyrxWdpjTKQFv5jojxa3A5LVuM8mhPGZfR/L5jSk
-5xc3llsKqrWI4ov4JyW79p0E99gfPA6Waixoavxvv1CZBQ4Stu7N660kTu9sJrACf20E+hdKLoiU
-hd5wiQXo9B2ncm5P3jFLYLBmPltIn/uzdiYpFj+E9kS9XYDd+boBZhN1Vh0296zLQZobLfKFzClo
-E6IFyTTANonrXvCRgodKS+QJEH8Syu2jSKe023aVemkuZjzvPK7o9iU7BKkPG2pzLPgxggJtMIIC
-aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
-EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxeQGjDntHGb2iaQkIw
-DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEINr+SKiUfQORmGFDYxdXMkw/60wuP8Xr
-PonlmiART7CLMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDky
-NzAzNTgwOFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
-ATANBgkqhkiG9w0BAQEFAASCAQB5/tqyub3pY6n7cEanbKMnQ1ia9R5q7k/xwPWQ/LlBI2qJk8K1
-hT+nH6D+pDhO8WG3vQZDPGVlz71g2stzhCT5INQT20JZM9AcP1sSDAWEPUZEZwGJxZeO27BrN+cu
-P7e4ZOQqP1VUGO5ZQtK/RXUSq3bk47Oom0rbzUGLwdw6FXo1h90Ypjgm+Lq23ZUJ04LGKAa4aHZR
-96q2E7p6SYE9QHVUet+fc7/yTMEOxQB4bc8hSh0YQ30UvAlJs3MQDFOOiBtXhcaGLL29wvC0jVbl
-oh4iOb7esN3Yi0rheV3RKBg0p1QWY8BovLGU26eaKIk+6FdQs6mXmdjeq0EY3tCN
---000000000000015ab806064f3387--
