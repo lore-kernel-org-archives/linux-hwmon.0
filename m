@@ -2,204 +2,97 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 997F6E80AA9
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Sep 2023 13:56:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19F2FE80AAC
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Sep 2023 14:00:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231975AbjI0N4T (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 27 Sep 2023 09:56:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53546 "EHLO
+        id S232001AbjI0OAd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 27 Sep 2023 10:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232001AbjI0N4S (ORCPT
+        with ESMTP id S231758AbjI0OAc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 27 Sep 2023 09:56:18 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4BE9136;
-        Wed, 27 Sep 2023 06:56:15 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id ca18e2360f4ac-79faba5fe12so298482439f.3;
-        Wed, 27 Sep 2023 06:56:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695822975; x=1696427775; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xAveGVM8W0FdsON7ZKmGd0DvdcUZDDmwBnlkrDtyA08=;
-        b=au9yBzDX+qSJKK9tdLMYUqwBGIspP+0Gyql+c/SLwdE4Kr2FWRWURGbbGPeVhY1Z1Z
-         GsQ6AR2MUIbcSqrFW7ZF/DzfDn0utNmKxFgMzw9Nv6WwXM3UcfY30zSPrf6HN5+QhMuv
-         PylIacCDn+ajb+EbRwK/kGbuXgcsQ/rREKByVS+XFNB791wf2Y9a+VY+khpTahJ378vA
-         HQGPJyC0HfWbzYJOp0goxc+uu0uyJP3K8rSn6SoSvfC1nEeGf/X48qmC5Urv8u3PtLrg
-         mEsG2ptT2ItpNYEn/Zxaqx0ZdPRsP8CG+DdwcxmHBQsY/OmoJS7nZUMIVHJj2gdSiESo
-         j3LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695822975; x=1696427775;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xAveGVM8W0FdsON7ZKmGd0DvdcUZDDmwBnlkrDtyA08=;
-        b=ZpVouxdJuhIfvXplW7513ftKKjXCneYJXoT1vicl+4vaCFTLC+YL4debx2gOUA4DT0
-         Zsdg/tONCna0yX8kEoJIB9Yaacl1B5rCCrZ0VqalvBwJ1ehcUCDtgcshobCmQpwMRUpQ
-         IrO3RPmpgSEtrNWvsummtbIhmN8S7/wJq5qE6PXPDs7ZYqaDYHyOeoq663h4xieOcZcF
-         5rZ0HnIlVZ/uo1H8IKorHf+KCilafVdmeb3xGnt4y37O+m+1u9l77mCL7/5mc3pBrk/x
-         FokTeXBJzWYja5teqS/7CSCc2jF8KapY05vcf8wN0dHQGx3wazZOvBVXb/npUmJZNYXM
-         Vhdw==
-X-Gm-Message-State: AOJu0YxRCIDlXQ/TNA7ATKGnNoKpktx+esxc+ORBb4ZbowmfczpM1vRO
-        2WaHAvZIARD+kgTX7RzIe7s=
-X-Google-Smtp-Source: AGHT+IGsFTy5UmQA+/fPHR194reUJcEmEplTO/zx9jHWwQGMum161x3vviW86ilq0T7Y04TSth/9HQ==
-X-Received: by 2002:a05:6e02:dd4:b0:34b:af03:e2a with SMTP id l20-20020a056e020dd400b0034baf030e2amr1957499ilj.31.1695822975010;
-        Wed, 27 Sep 2023 06:56:15 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x3-20020a056e021bc300b003513b61b472sm2226729ilv.38.2023.09.27.06.56.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Sep 2023 06:56:14 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 27 Sep 2023 06:56:13 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Michael Chan <michael.chan@broadcom.com>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, gospo@broadcom.com,
-        Kalesh AP <kalesh-anakkur.purayil@broadcom.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH net-next v2 4/9] bnxt_en: Modify the driver to use
- hwmon_device_register_with_info
-Message-ID: <659f1653-2166-4c49-a737-ab7dc4717e47@roeck-us.net>
-References: <20230927035734.42816-1-michael.chan@broadcom.com>
- <20230927035734.42816-5-michael.chan@broadcom.com>
+        Wed, 27 Sep 2023 10:00:32 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7734AFC;
+        Wed, 27 Sep 2023 07:00:31 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 54CB31FB;
+        Wed, 27 Sep 2023 07:01:09 -0700 (PDT)
+Received: from bogus (unknown [10.57.37.227])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B9D0A3F59C;
+        Wed, 27 Sep 2023 07:00:29 -0700 (PDT)
+Date:   Wed, 27 Sep 2023 14:59:09 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     "lihuisong (C)" <lihuisong@huawei.com>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 1/3] ACPI: PCC: Add PCC shared memory region command and
+ status bitfields
+Message-ID: <20230927135909.6rssuywmj4k3odex@bogus>
+References: <20230926-pcc_defines-v1-0-0f925a1658fd@arm.com>
+ <20230926-pcc_defines-v1-1-0f925a1658fd@arm.com>
+ <a89bdd10-9388-01f5-6a7c-894af793e1c1@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230927035734.42816-5-michael.chan@broadcom.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a89bdd10-9388-01f5-6a7c-894af793e1c1@huawei.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Sep 26, 2023 at 08:57:29PM -0700, Michael Chan wrote:
-> From: Kalesh AP <kalesh-anakkur.purayil@broadcom.com>
+On Wed, Sep 27, 2023 at 10:07:15AM +0800, lihuisong (C) wrote:
+> Hi Sudeep,
 > 
-> The use of hwmon_device_register_with_groups() is deprecated.
-> Modified the driver to use hwmon_device_register_with_info().
-> 
-> Driver currently exports only temp1_input through hwmon sysfs
-> interface. But FW has been modified to report more threshold
-> temperatures and driver want to report them through the
-> hwmon interface.
-> 
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: linux-hwmon@vger.kernel.org
-> Signed-off-by: Kalesh AP <kalesh-anakkur.purayil@broadcom.com>
-> Signed-off-by: Michael Chan <michael.chan@broadcom.com>
+> 在 2023/9/26 20:28, Sudeep Holla 写道:
+> > Define the common macros to use when referring to various bitfields in
+> > the PCC generic communications channel command and status fields.
+>
+> Can you define the bit0 macros in the "flags" for Extended PCC Subspace
+> Shared Memory Region?
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Sure I will take a look and include it in v2 if applicable.
 
-> ---
->  .../net/ethernet/broadcom/bnxt/bnxt_hwmon.c   | 71 ++++++++++++++-----
->  1 file changed, 55 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.c
-> index 476616d97071..05e3d75f3c43 100644
-> --- a/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.c
-> +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.c
-> @@ -18,34 +18,73 @@
->  #include "bnxt_hwrm.h"
->  #include "bnxt_hwmon.h"
->  
-> -static ssize_t bnxt_show_temp(struct device *dev,
-> -			      struct device_attribute *devattr, char *buf)
-> +static int bnxt_hwrm_temp_query(struct bnxt *bp, u8 *temp)
->  {
->  	struct hwrm_temp_monitor_query_output *resp;
->  	struct hwrm_temp_monitor_query_input *req;
-> -	struct bnxt *bp = dev_get_drvdata(dev);
-> -	u32 len = 0;
->  	int rc;
->  
->  	rc = hwrm_req_init(bp, req, HWRM_TEMP_MONITOR_QUERY);
->  	if (rc)
->  		return rc;
->  	resp = hwrm_req_hold(bp, req);
-> -	rc = hwrm_req_send(bp, req);
-> -	if (!rc)
-> -		len = sprintf(buf, "%u\n", resp->temp * 1000); /* display millidegree */
-> -	hwrm_req_drop(bp, req);
-> +	rc = hwrm_req_send_silent(bp, req);
->  	if (rc)
-> +		goto drop_req;
-> +
-> +	*temp = resp->temp;
-> +
-> +drop_req:
-> +	hwrm_req_drop(bp, req);
-> +	return rc;
-> +}
-> +
-> +static umode_t bnxt_hwmon_is_visible(const void *_data, enum hwmon_sensor_types type,
-> +				     u32 attr, int channel)
-> +{
-> +	if (type != hwmon_temp)
-> +		return 0;
-> +
-> +	switch (attr) {
-> +	case hwmon_temp_input:
-> +		return 0444;
-> +	default:
-> +		return 0;
-> +	}
-> +}
-> +
-> +static int bnxt_hwmon_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
-> +			   int channel, long *val)
-> +{
-> +	struct bnxt *bp = dev_get_drvdata(dev);
-> +	u8 temp = 0;
-> +	int rc;
-> +
-> +	switch (attr) {
-> +	case hwmon_temp_input:
-> +		rc = bnxt_hwrm_temp_query(bp, &temp);
-> +		if (!rc)
-> +			*val = temp * 1000;
->  		return rc;
-> -	return len;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
->  }
-> -static SENSOR_DEVICE_ATTR(temp1_input, 0444, bnxt_show_temp, NULL, 0);
->  
-> -static struct attribute *bnxt_attrs[] = {
-> -	&sensor_dev_attr_temp1_input.dev_attr.attr,
-> +static const struct hwmon_channel_info *bnxt_hwmon_info[] = {
-> +	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
->  	NULL
->  };
-> -ATTRIBUTE_GROUPS(bnxt);
-> +
-> +static const struct hwmon_ops bnxt_hwmon_ops = {
-> +	.is_visible     = bnxt_hwmon_is_visible,
-> +	.read           = bnxt_hwmon_read,
-> +};
-> +
-> +static const struct hwmon_chip_info bnxt_hwmon_chip_info = {
-> +	.ops    = &bnxt_hwmon_ops,
-> +	.info   = bnxt_hwmon_info,
-> +};
->  
->  void bnxt_hwmon_uninit(struct bnxt *bp)
->  {
-> @@ -72,9 +111,9 @@ void bnxt_hwmon_init(struct bnxt *bp)
->  	if (bp->hwmon_dev)
->  		return;
->  
-> -	bp->hwmon_dev = hwmon_device_register_with_groups(&pdev->dev,
-> -							  DRV_MODULE_NAME, bp,
-> -							  bnxt_groups);
-> +	bp->hwmon_dev = hwmon_device_register_with_info(&pdev->dev,
-> +							DRV_MODULE_NAME, bp,
-> +							&bnxt_hwmon_chip_info, NULL);
->  	if (IS_ERR(bp->hwmon_dev)) {
->  		bp->hwmon_dev = NULL;
->  		dev_warn(&pdev->dev, "Cannot register hwmon device\n");
-> -- 
-> 2.30.1
-> 
+> > 
+> > Currently different drivers that need to use these bitfields have defined
+> > these locally. This common macro is intended to consolidate and replace
+> > those.
+> > 
+> > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> > ---
+> >   include/acpi/pcc.h | 11 +++++++++++
+> >   1 file changed, 11 insertions(+)
+> > 
+> > diff --git a/include/acpi/pcc.h b/include/acpi/pcc.h
+> > index 73e806fe7ce7..66d9934c2ee4 100644
+> > --- a/include/acpi/pcc.h
+> > +++ b/include/acpi/pcc.h
+> > @@ -18,7 +18,18 @@ struct pcc_mbox_chan {
+> >   	u16 min_turnaround_time;
+> >   };
+> > +/* Generic Communications Channel Shared Memory Region */
+> > +#define PCC_SIGNATURE			0x50424300
+> Why is this signature 0x50424300?
 
+It is as per the specification.
 
+> In ACPI spec, this signature is all 0x50434303.
+
+No, not exactly. It is just an example.
+The PCC signature - The signature of a subspace is computed by a bitwise-or
+of the value 0x50434300 with the subspace ID. For example, subspace 3 has
+signature 0x50434303
+
+And I see the driver you mentioned(drivers/soc/hisilicon/kunpeng_hccs.c)
+is doing the right thing. I am bit confused as why you being the author
+of the driver are now confused.
+
+-- 
+Regards,
+Sudeep
