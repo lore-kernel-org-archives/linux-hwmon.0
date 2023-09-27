@@ -2,237 +2,329 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7147E80A89
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Sep 2023 05:26:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A21DEE80A89
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Sep 2023 05:27:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbjI0F0w (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 27 Sep 2023 01:26:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49448 "EHLO
+        id S229677AbjI0F1G (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 27 Sep 2023 01:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjI0F0F (ORCPT
+        with ESMTP id S229831AbjI0F0S (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 27 Sep 2023 01:26:05 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F2DB1E96C
-        for <linux-hwmon@vger.kernel.org>; Tue, 26 Sep 2023 20:58:11 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id d75a77b69052e-418201cb9e9so25432601cf.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 26 Sep 2023 20:58:11 -0700 (PDT)
+        Wed, 27 Sep 2023 01:26:18 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AAF34EC2
+        for <linux-hwmon@vger.kernel.org>; Tue, 26 Sep 2023 20:58:08 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-1bba7717d3bso5315103fac.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 26 Sep 2023 20:58:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1695787090; x=1696391890; darn=vger.kernel.org;
+        d=broadcom.com; s=google; t=1695787088; x=1696391888; darn=vger.kernel.org;
         h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
          :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=MVbf3lJwHOIg11Fw+QfMgjDwaQCf05nrTl5s+/i9vgc=;
-        b=HmS/DqylJTxxuphbf6UkXZ9wlgIaiHCvcRI2XNJAP1XT5Izb+FyscqkTvMFOtebIsq
-         /CU/nN/cs79XbEKzrF8D3c+DKotj0s6+Eypr95NmFnbDrztsQ8zlWDW0dbrGrfC+qm62
-         z5ca0aAUMQpafLZ8DKv6VemMtxeVG7lOp8pTM=
+        bh=HeNg9BOBda4ztu4d27HvpMlM+0NY6mpdQHBZPKjimxw=;
+        b=CO48JDmMzwBtZVuvxQgFm7njT/kiCG4tU9p5CmpGvtNKPzVnLFJNsqab0EUevePJWX
+         qNXnZJbxB7g3AsJ/4qRYe9Oyib5wcschiWuuv9g+4eNo33SG8Go9cwN7reRGc7YUI0qU
+         Puovh0Vy7TjlsVFrEg+Iu6UnjOEYTGii44L84=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695787090; x=1696391890;
+        d=1e100.net; s=20230601; t=1695787088; x=1696391888;
         h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
          :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MVbf3lJwHOIg11Fw+QfMgjDwaQCf05nrTl5s+/i9vgc=;
-        b=h/spMAlhfK8Hh40CVIWjLQ16kCDKw7ZQYkoIKVYdzf7EslVAXXy7dhrs/Q7kIiJRP8
-         ugzZc03vqyf5YpCQIpGBkwalc/0FZ8oPMB/hnz8EB+aN1TsMPPDSKdO9cSTGkhEAZwys
-         S3nLR9J034dQPXCyKzH4ToYHwltE5jG7DQZbu0gYt3LmyCy9oTT08PqJEAetP02paCp6
-         VR+SOym1kyZo1hwHUspcTmhWqiE/k1PDCgwz54TlI4kiofW2Xc08UctaH+3cki9HRwc2
-         v3/w5thjdT8HbuwrxlyAKYpIWcsm62yrh5mdHHGvtkZRyBgHx5FFjHtEYZldQo6Zzny7
-         HoEg==
-X-Gm-Message-State: AOJu0YzumsX5iDMnIV+Bs7yE2/1KN6Rzz4oWrO0eQdV91/a9OQZV84W9
-        dsE0UykUpbmji0cc1ghlsjUZOQ==
-X-Google-Smtp-Source: AGHT+IHc8nfHe+UL2EXNBAt5Nmacp6Rz6HnFW1GDEQCeGDrfEF78u1C9TLnTdajawLRxy2oTv0evEQ==
-X-Received: by 2002:ac8:5a53:0:b0:417:b901:98ff with SMTP id o19-20020ac85a53000000b00417b90198ffmr905433qta.54.1695787090120;
-        Tue, 26 Sep 2023 20:58:10 -0700 (PDT)
+        bh=HeNg9BOBda4ztu4d27HvpMlM+0NY6mpdQHBZPKjimxw=;
+        b=s5cppXenI5JNzWYPP3vyTFK1S5sOzhkNxum3vzn7st9hNjfFvkxFBB4Pazgkywa4f6
+         8erzq5Fcs7qtlvWkblLM7gD6+fPhPN0vpy64nRuxr6yQdYUPatXYzijP8bmSuqt+UADY
+         14W0ZRFv8V8k25QWMX1LBFmXcB0my+F50lJjsEv48HYgt8mE01T+FR0fgayj1sqQAKtv
+         kYhwvBa+kngZiFQrykOGq6Vq0X+dZqSFUun+vyMao7UDVJ5HOXVBoOe+6ZpcO0laf2uV
+         W0N2juL4Eqwkt5vPBy4++MBK5d/3TynJAxAKz0467XJOcM7Sl38qmrsoamp9x4UilKJ5
+         W98w==
+X-Gm-Message-State: AOJu0Yy1dYTKPPpOSokIp0SzBMhOcVhskNapWNZEOq0tB3eDThQHomTg
+        HMRGAUG3SQR+WrLy/o515h381Q==
+X-Google-Smtp-Source: AGHT+IF+l/zG89/pGz7aUi1JMmgZvmaYs1tcGg7qVJaCM928uxzbjkXuSq7HYXW13TYvxbN1sN1K3w==
+X-Received: by 2002:a05:6870:9a1b:b0:1d5:f070:d518 with SMTP id fo27-20020a0568709a1b00b001d5f070d518mr1334275oab.52.1695787087498;
+        Tue, 26 Sep 2023 20:58:07 -0700 (PDT)
 Received: from lvnvda5233.lvn.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id k67-20020a633d46000000b00577bc070c6bsm9736097pga.68.2023.09.26.20.58.09
+        by smtp.gmail.com with ESMTPSA id k67-20020a633d46000000b00577bc070c6bsm9736097pga.68.2023.09.26.20.58.06
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 26 Sep 2023 20:58:09 -0700 (PDT)
+        Tue, 26 Sep 2023 20:58:07 -0700 (PDT)
 From:   Michael Chan <michael.chan@broadcom.com>
 To:     davem@davemloft.net
 Cc:     netdev@vger.kernel.org, edumazet@google.com, kuba@kernel.org,
         pabeni@redhat.com, gospo@broadcom.com,
         Kalesh AP <kalesh-anakkur.purayil@broadcom.com>,
+        Andy Gospodarek <andrew.gospodarek@broadcom.com>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH net-next v2 5/9] bnxt_en: Expose threshold temperatures through hwmon
-Date:   Tue, 26 Sep 2023 20:57:30 -0700
-Message-Id: <20230927035734.42816-6-michael.chan@broadcom.com>
+Subject: [PATCH net-next v2 3/9] bnxt_en: Move hwmon functions into a dedicated file
+Date:   Tue, 26 Sep 2023 20:57:28 -0700
+Message-Id: <20230927035734.42816-4-michael.chan@broadcom.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20230927035734.42816-1-michael.chan@broadcom.com>
 References: <20230927035734.42816-1-michael.chan@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000002a0eee06064f3391"
+        boundary="000000000000015ab806064f3387"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
---0000000000002a0eee06064f3391
+--000000000000015ab806064f3387
 Content-Transfer-Encoding: 8bit
 
 From: Kalesh AP <kalesh-anakkur.purayil@broadcom.com>
 
-HWRM_TEMP_MONITOR_QUERY response now indicates various
-threshold temperatures. Expose these threshold temperatures
-through the hwmon sysfs using this mapping:
+This is in preparation for upcoming patches in the series.
+Driver has to expose more threshold temperatures through the
+hwmon sysfs interface. More code will be added and do not
+want to overload bnxt.c.
 
-hwmon_temp_max : bp->warn_thresh_temp
-hwmon_temp_crit : bp->crit_thresh_temp
-hwmon_temp_emergency : bp->fatal_thresh_temp
-
-hwmon_temp_max_alarm : temp >= bp->warn_thresh_temp
-hwmon_temp_crit_alarm : temp >= bp->crit_thresh_temp
-hwmon_temp_emergency_alarm : temp >= bp->fatal_thresh_temp
-
-Link: https://lore.kernel.org/netdev/20230815045658.80494-12-michael.chan@broadcom.com/
+Reviewed-by: Andy Gospodarek <andrew.gospodarek@broadcom.com>
 Cc: Jean Delvare <jdelvare@suse.com>
 Cc: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org
 Signed-off-by: Kalesh AP <kalesh-anakkur.purayil@broadcom.com>
 Signed-off-by: Michael Chan <michael.chan@broadcom.com>
 ---
-v2:
-bnxt_hwrm_temp_query() now stores the static threshold values once.
-Use new hwmon temperature mappings shown above and remove hwmon_temp_lcrit.
+ drivers/net/ethernet/broadcom/bnxt/Makefile   |  1 +
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c     | 76 +----------------
+ .../net/ethernet/broadcom/bnxt/bnxt_hwmon.c   | 82 +++++++++++++++++++
+ .../net/ethernet/broadcom/bnxt/bnxt_hwmon.h   | 25 ++++++
+ 4 files changed, 109 insertions(+), 75 deletions(-)
+ create mode 100644 drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.c
+ create mode 100644 drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.h
 
----
- drivers/net/ethernet/broadcom/bnxt/bnxt.h     |  7 +++
- .../net/ethernet/broadcom/bnxt/bnxt_hwmon.c   | 57 ++++++++++++++++---
- 2 files changed, 57 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.h b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
-index 84cbcfa61bc1..43a07d84f815 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt.h
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
-@@ -2013,6 +2013,7 @@ struct bnxt {
- 	#define BNXT_FW_CAP_RING_MONITOR		BIT_ULL(30)
- 	#define BNXT_FW_CAP_DBG_QCAPS			BIT_ULL(31)
- 	#define BNXT_FW_CAP_PTP				BIT_ULL(32)
-+	#define BNXT_FW_CAP_THRESHOLD_TEMP_SUPPORTED	BIT_ULL(33)
+diff --git a/drivers/net/ethernet/broadcom/bnxt/Makefile b/drivers/net/ethernet/broadcom/bnxt/Makefile
+index 2bc2b707d6ee..ba6c239d52fa 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/Makefile
++++ b/drivers/net/ethernet/broadcom/bnxt/Makefile
+@@ -4,3 +4,4 @@ obj-$(CONFIG_BNXT) += bnxt_en.o
+ bnxt_en-y := bnxt.o bnxt_hwrm.o bnxt_sriov.o bnxt_ethtool.o bnxt_dcb.o bnxt_ulp.o bnxt_xdp.o bnxt_ptp.o bnxt_vfr.o bnxt_devlink.o bnxt_dim.o bnxt_coredump.o
+ bnxt_en-$(CONFIG_BNXT_FLOWER_OFFLOAD) += bnxt_tc.o
+ bnxt_en-$(CONFIG_DEBUG_FS) += bnxt_debugfs.o
++bnxt_en-$(CONFIG_BNXT_HWMON) += bnxt_hwmon.o
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+index 785084147994..b83f8de0a015 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+@@ -52,8 +52,6 @@
+ #include <linux/cpu_rmap.h>
+ #include <linux/cpumask.h>
+ #include <net/pkt_cls.h>
+-#include <linux/hwmon.h>
+-#include <linux/hwmon-sysfs.h>
+ #include <net/page_pool/helpers.h>
+ #include <linux/align.h>
+ #include <net/netdev_queues.h>
+@@ -71,6 +69,7 @@
+ #include "bnxt_tc.h"
+ #include "bnxt_devlink.h"
+ #include "bnxt_debugfs.h"
++#include "bnxt_hwmon.h"
  
- 	u32			fw_dbg_cap;
- 
-@@ -2185,7 +2186,13 @@ struct bnxt {
- 	struct bnxt_tc_info	*tc_info;
- 	struct list_head	tc_indr_block_list;
- 	struct dentry		*debugfs_pdev;
-+#ifdef CONFIG_BNXT_HWMON
- 	struct device		*hwmon_dev;
-+	u8			warn_thresh_temp;
-+	u8			crit_thresh_temp;
-+	u8			fatal_thresh_temp;
-+	u8			shutdown_thresh_temp;
-+#endif
- 	enum board_idx		board_idx;
- };
- 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.c
-index 05e3d75f3c43..6a2cad5cc159 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.c
-@@ -32,8 +32,16 @@ static int bnxt_hwrm_temp_query(struct bnxt *bp, u8 *temp)
- 	if (rc)
- 		goto drop_req;
- 
--	*temp = resp->temp;
--
-+	if (temp) {
-+		*temp = resp->temp;
-+	} else if (resp->flags &
-+		   TEMP_MONITOR_QUERY_RESP_FLAGS_THRESHOLD_VALUES_AVAILABLE) {
-+		bp->fw_cap |= BNXT_FW_CAP_THRESHOLD_TEMP_SUPPORTED;
-+		bp->warn_thresh_temp = resp->warn_threshold;
-+		bp->crit_thresh_temp = resp->critical_threshold;
-+		bp->fatal_thresh_temp = resp->fatal_threshold;
-+		bp->shutdown_thresh_temp = resp->shutdown_threshold;
-+	}
- drop_req:
- 	hwrm_req_drop(bp, req);
- 	return rc;
-@@ -42,12 +50,23 @@ static int bnxt_hwrm_temp_query(struct bnxt *bp, u8 *temp)
- static umode_t bnxt_hwmon_is_visible(const void *_data, enum hwmon_sensor_types type,
- 				     u32 attr, int channel)
- {
-+	const struct bnxt *bp = _data;
-+
- 	if (type != hwmon_temp)
- 		return 0;
- 
- 	switch (attr) {
- 	case hwmon_temp_input:
- 		return 0444;
-+	case hwmon_temp_max:
-+	case hwmon_temp_crit:
-+	case hwmon_temp_emergency:
-+	case hwmon_temp_max_alarm:
-+	case hwmon_temp_crit_alarm:
-+	case hwmon_temp_emergency_alarm:
-+		if (!(bp->fw_cap & BNXT_FW_CAP_THRESHOLD_TEMP_SUPPORTED))
-+			return 0;
-+		return 0444;
- 	default:
- 		return 0;
- 	}
-@@ -66,13 +85,39 @@ static int bnxt_hwmon_read(struct device *dev, enum hwmon_sensor_types type, u32
- 		if (!rc)
- 			*val = temp * 1000;
- 		return rc;
-+	case hwmon_temp_max:
-+		*val = bp->warn_thresh_temp * 1000;
-+		return 0;
-+	case hwmon_temp_crit:
-+		*val = bp->crit_thresh_temp * 1000;
-+		return 0;
-+	case hwmon_temp_emergency:
-+		*val = bp->fatal_thresh_temp * 1000;
-+		return 0;
-+	case hwmon_temp_max_alarm:
-+		rc = bnxt_hwrm_temp_query(bp, &temp);
-+		if (!rc)
-+			*val = temp >= bp->warn_thresh_temp;
-+		return rc;
-+	case hwmon_temp_crit_alarm:
-+		rc = bnxt_hwrm_temp_query(bp, &temp);
-+		if (!rc)
-+			*val = temp >= bp->crit_thresh_temp;
-+		return rc;
-+	case hwmon_temp_emergency_alarm:
-+		rc = bnxt_hwrm_temp_query(bp, &temp);
-+		if (!rc)
-+			*val = temp >= bp->fatal_thresh_temp;
-+		return rc;
- 	default:
- 		return -EOPNOTSUPP;
- 	}
+ #define BNXT_TX_TIMEOUT		(5 * HZ)
+ #define BNXT_DEF_MSG_ENABLE	(NETIF_MSG_DRV | NETIF_MSG_HW | \
+@@ -10250,79 +10249,6 @@ static void bnxt_get_wol_settings(struct bnxt *bp)
+ 	} while (handle && handle != 0xffff);
  }
  
- static const struct hwmon_channel_info *bnxt_hwmon_info[] = {
--	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
-+	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-+			   HWMON_T_EMERGENCY | HWMON_T_MAX_ALARM |
-+			   HWMON_T_CRIT_ALARM | HWMON_T_EMERGENCY_ALARM),
- 	NULL
- };
- 
-@@ -96,13 +141,11 @@ void bnxt_hwmon_uninit(struct bnxt *bp)
- 
- void bnxt_hwmon_init(struct bnxt *bp)
- {
+-#ifdef CONFIG_BNXT_HWMON
+-static ssize_t bnxt_show_temp(struct device *dev,
+-			      struct device_attribute *devattr, char *buf)
+-{
+-	struct hwrm_temp_monitor_query_output *resp;
 -	struct hwrm_temp_monitor_query_input *req;
- 	struct pci_dev *pdev = bp->pdev;
- 	int rc;
- 
+-	struct bnxt *bp = dev_get_drvdata(dev);
+-	u32 len = 0;
+-	int rc;
+-
+-	rc = hwrm_req_init(bp, req, HWRM_TEMP_MONITOR_QUERY);
+-	if (rc)
+-		return rc;
+-	resp = hwrm_req_hold(bp, req);
+-	rc = hwrm_req_send(bp, req);
+-	if (!rc)
+-		len = sprintf(buf, "%u\n", resp->temp * 1000); /* display millidegree */
+-	hwrm_req_drop(bp, req);
+-	if (rc)
+-		return rc;
+-	return len;
+-}
+-static SENSOR_DEVICE_ATTR(temp1_input, 0444, bnxt_show_temp, NULL, 0);
+-
+-static struct attribute *bnxt_attrs[] = {
+-	&sensor_dev_attr_temp1_input.dev_attr.attr,
+-	NULL
+-};
+-ATTRIBUTE_GROUPS(bnxt);
+-
+-static void bnxt_hwmon_uninit(struct bnxt *bp)
+-{
+-	if (bp->hwmon_dev) {
+-		hwmon_device_unregister(bp->hwmon_dev);
+-		bp->hwmon_dev = NULL;
+-	}
+-}
+-
+-static void bnxt_hwmon_init(struct bnxt *bp)
+-{
+-	struct hwrm_temp_monitor_query_input *req;
+-	struct pci_dev *pdev = bp->pdev;
+-	int rc;
+-
 -	rc = hwrm_req_init(bp, req, HWRM_TEMP_MONITOR_QUERY);
 -	if (!rc)
 -		rc = hwrm_req_send_silent(bp, req);
-+	/* temp1_xxx is only sensor, ensure not registered if it will fail */
-+	rc = bnxt_hwrm_temp_query(bp, NULL);
- 	if (rc == -EACCES || rc == -EOPNOTSUPP) {
- 		bnxt_hwmon_uninit(bp);
- 		return;
+-	if (rc == -EACCES || rc == -EOPNOTSUPP) {
+-		bnxt_hwmon_uninit(bp);
+-		return;
+-	}
+-
+-	if (bp->hwmon_dev)
+-		return;
+-
+-	bp->hwmon_dev = hwmon_device_register_with_groups(&pdev->dev,
+-							  DRV_MODULE_NAME, bp,
+-							  bnxt_groups);
+-	if (IS_ERR(bp->hwmon_dev)) {
+-		bp->hwmon_dev = NULL;
+-		dev_warn(&pdev->dev, "Cannot register hwmon device\n");
+-	}
+-}
+-#else
+-static void bnxt_hwmon_uninit(struct bnxt *bp)
+-{
+-}
+-
+-static void bnxt_hwmon_init(struct bnxt *bp)
+-{
+-}
+-#endif
+-
+ static bool bnxt_eee_config_ok(struct bnxt *bp)
+ {
+ 	struct ethtool_eee *eee = &bp->eee;
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.c
+new file mode 100644
+index 000000000000..476616d97071
+--- /dev/null
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.c
+@@ -0,0 +1,82 @@
++/* Broadcom NetXtreme-C/E network driver.
++ *
++ * Copyright (c) 2023 Broadcom Limited
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation.
++ */
++
++#include <linux/dev_printk.h>
++#include <linux/errno.h>
++#include <linux/hwmon.h>
++#include <linux/hwmon-sysfs.h>
++#include <linux/pci.h>
++
++#include "bnxt_hsi.h"
++#include "bnxt.h"
++#include "bnxt_hwrm.h"
++#include "bnxt_hwmon.h"
++
++static ssize_t bnxt_show_temp(struct device *dev,
++			      struct device_attribute *devattr, char *buf)
++{
++	struct hwrm_temp_monitor_query_output *resp;
++	struct hwrm_temp_monitor_query_input *req;
++	struct bnxt *bp = dev_get_drvdata(dev);
++	u32 len = 0;
++	int rc;
++
++	rc = hwrm_req_init(bp, req, HWRM_TEMP_MONITOR_QUERY);
++	if (rc)
++		return rc;
++	resp = hwrm_req_hold(bp, req);
++	rc = hwrm_req_send(bp, req);
++	if (!rc)
++		len = sprintf(buf, "%u\n", resp->temp * 1000); /* display millidegree */
++	hwrm_req_drop(bp, req);
++	if (rc)
++		return rc;
++	return len;
++}
++static SENSOR_DEVICE_ATTR(temp1_input, 0444, bnxt_show_temp, NULL, 0);
++
++static struct attribute *bnxt_attrs[] = {
++	&sensor_dev_attr_temp1_input.dev_attr.attr,
++	NULL
++};
++ATTRIBUTE_GROUPS(bnxt);
++
++void bnxt_hwmon_uninit(struct bnxt *bp)
++{
++	if (bp->hwmon_dev) {
++		hwmon_device_unregister(bp->hwmon_dev);
++		bp->hwmon_dev = NULL;
++	}
++}
++
++void bnxt_hwmon_init(struct bnxt *bp)
++{
++	struct hwrm_temp_monitor_query_input *req;
++	struct pci_dev *pdev = bp->pdev;
++	int rc;
++
++	rc = hwrm_req_init(bp, req, HWRM_TEMP_MONITOR_QUERY);
++	if (!rc)
++		rc = hwrm_req_send_silent(bp, req);
++	if (rc == -EACCES || rc == -EOPNOTSUPP) {
++		bnxt_hwmon_uninit(bp);
++		return;
++	}
++
++	if (bp->hwmon_dev)
++		return;
++
++	bp->hwmon_dev = hwmon_device_register_with_groups(&pdev->dev,
++							  DRV_MODULE_NAME, bp,
++							  bnxt_groups);
++	if (IS_ERR(bp->hwmon_dev)) {
++		bp->hwmon_dev = NULL;
++		dev_warn(&pdev->dev, "Cannot register hwmon device\n");
++	}
++}
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.h b/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.h
+new file mode 100644
+index 000000000000..af310066687c
+--- /dev/null
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_hwmon.h
+@@ -0,0 +1,25 @@
++/* Broadcom NetXtreme-C/E network driver.
++ *
++ * Copyright (c) 2023 Broadcom Limited
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation.
++ */
++
++#ifndef BNXT_HWMON_H
++#define BNXT_HWMON_H
++
++#ifdef CONFIG_BNXT_HWMON
++void bnxt_hwmon_uninit(struct bnxt *bp);
++void bnxt_hwmon_init(struct bnxt *bp);
++#else
++static inline void bnxt_hwmon_uninit(struct bnxt *bp)
++{
++}
++
++static inline void bnxt_hwmon_init(struct bnxt *bp)
++{
++}
++#endif
++#endif
 -- 
 2.30.1
 
 
---0000000000002a0eee06064f3391
+--000000000000015ab806064f3387
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -303,13 +395,13 @@ hd5wiQXo9B2ncm5P3jFLYLBmPltIn/uzdiYpFj+E9kS9XYDd+boBZhN1Vh0296zLQZobLfKFzClo
 E6IFyTTANonrXvCRgodKS+QJEH8Syu2jSKe023aVemkuZjzvPK7o9iU7BKkPG2pzLPgxggJtMIIC
 aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
 EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxeQGjDntHGb2iaQkIw
-DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIFkSC4lU2Iq/cccKxSW+w0MymirTsFuj
-9j4WAFUvIENBMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDky
-NzAzNTgxMFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
+DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEINr+SKiUfQORmGFDYxdXMkw/60wuP8Xr
+PonlmiART7CLMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDky
+NzAzNTgwOFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
 SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
-ATANBgkqhkiG9w0BAQEFAASCAQBB/uUc/RehcHrx1lwWubNkAMkxKo95vWnb5qdJDJZsVa7rJghu
-9Urlk5A64YX+i4XtoWavvsMf7xQ5OSV2w2C5VTc3A7v2RAmnA+Scgr5ODs5uCT9JTrDr1Xd7RAhs
-T7J570Lo01SI6wa9WvDZfgIpw3sGv8KNFFrkO7zhsIWQNptDI+dGhORJn5S6hWs81oMDlWYwisBl
-DSd01iCDA9lLPQ241sIbG5fGFzWK0lwJH5cJLWi9lSvVdOBXIHc3uzraJTSZ99HKZP1G+lL3sI65
-3T39ObmANZyIajHicMfgHi8WoiWriReTejWjg+8VRidcC6YLYE/A4o9PcJLtA0zS
---0000000000002a0eee06064f3391--
+ATANBgkqhkiG9w0BAQEFAASCAQB5/tqyub3pY6n7cEanbKMnQ1ia9R5q7k/xwPWQ/LlBI2qJk8K1
+hT+nH6D+pDhO8WG3vQZDPGVlz71g2stzhCT5INQT20JZM9AcP1sSDAWEPUZEZwGJxZeO27BrN+cu
+P7e4ZOQqP1VUGO5ZQtK/RXUSq3bk47Oom0rbzUGLwdw6FXo1h90Ypjgm+Lq23ZUJ04LGKAa4aHZR
+96q2E7p6SYE9QHVUet+fc7/yTMEOxQB4bc8hSh0YQ30UvAlJs3MQDFOOiBtXhcaGLL29wvC0jVbl
+oh4iOb7esN3Yi0rheV3RKBg0p1QWY8BovLGU26eaKIk+6FdQs6mXmdjeq0EY3tCN
+--000000000000015ab806064f3387--
