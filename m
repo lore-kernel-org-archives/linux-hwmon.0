@@ -2,104 +2,221 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C8CBCE7AF9
-	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Sep 2023 03:49:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5CBDCE7AF9
+	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Sep 2023 04:55:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbjI1Dtd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 27 Sep 2023 23:49:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40998 "EHLO
+        id S229445AbjI1EzF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 28 Sep 2023 00:55:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjI1Dtc (ORCPT
+        with ESMTP id S230213AbjI1EzC (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 27 Sep 2023 23:49:32 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BAC10A;
-        Wed, 27 Sep 2023 20:49:29 -0700 (PDT)
-Received: from kwepemm000004.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RwzsM21YWzMltP;
-        Thu, 28 Sep 2023 11:45:43 +0800 (CST)
-Received: from [10.67.121.59] (10.67.121.59) by kwepemm000004.china.huawei.com
- (7.193.23.18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Thu, 28 Sep
- 2023 11:49:26 +0800
-Message-ID: <fbc038e3-9719-3f90-0c09-f26318e21f38@huawei.com>
-Date:   Thu, 28 Sep 2023 11:49:25 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 1/3] ACPI: PCC: Add PCC shared memory region command and
- status bitfields
-To:     Sudeep Holla <sudeep.holla@arm.com>
-CC:     <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, <lihuisong@huawei.com>
-References: <20230926-pcc_defines-v1-0-0f925a1658fd@arm.com>
- <20230926-pcc_defines-v1-1-0f925a1658fd@arm.com>
- <a89bdd10-9388-01f5-6a7c-894af793e1c1@huawei.com>
- <20230927135909.6rssuywmj4k3odex@bogus>
-From:   "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <20230927135909.6rssuywmj4k3odex@bogus>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.121.59]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm000004.china.huawei.com (7.193.23.18)
-X-CFilter-Loop: Reflected
+        Thu, 28 Sep 2023 00:55:02 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 503CC98
+        for <linux-hwmon@vger.kernel.org>; Wed, 27 Sep 2023 21:55:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695876901; x=1727412901;
+  h=date:message-id:from:to:cc:subject:in-reply-to:
+   references:mime-version;
+  bh=SoWd3/WZ8LeBBhnAtA4gNmkVLWgvSpJtO+81tR1xCI0=;
+  b=a+dPfcMAJJGVvrpT2RlmFPzzppsyR825Jycj/IAVmgQGq0Wag+QOg4sV
+   ny+oZyx7Ba56CJJzFwMFN/UcoT8ZWKBUoWBmzlfhZcr1EDuszTDtwjrez
+   tbtfGOClooeLZSTbf5l+qooebBRrBYhvbYC8AgGlYbwtfyx2+hkKwR7Yp
+   oQOTTRm4jLYRokYtPJxfNFCZFo07kaodDO0ME+6I8LhHeHtfmh0N7YL47
+   ZVfZOfH86OrcGlnQrfiq4JLBfsegBYeeaGDK8si+izrEKX5o0gM9w/2rX
+   Yfgfkn55sLEvCS/zIm5ilVJF6c7GRVJ9sGpiMzT6MoPquh2F+Sv8uf4mH
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10846"; a="372343741"
+X-IronPort-AV: E=Sophos;i="6.03,183,1694761200"; 
+   d="scan'208";a="372343741"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 21:55:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10846"; a="752835438"
+X-IronPort-AV: E=Sophos;i="6.03,183,1694761200"; 
+   d="scan'208";a="752835438"
+Received: from adixit-mobl.amr.corp.intel.com (HELO adixit-arch.intel.com) ([10.212.219.102])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 21:55:00 -0700
+Date:   Wed, 27 Sep 2023 21:54:56 -0700
+Message-ID: <87v8buucbj.wl-ashutosh.dixit@intel.com>
+From:   "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
+To:     "Nilawar, Badal" <badal.nilawar@intel.com>
+Cc:     intel-xe@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
+        anshuman.gupta@intel.com, linux@roeck-us.net,
+        andi.shyti@linux.intel.com, riana.tauro@intel.com,
+        matthew.brost@intel.com, rodrigo.vivi@intel.com
+Subject: Re: [PATCH v6 1/5] drm/xe/hwmon: Expose power attributes
+In-Reply-To: <9b189ee9-c253-3be5-7e26-178d6e904f14@intel.com>
+References: <20230925081842.3566834-1-badal.nilawar@intel.com>  <20230925081842.3566834-2-badal.nilawar@intel.com>      <875y3w1ax4.wl-ashutosh.dixit@intel.com>        <9b189ee9-c253-3be5-7e26-178d6e904f14@intel.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
+ Emacs/29.1 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On Wed, 27 Sep 2023 03:28:51 -0700, Nilawar, Badal wrote:
+>
+> Hi Ashutosh,
+>
+> On 27-09-2023 10:15, Dixit, Ashutosh wrote:
+> > On Mon, 25 Sep 2023 01:18:38 -0700, Badal Nilawar wrote:
+> >>
+> >
+> > Hi Badal,
+> >
+> >> +static int xe_hwmon_process_reg(struct xe_hwmon *hwmon, enum xe_hwmon_reg hwmon_reg,
+> >
+> > Maybe xe_hwmon_read_write_reg? process_reg sounds bad. Basically we don't
+> > process a register, we read or write it.
+> I don't think it sound that bad. When we say process register apart from
+> read/write/rmw what else we will be doing. I think lets not rename this
+> function.
 
-在 2023/9/27 21:59, Sudeep Holla 写道:
-> On Wed, Sep 27, 2023 at 10:07:15AM +0800, lihuisong (C) wrote:
->> Hi Sudeep,
->>
->> 在 2023/9/26 20:28, Sudeep Holla 写道:
->>> Define the common macros to use when referring to various bitfields in
->>> the PCC generic communications channel command and status fields.
->> Can you define the bit0 macros in the "flags" for Extended PCC Subspace
->> Shared Memory Region?
-> Sure I will take a look and include it in v2 if applicable.
-Thanks
+OK, maybe leave as is (though another option is xe_hwmon_operate_reg since
+we already have xe_hwmon_reg_op, or xe_hwmon_rw_reg).
+
+> >
+> >> +				enum xe_hwmon_reg_operation operation, u32 *value,
+> >> +				u32 clr, u32 set)
+> >> +{
+> >> +	struct xe_reg reg;
+> >> +
+> >> +	reg.raw = xe_hwmon_get_reg(hwmon, hwmon_reg);
+> >> +
+> >> +	if (!reg.raw)
+> >> +		return -EOPNOTSUPP;
+> >> +
+> >> +	switch (operation) {
+> >> +	case REG_READ:
+> >> +		*value = xe_mmio_read32(hwmon->gt, reg);
+> >> +		return 0;
+> >> +	case REG_WRITE:
+> >> +		xe_mmio_write32(hwmon->gt, reg, *value);
+> >> +		return 0;
+> >> +	case REG_RMW:
+> >> +		*value = xe_mmio_rmw32(hwmon->gt, reg, clr, set);
+> >> +		return 0;
+> >> +	default:
+> >> +		drm_warn(&gt_to_xe(hwmon->gt)->drm, "Invalid xe hwmon reg operation: %d\n",
+> >> +			 operation);
+> >> +		return -EOPNOTSUPP;
+> >> +	}
+> >> +}
+> >> +
+> >> +int xe_hwmon_process_reg_read64(struct xe_hwmon *hwmon, enum xe_hwmon_reg hwmon_reg, u64 *value)
+> >> +{
+> >> +	struct xe_reg reg;
+> >> +
+> >> +	reg.raw = xe_hwmon_get_reg(hwmon, hwmon_reg);
+> >> +
+> >> +	if (!reg.raw)
+> >> +		return -EOPNOTSUPP;
+> >> +
+> >> +	*value = xe_mmio_read64_2x32(hwmon->gt, reg);
+> >> +
+> >> +	return 0;
+> >
+> > We can't make read64 part of enum xe_hwmon_reg_operation?
+> read64 takes argument "u64 *value" so kept it separate.
+
+OK, makes sense.
+
+> >
+> >
+> >> +}
+> >> +
+> >> +#define PL1_DISABLE 0
+> >> +
+> >> +/*
+> >> + * HW allows arbitrary PL1 limits to be set but silently clamps these values to
+> >> + * "typical but not guaranteed" min/max values in REG_PKG_POWER_SKU. Follow the
+> >> + * same pattern for sysfs, allow arbitrary PL1 limits to be set but display
+> >> + * clamped values when read.
+> >> + */
+> >> +static int xe_hwmon_power_max_read(struct xe_hwmon *hwmon, long *value)
+> >> +{
+> >> +	u32 reg_val;
+> >> +	u64 reg_val64, min, max;
+> >> +
+> >> +	xe_hwmon_process_reg(hwmon, REG_PKG_RAPL_LIMIT, REG_READ, &reg_val, 0, 0);
+> >> +	/* Check if PL1 limit is disabled */
+> >> +	if (!(reg_val & PKG_PWR_LIM_1_EN)) {
+> >> +		*value = PL1_DISABLE;
+> >> +		return 0;
+> >> +	}
+> >> +
+> >> +	reg_val = REG_FIELD_GET(PKG_PWR_LIM_1, reg_val);
+> >> +	*value = mul_u64_u32_shr(reg_val, SF_POWER, hwmon->scl_shift_power);
+> >> +
+> >> +	xe_hwmon_process_reg_read64(hwmon, REG_PKG_POWER_SKU, &reg_val64);
+> >> +	min = REG_FIELD_GET(PKG_MIN_PWR, reg_val64);
+> >> +	min = mul_u64_u32_shr(min, SF_POWER, hwmon->scl_shift_power);
+> >> +	max = REG_FIELD_GET(PKG_MAX_PWR, reg_val64);
+> >> +	max = mul_u64_u32_shr(max, SF_POWER, hwmon->scl_shift_power);
+> >> +
+> >> +	if (min && max)
+> >> +		*value = clamp_t(u64, *value, min, max);
+> >
+> > Not exactly correct. Should be:
+> >
+> >	if (min)
+> >		clamp at min
+> >	if (max)
+> >		clamp at max
+> >
+> > I was thinking of changing it for i915 but was lazy.
+> Sure, thanks for pointing this.
+> >
+> >
+> >> +
+> >> +	return 0;
+> >> +}
+> >> +
+> >> +static int xe_hwmon_power_max_write(struct xe_hwmon *hwmon, long value)
+> >> +{
+> >> +	u32 reg_val;
+> >> +
+> >> +	/* Disable PL1 limit and verify, as limit cannot be disabled on all platforms */
+> >> +	if (value == PL1_DISABLE) {
+> >> +		xe_hwmon_process_reg(hwmon, REG_PKG_RAPL_LIMIT, REG_RMW, &reg_val,
+> >> +				     PKG_PWR_LIM_1_EN, 0);
+> >> +		xe_hwmon_process_reg(hwmon, REG_PKG_RAPL_LIMIT, REG_READ, &reg_val,
+> >
+> > If we are not checking for return codes from these functions, why are they
+> > not void?
+> Top level functions expect return. For function xe_hwmon_power_max_write
+> returning error if PL1 disable not possible. The functions
+> xe_hwmon_power_max_read/xe_hwmon_power_rated_max_read can be made void,
+> then it will look like. What difference its going to make? I feel existing
+> approach is much readable.
+
+As I have pointed out in the other mail it is not. It raises more questions
+about why the return code is not being checked, whether the function can
+return an error. So it is better to be crisp as to what can actually happen.
+
 >
->>> Currently different drivers that need to use these bitfields have defined
->>> these locally. This common macro is intended to consolidate and replace
->>> those.
->>>
->>> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
->>> ---
->>>    include/acpi/pcc.h | 11 +++++++++++
->>>    1 file changed, 11 insertions(+)
->>>
->>> diff --git a/include/acpi/pcc.h b/include/acpi/pcc.h
->>> index 73e806fe7ce7..66d9934c2ee4 100644
->>> --- a/include/acpi/pcc.h
->>> +++ b/include/acpi/pcc.h
->>> @@ -18,7 +18,18 @@ struct pcc_mbox_chan {
->>>    	u16 min_turnaround_time;
->>>    };
->>> +/* Generic Communications Channel Shared Memory Region */
->>> +#define PCC_SIGNATURE			0x50424300
->> Why is this signature 0x50424300?
-> It is as per the specification.
->
->> In ACPI spec, this signature is all 0x50434303.
-> No, not exactly. It is just an example.
-> The PCC signature - The signature of a subspace is computed by a bitwise-or
-> of the value 0x50434300 with the subspace ID. For example, subspace 3 has
-> signature 0x50434303
-Sorry for my mistake. I know this.
-I mean, why doesn't the following macro follow spec and define this 
-signature as 0x504*3*430.
-"#define PCC_SIGNATURE **0x504*2*4300*"*
-Because it seems that all version of ACPI spec is 0x5043430.
->
-> And I see the driver you mentioned(drivers/soc/hisilicon/kunpeng_hccs.c)
-> is doing the right thing. I am bit confused as why you being the author
-> of the driver are now confused.
-I used 0x50424300 instead of 0x50424300 according to the spec.
->
+> case hwmon_power_max:
+>          xe_hwmon_power_max_read(hwmon, val);
+>	 return 0;
+> case hwmon_power_rated_max:
+>          xe_hwmon_power_rated_max_read(hwmon, val);
+>	 return 0;
+
+This is fine.
+
+> >
+> > Also, how about separate read/write/rmw functions as Andi was suggesting?
+> > They would be clearer I think.
+> Would not prefer to add further abstraction, lets keep as is. Going further
+> while adding new platforms will think about adding it.
+
+OK, no need to add wrappers.
+
+Thanks.
+--
+Ashutosh
