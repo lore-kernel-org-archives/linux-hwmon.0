@@ -2,99 +2,112 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CB74E732C6
-	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Sep 2023 11:30:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 049F1E732C5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Sep 2023 11:43:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231843AbjI1Lat (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 28 Sep 2023 07:30:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37216 "EHLO
+        id S231952AbjI1Lnj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 28 Sep 2023 07:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231167AbjI1Lat (ORCPT
+        with ESMTP id S231843AbjI1Lni (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 28 Sep 2023 07:30:49 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 804539C;
-        Thu, 28 Sep 2023 04:30:47 -0700 (PDT)
-Received: from kwepemm000004.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RxB4t2kDlztSyt;
-        Thu, 28 Sep 2023 19:26:22 +0800 (CST)
-Received: from [10.67.121.59] (10.67.121.59) by kwepemm000004.china.huawei.com
- (7.193.23.18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Thu, 28 Sep
- 2023 19:30:44 +0800
-Message-ID: <8689e2aa-5fbd-cf9d-d168-a72669aea5ed@huawei.com>
-Date:   Thu, 28 Sep 2023 19:30:44 +0800
+        Thu, 28 Sep 2023 07:43:38 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532C4B7;
+        Thu, 28 Sep 2023 04:43:37 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id ca18e2360f4ac-79fa7e33573so362495139f.0;
+        Thu, 28 Sep 2023 04:43:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695901416; x=1696506216; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jhAcDN4K7D/vTmH1Qkl5/PH1ae9Q+7eDYlNx5SqvDps=;
+        b=JK4xMvO713wbZpuywukP4wEEYTKdVYapfpxMiGjToCMj01MA73F58KPa0y+ZhgLe6a
+         ZwbgSqFnhNvLDPZQeZtmBvyxZde/pNchhA35KL7+WFPm7SUWPGAqn0h0FIJhHOR02Z0Q
+         v8JrBePdqOfo8dKYgxDlo9wlKFotj4MfQZb+RFv9BxthldaaSe65cb59hpLFiF7gOc7A
+         jcyy+YMv4zlOMk7G7Q/OrjwvpQvMPc7TugVt+wj1et+7mbRt6Me4+loOlfSntTJecHXO
+         2BHREHuuqWBR09FSNR+xhH3tDzywYfaG4PQ4bb6yZHlrG9g7qJpYLW2IS/fH0SQuNBCg
+         Dowg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695901416; x=1696506216;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jhAcDN4K7D/vTmH1Qkl5/PH1ae9Q+7eDYlNx5SqvDps=;
+        b=kg/IrXCwwqOqfQs66hzDfDUBY93y2hjP86VYmDp8773NCqvJUHydSw6VPAFmKoBnaI
+         /NZ1GhUeaHktbngm6wziOWU1a7AwzTv/GDc9iYdDJRuUdPhP07K+keCIfbsY0np52rjG
+         fr4Kn/sRGBfNrsl7I85oXsjoVwaIzZnXfR9bMD+EVJJCPIkOc5vdMZVobthpb2pD1TMY
+         32rmw572NQgRQI126URSQWbmzOxMD8vnPPu1pYn2IoSS+xlFNhm4nSq2duEhThMESwY8
+         w/Ezd9kRWXyrJFLsq4S6WiAG2yvGIZvReAIQVf22Lv2ePLdOGr+Jt/f9R2rfsKnjkj4F
+         BhxA==
+X-Gm-Message-State: AOJu0Yzyh++3jmxG9RP71o/TnvhwtQ2V8FDRbl5MhL8unIhm/M6OBZ15
+        m9IZvxPvyZ94IKmUPeAYmmA=
+X-Google-Smtp-Source: AGHT+IHv4Y+EOxcAPosS0sv0p0W1NVztEVlhV40SdyBD4tFtuVkRgoUeCMOYryXEi5Pq3F84FjIAmg==
+X-Received: by 2002:a6b:6608:0:b0:787:4f3c:730d with SMTP id a8-20020a6b6608000000b007874f3c730dmr752837ioc.18.1695901416583;
+        Thu, 28 Sep 2023 04:43:36 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id cg11-20020a0566381bcb00b0042b3dcb1106sm4596901jab.47.2023.09.28.04.43.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Sep 2023 04:43:35 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 28 Sep 2023 04:43:33 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Hal Feng <hal.feng@starfivetech.com>
+Cc:     Conor Dooley <conor@kernel.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        linux-hwmon@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] MAINTAINERS: Add Hal as one of the maintainers of
+ SFCTEMP HWMON DRIVER
+Message-ID: <dc5e9253-5d82-4def-b6ff-038b29bf99ab@roeck-us.net>
+References: <20230928075249.109459-1-hal.feng@starfivetech.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 4/4] soc: kunpeng_hccs: Migrate to use generic PCC
- shmem related macros
-To:     Sudeep Holla <sudeep.holla@arm.com>, <linux-hwmon@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-acpi@vger.kernel.org>
-CC:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-References: <20230927-pcc_defines-v2-0-0b8ffeaef2e5@arm.com>
- <20230927-pcc_defines-v2-4-0b8ffeaef2e5@arm.com>
-From:   "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <20230927-pcc_defines-v2-4-0b8ffeaef2e5@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.121.59]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm000004.china.huawei.com (7.193.23.18)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230928075249.109459-1-hal.feng@starfivetech.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-lgtm,
-Reviewed-by: Huisong Li <lihuisong@huawei.com>
-
-
-在 2023/9/28 0:26, Sudeep Holla 写道:
-> Use the newly defined common and generic PCC shared memory region
-> related macros in this driver to replace the locally defined ones.
->
-> Cc: Huisong Li <lihuisong@huawei.com>
-> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+On Thu, Sep 28, 2023 at 03:52:49PM +0800, Hal Feng wrote:
+> As he is the submitter of this driver, add his mail so he can
+> maintain the driver and easily reply in the mailing list.
+> 
+> Acked-by: Emil Renner Berthing <kernel@esmil.dk>
+> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
 > ---
->   drivers/soc/hisilicon/kunpeng_hccs.c | 8 ++------
->   1 file changed, 2 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/soc/hisilicon/kunpeng_hccs.c b/drivers/soc/hisilicon/kunpeng_hccs.c
-> index f3810d9d1caa..27a96cafd1ea 100644
-> --- a/drivers/soc/hisilicon/kunpeng_hccs.c
-> +++ b/drivers/soc/hisilicon/kunpeng_hccs.c
-> @@ -31,10 +31,6 @@
->   
->   #include "kunpeng_hccs.h"
->   
-> -/* PCC defines */
-> -#define HCCS_PCC_SIGNATURE_MASK		0x50434300
-> -#define HCCS_PCC_STATUS_CMD_COMPLETE	BIT(0)
-> -
->   /*
->    * Arbitrary retries in case the remote processor is slow to respond
->    * to PCC commands
-> @@ -187,7 +183,7 @@ static int hccs_check_chan_cmd_complete(struct hccs_dev *hdev)
->   	 * deadline_us(timeout_us) until PCC command complete bit is set(cond)
->   	 */
->   	ret = readw_poll_timeout(&comm_base->status, status,
-> -				 status & HCCS_PCC_STATUS_CMD_COMPLETE,
-> +				 status & PCC_STATUS_CMD_COMPLETE,
->   				 HCCS_POLL_STATUS_TIME_INTERVAL_US,
->   				 cl_info->deadline_us);
->   	if (unlikely(ret))
-> @@ -208,7 +204,7 @@ static int hccs_pcc_cmd_send(struct hccs_dev *hdev, u8 cmd,
->   	int ret;
->   
->   	/* Write signature for this subspace */
-> -	tmp.signature = HCCS_PCC_SIGNATURE_MASK | hdev->chan_id;
-> +	tmp.signature = PCC_SIGNATURE | hdev->chan_id;
->   	/* Write to the shared command region */
->   	tmp.command = cmd;
->   	/* Clear cmd complete bit */
->
+> 
+> History:
+> v1: https://lore.kernel.org/all/20230718034937.92999-4-hal.feng@starfivetech.com/
+
+The change log should describe your changes, not just point to earlier
+versions of your patch. Please do not expect maintainers to fetch old
+versions of your patches and compare them manually.
+
+Did anything change besides the Acked-by: ?
+
+Guenter
+
+> 
+> ---
+>  MAINTAINERS | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index b19995690904..2376272bbe20 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19402,6 +19402,7 @@ F:	drivers/net/ethernet/sfc/
+>  
+>  SFCTEMP HWMON DRIVER
+>  M:	Emil Renner Berthing <kernel@esmil.dk>
+> +M:	Hal Feng <hal.feng@starfivetech.com>
+>  L:	linux-hwmon@vger.kernel.org
+>  S:	Maintained
+>  F:	Documentation/devicetree/bindings/hwmon/starfive,jh71x0-temp.yaml
+> 
+> base-commit: 6465e260f48790807eef06b583b38ca9789b6072
+> -- 
+> 2.38.1
+> 
