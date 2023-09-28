@@ -2,45 +2,45 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5CBDCE7AF9
-	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Sep 2023 04:55:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 774FCCE7AF8
+	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Sep 2023 04:55:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229445AbjI1EzF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 28 Sep 2023 00:55:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45398 "EHLO
+        id S230171AbjI1Ezg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 28 Sep 2023 00:55:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230213AbjI1EzC (ORCPT
+        with ESMTP id S230089AbjI1Eze (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 28 Sep 2023 00:55:02 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 503CC98
-        for <linux-hwmon@vger.kernel.org>; Wed, 27 Sep 2023 21:55:01 -0700 (PDT)
+        Thu, 28 Sep 2023 00:55:34 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5085F136
+        for <linux-hwmon@vger.kernel.org>; Wed, 27 Sep 2023 21:55:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695876901; x=1727412901;
+  t=1695876931; x=1727412931;
   h=date:message-id:from:to:cc:subject:in-reply-to:
    references:mime-version;
-  bh=SoWd3/WZ8LeBBhnAtA4gNmkVLWgvSpJtO+81tR1xCI0=;
-  b=a+dPfcMAJJGVvrpT2RlmFPzzppsyR825Jycj/IAVmgQGq0Wag+QOg4sV
-   ny+oZyx7Ba56CJJzFwMFN/UcoT8ZWKBUoWBmzlfhZcr1EDuszTDtwjrez
-   tbtfGOClooeLZSTbf5l+qooebBRrBYhvbYC8AgGlYbwtfyx2+hkKwR7Yp
-   oQOTTRm4jLYRokYtPJxfNFCZFo07kaodDO0ME+6I8LhHeHtfmh0N7YL47
-   ZVfZOfH86OrcGlnQrfiq4JLBfsegBYeeaGDK8si+izrEKX5o0gM9w/2rX
-   Yfgfkn55sLEvCS/zIm5ilVJF6c7GRVJ9sGpiMzT6MoPquh2F+Sv8uf4mH
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10846"; a="372343741"
+  bh=4PEJ3IQ0nFkePalt+zJFQBHdhchda9Q3XEy1ehcU0h4=;
+  b=EP+sEZQxvFux7qVM7f4XduTP8GxonZgJy9LZfUq0OogrTwtGlGZEQ95H
+   YgUwzeTKNid7XjzNqJ8ed8cEnRx4sbbJtJbRFiS03VriTM5ncs5ghwQJT
+   KeSZbDL+CCEJ0Mufwxi1dQJDomFDjaauGwmtn9Zih/0hY7XATY50W1w2t
+   QmDHk3togMQgUpuZFN/Jy/KA8HUR/WxyQtKwXx+7OQUC1juapWzqSQQFM
+   worVdKjgvlSLASiEU7yStFaF+WZfZKNXqyg+wd32/7aNnFgv0BjpdJxqs
+   qfwhK4Ld84N9rL/Qa3vOEXUZkysO9vZkT9Tyspwyehd6tgWyNVXxJme0Y
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10846"; a="448477153"
 X-IronPort-AV: E=Sophos;i="6.03,183,1694761200"; 
-   d="scan'208";a="372343741"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 21:55:00 -0700
+   d="scan'208";a="448477153"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 21:55:31 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10846"; a="752835438"
+X-IronPort-AV: E=McAfee;i="6600,9927,10846"; a="923073931"
 X-IronPort-AV: E=Sophos;i="6.03,183,1694761200"; 
-   d="scan'208";a="752835438"
+   d="scan'208";a="923073931"
 Received: from adixit-mobl.amr.corp.intel.com (HELO adixit-arch.intel.com) ([10.212.219.102])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 21:55:00 -0700
-Date:   Wed, 27 Sep 2023 21:54:56 -0700
-Message-ID: <87v8buucbj.wl-ashutosh.dixit@intel.com>
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 21:55:30 -0700
+Date:   Wed, 27 Sep 2023 21:55:15 -0700
+Message-ID: <87ttreucb0.wl-ashutosh.dixit@intel.com>
 From:   "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
 To:     "Nilawar, Badal" <badal.nilawar@intel.com>
 Cc:     intel-xe@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
@@ -48,8 +48,8 @@ Cc:     intel-xe@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
         andi.shyti@linux.intel.com, riana.tauro@intel.com,
         matthew.brost@intel.com, rodrigo.vivi@intel.com
 Subject: Re: [PATCH v6 1/5] drm/xe/hwmon: Expose power attributes
-In-Reply-To: <9b189ee9-c253-3be5-7e26-178d6e904f14@intel.com>
-References: <20230925081842.3566834-1-badal.nilawar@intel.com>  <20230925081842.3566834-2-badal.nilawar@intel.com>      <875y3w1ax4.wl-ashutosh.dixit@intel.com>        <9b189ee9-c253-3be5-7e26-178d6e904f14@intel.com>
+In-Reply-To: <84b5dc30-6b27-caf0-6535-c08f6b7e8cd0@intel.com>
+References: <20230925081842.3566834-1-badal.nilawar@intel.com>  <20230925081842.3566834-2-badal.nilawar@intel.com>      <874jjg1ak6.wl-ashutosh.dixit@intel.com>        <84b5dc30-6b27-caf0-6535-c08f6b7e8cd0@intel.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
  Emacs/29.1 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -59,163 +59,60 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, 27 Sep 2023 03:28:51 -0700, Nilawar, Badal wrote:
+On Wed, 27 Sep 2023 01:39:46 -0700, Nilawar, Badal wrote:
 >
-> Hi Ashutosh,
->
-> On 27-09-2023 10:15, Dixit, Ashutosh wrote:
+
+Hi Badal,
+
+> On 27-09-2023 10:23, Dixit, Ashutosh wrote:
 > > On Mon, 25 Sep 2023 01:18:38 -0700, Badal Nilawar wrote:
 > >>
-> >
-> > Hi Badal,
-> >
-> >> +static int xe_hwmon_process_reg(struct xe_hwmon *hwmon, enum xe_hwmon_reg hwmon_reg,
-> >
-> > Maybe xe_hwmon_read_write_reg? process_reg sounds bad. Basically we don't
-> > process a register, we read or write it.
-> I don't think it sound that bad. When we say process register apart from
-> read/write/rmw what else we will be doing. I think lets not rename this
-> function.
-
-OK, maybe leave as is (though another option is xe_hwmon_operate_reg since
-we already have xe_hwmon_reg_op, or xe_hwmon_rw_reg).
-
-> >
-> >> +				enum xe_hwmon_reg_operation operation, u32 *value,
-> >> +				u32 clr, u32 set)
+> >> +static umode_t
+> >> +xe_hwmon_is_visible(const void *drvdata, enum hwmon_sensor_types type,
+> >> +		    u32 attr, int channel)
 > >> +{
-> >> +	struct xe_reg reg;
+> >> +	struct xe_hwmon *hwmon = (struct xe_hwmon *)drvdata;
+> >> +	int ret;
 > >> +
-> >> +	reg.raw = xe_hwmon_get_reg(hwmon, hwmon_reg);
-> >> +
-> >> +	if (!reg.raw)
-> >> +		return -EOPNOTSUPP;
-> >> +
-> >> +	switch (operation) {
-> >> +	case REG_READ:
-> >> +		*value = xe_mmio_read32(hwmon->gt, reg);
-> >> +		return 0;
-> >> +	case REG_WRITE:
-> >> +		xe_mmio_write32(hwmon->gt, reg, *value);
-> >> +		return 0;
-> >> +	case REG_RMW:
-> >> +		*value = xe_mmio_rmw32(hwmon->gt, reg, clr, set);
-> >> +		return 0;
-> >> +	default:
-> >> +		drm_warn(&gt_to_xe(hwmon->gt)->drm, "Invalid xe hwmon reg operation: %d\n",
-> >> +			 operation);
-> >> +		return -EOPNOTSUPP;
-> >> +	}
-> >> +}
-> >> +
-> >> +int xe_hwmon_process_reg_read64(struct xe_hwmon *hwmon, enum xe_hwmon_reg hwmon_reg, u64 *value)
-> >> +{
-> >> +	struct xe_reg reg;
-> >> +
-> >> +	reg.raw = xe_hwmon_get_reg(hwmon, hwmon_reg);
-> >> +
-> >> +	if (!reg.raw)
-> >> +		return -EOPNOTSUPP;
-> >> +
-> >> +	*value = xe_mmio_read64_2x32(hwmon->gt, reg);
-> >> +
-> >> +	return 0;
+> >> +	xe_device_mem_access_get(gt_to_xe(hwmon->gt));
 > >
-> > We can't make read64 part of enum xe_hwmon_reg_operation?
-> read64 takes argument "u64 *value" so kept it separate.
+> > Maybe we do xe_device_mem_access_get/put in xe_hwmon_process_reg where it
+> > is needed? E.g. xe_hwmon_is_visible doesn't need to do this because it
+> > doesn't read/write registers.
+> Agreed, but visible function is called only once while registering hwmon
+> interface, which happen during driver probe. During driver probe device
+> will be in resumed state. So no harm in keeping
+> xe_device_mem_access_get/put in visible function.
 
-OK, makes sense.
+To me it doesn't make any sense to keep xe_device_mem_access_get/put
+anywhere except in xe_hwmon_process_reg where the HW access actually
+happens. We can eliminate xe_device_mem_access_get/put's all over the place
+if we do it. Isn't it?
+
+The only restriction I have heard of (though not sure why) is that
+xe_device_mem_access_get/put should not be called under lock. Though I am
+not sure it is for spinlock or also mutex. So as we were saying the locking
+will also need to move to xe_hwmon_process_reg.
+
+So:
+
+xe_hwmon_process_reg()
+{
+	xe_device_mem_access_get
+	mutex_lock
+	...
+	mutex_unlock
+	xe_device_mem_access_put
+}
+
+So once again if this is not possible for some reason let's figure out why.
 
 > >
-> >
-> >> +}
-> >> +
-> >> +#define PL1_DISABLE 0
-> >> +
-> >> +/*
-> >> + * HW allows arbitrary PL1 limits to be set but silently clamps these values to
-> >> + * "typical but not guaranteed" min/max values in REG_PKG_POWER_SKU. Follow the
-> >> + * same pattern for sysfs, allow arbitrary PL1 limits to be set but display
-> >> + * clamped values when read.
-> >> + */
-> >> +static int xe_hwmon_power_max_read(struct xe_hwmon *hwmon, long *value)
-> >> +{
-> >> +	u32 reg_val;
-> >> +	u64 reg_val64, min, max;
-> >> +
-> >> +	xe_hwmon_process_reg(hwmon, REG_PKG_RAPL_LIMIT, REG_READ, &reg_val, 0, 0);
-> >> +	/* Check if PL1 limit is disabled */
-> >> +	if (!(reg_val & PKG_PWR_LIM_1_EN)) {
-> >> +		*value = PL1_DISABLE;
-> >> +		return 0;
-> >> +	}
-> >> +
-> >> +	reg_val = REG_FIELD_GET(PKG_PWR_LIM_1, reg_val);
-> >> +	*value = mul_u64_u32_shr(reg_val, SF_POWER, hwmon->scl_shift_power);
-> >> +
-> >> +	xe_hwmon_process_reg_read64(hwmon, REG_PKG_POWER_SKU, &reg_val64);
-> >> +	min = REG_FIELD_GET(PKG_MIN_PWR, reg_val64);
-> >> +	min = mul_u64_u32_shr(min, SF_POWER, hwmon->scl_shift_power);
-> >> +	max = REG_FIELD_GET(PKG_MAX_PWR, reg_val64);
-> >> +	max = mul_u64_u32_shr(max, SF_POWER, hwmon->scl_shift_power);
-> >> +
-> >> +	if (min && max)
-> >> +		*value = clamp_t(u64, *value, min, max);
-> >
-> > Not exactly correct. Should be:
-> >
-> >	if (min)
-> >		clamp at min
-> >	if (max)
-> >		clamp at max
-> >
-> > I was thinking of changing it for i915 but was lazy.
-> Sure, thanks for pointing this.
-> >
-> >
-> >> +
-> >> +	return 0;
-> >> +}
-> >> +
-> >> +static int xe_hwmon_power_max_write(struct xe_hwmon *hwmon, long value)
-> >> +{
-> >> +	u32 reg_val;
-> >> +
-> >> +	/* Disable PL1 limit and verify, as limit cannot be disabled on all platforms */
-> >> +	if (value == PL1_DISABLE) {
-> >> +		xe_hwmon_process_reg(hwmon, REG_PKG_RAPL_LIMIT, REG_RMW, &reg_val,
-> >> +				     PKG_PWR_LIM_1_EN, 0);
-> >> +		xe_hwmon_process_reg(hwmon, REG_PKG_RAPL_LIMIT, REG_READ, &reg_val,
-> >
-> > If we are not checking for return codes from these functions, why are they
-> > not void?
-> Top level functions expect return. For function xe_hwmon_power_max_write
-> returning error if PL1 disable not possible. The functions
-> xe_hwmon_power_max_read/xe_hwmon_power_rated_max_read can be made void,
-> then it will look like. What difference its going to make? I feel existing
-> approach is much readable.
+> > Also do we need to take forcewake? i915 had forcewake table so it would
+> > take forcewake automatically but XE doesn't do that.
+> Hwmon regs doesn't fall under GT domain so doesn't need forcewake.
 
-As I have pointed out in the other mail it is not. It raises more questions
-about why the return code is not being checked, whether the function can
-return an error. So it is better to be crisp as to what can actually happen.
-
->
-> case hwmon_power_max:
->          xe_hwmon_power_max_read(hwmon, val);
->	 return 0;
-> case hwmon_power_rated_max:
->          xe_hwmon_power_rated_max_read(hwmon, val);
->	 return 0;
-
-This is fine.
-
-> >
-> > Also, how about separate read/write/rmw functions as Andi was suggesting?
-> > They would be clearer I think.
-> Would not prefer to add further abstraction, lets keep as is. Going further
-> while adding new platforms will think about adding it.
-
-OK, no need to add wrappers.
+OK, great.
 
 Thanks.
 --
