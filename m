@@ -2,117 +2,491 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 774FCCE7AF8
-	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Sep 2023 04:55:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A31AECE7AF9
+	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Sep 2023 04:56:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbjI1Ezg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 28 Sep 2023 00:55:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50640 "EHLO
+        id S229547AbjI1E4I (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 28 Sep 2023 00:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbjI1Eze (ORCPT
+        with ESMTP id S230206AbjI1E4G (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 28 Sep 2023 00:55:34 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5085F136
-        for <linux-hwmon@vger.kernel.org>; Wed, 27 Sep 2023 21:55:31 -0700 (PDT)
+        Thu, 28 Sep 2023 00:56:06 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57172139
+        for <linux-hwmon@vger.kernel.org>; Wed, 27 Sep 2023 21:56:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695876931; x=1727412931;
+  t=1695876964; x=1727412964;
   h=date:message-id:from:to:cc:subject:in-reply-to:
-   references:mime-version;
-  bh=4PEJ3IQ0nFkePalt+zJFQBHdhchda9Q3XEy1ehcU0h4=;
-  b=EP+sEZQxvFux7qVM7f4XduTP8GxonZgJy9LZfUq0OogrTwtGlGZEQ95H
-   YgUwzeTKNid7XjzNqJ8ed8cEnRx4sbbJtJbRFiS03VriTM5ncs5ghwQJT
-   KeSZbDL+CCEJ0Mufwxi1dQJDomFDjaauGwmtn9Zih/0hY7XATY50W1w2t
-   QmDHk3togMQgUpuZFN/Jy/KA8HUR/WxyQtKwXx+7OQUC1juapWzqSQQFM
-   worVdKjgvlSLASiEU7yStFaF+WZfZKNXqyg+wd32/7aNnFgv0BjpdJxqs
-   qfwhK4Ld84N9rL/Qa3vOEXUZkysO9vZkT9Tyspwyehd6tgWyNVXxJme0Y
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10846"; a="448477153"
+   references:mime-version:content-transfer-encoding;
+  bh=I2N6oxWy1Yad3jybeMchKAKNL8wIUsBoUa6oq4IE6+0=;
+  b=G3XbyO+Fu6hK+a/X9rnyjZF8YwWJwvtV63d/il34qsdUTRBuvxa3R5Cq
+   6i91wBl9JNNOStlPZpINSNYQL56KCPoEZHnLdcPSf1uaHgSytuC4r/6LK
+   x1yCkS0mScqgroQTvedf458/+v6lWTg0Y0hbi3fzQxdAjySd0jO6v69Bh
+   dimwV9tDRLSoXcPTO8OongIGXKBnHgZjoaqs/5tAoOeJtZk5K3VHodWcN
+   qUM4yXTcfpUJwYa/ef4JmU6Kvpo/xZJ6g8rW9gSbZHy8ZAgxEgE87Xk31
+   lSyrBLONA0vr6xysX25B6B3ml18mGNSz4ON+30J1XlvCMv9UBphLcjx5D
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10846"; a="412902069"
 X-IronPort-AV: E=Sophos;i="6.03,183,1694761200"; 
-   d="scan'208";a="448477153"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 21:55:31 -0700
+   d="scan'208";a="412902069"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 21:56:03 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10846"; a="923073931"
+X-IronPort-AV: E=McAfee;i="6600,9927,10846"; a="699142523"
 X-IronPort-AV: E=Sophos;i="6.03,183,1694761200"; 
-   d="scan'208";a="923073931"
+   d="scan'208";a="699142523"
 Received: from adixit-mobl.amr.corp.intel.com (HELO adixit-arch.intel.com) ([10.212.219.102])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 21:55:30 -0700
-Date:   Wed, 27 Sep 2023 21:55:15 -0700
-Message-ID: <87ttreucb0.wl-ashutosh.dixit@intel.com>
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 21:56:03 -0700
+Date:   Wed, 27 Sep 2023 21:55:52 -0700
+Message-ID: <87sf6yuc9z.wl-ashutosh.dixit@intel.com>
 From:   "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
-To:     "Nilawar, Badal" <badal.nilawar@intel.com>
-Cc:     intel-xe@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
-        anshuman.gupta@intel.com, linux@roeck-us.net,
-        andi.shyti@linux.intel.com, riana.tauro@intel.com,
-        matthew.brost@intel.com, rodrigo.vivi@intel.com
+To:     Badal Nilawar <badal.nilawar@intel.com>
+Cc:     <intel-xe@lists.freedesktop.org>, <linux-hwmon@vger.kernel.org>,
+        <anshuman.gupta@intel.com>, <linux@roeck-us.net>,
+        <andi.shyti@linux.intel.com>, <riana.tauro@intel.com>,
+        <matthew.brost@intel.com>, <rodrigo.vivi@intel.com>
 Subject: Re: [PATCH v6 1/5] drm/xe/hwmon: Expose power attributes
-In-Reply-To: <84b5dc30-6b27-caf0-6535-c08f6b7e8cd0@intel.com>
-References: <20230925081842.3566834-1-badal.nilawar@intel.com>  <20230925081842.3566834-2-badal.nilawar@intel.com>      <874jjg1ak6.wl-ashutosh.dixit@intel.com>        <84b5dc30-6b27-caf0-6535-c08f6b7e8cd0@intel.com>
+In-Reply-To: <20230925081842.3566834-2-badal.nilawar@intel.com>
+References: <20230925081842.3566834-1-badal.nilawar@intel.com>  <20230925081842.3566834-2-badal.nilawar@intel.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
  Emacs/29.1 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, 27 Sep 2023 01:39:46 -0700, Nilawar, Badal wrote:
+On Mon, 25 Sep 2023 01:18:38 -0700, Badal Nilawar wrote:
 >
 
 Hi Badal,
 
-> On 27-09-2023 10:23, Dixit, Ashutosh wrote:
-> > On Mon, 25 Sep 2023 01:18:38 -0700, Badal Nilawar wrote:
-> >>
-> >> +static umode_t
-> >> +xe_hwmon_is_visible(const void *drvdata, enum hwmon_sensor_types type,
-> >> +		    u32 attr, int channel)
-> >> +{
-> >> +	struct xe_hwmon *hwmon = (struct xe_hwmon *)drvdata;
-> >> +	int ret;
-> >> +
-> >> +	xe_device_mem_access_get(gt_to_xe(hwmon->gt));
-> >
-> > Maybe we do xe_device_mem_access_get/put in xe_hwmon_process_reg where it
-> > is needed? E.g. xe_hwmon_is_visible doesn't need to do this because it
-> > doesn't read/write registers.
-> Agreed, but visible function is called only once while registering hwmon
-> interface, which happen during driver probe. During driver probe device
-> will be in resumed state. So no harm in keeping
-> xe_device_mem_access_get/put in visible function.
+Here's how I think this we should change this patch.
 
-To me it doesn't make any sense to keep xe_device_mem_access_get/put
-anywhere except in xe_hwmon_process_reg where the HW access actually
-happens. We can eliminate xe_device_mem_access_get/put's all over the place
-if we do it. Isn't it?
+> diff --git a/drivers/gpu/drm/xe/xe_hwmon.c b/drivers/gpu/drm/xe/xe_hwmon.c
+> new file mode 100644
+> index 000000000000..44d814e111c6
+> --- /dev/null
+> +++ b/drivers/gpu/drm/xe/xe_hwmon.c
+> @@ -0,0 +1,357 @@
+> +// SPDX-License-Identifier: MIT
+> +/*
+> + * Copyright =A9 2023 Intel Corporation
+> + */
+> +
+> +#include <linux/hwmon.h>
+> +
+> +#include <drm/drm_managed.h>
+> +#include "regs/xe_gt_regs.h"
+> +#include "regs/xe_mchbar_regs.h"
+> +#include "xe_device.h"
+> +#include "xe_gt.h"
+> +#include "xe_hwmon.h"
+> +#include "xe_mmio.h"
+> +
+> +enum xe_hwmon_reg {
+> +	REG_PKG_RAPL_LIMIT,
+> +	REG_PKG_POWER_SKU,
+> +	REG_PKG_POWER_SKU_UNIT,
+> +};
+> +
+> +enum xe_hwmon_reg_operation {
 
-The only restriction I have heard of (though not sure why) is that
-xe_device_mem_access_get/put should not be called under lock. Though I am
-not sure it is for spinlock or also mutex. So as we were saying the locking
-will also need to move to xe_hwmon_process_reg.
+enum xe_hwmon_reg_op
 
-So:
+> +	REG_READ,
+> +	REG_WRITE,
+> +	REG_RMW,
+> +};
+> +
+> +/*
+> + * SF_* - scale factors for particular quantities according to hwmon spe=
+c.
+> + */
+> +#define SF_POWER	1000000		/* microwatts */
+> +
+> +struct xe_hwmon {
+> +	struct device *hwmon_dev;
+> +	struct xe_gt *gt;
+> +	struct mutex hwmon_lock; /* rmw operations*/
+> +	int scl_shift_power;
+> +};
+> +
+> +static u32 xe_hwmon_get_reg(struct xe_hwmon *hwmon, enum xe_hwmon_reg hw=
+mon_reg)
 
-xe_hwmon_process_reg()
-{
-	xe_device_mem_access_get
-	mutex_lock
-	...
-	mutex_unlock
-	xe_device_mem_access_put
+Return 'struct xe_reg' from here. Caller does .raw if needed, so caller can
+do xe_hwmon_get_reg(...).raw to check when needed.
+
+So basically this function can return a NULL register if say a particular
+register does not exist on a platorm.
+
+Also this is the function which should be called from the is_visible()
+functions (as has already been done) (so if this function returns NULL the
+sysfs entries will not be visible). This allows for other functions to be
+void.
+
+> +{
+> +	struct xe_device *xe =3D gt_to_xe(hwmon->gt);
+> +	struct xe_reg reg =3D XE_REG(0);
+> +
+> +	switch (hwmon_reg) {
+> +	case REG_PKG_RAPL_LIMIT:
+> +		if (xe->info.platform =3D=3D XE_DG2)
+> +			reg =3D PCU_CR_PACKAGE_RAPL_LIMIT;
+> +		else if (xe->info.platform =3D=3D XE_PVC)
+> +			reg =3D PVC_GT0_PACKAGE_RAPL_LIMIT;
+> +		break;
+> +	case REG_PKG_POWER_SKU:
+> +		if (xe->info.platform =3D=3D XE_DG2)
+> +			reg =3D PCU_CR_PACKAGE_POWER_SKU;
+> +		else if (xe->info.platform =3D=3D XE_PVC)
+> +			reg =3D PVC_GT0_PACKAGE_POWER_SKU;
+> +		break;
+> +	case REG_PKG_POWER_SKU_UNIT:
+> +		if (xe->info.platform =3D=3D XE_DG2)
+> +			reg =3D PCU_CR_PACKAGE_POWER_SKU_UNIT;
+> +		else if (xe->info.platform =3D=3D XE_PVC)
+> +			reg =3D PVC_GT0_PACKAGE_POWER_SKU_UNIT;
+> +		break;
+> +	default:
+> +		drm_warn(&xe->drm, "Unknown xe hwmon reg id: %d\n", hwmon_reg);
+> +		break;
+> +	}
+> +
+> +	return reg.raw;
+> +}
+> +
+> +static int xe_hwmon_process_reg(struct xe_hwmon *hwmon, enum xe_hwmon_re=
+g hwmon_reg,
+
+Should be void. As described above this should never get called if a
+particular register does not exist because the sysfs entries will not be
+visible.
+
+> +				enum xe_hwmon_reg_operation operation, u32 *value,
+> +				u32 clr, u32 set)
+
+I would also make the 'op' the second argument, so it is a little bit
+easier to see if we are reading or writing (as I said elsewhere we can skip
+adding read/write wrappers).
+
+> +{
+> +	struct xe_reg reg;
+> +
+> +	reg.raw =3D xe_hwmon_get_reg(hwmon, hwmon_reg);
+> +
+> +	if (!reg.raw)
+> +		return -EOPNOTSUPP;
+
+If register doesn't exist is a WARN_ON.
+
+> +
+> +	switch (operation) {
+> +	case REG_READ:
+> +		*value =3D xe_mmio_read32(hwmon->gt, reg);
+> +		return 0;
+> +	case REG_WRITE:
+> +		xe_mmio_write32(hwmon->gt, reg, *value);
+> +		return 0;
+> +	case REG_RMW:
+> +		*value =3D xe_mmio_rmw32(hwmon->gt, reg, clr, set);
+> +		return 0;
+> +	default:
+> +		drm_warn(&gt_to_xe(hwmon->gt)->drm, "Invalid xe hwmon reg operation: %=
+d\n",
+> +			 operation);
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +int xe_hwmon_process_reg_read64(struct xe_hwmon *hwmon, enum xe_hwmon_re=
+g hwmon_reg, u64 *value)
+
+Why not just xe_hwmon_reg_read64?
+
+> +{
+> +	struct xe_reg reg;
+> +
+> +	reg.raw =3D xe_hwmon_get_reg(hwmon, hwmon_reg);
+> +
+> +	if (!reg.raw)
+> +		return -EOPNOTSUPP;
+> +
+> +	*value =3D xe_mmio_read64_2x32(hwmon->gt, reg);
+> +
+> +	return 0;
+
+Again should be void, for the same reason as xe_hwmon_process_reg.
+
+> +}
+> +
+> +#define PL1_DISABLE 0
+> +
+> +/*
+> + * HW allows arbitrary PL1 limits to be set but silently clamps these va=
+lues to
+> + * "typical but not guaranteed" min/max values in REG_PKG_POWER_SKU. Fol=
+low the
+> + * same pattern for sysfs, allow arbitrary PL1 limits to be set but disp=
+lay
+> + * clamped values when read.
+> + */
+> +static int xe_hwmon_power_max_read(struct xe_hwmon *hwmon, long *value)
+> +{
+> +	u32 reg_val;
+> +	u64 reg_val64, min, max;
+> +
+> +	xe_hwmon_process_reg(hwmon, REG_PKG_RAPL_LIMIT, REG_READ, &reg_val, 0, =
+0);
+> +	/* Check if PL1 limit is disabled */
+> +	if (!(reg_val & PKG_PWR_LIM_1_EN)) {
+> +		*value =3D PL1_DISABLE;
+> +		return 0;
+> +	}
+> +
+> +	reg_val =3D REG_FIELD_GET(PKG_PWR_LIM_1, reg_val);
+> +	*value =3D mul_u64_u32_shr(reg_val, SF_POWER, hwmon->scl_shift_power);
+> +
+> +	xe_hwmon_process_reg_read64(hwmon, REG_PKG_POWER_SKU, &reg_val64);
+> +	min =3D REG_FIELD_GET(PKG_MIN_PWR, reg_val64);
+> +	min =3D mul_u64_u32_shr(min, SF_POWER, hwmon->scl_shift_power);
+> +	max =3D REG_FIELD_GET(PKG_MAX_PWR, reg_val64);
+> +	max =3D mul_u64_u32_shr(max, SF_POWER, hwmon->scl_shift_power);
+> +
+> +	if (min && max)
+> +		*value =3D clamp_t(u64, *value, min, max);
+> +
+> +	return 0;
+> +}
+
+Should be void.
+
+> +
+> +static int xe_hwmon_power_max_write(struct xe_hwmon *hwmon, long value)
+> +{
+> +	u32 reg_val;
+> +
+> +	/* Disable PL1 limit and verify, as limit cannot be disabled on all pla=
+tforms */
+> +	if (value =3D=3D PL1_DISABLE) {
+> +		xe_hwmon_process_reg(hwmon, REG_PKG_RAPL_LIMIT, REG_RMW, &reg_val,
+> +				     PKG_PWR_LIM_1_EN, 0);
+> +		xe_hwmon_process_reg(hwmon, REG_PKG_RAPL_LIMIT, REG_READ, &reg_val,
+> +				     PKG_PWR_LIM_1_EN, 0);
+> +
+> +		if (reg_val & PKG_PWR_LIM_1_EN)
+> +			return -EOPNOTSUPP;
+
+This function cannot be void since we return an error here, so it's fine.
+
+> +	}
+> +
+> +	/* Computation in 64-bits to avoid overflow. Round to nearest. */
+> +	reg_val =3D DIV_ROUND_CLOSEST_ULL((u64)value << hwmon->scl_shift_power,=
+ SF_POWER);
+> +	reg_val =3D PKG_PWR_LIM_1_EN | REG_FIELD_PREP(PKG_PWR_LIM_1, reg_val);
+> +
+> +	xe_hwmon_process_reg(hwmon, REG_PKG_RAPL_LIMIT, REG_RMW, &reg_val,
+> +			     PKG_PWR_LIM_1_EN | PKG_PWR_LIM_1, reg_val);
+> +
+> +	return 0;
+> +}
+> +
+> +static int xe_hwmon_power_rated_max_read(struct xe_hwmon *hwmon, long *v=
+alue)
+> +{
+> +	u32 reg_val;
+> +
+> +	xe_hwmon_process_reg(hwmon, REG_PKG_POWER_SKU, REG_READ, &reg_val, 0, 0=
+);
+> +	reg_val =3D REG_FIELD_GET(PKG_TDP, reg_val);
+> +	*value =3D mul_u64_u32_shr(reg_val, SF_POWER, hwmon->scl_shift_power);
+> +
+> +	return 0;
+> +}
+
+Should be void.
+
+> +
+> +static const struct hwmon_channel_info *hwmon_info[] =3D {
+> +	HWMON_CHANNEL_INFO(power, HWMON_P_MAX | HWMON_P_RATED_MAX),
+> +	NULL
+> +};
+> +
+> +static umode_t
+> +xe_hwmon_power_is_visible(struct xe_hwmon *hwmon, u32 attr, int chan)
+> +{
+> +	switch (attr) {
+> +	case hwmon_power_max:
+> +		return xe_hwmon_get_reg(hwmon, REG_PKG_RAPL_LIMIT) ? 0664 : 0;
+> +	case hwmon_power_rated_max:
+> +		return xe_hwmon_get_reg(hwmon, REG_PKG_POWER_SKU) ? 0444 : 0;
+> +	default:
+> +		return 0;
+> +	}
+> +}
+
+This is fine.
+
+> +
+> +static int
+> +xe_hwmon_power_read(struct xe_hwmon *hwmon, u32 attr, int chan, long *va=
+l)
+> +{
+> +	switch (attr) {
+> +	case hwmon_power_max:
+> +		return xe_hwmon_power_max_read(hwmon, val);
+> +	case hwmon_power_rated_max:
+> +		return xe_hwmon_power_rated_max_read(hwmon, val);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+
+Fine, just take care of void returns.
+
+> +
+> +static int
+> +xe_hwmon_power_write(struct xe_hwmon *hwmon, u32 attr, int chan, long va=
+l)
+> +{
+> +	switch (attr) {
+> +	case hwmon_power_max:
+> +		return xe_hwmon_power_max_write(hwmon, val);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static umode_t
+> +xe_hwmon_is_visible(const void *drvdata, enum hwmon_sensor_types type,
+> +		    u32 attr, int channel)
+> +{
+> +	struct xe_hwmon *hwmon =3D (struct xe_hwmon *)drvdata;
+> +	int ret;
+> +
+> +	xe_device_mem_access_get(gt_to_xe(hwmon->gt));
+
+Let's move xe_device_mem_access_get() to xe_hwmon_process_reg().
+
+> +
+> +	switch (type) {
+> +	case hwmon_power:
+> +		ret =3D xe_hwmon_power_is_visible(hwmon, attr, channel);
+> +		break;
+> +	default:
+> +		ret =3D 0;
+> +		break;
+
+return 0;
+
+> +	}
+> +
+> +	xe_device_mem_access_put(gt_to_xe(hwmon->gt));
+> +
+> +	return ret;
+> +}
+> +
+> +static int
+> +xe_hwmon_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+> +	      int channel, long *val)
+> +{
+> +	struct xe_hwmon *hwmon =3D dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	xe_device_mem_access_get(gt_to_xe(hwmon->gt));
+
+Move xe_device_mem_access_get() to xe_hwmon_process_reg().
+
+> +
+> +	switch (type) {
+> +	case hwmon_power:
+> +		ret =3D xe_hwmon_power_read(hwmon, attr, channel, val);
+> +		break;
+> +	default:
+> +		ret =3D -EOPNOTSUPP;
+> +		break;
+
+return -EOPNOTSUPP;
+
+
+> +	}
+> +
+> +	xe_device_mem_access_put(gt_to_xe(hwmon->gt));
+> +
+> +	return ret;
+> +}
+> +
+> +static int
+> +xe_hwmon_write(struct device *dev, enum hwmon_sensor_types type, u32 att=
+r,
+> +	       int channel, long val)
+> +{
+> +	struct xe_hwmon *hwmon =3D dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	xe_device_mem_access_get(gt_to_xe(hwmon->gt));
+
+Move xe_device_mem_access_get() to xe_hwmon_process_reg().
+
+> +
+> +	switch (type) {
+> +	case hwmon_power:
+> +		ret =3D xe_hwmon_power_write(hwmon, attr, channel, val);
+> +		break;
+> +	default:
+> +		ret =3D -EOPNOTSUPP;
+> +		break;
+
+return -EOPNOTSUPP;
+
+> +	}
+> +
+> +	xe_device_mem_access_put(gt_to_xe(hwmon->gt));
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct hwmon_ops hwmon_ops =3D {
+> +	.is_visible =3D xe_hwmon_is_visible,
+> +	.read =3D xe_hwmon_read,
+> +	.write =3D xe_hwmon_write,
+> +};
+> +
+> +static const struct hwmon_chip_info hwmon_chip_info =3D {
+> +	.ops =3D &hwmon_ops,
+> +	.info =3D hwmon_info,
+> +};
+> +
+> +static void
+> +xe_hwmon_get_preregistration_info(struct xe_device *xe)
+> +{
+> +	struct xe_hwmon *hwmon =3D xe->hwmon;
+> +	u32 val_sku_unit =3D 0;
+> +	int ret;
+> +
+> +	ret =3D xe_hwmon_process_reg(hwmon, REG_PKG_POWER_SKU_UNIT, REG_READ, &=
+val_sku_unit, 0, 0);
+> +	/*
+> +	 * The contents of register PKG_POWER_SKU_UNIT do not change,
+> +	 * so read it once and store the shift values.
+> +	 */
+> +	if (!ret)
+> +		hwmon->scl_shift_power =3D REG_FIELD_GET(PKG_PWR_UNIT, val_sku_unit);
+
+if xe_hwmon_is_visible(... hwmon_power ...) {
+	xe_hwmon_process_reg();
+	hwmon->scl_shift_power =3D REG_FIELD_GET(PKG_PWR_UNIT, val_sku_unit);
 }
 
-So once again if this is not possible for some reason let's figure out why.
-
-> >
-> > Also do we need to take forcewake? i915 had forcewake table so it would
-> > take forcewake automatically but XE doesn't do that.
-> Hwmon regs doesn't fall under GT domain so doesn't need forcewake.
-
-OK, great.
+Please let me know if any of this is not possible. I will look at the other
+patches after you respond, though it looks like they will also need almost
+identical changes.
 
 Thanks.
 --
