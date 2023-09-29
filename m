@@ -2,65 +2,195 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0ABE4E81815
-	for <linux-hwmon@archiver.kernel.org>; Fri, 29 Sep 2023 11:45:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD14FE728CA
+	for <linux-hwmon@archiver.kernel.org>; Fri, 29 Sep 2023 17:01:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233180AbjI2Lps (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 29 Sep 2023 07:45:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52490 "EHLO
+        id S233691AbjI2RBm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 29 Sep 2023 13:01:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233188AbjI2Lpd (ORCPT
+        with ESMTP id S233718AbjI2RBf (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 29 Sep 2023 07:45:33 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4B1C1980;
-        Fri, 29 Sep 2023 04:45:15 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D77501FB;
-        Fri, 29 Sep 2023 04:45:53 -0700 (PDT)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 29B803F59C;
-        Fri, 29 Sep 2023 04:45:14 -0700 (PDT)
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Sudeep Holla <sudeep.holla@arm.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Huisong Li <lihuisong@huawei.com>
-Subject: Re: [PATCH v2 0/4] ACPI: PCC: Define and use the common PCC shared memory regions related macros
-Date:   Fri, 29 Sep 2023 12:45:10 +0100
-Message-ID: <169598703811.2113895.1673081540867422060.b4-ty@arm.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20230927-pcc_defines-v2-0-0b8ffeaef2e5@arm.com>
-References: <20230927-pcc_defines-v2-0-0b8ffeaef2e5@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Fri, 29 Sep 2023 13:01:35 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 676B91B6
+        for <linux-hwmon@vger.kernel.org>; Fri, 29 Sep 2023 10:01:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696006892; x=1727542892;
+  h=date:message-id:from:to:cc:subject:in-reply-to:
+   references:mime-version;
+  bh=32uw7cJrMpiZ/tl2KJHh0FW/MCgAXdQXqGaUhxpd1Vk=;
+  b=GX5joJlI4IQrd5XuKu1UA//ai7bA3SPrqh22nhVbEgUBMd/r42yjDF93
+   FCqa2EdSw0pIkD2yvjXQcmD1zusaiQa8R9JGwHnndjqSD+h4QaXaNugF8
+   Odh5ZtW5ktgD0b5iOoE0t8O/KGJ6Ec7Zbdy6WTvE6+NitjV5EOEAOsXqM
+   QkoQBnWJt90/DJBT9/g1J9CAO46SLbhB91I8Ky6vIz1obHobEPcBgEY6U
+   JQilI+A4pDFAFGuvFxEsoulY4e/g0M4mUn54KPc+QFJuIgPN2GGfqrvW+
+   w8typtOEfASePLcYepZKXPCk2jEYLK1N790OBVQWd0bGtZF8d+P6a6J+5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10848"; a="382253782"
+X-IronPort-AV: E=Sophos;i="6.03,188,1694761200"; 
+   d="scan'208";a="382253782"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2023 10:01:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10848"; a="749996521"
+X-IronPort-AV: E=Sophos;i="6.03,187,1694761200"; 
+   d="scan'208";a="749996521"
+Received: from adixit-mobl.amr.corp.intel.com (HELO adixit-arch.intel.com) ([10.209.57.213])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2023 10:01:31 -0700
+Date:   Fri, 29 Sep 2023 09:48:36 -0700
+Message-ID: <87r0mhncwr.wl-ashutosh.dixit@intel.com>
+From:   "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
+To:     "Nilawar, Badal" <badal.nilawar@intel.com>
+Cc:     intel-xe@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
+        anshuman.gupta@intel.com, linux@roeck-us.net,
+        andi.shyti@linux.intel.com, riana.tauro@intel.com,
+        matthew.brost@intel.com, rodrigo.vivi@intel.com
+Subject: Re: [PATCH v6 1/5] drm/xe/hwmon: Expose power attributes
+In-Reply-To: <c366920b-ec67-f5be-4b17-ae1be82bdae9@intel.com>
+References: <20230925081842.3566834-1-badal.nilawar@intel.com>  <20230925081842.3566834-2-badal.nilawar@intel.com>      <874jjg1ak6.wl-ashutosh.dixit@intel.com>        <84b5dc30-6b27-caf0-6535-c08f6b7e8cd0@intel.com>        <87ttreucb0.wl-ashutosh.dixit@intel.com>        <c366920b-ec67-f5be-4b17-ae1be82bdae9@intel.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
+ Emacs/29.1 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, 27 Sep 2023 17:26:09 +0100, Sudeep Holla wrote:
-> This set of 3 small patches intend to consolidate and replace the existing
-> locally defined macros within couple of PCC client drivers when accessing
-> the command and status bitfields.
+On Thu, 28 Sep 2023 23:37:35 -0700, Nilawar, Badal wrote:
 >
 
-Applied to sudeep.holla/linux (for-next/pcc/updates), thanks!
+Hi Badal,
 
-[1/4] ACPI: PCC: Add PCC shared memory region command and status bitfields
-      [fixed the signature value]
-      https://git.kernel.org/sudeep.holla/c/55d235ebb684
-[2/4] i2c: xgene-slimpro: Migrate to use generic PCC shmem related macros
-      https://git.kernel.org/sudeep.holla/c/89a4ad1f437c
-[3/4] hwmon: (xgene) Migrate to use generic PCC shmem related macros
-      https://git.kernel.org/sudeep.holla/c/2cf39b806be7
-[4/4] soc: kunpeng_hccs: Migrate to use generic PCC shmem related macros
-      https://git.kernel.org/sudeep.holla/c/a46e42c09798
+> On 28-09-2023 10:25, Dixit, Ashutosh wrote:
+> > On Wed, 27 Sep 2023 01:39:46 -0700, Nilawar, Badal wrote:
+> >
+> >> On 27-09-2023 10:23, Dixit, Ashutosh wrote:
+> >>> On Mon, 25 Sep 2023 01:18:38 -0700, Badal Nilawar wrote:
+> >>>>
+> >>>> +static umode_t
+> >>>> +xe_hwmon_is_visible(const void *drvdata, enum hwmon_sensor_types type,
+> >>>> +		    u32 attr, int channel)
+> >>>> +{
+> >>>> +	struct xe_hwmon *hwmon = (struct xe_hwmon *)drvdata;
+> >>>> +	int ret;
+> >>>> +
+> >>>> +	xe_device_mem_access_get(gt_to_xe(hwmon->gt));
+> >>>
+> >>> Maybe we do xe_device_mem_access_get/put in xe_hwmon_process_reg where it
+> >>> is needed? E.g. xe_hwmon_is_visible doesn't need to do this because it
+> >>> doesn't read/write registers.
+> >> Agreed, but visible function is called only once while registering hwmon
+> >> interface, which happen during driver probe. During driver probe device
+> >> will be in resumed state. So no harm in keeping
+> >> xe_device_mem_access_get/put in visible function.
+> >
+> > To me it doesn't make any sense to keep xe_device_mem_access_get/put
+> > anywhere except in xe_hwmon_process_reg where the HW access actually
+> > happens. We can eliminate xe_device_mem_access_get/put's all over the place
+> > if we do it. Isn't it?
+> Agreed, thought process here suggest that take rpm wakeref at lowest
+> possible level. I already tried this in rfc series and in some extent in
+> rev2. There is problem with this approach. See my comments below.
+> >
+> > The only restriction I have heard of (though not sure why) is that
+> > xe_device_mem_access_get/put should not be called under lock. Though I am
+> > not sure it is for spinlock or also mutex. So as we were saying the locking
+> > will also need to move to xe_hwmon_process_reg.
+> Yes from rev2 comments its dangerous to take mutex before
+> xe_device_mem_access_get/put. With code for "PL1 disable/restore during
+> resume" I saw deadlock. Scenario was power1_max write -> mutex lock -> rpm
+> resume -> disable pl1 -> mutex lock (dead lock here).
+
+But this is already the wrong order as mentioned below. If we follow the
+below order do we still see deadlock?
+
+> >
+> > So:
+> >
+> > xe_hwmon_process_reg()
+> > {
+> >	xe_device_mem_access_get
+> >	mutex_lock
+> >	...
+> >	mutex_unlock
+> >	xe_device_mem_access_put
+> > }
+> >
+> > So once again if this is not possible for some reason let's figure out why.
+> There are two problems with this approach.
+>
+> Problem 1: If you see implementation of xe_hwmon_power_max_write, reg
+> access is happening 3 times, so there will be 3 rpm suspend/resume
+> cycles. I was observing the same with rfc implementation. So in subsequent
+> series xe_device_mem_access_put/get is moved to top level functions
+> i.e. hwmon hooks.
+
+This is not exactly correct because there is also a 1 second autosuspend
+delay which will prevent such rpm suspend/resume cycles:
+
+xe_pm_runtime_init:
+	pm_runtime_set_autosuspend_delay(dev, 1000);
+
+
+>
+> Problem 2: If locking moved inside xe_hwmon_process_reg then between two
+> subsequent reg accesses it will open small window during which race can
+> happen.
+> As Anshuman suggested in other thread for read are sequential and protected
+> by sysfs layer. So lets apply locking only for RW attributes.
+
+But what is the locking trying to protect? As far as I understand it is
+just the registers which have to be atomically modified/read. So it seems
+sufficient to just protect the register accesses with the lock.
+
+So I am still not convinced.
+
+Thanks.
 --
-Regards,
-Sudeep
+Ashutosh
 
+
+>
+> +static int xe_hwmon_power_max_write(struct xe_hwmon *hwmon, long value)
+> +{
+> +	u32 reg_val;
+> +
+> +	/* Disable PL1 limit and verify, as limit cannot be disabled on all
+> platforms */
+> +	if (value == PL1_DISABLE) {
+> +		xe_hwmon_process_reg(hwmon, REG_PKG_RAPL_LIMIT, REG_RMW, &reg_val,
+> +				     PKG_PWR_LIM_1_EN, 0);
+> +		xe_hwmon_process_reg(hwmon, REG_PKG_RAPL_LIMIT, REG_READ, &reg_val,
+> +				     PKG_PWR_LIM_1_EN, 0);
+> +
+> +		if (reg_val & PKG_PWR_LIM_1_EN)
+> +			return -EOPNOTSUPP;
+> +	}
+> +
+> +	/* Computation in 64-bits to avoid overflow. Round to nearest. */
+> +	reg_val = DIV_ROUND_CLOSEST_ULL((u64)value <<
+> hwmon->scl_shift_power, SF_POWER);
+> +	reg_val = PKG_PWR_LIM_1_EN | REG_FIELD_PREP(PKG_PWR_LIM_1, reg_val);
+> +
+> +	xe_hwmon_process_reg(hwmon, REG_PKG_RAPL_LIMIT, REG_RMW, &reg_val,
+> +			     PKG_PWR_LIM_1_EN | PKG_PWR_LIM_1, reg_val);
+> +
+> +	return 0;
+> +}
+>
+> Regards,
+> Badal
+> >
+> >>>
+> >>> Also do we need to take forcewake? i915 had forcewake table so it would
+> >>> take forcewake automatically but XE doesn't do that.
+> >> Hwmon regs doesn't fall under GT domain so doesn't need forcewake.
+> >
+> > OK, great.
+> >
+> > Thanks.
+> > --
+> > Ashutosh
