@@ -2,101 +2,89 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32D80E728CF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 29 Sep 2023 17:45:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6533CE728CF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 29 Sep 2023 18:56:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232954AbjI2Rpm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 29 Sep 2023 13:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50518 "EHLO
+        id S233781AbjI2S4r (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 29 Sep 2023 14:56:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233233AbjI2Rpm (ORCPT
+        with ESMTP id S233807AbjI2S4q (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 29 Sep 2023 13:45:42 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D40B19F
-        for <linux-hwmon@vger.kernel.org>; Fri, 29 Sep 2023 10:45:40 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id d9443c01a7336-1c60f1a2652so7341105ad.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 29 Sep 2023 10:45:40 -0700 (PDT)
+        Fri, 29 Sep 2023 14:56:46 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1147C1B0
+        for <linux-hwmon@vger.kernel.org>; Fri, 29 Sep 2023 11:56:43 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1c60f1a2652so7849455ad.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 29 Sep 2023 11:56:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696009539; x=1696614339; darn=vger.kernel.org;
-        h=content-language:content-transfer-encoding:mime-version:user-agent
-         :date:message-id:subject:to:from:reply-to:from:to:cc:subject:date
+        d=chromium.org; s=google; t=1696013802; x=1696618602; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7q/Ocr/LuKL/ulDcDi15T1xKwBX0O06v5b0Uc8oaurk=;
-        b=TlQGRmAT/8BbYP5nQkY8LQHZ+gnh/IvZJggAHFhfM3d07hCVnNQ8UsCUKfQquzYzLS
-         O+JXkZRPPdN5b9Mtgfix00mUCx19c5MNhQraFJxzAq9TzDdWwAcBJLNm/mtYkIt6SiY7
-         zzNarfRJHPsWbd/fekG4adsd5gDzyZTfPS8W9yg9v+8lSP6SSgXO6iO5I9PyWqyqbem9
-         LGaSd40VdtLP39HfxwA+ZYvy4UIqc11m5NAw7P+Jj7um5HTusCiC6NnrE+g0MoRoodwP
-         cJyELPk1O/8TPyeR4em6ajrLcZ/kX7iH8qAFJn/9oKebI7jARKyPCf7gU1OxY4wEYy09
-         3ysQ==
+        bh=viFu6r0UYe+M2GIK9v2NmILPjJMba2+ouWRdc3CGGmo=;
+        b=jMV9oe6EEaoKvB+JTAdGlNYnF6xqS9J9ZjjSU7N94MPptoxN5tlNNXxAi6SLmrzfpj
+         KE6yD8l6kmKZTg31bmYU4IDBGYZMUYUcWS9COrjbkKHmYtyB9cBZwCH0SQUBoc1WtL90
+         i10wwRzklmZaMkxdx5Lcv9/yCiM4W4/YslX6o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696009539; x=1696614339;
-        h=content-language:content-transfer-encoding:mime-version:user-agent
-         :date:message-id:subject:to:from:reply-to:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7q/Ocr/LuKL/ulDcDi15T1xKwBX0O06v5b0Uc8oaurk=;
-        b=X6l2XY4EwAGOHArwDcIN7EZLBF2CgSvDwVvKlHElMFpUTCvmiQPJi/Fi5n5INOCtfU
-         8akeLiu8NOAuuGMZfo0Hd8Y1IAgLkiizavvvB1JkPmhsLBHHcC1HIaMi37FHKaIW4rIu
-         X3vzK7soqaeFtNmYOZoggu8p6N4+8N7pDhH3J7HiasFMYC0+KMBZGTMO9y5XogxNvNGB
-         hUbBy/0TN1iN5/DW+AwKZVfpqatrKzGTsF2XuoeZZUZtXBEAI4PSKAXIMfP1SZT9ATgK
-         x3WV1tbu2ALJsngzJW0cNXF1a7L8E27hYWnZajqXzZO+WTeEIrlTi4Eo0Dm0cqbMI7of
-         25zw==
-X-Gm-Message-State: AOJu0YyAmRejBmESWKhjxYGQEFHXOIZ8kDZe3LKCsxtkQbMFAgrcuX3M
-        UPAoEoLVp+JBr1J+GX5Tkg9ycGORN7L+lQ==
-X-Google-Smtp-Source: AGHT+IHU/OFztXigyvrCJ2w0KjOB2f4hz+CWPA07oDdpbJxoaisrn4aLFEJOlAEYTuFv3mk4+N5ChQ==
-X-Received: by 2002:a17:902:ced1:b0:1c6:2866:5aeb with SMTP id d17-20020a170902ced100b001c628665aebmr7334840plg.9.1696009539460;
-        Fri, 29 Sep 2023 10:45:39 -0700 (PDT)
-Received: from [192.168.43.79] ([47.15.3.9])
-        by smtp.gmail.com with ESMTPSA id u14-20020a17090341ce00b001bb9f104328sm17162800ple.146.2023.09.29.10.45.36
-        for <linux-hwmon@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Sep 2023 10:45:38 -0700 (PDT)
-Reply-To: businesssolutionsrocks23@gmail.com
-From:   Noor Bano <noorbano3685@gmail.com>
-To:     linux-hwmon@vger.kernel.org
-Subject: RE: Meeting request
-Message-ID: <c7c9ec48-8f77-f2cf-5bf3-ccdf4774c778@gmail.com>
-Date:   Fri, 29 Sep 2023 23:15:31 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        d=1e100.net; s=20230601; t=1696013802; x=1696618602;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=viFu6r0UYe+M2GIK9v2NmILPjJMba2+ouWRdc3CGGmo=;
+        b=GWIssGeyJCC0vCDEklwx9rlZZa6NdTfgSR/Ph5dByiHMk24wIghwtYoApVh/Z1d7MY
+         /guHdhdYS0eh9gJbczM8wY0jz1CIGL47q2IRRjmvhuZRjYoUBW1w1/uSkrGRSGwZYLDG
+         PiX06vX63VuNXCubmrNYef1HQ2kF2JRee1Tetq1qBcbNZgAFRB9+ohWssrndnndpIVtG
+         WEs5n2N3ZlgNAny/6+Q34VRvtMvheGeBzgvEcP7/bn6RJwsoXcshKLYe2gSkZnEpCl7R
+         bXmNfaTcPyLin0mp7MkF2xojBGgMZMkp7SPPChu4Y+DN/gM+qFenRTRwzxhJzaGYT14i
+         y5oQ==
+X-Gm-Message-State: AOJu0Yw98EANYL0gu0cOigfVqwG1splgSl4b+nOZbAOn9JZHERsFBq6R
+        tx2nfzGjyezMCTsSEpUn9gVDyQ==
+X-Google-Smtp-Source: AGHT+IG6ycLvJhoXuGVCEKkMG9iMqITIOTXsWbm9Kz37/RyNws1GzSB+B8H7SuyFFn3vA3gbgMfwlw==
+X-Received: by 2002:a17:902:c948:b0:1bf:193a:70b6 with SMTP id i8-20020a170902c94800b001bf193a70b6mr8030559pla.5.1696013802531;
+        Fri, 29 Sep 2023 11:56:42 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id ix5-20020a170902f80500b001c733c0e456sm3829091plb.22.2023.09.29.11.56.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Sep 2023 11:56:42 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Justin Stitt <justinstitt@google.com>
+Cc:     Kees Cook <keescook@chromium.org>, linux-hwmon@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: (ibmpowernv) refactor deprecated strncpy
+Date:   Fri, 29 Sep 2023 11:55:45 -0700
+Message-Id: <169601374243.3010937.14194696181874272859.b4-ty@chromium.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230919-strncpy-drivers-hwmon-ibmpowernv-c-v2-1-37d3e64172bc@google.com>
+References: <20230919-strncpy-drivers-hwmon-ibmpowernv-c-v2-1-37d3e64172bc@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-GB
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi
+On Tue, 19 Sep 2023 05:22:51 +0000, Justin Stitt wrote:
+> `strncpy` is deprecated for use on NUL-terminated destination strings [1].
+> 
+> A suitable replacement is `memcpy` as we've already precisely calculated
+> the number of bytes to copy while `buf` has been explicitly
+> zero-initialized:
+> | 	char buf[8] = { 0 };
+> 
+> [...]
 
-Circling back on my previous email if you have a requirement for Mobile 
-App OR Web App Development service.
+Applied to for-next/hardening, thanks! (I've updated the Subject here
+and with the older "refactor" subjects...)
 
-Can we schedule a quick call for Tuesday (3rd october) or Wednesday (4th 
-October)?
+Take care,
 
-Please suggest a suitable time based on your availability. Please share 
-your contact information to connect.
+-- 
+Kees Cook
 
-Best Regards,
-Noor Bano
-
-On Tuesday 22 August 2023 5:43 PM, Noor Bano wrote:
-
-
-Hi
-
-We are a Software development company creating solutions for many 
-industries across all over the world.
-
-We follow the latest development approaches and technologies to build 
-web applications that meet your requirements.
-
-Our development teams only use modern and scalable technologies to 
-deliver a mobile or web application the way you mean it.
-
-Can we have a quick call to discuss if we can be of some assistance to 
-you? Please share your phone number to reach you.
-
-Thanks & Regards,
-Noor Bano
