@@ -2,66 +2,66 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72742E80A98
-	for <linux-hwmon@archiver.kernel.org>; Fri, 29 Sep 2023 10:28:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 282EDE732D0
+	for <linux-hwmon@archiver.kernel.org>; Fri, 29 Sep 2023 10:28:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233023AbjI2K2E (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 29 Sep 2023 06:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44226 "EHLO
+        id S232835AbjI2K2H (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 29 Sep 2023 06:28:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233025AbjI2K2A (ORCPT
+        with ESMTP id S233020AbjI2K2G (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 29 Sep 2023 06:28:00 -0400
+        Fri, 29 Sep 2023 06:28:06 -0400
 Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 797BD199;
-        Fri, 29 Sep 2023 03:27:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7908DF9;
+        Fri, 29 Sep 2023 03:27:59 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hNAh5OuI0pZN77thKOc53nVv5RKn82VpwdmgvcZUfzpDHux8BDo+C7UaBXQ6a/qzem/E7kVYXWRaBMDhEnYY4yRFR3W91BTltNzvKJZz1+3gk5wSWD3snpoMUIKswQmckNwDkaD+Y2J1+Z0HUs/Hpeft1XbGlxMa3KCWk9EK6CP7t13Rqn043I574TxeQ5myoxS2V5FnofVFREOybantt9amwOITF9GSrFb+T8Yeu0aPYzWqRb2g6DcfdvU7ObKK+X06YL9F9fXoHASmpQk9SQOBLohLiA8wuqEJk7J9mMvBLUPw5JrNqIxwB1ZSqKKH6cXo+wbGvOK67VQEb/SnjQ==
+ b=THO26b0JMTqNAGa3iuELPeDjFBIRo2HiGZv4nsve5FH2fP5ZZhEkn4nL+Z21+MN6yOLaGGNnZ4Ghb6DEecErcJj5u2fXHRqAWeaGNpDGqmWhBfwtG0l+hrctIz4as3CIwWaMFB/oORyDaZg1pGVM5Icr5Cl7vnSgP93bjT7YgsMzxfTs02UnvX72AZgtl54/eM/Gnz6915/ZeYB+qsSfZD0/ZrXRoRwHmvXZjI/KPep0EixDKZvYV6eM5VorquQrVICi5UUwhsP60iItU4ne5OGZNKjS72ivlpzdRplE12eEvcZ4Y31KSsjb8+cGR0xWBfwhLQPng4XW18FY429fBg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ncjKeZwLQiI5jrJ/KpsiTvV1g3avejRF0m9tef0zaA4=;
- b=IPkOeZrUnIOCYHEQn/U9qo60twQP128q1aDq5H26O3JoydoQOOXaSX4AdAOtKx/tcyGwkWzB/7oP8d7auCcim175nIndoiukzIpJ7rn+mUMbek8X/PQygCxf4HF8rtpfPOuclnwCwjP+WIvbqYewfv69lPfiurLUtGEweu/TVQAazPXHXYDu805KF4QFFEAiGREHM5ogRk99pxPBQ5RRltMy6HUjgLSbiuEC7ci4ikoXyu2fkwuXqLIeLcxpW5UjGfk5Qd6NocWPvPWY9Uft6xMjEdesBaDCwn/HkO30pz5zBJixdsQDiYenJnAJYyFMUn+eFgdzkOG+evejgl9epw==
+ bh=ngnjLdBnya5+X7Sr+3/xU+NWyT/CKu0Xzq+FcuSc7/w=;
+ b=IjLiW13PHlFhUAo5L/oX5S4Xnb0p/Fd3SL5w92MUjeiZ6Rh6akeV43mYtvrRW1bfks4Qx8tIdkyG4HHhRx6IrVo/nY6cCQIjXCBIQOooaYEC2MG9XOQkmGucIiMiqi8awMV0CLKC0i3iK4Dzp5PpOXkTJhcvevvhf7tvJ8xusgfEwHmW4rGiZw3rrO3Ii4mH6HDtLqJxFOU8TX9PIqw1D83Gm2gxjbmkJfzbi0xgNFMVemzuVHvmz5HDQqxIqG88GUjMohW9utBFxHJsDEWj9zaXPjqLE0IV2KFmDle5f40h3vCEqKA8bSa2ioLhdc9HMHqrSiEGooePsiDW+TdsFQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=suse.com smtp.mailfrom=nvidia.com;
+ 216.228.118.232) smtp.rcpttodomain=suse.com smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ncjKeZwLQiI5jrJ/KpsiTvV1g3avejRF0m9tef0zaA4=;
- b=Z/qicF1/9SU7fuYS5jaalPhA8dEag5digV08IwTGDvisvK5FEvmJxjXGi9MInRRNGCbEvFusf3OO7whylG3aHHfPhdHQA6zDmFLDMZ7RgVoDQ3ch4bJSgfyB1mQnroJSRjh2ZTgWtjHL1swBd9ih582Q23UyPgJDMsZHsVSBdyz8ocW8tARQ1qckgx6HnpM9wVScOW0X3D9a5OhyaNFMd6evFSkvNuv9rwQYdksMVvld67szG9XQut19RM9DuX+gShdVOp2al6zwfzZ78uTAvuUdeNqbM7X7fHVfocKc0Nh7blYLyTyOAdq+RRL0ZnsMyPBphB7kkQQsVk84CE27xQ==
-Received: from BL0PR1501CA0029.namprd15.prod.outlook.com
- (2603:10b6:207:17::42) by MW4PR12MB7191.namprd12.prod.outlook.com
- (2603:10b6:303:22d::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.22; Fri, 29 Sep
- 2023 10:27:52 +0000
-Received: from BL6PEPF0001AB4A.namprd04.prod.outlook.com
- (2603:10b6:207:17:cafe::4e) by BL0PR1501CA0029.outlook.office365.com
- (2603:10b6:207:17::42) with Microsoft SMTP Server (version=TLS1_2,
+ bh=ngnjLdBnya5+X7Sr+3/xU+NWyT/CKu0Xzq+FcuSc7/w=;
+ b=KjYebZEWk1heSrVv3sGJ6GacSLc2ADpBOoWbE3/atkFzKVjdaZEzlND30mcyRN1y8vtDV+lKvwZRHLOiRmxS+AUIgzIt8z2C1HoeHHhJfv+0G/FHqYt2NafAdeNV0SmPZoDxF9eaeNTqloxIU8XdvlglxNp/KeOomPqs+UQzRhLvHzT7wcPwvlyokGGJJUjM6JKBOPZFpujqjUDrXsFAU4aBQDwDdAc1l8OeQWSa3PJDRcRUvvl6P6j9OPkYdf2xr0ubTzKl82Qe8SfC9B53erGqhNREcjKfswZPWiJPNhzedIYGTR2h/lH2aBjAelKcRgz4ERfPiRmOqqdZ3ttIIQ==
+Received: from CH0P221CA0035.NAMP221.PROD.OUTLOOK.COM (2603:10b6:610:11d::22)
+ by DM3PR12MB9326.namprd12.prod.outlook.com (2603:10b6:0:3d::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.23; Fri, 29 Sep
+ 2023 10:27:57 +0000
+Received: from DS2PEPF0000343B.namprd02.prod.outlook.com
+ (2603:10b6:610:11d:cafe::f7) by CH0P221CA0035.outlook.office365.com
+ (2603:10b6:610:11d::22) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.26 via Frontend
- Transport; Fri, 29 Sep 2023 10:27:51 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ Transport; Fri, 29 Sep 2023 10:27:57 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- BL6PEPF0001AB4A.mail.protection.outlook.com (10.167.242.68) with Microsoft
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ DS2PEPF0000343B.mail.protection.outlook.com (10.167.18.38) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6838.14 via Frontend Transport; Fri, 29 Sep 2023 10:27:51 +0000
+ 15.20.6838.14 via Frontend Transport; Fri, 29 Sep 2023 10:27:56 +0000
 Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 29 Sep
- 2023 03:27:49 -0700
+ 2023 03:27:54 -0700
 Received: from drhqmail201.nvidia.com (10.126.190.180) by
  drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Fri, 29 Sep 2023 03:27:49 -0700
+ 15.2.986.41; Fri, 29 Sep 2023 03:27:54 -0700
 Received: from moonraker.home (10.127.8.9) by mail.nvidia.com (10.126.190.180)
  with Microsoft SMTP Server id 15.2.986.41 via Frontend Transport; Fri, 29 Sep
- 2023 03:27:47 -0700
+ 2023 03:27:52 -0700
 From:   Jon Hunter <jonathanh@nvidia.com>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -70,11 +70,14 @@ To:     Jean Delvare <jdelvare@suse.com>,
         Conor Dooley <conor+dt@kernel.org>,
         Thierry Reding <thierry.reding@gmail.com>
 CC:     <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, Jon Hunter <jonathanh@nvidia.com>
-Subject: [PATCH V4 0/4] hwmon: ina3221: Add selective summation support
-Date:   Fri, 29 Sep 2023 11:27:40 +0100
-Message-ID: <20230929102744.84989-1-jonathanh@nvidia.com>
+        <linux-tegra@vger.kernel.org>, Jon Hunter <jonathanh@nvidia.com>,
+        "Ninad Malwade" <nmalwade@nvidia.com>
+Subject: [PATCH V4 2/4] dt-bindings: hwmon: ina3221: Add ti,summation-disable
+Date:   Fri, 29 Sep 2023 11:27:42 +0100
+Message-ID: <20230929102744.84989-3-jonathanh@nvidia.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230929102744.84989-1-jonathanh@nvidia.com>
+References: <20230929102744.84989-1-jonathanh@nvidia.com>
 MIME-Version: 1.0
 X-NVConfidentiality: public
 Content-Transfer-Encoding: 8bit
@@ -82,82 +85,97 @@ Content-Type: text/plain
 X-NV-OnPremToCloud: ExternallySecured
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB4A:EE_|MW4PR12MB7191:EE_
-X-MS-Office365-Filtering-Correlation-Id: d6601ebc-5865-404d-a1e7-08dbc0d6bc1d
+X-MS-TrafficTypeDiagnostic: DS2PEPF0000343B:EE_|DM3PR12MB9326:EE_
+X-MS-Office365-Filtering-Correlation-Id: ee09c49e-967e-47ea-62f0-08dbc0d6bf70
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kHiSul7QuzFQPMn7jTI+7l/1fiNUM4Yz0r3I+ResLYN2aG/x9rkpQJitE37eVqxKn7zvohknLU6CMYKdLjwjb9BN4S8R4yitit6FvN70MHaIvDapAJvfJi6s/c9PV+CcIAzRkZJr6cIZRRXrpruP7qJdchbJ50Z/+Y1520sZgp2rSjup7yskbjrMAd+bpwEx+w/khaCl8ce6H9Nzgy/TUjJCWfq1MCHlFtD/1dV/SQjXuCu83Ub/3wj/kb8AeOql9k2SEloTK49AiZnqacrdzbUmTF/Ite/DuGoYkXtRpgZyySkBs8qdrGYorCMcf25LfHKcuyZwHCoSzztlbunK7bva6K445yIAFfVIT60a7NH47Y1z5OldXXOpKMTv5fHDmM8hdL7bbQp3rsiNYOgo1+nrfy2SNdXjs/+3LL0D2TppJL5d8lxJZsCAC39kgvkoLnZlyrYKnwibHuhTzgWV8okdfKuZDN/wmKsCk8E4jX1WF1734GK36Z0w6GtthrFpYcEmuTwCDgknr/1I2udkrp9Mye3zmvGmbx6Olf7KmNVGJhqkLwr/Pkpc19w0v7GaFXkXWGhdfZJx/5Y11E/LgDY5ziR6+HjfIbflUTprGUITEYyUXmnmJphN1fMW9RgkvSPqQRM20nTWZfO3CGvJfOPiREgvKjIc+citzKYVftOmmMMJt+yf/sOybxHKLSiFb43JIJ18FcQ4E6337UeFZ6SYI6FW6kDwVwa0k8oxJhP/TkdgoNg/y5fuFPnDW5aT
-X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(136003)(39860400002)(346002)(396003)(376002)(230922051799003)(64100799003)(186009)(1800799009)(451199024)(82310400011)(46966006)(40470700004)(36840700001)(82740400003)(7636003)(40480700001)(356005)(40460700003)(26005)(1076003)(2616005)(107886003)(8936002)(86362001)(8676002)(5660300002)(4326008)(2906002)(41300700001)(36756003)(70206006)(54906003)(70586007)(110136005)(316002)(6666004)(478600001)(83380400001)(47076005)(36860700001)(426003)(336012);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: UHuETInY0XEnNE7ayUHPb87VGyeKx0+cGhywoOJRCrDQjr7YDBHodGMYR9VBRg7i8JAU+G02ZsUco5CtM6fX4RZra8SFnpw8s0o6JOjpKmZ66mcin085+EqsGKYqoAGDlLyUxJqSI81PNGvu2TGZwKxiqWkoLrFS66N9rp17EZi+Aold+1uSncVHzcAY58FGbYQogMsWLgFQ2+m4ROZyN+5jXvkbK26TvGMlZikx6ZlhqRxTPGr1f816o4+fv3oB6S/QTi5WIYXZsD02EAjVO6cv5gY7SCEKb0bdjCrtYA7kr+P+ul54HvmW3dQ+dhq4N1TFZPLegIlLmPMxr2Ve5PgQE5grxQ15GkUYMXAhclTGSxKApzC62zdgkqCfT1J2BI3agBn2EVqlL9XUTSpZmeMc4OsZ3ltrxHVwI/j5s7Gi6BvAUrlx3HN+p1FlHzupnOQL4SGIh5cKH9p3qlPgjcYvUe1r0JzGkGpkuzB9eYzpwaFBGP2v89PcnpsDatztAKhC8+Wp/zyN/HyEp+936S3hKIV2NHZ3hxkU6IaixYT0I2/fEU5r7+JtDOePQ9WfxIAjw74y1PmDIDVKjYcpNLAGg73umEOSnYS/jk7xT/n2DHug7oHPamyeK9ojFoTFSQQG50UjTx4qSv/or/JkwQcBjyWQoeooGXXmeBmqUiZ8KmwMaaRxTvVYT1NGmTmzxTdZeI6yQwhl2yL4JFMe5OqLVivkrfVW6ZUaxpOr2eeTF08jIpXKxvpIG2ERyYJ+
+X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(396003)(136003)(346002)(39860400002)(376002)(230922051799003)(64100799003)(1800799009)(82310400011)(186009)(451199024)(46966006)(40470700004)(36840700001)(2906002)(36756003)(86362001)(6666004)(47076005)(70206006)(70586007)(8936002)(8676002)(7636003)(4326008)(5660300002)(478600001)(356005)(41300700001)(82740400003)(26005)(40460700003)(36860700001)(316002)(54906003)(426003)(40480700001)(1076003)(2616005)(107886003)(336012)(83380400001)(110136005);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2023 10:27:51.2618
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2023 10:27:56.8998
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d6601ebc-5865-404d-a1e7-08dbc0d6bc1d
+X-MS-Exchange-CrossTenant-Network-Message-Id: ee09c49e-967e-47ea-62f0-08dbc0d6bf70
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL6PEPF0001AB4A.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS2PEPF0000343B.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7191
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM3PR12MB9326
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The current INA3221 driver always sums the shunt voltage for all enabled
-channels regardless of the shunt-resistor used for each channel. Summing
-the shunt-voltage for channels is only meaningful if the shunt resistor
-is the same for each channel. This series adds device-tree support to
-allow which channels are summed in device-tree.
+The INA3221 has a critical alert pin that can be controlled by the
+summation control function. This function adds the single
+shunt-voltage conversions for the desired channels in order to
+compare the combined sum to the programmed limit. The Shunt-Voltage
+Sum Limit register contains the programmed value that is compared
+to the value in the Shunt-Voltage Sum register in order to
+determine if the total summed limit is exceeded. If the
+shunt-voltage sum limit value is exceeded, the critical alert pin
+pulls low.
 
-Changes since V3:
-- Added missing descriptions for new structure members that was reported
-  by the kernel-test-bot.
-- Added comment in the ina3221 dt-binding doc example to explain why we
-  need to explicitly disable channels.
-- Added more commentary in the commit message for the new DT property
-  to explain that this property does not change the behaviour of the
-  driver unless it is populated.
+For the summation limit to have a meaningful value, it is necessary
+to use the same shunt-resistor value on all included channels. Add a new
+vendor specific property, 'ti,summation-disable', to allow specific
+channels to be excluded from the summation control function if the shunt
+resistor is different to other channels or the channel should not be
+considered for triggering the critical alert pin.
 
-Changes since V2:
-- Added note to binding-doc to indicate that input channels must be
-  explicitly disabled.
-- Corrected ordering of properties in the binding-doc
-- Updated license for the binding-doc to be dual licensed.
-- Changed newly added property from 'summation-bypass' to
-  summation-disable'.
-- Documented type for the new 'summation-disable' property.
-- Corrected spelling and comments as per the feedback received.
-- Used debugfs instead of sysfs for exposing the 'summation-disable'
-  status for each input channel.
-- Populated missing instances for the ina3221 device for Tegra234
-  boards.
-- Populated ina219 device for the NVIDIA IGX board (not strictly
-  related to this series but related to populating all
-  power-sensors for Tegra234 boards)
+Note that the ina3221 has always supported summing the various input
+channels and summation is enabled by default if the shunt-resistor
+values are the same. This change simply provides a way to exclude
+inputs from the summation. If this property is not populated, then the
+functionality of the driver does not change.
 
-Changes since V1:
-- Added yaml conversion patch for binding-doc
-- Added binding-doc documentation patch for new property
-- Added patch to populate ina3221 devices for Tegra234.
+Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+Signed-off-by: Ninad Malwade <nmalwade@nvidia.com>
+---
+ .../devicetree/bindings/hwmon/ti,ina3221.yaml | 23 +++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-Jon Hunter (2):
-  dt-bindings: hwmon: ina3221: Add ti,summation-disable
-  arm64: tegra: Add power-sensors for Tegra234 boards
-
-Ninad Malwade (2):
-  dt-bindings: hwmon: ina3221: Convert to json-schema
-  hwmon: ina3221: Add support for channel summation disable
-
- .../devicetree/bindings/hwmon/ina3221.txt     |  54 --------
- .../devicetree/bindings/hwmon/ti,ina3221.yaml | 121 ++++++++++++++++++
- .../boot/dts/nvidia/tegra234-p3701-0008.dtsi  |  33 +++++
- .../arm64/boot/dts/nvidia/tegra234-p3701.dtsi |  53 ++++++++
- .../arm64/boot/dts/nvidia/tegra234-p3767.dtsi |  29 +++++
- drivers/hwmon/ina3221.c                       |  33 ++++-
- 6 files changed, 266 insertions(+), 57 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/hwmon/ina3221.txt
- create mode 100644 Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml
-
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml b/Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml
+index d0e64a72af5b..d69f50d0e4ab 100644
+--- a/Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml
++++ b/Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml
+@@ -58,6 +58,25 @@ patternProperties:
+       shunt-resistor-micro-ohms:
+         description: shunt resistor value in micro-Ohm
+ 
++      ti,summation-disable:
++        description: |
++          The INA3221 has a critical alert pin that can be controlled by the
++          summation control function. This function adds the single
++          shunt-voltage conversions for the desired channels in order to
++          compare the combined sum to the programmed limit. The Shunt-Voltage
++          Sum Limit register contains the programmed value that is compared
++          to the value in the Shunt-Voltage Sum register in order to
++          determine if the total summed limit is exceeded. If the
++          shunt-voltage sum limit value is exceeded, the critical alert pin
++          is asserted.
++
++          For the summation limit to have a meaningful value, it is necessary
++          to use the same shunt-resistor value on all enabled channels. If
++          this is not the case or if a channel should not be used for
++          triggering the critical alert pin, then this property can be used
++          exclude specific channels from the summation control function.
++        type: boolean
++
+     required:
+       - reg
+ 
+@@ -81,6 +100,10 @@ examples:
+ 
+             input@0 {
+                 reg = <0x0>;
++                /*
++                 * Input channels are enabled by default in the device and so
++                 * to disable, must be explicitly disabled in device-tree.
++                 */
+                 status = "disabled";
+             };
+ 
 -- 
 2.34.1
 
