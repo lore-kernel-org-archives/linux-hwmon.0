@@ -2,103 +2,165 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BDD7EE728FA
-	for <linux-hwmon@archiver.kernel.org>; Fri, 29 Sep 2023 20:14:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BCA9CE7F154
+	for <linux-hwmon@archiver.kernel.org>; Fri, 29 Sep 2023 21:48:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233517AbjI2UOh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 29 Sep 2023 16:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
+        id S232748AbjI2Vsa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 29 Sep 2023 17:48:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233365AbjI2UOg (ORCPT
+        with ESMTP id S229508AbjI2Vs3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 29 Sep 2023 16:14:36 -0400
-X-Greylist: delayed 360 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 29 Sep 2023 13:14:33 PDT
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB161AB;
-        Fri, 29 Sep 2023 13:14:32 -0700 (PDT)
-Received: from hatter.bewilderbeest.net (unknown [IPv6:2602:61:7e5d:5300::2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 6E1BC674;
-        Fri, 29 Sep 2023 13:08:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1696018112;
-        bh=XaRQ3hF7+3HvdPllkPSlqP2DtFhNZG/Nd/UsLFqUiwk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ih8LvmwmLvPNHvlZgHhZs0XrrvesXFkQ72sE/2t303C89uFRkEvlBBkfuKFLonnLf
-         PdPzGWKFMJU31pD3Cvc/LzS6nfRMiQb+kJPDJEv54r8wvxEflSoQX+D6sjSsI3XH0j
-         HFhjHthMflQ6oq4eE56OKnUP3+fnTq+z+LmIwvVo=
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Cc:     Zev Weiss <zev@bewilderbeest.net>, Joel Stanley <joel@jms.id.au>,
-        linux-kernel@vger.kernel.org, Thomas Zajic <zlatko@gmx.at>,
-        stable@vger.kernel.org
-Subject: [PATCH] hwmon: nct6775: Fix incorrect variable reuse in fan_div calculation
-Date:   Fri, 29 Sep 2023 13:08:23 -0700
-Message-ID: <20230929200822.964-2-zev@bewilderbeest.net>
-X-Mailer: git-send-email 2.42.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Fri, 29 Sep 2023 17:48:29 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83016B7
+        for <linux-hwmon@vger.kernel.org>; Fri, 29 Sep 2023 14:48:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696024107; x=1727560107;
+  h=date:message-id:from:to:cc:subject:in-reply-to:
+   references:mime-version;
+  bh=X4CuJukMWgc/Ad/o7doup9mWLP8Gb6EgvpRfIDppjWc=;
+  b=hdSK1tRDYdjGRML+cUMz+jHA8AaBIfY+ZSTrkATZIXerS/A5qxQXa2V2
+   MrCow243eslaChXTI3BiXySxEqRmySNfjZkJbGWaKsPKpFAFZzf7PxlFW
+   kIVuP4CU7FVmW77rj7r5LR0I397GMSr3Hy1koYxI2wQ0qxsehrqqLQX3A
+   BjK81JA9wO3NO45z3FRLL3W8bUmD5La+apJMqneEmxTMBudKZc6K5R/kP
+   xKUT5e93Lh8wMp3dCrrpv1YgH676OoE5/3FT1A2CuGRbkjaRnJ8t//Nnl
+   64+M9KBk0izm4uEIpPDsV5TjyWgPYf/LGh2KLd4F5xYfplAWOu0Hd8E19
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10848"; a="362636729"
+X-IronPort-AV: E=Sophos;i="6.03,188,1694761200"; 
+   d="scan'208";a="362636729"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2023 14:48:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10848"; a="743555775"
+X-IronPort-AV: E=Sophos;i="6.03,188,1694761200"; 
+   d="scan'208";a="743555775"
+Received: from adixit-mobl.amr.corp.intel.com (HELO adixit-arch.intel.com) ([10.209.57.213])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2023 14:48:26 -0700
+Date:   Fri, 29 Sep 2023 14:41:22 -0700
+Message-ID: <87pm20odx9.wl-ashutosh.dixit@intel.com>
+From:   "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
+To:     "Nilawar, Badal" <badal.nilawar@intel.com>
+Cc:     intel-xe@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
+        anshuman.gupta@intel.com, linux@roeck-us.net,
+        andi.shyti@linux.intel.com, riana.tauro@intel.com,
+        matthew.brost@intel.com, rodrigo.vivi@intel.com
+Subject: Re: [PATCH v6 1/5] drm/xe/hwmon: Expose power attributes
+In-Reply-To: <87r0mhncwr.wl-ashutosh.dixit@intel.com>
+References: <20230925081842.3566834-1-badal.nilawar@intel.com>
+        <20230925081842.3566834-2-badal.nilawar@intel.com>
+        <874jjg1ak6.wl-ashutosh.dixit@intel.com>
+        <84b5dc30-6b27-caf0-6535-c08f6b7e8cd0@intel.com>
+        <87ttreucb0.wl-ashutosh.dixit@intel.com>
+        <c366920b-ec67-f5be-4b17-ae1be82bdae9@intel.com>
+        <87r0mhncwr.wl-ashutosh.dixit@intel.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
+ Emacs/29.1 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-In the regmap conversion in commit 4ef2774511dc ("hwmon: (nct6775)
-Convert register access to regmap API") I reused the 'reg' variable
-for all three register reads in the fan speed calculation loop in
-nct6775_update_device(), but failed to notice that the value from the
-first one (data->REG_FAN[i]) is actually used in the call to
-nct6775_select_fan_div() at the end of the loop body.  Since that
-patch the register value passed to nct6775_select_fan_div() has been
-(conditionally) incorrectly clobbered with the value of a different
-register than intended, which has in at least some cases resulted in
-fan speeds being adjusted down to zero.
+On Fri, 29 Sep 2023 09:48:36 -0700, Dixit, Ashutosh wrote:
+>
 
-Fix this by using dedicated temporaries for the two intermediate
-register reads instead of 'reg'.
+Hi Badal,
 
-Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-Fixes: 4ef2774511dc ("hwmon: (nct6775) Convert register access to regmap API")
-Reported-by: Thomas Zajic <zlatko@gmx.at>
-Tested-by: Thomas Zajic <zlatko@gmx.at>
-Cc: stable@vger.kernel.org # v5.19+
----
- drivers/hwmon/nct6775-core.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+> On Thu, 28 Sep 2023 23:37:35 -0700, Nilawar, Badal wrote:
+> >
+> > On 28-09-2023 10:25, Dixit, Ashutosh wrote:
+> > > On Wed, 27 Sep 2023 01:39:46 -0700, Nilawar, Badal wrote:
+> > >
+> > >> On 27-09-2023 10:23, Dixit, Ashutosh wrote:
+> > >>> On Mon, 25 Sep 2023 01:18:38 -0700, Badal Nilawar wrote:
+> > >>>>
+> > >>>> +static umode_t
+> > >>>> +xe_hwmon_is_visible(const void *drvdata, enum hwmon_sensor_types type,
+> > >>>> +		    u32 attr, int channel)
+> > >>>> +{
+> > >>>> +	struct xe_hwmon *hwmon = (struct xe_hwmon *)drvdata;
+> > >>>> +	int ret;
+> > >>>> +
+> > >>>> +	xe_device_mem_access_get(gt_to_xe(hwmon->gt));
+> > >>>
+> > >>> Maybe we do xe_device_mem_access_get/put in xe_hwmon_process_reg where it
+> > >>> is needed? E.g. xe_hwmon_is_visible doesn't need to do this because it
+> > >>> doesn't read/write registers.
+> > >> Agreed, but visible function is called only once while registering hwmon
+> > >> interface, which happen during driver probe. During driver probe device
+> > >> will be in resumed state. So no harm in keeping
+> > >> xe_device_mem_access_get/put in visible function.
+> > >
+> > > To me it doesn't make any sense to keep xe_device_mem_access_get/put
+> > > anywhere except in xe_hwmon_process_reg where the HW access actually
+> > > happens. We can eliminate xe_device_mem_access_get/put's all over the place
+> > > if we do it. Isn't it?
+> > Agreed, thought process here suggest that take rpm wakeref at lowest
+> > possible level. I already tried this in rfc series and in some extent in
+> > rev2. There is problem with this approach. See my comments below.
+> > >
+> > > The only restriction I have heard of (though not sure why) is that
+> > > xe_device_mem_access_get/put should not be called under lock>. Though I am
+> > > not sure it is for spinlock or also mutex. So as we were saying the locking
+> > > will also need to move to xe_hwmon_process_reg.
+> > Yes from rev2 comments its dangerous to take mutex before
+> > xe_device_mem_access_get/put. With code for "PL1 disable/restore during
+> > resume" I saw deadlock. Scenario was power1_max write -> mutex lock -> rpm
+> > resume -> disable pl1 -> mutex lock (dead lock here).
+>
+> But this is already the wrong order as mentioned below. If we follow the
+> below order do we still see deadlock?
+>
+> > >
+> > > So:
+> > >
+> > > xe_hwmon_process_reg()
+> > > {
+> > >	xe_device_mem_access_get
+> > >	mutex_lock
+> > >	...
+> > >	mutex_unlock
+> > >	xe_device_mem_access_put
+> > > }
+> > >
+> > > So once again if this is not possible for some reason let's figure out why.
+> > There are two problems with this approach.
+> >
+> > Problem 1: If you see implementation of xe_hwmon_power_max_write, reg
+> > access is happening 3 times, so there will be 3 rpm suspend/resume
+> > cycles. I was observing the same with rfc implementation. So in subsequent
+> > series xe_device_mem_access_put/get is moved to top level functions
+> > i.e. hwmon hooks.
+>
+> This is not exactly correct because there is also a 1 second autosuspend
+> delay which will prevent such rpm suspend/resume cycles:
+>
+> xe_pm_runtime_init:
+>	pm_runtime_set_autosuspend_delay(dev, 1000);
+>
+>
+> >
+> > Problem 2: If locking moved inside xe_hwmon_process_reg then between two
+> > subsequent reg accesses it will open small window during which race can
+> > happen.
+> > As Anshuman suggested in other thread for read are sequential and protected
+> > by sysfs layer. So lets apply locking only for RW attributes.
+>
+> But what is the locking trying to protect? As far as I understand it is
+> just the registers which have to be atomically modified/read. So it seems
+> sufficient to just protect the register accesses with the lock.
+>
+> So I am still not convinced.
 
-diff --git a/drivers/hwmon/nct6775-core.c b/drivers/hwmon/nct6775-core.c
-index b5b81bd83bb1..d928eb8ae5a3 100644
---- a/drivers/hwmon/nct6775-core.c
-+++ b/drivers/hwmon/nct6775-core.c
-@@ -1614,17 +1614,21 @@ struct nct6775_data *nct6775_update_device(struct device *dev)
- 							  data->fan_div[i]);
- 
- 			if (data->has_fan_min & BIT(i)) {
--				err = nct6775_read_value(data, data->REG_FAN_MIN[i], &reg);
-+				u16 tmp;
-+
-+				err = nct6775_read_value(data, data->REG_FAN_MIN[i], &tmp);
- 				if (err)
- 					goto out;
--				data->fan_min[i] = reg;
-+				data->fan_min[i] = tmp;
- 			}
- 
- 			if (data->REG_FAN_PULSES[i]) {
--				err = nct6775_read_value(data, data->REG_FAN_PULSES[i], &reg);
-+				u16 tmp;
-+
-+				err = nct6775_read_value(data, data->REG_FAN_PULSES[i], &tmp);
- 				if (err)
- 					goto out;
--				data->fan_pulses[i] = (reg >> data->FAN_PULSE_SHIFT[i]) & 0x03;
-+				data->fan_pulses[i] = (tmp >> data->FAN_PULSE_SHIFT[i]) & 0x03;
- 			}
- 
- 			err = nct6775_select_fan_div(dev, data, i, reg);
--- 
-2.42.0
+Let's figure out the locking first depending on what needs to be protected
+(just registers or other data too). And then we can see where to put the
+xe_device_mem_access_get/put's (following the rule that
+xe_device_mem_access_get/put's should not be called under lock).
 
+Thanks.
+--
+Ashutosh
