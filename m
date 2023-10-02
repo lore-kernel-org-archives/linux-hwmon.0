@@ -2,83 +2,190 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF68BE74902
-	for <linux-hwmon@archiver.kernel.org>; Mon,  2 Oct 2023 17:39:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F40AE784BA
+	for <linux-hwmon@archiver.kernel.org>; Mon,  2 Oct 2023 19:38:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbjJBRjw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 2 Oct 2023 13:39:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56440 "EHLO
+        id S229750AbjJBTip (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 2 Oct 2023 15:38:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238249AbjJBRjw (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 Oct 2023 13:39:52 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B972294
-        for <linux-hwmon@vger.kernel.org>; Mon,  2 Oct 2023 10:39:47 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-69101d33315so15650b3a.3
-        for <linux-hwmon@vger.kernel.org>; Mon, 02 Oct 2023 10:39:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1696268387; x=1696873187; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TpVKVfOllcQbS/ZFFzm5rvtMjeszAGVS8sUGlEYlZ2I=;
-        b=jJGgYRZMWi7/h+uboTMzxc2yPPkE10cMGTYVEXhsFt2bC1/qav9/U/CeayDNt866bJ
-         7wxKkpEModSLt2jVVYbuP5HLYH5itIzjpPcY2/CELldUwMheB66irN3MoodZS14uGciM
-         1La40tt6mBl/BuoiFFqXPUllNVzhGdoWjwc0E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696268387; x=1696873187;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TpVKVfOllcQbS/ZFFzm5rvtMjeszAGVS8sUGlEYlZ2I=;
-        b=Huf0aIHaval2/97ZweKknehD8+Hvf9jdOvVx+ojay5Atz49QQ7WR9UraH2w5brV/5I
-         POur2ejMk18UGuPvvb+oLOay8UbtzuNzUp4+6AqgaiqYwcCyJisF67B3YjZfUqpTBmte
-         KYe+stNvV56bONhTY+M6OuBgnnWDt3VmepooqU6ddlDFM4OcbMDjWkHGgiCorhscIs7u
-         hz/rF9iWwksQNCz4eruQobSQQqCPciDm8ZKaev39TaKbx2cllfsxZRdQqCbNs4N3uqcG
-         CT8qsPLugVa4XbSQHpb9kekdxqohqPflsECxXwLhv2h1S4M5wZOvTkBXoX653zD6llJx
-         tS+Q==
-X-Gm-Message-State: AOJu0Yz+0jL/nwAaR3aavHZT4h6gdccUmQ4FLIKvEM5Cco0wWfq9HLrf
-        oYHv/BsK+OmC4Dl4/YccuBOB3Q==
-X-Google-Smtp-Source: AGHT+IFPixOT7PLEvjE3i0KA0O/A27DOjo/GqhKHxqOgkmL+NKkqUCM4OONVLUct28kbISv0eENneQ==
-X-Received: by 2002:a05:6a20:948c:b0:157:7568:6796 with SMTP id hs12-20020a056a20948c00b0015775686796mr9204380pzb.60.1696268386709;
-        Mon, 02 Oct 2023 10:39:46 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id a6-20020a170902ee8600b001c55db80b14sm6404674pld.221.2023.10.02.10.39.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Oct 2023 10:39:46 -0700 (PDT)
-Date:   Mon, 2 Oct 2023 10:39:39 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Justin Stitt <justinstitt@google.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
+        with ESMTP id S229623AbjJBTip (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 Oct 2023 15:38:45 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 406EFAC;
+        Mon,  2 Oct 2023 12:38:42 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F15A5C433C8;
+        Mon,  2 Oct 2023 19:38:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1696275521;
+        bh=3RlTZzQYaC/+oBacen75NhpiynitlSHubKdJ2Nak6tY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZWMakQzjBPIi8XauGl6bSkbTOR50c7ZX03Mm8TQ6dGqzdWCF5fyxj2DiowYBR/dcE
+         EAiYm3QcczaP2m9KSWbGn5TJFvBaT/ChZmDKhIjvrL0SZFgfvHmR91wiXphloE7AJy
+         QQRgBRqJFRkwlKIjr0acdh7NOAIAjNHS95u8ivuqUzXR+/2HavImNmufU0YeXkaA79
+         mCy1F3j70Q0S5WfmMRhZ19FLPsJKNp2frVyIqFaxe7r9x+TgDUTnCJUeU4Z0WsvTgo
+         nf40iiKGsEzAzBfwDOxaEOu6XX5/a2mi/uQ8SL6SMRx5jLOGsms5EH/QDidz/taiJh
+         7bLdV/cYCVTLQ==
+Received: (nullmailer pid 2400172 invoked by uid 1000);
+        Mon, 02 Oct 2023 19:38:35 -0000
+Date:   Mon, 2 Oct 2023 14:38:35 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     "Miclaus, Antoniu" <Antoniu.Miclaus@analog.com>
+Cc:     Conor Dooley <conor@kernel.org>, Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v5] hwmon: (acpi_power_meter) replace open-coded
- kmemdup_nul
-Message-ID: <202310021039.C13E217@keescook>
-References: <20230926-strncpy-drivers-hwmon-acpi_power_meter-c-v5-1-3fc31a9daf99@google.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: ltc2991: add bindings
+Message-ID: <20231002193835.GA2386834-robh@kernel.org>
+References: <20231002101835.39624-1-antoniu.miclaus@analog.com>
+ <20231002-babbling-justice-73d3601a71aa@spud>
+ <CY4PR03MB33990FB22E1BB8686AC0CF509BC5A@CY4PR03MB3399.namprd03.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230926-strncpy-drivers-hwmon-acpi_power_meter-c-v5-1-3fc31a9daf99@google.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CY4PR03MB33990FB22E1BB8686AC0CF509BC5A@CY4PR03MB3399.namprd03.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Sep 26, 2023 at 06:59:15AM +0000, Justin Stitt wrote:
-> `strncpy` is deprecated for use on NUL-terminated destination strings [1].
+On Mon, Oct 02, 2023 at 01:46:53PM +0000, Miclaus, Antoniu wrote:
 > 
-> Let's refactor this kcalloc() + strncpy() into a kmemdup_nul() which has
-> more obvious behavior and is less error prone.
 > 
-> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
-> Link: https://github.com/KSPP/linux/issues/90
-> Cc: linux-hardening@vger.kernel.org
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
+> --
+> Antoniu Miclăuş
+> 
+> > -----Original Message-----
+> > From: Conor Dooley <conor@kernel.org>
+> > Sent: Monday, October 2, 2023 4:01 PM
+> > To: Miclaus, Antoniu <Antoniu.Miclaus@analog.com>
+> > Cc: Jean Delvare <jdelvare@suse.com>; Guenter Roeck <linux@roeck-
+> > us.net>; Rob Herring <robh+dt@kernel.org>; Krzysztof Kozlowski
+> > <krzysztof.kozlowski+dt@linaro.org>; Conor Dooley
+> > <conor+dt@kernel.org>; Jonathan Corbet <corbet@lwn.net>; linux-
+> > hwmon@vger.kernel.org; devicetree@vger.kernel.org; linux-
+> > kernel@vger.kernel.org; linux-doc@vger.kernel.org
+> > Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: ltc2991: add bindings
+> > 
+> > [External]
+> > 
+> > Hey,
+> > 
+> > On Mon, Oct 02, 2023 at 01:18:14PM +0300, Antoniu Miclaus wrote:
+> > > Add dt-bindings for ltc2991 octal i2c voltage, current and temperature
+> > > monitor.
+> > >
+> > > Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+> > > ---
+> > > changes in v2:
+> > >  - make compatible const type
+> > >  - remove `|` where not necessary
+> > >  - switch to micro-ohms for the shunt resistor property
+> > >  - add vendor prefix for temperature-enable
+> > 
+> > Thanks for the updates...
+> > 
+> > >  .../bindings/hwmon/adi,ltc2991.yaml           | 114 ++++++++++++++++++
+> > >  1 file changed, 114 insertions(+)
+> > >  create mode 100644
+> > Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml
+> > b/Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml
+> > > new file mode 100644
+> > > index 000000000000..3811ea07a04f
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml
+> > > @@ -0,0 +1,114 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +
+> > > +$id: http://devicetree.org/schemas/hwmon/adi,ltc2991.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Analog Devices LTC2991 Octal I2C Voltage, Current and Temperature
+> > Monitor
+> > > +
+> > > +maintainers:
+> > > +  - Antoniu Miclaus <antoniu.miclaus@analog.com>
+> > > +
+> > > +description: |
+> > > +  The LTC2991 is used to monitor system temperatures, voltages and
+> > currents.
+> > > +  Through the I2C serial interface, the eight monitors can individually
+> > measure
+> > > +  supply voltages and can be paired for differential measurements of
+> > current
+> > > +  sense resistors or temperature sensing transistors.
+> > > +
+> > > +  Datasheet:
+> > > +    https://www.analog.com/en/products/ltc2991.html
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    const: adi,ltc2991
+> > > +
+> > > +  reg:
+> > > +    maxItems: 1
+> > > +
+> > > +  '#address-cells':
+> > > +    const: 1
+> > > +
+> > > +  '#size-cells':
+> > > +    const: 0
+> > > +
+> > > +  vcc-supply: true
+> > > +
+> > > +patternProperties:
+> > > +  "^channel@[0-3]$":
+> > > +    type: object
+> > > +    description:
+> > > +      Represents the differential/temperature channels.
+> > > +
+> > > +    properties:
+> > > +      reg:
+> > > +        description:
+> > > +          The channel number. LTC2991 can monitor 4 currents/temperatures.
+> > > +        items:
+> > > +          minimum: 0
+> > > +          maximum: 3
+> > > +
+> > > +      shunt-resistor-micro-ohms:
+> > > +        description:
+> > > +          The value of curent sense resistor in miliohms. Enables differential
+> > > +          input pair.
+> > > +
+> > > +      adi,temperature-enable:
+> > > +        description:
+> > > +          Enables temperature readings for a input pair.
+> > > +        type: boolean
+> > 
+> > ...but I did not see an answer to my question on v1:
+> > 	TBH, this seems like it is used just to control software behaviour.
+> > 	Why would you want to actually disable this in DT?
+> > In other words, is there something in that hardware that precludes
+> > measuring temperature for channels that do not contain this property?
+> > 
+> > Thanks,
+> > Conor.
+> > 
+> Sorry for missing that. I took in consideration this approach based on the pin functions
+> described in the datasheet (page 8 of 32). For example the V1 pin of the part can support
+> 3 different configurations: "V1 (Pin 1): First Monitor Input. This pin can be configured
+> as a single-ended input (0V to 4.9V) or the positive inputfor a differential or remote diode
+> temperature measurement (in combination with V2)."
+> Moreover, looking at the multiple typical applications examples at the end of the datasheet
+> there is a specific adjacent hardware circuit connected to this part for the temperature
+> measurements configurations.
 
-Thanks for continue to rev this change. This looks much nicer, is more
-readable, etc. :)
+Makes sense. Please expand the description with some of this detail so 
+the purpose is clear. The description should answer when do I set this 
+property or not.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
-
--- 
-Kees Cook
+Rob
