@@ -2,154 +2,78 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB989E784BC
-	for <linux-hwmon@archiver.kernel.org>; Mon,  2 Oct 2023 15:28:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7ABACE748FE
+	for <linux-hwmon@archiver.kernel.org>; Mon,  2 Oct 2023 17:19:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238026AbjJBP22 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 2 Oct 2023 11:28:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35258 "EHLO
+        id S238704AbjJBRTK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 2 Oct 2023 13:19:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237878AbjJBP22 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 Oct 2023 11:28:28 -0400
+        with ESMTP id S237954AbjJBRTJ (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 Oct 2023 13:19:09 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A467A6;
-        Mon,  2 Oct 2023 08:28:25 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99F18C433C8;
-        Mon,  2 Oct 2023 15:28:21 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5BEA4;
+        Mon,  2 Oct 2023 10:19:04 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A34AC433C8;
+        Mon,  2 Oct 2023 17:19:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696260504;
-        bh=cBsXuH+waMnbRb4zU7K8v3UB85/p7ufJUV9Y1AvcxRI=;
+        s=k20201202; t=1696267144;
+        bh=88t4OjXZc51C0kAFUiyZuz+p9QqkBW4TTymGySGL8hM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VdKIGKKOTx6RCCphHOtVS/Dr/s/B5hcvTW3AukByt1zrZOIpZJw0DS+x9GQjStAVx
-         C77Au3XeTTzvbiNUtG824gBmuwqXxgloskfVs+S8AN5nOCfpzi9SbnZlU1arCJREee
-         DcvqT5Ki92KBnFv/YHTsXVpzOQEybww5AmVYUGhwoKPQ5htUUorEwjW05u5sy0w48M
-         cmePtZHUeuyQERcJBWGnU1Khdvf0qyCeiccLQFn6c4n+YyfyBtj3BKI1MIZMT/iA2i
-         7MpJXE3H6AmIGBwDLUkrn6GiJIO50tbZga685E62N1w/+R8n+l0CWpro5kNA+Rijku
-         EJNvViksJFWgw==
-Received: (nullmailer pid 1757850 invoked by uid 1000);
-        Mon, 02 Oct 2023 15:28:19 -0000
-Date:   Mon, 2 Oct 2023 10:28:19 -0500
+        b=mZz/G8G2cCmjBjDTxvwY+v3UITEye5iTWR1oqlw9njlUvHnWLgapUCUZ/T4BGRwD6
+         zRPyXEbo97/QPyAbgdmexwg0XWm3w/J9asAnDT+w9+jjTI3hPSYFkgR8/2NN5ECOEH
+         DEP24KdlohfaKrIiwmDA1v0iGIFbvGh9wA+BRxJK77vWG25NzZkLWGUA3rt+qR5ImK
+         gt8pKhBAMRX41g/ueZCgj+83h6KHOpvFAIgW+O8ed3qx8uimmu+xrOhpJlvoD8hSwu
+         eMkWPwddT7e78qqoYoBpw2iXqy6Xx+qKUlcOPQWjZxpHdwexi6kARHO1EG0/hNAZLU
+         LEPsHkxk04PzA==
+Received: (nullmailer pid 2034391 invoked by uid 1000);
+        Mon, 02 Oct 2023 17:19:01 -0000
+Date:   Mon, 2 Oct 2023 12:19:01 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Billy Tsai <billy_tsai@aspeedtech.com>
-Cc:     jdelvare@suse.com, linux@roeck-us.net,
-        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
-        corbet@lwn.net, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, p.zabel@pengutronix.de,
-        naresh.solanki@9elements.com, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-pwm@vger.kernel.org,
-        BMC-SW@aspeedtech.com, patrick@stwcx.xyz
-Subject: Re: [PATCH v9 2/3] dt-bindings: hwmon: Support Aspeed g6 PWM TACH
- Control
-Message-ID: <20231002152819.GB1747496-robh@kernel.org>
-References: <20230918064111.2221594-1-billy_tsai@aspeedtech.com>
- <20230918064111.2221594-3-billy_tsai@aspeedtech.com>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Conor Dooley <conor+dt@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <treding@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Ninad Malwade <nmalwade@nvidia.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-tegra@vger.kernel.org,
+        devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH V5 1/4] dt-bindings: hwmon: ina3221: Convert to
+ json-schema
+Message-ID: <169626714151.2034330.4248654905752564697.robh@kernel.org>
+References: <20230929103650.86074-1-jonathanh@nvidia.com>
+ <20230929103650.86074-2-jonathanh@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230918064111.2221594-3-billy_tsai@aspeedtech.com>
+In-Reply-To: <20230929103650.86074-2-jonathanh@nvidia.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Sep 18, 2023 at 02:41:10PM +0800, Billy Tsai wrote:
-> Document the compatible for aspeed,ast2600-pwm-tach device, which can
-> support up to 16 PWM outputs and 16 fan tach input.
+
+On Fri, 29 Sep 2023 11:36:47 +0100, Jon Hunter wrote:
+> From: Ninad Malwade <nmalwade@nvidia.com>
 > 
-> Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
+> Convert the TI INA3221 bindings from the free-form text format to
+> json-schema.
+> 
+> Note that the INA3221 input channels default to enabled in the chip.
+> Unless channels are explicitly disabled in device-tree, input
+> channels will be enabled.
+> 
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
+> Signed-off-by: Ninad Malwade <nmalwade@nvidia.com>
+> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
 > ---
->  .../bindings/hwmon/aspeed,g6-pwm-tach.yaml    | 69 +++++++++++++++++++
->  1 file changed, 69 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/aspeed,g6-pwm-tach.yaml
+>  .../devicetree/bindings/hwmon/ina3221.txt     |  54 ----------
+>  .../devicetree/bindings/hwmon/ti,ina3221.yaml | 102 ++++++++++++++++++
+>  2 files changed, 102 insertions(+), 54 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/hwmon/ina3221.txt
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/aspeed,g6-pwm-tach.yaml b/Documentation/devicetree/bindings/hwmon/aspeed,g6-pwm-tach.yaml
-> new file mode 100644
-> index 000000000000..5a679f4ad2fa
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/aspeed,g6-pwm-tach.yaml
-> @@ -0,0 +1,69 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright (C) 2023 Aspeed, Inc.
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/aspeed,g6-pwm-tach.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: ASPEED G6 PWM and Fan Tach controller device driver
 
-This is binding for the h/w, not a 'device driver'.
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-> +
-> +maintainers:
-> +  - Billy Tsai <billy_tsai@aspeedtech.com>
-> +
-> +description: |
-> +  The ASPEED PWM controller can support up to 16 PWM outputs.
-> +  The ASPEED Fan Tacho controller can support up to 16 fan tach input.
-> +  They are independent hardware blocks, which are different from the
-> +  previous version of the ASPEED chip.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - aspeed,ast2600-pwm-tach
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  "#pwm-cells":
-> +    const: 3
-> +
-> +patternProperties:
-> +  "^fan-[0-9a-f]+$":
-
-foo-<index> naming is decimal, not hex. (unit-addresses are hex)
-
-But if 0 and 1 correspond to something in the h/w, then you should 
-probably be using 'reg' instead (which means a unit-address too).
-
-> +    $ref: fan-common.yaml#
-> +    unevaluatedProperties: false
-> +    required:
-> +      - tach-ch
-> +
-> +required:
-> +  - reg
-> +  - clocks
-> +  - resets
-> +  - "#pwm-cells"
-> +  - compatible
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/aspeed-clock.h>
-> +    pwm_tach: pwm-tach-controller@1e610000 {
-> +      compatible = "aspeed,ast2600-pwm-tach";
-> +      reg = <0x1e610000 0x100>;
-> +      clocks = <&syscon ASPEED_CLK_AHB>;
-> +      resets = <&syscon ASPEED_RESET_PWM>;
-> +      #pwm-cells = <3>;
-> +
-> +      fan-0 {
-> +        tach-ch = /bits/ 8 <0x0>;
-
-What about the PWM connection?
-
-> +      };
-> +
-> +      fan-1 {
-> +        tach-ch = /bits/ 8 <0x1 0x2>;
-> +      };
-> +    };
-> -- 
-> 2.25.1
-> 
