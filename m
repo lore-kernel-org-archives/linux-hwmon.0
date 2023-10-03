@@ -2,326 +2,118 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 373A0E7491B
-	for <linux-hwmon@archiver.kernel.org>; Mon,  2 Oct 2023 19:56:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77BEFE776F0
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Oct 2023 03:15:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjJBT4Q (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 2 Oct 2023 15:56:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51244 "EHLO
+        id S229913AbjJCDPj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 2 Oct 2023 23:15:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjJBT4P (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 Oct 2023 15:56:15 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707DDB3;
-        Mon,  2 Oct 2023 12:56:12 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB3C8C433C7;
-        Mon,  2 Oct 2023 19:56:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696276572;
-        bh=ph7h5sAEb9ypE4i6uCa380vh5k+WO2IDb6ilcGeeXL0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CLu04a56diys/JmudLhCzoBs+DRZaXslCht8wJQM0ZdJavmMXvRt1xGMwET2BZUth
-         xWMBloMwrHyzBlsLy2/z/1QdZrDZxcAwpZ4aoBaKFsvFOYkCYldzhU/jbBxq2Ub6+A
-         fZB1ZGYiqmVqntAYmxas6Ie5xlay4RP5t5wgOtSQIQOB9lru487BMDnKrf1EqVZTNB
-         vU96ibJRZJuoRrqIlcB0UzoyX94Yl/nd0AzS0eyEaHHIb5E4kiyC/NYBR5NguNFq4I
-         JnxLUznlkW1nIaBFrtufR2gkJoMpl3HczwhQhmZDa4n8wJpFpmX3nDBkV5JGqFSnqG
-         4XeLHFo2UxohA==
-Date:   Mon, 2 Oct 2023 20:56:07 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     "Miclaus, Antoniu" <Antoniu.Miclaus@analog.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
+        with ESMTP id S229933AbjJCDPh (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 Oct 2023 23:15:37 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2055.outbound.protection.outlook.com [40.107.117.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A3BBD;
+        Mon,  2 Oct 2023 20:15:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fFDZfi1GwndQrA+Tf/I411B+lHBRXVjxvSxmHIoiQ/OrWXNOR+kfVdNQ9Iz5MnKPBf0JBhOyZepWC67ltdy0frQeXnKwNELWA9WZko+JClugQE2obsBvR+SD3asDnlVS1i8jF/HLmCDsy91b5Nw+BpdtyuPKY/W7BA/H5XxFQzwWE3GNuB1yxX6JzV1OIm2sSOLqh694HgWrj0tSwZjjtsrAXsJJSpB4V7w9PzC+AMADD9FdmyA8AOtPVcTIpTVDmCiSWfB+G9q5hiyd5fBEIJHAvjRpX+6HAFOn29KlbP+SQ8PglJeTJWixFJxiZPiHozmcdQjIsngFHyAzfkohkQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/ABculsaNL2r+stL5Qp6KI32MY/C3wxBxj9evnp7U6w=;
+ b=VjAWvf0awgBOshBtzcIO0cMOBDDIodMjvSdNcpK5MK2zW/PUl7+8gP+/LWcMMpSOa/NY+dDQNp62emTylYwn9NHe6S9qsRdrffQ+h7dvQCs4emOqcZDs7UKPBzmTWNaih0neyPUuAUyqv1MqvfFp1NVNKyQyyaug4LrJZMRCYxaWBsJo9l1CnG+3kNiWqHEch9kHQPGfRLm9+XyagU3R9Jo8KJ1X4nOzLSsGX35CZMe/dR/lQE83K2AVp/M/xBpXgmO5+xwBY00d6HgDWbg7PbHljdxqmtQKJET4Ab8jhX5FGRwkZYu4yMR5jpjpNnKXF3QiLsElEtz89H44xzYTzQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 211.20.1.79) smtp.rcpttodomain=stwcx.xyz smtp.mailfrom=wiwynn.com; dmarc=fail
+ (p=quarantine sp=quarantine pct=100) action=quarantine
+ header.from=wiwynn.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/ABculsaNL2r+stL5Qp6KI32MY/C3wxBxj9evnp7U6w=;
+ b=eCrt5l3inxSLOZLqEaed+pmV7XEDa03fz9JHiSiFe6fal5Jq7tH6ViPl+Jo71vaDsYS/fd4FT19neWXHBxecVWkGZxOHAJjLd0PVVmeyaHFr2Cf536HUaaOGy24XWqgi3VRDuk0U+b+YuMcDKd7e2+3/EsIHsIx1cK4F5BeTkFE6uitgNpFgB2+myb4DqxmQkFW7pZz7SNTyEzMrFQHc+g3e9J6nE3fuArezL2gxXWAOL3JBQLQ9UMECBtgeHo5qio8OkuM/h9xP8HhfcEZEUw5GjOIlVyUb2+wU5o7U5aWDqTM1oUOnNJqEgC1FzVGRtKl8ASFKx/pJUdv5DaPVGw==
+Received: from SG2P153CA0010.APCP153.PROD.OUTLOOK.COM (2603:1096::20) by
+ SEYPR04MB6776.apcprd04.prod.outlook.com (2603:1096:101:dd::15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6838.28; Tue, 3 Oct 2023 03:15:25 +0000
+Received: from SG1PEPF000082E5.apcprd02.prod.outlook.com
+ (2603:1096::cafe:0:0:18) by SG2P153CA0010.outlook.office365.com
+ (2603:1096::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6886.6 via Frontend
+ Transport; Tue, 3 Oct 2023 03:15:25 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 211.20.1.79)
+ smtp.mailfrom=wiwynn.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=quarantine header.from=wiwynn.com;
+Received-SPF: Fail (protection.outlook.com: domain of wiwynn.com does not
+ designate 211.20.1.79 as permitted sender) receiver=protection.outlook.com;
+ client-ip=211.20.1.79; helo=localhost.localdomain;
+Received: from localhost.localdomain (211.20.1.79) by
+ SG1PEPF000082E5.mail.protection.outlook.com (10.167.240.8) with Microsoft
+ SMTP Server id 15.20.6838.14 via Frontend Transport; Tue, 3 Oct 2023 03:15:24
+ +0000
+From:   Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+To:     patrick@stwcx.xyz
+Cc:     Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: ltc2991: add bindings
-Message-ID: <20231002-gradient-crop-cfd75342c475@spud>
-References: <20231002101835.39624-1-antoniu.miclaus@analog.com>
- <20231002-babbling-justice-73d3601a71aa@spud>
- <CY4PR03MB33990FB22E1BB8686AC0CF509BC5A@CY4PR03MB3399.namprd03.prod.outlook.com>
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/2] hwmon: max31790: support to config PWM as TACH
+Date:   Tue,  3 Oct 2023 11:15:16 +0800
+Message-Id: <20231003031520.3091047-1-Delphine_CC_Chiu@wiwynn.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="zPbks5im7L45xBIh"
-Content-Disposition: inline
-In-Reply-To: <CY4PR03MB33990FB22E1BB8686AC0CF509BC5A@CY4PR03MB3399.namprd03.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SG1PEPF000082E5:EE_|SEYPR04MB6776:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 9d73efa7-5b88-4a5a-37db-08dbc3befc59
+X-MS-Exchange-AtpMessageProperties: SA
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 814/qhOo5a4VqCQ1+sEFeF1l1OR4Xf3f4+0bTZBZGYDr5ZzvhTnBNG+XKtkAfQslbXi7unfAMKlJvtUK+Rs+luvC8Saxsz9C/7CPh7bwYFWWObQO/atdNZqEWetxrG47mxr94wkpIXHZc+0uF7JOL3M6eud+27xwE5rFlLPk09bSDtz/TV05Vf2mb3vR675lSLTEZy4m830dDpeZ7B3CdamOBxVCls3CaIstiyv04V0ww2cfLKNm6tympf62fFFeVzlcBHqtCbkLO/UcFu0k0jzIF9bcXJHtEQblmAVkd6P9ROn+SWZxOFAMg5wT6Lwzj8z68w0e2M9QMBQd2tYvWn4yDIINwF3vtc0zBswoxU6CWzPAgLvqgwuFg3JNVYgW9uzB0yJ7sPZn5D51N5eD80AIaY/5Svf3JEdpL/7BI6ebWJh7tiZHmbPcixmNRxKHx4xyMGncUmL6CD0bfu5m0c2NhEYol3JV75IfnBGt82mKZVqgT8j/B1PPmRtOWZBuiSPvgmu7b3w7bVg2nT49k9eDKiMBLfNqqV486IAfuIx9r9WoaI59TQEWjnIAflNUyTkkVEAaNbf5++z4K+8IgJ5fXmn9UkkwoMKQ1MeXNFPG1b+gWxXiJP7DCF+19bBzqbvLXLNy6cYcwX9rXFKRVe1/GJWVTKB1I+R0ChCP1k14WBq10uzfyTvuRe+SX+eLpa+YhHCX5e3PyNyQKreqKw==
+X-Forefront-Antispam-Report: CIP:211.20.1.79;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:localhost.localdomain;PTR:211-20-1-79.hinet-ip.hinet.net;CAT:NONE;SFS:(13230031)(6069001)(4636009)(396003)(346002)(376002)(136003)(39860400002)(451199024)(1800799009)(82310400011)(186009)(64100799003)(46966006)(36840700001)(70206006)(6506007)(6512007)(82740400003)(2906002)(316002)(4744005)(8676002)(4326008)(5660300002)(36756003)(36736006)(8936002)(41300700001)(36860700001)(86362001)(9316004)(40480700001)(47076005)(478600001)(70586007)(956004)(6916009)(356005)(81166007)(6666004)(54906003)(6486002)(26005)(336012)(2616005)(1076003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: wiwynn.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Oct 2023 03:15:24.1558
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9d73efa7-5b88-4a5a-37db-08dbc3befc59
+X-MS-Exchange-CrossTenant-Id: da6e0628-fc83-4caf-9dd2-73061cbab167
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=da6e0628-fc83-4caf-9dd2-73061cbab167;Ip=[211.20.1.79];Helo=[localhost.localdomain]
+X-MS-Exchange-CrossTenant-AuthSource: SG1PEPF000082E5.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR04MB6776
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+Support to config PWM as TACH in MAX31790 driver.
+Add binding document for MAX31790 driver.
 
---zPbks5im7L45xBIh
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+---
+Changelog:
+v3 - Use 'sensor-type' in 'channel' node to config pwm as tach.
+   - Changed the status in MAINTAINERS to 'Maintained'. 
+v2 - Remove unnecessary parentheses.
+   - Add more error handling.
+   - Change the type of "pwm-as-tach" from u8 to u32 to match binding
+     document.
+   - Add dt-bindings for the MAXIM MAX31790.
+v1 - Support to config PWM as TACH
 
-On Mon, Oct 02, 2023 at 01:46:53PM +0000, Miclaus, Antoniu wrote:
->=20
->=20
-> --
-> Antoniu Micl=C4=83u=C5=9F
->=20
-> > -----Original Message-----
-> > From: Conor Dooley <conor@kernel.org>
-> > Sent: Monday, October 2, 2023 4:01 PM
-> > To: Miclaus, Antoniu <Antoniu.Miclaus@analog.com>
-> > Cc: Jean Delvare <jdelvare@suse.com>; Guenter Roeck <linux@roeck-
-> > us.net>; Rob Herring <robh+dt@kernel.org>; Krzysztof Kozlowski
-> > <krzysztof.kozlowski+dt@linaro.org>; Conor Dooley
-> > <conor+dt@kernel.org>; Jonathan Corbet <corbet@lwn.net>; linux-
-> > hwmon@vger.kernel.org; devicetree@vger.kernel.org; linux-
-> > kernel@vger.kernel.org; linux-doc@vger.kernel.org
-> > Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: ltc2991: add bindings
-> >=20
-> > [External]
-> >=20
-> > Hey,
-> >=20
-> > On Mon, Oct 02, 2023 at 01:18:14PM +0300, Antoniu Miclaus wrote:
-> > > Add dt-bindings for ltc2991 octal i2c voltage, current and temperature
-> > > monitor.
-> > >
-> > > Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
-> > > ---
-> > > changes in v2:
-> > >  - make compatible const type
-> > >  - remove `|` where not necessary
-> > >  - switch to micro-ohms for the shunt resistor property
-> > >  - add vendor prefix for temperature-enable
-> >=20
-> > Thanks for the updates...
-> >=20
-> > >  .../bindings/hwmon/adi,ltc2991.yaml           | 114 ++++++++++++++++=
-++
-> > >  1 file changed, 114 insertions(+)
-> > >  create mode 100644
-> > Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml
-> > b/Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml
-> > > new file mode 100644
-> > > index 000000000000..3811ea07a04f
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml
-> > > @@ -0,0 +1,114 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +
-> > > +$id: http://devicetree.org/schemas/hwmon/adi,ltc2991.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Analog Devices LTC2991 Octal I2C Voltage, Current and Tempera=
-ture
-> > Monitor
-> > > +
-> > > +maintainers:
-> > > +  - Antoniu Miclaus <antoniu.miclaus@analog.com>
-> > > +
-> > > +description: |
-> > > +  The LTC2991 is used to monitor system temperatures, voltages and
-> > currents.
-> > > +  Through the I2C serial interface, the eight monitors can individua=
-lly
-> > measure
-> > > +  supply voltages and can be paired for differential measurements of
-> > current
-> > > +  sense resistors or temperature sensing transistors.
-> > > +
-> > > +  Datasheet:
-> > > +    https://www.analog.com/en/products/ltc2991.html
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    const: adi,ltc2991
-> > > +
-> > > +  reg:
-> > > +    maxItems: 1
-> > > +
-> > > +  '#address-cells':
-> > > +    const: 1
-> > > +
-> > > +  '#size-cells':
-> > > +    const: 0
-> > > +
-> > > +  vcc-supply: true
-> > > +
-> > > +patternProperties:
-> > > +  "^channel@[0-3]$":
-> > > +    type: object
-> > > +    description:
-> > > +      Represents the differential/temperature channels.
+Delphine CC Chiu (2):
+  hwmon: max31790: support to config PWM as TACH
+  dt-bindings: hwmon: add MAX31790
 
-Missing "additionalProperties: false". Once added, it finds that you
-didn't update the child nodes to account for the addition of the vendor
-prefix.
+ .../bindings/hwmon/maxim,max31790.yaml        | 89 +++++++++++++++++++
+ MAINTAINERS                                   |  6 ++
+ drivers/hwmon/max31790.c                      | 83 +++++++++++++++++
+ 3 files changed, 178 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max31790.yaml
 
-> > > +
-> > > +    properties:
-> > > +      reg:
-> > > +        description:
-> > > +          The channel number. LTC2991 can monitor 4 currents/tempera=
-tures.
-> > > +        items:
-> > > +          minimum: 0
-> > > +          maximum: 3
+-- 
+2.25.1
 
-Should reg not be required here?
-
-> > > +
-> > > +      shunt-resistor-micro-ohms:
-> > > +        description:
-> > > +          The value of curent sense resistor in miliohms. Enables di=
-fferential
-> > > +          input pair.
-> > > +
-> > > +      adi,temperature-enable:
-> > > +        description:
-> > > +          Enables temperature readings for a input pair.
-> > > +        type: boolean
-> >=20
-> > ...but I did not see an answer to my question on v1:
-> > 	TBH, this seems like it is used just to control software behaviour.
-> > 	Why would you want to actually disable this in DT?
-> > In other words, is there something in that hardware that precludes
-> > measuring temperature for channels that do not contain this property?
-> >=20
-> > Thanks,
-> > Conor.
-> >=20
-> Sorry for missing that. I took in consideration this approach based on th=
-e pin functions
-> described in the datasheet (page 8 of 32). For example the V1 pin of the =
-part can support
-> 3 different configurations: "V1 (Pin 1): First Monitor Input. This pin ca=
-n be configured
-> as a single-ended input (0V to 4.9V) or the positive inputfor a different=
-ial or remote diode
-> temperature measurement (in combination with V2)."
-> Moreover, looking at the multiple typical applications examples at the en=
-d of the datasheet
-> there is a specific adjacent hardware circuit connected to this part for =
-the temperature
-> measurements configurations.
-
-Okay. That seems fair to me, thanks for the explanation. From your
-description here it sounds like the pins between which differential
-measurements are made are fixed in hardware. Is that correct?
-
-One final question - from your description here it sounds like
-shunt-resistor-micro-ohms & adi,temperature-enable are mutually
-exclusive? If they are indeed mutually exclusive, you can fold in
-something like the below.
-diff --git a/Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml b/Doc=
-umentation/devicetree/bindings/hwmon/adi,ltc2991.yaml
-index 3811ea07a04f..8b1bbbfe7948 100644
---- a/Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml
-@@ -39,6 +39,7 @@ patternProperties:
-     type: object
-     description:
-       Represents the differential/temperature channels.
-+    additionalProperties: false
-=20
-     properties:
-       reg:
-@@ -58,6 +59,17 @@ patternProperties:
-           Enables temperature readings for a input pair.
-         type: boolean
-=20
-+    required:
-+      - reg
-+
-+    allOf:
-+      - if:
-+          required:
-+            - shunt-resistor-micro-ohms
-+        then:
-+          properties:
-+            adi,temperature-enable: false
-+
- required:
-   - compatible
-   - reg
-
-Cheers,
-Conor.
-
->=20
-> Thank you,
-> Antoniu
-> > > +
-> > > +required:
-> > > +  - compatible
-> > > +  - reg
-> > > +  - vcc-supply
-> > > +
-> > > +additionalProperties: false
-> > > +
-> > > +examples:
-> > > +  - |
-> > > +    i2c {
-> > > +        #address-cells =3D <1>;
-> > > +        #size-cells =3D <0>;
-> > > +
-> > > +        hwmon@48 {
-> > > +            compatible =3D "adi,ltc2991";
-> > > +            reg =3D <0x48>;
-> > > +            vcc-supply =3D <&vcc>;
-> > > +        };
-> > > +    };
-> > > +  - |
-> > > +    i2c {
-> > > +        #address-cells =3D <1>;
-> > > +        #size-cells =3D <0>;
-> > > +
-> > > +        hwmon@48 {
-> > > +            #address-cells =3D <1>;
-> > > +            #size-cells =3D <0>;
-> > > +
-> > > +            compatible =3D "adi,ltc2991";
-> > > +            reg =3D <0x48>;
-> > > +            vcc-supply =3D <&vcc>;
-> > > +
-> > > +            channel@0 {
-> > > +                    reg =3D <0x0>;
-> > > +                    shunt-resistor-micro-ohms =3D <100000>;
-> > > +            };
-> > > +
-> > > +            channel@1 {
-> > > +                    reg =3D <0x1>;
-> > > +                    shunt-resistor-micro-ohms =3D <100000>;
-> > > +            };
-> > > +
-> > > +            channel@2 {
-> > > +                    reg =3D <0x2>;
-> > > +                    temperature-enable;
-> > > +            };
-> > > +
-> > > +            channel@3 {
-> > > +                    reg =3D <0x3>;
-> > > +                    temperature-enable;
-> > > +            };
-> > > +        };
-> > > +    };
-> > > +...
-> > > --
-> > > 2.42.0
-> > >
-
---zPbks5im7L45xBIh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZRsgVwAKCRB4tDGHoIJi
-0vOZAQCv9kZP0jt/EoZ1B3kYj0wcoOI26AeHAnG21QEvcDYmlwEAgMyhB+ExhReG
-WmMXYIFmiCGRqV+AKgiRUmorSB1EUgY=
-=3dB+
------END PGP SIGNATURE-----
-
---zPbks5im7L45xBIh--
