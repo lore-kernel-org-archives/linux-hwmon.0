@@ -2,180 +2,173 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A0A4E776F0
-	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Oct 2023 03:15:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E488EE75433
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Oct 2023 08:01:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239057AbjJCDPu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 2 Oct 2023 23:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60698 "EHLO
+        id S231638AbjJCIBw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 3 Oct 2023 04:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbjJCDPm (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 Oct 2023 23:15:42 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2084.outbound.protection.outlook.com [40.107.255.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FEC2AC;
-        Mon,  2 Oct 2023 20:15:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kt6GVMFNIUQlnrEblOyAxo9/NN7IQ7FnzdaIZZR9U8s2jB4I2L2DXDbkZMxQ6be1DCezN1cYjgnSLv4RQr3tBxKOMGCEeJoVngSkL7Rkxq+n8D/a4qBWAhmtN6Cy8O9xlarg5QZQ+DdB4tELUqwtVawfev2i20WXr2N+cU1xr9LA6yUPSYs6bkm+fIz2b96nXBnkevhBQ49uwyfsLW7DTHUgziA1JMycg8+1qblZGvhrAzEliCwl8/ZkAyjxnb3WOSaJZLJTFuz+PtBEmECQ55ax6ld/q0EJYCU3SzQ3sWKwRz8sdQ5KTFuPkCson3De+ByItKKu+fl+qrJGYw1X3w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5q1SEq+fsPLhWRcGCUvVOTCzWzXrgRGCR56eCQlopzo=;
- b=V+wwIr6OdoREEd2WaUHMXSnavt4EgI5Dcegl8vaeMswh4SMG/FGEIqbRahzyfaRZU9iZsaVVKzVZIXBLehWv5BDmLyJ20ajwG4diW7MaWu98wurO53GHAEF3IB/ooUmFQFqHuge1KyKsRWbYMWcFdr9XLIHXRJualozVXD8qeW6H05OJKb8kFDRidkPjcc3Zu6i3DnbJueD9MoeZ9UpeaErrND6TzVlE503rexN9EVnSqEe0NdqIxAZDf26WSOofTjaJcGOk9N8wLV7h9BmERtvKVwHWE1ztwKH6HCL/byNEsdpjuyei1N4HEgN6RL9dTMiC3WqEsrsmstLEyIeKIA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 211.20.1.79) smtp.rcpttodomain=stwcx.xyz smtp.mailfrom=wiwynn.com; dmarc=fail
- (p=quarantine sp=quarantine pct=100) action=quarantine
- header.from=wiwynn.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5q1SEq+fsPLhWRcGCUvVOTCzWzXrgRGCR56eCQlopzo=;
- b=f2uX69f42XOJpVThum6i5STEA9LfI3/uu+pm/tJrj59XDyrxWrFCz/dX9yfIDBUavGWCKbcyIAQdOpXbFHGIzIDDjNxM4j7ybW4LjAiaelcYOqhbVOnVLsX8Gu1Bvt5yqZOePopubs0a/ND7fwgQucPC829Jqjno9tIQZi6cdEW2zZAWT1iKdapYMnrX2YRWNo3ceTQnmSWMbzQIR6nsTLpKnpdok6n++dyzlBGK2FTp6xJb+9Q6+nNwAdL1hH6lANthHU3uFZ+tE5KjKH3/jYUHk1sgULphIimTTCyknqEAuFZa0QwomwjuGES1PEn3vA1P5pDii8MAln6liv9G/Q==
-Received: from SG2P153CA0014.APCP153.PROD.OUTLOOK.COM (2603:1096::24) by
- PUZPR04MB6650.apcprd04.prod.outlook.com (2603:1096:301:11c::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.26; Tue, 3 Oct
- 2023 03:15:34 +0000
-Received: from SG1PEPF000082E5.apcprd02.prod.outlook.com
- (2603:1096::cafe:0:0:9b) by SG2P153CA0014.outlook.office365.com
- (2603:1096::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6886.6 via Frontend
- Transport; Tue, 3 Oct 2023 03:15:34 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 211.20.1.79)
- smtp.mailfrom=wiwynn.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=quarantine header.from=wiwynn.com;
-Received-SPF: Fail (protection.outlook.com: domain of wiwynn.com does not
- designate 211.20.1.79 as permitted sender) receiver=protection.outlook.com;
- client-ip=211.20.1.79; helo=localhost.localdomain;
-Received: from localhost.localdomain (211.20.1.79) by
- SG1PEPF000082E5.mail.protection.outlook.com (10.167.240.8) with Microsoft
- SMTP Server id 15.20.6838.14 via Frontend Transport; Tue, 3 Oct 2023 03:15:33
- +0000
-From:   Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
-To:     patrick@stwcx.xyz, Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+        with ESMTP id S231340AbjJCIBv (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 Oct 2023 04:01:51 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E3BA1;
+        Tue,  3 Oct 2023 01:01:49 -0700 (PDT)
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 39376Fua020801;
+        Tue, 3 Oct 2023 04:01:27 -0400
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3tegk3ypcy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Oct 2023 04:01:26 -0400 (EDT)
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 39381PvK027344
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 3 Oct 2023 04:01:25 -0400
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Tue, 3 Oct 2023
+ 04:01:24 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Tue, 3 Oct 2023 04:01:24 -0400
+Received: from amiclaus-VirtualBox.ad.analog.com (AMICLAUS-L02.ad.analog.com [10.48.65.194])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 393814Mx012373;
+        Tue, 3 Oct 2023 04:01:07 -0400
+From:   Antoniu Miclaus <antoniu.miclaus@analog.com>
+To:     Antoniu Miclaus <antoniu.miclaus@analog.com>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] dt-bindings: hwmon: add MAX31790
-Date:   Tue,  3 Oct 2023 11:15:18 +0800
-Message-Id: <20231003031520.3091047-3-Delphine_CC_Chiu@wiwynn.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231003031520.3091047-1-Delphine_CC_Chiu@wiwynn.com>
-References: <20231003031520.3091047-1-Delphine_CC_Chiu@wiwynn.com>
+        Conor Dooley <conor+dt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>
+Subject: [PATCH v3 1/2] dt-bindings: hwmon: ltc2991: add bindings
+Date:   Tue, 3 Oct 2023 11:00:39 +0300
+Message-ID: <20231003080059.8041-1-antoniu.miclaus@analog.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=y
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SG1PEPF000082E5:EE_|PUZPR04MB6650:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9eabd69a-0ad3-44d8-2313-08dbc3bf01d3
-X-MS-Exchange-AtpMessageProperties: SA
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lmBvKPg4vcKggLdb8hGF90GjK7gS2t9J3uGn5Po4KjwKEw1X60Y6oGfOh6LFrFU8URB46CJEuo9rqFU5mj5+WUnshxMooszT9Ubk6YfJ9WNoYXk2M5CJNdVRiU+5vbKim0CVPvn76txg35gN5dcrSnZkWGZcOkruV4ty5A8PtWrodzhVNvT8iZ5/Ruhj3EWtWc78kgOrC+iEkoJw1wQRPHooJsLfh6J+f5q2tcp1FcN/eSAFB0z2u7UGZo/OdqWZuaiS7K/IGqca50b+igerd69RT2aifI9oTiSCoAEFt92PyzkdaFzqJa/SSWuve2xcpCgpeeFhuM2ilMQOz8R3QqVoiMSM0f03F7390UAM4NmW806vqsNTc9L6JiHF60tNVStDEu5ERTK32bzEGH+9QfykdccWIgtJeNEkAnl/+y7cPVTsBvj9GHO0n+2rxQAZuT44nRbLsBNk/yFUJa8VpBcY3TWibpgBTbTvvBCv0XZcdG//aWuIOa45KTATjP6UBPd5vObUhmAcvXh5BGkCtl7LqRpH0+JE5mRkm9r79lSp0mHd2VNukIDPfwE+GnOo3xUrxcLge0C4axLEH9kTCvNgmKfR7o0nfclHvgrkhFgKuiWpQaUAxUqB/25zt1sJbgh8IdSr/Pcy3whcDWBV883Y53x4TwhG/G885aFZ6BA47QSEh7gNWWdMowBW2HQw
-X-Forefront-Antispam-Report: CIP:211.20.1.79;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:localhost.localdomain;PTR:211-20-1-79.hinet-ip.hinet.net;CAT:NONE;SFS:(13230031)(6069001)(4636009)(396003)(39860400002)(136003)(376002)(346002)(1800799009)(186009)(64100799003)(451199024)(82310400011)(36840700001)(46966006)(40480700001)(6666004)(110136005)(86362001)(316002)(36736006)(36756003)(966005)(70206006)(70586007)(478600001)(2906002)(41300700001)(5660300002)(8676002)(8936002)(4326008)(9316004)(47076005)(2616005)(336012)(26005)(956004)(6506007)(36860700001)(1076003)(356005)(6512007)(82740400003)(6486002)(81166007);DIR:OUT;SFP:1101;
-X-OriginatorOrg: wiwynn.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Oct 2023 03:15:33.3278
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9eabd69a-0ad3-44d8-2313-08dbc3bf01d3
-X-MS-Exchange-CrossTenant-Id: da6e0628-fc83-4caf-9dd2-73061cbab167
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=da6e0628-fc83-4caf-9dd2-73061cbab167;Ip=[211.20.1.79];Helo=[localhost.localdomain]
-X-MS-Exchange-CrossTenant-AuthSource: SG1PEPF000082E5.apcprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PUZPR04MB6650
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-ORIG-GUID: RnXSYrQcCB2MDOXZu0k9c1grQvddaMBY
+X-Proofpoint-GUID: RnXSYrQcCB2MDOXZu0k9c1grQvddaMBY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-03_04,2023-10-02_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 clxscore=1015
+ bulkscore=0 impostorscore=0 lowpriorityscore=0 malwarescore=0 spamscore=0
+ priorityscore=1501 mlxscore=0 suspectscore=0 adultscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2309180000
+ definitions=main-2310030056
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add dt-bindings for the MAXIM MAX31790.
+Add dt-bindings for ltc2991 octal i2c voltage, current and temperature
+monitor.
 
-Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
 ---
-Changelog:
-v3 - Use 'sensor-type' in 'channel' node to config pwm as tach.
-   - Changed the status in MAINTAINERS to 'Maintained'.
-v2 - Add dt-bindings for the MAXIM MAX31790.
----
- .../bindings/hwmon/maxim,max31790.yaml        | 89 +++++++++++++++++++
- MAINTAINERS                                   |  6 ++
- 2 files changed, 95 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max31790.yaml
+changes in v3:
+ - expand description for differential channels and temperature channels by
+   mentioning the pin configuration that is set via these properties.
+ - add `additionalProperties: false` for the channel properties
+ - make `reg` required for channel properties
+ - make `adi,temperature-enable` and `shunt-resistor-micro-ohms` mutually
+   exclusive following the approach suggested in review.
+ .../bindings/hwmon/adi,ltc2991.yaml           | 128 ++++++++++++++++++
+ 1 file changed, 128 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml
 
-diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max31790.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max31790.yaml
+diff --git a/Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml b/Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml
 new file mode 100644
-index 000000000000..7f717ab4caac
+index 000000000000..011e5b65c79c
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/maxim,max31790.yaml
-@@ -0,0 +1,89 @@
++++ b/Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml
+@@ -0,0 +1,128 @@
 +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
 +%YAML 1.2
 +---
 +
-+$id: http://devicetree.org/schemas/hwmon/maxim,max31790.yaml#
++$id: http://devicetree.org/schemas/hwmon/adi,ltc2991.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Maxim max31790
++title: Analog Devices LTC2991 Octal I2C Voltage, Current and Temperature Monitor
 +
 +maintainers:
-+  - Delphine CC Chiu  <Delphine_CC_Chiu@wiwynn.com>
++  - Antoniu Miclaus <antoniu.miclaus@analog.com>
 +
 +description: |
-+  The MAX31790 controls the speeds of up to six fans using
-+  six independent PWM outputs. The desired fan speeds (or PWM duty cycles)
-+  are written through the I2C	interface.
-+  The outputs drive “4-wire” fans directly, or can be used to modulate
-+  the fan’s power terminals using an external pass transistor.
++  The LTC2991 is used to monitor system temperatures, voltages and currents.
++  Through the I2C serial interface, the eight monitors can individually measure
++  supply voltages and can be paired for differential measurements of current
++  sense resistors or temperature sensing transistors.
 +
-+  Datasheets:
-+    https://datasheets.maximintegrated.com/en/ds/MAX31790.pdf
-+
-+additionalProperties: false
++  Datasheet:
++    https://www.analog.com/en/products/ltc2991.html
 +
 +properties:
 +  compatible:
-+    enum:
-+      - maxim,max31790
++    const: adi,ltc2991
 +
 +  reg:
 +    maxItems: 1
 +
-+  "#address-cells":
++  '#address-cells':
 +    const: 1
 +
-+  "#size-cells":
++  '#size-cells':
 +    const: 0
 +
-+patternProperties:
-+  "^channel@[1-6]$":
-+    type: object
++  vcc-supply: true
 +
-+    additionalProperties: false
++patternProperties:
++  "^channel@[0-3]$":
++    type: object
++    description:
++      Represents the differential/temperature channels.
 +
 +    properties:
 +      reg:
++        description:
++          The channel number. LTC2991 can monitor 4 currents/temperatures.
 +        items:
-+          - enum: [1, 2, 3, 4, 5, 6]
++          minimum: 0
++          maximum: 3
 +
-+      # There are 6 PWM output channel in MAX31790 that allows to be configured
-+      # as a TACH input by setting the Fan Configuration register.
-+      # The default setting will be PWM output.
-+      sensor-type:
-+        items:
-+          - enum:
-+            - PWM
-+            - TACH
++      shunt-resistor-micro-ohms:
++        description:
++          The value of curent sense resistor in micro ohms. Pin configuration is
++          set for differential input pair.
++
++      adi,temperature-enable:
++        description:
++          Enables temperature readings. Pin configuration is set for remote
++          diode temperature measurement.
++        type: boolean
 +
 +    required:
 +      - reg
 +
++    allOf:
++      - if:
++          required:
++            - shunt-resistor-micro-ohms
++        then:
++          properties:
++            adi,temperature-enable: false
++
++    additionalProperties: false
++
 +required:
 +  - compatible
 +  - reg
++  - vcc-supply
++
++additionalProperties: false
 +
 +examples:
 +  - |
@@ -183,41 +176,47 @@ index 000000000000..7f717ab4caac
 +        #address-cells = <1>;
 +        #size-cells = <0>;
 +
-+        pwm@20 {
-+            compatible = "maxim,max31790";
-+            reg = <0x20>;
++        hwmon@48 {
++            compatible = "adi,ltc2991";
++            reg = <0x48>;
++            vcc-supply = <&vcc>;
++        };
++    };
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
 +
++        hwmon@48 {
 +            #address-cells = <1>;
 +            #size-cells = <0>;
 +
-+            channel@3 {
-+                reg = <3>;
-+                sensor-type = "TACH";
++            compatible = "adi,ltc2991";
++            reg = <0x48>;
++            vcc-supply = <&vcc>;
++
++            channel@0 {
++                    reg = <0x0>;
++                    shunt-resistor-micro-ohms = <100000>;
 +            };
 +
-+            channel@6 {
-+                reg = <6>;
-+                sensor-type = "TACH";
++            channel@1 {
++                    reg = <0x1>;
++                    shunt-resistor-micro-ohms = <100000>;
++            };
++
++            channel@2 {
++                    reg = <0x2>;
++                    adi,temperature-enable;
++            };
++
++            channel@3 {
++                    reg = <0x3>;
++                    adi,temperature-enable;
 +            };
 +        };
 +    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c8fdd0d03907..21be46200343 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1371,6 +1371,12 @@ F:	Documentation/devicetree/bindings/hwmon/adi,max31760.yaml
- F:	Documentation/hwmon/max31760.rst
- F:	drivers/hwmon/max31760.c
- 
-+ANALOG DEVICES INC MAX31790 DRIVER
-+M:	Delphine CC Chiu  <Delphine_CC_Chiu@wiwynn.com>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/hwmon/maxim,max31790.yaml
-+F:	drivers/hwmon/max31790.c
-+
- ANALOGBITS PLL LIBRARIES
- M:	Paul Walmsley <paul.walmsley@sifive.com>
- S:	Supported
++...
 -- 
-2.25.1
+2.42.0
 
