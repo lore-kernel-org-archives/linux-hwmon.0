@@ -2,53 +2,107 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECD40E95A61
-	for <linux-hwmon@archiver.kernel.org>; Sat,  7 Oct 2023 11:22:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28628E95A61
+	for <linux-hwmon@archiver.kernel.org>; Sat,  7 Oct 2023 16:58:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343865AbjJGLWH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 7 Oct 2023 07:22:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36952 "EHLO
+        id S1344091AbjJGQ61 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 7 Oct 2023 12:58:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343859AbjJGLWG (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 7 Oct 2023 07:22:06 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77648B6;
-        Sat,  7 Oct 2023 04:22:05 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5CB0C433C8;
-        Sat,  7 Oct 2023 11:22:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1696677725;
-        bh=Z5uEds1Mo99/fmj7mVc1AcM0874N3EkljcgDY7j9jSw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gIqjDr7E+QSsNPIJbf1T2sZ2bm/euOWRYPbQxRPe4L+ZJ9FJgNfWQVBffyDNxBVUx
-         M/sN7cycEzhv020tJW2YWoyBTuTVOSUafG+5X26Nap3002ykWVYhyfC1DCYvqeHvx6
-         uE5c+1Wt1oF2S50Cp48MJJXyfqTdIWQPWugM06Ys=
-Date:   Sat, 7 Oct 2023 13:22:01 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Aleksandr Mezin <mezin.alexander@gmail.com>
-Cc:     stable@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: hwmon: (nzxt-smart2) backport device ids to v6.1
-Message-ID: <2023100753-quarrel-harbor-a6f3@gregkh>
-References: <CADnvcfJn--J-51tjOVe2Z55Y8CxnXePXmP9V_j9HkVOt-RH4LA@mail.gmail.com>
+        with ESMTP id S1344085AbjJGQ60 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 7 Oct 2023 12:58:26 -0400
+Received: from omta040.useast.a.cloudfilter.net (omta040.useast.a.cloudfilter.net [44.202.169.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4BE6C2
+        for <linux-hwmon@vger.kernel.org>; Sat,  7 Oct 2023 09:58:25 -0700 (PDT)
+Received: from eig-obgw-6003a.ext.cloudfilter.net ([10.0.30.151])
+        by cmsmtp with ESMTP
+        id p9mXqKPunaLCxpAdFqsfFl; Sat, 07 Oct 2023 16:58:25 +0000
+Received: from md-in-79.webhostbox.net ([43.225.55.182])
+        by cmsmtp with ESMTPS
+        id pAdCqnTeuqG4jpAdEq3IBM; Sat, 07 Oct 2023 16:58:25 +0000
+X-Authority-Analysis: v=2.4 cv=fqrP2X0f c=1 sm=1 tr=0 ts=65218e31
+ a=LfuyaZh/8e9VOkaVZk0aRw==:117 a=J9R/PiKqv2o3jGxbVGXx4w==:17
+ a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
+ a=bhdUkHdE2iEA:10 a=oz0wMknONp8A:10 a=LxWt8M_ywhtm8WUVVfYA:9
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=linumiz.com
+        ; s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject
+        :Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=c5iYOT22elVfPNtUrUd4M1WiKLFX0mjQfvAI7rmkpE8=; b=P/UKBi+qsiNhVtsBY7AucgpHJ6
+        1GPcyrYP+SuEc7jQR86Q1bYSDSdoNcg3L2baPYGenioeRHLp04LR8zHAS42OI8nvCaHWHA4bc1lnX
+        FMb68N+QH/r3F3VwWkG98104CHc/VM7GDK8tAsGB/zrukkG1JiUwyGmUbGdn6+gAIEMDYnGxtVGao
+        FYfyv/bZjvCN0DC3AVoefj8lm1jSmz9bYOBOCzUe1Tq4eMg/fvxIGV0YUIiimgG9X3KkSYVMWetcu
+        j/iNPhwmZCIR/b8R8ABuu8CFz6gvG9vjQZCx1BtYac6d5qiVuQhviisCryXD9pCVaU8cfb4SPpVKH
+        KkuvZZ9g==;
+Received: from [103.186.120.251] (port=39748 helo=discovery..)
+        by md-in-79.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.96.1)
+        (envelope-from <saravanan@linumiz.com>)
+        id 1qpAd7-002Tlj-3D;
+        Sat, 07 Oct 2023 22:28:18 +0530
+From:   Saravanan Sekar <saravanan@linumiz.com>
+To:     sravanhome@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, linux@roeck-us.net, jdelvare@suse.com
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Saravanan Sekar <saravanan@linumiz.com>
+Subject: [PATCH v3 0/3] Add support for mpq2286 PMIC IC
+Date:   Sat,  7 Oct 2023 22:28:00 +0530
+Message-Id: <20231007165803.239718-1-saravanan@linumiz.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CADnvcfJn--J-51tjOVe2Z55Y8CxnXePXmP9V_j9HkVOt-RH4LA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - md-in-79.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - linumiz.com
+X-BWhitelist: no
+X-Source-IP: 103.186.120.251
+X-Source-L: No
+X-Exim-ID: 1qpAd7-002Tlj-3D
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (discovery..) [103.186.120.251]:39748
+X-Source-Auth: saravanan@linumiz.com
+X-Email-Count: 1
+X-Org:  HG=dishared_whb_net_legacy;ORG=directi;
+X-Source-Cap: bGludW1jbWM7aG9zdGdhdG9yO21kLWluLTc5LndlYmhvc3Rib3gubmV0
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfFCD3gxcelbr6Uxeu4QXPy4taUZU6z6U/KVxHOCN8plZUi/b20cfMW8QEsjTFHVJPsbIgCO+j4DnJKkPsAgNwa1d+w5FvxPXpnVq5aAW3WrkyVoDJXV7
+ OOJpui0GiAU2hm8aKNOdlQtFL+cZ8cFTSxOCmQV/P7fesyq7/Fq8i2BdSrwT+mHJZNBBrCyGk0CMaorCQMO2aabzWZkSdKG1FcM=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Sep 22, 2023 at 09:33:56PM +0300, Aleksandr Mezin wrote:
-> Please pick the following commits:
-> 
-> - e247510e1baad04e9b7b8ed7190dbb00989387b9 hwmon: (nzxt-smart2) Add device id
-> - 4a148e9b1ee04e608263fa9536a96214d5561220 hwmon: (nzxt-smart2) add
-> another USB ID
-> 
-> into v6.1 stable kernel. They add device ids for nzxt-smart2 hwmon
-> driver, and they don't require any other code changes. This will
-> synchronize the driver code with v6.3.
+changes in v3:
+ - dt-binding commit message updated the reason for 'buck0' is used instead of 'buck'
 
-Both now queued up, thanks.
+changes in v2:
+ - fix dt check warnings
+ - fix compiler warning on cast device_get_match_data and lexicological order of compatible
 
-greg k-h
+
+
+The MPQ2286 is a programmable, high frequency synchronous buck regulator with
+integrated internal high side and low side power MOSFET. Application in
+Automotive compenents such as ADAS, Infotainment, SOC System core, DDR memory.
+
+
+Saravanan Sekar (3):
+  hwmon: (pmbus/mpq7932) Get page count based on chip info
+  regulator: dt-bindings: Add mps,mpq2286 power-management IC
+  hwmon: (pmbus/mpq2286) Add a support for mpq2286 Power Management IC
+
+ .../bindings/regulator/mps,mpq2286.yaml       | 59 +++++++++++++++++++
+ drivers/hwmon/pmbus/mpq7932.c                 |  9 ++-
+ 2 files changed, 65 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/regulator/mps,mpq2286.yaml
+
+-- 
+2.34.1
+
