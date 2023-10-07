@@ -2,46 +2,47 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28628E95A61
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72915E95A65
 	for <linux-hwmon@archiver.kernel.org>; Sat,  7 Oct 2023 16:58:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344091AbjJGQ61 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S1344080AbjJGQ61 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Sat, 7 Oct 2023 12:58:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39374 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344085AbjJGQ60 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 7 Oct 2023 12:58:26 -0400
-Received: from omta040.useast.a.cloudfilter.net (omta040.useast.a.cloudfilter.net [44.202.169.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4BE6C2
-        for <linux-hwmon@vger.kernel.org>; Sat,  7 Oct 2023 09:58:25 -0700 (PDT)
-Received: from eig-obgw-6003a.ext.cloudfilter.net ([10.0.30.151])
+        with ESMTP id S1344088AbjJGQ61 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 7 Oct 2023 12:58:27 -0400
+Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43213B9
+        for <linux-hwmon@vger.kernel.org>; Sat,  7 Oct 2023 09:58:26 -0700 (PDT)
+Received: from eig-obgw-5001a.ext.cloudfilter.net ([10.0.29.139])
         by cmsmtp with ESMTP
-        id p9mXqKPunaLCxpAdFqsfFl; Sat, 07 Oct 2023 16:58:25 +0000
+        id p7vgq7vrGytxcpAdFqqLne; Sat, 07 Oct 2023 16:58:25 +0000
 Received: from md-in-79.webhostbox.net ([43.225.55.182])
         by cmsmtp with ESMTPS
-        id pAdCqnTeuqG4jpAdEq3IBM; Sat, 07 Oct 2023 16:58:25 +0000
-X-Authority-Analysis: v=2.4 cv=fqrP2X0f c=1 sm=1 tr=0 ts=65218e31
+        id pAdDqYO0iO1h5pAdEqZRH8; Sat, 07 Oct 2023 16:58:25 +0000
+X-Authority-Analysis: v=2.4 cv=fa2+dmcF c=1 sm=1 tr=0 ts=65218e31
  a=LfuyaZh/8e9VOkaVZk0aRw==:117 a=J9R/PiKqv2o3jGxbVGXx4w==:17
  a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
- a=bhdUkHdE2iEA:10 a=oz0wMknONp8A:10 a=LxWt8M_ywhtm8WUVVfYA:9
+ a=bhdUkHdE2iEA:10 a=oz0wMknONp8A:10 a=vU9dKmh3AAAA:8 a=rM9D5TWVn6pDyQQmvLkA:9
+ a=rsP06fVo5MYu2ilr0aT5:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=linumiz.com
-        ; s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject
-        :Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        ; s=default; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
         List-Post:List-Owner:List-Archive;
-        bh=c5iYOT22elVfPNtUrUd4M1WiKLFX0mjQfvAI7rmkpE8=; b=P/UKBi+qsiNhVtsBY7AucgpHJ6
-        1GPcyrYP+SuEc7jQR86Q1bYSDSdoNcg3L2baPYGenioeRHLp04LR8zHAS42OI8nvCaHWHA4bc1lnX
-        FMb68N+QH/r3F3VwWkG98104CHc/VM7GDK8tAsGB/zrukkG1JiUwyGmUbGdn6+gAIEMDYnGxtVGao
-        FYfyv/bZjvCN0DC3AVoefj8lm1jSmz9bYOBOCzUe1Tq4eMg/fvxIGV0YUIiimgG9X3KkSYVMWetcu
-        j/iNPhwmZCIR/b8R8ABuu8CFz6gvG9vjQZCx1BtYac6d5qiVuQhviisCryXD9pCVaU8cfb4SPpVKH
-        KkuvZZ9g==;
+        bh=4z+nM1mxoZBItzWTXHKdYlwbBxVGpaluekfGFIeavRs=; b=JY+dO9v4v3xDE3rAuXhtdLgEdk
+        sbY++wXnmb0Ka9Cf9hmEQ7wTnnnqzwqKpNbpLFcml3m0KtrBpCft/qEFvIBkRmgcRd8Nkg+Ngtb3w
+        a/StchzVUkslyrKqwEP0FfI3IyvtKKxrsjKHlMu3drNXk87qnOIPOAWW9rWsvLYY/dxjBugvDxrE1
+        4RBScLLvHRUwBnO9cPOFend9tP81FEza6IWF9Fise07kjaiEqOdkI6YrEafaLlI9Osu4e3qdFw1s/
+        TbGQ9AjE2z8Knunumy/0AUlzvHTF8Flv7P6t3P2RRS7N0eVNjXq+yff7Z6xXIU8Pz/iVJpagU2Lyj
+        ZjzByz1Q==;
 Received: from [103.186.120.251] (port=39748 helo=discovery..)
         by md-in-79.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.96.1)
         (envelope-from <saravanan@linumiz.com>)
-        id 1qpAd7-002Tlj-3D;
-        Sat, 07 Oct 2023 22:28:18 +0530
+        id 1qpAdA-002Tlj-09;
+        Sat, 07 Oct 2023 22:28:20 +0530
 From:   Saravanan Sekar <saravanan@linumiz.com>
 To:     sravanhome@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
@@ -49,10 +50,12 @@ To:     sravanhome@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-hwmon@vger.kernel.org,
         Saravanan Sekar <saravanan@linumiz.com>
-Subject: [PATCH v3 0/3] Add support for mpq2286 PMIC IC
-Date:   Sat,  7 Oct 2023 22:28:00 +0530
-Message-Id: <20231007165803.239718-1-saravanan@linumiz.com>
+Subject: [PATCH v3 1/3] hwmon: (pmbus/mpq7932) Get page count based on chip info
+Date:   Sat,  7 Oct 2023 22:28:01 +0530
+Message-Id: <20231007165803.239718-2-saravanan@linumiz.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231007165803.239718-1-saravanan@linumiz.com>
+References: <20231007165803.239718-1-saravanan@linumiz.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -63,46 +66,61 @@ X-AntiAbuse: Sender Address Domain - linumiz.com
 X-BWhitelist: no
 X-Source-IP: 103.186.120.251
 X-Source-L: No
-X-Exim-ID: 1qpAd7-002Tlj-3D
+X-Exim-ID: 1qpAdA-002Tlj-09
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
 X-Source-Sender: (discovery..) [103.186.120.251]:39748
 X-Source-Auth: saravanan@linumiz.com
-X-Email-Count: 1
+X-Email-Count: 12
 X-Org:  HG=dishared_whb_net_legacy;ORG=directi;
 X-Source-Cap: bGludW1jbWM7aG9zdGdhdG9yO21kLWluLTc5LndlYmhvc3Rib3gubmV0
 X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfFCD3gxcelbr6Uxeu4QXPy4taUZU6z6U/KVxHOCN8plZUi/b20cfMW8QEsjTFHVJPsbIgCO+j4DnJKkPsAgNwa1d+w5FvxPXpnVq5aAW3WrkyVoDJXV7
- OOJpui0GiAU2hm8aKNOdlQtFL+cZ8cFTSxOCmQV/P7fesyq7/Fq8i2BdSrwT+mHJZNBBrCyGk0CMaorCQMO2aabzWZkSdKG1FcM=
+X-CMAE-Envelope: MS4xfCIMT5gluI3YQ4QDeMUXQfDiUIxaaefI65zvRXO3Xw8E61R+hNf8tye8tiGsW6wjxARto+0WSELVNHoIWQDjuFdYEInPtBWEUluT24EIkQ7FkHq0tlcd
+ zcyttkjzQio7lVzb6DRwVbGVX2xY0VtjVYH9S05Ssd4AqXjw1Hrr8AI2snkknv1XjVkL30UQESZ4VdOHpa57KU5mWMBPoCR1ncs=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-changes in v3:
- - dt-binding commit message updated the reason for 'buck0' is used instead of 'buck'
+Get page count using compatible match to support the series of chipsets
+which differs in number of regualator/page.
 
-changes in v2:
- - fix dt check warnings
- - fix compiler warning on cast device_get_match_data and lexicological order of compatible
+Signed-off-by: Saravanan Sekar <saravanan@linumiz.com>
+---
+ drivers/hwmon/pmbus/mpq7932.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-
-
-The MPQ2286 is a programmable, high frequency synchronous buck regulator with
-integrated internal high side and low side power MOSFET. Application in
-Automotive compenents such as ADAS, Infotainment, SOC System core, DDR memory.
-
-
-Saravanan Sekar (3):
-  hwmon: (pmbus/mpq7932) Get page count based on chip info
-  regulator: dt-bindings: Add mps,mpq2286 power-management IC
-  hwmon: (pmbus/mpq2286) Add a support for mpq2286 Power Management IC
-
- .../bindings/regulator/mps,mpq2286.yaml       | 59 +++++++++++++++++++
- drivers/hwmon/pmbus/mpq7932.c                 |  9 ++-
- 2 files changed, 65 insertions(+), 3 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/regulator/mps,mpq2286.yaml
-
+diff --git a/drivers/hwmon/pmbus/mpq7932.c b/drivers/hwmon/pmbus/mpq7932.c
+index 6c62f01da7c6..723c314a57a2 100644
+--- a/drivers/hwmon/pmbus/mpq7932.c
++++ b/drivers/hwmon/pmbus/mpq7932.c
+@@ -105,7 +105,7 @@ static int mpq7932_probe(struct i2c_client *client)
+ 		return -ENOMEM;
+ 
+ 	info = &data->info;
+-	info->pages = MPQ7932_NUM_PAGES;
++	info->pages = (int)(unsigned long)device_get_match_data(&client->dev);
+ 	info->format[PSC_VOLTAGE_OUT] = direct;
+ 	info->m[PSC_VOLTAGE_OUT] = 160;
+ 	info->b[PSC_VOLTAGE_OUT] = -33;
+@@ -115,7 +115,7 @@ static int mpq7932_probe(struct i2c_client *client)
+ 	}
+ 
+ #if IS_ENABLED(CONFIG_SENSORS_MPQ7932_REGULATOR)
+-	info->num_regulators = ARRAY_SIZE(mpq7932_regulators_desc);
++	info->num_regulators = info->pages;
+ 	info->reg_desc = mpq7932_regulators_desc;
+ #endif
+ 
+@@ -129,7 +129,7 @@ static int mpq7932_probe(struct i2c_client *client)
+ }
+ 
+ static const struct of_device_id mpq7932_of_match[] = {
+-	{ .compatible = "mps,mpq7932"},
++	{ .compatible = "mps,mpq7932", .data = (void *)MPQ7932_NUM_PAGES },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, mpq7932_of_match);
 -- 
 2.34.1
 
