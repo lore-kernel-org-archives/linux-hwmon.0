@@ -2,126 +2,139 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 252D7CD612D
-	for <linux-hwmon@archiver.kernel.org>; Mon,  9 Oct 2023 19:36:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80ECDCD613D
+	for <linux-hwmon@archiver.kernel.org>; Mon,  9 Oct 2023 20:06:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346674AbjJITgm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 9 Oct 2023 15:36:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34630 "EHLO
+        id S1378538AbjJIUGN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 9 Oct 2023 16:06:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346671AbjJITgm (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 9 Oct 2023 15:36:42 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4556494;
-        Mon,  9 Oct 2023 12:36:41 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-692eed30152so3581550b3a.1;
-        Mon, 09 Oct 2023 12:36:41 -0700 (PDT)
+        with ESMTP id S1378533AbjJIUGM (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 9 Oct 2023 16:06:12 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A94E0
+        for <linux-hwmon@vger.kernel.org>; Mon,  9 Oct 2023 13:06:08 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2c1807f3400so60244941fa.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 09 Oct 2023 13:06:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696880201; x=1697485001; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QT4Br2eZjQ80RdnoaYqMr7Yf+2xA1VhGldDuZohGZNE=;
-        b=NzK3afOu1XyJOBumcOQyx6oAGIXDuJu8Vea35C/SHNYvhzV92/5GcFNzmxDZUvDHws
-         OVCunG31OSVY1FAC05sdhe7oU0U/i1H9DwV7Q8aFvY35/graTaHoTnLFV9nO5iU0BVRO
-         4C8ecKEATx3K+z0KBw68tGqw1hk3oZa/5b/1mg6mu9+waDfx3o8pxsWYUdWph8/CCQLx
-         vMKF0piSkc7Mstf1bqEJ0/Nwqpr3RUamDcNoYG7eLJmp15XBiLVBgWs61UifteZb9O1H
-         5+AOVqml7gjXkshuKlePSblQxvuvgbmeyXJjmSNaEaJ5OIxlwMHM3Cxsqev7h/TdTDMf
-         q6Gw==
+        d=ionos.com; s=google; t=1696881966; x=1697486766; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vntWR/EJpWFamZ/9NMXVbCLlV4xDhJbERcnlqbMN6Xk=;
+        b=BFuMz3FMbhLgkIJi/HkkmJ1VkLf2I7vqp4svyIwG2+yDE+U4S96EGEikgUcb8O02Uo
+         8j8iLlfo7vmxsfcwVcs/qIKkl99xa5dmEeJRo1cSF6V+ygbEal7iO3+v912NQA+dawBz
+         Soy5yco9XA4Rbc4rDCwVGkioAfXZalXRitmVvyF0C2rWZ0Ewe2//XA3FBEsbn52apGZL
+         aRFt/c7Wzbg6QpYPQ0dm8EJR8fe2x3S+duZuFSIP/H5VlRW/FVRYn5HxOETlTJKz3xcb
+         BMDmJLPjWEXQ8IaDm9bc5q/71Ibv+h4ffhs1BXiaAk1KUwUk/S2rUW6zLyroy1Lm1kJC
+         OAGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696880201; x=1697485001;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QT4Br2eZjQ80RdnoaYqMr7Yf+2xA1VhGldDuZohGZNE=;
-        b=Y1YT3KjS4/1gXHCOqB7Lj5/wIQNLUiCf02RuJADET4QCMaaiw8qaj7a7uh8iLEkZ9Q
-         qzlL0v57mf/nHl/jCgftZu1YK5gw1yL5pH5L7Dc5TXYDHBNeH+EDUY+wpvNZqAZfJXHu
-         d3oTfj5VlJ+PDC8EbJYhlB1hGiuzUvPjjuIivqeMnJJ4W5qYwEsIkYR8KZSXZZao2eK3
-         1j6s6ENI0Jz9+xjKR7J5sbS52TJne9s1gMbC1FM3G6I9CVAN3Qx/BzhlFIaBCTBU0Lkl
-         F7i4YmRrQAPZ3TNArtZmH4wPhHDLnC5I2NnDfSmnleVs83JQqsClgrL8ZUoI7sZKhCrA
-         X3rQ==
-X-Gm-Message-State: AOJu0YwWkbgK1XNaSgQUAyXcs3ZP5gPlBXnIoQpdR95w/Z8T6xTfU2QP
-        bRhkj4prQrgNoBM5G7l/e5TbrGg2AMI=
-X-Google-Smtp-Source: AGHT+IFJlgJoKtZAh6NKf/UOPOuUMtnnktunZmGdr7yx9EDHm1bLUu8RTTOdX3L2QYwoJXuvbEvlMw==
-X-Received: by 2002:a05:6a00:cc1:b0:68b:bf33:2957 with SMTP id b1-20020a056a000cc100b0068bbf332957mr14799799pfv.22.1696880200538;
-        Mon, 09 Oct 2023 12:36:40 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a21-20020a62bd15000000b00693498a846esm6737528pff.80.2023.10.09.12.36.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Oct 2023 12:36:39 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 9 Oct 2023 12:36:38 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Max Kellermann <max.kellermann@ionos.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/7] drivers/hwmon: add local variable for newly
- allocated attribute_group**
-Message-ID: <61bd7bfd-5054-4578-bcb5-0b855706b6d7@roeck-us.net>
-References: <20231009165741.746184-1-max.kellermann@ionos.com>
- <20231009165741.746184-2-max.kellermann@ionos.com>
- <bab3c83c-2ba8-4d23-b3cb-2f233898f7f2@roeck-us.net>
- <CAKPOu+8Uk4GNpZ3DfWhNWXR1bQ60LxcaK9nKs+kRKuq3BOJtmA@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1696881966; x=1697486766;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vntWR/EJpWFamZ/9NMXVbCLlV4xDhJbERcnlqbMN6Xk=;
+        b=fFwCJ7AhgH/OQszk2R8SBBRaQqD/XbAA9nx7fpJiBRp4XZlGASMIjMFYzKgJzLYxcR
+         vr+ejJn3Rrn3jX10u94SCzD5GpeNRNA4UB5edWucKzIemYgB5JGepv9eASKgOKWDzrcg
+         Wo45vKNNxS65daTmjCjKIpQcFFGywvtvkwCJOq5qrIdCXwh6BVqV+SO8UjFt7eU8Kvgb
+         6E4uJAQ+VE8V01650HT1seC98RYHCp/7wTtB9cJxGwEgM4+eTGrjgTvPPQsbiIHNNPkg
+         ij28Zx2WzJ3rMl/ie5s/KHCUBmAnZWedJA9rSW/Fbx5YY5tp439ICTwRw5L6zl7Lz5FJ
+         gEfw==
+X-Gm-Message-State: AOJu0YzvvdwmGqRA6SjwfOqmMAeuJEkrP1UrOu4p8JF/T5nUxlZ/mQTj
+        2IW3FV8keAiykK9UlvpqBm77IdAyr73HnwXUKJpfEA==
+X-Google-Smtp-Source: AGHT+IFghqg7b3VfDVvZ+soPEwEaIfxhrwarlOcz2b03PC3KagC0O9BH1UGRNCP79pJ8yT5JMzxC/VoYSKvtKG/y1ws=
+X-Received: by 2002:a2e:870c:0:b0:2b6:cbdb:790c with SMTP id
+ m12-20020a2e870c000000b002b6cbdb790cmr11535962lji.1.1696881966432; Mon, 09
+ Oct 2023 13:06:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKPOu+8Uk4GNpZ3DfWhNWXR1bQ60LxcaK9nKs+kRKuq3BOJtmA@mail.gmail.com>
+References: <20231009165741.746184-1-max.kellermann@ionos.com>
+ <20231009165741.746184-6-max.kellermann@ionos.com> <264fa39d-aed6-4a54-a085-107997078f8d@roeck-us.net>
+In-Reply-To: <264fa39d-aed6-4a54-a085-107997078f8d@roeck-us.net>
+From:   Max Kellermann <max.kellermann@ionos.com>
+Date:   Mon, 9 Oct 2023 22:05:55 +0200
+Message-ID: <CAKPOu+8k2x1CucWSzoouts0AfMJk+srJXWWf3iWVOeY+fWkOpQ@mail.gmail.com>
+Subject: Re: [PATCH 6/7] fs/sysfs/group: make attribute_group pointers const
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        James Clark <james.clark@arm.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-rdma@vger.kernel.org, iommu@lists.linux.dev,
+        nvdimm@lists.linux.dev, linux-nvme@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-leds@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Oct 09, 2023 at 07:28:03PM +0200, Max Kellermann wrote:
-> On Mon, Oct 9, 2023 at 7:19 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> > I have no idea what this is about, and I don't see how that would
-> > improve anything, but ...
-> 
-> Later, we can make lots of global variables "const", which puts them
-> in ".rodata" (write-protected at runtime). This is some
-> micro-hardening.
-> 
-> > CHECK: multiple assignments should be avoided
-> > #101: FILE: drivers/hwmon/hwmon.c:794:
-> > +               hwdev->groups = new_groups = kcalloc(ngroups, sizeof(*new_groups), GFP_KERNEL);
-> 
-> What program emitted this warning? checkpatch.pl had no error. I'll
-> change it in all patches.
+On Mon, Oct 9, 2023 at 7:24=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> w=
+rote:
+> Also, I don't know why checkpatch is happy with all the
+>
+>         const struct attribute_group *const*groups;
+>
+> instead of
+>
+>         const struct attribute_group *const *groups;
 
-I doubt that you ran checkpatch --strict. That check has existed in checkpatch
-at least since 2007.
+I found out that checkpatch has no check for this at all; it does
+complain about such lines, but only for local variables. But that
+warning is actually a bug, because this is a check for unary
+operators: it thinks the asterisk is a dereference operator, not a
+pointer declaration, and complains that the unary operator must be
+preceded by a space. Thus warnings on local variable are only correct
+by coincidence, not by design.
 
-Also, process/coding-style.rst says:
-
-    Don't put multiple assignments on a single line either.  Kernel coding style
-    is super simple.  Avoid tricky expressions.
-
-As far as I know that guildeline has not changed.
-
-Now, you might argue something like "who cares about checkpatch --strict",
-but in Documentation/hwmon/submitting-patches.rst we specifically say
-
-* Please run your patch through 'checkpatch --strict'. There should be no
-  errors, no warnings, and few if any check messages. If there are any
-  messages, please be prepared to explain.
-
-So, please explain why this message and with it the coding style violation
-should be ignored.
-
-> 
-> > either case, this change is not acceptable.
-> 
-> Because of the multi-assignment, or is there something else?
-
-I don't really see the benefit of this code, and I am not sure if the
-explanation about compiler optimization is really valid. It makes me
-want to run some test compliations to see if the claim is really true,
-and I really don't have time for that.
-
-Also, as Greg points out, this is not in a hot code path but executed
-exactly once for each hwmon device, so making such a change with a reason
-like that just invites lots of follow-up patches with similar reasons,
-and then the submitters of those can point to this patch and argue
-"but you accepted that one". You say "micro-hardening" above, but for
-me it is time consuming micro-optimization.
-
-Guenter
+Inside structs or parameters (where my coding style violations can be
+found), it's a different context and thus checkpatch doesn't apply the
+rules for unary operators.
