@@ -2,240 +2,126 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B08BCD6117
-	for <linux-hwmon@archiver.kernel.org>; Mon,  9 Oct 2023 17:35:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 252D7CD612D
+	for <linux-hwmon@archiver.kernel.org>; Mon,  9 Oct 2023 19:36:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377427AbjJIRfI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 9 Oct 2023 13:35:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56726 "EHLO
+        id S1346674AbjJITgm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 9 Oct 2023 15:36:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377385AbjJIRfH (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 9 Oct 2023 13:35:07 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A806E94;
-        Mon,  9 Oct 2023 10:35:06 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1366C433C8;
-        Mon,  9 Oct 2023 17:35:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696872906;
-        bh=1ZYVBGazHy2d4Xk2g9EBASgik4ghV3l90e5mT3K1Ytc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RDr93PRPR2Q/aDAn5KZ/clRWHgfjNEsU4Sm9fe6ojAyybNu2a+vz/JFOL2gBgyem0
-         AviVkEuKu9pfF2QwsiUVUQjWBbosIgwB8QehsabJ0WrNFrsQmHkomYR5wfARuJcWvV
-         9lYEMe6yh0eq4kI766BIsvtm7SP1Bd8TtBNfTSXzJQx1+l+DcG7YwYGJHpHiXyhFF1
-         C40bo6oAG24vz3K9ABTdBjX5SH2NEz18pOdnrViwbuNXJk/7KASVBejSR5KhC3Kqn3
-         pTLkC/ruDcqrsZsVHZxUdLgzYgxlV4xDE8oECUV5qfVWyx2FFXYmjXBPTnw0N2Tuvm
-         2ZY/ZXS2vVDiw==
-Date:   Mon, 9 Oct 2023 18:35:01 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Antoniu Miclaus <antoniu.miclaus@analog.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: ltc2991: add bindings
-Message-ID: <20231009-maimed-reenact-05c6e3b36ca9@spud>
-References: <20231003080059.8041-1-antoniu.miclaus@analog.com>
+        with ESMTP id S1346671AbjJITgm (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 9 Oct 2023 15:36:42 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4556494;
+        Mon,  9 Oct 2023 12:36:41 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-692eed30152so3581550b3a.1;
+        Mon, 09 Oct 2023 12:36:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696880201; x=1697485001; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QT4Br2eZjQ80RdnoaYqMr7Yf+2xA1VhGldDuZohGZNE=;
+        b=NzK3afOu1XyJOBumcOQyx6oAGIXDuJu8Vea35C/SHNYvhzV92/5GcFNzmxDZUvDHws
+         OVCunG31OSVY1FAC05sdhe7oU0U/i1H9DwV7Q8aFvY35/graTaHoTnLFV9nO5iU0BVRO
+         4C8ecKEATx3K+z0KBw68tGqw1hk3oZa/5b/1mg6mu9+waDfx3o8pxsWYUdWph8/CCQLx
+         vMKF0piSkc7Mstf1bqEJ0/Nwqpr3RUamDcNoYG7eLJmp15XBiLVBgWs61UifteZb9O1H
+         5+AOVqml7gjXkshuKlePSblQxvuvgbmeyXJjmSNaEaJ5OIxlwMHM3Cxsqev7h/TdTDMf
+         q6Gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696880201; x=1697485001;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QT4Br2eZjQ80RdnoaYqMr7Yf+2xA1VhGldDuZohGZNE=;
+        b=Y1YT3KjS4/1gXHCOqB7Lj5/wIQNLUiCf02RuJADET4QCMaaiw8qaj7a7uh8iLEkZ9Q
+         qzlL0v57mf/nHl/jCgftZu1YK5gw1yL5pH5L7Dc5TXYDHBNeH+EDUY+wpvNZqAZfJXHu
+         d3oTfj5VlJ+PDC8EbJYhlB1hGiuzUvPjjuIivqeMnJJ4W5qYwEsIkYR8KZSXZZao2eK3
+         1j6s6ENI0Jz9+xjKR7J5sbS52TJne9s1gMbC1FM3G6I9CVAN3Qx/BzhlFIaBCTBU0Lkl
+         F7i4YmRrQAPZ3TNArtZmH4wPhHDLnC5I2NnDfSmnleVs83JQqsClgrL8ZUoI7sZKhCrA
+         X3rQ==
+X-Gm-Message-State: AOJu0YwWkbgK1XNaSgQUAyXcs3ZP5gPlBXnIoQpdR95w/Z8T6xTfU2QP
+        bRhkj4prQrgNoBM5G7l/e5TbrGg2AMI=
+X-Google-Smtp-Source: AGHT+IFJlgJoKtZAh6NKf/UOPOuUMtnnktunZmGdr7yx9EDHm1bLUu8RTTOdX3L2QYwoJXuvbEvlMw==
+X-Received: by 2002:a05:6a00:cc1:b0:68b:bf33:2957 with SMTP id b1-20020a056a000cc100b0068bbf332957mr14799799pfv.22.1696880200538;
+        Mon, 09 Oct 2023 12:36:40 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a21-20020a62bd15000000b00693498a846esm6737528pff.80.2023.10.09.12.36.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Oct 2023 12:36:39 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 9 Oct 2023 12:36:38 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Max Kellermann <max.kellermann@ionos.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/7] drivers/hwmon: add local variable for newly
+ allocated attribute_group**
+Message-ID: <61bd7bfd-5054-4578-bcb5-0b855706b6d7@roeck-us.net>
+References: <20231009165741.746184-1-max.kellermann@ionos.com>
+ <20231009165741.746184-2-max.kellermann@ionos.com>
+ <bab3c83c-2ba8-4d23-b3cb-2f233898f7f2@roeck-us.net>
+ <CAKPOu+8Uk4GNpZ3DfWhNWXR1bQ60LxcaK9nKs+kRKuq3BOJtmA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Sb32d3m8HlxF4rSL"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20231003080059.8041-1-antoniu.miclaus@analog.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKPOu+8Uk4GNpZ3DfWhNWXR1bQ60LxcaK9nKs+kRKuq3BOJtmA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On Mon, Oct 09, 2023 at 07:28:03PM +0200, Max Kellermann wrote:
+> On Mon, Oct 9, 2023 at 7:19 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> > I have no idea what this is about, and I don't see how that would
+> > improve anything, but ...
+> 
+> Later, we can make lots of global variables "const", which puts them
+> in ".rodata" (write-protected at runtime). This is some
+> micro-hardening.
+> 
+> > CHECK: multiple assignments should be avoided
+> > #101: FILE: drivers/hwmon/hwmon.c:794:
+> > +               hwdev->groups = new_groups = kcalloc(ngroups, sizeof(*new_groups), GFP_KERNEL);
+> 
+> What program emitted this warning? checkpatch.pl had no error. I'll
+> change it in all patches.
 
---Sb32d3m8HlxF4rSL
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I doubt that you ran checkpatch --strict. That check has existed in checkpatch
+at least since 2007.
 
-On Tue, Oct 03, 2023 at 11:00:39AM +0300, Antoniu Miclaus wrote:
-> Add dt-bindings for ltc2991 octal i2c voltage, current and temperature
-> monitor.
->=20
-> Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
-> ---
-> changes in v3:
->  - expand description for differential channels and temperature channels =
-by
->    mentioning the pin configuration that is set via these properties.
->  - add `additionalProperties: false` for the channel properties
->  - make `reg` required for channel properties
->  - make `adi,temperature-enable` and `shunt-resistor-micro-ohms` mutually
->    exclusive following the approach suggested in review.
+Also, process/coding-style.rst says:
 
-Thanks for the updates.
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+    Don't put multiple assignments on a single line either.  Kernel coding style
+    is super simple.  Avoid tricky expressions.
 
-Cheers,
-Conor.
+As far as I know that guildeline has not changed.
 
->  .../bindings/hwmon/adi,ltc2991.yaml           | 128 ++++++++++++++++++
->  1 file changed, 128 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/adi,ltc2991.y=
-aml
->=20
-> diff --git a/Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml b/D=
-ocumentation/devicetree/bindings/hwmon/adi,ltc2991.yaml
-> new file mode 100644
-> index 000000000000..011e5b65c79c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml
-> @@ -0,0 +1,128 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +
-> +$id: http://devicetree.org/schemas/hwmon/adi,ltc2991.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Analog Devices LTC2991 Octal I2C Voltage, Current and Temperature=
- Monitor
-> +
-> +maintainers:
-> +  - Antoniu Miclaus <antoniu.miclaus@analog.com>
-> +
-> +description: |
-> +  The LTC2991 is used to monitor system temperatures, voltages and curre=
-nts.
-> +  Through the I2C serial interface, the eight monitors can individually =
-measure
-> +  supply voltages and can be paired for differential measurements of cur=
-rent
-> +  sense resistors or temperature sensing transistors.
-> +
-> +  Datasheet:
-> +    https://www.analog.com/en/products/ltc2991.html
-> +
-> +properties:
-> +  compatible:
-> +    const: adi,ltc2991
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
-> +
-> +  vcc-supply: true
-> +
-> +patternProperties:
-> +  "^channel@[0-3]$":
-> +    type: object
-> +    description:
-> +      Represents the differential/temperature channels.
-> +
-> +    properties:
-> +      reg:
-> +        description:
-> +          The channel number. LTC2991 can monitor 4 currents/temperature=
-s.
-> +        items:
-> +          minimum: 0
-> +          maximum: 3
-> +
-> +      shunt-resistor-micro-ohms:
-> +        description:
-> +          The value of curent sense resistor in micro ohms. Pin configur=
-ation is
-> +          set for differential input pair.
-> +
-> +      adi,temperature-enable:
-> +        description:
-> +          Enables temperature readings. Pin configuration is set for rem=
-ote
-> +          diode temperature measurement.
-> +        type: boolean
-> +
-> +    required:
-> +      - reg
-> +
-> +    allOf:
-> +      - if:
-> +          required:
-> +            - shunt-resistor-micro-ohms
-> +        then:
-> +          properties:
-> +            adi,temperature-enable: false
-> +
-> +    additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - vcc-supply
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells =3D <1>;
-> +        #size-cells =3D <0>;
-> +
-> +        hwmon@48 {
-> +            compatible =3D "adi,ltc2991";
-> +            reg =3D <0x48>;
-> +            vcc-supply =3D <&vcc>;
-> +        };
-> +    };
-> +  - |
-> +    i2c {
-> +        #address-cells =3D <1>;
-> +        #size-cells =3D <0>;
-> +
-> +        hwmon@48 {
-> +            #address-cells =3D <1>;
-> +            #size-cells =3D <0>;
-> +
-> +            compatible =3D "adi,ltc2991";
-> +            reg =3D <0x48>;
-> +            vcc-supply =3D <&vcc>;
-> +
-> +            channel@0 {
-> +                    reg =3D <0x0>;
-> +                    shunt-resistor-micro-ohms =3D <100000>;
-> +            };
-> +
-> +            channel@1 {
-> +                    reg =3D <0x1>;
-> +                    shunt-resistor-micro-ohms =3D <100000>;
-> +            };
-> +
-> +            channel@2 {
-> +                    reg =3D <0x2>;
-> +                    adi,temperature-enable;
-> +            };
-> +
-> +            channel@3 {
-> +                    reg =3D <0x3>;
-> +                    adi,temperature-enable;
-> +            };
-> +        };
-> +    };
-> +...
-> --=20
-> 2.42.0
->=20
+Now, you might argue something like "who cares about checkpatch --strict",
+but in Documentation/hwmon/submitting-patches.rst we specifically say
 
---Sb32d3m8HlxF4rSL
-Content-Type: application/pgp-signature; name="signature.asc"
+* Please run your patch through 'checkpatch --strict'. There should be no
+  errors, no warnings, and few if any check messages. If there are any
+  messages, please be prepared to explain.
 
------BEGIN PGP SIGNATURE-----
+So, please explain why this message and with it the coding style violation
+should be ignored.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZSQ5xQAKCRB4tDGHoIJi
-0g+SAP48zfjGLubhF083okMidLJzwi9GXWmdPgm2K/XEx2vJ4wEA0rwolj+tSDO4
-X8BeLlW4PVLEukU92W77hIo/kNPSAw0=
-=ymEK
------END PGP SIGNATURE-----
+> 
+> > either case, this change is not acceptable.
+> 
+> Because of the multi-assignment, or is there something else?
 
---Sb32d3m8HlxF4rSL--
+I don't really see the benefit of this code, and I am not sure if the
+explanation about compiler optimization is really valid. It makes me
+want to run some test compliations to see if the claim is really true,
+and I really don't have time for that.
+
+Also, as Greg points out, this is not in a hot code path but executed
+exactly once for each hwmon device, so making such a change with a reason
+like that just invites lots of follow-up patches with similar reasons,
+and then the submitters of those can point to this patch and argue
+"but you accepted that one". You say "micro-hardening" above, but for
+me it is time consuming micro-optimization.
+
+Guenter
