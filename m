@@ -2,126 +2,129 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DDBF9CD6137
-	for <linux-hwmon@archiver.kernel.org>; Mon,  9 Oct 2023 20:20:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D42E1CD6139
+	for <linux-hwmon@archiver.kernel.org>; Mon,  9 Oct 2023 21:16:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234621AbjJIUUo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 9 Oct 2023 16:20:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56396 "EHLO
+        id S234707AbjJIVQq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 9 Oct 2023 17:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378635AbjJIUUc (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 9 Oct 2023 16:20:32 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F81E6
-        for <linux-hwmon@vger.kernel.org>; Mon,  9 Oct 2023 13:20:27 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2b9d07a8d84so62220401fa.3
-        for <linux-hwmon@vger.kernel.org>; Mon, 09 Oct 2023 13:20:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google; t=1696882824; x=1697487624; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Y+Vz1bOKclq9QVOuzcbH1aPgn89tmrsRZHycaiZatEw=;
-        b=ZXApSf+xs3DWZi9glvHF1ftND6nJHcuKyZNMhSXqRfpzyjpe56h3jtGPbf0ReTYeIR
-         RoqIRMnNlo5c4iYjSTI3QLMoSrSL3Rs4N1wpJYkT7wNvk55NM8Kj09YWfoihk3uwDV0N
-         j3DLQGPgNtVUZ1Xe3iQddIydsZZGVwfsNomkvREBIGMDV5eJ9Swc92sSWIp/4FFJLqSW
-         cxpBEqBDyMXZseJ7uDuknWrKTq/l6vorjNDBaNeMsX/00U5lU9RwVZ4B+UfgR9Phi2Nn
-         Kmrm7CQdyUv/4Oz1E2zyTUl+ziSyCKtPfjZ+tJ8buhGvk4n7GbHom+dqb86i8kTuCv48
-         ctcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696882824; x=1697487624;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Y+Vz1bOKclq9QVOuzcbH1aPgn89tmrsRZHycaiZatEw=;
-        b=T3PU81J3nQnaexVwRgV4uo7eiLT2zXGjr5uyfe38vQDEF6y1oHk4bBdaqW2LLoCehT
-         fQ4Qb2uDTlksas0B6WnCf8B4zoPF1J+Go4dW2cJwJJOKyyOh38dkcOjaC2V5ZIa/sxQs
-         4NjoBX+QystX9TYbBVH1iMNhUlRt+nR9RdzU5i9G/gwp1c8f1BVPbbOQocZAaOKLgdgp
-         9CXu3yw0Q9+gJZm/3M3FVkPsklDLBKPCq4HjyP4pS5LYquGCHDC2qo3SndRjaFJY4jKa
-         CBXkBmYRhP0MNhfmBHclJdiHlCR58OLEDixuQCtTD6ka7sMooxaiHtMLeWgr4pXCDs7i
-         6Bhg==
-X-Gm-Message-State: AOJu0Yw4K0RgnQcUGHVqDuRbnaD2t3oMFyOWGploDdnRv3549TqN6n4/
-        azhIlT/k3IO9oFkdELfDvTprKUHtawNxN5e4O7caXg==
-X-Google-Smtp-Source: AGHT+IEX6TNoPqier59OSFRvkXjcha7x9rPtvBMuDMX6o39QQshLcsk0zSX1nZ378MTMsNUvnOr8e/pohr3AIc4q14M=
-X-Received: by 2002:a05:651c:120e:b0:2bf:fbe7:67dd with SMTP id
- i14-20020a05651c120e00b002bffbe767ddmr14845991lja.28.1696882824611; Mon, 09
- Oct 2023 13:20:24 -0700 (PDT)
+        with ESMTP id S1378256AbjJIVQb (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 9 Oct 2023 17:16:31 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C5D1FDD;
+        Mon,  9 Oct 2023 14:15:20 -0700 (PDT)
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 399L5tKb016139;
+        Mon, 9 Oct 2023 21:14:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=EYKuGGems9T+6zGXgi2t9NNdEBVNAcjgmaOdTsCRw4Q=;
+ b=QknR9rGKY0F+WzEDax92xSB5iS9q90JKwkLYtTxJPihstKdK0hbTRyYzpx7l6KqsFNnj
+ ulzH/J0+GKpUfWN60v5Fwjp9Yaqfcxwry2NnMe0DgHkt4p5wODROKXw/tQKqsKFOcP1h
+ 2R41U9N7rSixjw/44jjw7yXG8ryw/LpycvVDF+liJCZ2usicDkr4+5qCcGxodG+vqc4q
+ G7Vm7VNMbFkCXk+z/L+UCSXrq8y2zNh9Fef+WUR0aHxY1Jf6DohwFrNLmP85XHUci9II
+ qWWMvRBfF03hcg0w8+27H7c/VNfs1tw6YscgNfIzqhSrSKh56cUjENm/ZxzVvJOLq1kR TA== 
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tms4kr82s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 09 Oct 2023 21:14:55 +0000
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+        by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 399JtgoH025863;
+        Mon, 9 Oct 2023 21:14:54 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
+        by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3tkjnn3su5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 09 Oct 2023 21:14:54 +0000
+Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
+        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 399LErGI28967334
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 9 Oct 2023 21:14:53 GMT
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7DC775805A;
+        Mon,  9 Oct 2023 21:14:53 +0000 (GMT)
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 63F0C58054;
+        Mon,  9 Oct 2023 21:14:53 +0000 (GMT)
+Received: from gfwa600.aus.stglabs.ibm.com (unknown [9.3.84.101])
+        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTPS;
+        Mon,  9 Oct 2023 21:14:53 +0000 (GMT)
+Received: by gfwa600.aus.stglabs.ibm.com (Postfix, from userid 181152)
+        id D377B740052; Mon,  9 Oct 2023 16:14:52 -0500 (CDT)
+From:   Lakshmi Yadlapati <lakshmiy@us.ibm.com>
+To:     linux@roeck-us.net, wsa@kernel.org, sumit.semwal@linaro.org,
+        christian.koenig@amd.com, jdelvare@suse.com, joel@jms.id.au,
+        andrew@aj.id.au, eajames@linux.ibm.com, ninad@linux.ibm.com
+Cc:     Lakshmi Yadlapati <lakshmiy@us.ibm.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: [PATCH v1 2/2] hwmon: (pmbus/max31785) Add minimum delay between bus accesses
+Date:   Mon,  9 Oct 2023 16:14:20 -0500
+Message-Id: <20231009211420.3454026-3-lakshmiy@us.ibm.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20231009211420.3454026-1-lakshmiy@us.ibm.com>
+References: <20231009211420.3454026-1-lakshmiy@us.ibm.com>
 MIME-Version: 1.0
-References: <20231009165741.746184-1-max.kellermann@ionos.com>
- <20231009165741.746184-6-max.kellermann@ionos.com> <2023100921-that-jasmine-2240@gregkh>
-In-Reply-To: <2023100921-that-jasmine-2240@gregkh>
-From:   Max Kellermann <max.kellermann@ionos.com>
-Date:   Mon, 9 Oct 2023 22:20:13 +0200
-Message-ID: <CAKPOu+9=WBabTBExH1GQxhXrNH9xWciceavi6QF1nbfn9cXcig@mail.gmail.com>
-Subject: Re: [PATCH 6/7] fs/sysfs/group: make attribute_group pointers const
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Keith Busch <kbusch@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        James Clark <james.clark@arm.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-rdma@vger.kernel.org, iommu@lists.linux.dev,
-        nvdimm@lists.linux.dev, linux-nvme@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-leds@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: cSuJDHQgLZ_TeooGShUucacu0_peuDDX
+X-Proofpoint-ORIG-GUID: cSuJDHQgLZ_TeooGShUucacu0_peuDDX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-09_19,2023-10-09_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
+ spamscore=0 impostorscore=0 mlxscore=0 bulkscore=0 phishscore=0
+ malwarescore=0 mlxlogscore=999 adultscore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2310090169
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Oct 9, 2023 at 7:26=E2=80=AFPM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
-> "*const*groups"?   That's a parsing nightmare, really hard for humans to
-> read and understand.  Doesn't checkpatch complain about this?
+The MAX31785 has shown erratic behaviour across multiple system
+designs, unexpectedly clock stretching and NAKing transactions.
+Inserting a small delay (250us) after register writes makes the
+issue go away.
 
-No, checkpatch does not implement a check/warning for this style (see
-my other email). There's no rule for this in coding-style.rst. Should
-there be one?
+Signed-off-by: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
+---
+ drivers/hwmon/pmbus/max31785.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/hwmon/pmbus/max31785.c b/drivers/hwmon/pmbus/max31785.c
+index f9aa576495a5..532e1c8f632c 100644
+--- a/drivers/hwmon/pmbus/max31785.c
++++ b/drivers/hwmon/pmbus/max31785.c
+@@ -5,6 +5,7 @@
+ 
+ #include <linux/kernel.h>
+ #include <linux/module.h>
++#include <linux/moduleparam.h>
+ #include <linux/init.h>
+ #include <linux/err.h>
+ #include <linux/i2c.h>
+@@ -24,6 +25,9 @@ enum max31785_regs {
+ #define MAX31785_NR_PAGES		23
+ #define MAX31785_NR_FAN_PAGES		6
+ 
++static unsigned long throttle_delay_us = 250;
++module_param(throttle_delay_us, ulong, 0664);
++
+ static int max31785_read_byte_data(struct i2c_client *client, int page,
+ 				   int reg)
+ {
+@@ -337,6 +341,10 @@ static int max31785_probe(struct i2c_client *client)
+ 				     I2C_FUNC_SMBUS_WORD_DATA))
+ 		return -ENODEV;
+ 
++	ret = i2c_smbus_throttle_client(client, throttle_delay_us);
++	if (ret)
++		return ret;
++
+ 	info = devm_kzalloc(dev, sizeof(struct pmbus_driver_info), GFP_KERNEL);
+ 	if (!info)
+ 		return -ENOMEM;
+-- 
+2.39.2
+
