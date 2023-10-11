@@ -2,129 +2,159 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D03CCDB476
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Oct 2023 18:24:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D54ADCDB47E
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Oct 2023 20:28:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376285AbjJKSYE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 11 Oct 2023 14:24:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40042 "EHLO
+        id S233360AbjJKU20 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 11 Oct 2023 16:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376281AbjJKSX5 (ORCPT
+        with ESMTP id S233308AbjJKU2Z (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 Oct 2023 14:23:57 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A519D
-        for <linux-hwmon@vger.kernel.org>; Wed, 11 Oct 2023 11:23:56 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-325e9cd483eso120229f8f.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 11 Oct 2023 11:23:56 -0700 (PDT)
+        Wed, 11 Oct 2023 16:28:25 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836B891;
+        Wed, 11 Oct 2023 13:28:24 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-9ad8a822508so41229766b.0;
+        Wed, 11 Oct 2023 13:28:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697048635; x=1697653435; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2I3M0AseJOVwbz7qPxfXOr0/qxWVi2JNLlDWGyELfhM=;
-        b=FWYwnqpHgdnnWGL2up4W6Wi0GmrvE+islQGOzcTtZUTjL9uc0uRWCysNbgwTtkeWlj
-         aZBme8u9EuQrNDrKyQX3aLi54F127ltL58it6KeTfRhDrywqRNYViXqQ2X02QV1lVEFW
-         S2f9CBBPnwkvCcqqSCvg2e2i6asEx8fRc5BLBpa12A/ZkRB5C/IcFlyOSwIaduIFoROx
-         NOvnKmNkhQ9An2Gnz/Y5ll1v2XQZjJDOc5hOIw3w9RWoyc8HuQSY0nUojuun/w0/nDOS
-         HOVf8wyNDhtecmh8ZSxYMqyBrlUZNYoz0u+uXItqnOQPiTQ2Smp1wG/20Fwb5K14PYBO
-         gLyQ==
+        d=gmail.com; s=20230601; t=1697056103; x=1697660903; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ajiQCZsbPOI0YVqPS5NSWxeb5/T72xImtw2yRB9hN9k=;
+        b=WzoWJ/4m1DH6nOHkQheDn5r/b2dKJa3Ovi1inoyw0t8++90GehjF/W4ZV2QuBY2tJM
+         C85ztAaamM23j5qXEsO411iKJMUioDkzBK6iRXyI3eWQxUvV30lNHRwnbrZK+a5M1Gb3
+         lAZj0QdsbVliohR+QdQnFtlMiMQ3krneoxTL5/0oBUvXcGt7FfIn6r5+5RpKJP6+1t31
+         699x9XwT7xQ5klPVPgwBqIbVEkjkINAt0LMhrPRywUeVLvRhVppx0R3ijGZJr6dFD7Nd
+         U081D1DPi4dbpFm8Z0RbrXVUlMCuBomligPrjacF//3DM55SsvtiZDfVa1UAnLs5p4BG
+         pznQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697048635; x=1697653435;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2I3M0AseJOVwbz7qPxfXOr0/qxWVi2JNLlDWGyELfhM=;
-        b=MdmQxtKPGrtBZmaYRSxVN9fyIA73757jNTT22zdoVs0Tmt4pV5a2KqO94H+IP7BfMm
-         SDBUZ12As+ekHrCNqxVptyOhlGUSlW1CMDwyvfSxHtrju4EGstoN2seLSf/ZKJgUQH7j
-         DmBWKLIrsXIL9rVY9YzVbFkMYiOiYgNJWmJioifoCwkIm4c+Qa+ZCVgfNLtRz/vzF+oA
-         kkE56M/MvYciBa9BevRvWF+jSIE+rFOX+LRLUWVP924clrEsW24NFHUwHI/Q14MfA6Jt
-         RMTtGxgoVT/0QbcTj9hn7BjJgXpm3IbiQUZ80TY1W1sTD1fA1QJV/4u2069KPlCrkUAd
-         a73A==
-X-Gm-Message-State: AOJu0YxKrTDK2t+FSOhWA+hugBh/SklFIku2heIGZ6ODSPA5iEPGui9M
-        hKYWNioTsG1uH6xQ0MTtrCG+aw==
-X-Google-Smtp-Source: AGHT+IF7mNyaD81paY1de2OPbdYHq5nZzaXaKMB4IyScfdc7eQQK1Y0lIo/NVp7J+W52JosoRnH4aQ==
-X-Received: by 2002:adf:f34f:0:b0:323:2d01:f043 with SMTP id e15-20020adff34f000000b003232d01f043mr19981762wrp.3.1697048635013;
-        Wed, 11 Oct 2023 11:23:55 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.100])
-        by smtp.gmail.com with ESMTPSA id e15-20020adff34f000000b0031c6e1ea4c7sm16191985wrp.90.2023.10.11.11.23.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Oct 2023 11:23:54 -0700 (PDT)
-Message-ID: <db597f8d-1293-4b51-b182-bad499b7d1b4@linaro.org>
-Date:   Wed, 11 Oct 2023 20:23:52 +0200
+        d=1e100.net; s=20230601; t=1697056103; x=1697660903;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ajiQCZsbPOI0YVqPS5NSWxeb5/T72xImtw2yRB9hN9k=;
+        b=CoPb5AThpLG3IoXsrO5LUngOtbx1oHvOya4y4XOEjVHT8lVTujUWxXUFWtnIgVCW/S
+         isO8VxB3RlHXsmmlbSRFAdjW9Fq4MOOLnwryhtzdbaChL2o4uprt/FKjhvDEDZaSmDb0
+         v86TjhAASJjs+UuUlC9YjY7ZMtCT8IXUqRfxi0B2JbXADFnjJArSyMCEGzWML3T6QCva
+         7NfCBpFFMXQ9lsYdJRR0TzuonJ/p3csAFnUPFdBHTeIzHYwQg6imFH/wOXd9Sn00YYEr
+         Jp2h9t+wPljhgamglXzpuYEfyJdKWVGIq8Bq18x9Pxt5JQ6/hknogp5sIr5XuDVBd4io
+         zNAw==
+X-Gm-Message-State: AOJu0YwkKF9Szr575F1XseW1N4y5nFqUlb653TKkIMzY/vo3fXFf1jBK
+        kr0R4vF5eEIoz00BowyBHDs=
+X-Google-Smtp-Source: AGHT+IFFQ8ncd4Z5mbljFmPQ7aeVjaaJ6rr4oIOM3eHCQt79sUIbGntX4Z20sf1OIwTbFuY8d23Zqw==
+X-Received: by 2002:a17:906:3116:b0:9a9:e4ba:2da7 with SMTP id 22-20020a170906311600b009a9e4ba2da7mr20212190ejx.49.1697056102522;
+        Wed, 11 Oct 2023 13:28:22 -0700 (PDT)
+Received: from orome.fritz.box (p200300e41f3f4900f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f3f:4900:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id kb4-20020a1709070f8400b009adc81bb544sm10192307ejc.106.2023.10.11.13.28.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Oct 2023 13:28:22 -0700 (PDT)
+Date:   Wed, 11 Oct 2023 22:28:20 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Jon Hunter <jonathanh@nvidia.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH V5 0/4] hwmon: ina3221: Add selective summation support
+Message-ID: <ZScFZDZlTcqwjEJP@orome.fritz.box>
+References: <20230929103650.86074-1-jonathanh@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/4] regulator: dt-bindings: Add mps,mpq2286
- power-management IC
-Content-Language: en-US
-To:     Saravanan Sekar <saravanan@linumiz.com>, sravanhome@gmail.com,
-        lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        linux@roeck-us.net, jdelvare@suse.com
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-References: <20231011164754.449399-1-saravanan@linumiz.com>
- <20231011164754.449399-3-saravanan@linumiz.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231011164754.449399-3-saravanan@linumiz.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="CiujI+6zDegS36sT"
+Content-Disposition: inline
+In-Reply-To: <20230929103650.86074-1-jonathanh@nvidia.com>
+User-Agent: Mutt/2.2.12 (2023-09-09)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 11/10/2023 18:47, Saravanan Sekar wrote:
-> Document mpq2286 power-management IC.
-> 
-> Signed-off-by: Saravanan Sekar <saravanan@linumiz.com>
-> ---
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+--CiujI+6zDegS36sT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Krzysztof
+On Fri, Sep 29, 2023 at 11:36:46AM +0100, Jon Hunter wrote:
+> The current INA3221 driver always sums the shunt voltage for all enabled
+> channels regardless of the shunt-resistor used for each channel. Summing
+> the shunt-voltage for channels is only meaningful if the shunt resistor
+> is the same for each channel. This series adds device-tree support to
+> allow which channels are summed in device-tree.
+>=20
+> Changes since V4:
+> - Moved dt-binding comment added in V4 from patch #2 to patch #1.
+>=20
+> Changes since V3:
+> - Added missing descriptions for new structure members that was reported
+>   by the kernel-test-bot.
+> - Added comment in the ina3221 dt-binding doc example to explain why we
+>   need to explicitly disable channels.
+> - Added more commentary in the commit message for the new DT property
+>   to explain that this property does not change the behaviour of the
+>   driver unless it is populated.
+>=20
+> Changes since V2:
+> - Added note to binding-doc to indicate that input channels must be
+>   explicitly disabled.
+> - Corrected ordering of properties in the binding-doc
+> - Updated license for the binding-doc to be dual licensed.
+> - Changed newly added property from 'summation-bypass' to
+>   summation-disable'.
+> - Documented type for the new 'summation-disable' property.
+> - Corrected spelling and comments as per the feedback received.
+> - Used debugfs instead of sysfs for exposing the 'summation-disable'
+>   status for each input channel.
+> - Populated missing instances for the ina3221 device for Tegra234
+>   boards.
+> - Populated ina219 device for the NVIDIA IGX board (not strictly
+>   related to this series but related to populating all
+>   power-sensors for Tegra234 boards)
+>=20
+> Changes since V1:
+> - Added yaml conversion patch for binding-doc
+> - Added binding-doc documentation patch for new property
+> - Added patch to populate ina3221 devices for Tegra234.
+>=20
+> Jon Hunter (2):
+>   dt-bindings: hwmon: ina3221: Add ti,summation-disable
+>   arm64: tegra: Add power-sensors for Tegra234 boards
+>=20
+> Ninad Malwade (2):
+>   dt-bindings: hwmon: ina3221: Convert to json-schema
+>   hwmon: ina3221: Add support for channel summation disable
 
+Jean, Guenter,
+
+do you mind if I pick up patches 1, 2 and 4 into the Tegra tree? It's
+usually convenient to keep the DT bindings and DT additions in the same
+tree for validation.
+
+Thanks,
+Thierry
+
+--CiujI+6zDegS36sT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmUnBWQACgkQ3SOs138+
+s6H2Iw//b21u/DRkKk+i/7IngdxzNLH0SzEnEPuQED1vF2TjviBmHCOC2PWh6v3K
+JQEePa77FmCG6L46tHZ+kMpnh3mqe+Fce4GhxvsYAHIga8sBGHkM2Kzjpt1/P/a9
+OgpHYh/UJoBxRst+dBqgD3ajG8iokGbezr3kDorHX7Lcc7JBdJeai72La8oky62v
+kLrCPCOYGYBqFDYa/dMqX5tlsS/U1q5bRijNZXxD5miBb3sk2dW30r8BdfDKR0mQ
+SRXdeJYjFTaM1HmrzvoYeZjXMGJxrDXl3akZCA8tTwkPb7S8L/vcHE2ywpVb8IKH
+Wx4aB81qMwOJy8/zUs8RdrLe7vAauPn89cnPtxJmg1X4enKrj5PGmMu056eLTQCH
+MjdfCpj1tW6COX1iXU0lYLCPyGPEeMAmrxvS7FqhMKm6Az8s3EB9fOJgE5BQcBgl
+jxWPPmQWC35EHGIh1U30VP1ZrOsZyn5xJiDOtnf4Ksy0MeyU9m+9IDgJYCx7zL3U
+4rf5fXXWRZU1HdgNs9VoDSfEeMF9Iv+5jFow1A94x1M9F7mjpbkMpkLkmFQGKth7
+aMnwc/pHoTi9KnmEZRzOynA3tvjKfozQLCc1/LxqDey5NycqGn+iMnTL7qz+FXld
+fjZURu2bo7k8i38nAScMFY0aS3WBqUYqu3N2RcoMSNmYIOHJxuk=
+=WDbc
+-----END PGP SIGNATURE-----
+
+--CiujI+6zDegS36sT--
