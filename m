@@ -2,137 +2,115 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DFD9CCDB464
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Oct 2023 16:27:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6693ECDB467
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Oct 2023 16:48:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232473AbjJKQ1V (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 11 Oct 2023 12:27:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36468 "EHLO
+        id S235114AbjJKQsW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 11 Oct 2023 12:48:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230271AbjJKQ1U (ORCPT
+        with ESMTP id S232949AbjJKQsU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 Oct 2023 12:27:20 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031748F;
-        Wed, 11 Oct 2023 09:27:18 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40884C433C7;
-        Wed, 11 Oct 2023 16:27:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1697041638;
-        bh=zYaA2j2ue2uB4R6U1J8+ERVI8gEpOZeSEH/+AHNAPCk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rJLKXaIdciGTbQ8FRwESkX5Qvioj+CgtSrp+uVRbOE7Tfd7n+L8L9DK6tVHYdPGY0
-         7kin4cBlUYjXPtKd/n3pdQfsbOaidRVB3SbYiyJfUAr1b6RCG8iBU2V5ymyEY57tOp
-         JTbaU5PyB16S13HeDZqHr2xGOoRD3A1zfDjCUF+5cdpVTGL2fkehuoJsNK4RW0vOiI
-         CC/9UhV8iV9wTbAgVCVDwd1xnMHIyOuvDKiWnrIgHcfcqUKgx0aJdqdOyacA74DuaB
-         mWT3pCY68ruJbVVCyu/bQ5xJqRfEpebxfCUs7SPCaUU4XO1ZwyJ5kxZKxM8XYOWfbg
-         Ch9NJgrjO2etQ==
-Date:   Wed, 11 Oct 2023 18:27:15 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Lakshmi Yadlapati <lakshmiy@us.ibm.com>, sumit.semwal@linaro.org,
-        christian.koenig@amd.com, jdelvare@suse.com, joel@jms.id.au,
-        andrew@aj.id.au, eajames@linux.ibm.com, ninad@linux.ibm.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v1 0/2] [PATCH] hwmon: (pmbus/max31785) Add minimum delay
- between bus accesses
-Message-ID: <ZSbM44TQRYh6F/ee@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lakshmi Yadlapati <lakshmiy@us.ibm.com>, sumit.semwal@linaro.org,
-        christian.koenig@amd.com, jdelvare@suse.com, joel@jms.id.au,
-        andrew@aj.id.au, eajames@linux.ibm.com, ninad@linux.ibm.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <20231009211420.3454026-1-lakshmiy@us.ibm.com>
- <ZSUaDIfWmEn5edrE@shikoro>
- <1284830f-025e-4e25-8ed0-50a6cc00d223@roeck-us.net>
- <ZSWevlHzu6kVcGWA@shikoro>
- <125cac30-b83d-4530-885b-5008fc3045af@roeck-us.net>
+        Wed, 11 Oct 2023 12:48:20 -0400
+Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A1DB6
+        for <linux-hwmon@vger.kernel.org>; Wed, 11 Oct 2023 09:48:19 -0700 (PDT)
+Received: from eig-obgw-5008a.ext.cloudfilter.net ([10.0.29.246])
+        by cmsmtp with ESMTP
+        id qRKEqn7EeQUgRqcNeq3DIv; Wed, 11 Oct 2023 16:48:19 +0000
+Received: from md-in-79.webhostbox.net ([43.225.55.182])
+        by cmsmtp with ESMTPS
+        id qcNcqELnh3ii3qcNdqH2Mm; Wed, 11 Oct 2023 16:48:17 +0000
+X-Authority-Analysis: v=2.4 cv=JfGvEGGV c=1 sm=1 tr=0 ts=6526d1d1
+ a=LfuyaZh/8e9VOkaVZk0aRw==:117 a=J9R/PiKqv2o3jGxbVGXx4w==:17
+ a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
+ a=bhdUkHdE2iEA:10 a=oz0wMknONp8A:10 a=8_dukLawoc1J__1ghQYA:9
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=linumiz.com
+        ; s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject
+        :Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=lrNVRxtmcUBMaOcugSW58dCqLe+RokwwhirKqMzcqNU=; b=Up+vNPJc8aNa1CFbxB3+Bal1YL
+        6abewxA2+uot+ldXt1koVoIV4a3dbvN1LXtJxQBu+Z3NVDc9Bp0eOHuojICxpMmpJS65PD1DBOfym
+        PUix9mnFh7snVqnuL5esWCqCiRrALIJdjQRU5JOfANmx/NBcSbNmBlMq+d1RrYRq0rSKc66jA5O+o
+        zk1BT8luT/sOaoCXVmiPFwqznkA9zYxVM9YfB1vdV7ckCGjNAAKRS5eeikD1gLpXX1Ea0hdxFOf0o
+        ozKI7nQ0EDcco7OJy1Pe1Wmd4AE3FfravXHxGSjXZvMCc5662ZIUtQDnENr7oAeEqK3jjc2sVLkeT
+        /DhIegSA==;
+Received: from [103.186.120.251] (port=36530 helo=discovery..)
+        by md-in-79.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.96.1)
+        (envelope-from <saravanan@linumiz.com>)
+        id 1qqcNX-002Xlh-1W;
+        Wed, 11 Oct 2023 22:18:11 +0530
+From:   Saravanan Sekar <saravanan@linumiz.com>
+To:     sravanhome@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, linux@roeck-us.net, jdelvare@suse.com
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Saravanan Sekar <saravanan@linumiz.com>
+Subject: [PATCH v4 0/4] Add support for mpq2286 PMIC IC
+Date:   Wed, 11 Oct 2023 22:17:50 +0530
+Message-Id: <20231011164754.449399-1-saravanan@linumiz.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="npgRRoRwjI+EonaY"
-Content-Disposition: inline
-In-Reply-To: <125cac30-b83d-4530-885b-5008fc3045af@roeck-us.net>
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - md-in-79.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - linumiz.com
+X-BWhitelist: no
+X-Source-IP: 103.186.120.251
+X-Source-L: No
+X-Exim-ID: 1qqcNX-002Xlh-1W
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (discovery..) [103.186.120.251]:36530
+X-Source-Auth: saravanan@linumiz.com
+X-Email-Count: 1
+X-Org:  HG=dishared_whb_net_legacy;ORG=directi;
+X-Source-Cap: bGludW1jbWM7aG9zdGdhdG9yO21kLWluLTc5LndlYmhvc3Rib3gubmV0
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfNEC6fTBktw6Rmst8aZyBv5ZVNkFUI4HPshHjqATZgp/pgNOlirh2p7+ik6XWmrF71duue1Dn5NLNKeZliWRuf7kj125rfEY3wC1wiOZaO6sazSUuA5Z
+ pywM3QGjjZg8re6qhS1A/ODspm/kv7Az6OPgS3gxFRnrNXsUsiZzVyQFhbnLyMh2xYSCZV0823m1n9x1oyG2XzeEKgxIAZUjYTI=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+changes in v4:
+ - dt-binding changed regulator node and name from 'buck0' to 'buck'
+ - added new pmbus regulator helper to define single regulator and used in mpq2286 driver
 
---npgRRoRwjI+EonaY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+changes in v3:
+ - dt-binding commit message updated the reason for 'buck0' is used instead of 'buck'
 
-Hi Guenter,
-
-> I didn't (want to) say that. I am perfectly happy with driver specific
-> code, and I would personally still very much prefer it. I only wanted to
-> suggest that _if_ a generic solution is implemented, it should cover all
-> existing use cases and not just this one. But, really, I'd rather leave
-> that alone and not risk introducing regressions to existing drivers.
-
-Okay, seems we are aligned again :)
-
-> I don't know about this device, but in general the problem is that the
-> devices need some delay between some or all transfers or otherwise react
-> badly in one way or another. The problem is not always the same.
-
-Ok, that again doesn't speak for a generic solution IMO.
-
-> Lower bus frequencies don't help, at least not for the devices where
-> I have seen to problem myself. The issue is not bus speed, but time between
-> transfers. Typically the underlying problem is that there is some
-> microcontroller on the affected chips, and the microcode is less than
-> perfect. For example, the microcode may not poll its I2C interface
-> while it is busy writing into the chip's internal EEPROM or while it is
-> updating some internal parameters as result of a previous I2C transfer.
-
-I see. Well, as you probably know, EEPROMs not reacting because they are
-busy with an erase cycle is well-known in the I2C world. The bus driver
-reports that the transfer couldn't get through, and then the EEPROM
-driver knows the details and does something apropriate, probably waiting
-a while. This assumes that the EEPROM can still play well on the I2C
-bus. If a faulty device will lock up a bus because of bad microcode
-while it is busy, then it surely needs handling of that :( And this
-convinces me just more that it should be in the driver...
-
-> The latter. I never bothered trying to write up a list. Typically the behavior
-> is not documented and needs to be tweaked a couple of times, and it may be
-> different across chips supported by the same driver, or even across chip
-> revisions. Any list trying to keep track of the various details would
-> be difficult to maintain and notoriously be outdated.
-
-... especially because of that. If there is really some repeating
-pattern for some of the devices, we could introduce helper functions
-for the drivers to use maybe. But the I2C core functions are not the
-place to handle it.
-
-All the best,
-
-   Wolfram
+changes in v2:
+ - fix dt check warnings
+ - fix compiler warning on cast device_get_match_data and lexicological order of compatible
 
 
---npgRRoRwjI+EonaY
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+The MPQ2286 is a programmable, high frequency synchronous buck regulator with
+integrated internal high side and low side power MOSFET. Application in
+Automotive compenents such as ADAS, Infotainment, SOC System core, DDR memory.
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmUmzN8ACgkQFA3kzBSg
-Kba+5w/7B5EZR84z28gl0sg2NGZCA24M/MJCl14PDRI7XVN/XhvlnWIbshqyklN6
-e/sHS4rMJqL3fdAsmv/pJ/N0F+RBR/HdttTW/oTXR6nUk+EQdKuhwwUMHKtfsSiX
-MRB1fh4h5iA6+WXfpgl6FnftfhgOuG7HPfy4DfcwQE8MbK5CJirDVtT5ywy2BLpX
-t9hsm6uHvaLWCjU6YqeRs+YGA7RExWn51GFA5bZAkK3HBE8AUjmFKDhW+NV5cDOv
-6AjQe1+3i1BFYuBciOVrcwlJjagAe5nVmLCXSIKPjy3dsSJVAwGEtwBZ76CFnan3
-TKIefU/96DRa75LPJaIowbkG4RhkdggXTJU9ZLHmZlzz/gsy7YzT64/yE2EeBJQf
-w1nbkXMmr3Qz5BkxhCyBZwm4GWFHYkMXt5HePIXByJttW337lA/w5GcLmTUFMAQt
-tFYpTURv6YYDUaf0Wbk/376yJpBhNJAWPQbYoqzASuh3FZwFfdizxFY/mlH6FpSH
-VePifCHbiHWJaVGm+HuTurYJ/5O3WWU1NwQIMWqhxb5x1xosLS0mfPapYefGuiY+
-l2IagS7gaIDQioT3p+AxZaaz960L54maf1PYOzjBc+wxBTpJ4VNn7LlSKrBnaLvc
-niiS7yvv78mRIPTj7Nf1yKtqjyrJ1wfnfNiPxntTnsxhGJUQzJ8=
-=fkFw
------END PGP SIGNATURE-----
 
---npgRRoRwjI+EonaY--
+
+Saravanan Sekar (4):
+  hwmon: (pmbus/mpq7932) Get page count based on chip info
+  regulator: dt-bindings: Add mps,mpq2286 power-management IC
+  hwmon: (pmbus/core) Add helper macro to define single pmbus regulator
+  hwmon: (pmbus/mpq2286) Add a support for mpq2286 Power Management IC
+
+ .../bindings/regulator/mps,mpq2286.yaml       | 59 +++++++++++++++++++
+ drivers/hwmon/pmbus/mpq7932.c                 | 19 ++++--
+ drivers/hwmon/pmbus/pmbus.h                   | 15 +++++
+ 3 files changed, 89 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/regulator/mps,mpq2286.yaml
+
+-- 
+2.34.1
+
