@@ -2,320 +2,146 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1124CD6E75
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Oct 2023 14:20:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76CB7CD6E7D
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Oct 2023 14:50:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232307AbjJKOUO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 11 Oct 2023 10:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40806 "EHLO
+        id S235088AbjJKOuY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 11 Oct 2023 10:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232420AbjJKOUO (ORCPT
+        with ESMTP id S235082AbjJKOuX (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 Oct 2023 10:20:14 -0400
-Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A153494;
-        Wed, 11 Oct 2023 07:20:09 -0700 (PDT)
-Received: by mail-ua1-x931.google.com with SMTP id a1e0cc1a2514c-7b5f7f4e733so894010241.3;
-        Wed, 11 Oct 2023 07:20:09 -0700 (PDT)
+        Wed, 11 Oct 2023 10:50:23 -0400
+Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6EED92;
+        Wed, 11 Oct 2023 07:50:20 -0700 (PDT)
+Received: by mail-vk1-xa2f.google.com with SMTP id 71dfb90a1353d-49d8dd34f7bso2317584e0c.3;
+        Wed, 11 Oct 2023 07:50:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697034009; x=1697638809; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1697035820; x=1697640620; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xEqT+8WbEBzcapEwgMqi0AdiU+0yNDpiLyRrMbsTcxo=;
-        b=I1Hzd4U6blLnwt+StlOANy3gE7FU3tR7ZO19xzu6GeM5YqaPAtqtttZD47udiqZlrk
-         AkILDj2OwRLkJ3vBeM0gEz63jQm8e8pfGD1kqbUmARsUZckW8akJwLPnzSAi74n8qPCU
-         VqjBkOPqDIxDF7eQAKg7Z2Tocu63uO5TS8n2y+5V/Q2Akn2qJIitO2ZC6nudVPwCrDMs
-         P+pR8dTvSn0u+6N1vSB6Zsk1zkIVekKyv2DMB+JKtclbE+UJgEBWGaB5r/vupt2nqHee
-         b/6/gzrE6XEc3pvT2+d7pDiDMLXn+9+6exlokXMDFadAMW7MJZ1Ktqf8dgZvmztU9RKa
-         OUqw==
+        bh=TiR+D71XrrGzsX6kzUglgHVBFJmuDb5NbT7pcSYbF5c=;
+        b=izMUnSHp4wLWCR+iNng5aTndHzbwj+dGuyWeo9JJRfq1ewRmhcAMF1em760tgoS9nq
+         0Z9Ajx6dc8NqiIz6IyriA2bpUzjqNF+irJrhca/TP/6PYSufmC3FMfVJ06q7M9rwle1T
+         6otiUbSbw6arJwwfpfwNoGMrllsyTNge8cC4dhV4bZYya6GprfoWeSI7A2HSIrChlxGX
+         Uy7Ugnqo0dxDiqMnJuoEb/F6SPD9qjl7tEsDWp8B0+TYTj8dHcrWh565bINHSvYSzWcy
+         Z+WN2WQApIXgtL41V0Jzjavj5/K37fK1Hk64xoou7MFUv6GIyc5RGGTSQnoByn3CfnMm
+         szog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697034009; x=1697638809;
+        d=1e100.net; s=20230601; t=1697035820; x=1697640620;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xEqT+8WbEBzcapEwgMqi0AdiU+0yNDpiLyRrMbsTcxo=;
-        b=uxv5cFGIRc9pla+t7N3j0qx8H4G/TReiB0MTVtVkiXsxaOLOI62C3n/K1J4HeIYLYZ
-         QVQjiupdQYdV5vL/J1bJfAdhEIKdyQDrj4iW2TBgfHqJsv+Rn7bOMu6eW1HZvZOUjX0b
-         7r9+adO0O1JzZ19wyKvOXZ/J8yOfpn1965jfnJjd46rwiuJjQk6G2/eBVdTkvSI0Coiq
-         1aSZPsSwrnU64ZMtm9XSYZmr+BymVgEygjkjucxjoQJfUReomtC7aKyHxp5nRW5FL2RK
-         YqGSiQV3qJzkjHnDlrMaYAvN6sjFNYl0MD6dgk3IxYQODgAzfW4FKBUj8XZKCd5iKcbB
-         4K/g==
-X-Gm-Message-State: AOJu0YyKlXhR/XYZWRWY4GCFHDM+XOXYl3VFTfX0MZHwJ2/Q5xfl6Vn4
-        Qru62vAc9WFgUBRfZ6Y0XuE=
-X-Google-Smtp-Source: AGHT+IHUUhpDB9OXraSU3wdynsnh3F5aH6AzgLuAN1Cglp4u8JoGbW5Q1EoPGMNvIajhFAOkS+NzbA==
-X-Received: by 2002:a05:6102:3c7:b0:452:8422:1318 with SMTP id n7-20020a05610203c700b0045284221318mr19694515vsq.27.1697034008095;
-        Wed, 11 Oct 2023 07:20:08 -0700 (PDT)
+        bh=TiR+D71XrrGzsX6kzUglgHVBFJmuDb5NbT7pcSYbF5c=;
+        b=t2ZTuzk/zM3cD9R9+tX/vSZxR/j1d8jR0w0NX8WO/MEb1s2uXTR+lf7q7bnf47ZXOd
+         AHsZnS1m+1WBr26ai0oKX9YKAfBP4Q8SqCzlS1dKi1Gls0TSx0zpvbXzx8IMFh8cVhlb
+         EEAMA6tbUkZMcwply0ccJP0n78j69PY6HYM4q4YOO8AVuV7D+V6kciNRk/ONO9VzxHpo
+         91xLPqYhhx5J+Sas5aYn4D+nHUGzyi3r5CAP84eMoqKvvemnC/D7kEtLbY79aJ1DQo0R
+         DHTd+OFqO0Tj0fSJCfiH7eOI3VF46Rn9AOtNZtu9AvhSA3eDSayDZtfdRpoJJKIeAGk+
+         wJUw==
+X-Gm-Message-State: AOJu0YxcY7Tu9PE8e6pkBtt1vXfuTZfCj0Muw/JkcUacyOzzU8RBRHGp
+        cPl28Mh7usxz3drbcXHSAUI=
+X-Google-Smtp-Source: AGHT+IG2WnxDkI8RsVb0UVxjaWgQQHnrpHbCPoFkXoZjHR8EEyn+mcDPUgmVcFuisU/yN7VCFXAUsQ==
+X-Received: by 2002:a1f:e246:0:b0:499:dec9:e1a8 with SMTP id z67-20020a1fe246000000b00499dec9e1a8mr17068444vkg.14.1697035819690;
+        Wed, 11 Oct 2023 07:50:19 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e16-20020a0561020dd000b0045779cfd2c9sm1280887vst.16.2023.10.11.07.20.07
+        by smtp.gmail.com with ESMTPSA id y16-20020a05612211b000b0049696582913sm2510821vkn.10.2023.10.11.07.50.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Oct 2023 07:20:07 -0700 (PDT)
+        Wed, 11 Oct 2023 07:50:18 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 11 Oct 2023 07:20:06 -0700
+Date:   Wed, 11 Oct 2023 07:50:16 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     broonie@kernel.org, zev@bewilderbeest.net,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+To:     Saravanan Sekar <saravanan@linumiz.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        sravanhome@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, jdelvare@suse.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v5] regulator (max5970): Add hwmon support
-Message-ID: <a1bae0c4-0453-4f17-808f-859b684ae525@roeck-us.net>
-References: <20231005075508.1656071-1-naresh.solanki@9elements.com>
+Subject: Re: [PATCH v3 2/3] regulator: dt-bindings: Add mps,mpq2286
+ power-management IC
+Message-ID: <aff33fb9-02d5-4ea1-bd4e-1c8853d0cc8d@roeck-us.net>
+References: <20231007165803.239718-1-saravanan@linumiz.com>
+ <20231007165803.239718-3-saravanan@linumiz.com>
+ <84f4692c-5fee-4d00-b537-570f90191d6e@roeck-us.net>
+ <1ce9d59e-0938-4448-8279-b8c6e522b26a@linaro.org>
+ <154920ff-ad72-43fe-9631-e65ed918a9bb@roeck-us.net>
+ <7a964442-80ca-f69a-f1ad-9296cc8f6839@linumiz.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231005075508.1656071-1-naresh.solanki@9elements.com>
+In-Reply-To: <7a964442-80ca-f69a-f1ad-9296cc8f6839@linumiz.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Oct 05, 2023 at 09:55:07AM +0200, Naresh Solanki wrote:
-> Utilize the integrated 10-bit ADC in Max5970/Max5978 to enable voltage
-> and current monitoring. This feature is seamlessly integrated through
-> the hwmon subsystem.
+On Wed, Oct 11, 2023 at 12:02:44PM +0530, Saravanan Sekar wrote:
+> On 08/10/23 19:22, Guenter Roeck wrote:
+> > On Sun, Oct 08, 2023 at 12:40:29PM +0200, Krzysztof Kozlowski wrote:
+> > > On 08/10/2023 03:20, Guenter Roeck wrote:
+> > > > On Sat, Oct 07, 2023 at 10:28:02PM +0530, Saravanan Sekar wrote:
+> > > > > Document mpq2286 power-management IC. Instead of simple 'buck', 'buck0' is
+> > > > > used to keep the driver common which handles multiple regulators.
+> > > > 
+> > > > Sorry for the maybe dumb question, but where can I find the driver
+> > > > depencency on buck naming ?
+> > > 
+> > > I guess it is because:
+> > > PMBUS_REGULATOR_STEP("buck", 0, MPQ7932_N_VOLTAGES,
+> > > creates regulator name as buck+id (so buck0).
+> > > 
+> > 
+> > Ah, good point. Problem here is that this is already kind of common,
+> > even though the use of "buckX" isn't. Look for "vout0", or
+> > 'PMBUS_REGULATOR("vout", 0)'. Apparently so far no one took offence
+> > if a regulator was named "vout0" even if "vout1" didn't exist.
+> > 
+> > I don't really have a good solution right now, but I guess we'll need
+> > a second set of macros for the single-regulator case, or maybe generate
+> > struct regulator_desc arrays using a function. I'll have to explore
+> > options.
+> > 
+> > Please let me know how you want the subsystem to handle existing
+> > single-channel regulators with numbered regulator name.
+> > 
+> > Saravanan - for this driver please just declare a local driver-specific
+> > variant of the PMBUS_REGULATOR_STEP() macro which doesn't use indexing,
+> > use it to initialise a second regulators_desc array, and use that second
+> > array for mpq2286. That is a bit messy, but acceptable for now until
+> > there is a more generic solution (unless of course you have an idea for
+> > one and want to implement it, but that is not a requirement).
+> Hello Guenter,
 > 
-> Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
-> ---
-> Changes in V5:
-> - Simplify memory allocation for rdevs
-> Changes in V4:
-> - Use IS_REACHABLE
-> - Use rdevs array for hwmon ops.
-> - Remove duplicate i2c_set_clientdata
-
-I just noticed this one. Not my decision how to handle this,
-but the change is really unrelated to this patch.
-
-> Changes in V3:
-> - Update signed-off
-> - Add break
-> - Update hwmon dev register name to max5970
-> - Remove changes in Kconfig.
-> Changes in V2:
-> - default case added for switch statement
-> - Add dependency on HWMON
-> ---
->  drivers/regulator/max5970-regulator.c | 141 +++++++++++++++++++++++++-
->  1 file changed, 139 insertions(+), 2 deletions(-)
+> Thanks for your proposal as intermediate fix local declaration of macro,
+> could you please suggest whether below changes is acceptable as workaround?
 > 
-> diff --git a/drivers/regulator/max5970-regulator.c b/drivers/regulator/max5970-regulator.c
-> index b56a174cde3d..71b4a543339a 100644
-> --- a/drivers/regulator/max5970-regulator.c
-> +++ b/drivers/regulator/max5970-regulator.c
-> @@ -10,6 +10,7 @@
->  #include <linux/bitops.h>
->  #include <linux/device.h>
->  #include <linux/err.h>
-> +#include <linux/hwmon.h>
->  #include <linux/module.h>
->  #include <linux/io.h>
->  #include <linux/of.h>
-> @@ -32,6 +33,128 @@ enum max597x_regulator_id {
->  	MAX597X_SW1,
->  };
->  
-> +static int max5970_read_adc(struct regmap *regmap, int reg, long *val)
-> +{
-> +	u8 reg_data[2];
-> +	int ret;
-> +
-> +	ret = regmap_bulk_read(regmap, reg, &reg_data[0], 2);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	*val = (reg_data[0] << 2) | (reg_data[1] & 3);
-> +
-> +	return 0;
-> +}
-> +
-> +static int max5970_read(struct device *dev, enum hwmon_sensor_types type,
-> +			u32 attr, int channel, long *val)
-> +{
-> +	struct regulator_dev **rdevs = dev_get_drvdata(dev);
-> +	struct max5970_regulator *ddata = rdev_get_drvdata(rdevs[channel]);
-> +	struct regmap *regmap = ddata->regmap;
-> +	int ret;
-> +
-> +	switch (type) {
-> +	case hwmon_curr:
-> +		switch (attr) {
-> +		case hwmon_curr_input:
-> +			ret = max5970_read_adc(regmap, MAX5970_REG_CURRENT_H(channel), val);
 
-			if (ret < 0)
-				return ret;
+No, because that would overwrite a data structure which might be needed
+by another mpq7932 in the system. mpq7932_regulators_desc should really
+be declared const to clarify that it is not supposed to be changed.
 
-> +			/*
-> +			 * Calculate current from ADC value, IRNG range & shunt resistor value.
-> +			 * ddata->irng holds the voltage corresponding to the maximum value the
-> +			 * 10-bit ADC can measure.
-> +			 * To obtain the output, multiply the ADC value by the IRNG range (in
-> +			 * millivolts) and then divide it by the maximum value of the 10-bit ADC.
-> +			 */
-> +			*val = (*val * ddata->irng) >> 10;
-> +			/* Convert the voltage meansurement across shunt resistor to current */
-> +			*val = (*val * 1000) / ddata->shunt_micro_ohms;
-> +			return ret;
+Thinking more about it, the solution is actually quite simple. Please add
+a second patch adding PMBUS_REGULATOR_STEP_ONE() and PMBUS_REGULATOR_ONE()
+macros to drivers/hwmon/pmbus/pmbus.h and use the new macro in this patch.
+That would result in code such as
 
-			return 0;
+static const struct regulator_desc mpq7932_regulators_desc_one[] = {
+        PMBUS_REGULATOR_STEP_ONE("buck", MPQ7932_N_VOLTAGES,
+				 MPQ7932_UV_STEP, MPQ7932_BUCK_UV_MIN),
+};
 
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +
-> +	case hwmon_in:
-> +		switch (attr) {
-> +		case hwmon_in_input:
-> +			ret = max5970_read_adc(regmap, MAX5970_REG_VOLTAGE_H(channel), val);
-			if (ret < 0)
-				return ret;
+...
 
-> +			/*
-> +			 * Calculate voltage from ADC value and MON range.
-> +			 * ddata->mon_rng holds the voltage corresponding to the maximum value the
-> +			 * 10-bit ADC can measure.
-> +			 * To obtain the output, multiply the ADC value by the MON range (in
-> +			 * microvolts) and then divide it by the maximum value of the 10-bit ADC.
-> +			 */
-> +			*val = mul_u64_u32_shr(*val, ddata->mon_rng, 10);
-> +			/* uV to mV */
-> +			*val = *val / 1000;
-> +			return ret;
+        if (info->num_regulators == 1)
+                info->reg_desc = mpq7932_regulators_desc_one;
+        else
+                info->reg_desc = mpq7932_regulators_desc;
 
-			return 0;
+We can then use the xxx_ONE macros when adding regulator support to existing
+or new drivers, and either keep existing drivers as-is or update them based
+on DT maintainer input.
 
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static umode_t max5970_is_visible(const void *data,
-> +				  enum hwmon_sensor_types type,
-> +				  u32 attr, int channel)
-> +{
-> +	struct regulator_dev **rdevs = (struct regulator_dev **)data;
-> +	struct max5970_regulator *ddata;
-> +
-> +	if (channel >= MAX5970_NUM_SWITCHES || !rdevs[channel])
-> +		return 0;
-> +
-> +	ddata = rdev_get_drvdata(rdevs[channel]);
-> +
-> +	if (!ddata || channel >= ddata->num_switches)
-
-How would ddata ever be NULL ? I don't see that check
-elsewhere in the driver.
-
-> +		return 0;
-> +
-> +	switch (type) {
-> +	case hwmon_in:
-> +		switch (attr) {
-> +		case hwmon_in_input:
-> +			return 0444;
-> +		default:
-> +			break;
-> +		}
-> +		break;
-> +	case hwmon_curr:
-> +		switch (attr) {
-> +		case hwmon_curr_input:
-> +			/* Current measurement requires knowledge of the shunt resistor value. */
-> +			if (ddata->shunt_micro_ohms)
-> +				return 0444;
-
-The common approach in hwmon drivers is to define a default
-(typically 1 mOhm) if the value is not set, to let the user
-configure it from userspace with the sensors configuration file.
-
-Checking ... Never mind. I guess the problem here is that while the
-shunt-resistor-micro-ohms property is mandatory, the dt author can
-explicitly configure a shunt resistor value of 0 and that is accepted
-by the rest of the code. I am not sure if that makes sense, but ...
-With this in mind, keep as is, but please add a note explaining that
-this can happen.
-
-> +			break;
-> +		default:
-> +			break;
-> +		}
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static const struct hwmon_ops max5970_hwmon_ops = {
-> +	.is_visible = max5970_is_visible,
-> +	.read = max5970_read,
-> +};
-> +
-> +static const struct hwmon_channel_info *max5970_info[] = {
-> +	HWMON_CHANNEL_INFO(in, HWMON_I_INPUT, HWMON_I_INPUT),
-> +	HWMON_CHANNEL_INFO(curr, HWMON_C_INPUT, HWMON_C_INPUT),
-> +	NULL
-> +};
-> +
-> +static const struct hwmon_chip_info max5970_chip_info = {
-> +	.ops = &max5970_hwmon_ops,
-> +	.info = max5970_info,
-> +};
-> +
->  static int max597x_uvp_ovp_check_mode(struct regulator_dev *rdev, int severity)
->  {
->  	int ret, reg;
-> @@ -431,7 +554,8 @@ static int max597x_regulator_probe(struct platform_device *pdev)
->  	struct i2c_client *i2c = to_i2c_client(pdev->dev.parent);
->  	struct regulator_config config = { };
->  	struct regulator_dev *rdev;
-> -	struct regulator_dev *rdevs[MAX5970_NUM_SWITCHES];
-> +	struct regulator_dev **rdevs = NULL;
-> +	struct device *hwmon_dev;
->  	int num_switches;
->  	int ret, i;
->  
-> @@ -442,6 +566,11 @@ static int max597x_regulator_probe(struct platform_device *pdev)
->  	if (!max597x)
->  		return -ENOMEM;
->  
-> +	rdevs = devm_kcalloc(&i2c->dev, MAX5970_NUM_SWITCHES, sizeof(struct regulator_dev *),
-> +			     GFP_KERNEL);
-> +	if (!rdevs)
-> +		return -ENOMEM;
-> +
->  	i2c_set_clientdata(i2c, max597x);
->  
->  	if (of_device_is_compatible(i2c->dev.of_node, "maxim,max5978"))
-> @@ -451,7 +580,6 @@ static int max597x_regulator_probe(struct platform_device *pdev)
->  	else
->  		return -ENODEV;
->  
-> -	i2c_set_clientdata(i2c, max597x);
->  	num_switches = max597x->num_switches;
->  
->  	for (i = 0; i < num_switches; i++) {
-> @@ -485,6 +613,15 @@ static int max597x_regulator_probe(struct platform_device *pdev)
->  		max597x->shunt_micro_ohms[i] = data->shunt_micro_ohms;
->  	}
->  
-> +	if (IS_REACHABLE(CONFIG_HWMON)) {
-> +		hwmon_dev = devm_hwmon_device_register_with_info(&i2c->dev, "max5970", rdevs,
-> +								 &max5970_chip_info, NULL);
-> +		if (IS_ERR(hwmon_dev)) {
-> +			return dev_err_probe(&i2c->dev, PTR_ERR(hwmon_dev),
-> +					     "Unable to register hwmon device\n");
-> +		}
-> +	}
-> +
->  	if (i2c->irq) {
->  		ret =
->  		    max597x_setup_irq(&i2c->dev, i2c->irq, rdevs, num_switches,
-> 
-> base-commit: f9a1d31874c383f58bb4f89bfe79b764682cd026
-> -- 
-> 2.41.0
-> 
+Thanks,
+Guenter
