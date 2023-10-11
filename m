@@ -2,146 +2,89 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76CB7CD6E7D
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Oct 2023 14:50:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 691B2CD6E7D
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Oct 2023 15:09:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235088AbjJKOuY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 11 Oct 2023 10:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43974 "EHLO
+        id S232611AbjJKPJp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 11 Oct 2023 11:09:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235082AbjJKOuX (ORCPT
+        with ESMTP id S232629AbjJKPJj (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 Oct 2023 10:50:23 -0400
-Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6EED92;
-        Wed, 11 Oct 2023 07:50:20 -0700 (PDT)
-Received: by mail-vk1-xa2f.google.com with SMTP id 71dfb90a1353d-49d8dd34f7bso2317584e0c.3;
-        Wed, 11 Oct 2023 07:50:20 -0700 (PDT)
+        Wed, 11 Oct 2023 11:09:39 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE4A92
+        for <linux-hwmon@vger.kernel.org>; Wed, 11 Oct 2023 08:09:38 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-5a7b91faf40so29905957b3.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 11 Oct 2023 08:09:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697035820; x=1697640620; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1697036977; x=1697641777; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=TiR+D71XrrGzsX6kzUglgHVBFJmuDb5NbT7pcSYbF5c=;
-        b=izMUnSHp4wLWCR+iNng5aTndHzbwj+dGuyWeo9JJRfq1ewRmhcAMF1em760tgoS9nq
-         0Z9Ajx6dc8NqiIz6IyriA2bpUzjqNF+irJrhca/TP/6PYSufmC3FMfVJ06q7M9rwle1T
-         6otiUbSbw6arJwwfpfwNoGMrllsyTNge8cC4dhV4bZYya6GprfoWeSI7A2HSIrChlxGX
-         Uy7Ugnqo0dxDiqMnJuoEb/F6SPD9qjl7tEsDWp8B0+TYTj8dHcrWh565bINHSvYSzWcy
-         Z+WN2WQApIXgtL41V0Jzjavj5/K37fK1Hk64xoou7MFUv6GIyc5RGGTSQnoByn3CfnMm
-         szog==
+        bh=v6/37qPn/Fd3bF8TBSbd7C4AdE6tXRAZgqlQstEkwSc=;
+        b=f95eufyqgY3+Sdp3UeVcs0bskmvT+mls8B7PdrUHzSYv9Dce4JG4WNDh9SZO2qhJhi
+         +bDzvC9PejQBJJcOG1FdN/tsaJQRmhgee9GNC6mjT3GCbKOIgahBja5RG/IqvWIP/lhw
+         YANqPDtyETwMIafNko2xqfdedmfo+VgJ/85beoY8Q29tQQOKtl4rnrtUM1xsyhAoEJie
+         xo/u8Jg/2jzONJvN8Tye8VeAv0UAmUj9nX5Fi3dflJ9t+h8A9MsoxF353j+VL940FNUY
+         3L/LuNQ/gqDXHHg/BOXj4lWCc3VOixhUgcJRA5a/8lU87wXv46RdDI/CKWfSRncDlZmo
+         IGyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697035820; x=1697640620;
+        d=1e100.net; s=20230601; t=1697036977; x=1697641777;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=TiR+D71XrrGzsX6kzUglgHVBFJmuDb5NbT7pcSYbF5c=;
-        b=t2ZTuzk/zM3cD9R9+tX/vSZxR/j1d8jR0w0NX8WO/MEb1s2uXTR+lf7q7bnf47ZXOd
-         AHsZnS1m+1WBr26ai0oKX9YKAfBP4Q8SqCzlS1dKi1Gls0TSx0zpvbXzx8IMFh8cVhlb
-         EEAMA6tbUkZMcwply0ccJP0n78j69PY6HYM4q4YOO8AVuV7D+V6kciNRk/ONO9VzxHpo
-         91xLPqYhhx5J+Sas5aYn4D+nHUGzyi3r5CAP84eMoqKvvemnC/D7kEtLbY79aJ1DQo0R
-         DHTd+OFqO0Tj0fSJCfiH7eOI3VF46Rn9AOtNZtu9AvhSA3eDSayDZtfdRpoJJKIeAGk+
-         wJUw==
-X-Gm-Message-State: AOJu0YxcY7Tu9PE8e6pkBtt1vXfuTZfCj0Muw/JkcUacyOzzU8RBRHGp
-        cPl28Mh7usxz3drbcXHSAUI=
-X-Google-Smtp-Source: AGHT+IG2WnxDkI8RsVb0UVxjaWgQQHnrpHbCPoFkXoZjHR8EEyn+mcDPUgmVcFuisU/yN7VCFXAUsQ==
-X-Received: by 2002:a1f:e246:0:b0:499:dec9:e1a8 with SMTP id z67-20020a1fe246000000b00499dec9e1a8mr17068444vkg.14.1697035819690;
-        Wed, 11 Oct 2023 07:50:19 -0700 (PDT)
+        bh=v6/37qPn/Fd3bF8TBSbd7C4AdE6tXRAZgqlQstEkwSc=;
+        b=T2USz+R3Q0defiwRZZzBvRvmgzitQDizmjI8ZRih1QYjtO9NDl8KzzqcKBk5TCQhcl
+         VpUJNq5YLnl3DlTLLBZO0pmpl96xk42dnfHlOfBSoxdUH9TdaKbAXvxQarMTVSYBGCdv
+         Plc68zAWTsACxsGpq9qxOApLw7gXgxqOCoSCEpIbGrx/Tv02QMCfuxkZbj2K+feow0N1
+         yqeNwma86qCe7PCZecAt/g8R5bHVa+syAwapPhHZJcUvLqcNCCPbmAtqKY9In95zqN3B
+         YC7H0BetRckZ8g77TY3ePpy7ehAg17FKPAwpW5Nef9SmaB3NICPc1EqO/j7nE8MxhtOy
+         08eQ==
+X-Gm-Message-State: AOJu0YwpEevzQ3rHmPLINfT+Xsj2C9n1Aq3c5d0JLE8HeGKW7Pwi5H3l
+        8k9Q9h51hSSaww83/8HD2picIzkS+Os=
+X-Google-Smtp-Source: AGHT+IHslpdyzrBX3Wa6FFJoN32UbrXOgefICGZ6HNcvsqfooOCnhjskyV32/A73MZZ4VWlZBTQyYg==
+X-Received: by 2002:a81:6cc9:0:b0:5a7:c641:4fd2 with SMTP id h192-20020a816cc9000000b005a7c6414fd2mr4828718ywc.10.1697036977448;
+        Wed, 11 Oct 2023 08:09:37 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y16-20020a05612211b000b0049696582913sm2510821vkn.10.2023.10.11.07.50.17
+        by smtp.gmail.com with ESMTPSA id e15-20020ac5c98f000000b0049971fc9efcsm2496647vkm.29.2023.10.11.08.09.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Oct 2023 07:50:18 -0700 (PDT)
+        Wed, 11 Oct 2023 08:09:36 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 11 Oct 2023 07:50:16 -0700
+Date:   Wed, 11 Oct 2023 08:09:35 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Saravanan Sekar <saravanan@linumiz.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        sravanhome@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, jdelvare@suse.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] regulator: dt-bindings: Add mps,mpq2286
- power-management IC
-Message-ID: <aff33fb9-02d5-4ea1-bd4e-1c8853d0cc8d@roeck-us.net>
-References: <20231007165803.239718-1-saravanan@linumiz.com>
- <20231007165803.239718-3-saravanan@linumiz.com>
- <84f4692c-5fee-4d00-b537-570f90191d6e@roeck-us.net>
- <1ce9d59e-0938-4448-8279-b8c6e522b26a@linaro.org>
- <154920ff-ad72-43fe-9631-e65ed918a9bb@roeck-us.net>
- <7a964442-80ca-f69a-f1ad-9296cc8f6839@linumiz.com>
+To:     "Ben Shaul, Almog" <almogbs@amazon.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "Shenhar, Talel" <talel@amazon.com>
+Subject: Re: HWMON periodically collection
+Message-ID: <2d22df1b-f5a8-4161-b4e3-a3fcba6b3308@roeck-us.net>
+References: <B8B37F39-A91A-4925-8100-4818FDA202DC@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7a964442-80ca-f69a-f1ad-9296cc8f6839@linumiz.com>
+In-Reply-To: <B8B37F39-A91A-4925-8100-4818FDA202DC@amazon.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Oct 11, 2023 at 12:02:44PM +0530, Saravanan Sekar wrote:
-> On 08/10/23 19:22, Guenter Roeck wrote:
-> > On Sun, Oct 08, 2023 at 12:40:29PM +0200, Krzysztof Kozlowski wrote:
-> > > On 08/10/2023 03:20, Guenter Roeck wrote:
-> > > > On Sat, Oct 07, 2023 at 10:28:02PM +0530, Saravanan Sekar wrote:
-> > > > > Document mpq2286 power-management IC. Instead of simple 'buck', 'buck0' is
-> > > > > used to keep the driver common which handles multiple regulators.
-> > > > 
-> > > > Sorry for the maybe dumb question, but where can I find the driver
-> > > > depencency on buck naming ?
-> > > 
-> > > I guess it is because:
-> > > PMBUS_REGULATOR_STEP("buck", 0, MPQ7932_N_VOLTAGES,
-> > > creates regulator name as buck+id (so buck0).
-> > > 
-> > 
-> > Ah, good point. Problem here is that this is already kind of common,
-> > even though the use of "buckX" isn't. Look for "vout0", or
-> > 'PMBUS_REGULATOR("vout", 0)'. Apparently so far no one took offence
-> > if a regulator was named "vout0" even if "vout1" didn't exist.
-> > 
-> > I don't really have a good solution right now, but I guess we'll need
-> > a second set of macros for the single-regulator case, or maybe generate
-> > struct regulator_desc arrays using a function. I'll have to explore
-> > options.
-> > 
-> > Please let me know how you want the subsystem to handle existing
-> > single-channel regulators with numbered regulator name.
-> > 
-> > Saravanan - for this driver please just declare a local driver-specific
-> > variant of the PMBUS_REGULATOR_STEP() macro which doesn't use indexing,
-> > use it to initialise a second regulators_desc array, and use that second
-> > array for mpq2286. That is a bit messy, but acceptable for now until
-> > there is a more generic solution (unless of course you have an idea for
-> > one and want to implement it, but that is not a requirement).
-> Hello Guenter,
+On Wed, Oct 11, 2023 at 10:45:03AM +0000, Ben Shaul, Almog wrote:
+> Hi all,
 > 
-> Thanks for your proposal as intermediate fix local declaration of macro,
-> could you please suggest whether below changes is acceptable as workaround?
+> We'd like to collect hwmon sensors and get their min/max/avg for our platforms.
 > 
+> Those sensors doesn't support min/max by HW and only support reading current values (they also don't support avg but that is likely the case for all other devices).
+> 
+> For that goal of getting min/max/avg we have two options:
+> 
+> 1. Write userspace service that will constantly read the values and do the calculations (and later report to our database)
 
-No, because that would overwrite a data structure which might be needed
-by another mpq7932 in the system. mpq7932_regulators_desc should really
-be declared const to clarify that it is not supposed to be changed.
+Yes, this is what you'll have to do.
 
-Thinking more about it, the solution is actually quite simple. Please add
-a second patch adding PMBUS_REGULATOR_STEP_ONE() and PMBUS_REGULATOR_ONE()
-macros to drivers/hwmon/pmbus/pmbus.h and use the new macro in this patch.
-That would result in code such as
+> 2. Extend HWMON subsystem/library so each registering hwmon device will ask the subsystem to do it for you.
+>     Then kernel will create workqueue and constantly read the values and make the calculations (which shall later be readable via hwmon sysfs)
 
-static const struct regulator_desc mpq7932_regulators_desc_one[] = {
-        PMBUS_REGULATOR_STEP_ONE("buck", MPQ7932_N_VOLTAGES,
-				 MPQ7932_UV_STEP, MPQ7932_BUCK_UV_MIN),
-};
+No. This would add runtime overhead to each hwmon device even if the
+information is not used (which would be the case for almost every user).
 
-...
-
-        if (info->num_regulators == 1)
-                info->reg_desc = mpq7932_regulators_desc_one;
-        else
-                info->reg_desc = mpq7932_regulators_desc;
-
-We can then use the xxx_ONE macros when adding regulator support to existing
-or new drivers, and either keep existing drivers as-is or update them based
-on DT maintainer input.
-
-Thanks,
 Guenter
