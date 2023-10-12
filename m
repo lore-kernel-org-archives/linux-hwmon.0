@@ -2,658 +2,154 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21B06CDB46E
-	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Oct 2023 10:31:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80CE3CDB46E
+	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Oct 2023 14:18:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377957AbjJLKbF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 12 Oct 2023 06:31:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41314 "EHLO
+        id S234008AbjJLOSP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 12 Oct 2023 10:18:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377922AbjJLKbD (ORCPT
+        with ESMTP id S231217AbjJLOSO (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 12 Oct 2023 06:31:03 -0400
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC42890;
-        Thu, 12 Oct 2023 03:31:01 -0700 (PDT)
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 39C8FuQd007931;
-        Thu, 12 Oct 2023 06:30:42 -0400
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3tpd4t0qbd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 Oct 2023 06:30:41 -0400 (EDT)
-Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 39CAUeFT008987
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 12 Oct 2023 06:30:40 -0400
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Thu, 12 Oct
- 2023 06:30:39 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Thu, 12 Oct 2023 06:30:39 -0400
-Received: from amiclaus-VirtualBox.ad.analog.com (AMICLAUS-L02.ad.analog.com [10.48.65.194])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 39CAUHPW007059;
-        Thu, 12 Oct 2023 06:30:32 -0400
-From:   Antoniu Miclaus <antoniu.miclaus@analog.com>
-To:     Antoniu Miclaus <antoniu.miclaus@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>
-Subject: [PATCH v4 2/2] drivers: hwmon: ltc2991: add driver support
-Date:   Thu, 12 Oct 2023 13:29:36 +0300
-Message-ID: <20231012102954.103794-2-antoniu.miclaus@analog.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231012102954.103794-1-antoniu.miclaus@analog.com>
-References: <20231012102954.103794-1-antoniu.miclaus@analog.com>
+        Thu, 12 Oct 2023 10:18:14 -0400
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2059.outbound.protection.outlook.com [40.107.104.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C1791;
+        Thu, 12 Oct 2023 07:18:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZFB+89MtwXpYV0+xlrpT1R7Sdlh1fb6Fs1CrDFeNrt9FFO+nW1Z1DjOsTFgN/UlLlvfKT3eLtPCoLQiiulj1L9EANTCDPWvwbIOgfxoHiy9ihXC8/XVzJGJhUz41UiBi8W+jduEH3AGdxGDfaD6Ff2zNVMmOfNZmsf4GOtnm94qq1QhzGiUId99z8fVlYmYJszFUiLrDKZvb9cvGVcJGEyckR7awJsFkUv7PimqLnPPZTp6+x+ZB08ejK7TnowHpjKXp2FsEqCh3XPOG5TIc9sSkxO65hWK5Y+z6vDVxMwsXng1L2z9OEcQSyx3+gDSzG6l8gTAaWPajgbytSxK6lw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rnp9tDgopSL741e9o3xpR12fNbL5YwDtSJrN4x1x7P4=;
+ b=PFlVr/6C7fXDSXgkh+VHwWU48DmBi/OmhXxbXoGrJL8OS6phm7MkvxM3nt7bwQrMXb3BNLCfxfo37hXPGCWhAI4llKypz/Eub7b/p3Ne2GkiofwnYFdqQvtZdxcVyaJVXGC57R6OxkegzhCRRR+WrdYGCEe00n93yIdciIJPhUvqHOcl/8xyNn1U7G7/vCZFtB7izB75J6Yyk6Tct/0wvLzGS2QT+33SSiwOpth55p7scqJVvb1920ZZLrBJDPEg0KIJxphQThSMqijEoFlUV6e+8mrtvNydoyTo+5nibzaFRW1CUaeOFMCO5/AnJ/DtC9Ujhe0QavfFO9aKuMEeEw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rnp9tDgopSL741e9o3xpR12fNbL5YwDtSJrN4x1x7P4=;
+ b=Q/nVUo7MW5fsJpklfdlVzhf0ZamD8x/BEFKue0SziTyaA1ykUQt2+Dod/6JIH/a+D3V+BkgTeh8UwIMUqfIrAfNHgQShGRcupmeG3rr8Ar3VFwxGtaVkaOtWLU12huYk9Fv7RL8eE0KwsVHLyWfskLoi8rwD5JGZKX8K/3VMSdpFxwsQGeHX4LaqHAkROCUf6DsmhV1ntXHoDczXLdrK97+lyuRqbWs+rs0wgNPK+FGwmnPytXqSp34GlLtWDIHeCg/Vad+/HfyrZzKcE0Bftvcve/G8WNbCLII5Mp1IQSrA+Ykff5nJhhcVAbw5MjBm3/Iz+2xFIzDFBg/o9cXuQA==
+Received: from DB9PR04MB9476.eurprd04.prod.outlook.com (2603:10a6:10:366::11)
+ by DU2PR04MB8968.eurprd04.prod.outlook.com (2603:10a6:10:2e3::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.43; Thu, 12 Oct
+ 2023 14:18:10 +0000
+Received: from DB9PR04MB9476.eurprd04.prod.outlook.com
+ ([fe80::fbfc:dc11:f951:1665]) by DB9PR04MB9476.eurprd04.prod.outlook.com
+ ([fe80::fbfc:dc11:f951:1665%7]) with mapi id 15.20.6838.040; Thu, 12 Oct 2023
+ 14:18:10 +0000
+From:   Jean Delvare <jdelvare@suse.com>
+To:     "lakshmiy@us.ibm.com" <lakshmiy@us.ibm.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "christian.koenig@amd.com" <christian.koenig@amd.com>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
+        "ninad@linux.ibm.com" <ninad@linux.ibm.com>,
+        "eajames@linux.ibm.com" <eajames@linux.ibm.com>,
+        "wsa@kernel.org" <wsa@kernel.org>
+CC:     "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 1/2] i2c: smbus: Allow throttling of transfers to
+ client devices
+Thread-Topic: [PATCH v1 1/2] i2c: smbus: Allow throttling of transfers to
+ client devices
+Thread-Index: AQHZ+vW1cWNDUbRyxki9mDjkT198L7BGN+6A
+Date:   Thu, 12 Oct 2023 14:18:09 +0000
+Message-ID: <bf0d71383958e7cc88bc84c7e2378f10d3a486f3.camel@suse.com>
+References: <20231009211420.3454026-1-lakshmiy@us.ibm.com>
+         <20231009211420.3454026-2-lakshmiy@us.ibm.com>
+In-Reply-To: <20231009211420.3454026-2-lakshmiy@us.ibm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.42.4 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DB9PR04MB9476:EE_|DU2PR04MB8968:EE_
+x-ms-office365-filtering-correlation-id: 68837fc9-af02-4e09-1257-08dbcb2e0fe8
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: aM8sy2AoyL9Yea9jpQXe8pFCnNWLQqKRJZ1Qc8R7yic0y/O4uMExx4rmb5bTyXLLAGANJ3Xsc8fJpOwq9U2ydiRJmCz6tUrjB+k6NDo0soDOE3VkHZ3hogrtDT7xysGLtIFUB04VoweVYd6q5noEt2ifHqvQ+kyhJicFBmK0LrB234h+LHIVXdhJGT0sDdSTy2dWIbn5n/a3X+wLu5q8pYPVuEZ5n/uebSrhc2NDqhiiHzOQddc9nlE6Arm8IiI3Wy6t/XCc00n6J8/OStcwWMczf0Ll94u/eEIQE2LsPGTIdVmB+hj/WQGoR9DJTY+/J7s+7pfTUtyKi2stjU46ocYntBcmePYznxUYEW4hj1Q1EJSChs5mAfl47zbJRq+YrbRz8f+2T9QVTMhWOP9TbLiSFUyawRnapJ5e+1FMn9vSxAN58fx4zqaPkS1VAnd7S9joY28++8T6bE2g1AvZ3tEAOh5DIVYlXuaU0NLIhZ0lRyaq1rcv8UOzfJPz8UNpY17ivxoj1lDa/aXQFSZo23fLm2YFdMhsgXLsW+reR3fBcTyNtoLig3rtRcDlld1JGfWxuf54ylbjFFYyXL+ZJjgQk2uRKrwkY6b0YgfyNflSmPExmB8TAdPVgreYW74T
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB9476.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(346002)(136003)(366004)(376002)(39860400002)(230922051799003)(451199024)(186009)(64100799003)(1800799009)(110136005)(76116006)(54906003)(91956017)(66946007)(66446008)(66476007)(64756008)(66556008)(38070700005)(2616005)(316002)(6506007)(71200400001)(38100700002)(2906002)(4744005)(5660300002)(8676002)(4326008)(478600001)(6486002)(8936002)(86362001)(7416002)(122000001)(41300700001)(6512007)(36756003)(83380400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TUg1RkRaQkN1ZW5PNW9Jdk9XTDlGQlNsVlFLRHRnQzh0azBwNWw5bHZaSnY3?=
+ =?utf-8?B?L2NVaWNCcHFjTWpKdWlrMFdFZnBDVEs4ZHFWVXZWbjZEcnc3VmZWVlh0QUZF?=
+ =?utf-8?B?ZHVHVnBtNTk2L2xLYVh5ZzBDdDhCVVQ3ampvVDU1NWJiV2poQW9ZWGFDeitz?=
+ =?utf-8?B?T1VOejRpeW5FQ21oaXpKQkxlV3grWldvUlJWT0dJa1pFOWlwL0lZMU4rT1pB?=
+ =?utf-8?B?dTYwM2FmVDBjN0hneWZxY3VaQ1FhL2dYSGJVelEweUZlTTR3bHRTV0YxaUJV?=
+ =?utf-8?B?UmtGRncvVUNXWWNMalRpNTRObWdac014d1ZWK2o2d09na0pBNktaTW1FVWQx?=
+ =?utf-8?B?cTdMYU8ybmdGa1M2Y0JYN1hpTGIySTNqVmF3VjNJSDJTNGo4VENRNFplcW5W?=
+ =?utf-8?B?VjFlbS9pNmp4d0IrZWR3RGJyK1pCb1NkOWkrZTc1SDd5cHJYMFU5SURmRWFy?=
+ =?utf-8?B?Q1lTeVNVSmdod1EybTRSR2lCYXpDUGIvTjI2dWkzVVJjeG1lK3NkYnc4Y3Qv?=
+ =?utf-8?B?aFQ5aDBUTFhFRmlzdENkakp4QUdFV245bXYrelJTWU85a1drR05CR1JnMXl3?=
+ =?utf-8?B?Q21SNEFGdVdMWlMrQWlYa1BvTkZHYjJTS1FVUXI4ZHJyMzNkM2NoRjltNDhq?=
+ =?utf-8?B?NTZaczI4S1duUWN1dkgyS3Q3S2xQdlBSdDFQb2J2T3hobTJXaTJkOVNBVXlr?=
+ =?utf-8?B?b1BnaVhIWnl6Yy9BTksrWklxTWVkWGx1UGZrRGdEN0NydWxaM1B5QVN5STF1?=
+ =?utf-8?B?dFFyZHFTbHBxNkl4b1VFNVFsSDAzUzVkV2YzVkliNHNRYzB4L3JCdXpBL05J?=
+ =?utf-8?B?Q0xMTVdobGtVM0JpRW9XSEQ1YjlLcjhsMllwMWVTNTRSWFVCRW9Mb1NoY0dq?=
+ =?utf-8?B?SXVuVkwrYUJnUDJoWUFESG9Ra29pYWJSVFQ5SW01Zkd3Z0ordWdSSUdYOG0y?=
+ =?utf-8?B?WWlzbkw1Z1ZsZEc1Ulk3Z1NpYjZRSjdOUWN3OTNzSEZJdlBkT2RXOWxNWDFn?=
+ =?utf-8?B?SThJbnVGbEVNWERaRVN3SFNFZ2poT1BZczh6M1dwNkh6SUluRUl3TFYzdVVk?=
+ =?utf-8?B?eXhTQUVaUGlxaFRka0dVeUZjTENsODV0UWZQNFpIK2NEcjlGdGRuMDNJTmxR?=
+ =?utf-8?B?RDNicFdZWE1CNXBFR0xkbVZ4dXpUMmRZVjUvNHl2SjhPQU5vTHExaVYya1h0?=
+ =?utf-8?B?WmIvWEZ2VDRtL3VCbkttRmxLSnBTblNMM2JjWjRRY3ZDclNEaFliSWZ4MW9r?=
+ =?utf-8?B?c2M3N2ZUYjBjaWNRQVQwU3pSUkxmL0RycGd6VFpRcDhwd2F0TUsxZGh1ZDB2?=
+ =?utf-8?B?YXlNcEpDaU1CWkxOdmMxYnNuOENTM1F0WW84Y2FieXV2bE5XTmFtT1kreE1C?=
+ =?utf-8?B?L2t2WkpqcHMzZkNESVZEZTZUWDJOTHIrZUMrand6QnJwMUIyM1hqQWIxZnk5?=
+ =?utf-8?B?RGJmVU8wdDZOeS9YVHZjMHhWK2ZuNnNFYmE4ZjlBTklUbXhlb09FMW1nbEkw?=
+ =?utf-8?B?WXBVYWFzQm9UWDNRcVNKTHV1dnhxUURyOUkraGdtWGxUSmZEaUI1eUxhc1U2?=
+ =?utf-8?B?WWtTc0ZTL1VHdm9YR1FQUkw3NWN3VXczeVlnT2hBeTl2MHNJTmQ1YmM0c1g5?=
+ =?utf-8?B?bDhkb3F4aDlFbXZRNFRNTlBzTGJ6NWZEbFVTYUdjdU43QVBTVmRtSmk4R1d0?=
+ =?utf-8?B?VlFjR3Bjc1VidEVFeC8wcnVCRVZXcVdFNjhURTBzazBHN1JzcjIzZVhRVW5Y?=
+ =?utf-8?B?Q3NPM0hKaU1zMnhkUTN0NUpqSDkySzBYanZCY0hNVFNIdXhNdTRxSjBaQzEr?=
+ =?utf-8?B?NHZ5USsrRkF3NGxWRHVpKzBPL05oeThVSU9uaGNBRGc5aUZ5c2ZLNnpoekJu?=
+ =?utf-8?B?Zk1sdWNGRVluV1FIRjZYSHhaLy81aktUT1VOdFFqNUxlT2x4NGg3SjhvdDFi?=
+ =?utf-8?B?NkEySE02c0lrUzZPem5jZnB1Ri95ZWNqRGEva0JTYlJJQnkzZTluRDFuMjZp?=
+ =?utf-8?B?OTAyalp4N1NKejdSdFZmQ0hSRGNxYms0aG1na3RKTWpTQnBSaEJ6c1c0UzlS?=
+ =?utf-8?B?SjhGbHhzc21zR0hMeHRxZmxCRERDTUIyMmxaRHFPQnppNTdwV0VlZU5nRmxh?=
+ =?utf-8?B?TTBiQjduTUdURFBWRnBsbmk3alZ4dk5GMXpidWVHa1NPNXhlamR4TWMraVU4?=
+ =?utf-8?Q?vs3BQYSXgnRnC0JCzLt9ylqghvEQ31gGT8XSumVk0Wb3?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <D716FAD5F46005459B6F5FCF2C7A6381@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: w2DAAaYUOWNr5e8OgTixk701GCcq41Di
-X-Proofpoint-ORIG-GUID: w2DAAaYUOWNr5e8OgTixk701GCcq41Di
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-12_05,2023-10-12_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=999 bulkscore=0
- clxscore=1015 malwarescore=0 spamscore=0 phishscore=0 mlxscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2309180000 definitions=main-2310120086
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB9476.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 68837fc9-af02-4e09-1257-08dbcb2e0fe8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Oct 2023 14:18:09.8327
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Oxeg1c1bsvFtUsiGD2pmDHCGezlH2VncpnNtKcofh5BHp7hLI3lxg5VvUImVkaSshL+UpZJMXnl/JwKhAia+Fg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8968
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add support for LTC2991 Octal I2C Voltage, Current, and Temperature
-Monitor.
-
-The LTC2991 is used to monitor system temperatures, voltages and
-currents. Through the I2C serial interface, the eight monitors can
-individually measure supply voltages and can be paired for
-differential measurements of current sense resistors or temperature
-sensing transistors. Additional measurements include internal
-temperature and internal VCC.
-
-Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
----
-changes in v4:
- - rework ltc2991_read_reg
- - remove labels
- - rework channel exposure according to datasheet part typical apllications
- - avoid division by 0 by checking property value
- Documentation/hwmon/index.rst   |   1 +
- Documentation/hwmon/ltc2991.rst |  43 ++++
- MAINTAINERS                     |   8 +
- drivers/hwmon/Kconfig           |  11 +
- drivers/hwmon/Makefile          |   1 +
- drivers/hwmon/ltc2991.c         | 437 ++++++++++++++++++++++++++++++++
- 6 files changed, 501 insertions(+)
- create mode 100644 Documentation/hwmon/ltc2991.rst
- create mode 100644 drivers/hwmon/ltc2991.c
-
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 88dadea85cfc..0ec96abe3f7d 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -121,6 +121,7 @@ Hardware Monitoring Kernel Drivers
-    ltc2947
-    ltc2978
-    ltc2990
-+   ltc2991
-    ltc3815
-    ltc4151
-    ltc4215
-diff --git a/Documentation/hwmon/ltc2991.rst b/Documentation/hwmon/ltc2991.rst
-new file mode 100644
-index 000000000000..9ab29dd85012
---- /dev/null
-+++ b/Documentation/hwmon/ltc2991.rst
-@@ -0,0 +1,43 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Kernel driver ltc2991
-+=====================
-+
-+Supported chips:
-+
-+  * Analog Devices LTC2991
-+
-+    Prefix: 'ltc2991'
-+
-+    Addresses scanned: I2C 0x48 - 0x4f
-+
-+    Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/2991ff.pdf
-+
-+Authors:
-+
-+  - Antoniu Miclaus <antoniu.miclaus@analog.com>
-+
-+
-+Description
-+-----------
-+
-+This driver supports hardware monitoring for Analog Devices LTC2991 Octal I2C
-+Voltage, Current and Temperature Monitor.
-+
-+The LTC2991 is used to monitor system temperatures, voltages and currents.
-+Through the I2C serial interface, the eight monitors can individually measure
-+supply voltages and can be paired for differential measurements of current sense
-+resistors or temperature sensing transistors. Additional measurements include
-+internal temperatureand internal VCC.
-+
-+
-+sysfs-Interface
-+-------------
-+
-+The following attributes are supported. Limits are read-only.
-+
-+=============== =================
-+inX_input:      voltage input
-+currX_input:    current input
-+tempX_input:    temperature input
-+=============== =================
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 6c4cce45a09d..edfa49c42848 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12449,6 +12449,14 @@ F:	drivers/hwmon/ltc2947-i2c.c
- F:	drivers/hwmon/ltc2947-spi.c
- F:	drivers/hwmon/ltc2947.h
- 
-+LTC2991 HARDWARE MONITOR DRIVER
-+M:	Antoniu Miclaus <antoniu.miclaus@analog.com>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Supported
-+W:	https://ez.analog.com/linux-software-drivers
-+F:	Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml
-+F:	drivers/hwmon/ltc2991.c
-+
- LTC2983 IIO TEMPERATURE DRIVER
- M:	Nuno Sá <nuno.sa@analog.com>
- L:	linux-iio@vger.kernel.org
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index ec38c8892158..818a67328fcd 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -932,6 +932,17 @@ config SENSORS_LTC2990
- 	  This driver can also be built as a module. If so, the module will
- 	  be called ltc2990.
- 
-+config SENSORS_LTC2991
-+	tristate "Analog Devices LTC2991"
-+	depends on I2C
-+	help
-+	  If you say yes here you get support for Analog Devices LTC2991
-+	  Octal I2C Voltage, Current, and Temperature Monitor. The LTC2991
-+	  supports a combination of voltage, current and temperature monitoring.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called ltc2991.
-+
- config SENSORS_LTC2992
- 	tristate "Linear Technology LTC2992"
- 	depends on I2C
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index 4ac9452b5430..f324d057535a 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -127,6 +127,7 @@ obj-$(CONFIG_SENSORS_LTC2947)	+= ltc2947-core.o
- obj-$(CONFIG_SENSORS_LTC2947_I2C) += ltc2947-i2c.o
- obj-$(CONFIG_SENSORS_LTC2947_SPI) += ltc2947-spi.o
- obj-$(CONFIG_SENSORS_LTC2990)	+= ltc2990.o
-+obj-$(CONFIG_SENSORS_LTC2991)	+= ltc2991.o
- obj-$(CONFIG_SENSORS_LTC2992)	+= ltc2992.o
- obj-$(CONFIG_SENSORS_LTC4151)	+= ltc4151.o
- obj-$(CONFIG_SENSORS_LTC4215)	+= ltc4215.o
-diff --git a/drivers/hwmon/ltc2991.c b/drivers/hwmon/ltc2991.c
-new file mode 100644
-index 000000000000..4f3d73bc494a
---- /dev/null
-+++ b/drivers/hwmon/ltc2991.c
-@@ -0,0 +1,437 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2023 Analog Devices, Inc.
-+ * Author: Antoniu Miclaus <antoniu.miclaus@analog.com>
-+ */
-+
-+#include <linux/bitops.h>
-+#include <linux/err.h>
-+#include <linux/hwmon.h>
-+#include <linux/hwmon-sysfs.h>
-+#include <linux/i2c.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/property.h>
-+#include <linux/regmap.h>
-+#include <linux/regulator/consumer.h>
-+
-+#include <asm/unaligned.h>
-+
-+#define LTC2991_STATUS_LOW		0x00
-+#define LTC2991_CH_EN_TRIGGER		0x01
-+#define LTC2991_V1_V4_CTRL		0x06
-+#define LTC2991_V5_V8_CTRL		0x07
-+#define LTC2991_PWM_TH_LSB_T_INT	0x08
-+#define LTC2991_PWM_TH_MSB		0x09
-+#define LTC2991_CHANNEL_V_MSB(x)	(0x0A + ((x) * 2))
-+#define LTC2991_CHANNEL_T_MSB(x)	(0x0A + ((x) * 4))
-+#define LTC2991_CHANNEL_C_MSB(x)	(0x0C + ((x) * 4))
-+#define LTC2991_T_INT_MSB		0x1A
-+#define LTC2991_VCC_MSB			0x1C
-+
-+#define LTC2991_V7_V8_EN		BIT(7)
-+#define LTC2991_V5_V6_EN		BIT(6)
-+#define LTC2991_V3_V4_EN		BIT(5)
-+#define LTC2991_V1_V2_EN		BIT(4)
-+#define LTC2991_T_INT_VCC_EN		BIT(3)
-+
-+#define LTC2991_V3_V4_FILT_EN		BIT(7)
-+#define LTC2991_V3_V4_TEMP_EN		BIT(5)
-+#define LTC2991_V3_V4_DIFF_EN		BIT(4)
-+#define LTC2991_V1_V2_FILT_EN		BIT(3)
-+#define LTC2991_V1_V2_TEMP_EN		BIT(1)
-+#define LTC2991_V1_V2_DIFF_EN		BIT(0)
-+
-+#define LTC2991_V7_V8_FILT_EN		BIT(7)
-+#define LTC2991_V7_V8_TEMP_EN		BIT(5)
-+#define LTC2991_V7_V8_DIFF_EN		BIT(4)
-+#define LTC2991_V5_V6_FILT_EN		BIT(7)
-+#define LTC2991_V5_V6_TEMP_EN		BIT(5)
-+#define LTC2991_V5_V6_DIFF_EN		BIT(4)
-+
-+#define LTC2991_REPEAT_ACQ_EN		BIT(4)
-+#define LTC2991_T_INT_FILT_EN		BIT(3)
-+
-+#define LTC2991_MAX_CHANNEL		4
-+#define LTC2991_T_INT_CH_NR		4
-+#define LTC2991_VCC_CH_NR		0
-+
-+struct ltc2991_state {
-+	struct i2c_client	*client;
-+	struct regmap		*regmap;
-+	u32			r_sense_uohm[LTC2991_MAX_CHANNEL];
-+	bool			temp_en[LTC2991_MAX_CHANNEL];
-+};
-+
-+static int ltc2991_read_reg(struct ltc2991_state *st, u8 addr, u8 reg_len,
-+			    int *val)
-+{
-+	__be16 regvals;
-+	int ret;
-+
-+	if (reg_len < 2)
-+		return regmap_read(st->regmap, addr, val);
-+
-+	ret = regmap_bulk_read(st->regmap, addr, &regvals, reg_len);
-+	if (ret)
-+		return ret;
-+
-+	*val = be16_to_cpu(regvals);
-+
-+	return 0;
-+}
-+
-+static int ltc2991_get_voltage(struct ltc2991_state *st, u32 reg, long *val)
-+{
-+	int reg_val, ret, offset = 0;
-+
-+	ret = ltc2991_read_reg(st, reg, 2, &reg_val);
-+	if (ret)
-+		return ret;
-+
-+	if (reg == LTC2991_VCC_MSB)
-+		/* Vcc 2.5V offset */
-+		offset = 2500;
-+
-+	/* Vx, 305.18uV/LSB */
-+	*val = DIV_ROUND_CLOSEST(sign_extend32(reg_val, 14) * 30518,
-+				 1000 * 100) + offset;
-+
-+	return 0;
-+}
-+
-+static int ltc2991_read_in(struct device *dev, u32 attr, int channel, long *val)
-+{
-+	struct ltc2991_state *st = dev_get_drvdata(dev);
-+	u32 reg;
-+
-+	switch (attr) {
-+	case hwmon_in_input:
-+		if (channel == LTC2991_VCC_CH_NR)
-+			reg = LTC2991_VCC_MSB;
-+		else
-+			reg = LTC2991_CHANNEL_V_MSB(channel - 1);
-+
-+		return ltc2991_get_voltage(st, reg, val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int ltc2991_get_curr(struct ltc2991_state *st, u32 reg, int channel,
-+			    long *val)
-+{
-+	int reg_val, ret;
-+
-+	ret = ltc2991_read_reg(st, reg, 2, &reg_val);
-+	if (ret)
-+		return ret;
-+
-+	/* Vx-Vy, 19.075uV/LSB */
-+	*val = DIV_ROUND_CLOSEST(sign_extend32(reg_val, 14) * 19075, 1000)
-+				 / (st->r_sense_uohm[channel] / 1000);
-+
-+	return 0;
-+}
-+
-+static int ltc2991_read_curr(struct device *dev, u32 attr, int channel,
-+			     long *val)
-+{
-+	struct ltc2991_state *st = dev_get_drvdata(dev);
-+	u32 reg;
-+
-+	switch (attr) {
-+	case hwmon_curr_input:
-+		reg = LTC2991_CHANNEL_C_MSB(channel);
-+		return ltc2991_get_curr(st, reg, channel, val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int ltc2991_get_temp(struct ltc2991_state *st, u32 reg, int channel,
-+			    long *val)
-+{
-+	int reg_val, ret;
-+
-+	ret = ltc2991_read_reg(st, reg, 2, &reg_val);
-+	if (ret)
-+		return ret;
-+
-+	/* Temp LSB = 0.0625 Degrees */
-+	*val = DIV_ROUND_CLOSEST(sign_extend32(reg_val, 12) * 1000, 16);
-+
-+	return 0;
-+}
-+
-+static int ltc2991_read_temp(struct device *dev, u32 attr, int channel,
-+			     long *val)
-+{
-+	struct ltc2991_state *st = dev_get_drvdata(dev);
-+	u32 reg;
-+
-+	switch (attr) {
-+	case hwmon_temp_input:
-+		if (channel == LTC2991_T_INT_CH_NR)
-+			reg = LTC2991_T_INT_MSB;
-+		else
-+			reg = LTC2991_CHANNEL_T_MSB(channel);
-+
-+		return ltc2991_get_temp(st, reg, channel, val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int ltc2991_read(struct device *dev, enum hwmon_sensor_types type,
-+			u32 attr, int channel, long *val)
-+{
-+	switch (type) {
-+	case hwmon_in:
-+		return ltc2991_read_in(dev, attr, channel, val);
-+	case hwmon_curr:
-+		return ltc2991_read_curr(dev, attr, channel, val);
-+	case hwmon_temp:
-+		return ltc2991_read_temp(dev, attr, channel, val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static umode_t ltc2991_is_visible(const void *data,
-+				  enum hwmon_sensor_types type, u32 attr,
-+				  int channel)
-+{
-+	const struct ltc2991_state *st = data;
-+
-+	switch (type) {
-+	case hwmon_in:
-+		switch (attr) {
-+		case hwmon_in_input:
-+			if (channel == LTC2991_VCC_CH_NR)
-+				return 0444;
-+			if (st->temp_en[(channel - 1) / 2])
-+				break;
-+			if (channel % 2)
-+				return 0444;
-+			if (!st->r_sense_uohm[(channel - 1) / 2])
-+				return 0444;
-+		}
-+		break;
-+	case hwmon_curr:
-+		switch (attr) {
-+		case hwmon_curr_input:
-+			if (st->r_sense_uohm[channel])
-+				return 0444;
-+			break;
-+		}
-+		break;
-+	case hwmon_temp:
-+		switch (attr) {
-+		case hwmon_temp_input:
-+			if (st->temp_en[channel] ||
-+			    channel == LTC2991_T_INT_CH_NR)
-+				return 0444;
-+			break;
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct hwmon_ops ltc2991_hwmon_ops = {
-+	.is_visible = ltc2991_is_visible,
-+	.read = ltc2991_read,
-+};
-+
-+static const struct hwmon_channel_info *ltc2991_info[] = {
-+	HWMON_CHANNEL_INFO(temp,
-+			   HWMON_T_INPUT,
-+			   HWMON_T_INPUT,
-+			   HWMON_T_INPUT,
-+			   HWMON_T_INPUT,
-+			   HWMON_T_INPUT
-+			   ),
-+	HWMON_CHANNEL_INFO(curr,
-+			   HWMON_C_INPUT,
-+			   HWMON_C_INPUT,
-+			   HWMON_C_INPUT,
-+			   HWMON_C_INPUT
-+			   ),
-+	HWMON_CHANNEL_INFO(in,
-+			   HWMON_I_INPUT,
-+			   HWMON_I_INPUT,
-+			   HWMON_I_INPUT,
-+			   HWMON_I_INPUT,
-+			   HWMON_I_INPUT,
-+			   HWMON_I_INPUT,
-+			   HWMON_I_INPUT,
-+			   HWMON_I_INPUT,
-+			   HWMON_I_INPUT
-+			   ),
-+	NULL
-+};
-+
-+static const struct hwmon_chip_info ltc2991_chip_info = {
-+	.ops = &ltc2991_hwmon_ops,
-+	.info = ltc2991_info,
-+};
-+
-+static const struct regmap_config ltc2991_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.max_register = 0x1D,
-+};
-+
-+static int ltc2991_init(struct ltc2991_state *st)
-+{
-+	struct fwnode_handle *child;
-+	int ret;
-+	u32 val, addr;
-+	u8 v5_v8_reg_data = 0, v1_v4_reg_data = 0;
-+
-+	ret = devm_regulator_get_enable(&st->client->dev, "vcc");
-+	if (ret)
-+		return dev_err_probe(&st->client->dev, ret,
-+				     "failed to enable regulator\n");
-+
-+	device_for_each_child_node(&st->client->dev, child) {
-+		ret = fwnode_property_read_u32(child, "reg", &addr);
-+		if (ret < 0) {
-+			fwnode_handle_put(child);
-+			return ret;
-+		}
-+
-+		if (addr > 3) {
-+			fwnode_handle_put(child);
-+			return -EINVAL;
-+		}
-+
-+		ret = fwnode_property_read_u32(child, "shunt-resistor-micro-ohms", &val);
-+		if (!ret) {
-+			if (!val)
-+				return dev_err_probe(&st->client->dev, -EINVAL,
-+						     "shunt resistor value cannot be zero\n");
-+
-+			st->r_sense_uohm[addr] = val;
-+
-+			switch (addr) {
-+			case 0:
-+				v1_v4_reg_data |= LTC2991_V1_V2_DIFF_EN;
-+				break;
-+			case 1:
-+				v1_v4_reg_data |= LTC2991_V3_V4_DIFF_EN;
-+				break;
-+			case 2:
-+				v5_v8_reg_data |= LTC2991_V5_V6_DIFF_EN;
-+				break;
-+			case 3:
-+				v5_v8_reg_data |= LTC2991_V7_V8_DIFF_EN;
-+				break;
-+			default:
-+				break;
-+			}
-+		}
-+
-+		ret = fwnode_property_read_bool(child, "adi,temperature-enable");
-+		if (ret) {
-+			st->temp_en[addr] = ret;
-+
-+			switch (addr) {
-+			case 0:
-+				v1_v4_reg_data |= LTC2991_V1_V2_TEMP_EN;
-+				break;
-+			case 1:
-+				v1_v4_reg_data |= LTC2991_V3_V4_TEMP_EN;
-+				break;
-+			case 2:
-+				v5_v8_reg_data |= LTC2991_V5_V6_TEMP_EN;
-+				break;
-+			case 3:
-+				v5_v8_reg_data |= LTC2991_V7_V8_TEMP_EN;
-+				break;
-+			default:
-+				break;
-+			}
-+		}
-+	}
-+
-+	ret = regmap_write(st->regmap, LTC2991_V5_V8_CTRL, v5_v8_reg_data);
-+	if (ret)
-+		return dev_err_probe(&st->client->dev, ret,
-+				     "Error: Failed to set V5-V8 CTRL reg.\n");
-+
-+	ret = regmap_write(st->regmap, LTC2991_V1_V4_CTRL, v1_v4_reg_data);
-+	if (ret)
-+		return dev_err_probe(&st->client->dev, ret,
-+				     "Error: Failed to set V1-V4 CTRL reg.\n");
-+
-+	ret = regmap_write(st->regmap, LTC2991_PWM_TH_LSB_T_INT,
-+			   LTC2991_REPEAT_ACQ_EN);
-+	if (ret)
-+		return dev_err_probe(&st->client->dev, ret,
-+				     "Error: Failed to set contiuous mode.\n");
-+
-+	/* Enable all channels and trigger conversions */
-+	return regmap_write(st->regmap, LTC2991_CH_EN_TRIGGER,
-+			    LTC2991_V7_V8_EN | LTC2991_V5_V6_EN |
-+			    LTC2991_V3_V4_EN | LTC2991_V1_V2_EN |
-+			    LTC2991_T_INT_VCC_EN);
-+}
-+
-+static int ltc2991_i2c_probe(struct i2c_client *client)
-+{
-+	int ret;
-+	struct device *hwmon_dev;
-+	struct ltc2991_state *st;
-+
-+	st = devm_kzalloc(&client->dev, sizeof(*st), GFP_KERNEL);
-+	if (!st)
-+		return -ENOMEM;
-+
-+	st->client = client;
-+	st->regmap = devm_regmap_init_i2c(client, &ltc2991_regmap_config);
-+	if (IS_ERR(st->regmap))
-+		return PTR_ERR(st->regmap);
-+
-+	ret = ltc2991_init(st);
-+	if (ret)
-+		return ret;
-+
-+	hwmon_dev = devm_hwmon_device_register_with_info(&client->dev,
-+							 client->name, st,
-+							 &ltc2991_chip_info,
-+							 NULL);
-+
-+	return PTR_ERR_OR_ZERO(hwmon_dev);
-+}
-+
-+static const struct of_device_id ltc2991_of_match[] = {
-+	{ .compatible = "adi,ltc2991" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, ltc2991_of_match);
-+
-+static const struct i2c_device_id ltc2991_i2c_id[] = {
-+	{ "ltc2991", 0 },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(i2c, ltc2991_i2c_id);
-+
-+static struct i2c_driver ltc2991_i2c_driver = {
-+	.driver = {
-+		.name = "ltc2991",
-+		.of_match_table = ltc2991_of_match,
-+	},
-+	.probe = ltc2991_i2c_probe,
-+	.id_table = ltc2991_i2c_id,
-+};
-+
-+module_i2c_driver(ltc2991_i2c_driver);
-+
-+MODULE_AUTHOR("Antoniu Miclaus <antoniu.miclaus@analog.com>");
-+MODULE_DESCRIPTION("Analog Devices LTC2991 HWMON Driver");
-+MODULE_LICENSE("GPL");
--- 
-2.42.0
-
+T24gTW9uLCAyMDIzLTEwLTA5IGF0IDE2OjE0IC0wNTAwLCBMYWtzaG1pIFlhZGxhcGF0aSB3cm90
+ZToNCj4gU2lnbmVkLW9mZi1ieTogTGFrc2htaSBZYWRsYXBhdGkgPGxha3NobWl5QHVzLmlibS5j
+b20+DQo+IC0tLQ0KPiDCoGRyaXZlcnMvaTJjL2kyYy1jb3JlLWJhc2UuY8KgIHzCoMKgIDggKy0N
+Cj4gwqBkcml2ZXJzL2kyYy9pMmMtY29yZS1zbWJ1cy5jIHwgMTQzICsrKysrKysrKysrKysrKysr
+KysrKysrKysrKystLS0tLS0tDQo+IMKgZHJpdmVycy9pMmMvaTJjLWNvcmUuaMKgwqDCoMKgwqDC
+oCB8wqAgMjMgKysrKysrDQo+IMKgaW5jbHVkZS9saW51eC9pMmMuaMKgwqDCoMKgwqDCoMKgwqDC
+oCB8wqDCoCAyICsNCj4gwqA0IGZpbGVzIGNoYW5nZWQsIDE0NSBpbnNlcnRpb25zKCspLCAzMSBk
+ZWxldGlvbnMoLSkNCj4gKC4uLikNCg0KTm9uLXRyaXZpYWwgcGF0Y2ggd2l0aCBubyBkZXNjcmlw
+dGlvbiAtPiBub3QgZXZlbiBsb29raW5nLCBzb3JyeS4gWW91DQpjYW4ndCBwb3NzaWJseSBwcm9w
+b3NlIGEgY2hhbmdlIHRvIHRoZSBjb3JlIG9mIGEgc3Vic3lzdGVtIGFuZCBub3QNCmJvdGhlciBl
+eHBsYWluaW5nIHdoeSB0aGlzIGNoYW5nZSBpcyBuZWVkZWQgb3Igd2hhdCBwdXJwb3NlIGl0IHNl
+cnZlcy4NCg0KKEFuZCB5ZXMgSSBrbm93IHRoZXJlJ3Mgc29tZSBpbmZvcm1hdGlvbiBpbiBwYXRj
+aCAwLzIsIGJ1dCB0aGF0J3Mgbm90DQpnb2luZyB0byBtYWtlIGl0IGludG8gZ2l0LCBzbyBpdCB3
+aWxsIGJlIGxvc3QuIENvbW1pdHMgc2hvdWxkIGJlIHNlbGYtDQpzdWZmaWNpZW50LCBub3Qgb25s
+eSB0aGUgaW1wbGVtZW50YXRpb24sIGJ1dCBhbHNvIHRoZSBkZXNjcmlwdGlvbi4pDQoNCkkgd291
+bGQgYWxzbyBzdWdnZXN0IHRyaW1taW5nIHRoZSBUbyBhbmQgQ2MgbGlzdHMuIEkgY2FuJ3QgcmVh
+bGx5IHNlZQ0KaG93IGxpbnV4LW1lZGlhIGFuZCBkcmktZGV2ZWwgYXJlIHJlbGV2YW50IGhlcmUg
+Zm9yIGV4YW1wbGUuDQoNCi0tIA0KSmVhbiBEZWx2YXJlDQpTVVNFIEwzIFN1cHBvcnQNCg==
