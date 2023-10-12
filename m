@@ -2,105 +2,217 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DBDDCDB46E
-	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Oct 2023 10:19:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0927CCDB47E
+	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Oct 2023 10:31:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234179AbjJLKSx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 12 Oct 2023 06:18:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42608 "EHLO
+        id S235628AbjJLKbB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 12 Oct 2023 06:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234176AbjJLKSw (ORCPT
+        with ESMTP id S235672AbjJLKbA (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 12 Oct 2023 06:18:52 -0400
-Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C696CA9
-        for <linux-hwmon@vger.kernel.org>; Thu, 12 Oct 2023 03:18:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1697105930; x=1728641930;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=GOuDzjXZ5plwyWr3LLOzg6GVoIhzrAUvIXZ7R1cAp4E=;
-  b=eh3eBOwWjmaZJz7viJVZKXAYlxdZzBOlD6Z28ic81sRaw1gWblSABSQT
-   1PdU4gUrvEMz4dvchuKvGaEPoWUKlLe9KblIuFW8w5iurv2U1HSmt8cbO
-   zfX/Glmfm5RE44LsUOKOERKcaRqGWG4wHIZFEF4N2OrbFKvEUEZ4EAeLN
-   A=;
-X-IronPort-AV: E=Sophos;i="6.03,218,1694736000"; 
-   d="scan'208";a="356359699"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-e7094f15.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2023 10:18:47 +0000
-Received: from EX19D001EUA003.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2c-m6i4x-e7094f15.us-west-2.amazon.com (Postfix) with ESMTPS id 8CB5840D61;
-        Thu, 12 Oct 2023 10:18:45 +0000 (UTC)
-Received: from [192.168.5.1] (10.1.213.30) by EX19D001EUA003.ant.amazon.com
- (10.252.50.232) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.37; Thu, 12 Oct
- 2023 10:18:42 +0000
-Message-ID: <169cad22-702c-445a-a9d7-74c68509bfb1@amazon.com>
-Date:   Thu, 12 Oct 2023 13:18:37 +0300
+        Thu, 12 Oct 2023 06:31:00 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52782D3;
+        Thu, 12 Oct 2023 03:30:58 -0700 (PDT)
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 39C8Ftdr007899;
+        Thu, 12 Oct 2023 06:30:35 -0400
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3tpd4t0q93-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 Oct 2023 06:30:34 -0400 (EDT)
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 39CAUXg2008975
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 12 Oct 2023 06:30:33 -0400
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Thu, 12 Oct
+ 2023 06:30:32 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Thu, 12 Oct 2023 06:30:32 -0400
+Received: from amiclaus-VirtualBox.ad.analog.com (AMICLAUS-L02.ad.analog.com [10.48.65.194])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 39CAUHPV007059;
+        Thu, 12 Oct 2023 06:30:19 -0400
+From:   Antoniu Miclaus <antoniu.miclaus@analog.com>
+To:     Antoniu Miclaus <antoniu.miclaus@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>
+CC:     Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v4 1/2] dt-bindings: hwmon: ltc2991: add bindings
+Date:   Thu, 12 Oct 2023 13:29:35 +0300
+Message-ID: <20231012102954.103794-1-antoniu.miclaus@analog.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: HWMON periodically collection
-To:     Guenter Roeck <linux@roeck-us.net>,
-        "Ben Shaul, Almog" <almogbs@amazon.com>
-CC:     Jean Delvare <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-References: <B8B37F39-A91A-4925-8100-4818FDA202DC@amazon.com>
- <2d22df1b-f5a8-4161-b4e3-a3fcba6b3308@roeck-us.net>
-Content-Language: en-US
-From:   "Shenhar, Talel" <talel@amazon.com>
-In-Reply-To: <2d22df1b-f5a8-4161-b4e3-a3fcba6b3308@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.1.213.30]
-X-ClientProxiedBy: EX19D039UWA003.ant.amazon.com (10.13.139.49) To
- EX19D001EUA003.ant.amazon.com (10.252.50.232)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: pXApy2as7ILBqpRagVgqX3SmtXbJhlA_
+X-Proofpoint-ORIG-GUID: pXApy2as7ILBqpRagVgqX3SmtXbJhlA_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-12_05,2023-10-12_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=999 bulkscore=0
+ clxscore=1011 malwarescore=0 spamscore=0 phishscore=0 mlxscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2309180000 definitions=main-2310120086
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+Add dt-bindings for ltc2991 octal i2c voltage, current and temperature
+monitor.
 
-On 10/11/2023 6:09 PM, Guenter Roeck wrote:
->
-> On Wed, Oct 11, 2023 at 10:45:03AM +0000, Ben Shaul, Almog wrote:
->> Hi all,
->>
->> We'd like to collect hwmon sensors and get their min/max/avg for our platforms.
->>
->> Those sensors doesn't support min/max by HW and only support reading current values (they also don't support avg but that is likely the case for all other devices).
->>
->> For that goal of getting min/max/avg we have two options:
->>
->> 1. Write userspace service that will constantly read the values and do the calculations (and later report to our database)
-> Yes, this is what you'll have to do.
-We appreciate the prompt response!
->
->> 2. Extend HWMON subsystem/library so each registering hwmon device will ask the subsystem to do it for you.
->>      Then kernel will create workqueue and constantly read the values and make the calculations (which shall later be readable via hwmon sysfs)
-> No. This would add runtime overhead to each hwmon device even if the
-> information is not used (which would be the case for almost every user).
+Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+---
+ .../bindings/hwmon/adi,ltc2991.yaml           | 128 ++++++++++++++++++
+ 1 file changed, 128 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml
 
-That is a fair point.
+diff --git a/Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml b/Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml
+new file mode 100644
+index 000000000000..011e5b65c79c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml
+@@ -0,0 +1,128 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++
++$id: http://devicetree.org/schemas/hwmon/adi,ltc2991.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Analog Devices LTC2991 Octal I2C Voltage, Current and Temperature Monitor
++
++maintainers:
++  - Antoniu Miclaus <antoniu.miclaus@analog.com>
++
++description: |
++  The LTC2991 is used to monitor system temperatures, voltages and currents.
++  Through the I2C serial interface, the eight monitors can individually measure
++  supply voltages and can be paired for differential measurements of current
++  sense resistors or temperature sensing transistors.
++
++  Datasheet:
++    https://www.analog.com/en/products/ltc2991.html
++
++properties:
++  compatible:
++    const: adi,ltc2991
++
++  reg:
++    maxItems: 1
++
++  '#address-cells':
++    const: 1
++
++  '#size-cells':
++    const: 0
++
++  vcc-supply: true
++
++patternProperties:
++  "^channel@[0-3]$":
++    type: object
++    description:
++      Represents the differential/temperature channels.
++
++    properties:
++      reg:
++        description:
++          The channel number. LTC2991 can monitor 4 currents/temperatures.
++        items:
++          minimum: 0
++          maximum: 3
++
++      shunt-resistor-micro-ohms:
++        description:
++          The value of curent sense resistor in micro ohms. Pin configuration is
++          set for differential input pair.
++
++      adi,temperature-enable:
++        description:
++          Enables temperature readings. Pin configuration is set for remote
++          diode temperature measurement.
++        type: boolean
++
++    required:
++      - reg
++
++    allOf:
++      - if:
++          required:
++            - shunt-resistor-micro-ohms
++        then:
++          properties:
++            adi,temperature-enable: false
++
++    additionalProperties: false
++
++required:
++  - compatible
++  - reg
++  - vcc-supply
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        hwmon@48 {
++            compatible = "adi,ltc2991";
++            reg = <0x48>;
++            vcc-supply = <&vcc>;
++        };
++    };
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        hwmon@48 {
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            compatible = "adi,ltc2991";
++            reg = <0x48>;
++            vcc-supply = <&vcc>;
++
++            channel@0 {
++                    reg = <0x0>;
++                    shunt-resistor-micro-ohms = <100000>;
++            };
++
++            channel@1 {
++                    reg = <0x1>;
++                    shunt-resistor-micro-ohms = <100000>;
++            };
++
++            channel@2 {
++                    reg = <0x2>;
++                    adi,temperature-enable;
++            };
++
++            channel@3 {
++                    reg = <0x3>;
++                    adi,temperature-enable;
++            };
++        };
++    };
++...
+-- 
+2.42.0
 
-What about enabling this during runtime in case user will want to 
-utilize this?
-
-e.g. ioctl/sysfs/debugfs
-
-Of course users can configure the interval during runtime (or even 
-devfreq based?).
-
-
-The only concern we had for doing it from usrespace is the short 
-interval (and multiple sensors) required will create overhead. Of course 
-doing that in kernel space doesn't make this overhead go away and even 
-worsen it as we don't go via scheduler. (but does ease 
-userspace/kernelspace context switch).
-
-And of course the added value of contributing such a feature which does 
-make sense as probably many want to know across their HW what is the 
-power consumption. are you aware of some package that supply this kind 
-of info? or everyone interested is doing some sort of home made solution?
-
->
-> Guenter
