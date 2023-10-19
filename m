@@ -2,79 +2,171 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51B62CDB482
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Oct 2023 09:43:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67243CDB465
+	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Oct 2023 10:52:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232876AbjJSJna (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 19 Oct 2023 05:43:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34494 "EHLO
+        id S234920AbjJSKwX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 19 Oct 2023 06:52:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjJSJn3 (ORCPT
+        with ESMTP id S230297AbjJSKwW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 19 Oct 2023 05:43:29 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D028106;
-        Thu, 19 Oct 2023 02:43:28 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id ca18e2360f4ac-7a269637b98so282237139f.3;
-        Thu, 19 Oct 2023 02:43:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697708607; x=1698313407; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Irel4QvYAZOPIg1/WIHNQtWdDOjGV4tjoY9E6o8fSoE=;
-        b=I2TnY5PaQGExkm9+QJH/Y5++df4+pWAsoLN1IHU0RsriIHtaT5MS+d3/Kg0vqvavxM
-         GgJ4+PS3ndMc9Zc8ILqVTiUy9MIQf555CJ+PVg7ZuUVdsp80NpzV+DfyJ6ieDvY5NzEa
-         qujRAZ1NcTZV1a7RWwHV/H8csTYQdTWj1uPgkshDLVX2sQbZhBUCap3LWMwfglk6/1qX
-         qsEROt6mZ05pgCnt/THowfCQeijy7Pt1TkzFvb6qqhxVKuqJ8hiZGn+iRqKwc/tQklZM
-         vAAnRsHNz7Rkl0nImAC5TCF5GpXxI7dMrZW0IhUp/187dLk1qtnNXMA0xmkyTPnLuZqK
-         Nt6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697708607; x=1698313407;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Irel4QvYAZOPIg1/WIHNQtWdDOjGV4tjoY9E6o8fSoE=;
-        b=otBBqGMyCxRrJEza5ld6z/zoPdLPsldSNDcfwnEuosBt3iRZtdQv7IuTaY2cD5Z0hK
-         YyxX7McBpgEiq0C1cdmeZAcuSfdI6zsVEc6rF/OlZoQWvG5PTrDgEgEYDTcD1DrX/q0L
-         7ok5QgGxNfcIaedmi6dL6Tm4EN1PUc8vRv2mH6RbakftLGBhunHktBk5c3FTiJwDOtYR
-         sJbDywYfIjCe7QOnGOSVoRFESLsXO5bQZgSjJKWSQYVNjE9UsLnH3YAzPoIJFDhphaTU
-         u6QmRHRT4RVQT2jkYWF4/YI2Kjd4retbqbpIZGgen42YMNxOvYfnj8GIXPhZM0udVaV1
-         SeBw==
-X-Gm-Message-State: AOJu0Yy7t7ICti+nJBnyz3jkeHtJasH8MG3qSPQrgZ5l/PXlP2Hak718
-        1LEyTsmv8UWK7Ss9KbJME+mZq+06Nr5cQ6CXfTdReUmIt8U=
-X-Google-Smtp-Source: AGHT+IF62fs6ujxW2XujjLx9NTZQhFBo+/mBpYwbYYr3GRkxftjEIBk9P2wtZGH2UyNUP3+9329BdFH52wtH8pk7Tig=
-X-Received: by 2002:a05:6602:2b93:b0:786:2125:a034 with SMTP id
- r19-20020a0566022b9300b007862125a034mr2010050iov.18.1697708607564; Thu, 19
- Oct 2023 02:43:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <20231019032122.1594649-1-kernel@monoid.al>
-In-Reply-To: <20231019032122.1594649-1-kernel@monoid.al>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Thu, 19 Oct 2023 11:43:16 +0200
-Message-ID: <CAB95QAR-UbfVULOCaZMO4H1AgvzbiHEoSYk-DiYPY6Pg-i7Vag@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add ROG Crosshair X670E Gene.
-To:     Ellie Hermaszewska <kernel@monoid.al>
-Cc:     Jean Delvare <jdelvare@suse.com>,
+        Thu, 19 Oct 2023 06:52:22 -0400
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CAE7121
+        for <linux-hwmon@vger.kernel.org>; Thu, 19 Oct 2023 03:52:20 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qtQcb-0002Wd-GE; Thu, 19 Oct 2023 12:51:21 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qtQcZ-002lnZ-81; Thu, 19 Oct 2023 12:51:19 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qtQcY-001W9b-T9; Thu, 19 Oct 2023 12:51:18 +0200
+Date:   Thu, 19 Oct 2023 12:51:18 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
+        linux-pwm@vger.kernel.org,
+        Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Support Opensource <support.opensource@diasemi.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+        Mark Gross <markgross@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-fbdev@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] pwm: make it possible to apply pwm changes in
+ atomic context
+Message-ID: <20231019105118.64gdzzixwqrztjir@pengutronix.de>
+References: <cover.1697534024.git.sean@mess.org>
+ <a7fcd19938d5422abc59c968ff7b3d5c275577ed.1697534024.git.sean@mess.org>
+ <90728c06-4c6c-b3d2-4723-c24711be2fa5@redhat.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yn2iyczv5acooknv"
+Content-Disposition: inline
+In-Reply-To: <90728c06-4c6c-b3d2-4723-c24711be2fa5@redhat.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
 
-Thank you for submitting the patch! I don't understand how does your
-note that only the T_Sensor presence can be verified correlate with
-SENSOR_TEMP_CPU | SENSOR_TEMP_CPU_PACKAGE |
-SENSOR_TEMP_MB | SENSOR_TEMP_VRM enabled. Could you clarify, please?
+--yn2iyczv5acooknv
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Based on the EC registers dump you provided [1], I believe it is safe
-to enable Water_In and Water_Oout sensors as well.
+On Wed, Oct 18, 2023 at 03:57:48PM +0200, Hans de Goede wrote:
+> Hi Sean,
+>=20
+> On 10/17/23 11:17, Sean Young wrote:
+> > Some drivers require sleeping, for example if the pwm device is connect=
+ed
+> > over i2c. The pwm-ir-tx requires precise timing, and sleeping causes ha=
+voc
+> > with the generated IR signal when sleeping occurs.
+> >=20
+> > This patch makes it possible to use pwm when the driver does not sleep,
+> > by introducing the pwm_can_sleep() function.
+> >=20
+> > Signed-off-by: Sean Young <sean@mess.org>
+>=20
+> I have no objection to this patch by itself, but it seems a bit
+> of unnecessary churn to change all current callers of pwm_apply_state()
+> to a new API.
 
-And please add the board name to list in Documentation/hwmon/asus_ec_sensors.rst
+The idea is to improve the semantic of the function name, see
+https://lore.kernel.org/linux-pwm/20231013180449.mcdmklbsz2rlymzz@pengutron=
+ix.de
+for more context. I think it's very subjective if you consider this
+churn or not. While it's nice to have every caller converted in a single
+step, I'd go for
 
-Cheers,
-Eugene
+	#define pwm_apply_state(pwm, state) pwm_apply_cansleep(pwm, state)
 
-[1] https://github.com/zeule/asus-ec-sensors/issues/42#issuecomment-1742062260
+, keep that macro for a while and convert all users step by step. This
+way we don't needlessly break oot code and the changes to convert to the
+new API can go via their usual trees without time pressure.
+
+> Why not just keep pwm_apply_state() as is and introduce a new
+> pwm_apply_state_atomic() for callers which want to apply state
+> in a case where sleeping is not allowed ?
+
+There is a big spontaneous growth of function name patterns. I didn't
+claim having done a complete research, but not using a suffix for the
+fast variant and _cansleep for the sleeping one at least aligns to how
+the gpio subsystem names things.
+
+Grepping a bit more:
+
+ - regmap has: regmap_might_sleep() and struct regmap::can_sleep
+   The actual API doesn't have different functions to differentiate
+   sleeping and non-sleeping calls. (Though there is
+   regmap_read_poll_timeout_atomic().)
+
+ - kmap() + kmap_atomic()
+ - set_pte() + set_pte_atomic()
+
+ - There is scmi_is_transport_atomic() and scmi_handle::is_transport_atomic=
+()
+   (Is this also about sleeping?)
+
+ - There are quite a lot more symbols ending in _atomic and in
+   _cansleep, but several of them don't exists to differentiate a slow
+   and a fast procedure.  (e.g. drm_mode_atomic)
+
+Not entirely sure what to read out of that.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--yn2iyczv5acooknv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmUxCiUACgkQj4D7WH0S
+/k4jlwgAgQS/Vm8QPoZFBjT4W6JQXxJRPwUsXBOa7whQZfAYqlzZZ35+WjXKug70
+1nq/INcUz96H0aYtK2aHLUeOEQH+cDau32nAM9dYk0S4qWXOEgC1gFbPwGTrF1SE
+gEPMEkOMezwBlon9ik8cPddAGP5rDSXD8YKeiGy5O6gbXi/iKChFxnamOn5K7B+j
+mgPy/pP0tTP79r0tsVIKta7hnJ1uGfv8cWRQqvPTyT9YuEiBfKRzgi7rxXq9gH2X
+DS+SMO7jtBXFEl5kzKsw1oKpR5VqInvebeBJHSnsH3T/sXAuyJj379046bjbKq7c
+rp0jBis0JVqrfUguEpnfRBuxuTilXQ==
+=OvnQ
+-----END PGP SIGNATURE-----
+
+--yn2iyczv5acooknv--
