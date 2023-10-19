@@ -2,86 +2,122 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7CCDCDB465
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Oct 2023 11:33:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D23C8CDB465
+	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Oct 2023 13:57:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233155AbjJSLdG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 19 Oct 2023 07:33:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52108 "EHLO
+        id S1345759AbjJSN5m (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 19 Oct 2023 09:57:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233048AbjJSLdF (ORCPT
+        with ESMTP id S1345703AbjJSN5l (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 19 Oct 2023 07:33:05 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21400C0;
-        Thu, 19 Oct 2023 04:33:04 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id ca18e2360f4ac-77acb04309dso316593839f.2;
-        Thu, 19 Oct 2023 04:33:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697715183; x=1698319983; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vR4oIaKl7VukEPLoRxulPlCo1LPKKIgD+yZZhVz/lzA=;
-        b=TcahNRSDTocYilNNoeEygnawd+pCvgdLol9EvGTFsLktUX3WrgGHgNQK04qojWrAQT
-         DhvxEMJtjOSUeNAQzjrxg2t4zgEiPx5GonB5jJCBuCHB4O03Kz7UlglFzWB8znG7iaIz
-         k2Sd0nX3NWI85Kpq2bdrgZWdQpRyBzjVjF/F/rLeJW1ZIkDj/mZNYtcZw+n9haUp4ev3
-         8aKjwWXUlMAaP7SEZY6423Dg+2PKh0PgRLjJGzDhINuVQF/KJqJ7wNdHSzD5QHz+tZni
-         oxrre4KtcI8FHXsq4ALAEH22Ooir1o7nsLLxsF5odE5NAkibqLi18mr4M/E/JxKvy9q1
-         BIqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697715183; x=1698319983;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vR4oIaKl7VukEPLoRxulPlCo1LPKKIgD+yZZhVz/lzA=;
-        b=vWx71tl9vnNesxVUN6q9mIvXyWZIkWra6lVplTuZqTItNe0DATI7kma8GkOn4HGOYi
-         mZgz6sPh7svPbQqwS8i3NPFwJ8RpKhcWFRvJiUjn52BeBjnrjgUO+9/uqI53PBaEGy1l
-         0rlMwT4iH5hlIg8tNKk1eoCYhhtxrEETb4tstuqRQcI+dI7R50FTOypqlm5RqcR18wDj
-         JbY9/2IPVVAHtdpOz1A052q6hZGhighaiuKu+cOCfUN1PCdlItWIOuBtgfu8E/NIncA1
-         OwtV/5afWiF6e89atAg2RiSjypt0j7DicsoRe0z5l1mmxO8CiO/7OOH1vUAXZonDItVR
-         NPTA==
-X-Gm-Message-State: AOJu0YxKQH5hhD4EamS1ILWs78+NNypAXbxRkPJjjAlsRfjbzZoAAdmk
-        7tGEoljjN8Xgs4J7SzgPJvONJ8qcnEw2QYRmD/I=
-X-Google-Smtp-Source: AGHT+IFrDqKVC92ajXINvyayX7fRbh4tnLvmdy2wgUFpPgqZgbDrETvEaAKvR4BNzt3HU5dNk+czxTzLstg9Hoafm9M=
-X-Received: by 2002:a05:6602:2b0b:b0:787:34d:f1ea with SMTP id
- p11-20020a0566022b0b00b00787034df1eamr2626387iov.8.1697715183402; Thu, 19 Oct
- 2023 04:33:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20231019032122.1594649-1-kernel@monoid.al> <CAB95QAR-UbfVULOCaZMO4H1AgvzbiHEoSYk-DiYPY6Pg-i7Vag@mail.gmail.com>
-In-Reply-To: <CAB95QAR-UbfVULOCaZMO4H1AgvzbiHEoSYk-DiYPY6Pg-i7Vag@mail.gmail.com>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Thu, 19 Oct 2023 13:32:52 +0200
-Message-ID: <CAB95QAStiK=8ZD8yaSEtWbzt4vbB+EhjrEs259DYiimJSREDDw@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add ROG Crosshair X670E Gene.
-To:     Ellie Hermaszewska <kernel@monoid.al>
-Cc:     Jean Delvare <jdelvare@suse.com>,
+        Thu, 19 Oct 2023 09:57:41 -0400
+X-Greylist: delayed 38122 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 19 Oct 2023 06:57:37 PDT
+Received: from out-193.mta1.migadu.com (out-193.mta1.migadu.com [IPv6:2001:41d0:203:375::c1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00345B0
+        for <linux-hwmon@vger.kernel.org>; Thu, 19 Oct 2023 06:57:37 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=monoid.al; s=key1;
+        t=1697723856;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VRxOEzF/DS5Ox8tHGrklu3RK67HNn0EYzNtroRBbeKU=;
+        b=NJ6zwTDuDXga4dSQHGU1ASUZ7/FmT03Ln4ldnJ2aO2liVnVdTHDSNG8tFsfnsqM31o3Iv1
+        PP8TC5fzlg7NKLcFBMZkQvos+rk/LepsOox6M0thx09qjEKwoeM9IHd2mK6N5jSzpPbmnr
+        Lex+Eo0VT9YeezKlTacm5DqVUOwZzL3aiUO0HNM+Cxpj+kt0UrAfpFGvSAXh6OIPb7DRxo
+        BNs05zLnD8mH2MTpMZbtgYqK2HHhjDN0my3Q29ipCy6+Fv4woa89g+q9asvR82dAuAVlTi
+        kpXzZ40HdMRpcEhQ2DCK5wXnnyjpFj2uWhvUQlEIn3iqGyMr3CHDh28pRMxSiQ==
+From:   Ellie Hermaszewska <kernel@monoid.al>
+To:     eugene.shalygin@gmail.com
+Cc:     Ellie Hermaszewska <kernel@monoid.al>,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] hwmon: (asus-ec-sensors) add ROG Crosshair X670E Gene.
+Date:   Thu, 19 Oct 2023 21:51:58 +0800
+Message-ID: <20231019135640.434752-1-kernel@monoid.al>
+In-Reply-To: <CAB95QAR-UbfVULOCaZMO4H1AgvzbiHEoSYk-DiYPY6Pg-i7Vag@mail.gmail.com>
+References: <CAB95QAR-UbfVULOCaZMO4H1AgvzbiHEoSYk-DiYPY6Pg-i7Vag@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Oh, sorry, I misread the board name. Please scratch the bits about water temps.
+These are two separate statements, describing the set of sensors
+implemented (those I could verify) and the specifics of the T_Sensor new
+to the X670E motherboards.
 
-Cheers,
-Eugene
+Best wishes,
+Ellie
 
-On Thu, 19 Oct 2023 at 11:43, Eugene Shalygin <eugene.shalygin@gmail.com> wrote:
->
-> Hi,
->
-> Thank you for submitting the patch! I don't understand how does your
-> note that only the T_Sensor presence can be verified correlate with
-> SENSOR_TEMP_CPU | SENSOR_TEMP_CPU_PACKAGE |
-> SENSOR_TEMP_MB | SENSOR_TEMP_VRM enabled. Could you clarify, please?
->
-> Based on the EC registers dump you provided [1], I believe it is safe
-> to enable Water_In and Water_Oout sensors as well.
->
-> And please add the board name to list in Documentation/hwmon/asus_ec_sensors.rst
->
-> Cheers,
-> Eugene
->
-> [1] https://github.com/zeule/asus-ec-sensors/issues/42#issuecomment-1742062260
+Only the temp sensors that I can verify are present.
+
+T_Sensor is the temperature reading of a 10kΩ β=3435K NTC thermistor
+optionally connected to the T_SENSOR header.
+
+The other sensors are as found on the X670E HERO.
+
+Signed-off-by: Ellie Hermaszewska <kernel@monoid.al>
+---
+ Documentation/hwmon/asus_ec_sensors.rst |  1 +
+ drivers/hwmon/asus-ec-sensors.c         | 12 ++++++++++++
+ 2 files changed, 13 insertions(+)
+
+diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
+index 7e3cd5b6686f..0bf99ba406dd 100644
+--- a/Documentation/hwmon/asus_ec_sensors.rst
++++ b/Documentation/hwmon/asus_ec_sensors.rst
+@@ -15,6 +15,7 @@ Supported boards:
+  * ROG CROSSHAIR VIII HERO
+  * ROG CROSSHAIR VIII IMPACT
+  * ROG CROSSHAIR X670E HERO
++ * ROG CROSSHAIR X670E GENE
+  * ROG MAXIMUS XI HERO
+  * ROG MAXIMUS XI HERO (WI-FI)
+  * ROG STRIX B550-E GAMING
+diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+index 51f9c2db403e..36f9e38000d5 100644
+--- a/drivers/hwmon/asus-ec-sensors.c
++++ b/drivers/hwmon/asus-ec-sensors.c
+@@ -244,6 +244,8 @@ static const struct ec_sensor_info sensors_family_amd_600[] = {
+ 	EC_SENSOR("Motherboard", hwmon_temp, 1, 0x00, 0x32),
+ 	[ec_sensor_temp_vrm] =
+ 		EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x33),
++	[ec_sensor_temp_t_sensor] =
++		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x36),
+ 	[ec_sensor_temp_water_in] =
+ 		EC_SENSOR("Water_In", hwmon_temp, 1, 0x01, 0x00),
+ 	[ec_sensor_temp_water_out] =
+@@ -344,6 +346,14 @@ static const struct ec_board_info board_info_crosshair_x670e_hero = {
+ 	.family = family_amd_600_series,
+ };
+ 
++static const struct ec_board_info board_info_crosshair_x670e_gene = {
++	.sensors = SENSOR_TEMP_CPU | SENSOR_TEMP_CPU_PACKAGE |
++		SENSOR_TEMP_T_SENSOR |
++		SENSOR_TEMP_MB | SENSOR_TEMP_VRM,
++	.mutex_path = ACPI_GLOBAL_LOCK_PSEUDO_PATH,
++	.family = family_amd_600_series,
++};
++
+ static const struct ec_board_info board_info_crosshair_viii_dark_hero = {
+ 	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
+ 		SENSOR_TEMP_T_SENSOR |
+@@ -490,6 +500,8 @@ static const struct dmi_system_id dmi_table[] = {
+ 					&board_info_crosshair_viii_hero),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR X670E HERO",
+ 					&board_info_crosshair_x670e_hero),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR X670E GENE",
++					&board_info_crosshair_x670e_gene),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG MAXIMUS XI HERO",
+ 					&board_info_maximus_xi_hero),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG MAXIMUS XI HERO (WI-FI)",
+-- 
+2.42.0
+
