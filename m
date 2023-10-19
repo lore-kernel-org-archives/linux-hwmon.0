@@ -2,95 +2,79 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B6FFCDB47E
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Oct 2023 03:27:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51B62CDB482
+	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Oct 2023 09:43:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232350AbjJSD1h (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 18 Oct 2023 23:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59594 "EHLO
+        id S232876AbjJSJna (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 19 Oct 2023 05:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbjJSD1f (ORCPT
+        with ESMTP id S229473AbjJSJn3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 18 Oct 2023 23:27:35 -0400
-X-Greylist: delayed 315 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 18 Oct 2023 20:27:32 PDT
-Received: from out-202.mta1.migadu.com (out-202.mta1.migadu.com [95.215.58.202])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B87B122
-        for <linux-hwmon@vger.kernel.org>; Wed, 18 Oct 2023 20:27:31 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=monoid.al; s=key1;
-        t=1697685733;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Tnl+EruaCha2otXKuR/FBsuzKY4Vfaq7M8pGpL8/h8k=;
-        b=ev8txUR7RTEi4fTtLpzha2EqorV1lRrYzpFL1+RguOYeBIoKizJdmbd7vk7U9u16brHp1B
-        Na/tjM8UeUjHPnIeC1XwTK5pP62tpj6pV5jqYvGtW+9hhx9fgeZW+aMmlJXrNpqJ0RC2HT
-        lX286vA01PfDrAXWUqnDRqzez+03OJaY8X3dbPMXVqhz3eKML8radXpwERY3FfZ68sgQ/n
-        WW4leN1uQ/9nbPiNbuhshRjaWQrI35erT1nwva+CnpZ/wVE4Q84lu04XO9IoJ8N4f8ism8
-        LY8W43hCl+i2pNdaMDXM/8BFVITIL2u8EalzZJsJQnVkJtMK1auFIh0jcNqOMQ==
-From:   Ellie Hermaszewska <kernel@monoid.al>
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
+        Thu, 19 Oct 2023 05:43:29 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D028106;
+        Thu, 19 Oct 2023 02:43:28 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id ca18e2360f4ac-7a269637b98so282237139f.3;
+        Thu, 19 Oct 2023 02:43:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1697708607; x=1698313407; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Irel4QvYAZOPIg1/WIHNQtWdDOjGV4tjoY9E6o8fSoE=;
+        b=I2TnY5PaQGExkm9+QJH/Y5++df4+pWAsoLN1IHU0RsriIHtaT5MS+d3/Kg0vqvavxM
+         GgJ4+PS3ndMc9Zc8ILqVTiUy9MIQf555CJ+PVg7ZuUVdsp80NpzV+DfyJ6ieDvY5NzEa
+         qujRAZ1NcTZV1a7RWwHV/H8csTYQdTWj1uPgkshDLVX2sQbZhBUCap3LWMwfglk6/1qX
+         qsEROt6mZ05pgCnt/THowfCQeijy7Pt1TkzFvb6qqhxVKuqJ8hiZGn+iRqKwc/tQklZM
+         vAAnRsHNz7Rkl0nImAC5TCF5GpXxI7dMrZW0IhUp/187dLk1qtnNXMA0xmkyTPnLuZqK
+         Nt6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697708607; x=1698313407;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Irel4QvYAZOPIg1/WIHNQtWdDOjGV4tjoY9E6o8fSoE=;
+        b=otBBqGMyCxRrJEza5ld6z/zoPdLPsldSNDcfwnEuosBt3iRZtdQv7IuTaY2cD5Z0hK
+         YyxX7McBpgEiq0C1cdmeZAcuSfdI6zsVEc6rF/OlZoQWvG5PTrDgEgEYDTcD1DrX/q0L
+         7ok5QgGxNfcIaedmi6dL6Tm4EN1PUc8vRv2mH6RbakftLGBhunHktBk5c3FTiJwDOtYR
+         sJbDywYfIjCe7QOnGOSVoRFESLsXO5bQZgSjJKWSQYVNjE9UsLnH3YAzPoIJFDhphaTU
+         u6QmRHRT4RVQT2jkYWF4/YI2Kjd4retbqbpIZGgen42YMNxOvYfnj8GIXPhZM0udVaV1
+         SeBw==
+X-Gm-Message-State: AOJu0Yy7t7ICti+nJBnyz3jkeHtJasH8MG3qSPQrgZ5l/PXlP2Hak718
+        1LEyTsmv8UWK7Ss9KbJME+mZq+06Nr5cQ6CXfTdReUmIt8U=
+X-Google-Smtp-Source: AGHT+IF62fs6ujxW2XujjLx9NTZQhFBo+/mBpYwbYYr3GRkxftjEIBk9P2wtZGH2UyNUP3+9329BdFH52wtH8pk7Tig=
+X-Received: by 2002:a05:6602:2b93:b0:786:2125:a034 with SMTP id
+ r19-20020a0566022b9300b007862125a034mr2010050iov.18.1697708607564; Thu, 19
+ Oct 2023 02:43:27 -0700 (PDT)
+MIME-Version: 1.0
+References: <20231019032122.1594649-1-kernel@monoid.al>
+In-Reply-To: <20231019032122.1594649-1-kernel@monoid.al>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Thu, 19 Oct 2023 11:43:16 +0200
+Message-ID: <CAB95QAR-UbfVULOCaZMO4H1AgvzbiHEoSYk-DiYPY6Pg-i7Vag@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add ROG Crosshair X670E Gene.
+To:     Ellie Hermaszewska <kernel@monoid.al>
+Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Ellie Hermaszewska <kernel@monoid.al>
-Subject: [PATCH] hwmon: (asus-ec-sensors) add ROG Crosshair X670E Gene.
-Date:   Thu, 19 Oct 2023 11:21:22 +0800
-Message-ID: <20231019032122.1594649-1-kernel@monoid.al>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Only the temp sensors that I can verify are present. T_Sensor is the
-temperature reading of a 10kΩ β=3435K NTC thermistor optionally
-connected to the T_SENSOR header.
+Hi,
 
-Signed-off-by: Ellie Hermaszewska <kernel@monoid.al>
----
- drivers/hwmon/asus-ec-sensors.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+Thank you for submitting the patch! I don't understand how does your
+note that only the T_Sensor presence can be verified correlate with
+SENSOR_TEMP_CPU | SENSOR_TEMP_CPU_PACKAGE |
+SENSOR_TEMP_MB | SENSOR_TEMP_VRM enabled. Could you clarify, please?
 
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index 51f9c2db403e..36f9e38000d5 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -244,6 +244,8 @@ static const struct ec_sensor_info sensors_family_amd_600[] = {
- 	EC_SENSOR("Motherboard", hwmon_temp, 1, 0x00, 0x32),
- 	[ec_sensor_temp_vrm] =
- 		EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x33),
-+	[ec_sensor_temp_t_sensor] =
-+		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x36),
- 	[ec_sensor_temp_water_in] =
- 		EC_SENSOR("Water_In", hwmon_temp, 1, 0x01, 0x00),
- 	[ec_sensor_temp_water_out] =
-@@ -344,6 +346,14 @@ static const struct ec_board_info board_info_crosshair_x670e_hero = {
- 	.family = family_amd_600_series,
- };
- 
-+static const struct ec_board_info board_info_crosshair_x670e_gene = {
-+	.sensors = SENSOR_TEMP_CPU | SENSOR_TEMP_CPU_PACKAGE |
-+		SENSOR_TEMP_T_SENSOR |
-+		SENSOR_TEMP_MB | SENSOR_TEMP_VRM,
-+	.mutex_path = ACPI_GLOBAL_LOCK_PSEUDO_PATH,
-+	.family = family_amd_600_series,
-+};
-+
- static const struct ec_board_info board_info_crosshair_viii_dark_hero = {
- 	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
- 		SENSOR_TEMP_T_SENSOR |
-@@ -490,6 +500,8 @@ static const struct dmi_system_id dmi_table[] = {
- 					&board_info_crosshair_viii_hero),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR X670E HERO",
- 					&board_info_crosshair_x670e_hero),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR X670E GENE",
-+					&board_info_crosshair_x670e_gene),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG MAXIMUS XI HERO",
- 					&board_info_maximus_xi_hero),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG MAXIMUS XI HERO (WI-FI)",
--- 
-2.42.0
+Based on the EC registers dump you provided [1], I believe it is safe
+to enable Water_In and Water_Oout sensors as well.
 
+And please add the board name to list in Documentation/hwmon/asus_ec_sensors.rst
+
+Cheers,
+Eugene
+
+[1] https://github.com/zeule/asus-ec-sensors/issues/42#issuecomment-1742062260
