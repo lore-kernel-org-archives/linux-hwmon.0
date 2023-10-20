@@ -2,63 +2,119 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BA50C004C0
-	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Oct 2023 08:55:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21F3AC001DF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Oct 2023 10:35:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376521AbjJTIzz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 20 Oct 2023 04:55:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35398 "EHLO
+        id S1376857AbjJTKfQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 20 Oct 2023 06:35:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376546AbjJTIzy (ORCPT
+        with ESMTP id S1376891AbjJTKfO (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 20 Oct 2023 04:55:54 -0400
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 96248D57;
-        Fri, 20 Oct 2023 01:55:48 -0700 (PDT)
-Received: from localhost.localdomain (unknown [180.167.10.98])
-        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id F1F88604889BB;
-        Fri, 20 Oct 2023 16:55:35 +0800 (CST)
-X-MD-Sfrom: suhui@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From:   Su Hui <suhui@nfschina.com>
-To:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        jdelvare@suse.com, linux@roeck-us.net, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de
-Cc:     Su Hui <suhui@nfschina.com>, openbmc@lists.ozlabs.org,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH] hwmon: npcm750-pwm: add an error code check in npcm7xx_en_pwm_fan
-Date:   Fri, 20 Oct 2023 16:55:19 +0800
-Message-Id: <20231020085518.198477-1-suhui@nfschina.com>
-X-Mailer: git-send-email 2.30.2
+        Fri, 20 Oct 2023 06:35:14 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A8B0D65;
+        Fri, 20 Oct 2023 03:35:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697798112; x=1729334112;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RxoqXyv0zETKYqwyH5UYMhDM7joOC36tuvjkJay4FOU=;
+  b=iSfn9tujwsZivYeaY2IHCA0/xdJRn+Io1mMSjmrXsWjYMut7WxB2Mcvs
+   WlIPHSxydOQhqwc/WgvDPS0ZjFIIEeACCllCfU6TsnRvh2+rwE4ldPHz8
+   R7yOo3DAjX58uKf6FRBwd4fISzDW0iZM7zSmAlZjDADPzZ2oDShyE0CpZ
+   JuoE/i7zresv4/dE4KIy/nHq1wXH8mCuBqLx4Fc4k2TEtvCkiKn4yGqZL
+   ECfkvikuAcFjtfjCl+jj5BhKdxzxzkpWO/vbFDjNfmSpZ+/s/SvTZ7dKn
+   QrWu4fNJsnB4ApBBeYq1jrURWuqrcY7ZK6L59Cqk8TslOosW2VxIioi4B
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="365810931"
+X-IronPort-AV: E=Sophos;i="6.03,238,1694761200"; 
+   d="scan'208";a="365810931"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2023 03:35:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="733934381"
+X-IronPort-AV: E=Sophos;i="6.03,238,1694761200"; 
+   d="scan'208";a="733934381"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2023 03:35:07 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC2)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qtmqN-000000077dZ-2inU;
+        Fri, 20 Oct 2023 13:35:03 +0300
+Date:   Fri, 20 Oct 2023 13:35:03 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Raag Jadav <raag.jadav@intel.com>
+Cc:     rafael@kernel.org, len.brown@intel.com, robert.moore@intel.com,
+        mika.westerberg@linux.intel.com, mark.rutland@arm.com,
+        will@kernel.org, linux@roeck-us.net, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        acpica-devel@lists.linuxfoundation.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        mallikarjunappa.sangannavar@intel.com, bala.senthil@intel.com
+Subject: Re: [PATCH v1 1/8] ACPI: utils: Introduce acpi_dev_uid_match() for
+ matching _UID
+Message-ID: <ZTJX1ytv2aEcHULA@smile.fi.intel.com>
+References: <20231020084732.17130-1-raag.jadav@intel.com>
+ <20231020084732.17130-2-raag.jadav@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231020084732.17130-2-raag.jadav@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-npcm7xx_pwm_config_set() can return '-ENODEV' for failed. So check
-the value of 'ret' after calling npcm7xx_pwm_config_set().
+On Fri, Oct 20, 2023 at 02:17:25PM +0530, Raag Jadav wrote:
+> Introduce acpi_dev_uid_match() helper that matches the device with
+> supplied _UID string.
 
-Signed-off-by: Su Hui <suhui@nfschina.com>
----
- drivers/hwmon/npcm750-pwm-fan.c | 2 ++
- 1 file changed, 2 insertions(+)
+...
 
-diff --git a/drivers/hwmon/npcm750-pwm-fan.c b/drivers/hwmon/npcm750-pwm-fan.c
-index 10ed3f4335d4..4702e4edc662 100644
---- a/drivers/hwmon/npcm750-pwm-fan.c
-+++ b/drivers/hwmon/npcm750-pwm-fan.c
-@@ -875,6 +875,8 @@ static int npcm7xx_en_pwm_fan(struct device *dev,
- 	data->pwm_present[pwm_port] = true;
- 	ret = npcm7xx_pwm_config_set(data, pwm_port,
- 				     NPCM7XX_PWM_CMR_DEFAULT_NUM);
-+	if (ret)
-+		return ret;
- 
- 	ret = of_property_count_u8_elems(child, "cooling-levels");
- 	if (ret > 0) {
+> +/**
+> + * acpi_dev_uid_match - Match device by supplied UID
+> + * @adev: ACPI device to match.
+> + * @uid2: Unique ID of the device, pass NULL to not check _UID.
+> + *
+> + * Matches UID in @adev with given @uid2. Absence of @uid2 will be treated as
+> + * a match. If user wants to validate @uid2, it should be done before calling
+> + * this function. This behaviour is as needed by most of its current users.
+
+The "current" internally I applied to the result of the series. So reading this
+again I think the better wording is "potential".
+
+> + *
+> + * Returns:
+> + *  - %true if matches or @uid2 is NULL.
+> + *  - %false otherwise.
+> + */
+
+...
+
+>  /**
+>   * acpi_dev_hid_uid_match - Match device by supplied HID and UID
+>   * @adev: ACPI device to match.
+>   * @hid2: Hardware ID of the device.
+>   * @uid2: Unique ID of the device, pass NULL to not check _UID.
+>   *
+> - * Matches HID and UID in @adev with given @hid2 and @uid2.
+> - * Returns true if matches.
+> + * Matches HID and UID in @adev with given @hid2 and @uid2. Absence of @uid2
+> + * will be treated as a match. If user wants to validate @uid2, it should be
+> + * done before calling this function. This behaviour is as needed by most of
+> + * its current users.
+
+Ditto.
+
+> + * Returns:
+> + *  - %true if matches or @uid2 is NULL.
+> + *  - %false otherwise.
+>   */
+
 -- 
-2.30.2
+With Best Regards,
+Andy Shevchenko
+
 
