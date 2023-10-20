@@ -2,133 +2,78 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 732F0C0032E
-	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Oct 2023 15:49:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9487C00A98
+	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Oct 2023 17:05:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377732AbjJTPtl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 20 Oct 2023 11:49:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48558 "EHLO
+        id S229928AbjJTRFz convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 20 Oct 2023 13:05:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377663AbjJTPtk (ORCPT
+        with ESMTP id S229925AbjJTRFy (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 20 Oct 2023 11:49:40 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2B51A3;
-        Fri, 20 Oct 2023 08:49:37 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4SBpsm1khlz67M1H;
-        Fri, 20 Oct 2023 23:49:00 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Fri, 20 Oct
- 2023 16:49:34 +0100
-Date:   Fri, 20 Oct 2023 16:49:33 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Raag Jadav <raag.jadav@intel.com>
-CC:     <rafael@kernel.org>, <len.brown@intel.com>,
-        <robert.moore@intel.com>, <mika.westerberg@linux.intel.com>,
-        <andriy.shevchenko@linux.intel.com>, <mark.rutland@arm.com>,
-        <will@kernel.org>, <linux@roeck-us.net>,
-        <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <acpica-devel@lists.linuxfoundation.org>,
-        <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-hwmon@vger.kernel.org>,
-        <mallikarjunappa.sangannavar@intel.com>, <bala.senthil@intel.com>
-Subject: Re: [PATCH v1 1/8] ACPI: utils: Introduce acpi_dev_uid_match() for
- matching _UID
-Message-ID: <20231020164933.00002f53@Huawei.com>
-In-Reply-To: <20231020084732.17130-2-raag.jadav@intel.com>
-References: <20231020084732.17130-1-raag.jadav@intel.com>
-        <20231020084732.17130-2-raag.jadav@intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Fri, 20 Oct 2023 13:05:54 -0400
+Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D29D6F;
+        Fri, 20 Oct 2023 10:05:49 -0700 (PDT)
+Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-57de3096e25so92223eaf.1;
+        Fri, 20 Oct 2023 10:05:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697821548; x=1698426348;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=V8AIn6/iR3E8CT+JQB0gST5WJCIAr7Wh8y0iPNdS+AQ=;
+        b=ptUlr25gRHNzmmLXc0mp2K2CFT3kcfCh2/YEOHyFSYpHjdRFIFy83N4CyEyo+SmCgk
+         gpYbjHDagjqidrZsx2x7u0CKRdeeOn4wzHPsjzej0dOQj1LnZdfAX5bJOYJKy9ZA2c3Z
+         73WbE/BeMe+qxtCvvXBjhhL8fv4GEMI2La4KwKiRw5yY7TKXTDPkxJwHhUR0Fix42rfe
+         7AO0tE8yaatWpztUXBEgbHVCRXwLKeSDyB7kA4eu321VU+byERJfzCK1MLw/eLXED75H
+         jVhsda5lcbadIIxgx60hA3TMrGU1ywI98EBwIIUtRVJc9ICezyIzwmSbwOP5YNP8lxVp
+         kN8A==
+X-Gm-Message-State: AOJu0Ywkg3mN4ex/Rln0sAHgWs+XUKgE7Mz/tGqseNsdyXpyHmsZYiEH
+        hGujcLP3yjpO25skhzhd0ik1fv72MTgiYuH+/8s=
+X-Google-Smtp-Source: AGHT+IFSQ1zCkW05M9khBFLMCYZDLgibguIFQzo/kLEk64piidec4jtkFdB09yj4U6zdpHktR3/Riw2Hytar5/gTwX4=
+X-Received: by 2002:a4a:bd18:0:b0:581:e7b8:dd77 with SMTP id
+ n24-20020a4abd18000000b00581e7b8dd77mr2851560oop.1.1697821548724; Fri, 20 Oct
+ 2023 10:05:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
+References: <20231020084732.17130-1-raag.jadav@intel.com> <20231020084732.17130-6-raag.jadav@intel.com>
+ <ZTJYgnugWHwBhtxv@smile.fi.intel.com>
+In-Reply-To: <ZTJYgnugWHwBhtxv@smile.fi.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 20 Oct 2023 19:05:37 +0200
+Message-ID: <CAJZ5v0gqFgkhPHudqYUdg8ZgbEtF0Jf1ATbYACYEq3fNyaDW2w@mail.gmail.com>
+Subject: Re: [PATCH v1 5/8] ACPI: x86: use acpi_dev_uid_match() for matching _UID
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Raag Jadav <raag.jadav@intel.com>, rafael@kernel.org,
+        len.brown@intel.com, robert.moore@intel.com,
+        mika.westerberg@linux.intel.com, mark.rutland@arm.com,
+        will@kernel.org, linux@roeck-us.net, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        acpica-devel@lists.linuxfoundation.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        mallikarjunappa.sangannavar@intel.com, bala.senthil@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, 20 Oct 2023 14:17:25 +0530
-Raag Jadav <raag.jadav@intel.com> wrote:
-
-> Introduce acpi_dev_uid_match() helper that matches the device with
-> supplied _UID string.
-> 
-> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Raag Jadav <raag.jadav@intel.com>
+On Fri, Oct 20, 2023 at 12:38 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Fri, Oct 20, 2023 at 02:17:29PM +0530, Raag Jadav wrote:
+> > Convert manual _UID references to use standard ACPI helpers.
+>
 > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->  /**
->   * acpi_dev_hid_uid_match - Match device by supplied HID and UID
->   * @adev: ACPI device to match.
->   * @hid2: Hardware ID of the device.
->   * @uid2: Unique ID of the device, pass NULL to not check _UID.
->   *
-> - * Matches HID and UID in @adev with given @hid2 and @uid2.
-> - * Returns true if matches.
-> + * Matches HID and UID in @adev with given @hid2 and @uid2. Absence of @uid2
-> + * will be treated as a match. If user wants to validate @uid2, it should be
-> + * done before calling this function. This behaviour is as needed by most of
-> + * its current users.
+>
+> ...
+>
+> > -                     if (!adev->pnp.unique_id ||
+> > -                         strcmp(adev->pnp.unique_id, override_status_ids[i].uid))
+> > +                     if (!acpi_dev_uid_match(adev, override_status_ids[i].uid))
+>
+> The check for NULL argument inside that API does not affect the behaviour as
+> otherwise it will be a crash with the current implementation.
 
-If there are other other users that need different behavior are they
-buggy?  Also what behavior is this referring to?
-
-I'd just drop the at last sentence as confusing and not adding much.
-
-> + *
-> + * Returns:
-> + *  - %true if matches or @uid2 is NULL.
-> + *  - %false otherwise.
->   */
->  bool acpi_dev_hid_uid_match(struct acpi_device *adev,
->  			    const char *hid2, const char *uid2)
->  {
->  	const char *hid1 = acpi_device_hid(adev);
-> -	const char *uid1 = acpi_device_uid(adev);
->  
->  	if (strcmp(hid1, hid2))
->  		return false;
->  
-> -	if (!uid2)
-> -		return true;
-> -
-> -	return uid1 && !strcmp(uid1, uid2);
-> +	return acpi_dev_uid_match(adev, uid2);
->  }
->  EXPORT_SYMBOL(acpi_dev_hid_uid_match);
->  
-> diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
-> index 254685085c82..d1fe6446ffe0 100644
-> --- a/include/acpi/acpi_bus.h
-> +++ b/include/acpi/acpi_bus.h
-> @@ -760,6 +760,7 @@ static inline bool acpi_device_can_poweroff(struct acpi_device *adev)
->  		adev->power.states[ACPI_STATE_D3_HOT].flags.explicit_set);
->  }
->  
-> +bool acpi_dev_uid_match(struct acpi_device *adev, const char *uid2);
->  bool acpi_dev_hid_uid_match(struct acpi_device *adev, const char *hid2, const char *uid2);
->  int acpi_dev_uid_to_integer(struct acpi_device *adev, u64 *integer);
->  
-> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-> index afd94c9b8b8a..db3a33e19c97 100644
-> --- a/include/linux/acpi.h
-> +++ b/include/linux/acpi.h
-> @@ -787,6 +787,11 @@ static inline bool acpi_dev_present(const char *hid, const char *uid, s64 hrv)
->  
->  struct acpi_device;
->  
-> +static inline bool acpi_dev_uid_match(struct acpi_device *adev, const char *uid2)
-> +{
-> +	return false;
-> +}
-> +
->  static inline bool
->  acpi_dev_hid_uid_match(struct acpi_device *adev, const char *hid2, const char *uid2)
->  {
-
+What current implementation do you mean, exactly?
