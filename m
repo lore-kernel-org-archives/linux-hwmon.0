@@ -2,43 +2,43 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 531A4C004C0
-	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Oct 2023 08:48:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9391CDB47E
+	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Oct 2023 08:48:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376528AbjJTIsQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 20 Oct 2023 04:48:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33898 "EHLO
+        id S1376524AbjJTIsP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 20 Oct 2023 04:48:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376519AbjJTIsO (ORCPT
+        with ESMTP id S1376515AbjJTIsO (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Fri, 20 Oct 2023 04:48:14 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D9FAD49;
-        Fri, 20 Oct 2023 01:48:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86ECD45;
+        Fri, 20 Oct 2023 01:48:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1697791692; x=1729327692;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=1P08c+02XrBKccGcreruYeIgD28f7+s17ZZyX78daGc=;
-  b=CMEDCpUPJOswyAe6+vH3IfTQrD2FzFchFXSwCa591iFEzTBXlR3CDcem
-   2a6ljM4MO4+iNwOAJVNZgrPWUKZQlDL+a04uWR7DL0EYYvlPvKIcy8m6z
-   bw5hW1HVBfTv5WlpgFa2Gg2RB2k1d4l8shW5WYSM42djjm+5prUOyT7hx
-   WxuH4NZnMUaK8iZwVQAAaJcc1taPBNWSi36wQrJnnzHiVHPBccfsQZBB0
-   WDT4Q8vb8aBEwY7TrDBf3KIZkJLHjLXCQi5U05fgoIE9EDxK4iiSS75Bn
-   U8+Kebjg6SA0yahw20UnMj6VPzJEQ3/LuoiHp7nkUNQw9lx+1PAsrr8th
+  bh=0WNKWxhqnOM7fF435JX3yfg+v0y6tyX67g7zORiWNpU=;
+  b=K1Rxu3No8QvnVNhWqN7dlrJGhSPWm4RGDd4KfZNlCk9v4+OGw4Tz92Lt
+   G2ISJXJvrR7ZbaKZiSqdTZMp1c5meQ8He1py66vP3OxBW70VcE0KM5byR
+   8ge7xQTWQGr6T9fPyBTa8IqoBNnZMBBJ4fM3X4XbCCBT3XcTAkIr/j5W0
+   WM9j39xLdcqZvC8eJKHKKujJVbd3AXK2B5Jl2BhxAVop3FeyE9UxSdxUi
+   DzLOcn15954Y4qcgPQfi5YPLKMIZeGBV8mBtv2tl83TRD8Bp50uvAWHQB
+   fiWuKdAtwoa49gmByXHjXl4m+4Oo41naVAHEOzxeI9UzZEGeuqd1xd4rq
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="450683511"
+X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="450683501"
 X-IronPort-AV: E=Sophos;i="6.03,238,1694761200"; 
-   d="scan'208";a="450683511"
+   d="scan'208";a="450683501"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
   by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2023 01:48:11 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="873832168"
+X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="873832161"
 X-IronPort-AV: E=Sophos;i="6.03,238,1694761200"; 
-   d="scan'208";a="873832168"
+   d="scan'208";a="873832161"
 Received: from inlubt0316.iind.intel.com ([10.191.20.213])
-  by fmsmga002.fm.intel.com with ESMTP; 20 Oct 2023 01:47:56 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 20 Oct 2023 01:47:47 -0700
 From:   Raag Jadav <raag.jadav@intel.com>
 To:     rafael@kernel.org, len.brown@intel.com, robert.moore@intel.com,
         mika.westerberg@linux.intel.com, andriy.shevchenko@linux.intel.com,
@@ -48,9 +48,9 @@ Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
         mallikarjunappa.sangannavar@intel.com, bala.senthil@intel.com,
         Raag Jadav <raag.jadav@intel.com>
-Subject: [PATCH v1 3/8] ACPI: sysfs: use acpi_device_uid() for fetching _UID
-Date:   Fri, 20 Oct 2023 14:17:27 +0530
-Message-Id: <20231020084732.17130-4-raag.jadav@intel.com>
+Subject: [PATCH v1 1/8] ACPI: utils: Introduce acpi_dev_uid_match() for matching _UID
+Date:   Fri, 20 Oct 2023 14:17:25 +0530
+Message-Id: <20231020084732.17130-2-raag.jadav@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20231020084732.17130-1-raag.jadav@intel.com>
 References: <20231020084732.17130-1-raag.jadav@intel.com>
@@ -58,44 +58,112 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Convert manual _UID references to use standard ACPI helpers.
+Introduce acpi_dev_uid_match() helper that matches the device with
+supplied _UID string.
 
+Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Raag Jadav <raag.jadav@intel.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/acpi/device_sysfs.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/acpi/utils.c    | 40 +++++++++++++++++++++++++++++++++-------
+ include/acpi/acpi_bus.h |  1 +
+ include/linux/acpi.h    |  5 +++++
+ 3 files changed, 39 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/acpi/device_sysfs.c b/drivers/acpi/device_sysfs.c
-index b9bbf0746199..9d8e90744cb5 100644
---- a/drivers/acpi/device_sysfs.c
-+++ b/drivers/acpi/device_sysfs.c
-@@ -410,7 +410,7 @@ static ssize_t uid_show(struct device *dev,
- {
- 	struct acpi_device *acpi_dev = to_acpi_device(dev);
- 
--	return sprintf(buf, "%s\n", acpi_dev->pnp.unique_id);
-+	return sprintf(buf, "%s\n", acpi_device_uid(acpi_dev));
+diff --git a/drivers/acpi/utils.c b/drivers/acpi/utils.c
+index 2ea14648a661..664b9890b625 100644
+--- a/drivers/acpi/utils.c
++++ b/drivers/acpi/utils.c
+@@ -768,28 +768,54 @@ bool acpi_check_dsm(acpi_handle handle, const guid_t *guid, u64 rev, u64 funcs)
  }
- static DEVICE_ATTR_RO(uid);
+ EXPORT_SYMBOL(acpi_check_dsm);
  
-@@ -554,7 +554,7 @@ int acpi_device_setup_files(struct acpi_device *dev)
++/**
++ * acpi_dev_uid_match - Match device by supplied UID
++ * @adev: ACPI device to match.
++ * @uid2: Unique ID of the device, pass NULL to not check _UID.
++ *
++ * Matches UID in @adev with given @uid2. Absence of @uid2 will be treated as
++ * a match. If user wants to validate @uid2, it should be done before calling
++ * this function. This behaviour is as needed by most of its current users.
++ *
++ * Returns:
++ *  - %true if matches or @uid2 is NULL.
++ *  - %false otherwise.
++ */
++bool acpi_dev_uid_match(struct acpi_device *adev, const char *uid2)
++{
++	const char *uid1 = acpi_device_uid(adev);
++
++	if (!uid2)
++		return true;
++
++	return uid1 && !strcmp(uid1, uid2);
++}
++EXPORT_SYMBOL_GPL(acpi_dev_uid_match);
++
+ /**
+  * acpi_dev_hid_uid_match - Match device by supplied HID and UID
+  * @adev: ACPI device to match.
+  * @hid2: Hardware ID of the device.
+  * @uid2: Unique ID of the device, pass NULL to not check _UID.
+  *
+- * Matches HID and UID in @adev with given @hid2 and @uid2.
+- * Returns true if matches.
++ * Matches HID and UID in @adev with given @hid2 and @uid2. Absence of @uid2
++ * will be treated as a match. If user wants to validate @uid2, it should be
++ * done before calling this function. This behaviour is as needed by most of
++ * its current users.
++ *
++ * Returns:
++ *  - %true if matches or @uid2 is NULL.
++ *  - %false otherwise.
+  */
+ bool acpi_dev_hid_uid_match(struct acpi_device *adev,
+ 			    const char *hid2, const char *uid2)
+ {
+ 	const char *hid1 = acpi_device_hid(adev);
+-	const char *uid1 = acpi_device_uid(adev);
  
- 	if (dev->pnp.type.bus_address)
- 		result = device_create_file(&dev->dev, &dev_attr_adr);
--	if (dev->pnp.unique_id)
-+	if (acpi_device_uid(dev))
- 		result = device_create_file(&dev->dev, &dev_attr_uid);
+ 	if (strcmp(hid1, hid2))
+ 		return false;
  
- 	if (acpi_has_method(dev->handle, "_SUN")) {
-@@ -635,7 +635,7 @@ void acpi_device_remove_files(struct acpi_device *dev)
- 	if (acpi_has_method(dev->handle, "_HRV"))
- 		device_remove_file(&dev->dev, &dev_attr_hrv);
+-	if (!uid2)
+-		return true;
+-
+-	return uid1 && !strcmp(uid1, uid2);
++	return acpi_dev_uid_match(adev, uid2);
+ }
+ EXPORT_SYMBOL(acpi_dev_hid_uid_match);
  
--	if (dev->pnp.unique_id)
-+	if (acpi_device_uid(dev))
- 		device_remove_file(&dev->dev, &dev_attr_uid);
- 	if (dev->pnp.type.bus_address)
- 		device_remove_file(&dev->dev, &dev_attr_adr);
+diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
+index 254685085c82..d1fe6446ffe0 100644
+--- a/include/acpi/acpi_bus.h
++++ b/include/acpi/acpi_bus.h
+@@ -760,6 +760,7 @@ static inline bool acpi_device_can_poweroff(struct acpi_device *adev)
+ 		adev->power.states[ACPI_STATE_D3_HOT].flags.explicit_set);
+ }
+ 
++bool acpi_dev_uid_match(struct acpi_device *adev, const char *uid2);
+ bool acpi_dev_hid_uid_match(struct acpi_device *adev, const char *hid2, const char *uid2);
+ int acpi_dev_uid_to_integer(struct acpi_device *adev, u64 *integer);
+ 
+diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+index afd94c9b8b8a..db3a33e19c97 100644
+--- a/include/linux/acpi.h
++++ b/include/linux/acpi.h
+@@ -787,6 +787,11 @@ static inline bool acpi_dev_present(const char *hid, const char *uid, s64 hrv)
+ 
+ struct acpi_device;
+ 
++static inline bool acpi_dev_uid_match(struct acpi_device *adev, const char *uid2)
++{
++	return false;
++}
++
+ static inline bool
+ acpi_dev_hid_uid_match(struct acpi_device *adev, const char *hid2, const char *uid2)
+ {
 -- 
 2.17.1
 
