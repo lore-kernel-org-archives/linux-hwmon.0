@@ -2,43 +2,43 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30FC9C25B43
-	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Oct 2023 08:48:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5562FCDB474
+	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Oct 2023 08:48:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376532AbjJTIsQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 20 Oct 2023 04:48:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33914 "EHLO
+        id S1376531AbjJTIsR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 20 Oct 2023 04:48:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376520AbjJTIsO (ORCPT
+        with ESMTP id S1376523AbjJTIsP (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 20 Oct 2023 04:48:14 -0400
+        Fri, 20 Oct 2023 04:48:15 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B08D51;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69FED52;
         Fri, 20 Oct 2023 01:48:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1697791693; x=1729327693;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=yG6eK+7AGqw8L3P7iFJ1dEXh4HF5j+xoQ/khjB5EmKI=;
-  b=mbY5GsTdFC0TmggcsJb0kFLlFkW6YcRx5dio91CcBjeRdsULsig6MtGv
-   bJWAGudP8H1u4ZYqvNtbav4Uay5JdY1x37neorvIJx/jQtoooj0dmjG3c
-   MeXON0N9S8Hlp+X6HIaDyO3xfAHDkVCha3bGg1vZHS9lQNdrqjz9B/PxH
-   TX7o2wOEj3Z8n6r7KV2y1V8oC3fSWMXgRuk8WxMlC4mf5ZmC9eg8x3xmW
-   4k2vJ5mDL/h8zPvhrVkVvbSg36LINp5cC4C25TNvVLMO0A3s+H1gqJ2oq
-   Y7q1FvOJ7VcrpimW1sTigj5w2Iw5BcLgIUGKEkoyvwlFqS8Ll1V0Zdbox
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="450683522"
+  bh=ycYM//IBzYahr1OT+k/0SqcANs76449DXAt6/AuLX9M=;
+  b=DGUfNDHyfUwZk67l/7ienlCmcACFM+T7a4497ecipvcMGwx61kTH96cj
+   hjnCzgj9WGBuqM+LFN8O8o3+9/xOkEF2BA+lTCQnVDWD7hcve1H7IGHLI
+   nLK7P48ZxPFlyKsutg+LrQgjACIV7Caxs6wZNmXM5vi0MKPZQbrEhQd/W
+   Q8CYhzQeRCI96r5vfj5wRaj9L8v60Swjwd1o024ecpzsmjufeA/421ZF0
+   RGn0sW/HRZCp7U0/Sj+wR41rZlQ3XVciY8XDuSsrJGK3K/ygaQOI3r3Js
+   5U9Pfiy1CSvrtUs17fxQ7GO5GaXDwckDTfuFNsyGTe0ByS2544JgchEqI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="450683524"
 X-IronPort-AV: E=Sophos;i="6.03,238,1694761200"; 
-   d="scan'208";a="450683522"
+   d="scan'208";a="450683524"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
   by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2023 01:48:11 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="873832166"
+X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="873832171"
 X-IronPort-AV: E=Sophos;i="6.03,238,1694761200"; 
-   d="scan'208";a="873832166"
+   d="scan'208";a="873832171"
 Received: from inlubt0316.iind.intel.com ([10.191.20.213])
-  by fmsmga002.fm.intel.com with ESMTP; 20 Oct 2023 01:47:52 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 20 Oct 2023 01:48:01 -0700
 From:   Raag Jadav <raag.jadav@intel.com>
 To:     rafael@kernel.org, len.brown@intel.com, robert.moore@intel.com,
         mika.westerberg@linux.intel.com, andriy.shevchenko@linux.intel.com,
@@ -48,9 +48,9 @@ Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
         mallikarjunappa.sangannavar@intel.com, bala.senthil@intel.com,
         Raag Jadav <raag.jadav@intel.com>
-Subject: [PATCH v1 2/8] pinctrl: intel: use acpi_dev_uid_match() for matching _UID
-Date:   Fri, 20 Oct 2023 14:17:26 +0530
-Message-Id: <20231020084732.17130-3-raag.jadav@intel.com>
+Subject: [PATCH v1 4/8] ACPI: utils: use acpi_dev_uid_match() for matching _UID
+Date:   Fri, 20 Oct 2023 14:17:28 +0530
+Message-Id: <20231020084732.17130-5-raag.jadav@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20231020084732.17130-1-raag.jadav@intel.com>
 References: <20231020084732.17130-1-raag.jadav@intel.com>
@@ -61,24 +61,24 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 Convert manual _UID references to use standard ACPI helpers.
 
 Signed-off-by: Raag Jadav <raag.jadav@intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/pinctrl/intel/pinctrl-intel.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/acpi/utils.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/pinctrl/intel/pinctrl-intel.c b/drivers/pinctrl/intel/pinctrl-intel.c
-index 3be04ab760d3..999f453344d2 100644
---- a/drivers/pinctrl/intel/pinctrl-intel.c
-+++ b/drivers/pinctrl/intel/pinctrl-intel.c
-@@ -1694,7 +1694,7 @@ const struct intel_pinctrl_soc_data *intel_pinctrl_get_soc_data(struct platform_
- 		unsigned int i;
+diff --git a/drivers/acpi/utils.c b/drivers/acpi/utils.c
+index 664b9890b625..e3ba835e6590 100644
+--- a/drivers/acpi/utils.c
++++ b/drivers/acpi/utils.c
+@@ -889,8 +889,7 @@ static int acpi_dev_match_cb(struct device *dev, const void *data)
+ 	if (acpi_match_device_ids(adev, match->hid))
+ 		return 0;
  
- 		for (i = 0; table[i]; i++) {
--			if (!strcmp(adev->pnp.unique_id, table[i]->uid)) {
-+			if (acpi_dev_uid_match(adev, table[i]->uid)) {
- 				data = table[i];
- 				break;
- 			}
+-	if (match->uid && (!adev->pnp.unique_id ||
+-	    strcmp(adev->pnp.unique_id, match->uid)))
++	if (!acpi_dev_uid_match(adev, match->uid))
+ 		return 0;
+ 
+ 	if (match->hrv == -1)
 -- 
 2.17.1
 
