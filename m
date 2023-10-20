@@ -2,122 +2,91 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D23C8CDB465
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Oct 2023 13:57:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72814CDB474
+	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Oct 2023 08:48:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345759AbjJSN5m (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 19 Oct 2023 09:57:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35612 "EHLO
+        id S1376497AbjJTIsN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 20 Oct 2023 04:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345703AbjJSN5l (ORCPT
+        with ESMTP id S1376474AbjJTIsM (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 19 Oct 2023 09:57:41 -0400
-X-Greylist: delayed 38122 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 19 Oct 2023 06:57:37 PDT
-Received: from out-193.mta1.migadu.com (out-193.mta1.migadu.com [IPv6:2001:41d0:203:375::c1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00345B0
-        for <linux-hwmon@vger.kernel.org>; Thu, 19 Oct 2023 06:57:37 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=monoid.al; s=key1;
-        t=1697723856;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VRxOEzF/DS5Ox8tHGrklu3RK67HNn0EYzNtroRBbeKU=;
-        b=NJ6zwTDuDXga4dSQHGU1ASUZ7/FmT03Ln4ldnJ2aO2liVnVdTHDSNG8tFsfnsqM31o3Iv1
-        PP8TC5fzlg7NKLcFBMZkQvos+rk/LepsOox6M0thx09qjEKwoeM9IHd2mK6N5jSzpPbmnr
-        Lex+Eo0VT9YeezKlTacm5DqVUOwZzL3aiUO0HNM+Cxpj+kt0UrAfpFGvSAXh6OIPb7DRxo
-        BNs05zLnD8mH2MTpMZbtgYqK2HHhjDN0my3Q29ipCy6+Fv4woa89g+q9asvR82dAuAVlTi
-        kpXzZ40HdMRpcEhQ2DCK5wXnnyjpFj2uWhvUQlEIn3iqGyMr3CHDh28pRMxSiQ==
-From:   Ellie Hermaszewska <kernel@monoid.al>
-To:     eugene.shalygin@gmail.com
-Cc:     Ellie Hermaszewska <kernel@monoid.al>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] hwmon: (asus-ec-sensors) add ROG Crosshair X670E Gene.
-Date:   Thu, 19 Oct 2023 21:51:58 +0800
-Message-ID: <20231019135640.434752-1-kernel@monoid.al>
-In-Reply-To: <CAB95QAR-UbfVULOCaZMO4H1AgvzbiHEoSYk-DiYPY6Pg-i7Vag@mail.gmail.com>
-References: <CAB95QAR-UbfVULOCaZMO4H1AgvzbiHEoSYk-DiYPY6Pg-i7Vag@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+        Fri, 20 Oct 2023 04:48:12 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD331A8;
+        Fri, 20 Oct 2023 01:48:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697791690; x=1729327690;
+  h=from:to:cc:subject:date:message-id;
+  bh=55kFwQ1dJ+2JNO1s52sQQCyE+DnzabG8i8c9Ir2rEwI=;
+  b=LiGzTaePRnnr4rShhjxisC82fwc5QWFK7iH60WI7wDsDQxYZIi4C5Iss
+   jbH/dQj37MTs3XoswEZ9ZxafNXhCb50UvA3ZElVtKjmfCOskiv0imFWZM
+   ChMIz1KO5Zt7Y4rr67VUuNj2ix03/uA92fHBPh/wzmQ3sajZtzwM5Ifhq
+   OXYFxzB6UI+J3km9MWKyAVgQJEAzCv3zqEhSUqMqFQDYaLm+ByE1547JT
+   WQ1bfkz6NBxM57+rHKRMSkXFLG6In+2BvCPTG5k+63bUBqvxTVrDfTI6z
+   8oWlgemlrLmZ1Oh4YPiN0GDAlTxvma9MM5fX15VSKgITEoSFXy+rZB3bR
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="450683485"
+X-IronPort-AV: E=Sophos;i="6.03,238,1694761200"; 
+   d="scan'208";a="450683485"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2023 01:48:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="873832155"
+X-IronPort-AV: E=Sophos;i="6.03,238,1694761200"; 
+   d="scan'208";a="873832155"
+Received: from inlubt0316.iind.intel.com ([10.191.20.213])
+  by fmsmga002.fm.intel.com with ESMTP; 20 Oct 2023 01:47:42 -0700
+From:   Raag Jadav <raag.jadav@intel.com>
+To:     rafael@kernel.org, len.brown@intel.com, robert.moore@intel.com,
+        mika.westerberg@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        mark.rutland@arm.com, will@kernel.org, linux@roeck-us.net
+Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        acpica-devel@lists.linuxfoundation.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        mallikarjunappa.sangannavar@intel.com, bala.senthil@intel.com,
+        Raag Jadav <raag.jadav@intel.com>
+Subject: [PATCH v1 0/8] Refine _UID references across kernel
+Date:   Fri, 20 Oct 2023 14:17:24 +0530
+Message-Id: <20231020084732.17130-1-raag.jadav@intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-These are two separate statements, describing the set of sensors
-implemented (those I could verify) and the specifics of the T_Sensor new
-to the X670E motherboards.
+This series refines _UID references across kernel by:
 
-Best wishes,
-Ellie
+- Extracting _UID matching functionality from acpi_dev_hid_uid_match()
+  helper and introducing it as a separate acpi_dev_uid_match() helper.
 
-Only the temp sensors that I can verify are present.
+- Converting manual _UID references to use standard ACPI helpers.
 
-T_Sensor is the temperature reading of a 10kΩ β=3435K NTC thermistor
-optionally connected to the T_SENSOR header.
+Raag Jadav (8):
+  ACPI: utils: Introduce acpi_dev_uid_match() for matching _UID
+  pinctrl: intel: use acpi_dev_uid_match() for matching _UID
+  ACPI: sysfs: use acpi_device_uid() for fetching _UID
+  ACPI: utils: use acpi_dev_uid_match() for matching _UID
+  ACPI: x86: use acpi_dev_uid_match() for matching _UID
+  perf: qcom: use acpi_device_uid() for fetching _UID
+  hwmon: nct6775: use acpi_dev_hid_uid_match() for matching _HID and
+    _UID
+  perf: arm_cspmu: use acpi_dev_hid_uid_match() for matching _HID and
+    _UID
 
-The other sensors are as found on the X670E HERO.
+ drivers/acpi/device_sysfs.c           |  6 ++--
+ drivers/acpi/utils.c                  | 43 +++++++++++++++++++++------
+ drivers/acpi/x86/utils.c              |  3 +-
+ drivers/hwmon/nct6775-platform.c      |  4 +--
+ drivers/perf/arm_cspmu/arm_cspmu.c    |  8 ++---
+ drivers/perf/qcom_l3_pmu.c            |  4 +--
+ drivers/pinctrl/intel/pinctrl-intel.c |  2 +-
+ include/acpi/acpi_bus.h               |  1 +
+ include/linux/acpi.h                  |  5 ++++
+ 9 files changed, 51 insertions(+), 25 deletions(-)
 
-Signed-off-by: Ellie Hermaszewska <kernel@monoid.al>
----
- Documentation/hwmon/asus_ec_sensors.rst |  1 +
- drivers/hwmon/asus-ec-sensors.c         | 12 ++++++++++++
- 2 files changed, 13 insertions(+)
 
-diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
-index 7e3cd5b6686f..0bf99ba406dd 100644
---- a/Documentation/hwmon/asus_ec_sensors.rst
-+++ b/Documentation/hwmon/asus_ec_sensors.rst
-@@ -15,6 +15,7 @@ Supported boards:
-  * ROG CROSSHAIR VIII HERO
-  * ROG CROSSHAIR VIII IMPACT
-  * ROG CROSSHAIR X670E HERO
-+ * ROG CROSSHAIR X670E GENE
-  * ROG MAXIMUS XI HERO
-  * ROG MAXIMUS XI HERO (WI-FI)
-  * ROG STRIX B550-E GAMING
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index 51f9c2db403e..36f9e38000d5 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -244,6 +244,8 @@ static const struct ec_sensor_info sensors_family_amd_600[] = {
- 	EC_SENSOR("Motherboard", hwmon_temp, 1, 0x00, 0x32),
- 	[ec_sensor_temp_vrm] =
- 		EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x33),
-+	[ec_sensor_temp_t_sensor] =
-+		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x36),
- 	[ec_sensor_temp_water_in] =
- 		EC_SENSOR("Water_In", hwmon_temp, 1, 0x01, 0x00),
- 	[ec_sensor_temp_water_out] =
-@@ -344,6 +346,14 @@ static const struct ec_board_info board_info_crosshair_x670e_hero = {
- 	.family = family_amd_600_series,
- };
- 
-+static const struct ec_board_info board_info_crosshair_x670e_gene = {
-+	.sensors = SENSOR_TEMP_CPU | SENSOR_TEMP_CPU_PACKAGE |
-+		SENSOR_TEMP_T_SENSOR |
-+		SENSOR_TEMP_MB | SENSOR_TEMP_VRM,
-+	.mutex_path = ACPI_GLOBAL_LOCK_PSEUDO_PATH,
-+	.family = family_amd_600_series,
-+};
-+
- static const struct ec_board_info board_info_crosshair_viii_dark_hero = {
- 	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
- 		SENSOR_TEMP_T_SENSOR |
-@@ -490,6 +500,8 @@ static const struct dmi_system_id dmi_table[] = {
- 					&board_info_crosshair_viii_hero),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR X670E HERO",
- 					&board_info_crosshair_x670e_hero),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR X670E GENE",
-+					&board_info_crosshair_x670e_gene),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG MAXIMUS XI HERO",
- 					&board_info_maximus_xi_hero),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG MAXIMUS XI HERO (WI-FI)",
+base-commit: 9bc2fb9a7e41542a193658deff3df572fa24cb68
 -- 
-2.42.0
+2.17.1
 
