@@ -2,53 +2,53 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39AF6C004C0
-	for <linux-hwmon@archiver.kernel.org>; Sat, 21 Oct 2023 14:11:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2F0CC07545
+	for <linux-hwmon@archiver.kernel.org>; Sat, 21 Oct 2023 14:26:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbjJUOLq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 21 Oct 2023 10:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50292 "EHLO
+        id S231280AbjJUO0B (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 21 Oct 2023 10:26:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjJUOLp (ORCPT
+        with ESMTP id S231474AbjJUOZ7 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 21 Oct 2023 10:11:45 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2947E1A8;
-        Sat, 21 Oct 2023 07:11:41 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-777745f1541so136988285a.0;
-        Sat, 21 Oct 2023 07:11:41 -0700 (PDT)
+        Sat, 21 Oct 2023 10:25:59 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E1FCD68;
+        Sat, 21 Oct 2023 07:25:52 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id af79cd13be357-7788fb06997so124522385a.0;
+        Sat, 21 Oct 2023 07:25:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697897500; x=1698502300; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1697898351; x=1698503151; darn=vger.kernel.org;
         h=content-transfer-encoding:organization:mime-version:message-id:date
          :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FdyD/Hf2QPAaxfCfGRm2aAkVfMBg4GHGacaHHqGs7bo=;
-        b=BoTu8HEZr00lhy+l1mv9au5FI700chCbDOQFSYRba7KDE+nl5szlQ5nXhuLcxzQhjx
-         rbhH/Ol6z1OnSoiFy7cNmlmCgbcAqaJn97lKTBCSnAznhn01r4jbaQmars/w+YeVaKap
-         IjMFoaXYPaPKxWSpdo//YpzKG6YeYjpKKjeJ5punFil5Zg+EpNbxy3+PK1kCM55luhKM
-         P/i2WNKpzyGh1atAyF3DiAS/ufaSpPAsO8j7VXQSvHFy4jUQzQAVb64/zMEeJ/rOycoj
-         pIFpuyHaRAkiMEaxARi0jpp4ptTHvxm5igMH0p2iDmcfyh/afWPBHTm7QW/y0v1CWbtr
-         Eo9w==
+        bh=4W4wEmegVo86itQUE2BoW+qtA3EFNAS/SjR6K3+LCO8=;
+        b=S6rMZkRhGY3lBs/JeyjdhK6t7bdQ73FvQcbhrK0/S3b2jsBU00tiUqztakhIpNbGGU
+         mf6xOjAOFDr6nf1fZFZryW+doHhdVeM+JJhW9ylyOc4f2q5BzhBttImQCvwH6gsm4NGv
+         gFvoWX2DRQ1ByKclIfdYlpvjWQKWoy637xICS/Po5GKKYq7zBQ8FqYObcvaQuktwjaYQ
+         82kTpmyxTsOaQdIdXjkAYE7IMrbip3JjJ5vqwunyH4Bb2YD6YR6y9GpxnvaCL7qUmszh
+         6KkzDJZX+1mjWetCFNb9nY1HukvbV7uMwHvQbY6NA98q1ghl9MbNGQZxL0xm3itFdJ7N
+         bWOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697897500; x=1698502300;
+        d=1e100.net; s=20230601; t=1697898351; x=1698503151;
         h=content-transfer-encoding:organization:mime-version:message-id:date
          :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FdyD/Hf2QPAaxfCfGRm2aAkVfMBg4GHGacaHHqGs7bo=;
-        b=TGhFaNa0e+OQcTur/nmvRoaoyBYG+6u114PSyMQUO8/3rIeRvNJAjpWAraGgHm/RMW
-         zOMWNh1vCsgCbESaPv3ODtWinDCZwiPmznesC0ErIgiczDwAdY9h7nBv00RbCIDUoK18
-         RfVHLWAGAl2n/ep2p9gre9y7C/cuXOf3YO/i8RBJ/RrppDSchHwaPyGdAaHgursU/hEs
-         +5FDZxab756CdFHADubegCNsuj2cMOfnLhCa0WyAX1Aw+3tO87EQbWWLz6yQ3oNzgVp1
-         1R7CtJNGpnktx1yTZev2rXipKyrJmazIjaEkFvNO2DlBEqLJuSujckAttno+JNhC5ZIp
-         0xQA==
-X-Gm-Message-State: AOJu0YxOPBnH0AV+1iosApO/3N5KVcomAj2B2447IpaYowzTN9cPgRfL
-        PRS5xBt4p8Z6hLKvOSAMWuk=
-X-Google-Smtp-Source: AGHT+IF2ib7yQ7wAvOBM1HBZ9H8Yk1NM2aQF4cfAdt3xrhYdj2sX+aGnvoyAIy/veQxd23bIXf8mjA==
-X-Received: by 2002:a05:620a:2951:b0:775:9cd3:379d with SMTP id n17-20020a05620a295100b007759cd3379dmr4844932qkp.58.1697897500034;
-        Sat, 21 Oct 2023 07:11:40 -0700 (PDT)
+        bh=4W4wEmegVo86itQUE2BoW+qtA3EFNAS/SjR6K3+LCO8=;
+        b=j8fAAk+QpSdKGPufCULAvP4Kr3VHQmpNI3gKu97Krdl8Y1d4A7vLMzfTjSaWdMLuNI
+         2huVIhfwGYyQk/x+Q/8CDTv+zj1KaZiscKN3uaKBETvAixfx3ILgvRx2iTDLInUbnp/U
+         X6UEtGut9Hcf+Wbo39pG1IlzSHxmmTqbOUiEkc2J7d3j8KM269hBA7H0nkjYb749xsHL
+         adC3AM13F32JE5oWDQAVM4j9FQX34/jeNmt988bQ87Pmgukg5IGf7pVreHfU6sns7ZgL
+         Ts1Ba0zl2RKlwgxr3chYVEKxWdcm/N+y5VRnfql1FQ1C8CAiknPhLpfhR8EVVc9dZGPu
+         TboA==
+X-Gm-Message-State: AOJu0Yx8RhudCcWguLKK8hx7unkuLeuI5wUIezckHGCAP2iUxWwQAEs7
+        QR0bPb4nVp3LGTawuLLKgvM=
+X-Google-Smtp-Source: AGHT+IGkuADjIex7w0cvDfqG2cQBARedPZTyueJfQKNt+bybeApntbV0pqWve0NqW8riNQOAHYhp3A==
+X-Received: by 2002:a05:620a:460a:b0:76f:1d46:4a9f with SMTP id br10-20020a05620a460a00b0076f1d464a9fmr5833044qkb.4.1697898350392;
+        Sat, 21 Oct 2023 07:25:50 -0700 (PDT)
 Received: from build.adi.eng (173-14-114-226-richmond.hfc.comcastbusiness.net. [173.14.114.226])
-        by smtp.googlemail.com with ESMTPSA id h12-20020a05620a10ac00b00765ab6d3e81sm1380187qkk.122.2023.10.21.07.11.39
+        by smtp.googlemail.com with ESMTPSA id x6-20020a05620a14a600b0076f35d17d06sm1386984qkj.69.2023.10.21.07.25.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Oct 2023 07:11:39 -0700 (PDT)
+        Sat, 21 Oct 2023 07:25:49 -0700 (PDT)
 From:   Henry Shi <henryshi2018@gmail.com>
 To:     hbshi69@hotmail.com, tglx@linutronix.de, mingo@redhat.com,
         bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
@@ -58,8 +58,8 @@ To:     hbshi69@hotmail.com, tglx@linutronix.de, mingo@redhat.com,
         linux-hwmon@vger.kernel.org
 Cc:     hb_shi2003@yahoo.com, henrys@silicom-usa.com, wenw@silicom-usa.com
 Subject: [PATCH] platform/x86: Add Silicom Platform Driver
-Date:   Sat, 21 Oct 2023 10:11:37 -0400
-Message-Id: <20231021141137.6513-1-henryshi2018@gmail.com>
+Date:   Sat, 21 Oct 2023 10:25:46 -0400
+Message-Id: <20231021142546.6725-1-henryshi2018@gmail.com>
 X-Mailer: git-send-email 2.21.3
 MIME-Version: 1.0
 Organization: Silicom LTD
@@ -208,7 +208,7 @@ changes suggested by Hans de Goede <hdegoede@redhat.com>:
 .Usa a proper subsystem prefix for this patch subject:
 Subject: platform/x86: Add Silicom Platform Driver.
 
-change from patch v7 to v8 (current patch)
+change from patch v7 to v8
 ===========================================
 
 changes suggested by Hans de Goede <hdegoede@redhat.com>:
@@ -236,12 +236,310 @@ Changes suggested by Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>:
 .Too many GENMASK() within to code itself, need put them to
 #define. Removed all GENMASK() in c functions.
 
- drivers/platform/x86/Kconfig            |   14 +
- drivers/platform/x86/Makefile           |    1 +
- drivers/platform/x86/silicom-platform.c | 1001 +++++++++++++++++++++++
- 3 files changed, 1016 insertions(+)
+change from patch v8 to v9 (current patch)
+===========================================
+
+Changes suggested by Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>:
+.Just do the same (like MEC_VERSION_MAJOR) with all places in the where
+you previously had GENMASK() in the code (currently MEC_GET_BITS()
+is there, obviously, but it should go away and be replaced with
+FIELD_GET(GOODPREFIX_GOODNAME, ...))).
+.This is sysfs so it's odd to print pr_err() like that here. If the driver
+does not support those versions at all, the probe should fail. If driver is
+fine but just doesn't know how to interpret such a version, you should
+return -Esomething here. Driver returns -EINVAL here.
+.Replace CENTI with 100
+.Align FIELD_GET()s to the same column for line 661.
+.Change variables efuse_status, mec_uc_version, power_cycle to unsigned
+int from int.
+
+changes suggested by Hans de Goede <hdegoede@redhat.com>:
+.Please add a Documentation/ABI/testing/sysfs-platform-silicom
+file to document driver specific the sysfs attributes of this driver.
+.Like with the Kconfig part, group this together with the other industrial
+PC drivers we have at the end of the Makefile after Siemens
+Simatic Industrial PCs.
+
+ .../ABI/testing/sysfs-platform-silicom        |  265 +++++
+ drivers/platform/x86/Kconfig                  |   14 +
+ drivers/platform/x86/Makefile                 |    3 +
+ drivers/platform/x86/silicom-platform.c       | 1002 +++++++++++++++++
+ 4 files changed, 1284 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-platform-silicom
  create mode 100644 drivers/platform/x86/silicom-platform.c
 
+diff --git a/Documentation/ABI/testing/sysfs-platform-silicom b/Documentation/ABI/testing/sysfs-platform-silicom
+new file mode 100644
+index 000000000000..4c5e0974aea7
+--- /dev/null
++++ b/Documentation/ABI/testing/sysfs-platform-silicom
+@@ -0,0 +1,265 @@
++What:		/sys/devices/platform/silicom-platform/uc_version
++Date:		October 2023
++KernelVersion:	6.6
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This file allows to read microcontroller firmware
++		version of current platform.
++
++What:		/sys/devices/platform/silicom-platform/power_cycle
++Date:		October 2023
++KernelVersion:	6.6
++Contact:	Henry Shi <henrys@silicom-usa.com>
++		This file allow user to power cycle the platform.
++		default value is 0; when set to 1, it powers down
++		the platform, wait 5 seconds, then power on the
++		device.
++
++What:		/sys/devices/platform/silicom-platform/efuse_status
++Date:		October 2023
++KernelVersion:	6.6
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This file is read only. It returns the current
++		OTP status:
++
++		0 - not programmed.
++		1 - programmed.
++
++What:		/sys/devices/platform/silicom-platform/hwmon/hwmon1/
++		temp1_input
++Date:		October 2023
++KernelVersion:	6.6
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This file is read only. It returns the temperature
++		of device.
++
++What:		/sys/devices/platform/silicom-platform/hwmon/hwmon1/
++		temp1_label
++Date:		October 2023
++KernelVersion:	6.6
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This file is read only. It returns "Silicom_platform:
++		Thermostat Sensor".
++
++What:		/sys/devices/platform/silicom-platform/hwmon/hwmon1/
++		fan1_input
++Date:		October 2023
++KernelVersion:	6.6
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This file is read only. It returns current fan
++		speed (RPM).
++
++What:		/sys/devices/platform/silicom-platform/hwmon/hwmon1/
++		fan1_label
++Date:		October 2023
++KernelVersion:	6.6
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This file is read only. It returns "Silicom_platform:
++		Fan Speed".
++
++What:		/sys/class/leds/multicolor:sys/brightness
++Date:		October 2023
++KernelVersion:	6.6
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read/write file. It is used to read/set current
++		status of system LED brightness:
++
++		0 - to turn off the LED
++		1 - to turn on the LED
++
++What:		/sys/class/leds/multicolor:sys/multi_index
++Date:		October 2023
++KernelVersion:	6.6
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read only  file. It returns:
++
++		white amber red
++
++What:		/sys/class/leds/multicolor:sys/multi_intensity
++Date:		October 2023
++KernelVersion:	6.6
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read/write file. It is used to read/set current
++		multi-color intensity of system LED: First value for
++		color white; Second value for color amber and third value
++		for color red:
++
++		0 - The color is turned off.
++		1 - the color is turned on.
++
++What:		/sys/class/leds/multicolor:wan/brightness
++Date:		October 2023
++KernelVersion:	6.6
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read/write file. It is used to read/set current
++		status of WAN LED brightness:
++
++		0 - to turn off the LED
++		1 - to turn on the LED
++
++What:		/sys/class/leds/multicolor:wan/multi_index
++Date:		October 2023
++KernelVersion:	6.6
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read only file. It returns:
++
++		white yellow red
++
++What:		/sys/class/leds/multicolor:wan/multi_intensity
++Date:		October 2023
++KernelVersion:	6.6
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read/write file. It is used to read/set current
++		multi-color intensity of WAN LED: First value for
++		color white; Second value for color yellow and third value
++		for color red:
++
++		0 - The color is turned off.
++		1 - the color is turned on.
++
++What:		/sys/class/leds/multicolor:stat%d/brightness
++Date:		October 2023
++KernelVersion:	6.6
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read/write file. It is used to read/set current
++		status of device status LED (number %d) brightness:
++
++		0 - to turn off the LED
++		1 - to turn on the LED
++
++What:		/sys/class/leds/multicolor:stat%d/multi_index
++Date:		October 2023
++KernelVersion:	6.6
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read only file. It returns:
++
++		red green blue yellow
++
++What:		/sys/class/leds/multicolor:stat%d/multi_intensity
++Date:		October 2023
++KernelVersion:	6.6
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read/write file. It is used to read/set current
++		multi-color intensity of device status LED (number %d):
++		First value for color red; Second value for color green;
++		Third value for color blue and fourth value for color
++		yellow.
++
++		0 - The color is turned off.
++		1 - the color is turned on.
++
++What:		/sys/class/leds/multicolor:fp_left/brightness
++Date:		October 2023
++KernelVersion:	6.6
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read/write file. It is used to read/set current
++		status of left LED brightness:
++
++		0 - to turn off the LED
++		1 - to turn on the LED
++
++What:		/sys/class/leds/multicolor:fp_left/multi_index
++Date:		October 2023
++KernelVersion:	6.6
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read only  file. It returns:
++
++		red green blue amber
++
++What:		/sys/class/leds/multicolor:fp_left/multi_intensity
++Date:		October 2023
++KernelVersion:	6.6
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read/write file. It is used to read/set current
++		multi-color intensity of left LED: First value for
++		color red; Second value for color green; Third value for
++		color blue and fourth value for color amber.
++		for color red:
++
++		0 - The color is turned off.
++		1 - the color is turned on.
++
++What:		/sys/class/leds/multicolor:fp_center/brightness
++Date:		October 2023
++KernelVersion:	6.6
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read/write file. It is used to read/set current
++		status of left LED brightness:
++
++		0 - to turn off the LED
++		1 - to turn on the LED
++
++What:		/sys/class/leds/multicolor:fp_center/multi_index
++Date:		October 2023
++KernelVersion:	6.6
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read only  file. It returns:
++
++		red green blue amber
++
++What:		/sys/class/leds/multicolor:fp_center/multi_intensity
++Date:		October 2023
++KernelVersion:	6.6
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read/write file. It is used to read/set current
++		multi-color intensity of left LED: First value for
++		color red; Second value for color green; Third value for
++		color blue and fourth value for color amber.
++		for color red:
++
++		0 - The color is turned off.
++		1 - the color is turned on.
++
++What:		/sys/class/leds/multicolor:fp_right/brightness
++Date:		October 2023
++KernelVersion:	6.6
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read/write file. It is used to read/set current
++		status of left LED brightness:
++
++		0 - to turn off the LED
++		1 - to turn on the LED
++
++What:		/sys/class/leds/multicolor:fp_right/multi_index
++Date:		October 2023
++KernelVersion:	6.6
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read only  file. It returns:
++
++		red green blue amber
++
++What:		/sys/class/leds/multicolor:fp_right/multi_intensity
++Date:		October 2023
++KernelVersion:	6.6
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read/write file. It is used to read/set current
++		multi-color intensity of left LED: First value for
++		color red; Second value for color green; Third value for
++		color blue and fourth value for color amber.
++		for color red:
++
++		0 - The color is turned off.
++		1 - the color is turned on.
+\ No newline at end of file
 diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
 index 2a1070543391..f38fbd97f33d 100644
 --- a/drivers/platform/x86/Kconfig
@@ -268,23 +566,25 @@ index 2a1070543391..f38fbd97f33d 100644
  	tristate "Winmate FM07/FM07P front-panel keys driver"
  	depends on INPUT
 diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
-index b457de5abf7d..07efff8b24f7 100644
+index b457de5abf7d..8fdb0c7d8ca1 100644
 --- a/drivers/platform/x86/Makefile
 +++ b/drivers/platform/x86/Makefile
-@@ -113,6 +113,7 @@ obj-$(CONFIG_SERIAL_MULTI_INSTANTIATE)	+= serial-multi-instantiate.o
- obj-$(CONFIG_MLX_PLATFORM)		+= mlx-platform.o
- obj-$(CONFIG_TOUCHSCREEN_DMI)		+= touchscreen_dmi.o
- obj-$(CONFIG_WIRELESS_HOTKEY)		+= wireless-hotkey.o
-+obj-$(CONFIG_SILICOM_PLATFORM)		+= silicom-platform.o
- obj-$(CONFIG_X86_ANDROID_TABLETS)	+= x86-android-tablets/
+@@ -133,6 +133,9 @@ obj-$(CONFIG_X86_INTEL_LPSS)		+= pmc_atom.o
+ # Siemens Simatic Industrial PCs
+ obj-$(CONFIG_SIEMENS_SIMATIC_IPC)	+= siemens/
  
- # Intel uncore drivers
++# Silicom
++obj-$(CONFIG_SILICOM_PLATFORM)		+= silicom-platform.o
++
+ # Winmate
+ obj-$(CONFIG_WINMATE_FM07_KEYS)		+= winmate-fm07-keys.o
+ 
 diff --git a/drivers/platform/x86/silicom-platform.c b/drivers/platform/x86/silicom-platform.c
 new file mode 100644
-index 000000000000..8786d09476f2
+index 000000000000..9d8e690006a8
 --- /dev/null
 +++ b/drivers/platform/x86/silicom-platform.c
-@@ -0,0 +1,1001 @@
+@@ -0,0 +1,1002 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +//
 +// silicom-platform.c - Silicom MEC170x platform driver
@@ -325,16 +625,18 @@ index 000000000000..8786d09476f2
 +#define CHANNEL_TO_OFFSET(chan) (((chan) >> 3) - 0x14)
 +#define MEC_VERSION_MAJOR GENMASK(15, 14)
 +#define MEC_VERSION_MINOR GENMASK(13, 8)
-+#define MEC_GET_BITS(high, low, arg) FIELD_GET(GENMASK(high, low), arg)
++#define MEC_PREFIX_NAME GENMASK(31, 3)
++#define MEC_PREFIX_HIGH_BYTES GENMASK(31, 16)
++#define MEC_PREFIX_SEC_BYTE GENMASK(15, 8)
 +#define IO_REG_BANK 0x0
 +#define DEFAULT_CHAN_LO 0
 +#define DEFAULT_CHAN_HI 0
 +#define DEFAULT_CHAN_LO_T 0xc
 +
 +static DEFINE_MUTEX(mec_io_mutex);
-+static int efuse_status;
-+static int mec_uc_version;
-+static int power_cycle;
++static unsigned int efuse_status;
++static unsigned int mec_uc_version;
++static unsigned int power_cycle;
 +
 +static const struct hwmon_channel_info *silicom_fan_control_info[] = {
 +	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT | HWMON_F_LABEL),
@@ -436,10 +738,10 @@ index 000000000000..8786d09476f2
 +
 +	mutex_lock(&mec_io_mutex);
 +	/* Get the dword offset from the channel */
-+	outb(MEC_GET_BITS(31, 3, offset) & MEC_PORT_OFFSET_MASK, MEC_ADDR);
++	outb(FIELD_GET(MEC_PREFIX_NAME, offset) & MEC_PORT_OFFSET_MASK, MEC_ADDR);
 +
 +	/* Get the current register */
-+	reg = inb(MEC_DATA_OFFSET(MEC_GET_BITS(31, 3, offset) & MEC_DATA_OFFSET_MASK));
++	reg = inb(MEC_DATA_OFFSET(FIELD_GET(MEC_PREFIX_NAME, offset) & MEC_DATA_OFFSET_MASK));
 +	mutex_unlock(&mec_io_mutex);
 +
 +	return (reg >> (offset & MEC_PORT_CHANNEL_MASK)) & 0x01;
@@ -457,17 +759,17 @@ index 000000000000..8786d09476f2
 +
 +	mutex_lock(&mec_io_mutex);
 +	/* Get the dword offset from the channel */
-+	outb(MEC_GET_BITS(31, 3, channel) & MEC_PORT_OFFSET_MASK, MEC_ADDR);
++	outb(FIELD_GET(MEC_PREFIX_NAME, channel) & MEC_PORT_OFFSET_MASK, MEC_ADDR);
 +
 +	/* Get the current port settings */
-+	reg = inb(MEC_DATA_OFFSET(MEC_GET_BITS(31, 3, channel) & MEC_DATA_OFFSET_MASK));
++	reg = inb(MEC_DATA_OFFSET(FIELD_GET(MEC_PREFIX_NAME, channel) & MEC_DATA_OFFSET_MASK));
 +	/* Outputs are active low, so clear the bit for on, or set it for off */
 +	if (on)
 +		reg &= ~(1 << (channel & MEC_PORT_CHANNEL_MASK));
 +	else
 +		reg |= 1 << (channel & MEC_PORT_CHANNEL_MASK);
 +	/* Write back the updated register */
-+	outb(reg, MEC_DATA_OFFSET(MEC_GET_BITS(31, 3, channel) & MEC_DATA_OFFSET_MASK));
++	outb(reg, MEC_DATA_OFFSET(FIELD_GET(MEC_PREFIX_NAME, channel) & MEC_DATA_OFFSET_MASK));
 +	mutex_unlock(&mec_io_mutex);
 +}
 +
@@ -921,7 +1223,7 @@ index 000000000000..8786d09476f2
 +
 +	efuse_status = reg & 0x1;
 +
-+	return sprintf(buf, "%d\n", efuse_status);
++	return sprintf(buf, "%u\n", efuse_status);
 +}
 +static DEVICE_ATTR_RO(efuse_status);
 +
@@ -938,15 +1240,15 @@ index 000000000000..8786d09476f2
 +
 +	reg = inl(MEC_DATA_OFFSET(DEFAULT_CHAN_LO));
 +	mutex_unlock(&mec_io_mutex);
-+	uc_version = MEC_GET_BITS(15, 8, reg);
++	uc_version = FIELD_GET(MEC_PREFIX_SEC_BYTE, reg);
 +	if (uc_version >= 192)
-+		pr_err("uc version not supported\n");
++		return -EINVAL;
 +
-+	uc_version = FIELD_GET(MEC_VERSION_MAJOR, reg) * CENTI +
-+			       FIELD_GET(MEC_VERSION_MINOR, reg);
++	uc_version = FIELD_GET(MEC_VERSION_MAJOR, reg) * 100 +
++		     FIELD_GET(MEC_VERSION_MINOR, reg);
 +
 +	mec_uc_version = uc_version;
-+	return sprintf(buf, "%d\n", mec_uc_version);
++	return sprintf(buf, "%u\n", mec_uc_version);
 +}
 +static DEVICE_ATTR_RO(uc_version);
 +
@@ -954,7 +1256,7 @@ index 000000000000..8786d09476f2
 +				struct device_attribute *attr,
 +				char *buf)
 +{
-+	return sprintf(buf, "%d\n", power_cycle);
++	return sprintf(buf, "%u\n", power_cycle);
 +}
 +
 +static void powercycle_uc(void)
@@ -1055,7 +1357,7 @@ index 000000000000..8786d09476f2
 +	reg = inl(MEC_DATA_OFFSET(DEFAULT_CHAN_LO));
 +	mutex_unlock(&mec_io_mutex);
 +
-+	return MEC_GET_BITS(31, 16, reg) * CENTI;
++	return FIELD_GET(MEC_PREFIX_HIGH_BYTES, reg) * 100;
 +}
 +
 +static umode_t silicom_fan_control_fan_is_visible(const u32 attr)
@@ -1165,7 +1467,6 @@ index 000000000000..8786d09476f2
 +	u8 magic, ver;
 +	struct device *hwmon_dev;
 +	const char *name = "Silocom_Fan_Monitor";
-+	//const char *dev_name = "Silicom_platform";
 +
 +	if (!devm_request_region(&device->dev, MEC_IO_BASE, MEC_IO_LEN, "mec")) {
 +		dev_err(&device->dev, "couldn't reserve MEC io ports\n");
