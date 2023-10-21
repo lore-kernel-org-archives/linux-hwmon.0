@@ -2,53 +2,53 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2F0CC07545
-	for <linux-hwmon@archiver.kernel.org>; Sat, 21 Oct 2023 14:26:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0939FC001E0
+	for <linux-hwmon@archiver.kernel.org>; Sat, 21 Oct 2023 14:54:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231280AbjJUO0B (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 21 Oct 2023 10:26:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33168 "EHLO
+        id S231674AbjJUOyD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 21 Oct 2023 10:54:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231474AbjJUOZ7 (ORCPT
+        with ESMTP id S231857AbjJUOyA (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 21 Oct 2023 10:25:59 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E1FCD68;
-        Sat, 21 Oct 2023 07:25:52 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id af79cd13be357-7788fb06997so124522385a.0;
-        Sat, 21 Oct 2023 07:25:52 -0700 (PDT)
+        Sat, 21 Oct 2023 10:54:00 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5BABD70;
+        Sat, 21 Oct 2023 07:53:36 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id af79cd13be357-7781bc3783fso125422185a.1;
+        Sat, 21 Oct 2023 07:53:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697898351; x=1698503151; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1697900016; x=1698504816; darn=vger.kernel.org;
         h=content-transfer-encoding:organization:mime-version:message-id:date
          :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
         bh=4W4wEmegVo86itQUE2BoW+qtA3EFNAS/SjR6K3+LCO8=;
-        b=S6rMZkRhGY3lBs/JeyjdhK6t7bdQ73FvQcbhrK0/S3b2jsBU00tiUqztakhIpNbGGU
-         mf6xOjAOFDr6nf1fZFZryW+doHhdVeM+JJhW9ylyOc4f2q5BzhBttImQCvwH6gsm4NGv
-         gFvoWX2DRQ1ByKclIfdYlpvjWQKWoy637xICS/Po5GKKYq7zBQ8FqYObcvaQuktwjaYQ
-         82kTpmyxTsOaQdIdXjkAYE7IMrbip3JjJ5vqwunyH4Bb2YD6YR6y9GpxnvaCL7qUmszh
-         6KkzDJZX+1mjWetCFNb9nY1HukvbV7uMwHvQbY6NA98q1ghl9MbNGQZxL0xm3itFdJ7N
-         bWOw==
+        b=AukyOu6jgmbIBnfG7dXaKXMLlKSi+1zIP1R4uMOwHEYjdg2WI49QhdSjLRLQexFavg
+         kML1DxQjl0RBjA44BsWNlQjburbPEy+BG8C3pU9BS0edNYUffskKmwLh/yIBqSg2haDn
+         c/Z1wmESodpiOGRpT3vUBVrJ0temk8/I2sqAulLAcYqzybUi58W6ueN8w0iV+2tT9M+r
+         +OJINAZywcRyogK+eJBgNwSHTQ/oM7z9f0JHq3mVSlV38xAWcHNb1SoA09KUDnUExi9d
+         6E/lvX3cP/IQfML1pACfeGCM7EYBJSVxGDN9tbk3UgFN/t4rfpu1UvYKz4DWu/5P5SE1
+         5+dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697898351; x=1698503151;
+        d=1e100.net; s=20230601; t=1697900016; x=1698504816;
         h=content-transfer-encoding:organization:mime-version:message-id:date
          :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
         bh=4W4wEmegVo86itQUE2BoW+qtA3EFNAS/SjR6K3+LCO8=;
-        b=j8fAAk+QpSdKGPufCULAvP4Kr3VHQmpNI3gKu97Krdl8Y1d4A7vLMzfTjSaWdMLuNI
-         2huVIhfwGYyQk/x+Q/8CDTv+zj1KaZiscKN3uaKBETvAixfx3ILgvRx2iTDLInUbnp/U
-         X6UEtGut9Hcf+Wbo39pG1IlzSHxmmTqbOUiEkc2J7d3j8KM269hBA7H0nkjYb749xsHL
-         adC3AM13F32JE5oWDQAVM4j9FQX34/jeNmt988bQ87Pmgukg5IGf7pVreHfU6sns7ZgL
-         Ts1Ba0zl2RKlwgxr3chYVEKxWdcm/N+y5VRnfql1FQ1C8CAiknPhLpfhR8EVVc9dZGPu
-         TboA==
-X-Gm-Message-State: AOJu0Yx8RhudCcWguLKK8hx7unkuLeuI5wUIezckHGCAP2iUxWwQAEs7
-        QR0bPb4nVp3LGTawuLLKgvM=
-X-Google-Smtp-Source: AGHT+IGkuADjIex7w0cvDfqG2cQBARedPZTyueJfQKNt+bybeApntbV0pqWve0NqW8riNQOAHYhp3A==
-X-Received: by 2002:a05:620a:460a:b0:76f:1d46:4a9f with SMTP id br10-20020a05620a460a00b0076f1d464a9fmr5833044qkb.4.1697898350392;
-        Sat, 21 Oct 2023 07:25:50 -0700 (PDT)
+        b=Nf5FR+Kx2XuGTSLdX8yzBRim3VrXInZS5UfLyPuAKafHZl5yKT+kJYRjxejm6W4RmO
+         2hLuOgx9+Alip7bOzph0OwAU+lMdumIminkfNadxgXrpsOw2Ef5JKCK1ps5G0d20iYEO
+         LhCVQFzZCTI1kH4Jsh4X6cXVHQfFDLKr4pgiVIx21cgD9Ol3x4TO+peg3q9X64ZsA7ww
+         dF1Q/YH9u1XjiSIPEoxfrqPbqbSHcZ4JmIceRt0xc113xVCc9u+vk8a1bBmRBoX7eqk7
+         ZirDL8hqA5krOCOWvjEsmwx+EZoBgPAyS6aUp99re2Wlcd9dRzH8ooEFD463XYH0Tc+o
+         KDkw==
+X-Gm-Message-State: AOJu0YyNt2MWiSVLOUqeOIcc+QxHyFiqIgcomiogon3YvUm1BfDzX4Nz
+        yt5/ww+ozJ1YKvSirSSTDco=
+X-Google-Smtp-Source: AGHT+IGdGOxkMo/f/qBAJchoEOR9CJnRbz4MMJ1wL2u3e013bnnWASzsw8yqc9007y110aoY2Rkcqg==
+X-Received: by 2002:a05:620a:3994:b0:76d:9f64:f638 with SMTP id ro20-20020a05620a399400b0076d9f64f638mr4264675qkn.51.1697900015315;
+        Sat, 21 Oct 2023 07:53:35 -0700 (PDT)
 Received: from build.adi.eng (173-14-114-226-richmond.hfc.comcastbusiness.net. [173.14.114.226])
-        by smtp.googlemail.com with ESMTPSA id x6-20020a05620a14a600b0076f35d17d06sm1386984qkj.69.2023.10.21.07.25.49
+        by smtp.googlemail.com with ESMTPSA id d11-20020a05620a140b00b00767d4a3f4d9sm1411846qkj.29.2023.10.21.07.53.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Oct 2023 07:25:49 -0700 (PDT)
+        Sat, 21 Oct 2023 07:53:34 -0700 (PDT)
 From:   Henry Shi <henryshi2018@gmail.com>
 To:     hbshi69@hotmail.com, tglx@linutronix.de, mingo@redhat.com,
         bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
@@ -57,9 +57,9 @@ To:     hbshi69@hotmail.com, tglx@linutronix.de, mingo@redhat.com,
         linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
         linux-hwmon@vger.kernel.org
 Cc:     hb_shi2003@yahoo.com, henrys@silicom-usa.com, wenw@silicom-usa.com
-Subject: [PATCH] platform/x86: Add Silicom Platform Driver
-Date:   Sat, 21 Oct 2023 10:25:46 -0400
-Message-Id: <20231021142546.6725-1-henryshi2018@gmail.com>
+Subject: [PATCH v9] platform/x86: Add Silicom Platform Driver
+Date:   Sat, 21 Oct 2023 10:53:32 -0400
+Message-Id: <20231021145332.7039-1-henryshi2018@gmail.com>
 X-Mailer: git-send-email 2.21.3
 MIME-Version: 1.0
 Organization: Silicom LTD
