@@ -2,94 +2,392 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AEDBC001E0
-	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Oct 2023 14:44:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 391F7C25B46
+	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Oct 2023 18:08:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233757AbjJWOoq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 23 Oct 2023 10:44:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40802 "EHLO
+        id S231642AbjJWSIh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 23 Oct 2023 14:08:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233778AbjJWOod (ORCPT
+        with ESMTP id S231256AbjJWSIg (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 23 Oct 2023 10:44:33 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F1A19B0;
-        Mon, 23 Oct 2023 07:43:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698072194; x=1729608194;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=c+vwHWtU4SYe45hCSutTEEchOiP/C8YWbfE6MM6PUfQ=;
-  b=fZ1bQVRqMikzcZXly6+WJZ2mg0ZYLxZbXR2sCmPg4i18jIH6nYOfySei
-   MGmuIBtV5LRIvXbUU493dbc30Unrecm0AVIDvGkq1kNU0Q5lE0AeY91ad
-   dzUk1nTatYDkACZJRr+8g6HKkwh/F8idsuqZrVHRFBKIAtG3BdCXGQBcd
-   b6HFW96G4dJGaU5GO9b+2sCcgVWjvHiaXJkjTMD3+eihCDTzP21JNnR3b
-   nY3Po3BSPCk91ameJoBQX9oS4Md2SXaehB/4rzw5O+fXFqPR2blcAn3UT
-   YdZ1EBHhIyl4SsdH+T80mRlHYKz5a0B9MMO5AP4vDnhtDvA08BgO5e5MZ
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="417985236"
-X-IronPort-AV: E=Sophos;i="6.03,244,1694761200"; 
-   d="scan'208";a="417985236"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2023 07:42:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="793150451"
-X-IronPort-AV: E=Sophos;i="6.03,244,1694761200"; 
-   d="scan'208";a="793150451"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2023 07:42:51 -0700
-Date:   Mon, 23 Oct 2023 17:42:48 +0300
-From:   Raag Jadav <raag.jadav@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     rafael@kernel.org, len.brown@intel.com, robert.moore@intel.com,
-        mika.westerberg@linux.intel.com, mark.rutland@arm.com,
-        will@kernel.org, linux@roeck-us.net, Jonathan.Cameron@huawei.com,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        acpica-devel@lists.linuxfoundation.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        mallikarjunappa.sangannavar@intel.com, bala.senthil@intel.com
-Subject: Re: [PATCH v2 2/6] pinctrl: intel: use acpi_dev_uid_match() for
- matching _UID
-Message-ID: <ZTaGaDweYpBlxBez@black.fi.intel.com>
-References: <20231023053530.5525-1-raag.jadav@intel.com>
- <20231023053530.5525-3-raag.jadav@intel.com>
- <ZTZacR86hSmV04M9@smile.fi.intel.com>
+        Mon, 23 Oct 2023 14:08:36 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C686B4;
+        Mon, 23 Oct 2023 11:08:33 -0700 (PDT)
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39NHjrQu030290;
+        Mon, 23 Oct 2023 18:08:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=adARqlKcwSftqXMpKoE1Ya0I95zKkiUmCphlJHqpyU8=;
+ b=prDDjj5iv52OxcX1YGhta3HHKJzbvn/lfewTqJfCpoevEz6oJEOT8eXQGyoNFU3ZLINs
+ OnBbbmxzi+Z2wDXKE8z5ccb1fmMSSx9M/TOEY74fCW3Wd87rtnWZhv3UUcvSu6pPKII+
+ UtiLCzT3gk712XeJWlAyAiP/3iUgHFkhK6DPg1WBIKN4Wi+VmowfRS4B+nbhS2kwU/XL
+ hXYTkJYXNlQm8sbBU4RSoMRmlJXDLUnF00L1sUD+tdW73krgSvs7ZsCfWavOHGh/cuF7
+ 01bWYi7NVCjHvb9WvDWI3VdxB2BGo99fIdbAQFaKFSjtsrqa5Ku7FFcGlLU5YFUoGc4k RQ== 
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3twwgsrk4x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 Oct 2023 18:08:12 +0000
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+        by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 39NGZ0DL004987;
+        Mon, 23 Oct 2023 18:08:08 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+        by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3tvtfka2yx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 Oct 2023 18:08:08 +0000
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 39NI870h37028332
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 23 Oct 2023 18:08:07 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7DAEE5805D;
+        Mon, 23 Oct 2023 18:08:07 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 623D658052;
+        Mon, 23 Oct 2023 18:08:07 +0000 (GMT)
+Received: from gfwa600.aus.stglabs.ibm.com (unknown [9.3.84.101])
+        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTPS;
+        Mon, 23 Oct 2023 18:08:07 +0000 (GMT)
+Received: by gfwa600.aus.stglabs.ibm.com (Postfix, from userid 181152)
+        id EF89C740051; Mon, 23 Oct 2023 13:08:05 -0500 (CDT)
+From:   Lakshmi Yadlapati <lakshmiy@us.ibm.com>
+To:     joel@jms.id.au, andrew@aj.id.au, eajames@linux.ibm.com,
+        ninad@linux.ibm.com, linux@roeck-us.net, jdelvare@suse.com
+Cc:     Lakshmi Yadlapati <lakshmiy@us.ibm.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] hwmon: (pmbus/max31785) Add delay between bus accesses
+Date:   Mon, 23 Oct 2023 13:08:03 -0500
+Message-Id: <20231023180804.3068154-1-lakshmiy@us.ibm.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZTZacR86hSmV04M9@smile.fi.intel.com>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: VA4BULA_T6Hufd8QewOTHUrRwDhdnU45
+X-Proofpoint-ORIG-GUID: VA4BULA_T6Hufd8QewOTHUrRwDhdnU45
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-23_16,2023-10-19_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 clxscore=1015 adultscore=0 impostorscore=0 malwarescore=0
+ spamscore=0 bulkscore=0 mlxlogscore=995 lowpriorityscore=0 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2310170001 definitions=main-2310230157
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Oct 23, 2023 at 02:35:13PM +0300, Andy Shevchenko wrote:
-> On Mon, Oct 23, 2023 at 11:05:26AM +0530, Raag Jadav wrote:
-> > Convert manual _UID references to use the standard ACPI helper.
-> 
-> > Signed-off-by: Raag Jadav <raag.jadav@intel.com>
-> > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
-> It has a hidden logic that is not aligned with acpi_dev_hid_uid_match().
-> Or revert to your v1 I assume.
 
-I don't see how this has to be aligned with acpi_dev_hid_uid_match() or
-if acpi_dev_hid_uid_match() implementation concerns this specific change,
-since that's not what we intend to do here.
+Changes since V1:
+1. Changed the max31785_wait macro to a function, following the conventions
+  used in other drivers that had the same issue.
+2. Changed the function names from max31785_i2c_smbus* to max31785_i2c_* and
+  from max31785_pmbus_* to _max31785_*, making them more concise.
 
-Also, I think acpi_dev_uid_match() implementation in v2 is actually more
-aligned with the previous logic that we're replacing here, since it gives
-us a guaranteed match result as originally intended with strcmp in this
-case. And the "hidden logic" in v1 implementation (match with @uid2 == NULL)
-is what ends up breaking it in my opinion.
+The MAX31785 has shown erratic behaviour across multiple system
+designs, unexpectedly clock stretching and NAKing transactions.
 
-Regardless, for any version (v1 or v2) the usage still remains the same
-in this case.
+Experimentation shows that this seems to be triggered by a register access
+directly back to back with a previous register write. Experimentation also
+shows that inserting a small delay after register writes makes the issue go
+away.
 
-> As I asked you, please drop this one.
+Use a similar solution to what the max15301 driver does to solve the same
+problem. Create a custom set of bus read and write functions that make sure
+that the delay is added.
 
-But okay, as you wish :(
+Signed-off-by: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
+---
+ drivers/hwmon/pmbus/max31785.c | 181 +++++++++++++++++++++++++++++----
+ 1 file changed, 160 insertions(+), 21 deletions(-)
 
-Rafael, should I send a v3 with dropped tags?
+diff --git a/drivers/hwmon/pmbus/max31785.c b/drivers/hwmon/pmbus/max31785.c
+index f9aa576495a5..0e4f9bec542d 100644
+--- a/drivers/hwmon/pmbus/max31785.c
++++ b/drivers/hwmon/pmbus/max31785.c
+@@ -3,6 +3,7 @@
+  * Copyright (C) 2017 IBM Corp.
+  */
+ 
++#include <linux/delay.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/init.h>
+@@ -23,19 +24,112 @@ enum max31785_regs {
+ 
+ #define MAX31785_NR_PAGES		23
+ #define MAX31785_NR_FAN_PAGES		6
++#define MAX31785_WAIT_DELAY_US		250
+ 
+-static int max31785_read_byte_data(struct i2c_client *client, int page,
+-				   int reg)
++struct max31785_data {
++	ktime_t access;			/* Chip access time */
++	struct pmbus_driver_info info;
++};
++
++#define to_max31785_data(x)  container_of(x, struct max31785_data, info)
++
++/*
++ * MAX31785 Driver Workaround
++ *
++ * The MAX31785 fan controller occasionally exhibits communication issues.
++ * These issues are not indicated by the device itself, except for occasional
++ * NACK responses during master transactions. No error bits are set in STATUS_BYTE.
++ *
++ * To address this, we introduce a delay of 250us between consecutive accesses
++ * to the fan controller. This delay helps mitigate communication problems by
++ * allowing sufficient time between accesses.
++ */
++static inline void max31785_wait(const struct max31785_data *data)
+ {
+-	if (page < MAX31785_NR_PAGES)
+-		return -ENODATA;
++	s64 delta = ktime_us_delta(ktime_get(), data->access);
++
++	if (delta < MAX31785_WAIT_DELAY_US)
++		udelay(MAX31785_WAIT_DELAY_US - delta);
++}
++
++static int max31785_i2c_write_byte_data(struct i2c_client *client,
++					struct max31785_data *driver_data,
++					int command, u16 data)
++{
++	int rc;
++	max31785_wait(driver_data);
++	rc = i2c_smbus_write_byte_data(client, command, data);
++	driver_data->access = ktime_get();
++	return rc;
++}
++
++static int max31785_i2c_read_word_data(struct i2c_client *client,
++				       struct max31785_data *driver_data,
++				       int command)
++{
++	int rc;
++	max31785_wait(driver_data);
++	rc = i2c_smbus_read_word_data(client, command);
++	driver_data->access = ktime_get();
++	return rc;
++}
++
++static int _max31785_read_byte_data(struct i2c_client *client,
++				    struct max31785_data *driver_data,
++				    int page, int command)
++{
++	int rc;
++	max31785_wait(driver_data);
++	rc = pmbus_read_byte_data(client, page, command);
++	driver_data->access = ktime_get();
++	return rc;
++}
++
++static int _max31785_write_byte_data(struct i2c_client *client,
++				     struct max31785_data *driver_data,
++				     int page, int command, u16 data)
++{
++	int rc;
++	max31785_wait(driver_data);
++	rc = pmbus_write_byte_data(client, page, command, data);
++	driver_data->access = ktime_get();
++	return rc;
++}
++
++static int _max31785_read_word_data(struct i2c_client *client,
++				    struct max31785_data *driver_data,
++				    int page, int phase, int command)
++{
++	int rc;
++	max31785_wait(driver_data);
++	rc = pmbus_read_word_data(client, page, phase, command);
++	driver_data->access = ktime_get();
++	return rc;
++}
++
++static int _max31785_write_word_data(struct i2c_client *client,
++				     struct max31785_data *driver_data,
++				     int page, int command, u16 data)
++{
++	int rc;
++	max31785_wait(driver_data);
++	rc = pmbus_write_word_data(client, page, command, data);
++	driver_data->access = ktime_get();
++	return rc;
++}
++
++static int max31785_read_byte_data(struct i2c_client *client, int page, int reg)
++{
++	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
++	struct max31785_data *driver_data = to_max31785_data(info);
+ 
+ 	switch (reg) {
+ 	case PMBUS_VOUT_MODE:
+ 		return -ENOTSUPP;
+ 	case PMBUS_FAN_CONFIG_12:
+-		return pmbus_read_byte_data(client, page - MAX31785_NR_PAGES,
+-					    reg);
++		return _max31785_read_byte_data(client, driver_data,
++						page - MAX31785_NR_PAGES,
++						reg);
+ 	}
+ 
+ 	return -ENODATA;
+@@ -102,16 +196,19 @@ static int max31785_get_pwm(struct i2c_client *client, int page)
+ 	return rv;
+ }
+ 
+-static int max31785_get_pwm_mode(struct i2c_client *client, int page)
++static int max31785_get_pwm_mode(struct i2c_client *client,
++                                 struct max31785_data *driver_data, int page)
+ {
+ 	int config;
+ 	int command;
+ 
+-	config = pmbus_read_byte_data(client, page, PMBUS_FAN_CONFIG_12);
++	config = _max31785_read_byte_data(client, driver_data, page,
++					  PMBUS_FAN_CONFIG_12);
+ 	if (config < 0)
+ 		return config;
+ 
+-	command = pmbus_read_word_data(client, page, 0xff, PMBUS_FAN_COMMAND_1);
++	command = _max31785_read_word_data(client, driver_data, page, 0xff,
++					   PMBUS_FAN_COMMAND_1);
+ 	if (command < 0)
+ 		return command;
+ 
+@@ -129,6 +226,8 @@ static int max31785_get_pwm_mode(struct i2c_client *client, int page)
+ static int max31785_read_word_data(struct i2c_client *client, int page,
+ 				   int phase, int reg)
+ {
++	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
++	struct max31785_data *driver_data = to_max31785_data(info);
+ 	u32 val;
+ 	int rv;
+ 
+@@ -157,7 +256,7 @@ static int max31785_read_word_data(struct i2c_client *client, int page,
+ 		rv = max31785_get_pwm(client, page);
+ 		break;
+ 	case PMBUS_VIRT_PWM_ENABLE_1:
+-		rv = max31785_get_pwm_mode(client, page);
++		rv = max31785_get_pwm_mode(client, driver_data, page);
+ 		break;
+ 	default:
+ 		rv = -ENODATA;
+@@ -188,8 +287,36 @@ static inline u32 max31785_scale_pwm(u32 sensor_val)
+ 	return (sensor_val * 100) / 255;
+ }
+ 
+-static int max31785_pwm_enable(struct i2c_client *client, int page,
+-				    u16 word)
++static int max31785_update_fan(struct i2c_client *client,
++			       struct max31785_data *driver_data, int page,
++			       u8 config, u8 mask, u16 command)
++{
++	int from, rv;
++	u8 to;
++
++	from = _max31785_read_byte_data(client, driver_data, page,
++					PMBUS_FAN_CONFIG_12);
++	if (from < 0)
++		return from;
++
++	to = (from & ~mask) | (config & mask);
++
++	if (to != from) {
++		rv = _max31785_write_byte_data(client, driver_data, page,
++					       PMBUS_FAN_CONFIG_12, to);
++		if (rv < 0)
++			return rv;
++	}
++
++	rv = _max31785_write_word_data(client, driver_data, page,
++				       PMBUS_FAN_COMMAND_1, command);
++
++	return rv;
++}
++
++static int max31785_pwm_enable(struct i2c_client *client,
++			       struct max31785_data *driver_data, int page,
++			       u16 word)
+ {
+ 	int config = 0;
+ 	int rate;
+@@ -217,18 +344,23 @@ static int max31785_pwm_enable(struct i2c_client *client, int page,
+ 		return -EINVAL;
+ 	}
+ 
+-	return pmbus_update_fan(client, page, 0, config, PB_FAN_1_RPM, rate);
++	return max31785_update_fan(client, driver_data, page, config,
++                                   PB_FAN_1_RPM, rate);
+ }
+ 
+ static int max31785_write_word_data(struct i2c_client *client, int page,
+ 				    int reg, u16 word)
+ {
++	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
++	struct max31785_data *driver_data = to_max31785_data(info);
++
+ 	switch (reg) {
+ 	case PMBUS_VIRT_PWM_1:
+-		return pmbus_update_fan(client, page, 0, 0, PB_FAN_1_RPM,
+-					max31785_scale_pwm(word));
++		return max31785_update_fan(client, driver_data, page, 0,
++					   PB_FAN_1_RPM,
++					   max31785_scale_pwm(word));
+ 	case PMBUS_VIRT_PWM_ENABLE_1:
+-		return max31785_pwm_enable(client, page, word);
++		return max31785_pwm_enable(client, driver_data, page, word);
+ 	default:
+ 		break;
+ 	}
+@@ -303,13 +435,16 @@ static int max31785_configure_dual_tach(struct i2c_client *client,
+ {
+ 	int ret;
+ 	int i;
++	struct max31785_data *driver_data = to_max31785_data(info);
+ 
+ 	for (i = 0; i < MAX31785_NR_FAN_PAGES; i++) {
+-		ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, i);
++		ret = max31785_i2c_write_byte_data(client, driver_data,
++						   PMBUS_PAGE, i);
+ 		if (ret < 0)
+ 			return ret;
+ 
+-		ret = i2c_smbus_read_word_data(client, MFR_FAN_CONFIG);
++		ret = max31785_i2c_read_word_data(client, driver_data,
++						  MFR_FAN_CONFIG);
+ 		if (ret < 0)
+ 			return ret;
+ 
+@@ -329,6 +464,7 @@ static int max31785_probe(struct i2c_client *client)
+ {
+ 	struct device *dev = &client->dev;
+ 	struct pmbus_driver_info *info;
++	struct max31785_data *driver_data;
+ 	bool dual_tach = false;
+ 	int ret;
+ 
+@@ -337,13 +473,16 @@ static int max31785_probe(struct i2c_client *client)
+ 				     I2C_FUNC_SMBUS_WORD_DATA))
+ 		return -ENODEV;
+ 
+-	info = devm_kzalloc(dev, sizeof(struct pmbus_driver_info), GFP_KERNEL);
+-	if (!info)
++	driver_data = devm_kzalloc(dev, sizeof(struct max31785_data), GFP_KERNEL);
++	if (!driver_data)
+ 		return -ENOMEM;
+ 
++	info = &driver_data->info;
++	driver_data->access = ktime_get();
+ 	*info = max31785_info;
+ 
+-	ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, 255);
++	ret = max31785_i2c_write_byte_data(client,driver_data,
++					   PMBUS_PAGE, 255);
+ 	if (ret < 0)
+ 		return ret;
+ 
+-- 
+2.39.2
 
-Raag
