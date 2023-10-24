@@ -2,111 +2,93 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6781C25B47
-	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Oct 2023 09:40:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18BC7C25B6C
+	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Oct 2023 10:57:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234384AbjJXJkh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 24 Oct 2023 05:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55028 "EHLO
+        id S234445AbjJXK5y (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 24 Oct 2023 06:57:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234390AbjJXJk3 (ORCPT
+        with ESMTP id S234458AbjJXK5x (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 24 Oct 2023 05:40:29 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689E9198A;
-        Tue, 24 Oct 2023 02:30:17 -0700 (PDT)
+        Tue, 24 Oct 2023 06:57:53 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3676810CE;
+        Tue, 24 Oct 2023 03:57:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698139818; x=1729675818;
+  t=1698145071; x=1729681071;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=mSD40iH+sPX+DrU5ENcXUhxksvpVp9Sfw5JZjf5AJFA=;
-  b=cEbSB0HhGd5FKGuA2NJOQxdMb7ZKRypszTrQ9THJLwAhbH1P7sgg4yt4
-   gv6VpdWWCPXumRaDbvVoDxjmyk3xvAuMK1VzLxasqGj+98j5cevmB+5rO
-   JX2JwenP5GkvtXJVxfAC44NIvX2p1JHJDHY+v+Aj65it/y9S9drPQGhdN
-   pZM66Taw25/7qvZN25TT+TAycNza9gC6ExE2aafOQhsIYk4hhcl8wrPib
-   xysPfCNrZ5X5K0bK5jF4Ze7jbq1L354gkHjFDl7D0UU9chnL5xxiXUYm1
-   L28qh2O11r4u6JQFRhtNqOuigdbObCrLKMBOysJe1SYwGROThN+XL644g
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="8570434"
+  bh=rGtYObcuetOYR9kP/9TpGIdMtWpvP56ffO2o63DEo7o=;
+  b=lnf6reSfBpGc/epMkdnfLkcFl4qMDmkP8tthQUnLWIzFH2vKLHc47cvr
+   AUjhNrezJHhp8lmqFFTy7nFQOQUr2zBNHIGhSndh+ammmgkNzWBy7pDUD
+   hyhiGIeZJS19MiS+G4hT6r+4i/tc7Tuk3ZmbjF6QNmR9a3kTI4ujLR26m
+   2+7cBZC4wl9EjqqiDhYY3FLNYVSgWDebrVXedHMwEwlehyU573NvnMDHO
+   PujqNBh9akwUOBLDosLMjvevYSGFUuIY1Z9cM/CYaFm2xWQfbDprsdjFe
+   //E2jNKu+1WsLyLSUJpIx9kY6z57HkntoNm0Fjr34UPY/0rfT9d1vAl2i
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="453490635"
 X-IronPort-AV: E=Sophos;i="6.03,247,1694761200"; 
-   d="scan'208";a="8570434"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 02:30:16 -0700
+   d="scan'208";a="453490635"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 03:57:50 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="708224038"
+X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="1089803002"
 X-IronPort-AV: E=Sophos;i="6.03,247,1694761200"; 
-   d="scan'208";a="708224038"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 24 Oct 2023 02:30:11 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 6358894; Tue, 24 Oct 2023 12:30:10 +0300 (EEST)
-Date:   Tue, 24 Oct 2023 12:30:10 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Raag Jadav <raag.jadav@intel.com>
-Cc:     rafael@kernel.org, len.brown@intel.com, robert.moore@intel.com,
-        andriy.shevchenko@linux.intel.com, mark.rutland@arm.com,
+   d="scan'208";a="1089803002"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 03:57:46 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC2)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qvF6V-00000008BmT-0LUH;
+        Tue, 24 Oct 2023 13:57:43 +0300
+Date:   Tue, 24 Oct 2023 13:57:42 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Raag Jadav <raag.jadav@intel.com>, rafael@kernel.org,
+        len.brown@intel.com, robert.moore@intel.com, mark.rutland@arm.com,
         will@kernel.org, linux@roeck-us.net, Jonathan.Cameron@huawei.com,
         linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
         acpica-devel@lists.linuxfoundation.org, linux-gpio@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
         mallikarjunappa.sangannavar@intel.com, bala.senthil@intel.com
-Subject: Re: [PATCH v3 0/6] Refine _UID references across kernel
-Message-ID: <20231024093010.GF3208943@black.fi.intel.com>
+Subject: Re: [PATCH v3 1/6] ACPI: utils: Introduce acpi_dev_uid_match() for
+ matching _UID
+Message-ID: <ZTejJo6io91n7e4H@smile.fi.intel.com>
 References: <20231024062018.23839-1-raag.jadav@intel.com>
+ <20231024062018.23839-2-raag.jadav@intel.com>
+ <20231024092839.GE3208943@black.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231024062018.23839-1-raag.jadav@intel.com>
+In-Reply-To: <20231024092839.GE3208943@black.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Oct 24, 2023 at 11:50:12AM +0530, Raag Jadav wrote:
-> This series refines _UID references across kernel by:
-> 
-> - Extracting _UID matching functionality from acpi_dev_hid_uid_match()
->   helper and introducing it as a separate acpi_dev_uid_match() helper.
-> 
-> - Converting manual _UID references to use the standard ACPI helpers.
-> 
-> Changes since v2:
-> - Drop review tags as suggested by Andy.
-> 
-> Changes since v1:
-> - Change acpi_dev_uid_match() to return false in case of NULL argument.
-> - Drop accepted patches.
-> 
-> Raag Jadav (6):
->   ACPI: utils: Introduce acpi_dev_uid_match() for matching _UID
->   pinctrl: intel: use acpi_dev_uid_match() for matching _UID
->   ACPI: utils: use acpi_dev_uid_match() for matching _UID
->   ACPI: x86: use acpi_dev_uid_match() for matching _UID
->   hwmon: nct6775: use acpi_dev_hid_uid_match() for matching _HID and
->     _UID
->   perf: arm_cspmu: use acpi_dev_hid_uid_match() for matching _HID and
->     _UID
+On Tue, Oct 24, 2023 at 12:28:39PM +0300, Mika Westerberg wrote:
+> On Tue, Oct 24, 2023 at 11:50:13AM +0530, Raag Jadav wrote:
 
-For the series,
+...
 
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-
->  drivers/acpi/utils.c                  | 34 ++++++++++++++++++++++-----
->  drivers/acpi/x86/utils.c              |  3 +--
->  drivers/hwmon/nct6775-platform.c      |  4 +---
->  drivers/perf/arm_cspmu/arm_cspmu.c    |  8 +++----
->  drivers/pinctrl/intel/pinctrl-intel.c |  2 +-
-
-This pinctrl one is also fine by me so if Andy does not have objections,
-feel free to add my,
-
-Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-
->  include/acpi/acpi_bus.h               |  1 +
->  include/linux/acpi.h                  |  5 ++++
->  7 files changed, 40 insertions(+), 17 deletions(-)
+> > + * Returns:
+> > + *  - %true if matches.
+> > + *  - %false otherwise.
 > 
+> Nit: these actually do not get formatted like above so you can just
+> write it as
 > 
-> base-commit: a4ed5bffbeb19cfb7e21ac3b3f09d7bfe39a849b
-> -- 
-> 2.17.1
+> Returns: %true in case UIDs match, %false otherwise.
+> 
+> If it is even needed, I think it is pretty obvious from the function
+> name what it returns.
+
+kernel-doc complains if there is no Return: section in the text.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
