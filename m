@@ -2,93 +2,104 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47D26C00A8F
-	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Oct 2023 14:48:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C1BCC07545
+	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Oct 2023 17:42:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234469AbjJXOs5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 24 Oct 2023 10:48:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52758 "EHLO
+        id S1344101AbjJXRmb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 24 Oct 2023 13:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343497AbjJXOs5 (ORCPT
+        with ESMTP id S1344012AbjJXRma (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 24 Oct 2023 10:48:57 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD897B3
-        for <linux-hwmon@vger.kernel.org>; Tue, 24 Oct 2023 07:48:52 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1c5cd27b1acso37930655ad.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 24 Oct 2023 07:48:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698158932; x=1698763732; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:subject:from:cc:references:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=geodVAx2aVGSYUVKCREkNfDfr6HRCvzvW0wpu5g3zYw=;
-        b=gWEW23jUiZWS36vrjIG8moc2oYAwvkr36Kx3VypqWMGxd4nyUnnDf+DApenEdZsj9F
-         gUDkVELpkmgqGrdgNK/Rt/ZM0OZjaFiJRKEcuqEcsQCsJfbKGYAQmoUOiCclTclHRbEx
-         3erkrTGH8hahjSLsZqvqTo8q73KzYgNz61ERKHaSlAkyos5lHYjoYP/4HI4uqSXrpQJx
-         K73TXlawBcLz0Arb+7wIrVvXb8IbNoQMjY5Ck6SYIVd27CaIYmVuCO4WnA0wcwPfa8Df
-         TNB3JRTOs7FSXa++G0zhAYcrbT+sVknzIIFFfhxLTqDuVmXMCjfbg5GQPROWXI85blAN
-         q+ZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698158932; x=1698763732;
-        h=content-transfer-encoding:in-reply-to:subject:from:cc:references:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=geodVAx2aVGSYUVKCREkNfDfr6HRCvzvW0wpu5g3zYw=;
-        b=HlHE9Rbs5Tm48N+3bw3MJN23AaDk7KENBX8AeIT9d0NmxTf1nGpKXFUX4X1jz2qku7
-         pSl99dUfha+Dhvha/X1M5823R8nqRr2jSOEm6g7zw/PuvD/bN9Q8doRQvHTLWKRkNz0r
-         yu0tjA1YaBZAnZmGZWoD9XwrC8zzU9/2uKMo44SGWIO8oYdttPPgIDtlCTIJ3Bld6SZW
-         cuVElPAe3haUR+Li+oT4tIEEy4og7ZyR5xH9k3XRJnxC6yDuxBEr8wVz6S3lGu80OGin
-         6zRH1kn/R9vPllAU+sPDoZGS9+OeJGD7jg5r74gPoQakQt/LOaXJp8V/cuRfVS5qq3a9
-         c3gg==
-X-Gm-Message-State: AOJu0Yy5nhkLdmwPXkHvJ4dJBiLFFnCOJGdegqFCqXQAnd0nJ5ztFeL8
-        e95woi6BMymnhozU+z9zBW3IQsSNFi8=
-X-Google-Smtp-Source: AGHT+IFBZ+2zL7qw2fJ2eaCTvUovhKMweuJVTsS5/F3yRuUmq0qYcMSrgEh/f0O8Y7kVzDDq9ZfQQg==
-X-Received: by 2002:a17:902:e88f:b0:1bc:2abb:4e98 with SMTP id w15-20020a170902e88f00b001bc2abb4e98mr11253325plg.21.1698158932031;
-        Tue, 24 Oct 2023 07:48:52 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p11-20020a170902eacb00b001c9ad9470a5sm7504529pld.253.2023.10.24.07.48.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Oct 2023 07:48:51 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <9c099de7-4290-5699-122b-927e39577439@roeck-us.net>
-Date:   Tue, 24 Oct 2023 07:48:50 -0700
+        Tue, 24 Oct 2023 13:42:30 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 435D010CC
+        for <linux-hwmon@vger.kernel.org>; Tue, 24 Oct 2023 10:42:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1698169332; x=1698774132; i=w_armin@gmx.de;
+        bh=ogDfHzAX/yTatTfQPt1Mt7cBjLEhF86SNincpfdE768=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
+         In-Reply-To;
+        b=IchRXDzo/oTFupWOs8mMjgZkrqAgySjHNbd53JiYrDPWZdGy7OApIQi51bwecbI+
+         LX2Lr2o61OTQ3UjsyQZoH/OaZTvyCsw2l6DlhKBrWrWn9r9RBpPrCPcdVddv536XB
+         AfUUWe40p5Oce8Y67D+8kJz92v558ihj8yD/3+5g4N7SPkI8vppaANaXLv5W3NamD
+         8WwBSZAwMU/26yqrQz9r1w5ZS9kwvChBz1DEAZN1udSwBOzwfEDvf9xAa+6AFHRkK
+         b07g7l4Pw/WoVkQTpWI7abeN5JLVGfToTpnCf/1ppLKKCksyEmWJIifJLilFRyMB2
+         Cj2woSpvU0YStsc3kw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MJVHe-1rAow81xE0-00JrwW; Tue, 24
+ Oct 2023 19:42:12 +0200
+Message-ID: <7d9b4557-5e4b-44ea-be6f-2d23632dcf77@gmx.de>
+Date:   Tue, 24 Oct 2023 19:42:11 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Content-Language: en-US
-To:     Ian Nartowicz <deadbeef@nartowicz.co.uk>
-References: <20231024150438.68dd079b@debian.org>
-Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        Armin Wolf <W_Armin@gmx.de>
-From:   Guenter Roeck <linux@roeck-us.net>
+User-Agent: Mozilla Thunderbird
 Subject: Re: sch5627 on Fujitsu Celsius W280
-In-Reply-To: <20231024150438.68dd079b@debian.org>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Ian Nartowicz <deadbeef@nartowicz.co.uk>
+Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+References: <20231024150438.68dd079b@debian.org>
+ <9c099de7-4290-5699-122b-927e39577439@roeck-us.net>
+Content-Language: en-US
+From:   Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <9c099de7-4290-5699-122b-927e39577439@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:U9Cd2+EE3Jcz6RswJwb/C0ZQY6Xg2Zgw9UM4R9x+B2a0+hdoF72
+ J0Z935BvD5H0mMCBMY6kc4PAFl2tDWbFCbB9gcT0OM7bpUldbcxLA+dc0CAhp9heJy/oDIO
+ +IfupBYSTrIcjw1dMFMa5k3i/kyCBVNUswAk8s6JLgyIfsGK/udlBKsfalz2oHjxLpVbvYc
+ 0zN6njRx9mB33KXYvxC4g==
+UI-OutboundReport: notjunk:1;M01:P0:K8li8i5lyXM=;UTLxe+5gXPL231SQoYHJPuQX3VQ
+ QKO8sQFRYjKDoEl2ofPWvgX1oknX3orO17hRstSaG6SQ1i7sQTtNAMzjpueLU2jDXRNP/VnwJ
+ mI17/VP015LgVTDFhGNfjsrK0QeDHZsGyuW9ys7eFdnPm9i7/TmcJBw2JyGNwa+cxoYU3FsbA
+ h5eOQ3NkJcmW58OeNfqhzQ+CCZvIU1NxMeCGmMwjRNsRwh1K5yvaO4JThdnI5Pcye/vVAAtQ9
+ rrW8Zta4AINFnSRb39JELJZNdEraoOdVzeLMw1y2+WEZWcHrXOFLgXZYixXh9yomR3AMo1Y7U
+ gU+BdwUla6OSjEzIjjcQWj4+laVNxHnetve3C6h9uk3shZgg34dLHce+/hvM/fAvPqgUsR/OJ
+ 0u1p89giPCB3VBVtb9pC+yK7NtHFtvR8VzInasKemgwISUJvtpeHtbWB+e9uu1D5+iWAINgS1
+ PjYIt5FhrVHwFeS9hnf2hWMPx4nQ0yr8K+l9Q3kXQwWBQ+BZJTAh0fAt1dhOUJeQfXIz+lzQq
+ ez6NQbM24eLn5V66eyS9i9SIZ/4E6HYsCQshFRpJiL1hihdPwXerub/HHpSbTpG3zJMBxjMOV
+ xxKSRzTlwQWr+kdnAU/bNXua0Suaq7M8DTHn4bUSHkkQkcKwW8x8gEWcjx16IFAjLhg5ccZ6n
+ QJ2W4EFx543h7dfODITKnsd5tiUNRn5uTXSZcQp9jZ5YzdnSMmrQg0WJ1wPMpRkhH8lf8HNrG
+ counqiPzFLPajHr0oHd2j0FtzSCQDz6O53UK+qbN0ekFA9bgo6kb/tjoVEiaafJHRZ6cER0Pv
+ yqRtMzD68Y+N7aWXAc+V3LUXK6MxBLn0aqnF+nNaSCfUmT2ldV/3asucbisyi4t/NVf6tO2qZ
+ LA3KjBq2rJDWXy62Bk3ncJDXQRackNoqAb6Q1aIwjK71Y4KjBb3wQseCEv2fHreqCxKva8bGZ
+ iDsKJEFw8CvIFkpIP8CT0afQL+w=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/24/23 07:04, Ian Nartowicz wrote:
-> I just upgraded a Celsius W280 to the 6.1 kernel and noticed that hardware
-> monitoring was gone.  Was working in 5.10.  When I added it to the
-> dmi_override_table, it started working again (with a slightly different device
-> name).  dmidecode shows it as an on board device, type other, status disabled
-> (just the watchdog?), and description "SMsC SuperI/O".
-> 
+Am 24.10.23 um 16:48 schrieb Guenter Roeck:
 
-Weird, this is the second private e-mail I get in a single day.
-Is there some information out there suggesting that kernel maintainers
-should be contacted without copying the mailing list ? If so, tell them
-it is wrong. As warning to everyone, I won't reply any further
-to private e-mails like this.
+> On 10/24/23 07:04, Ian Nartowicz wrote:
+>> I just upgraded a Celsius W280 to the 6.1 kernel and noticed that
+>> hardware
+>> monitoring was gone.=C2=A0 Was working in 5.10.=C2=A0 When I added it t=
+o the
+>> dmi_override_table, it started working again (with a slightly
+>> different device
+>> name).=C2=A0 dmidecode shows it as an on board device, type other, stat=
+us
+>> disabled
+>> (just the watchdog?), and description "SMsC SuperI/O".
+>>
+>
+> Weird, this is the second private e-mail I get in a single day.
+> Is there some information out there suggesting that kernel maintainers
+> should be contacted without copying the mailing list ? If so, tell them
+> it is wrong. As warning to everyone, I won't reply any further
+> to private e-mails like this.
+>
+> Looking at the code, try adding ignore_dmi=3D1 as module parameter when
+> loading the driver. I think commit 393935baa45e5c messed it up and
+> prevents the driver from loading if the parameter is not provided.
+> Maybe the conditions in sch56xx_init() are wrong or too generic.
+> Armin, any comments ? Do we need to revert your patch ?
+>
+> Guenter
+>
+I think so, it seems that the DMI devices are not always present.
+We better revert the DMI autodetection patch to prevent anymore
+regressions like this.
 
-Looking at the code, try adding ignore_dmi=1 as module parameter when
-loading the driver. I think commit 393935baa45e5c messed it up and
-prevents the driver from loading if the parameter is not provided.
-Maybe the conditions in sch56xx_init() are wrong or too generic.
-Armin, any comments ? Do we need to revert your patch ?
-
-Guenter
+Armin Wolf
 
