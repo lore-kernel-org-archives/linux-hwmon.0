@@ -2,55 +2,84 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44CFEC25B47
-	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Oct 2023 08:16:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F313C25B47
+	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Oct 2023 09:29:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233670AbjJXIQE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 24 Oct 2023 04:16:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58518 "EHLO
+        id S234303AbjJXJ3m (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 24 Oct 2023 05:29:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233676AbjJXIP7 (ORCPT
+        with ESMTP id S234310AbjJXJ3W (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 24 Oct 2023 04:15:59 -0400
-Received: from mail.citycodes.pl (mail.citycodes.pl [158.255.215.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18ED5BD
-        for <linux-hwmon@vger.kernel.org>; Tue, 24 Oct 2023 01:15:56 -0700 (PDT)
-Received: by mail.citycodes.pl (Postfix, from userid 1001)
-        id E10DA21736; Tue, 24 Oct 2023 10:15:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=citycodes.pl; s=mail;
-        t=1698135354; bh=fClkhHu/p6gIm8tbpvFwCqGX3kXIMdqjiuDdSiYGEkk=;
-        h=Date:From:To:Subject:From;
-        b=dT6trITxD/qm6nutmeymtttb1Gk5hBO8h6Owt6NYVZ9mqmQKYoFg7L//FyJrLR6QZ
-         WwDQoE3502GMfLpsu5222qN38jivIe8Yt2l3zzDcqdiWl40i3LoIdkFZBGNgTs8xaX
-         2FxkR1mHWINKxl3W1TwV72hKTdINtC2ToD7JUzOMFw8av0AbgQ+vi9sPf37xA1nXr9
-         36vibZ5SnbcvXUhTsaNajzuR3pAINyAs9JxjRh9CLjZGAAXAyum1LQjXfU97BjcotH
-         Fi5yynJu5D5Kl5L4qhtNqpbj5AGAo5FUgZCbBK5cnqmOlHpIPL6z8SiqJPU64iY4fz
-         4QbrNEDxSelZw==
-Received: by mail.citycodes.pl for <linux-hwmon@vger.kernel.org>; Tue, 24 Oct 2023 08:15:29 GMT
-Message-ID: <20231024084500-0.1.8a.l8v9.0.a2ge8btbai@citycodes.pl>
-Date:   Tue, 24 Oct 2023 08:15:29 GMT
-From:   "Kamil Lasek" <kamil.lasek@citycodes.pl>
-To:     <linux-hwmon@vger.kernel.org>
-Subject: Wycena paneli fotowoltaicznych
-X-Mailer: mail.citycodes.pl
+        Tue, 24 Oct 2023 05:29:22 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B7E2120;
+        Tue, 24 Oct 2023 02:28:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698139726; x=1729675726;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TSB8pAAViMB/8p//BjKSeKwLOijnQ7uOJx1vlqPV8yg=;
+  b=d2pycOIegWmaiBPuhL0h9V7Rwvf6X6JJnSDd7LFcZcEP+mQgcROs44xe
+   FZVMWHkKU83iek/6+K3s5qtX4BwU7UbjUfUGbzWj6jOLbHXJCAl0C8+3W
+   u92kotQVO487mJ13BTNdSKp4wb5PDv0x2VtaC2LZi44VGuQBg4dy0pDJU
+   6Y033a/ed2f8KMgUPJTBeD0cumS7orMMBPIa49yhnSbsTY1s+avs5u+zs
+   G5YOI42yKFQTrslzzrVB1IIWQyXvROqbPfODyrsOJh6+YkQMatK1gI6NM
+   yav9LWgJerxpxlae412EFRx/KuSvMohp15v1L4m9PCqnT8BsCiGII9CzS
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="451251855"
+X-IronPort-AV: E=Sophos;i="6.03,247,1694761200"; 
+   d="scan'208";a="451251855"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 02:28:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="1089786072"
+X-IronPort-AV: E=Sophos;i="6.03,247,1694761200"; 
+   d="scan'208";a="1089786072"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 24 Oct 2023 02:28:40 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 55BD794; Tue, 24 Oct 2023 12:28:39 +0300 (EEST)
+Date:   Tue, 24 Oct 2023 12:28:39 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Raag Jadav <raag.jadav@intel.com>
+Cc:     rafael@kernel.org, len.brown@intel.com, robert.moore@intel.com,
+        andriy.shevchenko@linux.intel.com, mark.rutland@arm.com,
+        will@kernel.org, linux@roeck-us.net, Jonathan.Cameron@huawei.com,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        acpica-devel@lists.linuxfoundation.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        mallikarjunappa.sangannavar@intel.com, bala.senthil@intel.com
+Subject: Re: [PATCH v3 1/6] ACPI: utils: Introduce acpi_dev_uid_match() for
+ matching _UID
+Message-ID: <20231024092839.GE3208943@black.fi.intel.com>
+References: <20231024062018.23839-1-raag.jadav@intel.com>
+ <20231024062018.23839-2-raag.jadav@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20231024062018.23839-2-raag.jadav@intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On Tue, Oct 24, 2023 at 11:50:13AM +0530, Raag Jadav wrote:
+> +/**
+> + * acpi_dev_uid_match - Match device by supplied UID
+> + * @adev: ACPI device to match.
+> + * @uid2: Unique ID of the device.
+> + *
+> + * Matches UID in @adev with given @uid2.
+> + *
+> + * Returns:
+> + *  - %true if matches.
+> + *  - %false otherwise.
 
-dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
-irm=C4=85.
+Nit: these actually do not get formatted like above so you can just
+write it as
 
-=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
-ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej.
+Returns: %true in case UIDs match, %false otherwise.
 
-Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
-ropozycji?
-
-
-Pozdrawiam,
-Kamil Lasek
+If it is even needed, I think it is pretty obvious from the function
+name what it returns.
