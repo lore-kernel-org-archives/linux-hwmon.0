@@ -2,96 +2,55 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F37E7C25B48
-	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Oct 2023 06:21:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44CFEC25B47
+	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Oct 2023 08:16:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232704AbjJXGVb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 24 Oct 2023 02:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36240 "EHLO
+        id S233670AbjJXIQE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 24 Oct 2023 04:16:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232753AbjJXGVT (ORCPT
+        with ESMTP id S233676AbjJXIP7 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 24 Oct 2023 02:21:19 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EDEC198D;
-        Mon, 23 Oct 2023 23:21:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698128468; x=1729664468;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=3yrAjMBirTIUAhTanyYbEMtK/J+a0HZi5Xr6F7vjCTw=;
-  b=miF0FbPhdv5nYzlLy0kqL4U9Ht1eIN9TUbxeWYzWUAj8NLBbubmAtYd0
-   tqdC7qcyQyF0PKiOECZWaqWEYhGAFdcFMDv9jvX11U2723r87V1XM+QYR
-   yRPjVHL/ifs2bQ5y1p926bgZyC8G6tX95D2SRf2+NK38c+5cnvXkSJ+2A
-   JGRTG3blE1fgLt8G8BG7gTDYnVF3znaL7kNHtJPjOfHRVFoS5uq2cFBJx
-   ABUi4KN7fAdQelCFfZN0azsvBgDjOg3NnlyG7CUvF74lWlMkrXO6RYDQY
-   YJsW3FzXaO4O1BlYxn2WSm8rhMC81azS9rExPUYhWWV8OF14QmIBj0aiX
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="386806618"
-X-IronPort-AV: E=Sophos;i="6.03,246,1694761200"; 
-   d="scan'208";a="386806618"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2023 23:21:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="751891479"
-X-IronPort-AV: E=Sophos;i="6.03,246,1694761200"; 
-   d="scan'208";a="751891479"
-Received: from inlubt0316.iind.intel.com ([10.191.20.213])
-  by orsmga007.jf.intel.com with ESMTP; 23 Oct 2023 23:21:03 -0700
-From:   Raag Jadav <raag.jadav@intel.com>
-To:     rafael@kernel.org, len.brown@intel.com, robert.moore@intel.com,
-        mika.westerberg@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        mark.rutland@arm.com, will@kernel.org, linux@roeck-us.net,
-        Jonathan.Cameron@Huawei.com
-Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        acpica-devel@lists.linuxfoundation.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        mallikarjunappa.sangannavar@intel.com, bala.senthil@intel.com,
-        Raag Jadav <raag.jadav@intel.com>
-Subject: [PATCH v3 6/6] perf: arm_cspmu: use acpi_dev_hid_uid_match() for matching _HID and _UID
-Date:   Tue, 24 Oct 2023 11:50:18 +0530
-Message-Id: <20231024062018.23839-7-raag.jadav@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20231024062018.23839-1-raag.jadav@intel.com>
-References: <20231024062018.23839-1-raag.jadav@intel.com>
+        Tue, 24 Oct 2023 04:15:59 -0400
+Received: from mail.citycodes.pl (mail.citycodes.pl [158.255.215.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18ED5BD
+        for <linux-hwmon@vger.kernel.org>; Tue, 24 Oct 2023 01:15:56 -0700 (PDT)
+Received: by mail.citycodes.pl (Postfix, from userid 1001)
+        id E10DA21736; Tue, 24 Oct 2023 10:15:39 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=citycodes.pl; s=mail;
+        t=1698135354; bh=fClkhHu/p6gIm8tbpvFwCqGX3kXIMdqjiuDdSiYGEkk=;
+        h=Date:From:To:Subject:From;
+        b=dT6trITxD/qm6nutmeymtttb1Gk5hBO8h6Owt6NYVZ9mqmQKYoFg7L//FyJrLR6QZ
+         WwDQoE3502GMfLpsu5222qN38jivIe8Yt2l3zzDcqdiWl40i3LoIdkFZBGNgTs8xaX
+         2FxkR1mHWINKxl3W1TwV72hKTdINtC2ToD7JUzOMFw8av0AbgQ+vi9sPf37xA1nXr9
+         36vibZ5SnbcvXUhTsaNajzuR3pAINyAs9JxjRh9CLjZGAAXAyum1LQjXfU97BjcotH
+         Fi5yynJu5D5Kl5L4qhtNqpbj5AGAo5FUgZCbBK5cnqmOlHpIPL6z8SiqJPU64iY4fz
+         4QbrNEDxSelZw==
+Received: by mail.citycodes.pl for <linux-hwmon@vger.kernel.org>; Tue, 24 Oct 2023 08:15:29 GMT
+Message-ID: <20231024084500-0.1.8a.l8v9.0.a2ge8btbai@citycodes.pl>
+Date:   Tue, 24 Oct 2023 08:15:29 GMT
+From:   "Kamil Lasek" <kamil.lasek@citycodes.pl>
+To:     <linux-hwmon@vger.kernel.org>
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.citycodes.pl
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Convert manual _UID references to use the standard ACPI helpers.
+Dzie=C5=84 dobry,
 
-Signed-off-by: Raag Jadav <raag.jadav@intel.com>
----
- drivers/perf/arm_cspmu/arm_cspmu.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
 
-diff --git a/drivers/perf/arm_cspmu/arm_cspmu.c b/drivers/perf/arm_cspmu/arm_cspmu.c
-index e2b7827c4563..f0e6d14281d6 100644
---- a/drivers/perf/arm_cspmu/arm_cspmu.c
-+++ b/drivers/perf/arm_cspmu/arm_cspmu.c
-@@ -1061,7 +1061,7 @@ static int arm_cspmu_request_irq(struct arm_cspmu *cspmu)
- 
- static inline int arm_cspmu_find_cpu_container(int cpu, u32 container_uid)
- {
--	u32 acpi_uid;
-+	u64 acpi_uid;
- 	struct device *cpu_dev;
- 	struct acpi_device *acpi_dev;
- 
-@@ -1071,10 +1071,8 @@ static inline int arm_cspmu_find_cpu_container(int cpu, u32 container_uid)
- 
- 	acpi_dev = ACPI_COMPANION(cpu_dev);
- 	while (acpi_dev) {
--		if (!strcmp(acpi_device_hid(acpi_dev),
--			    ACPI_PROCESSOR_CONTAINER_HID) &&
--		    !kstrtouint(acpi_device_uid(acpi_dev), 0, &acpi_uid) &&
--		    acpi_uid == container_uid)
-+		if (acpi_dev_hid_uid_match(acpi_dev, ACPI_PROCESSOR_CONTAINER_HID, NULL) &&
-+		    !acpi_dev_uid_to_integer(acpi_dev, &acpi_uid) && acpi_uid == container_uid)
- 			return 0;
- 
- 		acpi_dev = acpi_dev_parent(acpi_dev);
--- 
-2.17.1
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej.
 
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
+
+
+Pozdrawiam,
+Kamil Lasek
