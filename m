@@ -2,62 +2,62 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3D8BC07545
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Oct 2023 14:27:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B196BC0032E
+	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Oct 2023 14:28:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344901AbjJYO10 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 Oct 2023 10:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43496 "EHLO
+        id S232897AbjJYO20 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 25 Oct 2023 10:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234201AbjJYO1Z (ORCPT
+        with ESMTP id S232398AbjJYO2Y (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 Oct 2023 10:27:25 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCBA618A
-        for <linux-hwmon@vger.kernel.org>; Wed, 25 Oct 2023 07:27:22 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-53dd3f169d8so8645926a12.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 25 Oct 2023 07:27:22 -0700 (PDT)
+        Wed, 25 Oct 2023 10:28:24 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E68619F
+        for <linux-hwmon@vger.kernel.org>; Wed, 25 Oct 2023 07:28:22 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-53d9b94731aso9115349a12.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 25 Oct 2023 07:28:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698244041; x=1698848841; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1698244101; x=1698848901; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=W11BoROAQ6O+AQAgJsTMh4mnP5mkkAOTryMggiaMy/Y=;
-        b=cNshRAxWpNTmmooh0A5GBsdJ9T15FxCRjZ2yieEGodIHrrQyJRuV4VxnmYQFSGF9Lk
-         MHEGbxOLFAWspv4laXbvWG0vFTEeOxNM9lKEXB0QNWeeaZ5pcYYqB43Gpr9jWcIeJ65S
-         iZbLJBYUs0hemXmAG+v6e2pCZrQ2wZsvBBf5enakw7aBC5xweurelMViP0Kq8DbfnKEH
-         ZQe+USNFE1QGTQhxiyyFBNu5MB2s2A8dEuvo19hTFyW8sUJr4clRZiPK3Zq597scgM3U
-         qKrHTkC+g5E4AMMSsCVwh1wJVjT9fZ12R1Y71taS1LknAEJGsU7ZyOcFvE1E8Ppeyzpt
-         Xy4A==
+        bh=1+rBNd3iOEE3KUvPYugV8YOCkksc/xnPzMUm+flKumE=;
+        b=h/Rkl9Olk5JseXa8sEhW3wHXHY+CsZKc1JKYwH6CJhaz2vuA+npoPi9DOLTI5rUzGu
+         S4ueDl/DjMMBBU8dbLgs13LpjzwQcvq3SrL5N06KuaJBHMXyy3q+lKoeXfVntAAKQLmN
+         sELUeAHD6iTRBM0nT62r7mskUjGKj32U1KYr1/CIJPhNL9eBlxbWVi9SA6Q8+xoJUvCv
+         uwlvev/bgfdSlxr6/xt6rxo9cJVNlkwp34wkTsieprT49DUBI9vequvAkFg+fmQ34G/0
+         BgOGvWmr8pV/xmv+Pmpa6O1havqMzKuQY2thV+K3bFLkNVCAQxfECoteeMhk9do1yqwa
+         dW8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698244041; x=1698848841;
+        d=1e100.net; s=20230601; t=1698244101; x=1698848901;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W11BoROAQ6O+AQAgJsTMh4mnP5mkkAOTryMggiaMy/Y=;
-        b=NaXZB25OYD0HABx9n22BWJQ/XO3fA+AyT9tRJjHimL73hikSX84TqipTBvUI8QJl1B
-         kKE/qWsZmBvn6cq0uu+QQHdlD8Tzk7Uv05a8YyZWg3iCoCZ/EerLHAdFGrIKT4QLGwpo
-         hlYu7I+/Bzq5yE9BY5A1F/CiBAq8mXSBY7SRaP9KUn1yMOjqLRFSbnndBt1tPW6e4lsj
-         bV8oIMZWgj4n07SIPwWOE1JeZ+K81qXwRwQXnV1BCsoCbgkXDmJ3IcAm2N2u5j4XAlFo
-         cEguiBNzvAZk8gNxLYewcpbE8z7GMTHYXuFwMzMckFQYUVrGsp8zsldusWhfw9tzIJta
-         v0lg==
-X-Gm-Message-State: AOJu0YwqbCMU9ywnyyALxonRWUKMO5kAEMGnX8mvW56DpPUL4sakJQlj
-        h0FH4l8SIrhMCadCmvd8l5A4sg==
-X-Google-Smtp-Source: AGHT+IGNPDcLEHtqkTkTFzPaEMRHgVhsYUa6bz5XZ4UvXRu3+Wctxh2Je6V3orKYXpq6y/reCX5vcg==
-X-Received: by 2002:a05:6402:11cf:b0:540:346c:7b2f with SMTP id j15-20020a05640211cf00b00540346c7b2fmr8191641edw.40.1698244041113;
-        Wed, 25 Oct 2023 07:27:21 -0700 (PDT)
+        bh=1+rBNd3iOEE3KUvPYugV8YOCkksc/xnPzMUm+flKumE=;
+        b=vpkiYqnsBQFZ6xTty54KaBOnoV2hNkbx9ddJ0QUk3vS/a/L7969/rpHEk5kVYUQkb4
+         Lm0Hb0NdkMnXqDcSmX0vU2eeqzHkj4P3tNrn9YiuLK1QJp7pGsTcdKbhZeh/z89tl3Ux
+         h9IP8g//0cwRpt6oSChpF8w9D668MTf+W+H9elm6wEn3TV8XFAwAosifZQiAtRrCgOtb
+         9s7KsbTCDAb5k/8LqHbLdaMqkH/gpqxXUfucBzdl3YRAJsUV/gn5IRxp12ePshWw+q6L
+         X+UDZIVX/fx1f1YdP0k8CezuCDL1H/8ZVEG7aIk3ERcHc+WgahOQckXK1lMohNi1+3hW
+         Bpmw==
+X-Gm-Message-State: AOJu0YwxpNOfdkRLx1ZQm58yqAu6MnT2qvK43xkS/K6Y4r9kHlswenL4
+        CHyx8AXhW/lTf/P0I/DckN1UTw==
+X-Google-Smtp-Source: AGHT+IEjokKlJRnmbdlJV1vZrul2MBvPP0TGVCXFxg9oN4VIT/mgWxEsKw9XXt8szV5Bu7EDiCGjSg==
+X-Received: by 2002:a05:6402:520b:b0:53b:3225:93c2 with SMTP id s11-20020a056402520b00b0053b322593c2mr11628664edd.8.1698244100909;
+        Wed, 25 Oct 2023 07:28:20 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.218.126])
-        by smtp.gmail.com with ESMTPSA id n25-20020a509359000000b00530bc7cf377sm9761788eda.12.2023.10.25.07.27.19
+        by smtp.gmail.com with ESMTPSA id n25-20020a509359000000b00530bc7cf377sm9761788eda.12.2023.10.25.07.28.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Oct 2023 07:27:20 -0700 (PDT)
-Message-ID: <d68f1109-9e99-4a94-98d8-676be4af920f@linaro.org>
-Date:   Wed, 25 Oct 2023 16:27:18 +0200
+        Wed, 25 Oct 2023 07:28:20 -0700 (PDT)
+Message-ID: <e5adb0cc-746c-4ca4-9052-af60b9655d5a@linaro.org>
+Date:   Wed, 25 Oct 2023 16:28:19 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 2/4] dt-bindings: hwmon: add ti,ina238
 Content-Language: en-US
-To:     Richard Leitner <richard.leitner@linux.dev>
-Cc:     Conor Dooley <conor@kernel.org>,
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Richard Leitner <richard.leitner@linux.dev>,
         Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -71,7 +71,7 @@ References: <20231025-ina237-v1-0-a0196119720c@linux.dev>
  <qoxgyho5twbm4jopfveaf5ee3z4tkyb2z5f2vsyrpglffegmxf@v2z5ckcaa5jc>
  <20231025-eatery-backup-ad85c043cb01@spud>
  <8cd5c34e-f733-445d-bc1e-d4dea1bcb47d@linaro.org>
- <2syaha4sapfpegvdsvef76egcqfebkuapxok6uripdbrgbk2vn@2xq5oi33zz2j>
+ <20231025-epilogue-preset-962b88985ea3@spud>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -117,14 +117,14 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <2syaha4sapfpegvdsvef76egcqfebkuapxok6uripdbrgbk2vn@2xq5oi33zz2j>
+In-Reply-To: <20231025-epilogue-preset-962b88985ea3@spud>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 25/10/2023 16:23, Richard Leitner wrote:
+On 25/10/2023 16:25, Conor Dooley wrote:
 > On Wed, Oct 25, 2023 at 04:18:31PM +0200, Krzysztof Kozlowski wrote:
 >> On 25/10/2023 16:11, Conor Dooley wrote:
 >>> On Wed, Oct 25, 2023 at 04:07:31PM +0200, Richard Leitner wrote:
@@ -145,27 +145,13 @@ On 25/10/2023 16:23, Richard Leitner wrote:
 >> why. Drivers are not related to bindings. The point is the compatible is
 >> already documented, so is anything wrong with existing documentation?
 > 
-> ina238 is a separate driver which doesn't evaluate the same properties as
-> the ina2xx driver. So I thought it would be reasonable to split those
-> bindings and therefore reflect the drivers capabilities.
+> If it was not clear, I meant merging the bindings, not the drivers. IOW,
+> adding the new compatible for the ina237 to the existing ina2xx.yaml
+> binding.
 
-I do not see different properties in the bindings, so what do you mean
-that it evaluates something else?
-
-Anyway, whatever driver does is rarely good argument for change in
-bindings, because we focus here on the hardware, not on one, chosen OS
-implementation.
-
-> 
-> If it's fine if there are additional properties in the dt-bindings which
-
-Where are they? Or rather which additional properties?
-
-> are not evaluated by the driver then it's of course fine with me to just
-> add the ina327 compatible in ina2xx.yaml.
-
-Depends. What driver does, might not matter in some cases. What matters
-is if these properties are applicable to this hardware.
+Yes, this sounds good. Maybe ina2xx is indeed not matching all of this
+hardware (e.g. supplies, shunt resistors), but then we need to talk
+about specifics.
 
 Best regards,
 Krzysztof
