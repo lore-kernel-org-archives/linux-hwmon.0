@@ -2,90 +2,83 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47F69C07545
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Oct 2023 19:35:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67632C0032E
+	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Oct 2023 19:36:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbjJYTfV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 Oct 2023 15:35:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47434 "EHLO
+        id S229596AbjJYTgz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 25 Oct 2023 15:36:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjJYTfV (ORCPT
+        with ESMTP id S229498AbjJYTgz (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 Oct 2023 15:35:21 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4597137;
-        Wed, 25 Oct 2023 12:35:18 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1cc04494653so342935ad.2;
-        Wed, 25 Oct 2023 12:35:18 -0700 (PDT)
+        Wed, 25 Oct 2023 15:36:55 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7937C13A;
+        Wed, 25 Oct 2023 12:36:53 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-6b1d1099a84so91491b3a.1;
+        Wed, 25 Oct 2023 12:36:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698262518; x=1698867318; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4PfZS2v4rKeH7WpwcRNnwJfVzvCUVvoLwgj4JaCkmXw=;
-        b=fe5z7E0HoVH30aW+MgpJk1dmyB61G+BkcDfsgeLtcinrQM2oa0jjGtzadSZm6Jl+mt
-         c2+aK6zUIJwKK32TXsm37CUwv5CSHQ8/MGJj8lZlnSLxtOtwQED7w5bC3LBWxHZyp5FP
-         QPOdAFcrBov2pKOL5BNn2HC90ebmCqXcoIzGU/gRRx5w75OFeMlMUB1T7wnV8rpYx1vs
-         TMROI1fen+497VMK81E6lA4F0csNAFVG/OMNoALX6YxkS9igzyl1T50qVSQ3FCn2kQ7H
-         NkIS6H0aTqSeZme0yxMdPk0iQMWVfrCGXmDGwHUgtuqRgvJ9PS0YKXcl+gNYabwj2mIs
-         WjXA==
+        d=gmail.com; s=20230601; t=1698262613; x=1698867413; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TGbMnAcQD9MpNg1isUp8Xn3wZuZoLOEwvnOJV3Zib1c=;
+        b=bztixrk69l+e/+jYISH76bAmPfZObiC7kZDH/4Ca0ghdA0sPIu2NLK74NWXSabG774
+         eIi7N6H6CW3zUJZD+A0PThMI5RDrXkhd2m5i2cn5sslVklqovQuJGL/4Kesf4rzfg1Hl
+         uDYvAifXSn6gQ99DypxNbMDc2nt3/yo7YtmnnWubxH7W3Y9kXR5T8zhysWdM45yvlm8X
+         snO/8iFmaUf4dr56gp/YQBW40nIqt/PMUVcDM+HjDQg5+heubVA4kenJ4FKejJZnaRkU
+         UeP7mIAU3i1lYmk5F+9amlzCeHKCowKdMhaSamvQiNl/BsSuJmLb7cGVBU1vFhDGRHHM
+         NAuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698262518; x=1698867318;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4PfZS2v4rKeH7WpwcRNnwJfVzvCUVvoLwgj4JaCkmXw=;
-        b=gy8AVH2Xc+OAAgxByCPGp+vg0wgYsGi9po2+xewhZBzmadRp3xrq96YUL+o4FmQZ5+
-         0tMb2nLatISvBcjEWwK/pMeNhcoCCRNILqRcmuDlbXmwhq59Db5w/SVCX2sMJKBACy8k
-         ZZGkK6HYSr0aCQFSYoY6b2EA5YizQzEsQ5Hp3QQumepIyeH1pNPyxg4yxihUaFdhAZms
-         tAkqnKzORQs9y/9GDfaqBmbHVr3kRqJnVGzMXmYAXOEDb+WKI9x5AT7FI/H3wnk7B2k4
-         3A12EiyLhr3m7S/CpWiCXdmFOY9LxRGVZOGZ63KSBrutvctNCHTMtFZrAEeRCRPdpZAr
-         TzmQ==
-X-Gm-Message-State: AOJu0YySBUkHml5HYxRZ3iIFAXbTOuj7VuSuuzF/JywgQaWJLn9NGQNy
-        p9bSuk53oPWBM8taHvQTUmk=
-X-Google-Smtp-Source: AGHT+IFuZDGO+Q1SobzYFl2F2V2CeAc/CplsJkrHeRr4Ij0e5NGsJhhmn7fzCV+5gl3nEVZgpnvHqw==
-X-Received: by 2002:a17:903:2442:b0:1b7:e86f:7631 with SMTP id l2-20020a170903244200b001b7e86f7631mr16157155pls.19.1698262518246;
-        Wed, 25 Oct 2023 12:35:18 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1698262613; x=1698867413;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TGbMnAcQD9MpNg1isUp8Xn3wZuZoLOEwvnOJV3Zib1c=;
+        b=V4BLka9nyp1cTG4/aE90R1SoKUxfxbe9c8q0/1DaFUGIo5upDH3DtM8Cx/36mdZDdG
+         9K8LQHDgegAtpKLzZQiCoPibNuyGrxU0eBiROD9TQ5Hk87GtgRZstSWLwzvwY/iO54mo
+         YnGUak+v+gbJGpzUqFWzEHmNEQf3JlUDda3c67YNOuErT304lQCvgoc2x1nP9VL+zQh8
+         Zi4lBeGbEZ6dJDlgvB28Km+n2WYyamlmJmtTpzbWpdbdV7Gy3fo4YeNFQOOcrsbRamCX
+         uJsl+y9JI3vNtfJfjZyXM/OSi+HO2sjXfKngS8mEiH/ZbRY/pBZxQ9TZ50d05eWB1WyG
+         AZOw==
+X-Gm-Message-State: AOJu0YztsFcZwQPJyqo9bbIwaFHak2s2HA5ch+LbCIAYMNQbVnN3OS6W
+        UVotfw9IhLvWh2CDR+9tYIQ=
+X-Google-Smtp-Source: AGHT+IFDdIs+VkhqOZmhmb39SGTaiCH9s23YjOt7r0Pg9uoy33BcIMUwPDCXdR+5BIBpQO0/ZEH7AQ==
+X-Received: by 2002:a05:6a00:1a4f:b0:6bc:e7f8:821e with SMTP id h15-20020a056a001a4f00b006bce7f8821emr19565769pfv.10.1698262612844;
+        Wed, 25 Oct 2023 12:36:52 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m11-20020a170902db0b00b001bf11cf2e21sm9501786plx.210.2023.10.25.12.35.17
+        by smtp.gmail.com with ESMTPSA id g5-20020aa79f05000000b006be055ab117sm9980413pfr.92.2023.10.25.12.36.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Oct 2023 12:35:17 -0700 (PDT)
+        Wed, 25 Oct 2023 12:36:52 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 25 Oct 2023 12:35:16 -0700
+Date:   Wed, 25 Oct 2023 12:36:51 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Ellie Hermaszewska <kernel@monoid.al>
-Cc:     eugene.shalygin@gmail.com, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: (asus-ec-sensors) add ROG Crosshair X670E Gene.
-Message-ID: <d013e9a3-df0a-4b8f-a1f3-db3cbd32812f@roeck-us.net>
-References: <CAB95QAR-UbfVULOCaZMO4H1AgvzbiHEoSYk-DiYPY6Pg-i7Vag@mail.gmail.com>
- <20231019135640.434752-1-kernel@monoid.al>
+To:     Su Hui <suhui@nfschina.com>
+Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        jdelvare@suse.com, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, openbmc@lists.ozlabs.org,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] hwmon: npcm750-pwm: add an error code check in
+ npcm7xx_en_pwm_fan
+Message-ID: <5036fed5-ff29-4d9b-a31a-1676a8e4f051@roeck-us.net>
+References: <20231020085518.198477-1-suhui@nfschina.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20231019135640.434752-1-kernel@monoid.al>
+In-Reply-To: <20231020085518.198477-1-suhui@nfschina.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Oct 19, 2023 at 09:51:58PM +0800, Ellie Hermaszewska wrote:
-> These are two separate statements, describing the set of sensors
-> implemented (those I could verify) and the specifics of the T_Sensor new
-> to the X670E motherboards.
+On Fri, Oct 20, 2023 at 04:55:19PM +0800, Su Hui wrote:
+> npcm7xx_pwm_config_set() can return '-ENODEV' for failed. So check
+> the value of 'ret' after calling npcm7xx_pwm_config_set().
 > 
-> Best wishes,
-> Ellie
-> 
-> Only the temp sensors that I can verify are present.
-> 
-> T_Sensor is the temperature reading of a 10kΩ β=3435K NTC thermistor
-> optionally connected to the T_SENSOR header.
-> 
-> The other sensors are as found on the X670E HERO.
-> 
+> Signed-off-by: Su Hui <suhui@nfschina.com>
 
-This is not an acceptable commit description.
+Applied.
 
+Thanks,
 Guenter
