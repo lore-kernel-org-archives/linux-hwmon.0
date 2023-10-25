@@ -2,32 +2,32 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD019C07545
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Oct 2023 13:59:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE56AC07545
+	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Oct 2023 14:00:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234790AbjJYN7B (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 Oct 2023 09:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58878 "EHLO
+        id S234709AbjJYOAK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 25 Oct 2023 10:00:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344545AbjJYN6y (ORCPT
+        with ESMTP id S232809AbjJYOAJ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 Oct 2023 09:58:54 -0400
+        Wed, 25 Oct 2023 10:00:09 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F19132;
-        Wed, 25 Oct 2023 06:58:49 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68816C433C8;
-        Wed, 25 Oct 2023 13:58:46 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38CC99C;
+        Wed, 25 Oct 2023 07:00:07 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB370C433C8;
+        Wed, 25 Oct 2023 14:00:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698242329;
-        bh=UlTZEI3okYwEXOfqTgk+bCPT0BOZMTu5VbgUq9Mk0hM=;
+        s=k20201202; t=1698242406;
+        bh=qc+ov5LIKiozFMXukORRE9nDxHa73MG+JepRkO8LbM0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gESLI8s/yysIu3Do5iEPzsQY1bHaGM5GwL/ilzz2jiuw8Ib3qR/2Tp+kj7zV6XWUP
-         wRgW1ZPNuhRjAJux9fc4IV56ezNfgMAQA8xW9Q/Fic2WvO9b+2XfWrGVXMtlp+L7QA
-         DdWghilDA8bvvmshc+0rLvXIYGp5VufLYpjhbv/Txo1k8YotgvxprDQss49FrwuyrW
-         a3Y+29MwjuUUiAzAIzaxORwMtq06jC5KlZeYnE6olvpLtC2XFkWAhGpML7ZC3vIvPI
-         3kaNYGI3B1jxfdYtN1nHACAk2nG/0Sg86FKHQUEPTVnkXAzZs7pa2S/wlb3g3Cffji
-         yd8xYIhECv5gw==
-Date:   Wed, 25 Oct 2023 14:58:44 +0100
+        b=ob42NPr3nRpkQzqR67FWvlhiE8STmmnJgumoM4rT/MisrlsTxUAd/GAlcmN4Y1TKY
+         2+vEvjd8gr7bvzjQGGOijUj4K6Gma1DNJKEL6G31fCXWlE0qeigb8v7xhQazaWwHV2
+         GUH0libugDsrQNtXk6ii+aZySXKaX61WHfGIGLV5Tb0NaUSSbiM52P5gdT5EOEJYuX
+         XL74b8uM/r8dsLCFRhqTNWB8HIzXuwmSTiFWSrGVmrtz6poMtUAn4tQE7ZcDG+uO08
+         ftUc0SIFtTK6ATlq5RC9hMli98aNgYYgtxvVD62TP9D84E0ajcNZp4T4RtHr2CY+vy
+         bzlrUl3haTjkQ==
+Date:   Wed, 25 Oct 2023 15:00:01 +0100
 From:   Conor Dooley <conor@kernel.org>
 To:     Richard Leitner <richard.leitner@linux.dev>
 Cc:     Guenter Roeck <linux@roeck-us.net>,
@@ -37,69 +37,125 @@ Cc:     Guenter Roeck <linux@roeck-us.net>,
         Conor Dooley <conor+dt@kernel.org>,
         linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         devicetree@vger.kernel.org
-Subject: Re: [PATCH 4/4] dt-bindings: hwmon: ti,ina238: add ti,ina237
-Message-ID: <20231025-unclip-ion-826a58681a12@spud>
+Subject: Re: [PATCH 2/4] dt-bindings: hwmon: add ti,ina238
+Message-ID: <20231025-hut-omnivore-f4b44a7b928d@spud>
 References: <20231025-ina237-v1-0-a0196119720c@linux.dev>
- <20231025-ina237-v1-4-a0196119720c@linux.dev>
+ <20231025-ina237-v1-2-a0196119720c@linux.dev>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="pE6BoEu0EbdyHUId"
+        protocol="application/pgp-signature"; boundary="XaYXm4eAH/Q3nOpF"
 Content-Disposition: inline
-In-Reply-To: <20231025-ina237-v1-4-a0196119720c@linux.dev>
+In-Reply-To: <20231025-ina237-v1-2-a0196119720c@linux.dev>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 
---pE6BoEu0EbdyHUId
+--XaYXm4eAH/Q3nOpF
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 25, 2023 at 10:34:14AM +0000, Richard Leitner wrote:
-> Add ti,ina237 binding to ti,ina238 as they share the same driver.
->=20
-> Signed-off-by: Richard Leitner <richard.leitner@linux.dev>
-> ---
->  Documentation/devicetree/bindings/hwmon/ti,ina238.yaml | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina238.yaml b/Doc=
-umentation/devicetree/bindings/hwmon/ti,ina238.yaml
-> index aba89e5f34b3..17408076696c 100644
-> --- a/Documentation/devicetree/bindings/hwmon/ti,ina238.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/ti,ina238.yaml
-> @@ -22,6 +22,7 @@ description: |
->  properties:
->    compatible:
->      enum:
-> +      - ti,ina237
+On Wed, Oct 25, 2023 at 10:34:12AM +0000, Richard Leitner wrote:
+> The ina238 driver is available since 2021 but lacks a dt-bindings file.
+> Therefore add the missing file now.
 
-The driver patch you have done implies no difference between the
-programming model for both of these devices. It'd seem to make more sense
-for the ina237 to fall back to the ina238, thereby requiring no change in
-the driver to support it.
+Seemingly it is documented in Documentation/devicetree/bindings/hwmon/ti,in=
+a2xx.yaml
 
 Cheers,
 Conor.
 
->        - ti,ina238
+>=20
+> Mention Jean Delvare and Guenter Roeck as maintainers as reported by the
+> get_maintainer.pl script.
+>=20
+> Signed-off-by: Richard Leitner <richard.leitner@linux.dev>
+> ---
+>  .../devicetree/bindings/hwmon/ti,ina238.yaml       | 46 ++++++++++++++++=
+++++++
+>  MAINTAINERS                                        |  1 +
+>  2 files changed, 47 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina238.yaml b/Doc=
+umentation/devicetree/bindings/hwmon/ti,ina238.yaml
+> new file mode 100644
+> index 000000000000..aba89e5f34b3
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/ti,ina238.yaml
+> @@ -0,0 +1,46 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +
+> +$id: http://devicetree.org/schemas/hwmon/ti,ina238.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Texas Instruments INA238 power/voltage monitors
+> +
+> +maintainers:
+> +  - Jean Delvare <jdelvare@suse.com>
+> +  - Guenter Roeck <linux@roeck-us.net>
+> +
+> +description: |
+> +  The INA238 is an ultra-precise digital power monitor with a
+> +  16-bit delta-sigma ADC specifically designed for current-sensing
+> +  applications.
+> +
+> +  Datasheets:
+> +    https://www.ti.com/lit/ds/symlink/ina238.pdf
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ti,ina238
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells =3D <1>;
+> +        #size-cells =3D <0>;
+> +
+> +        power-sensor@40 {
+> +            compatible =3D "ti,ina238";
+> +            reg =3D <0x40>;
+> +        };
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 28f91c8a2e1c..13858bd6a3d4 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -10271,6 +10271,7 @@ INA238 HARDWARE MONITOR DRIVER
+>  M:	Guenter Roeck <linux@roeck-us.net>
+>  L:	linux-hwmon@vger.kernel.org
+>  S:	Maintained
+> +F:	Documentation/devicetree/bindings/hwmon/ti,ina238.yaml
+>  F:	drivers/hwmon/ina238.c
 > =20
->    reg:
+>  INDEX OF FURTHER KERNEL DOCUMENTATION
 >=20
 > --=20
 > 2.40.1
 >=20
 
---pE6BoEu0EbdyHUId
+--XaYXm4eAH/Q3nOpF
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZTkfEwAKCRB4tDGHoIJi
-0pu2AQCAxnniBjz6rcPwfkiVyxIlV2tWkTei9kpP4WDrtKDCdwD+OebGU9904K9V
-R2HVKdB53Bhw0pxQXt5EW4gUi6BysQI=
-=tFzz
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZTkfYQAKCRB4tDGHoIJi
+0ij5AP41Xbf/AKBA0f15LztKkzCyqgf5yYkdNMp577jLE0Pw0wD8DnKGgXfXFTKQ
+XEU/DYq7TMdXOb1pMA9qCvfttAhNTQE=
+=uvAL
 -----END PGP SIGNATURE-----
 
---pE6BoEu0EbdyHUId--
+--XaYXm4eAH/Q3nOpF--
