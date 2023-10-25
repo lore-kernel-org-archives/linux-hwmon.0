@@ -2,78 +2,106 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B14AC07545
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Oct 2023 19:38:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EAAC7C07545
+	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Oct 2023 19:41:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbjJYTie (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 Oct 2023 15:38:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42070 "EHLO
+        id S232076AbjJYTlF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 25 Oct 2023 15:41:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjJYTid (ORCPT
+        with ESMTP id S229498AbjJYTlE (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 Oct 2023 15:38:33 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C1013A;
-        Wed, 25 Oct 2023 12:38:32 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id 98e67ed59e1d1-27d1aee5aa1so82251a91.0;
-        Wed, 25 Oct 2023 12:38:32 -0700 (PDT)
+        Wed, 25 Oct 2023 15:41:04 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC5B189;
+        Wed, 25 Oct 2023 12:41:02 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1ca3a54d2c4so388485ad.3;
+        Wed, 25 Oct 2023 12:41:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698262711; x=1698867511; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1698262862; x=1698867662; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=6z0oQ7+PlkATT0Vdd6vvsp8LGGR7gTa4RN839qkxV70=;
-        b=ECiSZqHCdUEfFxn38vB/32Yz4/t0xLOUYD2M/z+E8PwBZbZNM1XanG9OsqpDEszOaf
-         K0mAfB/0iXZ3iMjvPGkyJapt7msvdCJOgfV1IhgYEF5mcrCBvB43rllLSz5MNtPJZkqr
-         upOq3ty3b77HT2QInDBalnILSl1r+9BZA+lwk4+zMUNR3rtaoKSrzkCL0kK1+sDFlIMg
-         aVTWiPOsmW0XVF1YkcE33Pak/EhCTfqii7BGvpEnFyACSElEbHCRHbneCN7How2vSOlF
-         6crqn+knfjx3YkhjO54/nlQ/9UQgCL4aj67d1I2dOVZTESVoFZiuPte2JarSlqCzBjN3
-         G3PA==
+        bh=IdzTaQLvIjWdCW23uUwjApK25y8OzySo8bAMr5Qvrrc=;
+        b=G/jmQSvS+vH8+KbuGGYKLBZJFM2R3+8UcQj38qZyeJyGpoJKGQDXP0JaqPe8LjIlx5
+         F82OIpd8Q8+OvAPTSZAkCe1P+V31oZT1rr0jEGzSHqqYoNevW9Wx8zh9yPQcb5CvLZbA
+         SEAmnIjI579p206cMAPpXP9wfNm8lVk4kIgZd8sl1tnAtjMkY5p5G4gPyNzVG8AL/6kg
+         WeFnTfzdu96PrAb9Ay8PIZigZjGRozcg4/KruPiNlyONeY8sgtHg4s/gGe5mEFKoc/+/
+         ARxsFgl1odZM0Ha1pSalrFvLDGvaqvVjVSj+WWURYYPaF0rl+bfu98awvDKVix/kU5To
+         kgWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698262711; x=1698867511;
+        d=1e100.net; s=20230601; t=1698262862; x=1698867662;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6z0oQ7+PlkATT0Vdd6vvsp8LGGR7gTa4RN839qkxV70=;
-        b=qdaV5ynu35Hn/KnsyV9jmuzMxw6bn0+eLufvzogWVrJ19yXyWSy4EQi1HCGJ1FnLqa
-         NXBP9RCrvqqtkE/JGuhvtWPe4V1BZz7jiv5BYRM/9pgZWmwtNRV/30r8fV7IyJNCQ+6U
-         2q7XWh049C0CpSvD9isn5VHI0A8Y+TDty/Bq6+rNDfpbwajsWsZifevLDR0vGfJyY83s
-         H3rx7oCEBwTs4vWgrpuqgRRU7P1REuNodyVwVdJ+UWUhcEg3cuOx2slRxttkSGtg9MiL
-         e77CYDkxm4zlizEQaxHqIOq5eKf9T287NIFm5TUUy6CHBEPjymBK934AOZZ4bmG1D1xv
-         B9eA==
-X-Gm-Message-State: AOJu0Yx/TDwUc37SKTpx65N9cQpvTlUZdkI7ul4QmR1811ZlMcCHS9C/
-        0ZSRHIZdqfdqVw7Po51SVV3saxpnEwo=
-X-Google-Smtp-Source: AGHT+IHddo8qg9luyeDGCB2S9jMN51Ao1TIS9tk3t6dVtgEvRzi03FhZ5KpwEYoihkkJytVI6X8Ptg==
-X-Received: by 2002:a17:90b:1c06:b0:27c:f4a9:7e20 with SMTP id oc6-20020a17090b1c0600b0027cf4a97e20mr715215pjb.15.1698262711662;
-        Wed, 25 Oct 2023 12:38:31 -0700 (PDT)
+        bh=IdzTaQLvIjWdCW23uUwjApK25y8OzySo8bAMr5Qvrrc=;
+        b=bokGs0hm7WHIfySPIGarj8j+5Dx/+7kbSm7KE5SZqGdR1IQCGwx58oGztfSvlGGSX9
+         Th+daC6nIyjhCL34mL0OuO8v1rN96eQhCN8eAAtD7ZFEONtyKIRzajYK3Q9rKXjf0CDd
+         ayxMkufCKP0qM2wWlS/JlrK+D6hl1fx3eAhefdpAMgzTMoarW3bqJHEWEJUH1KMog3et
+         Oy5PmFd8zPo5uNtUdgGsbKmiG11w7R5kBzPeupR0DHz9chsbFys+ImmSuLtzTAXgSIIF
+         ISUcKyav9zBqwwP85UHEzaqf2p6ckFcCUvyDp4apDHxb3Jo4CIU6NoB46cka9ZkKr5Aq
+         LZ9A==
+X-Gm-Message-State: AOJu0YyPb1KCJJua0jfJ0xodzOpC97lPUBte0D+4g5nLpSQs28XPIUgJ
+        +FvTU+9fZEL0699Zg/Xnymc=
+X-Google-Smtp-Source: AGHT+IFZyvarEOoRSc9FXYqsMJLGoAA6rpsNiBAXJxTtm56787NJ2q1l4vPNbHRuh+eqs01IQCzXCw==
+X-Received: by 2002:a17:903:644:b0:1c9:ca45:f86 with SMTP id kh4-20020a170903064400b001c9ca450f86mr13714334plb.18.1698262861743;
+        Wed, 25 Oct 2023 12:41:01 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 22-20020a17090a1a1600b0027d0d4d4128sm288828pjk.25.2023.10.25.12.38.31
+        by smtp.gmail.com with ESMTPSA id t12-20020a170902a5cc00b001c74876f032sm9512635plq.162.2023.10.25.12.41.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Oct 2023 12:38:31 -0700 (PDT)
+        Wed, 25 Oct 2023 12:41:01 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 25 Oct 2023 12:38:30 -0700
+Date:   Wed, 25 Oct 2023 12:41:00 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Antoniu Miclaus <antoniu.miclaus@analog.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+To:     Aleksa Savic <savicaleksa83@gmail.com>
+Cc:     linux-hwmon@vger.kernel.org, leonard.anderweit@gmail.com,
+        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drivers: hwmon: ltc2992: avoid division by zero
-Message-ID: <68829dec-8bfa-4969-84fa-0cc63a8ee012@roeck-us.net>
-References: <20231011135754.13508-1-antoniu.miclaus@analog.com>
+Subject: Re: [PATCH 1/2] hwmon: (aquacomputer_d5next) Check if temp sensors
+ of legacy devices are connected
+Message-ID: <ac61decf-8ab7-46c1-83f0-d3f79f737bbf@roeck-us.net>
+References: <20231016083559.139341-1-savicaleksa83@gmail.com>
+ <20231016083559.139341-2-savicaleksa83@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231011135754.13508-1-antoniu.miclaus@analog.com>
+In-Reply-To: <20231016083559.139341-2-savicaleksa83@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Oct 11, 2023 at 04:57:53PM +0300, Antoniu Miclaus wrote:
-> Do not allow setting shunt resistor to 0. This results in a division by
-> zero when performing current value computations based on input voltages
-> and connected resistor values.
+On Mon, Oct 16, 2023 at 10:35:57AM +0200, Aleksa Savic wrote:
+> Return -ENODATA if a temp sensor of a legacy device
+> does not contain a reading.
 > 
-> Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
 
-Applied. Please note that the subject should not include "drivers:".
+Why is the sensor instantiated in the first place ?
+Returning -ENODATA for every reading is not desirable.
+If this can happen, the is_visible function should check
+for it and skip affected sensors.
 
 Guenter
+
+> Originally-from: Leonard Anderweit <leonard.anderweit@gmail.com>
+> Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
+> ---
+>  drivers/hwmon/aquacomputer_d5next.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
+> index 023807859be7..46ff4fd4f87d 100644
+> --- a/drivers/hwmon/aquacomputer_d5next.c
+> +++ b/drivers/hwmon/aquacomputer_d5next.c
+> @@ -926,7 +926,10 @@ static int aqc_legacy_read(struct aqc_data *priv)
+>  	for (i = 0; i < priv->num_temp_sensors; i++) {
+>  		sensor_value = get_unaligned_le16(priv->buffer + priv->temp_sensor_start_offset +
+>  						  i * AQC_SENSOR_SIZE);
+> -		priv->temp_input[i] = sensor_value * 10;
+> +		if (sensor_value == AQC_SENSOR_NA)
+> +			priv->temp_input[i] = -ENODATA;
+> +		else
+> +			priv->temp_input[i] = sensor_value * 10;
+>  	}
+>  
+>  	/* Special-case sensor readings */
