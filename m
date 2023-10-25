@@ -2,78 +2,91 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8722C07545
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Oct 2023 19:57:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F232C25B6B
+	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Oct 2023 20:04:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbjJYT54 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 Oct 2023 15:57:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48436 "EHLO
+        id S229867AbjJYUEn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 25 Oct 2023 16:04:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjJYT54 (ORCPT
+        with ESMTP id S229629AbjJYUEn (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 Oct 2023 15:57:56 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7706C12A
-        for <linux-hwmon@vger.kernel.org>; Wed, 25 Oct 2023 12:57:54 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id 98e67ed59e1d1-27d1fa1c787so63347a91.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 25 Oct 2023 12:57:54 -0700 (PDT)
+        Wed, 25 Oct 2023 16:04:43 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163618F;
+        Wed, 25 Oct 2023 13:04:41 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b9338e4695so1580821fa.2;
+        Wed, 25 Oct 2023 13:04:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698263874; x=1698868674; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hYKowwlkn1BHKHRc9JhBeWa2xMY1+E1zm1gAHR59v1Y=;
-        b=bSmRZbQE96JRRQCPAAlw3qTQux5C70nrkt8b6t/Li+BRIntRjZPYRx5U4tjONDMlTb
-         eN8/7Y7ZTZY5hEL535mPvgRzZTc1TASxFeJ7SXpaaV1Trx0oa0UlsUNAgwicySCciUk/
-         NVt+odM++BwsfX+EcAhnICx9q/zc4lxKXedTVgrgjK+Z4sLXhqjhker/0L6357OlfeXb
-         sKxR+z7ehlazyORyc96/6wa0OpnBmufI1mzlZhzO060EZI8XtJEATgp9BmhbMq1G38DX
-         /6W7eC2R+nAdjMI9+/tNLfVl9ly8wUJLt2rvp52nCjK7rqMgsmf+omXxErRF2tHWfHcO
-         n0pg==
+        d=gmail.com; s=20230601; t=1698264279; x=1698869079; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:cc:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aRXCvqUEGxPWmLeNrK49IAezUNl9MkqYIjX1pTeuyPs=;
+        b=CyXkHZI8wVNtfKaOvmmhbeqlQwpIgNtlcdc9pouWUyF/ZCGu/1kJK5SAlCKiFpJOnc
+         dQzemP2H4U3eQuxijtTlDAoLQcCnQTwl5ui8MidVTbPRcqbyAI+dnfaAdD1HDhpenhBg
+         5BNZPMy0+u08y+N7OgWdnAiDT7IjzcDmM+2hLbkAx4CU7OLHOc0Z4CR0Q8xwMX4GmX+F
+         etSFfexyGS6Wifp2RhWJ+D7YG5sKYEtBfBqCLxLODVPYHoCyP42uhgirgfqxOki/DHkq
+         8WPxPEC136Xui6vrnDeyNqzBCQv6XA9Qmxq5TFD6RJUjCCkEVXDaKSFui5D9tEX6N2tG
+         XRWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698263874; x=1698868674;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hYKowwlkn1BHKHRc9JhBeWa2xMY1+E1zm1gAHR59v1Y=;
-        b=GK2ZL8ffj4hgvERS/KmWw6x9mkzcyQsasEmjhnE2VMqINSu+Ohi3FOfCfH7WXh0XmX
-         QW4lMPHraNUyAG0IVeoHpkIS41sD2Pk1QjFbCnbooiWk1AinWghIjO+cWGbJZuGg+u8P
-         ldBTakD0JWJBklZPp+rI8Htk7NiJAnYhWoGouKWpzScz5iQSIl5m4lltTrzul50bLHzh
-         /kXkA/T+RGmEj7dvapR6jywClAvJbivHo6fJ3VbXHup3FTELuxvX8tN6pD55V+ebVW1f
-         igbL/J5ZKprjtrwyFfp3dlS4WGNxR/oBU59zQafKn4m9n/PLpipDQLVZM1A2mi4IzLfV
-         Pr/Q==
-X-Gm-Message-State: AOJu0YyJw4weptCJ2JsjaXVC9g8DAuMQ+7PrbDPV7QRJ1fHS4oAtbCAi
-        rV21V+So985pC5d266q93WImSRUCpzM=
-X-Google-Smtp-Source: AGHT+IEXz3w96QOizdtMAgffTFHSy7zzOjRErxAvpPJekEk2up/e5faZbQxJGFrqKvbEYk1OCxaG2Q==
-X-Received: by 2002:a17:90a:4f45:b0:27e:3880:d03d with SMTP id w5-20020a17090a4f4500b0027e3880d03dmr9372001pjl.7.1698263873870;
-        Wed, 25 Oct 2023 12:57:53 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 12-20020a17090a194c00b00279060a0fccsm305823pjh.9.2023.10.25.12.57.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Oct 2023 12:57:53 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 25 Oct 2023 12:57:52 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Alexander Koskovich <AKoskovich@pm.me>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 1/1] hwmon: (nct6683) Add another customer ID for ASRock
- X670E Taichi
-Message-ID: <2ee3669e-4366-4664-8525-70859dac4074@roeck-us.net>
-References: <20231023182442.21943-1-akoskovich@pm.me>
+        d=1e100.net; s=20230601; t=1698264279; x=1698869079;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:cc:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aRXCvqUEGxPWmLeNrK49IAezUNl9MkqYIjX1pTeuyPs=;
+        b=O9nz73wmlOeed026+eTbpw9MbMUYQ2Btvp5n6DYMgR//mge4nXWvr6ghEHyhYeXNUd
+         qJBNf1luD1CaSp+AjoV6KHpW3iQiPND4TWhZLb3YpDshk9nvXe258TDTXuJCXu3cnV5f
+         6VRdM+qtlMgvMO36UX7eH1nRgNNLGMxTtxJZ21X8RyOsFGSnILAnyXq/hEakobq2yANp
+         vg2l5i7fupog1Ey3NnGwk6NZQdwHVRZ6W4IhzeJGR2TMeIzyalo1t6J0c1WH5UWjdthV
+         kcDQTYUQt1hISJftegJokbMYtpMMfi5XymU4Y1F/cMnuz2z/ezMiu0TQF556uVOxgYs/
+         vEuw==
+X-Gm-Message-State: AOJu0YwIb0ZFtGZ68IVyg2MiQGgO5GM4ubg5flaMMh0smmbVR+QFuxkf
+        zjqb/84W1wrN6FwemdMq1og=
+X-Google-Smtp-Source: AGHT+IGcyVppwMzWcJePLy+2lwN2fhKViA8GWuWortnTRRjauD38DvPVVxmawlDSowy+NlXgYcywQQ==
+X-Received: by 2002:a2e:8716:0:b0:2bc:b0ae:a9e5 with SMTP id m22-20020a2e8716000000b002bcb0aea9e5mr11159207lji.42.1698264279020;
+        Wed, 25 Oct 2023 13:04:39 -0700 (PDT)
+Received: from [192.168.0.28] (cable-178-148-234-71.dynamic.sbb.rs. [178.148.234.71])
+        by smtp.gmail.com with ESMTPSA id az32-20020a05600c602000b004053e9276easm599668wmb.32.2023.10.25.13.04.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Oct 2023 13:04:38 -0700 (PDT)
+Message-ID: <456be27a-1e62-4b88-a868-6238813c26c8@gmail.com>
+Date:   Wed, 25 Oct 2023 22:04:36 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231023182442.21943-1-akoskovich@pm.me>
+User-Agent: Mozilla Thunderbird
+Cc:     savicaleksa83@gmail.com, linux-hwmon@vger.kernel.org,
+        leonard.anderweit@gmail.com, Jack Doan <me@jackdoan.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] hwmon: (aquacomputer_d5next) Check if temp sensors of
+ legacy devices are connected
+To:     Guenter Roeck <linux@roeck-us.net>
+References: <20231016083559.139341-1-savicaleksa83@gmail.com>
+ <20231016083559.139341-2-savicaleksa83@gmail.com>
+ <ac61decf-8ab7-46c1-83f0-d3f79f737bbf@roeck-us.net>
+Content-Language: en-US
+From:   Aleksa Savic <savicaleksa83@gmail.com>
+In-Reply-To: <ac61decf-8ab7-46c1-83f0-d3f79f737bbf@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Oct 23, 2023 at 06:24:59PM +0000, Alexander Koskovich wrote:
-> This value was found on an ASRock X670E Taichi with an
-> NCT6686D chip.
+On 2023-10-25 21:41:00 GMT+02:00, Guenter Roeck wrote:
 > 
-> Signed-off-by: Alexander Koskovich <akoskovich@pm.me>
+> Why is the sensor instantiated in the first place ?
+> Returning -ENODATA for every reading is not desirable.
+> If this can happen, the is_visible function should check
+> for it and skip affected sensors.
+> 
+> Guenter
+> 
 
-Applied.
+The external temp sensor(s) are hot-swappable and can be plugged
+or unplugged anytime. Similar logic already exists in
+aqc_raw_event() for the sensors.
 
 Thanks,
-Guenter
+Aleksa
