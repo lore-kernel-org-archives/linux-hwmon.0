@@ -2,196 +2,193 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 435E5C25B6B
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Oct 2023 10:49:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26A8FC0032E
+	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Oct 2023 10:54:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233153AbjJYKtI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 Oct 2023 06:49:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35586 "EHLO
+        id S234657AbjJYKye (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 25 Oct 2023 06:54:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234881AbjJYKsy (ORCPT
+        with ESMTP id S234685AbjJYKy2 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 Oct 2023 06:48:54 -0400
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0CC10A
-        for <linux-hwmon@vger.kernel.org>; Wed, 25 Oct 2023 03:48:47 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qvbQQ-0001DN-Q8; Wed, 25 Oct 2023 12:47:46 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qvbQO-0049gV-FC; Wed, 25 Oct 2023 12:47:44 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qvbQO-005ubj-4j; Wed, 25 Oct 2023 12:47:44 +0200
-Date:   Wed, 25 Oct 2023 12:47:43 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Sean Young <sean@mess.org>
-Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-media@vger.kernel.org, linux-pwm@vger.kernel.org,
-        Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Javier Martinez Canillas <javierm@redhat.com>,
+        Wed, 25 Oct 2023 06:54:28 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2056.outbound.protection.outlook.com [40.107.102.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451341B6;
+        Wed, 25 Oct 2023 03:54:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JxsRgZupDPQX4O/8QMKWOMLZ6biyHrwZQ+29FaWHBWxqc7/y6LVyfjAx1Zk5d+yJLTosfZn+KdJM5IV1dTwd7fLWWklAhWAnkVYtTzqpMozuDS8m/2PFArkkQL4BYSysp/nw9+S4FyX87ieoqo/oSQDdaOtlwWfMhpZPy98chAjvupONpc0hfPWccBycdxvkHolIwlFKPDVNH9VDBl8O1l8ftI1tRtBV/TjPzFCO86WXSbgmzaGodCyykEq8Is6CQP55xO1N0y9korPbClNfQyDPANS4nVY2CJ5umHT4szvEMfcgH03C37pRtYh+npzZtmUIjOtKPThYcNPcmKL6iQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DB1hKCqGNhi1BYeE2pd5E49mLAJsrtPPxOP6hgLSZ4c=;
+ b=b3MRJCebx2Rc+DUaa/qQwJ8snGKwzaQMeQtuEnQ3GIBXszvUdR13qfDYtaN3m8CMHCbikWCFhIZ4pLvm+BdSHkRRZLYjfADoD2bdmeRKgy2kWIyh1mFSAsLJ089agO2+vLTaB7P9zuSsfKbWfl0Qm2DRlHzPxYuM3KhYkU7loebIPkRkp/3AAxW/znUCS5kcLvCDQ2lGWduvTDgQzNp7nSmXBNveQvWh64GUCT7weLOWz2EYIPAxOO1k+zXqoiVk09UUWUocQErZhZVB7O0yLgs9a8uUjUBVyxv2YS/TPwyzBRh0EGzuhAdfZpO3MU194bmTuBw0TMy3yYgRWTUoug==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DB1hKCqGNhi1BYeE2pd5E49mLAJsrtPPxOP6hgLSZ4c=;
+ b=lDMoTqWGBRcJgP5rEUhKUEGC5hxY/nhyKNsTt9bIREdefXRlG1l344BmmRsFal3n36V2VKcIoCLbvYIrdhh2O1GXwJ8XiZpJaCUGiezqhpAOVJB68G4kEtEwdc4IZH237D9DTp4hQbFIB5B2HhKIS7XpvKHUSdZJ/Bfgvbhm/oMYLhFtyYNA3I/VrXj7j/7kl6O+GkN9d7QJL5p0/pj57lGDxIh1rrCAFJNHFe0rnnnWkeqxhhUMWpbWaz9hJz3x5coTHlXKowADVcS5b78OXFjNAaa17iRHjMHEO4nOfA/feSIH4VCZCWKagGWEtSAGVfirMfCmwP6SYbx+7BTqfA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
+ DM6PR12MB4482.namprd12.prod.outlook.com (2603:10b6:5:2a8::23) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6907.31; Wed, 25 Oct 2023 10:54:18 +0000
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::2639:e33c:fff1:68db]) by CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::2639:e33c:fff1:68db%4]) with mapi id 15.20.6907.028; Wed, 25 Oct 2023
+ 10:54:17 +0000
+Message-ID: <56c364ed-9ffa-4194-843e-afd93180700c@nvidia.com>
+Date:   Wed, 25 Oct 2023 11:54:12 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V5 0/4] hwmon: ina3221: Add selective summation support
+Content-Language: en-US
+To:     Thierry Reding <thierry.reding@gmail.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-        Mark Gross <markgross@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-fbdev@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] pwm: make it possible to apply pwm changes in
- atomic context
-Message-ID: <20231025104743.56elaloj3jmojz2v@pengutronix.de>
-References: <cover.1697534024.git.sean@mess.org>
- <a7fcd19938d5422abc59c968ff7b3d5c275577ed.1697534024.git.sean@mess.org>
- <90728c06-4c6c-b3d2-4723-c24711be2fa5@redhat.com>
- <20231019105118.64gdzzixwqrztjir@pengutronix.de>
- <01a505ac-320f-3819-a58d-2b82c1bf2a86@redhat.com>
- <ZTT9fvEF+lqfzGJ/@gofer.mess.org>
- <20231023133417.GE49511@aspen.lan>
- <ZTjll7oTNVWqygbD@gofer.mess.org>
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+References: <20230929103650.86074-1-jonathanh@nvidia.com>
+ <ZScFZDZlTcqwjEJP@orome.fritz.box>
+From:   Jon Hunter <jonathanh@nvidia.com>
+In-Reply-To: <ZScFZDZlTcqwjEJP@orome.fritz.box>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO2P265CA0325.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:a4::25) To CO6PR12MB5444.namprd12.prod.outlook.com
+ (2603:10b6:5:35e::8)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kdxw67dv7iobkbz2"
-Content-Disposition: inline
-In-Reply-To: <ZTjll7oTNVWqygbD@gofer.mess.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|DM6PR12MB4482:EE_
+X-MS-Office365-Filtering-Correlation-Id: 13088dbb-46b6-4bbb-c00c-08dbd548bc67
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NUI7vx2mVdGbbFOwc3g1NfSZax0Jh+KH0gBxTMioSj27IT1Kkox1qnLXxUAmwzWKPY9GfSnilev7YGg+zMgTXmtTIS9DfBISjsyIg/RCTGFuHywp0eNaWKs3UU/Xl3QRqpRKKcG/cjqVlb3fG06XQkJsa1rM6TCBqH8FBPNX2b+ZConT6LhCysx/gIt5bI7mFIMRgmdJuHKN611QeAJGVk3kehpUqLZJZ+pw09m+dFuJ6jm9BvA8IdZ+dZ4xhCLx0BHqgoSdcd9rmu7QZimsSBwfzCT3tipb21bwikYUvsRQ+LSErXmcZ6vEgpIT6lH3E1MVvCLtn8b1ESIvVXNnd2KVo/22SsjqRs6BjBgk+J0Tokd1b/xl5XdHn2aVQMq7qJv1mhZVRKvoLiOBidKoG+H5tWNqp7AhHyfoV2qXXpA+mPLcwCn3GDSHlLQrP+uYgwyG5y9gs+e5wTyTtrmSiYY1zZTCWimX1XqGHhND5pJSQ8bgl+Xa7PWjzUevJDU2zxj7LCUsRB6HdvKjInvvjXXoC6cmoewDish19+YP0okwZj3xgz1qEvI54j9HW2Pi6wvqTdMS/szEcTNrZL+7fetEisfMK+4YPQLLbTr/5tDKjptDdGis9+rQjv5IqXdiC/UleBf6jdHChu76y7+Cmg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(346002)(376002)(396003)(136003)(366004)(230922051799003)(451199024)(64100799003)(186009)(1800799009)(83380400001)(5660300002)(6486002)(86362001)(66476007)(41300700001)(110136005)(66556008)(66946007)(478600001)(31696002)(6506007)(54906003)(6512007)(316002)(6666004)(8676002)(36756003)(38100700002)(8936002)(4326008)(2906002)(2616005)(53546011)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bndQVHBiUnJYV2lpZnFOdDNtc2hEWU5KM1h2MGhJZVR5N0ZoTkw1VjNIdm9K?=
+ =?utf-8?B?amRvb1VGU1lRQVY5cTB4L3FRZFZSTWc3czBHMnZaRmhpYUpRckoxbHFnOSs5?=
+ =?utf-8?B?TXR4dmZicUk0MlNTOS9DVWV0bk9UbVZIYndyQTdNbnlJMERxSE0yWE9JRTVF?=
+ =?utf-8?B?QUNmRDJXVzRBWjhaNHRQTzVHNlNLbXBPMjNkTnBDdmVpbHhYMnRZYjJzWFdY?=
+ =?utf-8?B?Rkhyc0RSb2dqNS82ZElhWXltdlhCUXZpK0pTbkU2RjJFTnRjSjdTdEk2cWU1?=
+ =?utf-8?B?OTh3bUsrZzFwN2gwMW5LcFFvN1A4N0VnS1pyVHVIVjUvU3FaTS9uUmNjK3g5?=
+ =?utf-8?B?aWVjTnp4UXRndFpLSWk3akF0RndxMXZ2SWx4Z0tVQmJNR2hDY3NiaXoyNnpp?=
+ =?utf-8?B?SGgzc1RWdm5ZanFURWs3clJiclVhK0hIYys2bUpzdXVOcDAwSld2TUJxTjJD?=
+ =?utf-8?B?aFEwaFBqMnRlVVZUMTJQcCtHMi9oeGx5YkhGTW1xZ3NsT1cvckhtUUxNdFc1?=
+ =?utf-8?B?TUlxelM1Q1p5K1YyTEh2SXRQVVE0SEZxaG5UNTJPUFNZbGJ6YTlrU1VMa2V3?=
+ =?utf-8?B?amtwOWUwcFRBWHVZaGpyT20rTUIyU1hnVFMvendPQXJLMlB5RENSeVMyZnJD?=
+ =?utf-8?B?UlN2SWZIa1drTm1udGtVaVNQVXgvaWIzalJBUldyTDVKSXhuVEhYcWhKaHdB?=
+ =?utf-8?B?Q1MrNnZBcld3VXYreVNsT1NOdUZSMHU1M0Qyc3hlT3J5MTVObDRwU0RsVURF?=
+ =?utf-8?B?RXRVTkVJWnZJSW1RbWQ3QjIzUGc1OVFXYjM4UWFLd3pZdWxEelRHNHQ0RXVU?=
+ =?utf-8?B?SDcvTFAraVpTdjkrU1lrK3g0YXdaRmU0SWhGQUZ6ZGF2OVRjT3NLZlhMZDdU?=
+ =?utf-8?B?cHBQaDhtNWNLVTBiZTd5VmxYeGVUcitnYVJaN2ZORDNvZC9BQ1pvUS9kd0J1?=
+ =?utf-8?B?emUyZkdoSE1BenJMUjdxZkZhUmV2Z3ZINk5WeVZYRDBHLzN6b2E2VGVsUmxT?=
+ =?utf-8?B?ZGVvL2JhKzJsU1VqK3JPMnZFcG5FUmQ4SzhGRWY0MDhhUnJxSTRMS1poYXdT?=
+ =?utf-8?B?Wno2UWdBb0svNGZsb3IxYkwxV2lPelcxZng4SGx4dXZhOGFCSzIvL3c3K1Ar?=
+ =?utf-8?B?YUJyeUtVcktaQUg5UElBdEhGOEVNSzRZMVBpZWJRVHJvT2FER0hWaUQ1aHdx?=
+ =?utf-8?B?NE5EV2dKdGlzbnlaTjRtTDB2eUFocmtUcFYzQ1E3M2lVWktDcUFlbjh5U2hm?=
+ =?utf-8?B?WGU1UE9Tek5xb29hbm0zMVEwekVmYks0Y25LY2Q2MitVVmwxR1hzMGg1TjBh?=
+ =?utf-8?B?VVJpUU45U1lqQWsxalBnenZTRVRCdmNZY2J2ZkE4UUxsMEV5a09vOVVzWEQ3?=
+ =?utf-8?B?TFpWNUxsQi9GdnY0THJTME9nTkl5czBuMFNrZlo4TzUzcGEzallQbTEwUm5W?=
+ =?utf-8?B?RDBRMHNwanJpRGt1eHRJdFJLalo4UlhRZkFGSk5jdU9JVHdtOFNiQzFVZXJr?=
+ =?utf-8?B?UlUvMmovVXU5SVpLMEVTbU11U1ZKRHhia0tIOU9JeVpxdUUrTnFLWXNDREtS?=
+ =?utf-8?B?VGRqb2FqN3VLaTcwZGNId2ZWVDhsQkRXR2dXOXFVem5ieGgvRHB6ZHV3WlUx?=
+ =?utf-8?B?Mjc5RXlzZkhNZXRiWkM4T2lmS01jaVVXc0FsejJWVHBSb01tVE80YlQvNGpV?=
+ =?utf-8?B?cVJQK0lOd2tDQ3QwbW5GL2JBY1NkakNabWtDeGtMZDZkWXg0TkFGYkxvUjc2?=
+ =?utf-8?B?ODNOYU5sTklMSUR1RUhlSUFIaVlpWkNpdTk3bDM1Q1ZOU2xQOHlaUTBJU3Fs?=
+ =?utf-8?B?N1h5U0h5WmJGTlNBREQ0bDFjNTZvWUJWT0ZZT05ycjFnQzNpekNjS05xdGJT?=
+ =?utf-8?B?cm1KKy9Pcktza0crc3hkWWNuMzJtNlR2eEcwZzFLRXNsa01FZEpvUnNjaGdT?=
+ =?utf-8?B?bEJhUjBrNWRLRlJGb2lFVHV1V2RwdTVWemhrendhYUs3d0RxR0Z0UHh6Tm9m?=
+ =?utf-8?B?UnRRQWt6bEZnUTZQLzF1UzNpeis0cmpjL2IrZU9zT0JaaUdGYWZPYkFrLzVi?=
+ =?utf-8?B?bzh1K3dmNTNwbFV3QkxLdmUxUTdMYTFHaTJ1M0o5Y3BDU2R2cE8xTGdUaEhG?=
+ =?utf-8?B?aFBubGdsM01ROTZVRHcvOXpmNjN6dHJ3R0dEUFV1QkQ4TCtxVWhVTmNvTTJS?=
+ =?utf-8?B?V2hOLy9RMHhsS1VQRjlrM2dEWmVsY0FPWUdTVnFMbVAyR1orZHQzUEVOUjF5?=
+ =?utf-8?B?Y0VLa1ZuSXV2cmJld3I0cFZlYjZRPT0=?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 13088dbb-46b6-4bbb-c00c-08dbd548bc67
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2023 10:54:17.9424
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: h6ghBQ++GuvXdGeT/fowsBGnaoVyb02MOUNkaGXgj3Z+qmA7oPhnKew/3v2VXeeEBA6HAsdtrGZBshNDvLIzVg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4482
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+Hi Jean, Guenter,
 
---kdxw67dv7iobkbz2
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 11/10/2023 21:28, Thierry Reding wrote:
+> On Fri, Sep 29, 2023 at 11:36:46AM +0100, Jon Hunter wrote:
+>> The current INA3221 driver always sums the shunt voltage for all enabled
+>> channels regardless of the shunt-resistor used for each channel. Summing
+>> the shunt-voltage for channels is only meaningful if the shunt resistor
+>> is the same for each channel. This series adds device-tree support to
+>> allow which channels are summed in device-tree.
+>>
+>> Changes since V4:
+>> - Moved dt-binding comment added in V4 from patch #2 to patch #1.
+>>
+>> Changes since V3:
+>> - Added missing descriptions for new structure members that was reported
+>>    by the kernel-test-bot.
+>> - Added comment in the ina3221 dt-binding doc example to explain why we
+>>    need to explicitly disable channels.
+>> - Added more commentary in the commit message for the new DT property
+>>    to explain that this property does not change the behaviour of the
+>>    driver unless it is populated.
+>>
+>> Changes since V2:
+>> - Added note to binding-doc to indicate that input channels must be
+>>    explicitly disabled.
+>> - Corrected ordering of properties in the binding-doc
+>> - Updated license for the binding-doc to be dual licensed.
+>> - Changed newly added property from 'summation-bypass' to
+>>    summation-disable'.
+>> - Documented type for the new 'summation-disable' property.
+>> - Corrected spelling and comments as per the feedback received.
+>> - Used debugfs instead of sysfs for exposing the 'summation-disable'
+>>    status for each input channel.
+>> - Populated missing instances for the ina3221 device for Tegra234
+>>    boards.
+>> - Populated ina219 device for the NVIDIA IGX board (not strictly
+>>    related to this series but related to populating all
+>>    power-sensors for Tegra234 boards)
+>>
+>> Changes since V1:
+>> - Added yaml conversion patch for binding-doc
+>> - Added binding-doc documentation patch for new property
+>> - Added patch to populate ina3221 devices for Tegra234.
+>>
+>> Jon Hunter (2):
+>>    dt-bindings: hwmon: ina3221: Add ti,summation-disable
+>>    arm64: tegra: Add power-sensors for Tegra234 boards
+>>
+>> Ninad Malwade (2):
+>>    dt-bindings: hwmon: ina3221: Convert to json-schema
+>>    hwmon: ina3221: Add support for channel summation disable
+> 
+> Jean, Guenter,
+> 
+> do you mind if I pick up patches 1, 2 and 4 into the Tegra tree? It's
+> usually convenient to keep the DT bindings and DT additions in the same
+> tree for validation.
 
-Hello,
 
-On Wed, Oct 25, 2023 at 10:53:27AM +0100, Sean Young wrote:
-> On Mon, Oct 23, 2023 at 02:34:17PM +0100, Daniel Thompson wrote:
-> > On Sun, Oct 22, 2023 at 11:46:22AM +0100, Sean Young wrote:
-> > > On Sat, Oct 21, 2023 at 11:08:22AM +0200, Hans de Goede wrote:
-> > > > On 10/19/23 12:51, Uwe Kleine-K=F6nig wrote:
-> > > > > On Wed, Oct 18, 2023 at 03:57:48PM +0200, Hans de Goede wrote:
-> > > > >> On 10/17/23 11:17, Sean Young wrote:
-> > > > > I think it's very subjective if you consider this
-> > > > > churn or not.
-> > > >
-> > > > I consider it churn because I don't think adding a postfix
-> > > > for what is the default/expected behavior is a good idea
-> > > > (with GPIOs not sleeping is the expected behavior).
-> > > >
-> > > > I agree that this is very subjective and very much goes
-> > > > into the territory of bikeshedding. So please consider
-> > > > the above my 2 cents on this and lets leave it at that.
-> > >
-> > > You have a valid point. Let's focus on having descriptive function na=
-mes.
-> >=20
-> > For a couple of days I've been trying to resist the bikeshedding (esp.
-> > given the changes to backlight are tiny) so I'll try to keep it as
-> > brief as I can:
-> >=20
-> > 1. I dislike the do_it() and do_it_cansleep() pairing. It is
-> >    difficult to detect when a client driver calls do_it() by mistake.
-> >    In fact a latent bug of this nature can only be detected by runtime
-> >    testing with the small number of PWMs that do not support
-> >    configuration from an atomic context.
-> >=20
-> >    In contrast do_it() and do_it_atomic()[*] means that although
-> >    incorrectly calling do_it() from an atomic context can be pretty
-> >    catastrophic it is also trivially detected (with any PWM driver)
-> >    simply by running with CONFIG_DEBUG_ATOMIC_SLEEP.
+I have not seen any feedback on this from you? Please let me know if 
+this version is now OK with you?
 
-Wrongly calling the atomic variant (no matter how it's named) in a
-context where sleeping is possible is only a minor issue. Being faster
-than necessary is hardly a problem, so it only hurts by not being an
-preemption point with PREEMPT_VOLUNTARY which might not even be relevant
-because we're near to a system call anyhow.
+Thanks
+Jon
 
-For me the naming is only very loosely related to the possible bugs. I
-think calling the wrong function happens mainly because the driver author
-isn't aware in which context the call happens and not because of wrong
-assumptions about the sleepiness of a certain function call.
-If you consider this an argument however, do_it + do_it_cansleep is
-better than do_it_atomic + do_it as wrongly assuming do_it would sleep
-is less bad than wrongly assuming do_it wouldn't sleep. (The latter is
-catched by CONFIG_DEBUG_ATOMIC_SLEEP, but only if it's enabled.)
-
-Having said that while my subjective preference ordering is (with first
-=3D best):
-
-	do_it + do_it_cansleep
-	do_it_atomic + do_it_cansleep
-	do_it_atomic + do_it
-
-wi(th a _might_sleep or _mightsleep suffix ranging below _cansleep)
-I wouldn't get sleepless nights when I get overruled here
-(uwe_cansleep :-).
-
-> >    No objections (beyond churn) to fully spelt out pairings such as
-> >    do_it_cansleep() and do_it_atomic()[*]!
->=20
-> I must say I do like the look of this. Uwe, how do you feel about:
-> pwm_apply_cansleep() and pwm_apply_atomic()? I know we've talked about
-> pwm_apply_atomic in the past, however I think this this the best=20
-> option I've seen so far.
->=20
-> > 2. If there is an API rename can we make sure the patch contains no
-> >    other changes (e.g. don't introduce any new API in the same patch).
-> >    Seperating renames makes the patches easier to review!
-> >    It makes each one smaller and easier to review!
->=20
-> Yes, this should have been separated out. Will fix for next version.
-
-+1
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---kdxw67dv7iobkbz2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmU48k8ACgkQj4D7WH0S
-/k6W3AgAk4aFQs6woLctFKPwObedmFaF4LVusjnyP2JYEuwOcWzfmL/W31PFxuWP
-KEm7kc/16r0LD6qbwwgpOGUucBHmXKkmJa+0tdj/pRKkbkBfbA/RDaly9ZNh9Aql
-dZEuZ4CyAE7Pw6ea3ZQhQL1W4x37ZZwVPMvNmQaydtP5VBP1cBrml1SBcrT+6r0j
-j6N5LZR1Jb1+8XuisgUnufJAbBpykKTDJSdqwsREGb93kuDzhiTB7/YDFXe9P8fs
-NOvV78af278xkuohhXrWRRdqJSd+/PDGii+WImHHQpWcJPmcgwsXMCnjnK7DruZR
-Ket6emGp+CLdMp+GKhD7b53atfLNjQ==
-=7sp5
------END PGP SIGNATURE-----
-
---kdxw67dv7iobkbz2--
+-- 
+nvpublic
