@@ -2,193 +2,179 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26A8FC0032E
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Oct 2023 10:54:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9985C25B47
+	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Oct 2023 11:01:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234657AbjJYKye (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 Oct 2023 06:54:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43384 "EHLO
+        id S233804AbjJYLBc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 25 Oct 2023 07:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234685AbjJYKy2 (ORCPT
+        with ESMTP id S232076AbjJYLBa (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 Oct 2023 06:54:28 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2056.outbound.protection.outlook.com [40.107.102.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451341B6;
-        Wed, 25 Oct 2023 03:54:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JxsRgZupDPQX4O/8QMKWOMLZ6biyHrwZQ+29FaWHBWxqc7/y6LVyfjAx1Zk5d+yJLTosfZn+KdJM5IV1dTwd7fLWWklAhWAnkVYtTzqpMozuDS8m/2PFArkkQL4BYSysp/nw9+S4FyX87ieoqo/oSQDdaOtlwWfMhpZPy98chAjvupONpc0hfPWccBycdxvkHolIwlFKPDVNH9VDBl8O1l8ftI1tRtBV/TjPzFCO86WXSbgmzaGodCyykEq8Is6CQP55xO1N0y9korPbClNfQyDPANS4nVY2CJ5umHT4szvEMfcgH03C37pRtYh+npzZtmUIjOtKPThYcNPcmKL6iQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DB1hKCqGNhi1BYeE2pd5E49mLAJsrtPPxOP6hgLSZ4c=;
- b=b3MRJCebx2Rc+DUaa/qQwJ8snGKwzaQMeQtuEnQ3GIBXszvUdR13qfDYtaN3m8CMHCbikWCFhIZ4pLvm+BdSHkRRZLYjfADoD2bdmeRKgy2kWIyh1mFSAsLJ089agO2+vLTaB7P9zuSsfKbWfl0Qm2DRlHzPxYuM3KhYkU7loebIPkRkp/3AAxW/znUCS5kcLvCDQ2lGWduvTDgQzNp7nSmXBNveQvWh64GUCT7weLOWz2EYIPAxOO1k+zXqoiVk09UUWUocQErZhZVB7O0yLgs9a8uUjUBVyxv2YS/TPwyzBRh0EGzuhAdfZpO3MU194bmTuBw0TMy3yYgRWTUoug==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DB1hKCqGNhi1BYeE2pd5E49mLAJsrtPPxOP6hgLSZ4c=;
- b=lDMoTqWGBRcJgP5rEUhKUEGC5hxY/nhyKNsTt9bIREdefXRlG1l344BmmRsFal3n36V2VKcIoCLbvYIrdhh2O1GXwJ8XiZpJaCUGiezqhpAOVJB68G4kEtEwdc4IZH237D9DTp4hQbFIB5B2HhKIS7XpvKHUSdZJ/Bfgvbhm/oMYLhFtyYNA3I/VrXj7j/7kl6O+GkN9d7QJL5p0/pj57lGDxIh1rrCAFJNHFe0rnnnWkeqxhhUMWpbWaz9hJz3x5coTHlXKowADVcS5b78OXFjNAaa17iRHjMHEO4nOfA/feSIH4VCZCWKagGWEtSAGVfirMfCmwP6SYbx+7BTqfA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
- DM6PR12MB4482.namprd12.prod.outlook.com (2603:10b6:5:2a8::23) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6907.31; Wed, 25 Oct 2023 10:54:18 +0000
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::2639:e33c:fff1:68db]) by CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::2639:e33c:fff1:68db%4]) with mapi id 15.20.6907.028; Wed, 25 Oct 2023
- 10:54:17 +0000
-Message-ID: <56c364ed-9ffa-4194-843e-afd93180700c@nvidia.com>
-Date:   Wed, 25 Oct 2023 11:54:12 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V5 0/4] hwmon: ina3221: Add selective summation support
-Content-Language: en-US
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-References: <20230929103650.86074-1-jonathanh@nvidia.com>
- <ZScFZDZlTcqwjEJP@orome.fritz.box>
-From:   Jon Hunter <jonathanh@nvidia.com>
-In-Reply-To: <ZScFZDZlTcqwjEJP@orome.fritz.box>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO2P265CA0325.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:a4::25) To CO6PR12MB5444.namprd12.prod.outlook.com
- (2603:10b6:5:35e::8)
+        Wed, 25 Oct 2023 07:01:30 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E244B9D;
+        Wed, 25 Oct 2023 04:01:27 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id d2e1a72fcca58-6b20577ef7bso4555059b3a.3;
+        Wed, 25 Oct 2023 04:01:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698231687; x=1698836487; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=piuEhlKzYYwzHRc+GXT0yNRApgseVG2f389HXHULRS8=;
+        b=N+Zq/6DkSuaGZ1gFcJfJ2+mjoJVVFxr7kXryJ/i/SOHnlHmkGeiA15ZsIKVVGbhwv6
+         UAWo1a79TRF8wenzI8+ZrrqKxh5OK2Eafl8zgPagtzq3iXRN5wpu+4VHjxOPfGP0lu54
+         V9u0R0WkQz1M03E3HSBnlEffDmG6qTlXPEqIxZW4+mFgZzW2VxSh/72L+tY3Bg43jcYq
+         oxbfWmKc7qZh/NpDZbwMYiZSASoZ/z6ccQ7Ps0pV7pC63cLu/xKpTqCn/PxOIj82U7W6
+         qSEZKHzMOELdzRRENb6uekOOkKJ5vSKUdfiJW7/BJ9th/p7Yeieti4exizGexSEVy1yz
+         WzoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698231687; x=1698836487;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=piuEhlKzYYwzHRc+GXT0yNRApgseVG2f389HXHULRS8=;
+        b=lkDUTrQXQ4R53/hB/1Mk6Dwn/ncYTStBMn9W7DQXisl1vDfkxcCrMLkbl4hY+48xHs
+         xwaeKz3wNM0tfQ34YfTrVXNlq9mYA5gtmtMme72dOO8TFMlnNyc1gVinrdUlG0NVmdtD
+         Eyq0G/OSDswelZVMb4foTe8wpHcbWFlTcgzMqpAR22MplKPY1NWd1jbxfEqZt/JLNaGK
+         x3m7tZ3P7YS1wxrp6qj7WTqhwQ6Zmm8YIIJpKir/qVjfLt0/ZDs6DGVNB6JgHedq2E8k
+         rjCENWz+JYAJ0X472MaeBT2jcoMZN+qOvOCb+qHnUuiIkELYo8Q3bKOIwvfzXoq0r7xx
+         tOVg==
+X-Gm-Message-State: AOJu0YxqwYM/pwCpixAqUTd3cjMnSW6uk+MiMjx8kuUsRMAF8cDANFVs
+        yXBDRnN8XrVnT/hz6mGwlxk=
+X-Google-Smtp-Source: AGHT+IEFeaSOeoi2yUNTRWdDS9nkIWcP8+NXq94HUP9lvXACogZgvVbynbMTtkQkCxXtKGnAYSN7jw==
+X-Received: by 2002:a05:6a00:27a0:b0:690:c306:151a with SMTP id bd32-20020a056a0027a000b00690c306151amr13059034pfb.0.1698231685948;
+        Wed, 25 Oct 2023 04:01:25 -0700 (PDT)
+Received: from dawn-Aspire-A715-74G.. ([183.198.109.198])
+        by smtp.gmail.com with ESMTPSA id r1-20020aa79881000000b006babcf86b84sm9139783pfl.34.2023.10.25.04.01.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Oct 2023 04:01:25 -0700 (PDT)
+From:   Li peiyu <579lpy@gmail.com>
+To:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Li peiyu <579lpy@gmail.com>
+Subject: [PATCH] dt-bindings: hwmon: lm87: convert to YAML
+Date:   Wed, 25 Oct 2023 19:00:03 +0800
+Message-Id: <20231025110003.10769-1-579lpy@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|DM6PR12MB4482:EE_
-X-MS-Office365-Filtering-Correlation-Id: 13088dbb-46b6-4bbb-c00c-08dbd548bc67
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NUI7vx2mVdGbbFOwc3g1NfSZax0Jh+KH0gBxTMioSj27IT1Kkox1qnLXxUAmwzWKPY9GfSnilev7YGg+zMgTXmtTIS9DfBISjsyIg/RCTGFuHywp0eNaWKs3UU/Xl3QRqpRKKcG/cjqVlb3fG06XQkJsa1rM6TCBqH8FBPNX2b+ZConT6LhCysx/gIt5bI7mFIMRgmdJuHKN611QeAJGVk3kehpUqLZJZ+pw09m+dFuJ6jm9BvA8IdZ+dZ4xhCLx0BHqgoSdcd9rmu7QZimsSBwfzCT3tipb21bwikYUvsRQ+LSErXmcZ6vEgpIT6lH3E1MVvCLtn8b1ESIvVXNnd2KVo/22SsjqRs6BjBgk+J0Tokd1b/xl5XdHn2aVQMq7qJv1mhZVRKvoLiOBidKoG+H5tWNqp7AhHyfoV2qXXpA+mPLcwCn3GDSHlLQrP+uYgwyG5y9gs+e5wTyTtrmSiYY1zZTCWimX1XqGHhND5pJSQ8bgl+Xa7PWjzUevJDU2zxj7LCUsRB6HdvKjInvvjXXoC6cmoewDish19+YP0okwZj3xgz1qEvI54j9HW2Pi6wvqTdMS/szEcTNrZL+7fetEisfMK+4YPQLLbTr/5tDKjptDdGis9+rQjv5IqXdiC/UleBf6jdHChu76y7+Cmg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(346002)(376002)(396003)(136003)(366004)(230922051799003)(451199024)(64100799003)(186009)(1800799009)(83380400001)(5660300002)(6486002)(86362001)(66476007)(41300700001)(110136005)(66556008)(66946007)(478600001)(31696002)(6506007)(54906003)(6512007)(316002)(6666004)(8676002)(36756003)(38100700002)(8936002)(4326008)(2906002)(2616005)(53546011)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bndQVHBiUnJYV2lpZnFOdDNtc2hEWU5KM1h2MGhJZVR5N0ZoTkw1VjNIdm9K?=
- =?utf-8?B?amRvb1VGU1lRQVY5cTB4L3FRZFZSTWc3czBHMnZaRmhpYUpRckoxbHFnOSs5?=
- =?utf-8?B?TXR4dmZicUk0MlNTOS9DVWV0bk9UbVZIYndyQTdNbnlJMERxSE0yWE9JRTVF?=
- =?utf-8?B?QUNmRDJXVzRBWjhaNHRQTzVHNlNLbXBPMjNkTnBDdmVpbHhYMnRZYjJzWFdY?=
- =?utf-8?B?Rkhyc0RSb2dqNS82ZElhWXltdlhCUXZpK0pTbkU2RjJFTnRjSjdTdEk2cWU1?=
- =?utf-8?B?OTh3bUsrZzFwN2gwMW5LcFFvN1A4N0VnS1pyVHVIVjUvU3FaTS9uUmNjK3g5?=
- =?utf-8?B?aWVjTnp4UXRndFpLSWk3akF0RndxMXZ2SWx4Z0tVQmJNR2hDY3NiaXoyNnpp?=
- =?utf-8?B?SGgzc1RWdm5ZanFURWs3clJiclVhK0hIYys2bUpzdXVOcDAwSld2TUJxTjJD?=
- =?utf-8?B?aFEwaFBqMnRlVVZUMTJQcCtHMi9oeGx5YkhGTW1xZ3NsT1cvckhtUUxNdFc1?=
- =?utf-8?B?TUlxelM1Q1p5K1YyTEh2SXRQVVE0SEZxaG5UNTJPUFNZbGJ6YTlrU1VMa2V3?=
- =?utf-8?B?amtwOWUwcFRBWHVZaGpyT20rTUIyU1hnVFMvendPQXJLMlB5RENSeVMyZnJD?=
- =?utf-8?B?UlN2SWZIa1drTm1udGtVaVNQVXgvaWIzalJBUldyTDVKSXhuVEhYcWhKaHdB?=
- =?utf-8?B?Q1MrNnZBcld3VXYreVNsT1NOdUZSMHU1M0Qyc3hlT3J5MTVObDRwU0RsVURF?=
- =?utf-8?B?RXRVTkVJWnZJSW1RbWQ3QjIzUGc1OVFXYjM4UWFLd3pZdWxEelRHNHQ0RXVU?=
- =?utf-8?B?SDcvTFAraVpTdjkrU1lrK3g0YXdaRmU0SWhGQUZ6ZGF2OVRjT3NLZlhMZDdU?=
- =?utf-8?B?cHBQaDhtNWNLVTBiZTd5VmxYeGVUcitnYVJaN2ZORDNvZC9BQ1pvUS9kd0J1?=
- =?utf-8?B?emUyZkdoSE1BenJMUjdxZkZhUmV2Z3ZINk5WeVZYRDBHLzN6b2E2VGVsUmxT?=
- =?utf-8?B?ZGVvL2JhKzJsU1VqK3JPMnZFcG5FUmQ4SzhGRWY0MDhhUnJxSTRMS1poYXdT?=
- =?utf-8?B?Wno2UWdBb0svNGZsb3IxYkwxV2lPelcxZng4SGx4dXZhOGFCSzIvL3c3K1Ar?=
- =?utf-8?B?YUJyeUtVcktaQUg5UElBdEhGOEVNSzRZMVBpZWJRVHJvT2FER0hWaUQ1aHdx?=
- =?utf-8?B?NE5EV2dKdGlzbnlaTjRtTDB2eUFocmtUcFYzQ1E3M2lVWktDcUFlbjh5U2hm?=
- =?utf-8?B?WGU1UE9Tek5xb29hbm0zMVEwekVmYks0Y25LY2Q2MitVVmwxR1hzMGg1TjBh?=
- =?utf-8?B?VVJpUU45U1lqQWsxalBnenZTRVRCdmNZY2J2ZkE4UUxsMEV5a09vOVVzWEQ3?=
- =?utf-8?B?TFpWNUxsQi9GdnY0THJTME9nTkl5czBuMFNrZlo4TzUzcGEzallQbTEwUm5W?=
- =?utf-8?B?RDBRMHNwanJpRGt1eHRJdFJLalo4UlhRZkFGSk5jdU9JVHdtOFNiQzFVZXJr?=
- =?utf-8?B?UlUvMmovVXU5SVpLMEVTbU11U1ZKRHhia0tIOU9JeVpxdUUrTnFLWXNDREtS?=
- =?utf-8?B?VGRqb2FqN3VLaTcwZGNId2ZWVDhsQkRXR2dXOXFVem5ieGgvRHB6ZHV3WlUx?=
- =?utf-8?B?Mjc5RXlzZkhNZXRiWkM4T2lmS01jaVVXc0FsejJWVHBSb01tVE80YlQvNGpV?=
- =?utf-8?B?cVJQK0lOd2tDQ3QwbW5GL2JBY1NkakNabWtDeGtMZDZkWXg0TkFGYkxvUjc2?=
- =?utf-8?B?ODNOYU5sTklMSUR1RUhlSUFIaVlpWkNpdTk3bDM1Q1ZOU2xQOHlaUTBJU3Fs?=
- =?utf-8?B?N1h5U0h5WmJGTlNBREQ0bDFjNTZvWUJWT0ZZT05ycjFnQzNpekNjS05xdGJT?=
- =?utf-8?B?cm1KKy9Pcktza0crc3hkWWNuMzJtNlR2eEcwZzFLRXNsa01FZEpvUnNjaGdT?=
- =?utf-8?B?bEJhUjBrNWRLRlJGb2lFVHV1V2RwdTVWemhrendhYUs3d0RxR0Z0UHh6Tm9m?=
- =?utf-8?B?UnRRQWt6bEZnUTZQLzF1UzNpeis0cmpjL2IrZU9zT0JaaUdGYWZPYkFrLzVi?=
- =?utf-8?B?bzh1K3dmNTNwbFV3QkxLdmUxUTdMYTFHaTJ1M0o5Y3BDU2R2cE8xTGdUaEhG?=
- =?utf-8?B?aFBubGdsM01ROTZVRHcvOXpmNjN6dHJ3R0dEUFV1QkQ4TCtxVWhVTmNvTTJS?=
- =?utf-8?B?V2hOLy9RMHhsS1VQRjlrM2dEWmVsY0FPWUdTVnFMbVAyR1orZHQzUEVOUjF5?=
- =?utf-8?B?Y0VLa1ZuSXV2cmJld3I0cFZlYjZRPT0=?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 13088dbb-46b6-4bbb-c00c-08dbd548bc67
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2023 10:54:17.9424
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: h6ghBQ++GuvXdGeT/fowsBGnaoVyb02MOUNkaGXgj3Z+qmA7oPhnKew/3v2VXeeEBA6HAsdtrGZBshNDvLIzVg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4482
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Jean, Guenter,
+Convert the lm87 hwmon sensor bindings to DT schema
 
-On 11/10/2023 21:28, Thierry Reding wrote:
-> On Fri, Sep 29, 2023 at 11:36:46AM +0100, Jon Hunter wrote:
->> The current INA3221 driver always sums the shunt voltage for all enabled
->> channels regardless of the shunt-resistor used for each channel. Summing
->> the shunt-voltage for channels is only meaningful if the shunt resistor
->> is the same for each channel. This series adds device-tree support to
->> allow which channels are summed in device-tree.
->>
->> Changes since V4:
->> - Moved dt-binding comment added in V4 from patch #2 to patch #1.
->>
->> Changes since V3:
->> - Added missing descriptions for new structure members that was reported
->>    by the kernel-test-bot.
->> - Added comment in the ina3221 dt-binding doc example to explain why we
->>    need to explicitly disable channels.
->> - Added more commentary in the commit message for the new DT property
->>    to explain that this property does not change the behaviour of the
->>    driver unless it is populated.
->>
->> Changes since V2:
->> - Added note to binding-doc to indicate that input channels must be
->>    explicitly disabled.
->> - Corrected ordering of properties in the binding-doc
->> - Updated license for the binding-doc to be dual licensed.
->> - Changed newly added property from 'summation-bypass' to
->>    summation-disable'.
->> - Documented type for the new 'summation-disable' property.
->> - Corrected spelling and comments as per the feedback received.
->> - Used debugfs instead of sysfs for exposing the 'summation-disable'
->>    status for each input channel.
->> - Populated missing instances for the ina3221 device for Tegra234
->>    boards.
->> - Populated ina219 device for the NVIDIA IGX board (not strictly
->>    related to this series but related to populating all
->>    power-sensors for Tegra234 boards)
->>
->> Changes since V1:
->> - Added yaml conversion patch for binding-doc
->> - Added binding-doc documentation patch for new property
->> - Added patch to populate ina3221 devices for Tegra234.
->>
->> Jon Hunter (2):
->>    dt-bindings: hwmon: ina3221: Add ti,summation-disable
->>    arm64: tegra: Add power-sensors for Tegra234 boards
->>
->> Ninad Malwade (2):
->>    dt-bindings: hwmon: ina3221: Convert to json-schema
->>    hwmon: ina3221: Add support for channel summation disable
-> 
-> Jean, Guenter,
-> 
-> do you mind if I pick up patches 1, 2 and 4 into the Tegra tree? It's
-> usually convenient to keep the DT bindings and DT additions in the same
-> tree for validation.
+Signed-off-by: Li peiyu <579lpy@gmail.com>
+---
+ .../devicetree/bindings/hwmon/lm87.txt        | 30 ----------
+ .../devicetree/bindings/hwmon/lm87.yaml       | 59 +++++++++++++++++++
+ 2 files changed, 59 insertions(+), 30 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/hwmon/lm87.txt
+ create mode 100644 Documentation/devicetree/bindings/hwmon/lm87.yaml
 
-
-I have not seen any feedback on this from you? Please let me know if 
-this version is now OK with you?
-
-Thanks
-Jon
-
+diff --git a/Documentation/devicetree/bindings/hwmon/lm87.txt b/Documentation/devicetree/bindings/hwmon/lm87.txt
+deleted file mode 100644
+index 758ff398b67b..000000000000
+--- a/Documentation/devicetree/bindings/hwmon/lm87.txt
++++ /dev/null
+@@ -1,30 +0,0 @@
+-*LM87 hwmon sensor.
+-
+-Required properties:
+-- compatible: Should be
+-	"ti,lm87"
+-
+-- reg: I2C address
+-
+-optional properties:
+-- has-temp3: This configures pins 18 and 19 to be used as a second
+-             remote temperature sensing channel. By default the pins
+-             are configured as voltage input pins in0 and in5.
+-
+-- has-in6: When set, pin 5 is configured to be used as voltage input
+-           in6. Otherwise the pin is set as FAN1 input.
+-
+-- has-in7: When set, pin 6 is configured to be used as voltage input
+-           in7. Otherwise the pin is set as FAN2 input.
+-
+-- vcc-supply: a Phandle for the regulator supplying power, can be
+-              configured to measure 5.0V power supply. Default is 3.3V.
+-
+-Example:
+-
+-lm87@2e {
+-	compatible = "ti,lm87";
+-	reg = <0x2e>;
+-	has-temp3;
+-	vcc-supply = <&reg_5v0>;
+-};
+diff --git a/Documentation/devicetree/bindings/hwmon/lm87.yaml b/Documentation/devicetree/bindings/hwmon/lm87.yaml
+new file mode 100644
+index 000000000000..54d6ef6700ef
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/lm87.yaml
+@@ -0,0 +1,59 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/lm87.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: LM87 hwmon sensor
++
++maintainers:
++  - Jean Delvare <jdelvare@suse.com>
++  - Guenter Roeck <linux@roeck-us.net>
++
++properties:
++  compatible:
++    const: ti,lm87
++
++  reg:
++    maxItems: 1
++
++  has-temp3:
++    description: |
++      This configures pins 18 and 19 to be used as a second remote
++      temperature sensing channel. By default the pins are configured
++      as voltage input pins in0 and in5.
++
++  has-in6:
++    description: |
++      When set, pin 5 is configured to be used as voltage input in6.
++      Otherwise the pin is set as FAN1 input.
++
++  has-in7:
++    description: |
++      When set, pin 6 is configured to be used as voltage input in7.
++      Otherwise the pin is set as FAN2 input.
++
++  vcc-supply:
++    description: |
++      a Phandle for the regulator supplying power, can be configured to
++      measure 5.0V power supply. Default is 3.3V.
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      lm87@2e {
++        compatible = "ti,lm87";
++        reg = <0x2e>;
++        has-temp3;
++	vcc-supply = <&reg_5v0>;
++      };
++    };
 -- 
-nvpublic
+2.34.1
+
