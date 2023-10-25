@@ -2,85 +2,90 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EB21C07545
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Oct 2023 19:00:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47F69C07545
+	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Oct 2023 19:35:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbjJYTAY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 Oct 2023 15:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33384 "EHLO
+        id S229573AbjJYTfV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 25 Oct 2023 15:35:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjJYTAX (ORCPT
+        with ESMTP id S229498AbjJYTfV (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 Oct 2023 15:00:23 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1169F10E;
-        Wed, 25 Oct 2023 12:00:22 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1c9e95aa02dso569465ad.0;
-        Wed, 25 Oct 2023 12:00:22 -0700 (PDT)
+        Wed, 25 Oct 2023 15:35:21 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4597137;
+        Wed, 25 Oct 2023 12:35:18 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1cc04494653so342935ad.2;
+        Wed, 25 Oct 2023 12:35:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698260421; x=1698865221; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nzAfQ6yYZLyhx2cAwtxAGCA0+tOzhnyj4YuE87FGQU4=;
-        b=bIsGHb7WaVBQ74oLBGji5cEIrgoN6P9fvH2alJukwyw8Uh34w2+o96pbJ9G66cStNL
-         O8wkG4nsPp3C+xj7jC6ug9A5vGQzgOtW5UdgbkEKmYhfaRtUb9wUA9q3ehy23PiEd9k1
-         jDqVPgVtOAnkk+mqjnYbaFZIGsdER14TPRthHpIV5cjznvB1l4V6ahFubjXTtueIIAC9
-         ihr+lyuXZaG0bJYIBgT6HAEgalzYK3+/zrMpYT168UdRB2IqiRDDod07Ogh82I8ToIqA
-         WvmziC3JhNCvwaIsnTY/6tnQE1HgQRU+PchxNA9rkxJPO1Y+8b/+Qfs0njyPjdWGKfwF
-         JNlw==
+        d=gmail.com; s=20230601; t=1698262518; x=1698867318; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4PfZS2v4rKeH7WpwcRNnwJfVzvCUVvoLwgj4JaCkmXw=;
+        b=fe5z7E0HoVH30aW+MgpJk1dmyB61G+BkcDfsgeLtcinrQM2oa0jjGtzadSZm6Jl+mt
+         c2+aK6zUIJwKK32TXsm37CUwv5CSHQ8/MGJj8lZlnSLxtOtwQED7w5bC3LBWxHZyp5FP
+         QPOdAFcrBov2pKOL5BNn2HC90ebmCqXcoIzGU/gRRx5w75OFeMlMUB1T7wnV8rpYx1vs
+         TMROI1fen+497VMK81E6lA4F0csNAFVG/OMNoALX6YxkS9igzyl1T50qVSQ3FCn2kQ7H
+         NkIS6H0aTqSeZme0yxMdPk0iQMWVfrCGXmDGwHUgtuqRgvJ9PS0YKXcl+gNYabwj2mIs
+         WjXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698260421; x=1698865221;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nzAfQ6yYZLyhx2cAwtxAGCA0+tOzhnyj4YuE87FGQU4=;
-        b=f6j5EuLS21jBkiygUhYLUfZe1K7QEyTKOKFj75QWzWbUdfnJ+NHp381G7Q7gCLaUgf
-         jmhcAfE8OlJic/RIhptZOC2I2gh86wHtpgUf34naerS/S5bAX2+Goz5wg1UCt+87LXOR
-         ZBb1s4Y+Z5ltc9fJSNMI5MBYqpV5fPbh8dtlR0VAcHuVBwxEdQ8eQleIQ7TEzj9n2UCb
-         c1tipL9aT2uVWCcVaUpmDJZhg0CYXL+ECFug8z/F4c/x0b86x96mG5GYiQO8/cIhHVDg
-         eFNhqXx54EJp8FfAR/Z18y53yjRSGEoK7mFAmBh9oim7KoelTqoXiXbtyGsFN8Z/gldB
-         dhJw==
-X-Gm-Message-State: AOJu0YyKcCgDkKe1CCub+Y2hSakt52iFp6EXK+px1Pj+7IetjAsR19Ve
-        nqQU5YG2ajDYjTIJ0oUo3ytdX7fa7T4=
-X-Google-Smtp-Source: AGHT+IH0f70yOL3Vogs/TZ3xF70f7ik/ljg1vfYB4+38oocqr+9dom1dGVftRe4bhCVo4zwwbojxUg==
-X-Received: by 2002:a17:902:d50b:b0:1c8:75d9:f7dc with SMTP id b11-20020a170902d50b00b001c875d9f7dcmr626772plg.28.1698260421448;
-        Wed, 25 Oct 2023 12:00:21 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1698262518; x=1698867318;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4PfZS2v4rKeH7WpwcRNnwJfVzvCUVvoLwgj4JaCkmXw=;
+        b=gy8AVH2Xc+OAAgxByCPGp+vg0wgYsGi9po2+xewhZBzmadRp3xrq96YUL+o4FmQZ5+
+         0tMb2nLatISvBcjEWwK/pMeNhcoCCRNILqRcmuDlbXmwhq59Db5w/SVCX2sMJKBACy8k
+         ZZGkK6HYSr0aCQFSYoY6b2EA5YizQzEsQ5Hp3QQumepIyeH1pNPyxg4yxihUaFdhAZms
+         tAkqnKzORQs9y/9GDfaqBmbHVr3kRqJnVGzMXmYAXOEDb+WKI9x5AT7FI/H3wnk7B2k4
+         3A12EiyLhr3m7S/CpWiCXdmFOY9LxRGVZOGZ63KSBrutvctNCHTMtFZrAEeRCRPdpZAr
+         TzmQ==
+X-Gm-Message-State: AOJu0YySBUkHml5HYxRZ3iIFAXbTOuj7VuSuuzF/JywgQaWJLn9NGQNy
+        p9bSuk53oPWBM8taHvQTUmk=
+X-Google-Smtp-Source: AGHT+IFuZDGO+Q1SobzYFl2F2V2CeAc/CplsJkrHeRr4Ij0e5NGsJhhmn7fzCV+5gl3nEVZgpnvHqw==
+X-Received: by 2002:a17:903:2442:b0:1b7:e86f:7631 with SMTP id l2-20020a170903244200b001b7e86f7631mr16157155pls.19.1698262518246;
+        Wed, 25 Oct 2023 12:35:18 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id jj11-20020a170903048b00b001c8a0879805sm9591444plb.206.2023.10.25.12.00.20
+        by smtp.gmail.com with ESMTPSA id m11-20020a170902db0b00b001bf11cf2e21sm9501786plx.210.2023.10.25.12.35.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Oct 2023 12:00:20 -0700 (PDT)
+        Wed, 25 Oct 2023 12:35:17 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 25 Oct 2023 12:00:20 -0700
+Date:   Wed, 25 Oct 2023 12:35:16 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Andre Werner <andre.werner@systec-electronic.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: HS3001: remove redundant store on division
-Message-ID: <6a943960-d283-44e5-b19c-0250d6f4bed8@roeck-us.net>
-References: <20231023135828.667297-1-colin.i.king@gmail.com>
+To:     Ellie Hermaszewska <kernel@monoid.al>
+Cc:     eugene.shalygin@gmail.com, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: (asus-ec-sensors) add ROG Crosshair X670E Gene.
+Message-ID: <d013e9a3-df0a-4b8f-a1f3-db3cbd32812f@roeck-us.net>
+References: <CAB95QAR-UbfVULOCaZMO4H1AgvzbiHEoSYk-DiYPY6Pg-i7Vag@mail.gmail.com>
+ <20231019135640.434752-1-kernel@monoid.al>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20231023135828.667297-1-colin.i.king@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20231019135640.434752-1-kernel@monoid.al>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Oct 23, 2023 at 02:58:28PM +0100, Colin Ian King wrote:
-> Currently the local variable hum is being divided by a constant and
-> the results is being re-assigned back to hum before the value is being
-> returned to the caller. The assignment to hum is redundant and can
-> be removed.
+On Thu, Oct 19, 2023 at 09:51:58PM +0800, Ellie Hermaszewska wrote:
+> These are two separate statements, describing the set of sensors
+> implemented (those I could verify) and the specifics of the T_Sensor new
+> to the X670E motherboards.
 > 
-> Cleans up clang scan build warning:
-> drivers/hwmon/hs3001.c:65:9: warning: Although the value stored to 'hum'
-> is used in the enclosing expression, the value is never actually read
-> from 'hum' [deadcode.DeadStores]
+> Best wishes,
+> Ellie
 > 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> Only the temp sensors that I can verify are present.
+> 
+> T_Sensor is the temperature reading of a 10kΩ β=3435K NTC thermistor
+> optionally connected to the T_SENSOR header.
+> 
+> The other sensors are as found on the X670E HERO.
+> 
 
-Applied.
+This is not an acceptable commit description.
 
 Guenter
