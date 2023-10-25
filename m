@@ -2,105 +2,95 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3A22C07545
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Oct 2023 19:52:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83273C0032E
+	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Oct 2023 19:53:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231469AbjJYTw2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 Oct 2023 15:52:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34082 "EHLO
+        id S230051AbjJYTxs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 25 Oct 2023 15:53:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbjJYTw2 (ORCPT
+        with ESMTP id S229498AbjJYTxr (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 Oct 2023 15:52:28 -0400
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F6793;
-        Wed, 25 Oct 2023 12:52:25 -0700 (PDT)
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-6cd09663b1cso62309a34.3;
-        Wed, 25 Oct 2023 12:52:25 -0700 (PDT)
+        Wed, 25 Oct 2023 15:53:47 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F21181;
+        Wed, 25 Oct 2023 12:53:44 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-5ac865d1358so135920a12.3;
+        Wed, 25 Oct 2023 12:53:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698263624; x=1698868424; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YQjLg2aKbL9jWaAizwrSUOry26XXUxk3Bd3p9prdtOA=;
+        b=YRcdfgWKAO6++9BVFS3ijtEgvb/LcGQyU6wNApTO+V3FuuQL3NCS7alRUe22L5PtAW
+         b1QViQdTcGXYYki1sGGbvPlpboVw0kWQpjH6dfqY2damj+TZaA4NIrSdJmO62jzz+Mpy
+         8PVpzfJU2LPUSerKKSXu3O13k98W4VUkARq1ufo7YK57VgpYGZLvUz6Nxa/qU1C/2fna
+         OS8W1qiLGeuo49wrXTATDag82OgrKv+1LiGrYk4QC9596etlzG1AFkRpzxGwXdxBgnUo
+         cEYRwf9eeaW0R8HgSsnZjpWPcslgH3Oi+2ZqFPMgbpRrKAz/qjfV0zLehTKQbJwKZKGb
+         Awtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698263545; x=1698868345;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=gVyJJzlaqhQuMRLXx6AahaoT5TgV3H5GonOWDHTSFks=;
-        b=mASU6PkCVpQ8O2gjyYm4WiSiZ3wgSsBt7AdBmJT9lmy+yFYC4SklmgRWRhtjPlhMqf
-         yYR70OFIJp0jU/IVC3MajO0h2sZ0NbcdG5yvazaWzcS+Pl0tTGJOas/xVtC8T3Jw0gac
-         ob0T7NYiSM7qL98AN3qDQYwRKKeLjxWDAhZZM9ZQSrwwwARQ1KwQUy1KM+w52BOH5q68
-         8Grop998A3e89c1WCKiCnZyXrWL2J2DFyGVQXLMEp/5u4hckt/OSQctJ5Rx3IIkJ3kP1
-         E36B8jLyyQSUpsr+IWJVRnF1gC1YNiSGwB0Derxl2TSsX0PwWX/PwlHweE2lypceZy9V
-         qElQ==
-X-Gm-Message-State: AOJu0YxfVJ7KFNE9REGhj7Nb479eAeXbExzSmHb1jx9kNn5ev4E3kRCV
-        qGbh2kI94BwmezT0/SL2dT4FDupycw==
-X-Google-Smtp-Source: AGHT+IEoXrsz8CycBw2BIhhBUjVZkieM79JTQekBn1JmxX2F/3juNdVaRn3BX5L38K7JJLhzHVRKNg==
-X-Received: by 2002:a05:6830:2681:b0:6d1:f8b1:d9f5 with SMTP id l1-20020a056830268100b006d1f8b1d9f5mr1385585otu.20.1698263544986;
-        Wed, 25 Oct 2023 12:52:24 -0700 (PDT)
-Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id x10-20020a4aaf4a000000b0057b6ac3922esm125854oon.18.2023.10.25.12.52.24
+        d=1e100.net; s=20230601; t=1698263624; x=1698868424;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YQjLg2aKbL9jWaAizwrSUOry26XXUxk3Bd3p9prdtOA=;
+        b=uoO8AhNu42YM4XWvy9ECyQ6HLWumekoiK5TQ2zPUuh5izHFEN07aXdmebJmOQrB9g9
+         Q54ajosQm86DuGOQKnAnKXN5JWiz+exPSPk80Q5nWWTOE9j5YvvgP3N6IF3sDwPYSH+B
+         2/jyhQslf9bQE26ESKLynIObrKDub/+fPB3sCjNmYPmDcUpUR28GGFp7KmTuzfk4AOV6
+         I/8crChSxpndWWTRzUudEH7KTXcL58iq9fTi4W5eVLVeHdqnnXv74iwlwEnGNMtgM1sm
+         5a/oE9sWvzOvroKDFsPF+9urWploRXB50LYF/Nx3WNYMbqBTLrZ3q8vvaMoIbxuTaYT8
+         wL/A==
+X-Gm-Message-State: AOJu0YwLtlhRyjwiqLgr0/JlrbmY2qrhdij2ZjGtvIOAFPi3d6p+rN6i
+        1zFay7hLGZDB7xXoJEINRHr81eKxQjM=
+X-Google-Smtp-Source: AGHT+IFW+jd24bOEKuhU+1oi+8QarCoh+KSuzxP557Cgnd20gGGn02jnIDUrsUQ9UuXlDsjENsueCg==
+X-Received: by 2002:a17:90b:4c0d:b0:27d:3c7c:be84 with SMTP id na13-20020a17090b4c0d00b0027d3c7cbe84mr12766913pjb.30.1698263624317;
+        Wed, 25 Oct 2023 12:53:44 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id nv18-20020a17090b1b5200b0027ce36075d7sm259595pjb.53.2023.10.25.12.53.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Oct 2023 12:52:24 -0700 (PDT)
-Received: (nullmailer pid 1051191 invoked by uid 1000);
-        Wed, 25 Oct 2023 19:52:23 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Wed, 25 Oct 2023 12:53:43 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 25 Oct 2023 12:53:43 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Joel Stanley <joel@jms.id.au>, linux-kernel@vger.kernel.org,
+        Thomas Zajic <zlatko@gmx.at>, stable@vger.kernel.org
+Subject: Re: [PATCH] hwmon: nct6775: Fix incorrect variable reuse in fan_div
+ calculation
+Message-ID: <c186bb4b-9249-449e-8095-ff2b367731c5@roeck-us.net>
+References: <20230929200822.964-2-zev@bewilderbeest.net>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Li peiyu <579lpy@gmail.com>
-Cc:     conor+dt@kernel.org, jdelvare@suse.com,
-        krzysztof.kozlowski+dt@linaro.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux@roeck-us.net, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20231025110003.10769-1-579lpy@gmail.com>
-References: <20231025110003.10769-1-579lpy@gmail.com>
-Message-Id: <169826221302.1026753.7866373357949688424.robh@kernel.org>
-Subject: Re: [PATCH] dt-bindings: hwmon: lm87: convert to YAML
-Date:   Wed, 25 Oct 2023 14:52:23 -0500
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230929200822.964-2-zev@bewilderbeest.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-
-On Wed, 25 Oct 2023 19:00:03 +0800, Li peiyu wrote:
-> Convert the lm87 hwmon sensor bindings to DT schema
+On Fri, Sep 29, 2023 at 01:08:23PM -0700, Zev Weiss wrote:
+> In the regmap conversion in commit 4ef2774511dc ("hwmon: (nct6775)
+> Convert register access to regmap API") I reused the 'reg' variable
+> for all three register reads in the fan speed calculation loop in
+> nct6775_update_device(), but failed to notice that the value from the
+> first one (data->REG_FAN[i]) is actually used in the call to
+> nct6775_select_fan_div() at the end of the loop body.  Since that
+> patch the register value passed to nct6775_select_fan_div() has been
+> (conditionally) incorrectly clobbered with the value of a different
+> register than intended, which has in at least some cases resulted in
+> fan speeds being adjusted down to zero.
 > 
-> Signed-off-by: Li peiyu <579lpy@gmail.com>
-> ---
->  .../devicetree/bindings/hwmon/lm87.txt        | 30 ----------
->  .../devicetree/bindings/hwmon/lm87.yaml       | 59 +++++++++++++++++++
->  2 files changed, 59 insertions(+), 30 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/hwmon/lm87.txt
->  create mode 100644 Documentation/devicetree/bindings/hwmon/lm87.yaml
+> Fix this by using dedicated temporaries for the two intermediate
+> register reads instead of 'reg'.
 > 
+> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+> Fixes: 4ef2774511dc ("hwmon: (nct6775) Convert register access to regmap API")
+> Reported-by: Thomas Zajic <zlatko@gmx.at>
+> Tested-by: Thomas Zajic <zlatko@gmx.at>
+> Cc: stable@vger.kernel.org # v5.19+
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Applied.
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/hwmon/lm87.yaml:57:1: [error] syntax error: found character '\t' that cannot start any token (syntax)
-
-dtschema/dtc warnings/errors:
-make[2]: *** Deleting file 'Documentation/devicetree/bindings/hwmon/lm87.example.dts'
-Documentation/devicetree/bindings/hwmon/lm87.yaml:57:1: found a tab character where an indentation space is expected
-make[2]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/hwmon/lm87.example.dts] Error 1
-make[2]: *** Waiting for unfinished jobs....
-./Documentation/devicetree/bindings/hwmon/lm87.yaml:57:1: found a tab character where an indentation space is expected
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/lm87.yaml: ignoring, error parsing file
-make[1]: *** [/builds/robherring/dt-review-ci/linux/Makefile:1427: dt_binding_check] Error 2
-make: *** [Makefile:234: __sub-make] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20231025110003.10769-1-579lpy@gmail.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+Thanks,
+Guenter
