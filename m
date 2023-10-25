@@ -2,91 +2,82 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F232C25B6B
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Oct 2023 20:04:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6138DC0032E
+	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Oct 2023 20:13:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbjJYUEn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 Oct 2023 16:04:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34764 "EHLO
+        id S229695AbjJYUN5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 25 Oct 2023 16:13:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjJYUEn (ORCPT
+        with ESMTP id S229441AbjJYUN4 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 Oct 2023 16:04:43 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163618F;
-        Wed, 25 Oct 2023 13:04:41 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b9338e4695so1580821fa.2;
-        Wed, 25 Oct 2023 13:04:41 -0700 (PDT)
+        Wed, 25 Oct 2023 16:13:56 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5AD012A;
+        Wed, 25 Oct 2023 13:13:52 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-6b87c1edfd5so124833b3a.1;
+        Wed, 25 Oct 2023 13:13:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698264279; x=1698869079; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:cc:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aRXCvqUEGxPWmLeNrK49IAezUNl9MkqYIjX1pTeuyPs=;
-        b=CyXkHZI8wVNtfKaOvmmhbeqlQwpIgNtlcdc9pouWUyF/ZCGu/1kJK5SAlCKiFpJOnc
-         dQzemP2H4U3eQuxijtTlDAoLQcCnQTwl5ui8MidVTbPRcqbyAI+dnfaAdD1HDhpenhBg
-         5BNZPMy0+u08y+N7OgWdnAiDT7IjzcDmM+2hLbkAx4CU7OLHOc0Z4CR0Q8xwMX4GmX+F
-         etSFfexyGS6Wifp2RhWJ+D7YG5sKYEtBfBqCLxLODVPYHoCyP42uhgirgfqxOki/DHkq
-         8WPxPEC136Xui6vrnDeyNqzBCQv6XA9Qmxq5TFD6RJUjCCkEVXDaKSFui5D9tEX6N2tG
-         XRWw==
+        d=gmail.com; s=20230601; t=1698264832; x=1698869632; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q9eul69pshen1s/x7/gzxYAUPoCheVot1DPXycaxP8A=;
+        b=ja/PCQCGr21k+6K1bXO7BY6m+bb3MszRUKp1tU9+EWqte2nXDGjZdR750hisT6UmYb
+         GezTAOIlHgRNKFcERyNbMIRYXhs8B4a4DJJ60XyPN2GSbzhblHwxZvIeC29lgzUMRF3e
+         T9fGexwnydWijYn5NHSE7GwCAKnyPrHnZ8VL8oH/FG/SrwVQfX146fPzFN4WfUms/3Hf
+         FSeA76oYlkOxBklnycr3Yn4E/VFrMR+ayAsCR2avMjzKtTYW94DVh7AhMtU/IdYbfx64
+         1Z2q0GRyR2f4Wy5A+KCwYQ9p7ljNsH0pOvx++MmuKPS+II/WWV2qQKqxKCDOgbjGoGdy
+         aNkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698264279; x=1698869079;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:cc:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aRXCvqUEGxPWmLeNrK49IAezUNl9MkqYIjX1pTeuyPs=;
-        b=O9nz73wmlOeed026+eTbpw9MbMUYQ2Btvp5n6DYMgR//mge4nXWvr6ghEHyhYeXNUd
-         qJBNf1luD1CaSp+AjoV6KHpW3iQiPND4TWhZLb3YpDshk9nvXe258TDTXuJCXu3cnV5f
-         6VRdM+qtlMgvMO36UX7eH1nRgNNLGMxTtxJZ21X8RyOsFGSnILAnyXq/hEakobq2yANp
-         vg2l5i7fupog1Ey3NnGwk6NZQdwHVRZ6W4IhzeJGR2TMeIzyalo1t6J0c1WH5UWjdthV
-         kcDQTYUQt1hISJftegJokbMYtpMMfi5XymU4Y1F/cMnuz2z/ezMiu0TQF556uVOxgYs/
-         vEuw==
-X-Gm-Message-State: AOJu0YwIb0ZFtGZ68IVyg2MiQGgO5GM4ubg5flaMMh0smmbVR+QFuxkf
-        zjqb/84W1wrN6FwemdMq1og=
-X-Google-Smtp-Source: AGHT+IGcyVppwMzWcJePLy+2lwN2fhKViA8GWuWortnTRRjauD38DvPVVxmawlDSowy+NlXgYcywQQ==
-X-Received: by 2002:a2e:8716:0:b0:2bc:b0ae:a9e5 with SMTP id m22-20020a2e8716000000b002bcb0aea9e5mr11159207lji.42.1698264279020;
-        Wed, 25 Oct 2023 13:04:39 -0700 (PDT)
-Received: from [192.168.0.28] (cable-178-148-234-71.dynamic.sbb.rs. [178.148.234.71])
-        by smtp.gmail.com with ESMTPSA id az32-20020a05600c602000b004053e9276easm599668wmb.32.2023.10.25.13.04.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Oct 2023 13:04:38 -0700 (PDT)
-Message-ID: <456be27a-1e62-4b88-a868-6238813c26c8@gmail.com>
-Date:   Wed, 25 Oct 2023 22:04:36 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc:     savicaleksa83@gmail.com, linux-hwmon@vger.kernel.org,
-        leonard.anderweit@gmail.com, Jack Doan <me@jackdoan.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        d=1e100.net; s=20230601; t=1698264832; x=1698869632;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=q9eul69pshen1s/x7/gzxYAUPoCheVot1DPXycaxP8A=;
+        b=UWZmOSa0U17JpgNNxqF6f97gz1mBStyJeQWZKYDVWy/3Y4jTcRPKEexqbaslIk5nWQ
+         sBbNc57R3P42TYBE7uQqyHM/NWwXLBOcRA8dgf+9KVVoHp0zw8n5bQ/zWyHS4AOFe7NM
+         g4lWY4JeGrNNWaZ/7E09i0/EEndR8boJ5U0vccwzQczPZINkFDsqbIDPzC8eYpBcM/LW
+         yUUwzzh/EPR/jwbj4eMwfcdfa6bqDH1oPqjJtJYrtodQJoExxB4ywXJFgnVwuh4R+kpw
+         +Gy20dInMSVnu569KcRj/oX97VGmY6AR59ZfKuwECEXsHjBtUu42B2J4wkhc/XEHzC8T
+         0Q7Q==
+X-Gm-Message-State: AOJu0YyBZMGwHW+LuBWeAu24fc7f/a251ii+Dxy82GFtQ61CzbbzrtFC
+        /G+KE5dRt5YNzeKygDUSegA=
+X-Google-Smtp-Source: AGHT+IG4DpjJTdvsHL9M32cnRu++G3ljis347I/hA1ABt7FieYScOoT525YJ+D/T8HluBh2CrKefQQ==
+X-Received: by 2002:a05:6a20:4323:b0:15e:986:d92b with SMTP id h35-20020a056a20432300b0015e0986d92bmr7457083pzk.16.1698264832120;
+        Wed, 25 Oct 2023 13:13:52 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bz20-20020a056a02061400b005703a63836esm7926147pgb.57.2023.10.25.13.13.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Oct 2023 13:13:51 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 25 Oct 2023 13:13:50 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Hal Feng <hal.feng@starfivetech.com>
+Cc:     Conor Dooley <conor@kernel.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        linux-hwmon@vger.kernel.org, linux-riscv@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] hwmon: (aquacomputer_d5next) Check if temp sensors of
- legacy devices are connected
-To:     Guenter Roeck <linux@roeck-us.net>
-References: <20231016083559.139341-1-savicaleksa83@gmail.com>
- <20231016083559.139341-2-savicaleksa83@gmail.com>
- <ac61decf-8ab7-46c1-83f0-d3f79f737bbf@roeck-us.net>
-Content-Language: en-US
-From:   Aleksa Savic <savicaleksa83@gmail.com>
-In-Reply-To: <ac61decf-8ab7-46c1-83f0-d3f79f737bbf@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v2] MAINTAINERS: Add Hal as one of the maintainers of
+ SFCTEMP HWMON DRIVER
+Message-ID: <c37f7810-12ea-4abc-bc2d-c68edfa6dadf@roeck-us.net>
+References: <20230928075249.109459-1-hal.feng@starfivetech.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230928075249.109459-1-hal.feng@starfivetech.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2023-10-25 21:41:00 GMT+02:00, Guenter Roeck wrote:
+On Thu, Sep 28, 2023 at 03:52:49PM +0800, Hal Feng wrote:
+> As he is the submitter of this driver, add his mail so he can
+> maintain the driver and easily reply in the mailing list.
 > 
-> Why is the sensor instantiated in the first place ?
-> Returning -ENODATA for every reading is not desirable.
-> If this can happen, the is_visible function should check
-> for it and skip affected sensors.
-> 
-> Guenter
-> 
+> Acked-by: Emil Renner Berthing <kernel@esmil.dk>
+> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
 
-The external temp sensor(s) are hot-swappable and can be plugged
-or unplugged anytime. Similar logic already exists in
-aqc_raw_event() for the sensors.
+Applied.
 
 Thanks,
-Aleksa
+Guenter
