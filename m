@@ -2,130 +2,151 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4230C25B6D
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Oct 2023 02:05:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C7D1C07545
+	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Oct 2023 02:21:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231150AbjJYCFO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 24 Oct 2023 22:05:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59404 "EHLO
+        id S231521AbjJYCVh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 24 Oct 2023 22:21:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjJYCFN (ORCPT
+        with ESMTP id S231283AbjJYCVh (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 24 Oct 2023 22:05:13 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2529F10D5;
-        Tue, 24 Oct 2023 19:05:11 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-d9a58f5f33dso4722106276.1;
-        Tue, 24 Oct 2023 19:05:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698199510; x=1698804310; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WbdytW0refUglybCsXX0Y9h8CNgKWOlTE2eFIrGTl4M=;
-        b=BH4NtPknv7zzofaqxPicccCF8PWycl0Hbmaxxo5Aa5LJQVNISQayehHeiXXhwaHmGV
-         qaA9MxSr+nn8VTl7s1X2HagOLitwaSFrt65ZfTggVwu4G07kvPAXA2oJYwcgJiVP5/6V
-         KbsxIkHijUrQtWBafP0yYouStpmYE/Vh/at2+X9ov7kVJ1PyvQPZdUXX6DCSS/GRW+xE
-         pVW9srUV0uDCphu4ItQinALub3Kq/Fy2fHXh0Jxky9JEedwYO7XBc5nJHG4X2bAZggTn
-         u1qDW7lj447TQ5Wmp9NayBhezIq6SY0r2VmqP7t7uLrrGiWJT0iPJYrW1m1t3TUG/eE9
-         95hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698199510; x=1698804310;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WbdytW0refUglybCsXX0Y9h8CNgKWOlTE2eFIrGTl4M=;
-        b=JvigR/rQUuF88HxLvsp9QXf8cyCVrn6fIXT34vqgDG6N2qGM3kR6kbRRvHB/7VL5rv
-         BHfADocN3aqy9Ym8Mv5njH/rBQXjwRJ5kbPa9PFvjLceB9a0QCNi/JzeLNRsyc50CJUy
-         Yhh4vkwODSL8KT0kD1AUcyJCcQNrqr55xpIav/oZ45+LMcTj9VkLlPnoaKnRk4EqSO4I
-         q74ABs/30K9VlnJCo75aZw5vMA54dGd7sIWY8/oep+IhmvzX3EjJq9ARlzlYJKR81/Pl
-         fiKm8R29ykRWVwVJcLqks1Tthg2Rab4tXOkn/rIA54NXvKzKVk7dMAtnYFXOKKKywoqz
-         x1yw==
-X-Gm-Message-State: AOJu0YzYzvBXeKiUU/wTpEtXG7t7LK7wj4uCwmPADPQQyi6wPjvSuJra
-        G8ERKgihTsNqBd2qTgoM2SU=
-X-Google-Smtp-Source: AGHT+IERNV1QcSoqDHejS2ogA8dmntWOcfRPDiTPSWgt5OxcGIpls9S0uiTOXeqKjsqjLApnPEgISA==
-X-Received: by 2002:a05:6902:1083:b0:d9c:7b92:90b9 with SMTP id v3-20020a056902108300b00d9c7b9290b9mr16261960ybu.14.1698199510279;
-        Tue, 24 Oct 2023 19:05:10 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b136-20020a25348e000000b00d89679f6d22sm4022356yba.64.2023.10.24.19.05.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Oct 2023 19:05:09 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 24 Oct 2023 19:05:08 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Raag Jadav <raag.jadav@intel.com>, len.brown@intel.com,
-        robert.moore@intel.com, andriy.shevchenko@linux.intel.com,
-        mark.rutland@arm.com, will@kernel.org, Jonathan.Cameron@huawei.com,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        acpica-devel@lists.linuxfoundation.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        mallikarjunappa.sangannavar@intel.com, bala.senthil@intel.com
-Subject: Re: [PATCH v3 0/6] Refine _UID references across kernel
-Message-ID: <16cf6c19-20d2-4d11-80b1-b8e3c7e58803@roeck-us.net>
-References: <20231024062018.23839-1-raag.jadav@intel.com>
- <20231024093010.GF3208943@black.fi.intel.com>
- <CAJZ5v0hLYcN_CxUOocKoN8EsQTwyL-sLbWENfFaQ+f3fjHRvqw@mail.gmail.com>
+        Tue, 24 Oct 2023 22:21:37 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131F79C
+        for <linux-hwmon@vger.kernel.org>; Tue, 24 Oct 2023 19:21:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1698200479; x=1698805279; i=w_armin@gmx.de;
+        bh=nc3GJk6UgWSkGgkRrWJspqjPE6qp0FMfT8Jm7D58mag=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
+         In-Reply-To;
+        b=rQ1B0JtvHDu9/i8djkC0KafxFghFLDC5jcYwaUQdXNCOAajc0Q+nMUIqcSr65gWD
+         CfWj4iXCG71rN7ZFrP1eF9YgJAGP2vUgOQ0X4wMm+PVc9TCYOBM0yW8VMQe16K8HE
+         QdA/cPhhPblxiIfXVXxXAltgYshQizqXPsaU+EswgG/LWo+ISN1zF6AlVzd/CvvhY
+         917t95MFAquSKE7oNwcNKPTOBjUDsSYQU6WzOaPmw7In4LIHCr0KqSCoKwekAJPt1
+         Uk+4qNhmXYDpfQ4JdXLBhnRQvzSpGvj8d128FGlYG0YVwwl3O99JIytKThtvX4N2I
+         eg3dZyys/uJ2RvFFWw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M9FjR-1qsz4j3pUV-006LIW; Wed, 25
+ Oct 2023 04:21:18 +0200
+Message-ID: <9774e5d6-9f40-42e2-9961-8ad276d0de3f@gmx.de>
+Date:   Wed, 25 Oct 2023 04:21:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0hLYcN_CxUOocKoN8EsQTwyL-sLbWENfFaQ+f3fjHRvqw@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: sch5627 on Fujitsu Celsius W280
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Ian Nartowicz <deadbeef@nartowicz.co.uk>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+References: <20231024150438.68dd079b@debian.org>
+ <9c099de7-4290-5699-122b-927e39577439@roeck-us.net>
+ <7d9b4557-5e4b-44ea-be6f-2d23632dcf77@gmx.de>
+ <48d6b407-5431-4cb9-a43f-d0ca767d8a13@roeck-us.net>
+Content-Language: en-US
+From:   Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <48d6b407-5431-4cb9-a43f-d0ca767d8a13@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:rk3JUQTX5t4Afb5gNblIhC+7oP5QzFHsGKY0PzHcazqW3PAgp61
+ Y17ehnfK4V70NXwwbFjrBCY+K4t5fA+1EAMJN9EHYwXAIG0DiWAYPkMcEFaebNWND/Q+sNc
+ 81R1Tu4+J/pasq45hNTsnD+xmSU3ZURnYRJU4eB9J66FxbUhLKx1q5sJwU/Wxn03FKQIHf7
+ D1pTb+JuX233ukOsYEjkA==
+UI-OutboundReport: notjunk:1;M01:P0:yaOPfeWbugM=;CqnvrDeDzMX0ypDizX47AppUTKQ
+ JN73bfN8wb4lckR9sBIul4prD4uhSDzMBnbOnlNmEKuxhsEj00BHJ9TggpkqLC3bDVyVuVBCK
+ 8wjf2Cl0bbR8NrAVMJTlF45uTJbZ03zwIaQawKxClUXjk8QxDAQ4kbx1rPEoclZbO9O0E0nEP
+ 4W+2vKnZfneobYFUMX2gU50PN8+1GAL2j70nSSr2WR8lJ6825ZyZ1Ilb9eDw7af00eTD/ygz0
+ Uxhs56gQfyHE5UbY3CN/uHKZuof9xVbD21OM4tBrSWdLH9Qil4r+Qx4pfFMGzvYxiARVZhYCX
+ 5R/owNBLDyA7jLXWfVJTrP4ji/D16grbNf4+UAX34sq0ZMtFhmymq2ORd/TA9ZltK6XabKA1r
+ SN9F5G5LCaetwNCS4ry2XeJUyFynUlaKWDIAm25J7XEkHcLMyKnwQCnv+zRXVmVW5VDBngMd1
+ 51wWs72R8Rt4tc8RWe237F+zB1K12q6J/CVga9KcSQUSxYYX2jmvLN5T1Z8W5NfOpKixIaXI5
+ Wfe+kPdsUVXYBMAIQMOrly7OGOC4/mmTDyo4cIYL8nupc4NYPtEVvR20YEujndk7pWTrGae49
+ jTcYeRWm4+SuwzzKsWE5dpjKQ2C9DjtSStLo0st5UK33iZcVlOIEuyTkibtp6O6JdpzlCZN8/
+ SpFclTgMgZzOSmkKPP7Z0pTT/0DB4a6rGm2aAjH88fS5+GDuJ9kWR1R5on9xoRc82+bthZVzX
+ OrrGiOqbfc1zsgi5IKx/TGysE8azlx3CkhOWf/+Aq/kfjLFd/Kp7MOyVvjmnXMG9XiOMDqpFk
+ 39evjA3a88JqPhekY4EdIOQmm41Jrk8WPwimo9FDsoxVVnHC6Q6VeyxOm93KTT5kMzvMhuDO2
+ m3QtULDjsGb83/wNJz91r2e0fbkqsxMpuAsiVLEd+DkT7U5OXi6JaA2EmbrKhm4ua1lt1o9ly
+ ckiCWwyAvThifBV6JpvjKnjHQYA=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Oct 24, 2023 at 09:51:08PM +0200, Rafael J. Wysocki wrote:
-> On Tue, Oct 24, 2023 at 11:30 AM Mika Westerberg
-> <mika.westerberg@linux.intel.com> wrote:
-> >
-> > On Tue, Oct 24, 2023 at 11:50:12AM +0530, Raag Jadav wrote:
-> > > This series refines _UID references across kernel by:
-> > >
-> > > - Extracting _UID matching functionality from acpi_dev_hid_uid_match()
-> > >   helper and introducing it as a separate acpi_dev_uid_match() helper.
-> > >
-> > > - Converting manual _UID references to use the standard ACPI helpers.
-> > >
-> > > Changes since v2:
-> > > - Drop review tags as suggested by Andy.
-> > >
-> > > Changes since v1:
-> > > - Change acpi_dev_uid_match() to return false in case of NULL argument.
-> > > - Drop accepted patches.
-> > >
-> > > Raag Jadav (6):
-> > >   ACPI: utils: Introduce acpi_dev_uid_match() for matching _UID
-> > >   pinctrl: intel: use acpi_dev_uid_match() for matching _UID
-> > >   ACPI: utils: use acpi_dev_uid_match() for matching _UID
-> > >   ACPI: x86: use acpi_dev_uid_match() for matching _UID
-> > >   hwmon: nct6775: use acpi_dev_hid_uid_match() for matching _HID and
-> > >     _UID
-> > >   perf: arm_cspmu: use acpi_dev_hid_uid_match() for matching _HID and
-> > >     _UID
-> >
-> > For the series,
-> >
-> > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> >
-> > >  drivers/acpi/utils.c                  | 34 ++++++++++++++++++++++-----
-> > >  drivers/acpi/x86/utils.c              |  3 +--
-> > >  drivers/hwmon/nct6775-platform.c      |  4 +---
-> > >  drivers/perf/arm_cspmu/arm_cspmu.c    |  8 +++----
-> > >  drivers/pinctrl/intel/pinctrl-intel.c |  2 +-
-> >
-> > This pinctrl one is also fine by me so if Andy does not have objections,
-> > feel free to add my,
-> >
-> > Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> 
-> Whole series applied as 6.7 material with tags as per the above, thanks!
+Am 24.10.23 um 20:21 schrieb Guenter Roeck:
 
-Ok, that means I will _not_ apply the hwmon patch through
-the hwmon tree.
+> On Tue, Oct 24, 2023 at 07:42:11PM +0200, Armin Wolf wrote:
+>> Am 24.10.23 um 16:48 schrieb Guenter Roeck:
+>>
+>>> On 10/24/23 07:04, Ian Nartowicz wrote:
+>>>> I just upgraded a Celsius W280 to the 6.1 kernel and noticed that
+>>>> hardware
+>>>> monitoring was gone.=C2=A0 Was working in 5.10.=C2=A0 When I added it=
+ to the
+>>>> dmi_override_table, it started working again (with a slightly
+>>>> different device
+>>>> name).=C2=A0 dmidecode shows it as an on board device, type other, st=
+atus
+>>>> disabled
+>>>> (just the watchdog?), and description "SMsC SuperI/O".
+>>>>
+>>> Weird, this is the second private e-mail I get in a single day.
+>>> Is there some information out there suggesting that kernel maintainers
+>>> should be contacted without copying the mailing list ? If so, tell the=
+m
+>>> it is wrong. As warning to everyone, I won't reply any further
+>>> to private e-mails like this.
+>>>
+>>> Looking at the code, try adding ignore_dmi=3D1 as module parameter whe=
+n
+>>> loading the driver. I think commit 393935baa45e5c messed it up and
+>>> prevents the driver from loading if the parameter is not provided.
+>>> Maybe the conditions in sch56xx_init() are wrong or too generic.
+>>> Armin, any comments ? Do we need to revert your patch ?
+>>>
+>>> Guenter
+>>>
+>> I think so, it seems that the DMI devices are not always present.
+>> We better revert the DMI autodetection patch to prevent anymore
+>> regressions like this.
+>>
+> Not sure what I'd need to revert. Would it be all of the following ?
+>
+> fd2d53c367ae hwmon: (sch56xx-common) Add DMI override table
+> 393935baa45e hwmon: (sch56xx-common) Add automatic module loading on sup=
+ported devices
 
-FWIW, please note that I would have very much preferred applying
-it through the hwmon tree, and I did _not_ Ack it.
+Those two commits should be reverted. The other commit is still useful wit=
+hout the DMI
+autoloading, since it allows user to just load sch56xx-common without havi=
+ng to load
+sch5627/sch5636 manually afterwards.
 
-Guenter
+> 4db3c09228a0 hwmon: (sch56xx) Autoload modules on platform device creati=
+on
+>
+> Alternatively, we could add Celsius W280 to the dmi override table.
+> After all, the code has been present since 6.1, and the functional
+> gain seems to be sufficient. Adding W280 with a Fixes: tag pointing
+> to fd2d53c367ae would make more sense to me than reverting the above
+> patches.
+
+I fear that there are far more machines suffering from this exact same iss=
+ue.
+It seems to me now that the DMI device is only optional, possibly to signa=
+l the
+availability of some sort of management technology of which the hwmon inte=
+rface
+seems to be part of.
+
+We could solve this problem by somehow making it possible to send uevents =
+if
+DMI onboard devices are detected. They could then be used to load the nece=
+ssary
+drivers.
+
+However since we currently cannot do this, i would revert the two patches =
+for
+the time being.
+
+Armin Wolf
+
+>
+> Guenter
