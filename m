@@ -2,177 +2,110 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BDC71C25B6E
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Oct 2023 07:30:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5618C25B47
+	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Oct 2023 08:44:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233153AbjJYHal (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 Oct 2023 03:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38722 "EHLO
+        id S232213AbjJYIoN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 25 Oct 2023 04:44:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232470AbjJYHaf (ORCPT
+        with ESMTP id S232807AbjJYIoL (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 Oct 2023 03:30:35 -0400
-Received: from mail-oa1-x43.google.com (mail-oa1-x43.google.com [IPv6:2001:4860:4864:20::43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8094133
-        for <linux-hwmon@vger.kernel.org>; Wed, 25 Oct 2023 00:30:31 -0700 (PDT)
-Received: by mail-oa1-x43.google.com with SMTP id 586e51a60fabf-1dc9c2b2b79so2860841fac.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 25 Oct 2023 00:30:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698219031; x=1698823831; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=piuEhlKzYYwzHRc+GXT0yNRApgseVG2f389HXHULRS8=;
-        b=LA+jTOHq+kLLjNr464zLo2HwRw5vb4otiouv0sQA4wEvnIWgpsx0tiGFygpf8UXyQV
-         wj7giVsG1/6mxCZQ/KQTN5d/+YM0osOfdo123SGZLrnZ+2IMLFoB6DTikO6/GVn2m5gp
-         8TBrUBZ622PhbB9EMvXx2f+djJXyeY3ibT9qxVhLL+RCrrXjHt0EQokietgouIL4vtV8
-         R9BhKZflbTEA2Zn0icdVZdpMfbQZUL50CYHX9/5no4by/VQodkzsoh1/oqsO+92Hp9FO
-         jOo0Ncep1ayZvCEZPw8SZW0PUlYfBXcltEOzk8E9mYFCMBKEuI002o4p5IgjNM/qqh6r
-         /QVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698219031; x=1698823831;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=piuEhlKzYYwzHRc+GXT0yNRApgseVG2f389HXHULRS8=;
-        b=Ktmi09VKD3JNJDtt5PfsVdPWirXOUbvEUfLdb0KP2pEytKtkh2dLSyN42e39vbb9ya
-         HiKK550oIEavPIM97Dk4e8HRv5O5s8OjtFA8rdgo1hrFHY5/9m246IuN4vd/jqQgaXOg
-         WrRMAk0wGRgIc7OZbBMmtAj2vei4swQtpKZplM+AeM1GS49BtYm/Qxc9QTEW9S515NOp
-         sxSHgAzPNTjq5W0comUcYAe+PMn2VrozI5jfQZ/SrFXgVmzAg2GDT+vrcBnoYZo37VtD
-         /aF9FMYIrllNaNh4S8KK0OhaZv9i+0y45s8y7a+QzWkaf6d0ikowqUJWQ9rZFTpPQGL3
-         ZSBQ==
-X-Gm-Message-State: AOJu0YyFZyjtJDWnkZVsxNHWzL5afqlaGx1O2rezx5NQ93rcO1cTB74g
-        eU7QenP/1NyOPN6ajUsFgbV7qFQlk73+t1fK
-X-Google-Smtp-Source: AGHT+IEozn2zcAkwkjqQjp7DPHXdYWzI6mWiOqkUwQ99x2r+Vpnw2up7Wl1m9fpLOrysUl3e7bTckg==
-X-Received: by 2002:a05:6870:c6a1:b0:1ea:3525:9e99 with SMTP id cv33-20020a056870c6a100b001ea35259e99mr16048128oab.44.1698219030855;
-        Wed, 25 Oct 2023 00:30:30 -0700 (PDT)
-Received: from dawn-Aspire-A715-74G.. ([183.198.109.198])
-        by smtp.gmail.com with ESMTPSA id r19-20020a632053000000b005b18c53d73csm8173061pgm.16.2023.10.25.00.30.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Oct 2023 00:30:30 -0700 (PDT)
-From:   Li peiyu <579lpy@gmail.com>
-To:     jdelvare@suse.com
-Cc:     linux-hwmon@vger.kernel.org, Li peiyu <579lpy@gmail.com>
-Subject: [PATCH] dt-bindings: hwmon: lm87: Convert to dtschema
-Date:   Wed, 25 Oct 2023 15:30:01 +0800
-Message-Id: <20231025073001.8929-1-579lpy@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 25 Oct 2023 04:44:11 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8AB138
+        for <linux-hwmon@vger.kernel.org>; Wed, 25 Oct 2023 01:44:09 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E561C433C7;
+        Wed, 25 Oct 2023 08:44:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1698223449;
+        bh=7UbIo5BYCM97dk1L7ZbXI8HNkLlh33a9SY5HkZjhB2c=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Y3lRDbUDehLIXiQaSXYzGkYUZrQGup1mEp50vfRE9rJstBkTEhnCeWIONhfRMOj1q
+         XdIanDrSN6/7SOaO8od9WxdBcb/dP1RXyutplXLIKUoVyHRCPZcH3BEs/Gd+ZKJTge
+         LB/vYUWCIf6Zyj88b6UKQpCgciS7S6SZDNdWZcYgw535Ewz4Qwjm4aLtqJiRo96mxW
+         gcAJiNiG95X1f7UDjz9FeSqRUQc56TYpmIyIRrzQ4L+KhNN8B6IMzNXGocb1I1oC+L
+         oInC6o/+ERtIPhuXn8xaBhqwuUvinCmenASzsyMz4AfzQAcepfuMIc+y1iXIjsf57g
+         IoJQAcwxUIiIg==
+Message-ID: <caa50763-74be-4c40-9d8d-7f1f64ce5144@kernel.org>
+Date:   Wed, 25 Oct 2023 10:44:04 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] dt-bindings: hwmon: lm87: Convert to dtschema
+To:     Li peiyu <579lpy@gmail.com>, jdelvare@suse.com
+Cc:     linux-hwmon@vger.kernel.org
+References: <20231025073001.8929-1-579lpy@gmail.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20231025073001.8929-1-579lpy@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Convert the lm87 hwmon sensor bindings to DT schema
+On 25/10/2023 09:30, Li peiyu wrote:
+> Convert the lm87 hwmon sensor bindings to DT schema
+> 
+> Signed-off-by: Li peiyu <579lpy@gmail.com>
 
-Signed-off-by: Li peiyu <579lpy@gmail.com>
----
- .../devicetree/bindings/hwmon/lm87.txt        | 30 ----------
- .../devicetree/bindings/hwmon/lm87.yaml       | 59 +++++++++++++++++++
- 2 files changed, 59 insertions(+), 30 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/hwmon/lm87.txt
- create mode 100644 Documentation/devicetree/bindings/hwmon/lm87.yaml
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC. It might happen, that command when run on an older
+kernel, gives you outdated entries. Therefore please be sure you base
+your patches on recent Linux kernel.
 
-diff --git a/Documentation/devicetree/bindings/hwmon/lm87.txt b/Documentation/devicetree/bindings/hwmon/lm87.txt
-deleted file mode 100644
-index 758ff398b67b..000000000000
---- a/Documentation/devicetree/bindings/hwmon/lm87.txt
-+++ /dev/null
-@@ -1,30 +0,0 @@
--*LM87 hwmon sensor.
--
--Required properties:
--- compatible: Should be
--	"ti,lm87"
--
--- reg: I2C address
--
--optional properties:
--- has-temp3: This configures pins 18 and 19 to be used as a second
--             remote temperature sensing channel. By default the pins
--             are configured as voltage input pins in0 and in5.
--
--- has-in6: When set, pin 5 is configured to be used as voltage input
--           in6. Otherwise the pin is set as FAN1 input.
--
--- has-in7: When set, pin 6 is configured to be used as voltage input
--           in7. Otherwise the pin is set as FAN2 input.
--
--- vcc-supply: a Phandle for the regulator supplying power, can be
--              configured to measure 5.0V power supply. Default is 3.3V.
--
--Example:
--
--lm87@2e {
--	compatible = "ti,lm87";
--	reg = <0x2e>;
--	has-temp3;
--	vcc-supply = <&reg_5v0>;
--};
-diff --git a/Documentation/devicetree/bindings/hwmon/lm87.yaml b/Documentation/devicetree/bindings/hwmon/lm87.yaml
-new file mode 100644
-index 000000000000..54d6ef6700ef
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/lm87.yaml
-@@ -0,0 +1,59 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwmon/lm87.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: LM87 hwmon sensor
-+
-+maintainers:
-+  - Jean Delvare <jdelvare@suse.com>
-+  - Guenter Roeck <linux@roeck-us.net>
-+
-+properties:
-+  compatible:
-+    const: ti,lm87
-+
-+  reg:
-+    maxItems: 1
-+
-+  has-temp3:
-+    description: |
-+      This configures pins 18 and 19 to be used as a second remote
-+      temperature sensing channel. By default the pins are configured
-+      as voltage input pins in0 and in5.
-+
-+  has-in6:
-+    description: |
-+      When set, pin 5 is configured to be used as voltage input in6.
-+      Otherwise the pin is set as FAN1 input.
-+
-+  has-in7:
-+    description: |
-+      When set, pin 6 is configured to be used as voltage input in7.
-+      Otherwise the pin is set as FAN2 input.
-+
-+  vcc-supply:
-+    description: |
-+      a Phandle for the regulator supplying power, can be configured to
-+      measure 5.0V power supply. Default is 3.3V.
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      lm87@2e {
-+        compatible = "ti,lm87";
-+        reg = <0x2e>;
-+        has-temp3;
-+	vcc-supply = <&reg_5v0>;
-+      };
-+    };
--- 
-2.34.1
+You missed at least devicetree list (maybe more), so this won't be
+tested by automated tooling. Performing review on untested code might be
+a waste of time, thus I will skip this patch entirely till you follow
+the process allowing the patch to be tested.
+
+Please kindly resend and include all necessary To/Cc entries.
+
+Also, please use filename like compatible.
+
+Best regards,
+Krzysztof
 
