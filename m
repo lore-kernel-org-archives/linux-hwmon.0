@@ -2,120 +2,104 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DDDEC0032E
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Oct 2023 11:32:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76A78C0032E
+	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Oct 2023 12:23:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233766AbjJYLcp convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 Oct 2023 07:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43676 "EHLO
+        id S1343809AbjJYMX3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 25 Oct 2023 08:23:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232688AbjJYLco (ORCPT
+        with ESMTP id S1343767AbjJYMX3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 Oct 2023 07:32:44 -0400
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A9D111;
-        Wed, 25 Oct 2023 04:32:42 -0700 (PDT)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-1e9c28f8193so1562928fac.1;
-        Wed, 25 Oct 2023 04:32:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698233561; x=1698838361;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+bpTDlYy28TPceQP8PQQbnHdxroGDzNENEgygFYUDDg=;
-        b=hTXHXtLCScXFqONhFja42mi3H4B9YBw7DY4ZcGjfKZFmrO6yaq1dPM9CMoRgcoorQn
-         7OUgJJRvBoeSmRSVTpWXFDqFPW1oATfVjmWnEbmIO4+Lj0+CFlrArR0S/rLr3jho9DWI
-         FyzcyNIuRD5OP5BtkD2JlGURMiVRrFD7b3A64sqMETH0Pq8RGG1Br2dSFTVEaSvDNKO1
-         gPmlCJEL8q9qz1vQv3qUILH21UHpwUKKkq0P9FDr3E6UTK8ejT4hzYkVkoUugKCedneM
-         swOuBGyBWUBT0DRMyOnsa9QuRIv88sJVgyNSv/vIMHHHtlGRyLen/2mJUkXIQYvrud6+
-         ux+Q==
-X-Gm-Message-State: AOJu0YxMVBUl+Wp6/Maj5udTAGX2kGl8nzgpoG4ZJHFauImqQw+IWALg
-        wmNW0CfJA3kTL8T2WPqU1355GhyzZ5gzcFLMCbA=
-X-Google-Smtp-Source: AGHT+IFOALTrCxeNT9/wx62+knUiOQdgLJyX518saqHvCwbSpb1b9pG/oXGHik2oNple+LIgXdYlz0Wjoc9Rf4+OecE=
-X-Received: by 2002:a05:6870:9a98:b0:1e9:9e04:1d24 with SMTP id
- hp24-20020a0568709a9800b001e99e041d24mr18538546oab.5.1698233561419; Wed, 25
- Oct 2023 04:32:41 -0700 (PDT)
+        Wed, 25 Oct 2023 08:23:29 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4FCD9C;
+        Wed, 25 Oct 2023 05:23:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698236607; x=1729772607;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=CioEJ/ktqThFVcUxv05JHlMHKJHPP+QEuG95YNoPBAQ=;
+  b=C45IpDwdsG2VKWyze+hohhtDEIzG9XqL0gQw4z4kUxGcYS5yD6GHkkxq
+   RYJ5ZB0CRKTaggJ8LQDA5rHL+24cn+J6xjVYu55hurFyNgFcFVM9NGm4X
+   8yPiHawwbKUtqZYryWYxAlQaTWwlsoJYcdmpzbnaCsGdb240RX6nWwEEC
+   xo+M3xoN+KdaWsdAKNELLY6EXrl6IH0bff3tOk22bK3+B5Sp0Zu4xWEQL
+   UIrGUD4f9SrCsnK+sR4ZCOPelEM/BAkHp2RkGhNBSZlAWbXUK7fCNcKHQ
+   cnFN4QXatdth8rELorV6gdjz+yuTjFp1EqFL2Sb6bMMdxyCCai43L//9F
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="473530578"
+X-IronPort-AV: E=Sophos;i="6.03,250,1694761200"; 
+   d="scan'208";a="473530578"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2023 05:23:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="1005993196"
+X-IronPort-AV: E=Sophos;i="6.03,250,1694761200"; 
+   d="scan'208";a="1005993196"
+Received: from liyingmi-mobl.ccr.corp.intel.com (HELO rzhang1-mobl7.ccr.corp.intel.com) ([10.249.172.75])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2023 05:23:24 -0700
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     linux@roeck-us.net, jdelvare@suse.com, fenghua.yu@intel.com
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lkp@intel.com, dave.hansen@linux.intel.com, len.brown@intel.com
+Subject: [PATCH] hwmon: (coretemp) Fix potentially truncated sysfs attribute name
+Date:   Wed, 25 Oct 2023 20:23:16 +0800
+Message-Id: <20231025122316.836400-1-rui.zhang@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20231024062018.23839-1-raag.jadav@intel.com> <20231024093010.GF3208943@black.fi.intel.com>
- <CAJZ5v0hLYcN_CxUOocKoN8EsQTwyL-sLbWENfFaQ+f3fjHRvqw@mail.gmail.com> <16cf6c19-20d2-4d11-80b1-b8e3c7e58803@roeck-us.net>
-In-Reply-To: <16cf6c19-20d2-4d11-80b1-b8e3c7e58803@roeck-us.net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 25 Oct 2023 13:32:28 +0200
-Message-ID: <CAJZ5v0ge6_GK6DXcWM-OkjRszxBbPx+ArW76S8W9pf=YOzGyPQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/6] Refine _UID references across kernel
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Raag Jadav <raag.jadav@intel.com>, len.brown@intel.com,
-        robert.moore@intel.com, andriy.shevchenko@linux.intel.com,
-        mark.rutland@arm.com, will@kernel.org, Jonathan.Cameron@huawei.com,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        acpica-devel@lists.linuxfoundation.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        mallikarjunappa.sangannavar@intel.com, bala.senthil@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Oct 25, 2023 at 4:05 AM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Tue, Oct 24, 2023 at 09:51:08PM +0200, Rafael J. Wysocki wrote:
-> > On Tue, Oct 24, 2023 at 11:30 AM Mika Westerberg
-> > <mika.westerberg@linux.intel.com> wrote:
-> > >
-> > > On Tue, Oct 24, 2023 at 11:50:12AM +0530, Raag Jadav wrote:
-> > > > This series refines _UID references across kernel by:
-> > > >
-> > > > - Extracting _UID matching functionality from acpi_dev_hid_uid_match()
-> > > >   helper and introducing it as a separate acpi_dev_uid_match() helper.
-> > > >
-> > > > - Converting manual _UID references to use the standard ACPI helpers.
-> > > >
-> > > > Changes since v2:
-> > > > - Drop review tags as suggested by Andy.
-> > > >
-> > > > Changes since v1:
-> > > > - Change acpi_dev_uid_match() to return false in case of NULL argument.
-> > > > - Drop accepted patches.
-> > > >
-> > > > Raag Jadav (6):
-> > > >   ACPI: utils: Introduce acpi_dev_uid_match() for matching _UID
-> > > >   pinctrl: intel: use acpi_dev_uid_match() for matching _UID
-> > > >   ACPI: utils: use acpi_dev_uid_match() for matching _UID
-> > > >   ACPI: x86: use acpi_dev_uid_match() for matching _UID
-> > > >   hwmon: nct6775: use acpi_dev_hid_uid_match() for matching _HID and
-> > > >     _UID
-> > > >   perf: arm_cspmu: use acpi_dev_hid_uid_match() for matching _HID and
-> > > >     _UID
-> > >
-> > > For the series,
-> > >
-> > > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > >
-> > > >  drivers/acpi/utils.c                  | 34 ++++++++++++++++++++++-----
-> > > >  drivers/acpi/x86/utils.c              |  3 +--
-> > > >  drivers/hwmon/nct6775-platform.c      |  4 +---
-> > > >  drivers/perf/arm_cspmu/arm_cspmu.c    |  8 +++----
-> > > >  drivers/pinctrl/intel/pinctrl-intel.c |  2 +-
-> > >
-> > > This pinctrl one is also fine by me so if Andy does not have objections,
-> > > feel free to add my,
-> > >
-> > > Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> >
-> > Whole series applied as 6.7 material with tags as per the above, thanks!
->
-> Ok, that means I will _not_ apply the hwmon patch through
-> the hwmon tree.
->
-> FWIW, please note that I would have very much preferred applying
-> it through the hwmon tree, and I did _not_ Ack it.
+When build with W=1 and "-Werror=format-truncation", below error is
+observed in coretemp driver,
 
-OK, I'll drop it now and please feel free to pick it up (whenever it
-is convenient to do so), or if you'd rather let me carry it, please
-let me know.
+   drivers/hwmon/coretemp.c: In function 'create_core_data':
+>> drivers/hwmon/coretemp.c:393:34: error: '%s' directive output may be truncated writing likely 5 or more bytes into a region of size between 3 and 13 [-Werror=format-truncation=]
+     393 |                          "temp%d_%s", attr_no, suffixes[i]);
+         |                                  ^~
+   drivers/hwmon/coretemp.c:393:26: note: assuming directive output of 5 bytes
+     393 |                          "temp%d_%s", attr_no, suffixes[i]);
+         |                          ^~~~~~~~~~~
+   drivers/hwmon/coretemp.c:392:17: note: 'snprintf' output 7 or more bytes (assuming 22) into a destination of size 19
+     392 |                 snprintf(tdata->attr_name[i], CORETEMP_NAME_LENGTH,
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     393 |                          "temp%d_%s", attr_no, suffixes[i]);
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
 
-It's only been in my bleeding-edge branch so far.
+Given that
+1. '%d' could take 10 charactors,
+2. '%s' could take 10 charactors ("crit_alarm"),
+3. "temp", "_" and the NULL terminator take 6 charactors,
+fix the problem by increasing CORETEMP_NAME_LENGTH to 28.
+
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+Fixes: 7108b80a542b ("hwmon/coretemp: Handle large core ID value")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202310200443.iD3tUbbK-lkp@intel.com/
+---
+Note that, in practice, I found that the problem is gone if I increase
+the size to 22. But I cannot explain this.
+---
+ drivers/hwmon/coretemp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
+index eba94f68585a..ba82d1e79c13 100644
+--- a/drivers/hwmon/coretemp.c
++++ b/drivers/hwmon/coretemp.c
+@@ -42,7 +42,7 @@ MODULE_PARM_DESC(tjmax, "TjMax value in degrees Celsius");
+ #define PKG_SYSFS_ATTR_NO	1	/* Sysfs attribute for package temp */
+ #define BASE_SYSFS_ATTR_NO	2	/* Sysfs Base attr no for coretemp */
+ #define NUM_REAL_CORES		128	/* Number of Real cores per cpu */
+-#define CORETEMP_NAME_LENGTH	19	/* String Length of attrs */
++#define CORETEMP_NAME_LENGTH	28	/* String Length of attrs */
+ #define MAX_CORE_ATTRS		4	/* Maximum no of basic attrs */
+ #define TOTAL_ATTRS		(MAX_CORE_ATTRS + 1)
+ #define MAX_CORE_DATA		(NUM_REAL_CORES + BASE_SYSFS_ATTR_NO)
+-- 
+2.34.1
+
