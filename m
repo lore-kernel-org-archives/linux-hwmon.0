@@ -2,133 +2,104 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9D55C0032E
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Oct 2023 13:18:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD019C07545
+	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Oct 2023 13:59:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234415AbjJYNSi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 Oct 2023 09:18:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39164 "EHLO
+        id S234790AbjJYN7B (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 25 Oct 2023 09:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232992AbjJYNSi (ORCPT
+        with ESMTP id S1344545AbjJYN6y (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 Oct 2023 09:18:38 -0400
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98440133
-        for <linux-hwmon@vger.kernel.org>; Wed, 25 Oct 2023 06:18:36 -0700 (PDT)
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 39PAfOiI025638;
-        Wed, 25 Oct 2023 09:18:23 -0400
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3txxj79w0y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Oct 2023 09:18:22 -0400 (EDT)
-Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 39PDIK6O031136
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 25 Oct 2023 09:18:21 -0400
-Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
- ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Wed, 25 Oct 2023 09:18:20 -0400
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
- ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Wed, 25 Oct 2023 09:18:20 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Wed, 25 Oct 2023 09:18:20 -0400
-Received: from nsa.ad.analog.com ([10.44.3.69])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 39PDIABB005842;
-        Wed, 25 Oct 2023 09:18:12 -0400
-From:   Nuno Sa <nuno.sa@analog.com>
-To:     <linux-hwmon@vger.kernel.org>
-CC:     =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
-        Dragos Bogdan <dragos.bogdan@analog.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-Subject: [PATCH] hwmon: (axi-fan-control) Fix possible NULL pointer dereference
-Date:   Wed, 25 Oct 2023 15:21:00 +0200
-Message-ID: <20231025132100.649499-1-nuno.sa@analog.com>
-X-Mailer: git-send-email 2.42.0
+        Wed, 25 Oct 2023 09:58:54 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F19132;
+        Wed, 25 Oct 2023 06:58:49 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68816C433C8;
+        Wed, 25 Oct 2023 13:58:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1698242329;
+        bh=UlTZEI3okYwEXOfqTgk+bCPT0BOZMTu5VbgUq9Mk0hM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gESLI8s/yysIu3Do5iEPzsQY1bHaGM5GwL/ilzz2jiuw8Ib3qR/2Tp+kj7zV6XWUP
+         wRgW1ZPNuhRjAJux9fc4IV56ezNfgMAQA8xW9Q/Fic2WvO9b+2XfWrGVXMtlp+L7QA
+         DdWghilDA8bvvmshc+0rLvXIYGp5VufLYpjhbv/Txo1k8YotgvxprDQss49FrwuyrW
+         a3Y+29MwjuUUiAzAIzaxORwMtq06jC5KlZeYnE6olvpLtC2XFkWAhGpML7ZC3vIvPI
+         3kaNYGI3B1jxfdYtN1nHACAk2nG/0Sg86FKHQUEPTVnkXAzZs7pa2S/wlb3g3Cffji
+         yd8xYIhECv5gw==
+Date:   Wed, 25 Oct 2023 14:58:44 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Richard Leitner <richard.leitner@linux.dev>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 4/4] dt-bindings: hwmon: ti,ina238: add ti,ina237
+Message-ID: <20231025-unclip-ion-826a58681a12@spud>
+References: <20231025-ina237-v1-0-a0196119720c@linux.dev>
+ <20231025-ina237-v1-4-a0196119720c@linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-ORIG-GUID: biVbIQn9Zab2W5fe_rYGH9BsFYCRZBi0
-X-Proofpoint-GUID: biVbIQn9Zab2W5fe_rYGH9BsFYCRZBi0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-25_02,2023-10-25_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- spamscore=0 clxscore=1011 bulkscore=0 suspectscore=0 impostorscore=0
- lowpriorityscore=0 mlxlogscore=862 adultscore=0 phishscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2310170000 definitions=main-2310250115
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="pE6BoEu0EbdyHUId"
+Content-Disposition: inline
+In-Reply-To: <20231025-ina237-v1-4-a0196119720c@linux.dev>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Dragos Bogdan <dragos.bogdan@analog.com>
 
-axi_fan_control_irq_handler(), dependent on the private
-axi_fan_control_data structure, might be called before the hwmon
-device is registered. That will cause an "Unable to handle kernel
-NULL pointer dereference" error.
+--pE6BoEu0EbdyHUId
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: 8412b41 ("hwmon: Support ADI Fan Control IP")
-Signed-off-by: Dragos Bogdan <dragos.bogdan@analog.com>
-Signed-off-by: Nuno Sa <nuno.sa@analog.com>
----
- drivers/hwmon/axi-fan-control.c | 29 ++++++++++++++++-------------
- 1 file changed, 16 insertions(+), 13 deletions(-)
+On Wed, Oct 25, 2023 at 10:34:14AM +0000, Richard Leitner wrote:
+> Add ti,ina237 binding to ti,ina238 as they share the same driver.
+>=20
+> Signed-off-by: Richard Leitner <richard.leitner@linux.dev>
+> ---
+>  Documentation/devicetree/bindings/hwmon/ti,ina238.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina238.yaml b/Doc=
+umentation/devicetree/bindings/hwmon/ti,ina238.yaml
+> index aba89e5f34b3..17408076696c 100644
+> --- a/Documentation/devicetree/bindings/hwmon/ti,ina238.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/ti,ina238.yaml
+> @@ -22,6 +22,7 @@ description: |
+>  properties:
+>    compatible:
+>      enum:
+> +      - ti,ina237
 
-diff --git a/drivers/hwmon/axi-fan-control.c b/drivers/hwmon/axi-fan-control.c
-index 5fd136baf1cd..19b9bf3d75ef 100644
---- a/drivers/hwmon/axi-fan-control.c
-+++ b/drivers/hwmon/axi-fan-control.c
-@@ -496,6 +496,21 @@ static int axi_fan_control_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 	}
- 
-+	ret = axi_fan_control_init(ctl, pdev->dev.of_node);
-+	if (ret) {
-+		dev_err(&pdev->dev, "Failed to initialize device\n");
-+		return ret;
-+	}
-+
-+	ctl->hdev = devm_hwmon_device_register_with_info(&pdev->dev,
-+							 name,
-+							 ctl,
-+							 &axi_chip_info,
-+							 axi_fan_control_groups);
-+
-+	if (IS_ERR(ctl->hdev))
-+		return PTR_ERR(ctl->hdev);
-+
- 	ctl->irq = platform_get_irq(pdev, 0);
- 	if (ctl->irq < 0)
- 		return ctl->irq;
-@@ -509,19 +524,7 @@ static int axi_fan_control_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	ret = axi_fan_control_init(ctl, pdev->dev.of_node);
--	if (ret) {
--		dev_err(&pdev->dev, "Failed to initialize device\n");
--		return ret;
--	}
--
--	ctl->hdev = devm_hwmon_device_register_with_info(&pdev->dev,
--							 name,
--							 ctl,
--							 &axi_chip_info,
--							 axi_fan_control_groups);
--
--	return PTR_ERR_OR_ZERO(ctl->hdev);
-+	return 0;
- }
- 
- static struct platform_driver axi_fan_control_driver = {
--- 
-2.42.0
+The driver patch you have done implies no difference between the
+programming model for both of these devices. It'd seem to make more sense
+for the ina237 to fall back to the ina238, thereby requiring no change in
+the driver to support it.
 
+Cheers,
+Conor.
+
+>        - ti,ina238
+> =20
+>    reg:
+>=20
+> --=20
+> 2.40.1
+>=20
+
+--pE6BoEu0EbdyHUId
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZTkfEwAKCRB4tDGHoIJi
+0pu2AQCAxnniBjz6rcPwfkiVyxIlV2tWkTei9kpP4WDrtKDCdwD+OebGU9904K9V
+R2HVKdB53Bhw0pxQXt5EW4gUi6BysQI=
+=tFzz
+-----END PGP SIGNATURE-----
+
+--pE6BoEu0EbdyHUId--
