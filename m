@@ -2,185 +2,115 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB2E1C25B6B
-	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Oct 2023 08:03:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 019E3C25B48
+	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Oct 2023 08:15:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbjJZIDC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 26 Oct 2023 04:03:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49270 "EHLO
+        id S230283AbjJZIPc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 26 Oct 2023 04:15:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjJZIDB (ORCPT
+        with ESMTP id S229567AbjJZIPb (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 26 Oct 2023 04:03:01 -0400
-Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81102B8;
-        Thu, 26 Oct 2023 01:02:59 -0700 (PDT)
-Received: by mail-ot1-x342.google.com with SMTP id 46e09a7af769-6ce291b5df9so308866a34.2;
-        Thu, 26 Oct 2023 01:02:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698307379; x=1698912179; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EiNUWaVbyuQ9E3+Z8Xcu/M3576aIKpUu0D5Q0llCz/Y=;
-        b=HdtPWIqR+o4kxo1Y5iDHbGcrPB1w5Fstm7Nx0OOZ3P75OOtel40+ajHTWlwWu/5gSx
-         7nT98Za/HEwDhsjCjbX8qzso2By5Bzh56b0tgRX17pj3/cK12B2CA/EmzUaGajDiPOOj
-         V4uw2IMe1J8LThuEhUqAsmWj/7kqHqYNLtH5TZ1BflSj6DVk32A2m7JCJLF99HMycoMB
-         aD2OiFHaCUIFOsM1luvvstSX8QdW38jpYK9AlLi5k6trM3qWlWi2oJN7Zdmi59cDJg8v
-         pUiNDu3kd5BLMCapi0TXrujTerxjJh9jTDi1SId/CXTK45RCM4tbveIL0cg8VS9VcoPi
-         KcEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698307379; x=1698912179;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EiNUWaVbyuQ9E3+Z8Xcu/M3576aIKpUu0D5Q0llCz/Y=;
-        b=utr6171PHDJyskINhRSjRbn11Cgk5YRnd6vL1t+jkR3SaEG7y6FtLNFT6iFIHhbl/k
-         ou8lPzg3gF9OhfKJHsHXFebrsknPbeUskpZnHNeYr93ImD9pl6VFYrRVOC+QfDkX9Mjv
-         9awrozJF4Z3eeSmAdp1arvHlBL7hLYmBUCxxYNhVGcgUqrMS01wnoCTsd+HtSUCa0/+Z
-         gAFAtGTfgCF3p5TEnU8a4W4zGrt6iSKa8HtiYZYUUqhYJUBPHdAsV7Iva3UPYNlIGJ9y
-         aOPZGWfdyajeaS8zT37B7uQKZWgwOWSbiiche6XA89S4JORXIL+l8bAhilCIGoA2oWNV
-         dCmw==
-X-Gm-Message-State: AOJu0Yxfzjavp7nmqQUVqRgYjYQ1cw86BcANYathIDYVGgxqhDtyMLaO
-        QL/NzNYaqqnaCLSIUAzdfK8=
-X-Google-Smtp-Source: AGHT+IHgKWPQhOLXFQRr+4qqmAwqD5d5K+uinng7SBFGOYZi7HWhXPOFi6EUb9I2souPViSEkRgsWw==
-X-Received: by 2002:a05:6870:6713:b0:1e9:9bad:8989 with SMTP id gb19-20020a056870671300b001e99bad8989mr24160862oab.25.1698307378484;
-        Thu, 26 Oct 2023 01:02:58 -0700 (PDT)
-Received: from dawn-Aspire-A715-74G.. ([183.198.110.181])
-        by smtp.gmail.com with ESMTPSA id b11-20020a655ccb000000b0058a9621f583sm8625579pgt.44.2023.10.26.01.02.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Oct 2023 01:02:58 -0700 (PDT)
-From:   Li peiyu <579lpy@gmail.com>
-To:     jdelvare@suse.com, linux@roeck-us.net
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Li peiyu <579lpy@gmail.com>
-Subject: [PATCH v2] dt-bindings: hwmon: lm87: convert to YAML
-Date:   Thu, 26 Oct 2023 16:02:26 +0800
-Message-Id: <20231026080226.52170-1-579lpy@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <caa50763-74be-4c40-9d8d-7f1f64ce5144@kernel.org>
-References: <caa50763-74be-4c40-9d8d-7f1f64ce5144@kernel.org>
+        Thu, 26 Oct 2023 04:15:31 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2061.outbound.protection.outlook.com [40.107.117.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A266CE;
+        Thu, 26 Oct 2023 01:15:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aBfokeLiZoHOHlwnx3Ig/qtT2QpjyunjByTglqQB0gju0D8XReiJmMINt62JN5O0z28/jvCNt+f7LeaMCg6gJgoRPGmrQ6PZYxZqm3dDnZ+lE8ScF2NMyeJcUlTIcMqTolwX3TtH433ALQ3cn2IzK167seTNFwyqNlnDBjIulFy660PjYWQWiAqe8El9PTDLweJXR8yWHyEq4g+j1bsddWtf6hODDgIbHmyGvqvbsVtEscpQbE/TSk7meh4E7+v5GGHufKjbXd7m7/b+MYRh+yqXuN8wnQXn36USUWH19OCEDtKt3ToD08U1wExWXt8xbtWefrd8mSlJhfX/G0+Gvg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=41FOP7tGP3V4A+/Xspp259P7cwuIEzHK2Yug8mkoLow=;
+ b=UfkrfqJYhR4E5b07W4i8NNdBVBNI9TIN1sdie568mD6CZbrAi8OvePrGCQzzmyWZzN140FDv1hCYZCvtJqs53q1bYDE0yoBDcDmuS01SLwaCUL5GjpzOxys6tIFgm3jleWQUsda9YBVVE6fnhpJW4fowtf2pt4LbIJyT+buJ1VZlnCHbzvv1EekakxZHa92/MnQjc81vnc0JyDIwim0roPN643bMbRfnBdPJRHQrZT04SB9OQ6p9Fewz1hTvYw1WcYgacBzwCq3u3oKRKtnsaPF8yA2bXJxzUPfqhnLfQR+pvYyOU6YHSzEN5cRjO4ZWPqvp5ZlnLEMGdwNytGUNQQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 211.20.1.79) smtp.rcpttodomain=stwcx.xyz smtp.mailfrom=wiwynn.com; dmarc=fail
+ (p=quarantine sp=quarantine pct=100) action=quarantine
+ header.from=wiwynn.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=41FOP7tGP3V4A+/Xspp259P7cwuIEzHK2Yug8mkoLow=;
+ b=X0z3UkgQk5aDHVvNonWgSTStnDOdb30qDXluTFoLV+q4birwFw9LAlicj/KWdckufaG1V2ml6Vf1PZtXvksTZ57A1u7URcvRNeALZRVgxUQ96rvjHkEUrO/vqWvsUwFLHNB3utWOG4yAR37WR9/tw8tQpRUJT+o7PC71ZjX0eYy+NXt1BKrWfrnqQJkrR6AxvMw2msUpSAQREonqnzWCmfRrWTeXG4wTNfCELl3PWS1bNt7M507U7JawYIRVbVwLJwT94jcSIZZRFUwT2/v5osbhG9izs9DXNQvQsJ51YKH3dnPm740hbpSQF+RLdmMXfjNDm3eSmo4clVM9LyRWUA==
+Received: from KL1PR0401CA0030.apcprd04.prod.outlook.com (2603:1096:820:e::17)
+ by SEZPR04MB6355.apcprd04.prod.outlook.com (2603:1096:101:cb::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.19; Thu, 26 Oct
+ 2023 08:15:20 +0000
+Received: from HK2PEPF00006FB0.apcprd02.prod.outlook.com
+ (2603:1096:820:e:cafe::d6) by KL1PR0401CA0030.outlook.office365.com
+ (2603:1096:820:e::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.34 via Frontend
+ Transport; Thu, 26 Oct 2023 08:15:19 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 211.20.1.79)
+ smtp.mailfrom=Wiwynn.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=quarantine header.from=Wiwynn.com;
+Received-SPF: Fail (protection.outlook.com: domain of Wiwynn.com does not
+ designate 211.20.1.79 as permitted sender) receiver=protection.outlook.com;
+ client-ip=211.20.1.79; helo=localhost.localdomain;
+Received: from localhost.localdomain (211.20.1.79) by
+ HK2PEPF00006FB0.mail.protection.outlook.com (10.167.8.6) with Microsoft SMTP
+ Server id 15.20.6838.22 via Frontend Transport; Thu, 26 Oct 2023 08:15:19
+ +0000
+From:   Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+To:     patrick@stwcx.xyz
+Cc:     Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-i2c@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: [PATCH v2 0/2] LTC4286 and LTC4287 driver support
+Date:   Thu, 26 Oct 2023 16:15:10 +0800
+Message-Id: <20231026081514.3610343-1-Delphine_CC_Chiu@Wiwynn.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: HK2PEPF00006FB0:EE_|SEZPR04MB6355:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 8de9bb05-959c-4e6d-2250-08dbd5fbb16a
+X-MS-Exchange-AtpMessageProperties: SA
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: d2L1iVrANtie0MzbUkzvFKTA26EfwqtcYANAaSX5Fp9eTethzuDReTXKNvZL4Nie7L6XmkuOquwJ4tNRVegRjH3NAxSnPWXKAvMHymvXn6gEE3xi+/YYjyPljDwuodwP5hNrU3reVeD+D0iEgEk2B+fg8mz1vNMa1Ctal6EvUj3O/3NxEifuSswQCBHTGosE2q56rUm7ssLI2ysYly3Y4sXzcV3n7lsR+y7zdDHlJ83pY/ihRk7gbDfwMeW5wk3XUmA2NSB4aLdr6R0MJr2l8xgzP+mSoa4z4t+vy0DRtvdpKexZv5nY9bhfo3wKT41c/UNU2gIQAeh9oasShBh2qCsGhmZWNXvDx79FaoEprYl5l2o+7i/CxNFVxczwhdGhw6LKjnOtZe5BjERuddY5d08Ib/5Ez8zJtfUvIkEuZMFY6Z3UZ339WH4/S74bpq+tY6dcPtxxvRszucOELvWvO8qKbkWOaSbAGEbfNRzn/rbeTjUpprlw/jprh89kXuZTK8fVc0kjFEjiSuHI0EmiIT/ByR0sxiXyuvwNMvawHLR/VO25/UPE5dgui0rRkxB/neFTGQmL4aCifFDRLtYcCQITXQnoGbVma+xIFyF4ugNaQEW1JA2ztIJDPMEuZuTWKcXRdmjixBNRzgdW54Pz1jNL1NRbCa4/ZhtduF9EXvZzz4W220Q+sHjtoT2PlP0jYHfrlT4SCmw1MH0Qkr7Anw==
+X-Forefront-Antispam-Report: CIP:211.20.1.79;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:localhost.localdomain;PTR:211-20-1-79.hinet-ip.hinet.net;CAT:NONE;SFS:(13230031)(6069001)(4636009)(39860400002)(376002)(136003)(346002)(396003)(186009)(1800799009)(451199024)(64100799003)(82310400011)(46966006)(36840700001)(40480700001)(6506007)(478600001)(54906003)(2616005)(70586007)(70206006)(956004)(6512007)(1076003)(6666004)(316002)(36756003)(6916009)(86362001)(9316004)(6486002)(47076005)(36860700001)(336012)(81166007)(82740400003)(26005)(356005)(8676002)(8936002)(4326008)(36736006)(7416002)(5660300002)(2906002)(4744005)(41300700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: wiwynn.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2023 08:15:19.0431
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8de9bb05-959c-4e6d-2250-08dbd5fbb16a
+X-MS-Exchange-CrossTenant-Id: da6e0628-fc83-4caf-9dd2-73061cbab167
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=da6e0628-fc83-4caf-9dd2-73061cbab167;Ip=[211.20.1.79];Helo=[localhost.localdomain]
+X-MS-Exchange-CrossTenant-AuthSource: HK2PEPF00006FB0.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR04MB6355
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Convert the lm87 hwmon sensor bindings to DT schema
+v2 - Add LTC4286 and LTC4287 binding document
+   - Add LTC4286 and LTC4287 driver
 
-Signed-off-by: Li peiyu <579lpy@gmail.com>
----
-Changes for v2:
-- replace node name lm87 with sensor
-- replace character '\t' with spaces
+Delphine CC Chiu (2):
+  dt-bindings: hwmon: Add lltc ltc4286 driver bindings
+  hwmon: pmbus: Add ltc4286 driver
 
- .../devicetree/bindings/hwmon/lm87.txt        | 30 ----------
- .../devicetree/bindings/hwmon/lm87.yaml       | 59 +++++++++++++++++++
- 2 files changed, 59 insertions(+), 30 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/hwmon/lm87.txt
- create mode 100644 Documentation/devicetree/bindings/hwmon/lm87.yaml
+ .../bindings/hwmon/lltc,ltc4286.yaml          |  50 ++++++
+ Documentation/hwmon/ltc4286.rst               |  79 +++++++++
+ MAINTAINERS                                   |  10 ++
+ drivers/hwmon/pmbus/Kconfig                   |   9 +
+ drivers/hwmon/pmbus/Makefile                  |   1 +
+ drivers/hwmon/pmbus/ltc4286.c                 | 160 ++++++++++++++++++
+ 6 files changed, 309 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml
+ create mode 100644 Documentation/hwmon/ltc4286.rst
+ create mode 100644 drivers/hwmon/pmbus/ltc4286.c
 
-diff --git a/Documentation/devicetree/bindings/hwmon/lm87.txt b/Documentation/devicetree/bindings/hwmon/lm87.txt
-deleted file mode 100644
-index 758ff398b67b..000000000000
---- a/Documentation/devicetree/bindings/hwmon/lm87.txt
-+++ /dev/null
-@@ -1,30 +0,0 @@
--*LM87 hwmon sensor.
--
--Required properties:
--- compatible: Should be
--	"ti,lm87"
--
--- reg: I2C address
--
--optional properties:
--- has-temp3: This configures pins 18 and 19 to be used as a second
--             remote temperature sensing channel. By default the pins
--             are configured as voltage input pins in0 and in5.
--
--- has-in6: When set, pin 5 is configured to be used as voltage input
--           in6. Otherwise the pin is set as FAN1 input.
--
--- has-in7: When set, pin 6 is configured to be used as voltage input
--           in7. Otherwise the pin is set as FAN2 input.
--
--- vcc-supply: a Phandle for the regulator supplying power, can be
--              configured to measure 5.0V power supply. Default is 3.3V.
--
--Example:
--
--lm87@2e {
--	compatible = "ti,lm87";
--	reg = <0x2e>;
--	has-temp3;
--	vcc-supply = <&reg_5v0>;
--};
-diff --git a/Documentation/devicetree/bindings/hwmon/lm87.yaml b/Documentation/devicetree/bindings/hwmon/lm87.yaml
-new file mode 100644
-index 000000000000..8f4f07845d95
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/lm87.yaml
-@@ -0,0 +1,59 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwmon/lm87.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: LM87 hwmon sensor
-+
-+maintainers:
-+  - Jean Delvare <jdelvare@suse.com>
-+  - Guenter Roeck <linux@roeck-us.net>
-+
-+properties:
-+  compatible:
-+    const: ti,lm87
-+
-+  reg:
-+    maxItems: 1
-+
-+  has-temp3:
-+    description: |
-+      This configures pins 18 and 19 to be used as a second remote
-+      temperature sensing channel. By default the pins are configured
-+      as voltage input pins in0 and in5.
-+
-+  has-in6:
-+    description: |
-+      When set, pin 5 is configured to be used as voltage input in6.
-+      Otherwise the pin is set as FAN1 input.
-+
-+  has-in7:
-+    description: |
-+      When set, pin 6 is configured to be used as voltage input in7.
-+      Otherwise the pin is set as FAN2 input.
-+
-+  vcc-supply:
-+    description: |
-+      a Phandle for the regulator supplying power, can be configured to
-+      measure 5.0V power supply. Default is 3.3V.
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      sensor@2e {
-+        compatible = "ti,lm87";
-+        reg = <0x2e>;
-+        has-temp3;
-+        vcc-supply = <&reg_5v0>;
-+      };
-+    };
 -- 
-2.34.1
+2.25.1
 
