@@ -2,162 +2,82 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C272EC25B6B
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Oct 2023 21:36:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B94DFC25B47
+	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Oct 2023 00:48:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbjJYVgy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 Oct 2023 17:36:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55322 "EHLO
+        id S230241AbjJZAsT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 25 Oct 2023 20:48:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbjJYVgy (ORCPT
+        with ESMTP id S229877AbjJZAsS (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 Oct 2023 17:36:54 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E272128
-        for <linux-hwmon@vger.kernel.org>; Wed, 25 Oct 2023 14:36:52 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1cc04494653so1256135ad.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 25 Oct 2023 14:36:52 -0700 (PDT)
+        Wed, 25 Oct 2023 20:48:18 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77365132;
+        Wed, 25 Oct 2023 17:48:16 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id d75a77b69052e-41cd1fe4645so2430491cf.0;
+        Wed, 25 Oct 2023 17:48:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698269811; x=1698874611; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=C7J8CQ46sdWmgeVPJtCbfD8hQRmLkBLk5hYiX6M/hw8=;
-        b=K/9yNe+aW1wJp0cbxmB3R6w6rlviuP9viejmPSqsQulEmm1SyqMmcTWnkBxwVU4SiW
-         ThXC1S5L1BKyVIFPubwQ/JO+fP+Ec+Fwn5EUmkzjMfFcX8h7W93BWrwUBuNhdyySE0GM
-         OEdjpobUzQe7/A/1QmWmmv8U0dYE4k8y4NIcm+cgm+Q0PX/h0Z8yVDczDbtMxbz8QJl+
-         RQy/v6dviSIqOPCC+zhjCBjBeU5uzUQ6QQvCFUffgZwqqxLWzt7BBFJjQkE1n3Co+4wR
-         0tJN5ni+NIlPa7Fjal+R7/vEDZNdXjcKRweUBf/vR0gm5mb+Vq26p4wuzUf4rqbGPFJW
-         iBZA==
+        d=gmail.com; s=20230601; t=1698281295; x=1698886095; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LbvC3Jr6GlBODTrG4s/DZw4mHWi0s4/azQU3339hmps=;
+        b=BFUDTZUXwX4W9xjfJUdy61TiKqPCLJSqofh2NEiG4SnqgvFQTFt/VnkN3VRvnN22mI
+         p03lnj/8EAuD9JjEJNeuJisFPVO3zObwsiFdPT4IBxgIAkho6F7PcTylBX79ncqzDCq/
+         kI62lghnJJ+g9VfMeDrk011N8VvXb4KzvtP/Vk7AA4WL+YYdPBC1ixBKv3h3wijeEsCI
+         +d3PxDsDHbFsH/fft2+LX/iCVZeoXAPbMlTmE1TW+mAUXe5ahZIcxnRFKnKSi3YxEZfL
+         Ru2b9n5vWyoW5SLyi+fLKCobrt8Ux5i/zhPF0j+dAgeqkDfYYgboJ8OwILhtaVm7j+bp
+         26gQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698269811; x=1698874611;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=C7J8CQ46sdWmgeVPJtCbfD8hQRmLkBLk5hYiX6M/hw8=;
-        b=DfwALhVQYeSFHStNzTOtHLCzc/KLgEJKvaTx136z9YNIrBhCywotqM10tBYfhqZnFi
-         kWy1NygXauI0DM4Wgk8K9IIWqAlNYLhNmDi02o6HRDVLcVNUUtwhgqOM6mFjdROFwKjg
-         kXfdj8wMYHtY6ejMxM3AlEsDFOvsdYBME0SX9m0P5KGgP73PDnFzkngyYoc8pdwIV2ON
-         lluxDP4VZUC+J1r4RXLjztGE2Rkup5HeVx3yc7nkx9Har87xcTPy/NiJcju7zvmotBLx
-         e1ahtRLVijq6Xu8CdELjDiCmN3dBq+EBwlevEtKuwoJrwdGZFJWQ+oUBOuib510vwNzU
-         SbwQ==
-X-Gm-Message-State: AOJu0YynxXRysDjCsif0ZZClOUE+rPmL67EiCEhzH4BSY007+vk+qyFX
-        rpZT3hYSrYpZyDFOFSkQWUam2zIZ9U8=
-X-Google-Smtp-Source: AGHT+IHVrkv/BEAP509uS9xrzwasQihK8tL5tPoKPPyR6gje6vdkOPWIAsMxh3oPrzo6hYFRQNy5ew==
-X-Received: by 2002:a17:903:110d:b0:1c9:e508:ad43 with SMTP id n13-20020a170903110d00b001c9e508ad43mr15940042plh.8.1698269810957;
-        Wed, 25 Oct 2023 14:36:50 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1698281295; x=1698886095;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LbvC3Jr6GlBODTrG4s/DZw4mHWi0s4/azQU3339hmps=;
+        b=CVEvRQ+t/3Sdl5qWFPozQCKUbIOG/4R1OeCl1egFVYe/85UTqutp6AQBC5zHzP5Cpp
+         qhVCYmTUx3tgmx2mehRFOmhghQyKxRj01v5wDwla5Y1Lhtb3DvvQ/CDKpz7fZOyuE2a7
+         1C6xv95RKBUXQ2hfuH/IOuQ2Sq+3iwSg42I8tJqFyn0UiesACzO9cGzsWOVwl3H9IyZh
+         pFO0sMyQZjEtpfDtnKJrO8Tq/3AN859+CWn9UTWM7rTRn/4Ncn6G7RMeyhsk0XLCkip8
+         RzWzTvr/rOKMS29SOrieqz4UR9BlGu4O9dGDHLCrLjh8UtbidoKAoohTM+9P+IlBk/8D
+         N/yA==
+X-Gm-Message-State: AOJu0Yyq/leW3rp60R+DXcubKi/wbYgAHSXN1gx/c5NthNqwS3FCwTlg
+        2BxKLHgfD+WYblZRUvIZZJSmsNGAQa8=
+X-Google-Smtp-Source: AGHT+IEySCJt7Lqaa+DiGWDnDKQ/owwawYZ/7VU9DPmC43dSf7qa5qhE0e7NJ3pGXYodwM1xaYpMWQ==
+X-Received: by 2002:ac8:7e8a:0:b0:418:1b8f:4cde with SMTP id w10-20020ac87e8a000000b004181b8f4cdemr23683078qtj.45.1698281295449;
+        Wed, 25 Oct 2023 17:48:15 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p6-20020a170902e74600b001bdd7579b5dsm9626717plf.240.2023.10.25.14.36.50
+        by smtp.gmail.com with ESMTPSA id m124-20020a0de382000000b0059b2be24f88sm5448010ywe.143.2023.10.25.17.48.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Oct 2023 14:36:50 -0700 (PDT)
+        Wed, 25 Oct 2023 17:48:15 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 25 Oct 2023 17:48:13 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Ian Nartowicz <deadbeef@nartowicz.co.uk>,
-        Armin Wolf <W_Armin@gmx.de>
-Subject: [PATCH 2/2] Revert "hwmon: (sch56xx-common) Add automatic module loading on supported devices"
-Date:   Wed, 25 Oct 2023 14:36:45 -0700
-Message-Id: <20231025213645.832738-2-linux@roeck-us.net>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231025213645.832738-1-linux@roeck-us.net>
-References: <20231025213645.832738-1-linux@roeck-us.net>
+To:     Lakshmi Yadlapati <lakshmiy@us.ibm.com>
+Cc:     joel@jms.id.au, andrew@aj.id.au, eajames@linux.ibm.com,
+        ninad@linux.ibm.com, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: (pmbus/max31785) Add delay between bus accesses
+Message-ID: <bbbf3668-aa7a-4489-85b0-333cf394abe9@roeck-us.net>
+References: <20231023180804.3068154-1-lakshmiy@us.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231023180804.3068154-1-lakshmiy@us.ibm.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This reverts commit 393935baa45e5ccb9603cf7f9f020ed1bc0915f7.
+On Mon, Oct 23, 2023 at 01:08:03PM -0500, Lakshmi Yadlapati wrote:
+> Changes since V1:
+> 1. Changed the max31785_wait macro to a function, following the conventions
+>   used in other drivers that had the same issue.
+> 2. Changed the function names from max31785_i2c_smbus* to max31785_i2c_* and
+>   from max31785_pmbus_* to _max31785_*, making them more concise.
+> 
 
-As reported by Ian Nartowicz, this and the next patch
-result in a failure to load the driver on Celsius W280.
-While the alternative would be to add the board to the DMI
-override table, it is quite likely that other systems are
-also affected. Revert the offending patches to avoid future
-problems.
+Please check Documentation/process/submitting-patches.rst
+for the expected patch format, specifically details on how
+description and change log are supposed to look like.
 
-Fixes: 393935baa45e ("hwmon: (sch56xx-common) Add automatic module loading on supported devices")
-Reported-by: Ian Nartowicz <deadbeef@nartowicz.co.uk>
-Closes: https://lore.kernel.org/linux-hwmon/20231025192239.3c5389ae@debian.org/T/#t
-Cc: Armin Wolf <W_Armin@gmx.de>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/sch56xx-common.c | 40 ++--------------------------------
- 1 file changed, 2 insertions(+), 38 deletions(-)
-
-diff --git a/drivers/hwmon/sch56xx-common.c b/drivers/hwmon/sch56xx-common.c
-index 3ece53adabd6..ac1f72580715 100644
---- a/drivers/hwmon/sch56xx-common.c
-+++ b/drivers/hwmon/sch56xx-common.c
-@@ -7,10 +7,8 @@
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/module.h>
--#include <linux/mod_devicetable.h>
- #include <linux/init.h>
- #include <linux/platform_device.h>
--#include <linux/dmi.h>
- #include <linux/err.h>
- #include <linux/io.h>
- #include <linux/acpi.h>
-@@ -21,10 +19,7 @@
- #include <linux/slab.h>
- #include "sch56xx-common.h"
- 
--static bool ignore_dmi;
--module_param(ignore_dmi, bool, 0);
--MODULE_PARM_DESC(ignore_dmi, "Omit DMI check for supported devices (default=0)");
--
-+/* Insmod parameters */
- static bool nowayout = WATCHDOG_NOWAYOUT;
- module_param(nowayout, bool, 0);
- MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
-@@ -523,42 +518,11 @@ static int __init sch56xx_device_add(int address, const char *name)
- 	return PTR_ERR_OR_ZERO(sch56xx_pdev);
- }
- 
--/* For autoloading only */
--static const struct dmi_system_id sch56xx_dmi_table[] __initconst = {
--	{
--		.matches = {
--			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
--		},
--	},
--	{ }
--};
--MODULE_DEVICE_TABLE(dmi, sch56xx_dmi_table);
--
- static int __init sch56xx_init(void)
- {
--	const char *name = NULL;
- 	int address;
-+	const char *name = NULL;
- 
--	if (!ignore_dmi) {
--		if (!dmi_check_system(sch56xx_dmi_table))
--			return -ENODEV;
--
--		/*
--		 * Some machines like the Esprimo P720 and Esprimo C700 have
--		 * onboard devices named " Antiope"/" Theseus" instead of
--		 * "Antiope"/"Theseus", so we need to check for both.
--		 */
--		if (!dmi_find_device(DMI_DEV_TYPE_OTHER, "Antiope", NULL) &&
--		    !dmi_find_device(DMI_DEV_TYPE_OTHER, " Antiope", NULL) &&
--		    !dmi_find_device(DMI_DEV_TYPE_OTHER, "Theseus", NULL) &&
--		    !dmi_find_device(DMI_DEV_TYPE_OTHER, " Theseus", NULL))
--			return -ENODEV;
--	}
--
--	/*
--	 * Some devices like the Esprimo C700 have both onboard devices,
--	 * so we still have to check manually
--	 */
- 	address = sch56xx_find(0x4e, &name);
- 	if (address < 0)
- 		address = sch56xx_find(0x2e, &name);
--- 
-2.39.2
-
+Guenter
