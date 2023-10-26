@@ -2,189 +2,111 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3BDBC25B67
-	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Oct 2023 16:48:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E524C25B48
+	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Oct 2023 16:49:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230507AbjJZQsl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 26 Oct 2023 12:48:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57078 "EHLO
+        id S230505AbjJZQtp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 26 Oct 2023 12:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbjJZQsk (ORCPT
+        with ESMTP id S229815AbjJZQto (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 26 Oct 2023 12:48:40 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C68187;
-        Thu, 26 Oct 2023 09:48:38 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-d9c2420e417so841084276.2;
-        Thu, 26 Oct 2023 09:48:37 -0700 (PDT)
+        Thu, 26 Oct 2023 12:49:44 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CB1A4;
+        Thu, 26 Oct 2023 09:49:43 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-5a7af20c488so8761167b3.1;
+        Thu, 26 Oct 2023 09:49:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698338916; x=1698943716; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sO6k4iZXI5gVc3XI9r4gXhrXrv6eyD5MBhD8ODEC+L4=;
-        b=GYUyJ7qEaUZXlf7AxtOUku7IHZgOCWYDH8ZyCRmF3JBvFgxol9ZNinIEEiomr17OkH
-         VKZRXYHnXIxegcJtPkFQ7u3Dk/5oxkz8MTN9b1k0pvC6SVygb6Wg/5+vGaf8icxi+ail
-         xHagSKb9bWDlo4nlUOV5T0ukXfovkVZ/Kih2U3+sD9Nx95BcHdSqfqPOrL5BNNueAFCs
-         mxXgMmpzVYRkOXp7ISuyWwON7m5HxnmwZ4gfEb8u3LV16znPHu4seybCSFsa+XwfIoul
-         gHUDj1vuXFILv97rjgoBV3m9BY02ecbZVCTp/xIIuQHhYJ2eqfLyw1iU3+j9rxsNQMNQ
-         2KfQ==
+        d=gmail.com; s=20230601; t=1698338982; x=1698943782; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=a4/dheoJ9dWHv5mUFQEViTi9AUYQK1a6PHdzoT/e6yo=;
+        b=nUrI6pIPYWF2GXXIolYsKFuJCIWkJ7eKE6aPSAQrZBk8BlieRdtYOWMIyysyz6Erbu
+         c4YUjPqypeMCwqoVgg90Er9ElfIaOcwBsxed0dOA1wC5dGJc85XBVGPbfLVGwXM30NXm
+         o6T1g3vAAJRawLr2iHLmrhpU2eaEgrrMFwrDykQ5NHV5tXHNQjrnEPGAklX9nrwSZhAz
+         VKTHhS7OVwkq+/n5SPEhGCjtDp2OEnl2vKPszstduOMWA9xomQozwRw8ZoXTdhayRHKw
+         b1J5WYIKC5hXf3uL1UOJ7k/BERpCq201QfNZzRAhpgWR5ayJ83OZd1+M276PpeuXcOOd
+         K95w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698338916; x=1698943716;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sO6k4iZXI5gVc3XI9r4gXhrXrv6eyD5MBhD8ODEC+L4=;
-        b=IILNfciy+lKlnpzIxKHi9garQj79ALNsnkFmUus7zDQ6FE6kcrL6P0EkXTW6gG0X5o
-         yLJtZ+qiUxiyVPxMvB0ixamapb77TQpqXcyRsWRhip7E9a3H+YiZF2v4JLdL4REvUjt2
-         v2lMjDd3pRmWdFt0dYaSnEzfIyZKmKiVf0/uC69H+bTSRfs+UoZOW9EqlF+UTWiziS6j
-         BkOb0cwysxq4XrRgkijjLki/SdG6yRMovLUaJmwI5NL0uugbFmqWHYUbpR2CEZZrpxnI
-         QpknYVzHGvMHNJB952mn+aNTUfx7udUoK6cskB20ZHoZA9vJG6jWgcr1Gl9CBM09rtzb
-         n3oQ==
-X-Gm-Message-State: AOJu0YwplExLMIgBp3UHVv/svniZvRh/OOXRfRPkL6sMjotzr8V7E0Mj
-        y8bUILnmkf88Slyf3xGCSpw1Jt99ESo=
-X-Google-Smtp-Source: AGHT+IHZicZw0ErmgnGn0eZoIV1A4A1z0FPCfOFw/7XqKlelGMvCvWAzGMCYmtflZX1FmEOQs7gbAQ==
-X-Received: by 2002:a25:494:0:b0:d91:b6e5:54dd with SMTP id 142-20020a250494000000b00d91b6e554ddmr19928537ybe.3.1698338916486;
-        Thu, 26 Oct 2023 09:48:36 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1698338982; x=1698943782;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a4/dheoJ9dWHv5mUFQEViTi9AUYQK1a6PHdzoT/e6yo=;
+        b=ZQF2ej9mUoP2WzaLU67z/H62K5F7otkUBSsjZbb+kHGwvjCuNvZMvHt4CDkbbLQZ4u
+         LCmebJ357J927kp7UJeYiWfrrRXM5oOO01rJ6h+rGZyE0w3Se28dQfpWAAahdbS6Y0bU
+         MTDY81jA1XHvTcF/Uci2Cn1rzPf26EdPXQCddIZLQLuR91wXF2w1wRlxdCf1Fk5laGzo
+         IEthHJFq3NKQw8xuXg1ACWGFvZ1gYoSCPHsqdjyBdlwjut3iKpocn/nv/DYGuSB8PC24
+         nLBPo6EqlmTZ0UevfGTT8/7aIG4tQ++LBWlUZnnGqoYdJY1581P0bJRN4Y7r/1XAdYN9
+         g5jA==
+X-Gm-Message-State: AOJu0Yx3APZ16/GGBnxxonpsonMkaKlJ9QBaCDn9XRqxXX5JVvtwz+qZ
+        0WIZAOOzApILJgbZflKX0A61Gk32vJE=
+X-Google-Smtp-Source: AGHT+IEZH5OKoPGaiv6CJCTTJp/omGpCAA5guxIyAY5G6BFI5PG7LpEBLMTaAvAPxhZu9EyZWL0V1w==
+X-Received: by 2002:a0d:e20a:0:b0:59b:fb69:1639 with SMTP id l10-20020a0de20a000000b0059bfb691639mr20136914ywe.32.1698338982254;
+        Thu, 26 Oct 2023 09:49:42 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e78-20020a256951000000b00d9ab95777ecsm2150923ybc.49.2023.10.26.09.48.34
+        by smtp.gmail.com with ESMTPSA id t78-20020a818351000000b0059b4e981fe6sm6083009ywf.102.2023.10.26.09.49.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Oct 2023 09:48:35 -0700 (PDT)
+        Thu, 26 Oct 2023 09:49:41 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c734e26a-6fad-bc23-ec58-10c6a440ec83@roeck-us.net>
-Date:   Thu, 26 Oct 2023 09:48:33 -0700
+Message-ID: <fd996a28-99e6-ea69-df0e-49cf68780d16@roeck-us.net>
+Date:   Thu, 26 Oct 2023 09:49:40 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.1
+Subject: Re: [PATCH v2] hwmon: (pmbus/max31785) Add delay between bus accesses
 Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, patrick@stwcx.xyz,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-i2c@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20231026081514.3610343-1-Delphine_CC_Chiu@Wiwynn.com>
- <20231026081514.3610343-2-Delphine_CC_Chiu@Wiwynn.com>
- <20231026-dicing-crispy-a10af575d3e5@spud>
- <fffa4330-8d01-8498-4c5f-772ebf2a6b5a@roeck-us.net>
- <20231026-poison-encrypt-1df55e023867@spud>
+To:     Lakshmi Yadlapati <lakshmiy@us.ibm.com>
+Cc:     "joel@jms.id.au" <joel@jms.id.au>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "eajames@linux.ibm.com" <eajames@linux.ibm.com>,
+        "ninad@linux.ibm.com" <ninad@linux.ibm.com>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20231023180804.3068154-1-lakshmiy@us.ibm.com>
+ <bbbf3668-aa7a-4489-85b0-333cf394abe9@roeck-us.net>
+ <25390DC7-E8FF-4706-B241-C45E6DFDF444@us.ibm.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add lltc ltc4286 driver
- bindings
-In-Reply-To: <20231026-poison-encrypt-1df55e023867@spud>
+In-Reply-To: <25390DC7-E8FF-4706-B241-C45E6DFDF444@us.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/26/23 08:26, Conor Dooley wrote:
-> On Thu, Oct 26, 2023 at 08:09:52AM -0700, Guenter Roeck wrote:
->> On 10/26/23 07:25, Conor Dooley wrote:
->>> Hey,
->>>
->>> On Thu, Oct 26, 2023 at 04:15:11PM +0800, Delphine CC Chiu wrote:
->>>> Add a device tree bindings for ltc4286 driver.
->>>
->>> Bindings are for devices, not for drivers.
->>>
->>>>
->>>> Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
->>>>
->>>> Changelog:
->>>>     v2 - Revise vrange_select_25p6 to adi,vrange-select-25p6
->>>>        - Add type for adi,vrange-select-25p6
->>>>        - Revise rsense-micro-ohms to shunt-resistor-micro-ohms
->>>> ---
->>>>    .../bindings/hwmon/lltc,ltc4286.yaml          | 50 +++++++++++++++++++
->>>>    MAINTAINERS                                   | 10 ++++
->>>>    2 files changed, 60 insertions(+)
->>>>    create mode 100644 Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml b/Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml
->>>> new file mode 100644
->>>> index 000000000000..17022de657bb
->>>> --- /dev/null
->>>> +++ b/Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml
->>>> @@ -0,0 +1,50 @@
->>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>>> +%YAML 1.2
->>>> +---
->>>> +$id: http://devicetree.org/schemas/hwmon/lltc,ltc4286.yaml#
->>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>> +
->>>> +title: LTC4286 power monitors
->>>> +
->>>> +maintainers:
->>>> +  - Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
->>>> +
->>>> +properties:
->>>> +  compatible:
->>>> +    enum:
->>>> +      - lltc,ltc4286
->>>> +      - lltc,ltc4287
->>>
->>> I don't recall seeing an answer to Guenter about this ltc4287 device:
->>> https://lore.kernel.org/all/22f6364c-611c-ffb6-451c-9ddc20418d0a@roeck-us.net/
->>>
->>
->> At least the chip does officially exist now, and a datasheet is available.
->>
->> https://www.analog.com/en/products/ltc4287.html
->>
->> It shows that coefficients for the telemetry commands are different,
->> meaning that indeed both chips need to be explicitly referenced
->> in the properties description (and handled in the driver, which proves
->> my point of needing a datasheet before accepting such a driver).
-> 
-> Oh neat, would've been good if that'd been mentioned!
+On 10/26/23 07:48, Lakshmi Yadlapati wrote:
+> Thank you Guenter!
+> Should I fix and send the patch again?
 > 
 
-Actually, turns out there is some contradiction in the LTC4286 datasheet.
-It mentions different coefficients in different places. It is all but
-impossible to determine if the datasheet is wrong or if the chip uses
-a variety of coefficients unless one has a real chip available. Sigh :-(.
+Please do. And don't top-post.
 
->>>> +
->>>> +  reg:
->>>> +    maxItems: 1
->>>> +
->>>> +  adi,vrange-select-25p6:
->>>> +    description:
->>>> +      This property is a bool parameter to represent the
->>>> +      voltage range is 25.6 or not for this chip.
->>>
->>> 25.6 what? Volts? microvolts?
->>> What about Guenter's suggestion to name this so that it better matches
->>> the other, similar properties?
->>>
->>
->> I still would prefer one of the more common properties.
->> I still prefer adi,vrange-high-enable.
-> 
-> I think, from reading the previous version, that this is actually the
-> lower voltage range, as there is a 102.x $unit range too that is the
-> default in the hardware. Obviously, the use of the property could be
-> inverted to match that naming however.
-> 
-
-It needs to be programmed either way because it is unknown how the chip
-has been programmed before. That means some action is needed no matter
-if the property is provided or not.
-
-Sure, we could add something like adi,vrange-low-enable. Not sure if
-that would be any better.
-
-Actually, after looking at the datasheets, I'd be more interested
-in the impact of other configuration buts such as VPWR_SELECT
-which selects the voltage used for power calculations, or
-all the settings in MFR_ADC_CONFIG. The datasheet doesn't really
-explain (or I can't figure out how it does) how the different
-configurations affect the reported telemetry values. But that is
-a question for the driver, not for the property description.
-
+Thanks,
 Guenter
+
+> ﻿On 10/25/23, 7:48 PM, "Guenter Roeck" <groeck7@gmail.com <mailto:groeck7@gmail.com> on behalf of linux@roeck-us.net <mailto:linux@roeck-us.net>> wrote:
+> 
+> 
+> On Mon, Oct 23, 2023 at 01:08:03PM -0500, Lakshmi Yadlapati wrote:
+>> Changes since V1:
+>> 1. Changed the max31785_wait macro to a function, following the conventions
+>> used in other drivers that had the same issue.
+>> 2. Changed the function names from max31785_i2c_smbus* to max31785_i2c_* and
+>> from max31785_pmbus_* to _max31785_*, making them more concise.
+>>
+> 
+> 
+> Please check Documentation/process/submitting-patches.rst
+> for the expected patch format, specifically details on how
+> description and change log are supposed to look like.
+> 
+> 
+> Guenter
+> 
+> 
+> 
 
