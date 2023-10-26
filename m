@@ -2,102 +2,136 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE32BC25B48
-	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Oct 2023 13:09:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13E39C25B67
+	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Oct 2023 14:26:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345018AbjJZNJw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 26 Oct 2023 09:09:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34380 "EHLO
+        id S235052AbjJZO0E (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 26 Oct 2023 10:26:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344950AbjJZNJv (ORCPT
+        with ESMTP id S234902AbjJZO0D (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 26 Oct 2023 09:09:51 -0400
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE9B196;
-        Thu, 26 Oct 2023 06:09:49 -0700 (PDT)
-Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-3b2f28caab9so466980b6e.1;
-        Thu, 26 Oct 2023 06:09:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698325789; x=1698930589;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=59EyrAnu6qu4iHYGTTXbA1AsQ1YSI979KXGXmgmKV/k=;
-        b=BCFV5gWQbfz9f79IxAhmllOOj+/CfeiPgEaK/xhEFffDPQ5pj9hdrKfHGS3xWmJy6u
-         1tSdKg7egiPvslAezrZcYogyQaEfV4iVIO5MEtPDoIB1BBDGch+mAV5Z8Xqy41UToq3Z
-         oZlnavm6eRreF34EAuvMdOzBpXoyDwxHrutc4H8mP/gs4VICzjL2yrFnjmDOFE3EmyzL
-         k/obYaJl/c+fFu/xTyGisV/+6nyVS92Xwl7fshnJKgMtB8Q8dgqZ5L9fwQhnA2pmTMw6
-         UxUPkFpRbLRL82eJ5vmQ18Po8aAnGg9FewDm4BbJEifZVI2rtdTQEi2UzXIq7AYONIb7
-         ujKA==
-X-Gm-Message-State: AOJu0YzbMyNFdUnON6wWjOtPs5Ik63gO9pezSrNNlAVvIQb+ycLr39VX
-        3fAbcBwVns+zU4JXAICL3A==
-X-Google-Smtp-Source: AGHT+IFscanbjXkpHtFuekjcih1hv9YgNyuLg5VVZtCmF+VKMRcVJ8dLyWrFPHDKcKi8JP+29tsb5w==
-X-Received: by 2002:a05:6808:3c2:b0:3b2:e649:a830 with SMTP id o2-20020a05680803c200b003b2e649a830mr18921177oie.23.1698325788764;
-        Thu, 26 Oct 2023 06:09:48 -0700 (PDT)
-Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bm23-20020a0568081a9700b003af638fd8e4sm2784381oib.55.2023.10.26.06.09.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Oct 2023 06:09:48 -0700 (PDT)
-Received: (nullmailer pid 3504844 invoked by uid 1000);
-        Thu, 26 Oct 2023 13:09:45 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Thu, 26 Oct 2023 10:26:03 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3395C9C;
+        Thu, 26 Oct 2023 07:26:01 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38F3AC433C7;
+        Thu, 26 Oct 2023 14:25:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1698330360;
+        bh=9Cwqw/fWKM5uYNCnpfD7cgaQ4Y+kZK35kIJsOLUSy1o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Rk0fmsRFU74qvN0wrURYBETxMpTCpWBiSCdBGXjfJ6eVKk1CbB5PmlEVygDG0Veel
+         uoDyi0xwJHgrVoCINq5tSt6SeMh09QWLqfXyPhRBvRssN7i6YdTbquC0+3j0aLYEJ0
+         8VgVs2kr7AFhasTjd5/gWRNXLS+B2YC1ZS7648t8tBU3Eqi232Zmpep0WLNaRfqW1+
+         3KMr2Cq2bGQTRHU1ct1pIlQruaGQVZLRLmiFuYOXUDyzimoSVz5erPRR4vXRt8LDDP
+         rZUOUBw/ErMtS+BJ5T1Z0VQwsrfnDZZbfE9EP01kCZcq8RxST7IErLQS/vQnMzfcvH
+         bjckdnconGRbA==
+Date:   Thu, 26 Oct 2023 15:25:55 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+Cc:     patrick@stwcx.xyz, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-i2c@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add lltc ltc4286 driver
+ bindings
+Message-ID: <20231026-dicing-crispy-a10af575d3e5@spud>
+References: <20231026081514.3610343-1-Delphine_CC_Chiu@Wiwynn.com>
+ <20231026081514.3610343-2-Delphine_CC_Chiu@Wiwynn.com>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Li peiyu <579lpy@gmail.com>
-Cc:     devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        jdelvare@suse.com, linux@roeck-us.net, linux-kernel@vger.kernel.org
-In-Reply-To: <20231026080226.52170-1-579lpy@gmail.com>
-References: <caa50763-74be-4c40-9d8d-7f1f64ce5144@kernel.org>
- <20231026080226.52170-1-579lpy@gmail.com>
-Message-Id: <169832513050.3486335.8686944561228010224.robh@kernel.org>
-Subject: Re: [PATCH v2] dt-bindings: hwmon: lm87: convert to YAML
-Date:   Thu, 26 Oct 2023 08:09:45 -0500
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="jMMeW1OsGzkZp10V"
+Content-Disposition: inline
+In-Reply-To: <20231026081514.3610343-2-Delphine_CC_Chiu@Wiwynn.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 
-On Thu, 26 Oct 2023 16:02:26 +0800, Li peiyu wrote:
-> Convert the lm87 hwmon sensor bindings to DT schema
-> 
-> Signed-off-by: Li peiyu <579lpy@gmail.com>
+--jMMeW1OsGzkZp10V
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hey,
+
+On Thu, Oct 26, 2023 at 04:15:11PM +0800, Delphine CC Chiu wrote:
+> Add a device tree bindings for ltc4286 driver.
+
+Bindings are for devices, not for drivers.
+
+>=20
+> Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+>=20
+> Changelog:
+>   v2 - Revise vrange_select_25p6 to adi,vrange-select-25p6
+>      - Add type for adi,vrange-select-25p6
+>      - Revise rsense-micro-ohms to shunt-resistor-micro-ohms
 > ---
-> Changes for v2:
-> - replace node name lm87 with sensor
-> - replace character '\t' with spaces
-> 
->  .../devicetree/bindings/hwmon/lm87.txt        | 30 ----------
->  .../devicetree/bindings/hwmon/lm87.yaml       | 59 +++++++++++++++++++
->  2 files changed, 59 insertions(+), 30 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/hwmon/lm87.txt
->  create mode 100644 Documentation/devicetree/bindings/hwmon/lm87.yaml
-> 
+>  .../bindings/hwmon/lltc,ltc4286.yaml          | 50 +++++++++++++++++++
+>  MAINTAINERS                                   | 10 ++++
+>  2 files changed, 60 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/lltc,ltc4286.=
+yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml b/=
+Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml
+> new file mode 100644
+> index 000000000000..17022de657bb
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml
+> @@ -0,0 +1,50 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/lltc,ltc4286.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: LTC4286 power monitors
+> +
+> +maintainers:
+> +  - Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - lltc,ltc4286
+> +      - lltc,ltc4287
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+I don't recall seeing an answer to Guenter about this ltc4287 device:
+https://lore.kernel.org/all/22f6364c-611c-ffb6-451c-9ddc20418d0a@roeck-us.n=
+et/
 
-yamllint warnings/errors:
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  adi,vrange-select-25p6:
+> +    description:
+> +      This property is a bool parameter to represent the
+> +      voltage range is 25.6 or not for this chip.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/lm87.yaml: has-temp3: missing type definition
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/lm87.yaml: has-in6: missing type definition
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/lm87.yaml: has-in7: missing type definition
+25.6 what? Volts? microvolts?
+What about Guenter's suggestion to name this so that it better matches
+the other, similar properties?
 
-doc reference errors (make refcheckdocs):
+Cheers,
+Conor.
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20231026080226.52170-1-579lpy@gmail.com
+--jMMeW1OsGzkZp10V
+Content-Type: application/pgp-signature; name="signature.asc"
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+-----BEGIN PGP SIGNATURE-----
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZTp28wAKCRB4tDGHoIJi
+0jT7APwIvjLDbL//84boMtfvc5RAA1QcNcVO+kfVu3dhyr7v0QD/YlNzHmAB6RRB
+kYtv8yYAiBRKdn612BukEd8U5pcGjgU=
+=QvBI
+-----END PGP SIGNATURE-----
 
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+--jMMeW1OsGzkZp10V--
