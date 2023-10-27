@@ -2,62 +2,61 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2C90C25B47
-	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Oct 2023 04:41:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 743E9C25B47
+	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Oct 2023 04:45:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbjJ0ElK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 27 Oct 2023 00:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
+        id S229501AbjJ0EpL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 27 Oct 2023 00:45:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjJ0ElJ (ORCPT
+        with ESMTP id S229668AbjJ0EpK (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 27 Oct 2023 00:41:09 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE61186
-        for <linux-hwmon@vger.kernel.org>; Thu, 26 Oct 2023 21:41:06 -0700 (PDT)
+        Fri, 27 Oct 2023 00:45:10 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E39187
+        for <linux-hwmon@vger.kernel.org>; Thu, 26 Oct 2023 21:45:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698381667; x=1729917667;
+  t=1698381907; x=1729917907;
   h=date:from:to:cc:subject:message-id;
-  bh=/SSK4l8EqlkHc4ye0ORV4FN45X5ZhEGYfjd6J0F3ApQ=;
-  b=Pd4eWx4vwAAnx9sHAMJRqnYcFvWwNCYhMf6W6Hh4sRz75wlU9BfPW3qN
-   xOYZvBVYbL/4n8/gIIyPD4vbtBZHrWXU+YpzxgrM4pRYl0TKYS+EIztiD
-   25DSQdXBuAk8L7246wJtY1NvLnGYFKNKWLZ+ATt3sSKaRXbjWLItu4S0X
-   +nXD+iUKHnuPmw3NuzbCBeDMyJhq9qut07nrCi4ws5x0Q4zKBaxMIrkIH
-   kru5Y+v7kuRxlM720mFJRfj3EZIKPM1k6uUWpnPmN/mEcIJF+QDpG9rOp
-   Zlcmjbboptm+XkmdUYns0atthXUmb3pI4MkJt3NSo0DKbtst7b9K0sVKg
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10875"; a="9246083"
+  bh=PI6q6zj1bFodqRwEB/psDqdlFpd3/2Dw8n2bv9R32eg=;
+  b=HgtfSc2Qe/dYhSP9+kSsoSVZwHFcMpEe+UbxFEnGLXTynxM+Vh2Ovo2D
+   0ZcjSPJKDNDTpCldhEe/BLmJZYSyszAEpoKj9cv7NaOAq8bUOWrIic386
+   MBU/J7P8+Flnlp5eAzpvjwZw9FEHFJdylV5WlKu6Pnr0qT5Y/xukvU90X
+   JhnoCi53vbaYaLlwJnNv3ac7WsREbmAd0ifx14qkvP5EiHY2qGoi3/Y5e
+   tcbmJDM6LRkX/QFOrZfC1r/py4iSmnZf6MPDF0isecy4GnCBHa00EPk0a
+   PwZBJn66SDX9aY/urcdO8PZfHy0upWYB5qxoOHl5lOyLVhsZ12kTirZZH
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10875"; a="367916859"
 X-IronPort-AV: E=Sophos;i="6.03,255,1694761200"; 
-   d="scan'208";a="9246083"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2023 21:41:06 -0700
+   d="scan'208";a="367916859"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2023 21:45:07 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10875"; a="1006634236"
 X-IronPort-AV: E=Sophos;i="6.03,255,1694761200"; 
-   d="scan'208";a="1006634236"
+   d="scan'208";a="7106715"
 Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 26 Oct 2023 21:41:05 -0700
+  by orviesa001.jf.intel.com with ESMTP; 26 Oct 2023 21:43:44 -0700
 Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1qwEec-000ARc-2t;
-        Fri, 27 Oct 2023 04:41:02 +0000
-Date:   Fri, 27 Oct 2023 12:40:53 +0800
+        id 1qwEiV-000AT0-31;
+        Fri, 27 Oct 2023 04:45:03 +0000
+Date:   Fri, 27 Oct 2023 12:44:15 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 5421af83a43bdcb646564fec238253d11009ad3f
-Message-ID: <202310271250.kyeYvU1I-lkp@intel.com>
+Subject: [groeck-staging:hwmon] BUILD SUCCESS
+ d621a46d05107f4e510383d6a38f2160c62d28f7
+Message-ID: <202310271211.TvGuorqh-lkp@intel.com>
 User-Agent: s-nail v14.9.24
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 5421af83a43bdcb646564fec238253d11009ad3f  drivers: hwmon: max31827: handle vref regulator
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
+branch HEAD: d621a46d05107f4e510383d6a38f2160c62d28f7  Revert "hwmon: (sch56xx-common) Add automatic module loading on supported devices"
 
-elapsed time: 1576m
+elapsed time: 1649m
 
 configs tested: 199
 configs skipped: 2
