@@ -2,401 +2,352 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D4F1C25B47
-	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Oct 2023 04:47:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D3FCC25B47
+	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Oct 2023 05:10:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbjJ0ErG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 27 Oct 2023 00:47:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60628 "EHLO
+        id S232135AbjJ0FKg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 27 Oct 2023 01:10:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjJ0ErE (ORCPT
+        with ESMTP id S229604AbjJ0FKf (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 27 Oct 2023 00:47:04 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1D8186;
-        Thu, 26 Oct 2023 21:47:01 -0700 (PDT)
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39R4eESi011634;
-        Fri, 27 Oct 2023 04:46:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=JEai+xYL0exRitVg/sATL2GEvvL4tkPSvlWMqOUgntY=;
- b=dB1w85NRza8q4TQFBD6c1fhco5ZuA47jT/zpxL3JQpAlJja3c7yM1HgCHOjC0wQwUW1c
- 2vDmTReo1cNVQm83Mg5cygelEoBPA+hVKjxjrpsMYCsvYWSy/Ghr17Umd6OOc3J9e9uk
- FXYLhP5v4feGJI5mBONjBAd6qnntZb37fem0JE4ic6zt52Ag9EGhyRCKosO4nSIiHNYr
- /JDOInYgUmVgdQ+9BMUELLX502MgXFsroipIRes77rAHzwDgMadgm8Luyu3+QYH7ljIU
- qlC6lN5lABVzQrfBNXU65D+j/lS9flwcTc+4Uvs8MN2K1UhEIyjMZK5Cl+wtvVw/9uxO Gw== 
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3u06cjr2c5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 27 Oct 2023 04:46:39 +0000
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-        by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 39R4Swhf025046;
-        Fri, 27 Oct 2023 04:43:49 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
-        by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3tywqrtpaa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 27 Oct 2023 04:43:49 +0000
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 39R4hn4V36831614
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 27 Oct 2023 04:43:49 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E37E858055;
-        Fri, 27 Oct 2023 04:43:48 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C644F58043;
-        Fri, 27 Oct 2023 04:43:48 +0000 (GMT)
-Received: from gfwa600.aus.stglabs.ibm.com (unknown [9.3.84.101])
-        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTPS;
-        Fri, 27 Oct 2023 04:43:48 +0000 (GMT)
-Received: by gfwa600.aus.stglabs.ibm.com (Postfix, from userid 181152)
-        id 2D012740051; Thu, 26 Oct 2023 23:43:48 -0500 (CDT)
-From:   Lakshmi Yadlapati <lakshmiy@us.ibm.com>
-To:     joel@jms.id.au, andrew@aj.id.au, eajames@linux.ibm.com,
-        ninad@linux.ibm.com, linux@roeck-us.net, jdelvare@suse.com
-Cc:     Lakshmi Yadlapati <lakshmiy@us.ibm.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5] hwmon: (pmbus/max31785) Add delay between bus accesses
-Date:   Thu, 26 Oct 2023 23:43:46 -0500
-Message-Id: <20231027044346.2167548-1-lakshmiy@us.ibm.com>
-X-Mailer: git-send-email 2.39.2
+        Fri, 27 Oct 2023 01:10:35 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1B41A5;
+        Thu, 26 Oct 2023 22:10:32 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-d9c687f83a2so1196422276.3;
+        Thu, 26 Oct 2023 22:10:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698383432; x=1698988232; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3bFKgHNz6FE2kpechnoomAD9Qkm+ROmrq2aPVbLIIaE=;
+        b=JMDLrGugAjNyEBSNxzHeBZN339coGij7fmIElUM7vv0kGxzWBrQ6xzLaOfRU0cZANy
+         sN8KW9vVzUZ63OTeIOoKEXNOlHjrFBPzeMeJE+fLhm3Ubxm//btZoH92vAvlP0TBUZN0
+         Y/k6V/T56bZh+i91qfHji8+nWBzBLk2p0xRThyr7h4yXEhJwII22aM7FdwJoIq7Q7Lqp
+         g73d9Jci7pIoyEe1yzOzMpiqkoCyXqv3cMBPMSIF4cknLFAQQHA+uPxqJwQrfnnBJdWT
+         uk13b+IiioL8txhTiQbXF3pK7musfATKWzDrHw+cTGWwiyptxVO6TPO83yHB2yxh9pBp
+         X2HA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698383432; x=1698988232;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3bFKgHNz6FE2kpechnoomAD9Qkm+ROmrq2aPVbLIIaE=;
+        b=DHHluuoXW1gt1Bo43gBalHgVhr3eoVpBmtUKrnpc7wHOEFhWX/Jbshq0lSLMnsB2zb
+         i1pYhpwzL/j0vXwSTOHUrB0gldhsjTQAeT3KJcFGRiFaFVJQJJ0fef3fVK/tO7ebgESK
+         im7qz7lNQjkmjDCE3p8JpCQcngz6w8CNVRIL4QaM191EVbQQ3BWVMwQAAlLFBVqXaQqP
+         IC8mh1yMqqHwyqaQqCO+TpMS2uOeQFvyOymxHf8fmExQyf2JXbfGJ5zkC7ikXLjxJI3f
+         PDDoGMHC3ystkoAc/j3EIHjRc4MUyG5qXeUKeDHxbL09mmkw2ysxifMxW5Vi1i93K4Vz
+         T1BQ==
+X-Gm-Message-State: AOJu0Yx0jZ92s1rlf7eAeZSh0BMVqbmuKiSlkS/oPAoRyD+yk1qHD36X
+        VOM8DQqgmhIOTLW50uRmLr/7FPB2dPM=
+X-Google-Smtp-Source: AGHT+IHhIDphEAMsBoxJEU0uXMKTZjmTh9RS1isCZQfaC/umqQQf7eYQYWfwzCDlJe9SFT4myLU+uA==
+X-Received: by 2002:a25:2684:0:b0:da0:3924:3c9b with SMTP id m126-20020a252684000000b00da039243c9bmr1694665ybm.23.1698383431626;
+        Thu, 26 Oct 2023 22:10:31 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h4-20020a259744000000b00da041da21e7sm367443ybo.65.2023.10.26.22.10.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Oct 2023 22:10:31 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <bb467d2d-0557-0239-03e0-e5ac910db7e0@roeck-us.net>
+Date:   Thu, 26 Oct 2023 22:10:29 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: okRMIwo0kr5tdEnefdEozrK6s3joAzUG
-X-Proofpoint-ORIG-GUID: okRMIwo0kr5tdEnefdEozrK6s3joAzUG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-27_02,2023-10-26_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 clxscore=1015 bulkscore=0 adultscore=0 lowpriorityscore=0
- malwarescore=0 spamscore=0 mlxlogscore=999 priorityscore=1501 phishscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2310240000 definitions=main-2310270040
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Content-Language: en-US
+To:     Daniel Matyas <daniel.matyas@analog.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20231026144405.546822-1-daniel.matyas@analog.com>
+ <20231026144405.546822-4-daniel.matyas@analog.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v5 4/4] hwmon: max31827: Add custom attribute for
+ resolution
+In-Reply-To: <20231026144405.546822-4-daniel.matyas@analog.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The MAX31785 has shown erratic behaviour across multiple system
-designs, unexpectedly clock stretching and NAKing transactions.
+On 10/26/23 07:44, Daniel Matyas wrote:
+> Added custom channel-specific (temp1) attribute for resolution. The wait
+> time for a conversion in one-shot mode (enable = 0) depends on the
+> resolution.
+> 
+> When resolution is 12-bit, the conversion time is 140ms, but the minimum
+> update_interval is 125ms. Handled this problem by waiting an additional
+> 15ms (125ms + 15ms = 140ms).
+> 
+> Added 'mask' parameter to the shutdown_write() function. Now it can
+> either write or update bits, depending on the value of mask. This is
+> needed, because for alarms a write is necessary, but for resolution only
+> the resolution bits should be updated.
+> 
+> Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
+> ---
+> 
+> v4 -> v5: No change.
+> 
+> v3 -> v4: No change.
+> 
+> v2 -> v3: Fixed indentation problems in .rst.
+> 
+> v1 -> v2: Changed subject. Separated patch. Removed timeout sysfs
+> attribute and kept only resolution. Added temp1_ prefix to resolution.
+> Changed value of resolution from bits to milli-degrees Celsius. Added
+> appropriate documentation.
+> 
+> 
+>   Documentation/hwmon/max31827.rst |  29 ++++++--
+>   drivers/hwmon/max31827.c         | 121 ++++++++++++++++++++++++++++---
+>   2 files changed, 134 insertions(+), 16 deletions(-)
+> 
+> diff --git a/Documentation/hwmon/max31827.rst b/Documentation/hwmon/max31827.rst
+> index a8bbfb85dd02..44ab9dc064cb 100644
+> --- a/Documentation/hwmon/max31827.rst
+> +++ b/Documentation/hwmon/max31827.rst
+> @@ -90,11 +90,28 @@ the data sheet are:
+>   
+>   Enabling the device when it is already enabled has the side effect of setting
+>   the conversion frequency to 1 conv/s. The conversion time varies depending on
+> -the resolution. The conversion time doubles with every bit of increased
+> -resolution. For 10 bit resolution 35ms are needed, while for 12 bit resolution
+> -(default) 140ms. When chip is in shutdown mode and a read operation is
+> -requested, one-shot is triggered, the device waits for 140 (conversion time) ms,
+> -and only after that is the temperature value register read.
+> +the resolution.
+> +
+> +The conversion time doubles with every bit of increased resolution. The
+> +available resolutions are:
+> +
+> +- 8 bit -> 8.75 ms conversion time
+> +- 9 bit -> 17.5 ms conversion time
+> +- 10 bit -> 35 ms conversion time
+> +- 12 bit (default) -> 140 ms conversion time
+> +
+> +There is a temp1_resolution attribute which indicates the unit change in the
+> +input temperature in milli-degrees C.
+> +
+> +- 1000 mC -> 8 bit
+> +- 500 mC -> 9 bit
+> +- 250 mC -> 10 bit
+> +- 62 mC -> 12 bit (default) - actually this is 62.5, but the fil returns 62
 
-Experimentation shows that this seems to be triggered by a register access
-directly back to back with a previous register write. Experimentation also
-shows that inserting a small delay after register writes makes the issue go
-away.
+fil ? Should that be "attribute" ?
 
-Use a similar solution to what the max15301 driver does to solve the same
-problem. Create a custom set of bus read and write functions that make sure
-that the delay is added.
+> +
+> +When chip is in shutdown mode and a read operation is requested, one-shot is
+> +triggered, the device waits for <conversion time> ms, and only after that is
+> +the temperature value register read. Note that the conversion times are rounded
+> +up to the nearest possible integer.
+>   
+>   The LSB of the temperature values is 0.0625 degrees Celsius, but the values of
+>   the temperatures are displayed in milli-degrees. This means, that some data is
+> @@ -117,4 +134,4 @@ corresponding status bits.
+>   Notes
+>   -----
+>   
+> -PEC and resolution are not implemented.
+> +PEC is not implemented.
+> diff --git a/drivers/hwmon/max31827.c b/drivers/hwmon/max31827.c
+> index 8ba387b51157..c9fa6d4d6194 100644
+> --- a/drivers/hwmon/max31827.c
+> +++ b/drivers/hwmon/max31827.c
+> @@ -37,6 +37,9 @@
+>   #define MAX31827_CONFIGURATION_U_TEMP_STAT_MASK	BIT(14)
+>   #define MAX31827_CONFIGURATION_O_TEMP_STAT_MASK	BIT(15)
+>   
+> +#define MAX31827_8_BIT_CNV_TIME		9
+> +#define MAX31827_9_BIT_CNV_TIME		18
+> +#define MAX31827_10_BIT_CNV_TIME	35
+>   #define MAX31827_12_BIT_CNV_TIME	140
+>   
+>   #define MAX31827_ALRM_POL_HIGH	0x1
+> @@ -68,6 +71,27 @@ static const u16 max31827_conversions[] = {
+>   	[MAX31827_CNV_8_HZ] = 125,
+>   };
+>   
+> +enum max31827_resolution {
+> +	MAX31827_RES_8_BIT = 0,
+> +	MAX31827_RES_9_BIT,
+> +	MAX31827_RES_10_BIT,
+> +	MAX31827_RES_12_BIT,
+> +};
+> +
+> +static const u16 max31827_resolutions[] = {
+> +	[MAX31827_RES_8_BIT] = 1000,
+> +	[MAX31827_RES_9_BIT] = 500,
+> +	[MAX31827_RES_10_BIT] = 250,
+> +	[MAX31827_RES_12_BIT] = 62,
+> +};
+> +
+> +static const u16 max31827_conv_times[] = {
+> +	[MAX31827_RES_8_BIT] = MAX31827_8_BIT_CNV_TIME,
+> +	[MAX31827_RES_9_BIT] = MAX31827_9_BIT_CNV_TIME,
+> +	[MAX31827_RES_10_BIT] = MAX31827_10_BIT_CNV_TIME,
+> +	[MAX31827_RES_12_BIT] = MAX31827_12_BIT_CNV_TIME,
+> +};
+> +
+>   struct max31827_state {
+>   	/*
+>   	 * Prevent simultaneous access to the i2c client.
+> @@ -75,6 +99,8 @@ struct max31827_state {
+>   	struct mutex lock;
+>   	struct regmap *regmap;
+>   	bool enable;
+> +	unsigned int resolution;
+> +	unsigned int update_interval;
+>   };
+>   
+>   static const struct regmap_config max31827_regmap = {
+> @@ -91,9 +117,9 @@ static int shutdown_write(struct max31827_state *st, unsigned int reg,
+>   	int ret;
+>   
+>   	/*
+> -	 * Before the Temperature Threshold Alarm and Alarm Hysteresis Threshold
+> -	 * register values are changed over I2C, the part must be in shutdown
+> -	 * mode.
+> +	 * Before the Temperature Threshold Alarm, Alarm Hysteresis Threshold
+> +	 * and Resolution bits from Configuration register are changed over I2C,
+> +	 * the part must be in shutdown mode.
+>   	 *
+>   	 * Mutex is used to ensure, that some other process doesn't change the
+>   	 * configuration register.
+> @@ -211,9 +237,18 @@ static int max31827_read(struct device *dev, enum hwmon_sensor_types type,
+>   					mutex_unlock(&st->lock);
+>   					return ret;
+>   				}
+> -
+> -				msleep(MAX31827_12_BIT_CNV_TIME);
+> +				msleep(max31827_conv_times[st->resolution]);
+>   			}
+> +
+> +			/*
+> +			 * For 12-bit resolution the conversion time is 140 ms,
+> +			 * thus an additional 15 ms is needed to complete the
+> +			 * conversion: 125 ms + 15 ms = 140 ms
+> +			 */
+> +			if (max31827_resolutions[st->resolution] == 12 &&
+> +			    st->update_interval == 125)
+> +				usleep_range(15000, 20000);
+> +
+>   			ret = regmap_read(st->regmap, MAX31827_T_REG, &uval);
+>   
+>   			mutex_unlock(&st->lock);
+> @@ -371,10 +406,14 @@ static int max31827_write(struct device *dev, enum hwmon_sensor_types type,
+>   			res = FIELD_PREP(MAX31827_CONFIGURATION_CNV_RATE_MASK,
+>   					 res);
+>   
+> -			return regmap_update_bits(st->regmap,
+> -						  MAX31827_CONFIGURATION_REG,
+> -						  MAX31827_CONFIGURATION_CNV_RATE_MASK,
+> -						  res);
+> +			ret = regmap_update_bits(st->regmap,
+> +						 MAX31827_CONFIGURATION_REG,
+> +						 MAX31827_CONFIGURATION_CNV_RATE_MASK,
+> +						 res);
+> +			if (ret)
+> +				return ret;
+> +
+> +			st->update_interval = val;
+>   		}
+>   		break;
+>   
+> @@ -385,6 +424,68 @@ static int max31827_write(struct device *dev, enum hwmon_sensor_types type,
+>   	return -EOPNOTSUPP;
+>   }
+>   
+> +static ssize_t temp1_resolution_show(struct device *dev,
+> +				     struct device_attribute *devattr,
+> +				     char *buf)
+> +{
+> +	struct max31827_state *st = dev_get_drvdata(dev);
+> +	unsigned int val;
+> +	int ret;
+> +
+> +	ret = regmap_read(st->regmap, MAX31827_CONFIGURATION_REG, &val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	val = FIELD_GET(MAX31827_CONFIGURATION_RESOLUTION_MASK, val);
+> +
+> +	return scnprintf(buf, PAGE_SIZE, "%u\n", max31827_resolutions[val]);
+> +}
+> +
+> +static ssize_t temp1_resolution_store(struct device *dev,
+> +				      struct device_attribute *devattr,
+> +				      const char *buf, size_t count)
+> +{
+> +	struct max31827_state *st = dev_get_drvdata(dev);
+> +	unsigned int idx = 0;
+> +	unsigned int val;
+> +	int ret;
+> +
+> +	ret = kstrtouint(buf, 10, &val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/*
+> +	 * Convert the desired resolution into register
+> +	 * bits. idx is already initialized with 0.
+> +	 *
+> +	 * This was inspired by lm73 driver.
+> +	 */
+> +	while (idx < ARRAY_SIZE(max31827_resolutions) &&
+> +	       val < max31827_resolutions[idx])
+> +		idx++;
+> +
+> +	if (idx == ARRAY_SIZE(max31827_resolutions) ||
+> +	    val != max31827_resolutions[idx])
+> +		return -EOPNOTSUPP;
 
-Signed-off-by: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
----
-V4 -> V5: Changed udelay() to usleep_range() 
-V3 -> V4: Fixed warnings related to this commit
-V2 -> V3: Fixed the commit message
-V1 -> V2:
-- Changed the max31785_wait macro to a function, following the conventions
-  used in other drivers that had the same issue.
-- Changed the function names from max31785_i2c_smbus* to max31785_i2c_* and
-  from max31785_pmbus_* to _max31785_*, making them more concise.
+		-EINVAL
 
- drivers/hwmon/pmbus/max31785.c | 188 +++++++++++++++++++++++++++++----
- 1 file changed, 167 insertions(+), 21 deletions(-)
+Question here is if this should return the closest value/index
+or return an error. Traditionally, for ranges like this, drivers
+would accept all values and select the closest supported value.
+[ just as the lm73 driver, which is listed as example here, does ]
+There are even helper functions for that - find_closest()
+or find_closest_descending(). I would very much prefer the
+more flexible approach and not burden the user with having to find
+supported values.
 
-diff --git a/drivers/hwmon/pmbus/max31785.c b/drivers/hwmon/pmbus/max31785.c
-index f9aa576495a5..5d13bbfc8f47 100644
---- a/drivers/hwmon/pmbus/max31785.c
-+++ b/drivers/hwmon/pmbus/max31785.c
-@@ -3,6 +3,7 @@
-  * Copyright (C) 2017 IBM Corp.
-  */
- 
-+#include <linux/delay.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/init.h>
-@@ -23,19 +24,119 @@ enum max31785_regs {
- 
- #define MAX31785_NR_PAGES		23
- #define MAX31785_NR_FAN_PAGES		6
-+#define MAX31785_WAIT_DELAY_US		250
- 
--static int max31785_read_byte_data(struct i2c_client *client, int page,
--				   int reg)
-+struct max31785_data {
-+	ktime_t access;			/* Chip access time */
-+	struct pmbus_driver_info info;
-+};
-+
-+#define to_max31785_data(x)  container_of(x, struct max31785_data, info)
-+
-+/*
-+ * MAX31785 Driver Workaround
-+ *
-+ * The MAX31785 fan controller occasionally exhibits communication issues.
-+ * These issues are not indicated by the device itself, except for occasional
-+ * NACK responses during master transactions. No error bits are set in STATUS_BYTE.
-+ *
-+ * To address this, we introduce a delay of 250us between consecutive accesses
-+ * to the fan controller. This delay helps mitigate communication problems by
-+ * allowing sufficient time between accesses.
-+ */
-+static inline void max31785_wait(const struct max31785_data *data)
- {
--	if (page < MAX31785_NR_PAGES)
--		return -ENODATA;
-+	s64 delta = ktime_us_delta(ktime_get(), data->access);
-+
-+	if (delta < MAX31785_WAIT_DELAY_US)
-+		usleep_range(MAX31785_WAIT_DELAY_US - delta,
-+			     MAX31785_WAIT_DELAY_US);
-+}
-+
-+static int max31785_i2c_write_byte_data(struct i2c_client *client,
-+					struct max31785_data *driver_data,
-+					int command, u16 data)
-+{
-+	int rc;
-+
-+	max31785_wait(driver_data);
-+	rc = i2c_smbus_write_byte_data(client, command, data);
-+	driver_data->access = ktime_get();
-+	return rc;
-+}
-+
-+static int max31785_i2c_read_word_data(struct i2c_client *client,
-+				       struct max31785_data *driver_data,
-+				       int command)
-+{
-+	int rc;
-+
-+	max31785_wait(driver_data);
-+	rc = i2c_smbus_read_word_data(client, command);
-+	driver_data->access = ktime_get();
-+	return rc;
-+}
-+
-+static int _max31785_read_byte_data(struct i2c_client *client,
-+				    struct max31785_data *driver_data,
-+				    int page, int command)
-+{
-+	int rc;
-+
-+	max31785_wait(driver_data);
-+	rc = pmbus_read_byte_data(client, page, command);
-+	driver_data->access = ktime_get();
-+	return rc;
-+}
-+
-+static int _max31785_write_byte_data(struct i2c_client *client,
-+				     struct max31785_data *driver_data,
-+				     int page, int command, u16 data)
-+{
-+	int rc;
-+
-+	max31785_wait(driver_data);
-+	rc = pmbus_write_byte_data(client, page, command, data);
-+	driver_data->access = ktime_get();
-+	return rc;
-+}
-+
-+static int _max31785_read_word_data(struct i2c_client *client,
-+				    struct max31785_data *driver_data,
-+				    int page, int phase, int command)
-+{
-+	int rc;
-+
-+	max31785_wait(driver_data);
-+	rc = pmbus_read_word_data(client, page, phase, command);
-+	driver_data->access = ktime_get();
-+	return rc;
-+}
-+
-+static int _max31785_write_word_data(struct i2c_client *client,
-+				     struct max31785_data *driver_data,
-+				     int page, int command, u16 data)
-+{
-+	int rc;
-+
-+	max31785_wait(driver_data);
-+	rc = pmbus_write_word_data(client, page, command, data);
-+	driver_data->access = ktime_get();
-+	return rc;
-+}
-+
-+static int max31785_read_byte_data(struct i2c_client *client, int page, int reg)
-+{
-+	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-+	struct max31785_data *driver_data = to_max31785_data(info);
- 
- 	switch (reg) {
- 	case PMBUS_VOUT_MODE:
- 		return -ENOTSUPP;
- 	case PMBUS_FAN_CONFIG_12:
--		return pmbus_read_byte_data(client, page - MAX31785_NR_PAGES,
--					    reg);
-+		return _max31785_read_byte_data(client, driver_data,
-+						page - MAX31785_NR_PAGES,
-+						reg);
- 	}
- 
- 	return -ENODATA;
-@@ -102,16 +203,19 @@ static int max31785_get_pwm(struct i2c_client *client, int page)
- 	return rv;
- }
- 
--static int max31785_get_pwm_mode(struct i2c_client *client, int page)
-+static int max31785_get_pwm_mode(struct i2c_client *client,
-+				 struct max31785_data *driver_data, int page)
- {
- 	int config;
- 	int command;
- 
--	config = pmbus_read_byte_data(client, page, PMBUS_FAN_CONFIG_12);
-+	config = _max31785_read_byte_data(client, driver_data, page,
-+					  PMBUS_FAN_CONFIG_12);
- 	if (config < 0)
- 		return config;
- 
--	command = pmbus_read_word_data(client, page, 0xff, PMBUS_FAN_COMMAND_1);
-+	command = _max31785_read_word_data(client, driver_data, page, 0xff,
-+					   PMBUS_FAN_COMMAND_1);
- 	if (command < 0)
- 		return command;
- 
-@@ -129,6 +233,8 @@ static int max31785_get_pwm_mode(struct i2c_client *client, int page)
- static int max31785_read_word_data(struct i2c_client *client, int page,
- 				   int phase, int reg)
- {
-+	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-+	struct max31785_data *driver_data = to_max31785_data(info);
- 	u32 val;
- 	int rv;
- 
-@@ -157,7 +263,7 @@ static int max31785_read_word_data(struct i2c_client *client, int page,
- 		rv = max31785_get_pwm(client, page);
- 		break;
- 	case PMBUS_VIRT_PWM_ENABLE_1:
--		rv = max31785_get_pwm_mode(client, page);
-+		rv = max31785_get_pwm_mode(client, driver_data, page);
- 		break;
- 	default:
- 		rv = -ENODATA;
-@@ -188,8 +294,36 @@ static inline u32 max31785_scale_pwm(u32 sensor_val)
- 	return (sensor_val * 100) / 255;
- }
- 
--static int max31785_pwm_enable(struct i2c_client *client, int page,
--				    u16 word)
-+static int max31785_update_fan(struct i2c_client *client,
-+			       struct max31785_data *driver_data, int page,
-+			       u8 config, u8 mask, u16 command)
-+{
-+	int from, rv;
-+	u8 to;
-+
-+	from = _max31785_read_byte_data(client, driver_data, page,
-+					PMBUS_FAN_CONFIG_12);
-+	if (from < 0)
-+		return from;
-+
-+	to = (from & ~mask) | (config & mask);
-+
-+	if (to != from) {
-+		rv = _max31785_write_byte_data(client, driver_data, page,
-+					       PMBUS_FAN_CONFIG_12, to);
-+		if (rv < 0)
-+			return rv;
-+	}
-+
-+	rv = _max31785_write_word_data(client, driver_data, page,
-+				       PMBUS_FAN_COMMAND_1, command);
-+
-+	return rv;
-+}
-+
-+static int max31785_pwm_enable(struct i2c_client *client,
-+			       struct max31785_data *driver_data, int page,
-+			       u16 word)
- {
- 	int config = 0;
- 	int rate;
-@@ -217,18 +351,23 @@ static int max31785_pwm_enable(struct i2c_client *client, int page,
- 		return -EINVAL;
- 	}
- 
--	return pmbus_update_fan(client, page, 0, config, PB_FAN_1_RPM, rate);
-+	return max31785_update_fan(client, driver_data, page, config,
-+				   PB_FAN_1_RPM, rate);
- }
- 
- static int max31785_write_word_data(struct i2c_client *client, int page,
- 				    int reg, u16 word)
- {
-+	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-+	struct max31785_data *driver_data = to_max31785_data(info);
-+
- 	switch (reg) {
- 	case PMBUS_VIRT_PWM_1:
--		return pmbus_update_fan(client, page, 0, 0, PB_FAN_1_RPM,
--					max31785_scale_pwm(word));
-+		return max31785_update_fan(client, driver_data, page, 0,
-+					   PB_FAN_1_RPM,
-+					   max31785_scale_pwm(word));
- 	case PMBUS_VIRT_PWM_ENABLE_1:
--		return max31785_pwm_enable(client, page, word);
-+		return max31785_pwm_enable(client, driver_data, page, word);
- 	default:
- 		break;
- 	}
-@@ -303,13 +442,16 @@ static int max31785_configure_dual_tach(struct i2c_client *client,
- {
- 	int ret;
- 	int i;
-+	struct max31785_data *driver_data = to_max31785_data(info);
- 
- 	for (i = 0; i < MAX31785_NR_FAN_PAGES; i++) {
--		ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, i);
-+		ret = max31785_i2c_write_byte_data(client, driver_data,
-+						   PMBUS_PAGE, i);
- 		if (ret < 0)
- 			return ret;
- 
--		ret = i2c_smbus_read_word_data(client, MFR_FAN_CONFIG);
-+		ret = max31785_i2c_read_word_data(client, driver_data,
-+						  MFR_FAN_CONFIG);
- 		if (ret < 0)
- 			return ret;
- 
-@@ -329,6 +471,7 @@ static int max31785_probe(struct i2c_client *client)
- {
- 	struct device *dev = &client->dev;
- 	struct pmbus_driver_info *info;
-+	struct max31785_data *driver_data;
- 	bool dual_tach = false;
- 	int ret;
- 
-@@ -337,13 +480,16 @@ static int max31785_probe(struct i2c_client *client)
- 				     I2C_FUNC_SMBUS_WORD_DATA))
- 		return -ENODEV;
- 
--	info = devm_kzalloc(dev, sizeof(struct pmbus_driver_info), GFP_KERNEL);
--	if (!info)
-+	driver_data = devm_kzalloc(dev, sizeof(struct max31785_data), GFP_KERNEL);
-+	if (!driver_data)
- 		return -ENOMEM;
- 
-+	info = &driver_data->info;
-+	driver_data->access = ktime_get();
- 	*info = max31785_info;
- 
--	ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, 255);
-+	ret = max31785_i2c_write_byte_data(client, driver_data,
-+					   PMBUS_PAGE, 255);
- 	if (ret < 0)
- 		return ret;
- 
--- 
-2.39.2
+> +
+> +	st->resolution = idx;
+> +
+> +	ret = shutdown_write(st, MAX31827_CONFIGURATION_REG,
+> +			     MAX31827_CONFIGURATION_RESOLUTION_MASK,
+> +			     FIELD_PREP(MAX31827_CONFIGURATION_RESOLUTION_MASK,
+> +					idx));
+> +
+> +	return (ret) ? ret : count;
+
+drop () around ret
+
+> +}
+> +
+> +static DEVICE_ATTR_RW(temp1_resolution);
+> +
+> +static struct attribute *max31827_attrs[] = {
+> +	&dev_attr_temp1_resolution.attr,
+> +	NULL
+> +};
+> +ATTRIBUTE_GROUPS(max31827);
+> +
+>   static const struct i2c_device_id max31827_i2c_ids[] = {
+>   	{ "max31827", max31827 },
+>   	{ "max31828", max31828 },
+> @@ -501,7 +602,7 @@ static int max31827_probe(struct i2c_client *client)
+>   
+>   	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name, st,
+>   							 &max31827_chip_info,
+> -							 NULL);
+> +							 max31827_groups);
+>   
+>   	return PTR_ERR_OR_ZERO(hwmon_dev);
+>   }
 
