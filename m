@@ -2,33 +2,33 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57F84C0032E
-	for <linux-hwmon@archiver.kernel.org>; Sat, 28 Oct 2023 14:59:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73CB6C0032E
+	for <linux-hwmon@archiver.kernel.org>; Sat, 28 Oct 2023 15:01:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229454AbjJ1O7z (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 28 Oct 2023 10:59:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59532 "EHLO
+        id S229446AbjJ1PBC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 28 Oct 2023 11:01:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjJ1O7z (ORCPT
+        with ESMTP id S229449AbjJ1PBB (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 28 Oct 2023 10:59:55 -0400
+        Sat, 28 Oct 2023 11:01:01 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10499C0
-        for <linux-hwmon@vger.kernel.org>; Sat, 28 Oct 2023 07:59:53 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EE10C433C7;
-        Sat, 28 Oct 2023 14:59:51 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 886D791
+        for <linux-hwmon@vger.kernel.org>; Sat, 28 Oct 2023 08:00:59 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A1F0C433C7;
+        Sat, 28 Oct 2023 15:00:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698505192;
-        bh=XKFKJwLWN8LtB9HObwbsrakqlDA+eZ153UzGNfdFqXY=;
+        s=k20201202; t=1698505259;
+        bh=GD2T2QKFUpl5maQSmial0BzdF9R0LkgywwOMePuymGs=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=lZViAY92Wbr1wehCOC5INdBZAijNN3dxMZ6Cm7gGze93XSUbYK2VJ34+KFooBwiUT
-         lCianNHEVYQ96H1/Ip96m3JUCmXTcIY8ZdBf9DECM6xLr+LDqtiVGyXWM0lYkEYfBB
-         JcuXuRQqGQY2xUfHSEZSuYh8zoQMWow01V2uCt+xHOElI/cBaqq4BW2AYZk0KBVyu2
-         04KGgPcYO2iMpuZalT9cx0McFvijTRn8FIORk8Yda2jiNDEfXWfSFBfv2N/ngWqRym
-         Ml7UosNNkRZ+/V+YxJYmFzq79l+NcnGJBGXUUTK0okMATSGxQ24hv8Z5UVIPubuHTr
-         dc+4RnNwFyofA==
-Message-ID: <1f16f4d3-4f93-46ef-bb4a-4c60277fd737@kernel.org>
-Date:   Sat, 28 Oct 2023 16:59:49 +0200
+        b=TYTKofFMvawcKYW2vhTOc4RD3po6ftO/PEJ4QqlNeOrPPPKKjHHq67GbT6/VF66RH
+         ZYVE5zyeo8TI9q3tNj1UGXwvEg0HNN+lbBY/96Cbzq4VQJPnfVKT2rqXVGfMstGXDF
+         MGsJyIAR5LBqLNc6QDjNJJsAFxmAfvozevJEZ/xWzXFL2NPAYOCd1Tz2Oxde93LjZ7
+         G5ipP/sfA/07LcmcUPUTTv5qTXwl6DJ0jh2ES4CejdLze1EV/Y3tbsNPOQ0h4Mc2eU
+         7gQzau54ZcXR98w7JiOgpH+DE7jFqFq/MTF50xy4noJLSgSV1HeNIXqYBQcsTevi6S
+         tVBgTWQ9EOccg==
+Message-ID: <d12f8784-21ec-46c3-8216-e33e0f9846d7@kernel.org>
+Date:   Sat, 28 Oct 2023 17:00:57 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v4] dt-bindings: hwmon: lm87: convert to YAML
@@ -95,21 +95,12 @@ On 28/10/2023 14:05, Li peiyu wrote:
 > ---
 > Changes for v4:
 > - remove excess spaces
-> Changes for v3:
-> - add type definition of has-temp3, has-in6, has-in7
-> - Change the description of has-temp3
-> Changes for v2:
-> - replace node name lm87 with sensor
-> - replace character '\t' with spaces
-> 
->  .../devicetree/bindings/hwmon/lm87.txt        | 30 ---------
->  .../devicetree/bindings/hwmon/lm87.yaml       | 62 +++++++++++++++++++
 
-Nothing improved from my original feedback from 25th of October.
+One more comment (all previous are still valid):
 
-Instead of ignoring it, please open the email, read and respond inline
-that you understand each part of the feedback and you are going to
-implement it.
+Do not attach (thread) your patchsets to some other threads (unrelated
+or older versions). This buries them deep in the mailbox and might
+interfere with applying entire sets.
 
 Best regards,
 Krzysztof
