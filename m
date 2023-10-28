@@ -2,62 +2,62 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CEF41C0032E
-	for <linux-hwmon@archiver.kernel.org>; Sat, 28 Oct 2023 09:15:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ABDE3C0032E
+	for <linux-hwmon@archiver.kernel.org>; Sat, 28 Oct 2023 09:17:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbjJ1JPU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 28 Oct 2023 05:15:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47784 "EHLO
+        id S229645AbjJ1JRU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 28 Oct 2023 05:17:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjJ1JPT (ORCPT
+        with ESMTP id S229460AbjJ1JRU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 28 Oct 2023 05:15:19 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30257F3
-        for <linux-hwmon@vger.kernel.org>; Sat, 28 Oct 2023 02:15:17 -0700 (PDT)
+        Sat, 28 Oct 2023 05:17:20 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B72F3
+        for <linux-hwmon@vger.kernel.org>; Sat, 28 Oct 2023 02:17:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698484517; x=1730020517;
+  t=1698484637; x=1730020637;
   h=date:from:to:cc:subject:message-id;
-  bh=Emik57l4emXrZUvc2rksxydn5ygVQ4YhuH4w4Tu1Cx4=;
-  b=hyVa1/1yj1VXo5fVr/SH/epPu8f14Iyhgt/nsicaskdU/tEx1ZHacyaV
-   R77T9/qS3lGVOOuv4KU/nKD3YjDQDQ5nML8RrrPMDjMrpYPkFBGRfjec3
-   +DAJJl+UB/6ty3jvF4zZUFRoIpUoyzWjg+NaI3uyAx+PKegcgqDCKKAJ5
-   8/b3xVfk+mirYoNI392RerM7qUCbWZX/L7LUNZEjjq5syopTybClGW+0Q
-   Y86zyjbCNiJEN4rn+fu+oHNJQnhTHcN7rYhb4BnBd+33XOYKzxeKXoN0s
-   OoCcWhwgxitLZRuab9JcVFVI6t/Q3pjgVeQ3cGd4Q5IX/qvD757Qi68GP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10876"; a="372942593"
+  bh=tSbFmU3TOujOaNr97PiIa2/EWrtl3pYKjIQ17KDVzmI=;
+  b=j9+QT3v/ltubn68SHrBZdDN1mByrA2bjq8TZQZ0F6009Vn6khYVr4LfG
+   3BSLixSVOll2Il4GXaMW8ROjcFQ3xIDeXThqJa5YoGy0GYXk4vn9h/6B3
+   tWuFZeHfX+ZlD4KFG9X/167SvbAyT3SVXpsSsjESu4qsvA6Cc1ofzDlqS
+   84apI0yS4G2De/Epr00XyuZpMSqdk10Z0Ji33dblkunApswqsrx0uaTTT
+   /u4Vk6ghvRw3eNKp22Rzu3xQie75J+We65yFFlmRQh0D65F84PArgRkib
+   3+SEt8Caaf6vehmCSaUa8ioJFJST+MvK8fXmd9sfrHYdX8V6zwS+0zQkW
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10876"; a="418998581"
 X-IronPort-AV: E=Sophos;i="6.03,258,1694761200"; 
-   d="scan'208";a="372942593"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2023 02:15:16 -0700
+   d="scan'208";a="418998581"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2023 02:17:17 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10876"; a="1006978747"
+X-IronPort-AV: E=McAfee;i="6600,9927,10876"; a="789031781"
 X-IronPort-AV: E=Sophos;i="6.03,258,1694761200"; 
-   d="scan'208";a="1006978747"
+   d="scan'208";a="789031781"
 Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 28 Oct 2023 02:15:15 -0700
+  by orsmga008.jf.intel.com with ESMTP; 28 Oct 2023 02:17:15 -0700
 Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1qwfPV-000BbE-0w;
-        Sat, 28 Oct 2023 09:15:13 +0000
-Date:   Sat, 28 Oct 2023 17:14:59 +0800
+        id 1qwfRR-000BbZ-1g;
+        Sat, 28 Oct 2023 09:17:13 +0000
+Date:   Sat, 28 Oct 2023 17:16:16 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- cf526f52da81c3ccf59a2d8108f177b1b51e216d
-Message-ID: <202310281756.YVTQDRGv-lkp@intel.com>
+Subject: [groeck-staging:hwmon] BUILD SUCCESS
+ 9da2901c47332b030ea4d2a2302bc7c0b83fc67c
+Message-ID: <202310281713.Lhvj38j9-lkp@intel.com>
 User-Agent: s-nail v14.9.24
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: cf526f52da81c3ccf59a2d8108f177b1b51e216d  hwmon: (pmbus/max31785) Add delay between bus accesses
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
+branch HEAD: 9da2901c47332b030ea4d2a2302bc7c0b83fc67c  hwmon: (pmbus/mp2975) Move PGOOD fix
 
-elapsed time: 1032m
+elapsed time: 1034m
 
 configs tested: 151
 configs skipped: 2
