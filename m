@@ -2,84 +2,94 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 359F7C25B6E
-	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Oct 2023 22:55:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E22D5C25B67
+	for <linux-hwmon@archiver.kernel.org>; Sat, 28 Oct 2023 03:55:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbjJ0WzF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 27 Oct 2023 18:55:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
+        id S229484AbjJ1DzR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 27 Oct 2023 23:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235153AbjJ0WzE (ORCPT
+        with ESMTP id S229481AbjJ1DzQ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 27 Oct 2023 18:55:04 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D460F1B5;
-        Fri, 27 Oct 2023 15:55:00 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB71FC433C8;
-        Fri, 27 Oct 2023 22:54:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698447300;
-        bh=jpoAMGT0r13NE2Y4M1CX9RBspLXKW8zxy8LzdHWC3/c=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=R+rTmGoz4czPipBCmyBDRkBGAhN8cP+Yv1fvU9kEahWmdgSNuuUaPiroCEN13UQQw
-         3MhGKnvSDySPglPOcULAhG/4BFvwdNIf7FEnVrZfM4VhMC4INU5b4yaNyfKHMKpb6y
-         zsCMgv3F9XfxRk462si9JjYAfiQeh2D+stJuXQfLXNBKbArproUvRJRg9BtR+wG8LB
-         u7qTF1VLnvrBJKQKB52sMQPjKRvb3ASR2NLYV+3o2fpsPdJyaeM4eaDjNHk1vdmBYr
-         fIvOUsB6rd6U+OUaW3ufbaL+mIiE9XxrK615dJvnvjX5V7Rv5t1esidBhhiQS9A03K
-         zz2v1aMoFE+Kw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Fri, 27 Oct 2023 23:55:16 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F7E10A;
+        Fri, 27 Oct 2023 20:55:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698465313; x=1730001313;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qDzqr30MeOgL/N0BmqbgF3J5CqRGi7sdwxlhCyhEzw0=;
+  b=VciHVq8RNen2+p7pTeAZVSrT5C23q0LpdTIE1eiy4TTxsGHJlSp5KEUX
+   wFc0tSjLIie1AvNoqubw2dj0C9hFP9QPBwOsXnHYEsVv01/hKvNn3kNQJ
+   afoMGpZTcJ0VF1aM8ygwPI2XkmUCYzuvv7//jdY751+ihxOyiVEWM078c
+   pusvIVOwsB0wF/ChCRcZwJnL+6Df5bv8idsJF86uX6H2JBrm7WIaYM3XV
+   YO5/2tcYZ59QaUovp3lDOoFgGiTBnkJaZO7Pv7iN1nG7TCoQOxjPhVeKy
+   K/zQktFjuMP3NMZ6xZ5qdOnT8dRGEa1ELbC0oadLwrI4vzwmPvkh1QeY2
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10876"; a="676147"
+X-IronPort-AV: E=Sophos;i="6.03,258,1694761200"; 
+   d="scan'208";a="676147"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2023 20:55:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10876"; a="933283132"
+X-IronPort-AV: E=Sophos;i="6.03,258,1694761200"; 
+   d="scan'208";a="933283132"
+Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 27 Oct 2023 20:55:08 -0700
+Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qwaPi-000BSd-2O;
+        Sat, 28 Oct 2023 03:55:06 +0000
+Date:   Sat, 28 Oct 2023 11:54:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, patrick@stwcx.xyz,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-In-Reply-To: <20231027152830.1269895-1-naresh.solanki@9elements.com>
-References: <20231027152830.1269895-1-naresh.solanki@9elements.com>
-Subject: Re: [PATCH v6 1/2] regulator (max5970): Add hwmon support
-Message-Id: <169844729861.3013735.16623433333003690278.b4-ty@kernel.org>
-Date:   Fri, 27 Oct 2023 23:54:58 +0100
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     oe-kbuild-all@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] hwmon: pmbus: Add ltc4286 driver
+Message-ID: <202310281159.Y11xKbmu-lkp@intel.com>
+References: <20231026081514.3610343-3-Delphine_CC_Chiu@Wiwynn.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-0438c
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231026081514.3610343-3-Delphine_CC_Chiu@Wiwynn.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, 27 Oct 2023 15:28:28 +0000, Naresh Solanki wrote:
-> Utilize the integrated 10-bit ADC in Max5970/Max5978 to enable voltage
-> and current monitoring. This feature is seamlessly integrated through
-> the hwmon subsystem.
-> 
-> 
+Hi Delphine,
 
-Applied to
+kernel test robot noticed the following build warnings:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on linus/master v6.6-rc7 next-20231027]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks!
+url:    https://github.com/intel-lab-lkp/linux/commits/Delphine-CC-Chiu/dt-bindings-hwmon-Add-lltc-ltc4286-driver-bindings/20231026-161739
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20231026081514.3610343-3-Delphine_CC_Chiu%40Wiwynn.com
+patch subject: [PATCH v2 2/2] hwmon: pmbus: Add ltc4286 driver
+reproduce: (https://download.01.org/0day-ci/archive/20231028/202310281159.Y11xKbmu-lkp@intel.com/reproduce)
 
-[1/2] regulator (max5970): Add hwmon support
-      commit: f5afdd13ed6c643c7243e685fe3cf5484b3fdfae
-[2/2] regulator (max5970): Remove duplicate line
-      commit: 804bf07a1f726d4fe391d21b24a68ffc2381ba89
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310281159.Y11xKbmu-lkp@intel.com/
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+All warnings (new ones prefixed by >>):
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+>> Documentation/hwmon/ltc4286.rst: WARNING: document isn't included in any toctree
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
