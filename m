@@ -2,222 +2,97 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ABDE3C0032E
-	for <linux-hwmon@archiver.kernel.org>; Sat, 28 Oct 2023 09:17:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E29CC0032E
+	for <linux-hwmon@archiver.kernel.org>; Sat, 28 Oct 2023 12:00:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbjJ1JRU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 28 Oct 2023 05:17:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58796 "EHLO
+        id S230004AbjJ1MAE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 28 Oct 2023 08:00:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjJ1JRU (ORCPT
+        with ESMTP id S229449AbjJ1MAD (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 28 Oct 2023 05:17:20 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B72F3
-        for <linux-hwmon@vger.kernel.org>; Sat, 28 Oct 2023 02:17:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698484637; x=1730020637;
-  h=date:from:to:cc:subject:message-id;
-  bh=tSbFmU3TOujOaNr97PiIa2/EWrtl3pYKjIQ17KDVzmI=;
-  b=j9+QT3v/ltubn68SHrBZdDN1mByrA2bjq8TZQZ0F6009Vn6khYVr4LfG
-   3BSLixSVOll2Il4GXaMW8ROjcFQ3xIDeXThqJa5YoGy0GYXk4vn9h/6B3
-   tWuFZeHfX+ZlD4KFG9X/167SvbAyT3SVXpsSsjESu4qsvA6Cc1ofzDlqS
-   84apI0yS4G2De/Epr00XyuZpMSqdk10Z0Ji33dblkunApswqsrx0uaTTT
-   /u4Vk6ghvRw3eNKp22Rzu3xQie75J+We65yFFlmRQh0D65F84PArgRkib
-   3+SEt8Caaf6vehmCSaUa8ioJFJST+MvK8fXmd9sfrHYdX8V6zwS+0zQkW
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10876"; a="418998581"
-X-IronPort-AV: E=Sophos;i="6.03,258,1694761200"; 
-   d="scan'208";a="418998581"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2023 02:17:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10876"; a="789031781"
-X-IronPort-AV: E=Sophos;i="6.03,258,1694761200"; 
-   d="scan'208";a="789031781"
-Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 28 Oct 2023 02:17:15 -0700
-Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qwfRR-000BbZ-1g;
-        Sat, 28 Oct 2023 09:17:13 +0000
-Date:   Sat, 28 Oct 2023 17:16:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon] BUILD SUCCESS
- 9da2901c47332b030ea4d2a2302bc7c0b83fc67c
-Message-ID: <202310281713.Lhvj38j9-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+        Sat, 28 Oct 2023 08:00:03 -0400
+Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4F0AE5;
+        Sat, 28 Oct 2023 05:00:00 -0700 (PDT)
+Received: by mail-oi1-x244.google.com with SMTP id 5614622812f47-3b2ea7cc821so2013601b6e.1;
+        Sat, 28 Oct 2023 05:00:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698494400; x=1699099200; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+PiSBO3Y1WPsVw7wAvcXWqkwkpWT4KTgGbs+zAcx7ow=;
+        b=NOCDrz1rOwfdZArrbnU6OvzfDNA9Ra4sLxqWLlUgxnZ71ZV+MZiqjYu5WpD6qYAcvi
+         6ig+BkoTRjN84Wn7RphSjarh1zpokQz2Wj/njppM78zueJ+ZaqrvoYlw33S+CpwUgBan
+         Ak3dFRksFHIHRBFURFMgJiahfNBdUGyDIb7vzHAF99Sr5veONiI0WnpmEFNItRMKLnIb
+         66fW7Gv8P/mQtEZncjvOBzrlYS9dDgTAh9WZqPlfNSKKHpPSKHhrzkq08IRVbYwrRvj+
+         VUP5RV9due2UwInk/vR0DfHuFh1aCEpH9vQ3uI71PYmYgWtI54yFMwkKLcSLHcFCuF1l
+         Szww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698494400; x=1699099200;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+PiSBO3Y1WPsVw7wAvcXWqkwkpWT4KTgGbs+zAcx7ow=;
+        b=W7ieuYEMC6n903+0ZoUy62Tauo3sA4MLpdQGi1mzoO+4RMv8kXKhSHB+rr/Rk9ohUE
+         65CpyrwXkC1OvjnBJas4/Iq0n3+vNihgMwKg7g9SPFoScQoeEmyQY9v268NrkFqwC/rl
+         r442Jt5QJn++cXx4XG6FKr0GizrdS5rJkCJ2y07Q7uZOY5tCgyIhgNviTkP0MOHq0LsE
+         KoFh1fx96lAADBKBskveG9e1aSQZ9tHd6G9YYvSjRJWVYN9bdhVytq+/rFLGOrFnDKq/
+         fM7zesRz5j8fRxnidWzXfM0vcsI709qEJZSJJ3U4Z5dGmVJM3HCJUWJByqkVm2t4fCCV
+         jxbQ==
+X-Gm-Message-State: AOJu0YxbYVMp6LIESE03sLZq/XPTh9/fOzXdGC4zNWpucQ8I/lKHuexQ
+        cypr1cUZ0VWvln7vED+29d9ityCGiDmFmOKSN4E=
+X-Google-Smtp-Source: AGHT+IHFhc/0+pkWR0SUGHQwml4w6qj5BunSg6KMAvcETHAASsdx3GziCfhnVPK6xL2wvUrGxAXm1wSN3GwMKqtxZxs=
+X-Received: by 2002:a05:6808:a96:b0:39c:59e2:dd79 with SMTP id
+ q22-20020a0568080a9600b0039c59e2dd79mr5054929oij.36.1698494400043; Sat, 28
+ Oct 2023 05:00:00 -0700 (PDT)
+MIME-Version: 1.0
+References: <025c3d36-587e-480c-b913-2a3916674c54@kernel.org>
+ <20231028082056.43276-1-579lpy@gmail.com> <29d2e5dc-7eb1-4dba-a2fe-4829fdb65a95@kernel.org>
+In-Reply-To: <29d2e5dc-7eb1-4dba-a2fe-4829fdb65a95@kernel.org>
+From:   peiyu li <579lpy@gmail.com>
+Date:   Sat, 28 Oct 2023 19:59:49 +0800
+Message-ID: <CAELPsEZV2rgt7M_UxyhB-QZ+TWcYjgi_PORO9Tk4Lofp2AFTmw@mail.gmail.com>
+Subject: Re: [PATCH v3] dt-bindings: hwmon: lm87: convert to YAML
+To:     jdelvare@suse.com
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
-branch HEAD: 9da2901c47332b030ea4d2a2302bc7c0b83fc67c  hwmon: (pmbus/mp2975) Move PGOOD fix
+>
+> On 28/10/2023 10:20, Li peiyu wrote:
+> > Convert the lm87 hwmon sensor bindings to DT schema
+> >
+> > Signed-off-by: Li peiyu <579lpy@gmail.com>
+> > ---
+> > Changes for v3:
+> > - add type definition of has-temp3, has-in6, has-in7
+> > - Change the description of has-temp3
+> > Changes for v2:
+> > - replace node name lm87 with sensor
+> > - replace character '\t' with spaces
+> >
+> >  .../devicetree/bindings/hwmon/lm87.txt        | 30 ---------
+> >  .../devicetree/bindings/hwmon/lm87.yaml       | 62 +++++++++++++++++++
+>
+> Nothing improved.
+>
+> Stop ignoring feedback. You must respond to it or implement it.
+>
+> Best regards,
+> Krzysztof
+>
+I'm so sorry for that.For v3 I just run make dt_binding_check and forget to
+run checkpatch.pl,resulting in not finding an extra space.Now running the
+dt_binding_check on my computer will cause an error regarding the
+ti,ds90ub960.yaml
+file when I specify the file to be checked as lm87.yaml. This error will occur
+even if I specify other files, I am not sure if it will have an
+impact.I'll submit
+v4.If there are still issues,please tell me the reason again.Sorry again.
 
-elapsed time: 1034m
-
-configs tested: 151
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                        nsim_700_defconfig   gcc  
-arc                   randconfig-001-20231028   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                        keystone_defconfig   gcc  
-arm                   randconfig-001-20231028   gcc  
-arm                         vf610m4_defconfig   gcc  
-arm64                            allmodconfig   gcc  
-arm64                             allnoconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20231028   gcc  
-i386         buildonly-randconfig-002-20231028   gcc  
-i386         buildonly-randconfig-003-20231028   gcc  
-i386         buildonly-randconfig-004-20231028   gcc  
-i386         buildonly-randconfig-005-20231028   gcc  
-i386         buildonly-randconfig-006-20231028   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                  randconfig-001-20231028   gcc  
-i386                  randconfig-002-20231028   gcc  
-i386                  randconfig-003-20231028   gcc  
-i386                  randconfig-004-20231028   gcc  
-i386                  randconfig-005-20231028   gcc  
-i386                  randconfig-006-20231028   gcc  
-i386                  randconfig-011-20231028   gcc  
-i386                  randconfig-012-20231028   gcc  
-i386                  randconfig-013-20231028   gcc  
-i386                  randconfig-014-20231028   gcc  
-i386                  randconfig-015-20231028   gcc  
-i386                  randconfig-016-20231028   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20231028   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                        mvme16x_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                  maltasmvp_eva_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-openrisc                    or1ksim_defconfig   gcc  
-parisc                           alldefconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   gcc  
-powerpc                     redwood_defconfig   gcc  
-powerpc64                           defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                 randconfig-001-20231028   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20231028   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                          rsk7269_defconfig   gcc  
-sh                           se7780_defconfig   gcc  
-sh                              ul2_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                 randconfig-001-20231028   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-001-20231028   gcc  
-x86_64       buildonly-randconfig-002-20231028   gcc  
-x86_64       buildonly-randconfig-003-20231028   gcc  
-x86_64       buildonly-randconfig-004-20231028   gcc  
-x86_64       buildonly-randconfig-005-20231028   gcc  
-x86_64       buildonly-randconfig-006-20231028   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20231028   gcc  
-x86_64                randconfig-002-20231028   gcc  
-x86_64                randconfig-003-20231028   gcc  
-x86_64                randconfig-004-20231028   gcc  
-x86_64                randconfig-005-20231028   gcc  
-x86_64                randconfig-006-20231028   gcc  
-x86_64                randconfig-011-20231028   gcc  
-x86_64                randconfig-012-20231028   gcc  
-x86_64                randconfig-013-20231028   gcc  
-x86_64                randconfig-014-20231028   gcc  
-x86_64                randconfig-015-20231028   gcc  
-x86_64                randconfig-016-20231028   gcc  
-x86_64                randconfig-071-20231028   gcc  
-x86_64                randconfig-072-20231028   gcc  
-x86_64                randconfig-073-20231028   gcc  
-x86_64                randconfig-074-20231028   gcc  
-x86_64                randconfig-075-20231028   gcc  
-x86_64                randconfig-076-20231028   gcc  
-x86_64                          rhel-8.3-func   gcc  
-x86_64                    rhel-8.3-kselftests   gcc  
-x86_64                           rhel-8.3-ltp   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Li peiyu
