@@ -2,44 +2,41 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA283C0032E
-	for <linux-hwmon@archiver.kernel.org>; Sat, 28 Oct 2023 14:58:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57F84C0032E
+	for <linux-hwmon@archiver.kernel.org>; Sat, 28 Oct 2023 14:59:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbjJ1O6L (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 28 Oct 2023 10:58:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42076 "EHLO
+        id S229454AbjJ1O7z (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 28 Oct 2023 10:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjJ1O6K (ORCPT
+        with ESMTP id S229446AbjJ1O7z (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 28 Oct 2023 10:58:10 -0400
+        Sat, 28 Oct 2023 10:59:55 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE70CC;
-        Sat, 28 Oct 2023 07:58:07 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EB42C433C7;
-        Sat, 28 Oct 2023 14:58:05 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10499C0
+        for <linux-hwmon@vger.kernel.org>; Sat, 28 Oct 2023 07:59:53 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EE10C433C7;
+        Sat, 28 Oct 2023 14:59:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698505087;
-        bh=3FBz8PpdqcYaeZaijgGotbQmFOnLwcEvvWgm6pmF1/A=;
+        s=k20201202; t=1698505192;
+        bh=XKFKJwLWN8LtB9HObwbsrakqlDA+eZ153UzGNfdFqXY=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=XCOndWFLVbi++gRpgVMHbsuPzkIyYJALie6I1KjSaiGwX3cXvIpOTowxJ760nuVMs
-         4+RGYlRiPfZaNxEMEKtFGND3vTXVLYYO+bL/1Yrm1sicOjVGnKGCvM3UmuJw68FTCh
-         XDwOx5e03REZ4KiA5bTnYGcCBrGYjPR7f5TyGB0rYVMOoCnbqpDnJX6Fax/F7pPbWh
-         2r8T9BtoQTruzWWxAo13nu5YxeloAqe386UIViC1QeF3ZGUxiTXeG+t7EHLIpFzL+s
-         vnlBDru0sGSK3yvWw47BEmuot1bkW0aJzB9phR0lJMlr5f7zeWzN/cZD2a5GDABl8G
-         +EpY/+IfAygpg==
-Message-ID: <99a72af9-272b-4971-9eaf-64a171b59eb7@kernel.org>
-Date:   Sat, 28 Oct 2023 16:58:03 +0200
+        b=lZViAY92Wbr1wehCOC5INdBZAijNN3dxMZ6Cm7gGze93XSUbYK2VJ34+KFooBwiUT
+         lCianNHEVYQ96H1/Ip96m3JUCmXTcIY8ZdBf9DECM6xLr+LDqtiVGyXWM0lYkEYfBB
+         JcuXuRQqGQY2xUfHSEZSuYh8zoQMWow01V2uCt+xHOElI/cBaqq4BW2AYZk0KBVyu2
+         04KGgPcYO2iMpuZalT9cx0McFvijTRn8FIORk8Yda2jiNDEfXWfSFBfv2N/ngWqRym
+         Ml7UosNNkRZ+/V+YxJYmFzq79l+NcnGJBGXUUTK0okMATSGxQ24hv8Z5UVIPubuHTr
+         dc+4RnNwFyofA==
+Message-ID: <1f16f4d3-4f93-46ef-bb4a-4c60277fd737@kernel.org>
+Date:   Sat, 28 Oct 2023 16:59:49 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] dt-bindings: hwmon: lm87: convert to YAML
-To:     peiyu li <579lpy@gmail.com>, jdelvare@suse.com
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <025c3d36-587e-480c-b913-2a3916674c54@kernel.org>
- <20231028082056.43276-1-579lpy@gmail.com>
- <29d2e5dc-7eb1-4dba-a2fe-4829fdb65a95@kernel.org>
- <CAELPsEZV2rgt7M_UxyhB-QZ+TWcYjgi_PORO9Tk4Lofp2AFTmw@mail.gmail.com>
+Subject: Re: [PATCH v4] dt-bindings: hwmon: lm87: convert to YAML
 Content-Language: en-US
+To:     Li peiyu <579lpy@gmail.com>, jdelvare@suse.com
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
+References: <29d2e5dc-7eb1-4dba-a2fe-4829fdb65a95@kernel.org>
+ <20231028120526.19528-1-579lpy@gmail.com>
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -84,57 +81,35 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <CAELPsEZV2rgt7M_UxyhB-QZ+TWcYjgi_PORO9Tk4Lofp2AFTmw@mail.gmail.com>
+In-Reply-To: <20231028120526.19528-1-579lpy@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 28/10/2023 13:59, peiyu li wrote:
->>
->> On 28/10/2023 10:20, Li peiyu wrote:
->>> Convert the lm87 hwmon sensor bindings to DT schema
->>>
->>> Signed-off-by: Li peiyu <579lpy@gmail.com>
->>> ---
->>> Changes for v3:
->>> - add type definition of has-temp3, has-in6, has-in7
->>> - Change the description of has-temp3
->>> Changes for v2:
->>> - replace node name lm87 with sensor
->>> - replace character '\t' with spaces
->>>
->>>  .../devicetree/bindings/hwmon/lm87.txt        | 30 ---------
->>>  .../devicetree/bindings/hwmon/lm87.yaml       | 62 +++++++++++++++++++
->>
->> Nothing improved.
->>
->> Stop ignoring feedback. You must respond to it or implement it.
->>
->> Best regards,
->> Krzysztof
->>
-> I'm so sorry for that.For v3 I just run make dt_binding_check and forget to
+On 28/10/2023 14:05, Li peiyu wrote:
+> Convert the lm87 hwmon sensor bindings to DT schema
+> 
+> Signed-off-by: Li peiyu <579lpy@gmail.com>
+> ---
+> Changes for v4:
+> - remove excess spaces
+> Changes for v3:
+> - add type definition of has-temp3, has-in6, has-in7
+> - Change the description of has-temp3
+> Changes for v2:
+> - replace node name lm87 with sensor
+> - replace character '\t' with spaces
+> 
+>  .../devicetree/bindings/hwmon/lm87.txt        | 30 ---------
+>  .../devicetree/bindings/hwmon/lm87.yaml       | 62 +++++++++++++++++++
 
-You even removed my address when replying this!
+Nothing improved from my original feedback from 25th of October.
 
-> run checkpatch.pl,resulting in not finding an extra space.Now running the
-> dt_binding_check on my computer will cause an error regarding the
-> ti,ds90ub960.yaml
-> file when I specify the file to be checked as lm87.yaml. This error will occur
-> even if I specify other files, I am not sure if it will have an
-> impact.I'll submit
-> v4.If there are still issues,please tell me the reason again.Sorry again.
-
-
-v4 did not improve. Please explain me carefully how did you implement
-these two feedbacks from first version, so 25th of Oct:
-
-> Please use scripts/get_maintainers.pl to get a list of necessary
-people and lists to CC.
-
-> Also, please use filename like compatible.
+Instead of ignoring it, please open the email, read and respond inline
+that you understand each part of the feedback and you are going to
+implement it.
 
 Best regards,
 Krzysztof
