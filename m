@@ -2,106 +2,87 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0DD2C4332F
-	for <linux-hwmon@archiver.kernel.org>; Sun, 29 Oct 2023 08:55:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8253C4332F
+	for <linux-hwmon@archiver.kernel.org>; Sun, 29 Oct 2023 15:58:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbjJ2IzP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 29 Oct 2023 04:55:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37048 "EHLO
+        id S229689AbjJ2P6u (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 29 Oct 2023 11:58:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjJ2IzP (ORCPT
+        with ESMTP id S229529AbjJ2P6t (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 29 Oct 2023 04:55:15 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5596C5;
-        Sun, 29 Oct 2023 01:55:12 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id 46e09a7af769-6ce2d4567caso2318182a34.2;
-        Sun, 29 Oct 2023 01:55:12 -0700 (PDT)
+        Sun, 29 Oct 2023 11:58:49 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F28B6;
+        Sun, 29 Oct 2023 08:58:47 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-507bd64814fso5102615e87.1;
+        Sun, 29 Oct 2023 08:58:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698569712; x=1699174512; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0fYIGNwFWZy4nwypsvGihJFy/e8948/9zR6WomBIKnU=;
-        b=AbUQibrqrUBI67t4jcBCq0YOwqx32CIjT/+xJpZHJMOszvWgjcmqoBmrMtyIZBS8OX
-         +DIly+ny+XN8dthIySNdTsX1ZocbDaHNR10PmjASvfvjPcunFdcUyS3cVWSlet7eULxX
-         S84B52O2UglTGPHNAy8T/F0eeaFhi/xCYzoYwMrD4aa+QyoujpgUrMPJRzk9q5weSMmT
-         +gGjobX+16hw7Sj8boLgzL8GOGTFiGlR4yxeHoi7XRhQ39Ays4Q11PmfVYKKbusQngdY
-         qrb2RZndCuzZp5PRaWwmWKFcbOoMzGL76cHnlF+A8+CN+fATSwuxYO29L00M/p21fOFP
-         fNBQ==
+        d=gmail.com; s=20230601; t=1698595125; x=1699199925; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:cc:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3e6k9aLofPBwqtOZrl9eOkhzMIksyEAGsMT8mwHRyZM=;
+        b=Mvb/wDkrLCx3xmNgUd5TSo1Q0+GSK1vvjwW03vlzxaD8vGghFIHbOI+iYEEuLDBNsC
+         KYxjBpsB0NT9dYWCxhp4/4PxtnwnwUkVQSHiTT3PTFVpk5E1tN/HajqGZ9odjE4Gf/bW
+         +UO/ksjjzxXJ4p0yN3CEXbXypfdZFU0lkJwGgkrMwgTUN4k7CKvbQ04XZUXgUBTgqiGO
+         p2d8Xcs3nrZrmnLEfYB6HeFiEAW92uerdFenbYBfknATti5DMkcpodeS2stCt+CtGK1a
+         auXGtpYaPYWEK4P43+2XYpT7cStOpZSwi61OoxRZQ6dHBX07gQtvxqoLhwDaoBRcTybJ
+         jpog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698569712; x=1699174512;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0fYIGNwFWZy4nwypsvGihJFy/e8948/9zR6WomBIKnU=;
-        b=rQSZ9Sz+UWRMjdIA7l1EqoiB86WnYxF7PUtEEZHMS6gdg2MAGMI3bbcxWTEfGBejy+
-         5eVHw5B4U1u1yI34MDcPPPGH44aIVvqaTNqftuMffixGLXS9nkyXigOl6CzdVyBwmWbZ
-         PQGv+GEOJnY/sssrj/oQShjRoICZnXEh1wxzaylmsDg7K149obsOy2DzSJhu5Q5ETgzs
-         6IZyI2yVNH3kbsCgbn1uK/cEoZc3E206scHOC9VFjdwLJTSRhtAllZkYzg4HkTJDwc1a
-         crTWPs/fjTQ7PE0cz8berI+n/e7S1m6o8d8QdpvoCI2JbnECtV8sIkN7F/usaRRFCqWX
-         BGWQ==
-X-Gm-Message-State: AOJu0YwxF44K558E+eDTj7BYPH1pMGoB7AeawRvQmo7OidvPhAMit5QE
-        4cLHHC2g5gxWwMQfLrq2iYlHgEtBm4FzT2wpo3UmgZE4cfV0z1iY9Bs=
-X-Google-Smtp-Source: AGHT+IFZHQmbDLfXhXXI4CZ0tpJamLJRv8QboOXFYf+whs+m+uYeATaqQTaFFgLW66ajgPLwyFXsyNBhdrZLdNz/2A8=
-X-Received: by 2002:a05:6358:5924:b0:168:de6b:6c70 with SMTP id
- g36-20020a056358592400b00168de6b6c70mr6747254rwf.1.1698569711567; Sun, 29 Oct
- 2023 01:55:11 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1698595125; x=1699199925;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:cc:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3e6k9aLofPBwqtOZrl9eOkhzMIksyEAGsMT8mwHRyZM=;
+        b=FZ1MzQDbK3a55dkGqCOcsGa8EetZk9+5ou9BLZmE/yKVPNj2+eY2v3A0aRTsiJ4WOg
+         SZ8t/ebQtA1bPRXCaka/c1ujdaYH5k+IqU1fQIsUc69wW0qxzfyFmgeOZiNt1rM2ksyT
+         VdBa+x78st/dsGPJAbSXL3h3sdicIYu6y/iAjC+6/HewTK5CBSvyDJ41OMpn11WJ/+Uo
+         eUk5y0a+1ZduTC1UVN9jm3ZxvRUKAOt6ReJwOkb/hgxkeznz3V4YjRVCjLEdDkOUEKOD
+         37Dc/pCKqMrlDfH5BJpWVzZalli7/12v/L6W4ph78Nv3lpERaFL16nVi1vBkgMxdq5y6
+         KoIg==
+X-Gm-Message-State: AOJu0YzSwgNUNI418rfYl0y2v+AMkN+38xVinuB01BL9Gj6Vnwr3bDyd
+        //PnQKCmJCcAysom2u3v8yPyw3f0IhjpCA==
+X-Google-Smtp-Source: AGHT+IGdwy7SYuF6/s1PQPTMV/8CnnApzRpnqRmzo6LOWmpIsBoiqW0De7bNFLzKpreJ56RvnOLJoQ==
+X-Received: by 2002:a05:6512:1150:b0:503:26b0:e126 with SMTP id m16-20020a056512115000b0050326b0e126mr7221754lfg.59.1698595124842;
+        Sun, 29 Oct 2023 08:58:44 -0700 (PDT)
+Received: from [192.168.0.28] (cable-178-148-234-71.dynamic.sbb.rs. [178.148.234.71])
+        by smtp.gmail.com with ESMTPSA id j15-20020adfb30f000000b0032d8eecf901sm6231180wrd.3.2023.10.29.08.58.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 29 Oct 2023 08:58:44 -0700 (PDT)
+Message-ID: <576a2923-1705-48e8-81b9-f53a43c2b6f7@gmail.com>
+Date:   Sun, 29 Oct 2023 16:58:42 +0100
 MIME-Version: 1.0
-References: <025c3d36-587e-480c-b913-2a3916674c54@kernel.org>
- <20231028082056.43276-1-579lpy@gmail.com> <29d2e5dc-7eb1-4dba-a2fe-4829fdb65a95@kernel.org>
- <CAELPsEZV2rgt7M_UxyhB-QZ+TWcYjgi_PORO9Tk4Lofp2AFTmw@mail.gmail.com> <99a72af9-272b-4971-9eaf-64a171b59eb7@kernel.org>
-In-Reply-To: <99a72af9-272b-4971-9eaf-64a171b59eb7@kernel.org>
-From:   peiyu li <579lpy@gmail.com>
-Date:   Sun, 29 Oct 2023 16:55:00 +0800
-Message-ID: <CAELPsEao2Zsi+n7261TZn8EVR0RmTuWNJx-JXtokApKaVJk=HQ@mail.gmail.com>
-Subject: Re: [PATCH v3] dt-bindings: hwmon: lm87: convert to YAML
-To:     Krzysztof Kozlowski <krzk@kernel.org>, jdelvare@suse.com,
-        linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+User-Agent: Mozilla Thunderbird
+Cc:     savicaleksa83@gmail.com, linux-hwmon@vger.kernel.org,
+        leonard.anderweit@gmail.com, Jack Doan <me@jackdoan.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 2/2] hwmon: (aquacomputer_d5next) Add support for
+ Aquacomputer High Flow USB and MPS Flow
+To:     Guenter Roeck <linux@roeck-us.net>
+References: <20231016083559.139341-1-savicaleksa83@gmail.com>
+ <20231016083559.139341-3-savicaleksa83@gmail.com>
+ <c08d04b4-8e6d-4221-93f1-cf5fff8c54c4@roeck-us.net>
+Content-Language: en-US
+From:   Aleksa Savic <savicaleksa83@gmail.com>
+In-Reply-To: <c08d04b4-8e6d-4221-93f1-cf5fff8c54c4@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Oct 28, 2023 at 10:58=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.o=
-rg> wrote:
-> You even removed my address when replying this!
->
-> > run checkpatch.pl,resulting in not finding an extra space.Now running t=
-he
-> > dt_binding_check on my computer will cause an error regarding the
-> > ti,ds90ub960.yaml
-> > file when I specify the file to be checked as lm87.yaml. This error wil=
-l occur
-> > even if I specify other files, I am not sure if it will have an
-> > impact.I'll submit
-> > v4.If there are still issues,please tell me the reason again.Sorry agai=
-n.
->
->
-> v4 did not improve. Please explain me carefully how did you implement
-> these two feedbacks from first version, so 25th of Oct:
->
-> > Please use scripts/get_maintainers.pl to get a list of necessary
-> people and lists to CC.
->
+On 2023-10-28 18:24:38 GMT+02:00, Guenter Roeck wrote:
+> 
+> Applied.
+> 
+> Thanks,
+> Guenter
+> 
 
-I will send the next patch to all necessary people and cc all necessary lis=
-ts.
+Thanks. Maybe I'm missing something, why is the first patch
+from the series not applied as well?
 
-> > Also, please use filename like compatible.
->
-
-In the next version I will change the file name to "ti,lm87.yaml",
-which is the same as "compatible".
-
-> Best regards,
-> Krzysztof
->
-
-Thanks,
-Li peiyu
+Aleksa
