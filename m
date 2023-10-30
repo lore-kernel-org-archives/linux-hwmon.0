@@ -2,168 +2,314 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D25F8C4332F
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Oct 2023 14:15:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBE02C4167D
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Oct 2023 14:33:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233092AbjJ3OP0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 30 Oct 2023 10:15:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58422 "EHLO
+        id S233197AbjJ3Odq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 30 Oct 2023 10:33:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233456AbjJ3OPY (ORCPT
+        with ESMTP id S231845AbjJ3Odp (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 30 Oct 2023 10:15:24 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13476D6;
-        Mon, 30 Oct 2023 07:15:22 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-6c0f14d6875so968279b3a.1;
-        Mon, 30 Oct 2023 07:15:22 -0700 (PDT)
+        Mon, 30 Oct 2023 10:33:45 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BBBC6;
+        Mon, 30 Oct 2023 07:33:42 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-577fff1cae6so3060682a12.1;
+        Mon, 30 Oct 2023 07:33:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698675321; x=1699280121; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Phy/nzVRPIoAgrWYC8gIYIVfTU+CyCtvaYTpZcFu2/8=;
-        b=QBpV9UdY42knpVQGs5E5RilYtXTI53PYds9gg3Ob0K/qpx8nmftauriIDOz6B8oS6u
-         +8w+pJYBDF40XRaHB6yIy0njwLQSTVAlLU2Aq40WPs2YeI20+C+Jip1+UDBL0ea4SOu/
-         houjI96fLErayKzCURbdAIEJMJgD5wx9ZGDEfujFQfgjHi082c3rzP6X8BvqmyQgx2Ny
-         sCPtxwzX4v6iM47mbe/rXFUj8RPLRD9Z8IV+8sHTPDuO9kihOC2yFcFdmYPHUcLPWiOx
-         EeopnGzaL+wTmuzXsQXKUzBrPxyObp/C07CoRfg2aQSgs6hFdD2dQS6d39GYxSo9TTVx
-         Vn/A==
+        d=gmail.com; s=20230601; t=1698676422; x=1699281222; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=IDo3P66UG2s8id9OIvS41l0xuIgkJiiR3b6EgYiK6wQ=;
+        b=eVOYBp+2ElyITzeq+hk6qbHRDFdA/xJiogZS65aCjJyuyE5WoMMAJNDSOouTX6xUX7
+         p2Pq0c2w5tDJnAJj7iLCg2TCyoXei8d8pAFs+BxokRZ54r7BG1roV9hJu+O0TUdR6fw5
+         q8VwXHwCRiszSyefur2oHA7cl8100561Did12IYvfVZppzzdn5NTyr73az9YCwymTWGD
+         HJ+5pP5jzgKCiZKREI8akvWOVurat/sLtPPNvZuYxgT5zhtMIsYECye6VPQykg+OqKw7
+         XDhIDR48WYc2wcI16NjZzAUk4s4hrsNKtrYL3X2lNDHYcXXPvx3O2DwGmkGQ9WrBHRms
+         XfnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698675321; x=1699280121;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Phy/nzVRPIoAgrWYC8gIYIVfTU+CyCtvaYTpZcFu2/8=;
-        b=vlpW6/ajqdoYdhczTe+lLqcflpspF22AODDLW7Bnm1QcSzhXMn+Fr8xkywT1luuWXl
-         +cn8qTSKkzmLArAeFV+0ok8QbxOfeTfHwtoy1lNx1AyY4ngRa5/ZGDVdXYzWiEM4Fpbp
-         sVKvpefJrufdcKd7n8pRWvJbsVmjacLoxG7jggqcOLQjTWrKBtETDltVxpIq+0uAsyDW
-         UZp5Znqie79Ck7VXa9r8jt3fEjir2wf031nS/sEVtvliP73D+KoUuL4qaCgFpRXZFKAo
-         Iq7OIB4YsF+jl17dvclrMKPJUHSov41Z84fO6vLnI9O5oad6+7wHkvcMAK//IVrDztTo
-         bc0A==
-X-Gm-Message-State: AOJu0Yz9+iBct8mUQaMzOi4I5OrgTO/T06QBg3VyanJ/cen5ijbaaGUY
-        79b3BNLECiq9CMJFS43L3q8=
-X-Google-Smtp-Source: AGHT+IH1LGLzcObhgxTU63UavEcs3NmQlccH5PgxWH6rC1CZlrq70MTbiRAZcopHMG45pJY3z0yRRw==
-X-Received: by 2002:a05:6a00:1a04:b0:6b5:ec98:427d with SMTP id g4-20020a056a001a0400b006b5ec98427dmr7699238pfv.17.1698675321393;
-        Mon, 30 Oct 2023 07:15:21 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n10-20020a056a0007ca00b0068620bee456sm5987676pfu.209.2023.10.30.07.15.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Oct 2023 07:15:21 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1698676422; x=1699281222;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IDo3P66UG2s8id9OIvS41l0xuIgkJiiR3b6EgYiK6wQ=;
+        b=bbwXDlNQT3ow69WQ1co4KpvK6K4r8Mr1eWKW+yEZfxQhhG51PzkPXf4G+aqCwpb3U0
+         b8vCdoLuuHOXDiiBfSEoIj6k40/TV+cT/ggIJiCAEpPdseEXBqqlCHUkgnQz8Y5e+6EO
+         k0axRLd94HvWNElAqjRRE5Fow6rVChklfG27KhoZlZWW6iHT8NhZivk+Dm7QkNq3Byyr
+         cIN0We9DGE9o/4gaS3wzygsjTkCEHQ6q4CKUu41b/otCK9MnmvGtLmA6kN3SRiGtszp4
+         +D7H8T/S1FMbj2jiSNgm7gaOh+kICuV1SUs6LSvlcSsWAJ8HK16V1WeJ3N0iPrcnEKfY
+         A0qw==
+X-Gm-Message-State: AOJu0YzmfdXtNlvR87NC6yee+GFGMTWC3/Dsw8Avw5d9yEtLHpVKz9HZ
+        3OYqF6y4SwW8ZeN4TiXdql1ngsxPS44=
+X-Google-Smtp-Source: AGHT+IFH5Tjtvai0G+3YP9yWa6hL6WzpuSzZ8GkN7vKXG2XU+rqgchtbWzBlN1hpbxZxBC5kfvY3IA==
+X-Received: by 2002:a05:6a21:32aa:b0:17b:2c56:70bc with SMTP id yt42-20020a056a2132aa00b0017b2c5670bcmr12846252pzb.10.1698676422233;
+        Mon, 30 Oct 2023 07:33:42 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id k2-20020a637b42000000b0057412d84d25sm4844361pgn.4.2023.10.30.07.33.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Oct 2023 07:33:41 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <302a0c90-cc5a-41c3-8004-f96e9586ccf4@roeck-us.net>
-Date:   Mon, 30 Oct 2023 07:15:19 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/2] hwmon: ltc2991: add driver support
-Content-Language: en-US
-To:     "Miclaus, Antoniu" <Antoniu.Miclaus@analog.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-References: <20231026103413.27800-1-antoniu.miclaus@analog.com>
- <20231026103413.27800-2-antoniu.miclaus@analog.com>
- <075f6150-74f2-478e-9290-aa7186140cee@roeck-us.net>
- <CY4PR03MB3399049CB79E0F468A945C659BA1A@CY4PR03MB3399.namprd03.prod.outlook.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <CY4PR03MB3399049CB79E0F468A945C659BA1A@CY4PR03MB3399.namprd03.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon updates for v6.7
+Date:   Mon, 30 Oct 2023 07:33:40 -0700
+Message-Id: <20231030143340.2251301-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/30/23 00:59, Miclaus, Antoniu wrote:
-> 
->> On Thu, Oct 26, 2023 at 01:33:13PM +0300, Antoniu Miclaus wrote:
->>> Add support for LTC2991 Octal I2C Voltage, Current, and Temperature
->>> Monitor.
->>>
->>> The LTC2991 is used to monitor system temperatures, voltages and
->>> currents. Through the I2C serial interface, the eight monitors can
->>> individually measure supply voltages and can be paired for
->>> differential measurements of current sense resistors or temperature
->>> sensing transistors. Additional measurements include internal
->>> temperature and internal VCC.
->>>
->>> Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
->>
->> Applied. I do have one comment (see below) about code which
->> I would normally reject, but I am getting tired.
->>
->> [ ... ]
->>
->>> +
->>> +struct ltc2991_state {
->>> +	struct device		*dev;
->>
->> It is completely pointless to have a reference to dev in struct
->> ltc2991_state because it is only used in the init function and
->> dereferenced six times there. It would have been much easier to
->> pass it as argument to that function. That would also have avoided
->> the wrong assumption or expectation that it is needed/used elsewhere.
->>
->> Guenter
-> Sorry for the misunderstanding. I took as reference some old driver
-> implementations from the mainline kernel.
-> 
+Hi Linus,
 
-You can find examples for pretty much everything in the kernel, including
-pretty much everything bad and pointless.
+Please pull hwmon updates for Linux v6.7 from signed tag:
 
-> Is it fine if I do a follow-up patch on this subject in the near future?
-> 
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.7
 
-If you wish. I already accepted your patch.
-
+Thanks,
 Guenter
+------
 
+The following changes since commit 6465e260f48790807eef06b583b38ca9789b6072:
+
+  Linux 6.6-rc3 (2023-09-24 14:31:13 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.7
+
+for you to fetch changes up to 0f564130e5c76f1e5cf0008924f6a6cd138929d9:
+
+  hwmon: (aquacomputer_d5next) Check if temp sensors of legacy devices are connected (2023-10-29 22:22:48 -0700)
+
+----------------------------------------------------------------
+hwmon updates for v6.7-rc1
+
+* New drivers
+
+- Driver for LTC2991
+
+- Driver for POWER-Z
+
+* Added chip / system support to existing drivers
+
+- The ina238 driver now also supports INA237
+
+- The asus-ec-sensors driver now supports ROG Crosshair X670E Gene
+
+- The aquacomputer_d5next now supports Aquacomputer High Flow USB and MPS Flow
+
+- The pmbus/mpq7932 driver now also supports MPQ2286
+
+- The nct6683 now also supports ASRock X670E Taichi
+
+* Various other minor improvements and fixes
+
+- One patch series to call out is the conversion of hwmon platform
+  drivers to use the platform remove callback returning void
+
+----------------------------------------------------------------
+Aleksa Savic (2):
+      hwmon: (aquacomputer_d5next) Add support for Aquacomputer High Flow USB and MPS Flow
+      hwmon: (aquacomputer_d5next) Check if temp sensors of legacy devices are connected
+
+Alexander Koskovich (1):
+      hwmon: (nct6683) Add another customer ID for ASRock X670E Taichi
+
+Antoniu Miclaus (4):
+      hwmon: (ltc2992) Avoid division by zero
+      hwmon: (max31827) handle vref regulator
+      dt-bindings: hwmon: ltc2991: add bindings
+      hwmon: Add driver for ltc2991
+
+Armin Wolf (5):
+      hwmon: (sch5627) Use bit macros when accessing the control register
+      hwmon: (sch5627) Disallow write access if virtual registers are locked
+      hwmon: (sch5627) Use regmap for pwm map register caching
+      hwmon: (sch5627) Add support for writing limit registers
+      hwmon: (sch5627) Document behaviour of limit registers
+
+Biju Das (2):
+      hwmon: tmp513: Add max_channels variable to struct tmp51x_data
+      hwmon: tmp513: Simplify tmp51x_read_properties()
+
+Colin Ian King (1):
+      hwmon: (hs3001) remove redundant store on division
+
+Daniel Matyas (3):
+      hwmon: (max31827) Make code cleaner
+      hwmon: (max31827) Modify conversion wait time
+      dt-bindings: hwmon: Add possible new properties to max31827 bindings
+
+Dragos Bogdan (1):
+      hwmon: (axi-fan-control) Fix possible NULL pointer dereference
+
+Ellie Hermaszewska (1):
+      hwmon: (asus-ec-sensors) add ROG Crosshair X670E Gene.
+
+Guenter Roeck (2):
+      Revert "hwmon: (sch56xx-common) Add DMI override table"
+      Revert "hwmon: (sch56xx-common) Add automatic module loading on supported devices"
+
+Hal Feng (1):
+      MAINTAINERS: Add Hal as one of the maintainers of SFCTEMP HWMON DRIVER
+
+Jon Hunter (1):
+      dt-bindings: hwmon: ina3221: Add ti,summation-disable
+
+Lakshmi Yadlapati (1):
+      hwmon: (pmbus/max31785) Add delay between bus accesses
+
+Naresh Solanki (1):
+      hwmon: (pmbus/mp2975) Move PGOOD fix
+
+Ninad Malwade (2):
+      dt-bindings: hwmon: ina3221: Convert to json-schema
+      hwmon: (ina3221) Add support for channel summation disable
+
+Patrick Rudolph (3):
+      dt-bindings: hwmon: Add Infineon TDA38640
+      hwmon: (pmbus) Add ON_OFF_CONFIG register bits
+      hwmon: (pmbus/tda38640) Add workaround for SVID mode
+
+Raag Jadav (1):
+      hwmon: (nct6775) use acpi_dev_hid_uid_match() for matching _HID and _UID
+
+Richard Leitner (2):
+      dt-bindings: hwmon: ti,ina2xx: add ti,ina237
+      hwmon: (ina238) add ina237 support
+
+Saravanan Sekar (4):
+      hwmon: (pmbus/mpq7932) Get page count based on chip info
+      regulator: dt-bindings: Add mps,mpq2286 power-management IC
+      hwmon: (pmbus/core) Add helper macro to define single pmbus regulator
+      hwmon: (pmbus/mpq7932) Add a support for mpq2286 Power Management IC
+
+Su Hui (1):
+      hwmon: (npcm750-pwm) Add an error code check in npcm7xx_en_pwm_fan
+
+Thomas Weißschuh (2):
+      hwmon: add POWER-Z driver
+      hwmon: (powerz) add support for ChargerLAB KM002C
+
+Timothy Pearson (1):
+      hwmon: (adt7475) Add support for Imon readout on ADT7490
+
+Tomer Maimon (1):
+      dt-bindings: hwmon: npcm: Add npcm845 compatible string
+
+Uwe Kleine-König (24):
+      hwmon: (abitguru{,3}) Enable build testing on !X86
+      hwmon: (abituguru) Convert to platform remove callback returning void
+      hwmon: (abituguru3) Convert to platform remove callback returning void
+      hwmon: (da9052-hwmon) Convert to platform remove callback returning void
+      hwmon: (dme1737) Convert to platform remove callback returning void
+      hwmon: (f71805f) Convert to platform remove callback returning void
+      hwmon: (f71882fg) Convert to platform remove callback returning void
+      hwmon: (i5k_amb) Convert to platform remove callback returning void
+      hwmon: (max197) Convert to platform remove callback returning void
+      hwmon: (mc13783-adc) Convert to platform remove callback returning void
+      hwmon: (occ/p9_sbe) Convert to platform remove callback returning void
+      hwmon: (pc87360) Convert to platform remove callback returning void
+      hwmon: (pc87427) Convert to platform remove callback returning void
+      hwmon: (sch5636) Convert to platform remove callback returning void
+      hwmon: (sht15) Convert to platform remove callback returning void
+      hwmon: (sis5595) Convert to platform remove callback returning void
+      hwmon: (ultra45_env) Convert to platform remove callback returning void
+      hwmon: (via-cputemp) Convert to platform remove callback returning void
+      hwmon: (via686a) Convert to platform remove callback returning void
+      hwmon: (vt1211) Convert to platform remove callback returning void
+      hwmon: (vt8231) Convert to platform remove callback returning void
+      hwmon: (w83627hf) Convert to platform remove callback returning void
+      hwmon: (w83781d) Convert to platform remove callback returning void
+      hwmon: (xgene-hwmon) Convert to platform remove callback returning void
+
+Zev Weiss (1):
+      hwmon: (nct6775) Fix incorrect variable reuse in fan_div calculation
+
+Zhang Rui (1):
+      hwmon: (coretemp) Fix potentially truncated sysfs attribute name
+
+ .../devicetree/bindings/hwmon/adi,ltc2991.yaml     | 128 ++++++
+ .../devicetree/bindings/hwmon/adi,max31827.yaml    |  66 ++++
+ .../devicetree/bindings/hwmon/ina3221.txt          |  54 ---
+ .../devicetree/bindings/hwmon/npcm750-pwm-fan.txt  |   6 +-
+ .../bindings/hwmon/pmbus/infineon,tda38640.yaml    |  49 +++
+ .../devicetree/bindings/hwmon/ti,ina2xx.yaml       |   1 +
+ .../devicetree/bindings/hwmon/ti,ina3221.yaml      | 121 ++++++
+ .../devicetree/bindings/regulator/mps,mpq2286.yaml |  59 +++
+ .../devicetree/bindings/trivial-devices.yaml       |   2 -
+ Documentation/hwmon/adt7475.rst                    |   3 +-
+ Documentation/hwmon/aquacomputer_d5next.rst        |   7 +
+ Documentation/hwmon/asus_ec_sensors.rst            |   1 +
+ Documentation/hwmon/index.rst                      |   2 +
+ Documentation/hwmon/ltc2991.rst                    |  43 ++
+ Documentation/hwmon/max31827.rst                   |   4 +-
+ Documentation/hwmon/nct6683.rst                    |   1 +
+ Documentation/hwmon/powerz.rst                     |  30 ++
+ Documentation/hwmon/sch5627.rst                    |  10 +
+ MAINTAINERS                                        |  16 +
+ drivers/hwmon/Kconfig                              |  26 +-
+ drivers/hwmon/Makefile                             |   2 +
+ drivers/hwmon/abituguru.c                          |   6 +-
+ drivers/hwmon/abituguru3.c                         |   5 +-
+ drivers/hwmon/adt7475.c                            |  68 +++-
+ drivers/hwmon/aquacomputer_d5next.c                |  72 +++-
+ drivers/hwmon/asus-ec-sensors.c                    |  12 +
+ drivers/hwmon/axi-fan-control.c                    |  29 +-
+ drivers/hwmon/coretemp.c                           |   2 +-
+ drivers/hwmon/da9052-hwmon.c                       |   6 +-
+ drivers/hwmon/dme1737.c                            |   6 +-
+ drivers/hwmon/f71805f.c                            |   6 +-
+ drivers/hwmon/f71882fg.c                           |   5 +-
+ drivers/hwmon/hs3001.c                             |   2 +-
+ drivers/hwmon/i5k_amb.c                            |   5 +-
+ drivers/hwmon/ina238.c                             |   3 +-
+ drivers/hwmon/ina3221.c                            |  33 +-
+ drivers/hwmon/ltc2991.c                            | 437 +++++++++++++++++++++
+ drivers/hwmon/ltc2992.c                            |   6 +-
+ drivers/hwmon/max197.c                             |   6 +-
+ drivers/hwmon/max31827.c                           | 131 +++---
+ drivers/hwmon/mc13783-adc.c                        |   6 +-
+ drivers/hwmon/nct6683.c                            |   3 +
+ drivers/hwmon/nct6775-core.c                       |  12 +-
+ drivers/hwmon/nct6775-platform.c                   |   4 +-
+ drivers/hwmon/npcm750-pwm-fan.c                    |   2 +
+ drivers/hwmon/occ/p9_sbe.c                         |   6 +-
+ drivers/hwmon/pc87360.c                            |   6 +-
+ drivers/hwmon/pc87427.c                            |   6 +-
+ drivers/hwmon/pmbus/max31785.c                     | 188 ++++++++-
+ drivers/hwmon/pmbus/mp2975.c                       |  10 +-
+ drivers/hwmon/pmbus/mpq7932.c                      |  19 +-
+ drivers/hwmon/pmbus/pmbus.h                        |  24 ++
+ drivers/hwmon/pmbus/tda38640.c                     | 154 +++++++-
+ drivers/hwmon/powerz.c                             | 275 +++++++++++++
+ drivers/hwmon/sch5627.c                            | 267 +++++++++----
+ drivers/hwmon/sch5636.c                            |   6 +-
+ drivers/hwmon/sch56xx-common.c                     | 171 +++++---
+ drivers/hwmon/sch56xx-common.h                     |   6 +
+ drivers/hwmon/sht15.c                              |   6 +-
+ drivers/hwmon/sis5595.c                            |   6 +-
+ drivers/hwmon/tmp513.c                             |  52 ++-
+ drivers/hwmon/ultra45_env.c                        |   6 +-
+ drivers/hwmon/via-cputemp.c                        |   5 +-
+ drivers/hwmon/via686a.c                            |   6 +-
+ drivers/hwmon/vt1211.c                             |   6 +-
+ drivers/hwmon/vt8231.c                             |   6 +-
+ drivers/hwmon/w83627hf.c                           |   6 +-
+ drivers/hwmon/w83781d.c                            |   7 +-
+ drivers/hwmon/xgene-hwmon.c                        |   6 +-
+ 69 files changed, 2292 insertions(+), 456 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml
+ delete mode 100644 Documentation/devicetree/bindings/hwmon/ina3221.txt
+ create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.yaml
+ create mode 100644 Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml
+ create mode 100644 Documentation/devicetree/bindings/regulator/mps,mpq2286.yaml
+ create mode 100644 Documentation/hwmon/ltc2991.rst
+ create mode 100644 Documentation/hwmon/powerz.rst
+ create mode 100644 drivers/hwmon/ltc2991.c
+ create mode 100644 drivers/hwmon/powerz.c
