@@ -2,100 +2,158 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ADA06C4332F
-	for <linux-hwmon@archiver.kernel.org>; Sun, 29 Oct 2023 17:14:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E73C7C4332F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Oct 2023 02:07:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbjJ2ROG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 29 Oct 2023 13:14:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49878 "EHLO
+        id S229648AbjJ3CHN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 29 Oct 2023 22:07:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjJ2ROF (ORCPT
+        with ESMTP id S229569AbjJ3CHM (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 29 Oct 2023 13:14:05 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB56AB;
-        Sun, 29 Oct 2023 10:14:03 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2c523ac38fbso54710521fa.0;
-        Sun, 29 Oct 2023 10:14:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698599641; x=1699204441; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:cc:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0udIX/zF2kSnASkvlQwLeoGUtYljUF4NEJO2MWzKKgs=;
-        b=NTaVx9en9O7jV6ZPs8M0WUNGOXxT721DjssriRNZsJWGUfW0H8GNNY1G/qmI88cxCL
-         rgOx8HUgkpUodjjodoZBFsFiPbEtMjcyRNPjfoaL1i0IErq0phQrtc3+PvUD9JBh6Qky
-         miSI/2xZZ96bqnLY+qWavNzizFM+9RHkMN5Wymr6D62HyJR/G6fdePbtPnQWfM9RS4pr
-         rJb2Av2CkpGuCcuE+ZsFcVnWZ6eLN/v8W2fUpUOstNCcDEIl/zXdQ720HtFRH3QPqcfe
-         B4Zze8qljFhaLdP/cxYHegrQhf+IVPIULUeBBY30SDIjVBKB73f/lKH/r9jdcJ4PesPN
-         x4lQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698599641; x=1699204441;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:cc:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0udIX/zF2kSnASkvlQwLeoGUtYljUF4NEJO2MWzKKgs=;
-        b=EGJfSDErOTTbO+Cu4/GzdOX/WlKZ8KKbsYLt2uaYXKIw6qngrPEULB87SVIctcBGz+
-         TDENS7vFqVi2qaKfAU4B/B1+1Y1w3u+XE98IG63zhIjsxk2gG0aSen+M2zOj0PbSNdWV
-         dpI6XtauIcM6qMshSBy/yUit6ykMHSmThhx6M065TsuYffPxYsYz8cWrmFOgXru3Ozwq
-         P7u5AtduE1sIVoEeZAgww+7KlssKsEuBnpZcdYuV0nzCVXXElNUXaP95LNQV813dnnTE
-         DqPJ2+CNxHAhxJz8TibCIBB+S1lpjYpWkcB6087o6S3rX1BgmP36ES8Jza2fNTH3GuJJ
-         77zw==
-X-Gm-Message-State: AOJu0YzE6tHyw8Yf4rOT8fZMXsiwDJx+17hruAoFVx9oJ2LyJStM2Elp
-        HiBRyProDjakKfGEblirXrg=
-X-Google-Smtp-Source: AGHT+IHfVAPdZ/3t/WMgsC6wkvvBghKD/3oAdqyNckbm/9Tzzwvo6clZZQV7RKkUWrtJA4fU0EbaOQ==
-X-Received: by 2002:a05:651c:39a:b0:2c5:ee7:b322 with SMTP id e26-20020a05651c039a00b002c50ee7b322mr5780342ljp.18.1698599641279;
-        Sun, 29 Oct 2023 10:14:01 -0700 (PDT)
-Received: from [192.168.0.28] (cable-178-148-234-71.dynamic.sbb.rs. [178.148.234.71])
-        by smtp.gmail.com with ESMTPSA id gw18-20020a05600c851200b00405442edc69sm10382411wmb.14.2023.10.29.10.14.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 29 Oct 2023 10:14:00 -0700 (PDT)
-Message-ID: <613efff5-f99a-4a18-ae27-44f3687d10da@gmail.com>
-Date:   Sun, 29 Oct 2023 18:13:59 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc:     savicaleksa83@gmail.com, linux-hwmon@vger.kernel.org,
-        leonard.anderweit@gmail.com, Jack Doan <me@jackdoan.com>,
+        Sun, 29 Oct 2023 22:07:12 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED7ABE;
+        Sun, 29 Oct 2023 19:07:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698631630; x=1730167630;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dbVY1ThUDo1weBPv8bgLKEZ7vpAIM1jDmAicjkFa74o=;
+  b=OPrrqAennHFuo5x93Lu+aKsATqPdFBiYuqLGwt+aFoBkE2mmx5vEjqzI
+   Av8z0mpF99iiFYBQ1Bt6d5az59MfdyDLDtOTim2ssi+dB55w9g6oMAg3J
+   VogjA6/oDTQ3UDbqPJe+ep+qqKNI/R5MXSkswihdb/M+caQQiPcl2EX0x
+   EfXG7Fi4HvdO8dmHLHOJYNMpGN2U6vPLCeInOKHvWYtO6yFimK7Y0qWLv
+   scwnTavn26y/8KSc1UJrDPl5EhNbFPyMX5yl3bq0uU9wIrrPDdu7n1bmP
+   sraO+35bHURWZkrOxW1zwpuzg3JFzcxLIX+BsWcUego4YgzN0l4+lEz0i
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10878"; a="387812924"
+X-IronPort-AV: E=Sophos;i="6.03,262,1694761200"; 
+   d="scan'208";a="387812924"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2023 19:07:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10878"; a="876978077"
+X-IronPort-AV: E=Sophos;i="6.03,262,1694761200"; 
+   d="scan'208";a="876978077"
+Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 29 Oct 2023 19:07:07 -0700
+Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qxHgH-000Cyp-2D;
+        Mon, 30 Oct 2023 02:07:05 +0000
+Date:   Mon, 30 Oct 2023 10:06:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Aleksa Savic <savicaleksa83@gmail.com>, linux-hwmon@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Aleksa Savic <savicaleksa83@gmail.com>,
         Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] hwmon: (aquacomputer_d5next) Add support for
- Aquacomputer High Flow USB and MPS Flow
-To:     Guenter Roeck <linux@roeck-us.net>
-References: <20231016083559.139341-1-savicaleksa83@gmail.com>
- <20231016083559.139341-3-savicaleksa83@gmail.com>
- <c08d04b4-8e6d-4221-93f1-cf5fff8c54c4@roeck-us.net>
- <576a2923-1705-48e8-81b9-f53a43c2b6f7@gmail.com>
- <c5981e81-2f0c-41f0-b2c4-0a786fe13c2e@roeck-us.net>
-Content-Language: en-US
-From:   Aleksa Savic <savicaleksa83@gmail.com>
-In-Reply-To: <c5981e81-2f0c-41f0-b2c4-0a786fe13c2e@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] hwmon: Add driver for Gigabyte AORUS Waterforce AIO
+ coolers
+Message-ID: <202310300959.8NLKyQDJ-lkp@intel.com>
+References: <20231020130212.8919-1-savicaleksa83@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231020130212.8919-1-savicaleksa83@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2023-10-29 17:59:52 GMT+01:00, Guenter Roeck wrote:
-> On 10/29/23 08:58, Aleksa Savic wrote:
->> On 2023-10-28 18:24:38 GMT+02:00, Guenter Roeck wrote:
->>>
->>> Applied.
->>>
->>> Thanks,
->>> Guenter
->>>
->>
->> Thanks. Maybe I'm missing something, why is the first patch
->> from the series not applied as well?
->>
-> 
-> Because I missed your reply to my question. Sorry, I have to admit that I am less
-> than perfect. Applied now.
-> 
-> Guenter
-> 
+Hi Aleksa,
 
-Thank you, much appreciated :)
+kernel test robot noticed the following build warnings:
 
-Aleksa
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on linus/master v6.6-rc7 next-20231027]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Aleksa-Savic/hwmon-Add-driver-for-Gigabyte-AORUS-Waterforce-AIO-coolers/20231020-210452
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20231020130212.8919-1-savicaleksa83%40gmail.com
+patch subject: [PATCH] hwmon: Add driver for Gigabyte AORUS Waterforce AIO coolers
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20231030/202310300959.8NLKyQDJ-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231030/202310300959.8NLKyQDJ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310300959.8NLKyQDJ-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/hwmon/gigabyte_waterforce.c:130:7: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     130 |                 if (!time_after(jiffies, priv->updated + msecs_to_jiffies(STATUS_VALIDITY))) {
+         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/hwmon/gigabyte_waterforce.c:155:7: note: uninitialized use occurs here
+     155 |                 if (ret < 0)
+         |                     ^~~
+   drivers/hwmon/gigabyte_waterforce.c:130:3: note: remove the 'if' if its condition is always false
+     130 |                 if (!time_after(jiffies, priv->updated + msecs_to_jiffies(STATUS_VALIDITY))) {
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     131 |                         /* Data is up to date */
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     132 |                         goto unlock_and_return;
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     133 |                 }
+         | ~~~~~~~~~~~~~~~~~
+   drivers/hwmon/gigabyte_waterforce.c:127:9: note: initialize the variable 'ret' to silence this warning
+     127 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
+
+
+vim +130 drivers/hwmon/gigabyte_waterforce.c
+
+   124	
+   125	static int waterforce_get_status(struct waterforce_data *priv)
+   126	{
+   127		int ret;
+   128	
+   129		if (!mutex_lock_interruptible(&priv->status_report_request_mutex)) {
+ > 130			if (!time_after(jiffies, priv->updated + msecs_to_jiffies(STATUS_VALIDITY))) {
+   131				/* Data is up to date */
+   132				goto unlock_and_return;
+   133			}
+   134	
+   135			/*
+   136			 * Disable raw event parsing for a moment to safely reinitialize the
+   137			 * completion. Reinit is done because hidraw could have triggered
+   138			 * the raw event parsing and marked the priv->status_report_received
+   139			 * completion as done.
+   140			 */
+   141			spin_lock_bh(&priv->status_report_request_lock);
+   142			reinit_completion(&priv->status_report_received);
+   143			spin_unlock_bh(&priv->status_report_request_lock);
+   144	
+   145			/* Send command for getting status */
+   146			ret = waterforce_write_expanded(priv, get_status_cmd, GET_STATUS_CMD_LENGTH);
+   147			if (ret < 0)
+   148				return ret;
+   149	
+   150			if (wait_for_completion_interruptible_timeout
+   151			    (&priv->status_report_received, msecs_to_jiffies(STATUS_VALIDITY)) <= 0)
+   152				ret = -ENODATA;
+   153	unlock_and_return:
+   154			mutex_unlock(&priv->status_report_request_mutex);
+   155			if (ret < 0)
+   156				return ret;
+   157		} else {
+   158			return -ENODATA;
+   159		}
+   160	
+   161		return 0;
+   162	}
+   163	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
