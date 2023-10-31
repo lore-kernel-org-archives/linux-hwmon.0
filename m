@@ -2,69 +2,68 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1230C4332F
-	for <linux-hwmon@archiver.kernel.org>; Tue, 31 Oct 2023 14:47:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C055DC4332F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 31 Oct 2023 14:51:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235747AbjJaOry (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 31 Oct 2023 10:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59352 "EHLO
+        id S1344519AbjJaOvh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 31 Oct 2023 10:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235660AbjJaOry (ORCPT
+        with ESMTP id S1344518AbjJaOvh (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 31 Oct 2023 10:47:54 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9A9DB
-        for <linux-hwmon@vger.kernel.org>; Tue, 31 Oct 2023 07:47:52 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-6bd0e1b1890so4791184b3a.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 31 Oct 2023 07:47:52 -0700 (PDT)
+        Tue, 31 Oct 2023 10:51:37 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFFD4ED;
+        Tue, 31 Oct 2023 07:51:34 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1cc3bb32b5dso26381085ad.3;
+        Tue, 31 Oct 2023 07:51:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698763671; x=1699368471; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1698763894; x=1699368694; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=MZkOU0bTKneoo8rlVjNoUHq69uXwBx1Yq8iGhkGsjao=;
-        b=eV0WN1b75xZmCw4Cq7eTMUIzHt3eLb9LcW78NxwCNV1EN/O2nmzTX09rQGEbM8hRWF
-         mf6mhWVSUriJAGdGKcq4NMlnH0UBUMqsmqURkVGKpsbxhR0HqfDdViocicaY+ZLT7nsq
-         /C4IA4d4OSr92FAlM81CVYHJqeLvpV9mYAMQOiIivtsK/vsMNbXkbWjeByh5XfPsgtPv
-         AeeTb8W28q7o4BioKIv3dijwnQKgf0G3S4BW6VHB/Ue4/Fyd5s/JBJ13wR4mKG2Dfmr5
-         1dMbFJ6P6Zdtyfs+bRqsdeOL9bq9icDbUT1E6ZXifgKhkWnQQSGHZjL5nkT6GdK/lK/B
-         APOA==
+        bh=90p+Ev9PObByrmKNOtd680aQ56JEMH8qyqlYgw5xuYw=;
+        b=Ka13Y3Fy7gtiBt43Gr204NlYO6zPa40IND9S9cP96SH6VYQ1OBrcMtrWcBHp1+NM3k
+         tYCNAcnwoxd5RYH/BnAkE5taW1eAkkfPDV3ejPmKGBj054gfqSaLcpRxnh/eC3Wy2zJa
+         R2hxWKww4aTlE2OkzUtBcbmh64KXeFbfLfLd+YOsElZg5rVYb2HNwvV02UzvhpfDtC51
+         ibIS+6rz/G0PsdIorQYagQbdBbHn0/iPzQc2puQ0JvywBhtKv03jVDSVoeE2+edYfs2p
+         peaMy7vNvCPp4xxr7qeS2prN0aGd8bklcfw7SXbPuWma8SmT4ZMnK0JufDZVGcZndx5W
+         db+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698763671; x=1699368471;
+        d=1e100.net; s=20230601; t=1698763894; x=1699368694;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=MZkOU0bTKneoo8rlVjNoUHq69uXwBx1Yq8iGhkGsjao=;
-        b=J4+i9W1huAIpYVzW8fotj5G5KHfExq/SWH+3lCPb3pnSMtCj6iwmNhFE/bvXbGroF3
-         47pfI6tl2KomKz2GAHfISsRMuxnnXsGr+PjZXNyryZbloCl4wpjWaDfwFhaezVBTgLJV
-         /gBURPxhOMWNQt+CPtOIjGcfThsqLPjdlz2e/0f6N7+jpeSnqC5lvNRwbaQjWDnb+Zsi
-         wCdM4ktUBxqneSXH1z3SI1dhVUpdNzesTX3AQQ3VNPL8Qu4FVOm4EgEFEExJ/ORTeQnk
-         3EdohGIBrWCdE8cZe+C3kUA2OBR8S3npy5EJ6ZSlfH5z9hf/aGEpQODQHU1uhphz8Jjc
-         +ofQ==
-X-Gm-Message-State: AOJu0YxIvrhA9csI6S80yfTUeBU169hvjt9pc143uHGmO1JL7Fsu2P2K
-        sdE5jpmPTGv1HH1FDxuwgZg=
-X-Google-Smtp-Source: AGHT+IH+YvWOLAVEKLT3/b9JlflIfkFtmGkuRr+jHKhZ6ZzNgLquqGWSvLqzfBsv3vXx5nLkjeZ0Fw==
-X-Received: by 2002:a05:6a00:9a6:b0:6be:18a9:8f60 with SMTP id u38-20020a056a0009a600b006be18a98f60mr13633836pfg.16.1698763671565;
-        Tue, 31 Oct 2023 07:47:51 -0700 (PDT)
+        bh=90p+Ev9PObByrmKNOtd680aQ56JEMH8qyqlYgw5xuYw=;
+        b=uxP7oFZBBfPoB1PfL8xHnVDdJ0EICbdC+RhMHLTgKqhihUyFk05QcNdeoVlj3Xkygr
+         HwU0Xrt3KFyfgcOtiJt0P2wh7hydKkxekDdC/eXAbNHNG9J6ZecSHiVwxoXws4q3nZqv
+         TCAaRS2YuvCUaCdfAm/RfTRnIsiItUqR91TsJ+Wdz1mjuz0kq5Tj1X5on3dz85BtdRk0
+         pIIWlZEq7N6r29Dge6bpo0a0mTNZAJlW4S5BDXbzORHzLx93Wu4SOTrBqvk3P22bBU4R
+         /FldNaeSXMioOoHSEke/QtqhcVdkOxnwcUWxhTKDlGPX7DbfZ7O1QbCXhRo8Ix68UXT+
+         AG6w==
+X-Gm-Message-State: AOJu0Yx1bvI+xHgtcufM3fQ5cPuuVwJRGvuh4tl0BHlvj9FnoT/eha0r
+        ETLCt9rU6Og2KjOeNKCdY3U=
+X-Google-Smtp-Source: AGHT+IFoQHuHNOobKogT3uRuDdMvF5QAFGOwT/O08+L0hYnF/jVrxDPutZf7jBHLkRhCJLdb54svWA==
+X-Received: by 2002:a17:903:245:b0:1c3:6d97:e89e with SMTP id j5-20020a170903024500b001c36d97e89emr16539909plh.58.1698763894412;
+        Tue, 31 Oct 2023 07:51:34 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id gx2-20020a056a001e0200b006933822e7a6sm1340114pfb.66.2023.10.31.07.47.50
+        by smtp.gmail.com with ESMTPSA id c24-20020a170902d91800b001c611e9a5fdsm1418836plz.306.2023.10.31.07.51.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Oct 2023 07:47:51 -0700 (PDT)
+        Tue, 31 Oct 2023 07:51:34 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <3d1472e4-0575-451c-b84a-cc0b3f17b099@roeck-us.net>
-Date:   Tue, 31 Oct 2023 07:47:50 -0700
+Message-ID: <4ab27937-df39-44bf-967c-0f8ddc987879@roeck-us.net>
+Date:   Tue, 31 Oct 2023 07:51:32 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [BUG] hp-wmi-sensors: probe of
- 8F1F6435-9F42-42C8-BADC-0E9424F20C9A failed with error -22
+Subject: Re: [PATCH v2] hwmon:Add MEC172x Micro Chip driver for Lenovo
+ motherboards
 Content-Language: en-US
-To:     James Seo <james@equiv.tech>,
-        Lukasz Stelmach <l.stelmach@samsung.com>
-Cc:     Armin Wolf <W_Armin@gmx.de>, linux-hwmon@vger.kernel.org
-References: <ZT1U/zE6cApQKC2h@equiv.tech>
- <CGME20231031102014eucas1p2f377b89cd0381231b5c7f321e2902fe8@eucas1p2.samsung.com>
- <oypijd5y2nf60f.fsf%l.stelmach@samsung.com> <ZUEIcOBpVzxC/+c1@equiv.tech>
+To:     David Ober <dober6023@gmail.com>, linux-hwmon@vger.kernel.org
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jdelvare@suse.com, corbet@lwn.net, dober@lenovo.com,
+        mpearson@lenovo.com
+References: <20231031120942.4404-1-dober6023@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -109,27 +108,31 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <ZUEIcOBpVzxC/+c1@equiv.tech>
+In-Reply-To: <20231031120942.4404-1-dober6023@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/31/23 07:00, James Seo wrote:
-> On Tue, Oct 31, 2023 at 11:20:00AM +0100, Lukasz Stelmach wrote:
-
-[ ... ]
-
+On 10/31/23 05:09, David Ober wrote:
+> This addition adds in the ability for the system to scan the
+> MEC172x EC chip in Lenovo ThinkStation systems to get the
+> current fan RPM speeds and the Maximum speed value for each
+> fan also provides the current CPU and DIMM thermal status
 > 
-> For what it's worth, I personally don't see much value in doing much more than
-> a machine-limited workaround for now. To me it's clear that this UTF-16 corner
-> case is a BIOS bug and its consequences are minimal once a workaround is in
-> place.
+> Signed-off-by: David Ober <dober6023@gmail.com>
 > 
+> v2 fixed mixcased naming
+> v2 add mutex protection
+> v2 removed references to ACPI as it is not used
+> v2 added comment to explain why returning a -1 is needed
+> ---
+>   drivers/hwmon/lenovo-ec-sensors.c | 81 ++++++++++++++++++-------------
 
-A machine limited workaround sounds about right to me. We may have to revise
-it later, but better safe than sorry.
+What is this patch based on ? I don't see that driver in
+drivers/hwmon/, and based on the patch I would be surprised
+if I had accepted it.
 
 Guenter
 
