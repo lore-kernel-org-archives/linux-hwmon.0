@@ -2,492 +2,258 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD2E1C4332F
-	for <linux-hwmon@archiver.kernel.org>; Tue, 31 Oct 2023 18:09:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CDA03C4332F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 31 Oct 2023 19:08:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376595AbjJaSJm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 31 Oct 2023 14:09:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48938 "EHLO
+        id S233401AbjJaTIB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 31 Oct 2023 15:08:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230455AbjJaSJl (ORCPT
+        with ESMTP id S233231AbjJaTIB (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 31 Oct 2023 14:09:41 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1926BA2;
-        Tue, 31 Oct 2023 11:09:39 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-6be0277c05bso5297509b3a.0;
-        Tue, 31 Oct 2023 11:09:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698775778; x=1699380578; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=JchhP+mGKXvZIlmqePmuD84psJVG+oz+e68YnJRPIdo=;
-        b=Njht6S7VQD5X25TqY3cXftz+e98xikBN8DB93GXZFChKq70XVD3npFjhvpevLpBt12
-         e72nl5z9HAi9BTCFKZ6HHVsCkx/6/SOkmBeAQQK8kmRWp9TGlnHdAWBM+LTqr3SQlMYH
-         APX6lQ9VHZ639VwIAXOfF8I4eJisCJXZT5dGvWsx87nGbZxQYgbbAP/xlFlnZTFQZ6z1
-         joOeXFKR7xXF8WycbZcttt8H+71qmjplMm7cVWJ6Nm4QY1GcqXkTz3OteBqZLq8AVL08
-         E3CdH8izDGOTlJWEnh049S4uGUvODUT1tX+5eoMiS89bRlhgxCfhZGyjjga9femrAgQN
-         R29A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698775778; x=1699380578;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JchhP+mGKXvZIlmqePmuD84psJVG+oz+e68YnJRPIdo=;
-        b=D5AMRUlVAyD7n9lu8kEStRBfFU8KrwkfZ68lQ8A0ULZsPHL+vBWDmBtd3Z5kVWLOyB
-         wRUFOn1vrA8Sf/+DccUWXeOWfXxS4D/f7RcB7C2yJu890NoEEiJqTmpyv3D0p92gqf4c
-         yiyHATIafc2yy7AfMUqIegOBluYmBhnnY8wKkW5K4yz6KbUY7JAZiH/QFFTCsVYtIQL3
-         r8KAjNCKypFB6EExHEJmtiUG0gEu1iDHyiMrx7zTWX2xrpgrgowslfGYlyigLb0VvkUQ
-         gG4HTo0oA3vc5MklEk8WT5dRSE+haA3jvQpU4jpreHoGVqZRJJq9dO/IfP+0FBEtrHuK
-         LBqQ==
-X-Gm-Message-State: AOJu0YyTaJV0y2J4jefMjlSGAThJC2aj7T5J1rhrAv26i21iDpVuhx9Q
-        8Cnaba8OeggQhfVh5tYsOu8=
-X-Google-Smtp-Source: AGHT+IEhEGhFE8d19oTBS/RMKIKGCO7V9qvGIme49Hz8cY41gVd5uHZmSuhvL5tMNvGgl7GQjX/agw==
-X-Received: by 2002:a05:6a00:2d96:b0:6b2:5b5:4f12 with SMTP id fb22-20020a056a002d9600b006b205b54f12mr12995496pfb.14.1698775778082;
-        Tue, 31 Oct 2023 11:09:38 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g16-20020a056a001a1000b006c0685422e0sm1533514pfv.214.2023.10.31.11.09.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Oct 2023 11:09:37 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <96d7bf00-a5f8-486f-912d-931e918f3fa3@roeck-us.net>
-Date:   Tue, 31 Oct 2023 11:09:35 -0700
+        Tue, 31 Oct 2023 15:08:01 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F5E5F3
+        for <linux-hwmon@vger.kernel.org>; Tue, 31 Oct 2023 12:07:58 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20231031190754euoutp01244bde642bee2ac8fc627cf0065611f8~TRr-wfFyb2780727807euoutp01Z;
+        Tue, 31 Oct 2023 19:07:54 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20231031190754euoutp01244bde642bee2ac8fc627cf0065611f8~TRr-wfFyb2780727807euoutp01Z
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1698779274;
+        bh=DDfeCQzF6T6XGiaKOHJHBvQObdxj4bCUunftE3PL7Lc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=c2CBkR5d+AXdPkFSEZfBFjVvVzKmjInrUFcYFtqZwNQ/1Tnnzb+1BIOk4WaPDD475
+         QfOrg1e2CKJu699RJ7UH7836BWbpQj9dKxDQPo0XggfRpX2FCxIhdugZbeblLEUf1K
+         Y9MaK/eAp8HxWqL5mLIBoA0Kiy9K+fmL+bfQA/sc=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20231031190754eucas1p2715559240e63b30ad63938da8cc891d4~TRr-NLiwO1660816608eucas1p2Q;
+        Tue, 31 Oct 2023 19:07:54 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 10.4E.11320.98051456; Tue, 31
+        Oct 2023 19:07:53 +0000 (GMT)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20231031190753eucas1p25afeef1c5372a0da4549ebea01ec0ea9~TRr_sLaMy1474414744eucas1p2J;
+        Tue, 31 Oct 2023 19:07:53 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20231031190753eusmtrp28be2e5395e34ac6334c80f7630d57ba5~TRr_rr3GF1307213072eusmtrp2M;
+        Tue, 31 Oct 2023 19:07:53 +0000 (GMT)
+X-AuditID: cbfec7f4-993ff70000022c38-fe-65415089b2f8
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id B0.D5.10549.98051456; Tue, 31
+        Oct 2023 19:07:53 +0000 (GMT)
+Received: from localhost (unknown [106.120.51.111]) by eusmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20231031190753eusmtip18ae007650da089f21af6bce532805eca~TRr_c_aFS0344103441eusmtip1c;
+        Tue, 31 Oct 2023 19:07:53 +0000 (GMT)
+From:   Lukasz Stelmach <l.stelmach@samsung.com>
+To:     James Seo <james@equiv.tech>
+Cc:     Guenter Roeck <linux@roeck-us.net>, Armin Wolf <W_Armin@gmx.de>,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [BUG] hp-wmi-sensors: probe of
+ 8F1F6435-9F42-42C8-BADC-0E9424F20C9A failed with error -22
+Date:   Tue, 31 Oct 2023 20:07:42 +0100
+In-Reply-To: <ZUEIcOBpVzxC/+c1@equiv.tech> (James Seo's message of "Tue, 31
+ Oct 2023 07:00:16 -0700")
+Message-ID: <oypijdsf5qehkx.fsf%l.stelmach@samsung.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] hwmon: pmbus: Add ltc4286 driver
-Content-Language: en-US
-To:     Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>, patrick@stwcx.xyz,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20231031072124.201181-1-Delphine_CC_Chiu@Wiwynn.com>
- <20231031072124.201181-3-Delphine_CC_Chiu@Wiwynn.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20231031072124.201181-3-Delphine_CC_Chiu@Wiwynn.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="=-=-="; micalg="pgp-sha256";
+        protocol="application/pgp-signature"
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrAKsWRmVeSWpSXmKPExsWy7djPc7qdAY6pBo/PmFvMu3aQ2aL99VZG
+        iycLzzBZTHx+gNWBxeN790Umjw8f4zx2fm9g9/i8SS6AJYrLJiU1J7MstUjfLoEr48T3l2wF
+        z3Qrnp+cy9bAeFili5GTQ0LARGJN3yLWLkYuDiGBFYwS99tWMIMkhAS+MEq8O8APkfjMKPH6
+        wVw2mI73jzZCdSxnlLh5fSIjhPOCUeJM72Ogdg4ONgE9ibVrI0AaRAQUJFrnbGAEsZkFkiWW
+        dHYygpQIC2RI3PwNtoxFQFVi7qHdYCWcAukSkxZ2s4LYvALmEv8e7wWLiwpYShzf2s4GEReU
+        ODnzCQvEyFyJmeffgJ0gIXCFQ6Jj2wJmiENdJBadb2OEsIUlXh3fwg5hy0j83zmfCaKhnVGi
+        6cpCVghnAqPE544mJogqa4k7535BvewosWDeYjaQqyUE+CRuvBWE2MwnMWnbdGaIMK9ER5sQ
+        RLWKxLr+PSwQtpRE76sVUDd4SLzfupMJErq1ErPm/2KcwKgwC8k/s5D8MwtoKrOApsT6XfoQ
+        YW2JZQtfM0PYthLr1r1nWcDIuopRPLW0ODc9tdgoL7Vcrzgxt7g0L10vOT93EyMw4Zz+d/zL
+        Dsblrz7qHWJk4mA8xKgC1Pxow+oLjFIsefl5qUoivIdNHVKFeFMSK6tSi/Lji0pzUosPMUpz
+        sCiJ86qmyKcKCaQnlqRmp6YWpBbBZJk4OKUamKZJC5rdPndS7IXZEVHJRxOdFBWfbW2dv2sN
+        n/CjOQcvZq1gm3i6h5nd7Ljspz/G/x9zeGibNl7dGPVJ8su04OfJAp0LXBW2zd1ssz69dpen
+        7pSaA1O2sQVvzrdYPrFJ5vHeBYbqPEYPwnY5KOyt2Tn9f0b+kwi9/rlfF2oYquUHbX138d3b
+        6RLL5tqz7Of5ZbbK++nOa3pM69h3X+fvy59R7WPnasj4JJHJ3dLx896F589n2Pumzn7ziDFJ
+        e/mqF1kHwwrnLNHJ4zsXmni/1WVlrGSD/pP1Ym48K4MzExaz1Lzcfea8n7R7cbZdC1to7oYf
+        cifqr6s51lxlbJMLPeLcWLHwR16+nmTmQ2AiU2Ipzkg01GIuKk4EACEeprCzAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprGIsWRmVeSWpSXmKPExsVy+t/xu7qdAY6pBu/OilrMu3aQ2aL99VZG
+        iycLzzBZTHx+gNWBxeN790Umjw8f4zx2fm9g9/i8SS6AJUrPpii/tCRVISO/uMRWKdrQwkjP
+        0NJCz8jEUs/Q2DzWyshUSd/OJiU1J7MstUjfLkEv48T3l2wFz3Qrnp+cy9bAeFili5GTQ0LA
+        ROL9o42sXYxcHEICSxkljv64wNLFyAGUkJJYOTcdokZY4s+1LjYQW0jgGaPE1ElcICVsAnoS
+        a9dGgIRFBBQkWudsYASxmQVSJDZM6GACKREWyJC4+ZsZolNTYurCrWAlLAKqEnMP7QazOQXS
+        Jb592wZWwytgLvHv8V6wuKiApcTxre1sEHFBiZMzn7BAjM+W+Lr6OfMERoFZSFKzkKRmAW1m
+        Blq3fpc+RFhbYtnC18wQtq3EunXvWRYwsq5iFEktLc5Nzy021CtOzC0uzUvXS87P3cQIjJRt
+        x35u3sE479VHvUOMTByMhxhVgDofbVh9gVGKJS8/L1VJhPewqUOqEG9KYmVValF+fFFpTmrx
+        IUZToNcmMkuJJucDYzivJN7QzMDU0MTM0sDU0sxYSZzXs6AjUUggPbEkNTs1tSC1CKaPiYNT
+        qoHJZKd4x3eGso1zbeJTFDmnfa66avlxisZWK2uNVLaamuWXdOaeiPw75eu0HTNvcvU9j7/U
+        0bj43Euu3Rt02x7cXHd8pf3uxfEVXjumzl2efvlqncthS6f9JXLm1z2YF7JonPKxEHlZ2H5K
+        Y2Ld07oPLJNX71Wr3rH9F/fmvgOxK/zjmves5RDb7aZ0+uxSthqWl9IHHbIZuT5dcCjZV9v0
+        513qzZVz9Xc+W3gm6L9SnrPT9K83P6lt/jPjoMYFiyLfArbAQ9kRElJGfnOuPTu4TnrduteZ
+        pctfLuee4MCkJD2pIN1kwzxzg162D/OmPl90ntHDNH8Wa6fi0+z73kyOva9+is68veD1zK0H
+        qgx+zVBiKc5INNRiLipOBAAPFjiCKQMAAA==
+X-CMS-MailID: 20231031190753eucas1p25afeef1c5372a0da4549ebea01ec0ea9
+X-Msg-Generator: CA
+X-RootMTR: 20231031190753eucas1p25afeef1c5372a0da4549ebea01ec0ea9
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20231031190753eucas1p25afeef1c5372a0da4549ebea01ec0ea9
+References: <ZUEIcOBpVzxC/+c1@equiv.tech>
+        <CGME20231031190753eucas1p25afeef1c5372a0da4549ebea01ec0ea9@eucas1p2.samsung.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/31/23 00:21, Delphine CC Chiu wrote:
-> Add a driver to support ltc4286 chip
-> 
-> Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-> 
-> Changelog:
->    v3 - Use dev_err_probe() instead of dev_err()
->       - The VRANGE_SELECT bit only be written if it actually changed
->       - Avoid the info pointer being overwritten
->       - Check the MBR value range to avoid overflow
->       - Revise ltc4286.rst to corrcet description
->    v2 - Revise Linear Technologies LTC4286 to
->         Analog Devices LTC4286 in Kconfig
->       - Add more description for this driver in Kconfig
->       - Add some comments for MBR setting in ltc4286.c
->       - Add ltc4286.rst
-> ---
->   Documentation/hwmon/ltc4286.rst |  95 +++++++++++++++++
+--=-=-=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Needs to be added to Documentation/hwmon/index.rst
+It was <2023-10-31 wto 07:00>, when James Seo wrote:
+> On Tue, Oct 31, 2023 at 11:20:00AM +0100, Lukasz Stelmach wrote:
+>> I am attaching dsdt.dat. It is the only file that contains the
+>> "HPBIOS_BIOSEvent" string and the above UUID.
+>
+> OK, I think I've figured it out.
+>
+> Earlier, I focused on "probe of 8F1F6435-9F42-42C8-BADC-0E9424F20C9A fail=
+ed"
+> (the GUID of HPBIOS_BIOSNumericSensor), and missed it when you said the f=
+ailure
+> is happening when check_wobj() is called from check_platform_events_wobj(=
+).
+> So the issue is actually with HPBIOS_PlatformEvents.Name, since any insta=
+nces
+> of that WMI object are examined during driver init as well.
+>
+> After using iasl to decompile the DSDT you sent to ACPI Source Language (=
+ASL),
+> everything looks fine with HPBIOS_BIOSNumericSensor. Not that I'm particu=
+larly
+> familiar with ASL, but search for "Name (SEN1, Package (0x06)" and read o=
+n to
+> the "Method (_INI, 0, NotSerialized)" and the "Method (WQAE, 1, Serialize=
+d)"
+> lines below. It certainly looks like that's how the BIOS on that system is
+> generating HPBIOS_PlatformEvents instances at runtime.
+>
+> For HPBIOS_PlatformEvents instances, that BIOS seems to generate them in =
+two
+> places. The driver is interested in those from "Method (WQBC, 1, Serializ=
+ed)",
+> which rely on the section above that beginning at "Name (EVNT, Package (0=
+x0D)".
+> There are also some generated in "Method (WQPE, 1, Serialized)", relying =
+on:
+>
+>         Name (CBWE, Package (0x02)
+>         {
+>             Package (0x05)
+>             {
+>                 Unicode ("4BIOS Configuration Change"), // Oops.
+>                 "BIOS Settings",=20
+>                 0x04,=20
+>                 0x05,=20
+>                 0x02
+>             },=20
+>
+>             Package (0x05)
+>             {
+>                 "BIOS Configuration Security",=20
+>                 "An attempt has been made to Access BIOS features unsucce=
+ssfully",=20
+>                 0x04,=20
+>                 0x0A,=20
+>                 0x06
+>             }
+>         })
+>
+> So yes, Armin was right, UTF-16 is the culprit. And it's only for this one
+> instance of HPBIOS_PlatformEvents on this one system's BIOS.
+>
+> Can you find the wonky object instance in the debugfs interface? I imagine
+> its name shows up as either "4" or an empty string, depending on the UTF-=
+16
+> byte order.
 
->   drivers/hwmon/pmbus/Kconfig     |   9 ++
->   drivers/hwmon/pmbus/Makefile    |   1 +
->   drivers/hwmon/pmbus/ltc4286.c   | 178 ++++++++++++++++++++++++++++++++
->   4 files changed, 283 insertions(+)
->   create mode 100644 Documentation/hwmon/ltc4286.rst
->   create mode 100644 drivers/hwmon/pmbus/ltc4286.c
-> 
-> diff --git a/Documentation/hwmon/ltc4286.rst b/Documentation/hwmon/ltc4286.rst
-> new file mode 100644
-> index 000000000000..2cd149676d86
-> --- /dev/null
-> +++ b/Documentation/hwmon/ltc4286.rst
-> @@ -0,0 +1,95 @@
-> +.. SPDX-License-Identifier: GPL-2.0-or-later
-> +
-> +Kernel driver ltc4286
-> +=====================
-> +
-> +Supported chips:
-> +
-> +  * Analog Devices LTC4286
-> +
-> +    Prefix: 'ltc4286'
-> +
-> +    Addresses scanned: -
-> +
-> +    Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ltc4286.pdf
-> +
-> +  * Analog Devices LTC4287
-> +
-> +    Prefix: 'ltc4287'
-> +
-> +    Addresses scanned: -
-> +
-> +    Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ltc4287.pdf
-> +
-> +Author: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-> +
-> +
-> +Description
-> +-----------
-> +
-> +This driver supports hardware monitoring for Analog Devices LTC4286
-> +and LTC4287 Hot-Swap Controller and Digital Power Monitors.
-> +
-> +LTC4286 and LTC4287 are hot-swap controllers that allow a circuit board
-> +to be removed from or inserted into a live backplane. They also feature
-> +current and voltage readback via an integrated 12 bit analog-to-digital
-> +converter (ADC), accessed using a PMBus interface.
-> +
-> +The driver is a client driver to the core PMBus driver. Please see
-> +Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
-> +
-> +
-> +Usage Notes
-> +-----------
-> +
-> +This driver does not auto-detect devices. You will have to instantiate the
-> +devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
-> +details.
-> +
-> +The shunt value in micro-ohms can be set via device tree at compile-time. Please
-> +refer to the Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml for bindings
-> +if the device tree is used.
-> +
-> +
-> +Platform data support
-> +---------------------
-> +
-> +The driver supports standard PMBus driver platform data. Please see
-> +Documentation/hwmon/pmbus.rst for details.
-> +
-> +
-> +Sysfs entries
-> +-------------
-> +
-> +The following attributes are supported. Limits are read-write, history reset
-> +attributes are write-only, all other attributes are read-only.
-> +
-> +======================= =======================================================
-> +in1_label		"vin"
-> +in1_input		Measured voltage.
-> +in1_alarm		Input voltage alarm.
-> +in1_min 		Minimum input voltage.
-> +in1_max 		Maximum input voltage.
-> +
-> +in2_label		"vout1"
-> +in2_input		Measured voltage.
-> +in2_alarm		Output voltage alarm.
-> +in2_min 		Minimum output voltage.
-> +in2_max 		Maximum output voltage.
-> +
-> +curr1_label		"iout1"
-> +curr1_input		Measured current.
-> +curr1_alarm		Output current alarm.
-> +curr1_max		Maximum current.
-> +
-> +power1_label		"pin"
-> +power1_input		Input power.
-> +power1_alarm		Input power alarm.
-> +power1_max		Maximum poewr.
-> +
-> +temp1_input		Chip temperature.
-> +temp1_min		Minimum chip temperature.
-> +temp1_max		Maximum chip temperature.
-> +temp1_crit		Critical chip temperature.
-> +temp1_alarm		Chip temperature alarm.
-> +======================= =======================================================
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index b4e93bd5835e..f2b53e8abc3c 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -226,6 +226,15 @@ config SENSORS_LTC3815
->   
->   	  This driver can also be built as a module. If so, the module will
->   	  be called ltc3815.
+Indeed there is one
 
-Add empty line
+=2D-8<---------------cut here---------------start------------->8---
+# grep -r "" /sys/kernel/debug/hp-wmi-sensors-0/platform_events/0/
+/sys/kernel/debug/hp-wmi-sensors-0/platform_events/0/possible_status:2
+/sys/kernel/debug/hp-wmi-sensors-0/platform_events/0/possible_severity:5
+/sys/kernel/debug/hp-wmi-sensors-0/platform_events/0/category:4
+/sys/kernel/debug/hp-wmi-sensors-0/platform_events/0/source_class:HPBIOS_BI=
+OSEvent
+/sys/kernel/debug/hp-wmi-sensors-0/platform_events/0/source_namespace:root\=
+wmi
+/sys/kernel/debug/hp-wmi-sensors-0/platform_events/0/description:BIOS Setti=
+ngs
+/sys/kernel/debug/hp-wmi-sensors-0/platform_events/0/name:4
+=2D-8<---------------cut here---------------end--------------->8---
 
-> +config SENSORS_LTC4286
-> +	bool "Analog Devices LTC4286"
-> +	help
-> +	  LTC4286 is an integrated solution for hot swap applications that
-> +	  allows a board to be safely inserted and removed from a live
-> +	  backplane.
-> +	  This chip could be used to monitor voltage, current, ...etc.
-> +	  If you say yes here you get hardware monitoring support for Analog
-> +	  Devices LTC4286.
->   
->   config SENSORS_MAX15301
->   	tristate "Maxim MAX15301"
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index 84ee960a6c2d..94e28f6d6a61 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -24,6 +24,7 @@ obj-$(CONFIG_SENSORS_LM25066)	+= lm25066.o
->   obj-$(CONFIG_SENSORS_LT7182S)	+= lt7182s.o
->   obj-$(CONFIG_SENSORS_LTC2978)	+= ltc2978.o
->   obj-$(CONFIG_SENSORS_LTC3815)	+= ltc3815.o
-> +obj-$(CONFIG_SENSORS_LTC4286)	+= ltc4286.o
->   obj-$(CONFIG_SENSORS_MAX15301)	+= max15301.o
->   obj-$(CONFIG_SENSORS_MAX16064)	+= max16064.o
->   obj-$(CONFIG_SENSORS_MAX16601)	+= max16601.o
-> diff --git a/drivers/hwmon/pmbus/ltc4286.c b/drivers/hwmon/pmbus/ltc4286.c
-> new file mode 100644
-> index 000000000000..042d3af99489
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/ltc4286.c
-> @@ -0,0 +1,178 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +
-> +#include <linux/err.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/pmbus.h>
-> +#include "pmbus.h"
-> +
-> +/* LTC4286 register */
-> +#define LTC4286_MFR_CONFIG1	0xF2
-> +
-> +/* LTC4286 configuration */
-> +#define VRANGE_SELECT_BIT	BIT(1)
-> +
-> +#define LTC4286_MFR_ID_SIZE	3
-> +#define VRANGE_25P6		0
-> +
-> +enum chips { ltc4286, ltc4287 };
+> I'm also curious how it looks in Windows (I used WMI Explorer [1] during
+> development). The WMI namespace should be "\\.\root\HP\InstrumentedBIOS".
 
-Not really used anywhere and can be dropped.
+I'll see if I can find such machine with Windows. It may take a few days
+thou.
 
-> +
-> +/*
-> + * Initialize the MBR as default settings which is referred to LTC4286 datasheet
-> + * (March 22, 2022 version) table 3 page 16
-> + */
-> +static struct pmbus_driver_info ltc4286_info = {
-> +	.pages = 1,
-> +	.format[PSC_VOLTAGE_IN] = direct,
-> +	.format[PSC_VOLTAGE_OUT] = direct,
-> +	.format[PSC_CURRENT_OUT] = direct,
-> +	.format[PSC_POWER] = direct,
-> +	.format[PSC_TEMPERATURE] = direct,
-> +	.m[PSC_VOLTAGE_IN] = 32,
-> +	.b[PSC_VOLTAGE_IN] = 0,
-> +	.R[PSC_VOLTAGE_IN] = 1,
-> +	.m[PSC_VOLTAGE_OUT] = 32,
-> +	.b[PSC_VOLTAGE_OUT] = 0,
-> +	.R[PSC_VOLTAGE_OUT] = 1,
-> +	.m[PSC_CURRENT_OUT] = 1024,
-> +	.b[PSC_CURRENT_OUT] = 0,
-> +	/*
-> +	 * The rsense value used in MBR formula in LTC4286 datasheet should be ohm unit.
-> +	 * However, the rsense value that user input is mirco ohm.
+>> The readings of hp_wmi_sensors-virtual-0 look sensible and they change
+>> reasonably under load.
+>
+> Good. I guess that part working wasn't so surprising after all :)
+>
+> Regarding how we proceed from here, I think the main question is
+> whether a workaround should be limited to only specific machines
+> (maybe detected using DMI data), and if so, to specific WMI object
+> types and instances (cf.  hp_wmi_get_wobj(), though limiting on
+> instance number would be fragile if BIOS updates change instance
+> numbering). Other questions are how thoroughly to validate UTF-16 in a
+> buffer and whether to convert to UTF-8 internally.
+>
+> For what it's worth, I personally don't see much value in doing much
+> more than a machine-limited workaround for now. To me it's clear that
+> this UTF-16 corner case is a BIOS bug and its consequences are minimal
+> once a workaround is in place.
+>
+> Thoughts?
 
-micro
+I am no expert regarding x86 platforms and I don't know how often bugs
+like this happen and if making it more generic makes sens. Maybe.
 
-> +	 * Thus, the MBR setting which involves rsense should be shifted by 6 digits.
-> +	 */
-> +	.R[PSC_CURRENT_OUT] = 3 - 6,
-> +	.m[PSC_POWER] = 1,
-> +	.b[PSC_POWER] = 0,
-> +	/*
-> +	 * The rsense value used in MBR formula in LTC4286 datasheet should be ohm unit.
-> +	 * However, the rsense value that user input is mirco ohm.
+My solution would be to add a module option, let's name it `quirks` and
+make it a bit field for future use, that enables the workaound. Plus an
+additional error message when probe fails to suggest user to add the
+option to kernel command line or whatever file that contains module
+options. A nice touch would be to detect if the workaround is still
+required.
 
-micro
+Thouths.
 
-> +	 * Thus, the MBR setting which involves rsense should be shifted by 6 digits.
-> +	 */
-> +	.R[PSC_POWER] = 4 - 6,
-> +	.m[PSC_TEMPERATURE] = 1,
-> +	.b[PSC_TEMPERATURE] = 273,
-> +	.R[PSC_TEMPERATURE] = 0,
-> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
-> +		   PMBUS_HAVE_PIN | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_VOUT |
-> +		   PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_TEMP,
-> +};
-> +
-> +static const struct i2c_device_id ltc4286_id[] = { { "ltc4286", ltc4286 },
-> +						   { "ltc4287", ltc4287 },
-> +						   {} };
-> +MODULE_DEVICE_TABLE(i2c, ltc4286_id);
-> +
-> +static int ltc4286_probe(struct i2c_client *client)
-> +{
-> +	int ret;
-> +	const struct i2c_device_id *mid;
-> +	u8 block_buffer[I2C_SMBUS_BLOCK_MAX + 1];
-> +	struct pmbus_driver_info *info;
-> +	u32 rsense;
-> +
-> +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, block_buffer);
-> +	if (ret < 0) {
-> +		return dev_err_probe(&client->dev, ret,
-> +				     "Failed to read manufacturer id\n");
-> +	}
-> +
-> +	/*
-> +	 * Refer to ltc4286 datasheet page 20
-> +	 * the manufacturer id is LTC
-> +	 */
-> +	if (ret != LTC4286_MFR_ID_SIZE ||
-> +	    strncmp(block_buffer, "LTC", LTC4286_MFR_ID_SIZE)) {
-> +		return dev_err_probe(&client->dev, ret,
-> +				     "Manufacturer id mismatch\n");
-> +	}
-> +
-> +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, block_buffer);
-> +	if (ret < 0) {
-> +		return dev_err_probe(&client->dev, ret,
-> +				     "Failed to read manufacturer model\n");
-> +	}
-> +
-> +	for (mid = ltc4286_id; mid->name[0]; mid++) {
-> +		if (!strncasecmp(mid->name, block_buffer, strlen(mid->name)))
-> +			break;
-> +	}
-> +	if (!mid->name[0])
-> +		return dev_err_probe(&client->dev, -ENODEV,
-> +				     "Unsupported device\n");
-> +
-> +	ret = of_property_read_u32(client->dev.of_node,
-> +				   "shunt-resistor-micro-ohms", &rsense);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (rsense == 0)
-> +		return -EINVAL;
-> +
-> +	info = devm_kzalloc(&client->dev, sizeof(*info), GFP_KERNEL);
-> +	if (!info)
-> +		return -ENOMEM;
-> +	memcpy(info, &ltc4286_info, sizeof(*info));
+> Also, if you'd prefer to let me handle it, I'd be glad to write a
+> patch myself.
 
-devm_kmemdup()
+I am fine with that, I know a bit more about device-tree than about ACPI
+(-; and PCs in general. I'll be glad to test the patch thou.
 
-> +
-> +	/* Default of VRANGE_SELECT = 1, 102.4V */
-> +	if (device_property_read_bool(&client->dev, "adi,vrange-low-enable")) {
-> +		/* Setup MFR1 CONFIG register bit 1 VRANGE_SELECT */
-> +		ret = i2c_smbus_read_word_data(client, LTC4286_MFR_CONFIG1);
-> +		if (ret < 0) {
-> +			return dev_err_probe(
-> +				&client->dev, ret,
-> +				"Failed to read manufacturer configuration one\n");
-> +		}
-> +
-> +		if ((ret & VRANGE_SELECT_BIT) != VRANGE_25P6) {
-> +			ret &= ~VRANGE_SELECT_BIT; /* VRANGE_SELECT = 0, 25.6V */
-> +			ret = i2c_smbus_write_word_data(
-> +				client, LTC4286_MFR_CONFIG1, ret);
-> +			if (ret < 0)
-> +				return dev_err_probe(&client->dev, ret,
-> +						     "Failed to set vrange\n");
-> +		}
-> +
-> +		info->m[PSC_VOLTAGE_IN] = 128;
-> +		info->m[PSC_VOLTAGE_OUT] = 128;
-> +		info->m[PSC_POWER] = 4 * rsense;
-> +		if (info->m[PSC_POWER] > INT_MAX)
+=2D-=20
+=C5=81ukasz Stelmach
+Samsung R&D Institute Poland
+Samsung Electronics
 
-This is too late. See below.
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> +			return dev_err_probe(&client->dev, -ERANGE,
-> +					     "Power coefficient overflow\n");
-> +	} else {
-> +		info->m[PSC_POWER] = rsense;
-> +		if (info->m[PSC_POWER] > INT_MAX)
-> +			return dev_err_probe(&client->dev, -ERANGE,
-> +					     "Power coefficient overflow\n");
+-----BEGIN PGP SIGNATURE-----
 
-This still needs to be written into the chip. There is no guarantee that
-the chip is in its default configuration when the driver is loaded.
-
-> +	}
-> +
-> +	info->m[PSC_CURRENT_OUT] = 1024 * rsense;
-> +	if (info->m[PSC_CURRENT_OUT] > INT_MAX)
-
-This is too late. If rsense == INT_MAX, for example, 1024 * rsense
-will be some negative number.
-
-> +		return dev_err_probe(&client->dev, -ERANGE,
-> +				     "Current coefficient overflow\n");
-> +
-> +	return pmbus_do_probe(client, info);
-> +}
-> +
-> +static const struct of_device_id ltc4286_of_match[] = {
-> +	{ .compatible = "lltc,ltc4286" },
-> +	{ .compatible = "lltc,ltc4287" },
-> +	{}
-> +};
-> +
-> +static struct i2c_driver ltc4286_driver = {
-> +	.driver = {
-> +		.name = "ltc4286",
-> +		.of_match_table = ltc4286_of_match,
-> +	},
-> +	.probe = ltc4286_probe,
-> +	.id_table = ltc4286_id,
-> +};
-> +
-> +module_i2c_driver(ltc4286_driver);
-> +
-> +MODULE_AUTHOR("Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>");
-> +MODULE_DESCRIPTION("PMBUS driver for LTC4286 and compatibles");
-> +MODULE_LICENSE("GPL");
-
+iQEzBAEBCAAdFiEEXpuyqjq9kGEVr9UQsK4enJilgBAFAmVBUH4ACgkQsK4enJil
+gBApjAgAj3C3yYahkRmckb1BTCz+JFNzskkJBkbUyHOumOvFbm5RUiQhu2wwhQIj
+22UT6ZyKxCKp4lQIN18Os2+/6mHzN0tz2IKhHEFAaqd79LpzC51xhfqTnWVeMEpZ
+H29BLKuXRWiy/AwXrRQ2tyEBtsU1Z3HlSxB5H2y8PCSgfVXY9VwMOPwf9UBaLnPU
+93AEYYhd/kMjvcUthjr9ZAEW2uMzjj9aDQMWs0WcY8PVIi5QdzUx4HSVb8xCudKD
+AWglMMcUrUxCVMBvIbdrjIu9OScNzq3uJulsu5zaa2nQ1RQiZUw6hj3AFr13o9n7
+XLVx4qgvHMqDiPtuaBPUAJLlRBo3NA==
+=s9xF
+-----END PGP SIGNATURE-----
+--=-=-=--
