@@ -2,258 +2,146 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDA03C4332F
-	for <linux-hwmon@archiver.kernel.org>; Tue, 31 Oct 2023 19:08:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2D72C4167B
+	for <linux-hwmon@archiver.kernel.org>; Tue, 31 Oct 2023 19:28:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233401AbjJaTIB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 31 Oct 2023 15:08:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58050 "EHLO
+        id S231990AbjJaT2O (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 31 Oct 2023 15:28:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233231AbjJaTIB (ORCPT
+        with ESMTP id S230078AbjJaT2O (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 31 Oct 2023 15:08:01 -0400
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F5E5F3
-        for <linux-hwmon@vger.kernel.org>; Tue, 31 Oct 2023 12:07:58 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20231031190754euoutp01244bde642bee2ac8fc627cf0065611f8~TRr-wfFyb2780727807euoutp01Z;
-        Tue, 31 Oct 2023 19:07:54 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20231031190754euoutp01244bde642bee2ac8fc627cf0065611f8~TRr-wfFyb2780727807euoutp01Z
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1698779274;
-        bh=DDfeCQzF6T6XGiaKOHJHBvQObdxj4bCUunftE3PL7Lc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c2CBkR5d+AXdPkFSEZfBFjVvVzKmjInrUFcYFtqZwNQ/1Tnnzb+1BIOk4WaPDD475
-         QfOrg1e2CKJu699RJ7UH7836BWbpQj9dKxDQPo0XggfRpX2FCxIhdugZbeblLEUf1K
-         Y9MaK/eAp8HxWqL5mLIBoA0Kiy9K+fmL+bfQA/sc=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20231031190754eucas1p2715559240e63b30ad63938da8cc891d4~TRr-NLiwO1660816608eucas1p2Q;
-        Tue, 31 Oct 2023 19:07:54 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 10.4E.11320.98051456; Tue, 31
-        Oct 2023 19:07:53 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20231031190753eucas1p25afeef1c5372a0da4549ebea01ec0ea9~TRr_sLaMy1474414744eucas1p2J;
-        Tue, 31 Oct 2023 19:07:53 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20231031190753eusmtrp28be2e5395e34ac6334c80f7630d57ba5~TRr_rr3GF1307213072eusmtrp2M;
-        Tue, 31 Oct 2023 19:07:53 +0000 (GMT)
-X-AuditID: cbfec7f4-993ff70000022c38-fe-65415089b2f8
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id B0.D5.10549.98051456; Tue, 31
-        Oct 2023 19:07:53 +0000 (GMT)
-Received: from localhost (unknown [106.120.51.111]) by eusmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20231031190753eusmtip18ae007650da089f21af6bce532805eca~TRr_c_aFS0344103441eusmtip1c;
-        Tue, 31 Oct 2023 19:07:53 +0000 (GMT)
-From:   Lukasz Stelmach <l.stelmach@samsung.com>
-To:     James Seo <james@equiv.tech>
-Cc:     Guenter Roeck <linux@roeck-us.net>, Armin Wolf <W_Armin@gmx.de>,
-        linux-hwmon@vger.kernel.org
+        Tue, 31 Oct 2023 15:28:14 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11454DA
+        for <linux-hwmon@vger.kernel.org>; Tue, 31 Oct 2023 12:28:12 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id 98e67ed59e1d1-28041176e77so2121377a91.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 31 Oct 2023 12:28:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698780491; x=1699385291; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=ovv3WQ7FRMmEnWu6A/ZZBnQWoUTuziU06UNXPBgQjeY=;
+        b=L9bpVJhmMuSumAQYii8Z5ZsNHP5+agLZxFi/bYBsmfR/qssPlVN9EzYhmfMuEXD+TP
+         Lcs80kxHYkJx7N6iKUJYuhuiOSt/FQYK3dF7EQ3pBaeCd+AFx5my9BlWsuy+W6uDrTvM
+         4fXLm7pBIIr/8xOZaJ/n6GgZWrIz8qN7cVPHQW5YKuCh5cKPqqgCnpAeooMHVpUsrwxU
+         jNjRcqOW5Nm4zrPBufbgsXE59JcN5jY5MRq57quwCJS4ZPUvaFlEzbvwqPrvUdrLNRKL
+         AJCifzrofMjQqFB2mjeUt0C7PwfX0XX1GOZo8kfTBJ7gJ6s3OmSwWAtsY6Ws4CdOJSX4
+         4uHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698780491; x=1699385291;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ovv3WQ7FRMmEnWu6A/ZZBnQWoUTuziU06UNXPBgQjeY=;
+        b=g2haK0s+hmhhZtgghJeZRYKzfC4tpMRsNHqwJfwxDYUUW4M1nyuaO9wRCZJ3U/dhlv
+         hStCm9fHosI1J2fRpy0yU+cuYg63zZbEp43ySQDSgxmO7rpmV3Amw1UuRb1hS4hTDyi0
+         aejDzZy36nXZgkVt/0N1byEg3J2teCzvkT+A9Xiyvnz2XUfxh+KYwPa4X+++cErcTd8b
+         WXSbuRq7h7WCFCc6/ehOuEH+2zaTd0cByTkvZxro/T13jG5LFgwryyLIvMb99FMz9vgW
+         xu4i4LWWf0m6/0+x9oXDLnfCWO6zABRNGcZ/07+SOAf/WQgq3uB6SPBiGqU/DFENUYV3
+         T7BQ==
+X-Gm-Message-State: AOJu0YwfVbAm70tpXxkcrkg4V2n9tFXK2qcAVL6A7jzsev4WUMgnWnD4
+        IWmpB5aI2Hr1d7MbhgHJklM=
+X-Google-Smtp-Source: AGHT+IGHBinC7V/1kUOM6jVjX8HBGTHMbirNbqRfh6jLI48DGMaUOHCmLLpaUsc/ifZQm6wfCDswtg==
+X-Received: by 2002:a17:90a:fc94:b0:27d:c499:14f3 with SMTP id ci20-20020a17090afc9400b0027dc49914f3mr10889807pjb.9.1698780491276;
+        Tue, 31 Oct 2023 12:28:11 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id pj7-20020a17090b4f4700b00278ff752eacsm1426222pjb.50.2023.10.31.12.28.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Oct 2023 12:28:10 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <65a80c25-5646-4928-b6c8-914fb4b63046@roeck-us.net>
+Date:   Tue, 31 Oct 2023 12:28:09 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
 Subject: Re: [BUG] hp-wmi-sensors: probe of
  8F1F6435-9F42-42C8-BADC-0E9424F20C9A failed with error -22
-Date:   Tue, 31 Oct 2023 20:07:42 +0100
-In-Reply-To: <ZUEIcOBpVzxC/+c1@equiv.tech> (James Seo's message of "Tue, 31
- Oct 2023 07:00:16 -0700")
-Message-ID: <oypijdsf5qehkx.fsf%l.stelmach@samsung.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-="; micalg="pgp-sha256";
-        protocol="application/pgp-signature"
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrAKsWRmVeSWpSXmKPExsWy7djPc7qdAY6pBo/PmFvMu3aQ2aL99VZG
-        iycLzzBZTHx+gNWBxeN790Umjw8f4zx2fm9g9/i8SS6AJYrLJiU1J7MstUjfLoEr48T3l2wF
-        z3Qrnp+cy9bAeFili5GTQ0LARGJN3yLWLkYuDiGBFYwS99tWMIMkhAS+MEq8O8APkfjMKPH6
-        wVw2mI73jzZCdSxnlLh5fSIjhPOCUeJM72Ogdg4ONgE9ibVrI0AaRAQUJFrnbGAEsZkFkiWW
-        dHYygpQIC2RI3PwNtoxFQFVi7qHdYCWcAukSkxZ2s4LYvALmEv8e7wWLiwpYShzf2s4GEReU
-        ODnzCQvEyFyJmeffgJ0gIXCFQ6Jj2wJmiENdJBadb2OEsIUlXh3fwg5hy0j83zmfCaKhnVGi
-        6cpCVghnAqPE544mJogqa4k7535BvewosWDeYjaQqyUE+CRuvBWE2MwnMWnbdGaIMK9ER5sQ
-        RLWKxLr+PSwQtpRE76sVUDd4SLzfupMJErq1ErPm/2KcwKgwC8k/s5D8MwtoKrOApsT6XfoQ
-        YW2JZQtfM0PYthLr1r1nWcDIuopRPLW0ODc9tdgoL7Vcrzgxt7g0L10vOT93EyMw4Zz+d/zL
-        Dsblrz7qHWJk4mA8xKgC1Pxow+oLjFIsefl5qUoivIdNHVKFeFMSK6tSi/Lji0pzUosPMUpz
-        sCiJ86qmyKcKCaQnlqRmp6YWpBbBZJk4OKUamKZJC5rdPndS7IXZEVHJRxOdFBWfbW2dv2sN
-        n/CjOQcvZq1gm3i6h5nd7Ljspz/G/x9zeGibNl7dGPVJ8su04OfJAp0LXBW2zd1ssz69dpen
-        7pSaA1O2sQVvzrdYPrFJ5vHeBYbqPEYPwnY5KOyt2Tn9f0b+kwi9/rlfF2oYquUHbX138d3b
-        6RLL5tqz7Of5ZbbK++nOa3pM69h3X+fvy59R7WPnasj4JJHJ3dLx896F589n2Pumzn7ziDFJ
-        e/mqF1kHwwrnLNHJ4zsXmni/1WVlrGSD/pP1Ym48K4MzExaz1Lzcfea8n7R7cbZdC1to7oYf
-        cifqr6s51lxlbJMLPeLcWLHwR16+nmTmQ2AiU2Ipzkg01GIuKk4EACEeprCzAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprGIsWRmVeSWpSXmKPExsVy+t/xu7qdAY6pBu/OilrMu3aQ2aL99VZG
-        iycLzzBZTHx+gNWBxeN790Umjw8f4zx2fm9g9/i8SS6AJUrPpii/tCRVISO/uMRWKdrQwkjP
-        0NJCz8jEUs/Q2DzWyshUSd/OJiU1J7MstUjfLkEv48T3l2wFz3Qrnp+cy9bAeFili5GTQ0LA
-        ROL9o42sXYxcHEICSxkljv64wNLFyAGUkJJYOTcdokZY4s+1LjYQW0jgGaPE1ElcICVsAnoS
-        a9dGgIRFBBQkWudsYASxmQVSJDZM6GACKREWyJC4+ZsZolNTYurCrWAlLAKqEnMP7QazOQXS
-        Jb592wZWwytgLvHv8V6wuKiApcTxre1sEHFBiZMzn7BAjM+W+Lr6OfMERoFZSFKzkKRmAW1m
-        Blq3fpc+RFhbYtnC18wQtq3EunXvWRYwsq5iFEktLc5Nzy021CtOzC0uzUvXS87P3cQIjJRt
-        x35u3sE479VHvUOMTByMhxhVgDofbVh9gVGKJS8/L1VJhPewqUOqEG9KYmVValF+fFFpTmrx
-        IUZToNcmMkuJJucDYzivJN7QzMDU0MTM0sDU0sxYSZzXs6AjUUggPbEkNTs1tSC1CKaPiYNT
-        qoHJZKd4x3eGso1zbeJTFDmnfa66avlxisZWK2uNVLaamuWXdOaeiPw75eu0HTNvcvU9j7/U
-        0bj43Euu3Rt02x7cXHd8pf3uxfEVXjumzl2efvlqncthS6f9JXLm1z2YF7JonPKxEHlZ2H5K
-        Y2Ld07oPLJNX71Wr3rH9F/fmvgOxK/zjmves5RDb7aZ0+uxSthqWl9IHHbIZuT5dcCjZV9v0
-        513qzZVz9Xc+W3gm6L9SnrPT9K83P6lt/jPjoMYFiyLfArbAQ9kRElJGfnOuPTu4TnrduteZ
-        pctfLuee4MCkJD2pIN1kwzxzg162D/OmPl90ntHDNH8Wa6fi0+z73kyOva9+is68veD1zK0H
-        qgx+zVBiKc5INNRiLipOBAAPFjiCKQMAAA==
-X-CMS-MailID: 20231031190753eucas1p25afeef1c5372a0da4549ebea01ec0ea9
-X-Msg-Generator: CA
-X-RootMTR: 20231031190753eucas1p25afeef1c5372a0da4549ebea01ec0ea9
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20231031190753eucas1p25afeef1c5372a0da4549ebea01ec0ea9
+Content-Language: en-US
+To:     Lukasz Stelmach <l.stelmach@samsung.com>,
+        James Seo <james@equiv.tech>
+Cc:     Armin Wolf <W_Armin@gmx.de>, linux-hwmon@vger.kernel.org
 References: <ZUEIcOBpVzxC/+c1@equiv.tech>
-        <CGME20231031190753eucas1p25afeef1c5372a0da4549ebea01ec0ea9@eucas1p2.samsung.com>
+ <CGME20231031190753eucas1p25afeef1c5372a0da4549ebea01ec0ea9@eucas1p2.samsung.com>
+ <oypijdsf5qehkx.fsf%l.stelmach@samsung.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <oypijdsf5qehkx.fsf%l.stelmach@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+On 10/31/23 12:07, Lukasz Stelmach wrote:
 
-It was <2023-10-31 wto 07:00>, when James Seo wrote:
-> On Tue, Oct 31, 2023 at 11:20:00AM +0100, Lukasz Stelmach wrote:
->> I am attaching dsdt.dat. It is the only file that contains the
->> "HPBIOS_BIOSEvent" string and the above UUID.
->
-> OK, I think I've figured it out.
->
-> Earlier, I focused on "probe of 8F1F6435-9F42-42C8-BADC-0E9424F20C9A fail=
-ed"
-> (the GUID of HPBIOS_BIOSNumericSensor), and missed it when you said the f=
-ailure
-> is happening when check_wobj() is called from check_platform_events_wobj(=
-).
-> So the issue is actually with HPBIOS_PlatformEvents.Name, since any insta=
-nces
-> of that WMI object are examined during driver init as well.
->
-> After using iasl to decompile the DSDT you sent to ACPI Source Language (=
-ASL),
-> everything looks fine with HPBIOS_BIOSNumericSensor. Not that I'm particu=
-larly
-> familiar with ASL, but search for "Name (SEN1, Package (0x06)" and read o=
-n to
-> the "Method (_INI, 0, NotSerialized)" and the "Method (WQAE, 1, Serialize=
-d)"
-> lines below. It certainly looks like that's how the BIOS on that system is
-> generating HPBIOS_PlatformEvents instances at runtime.
->
-> For HPBIOS_PlatformEvents instances, that BIOS seems to generate them in =
-two
-> places. The driver is interested in those from "Method (WQBC, 1, Serializ=
-ed)",
-> which rely on the section above that beginning at "Name (EVNT, Package (0=
-x0D)".
-> There are also some generated in "Method (WQPE, 1, Serialized)", relying =
-on:
->
->         Name (CBWE, Package (0x02)
->         {
->             Package (0x05)
->             {
->                 Unicode ("4BIOS Configuration Change"), // Oops.
->                 "BIOS Settings",=20
->                 0x04,=20
->                 0x05,=20
->                 0x02
->             },=20
->
->             Package (0x05)
->             {
->                 "BIOS Configuration Security",=20
->                 "An attempt has been made to Access BIOS features unsucce=
-ssfully",=20
->                 0x04,=20
->                 0x0A,=20
->                 0x06
->             }
->         })
->
-> So yes, Armin was right, UTF-16 is the culprit. And it's only for this one
-> instance of HPBIOS_PlatformEvents on this one system's BIOS.
->
-> Can you find the wonky object instance in the debugfs interface? I imagine
-> its name shows up as either "4" or an empty string, depending on the UTF-=
-16
-> byte order.
+[ ... ]
 
-Indeed there is one
+>> For what it's worth, I personally don't see much value in doing much
+>> more than a machine-limited workaround for now. To me it's clear that
+>> this UTF-16 corner case is a BIOS bug and its consequences are minimal
+>> once a workaround is in place.
+>>
+>> Thoughts?
+> 
+> I am no expert regarding x86 platforms and I don't know how often bugs
+> like this happen and if making it more generic makes sens. Maybe.
+> 
 
-=2D-8<---------------cut here---------------start------------->8---
-# grep -r "" /sys/kernel/debug/hp-wmi-sensors-0/platform_events/0/
-/sys/kernel/debug/hp-wmi-sensors-0/platform_events/0/possible_status:2
-/sys/kernel/debug/hp-wmi-sensors-0/platform_events/0/possible_severity:5
-/sys/kernel/debug/hp-wmi-sensors-0/platform_events/0/category:4
-/sys/kernel/debug/hp-wmi-sensors-0/platform_events/0/source_class:HPBIOS_BI=
-OSEvent
-/sys/kernel/debug/hp-wmi-sensors-0/platform_events/0/source_namespace:root\=
-wmi
-/sys/kernel/debug/hp-wmi-sensors-0/platform_events/0/description:BIOS Setti=
-ngs
-/sys/kernel/debug/hp-wmi-sensors-0/platform_events/0/name:4
-=2D-8<---------------cut here---------------end--------------->8---
+That really depends on the system vendor, less on the CPU architecture.
 
-> I'm also curious how it looks in Windows (I used WMI Explorer [1] during
-> development). The WMI namespace should be "\\.\root\HP\InstrumentedBIOS".
+> My solution would be to add a module option, let's name it `quirks` and
+> make it a bit field for future use, that enables the workaound. Plus an
+> additional error message when probe fails to suggest user to add the
+> option to kernel command line or whatever file that contains module
+> options. A nice touch would be to detect if the workaround is still
+> required.
+> 
 
-I'll see if I can find such machine with Windows. It may take a few days
-thou.
+Please no module option. Use DMI data or similar.
 
->> The readings of hp_wmi_sensors-virtual-0 look sensible and they change
->> reasonably under load.
->
-> Good. I guess that part working wasn't so surprising after all :)
->
-> Regarding how we proceed from here, I think the main question is
-> whether a workaround should be limited to only specific machines
-> (maybe detected using DMI data), and if so, to specific WMI object
-> types and instances (cf.  hp_wmi_get_wobj(), though limiting on
-> instance number would be fragile if BIOS updates change instance
-> numbering). Other questions are how thoroughly to validate UTF-16 in a
-> buffer and whether to convert to UTF-8 internally.
->
-> For what it's worth, I personally don't see much value in doing much
-> more than a machine-limited workaround for now. To me it's clear that
-> this UTF-16 corner case is a BIOS bug and its consequences are minimal
-> once a workaround is in place.
->
-> Thoughts?
+Guenter
 
-I am no expert regarding x86 platforms and I don't know how often bugs
-like this happen and if making it more generic makes sens. Maybe.
-
-My solution would be to add a module option, let's name it `quirks` and
-make it a bit field for future use, that enables the workaound. Plus an
-additional error message when probe fails to suggest user to add the
-option to kernel command line or whatever file that contains module
-options. A nice touch would be to detect if the workaround is still
-required.
-
-Thouths.
-
-> Also, if you'd prefer to let me handle it, I'd be glad to write a
-> patch myself.
-
-I am fine with that, I know a bit more about device-tree than about ACPI
-(-; and PCs in general. I'll be glad to test the patch thou.
-
-=2D-=20
-=C5=81ukasz Stelmach
-Samsung R&D Institute Poland
-Samsung Electronics
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEXpuyqjq9kGEVr9UQsK4enJilgBAFAmVBUH4ACgkQsK4enJil
-gBApjAgAj3C3yYahkRmckb1BTCz+JFNzskkJBkbUyHOumOvFbm5RUiQhu2wwhQIj
-22UT6ZyKxCKp4lQIN18Os2+/6mHzN0tz2IKhHEFAaqd79LpzC51xhfqTnWVeMEpZ
-H29BLKuXRWiy/AwXrRQ2tyEBtsU1Z3HlSxB5H2y8PCSgfVXY9VwMOPwf9UBaLnPU
-93AEYYhd/kMjvcUthjr9ZAEW2uMzjj9aDQMWs0WcY8PVIi5QdzUx4HSVb8xCudKD
-AWglMMcUrUxCVMBvIbdrjIu9OScNzq3uJulsu5zaa2nQ1RQiZUw6hj3AFr13o9n7
-XLVx4qgvHMqDiPtuaBPUAJLlRBo3NA==
-=s9xF
------END PGP SIGNATURE-----
---=-=-=--
