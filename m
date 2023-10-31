@@ -2,229 +2,89 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B22D9C4167D
-	for <linux-hwmon@archiver.kernel.org>; Tue, 31 Oct 2023 07:58:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F520C4332F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 31 Oct 2023 08:42:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbjJaH63 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 31 Oct 2023 03:58:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55296 "EHLO
+        id S233437AbjJaIms (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 31 Oct 2023 04:42:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230481AbjJaH6V (ORCPT
+        with ESMTP id S233257AbjJaImr (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 31 Oct 2023 03:58:21 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01hn2242.outbound.protection.outlook.com [52.100.223.242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97A9102;
-        Tue, 31 Oct 2023 00:58:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JJo0nD1V/U1HIJnRyqT2VEgIeZtWtn6p0b2J5rofS6a0zrgRwhR2Ze/0E9B8RjvheP+Yuz6nxAZwD+0WJ4M76VAs8nIAfMv873krc8QQ9Ugr6MdBINhYXkN8Ua47aY3/hBvrvHDGM6jgrrqQrlWHxshnCdhvuOR5iqM3gqH6z2K7tuWY3jMOjaGiVgmGVDNcoPKxHY2CoduRplzOIFl8trQxxC31PAzubJl2kgySjegcAvCmnmTx2eVjg0lBd1+6QYXacvLO3iV+LqA9hJ4AbL1Mpuwgi5pO+W71ids8uLiplPhhcCXY33IIZU24zXe2nmbtCDCdJSKU+z/NSrrPBQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=97ZjtvTUd7vys+mjvLFEZUqcZXuY977xL1Zij6OQjh4=;
- b=UsaEqEn4D9BiOv2U/I9VScH9+SRDhx6GKz0UGb2zkSydh4IpCwqjnfSaE98YqvfKCQqoWkpd5PNcf9ccZsdKQlt8dYHBx2rPq7K4U3Pxo1zXjLJBZTIyBXUlQKzwvs+756O7EybSzedEY55sKuaMY+NNv0oG4FhKQ33etHez5iftFZCk9K4+hQ3G0YiOOp00MoZRBn3IKBX+GUAyQ58CwoDP1Vo2tkSvl4PDsSoZQtU9Ff9Atq1hbcD3VOkgQsfx0287HzTHz16s87vT/k9Pn5s7Lg25loFtpOvQjTaqfORtB4UqQjTPErcBIydEZ8xtAtgS/t1PSxPXYwJl0rQA+A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 175.98.123.7) smtp.rcpttodomain=codeconstruct.com.au
- smtp.mailfrom=nuvoton.com; dmarc=fail (p=none sp=quarantine pct=100)
- action=none header.from=gmail.com; dkim=none (message not signed); arc=none
- (0)
+        Tue, 31 Oct 2023 04:42:47 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399FDC1;
+        Tue, 31 Oct 2023 01:42:45 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-40853c639abso41994735e9.0;
+        Tue, 31 Oct 2023 01:42:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=nuvoton.onmicrosoft.com; s=selector2-nuvoton-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=97ZjtvTUd7vys+mjvLFEZUqcZXuY977xL1Zij6OQjh4=;
- b=qY2r9Cg/XuDQEAXLOVRGHgfG3FwuwSVv5qlXw8OXYVL8/8RdqqJruM5tHqcdwxhqkHfdFd5UiSsevvNB+KI7/bwEDQhs019uJld+2q99C2UkQ28SO29W8kPHFdBNKrr3VY8x8HYB5wmre2IdGVG1MDFE09Rwq7/1EhcE5cgq3rA=
-Received: from SG2P153CA0021.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c7::8) by
- PUZPR03MB6214.apcprd03.prod.outlook.com (2603:1096:301:ba::11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6933.23; Tue, 31 Oct 2023 07:58:12 +0000
-Received: from HK3PEPF0000021D.apcprd03.prod.outlook.com
- (2603:1096:4:c7:cafe::3b) by SG2P153CA0021.outlook.office365.com
- (2603:1096:4:c7::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6977.2 via Frontend
- Transport; Tue, 31 Oct 2023 07:58:12 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 175.98.123.7)
- smtp.mailfrom=nuvoton.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=none header.from=gmail.com;
-Received-SPF: Pass (protection.outlook.com: domain of nuvoton.com designates
- 175.98.123.7 as permitted sender) receiver=protection.outlook.com;
- client-ip=175.98.123.7; helo=NTHCCAS04.nuvoton.com; pr=C
-Received: from NTHCCAS04.nuvoton.com (175.98.123.7) by
- HK3PEPF0000021D.mail.protection.outlook.com (10.167.8.39) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.20.6838.22 via Frontend Transport; Tue, 31 Oct 2023 07:58:12 +0000
-Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCCAS04.nuvoton.com
- (10.1.8.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.14; Tue, 31
- Oct 2023 15:58:11 +0800
-Received: from taln58.nuvoton.co.il (10.191.1.178) by NTHCCAS01.nuvoton.com
- (10.1.8.28) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Tue, 31 Oct 2023 15:58:10 +0800
-Received: from taln60.nuvoton.co.il (taln60 [10.191.1.180])
-        by taln58.nuvoton.co.il (Postfix) with ESMTP id 375405F5BB;
-        Tue, 31 Oct 2023 09:58:10 +0200 (IST)
-Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
-        id 2F083235CE0F; Tue, 31 Oct 2023 09:58:10 +0200 (IST)
-From:   Tomer Maimon <tmaimon77@gmail.com>
-To:     <linux@roeck-us.net>, <jdelvare@suse.com>,
-        <avifishman70@gmail.com>, <tali.perry1@gmail.com>,
-        <joel@jms.id.au>, <andrew@codeconstruct.com.au>,
-        <venture@google.com>, <yuenn@google.com>,
-        <benjaminfair@google.com>, <j.neuschaefer@gmx.net>
-CC:     <openbmc@lists.ozlabs.org>, <linux-hwmon@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Tomer Maimon <tmaimon77@gmail.com>
-Subject: [PATCH v4 1/1] hwmon: npcm750-pwm-fan: Add NPCM8xx support
-Date:   Tue, 31 Oct 2023 09:58:06 +0200
-Message-ID: <20231031075806.400872-2-tmaimon77@gmail.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20231031075806.400872-1-tmaimon77@gmail.com>
-References: <20231031075806.400872-1-tmaimon77@gmail.com>
+        d=gmail.com; s=20230601; t=1698741763; x=1699346563; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AROgZw/JVvq+68xbNYsvRy/4pT+NfjXN2lg6x0CjG8A=;
+        b=hEIfClgSZNaP3I6eKSGlPQF6PJqqGnSF1OBnFjaBccKWtQDxZVdULZcUFLG/i81G09
+         Ng7FbbE9DcK20cdurESAuvslDp/dzHGJd9MvQCPQBDx0eCXi2O+BhBHzwxSJDT5FcqWX
+         K+eT7sv1wEYE8XyelIlGCwf27YEMFOZCpYKzkUA2n1+8UE1QvM2XPH3J+ChJ0X9KSsvV
+         XxGN8w03hsYfimJBFltRwFAqDk+NeWnE5tVJpngGFZt9IqKt0EcY2Hc4sahDPS0/VOvZ
+         1ikbSYcxMvRQfIf4JKjzO+KOWpKL/IRzLJttcJcwkiYh5P0g0FDnr3eDdObMWt/bToDt
+         3XBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698741763; x=1699346563;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AROgZw/JVvq+68xbNYsvRy/4pT+NfjXN2lg6x0CjG8A=;
+        b=F/g+gFX301U+BGTQRMQkQSYQ4jJBczRdR+PWRelFsJ0WswefY/q0U4WQcPZIcvGpfl
+         k1DWhv8/eCgXBBc0jFD52zNn0scmDHit36xSaBa2aYnkIz7TrJmqmMG0kLKZ1J3AS/Uj
+         KAK/eS/fmvYlcX5oO1YREpuqPBjgTwHDYM0GwrCeGHpfMBIDqqQWSh8mxSnlaiKllxb9
+         H8zkpnArjzNfjV4jKFcrXQjHY1FP5jmQKwPH6CciVNdVd6gLqiG/CFsCyhyo6nFz3oWu
+         lcl+5rxlQuv6kKzAbFWIDyDPF1KtTlp0f3cXljXloyBcH/zF+Js+dHIIL8ghbgmNNFgV
+         uvkg==
+X-Gm-Message-State: AOJu0YwTDtYdqpT1YAJk5WTeb2gUT5PcMY+RxnubZkkz+zzltKMgTpMT
+        0h/TQ+xyXWL1o/6yGK+vegg=
+X-Google-Smtp-Source: AGHT+IHZDRSngvhDQENTdP/LPwLPHEITHKXi7mwWdOtvMYjLB8/qRkJ++HuLwOr0jzkp77KVReCxhA==
+X-Received: by 2002:a05:600c:5251:b0:409:247b:b0ae with SMTP id fc17-20020a05600c525100b00409247bb0aemr9418327wmb.36.1698741763356;
+        Tue, 31 Oct 2023 01:42:43 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id fl14-20020a05600c0b8e00b00402d34ea099sm1083873wmb.29.2023.10.31.01.42.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Oct 2023 01:42:42 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Antoniu Miclaus <antoniu.miclaus@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] hwmon: ltc2991: Fix spelling mistake "contiuous" -> "continuous"
+Date:   Tue, 31 Oct 2023 08:42:40 +0000
+Message-Id: <20231031084240.2148339-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NotSetDelaration: True
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: HK3PEPF0000021D:EE_|PUZPR03MB6214:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9a8db875-9ad7-430b-08b2-08dbd9e72169
-X-MS-Exchange-SenderADCheck: 0
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?FwCbfl5m3t9ZxWCZ7laSW8thEFgFSyRLPi5Gdw1f24mtgEZfuV3pk8deOfLc?=
- =?us-ascii?Q?J0hJH0XY31jh4b+IvRSOdHGmFVTV97aHxKMRSF4RlqkupH7xS29SZ0Nzp6yV?=
- =?us-ascii?Q?qJvzPpyh2T2a5M3vn6pCBcCTHpL34V/SohI2mnY+SHt1AtMpiVAxOYVQQXJ+?=
- =?us-ascii?Q?isL3SXmQNiD6TU6UDxjob+JgAKPcrvOfxJ0lDcIe9hpbPrI5pEfDscp0lSWE?=
- =?us-ascii?Q?Rk0vdswLF0klb3GdTHIufBLQIhkjV/Vtwu+XfpLOqiGJnaJk891EP2Hv7lLJ?=
- =?us-ascii?Q?FudAg3hoVSZ3K+sUoYt0aCfO/DLzUMKQlDt5T30cP1VsBlQ7Pz9g1u72x0IO?=
- =?us-ascii?Q?TB92aExlzrST6nGkuhUZeUKsWRdU7xTtF7vEPSSfh8I1TpJ0cOexHS71PUG/?=
- =?us-ascii?Q?K2RRyI+VmCOOZq051pVSDsU4qRiXHJZ24bmrLinF9kBl+FJkk9NxO/ZQpuM7?=
- =?us-ascii?Q?t0l0ysYFCzLkRhMbxtQo76/xqEvCecF/zrKcJbeY6E21PQKwP/TE3k4QMWIW?=
- =?us-ascii?Q?bowerPnILT3GCGSAFyAl3dQtEndl/JylJEWiBBQlGCf91cTjHZOs7OYRsxKt?=
- =?us-ascii?Q?s1RzUXS1mlEWi0uoaSbgLUptrI/pFyVNB7fIVUvDupKtge6XvLi7mEN6r711?=
- =?us-ascii?Q?1ta2xphqyAtMWXHwhqw7wReBET4KCLvMsDt0xtqS0GXHNYEW1GzbZ2ejWbIR?=
- =?us-ascii?Q?9IpiV2Wl8wKIdVSo5IH+fHMrH1QThKRxIDdOPogfu94DucdGD+ggJ5cdPU9z?=
- =?us-ascii?Q?UboGKYxlD1izCnIO6l1Bu6rHKVWymmKh/UBf11/aPQZmwG4EGJ07AkvmsFvS?=
- =?us-ascii?Q?YzjnRRaxEsjJCTzY6r2inL+DRBgxHGY+gqGQkA/jNEXahQ3LRDjLgut6gGCU?=
- =?us-ascii?Q?TQuGx/4H3XgR4wOIvrELsHlKGuOsB1rTHZ6S7r8cfA3U5raz+krJh/By+elw?=
- =?us-ascii?Q?L/+9eZMXf92CziKvN9K++jvj6Mkh3iZFEHNYUnFH2Ogkddtcb5FqMZCgKrU9?=
- =?us-ascii?Q?uMOct48tJbapd76ZPn59LywBHQ=3D=3D?=
-X-Forefront-Antispam-Report: CIP:175.98.123.7;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:NTHCCAS04.nuvoton.com;PTR:175-98-123-7.static.tfn.net.tw;CAT:NONE;SFS:(13230031)(4636009)(136003)(396003)(346002)(376002)(39860400002)(84050400002)(230922051799003)(82310400011)(186009)(5400799018)(61400799006)(451199024)(48200799006)(64100799003)(36840700001)(46966006)(40470700004)(40480700001)(6666004)(42186006)(70206006)(110136005)(316002)(54906003)(81166007)(83170400001)(70586007)(356005)(76482006)(82740400003)(40460700003)(4326008)(7416002)(8936002)(8676002)(921008)(47076005)(26005)(5660300002)(55446002)(2906002)(73392003)(34020700004)(478600001)(336012)(6266002)(36756003)(83380400001)(42882007)(2616005)(1076003)(36860700001)(82202003)(41300700001)(45356006)(32563001)(35450700002)(84790400001)(12100799048);DIR:OUT;SFP:1501;
-X-OriginatorOrg: nuvoton.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Oct 2023 07:58:12.3792
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a8db875-9ad7-430b-08b2-08dbd9e72169
-X-MS-Exchange-CrossTenant-Id: a3f24931-d403-4b4a-94f1-7d83ac638e07
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=a3f24931-d403-4b4a-94f1-7d83ac638e07;Ip=[175.98.123.7];Helo=[NTHCCAS04.nuvoton.com]
-X-MS-Exchange-CrossTenant-AuthSource: HK3PEPF0000021D.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PUZPR03MB6214
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Adding Pulse Width Modulation (PWM) and fan tacho NPCM8xx support to
-NPCM PWM and fan tacho driver.
-NPCM8xx uses a different number of PWM devices.
+There is a spelling mistake in a dev_err_probe messages. Fix it.
 
-As part of adding NPCM8XX support:
-- Add NPCM8xx specific compatible string.
-- Add data to handle architecture-specific PWM parameters.
-
-Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- drivers/hwmon/npcm750-pwm-fan.c | 30 ++++++++++++++++++++++++++----
- 1 file changed, 26 insertions(+), 4 deletions(-)
+ drivers/hwmon/ltc2991.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/npcm750-pwm-fan.c b/drivers/hwmon/npcm750-pwm-fan.c
-index 10ed3f4335d4..d99b24c23d25 100644
---- a/drivers/hwmon/npcm750-pwm-fan.c
-+++ b/drivers/hwmon/npcm750-pwm-fan.c
-@@ -46,9 +46,9 @@
- #define NPCM7XX_PWM_CTRL_CH3_EN_BIT		BIT(16)
+diff --git a/drivers/hwmon/ltc2991.c b/drivers/hwmon/ltc2991.c
+index bd63c61129a9..fc53fdcb2b6c 100644
+--- a/drivers/hwmon/ltc2991.c
++++ b/drivers/hwmon/ltc2991.c
+@@ -373,7 +373,7 @@ static int ltc2991_init(struct ltc2991_state *st)
+ 			   LTC2991_REPEAT_ACQ_EN);
+ 	if (ret)
+ 		return dev_err_probe(st->dev, ret,
+-				     "Error: Failed to set contiuous mode.\n");
++				     "Error: Failed to set continuous mode.\n");
  
- /* Define the maximum PWM channel number */
--#define NPCM7XX_PWM_MAX_CHN_NUM			8
-+#define NPCM7XX_PWM_MAX_CHN_NUM			12
- #define NPCM7XX_PWM_MAX_CHN_NUM_IN_A_MODULE	4
--#define NPCM7XX_PWM_MAX_MODULES                 2
-+#define NPCM7XX_PWM_MAX_MODULES                 3
- 
- /* Define the Counter Register, value = 100 for match 100% */
- #define NPCM7XX_PWM_COUNTER_DEFAULT_NUM		255
-@@ -171,6 +171,10 @@
- #define FAN_PREPARE_TO_GET_FIRST_CAPTURE	0x01
- #define FAN_ENOUGH_SAMPLE			0x02
- 
-+struct npcm_hwmon_info {
-+	u32 pwm_max_channel;
-+};
-+
- struct npcm7xx_fan_dev {
- 	u8 fan_st_flg;
- 	u8 fan_pls_per_rev;
-@@ -204,6 +208,7 @@ struct npcm7xx_pwm_fan_data {
- 	struct timer_list fan_timer;
- 	struct npcm7xx_fan_dev fan_dev[NPCM7XX_FAN_MAX_CHN_NUM];
- 	struct npcm7xx_cooling_device *cdev[NPCM7XX_PWM_MAX_CHN_NUM];
-+	const struct npcm_hwmon_info *info;
- 	u8 fan_select;
- };
- 
-@@ -542,7 +547,7 @@ static umode_t npcm7xx_pwm_is_visible(const void *_data, u32 attr, int channel)
- {
- 	const struct npcm7xx_pwm_fan_data *data = _data;
- 
--	if (!data->pwm_present[channel])
-+	if (!data->pwm_present[channel] || channel >= data->info->pwm_max_channel)
- 		return 0;
- 
- 	switch (attr) {
-@@ -638,6 +643,10 @@ static const struct hwmon_channel_info * const npcm7xx_info[] = {
- 			   HWMON_PWM_INPUT,
- 			   HWMON_PWM_INPUT,
- 			   HWMON_PWM_INPUT,
-+			   HWMON_PWM_INPUT,
-+			   HWMON_PWM_INPUT,
-+			   HWMON_PWM_INPUT,
-+			   HWMON_PWM_INPUT,
- 			   HWMON_PWM_INPUT),
- 	HWMON_CHANNEL_INFO(fan,
- 			   HWMON_F_INPUT,
-@@ -670,6 +679,14 @@ static const struct hwmon_chip_info npcm7xx_chip_info = {
- 	.info = npcm7xx_info,
- };
- 
-+static const struct npcm_hwmon_info npxm7xx_hwmon_info = {
-+	.pwm_max_channel = 8,
-+};
-+
-+static const struct npcm_hwmon_info npxm8xx_hwmon_info = {
-+	.pwm_max_channel = 12,
-+};
-+
- static u32 npcm7xx_pwm_init(struct npcm7xx_pwm_fan_data *data)
- {
- 	int m, ch;
-@@ -923,6 +940,10 @@ static int npcm7xx_pwm_fan_probe(struct platform_device *pdev)
- 	if (!data)
- 		return -ENOMEM;
- 
-+	data->info = device_get_match_data(dev);
-+	if (!data->info)
-+		return -EINVAL;
-+
- 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "pwm");
- 	if (!res) {
- 		dev_err(dev, "pwm resource not found\n");
-@@ -1015,7 +1036,8 @@ static int npcm7xx_pwm_fan_probe(struct platform_device *pdev)
- }
- 
- static const struct of_device_id of_pwm_fan_match_table[] = {
--	{ .compatible = "nuvoton,npcm750-pwm-fan", },
-+	{ .compatible = "nuvoton,npcm750-pwm-fan", .data = &npxm7xx_hwmon_info},
-+	{ .compatible = "nuvoton,npcm845-pwm-fan", .data = &npxm8xx_hwmon_info},
- 	{},
- };
- MODULE_DEVICE_TABLE(of, of_pwm_fan_match_table);
+ 	/* Enable all channels and trigger conversions */
+ 	return regmap_write(st->regmap, LTC2991_CH_EN_TRIGGER,
 -- 
-2.33.0
+2.39.2
 
