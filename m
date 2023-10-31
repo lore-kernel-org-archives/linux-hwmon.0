@@ -2,233 +2,115 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19A6DC4332F
-	for <linux-hwmon@archiver.kernel.org>; Tue, 31 Oct 2023 07:18:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96F8DC4332F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 31 Oct 2023 07:21:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343627AbjJaHSr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 31 Oct 2023 03:18:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
+        id S1343597AbjJaHVi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 31 Oct 2023 03:21:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343523AbjJaHSr (ORCPT
+        with ESMTP id S1343585AbjJaHVh (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 31 Oct 2023 03:18:47 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 668428F
-        for <linux-hwmon@vger.kernel.org>; Tue, 31 Oct 2023 00:18:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698736724; x=1730272724;
-  h=date:from:to:cc:subject:message-id;
-  bh=svLnRNXiA3G6AU6zxtCYxaOscZWTQfO09czWtaY4sTA=;
-  b=hr2rwASPUwN0tCBakrmHP3Vvq+qDk4Iflgn1CMtZH/5MBbwLrxdmCj+D
-   yq/4yyVmYoFXYxThD9JXznFNrhDilVKcX2wK6TqmAm+hv4+7Msc80WTV9
-   KDLjDm4PffuzmZc4yDWAawU+XV94RKUCsY7aGZTi2adum2ge9V73z3NEW
-   WoQz9Y3rQooFo46GJkXdcq1Dh3+GfMY8OVwCp/0jJrEvycgddlEeD2ibM
-   QMOJDrLJNqLHnMVdrIYNYttWXzReWGq55xFzGXRKojDG/VoTQUgqHMB+f
-   5+LhlYEqHOk2vUBMDKaPoqwHllAzx8WecCQ97kqa/g5Stqt2MzKj35L1N
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10879"; a="387111815"
-X-IronPort-AV: E=Sophos;i="6.03,265,1694761200"; 
-   d="scan'208";a="387111815"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2023 00:18:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10879"; a="764153986"
-X-IronPort-AV: E=Sophos;i="6.03,265,1694761200"; 
-   d="scan'208";a="764153986"
-Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 31 Oct 2023 00:18:42 -0700
-Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qxj1L-000Du7-2h;
-        Tue, 31 Oct 2023 07:18:39 +0000
-Date:   Tue, 31 Oct 2023 15:18:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 0f564130e5c76f1e5cf0008924f6a6cd138929d9
-Message-ID: <202310311512.8bruEgLt-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+        Tue, 31 Oct 2023 03:21:37 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2071.outbound.protection.outlook.com [40.107.117.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C82368F;
+        Tue, 31 Oct 2023 00:21:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=a5NYjNbIUbwneTX7K2e8bVZ3X5Gaa2cq+DRUG9Gs0Du1kDOiB/ZgQ/zYyEjab7yPCrWxJsBWEvooFrVeCbSnvF8VxXZyGuoK/0qk6686aw6MnKEPs0iiDG1a3N5sKnC1UB2Z9v34k3GkYUfeYclXZwJFV3kEqYtFDlHrPiR7JBA21W9AUrQbIqsyOUYvilZJebrdK/h61rWxdgFanrKvAR5GQrneUj6JVkzfNtRXsyowJnISTunhEF5EgZtpQ9hwVDHUYMx/nj6ieFLM84SNqOXLckuKTOE0j8rRxbYsxPRpSeYL/veBlqUGyy6P+hiKtOF258Nm5bQFZYHS1noWng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Bt7PXAE/WeVXhukRg6lFGw9uNHQCoMuDUJ2Vetgbrdc=;
+ b=Hc5b9Jlv/mAlX8gTca4DnWHvmzTblsP06QgQuWgYhQsiRWvHKAAudig/300RORiaX9OZKgFJds9QTbuMDthLasMR3ROU+eORboEsaTv/QSHQWRogNJH4cZGOXgD/1GUIF7iOpejkmPs5vZAzxmgxCaxDU7FEu4XyZPUMbxBnpRWskYu7QW6js/9L1D/gf7/8kX5yIcDaaSVTDSTwrCzeZmdBUl0sXx3mIAL/t/QSZ6UkLegyJBYLOiX/Wno29JWQAA0LL/8hMhmexcloCl+QAp8oxxQCjZMbegLCcHvWMfF1ARWZtKPL3aVNWFdR2O5iOvOz+6llUUdkUHa8r1yphA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 211.20.1.79) smtp.rcpttodomain=stwcx.xyz smtp.mailfrom=wiwynn.com; dmarc=fail
+ (p=quarantine sp=quarantine pct=100) action=quarantine
+ header.from=wiwynn.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Bt7PXAE/WeVXhukRg6lFGw9uNHQCoMuDUJ2Vetgbrdc=;
+ b=T2clwvNSTY/eqBVHStfkw8QiIcpKxH9UqWsufhMP4Qtrbd8Jm/lDRwf4nRG3+BW01QC/Vvp9lxgZfXiDZN10BeXfkQ5tru0rSCtQPXggUaoNZpxBFjFpMHuCmPxNIRRUuakRL2bsu38eSmvMytMLlmFfEO2/95rdgrSOGOdNu2I528xz268xnqI7Pe3bmfPHlMOPsgxd9iFGr2M3RD+qyfMQ0mv/TCVCS99syCs9aHNLZ2zNwI8NvultXBnGuIJcyfgJKcmdJ9rkbcTEYCr9JZBXE4TNabUmB1HB6Eu0ni0X1Z4BQ7+yXEen/mynukrMIB+WbP9MjMyiVE3ywhSsQQ==
+Received: from PU1PR04CA0016.apcprd04.prod.outlook.com (2603:1096:803:29::28)
+ by TY2PR04MB3999.apcprd04.prod.outlook.com (2603:1096:404:8001::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.29; Tue, 31 Oct
+ 2023 07:21:29 +0000
+Received: from HK3PEPF00000220.apcprd03.prod.outlook.com
+ (2603:1096:803:29:cafe::2c) by PU1PR04CA0016.outlook.office365.com
+ (2603:1096:803:29::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.29 via Frontend
+ Transport; Tue, 31 Oct 2023 07:21:29 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 211.20.1.79)
+ smtp.mailfrom=Wiwynn.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=quarantine header.from=Wiwynn.com;
+Received-SPF: Fail (protection.outlook.com: domain of Wiwynn.com does not
+ designate 211.20.1.79 as permitted sender) receiver=protection.outlook.com;
+ client-ip=211.20.1.79; helo=localhost.localdomain;
+Received: from localhost.localdomain (211.20.1.79) by
+ HK3PEPF00000220.mail.protection.outlook.com (10.167.8.42) with Microsoft SMTP
+ Server id 15.20.6838.22 via Frontend Transport; Tue, 31 Oct 2023 07:21:28
+ +0000
+From:   Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+To:     patrick@stwcx.xyz
+Cc:     Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-i2c@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: [PATCH v3 0/2] LTC4286 and LTC4287 driver support
+Date:   Tue, 31 Oct 2023 15:21:20 +0800
+Message-Id: <20231031072124.201181-1-Delphine_CC_Chiu@Wiwynn.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: HK3PEPF00000220:EE_|TY2PR04MB3999:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: ba5c06b8-25a4-410a-b94c-08dbd9e1ffe3
+X-MS-Exchange-AtpMessageProperties: SA
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rR15NmUn6/pPXcnOC8Lc3PceauCXCwMTwLM3ir2PTDrTNifO47097BjKE9PZ3BARUDXXquC1wovvqPgmJgFglqqpioIkQ5RjkAJaEYegnE31Z907rQTzz2xC9QhPhs9+XRd0KcZgWyNdo78yLmLTGhDIyU1e5sXi89WKAJYDQrVuIpdIzXV1kOnHj9nRwGrbanSOickGuUsmkB0zuDqMpc/Fk9N0AicoRCQbB47W1+xqA1VtyYvbHq9Fsk+tcjxsgGb7uJ7mmJ+/+q/5QA7ajDhfwfSZIrBs1lb/nqQD5iIj0oc2adSxMNYAUE1SbEZULrk/1Qf4hg7a/Zorffqxf9/jTWuqU3kM136CuMLOfe5uBzX2qYgb5CRrlNg57xJjnoYRUjSnJaDXCEzXmDZvfs0QoL1ifpR739kziuC+lUMAnURuv7lqJyrDu7XqWyQgy1TmOyoI0S4jXqZ7RArN0F3b/y9oRKnMTdHAOno59mjOGtuVvaODalBMvu2ny66/WFkAe+g9Y3CkHyyPCFRI9/+EmOKcy6bPmlk8A+DjzoNmJFmD9EJfJ4jAJmd1+jwqy+chTqGChqKd/uj7lDusCL0WoIIAwu+jIBDLNVSSXp3UbBmncSrQzDEWjwlSxfQXbVYwrc/2lewZa0ApqxhV4bwFdC7H6AagL6CPz2jaVsdROuSKr/kjLG1gC0YKY1Ueayp81amcNxi1ZuqMRvJhZQ==
+X-Forefront-Antispam-Report: CIP:211.20.1.79;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:localhost.localdomain;PTR:211-20-1-79.hinet-ip.hinet.net;CAT:NONE;SFS:(13230031)(6069001)(4636009)(136003)(376002)(346002)(39860400002)(396003)(451199024)(82310400011)(64100799003)(186009)(1800799009)(46966006)(36840700001)(7416002)(1076003)(956004)(6512007)(26005)(6506007)(478600001)(6666004)(9316004)(47076005)(36860700001)(4744005)(2906002)(41300700001)(70206006)(5660300002)(2616005)(70586007)(6486002)(8676002)(4326008)(8936002)(6916009)(54906003)(36736006)(316002)(81166007)(82740400003)(356005)(86362001)(40480700001)(36756003)(336012);DIR:OUT;SFP:1101;
+X-OriginatorOrg: wiwynn.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Oct 2023 07:21:28.4384
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ba5c06b8-25a4-410a-b94c-08dbd9e1ffe3
+X-MS-Exchange-CrossTenant-Id: da6e0628-fc83-4caf-9dd2-73061cbab167
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=da6e0628-fc83-4caf-9dd2-73061cbab167;Ip=[211.20.1.79];Helo=[localhost.localdomain]
+X-MS-Exchange-CrossTenant-AuthSource: HK3PEPF00000220.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR04MB3999
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 0f564130e5c76f1e5cf0008924f6a6cd138929d9  hwmon: (aquacomputer_d5next) Check if temp sensors of legacy devices are connected
+v3 - Add LTC4286 and LTC4287 binding document
+   - Add LTC4286 and LTC4287 driver
 
-Unverified Warning (likely false positive, please contact us if interested):
+Delphine CC Chiu (2):
+  dt-bindings: hwmon: Add lltc ltc4286 driver bindings
+  hwmon: pmbus: Add ltc4286 driver
 
-{standard input}:537: Warning: overflow in branch to .L72; converted into longer instruction sequence
-{standard input}:643: Warning: overflow in branch to .L63; converted into longer instruction sequence
-
-Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-`-- sh-randconfig-r023-20211018
-    |-- standard-input:Warning:overflow-in-branch-to-.L63-converted-into-longer-instruction-sequence
-    `-- standard-input:Warning:overflow-in-branch-to-.L72-converted-into-longer-instruction-sequence
-
-elapsed time: 1506m
-
-configs tested: 150
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              alldefconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                          axs103_defconfig   gcc  
-arc                                 defconfig   gcc  
-arc                        nsim_700_defconfig   gcc  
-arc                   randconfig-001-20231030   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                   randconfig-001-20231030   gcc  
-arm                           sama5_defconfig   gcc  
-arm                         socfpga_defconfig   clang
-arm64                            allmodconfig   gcc  
-arm64                             allnoconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20231030   gcc  
-i386         buildonly-randconfig-002-20231030   gcc  
-i386         buildonly-randconfig-003-20231030   gcc  
-i386         buildonly-randconfig-004-20231030   gcc  
-i386         buildonly-randconfig-005-20231030   gcc  
-i386         buildonly-randconfig-006-20231030   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                  randconfig-001-20231030   gcc  
-i386                  randconfig-002-20231030   gcc  
-i386                  randconfig-003-20231030   gcc  
-i386                  randconfig-004-20231030   gcc  
-i386                  randconfig-005-20231030   gcc  
-i386                  randconfig-006-20231030   gcc  
-i386                  randconfig-011-20231030   gcc  
-i386                  randconfig-012-20231030   gcc  
-i386                  randconfig-013-20231030   gcc  
-i386                  randconfig-014-20231030   gcc  
-i386                  randconfig-015-20231030   gcc  
-i386                  randconfig-016-20231030   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20231030   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                         apollo_defconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                        m5307c3_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                           jazz_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                      acadia_defconfig   clang
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   gcc  
-powerpc                 mpc8313_rdb_defconfig   clang
-powerpc                     tqm5200_defconfig   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                 randconfig-001-20231030   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20231030   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                      rts7751r2d1_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                 randconfig-001-20231031   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-001-20231030   gcc  
-x86_64       buildonly-randconfig-002-20231030   gcc  
-x86_64       buildonly-randconfig-003-20231030   gcc  
-x86_64       buildonly-randconfig-004-20231030   gcc  
-x86_64       buildonly-randconfig-005-20231030   gcc  
-x86_64       buildonly-randconfig-006-20231030   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                randconfig-001-20231030   gcc  
-x86_64                randconfig-002-20231030   gcc  
-x86_64                randconfig-003-20231030   gcc  
-x86_64                randconfig-004-20231030   gcc  
-x86_64                randconfig-005-20231030   gcc  
-x86_64                randconfig-006-20231030   gcc  
-x86_64                randconfig-011-20231030   gcc  
-x86_64                randconfig-071-20231030   gcc  
-x86_64                randconfig-072-20231030   gcc  
-x86_64                randconfig-073-20231030   gcc  
-x86_64                randconfig-074-20231030   gcc  
-x86_64                randconfig-075-20231030   gcc  
-x86_64                randconfig-076-20231030   gcc  
-x86_64                           rhel-8.3-bpf   gcc  
-x86_64                          rhel-8.3-func   gcc  
-x86_64                    rhel-8.3-kselftests   gcc  
-x86_64                         rhel-8.3-kunit   gcc  
-x86_64                           rhel-8.3-ltp   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
-xtensa                  nommu_kc705_defconfig   gcc  
+ .../bindings/hwmon/lltc,ltc4286.yaml          |  52 +++++
+ Documentation/hwmon/ltc4286.rst               |  95 ++++++++++
+ MAINTAINERS                                   |  10 +
+ drivers/hwmon/pmbus/Kconfig                   |   9 +
+ drivers/hwmon/pmbus/Makefile                  |   1 +
+ drivers/hwmon/pmbus/ltc4286.c                 | 178 ++++++++++++++++++
+ 6 files changed, 345 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml
+ create mode 100644 Documentation/hwmon/ltc4286.rst
+ create mode 100644 drivers/hwmon/pmbus/ltc4286.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.25.1
+
