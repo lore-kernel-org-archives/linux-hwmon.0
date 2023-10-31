@@ -2,235 +2,492 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2091AC4332F
-	for <linux-hwmon@archiver.kernel.org>; Tue, 31 Oct 2023 17:42:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD2E1C4332F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 31 Oct 2023 18:09:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231805AbjJaRmd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 31 Oct 2023 13:42:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51454 "EHLO
+        id S1376595AbjJaSJm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 31 Oct 2023 14:09:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231249AbjJaRmc (ORCPT
+        with ESMTP id S230455AbjJaSJl (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 31 Oct 2023 13:42:32 -0400
-Received: from mx0b-00128a01.pphosted.com (mx0b-00128a01.pphosted.com [148.163.139.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879AB91;
-        Tue, 31 Oct 2023 10:42:30 -0700 (PDT)
-Received: from pps.filterd (m0167090.ppops.net [127.0.0.1])
-        by mx0b-00128a01.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 39VHSe92018446;
-        Tue, 31 Oct 2023 13:42:08 -0400
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2101.outbound.protection.outlook.com [104.47.58.101])
-        by mx0b-00128a01.pphosted.com (PPS) with ESMTPS id 3u360y06y0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Oct 2023 13:42:07 -0400 (EDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LO8fAN9WZikJdSXF1vWr3ef8eSwUvi/3Ir3D3rQDU85nHJWqCyYiuZqQZZfAL1GQ7zcXb6cxseykQHgwTy5PWcudK7bCmGyRDo65Vd+2KoxRyR8DVVVqcnR4PfOAFaM/KdJTpAfNImh8yZ99X17zVa1nAdlx7BlwMk3uZsTeFyKMN5VvnWuELu47cfbW6oHi4xjzxsjm5t+TRuR6g9biReMBEJqhuhRk1+nuqekwTf72rAZfgzc2fc+qrtomYDpplK9oVwrKU05FI4fcj02YpU1y+G2eaFwSEZXm2ubY2uZM+SZd4ZqZAo01lW3GVsBStTawCcYY1uWZk5oltbHR8A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=py40f1bnBzFs4HKfdfBmgSZylRP3s0cKeGprwkpshu8=;
- b=fKQipKM7DjlFuappgEMeLDOOGIn9+0+UwnrcRjgzYWa1hvGrna1A5GsJ+wDKCDrsRCIdWPbcysEjleIoO7rjZ1qyO8WKGEcLOY+nDhU2lIBF92OwdT/85rl9J6lzbjiPzqu5B/S82AtSsLFKb2fkuwxrSsT1Zs2CpbjycZaypNQNMGhhjXKfWpxKfXECeSZuj0nFRWnVe/5eeL7FL1d1Ssgm0973OGS9e2AfepxzLrH6+NLL3q1GhKN8OcaIhd0OWOWV0ntyh7eMGBvNJVAySUSSjwlT+Qijdfs7IZWudPoAuibXW4ko5u0oooV8q5oqic10WJSpoZe5BTdvM4Ubsg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=analog.com; dmarc=pass action=none header.from=analog.com;
- dkim=pass header.d=analog.com; arc=none
+        Tue, 31 Oct 2023 14:09:41 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1926BA2;
+        Tue, 31 Oct 2023 11:09:39 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-6be0277c05bso5297509b3a.0;
+        Tue, 31 Oct 2023 11:09:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=analog.onmicrosoft.com; s=selector2-analog-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=py40f1bnBzFs4HKfdfBmgSZylRP3s0cKeGprwkpshu8=;
- b=YWzL3bENTEr5Xi5LtDwMlnOn4RhnwILqr2c6K7ksfs6/6e+Bgn8OXLTjj7rs+CVwfrUC3+XSQNkQ6b6UkMBdpIpbNKmAQ37SHFNWKfkx+3iJRrlb/umPjFu5A0SEoTYjJx/HeQJcl9X5lJruaFUkjqPUwqhGLB47DExLYYrzHe4=
-Received: from CY4PR03MB3399.namprd03.prod.outlook.com (2603:10b6:910:57::13)
- by DM6PR03MB5082.namprd03.prod.outlook.com (2603:10b6:5:1ee::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.19; Tue, 31 Oct
- 2023 16:28:08 +0000
-Received: from CY4PR03MB3399.namprd03.prod.outlook.com
- ([fe80::26c3:a563:9b0a:3321]) by CY4PR03MB3399.namprd03.prod.outlook.com
- ([fe80::26c3:a563:9b0a:3321%3]) with mapi id 15.20.6954.014; Tue, 31 Oct 2023
- 16:28:07 +0000
-From:   "Miclaus, Antoniu" <Antoniu.Miclaus@analog.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Subject: RE: [PATCH v3 2/2] rtc: max31335: add driver support
-Thread-Topic: [PATCH v3 2/2] rtc: max31335: add driver support
-Thread-Index: AQHaDA9c3G+ASfoC90CsVtZgJtJaCLBkDtYAgAABduA=
-Date:   Tue, 31 Oct 2023 16:28:07 +0000
-Message-ID: <CY4PR03MB3399DEF73E052036AC7EDBA99BA0A@CY4PR03MB3399.namprd03.prod.outlook.com>
-References: <20231031153100.92939-1-antoniu.miclaus@analog.com>
- <20231031153100.92939-2-antoniu.miclaus@analog.com>
- <95e41f16-4b5f-4f2a-bc31-17273032312b@roeck-us.net>
-In-Reply-To: <95e41f16-4b5f-4f2a-bc31-17273032312b@roeck-us.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: =?utf-8?B?UEcxbGRHRStQR0YwSUc1dFBTSmliMlI1TG5SNGRDSWdjRDBpWXpwY2RYTmxj?=
- =?utf-8?B?bk5jWVcxcFkyeGhkWE5jWVhCd1pHRjBZVnh5YjJGdGFXNW5YREE1WkRnME9X?=
- =?utf-8?B?STJMVE15WkRNdE5HRTBNQzA0TldWbExUWmlPRFJpWVRJNVpUTTFZbHh0YzJk?=
- =?utf-8?B?elhHMXpaeTAzTnpZeU9XTmpaUzAzT0RCaExURXhaV1V0WVdVM09DMWtORGd4?=
- =?utf-8?B?WkRjMU1EWmtaR1ZjWVcxbExYUmxjM1JjTnpjMk1qbGpZMll0Tnpnd1lTMHhN?=
- =?utf-8?B?V1ZsTFdGbE56Z3RaRFE0TVdRM05UQTJaR1JsWW05a2VTNTBlSFFpSUhONlBT?=
- =?utf-8?B?SXpNakE0SWlCMFBTSXhNek0wTXpJME16STROVGN3TURJd05qQWlJR2c5SW1W?=
- =?utf-8?B?a0szRmFZblJHUlVZclZHaE9iRFpCTTFsYUswSkJZa0pVVVQwaUlHbGtQU0lp?=
- =?utf-8?B?SUdKc1BTSXdJaUJpYnowaU1TSWdZMms5SW1OQlFVRkJSVkpJVlRGU1UxSlZS?=
- =?utf-8?B?azVEWjFWQlFVVnZRMEZCUWsxTlVGVTFSbmQ2WVVGVWVtVlljMUZFVTBSSlFs?=
- =?utf-8?B?Qk9OV1Y0UVU1SlRXZEZSRUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRklRVUZCUVVSaFFWRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGRlFVRlJRVUpCUVVGQlJVOXdiRTluUVVGQlFVRkJRVUZCUVVGQlFVRkJT?=
- =?utf-8?B?alJCUVVGQ2FFRkhVVUZoVVVKbVFVaE5RVnBSUW1wQlNGVkJZMmRDYkVGR09F?=
- =?utf-8?B?RmpRVUo1UVVjNFFXRm5RbXhCUjAxQlpFRkNla0ZHT0VGYVowSm9RVWQzUVdO?=
- =?utf-8?B?M1FteEJSamhCV21kQ2RrRklUVUZoVVVJd1FVZHJRV1JuUW14QlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVWQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlowRkJRVUZCUVc1blFVRkJSMFZCV2tGQ2NFRkdPRUZqZDBKc1FVZE5RV1JS?=
- =?utf-8?B?UW5sQlIxVkJXSGRDZDBGSVNVRmlkMEp4UVVkVlFWbDNRakJCU0UxQldIZENN?=
- =?utf-8?B?RUZIYTBGYVVVSjVRVVJGUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRlJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRMEZCUVVGQlFVTmxRVUZCUVZsUlFtdEJSMnRCV0hkQ2Vr?=
- =?utf-8?B?RkhWVUZaZDBJeFFVaEpRVnBSUW1aQlNFRkJZMmRDZGtGSGIwRmFVVUpxUVVo?=
- =?utf-8?B?UlFXTjNRbVpCU0ZGQllWRkNiRUZJU1VGTlowRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZDUVVGQlFVRkJRVUZCUVVsQlFVRkJRVUZCUFQwaUx6NDhMMjFs?=
- =?utf-8?Q?dGE+?=
-x-dg-rorf: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CY4PR03MB3399:EE_|DM6PR03MB5082:EE_
-x-ms-office365-filtering-correlation-id: e132fa7b-1bcf-4134-bd37-08dbda2e5db8
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: MY1lW0Bj0RADHfsgj07MfA+DIHD3wig32/3WTstCve+IR87Ao6ZjWeMtGgZyXqc2u3Bl1aqlQXdBfZo8qmojdONdViIqYi8bHYzOGXPyh75asa3mDMQX48ZCGWDWIKlq1mFQTDu+/JrYiXJSfcuGUViftZeKzyXgVDRVZawZOeSxrC4/XEnv9GNhohb03aEyUFWwVcyVNmAGSYqRlJerAO+QGYqgJoeYj3oZTy0AgM6XyJCkp0GcY1NZ0rqtrH2Dj/I4K93eb1NYyXDdbqm9mw3kB/qMkKgGamg+BhOTk3brPh31AV/hi4aUUdjp8i/FVV84KXwOJAAporNUyDduZGXDPFkq9P9aYhdBQXNsUyy4xN3Wuk4I4rkvY3wNkrfF5UgFrFM6sfhybHMiMRvyNI5asAfmAFXg5CF5ibpyuaio4hIv1pFM/ezdUDREK9iAAkz2ACZ5FDDicnTh9PWZ7y/S4dgS04zvNRXj/0qe/1X9nEblsc+ncw51kHMbFvArid+m1QV+PLvvvQuv2QeacXGN0qOg7A04Cgj99I12XgrfCOPMWARkVmV/08c8mLB0EerS8mmdZ9p166fqA703McC274RDxAemEUEnNKwcTJeekrIFUnCkkG8M97JevCt2aGtImYwQeCJaPVtIB98TVQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR03MB3399.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(366004)(39860400002)(396003)(136003)(346002)(230922051799003)(451199024)(186009)(1800799009)(64100799003)(38070700009)(33656002)(921008)(55016003)(41300700001)(478600001)(7416002)(5660300002)(52536014)(83380400001)(7696005)(2906002)(66946007)(76116006)(110136005)(66556008)(8936002)(53546011)(8676002)(26005)(64756008)(66446008)(66476007)(316002)(86362001)(71200400001)(38100700002)(9686003)(6506007)(122000001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cFBKK2s5OTlVTDlSN1crV25XZ1dvdGkwTU5sRjdoUDY2RGxFaVU1NXozMllP?=
- =?utf-8?B?U2J5RVJ2YmtkMVdySHBHSm9wcWxtZVNHbDF2RHVwbCtNelJoUjg3MjdQUFhr?=
- =?utf-8?B?emZJVFMzbkg2TDMyUWhhbDVTbVp6Qm1CNHMrWTd1dDR0aWJOQjM2U0c0bTVl?=
- =?utf-8?B?cEZVL1VPWjRsSmFLMVgxeVFISnNVbzRldGpLK0NlOEJiVEdPYVdHRS84Q0th?=
- =?utf-8?B?MDFRMk1WeWNMcVYwSXVrNEh3QVNZNjlvQlNncjdEMk80eUdRTUxrOFNEN0pY?=
- =?utf-8?B?SVVzUVZkQmRqK2tYRWFGeVJ3Qk9JNXY2QjVBY3pDWHNUOWpGUUtKZHg2REov?=
- =?utf-8?B?WUQyTlJBdy9jaElIbVd5djY5R041MTBLeXdsc3dQek1SemVpaTJveG11Vk9L?=
- =?utf-8?B?eUtvNFMzcjA5S1lHdXFsL21qWWZjYVdRTktVQllHS0VDRVRlSTN0NmNtZ0FQ?=
- =?utf-8?B?TVNiVXo5bTQ4UURjcXQrazgwbEYxOFRScE5acWc0cVZqTEhlYnAxNkVRYzlt?=
- =?utf-8?B?aGp4eUM3QXJoaUlpdEJWMXA4R0d2clJMdWZpYS9HSGdJTUZFRVpiMWx1cUd3?=
- =?utf-8?B?MkwrK0JzTzBSaVo4dEI0dU9kZW9QNU1pcjBYTjU0ekVDL004cFdJQzVXOVMx?=
- =?utf-8?B?c2EvTitpVjEzOGtCdEp0Yit5WVg4ZkhKSERsUG92Q0U5WGZZVUhmZUFhV3NX?=
- =?utf-8?B?OElzTDJNcEdxRnNJY1lUTUZqNkpua2M4MHdKandNSnEyTm9wS2tjeVFKYkE3?=
- =?utf-8?B?N08xekRCaU1RajB6bUkyQzU0MWRCY1F6V3NCOUlCcXR3SmdaV0huNk10eUtW?=
- =?utf-8?B?SlRnbXFFSnlZK1g3SC9jaG9RZlppMzVtVS90MDZ6QllhSFMzek1QdXh0NHQx?=
- =?utf-8?B?bVRpSVBCOTh1OFNDK0NtckJpL3h5dTFXSFVFdG9QdjV0T25YamcvZmhIUVVG?=
- =?utf-8?B?NHFrMXB1cGRnMmJwK1oyRTZ5dVBSaVBMUUVSanltQ3ZMOEI4STQybU1EeU9Z?=
- =?utf-8?B?YjdwWnZhclFJRjBzVnNzNXBUYnpBWnVzS2xxaVFETGNpV3BMdkttUHE0QThl?=
- =?utf-8?B?WEJPRkVCSGVWUEdlMk0vQUJNN3hZUW53blhBQ0E4ZDVNWDUxaFhUaVo0dE9G?=
- =?utf-8?B?bWZ5Um80U1ZNMXZNS1dEaVY0dnNtMnBhd2UxWGxtQWxkUEJDUDdQV3h5OHo0?=
- =?utf-8?B?dWpHK2ZrZ1BsRERDRElxWWpSWDJ2MllUOTBaa0c2YjJWckRZR2paUndRUEQx?=
- =?utf-8?B?OEszQW9tVnh4RjllVmxKZG9obmR3enZBcUxYcE9xc0NYU3RPVlJEeFlQeFdz?=
- =?utf-8?B?K3luekpiajNvZUx5RXA4SDByRkFJL1dxQlJ2YjNob2RGYXkvNC92dlpWTWEw?=
- =?utf-8?B?aUxmV1U4UDJ4RXBWcnJxTmVtUEFEdmNraTNGUlVObzJKaEJBcmp1MFBYaEpr?=
- =?utf-8?B?NTN3RitYdkw5VzlLYytna3Q1VGkxT1lLWnVnL2VDSFNoNGI4eE1HTEFGZmh1?=
- =?utf-8?B?Q1crVDRGWlhROXZxTHVTeUlSaW9Cd0JDS0ZaNGxtdUdRTnVnQ2NRaUcxc1dQ?=
- =?utf-8?B?VDFTQktEMUkrVnM3NDN5NUVlWUkyWHFaQmhBMWFWaVQ2T0FxSm9OeG5yVDBm?=
- =?utf-8?B?TUoxYVJ2NlpkbUVCcXloREhYVlZyZXRwL25rVi9BSjkxTkNZRHE5S21ydERq?=
- =?utf-8?B?QkIzSGZaN1VHZVRSemlBQWtEZjVCeUJya1JoRi9hZVFyWXY3eDRHMXJTdEhr?=
- =?utf-8?B?dkJhZEt1K2RqM29sT0dGM3BWdUlHcksva2lhdzhjN1prejh1Z09UbkludktC?=
- =?utf-8?B?bXk0MTd6WnJtdnM5Q1RlRzNjbkRPZFFQL21NYzJCVHp4MkZtZlNNN2dBd1NY?=
- =?utf-8?B?RTZ5end6UTlLSjhyb2ZQOFY2WFlIc3g3MVBDK3BoMXV4OVduQ2tDTmU1SHZm?=
- =?utf-8?B?L09GRzZDempad05iSzBKM3I0QnZkVVhmRVF1SU9NOW9EcENLOWpWSWZkRUcr?=
- =?utf-8?B?NkhqRG1WUFBTbTVHR0tOV0lWbWg0alkzVExUMVRNRVNVUjdUNVpxTm9GNVps?=
- =?utf-8?B?M2YvR09CRWllY1J6bXoxeDdWd2ZTNloyNTlwOXlHT2JlSmJEQitQRHpGQWlt?=
- =?utf-8?B?TUNQdUU5OXF4MkhVTzlnSHo5dFgrdmFQRTF3SW1td1QzQjkyTlc1Q0E4ek5S?=
- =?utf-8?B?Tnc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        d=gmail.com; s=20230601; t=1698775778; x=1699380578; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=JchhP+mGKXvZIlmqePmuD84psJVG+oz+e68YnJRPIdo=;
+        b=Njht6S7VQD5X25TqY3cXftz+e98xikBN8DB93GXZFChKq70XVD3npFjhvpevLpBt12
+         e72nl5z9HAi9BTCFKZ6HHVsCkx/6/SOkmBeAQQK8kmRWp9TGlnHdAWBM+LTqr3SQlMYH
+         APX6lQ9VHZ639VwIAXOfF8I4eJisCJXZT5dGvWsx87nGbZxQYgbbAP/xlFlnZTFQZ6z1
+         joOeXFKR7xXF8WycbZcttt8H+71qmjplMm7cVWJ6Nm4QY1GcqXkTz3OteBqZLq8AVL08
+         E3CdH8izDGOTlJWEnh049S4uGUvODUT1tX+5eoMiS89bRlhgxCfhZGyjjga9femrAgQN
+         R29A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698775778; x=1699380578;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JchhP+mGKXvZIlmqePmuD84psJVG+oz+e68YnJRPIdo=;
+        b=D5AMRUlVAyD7n9lu8kEStRBfFU8KrwkfZ68lQ8A0ULZsPHL+vBWDmBtd3Z5kVWLOyB
+         wRUFOn1vrA8Sf/+DccUWXeOWfXxS4D/f7RcB7C2yJu890NoEEiJqTmpyv3D0p92gqf4c
+         yiyHATIafc2yy7AfMUqIegOBluYmBhnnY8wKkW5K4yz6KbUY7JAZiH/QFFTCsVYtIQL3
+         r8KAjNCKypFB6EExHEJmtiUG0gEu1iDHyiMrx7zTWX2xrpgrgowslfGYlyigLb0VvkUQ
+         gG4HTo0oA3vc5MklEk8WT5dRSE+haA3jvQpU4jpreHoGVqZRJJq9dO/IfP+0FBEtrHuK
+         LBqQ==
+X-Gm-Message-State: AOJu0YyTaJV0y2J4jefMjlSGAThJC2aj7T5J1rhrAv26i21iDpVuhx9Q
+        8Cnaba8OeggQhfVh5tYsOu8=
+X-Google-Smtp-Source: AGHT+IEhEGhFE8d19oTBS/RMKIKGCO7V9qvGIme49Hz8cY41gVd5uHZmSuhvL5tMNvGgl7GQjX/agw==
+X-Received: by 2002:a05:6a00:2d96:b0:6b2:5b5:4f12 with SMTP id fb22-20020a056a002d9600b006b205b54f12mr12995496pfb.14.1698775778082;
+        Tue, 31 Oct 2023 11:09:38 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g16-20020a056a001a1000b006c0685422e0sm1533514pfv.214.2023.10.31.11.09.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Oct 2023 11:09:37 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <96d7bf00-a5f8-486f-912d-931e918f3fa3@roeck-us.net>
+Date:   Tue, 31 Oct 2023 11:09:35 -0700
 MIME-Version: 1.0
-X-OriginatorOrg: analog.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR03MB3399.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e132fa7b-1bcf-4134-bd37-08dbda2e5db8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Oct 2023 16:28:07.8563
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ZqNDbfv+2O9VA5q/Pfx3pwDEvFszk0rAlWg7IWC6q8kp4yw3IpDSqGZl9qBbhCv3bJ42HAT4LDyrYcJlskOS9VQfxUGrM/0JcnwvyL6Ocgc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR03MB5082
-X-Proofpoint-ORIG-GUID: 7s947X3vUtoSYdSGBfpoVuXh3l7EcEH4
-X-Proofpoint-GUID: 7s947X3vUtoSYdSGBfpoVuXh3l7EcEH4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-31_04,2023-10-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 clxscore=1015 malwarescore=0 mlxscore=0 bulkscore=0
- phishscore=0 spamscore=0 mlxlogscore=999 impostorscore=0 suspectscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2310240000 definitions=main-2310310141
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/2] hwmon: pmbus: Add ltc4286 driver
+Content-Language: en-US
+To:     Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>, patrick@stwcx.xyz,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20231031072124.201181-1-Delphine_CC_Chiu@Wiwynn.com>
+ <20231031072124.201181-3-Delphine_CC_Chiu@Wiwynn.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20231031072124.201181-3-Delphine_CC_Chiu@Wiwynn.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-PiBPbiAxMC8zMS8yMyAwODozMCwgQW50b25pdSBNaWNsYXVzIHdyb3RlOg0KPiA+IFJUQyBkcml2
-ZXIgZm9yIE1BWDMxMzM1IMKxMnBwbSBBdXRvbW90aXZlIFJlYWwtVGltZSBDbG9jayB3aXRoDQo+
-ID4gSW50ZWdyYXRlZCBNRU1TIFJlc29uYXRvci4NCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IEFu
-dG9uaXUgTWljbGF1cyA8YW50b25pdS5taWNsYXVzQGFuYWxvZy5jb20+DQo+ID4gLS0tDQo+ID4g
-Y2hhbmdlcyBpbiB2MzoNCj4gPiAgIC0gZHJvcCBNQVgzMTMzNV9TVEFUVVMxIHJlZ2lzdGVyIGNo
-ZWNrIGluc2lkZSBwcm9iZSBmdW5jdGlvbi4NCj4gPiAgIGRyaXZlcnMvcnRjL0tjb25maWcgICAg
-ICAgIHwgIDExICsNCj4gPiAgIGRyaXZlcnMvcnRjL01ha2VmaWxlICAgICAgIHwgICAxICsNCj4g
-PiAgIGRyaXZlcnMvcnRjL3J0Yy1tYXgzMTMzNS5jIHwgNzY1DQo+ICsrKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKysrKysNCj4gPiAgIDMgZmlsZXMgY2hhbmdlZCwgNzc3IGluc2VydGlv
-bnMoKykNCj4gPiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL3J0Yy9ydGMtbWF4MzEzMzUu
-Yw0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvcnRjL0tjb25maWcgYi9kcml2ZXJzL3J0
-Yy9LY29uZmlnDQo+ID4gaW5kZXggZDc1MDI0MzNjNzhhLi4xMWM3ZDdmZTFlODUgMTAwNjQ0DQo+
-ID4gLS0tIGEvZHJpdmVycy9ydGMvS2NvbmZpZw0KPiA+ICsrKyBiL2RyaXZlcnMvcnRjL0tjb25m
-aWcNCj4gPiBAQCAtMzczLDYgKzM3MywxNyBAQCBjb25maWcgUlRDX0RSVl9NQVg4OTk3DQo+ID4g
-ICAJICBUaGlzIGRyaXZlciBjYW4gYWxzbyBiZSBidWlsdCBhcyBhIG1vZHVsZS4gSWYgc28sIHRo
-ZSBtb2R1bGUNCj4gPiAgIAkgIHdpbGwgYmUgY2FsbGVkIHJ0Yy1tYXg4OTk3Lg0KPiA+DQo+ID4g
-K2NvbmZpZyBSVENfRFJWX01BWDMxMzM1DQo+ID4gKwl0cmlzdGF0ZSAiQW5hbG9nIERldmljZXMg
-TUFYMzEzMzUiDQo+ID4gKwlkZXBlbmRzIG9uIEkyQw0KPiA+ICsJc2VsZWN0IFJFR01BUF9JMkMN
-Cj4gPiArCWhlbHANCj4gPiArCSAgSWYgeW91IHNheSB5ZXMgaGVyZSB5b3UgZ2V0IHN1cHBvcnQg
-Zm9yIHRoZSBBbmFsb2cgRGV2aWNlcw0KPiA+ICsJICBNQVgzMTMzNS4NCj4gPiArDQo+ID4gKwkg
-IFRoaXMgZHJpdmVyIGNhbiBhbHNvIGJlIGJ1aWx0IGFzIGEgbW9kdWxlLiBJZiBzbywgdGhlIG1v
-ZHVsZQ0KPiA+ICsJICB3aWxsIGJlIGNhbGxlZCBydGMtbWF4MzEzMzUuDQo+ID4gKw0KPiANCj4g
-SnVzdCBvdXQgb2YgY3VyaW9zaXR5LCBpcyB0aGlzIGFuIHVucmVsZWFzZWQgY2hpcCA/IEkgb25s
-eSBmaW5kDQo+IE1BWDMxMTMzMSBhbmQgTUFYMzEzMzQgb24gdGhlIEFuYWxvZyB3ZWJzaXRlLCBi
-dXQgdGhlIHJlZ2lzdGVyDQo+IG1hcCBmb3IgdGhvc2UgaXMgZGlmZmVyZW50LCBhbmQgdGhleSBk
-b24ndCBzdXBwb3J0IHJlcG9ydGluZw0KPiB0aGUgY2hpcCB0ZW1wZXJhdHVyZS4NCj4gDQo+IFsg
-Li4uIF0NCj4gDQo+ID4gKw0KPiA+ICtzdGF0aWMgY29uc3Qgc3RydWN0IGh3bW9uX2NoYW5uZWxf
-aW5mbyAqbWF4MzEzMzVfaW5mb1tdID0gew0KPiA+ICsJSFdNT05fQ0hBTk5FTF9JTkZPKHRlbXAs
-IEhXTU9OX1RfSU5QVVQpLA0KPiANCj4gQWNjb3JkaW5nIHRvIHRoZSByZWdpc3RlciBtYXAgYWJv
-dmUsIHRoZSBjaGlwIGRvZXMgc3VwcG9ydA0KPiBsb3cgYW5kIGhpZ2ggdGVtcGVyYXR1cmUgbGlt
-aXRzIGFzIHdlbGwgYXMgb3Zlci0gYW5kIHVuZGVydGVtcGVyYXR1cmUNCj4gYWxhcm1zIGFuZCBp
-bnRlcnJ1cHRzLiBJIHdvdWxkIHN1Z2dlc3QgdG8gYWRkIHN1cHBvcnQgZm9yIGFsbCBvZiB0aG9z
-ZS4NCj4gWW91IG1pZ2h0IGFsc28gY29uc2lkZXIgYWRkaW5nIHN1cHBvcnQgZm9yIHRlbXBlcmF0
-dXJlIGFsYXJtIGludGVycnVwdHMNCj4gYW5kIHJlcG9ydCB0ZW1wZXJhdHVyZSBhbGFybSBldmVu
-dHMgYnkgY2FsbGluZyBod21vbl9ub3RpZnlfZXZlbnQoKQ0KPiBpZiBhIHRoZXJtYWwgZXZlbnQg
-b2NjdXJzLg0KDQpJJ3ZlIHNlbnQgaW4gdGhlIGZpcnN0IHZlcnNpb24gb2YgdGhpcyBwYXRjaCBz
-ZXJpZXMgYSBjb3ZlciBsZXR0ZXI6DQoNCiJBbHRob3VnaCB0aGUgZGF0YXNoZWV0IGlzIG5vdCBw
-dWJsaWMgeWV0LCB0aGUgZHJpdmVyIGNhbiBiZSBtYWRlIHB1YmxpYyAob24NCm90aGVyIGxpbnV4
-IGN1c3RvbSB0cmVlcyBpdCBpcyBhbHJlYWR5KS4NCg0KVGhlIGRyaXZlciB3YXMgdGVzdGVkIHdp
-dGggYWN0dWFsIGhhcmR3YXJlIGFuZCB3b3Jrcy4NCg0KRXZlbiB0aG91Z2ggdGhlIGRhdGFzaGVl
-dCBpcyBub3QgYXZhaWxhYmxlLCBpZiB0aGVyZSBhcmUgYW55IHF1ZXJpZXMgYWJvdXQNCnRoZSBm
-dW5jdGlvbmFsaXR5IG9mIHRoZSBwYXJ0LCB0aGVzZSBjYW4gYmUgcHJvdmlkZWQvaW5zZXJ0ZWQg
-YXMgY29kZSBjb21tZW50cw0KaW5zaWRlIHRoZSBkcml2ZXIuIg0KDQpUaGUgcmVhc29uIHdoeSBJ
-IGFtIHJ1c2hpbmcgdGhpcyBhIGJpdCBpcyBiZWNhdXNlIHRoZSBjdXN0b21lciB0aGF0IHVzZXMg
-dGhlDQpkcml2ZXIgd2FudHMgdGhlIGRyaXZlciByZWxlYXNlZCBhbmQgbWFpbmxpbmUga2VybmVs
-IGNvbXBsaWFudC4NCg0KVGhpcyBpcyBhbiBpbml0aWFsIHZlcnNpb24gb2YgdGhlIGRyaXZlciBj
-b3ZlcmluZyB0aGUgbWFpbiB1c2UgY2FzZXMgKHdoaWNoIHdlcmUNCnJlcXVlc3RlZCwgdGhlcmVm
-b3JlIGFjdHVhbGx5IHVzZWQpLg0KDQpBZGRpdGlvbmFsIGZlYXR1cmVzIGNhbiBiZSBhZGRlZCBh
-ZnRlcndhcmRzLCBpZiByZXF1ZXN0ZWQuDQoNCj4gDQo+ID4gKw0KPiA+ICsJaHdtb24gPSBkZXZt
-X2h3bW9uX2RldmljZV9yZWdpc3Rlcl93aXRoX2luZm8oJmNsaWVudC0+ZGV2LA0KPiBjbGllbnQt
-Pm5hbWUsDQo+ID4gKwkJCQkJCSAgICAgbWF4MzEzMzUsDQo+ID4gKwkJCQkJCSAgICAgJm1heDMx
-MzM1X2NoaXBfaW5mbywNCj4gPiArCQkJCQkJICAgICBOVUxMKTsNCj4gDQo+IFRoZXJlIGlzIG5v
-ICJkZXBlbmRzIG9uIEhXTU9OIiBpbiB0aGUgS2NvbmZpZyBlbnRyeSwgbWVhbmluZyB0aGlzIHdp
-bGwgZmFpbA0KPiB0byBjb21waWxlIGlmIEhXTU9OPW4gb3IgaWYgSFdNT049bSBhbmQgUlRDX0RS
-Vl9NQVgzMTMzNT15Lg0KPg0KDQpXaWxsIGRvIGluIHY0Lg0KDQo+IEd1ZW50ZXINCg==
+On 10/31/23 00:21, Delphine CC Chiu wrote:
+> Add a driver to support ltc4286 chip
+> 
+> Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+> 
+> Changelog:
+>    v3 - Use dev_err_probe() instead of dev_err()
+>       - The VRANGE_SELECT bit only be written if it actually changed
+>       - Avoid the info pointer being overwritten
+>       - Check the MBR value range to avoid overflow
+>       - Revise ltc4286.rst to corrcet description
+>    v2 - Revise Linear Technologies LTC4286 to
+>         Analog Devices LTC4286 in Kconfig
+>       - Add more description for this driver in Kconfig
+>       - Add some comments for MBR setting in ltc4286.c
+>       - Add ltc4286.rst
+> ---
+>   Documentation/hwmon/ltc4286.rst |  95 +++++++++++++++++
+
+Needs to be added to Documentation/hwmon/index.rst
+
+>   drivers/hwmon/pmbus/Kconfig     |   9 ++
+>   drivers/hwmon/pmbus/Makefile    |   1 +
+>   drivers/hwmon/pmbus/ltc4286.c   | 178 ++++++++++++++++++++++++++++++++
+>   4 files changed, 283 insertions(+)
+>   create mode 100644 Documentation/hwmon/ltc4286.rst
+>   create mode 100644 drivers/hwmon/pmbus/ltc4286.c
+> 
+> diff --git a/Documentation/hwmon/ltc4286.rst b/Documentation/hwmon/ltc4286.rst
+> new file mode 100644
+> index 000000000000..2cd149676d86
+> --- /dev/null
+> +++ b/Documentation/hwmon/ltc4286.rst
+> @@ -0,0 +1,95 @@
+> +.. SPDX-License-Identifier: GPL-2.0-or-later
+> +
+> +Kernel driver ltc4286
+> +=====================
+> +
+> +Supported chips:
+> +
+> +  * Analog Devices LTC4286
+> +
+> +    Prefix: 'ltc4286'
+> +
+> +    Addresses scanned: -
+> +
+> +    Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ltc4286.pdf
+> +
+> +  * Analog Devices LTC4287
+> +
+> +    Prefix: 'ltc4287'
+> +
+> +    Addresses scanned: -
+> +
+> +    Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ltc4287.pdf
+> +
+> +Author: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+> +
+> +
+> +Description
+> +-----------
+> +
+> +This driver supports hardware monitoring for Analog Devices LTC4286
+> +and LTC4287 Hot-Swap Controller and Digital Power Monitors.
+> +
+> +LTC4286 and LTC4287 are hot-swap controllers that allow a circuit board
+> +to be removed from or inserted into a live backplane. They also feature
+> +current and voltage readback via an integrated 12 bit analog-to-digital
+> +converter (ADC), accessed using a PMBus interface.
+> +
+> +The driver is a client driver to the core PMBus driver. Please see
+> +Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
+> +
+> +
+> +Usage Notes
+> +-----------
+> +
+> +This driver does not auto-detect devices. You will have to instantiate the
+> +devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
+> +details.
+> +
+> +The shunt value in micro-ohms can be set via device tree at compile-time. Please
+> +refer to the Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml for bindings
+> +if the device tree is used.
+> +
+> +
+> +Platform data support
+> +---------------------
+> +
+> +The driver supports standard PMBus driver platform data. Please see
+> +Documentation/hwmon/pmbus.rst for details.
+> +
+> +
+> +Sysfs entries
+> +-------------
+> +
+> +The following attributes are supported. Limits are read-write, history reset
+> +attributes are write-only, all other attributes are read-only.
+> +
+> +======================= =======================================================
+> +in1_label		"vin"
+> +in1_input		Measured voltage.
+> +in1_alarm		Input voltage alarm.
+> +in1_min 		Minimum input voltage.
+> +in1_max 		Maximum input voltage.
+> +
+> +in2_label		"vout1"
+> +in2_input		Measured voltage.
+> +in2_alarm		Output voltage alarm.
+> +in2_min 		Minimum output voltage.
+> +in2_max 		Maximum output voltage.
+> +
+> +curr1_label		"iout1"
+> +curr1_input		Measured current.
+> +curr1_alarm		Output current alarm.
+> +curr1_max		Maximum current.
+> +
+> +power1_label		"pin"
+> +power1_input		Input power.
+> +power1_alarm		Input power alarm.
+> +power1_max		Maximum poewr.
+> +
+> +temp1_input		Chip temperature.
+> +temp1_min		Minimum chip temperature.
+> +temp1_max		Maximum chip temperature.
+> +temp1_crit		Critical chip temperature.
+> +temp1_alarm		Chip temperature alarm.
+> +======================= =======================================================
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index b4e93bd5835e..f2b53e8abc3c 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -226,6 +226,15 @@ config SENSORS_LTC3815
+>   
+>   	  This driver can also be built as a module. If so, the module will
+>   	  be called ltc3815.
+
+Add empty line
+
+> +config SENSORS_LTC4286
+> +	bool "Analog Devices LTC4286"
+> +	help
+> +	  LTC4286 is an integrated solution for hot swap applications that
+> +	  allows a board to be safely inserted and removed from a live
+> +	  backplane.
+> +	  This chip could be used to monitor voltage, current, ...etc.
+> +	  If you say yes here you get hardware monitoring support for Analog
+> +	  Devices LTC4286.
+>   
+>   config SENSORS_MAX15301
+>   	tristate "Maxim MAX15301"
+> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> index 84ee960a6c2d..94e28f6d6a61 100644
+> --- a/drivers/hwmon/pmbus/Makefile
+> +++ b/drivers/hwmon/pmbus/Makefile
+> @@ -24,6 +24,7 @@ obj-$(CONFIG_SENSORS_LM25066)	+= lm25066.o
+>   obj-$(CONFIG_SENSORS_LT7182S)	+= lt7182s.o
+>   obj-$(CONFIG_SENSORS_LTC2978)	+= ltc2978.o
+>   obj-$(CONFIG_SENSORS_LTC3815)	+= ltc3815.o
+> +obj-$(CONFIG_SENSORS_LTC4286)	+= ltc4286.o
+>   obj-$(CONFIG_SENSORS_MAX15301)	+= max15301.o
+>   obj-$(CONFIG_SENSORS_MAX16064)	+= max16064.o
+>   obj-$(CONFIG_SENSORS_MAX16601)	+= max16601.o
+> diff --git a/drivers/hwmon/pmbus/ltc4286.c b/drivers/hwmon/pmbus/ltc4286.c
+> new file mode 100644
+> index 000000000000..042d3af99489
+> --- /dev/null
+> +++ b/drivers/hwmon/pmbus/ltc4286.c
+> @@ -0,0 +1,178 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +
+> +#include <linux/err.h>
+> +#include <linux/i2c.h>
+> +#include <linux/init.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/pmbus.h>
+> +#include "pmbus.h"
+> +
+> +/* LTC4286 register */
+> +#define LTC4286_MFR_CONFIG1	0xF2
+> +
+> +/* LTC4286 configuration */
+> +#define VRANGE_SELECT_BIT	BIT(1)
+> +
+> +#define LTC4286_MFR_ID_SIZE	3
+> +#define VRANGE_25P6		0
+> +
+> +enum chips { ltc4286, ltc4287 };
+
+Not really used anywhere and can be dropped.
+
+> +
+> +/*
+> + * Initialize the MBR as default settings which is referred to LTC4286 datasheet
+> + * (March 22, 2022 version) table 3 page 16
+> + */
+> +static struct pmbus_driver_info ltc4286_info = {
+> +	.pages = 1,
+> +	.format[PSC_VOLTAGE_IN] = direct,
+> +	.format[PSC_VOLTAGE_OUT] = direct,
+> +	.format[PSC_CURRENT_OUT] = direct,
+> +	.format[PSC_POWER] = direct,
+> +	.format[PSC_TEMPERATURE] = direct,
+> +	.m[PSC_VOLTAGE_IN] = 32,
+> +	.b[PSC_VOLTAGE_IN] = 0,
+> +	.R[PSC_VOLTAGE_IN] = 1,
+> +	.m[PSC_VOLTAGE_OUT] = 32,
+> +	.b[PSC_VOLTAGE_OUT] = 0,
+> +	.R[PSC_VOLTAGE_OUT] = 1,
+> +	.m[PSC_CURRENT_OUT] = 1024,
+> +	.b[PSC_CURRENT_OUT] = 0,
+> +	/*
+> +	 * The rsense value used in MBR formula in LTC4286 datasheet should be ohm unit.
+> +	 * However, the rsense value that user input is mirco ohm.
+
+micro
+
+> +	 * Thus, the MBR setting which involves rsense should be shifted by 6 digits.
+> +	 */
+> +	.R[PSC_CURRENT_OUT] = 3 - 6,
+> +	.m[PSC_POWER] = 1,
+> +	.b[PSC_POWER] = 0,
+> +	/*
+> +	 * The rsense value used in MBR formula in LTC4286 datasheet should be ohm unit.
+> +	 * However, the rsense value that user input is mirco ohm.
+
+micro
+
+> +	 * Thus, the MBR setting which involves rsense should be shifted by 6 digits.
+> +	 */
+> +	.R[PSC_POWER] = 4 - 6,
+> +	.m[PSC_TEMPERATURE] = 1,
+> +	.b[PSC_TEMPERATURE] = 273,
+> +	.R[PSC_TEMPERATURE] = 0,
+> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
+> +		   PMBUS_HAVE_PIN | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_VOUT |
+> +		   PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_TEMP,
+> +};
+> +
+> +static const struct i2c_device_id ltc4286_id[] = { { "ltc4286", ltc4286 },
+> +						   { "ltc4287", ltc4287 },
+> +						   {} };
+> +MODULE_DEVICE_TABLE(i2c, ltc4286_id);
+> +
+> +static int ltc4286_probe(struct i2c_client *client)
+> +{
+> +	int ret;
+> +	const struct i2c_device_id *mid;
+> +	u8 block_buffer[I2C_SMBUS_BLOCK_MAX + 1];
+> +	struct pmbus_driver_info *info;
+> +	u32 rsense;
+> +
+> +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, block_buffer);
+> +	if (ret < 0) {
+> +		return dev_err_probe(&client->dev, ret,
+> +				     "Failed to read manufacturer id\n");
+> +	}
+> +
+> +	/*
+> +	 * Refer to ltc4286 datasheet page 20
+> +	 * the manufacturer id is LTC
+> +	 */
+> +	if (ret != LTC4286_MFR_ID_SIZE ||
+> +	    strncmp(block_buffer, "LTC", LTC4286_MFR_ID_SIZE)) {
+> +		return dev_err_probe(&client->dev, ret,
+> +				     "Manufacturer id mismatch\n");
+> +	}
+> +
+> +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, block_buffer);
+> +	if (ret < 0) {
+> +		return dev_err_probe(&client->dev, ret,
+> +				     "Failed to read manufacturer model\n");
+> +	}
+> +
+> +	for (mid = ltc4286_id; mid->name[0]; mid++) {
+> +		if (!strncasecmp(mid->name, block_buffer, strlen(mid->name)))
+> +			break;
+> +	}
+> +	if (!mid->name[0])
+> +		return dev_err_probe(&client->dev, -ENODEV,
+> +				     "Unsupported device\n");
+> +
+> +	ret = of_property_read_u32(client->dev.of_node,
+> +				   "shunt-resistor-micro-ohms", &rsense);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (rsense == 0)
+> +		return -EINVAL;
+> +
+> +	info = devm_kzalloc(&client->dev, sizeof(*info), GFP_KERNEL);
+> +	if (!info)
+> +		return -ENOMEM;
+> +	memcpy(info, &ltc4286_info, sizeof(*info));
+
+devm_kmemdup()
+
+> +
+> +	/* Default of VRANGE_SELECT = 1, 102.4V */
+> +	if (device_property_read_bool(&client->dev, "adi,vrange-low-enable")) {
+> +		/* Setup MFR1 CONFIG register bit 1 VRANGE_SELECT */
+> +		ret = i2c_smbus_read_word_data(client, LTC4286_MFR_CONFIG1);
+> +		if (ret < 0) {
+> +			return dev_err_probe(
+> +				&client->dev, ret,
+> +				"Failed to read manufacturer configuration one\n");
+> +		}
+> +
+> +		if ((ret & VRANGE_SELECT_BIT) != VRANGE_25P6) {
+> +			ret &= ~VRANGE_SELECT_BIT; /* VRANGE_SELECT = 0, 25.6V */
+> +			ret = i2c_smbus_write_word_data(
+> +				client, LTC4286_MFR_CONFIG1, ret);
+> +			if (ret < 0)
+> +				return dev_err_probe(&client->dev, ret,
+> +						     "Failed to set vrange\n");
+> +		}
+> +
+> +		info->m[PSC_VOLTAGE_IN] = 128;
+> +		info->m[PSC_VOLTAGE_OUT] = 128;
+> +		info->m[PSC_POWER] = 4 * rsense;
+> +		if (info->m[PSC_POWER] > INT_MAX)
+
+This is too late. See below.
+
+> +			return dev_err_probe(&client->dev, -ERANGE,
+> +					     "Power coefficient overflow\n");
+> +	} else {
+> +		info->m[PSC_POWER] = rsense;
+> +		if (info->m[PSC_POWER] > INT_MAX)
+> +			return dev_err_probe(&client->dev, -ERANGE,
+> +					     "Power coefficient overflow\n");
+
+This still needs to be written into the chip. There is no guarantee that
+the chip is in its default configuration when the driver is loaded.
+
+> +	}
+> +
+> +	info->m[PSC_CURRENT_OUT] = 1024 * rsense;
+> +	if (info->m[PSC_CURRENT_OUT] > INT_MAX)
+
+This is too late. If rsense == INT_MAX, for example, 1024 * rsense
+will be some negative number.
+
+> +		return dev_err_probe(&client->dev, -ERANGE,
+> +				     "Current coefficient overflow\n");
+> +
+> +	return pmbus_do_probe(client, info);
+> +}
+> +
+> +static const struct of_device_id ltc4286_of_match[] = {
+> +	{ .compatible = "lltc,ltc4286" },
+> +	{ .compatible = "lltc,ltc4287" },
+> +	{}
+> +};
+> +
+> +static struct i2c_driver ltc4286_driver = {
+> +	.driver = {
+> +		.name = "ltc4286",
+> +		.of_match_table = ltc4286_of_match,
+> +	},
+> +	.probe = ltc4286_probe,
+> +	.id_table = ltc4286_id,
+> +};
+> +
+> +module_i2c_driver(ltc4286_driver);
+> +
+> +MODULE_AUTHOR("Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>");
+> +MODULE_DESCRIPTION("PMBUS driver for LTC4286 and compatibles");
+> +MODULE_LICENSE("GPL");
+
