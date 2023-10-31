@@ -2,123 +2,154 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EAC31C4167D
-	for <linux-hwmon@archiver.kernel.org>; Tue, 31 Oct 2023 14:05:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9100BC4332F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 31 Oct 2023 14:15:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjJaOFo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 31 Oct 2023 10:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41420 "EHLO
+        id S235293AbjJaOPD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 31 Oct 2023 10:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236290AbjJaOFd (ORCPT
+        with ESMTP id S235317AbjJaOO6 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 31 Oct 2023 10:05:33 -0400
-X-Greylist: delayed 302 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 31 Oct 2023 07:05:29 PDT
-Received: from rs227.mailgun.us (rs227.mailgun.us [209.61.151.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1F310B
-        for <linux-hwmon@vger.kernel.org>; Tue, 31 Oct 2023 07:05:29 -0700 (PDT)
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=equiv.tech; q=dns/txt;
- s=mx; t=1698761127; x=1698768327; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Subject: Cc: To: To: From: From: Date:
- Sender: Sender; bh=+1gn/IUWoHGcPjndPkMsv0KKO+2s33RhJw8LVCk/5Sc=;
- b=MAhVAG2xt5EanTkGZnwqb3uIckhVUVojWxXw9iqvHUmK0okU/gdpiTK0F6jtOl0mev8z4I1G50sEwEmE64bK+wBI8z5k13jpsNPkg/9bnJ4rkbaQiTE8iHN3aJ4os2oHIiUxdnGJ4JgYP3XIsDzh0jf916K1v9Bkbpu39talXA8jBMNel2nLK68UItwWpUPi3uGGYWNgZSpScLO7NxiI6ckfZkdMZkTwlSaR5u4FTtbyG0FXkAE267gWTXhapNil6+nVW3Qa9DcYjOkfaiqE49WHPUxFpXvtIiOORgF57ElvHUpbsjfFwza1R7sOZWxW15evA6GW5wTQ/8FDExCCCw==
-X-Mailgun-Sending-Ip: 209.61.151.227
-X-Mailgun-Sid: WyJkOWUwNSIsImxpbnV4LWh3bW9uQHZnZXIua2VybmVsLm9yZyIsIjkzZDVhYiJd
-Received: from mail.equiv.tech (equiv.tech [142.93.28.83]) by 4f51a5dd470e with SMTP id
- 6541087288eacfcb84bd7327 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 31 Oct 2023 14:00:18 GMT
-Sender: james@equiv.tech
-Date:   Tue, 31 Oct 2023 07:00:16 -0700
-From:   James Seo <james@equiv.tech>
-To:     Lukasz Stelmach <l.stelmach@samsung.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>, Armin Wolf <W_Armin@gmx.de>,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [BUG] hp-wmi-sensors: probe of
- 8F1F6435-9F42-42C8-BADC-0E9424F20C9A failed with error -22
-Message-ID: <ZUEIcOBpVzxC/+c1@equiv.tech>
-References: <ZT1U/zE6cApQKC2h@equiv.tech>
- <CGME20231031102014eucas1p2f377b89cd0381231b5c7f321e2902fe8@eucas1p2.samsung.com>
- <oypijd5y2nf60f.fsf%l.stelmach@samsung.com>
+        Tue, 31 Oct 2023 10:14:58 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB5AED;
+        Tue, 31 Oct 2023 07:14:56 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-5ac865d1358so4233442a12.3;
+        Tue, 31 Oct 2023 07:14:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698761696; x=1699366496; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=kRNwzlQyH+VlpdFxfnUe4Y/Tf26qonfvNmh3DCH6lvA=;
+        b=JCrdSmmlOjER7c2+TICqjTaf/jMkGVujW4+TfVJaiYdRfq4KFCtcMvAX26sKbWJ8Yl
+         J1/d2blR/gDf1/LM8PLUAZEQKLqtTsSNakVH4Z5KkrSCW+1c5kTrKx0tb/tQ/Nm0FevM
+         MjtQVLUlHeMkYVUW0c7GjMw5U4XxGsJahh7e10PlAplWmNpaFSnYM11VK+7d19sQ4Gr+
+         N5uU0sUfdXf03EIWfrXlsi3xZf7sja47o8O7+ppofhu4q7U71vNNiKisurmSIu6lOSnL
+         AfRPvzO15rtl+YP8mvPI2WVJOf+2jNvLkyyfD1AvB08ZQMhXfaLiR/ZQ3N/qPY1hLHty
+         8oSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698761696; x=1699366496;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kRNwzlQyH+VlpdFxfnUe4Y/Tf26qonfvNmh3DCH6lvA=;
+        b=GnLxwXiCFDCPFQkXLCXZO87WvIGOsdDhkLBLJbADu5JwItvrN7aOTXtN2XgYelglwx
+         kAyRo1QjorT4Az5SFRVfddNf95kbX3FbcukSAXYr7aNKdz72si/tQ5SW0YPUluIItFVl
+         4MOd1BQVpfRiz3hcV+5LCvAJdfKOlxY3GaXLXdhoLPdynq8Wpq0GJiNgo+kzN47lzYod
+         NS+FG0tEyWI/bAwdj1b/xb7csvnv9Nq7li9ey4y8kvXBqbnnXlc5MkXyb93fJjdlddup
+         dKFuYxZ8LCwNU72ud4sgS9tsCw1tirwtFX0piLF7XbZgv0QpNWt8Bbyev8m5MZjiHzBX
+         yh0Q==
+X-Gm-Message-State: AOJu0Yx+R90fjfgHpvfPlUp8BvKfACTTHI7oiMxl8cwycL2COhBqwr+i
+        1LnxZQXY0dMllgNEOsiFQvo=
+X-Google-Smtp-Source: AGHT+IHy9Jj/Ww6f5TztL4zM9r3f+RpZejaBc/tHMpRDznCvumjJsGKs+jo2tnC2WQLeoa8SG2Anog==
+X-Received: by 2002:a17:90a:94ca:b0:280:1695:7b5 with SMTP id j10-20020a17090a94ca00b00280169507b5mr8318468pjw.12.1698761695920;
+        Tue, 31 Oct 2023 07:14:55 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b16-20020a17090ae39000b0026b12768e46sm1160685pjz.42.2023.10.31.07.14.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Oct 2023 07:14:55 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <708e84f3-01ac-455e-9b66-2f0e2be1a874@roeck-us.net>
+Date:   Tue, 31 Oct 2023 07:14:54 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <oypijd5y2nf60f.fsf%l.stelmach@samsung.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add lltc ltc4286 driver
+ bindings
+Content-Language: en-US
+To:     Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>,
+        Conor Dooley <conor@kernel.org>
+Cc:     "patrick@stwcx.xyz" <patrick@stwcx.xyz>,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+References: <20231026081514.3610343-1-Delphine_CC_Chiu@Wiwynn.com>
+ <20231026081514.3610343-2-Delphine_CC_Chiu@Wiwynn.com>
+ <20231026-dicing-crispy-a10af575d3e5@spud>
+ <fffa4330-8d01-8498-4c5f-772ebf2a6b5a@roeck-us.net>
+ <20231026-poison-encrypt-1df55e023867@spud>
+ <c734e26a-6fad-bc23-ec58-10c6a440ec83@roeck-us.net>
+ <SG2PR04MB55438AA9A2989F406012A4D4A1A0A@SG2PR04MB5543.apcprd04.prod.outlook.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <SG2PR04MB55438AA9A2989F406012A4D4A1A0A@SG2PR04MB5543.apcprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Oct 31, 2023 at 11:20:00AM +0100, Lukasz Stelmach wrote:
-> I am attaching dsdt.dat. It is the only file that contains the
-> "HPBIOS_BIOSEvent" string and the above UUID.
+On 10/30/23 23:25, Delphine_CC_Chiu/WYHQ/Wiwynn wrote:
+[ ... ]
+>>
+>> Actually, turns out there is some contradiction in the LTC4286 datasheet.
+>> It mentions different coefficients in different places. It is all but impossible to
+>> determine if the datasheet is wrong or if the chip uses a variety of coefficients
+>> unless one has a real chip available. Sigh :-(.
+> We are not the chip vendor, but we could forward your question to vendor.
+> Could you point out the exact places (which pages) where are the contradiction in LTC4286 datasheet?
+> 
 
-OK, I think I've figured it out.
+See "PMBUS COMMAND SUMMARY", default values:
 
-Earlier, I focused on "probe of 8F1F6435-9F42-42C8-BADC-0E9424F20C9A failed"
-(the GUID of HPBIOS_BIOSNumericSensor), and missed it when you said the failure
-is happening when check_wobj() is called from check_platform_events_wobj().
-So the issue is actually with HPBIOS_PlatformEvents.Name, since any instances
-of that WMI object are examined during driver init as well.
+"IOUT_OC_WARN_LIMIT" says "21.3 mV/RSENSE"
 
-After using iasl to decompile the DSDT you sent to ACPI Source Language (ASL),
-everything looks fine with HPBIOS_BIOSNumericSensor. Not that I'm particularly
-familiar with ASL, but search for "Name (SEN1, Package (0x06)" and read on to
-the "Method (_INI, 0, NotSerialized)" and the "Method (WQAE, 1, Serialized)"
-lines below. It certainly looks like that's how the BIOS on that system is
-generating HPBIOS_PlatformEvents instances at runtime.
+"PIN_OP_WARN_LIMIT" says "2.8/RSENSE"
 
-For HPBIOS_PlatformEvents instances, that BIOS seems to generate them in two
-places. The driver is interested in those from "Method (WQBC, 1, Serialized)",
-which rely on the section above that beginning at "Name (EVNT, Package (0x0D)".
-There are also some generated in "Method (WQPE, 1, Serialized)", relying on:
+This seems to contradict "Table 8. PMBus M, B, and R Parameters". But then,
+reading it again (and again), I think it is just an odd and confusing way
+of trying to describe the 0x7fff default register values. Sorry for the noise.
 
-        Name (CBWE, Package (0x02)
-        {
-            Package (0x05)
-            {
-                Unicode ("4BIOS Configuration Change"), // Oops.
-                "BIOS Settings", 
-                0x04, 
-                0x05, 
-                0x02
-            }, 
+Guenter
 
-            Package (0x05)
-            {
-                "BIOS Configuration Security", 
-                "An attempt has been made to Access BIOS features unsuccessfully", 
-                0x04, 
-                0x0A, 
-                0x06
-            }
-        })
-
-So yes, Armin was right, UTF-16 is the culprit. And it's only for this one
-instance of HPBIOS_PlatformEvents on this one system's BIOS.
-
-Can you find the wonky object instance in the debugfs interface? I imagine
-its name shows up as either "4" or an empty string, depending on the UTF-16
-byte order.
-
-I'm also curious how it looks in Windows (I used WMI Explorer [1] during
-development). The WMI namespace should be "\\.\root\HP\InstrumentedBIOS".
-
-> The readings of hp_wmi_sensors-virtual-0 look sensible and they change
-> reasonably under load.
-
-Good. I guess that part working wasn't so surprising after all :)
-
-Regarding how we proceed from here, I think the main question is whether a
-workaround should be limited to only specific machines (maybe detected using
-DMI data), and if so, to specific WMI object types and instances (cf.
-hp_wmi_get_wobj(), though limiting on instance number would be fragile if
-BIOS updates change instance numbering). Other questions are how thoroughly
-to validate UTF-16 in a buffer and whether to convert to UTF-8 internally.
-
-For what it's worth, I personally don't see much value in doing much more than
-a machine-limited workaround for now. To me it's clear that this UTF-16 corner
-case is a BIOS bug and its consequences are minimal once a workaround is in
-place.
-
-Thoughts? Also, if you'd prefer to let me handle it, I'd be glad to write a
-patch myself.
-
-[1] https://github.com/vinaypamnani/wmie2
