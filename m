@@ -2,148 +2,63 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F2C1C4332F
-	for <linux-hwmon@archiver.kernel.org>; Wed,  1 Nov 2023 02:27:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF112C4332F
+	for <linux-hwmon@archiver.kernel.org>; Wed,  1 Nov 2023 03:50:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232730AbjKAC1W (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 31 Oct 2023 22:27:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57420 "EHLO
+        id S233259AbjKADuO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 31 Oct 2023 23:50:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232367AbjKAC1V (ORCPT
+        with ESMTP id S231164AbjKADuK (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 31 Oct 2023 22:27:21 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C50A8F4;
-        Tue, 31 Oct 2023 19:27:11 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 0CF695C012D;
-        Tue, 31 Oct 2023 22:27:11 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Tue, 31 Oct 2023 22:27:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwcx.xyz; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1698805631; x=1698892031; bh=nX
-        qzmyDRymWSWIB/FPPzvbqvNMGKNPwkFJcqUXs4xgE=; b=G7/7rSr6QXQxRX5S5l
-        oSgh/UaX4New7qGsYERQ6Us5tc2ay2LLzNUIKeo8Brp8Tv4lmnoqU9VoIG/Hi9vy
-        UCM3C7IC2Zj4ClY5a5SN1ARKvQt/0iaG2uy9nFvHXo5L9l15rXAnmVaAYRO1N1+N
-        cRMLynLaUhj2YPnD8wy2tEQ+p8nSsNbPcXQ/kkWn/e//hl7fJ2D10b0PjKcsdQ+Z
-        mXI5GNrKrNA+EjPfXL4Q3deKN5cVpEq5ec9N+aFNmodWXvyA8Z/967cnVxbxo2PV
-        FX4tAQwcspEW2BlWz+7kJV8eg8uynZwhprjJNAl1/0x5SXfUJdYnt6wOU6E6Y6hF
-        CiZg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1698805631; x=1698892031; bh=nXqzmyDRymWSW
-        IB/FPPzvbqvNMGKNPwkFJcqUXs4xgE=; b=A9dxdxPi1J8/696P57XgFuyBSRx8Z
-        b2WRBjiprfcZLhe4cIa7jJYfdewkB9iIeCjMlHLdUAcjUIFc1vTClBh6j5g+vEwr
-        7i5dpZgRqOLptAWqyOQnUDQXGKYXSebfoSNeMR08tRWBSFp1Y5nXUZOTlXjtMhvi
-        q0qaS1NUmpCro10P7pzagu2Jh9r7Lb+HlUm/qqUpkTCi9ZdRF1FxxemrYds13x5y
-        xErfC70TeVRQtd53OZjFbHIEPihB8l94oEWt5qkLZx3wzqqBeyny6IomADRnyoJN
-        sVL2AqsJgKbj7JYCUSKh5/0b8Op3N66sN/6vzrhPADnKJ5bVee/QlX+wg==
-X-ME-Sender: <xms:frdBZRRbh2sfPG2QKnEpSB1oF7NT7TxmcFFdNuk-bHq_hOjpdbArQQ>
-    <xme:frdBZazb2_payjNXtvi_4IuBEqyutsl8IXQBbA1yOpoaJpq4g_y2qJfZqbnlsDR_W
-    HuoI9a8I9G7-RGDgvE>
-X-ME-Received: <xmr:frdBZW1o6fhXB4j-DjF0aHFyOpQ7uJTkoGlNxBQvIYE1zC2fvB3n72Y0hukXgqJYfQZAzlXRMwSvcmKFbAV3x1EJUAfnJeerFiA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedruddtfedggeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdlvdefmdenucfjughrpeffhffvvefukfhfgggtuggjsehgtderredt
-    tddvnecuhfhrohhmpefrrghtrhhitghkucghihhllhhirghmshcuoehprghtrhhitghkse
-    hsthiftgigrdighiiiqeenucggtffrrghtthgvrhhnpeehfeejheeftdejiedvfeekffeh
-    ledukeduleelffekgfdtleduledvtdegtdehkeenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpehprghtrhhitghksehsthiftgigrdighiii
-X-ME-Proxy: <xmx:frdBZZDQkr4x7yfnWhLQldsniK8f6dv90HqyL3_1dHKSIp2GsNsXzg>
-    <xmx:frdBZajx52x416siNQ6PtU7-BJIZi-DL0LrHZ9PuFFd9XdfP18PtgA>
-    <xmx:frdBZdpwpbnRjdsK8IRylboCx7Iv9ewxqZewGOi2etO6-QMjAgJeag>
-    <xmx:f7dBZbtXlUqNh1P1vEKZbG3utTRn0RiGaHh1ELvy0Y-r1xy9uc1wvQ>
-Feedback-ID: i68a1478a:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 31 Oct 2023 22:27:10 -0400 (EDT)
-Date:   Tue, 31 Oct 2023 21:27:08 -0500
-From:   Patrick Williams <patrick@stwcx.xyz>
+        Tue, 31 Oct 2023 23:50:10 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50775C1;
+        Tue, 31 Oct 2023 20:50:08 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EFEE7C433C8;
+        Wed,  1 Nov 2023 03:50:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1698810608;
+        bh=6dzLY2iaVL38rWgbdOCcm8+H0ylE8sYbmlWZ4iLykY0=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=RSycqQWfeiPGcasjpHx4WpKeprcHwpoXqhWGsKSybCwp+fNuIIR9kSCSvitOIsLqc
+         YPzCVY0+AitSDN84kfjfJ47zG+wsVOmh69pqnaRxMJ9qd2wGjm2umME+Npg8ctFm+m
+         nthpmdKTGCjNnIpzPQQNKHCBWObTflw/JDx1c0k74O+sTHDCBqJBV4Tk9pa4bNn0gC
+         E3unjLgBvGiKqmmi9/4thH+ch9eXVflY7oMugEgTCGokGRLHygkhqA6l9DSYqIA3eE
+         76htZXspZxFhliQhSHAbM8qdGy1sLHALT2dwV/ytdlbILZg7SxNutSsa+XMjE6Q8Kt
+         lMI9dwr/RWXoQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CCE1CC39563;
+        Wed,  1 Nov 2023 03:50:07 +0000 (UTC)
+Subject: Re: [GIT PULL] hwmon updates for v6.7
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20231030143340.2251301-1-linux@roeck-us.net>
+References: <20231030143340.2251301-1-linux@roeck-us.net>
+X-PR-Tracked-List-Id: <linux-hwmon.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20231030143340.2251301-1-linux@roeck-us.net>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.7
+X-PR-Tracked-Commit-Id: 0f564130e5c76f1e5cf0008924f6a6cd138929d9
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: f9a7eda4d73d44dc1d17d05cdc9aeb9fc5660740
+Message-Id: <169881060783.15630.10494784992677768377.pr-tracker-bot@kernel.org>
+Date:   Wed, 01 Nov 2023 03:50:07 +0000
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] hwmon: emc1403: Add support for EMC1442
-Message-ID: <ZUG3fOnw8RE7JHsh@heinlein.vulture-banana.ts.net>
-References: <20231031085807.618827-1-Delphine_CC_Chiu@wiwynn.com>
- <7d92d8ae-c247-4a71-a84d-4f9639a43fb8@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="1WgzJp/BygG6uQK0"
-Content-Disposition: inline
-In-Reply-To: <7d92d8ae-c247-4a71-a84d-4f9639a43fb8@roeck-us.net>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+The pull request you sent on Mon, 30 Oct 2023 07:33:40 -0700:
 
---1WgzJp/BygG6uQK0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.7
 
-On Tue, Oct 31, 2023 at 04:01:10PM -0700, Guenter Roeck wrote:
-> On Tue, Oct 31, 2023 at 04:58:06PM +0800, Delphine CC Chiu wrote:
-> > Add support for EMC1442 which is compatible with EMC1403.
-> >=20
->=20
-> Unfortunately, almost no information is available about this chip
-> except that it ships in an 8-pin package. Are you sure the chip
-> supports two external temperature sensors like EMC1403 ?
-> The chip numbering and the number of pins would suggest that
-> it only supports a single external temperature sensor,
-> which would make it compatible to emc1402/emc1422.
->=20
-> Guenter
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/f9a7eda4d73d44dc1d17d05cdc9aeb9fc5660740
 
-The datasheet I've seen says:
+Thank you!
 
->> The EMC1442 monitors two temperature channels (one
->> external and one internal).
-
-Based on this, I agree that emc1403 seems wrong.  The datasheet also
-says:
-
->> Pin compatible with EMC1412
-
->=20
-> > Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
-> > ---
-> >  	{ "emc1422", emc1402 },
-> >  	{ "emc1423", emc1403 },
-> >  	{ "emc1424", emc1404 },
-> > +	{ "emc1442", emc1403 },
-
-So, emc1402?
-
-> >  	{ }
-
---=20
-Patrick Williams
-
---1WgzJp/BygG6uQK0
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEBGD9ii4LE9cNbqJBqwNHzC0AwRkFAmVBt3kACgkQqwNHzC0A
-wRk+jw//VVmJXshZwt3N+ypEYxo6K6shKaloSoiCAbe+07PIgfmI8kfqWjqPfeYf
-fZZ80rh7NgtX1qrKXVtFxZgRI3wgpKxDYXqlzkUcGRVdrlMtKg/c7kHXUMgHzGoO
-infqGsQbodYk13nxIEKwD1Wl1d6c+nP1yIESK+PKsNFthctucFNgTNpPJS/EgEdv
-g03fucNe6uU2tt2nxb5UHqgLJidRCzSRdQiKdnTmcpEbKjwtHHS4CKmXQcxmj0pg
-Z9zbzm2uZgyKGPgUxpRUS5T1HEF82ut4hSzRYkAD7Cc4dCiUohJMdjKnz5mm6ua4
-c9Gq1SKpImk7uNLMaDkZYJITdNvb+Cg3T4QtGtNfasBgKLO731nfXo4fZMRgYmaw
-Lyyr/gEuXw+2iFXin47tl4Ig32yy3r9rcoDyfjMcWsWQn5RVi0Tb4b6jVpfHxulK
-qPbKHQcTyB5al+fyG1FpjDetAfJDGcBqZcPwalwCYilQFrbUa9NEB3hS4+y+vssX
-NI8c5mz5/knsXF1QOVOPID+Suh+zu1EGTdBMrnZdfAlu/bvfHNcOPEU8zBSbtGCy
-OVSXsO3PHiXwehg9pmImfwJ7Fwlnvd4ZaoeKH+NWfG6/Xx8qbWe1qLJqoIt3DV1D
-ffRCDGH5ffLWzw/2Le2779CHyyS8HaodHi/CmdxRcGyCDR5bKE8=
-=okqw
------END PGP SIGNATURE-----
-
---1WgzJp/BygG6uQK0--
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
