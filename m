@@ -2,162 +2,132 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B4F4C4167B
-	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Nov 2023 08:15:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78E0EC4332F
+	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Nov 2023 09:08:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345136AbjKBIPU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 2 Nov 2023 04:15:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33462 "EHLO
+        id S232341AbjKBJIX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 2 Nov 2023 05:08:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344839AbjKBIPT (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 2 Nov 2023 04:15:19 -0400
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE9218A
-        for <linux-hwmon@vger.kernel.org>; Thu,  2 Nov 2023 01:15:13 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20231102081510euoutp01111960964e12f15abcc806ee573adcb9~TwEqCuKFn1529015290euoutp01g;
-        Thu,  2 Nov 2023 08:15:10 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20231102081510euoutp01111960964e12f15abcc806ee573adcb9~TwEqCuKFn1529015290euoutp01g
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1698912910;
-        bh=GFLen3u4U5W40emCYW6ZkD36g7AR7FylXZCv5wSq3X0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LtlIPmCMtkPz3y/vNGoHH5gTWw+VfqWBblaAADfqNsdzErxsx2EhYOUhG+OCVXkkU
-         baUZCXrYrMRUVZcpZmAXzgPXSfqvvhvMwYwOlYUkoox7SR792ZOaUdQUYADIMKrtqE
-         f38FLAr/CuESwpS2S8Fxp4ZMtN4YkLsBf53vnU8s=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20231102081510eucas1p21cde4cb6935971424a6bb6c34140177c~TwEp1cGGc2985929859eucas1p2S;
-        Thu,  2 Nov 2023 08:15:10 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 87.3A.42423.E8A53456; Thu,  2
-        Nov 2023 08:15:10 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20231102081510eucas1p21c044f33cc9cb8c6c677797fae591ead~TwEphFGh72991829918eucas1p2V;
-        Thu,  2 Nov 2023 08:15:10 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20231102081510eusmtrp2e827d6afae201781535118c58a5472f0~TwEpglWWw2346623466eusmtrp2K;
-        Thu,  2 Nov 2023 08:15:10 +0000 (GMT)
-X-AuditID: cbfec7f2-a51ff7000002a5b7-ae-65435a8ea88a
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id B7.17.10549.E8A53456; Thu,  2
-        Nov 2023 08:15:10 +0000 (GMT)
-Received: from localhost (unknown [106.120.51.111]) by eusmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20231102081509eusmtip1a28742cd79577687c3a9148a5ffda167~TwEpVgIfg3253932539eusmtip1U;
-        Thu,  2 Nov 2023 08:15:09 +0000 (GMT)
-From:   Lukasz Stelmach <l.stelmach@samsung.com>
-To:     James Seo <james@equiv.tech>
-Cc:     Guenter Roeck <linux@roeck-us.net>, Armin Wolf <W_Armin@gmx.de>,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [BUG] hp-wmi-sensors: probe of
- 8F1F6435-9F42-42C8-BADC-0E9424F20C9A failed with error -22
-Date:   Thu, 02 Nov 2023 09:15:09 +0100
-In-Reply-To: <ZUHnrYOvIGeH1oH9@equiv.tech> (James Seo's message of "Tue, 31
- Oct 2023 22:52:45 -0700")
-Message-ID: <oypijdedh8efle.fsf%l.stelmach@samsung.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+        with ESMTP id S229556AbjKBJIW (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 2 Nov 2023 05:08:22 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2080.outbound.protection.outlook.com [40.107.117.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E4FFB;
+        Thu,  2 Nov 2023 02:08:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mANoDT9nhOa1NRPIn0dpXElM9NT5vEGmrepLqU7lqnukGcDjzRrKk397CdxJiE5tjf9gSRGdzqvEQg4D+jt0c7nXnRD0P8SmXb5JoPO895wN1ZhUP66F/BdoMQKk0PLZY23gVReoky/1Oak04v6C+F1f/G4Tw65/T1jF79FPzPm+R78kWLhSXbaTLz7eHFcV3Hq37OLtOm/GYavaj2k4ilA9CC3KFxJcyPO8P53fvGzCMyRuR9jtf8LB3LRrKK68tNJeC9nosX+mmZVZdObKGyD8meDpLJXtCiSFHGcs2b7q/j5XaSlSCE91aAaCnpe03y6rtmnfXqnu4JGW1z7nRQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yUJcYDCVknvzYwDKUZDEHnOL555F9nvKpNDh6OS23kw=;
+ b=B84Smy5V7ZwDmYKZaqF69bPRRPMNqtINiftWgB6Mp9xu8V6ApM7LlpU4Z6hY7BsSWzbzxPqq5g9ydGC9SYNUZQ29J3/4kWORWRXqrwv0Tv6y+Ys6g97vfiyYBZiTYh01cNHt0rgMFQG4JvLJQ7LgfpgDJH8hXgb2Vy1QbB3xWRQAQjSMyzOjDse/iaFAtiblWX3sG5UtnvyLAYPa4QTllbMwH7TKpBI+VF7Fl+y+tebnJbeit78gZmIY9rNcVVOf+vGymSD95E3x/xvtvvXK5rzsthXb5vJOQytlm1ipw2oYxtUQENNILpJWhR/VMZvOSISzFiBROdd45nSk5bkvvA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 211.20.1.79) smtp.rcpttodomain=stwcx.xyz smtp.mailfrom=wiwynn.com; dmarc=fail
+ (p=quarantine sp=quarantine pct=100) action=quarantine
+ header.from=wiwynn.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yUJcYDCVknvzYwDKUZDEHnOL555F9nvKpNDh6OS23kw=;
+ b=WoBOD5u9zD4oO5l77Q32vzJgDBXpduMxpd2fQLlSeI6TQXRnUIAMXXxbeDPyT6bspooJt9Njf/MZFtYCSr14KyccHgJxY79kDWed1u52qvVmuoD4n5/U15/ZJQPSLfQLe+sDsGe+j+sXmhxhvMRucjXAmUNZcOnplndMgS5PkH9uQ+8fxU3fXEyoIYNUKN9uo4YNyBF5QAo972h1h8MFhqZ0/lv7/Dn21OCImtUCY2xyaYfDBIdikkInjWEfDWUEUyh+EiUXlYSk7l5npqefkSBbroYwaJ9ftai992MGSs1n4LT6gJbHiIhiZ3Zo0zifjfHfTdyNk1E+UEmWGe2jkA==
+Received: from PS2PR02CA0011.apcprd02.prod.outlook.com (2603:1096:300:41::23)
+ by PSAPR04MB4358.apcprd04.prod.outlook.com (2603:1096:301:2a::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.21; Thu, 2 Nov
+ 2023 09:08:10 +0000
+Received: from HK3PEPF00000220.apcprd03.prod.outlook.com
+ (2603:1096:300:41:cafe::d6) by PS2PR02CA0011.outlook.office365.com
+ (2603:1096:300:41::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.19 via Frontend
+ Transport; Thu, 2 Nov 2023 09:08:10 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 211.20.1.79)
+ smtp.mailfrom=wiwynn.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=quarantine header.from=wiwynn.com;
+Received-SPF: Fail (protection.outlook.com: domain of wiwynn.com does not
+ designate 211.20.1.79 as permitted sender) receiver=protection.outlook.com;
+ client-ip=211.20.1.79; helo=localhost.localdomain;
+Received: from localhost.localdomain (211.20.1.79) by
+ HK3PEPF00000220.mail.protection.outlook.com (10.167.8.42) with Microsoft SMTP
+ Server id 15.20.6838.22 via Frontend Transport; Thu, 2 Nov 2023 09:08:09
+ +0000
+From:   Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+To:     patrick@stwcx.xyz
+Cc:     Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] hwmon: emc1403: Add support for EMC1442
+Date:   Thu,  2 Nov 2023 17:08:07 +0800
+Message-Id: <20231102090808.427351-1-Delphine_CC_Chiu@wiwynn.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-="; micalg="pgp-sha256";
-        protocol="application/pgp-signature"
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprDKsWRmVeSWpSXmKPExsWy7djPc7p9Uc6pBl27JC3mXTvIbNH+eiuj
-        xZOFZ5gsJj4/wOrA4vG9+yKTx4ePcR47vzewe3zeJBfAEsVlk5Kak1mWWqRvl8CV8W3RCraC
-        ZQIVF7pWsjYwfuXtYuTkkBAwkbiy/SJjFyMXh5DACkaJlQu3s0M4Xxgl1jacZoZwPjNKTFz+
-        jhWm5djZO2wgtpDAckaJo605EPYLRokVR9y7GDk42AT0JNaujQAJiwgoSLTO2cAIYjMLJEss
-        6exkBCkRFsiQuPmbGSTMIqAq8fviESaQMKdAusTjtT4gJq+AucSBjniQClEBS4njW9vBdvIK
-        CEqcnPmEBWJgrsTM82/AzpcQuMIhcfhVFyPEkS4SyzqPsEHYwhKvjm9hh7BlJP7vnM8E0dDO
-        KNF0ZSErhDOBUeJzRxMTRJW1xJ1zv6C6HSW2Pl8PdpyEAJ/EjbeCEJv5JCZtm84MEeaV6GgT
-        gqhWkVjXv4cFwpaS6H21ghGixEOi55oXJJxqJVZs/Mw+gVFhFpJ3ZiF5ZxZQB7OApsT6XfoQ
-        YW2JZQtfM0PYthLr1r1nWcDIuopRPLW0ODc9tdgwL7Vcrzgxt7g0L10vOT93EyMw0Zz+d/zT
-        Dsa5rz7qHWJk4mA8xKgC1Pxow+oLjFIsefl5qUoivIdNHVKFeFMSK6tSi/Lji0pzUosPMUpz
-        sCiJ86qmyKcKCaQnlqRmp6YWpBbBZJk4OKUamOz+uu14L2y3kN9Tf7e8/uRA7UvFX5bXs5+8
-        4n1xg8CSbfHdQncMDz/6bd1/6KKO3CyLo4VHv9imySc9XVPuaaortG5CyvONWdHK9tvNmbVK
-        q25+8OqUzvggl6HI+HTitpXqBewWlyc9ZZcPcUs/ZzWTw7hs07dTv1X4EwtvM3RdUNFUfr7C
-        IVutes6n10bTJ8VEuX1/sVC932Kz+Cydo8deZN5NnN6jtqbstd+xzQ78canZW01TRPZvFhZd
-        lDhHjOeJu404j+KP79GKsd++pbjLt0804/zYb79CnKFi2qfQAgkfu/Uz7ufWvll/1WuKz/R1
-        W5ma+nVV5p/98/Jf2K7zuueqpsjE159l3lXGosRSnJFoqMVcVJwIAEZ8JdivAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprGIsWRmVeSWpSXmKPExsVy+t/xu7p9Uc6pBpOPMVvMu3aQ2aL99VZG
-        iycLzzBZTHx+gNWBxeN790Umjw8f4zx2fm9g9/i8SS6AJUrPpii/tCRVISO/uMRWKdrQwkjP
-        0NJCz8jEUs/Q2DzWyshUSd/OJiU1J7MstUjfLkEv49uiFWwFywQqLnStZG1g/MrbxcjJISFg
-        InHs7B22LkYuDiGBpYwS+yZuAHI4gBJSEivnpkPUCEv8udYFVfOMUaJr8nIWkBo2AT2JtWsj
-        QGpEBBQkWudsYASxmQVSJDZM6GACKREWyJC4+ZsZJCwkoCmx4tl+JhCbRUBV4vfFI2A2p0C6
-        xOnjM8Em8gqYSxzoiAcJiwpYShzf2s4GYvMKCEqcnPmEBWJ6tsTX1c+ZJzAKzEKSmoUkNQto
-        EjPQtvW79CHC2hLLFr5mhrBtJdate8+ygJF1FaNIamlxbnpusaFecWJucWleul5yfu4mRmCk
-        bDv2c/MOxnmvPuodYmTiYDzEqALU+WjD6guMUix5+XmpSiK8h00dUoV4UxIrq1KL8uOLSnNS
-        iw8xmgJ9NpFZSjQ5HxjDeSXxhmYGpoYmZpYGppZmxkrivJ4FHYlCAumJJanZqakFqUUwfUwc
-        nFINTB0XBE7tUbbJ7kvgO/EoeA/f5ukxr/Y5S90LtBYt1cnXtw1NU79ftf6OyrO9SttNjxfr
-        HXFd+8jr5BrbeScLl+1SC/ovNuGUlXKCa9zsYL/KgsUbuzTs4xbMnnr3z6G7nTebpq1XVter
-        YTs6+bLl9is7krlYtnDH/Ji3bt3MqpRF+QZG8/n9QycbN/3Lff5La8X/PwY6qrkvlKuOiAZ+
-        fN88h61d70if/U3Xo2aTmpu2PUqcK3xyE08gVwjbYitOkd6p6x6V+fNOMzgn/2H7x5elvhqn
-        U2a8PeqjINx4Y+qFSaI2i48v/honmuAZ7Tb9+uG6WvY/3FcqUys3PU1Z0rxksYKFYNK6VbOM
-        FW+oqSixFGckGmoxFxUnAgAYLztiKQMAAA==
-X-CMS-MailID: 20231102081510eucas1p21c044f33cc9cb8c6c677797fae591ead
-X-Msg-Generator: CA
-X-RootMTR: 20231102081510eucas1p21c044f33cc9cb8c6c677797fae591ead
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20231102081510eucas1p21c044f33cc9cb8c6c677797fae591ead
-References: <ZUHnrYOvIGeH1oH9@equiv.tech>
-        <CGME20231102081510eucas1p21c044f33cc9cb8c6c677797fae591ead@eucas1p2.samsung.com>
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: HK3PEPF00000220:EE_|PSAPR04MB4358:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 8d547c16-8b40-4a3d-bb18-08dbdb833c0d
+X-MS-Exchange-AtpMessageProperties: SA
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qyDY/cmX68pmPY8db/KgjHvCEB4cLJ+buiSAzjEXNz4KP8Up13svr4KA+GUtbL5y6svzebAJWuK1s/7urBXoMsGgFt4I+2hsIOQ+DX9uBvGyIwhfvd+iEeZmKlvRcU4dHYNSxc3TEkpjBoINw3kWZMteEOGxjEt93sOW+dCHHRiKOKYUfXgqxiUs1+nWpM4Ho2QfYgb6Bim3Q4A3eGTybuhzwyGxKFa5AZdZVXSCAFxEQc7ZwUWTq/ZFUgz5i6v8WDRbEG9l+AA/gSwQ7rt5U9GgOM2OYeae5oKdYKE1e3TqnaqAmxKjgJlAWCaESx+EjxTN5jJ39VIhZv+VNgv3Uj0AISekWxy0nOVGTL7FxI4TSWOe+JksxAnAVq5SSNl0TOdOGzWbPS6gBkdG9TyZqNDZSEQC9Mk++Y8Ghb2Wfc+VIEGgUypPX3blsCdWPObo6IOjKA1Xu0zXaTnEOvbhY7aCW0kjm8LF1U58in3xsCyrfnod8PayB5xja4bWxEZZg2+4510hOL/N9kAB5bP5l6Qqg/k6FqpBdOREFvM3xQv/ZgsLaK00TPpVgF9iyDSbhSmIXT5mv7/OGvmZTbkfd5Wvg+lvdAdY4cd2HgIeINXsdLnb2Z1fgeJTJQ1tI2E97bbk+Nt78cecQ4+aycSIpkm/+Y7uFhsoj5tNdrNDRIu2IPMoG/Fu5RttQtVzhIrR/55aeTo5DDdS9xRlzJx/fw==
+X-Forefront-Antispam-Report: CIP:211.20.1.79;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:localhost.localdomain;PTR:211-20-1-79.hinet-ip.hinet.net;CAT:NONE;SFS:(13230031)(6069001)(4636009)(396003)(376002)(346002)(136003)(39850400004)(451199024)(1800799009)(82310400011)(64100799003)(186009)(36840700001)(46966006)(40480700001)(6506007)(9316004)(356005)(36860700001)(81166007)(47076005)(83380400001)(6512007)(82740400003)(2616005)(336012)(956004)(41300700001)(86362001)(2906002)(36756003)(4326008)(8936002)(26005)(8676002)(5660300002)(36736006)(54906003)(6916009)(316002)(70206006)(70586007)(1076003)(478600001)(6486002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: wiwynn.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2023 09:08:09.6538
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8d547c16-8b40-4a3d-bb18-08dbdb833c0d
+X-MS-Exchange-CrossTenant-Id: da6e0628-fc83-4caf-9dd2-73061cbab167
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=da6e0628-fc83-4caf-9dd2-73061cbab167;Ip=[211.20.1.79];Helo=[localhost.localdomain]
+X-MS-Exchange-CrossTenant-AuthSource: HK3PEPF00000220.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR04MB4358
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Add support for EMC1442 which is compatible with EMC1403.
 
-It was <2023-10-31 wto 22:52>, when James Seo wrote:
-> On Tue, Oct 31, 2023 at 10:07:26PM +0100, Lukasz Stelmach wrote:
->> It was <2023-10-31 wto 12:28>, when Guenter Roeck wrote:
->>> On 10/31/23 12:07, Lukasz Stelmach wrote:
-[...]
->>>> My solution would be to add a module option, let's name it `quirks` and
->>>> make it a bit field for future use, that enables the workaound. Plus an
->>>> additional error message when probe fails to suggest user to add the
->>>> option to kernel command line or whatever file that contains module
->>>> options. A nice touch would be to detect if the workaround is still
->>>> required.
->>>>=20
->>>
->>> Please no module option. Use DMI data or similar.
->>=20
->> DMI data is fine when can you identify broken systems upfront. In this
->> case we don't know which systems are or will be affected by this bug.
->
-> This particular bug seems extremely rare in general, which means I'm furt=
-her
-> inclined towards treating it as a one-off. As G=C3=BCnter said, we can al=
-ways add
-> more later.
->
-> Can you provide the output of `dmidecode -s baseboard-product-name` for n=
-ow?
+Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+---
+change in v2:
+Revised emc1403 to emc1402
+---
+ drivers/hwmon/emc1403.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-=2D-8<---------------cut here---------------start------------->8---
-# dmidecode -s baseboard-product-name
-870C
-=2D-8<---------------cut here---------------end--------------->8---
+diff --git a/drivers/hwmon/emc1403.c b/drivers/hwmon/emc1403.c
+index bb7c859e799d..1332e4ac078c 100644
+--- a/drivers/hwmon/emc1403.c
++++ b/drivers/hwmon/emc1403.c
+@@ -346,6 +346,9 @@ static int emc1403_detect(struct i2c_client *client,
+ 	case 0x27:
+ 		strscpy(info->type, "emc1424", I2C_NAME_SIZE);
+ 		break;
++	case 0x60:
++		strscpy(info->type, "emc1442", I2C_NAME_SIZE);
++		break;
+ 	default:
+ 		return -ENODEV;
+ 	}
+@@ -430,7 +433,7 @@ static int emc1403_probe(struct i2c_client *client)
+ }
+ 
+ static const unsigned short emc1403_address_list[] = {
+-	0x18, 0x1c, 0x29, 0x4c, 0x4d, 0x5c, I2C_CLIENT_END
++	0x18, 0x1c, 0x29, 0x3c, 0x4c, 0x4d, 0x5c, I2C_CLIENT_END
+ };
+ 
+ /* Last digit of chip name indicates number of channels */
+@@ -444,6 +447,7 @@ static const struct i2c_device_id emc1403_idtable[] = {
+ 	{ "emc1422", emc1402 },
+ 	{ "emc1423", emc1403 },
+ 	{ "emc1424", emc1404 },
++	{ "emc1442", emc1402 },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, emc1403_idtable);
+-- 
+2.25.1
 
-=2D-=20
-=C5=81ukasz Stelmach
-Samsung R&D Institute Poland
-Samsung Electronics
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEXpuyqjq9kGEVr9UQsK4enJilgBAFAmVDWo0ACgkQsK4enJil
-gBBcWwf/UusDy7QVvIyKlNv8dqB0uOtXYzYousRTE0P2uer/5nwR4c7BDoHnc/8B
-nosvz1oXLoSC9NLCLbw1A/dn3eQk50geS+K4GtbVdifnh35cwf8Y9+O8n5aPWxRF
-UPMsEG9hPpDFIIJJ8rsCl2eC5KFyUgCcCzNpnAbNQLi3Em4MbAakrbueJeCqe1Jg
-NLpH3g677I8DE9/i7XeoprmPMJFKkeQNLBNPwwpBEN2ymX7afVtRMmk8nxNPFo29
-BhUbjCxySDZh8Ny4Lmg9pXe3g2MD4eCEMRbmupsvQjvN6KiwYcLdeq59Y23fl+cH
-JGoQRQS8Wj/LXNc/+dQX1QCqNb0W8w==
-=eCuv
------END PGP SIGNATURE-----
---=-=-=--
