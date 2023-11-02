@@ -2,89 +2,79 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB656C4332F
-	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Nov 2023 03:14:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED056C4167B
+	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Nov 2023 03:15:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229477AbjKBDOL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 1 Nov 2023 23:14:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48096 "EHLO
+        id S1348269AbjKBDPL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 1 Nov 2023 23:15:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232949AbjKBDOK (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 1 Nov 2023 23:14:10 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B6F113;
-        Wed,  1 Nov 2023 20:14:07 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id 5614622812f47-3b4145e887bso257983b6e.3;
-        Wed, 01 Nov 2023 20:14:07 -0700 (PDT)
+        with ESMTP id S235541AbjKBDPK (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 1 Nov 2023 23:15:10 -0400
+Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BAC6113;
+        Wed,  1 Nov 2023 20:15:06 -0700 (PDT)
+Received: by mail-oo1-xc30.google.com with SMTP id 006d021491bc7-581fb6f53fcso234033eaf.2;
+        Wed, 01 Nov 2023 20:15:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698894847; x=1699499647; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1698894905; x=1699499705; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=8Ng+Ky2De9mKEU9cACPl0CpnKEJS0eue27RL+2JZ1s8=;
-        b=eCnxDRLiSUXAChl9U/MEDv23QFzLllIpgtDjPoQlV1dO+79FGy0Qm+Znb0c9DjC0+J
-         OdrDKPGjdP6y/1JgEQWDOKAFYSNJWMRFSqpwUtK/7U31STZJ7DFsL97f6Hjn74dzXx64
-         bS/iiu7iJqm3qj3TrL/m/eZQNcwYuYpH2QyFhSGvSAIH3+7rHE7NxGUVppJKmfrieP7z
-         PczOUiFIAtTSAt0636SSwTn5uI9gERRq3RMK3iVLytIQ6CW9R0+WQ7rn+YpKrXh1crBO
-         kFskOTGV1jZ57D300kR83ntXOFp/Iacm+BGdj1DW5SL5cx9GiFS55jfbU1GkA0wVM/ac
-         wS0w==
+        bh=07ijN2s/Gqg53qTilmJ5hXeaHQyI0IV15I526+m3XjE=;
+        b=WE6g+77SXdz276kzRRHF/lxpewzjdnOcN3lb7lKDu59cMsZfvDzqvIn7Je3+Gh1nss
+         8Lc1wdVy5eiqjtzrG8IHZW/Js21Y14aL99Z3XNaPQRiQ/FSRFYBzLFow5sPi/drBRWXE
+         jIVXX18snrR1uscJYfxTarEWGrVcc/mxxco/LP2AYxb3Lc/FatKpgee+N6MoR4Q/b9Tq
+         OudmqOr72ylZsJaeh8gDItp1UmkPZUApFH7izSEkvtUg72rlXp3J/Ok6QHueWJdAzq4Q
+         QYGtpHhHwiLNZ7E0C4yqit7n7E33AQcGPhknBkduwxbStPuoUvyOk8Tf9Hg7MkqGO3cs
+         1qtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698894847; x=1699499647;
+        d=1e100.net; s=20230601; t=1698894905; x=1699499705;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8Ng+Ky2De9mKEU9cACPl0CpnKEJS0eue27RL+2JZ1s8=;
-        b=SNizcXjPkJ4pzC8JZhYdYCaWGqUFZ6MtbXf5ZDREr7As0O4clZX9T0LJDV/DLIAaRZ
-         MrLI2fC6EfHzL21mK9Lhq3k+n0Cs+ORVTpexJQ/bfrBtrEb2Q+2KjRbbbBKMOdI8X01t
-         eTmdmpnodCsQdF3jv2WmKxbiGM4/sFMw/3m5q9w3yz4gd0JN4lz1+/7D/zo+4YAMjS4f
-         gauFMOIn4DbfH20Zr3qyxV9o5i1OAu6yx6oUg4p1+OP7Q777hicgW6Zg81WJYv1CSEud
-         1DzwIH3T5b7P0Cc+rhmeJfVT/d2w0/MrEZsAv4R4lj/jyWOJ2RnHHs10DBd6yVXhOFlE
-         Qg1Q==
-X-Gm-Message-State: AOJu0YxEYVj4VAzuqHANIsXxMuMNywaZD2J2yQ6QSYwCgN+66N6vgrqg
-        mNas2rPcXC6UDXosMIrmIoY=
-X-Google-Smtp-Source: AGHT+IEEI4dvb7QQTncXlStBqRd1w90xo3S0vMQiCz+d240Aib9+mztsA684rMGZIJudpyercdkBZA==
-X-Received: by 2002:a05:6808:30a4:b0:3af:a0bd:45b7 with SMTP id bl36-20020a05680830a400b003afa0bd45b7mr22115843oib.13.1698894846743;
-        Wed, 01 Nov 2023 20:14:06 -0700 (PDT)
+        bh=07ijN2s/Gqg53qTilmJ5hXeaHQyI0IV15I526+m3XjE=;
+        b=i5aK8wYxo0kqzmQAY5ezPMtAXSvG3e1xbbsKuJRJi85KMnQepQmgiSHjfy39Z64jTW
+         xbuoQRQKaufuoux2rMagZJkN+TS/5wdwsIwh8j58CmQzJOOYS/zAb276w6xJ9rdPuzj1
+         ejgk6ldYP/WzJf9YunF0k1M56ehonIcDE6v54GhXCJ7lhaKFmJ5qbFAVXQB7TV0Kjavb
+         C486n+9Tp1P8UPIxU4hAGinZWqrdsE/iD2fNtEHSvQIL+ti2rCHokRZNw5FsjFAeErvb
+         WD0kXYU2By/kBS5Wx7qH7F0nqmkKWej72MfA6Q7iHccQGMQUUKUd4mZzfA2W9MCEWhd8
+         y2MQ==
+X-Gm-Message-State: AOJu0Yz5/LVzGWBiFqnJr8TfsxftIl9VfFlzSNn5LIpinTjgB7uo4hjt
+        EULeYBuDJuMZGNiw/fll29JL2+p69k0=
+X-Google-Smtp-Source: AGHT+IHGqTqbXnZ6ELTOrKAIgev5NX8AiKdOnszEHivskG21FKHmW9/HkeZkbdz5pDjRmqzfciHZfA==
+X-Received: by 2002:a4a:dc94:0:b0:57b:7ac4:7a94 with SMTP id g20-20020a4adc94000000b0057b7ac47a94mr16486453oou.2.1698894905388;
+        Wed, 01 Nov 2023 20:15:05 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z20-20020a056808065400b003adcaf28f61sm417866oih.41.2023.11.01.20.14.06
+        by smtp.gmail.com with ESMTPSA id p125-20020a4a4883000000b0057bcbc23738sm857754ooa.17.2023.11.01.20.15.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Nov 2023 20:14:06 -0700 (PDT)
+        Wed, 01 Nov 2023 20:15:05 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 1 Nov 2023 20:14:05 -0700
+Date:   Wed, 1 Nov 2023 20:15:04 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     jdelvare@suse.com, avifishman70@gmail.com, tali.perry1@gmail.com,
-        joel@jms.id.au, andrew@codeconstruct.com.au, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, j.neuschaefer@gmx.net,
-        openbmc@lists.ozlabs.org, linux-hwmon@vger.kernel.org,
+To:     Antoniu Miclaus <antoniu.miclaus@analog.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/1] hwmon: npcm750-pwm-fan: Add NPCM8xx support
-Message-ID: <8d9d439b-70f7-4e9e-bcfd-b18182d5bb39@roeck-us.net>
-References: <20231031075806.400872-1-tmaimon77@gmail.com>
- <20231031075806.400872-2-tmaimon77@gmail.com>
+Subject: Re: [PATCH] hwmon: ltc2991: remove device reference from state
+Message-ID: <f0a0e61a-a853-47d8-8978-f6bfbdac5a44@roeck-us.net>
+References: <20231031095647.48376-1-antoniu.miclaus@analog.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231031075806.400872-2-tmaimon77@gmail.com>
+In-Reply-To: <20231031095647.48376-1-antoniu.miclaus@analog.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Oct 31, 2023 at 09:58:06AM +0200, Tomer Maimon wrote:
-> Adding Pulse Width Modulation (PWM) and fan tacho NPCM8xx support to
-> NPCM PWM and fan tacho driver.
-> NPCM8xx uses a different number of PWM devices.
+On Tue, Oct 31, 2023 at 11:56:46AM +0200, Antoniu Miclaus wrote:
+> Remove device reference from struct ltc2991_state since it is used only
+> inside the init function.
 > 
-> As part of adding NPCM8XX support:
-> - Add NPCM8xx specific compatible string.
-> - Add data to handle architecture-specific PWM parameters.
+> Pass the struct device as parameter to the init function instead.
 > 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
 
-Applied to hwmon-next. I'll push it after the relase window closes.
-
-Side note: An introductory patch is not necessary for single
-patches. Providing the change log in the unnecessary intro patch
-only adds additional overhead for no gain.
+Applied to hwmon-next. It will be available after the commit
+window closes.
 
 Guenter
