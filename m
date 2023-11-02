@@ -2,132 +2,152 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78E0EC4332F
-	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Nov 2023 09:08:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05EE4C4332F
+	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Nov 2023 13:26:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232341AbjKBJIX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 2 Nov 2023 05:08:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51910 "EHLO
+        id S234978AbjKBN0Z (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 2 Nov 2023 09:26:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjKBJIW (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 2 Nov 2023 05:08:22 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2080.outbound.protection.outlook.com [40.107.117.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E4FFB;
-        Thu,  2 Nov 2023 02:08:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mANoDT9nhOa1NRPIn0dpXElM9NT5vEGmrepLqU7lqnukGcDjzRrKk397CdxJiE5tjf9gSRGdzqvEQg4D+jt0c7nXnRD0P8SmXb5JoPO895wN1ZhUP66F/BdoMQKk0PLZY23gVReoky/1Oak04v6C+F1f/G4Tw65/T1jF79FPzPm+R78kWLhSXbaTLz7eHFcV3Hq37OLtOm/GYavaj2k4ilA9CC3KFxJcyPO8P53fvGzCMyRuR9jtf8LB3LRrKK68tNJeC9nosX+mmZVZdObKGyD8meDpLJXtCiSFHGcs2b7q/j5XaSlSCE91aAaCnpe03y6rtmnfXqnu4JGW1z7nRQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yUJcYDCVknvzYwDKUZDEHnOL555F9nvKpNDh6OS23kw=;
- b=B84Smy5V7ZwDmYKZaqF69bPRRPMNqtINiftWgB6Mp9xu8V6ApM7LlpU4Z6hY7BsSWzbzxPqq5g9ydGC9SYNUZQ29J3/4kWORWRXqrwv0Tv6y+Ys6g97vfiyYBZiTYh01cNHt0rgMFQG4JvLJQ7LgfpgDJH8hXgb2Vy1QbB3xWRQAQjSMyzOjDse/iaFAtiblWX3sG5UtnvyLAYPa4QTllbMwH7TKpBI+VF7Fl+y+tebnJbeit78gZmIY9rNcVVOf+vGymSD95E3x/xvtvvXK5rzsthXb5vJOQytlm1ipw2oYxtUQENNILpJWhR/VMZvOSISzFiBROdd45nSk5bkvvA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 211.20.1.79) smtp.rcpttodomain=stwcx.xyz smtp.mailfrom=wiwynn.com; dmarc=fail
- (p=quarantine sp=quarantine pct=100) action=quarantine
- header.from=wiwynn.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yUJcYDCVknvzYwDKUZDEHnOL555F9nvKpNDh6OS23kw=;
- b=WoBOD5u9zD4oO5l77Q32vzJgDBXpduMxpd2fQLlSeI6TQXRnUIAMXXxbeDPyT6bspooJt9Njf/MZFtYCSr14KyccHgJxY79kDWed1u52qvVmuoD4n5/U15/ZJQPSLfQLe+sDsGe+j+sXmhxhvMRucjXAmUNZcOnplndMgS5PkH9uQ+8fxU3fXEyoIYNUKN9uo4YNyBF5QAo972h1h8MFhqZ0/lv7/Dn21OCImtUCY2xyaYfDBIdikkInjWEfDWUEUyh+EiUXlYSk7l5npqefkSBbroYwaJ9ftai992MGSs1n4LT6gJbHiIhiZ3Zo0zifjfHfTdyNk1E+UEmWGe2jkA==
-Received: from PS2PR02CA0011.apcprd02.prod.outlook.com (2603:1096:300:41::23)
- by PSAPR04MB4358.apcprd04.prod.outlook.com (2603:1096:301:2a::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.21; Thu, 2 Nov
- 2023 09:08:10 +0000
-Received: from HK3PEPF00000220.apcprd03.prod.outlook.com
- (2603:1096:300:41:cafe::d6) by PS2PR02CA0011.outlook.office365.com
- (2603:1096:300:41::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.19 via Frontend
- Transport; Thu, 2 Nov 2023 09:08:10 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 211.20.1.79)
- smtp.mailfrom=wiwynn.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=quarantine header.from=wiwynn.com;
-Received-SPF: Fail (protection.outlook.com: domain of wiwynn.com does not
- designate 211.20.1.79 as permitted sender) receiver=protection.outlook.com;
- client-ip=211.20.1.79; helo=localhost.localdomain;
-Received: from localhost.localdomain (211.20.1.79) by
- HK3PEPF00000220.mail.protection.outlook.com (10.167.8.42) with Microsoft SMTP
- Server id 15.20.6838.22 via Frontend Transport; Thu, 2 Nov 2023 09:08:09
- +0000
-From:   Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
-To:     patrick@stwcx.xyz
-Cc:     Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
-        Jean Delvare <jdelvare@suse.com>,
+        with ESMTP id S229995AbjKBN0Y (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 2 Nov 2023 09:26:24 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05ABE134;
+        Thu,  2 Nov 2023 06:26:17 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 427DA320095A;
+        Thu,  2 Nov 2023 09:26:15 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Thu, 02 Nov 2023 09:26:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwcx.xyz; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1698931574; x=1699017974; bh=La
+        x5ShiBwLSsLjVsnn7zEY6/n4MOYHPf/N4qU9BqSCU=; b=MAL2ZyvjMEKoGy4Hrw
+        ralTkad3wTXel2uRJb7bpxfA4oaJaooNvhFsVNOe/x+gSgPsbIyB/My26LH8fot0
+        dzbDW1efm+a0hGKQ7+XXl/ioGaicBvmTNpuOtySQqThhi1vrljHiXikUtGyEDN5L
+        purLq5iHjMRIrFbJaFCRyT/3Z1TEAXZ+tmXHhLL5EtBLg9sJL2uuKnbx0IYaUNMu
+        Xp2zp6WaJQvXWaUwRQviU7Mfm5GJoppahLqRk1j9JwOJzLhmqf/lcufER47QyjQi
+        PtywnXnmedh+E9J6cn26los02k+tBbHUz5vTR5U09A9/FnL8dSwfdR6OXVGqOmBk
+        UINQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1698931574; x=1699017974; bh=Lax5ShiBwLSsL
+        jVsnn7zEY6/n4MOYHPf/N4qU9BqSCU=; b=vy1pV3xS+bb4zC3BiNQ+nfH2/8Sjk
+        vTGw4kUOFAQ/ID52Aky6iyKPEEFtQetPugHze/xstw/i6YKvAj618jBvzPNIBAUA
+        EYQY4pHw8NsCi0yZXGdpW1bktH9t6zEek/sCrqfcdW9eGPSC3lZaongNVM2gBrT6
+        rJpiRKta9pZouiaG1P/MUOnwqmZKaMOED321fBGrxcKVsUCLQ8RzRS3DTZRgowAY
+        mf/49gluNDt7ewTqG6mQKiBfaj4iP+2T/GS5OVlQVy9TWcztaCTkUQ5kMTKSUtYw
+        KOsMWh8XYGVd5LQcYYanpEXvHLyjERAetTXgD+U25EZWTIRVadqJois4w==
+X-ME-Sender: <xms:daNDZbHhPUZ7KeOqnocFXBRnVj3BCgZuKeHg75ZIzy1enntBDME4Sg>
+    <xme:daNDZYU6QFaysPJYinbp_vMERXoBzePI8eu8gHVOtkX9xxdB6VF4ADcD-I3-ZNlwX
+    mLvKw1BxnRq2PS7tOE>
+X-ME-Received: <xmr:daNDZdLA6K3gW-muk9FygHsvPcNcdsu9m7YyJ89VlNhq-TfO7RLgRFG7SJXMfC1G8FZM8chUTQ7utljxglpX8jYWdknXINKZpTg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedruddtiedghedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    gfrhhlucfvnfffucdlvdefmdenucfjughrpeffhffvvefukfhfgggtuggjsehgtderredt
+    tddvnecuhfhrohhmpefrrghtrhhitghkucghihhllhhirghmshcuoehprghtrhhitghkse
+    hsthiftgigrdighiiiqeenucggtffrrghtthgvrhhnpeehfeejheeftdejiedvfeekffeh
+    ledukeduleelffekgfdtleduledvtdegtdehkeenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpehprghtrhhitghksehsthiftgigrdighiii
+X-ME-Proxy: <xmx:daNDZZEx0ktavFcXgtP8A95OU3dMXyvR3ZliQjIY2bxKP5A7HXxzJg>
+    <xmx:daNDZRUl98wwW1tpxDcR-9ZOxorEFAnOz9LtbBjaeGwbK_5eYhKgNA>
+    <xmx:daNDZUNEzjYHw6lR-r7BQ-bKEIiO0e2SOFc6rNlmiaJVdXUU5In5jg>
+    <xmx:dqNDZUTPU40AC4QnxAK-4hafGWJoyMdv9CXmrriBgxzWBN7eWD3QAQ>
+Feedback-ID: i68a1478a:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 2 Nov 2023 09:26:13 -0400 (EDT)
+Date:   Thu, 2 Nov 2023 08:26:12 -0500
+From:   Patrick Williams <patrick@stwcx.xyz>
+To:     Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] hwmon: emc1403: Add support for EMC1442
-Date:   Thu,  2 Nov 2023 17:08:07 +0800
-Message-Id: <20231102090808.427351-1-Delphine_CC_Chiu@wiwynn.com>
-X-Mailer: git-send-email 2.25.1
+Subject: Re: [PATCH v2] hwmon: emc1403: Add support for EMC1442
+Message-ID: <ZUOjdGPDX06ehrLB@heinlein.vulture-banana.ts.net>
+References: <20231102090808.427351-1-Delphine_CC_Chiu@wiwynn.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: HK3PEPF00000220:EE_|PSAPR04MB4358:EE_
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: 8d547c16-8b40-4a3d-bb18-08dbdb833c0d
-X-MS-Exchange-AtpMessageProperties: SA
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qyDY/cmX68pmPY8db/KgjHvCEB4cLJ+buiSAzjEXNz4KP8Up13svr4KA+GUtbL5y6svzebAJWuK1s/7urBXoMsGgFt4I+2hsIOQ+DX9uBvGyIwhfvd+iEeZmKlvRcU4dHYNSxc3TEkpjBoINw3kWZMteEOGxjEt93sOW+dCHHRiKOKYUfXgqxiUs1+nWpM4Ho2QfYgb6Bim3Q4A3eGTybuhzwyGxKFa5AZdZVXSCAFxEQc7ZwUWTq/ZFUgz5i6v8WDRbEG9l+AA/gSwQ7rt5U9GgOM2OYeae5oKdYKE1e3TqnaqAmxKjgJlAWCaESx+EjxTN5jJ39VIhZv+VNgv3Uj0AISekWxy0nOVGTL7FxI4TSWOe+JksxAnAVq5SSNl0TOdOGzWbPS6gBkdG9TyZqNDZSEQC9Mk++Y8Ghb2Wfc+VIEGgUypPX3blsCdWPObo6IOjKA1Xu0zXaTnEOvbhY7aCW0kjm8LF1U58in3xsCyrfnod8PayB5xja4bWxEZZg2+4510hOL/N9kAB5bP5l6Qqg/k6FqpBdOREFvM3xQv/ZgsLaK00TPpVgF9iyDSbhSmIXT5mv7/OGvmZTbkfd5Wvg+lvdAdY4cd2HgIeINXsdLnb2Z1fgeJTJQ1tI2E97bbk+Nt78cecQ4+aycSIpkm/+Y7uFhsoj5tNdrNDRIu2IPMoG/Fu5RttQtVzhIrR/55aeTo5DDdS9xRlzJx/fw==
-X-Forefront-Antispam-Report: CIP:211.20.1.79;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:localhost.localdomain;PTR:211-20-1-79.hinet-ip.hinet.net;CAT:NONE;SFS:(13230031)(6069001)(4636009)(396003)(376002)(346002)(136003)(39850400004)(451199024)(1800799009)(82310400011)(64100799003)(186009)(36840700001)(46966006)(40480700001)(6506007)(9316004)(356005)(36860700001)(81166007)(47076005)(83380400001)(6512007)(82740400003)(2616005)(336012)(956004)(41300700001)(86362001)(2906002)(36756003)(4326008)(8936002)(26005)(8676002)(5660300002)(36736006)(54906003)(6916009)(316002)(70206006)(70586007)(1076003)(478600001)(6486002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: wiwynn.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2023 09:08:09.6538
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d547c16-8b40-4a3d-bb18-08dbdb833c0d
-X-MS-Exchange-CrossTenant-Id: da6e0628-fc83-4caf-9dd2-73061cbab167
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=da6e0628-fc83-4caf-9dd2-73061cbab167;Ip=[211.20.1.79];Helo=[localhost.localdomain]
-X-MS-Exchange-CrossTenant-AuthSource: HK3PEPF00000220.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR04MB4358
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="9y/QB9703V4eDch+"
+Content-Disposition: inline
+In-Reply-To: <20231102090808.427351-1-Delphine_CC_Chiu@wiwynn.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add support for EMC1442 which is compatible with EMC1403.
 
-Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
----
-change in v2:
-Revised emc1403 to emc1402
----
- drivers/hwmon/emc1403.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+--9y/QB9703V4eDch+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/hwmon/emc1403.c b/drivers/hwmon/emc1403.c
-index bb7c859e799d..1332e4ac078c 100644
---- a/drivers/hwmon/emc1403.c
-+++ b/drivers/hwmon/emc1403.c
-@@ -346,6 +346,9 @@ static int emc1403_detect(struct i2c_client *client,
- 	case 0x27:
- 		strscpy(info->type, "emc1424", I2C_NAME_SIZE);
- 		break;
-+	case 0x60:
-+		strscpy(info->type, "emc1442", I2C_NAME_SIZE);
-+		break;
- 	default:
- 		return -ENODEV;
- 	}
-@@ -430,7 +433,7 @@ static int emc1403_probe(struct i2c_client *client)
- }
- 
- static const unsigned short emc1403_address_list[] = {
--	0x18, 0x1c, 0x29, 0x4c, 0x4d, 0x5c, I2C_CLIENT_END
-+	0x18, 0x1c, 0x29, 0x3c, 0x4c, 0x4d, 0x5c, I2C_CLIENT_END
- };
- 
- /* Last digit of chip name indicates number of channels */
-@@ -444,6 +447,7 @@ static const struct i2c_device_id emc1403_idtable[] = {
- 	{ "emc1422", emc1402 },
- 	{ "emc1423", emc1403 },
- 	{ "emc1424", emc1404 },
-+	{ "emc1442", emc1402 },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, emc1403_idtable);
--- 
-2.25.1
+On Thu, Nov 02, 2023 at 05:08:07PM +0800, Delphine CC Chiu wrote:
 
+I have a datasheet for this chip with a "Revision 1.0 (10-25-10)" in the
+footer.  Reviewed the change against the datasheet.
+
+> Add support for EMC1442 which is compatible with EMC1403.
+>=20
+> Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+> ---
+> change in v2:
+> Revised emc1403 to emc1402
+
+> +	case 0x60:
+> +		strscpy(info->type, "emc1442", I2C_NAME_SIZE);
+> +		break;
+
+Confirmed against datasheet.
+
+Section 2.2 "Register Set Delta" specifies:
+    - Product ID | 60h
+
+>  static const unsigned short emc1403_address_list[] =3D {
+> -	0x18, 0x1c, 0x29, 0x4c, 0x4d, 0x5c, I2C_CLIENT_END
+> +	0x18, 0x1c, 0x29, 0x3c, 0x4c, 0x4d, 0x5c, I2C_CLIENT_END
+
+Confirmed against datasheet.
+
+Section 5.1.2 "SMBus Address and RD/WR Bit" has a table indicating that
+a 22k pull-up resistor corresponds to `0011_100?` binary.
+
+>  	{ "emc1422", emc1402 },
+>  	{ "emc1423", emc1403 },
+>  	{ "emc1424", emc1404 },
+> +	{ "emc1442", emc1402 },
+
+Datasheet section 2.1 is titled "Functional Delta from EMC1412 to
+EMC1442", with minimal differences.  We map "emc1412" to `emc1402`, so
+mapping "emc1442" to the same should be appropriate.
+
+
+Reviewed-by: Patrick Williams <patrick@stwcx.xyz>
+
+--=20
+Patrick Williams
+
+--9y/QB9703V4eDch+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEBGD9ii4LE9cNbqJBqwNHzC0AwRkFAmVDo3IACgkQqwNHzC0A
+wRno2w/9EP6FkMIG1Z66KQ9SB7n41ROCzu00EHnKD4IJ8v1p0crAFeeboxl3/QAU
+/gp+M3yyQXRobr0tn3AmCgPHBUpOx6nqVSN/X1XruE0G5eFLRosou+qJQl10LeVJ
+qEuyKL4tSgRX1sL5HP9zcNQqwqyDXYwqWDiShgLfuJhMKt9g4mi8EUS3JvU+DWwb
+Fa9uZRCkb+eAMjfGZXlZDf+dRAjSnm+euuKcHUaKQy+EX4VMx0B0fvZ2DGuIhXy4
+5/DfXi9dXIR1BoDNHXjkeqrycerWdXU73h4puNBgim+c6hCA3iplCYcwx7rsthk3
+P8m0pyqCP2sFLE4K32n/j1ZFKwy+b9+SBwmqpLnQuyT1ukdLa1xJEVh2yY5vECNO
+M9zHLhUcUlj4NgqN3o9sxrtYAZn4SgEOuV3dPxjNOJyfw3P+CMm2gZ5aDTkGGTM3
+1JzGomy20LOvweUWPxnQ7VRS8WedAFWgZPVeyAU+1ThFICRvRKELn3xz9beblAlO
+IzUVPsODOPZ7QW5htxYCMUXidN8i8nxUOY+UgLuq8/xLmoM3HkcHKgdaqw8v+QYm
+FC7ycXgXQvhfwxWoJaFzQ1QLSF3HOthHounyYsflqKG8dRnfrQVoaS6G6JMu9SbE
+iQ+OL3n+B3E1SmRFBqVYYuWSwZlEAqmTQWiK3CFXlMFjkrkWy24=
+=Cngv
+-----END PGP SIGNATURE-----
+
+--9y/QB9703V4eDch+--
