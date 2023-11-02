@@ -2,162 +2,218 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2E04C4332F
-	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Nov 2023 14:34:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE392C4167B
+	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Nov 2023 16:57:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjKBOew (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 2 Nov 2023 10:34:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41604 "EHLO
+        id S1347653AbjKBQ50 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 2 Nov 2023 12:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjKBOew (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 2 Nov 2023 10:34:52 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B5D212D;
-        Thu,  2 Nov 2023 07:34:49 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id 5614622812f47-3b566ee5f1dso628048b6e.0;
-        Thu, 02 Nov 2023 07:34:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698935689; x=1699540489; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=wHBPMtYXD9v/EXoxQS8QLRmpxsQlq3KNaQrAD21c7JI=;
-        b=O+PKuV3FuhXMg691Q4BmeDD8W7O9WRzO3EptdevZli/GIlKb/TAhFBqji5WrMIEnJG
-         gP3zuDj/OkWmWFOySK5s6DISegaNZNRF0Bm4cJv2NpESGOP+X/kNynaIHDQuT5yVKHN/
-         4hpVMxBfnK9Fhg1Crf83avd6NZsrVrVYWy0QyTUxLdpkiGPyBRNFl/7gabWVR836BZ5O
-         bKpQKbtbx/EnHjHhNiOhk3uPLIw6K7PSFQrEOWCi5pHGEOWk2dw9ZS2zGNuXiT44r4x5
-         s6u/hVCtSluHDL907MNx1oOBa+5ydPfbHcLfIEFsYxfDunyElyaZ4luMZEOepY26HcgZ
-         cVog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698935689; x=1699540489;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wHBPMtYXD9v/EXoxQS8QLRmpxsQlq3KNaQrAD21c7JI=;
-        b=NOtrBB7Ib9g7fLwHszS9X8xRpVLieOjJLTwwvvdmGdYUw2F3U1IDekTtSmvBsFdJX/
-         4vXmGUBsdCX8hJTkJyZGvZRaFJvYWoPR1lCHgQWKpwiL0vV1wjivfLWSRGpJQVQVQMeN
-         jQ60KwegTYMye/JyXCfs/fqn4XHNQ+MRoLs7/GXWg+tNQvmmPH4dwmpRDP3Ch91ym3jf
-         nIhKcHXWkAuDcdHvmLRu6FRP6cSmccx3xYIpfwdK+O/ChgL2rGlIm9ZbAVwTMVA+7AiE
-         sBnnAFg5eTqnyvN3DaZrvPhfJc7jAKoamSGAkFpQZDjJu9dzSSN+li5+bUsbHoF3gSpY
-         5UVg==
-X-Gm-Message-State: AOJu0Yzm5YflGh8zdEnCC+Mm6d8ckqt55AvQ9SuMnSSJ12Lkisw6XDmI
-        OOV2D9K+83oCjxQhwoH1dwBrUYTsZjA=
-X-Google-Smtp-Source: AGHT+IFHGR8jUEvgiRwPVHlNQJiHwDhmZyec4yYsaO2gSqpjQ+FT+YOISub2+G1SP3W+6RGT4f0S/g==
-X-Received: by 2002:a54:4799:0:b0:3a7:82e8:8fd1 with SMTP id o25-20020a544799000000b003a782e88fd1mr18574341oic.20.1698935688882;
-        Thu, 02 Nov 2023 07:34:48 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bd37-20020a056808222500b003b2df32d9a9sm549110oib.19.2023.11.02.07.34.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Nov 2023 07:34:48 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c448d7e3-c6b6-49e1-bbf1-331d74954a77@roeck-us.net>
-Date:   Thu, 2 Nov 2023 07:34:47 -0700
+        with ESMTP id S1347626AbjKBQ50 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 2 Nov 2023 12:57:26 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B59FE181;
+        Thu,  2 Nov 2023 09:57:16 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6356B40004;
+        Thu,  2 Nov 2023 16:57:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1698944235;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NVz3G4wL1rSrk0NYhI8ac9/fbtgh/W+2BcN82pui1bE=;
+        b=YS1ZbF5vPsUZVEV1gWd7BpaTy6XlyFUooET0lTUZk7BfYXMwO8LXKymhq1jnx1qLePrYXv
+        k18yCMxjUwyGi+jApbW4A2AzaOZq7khKIOfIRW5S1Tqr9UEHycwe+r50v4/3CsuCro/K64
+        lL4CeDsH9Sw3nQZphTqfBf/rLgJnFAQIkINRDnyY5NnUkS5x3nUiMOIc7+BLwfE6pt3H41
+        SZunbBcy6SXiY9RCxwtx+6+8gQ8wYvl6TqSN3y318g0tocXPZz05apbwa2lX0Hbx+k/R7U
+        iwqO4RDpVYJNbvT1/hRFLUNha1Q9wcqDlr0pWsKAlPC0yVmpSaeJJwn9KOrheQ==
+Date:   Thu, 2 Nov 2023 17:57:13 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     "Miclaus, Antoniu" <Antoniu.Miclaus@analog.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: Re: [PATCH v4 2/2] rtc: max31335: add driver support
+Message-ID: <20231102165713296ca50b@mail.local>
+References: <20231101094835.51031-1-antoniu.miclaus@analog.com>
+ <20231101094835.51031-2-antoniu.miclaus@analog.com>
+ <202311012223422e3387b3@mail.local>
+ <CY4PR03MB3399BAAA3A3F6FC4B9A7A9FB9BA6A@CY4PR03MB3399.namprd03.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] hwmon: emc1403: Add support for EMC1442
-Content-Language: en-US
-To:     Patrick Williams <patrick@stwcx.xyz>,
-        Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20231102090808.427351-1-Delphine_CC_Chiu@wiwynn.com>
- <ZUOjdGPDX06ehrLB@heinlein.vulture-banana.ts.net>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <ZUOjdGPDX06ehrLB@heinlein.vulture-banana.ts.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CY4PR03MB3399BAAA3A3F6FC4B9A7A9FB9BA6A@CY4PR03MB3399.namprd03.prod.outlook.com>
+X-GND-Sasl: alexandre.belloni@bootlin.com
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 11/2/23 06:26, Patrick Williams wrote:
-> On Thu, Nov 02, 2023 at 05:08:07PM +0800, Delphine CC Chiu wrote:
+On 02/11/2023 13:44:16+0000, Miclaus, Antoniu wrote:
+>  
+> > On 01/11/2023 11:48:14+0200, Antoniu Miclaus wrote:
+> > > +static int max31335_get_hour(u8 hour_reg)
+> > > +{
+> > > +	int hour;
+> > > +
+> > > +	/* 24Hr mode */
+> > > +	if (!FIELD_GET(MAX31335_HOURS_F_24_12, hour_reg))
+> > > +		return bcd2bin(hour_reg & 0x3f);
+> > > +
+> > > +	/* 12Hr mode */
+> > > +	hour = bcd2bin(hour_reg & 0x1f);
+> > > +	if (hour == 12)
+> > > +		hour = 0;
+> > > +
+> > 
+> > Do you really need to support 12h mode?
 > 
-> I have a datasheet for this chip with a "Revision 1.0 (10-25-10)" in the
-> footer.  Reviewed the change against the datasheet.
+> Is is a feature supported by the part, so I think is nice to have.
 > 
->> Add support for EMC1442 which is compatible with EMC1403.
->>
->> Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
->> ---
->> change in v2:
->> Revised emc1403 to emc1402
-> 
->> +	case 0x60:
->> +		strscpy(info->type, "emc1442", I2C_NAME_SIZE);
->> +		break;
-> 
-> Confirmed against datasheet.
-> 
-> Section 2.2 "Register Set Delta" specifies:
->      - Product ID | 60h
-> 
->>   static const unsigned short emc1403_address_list[] = {
->> -	0x18, 0x1c, 0x29, 0x4c, 0x4d, 0x5c, I2C_CLIENT_END
->> +	0x18, 0x1c, 0x29, 0x3c, 0x4c, 0x4d, 0x5c, I2C_CLIENT_END
-> 
-> Confirmed against datasheet.
-> 
-> Section 5.1.2 "SMBus Address and RD/WR Bit" has a table indicating that
-> a 22k pull-up resistor corresponds to `0011_100?` binary.
-> 
->>   	{ "emc1422", emc1402 },
->>   	{ "emc1423", emc1403 },
->>   	{ "emc1424", emc1404 },
->> +	{ "emc1442", emc1402 },
-> 
-> Datasheet section 2.1 is titled "Functional Delta from EMC1412 to
-> EMC1442", with minimal differences.  We map "emc1412" to `emc1402`, so
-> mapping "emc1442" to the same should be appropriate.
-> 
-> 
-> Reviewed-by: Patrick Williams <patrick@stwcx.xyz>
-> 
-Thanks. I'll apply, and fix the description while doing so.
 
-Guenter
+Is anything on the system going to use it? This driver is not setting
+12h time so if there is no other component in the system accessing the
+time, there is no chance this is going to be used. Dead code is not nice
+to maintain.
 
+> > 
+> > > +	if (FIELD_GET(MAX31335_HOURS_HR_20_AM_PM, hour_reg))
+> > > +		hour += 12;
+> > > +
+> > > +	return hour;
+> > > +}
+> > > +
+> > > +static int max31335_read_offset(struct device *dev, long *offset)
+> > > +{
+> > > +	struct max31335_data *max31335 = dev_get_drvdata(dev);
+> > > +	u32 value;
+> > > +	int ret;
+> > > +
+> > > +	ret = regmap_read(max31335->regmap, MAX31335_AGING_OFFSET,
+> > &value);
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > > +	*offset = value;
+> > 
+> > This is super dubious, what is the unit of MAX31335_AGING_OFFSET ?
+> > 
+> 
+> There is not additional information on the AGING_OFFSET register (no
+> other offset registers).
+> I treated it as a raw value that user can write/read. Should I drop the 
+> offset implementation?
+> 
+
+The value exposed to userspace is in parts per billion. If you can't do
+the conversion, then you have to drop it.
+
+> > > +
+> > > +		return 0;
+> > > +	}
+> > > +
+> > > +	if (diode)
+> > > +		i = i + 4;
+> > > +	else
+> > > +		i = i + 1;
+> > 
+> > Do you actually need to configure the trickle charger when there is
+> > nothing to charge?
+> 
+> These are the options for the trickle chager:
+> MAX31335_TRICKLE_REG_TRICKLE bits
+> 
+> 0x0: 3KΩ in series with a Schottky diode
+> 0x1: 3KΩ in series with a Schottky diode
+> 0x2: 6KΩ in series with a Schottky diode 
+> 0x3: 11KΩ in series with a Schottky diode
+> 0x4: 3KΩ in series with a diode+Schottky diode
+> 0x5: 3KΩ in series with a diode+Schottky diode
+> 0x6: 6KΩ in series with a diode+Schottky diode
+> 0x7: 11KΩ in series with a diode+Schottky diode
+> 
+
+Then you need a property to select with diodes you are going to use. The
+ABX80X supports something similar.
+
+> > 
+> > > +
+> > > +	return regmap_write(max31335->regmap, MAX31335_TRICKLE_REG,
+> > > +			    FIELD_PREP(MAX31335_TRICKLE_REG_TRICKLE, i) |
+> > > +				       MAX31335_TRICKLE_REG_EN_TRICKLE);
+> > > +}
+> > > +
+> > > +static int max31335_clkout_register(struct device *dev)
+> > > +{
+> > > +	struct max31335_data *max31335 = dev_get_drvdata(dev);
+> > > +	int ret;
+> > > +
+> > > +	if (!device_property_present(dev, "#clock-cells"))
+> > > +		return 0;
+> > 
+> > Is the clock output disabled by default?
+> 
+> No, I will disable it.
+
+The CCF is responsible to disable the clock, else you will have a glitch
+in the clock at boot time which will break use cases. But for this to
+work, you will have to always register the clock.
+
+> 
+> > 
+> > > +
+> > > +static int max31335_probe(struct i2c_client *client)
+> > > +{
+> > > +	struct max31335_data *max31335;
+> > > +	struct device *hwmon;
+> > > +	int ret;
+> > > +
+> > > +	max31335 = devm_kzalloc(&client->dev, sizeof(*max31335),
+> > GFP_KERNEL);
+> > > +	if (!max31335)
+> > > +		return -ENOMEM;
+> > > +
+> > > +	max31335->regmap = devm_regmap_init_i2c(client,
+> > &regmap_config);
+> > > +	if (IS_ERR(max31335->regmap))
+> > > +		return PTR_ERR(max31335->regmap);
+> > > +
+> > > +	i2c_set_clientdata(client, max31335);
+> > > +
+> > > +	ret = regmap_write(max31335->regmap, MAX31335_RTC_RESET, 1);
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > > +	ret = regmap_write(max31335->regmap, MAX31335_RTC_RESET, 0);
+> > > +	if (ret)
+> > > +		return ret;
+> > 
+> > What does this register do?
+> > 
+> 
+> RTC Software Reset Register: 
+> 0x0: Device is in normal mode.
+> 0x1: Resets the digital block and the I2C programmable registers except for
+> Timestamp/RAM registers and the SWRST bit. Oscillator is disabled.
+> 
+> The bit doesn't clear itself.
+> 
+
+Then you definitively don't want to do this, this will invalidate time
+and date as the oscillator is disabled and this renders the RTC useless.
+The whole point of the RTC is that it survives the reboot or shutdown of
+the system.
+
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
