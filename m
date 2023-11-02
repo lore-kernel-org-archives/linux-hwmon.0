@@ -2,65 +2,67 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3677C4332F
-	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Nov 2023 14:33:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2E04C4332F
+	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Nov 2023 14:34:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbjKBOdv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 2 Nov 2023 10:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45232 "EHLO
+        id S229602AbjKBOew (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 2 Nov 2023 10:34:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjKBOdu (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 2 Nov 2023 10:33:50 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C511185;
-        Thu,  2 Nov 2023 07:33:46 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id 5614622812f47-3b3e13fc1f7so597095b6e.0;
-        Thu, 02 Nov 2023 07:33:46 -0700 (PDT)
+        with ESMTP id S229579AbjKBOew (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 2 Nov 2023 10:34:52 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B5D212D;
+        Thu,  2 Nov 2023 07:34:49 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id 5614622812f47-3b566ee5f1dso628048b6e.0;
+        Thu, 02 Nov 2023 07:34:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698935625; x=1699540425; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1698935689; x=1699540489; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=brqJvWsHAzi4U2wihnaxOKoaRpOc4suom7JYm2x0X28=;
-        b=G00j6Vmgb0EHOt2VbHnVD/LHH2c4l/qHK9JSH39QVIeG+d2FMRtUd4t8oIHIkADSLw
-         yL81qVqTQx3T4r4R2bFNE7gmO2kUvRzqFBC1PTcTtO4R5gSbPUGoQaqiq+S7bDwQ8zKE
-         P9hUDrASCkMN/AukBLjmc1fh7sSHpzAx/9VKvZUB+L0ZPjIWAW7cyiHeMGSlT3Agv3G/
-         VQT1jIrLbMpp8KWouSlr7qZnXAlZy/biX8D3bOmg/3oZcQkg/OSNCnS15zuOwwuUYuyO
-         RyJUGW78JPRRvRv3xqBiFDsjD3nF82J/p2BdI4NLElrGmYj7SxKr84cE2DSS46RMqZy+
-         9fzw==
+        bh=wHBPMtYXD9v/EXoxQS8QLRmpxsQlq3KNaQrAD21c7JI=;
+        b=O+PKuV3FuhXMg691Q4BmeDD8W7O9WRzO3EptdevZli/GIlKb/TAhFBqji5WrMIEnJG
+         gP3zuDj/OkWmWFOySK5s6DISegaNZNRF0Bm4cJv2NpESGOP+X/kNynaIHDQuT5yVKHN/
+         4hpVMxBfnK9Fhg1Crf83avd6NZsrVrVYWy0QyTUxLdpkiGPyBRNFl/7gabWVR836BZ5O
+         bKpQKbtbx/EnHjHhNiOhk3uPLIw6K7PSFQrEOWCi5pHGEOWk2dw9ZS2zGNuXiT44r4x5
+         s6u/hVCtSluHDL907MNx1oOBa+5ydPfbHcLfIEFsYxfDunyElyaZ4luMZEOepY26HcgZ
+         cVog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698935625; x=1699540425;
+        d=1e100.net; s=20230601; t=1698935689; x=1699540489;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=brqJvWsHAzi4U2wihnaxOKoaRpOc4suom7JYm2x0X28=;
-        b=XasdCoJDbzdW0at78/Ua+v5dTzRwDRwt4JTuK5cy3rAQaiYE0Yq6joyPrUz/+tfFZl
-         VEFNe4Vfzy8tFqUc744zUlmmiX/Ged/0/BiLeGUv4D6W7bpYmJr/hE7R9K5/YFXPcxjZ
-         5rW/4mVZLDTlNGfjLNKnlzU0/h6eo1eGTETt0gPMmQFWIqchVRKNEC44YcdaxqI72Coe
-         jNriYKnhYekfcaAn+6khIeQg4RAFnmajABXP5F5wI1ROZnfzRpVufnu+xO3rVxfynyIH
-         idVbpI7s3dhZwDPAp2UR0XBIxozzjIjE1XAWI4dpbOepBYF4VmaPigG4hz/E23IMPbXo
-         HK7g==
-X-Gm-Message-State: AOJu0YzMn0xDGL0w96bFDu6X957Iglac0PNZ0CDsSuiECS32Lbd4eDp4
-        lXaya2YBE+umrpTJ1el7csQ=
-X-Google-Smtp-Source: AGHT+IHD2y78Km2ECeM/vYuGTC2m0mGPK/SqO/zgbv0IZLp1tsXc5ZbcdLDaG2YtLM0y1P2By+GkEQ==
-X-Received: by 2002:a05:6808:1790:b0:3b2:f54b:8b45 with SMTP id bg16-20020a056808179000b003b2f54b8b45mr24810808oib.40.1698935624772;
-        Thu, 02 Nov 2023 07:33:44 -0700 (PDT)
+        bh=wHBPMtYXD9v/EXoxQS8QLRmpxsQlq3KNaQrAD21c7JI=;
+        b=NOtrBB7Ib9g7fLwHszS9X8xRpVLieOjJLTwwvvdmGdYUw2F3U1IDekTtSmvBsFdJX/
+         4vXmGUBsdCX8hJTkJyZGvZRaFJvYWoPR1lCHgQWKpwiL0vV1wjivfLWSRGpJQVQVQMeN
+         jQ60KwegTYMye/JyXCfs/fqn4XHNQ+MRoLs7/GXWg+tNQvmmPH4dwmpRDP3Ch91ym3jf
+         nIhKcHXWkAuDcdHvmLRu6FRP6cSmccx3xYIpfwdK+O/ChgL2rGlIm9ZbAVwTMVA+7AiE
+         sBnnAFg5eTqnyvN3DaZrvPhfJc7jAKoamSGAkFpQZDjJu9dzSSN+li5+bUsbHoF3gSpY
+         5UVg==
+X-Gm-Message-State: AOJu0Yzm5YflGh8zdEnCC+Mm6d8ckqt55AvQ9SuMnSSJ12Lkisw6XDmI
+        OOV2D9K+83oCjxQhwoH1dwBrUYTsZjA=
+X-Google-Smtp-Source: AGHT+IFHGR8jUEvgiRwPVHlNQJiHwDhmZyec4yYsaO2gSqpjQ+FT+YOISub2+G1SP3W+6RGT4f0S/g==
+X-Received: by 2002:a54:4799:0:b0:3a7:82e8:8fd1 with SMTP id o25-20020a544799000000b003a782e88fd1mr18574341oic.20.1698935688882;
+        Thu, 02 Nov 2023 07:34:48 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bd37-20020a056808222500b003b2df32d9a9sm549110oib.19.2023.11.02.07.33.43
+        by smtp.gmail.com with ESMTPSA id bd37-20020a056808222500b003b2df32d9a9sm549110oib.19.2023.11.02.07.34.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Nov 2023 07:33:43 -0700 (PDT)
+        Thu, 02 Nov 2023 07:34:48 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8f814772-ec54-45f3-9c94-a37dc732b0eb@roeck-us.net>
-Date:   Thu, 2 Nov 2023 07:33:42 -0700
+Message-ID: <c448d7e3-c6b6-49e1-bbf1-331d74954a77@roeck-us.net>
+Date:   Thu, 2 Nov 2023 07:34:47 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2] hwmon: emc1403: Add support for EMC1442
 Content-Language: en-US
-To:     Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, patrick@stwcx.xyz
+To:     Patrick Williams <patrick@stwcx.xyz>,
+        Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
 Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20231102090808.427351-1-Delphine_CC_Chiu@wiwynn.com>
+ <ZUOjdGPDX06ehrLB@heinlein.vulture-banana.ts.net>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -105,66 +107,57 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20231102090808.427351-1-Delphine_CC_Chiu@wiwynn.com>
+In-Reply-To: <ZUOjdGPDX06ehrLB@heinlein.vulture-banana.ts.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 11/2/23 02:08, Delphine CC Chiu wrote:
-> Add support for EMC1442 which is compatible with EMC1403.
-                                                    ^^^^^^^
-
-EMC1402
-
-NP, I can fix that up when applying.
-
+On 11/2/23 06:26, Patrick Williams wrote:
+> On Thu, Nov 02, 2023 at 05:08:07PM +0800, Delphine CC Chiu wrote:
 > 
-> Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
-> ---
-> change in v2:
-> Revised emc1403 to emc1402
-> ---
->   drivers/hwmon/emc1403.c | 6 +++++-
->   1 file changed, 5 insertions(+), 1 deletion(-)
+> I have a datasheet for this chip with a "Revision 1.0 (10-25-10)" in the
+> footer.  Reviewed the change against the datasheet.
 > 
-> diff --git a/drivers/hwmon/emc1403.c b/drivers/hwmon/emc1403.c
-> index bb7c859e799d..1332e4ac078c 100644
-> --- a/drivers/hwmon/emc1403.c
-> +++ b/drivers/hwmon/emc1403.c
-> @@ -346,6 +346,9 @@ static int emc1403_detect(struct i2c_client *client,
->   	case 0x27:
->   		strscpy(info->type, "emc1424", I2C_NAME_SIZE);
->   		break;
-> +	case 0x60:
-> +		strscpy(info->type, "emc1442", I2C_NAME_SIZE);
-> +		break;
->   	default:
->   		return -ENODEV;
->   	}
-> @@ -430,7 +433,7 @@ static int emc1403_probe(struct i2c_client *client)
->   }
->   
->   static const unsigned short emc1403_address_list[] = {
-> -	0x18, 0x1c, 0x29, 0x4c, 0x4d, 0x5c, I2C_CLIENT_END
-> +	0x18, 0x1c, 0x29, 0x3c, 0x4c, 0x4d, 0x5c, I2C_CLIENT_END
-                           ^^^^
+>> Add support for EMC1442 which is compatible with EMC1403.
+>>
+>> Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+>> ---
+>> change in v2:
+>> Revised emc1403 to emc1402
+> 
+>> +	case 0x60:
+>> +		strscpy(info->type, "emc1442", I2C_NAME_SIZE);
+>> +		break;
+> 
+> Confirmed against datasheet.
+> 
+> Section 2.2 "Register Set Delta" specifies:
+>      - Product ID | 60h
+> 
+>>   static const unsigned short emc1403_address_list[] = {
+>> -	0x18, 0x1c, 0x29, 0x4c, 0x4d, 0x5c, I2C_CLIENT_END
+>> +	0x18, 0x1c, 0x29, 0x3c, 0x4c, 0x4d, 0x5c, I2C_CLIENT_END
+> 
+> Confirmed against datasheet.
+> 
+> Section 5.1.2 "SMBus Address and RD/WR Bit" has a table indicating that
+> a 22k pull-up resistor corresponds to `0011_100?` binary.
+> 
+>>   	{ "emc1422", emc1402 },
+>>   	{ "emc1423", emc1403 },
+>>   	{ "emc1424", emc1404 },
+>> +	{ "emc1442", emc1402 },
+> 
+> Datasheet section 2.1 is titled "Functional Delta from EMC1412 to
+> EMC1442", with minimal differences.  We map "emc1412" to `emc1402`, so
+> mapping "emc1442" to the same should be appropriate.
+> 
+> 
+> Reviewed-by: Patrick Williams <patrick@stwcx.xyz>
+> 
+Thanks. I'll apply, and fix the description while doing so.
 
-This also needs confirmation from someone (else) with a datasheet.
-
-Thanks,
 Guenter
-
->   };
->   
->   /* Last digit of chip name indicates number of channels */
-> @@ -444,6 +447,7 @@ static const struct i2c_device_id emc1403_idtable[] = {
->   	{ "emc1422", emc1402 },
->   	{ "emc1423", emc1403 },
->   	{ "emc1424", emc1404 },
-> +	{ "emc1442", emc1402 },
->   	{ }
->   };
->   MODULE_DEVICE_TABLE(i2c, emc1403_idtable);
 
