@@ -2,385 +2,210 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85652C4332F
-	for <linux-hwmon@archiver.kernel.org>; Wed,  1 Nov 2023 22:23:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B489FC4332F
+	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Nov 2023 01:12:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232708AbjKAWXw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 1 Nov 2023 18:23:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37544 "EHLO
+        id S1347628AbjKBBMZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 1 Nov 2023 21:12:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231281AbjKAWXv (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 1 Nov 2023 18:23:51 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00A411D;
-        Wed,  1 Nov 2023 15:23:44 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id EB176E0003;
-        Wed,  1 Nov 2023 22:23:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1698877423;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jggGNcvAtv9LxN7R6LMr0R964jtilEqQaxj50I5uJCg=;
-        b=pDlo0FOJY3L9dpP1BPmOMKhLX7DRNq7i/rYZcSimLwRXA11gf1G5FoHgBBrHWblhYwaQKU
-        t4i+DXCgpT02VcLii1qnacj9BPhztK6xsY1DxdqFExFVkxay88Zt9z/iyyLm9XJaoQFyAc
-        uzEAo1Dx4rimQRoi2v+SnOTGsbsur2+xwcj++drgxHUTFSbQMCu8ksjKJwfEqUMjO3jxRE
-        HmGk2+32EJ+QKxsZwYX4qgHuD0Msw3e7C24HbaBPyKpA8dLRuYyGAR9afFamRa4N7AEU+Z
-        qOgshuLXpppzLanr0PcUbLmlPtzbXUfD2gk7qIR9sf21aH8jcDTII1pDeZbrNg==
-Date:   Wed, 1 Nov 2023 23:23:42 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Antoniu Miclaus <antoniu.miclaus@analog.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] rtc: max31335: add driver support
-Message-ID: <202311012223422e3387b3@mail.local>
-References: <20231101094835.51031-1-antoniu.miclaus@analog.com>
- <20231101094835.51031-2-antoniu.miclaus@analog.com>
+        with ESMTP id S1347564AbjKBBMY (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 1 Nov 2023 21:12:24 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 182F2FC
+        for <linux-hwmon@vger.kernel.org>; Wed,  1 Nov 2023 18:12:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1698887513; x=1699492313; i=w_armin@gmx.de;
+        bh=awJn+ahfcbmLMaq9kjd7rQh/H7IzGRa+RIFGO48VvAc=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
+         In-Reply-To;
+        b=Xne7YEiVW5EYZGkP2k2LA7YvT0llLOO79C87AGnJpRvWONWz+nXxwjZ2afGqSLTL
+         U5rXnYWEQmA+Y7K8VwyFQFUgGpHaEl0Rfj7E/GeHxRXMF3HS9jimpYoSDuTndgCli
+         FPLdGJs7ekM/vLmwFiCNFLAbsFeQFC2a5x52Lwg/jBcy3HrLIZTbjScifXD1e0t0g
+         2j6d8QFf3AfIMwDNHGR07mqYiuPjxstrVCkJpBEwmFEoTpgSGFZ9B6a2tJsHepWSa
+         8xy/pOsrnf8iNZgcty4gxp5bmA2e/5FKJilRTm+poK258c7p5woYaZwVHhSeZLfh3
+         dCqetuQ2e72E2jzNNw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MTzf6-1qou3H2Ify-00R0he; Thu, 02
+ Nov 2023 02:11:53 +0100
+Message-ID: <2c1e7789-bce3-4652-a290-bd8ddbe26df8@gmx.de>
+Date:   Thu, 2 Nov 2023 02:11:49 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231101094835.51031-2-antoniu.miclaus@analog.com>
-X-GND-Sasl: alexandre.belloni@bootlin.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [BUG] hp-wmi-sensors: probe of
+ 8F1F6435-9F42-42C8-BADC-0E9424F20C9A failed with error -22
+To:     James Seo <james@equiv.tech>
+Cc:     Lukasz Stelmach <l.stelmach@samsung.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+References: <65a80c25-5646-4928-b6c8-914fb4b63046@roeck-us.net>
+ <CGME20231031210738eucas1p2e4901bcc3ba9b361fb562c7936c7d558@eucas1p2.samsung.com>
+ <oypijdmsvyec1d.fsf%l.stelmach@samsung.com>
+ <217211fb-ac5c-4b61-911d-4d25b90cddda@gmx.de> <ZUHVUkzDfPX16+7P@equiv.tech>
+Content-Language: en-US
+From:   Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <ZUHVUkzDfPX16+7P@equiv.tech>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:1XK8S3R/9Qr3sBmS5JHrQirDpeJBd8MrNOd9qLCX5BnRcqqOb9y
+ PYL4DYoA8fp5TtL7Pdi4iDmzkuvVg+tfzhVnrTad3klvyvjTcboWCVMYgEmOyCvOh0XZm5G
+ ArpC02qNgHOVSYIu0bxJnM3NDCd04513U6ObYMZWgEYgvy14NTRIqABBuaNtdeYZRll/VZS
+ KfzkVdyJDgRxiyCXw6CwQ==
+UI-OutboundReport: notjunk:1;M01:P0:AQRNNHTPX/w=;/02OoMKhAcj1E3FnpRZOm1SLrF4
+ OoFesNIxMdew+YlWMqukEEdkHXy1vFQizQAArqqNSPQ2LcVurgfCv9oCsVMcp43iZd3YnB4u6
+ XavHncOpuabGsPj++ujRied5mPPu4HHNkqqcfbQ3u7nOuavNK3v5Nz1fzw7ST0avh97+ekv5B
+ dnqBBWaX1nT/90bMWNs6AdlGaOYCmWE8FueZCRmBqrDYdjAm/4hN2jgYAK67TydOFUjELJfCQ
+ EOcHVXRQKCtv8MkGq1cfEvMVRgpbOhhgugd3ifVfJ+Y5W0j4OwsjraefKiTjNAVexoGT0SgV4
+ zAzHer/m59153KnaniYO1si6LxCpmA/IBNLb9fOIcLFCaM8jJfCFFTZWp2rgN1qJ6U+vsXpCD
+ h4UCPx/HzeoNNx5WzPmSdjPj9Y4fmqKXsXzDxVUytIfBmDQcCypqqwoBVoCrmwYwjasCuZyLS
+ 7WulZo1LO0X+1tzdkW66k97RTv+DrtjD1ZXKfhWBgsvQ8IGOUKb6ZB5PA/yp7rfrwIbhXYhZI
+ VONYFuMce+k3T1o9ogKUOF7EQxTRuzprXGmbAaBMM5xkwQIBZqj3UkzESb+CEMfNUc+StgsiR
+ I0F/bXh7/B8mG9zOH96KxZPfoUeLuYaPQ6ogQUKGA+a0YD0ROEVEkytFsUse2IwwKHgMiAwcp
+ 0xWOZuVGCfvEPtUxZgrvCkr98K6n3PyAefRZ7IH49FNmOHMIy+4F0eQHIc/BAemTygfRPpP19
+ w+y1AIvhqfM7/ZCd23KTeGdbuFLjUL5op1wpT4nYHNv8QM5lWyCJcZOrBqdByWUTuJmZ346Fa
+ fZiUBFMBF4VZ+FvyGbV47nK637z1dnL+oim0IwbwP7xcigXvRR39fiuiVimJ7EYGZzwR8Rgct
+ a1Z49FJJt4oNVoZ8nPTCcqDhx6MhqxarP9VmCb4HFBTM9DvmWsGuQGj617N3bVciJE15ehxu5
+ xV5nGZmpll+YCAX8jNPFnbhcrfc=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 01/11/2023 11:48:14+0200, Antoniu Miclaus wrote:
-> +static int max31335_get_hour(u8 hour_reg)
-> +{
-> +	int hour;
-> +
-> +	/* 24Hr mode */
-> +	if (!FIELD_GET(MAX31335_HOURS_F_24_12, hour_reg))
-> +		return bcd2bin(hour_reg & 0x3f);
-> +
-> +	/* 12Hr mode */
-> +	hour = bcd2bin(hour_reg & 0x1f);
-> +	if (hour == 12)
-> +		hour = 0;
-> +
+Am 01.11.23 um 05:34 schrieb James Seo:
 
-Do you really need to support 12h mode?
+> On Tue, Oct 31, 2023 at 11:34:16PM +0100, Armin Wolf wrote:
+>> Am 31.10.23 um 22:07 schrieb Lukasz Stelmach:
+>>
+>>> It was <2023-10-31 wto 12:28>, when Guenter Roeck wrote:
+>>>> On 10/31/23 12:07, Lukasz Stelmach wrote:
+>>>>
+>>>> [ ... ]
+>>>>
+>>>>>> For what it's worth, I personally don't see much value in doing muc=
+h
+>>>>>> more than a machine-limited workaround for now. To me it's clear th=
+at
+>>>>>> this UTF-16 corner case is a BIOS bug and its consequences are mini=
+mal
+>>>>>> once a workaround is in place.
+>>>>>>
+>>>>>> Thoughts?
+>> I think this is no BIOS bug, but valid behavior since the Windows ACPI-=
+WMI mapper
+>> converts the ACPI objects into a common buffer format as described here=
+:
+>>
+>> https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/drive=
+r-defined-wmi-data-items
+>>
+> Hi Armin,
+>
+> I did see this link when you mentioned it earlier, and I understand that=
+ it's
+> specifying the packed and internally aligned buffer format that WMI on W=
+indows
+> expects when a Windows driver provides a WMI data block.
+>
+> This to me is a different question from whether an ACPI object in the BI=
+OS,
+> one which will be converted to a WMI object by Windows later, should con=
+tain
+> UTF-16. I didn't find a single other example in all the ACPI dumps in th=
+e Linux
+> Hardware Database [1] of such an ACPI object.
+>
+> So the answer to the question seems like a "SHOULD NOT". And someone at =
+HP
+> definitely did a bad copy-paste when it came to this BIOS. I feel comfor=
+table
+> calling it a bug (the leading "4" makes it one in any case).
 
-> +	if (FIELD_GET(MAX31335_HOURS_HR_20_AM_PM, hour_reg))
-> +		hour += 12;
-> +
-> +	return hour;
-> +}
-> +
-> +static int max31335_read_offset(struct device *dev, long *offset)
-> +{
-> +	struct max31335_data *max31335 = dev_get_drvdata(dev);
-> +	u32 value;
-> +	int ret;
-> +
-> +	ret = regmap_read(max31335->regmap, MAX31335_AGING_OFFSET, &value);
-> +	if (ret)
-> +		return ret;
-> +
-> +	*offset = value;
+Not exactly, the leading "4" is a hack:
 
-This is super dubious, what is the unit of MAX31335_AGING_OFFSET ?
+The string "4BIOS Configuration Change" get converted to "\u0034 \u0042 \u=
+0049 \u004f \u0053 \u0020 \u0043 \u006f \u006e \u0066 \u0069 \u0067
+\u0075 \u0072 \u0061 \u0074 \u0069 \u006f \u006e \u0020 \u0043 \u0068 \u00=
+61 \u006e \u0067 \u0065 \u0000",
+so without the leading "4", the utf16 string is 52 bytes long.
 
-> +
-> +	return 0;
-> +}
-> +
-> +static int max31335_set_offset(struct device *dev, long offset)
-> +{
-> +	struct max31335_data *max31335 = dev_get_drvdata(dev);
-> +
-> +	return regmap_write(max31335->regmap, MAX31335_AGING_OFFSET, offset);
-> +}
-> +
-> +static int max31335_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-> +{
-> +	struct max31335_data *max31335 = dev_get_drvdata(dev);
-> +	struct mutex *lock = &max31335->rtc->ops_lock;
-> +	int ret, ctrl, status;
-> +	struct rtc_time time;
-> +	u8 regs[6];
-> +
-> +	mutex_lock(lock);
+Since WMI want the utf16 string prefixed with its length (52 =3D 0x34), th=
+e leading "4" was added
+since the letter "4" gets converted to \u0034 (0x34 =3D 52).
 
-Use rtc_lock(), I'm not quite sure why you would need locking here
-though.
+So for WMI, the leading "4" gets interpreted as the length of the followin=
+g utf16 string,
+so it is not displayed to WMI data consumers.
 
-> +
-> +	ret = regmap_bulk_read(max31335->regmap, MAX31335_ALM1_SEC, regs,
-> +			       sizeof(regs));
-> +	if (ret)
-> +		goto exit;
-> +
-> +	alrm->time.tm_sec  = bcd2bin(regs[0] & 0x7f);
-> +	alrm->time.tm_min  = bcd2bin(regs[1] & 0x7f);
-> +	alrm->time.tm_hour = bcd2bin(regs[2] & 0x3f);
-> +	alrm->time.tm_mday = bcd2bin(regs[3] & 0x3f);
-> +	alrm->time.tm_mon  = bcd2bin(regs[4] & 0x1f) - 1;
-> +	alrm->time.tm_year = bcd2bin(regs[5]) + 100;
-> +
-> +	ret = max31335_read_time(dev, &time);
-> +	if (ret)
-> +		goto exit;
-> +
-> +	if (time.tm_year >= 200)
-> +		alrm->time.tm_year += 100;
-> +
-> +	ret = regmap_read(max31335->regmap, MAX31335_INT_EN1, &ctrl);
-> +	if (ret)
-> +		goto exit;
-> +
-> +	ret = regmap_read(max31335->regmap, MAX31335_STATUS1, &status);
-> +	if (ret)
-> +		goto exit;
-> +
-> +	alrm->enabled = FIELD_GET(MAX31335_INT_EN1_A1IE, ctrl);
-> +	alrm->pending = FIELD_GET(MAX31335_STATUS1_A1F, status);
-> +
-> +exit:
-> +	mutex_unlock(lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static int max31335_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-> +{
-> +	struct max31335_data *max31335 = dev_get_drvdata(dev);
-> +	struct mutex *lock = &max31335->rtc->ops_lock;
-> +	unsigned int reg;
-> +	u8 regs[6];
-> +	int ret;
-> +
-> +	regs[0] = bin2bcd(alrm->time.tm_sec);
-> +	regs[1] = bin2bcd(alrm->time.tm_min);
-> +	regs[2] = bin2bcd(alrm->time.tm_hour);
-> +	regs[3] = bin2bcd(alrm->time.tm_mday);
-> +	regs[4] = bin2bcd(alrm->time.tm_mon + 1);
-> +	regs[5] = bin2bcd(alrm->time.tm_year % 100);
-> +
-> +	mutex_lock(lock);
+>
+>> I assume that the mapper converts the ACPI string into a WMI string buf=
+fer, and that
+>> a common ACPI buffer is just passed as-is. In this case, the error lies=
+ inside the
+>> linux WMI subsystem, which does not do such a conversion.
+>>
+>> I can try to find out more about this conversion and its rules, and use=
+ this to add
+>> support for that to the WMI subsystem. This would prevent such errors i=
+n the future
+>> and would bring us closer to full ACPI WMI support inside the kernel.
+> Yes, if the ACPI-WMI mapping driver handles already existing UTF-16 in a=
+n ACPI
+> buffer as we have here, it would be good for us to support that as well.
+> Hopefully =C5=81ukasz can find a Windows machine to help determine if it=
+ does.
+>
+> Earlier, you mentioned converting an ACPI object into the packed buffer =
+format
+> that Windows expects. But is there some reason I'm missing for us to als=
+o pack
+> things like that in the first place? I assume that this format exists fo=
+r
+> convenience (returning multiple values) or space reasons, and such a WMI
+> buffer is eventually unpacked into its various components according to t=
+he MOF
+> anyway. At least for WMI drivers on Linux, I think it would make more se=
+nse to
+> transparently convert the UTF-16 string to UTF-8 and pretend that the pr=
+operty
+> was an ACPI_TYPE_STRING all along.
+>
+> And now I'm thinking out loud, but if WMI doesn't allow arbitrary binary=
+ data
+> (and from the WMI buffer spec you linked, it doesn't), and the Windows A=
+CPI-WMI
+> mapper can indeed handle UTF-16, then ACPI_TYPE_BUFFER in ACPI objects i=
+ntended
+> to become WMI objects can only contain UTF-16.
 
-I'm not sure why you need locking here either, maybe you should simply
-disable the alarm first?
+On my machine (Dell Inspiron 3505), an ACPI WMI method uses a ACPI_TYPE_BU=
+FFER
+to pass an array of u32, so assuming ACPI_TYPE_BUFFER =3D=3D utf16 is fals=
+e.
 
-> +
-> +	ret = regmap_bulk_write(max31335->regmap, MAX31335_ALM1_SEC,
-> +				regs, sizeof(regs));
-> +	if (ret)
-> +		goto exit;
-> +
-> +	reg = FIELD_PREP(MAX31335_INT_EN1_A1IE, alrm->enabled);
-> +	ret = regmap_update_bits(max31335->regmap, MAX31335_INT_EN1,
-> +				 MAX31335_INT_EN1_A1IE, reg);
-> +	if (ret)
-> +		goto exit;
-> +
-> +	ret = regmap_update_bits(max31335->regmap, MAX31335_STATUS1,
-> +				 MAX31335_STATUS1_A1F, 0);
-> +
-> +exit:
-> +	mutex_unlock(lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static int max31335_alarm_irq_enable(struct device *dev, unsigned int enabled)
-> +{
-> +	struct max31335_data *max31335 = dev_get_drvdata(dev);
-> +
-> +	return regmap_update_bits(max31335->regmap, MAX31335_INT_EN1,
-> +				  MAX31335_INT_EN1_A1IE, enabled);
-> +}
-> +
+This shows why linux should do this preprocessing too, because WMI marshal=
+s
+the _converted_ buffer using the MOF definitions, not the ACPI bobject.
 
+According to Microsoft documentation, the ACPI-WMI mapper converts the ACP=
+I object
+without having _any_ knowledge of the corresponding MOF definitions. This =
+means
+that after conversion, the contents of the WMI buffer are only "normalized=
+" so
+the WMI core does not have to know about ACPI data types.
 
-> +static int max31335_trickle_charger_setup(struct device *dev,
-> +					  struct max31335_data *max31335)
-> +{
-> +	u32 ohms, chargeable;
-> +	bool diode = false;
-> +	int i;
-> +
-> +	if (device_property_read_u32(dev, "trickle-resistor-ohms", &ohms))
-> +		return 0;
-> +
-> +	if (!device_property_read_u32(dev, "aux-voltage-chargeable",
-> +				      &chargeable)) {
-> +		switch (chargeable) {
-> +		case 0:
-> +			diode = false;
-> +			break;
-> +		case 1:
-> +			diode = true;
-> +			break;
-> +		default:
-> +			dev_warn(dev,
-> +				 "unsupported aux-voltage-chargeable value\n");
+If linux would also do this "normalization" step, then we would also be ab=
+le to
+operate on this "normalized" WMI buffer without relying on the ACPI data t=
+ypes,
+which (like in this case) can use different ways to express the same WMI d=
+ata
+(string as ACPI string vs string as utf16 buffer).
 
-I don't think the string is necessary, checking the DT should be done at
-compile time.
+Armin Wolf
 
-> +			break;
-> +		}
-> +	}
-> +
-> +	for (i = 0; i < ARRAY_SIZE(max31335_trickle_resistors); i++)
-> +		if (ohms == max31335_trickle_resistors[i])
-> +			break;
-> +
-> +	if (i >= ARRAY_SIZE(max31335_trickle_resistors)) {
-> +		dev_warn(dev, "invalid trickle resistor value\n");
-
-Ditto.
-
-> +
-> +		return 0;
-> +	}
-> +
-> +	if (diode)
-> +		i = i + 4;
-> +	else
-> +		i = i + 1;
-
-Do you actually need to configure the trickle charger when there is
-nothing to charge?
-
-> +
-> +	return regmap_write(max31335->regmap, MAX31335_TRICKLE_REG,
-> +			    FIELD_PREP(MAX31335_TRICKLE_REG_TRICKLE, i) |
-> +				       MAX31335_TRICKLE_REG_EN_TRICKLE);
-> +}
-> +
-> +static int max31335_clkout_register(struct device *dev)
-> +{
-> +	struct max31335_data *max31335 = dev_get_drvdata(dev);
-> +	int ret;
-> +
-> +	if (!device_property_present(dev, "#clock-cells"))
-> +		return 0;
-
-Is the clock output disabled by default?
-
-> +
-> +static int max31335_probe(struct i2c_client *client)
-> +{
-> +	struct max31335_data *max31335;
-> +	struct device *hwmon;
-> +	int ret;
-> +
-> +	max31335 = devm_kzalloc(&client->dev, sizeof(*max31335), GFP_KERNEL);
-> +	if (!max31335)
-> +		return -ENOMEM;
-> +
-> +	max31335->regmap = devm_regmap_init_i2c(client, &regmap_config);
-> +	if (IS_ERR(max31335->regmap))
-> +		return PTR_ERR(max31335->regmap);
-> +
-> +	i2c_set_clientdata(client, max31335);
-> +
-> +	ret = regmap_write(max31335->regmap, MAX31335_RTC_RESET, 1);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = regmap_write(max31335->regmap, MAX31335_RTC_RESET, 0);
-> +	if (ret)
-> +		return ret;
-
-What does this register do?
-
-> +
-> +	max31335->rtc = devm_rtc_allocate_device(&client->dev);
-> +	if (IS_ERR(max31335->rtc))
-> +		return PTR_ERR(max31335->rtc);
-> +
-> +	max31335->rtc->ops = &max31335_rtc_ops;
-> +	max31335->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-> +	max31335->rtc->range_max = RTC_TIMESTAMP_END_2199;
-
-Please set alarm_offset_max too.
-
-> +
-> +	ret = devm_rtc_register_device(max31335->rtc);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = max31335_clkout_register(&client->dev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (client->irq > 0) {
-> +		ret = devm_request_threaded_irq(&client->dev, client->irq,
-> +						NULL, max31335_handle_irq,
-> +						IRQF_ONESHOT,
-> +						"max31335", max31335);
-> +		if (ret) {
-> +			dev_warn(&client->dev,
-> +				 "unable to request IRQ, alarm max31335 disabled\n");
-> +			client->irq = 0;
-> +		}
-> +	}
-> +
-> +	if (!client->irq)
-> +		clear_bit(RTC_FEATURE_ALARM, max31335->rtc->features);
-> +
-> +	max31335_nvmem_cfg.priv = max31335;
-> +	ret = devm_rtc_nvmem_register(max31335->rtc, &max31335_nvmem_cfg);
-> +	if (ret)
-> +		dev_err_probe(&client->dev, ret, "cannot register rtc nvmem\n");
-> +
-> +	hwmon = devm_hwmon_device_register_with_info(&client->dev, client->name,
-> +						     max31335,
-> +						     &max31335_chip_info,
-> +						     NULL);
-> +	if (IS_ERR(hwmon))
-> +		dev_err_probe(&client->dev, PTR_ERR(hwmon),
-> +			      "cannot register hwmon device\n");
-> +
-> +	return max31335_trickle_charger_setup(&client->dev, max31335);
-
-You must never fail probe after calling devm_rtc_register_device, else
-you are open to a race condition with userspace.
-
-> +}
-> +
-> +static const struct i2c_device_id max31335_id[] = {
-> +	{ "max31335", 0 },
-> +	{ }
-> +};
-> +
-> +MODULE_DEVICE_TABLE(i2c, max31335_id);
-> +
-> +static const struct of_device_id max31335_of_match[] = {
-> +	{ .compatible = "adi,max31335" },
-> +	{ }
-> +};
-> +
-> +MODULE_DEVICE_TABLE(of, max31335_of_match);
-> +
-> +static struct i2c_driver max31335_driver = {
-> +	.driver = {
-> +		.name = "rtc-max31335",
-> +		.of_match_table = max31335_of_match,
-> +	},
-> +	.probe = max31335_probe,
-> +	.id_table = max31335_id,
-> +};
-> +module_i2c_driver(max31335_driver);
-> +
-> +MODULE_AUTHOR("Antoniu Miclaus <antoniu.miclaus@analog.com>");
-> +MODULE_DESCRIPTION("MAX31335 RTC driver");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.42.0
-> 
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>> This will take quite some time however, so i would suggest adding a qui=
+rk handler
+>> first and replace this with the WMI conversion functions later.
+> No worries.
+>
+> [1] https://github.com/linuxhw/ACPI/
