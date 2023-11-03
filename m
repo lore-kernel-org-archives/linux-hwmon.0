@@ -2,176 +2,113 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A69AC4332F
-	for <linux-hwmon@archiver.kernel.org>; Fri,  3 Nov 2023 18:19:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11CD3C4167B
+	for <linux-hwmon@archiver.kernel.org>; Fri,  3 Nov 2023 18:57:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbjKCST5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 3 Nov 2023 14:19:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39910 "EHLO
+        id S230357AbjKCS5v (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 3 Nov 2023 14:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbjKCSTy (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 3 Nov 2023 14:19:54 -0400
-Received: from so254-32.mailgun.net (so254-32.mailgun.net [198.61.254.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E862ADB
-        for <linux-hwmon@vger.kernel.org>; Fri,  3 Nov 2023 11:19:46 -0700 (PDT)
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=equiv.tech; q=dns/txt;
- s=mx; t=1699035585; x=1699042785; h=Content-Transfer-Encoding: Content-Type:
- MIME-Version: Message-Id: Date: Subject: Subject: Cc: To: To: From: From:
- Sender: Sender; bh=Aw3NIZOfJGjEMR/zbjqoZg8/cDgznkhoiJJtPHEZINM=;
- b=LZoxlEfK+ZMiQAEdQ6icHiIJqgspBOmZFb7F6voG0ic5MZQWdRv6sM0sE8D7O8qZoiZy2PeHkUOV3ap00Rt6e+tdxQV/05IEreoTLLGLg5NfNAsG7XiDBSyh0iSVv3Z+7b9nHJ6+bXNjQS1qhkXMNjdhTsfBmQ2gh8CojB4lBYQnn7ZZbdi08p4l1yu1+JEsFqoKjHQcW76T3jgk3jNy0aE70ulAQMwKOQQi9kAPAyvssRTlsSQK3OLECm6T+c7G5nWVBV4OpCsSZqI2rCu8wbvo/b3GV+zj8uiWWbAzb182Qe3SO9OF8MzoakITDfETyZS4GszJbuF4cayaD73/7g==
-X-Mailgun-Sending-Ip: 198.61.254.32
-X-Mailgun-Sid: WyJkOWUwNSIsImxpbnV4LWh3bW9uQHZnZXIua2VybmVsLm9yZyIsIjkzZDVhYiJd
-Received: from mail.equiv.tech (equiv.tech [142.93.28.83]) by 0ae46d290350 with SMTP id
- 654539c082847315b749a83e (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 03 Nov 2023 18:19:44 GMT
-Sender: james@equiv.tech
-From:   James Seo <james@equiv.tech>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     James Seo <james@equiv.tech>,
-        Lukasz Stelmach <l.stelmach@samsung.com>,
-        Armin Wolf <W_Armin@gmx.de>, linux-hwmon@vger.kernel.org,
+        with ESMTP id S229600AbjKCS5v (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 3 Nov 2023 14:57:51 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237ECBD;
+        Fri,  3 Nov 2023 11:57:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1699037844; x=1699642644; i=w_armin@gmx.de;
+        bh=WxIQKDxEScDT6pMF2VA0SucOhl2rbl0wp5PNNerC15A=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=Fd/1CCLbG/eO1i8/k/hH5v2iYHO5SjLgmZ/5794m0fbdAeZJMqn3lQoHUHRNnIlr
+         rk0aLF6pidUO9juzgrUoKHFLMQuQfCqJ3kMKOu1RpmCAlCsxQ5QEqMoGaGWMPUZcN
+         CbwZY7djwBVarHfb0a4pXkquCT4tEzDdSo592zjf88zoMvlaSbkLYmPS/WdWz8gnb
+         lEz9LgXUe/BBPvXAhGLvVnGg1S/e7v6sCCsQf0OfkJ3l/owVeH7V7ARiSUkr+tzV3
+         XXn/PNzmYHldau026lVx2Rr6+wuka4D7P08el7mY/tvtl8DG0fln3VW2DNOq+e9Sx
+         EkH9m4wUjTm7hOTlVQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from mx-amd-b650.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1MoO6C-1rnmaC20W8-00okDZ; Fri, 03 Nov 2023 19:57:24 +0100
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     pali@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [RFC] hwmon: (hp-wmi-sensors) Fix failure to load on EliteDesk 800 G6
-Date:   Fri,  3 Nov 2023 11:19:31 -0700
-Message-Id: <20231103181931.677796-1-james@equiv.tech>
+Subject: [PATCH 0/9] hwmon: (dell-smm) Add support for WMI SMM interface
+Date:   Fri,  3 Nov 2023 19:57:07 +0100
+Message-Id: <20231103185716.11007-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:7Sd20CM+fHbaAIxl8mLOwXNM4dkkepHezY+nWmvVUtxJUMDeSql
+ w08TD+0HYyGPIt/vznU4ir4snnHl+BlCXoG8iFbJjoqoZrbE1IQQyArpdW9wzuZh8UvcLB1
+ BxYhoiADDxr+p6UyLuCwkUnHwC+q2jOsSlSfZiNWaj7+oLDJ/CjyNe8ZOJeMbuXbePFsvEY
+ n1Tkkdxg+8cPekrC0OQsQ==
+UI-OutboundReport: notjunk:1;M01:P0:iJuU7nWPeKE=;+0Kj5Mvni25uYWOeQdxs7Puo4bJ
+ KX4w3f4sxHE5CtflQ/n5ho/QpCkdi3XfVHhjklDGvu9f1PLTsoiMeY8Cbe8MFjdHaXb2w+XEs
+ vXWQvrwGMFp0RyUh+cHZq2bT6Jp3/q/K5GLiXl+cZCDAUIq4QsgaMq0UhArR0kr0jB/6iWslW
+ bZdeXA2c2MxR6xirzlyW6MPlXv2VMc/JEHCppuJrwsG8IFI87UM1jOKsZWUcFj5Lzf/kFQduf
+ QqCP81R/VKlKJo4hX1D9deKDPjZZ5zOoHjFSTw7+n9tVgMW1N2dsgjDixOyb6idVN/kjBf6os
+ nu3yCujfyOOB9W6vaFliFgLaIT7Dkn4mZrJnoj0UUzmfpVN5kND4jo4F9drIDP3lwJZewhSOW
+ Hm1oPsqm1/SG0o4tTq746en3tTidzoWy2ecAkiM+YsT8R9lXUUDbketIQNBmzQ0abtwlEN4zT
+ x8bpwvIRN71eaZst5u4jCKn501LN7hAQ8k1a7QsOt5QNGedC20ctW0VFSA89wjdbNjGvZ6P8D
+ VuDAJVZAbtcRhBTVgEWuLeJ+ZvzfPv+V2IzxeWgOtQJPlUqx5ZAwePhFNVXlB/M3Gorn5K2c1
+ 0hZzI7ZUK8znrHQNvsBbKTCh7JTSUiuCmIYx6u7KPCgOF0Qud1OgtZgtxuQ/Jyux9DXOrsBjo
+ wxVqp00O8zBxHaeQHECBnNPlrdXtlsWBQG4pUFWvljzZ6Sz/XIKveBqUSjg3jkMAt5lU3i3nv
+ 8t3g3KVPUWtegvYl2CPAB73fmszym/VzGZIETQ5z6Mo2fkTMoPYWlQOEGMAWdxc5PB5fDkw+t
+ Lr50naZXEVT29qxducrQlLbuimV7MAF1WoKeuKiVAl616VMtPx7NnIJ8vTeNkUGKXKxjhtco+
+ Lzoy1Ig0zQEQA1dqKmFZoHMi8ktYz1AAQres3DXHchAI//m8+FmZ+pLalJLCbpYfxhz1B2CDC
+ cxROoqRAqn6BVBdDzht4PMfiGD0=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The EliteDesk 800 G6 stores a raw WMI string within the ACPI object in its
-BIOS corresponding to one instance of HPBIOS_PlatformEvents.Name. This is
-evidently a valid way of representing a WMI data item as far as the Microsoft
-ACPI-WMI mapper is concerned, but is preventing the driver from loading.
+This patch series adds support for an alternative SMM calling
+backend to the dell-smm-hwmon driver. The reason for this is
+that on some modern machines, the legacy SMM calling interface
+does not work anymore and the SMM handler can be called over
+ACPI WMI instead.
 
-As this seems quite rare, add a machine-limited workaround for now.
+The first four patches prepare the driver by allowing to
+specify different SMM calling backends, and by moving most of
+the DMI handling into i8k_init() so that the DMI tables can
+keep their __initconst attributes (the WMI SMM backend driver
+does not probe at module init time). The fifth patch does some
+minor cleanup, while the next three patches implement the new
+WMI SMM calling backend. The last patch adds the machine of
+the user who requested and tested the changes to the fan control
+whitelist.
 
-Reported-by: Lukasz Stelmach <l.stelmach@samsung.com>
-Closes: https://lore.kernel.org/linux-hwmon/7850a0bd-60e7-88f8-1d6c-0bb0e3234fdc@roeck-us.net/
-Signed-off-by: James Seo <james@equiv.tech>
----
-Was converting to UTF-8 a good idea? There's also not much UTF-16 validation,
-because at the moment it's only being done on one machine with a known input.
----
- drivers/hwmon/hp-wmi-sensors.c | 57 ++++++++++++++++++++++++++++++++--
- 1 file changed, 55 insertions(+), 2 deletions(-)
+If the driver does not detect the legacy SMM interface, either
+because the machine is not whitelisted or because the SMM handler
+does not react, it registers an WMI driver which will then bound
+to the WMI SMM interface and do the remaining initialization.
 
-diff --git a/drivers/hwmon/hp-wmi-sensors.c b/drivers/hwmon/hp-wmi-sensors.c
-index 17ae62f88bbf..c82a9bbf16ca 100644
---- a/drivers/hwmon/hp-wmi-sensors.c
-+++ b/drivers/hwmon/hp-wmi-sensors.c
-@@ -17,13 +17,17 @@
-  *     Available: https://github.com/linuxhw/ACPI
-  * [4] P. Rohár, "bmfdec - Decompile binary MOF file (BMF) from WMI buffer",
-  *     2017. [Online]. Available: https://github.com/pali/bmfdec
-+ * [5] Microsoft Corporation, "Driver-Defined WMI Data Items", 2017. [Online].
-+ *     Available: https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/driver-defined-wmi-data-items
-  */
- 
- #include <linux/acpi.h>
- #include <linux/debugfs.h>
-+#include <linux/dmi.h>
- #include <linux/hwmon.h>
- #include <linux/jiffies.h>
- #include <linux/mutex.h>
-+#include <linux/nls.h>
- #include <linux/units.h>
- #include <linux/wmi.h>
- 
-@@ -52,6 +56,10 @@
- #define HP_WMI_MAX_PROPERTIES		32U
- #define HP_WMI_MAX_INSTANCES		32U
- 
-+/* DMI board names for machines requiring workarounds. */
-+
-+#define HP_WMI_BOARD_NAME_ELITEDESK_800_G6	"870C"
-+
- enum hp_wmi_type {
- 	HP_WMI_TYPE_OTHER			= 1,
- 	HP_WMI_TYPE_TEMPERATURE			= 2,
-@@ -412,6 +420,30 @@ static char *hp_wmi_strdup(struct device *dev, const char *src)
- 	return dst;
- }
- 
-+/* hp_wmi_wstrdup - hp_wmi_strdup, but for a raw WMI string */
-+static char *hp_wmi_wstrdup(struct device *dev, const u8 *buf)
-+{
-+	const wchar_t *src;
-+	size_t len;
-+	char *dst;
-+	int i;
-+
-+	/* WMI strings are length-prefixed UTF-16. See [5]. */
-+	src = (wchar_t *)buf;
-+	len = min(*src++ / sizeof(*src), (size_t)HP_WMI_MAX_STR_SIZE - 1);
-+	while (len && !src[len - 1])
-+		len--;
-+
-+	dst = devm_kmalloc(dev, (len + 1) * sizeof(*dst), GFP_KERNEL);
-+	if (!dst)
-+		return NULL;
-+
-+	i = utf16s_to_utf8s(src, len, UTF16_LITTLE_ENDIAN, dst, len);
-+	dst[i] = '\0';
-+
-+	return strim(dst);
-+}
-+
- /*
-  * hp_wmi_get_wobj - poll WMI for a WMI object instance
-  * @guid: WMI object GUID
-@@ -442,6 +474,21 @@ static u8 hp_wmi_wobj_instance_count(const char *guid)
- 	return clamp(count, 0, (int)HP_WMI_MAX_INSTANCES);
- }
- 
-+static bool is_raw_wmi_string(const acpi_object_type property_map[], int prop)
-+{
-+	const char *board_name;
-+
-+	if (property_map != hp_wmi_platform_events_property_map ||
-+	    prop != HP_WMI_PLATFORM_EVENTS_PROPERTY_NAME)
-+		return false;
-+
-+	board_name = dmi_get_system_info(DMI_BOARD_NAME);
-+	if (!board_name)
-+		return false;
-+
-+	return !strcmp(board_name, HP_WMI_BOARD_NAME_ELITEDESK_800_G6);
-+}
-+
- static int check_wobj(const union acpi_object *wobj,
- 		      const acpi_object_type property_map[], int last_prop)
- {
-@@ -462,8 +509,12 @@ static int check_wobj(const union acpi_object *wobj,
- 	for (prop = 0; prop <= last_prop; prop++) {
- 		type = elements[prop].type;
- 		valid_type = property_map[prop];
--		if (type != valid_type)
-+		if (type != valid_type) {
-+			if (type == ACPI_TYPE_BUFFER &&
-+			    is_raw_wmi_string(property_map, prop))
-+				continue;
- 			return -EINVAL;
-+		}
- 	}
- 
- 	return 0;
-@@ -480,7 +531,9 @@ static int extract_acpi_value(struct device *dev,
- 		break;
- 
- 	case ACPI_TYPE_STRING:
--		*out_string = hp_wmi_strdup(dev, strim(element->string.pointer));
-+		*out_string = element->type == ACPI_TYPE_BUFFER ?
-+			hp_wmi_wstrdup(dev, element->buffer.pointer) :
-+			hp_wmi_strdup(dev, strim(element->string.pointer));
- 		if (!*out_string)
- 			return -ENOMEM;
- 		break;
+The deprecated procfs interface is not supported when using the
+WMI SMM calling backend for the following reason: the WMI driver
+can potentially be instantiated multiple times while the deprectated
+procfs interface cannot. This should not cause any regressions
+because on machines supporting only the WMI SMM interface, the
+driver would, until now, not load anyway.
 
-base-commit: 0f564130e5c76f1e5cf0008924f6a6cd138929d9
--- 
+All patches where tested on a Dell Inspiron 3505 and a Dell
+OptiPlex 7000.
+
+Armin Wolf (9):
+  hwmon: (dell-smm) Prepare for multiple SMM calling backends
+  hwmon: (dell-smm) Move blacklist handling to module init
+  hwmon: (dell-smm) Move whitelist handling to module init
+  hwmon: (dell-smm) Move DMI config handling to module init
+  hwmon: (dell-smm) Move config entries out of i8k_dmi_table
+  hwmon: (dell-smm) Introduce helper function for data init
+  hwmon: (dell-smm) Add support for WMI SMM interface
+  hwmon: (dell-smm) Document the WMI SMM interface
+  hwmon: (dell-smm) Add Optiplex 7000 to fan control whitelist
+
+ Documentation/hwmon/dell-smm-hwmon.rst |  33 +-
+ drivers/hwmon/Kconfig                  |   1 +
+ drivers/hwmon/dell-smm-hwmon.c         | 569 +++++++++++++++++--------
+ drivers/platform/x86/wmi.c             |   1 +
+ 4 files changed, 414 insertions(+), 190 deletions(-)
+
+=2D-
 2.39.2
 
