@@ -2,149 +2,139 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C93F8C4332F
-	for <linux-hwmon@archiver.kernel.org>; Fri,  3 Nov 2023 19:36:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CEA9C4332F
+	for <linux-hwmon@archiver.kernel.org>; Fri,  3 Nov 2023 19:48:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbjKCTg6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 3 Nov 2023 15:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35586 "EHLO
+        id S234418AbjKCTsh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 3 Nov 2023 15:48:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230155AbjKCTg5 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 3 Nov 2023 15:36:57 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E60D5C;
-        Fri,  3 Nov 2023 12:36:53 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-d9cbba16084so2466370276.1;
-        Fri, 03 Nov 2023 12:36:53 -0700 (PDT)
+        with ESMTP id S229689AbjKCTsg (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 3 Nov 2023 15:48:36 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93466D50;
+        Fri,  3 Nov 2023 12:48:30 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-5a8ada42c2aso28715157b3.3;
+        Fri, 03 Nov 2023 12:48:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699040212; x=1699645012; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=zVTIOqE7WTSx8izaWl21cHuLe1YvhWC1HiEcf3Mu3r0=;
-        b=BquxUYFZNrmcNOO0NNyb11TgzREQpBDU8FltTgdCUui12QBIDDq2OWXl9uRRbT+CZb
-         5J6/Hq3Lb0e0X40LZStyP+ELa57mSxRu/b+fjV9c9u2bM1bYQdioIMwdw+kpcr69U2hU
-         Ax4bRZJNh0N2cY7ixROvS4kxQDW0s0wqsRrUr/dve6wsjKRfNqzOe5TvW+lw+hYSwALS
-         H0sdG7YCclWNdS1SWgNAHILuy0TsJ2y3vOB9IecWUEPr2I6t0k1fAcrAGS2fHAA/n4yy
-         4lTkX3GMMXxYU1TFWm8hCRVxqZoymNVNvZ63wYk61ZfpInFIJK9tGQiiGSERzVnTS//2
-         rwrg==
+        d=gmail.com; s=20230601; t=1699040910; x=1699645710; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=71hiR2M4614A24flgU9oexTeRtUyJjbPBhFi4ecHoW8=;
+        b=AfiRWiK6RK+k5QFQIOrpHpabefUGbYKckx2MvlCO+ykbeLljcEk2MJO9UQ78tdAbD5
+         x0Zxzy6ezoKiRvRXZoalXUmlpU3HJbyVLbE48DxuugN5p/XV2y36H7mtF4pgyPjC/ICw
+         jZFwqopdw946GNjxHXow68Dp0ss8psem43+CPv4DTErtPJXcxDoZ4ZzKfR41U68HZpfP
+         gsHAcMNgXoGUPad1iUuGSgEmvVniw3xW3bW5/Vyge+/PHU5D42DyFB7lTVx8WvGA+2+i
+         5BumEBQIkWXgvSHk5W5GMEdA7Z3Ucbm7tdRRTDXRqD8KLhxfOnTxXD6FUahmFfwfbu9T
+         g+Bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699040212; x=1699645012;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zVTIOqE7WTSx8izaWl21cHuLe1YvhWC1HiEcf3Mu3r0=;
-        b=VSZuc7VYSECvO0W4WMZlVzqLsVpfT8mM5liMLevyFItdHcZ3mTZz91qH0XkGIugqRH
-         P9PxX/ikwpiqUHqlkyozMq+skPJMUUbmdz9wHPbo8St0YaSfRNPY4K3cMFceP8E8avAo
-         hM4DammeM92bLqOKYbffa51G7gjeHrRRuxlDTYuf43kKOSV1B6+7y3QgsCjkN6YnHQXt
-         /kwVI2P9DpR2S3KHcYzT4gZxe9LQUX1ixrGltOPwibUFWX2SvP0TTwSNUo5HyrFBF0EI
-         yfzKVic3Obw4ak/e08TGcEatrkvdof1SWbQ03p2lqJY3ZbEjacYQ+XdkKmdFcVxN/Krr
-         uVog==
-X-Gm-Message-State: AOJu0YyGdRC0xUaPd+mcSWfWty+hxUXv8c1riULafg3iKt4nQwlHbfC7
-        0Ajpoxn3sd6uV6I2Zgr1r74=
-X-Google-Smtp-Source: AGHT+IFI68ifhgWXdoC5YyWS3okYu/PGSxm7gZ+s8fTD9H5I/Jzt5tvr5kAgvoREi6IeDSPnQDqp+A==
-X-Received: by 2002:a05:6902:18d2:b0:da0:4032:18b6 with SMTP id ck18-20020a05690218d200b00da0403218b6mr26766829ybb.30.1699040212335;
-        Fri, 03 Nov 2023 12:36:52 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w142-20020a25c794000000b00da0c49a588asm1193444ybe.8.2023.11.03.12.36.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Nov 2023 12:36:51 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1699040910; x=1699645710;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=71hiR2M4614A24flgU9oexTeRtUyJjbPBhFi4ecHoW8=;
+        b=YLXJ/A+Lp1nf4fAAa8aeyVk1xNeC4sT3amVvEReXvrvSOzmDohX2uAh+QuBsbaI/vl
+         uepBVok/OgtLAONNCW8xXKoKVb2Irfr8Ljdtcu4jTfzGCuYI5z7wzKCFIoTPjFEFmtwn
+         vcEJo/xqNdJmgCCaYNBIJkXxcAVAEU9rXWre4Sc49KhY9s1nyeJWsDJffNaw4IbF++/u
+         atneQZZKUAw/ECY7TNmJYbzazEmhxHRczMSOEipUtSp5M7ly5Xue2LAOkTOc+SYMAydA
+         GEblWfTgMiJa6zaQvwZFl/Ty6umfDm3bI7T+Wm7brFKeD46ZpNkTJfxu/VQ1DExSeij+
+         emnQ==
+X-Gm-Message-State: AOJu0Yy4zW57R/nIMMJOawa4EYzegJij9lMXH6J/CZOZ2lFIaGMBANSl
+        6lHUFomB2LjZ/Oob0pQRelM=
+X-Google-Smtp-Source: AGHT+IGXUJ4A2QHfkW46307v/6Xfx4nO2jmU4DTmuZXW8DJ39U79ZOJVTB0xJUJkv9QfuKFHWgDLCA==
+X-Received: by 2002:a81:7893:0:b0:5a7:a989:b85c with SMTP id t141-20020a817893000000b005a7a989b85cmr3816975ywc.16.1699040909707;
+        Fri, 03 Nov 2023 12:48:29 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o63-20020a0dfe42000000b005463e45458bsm1308339ywf.123.2023.11.03.12.48.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Nov 2023 12:48:29 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <dec086cc-7403-4a06-b860-aae6daf8f0e7@roeck-us.net>
-Date:   Fri, 3 Nov 2023 12:36:49 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC] hwmon: (hp-wmi-sensors) Fix failure to load on EliteDesk
- 800 G6
-Content-Language: en-US
-To:     James Seo <james@equiv.tech>, Jean Delvare <jdelvare@suse.com>
-Cc:     Lukasz Stelmach <l.stelmach@samsung.com>,
-        Armin Wolf <W_Armin@gmx.de>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20231103181931.677796-1-james@equiv.tech>
+Date:   Fri, 3 Nov 2023 12:48:27 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20231103181931.677796-1-james@equiv.tech>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To:     Antoniu Miclaus <antoniu.miclaus@analog.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v5 2/2] rtc: max31335: add driver support
+Message-ID: <f2a58018-d907-4401-a2d9-fe53bebc1459@roeck-us.net>
+References: <20231103140051.43174-1-antoniu.miclaus@analog.com>
+ <20231103140051.43174-2-antoniu.miclaus@analog.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20231103140051.43174-2-antoniu.miclaus@analog.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 11/3/23 11:19, James Seo wrote:
-> The EliteDesk 800 G6 stores a raw WMI string within the ACPI object in its
-> BIOS corresponding to one instance of HPBIOS_PlatformEvents.Name. This is
-> evidently a valid way of representing a WMI data item as far as the Microsoft
-> ACPI-WMI mapper is concerned, but is preventing the driver from loading.
+On Fri, Nov 03, 2023 at 04:00:26PM +0200, Antoniu Miclaus wrote:
+> RTC driver for MAX31335 ±2ppm Automotive Real-Time Clock with
+> Integrated MEMS Resonator.
 > 
-> As this seems quite rare, add a machine-limited workaround for now.
-> 
-> Reported-by: Lukasz Stelmach <l.stelmach@samsung.com>
-> Closes: https://lore.kernel.org/linux-hwmon/7850a0bd-60e7-88f8-1d6c-0bb0e3234fdc@roeck-us.net/
-> Signed-off-by: James Seo <james@equiv.tech>
+> Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
 > ---
-[ ... ]
-
-> +static bool is_raw_wmi_string(const acpi_object_type property_map[], int prop)
-> +{
-> +	const char *board_name;
+>  MAINTAINERS                |   8 +
+>  drivers/rtc/Kconfig        |  20 ++
+>  drivers/rtc/Makefile       |   1 +
+>  drivers/rtc/rtc-max31335.c | 700 +++++++++++++++++++++++++++++++++++++
+>  4 files changed, 729 insertions(+)
+>  create mode 100644 drivers/rtc/rtc-max31335.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index dd5de540ec0b..bc484cb997ab 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -12823,6 +12823,14 @@ F:	Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+>  F:	Documentation/hwmon/max31827.rst
+>  F:	drivers/hwmon/max31827.c
+>  
+> +MAX31335 RTC DRIVER
+> +M:	Antoniu Miclaus <antoniu.miclaus@analog.com>
+> +L:	linux-rtc@vger.kernel.org
+> +S:	Supported
+> +W:	https://ez.analog.com/linux-software-drivers
+> +F:	Documentation/devicetree/bindings/rtc/adi,max31335.yaml
+> +F:	drivers/rtc/rtc-max31335.c
 > +
-> +	if (property_map != hp_wmi_platform_events_property_map ||
-> +	    prop != HP_WMI_PLATFORM_EVENTS_PROPERTY_NAME)
-> +		return false;
+>  MAX6650 HARDWARE MONITOR AND FAN CONTROLLER DRIVER
+>  L:	linux-hwmon@vger.kernel.org
+>  S:	Orphan
+> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+> index d7502433c78a..360da13fe61b 100644
+> --- a/drivers/rtc/Kconfig
+> +++ b/drivers/rtc/Kconfig
+> @@ -373,6 +373,26 @@ config RTC_DRV_MAX8997
+>  	  This driver can also be built as a module. If so, the module
+>  	  will be called rtc-max8997.
+>  
+> +config RTC_DRV_MAX31335
+> +	tristate "Analog Devices MAX31335"
+> +	depends on I2C
+> +	select REGMAP_I2C
+> +	help
+> +	  If you say yes here you get support for the Analog Devices
+> +	  MAX31335.
 > +
-> +	board_name = dmi_get_system_info(DMI_BOARD_NAME);
-> +	if (!board_name)
-> +		return false;
+> +	  This driver can also be built as a module. If so, the module
+> +	  will be called rtc-max31335.
 > +
-> +	return !strcmp(board_name, HP_WMI_BOARD_NAME_ELITEDESK_800_G6);
+> +config RTC_DRV_MAX31335_HWMON
+> +	bool "HWMON support for Analog Devices MAX31335"
+> +	depends on RTC_DRV_MAX31335 && HWMON
+> +	depends on !(RTC_DRV_MAX31335=y && HWMON=m)
+> +	default y
+> +	help
+> +	  Say Y here if you want to expose temperature sensor data on
+> +	  rtc-max31335.
 
-Would it be possible to use a dmi table and dmi_check_system() ?
-That would make it easier to add more platforms later on if needed.
+CONFIG_RTC_DRV_MAX31335_HWMON is not used in the driver. What is the point
+of having it ?
 
-Thanks,
 Guenter
-
