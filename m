@@ -2,440 +2,394 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 659BBC4332F
-	for <linux-hwmon@archiver.kernel.org>; Fri,  3 Nov 2023 14:28:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 280A0C001DD
+	for <linux-hwmon@archiver.kernel.org>; Fri,  3 Nov 2023 14:36:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230191AbjKCO2c (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 3 Nov 2023 10:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39236 "EHLO
+        id S233366AbjKCOgA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 3 Nov 2023 10:36:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbjKCO2b (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 3 Nov 2023 10:28:31 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0743CD47;
-        Fri,  3 Nov 2023 07:28:24 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E76D740005;
-        Fri,  3 Nov 2023 14:28:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1699021703;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZzG3BUlf/liG07fvvmldSRD8z7LULgsollErwUz4HCc=;
-        b=Zzgi+XE2Oy+Pf9Rjd0xlAXZT+9RNUOns6u/+9qU1H4/3q69F4gL0+1WKlT1XnmV5+8kDrY
-        kWtYEedJeAuohNcKCVzEwjE7FB0IuUcowClFJkuODmIn7VVml3zggUdW6thF5XV3YdK+UJ
-        ohiwLX4Wl+WjiaXC+PPZGL3i5wqhdAQUGfH+0utlAu+kdganZLHEH0bVutMo83irZK6Sog
-        Os6/nEupyNpp/EQl+7W/vsWmz0lGfAdHUHKD6qh7O8zFhrDYE4NypY7nGg8Oy4+9YLjcJF
-        VzjuPB0iJHroCjssRjibHvCwx1frc5SV4YAcGKA+2LBiSwc2CAWnx1iGVXI24w==
-Date:   Fri, 3 Nov 2023 15:28:22 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Carlos Menin <menin@carlosaurelio.net>
-Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
+        with ESMTP id S233010AbjKCOgA (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 3 Nov 2023 10:36:00 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8213CCA;
+        Fri,  3 Nov 2023 07:35:54 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-5a9bc2ec556so2265693a12.0;
+        Fri, 03 Nov 2023 07:35:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1699022154; x=1699626954; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=761s3ZSOYqOl5OlbDmAC3O99DhhGiHJQ6guQs2cNdZI=;
+        b=P5dOTNJHCbWFDzRjj+4ecrnV6oPo1jfBpl3H1pgcr9Sn+S2fWX1T6xfi8BKU+Gu4Po
+         1d9+OynI6VGlEf2BQlJaXXOXS50NyEB9qShFU/ZeuA7QRB1Pvx7Tl8PtV8eNQvORc+jw
+         QX2l0Fjs0Zb5yO7NJOudROPvSsoCitkN2GzF/+X5tCDFhXDOlXuI/1KYiR4pkRqmly27
+         IvYqKKH3PFsY/KrPOoZm//yVP8zhEYFz4dKwOd7uovP6HKm/1adfzWrTKyS4f0dIwbcU
+         Z7in1BZstFBE/T9RNCz5P5+a6ZTVGdVt8kjSlegMOWFmvWATfk7HyCly00KS5vucRaUC
+         2Jag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699022154; x=1699626954;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=761s3ZSOYqOl5OlbDmAC3O99DhhGiHJQ6guQs2cNdZI=;
+        b=SZFt7Hve77Cx2AZoAFnQItMGW+9Ie93r1N+/DVAVMrbWQXSH3P34oCESN05zvxFk7U
+         T6YVgpW9jTlY+Vd95mI7F0qVWxAPzasmbppeM+qkYHTu+wPiW7sF3WLwHifTkGpGnbzL
+         wkHVmlcFoUsLgBKVEzWdiydqoOkVbfPSK5DgcB2ePBFQbMLPEHAeOMJdljvqgZxdEHMy
+         JuDaFQ+tm32USHfYhdLRDTW/pJJs7C79SxAUAnzHEfuk1J0fHRkP5+JJ9YO+EweLeiiE
+         IyDL3hb3pCyrDq/AHTAsrkImDuXjOASpRZvR+6j55bLrvqS34p+NYCXUwku4kdDOaVSd
+         /ZEg==
+X-Gm-Message-State: AOJu0Yw7jabClUMbfgDSVtm7iQ7fKZNF5vl5IKoaDrtPHvW0qThmQkTy
+        3wuNv+QuaGE7maZGNWF5whU=
+X-Google-Smtp-Source: AGHT+IHUT/dm23d8TBn14uWekihNltgnRe4oE+RQjflOX1AUX56bPQ4u06LltGcVEc4Ow97sparAtA==
+X-Received: by 2002:a05:6a21:4983:b0:180:5965:a772 with SMTP id ax3-20020a056a21498300b001805965a772mr2055886pzc.28.1699022153805;
+        Fri, 03 Nov 2023 07:35:53 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n4-20020a056a000d4400b006934a1c69f8sm1532704pfv.24.2023.11.03.07.35.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Nov 2023 07:35:52 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <c74beccd-26ea-4e63-906b-bd5508465cbc@roeck-us.net>
+Date:   Fri, 3 Nov 2023 07:35:51 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 2/2] hwmon: (pmbus) Add support for MPS Multi-phase
+ mp5990
+Content-Language: en-US
+To:     Peter Yin <peteryin.openbmc@gmail.com>, patrick@stwcx.xyz,
+        Jean Delvare <jdelvare@suse.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sergio Prado <sergio.prado@e-labworks.com>
-Subject: Re: [PATCH v2 1/2] rtc: add pcf85053a
-Message-ID: <20231103142822abbca0ed@mail.local>
-References: <20231103125106.78220-1-menin@carlosaurelio.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231103125106.78220-1-menin@carlosaurelio.net>
-X-GND-Sasl: alexandre.belloni@bootlin.com
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20231103080128.1204218-1-peteryin.openbmc@gmail.com>
+ <20231103080128.1204218-3-peteryin.openbmc@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20231103080128.1204218-3-peteryin.openbmc@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hello Carlos,
-
-On 03/11/2023 09:51:05-0300, Carlos Menin wrote:
-> +struct pcf85053a {
-> +	struct rtc_device	*rtc;
-> +	struct regmap		*regmap;
-> +	struct regmap		*regmap_nvmem;
-> +};
-> +
-> +struct pcf85053a_config {
-> +	struct regmap_config regmap;
-> +	struct regmap_config regmap_nvmem;
-> +};
-> +
-> +static int pcf85053a_read_offset(struct device *dev, long *offset)
-> +{
-> +	struct pcf85053a *pcf85053a = dev_get_drvdata(dev);
-> +	long val;
-> +	u32 reg_offset, reg_oscillator;
-> +	int ret;
-> +
-> +	ret = regmap_read(pcf85053a->regmap, REG_OFFSET, &reg_offset);
-> +	if (ret)
-> +		return -EIO;
-
-Why do you change the error returned by regmap?
-
-> +
-> +	ret = regmap_read(pcf85053a->regmap, REG_OSCILLATOR, &reg_oscillator);
-> +	if (ret)
-> +		return -EIO;
-> +
-> +	val = sign_extend32(reg_offset, 7);
-> +
-> +	if (reg_oscillator & REG_OSC_OFFM)
-> +		*offset = val * OFFSET_STEP1;
-> +	else
-> +		*offset = val * OFFSET_STEP0;
-> +
-> +	return 0;
-> +}
-> +
-> +static int pcf85053a_set_offset(struct device *dev, long offset)
-> +{
-> +	struct pcf85053a *pcf85053a = dev_get_drvdata(dev);
-> +	s8 mode0, mode1, reg_offset;
-> +	unsigned int ret, error0, error1;
-> +
-> +	if (offset > OFFSET_STEP0 * 127)
-> +		return -ERANGE;
-> +	if (offset < OFFSET_STEP0 * -128)
-> +		return -ERANGE;
-> +
-> +	ret = regmap_set_bits(pcf85053a->regmap, REG_ACCESS, REG_ACCESS_XCLK);
-> +	if (ret)
-> +		return -EIO;
-> +
-> +	mode0 = DIV_ROUND_CLOSEST(offset, OFFSET_STEP0);
-> +	mode1 = DIV_ROUND_CLOSEST(offset, OFFSET_STEP1);
-> +
-> +	error0 = abs(offset - (mode0 * OFFSET_STEP0));
-> +	error1 = abs(offset - (mode1 * OFFSET_STEP1));
-> +	if (error0 < error1) {
-> +		reg_offset = mode0;
-> +		ret = regmap_clear_bits(pcf85053a->regmap, REG_OSCILLATOR,
-> +					REG_OSC_OFFM);
-> +	} else {
-> +		reg_offset = mode1;
-> +		ret = regmap_set_bits(pcf85053a->regmap, REG_OSCILLATOR,
-> +				      REG_OSC_OFFM);
-> +	}
-> +	if (ret)
-> +		return -EIO;
-> +
-> +	ret = regmap_write(pcf85053a->regmap, REG_OFFSET, reg_offset);
-> +
-> +	return ret;
-> +}
-> +
-> +static int pcf85053a_rtc_check_reliability(struct device *dev, u8 status_reg)
-> +{
-> +	int ret = 0;
-> +
-> +	if (status_reg & REG_STATUS_CIF) {
-> +		dev_warn(dev, "tamper detected,"
-> +			 " date/time is not reliable\n");
-You should not split strings. Also, I don't think most of the messages
-are actually useful as the end user doesn't have any specific action
-after seeing it. You should probably drop them.
-
-I don't think CIF means the time is not correct anymore.
-
-> +		ret = -EINVAL;
-> +	}
-> +
-> +	if (status_reg & REG_STATUS_OF) {
-> +		dev_warn(dev, "oscillator fail detected,"
-> +			 " date/time is not reliable.\n");
-> +		ret = -EINVAL;
-> +	}
-> +
-> +	if (status_reg & REG_STATUS_RTCF) {
-> +		dev_warn(dev, "power loss detected,"
-> +			 " date/time is not reliable.\n");
-> +		ret = -EINVAL;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int pcf85053a_rtc_read_time(struct device *dev, struct rtc_time *tm)
-> +{
-> +	struct pcf85053a *pcf85053a = dev_get_drvdata(dev);
-> +	u8 buf[REG_STATUS + 1];
-> +	int ret, len = sizeof(buf);
-> +
-> +	ret = regmap_bulk_read(pcf85053a->regmap, REG_SECS, buf, len);
-> +	if (ret) {
-> +		dev_err(dev, "%s: error %d\n", __func__, ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = pcf85053a_rtc_check_reliability(dev, buf[REG_STATUS]);
-> +	if (ret)
-> +		return ret;
-> +
-> +	tm->tm_year = buf[REG_YEARS];
-> +	/* adjust for 1900 base of rtc_time */
-> +	tm->tm_year += 100;
-> +
-> +	tm->tm_wday = (buf[REG_WEEKDAYS] - 1) & 7; /* 1 - 7 */
-> +	tm->tm_sec = buf[REG_SECS];
-> +	tm->tm_min = buf[REG_MINUTES];
-> +	tm->tm_hour = buf[REG_HOURS];
-> +	tm->tm_mday = buf[REG_DAYS];
-> +	tm->tm_mon = buf[REG_MONTHS] - 1; /* 1 - 12 */
-
-Those comments are not useful.
-
-> +
-> +	return 0;
-> +}
-> +
-
-> +static ssize_t attr_flag_clear(struct device *dev,
-> +			       struct device_attribute *attr,
-> +			       const char *buf, size_t count,
-> +			       u8 reg, u8 flag)
-> +{
-> +	struct pcf85053a *pcf85053a = dev_get_drvdata(dev->parent);
-> +	int ret;
-> +
-> +	(void)attr;
-> +	(void)buf;
-> +	(void)count;
-> +
-> +	ret = regmap_clear_bits(pcf85053a->regmap, reg, flag);
-> +	if (ret)
-> +		return -EIO;
-> +
-> +	return count;
-> +}
-> +
-> +static ssize_t attr_flag_read(struct device *dev,
-> +			      struct device_attribute *attr,
-> +			      char *buf,
-> +			      u8 reg, u8 flag)
-> +{
-> +	struct pcf85053a *pcf85053a = dev_get_drvdata(dev->parent);
-> +	unsigned int status, val;
-> +	int ret;
-> +
-> +	(void)attr;
-> +	ret = regmap_read(pcf85053a->regmap, reg, &status);
-> +	if (ret)
-> +		return -EIO;
-> +
-> +	val = (status & flag) != 0;
-> +
-> +	return sprintf(buf, "%u\n", val);
-> +}
-
-
-
-> +
-> +/* flags that can be read or written to be cleared */
-> +#define PCF85053A_ATTR_FLAG_RWC(name, reg, flag)                                \
-> +	static ssize_t name ## _store(                                         \
-> +			struct device *dev,                                    \
-> +			struct device_attribute *attr,                         \
-> +			const char *buf,                                       \
-> +			size_t count)                                          \
-> +	{                                                                      \
-> +		return attr_flag_clear(dev, attr, buf, count,                  \
-> +				REG_ ## reg, REG_ ## reg ## _ ## flag);        \
-> +	}                                                                      \
-> +	static ssize_t name ## _show(                                          \
-> +			struct device *dev,                                    \
-> +			struct device_attribute *attr,                         \
-> +			char *buf)                                             \
-> +	{                                                                      \
-> +		return attr_flag_read(dev, attr, buf,                          \
-> +				REG_ ## reg, REG_ ## reg ## _ ## flag);        \
-> +	}                                                                      \
-> +	static DEVICE_ATTR_RW(name)
-> +
-> +PCF85053A_ATTR_FLAG_RWC(rtc_fail, STATUS, RTCF);
-> +PCF85053A_ATTR_FLAG_RWC(oscillator_fail, STATUS, OF);
-> +PCF85053A_ATTR_FLAG_RWC(rtc_clear, STATUS, CIF);
-> +
-> +static struct attribute *pcf85053a_attrs_flags[] = {
-> +	&dev_attr_rtc_fail.attr,
-> +	&dev_attr_oscillator_fail.attr,
-> +	&dev_attr_rtc_clear.attr,
-> +	0,
-> +};
-
-Don't add undocumented sysfs files. Also, You must not allow userspace
-to clear those flags without setting the time properly.
-
-> +static void pcf85053a_set_drive_control(struct device *dev, u8 *reg_ctrl)
-> +{
-> +	int ret;
-> +	const char *val;
-> +	u8 regval;
-> +
-> +	ret = of_property_read_string(dev->of_node, "nxp,quartz-drive-control",
-> +				      &val);
-
-This property should rather be "nxp,quartz-drive".
-
-> +	if (ret) {
-> +		dev_warn(dev, "failed to read nxp,quartz-drive-control property,"
-> +			 " assuming 'normal' drive");
-> +		val = "normal";
-> +	}
-> +
-> +	if (!strcmp(val, "normal")) {
-> +		regval = 0;
-> +	} else if (!strcmp(val, "low")) {
-> +		regval = 1;
-> +	} else if (!strcmp(val, "high")) {
-> +		regval = 2;
-> +	} else {
-> +		dev_warn(dev, "invalid nxp,quartz-drive-control value: %s,"
-> +			 " assuming 'normal' drive", val);
-> +		regval = 0;
-> +	}
-> +
-> +	*reg_ctrl |= (regval << 2);
-
-2 needs a define, what about using FIELD_PREP?
-
-> +}
-> +
-> +static void pcf85053a_set_low_jitter(struct device *dev, u8 *reg_ctrl)
-> +{
-> +	bool val;
-> +	u8 regval;
-> +
-> +	val = of_property_read_bool(dev->of_node, "nxp,low-jitter-mode");
-
-Bool properties don't work well with RTC because with this, there is now
-way to enable the normal mode.
-
-> +
-> +	regval = val ? 1 : 0;
-> +	*reg_ctrl |= (regval << 4);
-4 also needs a define
-
-> +}
-> +
-> +static void pcf85053a_set_clk_inverted(struct device *dev, u8 *reg_ctrl)
-> +{
-> +	bool val;
-> +	u8 regval;
-> +
-> +	val = of_property_read_bool(dev->of_node, "nxp,clk-inverted");
-> +
-> +	regval = val ? 1 : 0;
-> +	*reg_ctrl |= (regval << 7);
-
-Ditto
-> +}
-> +
-> +static int pcf85053a_probe(struct i2c_client *client)
-> +{
-> +	int ret;
-> +	struct pcf85053a *pcf85053a;
-> +	const struct pcf85053a_config *config = &pcf85053a_config;
-> +	u8 reg_ctrl;
-> +
-> +	pcf85053a = devm_kzalloc(&client->dev, sizeof(*pcf85053a), GFP_KERNEL);
-> +	if (!pcf85053a) {
-> +		dev_err(&client->dev, "failed to allocate device: no memory");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	pcf85053a->regmap = devm_regmap_init_i2c(client, &config->regmap);
-> +	if (IS_ERR(pcf85053a->regmap)) {
-> +		dev_err(&client->dev, "failed to allocate regmap: %ld\n",
-> +			PTR_ERR(pcf85053a->regmap));
-> +		return PTR_ERR(pcf85053a->regmap);
-> +	}
-> +
-> +	i2c_set_clientdata(client, pcf85053a);
-> +
-> +	pcf85053a->rtc = devm_rtc_allocate_device(&client->dev);
-> +	if (IS_ERR(pcf85053a->rtc)) {
-> +		dev_err(&client->dev, "failed to allocate rtc: %ld\n",
-> +			PTR_ERR(pcf85053a->rtc));
-> +		return PTR_ERR(pcf85053a->rtc);
-> +	}
-> +
-> +	pcf85053a->rtc->ops = &pcf85053a_rtc_ops;
-> +	pcf85053a->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-> +	pcf85053a->rtc->range_max = RTC_TIMESTAMP_END_2099;
-> +
-> +	reg_ctrl = REG_CTRL_DM | REG_CTRL_HF | REG_CTRL_CIE;
-
-CIE enables an interrupt but you never use interrupts.
-
-> +	pcf85053a_set_load_capacitance(&client->dev, &reg_ctrl);
-> +	pcf85053a_set_drive_control(&client->dev, &reg_ctrl);
-> +	pcf85053a_set_low_jitter(&client->dev, &reg_ctrl);
-> +	pcf85053a_set_clk_inverted(&client->dev, &reg_ctrl);
-> +
-> +	ret = regmap_write(pcf85053a->regmap, REG_CTRL, reg_ctrl);
-> +	if (ret) {
-> +		dev_err(&client->dev, "failed to configure rtc: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = rtc_add_group(pcf85053a->rtc, &pcf85053a_attr_group);
-> +	if (ret) {
-> +		dev_err(&client->dev, "failed to add sysfs entry: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = devm_rtc_register_device(pcf85053a->rtc);
-> +	if (ret) {
-> +		dev_err(&client->dev, "failed to register rtc: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = pcf85053a_add_nvmem(client, pcf85053a);
-> +	if (ret) {
-> +		dev_err(&client->dev, "failed to register nvmem: %d\n", ret);
-> +		return ret;
-
-probe must not fail after devm_rtc_register_device
-
-> +	}
-> +
-> +	ret = pcf85053a_hwmon_register(&client->dev, client->name);
-> +	if (ret)
-> +		dev_err(&client->dev, "failed to register hwmon: %d\n", ret);
-> +
-> +	return ret;
-> +}
-> +
-> +static const __maybe_unused struct of_device_id dev_ids[] = {
-> +	{ .compatible = "nxp,pcf85053a", .data = &pcf85053a_config },
-> +	{ },
-> +};
-> +MODULE_DEVICE_TABLE(of, dev_ids);
-> +
-> +static struct i2c_driver pcf85053a_driver = {
-> +	.driver = {
-> +		.name = "pcf85053a",
-> +		.of_match_table = of_match_ptr(dev_ids),
-> +	},
-> +	.probe_new = &pcf85053a_probe,
-> +};
-> +
-> +module_i2c_driver(pcf85053a_driver);
-> +
-> +MODULE_AUTHOR("Carlos Menin <menin@carlosaurelio.net>");
-> +MODULE_DESCRIPTION("PCF85053A I2C RTC driver");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.34.1
+On 11/3/23 01:01, Peter Yin wrote:
+> Add support for mp5990 device from Monolithic Power Systems, Inc. (MPS)
+> vendor. This is a Hot-Swap Controller.
 > 
+> Signed-off-by: Peter Yin <peteryin.openbmc@gmail.com>
+> ---
+>   Documentation/hwmon/index.rst  |  1 +
+>   Documentation/hwmon/mp5990.rst | 84 +++++++++++++++++++++++++++++++
+>   drivers/hwmon/pmbus/Kconfig    |  9 ++++
+>   drivers/hwmon/pmbus/Makefile   |  1 +
+>   drivers/hwmon/pmbus/mp5990.c   | 90 ++++++++++++++++++++++++++++++++++
+>   5 files changed, 185 insertions(+)
+>   create mode 100644 Documentation/hwmon/mp5990.rst
+>   create mode 100644 drivers/hwmon/pmbus/mp5990.c
+> 
+> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+> index 042e1cf9501b..8c70e10fc795 100644
+> --- a/Documentation/hwmon/index.rst
+> +++ b/Documentation/hwmon/index.rst
+> @@ -157,6 +157,7 @@ Hardware Monitoring Kernel Drivers
+>      mp2888
+>      mp2975
+>      mp5023
+> +   mp5990
+>      nct6683
+>      nct6775
+>      nct7802
+> diff --git a/Documentation/hwmon/mp5990.rst b/Documentation/hwmon/mp5990.rst
+> new file mode 100644
+> index 000000000000..8fc4e388ff7b
+> --- /dev/null
+> +++ b/Documentation/hwmon/mp5990.rst
+> @@ -0,0 +1,84 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +Kernel driver mp5990
+> +====================
+> +
+> +Supported chips:
+> +
+> +  * MPS MP5990
+> +
+> +    Prefix: 'mp5990'
+> +
+> +  * Datasheet
+> +
+> +    Publicly available at the MPS website : https://www.monolithicpower.com/en/mp5990.html
+> +
+> +Author:
+> +
+> +	Peter Yin <peteryin.openbmc@gmail.com>
+> +
+> +Description
+> +-----------
+> +
+> +This driver implements support for Monolithic Power Systems, Inc. (MPS)
+> +MP5990 Hot-Swap Controller.
+> +
+> +Device complaint with:
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+compliant
+
+> +
+> +- PMBus rev 1.3 interface.
+> +
+> +Device supports direct format for reading input voltage, output voltage,
+> +output current, input power and temperature.
+> +
+> +The driver exports the following attributes via the 'sysfs' files
+> +for input voltage:
+> +
+> +**in1_input**
+> +
+> +**in1_label**
+> +
+> +**in1_max**
+> +
+> +**in1_max_alarm**
+> +
+> +**in1_min**
+> +
+> +**in1_min_alarm**
+> +
+> +The driver provides the following attributes for output voltage:
+> +
+> +**in2_input**
+> +
+> +**in2_label**
+> +
+> +**in2_alarm**
+> +
+> +The driver provides the following attributes for output current:
+> +
+> +**curr1_input**
+> +
+> +**curr1_label**
+> +
+> +**curr1_alarm**
+> +
+> +**curr1_max**
+> +
+> +The driver provides the following attributes for input power:
+> +
+> +**power1_input**
+> +
+> +**power1_label**
+> +
+> +**power1_alarm**
+> +
+> +The driver provides the following attributes for temperature:
+> +
+> +**temp1_input**
+> +
+> +**temp1_max**
+> +
+> +**temp1_max_alarm**
+> +
+> +**temp1_crit**
+> +
+> +**temp1_crit_alarm**
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index 270b6336b76d..65a116f7744d 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -326,6 +326,15 @@ config SENSORS_MP5023
+>   	  This driver can also be built as a module. If so, the module will
+>   	  be called mp5023.
+>   
+> +config SENSORS_MP5990
+> +	tristate "MPS MP5990"
+> +	help
+> +	  If you say yes here you get hardware monitoring support for MPS
+> +	  MP5990.
+> +
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called mp5990.
+> +
+>   config SENSORS_MPQ7932_REGULATOR
+>   	bool "Regulator support for MPQ7932"
+>   	depends on SENSORS_MPQ7932 && REGULATOR
+> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> index 84ee960a6c2d..212d9ca0acc9 100644
+> --- a/drivers/hwmon/pmbus/Makefile
+> +++ b/drivers/hwmon/pmbus/Makefile
+> @@ -35,6 +35,7 @@ obj-$(CONFIG_SENSORS_MAX8688)	+= max8688.o
+>   obj-$(CONFIG_SENSORS_MP2888)	+= mp2888.o
+>   obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
+>   obj-$(CONFIG_SENSORS_MP5023)	+= mp5023.o
+> +obj-$(CONFIG_SENSORS_MP5990)	+= mp5990.o
+>   obj-$(CONFIG_SENSORS_MPQ7932)	+= mpq7932.o
+>   obj-$(CONFIG_SENSORS_PLI1209BC)	+= pli1209bc.o
+>   obj-$(CONFIG_SENSORS_PM6764TR)	+= pm6764tr.o
+> diff --git a/drivers/hwmon/pmbus/mp5990.c b/drivers/hwmon/pmbus/mp5990.c
+> new file mode 100644
+> index 000000000000..c3b31af9f750
+> --- /dev/null
+> +++ b/drivers/hwmon/pmbus/mp5990.c
+> @@ -0,0 +1,90 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Driver for MPS MP5990 Hot-Swap Controller
+> + */
+> +
+> +#include <linux/i2c.h>
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/pmbus.h>
+> +#include "pmbus.h"
+> +
+> +static int mp5990_read_byte_data(struct i2c_client *client, int page, int reg)
+> +{
+> +	switch (reg) {
+> +	case PMBUS_VOUT_MODE:
+> +		/*
+> +		  Enforce VOUT direct format, C4h reg BIT9
+> +		  default val is not match vout format
+> +		 */
+
+/*
+  * Please use proper multi-line comments. Also, the problem here is that the
+  * chip does not support the VOUT_MODE command, which should be mentioned.
+  *
+  * On top of that, overwriting PMBUS_VOUT_MODE result from the chip is only
+  * necessary if the chip does not return an error when reading the value.
+  * If that is the case, it should be mentioned in the comment. The above
+  * does not explain why this would be needed, even if the command is not
+  * (officially) supported by the chip. What does it return that requires
+  * an overwrite ?
+  */
+
+> +		return PB_VOUT_MODE_DIRECT;
+> +	default:
+> +		return -ENODATA;
+> +	}
+> +}
+> +
+> +static struct pmbus_driver_info mp5990_info = {
+> +	.pages = 1,
+> +	.format[PSC_VOLTAGE_IN] = direct,
+> +	.format[PSC_VOLTAGE_OUT] = direct,
+> +	.format[PSC_CURRENT_OUT] = direct,
+> +	.format[PSC_POWER] = direct,
+> +	.format[PSC_TEMPERATURE] = direct,
+> +	.m[PSC_VOLTAGE_IN] = 32,
+> +	.b[PSC_VOLTAGE_IN] = 0,
+> +	.R[PSC_VOLTAGE_IN] = 0,
+> +	.m[PSC_VOLTAGE_OUT] = 32,
+> +	.b[PSC_VOLTAGE_OUT] = 0,
+> +	.R[PSC_VOLTAGE_OUT] = 0,
+> +	.m[PSC_CURRENT_OUT] = 16,
+> +	.b[PSC_CURRENT_OUT] = 0,
+> +	.R[PSC_CURRENT_OUT] = 0,
+> +	.m[PSC_POWER] = 1,
+> +	.b[PSC_POWER] = 0,
+> +	.R[PSC_POWER] = 0,
+> +	.m[PSC_TEMPERATURE] = 1,
+> +	.b[PSC_TEMPERATURE] = 0,
+> +	.R[PSC_TEMPERATURE] = 0,
+> +	.func[0] =
+> +		PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_PIN |
+> +		PMBUS_HAVE_TEMP | PMBUS_HAVE_IOUT |
+> +		PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_TEMP,
+> +	.read_byte_data = mp5990_read_byte_data,
+> +};
+> +
+> +static int mp5990_probe(struct i2c_client *client)
+> +{
+> +	int ret;
+> +
+> +	ret = i2c_smbus_write_byte_data(client, PMBUS_VOUT_MODE,
+> +					PB_VOUT_MODE_DIRECT);
+
+According to the datasheet, the chip does not support the VOUT_MODE
+command. Supposedly, direct vs. linear mode is selected with bit 9
+of EFUSE_CFG. Even if the chip happens to "silently" support the command,
+the official command should be used to select the chip mode.
+
+Next question: Why use direct mode ? Linear mode is supported and would
+be much more flexible.
+
+> +	if (ret < 0)
+> +		return ret;
+> +	return pmbus_do_probe(client, &mp5990_info);
+> +}
+> +
+> +static const struct of_device_id mp5990_of_match[] = {
+> +	{ .compatible = "mps,mp5990" },
+> +	{}
+> +};
+> +
+> +static const struct i2c_device_id mp5990_id[] = {
+> +	{"mp5990", 0},
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(i2c, mp5990_id);
+> +
+> +static struct i2c_driver mp5990_driver = {
+> +	.driver = {
+> +		   .name = "mp5990",
+> +		   .of_match_table = of_match_ptr(mp5990_of_match),
+
+Using of_match_ptr() will result in a build failure if CONFIG_OF=n.
+
+> +	},
+> +	.probe = mp5990_probe,
+> +	.id_table = mp5990_id,
+> +};
+> +module_i2c_driver(mp5990_driver);
+> +
+> +MODULE_AUTHOR("Peter Yin <peter.yin@quantatw.com>");
+> +MODULE_DESCRIPTION("PMBus driver for MP5990 HSC");
+> +MODULE_LICENSE("GPL");
+> +MODULE_IMPORT_NS(PMBUS);
+
