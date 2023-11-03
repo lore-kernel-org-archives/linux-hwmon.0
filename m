@@ -2,159 +2,143 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AFFFC001B2
-	for <linux-hwmon@archiver.kernel.org>; Fri,  3 Nov 2023 18:58:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A1C3C4167D
+	for <linux-hwmon@archiver.kernel.org>; Fri,  3 Nov 2023 18:58:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345593AbjKCS6G (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 3 Nov 2023 14:58:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42574 "EHLO
+        id S1346225AbjKCS6W (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 3 Nov 2023 14:58:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345926AbjKCS6D (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 3 Nov 2023 14:58:03 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A48B6D60;
-        Fri,  3 Nov 2023 11:57:57 -0700 (PDT)
+        with ESMTP id S1345884AbjKCS6T (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 3 Nov 2023 14:58:19 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC2AD6C;
+        Fri,  3 Nov 2023 11:58:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1699037855; x=1699642655; i=w_armin@gmx.de;
-        bh=crjd0fdGfmTMPgr2YiAk3gnA49LR1woP6H9fXrLQ3lk=;
+        t=1699037858; x=1699642658; i=w_armin@gmx.de;
+        bh=TJgFoJSEZ7oco6vbH2uSKw0a8ZVpn5/M8nMVqzHvOZo=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:
          References;
-        b=itdz12JPTqhLyQbY3KSuebIYNJp8Pm66zJ9uiYV3+a5sV0ZSJO1ArN240dITWKs1
-         qoBMR1qP55e7t36cLLuRamN/GcLcDuf3PC4AHIbUamvhuOaLTKg8ZvqpxOvaXzrnz
-         6ut+dHIICyQXoL9ud82LRkrBF2PQxav1OCzfeoNt7Lcy8v8uMkkzU6rg9T4wx7j1c
-         Z3JK7tOoI46JCt8EBHKrmACpMJTiwDRnEHIU7+z0GTFBsgZ1wTgLza89EmhZeRiZG
-         k2na6v+jEfDdBZkUgmY3Q4gspWK5zjT2AWBBL5176ZKHu90TVIxRvVHdOR8a7NbEu
-         08EdMThLTNusDWG9aw==
+        b=BYSCoL+pIdDXwXl/6kR4OTi+DESwfNZOxbep/QZIKAFJKcUApLJltQGJZ2d4nYQe
+         YEeVFpxauq/8XMMKZuKWWOAgC0TA+b5kgqFXZnYiPNawzau8js40HcnoexWWxY+De
+         MO9OeKwO5k+K2G+FvEtzfZ9iBbEkMSiiaTEiXCRSX0N6Q0qt3iNddNkEsG0k7uFsM
+         kLEX5z8M6DpVnDmUl26dLLOCqGnUZvAX/rhWzagTGIzzlVymQ9c6y8C9CyOntm0xU
+         pxH2vCamA9Mz10IAqX2jGz+Q8Q6ExY7ZkRe5wMlG9qKUfCX6zZ/3+NUFquXvbvctL
+         Ckq19/JQeUbMC7oALw==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from mx-amd-b650.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MowGU-1rnEcD30Fq-00qPzR; Fri, 03 Nov 2023 19:57:35 +0100
+ (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MeCpR-1rXVAL0yIx-00bLtj; Fri, 03 Nov 2023 19:57:38 +0100
 From:   Armin Wolf <W_Armin@gmx.de>
 To:     pali@kernel.org
 Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 6/9] hwmon: (dell-smm) Introduce helper function for data init
-Date:   Fri,  3 Nov 2023 19:57:13 +0100
-Message-Id: <20231103185716.11007-7-W_Armin@gmx.de>
+Subject: [PATCH 8/9] hwmon: (dell-smm) Document the WMI SMM interface
+Date:   Fri,  3 Nov 2023 19:57:15 +0100
+Message-Id: <20231103185716.11007-9-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231103185716.11007-1-W_Armin@gmx.de>
 References: <20231103185716.11007-1-W_Armin@gmx.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:gY4bbZFrcedFAAvxypYxQopmhkCS4BccMx9PQDXnwgLhDmdz7a1
- QFAQ+scgz+YuYvzo/bzBYgUZy3ZwZIpwG64YVhWc72tCt5PLyo8jnhecRf8AKSOAiPCJ1VQ
- mj+mpzB2nwNfzOAL1SXo95iY5RlmK/0nqgjq4K55LZTDV7nspiLdRh54WbkD5qgur+p/awp
- DNpFPgrQkgvbDUMKR+xZQ==
-UI-OutboundReport: notjunk:1;M01:P0:RxhdxOFe/O0=;0MI+IggVXSYaqppV/AlpLmTvsfO
- xVm7YhTL4C2A0hlgwPDz92rxmMGaupBfXK03KxPY4SJGRpyCI9xzVQQFKfP3AQ7d3OHnUX3xM
- HUIM3BkUpODkgtL7AsZi9jErindHo8au7WVoua6EEa9C+VmNXfPM7SNpcgaGmLj6n2ckThh3T
- +H8shnWcyA9K0d0MxnCH73fePs99SjPYgU4Z8LaObGCEtGyTRSgILwnylALFJe+6foseNZx3c
- eTXQ8aYe7Izbj9P3pqwewZIPwWil6JCXHIWWgvp5J3XUnPyxeTlA9xVS92ml6gXwQkUeMdOfd
- i1ZxZpirJaonjiLfStsP5HUCwssF56aIUyJy0iAo/4awaZdY4vlHKe9i0px8WGwcfjTjpI0Jq
- i3Q0VEJKZfubg30jc9UFL5vD6IVA+vc9QYBsk2w5KbUp0zfFoVlIH43xDeYmIp60IASxGr3Zf
- npU4E1jbW4XC5OVvoN3gjn/mU6vaIArTu3Y7YnjPFb+Hc8dRYWOAQ9gz6cUrE982G4N3Qh7fv
- ePnx2Sdz7jbVaLokXgjmnyn+b/NAjnN/T7nxEq8xOlmF4EqRO36YJFZvULvWbQErC33SkkymJ
- nEinfIPQpgyIwwZajG49HnoszN7forVA5tydJMi/QZn6QA4csn8wTISAYI94eyxsN2fdndFrJ
- J7R9xVMiUYhApJAvUQbVEhZrOdoj2vDKrcrJzWa1r4NlBqwtXv5vy6sGTHBH7RuI30wUd1/iJ
- 6txq6QiJH3fguiblZUQ2ndyZs1thBcpmiyPmHJnjMUkbf00FPkYvmFg/6TDD7qO1XtO+m4uZu
- +hf3g19Q+d5uGvoQe+hlrqH9ceLXgeHi0SnPUhQrGaE5kxa3nmIBeHVgHJFskVTaCiT4x9BbN
- a0BaI8pK/LQUyp6FLi88rWYTgRwg2q/fazQ/Czb0cWsRoecNDgMZSiJKr70m6clbP22xh0P0S
- fXgA5PCsRtd/Gx0n97FVjMqAJCI=
+X-Provags-ID: V03:K1:TrSHmD4i5OZnstY4A3RxAkbMGUr3UEZcJLJCOCdsFx5ENHUxOT2
+ jaYRNr0AaCuMvMeF5CTDfjR6P9wLtgtm8cPW8f769MmiY7vGZ838/POYuf0sa1tXFTTe28c
+ lbgTHWPRvpUMpMYLNOuha8lxRGJACvFeEhFjpqf1f2GvquK41MLU6PKsaaRfDdmaO5dMaqr
+ 34eY9Z+Lin9EH6pNPhBHA==
+UI-OutboundReport: notjunk:1;M01:P0:Rlimnw2H6FE=;af55sEDBauzCOwcmmik/s0KEY+n
+ dpm/c5tj+HsULnAQAR89zPZ5YCPO8i8+iHVHtf/P7fLFa/IznTitSGa31xr7uhSPbkkquJTF9
+ AvPQk0GBP/bSKj5gkUv5XYanRYz+shOYwBk1CNz29Rfzy2uEKKuC2TUJTBa86BYiBPnU1Me3h
+ teX5C00T7VpxkFEYjKJuRf7SUedNSbjSvTvPQsoRSE+MZR/+9RMq6lMANVSRgEdViV9qHIMB0
+ KopR1oDEqiI/XY6r9SXzYxIMHzgCU4Z8txvTZ3ugX1MqfrYL+NAbcKyrrbEJLgAIU5VXCubKn
+ Cm0Gd2hEplcQrMrBhfkQCjk/8NhVVhp7BDM6P/HfZ6B4frbHdfjGPhHHfrB6efDlQwRNgEoUI
+ w+cz4mYwq9Y3y2ggKLZL0aLarr62ePUvQBOw3dA8mFNqwkPmACGluFigVW1xcY8ejE8Ln/B5s
+ crujHHAl3k/uH8BWyMZwgv/HLZSlir3gRkI+I4m3uCwb+gFP4xfmtuYGWMxJfHHOBkixnljJY
+ DdfoeYNNtuwb4WeuUODCaWgKSF5EjedEAna7uM+QmiUF7S7hpPkqwrjebcLJIa1CzmY0nVK2L
+ YYGU4z9/jXXY9PPHIdJgWCgthRIJ1IB8gjbOgz6Kt0+enPcViSSjlmVBNi5ztqcCdfo2c9n4N
+ KzQMWXg10KkcJSXZ1RE807LlYOzvVtO//VFnEK2Am1apimECgioAigk4AsZtqImW8TaDoodbv
+ xeAWHVqYNxVb/kGxtSkjVwhS9DqKKKVNljq96ehuH0UUFtyJhAJYXM/tgxRD1/TmsW1+5O8hi
+ IsnYX4jNS1fK++m4PGAhgGjsVneV+4mdV2k/S+1wbBadDQZQYffS7TJS+5Kc8ZZWNZ1M0I1q+
+ nRApftoAAUoyr/xxhDQ+GsyBP0Doim4Nj7vMifLVX6uNfCyLGrlEFPOoXHqBm7FsGSoudXFwD
+ 37Fmb/eqPPWOAPxlE/8q/L7yUc4=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-In the future, multiple SMM calling backends will exist,
-with each backend being required to initialize its data.
-Introduce a helper function for this so the code necessary
-to initialize dell_smm_data is not duplicated between
-different backends.
+Document the WMI SMM interface so that future developers
+can better understand how it works.
 
-Tested-by: <serverror@serverror.com>
 Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 =2D--
- drivers/hwmon/dell-smm-hwmon.c | 46 +++++++++++++++++++++-------------
- 1 file changed, 28 insertions(+), 18 deletions(-)
+ Documentation/hwmon/dell-smm-hwmon.rst | 33 +++++++++++++++++++++++---
+ 1 file changed, 30 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
-.c
-index 4a2c0d1ffa5b..2547b09929e6 100644
-=2D-- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -623,6 +623,11 @@ static void __init i8k_init_procfs(struct device *dev=
-)
- {
- 	struct dell_smm_data *data =3D dev_get_drvdata(dev);
+diff --git a/Documentation/hwmon/dell-smm-hwmon.rst b/Documentation/hwmon/=
+dell-smm-hwmon.rst
+index d8f1d6859b96..fea8cf76088e 100644
+=2D-- a/Documentation/hwmon/dell-smm-hwmon.rst
++++ b/Documentation/hwmon/dell-smm-hwmon.rst
+@@ -186,8 +186,7 @@ SMM Interface
+ The driver uses the SMM interface to send commands to the system BIOS.
+ This interface is normally used by Dell's 32-bit diagnostic program or
+ on newer notebook models by the buildin BIOS diagnostics.
+-The SMM is triggered by writing to the special ioports ``0xb2`` and ``0x8=
+4``,
+-and may cause short hangs when the BIOS code is taking too long to
++The SMM may cause short hangs when the BIOS code is taking too long to
+ execute.
 
-+	strscpy(data->bios_version, i8k_get_dmi_data(DMI_BIOS_VERSION),
-+		sizeof(data->bios_version));
-+	strscpy(data->bios_machineid, i8k_get_dmi_data(DMI_PRODUCT_SERIAL),
-+		sizeof(data->bios_machineid));
-+
- 	/* Only register exit function if creation was successful */
- 	if (proc_create_data("i8k", 0, NULL, &i8k_proc_ops, data))
- 		devm_add_action_or_reset(dev, i8k_exit_procfs, NULL);
-@@ -1078,6 +1083,26 @@ static int __init dell_smm_init_hwmon(struct device=
- *dev)
- 	return PTR_ERR_OR_ZERO(dell_smm_hwmon_dev);
- }
+ The SMM handler inside the system BIOS looks at the contents of the
+@@ -210,7 +209,35 @@ The SMM handler can signal a failure by either:
 
-+static int __init dell_smm_init_data(struct device *dev, const struct del=
-l_smm_ops *ops)
-+{
-+	struct dell_smm_data *data;
+ - setting the lower sixteen bits of ``eax`` to ``0xffff``
+ - not modifying ``eax`` at all
+=2D- setting the carry flag
++- setting the carry flag (legacy SMM interface only)
 +
-+	data =3D devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
++Legacy SMM Interface
++--------------------
 +
-+	mutex_init(&data->i8k_mutex);
-+	dev_set_drvdata(dev, data);
++When using the legacy SMM interface, a SMM is triggered by writing the le=
+ast significant byte
++of the command code to the special ioports ``0xb2`` and ``0x84``. This in=
+terface is not
++described inside the ACPI tables and can thus only be detected by issuing=
+ a test SMM call.
 +
-+	data->ops =3D ops;
-+	/* All options must not be 0 */
-+	data->i8k_fan_mult =3D fan_mult ? : I8K_FAN_MULT;
-+	data->i8k_fan_max =3D fan_max ? : I8K_FAN_HIGH;
-+	data->i8k_pwm_mult =3D DIV_ROUND_UP(255, data->i8k_fan_max);
++WMI SMM Interface
++-----------------
 +
-+	return 0;
-+}
++On modern Dell machines, the SMM calls are done over ACPI WMI:
 +
- static const struct dmi_system_id i8k_dmi_table[] __initconst =3D {
- 	{
- 		.ident =3D "Dell G5 5590",
-@@ -1386,26 +1411,11 @@ static const struct dmi_system_id i8k_whitelist_fa=
-n_control[] __initconst =3D {
++::
++
++ #pragma namespace("\\\\.\\root\\dcim\\sysman\\diagnostics")
++ [WMI, Provider("Provider_DiagnosticsServices"), Dynamic, Locale("MS\\0x4=
+09"), Description("RunDellDiag"), guid("{F1DDEE52-063C-4784-A11E-8A06684B9=
+B01}")]
++ class LegacyDiags {
++  [key, read] string InstanceName;
++  [read] boolean Active;
++
++  [WmiMethodId(1), Implemented, read, write, Description("Legacy Method "=
+)] void Execute([in, out] uint32 EaxLen, [in, out, WmiSizeIs("EaxLen") : T=
+oInstance] uint8 EaxVal[], [in, out] uint32 EbxLen, [in, out, WmiSizeIs("E=
+bxLen") : ToInstance] uint8 EbxVal[], [in, out] uint32 EcxLen, [in, out, W=
+miSizeIs("EcxLen") : ToInstance] uint8 EcxVal[], [in, out] uint32 EdxLen, =
+[in, out, WmiSizeIs("EdxLen") : ToInstance] uint8 EdxVal[]);
++ };
++
++Some machines support only the WMI SMM interface, while some machines sup=
+port both interfaces.
++The driver automatically detects which interfaces are present and will us=
+e the WMI SMM interface
++if the legacy SMM interface is not present. The WMI SMM interface is usua=
+lly slower than the
++legacy SMM interface since ACPI methods need to be called in order to tri=
+gger a SMM.
 
- static int __init dell_smm_probe(struct platform_device *pdev)
- {
--	struct dell_smm_data *data;
- 	int ret;
-
--	data =3D devm_kzalloc(&pdev->dev, sizeof(struct dell_smm_data), GFP_KERN=
-EL);
--	if (!data)
--		return -ENOMEM;
--
--	mutex_init(&data->i8k_mutex);
--	platform_set_drvdata(pdev, data);
--	data->ops =3D &i8k_smm_ops;
--
--	strscpy(data->bios_version, i8k_get_dmi_data(DMI_BIOS_VERSION),
--		sizeof(data->bios_version));
--	strscpy(data->bios_machineid, i8k_get_dmi_data(DMI_PRODUCT_SERIAL),
--		sizeof(data->bios_machineid));
--
--	/* All options must not be 0 */
--	data->i8k_fan_mult =3D fan_mult ? : I8K_FAN_MULT;
--	data->i8k_fan_max =3D fan_max ? : I8K_FAN_HIGH;
--	data->i8k_pwm_mult =3D DIV_ROUND_UP(255, data->i8k_fan_max);
-+	ret =3D dell_smm_init_data(&pdev->dev, &i8k_smm_ops);
-+	if (ret < 0)
-+		return ret;
-
- 	ret =3D dell_smm_init_hwmon(&pdev->dev);
- 	if (ret)
+ SMM command codes
+ -----------------
 =2D-
 2.39.2
 
