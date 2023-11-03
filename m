@@ -2,161 +2,440 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50421C4167B
-	for <linux-hwmon@archiver.kernel.org>; Fri,  3 Nov 2023 14:09:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 659BBC4332F
+	for <linux-hwmon@archiver.kernel.org>; Fri,  3 Nov 2023 14:28:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233045AbjKCOJf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 3 Nov 2023 10:09:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35690 "EHLO
+        id S230191AbjKCO2c (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 3 Nov 2023 10:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbjKCOJe (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 3 Nov 2023 10:09:34 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0579CD45;
-        Fri,  3 Nov 2023 07:09:32 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-5afabb23900so25199677b3.2;
-        Fri, 03 Nov 2023 07:09:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699020571; x=1699625371; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=sIKyxdcVNpKFBly0hFFv+ZdrlRZfkg9V+7hrvUWInms=;
-        b=Is2OgnZMJ3GvBxZfJgCAzAOUm5qa6uKsFlorxS50AGkhKzq9EiAtBfV1SupMXztTdR
-         bIVjxmMEyWSll7ydcEBoOAJscT5ZfDKFkLYlLXdMWs3hjypu596/e2jkihrc5skqSXwV
-         eGE7cMEW0NpE0sY1+1+HCTqrQgdhiOmV0nwRdQgqj03SevHPQYKV9VCJaIv035HQ94VU
-         nmdB5wT3/NA3jleBKohS7X2zP1oqlMBd3g05q1Rr+4wsXw3hlC371I8ztxIRQVU5fHkP
-         bmUh+kUiITlvU2B4qln6KjYr7xVrfMzBxwVUXLrDjRkD94a0c0QKpizS5hT063VzGj9M
-         RWbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699020571; x=1699625371;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sIKyxdcVNpKFBly0hFFv+ZdrlRZfkg9V+7hrvUWInms=;
-        b=eNRGNP0lyuQqb5au1yDpO47MvImeu5byo0BjltKgqFgplkfeDrshCQEH/jHBTigTvG
-         cHVC8ZUkZ7wPR3HN/tgSX1CGvFPRuy8FDt4l6AsCMyRzSD7m9Twba/NbwwUL8ROCh8nV
-         WashV31Zbtn3vQkoEFaKwAY1W9W1J8xc4Shm+9hicHYq3Ky/Yh+yLImQFcDcLhDJGa8t
-         FS/c5SXe41Tfi7fhrR7K0+T6ZTPGTW+9wqeVHvSO+Bk9tSKjWuKe2AmyBIc3GDs8hUBa
-         XECOEaOigQ51L7Q44P6vjyiVgiJKlzOdBgInEh+P0t2u/Q6fEnTzVZGFo8EjkgDBvb1T
-         G/nQ==
-X-Gm-Message-State: AOJu0Yz0UOMoKzLmfidxwOHY0iAblRasVGzgIwWaaGjC8Kx6F9j1w218
-        KPffyItqmc8YCDqEk9Jtkfs=
-X-Google-Smtp-Source: AGHT+IFYBe3Ss3fQT6KU2ro2SQ4zvKkmUxeeR622XhlW78RW7hPh5nrvUmXGJ4bwJ3mz4TGqc7klGg==
-X-Received: by 2002:a81:9a05:0:b0:5a7:b723:8fa3 with SMTP id r5-20020a819a05000000b005a7b7238fa3mr2580452ywg.26.1699020571074;
-        Fri, 03 Nov 2023 07:09:31 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r125-20020a0de883000000b005a7fbac4ff0sm966265ywe.110.2023.11.03.07.09.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Nov 2023 07:09:30 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <5451ac26-c498-4af5-b3fa-fe2265433ccc@roeck-us.net>
-Date:   Fri, 3 Nov 2023 07:09:27 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] rtc: add pcf85053a
-Content-Language: en-US
-To:     Carlos Menin <menin@carlosaurelio.net>, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        with ESMTP id S229965AbjKCO2b (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 3 Nov 2023 10:28:31 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0743CD47;
+        Fri,  3 Nov 2023 07:28:24 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E76D740005;
+        Fri,  3 Nov 2023 14:28:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1699021703;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZzG3BUlf/liG07fvvmldSRD8z7LULgsollErwUz4HCc=;
+        b=Zzgi+XE2Oy+Pf9Rjd0xlAXZT+9RNUOns6u/+9qU1H4/3q69F4gL0+1WKlT1XnmV5+8kDrY
+        kWtYEedJeAuohNcKCVzEwjE7FB0IuUcowClFJkuODmIn7VVml3zggUdW6thF5XV3YdK+UJ
+        ohiwLX4Wl+WjiaXC+PPZGL3i5wqhdAQUGfH+0utlAu+kdganZLHEH0bVutMo83irZK6Sog
+        Os6/nEupyNpp/EQl+7W/vsWmz0lGfAdHUHKD6qh7O8zFhrDYE4NypY7nGg8Oy4+9YLjcJF
+        VzjuPB0iJHroCjssRjibHvCwx1frc5SV4YAcGKA+2LBiSwc2CAWnx1iGVXI24w==
+Date:   Fri, 3 Nov 2023 15:28:22 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Carlos Menin <menin@carlosaurelio.net>
+Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Sergio Prado <sergio.prado@e-labworks.com>
+Subject: Re: [PATCH v2 1/2] rtc: add pcf85053a
+Message-ID: <20231103142822abbca0ed@mail.local>
 References: <20231103125106.78220-1-menin@carlosaurelio.net>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <20231103125106.78220-1-menin@carlosaurelio.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-GND-Sasl: alexandre.belloni@bootlin.com
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 11/3/23 05:51, Carlos Menin wrote:
-> Add support for NXP's PCF85053A RTC chip.
-> 
-> Signed-off-by: Carlos Menin <menin@carlosaurelio.net>
-> Reviewed-by: Sergio Prado <sergio.prado@e-labworks.com>
-> ---
+Hello Carlos,
 
-[ ... ]
-
-> +static int pcf85053a_bvl_to_mv(unsigned int bvl)
-> +{
-> +	long mv_table[] = {
-> +		1700,
-> +		1900,
-> +		2100,
-> +		2300,
-> +		2500,
-> +		2700,
-> +		2900,
-> +		3100,
-
-How are those numbers determined ? The datasheet gives voltage ranges.
-I'd have assumed that the center of those ranges is chosen, but for the
-most part it is the maximum, except for 2900 which is a bit above center
-and 3100 for "> 3.0V". Not that I care too much, but it seems to me that
-using the center voltage for each range would be more consistent.
-
-> +static int pcf85053a_hwmon_register(struct device *dev, const char *name)
+On 03/11/2023 09:51:05-0300, Carlos Menin wrote:
+> +struct pcf85053a {
+> +	struct rtc_device	*rtc;
+> +	struct regmap		*regmap;
+> +	struct regmap		*regmap_nvmem;
+> +};
+> +
+> +struct pcf85053a_config {
+> +	struct regmap_config regmap;
+> +	struct regmap_config regmap_nvmem;
+> +};
+> +
+> +static int pcf85053a_read_offset(struct device *dev, long *offset)
 > +{
 > +	struct pcf85053a *pcf85053a = dev_get_drvdata(dev);
-> +	struct device *hwmon_dev;
+> +	long val;
+> +	u32 reg_offset, reg_oscillator;
+> +	int ret;
 > +
-> +	hwmon_dev = devm_hwmon_device_register_with_info(dev, name, pcf85053a,
-> +							 &pcf85053a_hwmon_chip_info,
-> +							 0);
+> +	ret = regmap_read(pcf85053a->regmap, REG_OFFSET, &reg_offset);
+> +	if (ret)
+> +		return -EIO;
 
-This won't compile if CONFIG_HWMON=n or if CONFIG_RTC_DRV_PCF85053A=y and
-CONFIG_HWMON=m.
+Why do you change the error returned by regmap?
 
-Guenter
+> +
+> +	ret = regmap_read(pcf85053a->regmap, REG_OSCILLATOR, &reg_oscillator);
+> +	if (ret)
+> +		return -EIO;
+> +
+> +	val = sign_extend32(reg_offset, 7);
+> +
+> +	if (reg_oscillator & REG_OSC_OFFM)
+> +		*offset = val * OFFSET_STEP1;
+> +	else
+> +		*offset = val * OFFSET_STEP0;
+> +
+> +	return 0;
+> +}
+> +
+> +static int pcf85053a_set_offset(struct device *dev, long offset)
+> +{
+> +	struct pcf85053a *pcf85053a = dev_get_drvdata(dev);
+> +	s8 mode0, mode1, reg_offset;
+> +	unsigned int ret, error0, error1;
+> +
+> +	if (offset > OFFSET_STEP0 * 127)
+> +		return -ERANGE;
+> +	if (offset < OFFSET_STEP0 * -128)
+> +		return -ERANGE;
+> +
+> +	ret = regmap_set_bits(pcf85053a->regmap, REG_ACCESS, REG_ACCESS_XCLK);
+> +	if (ret)
+> +		return -EIO;
+> +
+> +	mode0 = DIV_ROUND_CLOSEST(offset, OFFSET_STEP0);
+> +	mode1 = DIV_ROUND_CLOSEST(offset, OFFSET_STEP1);
+> +
+> +	error0 = abs(offset - (mode0 * OFFSET_STEP0));
+> +	error1 = abs(offset - (mode1 * OFFSET_STEP1));
+> +	if (error0 < error1) {
+> +		reg_offset = mode0;
+> +		ret = regmap_clear_bits(pcf85053a->regmap, REG_OSCILLATOR,
+> +					REG_OSC_OFFM);
+> +	} else {
+> +		reg_offset = mode1;
+> +		ret = regmap_set_bits(pcf85053a->regmap, REG_OSCILLATOR,
+> +				      REG_OSC_OFFM);
+> +	}
+> +	if (ret)
+> +		return -EIO;
+> +
+> +	ret = regmap_write(pcf85053a->regmap, REG_OFFSET, reg_offset);
+> +
+> +	return ret;
+> +}
+> +
+> +static int pcf85053a_rtc_check_reliability(struct device *dev, u8 status_reg)
+> +{
+> +	int ret = 0;
+> +
+> +	if (status_reg & REG_STATUS_CIF) {
+> +		dev_warn(dev, "tamper detected,"
+> +			 " date/time is not reliable\n");
+You should not split strings. Also, I don't think most of the messages
+are actually useful as the end user doesn't have any specific action
+after seeing it. You should probably drop them.
 
+I don't think CIF means the time is not correct anymore.
+
+> +		ret = -EINVAL;
+> +	}
+> +
+> +	if (status_reg & REG_STATUS_OF) {
+> +		dev_warn(dev, "oscillator fail detected,"
+> +			 " date/time is not reliable.\n");
+> +		ret = -EINVAL;
+> +	}
+> +
+> +	if (status_reg & REG_STATUS_RTCF) {
+> +		dev_warn(dev, "power loss detected,"
+> +			 " date/time is not reliable.\n");
+> +		ret = -EINVAL;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int pcf85053a_rtc_read_time(struct device *dev, struct rtc_time *tm)
+> +{
+> +	struct pcf85053a *pcf85053a = dev_get_drvdata(dev);
+> +	u8 buf[REG_STATUS + 1];
+> +	int ret, len = sizeof(buf);
+> +
+> +	ret = regmap_bulk_read(pcf85053a->regmap, REG_SECS, buf, len);
+> +	if (ret) {
+> +		dev_err(dev, "%s: error %d\n", __func__, ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = pcf85053a_rtc_check_reliability(dev, buf[REG_STATUS]);
+> +	if (ret)
+> +		return ret;
+> +
+> +	tm->tm_year = buf[REG_YEARS];
+> +	/* adjust for 1900 base of rtc_time */
+> +	tm->tm_year += 100;
+> +
+> +	tm->tm_wday = (buf[REG_WEEKDAYS] - 1) & 7; /* 1 - 7 */
+> +	tm->tm_sec = buf[REG_SECS];
+> +	tm->tm_min = buf[REG_MINUTES];
+> +	tm->tm_hour = buf[REG_HOURS];
+> +	tm->tm_mday = buf[REG_DAYS];
+> +	tm->tm_mon = buf[REG_MONTHS] - 1; /* 1 - 12 */
+
+Those comments are not useful.
+
+> +
+> +	return 0;
+> +}
+> +
+
+> +static ssize_t attr_flag_clear(struct device *dev,
+> +			       struct device_attribute *attr,
+> +			       const char *buf, size_t count,
+> +			       u8 reg, u8 flag)
+> +{
+> +	struct pcf85053a *pcf85053a = dev_get_drvdata(dev->parent);
+> +	int ret;
+> +
+> +	(void)attr;
+> +	(void)buf;
+> +	(void)count;
+> +
+> +	ret = regmap_clear_bits(pcf85053a->regmap, reg, flag);
+> +	if (ret)
+> +		return -EIO;
+> +
+> +	return count;
+> +}
+> +
+> +static ssize_t attr_flag_read(struct device *dev,
+> +			      struct device_attribute *attr,
+> +			      char *buf,
+> +			      u8 reg, u8 flag)
+> +{
+> +	struct pcf85053a *pcf85053a = dev_get_drvdata(dev->parent);
+> +	unsigned int status, val;
+> +	int ret;
+> +
+> +	(void)attr;
+> +	ret = regmap_read(pcf85053a->regmap, reg, &status);
+> +	if (ret)
+> +		return -EIO;
+> +
+> +	val = (status & flag) != 0;
+> +
+> +	return sprintf(buf, "%u\n", val);
+> +}
+
+
+
+> +
+> +/* flags that can be read or written to be cleared */
+> +#define PCF85053A_ATTR_FLAG_RWC(name, reg, flag)                                \
+> +	static ssize_t name ## _store(                                         \
+> +			struct device *dev,                                    \
+> +			struct device_attribute *attr,                         \
+> +			const char *buf,                                       \
+> +			size_t count)                                          \
+> +	{                                                                      \
+> +		return attr_flag_clear(dev, attr, buf, count,                  \
+> +				REG_ ## reg, REG_ ## reg ## _ ## flag);        \
+> +	}                                                                      \
+> +	static ssize_t name ## _show(                                          \
+> +			struct device *dev,                                    \
+> +			struct device_attribute *attr,                         \
+> +			char *buf)                                             \
+> +	{                                                                      \
+> +		return attr_flag_read(dev, attr, buf,                          \
+> +				REG_ ## reg, REG_ ## reg ## _ ## flag);        \
+> +	}                                                                      \
+> +	static DEVICE_ATTR_RW(name)
+> +
+> +PCF85053A_ATTR_FLAG_RWC(rtc_fail, STATUS, RTCF);
+> +PCF85053A_ATTR_FLAG_RWC(oscillator_fail, STATUS, OF);
+> +PCF85053A_ATTR_FLAG_RWC(rtc_clear, STATUS, CIF);
+> +
+> +static struct attribute *pcf85053a_attrs_flags[] = {
+> +	&dev_attr_rtc_fail.attr,
+> +	&dev_attr_oscillator_fail.attr,
+> +	&dev_attr_rtc_clear.attr,
+> +	0,
+> +};
+
+Don't add undocumented sysfs files. Also, You must not allow userspace
+to clear those flags without setting the time properly.
+
+> +static void pcf85053a_set_drive_control(struct device *dev, u8 *reg_ctrl)
+> +{
+> +	int ret;
+> +	const char *val;
+> +	u8 regval;
+> +
+> +	ret = of_property_read_string(dev->of_node, "nxp,quartz-drive-control",
+> +				      &val);
+
+This property should rather be "nxp,quartz-drive".
+
+> +	if (ret) {
+> +		dev_warn(dev, "failed to read nxp,quartz-drive-control property,"
+> +			 " assuming 'normal' drive");
+> +		val = "normal";
+> +	}
+> +
+> +	if (!strcmp(val, "normal")) {
+> +		regval = 0;
+> +	} else if (!strcmp(val, "low")) {
+> +		regval = 1;
+> +	} else if (!strcmp(val, "high")) {
+> +		regval = 2;
+> +	} else {
+> +		dev_warn(dev, "invalid nxp,quartz-drive-control value: %s,"
+> +			 " assuming 'normal' drive", val);
+> +		regval = 0;
+> +	}
+> +
+> +	*reg_ctrl |= (regval << 2);
+
+2 needs a define, what about using FIELD_PREP?
+
+> +}
+> +
+> +static void pcf85053a_set_low_jitter(struct device *dev, u8 *reg_ctrl)
+> +{
+> +	bool val;
+> +	u8 regval;
+> +
+> +	val = of_property_read_bool(dev->of_node, "nxp,low-jitter-mode");
+
+Bool properties don't work well with RTC because with this, there is now
+way to enable the normal mode.
+
+> +
+> +	regval = val ? 1 : 0;
+> +	*reg_ctrl |= (regval << 4);
+4 also needs a define
+
+> +}
+> +
+> +static void pcf85053a_set_clk_inverted(struct device *dev, u8 *reg_ctrl)
+> +{
+> +	bool val;
+> +	u8 regval;
+> +
+> +	val = of_property_read_bool(dev->of_node, "nxp,clk-inverted");
+> +
+> +	regval = val ? 1 : 0;
+> +	*reg_ctrl |= (regval << 7);
+
+Ditto
+> +}
+> +
+> +static int pcf85053a_probe(struct i2c_client *client)
+> +{
+> +	int ret;
+> +	struct pcf85053a *pcf85053a;
+> +	const struct pcf85053a_config *config = &pcf85053a_config;
+> +	u8 reg_ctrl;
+> +
+> +	pcf85053a = devm_kzalloc(&client->dev, sizeof(*pcf85053a), GFP_KERNEL);
+> +	if (!pcf85053a) {
+> +		dev_err(&client->dev, "failed to allocate device: no memory");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	pcf85053a->regmap = devm_regmap_init_i2c(client, &config->regmap);
+> +	if (IS_ERR(pcf85053a->regmap)) {
+> +		dev_err(&client->dev, "failed to allocate regmap: %ld\n",
+> +			PTR_ERR(pcf85053a->regmap));
+> +		return PTR_ERR(pcf85053a->regmap);
+> +	}
+> +
+> +	i2c_set_clientdata(client, pcf85053a);
+> +
+> +	pcf85053a->rtc = devm_rtc_allocate_device(&client->dev);
+> +	if (IS_ERR(pcf85053a->rtc)) {
+> +		dev_err(&client->dev, "failed to allocate rtc: %ld\n",
+> +			PTR_ERR(pcf85053a->rtc));
+> +		return PTR_ERR(pcf85053a->rtc);
+> +	}
+> +
+> +	pcf85053a->rtc->ops = &pcf85053a_rtc_ops;
+> +	pcf85053a->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
+> +	pcf85053a->rtc->range_max = RTC_TIMESTAMP_END_2099;
+> +
+> +	reg_ctrl = REG_CTRL_DM | REG_CTRL_HF | REG_CTRL_CIE;
+
+CIE enables an interrupt but you never use interrupts.
+
+> +	pcf85053a_set_load_capacitance(&client->dev, &reg_ctrl);
+> +	pcf85053a_set_drive_control(&client->dev, &reg_ctrl);
+> +	pcf85053a_set_low_jitter(&client->dev, &reg_ctrl);
+> +	pcf85053a_set_clk_inverted(&client->dev, &reg_ctrl);
+> +
+> +	ret = regmap_write(pcf85053a->regmap, REG_CTRL, reg_ctrl);
+> +	if (ret) {
+> +		dev_err(&client->dev, "failed to configure rtc: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = rtc_add_group(pcf85053a->rtc, &pcf85053a_attr_group);
+> +	if (ret) {
+> +		dev_err(&client->dev, "failed to add sysfs entry: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = devm_rtc_register_device(pcf85053a->rtc);
+> +	if (ret) {
+> +		dev_err(&client->dev, "failed to register rtc: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = pcf85053a_add_nvmem(client, pcf85053a);
+> +	if (ret) {
+> +		dev_err(&client->dev, "failed to register nvmem: %d\n", ret);
+> +		return ret;
+
+probe must not fail after devm_rtc_register_device
+
+> +	}
+> +
+> +	ret = pcf85053a_hwmon_register(&client->dev, client->name);
+> +	if (ret)
+> +		dev_err(&client->dev, "failed to register hwmon: %d\n", ret);
+> +
+> +	return ret;
+> +}
+> +
+> +static const __maybe_unused struct of_device_id dev_ids[] = {
+> +	{ .compatible = "nxp,pcf85053a", .data = &pcf85053a_config },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, dev_ids);
+> +
+> +static struct i2c_driver pcf85053a_driver = {
+> +	.driver = {
+> +		.name = "pcf85053a",
+> +		.of_match_table = of_match_ptr(dev_ids),
+> +	},
+> +	.probe_new = &pcf85053a_probe,
+> +};
+> +
+> +module_i2c_driver(pcf85053a_driver);
+> +
+> +MODULE_AUTHOR("Carlos Menin <menin@carlosaurelio.net>");
+> +MODULE_DESCRIPTION("PCF85053A I2C RTC driver");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.34.1
+> 
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
