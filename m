@@ -2,159 +2,91 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDCE6C4332F
-	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Nov 2023 17:17:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29E7CC4332F
+	for <linux-hwmon@archiver.kernel.org>; Fri,  3 Nov 2023 08:03:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbjKBRR1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 2 Nov 2023 13:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37122 "EHLO
+        id S234660AbjKCIDl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 3 Nov 2023 04:03:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235593AbjKBRR0 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 2 Nov 2023 13:17:26 -0400
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FA51AA;
-        Thu,  2 Nov 2023 10:17:19 -0700 (PDT)
-Received: by mail-oo1-xc2a.google.com with SMTP id 006d021491bc7-5872b8323faso606502eaf.1;
-        Thu, 02 Nov 2023 10:17:19 -0700 (PDT)
+        with ESMTP id S234640AbjKCIDk (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 3 Nov 2023 04:03:40 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE3ED42;
+        Fri,  3 Nov 2023 01:03:37 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-6c311ca94b4so1814019b3a.3;
+        Fri, 03 Nov 2023 01:03:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698945439; x=1699550239; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bz6cORpfcaZknt5DQZ6VFAnZ3LhhxkSJyahVAlUv9r8=;
-        b=T0iPA5TPi5E1g07zwbBlD5LA6AG8av/PFgQlTs9M+Wv377YRCH4fnRoV4Y6BAxUEjs
-         KpCbHipUHI4px/w0XMDudV5BI/aBDUVeRsRwU5t2Y5+VhlchdkJmZeKFqJDia0+OHYvu
-         EjYIXViJfjZPxkW9JZ5hDrwng6Du3zL6XKpiQ5JfaB9ndu1Wm8BzYg0O7z79zl8Ec1sh
-         ApamNeG2ZzEWbUx4ueKFvP7UPC5MZWq2epGR8alsFed1GGF+BzfWf8eIR0yuvCmcIJN+
-         MVi/WbphuPw9gjpNHP5/WoJqV1l4qB7GdTVttqWcyALMnoUMLIr7//Jq7LqcBcWJ6P61
-         c5fQ==
+        d=gmail.com; s=20230601; t=1698998616; x=1699603416; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=T8JFS3vR1yJqsVQDnzz/sXYv25kxdeSbcVlJLmleJfk=;
+        b=EAUUN63Gfn5kQTemUCNmFo249uruWqD5ya513tWQv2nDGPiD000FWAW7R440dFb7EN
+         JPhUdbb25nZ5kB6Lj91YzIWhD2vkXaM2OxKVxNbYUe6qJJOr9andEWTKK4nWnK2YBRzG
+         KKtVYvU5lQjQxJ1N2COUnMb6S4M6sheB6hQMRSpC1gx/vP8CyvqshDzXt0W8Amx7OB3D
+         vHfP8hd8ZHlnKrMu2QSAKUNta2Q7tGEn1kuPzSKqdWMAy0GzVJnXUr6tf3PKtzRqCGpz
+         6YHtIvFg+qaqTIzteoasRrUzuUWcYr3WCOKd4J3aerOiPfQ5X2lulTijdBvG8IIFlhCr
+         Iowg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698945439; x=1699550239;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Bz6cORpfcaZknt5DQZ6VFAnZ3LhhxkSJyahVAlUv9r8=;
-        b=sxoiFMo4r2m0agZCvpAmo8bIBQznC7S8EJUOzRnImFtc1emCgPlVCFopkV6LVuflIs
-         M9CoDze5pdwolWUKlSkWzYJfjJvx/V/b+Y/xQX00BYhEpVf3/gIvh69JtSgUPnbydq/U
-         uEBZEX2QcHlVRNVm72YK41Jhwd22TvI1BCzGmkM/Q79DOqJSwzTcSnssCggmGfRoIAHi
-         o+gQhbKymPQoS8G7tBIEsBv+x32klK0VsI0Mj0o+uu3IdLhY0SAPt5RbiNGMiS9cI7/O
-         2kOO+pf1mGoOnHFeTBjpOXXIR3wxw8NL7hRk7AQIgboxAKerdvz8x7NfvH0ClQNW/IvT
-         xwlQ==
-X-Gm-Message-State: AOJu0YyCHFC8bSBG+OjNxzQBiElmAEl1cZfusbw1f9Frnez0KIfqz99K
-        kb0+Y7V1dSJB+JvQgAcM9B0=
-X-Google-Smtp-Source: AGHT+IEpw9KQgMOGsRC2ld7m1ZsUmHX/LPSBCdB7p7A8jUIdZETnuV4z4GNgAuwZU30xqHhbA6fsJw==
-X-Received: by 2002:a4a:b487:0:b0:581:ed12:98c6 with SMTP id b7-20020a4ab487000000b00581ed1298c6mr17861386ooo.4.1698945438789;
-        Thu, 02 Nov 2023 10:17:18 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 127-20020a4a1d85000000b00584086d7bdfsm1069815oog.20.2023.11.02.10.17.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Nov 2023 10:17:17 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e743bcaa-f17c-4a0f-bcb2-b38d02e802cb@roeck-us.net>
-Date:   Thu, 2 Nov 2023 10:17:15 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/2] rtc: max31335: add driver support
-Content-Language: en-US
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Miclaus, Antoniu" <Antoniu.Miclaus@analog.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        d=1e100.net; s=20230601; t=1698998616; x=1699603416;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=T8JFS3vR1yJqsVQDnzz/sXYv25kxdeSbcVlJLmleJfk=;
+        b=OF9Clk0u2yUemWeWZLG4yxhyLHXcLivmIiKffbSu9Dk77og12kYZ+iFPhySRnCtbMu
+         CJdbd4GEeA7g/jxS4c2MKrKs/v4RqfngQTnA1Wd9PEthldwuxthtARL/VFdz+4fdO1So
+         plpmgm6iwMqe33Wz0fFswTp7VKvhYo8NoNrLhfeY5QzSaN4AvAVvp2KEuKpjOxXasVBd
+         gs7sIOKLU9jcEvVX16qUCaijd7S9uWUFQ+qkihybSzlIOTm4pMdkxYJ8k+aUi32n3BLO
+         KZh1gFuYudP04G/Il5fqTlvbnQ9r9hkZ5xFI2DK9QbKBqAy8sl0nit8QMfnc+AkcR6g7
+         0ejA==
+X-Gm-Message-State: AOJu0YzwmCMrPNOszsQe5C2qOdsU+sK3GlfqaFGjSGr1t5OErUcYMGPN
+        Xdxb1B6S49mLEwFoebzJwlTZ9BsZzmI=
+X-Google-Smtp-Source: AGHT+IGL/Gi9CrNc1vO5zv6Y/Mwu6xbm6iVSNIPzWnOQ4pcbbAZlfgqVVIesdrDclKQX280myZdioA==
+X-Received: by 2002:a05:6a21:3b44:b0:180:eef7:b3bd with SMTP id zy4-20020a056a213b4400b00180eef7b3bdmr10255020pzb.28.1698998616364;
+        Fri, 03 Nov 2023 01:03:36 -0700 (PDT)
+Received: from peter-bmc.dhcpserver.bu9bmc.local (1-34-21-66.hinet-ip.hinet.net. [1.34.21.66])
+        by smtp.gmail.com with ESMTPSA id l1-20020a17090a72c100b002790ded9c6dsm834378pjk.31.2023.11.03.01.03.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Nov 2023 01:03:35 -0700 (PDT)
+From:   Peter Yin <peteryin.openbmc@gmail.com>
+To:     patrick@stwcx.xyz, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-References: <20231101094835.51031-1-antoniu.miclaus@analog.com>
- <20231101094835.51031-2-antoniu.miclaus@analog.com>
- <202311012223422e3387b3@mail.local>
- <CY4PR03MB3399BAAA3A3F6FC4B9A7A9FB9BA6A@CY4PR03MB3399.namprd03.prod.outlook.com>
- <20231102165713296ca50b@mail.local>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20231102165713296ca50b@mail.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Jonathan Corbet <corbet@lwn.net>,
+        Peter Yin <peteryin.openbmc@gmail.com>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: [PATCH v1 0/2] hwmon: (pmbus) Add support for MPS Multi-phase mp5990
+Date:   Fri,  3 Nov 2023 16:01:25 +0800
+Message-Id: <20231103080128.1204218-1-peteryin.openbmc@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 11/2/23 09:57, Alexandre Belloni wrote:
-[ ... ]
->>>> +static int max31335_read_offset(struct device *dev, long *offset)
->>>> +{
->>>> +	struct max31335_data *max31335 = dev_get_drvdata(dev);
->>>> +	u32 value;
->>>> +	int ret;
->>>> +
->>>> +	ret = regmap_read(max31335->regmap, MAX31335_AGING_OFFSET,
->>> &value);
->>>> +	if (ret)
->>>> +		return ret;
->>>> +
->>>> +	*offset = value;
->>>
->>> This is super dubious, what is the unit of MAX31335_AGING_OFFSET ?
->>>
->>
->> There is not additional information on the AGING_OFFSET register (no
->> other offset registers).
->> I treated it as a raw value that user can write/read. Should I drop the
->> offset implementation?
->>
-> 
-> The value exposed to userspace is in parts per billion. If you can't do
-> the conversion, then you have to drop it.
-> 
+Add support for MPS Multi-phase mp5990 hsc controller
 
-The max31334 datasheet says "Resolution = 0.477ppm". Again, the datasheet for
-max31335 is not public, so it is impossible to say what the resolution is
-for that chip, but I would assume that it is documented.
+Change log:
+  v1: Add support for MPS Multi-phase mp5990 HSC.
+---
+Peter Yin (2):
+  dt-bindings: hwmon: Add mps mp5990 driver bindings
+  hwmon: (pmbus) Add support for MPS Multi-phase mp5990
 
-Guenter
+ .../devicetree/bindings/hwmon/mps,mp5990.yaml | 43 +++++++++
+ Documentation/hwmon/index.rst                 |  1 +
+ Documentation/hwmon/mp5990.rst                | 84 +++++++++++++++++
+ drivers/hwmon/pmbus/Kconfig                   |  9 ++
+ drivers/hwmon/pmbus/Makefile                  |  1 +
+ drivers/hwmon/pmbus/mp5990.c                  | 90 +++++++++++++++++++
+ 6 files changed, 228 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/mps,mp5990.yaml
+ create mode 100644 Documentation/hwmon/mp5990.rst
+ create mode 100644 drivers/hwmon/pmbus/mp5990.c
+
+-- 
+2.25.1
 
