@@ -2,855 +2,101 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 626EAC4332F
-	for <linux-hwmon@archiver.kernel.org>; Sat,  4 Nov 2023 11:28:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DF34C4332F
+	for <linux-hwmon@archiver.kernel.org>; Sat,  4 Nov 2023 14:56:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232009AbjKDL2x (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 4 Nov 2023 07:28:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55344 "EHLO
+        id S231751AbjKDO4x (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 4 Nov 2023 10:56:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231998AbjKDL2w (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 4 Nov 2023 07:28:52 -0400
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D6D1BD;
-        Sat,  4 Nov 2023 04:28:47 -0700 (PDT)
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 3A48snmp004848;
-        Sat, 4 Nov 2023 07:28:25 -0400
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3u5jv1g9y2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 04 Nov 2023 07:28:25 -0400 (EDT)
-Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 3A4BSOvl052669
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sat, 4 Nov 2023 07:28:24 -0400
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Sat, 4 Nov 2023
- 07:28:23 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Sat, 4 Nov 2023 07:28:23 -0400
-Received: from amiclaus-VirtualBox.ad.analog.com (JPALOMIN-L01.ad.analog.com [10.65.41.83] (may be forged))
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 3A4BS0Sk031918;
-        Sat, 4 Nov 2023 07:28:15 -0400
-From:   Antoniu Miclaus <antoniu.miclaus@analog.com>
-To:     Antoniu Miclaus <antoniu.miclaus@analog.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-hwmon@vger.kernel.org>
-Subject: [PATCH v6 2/2] rtc: max31335: add driver support
-Date:   Sat, 4 Nov 2023 13:27:41 +0200
-Message-ID: <20231104112752.3217-2-antoniu.miclaus@analog.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231104112752.3217-1-antoniu.miclaus@analog.com>
-References: <20231104112752.3217-1-antoniu.miclaus@analog.com>
+        with ESMTP id S229620AbjKDO4w (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 4 Nov 2023 10:56:52 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657A91B2;
+        Sat,  4 Nov 2023 07:56:50 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-5a8ada42c2aso34972577b3.3;
+        Sat, 04 Nov 2023 07:56:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1699109809; x=1699714609; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=H0hrUGgZzYgQp76NmKrhuU8kV8DbyX9ea8P9JmtBgvE=;
+        b=gR0SUYGHNJKH8QGgB7Bh30cdcWECcLqNKByT3I382L6sh0p8kSFZiijZ2vY4elLEZ1
+         FIaOhVyHqSqNeAHA6ZNn5yU2pAgDfJJuJLbrZj4Rz/GmJ14bt50aWXjLHTv7OlFq7H/2
+         e1P800WJTzh4NzGEusaH7WC6U/pXT/8+GHJQ27DPHehOc1dEuFPDQpXeckl/fV/qCvLh
+         ybxvCKB3Y4NU2CdnAVrGPF+eW1qLfIXaDKNw400KV2CaRzViu3cRu/vbgsLIMCBll1cd
+         C9rn4yTkSrO/uDfMbhYdgWaxh8yRouttlD+gU/ARKlNI/E7Z7kr2wL4cra+g+L6VLaSh
+         +RdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699109809; x=1699714609;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=H0hrUGgZzYgQp76NmKrhuU8kV8DbyX9ea8P9JmtBgvE=;
+        b=QjiQEBhlWerkdLUVX2VRI2rsv0sKBWQMOWXu6RFavVM+Sz3Yx7yFvEpl8z3cleXM4S
+         nC2ij7KH1zt0paWE06vImuaBgcpNS2yAqDZbDnZ/KMzFr37AHFU/B9Z+uvZNXBXaofMw
+         hNN4XAqJRXLlnioo0BzjgTxeeBLjGk6DN2DG2DkF3IBFuQcoe6Y9JBYm6USewZqfnaMH
+         hi8rjeusQICTXVtYxhS5mSkUq8E/YH/PPTTZV+DrZ5d6/2cmJkw6fhHuV6dNTl2cT+98
+         X2irNYMGXGZMS8MgR0WBiehbXCpzlRGoltmqLP01KNMm+Kie4Jgj0uJSP6SpRjPo+Kad
+         hnvg==
+X-Gm-Message-State: AOJu0YxrO38m1kS9pX2KX0ERm+Z9uD1kCNYCt7aBhEKMEGB29qXvXURN
+        mhYNtNMz4frdnxTUek6NY6U=
+X-Google-Smtp-Source: AGHT+IG3DlQ2ys8YYCKek9u9alXx+xRcKJPuMFbnpSTCIHzhWHTU5a0l7hMtymZwgh2h7Lku0YeO8A==
+X-Received: by 2002:a0d:d5cd:0:b0:5a7:c8d4:c254 with SMTP id x196-20020a0dd5cd000000b005a7c8d4c254mr5399245ywd.0.1699109809473;
+        Sat, 04 Nov 2023 07:56:49 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id ci7-20020a05690c0a8700b005a7b8fddfedsm2114839ywb.41.2023.11.04.07.56.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Nov 2023 07:56:48 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 4 Nov 2023 07:56:46 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Armin Wolf <W_Armin@gmx.de>
+Cc:     pali@kernel.org, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 7/9] hwmon: (dell-smm) Add support for WMI SMM interface
+Message-ID: <efb7e4b9-487e-41a4-883f-4bfd29712bb8@roeck-us.net>
+References: <20231103185716.11007-1-W_Armin@gmx.de>
+ <20231103185716.11007-8-W_Armin@gmx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: Gm8zCw3zQa8DCiBoltEXVMaycg0BnYfi
-X-Proofpoint-ORIG-GUID: Gm8zCw3zQa8DCiBoltEXVMaycg0BnYfi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-04_10,2023-11-02_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- lowpriorityscore=0 mlxlogscore=999 suspectscore=0 adultscore=0
- priorityscore=1501 mlxscore=0 bulkscore=0 spamscore=0 malwarescore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2310240000 definitions=main-2311040096
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231103185716.11007-8-W_Armin@gmx.de>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-RTC driver for MAX31335 ±2ppm Automotive Real-Time Clock with
-Integrated MEMS Resonator.
+On Fri, Nov 03, 2023 at 07:57:14PM +0100, Armin Wolf wrote:
+> Some Dell machines like the Dell Optiplex 7000 do not support
+> the legacy SMM interface, but instead expect all SMM calls
+> to be issued over a special WMI interface.
+> Add support for this interface so users can control the fans
+> on those machines.
+> 
+> Tested-by: <serverror@serverror.com>
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> ---
+[ ... ]
 
-Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
----
-changes in v6:
- - add back aux-voltage-chargeable property handling.
- - drop CONFIG_RTC_DRV_MAX31335_HWMON from Kconfig since it is not used.
- MAINTAINERS                |   8 +
- drivers/rtc/Kconfig        |  12 +
- drivers/rtc/Makefile       |   1 +
- drivers/rtc/rtc-max31335.c | 706 +++++++++++++++++++++++++++++++++++++
- 4 files changed, 727 insertions(+)
- create mode 100644 drivers/rtc/rtc-max31335.c
+> diff --git a/drivers/platform/x86/wmi.c b/drivers/platform/x86/wmi.c
+> index a78ddd83cda0..0b3e63c21d26 100644
+> --- a/drivers/platform/x86/wmi.c
+> +++ b/drivers/platform/x86/wmi.c
+> @@ -106,6 +106,7 @@ MODULE_DEVICE_TABLE(acpi, wmi_device_ids);
+>  static const char * const allow_duplicates[] = {
+>  	"05901221-D566-11D1-B2F0-00A0C9062910",	/* wmi-bmof */
+>  	"8A42EA14-4F2A-FD45-6422-0087F7A7E608",	/* dell-wmi-ddv */
+> +	"F1DDEE52-063C-4784-A11E-8A06684B9B01", /* dell-smm-hwmon */
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index dd5de540ec0b..bc484cb997ab 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12823,6 +12823,14 @@ F:	Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
- F:	Documentation/hwmon/max31827.rst
- F:	drivers/hwmon/max31827.c
- 
-+MAX31335 RTC DRIVER
-+M:	Antoniu Miclaus <antoniu.miclaus@analog.com>
-+L:	linux-rtc@vger.kernel.org
-+S:	Supported
-+W:	https://ez.analog.com/linux-software-drivers
-+F:	Documentation/devicetree/bindings/rtc/adi,max31335.yaml
-+F:	drivers/rtc/rtc-max31335.c
-+
- MAX6650 HARDWARE MONITOR AND FAN CONTROLLER DRIVER
- L:	linux-hwmon@vger.kernel.org
- S:	Orphan
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index d7502433c78a..e430f66e7b7c 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -373,6 +373,18 @@ config RTC_DRV_MAX8997
- 	  This driver can also be built as a module. If so, the module
- 	  will be called rtc-max8997.
- 
-+config RTC_DRV_MAX31335
-+	tristate "Analog Devices MAX31335"
-+	depends on I2C
-+	depends on HWMON || HWMON=n
-+	select REGMAP_I2C
-+	help
-+	  If you say yes here you get support for the Analog Devices
-+	  MAX31335.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called rtc-max31335.
-+
- config RTC_DRV_MAX77686
- 	tristate "Maxim MAX77686"
- 	depends on MFD_MAX77686 || MFD_MAX77620 || MFD_MAX77714 || COMPILE_TEST
-diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-index fd209883ee2e..99e683a48240 100644
---- a/drivers/rtc/Makefile
-+++ b/drivers/rtc/Makefile
-@@ -88,6 +88,7 @@ obj-$(CONFIG_RTC_DRV_M41T94)	+= rtc-m41t94.o
- obj-$(CONFIG_RTC_DRV_M48T35)	+= rtc-m48t35.o
- obj-$(CONFIG_RTC_DRV_M48T59)	+= rtc-m48t59.o
- obj-$(CONFIG_RTC_DRV_M48T86)	+= rtc-m48t86.o
-+obj-$(CONFIG_RTC_DRV_MAX31335)	+= rtc-max31335.o
- obj-$(CONFIG_RTC_DRV_MAX6900)	+= rtc-max6900.o
- obj-$(CONFIG_RTC_DRV_MAX6902)	+= rtc-max6902.o
- obj-$(CONFIG_RTC_DRV_MAX6916)	+= rtc-max6916.o
-diff --git a/drivers/rtc/rtc-max31335.c b/drivers/rtc/rtc-max31335.c
-new file mode 100644
-index 000000000000..75e3266360a3
---- /dev/null
-+++ b/drivers/rtc/rtc-max31335.c
-@@ -0,0 +1,706 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * RTC driver for the MAX31335
-+ *
-+ * Copyright (C) 2023 Analog Devices
-+ *
-+ * Antoniu Miclaus <antoniu.miclaus@analog.com>
-+ *
-+ */
-+
-+#include <asm-generic/unaligned.h>
-+#include <linux/bcd.h>
-+#include <linux/bitfield.h>
-+#include <linux/bitops.h>
-+#include <linux/clk.h>
-+#include <linux/clk-provider.h>
-+#include <linux/hwmon.h>
-+#include <linux/i2c.h>
-+#include <linux/interrupt.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/regmap.h>
-+#include <linux/rtc.h>
-+#include <linux/util_macros.h>
-+
-+/* MAX31335 Register Map */
-+#define MAX31335_STATUS1			0x00
-+#define MAX31335_INT_EN1			0x01
-+#define MAX31335_STATUS2			0x02
-+#define MAX31335_INT_EN2			0x03
-+#define MAX31335_RTC_RESET			0x04
-+#define MAX31335_RTC_CONFIG			0x05
-+#define MAX31335_RTC_CONFIG2			0x06
-+#define MAX31335_TIMESTAMP_CONFIG		0x07
-+#define MAX31335_TIMER_CONFIG			0x08
-+#define MAX31335_SECONDS_1_128			0x09
-+#define MAX31335_SECONDS			0x0A
-+#define MAX31335_MINUTES			0x0B
-+#define MAX31335_HOURS				0x0C
-+#define MAX31335_DAY				0x0D
-+#define MAX31335_DATE				0x0E
-+#define MAX31335_MONTH				0x0F
-+#define MAX31335_YEAR				0x0F
-+#define MAX31335_ALM1_SEC			0x11
-+#define MAX31335_ALM1_MIN			0x12
-+#define MAX31335_ALM1_HRS			0x13
-+#define MAX31335_ALM1_DAY_DATE			0x14
-+#define MAX31335_ALM1_MON			0x15
-+#define MAX31335_ALM1_YEAR			0x16
-+#define MAX31335_ALM2_MIN			0x17
-+#define MAX31335_ALM2_HRS			0x18
-+#define MAX31335_ALM2_DAY_DATE			0x19
-+#define MAX31335_TIMER_COUNT			0x1A
-+#define MAX31335_TIMER_INIT			0x1B
-+#define MAX31335_PWR_MGMT			0x1C
-+#define MAX31335_TRICKLE_REG			0x1D
-+#define MAX31335_AGING_OFFSET			0x1E
-+#define MAX31335_TS_CONFIG			0x30
-+#define MAX31335_TEMP_ALARM_HIGH_MSB		0x31
-+#define MAX31335_TEMP_ALARM_HIGH_LSB		0x32
-+#define MAX31335_TEMP_ALARM_LOW_MSB		0x33
-+#define MAX31335_TEMP_ALARM_LOW_LSB		0x34
-+#define MAX31335_TEMP_DATA_MSB			0x35
-+#define MAX31335_TEMP_DATA_LSB			0x36
-+#define MAX31335_TS0_SEC_1_128			0x40
-+#define MAX31335_TS0_SEC			0x41
-+#define MAX31335_TS0_MIN			0x42
-+#define MAX31335_TS0_HOUR			0x43
-+#define MAX31335_TS0_DATE			0x44
-+#define MAX31335_TS0_MONTH			0x45
-+#define MAX31335_TS0_YEAR			0x46
-+#define MAX31335_TS0_FLAGS			0x47
-+#define MAX31335_TS1_SEC_1_128			0x48
-+#define MAX31335_TS1_SEC			0x49
-+#define MAX31335_TS1_MIN			0x4A
-+#define MAX31335_TS1_HOUR			0x4B
-+#define MAX31335_TS1_DATE			0x4C
-+#define MAX31335_TS1_MONTH			0x4D
-+#define MAX31335_TS1_YEAR			0x4E
-+#define MAX31335_TS1_FLAGS			0x4F
-+#define MAX31335_TS2_SEC_1_128			0x50
-+#define MAX31335_TS2_SEC			0x51
-+#define MAX31335_TS2_MIN			0x52
-+#define MAX31335_TS2_HOUR			0x53
-+#define MAX31335_TS2_DATE			0x54
-+#define MAX31335_TS2_MONTH			0x55
-+#define MAX31335_TS2_YEAR			0x56
-+#define MAX31335_TS2_FLAGS			0x57
-+#define MAX31335_TS3_SEC_1_128			0x58
-+#define MAX31335_TS3_SEC			0x59
-+#define MAX31335_TS3_MIN			0x5A
-+#define MAX31335_TS3_HOUR			0x5B
-+#define MAX31335_TS3_DATE			0x5C
-+#define MAX31335_TS3_MONTH			0x5D
-+#define MAX31335_TS3_YEAR			0x5E
-+#define MAX31335_TS3_FLAGS			0x5F
-+
-+/* MAX31335_STATUS1 Bit Definitions */
-+#define MAX31335_STATUS1_PSDECT			BIT(7)
-+#define MAX31335_STATUS1_OSF			BIT(6)
-+#define MAX31335_STATUS1_PFAIL			BIT(5)
-+#define MAX31335_STATUS1_VBATLOW		BIT(4)
-+#define MAX31335_STATUS1_DIF			BIT(3)
-+#define MAX31335_STATUS1_TIF			BIT(2)
-+#define MAX31335_STATUS1_A2F			BIT(1)
-+#define MAX31335_STATUS1_A1F			BIT(0)
-+
-+/* MAX31335_INT_EN1 Bit Definitions */
-+#define MAX31335_INT_EN1_DOSF			BIT(6)
-+#define MAX31335_INT_EN1_PFAILE			BIT(5)
-+#define MAX31335_INT_EN1_VBATLOWE		BIT(4)
-+#define MAX31335_INT_EN1_DIE			BIT(3)
-+#define MAX31335_INT_EN1_TIE			BIT(2)
-+#define MAX31335_INT_EN1_A2IE			BIT(1)
-+#define MAX31335_INT_EN1_A1IE			BIT(0)
-+
-+/* MAX31335_STATUS2 Bit Definitions */
-+#define MAX31335_STATUS2_TEMP_RDY		BIT(2)
-+#define MAX31335_STATUS2_OTF			BIT(1)
-+#define MAX31335_STATUS2_UTF			BIT(0)
-+
-+/* MAX31335_INT_EN2 Bit Definitions */
-+#define MAX31335_INT_EN2_TEMP_RDY_EN		BIT(2)
-+#define MAX31335_INT_EN2_OTIE			BIT(1)
-+#define MAX31335_INT_EN2_UTIE			BIT(0)
-+
-+/* MAX31335_RTC_RESET Bit Definitions */
-+#define MAX31335_RTC_RESET_SWRST		BIT(0)
-+
-+/* MAX31335_RTC_CONFIG1 Bit Definitions */
-+#define MAX31335_RTC_CONFIG1_EN_IO		BIT(6)
-+#define MAX31335_RTC_CONFIG1_A1AC		GENMASK(5, 4)
-+#define MAX31335_RTC_CONFIG1_DIP		BIT(3)
-+#define MAX31335_RTC_CONFIG1_I2C_TIMEOUT	BIT(1)
-+#define MAX31335_RTC_CONFIG1_EN_OSC		BIT(0)
-+
-+/* MAX31335_RTC_CONFIG2 Bit Definitions */
-+#define MAX31335_RTC_CONFIG2_ENCLKO		BIT(2)
-+#define MAX31335_RTC_CONFIG2_CLKO_HZ		GENMASK(1, 0)
-+
-+/* MAX31335_TIMESTAMP_CONFIG Bit Definitions */
-+#define MAX31335_TIMESTAMP_CONFIG_TSVLOW	BIT(5)
-+#define MAX31335_TIMESTAMP_CONFIG_TSPWM		BIT(4)
-+#define MAX31335_TIMESTAMP_CONFIG_TSDIN		BIT(3)
-+#define MAX31335_TIMESTAMP_CONFIG_TSOW		BIT(2)
-+#define MAX31335_TIMESTAMP_CONFIG_TSR		BIT(1)
-+#define MAX31335_TIMESTAMP_CONFIG_TSE		BIT(0)
-+
-+/* MAX31335_TIMER_CONFIG Bit Definitions */
-+#define MAX31335_TIMER_CONFIG_TE		BIT(4)
-+#define MAX31335_TIMER_CONFIG_TPAUSE		BIT(3)
-+#define MAX31335_TIMER_CONFIG_TRPT		BIT(2)
-+#define MAX31335_TIMER_CONFIG_TFS		GENMASK(1, 0)
-+
-+/* MAX31335_HOURS Bit Definitions */
-+#define MAX31335_HOURS_F_24_12			BIT(6)
-+#define MAX31335_HOURS_HR_20_AM_PM		BIT(5)
-+
-+/* MAX31335_MONTH Bit Definitions */
-+#define MAX31335_MONTH_CENTURY			BIT(7)
-+
-+/* MAX31335_PWR_MGMT Bit Definitions */
-+#define MAX31335_PWR_MGMT_PFVT			BIT(0)
-+
-+/* MAX31335_TRICKLE_REG Bit Definitions */
-+#define MAX31335_TRICKLE_REG_TRICKLE		GENMASK(3, 1)
-+#define MAX31335_TRICKLE_REG_EN_TRICKLE		BIT(0)
-+
-+/* MAX31335_TS_CONFIG Bit Definitions */
-+#define MAX31335_TS_CONFIG_AUTO			BIT(4)
-+#define MAX31335_TS_CONFIG_CONVERT_T		BIT(3)
-+#define MAX31335_TS_CONFIG_TSINT		GENMASK(2, 0)
-+
-+/* MAX31335_TS_FLAGS Bit Definitions */
-+#define MAX31335_TS_FLAGS_VLOWF			BIT(3)
-+#define MAX31335_TS_FLAGS_VBATF			BIT(2)
-+#define MAX31335_TS_FLAGS_VCCF			BIT(1)
-+#define MAX31335_TS_FLAGS_DINF			BIT(0)
-+
-+/* MAX31335 Miscellaneous Definitions */
-+#define MAX31335_TRICKLE_SCHOTTKY_DIODE		1
-+#define MAX31335_TRICKLE_STANDARD_DIODE		4
-+#define MAX31335_RAM_SIZE			32
-+#define MAX31335_TIME_SIZE			0x07
-+
-+#define clk_hw_to_max31335(_hw) container_of(_hw, struct max31335_data, clkout)
-+
-+struct max31335_data {
-+	struct regmap *regmap;
-+	struct rtc_device *rtc;
-+	struct clk_hw clkout;
-+};
-+
-+static const int max31335_clkout_freq[] = { 1, 64, 1024, 32768 };
-+
-+static const u16 max31335_trickle_resistors[] = {3000, 6000, 11000};
-+
-+static bool max31335_volatile_reg(struct device *dev, unsigned int reg)
-+{
-+	/* time keeping registers */
-+	if (reg >= MAX31335_SECONDS &&
-+	    reg < MAX31335_SECONDS + MAX31335_TIME_SIZE)
-+		return true;
-+
-+	/* interrupt status register */
-+	if (reg == MAX31335_INT_EN1_A1IE)
-+		return true;
-+
-+	/* temperature registers */
-+	if (reg == MAX31335_TEMP_DATA_MSB || MAX31335_TEMP_DATA_LSB)
-+		return true;
-+
-+	return false;
-+}
-+
-+static const struct regmap_config regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.max_register = 0x5F,
-+	.volatile_reg = max31335_volatile_reg,
-+};
-+
-+static int max31335_read_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct max31335_data *max31335 = dev_get_drvdata(dev);
-+	u8 date[7];
-+	int ret;
-+
-+	ret = regmap_bulk_read(max31335->regmap, MAX31335_SECONDS, date,
-+			       sizeof(date));
-+	if (ret)
-+		return ret;
-+
-+	tm->tm_sec  = bcd2bin(date[0] & 0x7f);
-+	tm->tm_min  = bcd2bin(date[1] & 0x7f);
-+	tm->tm_hour = bcd2bin(date[2] & 0x3f);
-+	tm->tm_wday = bcd2bin(date[3] & 0x7) - 1;
-+	tm->tm_mday = bcd2bin(date[4] & 0x3f);
-+	tm->tm_mon  = bcd2bin(date[5] & 0x1f) - 1;
-+	tm->tm_year = bcd2bin(date[6]) + 100;
-+
-+	if (FIELD_GET(MAX31335_MONTH_CENTURY, date[5]))
-+		tm->tm_year += 100;
-+
-+	return 0;
-+}
-+
-+static int max31335_set_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct max31335_data *max31335 = dev_get_drvdata(dev);
-+	u8 date[7];
-+
-+	date[0] = bin2bcd(tm->tm_sec);
-+	date[1] = bin2bcd(tm->tm_min);
-+	date[2] = bin2bcd(tm->tm_hour);
-+	date[3] = bin2bcd(tm->tm_wday + 1);
-+	date[4] = bin2bcd(tm->tm_mday);
-+	date[5] = bin2bcd(tm->tm_mon + 1);
-+	date[6] = bin2bcd(tm->tm_year % 100);
-+
-+	if (tm->tm_year >= 200)
-+		date[5] |= FIELD_PREP(MAX31335_MONTH_CENTURY, 1);
-+
-+	return regmap_bulk_write(max31335->regmap, MAX31335_SECONDS, date,
-+				 sizeof(date));
-+}
-+
-+static int max31335_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct max31335_data *max31335 = dev_get_drvdata(dev);
-+	int ret, ctrl, status;
-+	struct rtc_time time;
-+	u8 regs[6];
-+
-+	ret = regmap_bulk_read(max31335->regmap, MAX31335_ALM1_SEC, regs,
-+			       sizeof(regs));
-+	if (ret)
-+		return ret;
-+
-+	alrm->time.tm_sec  = bcd2bin(regs[0] & 0x7f);
-+	alrm->time.tm_min  = bcd2bin(regs[1] & 0x7f);
-+	alrm->time.tm_hour = bcd2bin(regs[2] & 0x3f);
-+	alrm->time.tm_mday = bcd2bin(regs[3] & 0x3f);
-+	alrm->time.tm_mon  = bcd2bin(regs[4] & 0x1f) - 1;
-+	alrm->time.tm_year = bcd2bin(regs[5]) + 100;
-+
-+	ret = max31335_read_time(dev, &time);
-+	if (ret)
-+		return ret;
-+
-+	if (time.tm_year >= 200)
-+		alrm->time.tm_year += 100;
-+
-+	ret = regmap_read(max31335->regmap, MAX31335_INT_EN1, &ctrl);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_read(max31335->regmap, MAX31335_STATUS1, &status);
-+	if (ret)
-+		return ret;
-+
-+	alrm->enabled = FIELD_GET(MAX31335_INT_EN1_A1IE, ctrl);
-+	alrm->pending = FIELD_GET(MAX31335_STATUS1_A1F, status);
-+
-+	return 0;
-+}
-+
-+static int max31335_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct max31335_data *max31335 = dev_get_drvdata(dev);
-+	unsigned int reg;
-+	u8 regs[6];
-+	int ret;
-+
-+	regs[0] = bin2bcd(alrm->time.tm_sec);
-+	regs[1] = bin2bcd(alrm->time.tm_min);
-+	regs[2] = bin2bcd(alrm->time.tm_hour);
-+	regs[3] = bin2bcd(alrm->time.tm_mday);
-+	regs[4] = bin2bcd(alrm->time.tm_mon + 1);
-+	regs[5] = bin2bcd(alrm->time.tm_year % 100);
-+
-+	ret = regmap_bulk_write(max31335->regmap, MAX31335_ALM1_SEC,
-+				regs, sizeof(regs));
-+	if (ret)
-+		return ret;
-+
-+	reg = FIELD_PREP(MAX31335_INT_EN1_A1IE, alrm->enabled);
-+	ret = regmap_update_bits(max31335->regmap, MAX31335_INT_EN1,
-+				 MAX31335_INT_EN1_A1IE, reg);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_update_bits(max31335->regmap, MAX31335_STATUS1,
-+				 MAX31335_STATUS1_A1F, 0);
-+
-+	return 0;
-+}
-+
-+static int max31335_alarm_irq_enable(struct device *dev, unsigned int enabled)
-+{
-+	struct max31335_data *max31335 = dev_get_drvdata(dev);
-+
-+	return regmap_update_bits(max31335->regmap, MAX31335_INT_EN1,
-+				  MAX31335_INT_EN1_A1IE, enabled);
-+}
-+
-+static irqreturn_t max31335_handle_irq(int irq, void *dev_id)
-+{
-+	struct max31335_data *max31335 = dev_id;
-+	struct mutex *lock = &max31335->rtc->ops_lock;
-+	int ret, status;
-+
-+	mutex_lock(lock);
-+
-+	ret = regmap_read(max31335->regmap, MAX31335_STATUS1, &status);
-+	if (ret)
-+		goto exit;
-+
-+	if (FIELD_GET(MAX31335_STATUS1_A1F, status)) {
-+		ret = regmap_update_bits(max31335->regmap, MAX31335_STATUS1,
-+					 MAX31335_STATUS1_A1F, 0);
-+		if (ret)
-+			goto exit;
-+
-+		rtc_update_irq(max31335->rtc, 1, RTC_AF | RTC_IRQF);
-+	}
-+
-+exit:
-+	mutex_unlock(lock);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static const struct rtc_class_ops max31335_rtc_ops = {
-+	.read_time = max31335_read_time,
-+	.set_time = max31335_set_time,
-+	.read_alarm = max31335_read_alarm,
-+	.set_alarm = max31335_set_alarm,
-+	.alarm_irq_enable = max31335_alarm_irq_enable,
-+};
-+
-+static int max31335_trickle_charger_setup(struct device *dev,
-+					  struct max31335_data *max31335)
-+{
-+	u32 ohms, chargeable;
-+	int i, trickle_cfg;
-+	const char *diode;
-+
-+	if (device_property_read_u32(dev, "aux-voltage-chargeable",
-+				     &chargeable))
-+		return 0;
-+
-+	if (device_property_read_u32(dev, "trickle-resistor-ohms", &ohms))
-+		return 0;
-+
-+	if (device_property_read_string(dev, "adi,tc-diode", &diode))
-+		return 0;
-+
-+	if (!strcmp(diode, "schottky"))
-+		trickle_cfg = MAX31335_TRICKLE_SCHOTTKY_DIODE;
-+	else if (!strcmp(diode, "standard+schottky"))
-+		trickle_cfg = MAX31335_TRICKLE_STANDARD_DIODE;
-+	else
-+		dev_err_probe(dev, -EINVAL, "Invalid tc-diode value: %s\n",
-+			      diode);
-+
-+	for (i = 0; i < ARRAY_SIZE(max31335_trickle_resistors); i++)
-+		if (ohms == max31335_trickle_resistors[i])
-+			break;
-+
-+	if (i >= ARRAY_SIZE(max31335_trickle_resistors))
-+		return 0;
-+
-+	i = i + trickle_cfg;
-+
-+	return regmap_write(max31335->regmap, MAX31335_TRICKLE_REG,
-+			    FIELD_PREP(MAX31335_TRICKLE_REG_TRICKLE, i) |
-+			    FIELD_PREP(MAX31335_TRICKLE_REG_EN_TRICKLE,
-+				       chargeable));
-+}
-+
-+static unsigned long max31335_clkout_recalc_rate(struct clk_hw *hw,
-+						 unsigned long parent_rate)
-+{
-+	struct max31335_data *max31335 = clk_hw_to_max31335(hw);
-+	unsigned int freq_mask;
-+	unsigned int reg;
-+	int ret;
-+
-+	ret = regmap_read(max31335->regmap, MAX31335_RTC_CONFIG2, &reg);
-+	if (ret)
-+		return 0;
-+
-+	freq_mask = __roundup_pow_of_two(ARRAY_SIZE(max31335_clkout_freq)) - 1;
-+
-+	return max31335_clkout_freq[reg & freq_mask];
-+}
-+
-+static long max31335_clkout_round_rate(struct clk_hw *hw, unsigned long rate,
-+				       unsigned long *prate)
-+{
-+	int index;
-+
-+	index = find_closest(rate, max31335_clkout_freq,
-+			     ARRAY_SIZE(max31335_clkout_freq));
-+
-+	return max31335_clkout_freq[index];
-+}
-+
-+static int max31335_clkout_set_rate(struct clk_hw *hw, unsigned long rate,
-+				    unsigned long parent_rate)
-+{
-+	struct max31335_data *max31335 = clk_hw_to_max31335(hw);
-+	unsigned int freq_mask;
-+	int index;
-+
-+	index = find_closest(rate, max31335_clkout_freq,
-+			     ARRAY_SIZE(max31335_clkout_freq));
-+	freq_mask = __roundup_pow_of_two(ARRAY_SIZE(max31335_clkout_freq)) - 1;
-+
-+	return regmap_update_bits(max31335->regmap, MAX31335_RTC_CONFIG2,
-+				  freq_mask, index);
-+}
-+
-+static int max31335_clkout_enable(struct clk_hw *hw)
-+{
-+	struct max31335_data *max31335 = clk_hw_to_max31335(hw);
-+
-+	return regmap_set_bits(max31335->regmap, MAX31335_RTC_CONFIG2,
-+			       MAX31335_RTC_CONFIG2_ENCLKO);
-+}
-+
-+static void max31335_clkout_disable(struct clk_hw *hw)
-+{
-+	struct max31335_data *max31335 = clk_hw_to_max31335(hw);
-+
-+	regmap_clear_bits(max31335->regmap, MAX31335_RTC_CONFIG2,
-+			  MAX31335_RTC_CONFIG2_ENCLKO);
-+}
-+
-+static int max31335_clkout_is_enabled(struct clk_hw *hw)
-+{
-+	struct max31335_data *max31335 = clk_hw_to_max31335(hw);
-+	unsigned int reg;
-+	int ret;
-+
-+	ret = regmap_read(max31335->regmap, MAX31335_RTC_CONFIG2, &reg);
-+	if (ret)
-+		return ret;
-+
-+	return !!(reg & MAX31335_RTC_CONFIG2_ENCLKO);
-+}
-+
-+static const struct clk_ops max31335_clkout_ops = {
-+	.recalc_rate = max31335_clkout_recalc_rate,
-+	.round_rate = max31335_clkout_round_rate,
-+	.set_rate = max31335_clkout_set_rate,
-+	.enable = max31335_clkout_enable,
-+	.disable = max31335_clkout_disable,
-+	.is_enabled = max31335_clkout_is_enabled,
-+};
-+
-+struct clk_init_data max31335_clk_init = {
-+	.name = "max31335-clkout",
-+	.ops = &max31335_clkout_ops,
-+};
-+
-+static int max31335_nvmem_reg_read(void *priv, unsigned int offset,
-+				   void *val, size_t bytes)
-+{
-+	struct max31335_data *max31335 = priv;
-+	unsigned int reg = MAX31335_TS0_SEC_1_128 + offset;
-+
-+	return regmap_bulk_read(max31335->regmap, reg, val, bytes);
-+}
-+
-+static int max31335_nvmem_reg_write(void *priv, unsigned int offset,
-+				    void *val, size_t bytes)
-+{
-+	struct max31335_data *max31335 = priv;
-+	unsigned int reg = MAX31335_TS0_SEC_1_128 + offset;
-+
-+	return regmap_bulk_write(max31335->regmap, reg, val, bytes);
-+}
-+
-+struct nvmem_config max31335_nvmem_cfg = {
-+	.reg_read = max31335_nvmem_reg_read,
-+	.reg_write = max31335_nvmem_reg_write,
-+	.word_size = 8,
-+	.size = MAX31335_RAM_SIZE,
-+};
-+
-+#if IS_REACHABLE(HWMON)
-+static int max31335_read_temp(struct device *dev, enum hwmon_sensor_types type,
-+			      u32 attr, int channel, long *val)
-+{
-+	struct max31335_data *max31335 = dev_get_drvdata(dev);
-+	u8 reg[2];
-+	s16 temp;
-+	int ret;
-+
-+	if (type != hwmon_temp || attr != hwmon_temp_input)
-+		return -EOPNOTSUPP;
-+
-+	ret = regmap_bulk_read(max31335->regmap, MAX31335_TEMP_DATA_MSB,
-+			       reg, 2);
-+	if (ret)
-+		return ret;
-+
-+	temp = get_unaligned_be16(reg);
-+
-+	*val = (temp / 64) * 250;
-+
-+	return 0;
-+}
-+
-+static umode_t max31335_is_visible(const void *data,
-+				   enum hwmon_sensor_types type,
-+				   u32 attr, int channel)
-+{
-+	if (type == hwmon_temp && attr == hwmon_temp_input)
-+		return 0444;
-+
-+	return 0;
-+}
-+
-+static const struct hwmon_channel_info *max31335_info[] = {
-+	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
-+	NULL
-+};
-+
-+static const struct hwmon_ops max31335_hwmon_ops = {
-+	.is_visible = max31335_is_visible,
-+	.read = max31335_read_temp,
-+};
-+
-+static const struct hwmon_chip_info max31335_chip_info = {
-+	.ops = &max31335_hwmon_ops,
-+	.info = max31335_info,
-+};
-+#endif
-+
-+static int max31335_clkout_register(struct device *dev)
-+{
-+	struct max31335_data *max31335 = dev_get_drvdata(dev);
-+	int ret;
-+
-+	if (!device_property_present(dev, "#clock-cells"))
-+		return regmap_clear_bits(max31335->regmap, MAX31335_RTC_CONFIG2,
-+					 MAX31335_RTC_CONFIG2_ENCLKO);
-+
-+	max31335->clkout.init = &max31335_clk_init;
-+
-+	ret = devm_clk_hw_register(dev, &max31335->clkout);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "cannot register clock\n");
-+
-+	ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get,
-+					  &max31335->clkout);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "cannot add hw provider\n");
-+
-+	max31335->clkout.clk = devm_clk_get_enabled(dev, NULL);
-+	if (IS_ERR(max31335->clkout.clk))
-+		return dev_err_probe(dev, PTR_ERR(max31335->clkout.clk),
-+				     "cannot enable clkout\n");
-+
-+	return 0;
-+}
-+
-+static int max31335_probe(struct i2c_client *client)
-+{
-+	struct max31335_data *max31335;
-+#if IS_REACHABLE(HWMON)
-+	struct device *hwmon;
-+#endif
-+	int ret;
-+
-+	max31335 = devm_kzalloc(&client->dev, sizeof(*max31335), GFP_KERNEL);
-+	if (!max31335)
-+		return -ENOMEM;
-+
-+	max31335->regmap = devm_regmap_init_i2c(client, &regmap_config);
-+	if (IS_ERR(max31335->regmap))
-+		return PTR_ERR(max31335->regmap);
-+
-+	i2c_set_clientdata(client, max31335);
-+
-+	max31335->rtc = devm_rtc_allocate_device(&client->dev);
-+	if (IS_ERR(max31335->rtc))
-+		return PTR_ERR(max31335->rtc);
-+
-+	max31335->rtc->ops = &max31335_rtc_ops;
-+	max31335->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-+	max31335->rtc->range_max = RTC_TIMESTAMP_END_2199;
-+	max31335->rtc->alarm_offset_max = 24 * 60 * 60;
-+
-+	ret = max31335_clkout_register(&client->dev);
-+	if (ret)
-+		return ret;
-+
-+	if (client->irq > 0) {
-+		ret = devm_request_threaded_irq(&client->dev, client->irq,
-+						NULL, max31335_handle_irq,
-+						IRQF_ONESHOT,
-+						"max31335", max31335);
-+		if (ret) {
-+			dev_warn(&client->dev,
-+				 "unable to request IRQ, alarm max31335 disabled\n");
-+			client->irq = 0;
-+		}
-+	}
-+
-+	if (!client->irq)
-+		clear_bit(RTC_FEATURE_ALARM, max31335->rtc->features);
-+
-+	max31335_nvmem_cfg.priv = max31335;
-+	ret = devm_rtc_nvmem_register(max31335->rtc, &max31335_nvmem_cfg);
-+	if (ret)
-+		dev_err_probe(&client->dev, ret, "cannot register rtc nvmem\n");
-+
-+#if IS_REACHABLE(HWMON)
-+	hwmon = devm_hwmon_device_register_with_info(&client->dev, client->name,
-+						     max31335,
-+						     &max31335_chip_info,
-+						     NULL);
-+	if (IS_ERR(hwmon))
-+		dev_err_probe(&client->dev, PTR_ERR(hwmon),
-+			      "cannot register hwmon device\n");
-+#endif
-+
-+	ret = max31335_trickle_charger_setup(&client->dev, max31335);
-+	if (ret)
-+		return ret;
-+
-+	return devm_rtc_register_device(max31335->rtc);
-+}
-+
-+static const struct i2c_device_id max31335_id[] = {
-+	{ "max31335", 0 },
-+	{ }
-+};
-+
-+MODULE_DEVICE_TABLE(i2c, max31335_id);
-+
-+static const struct of_device_id max31335_of_match[] = {
-+	{ .compatible = "adi,max31335" },
-+	{ }
-+};
-+
-+MODULE_DEVICE_TABLE(of, max31335_of_match);
-+
-+static struct i2c_driver max31335_driver = {
-+	.driver = {
-+		.name = "rtc-max31335",
-+		.of_match_table = max31335_of_match,
-+	},
-+	.probe = max31335_probe,
-+	.id_table = max31335_id,
-+};
-+module_i2c_driver(max31335_driver);
-+
-+MODULE_AUTHOR("Antoniu Miclaus <antoniu.miclaus@analog.com>");
-+MODULE_DESCRIPTION("MAX31335 RTC driver");
-+MODULE_LICENSE("GPL");
--- 
-2.42.0
+This would require an ack from its maintainer, which you did not Cc:.
+That means I won't be able to apply this patch.
 
+Guenter
+
+>  	NULL
+>  };
+> 
+> --
+> 2.39.2
+> 
