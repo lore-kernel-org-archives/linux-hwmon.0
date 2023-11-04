@@ -2,457 +2,180 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2F58C4332F
-	for <linux-hwmon@archiver.kernel.org>; Sat,  4 Nov 2023 15:56:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 386ABC4332F
+	for <linux-hwmon@archiver.kernel.org>; Sat,  4 Nov 2023 15:56:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbjKDP4i (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 4 Nov 2023 11:56:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33242 "EHLO
+        id S232024AbjKDP4l (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 4 Nov 2023 11:56:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjKDP4h (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 4 Nov 2023 11:56:37 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD8AD45;
-        Sat,  4 Nov 2023 08:56:31 -0700 (PDT)
+        with ESMTP id S229491AbjKDP4k (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 4 Nov 2023 11:56:40 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B4419D;
+        Sat,  4 Nov 2023 08:56:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1699113365; x=1699718165; i=w_armin@gmx.de;
-        bh=Bj1Fql5njftd7cc6/C+EO3KOgcnvPmCItfr4JnJy2ys=;
+        t=1699113371; x=1699718171; i=w_armin@gmx.de;
+        bh=ifOYwAxjzP5mj81yd22nPAM7GrmUV1QGSVAX6g3Ytlk=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:
          References;
-        b=QgQEdUBB6TrQUC7L31TQSFs1woitioLTA1RLKJwrur2tHd/5n1eZaveAUAljxfFz
-         pkjGnzxT8ze1/x0dPWk4bRmWiaDRFxbPeDS9bnKQbZ9+1pJ1gHlZyBQs4r0goZzb3
-         LW90XtRDCgOlz9sq8NvlMut1JP9ipFsVpQK/EH258ivYoM62halxziuSXeJRDp4Xr
-         S+0TUG7jqRX72hhxzGhWh8bxg+X8VCeQS1BA4l3ch8Zts6dGEBp/nrKR0ubxBVTRD
-         LZ5DZnUEMeL/b8AzKIwCCzA7QFMLo5cYBUuMxes7MKA28nZ+mMvaew0d9m40PY3aH
-         A20OtuXHkdSs+Mmz6g==
+        b=aeNpnhMe7UEn0GC5HmgFu0ZvtJC9ulUuql3yJUbh5sMwt1nB8xDJbt8Dgzpjo2XS
+         F9yv4I3+ao486wgJbhXzfDQlUyeBe9ZEFWjgB7caQX9dFrQ9NNEc7xZTClPgUvvy9
+         9DusNKxgw7xihZhcP2VkkWyA5lPMbZFy9F/RBitOhUXvPU+GdmGyFsBxAa5m0YOw2
+         dTBokE/vV8FXxVzATESGNsQw96hYP6oKGnF4627IGIF94afHdezC+A0/cLYejO1ev
+         0hTZhyuuVJTp2Zg5oyzv/EgYj7LC1OIYWqMEcQ3Fd8AtQflZkGRdGy+b+3+ITtYxL
+         RcsMw/DeFTyllM6dsw==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from mx-amd-b650.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MrQIv-1rkS821rnD-00oWqr; Sat, 04 Nov 2023 16:56:05 +0100
+ (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1N7QxB-1rVWZr3clR-017mVX; Sat, 04 Nov 2023 16:56:10 +0100
 From:   Armin Wolf <W_Armin@gmx.de>
 To:     pali@kernel.org
 Cc:     hdegoede@redhat.com, markgross@kernel.org,
         ilpo.jarvinen@linux.intel.com, jdelvare@suse.com,
         linux@roeck-us.net, platform-driver-x86@vger.kernel.org,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/9] hwmon: (dell-smm) Prepare for multiple SMM calling backends
-Date:   Sat,  4 Nov 2023 16:55:51 +0100
-Message-Id: <20231104155559.11842-2-W_Armin@gmx.de>
+Subject: [PATCH v2 3/9] hwmon: (dell-smm) Move whitelist handling to module init
+Date:   Sat,  4 Nov 2023 16:55:53 +0100
+Message-Id: <20231104155559.11842-4-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231104155559.11842-1-W_Armin@gmx.de>
 References: <20231104155559.11842-1-W_Armin@gmx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:sQvsfdTTJsnPhwsYLfPZrEFYHwG6BOwzUbXyTVCfBO15E39WLe0
- RU6EaT+OYMFGmXNtgP/HfIrGDmQE0q7bvm2fbeGWU3GGTA8JYrOJcYQ9IkXkCdhTESuIkaJ
- zAlhAfc+4FKTHrmP/SDC2anXeuW3X47q+iTX5JJ/UWfVyFVbBsIBEtxQkLKyZXw978eOwyQ
- ldey+h6zAILnQZZXyHH7g==
-UI-OutboundReport: notjunk:1;M01:P0:FrzbgbHcff0=;ptbLG4kz/KGcJ97nIjsdPp0BDlx
- Qau8QSkwqiH4u5wkqsx9srybPyUW8Hp9aMYpKQKJZiueZmGTHz37PCCnRCBwBUtr36LYcM/Lm
- J38Z2ARZrcA+9A3zzbaFcC6FzcjuqJEz+WEt24yRDYNyRZLSY8jbdSSN5Nm3nXfHGztEJqJw7
- xcJrA8/qUr7BeIeypEXTbHhi2fPoPdphiZ9/yX1AlRg8TbhotsWLNNvmjKROkCyeQtPc6O62T
- Ip5Q9PYh1yetZr3eSlN4ja5hB6sNt5deyLU4BLORQhfAXH375pc/97AO96WEMit/NBf6nB3yT
- QX19jGdtvEgBX3PV+QrU/FDHRl3Vc0Dvx4QlMBnQJKCblC7WCHI8DPqrlS0fwHcIiFQMbUjA5
- li0GJzTaE/+pAbSH31j7owh0EMOJioEV5rzT3Zolh7o6TW1OjFMX7iK97Ezu4tAD1zdFCfCmf
- AOMnWUMZDvihzoRIqAXROHmfpcsJYjtGvnd+Ds5S/afNC40vMr1XXm54cwQjpIyXff/UDXRvt
- G0lNX8++Of40fr5f1NLYG9K3t38Qow8n8UkFcCbwimTGLXHJg6iS2H0O7g6mlHzUwCNfdLqy5
- EK5Ads41arX3D2YqxHB7pZjez2lpTAKSGva9FvJrZPDEJ+oAKHiuP7n6eVTwURmuVCtCuenlH
- uyDYcPNjFZ22ADm4HKQEt5wcD26xmipZJmbafIlxr8oR5r+LRt/G3qxuXVMvUTYqNLA7lgKBw
- CeEv+2HvYRPX1W5sIQ7NnVqKFCWwggSSAuch3oJV5EjDCMlG/e5VKyfgstRIsmnUvQvSCr4/C
- qyOcwc9D9si0xjxFUxScKBA3q4GknkWJwIjS1Wujm2UQfwZ3FB5vXwmoCDUVmX6+5YyVmucDS
- qZPa2fvSQmMVsbXLwOzZSBEmd5kz7TFWf/3oCWKg73oSTXoMpy3XjhFpac3qDS7lX/UypgRD9
- OZimaMi/OS4alyzFBqoVjvLAA84=
+X-Provags-ID: V03:K1:fhnBU4BVWsJWvd3qaltsAgfCTlgrwgdwK7Yf2Rw17jIEaLL7td5
+ OSTF97H6a1ahaJjm18ySO8fVix7nGOS2l1Wft3E0nuzjZP3DholsFNnwfHwN8rgFBO0yrJc
+ LDBhyHY+dC3nID0wZB3TIHl0+Gvac7UDAYxUWy9Yb1n2AhSvOn3Lo9zd9+dQ4NCgOgnaUq6
+ QLBya7NdlB7J+yIquDb4g==
+UI-OutboundReport: notjunk:1;M01:P0:+GB79O5BKMA=;eht47skEnIL3mo9I9LYAA0vmFtU
+ 4MqDLnLLRPsu4ogYQUR4zTagHWlnwmUTRscC8HoFLXOMP4WITHZEmVR6YuzKOndVFB6vD/Scv
+ HZqhIyVXU8f6zQ/uAVc5LwsNqm8iR/yJqq7URzmSg4wPTYDEGgMP4zvHpv1v3vcHZD4hhpnQW
+ y3iIb1jH+IZYHlC19QYGajvO5TFdluEFQKFRQaX8n9uehw7aPuw7YXH5HtvQg4vtq6oZi2/tl
+ IYHLmyIe1RdK97uc5OmlD4uJoCOWJ1JBWKxSRjSqObZwYHUUz047hOqFotEK8sV+vcKz4d+VA
+ m6XKfQU/sWfJj1xqnIy+OfJ21Q9EanDaKSkViVclmHLllrmP7yRDCOwIpUouG7aqkbwJqvZKs
+ bf17x9E8ZlhjIbjV5a+LdekVw7uJOUZzuEUeCfJHOCSp1j6DyVTwtnCl0AX23qW/Lya58yOwi
+ 4ApeuV+rVBk47ZjzyOJEnKwKFeCeT63x3PdiDp4BP+VV05Agf2cAmpsv5KLgxAkY9419sVHSz
+ 9BjUq1g9DqL8EGaKAWgIz72l/tsAWkJIAARDCLJC5O+jZIQ8AyX6DmZF6H3YWVH+Zsqlpz5RH
+ HgKupE+2CmZ30o4uFeQ0OhAv/aknjzhpXMi7sZhcDPU0R3hzrv95WUTAHMWVrUVOHAaUC/a9p
+ McjNC0fy4Jf6TcsWKPSfUoN7Bq6hfNdpDwE59icfdoSxyq6jUJmltvJK6uy9aSVKloCGDKOvC
+ l1DFgul4pLgUFvVKRyIEe54DD8AU43z8IeQtNvsKoKk7CboOxosLjy987UIh6KszAGKTjxsVJ
+ 2n/JRpnkkXgHKkkrpeusXmM/Zau6DGFWsf+anULWklmfyTcJ6cvz/eDVsJ96vs17WoFNLmLhs
+ p10TTEyMYO9EYafllwQwFCFtcLvh1hvUD7jk/rLSJnN3DWUr5RgiX09nn/7nvRjpzyLtmYKIc
+ VTOB/IpVh2FclSx+Nq0yKOkcvnU=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Modern Dell machines support multiple ways to issue an SMM call.
-Prepare support for those by introducing dell_smm_ops, which is
-used by dell_smm_call() to perform a SMM call. Each SMM backend
-needs to provide a dell_smm_ops structure.
+Future SMM calling backends will not be able to probe during
+module init, meaning the DMI tables used for whitelisting
+features would have to drop their __initconst attribute.
+Prevent this by moving the whitelist handling to module init.
 
 Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 =2D--
- drivers/hwmon/dell-smm-hwmon.c | 131 ++++++++++++++++++++-------------
- 1 file changed, 79 insertions(+), 52 deletions(-)
+ drivers/hwmon/dell-smm-hwmon.c | 31 +++++++++++++++++--------------
+ 1 file changed, 17 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
 .c
-index 44aaf9b9191d..a3273780f7c3 100644
+index ccb3fcff4f60..3a792faf2369 100644
 =2D-- a/drivers/hwmon/dell-smm-hwmon.c
 +++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -69,6 +69,20 @@
- #define DELL_SMM_NO_TEMP	10
- #define DELL_SMM_NO_FANS	3
-
-+struct smm_regs {
-+	int eax;
-+	int ebx;
-+	int ecx;
-+	int edx;
-+	int esi;
-+	int edi;
-+};
-+
-+struct dell_smm_ops {
-+	struct device *smm_dev;
-+	int (*smm_call)(struct device *smm_dev, struct smm_regs *regs);
-+};
-+
- struct dell_smm_data {
- 	struct mutex i8k_mutex; /* lock for sensors writes */
- 	char bios_version[4];
-@@ -84,6 +98,7 @@ struct dell_smm_data {
+@@ -90,8 +90,6 @@ struct dell_smm_data {
+ 	uint i8k_fan_mult;
+ 	uint i8k_pwm_mult;
+ 	uint i8k_fan_max;
+-	unsigned int manual_fan;
+-	unsigned int auto_fan;
+ 	int temp_type[DELL_SMM_NO_TEMP];
  	bool fan[DELL_SMM_NO_FANS];
  	int fan_type[DELL_SMM_NO_FANS];
- 	int *fan_nominal_speed[DELL_SMM_NO_FANS];
-+	const struct dell_smm_ops *ops;
- };
+@@ -138,6 +136,8 @@ MODULE_PARM_DESC(fan_max, "Maximum configurable fan sp=
+eed (default: autodetect)"
 
- struct dell_smm_cooling_data {
-@@ -123,15 +138,6 @@ static uint fan_max;
- module_param(fan_max, uint, 0);
- MODULE_PARM_DESC(fan_max, "Maximum configurable fan speed (default: autod=
-etect)");
+ static bool disallow_fan_type_call, disallow_fan_support;
 
--struct smm_regs {
--	unsigned int eax;
--	unsigned int ebx;
--	unsigned int ecx;
--	unsigned int edx;
--	unsigned int esi;
--	unsigned int edi;
--};
--
++static unsigned int manual_fan, auto_fan;
++
  static const char * const temp_labels[] =3D {
  	"CPU",
  	"GPU",
-@@ -171,12 +177,8 @@ static inline const char __init *i8k_get_dmi_data(int=
- field)
-  */
- static int i8k_smm_func(void *par)
- {
--	ktime_t calltime =3D ktime_get();
- 	struct smm_regs *regs =3D par;
--	int eax =3D regs->eax;
--	int ebx =3D regs->ebx;
- 	unsigned char carry;
--	long long duration;
-
- 	/* SMM requires CPU 0 */
- 	if (smp_processor_id() !=3D 0)
-@@ -193,14 +195,7 @@ static int i8k_smm_func(void *par)
- 		       "+S" (regs->esi),
- 		       "+D" (regs->edi));
-
--	duration =3D ktime_us_delta(ktime_get(), calltime);
--	pr_debug("smm(0x%.4x 0x%.4x) =3D 0x%.4x carry: %d (took %7lld usecs)\n",
--		 eax, ebx, regs->eax & 0xffff, carry, duration);
--
--	if (duration > DELL_SMM_MAX_DURATION)
--		pr_warn_once("SMM call took %lld usecs!\n", duration);
--
--	if (carry || (regs->eax & 0xffff) =3D=3D 0xffff || regs->eax =3D=3D eax)
-+	if (carry)
- 		return -EINVAL;
-
- 	return 0;
-@@ -209,7 +204,7 @@ static int i8k_smm_func(void *par)
- /*
-  * Call the System Management Mode BIOS.
-  */
--static int i8k_smm(struct smm_regs *regs)
-+static int i8k_smm_call(struct device *dummy, struct smm_regs *regs)
- {
- 	int ret;
-
-@@ -220,6 +215,37 @@ static int i8k_smm(struct smm_regs *regs)
- 	return ret;
- }
-
-+static const struct dell_smm_ops i8k_smm_ops =3D {
-+	.smm_call =3D i8k_smm_call,
-+};
-+
-+static int dell_smm_call(const struct dell_smm_ops *ops, struct smm_regs =
-*regs)
-+{
-+	int eax =3D regs->eax;
-+	int ebx =3D regs->ebx;
-+	long long duration;
-+	ktime_t calltime;
-+	int ret;
-+
-+	calltime =3D ktime_get();
-+	ret =3D ops->smm_call(ops->smm_dev, regs);
-+	duration =3D ktime_us_delta(ktime_get(), calltime);
-+
-+	pr_debug("SMM(0x%.4x 0x%.4x) =3D 0x%.4x status: %d (took %7lld usecs)\n"=
-,
-+		 eax, ebx, regs->eax & 0xffff, ret, duration);
-+
-+	if (duration > DELL_SMM_MAX_DURATION)
-+		pr_warn_once("SMM call took %lld usecs!\n", duration);
-+
-+	if (ret < 0)
-+		return ret;
-+
-+	if ((regs->eax & 0xffff) =3D=3D 0xffff || regs->eax =3D=3D eax)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
- /*
-  * Read the fan status.
-  */
-@@ -233,7 +259,7 @@ static int i8k_get_fan_status(const struct dell_smm_da=
-ta *data, u8 fan)
- 	if (data->disallow_fan_support)
- 		return -EINVAL;
-
--	return i8k_smm(&regs) ? : regs.eax & 0xff;
-+	return dell_smm_call(data->ops, &regs) ? : regs.eax & 0xff;
- }
-
- /*
-@@ -249,7 +275,7 @@ static int i8k_get_fan_speed(const struct dell_smm_dat=
-a *data, u8 fan)
- 	if (data->disallow_fan_support)
- 		return -EINVAL;
-
--	return i8k_smm(&regs) ? : (regs.eax & 0xffff) * data->i8k_fan_mult;
-+	return dell_smm_call(data->ops, &regs) ? : (regs.eax & 0xffff) * data->i=
-8k_fan_mult;
- }
-
- /*
-@@ -265,7 +291,7 @@ static int _i8k_get_fan_type(const struct dell_smm_dat=
-a *data, u8 fan)
- 	if (data->disallow_fan_support || data->disallow_fan_type_call)
- 		return -EINVAL;
-
--	return i8k_smm(&regs) ? : regs.eax & 0xff;
-+	return dell_smm_call(data->ops, &regs) ? : regs.eax & 0xff;
- }
-
- static int i8k_get_fan_type(struct dell_smm_data *data, u8 fan)
-@@ -290,7 +316,7 @@ static int __init i8k_get_fan_nominal_speed(const stru=
-ct dell_smm_data *data, u8
- 	if (data->disallow_fan_support)
- 		return -EINVAL;
-
--	return i8k_smm(&regs) ? : (regs.eax & 0xffff);
-+	return dell_smm_call(data->ops, &regs) ? : (regs.eax & 0xffff);
- }
-
- /*
-@@ -304,7 +330,7 @@ static int i8k_enable_fan_auto_mode(const struct dell_=
+@@ -329,7 +329,7 @@ static int i8k_enable_fan_auto_mode(const struct dell_=
 smm_data *data, bool enabl
+ 	if (disallow_fan_support)
  		return -EINVAL;
 
- 	regs.eax =3D enable ? data->auto_fan : data->manual_fan;
--	return i8k_smm(&regs);
-+	return dell_smm_call(data->ops, &regs);
+-	regs.eax =3D enable ? data->auto_fan : data->manual_fan;
++	regs.eax =3D enable ? auto_fan : manual_fan;
+ 	return dell_smm_call(data->ops, &regs);
  }
 
- /*
-@@ -320,35 +346,35 @@ static int i8k_set_fan(const struct dell_smm_data *d=
-ata, u8 fan, int speed)
- 	speed =3D (speed < 0) ? 0 : ((speed > data->i8k_fan_max) ? data->i8k_fan=
-_max : speed);
- 	regs.ebx =3D fan | (speed << 8);
-
--	return i8k_smm(&regs);
-+	return dell_smm_call(data->ops, &regs);
- }
-
--static int __init i8k_get_temp_type(u8 sensor)
-+static int __init i8k_get_temp_type(const struct dell_smm_data *data, u8 =
-sensor)
- {
- 	struct smm_regs regs =3D {
- 		.eax =3D I8K_SMM_GET_TEMP_TYPE,
- 		.ebx =3D sensor,
- 	};
-
--	return i8k_smm(&regs) ? : regs.eax & 0xff;
-+	return dell_smm_call(data->ops, &regs) ? : regs.eax & 0xff;
- }
-
- /*
-  * Read the cpu temperature.
-  */
--static int _i8k_get_temp(u8 sensor)
-+static int _i8k_get_temp(const struct dell_smm_data *data, u8 sensor)
- {
- 	struct smm_regs regs =3D {
- 		.eax =3D I8K_SMM_GET_TEMP,
- 		.ebx =3D sensor,
- 	};
-
--	return i8k_smm(&regs) ? : regs.eax & 0xff;
-+	return dell_smm_call(data->ops, &regs) ? : regs.eax & 0xff;
- }
-
--static int i8k_get_temp(u8 sensor)
-+static int i8k_get_temp(const struct dell_smm_data *data, u8 sensor)
- {
--	int temp =3D _i8k_get_temp(sensor);
-+	int temp =3D _i8k_get_temp(data, sensor);
-
- 	/*
- 	 * Sometimes the temperature sensor returns 0x99, which is out of range.
-@@ -359,7 +385,7 @@ static int i8k_get_temp(u8 sensor)
- 	 */
- 	if (temp =3D=3D 0x99) {
- 		msleep(100);
--		temp =3D _i8k_get_temp(sensor);
-+		temp =3D _i8k_get_temp(data, sensor);
- 	}
- 	/*
- 	 * Return -ENODATA for all invalid temperatures.
-@@ -375,12 +401,12 @@ static int i8k_get_temp(u8 sensor)
- 	return temp;
- }
-
--static int __init i8k_get_dell_signature(int req_fn)
-+static int __init dell_smm_get_signature(const struct dell_smm_ops *ops, =
-int req_fn)
- {
- 	struct smm_regs regs =3D { .eax =3D req_fn, };
- 	int rc;
-
--	rc =3D i8k_smm(&regs);
-+	rc =3D dell_smm_call(ops, &regs);
- 	if (rc < 0)
- 		return rc;
-
-@@ -392,12 +418,12 @@ static int __init i8k_get_dell_signature(int req_fn)
- /*
-  * Read the Fn key status.
-  */
--static int i8k_get_fn_status(void)
-+static int i8k_get_fn_status(const struct dell_smm_data *data)
- {
- 	struct smm_regs regs =3D { .eax =3D I8K_SMM_FN_STATUS, };
- 	int rc;
-
--	rc =3D i8k_smm(&regs);
-+	rc =3D dell_smm_call(data->ops, &regs);
- 	if (rc < 0)
- 		return rc;
-
-@@ -416,12 +442,12 @@ static int i8k_get_fn_status(void)
- /*
-  * Read the power status.
-  */
--static int i8k_get_power_status(void)
-+static int i8k_get_power_status(const struct dell_smm_data *data)
- {
- 	struct smm_regs regs =3D { .eax =3D I8K_SMM_POWER_STATUS, };
- 	int rc;
-
--	rc =3D i8k_smm(&regs);
-+	rc =3D dell_smm_call(data->ops, &regs);
- 	if (rc < 0)
- 		return rc;
-
-@@ -464,15 +490,15 @@ static long i8k_ioctl(struct file *fp, unsigned int =
-cmd, unsigned long arg)
-
- 		return 0;
- 	case I8K_FN_STATUS:
--		val =3D i8k_get_fn_status();
-+		val =3D i8k_get_fn_status(data);
- 		break;
-
- 	case I8K_POWER_STATUS:
--		val =3D i8k_get_power_status();
-+		val =3D i8k_get_power_status(data);
- 		break;
-
- 	case I8K_GET_TEMP:
--		val =3D i8k_get_temp(0);
-+		val =3D i8k_get_temp(data, 0);
- 		break;
-
- 	case I8K_GET_SPEED:
-@@ -539,14 +565,14 @@ static int i8k_proc_show(struct seq_file *seq, void =
-*offset)
- 	int fn_key, cpu_temp, ac_power;
- 	int left_fan, right_fan, left_speed, right_speed;
-
--	cpu_temp	=3D i8k_get_temp(0);				/* 11100 =C2=B5s */
-+	cpu_temp	=3D i8k_get_temp(data, 0);			/* 11100 =C2=B5s */
- 	left_fan	=3D i8k_get_fan_status(data, I8K_FAN_LEFT);	/*   580 =C2=B5s */
- 	right_fan	=3D i8k_get_fan_status(data, I8K_FAN_RIGHT);	/*   580 =C2=B5s =
-*/
- 	left_speed	=3D i8k_get_fan_speed(data, I8K_FAN_LEFT);	/*   580 =C2=B5s *=
-/
- 	right_speed	=3D i8k_get_fan_speed(data, I8K_FAN_RIGHT);	/*   580 =C2=B5s=
- */
--	fn_key		=3D i8k_get_fn_status();				/*   750 =C2=B5s */
-+	fn_key		=3D i8k_get_fn_status(data);			/*   750 =C2=B5s */
- 	if (power_status)
--		ac_power =3D i8k_get_power_status();			/* 14700 =C2=B5s */
-+		ac_power =3D i8k_get_power_status(data);			/* 14700 =C2=B5s */
- 	else
- 		ac_power =3D -1;
-
-@@ -665,7 +691,7 @@ static umode_t dell_smm_is_visible(const void *drvdata=
+@@ -741,7 +741,7 @@ static umode_t dell_smm_is_visible(const void *drvdata=
 , enum hwmon_sensor_types
- 		switch (attr) {
- 		case hwmon_temp_input:
- 			/* _i8k_get_temp() is fine since we do not care about the actual value=
- */
--			if (data->temp_type[channel] >=3D 0 || _i8k_get_temp(channel) >=3D 0)
-+			if (data->temp_type[channel] >=3D 0 || _i8k_get_temp(data, channel) >=
-=3D 0)
- 				return 0444;
 
  			break;
-@@ -747,7 +773,7 @@ static int dell_smm_read(struct device *dev, enum hwmo=
-n_sensor_types type, u32 a
- 	case hwmon_temp:
- 		switch (attr) {
- 		case hwmon_temp_input:
--			ret =3D i8k_get_temp(channel);
-+			ret =3D i8k_get_temp(data, channel);
- 			if (ret < 0)
- 				return ret;
+ 		case hwmon_pwm_enable:
+-			if (data->auto_fan)
++			if (auto_fan)
+ 				/*
+ 				 * There is no command for retrieve the current status
+ 				 * from BIOS, and userspace/firmware itself can change
+@@ -1370,7 +1370,7 @@ static const struct dmi_system_id i8k_whitelist_fan_=
+control[] __initconst =3D {
+ static int __init dell_smm_probe(struct platform_device *pdev)
+ {
+ 	struct dell_smm_data *data;
+-	const struct dmi_system_id *id, *fan_control;
++	const struct dmi_system_id *id;
+ 	int ret;
 
-@@ -994,7 +1020,7 @@ static int __init dell_smm_init_hwmon(struct device *=
-dev)
- 	u8 i;
+ 	data =3D devm_kzalloc(&pdev->dev, sizeof(struct dell_smm_data), GFP_KERN=
+EL);
+@@ -1406,15 +1406,6 @@ static int __init dell_smm_probe(struct platform_de=
+vice *pdev)
+ 	data->i8k_fan_max =3D fan_max ? : I8K_FAN_HIGH;
+ 	data->i8k_pwm_mult =3D DIV_ROUND_UP(255, data->i8k_fan_max);
 
- 	for (i =3D 0; i < DELL_SMM_NO_TEMP; i++) {
--		data->temp_type[i] =3D i8k_get_temp_type(i);
-+		data->temp_type[i] =3D i8k_get_temp_type(data, i);
- 		if (data->temp_type[i] < 0)
- 			continue;
-
-@@ -1353,6 +1379,7 @@ static int __init dell_smm_probe(struct platform_dev=
-ice *pdev)
-
- 	mutex_init(&data->i8k_mutex);
- 	platform_set_drvdata(pdev, data);
-+	data->ops =3D &i8k_smm_ops;
-
+-	fan_control =3D dmi_first_match(i8k_whitelist_fan_control);
+-	if (fan_control && fan_control->driver_data) {
+-		const struct i8k_fan_control_data *control =3D fan_control->driver_data=
+;
+-
+-		data->manual_fan =3D control->manual_fan;
+-		data->auto_fan =3D control->auto_fan;
+-		dev_info(&pdev->dev, "enabling support for setting automatic/manual fan=
+ control\n");
+-	}
+-
+ 	ret =3D dell_smm_init_hwmon(&pdev->dev);
+ 	if (ret)
+ 		return ret;
+@@ -1437,6 +1428,9 @@ static struct platform_device *dell_smm_device;
+  */
+ static void __init dell_smm_init_dmi(void)
+ {
++	struct i8k_fan_control_data *control;
++	const struct dmi_system_id *id;
++
  	if (dmi_check_system(i8k_blacklist_fan_support_dmi_table)) {
  		if (!force) {
-@@ -1445,8 +1472,8 @@ static int __init i8k_init(void)
- 	/*
- 	 * Get SMM Dell signature
- 	 */
--	if (i8k_get_dell_signature(I8K_SMM_GET_DELL_SIG1) &&
--	    i8k_get_dell_signature(I8K_SMM_GET_DELL_SIG2)) {
-+	if (dell_smm_get_signature(&i8k_smm_ops, I8K_SMM_GET_DELL_SIG1) &&
-+	    dell_smm_get_signature(&i8k_smm_ops, I8K_SMM_GET_DELL_SIG2)) {
- 		if (!force)
- 			return -ENODEV;
+ 			pr_notice("Disabling fan support due to BIOS bugs\n");
+@@ -1454,6 +1448,15 @@ static void __init dell_smm_init_dmi(void)
+ 			pr_warn("Enabling fan type call despite BIOS bugs\n");
+ 		}
+ 	}
++
++	id =3D dmi_first_match(i8k_whitelist_fan_control);
++	if (id && id->driver_data) {
++		control =3D id->driver_data;
++		manual_fan =3D control->manual_fan;
++		auto_fan =3D control->auto_fan;
++
++		pr_info("Enabling support for setting automatic/manual fan control\n");
++	}
+ }
 
+ static int __init i8k_init(void)
 =2D-
 2.39.2
 
