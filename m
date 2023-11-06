@@ -2,181 +2,123 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2885C4708E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64452C41535
 	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Nov 2023 06:44:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230468AbjKFGo3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 6 Nov 2023 01:44:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45060 "EHLO
+        id S230299AbjKFGo2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 6 Nov 2023 01:44:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230464AbjKFGo2 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 6 Nov 2023 01:44:28 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302A010B;
-        Sun,  5 Nov 2023 22:44:25 -0800 (PST)
+        with ESMTP id S230442AbjKFGo1 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 6 Nov 2023 01:44:27 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9191B100;
+        Sun,  5 Nov 2023 22:44:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1699253040; x=1699857840; i=w_armin@gmx.de;
-        bh=Qq9RFdXKmIkJl7Ufko8TNWgUSGPjbcQWTneMlaRC8iY=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:
-         References;
-        b=ieHaatVt3nTxVzOjEi9b90lstmXCLzANYiNH/8Se7slIus2/yLiWHcikE2KJ7RC5
-         Gwc4BHJwlZM3oZBZwr+LQnhCvId3zjIeuMC9gGLx78GxMgPmlhi/HcsQDwdqZ+Phg
-         WbIZ9Pr7Uu4ddDB2BFBQylQaE4GHOXE+78bU+3T9gH6FXGNmPIA+mp1q+NBmxSWTu
-         Qtsj42J9P9nBFL+9ef9+zHXqtNO+0vX9olx49byHk3ZT0blC2OiH4LarL03GywQAj
-         RUeSwJuIRJcMT+xrlfwH+CZMBtjZ4UaNIkb/qamFUGQhLgk6H6FF5ENojEtC2cuVi
-         3jpKz4EsTN1Pjn5vNQ==
+        t=1699253034; x=1699857834; i=w_armin@gmx.de;
+        bh=GJm6EGWgF7nplKUEamq2/TnBRYeNAl2+Z6eHcmlB6Ew=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=kZUzptcF33Xi0SLRAfK/YpUBUKLrkGHob+Sy6B19MFf1iXW9N8yMqG3CNVjj4yBE
+         doZ3BSYhHCFAetzfcFpCUM08e7DiEmD6Tc+FVDRW69dm7sDL0nYrnc3xcRPU941Dt
+         jG5W44LFzvGsUQYs+n5tiZLFnCTEhJNxgDW+HJQqHHHlzy5iLR6X9NRr39JiPovIT
+         t5b7/nqA//TKBTcpaT2RDFowI5IOlprmaxVIBPRAxRtf6Vs7sxmeitIBxHg52RHCM
+         XHbHwZpoeltZXLk3wepVXRTKhjpk+w74m0LK10a25nvpFkPb3hv6ZtZNDNUlRqeV1
+         y52cH1EAzGjmRWTPIQ==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from mx-amd-b650.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MowGU-1rle9831SA-00qPot; Mon, 06 Nov 2023 07:44:00 +0100
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MOA3P-1qkqOZ0dNh-00OVUE; Mon, 06 Nov 2023 07:43:54 +0100
 From:   Armin Wolf <W_Armin@gmx.de>
 To:     pali@kernel.org
 Cc:     hdegoede@redhat.com, markgross@kernel.org,
         ilpo.jarvinen@linux.intel.com, jdelvare@suse.com,
         linux@roeck-us.net, platform-driver-x86@vger.kernel.org,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/9] hwmon: (dell-smm) Move whitelist handling to module init
-Date:   Mon,  6 Nov 2023 07:43:45 +0100
-Message-Id: <20231106064351.42347-4-W_Armin@gmx.de>
+Subject: [PATCH v3 0/9] hwmon: (dell-smm) Add support for WMI SMM interface
+Date:   Mon,  6 Nov 2023 07:43:42 +0100
+Message-Id: <20231106064351.42347-1-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231106064351.42347-1-W_Armin@gmx.de>
-References: <20231106064351.42347-1-W_Armin@gmx.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:931Nb3W7+lYHyL4mnGdtdqNKOFJKCygHBFYH77yx0F+881lzBUu
- YbGvr6FZ269SMT6PS4uQpsH0MRYPPIEYyeRuAGUt+IdDHT0IsUKQrWsK9suB8mZyV8g8fky
- iOOeW0F3zCe1mZ7+6TckXG8r1ucYndj6CPvl6vGN88O9Hh4eTmVYv2i/t2OMX3el7PpbnK9
- jI32B8pYjFOrxokGzZm+g==
-UI-OutboundReport: notjunk:1;M01:P0:+nNZPN/tGUs=;tcrO94bMQB6vXZErdlGLjJJpTh7
- yoRLjKWRQoa/HzF5NkPyOTGqeXbhUGkPuewxYuBe7RxrvzFrVwT4oYjS/z1661qqJBOOTXEGy
- n3L1RFPAYhkyT8njMwFHPp1D4ZkeFTm3DDxMQRsoh1Sau/p9pNHDlo61pE3X9JHTgsalIwUWj
- 1DnKHKeXOLcAd4Ta7CK+dGRKUvea6XOh9lfjbA5N7idU4zQ07YhyKCAOMbu+RAnQFVa0D6/lV
- ohE4ybZtXJuAflvztcgrk2E+b/DrSgS+MK0QD6hc8q98JhNYMlzB0fjGhHgxQeCzcmibplp5X
- apOaPXdJk5arMfm/xFu20vAwiYVI8VEURJAPlWfp4RdZ5bvLAluMjF/0sZA08BsENQQHBvDQ4
- Ly566cTKA6Lh5Ir+KkFDMWGEo6YKnRSBuVnQqixq/7moVe/C6WbjmVxZm3NHN9VphFz7Nu13T
- t4z17xoe73e1Dw83bGKMDJ6JMHW3RZ//hvxSdyg/6mlzWTxvcLfSWuuvLe+0hTjG3UxULxQXb
- 64RkN/9DM/47MvL8XZUgAirJdsWBTxUWcDtRarHbCE31hvOHJ/fFrAE1HkHOHrwSJ7c54XFV3
- r0S2yyo8K8QyVyPuzdZ4y0mgT3BrEjZr5ncHKFKEtLecMCHamj2srAgaB2IEu0w3hyiKWkHzJ
- 0U0x41HoEIVc1RD1a7DRBI9WK/ZESH+AecdoXuEQCdiV397RquJKkZqNB7bXW47I7q09CHgef
- lqeo5En5Vq0ojHVEyEmUltFYrZ2eepp8ukwUui+7hceFU3Wb1l8S51fBvUvW78dRQOwSkyzKD
- X3WtYQMrcQdkyLYvZAAm8CIjipZjEwsiDpYXCrF6+p0xaOtuFQCQE2GIogf2uetZryLwlZxAh
- rAHpiCgf78hQP4p5Y/6Xz4qjzKFW8sz+sk2lTA+nxZZ8n960rghTj6/jb9zpyjmhXhG7fFTEW
- xr+0/uvT60JsJmc2pHP8h9D9hQ8=
+X-Provags-ID: V03:K1:oNrrf78V2MqRmvGMF40W72gkDjNB8P7x1bRxTZXNEZKX5n6XZcm
+ CXAga+4uPEaGX91pCBbP/0HLc3OLbgyAfXXk3g+PjdSSGNWVGTvFzw1KjKfxxnU/1U/SRWT
+ /GmJZ0LsrHEb9kSiR/Wi0inylFr6cvW5gvtWwGHXEhwrGngS8FaivN0FuNugu1aLMzz2x9x
+ yOBOkvUsHl00iSWrpW4AA==
+UI-OutboundReport: notjunk:1;M01:P0:v6UDOQkmiLk=;JSaCrS0Cc6s5z4yOiQB3628dqh3
+ GOrQpefCiaLVVatuUIEhYjaPa3m2CpQjp+++XqFh9u2yRBuUwjpTu2gjenvQqdHr5expaWjSn
+ O9NGFjmQ/AYFU/q6roTTGLdzN/CAU/QEfm65Hx2c0PHMCNXONLUOxhqUXWorqxZzolfZXLOKF
+ ddswLCSIk7DSgJ+CzdszzDLhd56YQ2TRQpd/stD4VPqd5NEp4Tyj8K7MUu3vBr9vQfxzC2rcp
+ 0DWo3kOE4t6AkJy5K2uYdAYBqhtvyPw8913ocgSfJ1fkOkbV0pK2pSyaDBbSJ8RZ7IWNeFPdd
+ az6EeZjv/COthumUWLdcmy31kumqlJp5If80o+tYrzrj09t+6GR2RYWemasHZnYVQQVUee+Fg
+ edlGUBzmkzM2IUSSOq3iRsFY3mSYzT5h9rUNidAIgPY4D3IpV8vIlvUffonkhOvKzeWjeWiDv
+ l1o70TGv60w/BJHvHd6yW4ubITfq9I8vz9/sZabkNDyfV9G5Q2hyKmWsfWQajrDNAvQYeUcyd
+ SS5+4H3dePZdQJ75/vPBEajtrVvLiPxzbyPvfKxtp24acv/JWGFZYUSxycEIkILIO+r8QP7qm
+ PVFAtks3dgW87j+BVkTWIiO3PtZBy4QKmryIyFDKwq+/eyifx/qbV0O48IrTbbcvNOTlzqyfP
+ NMI++BhXu8lfmSmDIElAVErf2cDArDKuSAKW1MU/QM0ytvFGXvUREWslP8+26vs0ArqJMBRrp
+ Qa50gMtFK8fDBDFXCbllDe1nQIWdu/S9galK2JshdYNQ9raNAF927AE3lcjVtjMePCE7Eotlv
+ lLa5VIGUTFwZ4lrUw6xVMGSLzMV2PbYxXujiTWzsw+pGcGWdaaNrHpLbIumRMNXeQ7LcFrmvq
+ TcSxYZ6wLzqNqQnm7hPgwePW0b2i4Z709jdCM9qFodjuPc16AljHjf4iFqTuGHcZ9MEi63GTE
+ QXvyrWY5Yz31xhepYi+ZSf4ctnY=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Future SMM calling backends will not be able to probe during
-module init, meaning the DMI tables used for whitelisting
-features would have to drop their __initconst attribute.
-Prevent this by moving the whitelist handling to module init.
+This patch series adds support for an alternative SMM calling
+backend to the dell-smm-hwmon driver. The reason for this is
+that on some modern machines, the legacy SMM calling interface
+does not work anymore and the SMM handler can be called over
+ACPI WMI instead.
 
-Tested-by: <serverror@serverror.com>
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- drivers/hwmon/dell-smm-hwmon.c | 31 +++++++++++++++++--------------
- 1 file changed, 17 insertions(+), 14 deletions(-)
+The first four patches prepare the driver by allowing to
+specify different SMM calling backends, and by moving most of
+the DMI handling into i8k_init() so that the DMI tables can
+keep their __initconst attributes (the WMI SMM backend driver
+does not probe at module init time). The fifth patch does some
+minor cleanup, while the next three patches implement the new
+WMI SMM calling backend. The last patch adds the machine of
+the user who requested and tested the changes to the fan control
+whitelist.
 
-diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
-.c
-index ccb3fcff4f60..3a792faf2369 100644
-=2D-- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -90,8 +90,6 @@ struct dell_smm_data {
- 	uint i8k_fan_mult;
- 	uint i8k_pwm_mult;
- 	uint i8k_fan_max;
--	unsigned int manual_fan;
--	unsigned int auto_fan;
- 	int temp_type[DELL_SMM_NO_TEMP];
- 	bool fan[DELL_SMM_NO_FANS];
- 	int fan_type[DELL_SMM_NO_FANS];
-@@ -138,6 +136,8 @@ MODULE_PARM_DESC(fan_max, "Maximum configurable fan sp=
-eed (default: autodetect)"
+If the driver does not detect the legacy SMM interface, either
+because the machine is not whitelisted or because the SMM handler
+does not react, it registers an WMI driver which will then bound
+to the WMI SMM interface and do the remaining initialization.
 
- static bool disallow_fan_type_call, disallow_fan_support;
+The deprecated procfs interface is not supported when using the
+WMI SMM calling backend for the following reason: the WMI driver
+can potentially be instantiated multiple times while the deprectated
+procfs interface cannot. This should not cause any regressions
+because on machines supporting only the WMI SMM interface, the
+driver would, until now, not load anyway.
 
-+static unsigned int manual_fan, auto_fan;
-+
- static const char * const temp_labels[] =3D {
- 	"CPU",
- 	"GPU",
-@@ -329,7 +329,7 @@ static int i8k_enable_fan_auto_mode(const struct dell_=
-smm_data *data, bool enabl
- 	if (disallow_fan_support)
- 		return -EINVAL;
+All patches where tested on a Dell Inspiron 3505 and a Dell
+OptiPlex 7000.
 
--	regs.eax =3D enable ? data->auto_fan : data->manual_fan;
-+	regs.eax =3D enable ? auto_fan : manual_fan;
- 	return dell_smm_call(data->ops, &regs);
- }
+Changes since v2:
+- Rework WMI response parsing
+- Use #define for method number
 
-@@ -741,7 +741,7 @@ static umode_t dell_smm_is_visible(const void *drvdata=
-, enum hwmon_sensor_types
+Changes since v1:
+- Cc platform driver maintainers
+- Fix formating inside documentation
 
- 			break;
- 		case hwmon_pwm_enable:
--			if (data->auto_fan)
-+			if (auto_fan)
- 				/*
- 				 * There is no command for retrieve the current status
- 				 * from BIOS, and userspace/firmware itself can change
-@@ -1370,7 +1370,7 @@ static const struct dmi_system_id i8k_whitelist_fan_=
-control[] __initconst =3D {
- static int __init dell_smm_probe(struct platform_device *pdev)
- {
- 	struct dell_smm_data *data;
--	const struct dmi_system_id *id, *fan_control;
-+	const struct dmi_system_id *id;
- 	int ret;
+Armin Wolf (9):
+  hwmon: (dell-smm) Prepare for multiple SMM calling backends
+  hwmon: (dell-smm) Move blacklist handling to module init
+  hwmon: (dell-smm) Move whitelist handling to module init
+  hwmon: (dell-smm) Move DMI config handling to module init
+  hwmon: (dell-smm) Move config entries out of i8k_dmi_table
+  hwmon: (dell-smm) Introduce helper function for data init
+  hwmon: (dell-smm) Add support for WMI SMM interface
+  hwmon: (dell-smm) Document the WMI SMM interface
+  hwmon: (dell-smm) Add Optiplex 7000 to fan control whitelist
 
- 	data =3D devm_kzalloc(&pdev->dev, sizeof(struct dell_smm_data), GFP_KERN=
-EL);
-@@ -1406,15 +1406,6 @@ static int __init dell_smm_probe(struct platform_de=
-vice *pdev)
- 	data->i8k_fan_max =3D fan_max ? : I8K_FAN_HIGH;
- 	data->i8k_pwm_mult =3D DIV_ROUND_UP(255, data->i8k_fan_max);
+ Documentation/hwmon/dell-smm-hwmon.rst |  38 +-
+ drivers/hwmon/Kconfig                  |   1 +
+ drivers/hwmon/dell-smm-hwmon.c         | 603 +++++++++++++++++--------
+ drivers/platform/x86/wmi.c             |   1 +
+ 4 files changed, 453 insertions(+), 190 deletions(-)
 
--	fan_control =3D dmi_first_match(i8k_whitelist_fan_control);
--	if (fan_control && fan_control->driver_data) {
--		const struct i8k_fan_control_data *control =3D fan_control->driver_data=
-;
--
--		data->manual_fan =3D control->manual_fan;
--		data->auto_fan =3D control->auto_fan;
--		dev_info(&pdev->dev, "enabling support for setting automatic/manual fan=
- control\n");
--	}
--
- 	ret =3D dell_smm_init_hwmon(&pdev->dev);
- 	if (ret)
- 		return ret;
-@@ -1437,6 +1428,9 @@ static struct platform_device *dell_smm_device;
-  */
- static void __init dell_smm_init_dmi(void)
- {
-+	struct i8k_fan_control_data *control;
-+	const struct dmi_system_id *id;
-+
- 	if (dmi_check_system(i8k_blacklist_fan_support_dmi_table)) {
- 		if (!force) {
- 			pr_notice("Disabling fan support due to BIOS bugs\n");
-@@ -1454,6 +1448,15 @@ static void __init dell_smm_init_dmi(void)
- 			pr_warn("Enabling fan type call despite BIOS bugs\n");
- 		}
- 	}
-+
-+	id =3D dmi_first_match(i8k_whitelist_fan_control);
-+	if (id && id->driver_data) {
-+		control =3D id->driver_data;
-+		manual_fan =3D control->manual_fan;
-+		auto_fan =3D control->auto_fan;
-+
-+		pr_info("Enabling support for setting automatic/manual fan control\n");
-+	}
- }
-
- static int __init i8k_init(void)
 =2D-
 2.39.2
 
