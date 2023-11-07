@@ -2,133 +2,160 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 832BFC0018C
-	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Nov 2023 12:34:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 783D7C4167B
+	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Nov 2023 14:08:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234509AbjKGMe0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 7 Nov 2023 07:34:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46074 "EHLO
+        id S230523AbjKGOIu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 7 Nov 2023 09:08:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343528AbjKGMeK (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 7 Nov 2023 07:34:10 -0500
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC405B8B;
-        Tue,  7 Nov 2023 04:13:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699359230; x=1730895230;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BR1cjSBdfMopOWm50Dq+jOEum45GoCeXwev/zLPfHW0=;
-  b=D0uQ/MOqBPxfUfeCOwrOi9M1M7AsIJBQRhgCLLq1yZmNb85s88P1GvLF
-   Iq+/cyChOlwXlKV554bBl0eZW22PyShlqv+nfkuefitAz2G3s0f6MFofU
-   8xSIrDyyw08giS5wgIaSLVojChNdm3U/Q86Q3umOaCmUbjDVZQtv83phN
-   WpBO/IN0FsVGp4e3VTyh0cczl9skAlRicpLJ6O9pGkyxUEMNYOg00aEqV
-   hVgTq5xNPjGZHFWeyq6upHnN33HYa7AxAXHrFjX2o0vsN/YHj7VixJZzr
-   P3mAotbhwBoZDb84edX3G66QDMIVNafkQw8GmYK3TggmtV6Zu5eNWVAbU
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10886"; a="475736857"
-X-IronPort-AV: E=Sophos;i="6.03,283,1694761200"; 
-   d="scan'208";a="475736857"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2023 04:13:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10886"; a="936136351"
-X-IronPort-AV: E=Sophos;i="6.03,283,1694761200"; 
-   d="scan'208";a="936136351"
-Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 07 Nov 2023 04:13:37 -0800
-Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1r0Kxb-00075A-1e;
-        Tue, 07 Nov 2023 12:13:35 +0000
-Date:   Tue, 7 Nov 2023 20:12:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Antoniu Miclaus <antoniu.miclaus@analog.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v6 2/2] rtc: max31335: add driver support
-Message-ID: <202311071920.P1lDlqTA-lkp@intel.com>
-References: <20231104112752.3217-2-antoniu.miclaus@analog.com>
+        with ESMTP id S229665AbjKGOIt (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 7 Nov 2023 09:08:49 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B36AA3;
+        Tue,  7 Nov 2023 06:08:46 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id 5614622812f47-3b2e72fe47fso3588980b6e.1;
+        Tue, 07 Nov 2023 06:08:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1699366125; x=1699970925; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=7E017EjOFXuP36pk8gKau3KQ8toNm0LyBtFmQTDZXes=;
+        b=JJPcztugme2Ia87xhmO7iZjWODVe7chTRNpoozUsKEI0IzfF9PL+uE0YBHZ9BW+260
+         AYivinp991jwMx8WFwDdVIIGBk8Ol+x0baL2+VsmKMXhDu3/ngmrz7EpaWWCf0nCUrNR
+         EIqi/jDrn/27qLgx2mww+XlOVbpJ1kT8ywCVSwidbnlVvKw0GsS/uTgR9xJKYhyezNT0
+         cuu6LDjWN4CmlHeg03xbywstPLwa/czFmslLTo6olcJZ/zJvlxzB+Up6cMIls/n+urQL
+         ABggdHbubEc8tvInbW3ZXkfd/yqNqsA/xZCjioT7MwNvgKRR7og7ps9AXHdPsCyqY7t4
+         JEyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699366125; x=1699970925;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7E017EjOFXuP36pk8gKau3KQ8toNm0LyBtFmQTDZXes=;
+        b=mMDngcgK2+tJ4o4gnyqFNGthkw7OFmZ0hgEZneO+n4xKM2UKISMB1rpj8zwhOewZ57
+         aiLk0MLz8+toGtu2PZHW0t+ZoeLLL/MERn29zgRHYS+xuX9rXCz/C0+jUP837463UaGa
+         5miw6fEAW3p4vPxNW4Y+4ZsoeBDPxQ8WmpBmkWDii6s90C3GQjuQclV+HCBQZOPXBPgF
+         bG1Tru/DmUFEY5wGIUOKGH8pZ8NQvAbsE4I+fPltP/UH/ML7dF0yyf8Oy2AIFc18yBWq
+         V9xB0w0rIJfc4jGvn67rDA5cTPAUMXZlsmmyZufUT9t4mzL8P2HsU0TKRSkpIelaUT8W
+         e7EA==
+X-Gm-Message-State: AOJu0Yw4fLsqyZjA9c5dqAHwn+xfDWHITGwCPHaP5amLO09NvPShDJyW
+        zDBBAD3QRWwCHFMjvquY3ho=
+X-Google-Smtp-Source: AGHT+IEv7qhraNCOHtaK5eQQRgR4wQeeTOv9HlDWpb8HARhYjVV4ooQ+6ZyIWGbKsX9A29dvpCkWkg==
+X-Received: by 2002:a05:6808:4189:b0:3a7:6d4a:fd78 with SMTP id dj9-20020a056808418900b003a76d4afd78mr30432411oib.24.1699366125410;
+        Tue, 07 Nov 2023 06:08:45 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o15-20020a81de4f000000b0059f766f9750sm5537468ywl.124.2023.11.07.06.08.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Nov 2023 06:08:44 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <98e8490e-6608-47a8-890c-f1fe894dac7f@roeck-us.net>
+Date:   Tue, 7 Nov 2023 06:08:42 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231104112752.3217-2-antoniu.miclaus@analog.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] drm/amd/pm: clean up redundant comparisons with 0
+Content-Language: en-US
+To:     =?UTF-8?Q?Jos=C3=A9_Pekkarinen?= <jose.pekkarinen@foxhound.fi>,
+        evan.quan@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com,
+        skhan@linuxfoundation.org
+Cc:     airlied@gmail.com, daniel@ffwll.ch, jdelvare@suse.com,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-kernel-mentees@lists.linux.dev
+References: <20231107082910.92508-1-jose.pekkarinen@foxhound.fi>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
+ RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
+ nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
+ 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
+ gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
+ IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
+ kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
+ VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
+ jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
+ BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
+ ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
+ CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
+ nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
+ hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
+ c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
+ 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
+ GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
+ sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
+ Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
+ HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
+ BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
+ l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
+ 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
+ pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
+ J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
+ pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
+ 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
+ ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
+ I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
+ nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
+ HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
+ JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
+ J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
+ cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
+ wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
+ hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
+ nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
+ QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
+ trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
+ WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
+ HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20231107082910.92508-1-jose.pekkarinen@foxhound.fi>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Antoniu,
+On 11/7/23 00:29, José Pekkarinen wrote:
+> There is a couple of function return checks of functions that return
+> unsigned values, and local variables to hold them are also unsigned, so
+> checking if they are negative will always return false. This patch will
+> remove them, as well as the never reached code.
+> 
+> drivers/gpu/drm/amd/pm/amdgpu_pm.c:2801:5-8: WARNING: Unsigned expression compared with zero: val < 0
+> drivers/gpu/drm/amd/pm/amdgpu_pm.c:2814:5-8: WARNING: Unsigned expression compared with zero: val < 0
+> 
+> Signed-off-by: José Pekkarinen <jose.pekkarinen@foxhound.fi>
+> ---
+>   drivers/gpu/drm/amd/pm/amdgpu_pm.c | 4 ----
+>   1 file changed, 4 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/pm/amdgpu_pm.c b/drivers/gpu/drm/amd/pm/amdgpu_pm.c
+> index 8bb2da13826f..e7bb1d324084 100644
+> --- a/drivers/gpu/drm/amd/pm/amdgpu_pm.c
+> +++ b/drivers/gpu/drm/amd/pm/amdgpu_pm.c
+> @@ -2798,8 +2798,6 @@ static ssize_t amdgpu_hwmon_show_power_avg(struct device *dev,
+>   	unsigned int val;
+>   
+>   	val = amdgpu_hwmon_get_power(dev, AMDGPU_PP_SENSOR_GPU_AVG_POWER);
+> -	if (val < 0)
+> -		return val;
+>   
 
-kernel test robot noticed the following build errors:
+This is reporting errors returned from amdgpu_hwmon_get_power() as large integers.
 
-[auto build test ERROR on abelloni/rtc-next]
-[also build test ERROR on linus/master v6.6 next-20231107]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Guenter
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Antoniu-Miclaus/rtc-max31335-add-driver-support/20231104-202238
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
-patch link:    https://lore.kernel.org/r/20231104112752.3217-2-antoniu.miclaus%40analog.com
-patch subject: [PATCH v6 2/2] rtc: max31335: add driver support
-config: x86_64-randconfig-121-20231107 (https://download.01.org/0day-ci/archive/20231107/202311071920.P1lDlqTA-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231107/202311071920.P1lDlqTA-lkp@intel.com/reproduce)
+>   	return sysfs_emit(buf, "%u\n", val);
+>   }
+> @@ -2811,8 +2809,6 @@ static ssize_t amdgpu_hwmon_show_power_input(struct device *dev,
+>   	unsigned int val;
+>   
+>   	val = amdgpu_hwmon_get_power(dev, AMDGPU_PP_SENSOR_GPU_INPUT_POWER);
+> -	if (val < 0)
+> -		return val;
+>   
+>   	return sysfs_emit(buf, "%u\n", val);
+>   }
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311071920.P1lDlqTA-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   ld: vmlinux.o: in function `max31335_clkout_register':
->> drivers/rtc/rtc-max31335.c:595: undefined reference to `devm_clk_hw_register'
->> ld: drivers/rtc/rtc-max31335.c:599: undefined reference to `of_clk_hw_simple_get'
->> ld: drivers/rtc/rtc-max31335.c:599: undefined reference to `devm_of_clk_add_hw_provider'
-
-
-vim +595 drivers/rtc/rtc-max31335.c
-
-   583	
-   584	static int max31335_clkout_register(struct device *dev)
-   585	{
-   586		struct max31335_data *max31335 = dev_get_drvdata(dev);
-   587		int ret;
-   588	
-   589		if (!device_property_present(dev, "#clock-cells"))
-   590			return regmap_clear_bits(max31335->regmap, MAX31335_RTC_CONFIG2,
-   591						 MAX31335_RTC_CONFIG2_ENCLKO);
-   592	
-   593		max31335->clkout.init = &max31335_clk_init;
-   594	
- > 595		ret = devm_clk_hw_register(dev, &max31335->clkout);
-   596		if (ret)
-   597			return dev_err_probe(dev, ret, "cannot register clock\n");
-   598	
- > 599		ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get,
-   600						  &max31335->clkout);
-   601		if (ret)
-   602			return dev_err_probe(dev, ret, "cannot add hw provider\n");
-   603	
-   604		max31335->clkout.clk = devm_clk_get_enabled(dev, NULL);
-   605		if (IS_ERR(max31335->clkout.clk))
-   606			return dev_err_probe(dev, PTR_ERR(max31335->clkout.clk),
-   607					     "cannot enable clkout\n");
-   608	
-   609		return 0;
-   610	}
-   611	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
