@@ -2,58 +2,58 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22570C4332F
-	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Nov 2023 12:31:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6E5CC4332F
+	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Nov 2023 12:34:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235304AbjKHMbq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 8 Nov 2023 07:31:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45154 "EHLO
+        id S232822AbjKHMef (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 8 Nov 2023 07:34:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjKHMbo (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Nov 2023 07:31:44 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1921BE6
-        for <linux-hwmon@vger.kernel.org>; Wed,  8 Nov 2023 04:31:41 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-32f70391608so3478529f8f.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 08 Nov 2023 04:31:41 -0800 (PST)
+        with ESMTP id S229520AbjKHMee (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Nov 2023 07:34:34 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349291BE6
+        for <linux-hwmon@vger.kernel.org>; Wed,  8 Nov 2023 04:34:32 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-32fb1c35fe0so3174742f8f.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 08 Nov 2023 04:34:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699446700; x=1700051500; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1699446870; x=1700051670; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=M2fGcHW0SzI0rxaseVTwezR+XwXpiguYjez0SfBeLqc=;
-        b=wzzeDlwexpDGDtQLSPSbA59ZG49nPPUGHPy7Ve0QJ4KQRYspxT8YsnhxjJW+V2Jbga
-         b8c6jdiFrx37oNfGmPMDvTt3AQnZuE5qIOtZBMQWunX9Mz4W4uIxTs2M2XJOJHRPh1dl
-         Xk53C6EpQ481Ptn8Ff+YgHtkbJ9uOOhqdEvCQfWLQJoy8lqR9ln0kglxzs0vGHXESbMM
-         obO3/92yxj/cFG/2rPvXoLjz3k8HWhaQDq4AwvD1Ce/3r87L49E6I+Wncahz8wNi1sv5
-         chjCzzBV73fWk0o0KIHLCYcgSSKpdltWtwiuy4du/yg8QRU/nNOHZ/kHOTFKm4T/55eX
-         wF2A==
+        bh=f2CPRnNC80HIKz08qhNi2wTqt7rB0iR4CG7JVifewWY=;
+        b=g1Ls6q6zySPlyfa2M/pjfbk4KayNOuMwuFYhBpVoGR8qlASWiUAxPbmWOMqfTaZMN3
+         kPJYyIWz7i6fWq/BRar1daOE7kSbLq616dA7ebdW0WJkDX2pTEjF13fRPER5+piA54pI
+         wc653mWJ+iWVwKc1QF4ZdDxbXGVG8Nl5HZcI7et7HVsUeiEjMNE6Q7woC7wIKE+ecyjt
+         a4ohk0I0P0D2cPXaKbpRwn9lZq+SxkyP70iHsyBYbUDCVRfD0/gy5HgQMTa8nBYFPqjZ
+         LzuXHtxQTL1LSZxdUkryKO3bjbV71VErML6MWszr/ReKmAcNnFz1i2T5hQeFbDYsn5eY
+         58Ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699446700; x=1700051500;
+        d=1e100.net; s=20230601; t=1699446870; x=1700051670;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M2fGcHW0SzI0rxaseVTwezR+XwXpiguYjez0SfBeLqc=;
-        b=cpEpYbHJ7ExgVYVr+7t7KUB2kbfOgmgzTEYSsFAJyBYfiwYS5oFIFYYdBa2AbZs00U
-         fEZcgMexIPZzZoEbg5gyP5tViorV8JqXzO8ScM4M/TPJBXYXxgTeHC83BEts/FsfPFip
-         ngSYwXi6QvV9sLfJARcGfA6uiJYhGl4eypNEU3xM43NtRu5TpgMO6tmSLhHC6qdoNIaG
-         OjQrMeWnx7BDOAsCfFfxFguOusDxDi5ik+vGR2R6k/cWpLzIIyrujJIJ6eUBBqbJ+LRT
-         0LMuY/dmZOFJzbk5qOWtAYfPp4pyGjYFj8mkBjmWnEMcMPux6pgW6j6Zy33hWPW3Sr55
-         8hNw==
-X-Gm-Message-State: AOJu0YzT0sYs+xdQSQ24xy5aRKOOdf16AD5EkuUIi/egCCRbDYwvKCbr
-        diQJgHVF6UhhiOZozv1lclsVqw==
-X-Google-Smtp-Source: AGHT+IGnEkQ1ORNBEJDFwLqZzFDRkbrk1bAUzYaKPfGErnCMiMqVrh4noduBAl9nrAGfRNrhLljbrw==
-X-Received: by 2002:adf:e3ca:0:b0:32d:6031:2824 with SMTP id k10-20020adfe3ca000000b0032d60312824mr1644372wrm.24.1699446700362;
-        Wed, 08 Nov 2023 04:31:40 -0800 (PST)
+        bh=f2CPRnNC80HIKz08qhNi2wTqt7rB0iR4CG7JVifewWY=;
+        b=U8q/aM0W0YOViHqpWciD3nT/HHOto3Pq5jyVotR5GG7IN263sR/oKVocpQ6D3iew1t
+         /OH6JNVLC1mffPoaHpRi15+XJCEHbymKJuDInQb5+qcXNxfZer9uFnmrLnaBWPg3hVbF
+         Kw1DwlQaiDM2khri+nyzEZrpHPOabA017Tv/x+IIoR2RaOSIPe/iaUdCvhUtkkh29O6w
+         APM+3jFTX/ztAJPuPOu4ZYCq5ViZgFwr4zd1DUSPEF8+/SvLgWGXSRN5+X6rKFb+1xFn
+         wOxHuiYL3aLGEYttAgcnFuLqVIg1+grQuFVxY0jxeZvEI0V39bWKvAOMhbFsYdQ8x0AD
+         7NrQ==
+X-Gm-Message-State: AOJu0YyS95iJCFOveSqXZAlOMCGkv/ikEjK2QUM1nO0zdReaIklYsoeu
+        Cvc7kb9tVcPcWM1TIFs5pEKKUA==
+X-Google-Smtp-Source: AGHT+IHzLS0TX2NLa675ubFWL0Lkb4LSpXFYQx91g4fhiaLnJg+zsnbUsVca8iVCfr4x071Fpcov+w==
+X-Received: by 2002:a5d:58ec:0:b0:32d:b55c:41fa with SMTP id f12-20020a5d58ec000000b0032db55c41famr1132363wrd.28.1699446870643;
+        Wed, 08 Nov 2023 04:34:30 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.218.126])
-        by smtp.gmail.com with ESMTPSA id p7-20020a056000018700b0032f7eaa6e43sm4839670wrx.79.2023.11.08.04.31.38
+        by smtp.gmail.com with ESMTPSA id i12-20020a5d630c000000b0032dba85ea1bsm4859564wru.75.2023.11.08.04.34.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Nov 2023 04:31:39 -0800 (PST)
-Message-ID: <9b7e7492-04a3-4646-aba6-59bb453f55a5@linaro.org>
-Date:   Wed, 8 Nov 2023 13:31:37 +0100
+        Wed, 08 Nov 2023 04:34:28 -0800 (PST)
+Message-ID: <5a35f02d-31d0-4cef-9b46-f231d0611c7a@linaro.org>
+Date:   Wed, 8 Nov 2023 13:34:26 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] dt-bindings: vendor-prefixes: add Amphenol
+Subject: Re: [PATCH 4/4] dt-bindings: hwmon: Add Amphenol ChipCap 2
 Content-Language: en-US
 To:     Javier Carrasco <javier.carrasco.cruz@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -68,7 +68,7 @@ Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         linux-doc@vger.kernel.org
 References: <20231020-topic-chipcap2-v1-0-087e21d4b1ed@gmail.com>
- <20231020-topic-chipcap2-v1-1-087e21d4b1ed@gmail.com>
+ <20231020-topic-chipcap2-v1-4-087e21d4b1ed@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -114,7 +114,7 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231020-topic-chipcap2-v1-1-087e21d4b1ed@gmail.com>
+In-Reply-To: <20231020-topic-chipcap2-v1-4-087e21d4b1ed@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -122,26 +122,76 @@ List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 On 08/11/2023 13:29, Javier Carrasco wrote:
-> Add vendor prefix for Amphenol (https://www.amphenol-sensors.com)
+> Add device tree bindings and an example for the ChipCap 2 humidity
+> and temperature sensor.
 > 
 > Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 > ---
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> index 573578db9509..5911c2feb353 100644
-> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> @@ -103,6 +103,8 @@ patternProperties:
->      description: Amlogic, Inc.
->    "^ampere,.*":
->      description: Ampere Computing LLC
-> +  "^amphenol,.*":
-> +    description: Amphenol
 
-Use full company name in description, so I guess:
-Amphenol Advanced Sensors
+...
+
+> +maintainers:
+> +  - Javier Carrasco <javier.carrasco.cruz@gmail.com>
+> +
+> +description: |
+> +  Relative humidity and temperature sensor on I2C bus.
+> +
+> +  Datasheets:
+> +    https://www.amphenol-sensors.com/en/telaire/humidity/527-humidity-sensors/3095-chipcap-2
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - amphenol,cc2dxx
+> +      - amphenol,cc2dxxs
+
+What does xx stand for? Wildcard? I do not see cc2dxx in part numbers.
+We expect specific compatibles, not generic. What are the differences
+between all parts?
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 3
+> +    description: |
+> +      The device provides three optional interrupts. READY indicates that
+> +      a measurement was finished. LOW indicates a low humidity alarm and
+> +      HIGH a high humidity alarm.
+> +      All interrupts must be IRQ_TYPE_RISING_EDGE.
+
+Instead use items: with description: for each item.
+
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: READY
+> +      - const: LOW
+> +      - const: HIGH
+
+Lowercase names
+
+> +
+> +  vdd-supply:
+> +    description:
+> +      Dedicated, controllable supply-regulator to reset the device and
+> +      enter in command mode. If defined, it must provide a GPIO for its
+> +      control.
+
+I don't understand what GPIO has anything to do with power supply.
+
+> +      If not defined, no alarms will be available.
+> +
+> +
+
+Only one blank line.
+
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
 
 Best regards,
 Krzysztof
