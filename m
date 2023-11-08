@@ -2,60 +2,64 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CFB9C4332F
-	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Nov 2023 12:44:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D97DC4332F
+	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Nov 2023 15:37:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbjKHMo7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 8 Nov 2023 07:44:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35784 "EHLO
+        id S232642AbjKHPhf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 8 Nov 2023 10:37:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjKHMo7 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Nov 2023 07:44:59 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D171BF0;
-        Wed,  8 Nov 2023 04:44:56 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9d10f94f70bso1038202566b.3;
-        Wed, 08 Nov 2023 04:44:56 -0800 (PST)
+        with ESMTP id S232263AbjKHPhf (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Nov 2023 10:37:35 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98A3138;
+        Wed,  8 Nov 2023 07:37:32 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-53de8fc1ad8so11868076a12.0;
+        Wed, 08 Nov 2023 07:37:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699447495; x=1700052295; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bfIYw/eqVYS+oY4d930Rw+98Y2voJ1fI6YN4DdZy5xw=;
-        b=Psu9YFrVuMTSGQu1GTHajw6CvqGbu7OQL/Ouqkq4R9O4EOAaJTSaYN2GW2+HPmEeb+
-         70QOeL9k+b/eAzJFPYvEbn8HonlWjP8O6nI1Owa8SXnnVA1nQCbwfZ5pzRihXh/uCryC
-         ZizHsnr1lJuYamdErkb/+Yw7BkvRDK3wIfhKJmzm9C3tN5lgkq9p1nqA/Dl/+deSlBjK
-         kNDSs7JGQjMBu9xon1GadH4qzUVkmgsC3WE2shAHvQLjyo08CYLVv00/wuY+2khiRfi5
-         Z5l/+3Tcj1G3w6poHwKd5saFMF0XGOSvKDrIv+mtjcgDcbRp40m4e7yc3YL25lneq11Z
-         X6ng==
+        d=gmail.com; s=20230601; t=1699457851; x=1700062651; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=I3v/qTt5Ljh3hBbEGrTycTHSp+Yzgj9Ls2qqRIGxJao=;
+        b=M8hONW4tLmM4lA3mj70M2Qt7apQyy3O9hgTFa1PMuwOYds9arW/n3gu6wGhvGQ5Ew4
+         9ML0zFbZlrfVpsMQGL/Dd68/MIhjwspH/xSNPav0eLRWcMGYzwmlbCsiD3L8G+1p+81M
+         SJBa6pniky8AFwvYXUi/X75Qo01Y5HNe8OXd3aqTT1nIDXRvCpG5J/lzHfxz9CX8VBrT
+         /99roWaESmQXQhq4Qchf2mn4f0mbpY1uO47OwNHVB5NsrqdVsH5iKPcFur9vtIPyVRQY
+         zjt6f8mLqEykBt2eU92FAfULbCgA+l1Y3xk2RQYMPUqqDunOKy4jLh5JflezYp3/X14n
+         T4oQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699447495; x=1700052295;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bfIYw/eqVYS+oY4d930Rw+98Y2voJ1fI6YN4DdZy5xw=;
-        b=ZZn/w80VTWHedGYW691sFvd4WIpS4PHx4aeHQBXEtdNlUqyPHfmzcNwuN0sQ/PUut2
-         wi9gd2WqLi1+w8xMoKqYSUMlo3Qr/M5q4vkW3gDDpohEk342797yhyT0SsmFOzCtsHXP
-         Xcf5vfXwFvGc+bFPYCh8G8jFOfDVW/REvQq7vi4mQ9K8Hdl1tkzKmI/gMUwvHjF/eQ5Q
-         iJ+CClefaG7YTAyy79AOk5zBSlCKuLuYG7H3vNQ2VotqpSsJ+JMkALzewWhIDWCO1Re9
-         rM8Rmakysx6pbSjioJrqt1WEckw7UEvEnoFge9IDxQVXzyP5B8QjUwUbUyTHXe38S3zm
-         2ZZA==
-X-Gm-Message-State: AOJu0YwCD8cp1GdhujnDYadqHnshC8OR9aUdG16RYy6E6YblgMV2hqsA
-        m8YhbpNvJBqff7/SuAm3x5k=
-X-Google-Smtp-Source: AGHT+IHpd7EMYPwzVeWvMT/QxCTbAiO3+AWFKUFV0YS7L4f+kzaa4xw/++1WEvWsaPebdQlm/g8/ow==
-X-Received: by 2002:a17:907:934b:b0:9c4:67f:3ef5 with SMTP id bv11-20020a170907934b00b009c4067f3ef5mr1448237ejc.50.1699447495312;
-        Wed, 08 Nov 2023 04:44:55 -0800 (PST)
-Received: from ?IPV6:2a02:8389:41cf:e200:8f74:d45a:3701:5b6? (2a02-8389-41cf-e200-8f74-d45a-3701-05b6.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:8f74:d45a:3701:5b6])
-        by smtp.gmail.com with ESMTPSA id gz11-20020a170906f2cb00b009b2d46425absm989612ejb.85.2023.11.08.04.44.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Nov 2023 04:44:54 -0800 (PST)
-Message-ID: <269222d8-b72f-4c7a-a19e-a82964e29ec8@gmail.com>
-Date:   Wed, 8 Nov 2023 13:44:52 +0100
+        d=1e100.net; s=20230601; t=1699457851; x=1700062651;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=I3v/qTt5Ljh3hBbEGrTycTHSp+Yzgj9Ls2qqRIGxJao=;
+        b=dm076Z2hw8XguHaoO7/I0/v+n59oiEgMrRymCp+EFMVZ0G2XRGpIrxhitK4cs+39k4
+         9mxPd/ntm2jht+WT5ssB7rRT8JYb3ubaS4uiEqDgNJlTRx3ghZrOT3BXR31TumC5Q+Q2
+         vfCR+nWK3w7lOmSdVEJWbHZBPFdaiEN7CcPp0DWMax5eLafLE5vTxZm4KYnDcZ90gH/C
+         kIDnLg3oh9rpPWKTjx7tqKRBHTqRnHmz3YOHZOdUxLNvqXxjgVeUJcPgFh42g4PjThEt
+         Ciuqtr9Dix4mrzOhPha7R48tLdktun2YffrrxiB95bsBY3Rt0P2lnIr9uh875Qhftdvm
+         t7NQ==
+X-Gm-Message-State: AOJu0Yx6VvTbsl9ygFT205tyxm0YsOEMl3tNIW5blV+fJHtUGNtKb/4l
+        Dq6cMW+FJ9qcLYN/0mL2g0M=
+X-Google-Smtp-Source: AGHT+IFgjSomn5YIoZuSz/TiNggvCkPLex2HMq1HqIb6TjfOqnRW8O0zm1fW5m1y02CQQIj5APjZ6w==
+X-Received: by 2002:a50:8acf:0:b0:543:52be:e6ad with SMTP id k15-20020a508acf000000b0054352bee6admr1902290edk.5.1699457851030;
+        Wed, 08 Nov 2023 07:37:31 -0800 (PST)
+Received: from [127.0.1.1] (2a02-8389-41cf-e200-840c-82c6-68fb-9a49.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:840c:82c6:68fb:9a49])
+        by smtp.gmail.com with ESMTPSA id j28-20020a508a9c000000b0053e3839fc79sm7009966edj.96.2023.11.08.07.37.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Nov 2023 07:37:30 -0800 (PST)
+From:   Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Subject: [PATCH v2 0/4] hwmon: Add support for Amphenol ChipCap 2
+Date:   Wed, 08 Nov 2023 16:37:26 +0100
+Message-Id: <20231020-topic-chipcap2-v2-0-f5c325966fdb@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/4] dt-bindings: hwmon: Add Amphenol ChipCap 2
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADarS2UC/3WNQQ6CMBBFr0K6dkw7YERX3sOwKNORTiK0aQnRE
+ O5uYe/y/Z+Xt6rMSTire7WqxItkCVMBPFWKvJ0GBnGFFWqsjUYNc4hCQF4i2YjA6Npbe2lqTai
+ K1NvM0Cc7kd+10eaZ037ExC/5HKVnV9hLnkP6HuHF7OvfxmJAg26vjMY1vWH3GEYr7zOFUXXbt
+ v0AkYYpoMUAAAA=
+To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Jean Delvare <jdelvare@suse.com>,
@@ -65,104 +69,82 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Mark Brown <broonie@kernel.org>
 Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20231020-topic-chipcap2-v1-0-087e21d4b1ed@gmail.com>
- <20231020-topic-chipcap2-v1-4-087e21d4b1ed@gmail.com>
- <5a35f02d-31d0-4cef-9b46-f231d0611c7a@linaro.org>
-Content-Language: en-US
-From:   Javier Carrasco <javier.carrasco.cruz@gmail.com>
-In-Reply-To: <5a35f02d-31d0-4cef-9b46-f231d0611c7a@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        linux-doc@vger.kernel.org,
+        Javier Carrasco <javier.carrasco.cruz@gmail.com>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1699457849; l=2893;
+ i=javier.carrasco.cruz@gmail.com; s=20230509; h=from:subject:message-id;
+ bh=ayH9nA5zCQkeDYMrIDR2SC44crJoyCpng8mBNefEHdQ=;
+ b=f1ArRNO2o4kyjeliZffTZRopfo4+79/RxiamfoDoOPpQggHW+lIaTxxjpl0T4tDALeTRQgc0B
+ pvIQVn6ygMQCLGZik5qt5lGUaJq65oSm1Gh0v/6Gc4zaFtDeWOlQ6R5
+X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
+ pk=tIGJV7M+tCizagNijF0eGMBGcOsPD+0cWGfKjl4h6K8=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hello,
+This series adds support and documentation for the Amphenol ChipCap 2
+humidity and temperature sensor in its digital version.
 
-On 08.11.23 13:34, Krzysztof Kozlowski wrote:
-> On 08/11/2023 13:29, Javier Carrasco wrote:
->> Add device tree bindings and an example for the ChipCap 2 humidity
->> and temperature sensor.
->>
->> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
->> ---
-> 
-> ...
-> 
->> +maintainers:
->> +  - Javier Carrasco <javier.carrasco.cruz@gmail.com>
->> +
->> +description: |
->> +  Relative humidity and temperature sensor on I2C bus.
->> +
->> +  Datasheets:
->> +    https://www.amphenol-sensors.com/en/telaire/humidity/527-humidity-sensors/3095-chipcap-2
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - amphenol,cc2dxx
->> +      - amphenol,cc2dxxs
-> 
-> What does xx stand for? Wildcard? I do not see cc2dxx in part numbers.
-> We expect specific compatibles, not generic. What are the differences
-> between all parts?
-> 
-There are two device families: cc2dxx and cc2dxxs, where xx indicates
-the voltage and the accuracy. That does not change how the devices works
-and it is not relevant for the driver. The 's' indicates that it is a
-sleep device, and that modifies how it works.
-I listed the supported part numbers in the hwmon documentation, where
-they are also divided into these two families.
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    maxItems: 3
->> +    description: |
->> +      The device provides three optional interrupts. READY indicates that
->> +      a measurement was finished. LOW indicates a low humidity alarm and
->> +      HIGH a high humidity alarm.
->> +      All interrupts must be IRQ_TYPE_RISING_EDGE.
-> 
-> Instead use items: with description: for each item.
-> 
->> +
->> +  interrupt-names:
->> +    items:
->> +      - const: READY
->> +      - const: LOW
->> +      - const: HIGH
-> 
-> Lowercase names
-> 
->> +
->> +  vdd-supply:
->> +    description:
->> +      Dedicated, controllable supply-regulator to reset the device and
->> +      enter in command mode. If defined, it must provide a GPIO for its
->> +      control.
-> 
-> I don't understand what GPIO has anything to do with power supply.
-> 
->> +      If not defined, no alarms will be available.
->> +
->> +
-> 
-> Only one blank line.
-> 
->> +required:
->> +  - compatible
->> +  - reg
->> +
->> +additionalProperties: false
-> 
-> Best regards,
-> Krzysztof
-> 
-Thanks for your review.
+This I2C device provides 14-bit humidity and temperature measurements as
+well as low (minimum) and high (maximum) humidity alarms. A ready signal
+is also available to reduce delays while fetching data.
+
+The proposed driver implements the logic to perform measurements with
+and without the ready signal, EEPROM configuration and alarm signaling.
+
+The features this driver does not support (I2C address and command
+window length modification) have been documented in the "Known Issues"
+section.
+
+The complete supported functionality has been tested with a CC2D33S
+sensor (a 'sleep' device) connected to a Raspberry Pi Zero 2 w.
+Different device tree node definitions (with and without regulator,
+ready and/or alarm signals) have been positively tested.
+
+The non-sleep measurement mechanism has been inferred from the first
+measurement, which is carried out automatically and it is common for all
+part numbers. Any testing or improvements with a non-sleep device is
+more than welcome.
+
+The tests have also covered the properties added to the hwmon core to
+account for minimum and maximum humidity alarms.
+
+Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+---
+Changes in v2:
+- vendor-prefixes: full company name in the vendor description (Krzystof
+  Kozlowski)
+- chipcap2.c: proper i2c_device_id table, coding style fixes, cleaner
+  error path in the probe function (Krzystof Kozlowski)
+- dt-bindings: per-item description and lowercase names (Krzystof
+  Kozlowski)
+- MAINTAINERS: fix manufacturer name (Krzystof Kozlowski)
+- Link to v1: https://lore.kernel.org/r/20231020-topic-chipcap2-v1-0-087e21d4b1ed@gmail.com
+
+---
+Javier Carrasco (4):
+      dt-bindings: vendor-prefixes: add Amphenol
+      hwmon: (core) Add support for humidity min/max alarm
+      hwmon: Add support for Amphenol ChipCap 2
+      dt-bindings: hwmon: Add Amphenol ChipCap 2
+
+ .../bindings/hwmon/amphenol,chipcap2.yaml          |   68 ++
+ .../devicetree/bindings/vendor-prefixes.yaml       |    2 +
+ Documentation/hwmon/chipcap2.rst                   |   73 ++
+ Documentation/hwmon/index.rst                      |    1 +
+ MAINTAINERS                                        |    8 +
+ drivers/hwmon/Kconfig                              |   10 +
+ drivers/hwmon/Makefile                             |    1 +
+ drivers/hwmon/chipcap2.c                           | 1022 ++++++++++++++++++++
+ drivers/hwmon/hwmon.c                              |    2 +
+ include/linux/hwmon.h                              |    4 +
+ 10 files changed, 1191 insertions(+)
+---
+base-commit: ffc253263a1375a65fa6c9f62a893e9767fbebfa
+change-id: 20231020-topic-chipcap2-e2d8985430c2
 
 Best regards,
-Javier Carrasco
+-- 
+Javier Carrasco <javier.carrasco.cruz@gmail.com>
+
