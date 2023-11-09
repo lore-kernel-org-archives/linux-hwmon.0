@@ -2,315 +2,121 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A9ADC4332F
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Nov 2023 04:51:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BC69C4332F
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Nov 2023 05:14:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232312AbjKIEvL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 8 Nov 2023 23:51:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55410 "EHLO
+        id S229585AbjKIFO4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 9 Nov 2023 00:14:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232338AbjKIEvI (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Nov 2023 23:51:08 -0500
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051BF26AE;
-        Wed,  8 Nov 2023 20:51:05 -0800 (PST)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-1eb7a8e9dd0so241687fac.3;
-        Wed, 08 Nov 2023 20:51:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699505462; x=1700110262; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mGGNBzEmDwLCmCeF+BF2lSFyKjl0VHCNvq4NKl4HYq0=;
-        b=lnamVj+qoYTo4ToZOzTROLOOWOScCgRBoM0gwajTXMBy5hrHU11W5jTGtvBPz1t3eK
-         uv+QxOrOkzmEKttyVm2aX0AQEiqC8Lf0oY/VRrpMGnyy/fNTBZGRpbw8B3fiSGnse4iy
-         bbqyBkVpK2sCyheEMHGrYF2ccw//LVcD6LGtPD+VwEtrIzvs/2gy1c8SV69qBC+FcSsk
-         Vd2EqmMt81UyAEMcIfthL9ExW1/O9qYamPNAR/Sl4iUpHdobbHi9oMq/ZHZEOMdbB95p
-         Y7k3GOq0YrgAB5YGAGSN/c0c1ITzzCcksPOovgv1C6118rFf1yOXXPyUAXO+xLIO99Gq
-         LN5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699505462; x=1700110262;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mGGNBzEmDwLCmCeF+BF2lSFyKjl0VHCNvq4NKl4HYq0=;
-        b=KZy+sJOWSKaCxUT2lsvI/eC2Llo1IBwNCCGsdX2alnlbTfkmEwufXba9AR7ipw3d5l
-         dIdDy/GgE7MPO7E6aHPhO1PxWNw+IMm9PK1O2jS6WlrP+zIRmp/lewe7rpMzda3+IYMI
-         K4UqIQEMmIz6sosHsPRyrra2pX4QYvOV0sTmN2wMu1owq5awpW9jQqWSb0BUA87kpWwS
-         wGs17w6Ln7e6m62PVjEoqkGoitoxDqTYGttStv5Seg/jYYtB105HFvz9yjMAflnQDdu5
-         nfpXpaZpVF20ucIGabIxs6Z5EGYm635j3J+TGRXSx47otCD5yJcqNThCOopIlQS54CXg
-         iN1Q==
-X-Gm-Message-State: AOJu0YwsR0m5AARD4jxWnyEo+5D3tvw/GeSgVh2A9ElSZHuqCzyaNo7l
-        B5DEZ1SrgNwirrkfkrT0GZg=
-X-Google-Smtp-Source: AGHT+IHYTKeZvifAhG7xLuzZDBu6daMdLBcSru8velNUH89o+9nGIFmqmDSsHfW5mkgiSyLAlboosg==
-X-Received: by 2002:a05:6870:de15:b0:1bf:6ec:dd4d with SMTP id qg21-20020a056870de1500b001bf06ecdd4dmr4211085oab.28.1699505462465;
-        Wed, 08 Nov 2023 20:51:02 -0800 (PST)
-Received: from peter-bmc.dhcpserver.bu9bmc.local (1-34-21-66.hinet-ip.hinet.net. [1.34.21.66])
-        by smtp.gmail.com with ESMTPSA id q189-20020a6343c6000000b005bcebc93d7asm3869035pga.47.2023.11.08.20.51.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Nov 2023 20:51:02 -0800 (PST)
-From:   Peter Yin <peteryin.openbmc@gmail.com>
-To:     patrick@stwcx.xyz, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Peter Yin <peteryin.openbmc@gmail.com>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: [PATCH v2 2/2] hwmon: (pmbus) Add support for MPS Multi-phase mp5990
-Date:   Thu,  9 Nov 2023 12:48:43 +0800
-Message-Id: <20231109044844.614007-3-peteryin.openbmc@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231109044844.614007-1-peteryin.openbmc@gmail.com>
-References: <20231109044844.614007-1-peteryin.openbmc@gmail.com>
+        with ESMTP id S229457AbjKIFO4 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Nov 2023 00:14:56 -0500
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2061.outbound.protection.outlook.com [40.107.95.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADFD62683;
+        Wed,  8 Nov 2023 21:14:53 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PGUPe81qbMInYCDkKfGcg6WMLCOfo/G34xRmDonRIiXxGEy0GzyMfo8I0leFiFYnJ9oLyZeKIzOqCjY/G+9XLZF8sYfHTC/FGsGJYj6pFxtpWqEVCs/X/lebwWTrh5n9pWxi276rvUTVqs9YqUWZ7rn/CU8iAzeUv2k6n+bHigMmGss8l9v3A5/x9BV18Obt6e2WrysRm0omQTzfiUcKRb3q7KG6L1OyQoF/1BBf59aBZ7yGfewqYyai46W6E5dQFjzD15rHqhGIzpIXmgewHGBdbJt/LuNgtvfl8H6wYIExIOLXzP6l0R2521iumXXhnr/cnYnH+EZqJZ72cHciEQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Nj2tWhABRbAFCcr1uzEsJpvMr/2MFhINkOqvTWnMVYY=;
+ b=Q9vyBDcWtHdYEhv0gCNbX0f1vCyfiQNM0JCcVxAetRQYmhzfoKzDOMCdhM+VkaH8nyPu4z0iongddx9gHNqajPDXfM28UFhxS7XKhqhf25ttcHxjzJK1jJu3exNOyYPqIutNkQc5t7PqqQmV14vw0G2kxV06sO2F6piYzQ0fwKHoI6DSXCca1QkJgPHXDCVSqSM7q6UaZc6LNxBCYQ2HFgHHFCj+bZK/s32cji6JKaOrsU7Pyq0IfueScnNxwN3DmJKz73JwWgW9RZzXH0xnvPctmCvZw8rYGr766x72nh9Ce5zOl224Dt7GZEvDFVZJ8IEBSu9/KAHv6nleNltKOA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=suse.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Nj2tWhABRbAFCcr1uzEsJpvMr/2MFhINkOqvTWnMVYY=;
+ b=Xe8SwpM64CZTDq2aV9acpWV8cxJA++TAr/xQkqdiU/R4sKXf3jY1G9o6tun10E9Zj3HoKIAM2x3RSkB2MRWs35BNs+36myMQioHJ2RVhi72ovFO3ItX3BVCLvJfIufsV+TzXipme8RLqELpLYUImYmBEkPVU4yPuTSFQ0zQ1utQ=
+Received: from CH2PR16CA0018.namprd16.prod.outlook.com (2603:10b6:610:50::28)
+ by CH0PR12MB5386.namprd12.prod.outlook.com (2603:10b6:610:d5::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.28; Thu, 9 Nov
+ 2023 05:14:50 +0000
+Received: from DS2PEPF0000343B.namprd02.prod.outlook.com
+ (2603:10b6:610:50:cafe::5e) by CH2PR16CA0018.outlook.office365.com
+ (2603:10b6:610:50::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6977.19 via Frontend
+ Transport; Thu, 9 Nov 2023 05:14:50 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DS2PEPF0000343B.mail.protection.outlook.com (10.167.18.38) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6977.16 via Frontend Transport; Thu, 9 Nov 2023 05:14:50 +0000
+Received: from compile-server.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.32; Wed, 8 Nov
+ 2023 23:14:48 -0600
+From:   Ma Jun <Jun.Ma2@amd.com>
+To:     <jdelvare@suse.com>, <linux@roeck-us.net>,
+        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Ma Jun <Jun.Ma2@amd.com>
+Subject: [PATCH] hwmon: Add a new macro sensor_sysfs_attr
+Date:   Thu, 9 Nov 2023 13:14:29 +0800
+Message-ID: <20231109051429.2250774-1-Jun.Ma2@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS2PEPF0000343B:EE_|CH0PR12MB5386:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5b3467de-73c2-4830-29e2-08dbe0e2ccb5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jvSm3NkDtYbIuUJ1v7ZlDcELvn3004FnBYIojAwQ6aTrp5sxy5JI7X7ufHpUskqdW6ZF4PrthTijOUiRLVzzk0+GJWD8+KlbKRh5N2oh+TWZ4vwymopM+LGNJVvkuHSOz0wq5WiUYic35VF2Dx4pSTePtVU12f5NYAB9W7i6v/bX8d44uEdpNWDtmaLHSGOhHo2B2UZnLenaKb6PEhORZyDSqeegBkkQdHqX6CaWaHm161r/Bdmu6eMraV+29rxaplFHtE0ZaPaNjvfxp3negCOhk6rqy8kRnqJ3XdJm2XdlL9sH0n07iFXq5NQ8KmGLf48zZuqu0Am5eh+fTT4cw5LyevqQpYJl9GrKTwbzhPt7TviAfF404lWK82SQ7hcxi/hamup8/KRYgrb74cBxEdyDnuP/uwOVgxZK364NCjBwb/634vP3jl6qAT1Dw/ZmN1j9L4KauU42sgKYoXTQHuONCYl9QmVvz83km12p8X8ool7loDF1H7TFivh4iDdMSxzrgxP52Vm7+Rx+7LCI046KyegZ65mhB/ccTmz+SA8Pg1qsMPhz7n0BifcYnEVAV17XrzvZYlCquE/ND4eUagvg0j+3eVFAc8RHVK1G1skucWgtJOHCC3KvJZco0CvjVmZrqYemtPoEAX+BT9uZylvJDtAwC4rtYBoHv8wFGI1z0VsvUAUcRD0zthT4LNQTQ3i1mbG0UuKTZl5fO5EU7UQTJ1e4RtmYutAMFRYjF7D3plw2dYuwKPJpxh6FM1MH+ILyFhM2UD+xcQ6MNHcq1ZJjQpx7W6dh3XDyXfeIxy4=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(376002)(136003)(396003)(346002)(39860400002)(230922051799003)(82310400011)(1800799009)(451199024)(186009)(64100799003)(46966006)(40470700004)(36840700001)(5660300002)(4744005)(2906002)(86362001)(70206006)(8676002)(316002)(8936002)(70586007)(110136005)(4326008)(40460700003)(36756003)(41300700001)(1076003)(82740400003)(26005)(16526019)(2616005)(81166007)(336012)(426003)(7696005)(6666004)(47076005)(356005)(36860700001)(40480700001)(478600001)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Nov 2023 05:14:50.3931
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5b3467de-73c2-4830-29e2-08dbe0e2ccb5
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS2PEPF0000343B.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5386
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add support for mp5990 device from Monolithic Power Systems, Inc. (MPS)
-vendor. This is a Hot-Swap Controller.
+The attribute definiations like &sensor_dev_attr_xx_xx.dev_attr.attr
+are widely used in drivers. So add a new macro sensor_sysfs_attr t
+to make it easier to understand and use.
 
-Signed-off-by: Peter Yin <peteryin.openbmc@gmail.com>
+For example, user can use the sensor_sysfs_attr(xx_xx) instead of
+&sensor_dev_attr_xx_xx.dev_attr.attr
+
+Signed-off-by: Ma Jun <Jun.Ma2@amd.com>
 ---
- Documentation/hwmon/index.rst  |  1 +
- Documentation/hwmon/mp5990.rst | 84 +++++++++++++++++++++++++++++++++
- drivers/hwmon/pmbus/Kconfig    |  9 ++++
- drivers/hwmon/pmbus/Makefile   |  1 +
- drivers/hwmon/pmbus/mp5990.c   | 86 ++++++++++++++++++++++++++++++++++
- 5 files changed, 181 insertions(+)
- create mode 100644 Documentation/hwmon/mp5990.rst
- create mode 100644 drivers/hwmon/pmbus/mp5990.c
+ include/linux/hwmon-sysfs.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 042e1cf9501b..8c70e10fc795 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -157,6 +157,7 @@ Hardware Monitoring Kernel Drivers
-    mp2888
-    mp2975
-    mp5023
-+   mp5990
-    nct6683
-    nct6775
-    nct7802
-diff --git a/Documentation/hwmon/mp5990.rst b/Documentation/hwmon/mp5990.rst
-new file mode 100644
-index 000000000000..d2da0f767530
---- /dev/null
-+++ b/Documentation/hwmon/mp5990.rst
-@@ -0,0 +1,84 @@
-+.. SPDX-License-Identifier: GPL-2.0
+diff --git a/include/linux/hwmon-sysfs.h b/include/linux/hwmon-sysfs.h
+index d896713359cd..7feae637e3b5 100644
+--- a/include/linux/hwmon-sysfs.h
++++ b/include/linux/hwmon-sysfs.h
+@@ -14,6 +14,10 @@ struct sensor_device_attribute{
+ 	struct device_attribute dev_attr;
+ 	int index;
+ };
 +
-+Kernel driver mp5990
-+====================
++#define to_sensor_sysfs_attr(_name) \
++	(&sensor_dev_attr_##_name.dev_attr.attr)
 +
-+Supported chips:
-+
-+  * MPS MP5990
-+
-+    Prefix: 'mp5990'
-+
-+  * Datasheet
-+
-+    Publicly available at the MPS website : https://www.monolithicpower.com/en/mp5990.html
-+
-+Author:
-+
-+	Peter Yin <peteryin.openbmc@gmail.com>
-+
-+Description
-+-----------
-+
-+This driver implements support for Monolithic Power Systems, Inc. (MPS)
-+MP5990 Hot-Swap Controller.
-+
-+Device compliant with:
-+
-+- PMBus rev 1.3 interface.
-+
-+Device supports direct format for reading input voltage, output voltage,
-+output current, input power and temperature.
-+
-+The driver exports the following attributes via the 'sysfs' files
-+for input voltage:
-+
-+**in1_input**
-+
-+**in1_label**
-+
-+**in1_max**
-+
-+**in1_max_alarm**
-+
-+**in1_min**
-+
-+**in1_min_alarm**
-+
-+The driver provides the following attributes for output voltage:
-+
-+**in2_input**
-+
-+**in2_label**
-+
-+**in2_alarm**
-+
-+The driver provides the following attributes for output current:
-+
-+**curr1_input**
-+
-+**curr1_label**
-+
-+**curr1_alarm**
-+
-+**curr1_max**
-+
-+The driver provides the following attributes for input power:
-+
-+**power1_input**
-+
-+**power1_label**
-+
-+**power1_alarm**
-+
-+The driver provides the following attributes for temperature:
-+
-+**temp1_input**
-+
-+**temp1_max**
-+
-+**temp1_max_alarm**
-+
-+**temp1_crit**
-+
-+**temp1_crit_alarm**
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 270b6336b76d..65a116f7744d 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -326,6 +326,15 @@ config SENSORS_MP5023
- 	  This driver can also be built as a module. If so, the module will
- 	  be called mp5023.
+ #define to_sensor_dev_attr(_dev_attr) \
+ 	container_of(_dev_attr, struct sensor_device_attribute, dev_attr)
  
-+config SENSORS_MP5990
-+	tristate "MPS MP5990"
-+	help
-+	  If you say yes here you get hardware monitoring support for MPS
-+	  MP5990.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called mp5990.
-+
- config SENSORS_MPQ7932_REGULATOR
- 	bool "Regulator support for MPQ7932"
- 	depends on SENSORS_MPQ7932 && REGULATOR
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index 84ee960a6c2d..212d9ca0acc9 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -35,6 +35,7 @@ obj-$(CONFIG_SENSORS_MAX8688)	+= max8688.o
- obj-$(CONFIG_SENSORS_MP2888)	+= mp2888.o
- obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
- obj-$(CONFIG_SENSORS_MP5023)	+= mp5023.o
-+obj-$(CONFIG_SENSORS_MP5990)	+= mp5990.o
- obj-$(CONFIG_SENSORS_MPQ7932)	+= mpq7932.o
- obj-$(CONFIG_SENSORS_PLI1209BC)	+= pli1209bc.o
- obj-$(CONFIG_SENSORS_PM6764TR)	+= pm6764tr.o
-diff --git a/drivers/hwmon/pmbus/mp5990.c b/drivers/hwmon/pmbus/mp5990.c
-new file mode 100644
-index 000000000000..fb3ac9c5d44e
---- /dev/null
-+++ b/drivers/hwmon/pmbus/mp5990.c
-@@ -0,0 +1,86 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Driver for MPS MP5990 Hot-Swap Controller
-+ */
-+
-+#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/pmbus.h>
-+#include "pmbus.h"
-+
-+static int mp5990_read_byte_data(struct i2c_client *client, int page, int reg)
-+{
-+	switch (reg) {
-+	case PMBUS_VOUT_MODE:
-+		/* The datasheet does not support the VOUT command,
-+		 * but the device responds with a default value of 0x17.
-+		 * In the standard, 0x17 represents linear mode. However,
-+		 * for the MP5990, the VOUT linear mode is linear11, not linear16.
-+		 * Therefore, we should enforce the VOUT in the direct format.
-+		 */
-+		return PB_VOUT_MODE_DIRECT;
-+	default:
-+		return -ENODATA;
-+	}
-+}
-+
-+static struct pmbus_driver_info mp5990_info = {
-+	.pages = 1,
-+	.format[PSC_VOLTAGE_IN] = direct,
-+	.format[PSC_VOLTAGE_OUT] = direct,
-+	.format[PSC_CURRENT_OUT] = direct,
-+	.format[PSC_POWER] = direct,
-+	.format[PSC_TEMPERATURE] = direct,
-+	.m[PSC_VOLTAGE_IN] = 32,
-+	.b[PSC_VOLTAGE_IN] = 0,
-+	.R[PSC_VOLTAGE_IN] = 0,
-+	.m[PSC_VOLTAGE_OUT] = 32,
-+	.b[PSC_VOLTAGE_OUT] = 0,
-+	.R[PSC_VOLTAGE_OUT] = 0,
-+	.m[PSC_CURRENT_OUT] = 16,
-+	.b[PSC_CURRENT_OUT] = 0,
-+	.R[PSC_CURRENT_OUT] = 0,
-+	.m[PSC_POWER] = 1,
-+	.b[PSC_POWER] = 0,
-+	.R[PSC_POWER] = 0,
-+	.m[PSC_TEMPERATURE] = 1,
-+	.b[PSC_TEMPERATURE] = 0,
-+	.R[PSC_TEMPERATURE] = 0,
-+	.func[0] =
-+		PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_PIN |
-+		PMBUS_HAVE_TEMP | PMBUS_HAVE_IOUT |
-+		PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_TEMP,
-+	.read_byte_data = mp5990_read_byte_data,
-+};
-+
-+static int mp5990_probe(struct i2c_client *client)
-+{
-+	return pmbus_do_probe(client, &mp5990_info);
-+}
-+
-+static const struct of_device_id mp5990_of_match[] = {
-+	{ .compatible = "mps,mp5990" },
-+	{}
-+};
-+
-+static const struct i2c_device_id mp5990_id[] = {
-+	{"mp5990", 0},
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, mp5990_id);
-+
-+static struct i2c_driver mp5990_driver = {
-+	.driver = {
-+		   .name = "mp5990",
-+		   .of_match_table = mp5990_of_match,
-+	},
-+	.probe = mp5990_probe,
-+	.id_table = mp5990_id,
-+};
-+module_i2c_driver(mp5990_driver);
-+
-+MODULE_AUTHOR("Peter Yin <peter.yin@quantatw.com>");
-+MODULE_DESCRIPTION("PMBus driver for MP5990 HSC");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(PMBUS);
 -- 
-2.25.1
+2.34.1
 
