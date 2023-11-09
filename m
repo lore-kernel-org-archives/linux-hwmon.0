@@ -2,73 +2,70 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B07AC4332F
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Nov 2023 08:53:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C58AEC4332F
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Nov 2023 08:56:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233839AbjKIIxs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 9 Nov 2023 03:53:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52578 "EHLO
+        id S229973AbjKII4S (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 9 Nov 2023 03:56:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233859AbjKIIxr (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Nov 2023 03:53:47 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E151991
-        for <linux-hwmon@vger.kernel.org>; Thu,  9 Nov 2023 00:53:44 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-32f737deedfso359161f8f.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 09 Nov 2023 00:53:44 -0800 (PST)
+        with ESMTP id S229697AbjKII4R (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Nov 2023 03:56:17 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50B1111
+        for <linux-hwmon@vger.kernel.org>; Thu,  9 Nov 2023 00:56:14 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-4079ed65582so3772335e9.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 09 Nov 2023 00:56:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699520023; x=1700124823; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1699520173; x=1700124973; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=m3yImQCKVYVP/hw+lGjw+bq25vA1XBEmQlhdof4Nol0=;
-        b=OOwGhTxCq2pO6LwbKUYCehEfLyNOGgPIoZxTDpXZyQZE6W+X7cYbUB/HgphZsTF80y
-         tFJJi0MQePq4a5ZvJ4mBGiJn6uxkk9cY2Y5ct3Qa3oi0MBPNn/A+S7smOAnFkl1jmHCB
-         4pismWRWxi1zOZPq3hOoBBtC/MzmdDOzdqXfAluRE10FJgIzGuggT0feutByTHML9aCY
-         /rszb28LFCJMR0mr93UR6KXYFc7ktq73K6TJl9V25icpKTvXMQHLVmGaYG1+yfTsOeMc
-         UhG6phTVh4t0+3K9Ex+bLtZwmZ39X/S1MOOwap+MpnaBsApCQTFHyUZMHDdZ/IZ+zpVB
-         gWSA==
+        bh=C/Oc2Ri08TlARcuCbFX7jlwJIbMzeX1P2oeV470H4hk=;
+        b=acNULdN1ij2WrwhgGcnf7bHJtkAORvy+gP/mpevmLEDxPg22hZRZ7i1NWSEeUeZ/oq
+         TnlBBT9f7hbJp7sViFWMHXmdBh8FGAWCE7r2Q98zQ2gbVHf552w2ENmt6cU1laZvLTTj
+         py5gNyF3jum2O1BKm3+YnZxDfJ6SrNypYRpKoiwkURr89WNyyq9JfF7j/Z/VxCTtJUnY
+         HZIk1THyQUSCwDLrd01t3PNETwhD1IYMKiu4C6rKkdAEPgo70UcOGnU/+8ikpnyxCQ8L
+         eQ9WQ7uWow46tNb3ESsa8MKU88A/vw4ZtkOBu88D72RefyM4VRrr7dJAj/YY4Dm22LtK
+         qT7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699520023; x=1700124823;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1699520173; x=1700124973;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=m3yImQCKVYVP/hw+lGjw+bq25vA1XBEmQlhdof4Nol0=;
-        b=mtYyI0DwoTDdoXIKi/qz6dXcMQPWSM3t3QuayWeaiJ+a9NPxM7CEA3T5q2hnwEF389
-         zYpKJy9umX3kh2yQ3QR9sTr995Oy83raG48dyjoX9q7G5kvthGU1wv/s2dOho3NVGbTn
-         HiTxB1OW7U8UmTJHG/M3BCkf4iRI3tyZBhEYg2sOWwLfl5ErmjnZA9awDngqqxVEXPJY
-         s+9wUgk30oOl2fmNLSOYKb5/OxnUaOT71FYpj+QBHb65/m2rstUOmEjrPSUISucSbsf9
-         KatlIjiU86E6oIwMaWz8vDqy5CXXAWo597kvYBOltUgWkHbH8sj5DpBrMEdSaGQC+Zyi
-         xiEg==
-X-Gm-Message-State: AOJu0Yzd8XEBLJrzpYYSsy3y/ul0T9wdbYkmkGfH0edf+Hn0eFHIPKbB
-        aVih5xMspIiy9nU0grR8regfbA==
-X-Google-Smtp-Source: AGHT+IG0rMPzekOk4l/8iTBLQEffoSSaY5oVaJ7wQodyRL7mAaWa6HJPQTwl7jj6RAmJmujgAAZ6Kw==
-X-Received: by 2002:adf:e781:0:b0:32d:9a8f:6245 with SMTP id n1-20020adfe781000000b0032d9a8f6245mr3649213wrm.68.1699520022948;
-        Thu, 09 Nov 2023 00:53:42 -0800 (PST)
+        bh=C/Oc2Ri08TlARcuCbFX7jlwJIbMzeX1P2oeV470H4hk=;
+        b=ECr+JOuUx1lz4nxKJ0/yLNzzZvW4ghnFh+2cbQXfjiMkinuPIVoTV9B7z/xxG7nLVQ
+         yc8l0HGTgAoWpWbTLlVM6AWqRundmIFhFH2VF5fxsvwQeWDh1TBNM6xTTx7onHt+HkL/
+         nu/uzYY4Rv4iPrXR6HtM5vEeBIwuA5kJ3inQKHdkIYGF9Bi3yjAtWBh80Qr2If1Wv9XR
+         OI+ReXiV1/2gI9XAZ9ooLfnq8rCAwKPZPaiVf8oMX6em8f1yzKwbYsfkjfYR6LS4ztcb
+         58PITF4mjJ8GvOCD22Qsl20H+M7triJnL2CAXfykoBV1p0mrXtEhqRmNA81Ej6eLzWN8
+         3IbQ==
+X-Gm-Message-State: AOJu0YwB9ZJxe6A/0fljZsjyNofadD9rNUsT9kdnx/26sVhBesQQt4HV
+        d1frfyg/o6EQVQn8bs9yZFhAig==
+X-Google-Smtp-Source: AGHT+IHxV0c5K+HW648KGXbRUM/dBxgAWN/R3MureWTsp8lzf6mVtsfAt6CPWUk7l/CmSjN0DyPJ7w==
+X-Received: by 2002:a05:600c:32a7:b0:408:fe93:a2f7 with SMTP id t39-20020a05600c32a700b00408fe93a2f7mr4067831wmp.37.1699520173091;
+        Thu, 09 Nov 2023 00:56:13 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.218.126])
-        by smtp.gmail.com with ESMTPSA id v5-20020adfa1c5000000b0032d81837433sm6944964wrv.30.2023.11.09.00.53.41
+        by smtp.gmail.com with ESMTPSA id q3-20020a05600c46c300b00405442edc69sm1412660wmo.14.2023.11.09.00.56.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Nov 2023 00:53:42 -0800 (PST)
-Message-ID: <805967a5-5fdf-4580-9327-82a3c99d427a@linaro.org>
-Date:   Thu, 9 Nov 2023 09:53:40 +0100
+        Thu, 09 Nov 2023 00:56:12 -0800 (PST)
+Message-ID: <f9d25b19-ef26-480a-ae47-60dcba704ee5@linaro.org>
+Date:   Thu, 9 Nov 2023 09:56:11 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/4] dt-bindings: vendor-prefixes: add Amphenol
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add mps mp5990 driver bindings
 Content-Language: en-US
-To:     Javier Carrasco <javier.carrasco.cruz@gmail.com>,
+To:     Peter Yin <peteryin.openbmc@gmail.com>, patrick@stwcx.xyz,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org
-References: <20231020-topic-chipcap2-v2-0-f5c325966fdb@gmail.com>
- <20231020-topic-chipcap2-v2-1-f5c325966fdb@gmail.com>
+References: <20231109044844.614007-1-peteryin.openbmc@gmail.com>
+ <20231109044844.614007-2-peteryin.openbmc@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -114,20 +111,58 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231020-topic-chipcap2-v2-1-f5c325966fdb@gmail.com>
+In-Reply-To: <20231109044844.614007-2-peteryin.openbmc@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 08/11/2023 16:37, Javier Carrasco wrote:
-> Add vendor prefix for Amphenol (https://www.amphenol-sensors.com)
+On 09/11/2023 05:48, Peter Yin wrote:
+> Add a device tree bindings for mp5990 device.
 > 
-> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+> Signed-off-by: Peter Yin <peteryin.openbmc@gmail.com>
 > ---
+>  .../devicetree/bindings/hwmon/mps,mp5990.yaml | 41 +++++++++++++++++++
+>  1 file changed, 41 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/mps,mp5990.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/mps,mp5990.yaml b/Documentation/devicetree/bindings/hwmon/mps,mp5990.yaml
+> new file mode 100644
+> index 000000000000..bfd0cf7d3470
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/mps,mp5990.yaml
+> @@ -0,0 +1,41 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/mps,mp5990.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Monolithic Power Systems Devices MP5990 Hot-Swap Controller
+> +
+> +maintainers:
+> +  - Peter Yin <peteryin.openbmc@gmail.com>
+> +
+> +description: |
+> +  Monolithic Power Systems Devices MP5990 Hot-Swap Controller
+> +
+> +  Datasheets:
+> +  https://www.monolithicpower.com/en/mp5990.html
+> +
+> +properties:
+> +  compatible:
+> +    const: mps,mp5990
+> +
+> +  reg:
+> +    maxItems: 1
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+This is missing some properties... or is a candidate for
+trivial-devices.yaml.
+
+I guess it is fine as initial submission:
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
