@@ -2,160 +2,181 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A782BC4167D
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Nov 2023 16:25:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04177C4332F
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Nov 2023 17:09:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbjKIQZ6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 9 Nov 2023 11:25:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38810 "EHLO
+        id S231475AbjKIRJ4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 9 Nov 2023 12:09:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232373AbjKIQZ5 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Nov 2023 11:25:57 -0500
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF6835B1;
-        Thu,  9 Nov 2023 08:25:55 -0800 (PST)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-5a84204e7aeso12941287b3.0;
-        Thu, 09 Nov 2023 08:25:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699547155; x=1700151955; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=foC6qFxu1uAB3VKypouMTbZ7cY6s6Zil1/t6ulJboJg=;
-        b=bXOJc5aV0Op/7vo9U7eUjodBfVQlg8MUoqfL90xp/TV2CViPAdXIZP4tpvFqk5SFmf
-         mKR20XKPeayGOJRZmu/9f8DUSbBTHtZbn0McA2UG3Y4x8DbTfR9X44v6flRHpI4CiJKJ
-         8GlylgnNEFElNGQFyq9/xqhUHmO7b5wVLi6+OOAyigCFCA0LW+x+4lCL6sn8wX0uGtWP
-         6JIj050IPlWNPrJop/b7Agt6kCZrJEmN1ThDrO7H9/6173aLMa5IhXDH1Jj1ifni/kjc
-         SYrwMhnVLVVnm7ELbaVa2dNquzJKuLbBz9Nod0Id5qmBsLfwPUIa2OMokROFmSsnVZwY
-         uLxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699547155; x=1700151955;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=foC6qFxu1uAB3VKypouMTbZ7cY6s6Zil1/t6ulJboJg=;
-        b=PTz6roiTPlbek2TfvAu7iVymzP+6vw9F6ZOGpM5k4QVv25b0m4Uf4Z+I74Zm/UF7Qn
-         9aSEreAB9aG/DcJMAPfxc5qE08MhZEuYh6Tu6YyJVFhp4B4s29o7wZ4x0+QR/nfvodpO
-         iT/VSZb9cC2FstEjCkl4b4Mvut5Nn5n3/CnWfvOQaZzr53dHgOeYOizfwWMHM1OCgiW0
-         b7Ppskktnhq+gWlYgfwupSKfJvuLBd/Zrg2/YxcaS0QaRT7sIs/Px/FEACbE3h+zFsyR
-         sfcTV9UPxegDl4cEF9lJ7KlRt/G6yVIGvXUaQ4u169LKaqwaXacz1wf3PbSdQfCtkofU
-         dmkA==
-X-Gm-Message-State: AOJu0YzOW/lWQYFa6zJS0oplv+NRa6JosI4dGDXeXh7oVckGZkc7u3XF
-        SFm25cZ/01ADdTQLnGHlYog=
-X-Google-Smtp-Source: AGHT+IEVDdqykrywzzwAMQWOPZgNF/a973OFtelQ1YJ5HDOMyU2rkUGHAZ0ioND+p5PfbhSgOokyZA==
-X-Received: by 2002:a81:5212:0:b0:5a7:c935:6cf with SMTP id g18-20020a815212000000b005a7c93506cfmr6193932ywb.24.1699547154746;
-        Thu, 09 Nov 2023 08:25:54 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r125-20020a0de883000000b005a7fbac4ff0sm8096538ywe.110.2023.11.09.08.25.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Nov 2023 08:25:54 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e0319f92-b0c7-4f26-814d-f86ac410b2e1@roeck-us.net>
-Date:   Thu, 9 Nov 2023 08:25:51 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/4] hwmon: Add support for Amphenol ChipCap 2
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Javier Carrasco <javier.carrasco.cruz@gmail.com>,
+        with ESMTP id S231204AbjKIRJz (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Nov 2023 12:09:55 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13FCD4A;
+        Thu,  9 Nov 2023 09:09:53 -0800 (PST)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AC4EC433C8;
+        Thu,  9 Nov 2023 17:09:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1699549793;
+        bh=9BXK0KwCu9S5adkHNwW6vjWRO10k3ESEGRHXlcO7k/E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HctJhaRjYsnF1NnuYAE8SxFhZeb1L+0wgXPBz6YJ5z4Hf4Tz1hCleQELLBMyaF6fy
+         /n40B19t3cK436cE2fjQrDqjQumZ8UQ4o8++uJsQwikBRGD0m4amYP9oULeED+EClM
+         4oSoknFoQxQoBT1kB2KnRCtWpF+FpwWRKE9bQ4LpRE59fJLRaPaIxrHA9OpezghYDZ
+         OD5bwrt8mSSWXln1TpK1dRSrA/8KtwVUCaRMMFwr0jgKtf88SY+UHQLsfZGeyjeeke
+         MA8ZNGW41A0qxJncJtnC+8R8SIYJTA2X4TIjMySw/46fUArKJLfQHH93tvpqv3uum9
+         PVeKygKnXwgYA==
+Date:   Thu, 9 Nov 2023 17:09:48 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+Cc:     patrick@stwcx.xyz, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20231020-topic-chipcap2-v2-0-f5c325966fdb@gmail.com>
- <20231020-topic-chipcap2-v2-3-f5c325966fdb@gmail.com>
- <30ccb0a9-c0bd-491e-817f-def0aeda11c6@linaro.org>
- <d5692ab7-6d11-41f3-89ec-246a2fc045a8@roeck-us.net>
- <daae2f05-66ea-4f21-a47d-6e384bd35dee@linaro.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <daae2f05-66ea-4f21-a47d-6e384bd35dee@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Jonathan Corbet <corbet@lwn.net>, linux-i2c@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: Add lltc ltc4286 driver
+ bindings
+Message-ID: <20231109-obscurity-dress-4d1d3370ea56@spud>
+References: <20231109014948.2334465-1-Delphine_CC_Chiu@Wiwynn.com>
+ <20231109014948.2334465-2-Delphine_CC_Chiu@Wiwynn.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="r1FpUNa/o+EDNg70"
+Content-Disposition: inline
+In-Reply-To: <20231109014948.2334465-2-Delphine_CC_Chiu@Wiwynn.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 11/9/23 08:18, Krzysztof Kozlowski wrote:
-> On 09/11/2023 15:55, Guenter Roeck wrote:
->>>> +	if (IS_ERR(data->hwmon)) {
->>>> +		ret = PTR_ERR(data->hwmon);
->>>> +		goto cleanup;
->>>> +	}
->>>> +
->>>> +	return 0;
->>>> +
->>>> +cleanup:
->>>> +	if (cc2_disable(data))
->>>> +		dev_dbg(dev, "Failed to disable device");
->>>> +
->>>> +	return dev_err_probe(dev, ret,
->>>> +			     "Unable to register hwmon device\n");
->>>
->>> Drop or move to each error path.
->>>
->> This actually follows Documentation/process/coding-style.rst, chapter 7
->> (Centralized exiting of functions).
-> 
-> The point is that centralized message of error is useless. Probe failure
-> is already handled by core, thus another message doing the same is
-> redundant. What is needed to explain the true reason of failure, thus
-> the error message should be next to each type of failure. Missing
-> regulator? Say it. Missing clock? Say something else.
-> 
 
-Agreed, you have a point.
+--r1FpUNa/o+EDNg70
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
-Guenter
+On Thu, Nov 09, 2023 at 09:49:45AM +0800, Delphine CC Chiu wrote:
+> Add a device tree bindings for ltc4286 device.
+>=20
+> Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+>=20
+> Changelog:
+>   v4 - Revise some inappropriate writing in yaml file
+>   v3 - Revise adi,vrange-select-25p6 to adi,vrange-low-enable
+>   v2 - Revise vrange_select_25p6 to adi,vrange-select-25p6
+>      - Add type for adi,vrange-select-25p6
+>      - Revise rsense-micro-ohms to shunt-resistor-micro-ohms
 
+Your changelog should be below the --- line.
+You also omitted the tag I left on the previous version.
+With the changelog fixed:
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
+Cheers,
+Conor.
+
+> ---
+>  .../bindings/hwmon/lltc,ltc4286.yaml          | 51 +++++++++++++++++++
+>  MAINTAINERS                                   | 10 ++++
+>  2 files changed, 61 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/lltc,ltc4286.=
+yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml b/=
+Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml
+> new file mode 100644
+> index 000000000000..d26f34fb7ea7
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml
+> @@ -0,0 +1,51 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/lltc,ltc4286.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: LTC4286 power monitors
+> +
+> +maintainers:
+> +  - Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - lltc,ltc4286
+> +      - lltc,ltc4287
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  adi,vrange-low-enable:
+> +    description:
+> +      This property is a bool parameter to represent the
+> +      voltage range is 25.6 volts or 102.4 volts for this chip.
+> +      The default is 102.4 volts.
+> +    type: boolean
+> +
+> +  shunt-resistor-micro-ohms:
+> +    description:
+> +      Resistor value micro-ohms.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - shunt-resistor-micro-ohms
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells =3D <1>;
+> +        #size-cells =3D <0>;
+> +
+> +        power-monitor@40 {
+> +            compatible =3D "lltc,ltc4286";
+> +            reg =3D <0x40>;
+> +            adi,vrange-low-enable;
+> +            shunt-resistor-micro-ohms =3D <300>;
+> +        };
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 0b275b8d6bd2..5d439cd64ecb 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -12609,6 +12609,16 @@ S:	Maintained
+>  F:	Documentation/hwmon/ltc4261.rst
+>  F:	drivers/hwmon/ltc4261.c
+> =20
+> +LTC4286 HARDWARE MONITOR DRIVER
+> +M:	Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+> +L:	linux-i2c@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml
+> +F:	Documentation/devicetree/bindings/hwmon/ltc4286.rst
+> +F:	drivers/hwmon/pmbus/Kconfig
+> +F:	drivers/hwmon/pmbus/Makefile
+> +F:	drivers/hwmon/pmbus/ltc4286.c
+> +
+>  LTC4306 I2C MULTIPLEXER DRIVER
+>  M:	Michael Hennerich <michael.hennerich@analog.com>
+>  L:	linux-i2c@vger.kernel.org
+> --=20
+> 2.25.1
+>=20
+>=20
+
+--r1FpUNa/o+EDNg70
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZU0SXAAKCRB4tDGHoIJi
+0o3RAP9LvMj3vo2ZN2flNsUviDAWifQqZBjc1Lz6mrq8eBIYLwD+LT7EN17e+maE
+VSFhoe0qSkogRKsDDObn6ROyOwNV7w4=
+=HQG0
+-----END PGP SIGNATURE-----
+
+--r1FpUNa/o+EDNg70--
