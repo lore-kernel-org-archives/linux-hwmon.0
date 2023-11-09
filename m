@@ -2,58 +2,58 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 347FEC4332F
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Nov 2023 08:40:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BDA78C4332F
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Nov 2023 08:41:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233286AbjKIIkf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 9 Nov 2023 03:40:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38640 "EHLO
+        id S233577AbjKIIlk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 9 Nov 2023 03:41:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233110AbjKIIke (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Nov 2023 03:40:34 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC2AD5A
-        for <linux-hwmon@vger.kernel.org>; Thu,  9 Nov 2023 00:40:32 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-53de8fc1ad8so861482a12.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 09 Nov 2023 00:40:32 -0800 (PST)
+        with ESMTP id S233519AbjKIIli (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Nov 2023 03:41:38 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75291FFB
+        for <linux-hwmon@vger.kernel.org>; Thu,  9 Nov 2023 00:41:36 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-9d2e7726d5bso93752166b.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 09 Nov 2023 00:41:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699519231; x=1700124031; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1699519295; x=1700124095; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ap+aKL5g53m3TLoyw+LcX3FR8eWuItSX+wa0xplAHUY=;
-        b=tk58RRY0PbmldA75RL7euE4PU4VF73FuDWp8JwwF6XTay1iBTpSWLrsn2uHwm+iv94
-         Ovzas0fRa6y8PJWrT2zN9oJJZXUuo2bZ4paAsdzJcvotEmT5GcpepJ5VRbYUXxLj5vJ1
-         6ZqYwU62+nfc+YlZA2PtCM7lZA8vtJlVLhBr9RZeOkPlBIk9W86z4XeIpwX0t98Sa6/L
-         9GYQZ1IYMvn0lTO61lAfLFwsovvAAHoYybxfSN+6UZrwO7V3ecwblqzfw5+/MNbmbi9R
-         z+vNaPgm8slwpjZQg+aswAA/77CH5bTeJywAg0/EX/QH4WTdcBV0QrqYRnJpL2dQmHPQ
-         qhYA==
+        bh=cwAgYaVEe5rHd83b9y5VOGV1/NC7G+jo4TvPOlhWbiU=;
+        b=umn12c4weItL4mOxzZdpP3KuvrY1UXGOcjlm1d7Ez3GGEIA54IwugAYCNi6+kfZjkt
+         3Lpqv3ELz0d12NXLXliQJsw+Ol3mMCulEr2m15yuHTrO/X+pagLf8SDtGN9lj5vxNVJw
+         fOpDQ1KQNkzr0RlkUtVp7GD+N2WSwZeOOqtKSUTXgRDG8QmX9x0vB8MmsqUv+rvC+1Od
+         EK025NB/2iwiw4TFkFPIoD7AlwzIKyofLrEqeZejVQV7sm2F2wm+0vnP2tbIWW3+HNfs
+         0vR0/JowFXZpXQLddmo1jct7734gGYK/+IBK7OASxJaSVdVNwODUHuVYxxI0s+F1isVB
+         +aVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699519231; x=1700124031;
+        d=1e100.net; s=20230601; t=1699519295; x=1700124095;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ap+aKL5g53m3TLoyw+LcX3FR8eWuItSX+wa0xplAHUY=;
-        b=Kcj+His+8gcspv5XS7VrAoWjifVIqOgmQS89+PSUOmSpfkyxK5Fp7q/mTAiVRZsQlN
-         0PqsKCXcr1CuTzVgYPC1U46ML5Q7hDbbUFui4BztNNmL7yVXY/5XpgrTv2zo4opnCVu4
-         yB5Ukp7ymthFH6p/iOEibrATwjmMcll7Iach0Q9jkvkKHGCzzg5eTiCOIpaHlI/GGj1v
-         D5sqt5MqEyeWeyYWACW8d6Im1jCMbVNJ5wK6+G2icipF0sjOtJU8zsqlaEXvixuC1q1d
-         hmyn5tTAx9osDTFeIxEbuhnkS2wjf3c9JBMGcF/AccRoL6s7fGNoH8A54bqCf4KxybEP
-         aN4g==
-X-Gm-Message-State: AOJu0Yxyf6IuDvv+iY+x8x9b7Pd73RzMM77aAvKpV2h6Cz9icBX81zVa
-        jQUysSmVuFI+fwsQ0PXMFd/zog==
-X-Google-Smtp-Source: AGHT+IGNnImLMqbxq+paW4gNCQufTdedF88DlLHT7K2sxaf+X2b4APdnLfKtQKIrLovveuIc+vKItw==
-X-Received: by 2002:a17:907:3ea4:b0:9bd:dfaa:3f2 with SMTP id hs36-20020a1709073ea400b009bddfaa03f2mr3659648ejc.6.1699519230941;
-        Thu, 09 Nov 2023 00:40:30 -0800 (PST)
+        bh=cwAgYaVEe5rHd83b9y5VOGV1/NC7G+jo4TvPOlhWbiU=;
+        b=i9FT+KAcb2FyJFOCw7YbhkdeaQWgY5BX0LxywqIKmQPj7Y59U1VB6DAR7YmA2sFatr
+         QlWnZP3aaUbgbpEbHeVzPcDS/LxEP6qLV4k8ozpyjIaZc53/IbS2tp/GBl4WnPeim3Bu
+         smSQrjYKDSLb7S0yy7ymXg1NXpA8oxdwgwi2ftIl0Kajdw2mAYhG9+gIUt6kDhiQznok
+         BN0KRCohzuGsO+CT4ajiFC7QZ+Yc1y8Rw0p01RDd6h1uh3l+jzewMPal8QGVZOy+1Mq1
+         92V+stU4a31l2bIxSALRu9bXC7Kp+/ZxbcHYRM2AGL9GgqKsnZGLbCvqazHHvd9NNfpq
+         8N/Q==
+X-Gm-Message-State: AOJu0Yzol4wkgmb8c7iLJqhMF5dUXuhLDCghKZa2uu9vBFQ084GCANYV
+        UytdxcarWZQkaOHLgkKT6NBzKg==
+X-Google-Smtp-Source: AGHT+IFXU8GQ5VEsItHECzXzH7ol2ejhYskhHLowHi54WKakE2jStjce800JYgN47f3BPlQ91jdHsQ==
+X-Received: by 2002:a17:907:2ce2:b0:9e2:d087:86de with SMTP id hz2-20020a1709072ce200b009e2d08786demr3276355ejc.42.1699519295142;
+        Thu, 09 Nov 2023 00:41:35 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.218.126])
-        by smtp.gmail.com with ESMTPSA id r5-20020a170906c28500b009929ab17be0sm2203166ejz.162.2023.11.09.00.40.29
+        by smtp.gmail.com with ESMTPSA id r5-20020a170906c28500b009929ab17be0sm2203166ejz.162.2023.11.09.00.41.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Nov 2023 00:40:30 -0800 (PST)
-Message-ID: <a5b63eb4-4168-425e-a235-15cc7a6f2df3@linaro.org>
-Date:   Thu, 9 Nov 2023 09:40:28 +0100
+        Thu, 09 Nov 2023 00:41:34 -0800 (PST)
+Message-ID: <4b1d6fe8-529b-4cf4-ba0a-697c7aeac174@linaro.org>
+Date:   Thu, 9 Nov 2023 09:41:33 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4] hwmon: Add support for Amphenol ChipCap 2
+Subject: Re: [PATCH 4/4] dt-bindings: hwmon: Add Amphenol ChipCap 2
 Content-Language: en-US
 To:     Javier Carrasco <javier.carrasco.cruz@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -68,9 +68,9 @@ Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         linux-doc@vger.kernel.org
 References: <20231020-topic-chipcap2-v1-0-087e21d4b1ed@gmail.com>
- <20231020-topic-chipcap2-v1-3-087e21d4b1ed@gmail.com>
- <e58cdedb-1825-4713-9d3f-5239bb182230@linaro.org>
- <285ec1d8-d277-403c-961f-3de523fc799f@gmail.com>
+ <20231020-topic-chipcap2-v1-4-087e21d4b1ed@gmail.com>
+ <5a35f02d-31d0-4cef-9b46-f231d0611c7a@linaro.org>
+ <269222d8-b72f-4c7a-a19e-a82964e29ec8@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -116,47 +116,36 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <285ec1d8-d277-403c-961f-3de523fc799f@gmail.com>
+In-Reply-To: <269222d8-b72f-4c7a-a19e-a82964e29ec8@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 08/11/2023 17:35, Javier Carrasco wrote:
+On 08/11/2023 13:44, Javier Carrasco wrote:
+
+>>> +properties:
+>>> +  compatible:
+>>> +    enum:
+>>> +      - amphenol,cc2dxx
+>>> +      - amphenol,cc2dxxs
+>>
+>> What does xx stand for? Wildcard? I do not see cc2dxx in part numbers.
+>> We expect specific compatibles, not generic. What are the differences
+>> between all parts?
+>>
+> There are two device families: cc2dxx and cc2dxxs, where xx indicates
+> the voltage and the accuracy. That does not change how the devices works
+> and it is not relevant for the driver. The 's' indicates that it is a
+> sleep device, and that modifies how it works.
+> I listed the supported part numbers in the hwmon documentation, where
+> they are also divided into these two families.
+
+If the number of devices is relatively small, list them all. Otherwise
+choose one device model and use it. No family models. No wildcards.
+
 >>> +
->>> +	data->regulator = devm_regulator_get_optional(dev, "vdd");
->>> +	if (!IS_ERR(data->regulator)) {
->>> +		ret = cc2_retrive_alarm_config(data);
->>> +		if (ret)
->>> +			goto cleanup;
->>> +	} else {
->>> +		/* No access to EEPROM without regulator: no alarm control */
->>
->> Test your code with deferred probe. Are you sure you handle it
->> correctly? To me, it looks like you handle deferred probe the same as
->> any error.
->>
-> The -EPROBE_DEFER is propagated to the probe function and it is the
-> returned value. I clarified the error path in v2 so no error messages
-
-Really?
-
-I see:
-if (!IS_ERR(data->regulator)) {
-	// so you do not go here
-} else {
-	goto dev_register;
-}
-dev_register is not error path. So how do you return EPROBE_DEFER?
-
-Which line of code does it?
-
-> are displayed in that case, going directly to the dev_err_probe in the
-> probe cleanup.
-> When the EPROBE_DEFER error is returned, the probe function is deferred
-> and called again later on, which is the desired behavior.
-> 
 
 
 Best regards,
