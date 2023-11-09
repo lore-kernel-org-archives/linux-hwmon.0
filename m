@@ -2,121 +2,149 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BC69C4332F
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Nov 2023 05:14:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3AFFBC4332F
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Nov 2023 05:28:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbjKIFO4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 9 Nov 2023 00:14:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35368 "EHLO
+        id S230444AbjKIF2q (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 9 Nov 2023 00:28:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjKIFO4 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Nov 2023 00:14:56 -0500
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2061.outbound.protection.outlook.com [40.107.95.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADFD62683;
-        Wed,  8 Nov 2023 21:14:53 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PGUPe81qbMInYCDkKfGcg6WMLCOfo/G34xRmDonRIiXxGEy0GzyMfo8I0leFiFYnJ9oLyZeKIzOqCjY/G+9XLZF8sYfHTC/FGsGJYj6pFxtpWqEVCs/X/lebwWTrh5n9pWxi276rvUTVqs9YqUWZ7rn/CU8iAzeUv2k6n+bHigMmGss8l9v3A5/x9BV18Obt6e2WrysRm0omQTzfiUcKRb3q7KG6L1OyQoF/1BBf59aBZ7yGfewqYyai46W6E5dQFjzD15rHqhGIzpIXmgewHGBdbJt/LuNgtvfl8H6wYIExIOLXzP6l0R2521iumXXhnr/cnYnH+EZqJZ72cHciEQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Nj2tWhABRbAFCcr1uzEsJpvMr/2MFhINkOqvTWnMVYY=;
- b=Q9vyBDcWtHdYEhv0gCNbX0f1vCyfiQNM0JCcVxAetRQYmhzfoKzDOMCdhM+VkaH8nyPu4z0iongddx9gHNqajPDXfM28UFhxS7XKhqhf25ttcHxjzJK1jJu3exNOyYPqIutNkQc5t7PqqQmV14vw0G2kxV06sO2F6piYzQ0fwKHoI6DSXCca1QkJgPHXDCVSqSM7q6UaZc6LNxBCYQ2HFgHHFCj+bZK/s32cji6JKaOrsU7Pyq0IfueScnNxwN3DmJKz73JwWgW9RZzXH0xnvPctmCvZw8rYGr766x72nh9Ce5zOl224Dt7GZEvDFVZJ8IEBSu9/KAHv6nleNltKOA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=suse.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Nj2tWhABRbAFCcr1uzEsJpvMr/2MFhINkOqvTWnMVYY=;
- b=Xe8SwpM64CZTDq2aV9acpWV8cxJA++TAr/xQkqdiU/R4sKXf3jY1G9o6tun10E9Zj3HoKIAM2x3RSkB2MRWs35BNs+36myMQioHJ2RVhi72ovFO3ItX3BVCLvJfIufsV+TzXipme8RLqELpLYUImYmBEkPVU4yPuTSFQ0zQ1utQ=
-Received: from CH2PR16CA0018.namprd16.prod.outlook.com (2603:10b6:610:50::28)
- by CH0PR12MB5386.namprd12.prod.outlook.com (2603:10b6:610:d5::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.28; Thu, 9 Nov
- 2023 05:14:50 +0000
-Received: from DS2PEPF0000343B.namprd02.prod.outlook.com
- (2603:10b6:610:50:cafe::5e) by CH2PR16CA0018.outlook.office365.com
- (2603:10b6:610:50::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6977.19 via Frontend
- Transport; Thu, 9 Nov 2023 05:14:50 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DS2PEPF0000343B.mail.protection.outlook.com (10.167.18.38) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6977.16 via Frontend Transport; Thu, 9 Nov 2023 05:14:50 +0000
-Received: from compile-server.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.32; Wed, 8 Nov
- 2023 23:14:48 -0600
-From:   Ma Jun <Jun.Ma2@amd.com>
-To:     <jdelvare@suse.com>, <linux@roeck-us.net>,
-        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Ma Jun <Jun.Ma2@amd.com>
-Subject: [PATCH] hwmon: Add a new macro sensor_sysfs_attr
-Date:   Thu, 9 Nov 2023 13:14:29 +0800
-Message-ID: <20231109051429.2250774-1-Jun.Ma2@amd.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229457AbjKIF2p (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Nov 2023 00:28:45 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C96C126A4;
+        Wed,  8 Nov 2023 21:28:42 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-2809a824bbbso382699a91.3;
+        Wed, 08 Nov 2023 21:28:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1699507722; x=1700112522; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=I0FoB1MaP553UDPCYqFN96OUEdvh9cUVbyhLaWy6KOA=;
+        b=jlRQzpC6j2I6/E9IQl/LHZmVC4ysVxensZMkpAeEY1Ag3cMnpFxBobD1GPEORCWV2P
+         kuXWJTJ5IbK+S+uDENMQ7UhwabTFcy8LuvflMheo3BDA4acW8OY3zoiEXuNR04B8zK1F
+         /COcz+AoYIJGO+bG3RiucAcd/h9o8IHbWWdrSwINSUkvzDnPgDa6zMk602ksCJ8MGZB0
+         Va8W8hXYVkjlkYCKqhPGZDPmX0cHQG+LkvGsW+y7HF6HKRWvyXbd/26ohgs7OF/v1KXP
+         yjZBFLIkiihZkEDjnxGcwDxpKANmU5IFBRllYnVBz+9n5HZFWPVH+zzSWDNYLDkTtz0B
+         2QVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699507722; x=1700112522;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=I0FoB1MaP553UDPCYqFN96OUEdvh9cUVbyhLaWy6KOA=;
+        b=CiT7WPUDFzThtOc52GyKU6OUc6670t2m4aWt9a7iI4dlr0OKnHN6CdrBmFxTClp21K
+         dDeyhBYlDgQjhYnRO2WpA+4UX94ZIWaxWGNXXbCD4Qy3uM11xOQtCjoquh3KzEtlMB6L
+         0HuFWfAwJMGKZUPCh4pWhGMGyXamL60DaO9zaDYGGO4sYKguuBCW8qIbi5ytrMZ+QW65
+         bHUtAeWZAtHFicN9j6FFpGaQzJvzFmXDL5dvbJiRUnh4N4nileNLlgov1b4MwtKUKiLz
+         uK4rEWCnBeilyUD3VDyQRrcNEG+aPsEwdEIhee1UILUCX9I/OyGCXBts3IUpJP4Wc8Cv
+         XYog==
+X-Gm-Message-State: AOJu0YxODvRVTZ8QJGRVpCr0UFu1Qb3N3RqrBwsgaJDPq/mqwSylJhAy
+        hKHISEvwH6Th9iG4k8x2acU39ybggzI=
+X-Google-Smtp-Source: AGHT+IGHqkOM1vdaS2LSFOD2DH1AIRHT2NP3YpnE6fTOkIS4ksVqi6jR+f/mzNXjyiU7/wtawxj9JQ==
+X-Received: by 2002:a17:90a:4e:b0:280:2438:120 with SMTP id 14-20020a17090a004e00b0028024380120mr689874pjb.45.1699507722072;
+        Wed, 08 Nov 2023 21:28:42 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 27-20020a17090a031b00b0027cf4c554dasm458796pje.11.2023.11.08.21.28.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Nov 2023 21:28:41 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <0ae6bcc2-a30d-4840-a21a-0de0b394c309@roeck-us.net>
+Date:   Wed, 8 Nov 2023 21:28:39 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS2PEPF0000343B:EE_|CH0PR12MB5386:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5b3467de-73c2-4830-29e2-08dbe0e2ccb5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jvSm3NkDtYbIuUJ1v7ZlDcELvn3004FnBYIojAwQ6aTrp5sxy5JI7X7ufHpUskqdW6ZF4PrthTijOUiRLVzzk0+GJWD8+KlbKRh5N2oh+TWZ4vwymopM+LGNJVvkuHSOz0wq5WiUYic35VF2Dx4pSTePtVU12f5NYAB9W7i6v/bX8d44uEdpNWDtmaLHSGOhHo2B2UZnLenaKb6PEhORZyDSqeegBkkQdHqX6CaWaHm161r/Bdmu6eMraV+29rxaplFHtE0ZaPaNjvfxp3negCOhk6rqy8kRnqJ3XdJm2XdlL9sH0n07iFXq5NQ8KmGLf48zZuqu0Am5eh+fTT4cw5LyevqQpYJl9GrKTwbzhPt7TviAfF404lWK82SQ7hcxi/hamup8/KRYgrb74cBxEdyDnuP/uwOVgxZK364NCjBwb/634vP3jl6qAT1Dw/ZmN1j9L4KauU42sgKYoXTQHuONCYl9QmVvz83km12p8X8ool7loDF1H7TFivh4iDdMSxzrgxP52Vm7+Rx+7LCI046KyegZ65mhB/ccTmz+SA8Pg1qsMPhz7n0BifcYnEVAV17XrzvZYlCquE/ND4eUagvg0j+3eVFAc8RHVK1G1skucWgtJOHCC3KvJZco0CvjVmZrqYemtPoEAX+BT9uZylvJDtAwC4rtYBoHv8wFGI1z0VsvUAUcRD0zthT4LNQTQ3i1mbG0UuKTZl5fO5EU7UQTJ1e4RtmYutAMFRYjF7D3plw2dYuwKPJpxh6FM1MH+ILyFhM2UD+xcQ6MNHcq1ZJjQpx7W6dh3XDyXfeIxy4=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(376002)(136003)(396003)(346002)(39860400002)(230922051799003)(82310400011)(1800799009)(451199024)(186009)(64100799003)(46966006)(40470700004)(36840700001)(5660300002)(4744005)(2906002)(86362001)(70206006)(8676002)(316002)(8936002)(70586007)(110136005)(4326008)(40460700003)(36756003)(41300700001)(1076003)(82740400003)(26005)(16526019)(2616005)(81166007)(336012)(426003)(7696005)(6666004)(47076005)(356005)(36860700001)(40480700001)(478600001)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Nov 2023 05:14:50.3931
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5b3467de-73c2-4830-29e2-08dbe0e2ccb5
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DS2PEPF0000343B.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5386
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] hwmon: Add a new macro sensor_sysfs_attr
+Content-Language: en-US
+To:     Ma Jun <Jun.Ma2@amd.com>, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20231109051429.2250774-1-Jun.Ma2@amd.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20231109051429.2250774-1-Jun.Ma2@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The attribute definiations like &sensor_dev_attr_xx_xx.dev_attr.attr
-are widely used in drivers. So add a new macro sensor_sysfs_attr t
-to make it easier to understand and use.
+On 11/8/23 21:14, Ma Jun wrote:
+> The attribute definiations like &sensor_dev_attr_xx_xx.dev_attr.attr
+> are widely used in drivers. So add a new macro sensor_sysfs_attr t
+> to make it easier to understand and use.
+> 
+> For example, user can use the sensor_sysfs_attr(xx_xx) instead of
+> &sensor_dev_attr_xx_xx.dev_attr.attr
+> 
+> Signed-off-by: Ma Jun <Jun.Ma2@amd.com>
+> ---
+>   include/linux/hwmon-sysfs.h | 4 ++++
+>   1 file changed, 4 insertions(+)
+> 
+> diff --git a/include/linux/hwmon-sysfs.h b/include/linux/hwmon-sysfs.h
+> index d896713359cd..7feae637e3b5 100644
+> --- a/include/linux/hwmon-sysfs.h
+> +++ b/include/linux/hwmon-sysfs.h
+> @@ -14,6 +14,10 @@ struct sensor_device_attribute{
+>   	struct device_attribute dev_attr;
+>   	int index;
+>   };
+> +
+> +#define to_sensor_sysfs_attr(_name) \
+> +	(&sensor_dev_attr_##_name.dev_attr.attr)
+> +
+>   #define to_sensor_dev_attr(_dev_attr) \
+>   	container_of(_dev_attr, struct sensor_device_attribute, dev_attr)
+>   
 
-For example, user can use the sensor_sysfs_attr(xx_xx) instead of
-&sensor_dev_attr_xx_xx.dev_attr.attr
+No. This would just invite people to submit patches converting existing code
+to use this new macro. Instead of providing macros to support deprecated APIs,
+convert drivers to use an API which is not deprecated. This would for the
+most part avoid the need for including hwmon-sysfs.h in the first place and
+at the same time reduce driver code size significantly.
 
-Signed-off-by: Ma Jun <Jun.Ma2@amd.com>
----
- include/linux/hwmon-sysfs.h | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/include/linux/hwmon-sysfs.h b/include/linux/hwmon-sysfs.h
-index d896713359cd..7feae637e3b5 100644
---- a/include/linux/hwmon-sysfs.h
-+++ b/include/linux/hwmon-sysfs.h
-@@ -14,6 +14,10 @@ struct sensor_device_attribute{
- 	struct device_attribute dev_attr;
- 	int index;
- };
-+
-+#define to_sensor_sysfs_attr(_name) \
-+	(&sensor_dev_attr_##_name.dev_attr.attr)
-+
- #define to_sensor_dev_attr(_dev_attr) \
- 	container_of(_dev_attr, struct sensor_device_attribute, dev_attr)
- 
--- 
-2.34.1
+Guenter
 
