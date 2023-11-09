@@ -2,61 +2,61 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6A84C4332F
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Nov 2023 15:36:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA7BFC4332F
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Nov 2023 16:18:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231624AbjKIPgK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 9 Nov 2023 10:36:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33952 "EHLO
+        id S230225AbjKIQSc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 9 Nov 2023 11:18:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbjKIPgJ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Nov 2023 10:36:09 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 130CD30D3;
-        Thu,  9 Nov 2023 07:36:07 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-9e213f198dfso171574966b.2;
-        Thu, 09 Nov 2023 07:36:07 -0800 (PST)
+        with ESMTP id S230185AbjKIQSb (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Nov 2023 11:18:31 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB098358C
+        for <linux-hwmon@vger.kernel.org>; Thu,  9 Nov 2023 08:18:28 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-507be298d2aso1332524e87.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 09 Nov 2023 08:18:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699544165; x=1700148965; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1699546707; x=1700151507; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=wi1QpsAJgHUTB4YFMyuEyqEplHtXIeaZSET719WZmlw=;
-        b=kzMGmkHRyQcJYdL73ZjHXmkXhDet2Af3hEO0cNiRTIt1GoB/mSVA4Z+afItzjfohCl
-         RmMEVfIqW8rzsVQPgslD26p5uko0v9SouYXKGy+yZI3ZTUt7X7xqKaGIGR0mvlNFYueA
-         cHlFGHSohHwBEyiqDDNd/sBn3RfjCjH4Mu8H/MEdml/HYzutXkfMmFBqHoSa1ZWLSPUa
-         U7hBq3Cpp9RybHPGjuunI+fsiXsEn6O+x9itbYP4jCxJR5wuvattgtM9hsAVG+QPI2jp
-         WuNoB9zmmBQm0E9dbDwJbbK40JMTadSCtZd+s5JIXd8qan26YTmyIpk91RhMkdZE85oF
-         Sadg==
+        bh=oemg/XuC5ShAmdM2pBXqSj3mgBLJ/7eTLgLFmATn+qY=;
+        b=wNHjboC/vN1Lk/7SIJN+6S0a3OFzpkNiR2Sbm41FumPg7FY1EM9IxZp45ZHUaCut/2
+         n/a5Zt0R1AAVDpqcL59OIZUe+R87vA5mMtAq9Z1aruAeq5xRAsMcYy8azhxK7KIKq95m
+         4N9ZUvsOS4NEymejZcTWuSb4DTrUjYVpcsn0lKvJM/bss+u91UTifgPkidKrdAanfdj1
+         73EAIGP8Ro22EgIgV8Lb+fU3F1a/3KYeYZVHWTXbK6kvYZ0UFfjjygfXfMIeKfDUKeUo
+         GNbfZjjjhMBt40cvbcRHGDYkq5j/HX2T6xaesvUI8prjIS7UKAlb5O+bVskLhx2hUWDD
+         x9Fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699544165; x=1700148965;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1699546707; x=1700151507;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wi1QpsAJgHUTB4YFMyuEyqEplHtXIeaZSET719WZmlw=;
-        b=gUINNlZgAHRn4Seak8vbNMyavZdhsjLeZ/pzwOwUV41O/2YcJHgFZQqDhiR5D6cHxb
-         hMo3Pj52qWB8jxJdCPqRzrsHxfM6pM+N4RhvdgAHy8xLD4jKWY1/pcMebbRB32SGDYqA
-         0iNP/Vvyu8GkV1l0XMRKP3fTk7JTcINATAFfmTpJIG9+7SV9W6TnVK8UXpOwCu3iHXAW
-         eO0B/5nFMNOc4UjSuy7s9198BsGHuAIlmo5iRpxOlUECWtvXhVW24FHFl+1XaFE1tdX8
-         gsumxaHKlICi+EFcGXl4bOtBE2A3jnWfTHXWeEXUAPyFGtG2iFASekBkPcoaU7d4GfRm
-         nmhw==
-X-Gm-Message-State: AOJu0YzzuFncSASzbD+y3TF4EK0ntM2/YkQ5w05Ly84NWpkPpneeb7Z0
-        CQAsScijOmyPPO4ZrcM0YAo=
-X-Google-Smtp-Source: AGHT+IFbOVY6fsmj2hkbcNOUMKkyN6BOqaHSSpWwITRx/8cZ3c6X7LtCsDYKBVixxOl9OZltWZkK1A==
-X-Received: by 2002:a17:906:4796:b0:9bf:10f3:e435 with SMTP id cw22-20020a170906479600b009bf10f3e435mr5055466ejc.1.1699544165234;
-        Thu, 09 Nov 2023 07:36:05 -0800 (PST)
-Received: from [192.168.100.74] (91-118-163-37.static.upcbusiness.at. [91.118.163.37])
-        by smtp.gmail.com with ESMTPSA id x13-20020a1709065acd00b00992b8d56f3asm2669896ejs.105.2023.11.09.07.36.04
+        bh=oemg/XuC5ShAmdM2pBXqSj3mgBLJ/7eTLgLFmATn+qY=;
+        b=bDdjIAgKGhFD0FZYYjBYoZnidli277nqPLEjNwYPJneyWFYOS+9kXs8ZQm2F81Zyh3
+         Pvq4nSSo2EFL/DDuh8j5P/3MhuaYmWeeLJmGeeWFy0F4o9ioDNQKsxOAZi896dA+A3zz
+         35eGoH2JEmBmLWZyCKSQJ692Pt7CevkCri7S1sOJME0Q+17lgQ1bL1J5lD9pF0s/G/zz
+         Pd9zR6/3NIIXETLBSKX9rxfPZ8AgIOVB+nJd+yPputdBs/DVcA+JTrBILGzCoT1TfikH
+         vZbTcUKjdt2mHiTaY1fyvpuqTVjuJqyf/Mu1EemhcJt2NCwv08zviONW54f1cm3Hs7+K
+         2z4g==
+X-Gm-Message-State: AOJu0YwhjCHBRtEcuni1wjUDY96yhI7bYwAjWp+vSUdHsO2yb2pHkCYM
+        zzMpc6Q+sYiSjcpfRggcvdA6FA==
+X-Google-Smtp-Source: AGHT+IEuxRek3oq49L9luwn9G58dmX/rvNzgu6excSWHSKuvyj5kAvMPai/Nz6EfosKiOOceVRQEAA==
+X-Received: by 2002:a05:6512:3141:b0:500:9a45:63b with SMTP id s1-20020a056512314100b005009a45063bmr1663721lfi.13.1699546706923;
+        Thu, 09 Nov 2023 08:18:26 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.218.126])
+        by smtp.gmail.com with ESMTPSA id x21-20020a1c7c15000000b0040a3f9862e3sm622112wmc.1.2023.11.09.08.18.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Nov 2023 07:36:04 -0800 (PST)
-Message-ID: <a04cc8d1-5239-486a-8c1d-e9bd8bd7868d@gmail.com>
-Date:   Thu, 9 Nov 2023 16:36:03 +0100
+        Thu, 09 Nov 2023 08:18:26 -0800 (PST)
+Message-ID: <daae2f05-66ea-4f21-a47d-6e384bd35dee@linaro.org>
+Date:   Thu, 9 Nov 2023 17:18:24 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2 3/4] hwmon: Add support for Amphenol ChipCap 2
 Content-Language: en-US
 To:     Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Javier Carrasco <javier.carrasco.cruz@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
@@ -71,133 +71,84 @@ References: <20231020-topic-chipcap2-v2-0-f5c325966fdb@gmail.com>
  <20231020-topic-chipcap2-v2-3-f5c325966fdb@gmail.com>
  <30ccb0a9-c0bd-491e-817f-def0aeda11c6@linaro.org>
  <d5692ab7-6d11-41f3-89ec-246a2fc045a8@roeck-us.net>
-From:   Javier Carrasco <javier.carrasco.cruz@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
 In-Reply-To: <d5692ab7-6d11-41f3-89ec-246a2fc045a8@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 09.11.23 15:55, Guenter Roeck wrote:
-> On 11/9/23 00:52, Krzysztof Kozlowski wrote:
->> On 08/11/2023 16:37, Javier Carrasco wrote:
->>> The Amphenol ChipCap 2 is a capacitive polymer humidity and temperature
->>> sensor with an integrated EEPROM and minimum/maximum humidity alarms.
->>>
->>> All device variants offer an I2C interface and depending on the part
->>> number, two different output modes:
->>> - CC2D: digital output
->>> - CC2A: analog (PDM) output
->>>
->>> This driver adds support for the digital variant (CC2D part numbers),
->>> which is also divided into two subfamilies [1]:
->>> - CC2DXX: non-sleep measurement mode
->>> - CC2DXXS: sleep measurement mode
->>
->> ...
->>
+On 09/11/2023 15:55, Guenter Roeck wrote:
+>>> +	if (IS_ERR(data->hwmon)) {
+>>> +		ret = PTR_ERR(data->hwmon);
+>>> +		goto cleanup;
+>>> +	}
 >>> +
->>> +static int cc2_probe(struct i2c_client *client)
->>> +{
->>> +    struct cc2_data *data;
->>> +    struct device *dev = &client->dev;
->>> +    enum cc2_ids chip;
->>> +    int ret;
->>> +
->>> +    if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
->>> +        return -EOPNOTSUPP;
->>> +
->>> +    data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
->>> +    if (!data)
->>> +        return -ENOMEM;
->>> +
->>> +    i2c_set_clientdata(client, data);
->>> +
->>> +    mutex_init(&data->i2c_lock);
->>> +    mutex_init(&data->alarm_lock);
->>> +
->>> +    data->client = client;
->>> +
->>> +    if (client->dev.of_node)
->>> +        chip = (uintptr_t)of_device_get_match_data(&client->dev);
->>> +    else
->>> +        chip = i2c_match_id(cc2_id, client)->driver_data;
->>> +
->>> +    data->config = &cc2_config[chip];
->>> +
->>> +    ret = cc2_request_ready_irq(data, dev);
->>> +    if (ret)
->>> +        return ret;
->>> +
->>> +    data->regulator = devm_regulator_get_optional(dev, "vdd");
->>> +    if (!IS_ERR(data->regulator)) {
->>> +        ret = cc2_retrive_alarm_config(data);
-> 
-> fwiw, s/retrive/retrieve/g
-ack.
-> 
->>> +        if (ret)
->>> +            goto cleanup;
->>> +    } else {
->>> +        /* No access to EEPROM without regulator: no alarm control */
->>> +        goto dev_register;
->>
->> Nothing improved here.
->>
->> Do not send new version of patchset before discussion finishes.
->>
-> 
-> This driver will take a while to review due to its complexity.
-That is absolutely ok. I will wait for a few days to gather more
-feedback and hopefully send less versions.
-> 
-> As for the code above: Error handling goes first. Something like
-> the above, where the error case is just a goto, is unacceptable and
-> just increases indentation level for the other code and makes it
-> more difficult to read. Also, the above code _will_ have to handle
-> error cases other than -ENODEV. Besides deferred probe, it is
-> completely inappropriate to ignore -EINVAL or -ENOMEM or any other
-> error codes other than -ENODEV.
-> 
-The probe function will return from errors other than -ENODEV directly
-with no goto and checking them first.
-I just need to skip the alarm registration for -ENODEV and do the
-cleanup if an error occurs after enabling the regulator to keep
-enable/disable parity.
->>> +    }
->>> +
->>> +    ret = cc2_request_alarm_irqs(data, dev);
->>> +    if (ret)
->>> +        goto cleanup;
->>> +
->>> +dev_register:
->>> +    data->hwmon = devm_hwmon_device_register_with_info(dev,
->>> client->name,
->>> +                               data, &cc2_chip_info,
->>> +                               NULL);
->>> +    if (IS_ERR(data->hwmon)) {
->>> +        ret = PTR_ERR(data->hwmon);
->>> +        goto cleanup;
->>> +    }
->>> +
->>> +    return 0;
+>>> +	return 0;
 >>> +
 >>> +cleanup:
->>> +    if (cc2_disable(data))
->>> +        dev_dbg(dev, "Failed to disable device");
+>>> +	if (cc2_disable(data))
+>>> +		dev_dbg(dev, "Failed to disable device");
 >>> +
->>> +    return dev_err_probe(dev, ret,
->>> +                 "Unable to register hwmon device\n");
+>>> +	return dev_err_probe(dev, ret,
+>>> +			     "Unable to register hwmon device\n");
 >>
 >> Drop or move to each error path.
 >>
 > This actually follows Documentation/process/coding-style.rst, chapter 7
 > (Centralized exiting of functions).
-> 
-> Guenter
-> 
-Thanks for your comments.
+
+The point is that centralized message of error is useless. Probe failure
+is already handled by core, thus another message doing the same is
+redundant. What is needed to explain the true reason of failure, thus
+the error message should be next to each type of failure. Missing
+regulator? Say it. Missing clock? Say something else.
 
 Best regards,
-Javier Carrasco
+Krzysztof
+
