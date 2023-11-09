@@ -2,76 +2,75 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9ABFDC4167D
-	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Nov 2023 18:38:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC257C4332F
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Nov 2023 00:02:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229583AbjKHSie (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 8 Nov 2023 13:38:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53094 "EHLO
+        id S229554AbjKIACh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 8 Nov 2023 19:02:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjKHSid (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Nov 2023 13:38:33 -0500
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE282105;
-        Wed,  8 Nov 2023 10:38:31 -0800 (PST)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-5a7b91faf40so185527b3.1;
-        Wed, 08 Nov 2023 10:38:31 -0800 (PST)
+        with ESMTP id S229473AbjKIACg (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Nov 2023 19:02:36 -0500
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9DA2685;
+        Wed,  8 Nov 2023 16:02:34 -0800 (PST)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-5b383b4184fso3803107b3.1;
+        Wed, 08 Nov 2023 16:02:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699468711; x=1700073511; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1699488153; x=1700092953; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=gnRY8hgDaxFo76ZgJWjN69ov12zpJHTXkWZBmrfUhmM=;
-        b=CQ3pGXf8uFHpi780DRUOkvxfTuMl4TRfdA3mJFutpf2t8zLFhKYvva6pOnjJ7K2Si9
-         wFmTCgj4/C7Nqd36oSOZ/EBs62bYSVFUtPegzRC/D1KHO+FgTtcVCcv4IZskAPHQuxl+
-         IE8+WYQiWAG6QDZZxc8b++FZ68OXiiLsodLt+M7zO4HJA/6C30mE8cDUFHsPwe3wdE36
-         irk4wJZNJmPYgo5xVLxQZG3LpVEY31xeqbvnGw3sassV9NpBHKQa9kMurhjw4LHW6/R4
-         kIH2pUrueGwtpAWNqKuvARMfP1UC/GQMxnPJwZipmQoju6UNuKkuXVCfBJCMsgGCzAbZ
-         Hz2g==
+        bh=4S3hUwpEwAhRsIK33hvWrkFRJfd6iKru9dgJJTsDG6o=;
+        b=ItFiPvw8bWfimT2ADSZn+NOtiad8oICm1f4A/0F3U8MdzEwszzkFU2b8Uf+77SrHWs
+         gwrbm/vzLLzXGpm0wSsKWOpy/zi7e1xgnmTtvMkdGBHTTL9AVYN1AXLbr9AFDCpBjEAr
+         gF5K1EXQEYbRpZ5y/hFaLjMVI3XrE2gmznAnwSRkuNZdmEL2g/aUvTUc5sRH4RSYbcgB
+         X3tr65gYJl9LAQjdORPvXnq9pPq1XoG9ZL9IuYZH46d1s14UjK4W1UAbS8VP2gzAH+Mb
+         W9OE5Dl+5ebSyWZoDVV6QlOumWVioU/vO4a0TPABu/ZKqLJuvEqZMZqTbka2xUjDCFZ+
+         QKTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699468711; x=1700073511;
+        d=1e100.net; s=20230601; t=1699488153; x=1700092953;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gnRY8hgDaxFo76ZgJWjN69ov12zpJHTXkWZBmrfUhmM=;
-        b=BSGBPuaGKQ/VlEX8u15RgEqlKWUNiKYoUA72oVn7AwKscLxPQQAESS3djcq8WWCqbd
-         4jvHQKWD9wCDU1dKFA1QAswLGluGEpsUQc+UJtbdvSHAT36HSeUiwWl+bU1TQ5HZUu9f
-         9nwNbFrmZgmusGueliA0mzExiZtiTdpo325+uIBYfXf7dl3MIAyqk6HgOu60Decv0QR8
-         4M07oY9cEbCM0eCS6b0U7woSjoTr8tMW8douALGSq5uaoHQO4MyZUUcDdQwFJqBuJNi8
-         ZYJX8FhTGAqzG5B1O6B/e/exPWLev8xUdXBN9yXpCdwzSBp7aP8JBTGnfoyS8FFRZCo3
-         XUrA==
-X-Gm-Message-State: AOJu0YyK+1BwSd4meZp5gcjfzt1aB/OkeKExS4+M5D4YwODpgQ9P5oyI
-        ZM+yCGIU0Y91cIDqP8a5G/0=
-X-Google-Smtp-Source: AGHT+IF5UCiZdRU27t6uGR6Xd3CxkQN829PGDg05me1nIK2Rmn3euTUJlk/yBnlm83LSrqEfb7D+wA==
-X-Received: by 2002:a0d:f301:0:b0:583:b186:d817 with SMTP id c1-20020a0df301000000b00583b186d817mr2454238ywf.27.1699468710710;
-        Wed, 08 Nov 2023 10:38:30 -0800 (PST)
+        bh=4S3hUwpEwAhRsIK33hvWrkFRJfd6iKru9dgJJTsDG6o=;
+        b=u7FrwltY0KoOq8+hzGhCCnq9waHwRR7VR/GFoLqElDHzQGS2clV/zrEuEIcaEWyaZW
+         5auHGKbjs34GaKZuz4oBN7rXvwlajZgI+uhUN1OuEE7ZcTCP8nQnjktFLAbm1UdiEFoM
+         Q/rXekMnL03OQYZn83GFtOCB7lzEC76tBOn3x1jfDGhIkZgJLM9zkLrCFZ/tnt/GXUCC
+         ug6q/FsuiznzjzO0On0PfYrNtRyqzFey2pRgLPc2kSvJKOKNATfLlsxHfClrsnywkRYj
+         eVUcVxyBdSJFf5PtCMc/GzOj9UYrj5tIq7pjXWOt23CLbK3O9l+sP/SCkjGPtU6cuME/
+         eDrg==
+X-Gm-Message-State: AOJu0YxinkLgJs/FtEYOqz9PjkNuBKuV+lZClK1P1Hqp49XvcJLg0cav
+        MfmYhAWsVm+2v9Oua23jop0=
+X-Google-Smtp-Source: AGHT+IF7M4jKHrAJfyC9vLGEIV3Ibl9BE2YgD0HLpg94t/zgChrpWu+z0Mgw8Ztbp8/W5U9l7G1NZg==
+X-Received: by 2002:a81:9185:0:b0:5a5:65e:b847 with SMTP id i127-20020a819185000000b005a5065eb847mr3307746ywg.34.1699488153531;
+        Wed, 08 Nov 2023 16:02:33 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x184-20020a814ac1000000b0057a8de72338sm7119235ywa.68.2023.11.08.10.38.28
+        by smtp.gmail.com with ESMTPSA id q16-20020a819910000000b005a20ab8a184sm7607523ywg.31.2023.11.08.16.02.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Nov 2023 10:38:30 -0800 (PST)
+        Wed, 08 Nov 2023 16:02:32 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d3204361-2d4c-41f9-8365-5826195aa884@roeck-us.net>
-Date:   Wed, 8 Nov 2023 10:38:27 -0800
+Message-ID: <44f1eaa3-a90d-42cf-9808-4f39aacbf270@roeck-us.net>
+Date:   Wed, 8 Nov 2023 16:02:29 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND v10 1/3] dt-bindings: hwmon: fan: Add fan binding
- to schema
+Subject: Re: [PATCH v2 2/4] hwmon: (core) Add support for humidity min/max
+ alarm
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        Billy Tsai <billy_tsai@aspeedtech.com>
-Cc:     jdelvare@suse.com, krzysztof.kozlowski+dt@linaro.org,
-        joel@jms.id.au, andrew@aj.id.au, corbet@lwn.net,
-        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
-        p.zabel@pengutronix.de, naresh.solanki@9elements.com,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-pwm@vger.kernel.org,
-        BMC-SW@aspeedtech.com, patrick@stwcx.xyz
-References: <20231107105025.1480561-1-billy_tsai@aspeedtech.com>
- <20231107105025.1480561-2-billy_tsai@aspeedtech.com>
- <20231108181654.GA2664986-robh@kernel.org>
+To:     Javier Carrasco <javier.carrasco.cruz@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20231020-topic-chipcap2-v2-0-f5c325966fdb@gmail.com>
+ <20231020-topic-chipcap2-v2-2-f5c325966fdb@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -116,113 +115,78 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20231108181654.GA2664986-robh@kernel.org>
+In-Reply-To: <20231020-topic-chipcap2-v2-2-f5c325966fdb@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 11/8/23 10:16, Rob Herring wrote:
-> On Tue, Nov 07, 2023 at 06:50:23PM +0800, Billy Tsai wrote:
->> From: Naresh Solanki <naresh.solanki@9elements.com>
->>
->> Add common fan properties bindings to a schema.
->>
->> Bindings for fan controllers can reference the common schema for the
->> fan
->>
->> child nodes:
->>
->>    patternProperties:
->>      "^fan@[0-2]":
->>        type: object
->>        $ref: fan-common.yaml#
->>        unevaluatedProperties: false
->>
->> Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
->> Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
->> ---
->>   .../devicetree/bindings/hwmon/fan-common.yaml | 78 +++++++++++++++++++
->>   1 file changed, 78 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/hwmon/fan-common.yaml
+On 11/8/23 07:37, Javier Carrasco wrote:
+> Add min_alarm and max_alarm attributes for humidityX to support devices
+> that can generate these alarms.
+> Such attributes already exist for other magnitudes such as tempX.
 > 
-> Looking pretty good to me. It's disappointing that no one else
-> interested in upstreaming their fan controller can be bothered to
-> comment.
+> Tested with a ChipCap 2 temperature-humidity sensor.
 > 
 
-FWIW, I declined to comment since it basically looks ok to me
-and because at this point I'd rather have something (whatever it is)
-instead of nothing.
+No objection, but the new attributes also need to be added to the ABI
+documentation at
+Documentation/ABI/testing/sysfs-class-hwmon and
+Documentation/hwmon/sysfs-interface.rst
 
->>
->> diff --git a/Documentation/devicetree/bindings/hwmon/fan-common.yaml b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
->> new file mode 100644
->> index 000000000000..be4ce3bd7f22
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
->> @@ -0,0 +1,78 @@
->> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/hwmon/fan-common.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Common Fan Properties
->> +
->> +maintainers:
->> +  - Naresh Solanki <naresh.solanki@9elements.com>
->> +  - Billy Tsai <billy_tsai@aspeedtech.com>
->> +
->> +properties:
->> +  max-rpm:
->> +    description:
->> +      Max RPM supported by fan.
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    maximum: 100000
->> +
->> +  min-rpm:
->> +    description:
->> +      Min RPM supported by fan.
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    maximum: 1000
->> +
->> +  pulses-per-revolution:
->> +    description:
->> +      The number of pulse from fan sensor per revolution.
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    maximum: 4
->> +
->> +  tach-div:
->> +    description:
->> +      Divisor for the tach sampling clock, which determines the sensitivity of the tach pin.
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +
->> +  target-rpm:
->> +    description:
->> +      The default desired fan speed in RPM.
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +
->> +  fan-driving-mode:
->> +    description:
->> +      Select the driving mode of the fan.(DC, PWM and so on)
->> +    $ref: /schemas/types.yaml#/definitions/string
-> 
-> You need to define the possible values. I assume it's:
-> 
-> enum:
->    - dc
->    - pwm
->    - anything else???
-> 
+Which made me notice that humidityX_alarm isn't documented either.
+Please document that attribute as well while you are at it.
 
-I am not aware of any other possible method. dc and pwm is all
-I have ever seen.
-
+Thanks,
 Guenter
 
-> With that,
+> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+> ---
+>   drivers/hwmon/hwmon.c | 2 ++
+>   include/linux/hwmon.h | 4 ++++
+>   2 files changed, 6 insertions(+)
 > 
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+> index c7dd3f5b2bd5..7f92984c37d9 100644
+> --- a/drivers/hwmon/hwmon.c
+> +++ b/drivers/hwmon/hwmon.c
+> @@ -579,8 +579,10 @@ static const char * const hwmon_humidity_attr_templates[] = {
+>   	[hwmon_humidity_input] = "humidity%d_input",
+>   	[hwmon_humidity_label] = "humidity%d_label",
+>   	[hwmon_humidity_min] = "humidity%d_min",
+> +	[hwmon_humidity_min_alarm] = "humidity%d_min_alarm",
+>   	[hwmon_humidity_min_hyst] = "humidity%d_min_hyst",
+>   	[hwmon_humidity_max] = "humidity%d_max",
+> +	[hwmon_humidity_max_alarm] = "humidity%d_max_alarm",
+>   	[hwmon_humidity_max_hyst] = "humidity%d_max_hyst",
+>   	[hwmon_humidity_alarm] = "humidity%d_alarm",
+>   	[hwmon_humidity_fault] = "humidity%d_fault",
+> diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
+> index 8cd6a6b33593..154de35e34ac 100644
+> --- a/include/linux/hwmon.h
+> +++ b/include/linux/hwmon.h
+> @@ -286,8 +286,10 @@ enum hwmon_humidity_attributes {
+>   	hwmon_humidity_input,
+>   	hwmon_humidity_label,
+>   	hwmon_humidity_min,
+> +	hwmon_humidity_min_alarm,
+>   	hwmon_humidity_min_hyst,
+>   	hwmon_humidity_max,
+> +	hwmon_humidity_max_alarm,
+>   	hwmon_humidity_max_hyst,
+>   	hwmon_humidity_alarm,
+>   	hwmon_humidity_fault,
+> @@ -299,8 +301,10 @@ enum hwmon_humidity_attributes {
+>   #define HWMON_H_INPUT			BIT(hwmon_humidity_input)
+>   #define HWMON_H_LABEL			BIT(hwmon_humidity_label)
+>   #define HWMON_H_MIN			BIT(hwmon_humidity_min)
+> +#define HWMON_H_MIN_ALARM		BIT(hwmon_humidity_min_alarm)
+>   #define HWMON_H_MIN_HYST		BIT(hwmon_humidity_min_hyst)
+>   #define HWMON_H_MAX			BIT(hwmon_humidity_max)
+> +#define HWMON_H_MAX_ALARM		BIT(hwmon_humidity_max_alarm)
+>   #define HWMON_H_MAX_HYST		BIT(hwmon_humidity_max_hyst)
+>   #define HWMON_H_ALARM			BIT(hwmon_humidity_alarm)
+>   #define HWMON_H_FAULT			BIT(hwmon_humidity_fault)
+> 
 
