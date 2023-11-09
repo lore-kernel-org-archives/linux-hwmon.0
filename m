@@ -2,60 +2,60 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A278C4332F
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Nov 2023 09:35:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B980C4332F
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Nov 2023 09:52:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbjKIJfs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 9 Nov 2023 04:35:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52762 "EHLO
+        id S229581AbjKIJwU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 9 Nov 2023 04:52:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbjKIJfr (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Nov 2023 04:35:47 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FCD2715
-        for <linux-hwmon@vger.kernel.org>; Thu,  9 Nov 2023 01:35:44 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2c50906f941so8365141fa.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 09 Nov 2023 01:35:44 -0800 (PST)
+        with ESMTP id S229973AbjKIJwT (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Nov 2023 04:52:19 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1C92726;
+        Thu,  9 Nov 2023 01:52:16 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9d267605ceeso105169466b.2;
+        Thu, 09 Nov 2023 01:52:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699522543; x=1700127343; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20230601; t=1699523535; x=1700128335; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=73mU5ZjtYMnmOZJ9gd4UkTXOrS0RPRiuoYmSTTyggiI=;
-        b=wj4REZYx73zjK94OQYBUI/WC3qKjiMf380M9YeKBtZOFOvbZtN0sv/QpSEwvvj5Q9s
-         eKU22UK9UPvjQNz5D6InyGewHePO0uvPAflLR/Dg8AZQ4JCVDAxtAs8bcKFSDGAm7g5C
-         fl5DK78GvGPujg0trda+WdhqvN0y1UE0Zx39jnx+NOzOUx2Cc3qdorWtOL89VsfVOeb6
-         TI685ARJSQ7oADipdtKnXNX/Ef1N4KCuW87AJ10VTokvwwPN7c/P4aoDTx6WCQ0VL8yN
-         w1fO1opEuzSt7uMHippFiB6tYKGISlu9o4x2KgT1TT31qlWEn/muMeeGJ1Ne1w24EA0a
-         Eqzg==
+        bh=qyS8DtOu76hKJM8U9iOb6KlcCppdmmmIn9mic1VECzg=;
+        b=GGft0JbM5rxOQDBSq7O+NJlY5UlZRV8bGj8llBLvfuz8DxoGAGBqWlS2/07MSobryg
+         wB7B/OHsx7sZtd45CP0CQ0BhZlqPEoOcCwxSTSEN1B8mLG6JXSWuklvFXQp5AAxPdQj5
+         RQYlfQcoq9VYRDOaIehdqTTP14ZCIeWMrDAC4GoKBWtKB0KVMoepQgn5e+YjZJY+YQWQ
+         /Hjr8sz7kYc/+EfLMcwKhq+x+eVKkBYhcO5Q++w0qWEcg0uHReu8qteRfAe2ouEXWYBG
+         5bfrMzKJHQ61GQHKT5tmEu5jt6+V4vDHBN9rJdKjbWZDmzNwKVW1AN6/yKn8Z5Vyu5Ro
+         MDfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699522543; x=1700127343;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1699523535; x=1700128335;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=73mU5ZjtYMnmOZJ9gd4UkTXOrS0RPRiuoYmSTTyggiI=;
-        b=l293xYJn2ZwXQlWzpBPMlhHr51006IMep41cVB+RLa5f1h1ClW125uaMtgykncd046
-         6ezLBR+IpYLJjAqBIAR6hlbbza/qN55G2wLnmWi4Yw1e1fPRKnH3SjC2s++PjX/CY0GN
-         FPUr7LTX6qBMyneUr8RX60A3gtNg90nUyOzOqN4p88Lrav9egtSH3PDG3mYpm5sufXpd
-         zoukrwHmZXkMVqdl8idUGjK6zvdc6KtO1cczL6k1cYACtzkomDUX9wO79UX2Ec7hx5Xm
-         PJ8QFg3kqy4EaXbdd6k9/sqw5ufhrjoGnQrh9L5WVatUktomJs5kBmkKtqF7eZMDdJ+h
-         oiXw==
-X-Gm-Message-State: AOJu0YyO+RucJ/TgMRyZUZkQIXlXIRMXM+VzHjEZidiohgJ2WT+lng5X
-        1zFpfAH7mOhj/tICzqqV2MEN6A==
-X-Google-Smtp-Source: AGHT+IFtQgXZTLwwEFsOtUMMFxL6SbYkRsyymCt7oQntHcwPfmp8c9NkolyeRieJTi4ZQHQnbS6CCg==
-X-Received: by 2002:a05:651c:504:b0:2c5:ffa:375d with SMTP id o4-20020a05651c050400b002c50ffa375dmr3948286ljp.11.1699522543062;
-        Thu, 09 Nov 2023 01:35:43 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.218.126])
-        by smtp.gmail.com with ESMTPSA id o13-20020a05600c378d00b003fbe4cecc3bsm1493670wmr.16.2023.11.09.01.35.41
+        bh=qyS8DtOu76hKJM8U9iOb6KlcCppdmmmIn9mic1VECzg=;
+        b=ZI53jy8d0zJNF4FaTSElvwqXCxO3UjvKkzyTHmnpKcV93Ffa+ZqDeDkjPCdkQNhPtH
+         d6UtK3wvvWwQEeAKmswXITnkxORWYXodzF82b6P9dTZp6p4BrG6ODMwj+suPIybmayEU
+         lgcubowJuD8tf5RKSu4rfOmyTWT3pdRS4QZJsYHztxD1clyMGMi2NbcRgUastToxW+CX
+         UgmT/ff3r+208uYfoTx7S6Dab6t3XAdwskUIh1Ze9eXKN6QcwhdYIMfHD24cnRZ9Wl77
+         jnkKkelhmkRLEfHy96YkY3GqrBLKnR62Zu39uiFurBrij3ntKacLG9nBI3RquJYP+DpR
+         cJwQ==
+X-Gm-Message-State: AOJu0YyyUcSfZukgT6tuKoyu6XgDC0GFaV8rHtbrbHcvn8T7jU6MnYq6
+        56dpSqqFp18OdF/MvW2A5Wl2noyNLKLsjQ==
+X-Google-Smtp-Source: AGHT+IFXieEJ7rWnHwFIcuQX3LAG2VmKFBAL+uQEuCkz2H/rM2eTQk6v6KvWDaR/FcxFiepDS2Liqw==
+X-Received: by 2002:a17:906:478b:b0:9c7:5667:5648 with SMTP id cw11-20020a170906478b00b009c756675648mr3455100ejc.51.1699523535338;
+        Thu, 09 Nov 2023 01:52:15 -0800 (PST)
+Received: from [192.168.100.74] (91-118-163-37.static.upcbusiness.at. [91.118.163.37])
+        by smtp.gmail.com with ESMTPSA id ha12-20020a170906a88c00b0099d804da2e9sm2307418ejb.225.2023.11.09.01.52.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Nov 2023 01:35:42 -0800 (PST)
-Message-ID: <037f44d9-7240-4daf-9fe1-ac89fae9499c@linaro.org>
-Date:   Thu, 9 Nov 2023 10:35:40 +0100
+        Thu, 09 Nov 2023 01:52:14 -0800 (PST)
+Message-ID: <1a7adaca-7971-4739-8a0b-04429c08f683@gmail.com>
+Date:   Thu, 9 Nov 2023 10:52:13 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 3/4] hwmon: Add support for Amphenol ChipCap 2
 Content-Language: en-US
-To:     Javier Carrasco <javier.carrasco.cruz@gmail.com>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
@@ -73,107 +73,78 @@ References: <20231020-topic-chipcap2-v1-0-087e21d4b1ed@gmail.com>
  <285ec1d8-d277-403c-961f-3de523fc799f@gmail.com>
  <a5b63eb4-4168-425e-a235-15cc7a6f2df3@linaro.org>
  <f1c6efd3-fad1-453a-b922-41485495385b@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <f1c6efd3-fad1-453a-b922-41485495385b@gmail.com>
+ <037f44d9-7240-4daf-9fe1-ac89fae9499c@linaro.org>
+From:   Javier Carrasco <javier.carrasco.cruz@gmail.com>
+In-Reply-To: <037f44d9-7240-4daf-9fe1-ac89fae9499c@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 09/11/2023 09:59, Javier Carrasco wrote:
+On 09.11.23 10:35, Krzysztof Kozlowski wrote:
+> On 09/11/2023 09:59, Javier Carrasco wrote:
+>>
+>>
+>> On 09.11.23 09:40, Krzysztof Kozlowski wrote:
+>>> On 08/11/2023 17:35, Javier Carrasco wrote:
+>>>>>> +
+>>>>>> +	data->regulator = devm_regulator_get_optional(dev, "vdd");
+>>>>>> +	if (!IS_ERR(data->regulator)) {
+>>>>>> +		ret = cc2_retrive_alarm_config(data);
+>>>>>> +		if (ret)
+>>>>>> +			goto cleanup;
+>>>>>> +	} else {
+>>>>>> +		/* No access to EEPROM without regulator: no alarm control */
+>>>>>
+>>>>> Test your code with deferred probe. Are you sure you handle it
+>>>>> correctly? To me, it looks like you handle deferred probe the same as
+>>>>> any error.
+>>>>>
+>>>> The -EPROBE_DEFER is propagated to the probe function and it is the
+>>>> returned value. I clarified the error path in v2 so no error messages
+>>>
+>>> Really?
+>>>
+>>> I see:
+>>> if (!IS_ERR(data->regulator)) {
+>>> 	// so you do not go here
+>>> } else {
+>>> 	goto dev_register;
+>>> }
+>>> dev_register is not error path. So how do you return EPROBE_DEFER?
+>>>
+>>> Which line of code does it?
+>>>
+>> EPROBE_DEFER is returned if the command window was missed, which is
+> 
+> How "command window was missed" is related to the place I commented?
+> 
+it is right below the comment you added and hence the misunderstanding.
+But focusing on the line where your comment is, there is no probe
+deferring in that case. This is why I asked if you were talking about
+devm_regulator_get_optional() failing, which is not covered by the
+deferring mechanism in the current form.
+
+I have never experienced the case where the regulator was still not
+available, but I suppose there is no reason why that should never happen.
+The regulator is not mandatory and there is no reason to retry if it is
+not defined. But in case it is defined and not available, the deferring
+would make sense. I could consider that case as well.
+>> checked in cc2_retrieve_alarm_config() (there is a typo I just corrected
+>> -> cc2_retrive_alarm_config() in the current version). It could then
+>> happen where you added a comment, but not because
+>> devm_regulator_get_optional() failed.
+>>
+>> Are you expecting a probe deferring if devm_regulator_get_optional()
+>> fails as well? Like if the regulator is still not ready when the
+>> function is called.
+> 
+> We talk only about this place. Not others.
 > 
 > 
-> On 09.11.23 09:40, Krzysztof Kozlowski wrote:
->> On 08/11/2023 17:35, Javier Carrasco wrote:
->>>>> +
->>>>> +	data->regulator = devm_regulator_get_optional(dev, "vdd");
->>>>> +	if (!IS_ERR(data->regulator)) {
->>>>> +		ret = cc2_retrive_alarm_config(data);
->>>>> +		if (ret)
->>>>> +			goto cleanup;
->>>>> +	} else {
->>>>> +		/* No access to EEPROM without regulator: no alarm control */
->>>>
->>>> Test your code with deferred probe. Are you sure you handle it
->>>> correctly? To me, it looks like you handle deferred probe the same as
->>>> any error.
->>>>
->>> The -EPROBE_DEFER is propagated to the probe function and it is the
->>> returned value. I clarified the error path in v2 so no error messages
->>
->> Really?
->>
->> I see:
->> if (!IS_ERR(data->regulator)) {
->> 	// so you do not go here
->> } else {
->> 	goto dev_register;
->> }
->> dev_register is not error path. So how do you return EPROBE_DEFER?
->>
->> Which line of code does it?
->>
-> EPROBE_DEFER is returned if the command window was missed, which is
-
-How "command window was missed" is related to the place I commented?
-
-> checked in cc2_retrieve_alarm_config() (there is a typo I just corrected
-> -> cc2_retrive_alarm_config() in the current version). It could then
-> happen where you added a comment, but not because
-> devm_regulator_get_optional() failed.
+> Best regards,
+> Krzysztof
 > 
-> Are you expecting a probe deferring if devm_regulator_get_optional()
-> fails as well? Like if the regulator is still not ready when the
-> function is called.
-
-We talk only about this place. Not others.
-
-
 Best regards,
-Krzysztof
-
+Javier Carrasco
