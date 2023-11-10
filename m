@@ -1,397 +1,354 @@
-Return-Path: <linux-hwmon+bounces-6-linux-hwmon=archiver.kernel.org@vger.kernel.org>
+Return-Path: <linux-hwmon+bounces-7-linux-hwmon=archiver.kernel.org@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8C3DC4167B
-	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Nov 2023 17:50:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B8D0C4332F
+	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Nov 2023 17:50:55 +0000 (UTC)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 71DF4281874
-	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Nov 2023 17:50:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9A78AB22920
+	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Nov 2023 17:50:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C8CD3D99F;
-	Fri, 10 Nov 2023 17:47:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E07E53A295;
+	Fri, 10 Nov 2023 17:47:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C9D33C69F
-	for <linux-hwmon@vger.kernel.org>; Fri, 10 Nov 2023 17:47:04 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66CC40AEF;
-	Fri, 10 Nov 2023 08:50:48 -0800 (PST)
-X-IronPort-AV: E=McAfee;i="6600,9927,10890"; a="394111592"
-X-IronPort-AV: E=Sophos;i="6.03,291,1694761200"; 
-   d="scan'208";a="394111592"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2023 08:50:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10890"; a="740197164"
-X-IronPort-AV: E=Sophos;i="6.03,291,1694761200"; 
-   d="scan'208";a="740197164"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2023 08:50:45 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC3)
-	(envelope-from <andy@kernel.org>)
-	id 1r1UiQ-0000000Ctty-0Atx;
-	Fri, 10 Nov 2023 18:50:42 +0200
-Date: Fri, 10 Nov 2023 18:50:41 +0200
-From: Andy Shevchenko <andy@kernel.org>
-To: Nuno Sa <nuno.sa@analog.com>
-Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	devicetree@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-	Conor Dooley <conor+dt@kernel.org>
-Subject: Re: [PATCH 2/2] hwmon: ltc4282: add support for the LTC4282 chip
-Message-ID: <ZU5fYY81L_qSmQWq@smile.fi.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADF523D997
+	for <linux-hwmon@vger.kernel.org>; Fri, 10 Nov 2023 17:47:09 +0000 (UTC)
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7E43A234;
+	Fri, 10 Nov 2023 07:16:52 -0800 (PST)
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+	by mx0a-00128a01.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 3AADPX0h001170;
+	Fri, 10 Nov 2023 10:16:29 -0500
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3u7w2fx6ar-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 10 Nov 2023 10:16:28 -0500 (EST)
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+	by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 3AAFGRFS046171
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Fri, 10 Nov 2023 10:16:27 -0500
+Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
+ ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Fri, 10 Nov 2023 10:16:26 -0500
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
+ ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Fri, 10 Nov 2023 10:16:26 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Fri, 10 Nov 2023 10:16:26 -0500
+Received: from nsa.sphairon.box ([10.44.3.69])
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 3AAFGA0L029635;
+	Fri, 10 Nov 2023 10:16:20 -0500
+From: Nuno Sa <nuno.sa@analog.com>
+To: <linux-hwmon@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC: Bartosz Golaszewski <brgl@bgdev.pl>, Jonathan Corbet <corbet@lwn.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij
+	<linus.walleij@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>, Nuno Sa
+	<nuno.sa@analog.com>,
+        Rob Herring <robh+dt@kernel.org>, Andy Shevchenko
+	<andy@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>, Conor Dooley
+	<conor+dt@kernel.org>
+Subject: [PATCH 1/2] dt-bindings: hwmon: Add LTC4282 bindings
+Date: Fri, 10 Nov 2023 16:18:45 +0100
+Message-ID: <20231110151905.1659873-2-nuno.sa@analog.com>
+X-Mailer: git-send-email 2.42.1
+In-Reply-To: <20231110151905.1659873-1-nuno.sa@analog.com>
 References: <20231110151905.1659873-1-nuno.sa@analog.com>
- <20231110151905.1659873-3-nuno.sa@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231110151905.1659873-3-nuno.sa@analog.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-
-On Fri, Nov 10, 2023 at 04:18:46PM +0100, Nuno Sa wrote:
-> The LTC4282 hot swap controller allows a board to be safely inserted and
-> removed from a live backplane. Using one or more external N-channel pass
-> transistors, board supply voltage and inrush current are ramped up at an
-> adjustable rate. An I2C interface and onboard ADC allows for monitoring
-> of board current, voltage, power, energy and fault status.
-
-There are plenty of ltc42xx in the same folder and a lot of other chips.
-Have you checked that none of the existing driver is not close enough and
-brand new driver is indeed required? If so, add a respective paragraph
-somewhere (cover letter? TBH I haven't read it, it's fine if it's already
-explained there).
-
-...
-
-> +#define LTC4282_STATUS_MSB			0x1F
-
-> +#define LTC4282_VSOURCE				0x3a
-> +#define LTC4282_VSOURCE_LOWEST			0x3c
-> +#define LTC4282_VSOURCE_HIGHEST			0x3e
-
-You have an inconsistency in the capitalization of the hexadecimal values.
-
-...
-
-> +/*
-> + * relaxed version of FIELD_PREP() to be used when mask is not a compile time constant
-> + * u32_encode_bits() can't also be used as the compiler needs to be able to evaluate
-> + * mask at compile time.
-> + */
-> +#define LTC4282_FIELD_PREP(m, v)	(((v) << (ffs(m) - 1)) & (m))
-
-Can we name it accordingly as done in other places, and TBH it's a time to move
-it to the header. (At least I know about two more implementations of this).
-
-...
-
-> +struct ltc4282_state {
-> +	struct regmap *map;
-> +	struct device *dev;
-> +	/* Protect against multiple accesses to the device registers */
-> +	struct mutex lock;
-> +	struct gpio_chip gc;
-> +	u64 saved_energy;
-> +	long power_max;
-
-> +	u32 gpio_map[LTC4282_GPIO_NR];
-
-Why is this needed? The valid_mask is not enough?
-
-> +	u32 rsense;
-> +	u32 vin_mode;
-> +	u16 vfs_out;
-> +};
-
-...
-
-> +	/* GPIO_2,3 and the ALERT pin require setting the bit to 1 to pull down the line */
-> +	if (!gpio->active_high)
-
-Hmm... Why do you need a separate flag for this? Shouldn't be described or
-autodetected somehow?
-
-> +		val = !val;
-
-...
-
-> +	*val = DIV_ROUND_CLOSEST_ULL(be16_to_cpu(in) * (u64)fs, U16_MAX);
-
-I'm wondering if you can do some trick to "divide" actually to 2^16 so, it will
-not use division op at all?
-
-...
-
-> +	*val = DIV_ROUND_CLOSEST(in * fs, U8_MAX);
-
-Ditto.
-
-...
-
-> +	/*
-> +	 * Wait for two ADC conversions so we are sure we get one full VDD
-> +	 * measurement.
-> +	 */
-> +	msleep(2 * LTC4282_TCONV_US / MILLI);
-
-fsleep() ?
-
-...
-
-> +static int ltc4282_read_power_word(const struct ltc4282_state *st, u32 reg, long *val)
-> +{
-> +	u64 temp =  DECA * 40ULL * st->vfs_out * 1 << 16, temp_2;
-
-Too many spaces.
-
-"* BIT(16)" / "* BIT_ULL(16)" ?
-
-...
-
-> +		temp = DIV_ROUND_CLOSEST_ULL(power * temp, U16_MAX);
-> +		*val = DIV64_U64_ROUND_CLOSEST(temp * MICRO, U16_MAX * (u64)st->rsense);
-
-> +	*val = DIV64_U64_ROUND_CLOSEST(temp_2, st->rsense * int_pow(U16_MAX, 2));
-
-Same Q about possible optimizations.
-
-...
-
-> +	temp = power * 40 * DECA * st->vfs_out * 256ULL;
-
-BIT_ULL(8) ?
-
-...
-
-> +	*val = DIV64_U64_ROUND_CLOSEST(temp * MICRO, int_pow(U8_MAX, 2) * st->rsense);
-
-Same Q about possible optimizations.
-
-...
-
-> +	if (check_mul_overflow(DECA * st->vfs_out * 40 * 256, energy, &temp)) {
-> +		temp = DIV_ROUND_CLOSEST(DECA * st->vfs_out * 40 * 256, U16_MAX);
-> +		*val = DIV_ROUND_CLOSEST_ULL(temp * energy, st->rsense);
-> +		return ret;
-> +	}
-
-BIT(8) ?
-
-...
-
-> +	*val = DIV64_U64_ROUND_CLOSEST(temp, U16_MAX * (u64)st->rsense);
-
-Same Q about possible optimizations.
-
-...
-
-> +		/*
-> +		 * reset happened... let's read the new energy value that
-
-Reset
-Let's
-
-> +		 * together with the new tick counter should give a sane average
-> +		 * value. Furthermore, we save whatever value we had accumulated
-> +		 * so that the next energy read will have it into account.
-> +		 */
-
-...
-
-> +		/* give some time for accumulation... */
-> +		msleep(2 * LTC4282_TCONV_US / MILLI);
-
-fsleep() ?
-
-...
-
-> +	/*
-> +	 * AVG = E / (Tconv * counter)
-> +	 * We get energy in microJoule, hence dividing it by microSeconds gives Watts. Therefore,
-> +	 * multiplying by MICRO gives us microWatts.
-> +	 */
-
-Here you used long lines, somewhere else, much shorter. Please, choose one
-limit and be consistent with it.
-
-...
-
-> +	temp = val * int_pow(U8_MAX, 2) * st->rsense;
-> +	power = DIV64_U64_ROUND_CLOSEST(temp, MICRO * DECA * 256ULL * st->vfs_out * 40);
-
-As per above.
-
-...
-
-> +	if (val >= fs)
-> +		in = U8_MAX;
-> +	else
-> +		in = DIV_ROUND_CLOSEST(val * U8_MAX, fs);
-
-Can clamp() be used here?
-
-...
-
-> +	/*
-> +	 * Make sure vdd is stable. From the datasheet:
-> +	 * The state of the UV and OV comparators is indicated by the STATUS register
-> +	 * bits 0 and 1 and must be stable for at least 50ms to qualify for turn-on.
-> +	 */
-> +	do {
-> +		ret = regmap_read_poll_timeout(st->map, LTC4282_STATUS_LSB, reg,
-> +					       reg & LTC4282_VDD_STATUS_MASK, 10000, 50000);
-> +		if (!ret)
-> +			continue;
-> +		if (ret != -ETIMEDOUT)
-> +			return dev_err_probe(st->dev, ret, "Failed regmap read\n");
-
-I would do it a bit differently.
-
-> +		break;
-
-> +	} while (n_tries--);
-
-	} while (--n_tries); ?
-
-Altogether:
-
-	do {
-		ret = regmap_read_poll_timeout(st->map, LTC4282_STATUS_LSB, reg,
-					       reg & LTC4282_VDD_STATUS_MASK, 10000, 50000);
-		/* Check if we got timeout which means UV and OV are stable for 50ms */
-		if (ret == -ETIMEDOUT)
-			break;
-		if (ret)
-			return dev_err_probe(st->dev, ret, "Failed regmap read\n");
-	} while (--n_tries);
-
-
-...
-
-> +	if (val > LTC4282_CLKOUT_TICK)
-> +		return dev_err_probe(st->dev, -EINVAL,
-> +				     "Invalid val(%u) for adi,clkout-mode\n", val);
-
-ERANGE?
-
-...
-
-> +	if (rate < LTC4282_CLKIN_MIN || rate > LTC4282_CLKIN_MAX)
-
-in_range() ?
-
-> +		return dev_err_probe(st->dev, -EINVAL, "Invalid clkin range(%lu) [%lu %lu]\n",
-> +				     rate, LTC4282_CLKIN_MIN, LTC4282_CLKIN_MAX);
-
-...
-
-> +	for (gpio = 0; gpio <= LTC4282_GPIO_3; gpio++) {
-
-Is 0 also being defined?
-
-> +		ret = device_property_read_u32(dev, ltc4282_gpio_prop[gpio], &func);
-> +		if (ret)
-> +			continue;
-> +		if (func >= ltc4282_gpios[gpio].n_funcs)
-> +			return dev_err_probe(dev, ret, "Invalid func(%u >= %u) for gpio%u\n",
-> +					     func, ltc4282_gpios[gpio].n_funcs, gpio + 1);
-> +		if (func == LTC4282_PIN_GPIO) {
-> +			st->gpio_map[ngpios++] = gpio;
-> +			if (gpio == LTC4282_GPIO_1) {
-> +				/* default to input GPIO */
-> +				ret = regmap_set_bits(st->map, LTC4282_GPIO_CONFIG,
-> +						      LTC4282_GPIO_1_CONFIG_MASK);
-> +				if (ret)
-> +					return ret;
-> +			}
-> +
-> +			continue;
-> +		}
-
-...
-
-> +		switch (val) {
-> +		case 3300000:
-
-Hmm... Do we have MICROVOLTS_IN_VOLTS or so?
-
-> +			st->vin_mode = LTC4282_VIN_3_3V;
-> +			break;
-> +		case 5000000:
-> +			st->vin_mode = LTC4282_VIN_5V;
-> +			break;
-> +		case 12000000:
-> +			st->vin_mode = LTC4282_VIN_12V;
-> +			break;
-> +		case 24000000:
-> +			st->vin_mode = LTC4282_VIN_24V;
-> +			break;
-> +		default:
-> +			return dev_err_probe(dev, -EINVAL,
-> +					     "Invalid val(%u) for vin-mode-microvolt\n", val);
-> +		}
-
-...
-
-> +static SENSOR_DEVICE_ATTR(in1_crit_fault_log, 0644, ltc4282_show_fault_log,
-> +			  ltc4282_clear_fault_log, LTC4282_OV_FAULT_MASK);
-> +static SENSOR_DEVICE_ATTR(in1_lcrit_fault_log, 0644, ltc4282_show_fault_log,
-> +			  ltc4282_clear_fault_log, LTC4282_UV_FAULT_MASK);
-> +static SENSOR_DEVICE_ATTR(curr1_crit_fault_log, 0644, ltc4282_show_fault_log,
-> +			  ltc4282_clear_fault_log, LTC4282_OC_FAULT_MASK);
-> +static SENSOR_DEVICE_ATTR(power1_fault_log, 0644, ltc4282_show_fault_log,
-> +			  ltc4282_clear_fault_log, LTC4282_POWER_BAD_FAULT_MASK);
-> +static SENSOR_DEVICE_ATTR(fet_bad_fault_log, 0644, ltc4282_show_fault_log,
-> +			  ltc4282_clear_fault_log, LTC4282_FET_BAD_FAULT_MASK);
-> +static SENSOR_DEVICE_ATTR(fet_short_fault_log, 0644, ltc4282_show_fault_log,
-> +			  ltc4282_clear_fault_log, LTC4282_FET_SHORT_FAULT_MASK);
-
-SENSOR_DEVICE_ATTR_RO() / _RW() ?
-
-...
-
-> +static struct attribute *ltc4282_attrs[] = {
-> +	&sensor_dev_attr_energy1_input.dev_attr.attr,
-> +	&sensor_dev_attr_power1_good.dev_attr.attr,
-> +	&sensor_dev_attr_fet_bad_fault.dev_attr.attr,
-> +	&sensor_dev_attr_fet_short_fault.dev_attr.attr,
-> +	&sensor_dev_attr_in1_crit_fault_log.dev_attr.attr,
-> +	&sensor_dev_attr_in1_lcrit_fault_log.dev_attr.attr,
-> +	&sensor_dev_attr_curr1_crit_fault_log.dev_attr.attr,
-> +	&sensor_dev_attr_power1_fault_log.dev_attr.attr,
-> +	&sensor_dev_attr_fet_bad_fault_log.dev_attr.attr,
-> +	&sensor_dev_attr_fet_short_fault_log.dev_attr.attr,
-> +	NULL,
-
-No comma for the terminator line.
-
-> +};
-
-...
-
-> +	msleep(3200);
-
-Not a single letter to comment such a huge delay :-(
-
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-ORIG-GUID: p5OG32J-rIDCiEGfV79xuNjpO41KKOtS
+X-Proofpoint-GUID: p5OG32J-rIDCiEGfV79xuNjpO41KKOtS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-10_12,2023-11-09_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ clxscore=1015 phishscore=0 bulkscore=0 adultscore=0 priorityscore=1501
+ impostorscore=0 mlxscore=0 malwarescore=0 mlxlogscore=999
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2311060001 definitions=main-2311100126
+
+Add bindings for the LTC4282 High Current Hot Swap Controller with I2C
+Compatible Monitoring.
+
+Signed-off-by: Nuno Sa <nuno.sa@analog.com>
+---
+ .../bindings/hwmon/adi,ltc4282.yaml           | 228 ++++++++++++++++++
+ MAINTAINERS                                   |   6 +
+ 2 files changed, 234 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/adi,ltc4282.yaml
+
+diff --git a/Documentation/devicetree/bindings/hwmon/adi,ltc4282.yaml b/Documentation/devicetree/bindings/hwmon/adi,ltc4282.yaml
+new file mode 100644
+index 000000000000..0a5d540f014e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/adi,ltc4282.yaml
+@@ -0,0 +1,228 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/adi,ltc4282.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Analog Devices LTC4282 I2C High Current Hot Swap Controller over I2C
++
++maintainers:
++  - Nuno Sa <nuno.sa@analog.com>
++
++description: |
++  Analog Devices LTC4282 I2C High Current Hot Swap Controller over I2C.
++
++  https://www.analog.com/media/en/technical-documentation/data-sheets/ltc4282.pdf
++
++
++properties:
++  compatible:
++    enum:
++      - adi,ltc4282
++
++  reg:
++    maxItems: 1
++
++  vdd-supply: true
++
++  clocks:
++    maxItems: 1
++
++  adi,clkout-mode:
++    description: |
++      Controls in which mode the CLKOUT PIN should work:
++        0 - Configures the CLKOUT pin to output the internal system clock
++        1 - Configures the CLKOUT pin to output the internal conversion time
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [0, 1]
++
++  adi,rsense-nano-ohms:
++    description: Value of the sense resistor.
++
++  adi,vin-mode-microvolt:
++    description:
++      Selects operating range for the Undervoltage, Overvoltage and Foldback
++      pins. Also for the ADC. Should be set to the nominal input voltage.
++    enum: [3300000, 5000000, 12000000, 24000000]
++    default: 12000000
++
++  adi,fet-bad-timeout-ms:
++    description:
++      From the moment a FET bad conditions is present, this property selects the
++      wait time/timeout for a FET-bad fault to be signaled. Setting this to 0,
++      disables FET bad faults to be reported.
++    default: 255
++    maximum: 255
++
++  adi,overvoltage-dividers:
++    description: |
++      Select which dividers to use for VDD Overvoltage detection. Note that
++      when the internal dividers are used the threshold is referenced to VDD.
++      The percentages in the datasheet are misleading since the actual values
++      to look for are in the "Absolute Maximum Ratings" table in the
++      "Comparator Inputs" section. In there there's a line for each of the 5%,
++      10% and 15% settings with the actual min, typical and max tolerances.
++        0 - Use the external dividers.
++        1 - Internal dividers 5%
++        2 - Internal dividers 10%
++        3 - Internal dividers 15%
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [0, 1, 2, 3]
++    default: 0
++
++  adi,undervoltage-dividers:
++    description: |
++      Select which dividers to use for VDD Overvoltage detection. Note that
++      when the internal dividers are used the threshold is referenced to VDD.
++      The percentages in the datasheet are misleading since the actual values
++      to look for are in the "Absolute Maximum Ratings" table in the
++      "Comparator Inputs" section. In there there's a line for each of the 5%,
++      10% and 15% settings with the actual min, typical and max tolerances.
++        0 - Use the external dividers.
++        1 - Internal dividers 5%
++        2 - Internal dividers 10%
++        3 - Internal dividers 15%
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [0, 1, 2, 3]
++    default: 0
++
++  adi,current-limit-microvolt:
++    description:
++      The current limit sense voltage of the chip is adjustable between
++      12.5mV and 34.4mV in 3.1mV steps. This effectively limits the current
++      on the load.
++    enum: [12500, 15625, 18750, 21875, 25000, 28125, 31250, 34375]
++    default: 25000
++
++  adi,overcurrent-retry:
++    description:
++      If set, enables the chip to auto-retry 256 timer cycles after an
++      Overcurrent fault.
++    type: boolean
++
++  adi,overvoltage-retry-disable:
++    description:
++      If set, disables the chip to auto-retry 50ms after an Overvoltage fault.
++      It's enabled by default.
++    type: boolean
++
++  adi,undervoltage-retry-disable:
++    description:
++      If set, disables the chip to auto-retry 50ms after an Undervoltage fault.
++      It's enabled by default.
++    type: boolean
++
++  adi,fault-log-enable:
++    description:
++      If set, enables the FAULT_LOG and ADC_ALERT_LOG registers to be written
++      to the EEPROM when a fault bit transitions high and hence, will be
++      available after a power cycle (the chip loads the contents of
++      the EE_FAULT_LOG register - the one in EEPROM - into FAULT_LOG at boot).
++    type: boolean
++
++  adi,gpio-alert:
++    description: Use the ALERT pin as a GPIO.
++    type: boolean
++
++  adi,gpio1-mode:
++    description: |
++      Defines the function of the Pin.
++          0 - GPIO Mode.
++          1 - Power Bad. Goes into high-z to indicate that the output power is
++              no longer good.
++          2 - Power Good. Pulls low to indicate that the output power is no
++              longer good.
++    $ref: /schemas/types.yaml#/definitions/uint32
++    maximum: 2
++
++  adi,gpio2-mode:
++    description: |
++      Defines the function of the Pin.
++          0 - GPIO Mode.
++          1 - Acts as an input pin and it is feeded into the ADC.
++          2 - Pulls Low when the MOSFET is dissipating power (stress).
++    $ref: /schemas/types.yaml#/definitions/uint32
++    maximum: 2
++
++  adi,gpio3-mode:
++    description: |
++      Defines the function of the Pin.
++          0 - GPIO Mode.
++          1 - Acts as an input pin and it is feeded into the ADC.
++    $ref: /schemas/types.yaml#/definitions/uint32
++    maximum: 1
++
++  gpio-controller:
++    description:
++      This property applies if some of the pins are used as GPIOs.
++
++  '#gpio-cells':
++    const: 2
++
++required:
++  - compatible
++  - reg
++  - adi,rsense-nano-ohms
++
++dependencies:
++  adi,alert-as-gpio: [gpio-controller, '#gpio-cells']
++
++allOf:
++  - if:
++      required:
++        - adi,gpio1-mode
++    then:
++      allOf:
++        - if:
++            properties:
++              adi,gpio0-mode:
++                const: 0
++          then:
++            dependencies:
++              adi,gpio0-mode: [gpio-controller, '#gpio-cells']
++  - if:
++      required:
++        - adi,gpio2-mode
++    then:
++      allOf:
++        - if:
++            properties:
++              adi,gpio1-mode:
++                const: 0
++          then:
++            dependencies:
++              adi,gpio1-mode: [gpio-controller, '#gpio-cells']
++  - if:
++      required:
++        - adi,gpio3-mode
++    then:
++      allOf:
++        - if:
++            properties:
++              adi,gpio2-mode:
++                const: 0
++          then:
++            dependencies:
++              adi,gpio2-mode: [gpio-controller, '#gpio-cells']
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        hwmon@50 {
++            compatible = "adi,ltc4282";
++            reg = <0x50>;
++            adi,rsense-nano-ohms = <500>;
++
++            gpio-controller;
++            #gpio-cells = <2>;
++
++            adi,gpio1-mode = <2>;
++            adi,gpio2-mode = <0>;
++        };
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 43121073390c..9f9527f6057b 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12481,6 +12481,12 @@ S:	Maintained
+ F:	Documentation/hwmon/ltc4261.rst
+ F:	drivers/hwmon/ltc4261.c
+ 
++LTC4282 HARDWARE MONITOR DRIVER
++M:	Nuno Sa <nuno.sa@analog.com>
++L:	linux-hwmon@vger.kernel.org
++S:	Supported
++F:	Documentation/devicetree/bindings/hwmon/adi,ltc4282.yaml
++
+ LTC4306 I2C MULTIPLEXER DRIVER
+ M:	Michael Hennerich <michael.hennerich@analog.com>
+ L:	linux-i2c@vger.kernel.org
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.42.1
 
 
