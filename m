@@ -1,857 +1,418 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94C2619466;
-	Mon, 13 Nov 2023 10:12:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mx0b-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E208135;
-	Mon, 13 Nov 2023 02:12:25 -0800 (PST)
-Received: from pps.filterd (m0375855.ppops.net [127.0.0.1])
-	by mx0b-00128a01.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 3AD7Ovbh019662;
-	Mon, 13 Nov 2023 05:11:56 -0500
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-	by mx0b-00128a01.pphosted.com (PPS) with ESMTPS id 3ubfcxrh3d-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 13 Nov 2023 05:11:56 -0500 (EST)
-Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
-	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 3ADABtug046819
-	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Mon, 13 Nov 2023 05:11:55 -0500
-Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
- ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Mon, 13 Nov 2023 05:11:54 -0500
-Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
- ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Mon, 13 Nov 2023 05:11:54 -0500
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Mon, 13 Nov 2023 05:11:54 -0500
-Received: from amiclaus-VirtualBox.ad.analog.com (AMICLAUS-L02.ad.analog.com [10.48.65.148])
-	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 3ADABThx009585;
-	Mon, 13 Nov 2023 05:11:44 -0500
-From: Antoniu Miclaus <antoniu.miclaus@analog.com>
-To: Antoniu Miclaus <antoniu.miclaus@analog.com>,
-        Alessandro Zummo
-	<a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, "Jean Delvare" <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, <linux-rtc@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-hwmon@vger.kernel.org>
-Subject: [PATCH v8 2/2] rtc: max31335: add driver support
-Date: Mon, 13 Nov 2023 12:11:07 +0200
-Message-ID: <20231113101123.34767-2-antoniu.miclaus@analog.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231113101123.34767-1-antoniu.miclaus@analog.com>
-References: <20231113101123.34767-1-antoniu.miclaus@analog.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75CBE1CF8C
+	for <linux-hwmon@vger.kernel.org>; Mon, 13 Nov 2023 11:41:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="pxGdh/PU"
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9CAD4A;
+	Mon, 13 Nov 2023 03:41:30 -0800 (PST)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20231113114127euoutp0272c67c42f2763c59364f0fdaf6ede18f~XK_51PlBj1968919689euoutp02C;
+	Mon, 13 Nov 2023 11:41:27 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20231113114127euoutp0272c67c42f2763c59364f0fdaf6ede18f~XK_51PlBj1968919689euoutp02C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1699875687;
+	bh=00BaRMy10DoZwXsc828mOv4dAkFMOvcakVZtw0kuAd4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=pxGdh/PUhfCFG0n0FMQE9gvu2j8XF/XBM0v83ep9FpWSS6Xt6OzrgOTnDCTqrck5G
+	 acvUCOJ1mEUmc6EVduRutPhQC4xKF6Gv56RzLC8bR/eoGAmkYdXMH4ybkx31BxOeO4
+	 isP9mzm3cOj1TXfj3JI6h/Q1Eiy80oyMmywpLtT0=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+	20231113114127eucas1p1d4c81931f68d49d32741ce16a79cf4d0~XK_5uwnat0420804208eucas1p17;
+	Mon, 13 Nov 2023 11:41:27 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+	eusmges3new.samsung.com (EUCPMTA) with SMTP id 10.BD.09552.76B02556; Mon, 13
+	Nov 2023 11:41:27 +0000 (GMT)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20231113114127eucas1p2b407933cf1f685c218b259d643b21313~XK_5W8MjS0799307993eucas1p2p;
+	Mon, 13 Nov 2023 11:41:27 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20231113114127eusmtrp2deba170cd0d4869ba070d70ef3561e21~XK_5WZrus1925619256eusmtrp2L;
+	Mon, 13 Nov 2023 11:41:27 +0000 (GMT)
+X-AuditID: cbfec7f5-853ff70000002550-3a-65520b6708df
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+	eusmgms2.samsung.com (EUCPMTA) with SMTP id 04.4E.09274.66B02556; Mon, 13
+	Nov 2023 11:41:26 +0000 (GMT)
+Received: from localhost (unknown [106.120.51.111]) by eusmtip2.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20231113114126eusmtip240fe67ed2677c5c5d0ad11635d472841~XK_5JDMT10056300563eusmtip20;
+	Mon, 13 Nov 2023 11:41:26 +0000 (GMT)
+From: Lukasz Stelmach <l.stelmach@samsung.com>
+To: James Seo <james@equiv.tech>
+Cc: Jean Delvare <jdelvare@suse.com>,  Guenter Roeck <linux@roeck-us.net>,
+	Armin Wolf <W_Armin@gmx.de>,  linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [RFC v2] hwmon: (hp-wmi-sensors) Fix failure to load on
+ EliteDesk 800 G6
+Date: Mon, 13 Nov 2023 12:41:25 +0100
+In-Reply-To: <20231105192054.24833-1-james@equiv.tech> (James Seo's message
+	of "Sun, 5 Nov 2023 11:20:54 -0800")
+Message-ID: <oypijdpm0dkhi2.fsf%l.stelmach@samsung.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-ORIG-GUID: BcV0z4IKDYS3jTRX27nYA5sLDfd_SAlj
-X-Proofpoint-GUID: BcV0z4IKDYS3jTRX27nYA5sLDfd_SAlj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-12_24,2023-11-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
- suspectscore=0 clxscore=1015 adultscore=0 lowpriorityscore=0 spamscore=0
- impostorscore=0 phishscore=0 mlxscore=0 priorityscore=1501 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2311060001
- definitions=main-2311130083
+Content-Type: multipart/signed; boundary="=-=-="; micalg="pgp-sha256";
+	protocol="application/pgp-signature"
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrHKsWRmVeSWpSXmKPExsWy7djP87rp3EGpBmvviljMu3aQ2eLshECL
+	9tdbGS0u75rDZvFk4Rkmi4nPD7A6sHl8777I5PHhY5zHzu8N7B7rt1xl8fi8SS6ANYrLJiU1
+	J7MstUjfLoEr49ezvIIlfhWvD+9gaWCcaN/FyMkhIWAi0Xn1PGsXIxeHkMAKRonm5VfYIJwv
+	jBL3L/1kAqkSEvjMKHFwdQpMx9FzhxkhipYzSpz9ux+q6AWjxPkNJV2MHBxsAnoSa9dGgIRF
+	BBQkWudsAKtnFljGKPHt1kd2kISwQLhEZ/cdRhCbRUBVYundbjYQm1OgSKK3qxUszitgLtHZ
+	MgHMFhWwlDi+tZ0NIi4ocXLmExYQm1kgV2Lm+TdgCyQEXnBITJ65lx3iUheJrvNvWCBsYYlX
+	x7dAxWUk/u+czwTR0M4o0XRlISuEM4FR4nNHExNElbXEnXO/2CBsR4kN1y4xg7wmIcAnceOt
+	IMRmPolJ26ZDhXklOtqEIKpVJNb174HaKyXR+2oFI0SJh8TrheqQgOtklOjtW800gVFhFpJ/
+	ZiH5ZxZQC7OApsT6XfoQYW2JZQtfM0PYthLr1r1nWcDIuopRPLW0ODc9tdg4L7Vcrzgxt7g0
+	L10vOT93EyMwGZ3+d/zrDsYVrz7qHWJk4mA8xKgC1Pxow+oLjFIsefl5qUoivHmaAalCvCmJ
+	lVWpRfnxRaU5qcWHGKU5WJTEeVVT5FOFBNITS1KzU1MLUotgskwcnFINTNu5fMz6uPu9qpkX
+	iK2N2fddscFN+nffhtreH5v3Lvq6WnJra63N+30uDkUTBTxCmVjNVZ+evminVOJyNLOE7ZKx
+	R4b1pTTRCUc/2X9wefxaU/HN43jv/bzeRh7f+nJ/KBVU/23+O8tlRfCMxUf97sz4Mn/HFGv+
+	2ayCZ6Zur1ldV/v27s7oaIVb6xry/YoFMw/c+Dh9P3vsloBvG97ZTE6qL3iTuU7ReeJL8a3J
+	giH7TtU/uFy0393R1FXghrfD3/u3Ilzle78szrMJFuadLjpT+8eSs9unrP3wVljS22mF5uf7
+	4V1pAVfiw2fJ3r+zLfdk5/wDSvO+lBw/WeMVMce4KG+xe1Pr6izjb6omB5VYijMSDbWYi4oT
+	ASpBS+7BAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrGIsWRmVeSWpSXmKPExsVy+t/xe7pp3EGpBvd3mlvMu3aQ2eLshECL
+	9tdbGS0u75rDZvFk4Rkmi4nPD7A6sHl8777I5PHhY5zHzu8N7B7rt1xl8fi8SS6ANUrPpii/
+	tCRVISO/uMRWKdrQwkjP0NJCz8jEUs/Q2DzWyshUSd/OJiU1J7MstUjfLkEv49ezvIIlfhWv
+	D+9gaWCcaN/FyMkhIWAicfTcYcYuRi4OIYGljBLdD3YCORxACSmJlXPTIWqEJf5c62KDqHnG
+	KLGyqYUZpIZNQE9i7doIkBoRAQWJ1jkbwOYwC6xglNi9bzUjSEJYIFyis/sOmC0kYCrRvGMP
+	M4jNIqAqsfRuNxuIzSlQJPG+s58FxOYVMJfobJkAVi8qYClxfGs7G0RcUOLkzCdgNcwC2RJf
+	Vz9nnsAoMAtJahaS1Cyg85gFNCXW79KHCGtLLFv4mhnCtpVYt+49ywJG1lWMIqmlxbnpucVG
+	esWJucWleel6yfm5mxiBkbTt2M8tOxhXvvqod4iRiYPxEKMKUOejDasvMEqx5OXnpSqJ8OZp
+	BqQK8aYkVlalFuXHF5XmpBYfYjQFem0is5Rocj4wxvNK4g3NDEwNTcwsDUwtzYyVxHk9CzoS
+	hQTSE0tSs1NTC1KLYPqYODilGphK/gko2Fjo5aY7WF+fcGzGrpIN9seY2LMS5/zNmn2aR4wv
+	fgmj4Qcxng9/F2x6Jay2Zc6kiVfPLyzZkScgmqlVduVBiOQPAVGLN7uXr99y7nkZX3vVWUNt
+	Wa/sfOuvm51Wl5rdT3+9+E/aqYvqEx2yNhi9muqmEFDuJrU6Z+nJUPlXxk2nZvFkzH+x+/f5
+	ZYL/Ct1bLf3e7rFoZ11478Sr0x1/o6ak8q/crmChnTQxcONOhnrzHW7/DX2Z8ivaFtdZabO7
+	cefXl61/mbyRxVXp5tElt5rYzRIeXqzPX3ml4XgpY72BrFbNx/+mNaqiM8Pu3vD3+ukqe/PZ
+	hV8N3Zt2VBXPe73lyfsNK2Z1Pi9TYinOSDTUYi4qTgQAKtNU5DkDAAA=
+X-CMS-MailID: 20231113114127eucas1p2b407933cf1f685c218b259d643b21313
+X-Msg-Generator: CA
+X-RootMTR: 20231113114127eucas1p2b407933cf1f685c218b259d643b21313
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20231113114127eucas1p2b407933cf1f685c218b259d643b21313
+References: <20231105192054.24833-1-james@equiv.tech>
+	<CGME20231113114127eucas1p2b407933cf1f685c218b259d643b21313@eucas1p2.samsung.com>
 
-RTC driver for MAX31335 ±2ppm Automotive Real-Time Clock with
-Integrated MEMS Resonator.
+--=-=-=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
----
-changes in v8:
- - make `nvmem_config` and `clk_init_data` static
- MAINTAINERS                |   8 +
- drivers/rtc/Kconfig        |  13 +
- drivers/rtc/Makefile       |   1 +
- drivers/rtc/rtc-max31335.c | 706 +++++++++++++++++++++++++++++++++++++
- 4 files changed, 728 insertions(+)
- create mode 100644 drivers/rtc/rtc-max31335.c
+It was <2023-11-05 nie 11:20>, when James Seo wrote:
+> The EliteDesk 800 G6 stores a raw WMI string within the ACPI object in its
+> BIOS corresponding to one instance of HPBIOS_PlatformEvents.Name. This is
+> evidently a valid way of representing a WMI data item as far as the Micro=
+soft
+> ACPI-WMI mapper is concerned, but is preventing the driver from loading.
+>
+> This seems quite rare, but add support for such strings. Treating this as=
+ a
+> quirk pretty much means adding that support anyway.
+>
+> Also clean up an oversight in update_numeric_sensor_from_wobj() in which =
+the
+> result of hp_wmi_strdup() was being used without error checking.
+>
+> Reported-by: Lukasz Stelmach <l.stelmach@samsung.com>
+> Closes: https://lore.kernel.org/linux-hwmon/7850a0bd-60e7-88f8-1d6c-0bb0e=
+3234fdc@roeck-us.net/
+> Signed-off-by: James Seo <james@equiv.tech>
+> ---
+>
+> Changes v1->v2:
+> * Remove DMI-based workaround logic
+> * Add full support for raw WMI strings
+>   - Improve UTF-16 validation and conversion for the general case
+>   - Support such strings if they occur in HPBIOS_BIOSEvent objects
+> * Only use the result of hp_wmi_strdup() in update_numeric_sensor_from_wo=
+bj()
+>   if the call succeeded
+>
+> History:
+> v1: https://lore.kernel.org/linux-hwmon/20231103181931.677796-1-james@equ=
+iv.tech/
+>
+> ---
+>
+>  drivers/hwmon/hp-wmi-sensors.c | 127 ++++++++++++++++++++++++++++-----
+>  1 file changed, 111 insertions(+), 16 deletions(-)
+>
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 97f51d5ec1cf..0b2a6f95bae7 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12986,6 +12986,14 @@ F:	Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
- F:	Documentation/hwmon/max31827.rst
- F:	drivers/hwmon/max31827.c
- 
-+MAX31335 RTC DRIVER
-+M:	Antoniu Miclaus <antoniu.miclaus@analog.com>
-+L:	linux-rtc@vger.kernel.org
-+S:	Supported
-+W:	https://ez.analog.com/linux-software-drivers
-+F:	Documentation/devicetree/bindings/rtc/adi,max31335.yaml
-+F:	drivers/rtc/rtc-max31335.c
-+
- MAX6650 HARDWARE MONITOR AND FAN CONTROLLER DRIVER
- L:	linux-hwmon@vger.kernel.org
- S:	Orphan
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index 3814e0845e77..6ed8cb5c3c9a 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -373,6 +373,19 @@ config RTC_DRV_MAX8997
- 	  This driver can also be built as a module. If so, the module
- 	  will be called rtc-max8997.
- 
-+config RTC_DRV_MAX31335
-+	tristate "Analog Devices MAX31335"
-+	depends on I2C
-+	depends on COMMON_CLK
-+	depends on HWMON || HWMON=n
-+	select REGMAP_I2C
-+	help
-+	  If you say yes here you get support for the Analog Devices
-+	  MAX31335.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called rtc-max31335.
-+
- config RTC_DRV_MAX77686
- 	tristate "Maxim MAX77686"
- 	depends on MFD_MAX77686 || MFD_MAX77620 || MFD_MAX77714 || COMPILE_TEST
-diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-index 7b03c3abfd78..aa3f3bac8e1c 100644
---- a/drivers/rtc/Makefile
-+++ b/drivers/rtc/Makefile
-@@ -88,6 +88,7 @@ obj-$(CONFIG_RTC_DRV_M41T94)	+= rtc-m41t94.o
- obj-$(CONFIG_RTC_DRV_M48T35)	+= rtc-m48t35.o
- obj-$(CONFIG_RTC_DRV_M48T59)	+= rtc-m48t59.o
- obj-$(CONFIG_RTC_DRV_M48T86)	+= rtc-m48t86.o
-+obj-$(CONFIG_RTC_DRV_MAX31335)	+= rtc-max31335.o
- obj-$(CONFIG_RTC_DRV_MAX6900)	+= rtc-max6900.o
- obj-$(CONFIG_RTC_DRV_MAX6902)	+= rtc-max6902.o
- obj-$(CONFIG_RTC_DRV_MAX6916)	+= rtc-max6916.o
-diff --git a/drivers/rtc/rtc-max31335.c b/drivers/rtc/rtc-max31335.c
-new file mode 100644
-index 000000000000..779f872215a0
---- /dev/null
-+++ b/drivers/rtc/rtc-max31335.c
-@@ -0,0 +1,706 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * RTC driver for the MAX31335
-+ *
-+ * Copyright (C) 2023 Analog Devices
-+ *
-+ * Antoniu Miclaus <antoniu.miclaus@analog.com>
-+ *
-+ */
-+
-+#include <asm-generic/unaligned.h>
-+#include <linux/bcd.h>
-+#include <linux/bitfield.h>
-+#include <linux/bitops.h>
-+#include <linux/clk.h>
-+#include <linux/clk-provider.h>
-+#include <linux/hwmon.h>
-+#include <linux/i2c.h>
-+#include <linux/interrupt.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/regmap.h>
-+#include <linux/rtc.h>
-+#include <linux/util_macros.h>
-+
-+/* MAX31335 Register Map */
-+#define MAX31335_STATUS1			0x00
-+#define MAX31335_INT_EN1			0x01
-+#define MAX31335_STATUS2			0x02
-+#define MAX31335_INT_EN2			0x03
-+#define MAX31335_RTC_RESET			0x04
-+#define MAX31335_RTC_CONFIG			0x05
-+#define MAX31335_RTC_CONFIG2			0x06
-+#define MAX31335_TIMESTAMP_CONFIG		0x07
-+#define MAX31335_TIMER_CONFIG			0x08
-+#define MAX31335_SECONDS_1_128			0x09
-+#define MAX31335_SECONDS			0x0A
-+#define MAX31335_MINUTES			0x0B
-+#define MAX31335_HOURS				0x0C
-+#define MAX31335_DAY				0x0D
-+#define MAX31335_DATE				0x0E
-+#define MAX31335_MONTH				0x0F
-+#define MAX31335_YEAR				0x0F
-+#define MAX31335_ALM1_SEC			0x11
-+#define MAX31335_ALM1_MIN			0x12
-+#define MAX31335_ALM1_HRS			0x13
-+#define MAX31335_ALM1_DAY_DATE			0x14
-+#define MAX31335_ALM1_MON			0x15
-+#define MAX31335_ALM1_YEAR			0x16
-+#define MAX31335_ALM2_MIN			0x17
-+#define MAX31335_ALM2_HRS			0x18
-+#define MAX31335_ALM2_DAY_DATE			0x19
-+#define MAX31335_TIMER_COUNT			0x1A
-+#define MAX31335_TIMER_INIT			0x1B
-+#define MAX31335_PWR_MGMT			0x1C
-+#define MAX31335_TRICKLE_REG			0x1D
-+#define MAX31335_AGING_OFFSET			0x1E
-+#define MAX31335_TS_CONFIG			0x30
-+#define MAX31335_TEMP_ALARM_HIGH_MSB		0x31
-+#define MAX31335_TEMP_ALARM_HIGH_LSB		0x32
-+#define MAX31335_TEMP_ALARM_LOW_MSB		0x33
-+#define MAX31335_TEMP_ALARM_LOW_LSB		0x34
-+#define MAX31335_TEMP_DATA_MSB			0x35
-+#define MAX31335_TEMP_DATA_LSB			0x36
-+#define MAX31335_TS0_SEC_1_128			0x40
-+#define MAX31335_TS0_SEC			0x41
-+#define MAX31335_TS0_MIN			0x42
-+#define MAX31335_TS0_HOUR			0x43
-+#define MAX31335_TS0_DATE			0x44
-+#define MAX31335_TS0_MONTH			0x45
-+#define MAX31335_TS0_YEAR			0x46
-+#define MAX31335_TS0_FLAGS			0x47
-+#define MAX31335_TS1_SEC_1_128			0x48
-+#define MAX31335_TS1_SEC			0x49
-+#define MAX31335_TS1_MIN			0x4A
-+#define MAX31335_TS1_HOUR			0x4B
-+#define MAX31335_TS1_DATE			0x4C
-+#define MAX31335_TS1_MONTH			0x4D
-+#define MAX31335_TS1_YEAR			0x4E
-+#define MAX31335_TS1_FLAGS			0x4F
-+#define MAX31335_TS2_SEC_1_128			0x50
-+#define MAX31335_TS2_SEC			0x51
-+#define MAX31335_TS2_MIN			0x52
-+#define MAX31335_TS2_HOUR			0x53
-+#define MAX31335_TS2_DATE			0x54
-+#define MAX31335_TS2_MONTH			0x55
-+#define MAX31335_TS2_YEAR			0x56
-+#define MAX31335_TS2_FLAGS			0x57
-+#define MAX31335_TS3_SEC_1_128			0x58
-+#define MAX31335_TS3_SEC			0x59
-+#define MAX31335_TS3_MIN			0x5A
-+#define MAX31335_TS3_HOUR			0x5B
-+#define MAX31335_TS3_DATE			0x5C
-+#define MAX31335_TS3_MONTH			0x5D
-+#define MAX31335_TS3_YEAR			0x5E
-+#define MAX31335_TS3_FLAGS			0x5F
-+
-+/* MAX31335_STATUS1 Bit Definitions */
-+#define MAX31335_STATUS1_PSDECT			BIT(7)
-+#define MAX31335_STATUS1_OSF			BIT(6)
-+#define MAX31335_STATUS1_PFAIL			BIT(5)
-+#define MAX31335_STATUS1_VBATLOW		BIT(4)
-+#define MAX31335_STATUS1_DIF			BIT(3)
-+#define MAX31335_STATUS1_TIF			BIT(2)
-+#define MAX31335_STATUS1_A2F			BIT(1)
-+#define MAX31335_STATUS1_A1F			BIT(0)
-+
-+/* MAX31335_INT_EN1 Bit Definitions */
-+#define MAX31335_INT_EN1_DOSF			BIT(6)
-+#define MAX31335_INT_EN1_PFAILE			BIT(5)
-+#define MAX31335_INT_EN1_VBATLOWE		BIT(4)
-+#define MAX31335_INT_EN1_DIE			BIT(3)
-+#define MAX31335_INT_EN1_TIE			BIT(2)
-+#define MAX31335_INT_EN1_A2IE			BIT(1)
-+#define MAX31335_INT_EN1_A1IE			BIT(0)
-+
-+/* MAX31335_STATUS2 Bit Definitions */
-+#define MAX31335_STATUS2_TEMP_RDY		BIT(2)
-+#define MAX31335_STATUS2_OTF			BIT(1)
-+#define MAX31335_STATUS2_UTF			BIT(0)
-+
-+/* MAX31335_INT_EN2 Bit Definitions */
-+#define MAX31335_INT_EN2_TEMP_RDY_EN		BIT(2)
-+#define MAX31335_INT_EN2_OTIE			BIT(1)
-+#define MAX31335_INT_EN2_UTIE			BIT(0)
-+
-+/* MAX31335_RTC_RESET Bit Definitions */
-+#define MAX31335_RTC_RESET_SWRST		BIT(0)
-+
-+/* MAX31335_RTC_CONFIG1 Bit Definitions */
-+#define MAX31335_RTC_CONFIG1_EN_IO		BIT(6)
-+#define MAX31335_RTC_CONFIG1_A1AC		GENMASK(5, 4)
-+#define MAX31335_RTC_CONFIG1_DIP		BIT(3)
-+#define MAX31335_RTC_CONFIG1_I2C_TIMEOUT	BIT(1)
-+#define MAX31335_RTC_CONFIG1_EN_OSC		BIT(0)
-+
-+/* MAX31335_RTC_CONFIG2 Bit Definitions */
-+#define MAX31335_RTC_CONFIG2_ENCLKO		BIT(2)
-+#define MAX31335_RTC_CONFIG2_CLKO_HZ		GENMASK(1, 0)
-+
-+/* MAX31335_TIMESTAMP_CONFIG Bit Definitions */
-+#define MAX31335_TIMESTAMP_CONFIG_TSVLOW	BIT(5)
-+#define MAX31335_TIMESTAMP_CONFIG_TSPWM		BIT(4)
-+#define MAX31335_TIMESTAMP_CONFIG_TSDIN		BIT(3)
-+#define MAX31335_TIMESTAMP_CONFIG_TSOW		BIT(2)
-+#define MAX31335_TIMESTAMP_CONFIG_TSR		BIT(1)
-+#define MAX31335_TIMESTAMP_CONFIG_TSE		BIT(0)
-+
-+/* MAX31335_TIMER_CONFIG Bit Definitions */
-+#define MAX31335_TIMER_CONFIG_TE		BIT(4)
-+#define MAX31335_TIMER_CONFIG_TPAUSE		BIT(3)
-+#define MAX31335_TIMER_CONFIG_TRPT		BIT(2)
-+#define MAX31335_TIMER_CONFIG_TFS		GENMASK(1, 0)
-+
-+/* MAX31335_HOURS Bit Definitions */
-+#define MAX31335_HOURS_F_24_12			BIT(6)
-+#define MAX31335_HOURS_HR_20_AM_PM		BIT(5)
-+
-+/* MAX31335_MONTH Bit Definitions */
-+#define MAX31335_MONTH_CENTURY			BIT(7)
-+
-+/* MAX31335_PWR_MGMT Bit Definitions */
-+#define MAX31335_PWR_MGMT_PFVT			BIT(0)
-+
-+/* MAX31335_TRICKLE_REG Bit Definitions */
-+#define MAX31335_TRICKLE_REG_TRICKLE		GENMASK(3, 1)
-+#define MAX31335_TRICKLE_REG_EN_TRICKLE		BIT(0)
-+
-+/* MAX31335_TS_CONFIG Bit Definitions */
-+#define MAX31335_TS_CONFIG_AUTO			BIT(4)
-+#define MAX31335_TS_CONFIG_CONVERT_T		BIT(3)
-+#define MAX31335_TS_CONFIG_TSINT		GENMASK(2, 0)
-+
-+/* MAX31335_TS_FLAGS Bit Definitions */
-+#define MAX31335_TS_FLAGS_VLOWF			BIT(3)
-+#define MAX31335_TS_FLAGS_VBATF			BIT(2)
-+#define MAX31335_TS_FLAGS_VCCF			BIT(1)
-+#define MAX31335_TS_FLAGS_DINF			BIT(0)
-+
-+/* MAX31335 Miscellaneous Definitions */
-+#define MAX31335_TRICKLE_SCHOTTKY_DIODE		1
-+#define MAX31335_TRICKLE_STANDARD_DIODE		4
-+#define MAX31335_RAM_SIZE			32
-+#define MAX31335_TIME_SIZE			0x07
-+
-+#define clk_hw_to_max31335(_hw) container_of(_hw, struct max31335_data, clkout)
-+
-+struct max31335_data {
-+	struct regmap *regmap;
-+	struct rtc_device *rtc;
-+	struct clk_hw clkout;
-+};
-+
-+static const int max31335_clkout_freq[] = { 1, 64, 1024, 32768 };
-+
-+static const u16 max31335_trickle_resistors[] = {3000, 6000, 11000};
-+
-+static bool max31335_volatile_reg(struct device *dev, unsigned int reg)
-+{
-+	/* time keeping registers */
-+	if (reg >= MAX31335_SECONDS &&
-+	    reg < MAX31335_SECONDS + MAX31335_TIME_SIZE)
-+		return true;
-+
-+	/* interrupt status register */
-+	if (reg == MAX31335_INT_EN1_A1IE)
-+		return true;
-+
-+	/* temperature registers */
-+	if (reg == MAX31335_TEMP_DATA_MSB || MAX31335_TEMP_DATA_LSB)
-+		return true;
-+
-+	return false;
-+}
-+
-+static const struct regmap_config regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.max_register = 0x5F,
-+	.volatile_reg = max31335_volatile_reg,
-+};
-+
-+static int max31335_read_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct max31335_data *max31335 = dev_get_drvdata(dev);
-+	u8 date[7];
-+	int ret;
-+
-+	ret = regmap_bulk_read(max31335->regmap, MAX31335_SECONDS, date,
-+			       sizeof(date));
-+	if (ret)
-+		return ret;
-+
-+	tm->tm_sec  = bcd2bin(date[0] & 0x7f);
-+	tm->tm_min  = bcd2bin(date[1] & 0x7f);
-+	tm->tm_hour = bcd2bin(date[2] & 0x3f);
-+	tm->tm_wday = bcd2bin(date[3] & 0x7) - 1;
-+	tm->tm_mday = bcd2bin(date[4] & 0x3f);
-+	tm->tm_mon  = bcd2bin(date[5] & 0x1f) - 1;
-+	tm->tm_year = bcd2bin(date[6]) + 100;
-+
-+	if (FIELD_GET(MAX31335_MONTH_CENTURY, date[5]))
-+		tm->tm_year += 100;
-+
-+	return 0;
-+}
-+
-+static int max31335_set_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct max31335_data *max31335 = dev_get_drvdata(dev);
-+	u8 date[7];
-+
-+	date[0] = bin2bcd(tm->tm_sec);
-+	date[1] = bin2bcd(tm->tm_min);
-+	date[2] = bin2bcd(tm->tm_hour);
-+	date[3] = bin2bcd(tm->tm_wday + 1);
-+	date[4] = bin2bcd(tm->tm_mday);
-+	date[5] = bin2bcd(tm->tm_mon + 1);
-+	date[6] = bin2bcd(tm->tm_year % 100);
-+
-+	if (tm->tm_year >= 200)
-+		date[5] |= FIELD_PREP(MAX31335_MONTH_CENTURY, 1);
-+
-+	return regmap_bulk_write(max31335->regmap, MAX31335_SECONDS, date,
-+				 sizeof(date));
-+}
-+
-+static int max31335_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct max31335_data *max31335 = dev_get_drvdata(dev);
-+	int ret, ctrl, status;
-+	struct rtc_time time;
-+	u8 regs[6];
-+
-+	ret = regmap_bulk_read(max31335->regmap, MAX31335_ALM1_SEC, regs,
-+			       sizeof(regs));
-+	if (ret)
-+		return ret;
-+
-+	alrm->time.tm_sec  = bcd2bin(regs[0] & 0x7f);
-+	alrm->time.tm_min  = bcd2bin(regs[1] & 0x7f);
-+	alrm->time.tm_hour = bcd2bin(regs[2] & 0x3f);
-+	alrm->time.tm_mday = bcd2bin(regs[3] & 0x3f);
-+	alrm->time.tm_mon  = bcd2bin(regs[4] & 0x1f) - 1;
-+	alrm->time.tm_year = bcd2bin(regs[5]) + 100;
-+
-+	ret = max31335_read_time(dev, &time);
-+	if (ret)
-+		return ret;
-+
-+	if (time.tm_year >= 200)
-+		alrm->time.tm_year += 100;
-+
-+	ret = regmap_read(max31335->regmap, MAX31335_INT_EN1, &ctrl);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_read(max31335->regmap, MAX31335_STATUS1, &status);
-+	if (ret)
-+		return ret;
-+
-+	alrm->enabled = FIELD_GET(MAX31335_INT_EN1_A1IE, ctrl);
-+	alrm->pending = FIELD_GET(MAX31335_STATUS1_A1F, status);
-+
-+	return 0;
-+}
-+
-+static int max31335_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct max31335_data *max31335 = dev_get_drvdata(dev);
-+	unsigned int reg;
-+	u8 regs[6];
-+	int ret;
-+
-+	regs[0] = bin2bcd(alrm->time.tm_sec);
-+	regs[1] = bin2bcd(alrm->time.tm_min);
-+	regs[2] = bin2bcd(alrm->time.tm_hour);
-+	regs[3] = bin2bcd(alrm->time.tm_mday);
-+	regs[4] = bin2bcd(alrm->time.tm_mon + 1);
-+	regs[5] = bin2bcd(alrm->time.tm_year % 100);
-+
-+	ret = regmap_bulk_write(max31335->regmap, MAX31335_ALM1_SEC,
-+				regs, sizeof(regs));
-+	if (ret)
-+		return ret;
-+
-+	reg = FIELD_PREP(MAX31335_INT_EN1_A1IE, alrm->enabled);
-+	ret = regmap_update_bits(max31335->regmap, MAX31335_INT_EN1,
-+				 MAX31335_INT_EN1_A1IE, reg);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_update_bits(max31335->regmap, MAX31335_STATUS1,
-+				 MAX31335_STATUS1_A1F, 0);
-+
-+	return 0;
-+}
-+
-+static int max31335_alarm_irq_enable(struct device *dev, unsigned int enabled)
-+{
-+	struct max31335_data *max31335 = dev_get_drvdata(dev);
-+
-+	return regmap_update_bits(max31335->regmap, MAX31335_INT_EN1,
-+				  MAX31335_INT_EN1_A1IE, enabled);
-+}
-+
-+static irqreturn_t max31335_handle_irq(int irq, void *dev_id)
-+{
-+	struct max31335_data *max31335 = dev_id;
-+	struct mutex *lock = &max31335->rtc->ops_lock;
-+	int ret, status;
-+
-+	mutex_lock(lock);
-+
-+	ret = regmap_read(max31335->regmap, MAX31335_STATUS1, &status);
-+	if (ret)
-+		goto exit;
-+
-+	if (FIELD_GET(MAX31335_STATUS1_A1F, status)) {
-+		ret = regmap_update_bits(max31335->regmap, MAX31335_STATUS1,
-+					 MAX31335_STATUS1_A1F, 0);
-+		if (ret)
-+			goto exit;
-+
-+		rtc_update_irq(max31335->rtc, 1, RTC_AF | RTC_IRQF);
-+	}
-+
-+exit:
-+	mutex_unlock(lock);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static const struct rtc_class_ops max31335_rtc_ops = {
-+	.read_time = max31335_read_time,
-+	.set_time = max31335_set_time,
-+	.read_alarm = max31335_read_alarm,
-+	.set_alarm = max31335_set_alarm,
-+	.alarm_irq_enable = max31335_alarm_irq_enable,
-+};
-+
-+static int max31335_trickle_charger_setup(struct device *dev,
-+					  struct max31335_data *max31335)
-+{
-+	u32 ohms, chargeable;
-+	int i, trickle_cfg;
-+	const char *diode;
-+
-+	if (device_property_read_u32(dev, "aux-voltage-chargeable",
-+				     &chargeable))
-+		return 0;
-+
-+	if (device_property_read_u32(dev, "trickle-resistor-ohms", &ohms))
-+		return 0;
-+
-+	if (device_property_read_string(dev, "adi,tc-diode", &diode))
-+		return 0;
-+
-+	if (!strcmp(diode, "schottky"))
-+		trickle_cfg = MAX31335_TRICKLE_SCHOTTKY_DIODE;
-+	else if (!strcmp(diode, "standard+schottky"))
-+		trickle_cfg = MAX31335_TRICKLE_STANDARD_DIODE;
-+	else
-+		dev_err_probe(dev, -EINVAL, "Invalid tc-diode value: %s\n",
-+			      diode);
-+
-+	for (i = 0; i < ARRAY_SIZE(max31335_trickle_resistors); i++)
-+		if (ohms == max31335_trickle_resistors[i])
-+			break;
-+
-+	if (i >= ARRAY_SIZE(max31335_trickle_resistors))
-+		return 0;
-+
-+	i = i + trickle_cfg;
-+
-+	return regmap_write(max31335->regmap, MAX31335_TRICKLE_REG,
-+			    FIELD_PREP(MAX31335_TRICKLE_REG_TRICKLE, i) |
-+			    FIELD_PREP(MAX31335_TRICKLE_REG_EN_TRICKLE,
-+				       chargeable));
-+}
-+
-+static unsigned long max31335_clkout_recalc_rate(struct clk_hw *hw,
-+						 unsigned long parent_rate)
-+{
-+	struct max31335_data *max31335 = clk_hw_to_max31335(hw);
-+	unsigned int freq_mask;
-+	unsigned int reg;
-+	int ret;
-+
-+	ret = regmap_read(max31335->regmap, MAX31335_RTC_CONFIG2, &reg);
-+	if (ret)
-+		return 0;
-+
-+	freq_mask = __roundup_pow_of_two(ARRAY_SIZE(max31335_clkout_freq)) - 1;
-+
-+	return max31335_clkout_freq[reg & freq_mask];
-+}
-+
-+static long max31335_clkout_round_rate(struct clk_hw *hw, unsigned long rate,
-+				       unsigned long *prate)
-+{
-+	int index;
-+
-+	index = find_closest(rate, max31335_clkout_freq,
-+			     ARRAY_SIZE(max31335_clkout_freq));
-+
-+	return max31335_clkout_freq[index];
-+}
-+
-+static int max31335_clkout_set_rate(struct clk_hw *hw, unsigned long rate,
-+				    unsigned long parent_rate)
-+{
-+	struct max31335_data *max31335 = clk_hw_to_max31335(hw);
-+	unsigned int freq_mask;
-+	int index;
-+
-+	index = find_closest(rate, max31335_clkout_freq,
-+			     ARRAY_SIZE(max31335_clkout_freq));
-+	freq_mask = __roundup_pow_of_two(ARRAY_SIZE(max31335_clkout_freq)) - 1;
-+
-+	return regmap_update_bits(max31335->regmap, MAX31335_RTC_CONFIG2,
-+				  freq_mask, index);
-+}
-+
-+static int max31335_clkout_enable(struct clk_hw *hw)
-+{
-+	struct max31335_data *max31335 = clk_hw_to_max31335(hw);
-+
-+	return regmap_set_bits(max31335->regmap, MAX31335_RTC_CONFIG2,
-+			       MAX31335_RTC_CONFIG2_ENCLKO);
-+}
-+
-+static void max31335_clkout_disable(struct clk_hw *hw)
-+{
-+	struct max31335_data *max31335 = clk_hw_to_max31335(hw);
-+
-+	regmap_clear_bits(max31335->regmap, MAX31335_RTC_CONFIG2,
-+			  MAX31335_RTC_CONFIG2_ENCLKO);
-+}
-+
-+static int max31335_clkout_is_enabled(struct clk_hw *hw)
-+{
-+	struct max31335_data *max31335 = clk_hw_to_max31335(hw);
-+	unsigned int reg;
-+	int ret;
-+
-+	ret = regmap_read(max31335->regmap, MAX31335_RTC_CONFIG2, &reg);
-+	if (ret)
-+		return ret;
-+
-+	return !!(reg & MAX31335_RTC_CONFIG2_ENCLKO);
-+}
-+
-+static const struct clk_ops max31335_clkout_ops = {
-+	.recalc_rate = max31335_clkout_recalc_rate,
-+	.round_rate = max31335_clkout_round_rate,
-+	.set_rate = max31335_clkout_set_rate,
-+	.enable = max31335_clkout_enable,
-+	.disable = max31335_clkout_disable,
-+	.is_enabled = max31335_clkout_is_enabled,
-+};
-+
-+static struct clk_init_data max31335_clk_init = {
-+	.name = "max31335-clkout",
-+	.ops = &max31335_clkout_ops,
-+};
-+
-+static int max31335_nvmem_reg_read(void *priv, unsigned int offset,
-+				   void *val, size_t bytes)
-+{
-+	struct max31335_data *max31335 = priv;
-+	unsigned int reg = MAX31335_TS0_SEC_1_128 + offset;
-+
-+	return regmap_bulk_read(max31335->regmap, reg, val, bytes);
-+}
-+
-+static int max31335_nvmem_reg_write(void *priv, unsigned int offset,
-+				    void *val, size_t bytes)
-+{
-+	struct max31335_data *max31335 = priv;
-+	unsigned int reg = MAX31335_TS0_SEC_1_128 + offset;
-+
-+	return regmap_bulk_write(max31335->regmap, reg, val, bytes);
-+}
-+
-+static struct nvmem_config max31335_nvmem_cfg = {
-+	.reg_read = max31335_nvmem_reg_read,
-+	.reg_write = max31335_nvmem_reg_write,
-+	.word_size = 8,
-+	.size = MAX31335_RAM_SIZE,
-+};
-+
-+#if IS_REACHABLE(HWMON)
-+static int max31335_read_temp(struct device *dev, enum hwmon_sensor_types type,
-+			      u32 attr, int channel, long *val)
-+{
-+	struct max31335_data *max31335 = dev_get_drvdata(dev);
-+	u8 reg[2];
-+	s16 temp;
-+	int ret;
-+
-+	if (type != hwmon_temp || attr != hwmon_temp_input)
-+		return -EOPNOTSUPP;
-+
-+	ret = regmap_bulk_read(max31335->regmap, MAX31335_TEMP_DATA_MSB,
-+			       reg, 2);
-+	if (ret)
-+		return ret;
-+
-+	temp = get_unaligned_be16(reg);
-+
-+	*val = (temp / 64) * 250;
-+
-+	return 0;
-+}
-+
-+static umode_t max31335_is_visible(const void *data,
-+				   enum hwmon_sensor_types type,
-+				   u32 attr, int channel)
-+{
-+	if (type == hwmon_temp && attr == hwmon_temp_input)
-+		return 0444;
-+
-+	return 0;
-+}
-+
-+static const struct hwmon_channel_info *max31335_info[] = {
-+	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
-+	NULL
-+};
-+
-+static const struct hwmon_ops max31335_hwmon_ops = {
-+	.is_visible = max31335_is_visible,
-+	.read = max31335_read_temp,
-+};
-+
-+static const struct hwmon_chip_info max31335_chip_info = {
-+	.ops = &max31335_hwmon_ops,
-+	.info = max31335_info,
-+};
-+#endif
-+
-+static int max31335_clkout_register(struct device *dev)
-+{
-+	struct max31335_data *max31335 = dev_get_drvdata(dev);
-+	int ret;
-+
-+	if (!device_property_present(dev, "#clock-cells"))
-+		return regmap_clear_bits(max31335->regmap, MAX31335_RTC_CONFIG2,
-+					 MAX31335_RTC_CONFIG2_ENCLKO);
-+
-+	max31335->clkout.init = &max31335_clk_init;
-+
-+	ret = devm_clk_hw_register(dev, &max31335->clkout);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "cannot register clock\n");
-+
-+	ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get,
-+					  &max31335->clkout);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "cannot add hw provider\n");
-+
-+	max31335->clkout.clk = devm_clk_get_enabled(dev, NULL);
-+	if (IS_ERR(max31335->clkout.clk))
-+		return dev_err_probe(dev, PTR_ERR(max31335->clkout.clk),
-+				     "cannot enable clkout\n");
-+
-+	return 0;
-+}
-+
-+static int max31335_probe(struct i2c_client *client)
-+{
-+	struct max31335_data *max31335;
-+#if IS_REACHABLE(HWMON)
-+	struct device *hwmon;
-+#endif
-+	int ret;
-+
-+	max31335 = devm_kzalloc(&client->dev, sizeof(*max31335), GFP_KERNEL);
-+	if (!max31335)
-+		return -ENOMEM;
-+
-+	max31335->regmap = devm_regmap_init_i2c(client, &regmap_config);
-+	if (IS_ERR(max31335->regmap))
-+		return PTR_ERR(max31335->regmap);
-+
-+	i2c_set_clientdata(client, max31335);
-+
-+	max31335->rtc = devm_rtc_allocate_device(&client->dev);
-+	if (IS_ERR(max31335->rtc))
-+		return PTR_ERR(max31335->rtc);
-+
-+	max31335->rtc->ops = &max31335_rtc_ops;
-+	max31335->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-+	max31335->rtc->range_max = RTC_TIMESTAMP_END_2199;
-+	max31335->rtc->alarm_offset_max = 24 * 60 * 60;
-+
-+	ret = max31335_clkout_register(&client->dev);
-+	if (ret)
-+		return ret;
-+
-+	if (client->irq > 0) {
-+		ret = devm_request_threaded_irq(&client->dev, client->irq,
-+						NULL, max31335_handle_irq,
-+						IRQF_ONESHOT,
-+						"max31335", max31335);
-+		if (ret) {
-+			dev_warn(&client->dev,
-+				 "unable to request IRQ, alarm max31335 disabled\n");
-+			client->irq = 0;
-+		}
-+	}
-+
-+	if (!client->irq)
-+		clear_bit(RTC_FEATURE_ALARM, max31335->rtc->features);
-+
-+	max31335_nvmem_cfg.priv = max31335;
-+	ret = devm_rtc_nvmem_register(max31335->rtc, &max31335_nvmem_cfg);
-+	if (ret)
-+		dev_err_probe(&client->dev, ret, "cannot register rtc nvmem\n");
-+
-+#if IS_REACHABLE(HWMON)
-+	hwmon = devm_hwmon_device_register_with_info(&client->dev, client->name,
-+						     max31335,
-+						     &max31335_chip_info,
-+						     NULL);
-+	if (IS_ERR(hwmon))
-+		dev_err_probe(&client->dev, PTR_ERR(hwmon),
-+			      "cannot register hwmon device\n");
-+#endif
-+
-+	ret = max31335_trickle_charger_setup(&client->dev, max31335);
-+	if (ret)
-+		return ret;
-+
-+	return devm_rtc_register_device(max31335->rtc);
-+}
-+
-+static const struct i2c_device_id max31335_id[] = {
-+	{ "max31335", 0 },
-+	{ }
-+};
-+
-+MODULE_DEVICE_TABLE(i2c, max31335_id);
-+
-+static const struct of_device_id max31335_of_match[] = {
-+	{ .compatible = "adi,max31335" },
-+	{ }
-+};
-+
-+MODULE_DEVICE_TABLE(of, max31335_of_match);
-+
-+static struct i2c_driver max31335_driver = {
-+	.driver = {
-+		.name = "rtc-max31335",
-+		.of_match_table = max31335_of_match,
-+	},
-+	.probe = max31335_probe,
-+	.id_table = max31335_id,
-+};
-+module_i2c_driver(max31335_driver);
-+
-+MODULE_AUTHOR("Antoniu Miclaus <antoniu.miclaus@analog.com>");
-+MODULE_DESCRIPTION("MAX31335 RTC driver");
-+MODULE_LICENSE("GPL");
--- 
-2.42.0
+Tested-by: Lukasz Stelmach <l.stelmach@samsung.com>
 
+> diff --git a/drivers/hwmon/hp-wmi-sensors.c b/drivers/hwmon/hp-wmi-sensor=
+s.c
+> index 17ae62f88bbf..bdd7ca163593 100644
+> --- a/drivers/hwmon/hp-wmi-sensors.c
+> +++ b/drivers/hwmon/hp-wmi-sensors.c
+> @@ -17,6 +17,8 @@
+>   *     Available: https://github.com/linuxhw/ACPI
+>   * [4] P. Roh=C3=A1r, "bmfdec - Decompile binary MOF file (BMF) from WMI=
+ buffer",
+>   *     2017. [Online]. Available: https://github.com/pali/bmfdec
+> + * [5] Microsoft Corporation, "Driver-Defined WMI Data Items", 2017. [On=
+line].
+> + *     Available: https://learn.microsoft.com/en-us/windows-hardware/dri=
+vers/kernel/driver-defined-wmi-data-items
+>   */
+>=20=20
+>  #include <linux/acpi.h>
+> @@ -24,6 +26,7 @@
+>  #include <linux/hwmon.h>
+>  #include <linux/jiffies.h>
+>  #include <linux/mutex.h>
+> +#include <linux/nls.h>
+>  #include <linux/units.h>
+>  #include <linux/wmi.h>
+>=20=20
+> @@ -395,6 +398,50 @@ struct hp_wmi_sensors {
+>  	struct mutex lock;	/* Lock polling WMI and driver state changes. */
+>  };
+>=20=20
+> +static bool is_raw_wmi_string(const u8 *pointer, u32 length)
+> +{
+> +	const u16 *ptr;
+> +	u16 len;
+> +
+> +	/* WMI strings are length-prefixed UTF-16 [5]. */
+> +	if (length <=3D sizeof(*ptr))
+> +		return false;
+> +
+> +	length -=3D sizeof(*ptr);
+> +	ptr =3D (const u16 *)pointer;
+> +	len =3D *ptr;
+> +
+> +	return len <=3D length && !(len & 1);
+> +}
+> +
+> +static char *convert_raw_wmi_string(const u8 *buf)
+> +{
+> +	const wchar_t *src;
+> +	unsigned cps;
+> +	unsigned len;
+> +	char *dst;
+> +	int i;
+> +
+> +	src =3D (const wchar_t *)buf;
+> +
+> +	/* Count UTF-16 code points. Exclude trailing null padding. */
+> +	cps =3D *src / sizeof(*src);
+> +	while (cps && !src[cps])
+> +		cps--;
+> +
+> +	/* Each code point becomes up to 3 UTF-8 characters. */
+> +	len =3D min(cps * 3, HP_WMI_MAX_STR_SIZE - 1);
+> +
+> +	dst =3D kmalloc((len + 1) * sizeof(*dst), GFP_KERNEL);
+> +	if (!dst)
+> +		return NULL;
+> +
+> +	i =3D utf16s_to_utf8s(++src, cps, UTF16_LITTLE_ENDIAN, dst, len);
+> +	dst[i] =3D '\0';
+> +
+> +	return dst;
+> +}
+> +
+>  /* hp_wmi_strdup - devm_kstrdup, but length-limited */
+>  static char *hp_wmi_strdup(struct device *dev, const char *src)
+>  {
+> @@ -412,6 +459,23 @@ static char *hp_wmi_strdup(struct device *dev, const=
+ char *src)
+>  	return dst;
+>  }
+>=20=20
+> +/* hp_wmi_wstrdup - hp_wmi_strdup, but for a raw WMI string */
+> +static char *hp_wmi_wstrdup(struct device *dev, const u8 *buf)
+> +{
+> +	char *src;
+> +	char *dst;
+> +
+> +	src =3D convert_raw_wmi_string(buf);
+> +	if (!src)
+> +		return NULL;
+> +
+> +	dst =3D hp_wmi_strdup(dev, strim(src));	/* Note: Copy is trimmed. */
+> +
+> +	kfree(src);
+> +
+> +	return dst;
+> +}
+> +
+>  /*
+>   * hp_wmi_get_wobj - poll WMI for a WMI object instance
+>   * @guid: WMI object GUID
+> @@ -462,8 +526,14 @@ static int check_wobj(const union acpi_object *wobj,
+>  	for (prop =3D 0; prop <=3D last_prop; prop++) {
+>  		type =3D elements[prop].type;
+>  		valid_type =3D property_map[prop];
+> -		if (type !=3D valid_type)
+> +		if (type !=3D valid_type) {
+> +			if (type =3D=3D ACPI_TYPE_BUFFER &&
+> +			    valid_type =3D=3D ACPI_TYPE_STRING &&
+> +			    is_raw_wmi_string(elements[prop].buffer.pointer,
+> +					      elements[prop].buffer.length))
+> +				continue;
+>  			return -EINVAL;
+> +		}
+>  	}
+>=20=20
+>  	return 0;
+> @@ -480,7 +550,9 @@ static int extract_acpi_value(struct device *dev,
+>  		break;
+>=20=20
+>  	case ACPI_TYPE_STRING:
+> -		*out_string =3D hp_wmi_strdup(dev, strim(element->string.pointer));
+> +		*out_string =3D element->type =3D=3D ACPI_TYPE_BUFFER ?
+> +			hp_wmi_wstrdup(dev, element->buffer.pointer) :
+> +			hp_wmi_strdup(dev, strim(element->string.pointer));
+>  		if (!*out_string)
+>  			return -ENOMEM;
+>  		break;
+> @@ -861,7 +933,9 @@ update_numeric_sensor_from_wobj(struct device *dev,
+>  {
+>  	const union acpi_object *elements;
+>  	const union acpi_object *element;
+> -	const char *string;
+> +	const char *new_string;
+> +	char *trimmed;
+> +	char *string;
+>  	bool is_new;
+>  	int offset;
+>  	u8 size;
+> @@ -885,11 +959,21 @@ update_numeric_sensor_from_wobj(struct device *dev,
+>  	offset =3D is_new ? size - 1 : -2;
+>=20=20
+>  	element =3D &elements[HP_WMI_PROPERTY_CURRENT_STATE + offset];
+> -	string =3D strim(element->string.pointer);
+> -
+> -	if (strcmp(string, nsensor->current_state)) {
+> -		devm_kfree(dev, nsensor->current_state);
+> -		nsensor->current_state =3D hp_wmi_strdup(dev, string);
+> +	string =3D element->type =3D=3D ACPI_TYPE_BUFFER ?
+> +		convert_raw_wmi_string(element->buffer.pointer) :
+> +		element->string.pointer;
+> +
+> +	if (string) {
+> +		trimmed =3D strim(string);
+> +		if (strcmp(trimmed, nsensor->current_state)) {
+> +			new_string =3D hp_wmi_strdup(dev, trimmed);
+> +			if (new_string) {
+> +				devm_kfree(dev, nsensor->current_state);
+> +				nsensor->current_state =3D new_string;
+> +			}
+> +		}
+> +		if (element->type =3D=3D ACPI_TYPE_BUFFER)
+> +			kfree(string);
+>  	}
+>=20=20
+>  	/* Old variant: -2 (not -1) because it lacks the Size property. */
+> @@ -996,11 +1080,15 @@ static int check_event_wobj(const union acpi_objec=
+t *wobj)
+>  			  HP_WMI_EVENT_PROPERTY_STATUS);
+>  }
+>=20=20
+> -static int populate_event_from_wobj(struct hp_wmi_event *event,
+> +static int populate_event_from_wobj(struct device *dev,
+> +				    struct hp_wmi_event *event,
+>  				    union acpi_object *wobj)
+>  {
+>  	int prop =3D HP_WMI_EVENT_PROPERTY_NAME;
+>  	union acpi_object *element;
+> +	acpi_object_type type;
+> +	char *string;
+> +	u32 value;
+>  	int err;
+>=20=20
+>  	err =3D check_event_wobj(wobj);
+> @@ -1009,20 +1097,24 @@ static int populate_event_from_wobj(struct hp_wmi=
+_event *event,
+>=20=20
+>  	element =3D wobj->package.elements;
+>=20=20
+> -	/* Extracted strings are NOT device-managed copies. */
+> -
+>  	for (; prop <=3D HP_WMI_EVENT_PROPERTY_CATEGORY; prop++, element++) {
+> +		type =3D hp_wmi_event_property_map[prop];
+> +
+> +		err =3D extract_acpi_value(dev, element, type, &value, &string);
+> +		if (err)
+> +			return err;
+> +
+>  		switch (prop) {
+>  		case HP_WMI_EVENT_PROPERTY_NAME:
+> -			event->name =3D strim(element->string.pointer);
+> +			event->name =3D string;
+>  			break;
+>=20=20
+>  		case HP_WMI_EVENT_PROPERTY_DESCRIPTION:
+> -			event->description =3D strim(element->string.pointer);
+> +			event->description =3D string;
+>  			break;
+>=20=20
+>  		case HP_WMI_EVENT_PROPERTY_CATEGORY:
+> -			event->category =3D element->integer.value;
+> +			event->category =3D value;
+>  			break;
+>=20=20
+>  		default:
+> @@ -1511,8 +1603,8 @@ static void hp_wmi_notify(u32 value, void *context)
+>  	struct acpi_buffer out =3D { ACPI_ALLOCATE_BUFFER, NULL };
+>  	struct hp_wmi_sensors *state =3D context;
+>  	struct device *dev =3D &state->wdev->dev;
+> +	struct hp_wmi_event event =3D {};
+>  	struct hp_wmi_info *fan_info;
+> -	struct hp_wmi_event event;
+>  	union acpi_object *wobj;
+>  	acpi_status err;
+>  	int event_type;
+> @@ -1546,7 +1638,7 @@ static void hp_wmi_notify(u32 value, void *context)
+>=20=20
+>  	wobj =3D out.pointer;
+>=20=20
+> -	err =3D populate_event_from_wobj(&event, wobj);
+> +	err =3D populate_event_from_wobj(dev, &event, wobj);
+>  	if (err) {
+>  		dev_warn(dev, "Bad event data (ACPI type %d)\n", wobj->type);
+>  		goto out_free_wobj;
+> @@ -1577,6 +1669,9 @@ static void hp_wmi_notify(u32 value, void *context)
+>  out_free_wobj:
+>  	kfree(wobj);
+>=20=20
+> +	devm_kfree(dev, event.name);
+> +	devm_kfree(dev, event.description);
+> +
+>  out_unlock:
+>  	mutex_unlock(&state->lock);
+>  }
+>
+> base-commit: 0f564130e5c76f1e5cf0008924f6a6cd138929d9
+
+=2D-=20
+=C5=81ukasz Stelmach
+Samsung R&D Institute Poland
+Samsung Electronics
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEXpuyqjq9kGEVr9UQsK4enJilgBAFAmVSC2YACgkQsK4enJil
+gBCIiggApIBO18ogBUIg66CEO0URC76nRlCvr4U65Qv1IxRdmuEFACqySQxEH37l
+Gv/7FTH1OcElUJkcOcCLMXvbl+IEN99UFGKru30p7cahqzTyXcIkDNCd/b7RAmRa
+fMCmNRVGFfFVXBEqXw8gf2yXHixa5O9i/6oOZP/AOhoO3V7BQIlJqc/oKK6vH8s1
+SuLS6TuW1THb5nGPAZ/jKTJHRyEZU+4ybvReDJPfROkBSZW2P2USOWrzzcLharkF
+x2sR3/YFZoVaUMAuzAR5M4QKdF89OSaERky+YmIwYOJ3GcGs1w6ie/32zlvjMfQi
+ysCX6Ij/peNq9e55dJpR3luZ6b3dRQ==
+=AOIR
+-----END PGP SIGNATURE-----
+--=-=-=--
