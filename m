@@ -1,56 +1,51 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D52B8405E4
-	for <linux-hwmon@vger.kernel.org>; Tue, 14 Nov 2023 14:09:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 024DE405DB
+	for <linux-hwmon@vger.kernel.org>; Tue, 14 Nov 2023 14:16:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SorRPTQC"
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96DA7D4D
-	for <linux-hwmon@vger.kernel.org>; Tue, 14 Nov 2023 06:09:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1699970944;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nBPr2/qhlVXy/Hyc/g7DaWfZI781K10TZ78qXMh6iek=;
-	b=SorRPTQClY1qco7twF/rVHo1Mr6neAZIk3AraWKp7ywi5MnL6aSGL7BgoKGaWAO20xXxxL
-	X3aNgkaMjRgxWGPZVDADo5/M3HvfwjvQYPB7PUSHVIGV/nQkOgzBq6xlcCOKzdDXGnfttM
-	Yp3wpCTf55gStJZvVgddhcicfU8ebM4=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-515-cusB0kPHP82E2pvcfDcqdQ-1; Tue, 14 Nov 2023 09:09:01 -0500
-X-MC-Unique: cusB0kPHP82E2pvcfDcqdQ-1
-Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-53ee9f409a9so3879053a12.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 14 Nov 2023 06:09:01 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZnNYjLPN"
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D9719B6
+	for <linux-hwmon@vger.kernel.org>; Tue, 14 Nov 2023 06:16:16 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-53d9f001b35so8579616a12.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 14 Nov 2023 06:16:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1699971374; x=1700576174; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=H0bSGPchqfN9CxyPh13Iokvu0hmCeQtU6WkRF/v0Dqs=;
+        b=ZnNYjLPNaxUbltez3BRKI0CWDQITdrieczJxR8DHavo6dmMt2AtP+hZxVaZTPpybPj
+         a5Ddzp15N59huKo/eduQEHIR7GHMOrRykTy1LqXDj7XkUmkwzb6dQPkVwNGN+jOJFcMt
+         SD+MiGGPgdQ4kvd78lGi3tNaQFK8aW66sndF6Q63IFpNZMBbOvQtbtuBr2jz4dOl2xv9
+         45pdDfLtnARJ8wRoBWyoEaXEK4lvU+wCHWd0UZsACuxetGraBMdH7k9Kyjq9js6yRlBW
+         dpVFBLRgtQMB8/Ne+wlDObR/OPRVj4pSi1yPc+TbGjt9/dDsLsYpToBUKlyA3v1Z5ICj
+         46NQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699970940; x=1700575740;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nBPr2/qhlVXy/Hyc/g7DaWfZI781K10TZ78qXMh6iek=;
-        b=k2ADw6PhHCG8oeQx3IugZfYPg/vzAnOjUXq20C7+hqF+WSfxi9VImuAW3QYCr9rkQJ
-         IqIfMpHu/4VbzOW6LqljRjUtMEaK5XPnYZAWBVg6TN4BuWb8t5JK9+vNu2xw+0Vsdsw0
-         pmmDWSktK3p2JyWcXzcjfiy7KsjNod0xfKfFztz4qnQZYVKtp4MVmhhNmlo5yQZgVFs/
-         ZGh+okHHx6gzxfYBLqYUphm22wYK1u30t6vrNdOpO+gPLavYDV3viev9WJMggR6z8NVN
-         AHduOLySDciQnIVZN8ns6xDEquSZ6dc+nF5ulQRFFivAV15CNyEqljalUw3niW18E1Wm
-         Ociw==
-X-Gm-Message-State: AOJu0YypWRFlbdpnwldaEL7kgHMEyvCMr89aVg2rwAt/q8Bf2QiRRsJd
-	1FOUiHHhpqs3RXpeqXBj6yZAUZdf4vNDt5JVVSSEpRaB7803Wo6/j3vPphu0TCFZlY67bK+zMtx
-	9pXr0fBYlm9dI7S4RDW611/o=
-X-Received: by 2002:aa7:cd78:0:b0:544:a26b:dfa3 with SMTP id ca24-20020aa7cd78000000b00544a26bdfa3mr6474532edb.6.1699970940444;
-        Tue, 14 Nov 2023 06:09:00 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHTbfNeRRfGbes8c0XvK7c0uIL0u9sxP/QgJnnaVnOeP3LCEOzo5wP7J/yWyaceeceittbAaQ==
-X-Received: by 2002:aa7:cd78:0:b0:544:a26b:dfa3 with SMTP id ca24-20020aa7cd78000000b00544a26bdfa3mr6474526edb.6.1699970940203;
-        Tue, 14 Nov 2023 06:09:00 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id r30-20020a50aade000000b005434e3d8e7bsm5276674edc.1.2023.11.14.06.08.58
+        d=1e100.net; s=20230601; t=1699971374; x=1700576174;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H0bSGPchqfN9CxyPh13Iokvu0hmCeQtU6WkRF/v0Dqs=;
+        b=XvSHG5UxlEnWghfignoN7X0Ks1UIbs2WujtLykbxGdVNkDxOr9KZdjh3qwH2YOVR1x
+         a0I7gfvWK+qMSeytYV4jLc5bDZwL0VhTF4aMzvFMdRjE2zPvC3AqDCz5SKtlSlR9uQrk
+         r4ECjyxFPf/L+YFOpK5r/w6XY2Le/qSm5D7bm+NzFb/CyuLgCxP8a2Mxhe/8tWpFwyfE
+         jbXHEAnt641FUGvCEXGJbtJKH+uMSgAUp6gU7uMAgmP0bNLwueZQvwRhj/88bcdmaI19
+         dfZx+cPmzX3hO9OUWGSgMcjaCh5LeovUHgKQBYXVybS3Ya+CF8dWcDTDpkXUVBlCv5ct
+         ZWtg==
+X-Gm-Message-State: AOJu0Yxa9AmbGg00PMuVGBjgwzV/kwfhWHf/LuRElOHrHrw6iGotALH0
+	tqwrow0T517ghXlcHFlOunTEcpv/wUI=
+X-Google-Smtp-Source: AGHT+IHfP0RXrlR92e41TQ++n5XqIfArPWihvNYZbRXOaJQHEL3m9BLwZ/HtOKePyGOOKbkiosoMoA==
+X-Received: by 2002:aa7:d5cd:0:b0:53b:9948:cc1f with SMTP id d13-20020aa7d5cd000000b0053b9948cc1fmr7708924eds.12.1699971374404;
+        Tue, 14 Nov 2023 06:16:14 -0800 (PST)
+Received: from ?IPV6:2a01:c22:774d:c900:c14e:307a:8e88:ee47? (dynamic-2a01-0c22-774d-c900-c14e-307a-8e88-ee47.c22.pool.telefonica.de. [2a01:c22:774d:c900:c14e:307a:8e88:ee47])
+        by smtp.googlemail.com with ESMTPSA id m14-20020a50998e000000b00546d9d81ec8sm5264861edb.93.2023.11.14.06.16.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Nov 2023 06:08:58 -0800 (PST)
-Message-ID: <d2cf4587-d6d3-4c77-a263-aefb01d93c5e@redhat.com>
-Date: Tue, 14 Nov 2023 15:08:57 +0100
+        Tue, 14 Nov 2023 06:16:14 -0800 (PST)
+Message-ID: <0a156edb-8955-4775-accf-ff5abe32a8fe@gmail.com>
+Date: Tue, 14 Nov 2023 15:16:13 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -58,42 +53,86 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/9] hwmon: (dell-smm) Add support for WMI SMM
- interface
-Content-Language: en-US, nl
+Subject: Re: [PATCH] hwmon: jc42: Simplify pm ops handling
 To: Guenter Roeck <linux@roeck-us.net>
-Cc: Armin Wolf <W_Armin@gmx.de>, pali@kernel.org, markgross@kernel.org,
- ilpo.jarvinen@linux.intel.com, jdelvare@suse.com,
- platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20231106064351.42347-1-W_Armin@gmx.de>
- <3ec0496d-3b89-46f5-9faf-9fcce78f6b38@gmx.de>
- <8c25dfec-b0ca-4e2f-964a-5ae62452e141@redhat.com>
- <149a31b1-f5b8-438c-8883-987cb4224944@roeck-us.net>
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <149a31b1-f5b8-438c-8883-987cb4224944@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+References: <23f24d6d-ae79-4014-b4df-dc19ddb88e3f@gmail.com>
+ <a9b99531-cd00-4d4c-b046-cdd2e8ef202d@roeck-us.net>
+Content-Language: en-US
+From: Heiner Kallweit <hkallweit1@gmail.com>
+Autocrypt: addr=hkallweit1@gmail.com; keydata=
+ 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
+In-Reply-To: <a9b99531-cd00-4d4c-b046-cdd2e8ef202d@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Hi Guenter,
-
-On 11/14/23 14:57, Guenter Roeck wrote:
-> On Mon, Nov 13, 2023 at 09:17:48PM +0100, Hans de Goede wrote:
+On 14.11.2023 14:53, Guenter Roeck wrote:
+> On Mon, Nov 13, 2023 at 08:20:49PM +0100, Heiner Kallweit wrote:
+>> Use pm_sleep_ptr/DEFINE_SIMPLE_DEV_PM_OPS to simplify the code.
 >>
->> I plan to review and hopefully merge this and your
->> other series sometime this week.
->>
+>> Note: Apparently conditional compiling based on CONFIG_PM
+>> wasn't optimal, it should have been CONFIG_PM_SLEEP.
 > 
-> What warrants merging this series through your tree(s) instead of
-> through hwmon ?
+> Maybe that is apparent to you, but not to me, and I assume it won't
+> be apparent to others either. That warrants a real explanation,
+> not just "apparently".
+> 
 
-My bad, I was not paying attention to what the patches were touching
-(just a quick reply to Armin's status request), I agree that this
-should be merged through the hwmon tree, sorry about the confusion.
+See e.g. pm_generic_suspend(), it's NULL if CONFIG_PM_SLEEP isn't
+defined. Another hint is the following from pm.h:
 
-Regards,
+#ifdef CONFIG_PM_SLEEP
+#define SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+	SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn)
+#else
+#define SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn)
+#endif
 
-Hans
+CONFIG_PM_SLEEP implies CONFIG_PM, but we can have a setup where
+CONFIG_PM is defined but CONFIG_PM_SLEEP is not. In this case
+jc42_suspend/resume would be defined but not used by the PM core.
 
+> Guenter
 
-
+Heiner
