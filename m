@@ -1,56 +1,62 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A2CF405C0
-	for <linux-hwmon@vger.kernel.org>; Tue, 14 Nov 2023 13:53:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0E0F405C2
+	for <linux-hwmon@vger.kernel.org>; Tue, 14 Nov 2023 13:58:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XVOGK0LZ"
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4B01A1
-	for <linux-hwmon@vger.kernel.org>; Tue, 14 Nov 2023 05:53:54 -0800 (PST)
-Received: by mail-qv1-xf33.google.com with SMTP id 6a1803df08f44-66d87554434so35958506d6.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 14 Nov 2023 05:53:54 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ndMYdRBh"
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA1E1994;
+	Tue, 14 Nov 2023 05:58:01 -0800 (PST)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1efb9571b13so3448510fac.2;
+        Tue, 14 Nov 2023 05:58:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699970033; x=1700574833; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1699970280; x=1700575080; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ddTTbjvU4erKqXMFnrTE4jkbkhMjNYZvCZdUyEAr3qY=;
-        b=XVOGK0LZFOqXaj7Hl8/ZJCACOStrmVnKJNY4yc+Kx/vpgALlV96mNjNLol+3HxiLxs
-         zaCXiy88rvrn/I1SL6DRQ43wVJryAzL/DlER6S4rAqoUCADsVZVlkNRChi6jPY6KebAg
-         ut+UpmaRLptTgGPI856q7rwuxxnp+EFxmdogZGF0fjQnTsUSOI7AEbf0aoiyTWC6HSUh
-         NbXaOGEV26G+5pRh569gFzm5wXL7SXOhtvM8w63dxog7CokbD9OIXlw9JV9aJFEyZhyu
-         TmH7NY0i2qrlAAoPjoe7plrq7oFyYwLauqdm1eEW7QeCda5ZsISt+USTN4R9FthszInZ
-         NF9A==
+        bh=7tQ/w7U1rEr9pNLfzZT/Ukv2lbglG63Hd24Y7omCEu8=;
+        b=ndMYdRBhuGzs5m5r28ytpRzeCtq/wT08uE1WROpgLj35wkx2BYuGGzGqkvCAKK//Oe
+         JdRVIqA/t1+/Ud6AwnfUvody+0anHf4qXmJLeQi2tGF9hwvsFLTWB9rLATzBxOHmQQeX
+         SbtUJtObHIEMN4w0DXFbffnR5u4WF61AkZbw3679UPS893bHBo6m5GUZiLR+i5CcanYg
+         ZWVLepKDJMg0W16hR+PFSOq6ocbmh4W5HTU/7deDNuvsa1nbXQKbkgfla/HjGkNU/jCp
+         niSrSoMxVdrbzjXDXHI/Uum5e3Oj444D0vFlgj9iW6b0jRFdO2AlOaueNLFo9K4Tr9Tw
+         xFww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699970033; x=1700574833;
+        d=1e100.net; s=20230601; t=1699970280; x=1700575080;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ddTTbjvU4erKqXMFnrTE4jkbkhMjNYZvCZdUyEAr3qY=;
-        b=dnmWCq2QvGX4aeT5v1P0HyGVS1SowQK3E/7NlQIEmeWWFz8F0MTF+JV+e42b5TgJSm
-         s4JJVkPpS56JyLqRtg2Oju+LSifYsBBSpQrt3UuBDhhv/fJoqTqnrQkAKxY100LdTtJY
-         mDumg/9KC1aQSVE/2JZ60ZcSVi6Z5LpSs2v80OqO+eh2qnyHZ8O7OXcXsksUI3+kBwcb
-         3Dfs2AM3gFRoMcqAyM8sHMt32tr0ugWHVi8qE2yC2CvUNNEvFOLdG+Jw2ge+2WxC5YHT
-         iP1HiGL0pyXBXN/HpESAH2NJ8YELyln2+4EDex+P0/4iaKaw+bQD9BOfMnQaCzmQ7eX7
-         TwQA==
-X-Gm-Message-State: AOJu0YwT5uNdrLkDcTd8TNx0s2L9XhHJUDkOC05qnRceJfNmIeWDp3ca
-	HCVwMcfDHVrAf83Y8sRb3jI=
-X-Google-Smtp-Source: AGHT+IHL7rdCg3KXJ1k4lKfsA9J4te1MXqAH5P24l0p3efxYo5M9SdkAMz2ikcjpOzj0Ci1y0Pz8WQ==
-X-Received: by 2002:a05:6214:560c:b0:66d:3723:294b with SMTP id mg12-20020a056214560c00b0066d3723294bmr1670169qvb.64.1699970033308;
-        Tue, 14 Nov 2023 05:53:53 -0800 (PST)
+        bh=7tQ/w7U1rEr9pNLfzZT/Ukv2lbglG63Hd24Y7omCEu8=;
+        b=rYVUQHwxAKVF2jviGDxXLWEoWaPBiFp2m0w3TAte5CalkheOU119CaJMgoeL5O33ru
+         ta8NtvtVXSN/jzqPpGmMAFAQf8wUwgCwT9GDbTWjGCwhLRW2WXKJGFYsgWicpR5/MI3/
+         7ifXh7/2WSaaul6p6WfNVy1HBiu5OvWcvcwwvWFJMUkdSY4wQ7IScKb97mcsIJjMlI1C
+         1R9OrVrmwPjXZbS1BsYqddzSliFHp0UyRxfDSKgq0jUA7WCdSK1XvZuAjy2AzqIcdiu5
+         lSNKdGvLZCSgSC7lob6SXt/JIARpqSq1nlPZmZIoOH5cpElhoT85i19tscod646BeOHL
+         53Yw==
+X-Gm-Message-State: AOJu0Yy4ruQSG5F51IZhIldWwgoKRhfpuUz1uHv91PKNQJPK4SnbtmDj
+	wW1mBt93uJH3amXr68gnJnPyBq+LYOA=
+X-Google-Smtp-Source: AGHT+IG2kwx3olSWgkhoI21eWtGCUJjtnOwNM1Yb0dfCZ782WdZE4B0kmJy6laSkiHWN9lbI0DZggQ==
+X-Received: by 2002:a05:6870:1494:b0:1ea:bb5:a531 with SMTP id k20-20020a056870149400b001ea0bb5a531mr12651796oab.13.1699970280553;
+        Tue, 14 Nov 2023 05:58:00 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id po10-20020a05620a384a00b00775afce4235sm2636799qkn.131.2023.11.14.05.53.52
+        by smtp.gmail.com with ESMTPSA id k21-20020a05620a07f500b007759e9b0eb8sm2686217qkk.99.2023.11.14.05.57.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Nov 2023 05:53:52 -0800 (PST)
+        Tue, 14 Nov 2023 05:58:00 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 14 Nov 2023 05:53:51 -0800
+Date: Tue, 14 Nov 2023 05:57:58 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Heiner Kallweit <hkallweit1@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: jc42: Simplify pm ops handling
-Message-ID: <a9b99531-cd00-4d4c-b046-cdd2e8ef202d@roeck-us.net>
-References: <23f24d6d-ae79-4014-b4df-dc19ddb88e3f@gmail.com>
+To: Hans de Goede <hdegoede@redhat.com>
+Cc: Armin Wolf <W_Armin@gmx.de>, pali@kernel.org, markgross@kernel.org,
+	ilpo.jarvinen@linux.intel.com, jdelvare@suse.com,
+	platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/9] hwmon: (dell-smm) Add support for WMI SMM
+ interface
+Message-ID: <149a31b1-f5b8-438c-8883-987cb4224944@roeck-us.net>
+References: <20231106064351.42347-1-W_Armin@gmx.de>
+ <3ec0496d-3b89-46f5-9faf-9fcce78f6b38@gmx.de>
+ <8c25dfec-b0ca-4e2f-964a-5ae62452e141@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -59,16 +65,15 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <23f24d6d-ae79-4014-b4df-dc19ddb88e3f@gmail.com>
+In-Reply-To: <8c25dfec-b0ca-4e2f-964a-5ae62452e141@redhat.com>
 
-On Mon, Nov 13, 2023 at 08:20:49PM +0100, Heiner Kallweit wrote:
-> Use pm_sleep_ptr/DEFINE_SIMPLE_DEV_PM_OPS to simplify the code.
+On Mon, Nov 13, 2023 at 09:17:48PM +0100, Hans de Goede wrote:
 > 
-> Note: Apparently conditional compiling based on CONFIG_PM
-> wasn't optimal, it should have been CONFIG_PM_SLEEP.
+> I plan to review and hopefully merge this and your
+> other series sometime this week.
+> 
 
-Maybe that is apparent to you, but not to me, and I assume it won't
-be apparent to others either. That warrants a real explanation,
-not just "apparently".
+What warrants merging this series through your tree(s) instead of
+through hwmon ?
 
 Guenter
