@@ -1,221 +1,388 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B39B291F;
-	Tue, 14 Nov 2023 08:33:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C95BD156E0
+	for <linux-hwmon@vger.kernel.org>; Tue, 14 Nov 2023 10:51:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H62js26N"
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF2D1A5;
-	Tue, 14 Nov 2023 00:33:12 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9e623356e59so569366566b.0;
-        Tue, 14 Nov 2023 00:33:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699950791; x=1700555591; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=YKuTpCPN16vLxqtxNUoO64nlEyO6OP4oo4zEgiC+VFo=;
-        b=H62js26NeVAoKg/n0v9GTffUyJgNu896aMz8x1OoQpgWh6+LCfhbNwO/zKGxhiL3eQ
-         g5Wt9yUDLwPLt1Q3mgpO1AiCO3Fz8xzZ3o5oY+c5VCPCwsQsbjpWwMwWgB8/uld9UOjx
-         BpLhe6i9ZfjoRodvegfymsqb0KRrcWvL8fZeFY0fJre43HNQ4dsyzc7v/xCDv89L3HRt
-         7z1/pB9Ll1RFYNg/mL/TeVkMWNbyNTEVFLanVFCFbJq3tyPXacXXRvxWake8NCjssL1S
-         SnanwEyjtGhqtUfvCWDaVAfpGG6IZRMF1ysnUQEyZggcYcMq7iFrEaZ14bf1Xs3CPRUU
-         Hgdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699950791; x=1700555591;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YKuTpCPN16vLxqtxNUoO64nlEyO6OP4oo4zEgiC+VFo=;
-        b=c0Q+sgcn5AXSSsPzAdwl/GsUuUAuWYuF+xgnvp1fkHKIFlXK2MsQFd8tRiovpCxzsI
-         0rY5FRpOrhPzNzsYPDRuq+49nCNLEy5GDzjSNxwDsWZpIQ1lHuXmU+K7Ss77CwWHX4KC
-         W5OoZBNJ2yr3o4uL+SVVvPFzvdRvY4j1xS9zfx66BRa1YbR5LcWUxjHF1b6eeOEn94Y5
-         AOoumryjaxIuzv/5WLjRphId+qEKgddUWtSV+qErXM17+N3dGEAE5sJWRk/aZajI1p/q
-         Z9ojI+pzgTXl4lXKRboi4e+gfpoa0P7E2vTmRrd4qFWtCe8ggPnB8fS6uoaYnaZZ+Bkr
-         gNXg==
-X-Gm-Message-State: AOJu0Yz/zPrVCod4HAzPHCerR7voAdjXseKAbRDJsvya4etZz/ruuWpU
-	LjGL5e7kp/1xlBNfLneLCzasQ7HQWnyecXiT2oY=
-X-Google-Smtp-Source: AGHT+IEB9op4P/sigur1MvKvXtbr8TVcL/3UGnaMQfq+6vpzHk5HudqjhagJMT47mz52OydRN0ypiA==
-X-Received: by 2002:a17:906:7185:b0:9e3:85c9:11dc with SMTP id h5-20020a170906718500b009e385c911dcmr6132334ejk.32.1699950790794;
-        Tue, 14 Nov 2023 00:33:10 -0800 (PST)
-Received: from ?IPv6:2003:f6:ef1b:2000:361b:8f29:1cbf:5e69? (p200300f6ef1b2000361b8f291cbf5e69.dip0.t-ipconnect.de. [2003:f6:ef1b:2000:361b:8f29:1cbf:5e69])
-        by smtp.gmail.com with ESMTPSA id pj19-20020a170906d79300b0099ce025f8ccsm5176315ejb.186.2023.11.14.00.33.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Nov 2023 00:33:10 -0800 (PST)
-Message-ID: <fc3304423a57ca8acb40ecf8d2fb641aa280a8c1.camel@gmail.com>
-Subject: Re: [PATCH 2/2] hwmon: ltc4282: add support for the LTC4282 chip
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: Andy Shevchenko <andy@kernel.org>
-Cc: Nuno Sa <nuno.sa@analog.com>, linux-hwmon@vger.kernel.org, 
- linux-doc@vger.kernel.org, devicetree@vger.kernel.org, Bartosz Golaszewski
- <brgl@bgdev.pl>, Jonathan Corbet <corbet@lwn.net>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Linus Walleij
- <linus.walleij@linaro.org>,  Guenter Roeck <linux@roeck-us.net>, Rob
- Herring <robh+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,  Conor
- Dooley <conor+dt@kernel.org>
-Date: Tue, 14 Nov 2023 09:36:07 +0100
-In-Reply-To: <ZVJPbV2469kjqbHu@smile.fi.intel.com>
-References: <20231110151905.1659873-1-nuno.sa@analog.com>
-	 <20231110151905.1659873-3-nuno.sa@analog.com>
-	 <ZU5fYY81L_qSmQWq@smile.fi.intel.com>
-	 <581aec9c6313e3885aae8b1e12dfcc9f392716db.camel@gmail.com>
-	 <ZVJPbV2469kjqbHu@smile.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.1 
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YHadyKgp"
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52EB1187;
+	Tue, 14 Nov 2023 02:51:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1699959073; x=1731495073;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=lvdhR9cqOOSf9RGNFn4qM3c7dCfoGvtrzOLAaTvuIHQ=;
+  b=YHadyKgpL5fSRpsIwVAifvAlfduD6Kz10QdMfbalit9qt0Us/IYwhSCe
+   1NIJ5YQhXSv3lxpSk99iSEoZaP2cepqxIuclrufp3vLOUbtJOnBjRdm3R
+   YR7JeKWgWAmMQ8IL0Xw5Ca3sgWDQ1CliKumjFMohQcmksOzUSLebCPj+N
+   bH+kugP7gN9qOdzDbs9wCVg0yxlm/QDFOneIc09nU5Xi0xf8ctgoX5ITm
+   0s8TDL4B8UWPAPLSe79Ub++IH+kGrRvqJcYkAr7mLVHeNLwxxHmlSKaEM
+   5wA/JiWyaTT1EyDKJmjNoMIgjbR5C6MR6jGDFwvzTx6c95b5MBROXrJlm
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10893"; a="381029360"
+X-IronPort-AV: E=Sophos;i="6.03,301,1694761200"; 
+   d="scan'208";a="381029360"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2023 02:51:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10893"; a="888219908"
+X-IronPort-AV: E=Sophos;i="6.03,301,1694761200"; 
+   d="scan'208";a="888219908"
+Received: from rauhjoha-mobl2.ger.corp.intel.com ([10.251.217.194])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2023 02:51:06 -0800
+Date: Tue, 14 Nov 2023 12:51:04 +0200 (EET)
+From: =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To: Henry Shi <henryshi2018@gmail.com>
+cc: hbshi69@hotmail.com, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
+    dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
+    Hans de Goede <hdegoede@redhat.com>, markgross@kernel.org, 
+    jdelvare@suse.com, linux@roeck-us.net, LKML <linux-kernel@vger.kernel.org>, 
+    platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+    hb_shi2003@yahoo.com, henrys@silicom-usa.com, wenw@silicom-usa.com
+Subject: Re: [PATCH v12] platform/x86: Add Silicom Platform Driver
+In-Reply-To: <20231113210216.30237-1-henryshi2018@gmail.com>
+Message-ID: <fdeef06d-ab78-b2d-741d-fc3863f7edb5@linux.intel.com>
+References: <20231113210216.30237-1-henryshi2018@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="8323329-1550574774-1699959070=:1748"
 
-On Mon, 2023-11-13 at 18:31 +0200, Andy Shevchenko wrote:
-> On Mon, Nov 13, 2023 at 11:13:44AM +0100, Nuno S=C3=A1 wrote:
-> > On Fri, 2023-11-10 at 18:50 +0200, Andy Shevchenko wrote:
-> > > On Fri, Nov 10, 2023 at 04:18:46PM +0100, Nuno Sa wrote:
->=20
-> ...
->=20
-> > > > +/*
-> > > > + * relaxed version of FIELD_PREP() to be used when mask is not a
-> > > > compile
-> > > > time constant
-> > > > + * u32_encode_bits() can't also be used as the compiler needs to b=
-e
-> > > > able to
-> > > > evaluate
-> > > > + * mask at compile time.
-> > > > + */
-> > > > +#define LTC4282_FIELD_PREP(m, v)	(((v) << (ffs(m) - 1)) & (m))
-> > >=20
-> > > Can we name it accordingly as done in other places, and TBH it's a ti=
-me to
-> > > move
-> > > it to the header. (At least I know about two more implementations of
-> > > this).
-> >=20
-> > Not sure what you mean? Is there some other drivers doing it already? I=
-'ll,
-> > anyways, wait on more feedback for the GPIO stuff because we might end =
-up
-> > not
-> > needing it...
->=20
-> $ git grep -n 'define field_prep'
->=20
-> ...
->=20
-> > > > +	/* GPIO_2,3 and the ALERT pin require setting the bit to 1 to
-> > > > pull
-> > > > down the line */
-> > > > +	if (!gpio->active_high)
-> > >=20
-> > > Hmm... Why do you need a separate flag for this? Shouldn't be describ=
-ed or
-> > > autodetected somehow?
-> >=20
-> > Well, if a consumer as an active high gpio, it expects to call
-> > gpiod_set_value(..., 1) and the line to assert, right? To have that, we=
- need
-> > to
-> > write 0 on the device register for some of the pins.
->=20
-> It doesn't matter, the GPIO (not _raw) APIs are using logical levels, 1 =
-=E2=80=94
-> activate,
-> 0 =E2=80=94 deactivate.
->=20
-> > And the same story is true for active low. gpiod_set_value(..., 0) will=
- have
-> > the
-> > gpiolib to automatically invert the value and we get 1 in the callback.
->=20
-> Yes, but why do you have that flag in the structure?
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Because one of the pins (GPIO_1) has the opposite behavior...
+--8323329-1550574774-1699959070=:1748
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
->=20
-> > > > +		val =3D !val;
->=20
-> ...
->=20
-> > > > +	*val =3D DIV_ROUND_CLOSEST_ULL(be16_to_cpu(in) * (u64)fs,
-> > > > U16_MAX);
-> > >=20
-> > > I'm wondering if you can do some trick to "divide" actually to 2^16 s=
-o, it
-> > > will
-> > > not use division op at all?
-> >=20
-> > Hmm, not sure if it will be obvious but you mean something like:
-> >=20
-> > *val =3D (be16_to_cpu(in) * (u64)fs) >> 16;
-> >=20
-> > Is this what you mean? If so, we`ll loose the "CLOSEST" handling... Not=
- so
-> > sure
-> > if we need to be "that" performant in such a code path. But Guenter can=
- also
-> > share his opinion...
->=20
-> 	*val =3D DIV_ROUND_CLOSEST_ULL(be16_to_cpu(in) * (u64)fs + (BIT(16) -
-> 1), BIT(16));
->=20
-> will give the same result without division, no?
-> What you need is to make sure that the multiplication won't get closer to
-> U64_MAX, which seems not the case here (max 48-bit number).
+On Mon, 13 Nov 2023, Henry Shi wrote:
 
-Hmm, I must be missing something but you're still using DIV_ROUND_CLOSEST_U=
-LL().
-So, I guess you're rely on some formula optimization that removes the divis=
-ion
-(I'm honestly seeing it) but the result won't be exactly the same (off by 1=
-).
-Again, this is not a fast path (AFAIK) and this is a typical formula to get=
- a
-value from an ADC so I'm not sure making any super "smart" tricks to make t=
-his
-run faster beats readability.
+> platform/x86: Add Silicom Platform Driver
+> 
+> Add Silicom platform (silicom-platform) Linux driver for Swisscom
+> Business Box (Swisscom BB) as well as Cordoba family products.
+> 
+> This platform driver provides support for various functions via
+> the Linux LED framework, GPIO framework, Hardware Monitoring (HWMON)
+> and device attributes.
+> 
+> Signed-off-by: Henry Shi <henryshi2018@gmail.com>
+> ---
+> 
+> Changes from v1 to v2:
+> ===========================
+> 
+> Suggested by Hans de Goede <hdegoede@redhat.com>
+> .Use git send-email to submit patch.
+> .patch contents should be in message body.
+> .Kconfig bit for the driver should be in drivers/platform/x86/Kconfig.
+> 
+> changes from patch v2 to v3
+> ===========================
+> 
+> changes suggested by Guenter Roeck <groeck7@gmail.com>
+> .Removed unnecessary include file linux/thermal.h.
+> .Removed EXPORT_SYMBOL for mutex lock/unlock function.
+> 
+> Changes suggested by Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> .Remove extra new line in code on multiple position.
+> .Use table instead of space in code.
+> .Uss Linux defined bit operation MACRO define.
+> .Removed local variable in rpm_get().
+> .Corrected typo in comments.
+> .Corrected incorrect indentation.
+> .Removed unnecessary comments in silicom_mc_leds_register().
+> .Rewrite efuse_status_show() to used defined variable and removed 
+> uncessary local variables.
+> .Rewrite uc_version_show() to used defined variable and removed 
+> uncessary local variables.
+> .Removed unused MACRO define: #define CHANNEL_TO_BIT(chan) ((chan) & 0x07).
+> .Rewrite powercycle_uc() to used defined variable and removed uncessary 
+> local variables.
+> .use GENMASK() and use FIELD_GET() instead of bit shift.
+> .Added define for constant 0x28 used in  efuse_status_show().
+> .Added define for constant 0x0 used in  uc_version_show().
+> .Added define for constant 0x0 used in  powercycle_uc().
+> .Rearrange functions to avoid uncessary pre-define.
+> .Rewrite rpm_get() to used defined variable and removed uncessary 
+> local variables.
+> .Rewrite temp_get() to used defined variable and removed uncessary 
+> local variables.
+> .Use FIELD_GET instead of bit shift in temp_get().
+> .Used #define for constant variable 0/1.
+> 
+> Changes suggested by Christophe JAILLET <christophe.jaillet@wanadoo.fr>:
+> .use "if (!led->subled_info)" instead of
+> "if (IS_ERR_OR_NULL(led->subled_info))
+> "in silicom_mc_leds_register
+> 
+> changes from patch v3 to v4
+> ===========================
+> 
+> changes suggested by Guenter Roeck <groeck7@gmail.com>
+> 
+> Changes suggested by Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>:
+> .Rewrite silicom_mec_led/gpip_set/get() functions to use two newly created
+> silicom_mec_port_get()/silicom_mec_port_set() which have common code.
+> .Remove duplicate code in silicom_mec_port_get()
+> .Rewrite uc_version_show() to use Linux bit operation MACRO, and add
+> logic to check un-supported register value.
+> .Added "#define MEC_EFUSE_LSB_ADDR 0x28" and "#define
+> MEC_POWER_CYCLE_ADDR 0x24"
+> .Added "#define MEC_VERSION_MAJOR GENMASK(15, 14)" and "#define
+> MEC_VERSION_MINOR GENMASK(13, 8)".
+> 
+> Changes suggested by Christophe JAILLET <christophe.jaillet@wanadoo.fr>:
+> .Used a local variable to store "sizeof(struct mc_subled)" in function
+> silicom_mc_leds_register().
+> 
+> change from patch v4 to v5
+> ===========================================
+> 
+> changes suggested by Guenter Roeck <groeck7@gmail.com>:
+> .Corrected return value in temp_get() to return 1/10000th degree.
+> .Removed local variable struct silicom_fan_control_data *ctl in
+> silicom_fan_control_read_fan(),
+> removed storing rpm value to ctl variable.
+> .Removed local variable struct silicom_fan_control_data *ctl in 
+> silicom_fan_control_read_temp(),
+> .removed storing rpm value to ctl variable.
+> .Changed return string in silicom_fan_control_read_labels() to 
+> specific string for Silicom platform driver.
+> .Removed silicom_fan_control_data structure.
+> .Removed static variable mec_io_base and mec_io_len, and added
+> "#define MEC_IO_BASE 0x0800 and #define MEC_IO_LEN 0x8".
+> .Removed ".write = NULL" in silicom_fan_control_hwmon_ops
+> structure defination.
+> .Removed unnecessary function silicom_fan_control_write().
+> .Removed unnecessary check for silicom_led_info in function
+> silicom_platform_probe.
+> .Removed unnecessary local variable "silicom_fan_control_data *ctl"
+> in silicom_platform_probe().
+> .Clean out driver initialization error handling in
+> silicom_platform_init();
+> .Add patch version and changelog for patch submission.
+> 
+> Changes suggested by Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>:
+> .Rename "#define MEC_DATA(offset) to "#define MEC_DATA_OFFSET(offset).
+> .Use constant defined in include/linux/units.h instead of a literal.
+> .return directly instead of go to err condition when
+> platform_device_register_simple() failed.
+> .Remove unnecessary check for silicom_led_info and silicom_gpiochip.
+> .Use a local variable to how multiple use of array size.
+> .Align the arguments to the same column in
+> silicom_mec_led_mc_brightness_set.
+> .Add patch version and changelog that shows version to version changes
+> for patch submission.
+> 
+> Changes suggested by Christophe JAILLET <christophe.jaillet@wanadoo.fr>:
+> .Use "sizeof(*led)" instead of "sizeof(struct led_classdev_mc)"
+> .Use "if (!led)" instead of "if (IS_ERR_OR_NULL(led))" 
+> .Removed unnecessary error message:
+> "dev_err(dev, "Failed to alloc led_classdev_mc[%d]:
+> %ld\n", i, PTR_ERR(led)).
+> 
+> change from patch vv5 to v6
+> ===========================================
+> 
+> changes suggested by Guenter Roeck <groeck7@gmail.com>:
+> .Removed checkpath warnings. 
+> .Resoved dependencies between CONFIG_HWMON and CONFIG_SILICOM_PLATFORM.
+> 
+> change from patch v6 to v7
+> ===========================================
+> 
+> changes suggested by Hans de Goede <hdegoede@redhat.com>:
+> .Usa a proper subsystem prefix for this patch subject:
+> Subject: platform/x86: Add Silicom Platform Driver.
+> 
+> change from patch v7 to v8
+> ===========================================
+> 
+> changes suggested by Hans de Goede <hdegoede@redhat.com>:
+> .Chnage commit message of this driver.
+> .Adjust location of change log and signed-off-by.
+> .Change "config SILICOM_PLATFORM" and help contents location,
+> and put it to source "drivers/platform/x86/siemens/Kconfig".
+> .Set editor tab to 8 and align the start of extra function
+> parameters to directly after (. This should be applied for
+> all function.
+> .Do not manually create a sysfs dir and register sysfs attribute,
+> instead define a platform_driver structure.
+> .Move MODULE_DEVICE_TABLE(dmi, silicom_dmi_ids) directly after
+> table declaration.
+> .Using pr_info() instead of dev_info() in function
+> silicom_platform_info_init().
+> .Made dmi_check_system() check the first thing to do in
+> silicom_platform_init().
+> .Instead of separate platform_device creation + driver registration,
+> switched to using platform_create_bundle().
+> .Removed mutex_destroy(&mec_io_mutex).
+> 
+> 
+> Changes suggested by Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>:
+> .Too many GENMASK() within to code itself, need put them to
+> #define. Removed all GENMASK() in c functions.
+> 
+> change from patch v8 to v9
+> ===========================================
+> 
+> Changes suggested by Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>:
+> .Just do the same (like MEC_VERSION_MAJOR) with all places in the where
+> you previously had GENMASK() in the code (currently MEC_GET_BITS()
+> is there, obviously, but it should go away and be replaced with
+> FIELD_GET(GOODPREFIX_GOODNAME, ...))).
+> .This is sysfs so it's odd to print pr_err() like that here. If the driver
+> does not support those versions at all, the probe should fail. If driver is
+> fine but just doesn't know how to interpret such a version, you should
+> return -Esomething here. Driver returns -EINVAL here.
+> .Replace CENTI with 100
+> .Align FIELD_GET()s to the same column for line 661.
+> .Change variables efuse_status, mec_uc_version, power_cycle to unsigned
+> int from int.
+> 
+> changes suggested by Hans de Goede <hdegoede@redhat.com>:
+> .Please add a Documentation/ABI/testing/sysfs-platform-silicom
+> file to document driver specific the sysfs attributes of this driver.
+> .Like with the Kconfig part, group this together with the other industrial
+> PC drivers we have at the end of the Makefile after Siemens
+> Simatic Industrial PCs.
+> 
+> change from patch v9 to v10
+> ===========================================
+> 
+> Changes suggested by Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>:
+> .Added missing newline in kernel document file.
+> .Changed the order #define to make sure they are in increasing order.
+> .Removed printing in init function silicom_platform_info_init();
+> .Changed #define name MEC_PREFIX_HIGH_BYTES to MEC_TEMPERATURE.
+> .Removed dev_err(dev, "Failed to register[%d]: %d\n", i, err)
+> in function silicom_mc_leds_register() before ruturn err.
+> .Changed %du to %u in function power_cycle_store(...).
+> .Chnaged sprintf() to sysfs_emit().
+> .Changed start point for multi-line comments.
+> .Added empty line to seperate #define.
+> .Remove parenthesis around MEC_IO_BASE.
+> .Changed #define EC_ADDR_MSB (MEC_IO_BASE + 0x3), use
+> a constant value instead of MEC_DATA_OFFSET_MASK.
+> .Changed define name MEC_PREFIX_NAME to MEC_PORT_LOC.
+> .Changed define MEC_PREFIX_HIGH_BYTES to MEC_TEMP_LOC.
+> .Removed "PREFIX" from define name, changed
+> MEC_PREFIX_SEC_BYTE to MEC_VERSION_LOC.
+> 
+> change from patch v10 to v11
+> ===========================================
+> 
+> Changes suggested by Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>:
+> .Don't print anything when userspace gives an invalid value,
+> just return -EINVAL in function power_cycle_store().
+> .The includes should be in alphabethical order.
+> .Just make the calculation once and store into a local variable
+> in function silicom_mec_port_set().
+> .Use GENMASK for MEC_PORT_OFFSET_MASK, MEC_PORT_CHANNEL_MASK,
+> MEC_DATA_OFFSET_MASK.
+> .Rename MEC_PORT_LOC to MEC_PORT_DWORD_OFFSET.
+> .Add local variable to function silicom_mec_port_set() and
+> silicom_mec_port_get() to make the code less heavy to read.
+> .Allgned defines start from same column mostly.
+> .Kernel test robot WARNING sys/devices/platform/silicom-platform/hwmon/hwmon1/
+> is defined 4 times.
+> 
+> change from patch v11 to v12
+> ===========================================
+> 
+> Changes suggested by Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>:
+> Several editorial things:
+> .Put the subdir headers separately.
+> .Add more new line in define section.
+> .Use () around all macro arguments to be on the safe side.
+> .Add new line and remove comment in function silicom_mec_port_get().
+> .Add new line and remove comment in function silicom_mec_port_set().
+> .Remove unnecessary comment in function temp_get(), rpm_get().
 
-But, I'm still not seeing what you mean so I might change my mind...
 
->=20
-> Ditto for all other similar cases which I already pointed out.
->=20
-> ...
->=20
-> > > > +	u64 temp =3D=C2=A0 DECA * 40ULL * st->vfs_out * 1 << 16, temp_2;
->=20
-> > >=20
-> > > "* BIT(16)" / "* BIT_ULL(16)" ?
-> >=20
-> > Well, I can just place the number as in the formula. Not too keen on th=
-e
-> > BIT()
-> > macros as this is not really a mask.
->=20
-> I'm not sure I got this. The << 16 neither a plain number and BIT() is eq=
-ually
 
-Well, I do agree with << 16 part...
+> +#define MEC_DATA_OFFSET(offset) ((MEC_IO_BASE) + 0x04 + offset)
 
-> good. With power of two it's most likely that this is due to internal
-> implementation of the firmware or hardware, so again BIT() can be still g=
-ood
-> enough to show that.
->=20
+Put parenthesis around offset.
 
-I'm still not convinced honestly... I see plain numbers to be a good fit an=
-d
-they match exactly with the DS. I just see things like BIT(), GENMASK, BITM=
-AP
-and the likes to be used on masks.
+> +static ssize_t uc_version_show(struct device *dev,
+> +			       struct device_attribute *attr,
+> +			       char *buf)
+> +{
+> +	u32 reg;
+> +	int uc_version;
 
-But I don't really care so unless Guenter has some opinion I can make as yo=
-u
-suggest...
 
-- Nuno S=C3=A1
+> +static int __init silicom_platform_probe(struct platform_device *device)
+> +{
+> +	int err;
+> +	u8 magic, ver;
+> +	struct device *hwmon_dev;
+> +	const char *name = "Silocom_Fan_Monitor";
 
+There a typo in this string? Also, this doesn't seem to require using 
+local variable, you could just put it directly into the call below.
+
+Are you aware that most drivers use all lowercase names (this is not 
+universal but seems to be mostly the case)? I guess the name that would 
+best follow the usual convention is just "silicom_fan".
+
+
+Also, try to use reverse xmas tree order for function variable declaration 
+lines (that is, put the longest line first). Check the other functions 
+yourself besides the two I quoted above.
+
+But no need to go overboard with it if there are internal dependencies in 
+the variable initalizations, you may occasionally have to "violate" the 
+length based ordering, that's fine.
+
+> +	if (!devm_request_region(&device->dev, MEC_IO_BASE, MEC_IO_LEN, "mec")) {
+> +		dev_err(&device->dev, "couldn't reserve MEC io ports\n");
+> +		return -EBUSY;
+> +	}
+> +
+> +	/* Sanity check magic number read for EC */
+> +	outb(IO_REG_BANK, MEC_ADDR);
+> +	magic = inb(MEC_DATA_OFFSET(DEFAULT_CHAN_LO));
+> +	ver = inb(MEC_DATA_OFFSET(DEFAULT_CHAN_HI));
+> +	dev_dbg(&device->dev, "EC magic 0x%02x, version 0x%02x\n", magic, ver);
+> +
+> +	if (magic != SILICOM_MEC_MAGIC) {
+> +		dev_err(&device->dev, "Bad EC magic 0x%02x!\n", magic);
+> +		return -ENODEV;
+> +	}
+> +
+> +	err = silicom_mc_leds_register(&device->dev, silicom_led_info);
+> +	if (err) {
+> +		dev_err(&device->dev, "Failed to register LEDs\n");
+> +		return err;
+> +	}
+> +
+> +	err = devm_gpiochip_add_data(&device->dev, silicom_gpiochip,
+> +				     silicom_gpio_channels);
+> +	if (err) {
+> +		dev_err(&device->dev, "Failed to register gpiochip: %d\n", err);
+> +		return err;
+> +	}
+> +
+> +	hwmon_dev = devm_hwmon_device_register_with_info(&device->dev, name, NULL,
+> +							 &silicom_chip_info, NULL);
+> +	err = PTR_ERR_OR_ZERO(hwmon_dev);
+> +	if (err) {
+> +		dev_err(&device->dev, "Failed to register hwmon_dev: %d\n", err);
+> +		return err;
+> +	}
+> +
+> +	return err;
+> +}
+
+-- 
+ i.
+
+--8323329-1550574774-1699959070=:1748--
