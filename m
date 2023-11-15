@@ -1,53 +1,59 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A98c5Igw"
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4807219D;
-	Wed, 15 Nov 2023 14:24:18 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id 5614622812f47-3b587bd1a63so644497b6e.1;
-        Wed, 15 Nov 2023 14:24:18 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BqH4lBvI"
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6983C192;
+	Wed, 15 Nov 2023 14:27:23 -0800 (PST)
+Received: by mail-oi1-x22d.google.com with SMTP id 5614622812f47-3b5ff072fc4so97633b6e.3;
+        Wed, 15 Nov 2023 14:27:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700087057; x=1700691857; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1700087242; x=1700692042; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7pK7x80v/TUk+HNYdR00Nsp/GdzaTg3DmSY6zCPIMGg=;
-        b=A98c5IgwxRX3p2FGO34UArDsfhs+2wQG9M7rmPcUg6aaNCMNQKS4R51pkOIS/o9dHg
-         DpBZm6BwTr0nRR01WTo+bx3KGyJm8u2xg6Dy8LMoM+1D9x5jMXNVRytuxWLCJGE7Ni3U
-         pA3JeUDD3oNu9psEWeoNik04FjbB+L7RWlJAn8wCSvqW+Bt29S6iYkZlIRS4At0IkOAW
-         yqLXp0LKDlmew3bUbMtnaUeHenwoMehMOvPer/l00kIFwcjCTd48pg2QEiduyo4I7DW1
-         3bw55ksuV15ZHwfTbnCCPvOdCWckPwjXGC2U5R6sfpQlOr/dDlkv9hb2Bpj0OjWB4ify
-         x0jA==
+        bh=e17v8Sw4wSJJjTaEGlOWNvLKDpho2BpFrgN/WZm5exE=;
+        b=BqH4lBvIPcYOdW4R/viS7Pf1SEDUjq7gDMi+Fg77bGQglQLclZC76lG9yzFIkvTTXY
+         29rceaBs/OX5ENNv40axfywDZlAdJroZ6JmIzz9b+GoRDeW37fHGFxK+ZAWWbHPJhwp/
+         r9niKHaw6CwelYW4yql7jMp2C5ZcWxp6mMPGYXWxXsNVuCSus0UG3n2BDKbTVHIUSAiQ
+         FnvZtd8xc9aC221/3ITNgzh58KNzZkmUdFE/R9HJd0+PyYcZUlkKlMz4uxbqKAyTGPay
+         4HV5/QNAXs6M7uhO2vUwJf1sBf/F1JmdNq086MSo8/3J4AvYmhKOq4fWkVksw16GIXAX
+         4dFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700087057; x=1700691857;
+        d=1e100.net; s=20230601; t=1700087242; x=1700692042;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7pK7x80v/TUk+HNYdR00Nsp/GdzaTg3DmSY6zCPIMGg=;
-        b=T8zPtsUWyJiAZ9yJdGu1U1D13jr8X6sHWXKFV0wuoU07ZONTWBz+yoIapHxLNvXqEp
-         cDMGLrNRUFiWgmJ3partRN98g0817BBvAxB2qQwpLZ6WSe6SjotiQrpOaA6BWhne1xkJ
-         cr600nLTaih6PLs37D/C6brbVQq2kIKJzC3c19nBHP00usWTVMEb9VifhgJhNOO5of09
-         /Rj96QYUZtLC8xjv1fojDf0rTJ2NLiIAQmWgLO6P9uSRtUfkANutQSNs0b9o98PNAGc4
-         1L/7RLvMIusN9xHzjCD+/1aNlY1UJNOjtXmeO8rRHPj32fvmX8+Indj72oocV+j2Do+g
-         K2aQ==
-X-Gm-Message-State: AOJu0Yxfwv+QXoyVJKGwINUoudVCn8D7hU6Zm+8u4bI1QkloNxP0AI1Q
-	YrAlqMgdiRhTNk7050bHSa4stWX3bbw=
-X-Google-Smtp-Source: AGHT+IHdq1afOr17zIpOmnrFXKOSA54kmUEhDEWVRk4T9O0ItiEcdIypqDNf0UUNOIKrqBjSoC7Vyw==
-X-Received: by 2002:a05:6808:1918:b0:3a7:3791:706a with SMTP id bf24-20020a056808191800b003a73791706amr4029129oib.5.1700087057509;
-        Wed, 15 Nov 2023 14:24:17 -0800 (PST)
+        bh=e17v8Sw4wSJJjTaEGlOWNvLKDpho2BpFrgN/WZm5exE=;
+        b=IRuAiFDFUu/OX5VktPTLlWhnUqFuOqj1SdKWwNpzegmoYjzZejz9D+JMNITN42zqCo
+         SQu24sJrg8TNHXoaV6IFRee9ql9uX/ReQ2dMeeqbA9xjtxNdanPFOmSNlmxD9/EshbvS
+         H6cBzyeqrs4Qzzq7/JiTrBlSk1W0Bw6q4cybIZ1ZPeUPB/KenSS8lWOofG4FG7iY1tab
+         wbVn8+lW8vISrye4xB3gDD4zXMCPN7pccoGj4GjVy2RX9BM/O33dtexy/E/QxwBAyzqx
+         UBzE9V+iMlGGyAkSYEt/dSusqrUk6PCV4izvckYdRAJi6GQVvIN6vTZNFgeVK7Sp72X1
+         SE4g==
+X-Gm-Message-State: AOJu0YyItwjHx16EfQpMidNWEPu377/4CW9Hy5F7SykDh2x5xlk4iLi8
+	NcNotke8eAhgrd5183YFjRw=
+X-Google-Smtp-Source: AGHT+IFzAmvQX76tphpqTzSfTrMQ1xJxEJB6K6SOEfqb0t5crcNxzmM10NYre9nmdBE6apikiF5LZA==
+X-Received: by 2002:a05:6808:6541:b0:3b6:dc6f:2741 with SMTP id fn1-20020a056808654100b003b6dc6f2741mr16185463oib.19.1700087242730;
+        Wed, 15 Nov 2023 14:27:22 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h1-20020a056808014100b003ae0e57874fsm1620531oie.21.2023.11.15.14.24.16
+        by smtp.gmail.com with ESMTPSA id dq8-20020a056808428800b003a9ba396d62sm1633251oib.36.2023.11.15.14.27.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Nov 2023 14:24:17 -0800 (PST)
+        Wed, 15 Nov 2023 14:27:22 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 15 Nov 2023 14:24:16 -0800
+Date: Wed, 15 Nov 2023 14:27:21 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Rob Herring <robh@kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] hwmon: lm25066: Use i2c_get_match_data()
-Message-ID: <69c0290f-ab61-4f6a-95f5-3ef0486c4bce@roeck-us.net>
-References: <20231115205703.3730448-1-robh@kernel.org>
- <20231115205703.3730448-3-robh@kernel.org>
+To: Peter Yin <peteryin.openbmc@gmail.com>
+Cc: patrick@stwcx.xyz, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Joel Stanley <joel@jms.id.au>,
+	Chanh Nguyen <chanh@os.amperecomputing.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: Add mps mp5990 driver bindings
+Message-ID: <a3445201-58f2-42c6-bef7-ca6968fd80d6@roeck-us.net>
+References: <20231113155008.2147090-1-peteryin.openbmc@gmail.com>
+ <20231113155008.2147090-2-peteryin.openbmc@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -56,18 +62,14 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231115205703.3730448-3-robh@kernel.org>
+In-Reply-To: <20231113155008.2147090-2-peteryin.openbmc@gmail.com>
 
-On Wed, Nov 15, 2023 at 02:57:02PM -0600, Rob Herring wrote:
-> Use preferred i2c_get_match_data() instead of of_match_device() and
-> i2c_match_id() to get the driver match data. With this, adjust the
-> includes to explicitly include the correct headers.
+On Mon, Nov 13, 2023 at 11:50:07PM +0800, Peter Yin wrote:
+> Add a device tree bindings for mp5990 device.
 > 
-> Adjust the 'chips' enum to not use 0, so that no match data can be
-> distinguished from a valid enum value.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Peter Yin <peteryin.openbmc@gmail.com>
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-Applied.
+What branch is this patch based on ? git fails to apply it.
 
 Guenter
