@@ -1,129 +1,216 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFE4A1A5A2;
-	Wed, 15 Nov 2023 13:25:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7784E1CAAF;
+	Wed, 15 Nov 2023 13:45:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lJTWNsPg"
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF6E120;
-	Wed, 15 Nov 2023 05:25:34 -0800 (PST)
-Received: by mail-qk1-x736.google.com with SMTP id af79cd13be357-778925998cbso447128385a.0;
-        Wed, 15 Nov 2023 05:25:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700054733; x=1700659533; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3vuQNx0saY2ItGRKdBl26Lb/Oz25BKx0ZaIePLBjp78=;
-        b=lJTWNsPgkvArhJfx4mLzea66zYOPRDRqShORfizWt7bJwxyfZkIXlZoZpXiNpkYX7b
-         Ie9VxfSoTJ8ISvgqoq4CKoF2O7hVN7TGbaw/AV1H8VDXX9Fxyi+hNyFdbfL+WqPFDQjq
-         AsBN1/AY9K6AOugiCty/leyHi+zlF1Tax1husrlbiGg6nSG7l4+XjPyDk0XaMGx8HlxR
-         C4HqEpQ4WmxM8mR08upTH/Q3Ox5ycJ8673wZ40j4YZFfVbhyrhtFwm7ddZznVH+0B8L8
-         Pk0S9cghW+PejIMoLtKLY1HJvLRJde9RQf3NlOkpWOWhqeknqFoP49lMFOtTH7Jsritj
-         DTRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700054733; x=1700659533;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3vuQNx0saY2ItGRKdBl26Lb/Oz25BKx0ZaIePLBjp78=;
-        b=FUCzcEEjeMTfo1FOEnSEEBRA22fJG7nZNf+lKt7h7euSHz8Vrt2FlQuEPm5KHpqNlB
-         pW/v44mI9udgtjtREu0IMIGXIMOwUrcoDALcIwr4MdOjo3m+gsL81ndVYa7FBKPnYokU
-         T8voOwc9fcJ0W2y4Uu5YszLeMXyEKGAb7HxM6JAud3FzAoXaVUzFMl1fc7PnBZLSPbO4
-         /Z+KMGWK5TDgBD40I2Ijsk46++iZH57VF78zzNp2IhdmfzVgUQFbbuV41s5OLG2o1kRS
-         2gcV9xoUv61Pfs4P0PTzBXFA4Drh4VydVMmsNmvRqy/hGr5kzt47T6IElDl49M3Y5pox
-         kiSQ==
-X-Gm-Message-State: AOJu0Ywej8tnD8LOEx2BzpDxGk7FP1zvO92yRQv0/Iu02rCRHOA2yVXr
-	58VbYV7zrC03zGpNqXppAI2zzSR3wkY=
-X-Google-Smtp-Source: AGHT+IF4gKYfsnPTfy77RCqBJS3PI8cTib/dwl7HH/3rcJTzhH91a7+Qu0a6cI2q5Hc8xdw7+fnmIA==
-X-Received: by 2002:a05:620a:4627:b0:767:923:48e7 with SMTP id br39-20020a05620a462700b00767092348e7mr6223765qkb.5.1700054733626;
-        Wed, 15 Nov 2023 05:25:33 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id dp12-20020a05620a2b4c00b0076f0744ff50sm3433522qkb.136.2023.11.15.05.25.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Nov 2023 05:25:33 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 15 Nov 2023 05:25:31 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Cc: Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] hwmon: (core) Add support for humidity min/max
- alarm
-Message-ID: <1ef7a10c-d9cf-4042-a198-f72dbdf9d05a@roeck-us.net>
-References: <20231020-topic-chipcap2-v2-0-f5c325966fdb@gmail.com>
- <20231020-topic-chipcap2-v2-2-f5c325966fdb@gmail.com>
- <44f1eaa3-a90d-42cf-9808-4f39aacbf270@roeck-us.net>
- <25059951-ca50-4b19-8f74-5631b34c719b@gmail.com>
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="K5qR9s7u"
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801A39B;
+	Wed, 15 Nov 2023 05:45:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1700055936; x=1731591936;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=OeuBwu619sZ9CKoQPi5K5tN9S8LiI/QU+WIb+tJzElw=;
+  b=K5qR9s7unnXRV3gVy9PsYjzG1vlOI8nl2W8EmYvJpcwh++32NUETLJyE
+   fY6lW/X0ybZMYqGCElq5mqVwaGo6qP31u+ogmM5jKb4czzcfaGTNV3pvd
+   lZ509x8vT8Vw+0utX1fbUYh+msZWP1Xy85jK1dF5Ju/ylD7hj6Z+B1t2s
+   o5lMcb/OSI0NROzKeQHI6mbGyMg70zNCLtB938sFoAnYi2o+rvbdHlj4m
+   ph7JAHJ11osBg0YCejBqPDTdf1ukG1qF/5jCAHRQquaAsJc6t80fMJAxd
+   msf3jetbR6zX3xEFAorxRlSxXf+4kSrCLLEyi0iaDGrMGA3cIYUjNvJ09
+   g==;
+X-CSE-ConnectionGUID: 2CxX/TgFSY+eV5q6XTnYdw==
+X-CSE-MsgGUID: vg1bWUbUSr6+Li1euWtieA==
+X-ThreatScanner-Verdict: Negative
+X-IronPort-AV: E=Sophos;i="6.03,305,1694761200"; 
+   d="scan'208";a="178883589"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 15 Nov 2023 06:45:35 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 15 Nov 2023 06:45:03 -0700
+Received: from marius-VM.mshome.net (10.10.85.11) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Wed, 15 Nov 2023 06:45:00 -0700
+From: <marius.cristea@microchip.com>
+To: <jic23@kernel.org>, <lars@metafoo.de>, <robh+dt@kernel.org>,
+	<jdelvare@suse.com>, <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>
+CC: <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+	<linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <marius.cristea@microchip.com>
+Subject: [PATCH v3 1/2] dt-bindings: iio: adc: adding support for PAC193X
+Date: Wed, 15 Nov 2023 15:44:52 +0200
+Message-ID: <20231115134453.6656-2-marius.cristea@microchip.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231115134453.6656-1-marius.cristea@microchip.com>
+References: <20231115134453.6656-1-marius.cristea@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <25059951-ca50-4b19-8f74-5631b34c719b@gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On Thu, Nov 09, 2023 at 07:24:00AM +0100, Javier Carrasco wrote:
-> Hello,
-> 
-> On 09.11.23 01:02, Guenter Roeck wrote:
-> > On 11/8/23 07:37, Javier Carrasco wrote:
-> >> Add min_alarm and max_alarm attributes for humidityX to support devices
-> >> that can generate these alarms.
-> >> Such attributes already exist for other magnitudes such as tempX.
-> >>
-> >> Tested with a ChipCap 2 temperature-humidity sensor.
-> >>
-> > 
-> > No objection, but the new attributes also need to be added to the ABI
-> > documentation at
-> > Documentation/ABI/testing/sysfs-class-hwmon and
-> > Documentation/hwmon/sysfs-interface.rst
-> > 
-> > Which made me notice that humidityX_alarm isn't documented either.
-> > Please document that attribute as well while you are at it.
-> > 
-> > Thanks,
-> > Guenter
-> > 
-> Actually there are several attributes without ABI documentation or at
-> least the attributes enum is much larger than the objects in the ABI
-> documentation (in testing/sysfs-class-hwmon).
-> For humidity there is only input, enable, rated_min and rated_max. Are
-> some attributes not described for a good reason or should all be
-> documented? the current humidity_attributes contains:
-> 
-> hwmon_humidity_enable -> documented in sysfs-class-hwmon
-> hwmon_humidity_input -> documented in sysfs-class-hwmon
-> hwmon_humidity_label
-> hwmon_humidity_min
-> hwmon_humidity_min_hyst
-> hwmon_humidity_max
-> hwmon_humidity_max_hyst
-> hwmon_humidity_alarm
-> hwmon_humidity_fault
-> hwmon_humidity_rated_min -> documented in sysfs-class-hwmon
-> hwmon_humidity_rated_max -> documented in sysfs-class-hwmon
-> 
-> I could not find the temperature counterparts of my new additions
-> (temp_min_alarm and temp_max_alarm).
-> 
-> Should all be added to sysfs-class-hwmon or am I missing some other
-> document? I am alright adding the ones I mentioned.
-> 
+From: Marius Cristea <marius.cristea@microchip.com>
 
-They should all be documented. It would be great if you volunteer
-to add the missing ones, but that won't be a mandate. I just don't want
-the situation to get worse.
+This is the device tree schema for iio driver for
+Microchip PAC193X series of Power Monitors with Accumulator.
 
-Thanks,
-Guenter
+Signed-off-by: Marius Cristea <marius.cristea@microchip.com>
+---
+ .../bindings/iio/adc/microchip,pac1934.yaml   | 137 ++++++++++++++++++
+ 1 file changed, 137 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/adc/microchip,pac1934.yaml
+
+diff --git a/Documentation/devicetree/bindings/iio/adc/microchip,pac1934.yaml b/Documentation/devicetree/bindings/iio/adc/microchip,pac1934.yaml
+new file mode 100644
+index 000000000000..2609cb19c377
+--- /dev/null
++++ b/Documentation/devicetree/bindings/iio/adc/microchip,pac1934.yaml
+@@ -0,0 +1,137 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/iio/adc/microchip,pac1934.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Microchip PAC1934 Power Monitors with Accumulator
++
++maintainers:
++  - Marius Cristea <marius.cristea@microchip.com>
++
++description: |
++  This device is part of the Microchip family of Power Monitors with Accumulator.
++  The datasheet for PAC1931, PAC1932, PAC1933 and PAC1934 can be found here:
++    https://ww1.microchip.com/downloads/aemDocuments/documents/OTH/ProductDocuments/DataSheets/PAC1931-Family-Data-Sheet-DS20005850E.pdf
++
++properties:
++  compatible:
++    enum:
++      - microchip,pac1931
++      - microchip,pac1932
++      - microchip,pac1933
++      - microchip,pac1934
++
++  reg:
++    maxItems: 1
++
++  "#address-cells":
++    const: 1
++
++  "#size-cells":
++    const: 0
++
++  interrupts:
++    maxItems: 1
++
++  microchip,slow-io:
++    type: boolean
++    description: |
++      A GPIO used to trigger a change is sampling rate (lowering the chip power consumption).
++      If configured in SLOW mode, if this pin is forced high, sampling rate is forced to eight
++      samples/second. When it is forced low, the sampling rate is 1024 samples/second unless
++      a different sample rate has been programmed.
++
++patternProperties:
++  "^channel@[1-4]+$":
++    type: object
++    $ref: adc.yaml
++    description: Represents the external channels which are connected to the ADC.
++
++    properties:
++      reg:
++        items:
++          minimum: 1
++          maximum: 4
++
++      shunt-resistor-micro-ohms:
++        description: |
++          Value in micro Ohms of the shunt resistor connected between
++          the SENSE+ and SENSE- inputs, across which the current is measured. Value
++          is needed to compute the scaling of the measured current.
++
++    required:
++      - reg
++      - shunt-resistor-micro-ohms
++
++    unevaluatedProperties: false
++
++required:
++  - compatible
++  - reg
++  - "#address-cells"
++  - "#size-cells"
++
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: interrupts
++    then:
++      properties:
++        microchip,slow-io: false
++    else:
++      if:
++        properties:
++          compatible:
++            contains:
++              const: microchip,slow-io
++      then:
++        properties:
++          interrupts: false
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        pac193x: power-monitor@10 {
++            compatible = "microchip,pac1934";
++            reg = <0x10>;
++
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            channel@1 {
++                reg = <0x1>;
++                shunt-resistor-micro-ohms = <24900000>;
++                label = "CPU";
++            };
++
++            channel@2 {
++                reg = <0x2>;
++                shunt-resistor-micro-ohms = <49900000>;
++                label = "GPU";
++            };
++
++            channel@3 {
++                reg = <0x3>;
++                shunt-resistor-micro-ohms = <75000000>;
++                label = "MEM";
++                bipolar;
++            };
++
++            channel@4 {
++                reg = <0x4>;
++                shunt-resistor-micro-ohms = <100000000>;
++                label = "NET";
++                bipolar;
++            };
++        };
++    };
++
++...
+-- 
+2.34.1
+
