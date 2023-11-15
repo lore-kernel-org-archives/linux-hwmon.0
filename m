@@ -1,129 +1,140 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA85D1EB31;
-	Wed, 15 Nov 2023 13:46:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 593FE18B1B;
+	Wed, 15 Nov 2023 13:56:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="QBT/K71t"
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE331FA;
-	Wed, 15 Nov 2023 05:45:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1700055958; x=1731591958;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=eiHhnwxmDdZ6uny+ZcBXgoWY+2o1D01iokPBwa8lAqY=;
-  b=QBT/K71t52GzIeVl+byh/5EVkQl3AymLPmObR231p3lUoIDRfWcTbdZP
-   OsQGxVzVFHMTOQM+XKzKz5Yj9mUHHhuudBGKOiqcfReevLWFMH1AahOsZ
-   v4KF7xi85pDShePB4xySO7uoWtsSxQM3A3utWM/lc/FQbnS7Oup/58FV8
-   aF/uXZJviaYhGMV9z82HMckvR3gNKONRg1qxpIQeR3dhjX5WPXuQRh+mL
-   GHNrBhUHlPvMdLeCPTjOCrC7nk15q+LUM5FQzXqdExTt+VCcrRKpfR2qz
-   eP5jjL50uJrkEpB3NRXGthXumqrjj2drSXkMz1eVJ5ULn0TDm552XrJHQ
-   Q==;
-X-CSE-ConnectionGUID: LgQt6nmvRtWORLzOkR+vzg==
-X-CSE-MsgGUID: xozfofjNR0uC+f6mWO+Xjw==
-X-ThreatScanner-Verdict: Negative
-X-IronPort-AV: E=Sophos;i="6.03,305,1694761200"; 
-   d="scan'208";a="12423813"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 15 Nov 2023 06:45:57 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 15 Nov 2023 06:44:59 -0700
-Received: from marius-VM.mshome.net (10.10.85.11) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Wed, 15 Nov 2023 06:44:55 -0700
-From: <marius.cristea@microchip.com>
-To: <jic23@kernel.org>, <lars@metafoo.de>, <robh+dt@kernel.org>,
-	<jdelvare@suse.com>, <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>
-CC: <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-	<linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <marius.cristea@microchip.com>
-Subject: [PATCH v3 0/2] adding support for Microchip PAC193X Power Monitor
-Date: Wed, 15 Nov 2023 15:44:51 +0200
-Message-ID: <20231115134453.6656-1-marius.cristea@microchip.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HAnb+1dz"
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC902E1;
+	Wed, 15 Nov 2023 05:56:27 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2c788f5bf53so78432861fa.2;
+        Wed, 15 Nov 2023 05:56:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700056586; x=1700661386; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XzgHXk908oWBPw+MYYi5rg03v0Vm6ncWzqNrtjGiwyM=;
+        b=HAnb+1dzCudRmS9tQG25YIxOn3CKY3N3wf2fyWACbDHPSVZHhiyCKr7iIafBFFAWu9
+         /jELEofULDZYY3BH5shLCH0cHdjse8/XVz8WkDJAIazlE4YqVXzbbx5jx8DN3u2ZcoEF
+         VVFs2oaQpmryDsbHUX1INpymfLHTlAF4OzTA6DScPyc5CCfjtVT+zol1KjzXbVKx07fQ
+         zh1BnBkrtEzsG4bcH/uLdvOwgvRhXYzL142vZsqAypfXXuWv/SmjQ5xyuMy5I8twM3wT
+         Wt1vte2XHz5p4iVMrdeETlJYBoLvrUocGvLZm/3y91m2utDTyiJ8mPlRSnvuxIrGXxoK
+         zHhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700056586; x=1700661386;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XzgHXk908oWBPw+MYYi5rg03v0Vm6ncWzqNrtjGiwyM=;
+        b=qy33dAldtl6E8mROqJ9gLCABfTuykamOxpiWqCBz2peeqlB/TB7oGWCmN8XovEFWDd
+         ojz2uNZ/i2xBRdoGUGJv71AqxK/rkcpLeh6N1ceP6AF5Wk6gCHAQPylWX7wldMXs5f0D
+         DkUTOcWQuKLtNlMQWiyxrYNLuLAS05cyLdVYo6GqU5i/hV1GFe2JyFeaJWEZIYN6CLm0
+         cw34L6KhxjXXqIcEmXazibbXa5oou9dLtnFX0G1yD54ti5rGehau9QdFyuD3lY8Tr2uN
+         v5HQnXYR/FRcxB/LeLR0lFSJqA0VtdkDLzqmUQfRQnGOVIbGZY9oZKo7oL3dXji+Bt55
+         MNfg==
+X-Gm-Message-State: AOJu0YxfdCAdRdOu2UOoNjnuhEcDwnVgjQBtHSBEo+e7KvDGLSZsDyVA
+	2e5J45HyANplTWe6dVzmPpA=
+X-Google-Smtp-Source: AGHT+IFWd8R+CeHKZgVN07woDmZGKwFW/fSViGqEl9rM5aVnTMzjSsEp/U3dLZ4jSSUPz4VqGQ35qw==
+X-Received: by 2002:a05:6512:a96:b0:507:b9db:61dc with SMTP id m22-20020a0565120a9600b00507b9db61dcmr12387035lfu.48.1700056585655;
+        Wed, 15 Nov 2023 05:56:25 -0800 (PST)
+Received: from [192.168.100.74] (91-118-163-37.static.upcbusiness.at. [91.118.163.37])
+        by smtp.gmail.com with ESMTPSA id um27-20020a170906cf9b00b009de467a25d5sm7178088ejb.13.2023.11.15.05.56.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Nov 2023 05:56:24 -0800 (PST)
+Message-ID: <a7d9697c-c83e-4ef0-bd8d-025e79e34c3c@gmail.com>
+Date: Wed, 15 Nov 2023 14:56:23 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/4] hwmon: (core) Add support for humidity min/max
+ alarm
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+ Jonathan Corbet <corbet@lwn.net>, Liam Girdwood <lgirdwood@gmail.com>,
+ Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20231020-topic-chipcap2-v2-0-f5c325966fdb@gmail.com>
+ <20231020-topic-chipcap2-v2-2-f5c325966fdb@gmail.com>
+ <44f1eaa3-a90d-42cf-9808-4f39aacbf270@roeck-us.net>
+ <25059951-ca50-4b19-8f74-5631b34c719b@gmail.com>
+ <1ef7a10c-d9cf-4042-a198-f72dbdf9d05a@roeck-us.net>
+Content-Language: en-US
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+In-Reply-To: <1ef7a10c-d9cf-4042-a198-f72dbdf9d05a@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Level: *
 
-From: Marius Cristea <marius.cristea@microchip.com>
+On 15.11.23 14:25, Guenter Roeck wrote:
+> On Thu, Nov 09, 2023 at 07:24:00AM +0100, Javier Carrasco wrote:
+>> Hello,
+>>
+>> On 09.11.23 01:02, Guenter Roeck wrote:
+>>> On 11/8/23 07:37, Javier Carrasco wrote:
+>>>> Add min_alarm and max_alarm attributes for humidityX to support devices
+>>>> that can generate these alarms.
+>>>> Such attributes already exist for other magnitudes such as tempX.
+>>>>
+>>>> Tested with a ChipCap 2 temperature-humidity sensor.
+>>>>
+>>>
+>>> No objection, but the new attributes also need to be added to the ABI
+>>> documentation at
+>>> Documentation/ABI/testing/sysfs-class-hwmon and
+>>> Documentation/hwmon/sysfs-interface.rst
+>>>
+>>> Which made me notice that humidityX_alarm isn't documented either.
+>>> Please document that attribute as well while you are at it.
+>>>
+>>> Thanks,
+>>> Guenter
+>>>
+>> Actually there are several attributes without ABI documentation or at
+>> least the attributes enum is much larger than the objects in the ABI
+>> documentation (in testing/sysfs-class-hwmon).
+>> For humidity there is only input, enable, rated_min and rated_max. Are
+>> some attributes not described for a good reason or should all be
+>> documented? the current humidity_attributes contains:
+>>
+>> hwmon_humidity_enable -> documented in sysfs-class-hwmon
+>> hwmon_humidity_input -> documented in sysfs-class-hwmon
+>> hwmon_humidity_label
+>> hwmon_humidity_min
+>> hwmon_humidity_min_hyst
+>> hwmon_humidity_max
+>> hwmon_humidity_max_hyst
+>> hwmon_humidity_alarm
+>> hwmon_humidity_fault
+>> hwmon_humidity_rated_min -> documented in sysfs-class-hwmon
+>> hwmon_humidity_rated_max -> documented in sysfs-class-hwmon
+>>
+>> I could not find the temperature counterparts of my new additions
+>> (temp_min_alarm and temp_max_alarm).
+>>
+>> Should all be added to sysfs-class-hwmon or am I missing some other
+>> document? I am alright adding the ones I mentioned.
+>>
+> 
+> They should all be documented. It would be great if you volunteer
+> to add the missing ones, but that won't be a mandate. I just don't want
+> the situation to get worse.
+> 
+> Thanks,
+> Guenter
 
-Adding support for Microchip PAC193X series of Power Monitor with
-Accumulator chip family. This driver covers the following part numbers:
- - PAC1931, PAC1932, PAC1933 and PAC1934
+I will document them in a separate series, so the (probably) long review
+of the original device driver will not have any effect on this task,
+which has nothing to do with the ChipCap 2 anyways.
+I will start asap.
 
-  This device is at the boundary between IIO and HWMON (if you are
-looking just at the "shunt resistors, vsense, power, energy"). The
-device also has ADC internally that can measure voltages (up to 4
-channels) and also currents (up to 4 channels). The current is measured as
-voltage across the shunt_resistor.
-
-  I have started with a simple driver (this one that is more appropriate to be a
-HWMON) and willing to add more functionality later (like data buffering that is quite
-important for example if someone wants to profile power consumption of the
-processor itself, or a peripheral device, or a battery, this kind of functionality
-was requested by our customers).
-
-
-Differences related to previous patch:
-
-v3:
-- this version was sent also to HWMON list
-- fix review comments:
-  - drop redundant description from device tree bindings
-  - reorder "patternProperties:" to follow "properties:" in device tree bindings
-  - update comments to proper describe code
-  - use numbers instead of defines for clarity in some part of the code
-  - use the new "guard(mutex)"
-  - use "clamp()" instead of duplicating code
-  - remove extra layer of checking in some switch cases
-  - use "i2c_get_match_data()"
-  - replace while with for loops for the code to look cleaner
-  - reverse the logic to reduce indent.
-  - add comment related to channels numbering
-  - remove memory duplicate when creating dynamic channels
-  - add "devm_add_action_or_reset" to handle the "cancel_delayed_work_sync"
-  - remove "pac1934_remove()" function
-
-v2:
-- fix review comments:
-  - change the device tree bindings
-  - use label property
-  - fix coding style issues
-  - remove unused headers
-  - use get_unaligned_bexx instead of own functions
-  - change to use a system work queue
-  - use probe_new instead of old probe
-
-v1:
-- first version committed to review
-
-Marius Cristea (2):
-  dt-bindings: iio: adc: adding support for PAC193X
-  iio: adc: adding support for PAC193x
-
- .../ABI/testing/sysfs-bus-iio-adc-pac1934     |   15 +
- .../bindings/iio/adc/microchip,pac1934.yaml   |  137 ++
- MAINTAINERS                                   |    7 +
- drivers/iio/adc/Kconfig                       |   12 +
- drivers/iio/adc/Makefile                      |    1 +
- drivers/iio/adc/pac1934.c                     | 1673 +++++++++++++++++
- 6 files changed, 1845 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-bus-iio-adc-pac1934
- create mode 100644 Documentation/devicetree/bindings/iio/adc/microchip,pac1934.yaml
- create mode 100644 drivers/iio/adc/pac1934.c
-
-
-base-commit: 5e99f692d4e32e3250ab18d511894ca797407aec
--- 
-2.34.1
-
+Best regards,
+Javier Carrasco
