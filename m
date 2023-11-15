@@ -1,165 +1,89 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7859518026
-	for <linux-hwmon@vger.kernel.org>; Wed, 15 Nov 2023 12:17:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D092A18B1B;
+	Wed, 15 Nov 2023 13:12:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="buWUoiNI"
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F7BE5
-	for <linux-hwmon@vger.kernel.org>; Wed, 15 Nov 2023 04:17:39 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id d75a77b69052e-41eae4f0ee6so39135011cf.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 15 Nov 2023 04:17:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YfCBoDa0"
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E18121;
+	Wed, 15 Nov 2023 05:12:15 -0800 (PST)
+Received: by mail-qk1-x72b.google.com with SMTP id af79cd13be357-778940531dbso411959785a.0;
+        Wed, 15 Nov 2023 05:12:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700050658; x=1700655458; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NwOU1eQ+YKTD4yQGGCQJLYddK4he3i15lU45I5FAEyE=;
-        b=buWUoiNIHEcHc4hdkPKviopRlpqwqXMdi4/rOmI7glVANV78fd8AKhd+frtlY5Vwnh
-         tgMhAy0MjmOfK4I8IsMukHyVe75T2QeswNxOew9XrPzgxWXjkVAFTg4g9GJmq/uILwgv
-         MkV3zyE4lkI7pVa4Sg6aM+vx2Axk66p+sxRHQJTrqYHtKdpX8orkwjCN8pkbGEhPTvgK
-         hFZ5tO2xF0mxnQF9wHVZb/cwM8cIJu20sH4Y0rtFgLLAr9RELhpXjVToUBqQSkEXXmpW
-         MOjrCfeNr+iXROMyFe7FT88B66YhKqFTsXLyO9F9AiAKOMl0l0zN93nfhtrAz4oJFIyT
-         24xg==
+        d=gmail.com; s=20230601; t=1700053935; x=1700658735; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FYJiido5hWzDKtuGReYk+NTentFWgMjd8DEBxS+St7Y=;
+        b=YfCBoDa02I7uM0DcWWKqOBYX0ruVpHC2+AJwVkrgqMEwzpXMfvWwYqzfv5TKTBMIyA
+         PexfmTmBdUqD3cSIELR8w7auq0HZbs+IDgboSzyDWSswPOvvS8+pa4jprspz3Ub1kKpl
+         /n6bAuB29kmE4UT+o35Vsq3Ad/psZCEFfX229mLzxR4JBI98fpDLTb0Q8vESzBT56Rjx
+         zpCsPknkYcIWj5FuL0iNTK9CTKPS1sl52UiXX0v2iqaElw/L5+/ZiqpD8TX7zU4XYw/0
+         4UBc2sGi5voOgTQIsHy5FEER1Y7XMFEHECN8M4SHNJULfSSPwCMlxjzrcnAGnjcpeL0z
+         OW7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700050658; x=1700655458;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NwOU1eQ+YKTD4yQGGCQJLYddK4he3i15lU45I5FAEyE=;
-        b=eWnEVsbp42vNWyAkO7+K7UkxCwCjVfh5vPpCeycet+y8nsWJZpiiEsP8PGJljHl7oc
-         WMA1zMhubzx3ZQs0tgk7u8H9niOw+Lj4xWAzQKvtWfuBpr/3F62e0+9FCuo2buiZ4YVn
-         Zd8dLYbmY0h6Vpq8dwTGfrQsvypS/pcuViA2rP9ZVBof2PnFfI6xS66FB7sp/jynqlSI
-         +twUL2tpt50jDqa/cD9ar8zlrVOqS1AxOj7I2X56hmakoeCQJr/KqrD9UmAaGtX+9gP3
-         chXA7FYgWBE9tplr0eeNcWCqlHp5QLduRrRfrNmv8eUFFEJpN3xKCSOoSdMsH4pqDNgd
-         aigA==
-X-Gm-Message-State: AOJu0Yz/PpR6xlZxsojlU7jRLX7UcmAbhNB3fBMJzENzTyzphqTRzmrS
-	u4oKF7zW6rrBSuu4waclEwoBaw==
-X-Google-Smtp-Source: AGHT+IFQ37CO8FSGToXU4RQ6qFrxhCQbUJbC0uTbVgxOKU5Xh/kEVwqQpAIIcBT7RUj7XUpbd3TdGw==
-X-Received: by 2002:a05:622a:1aaa:b0:416:5dca:3c9d with SMTP id s42-20020a05622a1aaa00b004165dca3c9dmr5820552qtc.16.1700050658671;
-        Wed, 15 Nov 2023 04:17:38 -0800 (PST)
-Received: from [192.168.212.13] ([12.191.197.195])
-        by smtp.gmail.com with ESMTPSA id 3-20020ac85643000000b0041b9b6eb309sm3497310qtt.93.2023.11.15.04.17.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Nov 2023 04:17:38 -0800 (PST)
-Message-ID: <4f431cc6-4f13-47bb-ba35-44bddf047e02@linaro.org>
-Date: Wed, 15 Nov 2023 13:17:34 +0100
+        d=1e100.net; s=20230601; t=1700053935; x=1700658735;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FYJiido5hWzDKtuGReYk+NTentFWgMjd8DEBxS+St7Y=;
+        b=fr+pcY+0zkYamVWly5QNuhFrKHG3vfOdKVKBrzexyxFJDYMeER8bAMtHQosc/W3q/w
+         pspGHsK82v8+UaWJ+b+LphGqmHsKA3dgUQnKiQroJp37iRGeTrNnEjeLQIjB6Jmk4hXB
+         1lchXOZZAsTqNGLPVS8I3hge2alWOyOZzV9nDW2kXBekvunU95IEOPFn9vGASHEd1Jw+
+         SaspZ5qffKxmDUEMXazpKbbyPPng/Bl0bYxN1XTj73OZEI1QeG/W4ivragK84zy3NX5q
+         cWCnxEIIZlRl9B9Q9MfeBewcw4OgUmb6DfSy9SND7HLLmIQtCXRavTSuaEF66OwUzSmo
+         SqHA==
+X-Gm-Message-State: AOJu0Yz3i0Av8/YhFKhaL5PsWM9qFfk3ZrzkfbDm6sEOfYGd8BlA5ExM
+	sdTELObpBJsY+gKy+eHGdHzFsFWP2WA=
+X-Google-Smtp-Source: AGHT+IGhIxWgPMm8wqUw4hMJ5kHDs/Trl+Fudc3+UErv6dl9+e9FP4PNtTnJqgtywEwuz9/B7UU77w==
+X-Received: by 2002:a05:620a:4552:b0:773:bf62:b274 with SMTP id u18-20020a05620a455200b00773bf62b274mr6163539qkp.61.1700053934734;
+        Wed, 15 Nov 2023 05:12:14 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m11-20020a05620a290b00b007743382121esm3445056qkp.84.2023.11.15.05.12.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Nov 2023 05:12:14 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 15 Nov 2023 05:12:12 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: Jean Delvare <jdelvare@suse.com>, Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2][next] hwmon: (aspeed-pwm-tacho) Fix
+ -Wstringop-overflow warning in aspeed_create_fan_tach_channel()
+Message-ID: <9ed5116f-cf36-49f6-833e-75eeab4570b4@roeck-us.net>
+References: <ZVPQJIP26dIzRAr6@work>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: Add lltc ltc4286 driver
- bindings
-Content-Language: en-US
-To: Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>,
- Conor Dooley <conor@kernel.org>
-Cc: "patrick@stwcx.xyz" <patrick@stwcx.xyz>, Jean Delvare
- <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-References: <20231109014948.2334465-1-Delphine_CC_Chiu@Wiwynn.com>
- <20231109014948.2334465-2-Delphine_CC_Chiu@Wiwynn.com>
- <20231109-obscurity-dress-4d1d3370ea56@spud>
- <SG2PR04MB5543AB6AB419CA76DBD5E023A1B1A@SG2PR04MB5543.apcprd04.prod.outlook.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <SG2PR04MB5543AB6AB419CA76DBD5E023A1B1A@SG2PR04MB5543.apcprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZVPQJIP26dIzRAr6@work>
 
-On 15/11/2023 09:38, Delphine_CC_Chiu/WYHQ/Wiwynn wrote:
->> -----Original Message-----
->> From: Conor Dooley <conor@kernel.org>
->> Sent: Friday, November 10, 2023 1:10 AM
->> To: Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>
->> Cc: patrick@stwcx.xyz; Jean Delvare <jdelvare@suse.com>; Guenter Roeck
->> <linux@roeck-us.net>; Rob Herring <robh+dt@kernel.org>; Krzysztof Kozlowski
->> <krzysztof.kozlowski+dt@linaro.org>; Conor Dooley <conor+dt@kernel.org>;
->> Jonathan Corbet <corbet@lwn.net>; linux-i2c@vger.kernel.org;
->> linux-hwmon@vger.kernel.org; devicetree@vger.kernel.org;
->> linux-kernel@vger.kernel.org; linux-doc@vger.kernel.org
->> Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: Add lltc ltc4286 driver
->> bindings
->>
->> On Thu, Nov 09, 2023 at 09:49:45AM +0800, Delphine CC Chiu wrote:
->>> Add a device tree bindings for ltc4286 device.
->>>
->>> Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
->>>
->>> Changelog:
->>>   v4 - Revise some inappropriate writing in yaml file
->>>   v3 - Revise adi,vrange-select-25p6 to adi,vrange-low-enable
->>>   v2 - Revise vrange_select_25p6 to adi,vrange-select-25p6
->>>      - Add type for adi,vrange-select-25p6
->>>      - Revise rsense-micro-ohms to shunt-resistor-micro-ohms
->>
->> Your changelog should be below the --- line.
+On Tue, Nov 14, 2023 at 01:53:08PM -0600, Gustavo A. R. Silva wrote:
+> Based on the documentation below, the maximum number of Fan tach
+> channels is 16:
 > 
-> We will add --- line on our changelog.
+> Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt:45:
+>  45 - aspeed,fan-tach-ch : should specify the Fan tach input channel.
+>  46                 integer value in the range 0 through 15, with 0 indicating
+>  47                 Fan tach channel 0 and 15 indicating Fan tach channel 15.
+>  48                 At least one Fan tach input channel is required.
 > 
->> You also omitted the tag I left on the previous version.
+> However, the compiler doesn't know that, and legitimaly warns about a potential
+> overwrite in array `u8 fan_tach_ch_source[16]` in `struct aspeed_pwm_tacho_data`,
+> in case `index` takes a value outside the boundaries of the array:
 > 
-> Could you point out the exact places that we omit?
 
-Open the previous email and read it fully. Did you or did you not get a tag?
+Still messes the point. This isn't about "the compiler doesn't know that",
+it is a real bug which may result in out-of-bounds accesses.
 
-> Thanks.
-> 
->> With the changelog fixed:
->> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-Best regards,
-Krzysztof
+Oh, never mind, I'll just apply it.
 
+Guenter
