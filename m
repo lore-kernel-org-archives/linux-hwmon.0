@@ -1,61 +1,67 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D092A18B1B;
-	Wed, 15 Nov 2023 13:12:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFE4A1A5A2;
+	Wed, 15 Nov 2023 13:25:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YfCBoDa0"
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E18121;
-	Wed, 15 Nov 2023 05:12:15 -0800 (PST)
-Received: by mail-qk1-x72b.google.com with SMTP id af79cd13be357-778940531dbso411959785a.0;
-        Wed, 15 Nov 2023 05:12:15 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lJTWNsPg"
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF6E120;
+	Wed, 15 Nov 2023 05:25:34 -0800 (PST)
+Received: by mail-qk1-x736.google.com with SMTP id af79cd13be357-778925998cbso447128385a.0;
+        Wed, 15 Nov 2023 05:25:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700053935; x=1700658735; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1700054733; x=1700659533; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=FYJiido5hWzDKtuGReYk+NTentFWgMjd8DEBxS+St7Y=;
-        b=YfCBoDa02I7uM0DcWWKqOBYX0ruVpHC2+AJwVkrgqMEwzpXMfvWwYqzfv5TKTBMIyA
-         PexfmTmBdUqD3cSIELR8w7auq0HZbs+IDgboSzyDWSswPOvvS8+pa4jprspz3Ub1kKpl
-         /n6bAuB29kmE4UT+o35Vsq3Ad/psZCEFfX229mLzxR4JBI98fpDLTb0Q8vESzBT56Rjx
-         zpCsPknkYcIWj5FuL0iNTK9CTKPS1sl52UiXX0v2iqaElw/L5+/ZiqpD8TX7zU4XYw/0
-         4UBc2sGi5voOgTQIsHy5FEER1Y7XMFEHECN8M4SHNJULfSSPwCMlxjzrcnAGnjcpeL0z
-         OW7A==
+        bh=3vuQNx0saY2ItGRKdBl26Lb/Oz25BKx0ZaIePLBjp78=;
+        b=lJTWNsPgkvArhJfx4mLzea66zYOPRDRqShORfizWt7bJwxyfZkIXlZoZpXiNpkYX7b
+         Ie9VxfSoTJ8ISvgqoq4CKoF2O7hVN7TGbaw/AV1H8VDXX9Fxyi+hNyFdbfL+WqPFDQjq
+         AsBN1/AY9K6AOugiCty/leyHi+zlF1Tax1husrlbiGg6nSG7l4+XjPyDk0XaMGx8HlxR
+         C4HqEpQ4WmxM8mR08upTH/Q3Ox5ycJ8673wZ40j4YZFfVbhyrhtFwm7ddZznVH+0B8L8
+         Pk0S9cghW+PejIMoLtKLY1HJvLRJde9RQf3NlOkpWOWhqeknqFoP49lMFOtTH7Jsritj
+         DTRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700053935; x=1700658735;
+        d=1e100.net; s=20230601; t=1700054733; x=1700659533;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FYJiido5hWzDKtuGReYk+NTentFWgMjd8DEBxS+St7Y=;
-        b=fr+pcY+0zkYamVWly5QNuhFrKHG3vfOdKVKBrzexyxFJDYMeER8bAMtHQosc/W3q/w
-         pspGHsK82v8+UaWJ+b+LphGqmHsKA3dgUQnKiQroJp37iRGeTrNnEjeLQIjB6Jmk4hXB
-         1lchXOZZAsTqNGLPVS8I3hge2alWOyOZzV9nDW2kXBekvunU95IEOPFn9vGASHEd1Jw+
-         SaspZ5qffKxmDUEMXazpKbbyPPng/Bl0bYxN1XTj73OZEI1QeG/W4ivragK84zy3NX5q
-         cWCnxEIIZlRl9B9Q9MfeBewcw4OgUmb6DfSy9SND7HLLmIQtCXRavTSuaEF66OwUzSmo
-         SqHA==
-X-Gm-Message-State: AOJu0Yz3i0Av8/YhFKhaL5PsWM9qFfk3ZrzkfbDm6sEOfYGd8BlA5ExM
-	sdTELObpBJsY+gKy+eHGdHzFsFWP2WA=
-X-Google-Smtp-Source: AGHT+IGhIxWgPMm8wqUw4hMJ5kHDs/Trl+Fudc3+UErv6dl9+e9FP4PNtTnJqgtywEwuz9/B7UU77w==
-X-Received: by 2002:a05:620a:4552:b0:773:bf62:b274 with SMTP id u18-20020a05620a455200b00773bf62b274mr6163539qkp.61.1700053934734;
-        Wed, 15 Nov 2023 05:12:14 -0800 (PST)
+        bh=3vuQNx0saY2ItGRKdBl26Lb/Oz25BKx0ZaIePLBjp78=;
+        b=FUCzcEEjeMTfo1FOEnSEEBRA22fJG7nZNf+lKt7h7euSHz8Vrt2FlQuEPm5KHpqNlB
+         pW/v44mI9udgtjtREu0IMIGXIMOwUrcoDALcIwr4MdOjo3m+gsL81ndVYa7FBKPnYokU
+         T8voOwc9fcJ0W2y4Uu5YszLeMXyEKGAb7HxM6JAud3FzAoXaVUzFMl1fc7PnBZLSPbO4
+         /Z+KMGWK5TDgBD40I2Ijsk46++iZH57VF78zzNp2IhdmfzVgUQFbbuV41s5OLG2o1kRS
+         2gcV9xoUv61Pfs4P0PTzBXFA4Drh4VydVMmsNmvRqy/hGr5kzt47T6IElDl49M3Y5pox
+         kiSQ==
+X-Gm-Message-State: AOJu0Ywej8tnD8LOEx2BzpDxGk7FP1zvO92yRQv0/Iu02rCRHOA2yVXr
+	58VbYV7zrC03zGpNqXppAI2zzSR3wkY=
+X-Google-Smtp-Source: AGHT+IF4gKYfsnPTfy77RCqBJS3PI8cTib/dwl7HH/3rcJTzhH91a7+Qu0a6cI2q5Hc8xdw7+fnmIA==
+X-Received: by 2002:a05:620a:4627:b0:767:923:48e7 with SMTP id br39-20020a05620a462700b00767092348e7mr6223765qkb.5.1700054733626;
+        Wed, 15 Nov 2023 05:25:33 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m11-20020a05620a290b00b007743382121esm3445056qkp.84.2023.11.15.05.12.13
+        by smtp.gmail.com with ESMTPSA id dp12-20020a05620a2b4c00b0076f0744ff50sm3433522qkb.136.2023.11.15.05.25.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Nov 2023 05:12:14 -0800 (PST)
+        Wed, 15 Nov 2023 05:25:33 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 15 Nov 2023 05:12:12 -0800
+Date: Wed, 15 Nov 2023 05:25:31 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>, Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2][next] hwmon: (aspeed-pwm-tacho) Fix
- -Wstringop-overflow warning in aspeed_create_fan_tach_channel()
-Message-ID: <9ed5116f-cf36-49f6-833e-75eeab4570b4@roeck-us.net>
-References: <ZVPQJIP26dIzRAr6@work>
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Cc: Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] hwmon: (core) Add support for humidity min/max
+ alarm
+Message-ID: <1ef7a10c-d9cf-4042-a198-f72dbdf9d05a@roeck-us.net>
+References: <20231020-topic-chipcap2-v2-0-f5c325966fdb@gmail.com>
+ <20231020-topic-chipcap2-v2-2-f5c325966fdb@gmail.com>
+ <44f1eaa3-a90d-42cf-9808-4f39aacbf270@roeck-us.net>
+ <25059951-ca50-4b19-8f74-5631b34c719b@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -64,26 +70,60 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZVPQJIP26dIzRAr6@work>
+In-Reply-To: <25059951-ca50-4b19-8f74-5631b34c719b@gmail.com>
 
-On Tue, Nov 14, 2023 at 01:53:08PM -0600, Gustavo A. R. Silva wrote:
-> Based on the documentation below, the maximum number of Fan tach
-> channels is 16:
+On Thu, Nov 09, 2023 at 07:24:00AM +0100, Javier Carrasco wrote:
+> Hello,
 > 
-> Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt:45:
->  45 - aspeed,fan-tach-ch : should specify the Fan tach input channel.
->  46                 integer value in the range 0 through 15, with 0 indicating
->  47                 Fan tach channel 0 and 15 indicating Fan tach channel 15.
->  48                 At least one Fan tach input channel is required.
+> On 09.11.23 01:02, Guenter Roeck wrote:
+> > On 11/8/23 07:37, Javier Carrasco wrote:
+> >> Add min_alarm and max_alarm attributes for humidityX to support devices
+> >> that can generate these alarms.
+> >> Such attributes already exist for other magnitudes such as tempX.
+> >>
+> >> Tested with a ChipCap 2 temperature-humidity sensor.
+> >>
+> > 
+> > No objection, but the new attributes also need to be added to the ABI
+> > documentation at
+> > Documentation/ABI/testing/sysfs-class-hwmon and
+> > Documentation/hwmon/sysfs-interface.rst
+> > 
+> > Which made me notice that humidityX_alarm isn't documented either.
+> > Please document that attribute as well while you are at it.
+> > 
+> > Thanks,
+> > Guenter
+> > 
+> Actually there are several attributes without ABI documentation or at
+> least the attributes enum is much larger than the objects in the ABI
+> documentation (in testing/sysfs-class-hwmon).
+> For humidity there is only input, enable, rated_min and rated_max. Are
+> some attributes not described for a good reason or should all be
+> documented? the current humidity_attributes contains:
 > 
-> However, the compiler doesn't know that, and legitimaly warns about a potential
-> overwrite in array `u8 fan_tach_ch_source[16]` in `struct aspeed_pwm_tacho_data`,
-> in case `index` takes a value outside the boundaries of the array:
+> hwmon_humidity_enable -> documented in sysfs-class-hwmon
+> hwmon_humidity_input -> documented in sysfs-class-hwmon
+> hwmon_humidity_label
+> hwmon_humidity_min
+> hwmon_humidity_min_hyst
+> hwmon_humidity_max
+> hwmon_humidity_max_hyst
+> hwmon_humidity_alarm
+> hwmon_humidity_fault
+> hwmon_humidity_rated_min -> documented in sysfs-class-hwmon
+> hwmon_humidity_rated_max -> documented in sysfs-class-hwmon
+> 
+> I could not find the temperature counterparts of my new additions
+> (temp_min_alarm and temp_max_alarm).
+> 
+> Should all be added to sysfs-class-hwmon or am I missing some other
+> document? I am alright adding the ones I mentioned.
 > 
 
-Still messes the point. This isn't about "the compiler doesn't know that",
-it is a real bug which may result in out-of-bounds accesses.
+They should all be documented. It would be great if you volunteer
+to add the missing ones, but that won't be a mandate. I just don't want
+the situation to get worse.
 
-Oh, never mind, I'll just apply it.
-
+Thanks,
 Guenter
