@@ -1,75 +1,163 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BqH4lBvI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mHyjgMg6"
 Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6983C192;
-	Wed, 15 Nov 2023 14:27:23 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id 5614622812f47-3b5ff072fc4so97633b6e.3;
-        Wed, 15 Nov 2023 14:27:23 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC571AC;
+	Wed, 15 Nov 2023 14:46:06 -0800 (PST)
+Received: by mail-oi1-x22d.google.com with SMTP id 5614622812f47-3b6d88dbaa3so112319b6e.1;
+        Wed, 15 Nov 2023 14:46:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700087242; x=1700692042; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e17v8Sw4wSJJjTaEGlOWNvLKDpho2BpFrgN/WZm5exE=;
-        b=BqH4lBvIPcYOdW4R/viS7Pf1SEDUjq7gDMi+Fg77bGQglQLclZC76lG9yzFIkvTTXY
-         29rceaBs/OX5ENNv40axfywDZlAdJroZ6JmIzz9b+GoRDeW37fHGFxK+ZAWWbHPJhwp/
-         r9niKHaw6CwelYW4yql7jMp2C5ZcWxp6mMPGYXWxXsNVuCSus0UG3n2BDKbTVHIUSAiQ
-         FnvZtd8xc9aC221/3ITNgzh58KNzZkmUdFE/R9HJd0+PyYcZUlkKlMz4uxbqKAyTGPay
-         4HV5/QNAXs6M7uhO2vUwJf1sBf/F1JmdNq086MSo8/3J4AvYmhKOq4fWkVksw16GIXAX
-         4dFg==
+        d=gmail.com; s=20230601; t=1700088365; x=1700693165; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8GRR5+TtT69P//O5Q8RWJy3CDQOAIoE5wweaPetEfz0=;
+        b=mHyjgMg6IcYpAyRsjaTqNK9TCLsL6h4DV133+xiuitD7tMXeDbhRs2Lb/G/REwGeaI
+         y236aeXyENdDf9hUe2jehkUPRsmhcSFYKgh6g+8KLWEYBQXBuoQWc9Wf7O1HOqSw0Nu+
+         xIUd4PCmsWawPI8yOjZzF/llfTHmt1+vAtABBDKWF/3K7PocYLmzZIPNvkEF8evw8kf1
+         ipsGP7d51iAq2dFoU4ZvN9ceshOd3vzCo5r0nDCXvHRZrEMVN97K3MSeEamBPocNXWto
+         YUojP1Y328nmvPoa0Hr2JM0pqWSPsKc9I5puKm1nQyio+GN4hx41ovYv4QMOtZwYNqnH
+         j25w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700087242; x=1700692042;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e17v8Sw4wSJJjTaEGlOWNvLKDpho2BpFrgN/WZm5exE=;
-        b=IRuAiFDFUu/OX5VktPTLlWhnUqFuOqj1SdKWwNpzegmoYjzZejz9D+JMNITN42zqCo
-         SQu24sJrg8TNHXoaV6IFRee9ql9uX/ReQ2dMeeqbA9xjtxNdanPFOmSNlmxD9/EshbvS
-         H6cBzyeqrs4Qzzq7/JiTrBlSk1W0Bw6q4cybIZ1ZPeUPB/KenSS8lWOofG4FG7iY1tab
-         wbVn8+lW8vISrye4xB3gDD4zXMCPN7pccoGj4GjVy2RX9BM/O33dtexy/E/QxwBAyzqx
-         UBzE9V+iMlGGyAkSYEt/dSusqrUk6PCV4izvckYdRAJi6GQVvIN6vTZNFgeVK7Sp72X1
-         SE4g==
-X-Gm-Message-State: AOJu0YyItwjHx16EfQpMidNWEPu377/4CW9Hy5F7SykDh2x5xlk4iLi8
-	NcNotke8eAhgrd5183YFjRw=
-X-Google-Smtp-Source: AGHT+IFzAmvQX76tphpqTzSfTrMQ1xJxEJB6K6SOEfqb0t5crcNxzmM10NYre9nmdBE6apikiF5LZA==
-X-Received: by 2002:a05:6808:6541:b0:3b6:dc6f:2741 with SMTP id fn1-20020a056808654100b003b6dc6f2741mr16185463oib.19.1700087242730;
-        Wed, 15 Nov 2023 14:27:22 -0800 (PST)
+        d=1e100.net; s=20230601; t=1700088365; x=1700693165;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8GRR5+TtT69P//O5Q8RWJy3CDQOAIoE5wweaPetEfz0=;
+        b=D7prfZFQTZ6bbDmU0wNamF9LTrUicfQd/EdNusNEsE72s63byRxifxVu8trV6YIQPE
+         wRAKSxoIFYERKowrD9AGdDbUScHnyuA1R+LCIxjfFFM2yV9kU3BeeQ102gALDD/p+067
+         ru/qr67ZBgPWsfSWUIxZLkSCRxMuY0TkiHdpOk37JoZ34O+aOQAxfXDQXZMcW1kmkA+k
+         CaeKbZDlZs1xOjm6XLCcv/AIcnrF2KzwTYTa1R0RWK2HknA5LxSo43ruFOwYhsi5oaDx
+         MmeM7SaW6dmsSpSDqRKEdP1CS8tk3haInzZTavTaT9XVIdPvdkffDFtWo6LgsRmdM1BJ
+         Ii3g==
+X-Gm-Message-State: AOJu0YwrhY4CtRbSwFWieebmNUJC1yGgrjpp1ZmQ7SV6VRE29UsejrVG
+	EzD1FqcuYD2Py5kqN3tt+7Tt+qz5WdY=
+X-Google-Smtp-Source: AGHT+IEbaMZLZppucpqDyccqgHp3E4itdOMwPQDI8ude5VDnReEr7rQm62RVYEEJSUegcE1B5kUZvA==
+X-Received: by 2002:a54:4389:0:b0:3b5:9541:cb43 with SMTP id u9-20020a544389000000b003b59541cb43mr15234608oiv.14.1700088365661;
+        Wed, 15 Nov 2023 14:46:05 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id dq8-20020a056808428800b003a9ba396d62sm1633251oib.36.2023.11.15.14.27.22
+        by smtp.gmail.com with ESMTPSA id h1-20020a056808014100b003ae0e57874fsm1626254oie.21.2023.11.15.14.46.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Nov 2023 14:27:22 -0800 (PST)
+        Wed, 15 Nov 2023 14:46:05 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 15 Nov 2023 14:27:21 -0800
+Date: Wed, 15 Nov 2023 14:46:03 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Peter Yin <peteryin.openbmc@gmail.com>
-Cc: patrick@stwcx.xyz, Rob Herring <robh+dt@kernel.org>,
+To: Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>
+Cc: "patrick@stwcx.xyz" <patrick@stwcx.xyz>,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Joel Stanley <joel@jms.id.au>,
-	Chanh Nguyen <chanh@os.amperecomputing.com>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: Add mps mp5990 driver bindings
-Message-ID: <a3445201-58f2-42c6-bef7-ca6968fd80d6@roeck-us.net>
-References: <20231113155008.2147090-1-peteryin.openbmc@gmail.com>
- <20231113155008.2147090-2-peteryin.openbmc@gmail.com>
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v2 2/2] hwmon: pmbus: Add ltc4286 driver
+Message-ID: <e2d17ee5-f09a-4c29-b719-9ac6178af1e4@roeck-us.net>
+References: <20231026081514.3610343-1-Delphine_CC_Chiu@Wiwynn.com>
+ <20231026081514.3610343-3-Delphine_CC_Chiu@Wiwynn.com>
+ <2ef2e804-d498-a2ae-9717-dd03bfd26853@roeck-us.net>
+ <SG2PR04MB5543FEAFC1777ADE29239AC9A1A0A@SG2PR04MB5543.apcprd04.prod.outlook.com>
+ <e223764a-c081-4634-810b-56886a29804a@roeck-us.net>
+ <SG2PR04MB55436CFA902895FD5472838AA1A9A@SG2PR04MB5543.apcprd04.prod.outlook.com>
+ <4b73a239-c90e-4515-b89d-65de15a1e9a9@roeck-us.net>
+ <SG2PR04MB55430E53CC7229B5BB5592E7A1B1A@SG2PR04MB5543.apcprd04.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20231113155008.2147090-2-peteryin.openbmc@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <SG2PR04MB55430E53CC7229B5BB5592E7A1B1A@SG2PR04MB5543.apcprd04.prod.outlook.com>
 
-On Mon, Nov 13, 2023 at 11:50:07PM +0800, Peter Yin wrote:
-> Add a device tree bindings for mp5990 device.
+On Wed, Nov 15, 2023 at 08:42:22AM +0000, Delphine_CC_Chiu/WYHQ/Wiwynn wrote:
+> > -----Original Message-----
+> > From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
+> > Sent: Tuesday, November 7, 2023 11:30 AM
+> > To: Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>;
+> > patrick@stwcx.xyz; Jean Delvare <jdelvare@suse.com>; Jonathan Corbet
+> > <corbet@lwn.net>
+> > Cc: Rob Herring <robh+dt@kernel.org>; Krzysztof Kozlowski
+> > <krzysztof.kozlowski+dt@linaro.org>; Conor Dooley <conor+dt@kernel.org>;
+> > linux-i2c@vger.kernel.org; linux-hwmon@vger.kernel.org;
+> > devicetree@vger.kernel.org; linux-kernel@vger.kernel.org;
+> > linux-doc@vger.kernel.org
+> > Subject: Re: [PATCH v2 2/2] hwmon: pmbus: Add ltc4286 driver
+> > 
+> >   Security Reminder: Please be aware that this email is sent by an external
+> > sender.
+> > 
+> > On 11/6/23 19:08, Delphine_CC_Chiu/WYHQ/Wiwynn wrote:
+> > >> -----Original Message-----
+> > >> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
+> > >> Sent: Tuesday, October 31, 2023 9:47 PM
+> > >> To: Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>;
+> > >> patrick@stwcx.xyz; Jean Delvare <jdelvare@suse.com>; Jonathan Corbet
+> > >> <corbet@lwn.net>
+> > >> Cc: Rob Herring <robh+dt@kernel.org>; Krzysztof Kozlowski
+> > >> <krzysztof.kozlowski+dt@linaro.org>; Conor Dooley
+> > >> <conor+dt@kernel.org>; linux-i2c@vger.kernel.org;
+> > >> linux-hwmon@vger.kernel.org; devicetree@vger.kernel.org;
+> > >> linux-kernel@vger.kernel.org; linux-doc@vger.kernel.org
+> > >> Subject: Re: [PATCH v2 2/2] hwmon: pmbus: Add ltc4286 driver
+> > >>
+> > >>    Security Reminder: Please be aware that this email is sent by an
+> > >> external sender.
+> > >>
+> > >> On 10/30/23 23:46, Delphine_CC_Chiu/WYHQ/Wiwynn wrote:
+> > >> [ ... ]
+> > >>>>
+> > >>>>> +
+> > >>>>> +     ret = of_property_read_u32(client->dev.of_node,
+> > >>>>> +                                "shunt-resistor-micro-ohms",
+> > >>>> &rsense);
+> > >>>>> +     if (ret < 0)
+> > >>>>> +             return ret;
+> > >>>>> +
+> > >>>>> +     if (rsense == 0)
+> > >>>>> +             return -EINVAL;
+> > >>>>> +
+> > >>>>> +     info = &ltc4286_info;
+> > >>>>> +
+> > >>>>> +     /* Default of VRANGE_SELECT = 1, 102.4V */
+> > >>>>> +     if (device_property_read_bool(&client->dev,
+> > >>>> "adi,vrange-select-25p6")) {
+> > >>>>
+> > >>>> What if the adi,vrange-select-25p6 property is not provided, but
+> > >>>> the chip is programmed for this range ?
+> > >>> The binding document tells programmers how to fill the dts.
+> > >>> Thus, programmers must fill this property if their system is 25.6
+> > >>> volts voltage
+> > >> range.
+> > >>>
+> > >>
+> > >> Sure, but there is no else case, meaning VRANGE_SELECT is unmodified
+> > >> in that case. There is no guarantee that the chip is in its power-on state.
+> > >
+> > > The else case is in v2 ltc4286.c line 133 It means that the voltage
+> > > range for programmer is 102.4 volts which is default value, so driver
+> > > doesn't need to do any change for VRANGE_SELECT bit.
+> > 
+> > There is no guarantee that the value wasn't changed before the driver was
+> > loaded.
 > 
-> Signed-off-by: Peter Yin <peteryin.openbmc@gmail.com>
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> We still can’t get your point.
+> Could you tell us about your concern here?
 
-What branch is this patch based on ? git fails to apply it.
+I have repeated it several times. You are making assumptions about
+register values when the driver is loaded. Those asumptions
+are wrong since the state of the chip is unknown when the driver
+is loaded. Any entty (BIOS, ROMMON, i2cset, some operating system
+loaded earlier, or even some other driver or platform code) may
+have changed those values.
+
+On top of that, as I also have pointed out, LTC4287 supports
+saving its configuration data in eeprom. That means that any chip
+configuration set during production or anytime later will be
+retained, meaning any assumption about chip configuration
+when the driver is loaded is even more wrong.
 
 Guenter
