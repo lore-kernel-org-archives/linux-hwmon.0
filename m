@@ -1,39 +1,41 @@
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B56C195;
-	Wed, 15 Nov 2023 12:57:08 -0800 (PST)
-Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-6ce2fc858feso42009a34.3;
-        Wed, 15 Nov 2023 12:57:08 -0800 (PST)
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2C7198;
+	Wed, 15 Nov 2023 12:57:10 -0800 (PST)
+Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-6cd09663b1cso42391a34.3;
+        Wed, 15 Nov 2023 12:57:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700081827; x=1700686627;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kOK7JO5EOhsngaH3Qx/xmibO/SIbJATRMlHbrH/xpaY=;
-        b=ltpx2begib1pfLOz28zgib2Zf/HdiXqnOmVfxkQ998WLeQ4GiCmcBsm2M7sd4ynkP2
-         W6QaHczY1ZZPRnZCJF6p8KPa3rAq+a4BB385yq1lvF+oMrjQnA7Ndb2KaFmIYTQ8DvET
-         +yX5HjhPH0dWjfDl6Qcc8cT8cp53P65AGptRvhL9ErrH/qJ+rSWD3Y2FAJpMcwEVLOff
-         V6KxUOxm2ZHz2PPjLTNSul65xGnSF1cgyHN8+1ZmdH9RmGwlpSXeq+N5qqAXi3InlrRd
-         WYvbV3DvfDjKN8w66hqr5Vxc5eW6y+sJX/AcUXeZqSFGYZMfzFLuVYjLNLZmDg697qtC
-         dAvg==
-X-Gm-Message-State: AOJu0Yzkc9NxDPqdQpn2dvUO44b4sBr9FkCGaM1/rR3E9Qaw4ZXj4Gwz
-	4A3WbbM3t77Dned17keEwwISFtV1Sw==
-X-Google-Smtp-Source: AGHT+IHKs1dXxsNVJSUM1oPzK53u4i37AanRlau4wdYYXAofzu8nT/BwVheZeURF4kpAJ8uyyrQTdw==
-X-Received: by 2002:a05:6870:f609:b0:1ef:9234:aa2a with SMTP id ek9-20020a056870f60900b001ef9234aa2amr15024607oab.37.1700081827470;
-        Wed, 15 Nov 2023 12:57:07 -0800 (PST)
+        d=1e100.net; s=20230601; t=1700081830; x=1700686630;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yn8cWgc0LR3eqt+tX9p4U9PZWhRMqUpEjC58C6kq9fE=;
+        b=B/g6bTNulvrF4D1C+on42Mpg0ksJJv4fQ7mMXVN8wFA+ixA2t6Pu6GlKQhgF+913zX
+         qHkfBva41hfWQElalsz1zX2SaiSU89HA+Hh4vTb+c6rvxdQociP042n9JiKdg+VJsdCK
+         q/rI4hY2FGK9vvo20LigbPLN40Em0CAP//J9xWUGufO4drep0BKrsKOcOXjHvCkZqOQV
+         DtFsMhay0OEsNdcCVBGMTnDLTkZsAhoT99c93bF2HtxFbyAQjl3lvg/Zfqa7o+pAyI4S
+         CP/wvbtwXGOMeBnfI9vLkNXn0iM8qQFcaq+dAivPzGRd/wxQRfMI3t4dG0ZpdjCKoNG4
+         uu0A==
+X-Gm-Message-State: AOJu0YxMSmjRJkEd5+Ep3j1WD0KODiEN1v1G8CxMKiWxhDXX2nCi9xZF
+	94herRwhxZP1u5o1/XZvnNayDYFpXQ==
+X-Google-Smtp-Source: AGHT+IH9v+8lfC+47xxhorj2KGtbG1hK/QjCQLqm2wzXxqpzFQA6ulmJcmQteJ78UVZZZygsXL/8ew==
+X-Received: by 2002:a9d:6553:0:b0:6d6:45f1:d7b4 with SMTP id q19-20020a9d6553000000b006d645f1d7b4mr6684680otl.35.1700081829927;
+        Wed, 15 Nov 2023 12:57:09 -0800 (PST)
 Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id c1-20020a056870a58100b001eb0e8b75cdsm1868316oam.10.2023.11.15.12.57.06
+        by smtp.gmail.com with ESMTPSA id t10-20020a05683014ca00b006ce46212341sm689671otq.54.2023.11.15.12.57.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Nov 2023 12:57:06 -0800 (PST)
-Received: (nullmailer pid 3730597 invoked by uid 1000);
+        Wed, 15 Nov 2023 12:57:08 -0800 (PST)
+Received: (nullmailer pid 3730642 invoked by uid 1000);
 	Wed, 15 Nov 2023 20:57:06 -0000
 From: Rob Herring <robh@kernel.org>
 To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/3] hwmon: max6650: Use i2c_get_match_data()
-Date: Wed, 15 Nov 2023 14:57:00 -0600
-Message-ID: <20231115205703.3730448-1-robh@kernel.org>
+Subject: [PATCH v2 3/3] hwmon: lm25066: Use i2c_get_match_data()
+Date: Wed, 15 Nov 2023 14:57:02 -0600
+Message-ID: <20231115205703.3730448-3-robh@kernel.org>
 X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20231115205703.3730448-1-robh@kernel.org>
+References: <20231115205703.3730448-1-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -46,47 +48,59 @@ Use preferred i2c_get_match_data() instead of of_match_device() and
 i2c_match_id() to get the driver match data. With this, adjust the
 includes to explicitly include the correct headers.
 
+Adjust the 'chips' enum to not use 0, so that no match data can be
+distinguished from a valid enum value.
+
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
 v2:
  - Split up per driver
 ---
- drivers/hwmon/max6650.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/hwmon/pmbus/lm25066.c | 14 +++-----------
+ 1 file changed, 3 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/hwmon/max6650.c b/drivers/hwmon/max6650.c
-index cc8428a3045d..9649c6611d5f 100644
---- a/drivers/hwmon/max6650.c
-+++ b/drivers/hwmon/max6650.c
-@@ -26,7 +26,7 @@
- #include <linux/hwmon.h>
- #include <linux/hwmon-sysfs.h>
- #include <linux/err.h>
+diff --git a/drivers/hwmon/pmbus/lm25066.c b/drivers/hwmon/pmbus/lm25066.c
+index 929fa6d34efd..bd43457094a6 100644
+--- a/drivers/hwmon/pmbus/lm25066.c
++++ b/drivers/hwmon/pmbus/lm25066.c
+@@ -14,10 +14,10 @@
+ #include <linux/slab.h>
+ #include <linux/i2c.h>
+ #include <linux/log2.h>
 -#include <linux/of_device.h>
 +#include <linux/of.h>
- #include <linux/thermal.h>
+ #include "pmbus.h"
  
- /*
-@@ -763,8 +763,6 @@ static int max6650_probe(struct i2c_client *client)
- {
- 	struct thermal_cooling_device *cooling_dev;
- 	struct device *dev = &client->dev;
--	const struct of_device_id *of_id =
--		of_match_device(of_match_ptr(max6650_dt_match), dev);
- 	struct max6650_data *data;
- 	struct device *hwmon_dev;
- 	int err;
-@@ -776,8 +774,8 @@ static int max6650_probe(struct i2c_client *client)
- 	data->client = client;
- 	i2c_set_clientdata(client, data);
- 	mutex_init(&data->update_lock);
--	data->nr_fans = of_id ? (int)(uintptr_t)of_id->data :
--				i2c_match_id(max6650_id, client)->driver_data;
-+
-+	data->nr_fans = (uintptr_t)i2c_get_match_data(client);
+-enum chips { lm25056, lm25066, lm5064, lm5066, lm5066i };
++enum chips { lm25056 = 1, lm25066, lm5064, lm5066, lm5066i };
  
- 	/*
- 	 * Initialize the max6650 chip
+ #define LM25066_READ_VAUX		0xd0
+ #define LM25066_MFR_READ_IIN		0xd1
+@@ -468,8 +468,6 @@ static int lm25066_probe(struct i2c_client *client)
+ 	struct lm25066_data *data;
+ 	struct pmbus_driver_info *info;
+ 	const struct __coeff *coeff;
+-	const struct of_device_id *of_id;
+-	const struct i2c_device_id *i2c_id;
+ 
+ 	if (!i2c_check_functionality(client->adapter,
+ 				     I2C_FUNC_SMBUS_READ_BYTE_DATA))
+@@ -484,14 +482,8 @@ static int lm25066_probe(struct i2c_client *client)
+ 	if (config < 0)
+ 		return config;
+ 
+-	i2c_id = i2c_match_id(lm25066_id, client);
++	data->id = (enum chips)i2c_get_match_data(client);
+ 
+-	of_id = of_match_device(lm25066_of_match, &client->dev);
+-	if (of_id && (unsigned long)of_id->data != i2c_id->driver_data)
+-		dev_notice(&client->dev, "Device mismatch: %s in device tree, %s detected\n",
+-			   of_id->name, i2c_id->name);
+-
+-	data->id = i2c_id->driver_data;
+ 	info = &data->info;
+ 
+ 	info->pages = 1;
 -- 
 2.42.0
 
