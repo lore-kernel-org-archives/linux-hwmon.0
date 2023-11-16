@@ -1,91 +1,102 @@
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B4333C483;
+	Thu, 16 Nov 2023 21:31:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iZpplQUh"
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC82393;
-	Thu, 16 Nov 2023 13:00:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700168446; x=1731704446;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2gWWnk2VRah5A9Ok0AstpPn9yMDILghUr3W2/GKws0U=;
-  b=iZpplQUhJx1L0pk5BO11Sl9Xb+x+9ZujQrK/jEggsERBsCuuOovAZtmz
-   JFy1w5dIlMzLW6Pl2A9pe3zFw9rHN6D2vX7E9ePONcHO6nXTbmtfHEZLW
-   W3i4stUgVYYpOnC0IuM8a+7h0DmODyugVX62n1lCEab3rpjBc9yNkXmq3
-   qDE7qqVQTFthl3zYyFiQfKsHmNHaCC4nEUs7004kXsMwcUU4QXX7U0z3E
-   PplaDNNWccEwM2P9o2JbxfSXizMLzT5UZt+BjN4dW+FCsxINzRJvUvZsB
-   LV6lxVUMkPRZj4j1gHvzZvXu2M0IHS8EF6lpRyhgPNhnCUcQLiuc30ANI
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10896"; a="477402110"
-X-IronPort-AV: E=Sophos;i="6.04,205,1695711600"; 
-   d="scan'208";a="477402110"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2023 13:00:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10896"; a="1096902518"
-X-IronPort-AV: E=Sophos;i="6.04,205,1695711600"; 
-   d="scan'208";a="1096902518"
-Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 16 Nov 2023 13:00:41 -0800
-Received: from kbuild by b8de5498638e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r3jTa-00023j-1Y;
-	Thu, 16 Nov 2023 21:00:38 +0000
-Date: Fri, 17 Nov 2023 05:00:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Henry Shi <henryshi2018@gmail.com>, hbshi69@hotmail.com,
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-	hdegoede@redhat.com, markgross@kernel.org, jdelvare@suse.com,
-	linux@roeck-us.net, linux-kernel@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org
-Cc: Paul Gazzillo <paul@pgazz.com>,
-	Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-	oe-kbuild-all@lists.linux.dev, hb_shi2003@yahoo.com,
-	henrys@silicom-usa.com, wenw@silicom-usa.com
-Subject: Re: [PATCH v12] platform/x86: Add Silicom Platform Driver
-Message-ID: <202311170437.rhRtUQlh-lkp@intel.com>
-References: <20231113210216.30237-1-henryshi2018@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vz9TUSeg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07F05C433C8;
+	Thu, 16 Nov 2023 21:31:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700170312;
+	bh=HkqW/xbxkGnLq1viptkMdud4OyAiGVdBsU1lpf5TE20=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Vz9TUSegoI7rqv//v7Cqe/+3+YqU9uRvzmIzQ8nHFagHeFeuhIQJeI2U/j3BH+bDH
+	 KzKEsLIy5+ryc5ae8pcTCdeScD7/geUH0qLHvIHcvXpePlpfXMti2xu0vUl7YtNKfC
+	 Rdu8rUiDYIMQ14XgCRihB56d86XXeRA//c2UFvekXJWByh2fYBsNWrs50wT7oX9VrH
+	 aMnheh2RrHl1cEljKEgrlgf+7OKjhm10Ah0ZmLD1vxdfFRpkA5QZrdTlT3/GxXTEz9
+	 R06QnSlaEjDdH6UR0K8HhkmMJCRCqqeZjC66QNRrsH9Oxvk5en0ydWc+V/juPEIySk
+	 dzt5lUokVfXug==
+Date: Thu, 16 Nov 2023 21:31:42 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: marius.cristea@microchip.com, jic23@kernel.org, lars@metafoo.de,
+	robh+dt@kernel.org, jdelvare@suse.com, linux@roeck-us.net,
+	linux-hwmon@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org, linux-iio@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: iio: adc: adding support for PAC193X
+Message-ID: <20231116-uncork-onscreen-d041bbe3bb3f@squawk>
+References: <20231115134453.6656-1-marius.cristea@microchip.com>
+ <20231115134453.6656-2-marius.cristea@microchip.com>
+ <fedd4bcf-7892-4096-bcca-7ea72d39576f@linaro.org>
+ <20231116-channel-variety-cc7c262924ad@squawk>
+ <9d0749ee-08e5-4630-b1b4-27d6aa436b29@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Qy1pUtZjnv7Y8u6G"
+Content-Disposition: inline
+In-Reply-To: <9d0749ee-08e5-4630-b1b4-27d6aa436b29@linaro.org>
+
+
+--Qy1pUtZjnv7Y8u6G
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231113210216.30237-1-henryshi2018@gmail.com>
+Content-Transfer-Encoding: quoted-printable
 
-Hi Henry,
+On Thu, Nov 16, 2023 at 09:00:50PM +0100, Krzysztof Kozlowski wrote:
+> On 16/11/2023 19:21, Conor Dooley wrote:
+>=20
+> >>> +allOf:
+> >>> +  - if:
+> >>> +      properties:
+> >>> +        compatible:
+> >>> +          contains:
+> >>> +            const: interrupts
+> >>
+> >>
+> >> I don't understand what do you want to say here. I am also 100% sure y=
+ou
+> >> did not test it on a real case (maybe example passes but nothing more).
+> >=20
+> > As far as I understand, the same pin on the device is used for both an
+> > output or an input depending on the configuration. As an input, it is
+> > the "slow-io" control, and as an output it is an interrupt.
+> > I think Marius is trying to convey that either this pin can be in
+> > exclusively one state or another.
+> >=20
+> > _However_ I am not sure that that is really the right thing to do - they
+> > might well be mutually exclusive modes, but I think the decision can be
+> > made at runtime, rather than at devicetree creation time. Say for
+> > example the GPIO controller this is connected to is capable of acting as
+> > an interrupt controller. Unless I am misunderstanding the runtime
+> > configurability of this hardware, I think it is possible to actually
+> > provide a "slow-io-gpios" and an interrupt property & let the operating
+> > system decide at runtime which mode it wants to work in.
+> >=20
+> > I'm off travelling at the moment Marius, but I should be back in work on
+> > Monday if you want to have a chat about it & explain a bit more to me?
+>=20
+> Sure, but which compatible contains "interrupts"?
 
-kernel test robot noticed the following build warnings:
+Yeah, I did notice that - I figured you understood that that was meant
+to not be a check on compatibles, but rather on regular old properties &
+the rationale for the mutual exclusion was what you were missing.
 
-[auto build test WARNING on tip/master]
-[also build test WARNING on linus/master tip/auto-latest v6.7-rc1 next-20231116]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+--Qy1pUtZjnv7Y8u6G
+Content-Type: application/pgp-signature; name="signature.asc"
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Henry-Shi/platform-x86-Add-Silicom-Platform-Driver/20231114-050431
-base:   tip/master
-patch link:    https://lore.kernel.org/r/20231113210216.30237-1-henryshi2018%40gmail.com
-patch subject: [PATCH v12] platform/x86: Add Silicom Platform Driver
-config: i386-kismet-CONFIG_LEDS_CLASS_MULTICOLOR-CONFIG_SILICOM_PLATFORM-0-0 (https://download.01.org/0day-ci/archive/20231117/202311170437.rhRtUQlh-lkp@intel.com/config)
-reproduce: (https://download.01.org/0day-ci/archive/20231117/202311170437.rhRtUQlh-lkp@intel.com/reproduce)
+-----BEGIN PGP SIGNATURE-----
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311170437.rhRtUQlh-lkp@intel.com/
+iHUEARYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZVaKOgAKCRB4tDGHoIJi
+0smuAQCNpa1dlXPZqWLjgqP8b+I5SvrWhzNufcLR2XSaUA5qdQD/WziAESAZdybU
+8u9x2hZK43Ao6LkoE6nWOYKlAOu0uw0=
+=zWfv
+-----END PGP SIGNATURE-----
 
-kismet warnings: (new ones prefixed by >>)
->> kismet: WARNING: unmet direct dependencies detected for LEDS_CLASS_MULTICOLOR when selected by SILICOM_PLATFORM
-   
-   WARNING: unmet direct dependencies detected for LEDS_CLASS_MULTICOLOR
-     Depends on [n]: NEW_LEDS [=n] && LEDS_CLASS [=n]
-     Selected by [y]:
-     - SILICOM_PLATFORM [=y] && X86_PLATFORM_DEVICES [=y] && HWMON [=y]
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--Qy1pUtZjnv7Y8u6G--
