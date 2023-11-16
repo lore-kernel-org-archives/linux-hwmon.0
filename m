@@ -1,102 +1,145 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B4333C483;
-	Thu, 16 Nov 2023 21:31:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vz9TUSeg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07F05C433C8;
-	Thu, 16 Nov 2023 21:31:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700170312;
-	bh=HkqW/xbxkGnLq1viptkMdud4OyAiGVdBsU1lpf5TE20=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Vz9TUSegoI7rqv//v7Cqe/+3+YqU9uRvzmIzQ8nHFagHeFeuhIQJeI2U/j3BH+bDH
-	 KzKEsLIy5+ryc5ae8pcTCdeScD7/geUH0qLHvIHcvXpePlpfXMti2xu0vUl7YtNKfC
-	 Rdu8rUiDYIMQ14XgCRihB56d86XXeRA//c2UFvekXJWByh2fYBsNWrs50wT7oX9VrH
-	 aMnheh2RrHl1cEljKEgrlgf+7OKjhm10Ah0ZmLD1vxdfFRpkA5QZrdTlT3/GxXTEz9
-	 R06QnSlaEjDdH6UR0K8HhkmMJCRCqqeZjC66QNRrsH9Oxvk5en0ydWc+V/juPEIySk
-	 dzt5lUokVfXug==
-Date: Thu, 16 Nov 2023 21:31:42 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: marius.cristea@microchip.com, jic23@kernel.org, lars@metafoo.de,
-	robh+dt@kernel.org, jdelvare@suse.com, linux@roeck-us.net,
-	linux-hwmon@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, linux-iio@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: iio: adc: adding support for PAC193X
-Message-ID: <20231116-uncork-onscreen-d041bbe3bb3f@squawk>
-References: <20231115134453.6656-1-marius.cristea@microchip.com>
- <20231115134453.6656-2-marius.cristea@microchip.com>
- <fedd4bcf-7892-4096-bcca-7ea72d39576f@linaro.org>
- <20231116-channel-variety-cc7c262924ad@squawk>
- <9d0749ee-08e5-4630-b1b4-27d6aa436b29@linaro.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gtRkkNwf"
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A5C11F;
+	Thu, 16 Nov 2023 13:53:03 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id 41be03b00d2f7-5c1f8b0c149so499046a12.3;
+        Thu, 16 Nov 2023 13:53:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700171583; x=1700776383; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=6C9AZL6xuvaw9TUCVtQuHjnxGIMH+zJ13tnQH5dBkZE=;
+        b=gtRkkNwfJGoShFNZF04TeLD2uD63PsUXm6TORBHJ/0nKNVCCi9R+FWUpGZ6APmZAzG
+         39z4KgwqOF0SOrRaPHJqfijW2K4Xzkb9oiAYL4/G01imExMfKr0Vivd8F12vvrI8yw0H
+         Um5rryh/FD2mdWEhG9y8GuYhT89nFH2IUJcKSGuoGnTrIuoZvuXneIxzUgMfNuXJCZTH
+         KgxkisMiCUsDRMZGjlDLvsrgufDdPOFpAQF+E02NgEmmKlBK95MmWRw2d0FhirBp1PZU
+         YIOsSeyfqGsPs93YQkax2m04F7qxTT81Z9TFj2CRbMxw82wc3aG0CsKVx2ZxKQk6ydhr
+         f4hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700171583; x=1700776383;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6C9AZL6xuvaw9TUCVtQuHjnxGIMH+zJ13tnQH5dBkZE=;
+        b=BeGmdAgcA9rtAXH/Rrp1cf54OIhHofczb6HBuc64gtkPlW+/f0Paiy91OXhHeBEuAQ
+         LElfwZMfo4X4xYzQuxegIt16SLkRDIQAyLjy4dgxohP4xeSc/uD96mvUwaNgQtS7MpKO
+         O3FYOKW/QfTZ3lQp3ctp4HNK7/nDicqaNKfZ7C8Z5x9GQVhiPb32QiUfqfrQkgFMl5Hw
+         u833wTKp5Sw5MHHj+gNKrrdBHD6rYHCb76fx8HBMeyarCwmiWMwjZoKcBGA/gkGfQRjk
+         nx8/EKbiNsUu41evoqGCTk7ujn7k1g9hqFVEoQweB96Q8iqytlU1UNNPnqV7DBLkyhDx
+         TrbA==
+X-Gm-Message-State: AOJu0YzHJiLjvAOXksL1zFy9IsOEAU+yJYbQ8068clDtb7gbXy6p10Hj
+	AFKiqa95y98YsQHMKU5MmlM=
+X-Google-Smtp-Source: AGHT+IFmlZ7+0Z1cztjaS5xXqOKocmLLq6Xgy++RtEF26Fl5qnKdIu1mkWfw/y6y3FCTA8TeAs1qFw==
+X-Received: by 2002:a05:6a20:a112:b0:14c:c393:6af with SMTP id q18-20020a056a20a11200b0014cc39306afmr16401691pzk.0.1700171582658;
+        Thu, 16 Nov 2023 13:53:02 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id cm7-20020a056a020a0700b005b92ba3938dsm137240pgb.77.2023.11.16.13.53.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Nov 2023 13:53:01 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <780fd479-a3c0-49d0-b632-4bff171fe067@roeck-us.net>
+Date: Thu, 16 Nov 2023 13:53:00 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Qy1pUtZjnv7Y8u6G"
-Content-Disposition: inline
-In-Reply-To: <9d0749ee-08e5-4630-b1b4-27d6aa436b29@linaro.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 2/2] hwmon: pmbus: Add ltc4286 driver
+Content-Language: en-US
+To: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>, patrick@stwcx.xyz,
+ Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>
+Cc: Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, linux-i2c@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20231116023027.24855-1-Delphine_CC_Chiu@Wiwynn.com>
+ <20231116023027.24855-3-Delphine_CC_Chiu@Wiwynn.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20231116023027.24855-3-Delphine_CC_Chiu@Wiwynn.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 11/15/23 18:30, Delphine CC Chiu wrote:
+> Add a driver to support ltc4286 chip
+> 
+> Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+> 
+> -------------------------------------------------------------
+[ ... ]
 
---Qy1pUtZjnv7Y8u6G
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> +	/* Default of VRANGE_SELECT = 1, 102.4V */
+> +	if (device_property_read_bool(&client->dev, "adi,vrange-low-enable")) {
+> +		/* Setup MFR1 CONFIG register bit 1 VRANGE_SELECT */
+> +		ret = i2c_smbus_read_word_data(client, LTC4286_MFR_CONFIG1);
+> +		if (ret < 0)
+> +			return dev_err_probe(
+> +				&client->dev, ret,
+> +				"Failed to read manufacturer configuration one\n");
+> +
+> +		ret &= ~VRANGE_SELECT_BIT; /* VRANGE_SELECT = 0, 25.6V */
+> +		ret = i2c_smbus_write_word_data(client, LTC4286_MFR_CONFIG1,
+> +						ret);
+> +		if (ret < 0)
+> +			return dev_err_probe(&client->dev, ret,
+> +					     "Failed to set vrange\n");
+> +
+> +		info->m[PSC_VOLTAGE_IN] = 128;
+> +		info->m[PSC_VOLTAGE_OUT] = 128;
+> +		info->m[PSC_POWER] = 4 * rsense;
+> +	} else {
+> +		info->m[PSC_POWER] = rsense;
+> +	}
 
-On Thu, Nov 16, 2023 at 09:00:50PM +0100, Krzysztof Kozlowski wrote:
-> On 16/11/2023 19:21, Conor Dooley wrote:
->=20
-> >>> +allOf:
-> >>> +  - if:
-> >>> +      properties:
-> >>> +        compatible:
-> >>> +          contains:
-> >>> +            const: interrupts
-> >>
-> >>
-> >> I don't understand what do you want to say here. I am also 100% sure y=
-ou
-> >> did not test it on a real case (maybe example passes but nothing more).
-> >=20
-> > As far as I understand, the same pin on the device is used for both an
-> > output or an input depending on the configuration. As an input, it is
-> > the "slow-io" control, and as an output it is an interrupt.
-> > I think Marius is trying to convey that either this pin can be in
-> > exclusively one state or another.
-> >=20
-> > _However_ I am not sure that that is really the right thing to do - they
-> > might well be mutually exclusive modes, but I think the decision can be
-> > made at runtime, rather than at devicetree creation time. Say for
-> > example the GPIO controller this is connected to is capable of acting as
-> > an interrupt controller. Unless I am misunderstanding the runtime
-> > configurability of this hardware, I think it is possible to actually
-> > provide a "slow-io-gpios" and an interrupt property & let the operating
-> > system decide at runtime which mode it wants to work in.
-> >=20
-> > I'm off travelling at the moment Marius, but I should be back in work on
-> > Monday if you want to have a chat about it & explain a bit more to me?
->=20
-> Sure, but which compatible contains "interrupts"?
+My feedback has not been addressed.
 
-Yeah, I did notice that - I figured you understood that that was meant
-to not be a check on compatibles, but rather on regular old properties &
-the rationale for the mutual exclusion was what you were missing.
+Guenter
 
---Qy1pUtZjnv7Y8u6G
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZVaKOgAKCRB4tDGHoIJi
-0smuAQCNpa1dlXPZqWLjgqP8b+I5SvrWhzNufcLR2XSaUA5qdQD/WziAESAZdybU
-8u9x2hZK43Ao6LkoE6nWOYKlAOu0uw0=
-=zWfv
------END PGP SIGNATURE-----
-
---Qy1pUtZjnv7Y8u6G--
