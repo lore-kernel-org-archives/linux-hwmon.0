@@ -1,126 +1,91 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dm8hPqqp"
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702A4187
-	for <linux-hwmon@vger.kernel.org>; Thu, 16 Nov 2023 04:14:06 -0800 (PST)
-Received: by mail-qt1-x82c.google.com with SMTP id d75a77b69052e-4219f89ee21so3932901cf.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 16 Nov 2023 04:14:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700136845; x=1700741645; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cebbXdRvrbvVuyDTJ/a9z4SKNIngllr1lOkeCTh7hc0=;
-        b=dm8hPqqpKFwTB6TSCTaDHvyrDcNg1HJ7Y467pN//iu7kcwfmr/7D8YqrJg9TOAeWWA
-         b71ihHXxH5n/loF+mHJfXIV3PV5JqCm5sdWyXNntJpwzRZIorOF4+tcJ8e6rL3vQ0tKd
-         8Flhqbf4d0Ww/Cgz9yx4GqWqN2L2pvSE+PRQJdjHGSKYWjDA22MnTUEhsbIaZrcFpWvk
-         3AgGJ/EprElEpdO64KGXxj6c7XjzLSRr8rnBRC07TY878EqiZr+pWD/sX61Ivkyin4AW
-         fTJcvwGjNGkzTwdw77iwG/XZr1OuluiaepStDovxG3lPYg4fT5KVPS+khbctbKXjZycn
-         Sz5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700136845; x=1700741645;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cebbXdRvrbvVuyDTJ/a9z4SKNIngllr1lOkeCTh7hc0=;
-        b=WWjvqZM0Bbx5ECJQUCH+nYw6Qf85x8SZcTEEF1HKaR/+Govp/TaO7PkpHEn6QFEi5q
-         YN1UrCvj9XXf0X4kMhQR/UcbJeTYQloxQbQoUY4V5F2aU85bnZZBgZGOtUGuQAxHOO6f
-         MxA7fixiiMd4o8eOajtyCnZ16qx6hq4RuKqVfMTwzzzt/vnaMr+haFNkgEcQxMphgK97
-         lKz89xH15XzhDMpWjojEsc7RjSlThs3XfFzpPKEgVqi2npEjsCmwIrivYBGFDLpsORF+
-         ziyTa+ZV+tg7oNiFWzp+UrtLJQv1lHm18Fn8uUq/YVKWp2kUKi+7zsWe+q2ZqjWudNDw
-         D0Wg==
-X-Gm-Message-State: AOJu0YyKcK9Ywvgcb3y+rNNrhu9KlMeYMQRRs//rvH6M06TfNd+xlUjS
-	donuz3TRSBtNNGOI2dfVCuBCHg==
-X-Google-Smtp-Source: AGHT+IF1NL0Mg7K+4XgL7Hf64m30dmyiWpT6marfYlO7PGxs9vLOAvtbewKPLKQP+X3DBA4eGyCReg==
-X-Received: by 2002:a05:622a:11c9:b0:421:c58e:f9a2 with SMTP id n9-20020a05622a11c900b00421c58ef9a2mr10452230qtk.32.1700136845585;
-        Thu, 16 Nov 2023 04:14:05 -0800 (PST)
-Received: from [192.168.212.13] ([12.191.197.195])
-        by smtp.gmail.com with ESMTPSA id g4-20020ac870c4000000b004181e5a724csm4289781qtp.88.2023.11.16.04.13.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Nov 2023 04:14:05 -0800 (PST)
-Message-ID: <caff5743-265f-43ac-83fb-4e0fb23a9ff4@linaro.org>
-Date: Thu, 16 Nov 2023 13:13:58 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UpkFwsgL"
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CB7DD8;
+	Thu, 16 Nov 2023 04:40:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700138442; x=1731674442;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=o7i5pDIu8W1NKuPRmvouUT6+/JBgfYe8Hd8a+RRcWvM=;
+  b=UpkFwsgLf985ma6LHALk/uvrSiED6Et4y3c+Je4V29r1xVfxIhwgdrE3
+   AeA/70slLtKUza8peGM6FJXMNU6VzqQrkGDfncFKY98Zej6nL5uUEV/P9
+   wsyqsClYrgtLdYRAhgnbIvx8zTQQdCa3G8VGbRrcV95WMDa6DifhMghfq
+   X6Vt7b9EquyBDBaFEabLKPM2e/ESEUayIBl5Jtv2/ezR7b63znLLjM9Sl
+   2RTc5vgJz1G6NSZakeBNf0PktcENQiXHEByhPdxAIluH35VNHig45/H3W
+   cuzb0NB8uHOIS3yUZj+m+oTP40NPwEDhbZnFplrGynHn8zAq+azadw1JB
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10895"; a="370437791"
+X-IronPort-AV: E=Sophos;i="6.04,308,1695711600"; 
+   d="scan'208";a="370437791"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2023 04:40:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10895"; a="1096773125"
+X-IronPort-AV: E=Sophos;i="6.04,308,1695711600"; 
+   d="scan'208";a="1096773125"
+Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 16 Nov 2023 04:40:34 -0800
+Received: from kbuild by b8de5498638e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r3bfb-0001ej-2t;
+	Thu, 16 Nov 2023 12:40:31 +0000
+Date: Thu, 16 Nov 2023 20:39:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Henry Shi <henryshi2018@gmail.com>, hbshi69@hotmail.com,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	hdegoede@redhat.com, markgross@kernel.org, jdelvare@suse.com,
+	linux@roeck-us.net, linux-kernel@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org
+Cc: Paul Gazzillo <paul@pgazz.com>,
+	Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+	oe-kbuild-all@lists.linux.dev, hb_shi2003@yahoo.com,
+	henrys@silicom-usa.com, wenw@silicom-usa.com
+Subject: Re: [PATCH v12] platform/x86: Add Silicom Platform Driver
+Message-ID: <202311162035.fmFBbRzs-lkp@intel.com>
+References: <20231113210216.30237-1-henryshi2018@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/2] dt-bindings: hwmon: Add lltc ltc4286 driver
- bindings
-Content-Language: en-US
-To: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>, patrick@stwcx.xyz,
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>, linux-i2c@vger.kernel.org,
- linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20231116023027.24855-1-Delphine_CC_Chiu@Wiwynn.com>
- <20231116023027.24855-2-Delphine_CC_Chiu@Wiwynn.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzTRLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+wsGUBBMBCgA+FiEE
- m9B+DgxR+NWWd7dUG5NDfTtBYpsFAmI+BxMCGwMFCRRfreEFCwkIBwIGFQoJCAsCBBYCAwEC
- HgECF4AACgkQG5NDfTtBYptgbhAAjAGunRoOTduBeC7V6GGOQMYIT5n3OuDSzG1oZyM4kyvO
- XeodvvYv49/ng473E8ZFhXfrre+c1olbr1A8pnz9vKVQs9JGVa6wwr/6ddH7/yvcaCQnHRPK
- mnXyP2BViBlyDWQ71UC3N12YCoHE2cVmfrn4JeyK/gHCvcW3hUW4i5rMd5M5WZAeiJj3rvYh
- v8WMKDJOtZFXxwaYGbvFJNDdvdTHc2x2fGaWwmXMJn2xs1ZyFAeHQvrp49mS6PBQZzcx0XL5
- cU9ZjhzOZDn6Apv45/C/lUJvPc3lo/pr5cmlOvPq1AsP6/xRXsEFX/SdvdxJ8w9KtGaxdJuf
- rpzLQ8Ht+H0lY2On1duYhmro8WglOypHy+TusYrDEry2qDNlc/bApQKtd9uqyDZ+rx8bGxyY
- qBP6bvsQx5YACI4p8R0J43tSqWwJTP/R5oPRQW2O1Ye1DEcdeyzZfifrQz58aoZrVQq+innR
- aDwu8qDB5UgmMQ7cjDSeAQABdghq7pqrA4P8lkA7qTG+aw8Z21OoAyZdUNm8NWJoQy8m4nUP
- gmeeQPRc0vjp5JkYPgTqwf08cluqO6vQuYL2YmwVBIbO7cE7LNGkPDA3RYMu+zPY9UUi/ln5
- dcKuEStFZ5eqVyqVoZ9eu3RTCGIXAHe1NcfcMT9HT0DPp3+ieTxFx6RjY3kYTGLOwU0EVUNc
- NAEQAM2StBhJERQvgPcbCzjokShn0cRA4q2SvCOvOXD+0KapXMRFE+/PZeDyfv4dEKuCqeh0
- hihSHlaxTzg3TcqUu54w2xYskG8Fq5tg3gm4kh1Gvh1LijIXX99ABA8eHxOGmLPRIBkXHqJY
- oHtCvPc6sYKNM9xbp6I4yF56xVLmHGJ61KaWKf5KKWYgA9kfHufbja7qR0c6H79LIsiYqf92
- H1HNq1WlQpu/fh4/XAAaV1axHFt/dY/2kU05tLMj8GjeQDz1fHas7augL4argt4e+jum3Nwt
- yupodQBxncKAUbzwKcDrPqUFmfRbJ7ARw8491xQHZDsP82JRj4cOJX32sBg8nO2N5OsFJOcd
- 5IE9v6qfllkZDAh1Rb1h6DFYq9dcdPAHl4zOj9EHq99/CpyccOh7SrtWDNFFknCmLpowhct9
- 5ZnlavBrDbOV0W47gO33WkXMFI4il4y1+Bv89979rVYn8aBohEgET41SpyQz7fMkcaZU+ok/
- +HYjC/qfDxT7tjKXqBQEscVODaFicsUkjheOD4BfWEcVUqa+XdUEciwG/SgNyxBZepj41oVq
- FPSVE+Ni2tNrW/e16b8mgXNngHSnbsr6pAIXZH3qFW+4TKPMGZ2rZ6zITrMip+12jgw4mGjy
- 5y06JZvA02rZT2k9aa7i9dUUFggaanI09jNGbRA/ABEBAAHCwXwEGAEKACYCGwwWIQSb0H4O
- DFH41ZZ3t1Qbk0N9O0FimwUCYDzvagUJFF+UtgAKCRAbk0N9O0Fim9JzD/0auoGtUu4mgnna
- oEEpQEOjgT7l9TVuO3Qa/SeH+E0m55y5Fjpp6ZToc481za3xAcxK/BtIX5Wn1mQ6+szfrJQ6
- 59y2io437BeuWIRjQniSxHz1kgtFECiV30yHRgOoQlzUea7FgsnuWdstgfWi6LxstswEzxLZ
- Sj1EqpXYZE4uLjh6dW292sO+j4LEqPYr53hyV4I2LPmptPE9Rb9yCTAbSUlzgjiyyjuXhcwM
- qf3lzsm02y7Ooq+ERVKiJzlvLd9tSe4jRx6Z6LMXhB21fa5DGs/tHAcUF35hSJrvMJzPT/+u
- /oVmYDFZkbLlqs2XpWaVCo2jv8+iHxZZ9FL7F6AHFzqEFdqGnJQqmEApiRqH6b4jRBOgJ+cY
- qc+rJggwMQcJL9F+oDm3wX47nr6jIsEB5ZftdybIzpMZ5V9v45lUwmdnMrSzZVgC4jRGXzsU
- EViBQt2CopXtHtYfPAO5nAkIvKSNp3jmGxZw4aTc5xoAZBLo0OV+Ezo71pg3AYvq0a3/oGRG
- KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
- fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231116023027.24855-2-Delphine_CC_Chiu@Wiwynn.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231113210216.30237-1-henryshi2018@gmail.com>
 
-On 16/11/2023 03:30, Delphine CC Chiu wrote:
-> Add a device tree bindings for ltc4286 device.
-> 
-> Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-> 
-> -------------------------------------------------------------
-> Changelog:
->   v5 - Add hyphen under "Changelog" in commit message
+Hi Henry,
 
-Apply your patch from the list and check the result... You can easily
-see it's broken. We asked about ---. Please read the message carefully.
+kernel test robot noticed the following build warnings:
 
-Best regards,
-Krzysztof
+[auto build test WARNING on tip/master]
+[also build test WARNING on linus/master tip/auto-latest v6.7-rc1 next-20231116]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Henry-Shi/platform-x86-Add-Silicom-Platform-Driver/20231114-050431
+base:   tip/master
+patch link:    https://lore.kernel.org/r/20231113210216.30237-1-henryshi2018%40gmail.com
+patch subject: [PATCH v12] platform/x86: Add Silicom Platform Driver
+config: i386-kismet-CONFIG_LEDS_CLASS_MULTICOLOR-CONFIG_SILICOM_PLATFORM-0-0 (https://download.01.org/0day-ci/archive/20231116/202311162035.fmFBbRzs-lkp@intel.com/config)
+reproduce: (https://download.01.org/0day-ci/archive/20231116/202311162035.fmFBbRzs-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311162035.fmFBbRzs-lkp@intel.com/
+
+kismet warnings: (new ones prefixed by >>)
+>> kismet: WARNING: unmet direct dependencies detected for LEDS_CLASS_MULTICOLOR when selected by SILICOM_PLATFORM
+   
+   WARNING: unmet direct dependencies detected for LEDS_CLASS_MULTICOLOR
+     Depends on [n]: NEW_LEDS [=n] && LEDS_CLASS [=n]
+     Selected by [y]:
+     - SILICOM_PLATFORM [=y] && X86_PLATFORM_DEVICES [=y] && HWMON [=y]
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
