@@ -1,77 +1,91 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="kzXMORIJ"
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.216])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 02F6C19F;
-	Wed, 15 Nov 2023 18:39:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=cHgkt
-	6wFw4yulka3yAnNtGtv/ycgWvgfCPluWVrqKrA=; b=kzXMORIJgWIWLtVcRBc6+
-	CHeJZmWclLrJHzUWHTD+48VXG07e45AXH1BXU+NO/pGWL7xLsEDaknuskHNX+f/W
-	KOgLW4dXiv7qJfKdb+CRmIIygvCNbOEOhVNFbHJzS9ZrAIwaxMUXUIHczM5GU0Me
-	CJcOEsJLJOxemzngAD7zUc=
-Received: from localhost.localdomain (unknown [39.144.137.125])
-	by zwqz-smtp-mta-g4-4 (Coremail) with SMTP id _____wD3H2U+fVVl5bnXDA--.19779S4;
-	Thu, 16 Nov 2023 10:24:09 +0800 (CST)
-From: Xing Tong Wu <xingtong_wu@163.com>
-To: Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: xingtong.wu@siemens.com,
-	tobias.schaffner@siemens.com,
-	gerd.haeussler.ext@siemens.com
-Subject: [PATCH 2/3] hwmon: (nct6775) Fix logic error for PWM enable
-Date: Thu, 16 Nov 2023 10:23:29 +0800
-Message-Id: <20231116022330.2696-3-xingtong_wu@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231116022330.2696-1-xingtong_wu@163.com>
-References: <20231116022330.2696-1-xingtong_wu@163.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y1PxAmYN"
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEAE48F;
+	Wed, 15 Nov 2023 22:04:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700114684; x=1731650684;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KABAEVgFZrxu2pEBhbPGDF1wNMsDX0OcmGmgAPEJroU=;
+  b=Y1PxAmYNAyiXJdPmfl1P6dHGFAFLk1ysaXswdammE2zLzleDaoLEj4t0
+   bI4NFJCw05swvxGQRoM63VqRlNNv2rvT/ZMnhICK/MHGO09U7swzLm87G
+   cP5GFbsMV2ELasdhM1ppq1tn/LsYKX/snvOXbsTDzXxg5U/cr2Xv6Gyqk
+   LD7PzGuo52wy7I5ORkRoiPaWMC/GMGIfh7DAak3y+h5Y/0VRzu5mFoqND
+   LYsRnbwc0+FcdAJ3nGDySuy12OpKFYJoAkXp3Ok6j6LyrVKuXpQjwNk6h
+   tBcpBiitdOOpGi8LOayTKgqOtMDhOciU432jBxmwnIZsnUGEfAyvYxUu9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10895"; a="12578878"
+X-IronPort-AV: E=Sophos;i="6.03,307,1694761200"; 
+   d="scan'208";a="12578878"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2023 22:04:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10895"; a="758722570"
+X-IronPort-AV: E=Sophos;i="6.03,307,1694761200"; 
+   d="scan'208";a="758722570"
+Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 15 Nov 2023 22:04:38 -0800
+Received: from kbuild by b8de5498638e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r3VUS-0001Mv-0Y;
+	Thu, 16 Nov 2023 06:04:36 +0000
+Date: Thu, 16 Nov 2023 14:03:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Henry Shi <henryshi2018@gmail.com>, hbshi69@hotmail.com,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	hdegoede@redhat.com, markgross@kernel.org, jdelvare@suse.com,
+	linux@roeck-us.net, linux-kernel@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org
+Cc: Paul Gazzillo <paul@pgazz.com>,
+	Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+	oe-kbuild-all@lists.linux.dev, hb_shi2003@yahoo.com,
+	henrys@silicom-usa.com, wenw@silicom-usa.com
+Subject: Re: [PATCH v12] platform/x86: Add Silicom Platform Driver
+Message-ID: <202311161352.CCZ1uNtB-lkp@intel.com>
+References: <20231113210216.30237-1-henryshi2018@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3H2U+fVVl5bnXDA--.19779S4
-X-Coremail-Antispam: 1Uf129KBjvdXoW7Wry8Kr4xXw17trWfGF4Uurg_yoWkKFX_Ww
-	4rGrZ7Zw1Y9r13CF4jgF4rtFW2ka1UWr17Jw1xKa98J347AFn5Cr1kXrZxZrnru3yDZF93
-	Xa1DAr4Iy342vjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUeo7K5UUUUU==
-X-Originating-IP: [39.144.137.125]
-X-CM-SenderInfo: p0lqw35rqjs4rx6rljoofrz/1tbiTA4q0GI0cSnRZAAAsD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231113210216.30237-1-henryshi2018@gmail.com>
 
-From: Xing Tong Wu <xingtong.wu@siemens.com>
+Hi Henry,
 
-The determination of the "pwm_enable" should be based solely on the mode,
-regardless of the pwm value.
-According to the specification, the default values for pwm and pwm_enable
-are 255 and 0 respectively. However, there is a bug in the code where the
-fan control is actually enabled, but the file "pwm_enable" incorrectly
-displays "off", indicating that fan control is disabled. This contradiction
-needs to be addressed and resolved.
-Solution: Update the logic so that "pwm_enable" is determined by mode + 1,
-remove the "off" value for "pwm_enable" since it is not specified in the
-documentation.
+kernel test robot noticed the following build warnings:
 
-Signed-off-by: Xing Tong Wu <xingtong.wu@siemens.com>
----
- drivers/hwmon/nct6775-core.c | 2 --
- 1 file changed, 2 deletions(-)
+[auto build test WARNING on tip/master]
+[also build test WARNING on linus/master tip/auto-latest v6.7-rc1 next-20231116]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/drivers/hwmon/nct6775-core.c b/drivers/hwmon/nct6775-core.c
-index 2111f0cd9787..575db6cb96e9 100644
---- a/drivers/hwmon/nct6775-core.c
-+++ b/drivers/hwmon/nct6775-core.c
-@@ -900,8 +900,6 @@ static const u16 NCT6116_REG_TSI_TEMP[] = { 0x59, 0x5b };
- 
- static enum pwm_enable reg_to_pwm_enable(int pwm, int mode)
- {
--	if (mode == 0 && pwm == 255)
--		return off;
- 	return mode + 1;
- }
- 
+url:    https://github.com/intel-lab-lkp/linux/commits/Henry-Shi/platform-x86-Add-Silicom-Platform-Driver/20231114-050431
+base:   tip/master
+patch link:    https://lore.kernel.org/r/20231113210216.30237-1-henryshi2018%40gmail.com
+patch subject: [PATCH v12] platform/x86: Add Silicom Platform Driver
+config: i386-kismet-CONFIG_LEDS_CLASS_MULTICOLOR-CONFIG_SILICOM_PLATFORM-0-0 (https://download.01.org/0day-ci/archive/20231116/202311161352.CCZ1uNtB-lkp@intel.com/config)
+reproduce: (https://download.01.org/0day-ci/archive/20231116/202311161352.CCZ1uNtB-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311161352.CCZ1uNtB-lkp@intel.com/
+
+kismet warnings: (new ones prefixed by >>)
+>> kismet: WARNING: unmet direct dependencies detected for LEDS_CLASS_MULTICOLOR when selected by SILICOM_PLATFORM
+   
+   WARNING: unmet direct dependencies detected for LEDS_CLASS_MULTICOLOR
+     Depends on [n]: NEW_LEDS [=n] && LEDS_CLASS [=n]
+     Selected by [y]:
+     - SILICOM_PLATFORM [=y] && X86_PLATFORM_DEVICES [=y] && HWMON [=y]
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
