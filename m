@@ -1,144 +1,83 @@
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E4213159D;
+	Thu, 16 Nov 2023 14:30:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="kIhOabIE"
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A46881723
-	for <linux-hwmon@vger.kernel.org>; Thu, 16 Nov 2023 06:02:18 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-6bd0e1b1890so731260b3a.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 16 Nov 2023 06:02:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1700143337; x=1700748137; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OqmubgxtpJpRy+t3jjLZe9v6jbuEY+k/dDeNt+y7ewk=;
-        b=kIhOabIE72zhSMLtrFyXZnxq4bz1pLfhMPeq+akeoBej1YSe6Pub4Th5rFizsOzMH0
-         jF07QdN3D8VeI6d/oAfyL3I63+blIQuEBEVwmfnkoJle/4COlLG2Q7bMJsRG4Neh8mqf
-         AfKMcuxZwnYw66huXpMj/N3E0BdiTDAXM/UuI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700143337; x=1700748137;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OqmubgxtpJpRy+t3jjLZe9v6jbuEY+k/dDeNt+y7ewk=;
-        b=k+cxgJHCZIi9NM/sFcAVII7Yg+n9cm2aBIKjpZ8ZCbn9oYEG3Ww586F/BfVuh457hV
-         3pJckFzPxI+Lsb5NWfR3KcchNgQohFJGdihCRP2M1iq9trIhncd8Z/PK+d4pQd7uG9FO
-         8IXDDs9q6tcfqmYs+TW9m80czPlH37mOdxCNCkPvNvzLrwQPy3XLPCODS4CscHPejq3S
-         cDtSUUF0MRYgUljdmW8V2IQpwnYPa1ThkxBt5g9pCPyUBc/wLtY1nczoaRE9edmKnQU5
-         pLLltS+q2xaZ2xqFhsTB+vZ1FjnqiVcpNBhFu6rauO5JYyysx64FUeyIEdPSpgIxChvW
-         Dobg==
-X-Gm-Message-State: AOJu0YwnBL/JbGf8NAeYxQQu4VFnEa5MWyMsoht6YbUrPFEkZ0YB+/XE
-	xcwBzd3PmDlDjTDidBvBdR0kKg==
-X-Google-Smtp-Source: AGHT+IGZrZjuqSymisc89L4QV+JjjMZTNiIOsTyYazgRaov9rWMR5PLaervrIuX2YUjmeJ5JJqeBng==
-X-Received: by 2002:a05:6a20:7292:b0:17d:f127:d435 with SMTP id o18-20020a056a20729200b0017df127d435mr13937235pzk.45.1700143312099;
-        Thu, 16 Nov 2023 06:01:52 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id s14-20020a65690e000000b0057c44503835sm2548935pgq.65.2023.11.16.06.01.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Nov 2023 06:01:51 -0800 (PST)
-From: Kees Cook <keescook@chromium.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Kees Cook <keescook@chromium.org>,
-	Rob Herring <robh@kernel.org>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hEvYKp6t"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7ADFC433C8;
+	Thu, 16 Nov 2023 14:30:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700145020;
+	bh=hOIVPvdhoBjFYKhZmULCCqOEbzSpvXG69XSPRnCcnc0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hEvYKp6tn+edJXFASdLS/4hWvLo1b/esOxXyhHMo0UM/FDr+10bpe/WwnV7H3Ik70
+	 lIcurmbMrf9VqoPOKZ64HHuZUdC2luHb19tjIRf3a/tKdvKD4XBdXGVTZkkqb0B2po
+	 Z13GuuU/892TnfQJKEI4mYrKrSpYTUQmii6tpTF8pRye4wBrl4P5mICxCJFhZJOrHT
+	 mS4FQxcOQp7833BkOg4fBy8pESRBK7V+4iZcAPwgcUWGH9xFVy4JyBXFF2LDFgUybw
+	 zuhM80oCmmO+N9uqr9yi+GTwuCLjugRvstlJ2gcKzYeYl1lqLlf61qxSI1R7+gpPsJ
+	 i+Mq60EfYRh1A==
+Date: Thu, 16 Nov 2023 14:30:17 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, patrick@stwcx.xyz,
 	Jean Delvare <jdelvare@suse.com>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH] hwmon: Explicitly initialize nct6775_sio_names indexes
-Date: Thu, 16 Nov 2023 06:01:47 -0800
-Message-Id: <20231116140144.work.027-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, linux-i2c@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] dt-bindings: hwmon: Add lltc ltc4286 driver
+ bindings
+Message-ID: <20231116-iodize-wildfowl-f5d72c182658@squawk>
+References: <20231116023027.24855-1-Delphine_CC_Chiu@Wiwynn.com>
+ <20231116023027.24855-2-Delphine_CC_Chiu@Wiwynn.com>
+ <caff5743-265f-43ac-83fb-4e0fb23a9ff4@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2480; i=keescook@chromium.org;
- h=from:subject:message-id; bh=1CBLvb2An+Ij1IqxYo9cQLowHTbR2aYsJsLLfg4xKq8=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlViDLcz9aCbUgsJCVyqbFezrdEGpNsti+B37jv
- M346jHjQDuJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZVYgywAKCRCJcvTf3G3A
- Jk2DEACUk8rhIfFZwVeiVzXN6C47wYLRjwroswyjiBUQUFOSI2KDXV6a+evv1UEZflmzu6kGZX7
- BfnurrsZklRVxiABl9d22CAQGg6So8+pohy/C2+9a75/jYo61NKNY5Z9RYj66Ky2A0Va5Ticr9o
- Dp8EyJvS0Gpmvk79+1yAhhOeCL/PRxA+rwwPbU+DMX4VjXHahrhm1t4puf2feCR9KNOVCcRo2+h
- /gGWV6rMzysaAUihtxG2mUDojfHE2L+7uISHj90ZJK9U9LHHXFQq9R8aGCKbZlo4mmlEl/ip9wQ
- AsbcXrs0Jd94j+kVkBUrtwT3CjRVn9kwxWBVzeX3SAAu77bqT/G0AN1FvE3WMcAW/0WRdKvDs7u
- eCXPjRIWpnXxVYirBaCDMPg32CGddBAHOlBTh7C2kcSXt8PHiBdumvBVB6rtTikFVwTUxTK/AL0
- sw1y4mW3SJ4cUrPzwvY+h4O8Q0TtkA0VNo4pyCqumeh2A0Bz4Xiq5hTecX/wP7YkR+hs+2WNqnL
- 2ieVu9s2tadcO73MWPGDH07liU63FlUAB7LLcz0jBvKOaGlfVxUNpzqxVMV76a8uJpKCCezpgYT
- LRvvDv/JLtVSLwYlN4lGkhs8Rq1BV5DYREPhKLNvwqURK8oitAtHMHceGljgGiMT0Gh43MZfNLx
- LDGKpPP q3yl9hlQ==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="lStQTFIwxdtm5lrO"
+Content-Disposition: inline
+In-Reply-To: <caff5743-265f-43ac-83fb-4e0fb23a9ff4@linaro.org>
 
-Changing the "kinds" enum start value to be 1-indexed instead of
-0-indexed caused look-ups in nct6775_sio_namesp[] to be misaligned or
-off the end. Coverity reported:
 
-*** CID 1571052:  Memory - illegal accesses  (OVERRUN)
-drivers/hwmon/nct6775-platform.c:1075 in nct6775_find()
-1069                sio_data->kind == nct6793 || sio_data->kind == nct6795 ||
-1070                sio_data->kind == nct6796 || sio_data->kind == nct6797 ||
-1071                sio_data->kind == nct6798 || sio_data->kind == nct6799)
-1072                    nct6791_enable_io_mapping(sio_data);
-1073
-1074            sio_data->sio_exit(sio_data);
-vvv     CID 1571052:  Memory - illegal accesses  (OVERRUN)
-vvv     Overrunning array "nct6775_sio_names" of 13 8-byte elements at element index 13 (byte offset 111) using index "sio_data->kind" (which evaluates to 13).
-1075            pr_info("Found %s or compatible chip at %#x:%#x\n",
-1076                    nct6775_sio_names[sio_data->kind], sioaddr, addr);
-1077
-1078            return addr;
-1079     }
-1080
+--lStQTFIwxdtm5lrO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Initialize the string list with explicit indexes.
+On Thu, Nov 16, 2023 at 01:13:58PM +0100, Krzysztof Kozlowski wrote:
+> On 16/11/2023 03:30, Delphine CC Chiu wrote:
+> > Add a device tree bindings for ltc4286 device.
+> >=20
+> > Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+> >=20
+> > -------------------------------------------------------------
+> > Changelog:
+> >   v5 - Add hyphen under "Changelog" in commit message
+>=20
+> Apply your patch from the list and check the result... You can easily
+> see it's broken. We asked about ---. Please read the message carefully.
 
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Rob Herring <robh@kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>
-Cc: linux-hwmon@vger.kernel.org
-Fixes: 0a7093e69c1e ("hwmon: nct6775-i2c: Use i2c_get_match_data()")
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/hwmon/nct6775-platform.c | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
+My reviewed-by was also omitted again, but I suppose that is a good
+thing since I conditionally gave that based on the changelog being
+fixed!
 
-diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
-index 0adeeab7ee03..9aa4dcf4a6f3 100644
---- a/drivers/hwmon/nct6775-platform.c
-+++ b/drivers/hwmon/nct6775-platform.c
-@@ -23,19 +23,19 @@
- enum sensor_access { access_direct, access_asuswmi };
- 
- static const char * const nct6775_sio_names[] __initconst = {
--	"NCT6106D",
--	"NCT6116D",
--	"NCT6775F",
--	"NCT6776D/F",
--	"NCT6779D",
--	"NCT6791D",
--	"NCT6792D",
--	"NCT6793D",
--	"NCT6795D",
--	"NCT6796D",
--	"NCT6797D",
--	"NCT6798D",
--	"NCT6796D-S/NCT6799D-R",
-+	[nct6106] = "NCT6106D",
-+	[nct6116] = "NCT6116D",
-+	[nct6775] = "NCT6775F",
-+	[nct6776] = "NCT6776D/F",
-+	[nct6779] = "NCT6779D",
-+	[nct6791] = "NCT6791D",
-+	[nct6792] = "NCT6792D",
-+	[nct6793] = "NCT6793D",
-+	[nct6795] = "NCT6795D",
-+	[nct6796] = "NCT6796D",
-+	[nct6797] = "NCT6797D",
-+	[nct6798] = "NCT6798D",
-+	[nct6799] = "NCT6796D-S/NCT6799D-R",
- };
- 
- static unsigned short force_id;
--- 
-2.34.1
+--lStQTFIwxdtm5lrO
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZVYndQAKCRB4tDGHoIJi
+0g9pAQDuDPX4/eIC8rfODFMv4qArSDILjwy36Q/U/4fiERcTpgEA3Z9fHBFWkFKS
+oJYaFHnrTAdjn3WnmV9MY9RcWT6kIQY=
+=akaG
+-----END PGP SIGNATURE-----
+
+--lStQTFIwxdtm5lrO--
