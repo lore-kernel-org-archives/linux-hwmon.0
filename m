@@ -1,132 +1,273 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Vodl7Yic"
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59494D4D;
-	Fri, 17 Nov 2023 14:21:47 -0800 (PST)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0457960002;
-	Fri, 17 Nov 2023 22:21:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1700259705;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=z+XRMcZX0l03AC5u4LRSmNZEIVypqySKCEXV2aTX1bg=;
-	b=Vodl7YicdQp6H8eKKBzX+WV5WOiJ29HWHexR5suyxhKzXzzboMec5CMbwVlUuAQGlHH+i0
-	w51lGEaddRZ3lekpEtUWIS4mAhBMr1w1ChRqkC7VJ+h3PjPDa6/LdLvAd1cNFur7MRHjsG
-	lweLsQcNTO/qSS3AU6US/VgJy0UOjdwslNZCO8nqjZbf/NkkBqJYP3SusgO3BGTrqSl0Mx
-	Uog+HRbihWzsCIQdH3P1iIXsBrhBFzyvO823q9gMTL4oCXekEr1B7Bc8VUygeUQWUrTKf1
-	OjNeikDCgkvIpkq1f5bpEM5l8WMmRtTaG5dh670mEIv+QCFeuz+RrSCqvog9eg==
-Date: Fri, 17 Nov 2023 23:21:44 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Carlos Menin <menin@carlosaurelio.net>
-Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	Alessandro Zummo <a.zummo@towertech.it>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Sergio Prado <sergio.prado@e-labworks.com>
-Subject: Re: [PATCH v2 1/2] rtc: add pcf85053a
-Message-ID: <2023111722214402006513@mail.local>
-References: <20231103125106.78220-1-menin@carlosaurelio.net>
- <20231103142822abbca0ed@mail.local>
- <ZUf_3TAZh1bpVOVt@arch-bow>
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="rajSrZ4V"
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C34D50;
+	Fri, 17 Nov 2023 14:32:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+	t=1700260308; x=1700865108; i=w_armin@gmx.de;
+	bh=PsXYnaI2T53D8H5qrzK8vpKaHF+HAJvZZKNrV4eU6Lg=;
+	h=X-UI-Sender-Class:Date:Subject:To:References:Cc:From:
+	 In-Reply-To;
+	b=rajSrZ4VMg32ZBgBbGdvf1a7Zpp1KuAjel3h7f5hAMxGKdX+JPUPmftN4SGVoOTM
+	 Rm/wBUNQOrCJzQ+fdjYyjrvZKwo4eO8HNgoIy+gWMpUMFbJT5nc9jDOtrl8Rv8V52
+	 15f1yocifhuY95HKXMDxNFMI8rT3coPlcLc89dFk7VSswBThQcAeirvV0+fwT8gPs
+	 Ums8hkqVC6jxBqag5zQAG1N6eMTzDDR0lUNjtJaSMNRe+1zSfUUr8H5JIdHmUwl+i
+	 8YDrDO5IzW9m3ZzL3TzbTEkWADIt6CsGKXLWXB5RJvOKSXAfEp5gOC4N2SAqjxgU6
+	 uZxnpJN5K/zhhuU/Dw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MEm6F-1r9rsV0055-00GGKM; Fri, 17
+ Nov 2023 23:31:48 +0100
+Message-ID: <80f66f8f-84a7-4992-8d9d-e12f16915490@gmx.de>
+Date: Fri, 17 Nov 2023 23:31:46 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZUf_3TAZh1bpVOVt@arch-bow>
-X-GND-Sasl: alexandre.belloni@bootlin.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 7/9] hwmon: (dell-smm) Add support for WMI SMM
+ interface
+To: =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
+References: <20231106064351.42347-1-W_Armin@gmx.de>
+ <20231106064351.42347-8-W_Armin@gmx.de>
+ <20231114141259.culmdxsoa3hduudm@pali>
+Content-Language: en-US
+Cc: jdelvare@suse.com, Guenter Roeck <linux@roeck-us.net>,
+ "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>, Hans de Goede <hdegoede@redhat.com>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ platform-driver-x86@vger.kernel.org, markgross@kernel.org
+From: Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <20231114141259.culmdxsoa3hduudm@pali>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:VhacByqGV0UnBketf8qhmFBkP8EkzaasOtoEfFHKn40Gq5Qph5x
+ DRFuRkfNLQ8KtrydvQPHGaLphHvZG1ia8p7e1P1odFhHbrEluMfpIREgGarYSAElzxPaBlV
+ ruc0goc8jugRLzLNERnWQowQy/41PnhQik2VvymVjlZLDp/TP3WJbnuqCT9HSfggX/GWaDZ
+ hjgSWkd5MEHcR/h8oQXgg==
+UI-OutboundReport: notjunk:1;M01:P0:nrnFH7bXO5Q=;nolmpfcMndYQZx+qFq+UCI4dnOj
+ 5kknALJAzPZoc28If+vy+vqPSd6HK+OQHkytdY7h5dHkkRs90yGD0VNLAYEieZYtlihw86dFx
+ /xYTZ1J6V5y/2Ex0p8auq6k6+WqnNHqkIlZid/jnSirSOgA4luqnIIvQ2BMQh3bV5V8Sh7UvQ
+ ZYolpcvCcgJ8Y42dWDheG+kVaTUnGzv0AFIYekITioOCTNZWEvPmYtDT7AKsBBj+/IFwV8LO5
+ n5weuu2ktRNqGIk06TEBY9zc8C7n7guPpv8HZWYmfa+aNlFaKtR+QP6QvriJ//ppWtGXkejsO
+ GQLaSmObZ9OK1n34DiTxI/9YLLAv9dmNgF7pfFamSTV+VjCLeLZLbQmwIK+misZuTMuhRU7gv
+ mf+ieEabQx2H064CWipUt9UaJllI2506i6E55JVPbpvC1fgMHLKnSvaGWAQTH4dAxyTiSAhVI
+ GG3an/pUcNVcd4BiaVscxfKrKS0Q/JLF3WzY+pu4Pm3cXZY6LFLtchpddzA1zTaFZSyBh+81z
+ hwFEK6hYhlUoLsS5tUfVGybtVlm7+duhERjnkCpn5Im+OZFbe5JWBWl2JLHvAH2EfqI/7B7Tr
+ nSHuiPBrdy3Le7FuY/SLlho92faVTN/jecW5vb7sQSHIGkMABEZ4bJnmE79o+edtIn2n/lPHn
+ 3cMPIkNTWh26qbfxLoNkhhyAwaqE3/H5w5D7rUYvQSGA9BkYON8xMGffCcmpVg06BJnzFlRBw
+ Q9wOjWM4bErbEacLm38MSpBTfglB5XbAmSAJkecSOOERyGovo2THrHEa9gEmJxlS6RyS1UpsV
+ BSt3JW5bNhDG7qTT2/TIlGj/N2pt+RkxRKeNmffiQAkYP0UthC3iXuwQA+JyBfQdEIc8Xi9Og
+ 4HhAZ/rZ2trHQy1/xhoA7FIJ83+7ROiD3WE1tFOOXSl1vz62Hu/YTKnv81+UY9xeikasf0MlM
+ WIq0KgBk2rlYz+6nfzDRrHa4vRQ=
 
-On 05/11/2023 17:49:33-0300, Carlos Menin wrote:
-> > > +static int pcf85053a_rtc_check_reliability(struct device *dev, u8 status_reg)
-> > > +{
-> > > +	int ret = 0;
-> > > +
-> > > +	if (status_reg & REG_STATUS_CIF) {
-> > > +		dev_warn(dev, "tamper detected,"
-> > > +			 " date/time is not reliable\n");
-> > You should not split strings. Also, I don't think most of the messages
-> > are actually useful as the end user doesn't have any specific action
-> > after seeing it. You should probably drop them.
-> > 
-> 
-> About the usefullness of the message, do this apply to this CIF related
-> message or also to the other two flags?
+Am 14.11.23 um 15:12 schrieb Pali Roh=C3=A1r:
 
-This actually applies to all the messages of the driver, they will add
-to the size of the kernel then slow the boot time so please have a
-careful look at the usefulness of messages. You may consider swtching
-them to dev_dbg.
+> On Monday 06 November 2023 07:43:49 Armin Wolf wrote:
+>> Some Dell machines like the Dell Optiplex 7000 do not support
+>> the legacy SMM interface, but instead expect all SMM calls
+>> to be issued over a special WMI interface.
+>> Add support for this interface so users can control the fans
+>> on those machines.
+>>
+>> Tested-by: <serverror@serverror.com>
+>> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+>> ---
+>>   drivers/hwmon/Kconfig          |   1 +
+>>   drivers/hwmon/dell-smm-hwmon.c | 198 +++++++++++++++++++++++++++++---=
+-
+>>   drivers/platform/x86/wmi.c     |   1 +
+>>   3 files changed, 181 insertions(+), 19 deletions(-)
+>>
+>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+>> index cf27523eed5a..76cb05db1dcf 100644
+>> --- a/drivers/hwmon/Kconfig
+>> +++ b/drivers/hwmon/Kconfig
+>> @@ -512,6 +512,7 @@ config SENSORS_DS1621
+>>
+>>   config SENSORS_DELL_SMM
+>>   	tristate "Dell laptop SMM BIOS hwmon driver"
+>> +	depends on ACPI_WMI
+>>   	depends on X86
+>>   	imply THERMAL
+>>   	help
+>> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hw=
+mon.c
+>> index 2547b09929e6..d1bcfd447bb0 100644
+>> --- a/drivers/hwmon/dell-smm-hwmon.c
+>> +++ b/drivers/hwmon/dell-smm-hwmon.c
+>> @@ -12,6 +12,7 @@
+>>
+>>   #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+>>
+>> +#include <linux/acpi.h>
+>>   #include <linux/capability.h>
+>>   #include <linux/cpu.h>
+>>   #include <linux/ctype.h>
+>> @@ -34,8 +35,10 @@
+>>   #include <linux/thermal.h>
+>>   #include <linux/types.h>
+>>   #include <linux/uaccess.h>
+>> +#include <linux/wmi.h>
+>>
+>>   #include <linux/i8k.h>
+>> +#include <asm/unaligned.h>
+>>
+>>   #define I8K_SMM_FN_STATUS	0x0025
+>>   #define I8K_SMM_POWER_STATUS	0x0069
+>> @@ -66,6 +69,9 @@
+>>   #define I8K_POWER_AC		0x05
+>>   #define I8K_POWER_BATTERY	0x01
+>>
+>> +#define DELL_SMM_WMI_GUID	"F1DDEE52-063C-4784-A11E-8A06684B9B01"
+>> +#define DELL_SMM_LEGACY_EXECUTE	0x1
+>> +
+>>   #define DELL_SMM_NO_TEMP	10
+>>   #define DELL_SMM_NO_FANS	3
+>>
+>> @@ -219,6 +225,102 @@ static const struct dell_smm_ops i8k_smm_ops =3D =
+{
+>>   	.smm_call =3D i8k_smm_call,
+>>   };
+>>
+>> +/*
+>> + * Call the System Management Mode BIOS over WMI.
+>> + */
+>> +static int wmi_parse_register(u8 *buffer, u32 length, int *reg)
+>> +{
+>> +	__le32 value;
+>> +	u32 reg_size;
+>> +
+>> +	if (length <=3D sizeof(reg_size))
+>> +		return -ENODATA;
+>> +
+>> +	reg_size =3D get_unaligned_le32(buffer);
+>> +	if (!reg_size || reg_size > sizeof(value))
+>> +		return -ENOMSG;
+>> +
+>> +	if (length < sizeof(reg_size) + reg_size)
+>> +		return -ENODATA;
+>> +
+>> +	memcpy_and_pad(&value, sizeof(value), buffer + sizeof(reg_size), reg_=
+size, 0);
+> Hello! In one of the patches in this patch series you changed type of
+> register from unsigned 32 bit integer to signed 32 bit integers. I'm not
+> sure if this change is really intended and what is the real reason for
+> it (because there is no explanation for it in the commit message). But
+> this memcpy_and_pad would not work correctly for signed negative values
+> because it is the highest bit which indicates negative number.
+>
+> In my opinion, numbers and registers are unsigned. But if you have
+> figure out that they has to be treated as signed with possible negative
+> values then this fact has to be somehow handled.
 
-> > > +	tm->tm_year = buf[REG_YEARS];
-> > > +	/* adjust for 1900 base of rtc_time */
-> > > +	tm->tm_year += 100;
-> > > +
-> > > +	tm->tm_wday = (buf[REG_WEEKDAYS] - 1) & 7; /* 1 - 7 */
-> > > +	tm->tm_sec = buf[REG_SECS];
-> > > +	tm->tm_min = buf[REG_MINUTES];
-> > > +	tm->tm_hour = buf[REG_HOURS];
-> > > +	tm->tm_mday = buf[REG_DAYS];
-> > > +	tm->tm_mon = buf[REG_MONTHS] - 1; /* 1 - 12 */
-> > 
-> > Those comments are not useful.
-> > 
-> 
-> I Will improve them to explain why I am offsetting the register value.
+That change was by mistake, i will send an updated patch series once Hans
+has finished his review.
 
-I don't think this is necessary, most of the drivers are doing it so
-this is expected.
+>> +	*reg =3D le32_to_cpu(value);
+>> +
+>> +	return (int)(reg_size + sizeof(reg_size));
+>> +}
+>> +
+>> +static int wmi_parse_response(u8 *buffer, u32 length, struct smm_regs =
+*regs)
+>> +{
+>> +	int *registers[] =3D {
+>> +		&regs->eax,
+>> +		&regs->ebx,
+>> +		&regs->ecx,
+>> +		&regs->edx
+>> +	};
+>> +	u32 offset =3D 0;
+>> +	int ret, i;
+>> +
+>> +	for (i =3D 0; i < ARRAY_SIZE(registers); i++) {
+>> +		if (offset >=3D length)
+>> +			return -ENODATA;
+>> +
+>> +		ret =3D wmi_parse_register(buffer + offset, length - offset, registe=
+rs[i]);
+>> +		if (ret < 0)
+>> +			return ret;
+>> +
+>> +		offset +=3D ret;
+>> +	}
+>> +
+>> +	if (offset !=3D length)
+>> +		return -ENOMSG;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int wmi_smm_call(struct device *dev, struct smm_regs *regs)
+>> +{
+>> +	struct wmi_device *wdev =3D container_of(dev, struct wmi_device, dev)=
+;
+>> +	struct acpi_buffer out =3D { ACPI_ALLOCATE_BUFFER, NULL };
+>> +	u32 wmi_payload[] =3D {
+>> +		sizeof(regs->eax),
+>> +		regs->eax,
+>> +		sizeof(regs->ebx),
+>> +		regs->ebx,
+>> +		sizeof(regs->ecx),
+>> +		regs->ecx,
+>> +		sizeof(regs->edx),
+>> +		regs->edx
+>> +	};
+>> +	const struct acpi_buffer in =3D {
+>> +		.length =3D sizeof(wmi_payload),
+>> +		.pointer =3D &wmi_payload,
+>> +	};
+>> +	union acpi_object *obj;
+>> +	acpi_status status;
+>> +	int ret;
+>> +
+>> +	status =3D wmidev_evaluate_method(wdev, 0x0, DELL_SMM_LEGACY_EXECUTE,=
+ &in, &out);
+>> +	if (ACPI_FAILURE(status))
+>> +		return -EIO;
+>> +
+>> +	obj =3D out.pointer;
+>> +	if (!obj)
+>> +		return -ENODATA;
+>> +
+>> +	if (obj->type !=3D ACPI_TYPE_BUFFER) {
+>> +		ret =3D -ENOMSG;
+>> +
+>> +		goto err_free;
+>> +	}
+>> +
+>> +	ret =3D wmi_parse_response(obj->buffer.pointer, obj->buffer.length, r=
+egs);
+>> +
+>> +err_free:
+>> +	kfree(obj);
+>> +
+>> +	return ret;
+>> +}
+>> +
+> ...
+>> diff --git a/drivers/platform/x86/wmi.c b/drivers/platform/x86/wmi.c
+>> index a78ddd83cda0..0b3e63c21d26 100644
+>> --- a/drivers/platform/x86/wmi.c
+>> +++ b/drivers/platform/x86/wmi.c
+>> @@ -106,6 +106,7 @@ MODULE_DEVICE_TABLE(acpi, wmi_device_ids);
+>>   static const char * const allow_duplicates[] =3D {
+>>   	"05901221-D566-11D1-B2F0-00A0C9062910",	/* wmi-bmof */
+>>   	"8A42EA14-4F2A-FD45-6422-0087F7A7E608",	/* dell-wmi-ddv */
+>> +	"F1DDEE52-063C-4784-A11E-8A06684B9B01", /* dell-smm-hwmon */
+> Here you used space instead of TAB after the comma.
 
-> > > +static struct attribute *pcf85053a_attrs_flags[] = {
-> > > +	&dev_attr_rtc_fail.attr,
-> > > +	&dev_attr_oscillator_fail.attr,
-> > > +	&dev_attr_rtc_clear.attr,
-> > > +	0,
-> > > +};
-> > 
-> > Don't add undocumented sysfs files. Also, You must not allow userspace
-> > to clear those flags without setting the time properly.
-> > 
-> 
-> Should the flags be cleared only by setting the time, or is there
-> another acceptable method? What would be the correct way to let
-> userspace read those flags?
+You are right, i will fix this in the updated patch series.
 
-The RTC_VL_READ ioctl will allow reading the flags from userspace. For
-the flags that monitor the validity of the time and date, they must only
-be cleared when the time and date is known to be good s only when
-setting the time.
+Thanks,
+Armin Wolf
 
-> > > +}
-> > > +
-> > > +static void pcf85053a_set_low_jitter(struct device *dev, u8 *reg_ctrl)
-> > > +{
-> > > +	bool val;
-> > > +	u8 regval;
-> > > +
-> > > +	val = of_property_read_bool(dev->of_node, "nxp,low-jitter-mode");
-> > 
-> > Bool properties don't work well with RTC because with this, there is now
-> > way to enable the normal mode.
-> > 
-> 
-> Wouldn't the absence of the property enable normal mode? Or I am missing
-> something?
-
-RTC have a greater lifetime than the linux system so you must have a way
-to indicate that you don't want to change the configuration for example
-if it has been set from the bootloader or at the factory.
-
-Regards,
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>>   	NULL
+>>   };
+>>
+>> --
+>> 2.39.2
+>>
