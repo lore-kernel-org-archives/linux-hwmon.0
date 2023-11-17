@@ -1,81 +1,90 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kb1Ddgn/"
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3DDB9;
-	Thu, 16 Nov 2023 19:21:01 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-6c32a20d5dbso1429248b3a.1;
-        Thu, 16 Nov 2023 19:21:01 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FV47go9O"
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53FC01A5;
+	Thu, 16 Nov 2023 20:16:15 -0800 (PST)
+Received: by mail-ot1-x32f.google.com with SMTP id 46e09a7af769-6ce2ee17cb5so823909a34.2;
+        Thu, 16 Nov 2023 20:16:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700191261; x=1700796061; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20230601; t=1700194574; x=1700799374; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=04yJ8YqPKGFpqj3v0iOVI9DtylMq/xzGcXD8UiSYJ3g=;
-        b=Kb1Ddgn/HOoMl9tY9JCOZckEZXTVXGOdYBGR67qpX9jj9mfp9YewVIlQmr0NB2RQgq
-         eIi3Wyf63UNlVkwvA5qjih9psYB6AnDJ/lHpe+TJoJ3eCiO9ZOnvlsP863cFvBQfKlWH
-         nJ9P5gTcHga8jsGITwkDVe07U3nkty5CLbCPJnbPUNmklK7XfdWkZ6/EOhVmj2DnoVs/
-         NCkPY8wiIuM+laI824rTgwEb5Mi/upgGgozDOgzRF6iQwF0bPVG08ETz8Nq6i3kgizrl
-         PLPXz6GzWE8vTffvdyCzebw+ljCo2KfiumO/TWKcQU0ayzBMtRuhhz+LZB7VOOn+R49T
-         2KYQ==
+        bh=s0pRml4UbUCFGgeFvuEdYG1JjP5SjBhqOmjNulrwupY=;
+        b=FV47go9OZNgD1Qtx35+vGJq+fI8BeiAQQ4MkfGx6OG8jPmXCW/kH3jCz6/YoGCPn05
+         ZrR128aQY/2HnRw8LQbi1P3zIdmSwm5ieVmQcTE66BYae7dYR4oIJyulxMWOU1zovmxf
+         oqsITrGOjE7rcUvqun/JeEyE8Ufqyd1xVbcuuiEDhTe7vSG+EEYxh8sVvkkNYNbypqoa
+         yknwm7fPWK8bLt+9Fl5VkrqpYlNuiB8n/eitBFcwulLQsDZwbHXcWPAaG61r6o9rwzVX
+         csplpVT7tSqjqT4bO3SJVJiN+hP5NXnTqB0jtcXD6gVNqUfw8isR/bditCOwhm3aaz6l
+         s0kA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700191261; x=1700796061;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1700194574; x=1700799374;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=04yJ8YqPKGFpqj3v0iOVI9DtylMq/xzGcXD8UiSYJ3g=;
-        b=o1IZJGLRVpg/ETWgy9CN9o5ORZLX03jMkC/a2/ipI1EvEZEhIR1UKFAOFg+O+iVPri
-         lqQv6OUpVjSp2rRwTtLthsrYZCRxoNwyOxOlRYp8z67B3Bwf8y8d0WnD/CqyJhsrekgA
-         +j0jj793jWuW3kWw8WVVKXfmFcx/dRI5fmnc9SOehVxghgUrzJFvN8bVJChQis9NF4eq
-         u9KWEORBbnXk5lVs2xiXon3rlZSOszbwFgVpfBleD5Qpwr+ryNhmRoFSCY22i2QCzrFg
-         Kvq6tmuonh8Y2yvRjd8mU5c4+ULhOlPwlHmJ0Lf52A1fPgU1D5wO9FmuxV7SN6bitS7d
-         GVgQ==
-X-Gm-Message-State: AOJu0Yx/t9hlMI6RMYagK8/PA7niEYI58s4cq6hGQ5dPj7+ZIF5L/53r
-	+D0Ya08+x0ybJEquOwZT5ypbYkhVgQc=
-X-Google-Smtp-Source: AGHT+IFjDnrMp2pgy7V0U4koa/oNWvYszgsQ2cUM3Qj+UHiq3IVv4gnZaiFGgPGTKFjFRrGq+pa71Q==
-X-Received: by 2002:a05:6a00:4511:b0:6c4:e8a1:8b3b with SMTP id cw17-20020a056a00451100b006c4e8a18b3bmr21681438pfb.25.1700191261004;
-        Thu, 16 Nov 2023 19:21:01 -0800 (PST)
-Received: from [10.10.14.80] (1-34-21-66.hinet-ip.hinet.net. [1.34.21.66])
-        by smtp.gmail.com with ESMTPSA id j7-20020aa78007000000b0068ff267f094sm453663pfi.158.2023.11.16.19.20.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Nov 2023 19:21:00 -0800 (PST)
-Message-ID: <69657f96-4849-4134-911d-4785d5d6b8d8@gmail.com>
-Date: Fri, 17 Nov 2023 11:18:47 +0800
+        bh=s0pRml4UbUCFGgeFvuEdYG1JjP5SjBhqOmjNulrwupY=;
+        b=K1UZW/6CZESybl2kiYymtvvrV0QzSbmyeIS0DWLNiQiZCKd0SLysEaD6ZJ0seuSkpb
+         x6sV4y3j49pvMFN5s7tE9cj2qHe1LC/gYzGgIxlpvaTKobrjgvx/Wx5NQBidvO7kgHFG
+         i/tDmEJYIvnPGWZ8Pz2K2ZJIn1raHeAcZxQQ6HMHXgixcd+SPoXWcBEd0xFkn8slOedZ
+         PvOtNZEq3SkAKY1PXQtz7Bo4M0TC5nQAZZ8cSuhi3GDFkw0SU4/vdflMWvnPJlSwqtIp
+         qdx24D0n5JBsJ2JR3kxJkWY/GP+7X0VD2EkNRFJS8wHeagZvf8maDYry8JAYfRYxTb1r
+         SyFg==
+X-Gm-Message-State: AOJu0YygzlfROWuwrY4JUXQMtHmTjQa4toZyxud1yUkNFeX9QZpWrISl
+	87MKAHbSRruLhmnumT8/OTc=
+X-Google-Smtp-Source: AGHT+IHqSGYNZe+p9rpMhNdWcSO96mJzQypDORJ4+HZbbq3eCBx9k9JoQvFAsEaqrOMkfPqf57THnw==
+X-Received: by 2002:a9d:6244:0:b0:6ce:29cd:b699 with SMTP id i4-20020a9d6244000000b006ce29cdb699mr11397480otk.10.1700194574472;
+        Thu, 16 Nov 2023 20:16:14 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f37-20020a635125000000b005a9b20408a7sm502148pgb.23.2023.11.16.20.16.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Nov 2023 20:16:13 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Thu, 16 Nov 2023 20:16:12 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: PeterYin <peteryin.openbmc@gmail.com>
+Cc: patrick@stwcx.xyz, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Joel Stanley <joel@jms.id.au>,
+	Chanh Nguyen <chanh@os.amperecomputing.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: Add mps mp5990 driver bindings
+Message-ID: <140086a7-c89d-48b7-9574-7db28dcc056e@roeck-us.net>
+References: <20231113155008.2147090-1-peteryin.openbmc@gmail.com>
+ <20231113155008.2147090-2-peteryin.openbmc@gmail.com>
+ <a3445201-58f2-42c6-bef7-ca6968fd80d6@roeck-us.net>
+ <69657f96-4849-4134-911d-4785d5d6b8d8@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: Add mps mp5990 driver bindings
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: patrick@stwcx.xyz, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
- Jonathan Corbet <corbet@lwn.net>, Joel Stanley <joel@jms.id.au>,
- Chanh Nguyen <chanh@os.amperecomputing.com>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-doc@vger.kernel.org
-References: <20231113155008.2147090-1-peteryin.openbmc@gmail.com>
- <20231113155008.2147090-2-peteryin.openbmc@gmail.com>
- <a3445201-58f2-42c6-bef7-ca6968fd80d6@roeck-us.net>
-Content-Language: en-US
-From: PeterYin <peteryin.openbmc@gmail.com>
-In-Reply-To: <a3445201-58f2-42c6-bef7-ca6968fd80d6@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <69657f96-4849-4134-911d-4785d5d6b8d8@gmail.com>
 
-
-
-Guenter Roeck 於 11/16/23 06:27 寫道:
-> On Mon, Nov 13, 2023 at 11:50:07PM +0800, Peter Yin wrote:
->> Add a device tree bindings for mp5990 device.
->>
->> Signed-off-by: Peter Yin <peteryin.openbmc@gmail.com>
->> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+On Fri, Nov 17, 2023 at 11:18:47AM +0800, PeterYin wrote:
 > 
-> What branch is this patch based on ? git fails to apply it.
 > 
-> Guenter
-I think I don't pull the last version. I can rebase it and push the new 
-version. Thanks for your feedback.
+> Guenter Roeck 於 11/16/23 06:27 寫道:
+> > On Mon, Nov 13, 2023 at 11:50:07PM +0800, Peter Yin wrote:
+> > > Add a device tree bindings for mp5990 device.
+> > > 
+> > > Signed-off-by: Peter Yin <peteryin.openbmc@gmail.com>
+> > > Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> > 
+> > What branch is this patch based on ? git fails to apply it.
+> > 
+> > Guenter
+> I think I don't pull the last version. I can rebase it and push the new
+> version. Thanks for your feedback.
+
+Question is: Last version of what ? Best would be if it was based
+on mainline.
+
+Thanks,
+Guenter
