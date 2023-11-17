@@ -1,112 +1,154 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FjPJRjbg"
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BD9EA
-	for <linux-hwmon@vger.kernel.org>; Thu, 16 Nov 2023 16:02:55 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1cc3216b2a1so12960715ad.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 16 Nov 2023 16:02:55 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RHN7JhUJ"
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0776FC5;
+	Thu, 16 Nov 2023 17:35:23 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1cc330e8f58so12495385ad.3;
+        Thu, 16 Nov 2023 17:35:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700179374; x=1700784174; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=CjjsNIVQLO7uSgWiuihqRU/tj0v0w91Gakpavwjbf7o=;
-        b=FjPJRjbgmgPkC3zFDpY4f8slEytCxGB/BbEm4srDmoVt6L1ZkhjfswMhaqKfxF3ctX
-         qdiyQI/YKHEttY7AcuTiLP1p8Nvemsjzbxq8EyQoeZySKVYhg8PKa9O3dkn8ZQ/VRIFT
-         NoTgE79xFlev7xDCMYjOzQs+9i6V7LcJxpcmu1FsOyZCACczW42otveESUzaexUUuVS9
-         WwVx/OyD2c8zaDnlsTMbiCmhiz3WhCYh6srDhySGATtGwl7al0qIBnRiv+ChXHmZYOYn
-         Qm5wGzKLWFxy4QaedwXay+BHabg4bhxDES8WTcdyYa5Y8CbSOk7bH2e61roqMtc6VQeA
-         kgmQ==
+        d=gmail.com; s=20230601; t=1700184922; x=1700789722; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=OkBcSVnpNbeyyADBZ1LokbbQAdLBUFLRlKJdrYzEzIY=;
+        b=RHN7JhUJzvuEKqnHHs4pS4TiQ6/etiIpCPe5n5CNnsl85lwaI0NR2HOm9s9wRUPPg+
+         fnCqZb41y43rWetQFH3i4mBHQc/d9wqYn3Xttvg7fmdw3m92SwEoXLXKavZRzuNCUFCX
+         4NWP9IT/L8bQ+8S4TwfuMM2mpzv76qo9/E73i/GbS7hm1LsYHLg6Ex104YJnX9P0zjG6
+         neFmFKiX2FlFu2ebOUFzo2F9GcKPOkSTtJ/276WLGlYT2wbtReB2rWKW14h/1xcvhKgD
+         0i30hrr0P6T/6N251CMoIYsq0c17ZiyeD4IhNh2QvVJ+GXMDussRRqG06aflk9xY4ah/
+         iB5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700179374; x=1700784174;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CjjsNIVQLO7uSgWiuihqRU/tj0v0w91Gakpavwjbf7o=;
-        b=jG5Z/HV8XOIKVGghZRy5x4+DJPO1JRzeEn4NkMovfITXCkueWofsH6v9DMB5fb3q65
-         XABHUeHglqLWm2tpo+dFqcqFX5kql2bb4rMMCxBQ3CYnJJvpiXCHGe8HyfuCBi2tZzyC
-         6LFSuHVAEWfaG12+qMTUChXTpp32GcD4RG1eq+uUBdkfX44xWAd8HkgppdmlfL7oCD8N
-         G4OmA9v63eAeZKyhJ7x0o4b5OFH4K67J8hyRfExHMHWyjvABncdfazFo60atACd8W7x1
-         y+e2ihncCQSdlkxCGrpVdXZFsNGM4KE/mcYMjxomTLLpmjBX6t5hz6s/BZwP8023eRSu
-         KqKw==
-X-Gm-Message-State: AOJu0YyqXBnPT9sZLm/32pvwBev0D6USvXF6izOy15v6Iber+uN6Mswr
-	VEg78PfHgN/+xSwx3448ipWLs1MuUEk=
-X-Google-Smtp-Source: AGHT+IEx/6/Y23JddXnCjpAObFS6t9Fq2NrJQFb6KwPrHL4vErV37o3LP/4ipTdC2+bcf1Spe2d8tQ==
-X-Received: by 2002:a17:902:db03:b0:1cc:32ae:4afd with SMTP id m3-20020a170902db0300b001cc32ae4afdmr12931330plx.46.1700179374021;
-        Thu, 16 Nov 2023 16:02:54 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w1-20020a1709026f0100b001cc3fae06a6sm231783plk.159.2023.11.16.16.02.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Nov 2023 16:02:53 -0800 (PST)
+        d=1e100.net; s=20230601; t=1700184922; x=1700789722;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OkBcSVnpNbeyyADBZ1LokbbQAdLBUFLRlKJdrYzEzIY=;
+        b=F2QIFUPDJrGdRBND5gAtBVGhkgcuYk3DAS70oIC8vaCYFNcn1tWpdefdC7vyt8WdDz
+         1451imvDsA47AivK8dsPXOm0wIrFEukNYdGffxUcDKkaPfrJW++TP22I1dTOwrTSasdB
+         YLUNqK95QOjoPcoKICUSmzIxMd0v3FwdKzXCpnoM9+T+34r985Zl2Z4/2RkH+IIMByeY
+         CUW3vYn46i7x5RBlnMH2viBg7atkmBz0aUchB1nonl8HgDM8RTPzbNmwR0RcXulT8GZy
+         lo6J0+4M37c3WgQfUsI0r2IskfB+QcccMRI298gYLOWX6qJfAZEAk2NZ/LwphiLT+GZK
+         3R/g==
+X-Gm-Message-State: AOJu0YxwpBZBSLJUt8/170YgsaENBNmEwQKvwpqpLatfJ6BaoAqkqnsO
+	aCKGW5xbJcEWyOdTTNL3ULc=
+X-Google-Smtp-Source: AGHT+IHCAURyu2UVDQJLbES0kJOPiZnQ+nqaqUHt7AOQsy8GdLd4cPJPphKctTQ48EX81pTtYHsk3g==
+X-Received: by 2002:a17:903:110e:b0:1cc:4468:f1cf with SMTP id n14-20020a170903110e00b001cc4468f1cfmr11191260plh.3.1700184922230;
+        Thu, 16 Nov 2023 17:35:22 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id jw11-20020a170903278b00b001cc3a6813f8sm298223plb.154.2023.11.16.17.35.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Nov 2023 17:35:21 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
-	Kees Cook <keescook@chromium.org>
-Subject: [PATCH] hwmon: (nct6775-core) Explicitly initialize nct6775_device_names indexes
-Date: Thu, 16 Nov 2023 16:02:51 -0800
-Message-Id: <20231117000251.1197405-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.39.2
+Message-ID: <a18df29d-2e2e-431b-a486-4fd7898e0771@roeck-us.net>
+Date: Thu, 16 Nov 2023 17:35:20 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] hwmon: (nct6775) Fix incomplete register array
+Content-Language: en-US
+To: Xing Tong Wu <xingtong_wu@163.com>, Jean Delvare <jdelvare@suse.com>,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: xingtong.wu@siemens.com, tobias.schaffner@siemens.com,
+ gerd.haeussler.ext@siemens.com
+References: <20231116022330.2696-1-xingtong_wu@163.com>
+ <20231116022330.2696-2-xingtong_wu@163.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
+ RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
+ nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
+ 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
+ gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
+ IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
+ kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
+ VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
+ jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
+ BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
+ ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
+ CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
+ nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
+ hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
+ c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
+ 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
+ GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
+ sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
+ Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
+ HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
+ BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
+ l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
+ 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
+ pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
+ J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
+ pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
+ 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
+ ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
+ I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
+ nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
+ HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
+ JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
+ J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
+ cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
+ wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
+ hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
+ nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
+ QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
+ trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
+ WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
+ HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20231116022330.2696-2-xingtong_wu@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Changing the "kinds" enum start value to be 1-indexed instead of
-0-indexed caused look-ups in nct6775_device_names[] to be misaligned or
-off the end.
+On 11/15/23 18:23, Xing Tong Wu wrote:
+> From: Xing Tong Wu <xingtong.wu@siemens.com>
+> 
+> The nct6116 specification actually includes 5 PWMs, but only 3
+> PWMs are present in the array. To address this, the missing 2
+> PWMs have been added to the array.
+> 
+> Signed-off-by: Xing Tong Wu <xingtong.wu@siemens.com>
+> ---
+>   drivers/hwmon/nct6775-core.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/nct6775-core.c b/drivers/hwmon/nct6775-core.c
+> index d928eb8ae5a3..2111f0cd9787 100644
+> --- a/drivers/hwmon/nct6775-core.c
+> +++ b/drivers/hwmon/nct6775-core.c
+> @@ -769,7 +769,7 @@ static const u16 NCT6106_FAN_PULSE_SHIFT[] = { 0, 2, 4 };
+>   
+>   static const u8 NCT6106_REG_PWM_MODE[] = { 0xf3, 0xf3, 0xf3 };
+>   static const u8 NCT6106_PWM_MODE_MASK[] = { 0x01, 0x02, 0x04 };
+> -static const u16 NCT6106_REG_PWM_READ[] = { 0x4a, 0x4b, 0x4c };
+> +static const u16 NCT6106_REG_PWM_READ[] = { 0x4a, 0x4b, 0x4c, 0xd8, 0xd9 };
 
-Initialize the string list with explicit indexes.
+I have no idea where you got the above register addresses from. Looking at
+the datasheet, NCT6116 doesn't use those registers at all, and neither does
+NCT6106. The PWM registers for NCT6116 are
 
-Cc: Rob Herring <robh@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>
-Fixes: 0a7093e69c1e ("hwmon: nct6775-i2c: Use i2c_get_match_data()")
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/nct6775-core.c | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
+static const u16 NCT6116_REG_PWM[] = { 0x119, 0x129, 0x139, 0x199, 0x1a9 };
 
-diff --git a/drivers/hwmon/nct6775-core.c b/drivers/hwmon/nct6775-core.c
-index d928eb8ae5a3..7534d5c657bd 100644
---- a/drivers/hwmon/nct6775-core.c
-+++ b/drivers/hwmon/nct6775-core.c
-@@ -63,19 +63,19 @@
- 
- /* used to set data->name = nct6775_device_names[data->sio_kind] */
- static const char * const nct6775_device_names[] = {
--	"nct6106",
--	"nct6116",
--	"nct6775",
--	"nct6776",
--	"nct6779",
--	"nct6791",
--	"nct6792",
--	"nct6793",
--	"nct6795",
--	"nct6796",
--	"nct6797",
--	"nct6798",
--	"nct6799",
-+	[nct6106] = "nct6106",
-+	[nct6116] = "nct6116",
-+	[nct6775] = "nct6775",
-+	[nct6776] = "nct6776",
-+	[nct6779] = "nct6779",
-+	[nct6791] = "nct6791",
-+	[nct6792] = "nct6792",
-+	[nct6793] = "nct6793",
-+	[nct6795] = "nct6795",
-+	[nct6796] = "nct6796",
-+	[nct6797] = "nct6797",
-+	[nct6798] = "nct6798",
-+	[nct6799] = "nct6799",
- };
- 
- /* Common and NCT6775 specific data */
--- 
-2.39.2
+>   static const u16 NCT6106_REG_FAN_MODE[] = { 0x113, 0x123, 0x133 };
+>   static const u16 NCT6106_REG_TEMP_SOURCE[] = {
+>   	0xb0, 0xb1, 0xb2, 0xb3, 0xb4, 0xb5 };
+> @@ -3595,7 +3595,7 @@ int nct6775_probe(struct device *dev, struct nct6775_data *data,
+>   		break;
+>   	case nct6116:
+>   		data->in_num = 9;
+> -		data->pwm_num = 3;
+> +		data->pwm_num = 5;
+
+This does look correct, though.
+
+Guenter
+
+>   		data->auto_pwm_num = 4;
+>   		data->temp_fixed_num = 3;
+>   		data->num_temp_alarms = 3;
 
