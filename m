@@ -1,101 +1,99 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vnge7/5b"
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A9CD1A1;
-	Thu, 16 Nov 2023 20:54:14 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-6b77ab73c6fso1215846b3a.1;
-        Thu, 16 Nov 2023 20:54:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U2gteYP0"
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E5FD49;
+	Thu, 16 Nov 2023 22:40:39 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-99bdeae1d0aso228703866b.1;
+        Thu, 16 Nov 2023 22:40:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700196854; x=1700801654; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/lmKwmdeL65ZlMvWyE8ViyW/IEvLXZ106QkyWY1HoSE=;
-        b=Vnge7/5biuqSbk0RzDLJ+6eoIX/gdp1M90IHNnXc34hA24LYKK36nbuFSp5Itej4jD
-         B7aUS1/O5ekEtWFsxhwzDCteEoteXGg+0PpdcVuzlbPB3SMhn3/IMynZlaBQmAalNb0n
-         rmL7M9mlC5YKukCNQE8qp/juNsUaixBVg2pwv1wvVAiJF2tAquCsAtkjpJi4SXoXIdv7
-         F4+S1pfyR0aiFTVQZMFif1Y4jOvN42qvMAEJrtcvxoW7nFiZdSvC4G6VUQBIUim+UxZJ
-         6eJdVcvZ7XJvprVAFKEHV4qCqZaNVAYfB3UUU04o3CUu3DNMYi7bhSwIascyyfeVJbp3
-         fZ+A==
+        d=gmail.com; s=20230601; t=1700203238; x=1700808038; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TJeM0UPZbg4EOysqQFDW8uCltRVNjJPSKQ5K1d0kcZ8=;
+        b=U2gteYP0Qw86TdhHeFBMOX6Rub9JrG3sZdIKJBrEv99xApqGube8GKmeXfyMysbnbG
+         mDmVpQV28bBg0GIcE79jetUASx93BQgG3/hoKqzAkxFgjqv07h+2JSzwKwwzvTwA4ti2
+         ZXm5NMtuuI3/RrOYRp71EArMs7kC+SPhHaPrmP+8jm7pPPRZDMom2VTQEtd3Nt2CWDit
+         0NCMB3rYYAQOdnSfEYyPxH36EpiGITgy0bALS8Spz79ZenmIP41H4NqwAqGmfRRb5BNN
+         UZqeGv/EKiQ/kr8rb4oK5Bs3+Mlz0OglbskNt47Dp2R3FAYMpzogG+9raWVzGfCiCS+m
+         sH2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700196854; x=1700801654;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/lmKwmdeL65ZlMvWyE8ViyW/IEvLXZ106QkyWY1HoSE=;
-        b=UJqOY8TQ6WhS2IMtyRY63v2rYoTvKF2mAhqOxXJdyPWCNF5xp4MvKKRc1SXtDA3YlX
-         0K4fdcYADmlxOafEwRVn84P/nMOJqa9wlwU6p/hqr3T7dv0dC2H2a75UOYTPpT+Zxrm7
-         4h4zlAfM65b7i+bKh62T8/eqKmCB59DQjs8HPWCQkPK10nwTao9dqczjjg1BcUfsDCTq
-         4nedr3zr47lxJL4IU/C+HnqNHu3HFfBQyGKUBQpX1beOBEnlHI8QzQ9P1v+lXJ1tsQpy
-         A2wTPmotMBzpa/lD4h31+yLw63g1BqIgP/k7edDnNkkvxVJJodYBUjwmpPcD9VXzmAzd
-         CJuA==
-X-Gm-Message-State: AOJu0Yz/fNLC7RtBiEz9vU1lG33qcqnhSuk7f4z7WD3stw9GWOU7hnVR
-	Rvt4s3+nVbN9YVf8Q/RXTYBTWR6S4tU=
-X-Google-Smtp-Source: AGHT+IGEWBjc364kyBtrL2ltQbOgcPCiHETUvmBsIqW35a7IsgEIWjdVMMe5fccFaEPw0ylxLY/kTA==
-X-Received: by 2002:a05:6a00:310f:b0:6c4:d6fa:ee9d with SMTP id bi15-20020a056a00310f00b006c4d6faee9dmr5104694pfb.1.1700196853698;
-        Thu, 16 Nov 2023 20:54:13 -0800 (PST)
-Received: from [10.10.14.80] (1-34-21-66.hinet-ip.hinet.net. [1.34.21.66])
-        by smtp.gmail.com with ESMTPSA id v1-20020aa78081000000b0065a1b05193asm568042pff.185.2023.11.16.20.54.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Nov 2023 20:54:13 -0800 (PST)
-Message-ID: <7080c9f3-2a57-4855-be1b-9a206f6ef8e1@gmail.com>
-Date: Fri, 17 Nov 2023 12:52:33 +0800
+        d=1e100.net; s=20230601; t=1700203238; x=1700808038;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TJeM0UPZbg4EOysqQFDW8uCltRVNjJPSKQ5K1d0kcZ8=;
+        b=u6MbAefkJzQhucAu4HJcnKKfh1tBkF2kWFvrqBk0OCYOaNFDd/DnrJX87TyXWofeLF
+         dPB2dodp1ghSz6033NWT2W+sDCT5jZjClEGfsmF5rHd6qsECqi6Sef8nDu02DYswLMJp
+         gW7Y3HgMjuR4X4QHNprI2nTiWWO18KCFTm/yBwMZKMMYvx5lNiEjCwrU8HYAl4bKVdLZ
+         dgyL7DZzSOU0QmkIvLv3Tbk3b4A1UcMO3rjt+tuToO+Mfg1URGcPjYXAhSAVyy0hlxDQ
+         D5hmH5ZUSHgRh5351D5ymnNh9/tFp5bnUd9K5cYX+tw3QmdU3jtbdrzOWnZMoI8BaCpk
+         y5mg==
+X-Gm-Message-State: AOJu0YxvVLoRfHF7dc6WyP5xWda853+qvFQdpwGQ8R0GUn4VVmV9HMgq
+	zj4NPHLGhAK/XsIjBhEAuK0=
+X-Google-Smtp-Source: AGHT+IG4nfIiSvLOZhHXUzrmqtlexpnVhfKk7sP/Dbg7N6+TfdSMprHU/R5tPuPDZ7q9MwSYVSwtuA==
+X-Received: by 2002:a17:906:2a41:b0:9b9:f980:8810 with SMTP id k1-20020a1709062a4100b009b9f9808810mr15297902eje.34.1700203237894;
+        Thu, 16 Nov 2023 22:40:37 -0800 (PST)
+Received: from [127.0.1.1] (91-118-163-37.static.upcbusiness.at. [91.118.163.37])
+        by smtp.gmail.com with ESMTPSA id v27-20020a170906489b00b009d2eb40ff9dsm447514ejq.33.2023.11.16.22.40.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Nov 2023 22:40:37 -0800 (PST)
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Subject: [PATCH 0/4] ABI: sysfs-class-hwmon: document existing attributes
+Date: Fri, 17 Nov 2023 07:40:33 +0100
+Message-Id: <20231116-hwmon_abi-v1-0-8bfb7f51145a@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: Add mps mp5990 driver bindings
-Content-Language: en-US
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: patrick@stwcx.xyz, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
- Jonathan Corbet <corbet@lwn.net>, Joel Stanley <joel@jms.id.au>,
- Chanh Nguyen <chanh@os.amperecomputing.com>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-doc@vger.kernel.org
-References: <20231113155008.2147090-1-peteryin.openbmc@gmail.com>
- <20231113155008.2147090-2-peteryin.openbmc@gmail.com>
- <a3445201-58f2-42c6-bef7-ca6968fd80d6@roeck-us.net>
- <69657f96-4849-4134-911d-4785d5d6b8d8@gmail.com>
- <140086a7-c89d-48b7-9574-7db28dcc056e@roeck-us.net>
-From: PeterYin <peteryin.openbmc@gmail.com>
-In-Reply-To: <140086a7-c89d-48b7-9574-7db28dcc056e@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOEKV2UC/x2NUQqEMAwFryL5tmAtuOJVRKSt6TagUVrUBendN
+ /g5j3nMAxkTYYaheiDhRZl2FtB1BT5a/qKiRRjapjVa607Fe9t5to4UdqFvjDGf4AOI72xG5ZJ
+ lH+XB57rKeCQM9HsD41TKH1YtmOlwAAAA
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Javier Carrasco <javier.carrasco.cruz@gmail.com>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1700203237; l=1174;
+ i=javier.carrasco.cruz@gmail.com; s=20230509; h=from:subject:message-id;
+ bh=QXrfoCkqowTrn7dFYwnGzixw95ZtdozJg2Bowzx48no=;
+ b=xCNHdBj9ugJ0HGfYsl2ODHJXgm2FWD+gG1bL+Wozas7dR+y+SkIIIopQjdux9NQ/VPEkmZlV0
+ nSo/KPM3mmJA1JYYQdz2OsaJS4TQP3gaK0BU7ESIJceXr2MBPyxm+zr
+X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
+ pk=tIGJV7M+tCizagNijF0eGMBGcOsPD+0cWGfKjl4h6K8=
+X-Spam-Level: *
 
+This series documents all humidity attributes that are used in the hwmon
+subsystem and still do not have an entry in sysfs-class-hwmon.
 
+Additionally, tempY_crit_alarm has been fixed to show proper access
+rights according to its usage in the hwmon subsystem.
 
-Guenter Roeck 於 11/17/23 12:16 寫道:
-> On Fri, Nov 17, 2023 at 11:18:47AM +0800, PeterYin wrote:
->>
->>
->> Guenter Roeck 於 11/16/23 06:27 寫道:
->>> On Mon, Nov 13, 2023 at 11:50:07PM +0800, Peter Yin wrote:
->>>> Add a device tree bindings for mp5990 device.
->>>>
->>>> Signed-off-by: Peter Yin <peteryin.openbmc@gmail.com>
->>>> Acked-by: Conor Dooley <conor.dooley@microchip.com>
->>>
->>> What branch is this patch based on ? git fails to apply it.
->>>
->>> Guenter
->> I think I don't pull the last version. I can rebase it and push the new
->> version. Thanks for your feedback.
-> 
-> Question is: Last version of what ? Best would be if it was based
-> on mainline.
-> 
-> Thanks,
-> Guenter
+Three missing temperature alarms (tempY_emergency_alarm,
+tempY_max_alarm and tempY_min_alarm) have been documented as well.
 
-It is base on Linux 6.5.4, OpenBMC Kernel tree
-https://github.com/openbmc/linux/commit/2ba0babe7865cd5f4fac3d76ad15d9b6131bd283
+Note that there are no new additions, only existing attributes have
+been documented.
 
-I can regenerate it on mainline.
+Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+---
+Javier Carrasco (4):
+      ABI: sysfs-class-hwmon: rearrange humidity attributes alphabetically
+      ABI: sysfs-class-hwmon: document missing humidity attributes
+      ABI: sysfs-class-hwmon: fix tempY_crit_alarm access rights
+      ABI: sysfs-class-hwmon: document emergency/max/min temperature alarms
 
-Thanks,
-Peter.
+ Documentation/ABI/testing/sysfs-class-hwmon | 110 +++++++++++++++++++++++++---
+ 1 file changed, 100 insertions(+), 10 deletions(-)
+---
+base-commit: b85ea95d086471afb4ad062012a4d73cd328fa86
+change-id: 20231116-hwmon_abi-e6f803337fcf
+
+Best regards,
+-- 
+Javier Carrasco <javier.carrasco.cruz@gmail.com>
+
