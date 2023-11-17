@@ -1,60 +1,38 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B31NSXJE"
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4D610D9;
-	Fri, 17 Nov 2023 07:26:42 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-6c320a821c4so1929869b3a.2;
-        Fri, 17 Nov 2023 07:26:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700234801; x=1700839601; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ddFA885Lew1a2TIxEdkKv5i0KGKf0gF/uEp1+TNXPM0=;
-        b=B31NSXJER03zss/suRoC8C303zs8N2sFp5oBVjcVsck/QZ/iM8S0WHPA2jlnAnzCfM
-         fj7SA9F0HIU8ayTujLwZorl/Hh7/AfqZCJ9ZQzRb0VpvDmesm/jX6jkXyRKGDCLOyNLr
-         jhR2AemYO31/qX2cbs2tTR5nymo4HENwYLQc3nO5VwewjXkPpKHSTSxAYwRestcy0d0x
-         kuoocZU9o43Fh6T2pQsy6NNR0H72nYhHXz/63LD8ICRCflReIjEOg9Wom/td7iCfnDiH
-         WWJ6/SW+c0O2vZa6ft9DIvt9OZcrSRtIKmjkp5oYmfQ+jLkqHLsPsPiWv1ULY+Hw4mQZ
-         RGBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700234801; x=1700839601;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ddFA885Lew1a2TIxEdkKv5i0KGKf0gF/uEp1+TNXPM0=;
-        b=Gh8Fz97yVdJsmXnqzic/rfZygdKZussZEn+eb6bTH3tsuWVHrpD8As839RkpCUN9Pb
-         qcH+lAcJb/Y6UKFIsAbjbEzPiFs3Am1ztNlTx2z49y432e5kNhRUHcbx9eP0Djfv4kh3
-         g7BnUmOw7hAuTnsGkzns3TZwNWwQafYVTbH6sUTFeGottkMV0S9/R2PjegcitBDkFMA+
-         I6dLlt1VvKL0C5h7FL5ywmH7jN+JVjV2Woj9bqtKxiHtnBQtVfB+kssI9RAohCGjcUio
-         u5ZQjUtcldEgmcABlH3IjTo+B+bJUjzpQesVuR1AP0Jfi3jbcAaBe7mvdVzO5JLt2Z/h
-         qOkw==
-X-Gm-Message-State: AOJu0YxP+nzjchfh4OHdaOZjcSpZyQUPqVLBQRwnw6wTgNi+F5J3Ygk6
-	BA5eCqG4iUI2P377ZTsml1I=
-X-Google-Smtp-Source: AGHT+IGkJBJDsY3m5GSxybyrpFYcyEdmYPgHhELkWF11rl2pBhQgEbEKLNqgWAWqyowjUa0KQp8WWQ==
-X-Received: by 2002:a17:90b:1a8c:b0:27d:ba33:6990 with SMTP id ng12-20020a17090b1a8c00b0027dba336990mr16366785pjb.10.1700234801427;
-        Fri, 17 Nov 2023 07:26:41 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id gq17-20020a17090b105100b00283a09df0besm413384pjb.43.2023.11.17.07.26.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Nov 2023 07:26:41 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 17 Nov 2023 07:26:39 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Peter Yin <peteryin.openbmc@gmail.com>
-Cc: patrick@stwcx.xyz, Rob Herring <robh+dt@kernel.org>,
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Vodl7Yic"
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59494D4D;
+	Fri, 17 Nov 2023 14:21:47 -0800 (PST)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0457960002;
+	Fri, 17 Nov 2023 22:21:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1700259705;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=z+XRMcZX0l03AC5u4LRSmNZEIVypqySKCEXV2aTX1bg=;
+	b=Vodl7YicdQp6H8eKKBzX+WV5WOiJ29HWHexR5suyxhKzXzzboMec5CMbwVlUuAQGlHH+i0
+	w51lGEaddRZ3lekpEtUWIS4mAhBMr1w1ChRqkC7VJ+h3PjPDa6/LdLvAd1cNFur7MRHjsG
+	lweLsQcNTO/qSS3AU6US/VgJy0UOjdwslNZCO8nqjZbf/NkkBqJYP3SusgO3BGTrqSl0Mx
+	Uog+HRbihWzsCIQdH3P1iIXsBrhBFzyvO823q9gMTL4oCXekEr1B7Bc8VUygeUQWUrTKf1
+	OjNeikDCgkvIpkq1f5bpEM5l8WMmRtTaG5dh670mEIv+QCFeuz+RrSCqvog9eg==
+Date: Fri, 17 Nov 2023 23:21:44 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Carlos Menin <menin@carlosaurelio.net>
+Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	Alessandro Zummo <a.zummo@towertech.it>,
+	Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Joel Stanley <joel@jms.id.au>,
-	Chanh Nguyen <chanh@os.amperecomputing.com>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] hwmon: (pmbus) Add support for MPS Multi-phase
- mp5990
-Message-ID: <68bbb3c3-7bb7-4b8f-bfb2-2fb855a9f67a@roeck-us.net>
-References: <20231113155008.2147090-1-peteryin.openbmc@gmail.com>
- <20231113155008.2147090-3-peteryin.openbmc@gmail.com>
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Sergio Prado <sergio.prado@e-labworks.com>
+Subject: Re: [PATCH v2 1/2] rtc: add pcf85053a
+Message-ID: <2023111722214402006513@mail.local>
+References: <20231103125106.78220-1-menin@carlosaurelio.net>
+ <20231103142822abbca0ed@mail.local>
+ <ZUf_3TAZh1bpVOVt@arch-bow>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,14 +41,92 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231113155008.2147090-3-peteryin.openbmc@gmail.com>
+In-Reply-To: <ZUf_3TAZh1bpVOVt@arch-bow>
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On Mon, Nov 13, 2023 at 11:50:08PM +0800, Peter Yin wrote:
-> Add support for mp5990 device from Monolithic Power Systems, Inc. (MPS)
-> vendor. This is a Hot-Swap Controller.
+On 05/11/2023 17:49:33-0300, Carlos Menin wrote:
+> > > +static int pcf85053a_rtc_check_reliability(struct device *dev, u8 status_reg)
+> > > +{
+> > > +	int ret = 0;
+> > > +
+> > > +	if (status_reg & REG_STATUS_CIF) {
+> > > +		dev_warn(dev, "tamper detected,"
+> > > +			 " date/time is not reliable\n");
+> > You should not split strings. Also, I don't think most of the messages
+> > are actually useful as the end user doesn't have any specific action
+> > after seeing it. You should probably drop them.
+> > 
 > 
-> Signed-off-by: Peter Yin <peteryin.openbmc@gmail.com>
+> About the usefullness of the message, do this apply to this CIF related
+> message or also to the other two flags?
 
-Applied together with the first patch of the series.
+This actually applies to all the messages of the driver, they will add
+to the size of the kernel then slow the boot time so please have a
+careful look at the usefulness of messages. You may consider swtching
+them to dev_dbg.
 
-Guenter
+> > > +	tm->tm_year = buf[REG_YEARS];
+> > > +	/* adjust for 1900 base of rtc_time */
+> > > +	tm->tm_year += 100;
+> > > +
+> > > +	tm->tm_wday = (buf[REG_WEEKDAYS] - 1) & 7; /* 1 - 7 */
+> > > +	tm->tm_sec = buf[REG_SECS];
+> > > +	tm->tm_min = buf[REG_MINUTES];
+> > > +	tm->tm_hour = buf[REG_HOURS];
+> > > +	tm->tm_mday = buf[REG_DAYS];
+> > > +	tm->tm_mon = buf[REG_MONTHS] - 1; /* 1 - 12 */
+> > 
+> > Those comments are not useful.
+> > 
+> 
+> I Will improve them to explain why I am offsetting the register value.
+
+I don't think this is necessary, most of the drivers are doing it so
+this is expected.
+
+> > > +static struct attribute *pcf85053a_attrs_flags[] = {
+> > > +	&dev_attr_rtc_fail.attr,
+> > > +	&dev_attr_oscillator_fail.attr,
+> > > +	&dev_attr_rtc_clear.attr,
+> > > +	0,
+> > > +};
+> > 
+> > Don't add undocumented sysfs files. Also, You must not allow userspace
+> > to clear those flags without setting the time properly.
+> > 
+> 
+> Should the flags be cleared only by setting the time, or is there
+> another acceptable method? What would be the correct way to let
+> userspace read those flags?
+
+The RTC_VL_READ ioctl will allow reading the flags from userspace. For
+the flags that monitor the validity of the time and date, they must only
+be cleared when the time and date is known to be good s only when
+setting the time.
+
+> > > +}
+> > > +
+> > > +static void pcf85053a_set_low_jitter(struct device *dev, u8 *reg_ctrl)
+> > > +{
+> > > +	bool val;
+> > > +	u8 regval;
+> > > +
+> > > +	val = of_property_read_bool(dev->of_node, "nxp,low-jitter-mode");
+> > 
+> > Bool properties don't work well with RTC because with this, there is now
+> > way to enable the normal mode.
+> > 
+> 
+> Wouldn't the absence of the property enable normal mode? Or I am missing
+> something?
+
+RTC have a greater lifetime than the linux system so you must have a way
+to indicate that you don't want to change the configuration for example
+if it has been set from the bootloader or at the factory.
+
+Regards,
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
