@@ -1,760 +1,1673 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="jV69bJAg";
-	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="jZlt+y+O"
-Received: from gofer.mess.org (gofer.mess.org [88.97.38.141])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21DA0C1;
-	Sat, 18 Nov 2023 08:17:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
-	t=1700324235; bh=SSMZlJAtXBqySTQGjhCoG+0JNGUa6G1sARvdW2VQmYM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jV69bJAg9Wu0SFrxF3dUKTwRE5dR1T2QH0Ryfs7hAxXRvyUohn58DDos7r8bGbIdj
-	 s8whQDtU9xadF/WZvuDBs51JmR4lW2VKmIKRZ7S6kRuUAOL6V072LfxHSe4fzhQ36e
-	 5sypCY1iBQkNZ1ta2oYapN+FCXuZtcQqF8l6wUF2mWre8LbF2OjMIx+ieRqXifbfnc
-	 zb53KBMUwKLkfkJnRQ0r6kahkMhAxdMt6wNuQnYdgffkMmHT96g62dA4RgySjmI8OH
-	 2/eQ+WGwmHbk7cvshrgWQuQilpxLHLx5oPoFTBBK9ZUzIhvoNJDUYMDei00cIqHpKw
-	 G73ylu36yLLzw==
-Received: by gofer.mess.org (Postfix, from userid 501)
-	id BADDA100104; Sat, 18 Nov 2023 16:17:15 +0000 (GMT)
-X-Spam-Level: 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
-	t=1700324200; bh=SSMZlJAtXBqySTQGjhCoG+0JNGUa6G1sARvdW2VQmYM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jZlt+y+OdzcYYkhu9VxdV5V2E70BSzOJ92sczws9Mnf9wJ7d0+YLbeqdP/RVKdXWd
-	 uwZJNpfhAiSE1QRsx4pBrfWPjFmV9JoUwaeMRWqEvMAD86aVPQZNyKTYlEOlZjXMe8
-	 rCGX6QWn019vgdUVNO6e4rdzxzDvKam7caG5fX1S+PvmVy+WzzrNM/xV9u2HZFQ3Hu
-	 sJI9B1pt18bh8IjLnq0JNvHj1nrP4YM8x+2src9NcKlYvI4seGZbBNiqj3HOlR3O1l
-	 0kkimjxCanKWcVyUIvsUHYav6C8YN+0aIjdjkgMq1dyKl1Ebr5Cjy2/F/IroBFTY0p
-	 L36TxhXpiFxsA==
-Received: from bigcore.mess.org (bigcore-239.local [IPv6:2a02:8011:d000:212:ca7f:54ff:fe51:14d6])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by gofer.mess.org (Postfix) with ESMTPSA id 4823B1000AC;
-	Sat, 18 Nov 2023 16:16:40 +0000 (GMT)
-From: Sean Young <sean@mess.org>
-To: linux-media@vger.kernel.org,
-	linux-pwm@vger.kernel.org,
-	Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-	David Airlie <airlied@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Javier Martinez Canillas <javierm@redhat.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Support Opensource <support.opensource@diasemi.com>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Pavel Machek <pavel@ucw.cz>,
-	Lee Jones <lee@kernel.org>,
-	Sean Young <sean@mess.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Mark Gross <markgross@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Daniel Thompson <daniel.thompson@linaro.org>,
-	Jingoo Han <jingoohan1@gmail.com>,
-	Helge Deller <deller@gmx.de>
-Cc: Jani Nikula <jani.nikula@intel.com>,
-	linux-doc@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IvAKnCV+"
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CACB2C1;
+	Sat, 18 Nov 2023 08:32:19 -0800 (PST)
+Received: by mail-qv1-xf32.google.com with SMTP id 6a1803df08f44-677a0ac3797so2798206d6.1;
+        Sat, 18 Nov 2023 08:32:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700325139; x=1700929939; darn=vger.kernel.org;
+        h=content-transfer-encoding:organization:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VFy+DuRDtOJDDFZtMwvasuMmfuly3kxKb6gRr0ofW8E=;
+        b=IvAKnCV+6KbJkgxcK2YYnm17g0MBteRqqTKNJgSwvWgfgm6dYugCJGOP7XgRsOo/Sb
+         W3cE6+XUO9ao8JALlfCrF6lE5LGPQXjuQnW/ndhoYqBKdcTqwxXCpy8zzVXoGpeW2t7q
+         or4HJmaISvFg7Kdbv9G+QY8m2UD2WYqRZoisThnmoFoKiNL1opHZ/eLayXSepyJh5/r9
+         XiBG4G90vkRTMJ7xGuXMGtiloNHhxlqR8o3OOlzEvQQjzmUa+pRLT/7damuPuU7+1ljM
+         wBzfu1ZqpvBWqOWf7l+RP+ta3XVY6zhxI5x0BKBSbUi5U8pVJwVj2AoG2UfSyAoWND/l
+         uuMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700325139; x=1700929939;
+        h=content-transfer-encoding:organization:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VFy+DuRDtOJDDFZtMwvasuMmfuly3kxKb6gRr0ofW8E=;
+        b=AY3TGzN5uaHTF1xmj8GN/N1g96vq/9e0IEG60936R8Sx0Lvw016JG/72wOpbLwpld8
+         6n9FDDQbKjmCP0+Dwpau2n85pQOj8zWAJNA671R0VD1KhzEJukv+vQm+Ijwox0QL4Eyh
+         78pPmDIfWhVF+xwNYxJxvSVN/pJVG5KSsKw8Qf5Sxg0vPyglC76IoM7baHyVr7posS+B
+         d/Cg2hWnty1ZsgAfvXDQATNK9qpnKM174Tz++hjPRHdP0DvekaT5+6I+WOCXS4xxhPHy
+         JRgLzdseQSYTWLYApST7kKCXLlakIO922kH5k6Dpl/WcHatTAg9vvgHBuHrgyfmJHNkD
+         mLDw==
+X-Gm-Message-State: AOJu0Yy5X/6WBPSPk1VW4ANKFabNz2GBLMl1DE7lX63LXle82CS3HpTj
+	O6h6ZbHuhj3Jj8/6lS8rbok=
+X-Google-Smtp-Source: AGHT+IGB4HQtKyibdh6LXnB0QreECXKorAtx1qJ5ob4NmA8nQBX1O3lyd4JoGrbnQKiN/196cBLpjA==
+X-Received: by 2002:a0c:e00f:0:b0:66d:3e2b:bf0a with SMTP id j15-20020a0ce00f000000b0066d3e2bbf0amr2200033qvk.20.1700325138428;
+        Sat, 18 Nov 2023 08:32:18 -0800 (PST)
+Received: from build.adi.eng (173-14-114-226-richmond.hfc.comcastbusiness.net. [173.14.114.226])
+        by smtp.googlemail.com with ESMTPSA id o11-20020a0ceccb000000b0065b24c08994sm1485729qvq.128.2023.11.18.08.32.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Nov 2023 08:32:17 -0800 (PST)
+From: Henry Shi <henryshi2018@gmail.com>
+To: hbshi69@hotmail.com,
+	tglx@linutronix.de,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	x86@kernel.org,
+	hpa@zytor.com,
+	hdegoede@redhat.com,
+	markgross@kernel.org,
+	jdelvare@suse.com,
+	linux@roeck-us.net,
 	linux-kernel@vger.kernel.org,
-	intel-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
-	linux-hwmon@vger.kernel.org,
-	linux-input@vger.kernel.org,
-	linux-leds@vger.kernel.org,
 	platform-driver-x86@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-fbdev@vger.kernel.org
-Subject: [PATCH v5 1/4] pwm: rename pwm_apply_state() to pwm_apply_cansleep()
-Date: Sat, 18 Nov 2023 16:16:17 +0000
-Message-ID: <2b973840d800ffb71c2683c37bc996e0cf90a140.1700323916.git.sean@mess.org>
-X-Mailer: git-send-email 2.42.1
-In-Reply-To: <cover.1700323916.git.sean@mess.org>
-References: <cover.1700323916.git.sean@mess.org>
+	linux-hwmon@vger.kernel.org
+Cc: hb_shi2003@yahoo.com,
+	henrys@silicom-usa.com,
+	wenw@silicom-usa.com
+Subject: [PATCH v13] platform/x86: Add Silicom Platform Driver
+Date: Sat, 18 Nov 2023 11:32:14 -0500
+Message-Id: <20231118163214.27937-1-henryshi2018@gmail.com>
+X-Mailer: git-send-email 2.21.3
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Organization: Silicom LTD
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-In order to introduce a pwm api which can be used from atomic context,
-we will need two functions for applying pwm changes:
+platform/x86: Add Silicom Platform Driver
 
-	int pwm_apply_cansleep(struct pwm *, struct pwm_state *);
-	int pwm_apply_atomic(struct pwm *, struct pwm_state *);
+Add Silicom platform (silicom-platform) Linux driver for Swisscom
+Business Box (Swisscom BB) as well as Cordoba family products.
 
-This commit just deals with renaming pwm_apply_state(), a following
-commit will introduce the pwm_apply_atomic() function.
+This platform driver provides support for various functions via
+the Linux LED framework, GPIO framework, Hardware Monitoring (HWMON)
+and device attributes.
 
-Acked-by: Hans de Goede <hdegoede@redhat.com>
-Acked-by: Jani Nikula <jani.nikula@intel.com>
-Signed-off-by: Sean Young <sean@mess.org>
+Signed-off-by: Henry Shi <henryshi2018@gmail.com>
 ---
- Documentation/driver-api/pwm.rst              |  8 +++---
- .../gpu/drm/i915/display/intel_backlight.c    |  6 ++--
- drivers/gpu/drm/solomon/ssd130x.c             |  2 +-
- drivers/hwmon/pwm-fan.c                       |  8 +++---
- drivers/input/misc/da7280.c                   |  4 +--
- drivers/input/misc/pwm-beeper.c               |  4 +--
- drivers/input/misc/pwm-vibra.c                |  8 +++---
- drivers/leds/leds-pwm.c                       |  2 +-
- drivers/leds/rgb/leds-pwm-multicolor.c        |  4 +--
- drivers/media/rc/pwm-ir-tx.c                  |  4 +--
- drivers/platform/x86/lenovo-yogabook.c        |  2 +-
- drivers/pwm/core.c                            | 18 ++++++------
- drivers/pwm/pwm-twl-led.c                     |  2 +-
- drivers/pwm/pwm-vt8500.c                      |  2 +-
- drivers/pwm/sysfs.c                           | 10 +++----
- drivers/regulator/pwm-regulator.c             |  4 +--
- drivers/video/backlight/lm3630a_bl.c          |  2 +-
- drivers/video/backlight/lp855x_bl.c           |  2 +-
- drivers/video/backlight/pwm_bl.c              | 12 ++++----
- drivers/video/fbdev/ssd1307fb.c               |  2 +-
- include/linux/pwm.h                           | 28 +++++++++----------
- 21 files changed, 67 insertions(+), 67 deletions(-)
 
-diff --git a/Documentation/driver-api/pwm.rst b/Documentation/driver-api/pwm.rst
-index bb264490a87a1..5f6d1540dcd7e 100644
---- a/Documentation/driver-api/pwm.rst
-+++ b/Documentation/driver-api/pwm.rst
-@@ -41,7 +41,7 @@ the getter, devm_pwm_get() and devm_fwnode_pwm_get(), also exist.
- 
- After being requested, a PWM has to be configured using::
- 
--	int pwm_apply_state(struct pwm_device *pwm, struct pwm_state *state);
-+	int pwm_apply_cansleep(struct pwm_device *pwm, struct pwm_state *state);
- 
- This API controls both the PWM period/duty_cycle config and the
- enable/disable state.
-@@ -57,13 +57,13 @@ If supported by the driver, the signal can be optimized, for example to improve
- EMI by phase shifting the individual channels of a chip.
- 
- The pwm_config(), pwm_enable() and pwm_disable() functions are just wrappers
--around pwm_apply_state() and should not be used if the user wants to change
-+around pwm_apply_cansleep() and should not be used if the user wants to change
- several parameter at once. For example, if you see pwm_config() and
- pwm_{enable,disable}() calls in the same function, this probably means you
--should switch to pwm_apply_state().
-+should switch to pwm_apply_cansleep().
- 
- The PWM user API also allows one to query the PWM state that was passed to the
--last invocation of pwm_apply_state() using pwm_get_state(). Note this is
-+last invocation of pwm_apply_cansleep() using pwm_get_state(). Note this is
- different to what the driver has actually implemented if the request cannot be
- satisfied exactly with the hardware in use. There is currently no way for
- consumers to get the actually implemented settings.
-diff --git a/drivers/gpu/drm/i915/display/intel_backlight.c b/drivers/gpu/drm/i915/display/intel_backlight.c
-index 2e8f17c045222..cf516190cde8f 100644
---- a/drivers/gpu/drm/i915/display/intel_backlight.c
-+++ b/drivers/gpu/drm/i915/display/intel_backlight.c
-@@ -274,7 +274,7 @@ static void ext_pwm_set_backlight(const struct drm_connector_state *conn_state,
- 	struct intel_panel *panel = &to_intel_connector(conn_state->connector)->panel;
- 
- 	pwm_set_relative_duty_cycle(&panel->backlight.pwm_state, level, 100);
--	pwm_apply_state(panel->backlight.pwm, &panel->backlight.pwm_state);
-+	pwm_apply_cansleep(panel->backlight.pwm, &panel->backlight.pwm_state);
- }
- 
- static void
-@@ -427,7 +427,7 @@ static void ext_pwm_disable_backlight(const struct drm_connector_state *old_conn
- 	intel_backlight_set_pwm_level(old_conn_state, level);
- 
- 	panel->backlight.pwm_state.enabled = false;
--	pwm_apply_state(panel->backlight.pwm, &panel->backlight.pwm_state);
-+	pwm_apply_cansleep(panel->backlight.pwm, &panel->backlight.pwm_state);
- }
- 
- void intel_backlight_disable(const struct drm_connector_state *old_conn_state)
-@@ -749,7 +749,7 @@ static void ext_pwm_enable_backlight(const struct intel_crtc_state *crtc_state,
- 
- 	pwm_set_relative_duty_cycle(&panel->backlight.pwm_state, level, 100);
- 	panel->backlight.pwm_state.enabled = true;
--	pwm_apply_state(panel->backlight.pwm, &panel->backlight.pwm_state);
-+	pwm_apply_cansleep(panel->backlight.pwm, &panel->backlight.pwm_state);
- }
- 
- static void __intel_backlight_enable(const struct intel_crtc_state *crtc_state,
-diff --git a/drivers/gpu/drm/solomon/ssd130x.c b/drivers/gpu/drm/solomon/ssd130x.c
-index e0174f82e3537..46fa3b1cba9ba 100644
---- a/drivers/gpu/drm/solomon/ssd130x.c
-+++ b/drivers/gpu/drm/solomon/ssd130x.c
-@@ -319,7 +319,7 @@ static int ssd130x_pwm_enable(struct ssd130x_device *ssd130x)
- 
- 	pwm_init_state(ssd130x->pwm, &pwmstate);
- 	pwm_set_relative_duty_cycle(&pwmstate, 50, 100);
--	pwm_apply_state(ssd130x->pwm, &pwmstate);
-+	pwm_apply_cansleep(ssd130x->pwm, &pwmstate);
- 
- 	/* Enable the PWM */
- 	pwm_enable(ssd130x->pwm);
-diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-index 6e4516c2ab894..f68deb1f236b7 100644
---- a/drivers/hwmon/pwm-fan.c
-+++ b/drivers/hwmon/pwm-fan.c
-@@ -151,7 +151,7 @@ static int pwm_fan_power_on(struct pwm_fan_ctx *ctx)
- 	}
- 
- 	state->enabled = true;
--	ret = pwm_apply_state(ctx->pwm, state);
-+	ret = pwm_apply_cansleep(ctx->pwm, state);
- 	if (ret) {
- 		dev_err(ctx->dev, "failed to enable PWM\n");
- 		goto disable_regulator;
-@@ -181,7 +181,7 @@ static int pwm_fan_power_off(struct pwm_fan_ctx *ctx)
- 
- 	state->enabled = false;
- 	state->duty_cycle = 0;
--	ret = pwm_apply_state(ctx->pwm, state);
-+	ret = pwm_apply_cansleep(ctx->pwm, state);
- 	if (ret) {
- 		dev_err(ctx->dev, "failed to disable PWM\n");
- 		return ret;
-@@ -207,7 +207,7 @@ static int  __set_pwm(struct pwm_fan_ctx *ctx, unsigned long pwm)
- 
- 		period = state->period;
- 		state->duty_cycle = DIV_ROUND_UP(pwm * (period - 1), MAX_PWM);
--		ret = pwm_apply_state(ctx->pwm, state);
-+		ret = pwm_apply_cansleep(ctx->pwm, state);
- 		if (ret)
- 			return ret;
- 		ret = pwm_fan_power_on(ctx);
-@@ -278,7 +278,7 @@ static int pwm_fan_update_enable(struct pwm_fan_ctx *ctx, long val)
- 						    state,
- 						    &enable_regulator);
- 
--			pwm_apply_state(ctx->pwm, state);
-+			pwm_apply_cansleep(ctx->pwm, state);
- 			pwm_fan_switch_power(ctx, enable_regulator);
- 			pwm_fan_update_state(ctx, 0);
- 		}
-diff --git a/drivers/input/misc/da7280.c b/drivers/input/misc/da7280.c
-index ce82548916bbc..f10be2cdba803 100644
---- a/drivers/input/misc/da7280.c
-+++ b/drivers/input/misc/da7280.c
-@@ -352,7 +352,7 @@ static int da7280_haptic_set_pwm(struct da7280_haptic *haptics, bool enabled)
- 		state.duty_cycle = period_mag_multi;
- 	}
- 
--	error = pwm_apply_state(haptics->pwm_dev, &state);
-+	error = pwm_apply_cansleep(haptics->pwm_dev, &state);
- 	if (error)
- 		dev_err(haptics->dev, "Failed to apply pwm state: %d\n", error);
- 
-@@ -1175,7 +1175,7 @@ static int da7280_probe(struct i2c_client *client)
- 		/* Sync up PWM state and ensure it is off. */
- 		pwm_init_state(haptics->pwm_dev, &state);
- 		state.enabled = false;
--		error = pwm_apply_state(haptics->pwm_dev, &state);
-+		error = pwm_apply_cansleep(haptics->pwm_dev, &state);
- 		if (error) {
- 			dev_err(dev, "Failed to apply PWM state: %d\n", error);
- 			return error;
-diff --git a/drivers/input/misc/pwm-beeper.c b/drivers/input/misc/pwm-beeper.c
-index 1e731d8397c6f..1d6c4fb5f0caf 100644
---- a/drivers/input/misc/pwm-beeper.c
-+++ b/drivers/input/misc/pwm-beeper.c
-@@ -39,7 +39,7 @@ static int pwm_beeper_on(struct pwm_beeper *beeper, unsigned long period)
- 	state.period = period;
- 	pwm_set_relative_duty_cycle(&state, 50, 100);
- 
--	error = pwm_apply_state(beeper->pwm, &state);
-+	error = pwm_apply_cansleep(beeper->pwm, &state);
- 	if (error)
- 		return error;
- 
-@@ -138,7 +138,7 @@ static int pwm_beeper_probe(struct platform_device *pdev)
- 	/* Sync up PWM state and ensure it is off. */
- 	pwm_init_state(beeper->pwm, &state);
- 	state.enabled = false;
--	error = pwm_apply_state(beeper->pwm, &state);
-+	error = pwm_apply_cansleep(beeper->pwm, &state);
- 	if (error) {
- 		dev_err(dev, "failed to apply initial PWM state: %d\n",
- 			error);
-diff --git a/drivers/input/misc/pwm-vibra.c b/drivers/input/misc/pwm-vibra.c
-index acac79c488aa1..6552ce712d8dc 100644
---- a/drivers/input/misc/pwm-vibra.c
-+++ b/drivers/input/misc/pwm-vibra.c
-@@ -56,7 +56,7 @@ static int pwm_vibrator_start(struct pwm_vibrator *vibrator)
- 	pwm_set_relative_duty_cycle(&state, vibrator->level, 0xffff);
- 	state.enabled = true;
- 
--	err = pwm_apply_state(vibrator->pwm, &state);
-+	err = pwm_apply_cansleep(vibrator->pwm, &state);
- 	if (err) {
- 		dev_err(pdev, "failed to apply pwm state: %d\n", err);
- 		return err;
-@@ -67,7 +67,7 @@ static int pwm_vibrator_start(struct pwm_vibrator *vibrator)
- 		state.duty_cycle = vibrator->direction_duty_cycle;
- 		state.enabled = true;
- 
--		err = pwm_apply_state(vibrator->pwm_dir, &state);
-+		err = pwm_apply_cansleep(vibrator->pwm_dir, &state);
- 		if (err) {
- 			dev_err(pdev, "failed to apply dir-pwm state: %d\n", err);
- 			pwm_disable(vibrator->pwm);
-@@ -160,7 +160,7 @@ static int pwm_vibrator_probe(struct platform_device *pdev)
- 	/* Sync up PWM state and ensure it is off. */
- 	pwm_init_state(vibrator->pwm, &state);
- 	state.enabled = false;
--	err = pwm_apply_state(vibrator->pwm, &state);
-+	err = pwm_apply_cansleep(vibrator->pwm, &state);
- 	if (err) {
- 		dev_err(&pdev->dev, "failed to apply initial PWM state: %d\n",
- 			err);
-@@ -174,7 +174,7 @@ static int pwm_vibrator_probe(struct platform_device *pdev)
- 		/* Sync up PWM state and ensure it is off. */
- 		pwm_init_state(vibrator->pwm_dir, &state);
- 		state.enabled = false;
--		err = pwm_apply_state(vibrator->pwm_dir, &state);
-+		err = pwm_apply_cansleep(vibrator->pwm_dir, &state);
- 		if (err) {
- 			dev_err(&pdev->dev, "failed to apply initial PWM state: %d\n",
- 				err);
-diff --git a/drivers/leds/leds-pwm.c b/drivers/leds/leds-pwm.c
-index 2b3bf1353b707..0c7bccbcae408 100644
---- a/drivers/leds/leds-pwm.c
-+++ b/drivers/leds/leds-pwm.c
-@@ -54,7 +54,7 @@ static int led_pwm_set(struct led_classdev *led_cdev,
- 
- 	led_dat->pwmstate.duty_cycle = duty;
- 	led_dat->pwmstate.enabled = true;
--	return pwm_apply_state(led_dat->pwm, &led_dat->pwmstate);
-+	return pwm_apply_cansleep(led_dat->pwm, &led_dat->pwmstate);
- }
- 
- __attribute__((nonnull))
-diff --git a/drivers/leds/rgb/leds-pwm-multicolor.c b/drivers/leds/rgb/leds-pwm-multicolor.c
-index 46cd062b8b24c..8114adcdad9bb 100644
---- a/drivers/leds/rgb/leds-pwm-multicolor.c
-+++ b/drivers/leds/rgb/leds-pwm-multicolor.c
-@@ -51,8 +51,8 @@ static int led_pwm_mc_set(struct led_classdev *cdev,
- 
- 		priv->leds[i].state.duty_cycle = duty;
- 		priv->leds[i].state.enabled = duty > 0;
--		ret = pwm_apply_state(priv->leds[i].pwm,
--				      &priv->leds[i].state);
-+		ret = pwm_apply_cansleep(priv->leds[i].pwm,
-+					 &priv->leds[i].state);
- 		if (ret)
- 			break;
- 	}
-diff --git a/drivers/media/rc/pwm-ir-tx.c b/drivers/media/rc/pwm-ir-tx.c
-index c5f37c03af9c9..ccb86890adcea 100644
---- a/drivers/media/rc/pwm-ir-tx.c
-+++ b/drivers/media/rc/pwm-ir-tx.c
-@@ -68,7 +68,7 @@ static int pwm_ir_tx(struct rc_dev *dev, unsigned int *txbuf,
- 
- 	for (i = 0; i < count; i++) {
- 		state.enabled = !(i % 2);
--		pwm_apply_state(pwm, &state);
-+		pwm_apply_cansleep(pwm, &state);
- 
- 		edge = ktime_add_us(edge, txbuf[i]);
- 		delta = ktime_us_delta(edge, ktime_get());
-@@ -77,7 +77,7 @@ static int pwm_ir_tx(struct rc_dev *dev, unsigned int *txbuf,
- 	}
- 
- 	state.enabled = false;
--	pwm_apply_state(pwm, &state);
-+	pwm_apply_cansleep(pwm, &state);
- 
- 	return count;
- }
-diff --git a/drivers/platform/x86/lenovo-yogabook.c b/drivers/platform/x86/lenovo-yogabook.c
-index b8d0239192cbf..cbc285f77c2bd 100644
---- a/drivers/platform/x86/lenovo-yogabook.c
-+++ b/drivers/platform/x86/lenovo-yogabook.c
-@@ -435,7 +435,7 @@ static int yogabook_pdev_set_kbd_backlight(struct yogabook_data *data, u8 level)
- 		.enabled = level,
- 	};
- 
--	pwm_apply_state(data->kbd_bl_pwm, &state);
-+	pwm_apply_cansleep(data->kbd_bl_pwm, &state);
- 	gpiod_set_value(data->kbd_bl_led_enable, level ? 1 : 0);
- 	return 0;
- }
-diff --git a/drivers/pwm/core.c b/drivers/pwm/core.c
-index 29078486534d4..928531c34f481 100644
---- a/drivers/pwm/core.c
-+++ b/drivers/pwm/core.c
-@@ -356,8 +356,8 @@ struct pwm_device *pwm_request_from_chip(struct pwm_chip *chip,
- }
- EXPORT_SYMBOL_GPL(pwm_request_from_chip);
- 
--static void pwm_apply_state_debug(struct pwm_device *pwm,
--				  const struct pwm_state *state)
-+static void pwm_apply_debug(struct pwm_device *pwm,
-+			    const struct pwm_state *state)
- {
- 	struct pwm_state *last = &pwm->last;
- 	struct pwm_chip *chip = pwm->chip;
-@@ -463,11 +463,11 @@ static void pwm_apply_state_debug(struct pwm_device *pwm,
- }
- 
- /**
-- * pwm_apply_state() - atomically apply a new state to a PWM device
-+ * pwm_apply_cansleep() - atomically apply a new state to a PWM device
-  * @pwm: PWM device
-  * @state: new state to apply
-  */
--int pwm_apply_state(struct pwm_device *pwm, const struct pwm_state *state)
-+int pwm_apply_cansleep(struct pwm_device *pwm, const struct pwm_state *state)
- {
- 	struct pwm_chip *chip;
- 	int err;
-@@ -475,7 +475,7 @@ int pwm_apply_state(struct pwm_device *pwm, const struct pwm_state *state)
- 	/*
- 	 * Some lowlevel driver's implementations of .apply() make use of
- 	 * mutexes, also with some drivers only returning when the new
--	 * configuration is active calling pwm_apply_state() from atomic context
-+	 * configuration is active calling pwm_apply_cansleep() from atomic context
- 	 * is a bad idea. So make it explicit that calling this function might
- 	 * sleep.
- 	 */
-@@ -505,11 +505,11 @@ int pwm_apply_state(struct pwm_device *pwm, const struct pwm_state *state)
- 	 * only do this after pwm->state was applied as some
- 	 * implementations of .get_state depend on this
- 	 */
--	pwm_apply_state_debug(pwm, state);
-+	pwm_apply_debug(pwm, state);
- 
- 	return 0;
- }
--EXPORT_SYMBOL_GPL(pwm_apply_state);
-+EXPORT_SYMBOL_GPL(pwm_apply_cansleep);
- 
- /**
-  * pwm_capture() - capture and report a PWM signal
-@@ -567,7 +567,7 @@ int pwm_adjust_config(struct pwm_device *pwm)
- 		state.period = pargs.period;
- 		state.polarity = pargs.polarity;
- 
--		return pwm_apply_state(pwm, &state);
-+		return pwm_apply_cansleep(pwm, &state);
- 	}
- 
- 	/*
-@@ -590,7 +590,7 @@ int pwm_adjust_config(struct pwm_device *pwm)
- 		state.duty_cycle = state.period - state.duty_cycle;
- 	}
- 
--	return pwm_apply_state(pwm, &state);
-+	return pwm_apply_cansleep(pwm, &state);
- }
- EXPORT_SYMBOL_GPL(pwm_adjust_config);
- 
-diff --git a/drivers/pwm/pwm-twl-led.c b/drivers/pwm/pwm-twl-led.c
-index 625233f4703a9..9dae9b88d65cb 100644
---- a/drivers/pwm/pwm-twl-led.c
-+++ b/drivers/pwm/pwm-twl-led.c
-@@ -172,7 +172,7 @@ static int twl4030_pwmled_apply(struct pwm_chip *chip, struct pwm_device *pwm,
- 	 * We cannot skip calling ->config even if state->period ==
- 	 * pwm->state.period && state->duty_cycle == pwm->state.duty_cycle
- 	 * because we might have exited early in the last call to
--	 * pwm_apply_state because of !state->enabled and so the two values in
-+	 * pwm_apply_cansleep because of !state->enabled and so the two values in
- 	 * pwm->state might not be configured in hardware.
- 	 */
- 	ret = twl4030_pwmled_config(pwm->chip, pwm,
-diff --git a/drivers/pwm/pwm-vt8500.c b/drivers/pwm/pwm-vt8500.c
-index 5568d5312d3ca..b33e315de8fef 100644
---- a/drivers/pwm/pwm-vt8500.c
-+++ b/drivers/pwm/pwm-vt8500.c
-@@ -206,7 +206,7 @@ static int vt8500_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
- 	 * We cannot skip calling ->config even if state->period ==
- 	 * pwm->state.period && state->duty_cycle == pwm->state.duty_cycle
- 	 * because we might have exited early in the last call to
--	 * pwm_apply_state because of !state->enabled and so the two values in
-+	 * pwm_apply_cansleep because of !state->enabled and so the two values in
- 	 * pwm->state might not be configured in hardware.
- 	 */
- 	err = vt8500_pwm_config(pwm->chip, pwm, state->duty_cycle, state->period);
-diff --git a/drivers/pwm/sysfs.c b/drivers/pwm/sysfs.c
-index 8d1254761e4dd..eca9cad3be765 100644
---- a/drivers/pwm/sysfs.c
-+++ b/drivers/pwm/sysfs.c
-@@ -62,7 +62,7 @@ static ssize_t period_store(struct device *child,
- 	mutex_lock(&export->lock);
- 	pwm_get_state(pwm, &state);
- 	state.period = val;
--	ret = pwm_apply_state(pwm, &state);
-+	ret = pwm_apply_cansleep(pwm, &state);
- 	mutex_unlock(&export->lock);
- 
- 	return ret ? : size;
-@@ -97,7 +97,7 @@ static ssize_t duty_cycle_store(struct device *child,
- 	mutex_lock(&export->lock);
- 	pwm_get_state(pwm, &state);
- 	state.duty_cycle = val;
--	ret = pwm_apply_state(pwm, &state);
-+	ret = pwm_apply_cansleep(pwm, &state);
- 	mutex_unlock(&export->lock);
- 
- 	return ret ? : size;
-@@ -144,7 +144,7 @@ static ssize_t enable_store(struct device *child,
- 		goto unlock;
- 	}
- 
--	ret = pwm_apply_state(pwm, &state);
-+	ret = pwm_apply_cansleep(pwm, &state);
- 
- unlock:
- 	mutex_unlock(&export->lock);
-@@ -194,7 +194,7 @@ static ssize_t polarity_store(struct device *child,
- 	mutex_lock(&export->lock);
- 	pwm_get_state(pwm, &state);
- 	state.polarity = polarity;
--	ret = pwm_apply_state(pwm, &state);
-+	ret = pwm_apply_cansleep(pwm, &state);
- 	mutex_unlock(&export->lock);
- 
- 	return ret ? : size;
-@@ -401,7 +401,7 @@ static int pwm_class_apply_state(struct pwm_export *export,
- 				 struct pwm_device *pwm,
- 				 struct pwm_state *state)
- {
--	int ret = pwm_apply_state(pwm, state);
-+	int ret = pwm_apply_cansleep(pwm, state);
- 
- 	/* release lock taken in pwm_class_get_state */
- 	mutex_unlock(&export->lock);
-diff --git a/drivers/regulator/pwm-regulator.c b/drivers/regulator/pwm-regulator.c
-index 2aff6db748e2c..c19d37a479d43 100644
---- a/drivers/regulator/pwm-regulator.c
-+++ b/drivers/regulator/pwm-regulator.c
-@@ -90,7 +90,7 @@ static int pwm_regulator_set_voltage_sel(struct regulator_dev *rdev,
- 	pwm_set_relative_duty_cycle(&pstate,
- 			drvdata->duty_cycle_table[selector].dutycycle, 100);
- 
--	ret = pwm_apply_state(drvdata->pwm, &pstate);
-+	ret = pwm_apply_cansleep(drvdata->pwm, &pstate);
- 	if (ret) {
- 		dev_err(&rdev->dev, "Failed to configure PWM: %d\n", ret);
- 		return ret;
-@@ -216,7 +216,7 @@ static int pwm_regulator_set_voltage(struct regulator_dev *rdev,
- 
- 	pwm_set_relative_duty_cycle(&pstate, dutycycle, duty_unit);
- 
--	ret = pwm_apply_state(drvdata->pwm, &pstate);
-+	ret = pwm_apply_cansleep(drvdata->pwm, &pstate);
- 	if (ret) {
- 		dev_err(&rdev->dev, "Failed to configure PWM: %d\n", ret);
- 		return ret;
-diff --git a/drivers/video/backlight/lm3630a_bl.c b/drivers/video/backlight/lm3630a_bl.c
-index 8fcb62be597b8..5cb702989ef61 100644
---- a/drivers/video/backlight/lm3630a_bl.c
-+++ b/drivers/video/backlight/lm3630a_bl.c
-@@ -180,7 +180,7 @@ static int lm3630a_pwm_ctrl(struct lm3630a_chip *pchip, int br, int br_max)
- 
- 	pchip->pwmd_state.enabled = pchip->pwmd_state.duty_cycle ? true : false;
- 
--	return pwm_apply_state(pchip->pwmd, &pchip->pwmd_state);
-+	return pwm_apply_cansleep(pchip->pwmd, &pchip->pwmd_state);
- }
- 
- /* update and get brightness */
-diff --git a/drivers/video/backlight/lp855x_bl.c b/drivers/video/backlight/lp855x_bl.c
-index da1f124db69c0..b7edbaaa169a4 100644
---- a/drivers/video/backlight/lp855x_bl.c
-+++ b/drivers/video/backlight/lp855x_bl.c
-@@ -234,7 +234,7 @@ static int lp855x_pwm_ctrl(struct lp855x *lp, int br, int max_br)
- 	state.duty_cycle = div_u64(br * state.period, max_br);
- 	state.enabled = state.duty_cycle;
- 
--	return pwm_apply_state(lp->pwm, &state);
-+	return pwm_apply_cansleep(lp->pwm, &state);
- }
- 
- static int lp855x_bl_update_status(struct backlight_device *bl)
-diff --git a/drivers/video/backlight/pwm_bl.c b/drivers/video/backlight/pwm_bl.c
-index 289bd9ce4d36d..a7d3debee4753 100644
---- a/drivers/video/backlight/pwm_bl.c
-+++ b/drivers/video/backlight/pwm_bl.c
-@@ -103,7 +103,7 @@ static int pwm_backlight_update_status(struct backlight_device *bl)
- 		pwm_get_state(pb->pwm, &state);
- 		state.duty_cycle = compute_duty_cycle(pb, brightness, &state);
- 		state.enabled = true;
--		pwm_apply_state(pb->pwm, &state);
-+		pwm_apply_cansleep(pb->pwm, &state);
- 
- 		pwm_backlight_power_on(pb);
- 	} else {
-@@ -120,7 +120,7 @@ static int pwm_backlight_update_status(struct backlight_device *bl)
- 		 * inactive output.
- 		 */
- 		state.enabled = !pb->power_supply && !pb->enable_gpio;
--		pwm_apply_state(pb->pwm, &state);
-+		pwm_apply_cansleep(pb->pwm, &state);
- 	}
- 
- 	if (pb->notify_after)
-@@ -528,7 +528,7 @@ static int pwm_backlight_probe(struct platform_device *pdev)
- 	if (!state.period && (data->pwm_period_ns > 0))
- 		state.period = data->pwm_period_ns;
- 
--	ret = pwm_apply_state(pb->pwm, &state);
-+	ret = pwm_apply_cansleep(pb->pwm, &state);
- 	if (ret) {
- 		dev_err(&pdev->dev, "failed to apply initial PWM state: %d\n",
- 			ret);
-@@ -633,7 +633,7 @@ static void pwm_backlight_remove(struct platform_device *pdev)
- 	pwm_get_state(pb->pwm, &state);
- 	state.duty_cycle = 0;
- 	state.enabled = false;
--	pwm_apply_state(pb->pwm, &state);
-+	pwm_apply_cansleep(pb->pwm, &state);
- 
- 	if (pb->exit)
- 		pb->exit(&pdev->dev);
-@@ -649,7 +649,7 @@ static void pwm_backlight_shutdown(struct platform_device *pdev)
- 	pwm_get_state(pb->pwm, &state);
- 	state.duty_cycle = 0;
- 	state.enabled = false;
--	pwm_apply_state(pb->pwm, &state);
-+	pwm_apply_cansleep(pb->pwm, &state);
- }
- 
- #ifdef CONFIG_PM_SLEEP
-@@ -673,7 +673,7 @@ static int pwm_backlight_suspend(struct device *dev)
- 	pwm_get_state(pb->pwm, &state);
- 	state.duty_cycle = 0;
- 	state.enabled = false;
--	pwm_apply_state(pb->pwm, &state);
-+	pwm_apply_cansleep(pb->pwm, &state);
- 
- 	if (pb->notify_after)
- 		pb->notify_after(pb->dev, 0);
-diff --git a/drivers/video/fbdev/ssd1307fb.c b/drivers/video/fbdev/ssd1307fb.c
-index 5ae48e36fccb4..e5cca01af55f3 100644
---- a/drivers/video/fbdev/ssd1307fb.c
-+++ b/drivers/video/fbdev/ssd1307fb.c
-@@ -347,7 +347,7 @@ static int ssd1307fb_init(struct ssd1307fb_par *par)
- 
- 		pwm_init_state(par->pwm, &pwmstate);
- 		pwm_set_relative_duty_cycle(&pwmstate, 50, 100);
--		pwm_apply_state(par->pwm, &pwmstate);
-+		pwm_apply_cansleep(par->pwm, &pwmstate);
- 
- 		/* Enable the PWM */
- 		pwm_enable(par->pwm);
-diff --git a/include/linux/pwm.h b/include/linux/pwm.h
-index cda3597b84f2c..c4b066f7c5097 100644
---- a/include/linux/pwm.h
-+++ b/include/linux/pwm.h
-@@ -93,8 +93,8 @@ struct pwm_device {
-  * @state: state to fill with the current PWM state
-  *
-  * The returned PWM state represents the state that was applied by a previous call to
-- * pwm_apply_state(). Drivers may have to slightly tweak that state before programming it to
-- * hardware. If pwm_apply_state() was never called, this returns either the current hardware
-+ * pwm_apply_cansleep(). Drivers may have to slightly tweak that state before programming it to
-+ * hardware. If pwm_apply_cansleep() was never called, this returns either the current hardware
-  * state (if supported) or the default settings.
-  */
- static inline void pwm_get_state(const struct pwm_device *pwm,
-@@ -158,20 +158,20 @@ static inline void pwm_get_args(const struct pwm_device *pwm,
- }
- 
- /**
-- * pwm_init_state() - prepare a new state to be applied with pwm_apply_state()
-+ * pwm_init_state() - prepare a new state to be applied with pwm_apply_cansleep()
-  * @pwm: PWM device
-  * @state: state to fill with the prepared PWM state
-  *
-  * This functions prepares a state that can later be tweaked and applied
-- * to the PWM device with pwm_apply_state(). This is a convenient function
-+ * to the PWM device with pwm_apply_cansleep(). This is a convenient function
-  * that first retrieves the current PWM state and the replaces the period
-  * and polarity fields with the reference values defined in pwm->args.
-  * Once the function returns, you can adjust the ->enabled and ->duty_cycle
-- * fields according to your needs before calling pwm_apply_state().
-+ * fields according to your needs before calling pwm_apply_cansleep().
-  *
-  * ->duty_cycle is initially set to zero to avoid cases where the current
-  * ->duty_cycle value exceed the pwm_args->period one, which would trigger
-- * an error if the user calls pwm_apply_state() without adjusting ->duty_cycle
-+ * an error if the user calls pwm_apply_cansleep() without adjusting ->duty_cycle
-  * first.
-  */
- static inline void pwm_init_state(const struct pwm_device *pwm,
-@@ -227,7 +227,7 @@ pwm_get_relative_duty_cycle(const struct pwm_state *state, unsigned int scale)
-  *
-  * pwm_init_state(pwm, &state);
-  * pwm_set_relative_duty_cycle(&state, 50, 100);
-- * pwm_apply_state(pwm, &state);
-+ * pwm_apply_cansleep(pwm, &state);
-  *
-  * This functions returns -EINVAL if @duty_cycle and/or @scale are
-  * inconsistent (@scale == 0 or @duty_cycle > @scale).
-@@ -307,7 +307,7 @@ struct pwm_chip {
- 
- #if IS_ENABLED(CONFIG_PWM)
- /* PWM user APIs */
--int pwm_apply_state(struct pwm_device *pwm, const struct pwm_state *state);
-+int pwm_apply_cansleep(struct pwm_device *pwm, const struct pwm_state *state);
- int pwm_adjust_config(struct pwm_device *pwm);
- 
- /**
-@@ -335,7 +335,7 @@ static inline int pwm_config(struct pwm_device *pwm, int duty_ns,
- 
- 	state.duty_cycle = duty_ns;
- 	state.period = period_ns;
--	return pwm_apply_state(pwm, &state);
-+	return pwm_apply_cansleep(pwm, &state);
- }
- 
- /**
-@@ -356,7 +356,7 @@ static inline int pwm_enable(struct pwm_device *pwm)
- 		return 0;
- 
- 	state.enabled = true;
--	return pwm_apply_state(pwm, &state);
-+	return pwm_apply_cansleep(pwm, &state);
- }
- 
- /**
-@@ -375,7 +375,7 @@ static inline void pwm_disable(struct pwm_device *pwm)
- 		return;
- 
- 	state.enabled = false;
--	pwm_apply_state(pwm, &state);
-+	pwm_apply_cansleep(pwm, &state);
- }
- 
- /* PWM provider APIs */
-@@ -406,8 +406,8 @@ struct pwm_device *devm_fwnode_pwm_get(struct device *dev,
- 				       struct fwnode_handle *fwnode,
- 				       const char *con_id);
- #else
--static inline int pwm_apply_state(struct pwm_device *pwm,
--				  const struct pwm_state *state)
-+static inline int pwm_apply_cansleep(struct pwm_device *pwm,
-+				     const struct pwm_state *state)
- {
- 	might_sleep();
- 	return -ENOTSUPP;
-@@ -524,7 +524,7 @@ static inline void pwm_apply_args(struct pwm_device *pwm)
- 	state.period = pwm->args.period;
- 	state.usage_power = false;
- 
--	pwm_apply_state(pwm, &state);
-+	pwm_apply_cansleep(pwm, &state);
- }
- 
- struct pwm_lookup {
+Changes from v1 to v2:
+===========================
+
+Suggested by Hans de Goede <hdegoede@redhat.com>
+.Use git send-email to submit patch.
+.patch contents should be in message body.
+.Kconfig bit for the driver should be in drivers/platform/x86/Kconfig.
+
+changes from patch v2 to v3
+===========================
+
+changes suggested by Guenter Roeck <groeck7@gmail.com>
+.Removed unnecessary include file linux/thermal.h.
+.Removed EXPORT_SYMBOL for mutex lock/unlock function.
+
+Changes suggested by Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+.Remove extra new line in code on multiple position.
+.Use table instead of space in code.
+.Uss Linux defined bit operation MACRO define.
+.Removed local variable in rpm_get().
+.Corrected typo in comments.
+.Corrected incorrect indentation.
+.Removed unnecessary comments in silicom_mc_leds_register().
+.Rewrite efuse_status_show() to used defined variable and removed 
+uncessary local variables.
+.Rewrite uc_version_show() to used defined variable and removed 
+uncessary local variables.
+.Removed unused MACRO define: #define CHANNEL_TO_BIT(chan) ((chan) & 0x07).
+.Rewrite powercycle_uc() to used defined variable and removed uncessary 
+local variables.
+.use GENMASK() and use FIELD_GET() instead of bit shift.
+.Added define for constant 0x28 used in  efuse_status_show().
+.Added define for constant 0x0 used in  uc_version_show().
+.Added define for constant 0x0 used in  powercycle_uc().
+.Rearrange functions to avoid uncessary pre-define.
+.Rewrite rpm_get() to used defined variable and removed uncessary 
+local variables.
+.Rewrite temp_get() to used defined variable and removed uncessary 
+local variables.
+.Use FIELD_GET instead of bit shift in temp_get().
+.Used #define for constant variable 0/1.
+
+Changes suggested by Christophe JAILLET <christophe.jaillet@wanadoo.fr>:
+.use "if (!led->subled_info)" instead of
+"if (IS_ERR_OR_NULL(led->subled_info))
+"in silicom_mc_leds_register
+
+changes from patch v3 to v4
+===========================
+
+changes suggested by Guenter Roeck <groeck7@gmail.com>
+
+Changes suggested by Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>:
+.Rewrite silicom_mec_led/gpip_set/get() functions to use two newly created
+silicom_mec_port_get()/silicom_mec_port_set() which have common code.
+.Remove duplicate code in silicom_mec_port_get()
+.Rewrite uc_version_show() to use Linux bit operation MACRO, and add
+logic to check un-supported register value.
+.Added "#define MEC_EFUSE_LSB_ADDR 0x28" and "#define
+MEC_POWER_CYCLE_ADDR 0x24"
+.Added "#define MEC_VERSION_MAJOR GENMASK(15, 14)" and "#define
+MEC_VERSION_MINOR GENMASK(13, 8)".
+
+Changes suggested by Christophe JAILLET <christophe.jaillet@wanadoo.fr>:
+.Used a local variable to store "sizeof(struct mc_subled)" in function
+silicom_mc_leds_register().
+
+change from patch v4 to v5
+===========================================
+
+changes suggested by Guenter Roeck <groeck7@gmail.com>:
+.Corrected return value in temp_get() to return 1/10000th degree.
+.Removed local variable struct silicom_fan_control_data *ctl in
+silicom_fan_control_read_fan(),
+removed storing rpm value to ctl variable.
+.Removed local variable struct silicom_fan_control_data *ctl in 
+silicom_fan_control_read_temp(),
+.removed storing rpm value to ctl variable.
+.Changed return string in silicom_fan_control_read_labels() to 
+specific string for Silicom platform driver.
+.Removed silicom_fan_control_data structure.
+.Removed static variable mec_io_base and mec_io_len, and added
+"#define MEC_IO_BASE 0x0800 and #define MEC_IO_LEN 0x8".
+.Removed ".write = NULL" in silicom_fan_control_hwmon_ops
+structure defination.
+.Removed unnecessary function silicom_fan_control_write().
+.Removed unnecessary check for silicom_led_info in function
+silicom_platform_probe.
+.Removed unnecessary local variable "silicom_fan_control_data *ctl"
+in silicom_platform_probe().
+.Clean out driver initialization error handling in
+silicom_platform_init();
+.Add patch version and changelog for patch submission.
+
+Changes suggested by Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>:
+.Rename "#define MEC_DATA(offset) to "#define MEC_DATA_OFFSET(offset).
+.Use constant defined in include/linux/units.h instead of a literal.
+.return directly instead of go to err condition when
+platform_device_register_simple() failed.
+.Remove unnecessary check for silicom_led_info and silicom_gpiochip.
+.Use a local variable to how multiple use of array size.
+.Align the arguments to the same column in
+silicom_mec_led_mc_brightness_set.
+.Add patch version and changelog that shows version to version changes
+for patch submission.
+
+Changes suggested by Christophe JAILLET <christophe.jaillet@wanadoo.fr>:
+.Use "sizeof(*led)" instead of "sizeof(struct led_classdev_mc)"
+.Use "if (!led)" instead of "if (IS_ERR_OR_NULL(led))" 
+.Removed unnecessary error message:
+"dev_err(dev, "Failed to alloc led_classdev_mc[%d]:
+%ld\n", i, PTR_ERR(led)).
+
+change from patch vv5 to v6
+===========================================
+
+changes suggested by Guenter Roeck <groeck7@gmail.com>:
+.Removed checkpath warnings. 
+.Resoved dependencies between CONFIG_HWMON and CONFIG_SILICOM_PLATFORM.
+
+change from patch v6 to v7
+===========================================
+
+changes suggested by Hans de Goede <hdegoede@redhat.com>:
+.Usa a proper subsystem prefix for this patch subject:
+Subject: platform/x86: Add Silicom Platform Driver.
+
+change from patch v7 to v8
+===========================================
+
+changes suggested by Hans de Goede <hdegoede@redhat.com>:
+.Chnage commit message of this driver.
+.Adjust location of change log and signed-off-by.
+.Change "config SILICOM_PLATFORM" and help contents location,
+and put it to source "drivers/platform/x86/siemens/Kconfig".
+.Set editor tab to 8 and align the start of extra function
+parameters to directly after (. This should be applied for
+all function.
+.Do not manually create a sysfs dir and register sysfs attribute,
+instead define a platform_driver structure.
+.Move MODULE_DEVICE_TABLE(dmi, silicom_dmi_ids) directly after
+table declaration.
+.Using pr_info() instead of dev_info() in function
+silicom_platform_info_init().
+.Made dmi_check_system() check the first thing to do in
+silicom_platform_init().
+.Instead of separate platform_device creation + driver registration,
+switched to using platform_create_bundle().
+.Removed mutex_destroy(&mec_io_mutex).
+
+
+Changes suggested by Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>:
+.Too many GENMASK() within to code itself, need put them to
+#define. Removed all GENMASK() in c functions.
+
+change from patch v8 to v9
+===========================================
+
+Changes suggested by Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>:
+.Just do the same (like MEC_VERSION_MAJOR) with all places in the where
+you previously had GENMASK() in the code (currently MEC_GET_BITS()
+is there, obviously, but it should go away and be replaced with
+FIELD_GET(GOODPREFIX_GOODNAME, ...))).
+.This is sysfs so it's odd to print pr_err() like that here. If the driver
+does not support those versions at all, the probe should fail. If driver is
+fine but just doesn't know how to interpret such a version, you should
+return -Esomething here. Driver returns -EINVAL here.
+.Replace CENTI with 100
+.Align FIELD_GET()s to the same column for line 661.
+.Change variables efuse_status, mec_uc_version, power_cycle to unsigned
+int from int.
+
+changes suggested by Hans de Goede <hdegoede@redhat.com>:
+.Please add a Documentation/ABI/testing/sysfs-platform-silicom
+file to document driver specific the sysfs attributes of this driver.
+.Like with the Kconfig part, group this together with the other industrial
+PC drivers we have at the end of the Makefile after Siemens
+Simatic Industrial PCs.
+
+change from patch v9 to v10
+===========================================
+
+Changes suggested by Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>:
+.Added missing newline in kernel document file.
+.Changed the order #define to make sure they are in increasing order.
+.Removed printing in init function silicom_platform_info_init();
+.Changed #define name MEC_PREFIX_HIGH_BYTES to MEC_TEMPERATURE.
+.Removed dev_err(dev, "Failed to register[%d]: %d\n", i, err)
+in function silicom_mc_leds_register() before ruturn err.
+.Changed %du to %u in function power_cycle_store(...).
+.Chnaged sprintf() to sysfs_emit().
+.Changed start point for multi-line comments.
+.Added empty line to seperate #define.
+.Remove parenthesis around MEC_IO_BASE.
+.Changed #define EC_ADDR_MSB (MEC_IO_BASE + 0x3), use
+a constant value instead of MEC_DATA_OFFSET_MASK.
+.Changed define name MEC_PREFIX_NAME to MEC_PORT_LOC.
+.Changed define MEC_PREFIX_HIGH_BYTES to MEC_TEMP_LOC.
+.Removed "PREFIX" from define name, changed
+MEC_PREFIX_SEC_BYTE to MEC_VERSION_LOC.
+
+change from patch v10 to v11
+===========================================
+
+Changes suggested by Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>:
+.Don't print anything when userspace gives an invalid value,
+just return -EINVAL in function power_cycle_store().
+.The includes should be in alphabethical order.
+.Just make the calculation once and store into a local variable
+in function silicom_mec_port_set().
+.Use GENMASK for MEC_PORT_OFFSET_MASK, MEC_PORT_CHANNEL_MASK,
+MEC_DATA_OFFSET_MASK.
+.Rename MEC_PORT_LOC to MEC_PORT_DWORD_OFFSET.
+.Add local variable to function silicom_mec_port_set() and
+silicom_mec_port_get() to make the code less heavy to read.
+.Allgned defines start from same column mostly.
+.Kernel test robot WARNING sys/devices/platform/silicom-platform/hwmon/hwmon1/
+is defined 4 times.
+
+change from patch v11 to v12
+===========================================
+
+Changes suggested by Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>:
+Several editorial things:
+.Put the subdir headers separately.
+.Add more new line in define section.
+.Use () around all macro arguments to be on the safe side.
+.Add new line and remove comment in function silicom_mec_port_get().
+.Add new line and remove comment in function silicom_mec_port_set().
+.Remove unnecessary comment in function temp_get(), rpm_get().
+
+change from patch v12 to v13 (current)
+===========================================
+
+Changes suggested by Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>:
+.Put parenthesis in #define MEC_DATA_OFFSET(offset).
+.Remove unnecessary local variable *name and correct typo.
+.Use lower case for driver name.
+.Use reverse xmas tree order for function variables.
+
+Changes suggested by Randy Dunlap <rdunlap@infradead.org>:
+.Added "depends on GPIOLIB" in Kconfig.
+.Added default value for power_cycle file.
+.Added scale of temperature returned by temp1_input.
+.Correct editorlal issue in sysfs-platform-silicom.
+.Removed extra parenthesis around MEC_IO_BASE.
+.More indentation in silicom_mec_led_mc_brightness_set().
+
+.Kernel test robot WARNING: unmet direct dependencies detected for
+LEDS_CLASS_MULTICOLOR.
+
+ .../ABI/testing/sysfs-platform-silicom        |  264 +++++
+ drivers/platform/x86/Kconfig                  |   17 +
+ drivers/platform/x86/Makefile                 |    3 +
+ drivers/platform/x86/silicom-platform.c       | 1010 +++++++++++++++++
+ 4 files changed, 1294 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-platform-silicom
+ create mode 100644 drivers/platform/x86/silicom-platform.c
+
+diff --git a/Documentation/ABI/testing/sysfs-platform-silicom b/Documentation/ABI/testing/sysfs-platform-silicom
+new file mode 100644
+index 000000000000..01205362f836
+--- /dev/null
++++ b/Documentation/ABI/testing/sysfs-platform-silicom
+@@ -0,0 +1,264 @@
++What:		/sys/devices/platform/silicom-platform/uc_version
++Date:		November 2023
++KernelVersion:	6.7
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This file allows to read microcontroller firmware
++		version of current platform.
++
++What:		/sys/devices/platform/silicom-platform/power_cycle
++Date:		November 2023
++KernelVersion:	6.7
++Contact:	Henry Shi <henrys@silicom-usa.com>
++		This file allow user to power cycle the platform.
++		default value is 0; when set to 1, it powers down
++		the platform, wait 5 seconds, then power on the
++		device. It returns to default value after power cycle.
++
++		0 - default value.
++
++What:		/sys/devices/platform/silicom-platform/efuse_status
++Date:		November 2023
++KernelVersion:	6.7
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This file is read only. It returns the current
++		OTP status:
++
++		0 - not programmed.
++		1 - programmed.
++
++What:		/sys/devices/platform/silicom-platform/hwmon/hwmon1/temp1_input
++Date:		November 2023
++KernelVersion:	6.7
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This file is read only. It returns the temperature
++		of device in the scale of 1000 * Degree Celsius.
++
++What:		/sys/devices/platform/silicom-platform/hwmon/hwmon1/temp1_label
++Date:		November 2023
++KernelVersion:	6.7
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This file is read only. It returns "Silicom_platform:
++		Thermostat Sensor".
++
++What:		/sys/devices/platform/silicom-platform/hwmon/hwmon1/fan1_input
++Date:		November 2023
++KernelVersion:	6.7
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This file is read only. It returns current fan
++		speed (RPM).
++
++What:		/sys/devices/platform/silicom-platform/hwmon/hwmon1/fan1_label
++Date:		November 2023
++KernelVersion:	6.7
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This file is read only. It returns "Silicom_platform:
++		Fan Speed".
++
++What:		/sys/class/leds/multicolor:sys/brightness
++Date:		November 2023
++KernelVersion:	6.7
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read/write file. It is used to read/set current
++		status of system LED brightness:
++
++		0 - to turn off the LED
++		1 - to turn on the LED
++
++What:		/sys/class/leds/multicolor:sys/multi_index
++Date:		November 2023
++KernelVersion:	6.7
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read only  file. It returns:
++
++		white amber red
++
++What:		/sys/class/leds/multicolor:sys/multi_intensity
++Date:		November 2023
++KernelVersion:	6.7
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read/write file. It is used to read/set current
++		multi-color intensity of system LED: First value for
++		color white, second value for color amber and third value
++		for color red:
++
++		0 - The color is turned off.
++		1 - the color is turned on.
++
++What:		/sys/class/leds/multicolor:wan/brightness
++Date:		November 2023
++KernelVersion:	6.7
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read/write file. It is used to read/set current
++		status of WAN LED brightness:
++
++		0 - to turn off the LED
++		1 - to turn on the LED
++
++What:		/sys/class/leds/multicolor:wan/multi_index
++Date:		November 2023
++KernelVersion:	6.7
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read only file. It returns:
++
++		white yellow red
++
++What:		/sys/class/leds/multicolor:wan/multi_intensity
++Date:		November 2023
++KernelVersion:	6.7
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read/write file. It is used to read/set current
++		multi-color intensity of WAN LED: First value for
++		color white, second value for color yellow and third value
++		for color red:
++
++		0 - The color is turned off.
++		1 - the color is turned on.
++
++What:		/sys/class/leds/multicolor:stat%d/brightness
++Date:		November 2023
++KernelVersion:	6.7
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read/write file. It is used to read/set current
++		status of device status LED (number %d) brightness:
++
++		0 - to turn off the LED
++		1 - to turn on the LED
++
++What:		/sys/class/leds/multicolor:stat%d/multi_index
++Date:		November 2023
++KernelVersion:	6.7
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read only file. It returns:
++
++		red green blue yellow
++
++What:		/sys/class/leds/multicolor:stat%d/multi_intensity
++Date:		November 2023
++KernelVersion:	6.7
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read/write file. It is used to read/set current
++		multi-color intensity of device status LED (number %d):
++		First value for color red, second value for color green,
++		third value for color blue and fourth value for color
++		yellow.
++
++		0 - The color is turned off.
++		1 - the color is turned on.
++
++What:		/sys/class/leds/multicolor:fp_left/brightness
++Date:		November 2023
++KernelVersion:	6.7
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read/write file. It is used to read/set current
++		status of left LED brightness:
++
++		0 - to turn off the LED
++		1 - to turn on the LED
++
++What:		/sys/class/leds/multicolor:fp_left/multi_index
++Date:		November 2023
++KernelVersion:	6.7
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read only file. It returns:
++
++		red green blue amber
++
++What:		/sys/class/leds/multicolor:fp_left/multi_intensity
++Date:		November 2023
++KernelVersion:	6.7
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read/write file. It is used to read/set current
++		multi-color intensity of left LED: First value for
++		color red; Second value for color green; Third value for
++		color blue and fourth value for color amber.
++		for color red:
++
++		0 - The color is turned off.
++		1 - the color is turned on.
++
++What:		/sys/class/leds/multicolor:fp_center/brightness
++Date:		November 2023
++KernelVersion:	6.7
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read/write file. It is used to read/set current
++		status of left LED brightness:
++
++		0 - to turn off the LED
++		1 - to turn on the LED
++
++What:		/sys/class/leds/multicolor:fp_center/multi_index
++Date:		November 2023
++KernelVersion:	6.7
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read only  file. It returns:
++
++		red green blue amber
++
++What:		/sys/class/leds/multicolor:fp_center/multi_intensity
++Date:		November 2023
++KernelVersion:	6.7
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read/write file. It is used to read/set current
++		multi-color intensity of left LED: First value for
++		color red; Second value for color green; Third value for
++		color blue and fourth value for color amber.
++		for color red:
++
++		0 - The color is turned off.
++		1 - the color is turned on.
++
++What:		/sys/class/leds/multicolor:fp_right/brightness
++Date:		November 2023
++KernelVersion:	6.7
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read/write file. It is used to read/set current
++		status of left LED brightness:
++
++		0 - to turn off the LED
++		1 - to turn on the LED
++
++What:		/sys/class/leds/multicolor:fp_right/multi_index
++Date:		November 2023
++KernelVersion:	6.7
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read only  file. It returns:
++
++		red green blue amber
++
++What:		/sys/class/leds/multicolor:fp_right/multi_intensity
++Date:		November 2023
++KernelVersion:	6.7
++Contact:	Henry Shi <henrys@silicom-usa.com>
++Description:
++		This is a read/write file. It is used to read/set current
++		multi-color intensity of left LED: First value for
++		color red; Second value for color green; Third value for
++		color blue and fourth value for color amber.
++		for color red:
++
++		0 - The color is turned off.
++		1 - the color is turned on.
++
+diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+index 2a1070543391..676d89d96646 100644
+--- a/drivers/platform/x86/Kconfig
++++ b/drivers/platform/x86/Kconfig
+@@ -1076,6 +1076,23 @@ config INTEL_SCU_IPC_UTIL
+ 
+ source "drivers/platform/x86/siemens/Kconfig"
+ 
++config SILICOM_PLATFORM
++	tristate "Silicom Edge Networking device support"
++	depends on HWMON
++	depends on GPIOLIB
++	select NEW_LEDS
++	select LEDS_CLASS
++	select LEDS_CLASS_MULTICOLOR
++	help
++	  This option enables support for the LEDs/GPIO/etc downstream of the
++	  embedded controller on Silicom "Cordoba" hardware and derivatives.
++
++	  This platform driver provides support for various functions via
++	  the Linux LED framework, GPIO framework, Hardware Monitoring (HWMON)
++	  and device attributes.
++
++	  If you have a Silicom network appliance, say Y or M here.
++
+ config WINMATE_FM07_KEYS
+ 	tristate "Winmate FM07/FM07P front-panel keys driver"
+ 	depends on INPUT
+diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
+index b457de5abf7d..8fdb0c7d8ca1 100644
+--- a/drivers/platform/x86/Makefile
++++ b/drivers/platform/x86/Makefile
+@@ -133,6 +133,9 @@ obj-$(CONFIG_X86_INTEL_LPSS)		+= pmc_atom.o
+ # Siemens Simatic Industrial PCs
+ obj-$(CONFIG_SIEMENS_SIMATIC_IPC)	+= siemens/
+ 
++# Silicom
++obj-$(CONFIG_SILICOM_PLATFORM)		+= silicom-platform.o
++
+ # Winmate
+ obj-$(CONFIG_WINMATE_FM07_KEYS)		+= winmate-fm07-keys.o
+ 
+diff --git a/drivers/platform/x86/silicom-platform.c b/drivers/platform/x86/silicom-platform.c
+new file mode 100644
+index 000000000000..b9a888aed99e
+--- /dev/null
++++ b/drivers/platform/x86/silicom-platform.c
+@@ -0,0 +1,1010 @@
++// SPDX-License-Identifier: GPL-2.0+
++//
++// silicom-platform.c - Silicom MEC170x platform driver
++//
++// Copyright (C) 2023 Henry Shi <henrys@silicom-usa.com>
++#include <linux/bitfield.h>
++#include <linux/bits.h>
++#include <linux/dmi.h>
++#include <linux/hwmon.h>
++#include <linux/init.h>
++#include <linux/ioport.h>
++#include <linux/io.h>
++#include <linux/kernel.h>
++#include <linux/kobject.h>
++#include <linux/led-class-multicolor.h>
++#include <linux/module.h>
++#include <linux/mutex.h>
++#include <linux/platform_device.h>
++#include <linux/string.h>
++#include <linux/sysfs.h>
++#include <linux/units.h>
++
++#include <linux/gpio/driver.h>
++
++#define MEC_POWER_CYCLE_ADDR 0x24
++#define MEC_EFUSE_LSB_ADDR   0x28
++#define MEC_GPIO_IN_POS      0x08
++#define MEC_IO_BASE          0x0800
++#define MEC_IO_LEN           0x8
++#define IO_REG_BANK          0x0
++#define DEFAULT_CHAN_LO      0
++#define DEFAULT_CHAN_HI      0
++#define DEFAULT_CHAN_LO_T    0xc
++#define MEC_ADDR             (MEC_IO_BASE + 0x02)
++#define EC_ADDR_LSB          MEC_ADDR
++#define SILICOM_MEC_MAGIC    0x5a
++
++#define MEC_PORT_CHANNEL_MASK GENMASK(2, 0)
++#define MEC_PORT_DWORD_OFFSET GENMASK(31, 3)
++#define MEC_DATA_OFFSET_MASK  GENMASK(1, 0)
++#define MEC_PORT_OFFSET_MASK  GENMASK(7, 2)
++
++#define MEC_TEMP_LOC          GENMASK(31, 16)
++#define MEC_VERSION_LOC       GENMASK(15, 8)
++#define MEC_VERSION_MAJOR     GENMASK(15, 14)
++#define MEC_VERSION_MINOR     GENMASK(13, 8)
++
++#define EC_ADDR_MSB           ((MEC_IO_BASE) + 0x3)
++#define MEC_DATA_OFFSET(offset) (MEC_IO_BASE + 0x04 + (offset))
++
++#define OFFSET_BIT_TO_CHANNEL(off, bit) ((((off) + 0x014) << 3) | (bit))
++#define CHANNEL_TO_OFFSET(chan) (((chan) >> 3) - 0x14)
++
++static DEFINE_MUTEX(mec_io_mutex);
++static unsigned int efuse_status;
++static unsigned int mec_uc_version;
++static unsigned int power_cycle;
++
++static const struct hwmon_channel_info *silicom_fan_control_info[] = {
++	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT | HWMON_F_LABEL),
++	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_LABEL),
++	NULL
++};
++
++struct silicom_platform_info {
++	int io_base;
++	int io_len;
++	struct led_classdev_mc *led_info;
++	struct gpio_chip *gpiochip;
++	u8 *gpio_channels;
++	u16 ngpio;
++};
++
++static const char * const plat_0222_gpio_names[] = {
++	"AUTOM0_SFP_TX_FAULT",
++	"SLOT2_LED_OUT",
++	"SIM_M2_SLOT2_B_DET",
++	"SIM_M2_SLOT2_A_DET",
++	"SLOT1_LED_OUT",
++	"SIM_M2_SLOT1_B_DET",
++	"SIM_M2_SLOT1_A_DET",
++	"SLOT0_LED_OUT",
++	"WAN_SFP0_RX_LOS",
++	"WAN_SFP0_PRSNT_N",
++	"WAN_SFP0_TX_FAULT",
++	"AUTOM1_SFP_RX_LOS",
++	"AUTOM1_SFP_PRSNT_N",
++	"AUTOM1_SFP_TX_FAULT",
++	"AUTOM0_SFP_RX_LOS",
++	"AUTOM0_SFP_PRSNT_N",
++	"WAN_SFP1_RX_LOS",
++	"WAN_SFP1_PRSNT_N",
++	"WAN_SFP1_TX_FAULT",
++	"SIM_M2_SLOT1_MUX_SEL",
++	"W_DISABLE_M2_SLOT1_N",
++	"W_DISABLE_MPCIE_SLOT0_N",
++	"W_DISABLE_M2_SLOT0_N",
++	"BT_COMMAND_MODE",
++	"WAN_SFP1_TX_DISABLE",
++	"WAN_SFP0_TX_DISABLE",
++	"AUTOM1_SFP_TX_DISABLE",
++	"AUTOM0_SFP_TX_DISABLE",
++	"SIM_M2_SLOT2_MUX_SEL",
++	"W_DISABLE_M2_SLOT2_N",
++	"RST_CTL_M2_SLOT_1_N",
++	"RST_CTL_M2_SLOT_2_N",
++	"PM_USB_PWR_EN_BOT",
++	"PM_USB_PWR_EN_TOP",
++};
++
++static u8 plat_0222_gpio_channels[] = {
++	OFFSET_BIT_TO_CHANNEL(0x00, 0),
++	OFFSET_BIT_TO_CHANNEL(0x00, 1),
++	OFFSET_BIT_TO_CHANNEL(0x00, 2),
++	OFFSET_BIT_TO_CHANNEL(0x00, 3),
++	OFFSET_BIT_TO_CHANNEL(0x00, 4),
++	OFFSET_BIT_TO_CHANNEL(0x00, 5),
++	OFFSET_BIT_TO_CHANNEL(0x00, 6),
++	OFFSET_BIT_TO_CHANNEL(0x00, 7),
++	OFFSET_BIT_TO_CHANNEL(0x01, 0),
++	OFFSET_BIT_TO_CHANNEL(0x01, 1),
++	OFFSET_BIT_TO_CHANNEL(0x01, 2),
++	OFFSET_BIT_TO_CHANNEL(0x01, 3),
++	OFFSET_BIT_TO_CHANNEL(0x01, 4),
++	OFFSET_BIT_TO_CHANNEL(0x01, 5),
++	OFFSET_BIT_TO_CHANNEL(0x01, 6),
++	OFFSET_BIT_TO_CHANNEL(0x01, 7),
++	OFFSET_BIT_TO_CHANNEL(0x02, 0),
++	OFFSET_BIT_TO_CHANNEL(0x02, 1),
++	OFFSET_BIT_TO_CHANNEL(0x02, 2),
++	OFFSET_BIT_TO_CHANNEL(0x09, 0),
++	OFFSET_BIT_TO_CHANNEL(0x09, 1),
++	OFFSET_BIT_TO_CHANNEL(0x09, 2),
++	OFFSET_BIT_TO_CHANNEL(0x09, 3),
++	OFFSET_BIT_TO_CHANNEL(0x0a, 0),
++	OFFSET_BIT_TO_CHANNEL(0x0a, 1),
++	OFFSET_BIT_TO_CHANNEL(0x0a, 2),
++	OFFSET_BIT_TO_CHANNEL(0x0a, 3),
++	OFFSET_BIT_TO_CHANNEL(0x0a, 4),
++	OFFSET_BIT_TO_CHANNEL(0x0a, 5),
++	OFFSET_BIT_TO_CHANNEL(0x0a, 6),
++	OFFSET_BIT_TO_CHANNEL(0x0b, 0),
++	OFFSET_BIT_TO_CHANNEL(0x0b, 1),
++	OFFSET_BIT_TO_CHANNEL(0x0b, 2),
++	OFFSET_BIT_TO_CHANNEL(0x0b, 3),
++};
++
++static struct platform_device *silicom_platform_dev;
++static struct led_classdev_mc *silicom_led_info __initdata;
++static struct gpio_chip *silicom_gpiochip __initdata;
++static u8 *silicom_gpio_channels __initdata;
++
++static int silicom_mec_port_get(unsigned int offset)
++{
++	unsigned short mec_data_addr;
++	unsigned short mec_port_addr;
++	u8 reg;
++
++	mec_data_addr = FIELD_GET(MEC_PORT_DWORD_OFFSET, offset) & MEC_DATA_OFFSET_MASK;
++	mec_port_addr = FIELD_GET(MEC_PORT_DWORD_OFFSET, offset) & MEC_PORT_OFFSET_MASK;
++
++	mutex_lock(&mec_io_mutex);
++	outb(mec_port_addr, MEC_ADDR);
++	reg = inb(MEC_DATA_OFFSET(mec_data_addr));
++	mutex_unlock(&mec_io_mutex);
++
++	return (reg >> (offset & MEC_PORT_CHANNEL_MASK)) & 0x01;
++}
++
++static enum led_brightness silicom_mec_led_get(int channel)
++{
++	/* Outputs are active low */
++	return silicom_mec_port_get(channel) ? LED_OFF : LED_ON;
++}
++
++static void silicom_mec_port_set(int channel, int on)
++{
++
++	unsigned short mec_data_addr;
++	unsigned short mec_port_addr;
++	u8 reg;
++
++	mec_data_addr = FIELD_GET(MEC_PORT_DWORD_OFFSET, channel) & MEC_DATA_OFFSET_MASK;
++	mec_port_addr = FIELD_GET(MEC_PORT_DWORD_OFFSET, channel) & MEC_PORT_OFFSET_MASK;
++
++	mutex_lock(&mec_io_mutex);
++	outb(mec_port_addr, MEC_ADDR);
++	reg = inb(MEC_DATA_OFFSET(mec_data_addr));
++	/* Outputs are active low, so clear the bit for on, or set it for off */
++	if (on)
++		reg &= ~(1 << (channel & MEC_PORT_CHANNEL_MASK));
++	else
++		reg |= 1 << (channel & MEC_PORT_CHANNEL_MASK);
++	outb(reg, MEC_DATA_OFFSET(mec_data_addr));
++	mutex_unlock(&mec_io_mutex);
++}
++
++static enum led_brightness silicom_mec_led_mc_brightness_get(struct led_classdev *led_cdev)
++{
++	struct led_classdev_mc *mc_cdev = lcdev_to_mccdev(led_cdev);
++	enum led_brightness brightness = LED_OFF;
++	int i;
++
++	for (i = 0; i < mc_cdev->num_colors; i++) {
++		mc_cdev->subled_info[i].brightness =
++			silicom_mec_led_get(mc_cdev->subled_info[i].channel);
++		/* Mark the overall brightness as LED_ON if any of the subleds are on */
++		if (mc_cdev->subled_info[i].brightness != LED_OFF)
++			brightness = LED_ON;
++	}
++
++	return brightness;
++}
++
++static void silicom_mec_led_mc_brightness_set(struct led_classdev *led_cdev,
++					      enum led_brightness brightness)
++{
++	struct led_classdev_mc *mc_cdev = lcdev_to_mccdev(led_cdev);
++	int i;
++
++	led_mc_calc_color_components(mc_cdev, brightness);
++	for (i = 0; i < mc_cdev->num_colors; i++) {
++		silicom_mec_port_set(mc_cdev->subled_info[i].channel,
++				     mc_cdev->subled_info[i].brightness);
++	}
++}
++
++static int silicom_gpio_get_direction(struct gpio_chip *gc,
++				      unsigned int offset)
++{
++	u8 *channels = gpiochip_get_data(gc);
++
++	/* Input registers have offsets between [0x00, 0x07] */
++	if (CHANNEL_TO_OFFSET(channels[offset]) < MEC_GPIO_IN_POS)
++		return GPIO_LINE_DIRECTION_IN;
++
++	return GPIO_LINE_DIRECTION_OUT;
++}
++
++static int silicom_gpio_direction_input(struct gpio_chip *gc,
++					unsigned int offset)
++{
++	int direction = silicom_gpio_get_direction(gc, offset);
++
++	return direction == GPIO_LINE_DIRECTION_IN ? 0 : -EINVAL;
++}
++
++static void silicom_gpio_set(struct gpio_chip *gc,
++			     unsigned int offset,
++			     int value)
++{
++	int direction = silicom_gpio_get_direction(gc, offset);
++	u8 *channels = gpiochip_get_data(gc);
++	int channel = channels[offset];
++
++	if (direction == GPIO_LINE_DIRECTION_IN)
++		return;
++
++	if (value)
++		silicom_mec_port_set(channel, 0);
++	else if (value == 0)
++		silicom_mec_port_set(channel, 1);
++	else
++		pr_err("Wrong argument value: %d\n", value);
++}
++
++static int silicom_gpio_direction_output(struct gpio_chip *gc,
++					 unsigned int offset,
++					 int value)
++{
++	int direction = silicom_gpio_get_direction(gc, offset);
++
++	if (direction == GPIO_LINE_DIRECTION_IN)
++		return -EINVAL;
++
++	silicom_gpio_set(gc, offset, value);
++
++	return 0;
++}
++
++static int silicom_gpio_get(struct gpio_chip *gc, unsigned int offset)
++{
++	u8 *channels = gpiochip_get_data(gc);
++	int channel = channels[offset];
++
++	return silicom_mec_port_get(channel);
++}
++
++static struct mc_subled plat_0222_wan_mc_subled_info[] __initdata = {
++	{
++		.color_index = LED_COLOR_ID_WHITE,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0c, 7),
++	},
++	{
++		.color_index = LED_COLOR_ID_YELLOW,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0c, 6),
++	},
++	{
++		.color_index = LED_COLOR_ID_RED,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0c, 5),
++	},
++};
++
++static struct mc_subled plat_0222_sys_mc_subled_info[] __initdata = {
++	{
++		.color_index = LED_COLOR_ID_WHITE,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0c, 4),
++	},
++	{
++		.color_index = LED_COLOR_ID_AMBER,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0c, 3),
++	},
++	{
++		.color_index = LED_COLOR_ID_RED,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0c, 2),
++	},
++};
++
++static struct mc_subled plat_0222_stat1_mc_subled_info[] __initdata = {
++	{
++		.color_index = LED_COLOR_ID_RED,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0c, 1),
++	},
++	{
++		.color_index = LED_COLOR_ID_GREEN,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0c, 0),
++	},
++	{
++		.color_index = LED_COLOR_ID_BLUE,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0d, 7),
++	},
++	{
++		.color_index = LED_COLOR_ID_YELLOW,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0d, 6),
++	},
++};
++
++static struct mc_subled plat_0222_stat2_mc_subled_info[] __initdata = {
++	{
++		.color_index = LED_COLOR_ID_RED,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0d, 5),
++	},
++	{
++		.color_index = LED_COLOR_ID_GREEN,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0d, 4),
++	},
++	{
++		.color_index = LED_COLOR_ID_BLUE,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0d, 3),
++	},
++	{
++		.color_index = LED_COLOR_ID_YELLOW,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0d, 2),
++	},
++};
++
++static struct mc_subled plat_0222_stat3_mc_subled_info[] __initdata = {
++	{
++		.color_index = LED_COLOR_ID_RED,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0d, 1),
++	},
++	{
++		.color_index = LED_COLOR_ID_GREEN,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0d, 0),
++	},
++	{
++		.color_index = LED_COLOR_ID_BLUE,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0e, 1),
++	},
++	{
++		.color_index = LED_COLOR_ID_YELLOW,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0e, 0),
++	},
++};
++
++static struct led_classdev_mc plat_0222_mc_led_info[] __initdata = {
++	{
++		.led_cdev = {
++			.name = "multicolor:wan",
++			.brightness = 0,
++			.max_brightness = 1,
++			.brightness_set = silicom_mec_led_mc_brightness_set,
++			.brightness_get = silicom_mec_led_mc_brightness_get,
++		},
++		.num_colors = ARRAY_SIZE(plat_0222_wan_mc_subled_info),
++		.subled_info = plat_0222_wan_mc_subled_info,
++	},
++	{
++		.led_cdev = {
++			.name = "multicolor:sys",
++			.brightness = 0,
++			.max_brightness = 1,
++			.brightness_set = silicom_mec_led_mc_brightness_set,
++			.brightness_get = silicom_mec_led_mc_brightness_get,
++		},
++		.num_colors = ARRAY_SIZE(plat_0222_sys_mc_subled_info),
++		.subled_info = plat_0222_sys_mc_subled_info,
++	},
++	{
++		.led_cdev = {
++			.name = "multicolor:stat1",
++			.brightness = 0,
++			.max_brightness = 1,
++			.brightness_set = silicom_mec_led_mc_brightness_set,
++			.brightness_get = silicom_mec_led_mc_brightness_get,
++		},
++		.num_colors = ARRAY_SIZE(plat_0222_stat1_mc_subled_info),
++		.subled_info = plat_0222_stat1_mc_subled_info,
++	},
++	{
++		.led_cdev = {
++			.name = "multicolor:stat2",
++			.brightness = 0,
++			.max_brightness = 1,
++			.brightness_set = silicom_mec_led_mc_brightness_set,
++			.brightness_get = silicom_mec_led_mc_brightness_get,
++		},
++		.num_colors = ARRAY_SIZE(plat_0222_stat2_mc_subled_info),
++		.subled_info = plat_0222_stat2_mc_subled_info,
++	},
++	{
++		.led_cdev = {
++			.name = "multicolor:stat3",
++			.brightness = 0,
++			.max_brightness = 1,
++			.brightness_set = silicom_mec_led_mc_brightness_set,
++			.brightness_get = silicom_mec_led_mc_brightness_get,
++		},
++		.num_colors = ARRAY_SIZE(plat_0222_stat3_mc_subled_info),
++		.subled_info = plat_0222_stat3_mc_subled_info,
++	},
++	{ },
++};
++
++static struct gpio_chip silicom_gpio_chip = {
++	.label = "silicom-gpio",
++	.get_direction = silicom_gpio_get_direction,
++	.direction_input = silicom_gpio_direction_input,
++	.direction_output = silicom_gpio_direction_output,
++	.get = silicom_gpio_get,
++	.set = silicom_gpio_set,
++	.base = -1,
++	.ngpio = ARRAY_SIZE(plat_0222_gpio_channels),
++	.names = plat_0222_gpio_names,
++	/*
++	 * We're using a mutex to protect the indirect access, so we can sleep
++	 * if the lock blocks
++	 */
++	.can_sleep = true,
++};
++
++static struct silicom_platform_info silicom_plat_0222_cordoba_info __initdata = {
++	.io_base = MEC_IO_BASE,
++	.io_len = MEC_IO_LEN,
++	.led_info = plat_0222_mc_led_info,
++	.gpiochip = &silicom_gpio_chip,
++	.gpio_channels = plat_0222_gpio_channels,
++	/*
++	 * The original generic cordoba does not have the last 4 outputs of the
++	 * plat_0222 variant, the rest are the same, so use the same longer list,
++	 * but ignore the last entries here
++	 */
++	.ngpio = ARRAY_SIZE(plat_0222_gpio_channels),
++
++};
++
++static struct mc_subled cordoba_fp_left_mc_subled_info[] __initdata = {
++	{
++		.color_index = LED_COLOR_ID_RED,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x08, 6),
++	},
++	{
++		.color_index = LED_COLOR_ID_GREEN,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x08, 5),
++	},
++	{
++		.color_index = LED_COLOR_ID_BLUE,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x09, 7),
++	},
++	{
++		.color_index = LED_COLOR_ID_AMBER,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x09, 4),
++	},
++};
++
++static struct mc_subled cordoba_fp_center_mc_subled_info[] __initdata = {
++	{
++		.color_index = LED_COLOR_ID_RED,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x08, 7),
++	},
++	{
++		.color_index = LED_COLOR_ID_GREEN,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x08, 4),
++	},
++	{
++		.color_index = LED_COLOR_ID_BLUE,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x08, 3),
++	},
++	{
++		.color_index = LED_COLOR_ID_AMBER,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x09, 6),
++	},
++};
++
++static struct mc_subled cordoba_fp_right_mc_subled_info[] __initdata = {
++	{
++		.color_index = LED_COLOR_ID_RED,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x08, 2),
++	},
++	{
++		.color_index = LED_COLOR_ID_GREEN,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x08, 1),
++	},
++	{
++		.color_index = LED_COLOR_ID_BLUE,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x08, 0),
++	},
++	{
++		.color_index = LED_COLOR_ID_AMBER,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x09, 5),
++	},
++};
++
++static struct led_classdev_mc cordoba_mc_led_info[] __initdata = {
++	{
++		.led_cdev = {
++			.name = "multicolor:fp_left",
++			.brightness = 0,
++			.max_brightness = 1,
++			.brightness_set = silicom_mec_led_mc_brightness_set,
++			.brightness_get = silicom_mec_led_mc_brightness_get,
++		},
++		.num_colors = ARRAY_SIZE(cordoba_fp_left_mc_subled_info),
++		.subled_info = cordoba_fp_left_mc_subled_info,
++	},
++	{
++		.led_cdev = {
++			.name = "multicolor:fp_center",
++			.brightness = 0,
++			.max_brightness = 1,
++			.brightness_set = silicom_mec_led_mc_brightness_set,
++			.brightness_get = silicom_mec_led_mc_brightness_get,
++		},
++		.num_colors = ARRAY_SIZE(cordoba_fp_center_mc_subled_info),
++		.subled_info = cordoba_fp_center_mc_subled_info,
++	},
++	{
++		.led_cdev = {
++			.name = "multicolor:fp_right",
++			.brightness = 0,
++			.max_brightness = 1,
++			.brightness_set = silicom_mec_led_mc_brightness_set,
++			.brightness_get = silicom_mec_led_mc_brightness_get,
++		},
++		.num_colors = ARRAY_SIZE(cordoba_fp_right_mc_subled_info),
++		.subled_info = cordoba_fp_right_mc_subled_info,
++	},
++	{ },
++};
++
++static struct silicom_platform_info silicom_generic_cordoba_info __initdata = {
++	.io_base = MEC_IO_BASE,
++	.io_len = MEC_IO_LEN,
++	.led_info = cordoba_mc_led_info,
++	.gpiochip = &silicom_gpio_chip,
++	.gpio_channels = plat_0222_gpio_channels,
++	.ngpio = ARRAY_SIZE(plat_0222_gpio_channels),
++};
++
++/*
++ * sysfs interface
++ */
++static ssize_t efuse_status_show(struct device *dev,
++				 struct device_attribute *attr,
++				 char *buf)
++{
++	u32 reg;
++
++	mutex_lock(&mec_io_mutex);
++	/* Select memory region */
++	outb(IO_REG_BANK, EC_ADDR_MSB);
++	outb(MEC_EFUSE_LSB_ADDR, EC_ADDR_LSB);
++
++	/* Get current data from the address */
++	reg = inl(MEC_DATA_OFFSET(DEFAULT_CHAN_LO));
++	mutex_unlock(&mec_io_mutex);
++
++	efuse_status = reg & 0x1;
++
++	return sysfs_emit(buf, "%u\n", efuse_status);
++}
++static DEVICE_ATTR_RO(efuse_status);
++
++static ssize_t uc_version_show(struct device *dev,
++			       struct device_attribute *attr,
++			       char *buf)
++{
++	int uc_version;
++	u32 reg;
++
++	mutex_lock(&mec_io_mutex);
++	outb(IO_REG_BANK, EC_ADDR_MSB);
++	outb(DEFAULT_CHAN_LO, EC_ADDR_LSB);
++
++	reg = inl(MEC_DATA_OFFSET(DEFAULT_CHAN_LO));
++	mutex_unlock(&mec_io_mutex);
++	uc_version = FIELD_GET(MEC_VERSION_LOC, reg);
++	if (uc_version >= 192)
++		return -EINVAL;
++
++	uc_version = FIELD_GET(MEC_VERSION_MAJOR, reg) * 100 +
++		     FIELD_GET(MEC_VERSION_MINOR, reg);
++
++	mec_uc_version = uc_version;
++
++	return sysfs_emit(buf, "%u\n", mec_uc_version);
++}
++static DEVICE_ATTR_RO(uc_version);
++
++static ssize_t power_cycle_show(struct device *dev,
++				struct device_attribute *attr,
++				char *buf)
++{
++	return sysfs_emit(buf, "%u\n", power_cycle);
++}
++
++static void powercycle_uc(void)
++{
++	mutex_lock(&mec_io_mutex);
++	/* Select memory region */
++	outb(IO_REG_BANK, EC_ADDR_MSB);
++	outb(MEC_POWER_CYCLE_ADDR, EC_ADDR_LSB);
++
++	/* Set to 1 for current data from the address */
++	outb(1, MEC_DATA_OFFSET(DEFAULT_CHAN_LO));
++	mutex_unlock(&mec_io_mutex);
++}
++
++static ssize_t power_cycle_store(struct device *dev,
++				 struct device_attribute *attr,
++				 const char *buf, size_t count)
++{
++	int rc;
++
++	rc = kstrtou32(buf, 0, &power_cycle);
++	if (rc)
++		return -EINVAL;
++
++	if (power_cycle > 0)
++		powercycle_uc();
++
++	return count;
++}
++static DEVICE_ATTR_RW(power_cycle);
++
++static struct attribute *silicom_attrs[] = {
++	&dev_attr_efuse_status.attr,
++	&dev_attr_uc_version.attr,
++	&dev_attr_power_cycle.attr,
++	NULL,
++};
++ATTRIBUTE_GROUPS(silicom);
++
++static struct platform_driver silicom_platform_driver = {
++	.driver = {
++		.name = "silicom-platform",
++		.dev_groups = silicom_groups,
++	},
++};
++
++static int __init silicom_mc_leds_register(struct device *dev,
++					   const struct led_classdev_mc *mc_leds)
++{
++	int size = sizeof(struct mc_subled);
++	struct led_classdev_mc *led;
++	int i, err;
++
++	for (i = 0; mc_leds[i].led_cdev.name; i++) {
++
++		led = devm_kzalloc(dev, sizeof(*led), GFP_KERNEL);
++		if (!led)
++			return -ENOMEM;
++		memcpy(led, &mc_leds[i], sizeof(*led));
++
++		led->subled_info = devm_kzalloc(dev, led->num_colors * size, GFP_KERNEL);
++		if (!led->subled_info)
++			return -ENOMEM;
++		memcpy(led->subled_info, mc_leds[i].subled_info, led->num_colors * size);
++
++		err = devm_led_classdev_multicolor_register(dev, led);
++		if (err)
++			return err;
++	}
++
++	return 0;
++}
++
++static u32 rpm_get(void)
++{
++	u32 reg;
++
++	mutex_lock(&mec_io_mutex);
++	/* Select memory region */
++	outb(IO_REG_BANK, EC_ADDR_MSB);
++	outb(DEFAULT_CHAN_LO_T, EC_ADDR_LSB);
++	reg = inw(MEC_DATA_OFFSET(DEFAULT_CHAN_LO));
++	mutex_unlock(&mec_io_mutex);
++
++	return reg;
++}
++
++static u32 temp_get(void)
++{
++	u32 reg;
++
++	mutex_lock(&mec_io_mutex);
++	/* Select memory region */
++	outb(IO_REG_BANK, EC_ADDR_MSB);
++	outb(DEFAULT_CHAN_LO_T, EC_ADDR_LSB);
++	reg = inl(MEC_DATA_OFFSET(DEFAULT_CHAN_LO));
++	mutex_unlock(&mec_io_mutex);
++
++	return FIELD_GET(MEC_TEMP_LOC, reg) * 100;
++}
++
++static umode_t silicom_fan_control_fan_is_visible(const u32 attr)
++{
++	switch (attr) {
++	case hwmon_fan_input:
++	case hwmon_fan_label:
++		return 0444;
++	default:
++		return 0;
++	}
++}
++
++static umode_t silicom_fan_control_temp_is_visible(const u32 attr)
++{
++	switch (attr) {
++	case hwmon_temp_input:
++	case hwmon_temp_label:
++		return 0444;
++	default:
++		return 0;
++	}
++}
++
++static int silicom_fan_control_read_fan(struct device *dev, u32 attr, long *val)
++{
++	switch (attr) {
++	case hwmon_fan_input:
++		*val = rpm_get();
++		return 0;
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static int silicom_fan_control_read_temp(struct device *dev, u32 attr, long *val)
++{
++	switch (attr) {
++	case hwmon_temp_input:
++		*val = temp_get();
++		return 0;
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static umode_t silicom_fan_control_is_visible(const void *data,
++					      enum hwmon_sensor_types type,
++					      u32 attr, int channel)
++{
++	switch (type) {
++	case hwmon_fan:
++		return silicom_fan_control_fan_is_visible(attr);
++	case hwmon_temp:
++		return silicom_fan_control_temp_is_visible(attr);
++	default:
++		return 0;
++	}
++}
++
++static int silicom_fan_control_read(struct device *dev,
++				    enum hwmon_sensor_types type,
++				    u32 attr, int channel,
++				    long *val)
++{
++	switch (type) {
++	case hwmon_fan:
++		return silicom_fan_control_read_fan(dev, attr, val);
++	case hwmon_temp:
++		return silicom_fan_control_read_temp(dev, attr, val);
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static int silicom_fan_control_read_labels(struct device *dev,
++					   enum hwmon_sensor_types type,
++					   u32 attr, int channel,
++					   const char **str)
++{
++	switch (type) {
++	case hwmon_fan:
++		*str = "Silicom_platfomr: Fan Speed";
++		return 0;
++	case hwmon_temp:
++		*str = "Silicom_platform: Thermostat Sensor";
++		return 0;
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static const struct hwmon_ops silicom_fan_control_hwmon_ops = {
++	.is_visible = silicom_fan_control_is_visible,
++	.read = silicom_fan_control_read,
++	.read_string = silicom_fan_control_read_labels,
++};
++
++static const struct hwmon_chip_info silicom_chip_info = {
++	.ops = &silicom_fan_control_hwmon_ops,
++	.info = silicom_fan_control_info,
++};
++
++static int __init silicom_platform_probe(struct platform_device *device)
++{
++	struct device *hwmon_dev;
++	u8 magic, ver;
++	int err;
++
++	if (!devm_request_region(&device->dev, MEC_IO_BASE, MEC_IO_LEN, "mec")) {
++		dev_err(&device->dev, "couldn't reserve MEC io ports\n");
++		return -EBUSY;
++	}
++
++	/* Sanity check magic number read for EC */
++	outb(IO_REG_BANK, MEC_ADDR);
++	magic = inb(MEC_DATA_OFFSET(DEFAULT_CHAN_LO));
++	ver = inb(MEC_DATA_OFFSET(DEFAULT_CHAN_HI));
++	dev_dbg(&device->dev, "EC magic 0x%02x, version 0x%02x\n", magic, ver);
++
++	if (magic != SILICOM_MEC_MAGIC) {
++		dev_err(&device->dev, "Bad EC magic 0x%02x!\n", magic);
++		return -ENODEV;
++	}
++
++	err = silicom_mc_leds_register(&device->dev, silicom_led_info);
++	if (err) {
++		dev_err(&device->dev, "Failed to register LEDs\n");
++		return err;
++	}
++
++	err = devm_gpiochip_add_data(&device->dev, silicom_gpiochip,
++				     silicom_gpio_channels);
++	if (err) {
++		dev_err(&device->dev, "Failed to register gpiochip: %d\n", err);
++		return err;
++	}
++
++	hwmon_dev = devm_hwmon_device_register_with_info(&device->dev, "silicom_fan", NULL,
++							 &silicom_chip_info, NULL);
++	err = PTR_ERR_OR_ZERO(hwmon_dev);
++	if (err) {
++		dev_err(&device->dev, "Failed to register hwmon_dev: %d\n", err);
++		return err;
++	}
++
++	return err;
++}
++
++static int __init silicom_platform_info_init(const struct dmi_system_id *id)
++{
++	struct silicom_platform_info *info = id->driver_data;
++
++	silicom_led_info = info->led_info;
++	silicom_gpio_channels = info->gpio_channels;
++	silicom_gpiochip = info->gpiochip;
++	silicom_gpiochip->ngpio = info->ngpio;
++
++	return 1;
++}
++
++static const struct dmi_system_id silicom_dmi_ids[] __initconst = {
++	{
++		.callback = silicom_platform_info_init,
++		.ident = "Silicom Cordoba (Generic)",
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "Silicom"),
++			DMI_MATCH(DMI_BOARD_NAME, "80300-0214-G"),
++		},
++		.driver_data = &silicom_generic_cordoba_info,
++	},
++	{
++		.callback = silicom_platform_info_init,
++		.ident = "Silicom Cordoba (Generic)",
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "Silicom"),
++			DMI_MATCH(DMI_BOARD_NAME, "80500-0214-G"),
++		},
++		.driver_data = &silicom_generic_cordoba_info,
++	},
++	{
++		 .callback = silicom_platform_info_init,
++		 .ident = "Silicom Cordoba (plat_0222)",
++		 .matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "Silicom"),
++			DMI_MATCH(DMI_BOARD_NAME, "80300-0222-G"),
++		 },
++		.driver_data = &silicom_plat_0222_cordoba_info,
++	},
++	{ },
++};
++MODULE_DEVICE_TABLE(dmi, silicom_dmi_ids);
++
++static int __init silicom_platform_init(void)
++{
++	if (!dmi_check_system(silicom_dmi_ids)) {
++		pr_err("No DMI match for this platform\n");
++		return -ENODEV;
++	}
++
++	/*
++	 * Create and register a platform device.
++	 * Directly probe the platform driver in init since this isn't a
++	 * hotpluggable device.  That means we don't need to register a driver
++	 * that needs to wait around in memory on the chance a matching device
++	 * would get added.  Instead run once in __init so that we can free all
++	 * those resources when the __init region is wiped
++	 */
++	silicom_platform_dev = platform_create_bundle(&silicom_platform_driver,
++						      silicom_platform_probe,
++						      NULL, 0, NULL, 0);
++
++	return PTR_ERR_OR_ZERO(silicom_platform_dev);
++}
++
++static void __exit silicom_platform_exit(void)
++{
++	platform_device_unregister(silicom_platform_dev);
++	platform_driver_unregister(&silicom_platform_driver);
++}
++
++module_init(silicom_platform_init);
++module_exit(silicom_platform_exit);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Henry Shi <henrys@silicom-usa.com>");
++MODULE_DESCRIPTION("Platform driver for Silicom network appliances");
 -- 
-2.42.1
+2.21.3
 
