@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WvMqMruZ"
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68ABD271B;
-	Mon, 20 Nov 2023 06:52:53 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-da7238b3eb4so4486479276.1;
-        Mon, 20 Nov 2023 06:52:53 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XGAipQUD"
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840CDC1;
+	Mon, 20 Nov 2023 07:00:56 -0800 (PST)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-5b383b4184fso49527787b3.1;
+        Mon, 20 Nov 2023 07:00:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700491972; x=1701096772; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1700492455; x=1701097255; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=3qHPMK/nPQeJpHqpbeb3m3W/Zwv9dUdlHR5D9mZqK24=;
-        b=WvMqMruZG7gsX0qRoN5WBMmSb0RZkm+x8CBiTo0HZBYRyy+s7k9PWzSqhko7+G5Q2V
-         TpOiHDvtrz0ljWqW7RAd79jLxjrlTrQVDXaFDy4dId/GLfsvkxSrzBUwZg8UmJMLy7Q8
-         mTzXRY0Q+IqBKXCt1+87CIkdRVL8esya+JEMMtGG1w3OCnuo5GralL/qJqJAYrvqnGAz
-         INLxPEbZr33wdieB8zBN10NVC5GGyIXlinB5a715w8n86zcSSrdUG6qmDJSkV7O8NB1m
-         OrIg9UKcpZkulfFfHGSfUgk0OhlJkGdsl4xe1beaXvA1HuTRuyuTRfUA5WBiEW2Ni5/U
-         G0iA==
+        bh=nj2P2FBgOkHgEYC2eXuTIU7/YhJKLWMATJ8DvnuKIV8=;
+        b=XGAipQUDRaQqAc+6+lPCZIReNwPGQJzqY5Fi7SH+hcpNdL15yBQv10YWEgPpwCEeh8
+         xhlyOTINzfglAbLf2C1dzca+iK7WWUrf53cDsJdDSQWUadoGcGxCrzi7QEvu5xTc0JOQ
+         Cj9/O57u4enuePQIABfDFA8wCCEV/3ODkKbjS71nQ/+ATzqpP8hZXC2wLt/qSET8NNHe
+         ZlF12DXX+bvwFYHIZi8X6rwrrmP9H2tz0fRvEF4B3+PH99LQy+thb7EzlR8ChRmBfIvZ
+         3MLIhZXS3LcPkuK8WLo6vCWpxKERmM0LHesqClOYJKTWAFDUCFp6JP869yWtVbbv5Val
+         iBJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700491972; x=1701096772;
+        d=1e100.net; s=20230601; t=1700492455; x=1701097255;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3qHPMK/nPQeJpHqpbeb3m3W/Zwv9dUdlHR5D9mZqK24=;
-        b=Cz3aOEmiRSTKn84Q7weqwwTEPsgufMldN9lUuR0gXxAB3SIrfGhpK5sjsKHzRnvdpG
-         5OIxCRaQM/PfMR11zli1u2CnXgdVS1Fj5+1MgPUeFmUE1WW1vh8Ww6n0fIUnIFctcIIJ
-         L2YYP6Vwyv21LlUg2ppRk2n1cdoomzsBOdn55wV+6QelVjVlC4DSzCsvsKvbpYj6/37e
-         oE+S7M2ZK1uxwG4ST3K5vPdAuaoP/xpzYHjJlyqZn7qhhEr/LsDKB+8nsrDV6LLXeUTh
-         /ncz7hDegehYUA1HvtFp32APl/FRFZLXAGccIYa2hMQfq0RQIuRJGj/JNIhhEINi9VGT
-         r16w==
-X-Gm-Message-State: AOJu0Yzn6MVU0b/GW2B/uQqsdSVISO3mRJGwPT33soL4wqPr5fNxHPXO
-	EAk1WkQm8raH2J18vJyjUOA=
-X-Google-Smtp-Source: AGHT+IHPesf2IPH8qMkl34QrA2uEejr5dZvuu/lgS1+54IpfxxJID15h0vUj+alIvs2WwwKIdNI6Dg==
-X-Received: by 2002:a25:3452:0:b0:d9c:7d7d:1ac9 with SMTP id b79-20020a253452000000b00d9c7d7d1ac9mr6775451yba.14.1700491972419;
-        Mon, 20 Nov 2023 06:52:52 -0800 (PST)
+        bh=nj2P2FBgOkHgEYC2eXuTIU7/YhJKLWMATJ8DvnuKIV8=;
+        b=Fk/U/7nhv9MYqk7u4pQKbofVrrZ3DWSWpXtrFBYnmJCj4TiuaD7RpeLJBcJ0GggeCA
+         r/aianSoA97idPGh8gAoR4CWFzedXP6/IICxEymL7ux5Zy5ROhFA4x/aB/lqrcq9bCYI
+         WNqfkt1I2Intlvi8m++awGEIhafoyEOQ2o6FhdHbnJqK2FSd5ahzDJ4jT6r90HE/MzRh
+         hx567xXB7Bdf0QqCbdCzR+n5bEIOC5EW9YcjRGb6lxeVhwS0RRFXMpX7ckuTt6ozLfjc
+         7puLwks6MOnJTZ0j+HnJCSn3QKaFi5Pzq9cr4pREk+S4aHyqc2sRTaqG1h1u0Xx3B7Rv
+         8L/Q==
+X-Gm-Message-State: AOJu0YwjdVCM5PAC/OZaC/jfVY9zi+7ecuKp9lXFtAy3lQDPl/LoStdq
+	pdZjgedzum/jry5VWW99C2vlXUjzS1Q=
+X-Google-Smtp-Source: AGHT+IEPzXqvjkbeToWr6v43nfgW+61m3YSx+DoK0H5ueRQ1rr0TGJXLeWcwQsoOcBWCQ6eUlXamEw==
+X-Received: by 2002:a0d:fb86:0:b0:5a7:be61:d52b with SMTP id l128-20020a0dfb86000000b005a7be61d52bmr8360083ywf.24.1700492455479;
+        Mon, 20 Nov 2023 07:00:55 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 2-20020a251802000000b00d9c7bf8f32fsm48622yby.42.2023.11.20.06.52.50
+        by smtp.gmail.com with ESMTPSA id l186-20020a0de2c3000000b005a7be2919a1sm2380792ywe.14.2023.11.20.07.00.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Nov 2023 06:52:52 -0800 (PST)
+        Mon, 20 Nov 2023 07:00:54 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <7ceb1104-ace0-47a7-93ed-64a03c149f63@roeck-us.net>
-Date: Mon, 20 Nov 2023 06:52:49 -0800
+Message-ID: <e3cf1182-47c6-4b2d-b5ec-1eee07974b51@roeck-us.net>
+Date: Mon, 20 Nov 2023 07:00:52 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -51,16 +51,18 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 2/2] hwmon: ltc4282: add support for the LTC4282 chip
 Content-Language: en-US
-To: Dan Carpenter <dan.carpenter@linaro.org>, oe-kbuild@lists.linux.dev,
- Nuno Sa <nuno.sa@analog.com>, linux-hwmon@vger.kernel.org,
- linux-doc@vger.kernel.org, devicetree@vger.kernel.org
-Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev,
- Bartosz Golaszewski <brgl@bgdev.pl>, Jonathan Corbet <corbet@lwn.net>,
- Krzysztof Kozlowski <krzk@kernel.org>,
+To: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>,
+ Andy Shevchenko <andy@kernel.org>, Nuno Sa <nuno.sa@analog.com>
+Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+ devicetree@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
  Linus Walleij <linus.walleij@linaro.org>, Rob Herring <robh+dt@kernel.org>,
- Andy Shevchenko <andy@kernel.org>, Jean Delvare <jdelvare@suse.com>,
- Conor Dooley <conor+dt@kernel.org>
-References: <63effee3-359b-48a5-b5a4-36b0478f6045@suswa.mountain>
+ Jean Delvare <jdelvare@suse.com>, Conor Dooley <conor+dt@kernel.org>
+References: <20231110151905.1659873-1-nuno.sa@analog.com>
+ <20231110151905.1659873-3-nuno.sa@analog.com>
+ <ZU5fYY81L_qSmQWq@smile.fi.intel.com>
+ <581aec9c6313e3885aae8b1e12dfcc9f392716db.camel@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -105,60 +107,55 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <63effee3-359b-48a5-b5a4-36b0478f6045@suswa.mountain>
+In-Reply-To: <581aec9c6313e3885aae8b1e12dfcc9f392716db.camel@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 11/20/23 04:10, Dan Carpenter wrote:
-> Hi Nuno,
+On 11/13/23 02:13, Nuno Sá wrote:
+> On Fri, 2023-11-10 at 18:50 +0200, Andy Shevchenko wrote:
+>> On Fri, Nov 10, 2023 at 04:18:46PM +0100, Nuno Sa wrote:
+>>> The LTC4282 hot swap controller allows a board to be safely inserted and
+>>> removed from a live backplane. Using one or more external N-channel pass
+>>> transistors, board supply voltage and inrush current are ramped up at an
+>>> adjustable rate. An I2C interface and onboard ADC allows for monitoring
+>>> of board current, voltage, power, energy and fault status.
+>>
+>> There are plenty of ltc42xx in the same folder and a lot of other chips.
+>> Have you checked that none of the existing driver is not close enough and
+>> brand new driver is indeed required? If so, add a respective paragraph
+>> somewhere (cover letter? TBH I haven't read it, it's fine if it's already
+>> explained there).
+>>
 > 
-> kernel test robot noticed the following build warnings:
+> I can double check but not the last time I looked into those drivers
+
+They are all different.
+
+>>
+>>> +	/*
+>>> +	 * AVG = E / (Tconv * counter)
+>>> +	 * We get energy in microJoule, hence dividing it by microSeconds
+>>> gives Watts. Therefore,
+>>> +	 * multiplying by MICRO gives us microWatts.
+>>> +	 */
+>>
+>> Here you used long lines, somewhere else, much shorter. Please, choose one
+>> limit and be consistent with it.
+>>
 > 
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Nuno-Sa/dt-bindings-hwmon-Add-LTC4282-bindings/20231110-232017
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-> patch link:    https://lore.kernel.org/r/20231110151905.1659873-3-nuno.sa%40analog.com
-> patch subject: [PATCH 2/2] hwmon: ltc4282: add support for the LTC4282 chip
-> config: i386-randconfig-141-20231112 (https://download.01.org/0day-ci/archive/20231113/202311130219.YBiF8Xu3-lkp@intel.com/config)
-> compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-> reproduce: (https://download.01.org/0day-ci/archive/20231113/202311130219.YBiF8Xu3-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Reported-by: Dan Carpenter <error27@gmail.com>
-> | Closes: https://lore.kernel.org/r/202311130219.YBiF8Xu3-lkp@intel.com/
-> 
-> smatch warnings:
-> drivers/hwmon/ltc4282.c:859 ltc4282_is_visible() warn: signedness bug returning '(-524)'
-> drivers/hwmon/ltc4282.c:1143 ltc4282_gpio_setup() warn: passing zero to 'dev_err_probe'
-> 
-> vim +859 drivers/hwmon/ltc4282.c
-> 
-> 31ea069ddf481b Nuno Sa 2023-11-10  844  static umode_t ltc4282_is_visible(const void *data,
-> 31ea069ddf481b Nuno Sa 2023-11-10  845  				  enum hwmon_sensor_types type,
-> 31ea069ddf481b Nuno Sa 2023-11-10  846  				  u32 attr, int channel)
-> 31ea069ddf481b Nuno Sa 2023-11-10  847  {
-> 31ea069ddf481b Nuno Sa 2023-11-10  848  	switch (type) {
-> 31ea069ddf481b Nuno Sa 2023-11-10  849  	case hwmon_in:
-> 31ea069ddf481b Nuno Sa 2023-11-10  850  		return ltc4282_in_is_visible(data, attr);
-> 31ea069ddf481b Nuno Sa 2023-11-10  851  	case hwmon_curr:
-> 31ea069ddf481b Nuno Sa 2023-11-10  852  		return ltc4282_curr_is_visible(attr);
-> 31ea069ddf481b Nuno Sa 2023-11-10  853  	case hwmon_power:
-> 31ea069ddf481b Nuno Sa 2023-11-10  854  		return ltc4282_power_is_visible(attr);
-> 31ea069ddf481b Nuno Sa 2023-11-10  855  	case hwmon_energy:
-> 31ea069ddf481b Nuno Sa 2023-11-10  856  		/* hwmon_energy_enable */
-> 31ea069ddf481b Nuno Sa 2023-11-10  857  		return 0644;
-> 31ea069ddf481b Nuno Sa 2023-11-10  858  	default:
-> 31ea069ddf481b Nuno Sa 2023-11-10 @859  		return -ENOTSUPP;
-> 
-> This function returns umode_t (which must be unsigned and smaller than
-> int for this warning to trigger).
+> Yeah, maybe not too consistent. I'm still not sure what's the convention in
+> hwmon (I mention it in the cover).
 > 
 
-Yes, this is an is_visible() function which should return 0 if the attribute
-isn't visible.
+Patches should pass "checkpatch --strict". Other than that, I'd expect consistency
+and common sense, but that isn't exactly spelled out anywhere and would be
+difficult to define. Personally, I would suggest something like "use limit of 80
+columns for comments and otherwise try to stick with 80 columns unless it results
+in odd line breaks. In that case, feel free to go up to 100 columns". Do I need to
+spell that out in Documentation/hwmon/submitting-patches.rst ?
+
+Not that anyone seems to read that document :-(. Sorry, frustrated maintainer
+speaking.
 
 Guenter
 
