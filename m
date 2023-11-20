@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c4LLEuw5"
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F3F198E;
-	Mon, 20 Nov 2023 06:49:05 -0800 (PST)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-5cade8466f7so6258737b3.1;
-        Mon, 20 Nov 2023 06:49:05 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WvMqMruZ"
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68ABD271B;
+	Mon, 20 Nov 2023 06:52:53 -0800 (PST)
+Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-da7238b3eb4so4486479276.1;
+        Mon, 20 Nov 2023 06:52:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700491745; x=1701096545; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1700491972; x=1701096772; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=kkqrCTQYUsakYJCviHl+S/yW32iUxn7DN+xEx1mj1ws=;
-        b=c4LLEuw52vKWCqR9shzS7Txq//fASkwdZhtftKBE0YwZHJW/MsF5vzx9WTiK47hzY3
-         Mcyu43LGcJv0QL1CV+8p2/tAgzaJkW2uAdoh9dYSbTDRO5h1Tg5OqeWE9mW4EdqHKkKE
-         Pz4ojLQlqM8BRJ7+i3cWmhikHOMK83vw7Vmjn6R2UHOqe+S8HlIVYu751I9LoOoXofkg
-         ++CP3OpyaISt6N4nAgrU+zWEEC5Olyhs4xUIZ4GcRStNRD9I3Z5qEOMzQS4YI+NOerHP
-         wUht8tq7TivVITDo7SHlTF1ZreZ3MTteBDmiB/hLrhcw43CjfxJfXdhGje+FJ/CeiuQr
-         LCHA==
+        bh=3qHPMK/nPQeJpHqpbeb3m3W/Zwv9dUdlHR5D9mZqK24=;
+        b=WvMqMruZG7gsX0qRoN5WBMmSb0RZkm+x8CBiTo0HZBYRyy+s7k9PWzSqhko7+G5Q2V
+         TpOiHDvtrz0ljWqW7RAd79jLxjrlTrQVDXaFDy4dId/GLfsvkxSrzBUwZg8UmJMLy7Q8
+         mTzXRY0Q+IqBKXCt1+87CIkdRVL8esya+JEMMtGG1w3OCnuo5GralL/qJqJAYrvqnGAz
+         INLxPEbZr33wdieB8zBN10NVC5GGyIXlinB5a715w8n86zcSSrdUG6qmDJSkV7O8NB1m
+         OrIg9UKcpZkulfFfHGSfUgk0OhlJkGdsl4xe1beaXvA1HuTRuyuTRfUA5WBiEW2Ni5/U
+         G0iA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700491745; x=1701096545;
+        d=1e100.net; s=20230601; t=1700491972; x=1701096772;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=kkqrCTQYUsakYJCviHl+S/yW32iUxn7DN+xEx1mj1ws=;
-        b=td0p32Gc5ZUnj43UL5Upm6fokPBmDRNnYzj+OH4w9kBJ9+DSwISdaDKVeu99znLtt3
-         x2xPECekKKW6gIT/rfxFM1XS0J4gkUGTJG3JFghsq4NImpZ0BFIbfUMpYg8K5tu7+eOn
-         86eFxC13XNlUGa9aBwVxMpavaWeH8OspFacX6Cb5oNhYrpAr+Sp4nW2wZg3D1cdY31h3
-         uyPax0n/u+y6zXEp67vkDt7uhlw/4AVoW4oE4nEZPxBanTWJ2pMITPKy2/tGbTXYHvI2
-         j5mrXlFz76ecYguiSbw2JkXZQj/kO5mRwa0+9qzzh9F4GfwCSnGNi5Q/r7Vu7s8oPB16
-         Gx5w==
-X-Gm-Message-State: AOJu0YzNVZHwWI6wSd3CjAiWGPRgXIiX3bFlsHCJz7pZb8/dlY7Hj7Xc
-	BACqjsIBIRQVLzubHGNENgahNmRHCS4=
-X-Google-Smtp-Source: AGHT+IEgj+n9SDl36fXA4ikqYVKVhE6tQ0bZ64oDlXE0hJAh3SHMQ5eQac6jpjGptYSb2XkQcar3Jw==
-X-Received: by 2002:a81:fd14:0:b0:5c8:7269:b8b2 with SMTP id g20-20020a81fd14000000b005c87269b8b2mr5508135ywn.0.1700491744866;
-        Mon, 20 Nov 2023 06:49:04 -0800 (PST)
+        bh=3qHPMK/nPQeJpHqpbeb3m3W/Zwv9dUdlHR5D9mZqK24=;
+        b=Cz3aOEmiRSTKn84Q7weqwwTEPsgufMldN9lUuR0gXxAB3SIrfGhpK5sjsKHzRnvdpG
+         5OIxCRaQM/PfMR11zli1u2CnXgdVS1Fj5+1MgPUeFmUE1WW1vh8Ww6n0fIUnIFctcIIJ
+         L2YYP6Vwyv21LlUg2ppRk2n1cdoomzsBOdn55wV+6QelVjVlC4DSzCsvsKvbpYj6/37e
+         oE+S7M2ZK1uxwG4ST3K5vPdAuaoP/xpzYHjJlyqZn7qhhEr/LsDKB+8nsrDV6LLXeUTh
+         /ncz7hDegehYUA1HvtFp32APl/FRFZLXAGccIYa2hMQfq0RQIuRJGj/JNIhhEINi9VGT
+         r16w==
+X-Gm-Message-State: AOJu0Yzn6MVU0b/GW2B/uQqsdSVISO3mRJGwPT33soL4wqPr5fNxHPXO
+	EAk1WkQm8raH2J18vJyjUOA=
+X-Google-Smtp-Source: AGHT+IHPesf2IPH8qMkl34QrA2uEejr5dZvuu/lgS1+54IpfxxJID15h0vUj+alIvs2WwwKIdNI6Dg==
+X-Received: by 2002:a25:3452:0:b0:d9c:7d7d:1ac9 with SMTP id b79-20020a253452000000b00d9c7d7d1ac9mr6775451yba.14.1700491972419;
+        Mon, 20 Nov 2023 06:52:52 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u201-20020a8184d2000000b005a23ab90366sm2381630ywf.11.2023.11.20.06.49.03
+        by smtp.gmail.com with ESMTPSA id 2-20020a251802000000b00d9c7bf8f32fsm48622yby.42.2023.11.20.06.52.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Nov 2023 06:49:04 -0800 (PST)
+        Mon, 20 Nov 2023 06:52:52 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <a6f7198e-f2f4-4691-a0e2-8a1c09d01b6a@roeck-us.net>
-Date: Mon, 20 Nov 2023 06:49:02 -0800
+Message-ID: <7ceb1104-ace0-47a7-93ed-64a03c149f63@roeck-us.net>
+Date: Mon, 20 Nov 2023 06:52:49 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -49,14 +49,18 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] hwmon: (nct6775) Fix incomplete register array
+Subject: Re: [PATCH 2/2] hwmon: ltc4282: add support for the LTC4282 chip
 Content-Language: en-US
-To: Xing Tong Wu <xingtong_wu@163.com>, Jean Delvare <jdelvare@suse.com>,
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: xingtong.wu@siemens.com, tobias.schaffner@siemens.com,
- gerd.haeussler.ext@siemens.com
-References: <20231120081542.3174-1-xingtong_wu@163.com>
- <20231120081542.3174-2-xingtong_wu@163.com>
+To: Dan Carpenter <dan.carpenter@linaro.org>, oe-kbuild@lists.linux.dev,
+ Nuno Sa <nuno.sa@analog.com>, linux-hwmon@vger.kernel.org,
+ linux-doc@vger.kernel.org, devicetree@vger.kernel.org
+Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Jonathan Corbet <corbet@lwn.net>,
+ Krzysztof Kozlowski <krzk@kernel.org>,
+ Linus Walleij <linus.walleij@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+ Andy Shevchenko <andy@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+ Conor Dooley <conor+dt@kernel.org>
+References: <63effee3-359b-48a5-b5a4-36b0478f6045@suswa.mountain>
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -101,24 +105,60 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20231120081542.3174-2-xingtong_wu@163.com>
+In-Reply-To: <63effee3-359b-48a5-b5a4-36b0478f6045@suswa.mountain>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 11/20/23 00:15, Xing Tong Wu wrote:
-> From: Xing Tong Wu <xingtong.wu@siemens.com>
+On 11/20/23 04:10, Dan Carpenter wrote:
+> Hi Nuno,
 > 
-> The nct6116 specification actually includes 5 PWMs, but only 3
-> PWMs are present in the array. To address this, the missing 2
-> PWMs have been added to the array.
+> kernel test robot noticed the following build warnings:
+> 
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Nuno-Sa/dt-bindings-hwmon-Add-LTC4282-bindings/20231110-232017
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+> patch link:    https://lore.kernel.org/r/20231110151905.1659873-3-nuno.sa%40analog.com
+> patch subject: [PATCH 2/2] hwmon: ltc4282: add support for the LTC4282 chip
+> config: i386-randconfig-141-20231112 (https://download.01.org/0day-ci/archive/20231113/202311130219.YBiF8Xu3-lkp@intel.com/config)
+> compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+> reproduce: (https://download.01.org/0day-ci/archive/20231113/202311130219.YBiF8Xu3-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Reported-by: Dan Carpenter <error27@gmail.com>
+> | Closes: https://lore.kernel.org/r/202311130219.YBiF8Xu3-lkp@intel.com/
+> 
+> smatch warnings:
+> drivers/hwmon/ltc4282.c:859 ltc4282_is_visible() warn: signedness bug returning '(-524)'
+> drivers/hwmon/ltc4282.c:1143 ltc4282_gpio_setup() warn: passing zero to 'dev_err_probe'
+> 
+> vim +859 drivers/hwmon/ltc4282.c
+> 
+> 31ea069ddf481b Nuno Sa 2023-11-10  844  static umode_t ltc4282_is_visible(const void *data,
+> 31ea069ddf481b Nuno Sa 2023-11-10  845  				  enum hwmon_sensor_types type,
+> 31ea069ddf481b Nuno Sa 2023-11-10  846  				  u32 attr, int channel)
+> 31ea069ddf481b Nuno Sa 2023-11-10  847  {
+> 31ea069ddf481b Nuno Sa 2023-11-10  848  	switch (type) {
+> 31ea069ddf481b Nuno Sa 2023-11-10  849  	case hwmon_in:
+> 31ea069ddf481b Nuno Sa 2023-11-10  850  		return ltc4282_in_is_visible(data, attr);
+> 31ea069ddf481b Nuno Sa 2023-11-10  851  	case hwmon_curr:
+> 31ea069ddf481b Nuno Sa 2023-11-10  852  		return ltc4282_curr_is_visible(attr);
+> 31ea069ddf481b Nuno Sa 2023-11-10  853  	case hwmon_power:
+> 31ea069ddf481b Nuno Sa 2023-11-10  854  		return ltc4282_power_is_visible(attr);
+> 31ea069ddf481b Nuno Sa 2023-11-10  855  	case hwmon_energy:
+> 31ea069ddf481b Nuno Sa 2023-11-10  856  		/* hwmon_energy_enable */
+> 31ea069ddf481b Nuno Sa 2023-11-10  857  		return 0644;
+> 31ea069ddf481b Nuno Sa 2023-11-10  858  	default:
+> 31ea069ddf481b Nuno Sa 2023-11-10 @859  		return -ENOTSUPP;
+> 
+> This function returns umode_t (which must be unsigned and smaller than
+> int for this warning to trigger).
 > 
 
-Please rephrase.
+Yes, this is an is_visible() function which should return 0 if the attribute
+isn't visible.
 
-The subject and the description is a bit misleading. The need to extend
-the arrays is necessary, but the key change is adding support for the two
-additional fan controls.
-
-Thanks,
 Guenter
 
