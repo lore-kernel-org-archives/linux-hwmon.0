@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AMaOUkTv"
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01819110;
-	Mon, 20 Nov 2023 06:41:12 -0800 (PST)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-5c6705515d8so36098747b3.2;
-        Mon, 20 Nov 2023 06:41:11 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DPZvKcaw"
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C23110;
+	Mon, 20 Nov 2023 06:45:51 -0800 (PST)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-5c9cdc78c37so10731737b3.3;
+        Mon, 20 Nov 2023 06:45:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700491271; x=1701096071; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=KGHGuTDWNEl2LQwX/5JcgH6sbugZnAEf2kHBj6xk/f8=;
-        b=AMaOUkTv8MW1kPC9ID2KvbAq6fNHhChS5YqpnAfAl3Eu1qeTRYjbpOfARplMQSjLM7
-         lQWwwBBXA0Dl0g6d9m4RTj0V53amHNMiElJBB25bcwLjO1sXshWzqjMLN7Wvi9IUa3dg
-         PKxH8J/hfdJVwl2Qxdpx36nRSU/bqqGKdbY+KooOzPLEOAKw2BngNdKRHwgJF1PreHHB
-         6jorHFHQxl7ovq8fK5wYwZRdzuogonsGmxkKPKwb/uwfQs78I0JVA9ApPdc250pfkdl6
-         ZUGrLitLz/VHbHK73ktEPuzaov3lFnG7xRskr21wekUBsWhlhQi7FmX37jnkJ19PVMu9
-         +lrA==
+        d=gmail.com; s=20230601; t=1700491550; x=1701096350; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=hUfxoxNPRZuOPOH01mDDtEy1MldhPQH0SK1HxKKSFbs=;
+        b=DPZvKcawN3c4G9tw/LpqgfR0kSHzne9JTk/o4hFhObbXFyMtKmZ+tx11sRUPisoYT8
+         uj6GbKuQpQWiBu5Mjy/KLpQEfccgqkMUL6M/Dqpu+A1DVF25ksoqv888C50MHO40Ne+L
+         41Gk0KXRxMnxUQY2F5prYo2nlrFxch6woTPxk8PCzlJMaSZq1wve4TYLY2cR01ri04n2
+         izdlZXDr5Am+gvuWuvY+ErkN/0b+dMO86e+zwjlkwwEkLKppra9dsoZsLzX4coOunCpc
+         PbrvEn052ZM+MxdAAjPyl5ah3UMvGi+Yzkw5EDB38q8vGGYg9w/E4DIDM+p9SuTdv+Mq
+         ppbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700491271; x=1701096071;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KGHGuTDWNEl2LQwX/5JcgH6sbugZnAEf2kHBj6xk/f8=;
-        b=gcJ5ANBrWENHz/JYSyhM3vkFnOgmcP48WMncyI/Du4PMrVAroE2Hg+QqDJyu45M0+j
-         FsqZUz7V7kbfn2efx/CkYv0/3wbcmB13/evkc4BKwxGaqW/GIlSKwz27R4MwBOLkinnI
-         GpfuflPg+wVNcnE+BCYJRmTaQFq2KrvbIp2xjMlm7nfNYc2LzyHm+qG5yo3Zz6DiGEsN
-         qta1yOqe8sbWZsGZAFMWVFuxYMSsF3c+DAMLrcqHFlUsh1sr1izadcvQthfXZ9vx5cE7
-         IkVu+iqSkthBeB79RoIeGJeQH4zK20hAPWtut60uHKTGvd7sv3h9VEhHOcq+VlGcddZ+
-         nEFA==
-X-Gm-Message-State: AOJu0YyEavh7WUoKC2YTWBvcO+uAfzGhXn1oC3AIOOW84I4a2ZPuBvE9
-	cVP7G00ioojgZMhJ5tUwCro=
-X-Google-Smtp-Source: AGHT+IGqlEr88xE1RuxnwC2vNT+NiS1RlS4va3EZZJNMEU+Z0lDA9vH4d9boZOCSR44S6klNVPQSqQ==
-X-Received: by 2002:a81:4f13:0:b0:5a5:65e:b847 with SMTP id d19-20020a814f13000000b005a5065eb847mr7925386ywb.34.1700491271057;
-        Mon, 20 Nov 2023 06:41:11 -0800 (PST)
+        d=1e100.net; s=20230601; t=1700491550; x=1701096350;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hUfxoxNPRZuOPOH01mDDtEy1MldhPQH0SK1HxKKSFbs=;
+        b=dogG3guhoG/j5xfXdQc9y6Dv3G42CpNfZgCxM/CyguqOkCGbGCYAX5ZDpN1smk8FZ8
+         r7TJlWc3pB3Fx7PDCTidm69+kSHXwgOCTpY+jrggJ49gYZLK1+0v1zlly172oYHmtmt5
+         tX+9Y5ppophYusFOjeL+Ir+QTooyEw/pNmoTgL8cUgwKF2qlJZqiEI/RvbDkwL4Yt/VS
+         qXr679JETnbYWBQWxn5ENwqkV7JSuZhLpunJQ2jkfDWkr7nirPRjRWc5zYmNkWzgT8CJ
+         ie+GCn+P5a760SBGICK1ocobLHDXz+n3vihYNFmWDMYOSccKyWxcXHD6YzdkKnxu2uWg
+         jDVA==
+X-Gm-Message-State: AOJu0YxFbVRkX3eC+LXKJ+L0A5ErQkk1nmsPVfNf4uLs+pfbf5FI7eJG
+	Yd2KuNtnAsU+KzsqZCpuASo=
+X-Google-Smtp-Source: AGHT+IFxTZgmllIGTA/XNK+yOk50HuCc66UBLD9OdHr/NJ1P1gF/wXigob7JnpU/O2WpmHaOfHDttg==
+X-Received: by 2002:a81:af55:0:b0:5cb:4841:dc40 with SMTP id x21-20020a81af55000000b005cb4841dc40mr284470ywj.13.1700491550467;
+        Mon, 20 Nov 2023 06:45:50 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x77-20020a81a050000000b005a7ba08b2acsm2397894ywg.0.2023.11.20.06.41.09
+        by smtp.gmail.com with ESMTPSA id v13-20020a81480d000000b005af81610bdbsm2391078ywa.122.2023.11.20.06.45.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Nov 2023 06:41:10 -0800 (PST)
+        Mon, 20 Nov 2023 06:45:50 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4ed34030-d5c1-4caa-919a-69c7c5aa77ef@roeck-us.net>
-Date: Mon, 20 Nov 2023 06:41:08 -0800
+Message-ID: <5edd658e-afcc-4a7b-b730-374f7d9c3be3@roeck-us.net>
+Date: Mon, 20 Nov 2023 06:45:48 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -49,16 +49,14 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] hwmon: (nct6775) Fix incomplete register array
-To: "xingtong.wu" <xingtong_wu@163.com>, Jean Delvare <jdelvare@suse.com>,
+Subject: Re: [PATCH v2 1/2] hwmon: (nct6775) Fix incomplete register array
+Content-Language: en-US
+To: Xing Tong Wu <xingtong_wu@163.com>, Jean Delvare <jdelvare@suse.com>,
  linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc: xingtong.wu@siemens.com, tobias.schaffner@siemens.com,
  gerd.haeussler.ext@siemens.com
-References: <20231116022330.2696-1-xingtong_wu@163.com>
- <20231116022330.2696-2-xingtong_wu@163.com>
- <a18df29d-2e2e-431b-a486-4fd7898e0771@roeck-us.net>
- <b6d0dd45-f159-4518-84fa-8a02cc4e9442@163.com>
-Content-Language: en-US
+References: <20231120081542.3174-1-xingtong_wu@163.com>
+ <20231120081542.3174-2-xingtong_wu@163.com>
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -103,69 +101,40 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <b6d0dd45-f159-4518-84fa-8a02cc4e9442@163.com>
+In-Reply-To: <20231120081542.3174-2-xingtong_wu@163.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 11/19/23 19:30, xingtong.wu wrote:
-> On 2023/11/17 09:35, Guenter Roeck wrote:
->> On 11/15/23 18:23, Xing Tong Wu wrote:
->>> From: Xing Tong Wu <xingtong.wu@siemens.com>
->>>
->>> The nct6116 specification actually includes 5 PWMs, but only 3
->>> PWMs are present in the array. To address this, the missing 2
->>> PWMs have been added to the array.
->>>
->>> Signed-off-by: Xing Tong Wu <xingtong.wu@siemens.com>
->>> ---
->>>    drivers/hwmon/nct6775-core.c | 4 ++--
->>>    1 file changed, 2 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/hwmon/nct6775-core.c b/drivers/hwmon/nct6775-core.c
->>> index d928eb8ae5a3..2111f0cd9787 100644
->>> --- a/drivers/hwmon/nct6775-core.c
->>> +++ b/drivers/hwmon/nct6775-core.c
->>> @@ -769,7 +769,7 @@ static const u16 NCT6106_FAN_PULSE_SHIFT[] = { 0, 2, 4 };
->>>      static const u8 NCT6106_REG_PWM_MODE[] = { 0xf3, 0xf3, 0xf3 };
->>>    static const u8 NCT6106_PWM_MODE_MASK[] = { 0x01, 0x02, 0x04 };
->>> -static const u16 NCT6106_REG_PWM_READ[] = { 0x4a, 0x4b, 0x4c };
->>> +static const u16 NCT6106_REG_PWM_READ[] = { 0x4a, 0x4b, 0x4c, 0xd8, 0xd9 };
->>
->> I have no idea where you got the above register addresses from. Looking at
->> the datasheet, NCT6116 doesn't use those registers at all, and neither does
->> NCT6106. The PWM registers for NCT6116 are
->>
+On 11/20/23 00:15, Xing Tong Wu wrote:
+> From: Xing Tong Wu <xingtong.wu@siemens.com>
 > 
-> I obtain these registers from the Nuvoton official specification
-> "NCT6116D_Datasheet_V1_0.pdf". There is a table that describes the access for the
-> PWM registers and corresponding fans:
+> The nct6116 specification actually includes 5 PWMs, but only 3
+> PWMs are present in the array. To address this, the missing 2
+> PWMs have been added to the array.
 > 
-> Fans: SYSFANOUT, CPUFANOUT, AUXFANOUT0, AUXFANOUT1, AUXFANOUT2
-> PWM output duty (write): Bank1 Index19 bit[7:0], Bank1 Index29 bit[7:0], Bank1 Index39 bit[7:0], Bank1 Index99 bit[7:0], Bank1 IndexA9 bit[7:0]
-> Current output value (read): Bank0 Index4A, Bank0 Index4B, Bank0 Index4C, Bank0 IndexD8, Bank0 IndexD9
+> Signed-off-by: Xing Tong Wu <xingtong.wu@siemens.com>
+> ---
+>   drivers/hwmon/nct6775-core.c | 11 +++++++----
+>   1 file changed, 7 insertions(+), 4 deletions(-)
 > 
-> I have checked the NCT6106-NCT6126 series specification(These documents are not
-> publicly available, so I cannot share them with you), there are only 3 fans in
-> NCT6106: SYSFANOUT, CPUFANOUT, AUXFANOU0. However, for NCT6116D-NCT6126D, there
-> are 2 additional fans: AUXFANOUT1, AUXFANOUT2. The registers for these fans are
-> the same. I'll add a new array for NCT6116D's PWM read in my new patch.
-> 
+> diff --git a/drivers/hwmon/nct6775-core.c b/drivers/hwmon/nct6775-core.c
+> index d928eb8ae5a3..c24b2c312911 100644
+> --- a/drivers/hwmon/nct6775-core.c
+> +++ b/drivers/hwmon/nct6775-core.c
+> @@ -844,6 +844,9 @@ static const u16 NCT6116_REG_FAN_PULSES[] = { 0xf6, 0xf6, 0xf6, 0xf6, 0xf5 };
+>   static const u16 NCT6116_FAN_PULSE_SHIFT[] = { 0, 2, 4, 6, 6 };
+>   
+>   static const u16 NCT6116_REG_PWM[] = { 0x119, 0x129, 0x139, 0x199, 0x1a9 };
+> +static const u8 NCT6116_REG_PWM_MODE[] = { 0xf3, 0xf3, 0xf3, 0xf3, 0xf3 };
+> +static const u8 NCT6116_PWM_MODE_MASK[] = { 0x01, 0x02, 0x04, 0x04, 0x04 };
 
-I wasn't aware of NCT6126D, but I do have datasheets for NCT6102/4/6 and for NCT6112/4/6.
+No, this isn't correct. Chapter 8.4.4 in the datasheet says that auxfanout1 and
+auxfanout2 are always in pwm mode, so those register addresses and bit positions
+need to be 0 in the array. Also, please just extend the NCT6106 arrays.
 
-There is no need to add a separate array. This is good as-is since the added registers
-are not used for NCT6102/4/6.
+> +static const u16 NCT6116_REG_PWM_READ[] = { 0x4a, 0x4b, 0x4c, 0xd8, 0xd9 };
 
->> static const u16 NCT6116_REG_PWM[] = { 0x119, 0x129, 0x139, 0x199, 0x1a9 };
-> 
-> Therefore, this array is only for writing, we need to add an array of registers for reading.
-> 
-
-Ah, good point. I forgot that the read and write registers are different.
-
-Still, you'll need to extend NCT6106_REG_PWM_MODE[] and NCT6106_PWM_MODE_MASK[] as well.
-As far as I can see, aux1 and aux2 are always in pwm mode, so the register arrays
-need to be extended with ", 0, 0".
+Please just extend the nct6106 array.
 
 Thanks,
 Guenter
