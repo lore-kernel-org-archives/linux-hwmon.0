@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DPZvKcaw"
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C23110;
-	Mon, 20 Nov 2023 06:45:51 -0800 (PST)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-5c9cdc78c37so10731737b3.3;
-        Mon, 20 Nov 2023 06:45:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c4LLEuw5"
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F3F198E;
+	Mon, 20 Nov 2023 06:49:05 -0800 (PST)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-5cade8466f7so6258737b3.1;
+        Mon, 20 Nov 2023 06:49:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700491550; x=1701096350; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1700491745; x=1701096545; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=hUfxoxNPRZuOPOH01mDDtEy1MldhPQH0SK1HxKKSFbs=;
-        b=DPZvKcawN3c4G9tw/LpqgfR0kSHzne9JTk/o4hFhObbXFyMtKmZ+tx11sRUPisoYT8
-         uj6GbKuQpQWiBu5Mjy/KLpQEfccgqkMUL6M/Dqpu+A1DVF25ksoqv888C50MHO40Ne+L
-         41Gk0KXRxMnxUQY2F5prYo2nlrFxch6woTPxk8PCzlJMaSZq1wve4TYLY2cR01ri04n2
-         izdlZXDr5Am+gvuWuvY+ErkN/0b+dMO86e+zwjlkwwEkLKppra9dsoZsLzX4coOunCpc
-         PbrvEn052ZM+MxdAAjPyl5ah3UMvGi+Yzkw5EDB38q8vGGYg9w/E4DIDM+p9SuTdv+Mq
-         ppbg==
+        bh=kkqrCTQYUsakYJCviHl+S/yW32iUxn7DN+xEx1mj1ws=;
+        b=c4LLEuw52vKWCqR9shzS7Txq//fASkwdZhtftKBE0YwZHJW/MsF5vzx9WTiK47hzY3
+         Mcyu43LGcJv0QL1CV+8p2/tAgzaJkW2uAdoh9dYSbTDRO5h1Tg5OqeWE9mW4EdqHKkKE
+         Pz4ojLQlqM8BRJ7+i3cWmhikHOMK83vw7Vmjn6R2UHOqe+S8HlIVYu751I9LoOoXofkg
+         ++CP3OpyaISt6N4nAgrU+zWEEC5Olyhs4xUIZ4GcRStNRD9I3Z5qEOMzQS4YI+NOerHP
+         wUht8tq7TivVITDo7SHlTF1ZreZ3MTteBDmiB/hLrhcw43CjfxJfXdhGje+FJ/CeiuQr
+         LCHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700491550; x=1701096350;
+        d=1e100.net; s=20230601; t=1700491745; x=1701096545;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hUfxoxNPRZuOPOH01mDDtEy1MldhPQH0SK1HxKKSFbs=;
-        b=dogG3guhoG/j5xfXdQc9y6Dv3G42CpNfZgCxM/CyguqOkCGbGCYAX5ZDpN1smk8FZ8
-         r7TJlWc3pB3Fx7PDCTidm69+kSHXwgOCTpY+jrggJ49gYZLK1+0v1zlly172oYHmtmt5
-         tX+9Y5ppophYusFOjeL+Ir+QTooyEw/pNmoTgL8cUgwKF2qlJZqiEI/RvbDkwL4Yt/VS
-         qXr679JETnbYWBQWxn5ENwqkV7JSuZhLpunJQ2jkfDWkr7nirPRjRWc5zYmNkWzgT8CJ
-         ie+GCn+P5a760SBGICK1ocobLHDXz+n3vihYNFmWDMYOSccKyWxcXHD6YzdkKnxu2uWg
-         jDVA==
-X-Gm-Message-State: AOJu0YxFbVRkX3eC+LXKJ+L0A5ErQkk1nmsPVfNf4uLs+pfbf5FI7eJG
-	Yd2KuNtnAsU+KzsqZCpuASo=
-X-Google-Smtp-Source: AGHT+IFxTZgmllIGTA/XNK+yOk50HuCc66UBLD9OdHr/NJ1P1gF/wXigob7JnpU/O2WpmHaOfHDttg==
-X-Received: by 2002:a81:af55:0:b0:5cb:4841:dc40 with SMTP id x21-20020a81af55000000b005cb4841dc40mr284470ywj.13.1700491550467;
-        Mon, 20 Nov 2023 06:45:50 -0800 (PST)
+        bh=kkqrCTQYUsakYJCviHl+S/yW32iUxn7DN+xEx1mj1ws=;
+        b=td0p32Gc5ZUnj43UL5Upm6fokPBmDRNnYzj+OH4w9kBJ9+DSwISdaDKVeu99znLtt3
+         x2xPECekKKW6gIT/rfxFM1XS0J4gkUGTJG3JFghsq4NImpZ0BFIbfUMpYg8K5tu7+eOn
+         86eFxC13XNlUGa9aBwVxMpavaWeH8OspFacX6Cb5oNhYrpAr+Sp4nW2wZg3D1cdY31h3
+         uyPax0n/u+y6zXEp67vkDt7uhlw/4AVoW4oE4nEZPxBanTWJ2pMITPKy2/tGbTXYHvI2
+         j5mrXlFz76ecYguiSbw2JkXZQj/kO5mRwa0+9qzzh9F4GfwCSnGNi5Q/r7Vu7s8oPB16
+         Gx5w==
+X-Gm-Message-State: AOJu0YzNVZHwWI6wSd3CjAiWGPRgXIiX3bFlsHCJz7pZb8/dlY7Hj7Xc
+	BACqjsIBIRQVLzubHGNENgahNmRHCS4=
+X-Google-Smtp-Source: AGHT+IEgj+n9SDl36fXA4ikqYVKVhE6tQ0bZ64oDlXE0hJAh3SHMQ5eQac6jpjGptYSb2XkQcar3Jw==
+X-Received: by 2002:a81:fd14:0:b0:5c8:7269:b8b2 with SMTP id g20-20020a81fd14000000b005c87269b8b2mr5508135ywn.0.1700491744866;
+        Mon, 20 Nov 2023 06:49:04 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v13-20020a81480d000000b005af81610bdbsm2391078ywa.122.2023.11.20.06.45.49
+        by smtp.gmail.com with ESMTPSA id u201-20020a8184d2000000b005a23ab90366sm2381630ywf.11.2023.11.20.06.49.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Nov 2023 06:45:50 -0800 (PST)
+        Mon, 20 Nov 2023 06:49:04 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <5edd658e-afcc-4a7b-b730-374f7d9c3be3@roeck-us.net>
-Date: Mon, 20 Nov 2023 06:45:48 -0800
+Message-ID: <a6f7198e-f2f4-4691-a0e2-8a1c09d01b6a@roeck-us.net>
+Date: Mon, 20 Nov 2023 06:49:02 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -112,29 +112,12 @@ On 11/20/23 00:15, Xing Tong Wu wrote:
 > PWMs are present in the array. To address this, the missing 2
 > PWMs have been added to the array.
 > 
-> Signed-off-by: Xing Tong Wu <xingtong.wu@siemens.com>
-> ---
->   drivers/hwmon/nct6775-core.c | 11 +++++++----
->   1 file changed, 7 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/hwmon/nct6775-core.c b/drivers/hwmon/nct6775-core.c
-> index d928eb8ae5a3..c24b2c312911 100644
-> --- a/drivers/hwmon/nct6775-core.c
-> +++ b/drivers/hwmon/nct6775-core.c
-> @@ -844,6 +844,9 @@ static const u16 NCT6116_REG_FAN_PULSES[] = { 0xf6, 0xf6, 0xf6, 0xf6, 0xf5 };
->   static const u16 NCT6116_FAN_PULSE_SHIFT[] = { 0, 2, 4, 6, 6 };
->   
->   static const u16 NCT6116_REG_PWM[] = { 0x119, 0x129, 0x139, 0x199, 0x1a9 };
-> +static const u8 NCT6116_REG_PWM_MODE[] = { 0xf3, 0xf3, 0xf3, 0xf3, 0xf3 };
-> +static const u8 NCT6116_PWM_MODE_MASK[] = { 0x01, 0x02, 0x04, 0x04, 0x04 };
 
-No, this isn't correct. Chapter 8.4.4 in the datasheet says that auxfanout1 and
-auxfanout2 are always in pwm mode, so those register addresses and bit positions
-need to be 0 in the array. Also, please just extend the NCT6106 arrays.
+Please rephrase.
 
-> +static const u16 NCT6116_REG_PWM_READ[] = { 0x4a, 0x4b, 0x4c, 0xd8, 0xd9 };
-
-Please just extend the nct6106 array.
+The subject and the description is a bit misleading. The need to extend
+the arrays is necessary, but the key change is adding support for the two
+additional fan controls.
 
 Thanks,
 Guenter
