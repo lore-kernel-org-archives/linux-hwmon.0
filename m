@@ -1,119 +1,161 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NCuTRVCG"
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517A110C
-	for <linux-hwmon@vger.kernel.org>; Mon, 20 Nov 2023 04:10:14 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-32fdc5be26dso2796712f8f.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 20 Nov 2023 04:10:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700482213; x=1701087013; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=QS36oLotij0tVUHAFPCkN5+chgBCtn4SQxZS9m139l0=;
-        b=NCuTRVCGoerPqn/1EcxD1D0yS7i7kNMiElPUCpHgf3HTNX2+pUQJNXOvHKN+HRS4zl
-         +TQNuF2qXrpyFlz0CzxsqPLN+xDHToZD5l+/2lXN16E61vN+UD6m9ca9fKjbxhL7CRXO
-         /cUiuRcfYsTuhmShWIXIaCqxY0A4IKVoAq9eXOjUh8eSb4VAVHW0E5BNxGJYH6mzanAp
-         Tk14+2XVzBIaA0q14IyngVyoSQO4NqzvxlwIQ649Sp6osydhKVQWaxnrUsZ82kkRptMp
-         UChKkrB804jKfrNZf73PnBCAVdoiEw4fESvi1K0H6yBzMK4UQoRKMqayS3Z8gFPpJtLc
-         uiDg==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MZqqfiBg"
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8778BC5
+	for <linux-hwmon@vger.kernel.org>; Mon, 20 Nov 2023 05:03:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1700485423;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dsTV9hzS/0B5EbsiEzoDO0gYdNONcp7cbm9SpTTMYiI=;
+	b=MZqqfiBgIq2BGTOh3R1xqDnZtju5FtKBH21Qvxs5FaLJ5uI0rf5lFGdD4Oy4SrXXXdEY9Q
+	o/57x7doTk2XUHhvp1SJP7vd231nTBUxNovNT0ErnAHGAFOwQZpZjutKE5q1Dp6npknySg
+	70sw6Q/Ic/H6FKSDmh5026LE34cBn8U=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-300-lb0Hxy8oPjq_H5HsVfBqrQ-1; Mon, 20 Nov 2023 08:03:42 -0500
+X-MC-Unique: lb0Hxy8oPjq_H5HsVfBqrQ-1
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-9fd0a58549bso155664566b.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 20 Nov 2023 05:03:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700482213; x=1701087013;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QS36oLotij0tVUHAFPCkN5+chgBCtn4SQxZS9m139l0=;
-        b=rta2dm4ZqIVzoTEF0rPKuqAikr8VoQf40BA8CjGOR9HlPkfJXIerz0CXLbeUgDrIha
-         Av/XXlU6QBpYyKoez7uk6JHFwtJxyW0sMWiiaNJ6DNE2EngdEVpeTQtoEdKLkJ7g+YNu
-         9hf3T0Ypml8bdf3W8Q2k4+me1Ol1LwGOLqTcyZAFUCvnd1D5BinYVUY0uVbb+hpKGMG3
-         kFo73QZ37QkOMPXl3Vsg+OirV1hhT2xBBJyiZKoqR1nAoh6GVX4Kp4SBz5KXUWeYdXA0
-         cvb/1mWfsXsnrjblZXdkAIURiDzsaMV1XuKUqLsuuW8DxiUjAOLeJWA92uA7zpwm6GjB
-         11vw==
-X-Gm-Message-State: AOJu0YxNaEiprHiIr8oNhbHXmkNFxo/8zcPpkpkVtO8d7+svIYaNPats
-	QQiX6Hxs4ezNfK1VGju7US7UFoAhGxdF1f6vXv0=
-X-Google-Smtp-Source: AGHT+IEAc+7DnU+zQRiFX6lokbetp4JWQwWelJ6KkGXdipUCH1OQi/JBnWUP/lNPhPgciIgsW0sYsg==
-X-Received: by 2002:a5d:47ce:0:b0:332:c31b:249e with SMTP id o14-20020a5d47ce000000b00332c31b249emr2904421wrc.55.1700482212756;
-        Mon, 20 Nov 2023 04:10:12 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id o13-20020a5d4a8d000000b00332cbd59f8bsm393192wrq.25.2023.11.20.04.10.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Nov 2023 04:10:12 -0800 (PST)
-From: Dan Carpenter <dan.carpenter@linaro.org>
-X-Google-Original-From: Dan Carpenter <dan.carpenter@oracle.com>
-Date: Mon, 20 Nov 2023 07:10:09 -0500
-To: oe-kbuild@lists.linux.dev, Nuno Sa <nuno.sa@analog.com>,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	devicetree@vger.kernel.org
-Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Guenter Roeck <linux@roeck-us.net>, Nuno Sa <nuno.sa@analog.com>,
-	Rob Herring <robh+dt@kernel.org>, Andy Shevchenko <andy@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Conor Dooley <conor+dt@kernel.org>
-Subject: Re: [PATCH 2/2] hwmon: ltc4282: add support for the LTC4282 chip
-Message-ID: <63effee3-359b-48a5-b5a4-36b0478f6045@suswa.mountain>
+        d=1e100.net; s=20230601; t=1700485421; x=1701090221;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dsTV9hzS/0B5EbsiEzoDO0gYdNONcp7cbm9SpTTMYiI=;
+        b=eq6ozBz1+C8hRTR19VEbQV8INTbL2vdsieR8CEgdkyv9BQ2NVCaZ5rUol/yp4o8HQT
+         /m5DtXY9yGU4/bv2G9iOLI82PnZfcY0c40t0koBQIcF+sORboY1Jj6nXI36EU8ZhdGI1
+         B20be2BX8WA5M0XA/fyRsa+NYzbOSs2EQ1BJyr+ABW3LcG6fsUM8ddfGtChz/VBy41fe
+         FPdoGtFCBJ+asr0GNwBvXZlddDBAqjPcBKEePRSCY9Cr4UdDIoaywTnU70DntIoLg4X2
+         JdPYtF4M/r2N42wT4wZOU4jPj9V4VRaDgx53rIdskBnPzqEi1ndHQF2CAD8gVK1fqCwW
+         ZJ8w==
+X-Gm-Message-State: AOJu0YwjYpLfEfyahFKU7V1MYllSYXN7OxpewZJQeAifsWInsdtGY0TR
+	o7d3KqPcB8i0xMYAbVnDQoIlPsv9LewD6aNyo4DD2WRoBcNsNW0K4t7yQ9D+Ngq2ZYZSY7RjrRu
+	VnlBo3ERqh9kRj1UpylXZwj0=
+X-Received: by 2002:a17:906:74d1:b0:9c7:59ff:b7fd with SMTP id z17-20020a17090674d100b009c759ffb7fdmr1654721ejl.28.1700485419639;
+        Mon, 20 Nov 2023 05:03:39 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGPjEsbuEEIaUIArhY1AgjwEjuTEwqwN5UTyYfgqM119Vssoq6o/xtThwl7pAfiCxf1Bhgg3Q==
+X-Received: by 2002:a17:906:74d1:b0:9c7:59ff:b7fd with SMTP id z17-20020a17090674d100b009c759ffb7fdmr1654615ejl.28.1700485417356;
+        Mon, 20 Nov 2023 05:03:37 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id q16-20020a170906b29000b009b2cc87b8c3sm3888073ejz.52.2023.11.20.05.03.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Nov 2023 05:03:36 -0800 (PST)
+Message-ID: <bee1f739-b41c-4842-bdbd-80315be2d412@redhat.com>
+Date: Mon, 20 Nov 2023 14:03:36 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231110151905.1659873-3-nuno.sa@analog.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 0/9] hwmon: (dell-smm) Add support for WMI SMM
+ interface
+Content-Language: en-US, nl
+To: Armin Wolf <W_Armin@gmx.de>, pali@kernel.org
+Cc: markgross@kernel.org, ilpo.jarvinen@linux.intel.com, jdelvare@suse.com,
+ linux@roeck-us.net, platform-driver-x86@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20231106064351.42347-1-W_Armin@gmx.de>
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20231106064351.42347-1-W_Armin@gmx.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Nuno,
+Hi,
 
-kernel test robot noticed the following build warnings:
+On 11/6/23 07:43, Armin Wolf wrote:
+> This patch series adds support for an alternative SMM calling
+> backend to the dell-smm-hwmon driver. The reason for this is
+> that on some modern machines, the legacy SMM calling interface
+> does not work anymore and the SMM handler can be called over
+> ACPI WMI instead.
+> 
+> The first four patches prepare the driver by allowing to
+> specify different SMM calling backends, and by moving most of
+> the DMI handling into i8k_init() so that the DMI tables can
+> keep their __initconst attributes (the WMI SMM backend driver
+> does not probe at module init time). The fifth patch does some
+> minor cleanup, while the next three patches implement the new
+> WMI SMM calling backend. The last patch adds the machine of
+> the user who requested and tested the changes to the fan control
+> whitelist.
+> 
+> If the driver does not detect the legacy SMM interface, either
+> because the machine is not whitelisted or because the SMM handler
+> does not react, it registers an WMI driver which will then bound
+> to the WMI SMM interface and do the remaining initialization.
+> 
+> The deprecated procfs interface is not supported when using the
+> WMI SMM calling backend for the following reason: the WMI driver
+> can potentially be instantiated multiple times while the deprectated
+> procfs interface cannot. This should not cause any regressions
+> because on machines supporting only the WMI SMM interface, the
+> driver would, until now, not load anyway.
+> 
+> All patches where tested on a Dell Inspiron 3505 and a Dell
+> OptiPlex 7000.
 
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thank you for the patches.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nuno-Sa/dt-bindings-hwmon-Add-LTC4282-bindings/20231110-232017
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20231110151905.1659873-3-nuno.sa%40analog.com
-patch subject: [PATCH 2/2] hwmon: ltc4282: add support for the LTC4282 chip
-config: i386-randconfig-141-20231112 (https://download.01.org/0day-ci/archive/20231113/202311130219.YBiF8Xu3-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20231113/202311130219.YBiF8Xu3-lkp@intel.com/reproduce)
+Other then the signed int vs unsigned issue which Pali pointed
+out this looks good to me, so with that fixed:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
-| Closes: https://lore.kernel.org/r/202311130219.YBiF8Xu3-lkp@intel.com/
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
-smatch warnings:
-drivers/hwmon/ltc4282.c:859 ltc4282_is_visible() warn: signedness bug returning '(-524)'
-drivers/hwmon/ltc4282.c:1143 ltc4282_gpio_setup() warn: passing zero to 'dev_err_probe'
+for the series.
 
-vim +859 drivers/hwmon/ltc4282.c
+Note that the signed vs unsigned int issue needs to
+be fixed in at least both struct smm_regs as well
+as in the register parsing, specifically in these lines:
 
-31ea069ddf481b Nuno Sa 2023-11-10  844  static umode_t ltc4282_is_visible(const void *data,
-31ea069ddf481b Nuno Sa 2023-11-10  845  				  enum hwmon_sensor_types type,
-31ea069ddf481b Nuno Sa 2023-11-10  846  				  u32 attr, int channel)
-31ea069ddf481b Nuno Sa 2023-11-10  847  {
-31ea069ddf481b Nuno Sa 2023-11-10  848  	switch (type) {
-31ea069ddf481b Nuno Sa 2023-11-10  849  	case hwmon_in:
-31ea069ddf481b Nuno Sa 2023-11-10  850  		return ltc4282_in_is_visible(data, attr);
-31ea069ddf481b Nuno Sa 2023-11-10  851  	case hwmon_curr:
-31ea069ddf481b Nuno Sa 2023-11-10  852  		return ltc4282_curr_is_visible(attr);
-31ea069ddf481b Nuno Sa 2023-11-10  853  	case hwmon_power:
-31ea069ddf481b Nuno Sa 2023-11-10  854  		return ltc4282_power_is_visible(attr);
-31ea069ddf481b Nuno Sa 2023-11-10  855  	case hwmon_energy:
-31ea069ddf481b Nuno Sa 2023-11-10  856  		/* hwmon_energy_enable */
-31ea069ddf481b Nuno Sa 2023-11-10  857  		return 0644;
-31ea069ddf481b Nuno Sa 2023-11-10  858  	default:
-31ea069ddf481b Nuno Sa 2023-11-10 @859  		return -ENOTSUPP;
+static int wmi_parse_register(u8 *buffer, u32 length, int *reg)
 
-This function returns umode_t (which must be unsigned and smaller than
-int for this warning to trigger).
+	int *registers[] = {
 
-31ea069ddf481b Nuno Sa 2023-11-10  860  	}
-31ea069ddf481b Nuno Sa 2023-11-10  861  }
+Also I think it might be better to use u32 instead of
+"unsigned int" here. But I'll leave that choice up to you.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+
+Hans
+
+
+
+
+
+
+
+> Changes since v2:
+> - Rework WMI response parsing
+> - Use #define for method number
+> 
+> Changes since v1:
+> - Cc platform driver maintainers
+> - Fix formating inside documentation
+> 
+> Armin Wolf (9):
+>   hwmon: (dell-smm) Prepare for multiple SMM calling backends
+>   hwmon: (dell-smm) Move blacklist handling to module init
+>   hwmon: (dell-smm) Move whitelist handling to module init
+>   hwmon: (dell-smm) Move DMI config handling to module init
+>   hwmon: (dell-smm) Move config entries out of i8k_dmi_table
+>   hwmon: (dell-smm) Introduce helper function for data init
+>   hwmon: (dell-smm) Add support for WMI SMM interface
+>   hwmon: (dell-smm) Document the WMI SMM interface
+>   hwmon: (dell-smm) Add Optiplex 7000 to fan control whitelist
+> 
+>  Documentation/hwmon/dell-smm-hwmon.rst |  38 +-
+>  drivers/hwmon/Kconfig                  |   1 +
+>  drivers/hwmon/dell-smm-hwmon.c         | 603 +++++++++++++++++--------
+>  drivers/platform/x86/wmi.c             |   1 +
+>  4 files changed, 453 insertions(+), 190 deletions(-)
+> 
+> --
+> 2.39.2
+> 
 
