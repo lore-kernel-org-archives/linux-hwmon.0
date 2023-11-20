@@ -1,77 +1,109 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kFy2ldJl"
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F5AE1;
-	Sat, 18 Nov 2023 09:47:56 -0800 (PST)
-Received: by mail-ot1-x32b.google.com with SMTP id 46e09a7af769-6cd09663b1cso1981988a34.3;
-        Sat, 18 Nov 2023 09:47:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700329676; x=1700934476; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4XsSqYSIJ5c5j/NxuMtae8Hd+oDuANctNoZleK9CaD8=;
-        b=kFy2ldJlyGscgYbrF6eor4Eca9gEzwm9UOskitkw88mAk5YRP+XyKqo/oPtsLdd1Gm
-         uWxBFFZpMVisFZgl9qN2xIeuuxLVcqyiO48ktBNWF3hahLt6ruiiHwdD6V5wLHcnuyU0
-         5ax64UK9/ieC03/25crwoXIO8KB++w477wlhi7zMYRd4ud4QZqWcJ2/MSoWeq2g0LNYl
-         s0lHae+IUiQE6oOTUpHIHhS7LhrgStu42suPNaOhR94Pow7BO4shx+4bDIXrT8LOt/Ag
-         nyDLqD//WRqPG2fq1kpPiFLJHERHNuDhffBncbxqJwRYsDyuWuYkFaend+nEl9f7TYCn
-         XB5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700329676; x=1700934476;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4XsSqYSIJ5c5j/NxuMtae8Hd+oDuANctNoZleK9CaD8=;
-        b=RvLnzdqm3jZ2uS31Gl9ig5owP1rgWjAe/HPg9C2LKLMNe/zrprtse9mXRTTfOZXszl
-         mtjT+xqFC7JmNjtqIDNs9VhSQAiurYda5IQw239HvTnrZvR1YwtmHgo+oItoHUbcivnf
-         wzB4p3Jg6GkVJjRfrJtaeuFDrB/LXjUNsUI5J1B/wfqW0dBmqjvzQc6SSFt/Z0Qzjuwl
-         r2HbLv5DtiDEDmT+TA8nRK+PFezCzDSvUm/BLQc7o++xkQK6wXDnLyvDVnnLTKafHfDg
-         E2jpnTw+7XXn/Q4DsHy+JMdQJkXRoutc27Q5XO95lC25SL9mBfgfzS7INrWRtLjsWrEW
-         UOlg==
-X-Gm-Message-State: AOJu0YwUFg0vxFf26x5tzSTHrr8Q/4cqmQb9wwGybeLUipaHyyv5X9DP
-	+zjA0NHZcRRqRGNopa3kzDxHxxb1Xjc=
-X-Google-Smtp-Source: AGHT+IHm/aC/qK0Jdh3n3Ye8CdDzYwQVaqNOPuKyvCiVlEDsg8z8JxptpoCfaAgLvaGx6+kttZDmww==
-X-Received: by 2002:a9d:6194:0:b0:6d3:28c1:bd46 with SMTP id g20-20020a9d6194000000b006d328c1bd46mr3249670otk.10.1700329676059;
-        Sat, 18 Nov 2023 09:47:56 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p2-20020a9d76c2000000b006d30ebfc7dasm646670otl.7.2023.11.18.09.47.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Nov 2023 09:47:55 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sat, 18 Nov 2023 09:47:54 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] ABI: sysfs-class-hwmon: document emergency/max/min
- temperature alarms
-Message-ID: <7c3dab24-308e-4da5-881f-5727c0afdf09@roeck-us.net>
-References: <20231116-hwmon_abi-v1-0-8bfb7f51145a@gmail.com>
- <20231116-hwmon_abi-v1-4-8bfb7f51145a@gmail.com>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="GSEtVxxM"
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.215])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 924AAF2;
+	Sun, 19 Nov 2023 19:30:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Message-ID:Date:MIME-Version:Subject:From:
+	Content-Type; bh=UPg6IUSeVhQ/3v1u5hZx16L5qHeuDja5kJgDiWeIr4w=;
+	b=GSEtVxxMLVA3gQrTIzRtKqXt7GDZM3eJd7MhvEmrVz5MPgbumcwyaSPGQqg2jO
+	4Kp5/LOGHFZ5Nac8dJzC4ukDAUVjPIaRPlZpucIg6zIcRTctKNJp7OiII0FhauqF
+	FSim0q3HGp1cdlyBuwyRx5BtNpOnCTPxIq5tQs8BQGjsU=
+Received: from [172.20.10.2] (unknown [39.144.137.204])
+	by zwqz-smtp-mta-g5-0 (Coremail) with SMTP id _____wDnl6rM0lplVs3sBw--.29983S3;
+	Mon, 20 Nov 2023 11:30:21 +0800 (CST)
+Message-ID: <b6d0dd45-f159-4518-84fa-8a02cc4e9442@163.com>
+Date: Mon, 20 Nov 2023 11:30:20 +0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231116-hwmon_abi-v1-4-8bfb7f51145a@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] hwmon: (nct6775) Fix incomplete register array
+To: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: xingtong.wu@siemens.com, tobias.schaffner@siemens.com,
+ gerd.haeussler.ext@siemens.com
+References: <20231116022330.2696-1-xingtong_wu@163.com>
+ <20231116022330.2696-2-xingtong_wu@163.com>
+ <a18df29d-2e2e-431b-a486-4fd7898e0771@roeck-us.net>
+Content-Language: en-US
+From: "xingtong.wu" <xingtong_wu@163.com>
+In-Reply-To: <a18df29d-2e2e-431b-a486-4fd7898e0771@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wDnl6rM0lplVs3sBw--.29983S3
+X-Coremail-Antispam: 1Uf129KBjvJXoWxCw1xXr47uw45Wr13GF1xXwb_yoW5WF1rpF
+	WkWrWSkF4rtF1Yvr47G3W8u3W5C3Z3tF4Iyw1kGanakFn0gF92qF4xKr98Aa4YvrW0yFW2
+	gFyUJFy5ua98Ar7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jUID7UUUUU=
+X-Originating-IP: [39.144.137.204]
+X-CM-SenderInfo: p0lqw35rqjs4rx6rljoofrz/1tbiEA0u0F8YMmIKvQABsC
 
-On Fri, Nov 17, 2023 at 07:40:37AM +0100, Javier Carrasco wrote:
-> These attributes are widely used in the hwmon subsystem, but they still
-> must be documented.
+On 2023/11/17 09:35, Guenter Roeck wrote:
+> On 11/15/23 18:23, Xing Tong Wu wrote:
+>> From: Xing Tong Wu <xingtong.wu@siemens.com>
+>>
+>> The nct6116 specification actually includes 5 PWMs, but only 3
+>> PWMs are present in the array. To address this, the missing 2
+>> PWMs have been added to the array.
+>>
+>> Signed-off-by: Xing Tong Wu <xingtong.wu@siemens.com>
+>> ---
+>>   drivers/hwmon/nct6775-core.c | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/hwmon/nct6775-core.c b/drivers/hwmon/nct6775-core.c
+>> index d928eb8ae5a3..2111f0cd9787 100644
+>> --- a/drivers/hwmon/nct6775-core.c
+>> +++ b/drivers/hwmon/nct6775-core.c
+>> @@ -769,7 +769,7 @@ static const u16 NCT6106_FAN_PULSE_SHIFT[] = { 0, 2, 4 };
+>>     static const u8 NCT6106_REG_PWM_MODE[] = { 0xf3, 0xf3, 0xf3 };
+>>   static const u8 NCT6106_PWM_MODE_MASK[] = { 0x01, 0x02, 0x04 };
+>> -static const u16 NCT6106_REG_PWM_READ[] = { 0x4a, 0x4b, 0x4c };
+>> +static const u16 NCT6106_REG_PWM_READ[] = { 0x4a, 0x4b, 0x4c, 0xd8, 0xd9 };
 > 
-> Add tempY_emergency_alarm, tempY_max_alarm and tempY_min_alarm to the
-> ABI documentation according to their current usage and access rights in
-> the hwmon subsystem.
+> I have no idea where you got the above register addresses from. Looking at
+> the datasheet, NCT6116 doesn't use those registers at all, and neither does
+> NCT6106. The PWM registers for NCT6116 are
 > 
-> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
-Applied.
+I obtain these registers from the Nuvoton official specification
+"NCT6116D_Datasheet_V1_0.pdf". There is a table that describes the access for the
+PWM registers and corresponding fans:
 
-Thanks,
-Guenter
+Fans: SYSFANOUT, CPUFANOUT, AUXFANOUT0, AUXFANOUT1, AUXFANOUT2
+PWM output duty (write): Bank1 Index19 bit[7:0], Bank1 Index29 bit[7:0], Bank1 Index39 bit[7:0], Bank1 Index99 bit[7:0], Bank1 IndexA9 bit[7:0]
+Current output value (read): Bank0 Index4A, Bank0 Index4B, Bank0 Index4C, Bank0 IndexD8, Bank0 IndexD9
+
+I have checked the NCT6106-NCT6126 series specification(These documents are not
+publicly available, so I cannot share them with you), there are only 3 fans in
+NCT6106: SYSFANOUT, CPUFANOUT, AUXFANOU0. However, for NCT6116D-NCT6126D, there
+are 2 additional fans: AUXFANOUT1, AUXFANOUT2. The registers for these fans are
+the same. I'll add a new array for NCT6116D's PWM read in my new patch.
+
+> static const u16 NCT6116_REG_PWM[] = { 0x119, 0x129, 0x139, 0x199, 0x1a9 };
+
+Therefore, this array is only for writing, we need to add an array of registers for reading.
+
+> 
+>>   static const u16 NCT6106_REG_FAN_MODE[] = { 0x113, 0x123, 0x133 };
+>>   static const u16 NCT6106_REG_TEMP_SOURCE[] = {
+>>       0xb0, 0xb1, 0xb2, 0xb3, 0xb4, 0xb5 };
+>> @@ -3595,7 +3595,7 @@ int nct6775_probe(struct device *dev, struct nct6775_data *data,
+>>           break;
+>>       case nct6116:
+>>           data->in_num = 9;
+>> -        data->pwm_num = 3;
+>> +        data->pwm_num = 5;
+> 
+> This does look correct, though.
+> 
+> Guenter
+> 
+>>           data->auto_pwm_num = 4;
+>>           data->temp_fixed_num = 3;
+>>           data->num_temp_alarms = 3;
+
