@@ -1,143 +1,149 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TkuFRqMw"
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F278810DC;
-	Mon, 20 Nov 2023 07:03:14 -0800 (PST)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-5b31c5143a0so46934457b3.3;
-        Mon, 20 Nov 2023 07:03:14 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=SILICOMLTD.onmicrosoft.com header.i=@SILICOMLTD.onmicrosoft.com header.b="TxwWM9p7"
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2135.outbound.protection.outlook.com [40.107.22.135])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0131DBE;
+	Mon, 20 Nov 2023 07:25:47 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OGYssHpliU+e3fL3RutwgpOgVIx6n3vEQHOX+rQiCqh5Xcd/IX533GxCV3Mo5W0yq8hFVC1KVOzfKp++XwTosc8sKZYh1YTz3i/kY9fBhtQ/ABxNMobTFBWpK2QRRDhPypWOEnY1JTHY4WZE3ZK1OaSA4miSJAse0nkt5gYwn/Rl3R727sW7PKfh0wBK2bfHLCZkjtlHCDyn4apnukyprz1D7eHNWz3b9UWRIgFdVwBUDB3rpo/C//YNEwCncOwscLpCT71Y8BrNEyG6jKpk55a4DdRIN0d3C7+YXs7rfOz8c7zkAlVGG29JzulgD27W0mOGT83ZKlvt1gu/2bQUXg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=586KetFGvi4d1ofIQ3K5DD7/FW3WXxMjEthdMwTG0e0=;
+ b=nFuw17Sr0T6jWbEWAcNfbQn7jjlSCp0G1VEPqt+hu3EWhh8k1Sj9BGwjWNWI8bgT5EqmNwGSdVzX3i/12/BbZDNigoaVUT2j8+N3Ejrj/0s62G5peKdQvMm3wRBBwWGJ6kdQ7H0c2H/QMPUPslq3GguUYi6ikZT8w8YXx2vyJ4iBbtPaeqbySrDuilr2uyolR05DoZnIb+keBaC7QmfJENiSrGM3cm5pJbjOwOT8YWTHVKrKdGBaaMeUeBVWHI4Br6pNAiM4JUBQWma6wRdIC8+p9MpIY8ulZd/N4bM2ZSJLcBtP8uzbefWWWJ+oEo0XXpuT+o7AiZBglUywglwFDA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=silicom-usa.com; dmarc=pass action=none
+ header.from=silicom-usa.com; dkim=pass header.d=silicom-usa.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700492594; x=1701097394; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=CYIKMW1J9FAo/mzs4NB7u6IHF7+VDMv2OSpqHWwBWcU=;
-        b=TkuFRqMwrJR2xZ4Z3gD4cgqe4m8fqOEHEiqsCWv0F2HbksCayohULx0dQR2Wq2/o2J
-         NNuVycM10me90DCqaNvv2BzmOB5/08YK9vyp7352Hfq4pfgxuqw5FT6JEKwdFmZ8oZjA
-         SXnfs3vCIblOlOl+a+Imc+BPYY93wf2osa+b4Cav9KsOtN4d202o2JdkLnA7BkaZ414R
-         Yi368bQuSkvHXIJnVIlQwoEcYkDaai6l/eqQkL3+Fj6LQcQXLSaIREGITb1J8Y2R9nj3
-         E/LUQ5M0lOsteGaMJgzPb0oEn7KrLJLlM1ejB9gbr5EqmcRIHqbaOUxGiL+WFYurlvqU
-         4fNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700492594; x=1701097394;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CYIKMW1J9FAo/mzs4NB7u6IHF7+VDMv2OSpqHWwBWcU=;
-        b=FE80jY9bn33xsr5ANtbe8mBR4I9viEuvscO/lKCljuuHlZ7EgUJHOv+yyS9onb1wmP
-         ldiXzuufkAlQvFITD8RB5haYcKqA1/OTEewcYHgnPOIvCAndhizATYB+NZgL/Th3GhYy
-         h/OQnlAxjn7W3BDzJ3LklVm96gZO3goKmKRUhpNR+DPEQNBu1j9yiJm40p8abHyfwbIJ
-         AAdky2frJBlvvdJ3iNCEiseQHKvlidzhBChgsZUjGX50gGJ/mXUtGooaYVOt9P3t3cQV
-         GwgH4insIZ3LYFlXf4ao0GQ4J7ALcLAkjJAvNPOC7Oz/raYwT2hSSKf4bsyij/WjX5TA
-         whfw==
-X-Gm-Message-State: AOJu0YxLPbMj3349WiZlPOhjF5qvwJlqTrc+UGx9qwkpFfXPIIN+94en
-	6FQRPOdKu6bYB3IY1OVImkw=
-X-Google-Smtp-Source: AGHT+IGNVNQSAGxOxR6Zop6TS2EZsdhsc6h0S1S8oQ0l3Yd7tzXa1kN8rx3p6xd5LJXS/AJuO8WqBw==
-X-Received: by 2002:a05:690c:f93:b0:5ca:8979:e65d with SMTP id df19-20020a05690c0f9300b005ca8979e65dmr2415786ywb.1.1700492593933;
-        Mon, 20 Nov 2023 07:03:13 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x23-20020a81af57000000b005caf9e3dca1sm268067ywj.99.2023.11.20.07.03.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Nov 2023 07:03:13 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <012f0a82-8e75-42d4-a240-19ea67cb91f5@roeck-us.net>
-Date: Mon, 20 Nov 2023 07:03:11 -0800
+ d=SILICOMLTD.onmicrosoft.com; s=selector2-SILICOMLTD-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=586KetFGvi4d1ofIQ3K5DD7/FW3WXxMjEthdMwTG0e0=;
+ b=TxwWM9p7byIJ8YcJoWJBQEPe3FTJ25zi7z7jiNfm6N3gh0qvQD28OjosDHqwv35K8apEwSU3SSxRe3Vd+YbDrHNod6jjWmMlzEZLlwuVH4dTU2rTp0c1I6W63jMcCBh+b6B3hOaI9KGcvb5pAgRRlcddKMHY35hYVtAm7zufHU0=
+Received: from PA4PR04MB9222.eurprd04.prod.outlook.com (2603:10a6:102:2a1::18)
+ by DB9PR04MB9329.eurprd04.prod.outlook.com (2603:10a6:10:36f::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.16; Mon, 20 Nov
+ 2023 15:25:44 +0000
+Received: from PA4PR04MB9222.eurprd04.prod.outlook.com
+ ([fe80::fdd9:46:1ee:6f4]) by PA4PR04MB9222.eurprd04.prod.outlook.com
+ ([fe80::fdd9:46:1ee:6f4%2]) with mapi id 15.20.7025.014; Mon, 20 Nov 2023
+ 15:25:44 +0000
+From: Huibin Shi <henrys@silicom-usa.com>
+To: =?iso-8859-1?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>, Henry
+ Shi <henryshi2018@gmail.com>
+CC: "hbshi69@hotmail.com" <hbshi69@hotmail.com>, "tglx@linutronix.de"
+	<tglx@linutronix.de>, "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de"
+	<bp@alien8.de>, "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>, Hans de
+ Goede <hdegoede@redhat.com>, "markgross@kernel.org" <markgross@kernel.org>,
+	"jdelvare@suse.com" <jdelvare@suse.com>, "linux@roeck-us.net"
+	<linux@roeck-us.net>, LKML <linux-kernel@vger.kernel.org>,
+	"platform-driver-x86@vger.kernel.org" <platform-driver-x86@vger.kernel.org>,
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+	"hb_shi2003@yahoo.com" <hb_shi2003@yahoo.com>, Wen Wang
+	<wenw@silicom-usa.com>
+Subject: RE: [PATCH v13] platform/x86: Add Silicom Platform Driver
+Thread-Topic: [PATCH v13] platform/x86: Add Silicom Platform Driver
+Thread-Index: AQHaGjzQKTGu1aiRwU2iKK6v6UoxVbCDGwqAgAAluDA=
+Date: Mon, 20 Nov 2023 15:25:44 +0000
+Message-ID:
+ <PA4PR04MB92222C42B50F1F088C5AEB569AB4A@PA4PR04MB9222.eurprd04.prod.outlook.com>
+References: <20231118163214.27937-1-henryshi2018@gmail.com>
+ <17e30d-4477-2fed-3ea6-e6dbad98644@linux.intel.com>
+In-Reply-To: <17e30d-4477-2fed-3ea6-e6dbad98644@linux.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=silicom-usa.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PA4PR04MB9222:EE_|DB9PR04MB9329:EE_
+x-ms-office365-filtering-correlation-id: 96dd7338-bf9d-45e1-d021-08dbe9dcf6b8
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ PcNgsIbiXwudwXi1C8st9wh34tNIG5bwXd+X/9Xv+cuW5ULwTd0sK3Iwf5E1JfF6/VWglSZuNTpwtLoJSfyjUEp0GAe2tRCTvDDUVVc0L10bx4188fUrl9aCm3n4TR7095rYVqfoafC5EvjESZi7mA3xB1u6yxt34ggpXCqJQYeJEob5LOU3odkEhQ531rCpa54HPwYxW3sONap/cz14kkpmgR8mJ3bzrlP3YeGQD66tN6UYzzLJpdZH97CRQ00gSAmnuCdjEImSC2saddEaLp5JtySyDgOr81PcIBB4nBRBXuc9jhdNAcaPCW+4YdOQLQA/H+ZVhWXJlPyc6JnQfTD1j08vdk33XMhDOEpCOa1wK3/etQsA4A5AXb0KiWAWVa5heasl1NUW4ZIw5pWjyOAE/Biza0NKhL/Arkg0rjUNmsL3VTMM5XUVeafUG8UWP31m/8bkD9rs7jgqYPimVYG+/dw8//P/26v3B6O4dsqMEWSpTzGSz6Qb+qa+DmBrrrO+PNkiraDAv7D7UjMN0ZtwXbx0x/yACkIPL5eYXVTNm6bPjcWkdeHt3a/x5FGyCixFB3DWDkGo8zCq+0qO4pbnrXpYtms0i44p5WVXvso=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9222.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(366004)(39850400004)(136003)(346002)(376002)(230922051799003)(64100799003)(451199024)(1800799012)(186009)(5660300002)(86362001)(7416002)(2906002)(54906003)(64756008)(66446008)(66946007)(316002)(66556008)(66476007)(76116006)(110136005)(4326008)(8936002)(8676002)(52536014)(38070700009)(33656002)(41300700001)(9686003)(55016003)(83380400001)(122000001)(478600001)(6506007)(7696005)(71200400001)(107886003)(38100700002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-8859-1?Q?S+H7aI9WIhsoAbgFy1hYFk2fAuN2i3VvumZVSm6251LNnRcQ9oKfTKFXV8?=
+ =?iso-8859-1?Q?GnY+A30+KkY/9Q8QNzqz4O19ugQwxgso45N/iggh8CrFB2M4d+a5QBNCPo?=
+ =?iso-8859-1?Q?wUmu7IBDFjM6P0XsvO7WLm1gC18XCHYTMDt9sW7FDqbpFLq1GmogMu/NcE?=
+ =?iso-8859-1?Q?mdGbj1ug/3/frnYtsG7Lz8XmZ3/59YDmXcjb3bS2bDGesSVBEKTwUnh41K?=
+ =?iso-8859-1?Q?VHK5VFKF7LfOxVG56OsfeB+/FnKtd/n4Omtinb95wjRi160eOr9jvUSd9Q?=
+ =?iso-8859-1?Q?B/HVHDf3ZoJkTrBD1VcLKVYEQusSHHEz8PCkYj09TAA5FLlpQ2FgFMnN1I?=
+ =?iso-8859-1?Q?m4y7oLaGlsYrJihNErj3le/aKfZXSiyamwwiNXnxHI4kFUGEAPd7imFXDB?=
+ =?iso-8859-1?Q?IO+jYqltSExLP99Rk0dkze4OLVtU9JKIVWCTYK8nAC1580HjtrbilL5c3E?=
+ =?iso-8859-1?Q?odEOS6yQjNElqOlk9JBggPltRyGOerztZRj03D1LP9V0WbklkrV34HRt0M?=
+ =?iso-8859-1?Q?0TSI5oz5a2CYNszX+2MzKV+dOHyml7gtkemQCF4ZkYNuaV7Sj4sjiwismX?=
+ =?iso-8859-1?Q?I++bswfPJ3yooqpiTKIA3G3Mv5Cq/s1Yd9KRkjDT7tqijIeXFDK16NbbFu?=
+ =?iso-8859-1?Q?3jhOzipV2RfpNjODKIRww9S2ywesIrhb88Pp5mwRd4t0AmGewrtpyoNNhf?=
+ =?iso-8859-1?Q?nrf0RNxJPgyzptKGQKXKO2TZGNPw5Ey5BlQ53N3PUvbad9MjdinEu4jfGi?=
+ =?iso-8859-1?Q?68P3iKZk1eajzpGKN+ow1sYb08IMWGEN+xa7dA1rvLmDFoHoK2ETVXFIOG?=
+ =?iso-8859-1?Q?lOSK09jBNWuoKSF4snh2JTDSXLY4PfrWHdcJZPnRNGLgC/ayhWwnxJ5ygi?=
+ =?iso-8859-1?Q?ZxzN/mXEqXVdfszm08H3GNe0yFGAGp920I6LN2mgP2qLA99yDiB1ka9wrG?=
+ =?iso-8859-1?Q?Mr/YXcdxhhPHprOqjazbtbFZWczruHp0078T4Z27FIxk4yi7AmnJmMzvkV?=
+ =?iso-8859-1?Q?qNzRFaRbCM6afbwiGoXOm88Eqb1EakcFdNWFyt2bupiICWMbFRaaZO/lju?=
+ =?iso-8859-1?Q?E9jqh6q40Ay3dWhlzuT8wIjIKLeWdzr0dIhxAIVhwq84qqABVmcl1+qT2G?=
+ =?iso-8859-1?Q?mmEV6SvhIYLtjZ+qXVqeh+9D9xkh+PQE5oCgIVx5hRNZMB9dQHoYu8QAX/?=
+ =?iso-8859-1?Q?dwlTRgtPCpnC8Q0u8MT2ElAnvkHvz7lVCAqRLtnun8n/E23Vd0p6uj7v51?=
+ =?iso-8859-1?Q?v0k6ICVwRTxBOtDFdN/VGXf9MQmfuOyt+1s7XgHbQXmZNHgpn/45s35JnL?=
+ =?iso-8859-1?Q?BC9TV/7jdmo/5OVZWWkJCIC+5IdGnp3vnVaAzOOGFbPBIL1PwZgi+zC9r0?=
+ =?iso-8859-1?Q?MYp8DItWnMu9l71slbYtZetwqSZOmshplV/fHG0UEOrNq6zFrxYHgc9oba?=
+ =?iso-8859-1?Q?Ho2ljdgpZ4AkqE1pBaMakUG1zmo9vf+Au895SDeJ7pkyvLGxFeQJ4J4dQP?=
+ =?iso-8859-1?Q?iKNpA6oiZRr07sogMN0JTqzH6TrMRkduGfqz6sYiEH24oZmE51az7EPA+R?=
+ =?iso-8859-1?Q?x3+jZ78+Vn86w+s5SZvK+Y+DNNklSg9GYovRtyMSxxnaSc/ox6e088rX+9?=
+ =?iso-8859-1?Q?B3/BNsm2j33oFTHkT/+bBIjWDC7aSi3owVIg6HVNJ5Sy5PURuYuVt59XPd?=
+ =?iso-8859-1?Q?HHurlZmLw+DF3KsNgL+UW+5L2Hv2F+QGKdGLQosV?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Add LTC4282 bindings
-Content-Language: en-US
-To: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>,
- Conor Dooley <conor@kernel.org>, Nuno Sa <nuno.sa@analog.com>
-Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- devicetree@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
- Jonathan Corbet <corbet@lwn.net>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Linus Walleij <linus.walleij@linaro.org>, Rob Herring <robh+dt@kernel.org>,
- Andy Shevchenko <andy@kernel.org>, Jean Delvare <jdelvare@suse.com>,
- Conor Dooley <conor+dt@kernel.org>
-References: <20231110151905.1659873-1-nuno.sa@analog.com>
- <20231110151905.1659873-2-nuno.sa@analog.com>
- <20231110-astronomy-nicotine-02c798d42910@roley>
- <65060d844b4cdab02079a05286b506740623ed53.camel@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <65060d844b4cdab02079a05286b506740623ed53.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: silicom-usa.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9222.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 96dd7338-bf9d-45e1-d021-08dbe9dcf6b8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Nov 2023 15:25:44.4095
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c9e326d8-ce47-4930-8612-cc99d3c87ad1
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: LZK9wjvBnU+NjViubpGYmYgdnWNWM2L24D7u2u5gZ4EWn4k/u12TS5+DsVANZuycYspCVxTnLxrvVgGXPqrdGQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9329
 
-On 11/13/23 01:32, Nuno Sá wrote:
+Hi Ilpo,
 
->>> +
->>> +  clocks:
->>> +    maxItems: 1
->>> +
->>> +  adi,clkout-mode:
->>> +    description: |
->>> +      Controls in which mode the CLKOUT PIN should work:
->>> +        0 - Configures the CLKOUT pin to output the internal system clock
->>> +        1 - Configures the CLKOUT pin to output the internal conversion
->>> time
->>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>> +    enum: [0, 1]
->>
->> I really am not a fan of these types of properties. Part of me says that
->> if you're outputting clocks from this device, then you should be a clock
->> controller. How do consumers of this @clkout@ pin get the rate of the
->> clock?
-> 
-> I explained it to Guenter as he also argued about this. I'll wait for more
-> feedback but it's likely this will just turn into a clock provider, yes.
-> 
+Thanks for your comments. Regarding your comments:
 
-That wasn't an argument, it was a request. If the chip acts as clock provider,
-it needs to register as one if that functionality is used/provided.
+> +               device. It returns to default value after power cycle.
 
-Guenter
+to default value -> to 0
+
+What actually sets power_cycle variable back to 0? I couldn't find such cod=
+e.
+
+Also, writing 1 and then 0 to sysfs power_cycle causes reads to return garb=
+age unrelated to the whether there's power cycling currently going on or no=
+t.
+
+I think you should first parse the string to local variable in power_cycle_=
+store(), after checking it's okay take the mutex, and only then update powe=
+r_cycle variable.
+
+Henry: According to hardware design of this board, when powercycle_uc() is =
+called, it will cause the whole platform to go through a hard power cycle. =
+So Linux system will restart and this driver will be re-installed. There is=
+ no chance that power_cycle value will be read after powercycle_uc() is cal=
+led. This is why I did not set "powey_cycle" variable value to 0 explicitly=
+ in function power_cycle_store(). Maybe I need add comments to explain this=
+ in function power_cycle_store(). Any suggestion on this?
+
+Thanks
+Henry
 
