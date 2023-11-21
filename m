@@ -1,17 +1,17 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="fvGsGHgd"
-Received: from m15.mail.163.com (m15.mail.163.com [45.254.50.219])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id C126AC3;
-	Tue, 21 Nov 2023 00:16:30 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="UjQpQ+yd"
+Received: from m15.mail.163.com (m15.mail.163.com [45.254.50.220])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 72DA7E3;
+	Tue, 21 Nov 2023 00:16:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=/RxgG
-	ssmueIYxvcnniPKhkRyiQduoQOk4uIl6MFF1y8=; b=fvGsGHgdIWES8p59y9MW+
-	Pxn5R8UQlPpqT+kLweZ4eXyyKhhfMUv2G5wOjU32bYkRpjHxW6NvI5Hjsh7KKz6z
-	WmEmdy4Mq0D3kSGs6WcaRgT8ImJokCI9zPusPKBl432dIAdujGiGwMNQL5veP71P
-	IWbr3ruIN5VkQxfYcuWsM0=
+	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=ivtSy
+	t16d/q/4hJmFH8wkKbGBmxit30g3vcK59BKTWo=; b=UjQpQ+ydwcmU2U/RDwMLt
+	OgkISEd+zpBzgIM0inBdR910o5ZFYz+h0r8WNohLxD4CdjxSAy9l7iRTtDtyBXMT
+	t7bDq+/fuDyuvAUM5k8Et9AlsNFzl2Pzs/kjjkwJcw3/mUbkufCWCeSmuIvqRMRL
+	5RcdYClFNeqyemhdZVFKYM=
 Received: from localhost.localdomain (unknown [39.144.137.247])
-	by zwqz-smtp-mta-g2-0 (Coremail) with SMTP id _____wAn9ctEZ1xlUJ6BDg--.31532S2;
-	Tue, 21 Nov 2023 16:16:05 +0800 (CST)
+	by zwqz-smtp-mta-g2-0 (Coremail) with SMTP id _____wAn9ctEZ1xlUJ6BDg--.31532S4;
+	Tue, 21 Nov 2023 16:16:08 +0800 (CST)
 From: Xing Tong Wu <xingtong_wu@163.com>
 To: Guenter Roeck <linux@roeck-us.net>,
 	Jean Delvare <jdelvare@suse.com>,
@@ -20,10 +20,12 @@ To: Guenter Roeck <linux@roeck-us.net>,
 Cc: xingtong.wu@siemens.com,
 	tobias.schaffner@siemens.com,
 	gerd.haeussler.ext@siemens.com
-Subject: [PATCH v3 0/2] hwmon: (nct6775) Fix pwm bugs for NCT chips
-Date: Tue, 21 Nov 2023 16:16:02 +0800
-Message-Id: <20231121081604.2499-1-xingtong_wu@163.com>
+Subject: [PATCH v3 2/2] hwmon: (nct6775) Fix fan speed set failure in automatic mode
+Date: Tue, 21 Nov 2023 16:16:04 +0800
+Message-Id: <20231121081604.2499-3-xingtong_wu@163.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20231121081604.2499-1-xingtong_wu@163.com>
+References: <20231121081604.2499-1-xingtong_wu@163.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -31,35 +33,43 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wAn9ctEZ1xlUJ6BDg--.31532S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7XrWrZrW3CFy7KFW8Zw47Jwb_yoWxCFb_Wr
-	4IqrWxWw4qqasIka4a9Fn2v342kFWUur4UAr95trZxAw1fZrZ8uF4vvry2gr17Za10kFyf
-	ur1kJFyfA342kjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU0tUUUUUUUU==
+X-CM-TRANSID:_____wAn9ctEZ1xlUJ6BDg--.31532S4
+X-Coremail-Antispam: 1Uf129KBjvdXoWrtFWDWr4UXw45ZrykWrWfZrb_yoWfKFb_Ww
+	4F93s7urs8tF1Sk34DuF9Yya4UtFW5WF4xXFnFg3sxJFyjvwn8ZFyvqr9Fqw12kFW29FyD
+	Gw47WrWF934UCjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUeFApUUUUUU==
 X-Originating-IP: [39.144.137.247]
-X-CM-SenderInfo: p0lqw35rqjs4rx6rljoofrz/1tbiFgUv0F44X7XFXQAAs4
+X-CM-SenderInfo: p0lqw35rqjs4rx6rljoofrz/xtbBnAov0FghlftTwAABss
 
 From: Xing Tong Wu <xingtong.wu@siemens.com>
 
-These patches address bugs in the pwm features that do not meet the
-specification definition.
+Setting the fan speed is only valid in manual mode; it is not possible
+to set the fan's speed in automatic mode.
+Return error when attempting to set the fan speed in automatic mode.
 
-changes since v2:
- - Update commit message for 1/2 patch
- - Extend 6106 arrays and remove 6116 arrays for PWM.
+Signed-off-by: Xing Tong Wu <xingtong.wu@siemens.com>
+---
+ drivers/hwmon/nct6775-core.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-changes since v1:
- - Add PWM mode and mask register arrays for NCT6116
- - Delete 2nd patch for pwm_enable change
- - Delete log print and add comment for pwm failure set
-
-Xing Tong Wu (2):
-  hwmon: (nct6775) Add support for 2 additional fan controls
-  hwmon: (nct6775) Fix fan speed set failure in automatic mode
-
- drivers/hwmon/nct6775-core.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
-
+diff --git a/drivers/hwmon/nct6775-core.c b/drivers/hwmon/nct6775-core.c
+index 88300fb99bb9..83f1da5acd22 100644
+--- a/drivers/hwmon/nct6775-core.c
++++ b/drivers/hwmon/nct6775-core.c
+@@ -2553,6 +2553,13 @@ store_pwm(struct device *dev, struct device_attribute *attr, const char *buf,
+ 	int err;
+ 	u16 reg;
+ 
++	/*
++	 * The fan control mode should be set to manual if the user wants to adjust
++	 * the fan speed. Otherwise, it will fail to set.
++	 */
++	if (index == 0 && data->pwm_enable[nr] > manual)
++		return -EBUSY;
++
+ 	err = kstrtoul(buf, 10, &val);
+ 	if (err < 0)
+ 		return err;
 -- 
 2.25.1
 
