@@ -1,174 +1,236 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NZgHBQmr"
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B83B9;
-	Tue, 21 Nov 2023 22:35:23 -0800 (PST)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-5cca712b715so491847b3.1;
-        Tue, 21 Nov 2023 22:35:23 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eHx/k/aU"
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC8712A;
+	Tue, 21 Nov 2023 22:56:40 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1cf50cc2f85so32826075ad.1;
+        Tue, 21 Nov 2023 22:56:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700634923; x=1701239723; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=2hd1Zq/k/Ryf9wFcKS5fdo6xT3mq9vfnmVd+Mv4TFts=;
-        b=NZgHBQmrBzZsEnpgDBh0poPGdJnQddYl7iddEI2YXgJSQFp5qf5kXmOmizc4+Me3HX
-         q/wjzmo2C7tD8BZruKjrAGQ4gIN5TPntq4Yw680KesdQswlK55bQPcRLTExHAbnRPgUr
-         VvNwR03/ipoTgQR3sSpVm7jvD/YvfUma0SeYTBCD756KMCYMqLmxpiGH9Y64KmIDd+ru
-         FiPD8lvldi2rVgq+vp8nsb8foYERarEoU0N+7zEYv3FKP02rNPTgwTyIve0NUeCUnRqr
-         vawE+rbfek8kk6A1O+SK0emlNlZcmXKN2FzSbfakn0VEthB0eyT0hRHwZsH6RtVt70Sb
-         LjYw==
+        d=gmail.com; s=20230601; t=1700636200; x=1701241000; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AfNyGv2L+r7TGKe3tYxXY6W4jR1uAfVsepUOQnJljIY=;
+        b=eHx/k/aULtLcE6tUcTZgwUKs/ROfTW3O52pYMBQxKWB73MesihtBEKy19/Jw2/Kf/r
+         JJua2gx3eF0TRGNpgpvyXqA3Ky7aYYt6ENEkgeZcTn0LY9CnPxYK59nMc+hI03mBzXjG
+         KITBAxdaI9AkY17cuiDlzk2xlrkDOPgrdVeUuiqp9GYZrhopwbIlHHY4+feC7HXsVYqm
+         b1SdoIvOLERt0Lf6uigccW64rQ2gawMDuuVCC7qeuxbIzRH2vEAYeai0KjF826gudDKO
+         vBJgqcMc7erMgaRapnBvkx1JH6ynefmucnGh1WXKJPGsgsN3J1ywHueMboBeXoa0OI+f
+         jd0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700634923; x=1701239723;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2hd1Zq/k/Ryf9wFcKS5fdo6xT3mq9vfnmVd+Mv4TFts=;
-        b=F388FcAKEBNCuJ1sxEVFVrDvbZu2s03CqYdf4kLyiHkdkkG4bYTrcWnIxYAQCtDTdJ
-         HACmjj1lCDu2/nt2/91I+sby/F/fZLS62FZEWf13VgVJZf57M86W80Uz8WxO2E94eFPk
-         blh5dVmFkKxDcl/EdHfYRK4FHe+LbA2n/D7We/ZWWbk2wHpt/sN7dG9YPPFgFHDcu2ht
-         3a7+cpCAO5lcwogkNHoidEk1UTbyrWUYtvbjdxMHIOEyvgxVOukDMmGDVcAM38dCX3nX
-         MmGBXRsNikLNb7W7Cyqz1WKpSmUFP4gnvQiJR/bDkMA5TVPten2UWKDyULpnouF7WsnV
-         KXdA==
-X-Gm-Message-State: AOJu0Ywio/BOFEBtrEqky0UT0X7eiX/dv49h65gHYwv5E7Ag/dXYWjtu
-	H/tyigFwIVMi59I9avZdTQI=
-X-Google-Smtp-Source: AGHT+IHkQGhD2tzW6STYSWSP3lfwFAkGHoWOT84cZkqUrHPWgxtYXhS1Xsgol/4iG/PyhIytmp0hMg==
-X-Received: by 2002:a81:a091:0:b0:5c4:61b5:5ac6 with SMTP id x139-20020a81a091000000b005c461b55ac6mr1269540ywg.7.1700634922828;
-        Tue, 21 Nov 2023 22:35:22 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x19-20020a0dd513000000b0059f4f30a32bsm3507691ywd.24.2023.11.21.22.35.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Nov 2023 22:35:22 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d3790e91-d7c9-4b8d-9871-1765d693707e@roeck-us.net>
-Date: Tue, 21 Nov 2023 22:35:19 -0800
+        d=1e100.net; s=20230601; t=1700636200; x=1701241000;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AfNyGv2L+r7TGKe3tYxXY6W4jR1uAfVsepUOQnJljIY=;
+        b=SGqI7+BPRsRQNZK4aFyi/KDxLJglbM6APTGBa0D4yIKNZX9K1exArTZvoLkam+4qNK
+         PcxNHf5XiNWzfAgMib1ZCBKFgrD9IcagqB/LU3YkCqBB9Tn5EoexeXs/Izerr2SHyGRR
+         +5oXAFOSIEzT/hQXBv9iwVuGGa1NgExYETNbeqH6L9YxK3RIp9ovCIiyXKoQVB9qgviM
+         rZKhp7C7QFcx9L9HB74ZlEj0ehEwUJrMlIIMBim0A5wf5yijCKILr6uxRiLgrHUQ6Exm
+         13xceAebstydrg3E3Bf+7L/FIKfh4STYANP7EqoaR7tyEXtUgPy8mEfvaK1s3N2NEEo1
+         7Vjw==
+X-Gm-Message-State: AOJu0YxFvKxMozLndOG7IEZrUfp74r3wJIDKvtobYw24awBWGdJBDjhz
+	PTBAD13R77xPvozhsOKjtik=
+X-Google-Smtp-Source: AGHT+IEa9FDmsOkybdNjWTKaA0nufavct8TbA1k8AEsazpTEXgIvBNIE3tELQgxbp2uRZ21jF5J+eg==
+X-Received: by 2002:a17:903:491:b0:1cf:56ff:28af with SMTP id jj17-20020a170903049100b001cf56ff28afmr1346896plb.47.1700636199858;
+        Tue, 21 Nov 2023 22:56:39 -0800 (PST)
+Received: from localhost.localdomain ([110.46.146.116])
+        by smtp.gmail.com with ESMTPSA id x15-20020a170902820f00b001cf51972586sm701175pln.292.2023.11.21.22.56.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Nov 2023 22:56:39 -0800 (PST)
+From: SungHwan Jung <onenowy@gmail.com>
+To: "Lee, Chun-Yi" <jlee@suse.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: SungHwan Jung <onenowy@gmail.com>,
+	platform-driver-x86@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH v2 2/2] platform/x86: acer-wmi: add fan speed monitoring for Predator PHN16-71
+Date: Wed, 22 Nov 2023 15:55:33 +0900
+Message-ID: <20231122065534.3668-3-onenowy@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20231122065534.3668-1-onenowy@gmail.com>
+References: <20231122065534.3668-1-onenowy@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/2] hwmon: pmbus: Add adm1281 support
-Content-Language: en-US
-To: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, patrick@stwcx.xyz,
- Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>
-Cc: Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org
-References: <20231122032343.2794903-1-Delphine_CC_Chiu@wiwynn.com>
- <20231122032343.2794903-2-Delphine_CC_Chiu@wiwynn.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20231122032343.2794903-2-Delphine_CC_Chiu@wiwynn.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 11/21/23 19:23, Delphine CC Chiu wrote:
-> Add device type support for adm1281
-> 
+Support CPU and GPU fan speed monitoring through WMI for Predator
+PHN16-71.
 
-s/device type/chip/
+This patch depends on patch "platform/x86: acer-wmi: Add platform
+profile and mode key support for Predator PHN16-71"
 
-> Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
-> ---
->   Documentation/hwmon/adm1275.rst | 8 ++++++++
->   drivers/hwmon/pmbus/adm1275.c   | 8 ++++++--
->   2 files changed, 14 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/hwmon/adm1275.rst b/Documentation/hwmon/adm1275.rst
-> index 804590eeabdc..47a13b56e086 100644
-> --- a/Documentation/hwmon/adm1275.rst
-> +++ b/Documentation/hwmon/adm1275.rst
-> @@ -43,6 +43,14 @@ Supported chips:
->   
->       Datasheet: www.analog.com/static/imported-files/data_sheets/ADM1278.pdf
->   
-> +  * Analog Devices ADM1281
-> +
-> +    Prefix: 'adm1281'
-> +
-> +    Addresses scanned: -
-> +
-> +    Datasheet:
-> +
+Signed-off-by: SungHwan Jung <onenowy@gmail.com>
+---
+ drivers/platform/x86/acer-wmi.c | 98 ++++++++++++++++++++++++++++++++-
+ 1 file changed, 97 insertions(+), 1 deletion(-)
 
-Another undocumented / unpublished chip ?
-
-If so, at say something like "Not publicly available".
-
->     * Analog Devices ADM1293/ADM1294
->   
->       Prefix: 'adm1293', 'adm1294'
-> diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
-> index e2c61d6fa521..979474ba6bd3 100644
-> --- a/drivers/hwmon/pmbus/adm1275.c
-> +++ b/drivers/hwmon/pmbus/adm1275.c
-> @@ -18,7 +18,7 @@
->   #include <linux/log2.h>
->   #include "pmbus.h"
->   
-> -enum chips { adm1075, adm1272, adm1275, adm1276, adm1278, adm1293, adm1294 };
-> +enum chips { adm1075, adm1272, adm1275, adm1276, adm1278, adm1281, adm1293, adm1294 };
->   
->   #define ADM1275_MFR_STATUS_IOUT_WARN2	BIT(0)
->   #define ADM1293_MFR_STATUS_VAUX_UV_WARN	BIT(5)
-> @@ -362,6 +362,7 @@ static int adm1275_read_word_data(struct i2c_client *client, int page,
->   		ret = -ENODATA;
->   		break;
->   	}
-> +
-
-Please refrain from making cosmetic changes like this.
-
-Thanks,
-Guenter
-
->   	return ret;
->   }
->   
+diff --git a/drivers/platform/x86/acer-wmi.c b/drivers/platform/x86/acer-wmi.c
+index e3650dce0..f2f3b1c45 100644
+--- a/drivers/platform/x86/acer-wmi.c
++++ b/drivers/platform/x86/acer-wmi.c
+@@ -30,6 +30,7 @@
+ #include <linux/input.h>
+ #include <linux/input/sparse-keymap.h>
+ #include <acpi/video.h>
++#include <linux/hwmon.h>
+ 
+ MODULE_AUTHOR("Carlos Corbacho");
+ MODULE_DESCRIPTION("Acer Laptop WMI Extras Driver");
+@@ -96,6 +97,8 @@ enum acer_wmi_event_ids {
+ 
+ enum acer_wmi_predator_v4_sys_info_command {
+ 	ACER_WMID_CMD_GET_PREDATOR_V4_BAT_STATUS = 0x02,
++	ACER_WMID_CMD_GET_PREDATOR_V4_CPU_FAN_SPEED = 0x0201,
++	ACER_WMID_CMD_GET_PREDATOR_V4_GPU_FAN_SPEED = 0x0601,
+ };
+ 
+ static const struct key_entry acer_wmi_keymap[] __initconst = {
+@@ -241,6 +244,7 @@ struct hotkey_function_type_aa {
+ #define ACER_CAP_TURBO_LED     BIT(8)
+ #define ACER_CAP_TURBO_FAN     BIT(9)
+ #define ACER_CAP_PLATFORM_PROFILE BIT(10)
++#define ACER_CAP_FAN_SPEED_READ BIT(11)
+ 
+ /*
+  * Interface type flags
+@@ -353,7 +357,8 @@ static void __init set_quirks(void)
+ 					 | ACER_CAP_TURBO_FAN;
+ 
+ 	if (quirks->predator_v4)
+-		interface->capability |= ACER_CAP_PLATFORM_PROFILE;
++		interface->capability |= ACER_CAP_PLATFORM_PROFILE |
++					 ACER_CAP_FAN_SPEED_READ;
+ }
+ 
+ static int __init dmi_matched(const struct dmi_system_id *dmi)
+@@ -1722,6 +1727,25 @@ static int acer_gsensor_event(void)
+ 	return 0;
+ }
+ 
++static int acer_get_fan_speed(int fan)
++{
++	if (quirks->predator_v4) {
++		acpi_status status;
++		u64 fanspeed;
++
++		status = WMI_gaming_execute_u64(
++			ACER_WMID_GET_GAMING_SYS_INFO_METHODID,
++			fan == 0 ? ACER_WMID_CMD_GET_PREDATOR_V4_CPU_FAN_SPEED :
++				   ACER_WMID_CMD_GET_PREDATOR_V4_GPU_FAN_SPEED,
++			&fanspeed);
++
++		if (ACPI_FAILURE(status))
++			return -EIO;
++		return fanspeed >> 8;
++	}
++	return -EOPNOTSUPP;
++}
++
+ /*
+  *  Predator series turbo button
+  */
+@@ -2476,6 +2500,8 @@ static u32 get_wmid_devices(void)
+ 	return devices;
+ }
+ 
++static int acer_wmi_hwmon_init(void);
++
+ /*
+  * Platform device
+  */
+@@ -2505,6 +2531,9 @@ static int acer_platform_probe(struct platform_device *device)
+ 			goto error_platform_profile;
+ 	}
+ 
++	if (has_cap(ACER_CAP_FAN_SPEED_READ))
++		err = acer_wmi_hwmon_init();
++
+ 	return err;
+ 
+ error_rfkill:
+@@ -2617,6 +2646,73 @@ static void __init create_debugfs(void)
+ 			   &interface->debug.wmid_devices);
+ }
+ 
++static umode_t acer_wmi_hwmon_is_visible(const void *data,
++					 enum hwmon_sensor_types type, u32 attr,
++					 int channel)
++{
++	switch (type) {
++	case hwmon_fan:
++		if (acer_get_fan_speed(channel) >= 0)
++			return 0444;
++		break;
++	default:
++		return 0;
++	}
++
++	return 0;
++}
++
++static int acer_wmi_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
++			       u32 attr, int channel, long *val)
++{
++	int ret;
++
++	switch (type) {
++	case hwmon_fan:
++		ret = acer_get_fan_speed(channel);
++		if (ret < 0)
++			return ret;
++		*val = ret;
++		break;
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	return 0;
++}
++
++static const struct hwmon_channel_info *const acer_wmi_hwmon_info[] = {
++	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT, HWMON_F_INPUT), NULL
++};
++
++static const struct hwmon_ops acer_wmi_hwmon_ops = {
++	.read = acer_wmi_hwmon_read,
++	.is_visible = acer_wmi_hwmon_is_visible,
++};
++
++static const struct hwmon_chip_info acer_wmi_hwmon_chip_info = {
++	.ops = &acer_wmi_hwmon_ops,
++	.info = acer_wmi_hwmon_info,
++};
++
++static int acer_wmi_hwmon_init(void)
++{
++	struct device *dev = &acer_platform_device->dev;
++	struct device *hwmon;
++
++	hwmon = devm_hwmon_device_register_with_info(dev, "acer",
++						     &acer_platform_driver,
++						     &acer_wmi_hwmon_chip_info,
++						     NULL);
++
++	if (IS_ERR(hwmon)) {
++		dev_err(dev, "Could not register acer hwmon device\n");
++		return PTR_ERR(hwmon);
++	}
++
++	return 0;
++}
++
+ static int __init acer_wmi_init(void)
+ {
+ 	int err;
+-- 
+2.43.0
 
