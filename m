@@ -1,168 +1,174 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wiwynn.com header.i=@wiwynn.com header.b="aDHAZfRE"
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2040.outbound.protection.outlook.com [40.107.117.40])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F4CAD54;
-	Tue, 21 Nov 2023 19:23:58 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cxuh9/ij6ocLA3XoJPgUcS2oQKc2KFZUhlUz1gZ7ZkrbOCDnVBfsceBBInuKWu6hroPTS64rLZEi2+5a/1GqQvB7fsnz85EmsWtJQwHqV44VCPwa0dJ5v375DVxiQC5/aggKI65J4UKyVj431ghdmBztTRaZelthq/A1BhItoo12wUwLWbwUHt5C7f1por00gG4+ziqreJtLlVTu/pixO3sflDhAaedPr1oRcOOTUNczPPVQVqK+lWkW4gPPplxNVFud0NybEFzSs7zgImW/4wWxaswkbXhZPovnf3317r02tLf0EwDbEeBwyGg41EkrG+L67wLBI2kCE2sTajBVTw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2TAu505xZka5iEu4GuNbqK8LkJE7k/YWH1R52hNBm6A=;
- b=ghGRaUXvrsimk/DPp6t3h7vwf7jiGJBNxdkusQtYlKYG2yVjy+LRmoU1spw6kebBIOOXBhfAuYEJ+S4Pef4BE1kox6H/I5/CQnxpuQHy+mM8Zdo8PrbUBW3P9jHDeksV0VLw5nvozu4xcP/V57Gl110tJImwE99qOMqHW83Zc1WcF43ivkTCWY+kLH2kfwxTjneegkPNO3tPZpXGc7y+rJOrIGxEJHxIAHtSuU+JqsXpGWf1vvfv1PGr1CMhp0xR7I1FiEObkhbldAmTR4KY6BcbGKuRTYRWqElOMx+XBUg786YP8o/g1H3i2E6/ONdR4YkQR5Tb5PU8uMWSL0KcWQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 211.20.1.79) smtp.rcpttodomain=stwcx.xyz smtp.mailfrom=wiwynn.com; dmarc=fail
- (p=quarantine sp=quarantine pct=100) action=quarantine
- header.from=wiwynn.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2TAu505xZka5iEu4GuNbqK8LkJE7k/YWH1R52hNBm6A=;
- b=aDHAZfREfqTgoxYzcNhGodHwtQtAKelHUWR8fM4V/WENyoMP2j83UWNJ74ozZNpTJ/tFEAtydR8bzzdTRGacUqeOXcIEP3oC9VCcCG5W9mwaTXtEpn/vrQOF7DsgMjKLDN5qGHxeONbzUADypAzItvSew9558SkNSrOLYMrELVWWc/1PCx4XTk4kAxJgczYBSoipz5peCmDq1tivUboEvCpp1Z1BA1Tbbli/Dv32uLr9f+3FyRfpzn+DVj0W8UeupHQ9vx+8XlKCbk61aaHKH3B15Yrrq2rz+sZdqVQQF5zN/BARkm1KWjH0xXTfgPYxufuY+6zSFtPQNSMgeiPhEQ==
-Received: from KL1PR02CA0034.apcprd02.prod.outlook.com (2603:1096:820:d::21)
- by PSBPR04MB3973.apcprd04.prod.outlook.com (2603:1096:301:c::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.18; Wed, 22 Nov
- 2023 03:23:51 +0000
-Received: from HK3PEPF00000220.apcprd03.prod.outlook.com
- (2603:1096:820:d:cafe::bc) by KL1PR02CA0034.outlook.office365.com
- (2603:1096:820:d::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.18 via Frontend
- Transport; Wed, 22 Nov 2023 03:23:50 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 211.20.1.79)
- smtp.mailfrom=wiwynn.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=quarantine header.from=wiwynn.com;
-Received-SPF: Fail (protection.outlook.com: domain of wiwynn.com does not
- designate 211.20.1.79 as permitted sender) receiver=protection.outlook.com;
- client-ip=211.20.1.79; helo=localhost.localdomain;
-Received: from localhost.localdomain (211.20.1.79) by
- HK3PEPF00000220.mail.protection.outlook.com (10.167.8.42) with Microsoft SMTP
- Server id 15.20.7025.12 via Frontend Transport; Wed, 22 Nov 2023 03:23:49
- +0000
-From: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
-To: patrick@stwcx.xyz,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>,
-	Jonathan Corbet <corbet@lwn.net>
-Cc: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: [PATCH v1 1/2] hwmon: pmbus: Add adm1281 support
-Date: Wed, 22 Nov 2023 11:23:41 +0800
-Message-Id: <20231122032343.2794903-2-Delphine_CC_Chiu@wiwynn.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231122032343.2794903-1-Delphine_CC_Chiu@wiwynn.com>
-References: <20231122032343.2794903-1-Delphine_CC_Chiu@wiwynn.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NZgHBQmr"
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B83B9;
+	Tue, 21 Nov 2023 22:35:23 -0800 (PST)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-5cca712b715so491847b3.1;
+        Tue, 21 Nov 2023 22:35:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700634923; x=1701239723; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=2hd1Zq/k/Ryf9wFcKS5fdo6xT3mq9vfnmVd+Mv4TFts=;
+        b=NZgHBQmrBzZsEnpgDBh0poPGdJnQddYl7iddEI2YXgJSQFp5qf5kXmOmizc4+Me3HX
+         q/wjzmo2C7tD8BZruKjrAGQ4gIN5TPntq4Yw680KesdQswlK55bQPcRLTExHAbnRPgUr
+         VvNwR03/ipoTgQR3sSpVm7jvD/YvfUma0SeYTBCD756KMCYMqLmxpiGH9Y64KmIDd+ru
+         FiPD8lvldi2rVgq+vp8nsb8foYERarEoU0N+7zEYv3FKP02rNPTgwTyIve0NUeCUnRqr
+         vawE+rbfek8kk6A1O+SK0emlNlZcmXKN2FzSbfakn0VEthB0eyT0hRHwZsH6RtVt70Sb
+         LjYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700634923; x=1701239723;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2hd1Zq/k/Ryf9wFcKS5fdo6xT3mq9vfnmVd+Mv4TFts=;
+        b=F388FcAKEBNCuJ1sxEVFVrDvbZu2s03CqYdf4kLyiHkdkkG4bYTrcWnIxYAQCtDTdJ
+         HACmjj1lCDu2/nt2/91I+sby/F/fZLS62FZEWf13VgVJZf57M86W80Uz8WxO2E94eFPk
+         blh5dVmFkKxDcl/EdHfYRK4FHe+LbA2n/D7We/ZWWbk2wHpt/sN7dG9YPPFgFHDcu2ht
+         3a7+cpCAO5lcwogkNHoidEk1UTbyrWUYtvbjdxMHIOEyvgxVOukDMmGDVcAM38dCX3nX
+         MmGBXRsNikLNb7W7Cyqz1WKpSmUFP4gnvQiJR/bDkMA5TVPten2UWKDyULpnouF7WsnV
+         KXdA==
+X-Gm-Message-State: AOJu0Ywio/BOFEBtrEqky0UT0X7eiX/dv49h65gHYwv5E7Ag/dXYWjtu
+	H/tyigFwIVMi59I9avZdTQI=
+X-Google-Smtp-Source: AGHT+IHkQGhD2tzW6STYSWSP3lfwFAkGHoWOT84cZkqUrHPWgxtYXhS1Xsgol/4iG/PyhIytmp0hMg==
+X-Received: by 2002:a81:a091:0:b0:5c4:61b5:5ac6 with SMTP id x139-20020a81a091000000b005c461b55ac6mr1269540ywg.7.1700634922828;
+        Tue, 21 Nov 2023 22:35:22 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x19-20020a0dd513000000b0059f4f30a32bsm3507691ywd.24.2023.11.21.22.35.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Nov 2023 22:35:22 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <d3790e91-d7c9-4b8d-9871-1765d693707e@roeck-us.net>
+Date: Tue, 21 Nov 2023 22:35:19 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: HK3PEPF00000220:EE_|PSBPR04MB3973:EE_
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: bd946953-9681-41c9-2380-08dbeb0a7247
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	3lRnLSST4DQvBD+MP6Fluto1BYDQkDR7vNBfeLJ9zCrVEDduI6K/HWhfjQ+3W/YeWQVcdXkj/FyQtRsqxkl964DHpNrjSMjPBC63Sysgpq+PM94mm6Ci3eyvIBKTY1RoD2VcG74nVp4xxxYVAchdibyAKBQ+1+srzgfSXgWS3lNbjhZvroRFnwulfsnmwVZKcAdYiiH4BsVoebgpVLebhmNfeZOy+cZI80FBbhBONAzNBgo6nogMnLfH/mRWaPCRJaaKM3CLq1LfzDXfRLidCnQZdv8Ar6iexwWiruyalFt6po7gkmWEOr9MolPeVSA57+AH2h1XDo15ePvstNLxf+z76QO/BVw68Py2yOvAKB865EEge24g8Ef9f2QDHxzqOVAXUgknlfzOdsFHjPEtidDKtwBNIju4eSj4Ccg85W9V/6Ee/G+RGDlNlRqFITW/56Hde6pkEWEPWFXZygxoDroQo5HoK2w1XMrOrSHXS3ivKlJeWzNRxx6OlYsydJ8NL31O7hQHxgptvQM2iAYBcSilt+LZLI27hE/DHomQB83gfhLnh/fr4eAenkRVf0DvwVdu37r1MNa6Pg+pRxRx3PqOTVkrwS84VQvMMrnTQTuV2wg2LWi4S2di3Fbt27vSWCiZb9SyBrqHolAsioP1WaqORosa92MqUOqMPsQQyV02Q3UcDY2/oWnNpCD/mztsAZdPY7U3+ekVGm4T9/nyPA==
-X-Forefront-Antispam-Report:
-	CIP:211.20.1.79;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:localhost.localdomain;PTR:211-20-1-79.hinet-ip.hinet.net;CAT:NONE;SFS:(13230031)(6069001)(4636009)(346002)(136003)(396003)(376002)(39860400002)(230922051799003)(82310400011)(1800799012)(451199024)(186009)(64100799003)(36840700001)(46966006)(5660300002)(7416002)(2906002)(4326008)(41300700001)(8936002)(8676002)(110136005)(70586007)(316002)(54906003)(70206006)(36736006)(6666004)(478600001)(6486002)(26005)(6506007)(6512007)(1076003)(2616005)(40480700001)(956004)(36756003)(83380400001)(336012)(9316004)(15974865002)(86362001)(82740400003)(47076005)(81166007)(356005)(36860700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: wiwynn.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Nov 2023 03:23:49.9084
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: bd946953-9681-41c9-2380-08dbeb0a7247
-X-MS-Exchange-CrossTenant-Id: da6e0628-fc83-4caf-9dd2-73061cbab167
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=da6e0628-fc83-4caf-9dd2-73061cbab167;Ip=[211.20.1.79];Helo=[localhost.localdomain]
-X-MS-Exchange-CrossTenant-AuthSource:
-	HK3PEPF00000220.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSBPR04MB3973
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/2] hwmon: pmbus: Add adm1281 support
+Content-Language: en-US
+To: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, patrick@stwcx.xyz,
+ Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>
+Cc: Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org
+References: <20231122032343.2794903-1-Delphine_CC_Chiu@wiwynn.com>
+ <20231122032343.2794903-2-Delphine_CC_Chiu@wiwynn.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20231122032343.2794903-2-Delphine_CC_Chiu@wiwynn.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Add device type support for adm1281
+On 11/21/23 19:23, Delphine CC Chiu wrote:
+> Add device type support for adm1281
+> 
 
-Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
----
- Documentation/hwmon/adm1275.rst | 8 ++++++++
- drivers/hwmon/pmbus/adm1275.c   | 8 ++++++--
- 2 files changed, 14 insertions(+), 2 deletions(-)
+s/device type/chip/
 
-diff --git a/Documentation/hwmon/adm1275.rst b/Documentation/hwmon/adm1275.rst
-index 804590eeabdc..47a13b56e086 100644
---- a/Documentation/hwmon/adm1275.rst
-+++ b/Documentation/hwmon/adm1275.rst
-@@ -43,6 +43,14 @@ Supported chips:
- 
-     Datasheet: www.analog.com/static/imported-files/data_sheets/ADM1278.pdf
- 
-+  * Analog Devices ADM1281
-+
-+    Prefix: 'adm1281'
-+
-+    Addresses scanned: -
-+
-+    Datasheet:
-+
-   * Analog Devices ADM1293/ADM1294
- 
-     Prefix: 'adm1293', 'adm1294'
-diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
-index e2c61d6fa521..979474ba6bd3 100644
---- a/drivers/hwmon/pmbus/adm1275.c
-+++ b/drivers/hwmon/pmbus/adm1275.c
-@@ -18,7 +18,7 @@
- #include <linux/log2.h>
- #include "pmbus.h"
- 
--enum chips { adm1075, adm1272, adm1275, adm1276, adm1278, adm1293, adm1294 };
-+enum chips { adm1075, adm1272, adm1275, adm1276, adm1278, adm1281, adm1293, adm1294 };
- 
- #define ADM1275_MFR_STATUS_IOUT_WARN2	BIT(0)
- #define ADM1293_MFR_STATUS_VAUX_UV_WARN	BIT(5)
-@@ -362,6 +362,7 @@ static int adm1275_read_word_data(struct i2c_client *client, int page,
- 		ret = -ENODATA;
- 		break;
- 	}
-+
- 	return ret;
- }
- 
-@@ -482,6 +483,7 @@ static const struct i2c_device_id adm1275_id[] = {
- 	{ "adm1275", adm1275 },
- 	{ "adm1276", adm1276 },
- 	{ "adm1278", adm1278 },
-+	{ "adm1281", adm1281 },
- 	{ "adm1293", adm1293 },
- 	{ "adm1294", adm1294 },
- 	{ }
-@@ -555,7 +557,8 @@ static int adm1275_probe(struct i2c_client *client)
- 			   client->name, mid->name);
- 
- 	if (mid->driver_data == adm1272 || mid->driver_data == adm1278 ||
--	    mid->driver_data == adm1293 || mid->driver_data == adm1294)
-+	    mid->driver_data == adm1281 || mid->driver_data == adm1293 ||
-+	    mid->driver_data == adm1294)
- 		config_read_fn = i2c_smbus_read_word_data;
- 	else
- 		config_read_fn = i2c_smbus_read_byte_data;
-@@ -703,6 +706,7 @@ static int adm1275_probe(struct i2c_client *client)
- 			  PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT;
- 		break;
- 	case adm1278:
-+	case adm1281:
- 		data->have_vout = true;
- 		data->have_pin_max = true;
- 		data->have_temp_max = true;
--- 
-2.25.1
+> Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+> ---
+>   Documentation/hwmon/adm1275.rst | 8 ++++++++
+>   drivers/hwmon/pmbus/adm1275.c   | 8 ++++++--
+>   2 files changed, 14 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/hwmon/adm1275.rst b/Documentation/hwmon/adm1275.rst
+> index 804590eeabdc..47a13b56e086 100644
+> --- a/Documentation/hwmon/adm1275.rst
+> +++ b/Documentation/hwmon/adm1275.rst
+> @@ -43,6 +43,14 @@ Supported chips:
+>   
+>       Datasheet: www.analog.com/static/imported-files/data_sheets/ADM1278.pdf
+>   
+> +  * Analog Devices ADM1281
+> +
+> +    Prefix: 'adm1281'
+> +
+> +    Addresses scanned: -
+> +
+> +    Datasheet:
+> +
+
+Another undocumented / unpublished chip ?
+
+If so, at say something like "Not publicly available".
+
+>     * Analog Devices ADM1293/ADM1294
+>   
+>       Prefix: 'adm1293', 'adm1294'
+> diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
+> index e2c61d6fa521..979474ba6bd3 100644
+> --- a/drivers/hwmon/pmbus/adm1275.c
+> +++ b/drivers/hwmon/pmbus/adm1275.c
+> @@ -18,7 +18,7 @@
+>   #include <linux/log2.h>
+>   #include "pmbus.h"
+>   
+> -enum chips { adm1075, adm1272, adm1275, adm1276, adm1278, adm1293, adm1294 };
+> +enum chips { adm1075, adm1272, adm1275, adm1276, adm1278, adm1281, adm1293, adm1294 };
+>   
+>   #define ADM1275_MFR_STATUS_IOUT_WARN2	BIT(0)
+>   #define ADM1293_MFR_STATUS_VAUX_UV_WARN	BIT(5)
+> @@ -362,6 +362,7 @@ static int adm1275_read_word_data(struct i2c_client *client, int page,
+>   		ret = -ENODATA;
+>   		break;
+>   	}
+> +
+
+Please refrain from making cosmetic changes like this.
+
+Thanks,
+Guenter
+
+>   	return ret;
+>   }
+>   
 
