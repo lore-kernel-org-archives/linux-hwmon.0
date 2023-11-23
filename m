@@ -1,68 +1,60 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RiGn2bI+"
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7815F19D;
-	Wed, 22 Nov 2023 21:53:32 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id 5614622812f47-3b837d974ecso339544b6e.2;
-        Wed, 22 Nov 2023 21:53:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700718812; x=1701323612; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OdUNABR6Mifi2m+aoepA5AMZHmcuu2ymDmdpy19JJlA=;
-        b=RiGn2bI+Wy1l1D0qhXvj/+DN3MHQOCS0qR8FyGPos/lR40uhxsRK9Kp+NIp51iFZxB
-         GFpU1bdCE+V4X8rIiHABAS92SkEm3rgYlmwMqLV8RLmjsCcZmyMOeEmLyMTMHIhTbdu1
-         btG9FW1y91sI5eK0cLyIqj9ywfrp1d/uwQMiTrE1p7S2L06MoJquyoziBEPrvjUVZ1Fj
-         4HBo+EdsRjiPz5KtIikH4W74Tmj8DM0uMrXYu1fDPlDM/Qjq3Z4Io+8Ep3jVDE0LFHol
-         Aglbg6bXW/tqSki3/WAAj1dj2ndARlT0z6V2otHgKALfAc1L1di8r0Gwa75soJjIja8F
-         J29w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700718812; x=1701323612;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OdUNABR6Mifi2m+aoepA5AMZHmcuu2ymDmdpy19JJlA=;
-        b=e3YpGZujy3oS27uYxQ4toVJLSoFQpzaSNe1F+JGg/rxCVMctIlC5P6CMY3Uzbi0aKt
-         dgJUYOjH5z6fFqm1Ibbljdun/Mecx0ekke0l4Txok63EJw/O5hlYOv2T+o4EaVuxoKfg
-         AlC7cmLy3hMNatOa7eJU8ePOmwFvAjnmv6cR/niKzztx1C+2NlbZ0drGO1BPCxVDZ9m8
-         fZhg0M8whLA5uvYL5SxUF4OL6bxukroDiReZNtdPAA3YyDPeuwzGMl+ra5lfwI3eoheU
-         T3WJ1bDBkTWnjtJZMEQHTK0BXVRGBliU+tsBGYS8FK0lSKnQzBnFcELc5KDi87hYwFpU
-         tBLA==
-X-Gm-Message-State: AOJu0YzjBOTk8UXk7wjcIG7AFKVKwXcwLiHs8FQIWboLYLai3aJUxjLT
-	Dxc9ELy4kZtE3xFSbKn3cGA=
-X-Google-Smtp-Source: AGHT+IGn7QzG9DaCsRCcjqAPRW3yKy2dFCdW/Gzty+AL0RBIV+vk1a4EV6ImJUUWF7zaet1wZozNgQ==
-X-Received: by 2002:a05:6808:1915:b0:3b2:f275:18a8 with SMTP id bf21-20020a056808191500b003b2f27518a8mr6942617oib.22.1700718811822;
-        Wed, 22 Nov 2023 21:53:31 -0800 (PST)
-Received: from localhost.localdomain ([110.46.146.116])
-        by smtp.gmail.com with ESMTPSA id u26-20020a62ed1a000000b006cbcd08ed56sm429438pfh.56.2023.11.22.21.53.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Nov 2023 21:53:31 -0800 (PST)
-From: SungHwan Jung <onenowy@gmail.com>
-To: lkp@intel.com
-Cc: hdegoede@redhat.com,
-	ilpo.jarvinen@linux.intel.com,
-	jdelvare@suse.com,
-	jlee@suse.com,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux@roeck-us.net,
-	oe-kbuild-all@lists.linux.dev,
-	onenowy@gmail.com,
-	platform-driver-x86@vger.kernel.org
-Subject: Re: Re: [PATCH v2 2/2] platform/x86: acer-wmi: add fan speed monitoring for Predator PHN16-71
-Date: Thu, 23 Nov 2023 14:53:23 +0900
-Message-ID: <20231123055323.417287-1-onenowy@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <202311230750.psygl1ot-lkp@intel.com>
-References: <202311230750.psygl1ot-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n+PF/yaw"
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C12101;
+	Thu, 23 Nov 2023 03:51:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700740281; x=1732276281;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=c3bcXnDOVlFpX+Ph2RovZJ6+TK7ouwTaIB2jo3XHN/U=;
+  b=n+PF/yawXEWT6jfPikm7QikRKdmiJUTzP+E1xzGNLfgsq1HKSX+qoS2G
+   8YzZxnVNiEmRx6P5utIjr0qSuZS1QBnWI0RNCSx2+NRQ2W3VQ3oJWMf9P
+   C+RBbiy0q+xp+xI6wNaCoVP2trxhzXXEVdjErveX1cAsBigHikB2wAGtv
+   UCB958D7sCMT0gQfl/p/ytEV3sCokp+6OE04IOFckHp+Q9dcvITgxFM2H
+   06ZdztVbjPBarvJJUDp9/qw5LvH9kLfK1WtQiUXMECNcOpiheMjwfj/30
+   5aArmYUZ3xBru4lN6Oj8u8f/HGtuFJTZ6y1wboQDUYs2pCFsAczTQddQ1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="10929854"
+X-IronPort-AV: E=Sophos;i="6.04,221,1695711600"; 
+   d="scan'208";a="10929854"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2023 03:51:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.04,221,1695711600"; 
+   d="scan'208";a="15632384"
+Received: from mstrobel-mobl.ger.corp.intel.com ([10.252.40.70])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2023 03:51:18 -0800
+Date: Thu, 23 Nov 2023 13:51:15 +0200 (EET)
+From: =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To: SungHwan Jung <onenowy@gmail.com>
+cc: lkp@intel.com, Hans de Goede <hdegoede@redhat.com>, jdelvare@suse.com, 
+    jlee@suse.com, linux-hwmon@vger.kernel.org, 
+    LKML <linux-kernel@vger.kernel.org>, linux@roeck-us.net, 
+    oe-kbuild-all@lists.linux.dev, platform-driver-x86@vger.kernel.org
+Subject: Re: Re: [PATCH v2 2/2] platform/x86: acer-wmi: add fan speed monitoring
+ for Predator PHN16-71
+In-Reply-To: <20231123055323.417287-1-onenowy@gmail.com>
+Message-ID: <24bf6134-4111-87bc-1e4d-a84b2fb67443@linux.intel.com>
+References: <202311230750.psygl1ot-lkp@intel.com> <20231123055323.417287-1-onenowy@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 
-It is caused by dependency on hwmon. Setting both hwmon and acer-wmi as
-module (or in-kernel) in config fixes this error.
+On Thu, 23 Nov 2023, SungHwan Jung wrote:
+
+> It is caused by dependency on hwmon. Setting both hwmon and acer-wmi as
+> module (or in-kernel) in config fixes this error.
+
+Then you should add
+	depends on HWMON
+into the Kconfig in the next version of this patch.
+
+-- 
+ i.
+
