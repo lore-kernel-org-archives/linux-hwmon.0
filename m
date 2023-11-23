@@ -1,60 +1,121 @@
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 962F635EE8;
+	Thu, 23 Nov 2023 15:16:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n+PF/yaw"
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C12101;
-	Thu, 23 Nov 2023 03:51:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700740281; x=1732276281;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=c3bcXnDOVlFpX+Ph2RovZJ6+TK7ouwTaIB2jo3XHN/U=;
-  b=n+PF/yawXEWT6jfPikm7QikRKdmiJUTzP+E1xzGNLfgsq1HKSX+qoS2G
-   8YzZxnVNiEmRx6P5utIjr0qSuZS1QBnWI0RNCSx2+NRQ2W3VQ3oJWMf9P
-   C+RBbiy0q+xp+xI6wNaCoVP2trxhzXXEVdjErveX1cAsBigHikB2wAGtv
-   UCB958D7sCMT0gQfl/p/ytEV3sCokp+6OE04IOFckHp+Q9dcvITgxFM2H
-   06ZdztVbjPBarvJJUDp9/qw5LvH9kLfK1WtQiUXMECNcOpiheMjwfj/30
-   5aArmYUZ3xBru4lN6Oj8u8f/HGtuFJTZ6y1wboQDUYs2pCFsAczTQddQ1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="10929854"
-X-IronPort-AV: E=Sophos;i="6.04,221,1695711600"; 
-   d="scan'208";a="10929854"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2023 03:51:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,221,1695711600"; 
-   d="scan'208";a="15632384"
-Received: from mstrobel-mobl.ger.corp.intel.com ([10.252.40.70])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2023 03:51:18 -0800
-Date: Thu, 23 Nov 2023 13:51:15 +0200 (EET)
-From: =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To: SungHwan Jung <onenowy@gmail.com>
-cc: lkp@intel.com, Hans de Goede <hdegoede@redhat.com>, jdelvare@suse.com, 
-    jlee@suse.com, linux-hwmon@vger.kernel.org, 
-    LKML <linux-kernel@vger.kernel.org>, linux@roeck-us.net, 
-    oe-kbuild-all@lists.linux.dev, platform-driver-x86@vger.kernel.org
-Subject: Re: Re: [PATCH v2 2/2] platform/x86: acer-wmi: add fan speed monitoring
- for Predator PHN16-71
-In-Reply-To: <20231123055323.417287-1-onenowy@gmail.com>
-Message-ID: <24bf6134-4111-87bc-1e4d-a84b2fb67443@linux.intel.com>
-References: <202311230750.psygl1ot-lkp@intel.com> <20231123055323.417287-1-onenowy@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aHqy9roY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F0C6C433C9;
+	Thu, 23 Nov 2023 15:15:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700752567;
+	bh=lzVZxJXSuVlg5TJP4dPDommHt63YQoouP8CMSO2x+6s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aHqy9roYY5/JVAeimPivoDsCudYKtwdFnGpoLH3m76OeL8P0BDyL5Sc/3miQr2PmL
+	 hRZDRRGAm1Uye0c+yqVpFAK/beZ5hDj70CfWngjrStrTzTvXtSc8NSYhr3ldpsQfaY
+	 r0YfI3xAzbQ5IZOXus3baO9WeGtvVe+D4X7QQ1qjU3B6uwub042jUFn6y80DWhT82k
+	 MTX1bTMLehElqjnjKV5oO01PHxy/Uz+zYAXPf8w7C1cEIoT3gWUSjO5jdkHK4u5/SP
+	 VhJvtTHQuu7E5vz/fTds/fpgnXUPXA1bUvRWNF23KUPZaqQcD2SqRGBwVcGpofXsbE
+	 B/Co9nS6vBIOA==
+Date: Thu, 23 Nov 2023 15:15:56 +0000
+From: Lee Jones <lee@kernel.org>
+To: Sean Young <sean@mess.org>
+Cc: linux-media@vger.kernel.org, linux-pwm@vger.kernel.org,
+	Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Javier Martinez Canillas <javierm@redhat.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Support Opensource <support.opensource@diasemi.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Pavel Machek <pavel@ucw.cz>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Mark Gross <markgross@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Daniel Thompson <daniel.thompson@linaro.org>,
+	Jingoo Han <jingoohan1@gmail.com>, Helge Deller <deller@gmx.de>,
+	Jani Nikula <jani.nikula@intel.com>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-fbdev@vger.kernel.org
+Subject: Re: [PATCH v5 1/4] pwm: rename pwm_apply_state() to
+ pwm_apply_cansleep()
+Message-ID: <20231123151556.GC1354538@google.com>
+References: <cover.1700323916.git.sean@mess.org>
+ <2b973840d800ffb71c2683c37bc996e0cf90a140.1700323916.git.sean@mess.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2b973840d800ffb71c2683c37bc996e0cf90a140.1700323916.git.sean@mess.org>
 
-On Thu, 23 Nov 2023, SungHwan Jung wrote:
+On Sat, 18 Nov 2023, Sean Young wrote:
 
-> It is caused by dependency on hwmon. Setting both hwmon and acer-wmi as
-> module (or in-kernel) in config fixes this error.
+> In order to introduce a pwm api which can be used from atomic context,
+> we will need two functions for applying pwm changes:
+> 
+> 	int pwm_apply_cansleep(struct pwm *, struct pwm_state *);
+> 	int pwm_apply_atomic(struct pwm *, struct pwm_state *);
+> 
+> This commit just deals with renaming pwm_apply_state(), a following
+> commit will introduce the pwm_apply_atomic() function.
+> 
+> Acked-by: Hans de Goede <hdegoede@redhat.com>
+> Acked-by: Jani Nikula <jani.nikula@intel.com>
+> Signed-off-by: Sean Young <sean@mess.org>
+> ---
+>  Documentation/driver-api/pwm.rst              |  8 +++---
+>  .../gpu/drm/i915/display/intel_backlight.c    |  6 ++--
+>  drivers/gpu/drm/solomon/ssd130x.c             |  2 +-
+>  drivers/hwmon/pwm-fan.c                       |  8 +++---
+>  drivers/input/misc/da7280.c                   |  4 +--
+>  drivers/input/misc/pwm-beeper.c               |  4 +--
+>  drivers/input/misc/pwm-vibra.c                |  8 +++---
 
-Then you should add
-	depends on HWMON
-into the Kconfig in the next version of this patch.
+>  drivers/leds/leds-pwm.c                       |  2 +-
+>  drivers/leds/rgb/leds-pwm-multicolor.c        |  4 +--
+
+Acked-by: Lee Jones <lee@kernel.org>
+
+>  drivers/media/rc/pwm-ir-tx.c                  |  4 +--
+>  drivers/platform/x86/lenovo-yogabook.c        |  2 +-
+>  drivers/pwm/core.c                            | 18 ++++++------
+>  drivers/pwm/pwm-twl-led.c                     |  2 +-
+>  drivers/pwm/pwm-vt8500.c                      |  2 +-
+>  drivers/pwm/sysfs.c                           | 10 +++----
+>  drivers/regulator/pwm-regulator.c             |  4 +--
+
+>  drivers/video/backlight/lm3630a_bl.c          |  2 +-
+>  drivers/video/backlight/lp855x_bl.c           |  2 +-
+>  drivers/video/backlight/pwm_bl.c              | 12 ++++----
+
+Acked-by: Lee Jones <lee@kernel.org>
+
+>  drivers/video/fbdev/ssd1307fb.c               |  2 +-
+>  include/linux/pwm.h                           | 28 +++++++++----------
+>  21 files changed, 67 insertions(+), 67 deletions(-)
+
+[...]
 
 -- 
- i.
-
+Lee Jones [李琼斯]
