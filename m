@@ -1,121 +1,89 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 962F635EE8;
-	Thu, 23 Nov 2023 15:16:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aHqy9roY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F0C6C433C9;
-	Thu, 23 Nov 2023 15:15:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700752567;
-	bh=lzVZxJXSuVlg5TJP4dPDommHt63YQoouP8CMSO2x+6s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aHqy9roYY5/JVAeimPivoDsCudYKtwdFnGpoLH3m76OeL8P0BDyL5Sc/3miQr2PmL
-	 hRZDRRGAm1Uye0c+yqVpFAK/beZ5hDj70CfWngjrStrTzTvXtSc8NSYhr3ldpsQfaY
-	 r0YfI3xAzbQ5IZOXus3baO9WeGtvVe+D4X7QQ1qjU3B6uwub042jUFn6y80DWhT82k
-	 MTX1bTMLehElqjnjKV5oO01PHxy/Uz+zYAXPf8w7C1cEIoT3gWUSjO5jdkHK4u5/SP
-	 VhJvtTHQuu7E5vz/fTds/fpgnXUPXA1bUvRWNF23KUPZaqQcD2SqRGBwVcGpofXsbE
-	 B/Co9nS6vBIOA==
-Date: Thu, 23 Nov 2023 15:15:56 +0000
-From: Lee Jones <lee@kernel.org>
-To: Sean Young <sean@mess.org>
-Cc: linux-media@vger.kernel.org, linux-pwm@vger.kernel.org,
-	Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Javier Martinez Canillas <javierm@redhat.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nobkJI9v"
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19FF4C1;
+	Thu, 23 Nov 2023 07:23:20 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1ce656b9780so6967615ad.2;
+        Thu, 23 Nov 2023 07:23:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700752999; x=1701357799; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=O8k0J5g8fTvye961SlGaFZHeC7PjYj+KQtQkSEfcfOY=;
+        b=nobkJI9vC6LppbRZ/fh0nlVFNUwxgXOoOovhLY9pYdH/EYHbyVL9IlFKp8mtbdEJH3
+         xT4eV0eKImmvqd9lWsQIeijJ5tKBndxNKcrDqpo9xmTsXTiOvchPITocvlm5jI7VH7f9
+         3rmw3zH0TW9HDgPUXwH7rNxOtaYoJWjGLsEXmYz1AzcGuMK5k7pnluAWTn8A4tKP0+S6
+         25fAwwpKPF6bZ5EIfq1de6Te1MA+wK/uqiddwwseFUSbpeaLpIXyPf1mNztJ6Yorte8l
+         ECemZvpQfnd6WkmF9f6CaPc5kvUknrU8DNrCbxblkRmomAEuIiyxxC6W04+GH1BKdyM1
+         IYrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700752999; x=1701357799;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=O8k0J5g8fTvye961SlGaFZHeC7PjYj+KQtQkSEfcfOY=;
+        b=dpt1tW5YiV9MmEkL3tq7yCRqA84hN13JYq1Dc5wlYQ89IDDC32UaYz59sY76qbVItX
+         Vn2fmCBOndQ3gOYQ2sUOXRGUyXSSaS/RkrVS/VipR12KNA/FAiUcnt+aHvUgeGlDzbl4
+         Z1DN9KeRi6L1Zm5000xmVXX47z11TgFZX0/QrB5Gm4jpJ/kLC8LiQ66WPMiPqboDYDAa
+         G8vPFrsiaUr4FAythkiYNrqPHO/ni33ar8DrtnC61osAM+Q4IC+gtvcMqEQk19hZgdnI
+         QbGC3y2e5PEzRlx+BEnc3qnqCRzoPQRjqkRqIY1T951Sh3z3yCQ6BAVP7K8keDCm0oMo
+         EaeQ==
+X-Gm-Message-State: AOJu0YzvYdhaxgd3t/PCMfZBwN0jGdUYIpcMcvEVCb7uSxZbCXPavigk
+	CrKhTr3fCYH4FPPc0YlMENw=
+X-Google-Smtp-Source: AGHT+IE600Ab4cUQicMoMEPXhDZXqX+n8l2zmdX8bzr6PkqlfIQjhSoXlYepYPH0IrVCo/nbyqwBFQ==
+X-Received: by 2002:a17:903:4289:b0:1cf:64c9:b116 with SMTP id ju9-20020a170903428900b001cf64c9b116mr5559508plb.4.1700752999465;
+        Thu, 23 Nov 2023 07:23:19 -0800 (PST)
+Received: from localhost.localdomain ([110.46.146.116])
+        by smtp.gmail.com with ESMTPSA id e12-20020a17090301cc00b001c737950e4dsm418565plh.2.2023.11.23.07.23.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Nov 2023 07:23:19 -0800 (PST)
+From: SungHwan Jung <onenowy@gmail.com>
+To: Hans de Goede <hdegoede@redhat.com>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	"Lee, Chun-Yi" <jlee@suse.com>,
 	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Support Opensource <support.opensource@diasemi.com>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Pavel Machek <pavel@ucw.cz>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Mark Gross <markgross@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Daniel Thompson <daniel.thompson@linaro.org>,
-	Jingoo Han <jingoohan1@gmail.com>, Helge Deller <deller@gmx.de>,
-	Jani Nikula <jani.nikula@intel.com>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: SungHwan Jung <onenowy@gmail.com>,
 	platform-driver-x86@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-fbdev@vger.kernel.org
-Subject: Re: [PATCH v5 1/4] pwm: rename pwm_apply_state() to
- pwm_apply_cansleep()
-Message-ID: <20231123151556.GC1354538@google.com>
-References: <cover.1700323916.git.sean@mess.org>
- <2b973840d800ffb71c2683c37bc996e0cf90a140.1700323916.git.sean@mess.org>
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH v3 0/2] Add support for Acer Predator PHN16-71
+Date: Fri, 24 Nov 2023 00:22:25 +0900
+Message-ID: <20231123152229.4920-1-onenowy@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <2b973840d800ffb71c2683c37bc996e0cf90a140.1700323916.git.sean@mess.org>
 
-On Sat, 18 Nov 2023, Sean Young wrote:
+This series of patches adds support for Acer Predator PHN16-71 in acer-wmi
+including platform profile, (thermal) mode key and fan speed monitoring.
 
-> In order to introduce a pwm api which can be used from atomic context,
-> we will need two functions for applying pwm changes:
-> 
-> 	int pwm_apply_cansleep(struct pwm *, struct pwm_state *);
-> 	int pwm_apply_atomic(struct pwm *, struct pwm_state *);
-> 
-> This commit just deals with renaming pwm_apply_state(), a following
-> commit will introduce the pwm_apply_atomic() function.
-> 
-> Acked-by: Hans de Goede <hdegoede@redhat.com>
-> Acked-by: Jani Nikula <jani.nikula@intel.com>
-> Signed-off-by: Sean Young <sean@mess.org>
-> ---
->  Documentation/driver-api/pwm.rst              |  8 +++---
->  .../gpu/drm/i915/display/intel_backlight.c    |  6 ++--
->  drivers/gpu/drm/solomon/ssd130x.c             |  2 +-
->  drivers/hwmon/pwm-fan.c                       |  8 +++---
->  drivers/input/misc/da7280.c                   |  4 +--
->  drivers/input/misc/pwm-beeper.c               |  4 +--
->  drivers/input/misc/pwm-vibra.c                |  8 +++---
+The acer-wmi driver already includes fan control and turbo mode support
+for gaming laptops that use predator sense app (version 3), but PHN16-71
+operates in different way with new predator sense (version 4).
+To distinguish from implementation for previous model, new implementation
+for this device is marked with "v4".
 
->  drivers/leds/leds-pwm.c                       |  2 +-
->  drivers/leds/rgb/leds-pwm-multicolor.c        |  4 +--
+Changes in v3:
+- change dependencies in kconfig
 
-Acked-by: Lee Jones <lee@kernel.org>
+Changes in v2:
+- fix typo
+- remove redundant "if" statement
 
->  drivers/media/rc/pwm-ir-tx.c                  |  4 +--
->  drivers/platform/x86/lenovo-yogabook.c        |  2 +-
->  drivers/pwm/core.c                            | 18 ++++++------
->  drivers/pwm/pwm-twl-led.c                     |  2 +-
->  drivers/pwm/pwm-vt8500.c                      |  2 +-
->  drivers/pwm/sysfs.c                           | 10 +++----
->  drivers/regulator/pwm-regulator.c             |  4 +--
+SungHwan Jung (2):
+  platform/x86: acer-wmi: Add platform profile and mode key support for
+    Predator PHN16-71
+  platform/x86: acer-wmi: add fan speed monitoring for Predator PHN16-71
 
->  drivers/video/backlight/lm3630a_bl.c          |  2 +-
->  drivers/video/backlight/lp855x_bl.c           |  2 +-
->  drivers/video/backlight/pwm_bl.c              | 12 ++++----
-
-Acked-by: Lee Jones <lee@kernel.org>
-
->  drivers/video/fbdev/ssd1307fb.c               |  2 +-
->  include/linux/pwm.h                           | 28 +++++++++----------
->  21 files changed, 67 insertions(+), 67 deletions(-)
-
-[...]
+ drivers/platform/x86/Kconfig    |   3 +-
+ drivers/platform/x86/acer-wmi.c | 364 +++++++++++++++++++++++++++++++-
+ 2 files changed, 365 insertions(+), 2 deletions(-)
 
 -- 
-Lee Jones [李琼斯]
+2.43.0
+
