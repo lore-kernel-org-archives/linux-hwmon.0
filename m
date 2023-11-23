@@ -1,22 +1,23 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="V2/nGg+l"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="RlVRdU5h"
 Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC41D1B3;
-	Wed, 22 Nov 2023 16:49:00 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA666D46;
+	Wed, 22 Nov 2023 16:49:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-	t=1700700515; x=1701305315; i=w_armin@gmx.de;
-	bh=yDHyDHS5S4Auj4mc9ZSQ4WBkDIhFW3w9J4NlOR396bA=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-	b=V2/nGg+l89FJhovOYpe620NwhhbJeixnNf5TJhKUg/1tNy8FgIBy15nG/3LwbE0s
-	 VFFo+VoBAzE0QRJN2xL+6ZC+2PYvnbTCcWl6TtAB7RwF93cj0/2yKsBdyTZnxcmi2
-	 jrs7bRzeD6jbWev8rgWCHfaSdRE8xXgH+i3/1n16IPtCtgFZ0MDsIyuD4zhaHY/Gq
-	 tvgX4MnKqp7owsc1z1qr12sHy+mQM+riTxcbFT0TBj5p8HAEVCC7UCJv8DPtkUl4o
-	 MZN59DrxGprpNewGzoYvkaEpJDltLpR4/+G0lPqfNkLkvIhBTSwZCTROwf07azSef
-	 peeWJeNcVkSG1Go9Zw==
+	t=1700700520; x=1701305320; i=w_armin@gmx.de;
+	bh=0V3bzfnMuRNI/HSKvd9H3yajcogpKLc5fz8Tc5YYU+E=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:
+	 References;
+	b=RlVRdU5hrO810MAZ5l8slJAU6xEjGmxBj81/5DEKCgNmCZW+WUSqEfJ1v7dGfSiA
+	 wlLoFsbVnXcIBqmLoLqH+AiI6390+ha7jRDKF+rz3uIwsO441F1q7WMsoOmjJQa1g
+	 fSvr05chP625v/LbfFnu+l2tq9oJlNaHGOrFvuEx1kbRZzmp0+E0aBF7MYUk7ZjWc
+	 AuP5Ux8rM/btC3b3rOE6Z0Bqg6qY4k1dkfIWIHULK1RIlvwojC93WIonoNzFq0Eoj
+	 OkRIfwCWk9Z6VZpZTqdskqWxRDmROtVKkaEiElOKOGnQ8KaaI25VU92iPkAJb2YQD
+	 1zI/hQ8giuVdUmsDiQ==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from mx-amd-b650.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
  (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1ML9yS-1qnt2n1YNm-00I9EK; Thu, 23 Nov 2023 01:48:35 +0100
+ 1MDQiS-1rD5QP43c6-00AYWC; Thu, 23 Nov 2023 01:48:40 +0100
 From: Armin Wolf <W_Armin@gmx.de>
 To: pali@kernel.org
 Cc: jdelvare@suse.com,
@@ -27,10 +28,12 @@ Cc: jdelvare@suse.com,
 	platform-driver-x86@vger.kernel.org,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 0/9] hwmon: (dell-smm) Add support for WMI SMM interface
-Date: Thu, 23 Nov 2023 01:48:11 +0100
-Message-Id: <20231123004820.50635-1-W_Armin@gmx.de>
+Subject: [PATCH v4 2/9] hwmon: (dell-smm) Move blacklist handling to module init
+Date: Thu, 23 Nov 2023 01:48:13 +0100
+Message-Id: <20231123004820.50635-3-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20231123004820.50635-1-W_Armin@gmx.de>
+References: <20231123004820.50635-1-W_Armin@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -38,86 +41,217 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:/8/j+v/jLv65EcbwtRVIULNAn+AXMfHuCCmvpDJblvjb9KBaCNQ
- z8yXIudV5LTlgMloxMGj7afibyf8EQXUY6U6mZ5CpUERbAX5NZxALXOPMleJagbDyZ973Bc
- Qq27PNbFtWBLtAmJ8Mg9JPoYG/LbNCyq5wXbTnqrDrm4vkzCa65eV9S1yXa4rMt06LunQVk
- C7dCEkO0SKzo96M2Y5zzQ==
-UI-OutboundReport: notjunk:1;M01:P0:QEu2HiJ3IXc=;uhPAUJLf6aJNhsq/a4AmdUvLkMv
- fskxnYN3fHyK/C4fBiQGBo6E+F0GI1mHP+M7nA635SHjT7MiSi69tje66wx5f2mbQvglkv4u9
- BoXP8/Zo5svlJwOqzvjXdKMaoLjM8P2sfYkMEdJLbZdtQsexVXeSgBE1gUfRkNbIeukV7CBNs
- c2H+HKf9zZmFGj5ddmZbvFW+L6uHTn8IP657sz7KLpNJtq3eSocYIbNVYRNMerO6sZUS4GoPC
- UtLOORNEKONOUS0aSn0Y7iZ9KRPFF4mQJHPQCSn3oQ+O/p3x9A9o7RdoYQVdkxfH20u6SI6Gl
- eMmL2sMXfKGGjM/IdTpLqQ+aN1Thsv8/KKL+dBNJXMJznUJTXGfEpEvYgM3tfxCtZI7fQpNFb
- d7UgXSHouXiFEytu4RCmTgnbB0KeloKHlDCqDPvUiGLfC2RHQhLNj3qn5iKiNqrtKupSvfyus
- jUbWdPAHeWdUOuIhpqZgo9IcTXoa2ZadzNG/agVHXfeuK+WDBoJ9wAZOnhberRNoCeyk/6phQ
- nMy2iFuDRR/uPmHxsuuxXUlLUHb/FEHdUSgAJ1jCdaX6EkSoEB2EVKBCaavW0Fgpg8JJnVIib
- W8F1wVGumbvHTO/6McFj66eDYCPrAjr/JcO5Xy+RGIIPSZdpVFv4pNYoSAIkLydSKZLNdXAdm
- e5LlrpeLGyGVhEBZVe7kNEMDxSUNDGKF3XaXvhQhc4lnWlM6RJLOWxq6NmuMulCPt456/Fa30
- 07S8Dx+bivUKuO4mRRUjPwKj1Ugpj59oTYAG1mZwcjVFoRQB8WZtw1y6TRijFYGDikeg9n08o
- gOMKsvrgMBhtz+m/2795hxcz3msGQzYfkAvXxUDzr01OeYKNH4Ohx0A9LjjJMQmoJDg5rVQrU
- L2e6YOU12AaNCZ5HIjWH1LEE6tFIH4KpIaJqyXxiyWzbd4rGPqQbsVub8mGBa5lYNrauGtdwj
- df4AJg==
+X-Provags-ID: V03:K1:a/fdW2dy4yeFSAYerlCeoKCs5X20lLxsnjkJMe/xNOw3HCPoC0b
+ XCdVWBKQNBxshBIX/abhURkl1ldltxDRzeB6YV7+y4wL/Xfljrkz/a7aXCq1dv4FUAIeatt
+ YjDeqm8e+AD+XDAOIyZDCYI1QDxXOX/RICSzBeWaCKm0HQboZLJekwbo2sq7OEe4kpx9OE8
+ IcrImgBvEclY1pFxyPacA==
+UI-OutboundReport: notjunk:1;M01:P0:KJkxZR1bsD0=;EoBxRaRiYzt2O2djAy2Wczj9GZQ
+ LBpLai+YmtYELmJKjvZveB/lIccuz6d4iYMiGCbpAg5Vh7UQPNt9TG1RbEJKOgCAUh5nA7HyK
+ rcfzRTE9G0ksxJktUcGClPoPUlDXL9TNtz0Ar2AzDH51EShgVWs9dmjpGa4SqA40NlisS4CJH
+ khNcdHBV4EqaLtjiYjgQmmqPi4dJKGbjwqMZfBpZPNKnKIjM4gzpo4oZqwbNFcTp3wViT1Tv4
+ 7X34MHGNOkfA2SGbrZ9DXDFI7mCdb639shxgQclk6E7ujNTUXmmEhDX11UWpPcOP2K6d9adat
+ XpYFircMd35CQO/8OtlLVioAosncJeeOI6E6SJ0pZr+eccilQ4g2ijFM2XJ6v2dwEzPalrf6H
+ HmKAcm+2K+Chmd/D96z9dM20wfhdSaBO4d9w88M62kdQNuCk6lZp4sgPnyv2OL74gG/dzgfkl
+ wj5+hJ1p5XTvvlRPRy+qvro5asKaFkhJQrGJaLe8f/h2WjWhJ04fptHADH8Nb+VqoLT/ijLx6
+ s0KTvsNy3UmcFFNALoTt5wuz4UicuXNmNmPUajQeKAeWq3rWVxgnJ8FsmOrFxkRnLcE1Cs8S+
+ jErCmYFqCNuZXLWR+Gz5xUKc/vYN+4fTePc3hRxgDqzhimfGLKpiGHL5qwYlPS7n6iNOt6rCX
+ AlWR7C1QXfY7q9+PwlLzC7xGjg2pM/L1Flc/i0y9IIk0mgbNyhgLKSMI5S+WKrOFiEjAu27tK
+ 0mXHMkhjh6wDbaXE01B4exNu4DbX9BiW6EJiOvsR6XB0a+lZBKPqMFK8xe3VhpXn0Y1E2pQGp
+ r+29viAxMLELNPs4SU4N+2mafJ53s12xZGKHvl2/0fOJzh5/NkXhQhco0qQnLFYQWL7PiReo1
+ QKP5hmGvZQyF5yXK8ovHCxU23XUMhrcn07DqBfleAXVjrvqDvb2BbodzD4xeRmkot+L6pwIfS
+ N0H3dA0w5+Emyzkw2SvNXTwodvk=
 
-This patch series adds support for an alternative SMM calling
-backend to the dell-smm-hwmon driver. The reason for this is
-that on some modern machines, the legacy SMM calling interface
-does not work anymore and the SMM handler can be called over
-ACPI WMI instead.
+Future SMM calling backends will not be able to probe during
+module init, meaning the DMI tables used for backlisting broken
+features would have to drop their __initconst attribute.
+Prevent this by moving the blacklist handling to module init.
 
-The first four patches prepare the driver by allowing to
-specify different SMM calling backends, and by moving most of
-the DMI handling into i8k_init() so that the DMI tables can
-keep their __initconst attributes (the WMI SMM backend driver
-does not probe at module init time). The fifth patch does some
-minor cleanup, while the next three patches implement the new
-WMI SMM calling backend. The last patch adds the machine of
-the user who requested and tested the changes to the fan control
-whitelist.
+Tested-by: <serverror@serverror.com>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ drivers/hwmon/dell-smm-hwmon.c | 63 ++++++++++++++++++----------------
+ 1 file changed, 34 insertions(+), 29 deletions(-)
 
-If the driver does not detect the legacy SMM interface, either
-because the machine is not whitelisted or because the SMM handler
-does not react, it registers an WMI driver which will then bound
-to the WMI SMM interface and do the remaining initialization.
+diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
+.c
+index f66bcfd7c330..87d668799c9f 100644
+=2D-- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -90,8 +90,6 @@ struct dell_smm_data {
+ 	uint i8k_fan_mult;
+ 	uint i8k_pwm_mult;
+ 	uint i8k_fan_max;
+-	bool disallow_fan_type_call;
+-	bool disallow_fan_support;
+ 	unsigned int manual_fan;
+ 	unsigned int auto_fan;
+ 	int temp_type[DELL_SMM_NO_TEMP];
+@@ -138,6 +136,8 @@ static uint fan_max;
+ module_param(fan_max, uint, 0);
+ MODULE_PARM_DESC(fan_max, "Maximum configurable fan speed (default: autod=
+etect)");
 
-The deprecated procfs interface is not supported when using the
-WMI SMM calling backend for the following reason: the WMI driver
-can potentially be instantiated multiple times while the deprectated
-procfs interface cannot. This should not cause any regressions
-because on machines supporting only the WMI SMM interface, the
-driver would, until now, not load anyway.
++static bool disallow_fan_type_call, disallow_fan_support;
++
+ static const char * const temp_labels[] =3D {
+ 	"CPU",
+ 	"GPU",
+@@ -256,7 +256,7 @@ static int i8k_get_fan_status(const struct dell_smm_da=
+ta *data, u8 fan)
+ 		.ebx =3D fan,
+ 	};
 
-All patches where tested on a Dell Inspiron 3505 and a Dell
-OptiPlex 7000.
+-	if (data->disallow_fan_support)
++	if (disallow_fan_support)
+ 		return -EINVAL;
 
-Changes since v3:
-- Using unsigned integers for registers
-- use TAB instead of space after comma
+ 	return dell_smm_call(data->ops, &regs) ? : regs.eax & 0xff;
+@@ -272,7 +272,7 @@ static int i8k_get_fan_speed(const struct dell_smm_dat=
+a *data, u8 fan)
+ 		.ebx =3D fan,
+ 	};
 
-Changes since v2:
-- Rework WMI response parsing
-- Use #define for method number
+-	if (data->disallow_fan_support)
++	if (disallow_fan_support)
+ 		return -EINVAL;
 
-Changes since v1:
-- Cc platform driver maintainers
-- Fix formating inside documentation
+ 	return dell_smm_call(data->ops, &regs) ? : (regs.eax & 0xffff) * data->i=
+8k_fan_mult;
+@@ -288,7 +288,7 @@ static int _i8k_get_fan_type(const struct dell_smm_dat=
+a *data, u8 fan)
+ 		.ebx =3D fan,
+ 	};
 
-Armin Wolf (9):
-  hwmon: (dell-smm) Prepare for multiple SMM calling backends
-  hwmon: (dell-smm) Move blacklist handling to module init
-  hwmon: (dell-smm) Move whitelist handling to module init
-  hwmon: (dell-smm) Move DMI config handling to module init
-  hwmon: (dell-smm) Move config entries out of i8k_dmi_table
-  hwmon: (dell-smm) Introduce helper function for data init
-  hwmon: (dell-smm) Add support for WMI SMM interface
-  hwmon: (dell-smm) Document the WMI SMM interface
-  hwmon: (dell-smm) Add Optiplex 7000 to fan control whitelist
+-	if (data->disallow_fan_support || data->disallow_fan_type_call)
++	if (disallow_fan_support || disallow_fan_type_call)
+ 		return -EINVAL;
 
- Documentation/hwmon/dell-smm-hwmon.rst |  38 +-
- drivers/hwmon/Kconfig                  |   1 +
- drivers/hwmon/dell-smm-hwmon.c         | 604 +++++++++++++++++--------
- drivers/platform/x86/wmi.c             |   1 +
- 4 files changed, 454 insertions(+), 190 deletions(-)
+ 	return dell_smm_call(data->ops, &regs) ? : regs.eax & 0xff;
+@@ -313,7 +313,7 @@ static int __init i8k_get_fan_nominal_speed(const stru=
+ct dell_smm_data *data, u8
+ 		.ebx =3D fan | (speed << 8),
+ 	};
 
+-	if (data->disallow_fan_support)
++	if (disallow_fan_support)
+ 		return -EINVAL;
+
+ 	return dell_smm_call(data->ops, &regs) ? : (regs.eax & 0xffff);
+@@ -326,7 +326,7 @@ static int i8k_enable_fan_auto_mode(const struct dell_=
+smm_data *data, bool enabl
+ {
+ 	struct smm_regs regs =3D { };
+
+-	if (data->disallow_fan_support)
++	if (disallow_fan_support)
+ 		return -EINVAL;
+
+ 	regs.eax =3D enable ? data->auto_fan : data->manual_fan;
+@@ -340,7 +340,7 @@ static int i8k_set_fan(const struct dell_smm_data *dat=
+a, u8 fan, int speed)
+ {
+ 	struct smm_regs regs =3D { .eax =3D I8K_SMM_SET_FAN, };
+
+-	if (data->disallow_fan_support)
++	if (disallow_fan_support)
+ 		return -EINVAL;
+
+ 	speed =3D (speed < 0) ? 0 : ((speed > data->i8k_fan_max) ? data->i8k_fan=
+_max : speed);
+@@ -705,7 +705,7 @@ static umode_t dell_smm_is_visible(const void *drvdata=
+, enum hwmon_sensor_types
+ 		}
+ 		break;
+ 	case hwmon_fan:
+-		if (data->disallow_fan_support)
++		if (disallow_fan_support)
+ 			break;
+
+ 		switch (attr) {
+@@ -715,7 +715,7 @@ static umode_t dell_smm_is_visible(const void *drvdata=
+, enum hwmon_sensor_types
+
+ 			break;
+ 		case hwmon_fan_label:
+-			if (data->fan[channel] && !data->disallow_fan_type_call)
++			if (data->fan[channel] && !disallow_fan_type_call)
+ 				return 0444;
+
+ 			break;
+@@ -731,7 +731,7 @@ static umode_t dell_smm_is_visible(const void *drvdata=
+, enum hwmon_sensor_types
+ 		}
+ 		break;
+ 	case hwmon_pwm:
+-		if (data->disallow_fan_support)
++		if (disallow_fan_support)
+ 			break;
+
+ 		switch (attr) {
+@@ -1381,24 +1381,6 @@ static int __init dell_smm_probe(struct platform_de=
+vice *pdev)
+ 	platform_set_drvdata(pdev, data);
+ 	data->ops =3D &i8k_smm_ops;
+
+-	if (dmi_check_system(i8k_blacklist_fan_support_dmi_table)) {
+-		if (!force) {
+-			dev_notice(&pdev->dev, "Disabling fan support due to BIOS bugs\n");
+-			data->disallow_fan_support =3D true;
+-		} else {
+-			dev_warn(&pdev->dev, "Enabling fan support despite BIOS bugs\n");
+-		}
+-	}
+-
+-	if (dmi_check_system(i8k_blacklist_fan_type_dmi_table)) {
+-		if (!force) {
+-			dev_notice(&pdev->dev, "Disabling fan type call due to BIOS bugs\n");
+-			data->disallow_fan_type_call =3D true;
+-		} else {
+-			dev_warn(&pdev->dev, "Enabling fan type call despite BIOS bugs\n");
+-		}
+-	}
+-
+ 	strscpy(data->bios_version, i8k_get_dmi_data(DMI_BIOS_VERSION),
+ 		sizeof(data->bios_version));
+ 	strscpy(data->bios_machineid, i8k_get_dmi_data(DMI_PRODUCT_SERIAL),
+@@ -1453,6 +1435,27 @@ static struct platform_device *dell_smm_device;
+ /*
+  * Probe for the presence of a supported laptop.
+  */
++static void __init dell_smm_init_dmi(void)
++{
++	if (dmi_check_system(i8k_blacklist_fan_support_dmi_table)) {
++		if (!force) {
++			pr_notice("Disabling fan support due to BIOS bugs\n");
++			disallow_fan_support =3D true;
++		} else {
++			pr_warn("Enabling fan support despite BIOS bugs\n");
++		}
++	}
++
++	if (dmi_check_system(i8k_blacklist_fan_type_dmi_table)) {
++		if (!force) {
++			pr_notice("Disabling fan type call due to BIOS bugs\n");
++			disallow_fan_type_call =3D true;
++		} else {
++			pr_warn("Enabling fan type call despite BIOS bugs\n");
++		}
++	}
++}
++
+ static int __init i8k_init(void)
+ {
+ 	/*
+@@ -1469,6 +1472,8 @@ static int __init i8k_init(void)
+ 			i8k_get_dmi_data(DMI_BIOS_VERSION));
+ 	}
+
++	dell_smm_init_dmi();
++
+ 	/*
+ 	 * Get SMM Dell signature
+ 	 */
 =2D-
 2.39.2
 
