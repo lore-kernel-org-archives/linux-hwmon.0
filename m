@@ -1,301 +1,156 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 371C52D03D;
-	Fri, 24 Nov 2023 14:18:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eqMpE9+W"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BBEFBC433CA;
-	Fri, 24 Nov 2023 14:18:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700835506;
-	bh=aPHy+qeTdF90rjUwBCivA+w2Kks4lGAc9/2OBXiOdGo=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=eqMpE9+W/iwe5BSU4Ht6GiqSk5BxYYBq+tq1q8p2KHQI8AIS+38OH8iIczA2tk1Td
-	 mIlRXsSUQ4hAeVfb2LS47LgDKNuL7QcMn43TnakKdkRy9lT9fDUgUQLvUyzkjckUjw
-	 CKsmVqpBpzOTMGHbQIgZGoPUNZ4No2e+OYjVzMSjbioTQk1U/ouTh8aV6T+2bfdwux
-	 YDegVFXwWZGTCdtITLeEGABHcosRFS74JmiCWunKQNkA2JEXXzT++rEltl2R5N9qkq
-	 Fmb4D8yvyf/VM5I5CIDx9QouZXIbl0Uj2AqjsoHtp5RPVqecEmTWywlicq9jdxu1m9
-	 LjFGtJYwjczRg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4167C624B4;
-	Fri, 24 Nov 2023 14:18:26 +0000 (UTC)
-From: Nuno Sa via B4 Relay <devnull+nuno.sa.analog.com@kernel.org>
-Date: Fri, 24 Nov 2023 15:18:16 +0100
-Subject: [PATCH v2 1/2] dt-bindings: hwmon: Add LTC4282 bindings
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+X-Greylist: delayed 76 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 24 Nov 2023 06:59:25 PST
+Received: from mxout014.mail.hostpoint.ch (mxout014.mail.hostpoint.ch [IPv6:2a00:d70:0:e::314])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF622D72;
+	Fri, 24 Nov 2023 06:59:25 -0800 (PST)
+Received: from [10.0.2.44] (helo=asmtp014.mail.hostpoint.ch)
+	by mxout014.mail.hostpoint.ch with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2 (FreeBSD))
+	(envelope-from <code@stefan-gloor.ch>)
+	id 1r6Xd3-0007WZ-06;
+	Fri, 24 Nov 2023 15:58:01 +0100
+Received: from 157.20.79.83.dynamic.wline.res.cust.swisscom.ch ([83.79.20.157] helo=thinkpad.localdomain)
+	by asmtp014.mail.hostpoint.ch with esmtpa (Exim 4.96.2 (FreeBSD))
+	(envelope-from <code@stefan-gloor.ch>)
+	id 1r6Xd2-000C8u-1q;
+	Fri, 24 Nov 2023 15:58:00 +0100
+X-Authenticated-Sender-Id: code@stefan-gloor.ch
+From: Stefan Gloor <code@stefan-gloor.ch>
+To: jdelvare@suse.com,
+	linux@roeck-us.net,
+	corbet@lwn.net,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Stefan Gloor <code@stefan-gloor.ch>
+Subject: [PATCH] hwmon: sht3x: read out sensor serial number
+Date: Fri, 24 Nov 2023 15:55:20 +0100
+Message-ID: <20231124145519.11599-2-code@stefan-gloor.ch>
+X-Mailer: git-send-email 2.41.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231124-ltc4282-support-v2-1-952bf926f83c@analog.com>
-References: <20231124-ltc4282-support-v2-0-952bf926f83c@analog.com>
-In-Reply-To: <20231124-ltc4282-support-v2-0-952bf926f83c@analog.com>
-To: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-doc@vger.kernel.org
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
- Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Bartosz Golaszewski <brgl@bgdev.pl>, 
- Linus Walleij <linus.walleij@linaro.org>, Andy Shevchenko <andy@kernel.org>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1700835504; l=7583;
- i=nuno.sa@analog.com; s=20231116; h=from:subject:message-id;
- bh=OsmBFs3WX3gV38NkMDwvqrVkUAAW0yysY75GmZvn7xY=;
- b=AaYiW0WTAAKx7mUkzlCLaxn6Q9O0c5gdLWcEfM47PnPF5O9Xeb9TZAikjqdVHlbnEku1ugrKt
- iR2uHGxMpAmCHTWi2LY2oryMswM/n72pU7VVzbtmpuGDcWkr86I/Okg
-X-Developer-Key: i=nuno.sa@analog.com; a=ed25519;
- pk=3NQwYA013OUYZsmDFBf8rmyyr5iQlxV/9H4/Df83o1E=
-X-Endpoint-Received:
- by B4 Relay for nuno.sa@analog.com/20231116 with auth_id=100
-X-Original-From: Nuno Sa <nuno.sa@analog.com>
-Reply-To: <nuno.sa@analog.com>
+Content-Transfer-Encoding: 8bit
+X-Vs-State: 0
 
-From: Nuno Sa <nuno.sa@analog.com>
+Some of the temperature/humidity sensors of the STS3x/SHT3x family are
+calibrated and factory-programmed with a unique serial number. This serial
+number can be used to obtain a calibration certificate via an API provided
+by the manufacturer (Sensirion). The serial number is exposed as a
+non-standard sysfs attribute.
 
-Add bindings for the LTC4282 High Current Hot Swap Controller with I2C
-Compatible Monitoring.
+This feature is only available for STS32, STS33 and SHT33. The capability
+to read out the serial number is not documented for other sensors such as
+the STS31, but it is implemented in the ones I tested. To be safe, the
+driver will silently set the serial number to zero if it can not be read.
 
-Signed-off-by: Nuno Sa <nuno.sa@analog.com>
+Tested with:
+1x STS32: serial number present
+2x STS31: serial number present (feature not documented)
+1x SHT31: serial number present (feature not documented)
+
+Signed-off-by: Stefan Gloor <code@stefan-gloor.ch>
 ---
- .../devicetree/bindings/hwmon/adi,ltc4282.yaml     | 206 +++++++++++++++++++++
- MAINTAINERS                                        |   6 +
- 2 files changed, 212 insertions(+)
+ Documentation/hwmon/sht3x.rst |  2 ++
+ drivers/hwmon/sht3x.c         | 39 +++++++++++++++++++++++++++++++++++
+ 2 files changed, 41 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/adi,ltc4282.yaml b/Documentation/devicetree/bindings/hwmon/adi,ltc4282.yaml
-new file mode 100644
-index 000000000000..6c979f70687e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/adi,ltc4282.yaml
-@@ -0,0 +1,206 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwmon/adi,ltc4282.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Analog Devices LTC4282 I2C High Current Hot Swap Controller over I2C
-+
-+maintainers:
-+  - Nuno Sa <nuno.sa@analog.com>
-+
-+description: |
-+  Analog Devices LTC4282 I2C High Current Hot Swap Controller over I2C.
-+
-+  https://www.analog.com/media/en/technical-documentation/data-sheets/ltc4282.pdf
-+
-+properties:
-+  compatible:
-+    enum:
-+      - adi,ltc4282
-+
-+  reg:
-+    maxItems: 1
-+
-+  vdd-supply: true
-+
-+  clocks:
-+    maxItems: 1
-+
-+  '#clock-cells':
-+    const: 0
-+
-+  adi,rsense-nano-ohms:
-+    description: Value of the sense resistor.
-+
-+  adi,vin-mode-microvolt:
-+    description:
-+      Selects operating range for the Undervoltage, Overvoltage and Foldback
-+      pins. Also for the ADC. Should be set to the nominal input voltage.
-+    enum: [3300000, 5000000, 12000000, 24000000]
-+    default: 12000000
-+
-+  adi,fet-bad-timeout-ms:
-+    description:
-+      From the moment a FET bad conditions is present, this property selects the
-+      wait time/timeout for a FET-bad fault to be signaled. Setting this to 0,
-+      disables FET bad faults to be reported.
-+    default: 255
-+    maximum: 255
-+
-+  adi,overvoltage-dividers:
-+    description: |
-+      Select which dividers to use for VDD Overvoltage detection. Note that
-+      when the internal dividers are used the threshold is referenced to VDD.
-+      The percentages in the datasheet are misleading since the actual values
-+      to look for are in the "Absolute Maximum Ratings" table in the
-+      "Comparator Inputs" section. In there there's a line for each of the 5%,
-+      10% and 15% settings with the actual min, typical and max tolerances.
-+    $ref: /schemas/types.yaml#/definitions/string
-+    enum: [external, vdd_5_percent, vdd_10_percent, vdd_15_percent]
-+    default: 0
-+
-+  adi,undervoltage-dividers:
-+    description: |
-+      Select which dividers to use for VDD Overvoltage detection. Note that
-+      when the internal dividers are used the threshold is referenced to VDD.
-+      The percentages in the datasheet are misleading since the actual values
-+      to look for are in the "Absolute Maximum Ratings" table in the
-+      "Comparator Inputs" section. In there there's a line for each of the 5%,
-+      10% and 15% settings with the actual min, typical and max tolerances.
-+    $ref: /schemas/types.yaml#/definitions/string
-+    enum: [external, vdd_5_percent, vdd_10_percent, vdd_15_percent]
-+    default: 0
-+
-+  adi,current-limit-sense-microvolt:
-+    description:
-+      The current limit sense voltage of the chip is adjustable between
-+      12.5mV and 34.4mV in 3.1mV steps. This effectively limits the current
-+      on the load.
-+    enum: [12500, 15625, 18750, 21875, 25000, 28125, 31250, 34375]
-+    default: 25000
-+
-+  adi,overcurrent-retry:
-+    description:
-+      If set, enables the chip to auto-retry 256 timer cycles after an
-+      Overcurrent fault.
-+    type: boolean
-+
-+  adi,overvoltage-retry-disable:
-+    description:
-+      If set, disables the chip to auto-retry 50ms after an Overvoltage fault.
-+      It's enabled by default.
-+    type: boolean
-+
-+  adi,undervoltage-retry-disable:
-+    description:
-+      If set, disables the chip to auto-retry 50ms after an Undervoltage fault.
-+      It's enabled by default.
-+    type: boolean
-+
-+  adi,fault-log-enable:
-+    description:
-+      If set, enables the FAULT_LOG and ADC_ALERT_LOG registers to be written
-+      to the EEPROM when a fault bit transitions high and hence, will be
-+      available after a power cycle (the chip loads the contents of
-+      the EE_FAULT_LOG register - the one in EEPROM - into FAULT_LOG at boot).
-+    type: boolean
-+
-+  adi,gpio-alert:
-+    description: Use the ALERT pin as a GPIO.
-+    type: boolean
-+
-+  adi,gpio1-mode:
-+    description: Defines the function of the Pin.
-+    $ref: /schemas/types.yaml#/definitions/string
-+    enum: [gpio, power_bad, power_good]
-+
-+  adi,gpio2-mode:
-+    description: Defines the function of the Pin.
-+          0 - GPIO Mode.
-+          1 - Acts as an input pin and it is feeded into the ADC.
-+          2 - Pulls Low when the MOSFET is dissipating power (stress).
-+    $ref: /schemas/types.yaml#/definitions/string
-+    enum: [gpio, adc_input, stress_fet]
-+
-+  adi,gpio3-mode:
-+    description: Defines the function of the Pin.
-+          0 - GPIO Mode.
-+          1 - Acts as an input pin and it is feeded into the ADC.
-+    $ref: /schemas/types.yaml#/definitions/string
-+    enum: [gpio, adc_input]
-+
-+  gpio-controller:
-+    description:
-+      This property applies if some of the pins are used as GPIOs.
-+
-+  '#gpio-cells':
-+    const: 2
-+
-+required:
-+  - compatible
-+  - reg
-+  - adi,rsense-nano-ohms
-+
-+dependencies:
-+  adi,alert-as-gpio: [gpio-controller, '#gpio-cells']
-+
-+allOf:
-+  - if:
-+      required:
-+        - adi,gpio1-mode
-+    then:
-+      allOf:
-+        - if:
-+            properties:
-+              adi,gpio1-mode:
-+                const: gpio
-+          then:
-+            dependencies:
-+              adi,gpio1-mode: [gpio-controller, '#gpio-cells']
-+  - if:
-+      required:
-+        - adi,gpio2-mode
-+    then:
-+      allOf:
-+        - if:
-+            properties:
-+              adi,gpio2-mode:
-+                const: gpio
-+          then:
-+            dependencies:
-+              adi,gpio2-mode: [gpio-controller, '#gpio-cells']
-+  - if:
-+      required:
-+        - adi,gpio3-mode
-+    then:
-+      allOf:
-+        - if:
-+            properties:
-+              adi,gpio3-mode:
-+                const: gpio
-+          then:
-+            dependencies:
-+              adi,gpio3-mode: [gpio-controller, '#gpio-cells']
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        hwmon@50 {
-+            compatible = "adi,ltc4282";
-+            reg = <0x50>;
-+            adi,rsense-nano-ohms = <500>;
-+
-+            gpio-controller;
-+            #gpio-cells = <2>;
-+
-+            adi,gpio1-mode = "power_good";
-+            adi,gpio2-mode = "gpio";
-+        };
-+    };
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 97f51d5ec1cf..4a2b84ea1274 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12629,6 +12629,12 @@ S:	Maintained
- F:	Documentation/hwmon/ltc4261.rst
- F:	drivers/hwmon/ltc4261.c
+diff --git a/Documentation/hwmon/sht3x.rst b/Documentation/hwmon/sht3x.rst
+index 87864ffd1777..1727994f4a4a 100644
+--- a/Documentation/hwmon/sht3x.rst
++++ b/Documentation/hwmon/sht3x.rst
+@@ -85,4 +85,6 @@ repeatability:      write or read repeatability, higher repeatability means
+                         - 0: low repeatability
+                         - 1: medium repeatability
+                         - 2: high repeatability
++serial_number:      unique serial number of the sensor in decimal, 0 if
++                    unavailable
+ =================== ============================================================
+diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
+index 79657910b79e..e4d436af1097 100644
+--- a/drivers/hwmon/sht3x.c
++++ b/drivers/hwmon/sht3x.c
+@@ -41,6 +41,7 @@ static const unsigned char sht3x_cmd_heater_off[]              = { 0x30, 0x66 };
+ /* other commands */
+ static const unsigned char sht3x_cmd_read_status_reg[]         = { 0xf3, 0x2d };
+ static const unsigned char sht3x_cmd_clear_status_reg[]        = { 0x30, 0x41 };
++static const unsigned char sht3x_cmd_read_serial_number[]      = { 0x37, 0x80 };
  
-+LTC4282 HARDWARE MONITOR DRIVER
-+M:	Nuno Sa <nuno.sa@analog.com>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Supported
-+F:	Documentation/devicetree/bindings/hwmon/adi,ltc4282.yaml
+ /* delays for single-shot mode i2c commands, both in us */
+ #define SHT3X_SINGLE_WAIT_TIME_HPM  15000
+@@ -169,6 +170,7 @@ struct sht3x_data {
+ 	u32 wait_time;			/* in us*/
+ 	unsigned long last_update;	/* last update in periodic mode*/
+ 	enum sht3x_repeatability repeatability;
++	u32 serial_number;
+ 
+ 	/*
+ 	 * cached values for temperature and humidity and limits
+@@ -606,6 +608,33 @@ static int update_interval_write(struct device *dev, int val)
+ 	return 0;
+ }
+ 
++static int serial_number_read(struct sht3x_data *data)
++{
++	int ret;
++	char buffer[SHT3X_RESPONSE_LENGTH];
++	struct i2c_client *client = data->client;
 +
- LTC4306 I2C MULTIPLEXER DRIVER
- M:	Michael Hennerich <michael.hennerich@analog.com>
- L:	linux-i2c@vger.kernel.org
-
++	ret = sht3x_read_from_command(client, data,
++				      sht3x_cmd_read_serial_number,
++				      buffer,
++				      SHT3X_RESPONSE_LENGTH, 0);
++	if (ret)
++		return ret;
++
++	data->serial_number = (buffer[0] << 24) | (buffer[1] << 16) |
++			      (buffer[3] << 8) | buffer[4];
++	return ret;
++}
++
++static ssize_t serial_number_show(struct device *dev,
++				  struct device_attribute *attr,
++				  char *buf)
++{
++	struct sht3x_data *data = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "%d\n", data->serial_number);
++}
++
+ static ssize_t repeatability_show(struct device *dev,
+ 				  struct device_attribute *attr,
+ 				  char *buf)
+@@ -639,10 +668,12 @@ static ssize_t repeatability_store(struct device *dev,
+ 
+ static SENSOR_DEVICE_ATTR_RW(heater_enable, heater_enable, 0);
+ static SENSOR_DEVICE_ATTR_RW(repeatability, repeatability, 0);
++static SENSOR_DEVICE_ATTR_RO(serial_number, serial_number, 0);
+ 
+ static struct attribute *sht3x_attrs[] = {
+ 	&sensor_dev_attr_heater_enable.dev_attr.attr,
+ 	&sensor_dev_attr_repeatability.dev_attr.attr,
++	&sensor_dev_attr_serial_number.dev_attr.attr,
+ 	NULL
+ };
+ 
+@@ -899,6 +930,14 @@ static int sht3x_probe(struct i2c_client *client)
+ 	if (ret)
+ 		return ret;
+ 
++	/*
++	 * Serial number readout is not documented for the whole
++	 * STS3x/SHT3x series, so we don't return on error here.
++	 */
++	ret = serial_number_read(data);
++	if (ret)
++		data->serial_number = 0;
++
+ 	hwmon_dev = devm_hwmon_device_register_with_info(dev,
+ 							 client->name,
+ 							 data,
 -- 
 2.41.0
 
