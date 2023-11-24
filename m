@@ -1,134 +1,99 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bCnVa/lW"
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0BD91BC2;
-	Fri, 24 Nov 2023 09:34:51 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id 5614622812f47-3b2ec9a79bdso1367818b6e.3;
-        Fri, 24 Nov 2023 09:34:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700847291; x=1701452091; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=emE8oCCMObVTti3WryKtK+jq28122RLCctiS74g2B70=;
-        b=bCnVa/lWH7mzaYA+rJh+LPMPjnQ0O9roHMhel5jVynA7L2pXLZO5iLh9SbFvpsTZfE
-         Z9C2EelYFv3/LB7NT1LGMOW7Bxlf6qXqd+Z8qG3nyiA397kNy+49ccl6AhJPpStF5LdT
-         I/FR3PAOYlrZWyM7su+7l6qp1H/q3+ytx2dsUrKWqOvy9vb+lBZKPQrN93ZWhSBHtKAf
-         6zVCspmluioGI7xHlSnUrUPFaqe6Y3VXabd0wiZjkWKWrVozEqxbepCGDlYyO+znZuiS
-         jlJINVmemDTF+aGvMq+olmsW9Oj0igNZKKEbDmJJCWelP2BNMCuGBkQ7DSjNLok7zjP3
-         YvNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700847291; x=1701452091;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=emE8oCCMObVTti3WryKtK+jq28122RLCctiS74g2B70=;
-        b=r5HteV0Qxcqq3Dwdc77DH5YD2mJ023Z0M/OQ7ESn1vBknA4eOUqsBml5nBGaKUYcYs
-         5PK9qhm+IrF9wcOqsZrfr42u+2xiIBKTeUlkSS+45+i6M3asl05R/XOS3qK3TMdWSnTA
-         yvA2XRwsa2ticdUxIXKVgyhDX78SeAfTnZz/VkkJtzbmWox+5ZV64wLOdGZvbs50UjmF
-         88kRkIC18cFrTRcAklPNPjl4HzBxIgDGh+vcmifOwfVzlItXAoVGk7kTivHlY6tdowuW
-         8GOSsWKuBXUYhTigdzLIBrxgI2pKbjuFQ/pM1dhIaZMm3/0c623yN3pgC7AtEg0o44dH
-         m2FQ==
-X-Gm-Message-State: AOJu0YyLI9kSoSiouQmlJvFO+5JDjte4nCFMN9VJVapf0eDqaxkmajI5
-	SEfdaMHEzYUNETpzVMjQPB6dsxBivgM=
-X-Google-Smtp-Source: AGHT+IGEmQFPKJVdsB1JTaoH8/GVfWDjbl7LsFS0JEMsBIAesCPzS5YzxGLI472GNutJ8XgZvNO7Hw==
-X-Received: by 2002:a05:6808:219b:b0:3b6:d371:d4d4 with SMTP id be27-20020a056808219b00b003b6d371d4d4mr4765282oib.37.1700847290908;
-        Fri, 24 Nov 2023 09:34:50 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r30-20020a63515e000000b005b4b70738e5sm3348124pgl.8.2023.11.24.09.34.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Nov 2023 09:34:50 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <52909c46-4699-442b-9303-ec914fba093b@roeck-us.net>
-Date: Fri, 24 Nov 2023 09:34:48 -0800
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="RG0xaV/0"
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411211BC9;
+	Fri, 24 Nov 2023 10:28:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+	t=1700850472; x=1701455272; i=w_armin@gmx.de;
+	bh=YOwNjDfGnJRJthcNBht0dNRhiwLqkmRlexlwOFwzi44=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+	b=RG0xaV/0Th+t69dZ+vzHSCjLERYvu/mBSKNlrG1LxgamPxKcUzarGDd8dkLM8KJM
+	 ye0glsE1DZCQX7W5MTKNHX4BD1he20dTbxg5h+YgdV/G2IxMcZZn21Jamp0jaXFKY
+	 Hfl73iQgLLGg34AVBbZoMzyvj5Rwpk+KMHPaFDfj0RWIgdC+mBRZQRGlE1qPlmVH4
+	 gOHgAautMpOakAi5XEayHTkk/D/GEM9sjlVcxaPgbMMFi9FdMA4n/Wrwjz7ZYye9G
+	 QBT65sQyZGRvYahEP8xzhFAU2as37wUz8Alxh7VRzscJjiewzMPN6Cw4+iRz3meZy
+	 84AxzmxPMxEgG1ixWg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from mx-amd-b650.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MatVh-1rifTf1kSJ-00cULO; Fri, 24 Nov 2023 19:27:52 +0100
+From: Armin Wolf <W_Armin@gmx.de>
+To: jdelvare@suse.com,
+	linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (acpi_power_meter) Fix 4.29 MW bug
+Date: Fri, 24 Nov 2023 19:27:47 +0100
+Message-Id: <20231124182747.13956-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: sht3x: read out sensor serial number
-Content-Language: en-US
-To: Stefan Gloor <code@stefan-gloor.ch>, jdelvare@suse.com, corbet@lwn.net,
- linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20231124145519.11599-2-code@stefan-gloor.ch>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20231124145519.11599-2-code@stefan-gloor.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:FSfNVWMWv8UmnIPizhw0uZDKiGrcoL0B18QnbH5XNikbR+CPo+r
+ UhCsbAxKGd8saZs5Jt0uMC7HphiM7y//Rx9IQjSIWQfmwlOwfqA3UZ3SMf0lyyyaD7ajvfI
+ JrboNahOd1r8+D0fX+lQ4nWIKKII6nr8Ja5PFws2jFv6BeLj0lUHmB7/CGV44eVg/VfIo0T
+ jHu8U291TkotvmhNi0X2w==
+UI-OutboundReport: notjunk:1;M01:P0:6rj7i4piqfE=;XFSf2fXxtxeD6KElg3zwEDlmweZ
+ qYUnmgmsNyQ7o/HjxD2PMhsH2Mpn8U4KZEzR6KCeqgKfNQWOHddUg+3Tug7yWPkMR3c9CFvzd
+ RnXpknb2ZfuyqacYzfI+SNLli75YvXTHORiSdWUj5/b8sBjGdfMo41UJIdLpOW5urBtownWu0
+ Xwr+L0GFG3WNxQtVRtUPy1HMRHUcNlZ+xpRfpc9ejcM5B7aSCXQ1sD8G7kRvGx76argJMohcQ
+ P/+9yI1ChUTdTPfUpYUb5WhhQ+zu0XPOnePGyiLCxQDVqR+mqq6W5LBtObrZxUwOOF3MteGQ5
+ MAhJw/zcZyw/+0OGNYXxQMhiyW3pwyoi8XVc0ld8Clycht2R6pIesz54a2mFZdH1Hyws+2zyp
+ aebSgkaVcCE3iNjLNeXz2mOB9y4438B/rkTXs84cxna6L0xHOoVeW6DEwZjJ2SnvjLG3F31J3
+ HsKNtUsVlxtpznN960hs1bOeGSS73nmpDlOEC6JptUyVAh6sR3wlrDKdRIIt5SsW4Yb+lkD/l
+ NG6ZUG1vMIL2WQmrxL5yOJoM+jfWneJeelH0om/k+5uv4S1dk7F+MrmnIuwR8UHWgZLjccTop
+ 8C7Bdes/n7HfrgijlyfPFDRtSYIlLmecxSlMYRQUFbCzxcH37VXLk3LXvQSJlC4wpeYrkg04m
+ XjKZvaLMG0ARBoP3gHaT4nRZWVvrvLSGMOa1eB8SMkHM8b5KHiG7na0yszd3jjW6VFL7SRa9A
+ ctThhVEZ7TrmNsRiBchu+iYyawT9d/n1xGqOuyj323TBF0HNGpxpIzhcBwff5+u/5n5n+2eSU
+ g/NMC3RMDPinFWkq+eZ8NWVbOp0iT1bgU2e7OQRAovRlXRzWkZ9ucSRxFP6f/h2MOGNVPRqjI
+ IpnJUyoG6IHRm0uMDA1UPjThsprCSKYO7DZQmQLw9tdxxqpXusxCXuJ0R6p4Zf2xMZTHvWSPq
+ TYnL2UBSZxMwlXVAruZZ1bdPU90=
 
-On 11/24/23 06:55, Stefan Gloor wrote:
-> Some of the temperature/humidity sensors of the STS3x/SHT3x family are
-> calibrated and factory-programmed with a unique serial number. This serial
-> number can be used to obtain a calibration certificate via an API provided
-> by the manufacturer (Sensirion). The serial number is exposed as a
-> non-standard sysfs attribute.
-> 
-> This feature is only available for STS32, STS33 and SHT33. The capability
-> to read out the serial number is not documented for other sensors such as
-> the STS31, but it is implemented in the ones I tested. To be safe, the
-> driver will silently set the serial number to zero if it can not be read.
-> 
-> Tested with:
-> 1x STS32: serial number present
-> 2x STS31: serial number present (feature not documented)
-> 1x SHT31: serial number present (feature not documented)
-> 
-> Signed-off-by: Stefan Gloor <code@stefan-gloor.ch>
+The ACPI specification says:
 
-I am not going to accept this as sysfs attribute. Please implement
-using debugfs.
+"If an error occurs while obtaining the meter reading or if the value
+is not available then an Integer with all bits set is returned"
 
+Since the "integer" is 32 bits in case of the ACPI power meter,
+userspace will get a power reading of 2^32 * 1000 miliwatts (~4.29 MW)
+in case of such an error. This was discovered due to a lm_sensors
+bugreport (https://github.com/lm-sensors/lm-sensors/issues/460).
+Fix this by returning -ENODATA instead.
 
-Also, the attribute (sysfs or debugfs) should not exist if not supported.
-Please only provide if supported.
+Tested-by: <urbinek@gmail.com>
+Fixes: de584afa5e18 ("hwmon driver for ACPI 4.0 power meters")
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ drivers/hwmon/acpi_power_meter.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thanks,
-Guenter
+diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_m=
+eter.c
+index 8db740214ffd..703666b95bf4 100644
+=2D-- a/drivers/hwmon/acpi_power_meter.c
++++ b/drivers/hwmon/acpi_power_meter.c
+@@ -31,6 +31,7 @@
+ #define POWER_METER_CAN_NOTIFY	(1 << 3)
+ #define POWER_METER_IS_BATTERY	(1 << 8)
+ #define UNKNOWN_HYSTERESIS	0xFFFFFFFF
++#define UNKNOWN_POWER		0xFFFFFFFF
+
+ #define METER_NOTIFY_CONFIG	0x80
+ #define METER_NOTIFY_TRIP	0x81
+@@ -348,6 +349,9 @@ static ssize_t show_power(struct device *dev,
+ 	update_meter(resource);
+ 	mutex_unlock(&resource->lock);
+
++	if (resource->power =3D=3D UNKNOWN_POWER)
++		return -ENODATA;
++
+ 	return sprintf(buf, "%llu\n", resource->power * 1000);
+ }
+
+=2D-
+2.39.2
 
