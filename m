@@ -1,136 +1,140 @@
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBF342C842;
+	Fri, 24 Nov 2023 14:18:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jc7pzhnd"
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6032B1721;
-	Fri, 24 Nov 2023 05:31:23 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-a00f67f120aso263956766b.2;
-        Fri, 24 Nov 2023 05:31:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700832682; x=1701437482; darn=vger.kernel.org;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xqoNh8/DGOCDjWGBAsyHy8zDaolvBGz6WR/aPalN8vA=;
-        b=jc7pzhndHV74TrW5Y6euP8yk3htKIp8W3o1J4svRrdUUZjIdDRWgvExoS9S0QJD/zU
-         rBFEIT2MxFeZ/RzClYiIL0/02BNJdUr2xcGIsYQ77LaRf35g73whiGnOOChNAdVWSOrI
-         3hoq8vKd69rpowWA013qKYH7Bo61cWyy4QgiMXLsdISIwruZm2QyMOky9gdvpigFT2kh
-         1fDO4jvhAIcvXHr6BSmtl7uTFXktnDXDFMVWUS4DaHBnHSBtYtswpMLFp79/pPk1yWRG
-         hmZEhc/S29RsphTAt0pf2F0NPDGxYOfd/0JNu3TNk7MPkdFYp/43uE6PvHkLxFHbM6ee
-         ZfYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700832682; x=1701437482;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xqoNh8/DGOCDjWGBAsyHy8zDaolvBGz6WR/aPalN8vA=;
-        b=C0nGbEllQd0ZR9UGYNYIabEcZU4JD8C4NYjDZNpA7s+0dg2NqPP62OPWLMLz/5M+78
-         tmpXg8oVR1r1kZlVcj8bEdUHzE3TPASfVNWVYIHvrhKOQoQYzN0wuRoyMRLPPE/+6Ovy
-         ZADRjidfCaGRO9R8L+NVGSt9DfoHfPWXnLMvxpTMKbojBG56AvwWtji0wwC1jWKR/131
-         /BKk4Zi6MGdDyIz9IRP9E/sQDEELpVn1H/Ist3FnTBsPOM0reHjQ0Xr+OaRIPGOobYge
-         XINBminf+wxL25fA4hoDhLRwrTKsXxPIaP0D1X5uq7tFW57KBgHdj36ParxPaVNgGetL
-         ah2g==
-X-Gm-Message-State: AOJu0Yxm62nmPBvJXSHKOOIkD7oKbpAsw8xRU5Yr17p55DoW6b0eC3DF
-	kyWzyWAWzcpI3hUuINPbNBs=
-X-Google-Smtp-Source: AGHT+IF2CMWqW6QgTEUE8dPizHd4yGlrN9Vk/VgdOvaxxbdjXw50mDYgNNx7FjDnvVExXduvtyJWvw==
-X-Received: by 2002:a17:906:5da:b0:a03:a857:c6e0 with SMTP id t26-20020a17090605da00b00a03a857c6e0mr1663923ejt.77.1700832681495;
-        Fri, 24 Nov 2023 05:31:21 -0800 (PST)
-Received: from orome.fritz.box (p200300e41f0fa600f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f0f:a600:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id c24-20020a170906529800b009fe2f96ee9bsm2064075ejm.8.2023.11.24.05.31.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Nov 2023 05:31:21 -0800 (PST)
-Date: Fri, 24 Nov 2023 14:31:18 +0100
-From: Thierry Reding <thierry.reding@gmail.com>
-To: Sean Young <sean@mess.org>
-Cc: linux-media@vger.kernel.org, linux-pwm@vger.kernel.org,
-	Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
-	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Javier Martinez Canillas <javierm@redhat.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Support Opensource <support.opensource@diasemi.com>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-	Mark Gross <markgross@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Daniel Thompson <daniel.thompson@linaro.org>,
-	Jingoo Han <jingoohan1@gmail.com>, Helge Deller <deller@gmx.de>,
-	Jani Nikula <jani.nikula@intel.com>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-fbdev@vger.kernel.org
-Subject: Re: [PATCH v5 1/4] pwm: rename pwm_apply_state() to
- pwm_apply_cansleep()
-Message-ID: <ZWClpnMRg_vjuI_R@orome.fritz.box>
-References: <cover.1700323916.git.sean@mess.org>
- <2b973840d800ffb71c2683c37bc996e0cf90a140.1700323916.git.sean@mess.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pT2Q7tgx"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A7D20C433C8;
+	Fri, 24 Nov 2023 14:18:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700835506;
+	bh=uUJTbaCd7Vo6Sti9JdVroV1uYWkZ/cQnxQ94paZ9TME=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=pT2Q7tgxVbcYaGHxeVSKIkLgWIoc68CzY+U4JjsobpYR1mhgMc242nmysD3dkhQsX
+	 Cz7c2j8/7npn9sJNEmHjF5bjr6LKbnD2/yV6c3JhPNYq9j1nvq417bdSixKuBzT9yq
+	 YyLUf4BogZcFrWjocKDCyHWlW2H0PIeUfoeDUb77hJ+HKa7fjAbLU1hYkiUpUeq27x
+	 ROCU/Y5Jkrwj+QRDcD3LsuBtu5FmD4Vo0v/SL4iQWpk/TI2GbRXLSv+ElkKAIqyD+J
+	 EUHRXo3azAK5wvPfgMqP8qC18m7bvSsX+fxEt+o9QEXP6sl4XwkOuBDnVYwjViW064
+	 +IcpG4ScGbJJw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9666AC61DF4;
+	Fri, 24 Nov 2023 14:18:26 +0000 (UTC)
+From: Nuno Sa via B4 Relay <devnull+nuno.sa.analog.com@kernel.org>
+Subject: [PATCH v2 0/2] Add support for LTC4282
+Date: Fri, 24 Nov 2023 15:18:15 +0100
+Message-Id: <20231124-ltc4282-support-v2-0-952bf926f83c@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="mURPCj0PduVIws0V"
-Content-Disposition: inline
-In-Reply-To: <2b973840d800ffb71c2683c37bc996e0cf90a140.1700323916.git.sean@mess.org>
-User-Agent: Mutt/2.2.12 (2023-09-09)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAKiwYGUC/03MQQ6DIBBA0auYWXcMA6LoqvdouiB0VBIFA9o0M
+ d69pKsu3+L/EzInzxmG6oTEb599DAXyVoGbbZgY/asYpJCKSDa47K6RRmI+ti2mHY2jttOsSAs
+ DpdoSj/7zOz6exWOKK+5zYvv3IUGaeqFranVvOoUKwxFine3dBrvEqXZxhev6AhJ3lvafAAAA
+To: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-doc@vger.kernel.org
+Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, 
+ Linus Walleij <linus.walleij@linaro.org>, Andy Shevchenko <andy@kernel.org>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1700835504; l=3566;
+ i=nuno.sa@analog.com; s=20231116; h=from:subject:message-id;
+ bh=uUJTbaCd7Vo6Sti9JdVroV1uYWkZ/cQnxQ94paZ9TME=;
+ b=H5MYSzpyc32lZ4hUJgkdgeMFQOSC4eZWgSewE5GQ47D4cIXnrBOpDcVJUCq5kGNyymx93rZRK
+ 3cSqwG1QrG4Cz28KoMtFZiVigFY29HP/QRzjGVMDvUXKyl4BeDO8QTd
+X-Developer-Key: i=nuno.sa@analog.com; a=ed25519;
+ pk=3NQwYA013OUYZsmDFBf8rmyyr5iQlxV/9H4/Df83o1E=
+X-Endpoint-Received:
+ by B4 Relay for nuno.sa@analog.com/20231116 with auth_id=100
+X-Original-From: Nuno Sa <nuno.sa@analog.com>
+Reply-To: <nuno.sa@analog.com>
 
+v1:
+ * https://lore.kernel.org/linux-hwmon/20231110151905.1659873-1-nuno.sa@analog.com/
 
---mURPCj0PduVIws0V
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+v2:
+- driver
+  * Add Docs to index.rst;
+  * Removed ltc4282_power_on() - Not very reasonable to enable/disable
+    an hot swap from the driver;
+  * Removed struct device *dev parameter from struct ltc4282_state;
+  * Error out for rsense-nano-ohms < 100;
+  * Return 0 on .is_visible() - not a negative error;
+  * Moved to 80 column limit (Sorry about this one - it adds a lot of
+    unnecessary diffs);
+  * Replace ENOTSUPP with EOPNOTSUPP;
+  * Return 0 on .is_visible() - not a negative error;
+  * Remove Power Average (Should be done in userspace) - With it, no
+    need for handling energy + tick overflows;
+  * Return 0 instead of 'ret' in ltc4282_read_energy();
+  * Add adi prefix to 'vin-mode-microvolt';
+  * Changed 'adi,current-limit-microvolt' to
+    'adi,current-limit-sense-microvolt' so it's clear the device expects
+     volts to be configured;
+  * Moved fault logs to debugfs while adding a new interface to clear all
+    faults in one write;
+  * Keep historic alarms in ltc4282_read_alarm()
+  * Cache energy status so we don't have to read it from the device on
+    every energy value read;
+  * Use enable attributes to switch between VDD - VSOURCE;
+  * Support reset_history;
+  * Sync with bindings - use strings properties;
+  * Move to clock provider to support the clockout settings;
+  * Support gpio valid_mask;
+  * Use field_prep() instead of a driver specific macro (to be coherent
+    with other drivers);
+  * Add comment on the big sleep pos reset;
+  * Be consistent in hex letters;
+  * Use BIT() in the power formulas;
+  * Make use of in_range();
+  * Use SENSOR_DEVICE_ATTR_[RO|WO];
+  * No comma for the terminator line;
+  * Update ltc4282.rst doc.
 
-On Sat, Nov 18, 2023 at 04:16:17PM +0000, Sean Young wrote:
-> In order to introduce a pwm api which can be used from atomic context,
-> we will need two functions for applying pwm changes:
->=20
-> 	int pwm_apply_cansleep(struct pwm *, struct pwm_state *);
-> 	int pwm_apply_atomic(struct pwm *, struct pwm_state *);
->=20
-> This commit just deals with renaming pwm_apply_state(), a following
-> commit will introduce the pwm_apply_atomic() function.
+- bindings
+  * Use string properties for gpio_modes and over/under voltage dividers;
+  * Added #clock-cells;
+  * Add adi prefix to 'vin-mode-microvolt;
+  * Changed adi,current-limit-microvolt -> adi,current-limit-sense-microvolt;
+  * Updated the dts example accordingly.
 
-Sorry, I still don't agree with that _cansleep suffix. I think it's the
-wrong terminology. Just because something can sleep doesn't mean that it
-ever will. "Might sleep" is much more accurate because it says exactly
-what might happen and indicates what we're guarding against.
+V2 ended up with huge changes. Specially the introduction of the enabled
+stuff between VSOURCE and VDD since these are mutaally exclusive (share
+the same registers and we need to mux between one of them). It feels
+that I'm overdoing things a bit but OTOH, I'm fairly happy with the
+result. Hopefully, it is acceptable.
 
-Thierry
+I would also like to mention that there are still some questionable
+custom sysfs interfaces as I was not sure if I should remove them and
+got not reply in v1 (which is fine).
 
---mURPCj0PduVIws0V
-Content-Type: application/pgp-signature; name="signature.asc"
+Lastly, as one can see, there are lots of changes since v1 so I'm sorry
+if I missed some of the comments given in review. Not on purpose... And
+it would be really nice if one of the GPIO maintainers could look at the
+GPIO stuff. Please see my V1 cover where I speak about it. I'm not
+really sure I'm properly handling the pins.
 
------BEGIN PGP SIGNATURE-----
+---
+Nuno Sa (2):
+      dt-bindings: hwmon: Add LTC4282 bindings
+      hwmon: ltc4282: add support for the LTC4282 chip
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmVgpaQACgkQ3SOs138+
-s6HS8A/7BjtLlUH5CMfFlBTprZQsDfOXKtQTFT7vSIrS5EOAuemIkCNWaesc5juC
-gFpHk93q2Y8+pTg499tii+Ztr7m6Z00sAA8fpGEFwUn03iU9qrrC6/7gwVu8Dsjv
-m326JeQsUo8SL3s5JqH7vKQDUU0agG/rMAFwo5nIzD5xRGmtg1VB+Vg57/T0K4a4
-W99vEqpxwYAZLNQeId2ZTCZHREypDELrwcq0l0JYOOXdsvYa4r34dPep1KDfTvxK
-p6fGafsCc1qJ8S9ygxlTGPv/5+56JXyOEB75XXxBK2QaqEz9iHPxgfJsHz7K3DFx
-cpZtcEd899PpMbAiW5fag0BJcnUNffFf4CoZU34H8MPsp4DzKs7UvJlbQ79KNz6N
-VIjXUsk876G5NuLjwomvkmaxx1cQPbom4YknTav6Zm5dloV36kppnYuZ9+PV8NlW
-uudn06BsR8Yp7d2hpCHK6Vou1zbJtQHxQosq3e4e11mnMXxpnftSCuWZCeUedAhG
-zufpjdOkX1q24J9odZWGWz8rhGWgJUwtIpF8SOkPromrYAxZK+yJAb7AvepYNQNh
-i3X0j8HUnYCWUx7ty20NjF5rVY/GJh5DXncoB5cQqVlLCr8YUvFsOQ9YaUuFa/J5
-M/YrTcS9Bi0p3ps9qE3ec5+WY2E85s4+KeG0Z0/GD1ifS+r4fls=
-=1cUS
------END PGP SIGNATURE-----
+ .../devicetree/bindings/hwmon/adi,ltc4282.yaml     |  206 +++
+ Documentation/hwmon/index.rst                      |    1 +
+ Documentation/hwmon/ltc4282.rst                    |  108 ++
+ MAINTAINERS                                        |    8 +
+ drivers/hwmon/Kconfig                              |   11 +
+ drivers/hwmon/Makefile                             |    1 +
+ drivers/hwmon/ltc4282.c                            | 1891 ++++++++++++++++++++
+ 7 files changed, 2226 insertions(+)
 
---mURPCj0PduVIws0V--
+Thanks!
+- Nuno Sá
+
