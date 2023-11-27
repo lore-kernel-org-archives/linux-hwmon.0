@@ -1,24 +1,24 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA50610A37;
-	Mon, 27 Nov 2023 08:11:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D23D10A28;
+	Mon, 27 Nov 2023 08:12:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VtV3jRUi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02068C433C7;
-	Mon, 27 Nov 2023 08:11:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N6v7l+Nw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 134B1C433C8;
+	Mon, 27 Nov 2023 08:12:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701072669;
-	bh=bpWldNvw9mvVqhQM5ADwm6MqwJrs016CP96LH6mUA/o=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=VtV3jRUiKk3CDnEC8TeQXiS/r1H5Rviyrhxmx+KFoyP0+8C5CYMCivMsjLg976kr7
-	 MYv9rgIattvF3aNlZwN9KNkx6Tq/1HNA2F/pifZhGGg/fBJGsqc9YW+lxKGdnbSr50
-	 jNzW09bjvV7nw3SFjx9BqIsX1yK+w9qTMIvOFgHeiYhnvsq4UMMasToNkGCCDdcaEH
-	 d8+SHwzZW6nfZ9llILiXevMR3rgAbB3zrIBYE3SzzXmEqb3vfz1w9kygZb3dJh409X
-	 KJSV6D248C+tHFpNE9IO3lx3tJ54DRvCj8jQL13DyoXgc6pwRIu0zP07F6elFZfJvu
-	 PAoDpCLJvvt/Q==
-Message-ID: <76957975-56e7-489e-9c79-086b6c1ffe89@kernel.org>
-Date: Mon, 27 Nov 2023 09:10:57 +0100
+	s=k20201202; t=1701072741;
+	bh=89Osf04W2a/k7i/UC2ydsCIp/o6tir3VsWUrVtErmQM=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=N6v7l+NwERgYfhK0Csksn9xTGbJhTCV7QubRZ9jWuRREJ0AzPO+jqcXtnnTLY0XLq
+	 f8gliMlXzZ7g/lDoVZg0fNOpTIftXagnfJS7oxp8tEStme6e4tjqsP0WNoeeICE77Y
+	 z3utCnwayszo1l258/hSqbjHlM/nO4NSXTv2bmnVAoYFvPVlcjDclCLj7jMUTLEx0N
+	 eCLicZQU86zU5sGbhXpF0FTrb9s+KYraWyZDYL7GQvODsA6p0thimTQ3o863oSch0a
+	 rW9jsiCgAUZ35F/dslg1QPVylAxEirF/cO89mJMka8BHuAH2KUBUWSE0XjTv+vAzvz
+	 ILEWIgvnZr4mw==
+Message-ID: <ac950d01-d9aa-4fb7-810d-b21335e4cc94@kernel.org>
+Date: Mon, 27 Nov 2023 09:12:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -28,6 +28,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2 2/2] hwmon: ltc4282: add support for the LTC4282 chip
 Content-Language: en-US
+From: Krzysztof Kozlowski <krzk@kernel.org>
 To: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>,
  kernel test robot <lkp@intel.com>,
  Nuno Sa via B4 Relay <devnull+nuno.sa.analog.com@kernel.org>,
@@ -41,7 +42,7 @@ Cc: oe-kbuild-all@lists.linux.dev, Jean Delvare <jdelvare@suse.com>,
 References: <20231124-ltc4282-support-v2-2-952bf926f83c@analog.com>
  <202311250548.lUn3bm1A-lkp@intel.com>
  <fb2aaa4c69c88738499dfbf46ef93e3b81ca93cb.camel@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <76957975-56e7-489e-9c79-086b6c1ffe89@kernel.org>
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -85,39 +86,45 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <fb2aaa4c69c88738499dfbf46ef93e3b81ca93cb.camel@gmail.com>
+In-Reply-To: <76957975-56e7-489e-9c79-086b6c1ffe89@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 27/11/2023 08:53, Nuno Sá wrote:
->>    355  
->>  > 356  unsigned long ltc4282_recalc_rate(struct clk_hw *hw, unsigned long parent)
->>    357  {
->>    358          struct ltc4282_state *st = container_of(hw, struct ltc4282_state,
->>    359                                                  clk_hw);
->>    360          u32 clkdiv;
->>    361          int ret;
->>    362  
->>    363          ret = regmap_read(st->map, LTC4282_CLK_DIV, &clkdiv);
->>    364          if (ret)
->>    365                  return 0;
->>    366  
->>    367          clkdiv = FIELD_GET(LTC4282_CLKOUT_MASK, clkdiv);
->>    368          if (!clkdiv)
->>    369                  return 0;
->>    370          if (clkdiv == LTC4282_CLKOUT_INT)
->>    371                  return LTC4282_CLKOUT_SYSTEM;
->>    372  
->>    373          return LTC4282_CLKOUT_CNV;
->>    374  }
->>    375  
+On 27/11/2023 09:10, Krzysztof Kozlowski wrote:
+> On 27/11/2023 08:53, Nuno Sá wrote:
+>>>    355  
+>>>  > 356  unsigned long ltc4282_recalc_rate(struct clk_hw *hw, unsigned long parent)
+>>>    357  {
+>>>    358          struct ltc4282_state *st = container_of(hw, struct ltc4282_state,
+>>>    359                                                  clk_hw);
+>>>    360          u32 clkdiv;
+>>>    361          int ret;
+>>>    362  
+>>>    363          ret = regmap_read(st->map, LTC4282_CLK_DIV, &clkdiv);
+>>>    364          if (ret)
+>>>    365                  return 0;
+>>>    366  
+>>>    367          clkdiv = FIELD_GET(LTC4282_CLKOUT_MASK, clkdiv);
+>>>    368          if (!clkdiv)
+>>>    369                  return 0;
+>>>    370          if (clkdiv == LTC4282_CLKOUT_INT)
+>>>    371                  return LTC4282_CLKOUT_SYSTEM;
+>>>    372  
+>>>    373          return LTC4282_CLKOUT_CNV;
+>>>    374  }
+>>>    375  
+>>>
 >>
+>> Arghh, I do need to see if I can add some test branch of my own to the test robot :/.
+>> Anyways, will wait for some more reviewing before sending v3 to address this.
 > 
-> Arghh, I do need to see if I can add some test branch of my own to the test robot :/.
-> Anyways, will wait for some more reviewing before sending v3 to address this.
+> It's easy to test your patches on your own machines...  Just build few
+> different configs.
+> 
 
-It's easy to test your patches on your own machines...  Just build few
-different configs.
+Wait, this was not even unusual test, just standard compile, which means
+you did not do basic tests on your end. You must build your new driver
+with W=1, smatch, sparse and coccinelle before sending upstream.
 
 Best regards,
 Krzysztof
