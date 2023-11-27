@@ -1,286 +1,134 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b="BIF2DD/u"
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2139.outbound.protection.outlook.com [40.107.255.139])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95970124;
-	Sun, 26 Nov 2023 21:45:53 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VzkADlpYwBdxIQZkKvGEsXNleWvVYZdrWMn+2LtgbS5D5q3vtzGbq63LLzjToOTHvKZmXF+dPSvE6E5qHDMtxPQOZBuUQWlyMWWKOjzPTIob+KTIhJdirUgeyFCfKRx52tSqSiCnE0io0wkVRfF8O4KxsZFyvkADDmpZmeav/nb2/d20cOLHpC+/AUjFZ+q51NuDdWjPVFYVx6sdxdaFiQ+5VYgAlJr+Tp4owimGn3RoML9Z04Vd18Mag6gr4vcJPdWfmP19vV3EwvQs4KQ1rumezZIbLGHQICOMLEmsJ/N2a65tR7o8ugJ676HjdRnMZpx02qegTOCxHGEhlKbPUQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1He1AIe8gVwfcHdPJ1xuf6rTQn/3S/Q7MBx3NAb/4ok=;
- b=SopVUE0l6FcvkefrotdsGF0AmfcZInhkadcNFdOBlWFbkH2eWtqgtt/s82Gq1dgd4p9MbzKgvS9Hx3ZcVkWpTC6PP9jb0svorAualSzLa09guyRllxkSnHNUv/t5dSTGo4NMuq6cUm895kesyQG2jW3XLZlOXyljzzRZxtZImNZi018Zqv+TiSZYROD9zDFL8dG2rYynD69LF5GRbVS81V5msyJb2QYEYNMMq++YMO2UtSqR3NVzVSU/GZXsT06VvHN6k62iBBl9149u9H6uy4ry4uIzgSquKYH5cuoMU8CEc4aW/IAIcDBdKcqBgGg09WhB+DEpxp/uEnhpGQr2Jw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1He1AIe8gVwfcHdPJ1xuf6rTQn/3S/Q7MBx3NAb/4ok=;
- b=BIF2DD/uBI6NIJ78yYI5bUu4EQT02WlR+0qlBm90HemvEmX26IN/F4ne5BMWJCLGmiS4DUl4F8LZ88WXwHtfHWfPMSg1P/zHij/Gs3O7qIs/3UGwaRSNtPoJ1G4brmp1i7P1Q7x2/Lj9feg4V57nm4xNC4cbcTQUsySSnCmNfaLTx+iou/OuENqxTh0ECveygOUjE5AbOEibmbAdrqCnw1mrqBOvVyLTfhGkWEuUdLbABw4ByMZXXA6AYSDzmPgoNyiZ7lLkjM2x6mWlV/XHx8h8QiI5cdxRHkfUo5hV1zEb3VKb/84IgFfx/fnYMr2HEqRI74cbM7oU9f7iFmkI5g==
-Received: from SG2PR06MB3365.apcprd06.prod.outlook.com (2603:1096:4:69::12) by
- SEYPR06MB6062.apcprd06.prod.outlook.com (2603:1096:101:d4::16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7025.27; Mon, 27 Nov 2023 05:45:49 +0000
-Received: from SG2PR06MB3365.apcprd06.prod.outlook.com
- ([fe80::55c4:990b:3f5c:b5a1]) by SG2PR06MB3365.apcprd06.prod.outlook.com
- ([fe80::55c4:990b:3f5c:b5a1%4]) with mapi id 15.20.7025.022; Mon, 27 Nov 2023
- 05:45:49 +0000
-From: Billy Tsai <billy_tsai@aspeedtech.com>
-To: Rob Herring <robh@kernel.org>
-CC: "jdelvare@suse.com" <jdelvare@suse.com>, "linux@roeck-us.net"
-	<linux@roeck-us.net>, "krzysztof.kozlowski+dt@linaro.org"
-	<krzysztof.kozlowski+dt@linaro.org>, "joel@jms.id.au" <joel@jms.id.au>,
-	"andrew@aj.id.au" <andrew@aj.id.au>, "corbet@lwn.net" <corbet@lwn.net>,
-	"thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-	"u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-	"p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-	"naresh.solanki@9elements.com" <naresh.solanki@9elements.com>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-aspeed@lists.ozlabs.org"
-	<linux-aspeed@lists.ozlabs.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-doc@vger.kernel.org"
-	<linux-doc@vger.kernel.org>, "linux-pwm@vger.kernel.org"
-	<linux-pwm@vger.kernel.org>, BMC-SW <BMC-SW@aspeedtech.com>,
-	"patrick@stwcx.xyz" <patrick@stwcx.xyz>
-Subject: Re: [PATCH RESEND v10 2/3] dt-bindings: hwmon: Support Aspeed g6 PWM
- TACH Control
-Thread-Topic: [PATCH RESEND v10 2/3] dt-bindings: hwmon: Support Aspeed g6 PWM
- TACH Control
-Thread-Index: AQHaEWg/mi95vh4kakyU/BlPzwqmf7Bwvf+AgAhoGLuADcExAIAAWWVx
-Date: Mon, 27 Nov 2023 05:45:48 +0000
-Message-ID:
- <SG2PR06MB3365CAEE9CE3F691DA1CA1E28BB9A@SG2PR06MB3365.apcprd06.prod.outlook.com>
-References: <20231107105025.1480561-1-billy_tsai@aspeedtech.com>
- <20231107105025.1480561-3-billy_tsai@aspeedtech.com>
- <20231108182135.GA2698015-robh@kernel.org>
- <SG2PR06MB33655734700697E8F6FD0D1B8BB2A@SG2PR06MB3365.apcprd06.prod.outlook.com>
- <CAL_JsqL=2-dD5yFWWDDHu1svcCF-EMZqcYz92Pr7L5ntppNQVA@mail.gmail.com>
-In-Reply-To:
- <CAL_JsqL=2-dD5yFWWDDHu1svcCF-EMZqcYz92Pr7L5ntppNQVA@mail.gmail.com>
-Accept-Language: en-US, zh-TW
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SG2PR06MB3365:EE_|SEYPR06MB6062:EE_
-x-ms-office365-filtering-correlation-id: 75a7f0a6-49ab-4a71-4a74-08dbef0c1bb0
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- 2yuYAnquRS+OsUBKEGhxrBpuHtyptqnvSZ5jV1B2OveHC5ub984Oec5vNhyHhRQ7nV3DAiNV4NXQcc9ZUORX4xu3+YAYA0wlX6KVl3Ka/1W31DYOSMrGnT1uFf/5UHUfccei8IVhI9Kz/+Y+hnmXMRPnwYbVPEehuUHjLvahq8bBZH1erm9QWjyO0dRLCt2cvSvUCqrQqSnSIMOfbeJLvO6fzfeV87JE3wNNyfv45/S6BaKNvon9nHKrjsKKqY0Z9iiLDSKRGYMDo0X6TMN7w2ClrSwiFygARKcEUaFfMtuxJ7KenHgokKaHNHQGm28NiKeUS91x1gXqfdIJbRTlwg0tO+V9QYFIUN2L0cKK1KarPMpZS2vZPCIKWSCGhX3/NeZtjjvP83S+c14nDMvqoUI7HQZQV3TM19VQYJPyT4QFcYCYy4P76Ds697DUI7fUFysr76zEmdvBEc3LPtnE7RyohbFud8K+ox+JlDDndN5WvwMADHuf5ac2PBuHnLZvVki9y8zt3ydj+gbUNK1Wn9IMBqGcSd3uAKzbEjs1g9ygf5P9Slby6sr+o5lpH5shbiK7DMcoenVgOZmAUsgtSU9ed75e0GkC+7JpELZTa48=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3365.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39840400004)(396003)(136003)(366004)(376002)(346002)(230922051799003)(186009)(64100799003)(451199024)(1800799012)(86362001)(38100700002)(122000001)(38070700009)(33656002)(478600001)(966005)(66556008)(66476007)(66446008)(6916009)(316002)(54906003)(64756008)(76116006)(66946007)(91956017)(26005)(55016003)(7696005)(6506007)(71200400001)(55236004)(9686003)(5660300002)(2906002)(7416002)(4326008)(41300700001)(8936002)(8676002)(52536014)(83380400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?plNvgKRUVn92ViCKiO6Ig4/GvkqKZVX6J9I802BehG7GfEV/ClKORlx+7u?=
- =?iso-8859-1?Q?1r6yuH+RKylhsO7EvKCSP06rqdNNIjd5W8+sJR1wgsNhACp97SSxH/Qqzb?=
- =?iso-8859-1?Q?ZSTqYo7akUjLCu3z0yBc+a9KQyMxNW9WOBjkZ6Mednflx2cVNDvhMF2w+S?=
- =?iso-8859-1?Q?oVjpe6nNbR4qejMO+okXIaDsEIUIPyJKaLykzhpKB92V44VQMjdwi63c4P?=
- =?iso-8859-1?Q?8fWUNrX88GBiLpPw+I6mZGcKR9vDY9rIKD2ZMUJTMq/yvgQSrZJgyCmsMV?=
- =?iso-8859-1?Q?jl/UhvpR0A8Sd7r2SY/XzY+55hlAcqP1fXu2WcsMkFAeUjsw0zlQzKAMTH?=
- =?iso-8859-1?Q?GMr9r32nuFmsqGn7eaXTicpaI0H/5i+rEBpUuAY7M5ZyrdidM2s28pDBdJ?=
- =?iso-8859-1?Q?gTWU2/tpe6RsXvbfmCMG0/srb0TTebN18+zIuAbeEE/JVsta2qfty2Ejzm?=
- =?iso-8859-1?Q?7EFyTkC5qxr4CuY1JTmv1+3ATWB0gG+GkGafpcYZng0kecKd/hAxj+zrxQ?=
- =?iso-8859-1?Q?mwYDKCYCGiQ5uyVUUpoXtIk5D9rygVq2xZ6Qj14s8JBjgj1nPpBqYXaBum?=
- =?iso-8859-1?Q?+z/JadAMdVK0smyFqgDL90D6objuVMZ08tg+etGoqoaqtp44oPwF7gD9cC?=
- =?iso-8859-1?Q?l2HBPmohJNwbujfqzwOG+vMxlhPACseAGOOlbSy4E+g6pmlfCLykmf4xBi?=
- =?iso-8859-1?Q?5+AZfo9PfwDoWYsNyCLXpK9uuXKrmGbI0oMGiS6yCLdaJjtvpW1SsF9ofE?=
- =?iso-8859-1?Q?floZeQpwFCykAABBcb4gQC4D1ctdA58xqXoNO0sDiH2+BK+FTzYyRblnAU?=
- =?iso-8859-1?Q?e5BBY+a9ZT/KqgbMITyKIlmWcwHGSGZphJ4MO96cIKfn/LAe4qr4VStezi?=
- =?iso-8859-1?Q?l71BTuwjE0eT1ZzNl1WKO2QrmT6eoR6kVUU28F/LqtwQ+xHjZ21sfTUnpk?=
- =?iso-8859-1?Q?IwpblTWYbIpiRAPjNRzFE0Kj9/6iPWG36naDjlefh9J5xEWTG7Fogr93R9?=
- =?iso-8859-1?Q?xJntXIS8CLsJAGjpPU9KkdoUyEtDWFCuImcEqJeJ1rxAlsqZC12RvxU04R?=
- =?iso-8859-1?Q?Ez3LYUCdFbO4rOvxvzE5nP0my0aj2P3hC2Ny2AHiGVqAPVpzs98ADfts9o?=
- =?iso-8859-1?Q?wbFkfT7UfMcy7nJfofo8HTbfu9JqpdRzs8Y7HOzRQsg3FppqJgaGqUoXwW?=
- =?iso-8859-1?Q?J9qjDLLw1opfESolxfRcFwTzXNWx0yh2CYKggL+hxhuwYc/kepNaIaJ/8w?=
- =?iso-8859-1?Q?bL9XBVsOkFJUGpSb5xCAlumRhqc9ig51XmCMFu2/mGpfLfGlVZyztTrD7U?=
- =?iso-8859-1?Q?aq0aKD1rUfSO/Un4GadsK1VIW61n9HdUeO75X8nB8WpfjSuV00mRQtCakJ?=
- =?iso-8859-1?Q?E5vMgC+fNrKWBcLI0NjHpmIugfbbYeynnK6U4khN2X+8fb1E5r7/HiMPqv?=
- =?iso-8859-1?Q?07xXqQsoMHJlte8zb/iy+9h97edxddcRtdu7hEozdSATQtiARd/dBSXMou?=
- =?iso-8859-1?Q?iWdCzxkAgf7/QoZU5aw561nSzhyL8oe4rIsc4d/WIHLRrvoUzPGaad6o5S?=
- =?iso-8859-1?Q?hcW9ajTSj/R7BcYJrAoDb8+JWpz6My5V+Pt0FZ3hC/xsvE6qaqHSJTdyui?=
- =?iso-8859-1?Q?Z5n3dKVV6MoBLpr9CGwtoRWvQ93bBwkqvi?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ds/hQWOV"
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD802CE;
+	Sun, 26 Nov 2023 23:53:30 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-54b532b261bso1127528a12.1;
+        Sun, 26 Nov 2023 23:53:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701071609; x=1701676409; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=pwz92+GCoP7IYtIAj34kO+/kqYdpJOwmZboVL10/2TY=;
+        b=Ds/hQWOVEylpgo19LjbB2D0ehX8hGwso2Dq7M5TsJm6Mb22fgvd5Ijj82vF0xlR3kc
+         34Vk47giGTGdMRDes++wbvFLbDw9p7zZKukJMKUY333s/5jTpaDJ74CeCLbFqiUTIjll
+         dwuW72WgMtoeQU9zq9crWofvW/DEufFXcx7HpOq2NbU/tRd2TLUtnAefPjPEyZiI57YJ
+         vZsVxj5Vqk5muWWsi3dJ4txlUYx1lWOdnOdWCvJ9gZh7uwMrjT3+0Teb1hnDmlubepyE
+         5hTbdiMvepwDTYSDx+9BNrhQvHwpA6ZgtCLnb/YNv1Un02Z5VyLSDMhAMfMisrV1P5H8
+         ul9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701071609; x=1701676409;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pwz92+GCoP7IYtIAj34kO+/kqYdpJOwmZboVL10/2TY=;
+        b=LVC/2zupcY3SpA+VWbb3H1rQz0qpftohp2dN3RhxEg6sOFOYRp4XsiUvc8UnQs/ZwL
+         k0Mqo6J7zUEncq/ZuPSSIFnWJ3VbujP1nZtTuTQOFl+oJjNGvEW5wnoyRH4Vq1Oeu2JL
+         BuFk+eDHf7vsJvLsxSrieswHgic5oQx0ZyvIC90QliZbIheePW2sKH3wyqB14ZsY5UVP
+         QfYu5zuKPFRnHuroxWkc1sSbclHU949budhQqvComj6nsky/rewcXRe+ySlLvZiC382d
+         SIHwTzIT0F8Tcycw5l/KvgvcRmwIUuwoHdCCnxec/xFQd9HraAjDHxIE3OeQyJZy4JrK
+         g1wg==
+X-Gm-Message-State: AOJu0YxFxUeMpIKp/K3qQAV1i5hoK9ZJfYS9tFy+RpnUu0CovOOPKmNo
+	Z/HXMxMkkcd4s1G2cfScChaCn9eSkc3HEpCb
+X-Google-Smtp-Source: AGHT+IFTaov1AQrdzc6u35auEEen+Od0UW+CZQjZ8usDEx66PY98iv4uKdf0k6y+TEBSRmGZr4OWrQ==
+X-Received: by 2002:a17:906:f0d1:b0:a11:4dc3:d0ce with SMTP id dk17-20020a170906f0d100b00a114dc3d0cemr229592ejb.63.1701071608873;
+        Sun, 26 Nov 2023 23:53:28 -0800 (PST)
+Received: from ?IPv6:2001:a61:3456:4e01:6ae:b55a:bd1d:57fc? ([2001:a61:3456:4e01:6ae:b55a:bd1d:57fc])
+        by smtp.gmail.com with ESMTPSA id mm25-20020a170906cc5900b009fdaab907fbsm5395322ejb.188.2023.11.26.23.53.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Nov 2023 23:53:28 -0800 (PST)
+Message-ID: <fb2aaa4c69c88738499dfbf46ef93e3b81ca93cb.camel@gmail.com>
+Subject: Re: [PATCH v2 2/2] hwmon: ltc4282: add support for the LTC4282 chip
+From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To: kernel test robot <lkp@intel.com>, Nuno Sa via B4 Relay
+	 <devnull+nuno.sa.analog.com@kernel.org>, linux-hwmon@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-doc@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, Jean Delvare <jdelvare@suse.com>, Guenter
+ Roeck <linux@roeck-us.net>, Rob Herring <robh+dt@kernel.org>, Krzysztof
+ Kozlowski <krzk@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Jonathan
+ Corbet <corbet@lwn.net>, Bartosz Golaszewski <brgl@bgdev.pl>, Linus Walleij
+ <linus.walleij@linaro.org>, Andy Shevchenko <andy@kernel.org>
+Date: Mon, 27 Nov 2023 08:53:27 +0100
+In-Reply-To: <202311250548.lUn3bm1A-lkp@intel.com>
+References: <20231124-ltc4282-support-v2-2-952bf926f83c@analog.com>
+	 <202311250548.lUn3bm1A-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3365.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 75a7f0a6-49ab-4a71-4a74-08dbef0c1bb0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Nov 2023 05:45:48.5969
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vzdsqUIkQu2XfkFtPswWaxUG3WB0yIm4vu4aV3q9cfqw0C68ekyE2C30nUhZnehrLQO+XCBwtEQuuKl7FpcmcST6y6TlsrZjS4bqFlnDcI0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB6062
 
-> > > > Document the compatible for aspeed,ast2600-pwm-tach device, which c=
-an=0A=
-> > > > support up to 16 PWM outputs and 16 fan tach input.=0A=
-> > > >=0A=
-> > > > Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>=0A=
-> > > > ---=0A=
-> > > >  .../bindings/hwmon/aspeed,g6-pwm-tach.yaml    | 69 +++++++++++++++=
-++++=0A=
-> > > >  1 file changed, 69 insertions(+)=0A=
-> > > >  create mode 100644 Documentation/devicetree/bindings/hwmon/aspeed,=
-g6-pwm-tach.yaml=0A=
-> > > >=0A=
-> > > > diff --git a/Documentation/devicetree/bindings/hwmon/aspeed,g6-pwm-=
-tach.yaml b/Documentation/devicetree/bindings/hwmon/aspeed,g6-pwm-tach.yaml=
-=0A=
-> > > > new file mode 100644=0A=
-> > > > index 000000000000..c615fb10705c=0A=
-> > > > --- /dev/null=0A=
-> > > > +++ b/Documentation/devicetree/bindings/hwmon/aspeed,g6-pwm-tach.ya=
-ml=0A=
-> > > > @@ -0,0 +1,69 @@=0A=
-> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)=0A=
-> > > > +# Copyright (C) 2023 Aspeed, Inc.=0A=
-> > > > +%YAML 1.2=0A=
-> > > > +---=0A=
-> > > > +$id: http://devicetree.org/schemas/hwmon/aspeed,g6-pwm-tach.yaml#=
-=0A=
-> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#=0A=
-> > > > +=0A=
-> > > > +title: ASPEED G6 PWM and Fan Tach controller=0A=
-> > > > +=0A=
-> > > > +maintainers:=0A=
-> > > > +  - Billy Tsai <billy_tsai@aspeedtech.com>=0A=
-> > > > +=0A=
-> > > > +description: |=0A=
-> > > > +  The ASPEED PWM controller can support up to 16 PWM outputs.=0A=
-> > > > +  The ASPEED Fan Tacho controller can support up to 16 fan tach in=
-put.=0A=
-> > > > +  They are independent hardware blocks, which are different from t=
-he=0A=
-> > > > +  previous version of the ASPEED chip.=0A=
-> > > > +=0A=
-> > > > +properties:=0A=
-> > > > +  compatible:=0A=
-> > > > +    enum:=0A=
-> > > > +      - aspeed,ast2600-pwm-tach=0A=
-> > > > +=0A=
-> > > > +  reg:=0A=
-> > > > +    maxItems: 1=0A=
-> > > > +=0A=
-> > > > +  clocks:=0A=
-> > > > +    maxItems: 1=0A=
-> > > > +=0A=
-> > > > +  resets:=0A=
-> > > > +    maxItems: 1=0A=
-> > > > +=0A=
-> > > > +  "#pwm-cells":=0A=
-> > > > +    const: 3=0A=
-> > > > +=0A=
-> > > > +patternProperties:=0A=
-> > > > +  "^fan-[0-9]+$":=0A=
-> > > > +    $ref: fan-common.yaml#=0A=
-> > > > +    unevaluatedProperties: false=0A=
-> > > > +    required:=0A=
-> > > > +      - tach-ch=0A=
-> > > > +=0A=
-> > > > +required:=0A=
-> > > > +  - reg=0A=
-> > > > +  - clocks=0A=
-> > > > +  - resets=0A=
-> > > > +  - "#pwm-cells"=0A=
-> > > > +  - compatible=0A=
-> > > > +=0A=
-> > > > +additionalProperties: false=0A=
-> > > > +=0A=
-> > > > +examples:=0A=
-> > > > +  - |=0A=
-> > > > +    #include <dt-bindings/clock/aspeed-clock.h>=0A=
-> > > > +    pwm_tach: pwm-tach-controller@1e610000 {=0A=
-> > > > +      compatible =3D "aspeed,ast2600-pwm-tach";=0A=
-> > > > +      reg =3D <0x1e610000 0x100>;=0A=
-> > > > +      clocks =3D <&syscon ASPEED_CLK_AHB>;=0A=
-> > > > +      resets =3D <&syscon ASPEED_RESET_PWM>;=0A=
-> > > > +      #pwm-cells =3D <3>;=0A=
-> > > > +=0A=
-> > > > +      fan-0 {=0A=
-> >=0A=
-> > > I assume there's a PWM connection here? How do you know which PWM? Yo=
-u=0A=
-> > > said the tach channel is independent, so it is not that.=0A=
-> >=0A=
-> > > It should not be 0 from 'fan-0' because that's just a meaningless ind=
-ex.=0A=
-> >=0A=
-> > > You either need 'pwms' here or you can use 'reg' and the reg value is=
-=0A=
-> > > the PWM channel.=0A=
-> >=0A=
-> > Hi Rob, this binding is used to export the PWM provider and the Fan mon=
-itor (i.e., Tach).=0A=
-> > If the user wants to add the PWM connection for the fan, it can be done=
- as follows:=0A=
-> >=0A=
-> > fan0: pwm-fan0 {=0A=
-> >         compatible =3D "pwm-fan";=0A=
-> >         pwms =3D <&pwm_tach 0 40000 0>;=0A=
-> >         cooling-min-state =3D <0>;=0A=
-> >         cooling-max-state =3D <3>;=0A=
-> >         #cooling-cells =3D <2>;=0A=
-> >         cooling-levels =3D <0 15 128 255>;=0A=
-> > };=0A=
-> >=0A=
-> > This will reuse the existing PWM fan driver (e.g., pwm-fan.c).=0A=
-=0A=
-> I'm confused now. So what are the child nodes you have? You are=0A=
-> defining the fan in 2 places? The "pwm-fan" driver supports a tach via=0A=
-> an interrupt, so how would this work in your case?=0A=
-=0A=
-Hi Rob,=0A=
-=0A=
-The tach interrupt for the pwm-fan is option. In our case, the dts just reu=
-se the pwm control function=0A=
-of the pwm-fan, and the part of the tach monitor will be created by our fan=
- child nodes.=0A=
-So the dts will like followings:=0A=
-=0A=
-// Use to declare the tach monitor for fan.=0A=
-&pwm_tach {=0A=
-        fan-0 {=0A=
-		tach-ch =3D /bits/ 8 <0x0>;=0A=
-	};=0A=
-	fan-1 {=0A=
-		tach-ch =3D /bits/ 8 <0x1>;=0A=
-	};=0A=
-        ...=0A=
-}=0A=
-=0A=
-// Reuse the pwm-fan.c to control the behavior of the PWM for fan.=0A=
-fan0: pwm-fan0 {=0A=
-        compatible =3D "pwm-fan";=0A=
-        pwms =3D <&pwm_tach 0 40000 0>;   /* Target freq:25 kHz */=0A=
-        cooling-min-state =3D <0>;=0A=
-        cooling-max-state =3D <3>;=0A=
-        #cooling-cells =3D <2>;=0A=
-        cooling-levels =3D <0 15 128 255>;=0A=
-};=0A=
-=0A=
-fan1: pwm-fan1 {=0A=
-        compatible =3D "pwm-fan";=0A=
-        pwms =3D <&pwm_tach 1 40000 0>;   /* Target freq:25 kHz */=0A=
-        cooling-min-state =3D <0>;=0A=
-        cooling-max-state =3D <3>;=0A=
-        #cooling-cells =3D <2>;=0A=
-        cooling-levels =3D <0 15 128 255>;=0A=
-};=0A=
-=0A=
-Thanks=
+T24gU2F0LCAyMDIzLTExLTI1IGF0IDA3OjM5ICswODAwLCBrZXJuZWwgdGVzdCByb2JvdCB3cm90
+ZToKPiBIaSBOdW5vLAo+IAo+IGtlcm5lbCB0ZXN0IHJvYm90IG5vdGljZWQgdGhlIGZvbGxvd2lu
+ZyBidWlsZCB3YXJuaW5nczoKPiAKPiBbYXV0byBidWlsZCB0ZXN0IFdBUk5JTkcgb24gZ3JvZWNr
+LXN0YWdpbmcvaHdtb24tbmV4dF0KPiBbYWxzbyBidWlsZCB0ZXN0IFdBUk5JTkcgb24gbGludXMv
+bWFzdGVyIHY2LjctcmMyIG5leHQtMjAyMzExMjRdCj4gW0lmIHlvdXIgcGF0Y2ggaXMgYXBwbGll
+ZCB0byB0aGUgd3JvbmcgZ2l0IHRyZWUsIGtpbmRseSBkcm9wIHVzIGEgbm90ZS4KPiBBbmQgd2hl
+biBzdWJtaXR0aW5nIHBhdGNoLCB3ZSBzdWdnZXN0IHRvIHVzZSAnLS1iYXNlJyBhcyBkb2N1bWVu
+dGVkIGluCj4gaHR0cHM6Ly9naXQtc2NtLmNvbS9kb2NzL2dpdC1mb3JtYXQtcGF0Y2gjX2Jhc2Vf
+dHJlZV9pbmZvcm1hdGlvbl0KPiAKPiB1cmw6wqDCoMKgCj4gaHR0cHM6Ly9naXRodWIuY29tL2lu
+dGVsLWxhYi1sa3AvbGludXgvY29tbWl0cy9OdW5vLVNhLXZpYS1CNC1SZWxheS9od21vbi1sdGM0
+MjgyLWFkZC1zdXBwb3J0LWZvci10aGUtTFRDNDI4Mi1jaGlwLzIwMjMxMTI0LTIzMTg0Mgo+IGJh
+c2U6wqDCoAo+IGh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0
+L2dyb2Vjay9saW51eC1zdGFnaW5nLmdpdMKgaHdtb24tbmV4dAo+IHBhdGNoIGxpbms6wqDCoMKg
+Cj4gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvci8yMDIzMTEyNC1sdGM0MjgyLXN1cHBvcnQtdjIt
+Mi05NTJiZjkyNmY4M2MlNDBhbmFsb2cuY29tCj4gcGF0Y2ggc3ViamVjdDogW1BBVENIIHYyIDIv
+Ml0gaHdtb246IGx0YzQyODI6IGFkZCBzdXBwb3J0IGZvciB0aGUgTFRDNDI4MiBjaGlwCj4gY29u
+ZmlnOiB4ODZfNjQtcmFuZGNvbmZpZy0xNjEtMjAyMzExMjUKPiAoaHR0cHM6Ly9kb3dubG9hZC4w
+MS5vcmcvMGRheS1jaS9hcmNoaXZlLzIwMjMxMTI1LzIwMjMxMTI1MDU0OC5sVW4zYm0xQS1sa3BA
+aW50ZWwuYwo+IG9tL2NvbmZpZykKPiBjb21waWxlcjogZ2NjLTEyIChEZWJpYW4gMTIuMi4wLTE0
+KSAxMi4yLjAKPiByZXByb2R1Y2UgKHRoaXMgaXMgYSBXPTEgYnVpbGQpOgo+IChodHRwczovL2Rv
+d25sb2FkLjAxLm9yZy8wZGF5LWNpL2FyY2hpdmUvMjAyMzExMjUvMjAyMzExMjUwNTQ4LmxVbjNi
+bTFBLWxrcEBpbnRlbC5jCj4gb20vcmVwcm9kdWNlKQo+IAo+IElmIHlvdSBmaXggdGhlIGlzc3Vl
+IGluIGEgc2VwYXJhdGUgcGF0Y2gvY29tbWl0IChpLmUuIG5vdCBqdXN0IGEgbmV3IHZlcnNpb24g
+b2YKPiB0aGUgc2FtZSBwYXRjaC9jb21taXQpLCBraW5kbHkgYWRkIGZvbGxvd2luZyB0YWdzCj4g
+PiBSZXBvcnRlZC1ieToga2VybmVsIHRlc3Qgcm9ib3QgPGxrcEBpbnRlbC5jb20+Cj4gPiBDbG9z
+ZXM6Cj4gPiBodHRwczovL2xvcmUua2VybmVsLm9yZy9vZS1rYnVpbGQtYWxsLzIwMjMxMTI1MDU0
+OC5sVW4zYm0xQS1sa3BAaW50ZWwuY29tLwo+IAo+IEFsbCB3YXJuaW5ncyAobmV3IG9uZXMgcHJl
+Zml4ZWQgYnkgPj4pOgo+IAo+ID4gPiBkcml2ZXJzL2h3bW9uL2x0YzQyODIuYzozNDc6Njogd2Fy
+bmluZzogbm8gcHJldmlvdXMgcHJvdG90eXBlIGZvcgo+ID4gPiAnbHRjNDI4Ml9yb3VuZF9yYXRl
+JyBbLVdtaXNzaW5nLXByb3RvdHlwZXNdCj4gwqDCoMKgwqAgMzQ3IHwgbG9uZyBsdGM0MjgyX3Jv
+dW5kX3JhdGUoc3RydWN0IGNsa19odyAqaHcsIHVuc2lnbmVkIGxvbmcgcmF0ZSwKPiDCoMKgwqDC
+oMKgwqDCoMKgIHzCoMKgwqDCoMKgIF5+fn5+fn5+fn5+fn5+fn5+fgo+ID4gPiBkcml2ZXJzL2h3
+bW9uL2x0YzQyODIuYzozNTY6MTU6IHdhcm5pbmc6IG5vIHByZXZpb3VzIHByb3RvdHlwZSBmb3IK
+PiA+ID4gJ2x0YzQyODJfcmVjYWxjX3JhdGUnIFstV21pc3NpbmctcHJvdG90eXBlc10KPiDCoMKg
+wqDCoCAzNTYgfCB1bnNpZ25lZCBsb25nIGx0YzQyODJfcmVjYWxjX3JhdGUoc3RydWN0IGNsa19o
+dyAqaHcsIHVuc2lnbmVkIGxvbmcKPiBwYXJlbnQpCj4gwqDCoMKgwqDCoMKgwqDCoCB8wqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBefn5+fn5+fn5+fn5+fn5+fn5+Cj4gCj4gCj4gdmltICsv
+bHRjNDI4Ml9yb3VuZF9yYXRlICszNDcgZHJpdmVycy9od21vbi9sdGM0MjgyLmMKPiAKPiDCoMKg
+IDM0NsKgwqAKPiDCoD4gMzQ3wqDCoGxvbmcgbHRjNDI4Ml9yb3VuZF9yYXRlKHN0cnVjdCBjbGtf
+aHcgKmh3LCB1bnNpZ25lZCBsb25nIHJhdGUsCj4gwqDCoCAzNDjCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdW5zaWduZWQgbG9uZyAqcGFyZW50X3Jh
+dGUpCj4gwqDCoCAzNDnCoMKgewo+IMKgwqAgMzUwwqDCoMKgwqDCoMKgwqDCoMKgwqBpbnQgaWR4
+ID0gZmluZF9jbG9zZXN0KHJhdGUsIGx0YzQyODJfb3V0X3JhdGVzLAo+IMKgwqAgMzUxwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oCBBUlJBWV9TSVpFKGx0YzQyODJfb3V0X3JhdGVzKSk7Cj4gwqDCoCAzNTLCoMKgCj4gwqDCoCAz
+NTPCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVybiBsdGM0MjgyX291dF9yYXRlc1tpZHhdOwo+IMKg
+wqAgMzU0wqDCoH0KPiDCoMKgIDM1NcKgwqAKPiDCoD4gMzU2wqDCoHVuc2lnbmVkIGxvbmcgbHRj
+NDI4Ml9yZWNhbGNfcmF0ZShzdHJ1Y3QgY2xrX2h3ICpodywgdW5zaWduZWQgbG9uZyBwYXJlbnQp
+Cj4gwqDCoCAzNTfCoMKgewo+IMKgwqAgMzU4wqDCoMKgwqDCoMKgwqDCoMKgwqBzdHJ1Y3QgbHRj
+NDI4Ml9zdGF0ZSAqc3QgPSBjb250YWluZXJfb2YoaHcsIHN0cnVjdCBsdGM0MjgyX3N0YXRlLAo+
+IMKgwqAgMzU5wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNsa19o
+dyk7Cj4gwqDCoCAzNjDCoMKgwqDCoMKgwqDCoMKgwqDCoHUzMiBjbGtkaXY7Cj4gwqDCoCAzNjHC
+oMKgwqDCoMKgwqDCoMKgwqDCoGludCByZXQ7Cj4gwqDCoCAzNjLCoMKgCj4gwqDCoCAzNjPCoMKg
+wqDCoMKgwqDCoMKgwqDCoHJldCA9IHJlZ21hcF9yZWFkKHN0LT5tYXAsIExUQzQyODJfQ0xLX0RJ
+ViwgJmNsa2Rpdik7Cj4gwqDCoCAzNjTCoMKgwqDCoMKgwqDCoMKgwqDCoGlmIChyZXQpCj4gwqDC
+oCAzNjXCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gMDsKPiDCoMKg
+IDM2NsKgwqAKPiDCoMKgIDM2N8KgwqDCoMKgwqDCoMKgwqDCoMKgY2xrZGl2ID0gRklFTERfR0VU
+KExUQzQyODJfQ0xLT1VUX01BU0ssIGNsa2Rpdik7Cj4gwqDCoCAzNjjCoMKgwqDCoMKgwqDCoMKg
+wqDCoGlmICghY2xrZGl2KQo+IMKgwqAgMzY5wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgcmV0dXJuIDA7Cj4gwqDCoCAzNzDCoMKgwqDCoMKgwqDCoMKgwqDCoGlmIChjbGtkaXYg
+PT0gTFRDNDI4Ml9DTEtPVVRfSU5UKQo+IMKgwqAgMzcxwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgcmV0dXJuIExUQzQyODJfQ0xLT1VUX1NZU1RFTTsKPiDCoMKgIDM3MsKgwqAK
+PiDCoMKgIDM3M8KgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIExUQzQyODJfQ0xLT1VUX0NOVjsK
+PiDCoMKgIDM3NMKgwqB9Cj4gwqDCoCAzNzXCoMKgCj4gCgpBcmdoaCwgSSBkbyBuZWVkIHRvIHNl
+ZSBpZiBJIGNhbiBhZGQgc29tZSB0ZXN0IGJyYW5jaCBvZiBteSBvd24gdG8gdGhlIHRlc3Qgcm9i
+b3QgOi8uCkFueXdheXMsIHdpbGwgd2FpdCBmb3Igc29tZSBtb3JlIHJldmlld2luZyBiZWZvcmUg
+c2VuZGluZyB2MyB0byBhZGRyZXNzIHRoaXMuCgotIE51bm8gU8OhCg==
+
