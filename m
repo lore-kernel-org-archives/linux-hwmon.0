@@ -1,178 +1,118 @@
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 920D45915C;
+	Tue, 28 Nov 2023 16:51:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SWMPbqs9"
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9ECC5;
-	Tue, 28 Nov 2023 07:46:46 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-332e40322f0so3505182f8f.3;
-        Tue, 28 Nov 2023 07:46:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701186404; x=1701791204; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=eaSqohHugtt6grw6CEKXWSAnRWopnEUVV/N+wIwdxWQ=;
-        b=SWMPbqs9ng1eB6exXFiWps/Of1W0zWcMVl40ANAUMY6CFq3ffjDiQA7iIBlpics069
-         on0aUhJCLr18i+WfqDYdeTz3DAEodZZ52KMRzWDA2S4TJDym/wIkqrjrGOYZ/U4YlXVF
-         31594k8MtqLzpnbpTFI4to1c+2bb8MvS12csrxeKtwvVHYFqEjUT/BeMKWIb92CkgMjo
-         r5k7ol9pj5CV/EMx35++IbdMK2EOeKAAEyaBNJ9+kgy8UtBvrJxRkSrh1NYu89AjjNTb
-         Up0pGXfUNPsd377Lkx2vIRhDrCeOW0hNBNIHvSa78U2Y6uwNviVm2CsDzZR5qhk9flZJ
-         xC4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701186404; x=1701791204;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eaSqohHugtt6grw6CEKXWSAnRWopnEUVV/N+wIwdxWQ=;
-        b=shFPklkm3JMSoG4oF1vrA1Myv3iKEnSdVkgALhE8SWTfe9QFN1aI3tKMXbpzzDETOr
-         4z39n5sTzEiEIg9YpdUQycCLt/rhwm5pgkQn6oSbU580ETuLrox5VK6b+f6++ENtT+Ai
-         1Oue6gpDGTZXYY2qCGcysjEySANJxBJM6T7cif8Z3gkSplGos7kA2QzUb4U8wnlIwm8Y
-         zQO4mjB5XAlBOZCD6Rd97ETNtwKQZhi97giLJXal7zd1qbiJAXkv2PIM8Y/o0qrfANLF
-         pb8fNna5UWfiOmzQrARrzB9HaNWKO8nBkOxfw1mWBvPI+HkGyQBfm5eMWzE1Hm+ryRq8
-         tsfg==
-X-Gm-Message-State: AOJu0YwvcLIfqHBsxUcgCPlBYqXW7SQ+PLOnrsozpgLC5xQoMtyeQHTF
-	IbxcwtSn5MMCi50O881qMsE=
-X-Google-Smtp-Source: AGHT+IHuXzZ/2bcrZP6mKjeZQFKF3z9OOwNPyxBC+M2EUC+TojqMO8yb/JYBs7Ci1biEYfYlmxZPEQ==
-X-Received: by 2002:adf:fa8d:0:b0:333:12f9:d381 with SMTP id h13-20020adffa8d000000b0033312f9d381mr746477wrr.36.1701186403956;
-        Tue, 28 Nov 2023 07:46:43 -0800 (PST)
-Received: from ?IPv6:2003:f6:ef1b:2000:4423:d503:bf11:e8c6? (p200300f6ef1b20004423d503bf11e8c6.dip0.t-ipconnect.de. [2003:f6:ef1b:2000:4423:d503:bf11:e8c6])
-        by smtp.gmail.com with ESMTPSA id o10-20020adfcf0a000000b00332cda91c85sm15264190wrj.12.2023.11.28.07.46.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Nov 2023 07:46:43 -0800 (PST)
-Message-ID: <e4147e797ee2a35092f4dbf9e8687fb63f7a8c5a.camel@gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add LTC4282 bindings
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: Rob Herring <robh@kernel.org>, Nuno Sa <nuno.sa@analog.com>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-doc@vger.kernel.org, Jean Delvare <jdelvare@suse.com>, Guenter Roeck
- <linux@roeck-us.net>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>,  Conor Dooley <conor+dt@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Bartosz Golaszewski <brgl@bgdev.pl>, 
- Linus Walleij <linus.walleij@linaro.org>, Andy Shevchenko <andy@kernel.org>
-Date: Tue, 28 Nov 2023 16:49:43 +0100
-In-Reply-To: <20231128153733.GA3313427-robh@kernel.org>
-References: <20231124-ltc4282-support-v2-0-952bf926f83c@analog.com>
-	 <20231124-ltc4282-support-v2-1-952bf926f83c@analog.com>
-	 <20231128153733.GA3313427-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.1 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZgfTaApW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C86E1C433C7;
+	Tue, 28 Nov 2023 16:51:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701190266;
+	bh=7W/vahT7ggXSZ6p6vtoTRcfcRPo0VstJTQk4dlT3coI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ZgfTaApWwtZva/r+hXbrrj5VlwER4fSbB/AGB21yqYbDcGJo7P74s/sJmSUrErb17
+	 YZzC57HnyRFxdhY/iLlplZR1mjBT8WnG1ksoUIKOqXvrbrqWkiqMcxdGAsTOwtixNs
+	 RLmJzM57IDyI5qPoTeykDvvV8FaBx+xwBkzfFUR/MeHDcOmqaKJ6Omo0pYReG8Kkg2
+	 LtfTEayeC9ipg0DVDfVdo0gPNsh0wcODekvJWnR2gUn60hsXwblVEzzXImP7QgUpxa
+	 eWyjWIoLRiUSlCqe4NWKvsMT2RGZ+gZINszc8t79gzVAKHjNXslNkgnf1sEE0uTuzp
+	 qXKs+lKUeLcRQ==
+Message-ID: <bcc5da24-7243-42fa-a82b-48851ce17c0c@kernel.org>
+Date: Tue, 28 Nov 2023 17:50:55 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/2] hwmon: ltc4282: add support for the LTC4282 chip
+Content-Language: en-US
+To: Andy Shevchenko <andy@kernel.org>
+Cc: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>,
+ kernel test robot <lkp@intel.com>,
+ Nuno Sa via B4 Relay <devnull+nuno.sa.analog.com@kernel.org>,
+ linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-doc@vger.kernel.org, oe-kbuild-all@lists.linux.dev,
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ Rob Herring <robh+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Bartosz Golaszewski <brgl@bgdev.pl>,
+ Linus Walleij <linus.walleij@linaro.org>
+References: <20231124-ltc4282-support-v2-2-952bf926f83c@analog.com>
+ <202311250548.lUn3bm1A-lkp@intel.com>
+ <fb2aaa4c69c88738499dfbf46ef93e3b81ca93cb.camel@gmail.com>
+ <76957975-56e7-489e-9c79-086b6c1ffe89@kernel.org>
+ <ac950d01-d9aa-4fb7-810d-b21335e4cc94@kernel.org>
+ <ZWS90GQTJWA7DrML@smile.fi.intel.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <ZWS90GQTJWA7DrML@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, 2023-11-28 at 09:37 -0600, Rob Herring wrote:
-> On Fri, Nov 24, 2023 at 03:18:16PM +0100, Nuno Sa wrote:
-> > Add bindings for the LTC4282 High Current Hot Swap Controller with I2C
-> > Compatible Monitoring.
-> >=20
-> > Signed-off-by: Nuno Sa <nuno.sa@analog.com>
-> > ---
-> > =C2=A0.../devicetree/bindings/hwmon/adi,ltc4282.yaml=C2=A0=C2=A0=C2=A0=
-=C2=A0 | 206
-> > +++++++++++++++++++++
-> > =C2=A0MAINTAINERS=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 6 +
-> > =C2=A02 files changed, 212 insertions(+)
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/hwmon/adi,ltc4282.yaml
-> > b/Documentation/devicetree/bindings/hwmon/adi,ltc4282.yaml
-> > new file mode 100644
-> > index 000000000000..6c979f70687e
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/hwmon/adi,ltc4282.yaml
-> > @@ -0,0 +1,206 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/hwmon/adi,ltc4282.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Analog Devices LTC4282 I2C High Current Hot Swap Controller ove=
-r I2C
-> > +
-> > +maintainers:
-> > +=C2=A0 - Nuno Sa <nuno.sa@analog.com>
-> > +
-> > +description: |
-> > +=C2=A0 Analog Devices LTC4282 I2C High Current Hot Swap Controller ove=
-r I2C.
-> > +
-> > +=C2=A0
-> > https://www.analog.com/media/en/technical-documentation/data-sheets/ltc=
-4282.pdf
-> > +
-> > +properties:
-> > +=C2=A0 compatible:
-> > +=C2=A0=C2=A0=C2=A0 enum:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - adi,ltc4282
-> > +
-> > +=C2=A0 reg:
-> > +=C2=A0=C2=A0=C2=A0 maxItems: 1
-> > +
-> > +=C2=A0 vdd-supply: true
-> > +
-> > +=C2=A0 clocks:
-> > +=C2=A0=C2=A0=C2=A0 maxItems: 1
-> > +
-> > +=C2=A0 '#clock-cells':
-> > +=C2=A0=C2=A0=C2=A0 const: 0
-> > +
-> > +=C2=A0 adi,rsense-nano-ohms:
-> > +=C2=A0=C2=A0=C2=A0 description: Value of the sense resistor.
-> > +
-> > +=C2=A0 adi,vin-mode-microvolt:
-> > +=C2=A0=C2=A0=C2=A0 description:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Selects operating range for the Undervo=
-ltage, Overvoltage and
-> > Foldback
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pins. Also for the ADC. Should be set t=
-o the nominal input voltage.
-> > +=C2=A0=C2=A0=C2=A0 enum: [3300000, 5000000, 12000000, 24000000]
-> > +=C2=A0=C2=A0=C2=A0 default: 12000000
-> > +
-> > +=C2=A0 adi,fet-bad-timeout-ms:
-> > +=C2=A0=C2=A0=C2=A0 description:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 From the moment a FET bad conditions is=
- present, this property
-> > selects the
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 wait time/timeout for a FET-bad fault t=
-o be signaled. Setting this to
-> > 0,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 disables FET bad faults to be reported.
-> > +=C2=A0=C2=A0=C2=A0 default: 255
-> > +=C2=A0=C2=A0=C2=A0 maximum: 255
-> > +
-> > +=C2=A0 adi,overvoltage-dividers:
-> > +=C2=A0=C2=A0=C2=A0 description: |
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Select which dividers to use for VDD Ov=
-ervoltage detection. Note that
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 when the internal dividers are used the=
- threshold is referenced to
-> > VDD.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 The percentages in the datasheet are mi=
-sleading since the actual
-> > values
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 to look for are in the "Absolute Maximu=
-m Ratings" table in the
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 "Comparator Inputs" section. In there t=
-here's a line for each of the
-> > 5%,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 10% and 15% settings with the actual mi=
-n, typical and max tolerances.
-> > +=C2=A0=C2=A0=C2=A0 $ref: /schemas/types.yaml#/definitions/string
-> > +=C2=A0=C2=A0=C2=A0 enum: [external, vdd_5_percent, vdd_10_percent, vdd=
-_15_percent]
-> > +=C2=A0=C2=A0=C2=A0 default: 0
->=20
-> Default is an integer yet the type is a string?
+On 27/11/2023 17:03, Andy Shevchenko wrote:
+> On Mon, Nov 27, 2023 at 09:12:14AM +0100, Krzysztof Kozlowski wrote:
+>> On 27/11/2023 09:10, Krzysztof Kozlowski wrote:
+> 
+> ...
+> 
+>> Wait, this was not even unusual test, just standard compile, which means
+>> you did not do basic tests on your end. You must build your new driver
+>> with W=1, smatch, sparse and coccinelle before sending upstream.
+> 
+> Well, sparse is lagging in development, for the last year it's at least two
+> times it broke kernel builds because of being not ready for the new stuff used
+> in the kernel. Do we have anybody to sync this? I don't think so, hence
+> requiring this from developer is doubtful. Otherwise I agree, that basic
+> compilation with GCC/LLVM must be done.
 
-Argh, another leftover from v1. Thanks for catching it... Will change it in=
- v3.
+Sparse still detects several issues and handles lock annotations, so it
+is useful. But if you disagree with that part, I still insist on Smatch
+(which is actively developed and works great) and Coccinelle (also
+actively developed).
 
-- Nuno S=C3=A1
->=20
+Best regards,
+Krzysztof
+
