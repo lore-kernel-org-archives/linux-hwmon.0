@@ -1,34 +1,34 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q+ZzOBPR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LsxP3byv"
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56888198D;
-	Tue, 28 Nov 2023 10:18:48 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D3E19A7;
+	Tue, 28 Nov 2023 10:18:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701195528; x=1732731528;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=gfT5KQfissXiBN9mHghCBzLBOJS2Qjr3rQzIqIxZpLY=;
-  b=Q+ZzOBPR7+AJxIMipiD92Bi07slt0+z4xejBK1Q8VmtEbw6Up1fKWxC7
-   qYlVBHhQUgfXxH5xYiotCrMMAUMgKf5EgJWaurbVYqofkW8zY8M4Ek3Pt
-   u2nxLdlphu3GBrCr7x+eqyfv3SmZQ26bCFwdBBFvydbSO7/khVV1eagcY
-   Uptfl9XeunB2VHYvbxNsHw8BfNCJw26CSFJclv/h/DBZvGB2P8mvEoxy/
-   jSm1ZA8CieACD4w5ppjbsbULjn5n8hbB+ERafrIXRxdqQ1HQGpraBMPEA
-   whP8HtxPN8/XrQpAkU00eD21fW7NQK+AlhBWcOkqTXMZq6LY7oPA6itSD
+  t=1701195529; x=1732731529;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=dcWMDkc+5dxwvDVGtTBhtqPuSWadgpqLZKPUZgHhT7c=;
+  b=LsxP3byv+QJSOkFS7n5BKlEuOc/JebN7cC1OJIbFbZQGlGj7vqpS7EsT
+   s+f0NK8bT539dcqbj7/KzoldScr5zqW5xIH0kUOngSN4k18KL6vPFceQG
+   sSYMPoHgYOJ/vkpC7BzL5KsfzatsEDuJD4/PRJChJnjfeSZFkcSqB2h1l
+   aFmY8wgZ+uyXVYfKnpFDOBQ8EYzdNMaomG/eUjCyqg747XhHJMQrYuNwq
+   /87K8YQWsKL/mIfSLkaua96oJeGSp4y3T34ScvZ6qhQPN0cVKq5bvI4vh
+   G/eBJSO6FIpdgUiS/o5qRgrwdX5g6cAietQ2KDSufSzrJ+i8MZm5rCq0U
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10908"; a="383375347"
+X-IronPort-AV: E=McAfee;i="6600,9927,10908"; a="383375348"
 X-IronPort-AV: E=Sophos;i="6.04,234,1695711600"; 
-   d="scan'208";a="383375347"
+   d="scan'208";a="383375348"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2023 10:17:09 -0800
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2023 10:17:10 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10908"; a="886494446"
+X-IronPort-AV: E=McAfee;i="6600,9927,10908"; a="886494447"
 X-IronPort-AV: E=Sophos;i="6.04,234,1695711600"; 
-   d="scan'208";a="886494446"
+   d="scan'208";a="886494447"
 Received: from black.fi.intel.com ([10.237.72.28])
   by fmsmga002.fm.intel.com with ESMTP; 28 Nov 2023 10:17:07 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id E86BB23E; Tue, 28 Nov 2023 20:06:57 +0200 (EET)
+	id 1886D24C; Tue, 28 Nov 2023 20:06:58 +0200 (EET)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Guenter Roeck <linux@roeck-us.net>,
 	linux-hwmon@vger.kernel.org,
@@ -36,10 +36,12 @@ To: Guenter Roeck <linux@roeck-us.net>,
 Cc: Eric Tremblay <etremblay@distech-controls.com>,
 	Jean Delvare <jdelvare@suse.com>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 0/3] hwmon: tmp513: A few cleanups
-Date: Tue, 28 Nov 2023 20:06:01 +0200
-Message-ID: <20231128180654.395692-1-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 3/3] hwmon: tmp513: Use SI constants from units.h
+Date: Tue, 28 Nov 2023 20:06:04 +0200
+Message-ID: <20231128180654.395692-4-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.43.0.rc1.1.gbec44491f096
+In-Reply-To: <20231128180654.395692-1-andriy.shevchenko@linux.intel.com>
+References: <20231128180654.395692-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -48,17 +50,95 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Nothing special, just a few random cleanups, but there is a dependency
-due to closer lines changed.
+MILLI and MICRO may be used in the driver to make code more robust
+against possible miscalculations.
 
-Andy Shevchenko (3):
-  hwmon: tmp513: Don't use "proxy" headers
-  hwmon: tmp513: Simplify with dev_err_probe()
-  hwmon: tmp513: Use SI constants from units.h
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/hwmon/tmp513.c | 21 ++++++++++-----------
+ 1 file changed, 10 insertions(+), 11 deletions(-)
 
- drivers/hwmon/tmp513.c | 63 ++++++++++++++++++++----------------------
- 1 file changed, 30 insertions(+), 33 deletions(-)
-
+diff --git a/drivers/hwmon/tmp513.c b/drivers/hwmon/tmp513.c
+index 6e01800404fc..e0abdb27131e 100644
+--- a/drivers/hwmon/tmp513.c
++++ b/drivers/hwmon/tmp513.c
+@@ -32,6 +32,7 @@
+ #include <linux/regmap.h>
+ #include <linux/slab.h>
+ #include <linux/types.h>
++#include <linux/units.h>
+ 
+ // Common register definition
+ #define TMP51X_SHUNT_CONFIG		0x00
+@@ -101,8 +102,8 @@
+ #define TMP51X_REMOTE_TEMP_LIMIT_2_POS		8
+ #define TMP513_REMOTE_TEMP_LIMIT_3_POS		7
+ 
+-#define TMP51X_VBUS_RANGE_32V		32000000
+-#define TMP51X_VBUS_RANGE_16V		16000000
++#define TMP51X_VBUS_RANGE_32V		(32 * MICRO)
++#define TMP51X_VBUS_RANGE_16V		(16 * MICRO)
+ 
+ // Max and Min value
+ #define MAX_BUS_VOLTAGE_32_LIMIT	32764
+@@ -204,7 +205,7 @@ static int tmp51x_get_value(struct tmp51x_data *data, u8 reg, u8 pos,
+ 		 * on the pga gain setting. 1lsb = 10uV
+ 		 */
+ 		*val = sign_extend32(regval, 17 - tmp51x_get_pga_shift(data));
+-		*val = DIV_ROUND_CLOSEST(*val * 10000, data->shunt_uohms);
++		*val = DIV_ROUND_CLOSEST(*val * 10 * MILLI, data->shunt_uohms);
+ 		break;
+ 	case TMP51X_BUS_VOLTAGE_RESULT:
+ 	case TMP51X_BUS_VOLTAGE_H_LIMIT:
+@@ -220,7 +221,7 @@ static int tmp51x_get_value(struct tmp51x_data *data, u8 reg, u8 pos,
+ 	case TMP51X_BUS_CURRENT_RESULT:
+ 		// Current = (ShuntVoltage * CalibrationRegister) / 4096
+ 		*val = sign_extend32(regval, 16) * data->curr_lsb_ua;
+-		*val = DIV_ROUND_CLOSEST(*val, 1000);
++		*val = DIV_ROUND_CLOSEST(*val, MILLI);
+ 		break;
+ 	case TMP51X_LOCAL_TEMP_RESULT:
+ 	case TMP51X_REMOTE_TEMP_RESULT_1:
+@@ -260,7 +261,7 @@ static int tmp51x_set_value(struct tmp51x_data *data, u8 reg, long val)
+ 		 * The user enter current value and we convert it to
+ 		 * voltage. 1lsb = 10uV
+ 		 */
+-		val = DIV_ROUND_CLOSEST(val * data->shunt_uohms, 10000);
++		val = DIV_ROUND_CLOSEST(val * data->shunt_uohms, 10 * MILLI);
+ 		max_val = U16_MAX >> tmp51x_get_pga_shift(data);
+ 		regval = clamp_val(val, -max_val, max_val);
+ 		break;
+@@ -550,18 +551,16 @@ static int tmp51x_calibrate(struct tmp51x_data *data)
+ 	if (data->shunt_uohms == 0)
+ 		return regmap_write(data->regmap, TMP51X_SHUNT_CALIBRATION, 0);
+ 
+-	max_curr_ma = DIV_ROUND_CLOSEST_ULL(vshunt_max * 1000 * 1000,
+-					    data->shunt_uohms);
++	max_curr_ma = DIV_ROUND_CLOSEST_ULL(vshunt_max * MICRO, data->shunt_uohms);
+ 
+ 	/*
+ 	 * Calculate the minimal bit resolution for the current and the power.
+ 	 * Those values will be used during register interpretation.
+ 	 */
+-	data->curr_lsb_ua = DIV_ROUND_CLOSEST_ULL(max_curr_ma * 1000, 32767);
++	data->curr_lsb_ua = DIV_ROUND_CLOSEST_ULL(max_curr_ma * MILLI, 32767);
+ 	data->pwr_lsb_uw = 20 * data->curr_lsb_ua;
+ 
+-	div = DIV_ROUND_CLOSEST_ULL(data->curr_lsb_ua * data->shunt_uohms,
+-				    1000 * 1000);
++	div = DIV_ROUND_CLOSEST_ULL(data->curr_lsb_ua * data->shunt_uohms, MICRO);
+ 
+ 	return regmap_write(data->regmap, TMP51X_SHUNT_CALIBRATION,
+ 			    DIV_ROUND_CLOSEST(40960, div));
+@@ -678,7 +677,7 @@ static int tmp51x_read_properties(struct device *dev, struct tmp51x_data *data)
+ 				       data->max_channels - 1);
+ 
+ 	// Check if shunt value is compatible with pga-gain
+-	if (data->shunt_uohms > data->pga_gain * 40 * 1000 * 1000) {
++	if (data->shunt_uohms > data->pga_gain * 40 * MICRO) {
+ 		return dev_err_probe(dev, -EINVAL,
+ 				     "shunt-resistor: %u too big for pga_gain: %u\n",
+ 				     data->shunt_uohms, data->pga_gain);
 -- 
 2.43.0.rc1.1.gbec44491f096
 
