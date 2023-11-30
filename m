@@ -1,150 +1,178 @@
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CC7F2208A;
+	Thu, 30 Nov 2023 15:53:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e26qgxaZ"
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860D910E2;
-	Thu, 30 Nov 2023 07:20:16 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-40b472f98b1so8847355e9.3;
-        Thu, 30 Nov 2023 07:20:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701357615; x=1701962415; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=dylAbfVwWrPST5LX+rEqHAryAoBScVn+W4WcHE2nEOI=;
-        b=e26qgxaZQUw751NfhOtt2Cu+BCrQDrZRYA+SFoWKihDg4n8FiCmuQia4rC9ur0BCfk
-         FfQ8rXxNnxguzwSZGBOyp3wb5zlh6aaljjXBSCp76TIyLBBWSJVD+/sZaew6u6DfsSML
-         a8bNneSUHrP6XmLSo6IeT82AHdvdYfVShdxzr9qHmTu6K4a6eh0oAsr+ifYEtR4/Y9IA
-         2IqEJSVSa0K9rR+tPtSeMjDrJ7htq2ibNWm27ky4WFuoChJcwqfPwSh7kPPrkGvyzoDd
-         QBT/jo+/GOF+7f92PKD1DY+jUlIkS4BwAFnKyYr+nhSxW1CkFlAP+aswnpSoBbCL3AGd
-         I5IA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701357615; x=1701962415;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dylAbfVwWrPST5LX+rEqHAryAoBScVn+W4WcHE2nEOI=;
-        b=RpToGzawPTJ+xPF40fnKp3owl2pepu8Lw+6ghCKjPwBS5p3UO4+aOgmJQLMO24knB4
-         LZNTXPCNQr8mw/40hmfczUxtwt31wlvjr6RdBiPGgjS+Es3uMrLOF5W+e2bi7OEjCp3W
-         6E2CE2mPa3lov/TCGMgPkhsJsmzJQ7x8i+ZuKZxOacXWx0TM/G0qUmv4z5yN7HnWExzK
-         Ee7yxV0DGl3msj4Ph/YPRu8k3RwnVdHWfJDOntfMY/JCvAO7YonO1FIleg4XLshfW2au
-         psndsy+IkJHjcCVzGWTvPmUkuTl5ZtCrOu2FFceghB/PZUzDtaM6uCasx0QvG42hzpJU
-         nZ9w==
-X-Gm-Message-State: AOJu0YyjbMS0FVhiaIwGO1nWD+U9IQmxcUQfFQ2idQq/IvwpNzxab7Rz
-	SQtyiGMsN2gzX1bZsGCP3Ok=
-X-Google-Smtp-Source: AGHT+IHaU+1NLBkGRIORteHD1wkr7Lf2zALQw4P5g1GtV9KJP/jQi+BhEliYHWpBOtLQe2de1htcFw==
-X-Received: by 2002:a05:6000:401f:b0:332:eee9:6e7f with SMTP id cp31-20020a056000401f00b00332eee96e7fmr13332710wrb.56.1701357614546;
-        Thu, 30 Nov 2023 07:20:14 -0800 (PST)
-Received: from ?IPv6:2001:a61:3456:4e01:6ae:b55a:bd1d:57fc? ([2001:a61:3456:4e01:6ae:b55a:bd1d:57fc])
-        by smtp.gmail.com with ESMTPSA id dd16-20020a0560001e9000b00332cc24a59bsm1760782wrb.109.2023.11.30.07.20.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Nov 2023 07:20:13 -0800 (PST)
-Message-ID: <a4bd59df0c5bc1be5d0d6f11b968fd61a59ee2e0.camel@gmail.com>
-Subject: Re: [PATCH v2 2/2] hwmon: ltc4282: add support for the LTC4282 chip
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: Andy Shevchenko <andy@kernel.org>
-Cc: Linus Walleij <linus.walleij@linaro.org>, nuno.sa@analog.com, 
- linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-doc@vger.kernel.org, Jean Delvare <jdelvare@suse.com>, Guenter Roeck
- <linux@roeck-us.net>, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
- Jonathan Corbet <corbet@lwn.net>, Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Thu, 30 Nov 2023 16:20:13 +0100
-In-Reply-To: <ZWiP3i80KnVk9qyx@smile.fi.intel.com>
-References: <20231124-ltc4282-support-v2-0-952bf926f83c@analog.com>
-	 <20231124-ltc4282-support-v2-2-952bf926f83c@analog.com>
-	 <CACRpkdaksfS4WLNQ6ohauAPq3z2LPG2uF37_jWtm0brQHaDtNw@mail.gmail.com>
-	 <6384831c05b8ceeaf4a16cf9229770252989b762.camel@gmail.com>
-	 <CACRpkdZr6TdQCLy73Yx2RdMgQifd67remdxENBKYx3UvEMm87A@mail.gmail.com>
-	 <971eb35068639ec404669ea5320c8183ea71a7d0.camel@gmail.com>
-	 <ZWiP3i80KnVk9qyx@smile.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KWTJmj6g"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FE8DC433C8;
+	Thu, 30 Nov 2023 15:53:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701359612;
+	bh=HrIeUu7V7smPbz53czTMhVOKIhnJX6FObsHMqEgNuww=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KWTJmj6guoUZxaxt6RIJl4h1DsBIWv/7g3q4qKBMb15RXr7Fs2wvfEKnOK6rG16nX
+	 45OdwoH02duq0uGWs4bJbWEbkn8b8uzmW2JBSlzD6PR7V0Aa0o4BcJfbzkNI78j/FT
+	 cdfn/nZ2ARojwYf1WZp4ntPp3BEbjki/RMmFrqLL4em0VcmrE5P+5nvoFZpJr96uay
+	 oVrbrQ5PqGT8qFz1JX+VGFNsgks2ojGh9/pZC+cnKGaostTf9zZS5xpMK33ptqx4Vr
+	 8Ky45g5pqU2uS6pd5Zjx7EZbgwXCQhdNxJs/77t8TVniEHmU2Bfk0J4hlErV5Ap1sg
+	 SugTdBq1JUJ4g==
+Date: Thu, 30 Nov 2023 15:53:27 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	marius.cristea@microchip.com, lars@metafoo.de, robh+dt@kernel.org,
+	jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: iio: adc: adding support for PAC193X
+Message-ID: <20231130-obedient-pointer-6b4470a85c63@spud>
+References: <20231115134453.6656-1-marius.cristea@microchip.com>
+ <20231115134453.6656-2-marius.cristea@microchip.com>
+ <fedd4bcf-7892-4096-bcca-7ea72d39576f@linaro.org>
+ <20231116-channel-variety-cc7c262924ad@squawk>
+ <20231125194754.304523e6@jic23-huawei>
+ <20231126-nineteen-clumsy-701ac4145ba8@spud>
+ <20231126160438.01ff57d7@jic23-huawei>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="oP7sV86AVSwt1W+s"
+Content-Disposition: inline
+In-Reply-To: <20231126160438.01ff57d7@jic23-huawei>
 
-On Thu, 2023-11-30 at 15:36 +0200, Andy Shevchenko wrote:
-> On Thu, Nov 30, 2023 at 11:20:32AM +0100, Nuno S=C3=A1 wrote:
-> > On Wed, 2023-11-29 at 21:55 +0100, Linus Walleij wrote:
-> > > On Wed, Nov 29, 2023 at 5:08=E2=80=AFPM Nuno S=C3=A1 <noname.nuno@gma=
-il.com> wrote:
+
+--oP7sV86AVSwt1W+s
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Sun, Nov 26, 2023 at 04:04:38PM +0000, Jonathan Cameron wrote:
+> On Sun, 26 Nov 2023 11:24:56 +0000
+> Conor Dooley <conor@kernel.org> wrote:
+> > On Sat, Nov 25, 2023 at 07:47:54PM +0000, Jonathan Cameron wrote:
+> > > On Thu, 16 Nov 2023 18:21:33 +0000
+> > > Conor Dooley <conor@kernel.org> wrote: =20
+> > > > On Thu, Nov 16, 2023 at 04:01:43PM +0100, Krzysztof Kozlowski wrote=
+: =20
+> > > > > On 15/11/2023 14:44, marius.cristea@microchip.com wrote:   =20
+> > > > > > From: Marius Cristea <marius.cristea@microchip.com> =20
+> > > > > > +patternProperties:
+> > > > > > +  "^channel@[1-4]+$":
+> > > > > > +    type: object
+> > > > > > +    $ref: adc.yaml
+> > > > > > +    description: Represents the external channels which are co=
+nnected to the ADC.
+> > > > > > +
+> > > > > > +    properties:
+> > > > > > +      reg:
+> > > > > > +        items:
+> > > > > > +          minimum: 1
+> > > > > > +          maximum: 4
+> > > > > > +
+> > > > > > +      shunt-resistor-micro-ohms:
+> > > > > > +        description: |
+> > > > > > +          Value in micro Ohms of the shunt resistor connected =
+between
+> > > > > > +          the SENSE+ and SENSE- inputs, across which the curre=
+nt is measured. Value
+> > > > > > +          is needed to compute the scaling of the measured cur=
+rent.
+> > > > > > +
+> > > > > > +    required:
+> > > > > > +      - reg
+> > > > > > +      - shunt-resistor-micro-ohms
+> > > > > > +
+> > > > > > +    unevaluatedProperties: false
+> > > > > > +
+> > > > > > +required:
+> > > > > > +  - compatible
+> > > > > > +  - reg
+> > > > > > +  - "#address-cells"
+> > > > > > +  - "#size-cells"
+> > > > > > +
+> > > > > > +allOf:
+> > > > > > +  - if:
+> > > > > > +      properties:
+> > > > > > +        compatible:
+> > > > > > +          contains:
+> > > > > > +            const: interrupts   =20
+> > > > >=20
+> > > > >=20
+> > > > > I don't understand what do you want to say here. I am also 100% s=
+ure you
+> > > > > did not test it on a real case (maybe example passes but nothing =
+more).   =20
+> > > >=20
+> > > > As far as I understand, the same pin on the device is used for both=
+ an
+> > > > output or an input depending on the configuration. As an input, it =
+is
+> > > > the "slow-io" control, and as an output it is an interrupt.
+> > > > I think Marius is trying to convey that either this pin can be in
+> > > > exclusively one state or another.
+> > > >=20
+> > > > _However_ I am not sure that that is really the right thing to do -=
+ they
+> > > > might well be mutually exclusive modes, but I think the decision ca=
+n be
+> > > > made at runtime, rather than at devicetree creation time. Say for
+> > > > example the GPIO controller this is connected to is capable of acti=
+ng as
+> > > > an interrupt controller. Unless I am misunderstanding the runtime
+> > > > configurability of this hardware, I think it is possible to actually
+> > > > provide a "slow-io-gpios" and an interrupt property & let the opera=
+ting
+> > > > system decide at runtime which mode it wants to work in. =20
 > > >=20
-> > > > Cool, I actually thought that having the direction + get/set stuff =
-would be
-> > > > weird
-> > > > given the fact that we can only PULL_LOW or HIGH_Z the pins.
+> > > I'll admit I've long forgotten what was going on here, but based just=
+ on
+> > > this bit of text I agree. There is nothing 'stopping' us having a pin
+> > > uses as either / or / both interrupt and gpio.
 > > >=20
-> > > There are several drivers in the kernel that implement .set_config(),
-> > > it's existing and should be enabled if it has uses.
+> > > It'll be a bit messy to support in the driver as IIRC there are some =
+sanity
+> > > checks that limit combinations on IRQs and output GPIOS.  Can't remem=
+ber
+> > > how bad the dance to navigate it safely is.
+> > >=20
+> > > First version I'd just say pick one option if both are provided and
+> > > don't support configuring it at runtime. =20
 > >=20
-> > Yeah, it might make sense to support it specially for the input case. A=
-FAICT, if
-> > I
-> > use the .set_config() (but from a quick look I think we will need to ad=
-d support
-> > for
-> > it in gpiolib for the high-z configuration), then I can't use the gpio_=
-regmap
-> > stuff.
-> > As the driver stands I don't think I could do it anyways because settin=
-g gpio2-3
-> > and
-> > alert requires to write 0 on the register rather than 1. But again, I'm=
- still
-> > very
-> > suspicious about the whole thing. The datasheet states:
-> >=20
-> > "GPIO1-GPIO3 and ALERT all have comparators monitoring
-> > the voltage on these pins with a threshold of 1.28V even when
-> > the pins are configured as outputs."
-> >=20
-> > But we can't really set the direction for gpio2-3 and the alert pins (o=
-nly
-> > getting
-> > the level and setting it as PULL_LOW or HIGH_Z. gpio1 is the only one w=
-here we
-> > can
-> > configure it as input or open drain ouput. Bah, I'll try to see if some=
-one
-> > internally
-> > can shed some light on this.
+> > Just to be clear, you are suggesting having the
+> > "microchip,slow-io-gpios" and "interrupts" properties in the binding,
+> > but the driver will just (for example) put that pin into alert mode
+> > always & leave it there?
 >=20
-> I have better proposal. If these GPIOs are not needed for the main
-> functionality of the hardware, can we just left it out for now and implem=
-ent
-> later if required?
+> Yes.
 >=20
+> > If that is what you are suggesting, that seems pragmatic to me.
+>=20
+> If a use case to do something else comes along later, then we can
+> be smarter, but I'd like to keep it simple initially at least.
 
-Well, I did spent some time on the gpio thing so I would like to have it in=
- but yeah,
-no hard feelings if it does not go in.
+Sounds good to me, thanks Jonathan. Seems like a good compromise of
+depicting the hardware accurately and not overcomplicating the driver
+implementation.
 
-So, I actually talk with some hw guys and the pull_low is not really like a=
- pull_low
-resistor. These pins are effectively an open drain. Which means, setting th=
-em as
-input means setting them in high-z (turning off the mosffet) - and I do hav=
-e a bug in
-my code regarding this - Or if you want them as outputs you can set the lev=
-el low
-(and it will always be low - just turn on the mosffet) or you can also set =
-high-z
-which means it will be either low or high depending on your external circui=
-try. The
-point is, you can still have your pin acting as a normal gpo if you accommo=
-date your
-circuitry for it (can also use these pins for things like buses).
+Marius, I completely forgot to get in touch with you about this - give
+me a shout on teams if there's anything outstanding that I can help you
+with.
 
-Also got me thinking if a gpi vs gpo devicetree property would make sense. =
-But I
-would likely leave it more generic/relaxed for now (even though I think you=
- would
-need to be creative and actually use more HW to have the possibility of usi=
-ng these
-pins as GPIs and GPOs at the same time).
+--oP7sV86AVSwt1W+s
+Content-Type: application/pgp-signature; name="signature.asc"
 
-- Nuno S=C3=A1
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZWiv9wAKCRB4tDGHoIJi
+0uHzAPwLRSFe3lyznjBdX2nugpHz1wH9XkPMsIfMCDZMgNeUhQD/QIvnrIRYkwXk
+T9Reuc+W3+2ww8eTAHVikTkLYDMDvQ8=
+=fi+Q
+-----END PGP SIGNATURE-----
+
+--oP7sV86AVSwt1W+s--
