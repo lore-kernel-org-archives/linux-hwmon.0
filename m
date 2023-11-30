@@ -1,126 +1,149 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cxLbME04"
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36804173A
-	for <linux-hwmon@vger.kernel.org>; Thu, 30 Nov 2023 12:15:14 -0800 (PST)
-Received: by mail-ot1-x32d.google.com with SMTP id 46e09a7af769-6d812988394so831275a34.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 30 Nov 2023 12:15:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LdM7Q6hA"
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CC43170D;
+	Thu, 30 Nov 2023 12:31:30 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1cfd78f8a12so13332255ad.2;
+        Thu, 30 Nov 2023 12:31:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701375313; x=1701980113; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FO/kRurvZ75+kMpCvS7WQKXERPiftR1fMbdInuY1QHQ=;
-        b=cxLbME04Ux0SJcg8QQ6Ms7tJf6ZTe+qG86/+aGZmGWGVML6P53ICEulmY4q+ZSgLb9
-         TqKDtsmCaxVBJmPPCj1+Qvqif2Pkx8FEgQcKsVjRjkrc/Gv6mdfC2DIzsckPnVJEct7h
-         J9ju3Cg6wpdpzkRqMTGkzHQlUoB8r5HdkvAcHUC6ZWHH39uYx4BI6ewtPHC7pKNzgzz3
-         UuFpQgZ5utu9tK98IlQ/VONqL37T9Y4S2RyPyNkaE0m3sQVcIxiOY78oixzr+6cgZTUv
-         TiOV7F00FE669vfXiaI8Mo6fES5VZxaED02vhawYVe9ui6xm85+R3+KEAEPJLZKKN9E7
-         Tziw==
+        d=gmail.com; s=20230601; t=1701376290; x=1701981090; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=lT0qrYRiDsoV72KTkVoQoxtzRhRHGxESaqbx7R1F6QI=;
+        b=LdM7Q6hAcp15xEH1rfR+GbqvsNlXhLE+gIJ/oINoOTRXgGiOBE5f64jDTilhoOvlHI
+         FTY3+uW6NZcsiLtRMUERioA+k/KSayE1n12BC92GRvvYaDcljhq8NCNX/QPWeQRphaIX
+         bkWjGAdj4+qYVqe2qwE5SRntQYOzh7ZdtIRUK71PuxSfB2e0Y0rPEqkCBjGJTd69MyGP
+         DcBurbkVIGea2iQApqp3mt4exPbVF0IAF46Rrr96CPzCjNaWmrRBzgrVGZoAvF5u55mR
+         JZ4YmclYH0iiqDZ0o+oVHQN9SaOUmYZs8z4ajJcLfMGONiTDdBZI7FtsXnMo0aFU/8p/
+         QTXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701375313; x=1701980113;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FO/kRurvZ75+kMpCvS7WQKXERPiftR1fMbdInuY1QHQ=;
-        b=bEkzFEDJ5EhPSQ1Qgyto7Sns0qYtlw3TgNTMAGmiqtEdUP2oYG2LgWFjkfDOUpAZkb
-         dJU9hufVMxbZ0pnuhrjkZwQiUR/0IwPMJlT2nTYk3ycP8Dd4Yr1hFLWmq5Qa4wuZ3A+i
-         TKWhgMhC9somgvyEQ8jVnnCy6ofvOo+Mrvqp03rU7Ah6z8hw/+uzu9r/2FqddSQFNMYX
-         ew+tVpxfXwKsTv3Xl3J95vb1ebxIaep0qRHeRZ8U0nJFsBurac0Yr/kU7OGRaGMnjuEm
-         fBOmILOC1Rs69WrLMUHO8MEcNlJvrU8hulEw7I1SYOl8gWupX8B587hS0egrpofGF3p9
-         NLlg==
-X-Gm-Message-State: AOJu0YwC1UT1zbj+hppghwDFAbk6YOv81k3uWKUBEN/A7VbbPz3p/ywK
-	tqEUsl2eLbzV5Ain3xBO8YMMyyZDQlZKBDOvddxNPw==
-X-Google-Smtp-Source: AGHT+IGE78vgIP7nCnvTYi+v3uOEtJVvVccysnd2brNW5+bTr9Fyg2vYbHbRPXbhzUr8ZgFH5825fib629i8juGGv5I=
-X-Received: by 2002:a9d:75c1:0:b0:6ce:26e6:19fa with SMTP id
- c1-20020a9d75c1000000b006ce26e619famr722446otl.23.1701375313530; Thu, 30 Nov
- 2023 12:15:13 -0800 (PST)
+        d=1e100.net; s=20230601; t=1701376290; x=1701981090;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lT0qrYRiDsoV72KTkVoQoxtzRhRHGxESaqbx7R1F6QI=;
+        b=n96OvYiA9GXX38g0X6zIfxo7BLuwxoBSzVgkRLevG8d2gIIP//H7qvzZv6Yp7h67WV
+         eiSEuiecvEx6+dAj2ITYz4ybBimeqkV6qJt3kwINpTfaYRvLpciX8e3TbFCrxVY1x1cV
+         7jL2fJ63EH08LQr2AnwJMi5hM9xwPgqqfkfz1EJnY4/f2W3Rljr6nt5Tod+oPodWUvJ+
+         ngFeCCIONxC9ZL23b6EaR+/Z/ypIqg03/yEOdmqEYUzfOjYgVyuAR85A9FLAvsbiEtHc
+         2H3PPaNvzBs4Hkt6Gg4zZH6JqF9Bu1y12e5atRdgW3Zrthe1/FvTkB8+fAeQrWmo+KTl
+         f9Tw==
+X-Gm-Message-State: AOJu0Yzn9QuZzZBuBA9MUeRnyaj/mqQTx+3L2T6BU+p5yDu6RvTlhb2y
+	fpI4gRCjUeY+03WnmDsbWYon0OEYJRI=
+X-Google-Smtp-Source: AGHT+IH+fM8rY+srhKUulbpuwzzszQvrLQtPs1KYVPFZ6Cif94ZGQ+xD00dT7a2F8WpaOPp5r2tCfA==
+X-Received: by 2002:a17:902:d303:b0:1cc:5691:5113 with SMTP id b3-20020a170902d30300b001cc56915113mr24799769plc.26.1701376289637;
+        Thu, 30 Nov 2023 12:31:29 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d13-20020a170903230d00b001cf68d103easm1824937plh.46.2023.11.30.12.31.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Nov 2023 12:31:28 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <43effb57-abbd-46bb-ac7d-cab9616a4532@roeck-us.net>
+Date: Thu, 30 Nov 2023 12:31:26 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231124-ltc4282-support-v2-0-952bf926f83c@analog.com>
- <20231124-ltc4282-support-v2-2-952bf926f83c@analog.com> <CACRpkdaksfS4WLNQ6ohauAPq3z2LPG2uF37_jWtm0brQHaDtNw@mail.gmail.com>
- <6384831c05b8ceeaf4a16cf9229770252989b762.camel@gmail.com>
- <CACRpkdZr6TdQCLy73Yx2RdMgQifd67remdxENBKYx3UvEMm87A@mail.gmail.com>
- <971eb35068639ec404669ea5320c8183ea71a7d0.camel@gmail.com>
- <ZWiP3i80KnVk9qyx@smile.fi.intel.com> <a4bd59df0c5bc1be5d0d6f11b968fd61a59ee2e0.camel@gmail.com>
-In-Reply-To: <a4bd59df0c5bc1be5d0d6f11b968fd61a59ee2e0.camel@gmail.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 30 Nov 2023 21:15:01 +0100
-Message-ID: <CACRpkdYz+qi42Pz8CgeWybksC0edaVux6rcEhwzjDWnWe9Jr1g@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] hwmon: ltc4282: add support for the LTC4282 chip
-To: =?UTF-8?B?TnVubyBTw6E=?= <noname.nuno@gmail.com>
-Cc: Andy Shevchenko <andy@kernel.org>, nuno.sa@analog.com, linux-hwmon@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-doc@vger.kernel.org, 
-	Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Bartosz Golaszewski <brgl@bgdev.pl>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] hwmon: (pc87360) Bounds check data->innr usage
+Content-Language: en-US
+To: "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+ Kees Cook <keescook@chromium.org>, Jim Cromie <jim.cromie@gmail.com>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20231130200207.work.679-kees@kernel.org>
+ <cdc00899-cf44-44dd-b708-6cf7dc4b8375@embeddedor.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <cdc00899-cf44-44dd-b708-6cf7dc4b8375@embeddedor.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, Nov 30, 2023 at 4:20=E2=80=AFPM Nuno S=C3=A1 <noname.nuno@gmail.com=
-> wrote:
+On 11/30/23 12:11, Gustavo A. R. Silva wrote:
+> 
+> 
+> On 11/30/23 14:02, Kees Cook wrote:
+>> Without visibility into the initializers for data->innr, GCC suspects
+>> using it as an index could walk off the end of the various 14-element
+>> arrays in data. Perform an explicit clamp to the array size. Silences
+>> the following warning with GCC 12+:
+>>
+>> ../drivers/hwmon/pc87360.c: In function 'pc87360_update_device':
+>> ../drivers/hwmon/pc87360.c:341:49: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
+>>    341 |                                 data->in_max[i] = pc87360_read_value(data,
+>>        |                                 ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    342 |                                                   LD_IN, i,
+>>        |                                                   ~~~~~~~~~
+>>    343 |                                                   PC87365_REG_IN_MAX);
+>>        |                                                   ~~~~~~~~~~~~~~~~~~~
+>> ../drivers/hwmon/pc87360.c:209:12: note: at offset 255 into destination object 'in_max' of size 14
+>>    209 |         u8 in_max[14];          /* Register value */
+>>        |            ^~~~~~
+>>
+>> Cc: Jim Cromie <jim.cromie@gmail.com>
+>> Cc: Jean Delvare <jdelvare@suse.com>
+>> Cc: Guenter Roeck <linux@roeck-us.net>
+>> Cc: linux-hwmon@vger.kernel.org
+>> Signed-off-by: Kees Cook <keescook@chromium.org>
+> 
+> Looks good to me.
+> 
+> Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> 
 
-> Well, I did spent some time on the gpio thing so I would like to have it =
-in but yeah,
-> no hard feelings if it does not go in.
+Guess I'll apply it, even though it is quite pointless. But arguing against
+such changes seems like shouting into the wind, so whatever.
 
-I think it's a good idea to include it, especially if you can, in the
-commit message,
-illustrate how you test it with the libgpiod toolset. If you can test it al=
-l the
-way such that you have real hardware connected to real electronics where
-you can observe the values on these pins or read them: even better.
+There are several other similar "unchecked" loops, including loops for
+fannr and tempnr. The driver would misbehave badly if any of those would
+ever be outside the valid range, both when accessing the hardware and
+writing into various arrays.
 
-GPIOs tend to get used, and then we are prepared.
+Guenter
 
-> So, I actually talk with some hw guys and the pull_low is not really like=
- a pull_low
-> resistor.
-
-We usually call it pull down, so the PIN_CONFIG_BIAS_PULL_DOWN
-config property.
-
-This is vital to e.g. create a bit-banged I2C link, which is something I
-suspect could be useful on this hardware.
-
->These pins are effectively an open drain. Which means, setting them as
-> input means setting them in high-z (turning off the mosffet) - and I do h=
-ave a bug in
-> my code regarding this -
-
-The gpiolib framework assumes we can do open drain emulation by
-setting lines as input. It is used as fallback unless the hardware has
-an explicit open drain setting.
-
-> Or if you want them as outputs you can set the level low
-> (and it will always be low - just turn on the mosffet) or you can also se=
-t high-z
-> which means it will be either low or high depending on your external circ=
-uitry. The
-> point is, you can still have your pin acting as a normal gpo if you accom=
-modate your
-> circuitry for it (can also use these pins for things like buses).
-
-Yeah that is just standard open drain behaviour, by the book.
-Also documented in
-https://docs.kernel.org/driver-api/gpio/driver.html
-under the heading "GPIO lines with open drain/source support".
-
-> Also got me thinking if a gpi vs gpo devicetree property would make sense=
-. But I
-> would likely leave it more generic/relaxed for now (even though I think y=
-ou would
-> need to be creative and actually use more HW to have the possibility of u=
-sing these
-> pins as GPIs and GPOs at the same time).
-
-We don't define that in the device tree currently, we just make the driver
-not support output on input-only pins and vice versa, by returning error
-codes on the .set_direction() callbacks.
-
-Yours,
-Linus Walleij
