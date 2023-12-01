@@ -1,83 +1,82 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lA3tTlCD"
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0451E1718;
-	Thu, 30 Nov 2023 20:34:29 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H0pxZp2X"
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF12171F;
+	Thu, 30 Nov 2023 20:47:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701405270; x=1732941270;
+  t=1701406041; x=1732942041;
   h=date:from:to:cc:subject:message-id:references:
    in-reply-to:mime-version;
-  bh=J9Mor72VQRwo0Jl+GvZ800ZQjhgiBCgHMKjoa6gp/Rc=;
-  b=lA3tTlCDMEc+fFKfcpEfwz/+bLe9gwMhnWXdiZOxdpNOurOHrYMJlkvu
-   YGCJNl4scD/CHzip4HIq1ixQFqPqELPkyJMb34ZDIT1hd8hoksWanLUj3
-   b4KWQa23mWTzEtML65ISNFgHqbzMzM4nAIjYx7VdkTNr9I72Uo1MV/JRP
-   JMSEG2M316Bm5MZqaUvX9C1XwIOHE1mnE9DqwANR9pCK1Xsr2Rf2iX/Jr
-   N4R9nyouGoI6FyHJnkqCveWKRlw0pt7aXd4yHPVEDTtKb8eeU+EzoT5Rw
-   ORDLjm3p6kKr8PwpAzE2PEtOM9EXvFXh/eQo+edruo/9042z3kaKAdsUI
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10910"; a="320326"
+  bh=JDLRpKTSRrEw/g7XT/CM3vm9/sL/ruhWUtc67KOIm4o=;
+  b=H0pxZp2XGb5rDmv114LfmKA6wDLtEhWTMINiPdwuKYnXFG2FtRSngsLX
+   3hpRiU2SCATb/hT0DO+ekcbpj7ZvR8iGLgmjut0ZVg1yT7PJsm+4IIPLF
+   DeM174WSvgpvkCP/DiexmWSwR+mnEIh8YKxbRSKh/PeygjdPMei4qUtoL
+   4TXep1hdKvvq5vkA2pd58HBtd2NXGtMdzV73GR3ttXqPTAMCmExqnLj0/
+   PBM3rSuzsaz7c9q4rcw+iSJYwnirT2Z4XLLUhoUxYgS4NQC1dsSP82WAs
+   gUNCPLMk6vgax6LEjM5bUnETJpN0IYOrpayYB4WFLPCfSAQEIsy4Ydf9c
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10910"; a="424588073"
 X-IronPort-AV: E=Sophos;i="6.04,240,1695711600"; 
-   d="scan'208";a="320326"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2023 20:34:29 -0800
+   d="scan'208";a="424588073"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2023 20:47:20 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10910"; a="803920506"
+X-IronPort-AV: E=McAfee;i="6600,9927,10910"; a="769544904"
 X-IronPort-AV: E=Sophos;i="6.04,240,1695711600"; 
-   d="scan'208";a="803920506"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga001.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 30 Nov 2023 20:34:29 -0800
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+   d="scan'208";a="769544904"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga002.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 30 Nov 2023 20:47:20 -0800
+Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Thu, 30 Nov 2023 20:34:29 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ 15.1.2507.34; Thu, 30 Nov 2023 20:47:19 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34 via Frontend Transport; Thu, 30 Nov 2023 20:34:29 -0800
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.40) by
- edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ 15.1.2507.34 via Frontend Transport; Thu, 30 Nov 2023 20:47:19 -0800
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.100)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.34; Thu, 30 Nov 2023 20:34:28 -0800
+ 15.1.2507.34; Thu, 30 Nov 2023 20:47:19 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OcvJxctd1qESREGLm39SQzNIkLHRfpi+finko/lKIvlHMopdz/H/lHh58WZ2732tMnNaJNPVTKXmCsOM7zQIlhZITd0k0HCClCIeG0BDuwFF6mhYxr5ogUSFsPYH30Hs2n991Q0o9w0Vzvpp0Bzmowq9fHdH0bGopn+0TMF2mvz9pe9WDfTYg2OUBdmr3OEPeMPXtERL/8PQfot+X3ClGmyl6bwc6qNC3P6L0ElmhwBFs0VqkwRxGIMCkIKTTwVFjJOxslMjjGo5ML8YuZz7Ha+UN4M6uyqTUBqABNu8dv5LLc4a/K/8fGaVNgDLGum58+BZpq4z9kceGVmDc5gAvQ==
+ b=jn6w0UVJaJnzPuHc5kHBcqmzBcK+/2ar+32shsH+Yb1xookia2xcR8nyps688a2cKu9gsUmJ6p2I35R0mZsreppyw8O0LBdDv3dyYgXkyWzzu8K8RXYw1NvfXqxCmrUz/rFco0rW81EG2QIFVJQPJ7EntV6HDzZZBzdXV2kbpE0AJUs53Dv3tGqqONKeKfvrlfXT4PNv3OsWTOjNc9oWgEJQBwAXHFlxzi4y2tZx7LypO7MTSoLzvJLI7pZ4IB+bMkRgnegsHN27rKbQmviXuN3J7olASmOmcVFH/eQmiRYTVlOAo8uJjg5LuVZJ6FB2hoyXN8iUB61VMk6JQPasZQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UKQGSWPax2X9Qp4jPT6f4/wNDb8mYFyLDfq0lyNC6fM=;
- b=ITX9y/Xzt8BbRjpRnLCLAkLG6S/TWFT2pcFIewVHboIheqgCWNCmqN6KtfsCYeKPuikALcRsKwJzl59DTILJ3mHEgebeUjwYYdUUS7fVxjLNGbn5ZiajiOiM4anFvFSu1ZQciljnGR2S4GACdKBpeqYQyE6CkNAcet0l/TFrVW0R4m5DKkMREUOWHQ7SC8nYk7OzPO+N3aE4zTgVUCo6EPPBLzwUgxWU8CMM1opblIADa2tjsqujk7hcIfB6O6dyDnb5AwYZG/EsUJYttw8ZokPWPKhhvOpxLlDHM2kn+Q/drPzF8gaH4bZaP2r2UwmEcvdDb0PaANsMYSHsS0IMXg==
+ bh=G28QBAQDR5G/axx/LLtF5bTs+UO5+sn32ryRGWavuu0=;
+ b=RrsVRhQCVnwQ5a6Ctezy8MmubRacbQOyzAZ/FBpn+qNbMqIQa/SHCzVEr7yj8VVdzTzjwg87JxOpCLeuRMNHxAOtjVCsFVadYMy1nKWFBWS7bFW7XEYR5Gn+6wZHsHWYjhNQ83TPAp2irpkngRjX8+c+Oh6QmYsrFcYeD25heQL8RCQsugCmZrD0GkNDUnr9pQAkaqfXbKUCHj0h9VhA7sym6a6GyO482turSlONWGOOdhTPFa57QK1wgTk2+pqNw/AhuDvedNR/ti2hkj78dPgr8NQs5bsMy/IkxJfQWF1nk3fUei/8EFXF070o64pJ17ac67oZFzDClMyHYdYOjw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 Received: from SJ1PR11MB6201.namprd11.prod.outlook.com (2603:10b6:a03:45c::14)
- by DS0PR11MB7382.namprd11.prod.outlook.com (2603:10b6:8:131::13) with
+ by MN2PR11MB4711.namprd11.prod.outlook.com (2603:10b6:208:24e::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.24; Fri, 1 Dec
- 2023 04:34:25 +0000
+ 2023 04:47:12 +0000
 Received: from SJ1PR11MB6201.namprd11.prod.outlook.com
  ([fe80::6299:dc9f:239:202e]) by SJ1PR11MB6201.namprd11.prod.outlook.com
  ([fe80::6299:dc9f:239:202e%5]) with mapi id 15.20.7046.023; Fri, 1 Dec 2023
- 04:34:25 +0000
-Date: Thu, 30 Nov 2023 20:34:19 -0800
+ 04:47:12 +0000
+Date: Thu, 30 Nov 2023 20:47:06 -0800
 From: Ashok Raj <ashok.raj@intel.com>
 To: Guenter Roeck <linux@roeck-us.net>
 CC: Ashok Raj <ashok_raj@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>,
 	<jdelvare@suse.com>, <fenghua.yu@intel.com>, <linux-hwmon@vger.kernel.org>,
 	<linux-kernel@vger.kernel.org>, Ashok Raj <ashok.raj@intel.com>
-Subject: Re: [PATCH 2/3] hwmon: (coretemp) Remove unnecessary dependency of
- array index
-Message-ID: <ZWliS5pSORH1Ua9J@a4bf019067fa.jf.intel.com>
+Subject: Re: [PATCH 1/3] hwmon: (coretemp) Introduce enum for attr index
+Message-ID: <ZWllSmdI5pVGc0+3@a4bf019067fa.jf.intel.com>
 References: <20231127131651.476795-1-rui.zhang@intel.com>
- <20231127131651.476795-3-rui.zhang@intel.com>
- <ZWk2ZAxuyOFDCTmv@araj-dh-work.jf.intel.com>
- <b4723259-92a1-4c9a-8f4a-52b4b61940c5@roeck-us.net>
+ <20231127131651.476795-2-rui.zhang@intel.com>
+ <ZWkDQ5y3e4oPONni@araj-dh-work.jf.intel.com>
+ <0646bcf5-fd41-41e5-b7b1-06b425973c86@roeck-us.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <b4723259-92a1-4c9a-8f4a-52b4b61940c5@roeck-us.net>
-X-ClientProxiedBy: MW3PR06CA0022.namprd06.prod.outlook.com
- (2603:10b6:303:2a::27) To SJ1PR11MB6201.namprd11.prod.outlook.com
+In-Reply-To: <0646bcf5-fd41-41e5-b7b1-06b425973c86@roeck-us.net>
+X-ClientProxiedBy: MW4PR04CA0315.namprd04.prod.outlook.com
+ (2603:10b6:303:82::20) To SJ1PR11MB6201.namprd11.prod.outlook.com
  (2603:10b6:a03:45c::14)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -86,218 +85,106 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PR11MB6201:EE_|DS0PR11MB7382:EE_
-X-MS-Office365-Filtering-Correlation-Id: c83d2b57-d99a-46de-9b01-08dbf226cc09
+X-MS-TrafficTypeDiagnostic: SJ1PR11MB6201:EE_|MN2PR11MB4711:EE_
+X-MS-Office365-Filtering-Correlation-Id: 244c6694-f6ce-428a-32f4-08dbf2289537
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: py7i/KkXhLJI+DEoh4dnDFojpw0WVVB0IJ/y0E0gum3X6Kawtm5QJ1Ixf8uvMlgmUL8Kmka4mpcv04NNUo5lbI6uiFlTwEt6zYP23G4iFbYasfLLLfZPtgwCh+rRO/tJ1MMlle3BL5a7GJqcVFqSt83SQcWweUACoCaSyziVfJ+w1DhDk98Iwyc+6Cp34X8aFPYRPMyfWq+zo3Ewr6mVPWQ9SNzQQRK8xsJX8P6uSMgdMKYSjHyDhuLGsj9IaVZU7r3a6uu3i9vZzBmCbwfqnJemifP85DljeIdhGcuXtVm0NDZTtBD5Va6fO/MUIzILUm1jiickYQHh/9R3CD5HrygMA8iwsL/00VdfN27jSR0pWo+eGtue5ihqWFFNB1UUbc0YXuWpwxgtWLPsitMbnH2HSZCId2a4HuYjpslRBMDhYcxTMCUbsp7K3ueUmUAK8OlrtwrAxz8uqc/L9otdmp5rFrfhCwuUzxyieJYC1qSf/a1G1oc3DGYoj9xxr+C32LKKkKXG2wH62RLxGWPEp2R/ve5hjkk9ugKEvNLXJdGwUT7xrMcBO3+isQhGJby5
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6201.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(39860400002)(346002)(366004)(376002)(136003)(230922051799003)(64100799003)(186009)(451199024)(1800799012)(26005)(82960400001)(38100700002)(5660300002)(2906002)(53546011)(83380400001)(6666004)(6506007)(6512007)(478600001)(66476007)(316002)(6486002)(41300700001)(66946007)(6916009)(8936002)(66556008)(44832011)(54906003)(86362001)(4326008)(8676002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: EVb24q1fmnLKB9bfpR4VNn4WlJXGXxZkSURAhZGIdvhASHAFxrpRBFtvh2wASvG9voD/ITIMvLRcxZZeweAd8CHWCPYjQ1m2E8Y2GPZmol5sUquVFqo7MtIiswv3UScEyJgRCgqyQSq6HybbGads45iyqktkAva7DtAWWQYnsNiP4+MvlPrR8zSiyZObR1QnB0tCF/C9JCbvGMTOcaGNAmtWLdieZHiXoq1066PJagBfpQX+IR22A9LrkPc7L3L3Lg6+dN0CV/rYAzzHTVaCzLZqIjGywN7JLMtISIvtY/l6LiMXYIUjnMYa8AGb9Uyra59HZWRfn+dmFOuDuF4J4mcYkSQGHi6ACmj3/qjfIBiQLhnBWk34OU2v4M38kAyp4fGvCUk32exjmBtI+0Uj/3anE9aohtROVNfU7EhcWYzQXjK+yi6vZJZbVURL3+cez7zmWkHzqXSvuy3ocNERHuCbMWNoADchWsPVFDxa0ibaL+mh2Ygk74WsqohsoNWmQ0/gu+S6FVetVRT8J0RygSFDyZpMCn5+4A8HD3GSjKDdoqcumNw848wgYO67GNv2EcjPHPnSKnn32QFvtmqQpmOZnyegb/N4lfNkRPhFhSQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6201.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(136003)(366004)(376002)(39860400002)(396003)(230922051799003)(1800799012)(451199024)(186009)(64100799003)(478600001)(66556008)(8936002)(6916009)(86362001)(8676002)(4326008)(54906003)(44832011)(6486002)(316002)(66476007)(66946007)(41300700001)(2906002)(5660300002)(82960400001)(38100700002)(6506007)(6512007)(53546011)(6666004)(83380400001)(26005)(67856001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1Ipyj215orJqCdObHEHJuJTvPBULfIQUTFWlG9HVmHaoaJ3dL4IT1sY5vL+0?=
- =?us-ascii?Q?1yay5kavz42eMRX45O5dtbmGubxrX4+WI0j4XjgpxYd/KL13cQ+3/oOMfWjJ?=
- =?us-ascii?Q?wA6/QI8LvlT3SEJ4QG8ghvgl+lgVs0ww9HcNEFtW1u7KWraX0KH8+ByU4YDs?=
- =?us-ascii?Q?stbp7Xewey6X8fcNAz3dUrgzIZ+IsSoK0/3h7mh0XhS1b4oQr5PEAV7PirB2?=
- =?us-ascii?Q?WjtDh6sPVq8w06yI0GPOvR8gn+pSNdnFHI+n2EhsVPto/rHnDo7PRAlxKy2t?=
- =?us-ascii?Q?Ecs2+X0LouuU+VHYOorBI6N0o7y10gG7o5OhH3RzBtFn1OAOcrSTw3cnN7dY?=
- =?us-ascii?Q?bvTKVPT8uST0iMdNnqqSjxwZfJGxCA6/EDbFUdaAAfciFM/amh0hCaD57twm?=
- =?us-ascii?Q?ClT5XXspQVY1BCQl5OJjjVn7ycwgnxw/l4mbaj2Hv+/XuNaTEfIlqnEG/vm4?=
- =?us-ascii?Q?Igi4ifOHrFn7IjweAZU+meVuXIJhEPa8Ajh/k17h/D0VIpButiS+8tH7aqX5?=
- =?us-ascii?Q?F34rVnrGsZR/hM9+3ZU6L4bL0aOCy7T6JsPenWt6vvOKZKfz/UO8k9pFmYsa?=
- =?us-ascii?Q?F51RL8GXuZdUJTwub9HWLwigOCLSrjwGQzb/t6JDrUN9aCzc3Gv0ZgSe25rK?=
- =?us-ascii?Q?1F6FRlp7sHbkvxxWY/8U6F6Fh7l5rJiJ5qJ1SQ+UQDS+YoX8QUj7zTlNfCCK?=
- =?us-ascii?Q?4ZbFTyICpWIb7nwdSexkSqVTB7FaZuU7/uJY+d5YpTuat+BaESijcw412+Px?=
- =?us-ascii?Q?JoKh8+3t7AXexOR4+lfx5Sj2YHyT6EkmDBiHFIwTAg06HZdVD+D+3fA0Te4p?=
- =?us-ascii?Q?12M73/CNskuNXCNnYmKU5me91HCbCJiabUGe/3hJVo4v9G7YtsevQL1QdoGj?=
- =?us-ascii?Q?Te8/WOMCxir59vOox1zXUDhJ6rcJ8KZ1hNOQPgGd22P1BA/Y0K6gp2o+X5HV?=
- =?us-ascii?Q?Bcko0ZYCB/DUQQi3sdfz4YnrzDTjrB+wh/IUSV0rMTzAS88f+JdaQuBXyGyP?=
- =?us-ascii?Q?yfMYjjkEb68zMpIhsAZmzc4uwFa/VB8rsv0jzxaqdtQbKiQn89/T/8umGIUE?=
- =?us-ascii?Q?ijQkqr6gqsc4oxPSw1fouE5a6VL1he9RV8YdX36TAJGlYYuMw4oGt3E85i2W?=
- =?us-ascii?Q?VjN4MLXLDDIRGwi7W9TercWMSdWa4R/7UldCNshmM34b0ohTSrV8iQqdd37v?=
- =?us-ascii?Q?0FZzADQJY2lxG+bhlkMpUZhZ0hWMX/wmIAcGSfQwD/GUh8hhIxHITPqp/LA2?=
- =?us-ascii?Q?Qvi68jxJqvl6MAuUBld9swW97zxnlNcj2WuTshdFCYf6LwCfQGux6+QcpQOO?=
- =?us-ascii?Q?lyp0RObFmeI6uTXnaAA1I6YHYrA493dLPNkMHKiQRarZx4uOi53AFxqxCdnL?=
- =?us-ascii?Q?DrjiV/kTudO7wmHen5mZFxqSHtIwnhQDncUFkxSV/69ESPh7C3MtVe3R8F/Q?=
- =?us-ascii?Q?+l7wCSrVxBFoe2xxu8Xngeox8Jqt1gK7/R6aEqxW/wEvVZUx7BGEUfgxycct?=
- =?us-ascii?Q?mV0F5+MMKYtzcNwhIE5aaA0FwZpCV9qVl6FS5M4xfrkf9GjPtXK82uoJOAQ6?=
- =?us-ascii?Q?PcvBKLlxrdo4HlMlnNEy6gtnV1+atmXULD7kpYygYoZkLrEkS794Wuo5e67r?=
- =?us-ascii?Q?Hw=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: c83d2b57-d99a-46de-9b01-08dbf226cc09
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?m26JFOF/jWwsRNBSpeze8ySCb/NK1EHUUSi4xcpGlh0eDHF6S182lUyF8Q2a?=
+ =?us-ascii?Q?od5ZW8l200t3xoZZ1HJKJhYQSWXMN8NekEAmRurqGTn1q9tnqj1fLpjKHwOA?=
+ =?us-ascii?Q?5Uhr7ZrHckehpcDy5iV7DKQLptPdtqMyWaa724ejiGFz1El+6dEHnXNZ8Ywo?=
+ =?us-ascii?Q?cPpMYvHtoRTbsSJ583MgFEqJqU0nEbaJB5RKNXFPKhO0V21jYZDr0oPMeqjl?=
+ =?us-ascii?Q?ULqnLBr4BpVwEr1upyoiRqyxafd2JCopWcUYIk57cL3bqx8r3XEy/xB79qCn?=
+ =?us-ascii?Q?FJ4kWMdsf8GZSV2UHMhETNd6KZxfyNQHOiHgjTyq4HOc52IhnABsdNGFaKKs?=
+ =?us-ascii?Q?4tPbyBd1i+k6FLJLViTwb5aXeeTo7iNoi3llmDzGMhwqZSKVH1QzX1p0MuIF?=
+ =?us-ascii?Q?DMu9lRoB7nhhtGALnkkhvxqUQ9rf5LCbMZYDlyMy++lQvaWbO4MK9e5tXZZ2?=
+ =?us-ascii?Q?RvKsbC6J8Nro7fx32k1CxN8RPiCpNMtf5ozG18NpFu5AmpeAzifokoOuzNqe?=
+ =?us-ascii?Q?xybv+9h2Y6LqfYh6whsyqhpCOI1W9WEEDiN9cU4M8LfNDdeC/iG0I06ttBQk?=
+ =?us-ascii?Q?MEeS00H5xnBzjrnvj2s2xPTAP9xKFPe1zH7SrzKODEUlR0XWgCR3HObEqeSj?=
+ =?us-ascii?Q?EWdcJFovVwp+eHX42HRZsJO0gPMbdul0hQqcEKTnsZ0+WIdphrQbynC/dIOB?=
+ =?us-ascii?Q?TtzNgVdwip0XKLrBD6Bjfq6hH9gKKh5GhM0poF5HsFMLpS6M7oiCpT42MfS6?=
+ =?us-ascii?Q?wXGn2rNuUg8PqTaA+SrwReQKrZDaQdFzgtlnr6gQuPtr4bCId/2A7U7J85Ex?=
+ =?us-ascii?Q?T6lh7cyGEipznRDNMhi8MHEPymfO+IuUPrzKbpp/RQJFiR+45HzIXoQpZoPh?=
+ =?us-ascii?Q?/+8UEWdBwgGmRGDepDjxrjQ4LQDJrp4APk3+JTN6seTFGvlqRgBdePGlOEMP?=
+ =?us-ascii?Q?4P2KT/iTb6HSQ4shT5CqGgdbodXnX3OM+fA4O4mU8mTuAE9auE8BhL6KEhZb?=
+ =?us-ascii?Q?lfwrhndpFkKLpCxBx0zaqZCGFuhvJG3bHaOIu5e+UsZ32xbuuXibjgWOIteA?=
+ =?us-ascii?Q?edXfSLQnE+wsXmXsVr3zQsx1l/aQbIL9oG2VFW5L0hXrEYia8kfxKny2B+EL?=
+ =?us-ascii?Q?oCv1q8nAFbRMa5/F5KBfiFEOvNzv0rl/IDPdvuJZ/dmX4cnD7TOIUebmFF7c?=
+ =?us-ascii?Q?s1PDYPHz6GU3eUj2+ly7Q/x+wPQFwMpfLtp/KbQn4EGbfTvDvx4hbmz1GBFm?=
+ =?us-ascii?Q?4a9/Q0n1clBxn/UZ8jw/tiRrvrLKIUOllaouFofbepFGLzEZvy5y/cdoxj9m?=
+ =?us-ascii?Q?lHWMUKIFnZJ7WJl7clu9EgTA2BLA2MXdIkntdLb1avRCiZR25p3WXm8LW7CW?=
+ =?us-ascii?Q?xbZZe09gqjE+SWtY7riZkPitpiwC4U5RIdRa4OcEHeJN7eRzEnHZAxsTT6Q7?=
+ =?us-ascii?Q?JsciRAWp7cL7OBINNi620i+A7nn59sH8eDYGSguu+p2QPcD4GqrPITJG5n9W?=
+ =?us-ascii?Q?TEXmmqeu4sZOyKIFuZiTQXTZ49HsHVLskcqXyLSb+/hXSq6xSb3+Wgq4RUda?=
+ =?us-ascii?Q?HEYtvCxKMaOwGgCzq6ADEBnHXzDD69fa+JI1NZqO65oLeqzmMjDN2h5N236K?=
+ =?us-ascii?Q?Fw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 244c6694-f6ce-428a-32f4-08dbf2289537
 X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6201.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Dec 2023 04:34:25.0101
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Dec 2023 04:47:12.0136
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fw9aeDqjIdJ4xxSYYXuzukHiDHEHftR+Qyzc4mW2PTxEcpT0DfPav7gSy8S5qgQ1kvWA0uTpV1Vn25b9w1PT5g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7382
+X-MS-Exchange-CrossTenant-UserPrincipalName: qD8J6WHz1Fsi4sOpu+CfbWztVQIYncCg03b9a56hpG/P6Mte7wSuyB/4nvfOlcOO46UdXpkvnr4H84+0jJMtxA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4711
 X-OriginatorOrg: intel.com
 
-On Thu, Nov 30, 2023 at 07:26:31PM -0800, Guenter Roeck wrote:
-> On 11/30/23 17:27, Ashok Raj wrote:
-> > On Mon, Nov 27, 2023 at 09:16:50PM +0800, Zhang Rui wrote:
-> > > When sensor_device_attribute pointer is available, use container_of() to
-> > > get the temp_data address.
+On Thu, Nov 30, 2023 at 08:14:48PM -0800, Guenter Roeck wrote:
+> On 11/30/23 13:51, Ashok Raj wrote:
+> > On Mon, Nov 27, 2023 at 09:16:49PM +0800, Zhang Rui wrote:
+> > > Introduce enum coretemp_attr_index to better describe the index of each
+> > > sensor attribute and the maximum number of basic/possible attributes.
 > > > 
-> > > This removes the unnecessary dependency of cached index in
-> > > pdata->core_data[].
+> > > No functional change.
 > > > 
 > > > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 > > > ---
-> > >   drivers/hwmon/coretemp.c | 15 +++++----------
-> > >   1 file changed, 5 insertions(+), 10 deletions(-)
+> > >   drivers/hwmon/coretemp.c | 12 ++++++++++--
+> > >   1 file changed, 10 insertions(+), 2 deletions(-)
 > > > 
 > > > diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-> > > index 6053ed3761c2..cef43fedbd58 100644
+> > > index ba82d1e79c13..6053ed3761c2 100644
 > > > --- a/drivers/hwmon/coretemp.c
 > > > +++ b/drivers/hwmon/coretemp.c
-> > > @@ -342,7 +342,7 @@ static ssize_t show_label(struct device *dev,
-> > >   {
-> > >   	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
-> > >   	struct platform_data *pdata = dev_get_drvdata(dev);
-> > > -	struct temp_data *tdata = pdata->core_data[attr->index];
-> > > +	struct temp_data *tdata = container_of(attr, struct temp_data, sd_attrs[ATTR_LABEL]);
-> > >   	if (tdata->is_pkg_data)
-> > >   		return sprintf(buf, "Package id %u\n", pdata->pkg_id);
-> > > @@ -355,8 +355,7 @@ static ssize_t show_crit_alarm(struct device *dev,
-> > >   {
-> > >   	u32 eax, edx;
-> > >   	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
-> > > -	struct platform_data *pdata = dev_get_drvdata(dev);
-> > > -	struct temp_data *tdata = pdata->core_data[attr->index];
-> > > +	struct temp_data *tdata = container_of(attr, struct temp_data, sd_attrs[ATTR_CRIT_ALARM]);
-> > >   	mutex_lock(&tdata->update_lock);
-> > >   	rdmsr_on_cpu(tdata->cpu, tdata->status_reg, &eax, &edx);
-> > > @@ -369,8 +368,7 @@ static ssize_t show_tjmax(struct device *dev,
-> > >   			struct device_attribute *devattr, char *buf)
-> > >   {
-> > >   	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
-> > > -	struct platform_data *pdata = dev_get_drvdata(dev);
-> > > -	struct temp_data *tdata = pdata->core_data[attr->index];
-> > > +	struct temp_data *tdata = container_of(attr, struct temp_data, sd_attrs[ATTR_TJMAX]);
-> > >   	int tjmax;
-> > >   	mutex_lock(&tdata->update_lock);
-> > > @@ -384,8 +382,7 @@ static ssize_t show_ttarget(struct device *dev,
-> > >   				struct device_attribute *devattr, char *buf)
-> > >   {
-> > >   	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
-> > > -	struct platform_data *pdata = dev_get_drvdata(dev);
-> > > -	struct temp_data *tdata = pdata->core_data[attr->index];
-> > > +	struct temp_data *tdata = container_of(attr, struct temp_data, sd_attrs[ATTR_TTARGET]);
-> > >   	int ttarget;
-> > >   	mutex_lock(&tdata->update_lock);
-> > > @@ -402,8 +399,7 @@ static ssize_t show_temp(struct device *dev,
-> > >   {
-> > >   	u32 eax, edx;
-> > >   	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
-> > > -	struct platform_data *pdata = dev_get_drvdata(dev);
-> > > -	struct temp_data *tdata = pdata->core_data[attr->index];
-> > > +	struct temp_data *tdata = container_of(attr, struct temp_data, sd_attrs[ATTR_TEMP]);
-> > >   	int tjmax;
-> > >   	mutex_lock(&tdata->update_lock);
-> > > @@ -445,7 +441,6 @@ static int create_core_attrs(struct temp_data *tdata, struct device *dev,
-> > >   		tdata->sd_attrs[i].dev_attr.attr.name = tdata->attr_name[i];
-> > >   		tdata->sd_attrs[i].dev_attr.attr.mode = 0444;
-> > >   		tdata->sd_attrs[i].dev_attr.show = rd_ptr[i];
-> > > -		tdata->sd_attrs[i].index = attr_no;
+> > > @@ -43,10 +43,18 @@ MODULE_PARM_DESC(tjmax, "TjMax value in degrees Celsius");
+> > >   #define BASE_SYSFS_ATTR_NO	2	/* Sysfs Base attr no for coretemp */
+> > >   #define NUM_REAL_CORES		128	/* Number of Real cores per cpu */
+> > >   #define CORETEMP_NAME_LENGTH	28	/* String Length of attrs */
+> > > -#define MAX_CORE_ATTRS		4	/* Maximum no of basic attrs */
+> > > -#define TOTAL_ATTRS		(MAX_CORE_ATTRS + 1)
+> > >   #define MAX_CORE_DATA		(NUM_REAL_CORES + BASE_SYSFS_ATTR_NO)
+> > > +enum coretemp_attr_index {
+> > > +	ATTR_LABEL,
+> > > +	ATTR_CRIT_ALARM,
+> > > +	ATTR_TEMP,
+> > > +	ATTR_TJMAX,
+> > > +	ATTR_TTARGET,
+> > > +	TOTAL_ATTRS,			/* Maximum no of possible attrs */
+> > > +	MAX_CORE_ATTRS = ATTR_TJMAX + 1	/* Maximum no of basic attrs */
 > > 
-> > I was naively thinking if we could nuke that "index". I can see that used
-> > in couple macros, but seems like we can lose it?
-> > 
-> > Completely untested.. and uncertain :-)
+> > This seems odd. TOTAL_ATTRS being the last entry seems fine, but defining a
+> > MAX_CORE_ATTR the way above sounds a bit hacky.
 > > 
 > 
-> If you had suggested to replace
-> 	struct sensor_device_attribute sd_attrs[TOTAL_ATTRS];
-> with
-> 	struct device_attribute sd_attrs[TOTAL_ATTRS];
-> what you suggested may actually be possible and make sense. However,
-> suggesting to dump the index parameter of SENSOR_ATTR() completely
-> because _this_ driver may no longer need it seems to be a little excessive.
-
-I should have highlighted the uncertain :-).. Said naively thinking to add
-color that I'm calling it blind. But what you suggest might make more
-sense.
-
-I was just suggesting if there is more cleanup that could be accomplished along
-with this might be a good thing.
-
-I tried a quick and dirty cleanup.. apparently it was more dirty I guess
-:-)
-
+> Complaining is easy. What do you suggest that would be better ?
 > 
-> > 
-> > diff --git a/include/linux/hwmon-sysfs.h b/include/linux/hwmon-sysfs.h
-> > index d896713359cd..4855893f9401 100644
-> > --- a/include/linux/hwmon-sysfs.h
-> > +++ b/include/linux/hwmon-sysfs.h
-> > @@ -12,36 +12,35 @@
-> >   struct sensor_device_attribute{
-> >   	struct device_attribute dev_attr;
-> > -	int index;
-> >   };
-> >   #define to_sensor_dev_attr(_dev_attr) \
-> >   	container_of(_dev_attr, struct sensor_device_attribute, dev_attr)
-> > -#define SENSOR_ATTR(_name, _mode, _show, _store, _index)	\
-> > +#define SENSOR_ATTR(_name, _mode, _show, _store)	\
-> >   	{ .dev_attr = __ATTR(_name, _mode, _show, _store),	\
-> > -	  .index = _index }
-> > +	  }
-> > -#define SENSOR_ATTR_RO(_name, _func, _index)			\
-> > +#define SENSOR_ATTR_RO(_name, _func)			\
-> >   	SENSOR_ATTR(_name, 0444, _func##_show, NULL, _index)
-> > -#define SENSOR_ATTR_RW(_name, _func, _index)			\
-> > -	SENSOR_ATTR(_name, 0644, _func##_show, _func##_store, _index)
-> > +#define SENSOR_ATTR_RW(_name, _func)			\
-> > +	SENSOR_ATTR(_name, 0644, _func##_show, _func##_store)
-> > -#define SENSOR_ATTR_WO(_name, _func, _index)			\
-> > -	SENSOR_ATTR(_name, 0200, NULL, _func##_store, _index)
-> > +#define SENSOR_ATTR_WO(_name, _func)			\
-> > +	SENSOR_ATTR(_name, 0200, NULL, _func##_store)
-> > -#define SENSOR_DEVICE_ATTR(_name, _mode, _show, _store, _index)	\
-> > +#define SENSOR_DEVICE_ATTR(_name, _mode, _show, _store)	\
-> >   struct sensor_device_attribute sensor_dev_attr_##_name		\
-> > -	= SENSOR_ATTR(_name, _mode, _show, _store, _index)
-> > +	= SENSOR_ATTR(_name, _mode, _show, _store)
-> > -#define SENSOR_DEVICE_ATTR_RO(_name, _func, _index)		\
-> > -	SENSOR_DEVICE_ATTR(_name, 0444, _func##_show, NULL, _index)
-> > +#define SENSOR_DEVICE_ATTR_RO(_name, _func)		\
-> > +	SENSOR_DEVICE_ATTR(_name, 0444, _func##_show, NULL)
-> >   #define SENSOR_DEVICE_ATTR_RW(_name, _func, _index)		\
-> > -	SENSOR_DEVICE_ATTR(_name, 0644, _func##_show, _func##_store, _index)
-> > +	SENSOR_DEVICE_ATTR(_name, 0644, _func##_show, _func##_store)
-> > -#define SENSOR_DEVICE_ATTR_WO(_name, _func, _index)		\
-> > -	SENSOR_DEVICE_ATTR(_name, 0200, NULL, _func##_store, _index)
-> > +#define SENSOR_DEVICE_ATTR_WO(_name, _func)		\
-> > +	SENSOR_DEVICE_ATTR(_name, 0200, NULL, _func##_store)
-> >   struct sensor_device_attribute_2 {
-> >   	struct device_attribute dev_attr;
-> > diff --git a/drivers/gpu/drm/i915/i915_hwmon.c b/drivers/gpu/drm/i915/i915_hwmon.c
-> > index 975da8e7f2a9..c3bbf2f7d6eb 100644
-> > --- a/drivers/gpu/drm/i915/i915_hwmon.c
-> > +++ b/drivers/gpu/drm/i915/i915_hwmon.c
-> > @@ -239,7 +239,7 @@ hwm_power1_max_interval_store(struct device *dev,
-> >   static SENSOR_DEVICE_ATTR(power1_max_interval, 0664,
-> >   			  hwm_power1_max_interval_show,
-> > -			  hwm_power1_max_interval_store, 0);
-> > +			  hwm_power1_max_interval_store);
-> 
-> That driver could and should have used DEVICE_ATTR() instead of
-> SENSOR_DEVICE_ATTR(), and there are various other drivers where
-> that would have made sense. Actually, it should have used
-> DEVICE_ATTR_RW() but that is just a detail.
-> 
-> However, there are more than 2,000 uses of SENSOR_DEVICE_ATTR() and derived
-> macros in the kernel. The large majority of those do set index to values != 0,
-> and the affected drivers would not be happy if that argument disappeared.
-> 
-> Frankly, I am not entirely sure if you were serious with your suggestion.
+Fair enough.
 
-Certainly can't be serious.. but I was hinting at additional cleanups.. but
-I picked the wrong one obviously. 
+How about 
 
-> I tried to give a serious reply, but I am not entirely sure if I succeeded.
-> My apologies if some sarcasm was bleeding through.
+ATTR_LABEL,
+ATTR_CRIT_ALARM,
+ATTR_TEMP,
+ATTR_TJMAX,
+MAX_CORE_ATTRS,		/* One more than TJMAX */
+ATTR_TTARGET = MAX_CORE_ATTRS,
+TOTAL_ATTRS
 
-:-)... sarcasm is OK.. 
+Each enum can be assigned any value, but this way they are just increasing
+order. 
+
+
