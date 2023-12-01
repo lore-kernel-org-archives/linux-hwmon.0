@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eSzFICNi"
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FDC91715;
-	Thu, 30 Nov 2023 19:06:20 -0800 (PST)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-1fa21f561a1so41181fac.3;
-        Thu, 30 Nov 2023 19:06:20 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MXMZe047"
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36D31717;
+	Thu, 30 Nov 2023 19:26:34 -0800 (PST)
+Received: by mail-ot1-x333.google.com with SMTP id 46e09a7af769-6d83ff72dbbso47785a34.1;
+        Thu, 30 Nov 2023 19:26:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701399979; x=1702004779; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1701401194; x=1702005994; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=HlBmXw61xz34FZu2gf3f1pqRz+gjfA0iYgscjQD41D0=;
-        b=eSzFICNiPiCFyIuhyNu86j0qLPu38z4YgCpZY7ZLRIfFef/IbdhKjuVl58Z3PPMkUi
-         ANYh72yHVaR3RuQl5gqPNX0iiJemAHMza2c62qV+KrEIl5GRiZUGV9GsYOjcW257xjTx
-         Z7Kpps5Tvvx/AqbM3OA3T/WS1OfwiYQfskuf/CrLY2u9KTF/vn2R8HpYvH53rUp4/nSV
-         p2w8lA4giUJtq3+fa4Re60zpF79NSmBXELbqOGkS0yF9kOBVeHFbRsdKqnIb0AkxhmF/
-         5WLN7cF8oCxBPHnEGrLmU0LX1Ffqnhg6CX+IwXHPg5rJ2b7ieA7U+dAONcQ5A/BKC8J5
-         LYag==
+        bh=fvebJ5QToydTLWgRyxHFD+Ru+EdCC8PFScYOP2fmWDk=;
+        b=MXMZe047HX0MGLmuuuvZc8cl0jVRZc2JJnoVdncQ0YLOAgnIzDtiDwwBHzFUij45Do
+         Vu7eXAYWRYNHQpslfko+5onC+7HnReBTfeI8RxY23h6vUchNTpXe30eFb6Zk3d/pevvN
+         uIDFI9hsDhOMl06s0ci2eDrYKKbtYJIDSEjeA5Y0FBadnx3ZcPb1HWSSZkThmhob0DOk
+         Ezr5RjKi11v1e1hPDk9maoDKv8Zm23H4BvBqIJHVNQsoLXvCyEHgnPj45ldBEmJPe6Yp
+         sARaYOY7Gpga41q0assB9sk9lkxSLxrzM+H6xA2NWPwXWhD2Ih61JUHI8lxDqAm8x/SX
+         SaWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701399979; x=1702004779;
+        d=1e100.net; s=20230601; t=1701401194; x=1702005994;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=HlBmXw61xz34FZu2gf3f1pqRz+gjfA0iYgscjQD41D0=;
-        b=D2YmBPIyjOSvDnyYjup+aZxtxyP1i0H0bZVvdAstQBy6apWT/eaThHsegOZYlrim06
-         Rgu8BiVuxEOBeNWIiSCNTe6WO1oWLnPfYFGlsInU/6Havfv9bzaoCnh1sAq9XhxNKqPa
-         jWhx4pHiZdLq8dxk+259WWn3Qn0vJaw+QDu5k7mFo/Wko3Tv8yxFpZjJEq9Tmu8VgN+Y
-         ZlRl5b66GsIAjTD57gvL6RNhn2dvenFMMq2HhqJRMdr4FDAZHESX9CGx+MPlHcLoe+fM
-         fyKyV3Roa53BpgtYqf+Pt2PqvcGJpots2jMkhmZh2iXy9Inps2VLfZgV65kEe2zC+jYM
-         HgtQ==
-X-Gm-Message-State: AOJu0YzXKZekC05gY99vusmIodkoUhcejXnfqaeJr7rvMX3IfltR7yzR
-	iPAZcfoIb6YXgMZ4ZS3fwwg=
-X-Google-Smtp-Source: AGHT+IEgnGhO56NtfC2n7g1nUI541wzAoNfYMJjns8/mutxpmQ0j+u4qNM5GGZFdKGMMVIOD52UD5g==
-X-Received: by 2002:a05:6870:8921:b0:1fa:de7e:bfa2 with SMTP id i33-20020a056870892100b001fade7ebfa2mr2196755oao.51.1701399979393;
-        Thu, 30 Nov 2023 19:06:19 -0800 (PST)
+        bh=fvebJ5QToydTLWgRyxHFD+Ru+EdCC8PFScYOP2fmWDk=;
+        b=iftv3Q3FV+rrlj74KhTTcg72Us75gwRpVGhbdxhHGvtwBYIIOhXxNJvNGJkXAMham3
+         T+ud6kBkvolkC3tKnaapoiPxu7touIwcYel2supf69yabQVrKN04jN3Xn1bVvlR4GgNt
+         u8BXG65BILJ/jZ+QcNAI5pN4FgJTk540PsbG935fDrQPpWYnWneqm4P0eRpsShOrMgHN
+         EVfPg2J2s5ivHIton3dvRBk+78O6ou2qZrp9y3M8+ZSocOvS71ZZ+RdLaqmAyRLKCG5C
+         DBdPaROCheN7GJGazLQmmX0YmudFoxTRYHfiOG/YRag2e4W6a/SfMBJEpnJpN4oAXXIw
+         Wvig==
+X-Gm-Message-State: AOJu0YyC91m7Z5YhaHaxne98UfbfkWXqg0U7xry/arm09AKFg2vUCl5X
+	hJHhToFLumojtDV3yWP4j/jGIsMH6EI=
+X-Google-Smtp-Source: AGHT+IGoiHWETNrJC4inT/fCcLG731oG4jHY1kIHTzXuRgu9IJjEi+I4o8dbdLI7LwVEVp+iWbr44A==
+X-Received: by 2002:a9d:630e:0:b0:6c4:56b4:e91c with SMTP id q14-20020a9d630e000000b006c456b4e91cmr895317otk.7.1701401194098;
+        Thu, 30 Nov 2023 19:26:34 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id fu18-20020a0568705d9200b001fa8b2d3212sm596221oab.1.2023.11.30.19.06.17
+        by smtp.gmail.com with ESMTPSA id u12-20020a056830118c00b006ce2db9e6c4sm363220otq.36.2023.11.30.19.26.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Nov 2023 19:06:18 -0800 (PST)
+        Thu, 30 Nov 2023 19:26:33 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <91a3f785-8d69-4425-ad23-a6ac0ebddb07@roeck-us.net>
-Date: Thu, 30 Nov 2023 19:06:16 -0800
+Message-ID: <b4723259-92a1-4c9a-8f4a-52b4b61940c5@roeck-us.net>
+Date: Thu, 30 Nov 2023 19:26:31 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -49,13 +49,15 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] hwmon: (coretemp) Fix core count limitation
+Subject: Re: [PATCH 2/3] hwmon: (coretemp) Remove unnecessary dependency of
+ array index
 Content-Language: en-US
-To: Zhang Rui <rui.zhang@intel.com>, jdelvare@suse.com
-Cc: fenghua.yu@intel.com, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
+To: Ashok Raj <ashok_raj@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>
+Cc: jdelvare@suse.com, fenghua.yu@intel.com, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Ashok Raj <ashok.raj@intel.com>
 References: <20231127131651.476795-1-rui.zhang@intel.com>
- <20231127131651.476795-4-rui.zhang@intel.com>
+ <20231127131651.476795-3-rui.zhang@intel.com>
+ <ZWk2ZAxuyOFDCTmv@araj-dh-work.jf.intel.com>
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -100,83 +102,176 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20231127131651.476795-4-rui.zhang@intel.com>
+In-Reply-To: <ZWk2ZAxuyOFDCTmv@araj-dh-work.jf.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 11/27/23 05:16, Zhang Rui wrote:
-> Currently, coretemp driver only supports 128 cores per package.
-> This loses some core temperation information on systems that have more
-> than 128 cores per package.
->   [   58.685033] coretemp coretemp.0: Adding Core 128 failed
->   [   58.692009] coretemp coretemp.0: Adding Core 129 failed
+On 11/30/23 17:27, Ashok Raj wrote:
+> On Mon, Nov 27, 2023 at 09:16:50PM +0800, Zhang Rui wrote:
+>> When sensor_device_attribute pointer is available, use container_of() to
+>> get the temp_data address.
+>>
+>> This removes the unnecessary dependency of cached index in
+>> pdata->core_data[].
+>>
+>> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+>> ---
+>>   drivers/hwmon/coretemp.c | 15 +++++----------
+>>   1 file changed, 5 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
+>> index 6053ed3761c2..cef43fedbd58 100644
+>> --- a/drivers/hwmon/coretemp.c
+>> +++ b/drivers/hwmon/coretemp.c
+>> @@ -342,7 +342,7 @@ static ssize_t show_label(struct device *dev,
+>>   {
+>>   	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+>>   	struct platform_data *pdata = dev_get_drvdata(dev);
+>> -	struct temp_data *tdata = pdata->core_data[attr->index];
+>> +	struct temp_data *tdata = container_of(attr, struct temp_data, sd_attrs[ATTR_LABEL]);
+>>   
+>>   	if (tdata->is_pkg_data)
+>>   		return sprintf(buf, "Package id %u\n", pdata->pkg_id);
+>> @@ -355,8 +355,7 @@ static ssize_t show_crit_alarm(struct device *dev,
+>>   {
+>>   	u32 eax, edx;
+>>   	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+>> -	struct platform_data *pdata = dev_get_drvdata(dev);
+>> -	struct temp_data *tdata = pdata->core_data[attr->index];
+>> +	struct temp_data *tdata = container_of(attr, struct temp_data, sd_attrs[ATTR_CRIT_ALARM]);
+>>   
+>>   	mutex_lock(&tdata->update_lock);
+>>   	rdmsr_on_cpu(tdata->cpu, tdata->status_reg, &eax, &edx);
+>> @@ -369,8 +368,7 @@ static ssize_t show_tjmax(struct device *dev,
+>>   			struct device_attribute *devattr, char *buf)
+>>   {
+>>   	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+>> -	struct platform_data *pdata = dev_get_drvdata(dev);
+>> -	struct temp_data *tdata = pdata->core_data[attr->index];
+>> +	struct temp_data *tdata = container_of(attr, struct temp_data, sd_attrs[ATTR_TJMAX]);
+>>   	int tjmax;
+>>   
+>>   	mutex_lock(&tdata->update_lock);
+>> @@ -384,8 +382,7 @@ static ssize_t show_ttarget(struct device *dev,
+>>   				struct device_attribute *devattr, char *buf)
+>>   {
+>>   	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+>> -	struct platform_data *pdata = dev_get_drvdata(dev);
+>> -	struct temp_data *tdata = pdata->core_data[attr->index];
+>> +	struct temp_data *tdata = container_of(attr, struct temp_data, sd_attrs[ATTR_TTARGET]);
+>>   	int ttarget;
+>>   
+>>   	mutex_lock(&tdata->update_lock);
+>> @@ -402,8 +399,7 @@ static ssize_t show_temp(struct device *dev,
+>>   {
+>>   	u32 eax, edx;
+>>   	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+>> -	struct platform_data *pdata = dev_get_drvdata(dev);
+>> -	struct temp_data *tdata = pdata->core_data[attr->index];
+>> +	struct temp_data *tdata = container_of(attr, struct temp_data, sd_attrs[ATTR_TEMP]);
+>>   	int tjmax;
+>>   
+>>   	mutex_lock(&tdata->update_lock);
+>> @@ -445,7 +441,6 @@ static int create_core_attrs(struct temp_data *tdata, struct device *dev,
+>>   		tdata->sd_attrs[i].dev_attr.attr.name = tdata->attr_name[i];
+>>   		tdata->sd_attrs[i].dev_attr.attr.mode = 0444;
+>>   		tdata->sd_attrs[i].dev_attr.show = rd_ptr[i];
+>> -		tdata->sd_attrs[i].index = attr_no;
 > 
-> Fix the problem by using a per package list to maintain the per core
-> temp_data instead of the fixed length pdata->core_data[] array.
+> I was naively thinking if we could nuke that "index". I can see that used
+> in couple macros, but seems like we can lose it?
 > 
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> ---
->   drivers/hwmon/coretemp.c | 110 ++++++++++++++++++---------------------
->   1 file changed, 52 insertions(+), 58 deletions(-)
+> Completely untested.. and uncertain :-)
 > 
-> diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-> index cef43fedbd58..1bb1a6e4b07b 100644
-> --- a/drivers/hwmon/coretemp.c
-> +++ b/drivers/hwmon/coretemp.c
-> @@ -39,11 +39,7 @@ static int force_tjmax;
->   module_param_named(tjmax, force_tjmax, int, 0444);
->   MODULE_PARM_DESC(tjmax, "TjMax value in degrees Celsius");
+
+If you had suggested to replace
+	struct sensor_device_attribute sd_attrs[TOTAL_ATTRS];
+with
+	struct device_attribute sd_attrs[TOTAL_ATTRS];
+what you suggested may actually be possible and make sense. However,
+suggesting to dump the index parameter of SENSOR_ATTR() completely
+because _this_ driver may no longer need it seems to be a little excessive.
+
+> 
+> diff --git a/include/linux/hwmon-sysfs.h b/include/linux/hwmon-sysfs.h
+> index d896713359cd..4855893f9401 100644
+> --- a/include/linux/hwmon-sysfs.h
+> +++ b/include/linux/hwmon-sysfs.h
+> @@ -12,36 +12,35 @@
 >   
-> -#define PKG_SYSFS_ATTR_NO	1	/* Sysfs attribute for package temp */
-> -#define BASE_SYSFS_ATTR_NO	2	/* Sysfs Base attr no for coretemp */
-> -#define NUM_REAL_CORES		128	/* Number of Real cores per cpu */
->   #define CORETEMP_NAME_LENGTH	28	/* String Length of attrs */
-> -#define MAX_CORE_DATA		(NUM_REAL_CORES + BASE_SYSFS_ATTR_NO)
->   
->   enum coretemp_attr_index {
->   	ATTR_LABEL,
-> @@ -90,17 +86,17 @@ struct temp_data {
->   	struct attribute *attrs[TOTAL_ATTRS + 1];
->   	struct attribute_group attr_group;
->   	struct mutex update_lock;
-> +	struct list_head node;
+>   struct sensor_device_attribute{
+>   	struct device_attribute dev_attr;
+> -	int index;
 >   };
+>   #define to_sensor_dev_attr(_dev_attr) \
+>   	container_of(_dev_attr, struct sensor_device_attribute, dev_attr)
 >   
->   /* Platform Data per Physical CPU */
->   struct platform_data {
->   	struct device		*hwmon_dev;
->   	u16			pkg_id;
-> -	u16			cpu_map[NUM_REAL_CORES];
-> -	struct ida		ida;
->   	struct cpumask		cpumask;
-> -	struct temp_data	*core_data[MAX_CORE_DATA];
->   	struct device_attribute name_attr;
-> +	struct mutex		core_data_lock;
-> +	struct list_head	core_data_list;
->   };
+> -#define SENSOR_ATTR(_name, _mode, _show, _store, _index)	\
+> +#define SENSOR_ATTR(_name, _mode, _show, _store)	\
+>   	{ .dev_attr = __ATTR(_name, _mode, _show, _store),	\
+> -	  .index = _index }
+> +	  }
 >   
->   struct tjmax_pci {
-> @@ -491,6 +487,23 @@ static struct temp_data *init_temp_data(unsigned int cpu, int pkg_flag)
->   	return tdata;
->   }
+> -#define SENSOR_ATTR_RO(_name, _func, _index)			\
+> +#define SENSOR_ATTR_RO(_name, _func)			\
+>   	SENSOR_ATTR(_name, 0444, _func##_show, NULL, _index)
 >   
-> +static struct temp_data *get_tdata(struct platform_data *pdata, int cpu)
-> +{
-> +	struct temp_data *tdata;
-> +
-> +	mutex_lock(&pdata->core_data_lock);
-> +	list_for_each_entry(tdata, &pdata->core_data_list, node) {
-> +		if (cpu >= 0 && !tdata->is_pkg_data && tdata->cpu_core_id == topology_core_id(cpu))
-> +			goto found;
-> +		if (cpu < 0 && tdata->is_pkg_data)
-> +			goto found;
-> +	}
+> -#define SENSOR_ATTR_RW(_name, _func, _index)			\
+> -	SENSOR_ATTR(_name, 0644, _func##_show, _func##_store, _index)
+> +#define SENSOR_ATTR_RW(_name, _func)			\
+> +	SENSOR_ATTR(_name, 0644, _func##_show, _func##_store)
+>   
+> -#define SENSOR_ATTR_WO(_name, _func, _index)			\
+> -	SENSOR_ATTR(_name, 0200, NULL, _func##_store, _index)
+> +#define SENSOR_ATTR_WO(_name, _func)			\
+> +	SENSOR_ATTR(_name, 0200, NULL, _func##_store)
+>   
+> -#define SENSOR_DEVICE_ATTR(_name, _mode, _show, _store, _index)	\
+> +#define SENSOR_DEVICE_ATTR(_name, _mode, _show, _store)	\
+>   struct sensor_device_attribute sensor_dev_attr_##_name		\
+> -	= SENSOR_ATTR(_name, _mode, _show, _store, _index)
+> +	= SENSOR_ATTR(_name, _mode, _show, _store)
+>   
+> -#define SENSOR_DEVICE_ATTR_RO(_name, _func, _index)		\
+> -	SENSOR_DEVICE_ATTR(_name, 0444, _func##_show, NULL, _index)
+> +#define SENSOR_DEVICE_ATTR_RO(_name, _func)		\
+> +	SENSOR_DEVICE_ATTR(_name, 0444, _func##_show, NULL)
+>   
+>   #define SENSOR_DEVICE_ATTR_RW(_name, _func, _index)		\
+> -	SENSOR_DEVICE_ATTR(_name, 0644, _func##_show, _func##_store, _index)
+> +	SENSOR_DEVICE_ATTR(_name, 0644, _func##_show, _func##_store)
+>   
+> -#define SENSOR_DEVICE_ATTR_WO(_name, _func, _index)		\
+> -	SENSOR_DEVICE_ATTR(_name, 0200, NULL, _func##_store, _index)
+> +#define SENSOR_DEVICE_ATTR_WO(_name, _func)		\
+> +	SENSOR_DEVICE_ATTR(_name, 0200, NULL, _func##_store)
+>   
+>   struct sensor_device_attribute_2 {
+>   	struct device_attribute dev_attr;
+> diff --git a/drivers/gpu/drm/i915/i915_hwmon.c b/drivers/gpu/drm/i915/i915_hwmon.c
+> index 975da8e7f2a9..c3bbf2f7d6eb 100644
+> --- a/drivers/gpu/drm/i915/i915_hwmon.c
+> +++ b/drivers/gpu/drm/i915/i915_hwmon.c
+> @@ -239,7 +239,7 @@ hwm_power1_max_interval_store(struct device *dev,
+>   
+>   static SENSOR_DEVICE_ATTR(power1_max_interval, 0664,
+>   			  hwm_power1_max_interval_show,
+> -			  hwm_power1_max_interval_store, 0);
+> +			  hwm_power1_max_interval_store);
+>   
 
-I really don't like this. With 128+ cores, it gets terribly expensive.
+That driver could and should have used DEVICE_ATTR() instead of
+SENSOR_DEVICE_ATTR(), and there are various other drivers where
+that would have made sense. Actually, it should have used
+DEVICE_ATTR_RW() but that is just a detail.
 
-How about calculating the number of cores in the probe function and
-allocating cpu_map[] and core_data[] instead ?
+However, there are more than 2,000 uses of SENSOR_DEVICE_ATTR() and derived
+macros in the kernel. The large majority of those do set index to values != 0,
+and the affected drivers would not be happy if that argument disappeared.
 
-Thanks,
+Frankly, I am not entirely sure if you were serious with your suggestion.
+I tried to give a serious reply, but I am not entirely sure if I succeeded.
+My apologies if some sarcasm was bleeding through.
+
 Guenter
 
