@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nRZSYMiB"
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04172CF;
-	Fri,  1 Dec 2023 08:36:12 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1d05e4a94c3so4651585ad.1;
-        Fri, 01 Dec 2023 08:36:11 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F1aJxrrb"
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE87F2;
+	Fri,  1 Dec 2023 08:46:36 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-6cdd9c53282so2099973b3a.3;
+        Fri, 01 Dec 2023 08:46:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701448571; x=1702053371; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1701449196; x=1702053996; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xwr1MgtrJpApwYL7b0E1/Ufr7UsEtcFTk0rkOsQWyZA=;
-        b=nRZSYMiB9w9rVUu7+q66JCP5HM+6t4BQHqmVwEkcQ7nmm33zJM+u0Mpn2vWMQVN1BL
-         DoNAFOxaBiPa1xeUpz9u/kWLBNLkJFv5S8DBGDgJy1hTiTcnqJ4wQkX0E9W6Jm+Z8j0g
-         7AMc2tpj1lBeEiQVZVjmImNrdWrLXf3rWVerwsacTG/TReg2jjr2ClrGUPfqoOVbhzXP
-         bd/0TAw5l3dLsnhlSigOC/YxGcuwo3W++p8b0nGYdDTt9WQLFphCMt+z9x6t+Fj36sXs
-         f/2NYlYFguSGDyy6k9GHlei535y7HNfqHBe4jJOtni+fRC9kZcbz2P9ttw+DZOfdjWOx
-         o0aA==
+        bh=HHGit05b1ahFdzwDkwE+7iDSjXpPc/0z2Nr+N73kpco=;
+        b=F1aJxrrbqNPwSsivb2UKei8Rx1PdENLWTpcv1atuMprQs/Mnxj4ehQa9yBFtkhVnZm
+         9IfpOjR1UT3tgPq3twiSazbc518bGaIrb1k2K0Svpum2/3Mqpa4MVKWDMAWenBSxIkWI
+         hjmXC7IZ/F8rAr6xrc0gC5Y4OTTzeGmuNiSwzY1PhSRuYQGbHZbe/e0nB+SiOZaTuz8g
+         AmBSmGCEKXeDIr8FnR6j1heGTWy/4SzjRbgMjBb9JGuqthVdjEbtVAuhvpr4+TL0hiKU
+         H6cNw2jPFl0Jx6h/DxzlLOhkTKQoiYHrin+WWAqjy7J9DM2ze4X9D3ab3hyREmUO1FmD
+         STTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701448571; x=1702053371;
+        d=1e100.net; s=20230601; t=1701449196; x=1702053996;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Xwr1MgtrJpApwYL7b0E1/Ufr7UsEtcFTk0rkOsQWyZA=;
-        b=MzR9R7D+w9mG5bj21RCto5x722KRxJGvma99CwxSuzitpGvKHZ14whzlhHmrIT9mOy
-         pr8PL0+E9f0yiVEm1yHvXP8yOIGMTI5VsoTKxAU9iIJBx4YkPgWH2vi+1U0GmqiZrYnE
-         QTo3/etpPWqHHbLMEvwhJYKeDDXIpggAUA6tkMcSjMrTIwXWmZNRmIpk4fEENfuKhQZV
-         oA+9tPnhW4PINBx566jgK8Kwr6ttG11+Dx3MqFZ3A2xg1JvTRupX9n7lO+DDVO6RiDqD
-         x3FavMkwkHgheZ7H9oyFmrg8jMwlOlXiGzgnMGFPf3tB0yESwUvvNgHObIupCnQsp+2y
-         zrJg==
-X-Gm-Message-State: AOJu0YzFz364irQ43AsPeDe6yqrvuFymWxK+YO9rj1Z5DFtrFeBjniwz
-	c++GukPhTDq4XLNYHPPOLU4=
-X-Google-Smtp-Source: AGHT+IEHq56ixIzfeu7Q2B+2S7nDo/Q25TA1WQLmWnOOOpIq1kjBf2znviu8pcl3BDmgpqdGoPuwyQ==
-X-Received: by 2002:a17:902:cec4:b0:1d0:265:6a2c with SMTP id d4-20020a170902cec400b001d002656a2cmr12474114plg.11.1701448571423;
-        Fri, 01 Dec 2023 08:36:11 -0800 (PST)
+        bh=HHGit05b1ahFdzwDkwE+7iDSjXpPc/0z2Nr+N73kpco=;
+        b=SuxwiGmuFwM6bUR54EM6ciFd6K2lVQUE2xIWhr6VsREJ+FBBHrR9EfxLdiHKvbyVz3
+         F0wdTcliOaQDpv/e1I4XtazSXdSBbcP6XUbzKgXRTIJzE3m3IMVUlcgS1ePwZT28MgmU
+         eLWZszANAl6omkMRJ3U6sO3U9aOyh5YPmoxVq29r1FYjcic33bKq13QK59hI46mVwESC
+         HEWdE0BheNcXtEy9fGrX9NTiefZOlvdhKu7KPf29edmycIFurod6bg7uT9Fzk3MC54MT
+         YCl6Qd9H/FhiT2rfAjZ5o6m/wy8fBA3m5aEhUcoirPy09raTxsrvmUUmb4bn+zIoc+1u
+         mY5w==
+X-Gm-Message-State: AOJu0Yxy99jTDhCV61YeD79+jz0sqkmmHQSpd3y38mWCHW+8AON9n4ry
+	8CL4/mdlqyZyo6nAy4dRNCM=
+X-Google-Smtp-Source: AGHT+IGpYTBFd1cW3KPvHjM3AIHd9ZxEPzeXqyI4DLKgKUJzYgSYQ2KGQOV+6F0UbUOtFxqAh2/CAQ==
+X-Received: by 2002:a05:6a20:9145:b0:18b:e6c7:7c72 with SMTP id x5-20020a056a20914500b0018be6c77c72mr26259971pzc.57.1701449195688;
+        Fri, 01 Dec 2023 08:46:35 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e23-20020a63d957000000b005b7dd356f75sm3303315pgj.32.2023.12.01.08.36.10
+        by smtp.gmail.com with ESMTPSA id ka15-20020a056a00938f00b006cdd5dfc11asm3171445pfb.166.2023.12.01.08.46.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Dec 2023 08:36:10 -0800 (PST)
+        Fri, 01 Dec 2023 08:46:35 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8717e2d2-1138-40af-b580-c54662069dfc@roeck-us.net>
-Date: Fri, 1 Dec 2023 08:36:09 -0800
+Message-ID: <66454ca2-d5cb-4701-a237-03b3991a791f@roeck-us.net>
+Date: Fri, 1 Dec 2023 08:46:33 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -51,16 +51,18 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2 2/2] hwmon: ltc4282: add support for the LTC4282 chip
 Content-Language: en-US
-To: Andy Shevchenko <andy@kernel.org>
-Cc: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>,
- Linus Walleij <linus.walleij@linaro.org>, nuno.sa@analog.com,
+To: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>,
+ Andy Shevchenko <andy@kernel.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>, nuno.sa@analog.com,
  linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
  linux-doc@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
  Rob Herring <robh+dt@kernel.org>,
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
  Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
  Bartosz Golaszewski <brgl@bgdev.pl>
-References: <CACRpkdZr6TdQCLy73Yx2RdMgQifd67remdxENBKYx3UvEMm87A@mail.gmail.com>
+References: <CACRpkdaksfS4WLNQ6ohauAPq3z2LPG2uF37_jWtm0brQHaDtNw@mail.gmail.com>
+ <6384831c05b8ceeaf4a16cf9229770252989b762.camel@gmail.com>
+ <CACRpkdZr6TdQCLy73Yx2RdMgQifd67remdxENBKYx3UvEMm87A@mail.gmail.com>
  <971eb35068639ec404669ea5320c8183ea71a7d0.camel@gmail.com>
  <ZWiP3i80KnVk9qyx@smile.fi.intel.com>
  <a4bd59df0c5bc1be5d0d6f11b968fd61a59ee2e0.camel@gmail.com>
@@ -70,7 +72,7 @@ References: <CACRpkdZr6TdQCLy73Yx2RdMgQifd67remdxENBKYx3UvEMm87A@mail.gmail.com>
  <b761d2497462664d541779857398b2aa893cbee5.camel@gmail.com>
  <ZWoABzufPkdXnrMT@smile.fi.intel.com>
  <7dc3f137-6073-4262-afb5-439d024bbbd2@roeck-us.net>
- <ZWoIrVAaE04Zs6Xy@smile.fi.intel.com>
+ <986fb7dc2a34602fa9c2d57a7a3e06a71cfdc0a0.camel@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -115,20 +117,22 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <ZWoIrVAaE04Zs6Xy@smile.fi.intel.com>
+In-Reply-To: <986fb7dc2a34602fa9c2d57a7a3e06a71cfdc0a0.camel@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 12/1/23 08:24, Andy Shevchenko wrote:
-> On Fri, Dec 01, 2023 at 08:04:12AM -0800, Guenter Roeck wrote:
+On 12/1/23 08:29, Nuno Sá wrote:
+> On Fri, 2023-12-01 at 08:04 -0800, Guenter Roeck wrote:
 >> On 12/1/23 07:47, Andy Shevchenko wrote:
 >>> On Fri, Dec 01, 2023 at 04:24:35PM +0100, Nuno Sá wrote:
 >>>> On Fri, 2023-12-01 at 14:40 +0100, Linus Walleij wrote:
-> 
-> ...
-> 
->>>> Yes, that is the only thing we have. Meaning that there is no hw setting to set the
->>>> pins to open drain. Open drain is what they are. That is why I'm not seeing the point
+>>>
+>>> ...
+>>>
+>>>> Yes, that is the only thing we have. Meaning that there is no hw setting to set
+>>>> the
+>>>> pins to open drain. Open drain is what they are. That is why I'm not seeing the
+>>>> point
 >>>> in having PIN_CONFIG_DRIVE_OPEN_DRAIN implemented.
 >>>
 >>> At least you have to implement error for PUSH_PULL mode and other modes,
@@ -142,12 +146,15 @@ On 12/1/23 08:24, Andy Shevchenko wrote:
 >>
 >> Maybe I should request that all hwmon chips with gpio support must be implemented
 >> as mfd drivers. I'll have to think about that.
+>>
+>> Guenter
+>>
 > 
-> Or auxiliary bus?
+> Hopefully you don't ask that already for this driver...
 > 
 
-I don't know. All I can see it that it is getting way too complicated for a hwmon
-driver with embedded gpio support.
+Yes, I am, because the gpio part is getting way to complicated for embedding it
+into a hwmon driver.
 
 Guenter
 
