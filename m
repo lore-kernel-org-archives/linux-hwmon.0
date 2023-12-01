@@ -1,582 +1,196 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jzHnAPS5"
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13DA106;
-	Fri,  1 Dec 2023 10:08:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701454136; x=1732990136;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=X6oDrCudoe+j2q/7MS4iic+x0BAWts2PQMsDf+Rb5s4=;
-  b=jzHnAPS5dkp/VKrwtnQoculSoS4tEVrjGP6n8gvBB7iToZJWqhrZGB6h
-   mu5f4WodLgVT5ypXHAS5KMDmigJkgcXbSJgt/vWlVS8FrLl8LyEr36CXM
-   Sgnej0MFACixLoDbwur6/9Ti/KfqZtkPHIUDRtfVmehT5lev8OA+PDENR
-   wQ8hhSoB+VPyXNB0PI99vkx54TBp3FnO8R6h7lQfuqhuMLEIZ9mG5SKaR
-   FCQbK/DonkF/81H2ZulOgxk5imzE6j7rTQorrMEzWvvyu/kNXxffC4TCD
-   zVSA/AB8ybtwaYI94JqOW8zCHySfweQ2QjEa93w0Ki8TU432EzvnGsY7B
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10911"; a="12244386"
-X-IronPort-AV: E=Sophos;i="6.04,242,1695711600"; 
-   d="scan'208";a="12244386"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2023 10:08:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10911"; a="893272438"
-X-IronPort-AV: E=Sophos;i="6.04,242,1695711600"; 
-   d="scan'208";a="893272438"
-Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
-  by orsmga004.jf.intel.com with ESMTP; 01 Dec 2023 10:08:54 -0800
-From: Tony Nguyen <anthony.l.nguyen@intel.com>
-To: davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	netdev@vger.kernel.org
-Cc: Konrad Knitter <konrad.knitter@intel.com>,
-	anthony.l.nguyen@intel.com,
-	jdelvare@suse.com,
-	linux@roeck-us.net,
-	linux-hwmon@vger.kernel.org,
-	Marcin Domagala <marcinx.domagala@intel.com>,
-	Eric Joyner <eric.joyner@intel.com>,
-	Marcin Szycik <marcin.szycik@linux.intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Pucha Himasekhar Reddy <himasekharx.reddy.pucha@intel.com>
-Subject: [PATCH net-next 1/6] ice: read internal temperature sensor
-Date: Fri,  1 Dec 2023 10:08:39 -0800
-Message-ID: <20231201180845.219494-2-anthony.l.nguyen@intel.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20231201180845.219494-1-anthony.l.nguyen@intel.com>
-References: <20231201180845.219494-1-anthony.l.nguyen@intel.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="DwshIScM"
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2050.outbound.protection.outlook.com [40.107.102.50])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE15FF1;
+	Fri,  1 Dec 2023 12:35:02 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iYAbepkwW+m7DxWU06grg+ykiqnQke4C80KVDILUaXK5rNmNRl1tMPJM1k/doz+7r6A5TT4OYFBLYaz6Nz0YvzPgNAB7oVp6Llp+e6LBi6gMnNloqRexNlAx9pB8hs4Z9GEEM9zUoOYeDT/FadJuQvv3A3eqDC93wxDsallL+D1vzgD6ByUBamykI5mXsxXjYELhTCbWa6U3qk0rvOk4/7XP0eXn95uWJ24MuhNZOSUA26qUuZZQMi5yQQSiY0Xnf50v7+3mdndsWsoFCnPPfS295Vt9w0bqPU1gTaCdPRFrVIgeD7mXZqiGKoyCYc7pX61Jo2ijVS6yYxnFeBK5vQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+TWETa/xWs8hT4QKx8R6D9YOK//DGkoQ4jPw5YuOjts=;
+ b=GQUELKvSMbmUYpaXBpt70B8N1OHYQMU9TAD6ZPY0kFmW2llpYubhf6SlMThbSgKK11VvJ3mAsaMCDuV9DcUZT3yqzjDQ4KXRe3aAMHL2gNUNZv4dnZvQIptjFvNin9nl0QHuZjmYd889hZW4eTc0K+LTgEPEscLFF1Roi7l6Hf4zvOVJDF8xRKx89kQy6HKiJcFbRh/iYH7b8NvkfZEHl+b01Pa9VqNmXyjc0Z9r0VC2rfip7kORxiBOaaFTEDLbc1EebiRvHo6Xxk9oV4bC5iVztX3mZS1t+cjOPOf/cbKbITEFYpo+6/qXZUpntmC/DlspJMoKqSXnWM2oJ2kydQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+TWETa/xWs8hT4QKx8R6D9YOK//DGkoQ4jPw5YuOjts=;
+ b=DwshIScMiVN+SsNDIVNF0ISpkcSF/L28FTlDFJcDU/Wv4pda0C1VIZilS4VtUogCXZ3jIOkyWwJm9CIGg9wqdgWCDMV3/o13e901CuhRLgK8k9TgVxEnR9FTpinzLAxeE+0KYyI90FJ7CyZ56Z8Lp/Ve0c8COi5TfxC2YDsl02MEGF+dFwB70oVFdGS1WnOeNz3ue6n66OzDZyjdrl5T9l1LtBYZOknQNwSC5Javaz5xMbjpH0Sxz8JArIaAGRZ97jNqXzQEq2Oh6nQm/Yr656Jm8Utz41dP2g9gSxvCRkUe0fQ+cGAD+XB3gjll85ea4J0EFwEP16vLPzt3Y2luiA==
+Received: from BN9PR12MB5381.namprd12.prod.outlook.com (2603:10b6:408:102::24)
+ by DM3PR12MB9416.namprd12.prod.outlook.com (2603:10b6:0:4b::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7046.27; Fri, 1 Dec 2023 20:35:00 +0000
+Received: from BN9PR12MB5381.namprd12.prod.outlook.com
+ ([fe80::a02:fa08:8729:c1bb]) by BN9PR12MB5381.namprd12.prod.outlook.com
+ ([fe80::a02:fa08:8729:c1bb%4]) with mapi id 15.20.7046.027; Fri, 1 Dec 2023
+ 20:35:00 +0000
+From: Vadim Pasternak <vadimp@nvidia.com>
+To: Kunwu Chan <chentao@kylinos.cn>, "hdegoede@redhat.com"
+	<hdegoede@redhat.com>, "ilpo.jarvinen@linux.intel.com"
+	<ilpo.jarvinen@linux.intel.com>, "jdelvare@suse.com" <jdelvare@suse.com>,
+	"linux@roeck-us.net" <linux@roeck-us.net>, Shravan Ramani
+	<shravankr@nvidia.com>, "jiri@resnulli.us" <jiri@resnulli.us>
+CC: "kunwu.chan@hotmail.com" <kunwu.chan@hotmail.com>,
+	"platform-driver-x86@vger.kernel.org" <platform-driver-x86@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: RE: [PATCH v2] platform/mellanox: Add some null/error pointer checks
+ to mlxbf-pmc.c
+Thread-Topic: [PATCH v2] platform/mellanox: Add some null/error pointer checks
+ to mlxbf-pmc.c
+Thread-Index: AQHaJBsBarANaY4i8kSOk7A1nYaPgbCU41nw
+Date: Fri, 1 Dec 2023 20:35:00 +0000
+Message-ID:
+ <BN9PR12MB5381B3408452445483B7281EAF81A@BN9PR12MB5381.namprd12.prod.outlook.com>
+References: <20231201055447.2356001-1-chentao@kylinos.cn>
+In-Reply-To: <20231201055447.2356001-1-chentao@kylinos.cn>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR12MB5381:EE_|DM3PR12MB9416:EE_
+x-ms-office365-filtering-correlation-id: c73b2754-de7b-48c1-2984-08dbf2acfd4b
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ Y+znFwoDhGXpYoALFETi80ePvVRoqBJnM+1qjVe4bhlrIrCrAtXYsB3VOizmOJpejCOWfWMWVfN3dOJxbT4v4aATjOG8RYrG1oYcjBoy4CqUoZfuMBM7QDCaTi4b1+4xHVxwurgO+LUdDCZ32WzIQxvikV7mI+Ov62Lxc/wFgSwT/yoV1wKjxaUwhHObFOq+mpcDDXtRCevru9qGaHvWkB03N2vIojlHSxQcoa5XSS5XYPeYv8JwnBw5GrsS1fVv1WcsMFXaZF2ZpVluRoDMg1pXjiC2LvwZPGfPtkrVR7twfBnPVDN2nlV5VMNEe8/g/P/jy2R+ZemSX3dCWtrC5Kf4Rk0uNn6GCwd3ReftHGANY1ggdagpmq+jGFnSPBuxHaS7sTsHNwKr3U5AgKp+sFtqJWmKuEjcr7HR6+GC/V02HUIohKxoa2pD/JUI0SFRCpnRqapo2UKIRi9bkUoV2QVChusbkUZEckDUyX1deMRfLnpyZlIlWI3tu46zzyVaTqy2ZAZP+NGFEG3wWzVcmPe9jjVYz1DZKOjwhwe0ymWlPbu94Lbee/VillSN+9kr+EfbzqPX5Jg5+KofXNjQPU+aX0kom+uZfGIC94nPEFHQHQ2GAKWij5d91j9Jch55
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5381.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(376002)(396003)(39860400002)(366004)(136003)(230922051799003)(64100799003)(1800799012)(451199024)(186009)(38070700009)(86362001)(33656002)(55016003)(122000001)(7696005)(66476007)(53546011)(9686003)(110136005)(66556008)(66446008)(76116006)(6506007)(66946007)(66574015)(38100700002)(26005)(83380400001)(71200400001)(8676002)(8936002)(2906002)(41300700001)(54906003)(478600001)(45080400002)(64756008)(4326008)(5660300002)(7416002)(316002)(52536014);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?WmRiZ1NJVkpxOFdzMFlwN2c0Z243bFl5UXRHd1pFckZMZVlRWHcrR1JFa1BK?=
+ =?utf-8?B?K3lERGdtRlJDUTFvSW1IYmg0L0d1RzNITHBoWWpyS1RrNERMQWFiY1E5UGl4?=
+ =?utf-8?B?cmlCdGEzRVQ0Q0I2L2tZRENJcC9GTUw5UXJ2NU1nbURVcllsZmEvMTBIcUlk?=
+ =?utf-8?B?dkZIWWhPTmFqWjg5RVZNWEh1NWRFK3pMd3hjU29ObThhYzFqenpHcTdxRkFy?=
+ =?utf-8?B?d3VQbkZNZGw0dmJlYnpmV21aNEVESEsybk1vWGQ4Tk02U2hVeHAxQ2hTQ2s2?=
+ =?utf-8?B?dGRBK2FDVUIrTENMK2txNVNtdWRuL2JRZ3lOalV0WmMzSU9nSEJVclJyZW5w?=
+ =?utf-8?B?SEx3RVVlaXNLdGU1RkVBMExWbHorNFBzN05SQndBdFFPWkZSSTNOMUJ3RVVT?=
+ =?utf-8?B?eXF0aXYvaUFsT09SQUcrUDBYdWVmMkVnRFp0c0oxNVZwZXI5blhUQXNtWUVj?=
+ =?utf-8?B?TVJoV3FuTFdkVlBZSHp4R1FOcXVMc0ZIaXZkVCtCS0RDazJpY2RwMkZrZFhk?=
+ =?utf-8?B?bEQzYjY0RnZhZXJBR1FjSktZRWlXMGRzY2NaNm9UR3prUkpURUdPbkxBQi8y?=
+ =?utf-8?B?THhJc3g1eWdwNUxBT3FmcGtBT3FiRmxYZlRJV1lydVg0bGVHZU5nMDNXRUF2?=
+ =?utf-8?B?M0Zna1pWUXZ5ZjlxTEVoUzVvM3M4Q1ZvM0ErZEpDWDU4OGNzRnc3RVVMN1kz?=
+ =?utf-8?B?TUtQMTJQQ3ZlcGJQRzl4a0hTMHB2cGx5K09OZ1VWODlTekNIbWZHR1RtNVRn?=
+ =?utf-8?B?SHBRNE56bVM2TGhqYi95QkQ0WDBNb0JKVEJxdlZJRjBUZWk3U1NWQS9sS21C?=
+ =?utf-8?B?aGFnaEZYUmxjQjFoTGNBZUJKRjZCNnVUWXpHVktGMTFNN2hzNGtDRmFLeW1W?=
+ =?utf-8?B?UUJndDZyWG42RkxQNG53SnBQdmE2anpobTE1Zm1sVVRicEVEUlRCd2NlbU1E?=
+ =?utf-8?B?dUIvQVo2dThyaFBHUEhkYjVmbU9yVTFVaUVkazZoQlFML3ZZRFpOK1pDcElY?=
+ =?utf-8?B?Z1FNb1p6SHNzb1AyTVpST1VnU2MycDhzNTljQTdweHU4Y0QyblZDdVpWTUFR?=
+ =?utf-8?B?ektoSmd0NEs2OEpvdWdvVDVKV3ZjRzdza2s5TXZFRXllbnpjS25kODdOSHZQ?=
+ =?utf-8?B?T1QxbDBYMmU4am5saVZHYVJTQnZuTWZlcXY4WU1ZZ2RyVkQxVWdmU3MvMURQ?=
+ =?utf-8?B?VldiUVNlZU9jVEVIYjI0b2RvTVI0UUJFYjloenRtVzJmM3hBeXRieXVsODFq?=
+ =?utf-8?B?bjNjYnFIV3VUajBjYk9vOW1SQ2NmbE5ETnZPWUk4RExwOENTUXFkWkZjNkpZ?=
+ =?utf-8?B?L1ZYNncycUxwWURIMFNEOHlxSkZJUEdkR0xGU1RlZzFZNk9VazNRTnlWUjBo?=
+ =?utf-8?B?cmtHRmtHRlVjNDNwdnFCeERiVk1RUE0yVmlicGpHeUxTRWdmWE1DZXZSWWxr?=
+ =?utf-8?B?U0FWN2EyY29ibFVCZGJEZjU5ellwQ3lyUmJiVTZZYUp2RlRYSUdBN2tFZkw2?=
+ =?utf-8?B?K2hWbi91ZGt2cFFTc1VNRUcxSXJQTmNlTms4YVo5ZGxJcm5LaXJrdlFtVHhu?=
+ =?utf-8?B?ZHlrWUN5K2FPVm1TRy80Skd3SC95MXlwSGJzSVJrV1RGa1QwOHlqQ3E1dkQz?=
+ =?utf-8?B?a2ZiOVZYNmM2SjhEZEpVa3Y1VDRCcndvdHRNOEtvd25Cc3RaeEtlWE8yYm9i?=
+ =?utf-8?B?L1BnTG5JNGJiQVBtdVQrKys1bGpIc3JxOU1Mc2dSeU9leWdCMDVON29BVnFh?=
+ =?utf-8?B?Vmdnc0hkaUhJanY5ekUxOENCNUlSZW1MdW9kanNyUkpuclloRjRFTm1YMW1S?=
+ =?utf-8?B?REhtNHRwbVNQWWFVK1JHcWZBWlgxaFY4bHlKOXdhanZCUklxYVMwWlpYZUgx?=
+ =?utf-8?B?RCsyZU9iUFlqZml0aVJUZ1MzVTV5ZlhTSjdPU25wRFhxb0k5dWlqUGNLSmM2?=
+ =?utf-8?B?N0tQaDFPQkZjZkROcGowSTIxYXRsSGt1UXp1VlpodjVXNWNMeXpCakxKL3hU?=
+ =?utf-8?B?UUlHZUMwUGE5RC9WUzlLeURtN2s1Y0l2dFh4ZU1aNGpWQ3VuU1plT3pGUHY4?=
+ =?utf-8?B?UWZKeUc1dlkzTndiZFpoQmJEcVJ2bkg3MVUrMzFkaXdGWms3TUx5SWpaS2k3?=
+ =?utf-8?Q?nlIM=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5381.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c73b2754-de7b-48c1-2984-08dbf2acfd4b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Dec 2023 20:35:00.0664
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: mCHIjLJAfOjKB9eNHSbQ0HKx00aOA9PnHHSQaMCkKaS0tNDGNvu1qQPq/lLYkmqknagbQ6Kvg8Bnsp0sK6Vtwg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM3PR12MB9416
 
-From: Konrad Knitter <konrad.knitter@intel.com>
-
-Since 4.30 firmware exposes internal thermal sensor reading via admin
-queue commands. Expose those readouts via hwmon API when supported.
-
-Datasheet:
-
-Get Sensor Reading Command (Opcode: 0x0632)
-
-+--------------------+--------+--------------------+-------------------------+
-| Name               | Bytes  | Value              |          Remarks        |
-+--------------------+--------+--------------------+-------------------------+
-| Flags              | 1-0    |                    |                         |
-| Opcode             | 2-3    | 0x0632             | Command opcode          |
-| Datalen            | 4-5    | 0                  | No external buffer.     |
-| Return value       | 6-7    |                    | Return value.           |
-| Cookie High        | 8-11   | Cookie             |                         |
-| Cookie Low         | 12-15  | Cookie             |                         |
-| Sensor             | 16     |                    | 0x00: Internal temp     |
-|                    |        |                    | 0x01-0xFF: Reserved.    |
-| Format             | 17     | Requested response | Only 0x00 is supported. |
-|                    |        | format             | 0x01-0xFF: Reserved.    |
-| Reserved           | 18-23  |                    |                         |
-| Data Address high  | 24-27  | Response buffer    |                         |
-|                    |        | address            |                         |
-| Data Address low   | 28-31  | Response buffer    |                         |
-|                    |        | address            |                         |
-+--------------------+--------+--------------------+-------------------------+
-
-Get Sensor Reading Response (Opcode: 0x0632)
-
-+--------------------+--------+--------------------+-------------------------+
-| Name               | Bytes  | Value              |          Remarks        |
-+--------------------+--------+--------------------+-------------------------+
-| Flags              | 1-0    |                    |                         |
-| Opcode             | 2-3    | 0x0632             | Command opcode          |
-| Datalen            | 4-5    | 0                  | No external buffer      |
-| Return value       | 6-7    |                    | Return value.           |
-|                    |        |                    | EINVAL: Invalid         |
-|                    |        |                    | parameters              |
-|                    |        |                    | ENOENT: Unsupported     |
-|                    |        |                    | sensor                  |
-|                    |        |                    | EIO: Sensor access      |
-|                    |        |                    | error                   |
-| Cookie High        | 8-11   | Cookie             |                         |
-| Cookie Low         | 12-15  | Cookie             |                         |
-| Sensor Reading     | 16-23  |                    | Format of the reading   |
-|                    |        |                    | is dependent on request |
-| Data Address high  | 24-27  | Response buffer    |                         |
-|                    |        | address            |                         |
-| Data Address low   | 28-31  | Response buffer    |                         |
-|                    |        | address            |                         |
-+--------------------+--------+--------------------+-------------------------+
-
-Sensor Reading for Sensor 0x00 (Internal Chip Temperature):
-
-+--------------------+--------+--------------------+-------------------------+
-| Name               | Bytes  | Value              |          Remarks        |
-+--------------------+--------+--------------------+-------------------------+
-| Thermal Sensor     | 0      |                    | Reading in degrees      |
-| reading            |        |                    | Celsius. Signed int8    |
-| Warning High       | 1      |                    | Warning High threshold  |
-| threshold          |        |                    | in degrees Celsius.     |
-|                    |        |                    | Unsigned int8.          |
-|                    |        |                    | 0xFF when unsupported   |
-| Critical High      | 2      |                    | Critical High threshold |
-| threshold          |        |                    | in degrees Celsius.     |
-|                    |        |                    | Unsigned int8.          |
-|                    |        |                    | 0xFF when unsupported   |
-| Fatal High         | 3      |                    | Fatal High threshold    |
-| threshold          |        |                    | in degrees Celsius.     |
-|                    |        |                    | Unsigned int8.          |
-|                    |        |                    | 0xFF when unsupported   |
-| Reserved           | 4-7    |                    |                         |
-+--------------------+--------+--------------------+-------------------------+
-
-Driver provides current reading from HW as well as device specific
-thresholds for thermal alarm (Warning, Critical, Fatal) events.
-
-$ sensors
-
-Output
-=========================================================
-ice-pci-b100
-Adapter: PCI adapter
-temp1:        +62.0°C  (high = +95.0°C, crit = +105.0°C)
-                       (emerg = +115.0°C)
-
-Tested on Intel Corporation Ethernet Controller E810-C for SFP
-
-Co-developed-by: Marcin Domagala <marcinx.domagala@intel.com>
-Signed-off-by: Marcin Domagala <marcinx.domagala@intel.com>
-Co-developed-by: Eric Joyner <eric.joyner@intel.com>
-Signed-off-by: Eric Joyner <eric.joyner@intel.com>
-Reviewed-by: Marcin Szycik <marcin.szycik@linux.intel.com>
-Reviewed-by: Przemek Kitszel <przemyslaw.kitszel@intel.com>
-Signed-off-by: Konrad Knitter <konrad.knitter@intel.com>
-Tested-by: Pucha Himasekhar Reddy <himasekharx.reddy.pucha@intel.com> (A Contingent worker at Intel)
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
----
- drivers/net/ethernet/intel/Kconfig            |  11 ++
- drivers/net/ethernet/intel/ice/Makefile       |   1 +
- drivers/net/ethernet/intel/ice/ice.h          |   1 +
- .../net/ethernet/intel/ice/ice_adminq_cmd.h   |  28 ++++
- drivers/net/ethernet/intel/ice/ice_common.c   |  54 +++++++-
- drivers/net/ethernet/intel/ice/ice_common.h   |   2 +
- drivers/net/ethernet/intel/ice/ice_hwmon.c    | 126 ++++++++++++++++++
- drivers/net/ethernet/intel/ice/ice_hwmon.h    |  15 +++
- drivers/net/ethernet/intel/ice/ice_main.c     |   5 +
- drivers/net/ethernet/intel/ice/ice_type.h     |   7 +
- 10 files changed, 249 insertions(+), 1 deletion(-)
- create mode 100644 drivers/net/ethernet/intel/ice/ice_hwmon.c
- create mode 100644 drivers/net/ethernet/intel/ice/ice_hwmon.h
-
-diff --git a/drivers/net/ethernet/intel/Kconfig b/drivers/net/ethernet/intel/Kconfig
-index 06ddd7147c7f..d55638ad8704 100644
---- a/drivers/net/ethernet/intel/Kconfig
-+++ b/drivers/net/ethernet/intel/Kconfig
-@@ -299,6 +299,17 @@ config ICE
- 	  To compile this driver as a module, choose M here. The module
- 	  will be called ice.
- 
-+config ICE_HWMON
-+	bool "Intel(R) Ethernet Connection E800 Series Support HWMON support"
-+	default y
-+	depends on ICE && HWMON && !(ICE=y && HWMON=m)
-+	help
-+	  Say Y if you want to expose thermal sensor data on Intel devices.
-+
-+	  Some of our devices contain internal thermal sensors.
-+	  This data is available via the hwmon sysfs interface and exposes
-+	  the onboard sensors.
-+
- config ICE_SWITCHDEV
- 	bool "Switchdev Support"
- 	default y
-diff --git a/drivers/net/ethernet/intel/ice/Makefile b/drivers/net/ethernet/intel/ice/Makefile
-index 0679907980f7..b40b4179b9f4 100644
---- a/drivers/net/ethernet/intel/ice/Makefile
-+++ b/drivers/net/ethernet/intel/ice/Makefile
-@@ -49,3 +49,4 @@ ice-$(CONFIG_RFS_ACCEL) += ice_arfs.o
- ice-$(CONFIG_XDP_SOCKETS) += ice_xsk.o
- ice-$(CONFIG_ICE_SWITCHDEV) += ice_eswitch.o ice_eswitch_br.o
- ice-$(CONFIG_GNSS) += ice_gnss.o
-+ice-$(CONFIG_ICE_HWMON) += ice_hwmon.o
-diff --git a/drivers/net/ethernet/intel/ice/ice.h b/drivers/net/ethernet/intel/ice/ice.h
-index cd7dcd0fa7f2..3ea33947b878 100644
---- a/drivers/net/ethernet/intel/ice/ice.h
-+++ b/drivers/net/ethernet/intel/ice/ice.h
-@@ -655,6 +655,7 @@ struct ice_pf {
- #define ICE_MAX_VF_AGG_NODES		32
- 	struct ice_agg_node vf_agg_node[ICE_MAX_VF_AGG_NODES];
- 	struct ice_dplls dplls;
-+	struct device *hwmon_dev;
- };
- 
- extern struct workqueue_struct *ice_lag_wq;
-diff --git a/drivers/net/ethernet/intel/ice/ice_adminq_cmd.h b/drivers/net/ethernet/intel/ice/ice_adminq_cmd.h
-index d7fdb7ba7268..f77a3c70f262 100644
---- a/drivers/net/ethernet/intel/ice/ice_adminq_cmd.h
-+++ b/drivers/net/ethernet/intel/ice/ice_adminq_cmd.h
-@@ -117,6 +117,7 @@ struct ice_aqc_list_caps_elem {
- #define ICE_AQC_CAPS_NET_VER				0x004C
- #define ICE_AQC_CAPS_PENDING_NET_VER			0x004D
- #define ICE_AQC_CAPS_RDMA				0x0051
-+#define ICE_AQC_CAPS_SENSOR_READING			0x0067
- #define ICE_AQC_CAPS_PCIE_RESET_AVOIDANCE		0x0076
- #define ICE_AQC_CAPS_POST_UPDATE_RESET_RESTRICT		0x0077
- #define ICE_AQC_CAPS_NVM_MGMT				0x0080
-@@ -1413,6 +1414,30 @@ struct ice_aqc_get_phy_rec_clk_out {
- 	__le16 node_handle;
- };
- 
-+/* Get sensor reading (direct 0x0632) */
-+struct ice_aqc_get_sensor_reading {
-+	u8 sensor;
-+	u8 format;
-+	u8 reserved[6];
-+	__le32 addr_high;
-+	__le32 addr_low;
-+};
-+
-+/* Get sensor reading response (direct 0x0632) */
-+struct ice_aqc_get_sensor_reading_resp {
-+	union {
-+		u8 raw[8];
-+		/* Output data for sensor 0x00, format 0x00 */
-+		struct _packed {
-+			s8 temp;
-+			u8 temp_warning_threshold;
-+			u8 temp_critical_threshold;
-+			u8 temp_fatal_threshold;
-+			u8 reserved[4];
-+		} s0f0;
-+	} data;
-+};
-+
- struct ice_aqc_link_topo_params {
- 	u8 lport_num;
- 	u8 lport_num_valid;
-@@ -2443,6 +2468,8 @@ struct ice_aq_desc {
- 		struct ice_aqc_restart_an restart_an;
- 		struct ice_aqc_set_phy_rec_clk_out set_phy_rec_clk_out;
- 		struct ice_aqc_get_phy_rec_clk_out get_phy_rec_clk_out;
-+		struct ice_aqc_get_sensor_reading get_sensor_reading;
-+		struct ice_aqc_get_sensor_reading_resp get_sensor_reading_resp;
- 		struct ice_aqc_gpio read_write_gpio;
- 		struct ice_aqc_sff_eeprom read_write_sff_param;
- 		struct ice_aqc_set_port_id_led set_port_id_led;
-@@ -2618,6 +2645,7 @@ enum ice_adminq_opc {
- 	ice_aqc_opc_set_mac_lb				= 0x0620,
- 	ice_aqc_opc_set_phy_rec_clk_out			= 0x0630,
- 	ice_aqc_opc_get_phy_rec_clk_out			= 0x0631,
-+	ice_aqc_opc_get_sensor_reading			= 0x0632,
- 	ice_aqc_opc_get_link_topo			= 0x06E0,
- 	ice_aqc_opc_read_i2c				= 0x06E2,
- 	ice_aqc_opc_write_i2c				= 0x06E3,
-diff --git a/drivers/net/ethernet/intel/ice/ice_common.c b/drivers/net/ethernet/intel/ice/ice_common.c
-index 9a6c25f98632..8d97434e1413 100644
---- a/drivers/net/ethernet/intel/ice/ice_common.c
-+++ b/drivers/net/ethernet/intel/ice/ice_common.c
-@@ -2710,6 +2710,26 @@ ice_parse_fdir_dev_caps(struct ice_hw *hw, struct ice_hw_dev_caps *dev_p,
- 		  dev_p->num_flow_director_fltr);
- }
- 
-+/**
-+ * ice_parse_sensor_reading_cap - Parse ICE_AQC_CAPS_SENSOR_READING cap
-+ * @hw: pointer to the HW struct
-+ * @dev_p: pointer to device capabilities structure
-+ * @cap: capability element to parse
-+ *
-+ * Parse ICE_AQC_CAPS_SENSOR_READING for device capability for reading
-+ * enabled sensors.
-+ */
-+static void
-+ice_parse_sensor_reading_cap(struct ice_hw *hw, struct ice_hw_dev_caps *dev_p,
-+			     struct ice_aqc_list_caps_elem *cap)
-+{
-+	dev_p->supported_sensors = le32_to_cpu(cap->number);
-+
-+	ice_debug(hw, ICE_DBG_INIT,
-+		  "dev caps: supported sensors (bitmap) = 0x%x\n",
-+		  dev_p->supported_sensors);
-+}
-+
- /**
-  * ice_parse_dev_caps - Parse device capabilities
-  * @hw: pointer to the HW struct
-@@ -2755,9 +2775,12 @@ ice_parse_dev_caps(struct ice_hw *hw, struct ice_hw_dev_caps *dev_p,
- 		case ICE_AQC_CAPS_1588:
- 			ice_parse_1588_dev_caps(hw, dev_p, &cap_resp[i]);
- 			break;
--		case  ICE_AQC_CAPS_FD:
-+		case ICE_AQC_CAPS_FD:
- 			ice_parse_fdir_dev_caps(hw, dev_p, &cap_resp[i]);
- 			break;
-+		case ICE_AQC_CAPS_SENSOR_READING:
-+			ice_parse_sensor_reading_cap(hw, dev_p, &cap_resp[i]);
-+			break;
- 		default:
- 			/* Don't list common capabilities as unknown */
- 			if (!found)
-@@ -5540,6 +5563,35 @@ ice_aq_get_phy_rec_clk_out(struct ice_hw *hw, u8 *phy_output, u8 *port_num,
- 	return status;
- }
- 
-+/**
-+ * ice_aq_get_sensor_reading
-+ * @hw: pointer to the HW struct
-+ * @data: pointer to data to be read from the sensor
-+ *
-+ * Get sensor reading (0x0632)
-+ */
-+int ice_aq_get_sensor_reading(struct ice_hw *hw,
-+			      struct ice_aqc_get_sensor_reading_resp *data)
-+{
-+	struct ice_aqc_get_sensor_reading *cmd;
-+	struct ice_aq_desc desc;
-+	int status;
-+
-+	ice_fill_dflt_direct_cmd_desc(&desc, ice_aqc_opc_get_sensor_reading);
-+	cmd = &desc.params.get_sensor_reading;
-+#define ICE_INTERNAL_TEMP_SENSOR_FORMAT	0
-+#define ICE_INTERNAL_TEMP_SENSOR	0
-+	cmd->sensor = ICE_INTERNAL_TEMP_SENSOR;
-+	cmd->format = ICE_INTERNAL_TEMP_SENSOR_FORMAT;
-+
-+	status = ice_aq_send_cmd(hw, &desc, NULL, 0, NULL);
-+	if (!status)
-+		memcpy(data, &desc.params.get_sensor_reading_resp,
-+		       sizeof(*data));
-+
-+	return status;
-+}
-+
- /**
-  * ice_replay_pre_init - replay pre initialization
-  * @hw: pointer to the HW struct
-diff --git a/drivers/net/ethernet/intel/ice/ice_common.h b/drivers/net/ethernet/intel/ice/ice_common.h
-index 31fdcac33986..5f7aa293d4ae 100644
---- a/drivers/net/ethernet/intel/ice/ice_common.h
-+++ b/drivers/net/ethernet/intel/ice/ice_common.h
-@@ -241,6 +241,8 @@ ice_aq_set_phy_rec_clk_out(struct ice_hw *hw, u8 phy_output, bool enable,
- int
- ice_aq_get_phy_rec_clk_out(struct ice_hw *hw, u8 *phy_output, u8 *port_num,
- 			   u8 *flags, u16 *node_handle);
-+int ice_aq_get_sensor_reading(struct ice_hw *hw,
-+			      struct ice_aqc_get_sensor_reading_resp *data);
- void
- ice_stat_update40(struct ice_hw *hw, u32 reg, bool prev_stat_loaded,
- 		  u64 *prev_stat, u64 *cur_stat);
-diff --git a/drivers/net/ethernet/intel/ice/ice_hwmon.c b/drivers/net/ethernet/intel/ice/ice_hwmon.c
-new file mode 100644
-index 000000000000..e4c2c1bff6c0
---- /dev/null
-+++ b/drivers/net/ethernet/intel/ice/ice_hwmon.c
-@@ -0,0 +1,126 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) 2023, Intel Corporation. */
-+
-+#include "ice.h"
-+#include "ice_hwmon.h"
-+#include "ice_adminq_cmd.h"
-+
-+#include <linux/hwmon.h>
-+
-+#define TEMP_FROM_REG(reg) ((reg) * 1000)
-+
-+static const struct hwmon_channel_info *ice_hwmon_info[] = {
-+	HWMON_CHANNEL_INFO(temp,
-+			   HWMON_T_INPUT | HWMON_T_MAX |
-+			   HWMON_T_CRIT | HWMON_T_EMERGENCY),
-+	NULL
-+};
-+
-+static int ice_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-+			  u32 attr, int channel, long *val)
-+{
-+	struct ice_aqc_get_sensor_reading_resp resp;
-+	struct ice_pf *pf = dev_get_drvdata(dev);
-+	int ret;
-+
-+	if (type != hwmon_temp)
-+		return -EOPNOTSUPP;
-+
-+	ret = ice_aq_get_sensor_reading(&pf->hw, &resp);
-+	if (ret) {
-+		dev_warn_ratelimited(dev,
-+				     "%s HW read failure (%d)\n",
-+				     __func__,
-+				     ret);
-+		return ret;
-+	}
-+
-+	switch (attr) {
-+	case hwmon_temp_input:
-+		*val = TEMP_FROM_REG(resp.data.s0f0.temp);
-+		break;
-+	case hwmon_temp_max:
-+		*val = TEMP_FROM_REG(resp.data.s0f0.temp_warning_threshold);
-+		break;
-+	case hwmon_temp_crit:
-+		*val = TEMP_FROM_REG(resp.data.s0f0.temp_critical_threshold);
-+		break;
-+	case hwmon_temp_emergency:
-+		*val = TEMP_FROM_REG(resp.data.s0f0.temp_fatal_threshold);
-+		break;
-+	default:
-+		dev_dbg(dev, "%s unsupported attribute (%d)\n",
-+			__func__, attr);
-+		return -EOPNOTSUPP;
-+	}
-+
-+	return 0;
-+}
-+
-+static umode_t ice_hwmon_is_visible(const void *data,
-+				    enum hwmon_sensor_types type, u32 attr,
-+				    int channel)
-+{
-+	if (type != hwmon_temp)
-+		return 0;
-+
-+	switch (attr) {
-+	case hwmon_temp_input:
-+	case hwmon_temp_crit:
-+	case hwmon_temp_max:
-+	case hwmon_temp_emergency:
-+		return 0444;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct hwmon_ops ice_hwmon_ops = {
-+	.is_visible = ice_hwmon_is_visible,
-+	.read = ice_hwmon_read
-+};
-+
-+static const struct hwmon_chip_info ice_chip_info = {
-+	.ops = &ice_hwmon_ops,
-+	.info = ice_hwmon_info
-+};
-+
-+static bool ice_is_internal_reading_supported(struct ice_pf *pf)
-+{
-+	/* Only the first PF will report temperature for a chip.
-+	 * Note that internal temp reading is not supported
-+	 * for older FW (< v4.30).
-+	 */
-+	if (pf->hw.pf_id)
-+		return false;
-+
-+	unsigned long sensors = pf->hw.dev_caps.supported_sensors;
-+
-+	return _test_bit(ICE_SENSOR_SUPPORT_E810_INT_TEMP_BIT, &sensors);
-+};
-+
-+void ice_hwmon_init(struct ice_pf *pf)
-+{
-+	struct device *dev = ice_pf_to_dev(pf);
-+	struct device *hdev;
-+
-+	if (!ice_is_internal_reading_supported(pf))
-+		return;
-+
-+	hdev = hwmon_device_register_with_info(dev, "ice", pf, &ice_chip_info,
-+					       NULL);
-+	if (IS_ERR(hdev)) {
-+		dev_warn(dev,
-+			 "hwmon_device_register_with_info returns error (%ld)",
-+			 PTR_ERR(hdev));
-+		return;
-+	}
-+	pf->hwmon_dev = hdev;
-+}
-+
-+void ice_hwmon_exit(struct ice_pf *pf)
-+{
-+	if (!pf->hwmon_dev)
-+		return;
-+	hwmon_device_unregister(pf->hwmon_dev);
-+}
-diff --git a/drivers/net/ethernet/intel/ice/ice_hwmon.h b/drivers/net/ethernet/intel/ice/ice_hwmon.h
-new file mode 100644
-index 000000000000..d66d40354f5a
---- /dev/null
-+++ b/drivers/net/ethernet/intel/ice/ice_hwmon.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (C) 2023, Intel Corporation. */
-+
-+#ifndef _ICE_HWMON_H_
-+#define _ICE_HWMON_H_
-+
-+#ifdef CONFIG_ICE_HWMON
-+void ice_hwmon_init(struct ice_pf *pf);
-+void ice_hwmon_exit(struct ice_pf *pf);
-+#else /* CONFIG_ICE_HWMON */
-+static inline void ice_hwmon_init(struct ice_pf *pf) { }
-+static inline void ice_hwmon_exit(struct ice_pf *pf) { }
-+#endif /* CONFIG_ICE_HWMON */
-+
-+#endif /* _ICE_HWMON_H_ */
-diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
-index 43ba3e55b8c1..b8ad414dac47 100644
---- a/drivers/net/ethernet/intel/ice/ice_main.c
-+++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -14,6 +14,7 @@
- #include "ice_dcb_lib.h"
- #include "ice_dcb_nl.h"
- #include "ice_devlink.h"
-+#include "ice_hwmon.h"
- /* Including ice_trace.h with CREATE_TRACE_POINTS defined will generate the
-  * ice tracepoint functions. This must be done exactly once across the
-  * ice driver.
-@@ -4685,6 +4686,8 @@ static void ice_init_features(struct ice_pf *pf)
- 
- 	if (ice_init_lag(pf))
- 		dev_warn(dev, "Failed to init link aggregation support\n");
-+
-+	ice_hwmon_init(pf);
- }
- 
- static void ice_deinit_features(struct ice_pf *pf)
-@@ -5210,6 +5213,8 @@ static void ice_remove(struct pci_dev *pdev)
- 		ice_free_vfs(pf);
- 	}
- 
-+	ice_hwmon_exit(pf);
-+
- 	ice_service_task_stop(pf);
- 	ice_aq_cancel_waiting_tasks(pf);
- 	set_bit(ICE_DOWN, pf->state);
-diff --git a/drivers/net/ethernet/intel/ice/ice_type.h b/drivers/net/ethernet/intel/ice/ice_type.h
-index a18ca0ff879f..5a80158e49ed 100644
---- a/drivers/net/ethernet/intel/ice/ice_type.h
-+++ b/drivers/net/ethernet/intel/ice/ice_type.h
-@@ -377,6 +377,8 @@ struct ice_hw_func_caps {
- 	struct ice_ts_func_info ts_func_info;
- };
- 
-+#define ICE_SENSOR_SUPPORT_E810_INT_TEMP_BIT	0
-+
- /* Device wide capabilities */
- struct ice_hw_dev_caps {
- 	struct ice_hw_common_caps common_cap;
-@@ -385,6 +387,11 @@ struct ice_hw_dev_caps {
- 	u32 num_flow_director_fltr;	/* Number of FD filters available */
- 	struct ice_ts_dev_info ts_dev_info;
- 	u32 num_funcs;
-+	/* bitmap of supported sensors
-+	 * bit 0 - internal temperature sensor
-+	 * bit 31:1 - Reserved
-+	 */
-+	u32 supported_sensors;
- };
- 
- /* MAC info */
--- 
-2.41.0
-
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogS3Vud3UgQ2hhbiA8Y2hl
+bnRhb0BreWxpbm9zLmNuPg0KPiBTZW50OiBGcmlkYXksIDEgRGVjZW1iZXIgMjAyMyA3OjU1DQo+
+IFRvOiBoZGVnb2VkZUByZWRoYXQuY29tOyBpbHBvLmphcnZpbmVuQGxpbnV4LmludGVsLmNvbTsg
+VmFkaW0gUGFzdGVybmFrDQo+IDx2YWRpbXBAbnZpZGlhLmNvbT47IGpkZWx2YXJlQHN1c2UuY29t
+OyBsaW51eEByb2Vjay11cy5uZXQ7IFNocmF2YW4NCj4gUmFtYW5pIDxzaHJhdmFua3JAbnZpZGlh
+LmNvbT47IGppcmlAcmVzbnVsbGkudXMNCj4gQ2M6IGt1bnd1LmNoYW5AaG90bWFpbC5jb207IHBs
+YXRmb3JtLWRyaXZlci14ODZAdmdlci5rZXJuZWwub3JnOyBsaW51eC0NCj4ga2VybmVsQHZnZXIu
+a2VybmVsLm9yZzsgbGludXgtaHdtb25Admdlci5rZXJuZWwub3JnOyBLdW53dSBDaGFuDQo+IDxj
+aGVudGFvQGt5bGlub3MuY24+DQo+IFN1YmplY3Q6IFtQQVRDSCB2Ml0gcGxhdGZvcm0vbWVsbGFu
+b3g6IEFkZCBzb21lIG51bGwvZXJyb3IgcG9pbnRlciBjaGVja3MgdG8NCj4gbWx4YmYtcG1jLmMN
+Cj4gDQo+IGRldm1fa2FzcHJpbnRmKCkgcmV0dXJucyBhIHBvaW50ZXIgdG8gZHluYW1pY2FsbHkg
+YWxsb2NhdGVkIG1lbW9yeSB3aGljaA0KPiBjYW4gYmUgTlVMTCB1cG9uIGZhaWx1cmUuDQo+IGRl
+dm1faHdtb25fZGV2aWNlX3JlZ2lzdGVyX3dpdGhfZ3JvdXBzIHJldHVybiBhIGVycm9yIHBvaW50
+ZXIgdXBvbg0KPiBmYWlsdXJlLg0KPiANCj4gQ29tcGlsZS10ZXN0ZWQgb25seS4NCj4gDQo+IEZp
+eGVzOiAxYTIxOGQzMTJlNjUgKCJwbGF0Zm9ybS9tZWxsYW5veDogbWx4YmYtcG1jOiBBZGQgTWVs
+bGFub3gNCj4gQmx1ZUZpZWxkIFBNQyBkcml2ZXIiKQ0KPiBTdWdnZXN0ZWQtYnk6IElscG8gSsOk
+cnZpbmVuIDxpbHBvLmphcnZpbmVuQGxpbnV4LmludGVsLmNvbT4NCj4gU3VnZ2VzdGVkLWJ5OiBW
+YWRpbSBQYXN0ZXJuYWsgPHZhZGltcEBudmlkaWEuY29tPg0KPiBTaWduZWQtb2ZmLWJ5OiBLdW53
+dSBDaGFuIDxjaGVudGFvQGt5bGlub3MuY24+DQoNClJldmlld2VkLWJ5OiBWYWRpbSBQYXN0ZXJu
+YWsgPHZhZGltcEBudmlkaWEuY29tPg0KDQo+IC0tLQ0KPiAgZHJpdmVycy9wbGF0Zm9ybS9tZWxs
+YW5veC9tbHhiZi1wbWMuYyB8IDE0ICsrKysrKysrKysrKysrDQo+ICAxIGZpbGUgY2hhbmdlZCwg
+MTQgaW5zZXJ0aW9ucygrKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvcGxhdGZvcm0vbWVs
+bGFub3gvbWx4YmYtcG1jLmMNCj4gYi9kcml2ZXJzL3BsYXRmb3JtL21lbGxhbm94L21seGJmLXBt
+Yy5jDQo+IGluZGV4IDBiNDI3ZmMyNGE5Ni4uMWRkODRjN2E3OWRlIDEwMDY0NA0KPiAtLS0gYS9k
+cml2ZXJzL3BsYXRmb3JtL21lbGxhbm94L21seGJmLXBtYy5jDQo+ICsrKyBiL2RyaXZlcnMvcGxh
+dGZvcm0vbWVsbGFub3gvbWx4YmYtcG1jLmMNCj4gQEAgLTE3NzEsNiArMTc3MSw4IEBAIHN0YXRp
+YyBpbnQgbWx4YmZfcG1jX2luaXRfcGVyZnR5cGVfY291bnRlcihzdHJ1Y3QNCj4gZGV2aWNlICpk
+ZXYsIGludCBibGtfbnVtKQ0KPiAgCWF0dHItPmRldl9hdHRyLnNob3cgPSBtbHhiZl9wbWNfZXZl
+bnRfbGlzdF9zaG93Ow0KPiAgCWF0dHItPm5yID0gYmxrX251bTsNCj4gIAlhdHRyLT5kZXZfYXR0
+ci5hdHRyLm5hbWUgPSBkZXZtX2thc3ByaW50ZihkZXYsIEdGUF9LRVJORUwsDQo+ICJldmVudF9s
+aXN0Iik7DQo+ICsJaWYgKCFhdHRyLT5kZXZfYXR0ci5hdHRyLm5hbWUpDQo+ICsJCXJldHVybiAt
+RU5PTUVNOw0KPiAgCXBtYy0+YmxvY2tbYmxrX251bV0uYmxvY2tfYXR0cltpXSA9ICZhdHRyLT5k
+ZXZfYXR0ci5hdHRyOw0KPiAgCWF0dHIgPSBOVUxMOw0KPiANCj4gQEAgLTE3ODQsNiArMTc4Niw4
+IEBAIHN0YXRpYyBpbnQgbWx4YmZfcG1jX2luaXRfcGVyZnR5cGVfY291bnRlcihzdHJ1Y3QNCj4g
+ZGV2aWNlICpkZXYsIGludCBibGtfbnVtKQ0KPiAgCQlhdHRyLT5uciA9IGJsa19udW07DQo+ICAJ
+CWF0dHItPmRldl9hdHRyLmF0dHIubmFtZSA9IGRldm1fa2FzcHJpbnRmKGRldiwgR0ZQX0tFUk5F
+TCwNCj4gIAkJCQkJCQkgICJlbmFibGUiKTsNCj4gKwkJaWYgKCFhdHRyLT5kZXZfYXR0ci5hdHRy
+Lm5hbWUpDQo+ICsJCQlyZXR1cm4gLUVOT01FTTsNCj4gIAkJcG1jLT5ibG9ja1tibGtfbnVtXS5i
+bG9ja19hdHRyWysraV0gPSAmYXR0ci0+ZGV2X2F0dHIuYXR0cjsNCj4gIAkJYXR0ciA9IE5VTEw7
+DQo+ICAJfQ0KPiBAQCAtMTgxMCw2ICsxODE0LDggQEAgc3RhdGljIGludCBtbHhiZl9wbWNfaW5p
+dF9wZXJmdHlwZV9jb3VudGVyKHN0cnVjdA0KPiBkZXZpY2UgKmRldiwgaW50IGJsa19udW0pDQo+
+ICAJCWF0dHItPm5yID0gYmxrX251bTsNCj4gIAkJYXR0ci0+ZGV2X2F0dHIuYXR0ci5uYW1lID0g
+ZGV2bV9rYXNwcmludGYoZGV2LCBHRlBfS0VSTkVMLA0KPiAgCQkJCQkJCSAgImNvdW50ZXIlZCIs
+IGopOw0KPiArCQlpZiAoIWF0dHItPmRldl9hdHRyLmF0dHIubmFtZSkNCj4gKwkJCXJldHVybiAt
+RU5PTUVNOw0KPiAgCQlwbWMtPmJsb2NrW2Jsa19udW1dLmJsb2NrX2F0dHJbKytpXSA9ICZhdHRy
+LT5kZXZfYXR0ci5hdHRyOw0KPiAgCQlhdHRyID0gTlVMTDsNCj4gDQo+IEBAIC0xODIxLDYgKzE4
+MjcsOCBAQCBzdGF0aWMgaW50IG1seGJmX3BtY19pbml0X3BlcmZ0eXBlX2NvdW50ZXIoc3RydWN0
+DQo+IGRldmljZSAqZGV2LCBpbnQgYmxrX251bSkNCj4gIAkJYXR0ci0+bnIgPSBibGtfbnVtOw0K
+PiAgCQlhdHRyLT5kZXZfYXR0ci5hdHRyLm5hbWUgPSBkZXZtX2thc3ByaW50ZihkZXYsIEdGUF9L
+RVJORUwsDQo+ICAJCQkJCQkJICAiZXZlbnQlZCIsIGopOw0KPiArCQlpZiAoIWF0dHItPmRldl9h
+dHRyLmF0dHIubmFtZSkNCj4gKwkJCXJldHVybiAtRU5PTUVNOw0KPiAgCQlwbWMtPmJsb2NrW2Js
+a19udW1dLmJsb2NrX2F0dHJbKytpXSA9ICZhdHRyLT5kZXZfYXR0ci5hdHRyOw0KPiAgCQlhdHRy
+ID0gTlVMTDsNCj4gIAl9DQo+IEBAIC0xODUzLDYgKzE4NjEsOCBAQCBzdGF0aWMgaW50IG1seGJm
+X3BtY19pbml0X3BlcmZ0eXBlX3JlZyhzdHJ1Y3QNCj4gZGV2aWNlICpkZXYsIGludCBibGtfbnVt
+KQ0KPiAgCQlhdHRyLT5uciA9IGJsa19udW07DQo+ICAJCWF0dHItPmRldl9hdHRyLmF0dHIubmFt
+ZSA9IGRldm1fa2FzcHJpbnRmKGRldiwgR0ZQX0tFUk5FTCwNCj4gIAkJCQkJCQkgIGV2ZW50c1tq
+XS5ldnRfbmFtZSk7DQo+ICsJCWlmICghYXR0ci0+ZGV2X2F0dHIuYXR0ci5uYW1lKQ0KPiArCQkJ
+cmV0dXJuIC1FTk9NRU07DQo+ICAJCXBtYy0+YmxvY2tbYmxrX251bV0uYmxvY2tfYXR0cltpXSA9
+ICZhdHRyLT5kZXZfYXR0ci5hdHRyOw0KPiAgCQlhdHRyID0gTlVMTDsNCj4gIAkJaSsrOw0KPiBA
+QCAtMTg4Miw2ICsxODkyLDggQEAgc3RhdGljIGludCBtbHhiZl9wbWNfY3JlYXRlX2dyb3Vwcyhz
+dHJ1Y3QgZGV2aWNlDQo+ICpkZXYsIGludCBibGtfbnVtKQ0KPiAgCXBtYy0+YmxvY2tbYmxrX251
+bV0uYmxvY2tfYXR0cl9ncnAuYXR0cnMgPSBwbWMtDQo+ID5ibG9ja1tibGtfbnVtXS5ibG9ja19h
+dHRyOw0KPiAgCXBtYy0+YmxvY2tbYmxrX251bV0uYmxvY2tfYXR0cl9ncnAubmFtZSA9IGRldm1f
+a2FzcHJpbnRmKA0KPiAgCQlkZXYsIEdGUF9LRVJORUwsIHBtYy0+YmxvY2tfbmFtZVtibGtfbnVt
+XSk7DQo+ICsJaWYgKCFwbWMtPmJsb2NrW2Jsa19udW1dLmJsb2NrX2F0dHJfZ3JwLm5hbWUpDQo+
+ICsJCXJldHVybiAtRU5PTUVNOw0KPiAgCXBtYy0+Z3JvdXBzW3BtYy0+Z3JvdXBfbnVtXSA9ICZw
+bWMtDQo+ID5ibG9ja1tibGtfbnVtXS5ibG9ja19hdHRyX2dycDsNCj4gIAlwbWMtPmdyb3VwX251
+bSsrOw0KPiANCj4gQEAgLTIwNjMsNiArMjA3NSw4IEBAIHN0YXRpYyBpbnQgbWx4YmZfcG1jX3By
+b2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UNCj4gKnBkZXYpDQo+IA0KPiAgCXBtYy0+aHdtb25f
+ZGV2ID0gZGV2bV9od21vbl9kZXZpY2VfcmVnaXN0ZXJfd2l0aF9ncm91cHMoDQo+ICAJCWRldiwg
+ImJmcGVyZiIsIHBtYywgcG1jLT5ncm91cHMpOw0KPiArCWlmIChJU19FUlIocG1jLT5od21vbl9k
+ZXYpKQ0KPiArCQlyZXR1cm4gUFRSX0VSUihwbWMtPmh3bW9uX2Rldik7DQo+ICAJcGxhdGZvcm1f
+c2V0X2RydmRhdGEocGRldiwgcG1jKTsNCj4gDQo+ICAJcmV0dXJuIDA7DQo+IC0tDQo+IDIuMzQu
+MQ0KDQo=
