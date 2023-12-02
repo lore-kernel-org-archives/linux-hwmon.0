@@ -1,251 +1,180 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YbbJszcs"
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60A4CA2
-	for <linux-hwmon@vger.kernel.org>; Sat,  2 Dec 2023 08:16:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701533786; x=1733069786;
-  h=date:from:to:cc:subject:message-id;
-  bh=1rnr0o2sgp71uXlF9555ZHUQo9hSRfFyStxjEC7bVTo=;
-  b=YbbJszcsjWpJ5Wx/hkTVe1gXscm+fFcIYSs84kuvvmDT3c2ypK3KzqDY
-   ipFNfhfntodnUd0zMBfLeG2vSM+pwznkHVLGXk1f5H+q2p9hy6C7uXYwm
-   +2wGnD9ZHbEwtsBWU8bYR9AALhFC02klj3979fpQlT3talJVMpAcMXrsO
-   2efEO441HxfrTxgEBEcM1hFXsQUX2H2dONI0IoY7oZl7Xv6kdf86nsmeM
-   Gs35WXzsQtph/tfaDurknHFXIyok3nKwp5S32T7r9pYpJVvdhCiLgDzKZ
-   z/jafi3exwOf6BvY25AstQLAHNj0RarGVwzuDii/CEY4qo3XTP2JJvK8q
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10912"; a="378640539"
-X-IronPort-AV: E=Sophos;i="6.04,246,1695711600"; 
-   d="scan'208";a="378640539"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2023 08:16:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,246,1695711600"; 
-   d="scan'208";a="11481509"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 02 Dec 2023 08:16:24 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r9SfG-0005Qq-0l;
-	Sat, 02 Dec 2023 16:16:22 +0000
-Date: Sun, 03 Dec 2023 00:16:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 31d16f6ced5d43ab5fc21dc4eec3739e46f1960a
-Message-ID: <202312030058.MfM7Dnqx-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (1024-bit key) header.d=ixit.cz header.i=@ixit.cz header.b="cKXEG7Ps"
+X-Greylist: delayed 364 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 02 Dec 2023 14:36:06 PST
+Received: from ixit.cz (ip-89-177-23-149.bb.vodafone.cz [89.177.23.149])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6244C11A;
+	Sat,  2 Dec 2023 14:36:06 -0800 (PST)
+Received: from newone.lan (unknown [10.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by ixit.cz (Postfix) with ESMTPSA id 2D5AD161295;
+	Sat,  2 Dec 2023 23:30:00 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+	t=1701556200;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=w8RgVf3eXeZAKem0L618SQ0biYOfByDJvZecPoQGFuc=;
+	b=cKXEG7PsiepHEcQrcXwInsk0YmYc4jFv+gYp+pmE9X0y1h3gZ9JBD5OzGMqM3W/n7N1IFK
+	z/NClr0LGnfsUDRXPryZNHR5bPsmk0IL+nwOGlrJwD89Z927a1zGrEZ3vSemCGc7HRof3d
+	piWBcTAZJjK3MmUjEwxrAJEEINUE9jU=
+From: David Heidelberg <david@ixit.cz>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: David Heidelberg <david@ixit.cz>,
+	Rob Herring <robh@kernel.org>,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 1/5] dt-bindings: arm: hwmon: gpio-fan: Convert txt bindings to yaml
+Date: Sat,  2 Dec 2023 23:29:00 +0100
+Message-ID: <20231202222934.137191-1-david@ixit.cz>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 31d16f6ced5d43ab5fc21dc4eec3739e46f1960a  hwmon: (dell-smm) Add Optiplex 7000 to fan control whitelist
+Convert fan devices connected to GPIOs to the YAML syntax.
 
-Warning ids grouped by kconfigs:
+Signed-off-by: David Heidelberg <david@ixit.cz>
+---
+ .../devicetree/bindings/hwmon/gpio-fan.txt    | 41 -----------
+ .../devicetree/bindings/hwmon/gpio-fan.yaml   | 70 +++++++++++++++++++
+ 2 files changed, 70 insertions(+), 41 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/hwmon/gpio-fan.txt
+ create mode 100644 Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
 
-clang_recent_errors
-|-- arm-randconfig-002-20231202
-|   `-- include-linux-platform_data-cros_ec_commands.h:warning:field-within-struct-ec_params_motion_sense-is-less-aligned-than-union-ec_params_motion_sense::(anonymous-at-include-linux-platform_data-cros_ec_c
-|-- arm-randconfig-003-20231202
-|   `-- drivers-infiniband-core-mad_priv.h:warning:field-wc-within-struct-ib_mad_private_header-is-less-aligned-than-struct-ib_wc-and-is-usually-due-to-struct-ib_mad_private_header-being-packed-which-can-lead
-|-- arm-randconfig-004-20231202
-|   `-- include-linux-platform_data-cros_ec_commands.h:warning:field-within-struct-ec_params_motion_sense-is-less-aligned-than-union-ec_params_motion_sense::(anonymous-at-include-linux-platform_data-cros_ec_c
-`-- powerpc-randconfig-003-20231202
-    `-- fs-bcachefs-fsck.c:warning:stack-frame-size-()-exceeds-limit-()-in-reattach_inode
-
-elapsed time: 1464m
-
-configs tested: 178
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                     haps_hs_smp_defconfig   gcc  
-arc                   randconfig-001-20231202   gcc  
-arc                   randconfig-002-20231202   gcc  
-arc                        vdk_hs38_defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                        clps711x_defconfig   gcc  
-arm                                 defconfig   clang
-arm                         lpc18xx_defconfig   gcc  
-arm                   randconfig-001-20231202   clang
-arm                   randconfig-002-20231202   clang
-arm                   randconfig-003-20231202   clang
-arm                   randconfig-004-20231202   clang
-arm                           sunxi_defconfig   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20231202   clang
-arm64                 randconfig-002-20231202   clang
-arm64                 randconfig-003-20231202   clang
-arm64                 randconfig-004-20231202   clang
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20231202   gcc  
-csky                  randconfig-002-20231202   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20231202   clang
-hexagon               randconfig-002-20231202   clang
-i386                             allmodconfig   clang
-i386                              allnoconfig   clang
-i386                             allyesconfig   clang
-i386         buildonly-randconfig-001-20231202   clang
-i386         buildonly-randconfig-002-20231202   clang
-i386         buildonly-randconfig-003-20231202   clang
-i386         buildonly-randconfig-004-20231202   clang
-i386         buildonly-randconfig-005-20231202   clang
-i386         buildonly-randconfig-006-20231202   clang
-i386                                defconfig   gcc  
-i386                  randconfig-001-20231202   clang
-i386                  randconfig-002-20231202   clang
-i386                  randconfig-003-20231202   clang
-i386                  randconfig-004-20231202   clang
-i386                  randconfig-005-20231202   clang
-i386                  randconfig-006-20231202   clang
-i386                  randconfig-011-20231202   gcc  
-i386                  randconfig-012-20231202   gcc  
-i386                  randconfig-013-20231202   gcc  
-i386                  randconfig-014-20231202   gcc  
-i386                  randconfig-015-20231202   gcc  
-i386                  randconfig-016-20231202   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20231202   gcc  
-loongarch             randconfig-002-20231202   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                         amcore_defconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                       m5249evb_defconfig   gcc  
-m68k                          sun3x_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-microblaze                      mmu_defconfig   gcc  
-mips                              allnoconfig   clang
-mips                             allyesconfig   gcc  
-mips                          rb532_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20231202   gcc  
-nios2                 randconfig-002-20231202   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20231202   gcc  
-parisc                randconfig-002-20231202   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   clang
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                   currituck_defconfig   gcc  
-powerpc                    gamecube_defconfig   clang
-powerpc                      pmac32_defconfig   clang
-powerpc               randconfig-001-20231202   clang
-powerpc               randconfig-002-20231202   clang
-powerpc               randconfig-003-20231202   clang
-powerpc64             randconfig-001-20231202   clang
-powerpc64             randconfig-002-20231202   clang
-powerpc64             randconfig-003-20231202   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   clang
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                 randconfig-001-20231202   clang
-riscv                 randconfig-002-20231202   clang
-riscv                          rv32_defconfig   clang
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20231202   gcc  
-s390                  randconfig-002-20231202   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                 kfr2r09-romimage_defconfig   gcc  
-sh                    randconfig-001-20231202   gcc  
-sh                    randconfig-002-20231202   gcc  
-sh                           se7721_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20231202   gcc  
-sparc64               randconfig-002-20231202   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20231202   clang
-um                    randconfig-002-20231202   clang
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20231202   clang
-x86_64       buildonly-randconfig-002-20231202   clang
-x86_64       buildonly-randconfig-003-20231202   clang
-x86_64       buildonly-randconfig-004-20231202   clang
-x86_64       buildonly-randconfig-005-20231202   clang
-x86_64       buildonly-randconfig-006-20231202   clang
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20231202   gcc  
-x86_64                randconfig-002-20231202   gcc  
-x86_64                randconfig-003-20231202   gcc  
-x86_64                randconfig-004-20231202   gcc  
-x86_64                randconfig-005-20231202   gcc  
-x86_64                randconfig-006-20231202   gcc  
-x86_64                randconfig-011-20231202   clang
-x86_64                randconfig-012-20231202   clang
-x86_64                randconfig-013-20231202   clang
-x86_64                randconfig-014-20231202   clang
-x86_64                randconfig-015-20231202   clang
-x86_64                randconfig-016-20231202   clang
-x86_64                randconfig-071-20231202   clang
-x86_64                randconfig-072-20231202   clang
-x86_64                randconfig-073-20231202   clang
-x86_64                randconfig-074-20231202   clang
-x86_64                randconfig-075-20231202   clang
-x86_64                randconfig-076-20231202   clang
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
-xtensa                          iss_defconfig   gcc  
-xtensa                randconfig-001-20231202   gcc  
-xtensa                randconfig-002-20231202   gcc  
-
+diff --git a/Documentation/devicetree/bindings/hwmon/gpio-fan.txt b/Documentation/devicetree/bindings/hwmon/gpio-fan.txt
+deleted file mode 100644
+index f4cfa350f6a1..000000000000
+--- a/Documentation/devicetree/bindings/hwmon/gpio-fan.txt
++++ /dev/null
+@@ -1,41 +0,0 @@
+-Bindings for fan connected to GPIO lines
+-
+-Required properties:
+-- compatible : "gpio-fan"
+-
+-Optional properties:
+-- gpios: Specifies the pins that map to bits in the control value,
+-  ordered MSB-->LSB.
+-- gpio-fan,speed-map: A mapping of possible fan RPM speeds and the
+-  control value that should be set to achieve them. This array
+-  must have the RPM values in ascending order.
+-- alarm-gpios: This pin going active indicates something is wrong with
+-  the fan, and a udev event will be fired.
+-- #cooling-cells: If used as a cooling device, must be <2>
+-  Also see:
+-  Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml
+-  min and max states are derived from the speed-map of the fan.
+-
+-Note: At least one the "gpios" or "alarm-gpios" properties must be set.
+-
+-Examples:
+-
+-	gpio_fan {
+-		compatible = "gpio-fan";
+-		gpios = <&gpio1 14 1
+-			 &gpio1 13 1>;
+-		gpio-fan,speed-map = <0    0
+-				      3000 1
+-				      6000 2>;
+-		alarm-gpios = <&gpio1 15 1>;
+-	};
+-	gpio_fan_cool: gpio_fan {
+-		compatible = "gpio-fan";
+-		gpios = <&gpio2 14 1
+-			 &gpio2 13 1>;
+-		gpio-fan,speed-map =	<0    0>,
+-					<3000 1>,
+-					<6000 2>;
+-		alarm-gpios = <&gpio2 15 1>;
+-		#cooling-cells = <2>; /* min followed by max */
+-	};
+diff --git a/Documentation/devicetree/bindings/hwmon/gpio-fan.yaml b/Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
+new file mode 100644
+index 000000000000..0e220874bee6
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
+@@ -0,0 +1,70 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/gpio-fan.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Fan connected to GPIO lines
++
++maintainers:
++  - Rob Herring <robh@kernel.org>
++
++properties:
++  compatible:
++    const: gpio-fan
++
++  gpios:
++    description: |
++      Specifies the pins that map to bits in the control value,
++      ordered MSB-->LSB.
++    minItems: 1
++    maxItems: 7
++
++  alarm-gpios:
++    maxItems: 1
++
++  gpio-fan,speed-map:
++    $ref: /schemas/types.yaml#/definitions/uint32-matrix
++    minItems: 2
++    maxItems: 127
++    items:
++      items:
++        - description: fan speed in RPMs
++        - description: control value
++    description: |
++      A mapping of possible fan RPM speeds and the
++      control value that should be set to achieve them. This array
++      must have the RPM values in ascending order.
++
++  '#cooling-cells':
++    const: 2
++
++required:
++  - compatible
++  - gpios
++  - gpio-fan,speed-map
++
++additionalProperties: false
++
++examples:
++  - |
++    gpio_fan {
++      compatible = "gpio-fan";
++      gpios = <&gpio1 14 1
++               &gpio1 13 1>;
++      gpio-fan,speed-map = <    0 0>,
++                           < 3000 1>,
++                           <36000 2>;
++      alarm-gpios = <&gpio1 15 1>;
++    };
++  - |
++    gpio_fan_cool: gpio_fan {
++      compatible = "gpio-fan";
++      gpios = <&gpio2 14 1
++               &gpio2 13 1>;
++      gpio-fan,speed-map = <   0 0>,
++                           <3000 1>,
++                           <6000 2>;
++      alarm-gpios = <&gpio2 15 1>;
++      #cooling-cells = <2>; /* min followed by max */
++    };
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.42.0
+
