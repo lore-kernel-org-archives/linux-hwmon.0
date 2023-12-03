@@ -1,153 +1,81 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M5POUlzF"
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3831DEB;
-	Sun,  3 Dec 2023 07:00:27 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-6cdfb721824so1504132b3a.3;
-        Sun, 03 Dec 2023 07:00:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701615626; x=1702220426; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=uFClHI7/Qf8rlFoR8FIIkd9D60YkKGL1HqHDZcVNu8M=;
-        b=M5POUlzFx+OapWbJw7z0VkuiDJUZZ0pRrEDnkxTQtj7he5RT9nNVB1hDjUZxdAHda0
-         G2neVUK0gxdd8Cd/20c6KlUg30yrYo/qydl2PkF9y3vzCoLf+7SiKX/hy91gTCRuFrzb
-         2Fek0a/Faf5JyYR7CtAa7HZ/2yJeZWqUOm6SM8n3+NT63yAUbL2XS1wSg5wMQ23vY8W7
-         JBFNDe6W9LEZa974X6orpBrPmp3BkKJpRoPOLrfEhHdi4ILgg+8ot3oJCwfE0GLFh1ME
-         dnVcf5pEg57Wvnoeufn6Sy4jszNLh/L/EFW+MwM1NSFY5kxvWoWdXwHdeJZMJGZP3tRj
-         sYJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701615626; x=1702220426;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uFClHI7/Qf8rlFoR8FIIkd9D60YkKGL1HqHDZcVNu8M=;
-        b=wxxY8LHhutbLOYjwMt5SRInB9z1cFPU1NitY31QnN13xBn+CVKmqFUndPRqWVpiBuT
-         iRGjHcS11NF2zu4NFuPg/V7Ha0IC+3PW4BCninZ+bcI8IAsJoiRotXIOv/PYSOYuBVh1
-         4KZTkPU/OTGHg+OKDQ8xcRLMxboFfeKNIYKsKkvOuFFnGOKehuo05uapn7/aoYE6R+xn
-         DGbNZ3g0xb34dPegejKS7s82ek2giuB27xc2wu9tjqJUDRAwkR7QI3tMjnyvPXof55XC
-         Bqwy9clRIveMc6day30I8sWVBlOVVh6B1lE3Y+HU3nmPl7sbuSDmksuUUIw/IolB/f8V
-         nxRg==
-X-Gm-Message-State: AOJu0YyjsfEYa/e33QmC2DdpQjeA/smLgggek8ndG+hhFgCRV+uKY80u
-	ORrY0r6n85x61c/9oa+ZoaY=
-X-Google-Smtp-Source: AGHT+IFzr54qC1LWswjIGBd9dNEfWa1uGMAcbsxAZf4ohfU76osFr1S4cqA+D+SMnZKdREZdFXrkNg==
-X-Received: by 2002:a05:6a20:da99:b0:18f:97c:b9e7 with SMTP id iy25-20020a056a20da9900b0018f097cb9e7mr1415698pzb.65.1701615626479;
-        Sun, 03 Dec 2023 07:00:26 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g11-20020aa79f0b000000b006cb64908070sm203585pfr.93.2023.12.03.07.00.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 03 Dec 2023 07:00:25 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <36d2316c-5482-4c27-b887-8d8a7543494f@roeck-us.net>
-Date: Sun, 3 Dec 2023 07:00:24 -0800
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="IOXgqwrk"
+Received: from smtp.smtpout.orange.fr (smtp-17.smtpout.orange.fr [80.12.242.17])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CC5CB
+	for <linux-hwmon@vger.kernel.org>; Sun,  3 Dec 2023 07:24:19 -0800 (PST)
+Received: from pop-os.home ([92.140.202.140])
+	by smtp.orange.fr with ESMTPA
+	id 9oKOre2IUxHPQ9oKOrhoyc; Sun, 03 Dec 2023 16:24:17 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1701617057;
+	bh=gnbtnIix+v+CGc9OT23ytJpA1uN7CF77J/4touzfKKQ=;
+	h=From:To:Cc:Subject:Date;
+	b=IOXgqwrkOp7vaS9xb3U5gr7R2FeAR3ZWsbSp7zExv5vDAHpB52I3PnNrManjYY+LH
+	 45mg7VkT6a9FT5ZSJf/jAtqViJwdajOJH3958WLb7WB/nZicsJ0GF551yUhuDABRAF
+	 cublK6HjDKoK79HnEbEod0lWwc0OZHY39VVH3/7pzDk//OEisLXVzzTp2E7LChY06T
+	 Avm5Sl6DWWQk/opdnRfwJr2jpsst+2r4l/DecCGiT+EMhjEVP9W60alo+XP449FnZe
+	 3lDvbtfscEFsO8Y+0Zu1zuzGSdfz4Tq158efFYRvtuAe/So/vMCcjC77Dcch9snNLF
+	 OrgCzmA5bAyug==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 03 Dec 2023 16:24:17 +0100
+X-ME-IP: 92.140.202.140
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To: Jonas Malaco <jonas@protocubo.io>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Aleksa Savic <savicaleksa83@gmail.com>,
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH] hwmon: nzxt: Fix some error handling path in kraken2_probe()
+Date: Sun,  3 Dec 2023 16:24:05 +0100
+Message-Id: <a768e69851a07a1f4e29f270f4e2559063f07343.1701617030.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] [hwmon] pcf8591: Add error handling for
- i2c_smbus_write_byte
-Content-Language: en-US
-To: Haoran Liu <liuhaoran14@163.com>, jdelvare@suse.com
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20231203092518.38479-1-liuhaoran14@163.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20231203092518.38479-1-liuhaoran14@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 12/3/23 01:25, Haoran Liu wrote:
-> This patch adds error handling to the out0_enable_store function in
-> drivers/hwmon/pcf8591.c for the i2c_smbus_write_byte call. This issue was
-> identified through static analysis, which indicated that the function
-> previously did not handle potential failures of i2c_smbus_write_byte.
-> The lack of error handling could lead to silent failures and unpredictable
-> behavior in the PCF8591 driver.
-> 
-> Although the error addressed by this patch may not occur in the current
-> environment, I still suggest implementing these error handling routines
-> if the function is not highly time-sensitive. As the environment evolves
-> or the code gets reused in different contexts, there's a possibility that
-> these errors might occur. In case you find this addition unnecessary, I
-> completely understand and respect your perspective. My intention was to
-> enhance the robustness of the code, but I acknowledge that practical
-> considerations and current functionality might not warrant this change
-> at this point.
-> 
+There is no point in calling hid_hw_stop() if hid_hw_start() has failed.
+There is no point in calling hid_hw_close() if hid_hw_open() has failed.
 
+Update the error handling path accordingly.
 
-I don't mind the patch, but the above does not belong into its description.
+Fixes: 82e3430dfa8c ("hwmon: add driver for NZXT Kraken X42/X52/X62/X72")
+Reported-by: Aleksa Savic <savicaleksa83@gmail.com>
+Closes: https://lore.kernel.org/all/121470f0-6c1f-418a-844c-7ec2e8a54b8e@gmail.com/
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+Closes added to please checkpatch, not sure if relevant here.
+---
+ drivers/hwmon/nzxt-kraken2.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Guenter
-
-> Signed-off-by: Haoran Liu <liuhaoran14@163.com>
-> ---
->   drivers/hwmon/pcf8591.c | 6 +++++-
->   1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/pcf8591.c b/drivers/hwmon/pcf8591.c
-> index 66c76b28c9e0..2a12b024214c 100644
-> --- a/drivers/hwmon/pcf8591.c
-> +++ b/drivers/hwmon/pcf8591.c
-> @@ -147,8 +147,12 @@ static ssize_t out0_enable_store(struct device *dev,
->   		data->control |= PCF8591_CONTROL_AOEF;
->   	else
->   		data->control &= ~PCF8591_CONTROL_AOEF;
-> -	i2c_smbus_write_byte(client, data->control);
-> +	err = i2c_smbus_write_byte(client, data->control);
->   	mutex_unlock(&data->update_lock);
-> +
-> +	if (err)
-> +		return err;
-> +
->   	return count;
->   }
->   
+diff --git a/drivers/hwmon/nzxt-kraken2.c b/drivers/hwmon/nzxt-kraken2.c
+index 428c77b5fce5..7caf387eb144 100644
+--- a/drivers/hwmon/nzxt-kraken2.c
++++ b/drivers/hwmon/nzxt-kraken2.c
+@@ -161,13 +161,13 @@ static int kraken2_probe(struct hid_device *hdev,
+ 	ret = hid_hw_start(hdev, HID_CONNECT_HIDRAW);
+ 	if (ret) {
+ 		hid_err(hdev, "hid hw start failed with %d\n", ret);
+-		goto fail_and_stop;
++		return ret;
+ 	}
+ 
+ 	ret = hid_hw_open(hdev);
+ 	if (ret) {
+ 		hid_err(hdev, "hid hw open failed with %d\n", ret);
+-		goto fail_and_close;
++		goto fail_and_stop;
+ 	}
+ 
+ 	priv->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, "kraken2",
+-- 
+2.34.1
 
