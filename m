@@ -1,180 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ixit.cz header.i=@ixit.cz header.b="cKXEG7Ps"
-X-Greylist: delayed 364 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 02 Dec 2023 14:36:06 PST
-Received: from ixit.cz (ip-89-177-23-149.bb.vodafone.cz [89.177.23.149])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6244C11A;
-	Sat,  2 Dec 2023 14:36:06 -0800 (PST)
-Received: from newone.lan (unknown [10.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by ixit.cz (Postfix) with ESMTPSA id 2D5AD161295;
-	Sat,  2 Dec 2023 23:30:00 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-	t=1701556200;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=w8RgVf3eXeZAKem0L618SQ0biYOfByDJvZecPoQGFuc=;
-	b=cKXEG7PsiepHEcQrcXwInsk0YmYc4jFv+gYp+pmE9X0y1h3gZ9JBD5OzGMqM3W/n7N1IFK
-	z/NClr0LGnfsUDRXPryZNHR5bPsmk0IL+nwOGlrJwD89Z927a1zGrEZ3vSemCGc7HRof3d
-	piWBcTAZJjK3MmUjEwxrAJEEINUE9jU=
-From: David Heidelberg <david@ixit.cz>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: David Heidelberg <david@ixit.cz>,
-	Rob Herring <robh@kernel.org>,
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="fPp9aPxW"
+Received: from m15.mail.163.com (m15.mail.163.com [45.254.50.219])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 46AA5E8;
+	Sun,  3 Dec 2023 01:25:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-Id; bh=WiReZGbdyXdM2Brh1y
+	yxhHq+j+ZmAyhep9YRbr+YaAk=; b=fPp9aPxWZzgKmPZmx2gLz8ieKRnZ6MlGrg
+	GLlW5YME/uqQXXkABbbXdLXOkHMfE+8ISbR7iPrvNVq0WZGlCAoRiQoAqzVjUtXT
+	Twbw8hnHSRSQdTk8jChC/FTUzVEeUbH0uEwQAvx67BR8C/LLK5Eh3l2uYUg+Z6kW
+	Z9jDT8fqw=
+Received: from localhost.localdomain (unknown [39.144.190.5])
+	by zwqz-smtp-mta-g1-4 (Coremail) with SMTP id _____wC3fxuLSWxlCBn1EQ--.215S2;
+	Sun, 03 Dec 2023 17:25:31 +0800 (CST)
+From: Haoran Liu <liuhaoran14@163.com>
+To: jdelvare@suse.com
+Cc: linux@roeck-us.net,
 	linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 1/5] dt-bindings: arm: hwmon: gpio-fan: Convert txt bindings to yaml
-Date: Sat,  2 Dec 2023 23:29:00 +0100
-Message-ID: <20231202222934.137191-1-david@ixit.cz>
-X-Mailer: git-send-email 2.42.0
+	linux-kernel@vger.kernel.org,
+	Haoran Liu <liuhaoran14@163.com>
+Subject: [PATCH] [hwmon] pcf8591: Add error handling for i2c_smbus_write_byte
+Date: Sun,  3 Dec 2023 01:25:18 -0800
+Message-Id: <20231203092518.38479-1-liuhaoran14@163.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID:_____wC3fxuLSWxlCBn1EQ--.215S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7AF1DAr43Gw4UCF4fJw4kCrg_yoW8Ar43p3
+	yDGws0kF1UJa17uan7tF48Wr13t3y8XrW7GrWDK3s5ZF45ZF92gFW8Ka4Fga4Uur93Z3W7
+	Zw10qryY9F1UAFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zifgA3UUUUU=
+X-CM-SenderInfo: xolxxtxrud0iqu6rljoofrz/1tbiZQc7gl8ZaX6O9QAAsx
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Convert fan devices connected to GPIOs to the YAML syntax.
+This patch adds error handling to the out0_enable_store function in
+drivers/hwmon/pcf8591.c for the i2c_smbus_write_byte call. This issue was
+identified through static analysis, which indicated that the function
+previously did not handle potential failures of i2c_smbus_write_byte.
+The lack of error handling could lead to silent failures and unpredictable
+behavior in the PCF8591 driver.
 
-Signed-off-by: David Heidelberg <david@ixit.cz>
+Although the error addressed by this patch may not occur in the current
+environment, I still suggest implementing these error handling routines
+if the function is not highly time-sensitive. As the environment evolves
+or the code gets reused in different contexts, there's a possibility that
+these errors might occur. In case you find this addition unnecessary, I
+completely understand and respect your perspective. My intention was to
+enhance the robustness of the code, but I acknowledge that practical
+considerations and current functionality might not warrant this change
+at this point.
+
+Signed-off-by: Haoran Liu <liuhaoran14@163.com>
 ---
- .../devicetree/bindings/hwmon/gpio-fan.txt    | 41 -----------
- .../devicetree/bindings/hwmon/gpio-fan.yaml   | 70 +++++++++++++++++++
- 2 files changed, 70 insertions(+), 41 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/hwmon/gpio-fan.txt
- create mode 100644 Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
+ drivers/hwmon/pcf8591.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/gpio-fan.txt b/Documentation/devicetree/bindings/hwmon/gpio-fan.txt
-deleted file mode 100644
-index f4cfa350f6a1..000000000000
---- a/Documentation/devicetree/bindings/hwmon/gpio-fan.txt
-+++ /dev/null
-@@ -1,41 +0,0 @@
--Bindings for fan connected to GPIO lines
--
--Required properties:
--- compatible : "gpio-fan"
--
--Optional properties:
--- gpios: Specifies the pins that map to bits in the control value,
--  ordered MSB-->LSB.
--- gpio-fan,speed-map: A mapping of possible fan RPM speeds and the
--  control value that should be set to achieve them. This array
--  must have the RPM values in ascending order.
--- alarm-gpios: This pin going active indicates something is wrong with
--  the fan, and a udev event will be fired.
--- #cooling-cells: If used as a cooling device, must be <2>
--  Also see:
--  Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml
--  min and max states are derived from the speed-map of the fan.
--
--Note: At least one the "gpios" or "alarm-gpios" properties must be set.
--
--Examples:
--
--	gpio_fan {
--		compatible = "gpio-fan";
--		gpios = <&gpio1 14 1
--			 &gpio1 13 1>;
--		gpio-fan,speed-map = <0    0
--				      3000 1
--				      6000 2>;
--		alarm-gpios = <&gpio1 15 1>;
--	};
--	gpio_fan_cool: gpio_fan {
--		compatible = "gpio-fan";
--		gpios = <&gpio2 14 1
--			 &gpio2 13 1>;
--		gpio-fan,speed-map =	<0    0>,
--					<3000 1>,
--					<6000 2>;
--		alarm-gpios = <&gpio2 15 1>;
--		#cooling-cells = <2>; /* min followed by max */
--	};
-diff --git a/Documentation/devicetree/bindings/hwmon/gpio-fan.yaml b/Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
-new file mode 100644
-index 000000000000..0e220874bee6
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
-@@ -0,0 +1,70 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwmon/gpio-fan.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/hwmon/pcf8591.c b/drivers/hwmon/pcf8591.c
+index 66c76b28c9e0..2a12b024214c 100644
+--- a/drivers/hwmon/pcf8591.c
++++ b/drivers/hwmon/pcf8591.c
+@@ -147,8 +147,12 @@ static ssize_t out0_enable_store(struct device *dev,
+ 		data->control |= PCF8591_CONTROL_AOEF;
+ 	else
+ 		data->control &= ~PCF8591_CONTROL_AOEF;
+-	i2c_smbus_write_byte(client, data->control);
++	err = i2c_smbus_write_byte(client, data->control);
+ 	mutex_unlock(&data->update_lock);
 +
-+title: Fan connected to GPIO lines
++	if (err)
++		return err;
 +
-+maintainers:
-+  - Rob Herring <robh@kernel.org>
-+
-+properties:
-+  compatible:
-+    const: gpio-fan
-+
-+  gpios:
-+    description: |
-+      Specifies the pins that map to bits in the control value,
-+      ordered MSB-->LSB.
-+    minItems: 1
-+    maxItems: 7
-+
-+  alarm-gpios:
-+    maxItems: 1
-+
-+  gpio-fan,speed-map:
-+    $ref: /schemas/types.yaml#/definitions/uint32-matrix
-+    minItems: 2
-+    maxItems: 127
-+    items:
-+      items:
-+        - description: fan speed in RPMs
-+        - description: control value
-+    description: |
-+      A mapping of possible fan RPM speeds and the
-+      control value that should be set to achieve them. This array
-+      must have the RPM values in ascending order.
-+
-+  '#cooling-cells':
-+    const: 2
-+
-+required:
-+  - compatible
-+  - gpios
-+  - gpio-fan,speed-map
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    gpio_fan {
-+      compatible = "gpio-fan";
-+      gpios = <&gpio1 14 1
-+               &gpio1 13 1>;
-+      gpio-fan,speed-map = <    0 0>,
-+                           < 3000 1>,
-+                           <36000 2>;
-+      alarm-gpios = <&gpio1 15 1>;
-+    };
-+  - |
-+    gpio_fan_cool: gpio_fan {
-+      compatible = "gpio-fan";
-+      gpios = <&gpio2 14 1
-+               &gpio2 13 1>;
-+      gpio-fan,speed-map = <   0 0>,
-+                           <3000 1>,
-+                           <6000 2>;
-+      alarm-gpios = <&gpio2 15 1>;
-+      #cooling-cells = <2>; /* min followed by max */
-+    };
+ 	return count;
+ }
+ 
 -- 
-2.42.0
+2.17.1
 
