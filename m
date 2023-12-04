@@ -1,194 +1,229 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="4fZ5DMUQ"
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2063.outbound.protection.outlook.com [40.107.244.63])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 447B6B9;
-	Sun,  3 Dec 2023 23:57:35 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LoDwSsHjbFdVf5777snjQVIufgvy95vwr6A7WNAuulhvIxAjlhe/gFPuJIuirM4717lxiqT7yUq1sKqTkTwEwX0M7yQWLN/7/ff/kxaStov/lfjhaQN3E57T3HaHSsaAuYNL8NlOceejukafMFc4Js8oGEWN4XQ6UkeQ4tRMh9C+JblscnqG4nQbzhy+zPB+XrFre3vJpxLitZIfc8ZFdOIpqor67vL38FxbbMf4cDOEjEP2NSVfN7F2btFURVa6FgbqJIUoSbeH2rE8DtrgpqmBrTZey09mB/vGnq32rZxq1zMM55nelhRI+IIC1bs2K151mYwVNIMSCdfw+R5gnA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ru1S53EoHxDUFYZa3XhDYN7m63JwLKEDFDgsydFtKIU=;
- b=cYbEJ+bGmY+MCuLfYPf841RMNNtkg7IB8Wgo4ih5HwUbnJAJfuvapMtx91nC/usAOoDTENExds2NjgOnNQ2n1eAzJDXJbsmbpNVhjOzaHs6ciPHbaegNIx9K9mP7ePmmOFF85YPbrC4qsfnHH0vFv5q3C0Qiy+URQSpnT6UxsLVaACZYAcWtt7o8cB8fO1loc8YeJ3L/Gg+cb8LFWtAzt6XDD0zmMSbP0wITu2H+yliXQe1P7xwHpw9A71ZJ4kd4VDH6dyH2uK/FzHLuAak0uFsra5/hARdp/cqVwnrf8LHeUlopIoc7Spfl8s0JncM4wI2WmmB7muaWWBPTcK/tog==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ru1S53EoHxDUFYZa3XhDYN7m63JwLKEDFDgsydFtKIU=;
- b=4fZ5DMUQZM7TsYkfguTVNxUyXeTWBeNuJHQBPHEzQ5+VcdNd9omj7tIBua5WSBfoxjjc3j3C0l+Z4q4FSBeQNP7Up4No1Fyglwks10aNNlCqnMY0Op5NydnwM2WXFTtJgsp6/kA6PSYseE/A2J+Ch8cJgxVUzgcOm2B/SsSKdKk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BYAPR12MB4758.namprd12.prod.outlook.com (2603:10b6:a03:a5::28)
- by SN7PR12MB7324.namprd12.prod.outlook.com (2603:10b6:806:29b::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.29; Mon, 4 Dec
- 2023 07:57:33 +0000
-Received: from BYAPR12MB4758.namprd12.prod.outlook.com
- ([fe80::39a2:42da:ea20:3349]) by BYAPR12MB4758.namprd12.prod.outlook.com
- ([fe80::39a2:42da:ea20:3349%5]) with mapi id 15.20.7046.033; Mon, 4 Dec 2023
- 07:57:32 +0000
-Message-ID: <0ca586ea-ba5b-4574-a93c-d92d930214b1@amd.com>
-Date: Mon, 4 Dec 2023 08:57:15 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: hwmon: Increase max number of io-channels
-Content-Language: en-US
-To: Conor Dooley <conor@kernel.org>
-Cc: linux-kernel@vger.kernel.org, monstr@monstr.eu, michal.simek@xilinx.com,
- git@xilinx.com, Conor Dooley <conor+dt@kernel.org>,
- Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>,
- Jonathan Cameron <jic23@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
- linux-hwmon@vger.kernel.org
-References: <441d9babc7042892350a58ba4300df4761876ae3.1701334008.git.michal.simek@amd.com>
- <20231130-power-rubbed-fbf64a8c6978@spud>
- <074cb071-2a3d-4c9b-89ba-d215a3624b6b@amd.com>
- <20231201-spousal-outage-c8c5ec1fca80@spud>
-From: Michal Simek <michal.simek@amd.com>
-Autocrypt: addr=michal.simek@amd.com; keydata=
- xsFNBFFuvDEBEAC9Amu3nk79+J+4xBOuM5XmDmljuukOc6mKB5bBYOa4SrWJZTjeGRf52VMc
- howHe8Y9nSbG92obZMqsdt+d/hmRu3fgwRYiiU97YJjUkCN5paHXyBb+3IdrLNGt8I7C9RMy
- svSoH4WcApYNqvB3rcMtJIna+HUhx8xOk+XCfyKJDnrSuKgx0Svj446qgM5fe7RyFOlGX/wF
- Ae63Hs0RkFo3I/+hLLJP6kwPnOEo3lkvzm3FMMy0D9VxT9e6Y3afe1UTQuhkg8PbABxhowzj
- SEnl0ICoqpBqqROV/w1fOlPrm4WSNlZJunYV4gTEustZf8j9FWncn3QzRhnQOSuzTPFbsbH5
- WVxwDvgHLRTmBuMw1sqvCc7CofjsD1XM9bP3HOBwCxKaTyOxbPJh3D4AdD1u+cF/lj9Fj255
- Es9aATHPvoDQmOzyyRNTQzupN8UtZ+/tB4mhgxWzorpbdItaSXWgdDPDtssJIC+d5+hskys8
- B3jbv86lyM+4jh2URpnL1gqOPwnaf1zm/7sqoN3r64cml94q68jfY4lNTwjA/SnaS1DE9XXa
- XQlkhHgjSLyRjjsMsz+2A4otRLrBbumEUtSMlPfhTi8xUsj9ZfPIUz3fji8vmxZG/Da6jx/c
- a0UQdFFCL4Ay/EMSoGbQouzhC69OQLWNH3rMQbBvrRbiMJbEZwARAQABzSlNaWNoYWwgU2lt
- ZWsgKEFNRCkgPG1pY2hhbC5zaW1la0BhbWQuY29tPsLBlAQTAQgAPgIbAwULCQgHAgYVCgkI
- CwIEFgIDAQIeAQIXgBYhBGc1DJv1zO6bU2Q1ajd8fyH+PR+RBQJkK9VOBQkWf4AXAAoJEDd8
- fyH+PR+ROzEP/1IFM7J4Y58SKuvdWDddIvc7JXcal5DpUtMdpuV+ZiHSOgBQRqvwH4CVBK7p
- ktDCWQAoWCg0KhdGyBjfyVVpm+Gw4DkZovcvMGUlvY5p5w8XxTE5Xx+cj/iDnj83+gy+0Oyz
- VFU9pew9rnT5YjSRFNOmL2dsorxoT1DWuasDUyitGy9iBegj7vtyAsvEObbGiFcKYSjvurkm
- MaJ/AwuJehZouKVfWPY/i4UNsDVbQP6iwO8jgPy3pwjt4ztZrl3qs1gV1F4Zrak1k6qoDP5h
- 19Q5XBVtq4VSS4uLKjofVxrw0J+sHHeTNa3Qgk9nXJEvH2s2JpX82an7U6ccJSdNLYbogQAS
- BW60bxq6hWEY/afbT+tepEsXepa0y04NjFccFsbECQ4DA3cdA34sFGupUy5h5la/eEf3/8Kd
- BYcDd+aoxWliMVmL3DudM0Fuj9Hqt7JJAaA0Kt3pwJYwzecl/noK7kFhWiKcJULXEbi3Yf/Y
- pwCf691kBfrbbP9uDmgm4ZbWIT5WUptt3ziYOWx9SSvaZP5MExlXF4z+/KfZAeJBpZ95Gwm+
- FD8WKYjJChMtTfd1VjC4oyFLDUMTvYq77ABkPeKB/WmiAoqMbGx+xQWxW113wZikDy+6WoCS
- MPXfgMPWpkIUnvTIpF+m1Nyerqf71fiA1W8l0oFmtCF5oTMkzsFNBFFuvDEBEACXqiX5h4IA
- 03fJOwh+82aQWeHVAEDpjDzK5hSSJZDE55KP8br1FZrgrjvQ9Ma7thSu1mbr+ydeIqoO1/iM
- fZA+DDPpvo6kscjep11bNhVa0JpHhwnMfHNTSHDMq9OXL9ZZpku/+OXtapISzIH336p4ZUUB
- 5asad8Ux70g4gmI92eLWBzFFdlyR4g1Vis511Nn481lsDO9LZhKyWelbif7FKKv4p3FRPSbB
- vEgh71V3NDCPlJJoiHiYaS8IN3uasV/S1+cxVbwz2WcUEZCpeHcY2qsQAEqp4GM7PF2G6gtz
- IOBUMk7fjku1mzlx4zP7uj87LGJTOAxQUJ1HHlx3Li+xu2oF9Vv101/fsCmptAAUMo7KiJgP
- Lu8TsP1migoOoSbGUMR0jQpUcKF2L2jaNVS6updvNjbRmFojK2y6A/Bc6WAKhtdv8/e0/Zby
- iVA7/EN5phZ1GugMJxOLHJ1eqw7DQ5CHcSQ5bOx0Yjmhg4PT6pbW3mB1w+ClAnxhAbyMsfBn
- XxvvcjWIPnBVlB2Z0YH/gizMDdM0Sa/HIz+q7JR7XkGL4MYeAM15m6O7hkCJcoFV7LMzkNKk
- OiCZ3E0JYDsMXvmh3S4EVWAG+buA+9beElCmXDcXPI4PinMPqpwmLNcEhPVMQfvAYRqQp2fg
- 1vTEyK58Ms+0a9L1k5MvvbFg9QARAQABwsF8BBgBCAAmAhsMFiEEZzUMm/XM7ptTZDVqN3x/
- If49H5EFAmQr1YsFCRZ/gFoACgkQN3x/If49H5H6BQ//TqDpfCh7Fa5v227mDISwU1VgOPFK
- eo/+4fF/KNtAtU/VYmBrwT/N6clBxjJYY1i60ekFfAEsCb+vAr1W9geYYpuA+lgR3/BOkHlJ
- eHf4Ez3D71GnqROIXsObFSFfZWGEgBtHBZ694hKwFmIVCg+lqeMV9nPQKlvfx2n+/lDkspGi
- epDwFUdfJLHOYxFZMQsFtKJX4fBiY85/U4X2xSp02DxQZj/N2lc9OFrKmFJHXJi9vQCkJdIj
- S6nuJlvWj/MZKud5QhlfZQsixT9wCeOa6Vgcd4vCzZuptx8gY9FDgb27RQxh/b1ZHalO1h3z
- kXyouA6Kf54Tv6ab7M/fhNqznnmSvWvQ4EWeh8gddpzHKk8ixw9INBWkGXzqSPOztlJbFiQ3
- YPi6o9Pw/IxdQJ9UZ8eCjvIMpXb4q9cZpRLT/BkD4ttpNxma1CUVljkF4DuGydxbQNvJFBK8
- ywyA0qgv+Mu+4r/Z2iQzoOgE1SymrNSDyC7u0RzmSnyqaQnZ3uj7OzRkq0fMmMbbrIvQYDS/
- y7RkYPOpmElF2pwWI/SXKOgMUgigedGCl1QRUio7iifBmXHkRrTgNT0PWQmeGsWTmfRit2+i
- l2dpB2lxha72cQ6MTEmL65HaoeANhtfO1se2R9dej57g+urO9V2v/UglZG1wsyaP/vOrgs+3
- 3i3l5DA=
-In-Reply-To: <20231201-spousal-outage-c8c5ec1fca80@spud>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: VI1PR07CA0296.eurprd07.prod.outlook.com
- (2603:10a6:800:130::24) To BYAPR12MB4758.namprd12.prod.outlook.com
- (2603:10b6:a03:a5::28)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UmCdDeUi"
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8ED0D6
+	for <linux-hwmon@vger.kernel.org>; Mon,  4 Dec 2023 00:04:26 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-40a4848c6e1so42539745e9.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 04 Dec 2023 00:04:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1701677065; x=1702281865; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vVaID42WmWo7eAY8bPdAR9Y2HBlZxV8DXl4tSWq+kCU=;
+        b=UmCdDeUimwDSJXDXMnaNInf7VqyroZVSgM/00E+iK+2At4ZzjQ0C/1/EumMkpr6dTm
+         54fXsHLTWnD8iOYIYJe3/UvQkTx8lk0+QbEsrXyG9oVuayjr8PrQDf1NH9wu6GnR+elD
+         Gqto24Jg5zuXvbCsXK7BV2RXu3eJ3TRgtu2Rf4u2A5qGAjRncJc7t89JumeoBn0yJW9v
+         ybkEkfITCLwZMcXI9aNx1LXEq3r6SBXyEXU44cmUJVWedg+cCmFAwusKz01yemPczF6D
+         PCjeHEs6mvMV/6M8KQvfu9l9gfWs8rqpICrOLerKHk2MifZtfEW1W+zrIM9/jh7u2ZIh
+         mpQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701677065; x=1702281865;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vVaID42WmWo7eAY8bPdAR9Y2HBlZxV8DXl4tSWq+kCU=;
+        b=IOsDe3dFhCYbRBjqZuqtlXXdJBC2Ye2QryJEOKbhtwzYycdo43SKL6EFhyCUG2ZIF7
+         lO0GPvPA9v3RPTWwhjjNYeRCUhaOHe/e3wWtj+7C1xCCncUFWvBgkCiLHciPw9TnBxbs
+         17VOY9hHJASV3Xj7STaFGAsEpp17pTeuwZugHCZsyaDNrOsi5hhACmdVIyGvZ1a/Zh1n
+         jodxLNQ1J4yloX5FIPUOj5uLV++V5goiCcrfIbdLOznpDO0IJ5M8zO0lKfDnGErESlzP
+         cH4dr4po1sy3eAtn9rd/jPdUBL4gV3QZPi7Oa4uLBfqwGdvQdEL0ZAKGpqeOWu9LnDGl
+         /Cow==
+X-Gm-Message-State: AOJu0YwV1/uYNJiG/svF7kvlcYR6CKBnzRzQsVkisZi26CEaGrJUT8JI
+	jBgLJCcF6XSYNFsKYnXfVGDV/A==
+X-Google-Smtp-Source: AGHT+IFDoUbztBuebRWauGH5T7fwkI29ue733eofsJfUis1cTAJsJlWv+11v3XBcwxPMPBByEw3u6w==
+X-Received: by 2002:a05:600c:1da7:b0:40b:5e1f:6fd9 with SMTP id p39-20020a05600c1da700b0040b5e1f6fd9mr1832082wms.46.1701677065240;
+        Mon, 04 Dec 2023 00:04:25 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.223.109])
+        by smtp.gmail.com with ESMTPSA id fc12-20020a05600c524c00b0040b400711f5sm17787653wmb.7.2023.12.04.00.04.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Dec 2023 00:04:24 -0800 (PST)
+Message-ID: <94607c47-9824-4e2c-8f22-99ca2e088b27@linaro.org>
+Date: Mon, 4 Dec 2023 09:04:22 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB4758:EE_|SN7PR12MB7324:EE_
-X-MS-Office365-Filtering-Correlation-Id: b10b7cc6-5f2d-49a0-8a83-08dbf49eab9b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	gNcv7LzTtNljJyfNGJ53FAD7hMulz/0//yVh/7cvTVCHkpGzOeM7DIAUtSsXjmCa8Kg1L93W94VsW2QV+I/ePFm01vLrUdwMLc0Fndq1CxA4ZN4tSesU7i3xFVyJZspBY0mdZ9QLa7zzYCJ43TACXGVpj7VoCjH3/GWUDTY59BYGkEpbVdt09csWjgYP/z4a3cf13UXCyblOKL10mtdw+oxVOINpTRIKQuDPJpn7c5pZw79ak97aMBndDTzRj9eyGjnoejLy9zcXt6E6qEws+NpsBbhDm3PdhikVEKtXBG4ZILkCiysHUvFGS+GEbzqmFLfpNXgMv4/AucAf9pFhhPJMPQ3/Ms6BfPTQef+F9ejXTK8ZpYLYJnRIiVffeiP1VsmzXWDHfZuAQq4I619rGHffUgydTR3ClYc0s+yxa7K25f6J7/K6IOJ1oisNgzb2rtaBqcezUpF5U/YKzaxiE4Xb69dtEzNrd2LdW8NA6hm6aAqkB4bxk+RzyOm15cOn4F9yxatrq6/+YrykfuxNiWunwSfcxtyjBH48Dta8xbj9XhGH2PIYKjESuCg+OqHP1QyGd42WaEGoXb51BaeEt54apvAsO98CYzMhZNRVxPeIAkEZjazjUl0VCU+XjObUgVjNYF3Hm3EB1VGEw/GLnA==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4758.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(366004)(396003)(376002)(136003)(346002)(230922051799003)(64100799003)(1800799012)(186009)(451199024)(8936002)(8676002)(6512007)(4326008)(6666004)(6506007)(478600001)(53546011)(66556008)(54906003)(66476007)(316002)(6916009)(66946007)(6486002)(36756003)(86362001)(38100700002)(41300700001)(31686004)(31696002)(26005)(44832011)(2906002)(2616005)(5660300002)(83380400001)(7416002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?VW82QkxUblRQQ3kxcTQ1MHZlV1J6MU4ra0ZNdWlqSGtmVmV0QzVlSFZNcjFF?=
- =?utf-8?B?ak83NkFmSEthbFZSWU5VOVdSckQwY3lEYWVVSmM3SzFJQ0VxbEVnbjZBSDgr?=
- =?utf-8?B?Q08yck1lRjR3MVZGRG9RQzRNeXB3d3Z6Tnp4WTViaitKMWZUS2Z1VFFVSXV2?=
- =?utf-8?B?aHA0K0RFKzJtYmNZMHQxL3dNSDVFSDVoMU9wdis4bStiYzV1dkE3b21yazhF?=
- =?utf-8?B?N2dGd3ZaUmdnRWljTDdvdk9UZE83R2V6RDU4Rnc3eW1LdW1XaGp4aFNBY2JT?=
- =?utf-8?B?dXJqdk5iOWFZNVVLUmZGUEFqYloyd0gyVTJnWFpucTBSTENad0ozdnU4Szg5?=
- =?utf-8?B?bkJXZ0dhQlhwTzZmZFRBRXZJR00vRHVlMThkRGhqbFdES0J5dEg5Y0RReVFT?=
- =?utf-8?B?QmdhUHk3VXQ4bDZlTmdSbzg1U1JWZ2N4SFBockVkaDVDak9kRGo4VnNKaGp0?=
- =?utf-8?B?aUdKeUxhZ1lTd0VlKzVLRjBOcnNabWFtZGpwMzFJaEpNV3lzN0YwTG1DaXgy?=
- =?utf-8?B?YUg0TkhOTTVPeXZnMG5LeUppOThjaWorRk9acWhGVmIwUVl4elNYZDZPZ1RT?=
- =?utf-8?B?RmlQYXFONk1YeGh6TVFNK1JZa2VmcENnWmNUQ1htb21QMFBmQW01aThyWkRz?=
- =?utf-8?B?OGFkTk8vQnpqUGZXemh6TWhEcDA4RWJrME4xTGtaRkJlTzNSVW5IUTFWNEww?=
- =?utf-8?B?SWhEZ3g0TFl2VWdSMDZyaytKcmRyVDRnSTRYc3BMM0c4STRiM05HZ1RoTTBF?=
- =?utf-8?B?dE00WU5wRnZpMFZyc3l3K0dZNjFDdEQzdVlaUHhtdHlnWklqRG43TzlQeldO?=
- =?utf-8?B?ckpOaHhnT0tGYjgxRlljWk1SSWFBYm5xeDIrWXRvUFFlSVowRDNrM1VBT0pl?=
- =?utf-8?B?VXQ1U3h4MlBTQWpYUGtqSTdTMk9oZ3VpVDlLdEVpWHFuNEd5Vmo4d1dBTEV1?=
- =?utf-8?B?R1hzTEQxbDcwdkk1K2FDZG5SRUltRS93R2w5M241T1BvQUVFUnhFSEhTTlhI?=
- =?utf-8?B?K1MxbWxHcGhUOGxzSVpBdDA2SlB6V1plRHhwVld2NkdQcEd6TTd0dVYxWHhu?=
- =?utf-8?B?cG5GRER4RzR5TzRNY3RVNUUzakU0V0pvNi91d3EzajgrUHJUbWV5SGZ6S243?=
- =?utf-8?B?d1pDcjlvZXV3a1hieCtmQVBTS0RqSFpYZW1TMUxBNTdYUEVSWlJhUGYvZkxx?=
- =?utf-8?B?d2s3dG12dkI4UlRhQUlCdCs2Y1JrNWZaMG9WT200SFZtdW5iLyt0NEMwdHBN?=
- =?utf-8?B?akQxUEpNYW1rWUJQL3RDYUN0eVRMNWs0OHo0dldPYWFldHNHemZRd2J0cXhZ?=
- =?utf-8?B?aW5JYXIydUgxMFBvSG9uZlJCUVY3ZXF3bytrS2VGQldUWVV0aGpTSFVTV1dj?=
- =?utf-8?B?TnhBMWlNbVRxYi9ndlp2eVlYMDVORlNuN1lzanJTdXV2SzBvL3ZqSCtpdVBP?=
- =?utf-8?B?SExadDJHUmx5dkhoc0Ezck5mczd5RjJ1OE13YVZPazNtaXdvME9wUjFSK3Vk?=
- =?utf-8?B?RnhxQnY4NzJDajJPNlNJMkRlanYrZHViUjdNTmFRL0UrU29KR0RWc0ZzOFAv?=
- =?utf-8?B?L3dhNDhDOHhzdGpjSkJEc2hRMVJmc0VzaEVMVWdxVVdUTUxUeEQ3T3lpQXRu?=
- =?utf-8?B?ak5qcjNVVzVLMklnTHdZa3lnL0xDckhyNnQ4K2svcXNweWJoWHcrME56WVN6?=
- =?utf-8?B?Q2NhVWIvdU5wRm5ML3UxVTJjT0ZQOE1lUEx5NDlWbUIydXJGMFJrWUZGTzdt?=
- =?utf-8?B?WlQ2ZGJ3SjFUSXJlcDR6bE1TMHBuR1V1WDQ4ZXdRempzMko5dldPcDVvWnFP?=
- =?utf-8?B?NElRZGxuUWxEM0lFdzZUVDdiNDhOY2pqM3Zlc1JRdGdxSFpRdXIzd2prQWUx?=
- =?utf-8?B?djcyWUFKdGUvZ1BxZDRMSTVBVm9CWjZtSklRSTFrU2F3M2k3dHI1UVpKejA3?=
- =?utf-8?B?alhUcXJFZis3aUE5YWxXZW4za2JBTXBmcHh0eHFZQWhTSldUSDU1RWFCalBu?=
- =?utf-8?B?TFRpYlJSQ1NrUzkrSGZPNGtRL1VwcE1xSW05dHdwT0svWHN4dS9QMXBtb0hG?=
- =?utf-8?B?RUhDQlVYZmNLRjlyVWVhNEZubzhweEs4amUwVkpJWC90d3d1VU82RVlaQkh5?=
- =?utf-8?Q?Q7srzgRi88uOvSh7AH40HbDPp?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b10b7cc6-5f2d-49a0-8a83-08dbf49eab9b
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4758.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Dec 2023 07:57:32.6811
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: k+Ajl8Nv4wvQEtdCVRP6PKxLkKH3S4m8d/Mn33oyUP5yaNiut2OpahyDYhSJ4kfF
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7324
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/2] dt-bindings: hwmon: Add nct736x bindings
+Content-Language: en-US
+To: baneric926@gmail.com, jdelvare@suse.com, linux@roeck-us.net,
+ robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ corbet@lwn.net
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ openbmc@lists.ozlabs.org, kwliu@nuvoton.com, kcfeng0@nuvoton.com,
+ DELPHINE_CHIU@wiwynn.com, Bonnie_Lo@wiwynn.com
+References: <20231204055650.788388-1-kcfeng0@nuvoton.com>
+ <20231204055650.788388-2-kcfeng0@nuvoton.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20231204055650.788388-2-kcfeng0@nuvoton.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-
-
-On 12/1/23 17:07, Conor Dooley wrote:
-> On Fri, Dec 01, 2023 at 09:35:27AM +0100, Michal Simek wrote:
->>
->>
->> On 11/30/23 15:58, Conor Dooley wrote:
->>> On Thu, Nov 30, 2023 at 09:46:54AM +0100, Michal Simek wrote:
->>>> arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts is defining 30 channels
->>>> that's why increase it.
->>>> But AMS binding defines 51 channels
->>>> Documentation/devicetree/bindings/iio/adc/xlnx,zynqmp-ams.yaml
->>>> that's why increase number to 51.
->>>
->>> Please write commit messages for bindings in terms of how they relate to
->>> some hardware. In this case I think it would be sufficient to say that
->>> the Analog Monitoring system has 51 channels, the opening sentence about
->>> the dts as justification provides no actionable information.
->>> Acked-by: Conor Dooley <conor.dooley@microchip.com>
->>
->> v2 sent.
+On 04/12/2023 06:56, baneric926@gmail.com wrote:
+> From: Ban Feng <kcfeng0@nuvoton.com>
 > 
-> I wasn't requesting a v2 FWIW. "$file uses 30 channels" rather than
-> rephrasing it in terms of the hardware actually having 51 channels just
-> annoyed me, that's all.
+> This change documents the device tree bindings for the Nuvoton
+> NCT7362Y, NCT7363Y driver.
+> 
+> Signed-off-by: Ban Feng <kcfeng0@nuvoton.com>
+> ---
+>  .../bindings/hwmon/nuvoton,nct736x.yaml       | 80 +++++++++++++++++++
+>  MAINTAINERS                                   |  6 ++
+>  2 files changed, 86 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/nuvoton,nct736x.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/nuvoton,nct736x.yaml b/Documentation/devicetree/bindings/hwmon/nuvoton,nct736x.yaml
+> new file mode 100644
+> index 000000000000..f98fd260a20f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/nuvoton,nct736x.yaml
+> @@ -0,0 +1,80 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +
+> +$id: http://devicetree.org/schemas/hwmon/nuvoton,nct736x.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Nuvoton NCT736X Hardware Monitoring IC
+> +
+> +maintainers:
+> +  - Ban Feng <kcfeng0@nuvoton.com>
+> +
+> +description: |
+> +  The NCT736X is a Fan controller which provides up to 16 independent
+> +  FAN input monitors, and up to 16 independent PWM output with SMBus interface.
+> +  Besides, NCT7363Y has a built-in watchdog timer which is used for
+> +  conditionally generating a system reset output (INT#).
+> +
+> +additionalProperties: false
 
-I know and I agreed that commit message can be improved that's why sent v2.
+Please place it just like other bindings are placing it. Not in some
+random order. See example-schema.
 
-Thanks,
-Michal
+You should use common fan properties. If it was not merged yet, you must
+rebase on patchset on LKML and mention the dependency in the change log
+(---).
+
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - nuvoton,nct7362
+> +      - nuvoton,nct7363
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  nuvoton,pwm-mask:
+> +    description: |
+> +      each bit means PWMx enable/disable setting, where x = 0~15.
+> +      0: disabled, 1: enabled
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 0x0
+> +    maximum: 0xFFFF
+> +    default: 0x0
+
+Use pwms, not own property for this.
+
+> +
+> +  nuvoton,fanin-mask:
+> +    description: |
+> +      each bit means FANINx monitoring enable/disable setting,
+> +      where x = 0~15.
+> +      0: disabled, 1: enabled
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 0x0
+> +    maximum: 0xFFFF
+> +    default: 0x0
+
+Use properties from common fan bindings.
+
+> +
+> +  nuvoton,wdt-timeout:
+> +    description: |
+> +      Watchdog Timer time configuration for NCT7363Y, as below
+> +      0: 15 sec (default)
+> +      1: 7.5 sec
+> +      2: 3.75 sec
+> +      3: 30 sec
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [0, 1, 2, 3]
+> +    default: 0
+
+Nope, reference watchdog.yaml and use its properties. See other watchdog
+bindings for examples.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - nuvoton,pwm-mask
+> +  - nuvoton,fanin-mask
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        nct7363@22 {
+
+Node names should be generic. See also an explanation and list of
+examples (not exhaustive) in DT specification:
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+
+
+
+Best regards,
+Krzysztof
+
