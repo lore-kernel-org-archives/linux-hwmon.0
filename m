@@ -1,100 +1,69 @@
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fsgXxWRQ"
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B717FA7;
-	Mon,  4 Dec 2023 05:07:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701695260; x=1733231260;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=rwfeHVUdIJbFUBsUHDPSqcnPbouutdp0s8W6pWKb+Y4=;
-  b=fsgXxWRQ89m4nUroXsW8cNZiVAFyIkyNiUyf+4W9A8wxcEl0dcf6/OHN
-   0lRvV3dfulQDh/7rnREljYFb4WFLZIENwuWIdDmwgTWUnxW7HzaIfl3ex
-   ZN4S3/Cs0E2w8BFR/z1H2LmDf5gdeZLaBTckYzs/aDb9SqaJvY3TSf+hb
-   O+j/bt9fJDxXaxXaLLf0RjuotT1CgRHXFb17dvQheY5hqmB4jsTvnl9N5
-   UTe3cthvCNNc47QmHS5r2FtuamSEk9RpQMiX4eIqHmgzvuPIckptx+4S/
-   AVrdwdq/WTKLP0x45BtoDcs6XuyybGFMqnhqGK7gXRvscfaja3sJcwCWQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10913"; a="15275123"
-X-IronPort-AV: E=Sophos;i="6.04,249,1695711600"; 
-   d="scan'208";a="15275123"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2023 05:07:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10913"; a="861373354"
-X-IronPort-AV: E=Sophos;i="6.04,249,1695711600"; 
-   d="scan'208";a="861373354"
-Received: from malladhi-mobl.gar.corp.intel.com ([10.249.34.28])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2023 05:07:12 -0800
-Date: Mon, 4 Dec 2023 15:07:06 +0200 (EET)
-From: =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To: Vadim Pasternak <vadimp@nvidia.com>
-cc: Kunwu Chan <chentao@kylinos.cn>, 
-    "hdegoede@redhat.com" <hdegoede@redhat.com>, 
-    "jdelvare@suse.com" <jdelvare@suse.com>, 
-    "linux@roeck-us.net" <linux@roeck-us.net>, 
-    Shravan Ramani <shravankr@nvidia.com>, 
-    "jiri@resnulli.us" <jiri@resnulli.us>, 
-    "kunwu.chan@hotmail.com" <kunwu.chan@hotmail.com>, 
-    "platform-driver-x86@vger.kernel.org" <platform-driver-x86@vger.kernel.org>, 
-    "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-    "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Subject: RE: [PATCH v2] platform/mellanox: Add some null/error pointer checks
- to mlxbf-pmc.c
-In-Reply-To: <BN9PR12MB5381B3408452445483B7281EAF81A@BN9PR12MB5381.namprd12.prod.outlook.com>
-Message-ID: <b2fa490-4e48-44a6-64d3-45ef4f5c14b@linux.intel.com>
-References: <20231201055447.2356001-1-chentao@kylinos.cn> <BN9PR12MB5381B3408452445483B7281EAF81A@BN9PR12MB5381.namprd12.prod.outlook.com>
+Received: from mxout014.mail.hostpoint.ch (mxout014.mail.hostpoint.ch [IPv6:2a00:d70:0:e::314])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F78DCA;
+	Mon,  4 Dec 2023 08:51:48 -0800 (PST)
+Received: from [10.0.2.46] (helo=asmtp013.mail.hostpoint.ch)
+	by mxout014.mail.hostpoint.ch with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2 (FreeBSD))
+	(envelope-from <code@stefan-gloor.ch>)
+	id 1rACAV-0007sl-1J;
+	Mon, 04 Dec 2023 17:51:39 +0100
+Received: from 157.20.79.83.dynamic.wline.res.cust.swisscom.ch ([83.79.20.157] helo=thinkpad.localdomain)
+	by asmtp013.mail.hostpoint.ch with esmtpa (Exim 4.96.2 (FreeBSD))
+	(envelope-from <code@stefan-gloor.ch>)
+	id 1rACAV-000JX2-0e;
+	Mon, 04 Dec 2023 17:51:39 +0100
+X-Authenticated-Sender-Id: code@stefan-gloor.ch
+From: Stefan Gloor <code@stefan-gloor.ch>
+To: jdelvare@suse.com,
+	linux@roeck-us.net,
+	corbet@lwn.net,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Stefan Gloor <code@stefan-gloor.ch>
+Subject: [PATCH v2 0/2] hwmon: sht3x: improve docs, read serial number
+Date: Mon,  4 Dec 2023 17:50:02 +0100
+Message-ID: <20231204165004.8491-1-code@stefan-gloor.ch>
+X-Mailer: git-send-email 2.41.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1694539297-1701695235=:3149"
+Content-Transfer-Encoding: 8bit
+X-Vs-State: 0
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+The temperature/humidity sensors of the STS3x/SHT3x family are
+calibrated and factory-programmed with a unique serial number.
+For some sensors, this serial number can be used to obtain a calibration
+certificate via an API provided by the manufacturer (Sensirion).
+Expose the serial number via debugfs.
 
---8323329-1694539297-1701695235=:3149
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
+Documentation is missing information about the sts3x support, add it.
 
-> > Subject: [PATCH v2] platform/mellanox: Add some null/error pointer checks to
-> > mlxbf-pmc.c
-> > 
-> > devm_kasprintf() returns a pointer to dynamically allocated memory which
-> > can be NULL upon failure.
-> > devm_hwmon_device_register_with_groups return a error pointer upon
-> > failure.
-> > 
-> > Compile-tested only.
-> > 
-> > Fixes: 1a218d312e65 ("platform/mellanox: mlxbf-pmc: Add Mellanox
-> > BlueField PMC driver")
-> > Suggested-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > Suggested-by: Vadim Pasternak <vadimp@nvidia.com>
-> > Signed-off-by: Kunwu Chan <chentao@kylinos.cn>
-> 
-> Reviewed-by: Vadim Pasternak <vadimp@nvidia.com>
+Changelog
+=========
 
-> >  		attr->dev_attr.attr.name = devm_kasprintf(dev, GFP_KERNEL,
-> >  							  "enable");
-> > +		if (!attr->dev_attr.attr.name)
-> > +			return -ENOMEM;
+v1 -> v2:
+	- Change from sysfs to debugfs
+	- Add documentation improvements
 
-> >  	pmc->hwmon_dev = devm_hwmon_device_register_with_groups(
-> >  		dev, "bfperf", pmc, pmc->groups);
-> > +	if (IS_ERR(pmc->hwmon_dev))
-> > +		return PTR_ERR(pmc->hwmon_dev);
+In v1 I stated that the serial number readout was not
+documented for the whole SHT3x/STS3x series. I found that there is a
+separate document for SHT3x documenting this feature.
+For STS3x, the manufacturer confirmed with me that both families work
+identically. Therefore, it is not needed to introduce more IDs than "sts3x"
+and "sht3x", as they don't have different functionality.
 
-Thank you both, applied to review-ilpo and will go into fixes branch once 
-LKP has had its chance to build this.
+Stefan Gloor (2):
+  hwmon: sht3x: add sts3x support
+  hwmon: sht3x: read out sensor serial number
 
-In the end, I decided to split the devm_kasprintf() and 
-devm_hwmon_device_register_with_groups() changes into separate commits.
+ Documentation/hwmon/sht3x.rst | 40 ++++++++++++++++++++-----
+ drivers/hwmon/sht3x.c         | 55 +++++++++++++++++++++++++++++++++++
+ 2 files changed, 87 insertions(+), 8 deletions(-)
 
 -- 
- i.
+2.41.0
 
---8323329-1694539297-1701695235=:3149--
