@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QV8Ac/hn"
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11E2D8;
-	Sun,  3 Dec 2023 23:04:56 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1ce28faa92dso11600065ad.2;
-        Sun, 03 Dec 2023 23:04:56 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B1PgSbGv"
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CFB4B3;
+	Sun,  3 Dec 2023 23:06:40 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1d011cdf562so12669845ad.2;
+        Sun, 03 Dec 2023 23:06:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701673496; x=1702278296; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1701673600; x=1702278400; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=N1vpjPPczaDWxidWWEbF4RZb6CCdsDsvJw92nhMFM8Y=;
-        b=QV8Ac/hnAqU7LnUAyFgeAUYO8BNpYeqbmv7Fjr0WhNSLR86hsFQkt7AZk7uw+T2kq8
-         MdVIGY6yVlpd99ZsKTZdLOk8OHQ6AkKbocNtdCU3FcV2YkHkS7Q95N5xv8z/82SakgKH
-         K4tzfeSWBGL4513p9qkbTESetYS15jEOyPwqXUOzh4FEXTIMbUo6RHu7VD89OvA5rmIx
-         81Fx/jLLN/jGNUe4+WgVwqTGzNfJd10YNyo/d3B2Y07lz95oj74p4NLTbfWze6+AvW6z
-         Nyc7HN+qNaRHVcMcoTPHXFTBHb/Fi0aOT+ECJsCB49WR0E9JXni/GQbV94S6N0ho2mG1
-         CHaw==
+        bh=+njrNhnp33Oxlc6sSwRjQua/dB3fSaUcGOxq5KaU0Jo=;
+        b=B1PgSbGv4nklgBzGhHtbNyQ4V0UDWet52JvPy9/dPFOe+moyVHBlxTIaAZSs8fH0UF
+         oEAYUia9qFIVLxGERaKbR1yj8BlM1q9O6KFatMv6iyFWpFwxADZbLVtPsQQ+b056miGO
+         sFDVaivbf2rG7qrqXhfFphGYe0TICAygjPTV9huVfFqlI0Zcxv5yyIoQ2WWa7RYBMs4Y
+         W7wu4kt04O1Lljh7iuCo44i9Vdh1IoU8lNuM/8g/mICHfd/EUWo5izRjt8EtUk9cyRnO
+         YvpBUB+5cgG9DOJVQaVahzwITs006QVie3LVK3CBa9wTpbNxIPzTH9QCJlm3x4Eni1mh
+         7aXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701673496; x=1702278296;
+        d=1e100.net; s=20230601; t=1701673600; x=1702278400;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=N1vpjPPczaDWxidWWEbF4RZb6CCdsDsvJw92nhMFM8Y=;
-        b=TJhQZ+db7KEj8AHsEQlQlJAlnJMQhoHXdpdemiRJuazTiR6U3rhyhiwnK0h/ZftPPq
-         XE4fqJtAxMPfG361VNlfryBJpRNhm20rKvZSi8KmweRtTcqrmpbQUd9J//ZCNZXiM7nw
-         VcVNNDyC46whueIGRTKmPaU4fkGfolS7QG4XveIPfKdgPpvUT9juAG2Qz1PZeqEU3A18
-         I2KwyFOIKiYIlHp+qYp1X1f7EsdcFPOEynuJCRXZf/kdXokXlUeuZALLuSy6RJ3ZyKj4
-         DEH4KhWPRPsY8FHtWA8klB3FqkzQ8KSlNAvoQGMSNhJV4gs/SAuq/uAqvciyyrNPa1oy
-         sd7w==
-X-Gm-Message-State: AOJu0YyGFoumIfM/hIXRxm2Wty5ziy7CAZhv95TCDRPv8bzoP6d2lAy3
-	Cwk0L/CP8k9bjS6heQNTeco=
-X-Google-Smtp-Source: AGHT+IFGQ1tOXEmLAVKqsR7L9UDk4NEuOYXIcXkAIqxH4/1OI0J79Nsp8GNhIOISl/dF3LevXvviSA==
-X-Received: by 2002:a17:902:9302:b0:1d0:91a0:a29 with SMTP id bc2-20020a170902930200b001d091a00a29mr594579plb.6.1701673496136;
-        Sun, 03 Dec 2023 23:04:56 -0800 (PST)
+        bh=+njrNhnp33Oxlc6sSwRjQua/dB3fSaUcGOxq5KaU0Jo=;
+        b=hK+LiH48+KsvJroZs0nEvbnf/6kBYGCboXX7Wq98/+Q54G61H2WF5fZ+e5Z4E2i5z/
+         e3kITmlZ6ACzT8C2S44iqEIebKebVYekP53oAN4v20yjv0+GzYPaCfDSTcWYlJQcXaYc
+         EcPcF6BQS1JlP8K2o+mh7EcXmw4sWr5VMNqbMybPWjGGE+hY/RvWYrHL8Ekkzk3IejKw
+         Tw3GUoxa2vWUcuHuyx0JqsGStNk/8ciqg7BDGfvLMETrZ6FBgsl8eU8nVEUtojYQ9NMQ
+         vgcMq/i7oBniNB0dLTw3Ny0qkziILjGAGcw8ZJxou9SbhwEeLp1XoCzJUwqIJ2Xn2ZeD
+         IoGQ==
+X-Gm-Message-State: AOJu0Yy291SESNgrhVjJ36K1UHIXyY9M2ddVwHVYfiAxM99tiShl7sqs
+	n1D5tjPNaTERlqvVC7RwJwE=
+X-Google-Smtp-Source: AGHT+IFCeUBMRQ8Cy4jZFln0eUrC9xLqsdy28RaYRFDbCENqD1XkZlpWrNzfgtzrlwIcdSqw7/jzmQ==
+X-Received: by 2002:a17:902:da89:b0:1d0:5137:488a with SMTP id j9-20020a170902da8900b001d05137488amr5226648plx.31.1701673599768;
+        Sun, 03 Dec 2023 23:06:39 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u5-20020a170902e5c500b001c62e3e1286sm7679347plf.166.2023.12.03.23.04.54
+        by smtp.gmail.com with ESMTPSA id l17-20020a170902eb1100b001d060d6cde0sm5009033plb.162.2023.12.03.23.06.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 03 Dec 2023 23:04:55 -0800 (PST)
+        Sun, 03 Dec 2023 23:06:39 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4d978188-b924-4f43-a619-fb5307828440@roeck-us.net>
-Date: Sun, 3 Dec 2023 23:04:53 -0800
+Message-ID: <87c11991-8f74-4f71-972e-373ffa1fddb1@roeck-us.net>
+Date: Sun, 3 Dec 2023 23:06:37 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -49,7 +49,7 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 0/2] hwmon: Driver for Nuvoton NCT736X
+Subject: Re: [PATCH v1 2/2] hwmon: Driver for Nuvoton NCT736X
 Content-Language: en-US
 To: baneric926@gmail.com, jdelvare@suse.com, robh+dt@kernel.org,
  krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, corbet@lwn.net
@@ -58,6 +58,7 @@ Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
  openbmc@lists.ozlabs.org, kwliu@nuvoton.com, kcfeng0@nuvoton.com,
  DELPHINE_CHIU@wiwynn.com, Bonnie_Lo@wiwynn.com
 References: <20231204055650.788388-1-kcfeng0@nuvoton.com>
+ <20231204055650.788388-3-kcfeng0@nuvoton.com>
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -102,20 +103,26 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20231204055650.788388-1-kcfeng0@nuvoton.com>
+In-Reply-To: <20231204055650.788388-3-kcfeng0@nuvoton.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 12/3/23 21:56, baneric926@gmail.com wrote:
-> From: Ban Feng <baneric926@gmail.com>
+> From: Ban Feng <kcfeng0@nuvoton.com>
 > 
 > NCT736X is an I2C based hardware monitoring chip from Nuvoton.
 > 
+> Signed-off-by: Ban Feng <kcfeng0@nuvoton.com>
+> ---
+[ ... ]
 
-No, it isn't. Such a chip does not exist. The chips are apparently
-NCT7362Y and NCT7363Y. No wildcards in filenames, variables, etc.,
-please. Pick one name (nct7362y) instead and reference both chips
-where appropriate.
+> +	hwmon_dev = devm_hwmon_device_register_with_groups(dev,
+> +							   client->name,
+> +							   data, data->groups);
+
+Please resubmit using devm_hwmon_device_register_with_info().
+Drivers using deprecated APIs will not be accepted.
 
 Guenter
+
 
