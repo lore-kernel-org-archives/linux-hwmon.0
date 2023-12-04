@@ -1,106 +1,146 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="N8w96T/q"
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB15D3
-	for <linux-hwmon@vger.kernel.org>; Mon,  4 Dec 2023 00:20:48 -0800 (PST)
-Received: by mail-vs1-xe2b.google.com with SMTP id ada2fe7eead31-46484f37549so235132137.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 04 Dec 2023 00:20:48 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U8V6eqrj"
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655DD101;
+	Mon,  4 Dec 2023 00:53:13 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-33338c67d20so1658050f8f.0;
+        Mon, 04 Dec 2023 00:53:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1701678048; x=1702282848; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=28cyFAoKbjfR/kdzsJO4rKA0W8Gwei+uNVU1U+mLnOY=;
-        b=N8w96T/qdSKRauf4IQYWf51yYd7AUPub2Xz3wbmAkfYCAHdPYC3QnCSxZHrYt7B78L
-         B8DnsnFqZQbN+pMBV4SBogerVfO55Oi/ZNQE5tu2SZwfdnZF0TKN5Fqt5uWoRVxx/gC4
-         YCp9FfEQBuHqBW8/MeMuJdCOyD/G0GlqyDbH8vEkLLUda+I+ijlCcRaAgUskUzvmri9b
-         4F6z4HE3e5+sCVPV6XyAcv8tmfwGwNWAEmtMUi8Ts5QIl2PYx0MTzv8hgmTP/ARaPCIR
-         miekL2a9cebjExQN6GoYqn7Hobxzf/97mdNxr38L5YpLByG4RG5zVHn2+V0X4O5+j10k
-         SRzw==
+        d=gmail.com; s=20230601; t=1701679991; x=1702284791; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=a8U8FDgV2kJRNizasnA0RIYG3htVkBqbfELVizQ8fYE=;
+        b=U8V6eqrjQn/cZy6N+G7NJ83cHXzs6uuzrxq7IXLrlEIr2zX0BsaMLFgoxxCdffyjkk
+         NQ5QHEKy6BhsF3Mt+xK20fyCJrXMsL/hN2g/oVPx6jUbf7cB3qs6oiqTs/A7sizV+h6I
+         C1wBotfoBHenwREFCAMVucTjhruDQMvGKOwdySCRc5FHNFJKpadnNzjs8Eq1zcoOIHPj
+         dgIAgE1ZeCDDUunxHpYP5yWfo6wDaZclpmbrjYv3gasObrl2Vv3bK53Cab5OKOX2vUwB
+         o+RPkv9bRPO5VnQTvH/5lYb5rggrQcgGvk0dwNGm+8AQc/I4ZlAY9Au/FOJy7fKT3894
+         RLgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701678048; x=1702282848;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=28cyFAoKbjfR/kdzsJO4rKA0W8Gwei+uNVU1U+mLnOY=;
-        b=iUXuH+7yhVsLOZlE58RJhc88FYJ+NEPGvULcmK80CVaSr/Fb+Yg2jdpmCdNzxy/v51
-         z//zX0wDbkLpLcy2Jt/L0ral5znQjxVgGMA0G2ELITKszN+KCvjBg7DU/83iVL0Ci3El
-         aXyJ/AHygnKl5sHxLSY9QkKlL2d5V0N73JXdgTdZRFuvSIj7YA29j9bJ9U3wCpcLtBP5
-         4qtvL5MLT64AfiWwPgbJd3EeClsa2OzmE0Dw3qp/6Ulv9DhwkFAXhssIGC4cNOG03jxf
-         uAr5rfF+nszykkMDgY9eOD+saZ7jyWKu541VPfQoL62EXg0BLOIpD5ssWCmeKjVHmU1F
-         3tyw==
-X-Gm-Message-State: AOJu0YwVpsHzGd/dKj60RqcRhEVDFVUVidH9F6RZxMXQIAZKF5XdI0+B
-	wcANvQDnubWQqpukT31QZtJuUHzaQ2H7KRDdX7bboQ==
-X-Google-Smtp-Source: AGHT+IFN6y9qVR68yPdmtEVkrffiZvx/PZkLrVxoEmSzgloE8lDnAEu7zQvU5ulZRB2pdnQGBoz5tKZCHvsO1wQm0SY=
-X-Received: by 2002:a05:6102:34e2:b0:462:c2e9:6dda with SMTP id
- bi2-20020a05610234e200b00462c2e96ddamr1269374vsb.31.1701678047986; Mon, 04
- Dec 2023 00:20:47 -0800 (PST)
+        d=1e100.net; s=20230601; t=1701679991; x=1702284791;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=a8U8FDgV2kJRNizasnA0RIYG3htVkBqbfELVizQ8fYE=;
+        b=sEgroibOiVBF7DaaFynFB01dUhyNtcfA/GzXeZzO5UFiKXJbKQZQ/P3WndclOPoRV/
+         2r6vgU/62cBM3EQK4sXKl7cW1JHO0XtO8za5WyyovdMmvrMJbkxJ+zLCgj++kR8+WdJ/
+         lIcXLyEDrOWnnpCZBwN+8PKJgkKhLAsNdxeneM4FRvRgwqgalkfTJymmw1zdflk6ffTv
+         w/goTSRMYmYz1i4fuIHGl9lamKrXzdNxuV3AKfsuZ4MJ2Bmr8qriI8sa0im+ctAgg/v0
+         4PjI8GHjysRC2WkPaKukDvU34sEIcRPEJVYFNEWJxib5NZ/Iom6WMKkMZub+U6SYBwIG
+         +tMA==
+X-Gm-Message-State: AOJu0Yx1ORJSUx9GwSOuVHnZ6r1jN9tl5yp/NSUZdkM6THByVpbMSTr+
+	IOnXu46y0tZE+SNnrmec9zE=
+X-Google-Smtp-Source: AGHT+IG0Nm8uobkZ7fuXeNb1VG2jgOv+y9cbRZbS+9o13GgReT/Aq5/hyQJO0ZQnIX+Z0sjCXFDweA==
+X-Received: by 2002:a7b:cd0a:0:b0:40b:5e59:da94 with SMTP id f10-20020a7bcd0a000000b0040b5e59da94mr1978664wmj.167.1701679990885;
+        Mon, 04 Dec 2023 00:53:10 -0800 (PST)
+Received: from ?IPv6:2001:a61:3456:4e01:6ae:b55a:bd1d:57fc? ([2001:a61:3456:4e01:6ae:b55a:bd1d:57fc])
+        by smtp.gmail.com with ESMTPSA id v11-20020a05600c444b00b003fefaf299b6sm14132838wmn.38.2023.12.04.00.53.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Dec 2023 00:53:10 -0800 (PST)
+Message-ID: <edc0fe0abf55212131cc1e0ca064df64e8ba14bb.camel@gmail.com>
+Subject: Re: [PATCH v2 2/2] hwmon: ltc4282: add support for the LTC4282 chip
+From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: Andy Shevchenko <andy@kernel.org>, nuno.sa@analog.com, 
+ linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-doc@vger.kernel.org, Jean Delvare <jdelvare@suse.com>, Guenter Roeck
+ <linux@roeck-us.net>, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+ Jonathan Corbet <corbet@lwn.net>, Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Mon, 04 Dec 2023 09:53:09 +0100
+In-Reply-To: <CACRpkdYBXVt7KvWfPJj1OhPUB7-QJbKg+74zwnR_=0pszg9APA@mail.gmail.com>
+References: <20231124-ltc4282-support-v2-0-952bf926f83c@analog.com>
+	 <20231124-ltc4282-support-v2-2-952bf926f83c@analog.com>
+	 <CACRpkdaksfS4WLNQ6ohauAPq3z2LPG2uF37_jWtm0brQHaDtNw@mail.gmail.com>
+	 <6384831c05b8ceeaf4a16cf9229770252989b762.camel@gmail.com>
+	 <CACRpkdZr6TdQCLy73Yx2RdMgQifd67remdxENBKYx3UvEMm87A@mail.gmail.com>
+	 <971eb35068639ec404669ea5320c8183ea71a7d0.camel@gmail.com>
+	 <ZWiP3i80KnVk9qyx@smile.fi.intel.com>
+	 <a4bd59df0c5bc1be5d0d6f11b968fd61a59ee2e0.camel@gmail.com>
+	 <CACRpkdYz+qi42Pz8CgeWybksC0edaVux6rcEhwzjDWnWe9Jr1g@mail.gmail.com>
+	 <61a8f54835c10db7a9c650ee2e3706b47382c634.camel@gmail.com>
+	 <CACRpkda55HzPqus5KR-t=xEBkkdND5kYZj1sHdxK+j6QwDUPRg@mail.gmail.com>
+	 <b761d2497462664d541779857398b2aa893cbee5.camel@gmail.com>
+	 <CACRpkdYBXVt7KvWfPJj1OhPUB7-QJbKg+74zwnR_=0pszg9APA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CACRpkdaksfS4WLNQ6ohauAPq3z2LPG2uF37_jWtm0brQHaDtNw@mail.gmail.com>
- <6384831c05b8ceeaf4a16cf9229770252989b762.camel@gmail.com>
- <CACRpkdZr6TdQCLy73Yx2RdMgQifd67remdxENBKYx3UvEMm87A@mail.gmail.com>
- <971eb35068639ec404669ea5320c8183ea71a7d0.camel@gmail.com>
- <ZWiP3i80KnVk9qyx@smile.fi.intel.com> <a4bd59df0c5bc1be5d0d6f11b968fd61a59ee2e0.camel@gmail.com>
- <CACRpkdYz+qi42Pz8CgeWybksC0edaVux6rcEhwzjDWnWe9Jr1g@mail.gmail.com>
- <61a8f54835c10db7a9c650ee2e3706b47382c634.camel@gmail.com>
- <CACRpkda55HzPqus5KR-t=xEBkkdND5kYZj1sHdxK+j6QwDUPRg@mail.gmail.com>
- <b761d2497462664d541779857398b2aa893cbee5.camel@gmail.com>
- <ZWoABzufPkdXnrMT@smile.fi.intel.com> <7dc3f137-6073-4262-afb5-439d024bbbd2@roeck-us.net>
- <986fb7dc2a34602fa9c2d57a7a3e06a71cfdc0a0.camel@gmail.com>
- <66454ca2-d5cb-4701-a237-03b3991a791f@roeck-us.net> <ba123831d7956b0437158a6928ddafb4510ab62b.camel@gmail.com>
- <CACRpkdYfe68aVNcnvfmLz8y3QOfsyA9vFHsaTL6Y9mZJ31wKRg@mail.gmail.com>
-In-Reply-To: <CACRpkdYfe68aVNcnvfmLz8y3QOfsyA9vFHsaTL6Y9mZJ31wKRg@mail.gmail.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Mon, 4 Dec 2023 09:20:37 +0100
-Message-ID: <CAMRc=Mc9dbyNEdg2W9WdptjnuG_bFsBFXuimyU9gccqUVsqTxA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] hwmon: ltc4282: add support for the LTC4282 chip
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: =?UTF-8?B?TnVubyBTw6E=?= <noname.nuno@gmail.com>, 
-	Guenter Roeck <linux@roeck-us.net>, Andy Shevchenko <andy@kernel.org>, nuno.sa@analog.com, 
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-doc@vger.kernel.org, Jean Delvare <jdelvare@suse.com>, 
-	Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 4, 2023 at 12:09=E2=80=AFAM Linus Walleij <linus.walleij@linaro=
-.org> wrote:
->
-> On Sat, Dec 2, 2023 at 10:42=E2=80=AFAM Nuno S=C3=A1 <noname.nuno@gmail.c=
-om> wrote:
->
->  Hopefully, I'll get into the gpio stuff later on. From a brief look,
-> the auxiliary
-> > bus might feet and easier than mfd.
->
-> You can also just spawn a random platform_device from the HWMON driver
-> and let that probe a driver down in drivers/gpio/*.
->
+On Mon, 2023-12-04 at 00:03 +0100, Linus Walleij wrote:
+> On Fri, Dec 1, 2023 at 4:24=E2=80=AFPM Nuno S=C3=A1 <noname.nuno@gmail.co=
+m> wrote:
+>=20
+> > > If a pins .direction_output() fails, .set_value() will not be called
+> > > on it either.
+> >=20
+> > This is where I lost you :(
+>=20
+> devm_gpiod_get() (and similar interfaces) will set up the default mode fo=
+r
+> the line, as input or output (with value, calling .direction_output) so m=
+ost
+> likely it will fail already there, and the driver will not probe or
+> userspace client
+> will fail.
+>=20
+> > So, I'm might be overcomplicating things but... Again,
+> > the case where someone wired up HW so that we can actually use the pin =
+to drive
+> > the
+> > line high (having an external pull up). In that case, If I return error=
+, then I
+> > won't
+> > be able to effectively set the line high (as you said, set_value will n=
+ot be
+> > called
+> > on it either).
+> >=20
+> > Now, I do understand that if we have the line flagged as GPIO_OPEN_DRAI=
+N, then
+> > gpiolib will switch the line to input which means we will set the line =
+in high-z
+> > which means that if we have a pull up, then the line will be high. I me=
+an, it
+> > works
+> > but it would be strange if someone wants to have the line as output hig=
+h and
+> > after
+> > trying to set the it high, it sees the pin moving to input. But if this=
+ is how it
+> > should be, fine by me.
+>=20
+> What do you mean by "sees the pin moving to input".
+>=20
+> If you mean electrically then yes, it goes to high-Z.
+>=20
 
-Please don't. A "random platform_device" even reads like a bad idea.
-Conceptually the GPIO part is not a child but one of the modules. It
-should be an MFD device IMO.
+Ohh, I know where my failure was!! I was reading gpiod_direction_output(des=
+c, 1) and
+following it only till gpiod_direction_input(desc). I was completely missin=
+g the
+'set_output_flag' jump... All understood now :)
 
-Bart
+> If you mean logically, as seen by software and GPIO and debugfs, not
+> really.
+>=20
+> I think a good exercise to see how it works is to just walk through the
+> code in drivers/gpio/gpiolib.c for e.g.
+> gpiod_set_value()
+> gpiod_set_value_nocheck()
+> gpio_set_open_drain_value_commit()
+>=20
 
-> static struct platform_device my_gpio_device =3D {
->         .name =3D "my-gpio",
->         .id =3D -1,
-> };
->
-> my_gpio_device.dev.platform_data =3D ... ;
-> my_gpio_device.dev.parent =3D dev;
-> return platform_device_register(&my_gpio_device);
->
-> You can then pass any accessors as platform data. This in a way is what
-> the MFD or aux buses do just more organized.
->
-> Yours
-> Linus Walleij
+Hmm, by looking into those, it made me think that I should not even need to=
+ implement
+the .set() callback...
+>=20
+
+Thanks for all your help!
+- Nuno S=C3=A1
