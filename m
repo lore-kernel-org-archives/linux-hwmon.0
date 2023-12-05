@@ -1,218 +1,193 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jf4/LrIF"
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 496AA1712;
-	Tue,  5 Dec 2023 01:31:12 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id ca18e2360f4ac-7b3a8366e13so213787839f.1;
-        Tue, 05 Dec 2023 01:31:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701768671; x=1702373471; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RenfwwRJ+AFtvegtJNUpHv8NSTFiZxHcpwZvmM/2PSE=;
-        b=Jf4/LrIFbDZ7xFNQGncpPKfItPdWPYvYBQvqI+QqmOMwThh6UPSvitMCHKxa8S/kqd
-         mkV2S2Cyudo5Xu2y7ofmZcWnFfbRAxl9G+ja1ocAjON2C2PLiC6pc4o0+y3vEcHAU5Pf
-         sk26WfkbDhkydsyMBHKNkPxK0RIzYLY3vpQtDW59kpJb2ec8lEEloVSPkra9qcYrCUJT
-         InY0GH8u0iYrkbxDAfZ9Ch5qsrNVUto1NNp9F4BTvT4KDOoI1eBy2lXl8/pUG4+CmHvv
-         NnlaY7roj3Izz6wtRo+DNGzD7wVfKNpnabOLo/DXglVOOrGu7RUhC9bv+euXskc3S/EF
-         Vx/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701768671; x=1702373471;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RenfwwRJ+AFtvegtJNUpHv8NSTFiZxHcpwZvmM/2PSE=;
-        b=hbhumq5+L3TpqMeTCA4teO8fDR6oVo4rgJGmUo7CjiBpLy9MM6cFUYsqNLOBpO088z
-         4T43wnu5Q46WoKJxpnjJogIiKQ+WvCddHZda/NWbl/n5z06zfzcMqlT9aqm84pBhbm9j
-         uaX8lVi4457uh1vA7f1xKOKv/eY0nVXVj4wrElyumxusH5KvtYrX9snp5We2FI5rJ8t3
-         XvzYJoEwmAV6dl2XaAhaAg8hl4q+c6yP04ifjNmhY/Et4qtunX2e+9Dt0u+jXbq9o+zs
-         sdWZoFSPxdfFodCLLGx/E8pkMY6oOTyfkVILnGujsANis+WGGEIn3JsqeZPe/wAGRZM/
-         xlaA==
-X-Gm-Message-State: AOJu0Yw1Rm2W0qG4VVHMoAlI3bEwokGXG/TW2sm4yema5KaR2WqlSnfS
-	+REEPjNLlPMUUztS8y8XO3hyxRPswiboiRHsJ/c=
-X-Google-Smtp-Source: AGHT+IFr6D6BYqWGEyE3UMSbNV71rjyqF6qvTXD3vh+DfXrYkp9XBifnGHmOK8cQ4HX10HYIwoHFe7lh2PJHgyC+q1I=
-X-Received: by 2002:a5d:974a:0:b0:7b4:28f8:1dfa with SMTP id
- c10-20020a5d974a000000b007b428f81dfamr7247279ioo.25.1701768671291; Tue, 05
- Dec 2023 01:31:11 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aymnqoW6"
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599629A;
+	Tue,  5 Dec 2023 03:05:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701774325; x=1733310325;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vxtWDeGzVM4kvy0di8LLvjYNsy4xYn3TtHE94cFFtoI=;
+  b=aymnqoW63Xl1IB8S6sWu2XvyFcuuiQkiTynli4f3CHEN44n3KucPPanE
+   5jeP1b9WpoaE2ryBCvVNJ/i9ZwAuZq78kMOD+xjwKDnkDclzwoTDInUNb
+   VFm5RLxb+2rPPAhcK+guFNxNPu7VYlkXOHGc54t0tJhuf3Z/+j3RxE/Ta
+   jt47MteQjelfWeHVlselsEHD8KnN9LhoVggcQm3dXOmePUkoMNeS1nC/r
+   cevLmMBLRvB87Y3qM2m7qy4VvRekB/X2I4zsjmphKXR6UW0LLHfyf9odR
+   t2078ay7oWoG7qInjFPCUwWoy1/XaCp7GlLDwBuu5iKS4MAS7J7JLKl10
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="458199426"
+X-IronPort-AV: E=Sophos;i="6.04,251,1695711600"; 
+   d="scan'208";a="458199426"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 03:05:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="861708559"
+X-IronPort-AV: E=Sophos;i="6.04,251,1695711600"; 
+   d="scan'208";a="861708559"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 05 Dec 2023 03:05:20 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rATEp-0008pW-0o;
+	Tue, 05 Dec 2023 11:05:16 +0000
+Date: Tue, 5 Dec 2023 19:04:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: baneric926@gmail.com, jdelvare@suse.com, linux@roeck-us.net,
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org, corbet@lwn.net
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	openbmc@lists.ozlabs.org, kwliu@nuvoton.com, kcfeng0@nuvoton.com,
+	DELPHINE_CHIU@wiwynn.com, Bonnie_Lo@wiwynn.com
+Subject: Re: [PATCH v1 2/2] hwmon: Driver for Nuvoton NCT736X
+Message-ID: <202312051854.qBIoJW1N-lkp@intel.com>
+References: <20231204055650.788388-3-kcfeng0@nuvoton.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231204055650.788388-1-kcfeng0@nuvoton.com> <20231204055650.788388-2-kcfeng0@nuvoton.com>
- <94607c47-9824-4e2c-8f22-99ca2e088b27@linaro.org>
-In-Reply-To: <94607c47-9824-4e2c-8f22-99ca2e088b27@linaro.org>
-From: Ban Feng <baneric926@gmail.com>
-Date: Tue, 5 Dec 2023 17:31:00 +0800
-Message-ID: <CALz278ZbjcbjUmFKv4B20DPDW33KPW-nZn4if3qTLjYKZZmWWw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] dt-bindings: hwmon: Add nct736x bindings
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org, 
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, corbet@lwn.net, 
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	openbmc@lists.ozlabs.org, kwliu@nuvoton.com, kcfeng0@nuvoton.com, 
-	DELPHINE_CHIU@wiwynn.com, Bonnie_Lo@wiwynn.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231204055650.788388-3-kcfeng0@nuvoton.com>
 
-Hi Krzysztof,
+Hi,
 
-On Mon, Dec 4, 2023 at 4:04=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 04/12/2023 06:56, baneric926@gmail.com wrote:
-> > From: Ban Feng <kcfeng0@nuvoton.com>
-> >
-> > This change documents the device tree bindings for the Nuvoton
-> > NCT7362Y, NCT7363Y driver.
-> >
-> > Signed-off-by: Ban Feng <kcfeng0@nuvoton.com>
-> > ---
-> >  .../bindings/hwmon/nuvoton,nct736x.yaml       | 80 +++++++++++++++++++
-> >  MAINTAINERS                                   |  6 ++
-> >  2 files changed, 86 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/hwmon/nuvoton,nct=
-736x.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/hwmon/nuvoton,nct736x.ya=
-ml b/Documentation/devicetree/bindings/hwmon/nuvoton,nct736x.yaml
-> > new file mode 100644
-> > index 000000000000..f98fd260a20f
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/hwmon/nuvoton,nct736x.yaml
-> > @@ -0,0 +1,80 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +
-> > +$id: http://devicetree.org/schemas/hwmon/nuvoton,nct736x.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Nuvoton NCT736X Hardware Monitoring IC
-> > +
-> > +maintainers:
-> > +  - Ban Feng <kcfeng0@nuvoton.com>
-> > +
-> > +description: |
-> > +  The NCT736X is a Fan controller which provides up to 16 independent
-> > +  FAN input monitors, and up to 16 independent PWM output with SMBus i=
-nterface.
-> > +  Besides, NCT7363Y has a built-in watchdog timer which is used for
-> > +  conditionally generating a system reset output (INT#).
-> > +
-> > +additionalProperties: false
->
-> Please place it just like other bindings are placing it. Not in some
-> random order. See example-schema.
+kernel test robot noticed the following build warnings:
 
-ok, I'll move additionalProperties to the correct place.
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.7-rc4 next-20231205]
+[cannot apply to groeck-staging/hwmon-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->
-> You should use common fan properties. If it was not merged yet, you must
-> rebase on patchset on LKML and mention the dependency in the change log
-> (---).
+url:    https://github.com/intel-lab-lkp/linux/commits/baneric926-gmail-com/dt-bindings-hwmon-Add-nct736x-bindings/20231204-135942
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20231204055650.788388-3-kcfeng0%40nuvoton.com
+patch subject: [PATCH v1 2/2] hwmon: Driver for Nuvoton NCT736X
+config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20231205/202312051854.qBIoJW1N-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231205/202312051854.qBIoJW1N-lkp@intel.com/reproduce)
 
-please kindly see below
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312051854.qBIoJW1N-lkp@intel.com/
 
->
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - nuvoton,nct7362
-> > +      - nuvoton,nct7363
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  nuvoton,pwm-mask:
-> > +    description: |
-> > +      each bit means PWMx enable/disable setting, where x =3D 0~15.
-> > +      0: disabled, 1: enabled
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    minimum: 0x0
-> > +    maximum: 0xFFFF
-> > +    default: 0x0
->
-> Use pwms, not own property for this.
+All warnings (new ones prefixed by >>):
 
-NCT736X has 16 funtion pins, they can be
-GPIO/PWM/FANIN/Reserved_or_ALERT#, and default is GPIO.
-We would like to add such a property that can configure the function
-pin for pin0~7 and pin10~17.
+>> drivers/hwmon/nct736x.c:352:5: warning: variable 'gpio14_17' is uninitialized when used here [-Wuninitialized]
+                                   gpio14_17 |= FANIN_SEL(i);
+                                   ^~~~~~~~~
+   drivers/hwmon/nct736x.c:339:46: note: initialize the variable 'gpio14_17' to silence this warning
+           u8 i, gpio0_3, gpio4_7, gpio10_13, gpio14_17;
+                                                       ^
+                                                        = '\0'
+>> drivers/hwmon/nct736x.c:347:5: warning: variable 'gpio10_13' is uninitialized when used here [-Wuninitialized]
+                                   gpio10_13 |= FANIN_SEL(i);
+                                   ^~~~~~~~~
+   drivers/hwmon/nct736x.c:339:35: note: initialize the variable 'gpio10_13' to silence this warning
+           u8 i, gpio0_3, gpio4_7, gpio10_13, gpio14_17;
+                                            ^
+                                             = '\0'
+>> drivers/hwmon/nct736x.c:350:5: warning: variable 'gpio4_7' is uninitialized when used here [-Wuninitialized]
+                                   gpio4_7 |= PWM_SEL(i);
+                                   ^~~~~~~
+   drivers/hwmon/nct736x.c:339:24: note: initialize the variable 'gpio4_7' to silence this warning
+           u8 i, gpio0_3, gpio4_7, gpio10_13, gpio14_17;
+                                 ^
+                                  = '\0'
+>> drivers/hwmon/nct736x.c:345:5: warning: variable 'gpio0_3' is uninitialized when used here [-Wuninitialized]
+                                   gpio0_3 |= PWM_SEL(i);
+                                   ^~~~~~~
+   drivers/hwmon/nct736x.c:339:15: note: initialize the variable 'gpio0_3' to silence this warning
+           u8 i, gpio0_3, gpio4_7, gpio10_13, gpio14_17;
+                        ^
+                         = '\0'
+   4 warnings generated.
 
-My original design is only for PWM/FANIN, however,
-I noticed that we can change the design to "nuvoton,pin[0-7]$" and
-"nuvoton,pin[10-17]$", like example in adt7475.yaml.
-I'm not sure if this can be accepted or not, please kindly review this.
 
->
-> > +
-> > +  nuvoton,fanin-mask:
-> > +    description: |
-> > +      each bit means FANINx monitoring enable/disable setting,
-> > +      where x =3D 0~15.
-> > +      0: disabled, 1: enabled
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    minimum: 0x0
-> > +    maximum: 0xFFFF
-> > +    default: 0x0
->
-> Use properties from common fan bindings.
+vim +/gpio14_17 +352 drivers/hwmon/nct736x.c
 
-Ditto
+   334	
+   335	static int nct736x_init_chip(struct i2c_client *client,
+   336				     u32 pwm_mask, u32 fanin_mask, u32 wdt_cfg)
+   337	{
+   338		const struct i2c_device_id *id = i2c_match_id(nct736x_id, client);
+   339		u8 i, gpio0_3, gpio4_7, gpio10_13, gpio14_17;
+   340		int ret;
+   341	
+   342		for (i = 0; i < NCT736X_PWM_COUNT; i++) {
+   343			if (i < 4) {
+   344				if (pwm_mask & BIT_CHECK(i))
+ > 345					gpio0_3 |= PWM_SEL(i);
+   346				if (fanin_mask & BIT_CHECK(i))
+ > 347					gpio10_13 |= FANIN_SEL(i);
+   348			} else if (i < 8) {
+   349				if (pwm_mask & BIT_CHECK(i))
+ > 350					gpio4_7 |= PWM_SEL(i);
+   351				if (fanin_mask & BIT_CHECK(i))
+ > 352					gpio14_17 |= FANIN_SEL(i);
+   353			} else if (i < 12) {
+   354				if (pwm_mask & BIT_CHECK(i))
+   355					gpio10_13 |= PWM_SEL(i);
+   356				if (fanin_mask & BIT_CHECK(i))
+   357					gpio0_3 |= FANIN_SEL(i);
+   358			} else {
+   359				if (pwm_mask & BIT_CHECK(i))
+   360					gpio14_17 |= PWM_SEL(i);
+   361				if (fanin_mask & BIT_CHECK(i))
+   362					gpio4_7 |= FANIN_SEL(i);
+   363			}
+   364		}
+   365	
+   366		/* Pin Function Configuration */
+   367		ret = nct736x_write_reg(client, NCT736X_REG_GPIO_0_3, gpio0_3);
+   368		if (ret < 0)
+   369			return ret;
+   370		ret = nct736x_write_reg(client, NCT736X_REG_GPIO_4_7, gpio4_7);
+   371		if (ret < 0)
+   372			return ret;
+   373		ret = nct736x_write_reg(client, NCT736X_REG_GPIO_10_13, gpio10_13);
+   374		if (ret < 0)
+   375			return ret;
+   376		ret = nct736x_write_reg(client, NCT736X_REG_GPIO_14_17, gpio14_17);
+   377		if (ret < 0)
+   378			return ret;
+   379	
+   380		/* PWM and FANIN Monitoring Enable */
+   381		ret = nct736x_write_reg(client, NCT736X_REG_PWMEN_0_7,
+   382					pwm_mask & 0xff);
+   383		if (ret < 0)
+   384			return ret;
+   385		ret = nct736x_write_reg(client,
+   386					NCT736X_REG_PWMEN_8_15, (pwm_mask >> 8) & 0xff);
+   387		if (ret < 0)
+   388			return ret;
+   389		ret = nct736x_write_reg(client, NCT736X_REG_FANINEN_0_7,
+   390					fanin_mask & 0xff);
+   391		if (ret < 0)
+   392			return ret;
+   393		ret = nct736x_write_reg(client, NCT736X_REG_FANINEN_8_15,
+   394					(fanin_mask >> 8) & 0xff);
+   395		if (ret < 0)
+   396			return ret;
+   397	
+   398		/* Watchdog Timer Configuration */
+   399		if (wdt_cfg != 0xff && id->driver_data == nct7363) {
+   400			ret = nct736x_write_reg(client, NCT7363_REG_WDT, wdt_cfg);
+   401			if (ret < 0)
+   402				return ret;
+   403		}
+   404	
+   405		return 0;
+   406	}
+   407	
 
->
-> > +
-> > +  nuvoton,wdt-timeout:
-> > +    description: |
-> > +      Watchdog Timer time configuration for NCT7363Y, as below
-> > +      0: 15 sec (default)
-> > +      1: 7.5 sec
-> > +      2: 3.75 sec
-> > +      3: 30 sec
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    enum: [0, 1, 2, 3]
-> > +    default: 0
->
-> Nope, reference watchdog.yaml and use its properties. See other watchdog
-> bindings for examples.
-
-NCT7363 has a built-in watchdog timer which is used for conditionally
-generating a system reset
-output (INT#) if the microcontroller or microprocessor stops to
-periodically send a pulse signal or
-interface communication access signal like SCL signal from SMBus interface.
-
-We only consider "Watchdog Timer Configuration Register" enable bit
-and timeout setting.
-Should we still need to add struct watchdog_device to struct nct736x_data?
-
->
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - nuvoton,pwm-mask
-> > +  - nuvoton,fanin-mask
-> > +
-> > +examples:
-> > +  - |
-> > +    i2c {
-> > +        #address-cells =3D <1>;
-> > +        #size-cells =3D <0>;
-> > +
-> > +        nct7363@22 {
->
-> Node names should be generic. See also an explanation and list of
-> examples (not exhaustive) in DT specification:
-> https://devicetree-specification.readthedocs.io/en/latest/chapter2-device=
-tree-basics.html#generic-names-recommendation
-
-ok, I'll change nct7363@22 to hwmon@22.
-
-Thanks,
-Ban
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
