@@ -1,139 +1,144 @@
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3AA83DBBC;
+	Wed,  6 Dec 2023 15:41:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RzdVUKB6"
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA93A1;
-	Wed,  6 Dec 2023 00:38:14 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-40b595bf5d2so71104505e9.2;
-        Wed, 06 Dec 2023 00:38:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701851892; x=1702456692; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=yzrIQSDj7iD4AI+Qk2SNNB2s4PzYTQjVrXFHRggcHZs=;
-        b=RzdVUKB6N//Cg+ZRw9LghYrrfW3b/pLU90TYfztpGiqedE+afEQtStN9kaZU4bbUgB
-         MsybQYvX+07iurF91BwB4DuDxhxxSQfs/M45ahvcExy0ZgFBRlQCdY2Yag4sJ2KgZsBA
-         Ehhl+LFhCrbZ7oej3wg3o8G5xHW19lUF9p9KqcRpOifaQnQxACtyOUFa9ghZ5cxxejNf
-         nSmQbL/Fz16zj8Cmjusk6loVlyprJxj6qY1HLMkCeYud2Sw1j91JTFMHfpN8L17qiVbv
-         KsOItQinwEoQconwZePp64MUClIv17Y1JsfjZT20iBfTyGT5mVuk6I+avzn+dLGBL3Od
-         l9ZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701851892; x=1702456692;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yzrIQSDj7iD4AI+Qk2SNNB2s4PzYTQjVrXFHRggcHZs=;
-        b=NGPqqXGI2qE/UWnchBS6yvVh5C6GyiD1dZBP+zT5SpymWR3hsH4brwjExPOeDBF8PU
-         zaX1s3JVwgMQ4txY0PBvdq6ClyFtKGZsXD4c/LTwagW8sbx6cgLlx62BEYXc2aVw8nJR
-         W/mRtJsBbymD7a1zNUkjxI0Vbw/aEXK6L7esYX9yO8SJzn3SP4K1OUPHr0i/D7QIa4Zp
-         KkD343mDbVjUzopwnyBUXE/Eadk/V79T7AE792pb86bEhlF+6MZfNrSV9uMk4v5tavQH
-         d2fI5DxQbk/GR9PUlKdi1RJg9Scm0laoBhh/D9HbfNpWMfPPi+sTibb8paKJI+MmlT6g
-         BJhQ==
-X-Gm-Message-State: AOJu0YzMHKraoS+DGUyPYR7DFgnSHaZcMe5e72hPFYMvqZh8g1dkQAfX
-	NJ1cDbUpFDljQGY4JaWkwH8=
-X-Google-Smtp-Source: AGHT+IEEWtaYdXId5WgPzy/X3b2sx2wX+90fgD1DmLE7l9dt5mgSeaJ+85PBr3yL7fJN/OaCr10Nfg==
-X-Received: by 2002:a05:600c:91c:b0:40b:5e59:99c9 with SMTP id m28-20020a05600c091c00b0040b5e5999c9mr222346wmp.233.1701851892085;
-        Wed, 06 Dec 2023 00:38:12 -0800 (PST)
-Received: from ?IPv6:2001:a61:3456:4e01:6ae:b55a:bd1d:57fc? ([2001:a61:3456:4e01:6ae:b55a:bd1d:57fc])
-        by smtp.gmail.com with ESMTPSA id k26-20020adfb35a000000b003332faefd86sm14436262wrd.0.2023.12.06.00.38.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Dec 2023 00:38:11 -0800 (PST)
-Message-ID: <92aeaa124adf7e678f9ef1750b353fe9d11f8909.camel@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hB0+DXoy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08782C433C8;
+	Wed,  6 Dec 2023 15:41:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701877289;
+	bh=Uv8b+EwMtwJvMdfrPZdZ0AgVz/8itxAOt+skCzPWAIc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hB0+DXoyAPXGeE5NqAPSHP0yqeelHdgj73jAwCnh6L8msEZco1WvyF8zme077/FvN
+	 yEHv2cEhn4UwjMD4b01vuIkYLb97o13SSMvQXJSk0thkT2cPyVi9nIBqS38oSkiRE7
+	 Sd08aV0X/FdkYpG0/x0+zekyJS8fe7FzhBmhoqvgtXCXrF07yUiTjpXaY1GqY5sZ2N
+	 Y1AzFg7mKOL/jDyeUKtWSVsXxCaPsQhdMpHH3fBFmw6B2subP5uAVDXu3xOde3AxAM
+	 gR+Qz9LjLWwG0bwrUN7gYaMNtmoRwXdKYehPgbL/5OqwskQ2pqx4srqMTkBWtqMKE6
+	 Si0FFSv0ZvUfg==
+Date: Wed, 6 Dec 2023 15:41:24 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+Cc: nuno.sa@analog.com, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>
 Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: Add LTC4282 bindings
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: Conor Dooley <conor@kernel.org>, nuno.sa@analog.com
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-doc@vger.kernel.org, Jean Delvare <jdelvare@suse.com>, Guenter Roeck
- <linux@roeck-us.net>, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
- Jonathan Corbet <corbet@lwn.net>
-Date: Wed, 06 Dec 2023 09:38:11 +0100
-In-Reply-To: <20231205-cognitive-propose-aa71278f65ea@spud>
+Message-ID: <20231206-reference-litigator-eb7c466222a3@spud>
 References: <20231205-ltc4282-support-v3-0-e0877b281bc2@analog.com>
-	 <20231205-ltc4282-support-v3-1-e0877b281bc2@analog.com>
-	 <20231205-cognitive-propose-aa71278f65ea@spud>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+ <20231205-ltc4282-support-v3-1-e0877b281bc2@analog.com>
+ <20231205-cognitive-propose-aa71278f65ea@spud>
+ <92aeaa124adf7e678f9ef1750b353fe9d11f8909.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="s9iPQ469fKQZnoy/"
+Content-Disposition: inline
+In-Reply-To: <92aeaa124adf7e678f9ef1750b353fe9d11f8909.camel@gmail.com>
 
-On Tue, 2023-12-05 at 16:18 +0000, Conor Dooley wrote:
-> On Tue, Dec 05, 2023 at 04:22:55PM +0100, Nuno Sa via B4 Relay wrote:
+
+--s9iPQ469fKQZnoy/
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Dec 06, 2023 at 09:38:11AM +0100, Nuno S=E1 wrote:
+> On Tue, 2023-12-05 at 16:18 +0000, Conor Dooley wrote:
+> > On Tue, Dec 05, 2023 at 04:22:55PM +0100, Nuno Sa via B4 Relay wrote:
+> >=20
+> > > +=A0 adi,overvoltage-dividers:
+> > > +=A0=A0=A0 description: |
+> > > +=A0=A0=A0=A0=A0 Select which dividers to use for VDD Overvoltage det=
+ection. Note that
+> > > +=A0=A0=A0=A0=A0 when the internal dividers are used the threshold is=
+ referenced to VDD.
+> > > +=A0=A0=A0=A0=A0 The percentages in the datasheet are misleading sinc=
+e the actual values
+> > > +=A0=A0=A0=A0=A0 to look for are in the "Absolute Maximum Ratings" ta=
+ble in the
+> > > +=A0=A0=A0=A0=A0 "Comparator Inputs" section. In there there's a line=
+ for each of the 5%,
+> > > +=A0=A0=A0=A0=A0 10% and 15% settings with the actual min, typical an=
+d max tolerances.
+> > > +=A0=A0=A0 $ref: /schemas/types.yaml#/definitions/string
+> > > +=A0=A0=A0 enum: [external, vdd_5_percent, vdd_10_percent, vdd_15_per=
+cent]
+> > > +
+> > > +=A0 adi,undervoltage-dividers:
+> > > +=A0=A0=A0 description: |
+> > > +=A0=A0=A0=A0=A0 Select which dividers to use for VDD Overvoltage det=
+ection. Note that
+> > > +=A0=A0=A0=A0=A0 when the internal dividers are used the threshold is=
+ referenced to VDD.
+> > > +=A0=A0=A0=A0=A0 The percentages in the datasheet are misleading sinc=
+e the actual values
+> > > +=A0=A0=A0=A0=A0 to look for are in the "Absolute Maximum Ratings" ta=
+ble in the
+> > > +=A0=A0=A0=A0=A0 "Comparator Inputs" section. In there there's a line=
+ for each of the 5%,
+> > > +=A0=A0=A0=A0=A0 10% and 15% settings with the actual min, typical an=
+d max tolerances.
+> > > +=A0=A0=A0 $ref: /schemas/types.yaml#/definitions/string
+> > > +=A0=A0=A0 enum: [external, vdd_5_percent, vdd_10_percent, vdd_15_per=
+cent]
+> >=20
+> > > +=A0 adi,gpio1-mode:
+> > > +=A0=A0=A0 description: Defines the function of the Pin. It can indic=
+ate that power is
+> > > +=A0=A0=A0=A0=A0 good (PULL the pin low when power is not good) or th=
+at power is bad (Go
+> > > +=A0=A0=A0=A0=A0 into high-z when power is not good).
+> > > +=A0=A0=A0 $ref: /schemas/types.yaml#/definitions/string
+> > > +=A0=A0=A0 enum: [power_bad, power_good]
+> > > +
+> > > +=A0 adi,gpio2-mode:
+> > > +=A0=A0=A0 description: Defines the function of the Pin. It can be se=
+t as the input for
+> > > +=A0=A0=A0=A0=A0 the ADC or indicating that the MOSFET is in stress (=
+dissipating power).
+> > > +=A0=A0=A0 $ref: /schemas/types.yaml#/definitions/string
+> > > +=A0=A0=A0 enum: [adc_input, stress_fet]
+> >=20
+> > None of these properties have a default nor are required.
+> > What happens when they are omitted?
+> >=20
 >=20
-> > +=C2=A0 adi,overvoltage-dividers:
-> > +=C2=A0=C2=A0=C2=A0 description: |
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Select which dividers to use for VDD Ov=
-ervoltage detection. Note that
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 when the internal dividers are used the=
- threshold is referenced to VDD.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 The percentages in the datasheet are mi=
-sleading since the actual values
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 to look for are in the "Absolute Maximu=
-m Ratings" table in the
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 "Comparator Inputs" section. In there t=
-here's a line for each of the 5%,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 10% and 15% settings with the actual mi=
-n, typical and max tolerances.
-> > +=C2=A0=C2=A0=C2=A0 $ref: /schemas/types.yaml#/definitions/string
-> > +=C2=A0=C2=A0=C2=A0 enum: [external, vdd_5_percent, vdd_10_percent, vdd=
-_15_percent]
-> > +
-> > +=C2=A0 adi,undervoltage-dividers:
-> > +=C2=A0=C2=A0=C2=A0 description: |
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Select which dividers to use for VDD Ov=
-ervoltage detection. Note that
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 when the internal dividers are used the=
- threshold is referenced to VDD.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 The percentages in the datasheet are mi=
-sleading since the actual values
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 to look for are in the "Absolute Maximu=
-m Ratings" table in the
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 "Comparator Inputs" section. In there t=
-here's a line for each of the 5%,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 10% and 15% settings with the actual mi=
-n, typical and max tolerances.
-> > +=C2=A0=C2=A0=C2=A0 $ref: /schemas/types.yaml#/definitions/string
-> > +=C2=A0=C2=A0=C2=A0 enum: [external, vdd_5_percent, vdd_10_percent, vdd=
-_15_percent]
->=20
-> > +=C2=A0 adi,gpio1-mode:
-> > +=C2=A0=C2=A0=C2=A0 description: Defines the function of the Pin. It ca=
-n indicate that power is
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 good (PULL the pin low when power is no=
-t good) or that power is bad (Go
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 into high-z when power is not good).
-> > +=C2=A0=C2=A0=C2=A0 $ref: /schemas/types.yaml#/definitions/string
-> > +=C2=A0=C2=A0=C2=A0 enum: [power_bad, power_good]
-> > +
-> > +=C2=A0 adi,gpio2-mode:
-> > +=C2=A0=C2=A0=C2=A0 description: Defines the function of the Pin. It ca=
-n be set as the input for
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 the ADC or indicating that the MOSFET i=
-s in stress (dissipating power).
-> > +=C2=A0=C2=A0=C2=A0 $ref: /schemas/types.yaml#/definitions/string
-> > +=C2=A0=C2=A0=C2=A0 enum: [adc_input, stress_fet]
->=20
-> None of these properties have a default nor are required.
-> What happens when they are omitted?
->=20
+> Yeah, they get the power on reset default values (or whatever is in eepro=
+m but that's
+> not the typical usecase). I'll add a default for all these properties. Yo=
+ur question
+> already made me realize something I need to fix for v4. For some reason, =
+I thought
+> gpio3 was the default pin to be muxed into the ADC (and hence monitored b=
+y hwmon) but
+> I realized that gpio2 is the default one. Hence, I need a boolean propert=
+y to allow
+> for users to mux gpio3 instead of gpio2.
 
-Yeah, they get the power on reset default values (or whatever is in eeprom =
-but that's
-not the typical usecase). I'll add a default for all these properties. Your=
- question
-already made me realize something I need to fix for v4. For some reason, I =
-thought
-gpio3 was the default pin to be muxed into the ADC (and hence monitored by =
-hwmon) but
-I realized that gpio2 is the default one. Hence, I need a boolean property =
-to allow
-for users to mux gpio3 instead of gpio2.
+:+1: patch should be good to go then IMO with those defaults added and
+the mux one fixed.
 
-- Nuno S=C3=A1
+Thanks,
+Conor.
 
+--s9iPQ469fKQZnoy/
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZXCWJAAKCRB4tDGHoIJi
+0iy7AQDlbLpqU0xbjnJVhrmJIKxpmhs40HeLz0LxacxpaCytWAD8Dq6mYWlGLajz
+uJt7xdmFpf1v61NEz7qhRpOseP4cagk=
+=3D/+
+-----END PGP SIGNATURE-----
+
+--s9iPQ469fKQZnoy/--
