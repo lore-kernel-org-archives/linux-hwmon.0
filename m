@@ -1,144 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3AA83DBBC;
-	Wed,  6 Dec 2023 15:41:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hB0+DXoy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08782C433C8;
-	Wed,  6 Dec 2023 15:41:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701877289;
-	bh=Uv8b+EwMtwJvMdfrPZdZ0AgVz/8itxAOt+skCzPWAIc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hB0+DXoyAPXGeE5NqAPSHP0yqeelHdgj73jAwCnh6L8msEZco1WvyF8zme077/FvN
-	 yEHv2cEhn4UwjMD4b01vuIkYLb97o13SSMvQXJSk0thkT2cPyVi9nIBqS38oSkiRE7
-	 Sd08aV0X/FdkYpG0/x0+zekyJS8fe7FzhBmhoqvgtXCXrF07yUiTjpXaY1GqY5sZ2N
-	 Y1AzFg7mKOL/jDyeUKtWSVsXxCaPsQhdMpHH3fBFmw6B2subP5uAVDXu3xOde3AxAM
-	 gR+Qz9LjLWwG0bwrUN7gYaMNtmoRwXdKYehPgbL/5OqwskQ2pqx4srqMTkBWtqMKE6
-	 Si0FFSv0ZvUfg==
-Date: Wed, 6 Dec 2023 15:41:24 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-Cc: nuno.sa@analog.com, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: Add LTC4282 bindings
-Message-ID: <20231206-reference-litigator-eb7c466222a3@spud>
-References: <20231205-ltc4282-support-v3-0-e0877b281bc2@analog.com>
- <20231205-ltc4282-support-v3-1-e0877b281bc2@analog.com>
- <20231205-cognitive-propose-aa71278f65ea@spud>
- <92aeaa124adf7e678f9ef1750b353fe9d11f8909.camel@gmail.com>
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783D6D5E
+	for <linux-hwmon@vger.kernel.org>; Wed,  6 Dec 2023 09:49:00 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rAw0Z-0003ZN-Ul; Wed, 06 Dec 2023 18:48:27 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rAw0V-00E0n0-Jx; Wed, 06 Dec 2023 18:48:23 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rAw0V-00Fdvj-A8; Wed, 06 Dec 2023 18:48:23 +0100
+Date: Wed, 6 Dec 2023 18:48:23 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Billy Tsai <billy_tsai@aspeedtech.com>, jdelvare@suse.com,
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	joel@jms.id.au, andrew@aj.id.au, corbet@lwn.net,
+	thierry.reding@gmail.com, p.zabel@pengutronix.de,
+	naresh.solanki@9elements.com, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-pwm@vger.kernel.org,
+	BMC-SW@aspeedtech.com, patrick@stwcx.xyz
+Subject: Re: [PATCH RESEND v10 0/3] Support pwm/tach driver for aspeed ast26xx
+Message-ID: <20231206174823.ok6rrufhez33rte5@pengutronix.de>
+References: <20231107105025.1480561-1-billy_tsai@aspeedtech.com>
+ <3ea9ef0c-27c0-4304-8bf7-26710224c3b1@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="s9iPQ469fKQZnoy/"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="xahfw2iectdfzaf3"
 Content-Disposition: inline
-In-Reply-To: <92aeaa124adf7e678f9ef1750b353fe9d11f8909.camel@gmail.com>
+In-Reply-To: <3ea9ef0c-27c0-4304-8bf7-26710224c3b1@roeck-us.net>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
 
---s9iPQ469fKQZnoy/
+--xahfw2iectdfzaf3
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 06, 2023 at 09:38:11AM +0100, Nuno S=E1 wrote:
-> On Tue, 2023-12-05 at 16:18 +0000, Conor Dooley wrote:
-> > On Tue, Dec 05, 2023 at 04:22:55PM +0100, Nuno Sa via B4 Relay wrote:
+On Tue, Nov 07, 2023 at 11:02:43AM -0800, Guenter Roeck wrote:
+> On 11/7/23 02:50, Billy Tsai wrote:
+> > Unlike the old design that the register setting of the TACH should based
+> > on the configure of the PWM. In ast26xx, the dependency between pwm and
+> > tach controller is eliminated and becomes a separate hardware block. One
+> > is used to provide pwm output and another is used to monitor the freque=
+ncy
+> > of the input. This driver implements them by exposing two kernel
+> > subsystems: PWM and HWMON. The PWM subsystem can be utilized alongside
+> > existing drivers for controlling elements such as fans (pwm-fan.c),
+> > beepers (pwm-beeper.c) and so on. Through the HWMON subsystem, the driv=
+er
+> > provides sysfs interfaces for fan.
 > >=20
-> > > +=A0 adi,overvoltage-dividers:
-> > > +=A0=A0=A0 description: |
-> > > +=A0=A0=A0=A0=A0 Select which dividers to use for VDD Overvoltage det=
-ection. Note that
-> > > +=A0=A0=A0=A0=A0 when the internal dividers are used the threshold is=
- referenced to VDD.
-> > > +=A0=A0=A0=A0=A0 The percentages in the datasheet are misleading sinc=
-e the actual values
-> > > +=A0=A0=A0=A0=A0 to look for are in the "Absolute Maximum Ratings" ta=
-ble in the
-> > > +=A0=A0=A0=A0=A0 "Comparator Inputs" section. In there there's a line=
- for each of the 5%,
-> > > +=A0=A0=A0=A0=A0 10% and 15% settings with the actual min, typical an=
-d max tolerances.
-> > > +=A0=A0=A0 $ref: /schemas/types.yaml#/definitions/string
-> > > +=A0=A0=A0 enum: [external, vdd_5_percent, vdd_10_percent, vdd_15_per=
-cent]
-> > > +
-> > > +=A0 adi,undervoltage-dividers:
-> > > +=A0=A0=A0 description: |
-> > > +=A0=A0=A0=A0=A0 Select which dividers to use for VDD Overvoltage det=
-ection. Note that
-> > > +=A0=A0=A0=A0=A0 when the internal dividers are used the threshold is=
- referenced to VDD.
-> > > +=A0=A0=A0=A0=A0 The percentages in the datasheet are misleading sinc=
-e the actual values
-> > > +=A0=A0=A0=A0=A0 to look for are in the "Absolute Maximum Ratings" ta=
-ble in the
-> > > +=A0=A0=A0=A0=A0 "Comparator Inputs" section. In there there's a line=
- for each of the 5%,
-> > > +=A0=A0=A0=A0=A0 10% and 15% settings with the actual min, typical an=
-d max tolerances.
-> > > +=A0=A0=A0 $ref: /schemas/types.yaml#/definitions/string
-> > > +=A0=A0=A0 enum: [external, vdd_5_percent, vdd_10_percent, vdd_15_per=
-cent]
-> >=20
-> > > +=A0 adi,gpio1-mode:
-> > > +=A0=A0=A0 description: Defines the function of the Pin. It can indic=
-ate that power is
-> > > +=A0=A0=A0=A0=A0 good (PULL the pin low when power is not good) or th=
-at power is bad (Go
-> > > +=A0=A0=A0=A0=A0 into high-z when power is not good).
-> > > +=A0=A0=A0 $ref: /schemas/types.yaml#/definitions/string
-> > > +=A0=A0=A0 enum: [power_bad, power_good]
-> > > +
-> > > +=A0 adi,gpio2-mode:
-> > > +=A0=A0=A0 description: Defines the function of the Pin. It can be se=
-t as the input for
-> > > +=A0=A0=A0=A0=A0 the ADC or indicating that the MOSFET is in stress (=
-dissipating power).
-> > > +=A0=A0=A0 $ref: /schemas/types.yaml#/definitions/string
-> > > +=A0=A0=A0 enum: [adc_input, stress_fet]
-> >=20
-> > None of these properties have a default nor are required.
-> > What happens when they are omitted?
+> > Changes since v9:
+> > Change the type of fan-driving-mode to string
+> > Fix some typos and formatting issues.
 > >=20
 >=20
-> Yeah, they get the power on reset default values (or whatever is in eepro=
-m but that's
-> not the typical usecase). I'll add a default for all these properties. Yo=
-ur question
-> already made me realize something I need to fix for v4. For some reason, =
-I thought
-> gpio3 was the default pin to be muxed into the ADC (and hence monitored b=
-y hwmon) but
-> I realized that gpio2 is the default one. Hence, I need a boolean propert=
-y to allow
-> for users to mux gpio3 instead of gpio2.
+> What is the resend about ?
 
-:+1: patch should be good to go then IMO with those defaults added and
-the mux one fixed.
+And to the original v10 there is a reply by Krzysztof;
+see https://lore.kernel.org/linux-pwm/3d9e50db-19f0-43b3-8042-2f80a1e7b79e@=
+linaro.org/ .
 
-Thanks,
-Conor.
+I'll mark the original and this resend as "changes-requested" in our
+patchwork. Probably the most cooperative way to object is to send a v11
+and point out the changes compared to v10.
 
---s9iPQ469fKQZnoy/
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--xahfw2iectdfzaf3
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZXCWJAAKCRB4tDGHoIJi
-0iy7AQDlbLpqU0xbjnJVhrmJIKxpmhs40HeLz0LxacxpaCytWAD8Dq6mYWlGLajz
-uJt7xdmFpf1v61NEz7qhRpOseP4cagk=
-=3D/+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmVws+YACgkQj4D7WH0S
+/k6h9gf/WbDCCPB8gEoBy04/59kS+pKvmePtsjuxxGtkiYQdKXw4e8Q7ceGH7jHL
+HcjE2lXZJ+PbjcK9zRbglyTKkbJT0cl4pYDYxaSbb3b87GCmImjsNGPb0pkOb3id
+e6JgbB8kWpXtpoDWTSrCUYUiTwmwTpcaLEA8/ybJpnbV4G/+ZquEc+hYl/f4LViz
+HhuTGL/AAd3aa6F8g6+3u0NCp9fdJwwYBJw3nyg5UWwF/YzauUoNNHpa/u7Wm5qg
+3BIwHt2JcOIrs187TPDHTRsTRoCRNyZv1gifyXDZhIsi48EyYKUuXMdr/IHq8Fuy
+GX73E7Tr65j6LyKnQ9p2YwEggAzSVQ==
+=3LdD
 -----END PGP SIGNATURE-----
 
---s9iPQ469fKQZnoy/--
+--xahfw2iectdfzaf3--
