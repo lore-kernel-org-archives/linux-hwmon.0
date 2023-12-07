@@ -1,107 +1,113 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FFB84C61F;
-	Thu,  7 Dec 2023 20:44:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FZcc6zBj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B985C433C8;
-	Thu,  7 Dec 2023 20:44:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701981859;
-	bh=d9aDVM2UeURdax+lpotfrVgU9kIaouVQcvPA3ammyFM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FZcc6zBjxi6Hw9KA7xxdN1W62gPQWQyol1uN7QTMtxIa9WKnE8SU57t/mpAY9P/SX
-	 5nNnw8aAPE/oVuer1jDxJCVlgzt2vA6TB3fwrHdGItYH8OkEyOBZH6hG4tY8bxNLtx
-	 ECqcCpkgzxLdlpQxr5/zG2EG4fJL1Bh118j9IKBjVPcEfIZqGy1B+TgqzEIwj1LFpX
-	 cy4pdGbKaqiT6wiuahVBs5lHs9HF5KzqCHJ5JF+B1YN0JYWzIy2fbAsWq4XbL1T0rc
-	 RFmnzl1gJgB10ZwLq84RXu7RuC3M9q3od+CXqVReGoBzNmF4OWstUUC+dl/Jabh4em
-	 LNxMGKpu7q8gQ==
-Date: Thu, 7 Dec 2023 20:44:14 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Cc: Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Liam Girdwood <lgirdwood@gmail.com>, Rob Herring <robh@kernel.org>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v3 5/5] hwmon: Add support for Amphenol ChipCap 2
-Message-ID: <6cce1b87-a9a9-4554-9dae-c24d1d276fb5@sirena.org.uk>
-References: <20231020-topic-chipcap2-v3-0-5b3bb50a5f0b@gmail.com>
- <20231020-topic-chipcap2-v3-5-5b3bb50a5f0b@gmail.com>
- <04475f91-bdce-4677-894c-74c2bb8233d9@sirena.org.uk>
- <5b62afcb-254d-4dfc-8332-7979c62ea2c2@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="Wobu4kRe"
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40F01718;
+	Thu,  7 Dec 2023 12:49:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+	t=1701982124; x=1702586924; i=w_armin@gmx.de;
+	bh=j1KQyy5uZSILlZqSsSLS4MPgyN7jRnDBrPne253w/98=;
+	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
+	 In-Reply-To;
+	b=Wobu4kRet4gqvrIHkX2jrUrdBFggYsB+Y9RFiRqdlYxkj+JSKg7L5EBuTWoLGN9F
+	 Hj9Sl24cl4STDiyMfRStquQ8xXqhufPDx4zrzIArgoOwAC6HswGZkTFBB6cubMR7L
+	 VdRv+EBHvOk3yvcnxzDpgoZu8noOUSwOLUNza3xdDXcaX3G56Wrbw0LIA6qwdtZeE
+	 yd4Gj5CyP/vgcYcFol0psU85fKG8G95y0rzfSj35jd1TRy6O7fC0D1G7mQ/0k2TVR
+	 SeYZdR5W0eB3zpWkhJPjLewIwbdACPkwwTF9wUKotIEV7dX6wFfEJoEo96EAatjov
+	 7wxkUcn5Vysi5r2Miw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mf0BG-1rhvxm0Vbe-00gWKN; Thu, 07
+ Dec 2023 21:48:44 +0100
+Message-ID: <67069bf0-58d9-44d3-94ac-4cbc2647d447@gmx.de>
+Date: Thu, 7 Dec 2023 21:48:43 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="84DjwU6xjfumnT6L"
-Content-Disposition: inline
-In-Reply-To: <5b62afcb-254d-4dfc-8332-7979c62ea2c2@gmail.com>
-X-Cookie: Two is company, three is an orgy.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] hwmon: Add driver for Gigabyte AORUS Waterforce AIO
+ coolers
+Content-Language: en-US
+To: Aleksa Savic <savicaleksa83@gmail.com>, linux-hwmon@vger.kernel.org
+Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20231207122402.107032-1-savicaleksa83@gmail.com>
+ <ce3568c5-c35b-40b5-80f1-8334d1b3549b@gmx.de>
+ <f6522abb-885d-4476-bf27-5ee8b48138bd@gmail.com>
+From: Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <f6522abb-885d-4476-bf27-5ee8b48138bd@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:81m6qr5n2wi/45vDrfvBrgtzddgoNeb23aZ/edWnNoRvayYIdEg
+ OF5OdaVYEROH4WrDLXDDTbbJkrhgKPZxCY84OjWP/tDkMgmG6i8tlE82PlwayJLtGe2MWhY
+ H0OPp98u1xb3CxuG8KkEY07O3o03K2u54hs8Qe4TgkmaoGXaOagErmpD54deKDtgdAFox+g
+ B755s4uYQfPfJX+8cQpyw==
+UI-OutboundReport: notjunk:1;M01:P0:riQAvS79JTc=;WUYCzJoA3zXDwlHjK6hopcaQDOE
+ TCHTIL8gu/0fQzWbxWL3jwTj6xX3S+7y4UvfUxoyaoKCzFCzElsvA3wxibUUrI9R4dvSzR1/3
+ Mle85oLrI9p/Y3KRHtMKOfp1k7oibA1iuyVbSu9UB9IbitPhoO3UeCNFGBHgnattAmifRJ4J5
+ 28A8l+m/J+sfBSVGOh9Ri1MRGmcx9ECk0+RDAm6znPZ2sMoeGjW767ytA+gxLpVlqCjjj4ArF
+ DRLROB2mKgPrPZ8TsmfeVWhFpEI4ycdzmvEPsEuOUbmrMLGzOJqPEaxewHbR0xqtL2EPq64RY
+ HuCK09WOj2onJdC3KdGFfvrZa0xHKhvyNS47+Y/+sG+D7eNpYdyj1ObzkhTUWqewCAsxe4EB8
+ 1mb1ZFqiQ4X8c5tvwiJgP3HVc8MREmDso7U7JXtAhJ0EpJHwZlfWmBCTYyftxdoBYQSBSZ0MB
+ u6bFU1js22Dk+QFdpbboJ4nA82pgofvT0dlwfS15c8O9vxkm16g+bIuwUWqHVDxv8IbHlxei7
+ qLXtXY3I08BHw22RDqpE/+IArIbFZ7v36EPrxBYbUp4ZFLj4aJUPHoLTBjJIRNRnvxJ/YvgxX
+ Lk8BuDJpKyhsWYxQ9kTKnJPgfYT3rU2ET/1oT1ivYLZihraRXJtWvcEOKA5QpF10kMFpfUW80
+ MKh3oLhzYcaPQIqBSC47slE2exUr65/qAgGorpGDDOwek4TCdbcx3t8f157rRG6IyAHbIFi+P
+ tgquCz9B6C/x67PNRqEjDF//9S997W0hjFv4IJnrHUklmywDucEE4Kk2g4P14AbKvqZEyqBFY
+ xUAPrsGDeQQ3yz6VQVz25Gp6+I4+Puv+Km1hh7yd+0TocSvvy+hfydhFG7YTYCh3JFyAs3POe
+ bIeTQnHwcmmCkmui6HGdbg11VHuyoMtp5FQexAFj/W6ewL0Cc2xJems1CZXP405hZHiKm7HVp
+ j+s0UWZpoddTkRzmWhChxuCkcsQ=
 
+Am 07.12.23 um 21:04 schrieb Aleksa Savic:
 
---84DjwU6xjfumnT6L
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> On 2023-12-07 20:39:23 GMT+01:00, Armin Wolf wrote:
+>> Am 07.12.23 um 13:23 schrieb Aleksa Savic:
+>>
+> ...
+>
+>>> +
+>>> +static struct hid_driver waterforce_driver =3D {
+>>> +=C2=A0=C2=A0=C2=A0 .name =3D "waterforce",
+>>> +=C2=A0=C2=A0=C2=A0 .id_table =3D waterforce_table,
+>>> +=C2=A0=C2=A0=C2=A0 .probe =3D waterforce_probe,
+>>> +=C2=A0=C2=A0=C2=A0 .remove =3D waterforce_remove,
+>>> +=C2=A0=C2=A0=C2=A0 .raw_event =3D waterforce_raw_event,
+>>> +};
+>>> +
+>>> +static int __init waterforce_init(void)
+>>> +{
+>>> +=C2=A0=C2=A0=C2=A0 return hid_register_driver(&waterforce_driver);
+>>> +}
+>>> +
+>>> +static void __exit waterforce_exit(void)
+>>> +{
+>>> +=C2=A0=C2=A0=C2=A0 hid_unregister_driver(&waterforce_driver);
+>>> +}
+>>> +
+>>> +/* When compiled into the kernel, initialize after the HID bus */
+>>> +late_initcall(waterforce_init);
+>>> +module_exit(waterforce_exit);
+>> Hi,
+>>
+>> I think you could use the module_hid_driver() macro here.
+> As far as I'm aware, hwmon will get built before hid, so a late_initcall=
+()
+> is necessary for this to function when compiled as a built-in driver. Ot=
+her
+> HID drivers in hwmon also do this (see nzxt-smart2 for an example).
+>
+> Aleksa
+>
+Interesting, in this case forget about my suggestion above.
 
-On Thu, Dec 07, 2023 at 09:34:58PM +0100, Javier Carrasco wrote:
-> On 07.12.23 21:05, Mark Brown wrote:
+Armin Wolf
 
-> > This is very buggy.  A consumer should only disable a regulator if it
-> > itself enabled that regulator (or it *requires* an exclusive regulator
-> > which isn't a good fit here), and there's no guarantee that disabling a
-> > regulator will actually result in a power off.  Either the board might
-> > not physically or through constraints permit the state to change or
-> > another user may have enabled the regulator.  The driver needs to keep
-> > track of if it enabled the regulator and only disable it as many times
-> > as it enabled it.
-
-> The idea is actually that if alarms are required, an exclusive regulator
-> will be necessary to trigger power cycles and enter the command mode.
-
-There is a specific API for exclusive regulators which the driver is not
-using, and it's unconditionally doing the disable/enable cycle here.
-
-> In summary there would be two options: either a regulator is defined and
-> can be controlled to trigger the command mode or no regulator was
-> defined for this device and therefore no command mode is available i.e.
-> interrupts cannot be configured. That would be the case for example when
-> the supply is always on.
-
-The driver needs to be explicitly configured for this and have separate
-code paths for normal operation and operation where the supply can be
-bounced like this.  In neither code path should the supply be optional.
-Right now we don't have a mechanism for discovering optionally exclusive
-and enable/disablable supplies which is what the device needs, we could
-potentially add that since this does seem like a viable use case and we
-already have enough information in the DT to say if the supply matches
-the constraints.  Probably the two properties queryable separately.  If
-that API were added then the driver would do a normal regulator_get()
-then check if it has the capabilities it needs and either keep the
-supply on all the time (or possibly just during measurements?) or enable
-the alarm functionality.
-
---84DjwU6xjfumnT6L
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVyLp0ACgkQJNaLcl1U
-h9A0kwf6A9o+HV9MW3c5kq5qLVjTu0EmR00E8VExX9/QFePmhDWEVuPtI53Cky5I
-vrpgnVTh4FtB23ga32jy7qHH/TpZ7knjqL1f7/iWmJED6Nl3GRQEXullQwAJoV1X
-tdO3MjtjJ10YMB6CLdFE7LcNb5APUGAk46tpjigU4a8/Adkctw+G7DN9dJPDhH4U
-w8pSe5reBCM7eLpW3YROF3M2j6Ucq60cYlCymE7ijJkhvU+tYvSHIXPLdK53JHxa
-DRw75mqIKhSr/gMLpYq2QnyNkFzlr7YPoxTEVwp5IBbOXWbReoiOKvnx/zu4PwqF
-ovHn/RKfkkdo03p4ohncAz0eThNaZw==
-=5LYW
------END PGP SIGNATURE-----
-
---84DjwU6xjfumnT6L--
+>>> +
+>>> +MODULE_LICENSE("GPL");
+>>> +MODULE_AUTHOR("Aleksa Savic <savicaleksa83@gmail.com>");
+>>> +MODULE_DESCRIPTION("Hwmon driver for Gigabyte AORUS Waterforce AIO co=
+olers");
+>
