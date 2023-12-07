@@ -1,110 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F88242A9C;
-	Thu,  7 Dec 2023 20:05:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KsPhzS8o"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7B9DC433C8;
-	Thu,  7 Dec 2023 20:05:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701979527;
-	bh=ZuLoiw1NYaGVr+kvGugUqnXifo1hF2+hifnZiWIiLTE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KsPhzS8oX8ysFJbnZcJ+Sln6ssoSMvSW4666hoJMvzrpoBYgDKy876U+qPa+DO7lc
-	 wSYZ2KxMCbuRxto9EmMWEGrQEExy28T8b6C50EOyaxdadUImJ+1BGr9JB3vfrqRN2x
-	 6Nz77vSGqPDje88XjsYkH1VqdjkyOQi5NZLMNch7FlFjM50GHoQdfBZSZBY5YXtCS7
-	 hxdMGu+amX57xLlXgDWRBZa36KwIguVoXe49LdnuPcmbQ7CP5Zgm3d1ZymOAsmkUgM
-	 K1Fbdzlq4lXU6eQzoZsx+h1Q0J9ZJiUyF9P8oCc0EPPA4LFRW2NV08KZ7RriIpli9r
-	 7h4Hqx9UJZX/g==
-Date: Thu, 7 Dec 2023 20:05:21 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Cc: Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Liam Girdwood <lgirdwood@gmail.com>, Rob Herring <robh@kernel.org>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v3 5/5] hwmon: Add support for Amphenol ChipCap 2
-Message-ID: <04475f91-bdce-4677-894c-74c2bb8233d9@sirena.org.uk>
-References: <20231020-topic-chipcap2-v3-0-5b3bb50a5f0b@gmail.com>
- <20231020-topic-chipcap2-v3-5-5b3bb50a5f0b@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hSTGjmM5"
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4FE171C;
+	Thu,  7 Dec 2023 12:35:03 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-40c2718a768so13996305e9.0;
+        Thu, 07 Dec 2023 12:35:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701981302; x=1702586102; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GSDMwDwuR5idPA4yAqUVjkE38lvDI/clGFKdPtgI5Ao=;
+        b=hSTGjmM5V7ARJkE+xO86aRZjuIiNKG8Oa36foC9lTcR820xqFLgoISy4ER2fh3l+y8
+         UCxiiqi3eN69XhurugL9BZaBbYYvsJmmfCsnQuYtInSL4bDPjJa0xS3pP3dObhEqGDQD
+         7xX7o/tquBMWtoq1Rw4FBVh0T49l0w4piG+IS3Uo3njAp/hOdHCUATHIuoBGBPWx1aw5
+         czWJ1mFncHm3tvTi6+73MPGnldYkFrt3uVnCdvGXfX3X6aAQAR2ReVjqzwOvhnUktsEm
+         4Ifl4Z8mr22o433C4lIPodyiw7El9zJRsXaTMqLDe4xPhYh1N1rR/lKZMlLC119whSFf
+         NoVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701981302; x=1702586102;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GSDMwDwuR5idPA4yAqUVjkE38lvDI/clGFKdPtgI5Ao=;
+        b=bGk9Bm5B6gSUiLks0sJQzp83C+Kiq9Zss8dp4Py4456wf1cD9ftbsgZISu+Obgn4Sd
+         koJKQxkqz8DpwFLl7l8CodmAsTBOYa/d2MuVe5tjwWY9D81u3J5zbHcZibeScUE02wdN
+         m4BZe3QBSdolIxWwsqi16ZtswFpzuF0ybpsit+YDNHt1ueLvEAbdEcqDDJ3P2wKCD84t
+         NO73HWHvlGwG8JVy/FS+TBYxpRiI71xC/Wx3lNJEpAHcKSxQT4LW7njw8yNx+vcg03s0
+         KsO7wR3QNLvMJJMM4edITsqIE09ar9mhw0Q6nZA3Fu1U8rcMQksm0w67pJyq0hZD2PmR
+         88IQ==
+X-Gm-Message-State: AOJu0YybnJEbEsYYRdP1bm+MHWeymhZBtf4deneLdJgCK0JOf3NGunK9
+	DFsUET0rrtbFYAUk8bA6zXI=
+X-Google-Smtp-Source: AGHT+IFsY0uVZUeLGUIGhIhqlu+QFmzoZPGoy6xXNQq6DfeECVKZ8fqAbkAL3rcCWHG3neVjjNFw0g==
+X-Received: by 2002:a7b:cbc6:0:b0:40b:5e22:98e with SMTP id n6-20020a7bcbc6000000b0040b5e22098emr2269971wmi.125.1701981301642;
+        Thu, 07 Dec 2023 12:35:01 -0800 (PST)
+Received: from ?IPV6:2a02:8389:41cf:e200:18e7:4dee:8ee0:df02? (2a02-8389-41cf-e200-18e7-4dee-8ee0-df02.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:18e7:4dee:8ee0:df02])
+        by smtp.gmail.com with ESMTPSA id u21-20020a05600c139500b00405d9a950a2sm2964254wmf.28.2023.12.07.12.35.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Dec 2023 12:35:01 -0800 (PST)
+Message-ID: <5b62afcb-254d-4dfc-8332-7979c62ea2c2@gmail.com>
+Date: Thu, 7 Dec 2023 21:34:58 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="skxAi3lmk/Z+j09s"
-Content-Disposition: inline
-In-Reply-To: <20231020-topic-chipcap2-v3-5-5b3bb50a5f0b@gmail.com>
-X-Cookie: Two is company, three is an orgy.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 5/5] hwmon: Add support for Amphenol ChipCap 2
+To: Mark Brown <broonie@kernel.org>
+Cc: Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
+ Liam Girdwood <lgirdwood@gmail.com>, Rob Herring <robh@kernel.org>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20231020-topic-chipcap2-v3-0-5b3bb50a5f0b@gmail.com>
+ <20231020-topic-chipcap2-v3-5-5b3bb50a5f0b@gmail.com>
+ <04475f91-bdce-4677-894c-74c2bb8233d9@sirena.org.uk>
+Content-Language: en-US
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+In-Reply-To: <04475f91-bdce-4677-894c-74c2bb8233d9@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 07.12.23 21:05, Mark Brown wrote:
+> On Thu, Dec 07, 2023 at 08:44:55PM +0100, Javier Carrasco wrote:
+> 
+>> +       if (regulator_is_enabled(data->regulator)) {
+>> +               ret = regulator_disable(data->regulator);
+>> +               if (ret < 0)
+>> +                       return ret;
+>> +
+>> +               msleep(CC2_POWER_CYCLE_MS); /* ensure a clean power cycle */
+>> +       }
+>> +
+>> +       ret = regulator_enable(data->regulator);
+>> +       if (ret < 0)
+>> +               return ret;
+> 
+> This is very buggy.  A consumer should only disable a regulator if it
+> itself enabled that regulator (or it *requires* an exclusive regulator
+> which isn't a good fit here), and there's no guarantee that disabling a
+> regulator will actually result in a power off.  Either the board might
+> not physically or through constraints permit the state to change or
+> another user may have enabled the regulator.  The driver needs to keep
+> track of if it enabled the regulator and only disable it as many times
+> as it enabled it.
+The idea is actually that if alarms are required, an exclusive regulator
+will be necessary to trigger power cycles and enter the command mode.
 
---skxAi3lmk/Z+j09s
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+In summary there would be two options: either a regulator is defined and
+can be controlled to trigger the command mode or no regulator was
+defined for this device and therefore no command mode is available i.e.
+interrupts cannot be configured. That would be the case for example when
+the supply is always on.
+> 
+> For this usage with trying to bounce the power of the regulator you can
+> keep track of the actual power state of the supply by listening to
+> notifications, and should possibly just keep the regulator disabled when
+> it's not actively in use (if no alarm is active or measurement in
+> progress?).
+> 
+>> +	data->regulator = devm_regulator_get_optional(dev, "vdd");
+> 
+> Does the device *really* work without power?  The datasheet appears to
+> suggest that the device has a non-optional supply Vdd
+> 
+>    https://f.hubspotusercontent40.net/hubfs/9035299/Documents/AAS-916-127J-Telaire-ChipCap2-022118-web.pdf
+> 
+The vdd is a non-optional supply and the device cannot run without it.
+What is optional is the controllable regulator to enter the command
+window. Hence why I used _optional() functions.
 
-On Thu, Dec 07, 2023 at 08:44:55PM +0100, Javier Carrasco wrote:
+I could ban any use without a controllable regulator to make things
+simpler, but if no alarms are required, the device should work fine
+without command mode. Either way the driver must have some control over
+a regulator for the mentioned command window.
+> (there's also a Vcore pin but that appears to be for connecting a
+> decoupling capacitor rather than a supply).
+> 
+> In general _optional() should only be used for supplies which may be
+> physically absentIn the end I need a way to control a regulator to enter in command mode,
+but still offering measurement functionality if there is no regulator to
+control.
+The current approach is that there must be a supply, but the regulator
+might be controllable or not.
 
-> +       if (regulator_is_enabled(data->regulator)) {
-> +               ret = regulator_disable(data->regulator);
-> +               if (ret < 0)
-> +                       return ret;
-> +
-> +               msleep(CC2_POWER_CYCLE_MS); /* ensure a clean power cycle */
-> +       }
-> +
-> +       ret = regulator_enable(data->regulator);
-> +       if (ret < 0)
-> +               return ret;
-
-This is very buggy.  A consumer should only disable a regulator if it
-itself enabled that regulator (or it *requires* an exclusive regulator
-which isn't a good fit here), and there's no guarantee that disabling a
-regulator will actually result in a power off.  Either the board might
-not physically or through constraints permit the state to change or
-another user may have enabled the regulator.  The driver needs to keep
-track of if it enabled the regulator and only disable it as many times
-as it enabled it.
-
-For this usage with trying to bounce the power of the regulator you can
-keep track of the actual power state of the supply by listening to
-notifications, and should possibly just keep the regulator disabled when
-it's not actively in use (if no alarm is active or measurement in
-progress?).
-
-> +	data->regulator = devm_regulator_get_optional(dev, "vdd");
-
-Does the device *really* work without power?  The datasheet appears to
-suggest that the device has a non-optional supply Vdd
-
-   https://f.hubspotusercontent40.net/hubfs/9035299/Documents/AAS-916-127J-Telaire-ChipCap2-022118-web.pdf
-
-(there's also a Vcore pin but that appears to be for connecting a
-decoupling capacitor rather than a supply).
-
-In general _optional() should only be used for supplies which may be
-physically absent.
-
---skxAi3lmk/Z+j09s
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVyJYAACgkQJNaLcl1U
-h9ATSwf/VyDbhFanh416hXAS3NUyE1fY08GL8xlMZYwm6c+DHomBU3JouF6321Vc
-l3r+wim6gRhaVqclmbACV9Tew2hRz3UpOWzWt02GcYoR6UmMz/AvVMopvPVtIZdW
-ew+dcD+8L8NC1Ivl6chszVD01u0CHHPFdmVlvkASkKVhKXKtC3DdZm3E4aopZSgf
-PSS1iGmWasrxCpNgfet5ea/TIdlQlMEWwGkXrqMbJXEXO5VazmNMAhOsnwG2pB2e
-1gdcZKJtFRPl3D3HJ/BruMY0IcZAFMAs5F0MnR6Oy04EWxi8tq7AWsC1SpYbAiZ3
-mdJ8HCV04qAIPFr1iWDLBmyWvW1hAw==
-=hTAC
------END PGP SIGNATURE-----
-
---skxAi3lmk/Z+j09s--
+Thank you for your feedback and best regards,
+Javier Carrasco
