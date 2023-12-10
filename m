@@ -1,138 +1,100 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FePIhVRc"
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3E0123;
-	Sat,  9 Dec 2023 15:25:21 -0800 (PST)
-Received: by mail-ot1-x329.google.com with SMTP id 46e09a7af769-6d9f7b3de20so981245a34.2;
-        Sat, 09 Dec 2023 15:25:21 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dpqe82ix"
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB29A9;
+	Sat,  9 Dec 2023 19:59:32 -0800 (PST)
+Received: by mail-il1-x133.google.com with SMTP id e9e14a558f8ab-35d725ac060so14996775ab.2;
+        Sat, 09 Dec 2023 19:59:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702164321; x=1702769121; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=FJKX/IhvX5i6ssR0lDIL/p7k2gPRLBjechmn2E2C/Ys=;
-        b=FePIhVRcQizNTapsJ6RHIQasR2kwXBxNlVG0JU6s+qRVVrn+PUXrhz0lwJ30qGISoo
-         BmwPA6XewMnsVFboyxzLTsfBvkBdoxoBIx9/ynTak1DqyBASUnz+jD1Ce7wkvnQNozA0
-         B1oxwEtqrRkaH+f4qjUj8MizDy4f8rntdwrg/Ia06/3pB9aSgsw+EUuCwLTQQ5CR8oi7
-         3GnH4TcWkS9KbZBjh7ZDfH+MD9GPfccS2NKKJlDXTOiDgb1j+e/yB4u1gx2UVUDblFjr
-         ll3GcKnrD7uEbFP/P+fPlHGqRXGSH3Ct+svsfuEbw3I0lu3umuXuJHH+L/fNHKbOO4BH
-         TOZQ==
+        d=gmail.com; s=20230601; t=1702180771; x=1702785571; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=84cInsubYIer0iSHh7fFONzX0zWNfmSdIBRyKoPJTkI=;
+        b=Dpqe82ixxSSlYbhIzV4rNaEDkOnIiiRPf7jpFsAcHgDwxCr4Ms2JSc0eRfQ7dXDu5d
+         bw32ai1gAryHH0ZG+d3fEp6CNoR9WwQArNNtkv3qTKMLFDTvXm0z6Hn7EihQrdKE/jR4
+         NU8b+Akh0wOOqzkT3vvftHIbvllFqQc7jOtGd2V1WhEtrZzQKJbHPuWXKN0srVrSHdaw
+         HcDjyMUHzmcTibFYvWtEVVKZVd+kGzfx7rmx6EwuqQdRBYywPXrlG/aXFsVfJGMLlfRL
+         Z2byYxb9H1kaz53izhAZv1INArcTOb00Or6jAwxWbGqt1+52pMsrLUjgD1if6kXGB/22
+         PYcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702164321; x=1702769121;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FJKX/IhvX5i6ssR0lDIL/p7k2gPRLBjechmn2E2C/Ys=;
-        b=jlycDfykNkds3WIj899PPlSiJOFVUxV0u/noBzkf/Jy1ln79Q5WeyfyS5dU3eZUwVC
-         i7bpJxklTOSamPQN49ybcyIV9t3aomHTY54aftrvkaepEdQXcYFbsbC5dr/wz1JVerlU
-         MRW3HNUA3HLgDD9FL+o0Ti0fiSIYBoZcZO6m1fxCOTRi1yw7tkP7XiluM+TTuyTDCtB9
-         8/wO7JaY2QMK+2YoXBPCvkxrqqpQNTyxmy5aI4VhCTOo1qMP/aISngvUEDeFt92bzGFY
-         kLGklxb3G6kDaCT9RHsOEutZmHonbwnAybqqrzQ5edexPtruSGquf6roSXQsYjkw9QdK
-         ImVw==
-X-Gm-Message-State: AOJu0Yyj1QfYYn55qq+QeDWgbxS6lv+Q04/DU5dnJeekGmXWYjgczdrh
-	cYwffzexWHDKUW5qaJ7f7hCZgidiHYo=
-X-Google-Smtp-Source: AGHT+IH8uUR9H3V5xw4WHncTthZ4sDKF0a/KF3+XI6egvvBsGaGjhtzyU7NyZpBEymrObh2YoFnlOQ==
-X-Received: by 2002:a9d:685a:0:b0:6d9:ebb5:6b0e with SMTP id c26-20020a9d685a000000b006d9ebb56b0emr2830805oto.13.1702164321085;
-        Sat, 09 Dec 2023 15:25:21 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o8-20020a9d6d08000000b006d8017dcda9sm960209otp.75.2023.12.09.15.25.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 09 Dec 2023 15:25:20 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <1c35ac10-2768-4d9b-aad8-091ea17ee92d@roeck-us.net>
-Date: Sat, 9 Dec 2023 15:25:18 -0800
+        d=1e100.net; s=20230601; t=1702180771; x=1702785571;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=84cInsubYIer0iSHh7fFONzX0zWNfmSdIBRyKoPJTkI=;
+        b=CE9U9prywbf4ws35fDREq5qeTXLrYc/s58IqiqRPRtnBiftMULtEsaNTUdlT9IN0mi
+         p0eTaV64nNpTjeqjXvH+yVy5/zJB+RX9A87P10wxmKDVSdye0iVzJviL0BG8RlnBZx8u
+         GSstTGkHFS3W3kWSW0qULyul9DcXxuSey7Q8J1kIe6h6wmvRRHm3MwgdfA8MFtHd0Cjl
+         Ix5bav6GfWwhX/ajw2JTcL/eqweW+CPyrvXbF77LCWLTZla1eXENbnyPWfbr4Mr87DWX
+         Izx/T5TKk2QBJLHc1O6CmCKZpFkSsvCMmdR1V63UXHevATWRVpDLw0fRLN0VCFvsm0OV
+         5m2g==
+X-Gm-Message-State: AOJu0YxYMWa48ePM9hNZJCYCfEbni4S4bOF/UBHa1fCesRuAlQIKO9YJ
+	sFa0JgRKtpKPXxtbJO15jbu6t3PAA2A=
+X-Google-Smtp-Source: AGHT+IH9F5XvBInEJBWDJV2re58BWPH91w8i++zb8S4UYFPdHM7W/4ZmjNF8Wa+XCmRN3R3hwoJNSg==
+X-Received: by 2002:a05:6e02:1845:b0:35d:5667:c42e with SMTP id b5-20020a056e02184500b0035d5667c42emr4576271ilv.2.1702180771158;
+        Sat, 09 Dec 2023 19:59:31 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:9082:8aa4:377c:de99])
+        by smtp.gmail.com with ESMTPSA id b6-20020a170902ed0600b001d060bb0582sm4129422pld.165.2023.12.09.19.59.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 09 Dec 2023 19:59:30 -0800 (PST)
+Date: Sat, 9 Dec 2023 19:59:26 -0800
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To: Sean Young <sean@mess.org>
+Cc: linux-media@vger.kernel.org, linux-pwm@vger.kernel.org,
+	Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Javier Martinez Canillas <javierm@redhat.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Support Opensource <support.opensource@diasemi.com>,
+	Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Mark Gross <markgross@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Daniel Thompson <daniel.thompson@linaro.org>,
+	Jingoo Han <jingoohan1@gmail.com>, Helge Deller <deller@gmx.de>,
+	Jani Nikula <jani.nikula@intel.com>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-fbdev@vger.kernel.org
+Subject: Re: [PATCH v6 1/4] pwm: rename pwm_apply_state() to
+ pwm_apply_might_sleep()
+Message-ID: <ZXU3nsNoQxXKUF4F@google.com>
+References: <cover.1701248996.git.sean@mess.org>
+ <37090c1d8d8f42f1e12fa84942027d995189a99e.1701248996.git.sean@mess.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Added support for Zen 3 based AMD Threadrippers (5000WX
- series). They were previously under Zen3 SP models, but this was incorrect.
-Content-Language: en-US
-To: bindkeys@gmail.com, Clemens Ladisch <clemens@ladisch.de>,
- Jean Delvare <jdelvare@suse.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20231209231545.1272806-1-bindkeys@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20231209231545.1272806-1-bindkeys@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <37090c1d8d8f42f1e12fa84942027d995189a99e.1701248996.git.sean@mess.org>
 
-On 12/9/23 15:15, bindkeys@gmail.com wrote:
-> From: Jami Kurki <bindkeys@gmail.com>
-> 
-> Signed-off-by: Jami Kurki <bindkeys@gmail.com>
+On Wed, Nov 29, 2023 at 09:13:34AM +0000, Sean Young wrote:
+>  drivers/input/misc/da7280.c                   |  4 +--
+>  drivers/input/misc/pwm-beeper.c               |  4 +--
+>  drivers/input/misc/pwm-vibra.c                |  8 +++---
 
-This is not an appropriate patch subject and description.
+Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com> # for input
 
-Please follow Documentation/process/submitting-patches.rst,
-"The canonical patch format".
+Thanks.
 
-Thanks,
-Guenter
-
-> ---
->   drivers/hwmon/k10temp.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-> index bae0becfa24b..b5738dd8d442 100644
-> --- a/drivers/hwmon/k10temp.c
-> +++ b/drivers/hwmon/k10temp.c
-> @@ -454,7 +454,8 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->   		data->is_zen = true;
->   
->   		switch (boot_cpu_data.x86_model) {
-> -		case 0x0 ... 0x1:	/* Zen3 SP3/TR */
-> +		case 0x0 ... 0x1:	/* Zen3 SP3 */
-> +		case 0x8:		/* Zen3 TR */
->   		case 0x21:		/* Zen3 Ryzen Desktop */
->   		case 0x50 ... 0x5f:	/* Green Sardine */
->   			data->ccd_offset = 0x154;
-
+-- 
+Dmitry
