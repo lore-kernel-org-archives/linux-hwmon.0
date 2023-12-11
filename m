@@ -1,96 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 112284E61B;
-	Mon, 11 Dec 2023 17:43:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pBGWQZBu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D4E9C433CA;
-	Mon, 11 Dec 2023 17:43:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702316609;
-	bh=XO5UnE3l9FoJonkWKncREOJcAIBzPv6VU7wsH1kOpxM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=pBGWQZBu3OtoFtjr3cSc29srAxT/KHzA081G8QCNhH9Dha5xJWMwCZ//QqbRAy4Wg
-	 cl/vLS7ULMNtY/bVFEgE6Ub8DY8LFGN3E/CsKLqMxpIOj6NjaPMDEb1FzjswlG++hn
-	 6+JYb+gsKdnA/z3vNNLxwsQK+Ne+Betq0yHK1LhkMunfBMRZdyY4vTVOcqKH1DBFGL
-	 DrWZ640hjOioGS+/41LrmWYW4Mwo9tSJXFeQ7cKHOoVjljaSMW/2LEHy04jyMBYeJe
-	 w0l9OLMZ1DyrvpzoIelVA88VjbAYbzP36dTAMzH7pXwT+4YTtJh1XsJqfWSUMA7FVs
-	 MeLyCIyPYZkGA==
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2c9e9c2989dso63235771fa.0;
-        Mon, 11 Dec 2023 09:43:29 -0800 (PST)
-X-Gm-Message-State: AOJu0Yy2+BTDVOXBZExySzOoMvQAtmqCB/DB9ntcJDuUGcrS4GCeMW2H
-	xZ9EmLxe/QeA2dJUzm25vtOMoH204msdz76Rzw==
-X-Google-Smtp-Source: AGHT+IGc6D0UVRfS6W81ZqHgRyau/738i7lc5EmYgEf+WLZ/K6dTwMaHtj36ALgXX389kp1ZtWpPh9DW0XRQKLSG3HA=
-X-Received: by 2002:a05:6512:b9c:b0:50c:180:2162 with SMTP id
- b28-20020a0565120b9c00b0050c01802162mr2102140lfv.99.1702316607874; Mon, 11
- Dec 2023 09:43:27 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=ixit.cz header.i=@ixit.cz header.b="AMW4dSSJ"
+Received: from ixit.cz (ip-89-177-23-149.bb.vodafone.cz [89.177.23.149])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8614CEA;
+	Mon, 11 Dec 2023 11:29:02 -0800 (PST)
+Received: from [10.0.0.200] (unknown [10.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by ixit.cz (Postfix) with ESMTPSA id B73FA16328A;
+	Mon, 11 Dec 2023 20:28:59 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+	t=1702322939;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=Z90PLYnaFX3ySlFLA1f23BlCKMKpgm6Egi23qeHCp2g=;
+	b=AMW4dSSJmbmVq97nY7JTDd4SnmFYXJVGip4gC8HT0bqioap722xLeUHhv+ZOhmEwwPyg5L
+	N+PabJByXJfjNSCna3999VFseyJEgSu5/ZHHzKP00J1eUM728VTgfoJTLQYnOj55h1aDMy
+	5jurxktswwxh0ggaM1EvYUZPeLG7ftc=
+Message-ID: <9b67ad11-c55c-4695-9439-2a9c5d6c1e45@ixit.cz>
+Date: Mon, 11 Dec 2023 20:28:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231205074723.3546295-1-chou.cosmo@gmail.com> <20231205074723.3546295-4-chou.cosmo@gmail.com>
-In-Reply-To: <20231205074723.3546295-4-chou.cosmo@gmail.com>
-From: Rob Herring <robh+dt@kernel.org>
-Date: Mon, 11 Dec 2023 11:43:15 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+xPAvQoUX=Td4QgbbL7Xhs-3hj8pQLCdOj6fDvCz0_ug@mail.gmail.com>
-Message-ID: <CAL_Jsq+xPAvQoUX=Td4QgbbL7Xhs-3hj8pQLCdOj6fDvCz0_ug@mail.gmail.com>
-Subject: Re: [PATCH 3/3] hwmon: Add driver for Astera Labs PT516XX retimer
-To: Cosmo Chou <chou.cosmo@gmail.com>
-Cc: jdelvare@suse.com, linux@roeck-us.net, krzysztof.kozlowski+dt@linaro.org, 
-	conor+dt@kernel.org, corbet@lwn.net, heiko@sntech.de, 
-	jernej.skrabec@gmail.com, macromorgan@hotmail.com, linus.walleij@linaro.org, 
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	cosmo.chou@quantatw.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH v4 1/3] dt-bindings: arm: hwmon: gpio-fan: Convert txt
+ bindings to yaml
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Rob Herring <robh@kernel.org>,
+ linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20231209171653.85468-1-david@ixit.cz>
+ <08ecf10d-03c4-4025-8809-475fb5ee76a9@roeck-us.net>
+Content-Language: en-US
+From: David Heidelberg <david@ixit.cz>
+Autocrypt: addr=david@ixit.cz; keydata=
+ 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
+In-Reply-To: <08ecf10d-03c4-4025-8809-475fb5ee76a9@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Dec 5, 2023 at 1:49=E2=80=AFAM Cosmo Chou <chou.cosmo@gmail.com> wr=
-ote:
+Nothing, as I was working on others ARM-related bindings, it just 
+sneaked in. Good catch.
+
+Should I resend with adjusted name or can this by done by quick adjust 
+before the merge?
+
+David
+
+On 11/12/2023 15:34, Guenter Roeck wrote:
+> On Sat, Dec 09, 2023 at 06:15:39PM +0100, David Heidelberg wrote:
+>> Convert fan devices connected to GPIOs to the YAML syntax.
+>>
+>> Signed-off-by: David Heidelberg <david@ixit.cz>
+> I keep wondering: What does this have to do with arm (in the subject) ?
 >
-> This driver implements support for temperature monitoring of Astera Labs
-> PT5161L series PCIe retimer chips.
->
-> This driver implementation originates from the CSDK available at
-> Link: https://github.com/facebook/openbmc/tree/helium/common/recipes-lib/=
-retimer-v2.14
-> The communication protocol utilized is based on the I2C/SMBus standard.
->
-> Signed-off-by: Cosmo Chou <chou.cosmo@gmail.com>
-> ---
->  Documentation/hwmon/index.rst   |   1 +
->  Documentation/hwmon/pt516xx.rst |  48 +++
->  MAINTAINERS                     |   8 +
->  drivers/hwmon/Kconfig           |  10 +
->  drivers/hwmon/Makefile          |   1 +
->  drivers/hwmon/pt516xx.c         | 648 ++++++++++++++++++++++++++++++++
->  6 files changed, 716 insertions(+)
->  create mode 100644 Documentation/hwmon/pt516xx.rst
->  create mode 100644 drivers/hwmon/pt516xx.c
+> Guenter
 
-> diff --git a/drivers/hwmon/pt516xx.c b/drivers/hwmon/pt516xx.c
-> new file mode 100644
-> index 000000000000..824798559fe1
-> --- /dev/null
-> +++ b/drivers/hwmon/pt516xx.c
-> @@ -0,0 +1,648 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +
-> +#include <linux/debugfs.h>
-> +#include <linux/delay.h>
-> +#include <linux/err.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/of_device.h>
+-- 
+David Heidelberg
 
-You probably don't need this header and the implicit includes it makes
-are dropped now in linux-next. Please check what you actually need and
-make them explicit.
-
-Rob
