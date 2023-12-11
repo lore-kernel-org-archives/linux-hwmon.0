@@ -1,22 +1,22 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A712358A9;
-	Mon, 11 Dec 2023 13:57:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C28E1F60B;
+	Mon, 11 Dec 2023 14:00:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j4IJmLAs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECAAFC433CC;
-	Mon, 11 Dec 2023 13:57:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NL+KGM28"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AEEAC433C9;
+	Mon, 11 Dec 2023 14:00:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702303049;
-	bh=Xzk6QwB/lWLi74oIBRlDiOFUCFUkIl/uQUB+iJ/xC+Y=;
+	s=k20201202; t=1702303234;
+	bh=V0LlhXdpNiG0pJ5YJinIlfbudaIGy8VzuK3rddu039Y=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=j4IJmLAs2nPklNIGu5nayf/8RQxKT+PLfInobcRnD23Mvew4xnJp6GSN5CytU0Ni+
-	 +gbsevk31IzuAYwfsLKuF4WyiDYVRyZUdsPmL9bPphmIWCpvWtnFlmVE5B4Qe6eAqs
-	 91R+o3Ha6cJeDt5jzgy32y59msx6lAe1UlBUt+CblRpQbUKldStYhDZ8s22cUiI77R
-	 i79eSmvRpA3BUrCeslQxlDhXHeVvRwwV4O100jeD00WbxX+UrfKiQfQ9aZvJg7wjlA
-	 TOEHd4yWC9zkE7yfmmodMymjN0CqZ4woCzm/Z3uCEHB6qPBPklaUNJ+4OEPctYZLdr
-	 MKgDpz3oLvdsg==
+	b=NL+KGM28eUDxSiO4IGCnl2sO5JA/cY4jq3qSgEIFHJwV4towevdpa/NUJWqKpdCDW
+	 Itwg3bMH12YvM3I2sdMDwc3aKCYx+4XVNk7HiyizH9EGr0g2pJeLUyJsjqRQ7nAs+r
+	 35DkOg8PwuCjE9/w7moX3bHPQQdHE4ZukDw5syS2lodfw67JY8zRn6K74QiPz2R9hQ
+	 /CDUQqMKV2Pc0BjrG4aq6WLRsbOihN6pUOema4LWVJSj4RAr9ZSWwmMMVmSX5arlkz
+	 4zX8AO9mM1+HOFBpOyHWJeRDso9l/xRUQrteZjzHqhfViY/hHbysgUR/AtgFC9xsnX
+	 6qrk9Mq0b16hg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -26,12 +26,12 @@ Cc: Armin Wolf <W_Armin@gmx.de>,
 	wilken.gottwalt@posteo.net,
 	jdelvare@suse.com,
 	linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 28/29] hwmon: (corsair-psu) Fix probe when built-in
-Date: Mon, 11 Dec 2023 08:54:12 -0500
-Message-ID: <20231211135457.381397-28-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 19/19] hwmon: (corsair-psu) Fix probe when built-in
+Date: Mon, 11 Dec 2023 08:57:53 -0500
+Message-ID: <20231211135908.385694-19-sashal@kernel.org>
 X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231211135457.381397-1-sashal@kernel.org>
-References: <20231211135457.381397-1-sashal@kernel.org>
+In-Reply-To: <20231211135908.385694-1-sashal@kernel.org>
+References: <20231211135908.385694-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -40,7 +40,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.66
+X-stable-base: Linux 5.15.142
 Content-Transfer-Encoding: 8bit
 
 From: Armin Wolf <W_Armin@gmx.de>
@@ -64,10 +64,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 17 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-index 2210aa62e3d06..ec7f27a6ce016 100644
+index 14389fd7afb89..ae983e715110e 100644
 --- a/drivers/hwmon/corsair-psu.c
 +++ b/drivers/hwmon/corsair-psu.c
-@@ -837,7 +837,23 @@ static struct hid_driver corsairpsu_driver = {
+@@ -808,7 +808,23 @@ static struct hid_driver corsairpsu_driver = {
  	.reset_resume	= corsairpsu_resume,
  #endif
  };
