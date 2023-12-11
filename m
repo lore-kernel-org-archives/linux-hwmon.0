@@ -1,134 +1,94 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YxVRi77t"
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA214D0;
-	Mon, 11 Dec 2023 11:42:11 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1d0a7b72203so42640855ad.2;
-        Mon, 11 Dec 2023 11:42:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702323731; x=1702928531; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=B8Nrxh5KFaB53RrFC7+uu6+AWVDGPPyGb9UygQv+cfo=;
-        b=YxVRi77ttGS0KjUbhQK6pTsfKfFtTZvbY5nPwZZiScu7ArhHaytZwY17lnZ8rtmDbx
-         VWS5AyRiVixWt/grsHWkNrInQBrMamEzfbF8PU1hfsM2E3FoMT1tjgXKdgG5LldndxsC
-         qoBYRQbdcu0BtH1BeooRfSYO9wqVhUPenvQ54NN4o62iW6sxgHLmysTkEcth6NvjUSSY
-         G+9dNa8Ox3/tkoV5SbS9+nspdJ7fri1dyNNm+JQCaeQvvplApsDDNEhiNXO5Ylcmpezg
-         HntbixLLAT1WTAe5+lhepp+lG9i9hfjNM7GYWSulxXGEzZ7Qn8nVKWBsk3a+6aCgsdUK
-         Gmcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702323731; x=1702928531;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=B8Nrxh5KFaB53RrFC7+uu6+AWVDGPPyGb9UygQv+cfo=;
-        b=GgWhwxav0QABoZdMJLI37ih6tY+mZiMasqzMIm46FhAQqYxm63ngRVJQnNU2gDDs86
-         88f2zPQYj+h/4do9LYTj+1y91HTPuEin981O6bCLfkaiNL6EBQm9zGpMwWY8bfCfNbLC
-         Oum2Q5VHiin9Xatgja0SMR/P559iaEAMfvpO+8HJ4YJGcP4CKbJqhRB12CDv3om20QjT
-         zdsE7vcoxNmNV3ErlhSEpOi2ZZDAp/EPj0MDv3KgHKg03/hAh1ctM86eDfNPZ+MRYUuZ
-         RK8bXNWBrcqKhBJQHKCOjd6MvFXwzxxnxEGR31ODaR3VhxRxuOWyXORMPevhXG5u6a7x
-         tO3Q==
-X-Gm-Message-State: AOJu0Yy+14lwqdk+MUR/6n1s1eU0hAVM3aLbu4SWI6yvqo5ofoQEeG2u
-	6I7rBc7bKXTt8Wcss9yZ3+kEh0m/qUM=
-X-Google-Smtp-Source: AGHT+IE1J1kcAjkwLeIB1dR6s+RZsjtXDy6CxgSIzm6Q+ds5pY4Nnxsc6PzZpXIGvL0pIAqPnPAOPQ==
-X-Received: by 2002:a17:90a:578b:b0:286:c37f:d1b1 with SMTP id g11-20020a17090a578b00b00286c37fd1b1mr3739637pji.41.1702323731328;
-        Mon, 11 Dec 2023 11:42:11 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g5-20020a17090a128500b00262eb0d141esm7179428pja.28.2023.12.11.11.42.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Dec 2023 11:42:10 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b327d7e4-35fb-4b1e-bde2-267bba918df6@roeck-us.net>
-Date: Mon, 11 Dec 2023 11:42:09 -0800
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="TjPZ8Xow"
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E68DC8;
+	Mon, 11 Dec 2023 13:02:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+	t=1702328533; x=1702933333; i=w_armin@gmx.de;
+	bh=r5JwhE7WVnOi0zL1pvBnZD8RDseYzabf8g49jVHn60k=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+	b=TjPZ8XowpffTga7TPKfRglvgWbusZV6t+GeMi02o2ijZsBOXHeLllYIUj2SzI18m
+	 +FvAlID7zEXDKrKB1NCxRBw8DH/TF7610gaJbQZTtHvfr1FOsLZEq00BipxEfsmgL
+	 J44HKU2OccCHVvgiKq9SxCxW1FoADIT51rXVoe9rBek2zG6LIMpQ7glwvqcNSm2nG
+	 euENf2JdTsGEo28007zoI+FlqMxFlxk8rBetYxwj5F/+hnR3Z7POs33y1851mo6Td
+	 CrHZ9bRjRbPVz6I6tf23DbcRpi2QZGX3snl7WUJeZ6/lamX/Qn+w2FzZgQY0CowJ4
+	 O7MMBKa0G9DB/zprQQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from mx-amd-b650.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1MEm27-1r0un00yU7-00GFIu; Mon, 11 Dec 2023 22:02:13 +0100
+From: Armin Wolf <W_Armin@gmx.de>
+To: clemens@ladisch.de
+Cc: jdelvare@suse.com,
+	linux@roeck-us.net,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] hwmon: (k10temp) Add support for AMD Family 19h Model 8h
+Date: Mon, 11 Dec 2023 22:02:06 +0100
+Message-Id: <20231211210206.11060-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/3] dt-bindings: arm: hwmon: gpio-fan: Convert txt
- bindings to yaml
-Content-Language: en-US
-To: David Heidelberg <david@ixit.cz>
-Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Rob Herring <robh@kernel.org>,
- linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20231209171653.85468-1-david@ixit.cz>
- <08ecf10d-03c4-4025-8809-475fb5ee76a9@roeck-us.net>
- <9b67ad11-c55c-4695-9439-2a9c5d6c1e45@ixit.cz>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <9b67ad11-c55c-4695-9439-2a9c5d6c1e45@ixit.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:RbIggH91CFz/XAJwNFKyhG5mZPwntsqz+9ypAA9HPaIqGhpBL0T
+ 08P3t2gRNu/jk/B556BDzdXSeL+HolRF88fQwtpT5GPMaeN1wDaXcl3ZnFZpDYwgVKIUucV
+ zgPOipxbT6O1hGI1Ru9w8e6x0CiVfEkBPGKPsiXltFm0LOy0E534iYYf9Haxx+/RISNV81f
+ fekaXLqyK8H+t3W0vKGTg==
+UI-OutboundReport: notjunk:1;M01:P0:YuDohJt/SOI=;pWZflexVTv+dqq4CCbj6nbD7xg9
+ KvYStuzLunyTgVcytArwjFQlqDb1Zz3Dv1xLosT6h6a6tURGqjpDuTPbwDwFCN2sxXNGOZlgM
+ tCsc7IAIxrjc9UjnacWofkFdBk14QPQvUtQBhRbPYMye6o/Qy3i+LZavBZICqqcaWDdIuKp+B
+ +fdtsNxUOfrcmuPK1WAK3VSH0xYYMHqv7ECYKyBJrx//O2DTNA569wiwkQXhCi2x/rtmIGAsv
+ qGFs1gh/2Rr838ZIu+xbMJzJZHb4pDbXd/ub/Z/Una8OvD+VlVlhh7tKQKDqVoVr/hYjp4u+L
+ Vcy+V33W4scCkIRrCRxdUfngDtFjMzoYhKs42TpFwhWFox0ijpYqyOvi42PT8J9c0cuQKZzyz
+ ZDmm0FVBxiV7bpblcELaiq6QOqFt0n+t/M7bkpdWWgW8/pVNSi4nH5yAxseEjE1vFrjAz81eU
+ Lzko9dqQoi/X9eKyrYMIEhcXcuczHprMrOAVuIF6DEPIccU83r32R+xWV0rWrojtLTbPo2cRc
+ apk+xKBF26KkZkapjdMshdLgO/Ke8yKJC46u3jffQE8k+XH1Co+hFnRwgn4SZmY3pSkDN+SoL
+ xN4F2x+c2ZbGq1fBtFGiRWO5JUnJyYU5hrJ1xekLWXbceZf+FdW21BCMAwZoXyaOPN7Ry0WPE
+ DI1ygk/fWysG4d6n1EguL/gtKK+Ytj6dIwrf5D2dS6skpKMN+C9UaMbpnqKW7k7DACcjwA+t5
+ 5997mkJWV+vudVFFtO1M76J6vhgQa1/Ng/K8+aZzJl+IPeguVoDJvqJOpiwNyAa/oqBTcj0fN
+ mlTUA0rehZW2Bbcrps5gRi4LGM8BJ9jyHT9voHLL7iq1XkPzGSan2SyyT+gvGNV6Lz+jALN/c
+ 0ErI+oRckoUDxhpdVMGYubI5q1gH70xbgYdwkRQGoMwjAOHGSG+Hg9uiUpBIVFA0s+R/nqkcl
+ P0cBwwrddudoGzQwKngERZ1irE4=
 
-On 12/11/23 11:28, David Heidelberg wrote:
-> Nothing, as I was working on others ARM-related bindings, it just sneaked in. Good catch.
-> 
-> Should I resend with adjusted name or can this by done by quick adjust before the merge?
-> 
+From: Jami Kurki <bindkeys@gmail.com>
 
-No need to resend. I'll fix that up, assuming you get a Reviewed-by: tag from a dt
-maintainer.
+From: Jami Kurki <bindkeys@gmail.com>
 
-Guenter
+Add support for AMD Family 19h Model 8h CPUs, which appear to
+be the Zen 3 based AMD Threadripper 5000WX series (Chagall).
 
-> David
-> 
-> On 11/12/2023 15:34, Guenter Roeck wrote:
->> On Sat, Dec 09, 2023 at 06:15:39PM +0100, David Heidelberg wrote:
->>> Convert fan devices connected to GPIOs to the YAML syntax.
->>>
->>> Signed-off-by: David Heidelberg <david@ixit.cz>
->> I keep wondering: What does this have to do with arm (in the subject) ?
->>
->> Guenter
-> 
+The patch was tested with an AMD Threadripper 5955WX.
+
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D218244
+Tested-by: Jami Kurki <bindkeys@gmail.com>
+Signed-off-by: Jami Kurki <bindkeys@gmail.com>
+Co-developed-by: Armin Wolf <W_Armin@gmx.de>
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+Changes since v1:
+- reword patch description
+- reduce changes to existing code
+=2D--
+ drivers/hwmon/k10temp.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+index bae0becfa24b..8092312c0a87 100644
+=2D-- a/drivers/hwmon/k10temp.c
++++ b/drivers/hwmon/k10temp.c
+@@ -455,6 +455,7 @@ static int k10temp_probe(struct pci_dev *pdev, const s=
+truct pci_device_id *id)
+
+ 		switch (boot_cpu_data.x86_model) {
+ 		case 0x0 ... 0x1:	/* Zen3 SP3/TR */
++		case 0x8:		/* Zen3 TR Chagall */
+ 		case 0x21:		/* Zen3 Ryzen Desktop */
+ 		case 0x50 ... 0x5f:	/* Green Sardine */
+ 			data->ccd_offset =3D 0x154;
+=2D-
+2.39.2
 
