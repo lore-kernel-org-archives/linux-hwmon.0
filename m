@@ -1,151 +1,104 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R0vcsfvX"
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EABBAE4;
-	Mon, 11 Dec 2023 07:28:20 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-5c229dabbb6so2458161a12.0;
-        Mon, 11 Dec 2023 07:28:20 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b62EpURe"
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB6BAEA;
+	Mon, 11 Dec 2023 07:36:53 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id 98e67ed59e1d1-289d988a947so3208760a91.0;
+        Mon, 11 Dec 2023 07:36:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702308500; x=1702913300; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=QX/pQldXLuonw195e6/ahk3+iQHzJpP5HF8v/aVVoFc=;
-        b=R0vcsfvXUY5jVjkEb6xpn3xIUElpO3qp8fI4eEtvIJw2XoruBhrfQiwEJUxgtretUM
-         TJtr82Frv5ozpicPyxNIh0iKKZUX6qOJZJxzIMsGPy9o+UNJ+TcGMaupqz8RIZUIEKX0
-         N9O2lj7YaEEzi5modl63E8k3hDtNMEVp0kxY3KQuZeX3bzm+zGuSBqe34nSKrBvj8BbK
-         itTAG3oaiz5kPgTmxRIzcAa72upShhcjERSzkPSup/9vgeM/cLW1GZshW3ATLahmDuyq
-         ELbZWOP6zTO5i93xoHwsj00WZVKQEwppqP5UTNQ6d5DL1sov2vZLJsIVWGiUQT0F6uXn
-         QPOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702308500; x=1702913300;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1702309013; x=1702913813; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=QX/pQldXLuonw195e6/ahk3+iQHzJpP5HF8v/aVVoFc=;
-        b=BMPtc8hMw+ydZYpJXESRnvHmbZf857msl7pRlRZE5b1I6q+znlrD/oxIkbdICY4AAg
-         3f7Hi//GpxY5yztuHjLEn7992E6b1BmWn3t3FykcFBplpnJ4d5k86r9Yp70TWEoH0vGr
-         VRgE8WM0y5F+4Zpk5SHsOt2R4hhRtLjxfQj/QTrrNZffoeDUfGircWTVQrcf73uTfS75
-         OJ3aAblYA/jshG0dKqnd95lI2ikz6iEB4wvjgrDleiswv460R/ABw1P5LSFfu9wltkmq
-         HX0UH41QA4mZqiP7D9Eebu6JlE5iG3+t7gsuVcUsgZvc+QYLnj2LbIBJw0dICSsJ12Yc
-         Dm7A==
-X-Gm-Message-State: AOJu0Yw0OWre4pvfEk1IFITldrSFdhgJjsZPLrzJE/KetFVz0atY9lgY
-	QQ1Bz6Ih1DIQOK3ZkK6Ei/w=
-X-Google-Smtp-Source: AGHT+IH5l1GEbzeajDKZgF4FWeKvBfekspdMPd8ulXl6VW0YptbdCsyoqiz/cWy2lMzvvfbElrBP0Q==
-X-Received: by 2002:a17:90a:d318:b0:286:bc9c:327c with SMTP id p24-20020a17090ad31800b00286bc9c327cmr1918761pju.22.1702308500303;
-        Mon, 11 Dec 2023 07:28:20 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bs9-20020a632809000000b0059b2316be86sm6435498pgb.46.2023.12.11.07.28.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Dec 2023 07:28:19 -0800 (PST)
+        bh=USiT5zfWilvoWlYRpLxV0vec/h5b4ak4/V2ZKe4xVlU=;
+        b=b62EpURe3zNDPlAAm0F5wmAktCroF8e3pe5hVUub3eSPDAWySVzj9wxJsD1tZ5rJLy
+         EL44PIqdMurmRKdiB5SH0fKRxdyjxsrqJ/bMLIk+oLWr+8VqIiyx5jHK3MDnuJ/Z1jcK
+         r5B2opYAiIsUwz84NCjCQ1hHjCRgfZjccU0xBTCKAqrZB7lDGj3rQ5KTBx9H8ahdRyp5
+         F54jsh841wnuLw9vj7eClpMS1s0e4mq6CMTNh+tuukJPQkNB8Xov/rtfxyLg3xRILy8z
+         s09M3X1y5SQiXde/U+A3IdnmnfIUp9UqWFOsoRWcyXLyWUwBVw0xAfSOerfPtpdpa1k7
+         vhSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702309013; x=1702913813;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=USiT5zfWilvoWlYRpLxV0vec/h5b4ak4/V2ZKe4xVlU=;
+        b=E0qV9EZ3Lzzhm4kMnq3u99OqKngd8LMjq1ZkbygI6aYtyOZIodsgQFPeoBqKk9ffb0
+         dSxr007qtSrSJWofnMG8x1cQS2x6wNAzpBLR5Lyeoizad9l4L0d+C9fvBqbwrK0m0cQN
+         xXF/V4U1Hs9Td74bTLdKkMDYY32yG326wQXMK/NsdfxwutMn/cGz2D7YrjqwvUEX0cly
+         jCsbhIhldEJgs7XKvFled2ntRPpnkJYNy72JE7zkDNciQ/qzFPW+m/kW//NcQqHis3I4
+         IA54uCSU/kYfnGkE257CJoceUN5Wo8SO8mQaSTNKBj1aqy9D61Zrn6eBg6pvRWbiKM0c
+         fhww==
+X-Gm-Message-State: AOJu0YxH/L0o/6BdYVc/iSOkQFXRcRpuR1ofXLSwOaHVtxKAG2Ntp6O1
+	8S3N3qXUY8fplc0tikI0o7o=
+X-Google-Smtp-Source: AGHT+IFrEVKWi+zYA8gCfiKXv8HpzXw6apf0j+ypYDF+rHce9v4xF3sSLkbrymdGw3rd6aJuBljing==
+X-Received: by 2002:a17:90b:4c0d:b0:286:6cc1:2cbd with SMTP id na13-20020a17090b4c0d00b002866cc12cbdmr2207441pjb.71.1702309013269;
+        Mon, 11 Dec 2023 07:36:53 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b1-20020a170902d30100b001cf96a0e4e6sm6793789plc.242.2023.12.11.07.36.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Dec 2023 07:36:52 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <37fc9395-1ef4-4e79-af4e-5d8b9090ec99@roeck-us.net>
-Date: Mon, 11 Dec 2023 07:28:18 -0800
+Date: Mon, 11 Dec 2023 07:36:51 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: nuno.sa@analog.com
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-doc@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [PATCH v3 2/2] hwmon: ltc4282: add support for the LTC4282 chip
+Message-ID: <a0eb6cb4-b8af-4a6f-8888-fa18f8f1d188@roeck-us.net>
+References: <20231205-ltc4282-support-v3-0-e0877b281bc2@analog.com>
+ <20231205-ltc4282-support-v3-2-e0877b281bc2@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] hwmon: sht3x: read out sensor serial number
-Content-Language: en-US
-To: Stefan Gloor <code@stefan-gloor.ch>
-Cc: jdelvare@suse.com, corbet@lwn.net, linux-hwmon@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20231204165004.8491-1-code@stefan-gloor.ch>
- <20231204165004.8491-3-code@stefan-gloor.ch>
- <69065f64-1448-4513-bdda-a25a913e914d@roeck-us.net>
- <20231211151216.yehwa27daveq57jo@thinkpad>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20231211151216.yehwa27daveq57jo@thinkpad>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231205-ltc4282-support-v3-2-e0877b281bc2@analog.com>
 
-On 12/11/23 07:12, Stefan Gloor wrote:
-> On Mon, Dec 11, 2023 at 06:31:27AM -0800, Guenter Roeck wrote:
->> On Mon, Dec 04, 2023 at 05:50:04PM +0100, Stefan Gloor wrote:
->>>   
->>> +#ifdef CONFIG_DEBUG_FS
->>> +
->>> +static void sht3x_debugfs_init(struct sht3x_data *data)
->>> +{
->>> +	char name[32];
->>> +	struct dentry *sensor_dir;
->>> +
->>> +	data->debugfs = debugfs_lookup("sht3x", NULL);
->>> +	if (IS_ERR_OR_NULL(data->debugfs))
->>> +		data->debugfs = debugfs_create_dir("sht3x", NULL);
->>> +
->>> +	snprintf(name, sizeof(name), "i2c%u-%02x",
->>> +		 data->client->adapter->nr, data->client->addr);
->>> +	sensor_dir = debugfs_create_dir(name, data->debugfs);
->>> +	debugfs_create_u32("serial_number", 0444,
->>> +			   sensor_dir, &data->serial_number);
->>> +}
->>> +
->>> +#else
->>> +
->>> +static void sht3x_debugfs_init(struct sht3x_data *data)
->>> +{
->>> +}
->>> +
->>> +#endif
->>
->> debugfs doesn't need if/else or error handling.
->>
-> Do you mean the IS_ERR_OR_NULL? I included that to get rid of the
-> "debugfs directory already exists" message when using multiple sensors.
+On Tue, Dec 05, 2023 at 04:22:56PM +0100, Nuno Sa via B4 Relay wrote:
+> From: Nuno Sa <nuno.sa@analog.com>
 > 
+> The LTC4282 hot swap controller allows a board to be safely inserted and
+> removed from a live backplane. Using one or more external N-channel pass
+> transistors, board supply voltage and inrush current are ramped up at an
+> adjustable rate. An I2C interface and onboard ADC allows for monitoring
+> of board current, voltage, power, energy and fault status.
+> 
+> Signed-off-by: Nuno Sa <nuno.sa@analog.com>
+> ---
+> +
 
-A much easier way to do that would be to create the directory in the init function,
-and to use a static variable to point to it. Note that you'll also need need an
-explicit exit function to remove it when the driver is unloaded.
+> +power1_good		Power considered good
+
+I really don't like this attribute. Like the ones below it is non-standard
+and invisible for standard applications. On top of that, I think it isn't
+really related to "power" but to the output voltage. What does it actually
+report that isn't included in the FET faults ?
+
+
+> +fet_short_fault		FET short alarm
+> +fet_bad_fault		FET bad alarm
+
+Those attributes have little value since they are not standard attributes
+and won't be seen by standard applications. On top of that, it is not clear
+(not documented) what the attribute actually reports. I assume it is
+associated with the output voltage, i.e., in0, but that is just an
+assumption.
+
+What do you think about introducing a standard inX_fault attribute ?
+It would not be as specific as short/bad, but I think it would be more
+useful and we could add it to the ABI.
+
+> +fault_logs_reset	Clears all the Logged Faults
+
+What exactly does that do that is user visible ?
 
 Thanks,
 Guenter
-
