@@ -1,111 +1,104 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EHYnZp1C"
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43559A1;
-	Mon, 11 Dec 2023 07:41:41 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id 98e67ed59e1d1-286e05d9408so3466486a91.1;
-        Mon, 11 Dec 2023 07:41:41 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EN708hKa"
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F260926B9;
+	Mon, 11 Dec 2023 08:07:43 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-6ce72730548so3962475b3a.1;
+        Mon, 11 Dec 2023 08:07:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702309301; x=1702914101; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Rkgj0xsJjNUuqRFvrTNXcjbvl2FdG5FGdJNlXw/A8P4=;
-        b=EHYnZp1CNmEqN2RE3JJf6mN94RxLmS1QmvLCg3HBlRf9eTKryD4dH+mLfuj/x1WvxX
-         umwPedZ8A3RVnzKT/mBwdN9KbWCMOUeUP0Zm8dduZHjCVxSwdr/Kx70nKW8vNCaevXeS
-         FK1fMoEEy0y5w3a/hyhqTJc4XS8nrc4N6UT1xf0IPdNcvMH6QqUmik6xbccKEbrmCZVx
-         NBnBpBUx+UWpMM4E4rCcGCIT/BDmmHTYWJ73r1wdcJSL8Y+POCTaX4lgHiOuQ0M73ut+
-         rAkvVgZkD7oeSPsNbJeB9w4rr3oRppuu/QPM2JAlYVpjUvr76/eLVGqhVps5ge8VchVF
-         IXZg==
+        d=gmail.com; s=20230601; t=1702310863; x=1702915663; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WGjiUns1h+iAl3w3ceq2flEBlTM6hUQvZg8488X+6N0=;
+        b=EN708hKaCy9qzdzx3q0dMTuJnp6PecLBV0ZAlAWaBvO0rID0vEVTM6dvhOQDaw6Bji
+         WcKj6KWkMCfqRMEfJArITfFeqEYcgNPyo9BYFFp7k8YRFiv1EHkmDhKi6DkJIYAmgixF
+         xLruuvvYvfIEFzSk54EOAHnVamJuro02+cJj7mrzTavdLQEODW6QW3vI7rrZw1qMbAsJ
+         MvBaAZVBg5tspbgnXGEY8CetMuuU9316RnArrnXZ+3KtG0AqF9LjzPhuUQP6VboEVKn3
+         LzAF3hDW4vFh83rpmt8EgkrBQiMX9qMxKn59nZfOoJmTYgns43lMXHm/m2zAbbx8B5BD
+         sV3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702309301; x=1702914101;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Rkgj0xsJjNUuqRFvrTNXcjbvl2FdG5FGdJNlXw/A8P4=;
-        b=tWEEHeDaGXJhZIH4fEZZEgyNA1KQ36/90I7Rce2q5TwEEUQnlf60B+VSDCtYGlRVjc
-         zyRX2cPnkFuDv0nJjddJdAYile48Y6tGX0HiKJiGMRb+cAyCiqPRYganwYun54qWQt3b
-         TWl0xEcUFyTMPjNp1J8QFnUrqP43YxOtlNUKZ6y4Pm4//2c5AzooYuWIskCluGUQMUxL
-         ZPaqioKswrBH2HoIobUyj78F/AUvAh87hINydrEmZX8ghI7KVU+iTE5obtYwcyMRS/kU
-         wmKf0f7Is0tOTATmqhxq7kcP1vJ70Cfau6vd5J4II2G8fo15w5VU+3qZPlU6tgAIqIEV
-         rCzw==
-X-Gm-Message-State: AOJu0YxDbpeL89WsudSvd5v8qyZRSS2ezuE6im/2QC9HwWwfjiELdY76
-	pFpfP6kZApEHFxbvylNXzv8=
-X-Google-Smtp-Source: AGHT+IHXuif/A5CNnn4PFgEgh9sAzp142sXqPe6a/S2uXXB5rfBMamdlf3zyD2imWY7HBVwmSAYB7Q==
-X-Received: by 2002:a17:90b:4f88:b0:286:f66a:973b with SMTP id qe8-20020a17090b4f8800b00286f66a973bmr4636263pjb.48.1702309300547;
-        Mon, 11 Dec 2023 07:41:40 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id qc9-20020a17090b288900b00286be9fb3fdsm7234032pjb.40.2023.12.11.07.41.39
+        d=1e100.net; s=20230601; t=1702310863; x=1702915663;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WGjiUns1h+iAl3w3ceq2flEBlTM6hUQvZg8488X+6N0=;
+        b=RnEjnH3A7QLhx/D/39Hc15FZgubQB0xCRmLoqEoodCs73NfUZinkZvDaZwopIdANZZ
+         sv9LOHzeOVna6s8NoLkTAVQhS+r+Uw2BaSpUUe9d/liEJwt81JA2dZF4Gbhl5g4HbdYA
+         YMUutl3gSaoAmwnzE8+ubsUHHJ9iTa5WqBRVz5W6d3NbgKVXLQJThKsJ1Q1aQvEGCbDe
+         UN1sLLZI3r2bfBOOV3dCDgqWDOeRCNTeDUsh87riux8M7+M/hxb1LhBVKTArmM7Pg35G
+         RtiRV2Of1sTxhSp1q+bo08tMvGlEyH6xZAF5xNWWmxuNifXBBjloJnHY1L6ztTx5qrWy
+         GZMg==
+X-Gm-Message-State: AOJu0YzR75rebS4W77ziALDsqt11rE0YJMl3ss+1tnIz8jIRb066K+Wg
+	tznpENkugtdnON2EGlQzk3o=
+X-Google-Smtp-Source: AGHT+IGymO/AZvtr+iq7BXI8n9/mucysy0DHR3Jo0o/aSWw86azUrY0Z7ByOYsTJacMGu6oNjOiLKQ==
+X-Received: by 2002:a05:6a00:870b:b0:6ce:2731:e877 with SMTP id hj11-20020a056a00870b00b006ce2731e877mr3977204pfb.62.1702310863210;
+        Mon, 11 Dec 2023 08:07:43 -0800 (PST)
+Received: from localhost.localdomain (1-34-21-66.hinet-ip.hinet.net. [1.34.21.66])
+        by smtp.gmail.com with ESMTPSA id ei39-20020a056a0080e700b006cbef269712sm6545611pfb.9.2023.12.11.08.07.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Dec 2023 07:41:40 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 11 Dec 2023 07:41:39 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: nuno.sa@analog.com
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-doc@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-	Rob Herring <robh+dt@kernel.org>,
+        Mon, 11 Dec 2023 08:07:42 -0800 (PST)
+From: Potin Lai <potin.lai.pt@gmail.com>
+To: Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH v3 2/2] hwmon: ltc4282: add support for the LTC4282 chip
-Message-ID: <7a6a0517-47f8-47df-9e61-44adb60f6135@roeck-us.net>
-References: <20231205-ltc4282-support-v3-0-e0877b281bc2@analog.com>
- <20231205-ltc4282-support-v3-2-e0877b281bc2@analog.com>
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Mark Brown <broonie@kernel.org>,
+	Joel Stanley <joel@jms.id.au>
+Cc: Peter Yin <peteryin.openbmc@gmail.com>,
+	Peter Yin <peter.yin@quantatw.com>,
+	Potin Lai <potin.lai@quantatw.com>,
+	Patrick Williams <patrick@stwcx.xyz>,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	Potin Lai <potin.lai.pt@gmail.com>
+Subject: [PATCH v2 0/2] hwmon: (pmbus) Add support for MPS Multi-phase mp2856/mp2857 controller
+Date: Tue, 12 Dec 2023 00:05:17 +0800
+Message-Id: <20231211160519.21254-1-potin.lai.pt@gmail.com>
+X-Mailer: git-send-email 2.31.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231205-ltc4282-support-v3-2-e0877b281bc2@analog.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Dec 05, 2023 at 04:22:56PM +0100, Nuno Sa via B4 Relay wrote:
-> From: Nuno Sa <nuno.sa@analog.com>
-> 
-> The LTC4282 hot swap controller allows a board to be safely inserted and
-> removed from a live backplane. Using one or more external N-channel pass
-> transistors, board supply voltage and inrush current are ramped up at an
-> adjustable rate. An I2C interface and onboard ADC allows for monitoring
-> of board current, voltage, power, energy and fault status.
-> 
-> Signed-off-by: Nuno Sa <nuno.sa@analog.com>
-> ---
-[ ... ]
+Add support for mp2856/mp2857 device from Monolithic Power Systems, Inc.
+(MPS) vendor. This is a dual-loop, digital, multi-phase,
+modulation controller.
 
-> +/* power1_fault */
-> +static SENSOR_DEVICE_ATTR_RO(power1_good, ltc4282_status,
-> +			     LTC4282_POWER_GOOD_MASK);
-> +/* FET faults */
-> +static SENSOR_DEVICE_ATTR_RO(fet_short_fault, ltc4282_status,
-> +			     LTC4282_FET_SHORT_MASK);
-> +static SENSOR_DEVICE_ATTR_RO(fet_bad_fault, ltc4282_status,
-> +			     LTC4282_FET_BAD_STATUS_MASK);
-> +/*
-> + * Fault log failures. These faults might be important in systems where
-> + * auto-retry is not enabled since they will cause the part to latch off until
-> + * they are cleared. Typically that happens when the system admin is close
-> + * enough so he can check what happened and manually clear the faults. Hence, we
-> + * provide an attribute to clear all fauls at once while still capable of
-> + * checking individual faults in debugfs.
-> + */
-> +static SENSOR_DEVICE_ATTR_WO(fault_logs_reset, ltc4282_clear_faults, 0);
-> +
-> +static struct attribute *ltc4282_attrs[] = {
-> +	&sensor_dev_attr_energy1_input.dev_attr.attr,
-> +	&sensor_dev_attr_power1_good.dev_attr.attr,
-> +	&sensor_dev_attr_fet_bad_fault.dev_attr.attr,
-> +	&sensor_dev_attr_fet_short_fault.dev_attr.attr,
-> +	&sensor_dev_attr_fault_logs_reset.dev_attr.attr,
-> +	NULL
-> +};
-> +ATTRIBUTE_GROUPS(ltc4282);
-> +
+LINK: [v1] https://lore.kernel.org/all/20231108024222.2026546-1-peter.yin@quantatw.com/
 
-Ah, now I see what those are for. Please move all but energy1_input
-to debugfs, including clearing the faults.
+changes v1 --> v2:
+- mp2856.rst
+  - fix wordings
+- mp2856.c
+  - fix register naming in defines
+  - remove unused register defines
+  - add max_phases and chip_id in struct mp2856_data
+  - force vout in direct mode
+  - remove unnecessary functions (ex: mp2856_identify_vid)
+  - add identify multiphase for both rail1 and rail2
 
-Thanks,
-Guenter
+Peter Yin (2):
+  dt-bindings: Add MP2856/MP2857 voltage regulator device
+  hwmon: (pmbus) Add support for MPS Multi-phase mp2856/mp2857
+    controller
+
+ .../devicetree/bindings/trivial-devices.yaml  |   4 +
+ Documentation/hwmon/index.rst                 |   1 +
+ Documentation/hwmon/mp2856.rst                |  98 ++++
+ drivers/hwmon/pmbus/Kconfig                   |   9 +
+ drivers/hwmon/pmbus/Makefile                  |   1 +
+ drivers/hwmon/pmbus/mp2856.c                  | 477 ++++++++++++++++++
+ 6 files changed, 590 insertions(+)
+ create mode 100644 Documentation/hwmon/mp2856.rst
+ create mode 100644 drivers/hwmon/pmbus/mp2856.c
+
+-- 
+2.31.1
+
