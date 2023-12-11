@@ -1,55 +1,60 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ItyZDgI3"
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C9F49D0;
-	Mon, 11 Dec 2023 06:16:00 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-2886579d59fso4407815a91.1;
-        Mon, 11 Dec 2023 06:16:00 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DWteeA9G"
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62CA9212F;
+	Mon, 11 Dec 2023 06:17:53 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1d03bcf27e9so26945025ad.0;
+        Mon, 11 Dec 2023 06:17:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702304160; x=1702908960; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1702304273; x=1702909073; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xidirTrxXnNmG0JvKz0tJiRl9A5fgie8YXkr2qojzMw=;
-        b=ItyZDgI3FB3BEhznaiWb+iZBB1MyVVAKqfEg0R+XlP7Ia/CpdrF5cRvcvztoHdz3K1
-         HcfcZhE6oIW8bbu0PxfwIa/bGSdRtY4+PcGPJSTjl364qnK7vb4en0x7gRMkvLYfrnWM
-         1geVbSS0jG8Ny91cXYtgEViWxY2Jlkjz17739bElRcPnu0oI6m9lZNYrUi8KkRx1YYZV
-         A/Gh29jrz5kbKjmll7eW0ri6szchZvZdos+d7l+oQoo7R73/kOfzSSmr6lGbWn8Gcwpk
-         O8AkdgFAfJmhW7Y1iFdkHKSZBAOhbTvBeVY2Qa+iXIid0hN13MohOR8q3wIB4dxLhB/Z
-         xbfA==
+        bh=yQCSZCHRZifXrm2rHeeJVxoyk1kBTheYDBk9lmCNOio=;
+        b=DWteeA9G9+KWL1JJ5nyOscj1KRl3rN/30VZq1cON/fFiRpJdS4ngFCo1kKKb2wXzI8
+         koUYTRiuaO5t3nigev7a46Jc6n6b5GsYxUTuDOz5bGbEaVK0jTtgj4pGl/YyytOc/zlr
+         PWUwSJl49ruIwmKvd3PWRVK+aQOpup5jF9EPyESDGBhVWav2pNS+lfVy6sJcyroInjbk
+         R3yI0OUlXJbk+7IUoz4y/9EC4W4nqxomhBKJ9uAcsoHrbvbFYiV+4zr/qfczf2Y0AtGY
+         a+ItubsUhoTuK7gF1KqwF8t2ZqzvLAjRuy0ANUVLNBrcCY8SHn6eWf7MNGE+86vndsrB
+         LjAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702304160; x=1702908960;
+        d=1e100.net; s=20230601; t=1702304273; x=1702909073;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xidirTrxXnNmG0JvKz0tJiRl9A5fgie8YXkr2qojzMw=;
-        b=cq7VmbIlNVSchvLTwRi0sZzVW5bJ5Ge/mBKggRI5jD/ObXLOAB+PAvzUl67VTLjN6N
-         VoHifKc2PsTH30D8GzSA64hjABBNLp5LZW4Iv4e/+UVxogCasq6abrUq6/5vA92gd8Yu
-         YrNtft0FkKnP0W8lGnz/YDq2YR/aFQxGex+88z8JSXDg3yFROfB2YWDsoPubaKZqaY02
-         3BMIVJgNzmaLWkVs+DW+vaOr2vdzg0K0rRlijn5Ns/IYN3zMQS6uhSVd/F86Jmqx6XfW
-         BDlBH7srTDv1hdYVm03h15NpZrXSovN78IQ1Cs4lnSN/ktVT+RPKWZMpgJOf+Xj6B/Ln
-         NGYg==
-X-Gm-Message-State: AOJu0YxYiTm85baU/GK/y8xQFo1G2o8SD8yuToubDLudPda7eFPHeBr4
-	15zdoOLbjuCEcg3sD/oTGUk=
-X-Google-Smtp-Source: AGHT+IH0WXagXgVuJh/SlrzMlkhD5V5Tt4h+uv5dL8ESmjBVsqzSI/DJzQXA7+bylhPcIsqFOO4wMg==
-X-Received: by 2002:a17:90b:11c8:b0:286:6cc0:cabb with SMTP id gv8-20020a17090b11c800b002866cc0cabbmr3414899pjb.50.1702304159636;
-        Mon, 11 Dec 2023 06:15:59 -0800 (PST)
+        bh=yQCSZCHRZifXrm2rHeeJVxoyk1kBTheYDBk9lmCNOio=;
+        b=myIwWmw/lU3Rlzr2ezxK6ruDQHh0ED+U2oSbxCW5B+dBtsfs4gEdCVHnWzlDV+9dV3
+         qVoj97BXFMfzMvIzP3s93I8tnIpIVABTWGiCzY4M7J7HY4a0/AWBdlqeDW0cqKxXebji
+         uTY99wzNu2cI0geGVL4gKn4JmLMzTe831xwUEl5orJl5kBiwDu0EbJ/uVPzCREM16n3/
+         ZSwxTQPdyL2XuA6iH2ZQIBTW6WuwwHgrigUSpw5zmxqWpIvYtUvcnEUMa1fJTD62eF9o
+         4XGYbSMcs+eVfut1lM8ubWfSUef9GN4dWgE0BegPwrjf3fhktY3EdbcHYQglfozTEutw
+         kC0g==
+X-Gm-Message-State: AOJu0YzUGhhN68GD8q2oVZMWSIp1bACNvR8AcqZ2M273sZB/ufqSCvaz
+	w06ujFDXz7yjARPWpiY5n+0=
+X-Google-Smtp-Source: AGHT+IGgbLZWtCsbqHPS5cp/C5+jKiGs3bIxlGTixkc0tac/6iObkizX9mZzNwEHQcFHKHYBel0W6w==
+X-Received: by 2002:a17:90b:1191:b0:286:c105:2373 with SMTP id gk17-20020a17090b119100b00286c1052373mr1896361pjb.45.1702304272647;
+        Mon, 11 Dec 2023 06:17:52 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s3-20020a17090a698300b00286920600a9sm9259924pjj.32.2023.12.11.06.15.58
+        by smtp.gmail.com with ESMTPSA id l17-20020a17090aaa9100b0028593e9eaadsm8462569pjq.31.2023.12.11.06.17.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Dec 2023 06:15:59 -0800 (PST)
+        Mon, 11 Dec 2023 06:17:52 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 11 Dec 2023 06:15:58 -0800
+Date: Mon, 11 Dec 2023 06:17:51 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Daniel Matyas <daniel.matyas@analog.com>
-Cc: no To-header on input <;, Jean Delvare <jdelvare@suse.com>,
-	Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 5/5] hwmon: max31827: Add custom attribute for
- resolution
-Message-ID: <3b55f462-a52d-411f-8151-bd73ad5cd4b8@roeck-us.net>
-References: <20231031182158.124608-1-daniel.matyas@analog.com>
- <20231031182158.124608-5-daniel.matyas@analog.com>
+To: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+Cc: patrick@stwcx.xyz, Jean Delvare <jdelvare@suse.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Jonathan Corbet <corbet@lwn.net>, linux-i2c@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v7 1/2] dt-bindings: hwmon: Add lltc ltc4286 driver
+ bindings
+Message-ID: <a71eae64-680a-414a-84e1-709c27a90d0a@roeck-us.net>
+References: <20231123015440.199822-1-Delphine_CC_Chiu@Wiwynn.com>
+ <20231123015440.199822-2-Delphine_CC_Chiu@Wiwynn.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -58,25 +63,16 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231031182158.124608-5-daniel.matyas@analog.com>
+In-Reply-To: <20231123015440.199822-2-Delphine_CC_Chiu@Wiwynn.com>
 
-On Tue, Oct 31, 2023 at 08:21:57PM +0200, Daniel Matyas wrote:
-> Added custom channel-specific (temp1) attribute for resolution. The wait
-> time for a conversion in one-shot mode (enable = 0) depends on the
-> resolution.
+On Thu, Nov 23, 2023 at 09:54:36AM +0800, Delphine CC Chiu wrote:
+> Add a device tree bindings for ltc4286 device.
 > 
-> When resolution is 12-bit, the conversion time is 140ms, but the minimum
-> update_interval is 125ms. Handled this problem by waiting an additional
-> 15ms (125ms + 15ms = 140ms).
-> 
-> Added 'mask' parameter to the shutdown_write() function. Now it can
-> either write or update bits, depending on the value of mask. This is
-> needed, because for alarms a write is necessary, but for resolution only
-> the resolution bits should be updated.
-> 
-> Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
+> Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
 
-Series applied.
+Applied.
 
 Thanks,
 Guenter
