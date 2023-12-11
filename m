@@ -1,71 +1,86 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GTKDmK2r"
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23A39F
-	for <linux-hwmon@vger.kernel.org>; Mon, 11 Dec 2023 06:40:21 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id 98e67ed59e1d1-28652d59505so3479523a91.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 11 Dec 2023 06:40:21 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QJnbZq6U"
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0634B4;
+	Mon, 11 Dec 2023 06:41:53 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1d045097b4cso25751485ad.0;
+        Mon, 11 Dec 2023 06:41:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702305621; x=1702910421; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=84aajq3S5sy7zvTFwoBuAp9Vt7HV4bOzNj8Fa6a8uBo=;
-        b=GTKDmK2rA/tvMfHlgG9U+gExfbnt221VKmMIiB8vO4P8kwsmAOwHXHv5HtvAr1KLsR
-         ofLnkVtBD/Gk0/QyBYdCa9XH3mZQaRRUKVKwXNAlspG75NuJjbJaSvuKRBwmdBx3RSyY
-         OX2eoNAU5GBVhNWqaVXQHO8cBV6Wo6FHpKBZNOvWopU69q9l87+kRAoUUhKTL9CiWFbf
-         1efqF22gYoj56z7NkcQYVoz27MBqW1dTcM+wkeoelaaScDgMv2hhNeW0LIQP15FQeSl1
-         MWtMmWLphZEM0TMSIZxJ2Xso3pBHm03cr/3f/VUPNtDzugN+z+ZEssUjwbRNX4PAr6V/
-         ZpFQ==
+        d=gmail.com; s=20230601; t=1702305713; x=1702910513; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T9DaHiruHnu1Ugo/eNiPXfm/bzESsaARD0DZgVgoZ3k=;
+        b=QJnbZq6UtI1YhCei0Gaa3tAlKU9QPJ7df82DZwpxWCjBB1tXt2SfLi53HrFYyx26Vk
+         CEOBHe+0f3wzh5fawIKaZxplL9jlYR4P2pmrpSGDUZYnByGdRtea24048ppbij1s6kGr
+         VsoyAeyZ8+ZBtnXgelbRra6tWcnzTWmmW2/jYeW8RWYKe1fQPo0W9S7yofm1GUghTwyV
+         5imTFeACMObj4rEQSme7qM8EIxD5L6xm2OOWnOtEdfHy6NFc/Z3AbA2IKCMoz3mlhcvo
+         UPg0+kX+JZQiEn4XpgEQsozJ0bZB4fVfVL1BfJ8Y+uezIST3kGHwxGF0M4pDbAhh6srl
+         M3ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702305621; x=1702910421;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=84aajq3S5sy7zvTFwoBuAp9Vt7HV4bOzNj8Fa6a8uBo=;
-        b=Y3H4N6VH1weaEVUkmH+BDmIkyPJoFunZ+RY+S5cNzuLfSpjF/7xOBkHumsI1p7C0Pv
-         3hPKuT2gVC9JG5iMU/k67nXq6Rf0EkExm8P4A/aG6gyiRkoJFnHcWOb1RGRmyjnpB0WM
-         +C6pjvOoQKqlv8do9cGhDCGWMY15g/ZgOxX4VOE4q9QqHHJXy0KqanpIJiPVmAgDuAo+
-         AjITKbIG5R3iBpfJSAkmQ770im6ufJI6YkbJCNzIvvs44rD0zD3ImIT/MXXVjS61UMQE
-         7bmP3aLWI94F8YU9nq737TtlBcOcxPlOXQ0EWKrBTH5gnWV4XYMQT/sbdcI+kBcc3EoN
-         13bQ==
-X-Gm-Message-State: AOJu0YxXszUVcCn0puxFwoRA5lbMEdqYaCWu18vJtjDENDnzckcp0FLY
-	H2pHCIooe8rHhpvvB6pBv5s7gLY0T4o=
-X-Google-Smtp-Source: AGHT+IEffxCslF4FtqSSynzYAq+CP3Aiqtm9nC7EfT4OLx/sm8bUsL2VsfTorRxJjKd1lMs7LkcCZA==
-X-Received: by 2002:a17:90b:156:b0:286:7469:b133 with SMTP id em22-20020a17090b015600b002867469b133mr2050369pjb.23.1702305621392;
-        Mon, 11 Dec 2023 06:40:21 -0800 (PST)
+        d=1e100.net; s=20230601; t=1702305713; x=1702910513;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=T9DaHiruHnu1Ugo/eNiPXfm/bzESsaARD0DZgVgoZ3k=;
+        b=JH4331o2PH4zDaiUyZORLgs4S89hVh8ruku7ukfFYMR3VeGRz4PBXB9bNNHc9IuhtQ
+         qInhkfubn3ZOGyEv3CmUZSqpRetjnYYhB/49Md7ZjWO+X95hlDpJ2OUTUxbRCcYQVUdA
+         QilX+tc8SkBjtdCIMSEnEuGPFXF7egKmyCnyVdVJKa/pErV7ZrQO2gRlZZd0VDrn/mtZ
+         e5NEgzN2lxgnlBll3WlT345mATkY9GCrUNIgvGNe/Jt1WpPTXLK7x77wT5yk33EUSy3W
+         0Z7MdB/0N8oWuzlwADAeS22/5X1Fp87yYD0Ik9M1kG0iMX5g/4/X635W7OSsOVihuUfh
+         4npg==
+X-Gm-Message-State: AOJu0YwDfGI/KYO6wtP8aIFl5fmZdLmxE33YbOoqx4FvjaZ0PDAwb6Tp
+	XQ1YCwtHnYNQcKZSRmduF8ioxRS/8ms=
+X-Google-Smtp-Source: AGHT+IFU0Ir8swqWWIKeGisQaCsjK175j5nJ5tGS1mkYhcXbQDjsHUfacT1J59An51dqA5EUbKzOug==
+X-Received: by 2002:a17:902:c183:b0:1d0:6ffd:cea7 with SMTP id d3-20020a170902c18300b001d06ffdcea7mr2061723pld.96.1702305713133;
+        Mon, 11 Dec 2023 06:41:53 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id ot15-20020a17090b3b4f00b00280070a2613sm8571267pjb.51.2023.12.11.06.40.20
+        by smtp.gmail.com with ESMTPSA id p20-20020a170902ead400b001d0b5a97cabsm6718612pld.124.2023.12.11.06.41.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Dec 2023 06:40:21 -0800 (PST)
+        Mon, 11 Dec 2023 06:41:52 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 11 Dec 2023 06:40:20 -0800
+Date: Mon, 11 Dec 2023 06:41:51 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-	kernel@pengutronix.de
-Subject: Re: [PATCH 4/4] hwmon: (smsc47m1) Rename global platform device
- variable
-Message-ID: <7eb48026-61e9-443d-9cc2-cf541ce233cf@roeck-us.net>
-References: <cover.1701957840.git.u.kleine-koenig@pengutronix.de>
- <68a959b56da7f9452557d08c72249182364b0dd0.1701957841.git.u.kleine-koenig@pengutronix.de>
+To: Aleksa Savic <savicaleksa83@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] hwmon: Add driver for Gigabyte AORUS Waterforce AIO
+ coolers
+Message-ID: <10044dce-8416-405f-a525-f547d48411f2@roeck-us.net>
+References: <20231207122402.107032-1-savicaleksa83@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <68a959b56da7f9452557d08c72249182364b0dd0.1701957841.git.u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20231207122402.107032-1-savicaleksa83@gmail.com>
 
-On Thu, Dec 07, 2023 at 03:09:32PM +0100, Uwe Kleine-König wrote:
-> pdev is a bad name for a global variable. Still more as the driver has
-> functions where pdev is a local variable. Rename it to smsc47m1_pdev.
+On Thu, Dec 07, 2023 at 01:23:59PM +0100, Aleksa Savic wrote:
+> This driver exposes hardware sensors of the Gigabyte AORUS Waterforce
+> all-in-one CPU liquid coolers, which communicate through a proprietary
+> USB HID protocol. Report offsets were initially discovered in [1] and
+> confirmed by me on a Waterforce X240 by observing the sent reports from
+> the official software.
 > 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> Available sensors are pump and fan speed in RPM, as well as coolant
+> temperature. Also available through debugfs is the firmware version.
+> 
+> Attaching a fan is optional and allows it to be controlled from the
+> device. If it's not connected, the fan-related sensors will report
+> zeroes.
+> 
+> The addressable RGB LEDs and LCD screen are not supported in this
+> driver and should be controlled through userspace tools.
+> 
+> [1]: https://github.com/liquidctl/liquidctl/issues/167
+> 
+> Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
 
 Applied.
 
+Thanks,
 Guenter
