@@ -1,117 +1,74 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB6BC5
-	for <linux-hwmon@vger.kernel.org>; Mon, 11 Dec 2023 06:31:57 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rChJL-00005m-1a; Mon, 11 Dec 2023 15:31:07 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rChJG-00F7ct-Pw; Mon, 11 Dec 2023 15:31:02 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rChJG-000z2u-FK; Mon, 11 Dec 2023 15:31:02 +0100
-Date: Mon, 11 Dec 2023 15:30:59 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Sean Young <sean@mess.org>
-Cc: linux-media@vger.kernel.org, linux-pwm@vger.kernel.org,
-	Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Javier Martinez Canillas <javierm@redhat.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Support Opensource <support.opensource@diasemi.com>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Daniel Thompson <daniel.thompson@linaro.org>,
-	Jingoo Han <jingoohan1@gmail.com>, Helge Deller <deller@gmx.de>,
-	Jani Nikula <jani.nikula@intel.com>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-fbdev@vger.kernel.org
-Subject: Re: [PATCH v7 1/4] pwm: Rename pwm_apply_state() to
- pwm_apply_might_sleep()
-Message-ID: <20231211143059.dggelgdwjnntx7kf@pengutronix.de>
-References: <cover.1702282806.git.sean@mess.org>
- <f2762a5abc13be9ec05a45927bbd84e9da5bb41c.1702282807.git.sean@mess.org>
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hadUpPsk"
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B679DC3;
+	Mon, 11 Dec 2023 06:32:30 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id 98e67ed59e1d1-28aabe4a728so220606a91.3;
+        Mon, 11 Dec 2023 06:32:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702305150; x=1702909950; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=M4T42pMM+lOegJCe1HFIlB1ZP3arDImtXfzEjv6FDZc=;
+        b=hadUpPsk75xdo1BdTPC6mh1dbht08J5g49dL0r71RVXc0p45dy+3/Kgf8ydTXsFXcC
+         QXbml0a27k4/yc3wG1/14BxJp50XM/QrtNGJmd5MCNiqm/Ul/S2alFwk/455QTCfJ9NZ
+         m0aTUgZt92Aa/odjWU+zENx6h47xku+lJypPLxoTr2BZa+fQFIWmase/Q3bzjbB4q1hU
+         xGab5LJMmdReWkdS0plFkCkcb56ptH7h7/JVEgJx4uWDfzpqQk5kN7IKoBlXR80GC+Wh
+         I31/JB0sgHDgR37mjFOBzXn7MSzq4gcdkBTqhKYTEac+oTSqcRZaqvfd+PWnrAQvsw6Y
+         Iwhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702305150; x=1702909950;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=M4T42pMM+lOegJCe1HFIlB1ZP3arDImtXfzEjv6FDZc=;
+        b=SZvUtZ7VmytkmJT8gjR/uCIZoMHBSQ2cSVtlGVoXxuV+1UQsn6tXO8cA0lMkgUD4rz
+         bUw4oeMFS8idZFSvyO4YW0MB+w6qqgs4rFo4kOHPC8MwtroqhyQOlUZMvstb04rGKqY6
+         uCHoFopNGMqnMvSnGmrx2qT/DNXDJDlEvogh6KmDLutwzFpa1sXdTbTCdTdluV54pqra
+         Hy3S78r+BpSKXoc4/ZDVMStSurs9v/XTudq9fb3UyBwyREi6cwsImc9XKjoGQ+/skqZY
+         spAupVkMiQebReWxgM+vTc2CTyTWZFaD0K8pQ5Y4tRXF/2SCrxAqjDi1vOvwNZEVozV1
+         l/8Q==
+X-Gm-Message-State: AOJu0YzbON625sXbFBiqMeVA7e6HpSBz7LNw3QwSzOOK2PeBaEbSiNbk
+	mOAJkiSOHabuLYFirqr33xo=
+X-Google-Smtp-Source: AGHT+IEQkYkTZC+r8SjpiBendOi3zHCvQ4uKeqztoZtzBJofctThTRrwnsZ9xq6Ag8OLvBeGRoQaUQ==
+X-Received: by 2002:a17:90a:f487:b0:286:6cc0:884c with SMTP id bx7-20020a17090af48700b002866cc0884cmr1817096pjb.57.1702305150102;
+        Mon, 11 Dec 2023 06:32:30 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id st8-20020a17090b1fc800b0028656e226efsm7051238pjb.1.2023.12.11.06.32.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Dec 2023 06:32:29 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Mon, 11 Dec 2023 06:32:28 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Serge Semin <fancer.lancer@gmail.com>,
+	Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+	Arnd Bergmann <arnd@arndb.de>, linux-mips@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] MAINTAINERS: Add maintainer for Baikal-T1 PVT hwmon
+ driver
+Message-ID: <1ab63238-5411-4e31-9248-b494c29f2182@roeck-us.net>
+References: <20231122170506.27267-1-Sergey.Semin@baikalelectronics.ru>
+ <20231122170506.27267-2-Sergey.Semin@baikalelectronics.ru>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="kkbvgfm75p6j7s2z"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f2762a5abc13be9ec05a45927bbd84e9da5bb41c.1702282807.git.sean@mess.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
+In-Reply-To: <20231122170506.27267-2-Sergey.Semin@baikalelectronics.ru>
 
+On Wed, Nov 22, 2023 at 08:04:50PM +0300, Serge Semin wrote:
+> Add myself as a maintainer of the Baikal-T1 PVT sensors driver.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
---kkbvgfm75p6j7s2z
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied.
 
-On Mon, Dec 11, 2023 at 08:24:52AM +0000, Sean Young wrote:
-> In order to introduce a pwm api which can be used from atomic context,
-> we will need two functions for applying pwm changes:
->=20
-> 	int pwm_apply_might_sleep(struct pwm *, struct pwm_state *);
-> 	int pwm_apply_atomic(struct pwm *, struct pwm_state *);
->=20
-> This commit just deals with renaming pwm_apply_state(), a following
-> commit will introduce the pwm_apply_atomic() function.
->=20
-> Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com> # for input
-> Acked-by: Hans de Goede <hdegoede@redhat.com>
-> Acked-by: Jani Nikula <jani.nikula@intel.com>
-> Acked-by: Lee Jones <lee@kernel.org>
-> Signed-off-by: Sean Young <sean@mess.org>
-
-Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---kkbvgfm75p6j7s2z
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmV3HSIACgkQj4D7WH0S
-/k7bnAf/cRTO22nABcFvyIQZ3V56at9Cfad/B9139ZFHLXIV2KYhrRI/65AlFTP2
-nO0TxvG6yhZVS24t9na92aLNJYXlpQpvKScNCEXaZgKg5IOxBn3FEkChVdv0OeQh
-X5nEqz71490AGYDzpQwXckFxMGo8wFhMRU98Htb8tJcn6NNIcfS8kWRy6bmSly9y
-enHFBwqZ+liARBITVl3+y5Qqr1RErOtO1SZl4wxJjDduSbJfvl0ZVjGhI646k6+G
-+qBYmGe9YrWshP/Foo1PClhXj1dTQUucAnB0gc9fnczRvLOTy11dbHZ66NJLcfB+
-wRvN6iZVO/dLcWu5WihPzL4de3xwLg==
-=C1pU
------END PGP SIGNATURE-----
-
---kkbvgfm75p6j7s2z--
+Guenter
