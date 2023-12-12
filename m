@@ -1,232 +1,125 @@
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 008BD76DDF;
+	Tue, 12 Dec 2023 15:27:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kmC0SMZG"
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28DEE4;
-	Tue, 12 Dec 2023 07:27:10 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-3333131e08dso6330094f8f.2;
-        Tue, 12 Dec 2023 07:27:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702394829; x=1702999629; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=B38W1esuqMveBz4GM+3+CzV8mGUQVgFrvUut5Ptidsg=;
-        b=kmC0SMZGH2u+11X3BKtlxPM5lUTFTLY327O6UjGhLivevu5S6TIKibAF8+ehe33thl
-         qYzfDh/XoiC1EIA/JYieGXTrSZ3PzXS5xB6cNRckAKakucYuubL3TVW06jEh2xuv201B
-         d1sq+GV7nj8wg95zd8oO1wjYm3h8W7DBXeIEQ0mH3mTbIATNIeqiZbymYTh0L7FFYVsR
-         W+JZT8L+TLJzjxAMc5L+5jCP2g15dv6edl+gC0bN86Is6NpO8y2a+yRCV2iAHTHk3et0
-         nvT53iglT/BKLOAvbQ1lhbR4ybBThuV7y8fa/tvRFTvTyuDisUkh9+HbREZAD/fLuT2X
-         +uCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702394829; x=1702999629;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=B38W1esuqMveBz4GM+3+CzV8mGUQVgFrvUut5Ptidsg=;
-        b=WJq8HSg6aAY4GkvUOcxdFPJGFaF7c4O+/cIVTxGud7CbAxM4Dy9Ns/0Ohc7fJOYmrV
-         +1Qn8EO3jRJaB7VxLOq+eWQSVbSwFCSk+NEAJ0LzkDA2XIzbk87lZZr6PUGWzphFUXYt
-         9XddiF3IeJNDxrdydXGkGYih2I5k2EfwcRWLvIxDgaEzb0cRwuUSzqMYjFQUYkouWSQI
-         xg93VisiqusWMVAS5J6K/dxISINj9ezGl/JHdrY15ILHwRpf424U/aMtZhtU/jFUVjs4
-         0CEAYQK+qn+32K26PBadbcr2sthZiHA6vAnEsL6TjZnIUJiUo6EEqEDS7UUnKPWaIGO5
-         c8uQ==
-X-Gm-Message-State: AOJu0Yzwxc0KFHg/LzVaeczuoryXJiMRdoeiHsSB+1hg3O+O7CsFFZzu
-	vqvg1at1nsavlozTWfw7j7g=
-X-Google-Smtp-Source: AGHT+IFZG3xYh01CXHis8sQS+MW2ObMzZFAi5sZtDtpN9tzS1ZdwCHhcT4BcWrhH4S/1V1pGtCmjaQ==
-X-Received: by 2002:a5d:4344:0:b0:333:f04:f2d7 with SMTP id u4-20020a5d4344000000b003330f04f2d7mr2822428wrr.55.1702394829201;
-        Tue, 12 Dec 2023 07:27:09 -0800 (PST)
-Received: from ?IPv6:2003:f6:ef1b:2000:944c:cbc7:1e1c:2c47? (p200300f6ef1b2000944ccbc71e1c2c47.dip0.t-ipconnect.de. [2003:f6:ef1b:2000:944c:cbc7:1e1c:2c47])
-        by smtp.gmail.com with ESMTPSA id x15-20020a5d60cf000000b0033635ee4543sm652519wrt.67.2023.12.12.07.27.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Dec 2023 07:27:08 -0800 (PST)
-Message-ID: <38e41d0b92c0cb1f61e7a1d92137cc94a57a7f85.camel@gmail.com>
-Subject: Re: [PATCH v3 2/2] hwmon: ltc4282: add support for the LTC4282 chip
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>, nuno.sa@analog.com
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-doc@vger.kernel.org, Jean Delvare <jdelvare@suse.com>, Rob Herring
- <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>,  Conor Dooley <conor+dt@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>
-Date: Tue, 12 Dec 2023 16:30:12 +0100
-In-Reply-To: <436257a1-628e-4a45-884d-348e73d4c5e9@roeck-us.net>
-References: <20231205-ltc4282-support-v3-0-e0877b281bc2@analog.com>
-	 <20231205-ltc4282-support-v3-2-e0877b281bc2@analog.com>
-	 <a0eb6cb4-b8af-4a6f-8888-fa18f8f1d188@roeck-us.net>
-	 <d190620900ceda6c2846f3828ee389da917a66e0.camel@gmail.com>
-	 <436257a1-628e-4a45-884d-348e73d4c5e9@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.2 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XZE/1j13"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C6CDC433CB;
+	Tue, 12 Dec 2023 15:27:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702394866;
+	bh=DWg3sQ9qxo14q4VzdIjndy7b2Wyci4KHHq5fC3tFwHw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XZE/1j13EWy8z8pFkXqNRn6HYJzjFYN/10G8iu8cAoafoyKUIycSHgfsSyvCG2Teo
+	 WIYd8P+3bQWl5nIbbFYJJT9TxFvKa61BuG3l1DafVw0ekfJDR8qSKIxXKDzCInlZYV
+	 raUWL9oNnYA4SBKtgOH4ful8G+RZ+T/71QpgbHLJGeR0sVbnohOUMP3PCXgg3SfKK2
+	 I9ufZ93he66i2gRzet1ebLl1wH5amInfBW6CfiulcjcH7V2WDx4RmZaQ5GFC1P65zR
+	 XRdJhdv/ySQONhdGuJFe03izK1d+T/JtjpbEhiwAqjmZ4pejzLDtj95C/Gi2y5/LVG
+	 RVsC/UmRz27YA==
+Date: Tue, 12 Dec 2023 15:27:35 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Sean Young <sean@mess.org>, Jean Delvare <jdelvare@suse.com>,
+	Javier Martinez Canillas <javierm@redhat.com>,
+	Liam Girdwood <lgirdwood@gmail.com>, Helge Deller <deller@gmx.de>,
+	linux-media@vger.kernel.org, linux-pwm@vger.kernel.org,
+	Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Support Opensource <support.opensource@diasemi.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Mark Gross <markgross@kernel.org>,
+	Daniel Thompson <daniel.thompson@linaro.org>,
+	Jingoo Han <jingoohan1@gmail.com>,
+	Jani Nikula <jani.nikula@intel.com>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-fbdev@vger.kernel.org
+Subject: Re: [PATCH v8 1/6] pwm: Rename pwm_apply_state() to
+ pwm_apply_might_sleep()
+Message-ID: <7594ea09-a6f3-4dac-acb3-d5f899f9cf84@sirena.org.uk>
+References: <cover.1702369869.git.sean@mess.org>
+ <9af7ba748fd2eb7e04208b6b183185f1daf78016.1702369869.git.sean@mess.org>
+ <20231212114100.sn7nzntousql2ays@pengutronix.de>
+ <f7be8d89-25ae-4d83-9577-12fcac41d0ab@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-
-On Tue, 2023-12-12 at 07:14 -0800, Guenter Roeck wrote:
-> On 12/12/23 06:28, Nuno S=C3=A1 wrote:
-> > On Mon, 2023-12-11 at 07:36 -0800, Guenter Roeck wrote:
-> > > On Tue, Dec 05, 2023 at 04:22:56PM +0100, Nuno Sa via B4 Relay wrote:
-> > > > From: Nuno Sa <nuno.sa@analog.com>
-> > > >=20
-> > > > The LTC4282 hot swap controller allows a board to be safely inserte=
-d and
-> > > > removed from a live backplane. Using one or more external N-channel=
- pass
-> > > > transistors, board supply voltage and inrush current are ramped up =
-at an
-> > > > adjustable rate. An I2C interface and onboard ADC allows for monito=
-ring
-> > > > of board current, voltage, power, energy and fault status.
-> > > >=20
-> > > > Signed-off-by: Nuno Sa <nuno.sa@analog.com>
-> > > > ---
-> > > > +
-> > >=20
-> > > > +power1_good		Power considered good
-> > >=20
-> > > I really don't like this attribute. Like the ones below it is non-sta=
-ndard
-> > > and invisible for standard applications. On top of that, I think it i=
-sn't
-> > > really related to "power" but to the output voltage. What does it act=
-ually
-> > > report that isn't included in the FET faults ?
-> > >=20
-> >=20
-> > This is detected with the FB pin and a voltage divider (from the output
-> > voltage). Basically depending on the level of that pin, the chip indica=
-te
-> > power
-> > good or power bad. I was also very reluctant with this attribute (I men=
-tion
-> > it
-> > in the v1 cover). This might not even indicate any misbehave. We also
-> > support
-> > reporting this using the gpio1 pin (if we set it that way). So, I guess=
- I
-> > can
-> > just drop this one and add support for it if we ever have a real usecas=
-e
-> > where I
-> > can actually justify having it :).
-> >=20
-> > We already have the power_bad fault log in debugfs so I'm not sure if a=
-dding
-> > this one there adds much value.
-> >=20
-> > >=20
-> > > > +fet_short_fault		FET short alarm
-> > > > +fet_bad_fault		FET bad alarm
-> > >=20
-> > > Those attributes have little value since they are not standard attrib=
-utes
-> > > and won't be seen by standard applications. On top of that, it is not
-> > > clear
-> > > (not documented) what the attribute actually reports. I assume it is
-> > > associated with the output voltage, i.e., in0, but that is just an
-> > > assumption.
-> > >=20
-> >=20
-> > fet_short - This is one is detected if the ADC measures a current sense
-> > voltage
-> > > 0.25mv while the fet gate is off.
-> >=20
-> > fet_bad - Is set by monitoring the voltage at the gate and the drain to
-> > source
-> > voltage.
-> >=20
-> > These ones might indicate real issues with the HW so I thought they cou=
-ld be
-> > important...
-> > =C2=A0=20
-> > > What do you think about introducing a standard inX_fault attribute ?
-> > > It would not be as specific as short/bad, but I think it would be mor=
-e
-> > > useful and we could add it to the ABI.
-> > >=20
-> >=20
-> > It would be better than nothing. And we do have fault logs for both the=
-se
-> > failures so userspace could also use that to know exactly what was the
-> > issue. If
-> > that's ok with you, I would then report this in inX_fault? Did you had =
-in
-> > mind
-> > putting this in in0 (vsource) or adding a new channel?
-> >=20
-> > In my first draft I had another voltage channel (label: VFET) to report=
- the
-> > fet_bad condition. I was using the inX_crit or inX_lcrit but it felt ba=
-d so
-> > I
-> > removed it...
-> >=20
->=20
-> This isn't an extra voltage channel. It should be associated with the out=
-put
-> voltage because that is what is affected, and that would be in0.
->=20
-
-Noted... will go with that and add an introductory patch for having inX_fau=
-lt in
-hwmon.
-
-> > > > +fault_logs_reset	Clears all the Logged Faults
-> >=20
-> > > What exactly does that do that is user visible ?
-> >=20
-> > Well, this one is because in some configurations the chip won't enable =
-the
-> > output load until you reset/clear the fault log keeping it from enablin=
-g the
-> > output.=C2=A0This is the comment I have in the code:
-> >=20
-> > "Fault log failures. These faults might be important in systems where a=
-uto-
-> > retry
-> > is not enabled since they will cause the part to latch off until they a=
-re
-> > cleared. Typically that happens when the system admin is close enough s=
-o he
-> > can
-> > check what happened and manually clear the faults. Moreover, manually
-> > clearing
-> > the faults might only matter when ON_FAULT_MASK in the CONTROL register=
- is
-> > set
-> > (which is the default) as in that case, a turn off signal from the ON p=
-in
-> > won't
-> > clear them."
-> >=20
-> > In v1 I was allowing to clear fauls log individually and you recommende=
-d to
-> > have
-> > an attribute to clear them all at once as that would simplify things.
-> >=20
-> > I just kept it in here because this might be important for the chip to =
-work
-> > as
-> > expected again so having it in debugfs might be weird.
-> >=20
->=20
-> How about using a write to in0_fault to clear the log ?
->=20
-
-But that would be just related with the output voltage. You can also have
-failures on VDD (over and undervolatge fault - I'm using in1_crit and in1_l=
-crit)
-and if you have the auto retry bit disabled, then clearing fault logs might=
- be
-important. This attribute is nice because makes it clear what will be done.
-OTOH, I do understand your worries with non standard ABI...
-
-I'm not sure how usual is for fault logs to be around that would justify fo=
-r a
-global standard attribute.
-
-- Nuno S=C3=A1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="iRFgPhdLTHQFhazT"
+Content-Disposition: inline
+In-Reply-To: <f7be8d89-25ae-4d83-9577-12fcac41d0ab@roeck-us.net>
+X-Cookie: If rash develops, discontinue use.
 
 
+--iRFgPhdLTHQFhazT
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Dec 12, 2023 at 07:22:18AM -0800, Guenter Roeck wrote:
+> On 12/12/23 03:41, Uwe Kleine-K=F6nig wrote:
+
+> > Several affected maintainers already acked, so I guess it's fine to take
+> > this via the pwm tree. An Ack from the remaining maintainers would be
+> > very welcome, an alternative would be to split the patch.
+
+> > Missing Acks so far:
+
+> >   - Jean Delvare / Guenter Roeck for drivers/hwmon/pwm-fan.c
+> >   - Javier Martinez Canillas for drivers/gpu/drm/solomon/ssd130x.c
+> >   - Liam Girdwood / Mark Brown for drivers/regulator/pwm-regulator.c
+> >   - Helge Deller for drivers/video/fbdev/ssd1307fb.c
+
+> Personally I find the change unnecessary and pointless, which is why I
+> didn't ack it. Even if function names were deemed important enough, keepi=
+ng
+> pwm_apply_state() for the time being and just adding pwm_apply_might_slee=
+p()
+> as duplicate would have done it, all the changes could have gone in long
+> ago, and per-subsystem cleanup could have been orthogonal.
+
+> I refrained from commenting because it might be considered bike shedding,
+> but I don't want to ack something I deem unnecessary and pointless without
+> comment. But then don't want to keep arguing either, so
+
+I haven't been reading this series because I couldn't tell why I was
+copied on it, it's only chance that made me open Guenter's mail here...
+
+Acked-by: Mark Brown <broonie@kernel.org>
+
+--iRFgPhdLTHQFhazT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmV4e+YACgkQJNaLcl1U
+h9Aqewf/UALlUMgqzHC9oYZI+Kcf9eGgd7QO/+pxhbI5hMnT5tFRH9lkihV8NhkZ
+moY0GH6PcO8YFj0y+Hs89vmJCd3MRAJ7tZ3eEg5/Q7BJejmk7kB24R5TlqUHUcg7
+DcHugsUrGAmvt3afuF03VqA53HlJ6D43J0cIv5j5X8x18v9Z4s0/4z+/zuMEJ8qi
+05gpioqCsqqPxlKMuWv9qPxn6PDVO3JMk7OUodLi1Tdzfio/b7/81nRQX6DgpHm4
+odCEdmvJwIAukE1TlXxfpb7GZuHEe0z04rKSLfvDj6s90hRM9uHdJb3L7kp1Xf0n
+nsm4Twh4PnRdMJRKACafo9HyC8RvJw==
+=Wkx1
+-----END PGP SIGNATURE-----
+
+--iRFgPhdLTHQFhazT--
