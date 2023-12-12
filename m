@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Be4X8eAi"
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A9ECA;
-	Tue, 12 Dec 2023 07:14:21 -0800 (PST)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-2030fbc2417so123841fac.3;
-        Tue, 12 Dec 2023 07:14:21 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BDHsEI/O"
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9384683;
+	Tue, 12 Dec 2023 07:22:24 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id 5614622812f47-3b9dbbaa9a9so4770904b6e.2;
+        Tue, 12 Dec 2023 07:22:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702394061; x=1702998861; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1702394544; x=1702999344; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=0Q82A7YNLsEgZIKZ3MuE+ES9oIeEJyJzsdp/yKVEP3M=;
-        b=Be4X8eAiaiGq124Vctm9Z3IuWkWoxYrTNUlpa3D2MXBOwkmAKGGr6BCK+ojFbG0I2L
-         6ABpSFh0JJISlvyplPDmodaVkp6y6ASAK3Wf0Nzziy1AufoWK6tbTS/Tq5off36kaY7G
-         yhyXu4ohhCaq1UMN2iMDlKVKT98evRDM9LLUF6BzW6QgCaOhyF1w2iyQGw88GUfdvN7m
-         kOGkTdr/e5+/0MiOR2pDabyjCGwwPltzp2xn8NDJxBAdpXW3L5BvdATe5WqKD+72XC1/
-         DWHezP0GaE/xFeny118+byO8kRqt68biJc0cpB/1V2NIJ4E2H7b21PedVdQ4qTqx2UN8
-         rRGA==
+        bh=75Rm+5xBDQKmd+48f6tczEiVYrcFon2o4idJL/p3O7M=;
+        b=BDHsEI/OVfZflTp+T/anCwxYO25+WBHMwkJ+H4kMJVtnWaNWG7Ay7DyvL4Goa5lZoJ
+         UQCSCziGeBIVgUnavqgXKiWH3XjPYhDicltiglZmm2NKV+GqGJII7/NLkRnbsvAfSllV
+         0qnvx2+Esbcn0MyL5Lf9kqCVolUN6cvfRPBTbpgWrZWdNhcYo4K3GuWy2Kika4g+NHfe
+         yrFwvz/iRtZJMAEIT2lXIEBaZVkuPNDqtJwcMxIwgvKxO9ZU98zm1cBvNbWqoafVeUbX
+         8pQVsdi2li7uaI0xjnNM+IWezeP9IrkUEqOVLG8ayEQkWLRf1MJgrDfz1PDcv1vfPwO7
+         p6cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702394061; x=1702998861;
+        d=1e100.net; s=20230601; t=1702394544; x=1702999344;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0Q82A7YNLsEgZIKZ3MuE+ES9oIeEJyJzsdp/yKVEP3M=;
-        b=YmLD0xDFDWqKrstefD7qzGdwtY19Ekjv3sWoGPpv95PC8FueKD4DCRcxQT808WKB+2
-         ys7GSYrprMLIhSkmVeRnFc5mZQ5uT09g5atW8rKjkTHaQKU3vRrWbiRb/pypE1wmCGZp
-         rLFuWf7KugA2bhDMlhZ0M4dkrClQRjrnrNuSTxj7fdo/RRH5myzPnL2HDpNSTuAUL/6o
-         P0qA2ujiTExFTiLelGJjX74ZoKricrPH+O+HZKxM5Mlc0/NBu30EyxD7UYvnLjRko0le
-         oIG0XRzX1IXa+j5GoDTeTBvoaMs1rQ7ZIzSKm+1ZvAY/M2t1gowJa4OTW8XdVpqbOjeP
-         qsiw==
-X-Gm-Message-State: AOJu0Yw18i4+JnptTkVaT8Hc2kPfA6tov79naLVHijYo12SjCpBLkyrr
-	nXcBOgLEjT6YLfR3dYW9JVw=
-X-Google-Smtp-Source: AGHT+IHjWy79N/NLmtx8hxNiXbqSmqMXAvj5rornY3O1pALUZXevA8Bt5Qv+KMWMQj5UaAAWeqMe/Q==
-X-Received: by 2002:a05:6870:20d:b0:1fb:75c:3fde with SMTP id j13-20020a056870020d00b001fb075c3fdemr7861841oad.62.1702394060845;
-        Tue, 12 Dec 2023 07:14:20 -0800 (PST)
+        bh=75Rm+5xBDQKmd+48f6tczEiVYrcFon2o4idJL/p3O7M=;
+        b=Wd8XAy9prmMpd1J2kjIPIoZWXZGHEdaLWu0jkTAlGVeTE3ql2u+qPY/hG2qIXUaQr9
+         aiePNfgSzE/nx9JYWCUsLmLK4LnTi7U3YhnPO5Jc69yrCph2r1IHw4zTJxxJS6+XGUDI
+         7APHPHAWtL2O07+Doe+WaxpdU5y/B5JH18tzgR00rwWjguCzAp+eIdSR49wCaDHvJwo2
+         esvtXJMD74R01Rh3+7yaWtciC5eXjiE/083PMqbaUtpPNr5ux6dHwnymr3oJMxF5N6Gq
+         ibrjKaiskCiA2Nw0QNmVgSm8rF7Zf5duUPz6Cp8B/FxqB4Inb9sdFsjlXsC8OuvoMMgH
+         ibzQ==
+X-Gm-Message-State: AOJu0Yzjx9KEj9EJMGdsfNERxvVfdt/yDyDTFZPfnrrk5Y8v07NLz3jk
+	UjkPK7hqKzpnUw/BG3rpFeU=
+X-Google-Smtp-Source: AGHT+IHZ4pvntu/TwpQ+WJl0z4EXkuFPrI/3FnIMC3Z64SrFUnbiRb6pzz8yVWJ0MKShxAPcgZaE0A==
+X-Received: by 2002:a05:6808:158e:b0:3b9:e801:7aae with SMTP id t14-20020a056808158e00b003b9e8017aaemr8926120oiw.54.1702394543815;
+        Tue, 12 Dec 2023 07:22:23 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n10-20020a9d4d0a000000b006d9d144786fsm2207871otf.79.2023.12.12.07.14.19
+        by smtp.gmail.com with ESMTPSA id ck20-20020a056808251400b003b9f057de84sm806103oib.58.2023.12.12.07.22.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Dec 2023 07:14:20 -0800 (PST)
+        Tue, 12 Dec 2023 07:22:22 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <436257a1-628e-4a45-884d-348e73d4c5e9@roeck-us.net>
-Date: Tue, 12 Dec 2023 07:14:18 -0800
+Message-ID: <f7be8d89-25ae-4d83-9577-12fcac41d0ab@roeck-us.net>
+Date: Tue, 12 Dec 2023 07:22:18 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -49,18 +49,40 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] hwmon: ltc4282: add support for the LTC4282 chip
+Subject: Re: [PATCH v8 1/6] pwm: Rename pwm_apply_state() to
+ pwm_apply_might_sleep()
 Content-Language: en-US
-To: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>, nuno.sa@analog.com
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-doc@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-References: <20231205-ltc4282-support-v3-0-e0877b281bc2@analog.com>
- <20231205-ltc4282-support-v3-2-e0877b281bc2@analog.com>
- <a0eb6cb4-b8af-4a6f-8888-fa18f8f1d188@roeck-us.net>
- <d190620900ceda6c2846f3828ee389da917a66e0.camel@gmail.com>
+To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+ Sean Young <sean@mess.org>, Jean Delvare <jdelvare@suse.com>,
+ Javier Martinez Canillas <javierm@redhat.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Helge Deller <deller@gmx.de>
+Cc: linux-media@vger.kernel.org, linux-pwm@vger.kernel.org,
+ Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
+ Thierry Reding <thierry.reding@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
+ Jani Nikula <jani.nikula@linux.intel.com>,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>,
+ Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+ David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ Support Opensource <support.opensource@diasemi.com>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+ Lee Jones <lee@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Hans de Goede <hdegoede@redhat.com>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Mark Gross <markgross@kernel.org>,
+ Daniel Thompson <daniel.thompson@linaro.org>,
+ Jingoo Han <jingoohan1@gmail.com>, Jani Nikula <jani.nikula@intel.com>,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+ linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-leds@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-fbdev@vger.kernel.org
+References: <cover.1702369869.git.sean@mess.org>
+ <9af7ba748fd2eb7e04208b6b183185f1daf78016.1702369869.git.sean@mess.org>
+ <20231212114100.sn7nzntousql2ays@pengutronix.de>
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -105,107 +127,56 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <d190620900ceda6c2846f3828ee389da917a66e0.camel@gmail.com>
+In-Reply-To: <20231212114100.sn7nzntousql2ays@pengutronix.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 12/12/23 06:28, Nuno Sá wrote:
-> On Mon, 2023-12-11 at 07:36 -0800, Guenter Roeck wrote:
->> On Tue, Dec 05, 2023 at 04:22:56PM +0100, Nuno Sa via B4 Relay wrote:
->>> From: Nuno Sa <nuno.sa@analog.com>
->>>
->>> The LTC4282 hot swap controller allows a board to be safely inserted and
->>> removed from a live backplane. Using one or more external N-channel pass
->>> transistors, board supply voltage and inrush current are ramped up at an
->>> adjustable rate. An I2C interface and onboard ADC allows for monitoring
->>> of board current, voltage, power, energy and fault status.
->>>
->>> Signed-off-by: Nuno Sa <nuno.sa@analog.com>
->>> ---
->>> +
+On 12/12/23 03:41, Uwe Kleine-König wrote:
+> On Tue, Dec 12, 2023 at 08:34:00AM +0000, Sean Young wrote:
+>> In order to introduce a pwm api which can be used from atomic context,
+>> we will need two functions for applying pwm changes:
 >>
->>> +power1_good		Power considered good
+>> 	int pwm_apply_might_sleep(struct pwm *, struct pwm_state *);
+>> 	int pwm_apply_atomic(struct pwm *, struct pwm_state *);
 >>
->> I really don't like this attribute. Like the ones below it is non-standard
->> and invisible for standard applications. On top of that, I think it isn't
->> really related to "power" but to the output voltage. What does it actually
->> report that isn't included in the FET faults ?
+>> This commit just deals with renaming pwm_apply_state(), a following
+>> commit will introduce the pwm_apply_atomic() function.
 >>
+>> Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com> # for input
+>> Acked-by: Hans de Goede <hdegoede@redhat.com>
+>> Acked-by: Jani Nikula <jani.nikula@intel.com>
+>> Acked-by: Lee Jones <lee@kernel.org>
+>> Signed-off-by: Sean Young <sean@mess.org>
 > 
-> This is detected with the FB pin and a voltage divider (from the output
-> voltage). Basically depending on the level of that pin, the chip indicate power
-> good or power bad. I was also very reluctant with this attribute (I mention it
-> in the v1 cover). This might not even indicate any misbehave. We also support
-> reporting this using the gpio1 pin (if we set it that way). So, I guess I can
-> just drop this one and add support for it if we ever have a real usecase where I
-> can actually justify having it :).
+> Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 > 
-> We already have the power_bad fault log in debugfs so I'm not sure if adding
-> this one there adds much value.
+> Several affected maintainers already acked, so I guess it's fine to take
+> this via the pwm tree. An Ack from the remaining maintainers would be
+> very welcome, an alternative would be to split the patch.
 > 
->>
->>> +fet_short_fault		FET short alarm
->>> +fet_bad_fault		FET bad alarm
->>
->> Those attributes have little value since they are not standard attributes
->> and won't be seen by standard applications. On top of that, it is not clear
->> (not documented) what the attribute actually reports. I assume it is
->> associated with the output voltage, i.e., in0, but that is just an
->> assumption.
->>
+> Missing Acks so far:
 > 
-> fet_short - This is one is detected if the ADC measures a current sense voltage
->> 0.25mv while the fet gate is off.
+>   - Jean Delvare / Guenter Roeck for drivers/hwmon/pwm-fan.c
+>   - Javier Martinez Canillas for drivers/gpu/drm/solomon/ssd130x.c
+>   - Liam Girdwood / Mark Brown for drivers/regulator/pwm-regulator.c
+>   - Helge Deller for drivers/video/fbdev/ssd1307fb.c
 > 
-> fet_bad - Is set by monitoring the voltage at the gate and the drain to source
-> voltage.
-> 
-> These ones might indicate real issues with the HW so I thought they could be
-> important...
->   
->> What do you think about introducing a standard inX_fault attribute ?
->> It would not be as specific as short/bad, but I think it would be more
->> useful and we could add it to the ABI.
->>
-> 
-> It would be better than nothing. And we do have fault logs for both these
-> failures so userspace could also use that to know exactly what was the issue. If
-> that's ok with you, I would then report this in inX_fault? Did you had in mind
-> putting this in in0 (vsource) or adding a new channel?
-> 
-> In my first draft I had another voltage channel (label: VFET) to report the
-> fet_bad condition. I was using the inX_crit or inX_lcrit but it felt bad so I
-> removed it...
+> Best regards
+> Uwe
 > 
 
-This isn't an extra voltage channel. It should be associated with the output
-voltage because that is what is affected, and that would be in0.
 
->>> +fault_logs_reset	Clears all the Logged Faults
-> 
->> What exactly does that do that is user visible ?
-> 
-> Well, this one is because in some configurations the chip won't enable the
-> output load until you reset/clear the fault log keeping it from enabling the
-> output. This is the comment I have in the code:
-> 
-> "Fault log failures. These faults might be important in systems where auto-retry
-> is not enabled since they will cause the part to latch off until they are
-> cleared. Typically that happens when the system admin is close enough so he can
-> check what happened and manually clear the faults. Moreover, manually clearing
-> the faults might only matter when ON_FAULT_MASK in the CONTROL register is set
-> (which is the default) as in that case, a turn off signal from the ON pin won't
-> clear them."
-> 
-> In v1 I was allowing to clear fauls log individually and you recommended to have
-> an attribute to clear them all at once as that would simplify things.
-> 
-> I just kept it in here because this might be important for the chip to work as
-> expected again so having it in debugfs might be weird.
-> 
+Personally I find the change unnecessary and pointless, which is why I
+didn't ack it. Even if function names were deemed important enough, keeping
+pwm_apply_state() for the time being and just adding pwm_apply_might_sleep()
+as duplicate would have done it, all the changes could have gone in long
+ago, and per-subsystem cleanup could have been orthogonal.
 
-How about using a write to in0_fault to clear the log ?
+I refrained from commenting because it might be considered bike shedding,
+but I don't want to ack something I deem unnecessary and pointless without
+comment. But then don't want to keep arguing either, so
 
-Thanks,
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+
 Guenter
 
