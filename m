@@ -1,94 +1,78 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="TjPZ8Xow"
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E68DC8;
-	Mon, 11 Dec 2023 13:02:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-	t=1702328533; x=1702933333; i=w_armin@gmx.de;
-	bh=r5JwhE7WVnOi0zL1pvBnZD8RDseYzabf8g49jVHn60k=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-	b=TjPZ8XowpffTga7TPKfRglvgWbusZV6t+GeMi02o2ijZsBOXHeLllYIUj2SzI18m
-	 +FvAlID7zEXDKrKB1NCxRBw8DH/TF7610gaJbQZTtHvfr1FOsLZEq00BipxEfsmgL
-	 J44HKU2OccCHVvgiKq9SxCxW1FoADIT51rXVoe9rBek2zG6LIMpQ7glwvqcNSm2nG
-	 euENf2JdTsGEo28007zoI+FlqMxFlxk8rBetYxwj5F/+hnR3Z7POs33y1851mo6Td
-	 CrHZ9bRjRbPVz6I6tf23DbcRpi2QZGX3snl7WUJeZ6/lamX/Qn+w2FzZgQY0CowJ4
-	 O7MMBKa0G9DB/zprQQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from mx-amd-b650.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MEm27-1r0un00yU7-00GFIu; Mon, 11 Dec 2023 22:02:13 +0100
-From: Armin Wolf <W_Armin@gmx.de>
-To: clemens@ladisch.de
-Cc: jdelvare@suse.com,
-	linux@roeck-us.net,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] hwmon: (k10temp) Add support for AMD Family 19h Model 8h
-Date: Mon, 11 Dec 2023 22:02:06 +0100
-Message-Id: <20231211210206.11060-1-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.39.2
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="Ob8fu2Iw"
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6FEDC6
+	for <linux-hwmon@vger.kernel.org>; Mon, 11 Dec 2023 18:52:07 -0800 (PST)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id B5A3F2C01BC;
+	Tue, 12 Dec 2023 15:52:03 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1702349523;
+	bh=EhEDl/bwO+lO79WJrltFLO5hM+8zR4lFT8h6icmX18o=;
+	h=From:To:Subject:Date:From;
+	b=Ob8fu2IwSI5Of0REca9PkO8NfD8JaXUPQ5vA/mtxPZw2pPkfYIVpadlQKDe5nN5aG
+	 W9u2IjG2x0PKVnyvBTCQVYzGSP1aVLIBB5xg3SCeh5kyIWNBzu9ZlQbRug637W9LJY
+	 5rlvkVlHm8YGRBYPVsPlQSzhP7q4xHScsPOzdEI0FSEnV1Kw57G8Ua/vRfYFdr6392
+	 qrPnwxMqYP1mGvFT+aI1Qcc3XLueE0RKeD7oXMQgzLouWeOLk6QuJItq9P+mDhJVqH
+	 rWkgLmZ8ISdU4NE4dQLFtulUz/3uiz3eFeMFSNOqlM+o2vfqSujW6w7EQyCVkv3++G
+	 Gww6Yk9Hwtcbw==
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B6577cad30000>; Tue, 12 Dec 2023 15:52:03 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.40; Tue, 12 Dec 2023 15:52:03 +1300
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
+ svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.48; Tue, 12 Dec 2023 15:52:03 +1300
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1118.040; Tue, 12 Dec 2023 15:52:03 +1300
+From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
+Subject: Deterministic device paths for ACPI instantiated hwmon devices
+Thread-Topic: Deterministic device paths for ACPI instantiated hwmon devices
+Thread-Index: AQHaLKYvbHi8z1cXhUawglUQytIyoQ==
+Date: Tue, 12 Dec 2023 02:52:03 +0000
+Message-ID: <9d52cc19-062b-4b8d-a9a0-bc2101dccab4@alliedtelesis.co.nz>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <26BEBAFA17279E45A8A4C2C54BD2AC46@atlnz.lc>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:RbIggH91CFz/XAJwNFKyhG5mZPwntsqz+9ypAA9HPaIqGhpBL0T
- 08P3t2gRNu/jk/B556BDzdXSeL+HolRF88fQwtpT5GPMaeN1wDaXcl3ZnFZpDYwgVKIUucV
- zgPOipxbT6O1hGI1Ru9w8e6x0CiVfEkBPGKPsiXltFm0LOy0E534iYYf9Haxx+/RISNV81f
- fekaXLqyK8H+t3W0vKGTg==
-UI-OutboundReport: notjunk:1;M01:P0:YuDohJt/SOI=;pWZflexVTv+dqq4CCbj6nbD7xg9
- KvYStuzLunyTgVcytArwjFQlqDb1Zz3Dv1xLosT6h6a6tURGqjpDuTPbwDwFCN2sxXNGOZlgM
- tCsc7IAIxrjc9UjnacWofkFdBk14QPQvUtQBhRbPYMye6o/Qy3i+LZavBZICqqcaWDdIuKp+B
- +fdtsNxUOfrcmuPK1WAK3VSH0xYYMHqv7ECYKyBJrx//O2DTNA569wiwkQXhCi2x/rtmIGAsv
- qGFs1gh/2Rr838ZIu+xbMJzJZHb4pDbXd/ub/Z/Una8OvD+VlVlhh7tKQKDqVoVr/hYjp4u+L
- Vcy+V33W4scCkIRrCRxdUfngDtFjMzoYhKs42TpFwhWFox0ijpYqyOvi42PT8J9c0cuQKZzyz
- ZDmm0FVBxiV7bpblcELaiq6QOqFt0n+t/M7bkpdWWgW8/pVNSi4nH5yAxseEjE1vFrjAz81eU
- Lzko9dqQoi/X9eKyrYMIEhcXcuczHprMrOAVuIF6DEPIccU83r32R+xWV0rWrojtLTbPo2cRc
- apk+xKBF26KkZkapjdMshdLgO/Ke8yKJC46u3jffQE8k+XH1Co+hFnRwgn4SZmY3pSkDN+SoL
- xN4F2x+c2ZbGq1fBtFGiRWO5JUnJyYU5hrJ1xekLWXbceZf+FdW21BCMAwZoXyaOPN7Ry0WPE
- DI1ygk/fWysG4d6n1EguL/gtKK+Ytj6dIwrf5D2dS6skpKMN+C9UaMbpnqKW7k7DACcjwA+t5
- 5997mkJWV+vudVFFtO1M76J6vhgQa1/Ng/K8+aZzJl+IPeguVoDJvqJOpiwNyAa/oqBTcj0fN
- mlTUA0rehZW2Bbcrps5gRi4LGM8BJ9jyHT9voHLL7iq1XkPzGSan2SyyT+gvGNV6Lz+jALN/c
- 0ErI+oRckoUDxhpdVMGYubI5q1gH70xbgYdwkRQGoMwjAOHGSG+Hg9uiUpBIVFA0s+R/nqkcl
- P0cBwwrddudoGzQwKngERZ1irE4=
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=AZXP4EfG c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=e2cXIFwxEfEA:10 a=2gvIz3qf2Ucxk_-o8dMA:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
 
-From: Jami Kurki <bindkeys@gmail.com>
-
-From: Jami Kurki <bindkeys@gmail.com>
-
-Add support for AMD Family 19h Model 8h CPUs, which appear to
-be the Zen 3 based AMD Threadripper 5000WX series (Chagall).
-
-The patch was tested with an AMD Threadripper 5955WX.
-
-Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D218244
-Tested-by: Jami Kurki <bindkeys@gmail.com>
-Signed-off-by: Jami Kurki <bindkeys@gmail.com>
-Co-developed-by: Armin Wolf <W_Armin@gmx.de>
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
-Changes since v1:
-- reword patch description
-- reduce changes to existing code
-=2D--
- drivers/hwmon/k10temp.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-index bae0becfa24b..8092312c0a87 100644
-=2D-- a/drivers/hwmon/k10temp.c
-+++ b/drivers/hwmon/k10temp.c
-@@ -455,6 +455,7 @@ static int k10temp_probe(struct pci_dev *pdev, const s=
-truct pci_device_id *id)
-
- 		switch (boot_cpu_data.x86_model) {
- 		case 0x0 ... 0x1:	/* Zen3 SP3/TR */
-+		case 0x8:		/* Zen3 TR Chagall */
- 		case 0x21:		/* Zen3 Ryzen Desktop */
- 		case 0x50 ... 0x5f:	/* Green Sardine */
- 			data->ccd_offset =3D 0x154;
-=2D-
-2.39.2
-
+SGksDQoNCldlJ3JlIGxvb2tpbmcgYXQgb3VyIGZpcnN0IGluLWhvdXNlIG1vZHVsYXIgcHJvZHVj
+dCB1c2luZyBhbiB4ODZfNjQgQ1BVLiANClByZXZpb3VzbHkgd2UndmUgZG9uZSBvdGhlciBwcm9k
+dWN0cyB1c2luZyBvdGhlciB2YXJpb3VzIGVtYmVkZGVkIENQVSANCmFyY2hpdGVjdHVyZXMgd2hp
+Y2ggbWFrZSB1c2Ugb2YgYSBkZXZpY2UgdHJlZSBmb3IgZGVzY3JpYmluZyB0aGUgaGFyZHdhcmUu
+DQoNCldlJ3ZlIGdvdCBzb21lIHVzZXJzcGFjZSBjb2RlIHdoaWNoIHRyaWVzIHRvIHByZXNlbnQg
+ZW5kLXVzZXIgY29uc3VtYWJsZSANCm5hbWVzIGZvciB2YXJpb3VzIGhhcmR3YXJlIG1vbml0b3Jz
+IG9uIHJlbW92YWJsZSBtb2R1bGVzIChlLmcuIA0KInRlbXBlcmF0dXJlIHNlbnNvciAxIG9uIHRo
+ZSBjYXJkIGluIGJheSAzIikuDQoNCldlIGRvIHRoaXMgYmFzZWQgb24ga25vd2luZyB0aGUgZGV0
+ZXJtaW5pc3RpYyBwYXRoIG9mIHRoZSBkZXZpY2UgaW4gDQpzeXNmcyAoZS5nLiAvc3lzL2Rldmlj
+ZXMvcGxhdGZvcm0vc29jL2kyYzAvbG03NUAyZSkgdGhhdCB3b3JrcyBmaW5lIGZvciANCmRldmlj
+ZXMgaW5zdGFudGlhdGVkIG9uIGEgZGV2aWNlIHRyZWUgYXdhcmUgc3lzdGVtICh1c2luZyBkZXZp
+Y2UtdHJlZSANCm92ZXJsYXlzKS4gSG93ZXZlciB3ZSd2ZSB5ZXQgdG8gZmluZCBhbnkgd2F5IG9m
+IGdldHRpbmcgYSBkZXRlcm1pbmlzdGljIA0KcGF0aCBvdXQgb2YgZGV2aWNlcyBpbnN0YW50aWF0
+ZWQgdmlhIEFDUEkgb3ZlcmxheXMuIEZvciBub3cgd2UndmUgYmVlbiANCnVzaW5nIHRoZSBgL3N5
+cy9jbGFzcy9od21vbi9od21vbk4vZGV2aWNlYCBwYXRocyBidXQgdGhlIE4gZGVwZW5kcyBvbiAN
+CnRoZSBvcmRlciB0aGUgaGFyZHdhcmUgd2FzIGRpc2NvdmVyZWQgd2hpY2ggbWF5IG5vdCBiZSB0
+aGUgb3JkZXIgdGhlIA0KZW5kLXVzZXIgZXhwZWN0cy4NCg0KSXMgdGhlcmUgYSB3YXkgb2YgaW5m
+ZXJyaW5nL2luZmx1ZW5jaW5nIHRoZSBudW1iZXJpbmcgdGhhdCBnZXRzIHVzZWQgaW4gDQp0aGUg
+YC9zeXMvZGV2aWNlcy9MTlhTWVNUTTowMC9MTlhTWUJVUzowMC9BTURJMDAxMDowMC9gIHBhdGhz
+IHRoYXQgDQphcHBlYXIgd2hlbiB0aGUgZGV2aWNlcyBnZXQgaW5zdGFudGlhdGVkPw0KDQpUaGFu
+a3MsDQpDaHJpcw0K
