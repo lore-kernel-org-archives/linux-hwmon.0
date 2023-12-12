@@ -1,128 +1,133 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18EBDC3
-	for <linux-hwmon@vger.kernel.org>; Tue, 12 Dec 2023 03:42:30 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rD18I-0005bB-Vy; Tue, 12 Dec 2023 12:41:03 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rD18G-00FKJT-S1; Tue, 12 Dec 2023 12:41:00 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rD18G-001bBp-HP; Tue, 12 Dec 2023 12:41:00 +0100
-Date: Tue, 12 Dec 2023 12:41:00 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Sean Young <sean@mess.org>, Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Javier Martinez Canillas <javierm@redhat.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Helge Deller <deller@gmx.de>
-Cc: linux-media@vger.kernel.org, linux-pwm@vger.kernel.org,
-	Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Support Opensource <support.opensource@diasemi.com>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-	Mark Gross <markgross@kernel.org>,
-	Daniel Thompson <daniel.thompson@linaro.org>,
-	Jingoo Han <jingoohan1@gmail.com>,
-	Jani Nikula <jani.nikula@intel.com>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-fbdev@vger.kernel.org
-Subject: Re: [PATCH v8 1/6] pwm: Rename pwm_apply_state() to
- pwm_apply_might_sleep()
-Message-ID: <20231212114100.sn7nzntousql2ays@pengutronix.de>
-References: <cover.1702369869.git.sean@mess.org>
- <9af7ba748fd2eb7e04208b6b183185f1daf78016.1702369869.git.sean@mess.org>
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W5p32vTW"
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC95109;
+	Tue, 12 Dec 2023 05:49:59 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-336210c34ebso2098926f8f.1;
+        Tue, 12 Dec 2023 05:49:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702388997; x=1702993797; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=SKCoI3Z14PMDWcBeZWOED9ULYXLkoHexXMA063HaNhM=;
+        b=W5p32vTWRBu7G7SyoHFwo2TH36h6bYjpZTTWZzTaMzwDybSljuhaaiSZ4VhXeMAcqM
+         R9PrSKCMJQjrxbNEQ36zdBsAU1yKXstCu0gTdcws0lthqJLhkqZ0mIV3FwPI7ReH7XKh
+         oD/HwjjZZ06zbiXhDhrhRChfTGM+Vx2h8yZ1FcD2hM2Cb7/JqhMo8GjNZP4x3DCRJkQY
+         E5FsW3MDf7izyx5w5iOvsyn2RtJbduOf+CPJsFLLPdx5U8xNHGLLgbCU2Z64hS+j1A9g
+         vg8CcHMDklYdVnBHq6wFsn9CLy+dFPb1eex/vHpWduIBoTpu4MTulpkniqjvbRlgHaes
+         PT8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702388997; x=1702993797;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SKCoI3Z14PMDWcBeZWOED9ULYXLkoHexXMA063HaNhM=;
+        b=TygCvJRr9GxBt7j1WPwBUZC7qP5zF36M1x9nurpN9GdyBx0y70ZoGgoMCxVjuif29V
+         YRQTcqgEuyyQdQePhMaYZGoQ8prgv9Ixl0yxH/BXCBhB7FvmS/004hh4EP+9IPQtOHqc
+         f6fNRDd3WXNwLFVEOUgidbL4/dPeYWOpZ/p6UpSQ15c0ctWjJEiJM4fN4VVNNyHW7OJ0
+         7C/p9uigIJeHg7ew8ht/APwJTZVqRNXfDn/vbme04X1Yag5IGVKwf/Sz4X5WDc6ckfNA
+         fKIi4Xrx1hC7uni8cjwPRnnj+vRYztt4qwX1BJL9HJu80RwQZlnqy54GWOTvoEsGovmp
+         ODmQ==
+X-Gm-Message-State: AOJu0YymA7Ix2RTY2J8vCbk7RmxhRXSjCjjfkFEXt0cHmjq0rUYTcRb9
+	naTf7gvO7B+OiMSgk7BiwFg=
+X-Google-Smtp-Source: AGHT+IH/expu4WThuyDgGnB7BZ1cOvTWQKCjCxwbeZirIbU1Ye7mHzV9czSmswpa2qM2d8dm88q0Vw==
+X-Received: by 2002:adf:ee43:0:b0:333:4156:2763 with SMTP id w3-20020adfee43000000b0033341562763mr2326920wro.140.1702388996912;
+        Tue, 12 Dec 2023 05:49:56 -0800 (PST)
+Received: from ?IPv6:2003:f6:ef1b:2000:944c:cbc7:1e1c:2c47? (p200300f6ef1b2000944ccbc71e1c2c47.dip0.t-ipconnect.de. [2003:f6:ef1b:2000:944c:cbc7:1e1c:2c47])
+        by smtp.gmail.com with ESMTPSA id s12-20020adf978c000000b003333a0da243sm10994335wrb.81.2023.12.12.05.49.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Dec 2023 05:49:56 -0800 (PST)
+Message-ID: <af8fa90004157fa6b464b5f74335d9cbfa667675.camel@gmail.com>
+Subject: Re: [PATCH v3 2/2] hwmon: ltc4282: add support for the LTC4282 chip
+From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>, nuno.sa@analog.com
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-doc@vger.kernel.org, Jean Delvare <jdelvare@suse.com>, Rob Herring
+ <robh+dt@kernel.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>,  Conor Dooley <conor+dt@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>
+Date: Tue, 12 Dec 2023 14:53:00 +0100
+In-Reply-To: <7a6a0517-47f8-47df-9e61-44adb60f6135@roeck-us.net>
+References: <20231205-ltc4282-support-v3-0-e0877b281bc2@analog.com>
+	 <20231205-ltc4282-support-v3-2-e0877b281bc2@analog.com>
+	 <7a6a0517-47f8-47df-9e61-44adb60f6135@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.2 
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="kqcylsquh2dgmtcq"
-Content-Disposition: inline
-In-Reply-To: <9af7ba748fd2eb7e04208b6b183185f1daf78016.1702369869.git.sean@mess.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
-
---kqcylsquh2dgmtcq
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Dec 12, 2023 at 08:34:00AM +0000, Sean Young wrote:
-> In order to introduce a pwm api which can be used from atomic context,
-> we will need two functions for applying pwm changes:
+On Mon, 2023-12-11 at 07:41 -0800, Guenter Roeck wrote:
+> On Tue, Dec 05, 2023 at 04:22:56PM +0100, Nuno Sa via B4 Relay wrote:
+> > From: Nuno Sa <nuno.sa@analog.com>
+> >=20
+> > The LTC4282 hot swap controller allows a board to be safely inserted an=
+d
+> > removed from a live backplane. Using one or more external N-channel pas=
+s
+> > transistors, board supply voltage and inrush current are ramped up at a=
+n
+> > adjustable rate. An I2C interface and onboard ADC allows for monitoring
+> > of board current, voltage, power, energy and fault status.
+> >=20
+> > Signed-off-by: Nuno Sa <nuno.sa@analog.com>
+> > ---
+> [ ... ]
 >=20
-> 	int pwm_apply_might_sleep(struct pwm *, struct pwm_state *);
-> 	int pwm_apply_atomic(struct pwm *, struct pwm_state *);
+> > +/* power1_fault */
+> > +static SENSOR_DEVICE_ATTR_RO(power1_good, ltc4282_status,
+> > +			=C2=A0=C2=A0=C2=A0=C2=A0 LTC4282_POWER_GOOD_MASK);
+> > +/* FET faults */
+> > +static SENSOR_DEVICE_ATTR_RO(fet_short_fault, ltc4282_status,
+> > +			=C2=A0=C2=A0=C2=A0=C2=A0 LTC4282_FET_SHORT_MASK);
+> > +static SENSOR_DEVICE_ATTR_RO(fet_bad_fault, ltc4282_status,
+> > +			=C2=A0=C2=A0=C2=A0=C2=A0 LTC4282_FET_BAD_STATUS_MASK);
+> > +/*
+> > + * Fault log failures. These faults might be important in systems wher=
+e
+> > + * auto-retry is not enabled since they will cause the part to latch o=
+ff
+> > until
+> > + * they are cleared. Typically that happens when the system admin is c=
+lose
+> > + * enough so he can check what happened and manually clear the faults.
+> > Hence, we
+> > + * provide an attribute to clear all fauls at once while still capable=
+ of
+> > + * checking individual faults in debugfs.
+> > + */
+> > +static SENSOR_DEVICE_ATTR_WO(fault_logs_reset, ltc4282_clear_faults, 0=
+);
+> > +
+> > +static struct attribute *ltc4282_attrs[] =3D {
+> > +	&sensor_dev_attr_energy1_input.dev_attr.attr,
+> > +	&sensor_dev_attr_power1_good.dev_attr.attr,
+> > +	&sensor_dev_attr_fet_bad_fault.dev_attr.attr,
+> > +	&sensor_dev_attr_fet_short_fault.dev_attr.attr,
+> > +	&sensor_dev_attr_fault_logs_reset.dev_attr.attr,
+> > +	NULL
+> > +};
+> > +ATTRIBUTE_GROUPS(ltc4282);
+> > +
 >=20
-> This commit just deals with renaming pwm_apply_state(), a following
-> commit will introduce the pwm_apply_atomic() function.
+> Ah, now I see what those are for. Please move all but energy1_input
+> to debugfs, including clearing the faults.
 >=20
-> Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com> # for input
-> Acked-by: Hans de Goede <hdegoede@redhat.com>
-> Acked-by: Jani Nikula <jani.nikula@intel.com>
-> Acked-by: Lee Jones <lee@kernel.org>
-> Signed-off-by: Sean Young <sean@mess.org>
 
-Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+I'll reply in the other thread. Just wanted to make it clear (not totally s=
+ure
+it is) that all of those attributes are status stuff and not fault logs. Al=
+l of
+the fault logs where moved to debugfs and I kept this one in here. If this =
+was
+already clear to you, sorry for the noise.
 
-Several affected maintainers already acked, so I guess it's fine to take
-this via the pwm tree. An Ack from the remaining maintainers would be
-very welcome, an alternative would be to split the patch.
+- Nuno S=C3=A1
+>=20
+>=20
 
-Missing Acks so far:
-
- - Jean Delvare / Guenter Roeck for drivers/hwmon/pwm-fan.c
- - Javier Martinez Canillas for drivers/gpu/drm/solomon/ssd130x.c
- - Liam Girdwood / Mark Brown for drivers/regulator/pwm-regulator.c
- - Helge Deller for drivers/video/fbdev/ssd1307fb.c
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---kqcylsquh2dgmtcq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmV4RssACgkQj4D7WH0S
-/k4FvQgAhhnJ0gGDS9vNrkWmDYMBz0OOooFMMGBMTBk2URyQxiqdxXWCSQKX4pDP
-4H/Hu+EbrEgXfRn0ANEzPIBDBGHQTo7W6N1NGpgxr8Bn1FoRwTzJMCbp62IGORar
-Xr+m5fAJrOjprAETsdyrt8zzjkkJR8Rxg3Gs1bCjjaJGv9VND2ArWlOqwC+I1PWM
-AYDVj/+/0wv8/rqAgNJbjPxdvlcfw/bnqy4/4Gs75Zn9qCRtODT3mCVtAKaWFSsh
-/FMmxKBYIm9ZFhT4skjci6JscC3iWTtp/LeJnoTY2cOyMJePYeRFLT0Ys7+wlsWe
-LCFShS20T2QYBWCYGmIIOHXHa7YwRQ==
-=jAgf
------END PGP SIGNATURE-----
-
---kqcylsquh2dgmtcq--
