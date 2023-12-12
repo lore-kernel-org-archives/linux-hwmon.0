@@ -1,94 +1,128 @@
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="EAbRdmqa"
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC5BD3;
-	Tue, 12 Dec 2023 03:33:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-	t=1702380775; x=1702985575; i=w_armin@gmx.de;
-	bh=xPGk5VnPnUwvPLpm6IAhcnnK/GipENIGWxMGcKHWdws=;
-	h=X-UI-Sender-Class:Date:Subject:To:References:From:In-Reply-To;
-	b=EAbRdmqaI8ve8OvZ5qDTIz1sn8Rj1lto+utMAP9Y7O4wfYWlwpnWlrlMeXyoaUVo
-	 NltY2C8yYLnrKgWpskXoutDaSVp6dNR5kf2mXoOgHAVp0+NzDKOM3f7SAFErl4b1M
-	 UygGd1dha9IScTXsY70YHZ2az1XbWrfoH2X1X1GE/d85gNRvGrzunFBG8xgHAQ9ff
-	 I6cZ3cd/xz/1nloIYcxrLgq2m/oJGqqbBVwSZWpykHs00ySAGRRyFbCAcbqwWduPu
-	 jJjFHpaaBJCJbRmR6VREifB3bHz7ODIMsbeVqyovLkytU8xyebI17pTJ2OiRQCH9L
-	 Dhj6I3XvQEdHJ5NWrw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [172.16.61.40] ([141.76.179.210]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MYeMj-1qj1mu1RbP-00VdyG; Tue, 12
- Dec 2023 12:32:55 +0100
-Message-ID: <a96ae23e-3c48-44c5-ba4b-dee2c40f3b76@gmx.de>
-Date: Tue, 12 Dec 2023 12:32:52 +0100
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18EBDC3
+	for <linux-hwmon@vger.kernel.org>; Tue, 12 Dec 2023 03:42:30 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rD18I-0005bB-Vy; Tue, 12 Dec 2023 12:41:03 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rD18G-00FKJT-S1; Tue, 12 Dec 2023 12:41:00 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rD18G-001bBp-HP; Tue, 12 Dec 2023 12:41:00 +0100
+Date: Tue, 12 Dec 2023 12:41:00 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Sean Young <sean@mess.org>, Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Javier Martinez Canillas <javierm@redhat.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Helge Deller <deller@gmx.de>
+Cc: linux-media@vger.kernel.org, linux-pwm@vger.kernel.org,
+	Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Support Opensource <support.opensource@diasemi.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+	Mark Gross <markgross@kernel.org>,
+	Daniel Thompson <daniel.thompson@linaro.org>,
+	Jingoo Han <jingoohan1@gmail.com>,
+	Jani Nikula <jani.nikula@intel.com>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-fbdev@vger.kernel.org
+Subject: Re: [PATCH v8 1/6] pwm: Rename pwm_apply_state() to
+ pwm_apply_might_sleep()
+Message-ID: <20231212114100.sn7nzntousql2ays@pengutronix.de>
+References: <cover.1702369869.git.sean@mess.org>
+ <9af7ba748fd2eb7e04208b6b183185f1daf78016.1702369869.git.sean@mess.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Deterministic device paths for ACPI instantiated hwmon devices
-Content-Language: en-US
-To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
-References: <9d52cc19-062b-4b8d-a9a0-bc2101dccab4@alliedtelesis.co.nz>
-From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <9d52cc19-062b-4b8d-a9a0-bc2101dccab4@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:HYm+jii7thqSibYajAGvq0koYgGW6NLKP6OZW38AGOrqbPajaMg
- Us475e6IQUkVE6Mw3QR2DyioTv5JQCeSV7ZRpWeDrHalyxuSKT3B8E7i/f8jeuPY9nwuZ7N
- dpJQWnEI1PmeaNBGoaVg48Hru7NuQukXBIcwsjEz94iiuueOczRQdtGnYmclQFGQBNcXSUO
- st+I5xAVuyHOUrNBatCdw==
-UI-OutboundReport: notjunk:1;M01:P0:QuE+5+yKgcU=;7MHyOkXwq0pd7dYzf4JUerZKkRW
- Gj0PeN4rKNkWPRd/CY1o1sItBgfgobdYjXEpbELH7duMPZ0YHrVVRxLMWqqvUvy91suBtHUSm
- k7Tcln9JlW2PK+P34jDrV1Q+jnYS3qnQm8Cr5RndNXPaANxx8JE9HNqZ0rPmdjf1LvhWHfnZV
- OdPC/vLpPFWwlQ5YvyqBh3sn/8ijeG8z4SygBfa8VukR62WLPnUSIT9UTJVY45NPCIiTKL7AU
- i3n7QM1o+X14qS8LUBqKMJxNoZY568lZFk6slwrWvxeWalKWQqAKzg/vJD6HHVrwAbATa7dal
- WpDyIeHFn2QgOWRs/o0IPJJaHfnMhjQtcnO8yDY3q+bAU4Se8QqMeFuZ/Zium/B5dUu9quFDu
- 4H2+sgOsDqDrxnS6t8Kla6DEpketla0UTD6AdI1xBZSX0g1ixYIOf/6n0h6Qi8kBgOmzX9oq2
- KdHCTaIonf5B2u4LS/aI/5FqNw/7UQeteb4si7Ks1R4pDEZgTE3XKrhw62OrsBJEKFh0rM8XC
- DEfXM6M7zxcw0WzzBgZCjPafaTuihxVlOEJDoFQK1H90K3HtgaQNVldLiVUDpWLgVePm4oF6y
- nCXxrccDz6kHkuEWkRlz9ihRORhWY6yosaK5GfqXRaIJGrZQUyjtu9eZQAwiSog3WjIMzApux
- SgrLVKiY/b5/dBcbdID6ZY0tCVHPW89Lxs1dWuZ+OWfInjS9zSiochjnBBw1kh3AZ8C74SzHw
- jwRLzSYa3gTsB7u7AD9rPgEOJTZAyGZp4ZR3XDhBjcYM2UkSZLw1K6r5or39kE5fFsi/mtVt5
- fiiBYiDOZmb/5/mOXRR40C2W4YMg8a4Gzfe1vjc5P3oJapHcpgLxFWeiQj9ZRuicmakboJBfZ
- nMiNhQ9tNT9EZVU2LY+b6pZQZa1AmFrPIemsx6TmhdR20LdyIuKkLZ1Rj9noOCVKrfZogr0w5
- d20+O7eIR8ITEv/bPsNvH7Hyt7U=
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="kqcylsquh2dgmtcq"
+Content-Disposition: inline
+In-Reply-To: <9af7ba748fd2eb7e04208b6b183185f1daf78016.1702369869.git.sean@mess.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
-Am 12.12.23 um 03:52 schrieb Chris Packham:
 
-> Hi,
->
-> We're looking at our first in-house modular product using an x86_64 CPU.
-> Previously we've done other products using other various embedded CPU
-> architectures which make use of a device tree for describing the hardware.
->
-> We've got some userspace code which tries to present end-user consumable
-> names for various hardware monitors on removable modules (e.g.
-> "temperature sensor 1 on the card in bay 3").
->
-> We do this based on knowing the deterministic path of the device in
-> sysfs (e.g. /sys/devices/platform/soc/i2c0/lm75@2e) that works fine for
-> devices instantiated on a device tree aware system (using device-tree
-> overlays). However we've yet to find any way of getting a deterministic
-> path out of devices instantiated via ACPI overlays. For now we've been
-> using the `/sys/class/hwmon/hwmonN/device` paths but the N depends on
-> the order the hardware was discovered which may not be the order the
-> end-user expects.
->
-> Is there a way of inferring/influencing the numbering that gets used in
-> the `/sys/devices/LNXSYSTM:00/LNXSYBUS:00/AMDI0010:00/` paths that
-> appear when the devices get instantiated?
+--kqcylsquh2dgmtcq
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Hello,
+On Tue, Dec 12, 2023 at 08:34:00AM +0000, Sean Young wrote:
+> In order to introduce a pwm api which can be used from atomic context,
+> we will need two functions for applying pwm changes:
+>=20
+> 	int pwm_apply_might_sleep(struct pwm *, struct pwm_state *);
+> 	int pwm_apply_atomic(struct pwm *, struct pwm_state *);
+>=20
+> This commit just deals with renaming pwm_apply_state(), a following
+> commit will introduce the pwm_apply_atomic() function.
+>=20
+> Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com> # for input
+> Acked-by: Hans de Goede <hdegoede@redhat.com>
+> Acked-by: Jani Nikula <jani.nikula@intel.com>
+> Acked-by: Lee Jones <lee@kernel.org>
+> Signed-off-by: Sean Young <sean@mess.org>
 
-if all you want is a way of attaching a label to an ACPI device, then maybe you could
-implement the _STR or _MLS ACPI method for the device in question, see
-https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/06_Device_Configuration/Device_Configuration.html
-for details.
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
-Armin Wolf
+Several affected maintainers already acked, so I guess it's fine to take
+this via the pwm tree. An Ack from the remaining maintainers would be
+very welcome, an alternative would be to split the patch.
 
-> Thanks,
-> Chris
+Missing Acks so far:
+
+ - Jean Delvare / Guenter Roeck for drivers/hwmon/pwm-fan.c
+ - Javier Martinez Canillas for drivers/gpu/drm/solomon/ssd130x.c
+ - Liam Girdwood / Mark Brown for drivers/regulator/pwm-regulator.c
+ - Helge Deller for drivers/video/fbdev/ssd1307fb.c
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--kqcylsquh2dgmtcq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmV4RssACgkQj4D7WH0S
+/k4FvQgAhhnJ0gGDS9vNrkWmDYMBz0OOooFMMGBMTBk2URyQxiqdxXWCSQKX4pDP
+4H/Hu+EbrEgXfRn0ANEzPIBDBGHQTo7W6N1NGpgxr8Bn1FoRwTzJMCbp62IGORar
+Xr+m5fAJrOjprAETsdyrt8zzjkkJR8Rxg3Gs1bCjjaJGv9VND2ArWlOqwC+I1PWM
+AYDVj/+/0wv8/rqAgNJbjPxdvlcfw/bnqy4/4Gs75Zn9qCRtODT3mCVtAKaWFSsh
+/FMmxKBYIm9ZFhT4skjci6JscC3iWTtp/LeJnoTY2cOyMJePYeRFLT0Ys7+wlsWe
+LCFShS20T2QYBWCYGmIIOHXHa7YwRQ==
+=jAgf
+-----END PGP SIGNATURE-----
+
+--kqcylsquh2dgmtcq--
