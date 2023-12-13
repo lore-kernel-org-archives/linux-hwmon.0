@@ -1,198 +1,179 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U95j3ji7"
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9074E269D;
-	Tue, 12 Dec 2023 12:53:52 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1d076ebf79cso37316155ad.1;
-        Tue, 12 Dec 2023 12:53:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702414431; x=1703019231; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=r3V74bFEqDGnRxMz9mRGbdIBTf3xxTDlfaM2RqnpzVY=;
-        b=U95j3ji7JJQ1LFz17ga+ozhK0N8zeQmVhvYHUPZbgZBVJ3exlaPuuq/0inew2r8G4s
-         JT6MzXG2I/tgIYl+cSdZ/2/z6HfBnjuEZKkMi3H5lSbPtCI2D64efvtP/wgpeZetDZML
-         fMYFTvoCeuSwJOQ7Jr1nCAIhs3gMgy9FRMOToZPlOmjjNy91HDxX6eqeQd4qNc89qEkD
-         sy15Yr7CGOD2HZLJ2UnPSCVGXyFv50ucu40ON6a5ghepKVl7wX2FGSbx9Q1AZfHq7VAN
-         RgxEiXvdGNkHA2fFOLTCix8E3ztnlTrAdygG3dM9e53Cps8aqQE+RqB397dGRf9XugK4
-         QkQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702414431; x=1703019231;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=r3V74bFEqDGnRxMz9mRGbdIBTf3xxTDlfaM2RqnpzVY=;
-        b=Olz/tVWa6ImN7XI+3jpoiD+JnsqM9iXiL4wQPexrtI48zaeQOnx1pHweRwDOld3uw9
-         Lm2NlI95AQtKILDss1wsZco3b3RwQvlxeDCTHpxIi/g1NEj/H0kh1w7sFZ3h5LqUWTMW
-         kQ5Q4/TdVfvD6yN6Uzww+4Sv6PknHKw5YDdxj6AdO1dOeJ5RL4YVl9eZPZ/SHFcfluin
-         6XdFoiu1pb0kx+vd/oZIp3zrmtaR+CqFUN8cu/rRVYf/gmhzjB1WKl0a7I3CsGnyeDWh
-         fPW/xPVUAinj3nWECSnMtn1k1MAs20XW3oABitgQ6qQRhMnmuRwfZljhiz6PkvU7APGq
-         9O6Q==
-X-Gm-Message-State: AOJu0YyrUu8MSZCRfSANmzsj6WTM3d+9ke2eePn7yua3wgfjQcvgfR8z
-	cjURpA/PGEx8mKU9cstIOVI=
-X-Google-Smtp-Source: AGHT+IHiXmz/AN2QPmRWW+z4CB5Jj58em8D2Nt4dCM9exP3M/rZIEjMQySTJDZnTZfQGYzpOWNqZwA==
-X-Received: by 2002:a17:902:eb86:b0:1d0:92a0:492a with SMTP id q6-20020a170902eb8600b001d092a0492amr4162291plg.85.1702414431330;
-        Tue, 12 Dec 2023 12:53:51 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h3-20020a170902748300b001d345b87df3sm732961pll.184.2023.12.12.12.53.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Dec 2023 12:53:50 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 12 Dec 2023 12:53:49 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: David Heidelberg <david@ixit.cz>
-Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Rob Herring <robh@kernel.org>,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] dt-bindings: arm: hwmon: gpio-fan: Convert txt
- bindings to yaml
-Message-ID: <98291877-9648-4f5e-b8fc-536468afa68e@roeck-us.net>
-References: <20231209171653.85468-1-david@ixit.cz>
+	dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b="NbxUT3J0"
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2102.outbound.protection.outlook.com [40.107.215.102])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C04D2;
+	Tue, 12 Dec 2023 19:23:30 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=a9Fx1rr6eClJccGQT+aUH6MEy5YnOqDqZ7HfmF0mb7KSVDg+bECizb6kErD4bn4gRQ4WoGRUER5SD/DOMwkxA7HxhuuRP59+xDax3eAAOLCn8nfHoJqzE9zQnJGOFT03jm3eAo1jiIe1C/RBoz+RuHalvveNfYQTJHAr6aKQCPeQu8JuDP99eovaq9hMEs8EdRDL5siTlmXYIDin+oHkwCntANT5OAUDBiAJuhWar1TdRkZaseZ8dryHaUWs6kEoAyQEbCRIjsOOdraU3+NSP53Af0yvdWJznmYWzBo2A8njppeK6bCCSshmC5BuHfwB+6cUKaPAp+SF4TTGFKLxzw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=j+vN2/9Jan56PwObpWXGtQzwfz7wH6YKNRyc7th54Fs=;
+ b=gynVzRWcHLfC3wDJZ7x1CsH5WoOqoOXfdBdSG8BWVWSREniyLLoRraZh89lGMqRd+nPSaxhF0x6rKzSldw06byZ3MBphmT10uyj6DTKe9EWKafQeoHIihFUswlpOWBNeA64HTs3QfZaN1DYP216Rpp7lAzX72fTQ9ekrCrV6HLXZIdoCMUBOwibGwtXQTzNX+83GZ/rRF6li0szoSjs5/2V8I8FOH82QXzvV+FJJKQgUn2YgBMi6fkf/7PbabQJswfPcR6l/I9NkDxElkTtY2Obsv606FccQTuL1+ctAV05cBqdA0J6h+57Gt+yNZgx7IeM+1f9r0VFPl59B/g53tw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=j+vN2/9Jan56PwObpWXGtQzwfz7wH6YKNRyc7th54Fs=;
+ b=NbxUT3J0FyggAGWhcnBqtmPP5OGcwgrWTuhHq8wWXFd58vGC7J/pD3pYKJuayNCN+sT0XvjNL/JkHPRWTgZcH+JAf8g/imhZmB9et7vWiCJ5vi6mqDof+p68hn8myQQeSscbQB5VnLWfw0s204qpY4J0B38nQUsyEUnatYSjhVjL9uIZoZtPkw/9TBtHqd9xWNdcaERDntjT96ExAsSW9W4POuvsr/8oWyJRdlGhS0YDkMeOQLbUi2W2qzsGVzHzO59wO85MIQWWt+nf4GDhGKvplUtTSonv6ySMghlTglLPUztexg79ybS/8a+hOtN7+JDG1UGkMuGdfNaigcoKlg==
+Received: from OSQPR06MB7252.apcprd06.prod.outlook.com (2603:1096:604:29c::6)
+ by SEZPR06MB5667.apcprd06.prod.outlook.com (2603:1096:101:9f::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.26; Wed, 13 Dec
+ 2023 03:23:23 +0000
+Received: from OSQPR06MB7252.apcprd06.prod.outlook.com
+ ([fe80::36df:4bd:1991:976b]) by OSQPR06MB7252.apcprd06.prod.outlook.com
+ ([fe80::36df:4bd:1991:976b%5]) with mapi id 15.20.7091.022; Wed, 13 Dec 2023
+ 03:23:23 +0000
+From: Billy Tsai <billy_tsai@aspeedtech.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	=?iso-8859-1?Q?Uwe_Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>, Guenter
+ Roeck <linux@roeck-us.net>
+CC: "jdelvare@suse.com" <jdelvare@suse.com>, "robh+dt@kernel.org"
+	<robh+dt@kernel.org>, "krzysztof.kozlowski+dt@linaro.org"
+	<krzysztof.kozlowski+dt@linaro.org>, "joel@jms.id.au" <joel@jms.id.au>,
+	"andrew@aj.id.au" <andrew@aj.id.au>, "corbet@lwn.net" <corbet@lwn.net>,
+	"thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+	"p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+	"naresh.solanki@9elements.com" <naresh.solanki@9elements.com>,
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-aspeed@lists.ozlabs.org"
+	<linux-aspeed@lists.ozlabs.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "linux-pwm@vger.kernel.org"
+	<linux-pwm@vger.kernel.org>, BMC-SW <BMC-SW@aspeedtech.com>,
+	"patrick@stwcx.xyz" <patrick@stwcx.xyz>
+Subject: Re: [PATCH RESEND v10 0/3] Support pwm/tach driver for aspeed ast26xx
+Thread-Topic: [PATCH RESEND v10 0/3] Support pwm/tach driver for aspeed
+ ast26xx
+Thread-Index: AQHaEWg7S/NllT0hPE+qUe52iPc027BvNyiAgC1+14CAAAJLgIAKCWl7
+Date: Wed, 13 Dec 2023 03:23:23 +0000
+Message-ID:
+ <OSQPR06MB72529B0769B89A21DDFB8B1F8B8DA@OSQPR06MB7252.apcprd06.prod.outlook.com>
+References: <20231107105025.1480561-1-billy_tsai@aspeedtech.com>
+ <3ea9ef0c-27c0-4304-8bf7-26710224c3b1@roeck-us.net>
+ <20231206174823.ok6rrufhez33rte5@pengutronix.de>
+ <ed9d28e0-f879-41f3-8679-7ed5e0eec7ce@linaro.org>
+In-Reply-To: <ed9d28e0-f879-41f3-8679-7ed5e0eec7ce@linaro.org>
+Accept-Language: en-US, zh-TW
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: OSQPR06MB7252:EE_|SEZPR06MB5667:EE_
+x-ms-office365-filtering-correlation-id: f6d86246-0c1b-482e-517e-08dbfb8adcd5
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ wvpeZwR5TL/jWvm/Tl14W4H08+JMxVCBmpADWSZ0nGlTV5xQO15iO9TkmsKXOHzuTPE44peoU2yPRKDoVCDJM+K6U/WsRoGQmEEOam2oSHsHAP+ZoLBOzmsI0ON5I3af/L6Ok68MpcsLYtSDjrOqcOAYFSjPFLeTqZTJqqnHmJFkcpJbAVgckJABl4CgaXyfKsaol4HzEg7WJDhWJTHEZ8Kk+D4rwbLOR3F6CDlc8ISbzWukXkW47wZ8mBoeLJQu1je+bktcYnElFtEfc67ViDo6sWU9nxXUCsd42wbhowktqvKpKckTBGvFZcc6DMG6e5ggpI/xIKGS79mmUhmMLvucW8csRViW0yzpGzKcT+4pb03ZyCi1HvSubU9NE4GfQLvDyNxQLL+W711uVVeNDWzgXMmsNiTA2wLFK/iF0GHw29qLCF/rrZXGaF6S04JmKx1vMzdjtq8qYyCBFuSRzz6V5C6q7OaAUc4IWV85T4EqR1clUqSMBp8E859BCyFqbNXepE6ltO9wzvgCN/XTGKJoJGIj/fJISRAHfyuwhRzBseD4Dxa7y1OejnVonqVIY0EvonR4KYrP1d0BP65sEuSzsih7iwzWRJQ74HfliHM=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSQPR06MB7252.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(136003)(39850400004)(376002)(346002)(366004)(230922051799003)(64100799003)(1800799012)(451199024)(186009)(38070700009)(41300700001)(7416002)(5660300002)(33656002)(2906002)(26005)(53546011)(55236004)(7696005)(9686003)(83380400001)(55016003)(6506007)(71200400001)(478600001)(966005)(122000001)(38100700002)(86362001)(52536014)(8936002)(8676002)(4326008)(64756008)(54906003)(110136005)(316002)(66556008)(66476007)(66446008)(76116006)(66946007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-8859-1?Q?Az2o7Ae0WZHT1PVD5xu1XnPkWGuMxKwGvgMn6dTL0IJg1Q64ORAZr44EOH?=
+ =?iso-8859-1?Q?EYj2VQz70IyESiIw8JTN/oFZ5uEc8u6xliaKB3vcGiWhxXckPhc3rUq2/B?=
+ =?iso-8859-1?Q?uOR1ypDwZcbZb62A/B0+hs8a6Va7BqqQAP4aA2PBHubZtRTOmazMENcMGa?=
+ =?iso-8859-1?Q?g6cEUBxEQsGz21fqZ3RuB4oFzyS2G9A/zgQTyYaJZbEtfSAXiJmhw49NOS?=
+ =?iso-8859-1?Q?vBAXETZKjzTnSbn7XEnnAUFXJFKftOVHDDgBwQXY60ycKJOv5AH91LXu6R?=
+ =?iso-8859-1?Q?W5jWo6aP1QJbKbVW5xuZZ8o6vSC4Tsp7xFwIKRqG2ZIxcdlO7+GUdaGQyL?=
+ =?iso-8859-1?Q?iAdeZKqRpcyc4muZgzlZgcXauD2aKhQ0YVJlzAdtV10ekvN1j/KK06/uBg?=
+ =?iso-8859-1?Q?v+15ooXFGnWeUoL63+YBfE3hOpI1RstyuplT9jmBLekZrleHZWneOWas1H?=
+ =?iso-8859-1?Q?f8ACCVY1BV/pDBfOx4hyNEK3VFOn68AUH1ZBysLsr/4/Qq0xmem1Y6oYQd?=
+ =?iso-8859-1?Q?BaXtoB8AWXAIG11k0f0dR1mX1KYY23r/bfPeLKSfYg/UQ3wDo5iT72tPZn?=
+ =?iso-8859-1?Q?7Mw+xgKsNFUZTYlHhn2gHzthReBM7VeMbKZk7Hh1IMYI6y6HRUwJ6ZAH/i?=
+ =?iso-8859-1?Q?e0l/AWXmu5Js//f1OinDtK7wGoYL03ILigrvtCzOXsPF1d1dD1hA7cXCh4?=
+ =?iso-8859-1?Q?lydJhdv+h/TbOfsgkk851MHorwytZCGK2WwtP3HirqcfmSnw53lHmY6wm3?=
+ =?iso-8859-1?Q?dnqMAXEl+aWs2xMy2z56i3b9PoETHMULhwp5I+WvR/d66120xVRStagnUE?=
+ =?iso-8859-1?Q?sIm6UTG92Qer8Y5XqtAnrw0GDouJ78i6v8Tyn5Uk2lw4n3MXW0IP8m8VVF?=
+ =?iso-8859-1?Q?YrskQb+oKmdAB/j/2qqDUntUBLowH22sjvLB2ollEf0tqwjiM9RMmHC2PP?=
+ =?iso-8859-1?Q?gqCM8TG1UEZKdI77aiVihXYoMyiVJJLJTVTa4wlgb2MLmN5kzRrWIZS55B?=
+ =?iso-8859-1?Q?Klkx5+mbbvecIOXLOqjqw2pIzjK0HmUmsU6uxM0I3pV/Ro4krzhqLKj0uK?=
+ =?iso-8859-1?Q?p64/6Qy0COjZvBTws1AyDQJ786ABVXcGQ2zwU1nLiY1OVkBvqwPRUVYJzE?=
+ =?iso-8859-1?Q?V8L7pmtV92nzpcXmo/fdI0bd0Z7zZoPvXWrqjsfWOzReoAoYndWi9GwYPR?=
+ =?iso-8859-1?Q?KjLogHrWHXzNhFXCWPDaD93F2gTJqnPuTHqyV3fgQ43zvOEFpE/KnNMWFa?=
+ =?iso-8859-1?Q?5lj5RR13w1APd7auvXEJFQ+/VDoKeQbm6LVr7RwmOzNJjZf1YqR5N8CZNp?=
+ =?iso-8859-1?Q?SviU+ZUfa0r1NtGB5b+SuLcHeyYiwEV9opFoM6g6HeJHf+9CdVj448Df+m?=
+ =?iso-8859-1?Q?IY5LJHDwfCa4ecoE3sCUkxlR3jkUnxdJkFYePSA21D0NM/KZu2LUktXZ47?=
+ =?iso-8859-1?Q?cVEk2ePYJJcCaAxdicEu/N643jY4uahlZXToJn+0Ol/ANTDuBLZGs0IkQe?=
+ =?iso-8859-1?Q?YJyRyUoJrDFPwgvw1I1B3AyOSVWLMUL60qi/Uy7B21EdVHxkoHlBMAnWV6?=
+ =?iso-8859-1?Q?JwuW/mS77UYpmUjnR0fQvVtz+/u32a9P0OAO2JX1A/69tS96bIzgEDs0AL?=
+ =?iso-8859-1?Q?eZCxrGhzEGCT1BMhDLXrccAFG7GoRacNJf?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231209171653.85468-1-david@ixit.cz>
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OSQPR06MB7252.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f6d86246-0c1b-482e-517e-08dbfb8adcd5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Dec 2023 03:23:23.1813
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: m59l02BNGgtk+Wvaw72k8j5W8vzb+S7q4axxvNaBtFh6uAeAfRfCgXV6mUDVXqSCxFdmQTeNoVT13VjR5Mccg5MTttZD1x3xAIG7fUCJ1CU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB5667
 
-On Sat, Dec 09, 2023 at 06:15:39PM +0100, David Heidelberg wrote:
-> Convert fan devices connected to GPIOs to the YAML syntax.
-> 
-> Signed-off-by: David Heidelberg <david@ixit.cz>
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-
-Applied.
-
-Thanks,
-Guenter
-
-> ---
-> v4:
->  - dropped the 1st example
->  - dropped unused label in 2nd example (now 1st example)
-> 
->  .../devicetree/bindings/hwmon/gpio-fan.txt    | 41 -------------
->  .../devicetree/bindings/hwmon/gpio-fan.yaml   | 60 +++++++++++++++++++
->  2 files changed, 60 insertions(+), 41 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/hwmon/gpio-fan.txt
->  create mode 100644 Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/gpio-fan.txt b/Documentation/devicetree/bindings/hwmon/gpio-fan.txt
-> deleted file mode 100644
-> index f4cfa350f6a1..000000000000
-> --- a/Documentation/devicetree/bindings/hwmon/gpio-fan.txt
-> +++ /dev/null
-> @@ -1,41 +0,0 @@
-> -Bindings for fan connected to GPIO lines
-> -
-> -Required properties:
-> -- compatible : "gpio-fan"
-> -
-> -Optional properties:
-> -- gpios: Specifies the pins that map to bits in the control value,
-> -  ordered MSB-->LSB.
-> -- gpio-fan,speed-map: A mapping of possible fan RPM speeds and the
-> -  control value that should be set to achieve them. This array
-> -  must have the RPM values in ascending order.
-> -- alarm-gpios: This pin going active indicates something is wrong with
-> -  the fan, and a udev event will be fired.
-> -- #cooling-cells: If used as a cooling device, must be <2>
-> -  Also see:
-> -  Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml
-> -  min and max states are derived from the speed-map of the fan.
-> -
-> -Note: At least one the "gpios" or "alarm-gpios" properties must be set.
-> -
-> -Examples:
-> -
-> -	gpio_fan {
-> -		compatible = "gpio-fan";
-> -		gpios = <&gpio1 14 1
-> -			 &gpio1 13 1>;
-> -		gpio-fan,speed-map = <0    0
-> -				      3000 1
-> -				      6000 2>;
-> -		alarm-gpios = <&gpio1 15 1>;
-> -	};
-> -	gpio_fan_cool: gpio_fan {
-> -		compatible = "gpio-fan";
-> -		gpios = <&gpio2 14 1
-> -			 &gpio2 13 1>;
-> -		gpio-fan,speed-map =	<0    0>,
-> -					<3000 1>,
-> -					<6000 2>;
-> -		alarm-gpios = <&gpio2 15 1>;
-> -		#cooling-cells = <2>; /* min followed by max */
-> -	};
-> diff --git a/Documentation/devicetree/bindings/hwmon/gpio-fan.yaml b/Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
-> new file mode 100644
-> index 000000000000..7f30cfc87350
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
-> @@ -0,0 +1,60 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/gpio-fan.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Fan connected to GPIO lines
-> +
-> +maintainers:
-> +  - Rob Herring <robh@kernel.org>
-> +
-> +properties:
-> +  compatible:
-> +    const: gpio-fan
-> +
-> +  gpios:
-> +    description: |
-> +      Specifies the pins that map to bits in the control value,
-> +      ordered MSB-->LSB.
-> +    minItems: 1
-> +    maxItems: 7
-> +
-> +  alarm-gpios:
-> +    maxItems: 1
-> +
-> +  gpio-fan,speed-map:
-> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
-> +    minItems: 2
-> +    maxItems: 127
-> +    items:
-> +      items:
-> +        - description: fan speed in RPMs
-> +        - description: control value
-> +    description: |
-> +      A mapping of possible fan RPM speeds and the
-> +      control value that should be set to achieve them. This array
-> +      must have the RPM values in ascending order.
-> +
-> +  '#cooling-cells':
-> +    const: 2
-> +
-> +required:
-> +  - compatible
-> +  - gpios
-> +  - gpio-fan,speed-map
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    gpio-fan {
-> +      compatible = "gpio-fan";
-> +      gpios = <&gpio2 14 1
-> +               &gpio2 13 1>;
-> +      gpio-fan,speed-map = <   0 0>,
-> +                           <3000 1>,
-> +                           <6000 2>;
-> +      alarm-gpios = <&gpio2 15 1>;
-> +      #cooling-cells = <2>; /* min followed by max */
-> +    };
+On 06/12/2023 18:48, Uwe Kleine-K=F6nig wrote:=0A=
+>> On Tue, Nov 07, 2023 at 11:02:43AM -0800, Guenter Roeck wrote:=0A=
+>>> On 11/7/23 02:50, Billy Tsai wrote:=0A=
+>>>> Unlike the old design that the register setting of the TACH should bas=
+ed=0A=
+>>>> on the configure of the PWM. In ast26xx, the dependency between pwm an=
+d=0A=
+>>>> tach controller is eliminated and becomes a separate hardware block. O=
+ne=0A=
+>>>> is used to provide pwm output and another is used to monitor the frequ=
+ency=0A=
+>>>> of the input. This driver implements them by exposing two kernel=0A=
+>>>> subsystems: PWM and HWMON. The PWM subsystem can be utilized alongside=
+=0A=
+>>>> existing drivers for controlling elements such as fans (pwm-fan.c),=0A=
+>>>> beepers (pwm-beeper.c) and so on. Through the HWMON subsystem, the dri=
+ver=0A=
+>>>> provides sysfs interfaces for fan.=0A=
+>>>>=0A=
+>>>> Changes since v9:=0A=
+>>>> Change the type of fan-driving-mode to string=0A=
+>>>> Fix some typos and formatting issues.=0A=
+>>>>=0A=
+>>>=0A=
+>>> What is the resend about ?=0A=
+>>=0A=
+>> And to the original v10 there is a reply by Krzysztof;=0A=
+>> see https://lore.kernel.org/linux-pwm/3d9e50db-19f0-43b3-8042-2f80a1e7b7=
+9e@linaro.org/ .=0A=
+>>=0A=
+>> I'll mark the original and this resend as "changes-requested" in our=0A=
+>> patchwork. Probably the most cooperative way to object is to send a v11=
+=0A=
+>> and point out the changes compared to v10.=0A=
+=0A=
+> The resend might be fixing issues from v10, but who knows which and how=
+=0A=
+> many. In any case it should be v11, not a resend.=0A=
+=0A=
+I apologize for responding to this question inappropriately. I only replied=
+ to Guenter and removed=0A=
+the others.=0A=
+The reason for the resend is simply to remove the 'Change-Id' in the commit=
+ log, which triggers an=0A=
+error when running scripts/checkpatch.pl. =0A=
+It's a minor issue, and I forgot to mention this change in the cover letter=
+.=0A=
+I sincerely apologize for any confusion.=0A=
+=0A=
+Best regards,=0A=
+Billy Tsai=0A=
