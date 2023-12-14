@@ -1,82 +1,109 @@
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2F8C6A036;
+	Thu, 14 Dec 2023 20:08:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DfdipaSn"
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A0710F;
-	Thu, 14 Dec 2023 08:25:27 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-a1e35c2807fso1099593166b.3;
-        Thu, 14 Dec 2023 08:25:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702571126; x=1703175926; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nAh9hLA7/3vJZkTHk2ApYbTI4ADCNqSEYHhLSzcSf7g=;
-        b=DfdipaSn8GBSt0vGKyWk6+i1XW02Vzeuy6Bz/CjQzNfoFdiMeqxaXZ15BnNXpqwJMB
-         DtFD9mRhLf8FCAEddJsTW8zABRaadUJZrQWmhDh7clPB/5hV7vN0wCgW2aIBLiHnlyn4
-         X2zUPDX5c5+s0R1xATpfiIw7QISKKjAR09bjDd4muPYP8wKn6GBcRDY/Qal8u2+dAcPG
-         ehxPTfgwoaBdov2yExbR52qa9Qll8H7DLxc5GazWpIoke0eAkisxHsUqzwHbEK8LQ0M0
-         3MKC8/A0Y4auVBYczH3gF5XOauw/3GdxhNh83mD3J7lv5jY0LNX4ck+3/nD8d9652wQ1
-         iZwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702571126; x=1703175926;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nAh9hLA7/3vJZkTHk2ApYbTI4ADCNqSEYHhLSzcSf7g=;
-        b=n3qC9JA8KWSuywFfGCJSlWpmmINpfgjwg6JCTCF8hXtY/vEvTEnuzSEj1R7u60HufI
-         Jf3olvIp+nWlAbQoB1o/iOIZNXZwNjEwkIFBgvAN3dt89e19GmcPE124szTDTWBbM5J2
-         Tz0rV95XKAkNrMPpkx7ApP9fdQIIfxfcAPmERhHueYxIOoSgxAkrT6TFj/DT1coQ5/0O
-         1BJtYlPUPLembycyXapWnLdHuIh2sTqZHy7MmVktP0YecdlrWDBSvsPp3ptY8zi2ENyQ
-         F5xxpTf51MC62iASV1W+El/IYFWqp8WwncJWXeLincFKBmhQHEeRwcXnf+ipPvlUVeHv
-         //PA==
-X-Gm-Message-State: AOJu0Yzpq0IjW763liEuln88KuGBsiytpWUQLN4ILMrVMEoHGoenYU7C
-	BJAx7f3lQ1/vptdEizrcTb8=
-X-Google-Smtp-Source: AGHT+IE2yCLDkuvnAGzuGQCgb+g82SQy0V+xnj+sV1DuFTKwWQZGgTCilxOSm5OBuK/K6XS2NmhyxQ==
-X-Received: by 2002:a17:906:1c4b:b0:a1c:8f41:299b with SMTP id l11-20020a1709061c4b00b00a1c8f41299bmr4936084ejg.56.1702571125834;
-        Thu, 14 Dec 2023 08:25:25 -0800 (PST)
-Received: from localhost (p200300e41f0fa600f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f0f:a600:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id uv6-20020a170907cf4600b00a1f699e5217sm9307467ejc.135.2023.12.14.08.25.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Dec 2023 08:25:25 -0800 (PST)
-From: Thierry Reding <thierry.reding@gmail.com>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	David Heidelberg <david@ixit.cz>
-Cc: Rob Herring <robh@kernel.org>,
-	linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH v4 1/3] dt-bindings: arm: hwmon: gpio-fan: Convert txt bindings to yaml
-Date: Thu, 14 Dec 2023 17:25:21 +0100
-Message-ID: <170257110824.3783528.16373927104486935046.b4-ty@nvidia.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20231209171653.85468-1-david@ixit.cz>
-References: <20231209171653.85468-1-david@ixit.cz>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mbtNiX0h"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702584499; x=1734120499;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SEbmdNQI4oR9juNQv5BOktkdGKtVXGwsaSvQNvpGCOs=;
+  b=mbtNiX0hkvqnclP3l+XrN1tylS06G3iMKCIrk1kLpBxAclD7Ykzxn/O7
+   XvLOM9lvlBOOKHEspg45UxGShxLMsyrGNs8/k5Oo+UpXZnFuPxWvRPXD2
+   js3XgLkwv0FgJO+hBKM33pnvocm7v/2KHo12UXXZ40B24jrWRHbm1fE8X
+   6CWfR5DDJQgfsn1hEOu0nzVeakLJGe+FYXLMolR1ZB1o6lNi8gyZFM0yf
+   VP5AxSR0CN1jbvRo4sJKSSgiPeyNMrVePEP8492uYDOjBnSYFg+DOU8gb
+   znbSg3ooBVWSg1M11Zp0TvYkLq0d01X/+sHKGnZ9mHal2rBcxTXs3rlRZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10924"; a="392356776"
+X-IronPort-AV: E=Sophos;i="6.04,276,1695711600"; 
+   d="scan'208";a="392356776"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2023 12:08:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10924"; a="918168048"
+X-IronPort-AV: E=Sophos;i="6.04,276,1695711600"; 
+   d="scan'208";a="918168048"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 14 Dec 2023 12:08:12 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rDs09-000MZA-1y;
+	Thu, 14 Dec 2023 20:08:09 +0000
+Date: Fri, 15 Dec 2023 04:07:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Cosmo Chou <chou.cosmo@gmail.com>, linux@roeck-us.net,
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org, jdelvare@suse.com, corbet@lwn.net,
+	broonie@kernel.org, naresh.solanki@9elements.com,
+	vincent@vtremblay.dev, patrick.rudolph@9elements.com,
+	luca.ceresoli@bootlin.com, bhelgaas@google.com, festevam@denx.de,
+	alexander.stein@ew.tq-group.com, heiko@sntech.de,
+	jernej.skrabec@gmail.com, macromorgan@hotmail.com,
+	forbidden405@foxmail.com, sre@kernel.org, linus.walleij@linaro.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	chou.cosmo@gmail.com, cosmo.chou@quantatw.com
+Subject: Re: [PATCH v2 3/3] hwmon: Add driver for Astera Labs PT5161L retimer
+Message-ID: <202312150313.eDD5WEPc-lkp@intel.com>
+References: <20231214060552.2852761-4-chou.cosmo@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231214060552.2852761-4-chou.cosmo@gmail.com>
 
-From: Thierry Reding <treding@nvidia.com>
+Hi Cosmo,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on robh/for-next linus/master v6.7-rc5 next-20231214]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Cosmo-Chou/dt-bindings-vendor-prefixes-add-asteralabs/20231214-140823
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20231214060552.2852761-4-chou.cosmo%40gmail.com
+patch subject: [PATCH v2 3/3] hwmon: Add driver for Astera Labs PT5161L retimer
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20231215/202312150313.eDD5WEPc-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231215/202312150313.eDD5WEPc-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312150313.eDD5WEPc-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/hwmon/pt5161l.c:517:36: warning: unused variable 'pt5161l_acpi_match' [-Wunused-const-variable]
+     517 | static const struct acpi_device_id pt5161l_acpi_match[] = {
+         |                                    ^
+   1 warning generated.
 
 
-On Sat, 09 Dec 2023 18:15:39 +0100, David Heidelberg wrote:
-> Convert fan devices connected to GPIOs to the YAML syntax.
-> 
-> 
+vim +/pt5161l_acpi_match +517 drivers/hwmon/pt5161l.c
 
-Applied, thanks!
+   516	
+ > 517	static const struct acpi_device_id pt5161l_acpi_match[] = {
+   518		{ "PT5161L", 0 },
+   519		{},
+   520	};
+   521	MODULE_DEVICE_TABLE(acpi, pt5161l_acpi_match);
+   522	
 
-[3/3] ARM: dts: tegra30-ouya: make dts use gpio-fan matrix instead of array
-      (no commit info)
-
-Best regards,
 -- 
-Thierry Reding <treding@nvidia.com>
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
