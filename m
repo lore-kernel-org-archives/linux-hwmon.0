@@ -1,49 +1,51 @@
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D857B16426
-	for <linux-hwmon@vger.kernel.org>; Fri, 15 Dec 2023 08:49:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D2E039FC7;
+	Fri, 15 Dec 2023 16:03:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TIiwaVsV"
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-552dc0d0e28so103004a12.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 15 Dec 2023 00:49:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BQkKN+gc"
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-5ca0b968d8dso365601a12.1;
+        Fri, 15 Dec 2023 08:03:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702630185; x=1703234985; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1702656187; x=1703260987; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WnR1+hD8CRiuBtXrZdhqIxielhfB26flvM64rWZB+bk=;
-        b=TIiwaVsVY0CyJMO2uYuyzs/nqLCjdL2kQshRw9qxg8ETR1FKpO8JPpgNIVB98ykzai
-         ftaYFUnVZHRCjjEHnwBkcoNHo4hAoRCUO1dmIaczoEJz06QadOvHvlam2Jv/sy5sTV0h
-         fixZHARilGD0LAOuK9G6qBcFRor2t2YE2ETIFMAT7FUAn67QMp1+TqwBsR2/o940qCWk
-         Txqk0EZggtWFG7+sOSbAf8pJcItBnGuaqfnp4nk5mklQ8LTpAPdZEeHF3/q0uOOzUJF1
-         zPqq63cl88xvu3tnjy2Fduc6lVXUf7ZxgoGwvM/oOaug1Njz+3Z0JcXKznVvUtwym4tD
-         Avrg==
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=0VcnCj2g0CTMbP7kCr30p3xsaqF30bpbC2Z0SG00ebA=;
+        b=BQkKN+gcNNp9IivBuRKuTG9PWURhUMrakOyUAKEc2tcRr6d8cDKNti4k916DGfce10
+         fSSVhFV4gyOETxBlxeQjA36o84IHgv6I8YRZadoDVerPrUCCnniqR50IL4a4DPNahFnT
+         lXiceZfTSWjiXgpDxz4ngr1ceP0880/8GR64GVDY2O9nE7Kfo17VhbfvBP7qaqV/7e/l
+         pyQS5WY/OWYwmwfrjKels0rgJQi0JRIP9lMjuGGl7DfdVWqgFmnkVde5tpkjhnQd0hCj
+         gjHcwbnDldLJdi/CMk6MRDzIiD0qDHeerdQUCx51/DWkCAgAaYSaW5hPlaOCTpHcgIq+
+         xVnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702630185; x=1703234985;
+        d=1e100.net; s=20230601; t=1702656187; x=1703260987;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WnR1+hD8CRiuBtXrZdhqIxielhfB26flvM64rWZB+bk=;
-        b=Od2ogUu1oAohaS99hmHdlj6T/4wuMfqg9AeNM2ZTlJ3WwgdfLd6P46Mvn+JtDzxkdd
-         TrZgwJNo/oqTHxm/wRKg15nAOLGWLiKVo/QNTbdqyKWOXY19CUOcdftL5V4JURX1zPi0
-         s9IJP9/+ReKmFjXR1AfTUEXXf+k88cCdMf6yEDD8vH42J3ucUg3wf1jvZb76ChgsbSrc
-         1tmrt03g7e4cI/m7qHbSjmVbsvsDtItMw3lxf75ntzPZas8sgb5W9leBsLjwgHhERTHB
-         eDOunhMlfTv7I47fhGCgkO0lqOlZbpdHyiUwhdGuw0maYXSW9SGIoSdf7EaxrWv7Y7Jp
-         pn+Q==
-X-Gm-Message-State: AOJu0YwH4DVeZ+d57pJVME41cz7EhvCCY2v3hXQHuzDlGtKClodcw3l7
-	Iz4/+gBLP4FjvgrI/UmTCqJnNQ==
-X-Google-Smtp-Source: AGHT+IFleqWwkEcz3GhyaoVFjr7aII6NAHaUYPTS22y4mdbCyVwYHk0TR6crjv+Mih8Rwky5W73ppA==
-X-Received: by 2002:a17:906:1091:b0:a18:bb79:9a0 with SMTP id u17-20020a170906109100b00a18bb7909a0mr4317292eju.58.1702630185160;
-        Fri, 15 Dec 2023 00:49:45 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id tx27-20020a1709078e9b00b00a1c85124b08sm10633350ejc.94.2023.12.15.00.49.43
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0VcnCj2g0CTMbP7kCr30p3xsaqF30bpbC2Z0SG00ebA=;
+        b=Cb+FRXuACh5Bnpgp0RC4zF9sdr1U3e1YIY2QltFjQKTvl6+e82FYajTpgrns+j9YW7
+         VIlFVUqywNVTVvZmfIpkXA2ppIK1aEzG5aIdSpuaRfeM049GF502vnkVR8BBnBD6XrWj
+         6uhVCzq16e9aT1Uk9CIqBPlSVjiKaKyCvDGasjgnRmiOuAY0vY53R8eDAxO4aKW5v6Y6
+         j/WUzyk/IR5jRJvArE1mAOsG9dAW6kyJ2YIHKHWHcwM+nzK1u2mRhp54s5iToVF5KLiH
+         qoQIAK5vDjyMpnXoOp/NJqa47Ggo4pAlyeyH72tNNGvZh2RHSP92Cz7WOfhjpnMVedYW
+         Sbqg==
+X-Gm-Message-State: AOJu0YxV/xXVxHIIQ8/xrHVpxF9H2g5e+W40nAgaCNZ6+FHotyCe31Ak
+	X1V7MLC8DfcabujLfMimm4eJGrtPY+8=
+X-Google-Smtp-Source: AGHT+IFSH1D8sIyMyxDwxEymOQOtS3bUo+07nj6vzkeNM5nieaJ3mjQM/onoPIRqUw2gSN4WVlKpTQ==
+X-Received: by 2002:a17:902:e789:b0:1d0:5567:5c75 with SMTP id cp9-20020a170902e78900b001d055675c75mr6544213plb.66.1702656186690;
+        Fri, 15 Dec 2023 08:03:06 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p12-20020a170902e74c00b001d077da4ac4sm14280162plf.212.2023.12.15.08.03.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Dec 2023 00:49:44 -0800 (PST)
-Message-ID: <43c3f6cb-aeb2-40c8-a79d-c2222414b49c@linaro.org>
-Date: Fri, 15 Dec 2023 09:49:43 +0100
+        Fri, 15 Dec 2023 08:03:06 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <a5bc25d5-f59c-43ce-a44a-3eabc4b2d06c@roeck-us.net>
+Date: Fri, 15 Dec 2023 08:03:04 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -54,93 +56,129 @@ User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 2/3] bindings: hwmon: Add adi,adaq4224_temp as compatible
  string
 Content-Language: en-US
-To: Daniel Matyas <daniel.matyas@analog.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Rob Herring <robh+dt@kernel.org>,
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Daniel Matyas <daniel.matyas@analog.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
  Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
  linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
 References: <20231214143648.175336-1-daniel.matyas@analog.com>
  <20231214143648.175336-2-daniel.matyas@analog.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231214143648.175336-2-daniel.matyas@analog.com>
-Content-Type: text/plain; charset=UTF-8
+ <43c3f6cb-aeb2-40c8-a79d-c2222414b49c@linaro.org>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <43c3f6cb-aeb2-40c8-a79d-c2222414b49c@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 14/12/2023 15:36, Daniel Matyas wrote:
-> In the device ada4224 the max31827 temperature sensor will be used, so
-> the default values corresponding to adaq4224_temp are the same for
-> max31827.
+On 12/15/23 00:49, Krzysztof Kozlowski wrote:
+> On 14/12/2023 15:36, Daniel Matyas wrote:
+>> In the device ada4224 the max31827 temperature sensor will be used, so
+>> the default values corresponding to adaq4224_temp are the same for
+>> max31827.
+>>
+>> Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
 > 
-> Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
-
-Please use subject prefixes matching the subsystem. You can get them for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching.
-
-> ---
->  Documentation/devicetree/bindings/hwmon/adi,max31827.yaml | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+> Please use subject prefixes matching the subsystem. You can get them for
+> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+> your patch is touching.
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
-> index f60e06ab7d0a..9f3b0839aa46 100644
-> --- a/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
-> @@ -20,6 +20,7 @@ properties:
->        - const: adi,max31827
->        - items:
->            - enum:
-> +              - adi,adaq4224_temp
+>> ---
+>>   Documentation/devicetree/bindings/hwmon/adi,max31827.yaml | 5 ++++-
+>>   1 file changed, 4 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+>> index f60e06ab7d0a..9f3b0839aa46 100644
+>> --- a/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+>> +++ b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+>> @@ -20,6 +20,7 @@ properties:
+>>         - const: adi,max31827
+>>         - items:
+>>             - enum:
+>> +              - adi,adaq4224_temp
+> 
+> Underscores are not allowed
+> 
 
-Underscores are not allowed
+That isn't the main problem with this patch.
+https://github.com/analogdevicesinc/linux/tree/dev_adaq4224_dts
+suggests that it may be a development system which utilizes the max31827.
+ From there, we can see that there is a devicetree description of a board
+with that name which uses
 
+                 temperature1: temperature@5f {
+                         compatible = "adi,adaq4224_temp";
+                         reg = <0x5f>;
+                         vref-supply = <&vio>;
 
+                         adi,comp-int;
+                         adi,alarm-pol = <0>;
+                         adi,fault-q = <1>;
+                         adi,timeout-enable;
+                 };
 
-Best regards,
-Krzysztof
+That doesn't make sense to me. I don't know why they don't just reference max31827.
+I am most definitely not going to accept a driver change just to map adi,adaq4224_temp
+(or adi,adaq4224-temp) to the actually used temperature sensor chip. If we start
+accepting that, we'd end up with no end of
+"<vendor>,<board_name>-{temp,voltage,current,power,...}"
+compatibles.
+
+Looking more into the above mentioned repository/branch, an earlier version
+of the dts file did reference adi,max31827 for that chip. It also looks like
+there may be an adaq4224 ADC (per drivers/iio/adc/ad4630.c), but that would be
+a SPI chip. It seems highly unlikely that a SPI ADC would have a separate I2C
+interface connected to a temperature sensor. Confusing.
+
+There is also some indication that this may some IP to be loaded into an FPGA.
+which utilizes an FPGA implementation of max31827 (or maybe connects to one).
+If that is the case, it should still be referenced as max31827.
+
+All that wasted time because of "let's provide as little as possible information
+about what we are actually doing" :-(.
+
+Guenter
 
