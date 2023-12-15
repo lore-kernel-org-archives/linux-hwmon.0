@@ -1,910 +1,518 @@
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4494E41863;
-	Fri, 15 Dec 2023 18:54:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 860F156383;
+	Fri, 15 Dec 2023 21:46:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gqoTuJU7"
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a22f59c6ae6so134421666b.1;
-        Fri, 15 Dec 2023 10:54:12 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=analog.onmicrosoft.com header.i=@analog.onmicrosoft.com header.b="rk38X+QJ"
+Received: from pps.filterd (m0375855.ppops.net [127.0.0.1])
+	by mx0b-00128a01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BFKRYga014712;
+	Fri, 15 Dec 2023 15:28:13 -0500
+Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam02lp2041.outbound.protection.outlook.com [104.47.56.41])
+	by mx0b-00128a01.pphosted.com (PPS) with ESMTPS id 3v0wuvr01c-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 15 Dec 2023 15:28:13 -0500 (EST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EGBeZR364EM6C/23JqgrP9V6m34bldadtwODi6dj93ER0porPudiEITcWo25esnPW+9j8wfIDi9v6ksCsNgiPzqNhta/YDAmfPr4oqUrHJAe4EPzEC+dGTsQMIKqn3nROK3+GdqxWEcogjYF/PmKXgPnoTHnzjq8LAwIqaZTcB1U/OoYucGQs04Mo9+U33iqE/NWm7jHY4tWB/UdEPK/P8A8aECZw/acqAjVzVuE/pCVY0wZSZ6XuHapVmGwLEyRw8iUhkHKLXLEfchL6TCnMB929fFiY+w4Tk8CzSTV1uINTG5ohFzG9m2PtisaTie40ONsZeSwD3JO04/vmb38UA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=O11a6b1BhdvjW/q7AixA5meFTqpGXMMad4ICwW0IPpg=;
+ b=gIeYYaxwFxC4rFLDPd8Uunxp0rNxakIODiIfqGuCQys5McKPIUkwjgJXnS9cXI7wxyXf+eDI9PGR2/yTzDUFEZOIKij0TyMI22FWDDcc8zvCK7wfjGaU1QJuOtWCtoTrOJciQ4E3GhfNWC3UEHA7xQhr94cqUxgPS0kG/7EHI+gEQTMjQFL/yhjZU9c03VWQjbjwjJ+zf5yHJyvlsxB6ERyPL9O+BV1Bc3DYsdm790oeUjAsSM0hlxrpncDchNe2K5/ucwEywmJ4Zx+DR0XScaTMR1WXON0QzgZM+TXebMGejmhvU5mURCPjeReBoX0eJ8erUXIKF3tEjpB/bsu8dQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=analog.com; dmarc=pass action=none header.from=analog.com;
+ dkim=pass header.d=analog.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702666451; x=1703271251; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TsWiTsAx6rY/ivEOcOv3qrsTgsfWq4HF82+Qu3XkrJE=;
-        b=gqoTuJU7ytF6MxcbsBaDXt67boDp8NFXEh4kz1O+y9fNRaCn+jJ39/aVV52R0J2Q8n
-         SgDC3FdFYdM0WvowGEJelm5ESbyx5/bjLloL8QMb+ZYBdd2xvdXESfNttEEi3OHwpER+
-         oP44qZuCkRUrs0hZmnIiF3q6onhG90ToclORXeX0PdpNleNLm9QtQOH7d2EB6y+DQGFz
-         NcW4R/Nfe2F6Z8TdrPGNPlpaxqhkyN3qOE5AiSscqAgO8NhxE8C+UakZmlQy61Gp9GBM
-         0nSLmUyPmG78PmJ9PGn5ZHapjCO8nJydPhnWtEV0jLByERiNKPS5ETaEK5ZFiWNh6xWA
-         VHvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702666451; x=1703271251;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TsWiTsAx6rY/ivEOcOv3qrsTgsfWq4HF82+Qu3XkrJE=;
-        b=Yc5hhcBHNL2Qaa/aDJr95fSZb8/o5djptmrixZYkoifJSytzW5ChFejBTQnNmj3AOp
-         OCr1taP2hOdX9UszG3cqHsHXr4cy0Pdd0ioz+Gcz26RbB5eXbmuWufamVPn9PJPBcEMH
-         15F7Dn7zHGc9o06zR1L3kVWHw0UwNeiaqvuUJ09A0ZKQ+El1CzGN0rxHLY2WDLP/Gm5y
-         LLvukg3RletDopfrwghErdTJ55GYqRzy+s6UfiWc6/OKlhmmwU9IL2bQJ1IgutCaHt3j
-         3csMV1awqMj29grLzDOxyso9/qDvhoPe5xHXpSF6ly5nSmECSOlsM5kiYt4SSW+CTVy+
-         qk7A==
-X-Gm-Message-State: AOJu0YwlOi2tUDZpdAPKpo5LnW6PEqnmmPl4YPEMUKALXtwYFQFGzcrB
-	OwPbX+v9k9pn3bdcCNLaObLYvciW1jtJtMa+Nfo=
-X-Google-Smtp-Source: AGHT+IGTe60xMdwTz2nmsDBKL83lJlfe2F7HRxnwrlp07sDZDNOE4jdESKX05xcBbPbTErePQGJK86eA3EBbr/+QFJk=
-X-Received: by 2002:a17:906:1083:b0:a19:d40a:d238 with SMTP id
- u3-20020a170906108300b00a19d40ad238mr2913096eju.260.1702666451113; Fri, 15
- Dec 2023 10:54:11 -0800 (PST)
+ d=analog.onmicrosoft.com; s=selector2-analog-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=O11a6b1BhdvjW/q7AixA5meFTqpGXMMad4ICwW0IPpg=;
+ b=rk38X+QJWkxg+7Y56cKJRePuyJcvLX8z2HpfYmLd7DI3yf7V2bGHvps5SB1bxXdipaEGTfiW17TKLJ0QOKb5S1WLaMLtfPv/DpWBoXYi9PF2nZBWpJpvTp+T3SXdfWVWgAelR3Jk62MuZG2ugxKYszrQPoFw/gHGH88iMSQd8pE=
+Received: from PH0PR03MB6771.namprd03.prod.outlook.com (2603:10b6:510:122::17)
+ by SA2PR03MB5897.namprd03.prod.outlook.com (2603:10b6:806:11e::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.31; Fri, 15 Dec
+ 2023 20:28:07 +0000
+Received: from PH0PR03MB6771.namprd03.prod.outlook.com
+ ([fe80::defd:60a2:d154:5afc]) by PH0PR03MB6771.namprd03.prod.outlook.com
+ ([fe80::defd:60a2:d154:5afc%4]) with mapi id 15.20.7091.030; Fri, 15 Dec 2023
+ 20:28:07 +0000
+From: "Matyas, Daniel" <Daniel.Matyas@analog.com>
+To: Guenter Roeck <linux@roeck-us.net>
+CC: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Subject: RE: [PATCH 1/3] hwmon: max31827: Add PEC support
+Thread-Topic: [PATCH 1/3] hwmon: max31827: Add PEC support
+Thread-Index: AQHaLpsJwCfUNDapL0KYBUa9I84zGLCo8tIAgAHUSyA=
+Date: Fri, 15 Dec 2023 20:28:07 +0000
+Message-ID: 
+ <PH0PR03MB6771AD7164ABEEB02650CA908993A@PH0PR03MB6771.namprd03.prod.outlook.com>
+References: <20231214143648.175336-1-daniel.matyas@analog.com>
+ <2e0bf1cf-824d-40c6-9450-7ed4740f2f46@roeck-us.net>
+In-Reply-To: <2e0bf1cf-824d-40c6-9450-7ed4740f2f46@roeck-us.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: 
+ =?utf-8?B?UEcxbGRHRStQR0YwSUc1dFBTSmliMlI1TG5SNGRDSWdjRDBpWXpwY2RYTmxj?=
+ =?utf-8?B?bk5jWkcxaGRIbGhjMXhoY0hCa1lYUmhYSEp2WVcxcGJtZGNNRGxrT0RRNVlq?=
+ =?utf-8?B?WXRNekprTXkwMFlUUXdMVGcxWldVdE5tSTROR0poTWpsbE16VmlYRzF6WjNO?=
+ =?utf-8?B?Y2JYTm5MVGN5TTJNNVlUUTFMVGxpT0RndE1URmxaUzFpTnpVMUxURTRNV1Js?=
+ =?utf-8?B?WVdGbU1UTTBNVnhoYldVdGRHVnpkRnczTWpOak9XRTBOeTA1WWpnNExURXha?=
+ =?utf-8?B?V1V0WWpjMU5TMHhPREZrWldGaFpqRXpOREZpYjJSNUxuUjRkQ0lnYzNvOUlq?=
+ =?utf-8?B?TTVNVFF3SWlCMFBTSXhNek0wTnpFME5UWTROREF5T1Rnek9UTWlJR2c5SWk5?=
+ =?utf-8?B?M2JVNWFVVFZVYVdkclpIRnpMMGxsVDBSdFpVMVFPR1J1VlQwaUlHbGtQU0lp?=
+ =?utf-8?B?SUdKc1BTSXdJaUJpYnowaU1TSWdZMms5SW1OQlFVRkJSVkpJVlRGU1UxSlZS?=
+ =?utf-8?B?azVEWjFWQlFVVnZRMEZCUTFweU5UUXdiRk12WVVGVGRFSjNRVlpPYjNWWFlr?=
+ =?utf-8?B?c3dTRUZDVlRKcE5WcHpSRUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRklRVUZCUVVSaFFWRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
+ =?utf-8?B?UVVGRlFVRlJRVUpCUVVGQmJFZFVSMVpuUVVGQlFVRkJRVUZCUVVGQlFVRkJT?=
+ =?utf-8?B?alJCUVVGQ2FFRkhVVUZoVVVKbVFVaE5RVnBSUW1wQlNGVkJZMmRDYkVGR09F?=
+ =?utf-8?B?RmpRVUo1UVVjNFFXRm5RbXhCUjAxQlpFRkNla0ZHT0VGYVowSm9RVWQzUVdO?=
+ =?utf-8?B?M1FteEJSamhCV21kQ2RrRklUVUZoVVVJd1FVZHJRV1JuUW14QlFVRkJRVUZC?=
+ =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVWQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlowRkJRVUZCUVc1blFVRkJSMFZCV2tGQ2NFRkdPRUZqZDBKc1FVZE5RV1JS?=
+ =?utf-8?B?UW5sQlIxVkJXSGRDZDBGSVNVRmlkMEp4UVVkVlFWbDNRakJCU0UxQldIZENN?=
+ =?utf-8?B?RUZIYTBGYVVVSjVRVVJGUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
+ =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRlJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRMEZCUVVGQlFVTmxRVUZCUVZsUlFtdEJSMnRCV0hkQ2Vr?=
+ =?utf-8?B?RkhWVUZaZDBJeFFVaEpRVnBSUW1aQlNFRkJZMmRDZGtGSGIwRmFVVUpxUVVo?=
+ =?utf-8?B?UlFXTjNRbVpCU0ZGQllWRkNiRUZJU1VGTlowRkJRVUZCUVVGQlFVRkJRVUZC?=
+ =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRkJRVUZDUVVGQlFVRkJRVUZCUVVsQlFVRkJRVUZCUFQwaUx6NDhMMjFs?=
+ =?utf-8?Q?dGE+?=
+x-dg-rorf: true
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR03MB6771:EE_|SA2PR03MB5897:EE_
+x-ms-office365-filtering-correlation-id: 543664bd-637c-4165-f2f5-08dbfdac5900
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 
+ 9OG4qhM/XpLg5mGQWIe4qEBgzYJ9kqAGkmz6XoXOseRFv14RRU3wjBwqzs2QIN/FZ22dOqWWmMZzsfm3AS1eKeBVH9SJFxHi1D4rubXiv8nbMY4fjdY8FiXWuvXvGmyM+6kcz6w4WmBgfowFvAzG8Y1HIoO9XqBUvCoXBJzxnN4GILMmuvRM4NCMvplpjX5F/W7U19CUjf2VFtLJ55YEV1B8T2LkQRVSAVc8YOP0LslLrgEvutLfU2SjKr3MsPY2Q6LCWB52Zzo19r4GLVb9j6q/onEvZMm1UjG3QB6rN2V7E6yMs2p0xgfRPbIp9AN/bqumhklEZotnAB83eE/rC3cipvV6G3WW6FrkYVhhyVkFOBuqq+3uCnF5tZ0OSV0unyD8rpeAu4fmx+zQFl9y48bH4/4gAf08lq08x6s+PmpE6iGWCyZ1fHWgAJdXG7cfQ6Gityb0pOGd4MekeU+4af4MkyesbqM2SRLueMDL0MonbV0aptIhX0lFyIK36NTCTwh05NZIUXjPQIO5x9vvpZL7vz52mBatw606HF1bmzDbKIjmuxN94XZ7fswK+Yikv4F6fLvuiP3JE+zm7/GDQ5qOG0j0oo1jiUQ2aVZtHY6ZHm3sF5gweyGb59ath8MzhRxstGx/4kLHZL24nFAoLqHgoD5Td/G3l3F2SJiheR8=
+x-forefront-antispam-report: 
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR03MB6771.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(376002)(396003)(366004)(136003)(346002)(230273577357003)(230922051799003)(230173577357003)(186009)(64100799003)(451199024)(1800799012)(55016003)(26005)(7696005)(6506007)(33656002)(38070700009)(86362001)(38100700002)(122000001)(83380400001)(4326008)(52536014)(5660300002)(7416002)(53546011)(9686003)(71200400001)(76116006)(6916009)(316002)(66946007)(8676002)(8936002)(54906003)(66556008)(66476007)(66446008)(64756008)(2906002)(30864003)(41300700001)(478600001)(579004);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: 
+ =?utf-8?B?VEhJM3UrRWlEZGg3dXF0S2JYRHlYWkFzcWlNTm14ZExteXl2MzB6KzNvVzRm?=
+ =?utf-8?B?VmZjMkF3ay9pMy96c08xNHlUUFlGSlkvSExzb2plVDM0L3ptTFhZUm9YcVZh?=
+ =?utf-8?B?N21Nc0I5OStscnBRcnJVWE5KZWErZytrZmtJREhnZGQ4ZkRjN0pSTnBRRHJr?=
+ =?utf-8?B?RHBaMHdYaHBEdXkvbWJnYzByUDBJSTUwVExOaUdTczNXUVk2ZU5QcGJBcjM4?=
+ =?utf-8?B?V3hEY2pGNWpGZ0wzbGgyNGJMS1VSOGJ6cndVcFNkU2NTRkhzdzkxS1NuUVJI?=
+ =?utf-8?B?ZEp5ZExZbmZLOTZ4MFdnR0R4SDhEV1UvS3FDMkJmQ0NGYVY3U2doL0k4Yk84?=
+ =?utf-8?B?RXFLVlErWmZEQ2hpbDY2ZzhPdDRMRGxMLzZzNG5Pa3VRYXAvRnFZbTh2SnR5?=
+ =?utf-8?B?d0k5SFhlRE1nNUFuNEJLWDlyRVBMVFU1WVNXcHZ2clFkWmZjbURGT3l3V0p0?=
+ =?utf-8?B?Y1pSTEJCZE96M2tmazV1S2h1K1VKOVVhdXVjckM5NWV2UzdYbGprM0h5Zlpu?=
+ =?utf-8?B?R01wVElsTzZVVE9USkJjUDdDNU0xNFpDRWUxS1dLUWlJRDRha1FPTVByVGtx?=
+ =?utf-8?B?amYzMmVFOUpMa28rbitRL2Exa2c3ZWlMNGV6NnJwSWVvQUo0OENSbkJyR2FL?=
+ =?utf-8?B?UmdLL1dpWXo3UjFnTi92U3d5cTd2WDlEeTk2dkVHSWJja05CN1daVGNUTjBz?=
+ =?utf-8?B?TmViRlIyRXA1dmYzV3BDRzZFcEt5RHpnY3R3Z1hCYXBPL1pYajVaSmVPVDR2?=
+ =?utf-8?B?UndFMnZSSnhJa3FUU0c4ZWFaVG1aVndMcjFqc0pzZkpIUVl1dUZ0M2xqcGZO?=
+ =?utf-8?B?OGx6YS9LWmwrQXl3WnFPL2I1c0hSeUpjSlU3UkRiR1drT1hmbE5HK1dFYXVK?=
+ =?utf-8?B?bHAwVS9QbUNlL2QyVU5mNEdKUlVoWmt0NmZsdEtsQ2lhcElmZVRUMTBodUxr?=
+ =?utf-8?B?cnMvL3pqRXZKNHhUSzdwODh4aTRsYlNzcHBuVVRlRnZwcWZ1akxJTkV0K2xR?=
+ =?utf-8?B?YXM0S2dGbDVMWEZDejBKaE1hUkZ1cm9PQ0lWczZXSklEQkFZZVpBTUY3U3NT?=
+ =?utf-8?B?MWVLaUprOVNPcG1XY29TWHNtWm5HRkhHTi9XNFRyWjlSL29KSXptdVVvbVRG?=
+ =?utf-8?B?TTZsL2NLaWRzTUFhcTNVb3JRWEVGa0xFN1ptN2VpYm01dE1ZVkR0eS9lVVZQ?=
+ =?utf-8?B?T1FuN0lkSVFHVStIUkZ0emNyNzNwZGVhc0dXOW9NMGkyV3FxTDRaNU5CaW15?=
+ =?utf-8?B?S0dheFVMN0hDRzUvb0RpZDBESStkcTlDMDJVbDBBVEc4Y3VkY25RVVdBTGg4?=
+ =?utf-8?B?YW5nb3o1VWs4dnR0VHJWdmNWdld6Rk9iNDlyNFY1KzlsWkkrbHZ5dG9rZjIx?=
+ =?utf-8?B?c0ZpenlheGZ1MmY5MGcrK0R2UkJxTjhDblozRDJQRU1LYVJTc3RlU3o5TW9a?=
+ =?utf-8?B?VnZPbUFNU3JHRlhBa1Irb3A5QjkvRmJ5eVBxOVRnMWV2a3VQV2pLYWlPWmpz?=
+ =?utf-8?B?TXEvSEFHU0p1K1RVUnBQTkpZd1pEMGlCRWEvRE92WEl1N1lFTUduRHVISG1n?=
+ =?utf-8?B?eUZzSFlYK0ZkaGlpYTV2djdNU25DdkpzZFFHQitldjloMGZYU0dnSkVYRlVQ?=
+ =?utf-8?B?V1NjOCtxV1F0bE5MRGtHNHdPSUhnUWJMbVJGOXNWd2ZQZWEyMTNieklsMkRr?=
+ =?utf-8?B?R09jRFBTY3phNXJ0NW90dmE2YmRoZUtUU1REUkl6ak5NUXNKYTNmNGV4MDVN?=
+ =?utf-8?B?SkttVkR5Wnd1TXUxRS9nL09yYUE2WnFmMjdYSXJlUm9qWUtuczJxeU14NHIz?=
+ =?utf-8?B?R2QxY0xscXQvdWZ2QWRKTGFFRitTcEdOdVQvb3ZkY2NuZjQwRE5JQkpFUXFp?=
+ =?utf-8?B?TUpPUW5lRnozT2pERGhNdDFvbG1Uc3pNVzhhNVBaOXVxY0JJT1FXaE1WZ285?=
+ =?utf-8?B?UlVmUURHdWZFNG1NZy9BOUZySWo5T1JpY25FbndCNk5Id1ZxQmI3RnFmbW5r?=
+ =?utf-8?B?dmxFZFI5Q2trRUlkK2xDMW5aRVY5SmQrZFRlN0ZMVEtFdWliTkVpUW5OZzNP?=
+ =?utf-8?B?Qk1SR1ZaUndpM3h1UmMxSG5VSDhhdUYvVG4wQmZOUVZGeG1HaGwxdW0rNUZo?=
+ =?utf-8?Q?FskYQb6o1dR0gfyTgUyOUs7Lf?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231214060552.2852761-1-chou.cosmo@gmail.com>
- <20231214060552.2852761-4-chou.cosmo@gmail.com> <32806071-7fc1-4f5a-a9ca-99dd9c8f3fb4@roeck-us.net>
-In-Reply-To: <32806071-7fc1-4f5a-a9ca-99dd9c8f3fb4@roeck-us.net>
-From: Cosmo Chou <chou.cosmo@gmail.com>
-Date: Sat, 16 Dec 2023 02:53:59 +0800
-Message-ID: <CAOeEDyvNqLXfeAY9D00tZttZXMoLsXuTOZu8c4sXn6dgYHTM6g@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] hwmon: Add driver for Astera Labs PT5161L retimer
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
-	jdelvare@suse.com, corbet@lwn.net, broonie@kernel.org, 
-	naresh.solanki@9elements.com, vincent@vtremblay.dev, 
-	patrick.rudolph@9elements.com, luca.ceresoli@bootlin.com, bhelgaas@google.com, 
-	festevam@denx.de, alexander.stein@ew.tq-group.com, heiko@sntech.de, 
-	jernej.skrabec@gmail.com, macromorgan@hotmail.com, forbidden405@foxmail.com, 
-	sre@kernel.org, linus.walleij@linaro.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-doc@vger.kernel.org, cosmo.chou@quantatw.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-OriginatorOrg: analog.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR03MB6771.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 543664bd-637c-4165-f2f5-08dbfdac5900
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Dec 2023 20:28:07.1877
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: MbkiDEHrAyOKBVmM4cBI/NgEq673FlcaCv7+7IFwlpRPZ8KWK378ecwRBn7hzZSVudDtdXpoIYMlgRSKGpsm3oe5raqt0fBJrjeNsxkz0Y4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR03MB5897
+X-Proofpoint-GUID: IVYryjG_z5BvKOVC6eCeydcg7wbzDeeu
+X-Proofpoint-ORIG-GUID: IVYryjG_z5BvKOVC6eCeydcg7wbzDeeu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-02_01,2023-11-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
+ lowpriorityscore=0 spamscore=0 priorityscore=1501 bulkscore=0 phishscore=0
+ adultscore=0 malwarescore=0 impostorscore=0 mlxscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2311290000
+ definitions=main-2312150143
 
-On 12/14/2023 12:57:10 -0800 Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 12/13/23 22:05, Cosmo Chou wrote:
-> > This driver implements support for temperature monitoring of Astera Lab=
-s
-> > PT5161L series PCIe retimer chips.
-> >
-> > This driver implementation originates from the CSDK available at
-> > Link: https://github.com/facebook/openbmc/tree/helium/common/recipes-li=
-b/retimer-v2.14
-> > The communication protocol utilized is based on the I2C/SMBus standard.
-> >
-> > Signed-off-by: Cosmo Chou <chou.cosmo@gmail.com>
-> > ---
-> >   Documentation/hwmon/index.rst   |   1 +
-> >   Documentation/hwmon/pt5161l.rst |  42 +++
-> >   MAINTAINERS                     |   7 +
-> >   drivers/hwmon/Kconfig           |  10 +
-> >   drivers/hwmon/Makefile          |   1 +
-> >   drivers/hwmon/pt5161l.c         | 558 +++++++++++++++++++++++++++++++=
-+
-> >   6 files changed, 619 insertions(+)
-> >   create mode 100644 Documentation/hwmon/pt5161l.rst
-> >   create mode 100644 drivers/hwmon/pt5161l.c
-> >
-> > diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.=
-rst
-> > index 72f4e6065bae..f145652098fc 100644
-> > --- a/Documentation/hwmon/index.rst
-> > +++ b/Documentation/hwmon/index.rst
-> > @@ -181,6 +181,7 @@ Hardware Monitoring Kernel Drivers
-> >      pmbus
-> >      powerz
-> >      powr1220
-> > +   pt5161l
-> >      pxe1610
-> >      pwm-fan
-> >      q54sj108a2
-> > diff --git a/Documentation/hwmon/pt5161l.rst b/Documentation/hwmon/pt51=
-61l.rst
-> > new file mode 100644
-> > index 000000000000..5f4ce3b2f38d
-> > --- /dev/null
-> > +++ b/Documentation/hwmon/pt5161l.rst
-> > @@ -0,0 +1,42 @@
-> > +.. SPDX-License-Identifier: GPL-2.0-or-later
-> > +
-> > +Kernel driver pt5161l
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +
-> > +Supported chips:
-> > +
-> > +  * Astera Labs PT5161L
-> > +
-> > +    Prefix: 'pt5161l'
-> > +
-> > +    Addresses: I2C 0x24
-> > +
-> > +    Datasheet: http://www.asteralabs.com/wp-content/uploads/2021/03/As=
-tera_Labs_PT5161L_Product_Brief.pdf
-> > +
->
-> This is not the datasheet. It is a product brief. This should truthfully =
-say
-> that the product datasheet is not available to the public.
->
-Got it. Thanks for the advice.
-
-> > +Authors: Cosmo Chou <cosmo.chou@quantatw.com>
-> > +
-> > +Description
-> > +-----------
-> > +
-> > +This driver implements support for temperature monitoring of Astera La=
-bs
-> > +PT5161L series PCIe retimer chips.
-> > +
-> > +This driver implementation originates from the CSDK available at
-> > +https://github.com/facebook/openbmc/tree/helium/common/recipes-lib/ret=
-imer-v2.14
-> > +The communication protocol utilized is based on the I2C/SMBus standard=
-.
-> > +
-> > +Sysfs entries
-> > +----------------
-> > +
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +temp1_input      Measured temperature (in millidegrees Celsius)
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +
-> > +Debugfs entries
-> > +----------------
-> > +
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +fw_load_status   Firmware load status
-> > +fw_ver           Firmware version of the retimer
-> > +heartbeat_status Heartbeat status
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index e2c6187a3ac8..8def71ca2ace 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -17421,6 +17421,13 @@ F:   fs/pstore/
-> >   F:  include/linux/pstore*
-> >   K:  \b(pstore|ramoops)
-> >
-> > +PT5161L HARDWARE MONITOR DRIVER
-> > +M:   Cosmo Chou <cosmo.chou@quantatw.com>
-> > +L:   linux-hwmon@vger.kernel.org
-> > +S:   Maintained
-> > +F:   Documentation/hwmon/pt5161l.rst
-> > +F:   drivers/hwmon/pt5161l.c
-> > +
-> >   PTP HARDWARE CLOCK SUPPORT
-> >   M:  Richard Cochran <richardcochran@gmail.com>
-> >   L:  netdev@vger.kernel.org
-> > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> > index cf27523eed5a..ccdbcf12aed3 100644
-> > --- a/drivers/hwmon/Kconfig
-> > +++ b/drivers/hwmon/Kconfig
-> > @@ -1703,6 +1703,16 @@ source "drivers/hwmon/peci/Kconfig"
-> >
-> >   source "drivers/hwmon/pmbus/Kconfig"
-> >
-> > +config SENSORS_PT5161L
-> > +     tristate "Astera Labs PT5161L PCIe retimer hardware monitoring"
-> > +     depends on I2C
-> > +     help
-> > +       If you say yes here you get support for temperature monitoring
-> > +       on the Astera Labs PT5161L PCIe retimer.
-> > +
-> > +       This driver can also be built as a module. If so, the module
-> > +       will be called pt5161l.
-> > +
-> >   config SENSORS_PWM_FAN
-> >       tristate "PWM fan"
-> >       depends on (PWM && OF) || COMPILE_TEST
-> > diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> > index e84bd9685b5c..4e68b808ddac 100644
-> > --- a/drivers/hwmon/Makefile
-> > +++ b/drivers/hwmon/Makefile
-> > @@ -179,6 +179,7 @@ obj-$(CONFIG_SENSORS_PC87427)     +=3D pc87427.o
-> >   obj-$(CONFIG_SENSORS_PCF8591)       +=3D pcf8591.o
-> >   obj-$(CONFIG_SENSORS_POWERZ)        +=3D powerz.o
-> >   obj-$(CONFIG_SENSORS_POWR1220)  +=3D powr1220.o
-> > +obj-$(CONFIG_SENSORS_PT5161L)        +=3D pt5161l.o
-> >   obj-$(CONFIG_SENSORS_PWM_FAN)       +=3D pwm-fan.o
-> >   obj-$(CONFIG_SENSORS_RASPBERRYPI_HWMON)     +=3D raspberrypi-hwmon.o
-> >   obj-$(CONFIG_SENSORS_SBTSI) +=3D sbtsi_temp.o
-> > diff --git a/drivers/hwmon/pt5161l.c b/drivers/hwmon/pt5161l.c
-> > new file mode 100644
-> > index 000000000000..95e7fb07699c
-> > --- /dev/null
-> > +++ b/drivers/hwmon/pt5161l.c
-> > @@ -0,0 +1,558 @@
-> > +// SPDX-License-Identifier: GPL-2.0-or-later
-> > +
-> > +#include <linux/debugfs.h>
-> > +#include <linux/err.h>
-> > +#include <linux/i2c.h>
-> > +#include <linux/init.h>
-> > +#include <linux/hwmon.h>
-> > +#include <linux/module.h>
-> > +#include <linux/mutex.h>
-> > +
-> > +/* Temperature measurement constants */
-> > +// Aries current average temp ADC code CSR
->
-> Please decide if you want to use C++ or C comments throughout.
->
-Got it, I will revise the comments.
-
-> > +#define ARIES_CURRENT_AVG_TEMP_ADC_CSR       0x42c
-> > +
-> > +// Main Micro Heartbeat reg
-> > +#define ARIES_MM_HEARTBEAT_ADDR      0x923
-> > +
-> > +/* Main SRAM */
-> > +// AL Main SRAM DMEM offset (A0)
-> > +#define AL_MAIN_SRAM_DMEM_OFFSET     (64 * 1024)
-> > +// SRAM read command
-> > +#define AL_TG_RD_LOC_IND_SRAM        0x16
-> > +
-> > +/* Micros */
-> > +// Offset for main micro FW info
-> > +#define ARIES_MAIN_MICRO_FW_INFO     (96 * 1024 - 128)
-> > +
-> > +/* Path Micro Members */
-> > +// FW Info (Major) offset location in struct
-> > +#define ARIES_MM_FW_VERSION_MAJOR    0
-> > +// FW Info (Minor) offset location in struct
-> > +#define ARIES_MM_FW_VERSION_MINOR    1
-> > +// FW Info (Build no.) offset location in struct
-> > +#define ARIES_MM_FW_VERSION_BUILD    2
-> > +
-> > +/* Offsets for MM assisted accesses */
-> > +// Legacy Address and Data registers (using wide registers)
-> > +// Reg offset to specify Address for MM assisted accesses
-> > +#define ARIES_MM_ASSIST_REG_ADDR_OFFSET      0xd99
-> > +
-> > +/* Misc block offsets */
-> > +// Device Load check register
-> > +#define ARIES_CODE_LOAD_REG  0x605
-> > +
-> > +/* Value indicating FW was loaded properly */
-> > +#define ARIES_LOAD_CODE      0xe
-> > +
-> > +#define ARIES_TEMP_CAL_CODE_DEFAULT  84
-> > +
-> > +/* Struct defining FW version loaded on an Aries device */
-> > +struct pt5161l_fw_ver {
-> > +     u8 major;
-> > +     u8 minor;
-> > +     u16 build;
-> > +};
-> > +
-> > +/* Each client has this additional data */
-> > +struct pt5161l_data {
-> > +     struct i2c_client *client;
-> > +     struct dentry *debugfs;
-> > +     struct pt5161l_fw_ver fw_ver;
-> > +     struct mutex lock;
-> > +     bool pec_enable;
->
-> What is the point of this variable ? It is never set.
->
-> > +     bool code_load_okay; // indicate if code load reg value is expect=
-ed
-> > +     bool mm_heartbeat_okay; // indicate if Main Micro heartbeat is go=
-od
-> > +};
-> > +
-> > +static struct dentry *pt5161l_debugfs_dir;
-> > +
-> > +/*
-> > + * Write multiple data bytes to Aries over I2C
-> > + */
-> > +static int pt5161l_write_block_data(struct pt5161l_data *data, u32 add=
-ress,
-> > +                                 u8 len, u8 *val)
-> > +{
-> > +     struct i2c_client *client =3D data->client;
-> > +     int ret;
-> > +     u8 remain_len =3D len;
-> > +     u8 xfer_len, curr_len;
-> > +     u8 buf[16];
-> > +     u8 cmd =3D 0x0F; // [7]:pec_en, [6:5]:rsvd, [4:2]:func, [1]:start=
-, [0]:end
-> > +     u8 config =3D 0x40; // [6]:cfg_type, [4:1]:burst_len, [0]:bit16 o=
-f address
-> > +
-> > +     if (data->pec_enable)
-> > +             cmd |=3D 0x80;
-> > +
->
-> Too bad the datasheet isn't public. It is kind of weird to "enable" PEC t=
-his
-> way. How is it checked if enabled ? How does the i2c subsystem know that =
-it
-> is enabled, and what happens if PEC _is_ actually enabled ?
->
-Checking the datasheet, the read/write used here (so called
-"short format") does not use PEC. I will remove this.
-
-> > +     while (remain_len > 0) {
-> > +             if (remain_len > 4) {
-> > +                     curr_len =3D 4;
-> > +                     remain_len -=3D 4;
-> > +             } else {
-> > +                     curr_len =3D remain_len;
-> > +                     remain_len =3D 0;
-> > +             }
-> > +
-> > +             buf[0] =3D config | (curr_len - 1) << 1 | ((address >> 16=
-) & 0x1);
-> > +             buf[1] =3D (address >> 8) & 0xff;
-> > +             buf[2] =3D address & 0xff;
-> > +             memcpy(&buf[3], val, curr_len);
-> > +
-> > +             xfer_len =3D 3 + curr_len;
-> > +             ret =3D i2c_smbus_write_block_data(client, cmd, xfer_len,=
- buf);
-> > +             if (ret)
-> > +                     return ret;
-> > +
-> > +             val +=3D curr_len;
-> > +             address +=3D curr_len;
-> > +     }
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +/*
-> > + * Read multiple data bytes from Aries over I2C
-> > + */
-> > +static int pt5161l_read_block_data(struct pt5161l_data *data, u32 addr=
-ess,
-> > +                                u8 len, u8 *val)
-> > +{
-> > +     struct i2c_client *client =3D data->client;
-> > +     int ret, tries;
-> > +     u8 remain_len =3D len;
-> > +     u8 curr_len;
-> > +     u8 wbuf[16], rbuf[24];
-> > +     u8 cmd =3D 0x08; // [7]:pec_en, [6:5]:rsvd, [4:2]:func, [1]:start=
-, [0]:end
-> > +     u8 config =3D 0x00; // [6]:cfg_type, [4:1]:burst_len, [0]:bit16 o=
-f address
-> > +
-> > +     if (data->pec_enable)
-> > +             cmd |=3D 0x80;
-> > +
-> > +     while (remain_len > 0) {
-> > +             if (remain_len > 16) {
-> > +                     curr_len =3D 16;
-> > +                     remain_len -=3D 16;
-> > +             } else {
-> > +                     curr_len =3D remain_len;
-> > +                     remain_len =3D 0;
-> > +             }
-> > +
-> > +             wbuf[0] =3D config | (curr_len - 1) << 1 |
-> > +                       ((address >> 16) & 0x1);
-> > +             wbuf[1] =3D (address >> 8) & 0xff;
-> > +             wbuf[2] =3D address & 0xff;
-> > +
-> > +             for (tries =3D 0; tries < 3; tries++) {
-> > +                     ret =3D i2c_smbus_write_block_data(client, (cmd |=
- 0x2), 3,
-> > +                                                      wbuf);
-> > +                     if (ret)
-> > +                             return ret;
-> > +
-> > +                     ret =3D i2c_smbus_read_block_data(client, (cmd | =
-0x1),
-> > +                                                     rbuf);
-> > +                     if (ret =3D=3D curr_len)
-> > +                             break;
-> > +             }
->
-> For code like this it would be really useful to see the datasheet.
-> Those transfers are pretty odd. Does the chip really not support
-> standard SMBus read/write commands ?
->
-hmm.. actually the "pt5161l_read_block_data" and
-"pt5161l_write_block_data" wrapper the smbus block write and read.
-
-> > +             if (tries >=3D 3)
-> > +                     return -ENODATA;
->
-> Is this an appropriate error ? -ENODATA means that no data was available.
-> Sure, after an error no data will be available, but that doesn't really r=
-eflect
-> the error. Why not return the error reported by the i2c subsystem ?
->
-OK. Thanks for the advice.
-
-> > +
-> > +             memcpy(val, rbuf, curr_len);
-> > +             val +=3D curr_len;
-> > +             address +=3D curr_len;
-> > +     }
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +/*
-> > + * Read multiple (up to eight) data bytes from micro SRAM over I2C
-> > + */
-> > +static int
-> > +pt5161l_read_block_data_main_micro_indirect(struct pt5161l_data *data,
-> > +                                         u32 address, u8 len, u8 *val)
-> > +{
-> > +     int ret, tries;
-> > +     u8 buf[8];
-> > +     u8 i, status;
-> > +     u32 uind_offs =3D ARIES_MM_ASSIST_REG_ADDR_OFFSET;
-> > +     u32 eeprom_base, eeprom_addr;
-> > +
-> > +     // No multi-byte indirect support here. Hence read a byte at a ti=
-me
-> > +     eeprom_base =3D address - AL_MAIN_SRAM_DMEM_OFFSET;
-> > +     for (i =3D 0; i < len; i++) {
-> > +             eeprom_addr =3D eeprom_base + i;
-> > +             buf[0] =3D eeprom_addr & 0xff;
-> > +             buf[1] =3D (eeprom_addr >> 8) & 0xff;
-> > +             buf[2] =3D (eeprom_addr >> 16) & 0xff;
-> > +             ret =3D pt5161l_write_block_data(data, uind_offs, 3, buf)=
-;
-> > +             if (ret)
-> > +                     return ret;
-> > +
-> > +             buf[0] =3D AL_TG_RD_LOC_IND_SRAM;
-> > +             ret =3D pt5161l_write_block_data(data, uind_offs + 4, 1, =
-buf);
-> > +             if (ret)
-> > +                     return ret;
-> > +
-> > +             status =3D 0xff;
-> > +             for (tries =3D 0; tries < 255; tries++) {
-> > +                     ret =3D pt5161l_read_block_data(data, uind_offs +=
- 4, 1,
-> > +                                                   &status);
-> > +                     if (ret)
-> > +                             return ret;
-> > +
-> > +                     if (status =3D=3D 0)
-> > +                             break;
-> > +             }
-> > +             if (status !=3D 0)
-> > +                     return -ETIMEDOUT;
-> > +
-> > +             ret =3D pt5161l_read_block_data(data, uind_offs + 3, 1, b=
-uf);
-> > +             if (ret)
-> > +                     return ret;
-> > +
-> > +             val[i] =3D buf[0];
-> > +     }
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +/*
-> > + * Check firmware load status
-> > + */
-> > +static int pt5161l_fw_load_check(struct pt5161l_data *data)
-> > +{
-> > +     int ret;
-> > +     u8 buf[8];
-> > +
-> > +     ret =3D pt5161l_read_block_data(data, ARIES_CODE_LOAD_REG, 1, buf=
-);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     if (buf[0] < ARIES_LOAD_CODE) {
->
->
-> What if it reports, say, 0x0f or 0x55 ?
->
-I just followed the CSDK behavior, and will check if it should be
-exactly equal to 0xe.
-
-> > +             dev_dbg(&data->client->dev,
-> > +                     "Code Load reg unexpected. Not all modules are lo=
-aded %x\n",
-> > +                     buf[0]);
-> > +             data->code_load_okay =3D false;
-> > +     } else {
-> > +             data->code_load_okay =3D true;
-> > +     }
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +/*
-> > + * Check main micro heartbeat
-> > + */
-> > +static int pt5161l_heartbeat_check(struct pt5161l_data *data)
-> > +{
-> > +     int ret, tries;
-> > +     u8 buf[8];
-> > +     u8 heartbeat;
-> > +     bool hb_changed =3D false;
-> > +
-> > +     ret =3D pt5161l_read_block_data(data, ARIES_MM_HEARTBEAT_ADDR, 1,=
- buf);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     heartbeat =3D buf[0];
-> > +     for (tries =3D 0; tries < 100; tries++) {
-> > +             ret =3D pt5161l_read_block_data(data, ARIES_MM_HEARTBEAT_=
-ADDR, 1,
-> > +                                           buf);
-> > +             if (ret)
-> > +                     return ret;
-> > +
-> > +             if (buf[0] !=3D heartbeat) {
-> > +                     hb_changed =3D true;
-> > +                     break;
-> > +             }
->
-> This makes the code really CPU speed dependent. Is this intentional ?
->
-I just followed the behavior of CSDK. I think it should be more
-related to the i2c clock, the maximum is only 400KHz.
-
-> > +     }
-> > +     data->mm_heartbeat_okay =3D hb_changed;
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +/*
-> > + * Check the status of firmware
-> > + */
-> > +static int pt5161l_fwsts_check(struct pt5161l_data *data)
-> > +{
-> > +     int ret;
-> > +     u8 buf[8];
-> > +     u8 major =3D 0, minor =3D 0;
-> > +     u16 build =3D 0;
-> > +
-> > +     ret =3D pt5161l_fw_load_check(data);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     ret =3D pt5161l_heartbeat_check(data);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     if (data->code_load_okay && data->mm_heartbeat_okay) {
-> > +             ret =3D pt5161l_read_block_data_main_micro_indirect(
-> > +                     data,
-> > +                     ARIES_MAIN_MICRO_FW_INFO + ARIES_MM_FW_VERSION_MA=
-JOR, 1,
-> > +                     &major);
-> > +             if (ret)
-> > +                     return ret;
-> > +
-> > +             ret =3D pt5161l_read_block_data_main_micro_indirect(
-> > +                     data,
-> > +                     ARIES_MAIN_MICRO_FW_INFO + ARIES_MM_FW_VERSION_MI=
-NOR, 1,
-> > +                     &minor);
-> > +             if (ret)
-> > +                     return ret;
-> > +
-> > +             ret =3D pt5161l_read_block_data_main_micro_indirect(
-> > +                     data,
-> > +                     ARIES_MAIN_MICRO_FW_INFO + ARIES_MM_FW_VERSION_BU=
-ILD, 2,
-> > +                     buf);
-> > +             if (ret)
-> > +                     return ret;
-> > +             build =3D buf[1] << 8 | buf[0];
-> > +     }
-> > +     data->fw_ver.major =3D major;
-> > +     data->fw_ver.minor =3D minor;
-> > +     data->fw_ver.build =3D build;
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int pt5161l_read(struct device *dev, enum hwmon_sensor_types ty=
-pe,
-> > +                     u32 attr, int channel, long *val)
-> > +{
-> > +     struct pt5161l_data *data =3D dev_get_drvdata(dev);
-> > +     int ret =3D 0;
-> > +     u8 buf[8];
-> > +     long adc_code =3D 0;
-> > +
-> > +     switch (attr) {
-> > +     case hwmon_temp_input:
-> > +             mutex_lock(&data->lock);
-> > +             ret =3D pt5161l_read_block_data(
-> > +                     data, ARIES_CURRENT_AVG_TEMP_ADC_CSR, 4, buf);
-> > +             mutex_unlock(&data->lock);
-> > +             adc_code =3D buf[3] << 24 | buf[2] << 16 | buf[1] << 8 | =
-buf[0];
-> > +             break;
-> > +     default:
-> > +             return -EOPNOTSUPP;
-> > +     }
-> > +     if (ret) {
-> > +             dev_dbg(dev, "Read adc_code failed %d\n", ret);
-> > +             return ret;
-> > +     }
->
-> I fail to see why it would make sense to have the error check here,
-> after the potentially uninitialized content of buf[] is converted.
->
-Oh, I should move this to under the "case hwmon_temp_input:"
-
-> > +     if (adc_code =3D=3D 0 || adc_code >=3D 0x3ff) {
-> > +             dev_dbg(dev, "Invalid adc_code %lx\n", adc_code);
-> > +             return -ENODATA;
->
-> "No data available" is not an appropriate error.
->
-Is "EIO" OK? Do you have a recommended return value?
-
-> > +     }
-> > +
-> > +     *val =3D 110000 +
-> > +            ((adc_code - (ARIES_TEMP_CAL_CODE_DEFAULT + 250)) * -320);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static umode_t pt5161l_is_visible(const void *data,
-> > +                               enum hwmon_sensor_types type, u32 attr,
-> > +                               int channel)
-> > +{
-> > +     switch (attr) {
-> > +     case hwmon_temp_input:
-> > +             return 0444;
-> > +     default:
-> > +             break;
-> > +     }
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static const struct hwmon_channel_info *pt5161l_info[] =3D {
-> > +     HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
-> > +     NULL
-> > +};
-> > +
-> > +static const struct hwmon_ops pt5161l_hwmon_ops =3D {
-> > +     .is_visible =3D pt5161l_is_visible,
-> > +     .read =3D pt5161l_read,
-> > +};
-> > +
-> > +static const struct hwmon_chip_info pt5161l_chip_info =3D {
-> > +     .ops =3D &pt5161l_hwmon_ops,
-> > +     .info =3D pt5161l_info,
-> > +};
-> > +
-> > +static ssize_t pt5161l_debugfs_read_fw_ver(struct file *file, char __u=
-ser *buf,
-> > +                                        size_t count, loff_t *ppos)
-> > +{
-> > +     struct pt5161l_data *data =3D file->private_data;
-> > +     int ret;
-> > +     char ver[32];
-> > +
-> > +     mutex_lock(&data->lock);
-> > +     ret =3D pt5161l_fwsts_check(data);
-> > +     mutex_unlock(&data->lock);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     ret =3D snprintf(ver, sizeof(ver), "%u.%u.%u\n", data->fw_ver.maj=
-or,
-> > +                    data->fw_ver.minor, data->fw_ver.build);
-> > +     if (ret < 0)
-> > +             return ret;
-> > +
-> > +     return simple_read_from_buffer(buf, count, ppos, ver, ret + 1);
-> > +}
-> > +
-> > +static const struct file_operations pt5161l_debugfs_ops_fw_ver =3D {
-> > +     .read =3D pt5161l_debugfs_read_fw_ver,
-> > +     .open =3D simple_open,
-> > +};
-> > +
-> > +static ssize_t pt5161l_debugfs_read_fw_load_sts(struct file *file,
-> > +                                             char __user *buf, size_t =
-count,
-> > +                                             loff_t *ppos)
-> > +{
-> > +     struct pt5161l_data *data =3D file->private_data;
-> > +     int ret;
-> > +     bool status =3D false;
-> > +     char health[16];
-> > +
-> > +     mutex_lock(&data->lock);
-> > +     ret =3D pt5161l_fw_load_check(data);
-> > +     mutex_unlock(&data->lock);
-> > +     if (ret =3D=3D 0)
-> > +             status =3D data->code_load_okay;
-> > +
-> > +     ret =3D snprintf(health, sizeof(health), "%s\n",
-> > +                    status ? "normal" : "abnormal");
-> > +     if (ret < 0)
-> > +             return ret;
-> > +
-> > +     return simple_read_from_buffer(buf, count, ppos, health, ret + 1)=
-;
-> > +}
-> > +
-> > +static const struct file_operations pt5161l_debugfs_ops_fw_load_sts =
-=3D {
-> > +     .read =3D pt5161l_debugfs_read_fw_load_sts,
-> > +     .open =3D simple_open,
-> > +};
-> > +
-> > +static ssize_t pt5161l_debugfs_read_hb_sts(struct file *file, char __u=
-ser *buf,
-> > +                                        size_t count, loff_t *ppos)
-> > +{
-> > +     struct pt5161l_data *data =3D file->private_data;
-> > +     int ret;
-> > +     bool status =3D false;
-> > +     char health[16];
-> > +
-> > +     mutex_lock(&data->lock);
-> > +     ret =3D pt5161l_heartbeat_check(data);
-> > +     mutex_unlock(&data->lock);
-> > +     if (ret =3D=3D 0)
-> > +             status =3D data->mm_heartbeat_okay;
-> > +
-> > +     ret =3D snprintf(health, sizeof(health), "%s\n",
-> > +                    status ? "normal" : "abnormal");
-> > +     if (ret < 0)
-> > +             return ret;
-> > +
-> > +     return simple_read_from_buffer(buf, count, ppos, health, ret + 1)=
-;
-> > +}
-> > +
-> > +static const struct file_operations pt5161l_debugfs_ops_hb_sts =3D {
-> > +     .read =3D pt5161l_debugfs_read_hb_sts,
-> > +     .open =3D simple_open,
-> > +};
-> > +
-> > +static int pt5161l_init_debugfs(struct pt5161l_data *data)
-> > +{
-> > +     data->debugfs =3D debugfs_create_dir(dev_name(&data->client->dev)=
-,
-> > +                                        pt5161l_debugfs_dir);
-> > +
-> > +     debugfs_create_file("fw_ver", 0444, data->debugfs, data,
-> > +                         &pt5161l_debugfs_ops_fw_ver);
-> > +
-> > +     debugfs_create_file("fw_load_status", 0444, data->debugfs, data,
-> > +                         &pt5161l_debugfs_ops_fw_load_sts);
-> > +
-> > +     debugfs_create_file("heartbeat_status", 0444, data->debugfs, data=
-,
-> > +                         &pt5161l_debugfs_ops_hb_sts);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int pt5161l_probe(struct i2c_client *client)
-> > +{
-> > +     struct device *dev =3D &client->dev;
-> > +     struct device *hwmon_dev;
-> > +     struct pt5161l_data *data;
-> > +
-> > +     data =3D devm_kzalloc(dev, sizeof(struct pt5161l_data), GFP_KERNE=
-L);
-> > +     if (!data)
-> > +             return -ENOMEM;
-> > +
-> > +     data->client =3D client;
-> > +     mutex_init(&data->lock);
-> > +     dev_set_drvdata(dev, data);
-> > +
-> > +     hwmon_dev =3D devm_hwmon_device_register_with_info(
-> > +             dev, client->name, data, &pt5161l_chip_info, NULL);
-> > +
-> > +     pt5161l_init_debugfs(data);
->
-> This should still result in crashes if a device is instantiated (for exam=
-ple
-> with new_device) and then removed (for example with delete_device).
->
-I don=E2=80=99t know much about this. I=E2=80=99ve tested it and it seems t=
-o be fine.
-Each device has its own debugfs files, and the debugfs files will be
-removed after the device is deleted.
-
-> > +
-> > +     return PTR_ERR_OR_ZERO(hwmon_dev);
-> > +}
-> > +
-> > +static void pt5161l_remove(struct i2c_client *client)
-> > +{
-> > +     struct pt5161l_data *data =3D i2c_get_clientdata(client);
-> > +
-> > +     debugfs_remove_recursive(data->debugfs);
-> > +}
-> > +
-> > +static const struct of_device_id __maybe_unused pt5161l_of_match[] =3D=
- {
-> > +     { .compatible =3D "asteralabs,pt5161l" },
-> > +     {},
-> > +};
-> > +MODULE_DEVICE_TABLE(of, pt5161l_of_match);
-> > +
-> > +static const struct acpi_device_id pt5161l_acpi_match[] =3D {
->
-> Guess the __maybe_unused applies here as well.
->
-Yes. I will add this. Thanks.
-
-> > +     { "PT5161L", 0 },
->
-> Is that an official ACPI ID ? It doesn't look like one to me. ACPI IDs
-> are supposed to be 8 characters long. I don't find a vendor ID for Astera=
-,
-> and it seems unlikely that it is "PT51". The model number is supposed
-> to be a 4-digit hex string, and "61L" is neither. If it is supposed
-> to be a PNP ID, that doesn't look correct either. "PT5" is not a valid
-> PNP ID, and "161L" is not a valid PNP product ID.
->
-I'm not entirely clear on the issue. I just refer to the "I2C serial
-bus support" section of this:
-https://docs.kernel.org/firmware-guide/acpi/enumeration.html
-
-> > +     {},
-> > +};
-> > +MODULE_DEVICE_TABLE(acpi, pt5161l_acpi_match);
-> > +
-> > +static const struct i2c_device_id pt5161l_id[] =3D {
-> > +     { "pt5161l", 0 },
-> > +     {}
-> > +};
-> > +MODULE_DEVICE_TABLE(i2c, pt5161l_id);
-> > +
-> > +static struct i2c_driver pt5161l_driver =3D {
-> > +     .class =3D I2C_CLASS_HWMON,
-> > +     .driver =3D {
-> > +             .name =3D "pt5161l",
-> > +             .of_match_table =3D of_match_ptr(pt5161l_of_match),
-> > +             .acpi_match_table =3D ACPI_PTR(pt5161l_acpi_match),
-> > +     },
-> > +     .probe =3D pt5161l_probe,
-> > +     .remove =3D pt5161l_remove,
-> > +     .id_table =3D pt5161l_id,
-> > +};
-> > +
-> > +static int __init pt5161l_init(void)
-> > +{
-> > +     pt5161l_debugfs_dir =3D debugfs_create_dir("pt5161l", NULL);
-> > +     return i2c_add_driver(&pt5161l_driver);
-> > +}
-> > +
-> > +static void __exit pt5161l_exit(void)
-> > +{
-> > +     debugfs_remove_recursive(pt5161l_debugfs_dir);
-> > +     i2c_del_driver(&pt5161l_driver);
-> > +}
-> > +
-> > +module_init(pt5161l_init);
-> > +module_exit(pt5161l_exit);
-> > +
-> > +MODULE_AUTHOR("Cosmo Chou <cosmo.chou@quantatw.com>");
-> > +MODULE_DESCRIPTION("Hwmon driver for Astera Labs Aries PCIe retimer");
-> > +MODULE_LICENSE("GPL");
->
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogR3VlbnRlciBSb2VjayA8
+Z3JvZWNrN0BnbWFpbC5jb20+IE9uIEJlaGFsZiBPZiBHdWVudGVyIFJvZWNrDQo+IFNlbnQ6IFRo
+dXJzZGF5LCBEZWNlbWJlciAxNCwgMjAyMyA2OjEwIFBNDQo+IFRvOiBNYXR5YXMsIERhbmllbCA8
+RGFuaWVsLk1hdHlhc0BhbmFsb2cuY29tPg0KPiBDYzogSmVhbiBEZWx2YXJlIDxqZGVsdmFyZUBz
+dXNlLmNvbT47IFJvYiBIZXJyaW5nDQo+IDxyb2JoK2R0QGtlcm5lbC5vcmc+OyBLcnp5c3p0b2Yg
+S296bG93c2tpDQo+IDxrcnp5c3p0b2Yua296bG93c2tpK2R0QGxpbmFyby5vcmc+OyBDb25vciBE
+b29sZXkNCj4gPGNvbm9yK2R0QGtlcm5lbC5vcmc+OyBKb25hdGhhbiBDb3JiZXQgPGNvcmJldEBs
+d24ubmV0PjsgbGludXgtDQo+IGh3bW9uQHZnZXIua2VybmVsLm9yZzsgZGV2aWNldHJlZUB2Z2Vy
+Lmtlcm5lbC5vcmc7IGxpbnV4LQ0KPiBrZXJuZWxAdmdlci5rZXJuZWwub3JnOyBsaW51eC1kb2NA
+dmdlci5rZXJuZWwub3JnDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggMS8zXSBod21vbjogbWF4MzE4
+Mjc6IEFkZCBQRUMgc3VwcG9ydA0KPiANCj4gW0V4dGVybmFsXQ0KPiANCj4gT24gMTIvMTQvMjMg
+MDY6MzYsIERhbmllbCBNYXR5YXMgd3JvdGU6DQo+ID4gUmVtb3ZlZCByZWdtYXAgYW5kIHVzZWQg
+bXkgZnVuY3Rpb25zIHRvIHJlYWQsIHdyaXRlIGFuZCB1cGRhdGUgYml0cy4NCj4gPiBJbiB0aGVz
+ZSBmdW5jdGlvbnMgaTJjX3NtYnVzXyBoZWxwZXIgZnVuY3Rpb25zIGFyZSB1c2VkLiBUaGVzZSBj
+aGVjaw0KPiA+IGlmIHRoZXJlIHdlcmUgYW55IFBFQyBlcnJvcnMgZHVyaW5nIHJlYWQuIEluIHRo
+ZSB3cml0ZSBmdW5jdGlvbiwgaWYNCj4gPiBQRUMgaXMgZW5hYmxlZCwgSSBjaGVjayBmb3IgUEVD
+IEVycm9yIGJpdCwgdG8gc2VlIGlmIHRoZXJlIHdlcmUgYW55IGVycm9ycy4NCj4gPg0KPiA+IFNp
+Z25lZC1vZmYtYnk6IERhbmllbCBNYXR5YXMgPGRhbmllbC5tYXR5YXNAYW5hbG9nLmNvbT4NCj4g
+DQo+IFRoZSAiUEVDIiBhdHRyaWJ1dGUgbmVlZHMgdG8gYmUgYXR0YWNoZWQgdG8gdGhlIEkyQyBk
+ZXZpY2UuDQo+IFNlZSBsbTkwLmMgb3IgcG1idXNfY29yZS5jIGZvciBleGFtcGxlcy4NCj4gDQoN
+CkkgYWRkZWQgcGVjX3Nob3coKSBhbmQgcGVjX3N0b3JlKCkgZnVuY3Rpb25zIGFuZCBjcmVhdGVk
+IHRoZSBwZWMgZmlsZSB3aXRoaW4gdGhlIG1heDMxODI3X2dyb3Vwcy4NCkkgZGlkIG5vdCBzZXQg
+dGhlIGZsYWdzLCBiZWNhdXNlIEkgd2FudCB0aGVtIHRvIGJlIHNldCBvbmx5IGluIHBlY19zdG9y
+ZS4gQnkgZGVmYXVsdCB0aGUgUEVDIGZsYWcgc2hvdWxkIG5vdCBiZSBzZXQuDQoNCj4gVGhlIGNo
+YW5nZXMsIGlmIGluZGVlZCBuZWVkZWQsIGRvIG5vdCB3YXJhbnQgZHJvcHBpbmcgcmVnbWFwLg0K
+PiBZb3Ugd2lsbCBuZWVkIHRvIGV4cGxhaW4gd2h5IHRoZSByZWdfcmVhZCBhbmQgcmVnX3dyaXRl
+IGNhbGxiYWNrcw0KPiBwcm92aWRlZWQgYnkgcmVnbWFwIGNhbiBub3QgYmUgdXNlZC4NCj4gDQo+
+IE9uIHRvcCBvZiB0aGF0LCBpdCBpcyBub3QgY2xlYXIgd2h5IHJlZ21hcCBjYW4ndCBiZSB1c2Vk
+IGluIHRoZSBmaXJzdCBwbGFjZS4NCj4gSXQgc2VlbXMgdGhhdCB0aGUgbWFqb3IgY2hhbmdlIGlz
+IHRoYXQgb25lIG5lZWRzIHRvIHJlYWQgdGhlIGNvbmZpZ3VyYXRpb24NCj4gcmVnaXN0ZXIgYWZ0
+ZXIgYSB3cml0ZSB0byBzZWUgaWYgdGhlcmUgd2FzIGEgUEVDIGVycm9yLiBJdCBpcyBub3QgaW1t
+ZWRpYXRlbHkNCj4gb2J2aW91cyB3aHkgdGhhdCBhZGRpdGlvbmFsIHJlYWQgKGlmIGluZGVlZCBu
+ZWNlc3NhcnkpIHdvdWxkIHJlcXVpcmUNCj4gcmVnbWFwIHN1cHBvcnQgdG8gYmUgZHJvcHBlZC4N
+Cj4gDQoNClNvIEkgYW0gbm90IHN1cmUgYWJvdXQgdGhpcywgYnV0IGl0IHNlZW1zIHRvIG1lLCB0
+aGF0IHJlZ21hcF93cml0ZSBpcyBub3Qgc2VuZGluZyBhIFBFQyBieXRlIGFuZCByZWdtYXBfcmVh
+ZCBpcyBub3QgY2hlY2tpbmcgdGhlIFBFQyBieXRlIGJ5IGRlZmF1bHQuIE15IHJhdGlvbmFsZSB3
+YXM6IGkyY19zbWJ1c193cml0ZV93b3JkX2RhdGEoKSBpcyB1c2luZyB0aGUgaTJjX3hmZXIgZnVu
+Y3Rpb24sIHdoaWNoIGhhcyBhcyBhcmd1bWVudCB0aGUgY2xpZW50LT5mbGFncy4gU28sIGlmIEky
+Q19DTElFTlRfUEVDIGlzIHNldCBpbiBjbGllbnQtPmZsYWdzLCB0aGF0IHdvdWxkIGJlIHRyYW5z
+bWl0dGVkIGJ5IGkyY194ZmVyLiBJIGFtIG5vdCBjb252aW5jZWQgYWJvdXQgdGhpcywgYnV0IGxt
+OTAgYW5kIHBtYnVzX2NvcmUgYXJlIG5vdCB1c2luZyByZWdtYXAsIHNvIEkgd2VudCBhaGVhZCBh
+bmQgcmVwbGFjZWQgaXQuDQoNCklmIHdoYXQgSSBhbSB0aGlua2luZyBpcyB3cm9uZywgcGxlYXNl
+IGNvcnJlY3QgbWUuDQoNCj4gUmVnYXJkaW5nICJpZiBpbmRlZWQgbmVjZXNzYXJ5IjogVGhlcmUg
+bmVlZHMgdG8gYmUgYSBjb21tZW50IGV4cGxhaW5pbmcNCj4gdGhhdCB0aGUgZGV2aWNlIHdpbGwg
+cmV0dXJuIEFDSyBldmVuIGFmdGVyIGEgcGFja2V0IHdpdGggYmFkIFBFQyBpcw0KPiByZWNlaXZl
+ZC4NCj4gDQo+ID4gLS0tDQo+ID4gICBEb2N1bWVudGF0aW9uL2h3bW9uL21heDMxODI3LnJzdCB8
+ICAxNCArLQ0KPiA+ICAgZHJpdmVycy9od21vbi9tYXgzMTgyNy5jICAgICAgICAgfCAyMTkgKysr
+KysrKysrKysrKysrKysrKysrKystLS0tLQ0KPiAtLS0NCj4gPiAgIDIgZmlsZXMgY2hhbmdlZCwg
+MTcxIGluc2VydGlvbnMoKyksIDYyIGRlbGV0aW9ucygtKQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBh
+L0RvY3VtZW50YXRpb24vaHdtb24vbWF4MzE4MjcucnN0DQo+ID4gYi9Eb2N1bWVudGF0aW9uL2h3
+bW9uL21heDMxODI3LnJzdA0KPiA+IGluZGV4IDQ0YWI5ZGMwNjRjYi4uZWNiYzFkZGJhNmE3IDEw
+MDY0NA0KPiA+IC0tLSBhL0RvY3VtZW50YXRpb24vaHdtb24vbWF4MzE4MjcucnN0DQo+ID4gKysr
+IGIvRG9jdW1lbnRhdGlvbi9od21vbi9tYXgzMTgyNy5yc3QNCj4gPiBAQCAtMTMxLDcgKzEzMSwx
+MyBAQCBUaGUgRmF1bHQgUXVldWUgYml0cyBzZWxlY3QgaG93IG1hbnkNCj4gY29uc2VjdXRpdmUg
+dGVtcGVyYXR1cmUgZmF1bHRzIG11c3Qgb2NjdXINCj4gPiAgIGJlZm9yZSBvdmVydGVtcGVyYXR1
+cmUgb3IgdW5kZXJ0ZW1wZXJhdHVyZSBmYXVsdHMgYXJlIGluZGljYXRlZCBpbg0KPiB0aGUNCj4g
+PiAgIGNvcnJlc3BvbmRpbmcgc3RhdHVzIGJpdHMuDQo+ID4NCj4gPiAtTm90ZXMNCj4gPiAtLS0t
+LS0NCj4gPiAtDQo+ID4gLVBFQyBpcyBub3QgaW1wbGVtZW50ZWQuDQo+ID4gK1BFQyAocGFja2V0
+IGVycm9yIGNoZWNraW5nKSBjYW4gYmUgZW5hYmxlZCBmcm9tIHRoZSAicGVjIiBkZXZpY2UNCj4g
+YXR0cmlidXRlLg0KPiA+ICtJZiBQRUMgaXMgZW5hYmxlZCwgYSBQRUMgYnl0ZSBpcyBhcHBlbmRl
+ZCB0byB0aGUgZW5kIG9mIGVhY2ggbWVzc2FnZQ0KPiB0cmFuc2Zlci4NCj4gPiArVGhpcyBpcyBh
+IENSQy04IGJ5dGUgdGhhdCBpcyBjYWxjdWxhdGVkIG9uIGFsbCBvZiB0aGUgbWVzc2FnZSBieXRl
+cw0KPiA+ICsoaW5jbHVkaW5nIHRoZSBhZGRyZXNzL3JlYWQvd3JpdGUgYnl0ZSkuIFRoZSBsYXN0
+IGRldmljZSB0byB0cmFuc21pdA0KPiA+ICthIGRhdGEgYnl0ZSBhbHNvIHRyYW5zbWl0cyB0aGUg
+UEVDIGJ5dGUuIFRoZSBtYXN0ZXIgdHJhbnNtaXRzIHRoZSBQRUMNCj4gPiArYnl0ZSBhZnRlciBh
+IHdyaXRlIHRyYW5zYWN0aW9uLCBhbmQgdGhlIE1BWDMxODI3IHRyYW5zbWl0cyB0aGUgUEVDDQo+
+IGJ5dGUgYWZ0ZXIgYSByZWFkIHRyYW5zYWN0aW9uLg0KPiA+ICsNCj4gPiArVGhlIHJlYWQgUEVD
+IGVycm9yIGlzIGhhbmRsZWQgaW5zaWRlIHRoZQ0KPiBpMmNfc21idXNfcmVhZF93b3JkX3N3YXBw
+ZWQoKSBmdW5jdGlvbi4NCj4gPiArVG8gY2hlY2sgaWYgdGhlIHdyaXRlIGhhZCBhbnkgUEVDIGVy
+cm9yIGEgcmVhZCBpcyBwZXJmb3JtZWQgb24gdGhlDQo+ID4gK2NvbmZpZ3VyYXRpb24gcmVnaXN0
+ZXIsIHRvIGNoZWNrIHRoZSBQRUMgRXJyb3IgYml0Lg0KPiA+IFwgTm8gbmV3bGluZSBhdCBlbmQg
+b2YgZmlsZQ0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2h3bW9uL21heDMxODI3LmMgYi9kcml2
+ZXJzL2h3bW9uL21heDMxODI3LmMNCj4gaW5kZXgNCj4gPiA3MWFkMzkzNGRmYjYuLmRiOTM0OTIx
+OTNiZCAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL2h3bW9uL21heDMxODI3LmMNCj4gPiArKysg
+Yi9kcml2ZXJzL2h3bW9uL21heDMxODI3LmMNCj4gPiBAQCAtMTEsOCArMTEsOCBAQA0KPiA+ICAg
+I2luY2x1ZGUgPGxpbnV4L2h3bW9uLmg+DQo+ID4gICAjaW5jbHVkZSA8bGludXgvaTJjLmg+DQo+
+ID4gICAjaW5jbHVkZSA8bGludXgvbXV0ZXguaD4NCj4gPiAtI2luY2x1ZGUgPGxpbnV4L3JlZ21h
+cC5oPg0KPiA+ICAgI2luY2x1ZGUgPGxpbnV4L3JlZ3VsYXRvci9jb25zdW1lci5oPg0KPiA+ICsj
+aW5jbHVkZSA8bGludXgvaHdtb24tc3lzZnMuaD4NCj4gPiAgICNpbmNsdWRlIDxsaW51eC9vZl9k
+ZXZpY2UuaD4NCj4gPg0KPiA+ICAgI2RlZmluZSBNQVgzMTgyN19UX1JFRwkJCTB4MA0KPiA+IEBA
+IC0yNCwxMSArMjQsMTMgQEANCj4gPg0KPiA+ICAgI2RlZmluZSBNQVgzMTgyN19DT05GSUdVUkFU
+SU9OXzFTSE9UX01BU0sJQklUKDApDQo+ID4gICAjZGVmaW5lIE1BWDMxODI3X0NPTkZJR1VSQVRJ
+T05fQ05WX1JBVEVfTUFTSw0KPiAJR0VOTUFTSygzLCAxKQ0KPiA+ICsjZGVmaW5lIE1BWDMxODI3
+X0NPTkZJR1VSQVRJT05fUEVDX0VOX01BU0sJQklUKDQpDQo+ID4gICAjZGVmaW5lIE1BWDMxODI3
+X0NPTkZJR1VSQVRJT05fVElNRU9VVF9NQVNLCUJJVCg1KQ0KPiA+ICAgI2RlZmluZSBNQVgzMTgy
+N19DT05GSUdVUkFUSU9OX1JFU09MVVRJT05fTUFTSw0KPiAJR0VOTUFTSyg3LCA2KQ0KPiA+ICAg
+I2RlZmluZSBNQVgzMTgyN19DT05GSUdVUkFUSU9OX0FMUk1fUE9MX01BU0sJQklUKDgpDQo+ID4g
+ICAjZGVmaW5lIE1BWDMxODI3X0NPTkZJR1VSQVRJT05fQ09NUF9JTlRfTUFTSwlCSVQoOSkNCj4g
+PiAgICNkZWZpbmUgTUFYMzE4MjdfQ09ORklHVVJBVElPTl9GTFRfUV9NQVNLCUdFTk1BU0soMTEs
+IDEwKQ0KPiA+ICsjZGVmaW5lIE1BWDMxODI3X0NPTkZJR1VSQVRJT05fUEVDX0VSUl9NQVNLCUJJ
+VCgxMykNCj4gPiAgICNkZWZpbmUgTUFYMzE4MjdfQ09ORklHVVJBVElPTl9VX1RFTVBfU1RBVF9N
+QVNLCUJJVCgxNCkNCj4gPiAgICNkZWZpbmUgTUFYMzE4MjdfQ09ORklHVVJBVElPTl9PX1RFTVBf
+U1RBVF9NQVNLCUJJVCgxNSkNCj4gPg0KPiA+IEBAIC05NCwyMyArOTYsNjcgQEAgc3RydWN0IG1h
+eDMxODI3X3N0YXRlIHsNCj4gPiAgIAkgKiBQcmV2ZW50IHNpbXVsdGFuZW91cyBhY2Nlc3MgdG8g
+dGhlIGkyYyBjbGllbnQuDQo+ID4gICAJICovDQo+ID4gICAJc3RydWN0IG11dGV4IGxvY2s7DQo+
+ID4gLQlzdHJ1Y3QgcmVnbWFwICpyZWdtYXA7DQo+ID4gICAJYm9vbCBlbmFibGU7DQo+ID4gICAJ
+dW5zaWduZWQgaW50IHJlc29sdXRpb247DQo+ID4gICAJdW5zaWduZWQgaW50IHVwZGF0ZV9pbnRl
+cnZhbDsNCj4gPiArCXN0cnVjdCBpMmNfY2xpZW50ICpjbGllbnQ7DQo+ID4gICB9Ow0KPiA+DQo+
+ID4gLXN0YXRpYyBjb25zdCBzdHJ1Y3QgcmVnbWFwX2NvbmZpZyBtYXgzMTgyN19yZWdtYXAgPSB7
+DQo+ID4gLQkucmVnX2JpdHMgPSA4LA0KPiA+IC0JLnZhbF9iaXRzID0gMTYsDQo+ID4gLQkubWF4
+X3JlZ2lzdGVyID0gMHhBLA0KPiA+IC19Ow0KPiA+ICtzdGF0aWMgaW50IG1heDMxODI3X3JlZ19y
+ZWFkKHN0cnVjdCBpMmNfY2xpZW50ICpjbGllbnQsIHU4IHJlZywgdTE2DQo+ID4gKyp2YWwpIHsN
+Cj4gPiArCXUxNiB0bXAgPSBpMmNfc21idXNfcmVhZF93b3JkX3N3YXBwZWQoY2xpZW50LCByZWcp
+Ow0KPiA+ICsNCj4gPiArCWlmICh0bXAgPCAwKQ0KPiANCj4gQW4gdTE2IHZhcmlhYmxlIHdpbGwg
+bmV2ZXIgYmUgbmVnYXRpdmUuDQo+IA0KPiA+ICsJCXJldHVybiB0bXA7DQo+ID4gKw0KPiA+ICsJ
+KnZhbCA9IHRtcDsNCj4gPiArCXJldHVybiAwOw0KPiA+ICt9DQo+IA0KPiBJZiByZWdtYXAgY2Fu
+IGluZGVlZCBub3QgYmUgdXNlZCwgaXQgaXMgdW5uZWNlc3NhcnkgdG8gcHJvdmlkZSBhIHBvaW50
+ZXIgdG8NCj4gdGhlIHJldHVybiB2YWx1ZS4gSW5zdGVhZCwganVzdCBsaWtlIHdpdGggc21idXMg
+Y2FsbHMsIHRoZSBlcnJvciByZXR1cm4gYW5kDQo+IHRoZSByZXR1cm4gdmFsdWUgY2FuIGJlIGNv
+bWJpbmVkLiBBZGRpbmcgdGhpcyBmdW5jdGlvbiBqdXN0IHRvIHNlcGFyYXRlDQo+IGVycm9yIGZy
+b20gcmV0dXJuIHZhbHVlIGFkZHMgemVybyB2YWx1ZSAoYW5kLCBhcyBjYW4gYmUgc2VlbiBmcm9t
+IHRoZQ0KPiBhYm92ZSwgYWN0dWFsbHkgYWRkcyBhbiBvcHBvcnR1bml0eSB0byBpbnRyb2R1Y2Ug
+YnVncykuDQo+IA0KPiA+ICsNCj4gPiArc3RhdGljIGludCBtYXgzMTgyN19yZWdfd3JpdGUoc3Ry
+dWN0IGkyY19jbGllbnQgKmNsaWVudCwgdTggcmVnLCB1MTYNCj4gPiArdmFsKSB7DQo+ID4gKwl1
+MTYgY2ZnOw0KPiA+ICsJaW50IHJldDsNCj4gPiArDQo+ID4gKwlyZXQgPSBpMmNfc21idXNfd3Jp
+dGVfd29yZF9zd2FwcGVkKGNsaWVudCwgcmVnLCB2YWwpOw0KPiA+ICsJaWYgKHJldCkNCj4gPiAr
+CQlyZXR1cm4gcmV0Ow0KPiA+ICsNCj4gPiArCS8vIElmIFBFQyBpcyBub3QgZW5hYmxlZCwgcmV0
+dXJuIHdpdGggc3VjY2Vzcw0KPiANCj4gRG8gbm90IG1peCBjb21tZW50IHN0eWxlcy4gVGhlIHJl
+c3Qgb2YgdGhlIGRyaXZlciBkb2Vzbid0IHVzZSBDKysNCj4gY29tbWVudHMuDQo+IEJlc2lkZXMs
+IHRoZSBjb21tZW50IGRvZXMgbm90IGFkZCBhbnkgdmFsdWUuDQo+IA0KPiA+ICsJaWYgKCEoY2xp
+ZW50LT5mbGFncyAmIEkyQ19DTElFTlRfUEVDKSkNCj4gPiArCQlyZXR1cm4gMDsNCj4gPiArDQo+
+ID4gKwlyZXQgPSBtYXgzMTgyN19yZWdfcmVhZChjbGllbnQsDQo+IE1BWDMxODI3X0NPTkZJR1VS
+QVRJT05fUkVHLCAmY2ZnKTsNCj4gPiArCWlmIChyZXQpDQo+ID4gKwkJcmV0dXJuIHJldDsNCj4g
+PiArDQo+ID4gKwlpZiAoY2ZnICYgTUFYMzE4MjdfQ09ORklHVVJBVElPTl9QRUNfRVJSX01BU0sp
+DQo+ID4gKwkJcmV0dXJuIC1FQkFETVNHOw0KPiA+ICsNCj4gDQo+IEVCQURNU0cgaXMgIk5vdCBh
+IGRhdGEgbWVzc2FnZSIuIEkgZG9uJ3QgdGhpbmsgdGhhdCBpcyBhcHByb3ByaWF0ZSBoZXJlLg0K
+PiANCj4gSSB3b3VsZCB2ZXJ5IG11Y2ggcHJlZmVyDQo+IAlpZiAoY2xpZW50LT5mbGFncyAmIEky
+Q19DTElFTlRfUEVDKSB7DQo+IAkJLi4uDQo+IAl9DQo+IA0KPiA+ICsJcmV0dXJuIDA7DQo+ID4g
+K30NCj4gPiArDQo+ID4gK3N0YXRpYyBpbnQgbWF4MzE4MjdfdXBkYXRlX2JpdHMoc3RydWN0IGky
+Y19jbGllbnQgKmNsaWVudCwgdTggcmVnLA0KPiA+ICsJCQkJdTE2IG1hc2ssIHUxNiB2YWwpDQo+
+ID4gK3sNCj4gPiArCXUxNiB0bXA7DQo+ID4gKwlpbnQgcmV0Ow0KPiA+ICsNCj4gPiArCXJldCA9
+IG1heDMxODI3X3JlZ19yZWFkKGNsaWVudCwgcmVnLCAmdG1wKTsNCj4gPiArCWlmIChyZXQpDQo+
+ID4gKwkJcmV0dXJuIHJldDsNCj4gPiArDQo+ID4gKwl0bXAgPSAodG1wICYgfm1hc2spIHwgKHZh
+bCAmIG1hc2spOw0KPiA+ICsJcmV0ID0gbWF4MzE4MjdfcmVnX3dyaXRlKGNsaWVudCwgcmVnLCB0
+bXApOw0KPiA+ICsNCj4gPiArCXJldHVybiByZXQ7DQo+ID4gK30NCj4gPg0KPiA+ICAgc3RhdGlj
+IGludCBzaHV0ZG93bl93cml0ZShzdHJ1Y3QgbWF4MzE4Mjdfc3RhdGUgKnN0LCB1bnNpZ25lZCBp
+bnQgcmVnLA0KPiA+ICAgCQkJICB1bnNpZ25lZCBpbnQgbWFzaywgdW5zaWduZWQgaW50IHZhbCkN
+Cj4gPiAgIHsNCj4gPiAtCXVuc2lnbmVkIGludCBjZmc7DQo+ID4gLQl1bnNpZ25lZCBpbnQgY252
+X3JhdGU7DQo+ID4gKwl1MTYgY2ZnOw0KPiA+ICsJdTE2IGNudl9yYXRlOw0KPiANCj4gSSByZWFs
+bHkgZG8gbm90IHNlZSB0aGUgcG9pbnQgb2YgdGhvc2UgY2hhbmdlcy4gdTE2IGlzIG1vcmUgZXhw
+ZW5zaXZlIHRoYW4NCj4gdW5zaWduZWQgaW50IG9uIG1hbnkgYXJjaGl0ZWN0dXJlcy4gSWYgcmV0
+YWluZWQsIHlvdSdsbCBoYXZlIHRvIGV4cGxhaW4gd2h5DQo+IHRoaXMgaXMgbmVlZGVkIGFuZCBi
+ZW5lZmljaWFsLg0KPiANCj4gPiAgIAlpbnQgcmV0Ow0KPiA+DQo+ID4gICAJLyoNCj4gPiBAQCAt
+MTI1LDM0ICsxNzEsMzQgQEAgc3RhdGljIGludCBzaHV0ZG93bl93cml0ZShzdHJ1Y3QNCj4gbWF4
+MzE4Mjdfc3RhdGUNCj4gPiAqc3QsIHVuc2lnbmVkIGludCByZWcsDQo+ID4NCj4gPiAgIAlpZiAo
+IXN0LT5lbmFibGUpIHsNCj4gPiAgIAkJaWYgKCFtYXNrKQ0KPiA+IC0JCQlyZXQgPSByZWdtYXBf
+d3JpdGUoc3QtPnJlZ21hcCwgcmVnLCB2YWwpOw0KPiA+ICsJCQlyZXQgPSBtYXgzMTgyN19yZWdf
+d3JpdGUoc3QtPmNsaWVudCwgcmVnLCB2YWwpOw0KPiA+ICAgCQllbHNlDQo+ID4gLQkJCXJldCA9
+IHJlZ21hcF91cGRhdGVfYml0cyhzdC0+cmVnbWFwLCByZWcsIG1hc2ssDQo+IHZhbCk7DQo+ID4g
+KwkJCXJldCA9IG1heDMxODI3X3VwZGF0ZV9iaXRzKHN0LT5jbGllbnQsIHJlZywNCj4gbWFzaywg
+dmFsKTsNCj4gPiAgIAkJZ290byB1bmxvY2s7DQo+ID4gICAJfQ0KPiA+DQo+ID4gLQlyZXQgPSBy
+ZWdtYXBfcmVhZChzdC0+cmVnbWFwLA0KPiBNQVgzMTgyN19DT05GSUdVUkFUSU9OX1JFRywgJmNm
+Zyk7DQo+ID4gKwlyZXQgPSBtYXgzMTgyN19yZWdfcmVhZChzdC0+Y2xpZW50LA0KPiBNQVgzMTgy
+N19DT05GSUdVUkFUSU9OX1JFRywNCj4gPiArJmNmZyk7DQo+ID4gICAJaWYgKHJldCkNCj4gPiAg
+IAkJZ290byB1bmxvY2s7DQo+ID4NCj4gPiAgIAljbnZfcmF0ZSA9IE1BWDMxODI3X0NPTkZJR1VS
+QVRJT05fQ05WX1JBVEVfTUFTSyAmIGNmZzsNCj4gPiAgIAljZmcgPSBjZmcgJiB+KE1BWDMxODI3
+X0NPTkZJR1VSQVRJT05fMVNIT1RfTUFTSyB8DQo+ID4gICAJCSAgICAgIE1BWDMxODI3X0NPTkZJ
+R1VSQVRJT05fQ05WX1JBVEVfTUFTSyk7DQo+ID4gLQlyZXQgPSByZWdtYXBfd3JpdGUoc3QtPnJl
+Z21hcCwNCj4gTUFYMzE4MjdfQ09ORklHVVJBVElPTl9SRUcsIGNmZyk7DQo+ID4gKwlyZXQgPSBt
+YXgzMTgyN19yZWdfd3JpdGUoc3QtPmNsaWVudCwNCj4gTUFYMzE4MjdfQ09ORklHVVJBVElPTl9S
+RUcsDQo+ID4gK2NmZyk7DQo+ID4gICAJaWYgKHJldCkNCj4gPiAgIAkJZ290byB1bmxvY2s7DQo+
+ID4NCj4gPiAgIAlpZiAoIW1hc2spDQo+ID4gLQkJcmV0ID0gcmVnbWFwX3dyaXRlKHN0LT5yZWdt
+YXAsIHJlZywgdmFsKTsNCj4gPiArCQlyZXQgPSBtYXgzMTgyN19yZWdfd3JpdGUoc3QtPmNsaWVu
+dCwgcmVnLCB2YWwpOw0KPiA+ICAgCWVsc2UNCj4gPiAtCQlyZXQgPSByZWdtYXBfdXBkYXRlX2Jp
+dHMoc3QtPnJlZ21hcCwgcmVnLCBtYXNrLCB2YWwpOw0KPiA+ICsJCXJldCA9IG1heDMxODI3X3Vw
+ZGF0ZV9iaXRzKHN0LT5jbGllbnQsIHJlZywgbWFzaywgdmFsKTsNCj4gPg0KPiA+ICAgCWlmIChy
+ZXQpDQo+ID4gICAJCWdvdG8gdW5sb2NrOw0KPiA+DQo+ID4gLQlyZXQgPSByZWdtYXBfdXBkYXRl
+X2JpdHMoc3QtPnJlZ21hcCwNCj4gTUFYMzE4MjdfQ09ORklHVVJBVElPTl9SRUcsDQo+ID4gLQ0K
+PiBNQVgzMTgyN19DT05GSUdVUkFUSU9OX0NOVl9SQVRFX01BU0ssDQo+ID4gLQkJCQkgY252X3Jh
+dGUpOw0KPiA+ICsJcmV0ID0gbWF4MzE4MjdfdXBkYXRlX2JpdHMoc3QtPmNsaWVudCwNCj4gTUFY
+MzE4MjdfQ09ORklHVVJBVElPTl9SRUcsDQo+ID4gKw0KPiBNQVgzMTgyN19DT05GSUdVUkFUSU9O
+X0NOVl9SQVRFX01BU0ssDQo+ID4gKwkJCQkgICBjbnZfcmF0ZSk7DQo+ID4NCj4gPiAgIHVubG9j
+azoNCj4gPiAgIAltdXRleF91bmxvY2soJnN0LT5sb2NrKTsNCj4gPiBAQCAtMTk4LDE1ICsyNDQs
+MTYgQEAgc3RhdGljIGludCBtYXgzMTgyN19yZWFkKHN0cnVjdCBkZXZpY2UgKmRldiwNCj4gZW51
+bSBod21vbl9zZW5zb3JfdHlwZXMgdHlwZSwNCj4gPiAgIAkJCSB1MzIgYXR0ciwgaW50IGNoYW5u
+ZWwsIGxvbmcgKnZhbCkNCj4gPiAgIHsNCj4gPiAgIAlzdHJ1Y3QgbWF4MzE4Mjdfc3RhdGUgKnN0
+ID0gZGV2X2dldF9kcnZkYXRhKGRldik7DQo+ID4gLQl1bnNpZ25lZCBpbnQgdXZhbDsNCj4gPiAr
+CXUxNiB1dmFsOw0KPiA+ICAgCWludCByZXQgPSAwOw0KPiA+DQo+ID4gICAJc3dpdGNoICh0eXBl
+KSB7DQo+ID4gICAJY2FzZSBod21vbl90ZW1wOg0KPiA+ICAgCQlzd2l0Y2ggKGF0dHIpIHsNCj4g
+PiAgIAkJY2FzZSBod21vbl90ZW1wX2VuYWJsZToNCj4gPiAtCQkJcmV0ID0gcmVnbWFwX3JlYWQo
+c3QtPnJlZ21hcCwNCj4gPiAtDQo+IE1BWDMxODI3X0NPTkZJR1VSQVRJT05fUkVHLCAmdXZhbCk7
+DQo+ID4gKwkJCXJldCA9IG1heDMxODI3X3JlZ19yZWFkKHN0LT5jbGllbnQsDQo+ID4gKw0KPiAJ
+TUFYMzE4MjdfQ09ORklHVVJBVElPTl9SRUcsDQo+ID4gKwkJCQkJCSZ1dmFsKTsNCj4gPiAgIAkJ
+CWlmIChyZXQpDQo+ID4gICAJCQkJYnJlYWs7DQo+ID4NCj4gPiBAQCAtMjI2LDEwICsyNzMsMTAg
+QEAgc3RhdGljIGludCBtYXgzMTgyN19yZWFkKHN0cnVjdCBkZXZpY2UgKmRldiwNCj4gZW51bSBo
+d21vbl9zZW5zb3JfdHlwZXMgdHlwZSwNCj4gPiAgIAkJCQkgKiBiZSBjaGFuZ2VkIGR1cmluZyB0
+aGUgY29udmVyc2lvbg0KPiBwcm9jZXNzLg0KPiA+ICAgCQkJCSAqLw0KPiA+DQo+ID4gLQkJCQly
+ZXQgPSByZWdtYXBfdXBkYXRlX2JpdHMoc3QtPnJlZ21hcCwNCj4gPiAtDQo+IE1BWDMxODI3X0NP
+TkZJR1VSQVRJT05fUkVHLA0KPiA+IC0NCj4gTUFYMzE4MjdfQ09ORklHVVJBVElPTl8xU0hPVF9N
+QVNLLA0KPiA+IC0JCQkJCQkJIDEpOw0KPiA+ICsJCQkJcmV0ID0gbWF4MzE4MjdfdXBkYXRlX2Jp
+dHMoc3QtPmNsaWVudCwNCj4gPiArDQo+IE1BWDMxODI3X0NPTkZJR1VSQVRJT05fUkVHLA0KPiA+
+ICsNCj4gTUFYMzE4MjdfQ09ORklHVVJBVElPTl8xU0hPVF9NQVNLLA0KPiA+ICsJCQkJCQkJICAg
+MSk7DQo+ID4gICAJCQkJaWYgKHJldCkgew0KPiA+ICAgCQkJCQltdXRleF91bmxvY2soJnN0LT5s
+b2NrKTsNCj4gPiAgIAkJCQkJcmV0dXJuIHJldDsNCj4gPiBAQCAtMjQ2LDcgKzI5Myw4IEBAIHN0
+YXRpYyBpbnQgbWF4MzE4MjdfcmVhZChzdHJ1Y3QgZGV2aWNlICpkZXYsDQo+IGVudW0gaHdtb25f
+c2Vuc29yX3R5cGVzIHR5cGUsDQo+ID4gICAJCQkgICAgc3QtPnVwZGF0ZV9pbnRlcnZhbCA9PSAx
+MjUpDQo+ID4gICAJCQkJdXNsZWVwX3JhbmdlKDE1MDAwLCAyMDAwMCk7DQo+ID4NCj4gPiAtCQkJ
+cmV0ID0gcmVnbWFwX3JlYWQoc3QtPnJlZ21hcCwNCj4gTUFYMzE4MjdfVF9SRUcsICZ1dmFsKTsN
+Cj4gPiArCQkJcmV0ID0gbWF4MzE4MjdfcmVnX3JlYWQoc3QtPmNsaWVudCwNCj4gTUFYMzE4Mjdf
+VF9SRUcsDQo+ID4gKwkJCQkJCSZ1dmFsKTsNCj4gPg0KPiA+ICAgCQkJbXV0ZXhfdW5sb2NrKCZz
+dC0+bG9jayk7DQo+ID4NCj4gPiBAQCAtMjU3LDIzICszMDUsMjYgQEAgc3RhdGljIGludCBtYXgz
+MTgyN19yZWFkKHN0cnVjdCBkZXZpY2UgKmRldiwNCj4gPiBlbnVtIGh3bW9uX3NlbnNvcl90eXBl
+cyB0eXBlLA0KPiA+DQo+ID4gICAJCQlicmVhazsNCj4gPiAgIAkJY2FzZSBod21vbl90ZW1wX21h
+eDoNCj4gPiAtCQkJcmV0ID0gcmVnbWFwX3JlYWQoc3QtPnJlZ21hcCwNCj4gTUFYMzE4MjdfVEhf
+UkVHLCAmdXZhbCk7DQo+ID4gKwkJCXJldCA9IG1heDMxODI3X3JlZ19yZWFkKHN0LT5jbGllbnQs
+DQo+IE1BWDMxODI3X1RIX1JFRywNCj4gPiArCQkJCQkJJnV2YWwpOw0KPiA+ICAgCQkJaWYgKHJl
+dCkNCj4gPiAgIAkJCQlicmVhazsNCj4gPg0KPiA+ICAgCQkJKnZhbCA9IE1BWDMxODI3XzE2X0JJ
+VF9UT19NX0RHUih1dmFsKTsNCj4gPiAgIAkJCWJyZWFrOw0KPiA+ICAgCQljYXNlIGh3bW9uX3Rl
+bXBfbWF4X2h5c3Q6DQo+ID4gLQkJCXJldCA9IHJlZ21hcF9yZWFkKHN0LT5yZWdtYXAsDQo+IE1B
+WDMxODI3X1RIX0hZU1RfUkVHLA0KPiA+IC0JCQkJCSAgJnV2YWwpOw0KPiA+ICsJCQlyZXQgPSBt
+YXgzMTgyN19yZWdfcmVhZChzdC0+Y2xpZW50LA0KPiA+ICsNCj4gCU1BWDMxODI3X1RIX0hZU1Rf
+UkVHLA0KPiA+ICsJCQkJCQkmdXZhbCk7DQo+ID4gICAJCQlpZiAocmV0KQ0KPiA+ICAgCQkJCWJy
+ZWFrOw0KPiA+DQo+ID4gICAJCQkqdmFsID0gTUFYMzE4MjdfMTZfQklUX1RPX01fREdSKHV2YWwp
+Ow0KPiA+ICAgCQkJYnJlYWs7DQo+ID4gICAJCWNhc2UgaHdtb25fdGVtcF9tYXhfYWxhcm06DQo+
+ID4gLQkJCXJldCA9IHJlZ21hcF9yZWFkKHN0LT5yZWdtYXAsDQo+ID4gLQ0KPiBNQVgzMTgyN19D
+T05GSUdVUkFUSU9OX1JFRywgJnV2YWwpOw0KPiA+ICsJCQlyZXQgPSBtYXgzMTgyN19yZWdfcmVh
+ZChzdC0+Y2xpZW50LA0KPiA+ICsNCj4gCU1BWDMxODI3X0NPTkZJR1VSQVRJT05fUkVHLA0KPiA+
+ICsJCQkJCQkmdXZhbCk7DQo+ID4gICAJCQlpZiAocmV0KQ0KPiA+ICAgCQkJCWJyZWFrOw0KPiA+
+DQo+ID4gQEAgLTI4MSwyMyArMzMyLDI1IEBAIHN0YXRpYyBpbnQgbWF4MzE4MjdfcmVhZChzdHJ1
+Y3QgZGV2aWNlICpkZXYsDQo+IGVudW0gaHdtb25fc2Vuc29yX3R5cGVzIHR5cGUsDQo+ID4gICAJ
+CQkJCSB1dmFsKTsNCj4gPiAgIAkJCWJyZWFrOw0KPiA+ICAgCQljYXNlIGh3bW9uX3RlbXBfbWlu
+Og0KPiA+IC0JCQlyZXQgPSByZWdtYXBfcmVhZChzdC0+cmVnbWFwLA0KPiBNQVgzMTgyN19UTF9S
+RUcsICZ1dmFsKTsNCj4gPiArCQkJcmV0ID0gbWF4MzE4MjdfcmVnX3JlYWQoc3QtPmNsaWVudCwN
+Cj4gTUFYMzE4MjdfVExfUkVHLA0KPiA+ICsJCQkJCQkmdXZhbCk7DQo+ID4gICAJCQlpZiAocmV0
+KQ0KPiA+ICAgCQkJCWJyZWFrOw0KPiA+DQo+ID4gICAJCQkqdmFsID0gTUFYMzE4MjdfMTZfQklU
+X1RPX01fREdSKHV2YWwpOw0KPiA+ICAgCQkJYnJlYWs7DQo+ID4gICAJCWNhc2UgaHdtb25fdGVt
+cF9taW5faHlzdDoNCj4gPiAtCQkJcmV0ID0gcmVnbWFwX3JlYWQoc3QtPnJlZ21hcCwNCj4gTUFY
+MzE4MjdfVExfSFlTVF9SRUcsDQo+ID4gLQkJCQkJICAmdXZhbCk7DQo+ID4gKwkJCXJldCA9IG1h
+eDMxODI3X3JlZ19yZWFkKHN0LT5jbGllbnQsDQo+IE1BWDMxODI3X1RMX0hZU1RfUkVHLA0KPiA+
+ICsJCQkJCQkmdXZhbCk7DQo+ID4gICAJCQlpZiAocmV0KQ0KPiA+ICAgCQkJCWJyZWFrOw0KPiA+
+DQo+ID4gICAJCQkqdmFsID0gTUFYMzE4MjdfMTZfQklUX1RPX01fREdSKHV2YWwpOw0KPiA+ICAg
+CQkJYnJlYWs7DQo+ID4gICAJCWNhc2UgaHdtb25fdGVtcF9taW5fYWxhcm06DQo+ID4gLQkJCXJl
+dCA9IHJlZ21hcF9yZWFkKHN0LT5yZWdtYXAsDQo+ID4gLQ0KPiBNQVgzMTgyN19DT05GSUdVUkFU
+SU9OX1JFRywgJnV2YWwpOw0KPiA+ICsJCQlyZXQgPSBtYXgzMTgyN19yZWdfcmVhZChzdC0+Y2xp
+ZW50LA0KPiA+ICsNCj4gCU1BWDMxODI3X0NPTkZJR1VSQVRJT05fUkVHLA0KPiA+ICsJCQkJCQkm
+dXZhbCk7DQo+ID4gICAJCQlpZiAocmV0KQ0KPiA+ICAgCQkJCWJyZWFrOw0KPiA+DQo+ID4gQEAg
+LTMxMyw4ICszNjYsOSBAQCBzdGF0aWMgaW50IG1heDMxODI3X3JlYWQoc3RydWN0IGRldmljZSAq
+ZGV2LA0KPiBlbnVtDQo+ID4gaHdtb25fc2Vuc29yX3R5cGVzIHR5cGUsDQo+ID4NCj4gPiAgIAlj
+YXNlIGh3bW9uX2NoaXA6DQo+ID4gICAJCWlmIChhdHRyID09IGh3bW9uX2NoaXBfdXBkYXRlX2lu
+dGVydmFsKSB7DQo+ID4gLQkJCXJldCA9IHJlZ21hcF9yZWFkKHN0LT5yZWdtYXAsDQo+ID4gLQ0K
+PiBNQVgzMTgyN19DT05GSUdVUkFUSU9OX1JFRywgJnV2YWwpOw0KPiA+ICsJCQlyZXQgPSBtYXgz
+MTgyN19yZWdfcmVhZChzdC0+Y2xpZW50LA0KPiA+ICsNCj4gCU1BWDMxODI3X0NPTkZJR1VSQVRJ
+T05fUkVHLA0KPiA+ICsJCQkJCQkmdXZhbCk7DQo+ID4gICAJCQlpZiAocmV0KQ0KPiA+ICAgCQkJ
+CWJyZWFrOw0KPiA+DQo+ID4gQEAgLTM1NSwxMSArNDA5LDExIEBAIHN0YXRpYyBpbnQgbWF4MzE4
+Mjdfd3JpdGUoc3RydWN0IGRldmljZSAqZGV2LA0KPiA+IGVudW0gaHdtb25fc2Vuc29yX3R5cGVz
+IHR5cGUsDQo+ID4NCj4gPiAgIAkJCXN0LT5lbmFibGUgPSB2YWw7DQo+ID4NCj4gPiAtCQkJcmV0
+ID0gcmVnbWFwX3VwZGF0ZV9iaXRzKHN0LT5yZWdtYXAsDQo+ID4gLQ0KPiBNQVgzMTgyN19DT05G
+SUdVUkFUSU9OX1JFRywNCj4gPiAtDQo+IE1BWDMxODI3X0NPTkZJR1VSQVRJT05fMVNIT1RfTUFT
+SyB8DQo+ID4gLQ0KPiBNQVgzMTgyN19DT05GSUdVUkFUSU9OX0NOVl9SQVRFX01BU0ssDQo+ID4g
+LQ0KPiBNQVgzMTgyN19ERVZJQ0VfRU5BQkxFKHZhbCkpOw0KPiA+ICsJCQlyZXQgPSBtYXgzMTgy
+N191cGRhdGVfYml0cyhzdC0+Y2xpZW50LA0KPiA+ICsNCj4gTUFYMzE4MjdfQ09ORklHVVJBVElP
+Tl9SRUcsDQo+ID4gKw0KPiBNQVgzMTgyN19DT05GSUdVUkFUSU9OXzFTSE9UX01BU0sgfA0KPiA+
+ICsNCj4gTUFYMzE4MjdfQ09ORklHVVJBVElPTl9DTlZfUkFURV9NQVNLLA0KPiA+ICsNCj4gTUFY
+MzE4MjdfREVWSUNFX0VOQUJMRSh2YWwpKTsNCj4gPg0KPiA+ICAgCQkJbXV0ZXhfdW5sb2NrKCZz
+dC0+bG9jayk7DQo+ID4NCj4gPiBAQCAtNDAyLDEwICs0NTYsMTAgQEAgc3RhdGljIGludCBtYXgz
+MTgyN193cml0ZShzdHJ1Y3QgZGV2aWNlICpkZXYsDQo+IGVudW0gaHdtb25fc2Vuc29yX3R5cGVz
+IHR5cGUsDQo+ID4gICAJCQlyZXMgPQ0KPiBGSUVMRF9QUkVQKE1BWDMxODI3X0NPTkZJR1VSQVRJ
+T05fQ05WX1JBVEVfTUFTSywNCj4gPiAgIAkJCQkJIHJlcyk7DQo+ID4NCj4gPiAtCQkJcmV0ID0g
+cmVnbWFwX3VwZGF0ZV9iaXRzKHN0LT5yZWdtYXAsDQo+ID4gLQ0KPiBNQVgzMTgyN19DT05GSUdV
+UkFUSU9OX1JFRywNCj4gPiAtDQo+IE1BWDMxODI3X0NPTkZJR1VSQVRJT05fQ05WX1JBVEVfTUFT
+SywNCj4gPiAtCQkJCQkJIHJlcyk7DQo+ID4gKwkJCXJldCA9IG1heDMxODI3X3VwZGF0ZV9iaXRz
+KHN0LT5jbGllbnQsDQo+ID4gKw0KPiBNQVgzMTgyN19DT05GSUdVUkFUSU9OX1JFRywNCj4gPiAr
+DQo+IE1BWDMxODI3X0NPTkZJR1VSQVRJT05fQ05WX1JBVEVfTUFTSywNCj4gPiArCQkJCQkJICAg
+cmVzKTsNCj4gPiAgIAkJCWlmIChyZXQpDQo+ID4gICAJCQkJcmV0dXJuIHJldDsNCj4gPg0KPiA+
+IEBAIC00MjUsMTAgKzQ3OSwxMCBAQCBzdGF0aWMgc3NpemVfdCB0ZW1wMV9yZXNvbHV0aW9uX3No
+b3coc3RydWN0DQo+IGRldmljZSAqZGV2LA0KPiA+ICAgCQkJCSAgICAgY2hhciAqYnVmKQ0KPiA+
+ICAgew0KPiA+ICAgCXN0cnVjdCBtYXgzMTgyN19zdGF0ZSAqc3QgPSBkZXZfZ2V0X2RydmRhdGEo
+ZGV2KTsNCj4gPiAtCXVuc2lnbmVkIGludCB2YWw7DQo+ID4gKwl1MTYgdmFsOw0KPiA+ICAgCWlu
+dCByZXQ7DQo+ID4NCj4gPiAtCXJldCA9IHJlZ21hcF9yZWFkKHN0LT5yZWdtYXAsDQo+IE1BWDMx
+ODI3X0NPTkZJR1VSQVRJT05fUkVHLCAmdmFsKTsNCj4gPiArCXJldCA9IG1heDMxODI3X3JlZ19y
+ZWFkKHN0LT5jbGllbnQsDQo+IE1BWDMxODI3X0NPTkZJR1VSQVRJT05fUkVHLA0KPiA+ICsmdmFs
+KTsNCj4gPiAgIAlpZiAocmV0KQ0KPiA+ICAgCQlyZXR1cm4gcmV0Ow0KPiA+DQo+ID4gQEAgLTQ3
+MywxMCArNTI3LDYzIEBAIHN0YXRpYyBzc2l6ZV90IHRlbXAxX3Jlc29sdXRpb25fc3RvcmUoc3Ry
+dWN0DQo+IGRldmljZSAqZGV2LA0KPiA+ICAgCXJldHVybiByZXQgPyByZXQgOiBjb3VudDsNCj4g
+PiAgIH0NCj4gPg0KPiA+ICtzdGF0aWMgc3NpemVfdCBwZWNfc2hvdyhzdHJ1Y3QgZGV2aWNlICpk
+ZXYsIHN0cnVjdCBkZXZpY2VfYXR0cmlidXRlDQo+ICpkZXZhdHRyLA0KPiA+ICsJCQljaGFyICpi
+dWYpDQo+ID4gK3sNCj4gPiArCXN0cnVjdCBtYXgzMTgyN19zdGF0ZSAqc3QgPSBkZXZfZ2V0X2Ry
+dmRhdGEoZGV2KTsNCj4gPiArCXN0cnVjdCBpMmNfY2xpZW50ICpjbGllbnQgPSBzdC0+Y2xpZW50
+Ow0KPiA+ICsNCj4gPiArCXJldHVybiBzY25wcmludGYoYnVmLCBQQUdFX1NJWkUsICIlZFxuIiwg
+ISEoY2xpZW50LT5mbGFncyAmDQo+ID4gK0kyQ19DTElFTlRfUEVDKSk7IH0NCj4gPiArDQo+ID4g
+K3N0YXRpYyBzc2l6ZV90IHBlY19zdG9yZShzdHJ1Y3QgZGV2aWNlICpkZXYsIHN0cnVjdCBkZXZp
+Y2VfYXR0cmlidXRlDQo+ICpkZXZhdHRyLA0KPiA+ICsJCQkgY29uc3QgY2hhciAqYnVmLCBzaXpl
+X3QgY291bnQpDQo+ID4gK3sNCj4gPiArCXN0cnVjdCBtYXgzMTgyN19zdGF0ZSAqc3QgPSBkZXZf
+Z2V0X2RydmRhdGEoZGV2KTsNCj4gPiArCXN0cnVjdCBpMmNfY2xpZW50ICpjbGllbnQgPSBzdC0+
+Y2xpZW50Ow0KPiA+ICsJdW5zaWduZWQgaW50IHZhbDsNCj4gPiArCXUxNiB2YWwyOw0KPiA+ICsJ
+aW50IGVycjsNCj4gPiArDQo+ID4gKwllcnIgPSBrc3RydG91aW50KGJ1ZiwgMTAsICZ2YWwpOw0K
+PiA+ICsJaWYgKGVyciA8IDApDQo+ID4gKwkJcmV0dXJuIGVycjsNCj4gPiArDQo+ID4gKwl2YWwy
+ID0gRklFTERfUFJFUChNQVgzMTgyN19DT05GSUdVUkFUSU9OX1BFQ19FTl9NQVNLLA0KPiB2YWwp
+Ow0KPiA+ICsNCj4gPiArCWlmIChlcnIpDQo+ID4gKwkJcmV0dXJuIGVycjsNCj4gPiArDQo+ID4g
+Kwlzd2l0Y2ggKHZhbCkgew0KPiA+ICsJY2FzZSAwOg0KPiA+ICsJCWNsaWVudC0+ZmxhZ3MgJj0g
+fkkyQ19DTElFTlRfUEVDOw0KPiA+ICsJCWVyciA9IG1heDMxODI3X3VwZGF0ZV9iaXRzKGNsaWVu
+dCwNCj4gTUFYMzE4MjdfQ09ORklHVVJBVElPTl9SRUcsDQo+ID4gKw0KPiBNQVgzMTgyN19DT05G
+SUdVUkFUSU9OX1BFQ19FTl9NQVNLLA0KPiA+ICsJCQkJCSAgIHZhbDIpOw0KPiA+ICsJCWlmIChl
+cnIpDQo+ID4gKwkJCXJldHVybiBlcnI7DQo+ID4gKwkJYnJlYWs7DQo+ID4gKwljYXNlIDE6DQo+
+ID4gKwkJZXJyID0gbWF4MzE4MjdfdXBkYXRlX2JpdHMoY2xpZW50LA0KPiBNQVgzMTgyN19DT05G
+SUdVUkFUSU9OX1JFRywNCj4gPiArDQo+IE1BWDMxODI3X0NPTkZJR1VSQVRJT05fUEVDX0VOX01B
+U0ssDQo+ID4gKwkJCQkJICAgdmFsMik7DQo+ID4gKwkJaWYgKGVycikNCj4gPiArCQkJcmV0dXJu
+IGVycjsNCj4gPiArCQljbGllbnQtPmZsYWdzIHw9IEkyQ19DTElFTlRfUEVDOw0KPiA+ICsJCWJy
+ZWFrOw0KPiA+ICsJZGVmYXVsdDoNCj4gPiArCQlyZXR1cm4gLUVJTlZBTDsNCj4gPiArCX0NCj4g
+PiArDQo+ID4gKwlyZXR1cm4gY291bnQ7DQo+ID4gK30NCj4gPiArDQo+ID4gICBzdGF0aWMgREVW
+SUNFX0FUVFJfUlcodGVtcDFfcmVzb2x1dGlvbik7DQo+ID4gK3N0YXRpYyBERVZJQ0VfQVRUUl9S
+VyhwZWMpOw0KPiA+DQo+ID4gICBzdGF0aWMgc3RydWN0IGF0dHJpYnV0ZSAqbWF4MzE4MjdfYXR0
+cnNbXSA9IHsNCj4gPiAgIAkmZGV2X2F0dHJfdGVtcDFfcmVzb2x1dGlvbi5hdHRyLA0KPiA+ICsJ
+JmRldl9hdHRyX3BlYy5hdHRyLA0KPiA+ICAgCU5VTEwNCj4gPiAgIH07DQo+ID4gICBBVFRSSUJV
+VEVfR1JPVVBTKG1heDMxODI3KTsNCj4gPiBAQCAtNDg5LDkgKzU5Niw5IEBAIHN0YXRpYyBjb25z
+dCBzdHJ1Y3QgaTJjX2RldmljZV9pZA0KPiBtYXgzMTgyN19pMmNfaWRzW10gPSB7DQo+ID4gICB9
+Ow0KPiA+ICAgTU9EVUxFX0RFVklDRV9UQUJMRShpMmMsIG1heDMxODI3X2kyY19pZHMpOw0KPiA+
+DQo+ID4gLXN0YXRpYyBpbnQgbWF4MzE4MjdfaW5pdF9jbGllbnQoc3RydWN0IG1heDMxODI3X3N0
+YXRlICpzdCwNCj4gPiAtCQkJCXN0cnVjdCBkZXZpY2UgKmRldikNCj4gPiArc3RhdGljIGludCBt
+YXgzMTgyN19pbml0X2NsaWVudChzdHJ1Y3QgbWF4MzE4Mjdfc3RhdGUgKnN0KQ0KPiA+ICAgew0K
+PiA+ICsJc3RydWN0IGRldmljZSAqZGV2ID0gJnN0LT5jbGllbnQtPmRldjsNCj4gDQo+IE5vdyB3
+ZSBhcmUgYWJzb2x1dGVseSBkb3duIHRvIHBlcnNvbmFsIHByZWZlcmVuY2UgY2hhbmdlcy4NCj4g
+SSBhbSBub3QgYXQgYWxsIGluY2xpbmVkIHRvIGFjY2VwdCBzdWNoIGNoYW5nZXMsIHNvcnJ5Lg0K
+PiANCj4gSW5jbHVkaW5nIHN1Y2ggY2hhbmdlcyBtZWFucyBJJ2xsIGhhdmUgdG8gcHV0IGV4dHJh
+IHNjcnV0aW55IG9uIHlvdXIgcGF0Y2gNCj4gc3VibWlzc2lvbnMgaW4gdGhlIGZ1dHVyZSB0byBl
+bnN1cmUgdGhhdCB5b3UgZG9uJ3QgdHJ5IHRvIHNuZWFrIGluIHNpbWlsYXINCj4gY2hhbmdlcywg
+d2hpY2ggSSBmaW5kIHF1aXRlIGZydXN0cmF0aW5nLiBJcyB0aGF0IHJlYWxseSBuZWNlc3Nhcnkg
+Pw0KPiANCj4gR3VlbnRlcg0KPiANCg0KU29ycnkgZm9yIHRoaXMhIEkgdGhvdWdodCwgaWYgSSBh
+bSBhZGRpbmcgY2xpZW50IHRvIHRoZSBwcml2YXRlIHN0cnVjdHVyZSBJIG1pZ2h0IGFzIHdlbGwg
+ZGVsZXRlIHRoZSBzZWNvbmQgcGFyYW1ldGVyIG9mIGluaXRfY2xpZW50LCBiZWNhdXNlIEkgY2Fu
+IGVhc2lseSByZXRyaWV2ZSB0aGUgZGV2aWNlIHN0cnVjdHVyZSBmcm9tIGNsaWVudC4gSSBhZGRl
+ZCB0aGlzIGxpbmUgc28gdGhhdCB0aGUgY2hhbmdlcyB0byB0aGUgY29kZSBhcmUga2VwdCB0byBh
+IG1pbmltdW0uDQoNCj4gPiAgIAlzdHJ1Y3QgZndub2RlX2hhbmRsZSAqZndub2RlOw0KPiA+ICAg
+CXVuc2lnbmVkIGludCByZXMgPSAwOw0KPiA+ICAgCXUzMiBkYXRhLCBsc2JfaWR4Ow0KPiA+IEBA
+IC01NzUsNyArNjgyLDcgQEAgc3RhdGljIGludCBtYXgzMTgyN19pbml0X2NsaWVudChzdHJ1Y3QN
+Cj4gbWF4MzE4Mjdfc3RhdGUgKnN0LA0KPiA+ICAgCQl9DQo+ID4gICAJfQ0KPiA+DQo+ID4gLQly
+ZXR1cm4gcmVnbWFwX3dyaXRlKHN0LT5yZWdtYXAsDQo+IE1BWDMxODI3X0NPTkZJR1VSQVRJT05f
+UkVHLCByZXMpOw0KPiA+ICsJcmV0dXJuIG1heDMxODI3X3JlZ193cml0ZShzdC0+Y2xpZW50LA0K
+PiBNQVgzMTgyN19DT05GSUdVUkFUSU9OX1JFRywNCj4gPiArcmVzKTsNCj4gPiAgIH0NCj4gPg0K
+PiA+ICAgc3RhdGljIGNvbnN0IHN0cnVjdCBod21vbl9jaGFubmVsX2luZm8gKm1heDMxODI3X2lu
+Zm9bXSA9IHsgQEANCj4gPiAtNjEzLDE3ICs3MjAsMTMgQEAgc3RhdGljIGludCBtYXgzMTgyN19w
+cm9iZShzdHJ1Y3QgaTJjX2NsaWVudA0KPiAqY2xpZW50KQ0KPiA+ICAgCQlyZXR1cm4gLUVOT01F
+TTsNCj4gPg0KPiA+ICAgCW11dGV4X2luaXQoJnN0LT5sb2NrKTsNCj4gPiAtDQo+ID4gLQlzdC0+
+cmVnbWFwID0gZGV2bV9yZWdtYXBfaW5pdF9pMmMoY2xpZW50LA0KPiAmbWF4MzE4MjdfcmVnbWFw
+KTsNCj4gPiAtCWlmIChJU19FUlIoc3QtPnJlZ21hcCkpDQo+ID4gLQkJcmV0dXJuIGRldl9lcnJf
+cHJvYmUoZGV2LCBQVFJfRVJSKHN0LT5yZWdtYXApLA0KPiA+IC0JCQkJICAgICAiRmFpbGVkIHRv
+IGFsbG9jYXRlIHJlZ21hcC5cbiIpOw0KPiA+ICsJc3QtPmNsaWVudCA9IGNsaWVudDsNCj4gPg0K
+PiA+ICAgCWVyciA9IGRldm1fcmVndWxhdG9yX2dldF9lbmFibGUoZGV2LCAidnJlZiIpOw0KPiA+
+ICAgCWlmIChlcnIpDQo+ID4gICAJCXJldHVybiBkZXZfZXJyX3Byb2JlKGRldiwgZXJyLCAiZmFp
+bGVkIHRvIGVuYWJsZQ0KPiByZWd1bGF0b3JcbiIpOw0KPiA+DQo+ID4gLQllcnIgPSBtYXgzMTgy
+N19pbml0X2NsaWVudChzdCwgZGV2KTsNCj4gPiArCWVyciA9IG1heDMxODI3X2luaXRfY2xpZW50
+KHN0KTsNCj4gPiAgIAlpZiAoZXJyKQ0KPiA+ICAgCQlyZXR1cm4gZXJyOw0KPiA+DQoNCg==
