@@ -1,441 +1,136 @@
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07D4030645;
-	Sat, 16 Dec 2023 16:41:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 268FD1E486;
+	Sat, 16 Dec 2023 18:46:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="em5wJHY6"
-Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-77f8308616eso143956085a.2;
-        Sat, 16 Dec 2023 08:41:29 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HuNIzAJz"
+Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-dbd01358170so1092997276.1;
+        Sat, 16 Dec 2023 10:46:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702744889; x=1703349689; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Etz+ReDYEWzjFjGAW3ei94pJhObROkWL8EBMLBIAVyU=;
-        b=em5wJHY6/bnwlvEVstmWsi7M+LxcFe/U7l5zK6idzpFOcYB8BAGINJb+rdXtYNyyrr
-         7OV8d+SZrXc0Kgz8q19urYlYYRT7RMCMmCjZzDNiO/jWUTy4ShNSf4oMgBmDUd99NS/M
-         sd7N6o+9KAa0jTbpmbzcXbx3i+tmgS954Obz/Zh4HNf9xkcglHLRN6HtwAz3bfhNUWJO
-         /6T1PEx0MhNGeq/m5RNRX+0UnxMdGpx5F8bZmZ9RTh27wcJ59tL2kdrw6KJFTDtx4SHW
-         c6ElZh45RlY3a6749rGz5y3fTTU+YhASJnLcsrTLIn9dGGJOoAMU92BZrHc5upUNNtFW
-         cYnA==
+        d=gmail.com; s=20230601; t=1702752416; x=1703357216; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=1PqwN8xgxEqfFPFbP4Fat6gmsrMU5g+ugpgcAeXDgIg=;
+        b=HuNIzAJzy+MnxwwImQw6y+GvRd4HpaD7J311RZETbI9k/NYNX4IcoxmnP6vpF4e5WZ
+         mKb1/eaB073Km2NR66d4JLJf1t0nIJe1WGYKB7SwsfiJmuHjmsSxPDl6DMUrTJjdLFSk
+         293yMwyJr6PKOPUSRB63SA9RNbgASNTFI3Gg5Ky5O2PlobSTC0wRPk8ORT6YGSYKGx/P
+         CPq7RAKYHJlSNKyFFls2JQ7tqe6XIL+l1+sa45S8t5p1FMPhhq7GcOZG+P1ajg4d0naI
+         MBPlJUujWI0ba/a5Yhj9bhw4G2bNBgZ83IxVyaBHF6iNYaBjGtHMi7vMdLCGjd12CR6l
+         z4IQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702744889; x=1703349689;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Etz+ReDYEWzjFjGAW3ei94pJhObROkWL8EBMLBIAVyU=;
-        b=iZMioQ/9YhcZEM9QqjG28toPjzCa7GDYIrbglzocECncCZWnyZHg2e8JeArR/MaI9b
-         xkLXw7IqdcL9AT6+ohboS/X3R1m5Jq3R8HCwd0EKONF9Cy949GoF0T+RJwbNtyHekqhK
-         0UQhnTT8Yv/FPqFmXv3NwXLOkYTL+wcmMw+HJxsRWUatjRXt8jaK03stC8eEO/SaGYVh
-         vy3Bj2htadz9n39/FQqUcIhbMJ/vYG9yVeuAmJMQIjWuCj8XXJr/9ZAvFUfSipX4uSEq
-         OzewghEOlXk1AfZ+fPCmlorqmXHO+fGQqbzPZwqLt6v/W5+9VFL1Th079DkYdEQMmYct
-         4wnQ==
-X-Gm-Message-State: AOJu0Yyg9Dvo0S60tRLuhSlK4sdGn9LQj4aryrY7BYzVT3BBaV3adP5t
-	CNQ6eHZWnlJHa6pgCETzf48=
-X-Google-Smtp-Source: AGHT+IHNrZzlygMSFO0VlUrDd1kPB8vYZW7b95drewctQoWzcMGyVl9B9/pKcgxUORDsvcajoj86CQ==
-X-Received: by 2002:a05:620a:454e:b0:77e:fba3:a20e with SMTP id u14-20020a05620a454e00b0077efba3a20emr19298152qkp.104.1702744888714;
-        Sat, 16 Dec 2023 08:41:28 -0800 (PST)
-Received: from localhost.localdomain ([174.95.13.129])
-        by smtp.gmail.com with ESMTPSA id c1-20020a37e101000000b0077d72f820adsm6861697qkm.115.2023.12.16.08.41.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Dec 2023 08:41:28 -0800 (PST)
-From: Abdel Alkuor <alkuor@gmail.com>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Abdel Alkuor <alkuor@gmail.com>
-Cc: linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: [PATCH 2/2] hwmon: Add AMS AS6200 temperature sensor
-Date: Sat, 16 Dec 2023 11:39:30 -0500
-Message-Id: <63e352150ed51eefce90ca4058af5459730174b2.1702744180.git.alkuor@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <149032e99136a9fe47c3533b57a71092646e497d.1702744180.git.alkuor@gmail.com>
-References: <149032e99136a9fe47c3533b57a71092646e497d.1702744180.git.alkuor@gmail.com>
+        d=1e100.net; s=20230601; t=1702752416; x=1703357216;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1PqwN8xgxEqfFPFbP4Fat6gmsrMU5g+ugpgcAeXDgIg=;
+        b=TyHRYDOgcDy68TOheuuxpRjA8AbKpnCDszLQeZ3W1ffEvtyyLhNHVxtg0LlaqJ9uKq
+         PsIm0gOK+M/0GxAyseboQiXq41kh3MH7hdvedXRyjpgqRdYndoMwjSqk2ujPnx7g/YL5
+         QnISaGWYA0R4CrblUvN+xhMsxtjrpmrY//fo0I9R3iA9Z3aMmSFs6z5Nz51DGc8sxstd
+         IpPy3ZHOZdg0aTqtXKf0EMBX1i9OvxM93VfoH5q8Kdk9Uwdc4ORAtUXjIL5uxTTqPq+Q
+         yNOfkiLmYep5Lt3gH95zNcN0PquefsS3b/tb2ciEMWg68LlP8aIZM7JolSicssbn4Kto
+         Z+tQ==
+X-Gm-Message-State: AOJu0YwWjZmj+9+fHCfWSH2FOouL/KOF2hN3grmTScs962/1v1tJWsYY
+	BkQY8NyUWK3hgMS3Wcy+a0w=
+X-Google-Smtp-Source: AGHT+IFwjDbQubiOZYU99tsuVkiHPBI5CoOq4n6igsbupe4niqU/2a3np5qXlxV1zAEMM584sVIUQA==
+X-Received: by 2002:a25:b08a:0:b0:dbc:d28c:6a3c with SMTP id f10-20020a25b08a000000b00dbcd28c6a3cmr4470130ybj.16.1702752416010;
+        Sat, 16 Dec 2023 10:46:56 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l145-20020a252597000000b00dbcf9daace8sm1268881ybl.8.2023.12.16.10.46.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 16 Dec 2023 10:46:55 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <aa93010a-7ab0-4b9d-bb5d-25ea15b81120@roeck-us.net>
+Date: Sat, 16 Dec 2023 10:46:53 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] hwmon: Add AMS AS6200 temperature sensor
+Content-Language: en-US
+To: Abdel Alkuor <alkuor@gmail.com>, Jean Delvare <jdelvare@suse.com>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+References: <149032e99136a9fe47c3533b57a71092646e497d.1702744180.git.alkuor@gmail.com>
+ <63e352150ed51eefce90ca4058af5459730174b2.1702744180.git.alkuor@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <63e352150ed51eefce90ca4058af5459730174b2.1702744180.git.alkuor@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-as6200 is a temperature sensor with 0.0625°C resolution and a range between
--40°C to 125°C.
+On 12/16/23 08:39, Abdel Alkuor wrote:
+> as6200 is a temperature sensor with 0.0625°C resolution and a range between
+> -40°C to 125°C.
+> 
+> By default, the driver configures as6200 as following:
+> - Converstion rate: 8 Hz
+> - Conversion mode: continuous
+> - Consecutive fault counts: 6 samples
+> - Alert state: high polarity
+> - Alert mode: comparator mode
+> 
+> Interrupt is supported for the alert pin.
+> 
+> Datasheet: https://ams.com/documents/20143/36005/AS6200_DS000449_4-00.pdf
+> Signed-off-by: Abdel Alkuor <alkuor@gmail.com>
 
-By default, the driver configures as6200 as following:
-- Converstion rate: 8 Hz
-- Conversion mode: continuous
-- Consecutive fault counts: 6 samples
-- Alert state: high polarity
-- Alert mode: comparator mode
+Please explain why the lm75 driver would not work for this chip.
+I don't immediately see the problem, especially with TMP112 using almost
+the same configuration register layout.
 
-Interrupt is supported for the alert pin.
-
-Datasheet: https://ams.com/documents/20143/36005/AS6200_DS000449_4-00.pdf
-Signed-off-by: Abdel Alkuor <alkuor@gmail.com>
----
- Documentation/hwmon/as6200.rst |  50 +++++++
- drivers/hwmon/Kconfig          |  10 ++
- drivers/hwmon/Makefile         |   1 +
- drivers/hwmon/as6200.c         | 249 +++++++++++++++++++++++++++++++++
- 4 files changed, 310 insertions(+)
- create mode 100644 Documentation/hwmon/as6200.rst
- create mode 100644 drivers/hwmon/as6200.c
-
-diff --git a/Documentation/hwmon/as6200.rst b/Documentation/hwmon/as6200.rst
-new file mode 100644
-index 000000000000..f6156c2105ff
---- /dev/null
-+++ b/Documentation/hwmon/as6200.rst
-@@ -0,0 +1,50 @@
-+Kernel driver as6200
-+====================
-+
-+Supported chips:
-+
-+  * AMS OSRAM AS6200
-+
-+    Prefix: 'as6200'
-+
-+    Addresses scanned: none
-+
-+    Datasheet: https://ams.com/documents/20143/36005/AS6200_DS000449_4-00.pdf
-+
-+Author:
-+
-+	Abdel Alkuor <alkuor@gmail.com>
-+
-+Description
-+-----------
-+The AS6200 IC is a temperature sensor with a range between -40°C and 125°C.
-+It supports ultra-low power consumption (low operation and quiescent current)
-+which makes it ideally suited for mobile/battery powered applications.
-+Additionally the AS6200 temperature sensor system also features an alert
-+functionality, which triggers an interrupt to protect devices from excessive
-+temperatures.
-+
-+The sensor has an accuracy of ±0.4°C between 0°C and 60°C and has an accuracy
-+of 1.0°C from -40°C to +125°C, with Resolution of 0.0625°C. The sensor
-+supports conversion rate of 0.25, 1, 4, 8 Hz, and consecutive fault counts of
-+1, 2, 4, 6 samples which triggers/clears an alert when high/low temperature
-+is detected respectively. Two alert modes are supported, interrupt mode and
-+comparator mode.
-+
-+Configuration Notes
-+-------------------
-+By default as6200 driver reads the temperature continuously at 8Hz.
-+Consecutive faults is set to 6 samples with true polarity which an
-+alert is set when the current temperaute goes above high temperature
-+theshold and is cleared when it falls below the low temperature threshold.
-+Alert is configured in comparator mode.
-+
-+Interrupt is supported for the alert where user space is notified
-+when alert is set/cleared.
-+
-+sysfs-Interface
-+---------------
-+temp#_input		 temperature input (read-only)
-+temp#_alert              alert flag (read-only)
-+temp#_max		 temperature maximum setpoint (read/write)
-+temp#_max_hyst		 hysteresis for temperature maximum (read/write)
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index cf27523eed5a..f6edcbf1b7cf 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -287,6 +287,16 @@ config SENSORS_AS370
- 	  This driver can also be built as a module. If so, the module
- 	  will be called as370-hwmon.
- 
-+config SENSORS_AS6200
-+	tristate "AMS AS6200 temperature sensor"
-+	depends on I2C
-+	select REGMAP_I2C
-+	help
-+	  If you say yes here you get support for AMS AS6200
-+	  temperature sensor.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called as6200.
- 
- config SENSORS_ASC7621
- 	tristate "Andigilog aSC7621"
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index e84bd9685b5c..11fe2b7a80a9 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -53,6 +53,7 @@ obj-$(CONFIG_SENSORS_AQUACOMPUTER_D5NEXT) += aquacomputer_d5next.o
- obj-$(CONFIG_SENSORS_ARM_SCMI)	+= scmi-hwmon.o
- obj-$(CONFIG_SENSORS_ARM_SCPI)	+= scpi-hwmon.o
- obj-$(CONFIG_SENSORS_AS370)	+= as370-hwmon.o
-+obj-$(CONFIG_SENSORS_AS6200)	+= as6200.o
- obj-$(CONFIG_SENSORS_ASC7621)	+= asc7621.o
- obj-$(CONFIG_SENSORS_ASPEED)	+= aspeed-pwm-tacho.o
- obj-$(CONFIG_SENSORS_ATXP1)	+= atxp1.o
-diff --git a/drivers/hwmon/as6200.c b/drivers/hwmon/as6200.c
-new file mode 100644
-index 000000000000..173f86e48ee1
---- /dev/null
-+++ b/drivers/hwmon/as6200.c
-@@ -0,0 +1,249 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Driver for AMS AS6200 Temperature sensor
-+ *
-+ * Author: Abdel Alkuor <alkuor@gmail.com>
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/device.h>
-+#include <linux/i2c.h>
-+#include <linux/interrupt.h>
-+#include <linux/module.h>
-+#include <linux/regmap.h>
-+
-+#include <linux/hwmon.h>
-+
-+#define AS6200_TVAL_REG		0x0
-+#define AS6200_CONFIG_REG	0x1
-+#define AS6200_TLOW_REG		0x2
-+#define AS6200_THIGH_REG	0x3
-+
-+#define AS6200_CONFIG_AL	BIT(5)
-+#define AS6200_CONFIG_CR	GENMASK(7, 6)
-+#define AS6200_CONFIG_SM	BIT(8)
-+#define AS6200_CONFIG_IM	BIT(9)
-+#define AS6200_CONFIG_POL	BIT(10)
-+#define AS6200_CONFIG_CF	GENMASK(12, 11)
-+
-+#define AS6200_TEMP_MASK	GENMASK(15, 4)
-+#define AS6200_DEFAULT_CONFIG	(AS6200_CONFIG_CR |\
-+				 AS6200_CONFIG_CF |\
-+				 AS6200_CONFIG_POL)
-+
-+static const struct regmap_config as6200_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 16,
-+	.max_register = AS6200_THIGH_REG,
-+};
-+
-+static irqreturn_t as6200_event_handler(int irq, void *private)
-+{
-+	struct device *hwmon_dev = private;
-+
-+	hwmon_notify_event(hwmon_dev, hwmon_temp, hwmon_temp_alarm, 0);
-+	return IRQ_HANDLED;
-+}
-+
-+static int as6200_read(struct device *dev, enum hwmon_sensor_types type,
-+		       u32 attr, int channel, long *val)
-+{
-+	struct regmap *regmap = dev_get_drvdata(dev);
-+	unsigned int regval;
-+	unsigned int reg;
-+	s32 temp;
-+	int ret;
-+
-+	switch (attr) {
-+	case hwmon_temp_input:
-+		reg = AS6200_TVAL_REG;
-+		break;
-+	case hwmon_temp_max_hyst:
-+		reg = AS6200_TLOW_REG;
-+		break;
-+	case hwmon_temp_max:
-+		reg = AS6200_THIGH_REG;
-+		break;
-+	case hwmon_temp_alarm:
-+		reg = AS6200_CONFIG_REG;
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	ret = regmap_read(regmap, reg, &regval);
-+	if (ret)
-+		return ret;
-+
-+	if (reg == AS6200_CONFIG_REG) {
-+		*val = FIELD_GET(AS6200_CONFIG_AL, regval);
-+	} else {
-+		temp = sign_extend32(FIELD_GET(AS6200_TEMP_MASK, regval), 11);
-+		*val = DIV_ROUND_CLOSEST(temp * 625, 10);
-+	}
-+
-+	return 0;
-+}
-+
-+static int as6200_write(struct device *dev, enum hwmon_sensor_types type,
-+			u32 attr, int channel, long val)
-+{
-+	struct regmap *regmap = dev_get_drvdata(dev);
-+	int reg;
-+
-+	switch (attr) {
-+	case hwmon_temp_max_hyst:
-+		reg = AS6200_TLOW_REG;
-+		break;
-+	case hwmon_temp_max:
-+		reg = AS6200_THIGH_REG;
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	val = clamp_val(val, -40000, 125000) * 16 / 1000;
-+	return regmap_write(regmap, reg, FIELD_PREP(AS6200_TEMP_MASK, val));
-+}
-+
-+static umode_t as6200_is_visible(const void *data, enum hwmon_sensor_types type,
-+				 u32 attr, int channel)
-+{
-+	if (type != hwmon_temp)
-+		return 0;
-+
-+	switch (attr) {
-+	case hwmon_temp_input:
-+	case hwmon_temp_alarm:
-+		return 0444;
-+	case hwmon_temp_max_hyst:
-+	case hwmon_temp_max:
-+		return 0644;
-+	default:
-+		return 0;
-+	}
-+}
-+
-+static const struct hwmon_ops as6200_hwmon_ops = {
-+	.is_visible = as6200_is_visible,
-+	.read = as6200_read,
-+	.write = as6200_write,
-+};
-+
-+static const struct hwmon_channel_info * const as6200_info[] = {
-+	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
-+	HWMON_CHANNEL_INFO(temp,
-+			   HWMON_T_INPUT | HWMON_T_MAX |
-+			   HWMON_T_MAX_HYST | HWMON_T_ALARM),
-+	NULL
-+};
-+
-+struct hwmon_chip_info as6200_chip_info = {
-+	.ops = &as6200_hwmon_ops,
-+	.info = as6200_info
-+};
-+
-+static int as6200_probe(struct i2c_client *client)
-+{
-+	struct regmap *regmap;
-+	struct device *hwmon_dev;
-+	struct device *dev = &client->dev;
-+	int ret;
-+
-+	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
-+		return -EINVAL;
-+
-+	regmap = devm_regmap_init_i2c(client, &as6200_regmap_config);
-+	if (IS_ERR(regmap))
-+		return PTR_ERR(regmap);
-+
-+	ret = devm_regulator_get_enable(dev, "vdd");
-+	if (ret)
-+		return dev_err_probe(dev, ret,
-+				     "Could not get and enable regulator %d\n",
-+				     ret);
-+
-+	ret = regmap_write(regmap, AS6200_CONFIG_REG, AS6200_DEFAULT_CONFIG);
-+	if (ret)
-+		return ret;
-+
-+	hwmon_dev = devm_hwmon_device_register_with_info(dev, "as6200",
-+							 regmap,
-+							 &as6200_chip_info,
-+							 NULL);
-+	if (IS_ERR(hwmon_dev))
-+		return PTR_ERR(hwmon_dev);
-+
-+	if (client->irq) {
-+		ret = devm_request_threaded_irq(dev,
-+						client->irq,
-+						NULL,
-+						&as6200_event_handler,
-+						IRQF_ONESHOT,
-+						client->name,
-+						hwmon_dev);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	i2c_set_clientdata(client, regmap);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused as6200_suspend(struct device *dev)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct regmap *regmap = i2c_get_clientdata(client);
-+
-+	if (client->irq)
-+		disable_irq(client->irq);
-+
-+	return regmap_update_bits(regmap, AS6200_CONFIG_REG,
-+				  AS6200_CONFIG_SM, AS6200_CONFIG_SM);
-+}
-+
-+static int __maybe_unused as6200_resume(struct device *dev)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct regmap *regmap = i2c_get_clientdata(client);
-+	int ret;
-+
-+	ret = regmap_update_bits(regmap, AS6200_CONFIG_REG, AS6200_CONFIG_SM, 0);
-+	if (ret)
-+		return ret;
-+
-+	if (client->irq)
-+		enable_irq(client->irq);
-+
-+	return 0;
-+}
-+
-+static DEFINE_SIMPLE_DEV_PM_OPS(as6200_pm_ops, as6200_suspend, as6200_resume);
-+
-+static const struct i2c_device_id as6200_id_table[] = {
-+	{ "as6200", 0 },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, as6200_id_table);
-+
-+static const struct of_device_id as6200_of_match[] = {
-+	{ .compatible = "ams,as6200" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, as6200_of_match);
-+
-+static struct i2c_driver as6200_driver = {
-+	.driver = {
-+		.name = "as6200",
-+		.pm = pm_sleep_ptr(&as6200_pm_ops),
-+		.of_match_table = as6200_of_match,
-+	},
-+	.probe = as6200_probe,
-+	.id_table = as6200_id_table,
-+};
-+module_i2c_driver(as6200_driver);
-+
-+MODULE_AUTHOR("Abdel Alkuor <alkuor@gmail.com");
-+MODULE_DESCRIPTION("AMS AS6200 Temperature Sensor");
-+MODULE_LICENSE("GPL");
--- 
-2.34.1
+Thanks,
+Guenter
 
