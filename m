@@ -1,735 +1,438 @@
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEEEC4C7B;
-	Sat, 16 Dec 2023 01:32:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5300711181;
+	Sat, 16 Dec 2023 05:17:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N6FmnS8R"
-Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-7b7876fe9f0so52956639f.2;
-        Fri, 15 Dec 2023 17:32:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702690372; x=1703295172; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=7ryCslXcnp/wf06MYetgns8yY2qOdlOuLyRlTGWRzyA=;
-        b=N6FmnS8RLhfOKjjlYfWsC2Zqb4w8enh8dZ8OVmOyUkji4MJXQ4C9rVtqP50XUOe3LI
-         P53xBDXFwf7/kd0vEGp6pZ8sprtTkiwkHK++FkM8zzs+bN1sc2GhWN3O/YSL7z83V5bm
-         sTmtfdOS/geooUJywgwi6nsUh2UGVAV9TmsM/OmMyCXfXn7PPvud9HJ57PfvW340xAP4
-         700XV6E0apdfNG4+Xp0jEY98CV2GNa5lLJ/3K4PJFtWfSufMNj7m7TAk58DXwGSSB/6/
-         l+ZhuWh7xoXSZFQ9vUBa82W+RgKDx+MgqtpmUq5d7+FN7q9Wu1CxrieP4OUHp8Lw9/HW
-         qYfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702690372; x=1703295172;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7ryCslXcnp/wf06MYetgns8yY2qOdlOuLyRlTGWRzyA=;
-        b=Izppndk+WxXLOKCr1Wnk+3bI8WaJBGKmdE9BdDwMBzJDUlMlTsytdReuAjQWwfoETP
-         qT1EfN/OA8PipCJbcoksgSEGbep6WMeD8gmBGrjIXkZ554t8ToA7jocJkJ9AK1wuW9UU
-         RrTgW91cPqyBpwgU5fC1j7N6f2ItRy9N5X3UJs3mYSMPgE4qSvZ5lF93V0iOmsXwBM4E
-         cqY2ER/aABIUaPASsmEAhvi/sLbxD7Al2xoD0AC/W7Od3OSEJ9KPRkdgLGJtgmVdDDAZ
-         r6gx6j8qwZ0tFOupDu0uVCvDT3LfhILLo3KKHJYx7gbza/MEDver3Q7cX6EHg10ifPBu
-         GpYw==
-X-Gm-Message-State: AOJu0YyDf8QI87JBJZ5mvglEp/zdVTFOiikddD6oEA+jB7WjekJJgvxj
-	gqzDYol7rj6QahYfA57ecO9vIlKczYM=
-X-Google-Smtp-Source: AGHT+IE6MJ2h/9hkVYF51M4g/a7uK4j3msJhKd5jr4Z16ovQHdXndEQB7n5XWM6i1SeHE/kzudY5Aw==
-X-Received: by 2002:a92:c24d:0:b0:35d:637e:c3d2 with SMTP id k13-20020a92c24d000000b0035d637ec3d2mr16126097ilo.20.1702690371861;
-        Fri, 15 Dec 2023 17:32:51 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a2-20020a170902ecc200b001cf658f20ecsm14918186plh.96.2023.12.15.17.32.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Dec 2023 17:32:50 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8b6fc14f-28a5-4caf-80b6-747ff485dcef@roeck-us.net>
-Date: Fri, 15 Dec 2023 17:32:49 -0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jbwKIVx2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702703832; x=1734239832;
+  h=date:from:to:cc:subject:message-id;
+  bh=0DJx5tWAZSSJiCmdaCOvf0847AXdqKO1db2kTzxegmQ=;
+  b=jbwKIVx2Y5MFNfUirqf4X+45kY7aBEC7auyGBUFtAaNQegFB+mbj7vhu
+   jR84nsblT1Idbgta7UblTspI7LpgxxpQbFSiM4jhQBJ2X549SNVmnvHAd
+   ULJ7zzJUdXRBJkQ7Q4EDlAuZaafb2wHM+pM14HvqTpYscThgRKeiCQetN
+   oBBymA0caKkAryIC0rMwENkmoTErEphvD6jOvHMp/izGmj2j5hquxAYr6
+   UgYXidrkT+d3PtTeagbyYpeRuJQau6V26Okvw9Y6zcRRW7m/zARZHtg5c
+   UwlXWIeN7tbvCnv7XOK2KDyVcrXZuBmTcYAEdm7ZoqnUet91OpJeisvzT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10925"; a="2535934"
+X-IronPort-AV: E=Sophos;i="6.04,280,1695711600"; 
+   d="scan'208";a="2535934"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2023 21:17:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10925"; a="893144840"
+X-IronPort-AV: E=Sophos;i="6.04,280,1695711600"; 
+   d="scan'208";a="893144840"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 15 Dec 2023 21:17:07 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rEN2v-0001Bj-2F;
+	Sat, 16 Dec 2023 05:17:05 +0000
+Date: Sat, 16 Dec 2023 13:17:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Linux Memory Management List <linux-mm@kvack.org>,
+ amd-gfx@lists.freedesktop.org, intel-wired-lan@lists.osuosl.org,
+ linux-afs@lists.infradead.org, linux-arch@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+ linux-bcachefs@vger.kernel.org, linux-csky@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-leds@vger.kernel.org, sparclinux@vger.kernel.org
+Subject: [linux-next:master] BUILD REGRESSION
+ 17cb8a20bde66a520a2ca7aad1063e1ce7382240
+Message-ID: <202312161352.wMZ6kGnT-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] hwmon: max31827: Add PEC support
-Content-Language: en-US
-To: "Matyas, Daniel" <Daniel.Matyas@analog.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-References: <20231214143648.175336-1-daniel.matyas@analog.com>
- <2e0bf1cf-824d-40c6-9450-7ed4740f2f46@roeck-us.net>
- <PH0PR03MB6771AD7164ABEEB02650CA908993A@PH0PR03MB6771.namprd03.prod.outlook.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <PH0PR03MB6771AD7164ABEEB02650CA908993A@PH0PR03MB6771.namprd03.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 12/15/23 12:28, Matyas, Daniel wrote:
-> 
-> 
->> -----Original Message-----
->> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
->> Sent: Thursday, December 14, 2023 6:10 PM
->> To: Matyas, Daniel <Daniel.Matyas@analog.com>
->> Cc: Jean Delvare <jdelvare@suse.com>; Rob Herring
->> <robh+dt@kernel.org>; Krzysztof Kozlowski
->> <krzysztof.kozlowski+dt@linaro.org>; Conor Dooley
->> <conor+dt@kernel.org>; Jonathan Corbet <corbet@lwn.net>; linux-
->> hwmon@vger.kernel.org; devicetree@vger.kernel.org; linux-
->> kernel@vger.kernel.org; linux-doc@vger.kernel.org
->> Subject: Re: [PATCH 1/3] hwmon: max31827: Add PEC support
->>
->> [External]
->>
->> On 12/14/23 06:36, Daniel Matyas wrote:
->>> Removed regmap and used my functions to read, write and update bits.
->>> In these functions i2c_smbus_ helper functions are used. These check
->>> if there were any PEC errors during read. In the write function, if
->>> PEC is enabled, I check for PEC Error bit, to see if there were any errors.
->>>
->>> Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
->>
->> The "PEC" attribute needs to be attached to the I2C device.
->> See lm90.c or pmbus_core.c for examples.
->>
-> 
-> I added pec_show() and pec_store() functions and created the pec file within the max31827_groups.
-> I did not set the flags, because I want them to be set only in pec_store. By default the PEC flag should not be set.
-> 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: 17cb8a20bde66a520a2ca7aad1063e1ce7382240  Add linux-next specific files for 20231215
 
-That is not the point. Again,
+Error/Warning reports:
 
- >> The "PEC" attribute needs to be attached to the I2C device.
- >> See lm90.c or pmbus_core.c for examples.
+https://lore.kernel.org/oe-kbuild-all/202312151816.munFeE4L-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202312151854.4k8dhWf6-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202312160153.ovUEsxo6-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202312160433.Oz8VJHH3-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202312161324.nZN1zCQT-lkp@intel.com
 
-That is not about regmap, it is about the location of the "pec" attribute.
+Error/Warning: (recently discovered and may have been fixed)
 
->> The changes, if indeed needed, do not warant dropping regmap.
->> You will need to explain why the reg_read and reg_write callbacks
->> provideed by regmap can not be used.
->>
->> On top of that, it is not clear why regmap can't be used in the first place.
->> It seems that the major change is that one needs to read the configuration
->> register after a write to see if there was a PEC error. It is not immediately
->> obvious why that additional read (if indeed necessary) would require
->> regmap support to be dropped.
->>
-> 
-> So I am not sure about this, but it seems to me, that regmap_write is not sending a PEC byte and regmap_read is not checking the PEC byte by default. My rationale was: i2c_smbus_write_word_data() is using the i2c_xfer function, which has as argument the client->flags. So, if I2C_CLIENT_PEC is set in client->flags, that would be transmitted by i2c_xfer. I am not convinced about this, but lm90 and pmbus_core are not using regmap, so I went ahead and replaced it.
-> 
-> If what I am thinking is wrong, please correct me.
-> 
+arch/arm/include/asm/cmpxchg.h:111:(.text+0xf6c): undefined reference to `__bad_xchg'
+callback.c:(.rodata.cst4+0x18): undefined reference to `__xchg_called_with_bad_pointer'
+callback.c:(.text+0x114): undefined reference to `__xchg_called_with_bad_pointer'
+drivers/net/ethernet/intel/ice/ice_base.c:525:16: error: variable 'desc' has initializer but incomplete type
+drivers/net/ethernet/intel/ice/ice_base.c:525:28: error: storage size of 'desc' isn't known
+drivers/net/ethernet/intel/ice/ice_base.c:525:28: warning: unused variable 'desc' [-Wunused-variable]
+fs/bcachefs/btree_iter.c:3090:36: sparse:    struct btree_path *
+fs/bcachefs/btree_iter.c:3090:36: sparse:    struct btree_path [noderef] __rcu *
+fs/bcachefs/btree_locking.c:309:36: sparse:    struct btree_path *
+fs/bcachefs/btree_locking.c:309:36: sparse:    struct btree_path [noderef] __rcu *
+include/asm-generic/cmpxchg.h:76:(.text+0x1d0): relocation truncated to fit: R_NIOS2_CALL26 against `__generic_xchg_called_with_bad_pointer'
+include/linux/compiler_types.h:435:45: error: call to '__compiletime_assert_38' declared with attribute error: Unsupported size for __xchg_relaxed
+io.c:(.text+0x6): relocation truncated to fit: R_CKCORE_PCREL_IMM16BY4 against `__jump_table'
+m68k-linux-ld: callback.c:(.text+0x228): undefined reference to `__invalid_xchg_size'
+mm/ksm.c:344:13: warning: 'set_advisor_defaults' defined but not used [-Wunused-function]
+rotate.c:(.rodata.cst4+0x30): undefined reference to `__xchg_called_with_bad_pointer'
+scripts/kernel-doc: drivers/spi/spi-pl022.c:397: warning: Excess struct member 'cur_msg' description in 'pl022'
+scripts/kernel-doc: drivers/spi/spi-pl022.c:437: warning: Excess function parameter 'command' description in 'internal_cs_control'
+scripts/kernel-doc: drivers/spi/spi-pl022.c:437: warning: Function parameter or struct member 'enable' not described in 'internal_cs_control'
 
-regmap uses smbus functions to access the chip if the underlying i2c driver
-supports SMBus word operations. I fail to see the difference to your code.
-Sure, max31827_reg_write() executes another read after the write, but that
-is again a 16-bit operation and might we well be implemented as another
-regmap operation to read the status register.
+Error/Warning ids grouped by kconfigs:
 
-It would be possible to replace the regmap i2c code, use raw regmap
-code instead, and provide ->read and ->write callbacks in struct regmap_config,
-but I am not convinced that this would be beneficial.
+gcc_recent_errors
+|-- arc-randconfig-002-20231215
+|   |-- drivers-net-ethernet-intel-ice-ice_base.c:error:storage-size-of-desc-isn-t-known
+|   |-- drivers-net-ethernet-intel-ice-ice_base.c:error:variable-desc-has-initializer-but-incomplete-type
+|   `-- drivers-net-ethernet-intel-ice-ice_base.c:warning:unused-variable-desc
+|-- arc-randconfig-r132-20231215
+|   |-- drivers-hwmon-max31827.c:sparse:sparse:dubious:x-y
+|   `-- lib-zstd-compress-zstd_fast.c:sparse:sparse:Using-plain-integer-as-NULL-pointer
+|-- arm-buildonly-randconfig-r002-20220918
+|   `-- arch-arm-include-asm-cmpxchg.h:(.text):undefined-reference-to-__bad_xchg
+|-- arm-lpc18xx_defconfig
+|   |-- scripts-kernel-doc:drivers-spi-spi-pl022.c:warning:Excess-function-parameter-command-description-in-internal_cs_control
+|   |-- scripts-kernel-doc:drivers-spi-spi-pl022.c:warning:Excess-struct-member-cur_msg-description-in-pl022
+|   `-- scripts-kernel-doc:drivers-spi-spi-pl022.c:warning:Function-parameter-or-struct-member-enable-not-described-in-internal_cs_control
+|-- csky-randconfig-001-20231215
+|   `-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-lib-zlib_inflate-zlib_inflate.o
+|-- csky-randconfig-r016-20220425
+|   `-- io.c:(.text):relocation-truncated-to-fit:R_CKCORE_PCREL_IMM16BY4-against-__jump_table
+|-- csky-randconfig-r113-20231215
+|   |-- arch-csky-kernel-vdso-vgettimeofday.c:sparse:sparse:function-__vdso_clock_gettime-with-external-linkage-has-definition
+|   |-- fs-bcachefs-btree_iter.c:sparse:sparse:incompatible-types-in-comparison-expression-(different-address-spaces):
+|   |-- fs-bcachefs-btree_iter.c:sparse:struct-btree_path
+|   |-- fs-bcachefs-btree_iter.c:sparse:struct-btree_path-noderef-__rcu
+|   |-- fs-bcachefs-btree_locking.c:sparse:sparse:incompatible-types-in-comparison-expression-(different-address-spaces):
+|   |-- fs-bcachefs-btree_locking.c:sparse:struct-btree_path
+|   |-- fs-bcachefs-btree_locking.c:sparse:struct-btree_path-noderef-__rcu
+|   `-- lib-zstd-compress-zstd_fast.c:sparse:sparse:Using-plain-integer-as-NULL-pointer
+|-- i386-randconfig-013-20231215
+|   `-- drivers-hid-hid-nintendo.c:error:initializer-element-is-not-constant
+|-- loongarch-defconfig
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-hwss-dcn35-dcn35_hwseq.c:warning:This-comment-starts-with-but-isn-t-a-kernel-doc-comment.-Refer-Documentation-doc-guide-kernel-doc.rst
+|-- loongarch-randconfig-001-20231215
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-hwss-dcn35-dcn35_hwseq.c:warning:This-comment-starts-with-but-isn-t-a-kernel-doc-comment.-Refer-Documentation-doc-guide-kernel-doc.rst
+|-- loongarch-randconfig-002-20231215
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-hwss-dcn35-dcn35_hwseq.c:warning:This-comment-starts-with-but-isn-t-a-kernel-doc-comment.-Refer-Documentation-doc-guide-kernel-doc.rst
+|-- m68k-randconfig-r012-20211002
+|   `-- m68k-linux-ld:callback.c:(.text):undefined-reference-to-__invalid_xchg_size
+|-- microblaze-randconfig-r121-20231215
+|   `-- lib-zstd-compress-zstd_fast.c:sparse:sparse:Using-plain-integer-as-NULL-pointer
+|-- microblaze-randconfig-r122-20231215
+|   |-- drivers-soc-qcom-pmic_pdcharger_ulog.c:sparse:sparse:incorrect-type-in-initializer-(different-base-types)-expected-restricted-__le32-usertype-opcode-got-int
+|   |-- drivers-soc-qcom-pmic_pdcharger_ulog.c:sparse:sparse:incorrect-type-in-initializer-(different-base-types)-expected-restricted-__le32-usertype-owner-got-int
+|   |-- drivers-soc-qcom-pmic_pdcharger_ulog.c:sparse:sparse:incorrect-type-in-initializer-(different-base-types)-expected-restricted-__le32-usertype-type-got-int
+|   `-- lib-zstd-compress-zstd_fast.c:sparse:sparse:Using-plain-integer-as-NULL-pointer
+|-- mips-decstation_64_defconfig
+|   `-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-lib-zlib_inflate-zlib_inflate.o
+|-- mips-fuloong2e_defconfig
+|   |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-drivers-base-regmap-regmap-mmio.o
+|   `-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-lib-zlib_inflate-zlib_inflate.o
+|-- mips-jazz_defconfig
+|   |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-lib-zlib_inflate-zlib_inflate.o
+|   `-- cache.c:(.text):undefined-reference-to-r3k_cache_init
+|-- nios2-allyesconfig
+|   |-- callback.c:(.text):relocation-truncated-to-fit:R_NIOS2_CALL26-against-__generic_xchg_called_with_bad_pointer
+|   `-- rotate.c:(.text):relocation-truncated-to-fit:R_NIOS2_CALL26-against-__generic_xchg_called_with_bad_pointer
+|-- nios2-randconfig-r035-20230329
+|   `-- include-asm-generic-cmpxchg.h:(.text):relocation-truncated-to-fit:R_NIOS2_CALL26-against-__generic_xchg_called_with_bad_pointer
+|-- openrisc-randconfig-r016-20230621
+|   `-- mm-ksm.c:warning:set_advisor_defaults-defined-but-not-used
+|-- openrisc-randconfig-r111-20231215
+|   |-- drivers-hwmon-max31827.c:sparse:sparse:dubious:x-y
+|   `-- lib-zstd-compress-zstd_fast.c:sparse:sparse:Using-plain-integer-as-NULL-pointer
+|-- parisc-randconfig-001-20231215
+|   `-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-lib-zlib_inflate-zlib_inflate.o
+|-- parisc-randconfig-r015-20220820
+|   |-- callback.c:(.rodata.cst4):undefined-reference-to-__xchg_called_with_bad_pointer
+|   `-- rotate.c:(.rodata.cst4):undefined-reference-to-__xchg_called_with_bad_pointer
+|-- powerpc-randconfig-c003-20220424
+|   `-- include-linux-compiler_types.h:error:call-to-__compiletime_assert_NNN-declared-with-attribute-error:Unsupported-size-for-__xchg_relaxed
+|-- s390-randconfig-r133-20231215
+|   |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-lib-zlib_inflate-zlib_inflate.o
+|   |-- drivers-hwmon-max31827.c:sparse:sparse:dubious:x-y
+|   `-- lib-zstd-compress-zstd_fast.c:sparse:sparse:Using-plain-integer-as-NULL-pointer
+|-- sparc-allmodconfig
+|   |-- arch-sparc-kernel-module.c:warning:variable-strtab-set-but-not-used
+|   `-- arch-sparc-mm-init_64.c:warning:variable-hv_pgsz_idx-set-but-not-used
+|-- sparc-allnoconfig
+|   |-- arch-sparc-mm-leon_mm.c:warning:variable-paddrbase-set-but-not-used
+|   `-- arch-sparc-mm-srmmu.c:warning:variable-clear-set-but-not-used
+|-- sparc-defconfig
+|   |-- arch-sparc-kernel-module.c:warning:variable-strtab-set-but-not-used
+|   |-- arch-sparc-mm-leon_mm.c:warning:variable-paddrbase-set-but-not-used
+|   `-- arch-sparc-mm-srmmu.c:warning:variable-clear-set-but-not-used
+|-- sparc-randconfig-001-20231215
+|   |-- (.head.text):relocation-truncated-to-fit:R_SPARC_WDISP22-against-init.text
+|   |-- arch-sparc-kernel-module.c:warning:variable-strtab-set-but-not-used
+|   |-- arch-sparc-mm-leon_mm.c:warning:variable-paddrbase-set-but-not-used
+|   `-- arch-sparc-mm-srmmu.c:warning:variable-clear-set-but-not-used
+|-- sparc-randconfig-002-20231215
+|   |-- (.head.text):relocation-truncated-to-fit:R_SPARC_WDISP22-against-init.text
+|   |-- arch-sparc-mm-leon_mm.c:warning:variable-paddrbase-set-but-not-used
+|   |-- arch-sparc-mm-srmmu.c:warning:variable-clear-set-but-not-used
+|   |-- parport_pc.c:(.text):undefined-reference-to-ebus_dma_enable
+|   |-- parport_pc.c:(.text):undefined-reference-to-ebus_dma_irq_enable
+|   |-- parport_pc.c:(.text):undefined-reference-to-ebus_dma_register
+|   |-- sparc-linux-ld:parport_pc.c:(.text):undefined-reference-to-ebus_dma_enable
+|   |-- sparc-linux-ld:parport_pc.c:(.text):undefined-reference-to-ebus_dma_irq_enable
+|   |-- sparc-linux-ld:parport_pc.c:(.text):undefined-reference-to-ebus_dma_prepare
+|   |-- sparc-linux-ld:parport_pc.c:(.text):undefined-reference-to-ebus_dma_request
+|   |-- sparc-linux-ld:parport_pc.c:(.text):undefined-reference-to-ebus_dma_residue
+|   `-- sparc-linux-ld:parport_pc.c:(.text):undefined-reference-to-ebus_dma_unregister
+|-- sparc64-allmodconfig
+|   |-- arch-sparc-kernel-module.c:warning:variable-strtab-set-but-not-used
+|   `-- arch-sparc-mm-init_64.c:warning:variable-hv_pgsz_idx-set-but-not-used
+|-- sparc64-allyesconfig
+|   |-- arch-sparc-kernel-module.c:warning:variable-strtab-set-but-not-used
+|   `-- arch-sparc-mm-init_64.c:warning:variable-hv_pgsz_idx-set-but-not-used
+|-- sparc64-defconfig
+|   |-- arch-sparc-kernel-module.c:warning:variable-strtab-set-but-not-used
+|   `-- arch-sparc-mm-init_64.c:warning:variable-hv_pgsz_idx-set-but-not-used
+|-- sparc64-randconfig-001-20231215
+|   `-- arch-sparc-mm-init_64.c:warning:variable-hv_pgsz_idx-set-but-not-used
+|-- sparc64-randconfig-002-20231215
+|   `-- arch-sparc-mm-init_64.c:warning:variable-pagecv_flag-set-but-not-used
+|-- sparc64-randconfig-r062-20231215
+|   `-- arch-sparc-kernel-module.c:warning:variable-strtab-set-but-not-used
+|-- x86_64-allnoconfig
+|   `-- Warning:MAINTAINERS-references-a-file-that-doesn-t-exist:Documentation-devicetree-bindings-display-panel-synaptics-r63353.yaml
+|-- x86_64-randconfig-001-20231215
+|   `-- drivers-hid-hid-nintendo.c:error:initializer-element-is-not-constant
+|-- x86_64-randconfig-r131-20231215
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-hwss-dcn35-dcn35_hwseq.c:warning:This-comment-starts-with-but-isn-t-a-kernel-doc-comment.-Refer-Documentation-doc-guide-kernel-doc.rst
+|   `-- drivers-hwmon-max31827.c:sparse:sparse:dubious:x-y
+`-- xtensa-randconfig-c024-20220216
+    `-- callback.c:(.text):undefined-reference-to-__xchg_called_with_bad_pointer
+clang_recent_errors
+|-- arm-defconfig
+|   |-- WARNING:modpost:vmlinux:section-mismatch-in-reference:at91_poweroff_probe-(section:.text)-at91_wakeup_status-(section:.init.text)
+|   `-- WARNING:modpost:vmlinux:section-mismatch-in-reference:at91_shdwc_probe-(section:.text)-at91_wakeup_status-(section:.init.text)
+|-- arm64-allmodconfig
+|   `-- drivers-leds-leds-max5970.c:warning:variable-num_leds-set-but-not-used
+|-- arm64-allyesconfig
+|   `-- drivers-leds-leds-max5970.c:warning:variable-num_leds-set-but-not-used
+|-- hexagon-allmodconfig
+|   `-- drivers-leds-leds-max5970.c:warning:variable-num_leds-set-but-not-used
+|-- hexagon-allyesconfig
+|   `-- drivers-leds-leds-max5970.c:warning:variable-num_leds-set-but-not-used
+|-- i386-allmodconfig
+|   `-- drivers-leds-leds-max5970.c:warning:variable-num_leds-set-but-not-used
+|-- i386-buildonly-randconfig-006-20231215
+|   |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-drivers-base-regmap-regmap-mmio.o
+|   `-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-lib-zlib_inflate-zlib_inflate.o
+|-- i386-randconfig-063-20231215
+|   |-- fs-afs-main.c:sparse:sparse:cast-removes-address-space-__rcu-of-expression
+|   |-- fs-afs-main.c:sparse:sparse:incorrect-type-in-argument-(different-address-spaces)-expected-struct-callback_head-head-got-struct-callback_head-noderef-__rcu
+|   `-- lib-zstd-compress-zstd_fast.c:sparse:sparse:Using-plain-integer-as-NULL-pointer
+|-- powerpc-allmodconfig
+|   `-- drivers-leds-leds-max5970.c:warning:variable-num_leds-set-but-not-used
+|-- powerpc-allyesconfig
+|   `-- drivers-leds-leds-max5970.c:warning:variable-num_leds-set-but-not-used
+|-- riscv-randconfig-r112-20231215
+|   `-- lib-zstd-compress-zstd_fast.c:sparse:sparse:Using-plain-integer-as-NULL-pointer
+|-- s390-randconfig-r123-20231215
+|   |-- drivers-hwmon-max31827.c:sparse:sparse:dubious:x-y
+|   `-- lib-zstd-compress-zstd_fast.c:sparse:sparse:Using-plain-integer-as-NULL-pointer
+|-- x86_64-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-hwss-dcn35-dcn35_hwseq.c:warning:This-comment-starts-with-but-isn-t-a-kernel-doc-comment.-Refer-Documentation-doc-guide-kernel-doc.rst
+|   `-- drivers-leds-leds-max5970.c:warning:variable-num_leds-set-but-not-used
+|-- x86_64-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-hwss-dcn35-dcn35_hwseq.c:warning:This-comment-starts-with-but-isn-t-a-kernel-doc-comment.-Refer-Documentation-doc-guide-kernel-doc.rst
+|   `-- drivers-leds-leds-max5970.c:warning:variable-num_leds-set-but-not-used
+`-- x86_64-randconfig-161-20231215
+    |-- lib-zstd-common-bits.h-ZSTD_countLeadingZeros32()-warn:inconsistent-indenting
+    |-- lib-zstd-common-bits.h-ZSTD_countTrailingZeros32()-warn:inconsistent-indenting
+    |-- lib-zstd-compress-..-common-bits.h-ZSTD_countLeadingZeros32()-warn:inconsistent-indenting
+    |-- lib-zstd-compress-..-common-bits.h-ZSTD_countLeadingZeros64()-warn:inconsistent-indenting
+    |-- lib-zstd-compress-..-common-bits.h-ZSTD_countTrailingZeros32()-warn:inconsistent-indenting
+    |-- lib-zstd-compress-..-common-bits.h-ZSTD_countTrailingZeros64()-warn:inconsistent-indenting
+    |-- lib-zstd-decompress-..-common-bits.h-ZSTD_countLeadingZeros32()-warn:inconsistent-indenting
+    `-- lib-zstd-decompress-..-common-bits.h-ZSTD_countTrailingZeros64()-warn:inconsistent-indenting
 
-Either case, sorry, I can not follow your line of argument.
+elapsed time: 1467m
 
->> Regarding "if indeed necessary": There needs to be a comment explaining
->> that the device will return ACK even after a packet with bad PEC is
->> received.
->>
->>> ---
->>>    Documentation/hwmon/max31827.rst |  14 +-
->>>    drivers/hwmon/max31827.c         | 219 +++++++++++++++++++++++-----
->> ---
->>>    2 files changed, 171 insertions(+), 62 deletions(-)
->>>
->>> diff --git a/Documentation/hwmon/max31827.rst
->>> b/Documentation/hwmon/max31827.rst
->>> index 44ab9dc064cb..ecbc1ddba6a7 100644
->>> --- a/Documentation/hwmon/max31827.rst
->>> +++ b/Documentation/hwmon/max31827.rst
->>> @@ -131,7 +131,13 @@ The Fault Queue bits select how many
->> consecutive temperature faults must occur
->>>    before overtemperature or undertemperature faults are indicated in
->> the
->>>    corresponding status bits.
->>>
->>> -Notes
->>> ------
->>> -
->>> -PEC is not implemented.
->>> +PEC (packet error checking) can be enabled from the "pec" device
->> attribute.
->>> +If PEC is enabled, a PEC byte is appended to the end of each message
->> transfer.
->>> +This is a CRC-8 byte that is calculated on all of the message bytes
->>> +(including the address/read/write byte). The last device to transmit
->>> +a data byte also transmits the PEC byte. The master transmits the PEC
->>> +byte after a write transaction, and the MAX31827 transmits the PEC
->> byte after a read transaction.
->>> +
->>> +The read PEC error is handled inside the
->> i2c_smbus_read_word_swapped() function.
->>> +To check if the write had any PEC error a read is performed on the
->>> +configuration register, to check the PEC Error bit.
->>> \ No newline at end of file
->>> diff --git a/drivers/hwmon/max31827.c b/drivers/hwmon/max31827.c
->> index
->>> 71ad3934dfb6..db93492193bd 100644
->>> --- a/drivers/hwmon/max31827.c
->>> +++ b/drivers/hwmon/max31827.c
->>> @@ -11,8 +11,8 @@
->>>    #include <linux/hwmon.h>
->>>    #include <linux/i2c.h>
->>>    #include <linux/mutex.h>
->>> -#include <linux/regmap.h>
->>>    #include <linux/regulator/consumer.h>
->>> +#include <linux/hwmon-sysfs.h>
->>>    #include <linux/of_device.h>
->>>
->>>    #define MAX31827_T_REG			0x0
->>> @@ -24,11 +24,13 @@
->>>
->>>    #define MAX31827_CONFIGURATION_1SHOT_MASK	BIT(0)
->>>    #define MAX31827_CONFIGURATION_CNV_RATE_MASK
->> 	GENMASK(3, 1)
->>> +#define MAX31827_CONFIGURATION_PEC_EN_MASK	BIT(4)
->>>    #define MAX31827_CONFIGURATION_TIMEOUT_MASK	BIT(5)
->>>    #define MAX31827_CONFIGURATION_RESOLUTION_MASK
->> 	GENMASK(7, 6)
->>>    #define MAX31827_CONFIGURATION_ALRM_POL_MASK	BIT(8)
->>>    #define MAX31827_CONFIGURATION_COMP_INT_MASK	BIT(9)
->>>    #define MAX31827_CONFIGURATION_FLT_Q_MASK	GENMASK(11, 10)
->>> +#define MAX31827_CONFIGURATION_PEC_ERR_MASK	BIT(13)
->>>    #define MAX31827_CONFIGURATION_U_TEMP_STAT_MASK	BIT(14)
->>>    #define MAX31827_CONFIGURATION_O_TEMP_STAT_MASK	BIT(15)
->>>
->>> @@ -94,23 +96,67 @@ struct max31827_state {
->>>    	 * Prevent simultaneous access to the i2c client.
->>>    	 */
->>>    	struct mutex lock;
->>> -	struct regmap *regmap;
->>>    	bool enable;
->>>    	unsigned int resolution;
->>>    	unsigned int update_interval;
->>> +	struct i2c_client *client;
->>>    };
->>>
->>> -static const struct regmap_config max31827_regmap = {
->>> -	.reg_bits = 8,
->>> -	.val_bits = 16,
->>> -	.max_register = 0xA,
->>> -};
->>> +static int max31827_reg_read(struct i2c_client *client, u8 reg, u16
->>> +*val) {
->>> +	u16 tmp = i2c_smbus_read_word_swapped(client, reg);
->>> +
->>> +	if (tmp < 0)
->>
->> An u16 variable will never be negative.
->>
->>> +		return tmp;
->>> +
->>> +	*val = tmp;
->>> +	return 0;
->>> +}
->>
->> If regmap can indeed not be used, it is unnecessary to provide a pointer to
->> the return value. Instead, just like with smbus calls, the error return and
->> the return value can be combined. Adding this function just to separate
->> error from return value adds zero value (and, as can be seen from the
->> above, actually adds an opportunity to introduce bugs).
->>
->>> +
->>> +static int max31827_reg_write(struct i2c_client *client, u8 reg, u16
->>> +val) {
->>> +	u16 cfg;
->>> +	int ret;
->>> +
->>> +	ret = i2c_smbus_write_word_swapped(client, reg, val);
->>> +	if (ret)
->>> +		return ret;
->>> +
->>> +	// If PEC is not enabled, return with success
->>
->> Do not mix comment styles. The rest of the driver doesn't use C++
->> comments.
->> Besides, the comment does not add any value.
->>
->>> +	if (!(client->flags & I2C_CLIENT_PEC))
->>> +		return 0;
->>> +
->>> +	ret = max31827_reg_read(client,
->> MAX31827_CONFIGURATION_REG, &cfg);
->>> +	if (ret)
->>> +		return ret;
->>> +
->>> +	if (cfg & MAX31827_CONFIGURATION_PEC_ERR_MASK)
->>> +		return -EBADMSG;
->>> +
->>
->> EBADMSG is "Not a data message". I don't think that is appropriate here.
->>
->> I would very much prefer
->> 	if (client->flags & I2C_CLIENT_PEC) {
->> 		...
->> 	}
->>
->>> +	return 0;
->>> +}
->>> +
->>> +static int max31827_update_bits(struct i2c_client *client, u8 reg,
->>> +				u16 mask, u16 val)
->>> +{
->>> +	u16 tmp;
->>> +	int ret;
->>> +
->>> +	ret = max31827_reg_read(client, reg, &tmp);
->>> +	if (ret)
->>> +		return ret;
->>> +
->>> +	tmp = (tmp & ~mask) | (val & mask);
->>> +	ret = max31827_reg_write(client, reg, tmp);
->>> +
->>> +	return ret;
->>> +}
->>>
->>>    static int shutdown_write(struct max31827_state *st, unsigned int reg,
->>>    			  unsigned int mask, unsigned int val)
->>>    {
->>> -	unsigned int cfg;
->>> -	unsigned int cnv_rate;
->>> +	u16 cfg;
->>> +	u16 cnv_rate;
->>
->> I really do not see the point of those changes. u16 is more expensive than
->> unsigned int on many architectures. If retained, you'll have to explain why
->> this is needed and beneficial.
->>
->>>    	int ret;
->>>
->>>    	/*
->>> @@ -125,34 +171,34 @@ static int shutdown_write(struct
->> max31827_state
->>> *st, unsigned int reg,
->>>
->>>    	if (!st->enable) {
->>>    		if (!mask)
->>> -			ret = regmap_write(st->regmap, reg, val);
->>> +			ret = max31827_reg_write(st->client, reg, val);
->>>    		else
->>> -			ret = regmap_update_bits(st->regmap, reg, mask,
->> val);
->>> +			ret = max31827_update_bits(st->client, reg,
->> mask, val);
->>>    		goto unlock;
->>>    	}
->>>
->>> -	ret = regmap_read(st->regmap,
->> MAX31827_CONFIGURATION_REG, &cfg);
->>> +	ret = max31827_reg_read(st->client,
->> MAX31827_CONFIGURATION_REG,
->>> +&cfg);
->>>    	if (ret)
->>>    		goto unlock;
->>>
->>>    	cnv_rate = MAX31827_CONFIGURATION_CNV_RATE_MASK & cfg;
->>>    	cfg = cfg & ~(MAX31827_CONFIGURATION_1SHOT_MASK |
->>>    		      MAX31827_CONFIGURATION_CNV_RATE_MASK);
->>> -	ret = regmap_write(st->regmap,
->> MAX31827_CONFIGURATION_REG, cfg);
->>> +	ret = max31827_reg_write(st->client,
->> MAX31827_CONFIGURATION_REG,
->>> +cfg);
->>>    	if (ret)
->>>    		goto unlock;
->>>
->>>    	if (!mask)
->>> -		ret = regmap_write(st->regmap, reg, val);
->>> +		ret = max31827_reg_write(st->client, reg, val);
->>>    	else
->>> -		ret = regmap_update_bits(st->regmap, reg, mask, val);
->>> +		ret = max31827_update_bits(st->client, reg, mask, val);
->>>
->>>    	if (ret)
->>>    		goto unlock;
->>>
->>> -	ret = regmap_update_bits(st->regmap,
->> MAX31827_CONFIGURATION_REG,
->>> -
->> MAX31827_CONFIGURATION_CNV_RATE_MASK,
->>> -				 cnv_rate);
->>> +	ret = max31827_update_bits(st->client,
->> MAX31827_CONFIGURATION_REG,
->>> +
->> MAX31827_CONFIGURATION_CNV_RATE_MASK,
->>> +				   cnv_rate);
->>>
->>>    unlock:
->>>    	mutex_unlock(&st->lock);
->>> @@ -198,15 +244,16 @@ static int max31827_read(struct device *dev,
->> enum hwmon_sensor_types type,
->>>    			 u32 attr, int channel, long *val)
->>>    {
->>>    	struct max31827_state *st = dev_get_drvdata(dev);
->>> -	unsigned int uval;
->>> +	u16 uval;
->>>    	int ret = 0;
->>>
->>>    	switch (type) {
->>>    	case hwmon_temp:
->>>    		switch (attr) {
->>>    		case hwmon_temp_enable:
->>> -			ret = regmap_read(st->regmap,
->>> -
->> MAX31827_CONFIGURATION_REG, &uval);
->>> +			ret = max31827_reg_read(st->client,
->>> +
->> 	MAX31827_CONFIGURATION_REG,
->>> +						&uval);
->>>    			if (ret)
->>>    				break;
->>>
->>> @@ -226,10 +273,10 @@ static int max31827_read(struct device *dev,
->> enum hwmon_sensor_types type,
->>>    				 * be changed during the conversion
->> process.
->>>    				 */
->>>
->>> -				ret = regmap_update_bits(st->regmap,
->>> -
->> MAX31827_CONFIGURATION_REG,
->>> -
->> MAX31827_CONFIGURATION_1SHOT_MASK,
->>> -							 1);
->>> +				ret = max31827_update_bits(st->client,
->>> +
->> MAX31827_CONFIGURATION_REG,
->>> +
->> MAX31827_CONFIGURATION_1SHOT_MASK,
->>> +							   1);
->>>    				if (ret) {
->>>    					mutex_unlock(&st->lock);
->>>    					return ret;
->>> @@ -246,7 +293,8 @@ static int max31827_read(struct device *dev,
->> enum hwmon_sensor_types type,
->>>    			    st->update_interval == 125)
->>>    				usleep_range(15000, 20000);
->>>
->>> -			ret = regmap_read(st->regmap,
->> MAX31827_T_REG, &uval);
->>> +			ret = max31827_reg_read(st->client,
->> MAX31827_T_REG,
->>> +						&uval);
->>>
->>>    			mutex_unlock(&st->lock);
->>>
->>> @@ -257,23 +305,26 @@ static int max31827_read(struct device *dev,
->>> enum hwmon_sensor_types type,
->>>
->>>    			break;
->>>    		case hwmon_temp_max:
->>> -			ret = regmap_read(st->regmap,
->> MAX31827_TH_REG, &uval);
->>> +			ret = max31827_reg_read(st->client,
->> MAX31827_TH_REG,
->>> +						&uval);
->>>    			if (ret)
->>>    				break;
->>>
->>>    			*val = MAX31827_16_BIT_TO_M_DGR(uval);
->>>    			break;
->>>    		case hwmon_temp_max_hyst:
->>> -			ret = regmap_read(st->regmap,
->> MAX31827_TH_HYST_REG,
->>> -					  &uval);
->>> +			ret = max31827_reg_read(st->client,
->>> +
->> 	MAX31827_TH_HYST_REG,
->>> +						&uval);
->>>    			if (ret)
->>>    				break;
->>>
->>>    			*val = MAX31827_16_BIT_TO_M_DGR(uval);
->>>    			break;
->>>    		case hwmon_temp_max_alarm:
->>> -			ret = regmap_read(st->regmap,
->>> -
->> MAX31827_CONFIGURATION_REG, &uval);
->>> +			ret = max31827_reg_read(st->client,
->>> +
->> 	MAX31827_CONFIGURATION_REG,
->>> +						&uval);
->>>    			if (ret)
->>>    				break;
->>>
->>> @@ -281,23 +332,25 @@ static int max31827_read(struct device *dev,
->> enum hwmon_sensor_types type,
->>>    					 uval);
->>>    			break;
->>>    		case hwmon_temp_min:
->>> -			ret = regmap_read(st->regmap,
->> MAX31827_TL_REG, &uval);
->>> +			ret = max31827_reg_read(st->client,
->> MAX31827_TL_REG,
->>> +						&uval);
->>>    			if (ret)
->>>    				break;
->>>
->>>    			*val = MAX31827_16_BIT_TO_M_DGR(uval);
->>>    			break;
->>>    		case hwmon_temp_min_hyst:
->>> -			ret = regmap_read(st->regmap,
->> MAX31827_TL_HYST_REG,
->>> -					  &uval);
->>> +			ret = max31827_reg_read(st->client,
->> MAX31827_TL_HYST_REG,
->>> +						&uval);
->>>    			if (ret)
->>>    				break;
->>>
->>>    			*val = MAX31827_16_BIT_TO_M_DGR(uval);
->>>    			break;
->>>    		case hwmon_temp_min_alarm:
->>> -			ret = regmap_read(st->regmap,
->>> -
->> MAX31827_CONFIGURATION_REG, &uval);
->>> +			ret = max31827_reg_read(st->client,
->>> +
->> 	MAX31827_CONFIGURATION_REG,
->>> +						&uval);
->>>    			if (ret)
->>>    				break;
->>>
->>> @@ -313,8 +366,9 @@ static int max31827_read(struct device *dev,
->> enum
->>> hwmon_sensor_types type,
->>>
->>>    	case hwmon_chip:
->>>    		if (attr == hwmon_chip_update_interval) {
->>> -			ret = regmap_read(st->regmap,
->>> -
->> MAX31827_CONFIGURATION_REG, &uval);
->>> +			ret = max31827_reg_read(st->client,
->>> +
->> 	MAX31827_CONFIGURATION_REG,
->>> +						&uval);
->>>    			if (ret)
->>>    				break;
->>>
->>> @@ -355,11 +409,11 @@ static int max31827_write(struct device *dev,
->>> enum hwmon_sensor_types type,
->>>
->>>    			st->enable = val;
->>>
->>> -			ret = regmap_update_bits(st->regmap,
->>> -
->> MAX31827_CONFIGURATION_REG,
->>> -
->> MAX31827_CONFIGURATION_1SHOT_MASK |
->>> -
->> MAX31827_CONFIGURATION_CNV_RATE_MASK,
->>> -
->> MAX31827_DEVICE_ENABLE(val));
->>> +			ret = max31827_update_bits(st->client,
->>> +
->> MAX31827_CONFIGURATION_REG,
->>> +
->> MAX31827_CONFIGURATION_1SHOT_MASK |
->>> +
->> MAX31827_CONFIGURATION_CNV_RATE_MASK,
->>> +
->> MAX31827_DEVICE_ENABLE(val));
->>>
->>>    			mutex_unlock(&st->lock);
->>>
->>> @@ -402,10 +456,10 @@ static int max31827_write(struct device *dev,
->> enum hwmon_sensor_types type,
->>>    			res =
->> FIELD_PREP(MAX31827_CONFIGURATION_CNV_RATE_MASK,
->>>    					 res);
->>>
->>> -			ret = regmap_update_bits(st->regmap,
->>> -
->> MAX31827_CONFIGURATION_REG,
->>> -
->> MAX31827_CONFIGURATION_CNV_RATE_MASK,
->>> -						 res);
->>> +			ret = max31827_update_bits(st->client,
->>> +
->> MAX31827_CONFIGURATION_REG,
->>> +
->> MAX31827_CONFIGURATION_CNV_RATE_MASK,
->>> +						   res);
->>>    			if (ret)
->>>    				return ret;
->>>
->>> @@ -425,10 +479,10 @@ static ssize_t temp1_resolution_show(struct
->> device *dev,
->>>    				     char *buf)
->>>    {
->>>    	struct max31827_state *st = dev_get_drvdata(dev);
->>> -	unsigned int val;
->>> +	u16 val;
->>>    	int ret;
->>>
->>> -	ret = regmap_read(st->regmap,
->> MAX31827_CONFIGURATION_REG, &val);
->>> +	ret = max31827_reg_read(st->client,
->> MAX31827_CONFIGURATION_REG,
->>> +&val);
->>>    	if (ret)
->>>    		return ret;
->>>
->>> @@ -473,10 +527,63 @@ static ssize_t temp1_resolution_store(struct
->> device *dev,
->>>    	return ret ? ret : count;
->>>    }
->>>
->>> +static ssize_t pec_show(struct device *dev, struct device_attribute
->> *devattr,
->>> +			char *buf)
->>> +{
->>> +	struct max31827_state *st = dev_get_drvdata(dev);
->>> +	struct i2c_client *client = st->client;
->>> +
->>> +	return scnprintf(buf, PAGE_SIZE, "%d\n", !!(client->flags &
->>> +I2C_CLIENT_PEC)); }
->>> +
->>> +static ssize_t pec_store(struct device *dev, struct device_attribute
->> *devattr,
->>> +			 const char *buf, size_t count)
->>> +{
->>> +	struct max31827_state *st = dev_get_drvdata(dev);
->>> +	struct i2c_client *client = st->client;
->>> +	unsigned int val;
->>> +	u16 val2;
->>> +	int err;
->>> +
->>> +	err = kstrtouint(buf, 10, &val);
->>> +	if (err < 0)
->>> +		return err;
->>> +
->>> +	val2 = FIELD_PREP(MAX31827_CONFIGURATION_PEC_EN_MASK,
->> val);
->>> +
->>> +	if (err)
->>> +		return err;
->>> +
->>> +	switch (val) {
->>> +	case 0:
->>> +		client->flags &= ~I2C_CLIENT_PEC;
->>> +		err = max31827_update_bits(client,
->> MAX31827_CONFIGURATION_REG,
->>> +
->> MAX31827_CONFIGURATION_PEC_EN_MASK,
->>> +					   val2);
->>> +		if (err)
->>> +			return err;
->>> +		break;
->>> +	case 1:
->>> +		err = max31827_update_bits(client,
->> MAX31827_CONFIGURATION_REG,
->>> +
->> MAX31827_CONFIGURATION_PEC_EN_MASK,
->>> +					   val2);
->>> +		if (err)
->>> +			return err;
->>> +		client->flags |= I2C_CLIENT_PEC;
->>> +		break;
->>> +	default:
->>> +		return -EINVAL;
->>> +	}
->>> +
->>> +	return count;
->>> +}
->>> +
->>>    static DEVICE_ATTR_RW(temp1_resolution);
->>> +static DEVICE_ATTR_RW(pec);
->>>
->>>    static struct attribute *max31827_attrs[] = {
->>>    	&dev_attr_temp1_resolution.attr,
->>> +	&dev_attr_pec.attr,
->>>    	NULL
->>>    };
->>>    ATTRIBUTE_GROUPS(max31827);
->>> @@ -489,9 +596,9 @@ static const struct i2c_device_id
->> max31827_i2c_ids[] = {
->>>    };
->>>    MODULE_DEVICE_TABLE(i2c, max31827_i2c_ids);
->>>
->>> -static int max31827_init_client(struct max31827_state *st,
->>> -				struct device *dev)
->>> +static int max31827_init_client(struct max31827_state *st)
->>>    {
->>> +	struct device *dev = &st->client->dev;
->>
->> Now we are absolutely down to personal preference changes.
->> I am not at all inclined to accept such changes, sorry.
->>
->> Including such changes means I'll have to put extra scrutiny on your patch
->> submissions in the future to ensure that you don't try to sneak in similar
->> changes, which I find quite frustrating. Is that really necessary ?
->>
->> Guenter
->>
-> 
-> Sorry for this! I thought, if I am adding client to the private structure I might as well delete the second parameter of init_client, because I can easily retrieve the device structure from client. I added this line so that the changes to the code are kept to a minimum.
-> 
+configs tested: 166
+configs skipped: 2
 
-You are making unnecessary changes (several unsigned int -> u16
-plus this one), and claim this would be "so that the changes to
-the code are kept to a minimum". Really ? How does making
-unnecessary changes keep the changes to the code to a minimum ?
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                            hsdk_defconfig   gcc  
+arc                   randconfig-001-20231215   gcc  
+arc                   randconfig-002-20231215   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                     am200epdkit_defconfig   clang
+arm                                 defconfig   clang
+arm                            dove_defconfig   clang
+arm                            hisi_defconfig   gcc  
+arm                            mmp2_defconfig   clang
+arm                          pxa168_defconfig   clang
+arm                          pxa3xx_defconfig   gcc  
+arm                   randconfig-001-20231215   clang
+arm                   randconfig-002-20231215   clang
+arm                   randconfig-003-20231215   clang
+arm                   randconfig-004-20231215   clang
+arm                           stm32_defconfig   gcc  
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20231215   clang
+arm64                 randconfig-002-20231215   clang
+arm64                 randconfig-003-20231215   clang
+arm64                 randconfig-004-20231215   clang
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20231215   gcc  
+csky                  randconfig-002-20231215   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+hexagon               randconfig-001-20231215   clang
+hexagon               randconfig-002-20231215   clang
+i386                             allmodconfig   clang
+i386                              allnoconfig   clang
+i386                             allyesconfig   clang
+i386         buildonly-randconfig-001-20231215   clang
+i386         buildonly-randconfig-002-20231215   clang
+i386         buildonly-randconfig-003-20231215   clang
+i386         buildonly-randconfig-004-20231215   clang
+i386         buildonly-randconfig-005-20231215   clang
+i386         buildonly-randconfig-006-20231215   clang
+i386                                defconfig   gcc  
+i386                  randconfig-001-20231215   clang
+i386                  randconfig-002-20231215   clang
+i386                  randconfig-003-20231215   clang
+i386                  randconfig-004-20231215   clang
+i386                  randconfig-005-20231215   clang
+i386                  randconfig-006-20231215   clang
+i386                  randconfig-011-20231215   gcc  
+i386                  randconfig-012-20231215   gcc  
+i386                  randconfig-013-20231215   gcc  
+i386                  randconfig-014-20231215   gcc  
+i386                  randconfig-015-20231215   gcc  
+i386                  randconfig-016-20231215   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20231215   gcc  
+loongarch             randconfig-002-20231215   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                          atari_defconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                              allnoconfig   clang
+mips                             allyesconfig   gcc  
+mips                  decstation_64_defconfig   gcc  
+mips                      fuloong2e_defconfig   gcc  
+mips                           jazz_defconfig   gcc  
+mips                      malta_kvm_defconfig   clang
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20231215   gcc  
+nios2                 randconfig-002-20231215   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+openrisc                  or1klitex_defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                randconfig-001-20231215   gcc  
+parisc                randconfig-002-20231215   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   clang
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc                  mpc885_ads_defconfig   clang
+powerpc               randconfig-001-20231215   clang
+powerpc               randconfig-002-20231215   clang
+powerpc               randconfig-003-20231215   clang
+powerpc64             randconfig-001-20231215   clang
+powerpc64             randconfig-002-20231215   clang
+powerpc64             randconfig-003-20231215   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   clang
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                 randconfig-001-20231215   clang
+riscv                 randconfig-002-20231215   clang
+riscv                          rv32_defconfig   clang
+s390                             allmodconfig   gcc  
+s390                              allnoconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                  randconfig-001-20231215   gcc  
+s390                  randconfig-002-20231215   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                         ecovec24_defconfig   gcc  
+sh                          lboxre2_defconfig   gcc  
+sh                    randconfig-001-20231215   gcc  
+sh                    randconfig-002-20231215   gcc  
+sh                           se7721_defconfig   gcc  
+sh                           se7750_defconfig   gcc  
+sh                            shmin_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64               randconfig-001-20231215   gcc  
+sparc64               randconfig-002-20231215   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                    randconfig-001-20231215   clang
+um                    randconfig-002-20231215   clang
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   clang
+x86_64       buildonly-randconfig-001-20231215   clang
+x86_64       buildonly-randconfig-003-20231215   clang
+x86_64       buildonly-randconfig-005-20231215   clang
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20231215   gcc  
+x86_64                randconfig-003-20231215   gcc  
+x86_64                randconfig-004-20231215   gcc  
+x86_64                randconfig-005-20231215   gcc  
+x86_64                randconfig-006-20231215   gcc  
+x86_64                          rhel-8.3-rust   clang
+xtensa                            allnoconfig   gcc  
+xtensa                randconfig-001-20231215   gcc  
+xtensa                randconfig-002-20231215   gcc  
 
-Guenter
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
