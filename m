@@ -1,54 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CDAD32C63;
-	Sun, 17 Dec 2023 11:50:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2FDB36AFA;
+	Sun, 17 Dec 2023 15:11:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Mm2DBawt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702813811; x=1734349811;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9IDAZ6s+VCoUbUYOgwDqe6kkFvmADMWSOYAij07BnEs=;
-  b=Mm2DBawtn0sbZ7q1MAX1yqHrtIDlnkThxl8HqJByxR3X3qwiv/wJL6aB
-   HMVPZUYwVHIQQXPLbsrjSrYeR6VcK/4lecr3rvVNtvPINdi/hCEerAyKQ
-   zDeX+PmH2WIGDu+2Ox4J0wlsDwPu0C2NmRYg2vOrlju99Ort7GEYSE4To
-   zOSNXAhpWzqTOPQHMVBZGidM1hvSQGCb5fkJa8rxVuhqzRmy7cnj8oZW0
-   OwarEMEBNSUfPgmCOPRWxcqAk1W1XnojmKCNbwvI+RlME2mlwx0c6RGLp
-   8lp25bUMZxIlViJLPaqnA71hgMGP6IGAAr7ZU1no0wCncYRIhaxg5+FCz
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10926"; a="375562901"
-X-IronPort-AV: E=Sophos;i="6.04,283,1695711600"; 
-   d="scan'208";a="375562901"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2023 03:50:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10926"; a="724977812"
-X-IronPort-AV: E=Sophos;i="6.04,283,1695711600"; 
-   d="scan'208";a="724977812"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 17 Dec 2023 03:50:07 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rEpen-0002zS-0R;
-	Sun, 17 Dec 2023 11:50:05 +0000
-Date: Sun, 17 Dec 2023 19:49:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Abdel Alkuor <alkuor@gmail.com>, Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>
-Cc: oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH 2/2] hwmon: Add AMS AS6200 temperature sensor
-Message-ID: <202312171951.3y47awo9-lkp@intel.com>
-References: <63e352150ed51eefce90ca4058af5459730174b2.1702744180.git.alkuor@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KCN4/ALx"
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-425959f36b0so26480061cf.3;
+        Sun, 17 Dec 2023 07:11:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702825859; x=1703430659; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WsWDMqUeycdFferxtBGhRHD/oVHnewRJx7Wjqx7EV1M=;
+        b=KCN4/ALxg/Yo/SYAE+yVszAOq8Pr0w8vbC6zEibhQ/kDeRF9Dngib7atFSJCqpGNWW
+         me/GgfGMk8lCEPLXOUy8V9u/VBRHaqsi8RovGLioQd0ouCc47WMGHK4LwNl/H3JLoDco
+         wRXrROp1Z4P1UrVWtHcqRbCHWniag2uw+TBD7QQS5MyJxkeZY9neBnUpfcrAGMgRlhpW
+         Y6CiNCOqletZKevlNmeG72rlaoAa9MY++sS3Zwh9jCyBTBYsA9JRYqNSKAPUtgexbvv+
+         dS5SdIBCeuefL9/TFA2nkbKQre2vXtD9S908a3ESAxoGnhqeRvZ1JTjjKWM+f9/eUH2a
+         jDfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702825859; x=1703430659;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WsWDMqUeycdFferxtBGhRHD/oVHnewRJx7Wjqx7EV1M=;
+        b=Y+aSONm9KN2N75G0JxQozFkZEOz94R8S9j13NWF9mRTra1PcH/oTUgclUXV3W618/E
+         4JW0zUD5Z0eRQkIVS2iXqDZ7QNBKMcPoHNeqInnY7vPbK68894f4vApGnhMlROq/bvft
+         9n+n0I5sziyuL10L7jUtPxbuz2CU4fZOGNhZfUzhgc0fXSjvvsk+pbpDfcfh/njRykpw
+         i+Da9yAhNuvAdTSKynIEF6xRTzegit+IgUjHaKr8wSbu8RzIE8RYayEEtfgUe/meFCQj
+         sRdG+1l93UqbHh8gx5dYiG+sTVjN953n2qhLTChdjx/FuUTZHHb6VPoiai5XZHNicubU
+         GZww==
+X-Gm-Message-State: AOJu0YxVKF3p5fh4wb9GqdAxQp2TH3Hkn8B/Kd8S9msZSxokpJCuz2VX
+	1Z6Zk6BBBqI1hgmKMpGEaHMC8/JrGzk=
+X-Google-Smtp-Source: AGHT+IF2IFx60RANfnz1Nagow/lXvtBhPocWFmcLVid2GFgv2EKxBM2Ia5QBxGTtj8LfsWkZy3m7UQ==
+X-Received: by 2002:a05:620a:e14:b0:77f:9568:72ee with SMTP id y20-20020a05620a0e1400b0077f956872eemr8004592qkm.31.1702825859561;
+        Sun, 17 Dec 2023 07:10:59 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g4-20020a056102244400b004663caa0d70sm898645vss.4.2023.12.17.07.10.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Dec 2023 07:10:58 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Sun, 17 Dec 2023 07:10:56 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Aleksa Savic <savicaleksa83@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, Jack Doan <me@jackdoan.com>,
+	Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Remove unneeded
+ CONFIG_DEBUG_FS #ifdef
+Message-ID: <e62ed773-81dc-43ff-86f2-773c4ae6db96@roeck-us.net>
+References: <20231216140754.336775-1-savicaleksa83@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -57,33 +60,16 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <63e352150ed51eefce90ca4058af5459730174b2.1702744180.git.alkuor@gmail.com>
+In-Reply-To: <20231216140754.336775-1-savicaleksa83@gmail.com>
 
-Hi Abdel,
+On Sat, Dec 16, 2023 at 03:07:54PM +0100, Aleksa Savic wrote:
+> Remove the #ifdef check for CONFIG_DEBUG_FS and the empty variant
+> of aqc_debugfs_init(), because the debugfs functions already do nothing
+> if debugfs isn't enabled.
+> 
+> Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
 
-kernel test robot noticed the following build warnings:
+Applied.
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on robh/for-next linus/master v6.7-rc5 next-20231215]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Abdel-Alkuor/hwmon-Add-AMS-AS6200-temperature-sensor/20231217-004310
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/63e352150ed51eefce90ca4058af5459730174b2.1702744180.git.alkuor%40gmail.com
-patch subject: [PATCH 2/2] hwmon: Add AMS AS6200 temperature sensor
-reproduce: (https://download.01.org/0day-ci/archive/20231217/202312171951.3y47awo9-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312171951.3y47awo9-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> Documentation/hwmon/as6200.rst: WARNING: document isn't included in any toctree
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Guenter
