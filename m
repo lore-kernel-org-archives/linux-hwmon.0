@@ -1,109 +1,144 @@
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAC2644C7B;
-	Sun, 17 Dec 2023 15:33:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A98D5481B7;
+	Sun, 17 Dec 2023 20:58:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CvYCyXxm"
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-4257ba1bc5fso24598021cf.0;
-        Sun, 17 Dec 2023 07:33:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702827201; x=1703432001; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Q5Z4tR06Qkm0+yhPoaVhQmj48yvm7Zr+y9XzEyeTPI0=;
-        b=CvYCyXxmxy08oVqeMNCi5U6e3758b3ej+eh+fL5RIwXYZibozGJbjy3yyRqPlisXhE
-         NzeKUhmiTfgk/ScLFXVgUBAO92zGwIGAEw2RijU4N6cd8aPpEj2kaeN+Vk+N9YTqKycr
-         ktfr2+rxU5G08NduNyb2vPxVsWieAxKC+2e3jvwY9RAZ3o5MGqdXT0gSzXLIJ96Slya8
-         U6fjl6nd7coMLaM0Wrjix2JFXFmq3lj5nFr/+k8M+KAjqezDwsSFBC3j7ujQ1q806Qvh
-         zb6VH3CQc/MuzVqYIkfCdKkzTmitsuuvRN2uAPSrPL63ngwtEr3mLdJDR3juPf4mY9Dt
-         L1wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702827201; x=1703432001;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q5Z4tR06Qkm0+yhPoaVhQmj48yvm7Zr+y9XzEyeTPI0=;
-        b=RbPnvoDF8oggreISlEKjy9lXVdf/EkF7NJIONEI9sBk0fDIkaGsVnoc2vxlISvSKjl
-         2cI93qeZsqyEYMnqQFvUKuavBMEX+3pznGY/7+bROOldQvbvEaobZS3+U8+0t6gAgZEh
-         cMpQL55RNWOOTyPyEvcMOzTMSrEn0Cc9hhVSBiHCqLb73CwH6pklkFVviV1TNywAPtzo
-         eHHyYPBKtZSJzP+68N58Ld31YYPx0VjkgOeSTayEOPIlG6T5R4DAyq3qIahFs7LR9Nvo
-         mies38ugRG/giLzZHPXoWQbFlCTE4CRUvas7cKXQWu1D6EJVAmZZipvMyKmCsYwOFNJ6
-         zazg==
-X-Gm-Message-State: AOJu0YxbEEJz/PrAKtkRVKgiMT0cOWhexPjoraDyQCtHAxeG11FH5ClU
-	fWgrqfbQIAYYiDANcnQwyb5cN/CM9m4=
-X-Google-Smtp-Source: AGHT+IG+rX2LsMaUu+ADAb4PaMIvL834e14XpGk9OidFNNFIXmM0sY9KM4s6PVRUg27xEyf932Yaig==
-X-Received: by 2002:a05:620a:1271:b0:77d:5a1d:cf4 with SMTP id b17-20020a05620a127100b0077d5a1d0cf4mr17019544qkl.47.1702827201410;
-        Sun, 17 Dec 2023 07:33:21 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m26-20020ab0751a000000b007cb8b709b31sm280484uap.23.2023.12.17.07.33.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Dec 2023 07:33:21 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 17 Dec 2023 07:33:19 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Potin Lai <potin.lai.pt@gmail.com>
-Cc: Rob Herring <robh+dt@kernel.org>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g1IEyH7O"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB1D2C433C7;
+	Sun, 17 Dec 2023 20:58:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702846704;
+	bh=dmBWSGVLX9M37oiT1huSLuehN5K3OPoC+1LO7W8F6tY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=g1IEyH7OZQ1cnB+nQKyx1BSZYuMienvw8IOun2jYHonpEluyYwv9USbHu2szK+2qL
+	 ucwsTdM38FjI/AxRZwWZtyPVeBgkp6wTmMo4zRI9tlc0Ux/Ugozc3OdJRPiKdEr3GL
+	 czSpLiaYYNM0D82bztxxwzeCVMGF1fd4qmpZuStPuHLZADNuMXsFqlDo/jRIYaPm0c
+	 Zx3SB1xHxn9qngkt+bKIUAKV24IAIvjMjBHBKFwGWNQ+xyyZ6v48lt9WIUV+juQKC0
+	 /rg2K86Oz+X8ayR/xFp4y41oqYSBVarau9KenEP3xwGGvRuTEuVvDugUwCtlP9etEI
+	 uayy2Ky54TJpA==
+Date: Sun, 17 Dec 2023 20:58:19 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Abdel Alkuor <alkuor@gmail.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Mark Brown <broonie@kernel.org>, Joel Stanley <joel@jms.id.au>,
-	Peter Yin <peteryin.openbmc@gmail.com>,
-	Peter Yin <peter.yin@quantatw.com>,
-	Potin Lai <potin.lai@quantatw.com>,
-	Patrick Williams <patrick@stwcx.xyz>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] hwmon: (pmbus) Add support for MPS Multi-phase
- mp2856/mp2857 controller
-Message-ID: <9abe3c01-f6ba-4791-9cf8-d73dfe44d899@roeck-us.net>
-References: <20231211160519.21254-1-potin.lai.pt@gmail.com>
- <20231211160519.21254-3-potin.lai.pt@gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Add AMS AS6200 temperature sensor
+Message-ID: <20231217-enlarged-mule-a594e472d007@spud>
+References: <149032e99136a9fe47c3533b57a71092646e497d.1702744180.git.alkuor@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="0Nuw4ocMxTNpMmVV"
 Content-Disposition: inline
-In-Reply-To: <20231211160519.21254-3-potin.lai.pt@gmail.com>
+In-Reply-To: <149032e99136a9fe47c3533b57a71092646e497d.1702744180.git.alkuor@gmail.com>
 
-On Tue, Dec 12, 2023 at 12:05:19AM +0800, Potin Lai wrote:
-> From: Peter Yin <peteryin.openbmc@gmail.com>
-> 
-> Add support for mp2856/mp2857 device from Monolithic Power Systems, Inc.
-> (MPS) vendor. This is a dual-loop, digital, multi-phase,
-> modulation controller.
-> 
-> Signed-off-by: Peter Yin <peteryin.openbmc@gmail.com>
-> Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
 
-Applied, with reservations (because due to lack of datasheet it is all but
-impossible to validate the code) and several fixups. So this driver comes
-with even less warranty than usual.
+--0Nuw4ocMxTNpMmVV
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-CHECK: Alignment should match open parenthesis
-#671: FILE: drivers/hwmon/pmbus/mp2856.c:413:
-+	memcpy(data->max_phases, mp2856_max_phases[data->chip_id],
-+		sizeof(data->max_phases));
+On Sat, Dec 16, 2023 at 11:39:29AM -0500, Abdel Alkuor wrote:
+> as6200 is a temperature sensor with a range between -40=B0C to
+> 125=B0C degrees and an accuracy of =B10.4=B0C degree between 0
+> and 65=B0C and =B11=B0C for the other ranges.
+>=20
+> Signed-off-by: Abdel Alkuor <alkuor@gmail.com>
 
-CHECK: Please don't use multiple blank lines
-#673: FILE: drivers/hwmon/pmbus/mp2856.c:415:
-+
-+
+Is this not v3?
+Either way,
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-CHECK: Please don't use multiple blank lines
-#707: FILE: drivers/hwmon/pmbus/mp2856.c:449:
-+
-+
+Cheers,
+Conor.
 
-Fix those, and use i2c_get_match_data().
+> ---
+>  .../devicetree/bindings/hwmon/ams,as6200.yaml | 52 +++++++++++++++++++
+>  1 file changed, 52 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/ams,as6200.ya=
+ml
+>=20
+> diff --git a/Documentation/devicetree/bindings/hwmon/ams,as6200.yaml b/Do=
+cumentation/devicetree/bindings/hwmon/ams,as6200.yaml
+> new file mode 100644
+> index 000000000000..01476c1a4c98
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/ams,as6200.yaml
+> @@ -0,0 +1,52 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/ams,as6200.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: AMS AS6200 Temperature Sensor
+> +
+> +maintainers:
+> +  - Abdel Alkuor <alkuor@gmail.com>
+> +
+> +description: |
+> +  as6200 is a temperature sensor with a range between -40=B0C to
+> +  125=B0C degrees and an accuracy of =B10.4=B0C degree between 0
+> +  and 65=B0C and =B11=B0C for the other ranges.
+> +  https://ams.com/documents/20143/36005/AS6200_DS000449_4-00.pdf
+> +
+> +properties:
+> +  compatible:
+> +    const: ams,as6200
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  vdd-supply: true
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - vdd-supply
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c {
+> +        #address-cells =3D <1>;
+> +        #size-cells =3D <0>;
+> +
+> +        temperature-sensor@48 {
+> +            compatible =3D "ams,as6200";
+> +            reg =3D <0x48>;
+> +            vdd-supply =3D <&vdd>;
+> +            interrupt-parent =3D <&gpio1>;
+> +            interrupts =3D <17 IRQ_TYPE_EDGE_BOTH>;
+> +        };
+> +    };
+> +...
+> --=20
+> 2.34.1
+>=20
 
-_Please_ run your patches through checkpatch. The above is really
-completely unnecessary and creates unnecessary extra work for others (me).
+--0Nuw4ocMxTNpMmVV
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Guenter
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZX9g6wAKCRB4tDGHoIJi
+0pt1AP9wa3Ox1pAcjn5pj3sf4FDkDATXqM48sSJn49Y6tvjAigEA/oTJrckePXPg
+d17KRA0h1rPIryJLMl9jHSEA7Rip2QI=
+=970O
+-----END PGP SIGNATURE-----
+
+--0Nuw4ocMxTNpMmVV--
