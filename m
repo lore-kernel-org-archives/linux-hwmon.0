@@ -1,57 +1,68 @@
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com [209.85.221.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2FDB36AFA;
-	Sun, 17 Dec 2023 15:11:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E6B731741;
+	Sun, 17 Dec 2023 15:19:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KCN4/ALx"
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-425959f36b0so26480061cf.3;
-        Sun, 17 Dec 2023 07:11:00 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h+Zc79M+"
+Received: by mail-vk1-f181.google.com with SMTP id 71dfb90a1353d-4b2cef60577so314620e0c.3;
+        Sun, 17 Dec 2023 07:19:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702825859; x=1703430659; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1702826359; x=1703431159; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=WsWDMqUeycdFferxtBGhRHD/oVHnewRJx7Wjqx7EV1M=;
-        b=KCN4/ALxg/Yo/SYAE+yVszAOq8Pr0w8vbC6zEibhQ/kDeRF9Dngib7atFSJCqpGNWW
-         me/GgfGMk8lCEPLXOUy8V9u/VBRHaqsi8RovGLioQd0ouCc47WMGHK4LwNl/H3JLoDco
-         wRXrROp1Z4P1UrVWtHcqRbCHWniag2uw+TBD7QQS5MyJxkeZY9neBnUpfcrAGMgRlhpW
-         Y6CiNCOqletZKevlNmeG72rlaoAa9MY++sS3Zwh9jCyBTBYsA9JRYqNSKAPUtgexbvv+
-         dS5SdIBCeuefL9/TFA2nkbKQre2vXtD9S908a3ESAxoGnhqeRvZ1JTjjKWM+f9/eUH2a
-         jDfg==
+        bh=+UtImHLFMCVHfk9UzUAedYoxSjwyfQ8nKMkLmNvd6Mw=;
+        b=h+Zc79M+Qd6nk+H9TZZ3V8XU4FlheZY7FJPRf/S3B6ON/x7jECjGeco5BSraj21ex3
+         ZoOFZmUvpr3kfamMhOpQ3ZnUwjDHttChkRzPz46y3TWbf/Ia4TAIY5cBTBDCQiQ6JNH0
+         6LRXfabprhbM4l8Ml++Czv/V6qjT4/CtvVlYkUQqth/+nNGAGIA+oQo2pC3GyQXhTezf
+         Tr86rtIlW0fdxkSFB32qDrwKeDENIGFCg4w6TABJjDZZHC+rWh/sTrVBVevcOwrRMEgB
+         o9RA39FxcRs+TR1w4QqtjmVLCxzJu39bL4RY5G8WovmhbkQMtcz/QBwerXhB5+d4B1aT
+         NOoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702825859; x=1703430659;
+        d=1e100.net; s=20230601; t=1702826359; x=1703431159;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WsWDMqUeycdFferxtBGhRHD/oVHnewRJx7Wjqx7EV1M=;
-        b=Y+aSONm9KN2N75G0JxQozFkZEOz94R8S9j13NWF9mRTra1PcH/oTUgclUXV3W618/E
-         4JW0zUD5Z0eRQkIVS2iXqDZ7QNBKMcPoHNeqInnY7vPbK68894f4vApGnhMlROq/bvft
-         9n+n0I5sziyuL10L7jUtPxbuz2CU4fZOGNhZfUzhgc0fXSjvvsk+pbpDfcfh/njRykpw
-         i+Da9yAhNuvAdTSKynIEF6xRTzegit+IgUjHaKr8wSbu8RzIE8RYayEEtfgUe/meFCQj
-         sRdG+1l93UqbHh8gx5dYiG+sTVjN953n2qhLTChdjx/FuUTZHHb6VPoiai5XZHNicubU
-         GZww==
-X-Gm-Message-State: AOJu0YxVKF3p5fh4wb9GqdAxQp2TH3Hkn8B/Kd8S9msZSxokpJCuz2VX
-	1Z6Zk6BBBqI1hgmKMpGEaHMC8/JrGzk=
-X-Google-Smtp-Source: AGHT+IF2IFx60RANfnz1Nagow/lXvtBhPocWFmcLVid2GFgv2EKxBM2Ia5QBxGTtj8LfsWkZy3m7UQ==
-X-Received: by 2002:a05:620a:e14:b0:77f:9568:72ee with SMTP id y20-20020a05620a0e1400b0077f956872eemr8004592qkm.31.1702825859561;
-        Sun, 17 Dec 2023 07:10:59 -0800 (PST)
+        bh=+UtImHLFMCVHfk9UzUAedYoxSjwyfQ8nKMkLmNvd6Mw=;
+        b=MWcq1GCVAGqKyoSjUSnO0G2lmz4TmPQQRi/H/8tYGiK9Eza6wMN52f/WzXl517VbnN
+         PJoGQ/mzL6RJfb64gkI+ILkItOtjxxoMkv03JDkQ96JluBkiaPY0aVPZIpKTq/cjtPX1
+         fLuE/JvixIog6tVPNlMc64eU67eohbA+kEXw+DpkLI5uDdLle2471W39PqjPZkcmCNdj
+         s+bXiMya00MpqxQBePc6iPLROiI3/FqUlzyMugnv7KeY/rP0xeq4bl3LLpIh3QDI67p/
+         S9L7pOzImZzfIstoSnQLAmxSB57bYnF7YY13EEWrSTfOmnuaO2P8bHxshr/BVpqpYRyw
+         nxRw==
+X-Gm-Message-State: AOJu0YyvnBpIvQfHmmNf47QUaJIgAekDBpiBcqouCbO5PsavQwneD/A2
+	6w+96Y+SfP9EcSYYDwsj9Es=
+X-Google-Smtp-Source: AGHT+IGfbOYjCY2Rb5Lm6BujYo5gkYTmyE30aTT/TjEes6SdT58P3AL4UPO57Vxufivds2qdx6NXig==
+X-Received: by 2002:a05:6102:c94:b0:464:9f3f:cde with SMTP id f20-20020a0561020c9400b004649f3f0cdemr12760068vst.23.1702826358904;
+        Sun, 17 Dec 2023 07:19:18 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g4-20020a056102244400b004663caa0d70sm898645vss.4.2023.12.17.07.10.58
+        by smtp.gmail.com with ESMTPSA id cd19-20020a056102419300b00457bc8f04e3sm1721488vsb.5.2023.12.17.07.19.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Dec 2023 07:10:58 -0800 (PST)
+        Sun, 17 Dec 2023 07:19:18 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 17 Dec 2023 07:10:56 -0800
+Date: Sun, 17 Dec 2023 07:19:17 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Aleksa Savic <savicaleksa83@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, Jack Doan <me@jackdoan.com>,
-	Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Remove unneeded
- CONFIG_DEBUG_FS #ifdef
-Message-ID: <e62ed773-81dc-43ff-86f2-773c4ae6db96@roeck-us.net>
-References: <20231216140754.336775-1-savicaleksa83@gmail.com>
+To: Potin Lai <potin.lai.pt@gmail.com>
+Cc: Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Mark Brown <broonie@kernel.org>, Joel Stanley <joel@jms.id.au>,
+	Peter Yin <peteryin.openbmc@gmail.com>,
+	Peter Yin <peter.yin@quantatw.com>,
+	Potin Lai <potin.lai@quantatw.com>,
+	Patrick Williams <patrick@stwcx.xyz>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2 1/2] dt-bindings: Add MP2856/MP2857 voltage regulator
+ device
+Message-ID: <f204b419-3e05-4848-882e-70a17671435e@roeck-us.net>
+References: <20231211160519.21254-1-potin.lai.pt@gmail.com>
+ <20231211160519.21254-2-potin.lai.pt@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -60,16 +71,38 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231216140754.336775-1-savicaleksa83@gmail.com>
+In-Reply-To: <20231211160519.21254-2-potin.lai.pt@gmail.com>
 
-On Sat, Dec 16, 2023 at 03:07:54PM +0100, Aleksa Savic wrote:
-> Remove the #ifdef check for CONFIG_DEBUG_FS and the empty variant
-> of aqc_debugfs_init(), because the debugfs functions already do nothing
-> if debugfs isn't enabled.
+On Tue, Dec 12, 2023 at 12:05:18AM +0800, Potin Lai wrote:
+> From: Peter Yin <peteryin.openbmc@gmail.com>
 > 
-> Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
+> Monolithic Power Systems, Inc. (MPS) MP2856/MP2857
+> dual-loop, digital, multi-phase controller.
+> 
+> Signed-off-by: Peter Yin <peteryin.openbmc@gmail.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Applied.
 
 Thanks,
 Guenter
+
+> ---
+>  Documentation/devicetree/bindings/trivial-devices.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+> index 386ebd1471d0e..c847a532283d4 100644
+> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> @@ -119,6 +119,10 @@ properties:
+>            - fsl,mpl3115
+>              # MPR121: Proximity Capacitive Touch Sensor Controller
+>            - fsl,mpr121
+> +            # Monolithic Power Systems Inc. multi-phase controller mp2856
+> +          - mps,mp2856
+> +            # Monolithic Power Systems Inc. multi-phase controller mp2857
+> +          - mps,mp2857
+>              # Monolithic Power Systems Inc. multi-phase controller mp2888
+>            - mps,mp2888
+>              # Monolithic Power Systems Inc. multi-phase controller mp2971
