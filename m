@@ -1,114 +1,123 @@
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C091B440A;
-	Mon, 18 Dec 2023 02:44:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5399E63A8;
+	Mon, 18 Dec 2023 04:53:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dAHbWKY8"
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-50e23a4df33so2149782e87.2;
-        Sun, 17 Dec 2023 18:44:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XiHBXoWc"
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-4260b657ed5so27341821cf.0;
+        Sun, 17 Dec 2023 20:53:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702867443; x=1703472243; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+8Z0YdFoXKobRPklUZUaPLQDZ6N1e0RWZ8GkPA3Z6Cw=;
-        b=dAHbWKY8y42WblC5TdAM76RFO//68g34JTWRcJhJ+lnCneb36Ch8rtA5+eUGxH5fGU
-         JM/2Bk7JwuXV1wC+XScGOSEirflZBSumP7xJo7PR290hUWUm2eh/4JClutbX9WqMeQEG
-         i4rDb8e7I8P4jcU6DU3mj8sJVFCP3+K0+ZWxzrVzxrcNRSlpnISODx18oa+JvUy7bbYe
-         XF6zro5f02irIcOiJ7g+4a3aTSYoOndwX7aq2EFvtA2qPQ0EOPhG7s+zZ8oFMDKgZxPX
-         3OckxA52mLakIwkHlspwe2zy5YhXtmHCDjeCLm6geeW4pna38O7Tg+dk0DJlesYlt9nz
-         qlww==
+        d=gmail.com; s=20230601; t=1702875211; x=1703480011; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VaTyomZwxtPir8w34v7twVd3Xf9J4c1d0y7WayfPqp4=;
+        b=XiHBXoWcyb5khBc+o+EWX/b9MrYLY48yDetaQ7IbYDolPHbBQ+T0K5B7pYPWIsAm8g
+         tBnQInDFWwOzkU0B6l6UVUMCWwnsBzPYvM/zwp+J2A+dH3kAFSfhyfZ4ib8WaX27az1p
+         114RZEJVnx0UTMI2b8e2fY7NDmM3Cyx1AtD0nvhoIB+qd3xnDEG+8hOKEdGMWOc0tqCf
+         H89N3VEA1t/WqAYYhnBTnNzNZdNenFfrwPRx/HUuY5HSOQyHUv7fg3P5lOZRQ9e42R52
+         eRo1C8A/4LwkACyhyCP5zRzg/AZ6iIhrfnf57L7yC5zSDvLu67YURlcZj1We1Knui0Dn
+         GpeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702867443; x=1703472243;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+8Z0YdFoXKobRPklUZUaPLQDZ6N1e0RWZ8GkPA3Z6Cw=;
-        b=PsSQDOWOyh/Kl6ydPYj7Pcy4uqk1WtxaBW7CvTNFY98tqFU+CatM3+UvVZMnjA/i7R
-         Dm9gNywcYriihqNHlF0EKo8O2bXLCuWOD7MXxhzkpnAO9PKrSXNwcbHZY/aeKWrfwYMW
-         sRMJVxPCHuGqbqrPUw8CIUmglYaPgPmIAu8tx6jzZo2RURg1RChyXTCc4ivgRX+H2uOG
-         ubD1Fn3oWvmAjf4dnVREVQWVaXxal8axPRGOkcnj1qK+iiWjF0TeP3zXMXq1K+zjMq6K
-         lNMltpB6ltJCI4LrqLs0JqmmMDHUURV8DrujrOu3bouBYMUwxQ+MQuqYwdULY8KGpIDx
-         6whA==
-X-Gm-Message-State: AOJu0YxwhRj0RTOeQdJ9uXuT1lMmxD9Y8tjteL6H9Qc9r7c8JAhFWSdt
-	Us6B1PbXyUzGpX1Jrgwyxxr7DQbriZhjdLZis1Q=
-X-Google-Smtp-Source: AGHT+IFmazdQohWb855+eNoYKPzieuisdCcCVUvwLaEA8LxarAZC6ObJtAL07qXPwxeoKqqSIyqP5QCJV6Zu3Znpw7A=
-X-Received: by 2002:ac2:43d9:0:b0:50e:23db:3d31 with SMTP id
- u25-20020ac243d9000000b0050e23db3d31mr1275113lfl.76.1702867442608; Sun, 17
- Dec 2023 18:44:02 -0800 (PST)
+        d=1e100.net; s=20230601; t=1702875211; x=1703480011;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VaTyomZwxtPir8w34v7twVd3Xf9J4c1d0y7WayfPqp4=;
+        b=IyCpPiv8t4nmx+53hD4i0AHWTJDVP20nO8Wle3VIB9PTziC8tdXohL4CkCdNlFagHi
+         PNwXNdKV6TGr1h+klOOijobqMqOevZvJH+X2McokFpThU7ZexRlx7zlzbocgYsj2WkCN
+         jEY/QYR/0xGvn+S4fJV9RXzyCGDVtPfk8L4jYAa+Ctfu3jKergUYlirKkG2Sdp+1yAwY
+         Igx8ubsazqSgNXeSYoIxWagB8W7wtsCSZsq7Q9JbaVcJaBK01JGX30nd5BIVYrJWTAPk
+         7O7bqtUWyEd3OOzVPtJPU8Z5QfcGkSR1Dt92YyA4IGcAClj2qiKtce+xs5fiKOMO+oMV
+         76uw==
+X-Gm-Message-State: AOJu0Yz8DJnVAq03mrEKMSy4ElMtz3l6nc7Neh8eYdBVi9Fav1+/gbqd
+	wLv0ahRmITIXHNu9xt+XFoc=
+X-Google-Smtp-Source: AGHT+IHqmvmG1RooZIHAiqujufEWGIlTnBa/UR8xSxVd32Rv533h8teIaKMjcQNAJzaNQlN79U08IA==
+X-Received: by 2002:ac8:5a43:0:b0:425:4043:50e9 with SMTP id o3-20020ac85a43000000b00425404350e9mr21054133qta.120.1702875211144;
+        Sun, 17 Dec 2023 20:53:31 -0800 (PST)
+Received: from localhost.localdomain ([174.95.13.129])
+        by smtp.gmail.com with ESMTPSA id fv5-20020a05622a4a0500b004275e9cdf15sm716571qtb.11.2023.12.17.20.53.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Dec 2023 20:53:30 -0800 (PST)
+From: Abdel Alkuor <alkuor@gmail.com>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>
+Cc: Abdel Alkuor <alkuor@gmail.com>,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: [PATCH v2 1/2] dt-bindings: hwmon: (lm75) Add AMS AS6200 temperature sensor
+Date: Sun, 17 Dec 2023 23:52:27 -0500
+Message-Id: <89fb5eec30df734ee8fc58427cf5d94929076514.1702874115.git.alkuor@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231211160519.21254-1-potin.lai.pt@gmail.com>
- <20231211160519.21254-3-potin.lai.pt@gmail.com> <9abe3c01-f6ba-4791-9cf8-d73dfe44d899@roeck-us.net>
-In-Reply-To: <9abe3c01-f6ba-4791-9cf8-d73dfe44d899@roeck-us.net>
-From: Potin Lai <potin.lai.pt@gmail.com>
-Date: Mon, 18 Dec 2023 10:43:51 +0800
-Message-ID: <CAGfYmwXMHO7zYc0pzaexO4L5gXzCODEAd4Zxm8LmVL6USrrOwQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] hwmon: (pmbus) Add support for MPS Multi-phase
- mp2856/mp2857 controller
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>, Mark Brown <broonie@kernel.org>, 
-	Joel Stanley <joel@jms.id.au>, Peter Yin <peteryin.openbmc@gmail.com>, 
-	Peter Yin <peter.yin@quantatw.com>, Potin Lai <potin.lai@quantatw.com>, 
-	Patrick Williams <patrick@stwcx.xyz>, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sun, Dec 17, 2023 at 11:33=E2=80=AFPM Guenter Roeck <linux@roeck-us.net>=
- wrote:
->
-> On Tue, Dec 12, 2023 at 12:05:19AM +0800, Potin Lai wrote:
-> > From: Peter Yin <peteryin.openbmc@gmail.com>
-> >
-> > Add support for mp2856/mp2857 device from Monolithic Power Systems, Inc=
-.
-> > (MPS) vendor. This is a dual-loop, digital, multi-phase,
-> > modulation controller.
-> >
-> > Signed-off-by: Peter Yin <peteryin.openbmc@gmail.com>
-> > Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
->
-> Applied, with reservations (because due to lack of datasheet it is all bu=
-t
-> impossible to validate the code) and several fixups. So this driver comes
-> with even less warranty than usual.
->
-> CHECK: Alignment should match open parenthesis
-> #671: FILE: drivers/hwmon/pmbus/mp2856.c:413:
-> +       memcpy(data->max_phases, mp2856_max_phases[data->chip_id],
-> +               sizeof(data->max_phases));
->
-> CHECK: Please don't use multiple blank lines
-> #673: FILE: drivers/hwmon/pmbus/mp2856.c:415:
-> +
-> +
->
-> CHECK: Please don't use multiple blank lines
-> #707: FILE: drivers/hwmon/pmbus/mp2856.c:449:
-> +
-> +
->
-> Fix those, and use i2c_get_match_data().
->
-> _Please_ run your patches through checkpatch. The above is really
-> completely unnecessary and creates unnecessary extra work for others (me)=
-.
->
-> Guenter
+as6200 is a temperature sensor with a range between -40°C to
+125°C degrees and an accuracy of ±0.4°C degree between 0
+and 65°C and ±1°C for the other ranges.
 
-Apologies for missing the style check issue, I will add "--strict"
-when running checkpatch.pl in future.
-And thank you for fixing the mistakes and applying the driver.
+Signed-off-by: Abdel Alkuor <alkuor@gmail.com>
+---
+Changes in v2:
+  - Incorporate as6200 into lm75 bindings
 
-Potin
+ .../devicetree/bindings/hwmon/lm75.yaml        | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/hwmon/lm75.yaml b/Documentation/devicetree/bindings/hwmon/lm75.yaml
+index 0b69897f0c63..63b85a83ac18 100644
+--- a/Documentation/devicetree/bindings/hwmon/lm75.yaml
++++ b/Documentation/devicetree/bindings/hwmon/lm75.yaml
+@@ -14,6 +14,7 @@ properties:
+   compatible:
+     enum:
+       - adi,adt75
++      - ams,as6200
+       - atmel,at30ts74
+       - dallas,ds1775
+       - dallas,ds75
+@@ -48,6 +49,9 @@ properties:
+   vs-supply:
+     description: phandle to the regulator that provides the +VS supply
+ 
++  interrupts:
++    maxItems: 1
++
+ required:
+   - compatible
+   - reg
+@@ -66,3 +70,17 @@ examples:
+         vs-supply = <&vs>;
+       };
+     };
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        temperature-sensor@48 {
++            compatible = "ams,as6200";
++            reg = <0x48>;
++            vs-supply = <&vs>;
++            interrupt-parent = <&gpio1>;
++            interrupts = <17 IRQ_TYPE_EDGE_BOTH>;
++        };
++    };
+-- 
+2.34.1
+
