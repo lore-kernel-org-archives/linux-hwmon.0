@@ -1,396 +1,104 @@
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 656DF5671;
-	Mon, 18 Dec 2023 04:53:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90D366FA5;
+	Mon, 18 Dec 2023 05:23:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kDv/VUDi"
-Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-4260ba19a57so30292251cf.3;
-        Sun, 17 Dec 2023 20:53:44 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GGNFH4hg"
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-425a116f1cdso26551071cf.0;
+        Sun, 17 Dec 2023 21:23:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702875223; x=1703480023; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bSwu6xy1q8rHEwXEuWcu18fqodsLh+KDPx4QWvbItl8=;
-        b=kDv/VUDi2DwaohdLEjPZEsLK3xIgO+iKuZ8dpZ60hPPxqym4iXwELcUtTq9P5mG56s
-         SGRJGSiO1uJ4ZneXuvY2bWkyDovBbvVAYuTyOg42JC+fnIJsEG0wS9d4bDMVY3KFDT+x
-         24/4WOMrqgETh8nxDZVqX8Nv3uv7F7pGaq1ERtuYLDAvHcUN+0W6ffasXd+CaTWG8rSR
-         j+Lc/OVknz7wLc9mKa98ooZoYeiYS8WPGU6LTNyZIjfX2gPSmzN/tMiEUjPREedgl7hc
-         l+MiipC8uRIcoeLwV3e8TUgJaFkMrLNu2/KJMd/OopIdnI43L8NDOKBa3gKejUS23+SL
-         X5FQ==
+        d=gmail.com; s=20230601; t=1702877021; x=1703481821; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RXl3wOFqM2CSVNd+66EEJwPvOL1LNVJZxBeNfFMTBSM=;
+        b=GGNFH4hg6BMpQcAjNNoiBNgSInWLULKCsTGC/cEy3jxArCtFyZ7e6dtNwBoNwhqLfY
+         Y31Y42Lw++HpEzIw78kGf4WwG4vcLu5jbm/McN9WlqEl71sDo/79BwgrwmJYMitQs5sh
+         9zJOmnmHWH9IrAtOZT2rBAW6SnkmwT/2Ab8kAfVtxyVC+oYwAwV6/tNgZoaIH1at/VXQ
+         Fqq50EZPEaB7QvQyA0gHi53ERaGaT/G+aAwIzyA41Z4aVup7k5bpVi4CmDHgTx2iLJmN
+         MTXW0KDplns76KTFEeX3KVdnpFfkABOHeCnJqSCimrbtAPc1LiueGxW3pMB+jJKaJ2pr
+         T31w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702875223; x=1703480023;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bSwu6xy1q8rHEwXEuWcu18fqodsLh+KDPx4QWvbItl8=;
-        b=SlcfRLcOV7pIMvxUNn9+SNV2xq9pXoFz4hWKaj+dtxn5T6f6cvaDeDDLbYmg0BVr9P
-         nMpDZ5habc+AOs7RQ17HxVQR/0CRVKegPTqIJ4E1HYVs/63T9u6WdEEC8AEGLyyRV1es
-         e/4AuELa21SZ6Hq5zxz1Br2GHTdNd8yATDYUS8Mxl1FO2lqRYWrYPvm12Sf3ilS8RRRV
-         ou8AGSCUCQCTbzK9un1c8nf9Ri+8xkc12Oc9uECJFJcI+sSoxOR/zPPTmAoWd4Al8+4g
-         6ICngsze9KP8XTorgUMlsYnSE2FSoOnvv5deSz7vyb7YX7buhjgeAtes0k4TWlwnMG1l
-         9jSg==
-X-Gm-Message-State: AOJu0YxD7141qYdImghTao+O+3+l+/MWRFeAfHRVywaiZSTl5VkkGVGM
-	k5FaWG/2ds6IYlzJUrgQN5g=
-X-Google-Smtp-Source: AGHT+IFgvRF7jhnQjmZXNo/oBGJeAPea00yqhXVceGALYf0iaiwD1Q1/x1VmfmiTTuzpszSy50ugdQ==
-X-Received: by 2002:ac8:5fce:0:b0:425:4043:5f26 with SMTP id k14-20020ac85fce000000b0042540435f26mr22621750qta.100.1702875223109;
-        Sun, 17 Dec 2023 20:53:43 -0800 (PST)
-Received: from localhost.localdomain ([174.95.13.129])
-        by smtp.gmail.com with ESMTPSA id fv5-20020a05622a4a0500b004275e9cdf15sm716571qtb.11.2023.12.17.20.53.42
+        d=1e100.net; s=20230601; t=1702877021; x=1703481821;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RXl3wOFqM2CSVNd+66EEJwPvOL1LNVJZxBeNfFMTBSM=;
+        b=K1nH0ExB1vsmxF2xZrgX90AxaVMFKWB1GMTWa0KS4+Sc1d8AKc3WdsjI7tbwPcPnNd
+         amwTckmbsl5mbnQ8J1Vkf+h5wY72T+7fZnDJ7E9HaIGNJIyuqFsDEvJJuEtB10xxziTc
+         5JVIU+vq1SDjvslxQqDJgRQK0p/L/KiKhZ4ITaPS5DAqoTZ98tDoE/0aQojyvYEUbPGJ
+         e06qmvR7Sb4s0jOuNKnLLWvJUo0AFA/y50JMAun7HK6Lj59FoGiTTwQTH2GOvKPiWDCy
+         pZWz9V2JkpEnYbb/Nl/9R6gxFQ+ks0WxA9UOz2d8kKUX8GqD8yTTCXEhMjAI2vGvqumE
+         z8qQ==
+X-Gm-Message-State: AOJu0YyAPbQC1d4qxtuRE0G4x69oDusjdBsVLf90bAMUD4zd8WdYC1ku
+	m3xVNwVePkq2TijmCiaLzWY=
+X-Google-Smtp-Source: AGHT+IHDdUhVaGmO76KoEpbpCO+h9TEe81AmbrDQJPIixHJ3109OZKp+oGo8KSAjVPCayGR5qVjxzg==
+X-Received: by 2002:ac8:5ad1:0:b0:425:823d:2d27 with SMTP id d17-20020ac85ad1000000b00425823d2d27mr24455905qtd.115.1702877021444;
+        Sun, 17 Dec 2023 21:23:41 -0800 (PST)
+Received: from abdel ([174.95.13.129])
+        by smtp.gmail.com with ESMTPSA id m26-20020ac8445a000000b00423e1b606bbsm8928996qtn.69.2023.12.17.21.23.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Dec 2023 20:53:42 -0800 (PST)
+        Sun, 17 Dec 2023 21:23:40 -0800 (PST)
+Date: Mon, 18 Dec 2023 00:23:30 -0500
 From: Abdel Alkuor <alkuor@gmail.com>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh+dt@kernel.org>,
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>
-Cc: Abdel Alkuor <alkuor@gmail.com>,
-	linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-doc@vger.kernel.org
-Subject: [PATCH v2 2/2] hwmon: (lm75) Add AMS AS6200 temperature sensor
-Date: Sun, 17 Dec 2023 23:52:28 -0500
-Message-Id: <a71ac5106e022b526bef9fc375bd5d3f547eb19d.1702874115.git.alkuor@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <89fb5eec30df734ee8fc58427cf5d94929076514.1702874115.git.alkuor@gmail.com>
-References: <89fb5eec30df734ee8fc58427cf5d94929076514.1702874115.git.alkuor@gmail.com>
+Subject: Re: [PATCH 2/2] hwmon: Add AMS AS6200 temperature sensor
+Message-ID: <ZX/XUpHl+5ZiAcou@abdel>
+References: <149032e99136a9fe47c3533b57a71092646e497d.1702744180.git.alkuor@gmail.com>
+ <63e352150ed51eefce90ca4058af5459730174b2.1702744180.git.alkuor@gmail.com>
+ <aa93010a-7ab0-4b9d-bb5d-25ea15b81120@roeck-us.net>
+ <ZX4frjGqOGb4zMmx@abdel>
+ <c606c40b-8571-4618-827a-555ceab3ae74@roeck-us.net>
+ <ZX6AQg1vz/Zz6JeG@abdel>
+ <fbcceae6-2daf-4855-b8f2-f7a832a53339@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fbcceae6-2daf-4855-b8f2-f7a832a53339@roeck-us.net>
 
-as6200 is a temperature sensor with 0.0625°C resolution and a
-range between -40°C to 125°C.
+On Sat, Dec 16, 2023 at 10:06:03PM -0800, Guenter Roeck wrote:
+> On 12/16/23 20:59, Abdel Alkuor wrote:
+> > On Sat, Dec 16, 2023 at 05:40:35PM -0800, Guenter Roeck wrote:
+> > > On 12/16/23 14:07, Abdel Alkuor wrote:
+> > > > On Sat, Dec 16, 2023 at 10:46:53AM -0800, Guenter Roeck wrote:
+> > > > > On 12/16/23 08:39, Abdel Alkuor wrote:
+> >       ...
+> >     }
+> > 
+> > Based on that, the new tmp112 set_mask and clr_mask would look like this instead,
+> >    [tmp112] = {
+> >    	.set_mask = 3 << 6,	/* 8 samples / second */
+> >    	.clr_mask = 1 << 15,	/* no one-shot mode*/
+> > 	.config_reg_16bits = 1,
+> >    	...
+> >    }
+> > 
+> 
+> Yes, you are correct, we'll need something like that. lm75_update_interval()
+> tries to solve the problem for tmp112, but that doesn't work with
+> set_mask/clear_mask. We should have a separate function lm75_read_config(),
+> though, to hide the complexity.
+>
+I'll fix tmp112 parameters in another patch as as6200 patch 2 in v2
+implements 2bytes read/write for the configure reg.
+https://marc.info/?l=linux-hwmon&m=170287522119545&w=2
 
-By default, the driver configures as6200 as following:
-- Converstion rate: 8 Hz
-- Conversion mode: continuous
-- Consecutive fault counts: 4 samples
-- Alert state: high polarity
-- Alert mode: comparator mode
+On another note, I checked all the supported chips in lm75 to see
+which ones support an alert bit, only 3 chips support it; tmp112(bit 5 in the second byte),
+tmp100, and tmp101 (bit 7 in the first byte).
 
-Interrupt is supported for the alert pin.
-
-Datasheet: https://ams.com/documents/20143/36005/AS6200_DS000449_4-00.pdf
-Signed-off-by: Abdel Alkuor <alkuor@gmail.com>
----
-Changes in v2:
-  - Incorporate as6200 into lm75 driver
-
- Documentation/hwmon/lm75.rst |  10 +++
- drivers/hwmon/lm75.c         | 132 +++++++++++++++++++++++++++++------
- 2 files changed, 122 insertions(+), 20 deletions(-)
-
-diff --git a/Documentation/hwmon/lm75.rst b/Documentation/hwmon/lm75.rst
-index 8d0ab4ad5fb5..6adab608dd05 100644
---- a/Documentation/hwmon/lm75.rst
-+++ b/Documentation/hwmon/lm75.rst
-@@ -133,6 +133,16 @@ Supported chips:
- 
-                https://www.nxp.com/docs/en/data-sheet/PCT2075.pdf
- 
-+  * AMS OSRAM AS6200
-+
-+    Prefix: 'as6200'
-+
-+    Addresses scanned: none
-+
-+    Datasheet: Publicly available at the AMS website
-+
-+               https://ams.com/documents/20143/36005/AS6200_DS000449_4-00.pdf
-+
- Author: Frodo Looijaard <frodol@dds.nl>
- 
- Description
-diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
-index 5b2ea05c951e..2d153f6729e0 100644
---- a/drivers/hwmon/lm75.c
-+++ b/drivers/hwmon/lm75.c
-@@ -7,6 +7,7 @@
- 
- #include <linux/module.h>
- #include <linux/init.h>
-+#include <linux/interrupt.h>
- #include <linux/slab.h>
- #include <linux/jiffies.h>
- #include <linux/i2c.h>
-@@ -25,6 +26,7 @@
- 
- enum lm75_type {		/* keep sorted in alphabetical order */
- 	adt75,
-+	as6200,
- 	at30ts74,
- 	ds1775,
- 	ds75,
-@@ -55,6 +57,7 @@ enum lm75_type {		/* keep sorted in alphabetical order */
- 
- /**
-  * struct lm75_params - lm75 configuration parameters.
-+ * @config_reg_16bits	Configure register size is 2 bytes.
-  * @set_mask:		Bits to set in configuration register when configuring
-  *			the chip.
-  * @clr_mask:		Bits to clear in configuration register when configuring
-@@ -75,17 +78,20 @@ enum lm75_type {		/* keep sorted in alphabetical order */
-  * @sample_times:	All the possible sample times to be set. Mandatory if
-  *			num_sample_times is larger than 1. If set, number of
-  *			entries must match num_sample_times.
-+ * @alarm		Alarm is supported.
-  */
- 
- struct lm75_params {
--	u8			set_mask;
--	u8			clr_mask;
-+	bool			config_reg_16bits;
-+	u16			set_mask;
-+	u16			clr_mask;
- 	u8			default_resolution;
- 	u8			resolution_limits;
- 	const u8		*resolutions;
- 	unsigned int		default_sample_time;
- 	u8			num_sample_times;
- 	const unsigned int	*sample_times;
-+	bool			alarm;
- };
- 
- /* Addresses scanned */
-@@ -104,8 +110,8 @@ struct lm75_data {
- 	struct i2c_client		*client;
- 	struct regmap			*regmap;
- 	struct regulator		*vs;
--	u8				orig_conf;
--	u8				current_conf;
-+	u16				orig_conf;
-+	u16				current_conf;
- 	u8				resolution;	/* In bits, 9 to 16 */
- 	unsigned int			sample_time;	/* In ms */
- 	enum lm75_type			kind;
-@@ -128,6 +134,15 @@ static const struct lm75_params device_params[] = {
- 		.default_resolution = 12,
- 		.default_sample_time = MSEC_PER_SEC / 10,
- 	},
-+	[as6200] = {
-+		.config_reg_16bits = true,
-+		.set_mask = 0x94C0,	/* 8 sample/s, 4 CF, positive polarity */
-+		.default_resolution = 12,
-+		.default_sample_time = 125,
-+		.num_sample_times = 4,
-+		.sample_times = (unsigned int []){ 125, 250, 1000, 4000 },
-+		.alarm = true,
-+	},
- 	[at30ts74] = {
- 		.set_mask = 3 << 5,	/* 12-bit mode*/
- 		.default_resolution = 12,
-@@ -317,20 +332,23 @@ static inline long lm75_reg_to_mc(s16 temp, u8 resolution)
- 	return ((temp >> (16 - resolution)) * 1000) >> (resolution - 8);
- }
- 
--static int lm75_write_config(struct lm75_data *data, u8 set_mask,
--			     u8 clr_mask)
-+static int lm75_write_config(struct lm75_data *data, u16 set_mask,
-+			     u16 clr_mask)
- {
--	u8 value;
-+	unsigned int value;
- 
--	clr_mask |= LM75_SHUTDOWN;
-+	clr_mask |= LM75_SHUTDOWN << (8 * data->params->config_reg_16bits);
- 	value = data->current_conf & ~clr_mask;
- 	value |= set_mask;
- 
- 	if (data->current_conf != value) {
- 		s32 err;
--
--		err = i2c_smbus_write_byte_data(data->client, LM75_REG_CONF,
--						value);
-+		if (data->params->config_reg_16bits)
-+			err = regmap_write(data->regmap, LM75_REG_CONF, value);
-+		else
-+			err = i2c_smbus_write_byte_data(data->client,
-+							LM75_REG_CONF,
-+							value);
- 		if (err)
- 			return err;
- 		data->current_conf = value;
-@@ -338,6 +356,33 @@ static int lm75_write_config(struct lm75_data *data, u8 set_mask,
- 	return 0;
- }
- 
-+static int lm75_read_config(struct lm75_data *data, u16 *config)
-+{
-+	int ret;
-+	unsigned int status;
-+
-+	if (data->params->config_reg_16bits) {
-+		ret = regmap_read(data->regmap, LM75_REG_CONF, &status);
-+	} else {
-+		ret = i2c_smbus_read_byte_data(data->client, LM75_REG_CONF);
-+		status = ret;
-+	}
-+
-+	if (ret < 0)
-+		return ret;
-+
-+	*config = status;
-+	return 0;
-+}
-+
-+static irqreturn_t lm75_alarm_handler(int irq, void *private)
-+{
-+	struct device *hwmon_dev = private;
-+
-+	hwmon_notify_event(hwmon_dev, hwmon_temp, hwmon_temp_alarm, 0);
-+	return IRQ_HANDLED;
-+}
-+
- static int lm75_read(struct device *dev, enum hwmon_sensor_types type,
- 		     u32 attr, int channel, long *val)
- {
-@@ -366,6 +411,9 @@ static int lm75_read(struct device *dev, enum hwmon_sensor_types type,
- 		case hwmon_temp_max_hyst:
- 			reg = LM75_REG_HYST;
- 			break;
-+		case hwmon_temp_alarm:
-+			reg = LM75_REG_CONF;
-+			break;
- 		default:
- 			return -EINVAL;
- 		}
-@@ -373,7 +421,17 @@ static int lm75_read(struct device *dev, enum hwmon_sensor_types type,
- 		if (err < 0)
- 			return err;
- 
--		*val = lm75_reg_to_mc(regval, data->resolution);
-+		if (attr == hwmon_temp_alarm) {
-+			switch (data->kind) {
-+			case as6200:
-+				*val = (regval >> 5) & 0x1;
-+				break;
-+			default:
-+				return -EINVAL;
-+			}
-+		} else {
-+			*val = lm75_reg_to_mc(regval, data->resolution);
-+		}
- 		break;
- 	default:
- 		return -EINVAL;
-@@ -436,6 +494,7 @@ static int lm75_update_interval(struct device *dev, long val)
- 			data->resolution = data->params->resolutions[index];
- 		break;
- 	case tmp112:
-+	case as6200:
- 		err = regmap_read(data->regmap, LM75_REG_CONF, &reg);
- 		if (err < 0)
- 			return err;
-@@ -503,6 +562,9 @@ static umode_t lm75_is_visible(const void *data, enum hwmon_sensor_types type,
- 		case hwmon_temp_max:
- 		case hwmon_temp_max_hyst:
- 			return 0644;
-+		case hwmon_temp_alarm:
-+			if (config_data->params->alarm)
-+				return 0444;
- 		}
- 		break;
- 	default:
-@@ -515,7 +577,8 @@ static const struct hwmon_channel_info * const lm75_info[] = {
- 	HWMON_CHANNEL_INFO(chip,
- 			   HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL),
- 	HWMON_CHANNEL_INFO(temp,
--			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST),
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-+			   HWMON_T_ALARM),
- 	NULL
- };
- 
-@@ -574,7 +637,7 @@ static int lm75_probe(struct i2c_client *client)
- 	struct device *dev = &client->dev;
- 	struct device *hwmon_dev;
- 	struct lm75_data *data;
--	int status, err;
-+	int err;
- 	enum lm75_type kind;
- 
- 	if (client->dev.of_node)
-@@ -623,13 +686,13 @@ static int lm75_probe(struct i2c_client *client)
- 		return err;
- 
- 	/* Cache original configuration */
--	status = i2c_smbus_read_byte_data(client, LM75_REG_CONF);
--	if (status < 0) {
--		dev_dbg(dev, "Can't read config? %d\n", status);
--		return status;
-+	err = lm75_read_config(data, &data->current_conf);
-+	if (err) {
-+		dev_dbg(dev, "Can't read config? %d\n", err);
-+		return err;
- 	}
--	data->orig_conf = status;
--	data->current_conf = status;
-+
-+	data->orig_conf = data->current_conf;
- 
- 	err = lm75_write_config(data, data->params->set_mask,
- 				data->params->clr_mask);
-@@ -646,6 +709,30 @@ static int lm75_probe(struct i2c_client *client)
- 	if (IS_ERR(hwmon_dev))
- 		return PTR_ERR(hwmon_dev);
- 
-+	if (client->irq) {
-+		if (data->params->alarm) {
-+			err = devm_request_threaded_irq(dev,
-+							client->irq,
-+							NULL,
-+							&lm75_alarm_handler,
-+							IRQF_ONESHOT,
-+							client->name,
-+							hwmon_dev);
-+			if (err)
-+				return err;
-+		} else {
-+			/*
-+			 * Currently, alarm is only supported for chips with
-+			 * alarm bit.
-+			 * In the future, if alarm is needed for chips with
-+			 * no alarm bit, current temp needs to be compared
-+			 * against the max and max hyst values to set/clear
-+			 * the alarm state.
-+			 */
-+			dev_warn(dev, "alarm interrupt is not supported\n");
-+		}
-+	}
-+
- 	dev_info(dev, "%s: sensor '%s'\n", dev_name(hwmon_dev), client->name);
- 
- 	return 0;
-@@ -654,6 +741,7 @@ static int lm75_probe(struct i2c_client *client)
- static const struct i2c_device_id lm75_ids[] = {
- 	{ "adt75", adt75, },
- 	{ "at30ts74", at30ts74, },
-+	{ "as6200", as6200, },
- 	{ "ds1775", ds1775, },
- 	{ "ds75", ds75, },
- 	{ "ds7505", ds7505, },
-@@ -689,6 +777,10 @@ static const struct of_device_id __maybe_unused lm75_of_match[] = {
- 		.compatible = "adi,adt75",
- 		.data = (void *)adt75
- 	},
-+	{
-+		.compatible = "ams,as6200",
-+		.data = (void *)as6200
-+	},
- 	{
- 		.compatible = "atmel,at30ts74",
- 		.data = (void *)at30ts74
--- 
-2.34.1
-
+Thanks,
+Abdel
