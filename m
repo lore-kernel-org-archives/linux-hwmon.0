@@ -1,51 +1,51 @@
-Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43])
+Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com [209.85.217.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31BA149888;
-	Mon, 18 Dec 2023 16:18:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAF3D498BC;
+	Mon, 18 Dec 2023 16:26:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DMyt6E+6"
-Received: by mail-vs1-f43.google.com with SMTP id ada2fe7eead31-4665fb8a7e9so451301137.2;
-        Mon, 18 Dec 2023 08:18:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZLd3hkGn"
+Received: by mail-vs1-f42.google.com with SMTP id ada2fe7eead31-4669ac6df36so251421137.2;
+        Mon, 18 Dec 2023 08:26:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702916310; x=1703521110; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1702916812; x=1703521612; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=HQFk8KSk4ImJwtsGcFEdS5YHLbNQQV6HJ8e8flUomYs=;
-        b=DMyt6E+6uzq3CjV+VKy8ZhywdEbFlft4BQj6jgg+GTgZiOvedttf4E8usDvbGitkkO
-         37fyUg5EahhqhjyZaNxVyaqvdagQ+jVJ734O1xKG/wdAMUCRHMIZt4OCWv2vv/XbDg61
-         97bjK7m+zpfxCBvswCt8nhlZc1v+HbAh8ROsW7AEnWzfGK/5na+IbyFIEJeTicw7WTuF
-         y4mHiw9ltraPbg5dUlzvbZiJPqr/JHS7bwmYIZVzsxDH2Vh0YJ/LlRTm6wU8uuonpWYa
-         AgUZAXYmqkY0ranh27LN/oAXtS9x+rWD+r1FgsOL4GMfYSBoA9Xm/j5DxYONSWwl5/hC
-         m/Hg==
+        bh=E3bMqGvFd2ovYEJupaD2iiMJymj8eT2qHOLEt3EV5ao=;
+        b=ZLd3hkGnagBFyTsc48vJwy4caSlADCkMddjZDoBczoGq9TK1pS03D74kUbpW1J5pED
+         oNnDfAWelwmb0vdh1O+UsdkYXalC4yEOQ9XFQtMOcFAmOmnc8mMI7jSHHKaoS6AkLgCc
+         HBv+gzrxC/fP/nu6YoI91n7vwWf5A/Tyua6Zmf7jPtXpVs4bIWvwwJ8k/nW7Krjgdx9H
+         NU4qAIUL7e1D/XwZqnUt65QjJUOP1cV+RiC6QOhZ+pnvbxBH+m3VRa3OfPgkR3EfzRZR
+         olaTq5sfXO0waR29UBzS1VddVxU7ofw5aNO/gLYynp9MPTIQHo+SSUYjg9TP4cnBocxw
+         23Zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702916310; x=1703521110;
+        d=1e100.net; s=20230601; t=1702916812; x=1703521612;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=HQFk8KSk4ImJwtsGcFEdS5YHLbNQQV6HJ8e8flUomYs=;
-        b=SJRM7POatPLgMr7N+ZTr1sr4lF/dy4M6uGFhZSK788cS5I+q1yr+ikj8nBSXlKlfli
-         rrd8Wbv1t0St/F+l5LbzHPsiLdf5eGgKSJf6lJC14FI7+Le5MbyA1opkdvT/XclMd5pw
-         k31m2cumyHmuHxE6AyVoc3Cd1tGPYXlgAQJY+8vOZlA6N3N1+MeUtRlshoyqMjvpmF48
-         pn93k1oOlmERZ4i8hx34rY3/KWc/TyrOQZ3WedaG+SzQr18IO/2I7jP+bDqS1/LUZF8a
-         IE33J+jOAtURCJ9DT33eJbzj4VBYAtLMHREdsK1OolefSb0szzuTPygeXp04Eqv/ExP3
-         Ggjg==
-X-Gm-Message-State: AOJu0Yyfts5IdvBO8RQnw5+uRfEgnw3h5DLLiw/qGw2a7Jck/zHo9d97
-	uZQMVFYEsXl/Nm0cLhA5n0I=
-X-Google-Smtp-Source: AGHT+IEBCN+vu2mcLWnHo8dUB9qyeVGDkKSGsVOKOhRcQPSwmAFvWMrLe0ovrF65qWtdn7KsY5JymA==
-X-Received: by 2002:a05:6102:c15:b0:464:4518:ba73 with SMTP id x21-20020a0561020c1500b004644518ba73mr10334637vss.8.1702916310005;
-        Mon, 18 Dec 2023 08:18:30 -0800 (PST)
+        bh=E3bMqGvFd2ovYEJupaD2iiMJymj8eT2qHOLEt3EV5ao=;
+        b=dJNqj43VKn9DqCtR14smLBKRgoRHrYm+SAvcTd6tQenpOk81ImpDv5XnNZoVxhRRyl
+         cgy0kQtZchP2uJqegHE1UajXGmFFSSwvPqIc24Io7TM7I0cNa6nZWgCrAoRI954jYudX
+         NVszewqhbI0gb6sw1B6PNew2AWK4fOSBejVyPqv7Ww5cXVo7pFFNcC90BjP8+WHMnxzs
+         XIFAhoE6Ze9dBuQF8nbny9yne/ecHh1Udyd/bN1DczbkDV6aNdAjXmxNzAUIUpII7itL
+         GzQyrK5b8J+m7Qmgy/osLpS1KpecQKtG6vJxiwWZn0vvXRoleMJtGO9GA+VFgYD0CRjb
+         w4TQ==
+X-Gm-Message-State: AOJu0YzgTKDWpGn9gNrMwdK7w5KKm6Lh6EWtNXfmum5gzVgHCFZue2dG
+	5xfEtTRD4klFzhu+9X0VSow=
+X-Google-Smtp-Source: AGHT+IGjSB5M0cOljLHaztxwaNbNAoUs6AJuGoEggJJ4Q9aGq0EApZCsoJfeIXHDdyIAeEVr0JGBIw==
+X-Received: by 2002:a05:6102:32c9:b0:465:dcc0:6538 with SMTP id o9-20020a05610232c900b00465dcc06538mr12358249vss.38.1702916812580;
+        Mon, 18 Dec 2023 08:26:52 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id by10-20020a056102504a00b004669c17b944sm84085vsb.11.2023.12.18.08.18.27
+        by smtp.gmail.com with ESMTPSA id hw11-20020a67e70b000000b004668bf7d113sm271112vsb.34.2023.12.18.08.26.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Dec 2023 08:18:29 -0800 (PST)
+        Mon, 18 Dec 2023 08:26:52 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <6732bd18-2157-4ccb-b02c-43f3350e89cb@roeck-us.net>
-Date: Mon, 18 Dec 2023 08:18:26 -0800
+Message-ID: <5baa93fe-bd08-4f11-9c5c-42060e89930c@roeck-us.net>
+Date: Mon, 18 Dec 2023 08:26:50 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -65,9 +65,7 @@ Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
  "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
 References: <20231214143648.175336-1-daniel.matyas@analog.com>
  <2e0bf1cf-824d-40c6-9450-7ed4740f2f46@roeck-us.net>
- <PH0PR03MB6771AD7164ABEEB02650CA908993A@PH0PR03MB6771.namprd03.prod.outlook.com>
- <8b6fc14f-28a5-4caf-80b6-747ff485dcef@roeck-us.net>
- <SJ0PR03MB6764A464744E3A8CE18C17238990A@SJ0PR03MB6764.namprd03.prod.outlook.com>
+ <PH0PR03MB6771B89E4D3291BA0B1B5ABF8990A@PH0PR03MB6771.namprd03.prod.outlook.com>
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -112,80 +110,29 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <SJ0PR03MB6764A464744E3A8CE18C17238990A@SJ0PR03MB6764.namprd03.prod.outlook.com>
+In-Reply-To: <PH0PR03MB6771B89E4D3291BA0B1B5ABF8990A@PH0PR03MB6771.namprd03.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 12/18/23 01:12, Matyas, Daniel wrote:
-> 
-> 
->> -----Original Message-----
->> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
->> Sent: Saturday, December 16, 2023 3:33 AM
->> To: Matyas, Daniel <Daniel.Matyas@analog.com>
->> Cc: Jean Delvare <jdelvare@suse.com>; Rob Herring
->> <robh+dt@kernel.org>; Krzysztof Kozlowski
->> <krzysztof.kozlowski+dt@linaro.org>; Conor Dooley
->> <conor+dt@kernel.org>; Jonathan Corbet <corbet@lwn.net>; linux-
->> hwmon@vger.kernel.org; devicetree@vger.kernel.org; linux-
->> kernel@vger.kernel.org; linux-doc@vger.kernel.org
->> Subject: Re: [PATCH 1/3] hwmon: max31827: Add PEC support
->>
->> [External]
->>
->> On 12/15/23 12:28, Matyas, Daniel wrote:
->>>
->>>
->>>> -----Original Message-----
->>>> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter
->> Roeck
->>>> Sent: Thursday, December 14, 2023 6:10 PM
->>>> To: Matyas, Daniel <Daniel.Matyas@analog.com>
->>>> Cc: Jean Delvare <jdelvare@suse.com>; Rob Herring
->>>> <robh+dt@kernel.org>; Krzysztof Kozlowski
->>>> <krzysztof.kozlowski+dt@linaro.org>; Conor Dooley
->>>> <conor+dt@kernel.org>; Jonathan Corbet <corbet@lwn.net>; linux-
->>>> hwmon@vger.kernel.org; devicetree@vger.kernel.org; linux-
->>>> kernel@vger.kernel.org; linux-doc@vger.kernel.org
->>>> Subject: Re: [PATCH 1/3] hwmon: max31827: Add PEC support
->>>>
->>>> [External]
->>>>
->>>> On 12/14/23 06:36, Daniel Matyas wrote:
->>>>> Removed regmap and used my functions to read, write and update
->> bits.
->>>>> In these functions i2c_smbus_ helper functions are used. These check
->>>>> if there were any PEC errors during read. In the write function, if
->>>>> PEC is enabled, I check for PEC Error bit, to see if there were any
->> errors.
->>>>>
->>>>> Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
->>>>
->>>> The "PEC" attribute needs to be attached to the I2C device.
->>>> See lm90.c or pmbus_core.c for examples.
->>>>
->>>
->>> I added pec_show() and pec_store() functions and created the pec file
->> within the max31827_groups.
->>> I did not set the flags, because I want them to be set only in pec_store.
->> By default the PEC flag should not be set.
->>>
->>
->> That is not the point. Again,
->>
->>   >> The "PEC" attribute needs to be attached to the I2C device.
->>   >> See lm90.c or pmbus_core.c for examples.
->>
->> That is not about regmap, it is about the location of the "pec" attribute.
+On 12/18/23 06:55, Matyas, Daniel wrote:
+[ ... ]
+>> On top of that, it is not clear why regmap can't be used in the first place.
+>> It seems that the major change is that one needs to read the configuration
+>> register after a write to see if there was a PEC error. It is not immediately
+>> obvious why that additional read (if indeed necessary) would require
+>> regmap support to be dropped.
 >>
 > 
-> I understand that this is not about regmap. Still, I would argue, that when I am registering the device with groups, the "pec" attribute is attached.
+> I tried out writing and and reading with regmap, but it is not working properly. Even if I modify the client flag, I still receive only 2 bytes of data (a word). I should be receiving 2+1 bytes = data + CRC-8.
+> 
+> With i2c_smbus reads and writes, when I set the flag, I receive the 2+1 bytes, as expected.
 > 
 
-Sure. To the hwmon device. I asked you to attach it to the i2c device, as
-implemented all other hwmon drivers supporting this attribute. I am not
-inclined to make an exception for this driver, and I do not see a reason
-to do so.
+The SMBus code in drivers/i2c/i2c-core-smbus.c is supposed to check
+if the received PEC is correct for SMBus transfers. Are you saying
+that this doesn't work, or that regmap doesn't use SMBus functions
+to communicate with the chip ?
 
+Thanks,
 Guenter
 
