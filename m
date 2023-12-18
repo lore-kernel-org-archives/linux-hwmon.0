@@ -1,246 +1,162 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DCFB4FF9A;
-	Mon, 18 Dec 2023 19:01:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B14D5A843;
+	Mon, 18 Dec 2023 19:10:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bug4bz1p"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1d389fb3f64so14214475ad.1;
-        Mon, 18 Dec 2023 11:01:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jFwA6TEQ"
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a236de428a5so43006566b.0;
+        Mon, 18 Dec 2023 11:10:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702926074; x=1703530874; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=MSCNW3XocCoAsaIVyOF/pzRCaLzEloazKrsnZY7ER0Q=;
-        b=bug4bz1pAWwMKzb2fTNNBKhIW3Ix0n4nMrDMxYwgcsrv22g902IX2tJ24rTkW+ik1j
-         IbjabxDaA+bNOL8pfFeN60yAdSWxJYBGJ8eWLc3UN2DePkS4EABf4hdS2MZFHvlaxpjQ
-         wkETDm8xiU3DU+urL5HnALWz0y1np1Of4zGI762xDOwAzz3iKFdnl+akTMbxiyExW1vL
-         e8K6YJ3N8PyNVOFyusJLgzxI58j5S/uzY7I7XhE8TKIRiuwki7c0KZFC/BtF7YrO+v13
-         03eWty/P5JOrygGIIZEfznANnEDbhF61G5V2Elpk41Yznrv3GKFOYRTAHHzgxSwk2WtX
-         v1fw==
+        d=gmail.com; s=20230601; t=1702926635; x=1703531435; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FtV51mBA8Uop3abJyrVBwepRUDAnZ/VDxeYjqufsJYk=;
+        b=jFwA6TEQp1GW1AuZXBXVcn6zuSvzLFifuoPUUjFhO9YLWOCvH1U4SK282Nk0P6N3E7
+         Lr05moKMfucyYd/hsv7UuKCtMJe9UEMYYaTROAaBHiUiiFU0VSe9hQzBY77ME6uQEX8p
+         U2130ORM5tZErgmBRyPxRmcKYamik5ygR3qrZMnYUmtURuFvXw9txvEm3EIMuc4DOLs8
+         wpMQ9McX5ExCX2AdlZoAyTnht13es2ujMLslLm9ELSja7R+vJqoKoPgjiJynj+vtTU1d
+         EGwWgL6XtmGyn1dS59vUQLO2xgj1gCGZeS3ZMYjFu/zKZ3ah/6KoNlXHOVxyJAkzK/kg
+         V5+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702926074; x=1703530874;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1702926635; x=1703531435;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=MSCNW3XocCoAsaIVyOF/pzRCaLzEloazKrsnZY7ER0Q=;
-        b=viXPF+dBHYMZxVTc81dade/0ph+TuBroa8GOuD8vkHxUhm4HICLgDH43aS2YNv9cKm
-         ssLOgGIqCesIcZrMHtVtSDasdTUFm1YNOeqfNIb7aLurz6n3rrX8AoA8MMhs5oRVF21y
-         6NPBCET8nERPOzJr1dEpsVwPbCLEQ9vZ0rGqU6NSjiJCr5ui0Vss2+LXgCi34FTyLwTY
-         VTBbZw3SRIQ6r/aGGOecA2X2BDh2E7qTRvmF49uL/pwlnyOKQ9nkwEhYNXkVzdEbLr+o
-         p9Y8Nh4wX5eCZWF7K6LFRuNVn/T/BJsgwxD/cCtfh8GymuPV1Hat964skySgERVk/fCx
-         721Q==
-X-Gm-Message-State: AOJu0Ywysqvtt1Z8yLwnE5DNqR3NwAV8M72eYd2oqVqw6ZoxD6hRWQKX
-	sfxKX06NLmgpLGGYa0+37bg=
-X-Google-Smtp-Source: AGHT+IGYxHEJLhZPCxXTzyXH9OqscdA58SngL3HNWhrsUwQPRP2M7CFbxMaiKlUkMHufM7nDyN5Ktw==
-X-Received: by 2002:a17:903:40ca:b0:1d0:ba36:eea3 with SMTP id t10-20020a17090340ca00b001d0ba36eea3mr10563132pld.7.1702926074344;
-        Mon, 18 Dec 2023 11:01:14 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e14-20020a170902ed8e00b001d362b6b0eesm8724243plj.168.2023.12.18.11.01.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Dec 2023 11:01:13 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <7f470259-89c9-4a4c-90d8-0997a706f7dd@roeck-us.net>
-Date: Mon, 18 Dec 2023 11:01:12 -0800
+        bh=FtV51mBA8Uop3abJyrVBwepRUDAnZ/VDxeYjqufsJYk=;
+        b=rW2cXsgEE5S4nAO652lWBDig3RO12w3FpKSEGlwLQSoFhN8CTOhxNtMV40HzhxWiKf
+         i2WVaybHQWs1Oy4Uwi0/NUNerUjjgCG3MHlbjoQE/Vf2n+gg+pjykwmhfZ4MEi4GoBMg
+         Izpj9v1prJJ+LJZJEbLimyOVe/1mEHDwCd9fqMNRZLNiijjaTTL8wqZzWCtSXW874YJb
+         6D5lF9DMqOAnJ5VnDax8aeodvL9JU8nqOW22sYwEBHIQbCt+MDK5kDxaBPhNJHfBdcRr
+         bLSt/QCx9mvkk2pU/WwqozqVqj0h6BL7Shls1d+ymJDQV5Np/ByXa9EKz1gJ3b1DRAvT
+         Y+Kg==
+X-Gm-Message-State: AOJu0Yz2ZRON0IWd+ExbqsTGMQwi3vZk9MGVe6MZ19nz7R4KvdQ4vkAH
+	a88Z9zadUhw0HIhJpm5ZFi0=
+X-Google-Smtp-Source: AGHT+IF6+w0TlnnyW897EM+gfRDQl1yuQve6QfbfC+AbZqDjLH5tmyc6O7rAhSTRxsAjJPZDXafCbw==
+X-Received: by 2002:a17:906:1009:b0:a23:5a00:326 with SMTP id 9-20020a170906100900b00a235a000326mr1129425ejm.0.1702926635279;
+        Mon, 18 Dec 2023 11:10:35 -0800 (PST)
+Received: from [127.0.1.1] (2a02-8389-41cf-e200-339c-9917-d041-4030.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:339c:9917:d041:4030])
+        by smtp.gmail.com with ESMTPSA id vw6-20020a170907a70600b00a1d80b665dfsm14398956ejc.26.2023.12.18.11.10.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Dec 2023 11:10:34 -0800 (PST)
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Subject: [PATCH v4 0/5] hwmon: Add support for Amphenol ChipCap 2
+Date: Mon, 18 Dec 2023 20:10:28 +0100
+Message-Id: <20231020-topic-chipcap2-v4-0-7940cfa7613a@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] hwmon: max31827: Add PEC support
-Content-Language: en-US
-To: "Matyas, Daniel" <Daniel.Matyas@analog.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-References: <20231214143648.175336-1-daniel.matyas@analog.com>
- <2e0bf1cf-824d-40c6-9450-7ed4740f2f46@roeck-us.net>
- <PH0PR03MB6771B89E4D3291BA0B1B5ABF8990A@PH0PR03MB6771.namprd03.prod.outlook.com>
- <5baa93fe-bd08-4f11-9c5c-42060e89930c@roeck-us.net>
- <PH0PR03MB6771CF6A95CB576E534C225F8990A@PH0PR03MB6771.namprd03.prod.outlook.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <PH0PR03MB6771CF6A95CB576E534C225F8990A@PH0PR03MB6771.namprd03.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACSZgGUC/33Nyw6CMBAF0F8hXVvTTimCK//DuOhjgEnkkZYQD
+ eHfLew0keWdybl3YREDYWTXbGEBZ4o09Cnkp4y51vQNcvIpMxCgpADBp2Ekx11LozMjcARfVqX
+ OlXDAErImIrfB9K7dWGfihGF7jAFreu1L90fKLcVpCO99eJbb9e/GLLngorwgSJ9bif7WdIaeZ
+ zd0bKua4ZhD4rV2CnRVFLW3v1wdc5W4tspaLYyuxRdf1/UDMgOBHkMBAAA=
+To: Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>, 
+ Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>, 
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ linux-doc@vger.kernel.org, Javier Carrasco <javier.carrasco.cruz@gmail.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Conor Dooley <conor.dooley@microchip.com>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1702926633; l=3893;
+ i=javier.carrasco.cruz@gmail.com; s=20230509; h=from:subject:message-id;
+ bh=tUUetk6U5Qf1+ktWmLjw4LMYeWqB0v1Yz0I77M4Y3oo=;
+ b=bvKuX7PYDfO4pxf6a2Tll1ongdh82ZJIkXOsz3f3nPjJG7YrRb5X9Fl0bMNbjeoN0yk61NWdE
+ 2yMVIStDm8LAeMUeQUPCbnciTNXSmSyOFGSDD5eqJ/wIPr6HEFxja1o
+X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
+ pk=tIGJV7M+tCizagNijF0eGMBGcOsPD+0cWGfKjl4h6K8=
 
-T24gMTIvMTgvMjMgMDk6NTksIE1hdHlhcywgRGFuaWVsIHdyb3RlOg0KPiANCj4gDQo+IC0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLQ0KPiAqVm9uOiogR3VlbnRlciBSb2VjayA8Z3JvZWNrN0BnbWFp
-bC5jb20+IGltIEF1ZnRyYWcgdm9uIEd1ZW50ZXIgUm9lY2sgPGxpbnV4QHJvZWNrLXVzLm5l
-dD4NCj4gKkdlc2VuZGV0OiogTW9udGFnLCBEZXplbWJlciAxOCwgMjAyMyA2OjI2OjU3IG5h
-Y2htLg0KPiAqQW46KiBNYXR5YXMsIERhbmllbCA8RGFuaWVsLk1hdHlhc0BhbmFsb2cuY29t
-Pg0KPiAqQ2M6KiBKZWFuIERlbHZhcmUgPGpkZWx2YXJlQHN1c2UuY29tPjsgUm9iIEhlcnJp
-bmcgPHJvYmgrZHRAa2VybmVsLm9yZz47IEtyenlzenRvZiBLb3psb3dza2kgPGtyenlzenRv
-Zi5rb3psb3dza2krZHRAbGluYXJvLm9yZz47IENvbm9yIERvb2xleSA8Y29ub3IrZHRAa2Vy
-bmVsLm9yZz47IEpvbmF0aGFuIENvcmJldCA8Y29yYmV0QGx3bi5uZXQ+OyBsaW51eC1od21v
-bkB2Z2VyLmtlcm5lbC5vcmcgPGxpbnV4LWh3bW9uQHZnZXIua2VybmVsLm9yZz47IGRldmlj
-ZXRyZWVAdmdlci5rZXJuZWwub3JnIDxkZXZpY2V0cmVlQHZnZXIua2VybmVsLm9yZz47IGxp
-bnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcgPGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5v
-cmc+OyBsaW51eC1kb2NAdmdlci5rZXJuZWwub3JnIDxsaW51eC1kb2NAdmdlci5rZXJuZWwu
-b3JnPg0KPiAqQmV0cmVmZjoqIFJlOiBbUEFUQ0ggMS8zXSBod21vbjogbWF4MzE4Mjc6IEFk
-ZCBQRUMgc3VwcG9ydA0KPiANCj4gW0V4dGVybmFsXQ0KPiANCj4gT24gMTIvMTgvMjMgMDY6
-NTUsIE1hdHlhcywgRGFuaWVsIHdyb3RlOg0KPiBbIC4uLiBdDQo+Pj4gT24gdG9wIG9mIHRo
-YXQsIGl0IGlzIG5vdCBjbGVhciB3aHkgcmVnbWFwIGNhbid0IGJlIHVzZWQgaW4gdGhlIGZp
-cnN0IHBsYWNlLg0KPj4+IEl0IHNlZW1zIHRoYXQgdGhlIG1ham9yIGNoYW5nZSBpcyB0aGF0
-IG9uZSBuZWVkcyB0byByZWFkIHRoZSBjb25maWd1cmF0aW9uDQo+Pj4gcmVnaXN0ZXIgYWZ0
-ZXIgYSB3cml0ZSB0byBzZWUgaWYgdGhlcmUgd2FzIGEgUEVDIGVycm9yLiBJdCBpcyBub3Qg
-aW1tZWRpYXRlbHkNCj4+PiBvYnZpb3VzIHdoeSB0aGF0IGFkZGl0aW9uYWwgcmVhZCAoaWYg
-aW5kZWVkIG5lY2Vzc2FyeSkgd291bGQgcmVxdWlyZQ0KPj4+IHJlZ21hcCBzdXBwb3J0IHRv
-IGJlIGRyb3BwZWQuDQo+Pj4NCj4+IA0KPj4gSSB0cmllZCBvdXQgd3JpdGluZyBhbmQgYW5k
-IHJlYWRpbmcgd2l0aCByZWdtYXAsIGJ1dCBpdCBpcyBub3Qgd29ya2luZyBwcm9wZXJseS4g
-RXZlbiBpZiBJIG1vZGlmeSB0aGUgY2xpZW50IGZsYWcsIEkgc3RpbGwgcmVjZWl2ZSBvbmx5
-IDIgYnl0ZXMgb2YgZGF0YSAoYSB3b3JkKS4gSSBzaG91bGQgYmUgcmVjZWl2aW5nIDIrMSBi
-eXRlcyA9IGRhdGEgKyBDUkMtOC4NCj4+IA0KPj4gV2l0aCBpMmNfc21idXMgcmVhZHMgYW5k
-IHdyaXRlcywgd2hlbiBJIHNldCB0aGUgZmxhZywgSSByZWNlaXZlIHRoZSAyKzEgYnl0ZXMs
-IGFzIGV4cGVjdGVkLg0KPj4gDQo+IA0KPiBUaGUgU01CdXMgY29kZSBpbiBkcml2ZXJzL2ky
-Yy9pMmMtY29yZS1zbWJ1cy5jIGlzIHN1cHBvc2VkIHRvIGNoZWNrDQo+IGlmIHRoZSByZWNl
-aXZlZCBQRUMgaXMgY29ycmVjdCBmb3IgU01CdXMgdHJhbnNmZXJzLiBBcmUgeW91IHNheWlu
-Zw0KPiB0aGF0IHRoaXMgZG9lc24ndCB3b3JrLCBvciB0aGF0IHJlZ21hcCBkb2Vzbid0IHVz
-ZSBTTUJ1cyBmdW5jdGlvbnMNCj4gdG8gY29tbXVuaWNhdGUgd2l0aCB0aGUgY2hpcCA/DQo+
-IA0KPiBUaGFua3MsDQo+IEd1ZW50ZXINCj4gDQo+IA0KPiBJIGFtIDcwJSBzdXJlLCB0aGF0
-IHRoZSByZWdtYXAgZG9lcyBub3QgdXNlIFNNQnVzIGZ1bmN0aW9ucy4NCj4gDQoNCkl0IHNo
-b3VsZC4NCg0KJCBnaXQgZ3JlcCBzbWJ1cyBkcml2ZXJzL2Jhc2UvcmVnbWFwL3JlZ21hcC1p
-MmMuYw0KZHJpdmVycy9iYXNlL3JlZ21hcC9yZWdtYXAtaTJjLmM6c3RhdGljIGludCByZWdt
-YXBfc21idXNfYnl0ZV9yZWdfcmVhZCh2b2lkICpjb250ZXh0LCB1bnNpZ25lZCBpbnQgcmVn
-LA0KZHJpdmVycy9iYXNlL3JlZ21hcC9yZWdtYXAtaTJjLmM6ICAgICAgIHJldCA9IGkyY19z
-bWJ1c19yZWFkX2J5dGVfZGF0YShpMmMsIHJlZyk7DQpkcml2ZXJzL2Jhc2UvcmVnbWFwL3Jl
-Z21hcC1pMmMuYzpzdGF0aWMgaW50IHJlZ21hcF9zbWJ1c19ieXRlX3JlZ193cml0ZSh2b2lk
-ICpjb250ZXh0LCB1bnNpZ25lZCBpbnQgcmVnLA0KZHJpdmVycy9iYXNlL3JlZ21hcC9yZWdt
-YXAtaTJjLmM6ICAgICAgIHJldHVybiBpMmNfc21idXNfd3JpdGVfYnl0ZV9kYXRhKGkyYywg
-cmVnLCB2YWwpOw0KZHJpdmVycy9iYXNlL3JlZ21hcC9yZWdtYXAtaTJjLmM6c3RhdGljIGNv
-bnN0IHN0cnVjdCByZWdtYXBfYnVzIHJlZ21hcF9zbWJ1c19ieXRlID0gew0KZHJpdmVycy9i
-YXNlL3JlZ21hcC9yZWdtYXAtaTJjLmM6ICAgICAgIC5yZWdfd3JpdGUgPSByZWdtYXBfc21i
-dXNfYnl0ZV9yZWdfd3JpdGUsDQpkcml2ZXJzL2Jhc2UvcmVnbWFwL3JlZ21hcC1pMmMuYzog
-ICAgICAgLnJlZ19yZWFkID0gcmVnbWFwX3NtYnVzX2J5dGVfcmVnX3JlYWQsDQpkcml2ZXJz
-L2Jhc2UvcmVnbWFwL3JlZ21hcC1pMmMuYzpzdGF0aWMgaW50IHJlZ21hcF9zbWJ1c193b3Jk
-X3JlZ19yZWFkKHZvaWQgKmNvbnRleHQsIHVuc2lnbmVkIGludCByZWcsDQpkcml2ZXJzL2Jh
-c2UvcmVnbWFwL3JlZ21hcC1pMmMuYzogICAgICAgcmV0ID0gaTJjX3NtYnVzX3JlYWRfd29y
-ZF9kYXRhKGkyYywgcmVnKTsNCmRyaXZlcnMvYmFzZS9yZWdtYXAvcmVnbWFwLWkyYy5jOnN0
-YXRpYyBpbnQgcmVnbWFwX3NtYnVzX3dvcmRfcmVnX3dyaXRlKHZvaWQgKmNvbnRleHQsIHVu
-c2lnbmVkIGludCByZWcsDQpkcml2ZXJzL2Jhc2UvcmVnbWFwL3JlZ21hcC1pMmMuYzogICAg
-ICAgcmV0dXJuIGkyY19zbWJ1c193cml0ZV93b3JkX2RhdGEoaTJjLCByZWcsIHZhbCk7DQpk
-cml2ZXJzL2Jhc2UvcmVnbWFwL3JlZ21hcC1pMmMuYzpzdGF0aWMgY29uc3Qgc3RydWN0IHJl
-Z21hcF9idXMgcmVnbWFwX3NtYnVzX3dvcmQgPSB7DQpkcml2ZXJzL2Jhc2UvcmVnbWFwL3Jl
-Z21hcC1pMmMuYzogICAgICAgLnJlZ193cml0ZSA9IHJlZ21hcF9zbWJ1c193b3JkX3JlZ193
-cml0ZSwNCmRyaXZlcnMvYmFzZS9yZWdtYXAvcmVnbWFwLWkyYy5jOiAgICAgICAucmVnX3Jl
-YWQgPSByZWdtYXBfc21idXNfd29yZF9yZWdfcmVhZCwNCmRyaXZlcnMvYmFzZS9yZWdtYXAv
-cmVnbWFwLWkyYy5jOnN0YXRpYyBpbnQgcmVnbWFwX3NtYnVzX3dvcmRfcmVhZF9zd2FwcGVk
-KHZvaWQgKmNvbnRleHQsIHVuc2lnbmVkIGludCByZWcsDQpkcml2ZXJzL2Jhc2UvcmVnbWFw
-L3JlZ21hcC1pMmMuYzogICAgICAgcmV0ID0gaTJjX3NtYnVzX3JlYWRfd29yZF9zd2FwcGVk
-KGkyYywgcmVnKTsNCmRyaXZlcnMvYmFzZS9yZWdtYXAvcmVnbWFwLWkyYy5jOnN0YXRpYyBp
-bnQgcmVnbWFwX3NtYnVzX3dvcmRfd3JpdGVfc3dhcHBlZCh2b2lkICpjb250ZXh0LCB1bnNp
-Z25lZCBpbnQgcmVnLA0KZHJpdmVycy9iYXNlL3JlZ21hcC9yZWdtYXAtaTJjLmM6ICAgICAg
-IHJldHVybiBpMmNfc21idXNfd3JpdGVfd29yZF9zd2FwcGVkKGkyYywgcmVnLCB2YWwpOw0K
-ZHJpdmVycy9iYXNlL3JlZ21hcC9yZWdtYXAtaTJjLmM6c3RhdGljIGNvbnN0IHN0cnVjdCBy
-ZWdtYXBfYnVzIHJlZ21hcF9zbWJ1c193b3JkX3N3YXBwZWQgPSB7DQpkcml2ZXJzL2Jhc2Uv
-cmVnbWFwL3JlZ21hcC1pMmMuYzogICAgICAgLnJlZ193cml0ZSA9IHJlZ21hcF9zbWJ1c193
-b3JkX3dyaXRlX3N3YXBwZWQsDQpkcml2ZXJzL2Jhc2UvcmVnbWFwL3JlZ21hcC1pMmMuYzog
-ICAgICAgLnJlZ19yZWFkID0gcmVnbWFwX3NtYnVzX3dvcmRfcmVhZF9zd2FwcGVkLA0KZHJp
-dmVycy9iYXNlL3JlZ21hcC9yZWdtYXAtaTJjLmM6c3RhdGljIGludCByZWdtYXBfaTJjX3Nt
-YnVzX2kyY193cml0ZSh2b2lkICpjb250ZXh0LCBjb25zdCB2b2lkICpkYXRhLA0KZHJpdmVy
-cy9iYXNlL3JlZ21hcC9yZWdtYXAtaTJjLmM6ICAgICAgIHJldHVybiBpMmNfc21idXNfd3Jp
-dGVfaTJjX2Jsb2NrX2RhdGEoaTJjLCAoKHU4ICopZGF0YSlbMF0sIGNvdW50LA0KZHJpdmVy
-cy9iYXNlL3JlZ21hcC9yZWdtYXAtaTJjLmM6c3RhdGljIGludCByZWdtYXBfaTJjX3NtYnVz
-X2kyY19yZWFkKHZvaWQgKmNvbnRleHQsIGNvbnN0IHZvaWQgKnJlZywNCmRyaXZlcnMvYmFz
-ZS9yZWdtYXAvcmVnbWFwLWkyYy5jOiAgICAgICByZXQgPSBpMmNfc21idXNfcmVhZF9pMmNf
-YmxvY2tfZGF0YShpMmMsICgodTggKilyZWcpWzBdLCB2YWxfc2l6ZSwgdmFsKTsNCmRyaXZl
-cnMvYmFzZS9yZWdtYXAvcmVnbWFwLWkyYy5jOnN0YXRpYyBjb25zdCBzdHJ1Y3QgcmVnbWFw
-X2J1cyByZWdtYXBfaTJjX3NtYnVzX2kyY19ibG9jayA9IHsNCmRyaXZlcnMvYmFzZS9yZWdt
-YXAvcmVnbWFwLWkyYy5jOiAgICAgICAud3JpdGUgPSByZWdtYXBfaTJjX3NtYnVzX2kyY193
-cml0ZSwNCmRyaXZlcnMvYmFzZS9yZWdtYXAvcmVnbWFwLWkyYy5jOiAgICAgICAucmVhZCA9
-IHJlZ21hcF9pMmNfc21idXNfaTJjX3JlYWQsDQpkcml2ZXJzL2Jhc2UvcmVnbWFwL3JlZ21h
-cC1pMmMuYzpzdGF0aWMgaW50IHJlZ21hcF9pMmNfc21idXNfaTJjX3dyaXRlX3JlZzE2KHZv
-aWQgKmNvbnRleHQsIGNvbnN0IHZvaWQgKmRhdGEsDQpkcml2ZXJzL2Jhc2UvcmVnbWFwL3Jl
-Z21hcC1pMmMuYzogICAgICAgcmV0dXJuIGkyY19zbWJ1c193cml0ZV9pMmNfYmxvY2tfZGF0
-YShpMmMsICgodTggKilkYXRhKVswXSwgY291bnQsDQpkcml2ZXJzL2Jhc2UvcmVnbWFwL3Jl
-Z21hcC1pMmMuYzpzdGF0aWMgaW50IHJlZ21hcF9pMmNfc21idXNfaTJjX3JlYWRfcmVnMTYo
-dm9pZCAqY29udGV4dCwgY29uc3Qgdm9pZCAqcmVnLA0KZHJpdmVycy9iYXNlL3JlZ21hcC9y
-ZWdtYXAtaTJjLmM6ICAgICAgIHJldCA9IGkyY19zbWJ1c193cml0ZV9ieXRlX2RhdGEoaTJj
-LCAoKHUxNiAqKXJlZylbMF0gJiAweGZmLA0KZHJpdmVycy9iYXNlL3JlZ21hcC9yZWdtYXAt
-aTJjLmM6ICAgICAgICAgICAgICAgcmV0ID0gaTJjX3NtYnVzX3JlYWRfYnl0ZShpMmMpOw0K
-ZHJpdmVycy9iYXNlL3JlZ21hcC9yZWdtYXAtaTJjLmM6c3RhdGljIGNvbnN0IHN0cnVjdCBy
-ZWdtYXBfYnVzIHJlZ21hcF9pMmNfc21idXNfaTJjX2Jsb2NrX3JlZzE2ID0gew0KZHJpdmVy
-cy9iYXNlL3JlZ21hcC9yZWdtYXAtaTJjLmM6ICAgICAgIC53cml0ZSA9IHJlZ21hcF9pMmNf
-c21idXNfaTJjX3dyaXRlX3JlZzE2LA0KZHJpdmVycy9iYXNlL3JlZ21hcC9yZWdtYXAtaTJj
-LmM6ICAgICAgIC5yZWFkID0gcmVnbWFwX2kyY19zbWJ1c19pMmNfcmVhZF9yZWcxNiwNCmRy
-aXZlcnMvYmFzZS9yZWdtYXAvcmVnbWFwLWkyYy5jOiAgICAgICAgICAgICAgIGJ1cyA9ICZy
-ZWdtYXBfaTJjX3NtYnVzX2kyY19ibG9jazsNCmRyaXZlcnMvYmFzZS9yZWdtYXAvcmVnbWFw
-LWkyYy5jOiAgICAgICAgICAgICAgIGJ1cyA9ICZyZWdtYXBfaTJjX3NtYnVzX2kyY19ibG9j
-a19yZWcxNjsNCmRyaXZlcnMvYmFzZS9yZWdtYXAvcmVnbWFwLWkyYy5jOiAgICAgICAgICAg
-ICAgICAgICAgICAgYnVzID0gJnJlZ21hcF9zbWJ1c193b3JkOw0KZHJpdmVycy9iYXNlL3Jl
-Z21hcC9yZWdtYXAtaTJjLmM6ICAgICAgICAgICAgICAgICAgICAgICBidXMgPSAmcmVnbWFw
-X3NtYnVzX3dvcmRfc3dhcHBlZDsNCmRyaXZlcnMvYmFzZS9yZWdtYXAvcmVnbWFwLWkyYy5j
-OiAgICAgICAgICAgICAgIGJ1cyA9ICZyZWdtYXBfc21idXNfYnl0ZTsNCg0KSWYgdGhhdCBk
-b2Vzbid0IHdvcmsgZm9yIHNvbWUgcmVhc29uLCBJJ2QgcmF0aGVyIGZpZ3VyZSBvdXQgd2h5
-IGluc3RlYWQgb2YNCnN0YXJ0aW5nIHRvIGRyb3AgcmVnbWFwIHN1cHBvcnQuDQoNCkd1ZW50
-ZXINCg0K
+This series adds support and documentation for the Amphenol ChipCap 2
+humidity and temperature sensor in its digital version.
+
+This I2C device provides 14-bit humidity and temperature measurements as
+well as low (minimum) and high (maximum) humidity alarms. A ready signal
+is also available to reduce delays while fetching data.
+
+The proposed driver implements the logic to perform measurements with
+and without the ready signal, EEPROM configuration and alarm signaling.
+
+The features this driver does not support (I2C address and command
+window length modification) have been documented in the "Known Issues"
+section.
+
+The complete supported functionality has been tested with a CC2D33S
+sensor connected to a Raspberry Pi Zero 2 w.
+Different device tree node definitions (with and without ready and/or
+alarm signals) have been positively tested.
+
+Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+---
+Changes in v4:
+- chipcap2.c: require exclusive regulator to trigger command mode.
+- chipcap2.c: keep the device off until a measurement is required.
+  Because the device makes an automatic measurement after the power-up
+  sequence, no differentiation between sleep and non-sleep modes is
+  required anymore.
+- chipcap2.c: retrieve alarm settings from the device instead of storing
+  them locally.
+- dt-bindings: add vdd-supply to required properties.
+- dt-bindings: default to 'amphenol,cc2d23' compatible (same
+  functionality for all compatibles).
+- Link to v3: https://lore.kernel.org/r/20231020-topic-chipcap2-v3-0-5b3bb50a5f0b@gmail.com
+
+Changes in v3:
+- ABI: sysfs-class-hwmon: documented humidity min/max alarms.
+- General: reorder patches (bindings first to remove checkpatch
+  warnings).
+- General: remove part number wildcards and use real part numbers.
+- chipcap2.c: improve error path in probe function.
+- chipcap2.c: fix error handling if regulator could not be registered.
+- chipcap2.c: use absolute values for hysteresis (for both ABI
+  compatibility and simplicity).
+- chipcap2.c: minor code-style fixes and variable renaming.
+- Link to v2: https://lore.kernel.org/r/20231020-topic-chipcap2-v2-0-f5c325966fdb@gmail.com
+
+Changes in v2:
+- vendor-prefixes: full company name in the vendor description (Krzystof
+  Kozlowski)
+- chipcap2.c: proper i2c_device_id table, coding style fixes, cleaner
+  error path in the probe function (Krzystof Kozlowski)
+- dt-bindings: per-item description and lowercase names (Krzystof
+  Kozlowski)
+- MAINTAINERS: fix manufacturer name (Krzystof Kozlowski)
+- Link to v1: https://lore.kernel.org/r/20231020-topic-chipcap2-v1-0-087e21d4b1ed@gmail.com
+
+---
+Javier Carrasco (5):
+      dt-bindings: vendor-prefixes: add Amphenol
+      hwmon: (core) Add support for humidity min/max alarm
+      ABI: sysfs-class-hwmon: add descriptions for humidity min/max alarms
+      dt-bindings: hwmon: Add Amphenol ChipCap 2
+      hwmon: Add support for Amphenol ChipCap 2
+
+ Documentation/ABI/testing/sysfs-class-hwmon        |  18 +
+ .../bindings/hwmon/amphenol,chipcap2.yaml          |  77 ++
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ Documentation/hwmon/chipcap2.rst                   |  73 ++
+ Documentation/hwmon/index.rst                      |   1 +
+ MAINTAINERS                                        |   8 +
+ drivers/hwmon/Kconfig                              |  10 +
+ drivers/hwmon/Makefile                             |   1 +
+ drivers/hwmon/chipcap2.c                           | 835 +++++++++++++++++++++
+ drivers/hwmon/hwmon.c                              |   2 +
+ include/linux/hwmon.h                              |   4 +
+ 11 files changed, 1031 insertions(+)
+---
+base-commit: 33cc938e65a98f1d29d0a18403dbbee050dcad9a
+change-id: 20231020-topic-chipcap2-e2d8985430c2
+
+Best regards,
+-- 
+Javier Carrasco <javier.carrasco.cruz@gmail.com>
+
