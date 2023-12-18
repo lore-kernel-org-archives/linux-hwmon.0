@@ -1,240 +1,135 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 695DE4FF84
-	for <linux-hwmon@vger.kernel.org>; Mon, 18 Dec 2023 16:51:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 399AC5BF80;
+	Mon, 18 Dec 2023 17:01:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N5d/bchu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nWtUr8QK"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702918269; x=1734454269;
-  h=date:from:to:cc:subject:message-id;
-  bh=oCGSCqic9tvpxs8dDZKuuweTZXYDa1rulh8Igh3phK4=;
-  b=N5d/bchuK7ARE1zabZQwNbv1QkyprsjvDOqPP51BgWij59rRfiuw2WSx
-   vz0Ccrw1ju4JRJSvyyE0WheLWJadXQYdjbDJG1Fjo9qu9JpjnTAwA20Y1
-   nmZal3JkAXm4PbmSCXJZhc+lbt98wlmGRoSn9ObBB03ExKA8LDTQyGIk3
-   K8bHMJCeRYvZx0IRYHkJCQYt011NCRZxodg3q0VtAn9vQQ6F6ou4jeH6E
-   7xZggLbplkH3UjaeZ83qfhqveVYT5/+8tA+egZzN6icLlJDVzycscKcUh
-   yXm0PNYuUNZcLU92eMnGToF24HkjIMuHCHSNs/yWEWRY04k0D44JDAYbm
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10928"; a="385957290"
+  t=1702918874; x=1734454874;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YGQ0G6lJV8wNzSBABFy+OTts9y2BZfj1wdkFcSdtY4w=;
+  b=nWtUr8QKhdfEGj3n4Oc4/cvVAxyvhaKiHZZXWXOhrGwLgY0D2pbU9yo+
+   krbTQmD6ComUL7/HgcQL8w/HKTr/USxJNHXksXuC33xTqbOsgQ4EpAmII
+   PgaUMu/6gzn2S84Nh3UXCwchHBNGrWhxw1ufign97zd5dIxkTJHtN7cp0
+   kbcUoVREe2CFYAoZd8rYzzGnqcZhNqOERgMNqO2LCMOblnwqwzV5L6ZWF
+   myXfJTywUUDg+DmEOBUW4j4X8Eu4LWMcQAXwG+2vfcL3cm5/Vu7eaoxNE
+   qLtVI3wbKlXqRkVkp5mD3hbUSzDFECf2AkLO/vcVyXKU4BYArDJceY5wy
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10928"; a="2745130"
 X-IronPort-AV: E=Sophos;i="6.04,286,1695711600"; 
-   d="scan'208";a="385957290"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2023 08:51:08 -0800
+   d="scan'208";a="2745130"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2023 09:01:12 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10928"; a="948835290"
+X-IronPort-AV: E=McAfee;i="6600,9927,10928"; a="809903347"
 X-IronPort-AV: E=Sophos;i="6.04,286,1695711600"; 
-   d="scan'208";a="948835290"
+   d="scan'208";a="809903347"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 18 Dec 2023 08:51:07 -0800
+  by orsmga001.jf.intel.com with ESMTP; 18 Dec 2023 09:01:08 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rFGpd-0004L1-1G;
-	Mon, 18 Dec 2023 16:51:05 +0000
-Date: Tue, 19 Dec 2023 00:50:37 +0800
+	id 1rFGzJ-0004Ll-2W;
+	Mon, 18 Dec 2023 17:01:05 +0000
+Date: Tue, 19 Dec 2023 01:00:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- db79be9d970740b2310b1eece69c34bcea06c340
-Message-ID: <202312190034.C6kGUz0G-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+To: Abdel Alkuor <alkuor@gmail.com>, Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>
+Cc: oe-kbuild-all@lists.linux.dev, Abdel Alkuor <alkuor@gmail.com>,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] hwmon: (lm75) Add AMS AS6200 temperature sensor
+Message-ID: <202312190037.v9VmHXF6-lkp@intel.com>
+References: <a71ac5106e022b526bef9fc375bd5d3f547eb19d.1702874115.git.alkuor@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a71ac5106e022b526bef9fc375bd5d3f547eb19d.1702874115.git.alkuor@gmail.com>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: db79be9d970740b2310b1eece69c34bcea06c340  hwmon: (pmbus) Add support for MPS Multi-phase mp2856/mp2857 controller
+Hi Abdel,
 
-elapsed time: 1471m
+kernel test robot noticed the following build warnings:
 
-configs tested: 175
-configs skipped: 3
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on robh/for-next linus/master v6.7-rc6 next-20231218]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+url:    https://github.com/intel-lab-lkp/linux/commits/Abdel-Alkuor/hwmon-lm75-Add-AMS-AS6200-temperature-sensor/20231218-125552
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/a71ac5106e022b526bef9fc375bd5d3f547eb19d.1702874115.git.alkuor%40gmail.com
+patch subject: [PATCH v2 2/2] hwmon: (lm75) Add AMS AS6200 temperature sensor
+config: arm64-defconfig (https://download.01.org/0day-ci/archive/20231219/202312190037.v9VmHXF6-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231219/202312190037.v9VmHXF6-lkp@intel.com/reproduce)
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                               defconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20231218   gcc  
-arc                   randconfig-002-20231218   gcc  
-arc                        vdk_hs38_defconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                                 defconfig   clang
-arm                           h3600_defconfig   gcc  
-arm                        mvebu_v7_defconfig   gcc  
-arm                            qcom_defconfig   gcc  
-arm                   randconfig-001-20231218   gcc  
-arm                   randconfig-002-20231218   gcc  
-arm                   randconfig-003-20231218   gcc  
-arm                   randconfig-004-20231218   gcc  
-arm                             rpc_defconfig   gcc  
-arm                           tegra_defconfig   gcc  
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20231218   gcc  
-arm64                 randconfig-002-20231218   gcc  
-arm64                 randconfig-003-20231218   gcc  
-arm64                 randconfig-004-20231218   gcc  
-csky                              allnoconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20231218   gcc  
-csky                  randconfig-002-20231218   gcc  
-hexagon                           allnoconfig   clang
-hexagon                             defconfig   clang
-i386                             allmodconfig   clang
-i386                              allnoconfig   clang
-i386                             allyesconfig   clang
-i386         buildonly-randconfig-001-20231218   gcc  
-i386         buildonly-randconfig-002-20231218   gcc  
-i386         buildonly-randconfig-003-20231218   gcc  
-i386         buildonly-randconfig-004-20231218   gcc  
-i386         buildonly-randconfig-005-20231218   gcc  
-i386         buildonly-randconfig-006-20231218   gcc  
-i386                                defconfig   gcc  
-i386                  randconfig-001-20231218   gcc  
-i386                  randconfig-002-20231218   gcc  
-i386                  randconfig-003-20231218   gcc  
-i386                  randconfig-004-20231218   gcc  
-i386                  randconfig-005-20231218   gcc  
-i386                  randconfig-006-20231218   gcc  
-i386                  randconfig-011-20231218   clang
-i386                  randconfig-012-20231218   clang
-i386                  randconfig-013-20231218   clang
-i386                  randconfig-014-20231218   clang
-i386                  randconfig-015-20231218   clang
-i386                  randconfig-016-20231218   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20231218   gcc  
-loongarch             randconfig-002-20231218   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                       bvme6000_defconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                          hp300_defconfig   gcc  
-m68k                       m5249evb_defconfig   gcc  
-m68k                       m5275evb_defconfig   gcc  
-m68k                        m5407c3_defconfig   gcc  
-m68k                            mac_defconfig   gcc  
-m68k                          sun3x_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   clang
-mips                             allyesconfig   gcc  
-mips                     decstation_defconfig   gcc  
-mips                      loongson3_defconfig   gcc  
-mips                  maltasmvp_eva_defconfig   gcc  
-mips                          rb532_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20231218   gcc  
-nios2                 randconfig-002-20231218   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-openrisc                    or1ksim_defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                generic-32bit_defconfig   gcc  
-parisc                randconfig-001-20231218   gcc  
-parisc                randconfig-002-20231218   gcc  
-parisc64                            defconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                        cell_defconfig   gcc  
-powerpc                       eiger_defconfig   gcc  
-powerpc                    ge_imp3a_defconfig   gcc  
-powerpc                    klondike_defconfig   gcc  
-powerpc               randconfig-001-20231218   gcc  
-powerpc               randconfig-002-20231218   gcc  
-powerpc               randconfig-003-20231218   gcc  
-powerpc64             randconfig-001-20231218   gcc  
-powerpc64             randconfig-002-20231218   gcc  
-powerpc64             randconfig-003-20231218   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   clang
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                 randconfig-001-20231218   gcc  
-riscv                 randconfig-002-20231218   gcc  
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                        apsh4ad0a_defconfig   gcc  
-sh                                  defconfig   gcc  
-sh                    randconfig-001-20231218   gcc  
-sh                    randconfig-002-20231218   gcc  
-sh                          rsk7201_defconfig   gcc  
-sh                          rsk7203_defconfig   gcc  
-sh                   rts7751r2dplus_defconfig   gcc  
-sh                        sh7785lcr_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20231218   gcc  
-sparc64               randconfig-002-20231218   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20231218   gcc  
-um                    randconfig-002-20231218   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20231218   gcc  
-x86_64       buildonly-randconfig-002-20231218   gcc  
-x86_64       buildonly-randconfig-003-20231218   gcc  
-x86_64       buildonly-randconfig-004-20231218   gcc  
-x86_64       buildonly-randconfig-005-20231218   gcc  
-x86_64       buildonly-randconfig-006-20231218   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                randconfig-011-20231218   gcc  
-x86_64                randconfig-012-20231218   gcc  
-x86_64                randconfig-013-20231218   gcc  
-x86_64                randconfig-014-20231218   gcc  
-x86_64                randconfig-015-20231218   gcc  
-x86_64                randconfig-016-20231218   gcc  
-x86_64                randconfig-071-20231218   gcc  
-x86_64                randconfig-072-20231218   gcc  
-x86_64                randconfig-073-20231218   gcc  
-x86_64                randconfig-074-20231218   gcc  
-x86_64                randconfig-075-20231218   gcc  
-x86_64                randconfig-076-20231218   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
-xtensa                       common_defconfig   gcc  
-xtensa                randconfig-001-20231218   gcc  
-xtensa                randconfig-002-20231218   gcc  
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312190037.v9VmHXF6-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/hwmon/lm75.c:95: warning: Function parameter or member 'config_reg_16bits' not described in 'lm75_params'
+>> drivers/hwmon/lm75.c:95: warning: Function parameter or member 'alarm' not described in 'lm75_params'
+
+
+vim +95 drivers/hwmon/lm75.c
+
+9ebd3d822efeca David Brownell                  2008-05-03  57  
+dcb12653875e7c Iker Perez del Palomar Sustatxa 2019-08-08  58  /**
+dcb12653875e7c Iker Perez del Palomar Sustatxa 2019-08-08  59   * struct lm75_params - lm75 configuration parameters.
+08760063a75ca5 Abdel Alkuor                    2023-12-17  60   * @config_reg_16bits	Configure register size is 2 bytes.
+dcb12653875e7c Iker Perez del Palomar Sustatxa 2019-08-08  61   * @set_mask:		Bits to set in configuration register when configuring
+dcb12653875e7c Iker Perez del Palomar Sustatxa 2019-08-08  62   *			the chip.
+dcb12653875e7c Iker Perez del Palomar Sustatxa 2019-08-08  63   * @clr_mask:		Bits to clear in configuration register when configuring
+dcb12653875e7c Iker Perez del Palomar Sustatxa 2019-08-08  64   *			the chip.
+dcb12653875e7c Iker Perez del Palomar Sustatxa 2019-08-08  65   * @default_resolution:	Default number of bits to represent the temperature
+dcb12653875e7c Iker Perez del Palomar Sustatxa 2019-08-08  66   *			value.
+dcb12653875e7c Iker Perez del Palomar Sustatxa 2019-08-08  67   * @resolution_limits:	Limit register resolution. Optional. Should be set if
+dcb12653875e7c Iker Perez del Palomar Sustatxa 2019-08-08  68   *			the resolution of limit registers does not match the
+dcb12653875e7c Iker Perez del Palomar Sustatxa 2019-08-08  69   *			resolution of the temperature register.
+7f1a300f8abd11 Iker Perez del Palomar Sustatxa 2019-08-08  70   * @resolutions:	List of resolutions associated with sample times.
+7f1a300f8abd11 Iker Perez del Palomar Sustatxa 2019-08-08  71   *			Optional. Should be set if num_sample_times is larger
+7f1a300f8abd11 Iker Perez del Palomar Sustatxa 2019-08-08  72   *			than 1, and if the resolution changes with sample times.
+7f1a300f8abd11 Iker Perez del Palomar Sustatxa 2019-08-08  73   *			If set, number of entries must match num_sample_times.
+7f1a300f8abd11 Iker Perez del Palomar Sustatxa 2019-08-08  74   * @default_sample_time:Sample time to be set by default.
+7f1a300f8abd11 Iker Perez del Palomar Sustatxa 2019-08-08  75   * @num_sample_times:	Number of possible sample times to be set. Optional.
+7f1a300f8abd11 Iker Perez del Palomar Sustatxa 2019-08-08  76   *			Should be set if the number of sample times is larger
+7f1a300f8abd11 Iker Perez del Palomar Sustatxa 2019-08-08  77   *			than one.
+7f1a300f8abd11 Iker Perez del Palomar Sustatxa 2019-08-08  78   * @sample_times:	All the possible sample times to be set. Mandatory if
+7f1a300f8abd11 Iker Perez del Palomar Sustatxa 2019-08-08  79   *			num_sample_times is larger than 1. If set, number of
+7f1a300f8abd11 Iker Perez del Palomar Sustatxa 2019-08-08  80   *			entries must match num_sample_times.
+08760063a75ca5 Abdel Alkuor                    2023-12-17  81   * @alarm		Alarm is supported.
+dcb12653875e7c Iker Perez del Palomar Sustatxa 2019-08-08  82   */
+dcb12653875e7c Iker Perez del Palomar Sustatxa 2019-08-08  83  
+dcb12653875e7c Iker Perez del Palomar Sustatxa 2019-08-08  84  struct lm75_params {
+08760063a75ca5 Abdel Alkuor                    2023-12-17  85  	bool			config_reg_16bits;
+08760063a75ca5 Abdel Alkuor                    2023-12-17  86  	u16			set_mask;
+08760063a75ca5 Abdel Alkuor                    2023-12-17  87  	u16			clr_mask;
+dcb12653875e7c Iker Perez del Palomar Sustatxa 2019-08-08  88  	u8			default_resolution;
+dcb12653875e7c Iker Perez del Palomar Sustatxa 2019-08-08  89  	u8			resolution_limits;
+7f1a300f8abd11 Iker Perez del Palomar Sustatxa 2019-08-08  90  	const u8		*resolutions;
+dcb12653875e7c Iker Perez del Palomar Sustatxa 2019-08-08  91  	unsigned int		default_sample_time;
+7f1a300f8abd11 Iker Perez del Palomar Sustatxa 2019-08-08  92  	u8			num_sample_times;
+7f1a300f8abd11 Iker Perez del Palomar Sustatxa 2019-08-08  93  	const unsigned int	*sample_times;
+08760063a75ca5 Abdel Alkuor                    2023-12-17  94  	bool			alarm;
+dcb12653875e7c Iker Perez del Palomar Sustatxa 2019-08-08 @95  };
+dcb12653875e7c Iker Perez del Palomar Sustatxa 2019-08-08  96  
 
 -- 
 0-DAY CI Kernel Test Service
