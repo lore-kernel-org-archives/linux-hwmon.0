@@ -1,51 +1,51 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 160F11E4BF;
-	Mon, 18 Dec 2023 17:37:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DCFB4FF9A;
+	Mon, 18 Dec 2023 19:01:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hNchnvP8"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1d3b66733a9so6559985ad.2;
-        Mon, 18 Dec 2023 09:37:59 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bug4bz1p"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1d389fb3f64so14214475ad.1;
+        Mon, 18 Dec 2023 11:01:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702921079; x=1703525879; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1702926074; x=1703530874; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=9oaFHCCDI1MHrsKGmso+es37yBkgml+kPF0HQgZSQ20=;
-        b=hNchnvP8j3qR3jE75AkYhvPIJIzexySLQamDK13GsB7Ojk3fxWZ6hWZXJegnUoQoWX
-         9u6FmVbc8aKAJB80H8DXB4C5lM1A1SGwom2RBb62OLh84pWq8P+gn/gzbs2ZM3+spwre
-         rmPGpXm2e4a0QdkwjfcKSsQiZSPhviQgefEeOaxZEE7LWIuL0vNtgAYPg62oa314eRiE
-         L5QfVWlGxEP7LRUM1/98CWmePKOXJZH4Z+tqIOJIydrFKtX1Uq+1Pn1xrbLx6UsyIS5P
-         SbSiHOu5ExFEebrR/V1EUCcy2ZP11AXgcf8fzWOYcVAlm1YfqKB8jX2Mk8k7fZzbcnO1
-         4GpA==
+        bh=MSCNW3XocCoAsaIVyOF/pzRCaLzEloazKrsnZY7ER0Q=;
+        b=bug4bz1pAWwMKzb2fTNNBKhIW3Ix0n4nMrDMxYwgcsrv22g902IX2tJ24rTkW+ik1j
+         IbjabxDaA+bNOL8pfFeN60yAdSWxJYBGJ8eWLc3UN2DePkS4EABf4hdS2MZFHvlaxpjQ
+         wkETDm8xiU3DU+urL5HnALWz0y1np1Of4zGI762xDOwAzz3iKFdnl+akTMbxiyExW1vL
+         e8K6YJ3N8PyNVOFyusJLgzxI58j5S/uzY7I7XhE8TKIRiuwki7c0KZFC/BtF7YrO+v13
+         03eWty/P5JOrygGIIZEfznANnEDbhF61G5V2Elpk41Yznrv3GKFOYRTAHHzgxSwk2WtX
+         v1fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702921079; x=1703525879;
+        d=1e100.net; s=20230601; t=1702926074; x=1703530874;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=9oaFHCCDI1MHrsKGmso+es37yBkgml+kPF0HQgZSQ20=;
-        b=O6XhrnI+W0k7sqRb4+RBKVlwNAiyExrTOCCr7Ouv78zwNHb5HVH8L/FJaV2LFTaS31
-         +Vac/XoW5rd8i3bLLv2p0DWD+dd17dRjlR6xbmZRLLX2jmmO2s+thTtpbaGImc/jtkuY
-         sLYcOWIbkRGI6C3sWShNY93k3turEu0yOmm2j5uewaXPTx/FowQzn08Jb9aAE96Tdh9O
-         iRsEDttebDUoYEJW6LI78bNpvTF+/JvC1L9ur0vuLzS62rxe9pVpOt1qcj13FjIYtwER
-         +ASXcNVC6OoGo2588oQS1GxdZGQQfT/DXzpjs4KUFKsASEX9Dz85fhJVi5rppMCTfxiX
-         p3gQ==
-X-Gm-Message-State: AOJu0YxqAXorbHFjiw9ctrpZo4iuKTf/QRgY/i16ybqqwTwqCylET85l
-	MxikEFxFaTVV0mVAMTeiPyg=
-X-Google-Smtp-Source: AGHT+IETgqfFvqXl4D6oTt8HqSBTHeU5qIhotu6cWcFE5mphMS+hJLeTcvmtsRtxh3VpBUV5K9k01A==
-X-Received: by 2002:a17:902:a517:b0:1d0:6ffd:ce97 with SMTP id s23-20020a170902a51700b001d06ffdce97mr8244321plq.80.1702921079335;
-        Mon, 18 Dec 2023 09:37:59 -0800 (PST)
+        bh=MSCNW3XocCoAsaIVyOF/pzRCaLzEloazKrsnZY7ER0Q=;
+        b=viXPF+dBHYMZxVTc81dade/0ph+TuBroa8GOuD8vkHxUhm4HICLgDH43aS2YNv9cKm
+         ssLOgGIqCesIcZrMHtVtSDasdTUFm1YNOeqfNIb7aLurz6n3rrX8AoA8MMhs5oRVF21y
+         6NPBCET8nERPOzJr1dEpsVwPbCLEQ9vZ0rGqU6NSjiJCr5ui0Vss2+LXgCi34FTyLwTY
+         VTBbZw3SRIQ6r/aGGOecA2X2BDh2E7qTRvmF49uL/pwlnyOKQ9nkwEhYNXkVzdEbLr+o
+         p9Y8Nh4wX5eCZWF7K6LFRuNVn/T/BJsgwxD/cCtfh8GymuPV1Hat964skySgERVk/fCx
+         721Q==
+X-Gm-Message-State: AOJu0Ywysqvtt1Z8yLwnE5DNqR3NwAV8M72eYd2oqVqw6ZoxD6hRWQKX
+	sfxKX06NLmgpLGGYa0+37bg=
+X-Google-Smtp-Source: AGHT+IGYxHEJLhZPCxXTzyXH9OqscdA58SngL3HNWhrsUwQPRP2M7CFbxMaiKlUkMHufM7nDyN5Ktw==
+X-Received: by 2002:a17:903:40ca:b0:1d0:ba36:eea3 with SMTP id t10-20020a17090340ca00b001d0ba36eea3mr10563132pld.7.1702926074344;
+        Mon, 18 Dec 2023 11:01:14 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id jk11-20020a170903330b00b001d3d9be4d5bsm35613plb.88.2023.12.18.09.37.56
+        by smtp.gmail.com with ESMTPSA id e14-20020a170902ed8e00b001d362b6b0eesm8724243plj.168.2023.12.18.11.01.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Dec 2023 09:37:57 -0800 (PST)
+        Mon, 18 Dec 2023 11:01:13 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <dea56d34-bab1-4bca-9daf-5a48b4e0507e@roeck-us.net>
-Date: Mon, 18 Dec 2023 09:37:56 -0800
+Message-ID: <7f470259-89c9-4a4c-90d8-0997a706f7dd@roeck-us.net>
+Date: Mon, 18 Dec 2023 11:01:12 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -53,16 +53,21 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] hwmon: (lm75) Add AMS AS6200 temperature sensor
+Subject: Re: [PATCH 1/3] hwmon: max31827: Add PEC support
 Content-Language: en-US
-To: Abdel Alkuor <alkuor@gmail.com>, Jean Delvare <jdelvare@suse.com>,
- Rob Herring <robh+dt@kernel.org>,
+To: "Matyas, Daniel" <Daniel.Matyas@analog.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-References: <89fb5eec30df734ee8fc58427cf5d94929076514.1702874115.git.alkuor@gmail.com>
- <a71ac5106e022b526bef9fc375bd5d3f547eb19d.1702874115.git.alkuor@gmail.com>
+ Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+References: <20231214143648.175336-1-daniel.matyas@analog.com>
+ <2e0bf1cf-824d-40c6-9450-7ed4740f2f46@roeck-us.net>
+ <PH0PR03MB6771B89E4D3291BA0B1B5ABF8990A@PH0PR03MB6771.namprd03.prod.outlook.com>
+ <5baa93fe-bd08-4f11-9c5c-42060e89930c@roeck-us.net>
+ <PH0PR03MB6771CF6A95CB576E534C225F8990A@PH0PR03MB6771.namprd03.prod.outlook.com>
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -107,359 +112,135 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <a71ac5106e022b526bef9fc375bd5d3f547eb19d.1702874115.git.alkuor@gmail.com>
+In-Reply-To: <PH0PR03MB6771CF6A95CB576E534C225F8990A@PH0PR03MB6771.namprd03.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: base64
 
-On 12/17/23 20:52, Abdel Alkuor wrote:
-> as6200 is a temperature sensor with 0.0625°C resolution and a
-> range between -40°C to 125°C.
-> 
-> By default, the driver configures as6200 as following:
-> - Converstion rate: 8 Hz
-> - Conversion mode: continuous
-> - Consecutive fault counts: 4 samples
-> - Alert state: high polarity
-> - Alert mode: comparator mode
-> 
-> Interrupt is supported for the alert pin.
-> 
-> Datasheet: https://ams.com/documents/20143/36005/AS6200_DS000449_4-00.pdf
-> Signed-off-by: Abdel Alkuor <alkuor@gmail.com>
-> ---
-> Changes in v2:
->    - Incorporate as6200 into lm75 driver
-> 
->   Documentation/hwmon/lm75.rst |  10 +++
->   drivers/hwmon/lm75.c         | 132 +++++++++++++++++++++++++++++------
->   2 files changed, 122 insertions(+), 20 deletions(-)
-> 
-> diff --git a/Documentation/hwmon/lm75.rst b/Documentation/hwmon/lm75.rst
-> index 8d0ab4ad5fb5..6adab608dd05 100644
-> --- a/Documentation/hwmon/lm75.rst
-> +++ b/Documentation/hwmon/lm75.rst
-> @@ -133,6 +133,16 @@ Supported chips:
->   
->                  https://www.nxp.com/docs/en/data-sheet/PCT2075.pdf
->   
-> +  * AMS OSRAM AS6200
-> +
-> +    Prefix: 'as6200'
-> +
-> +    Addresses scanned: none
-> +
-> +    Datasheet: Publicly available at the AMS website
-> +
-> +               https://ams.com/documents/20143/36005/AS6200_DS000449_4-00.pdf
-> +
->   Author: Frodo Looijaard <frodol@dds.nl>
->   
->   Description
-> diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
-> index 5b2ea05c951e..2d153f6729e0 100644
-> --- a/drivers/hwmon/lm75.c
-> +++ b/drivers/hwmon/lm75.c
-> @@ -7,6 +7,7 @@
->   
->   #include <linux/module.h>
->   #include <linux/init.h>
-> +#include <linux/interrupt.h>
->   #include <linux/slab.h>
->   #include <linux/jiffies.h>
->   #include <linux/i2c.h>
-> @@ -25,6 +26,7 @@
->   
->   enum lm75_type {		/* keep sorted in alphabetical order */
->   	adt75,
-> +	as6200,
->   	at30ts74,
->   	ds1775,
->   	ds75,
-> @@ -55,6 +57,7 @@ enum lm75_type {		/* keep sorted in alphabetical order */
->   
->   /**
->    * struct lm75_params - lm75 configuration parameters.
-> + * @config_reg_16bits	Configure register size is 2 bytes.
-
-@config_reg_16bits:
-
->    * @set_mask:		Bits to set in configuration register when configuring
->    *			the chip.
->    * @clr_mask:		Bits to clear in configuration register when configuring
-> @@ -75,17 +78,20 @@ enum lm75_type {		/* keep sorted in alphabetical order */
->    * @sample_times:	All the possible sample times to be set. Mandatory if
->    *			num_sample_times is larger than 1. If set, number of
->    *			entries must match num_sample_times.
-> + * @alarm		Alarm is supported.
-
-@alarm:
-
->    */
->   
->   struct lm75_params {
-> -	u8			set_mask;
-> -	u8			clr_mask;
-> +	bool			config_reg_16bits;
-> +	u16			set_mask;
-> +	u16			clr_mask;
->   	u8			default_resolution;
->   	u8			resolution_limits;
->   	const u8		*resolutions;
->   	unsigned int		default_sample_time;
->   	u8			num_sample_times;
->   	const unsigned int	*sample_times;
-> +	bool			alarm;
->   };
->   
->   /* Addresses scanned */
-> @@ -104,8 +110,8 @@ struct lm75_data {
->   	struct i2c_client		*client;
->   	struct regmap			*regmap;
->   	struct regulator		*vs;
-> -	u8				orig_conf;
-> -	u8				current_conf;
-> +	u16				orig_conf;
-> +	u16				current_conf;
->   	u8				resolution;	/* In bits, 9 to 16 */
->   	unsigned int			sample_time;	/* In ms */
->   	enum lm75_type			kind;
-> @@ -128,6 +134,15 @@ static const struct lm75_params device_params[] = {
->   		.default_resolution = 12,
->   		.default_sample_time = MSEC_PER_SEC / 10,
->   	},
-> +	[as6200] = {
-> +		.config_reg_16bits = true,
-> +		.set_mask = 0x94C0,	/* 8 sample/s, 4 CF, positive polarity */
-> +		.default_resolution = 12,
-> +		.default_sample_time = 125,
-> +		.num_sample_times = 4,
-> +		.sample_times = (unsigned int []){ 125, 250, 1000, 4000 },
-> +		.alarm = true,
-> +	},
->   	[at30ts74] = {
->   		.set_mask = 3 << 5,	/* 12-bit mode*/
->   		.default_resolution = 12,
-> @@ -317,20 +332,23 @@ static inline long lm75_reg_to_mc(s16 temp, u8 resolution)
->   	return ((temp >> (16 - resolution)) * 1000) >> (resolution - 8);
->   }
->   
-> -static int lm75_write_config(struct lm75_data *data, u8 set_mask,
-> -			     u8 clr_mask)
-> +static int lm75_write_config(struct lm75_data *data, u16 set_mask,
-> +			     u16 clr_mask)
->   {
-> -	u8 value;
-> +	unsigned int value;
->   
-> -	clr_mask |= LM75_SHUTDOWN;
-> +	clr_mask |= LM75_SHUTDOWN << (8 * data->params->config_reg_16bits);
->   	value = data->current_conf & ~clr_mask;
->   	value |= set_mask;
->   
->   	if (data->current_conf != value) {
->   		s32 err;
-> -
-> -		err = i2c_smbus_write_byte_data(data->client, LM75_REG_CONF,
-> -						value);
-> +		if (data->params->config_reg_16bits)
-> +			err = regmap_write(data->regmap, LM75_REG_CONF, value);
-> +		else
-> +			err = i2c_smbus_write_byte_data(data->client,
-> +							LM75_REG_CONF,
-> +							value);
->   		if (err)
->   			return err;
->   		data->current_conf = value;
-> @@ -338,6 +356,33 @@ static int lm75_write_config(struct lm75_data *data, u8 set_mask,
->   	return 0;
->   }
->   
-> +static int lm75_read_config(struct lm75_data *data, u16 *config)
-> +{
-> +	int ret;
-> +	unsigned int status;
-> +
-> +	if (data->params->config_reg_16bits) {
-> +		ret = regmap_read(data->regmap, LM75_REG_CONF, &status);
-> +	} else {
-> +		ret = i2c_smbus_read_byte_data(data->client, LM75_REG_CONF);
-> +		status = ret;
-> +	}
-> +
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	*config = status;
-> +	return 0;
-> +}
-> +
-> +static irqreturn_t lm75_alarm_handler(int irq, void *private)
-> +{
-> +	struct device *hwmon_dev = private;
-> +
-> +	hwmon_notify_event(hwmon_dev, hwmon_temp, hwmon_temp_alarm, 0);
-> +	return IRQ_HANDLED;
-> +}
-> +
->   static int lm75_read(struct device *dev, enum hwmon_sensor_types type,
->   		     u32 attr, int channel, long *val)
->   {
-> @@ -366,6 +411,9 @@ static int lm75_read(struct device *dev, enum hwmon_sensor_types type,
->   		case hwmon_temp_max_hyst:
->   			reg = LM75_REG_HYST;
->   			break;
-> +		case hwmon_temp_alarm:
-> +			reg = LM75_REG_CONF;
-> +			break;
->   		default:
->   			return -EINVAL;
->   		}
-> @@ -373,7 +421,17 @@ static int lm75_read(struct device *dev, enum hwmon_sensor_types type,
->   		if (err < 0)
->   			return err;
->   
-> -		*val = lm75_reg_to_mc(regval, data->resolution);
-> +		if (attr == hwmon_temp_alarm) {
-> +			switch (data->kind) {
-> +			case as6200:
-> +				*val = (regval >> 5) & 0x1;
-> +				break;
-> +			default:
-> +				return -EINVAL;
-> +			}
-> +		} else {
-> +			*val = lm75_reg_to_mc(regval, data->resolution);
-> +		}
->   		break;
->   	default:
->   		return -EINVAL;
-> @@ -436,6 +494,7 @@ static int lm75_update_interval(struct device *dev, long val)
->   			data->resolution = data->params->resolutions[index];
->   		break;
->   	case tmp112:
-> +	case as6200:
->   		err = regmap_read(data->regmap, LM75_REG_CONF, &reg);
->   		if (err < 0)
->   			return err;
-> @@ -503,6 +562,9 @@ static umode_t lm75_is_visible(const void *data, enum hwmon_sensor_types type,
->   		case hwmon_temp_max:
->   		case hwmon_temp_max_hyst:
->   			return 0644;
-> +		case hwmon_temp_alarm:
-> +			if (config_data->params->alarm)
-> +				return 0444;
-
-Missing
-			break;
-
->   		}
->   		break;
->   	default:
-> @@ -515,7 +577,8 @@ static const struct hwmon_channel_info * const lm75_info[] = {
->   	HWMON_CHANNEL_INFO(chip,
->   			   HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL),
->   	HWMON_CHANNEL_INFO(temp,
-> -			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST),
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-> +			   HWMON_T_ALARM),
->   	NULL
->   };
->   
-> @@ -574,7 +637,7 @@ static int lm75_probe(struct i2c_client *client)
->   	struct device *dev = &client->dev;
->   	struct device *hwmon_dev;
->   	struct lm75_data *data;
-> -	int status, err;
-> +	int err;
->   	enum lm75_type kind;
->   
->   	if (client->dev.of_node)
-> @@ -623,13 +686,13 @@ static int lm75_probe(struct i2c_client *client)
->   		return err;
->   
->   	/* Cache original configuration */
-> -	status = i2c_smbus_read_byte_data(client, LM75_REG_CONF);
-> -	if (status < 0) {
-> -		dev_dbg(dev, "Can't read config? %d\n", status);
-> -		return status;
-> +	err = lm75_read_config(data, &data->current_conf);
-> +	if (err) {
-> +		dev_dbg(dev, "Can't read config? %d\n", err);
-> +		return err;
->   	}
-
-I don't think splitting the return value from the error code adds any value,
-even more so since it needs to be dereferenced below anyway. Please just keep
-the original semantics here, and have lm75_read_config() return the combined
-error code and status.
-
-> -	data->orig_conf = status;
-> -	data->current_conf = status;
-> +
-> +	data->orig_conf = data->current_conf;
->   
->   	err = lm75_write_config(data, data->params->set_mask,
->   				data->params->clr_mask);
-> @@ -646,6 +709,30 @@ static int lm75_probe(struct i2c_client *client)
->   	if (IS_ERR(hwmon_dev))
->   		return PTR_ERR(hwmon_dev);
->   
-> +	if (client->irq) {
-> +		if (data->params->alarm) {
-> +			err = devm_request_threaded_irq(dev,
-> +							client->irq,
-> +							NULL,
-> +							&lm75_alarm_handler,
-> +							IRQF_ONESHOT,
-> +							client->name,
-> +							hwmon_dev);
-> +			if (err)
-> +				return err;
-> +		} else {
-> +			/*
-> +			 * Currently, alarm is only supported for chips with
-> +			 * alarm bit.
-> +			 * In the future, if alarm is needed for chips with
-> +			 * no alarm bit, current temp needs to be compared
-> +			 * against the max and max hyst values to set/clear
-> +			 * the alarm state.
-
-Please don't make such suggestions. If userspace wants to compare attributes
-if there is no alarm attribute, it is free to do it. We should not even try
-to do it in the kernel.
-
-> +			 */
-> +			dev_warn(dev, "alarm interrupt is not supported\n");
-
-I think this should be an error: There should be no interrupt configured on a
-chip not supporting it.
-
-> +		}
-> +	}
-> +
->   	dev_info(dev, "%s: sensor '%s'\n", dev_name(hwmon_dev), client->name);
->   
->   	return 0;
-> @@ -654,6 +741,7 @@ static int lm75_probe(struct i2c_client *client)
->   static const struct i2c_device_id lm75_ids[] = {
->   	{ "adt75", adt75, },
->   	{ "at30ts74", at30ts74, },
-> +	{ "as6200", as6200, },
-
-Alphabetic order, please
-
->   	{ "ds1775", ds1775, },
->   	{ "ds75", ds75, },
->   	{ "ds7505", ds7505, },
-> @@ -689,6 +777,10 @@ static const struct of_device_id __maybe_unused lm75_of_match[] = {
->   		.compatible = "adi,adt75",
->   		.data = (void *)adt75
->   	},
-> +	{
-> +		.compatible = "ams,as6200",
-> +		.data = (void *)as6200
-> +	},
->   	{
->   		.compatible = "atmel,at30ts74",
->   		.data = (void *)at30ts74
-
+T24gMTIvMTgvMjMgMDk6NTksIE1hdHlhcywgRGFuaWVsIHdyb3RlOg0KPiANCj4gDQo+IC0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLQ0KPiAqVm9uOiogR3VlbnRlciBSb2VjayA8Z3JvZWNrN0BnbWFp
+bC5jb20+IGltIEF1ZnRyYWcgdm9uIEd1ZW50ZXIgUm9lY2sgPGxpbnV4QHJvZWNrLXVzLm5l
+dD4NCj4gKkdlc2VuZGV0OiogTW9udGFnLCBEZXplbWJlciAxOCwgMjAyMyA2OjI2OjU3IG5h
+Y2htLg0KPiAqQW46KiBNYXR5YXMsIERhbmllbCA8RGFuaWVsLk1hdHlhc0BhbmFsb2cuY29t
+Pg0KPiAqQ2M6KiBKZWFuIERlbHZhcmUgPGpkZWx2YXJlQHN1c2UuY29tPjsgUm9iIEhlcnJp
+bmcgPHJvYmgrZHRAa2VybmVsLm9yZz47IEtyenlzenRvZiBLb3psb3dza2kgPGtyenlzenRv
+Zi5rb3psb3dza2krZHRAbGluYXJvLm9yZz47IENvbm9yIERvb2xleSA8Y29ub3IrZHRAa2Vy
+bmVsLm9yZz47IEpvbmF0aGFuIENvcmJldCA8Y29yYmV0QGx3bi5uZXQ+OyBsaW51eC1od21v
+bkB2Z2VyLmtlcm5lbC5vcmcgPGxpbnV4LWh3bW9uQHZnZXIua2VybmVsLm9yZz47IGRldmlj
+ZXRyZWVAdmdlci5rZXJuZWwub3JnIDxkZXZpY2V0cmVlQHZnZXIua2VybmVsLm9yZz47IGxp
+bnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcgPGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5v
+cmc+OyBsaW51eC1kb2NAdmdlci5rZXJuZWwub3JnIDxsaW51eC1kb2NAdmdlci5rZXJuZWwu
+b3JnPg0KPiAqQmV0cmVmZjoqIFJlOiBbUEFUQ0ggMS8zXSBod21vbjogbWF4MzE4Mjc6IEFk
+ZCBQRUMgc3VwcG9ydA0KPiANCj4gW0V4dGVybmFsXQ0KPiANCj4gT24gMTIvMTgvMjMgMDY6
+NTUsIE1hdHlhcywgRGFuaWVsIHdyb3RlOg0KPiBbIC4uLiBdDQo+Pj4gT24gdG9wIG9mIHRo
+YXQsIGl0IGlzIG5vdCBjbGVhciB3aHkgcmVnbWFwIGNhbid0IGJlIHVzZWQgaW4gdGhlIGZp
+cnN0IHBsYWNlLg0KPj4+IEl0IHNlZW1zIHRoYXQgdGhlIG1ham9yIGNoYW5nZSBpcyB0aGF0
+IG9uZSBuZWVkcyB0byByZWFkIHRoZSBjb25maWd1cmF0aW9uDQo+Pj4gcmVnaXN0ZXIgYWZ0
+ZXIgYSB3cml0ZSB0byBzZWUgaWYgdGhlcmUgd2FzIGEgUEVDIGVycm9yLiBJdCBpcyBub3Qg
+aW1tZWRpYXRlbHkNCj4+PiBvYnZpb3VzIHdoeSB0aGF0IGFkZGl0aW9uYWwgcmVhZCAoaWYg
+aW5kZWVkIG5lY2Vzc2FyeSkgd291bGQgcmVxdWlyZQ0KPj4+IHJlZ21hcCBzdXBwb3J0IHRv
+IGJlIGRyb3BwZWQuDQo+Pj4NCj4+IA0KPj4gSSB0cmllZCBvdXQgd3JpdGluZyBhbmQgYW5k
+IHJlYWRpbmcgd2l0aCByZWdtYXAsIGJ1dCBpdCBpcyBub3Qgd29ya2luZyBwcm9wZXJseS4g
+RXZlbiBpZiBJIG1vZGlmeSB0aGUgY2xpZW50IGZsYWcsIEkgc3RpbGwgcmVjZWl2ZSBvbmx5
+IDIgYnl0ZXMgb2YgZGF0YSAoYSB3b3JkKS4gSSBzaG91bGQgYmUgcmVjZWl2aW5nIDIrMSBi
+eXRlcyA9IGRhdGEgKyBDUkMtOC4NCj4+IA0KPj4gV2l0aCBpMmNfc21idXMgcmVhZHMgYW5k
+IHdyaXRlcywgd2hlbiBJIHNldCB0aGUgZmxhZywgSSByZWNlaXZlIHRoZSAyKzEgYnl0ZXMs
+IGFzIGV4cGVjdGVkLg0KPj4gDQo+IA0KPiBUaGUgU01CdXMgY29kZSBpbiBkcml2ZXJzL2ky
+Yy9pMmMtY29yZS1zbWJ1cy5jIGlzIHN1cHBvc2VkIHRvIGNoZWNrDQo+IGlmIHRoZSByZWNl
+aXZlZCBQRUMgaXMgY29ycmVjdCBmb3IgU01CdXMgdHJhbnNmZXJzLiBBcmUgeW91IHNheWlu
+Zw0KPiB0aGF0IHRoaXMgZG9lc24ndCB3b3JrLCBvciB0aGF0IHJlZ21hcCBkb2Vzbid0IHVz
+ZSBTTUJ1cyBmdW5jdGlvbnMNCj4gdG8gY29tbXVuaWNhdGUgd2l0aCB0aGUgY2hpcCA/DQo+
+IA0KPiBUaGFua3MsDQo+IEd1ZW50ZXINCj4gDQo+IA0KPiBJIGFtIDcwJSBzdXJlLCB0aGF0
+IHRoZSByZWdtYXAgZG9lcyBub3QgdXNlIFNNQnVzIGZ1bmN0aW9ucy4NCj4gDQoNCkl0IHNo
+b3VsZC4NCg0KJCBnaXQgZ3JlcCBzbWJ1cyBkcml2ZXJzL2Jhc2UvcmVnbWFwL3JlZ21hcC1p
+MmMuYw0KZHJpdmVycy9iYXNlL3JlZ21hcC9yZWdtYXAtaTJjLmM6c3RhdGljIGludCByZWdt
+YXBfc21idXNfYnl0ZV9yZWdfcmVhZCh2b2lkICpjb250ZXh0LCB1bnNpZ25lZCBpbnQgcmVn
+LA0KZHJpdmVycy9iYXNlL3JlZ21hcC9yZWdtYXAtaTJjLmM6ICAgICAgIHJldCA9IGkyY19z
+bWJ1c19yZWFkX2J5dGVfZGF0YShpMmMsIHJlZyk7DQpkcml2ZXJzL2Jhc2UvcmVnbWFwL3Jl
+Z21hcC1pMmMuYzpzdGF0aWMgaW50IHJlZ21hcF9zbWJ1c19ieXRlX3JlZ193cml0ZSh2b2lk
+ICpjb250ZXh0LCB1bnNpZ25lZCBpbnQgcmVnLA0KZHJpdmVycy9iYXNlL3JlZ21hcC9yZWdt
+YXAtaTJjLmM6ICAgICAgIHJldHVybiBpMmNfc21idXNfd3JpdGVfYnl0ZV9kYXRhKGkyYywg
+cmVnLCB2YWwpOw0KZHJpdmVycy9iYXNlL3JlZ21hcC9yZWdtYXAtaTJjLmM6c3RhdGljIGNv
+bnN0IHN0cnVjdCByZWdtYXBfYnVzIHJlZ21hcF9zbWJ1c19ieXRlID0gew0KZHJpdmVycy9i
+YXNlL3JlZ21hcC9yZWdtYXAtaTJjLmM6ICAgICAgIC5yZWdfd3JpdGUgPSByZWdtYXBfc21i
+dXNfYnl0ZV9yZWdfd3JpdGUsDQpkcml2ZXJzL2Jhc2UvcmVnbWFwL3JlZ21hcC1pMmMuYzog
+ICAgICAgLnJlZ19yZWFkID0gcmVnbWFwX3NtYnVzX2J5dGVfcmVnX3JlYWQsDQpkcml2ZXJz
+L2Jhc2UvcmVnbWFwL3JlZ21hcC1pMmMuYzpzdGF0aWMgaW50IHJlZ21hcF9zbWJ1c193b3Jk
+X3JlZ19yZWFkKHZvaWQgKmNvbnRleHQsIHVuc2lnbmVkIGludCByZWcsDQpkcml2ZXJzL2Jh
+c2UvcmVnbWFwL3JlZ21hcC1pMmMuYzogICAgICAgcmV0ID0gaTJjX3NtYnVzX3JlYWRfd29y
+ZF9kYXRhKGkyYywgcmVnKTsNCmRyaXZlcnMvYmFzZS9yZWdtYXAvcmVnbWFwLWkyYy5jOnN0
+YXRpYyBpbnQgcmVnbWFwX3NtYnVzX3dvcmRfcmVnX3dyaXRlKHZvaWQgKmNvbnRleHQsIHVu
+c2lnbmVkIGludCByZWcsDQpkcml2ZXJzL2Jhc2UvcmVnbWFwL3JlZ21hcC1pMmMuYzogICAg
+ICAgcmV0dXJuIGkyY19zbWJ1c193cml0ZV93b3JkX2RhdGEoaTJjLCByZWcsIHZhbCk7DQpk
+cml2ZXJzL2Jhc2UvcmVnbWFwL3JlZ21hcC1pMmMuYzpzdGF0aWMgY29uc3Qgc3RydWN0IHJl
+Z21hcF9idXMgcmVnbWFwX3NtYnVzX3dvcmQgPSB7DQpkcml2ZXJzL2Jhc2UvcmVnbWFwL3Jl
+Z21hcC1pMmMuYzogICAgICAgLnJlZ193cml0ZSA9IHJlZ21hcF9zbWJ1c193b3JkX3JlZ193
+cml0ZSwNCmRyaXZlcnMvYmFzZS9yZWdtYXAvcmVnbWFwLWkyYy5jOiAgICAgICAucmVnX3Jl
+YWQgPSByZWdtYXBfc21idXNfd29yZF9yZWdfcmVhZCwNCmRyaXZlcnMvYmFzZS9yZWdtYXAv
+cmVnbWFwLWkyYy5jOnN0YXRpYyBpbnQgcmVnbWFwX3NtYnVzX3dvcmRfcmVhZF9zd2FwcGVk
+KHZvaWQgKmNvbnRleHQsIHVuc2lnbmVkIGludCByZWcsDQpkcml2ZXJzL2Jhc2UvcmVnbWFw
+L3JlZ21hcC1pMmMuYzogICAgICAgcmV0ID0gaTJjX3NtYnVzX3JlYWRfd29yZF9zd2FwcGVk
+KGkyYywgcmVnKTsNCmRyaXZlcnMvYmFzZS9yZWdtYXAvcmVnbWFwLWkyYy5jOnN0YXRpYyBp
+bnQgcmVnbWFwX3NtYnVzX3dvcmRfd3JpdGVfc3dhcHBlZCh2b2lkICpjb250ZXh0LCB1bnNp
+Z25lZCBpbnQgcmVnLA0KZHJpdmVycy9iYXNlL3JlZ21hcC9yZWdtYXAtaTJjLmM6ICAgICAg
+IHJldHVybiBpMmNfc21idXNfd3JpdGVfd29yZF9zd2FwcGVkKGkyYywgcmVnLCB2YWwpOw0K
+ZHJpdmVycy9iYXNlL3JlZ21hcC9yZWdtYXAtaTJjLmM6c3RhdGljIGNvbnN0IHN0cnVjdCBy
+ZWdtYXBfYnVzIHJlZ21hcF9zbWJ1c193b3JkX3N3YXBwZWQgPSB7DQpkcml2ZXJzL2Jhc2Uv
+cmVnbWFwL3JlZ21hcC1pMmMuYzogICAgICAgLnJlZ193cml0ZSA9IHJlZ21hcF9zbWJ1c193
+b3JkX3dyaXRlX3N3YXBwZWQsDQpkcml2ZXJzL2Jhc2UvcmVnbWFwL3JlZ21hcC1pMmMuYzog
+ICAgICAgLnJlZ19yZWFkID0gcmVnbWFwX3NtYnVzX3dvcmRfcmVhZF9zd2FwcGVkLA0KZHJp
+dmVycy9iYXNlL3JlZ21hcC9yZWdtYXAtaTJjLmM6c3RhdGljIGludCByZWdtYXBfaTJjX3Nt
+YnVzX2kyY193cml0ZSh2b2lkICpjb250ZXh0LCBjb25zdCB2b2lkICpkYXRhLA0KZHJpdmVy
+cy9iYXNlL3JlZ21hcC9yZWdtYXAtaTJjLmM6ICAgICAgIHJldHVybiBpMmNfc21idXNfd3Jp
+dGVfaTJjX2Jsb2NrX2RhdGEoaTJjLCAoKHU4ICopZGF0YSlbMF0sIGNvdW50LA0KZHJpdmVy
+cy9iYXNlL3JlZ21hcC9yZWdtYXAtaTJjLmM6c3RhdGljIGludCByZWdtYXBfaTJjX3NtYnVz
+X2kyY19yZWFkKHZvaWQgKmNvbnRleHQsIGNvbnN0IHZvaWQgKnJlZywNCmRyaXZlcnMvYmFz
+ZS9yZWdtYXAvcmVnbWFwLWkyYy5jOiAgICAgICByZXQgPSBpMmNfc21idXNfcmVhZF9pMmNf
+YmxvY2tfZGF0YShpMmMsICgodTggKilyZWcpWzBdLCB2YWxfc2l6ZSwgdmFsKTsNCmRyaXZl
+cnMvYmFzZS9yZWdtYXAvcmVnbWFwLWkyYy5jOnN0YXRpYyBjb25zdCBzdHJ1Y3QgcmVnbWFw
+X2J1cyByZWdtYXBfaTJjX3NtYnVzX2kyY19ibG9jayA9IHsNCmRyaXZlcnMvYmFzZS9yZWdt
+YXAvcmVnbWFwLWkyYy5jOiAgICAgICAud3JpdGUgPSByZWdtYXBfaTJjX3NtYnVzX2kyY193
+cml0ZSwNCmRyaXZlcnMvYmFzZS9yZWdtYXAvcmVnbWFwLWkyYy5jOiAgICAgICAucmVhZCA9
+IHJlZ21hcF9pMmNfc21idXNfaTJjX3JlYWQsDQpkcml2ZXJzL2Jhc2UvcmVnbWFwL3JlZ21h
+cC1pMmMuYzpzdGF0aWMgaW50IHJlZ21hcF9pMmNfc21idXNfaTJjX3dyaXRlX3JlZzE2KHZv
+aWQgKmNvbnRleHQsIGNvbnN0IHZvaWQgKmRhdGEsDQpkcml2ZXJzL2Jhc2UvcmVnbWFwL3Jl
+Z21hcC1pMmMuYzogICAgICAgcmV0dXJuIGkyY19zbWJ1c193cml0ZV9pMmNfYmxvY2tfZGF0
+YShpMmMsICgodTggKilkYXRhKVswXSwgY291bnQsDQpkcml2ZXJzL2Jhc2UvcmVnbWFwL3Jl
+Z21hcC1pMmMuYzpzdGF0aWMgaW50IHJlZ21hcF9pMmNfc21idXNfaTJjX3JlYWRfcmVnMTYo
+dm9pZCAqY29udGV4dCwgY29uc3Qgdm9pZCAqcmVnLA0KZHJpdmVycy9iYXNlL3JlZ21hcC9y
+ZWdtYXAtaTJjLmM6ICAgICAgIHJldCA9IGkyY19zbWJ1c193cml0ZV9ieXRlX2RhdGEoaTJj
+LCAoKHUxNiAqKXJlZylbMF0gJiAweGZmLA0KZHJpdmVycy9iYXNlL3JlZ21hcC9yZWdtYXAt
+aTJjLmM6ICAgICAgICAgICAgICAgcmV0ID0gaTJjX3NtYnVzX3JlYWRfYnl0ZShpMmMpOw0K
+ZHJpdmVycy9iYXNlL3JlZ21hcC9yZWdtYXAtaTJjLmM6c3RhdGljIGNvbnN0IHN0cnVjdCBy
+ZWdtYXBfYnVzIHJlZ21hcF9pMmNfc21idXNfaTJjX2Jsb2NrX3JlZzE2ID0gew0KZHJpdmVy
+cy9iYXNlL3JlZ21hcC9yZWdtYXAtaTJjLmM6ICAgICAgIC53cml0ZSA9IHJlZ21hcF9pMmNf
+c21idXNfaTJjX3dyaXRlX3JlZzE2LA0KZHJpdmVycy9iYXNlL3JlZ21hcC9yZWdtYXAtaTJj
+LmM6ICAgICAgIC5yZWFkID0gcmVnbWFwX2kyY19zbWJ1c19pMmNfcmVhZF9yZWcxNiwNCmRy
+aXZlcnMvYmFzZS9yZWdtYXAvcmVnbWFwLWkyYy5jOiAgICAgICAgICAgICAgIGJ1cyA9ICZy
+ZWdtYXBfaTJjX3NtYnVzX2kyY19ibG9jazsNCmRyaXZlcnMvYmFzZS9yZWdtYXAvcmVnbWFw
+LWkyYy5jOiAgICAgICAgICAgICAgIGJ1cyA9ICZyZWdtYXBfaTJjX3NtYnVzX2kyY19ibG9j
+a19yZWcxNjsNCmRyaXZlcnMvYmFzZS9yZWdtYXAvcmVnbWFwLWkyYy5jOiAgICAgICAgICAg
+ICAgICAgICAgICAgYnVzID0gJnJlZ21hcF9zbWJ1c193b3JkOw0KZHJpdmVycy9iYXNlL3Jl
+Z21hcC9yZWdtYXAtaTJjLmM6ICAgICAgICAgICAgICAgICAgICAgICBidXMgPSAmcmVnbWFw
+X3NtYnVzX3dvcmRfc3dhcHBlZDsNCmRyaXZlcnMvYmFzZS9yZWdtYXAvcmVnbWFwLWkyYy5j
+OiAgICAgICAgICAgICAgIGJ1cyA9ICZyZWdtYXBfc21idXNfYnl0ZTsNCg0KSWYgdGhhdCBk
+b2Vzbid0IHdvcmsgZm9yIHNvbWUgcmVhc29uLCBJJ2QgcmF0aGVyIGZpZ3VyZSBvdXQgd2h5
+IGluc3RlYWQgb2YNCnN0YXJ0aW5nIHRvIGRyb3AgcmVnbWFwIHN1cHBvcnQuDQoNCkd1ZW50
+ZXINCg0K
