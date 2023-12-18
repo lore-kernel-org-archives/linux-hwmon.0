@@ -1,138 +1,269 @@
-Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com [209.85.217.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAF3D498BC;
-	Mon, 18 Dec 2023 16:26:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZLd3hkGn"
-Received: by mail-vs1-f42.google.com with SMTP id ada2fe7eead31-4669ac6df36so251421137.2;
-        Mon, 18 Dec 2023 08:26:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702916812; x=1703521612; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=E3bMqGvFd2ovYEJupaD2iiMJymj8eT2qHOLEt3EV5ao=;
-        b=ZLd3hkGnagBFyTsc48vJwy4caSlADCkMddjZDoBczoGq9TK1pS03D74kUbpW1J5pED
-         oNnDfAWelwmb0vdh1O+UsdkYXalC4yEOQ9XFQtMOcFAmOmnc8mMI7jSHHKaoS6AkLgCc
-         HBv+gzrxC/fP/nu6YoI91n7vwWf5A/Tyua6Zmf7jPtXpVs4bIWvwwJ8k/nW7Krjgdx9H
-         NU4qAIUL7e1D/XwZqnUt65QjJUOP1cV+RiC6QOhZ+pnvbxBH+m3VRa3OfPgkR3EfzRZR
-         olaTq5sfXO0waR29UBzS1VddVxU7ofw5aNO/gLYynp9MPTIQHo+SSUYjg9TP4cnBocxw
-         23Zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702916812; x=1703521612;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=E3bMqGvFd2ovYEJupaD2iiMJymj8eT2qHOLEt3EV5ao=;
-        b=dJNqj43VKn9DqCtR14smLBKRgoRHrYm+SAvcTd6tQenpOk81ImpDv5XnNZoVxhRRyl
-         cgy0kQtZchP2uJqegHE1UajXGmFFSSwvPqIc24Io7TM7I0cNa6nZWgCrAoRI954jYudX
-         NVszewqhbI0gb6sw1B6PNew2AWK4fOSBejVyPqv7Ww5cXVo7pFFNcC90BjP8+WHMnxzs
-         XIFAhoE6Ze9dBuQF8nbny9yne/ecHh1Udyd/bN1DczbkDV6aNdAjXmxNzAUIUpII7itL
-         GzQyrK5b8J+m7Qmgy/osLpS1KpecQKtG6vJxiwWZn0vvXRoleMJtGO9GA+VFgYD0CRjb
-         w4TQ==
-X-Gm-Message-State: AOJu0YzgTKDWpGn9gNrMwdK7w5KKm6Lh6EWtNXfmum5gzVgHCFZue2dG
-	5xfEtTRD4klFzhu+9X0VSow=
-X-Google-Smtp-Source: AGHT+IGjSB5M0cOljLHaztxwaNbNAoUs6AJuGoEggJJ4Q9aGq0EApZCsoJfeIXHDdyIAeEVr0JGBIw==
-X-Received: by 2002:a05:6102:32c9:b0:465:dcc0:6538 with SMTP id o9-20020a05610232c900b00465dcc06538mr12358249vss.38.1702916812580;
-        Mon, 18 Dec 2023 08:26:52 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id hw11-20020a67e70b000000b004668bf7d113sm271112vsb.34.2023.12.18.08.26.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Dec 2023 08:26:52 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <5baa93fe-bd08-4f11-9c5c-42060e89930c@roeck-us.net>
-Date: Mon, 18 Dec 2023 08:26:50 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FBF4F51F;
+	Mon, 18 Dec 2023 16:27:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
+Received: from pps.filterd (m0375855.ppops.net [127.0.0.1])
+	by mx0b-00128a01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BIDLbpY028640;
+	Mon, 18 Dec 2023 11:27:00 -0500
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+	by mx0b-00128a01.pphosted.com (PPS) with ESMTPS id 3v2pw7gu8v-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 18 Dec 2023 11:26:59 -0500 (EST)
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 3BIGQwC9043882
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 18 Dec 2023 11:26:58 -0500
+Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
+ ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Mon, 18 Dec 2023 11:26:57 -0500
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
+ ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Mon, 18 Dec 2023 11:26:57 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Mon, 18 Dec 2023 11:26:57 -0500
+Received: from [127.0.0.1] ([10.44.3.56])
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 3BIGQiuW024955;
+	Mon, 18 Dec 2023 11:26:54 -0500
+From: Nuno Sa <nuno.sa@analog.com>
+Date: Mon, 18 Dec 2023 17:29:42 +0100
+Subject: [PATCH v4 1/3] dt-bindings: hwmon: Add LTC4282 bindings
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] hwmon: max31827: Add PEC support
-Content-Language: en-US
-To: "Matyas, Daniel" <Daniel.Matyas@analog.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-References: <20231214143648.175336-1-daniel.matyas@analog.com>
- <2e0bf1cf-824d-40c6-9450-7ed4740f2f46@roeck-us.net>
- <PH0PR03MB6771B89E4D3291BA0B1B5ABF8990A@PH0PR03MB6771.namprd03.prod.outlook.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <PH0PR03MB6771B89E4D3291BA0B1B5ABF8990A@PH0PR03MB6771.namprd03.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-ID: <20231218-b4-ltc4282-support-v4-1-4fc51f7d04f0@analog.com>
+References: <20231218-b4-ltc4282-support-v4-0-4fc51f7d04f0@analog.com>
+In-Reply-To: <20231218-b4-ltc4282-support-v4-0-4fc51f7d04f0@analog.com>
+To: <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>
+CC: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+        "Rob
+ Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1702916989; l=6498;
+ i=nuno.sa@analog.com; s=20231116; h=from:subject:message-id;
+ bh=oojdKwLyvbvIwuETLcOx1fT8+oVsNhlM5t/I+U44efw=;
+ b=MAEmr+q4xJ+CGZI6qesQY6oCLRP8H/+1bUhnK2EPXxmUjd4yNeOlTo5YpLq3l6AIdUdz1cyAl
+ 2nRhgVOw0nAAOtYePMSDnHkBKGPBKWEjbUV6q85tQe5HKv+du6z5MA2
+X-Developer-Key: i=nuno.sa@analog.com; a=ed25519;
+ pk=3NQwYA013OUYZsmDFBf8rmyyr5iQlxV/9H4/Df83o1E=
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: jTkfNfI_DoZ0llvbn0jUanCQu38gVBU2
+X-Proofpoint-ORIG-GUID: jTkfNfI_DoZ0llvbn0jUanCQu38gVBU2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-02_01,2023-11-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
+ suspectscore=0 priorityscore=1501 mlxlogscore=999 malwarescore=0
+ spamscore=0 bulkscore=0 clxscore=1011 impostorscore=0 phishscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2311290000 definitions=main-2312180121
 
-On 12/18/23 06:55, Matyas, Daniel wrote:
-[ ... ]
->> On top of that, it is not clear why regmap can't be used in the first place.
->> It seems that the major change is that one needs to read the configuration
->> register after a write to see if there was a PEC error. It is not immediately
->> obvious why that additional read (if indeed necessary) would require
->> regmap support to be dropped.
->>
-> 
-> I tried out writing and and reading with regmap, but it is not working properly. Even if I modify the client flag, I still receive only 2 bytes of data (a word). I should be receiving 2+1 bytes = data + CRC-8.
-> 
-> With i2c_smbus reads and writes, when I set the flag, I receive the 2+1 bytes, as expected.
-> 
+Add bindings for the LTC4282 High Current Hot Swap Controller with I2C
+Compatible Monitoring.
 
-The SMBus code in drivers/i2c/i2c-core-smbus.c is supposed to check
-if the received PEC is correct for SMBus transfers. Are you saying
-that this doesn't work, or that regmap doesn't use SMBus functions
-to communicate with the chip ?
+Signed-off-by: Nuno Sa <nuno.sa@analog.com>
+---
+ .../devicetree/bindings/hwmon/adi,ltc4282.yaml     | 159 +++++++++++++++++++++
+ MAINTAINERS                                        |   6 +
+ 2 files changed, 165 insertions(+)
 
-Thanks,
-Guenter
+diff --git a/Documentation/devicetree/bindings/hwmon/adi,ltc4282.yaml b/Documentation/devicetree/bindings/hwmon/adi,ltc4282.yaml
+new file mode 100644
+index 000000000000..4854b95a93e3
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/adi,ltc4282.yaml
+@@ -0,0 +1,159 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/adi,ltc4282.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Analog Devices LTC4282 I2C High Current Hot Swap Controller over I2C
++
++maintainers:
++  - Nuno Sa <nuno.sa@analog.com>
++
++description: |
++  Analog Devices LTC4282 I2C High Current Hot Swap Controller over I2C.
++
++  https://www.analog.com/media/en/technical-documentation/data-sheets/ltc4282.pdf
++
++properties:
++  compatible:
++    enum:
++      - adi,ltc4282
++
++  reg:
++    maxItems: 1
++
++  vdd-supply: true
++
++  clocks:
++    maxItems: 1
++
++  '#clock-cells':
++    const: 0
++
++  adi,rsense-nano-ohms:
++    description: Value of the sense resistor.
++
++  adi,vin-mode-microvolt:
++    description:
++      Selects operating range for the Undervoltage, Overvoltage and Foldback
++      pins. Also for the ADC. Should be set to the nominal input voltage.
++    enum: [3300000, 5000000, 12000000, 24000000]
++    default: 12000000
++
++  adi,fet-bad-timeout-ms:
++    description:
++      From the moment a FET bad conditions is present, this property selects the
++      wait time/timeout for a FET-bad fault to be signaled. Setting this to 0,
++      disables FET bad faults to be reported.
++    default: 255
++    maximum: 255
++
++  adi,overvoltage-dividers:
++    description: |
++      Select which dividers to use for VDD Overvoltage detection. Note that
++      when the internal dividers are used the threshold is referenced to VDD.
++      The percentages in the datasheet are misleading since the actual values
++      to look for are in the "Absolute Maximum Ratings" table in the
++      "Comparator Inputs" section. In there there's a line for each of the 5%,
++      10% and 15% settings with the actual min, typical and max tolerances.
++    $ref: /schemas/types.yaml#/definitions/string
++    enum: [external, vdd_5_percent, vdd_10_percent, vdd_15_percent]
++    default: external
++
++  adi,undervoltage-dividers:
++    description: |
++      Select which dividers to use for VDD Overvoltage detection. Note that
++      when the internal dividers are used the threshold is referenced to VDD.
++      The percentages in the datasheet are misleading since the actual values
++      to look for are in the "Absolute Maximum Ratings" table in the
++      "Comparator Inputs" section. In there there's a line for each of the 5%,
++      10% and 15% settings with the actual min, typical and max tolerances.
++    $ref: /schemas/types.yaml#/definitions/string
++    enum: [external, vdd_5_percent, vdd_10_percent, vdd_15_percent]
++    default: external
++
++  adi,current-limit-sense-microvolt:
++    description:
++      The current limit sense voltage of the chip is adjustable between
++      12.5mV and 34.4mV in 3.1mV steps. This effectively limits the current
++      on the load.
++    enum: [12500, 15625, 18750, 21875, 25000, 28125, 31250, 34375]
++    default: 25000
++
++  adi,overcurrent-retry:
++    description:
++      If set, enables the chip to auto-retry 256 timer cycles after an
++      Overcurrent fault.
++    type: boolean
++
++  adi,overvoltage-retry-disable:
++    description:
++      If set, disables the chip to auto-retry 50ms after an Overvoltage fault.
++      It's enabled by default.
++    type: boolean
++
++  adi,undervoltage-retry-disable:
++    description:
++      If set, disables the chip to auto-retry 50ms after an Undervoltage fault.
++      It's enabled by default.
++    type: boolean
++
++  adi,fault-log-enable:
++    description:
++      If set, enables the FAULT_LOG and ADC_ALERT_LOG registers to be written
++      to the EEPROM when a fault bit transitions high and hence, will be
++      available after a power cycle (the chip loads the contents of
++      the EE_FAULT_LOG register - the one in EEPROM - into FAULT_LOG at boot).
++    type: boolean
++
++  adi,gpio1-mode:
++    description: Defines the function of the Pin. It can indicate that power is
++      good (PULL the pin low when power is not good) or that power is bad (Go
++      into high-z when power is not good).
++    $ref: /schemas/types.yaml#/definitions/string
++    enum: [power_bad, power_good]
++    default: power_good
++
++  adi,gpio2-mode:
++    description: Defines the function of the Pin. It can be set as the input for
++      the ADC or indicating that the MOSFET is in stress (dissipating power).
++    $ref: /schemas/types.yaml#/definitions/string
++    enum: [adc_input, stress_fet]
++    default: adc_input
++
++  adi,gpio3-monitor-enable:
++    description: If set, gpio3 is set as input for the ADC instead of gpio2.
++    type: boolean
++
++allOf:
++  - if:
++      required:
++        - adi,gpio3-monitor-enable
++    then:
++      properties:
++        adi,gpio2-mode:
++          const: stress_fet
++
++required:
++  - compatible
++  - reg
++  - adi,rsense-nano-ohms
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        hwmon@50 {
++            compatible = "adi,ltc4282";
++            reg = <0x50>;
++            adi,rsense-nano-ohms = <500>;
++
++            adi,gpio1-mode = "power_good";
++            adi,gpio2-mode = "adc_input";
++        };
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a0677e35c9b6..4c0d12bffd4f 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12592,6 +12592,12 @@ S:	Maintained
+ F:	Documentation/hwmon/ltc4261.rst
+ F:	drivers/hwmon/ltc4261.c
+ 
++LTC4282 HARDWARE MONITOR DRIVER
++M:	Nuno Sa <nuno.sa@analog.com>
++L:	linux-hwmon@vger.kernel.org
++S:	Supported
++F:	Documentation/devicetree/bindings/hwmon/adi,ltc4282.yaml
++
+ LTC4286 HARDWARE MONITOR DRIVER
+ M:	Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+ L:	linux-i2c@vger.kernel.org
+
+-- 
+2.43.0
 
