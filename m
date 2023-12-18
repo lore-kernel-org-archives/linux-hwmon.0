@@ -1,51 +1,51 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01A185A845;
-	Mon, 18 Dec 2023 17:22:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 160F11E4BF;
+	Mon, 18 Dec 2023 17:37:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dr9qv1og"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-5cd86e3a9afso1241214a12.1;
-        Mon, 18 Dec 2023 09:22:22 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hNchnvP8"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1d3b66733a9so6559985ad.2;
+        Mon, 18 Dec 2023 09:37:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702920142; x=1703524942; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1702921079; x=1703525879; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=w6K0/NiXGchDMTiOr+7eRMHgU+/hkbBVVErT4LbtoLY=;
-        b=Dr9qv1ogsrWodKpc7zCaNzysy68ANqqoCEDtMSjCtGa5JSzEqHAMEO+fbTWV8wpIdt
-         pUzEXWsYtshv0/EMzK9syEVABfDnt8+Vjjb3AHqrlGlDzB/uXfGosKI4isB313ofVIHJ
-         iIGDLXQYOvmxmIoyUiIHSM8yXCvgAGBczpdIAEXeXTwjn2EfJwT0oMl/avzh4VbTD+Sy
-         HgY/Dq2RhUoAcbwbHbfwRDoei9kpmF+UqAsWjMl7JO9He3n5J0flCqn5b+u8iPHm7ccb
-         8P0NCy7nEPup/CyXkjPl4sGNT1DRYSyVQTYaNsAH0nvlWpDS4gm83GlXmSHID2Ue9WfR
-         Wqvw==
+        bh=9oaFHCCDI1MHrsKGmso+es37yBkgml+kPF0HQgZSQ20=;
+        b=hNchnvP8j3qR3jE75AkYhvPIJIzexySLQamDK13GsB7Ojk3fxWZ6hWZXJegnUoQoWX
+         9u6FmVbc8aKAJB80H8DXB4C5lM1A1SGwom2RBb62OLh84pWq8P+gn/gzbs2ZM3+spwre
+         rmPGpXm2e4a0QdkwjfcKSsQiZSPhviQgefEeOaxZEE7LWIuL0vNtgAYPg62oa314eRiE
+         L5QfVWlGxEP7LRUM1/98CWmePKOXJZH4Z+tqIOJIydrFKtX1Uq+1Pn1xrbLx6UsyIS5P
+         SbSiHOu5ExFEebrR/V1EUCcy2ZP11AXgcf8fzWOYcVAlm1YfqKB8jX2Mk8k7fZzbcnO1
+         4GpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702920142; x=1703524942;
+        d=1e100.net; s=20230601; t=1702921079; x=1703525879;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=w6K0/NiXGchDMTiOr+7eRMHgU+/hkbBVVErT4LbtoLY=;
-        b=B/LHPzP9gb54Xb/kZ0iMox7QJJGeUk31aFjp6mljUKdOYvZOtu4ls5qkkYoLzFS5js
-         OxTQo+oEX+mOSBmU5XsdoT7lluC78HqMhklHqFGcLNvqePsILwjSMaDwpepaMlXz8Faq
-         SKlPrJ7g8IJwRXj6oeoZ5VCMX65V6VGzr9K4wMWGnw/AmQaLmJlTkIH8PwZWEdvplpnv
-         DO4sEIrDSr8rQl3E0RRu+6fCU5P9YKVeKXXaX8nlz7LqxaeUUqq+tigk61/F4FBRRGeP
-         RK5zA6yYXUUYHcSrpQ7gUhvqZjiCN4+TW73QzYcPMmTfbk2gdyOc9BgjgNCKo2ccOvG4
-         5Msw==
-X-Gm-Message-State: AOJu0YxXA+66kmyjvKJDC9/+2RLcFFmpVbYr+Nqrr7AjSt/bLtjVsbvV
-	+oYSzmGSnB+krrZa3WjTuFo=
-X-Google-Smtp-Source: AGHT+IHz9yyeL9jQHPKCQRZEb02OwHwFoelgORqY6jpcbZAJslua/yKCKjKkWcBXEQYHNwCtPRyjJQ==
-X-Received: by 2002:a05:6a20:320b:b0:187:29f9:e12e with SMTP id hl11-20020a056a20320b00b0018729f9e12emr16188961pzc.29.1702920142047;
-        Mon, 18 Dec 2023 09:22:22 -0800 (PST)
+        bh=9oaFHCCDI1MHrsKGmso+es37yBkgml+kPF0HQgZSQ20=;
+        b=O6XhrnI+W0k7sqRb4+RBKVlwNAiyExrTOCCr7Ouv78zwNHb5HVH8L/FJaV2LFTaS31
+         +Vac/XoW5rd8i3bLLv2p0DWD+dd17dRjlR6xbmZRLLX2jmmO2s+thTtpbaGImc/jtkuY
+         sLYcOWIbkRGI6C3sWShNY93k3turEu0yOmm2j5uewaXPTx/FowQzn08Jb9aAE96Tdh9O
+         iRsEDttebDUoYEJW6LI78bNpvTF+/JvC1L9ur0vuLzS62rxe9pVpOt1qcj13FjIYtwER
+         +ASXcNVC6OoGo2588oQS1GxdZGQQfT/DXzpjs4KUFKsASEX9Dz85fhJVi5rppMCTfxiX
+         p3gQ==
+X-Gm-Message-State: AOJu0YxqAXorbHFjiw9ctrpZo4iuKTf/QRgY/i16ybqqwTwqCylET85l
+	MxikEFxFaTVV0mVAMTeiPyg=
+X-Google-Smtp-Source: AGHT+IETgqfFvqXl4D6oTt8HqSBTHeU5qIhotu6cWcFE5mphMS+hJLeTcvmtsRtxh3VpBUV5K9k01A==
+X-Received: by 2002:a17:902:a517:b0:1d0:6ffd:ce97 with SMTP id s23-20020a170902a51700b001d06ffdce97mr8244321plq.80.1702921079335;
+        Mon, 18 Dec 2023 09:37:59 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p31-20020a056a000a1f00b006d85c3cf56bsm1528223pfh.215.2023.12.18.09.22.19
+        by smtp.gmail.com with ESMTPSA id jk11-20020a170903330b00b001d3d9be4d5bsm35613plb.88.2023.12.18.09.37.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Dec 2023 09:22:20 -0800 (PST)
+        Mon, 18 Dec 2023 09:37:57 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <86e0e357-5b31-4984-a66f-d27128178470@roeck-us.net>
-Date: Mon, 18 Dec 2023 09:22:19 -0800
+Message-ID: <dea56d34-bab1-4bca-9daf-5a48b4e0507e@roeck-us.net>
+Date: Mon, 18 Dec 2023 09:37:56 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -53,23 +53,16 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] bindings: hwmon: Add adi,adaq4224_temp as compatible
- string
+Subject: Re: [PATCH v2 2/2] hwmon: (lm75) Add AMS AS6200 temperature sensor
 Content-Language: en-US
-To: "Matyas, Daniel" <Daniel.Matyas@analog.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+To: Abdel Alkuor <alkuor@gmail.com>, Jean Delvare <jdelvare@suse.com>,
+ Rob Herring <robh+dt@kernel.org>,
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-References: <20231214143648.175336-1-daniel.matyas@analog.com>
- <20231214143648.175336-2-daniel.matyas@analog.com>
- <43c3f6cb-aeb2-40c8-a79d-c2222414b49c@linaro.org>
- <a5bc25d5-f59c-43ce-a44a-3eabc4b2d06c@roeck-us.net>
- <SJ0PR03MB67643A8DD1F7AD8CEF66BBBE8990A@SJ0PR03MB6764.namprd03.prod.outlook.com>
+ Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+References: <89fb5eec30df734ee8fc58427cf5d94929076514.1702874115.git.alkuor@gmail.com>
+ <a71ac5106e022b526bef9fc375bd5d3f547eb19d.1702874115.git.alkuor@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -114,129 +107,359 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <SJ0PR03MB67643A8DD1F7AD8CEF66BBBE8990A@SJ0PR03MB6764.namprd03.prod.outlook.com>
+In-Reply-To: <a71ac5106e022b526bef9fc375bd5d3f547eb19d.1702874115.git.alkuor@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 12/18/23 01:08, Matyas, Daniel wrote:
+On 12/17/23 20:52, Abdel Alkuor wrote:
+> as6200 is a temperature sensor with 0.0625°C resolution and a
+> range between -40°C to 125°C.
 > 
+> By default, the driver configures as6200 as following:
+> - Converstion rate: 8 Hz
+> - Conversion mode: continuous
+> - Consecutive fault counts: 4 samples
+> - Alert state: high polarity
+> - Alert mode: comparator mode
 > 
->> -----Original Message-----
->> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
->> Sent: Friday, December 15, 2023 6:03 PM
->> To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>; Matyas, Daniel
->> <Daniel.Matyas@analog.com>
->> Cc: Jean Delvare <jdelvare@suse.com>; Rob Herring
->> <robh+dt@kernel.org>; Krzysztof Kozlowski
->> <krzysztof.kozlowski+dt@linaro.org>; Conor Dooley
->> <conor+dt@kernel.org>; Jonathan Corbet <corbet@lwn.net>; linux-
->> hwmon@vger.kernel.org; devicetree@vger.kernel.org; linux-
->> kernel@vger.kernel.org; linux-doc@vger.kernel.org
->> Subject: Re: [PATCH 2/3] bindings: hwmon: Add adi,adaq4224_temp as
->> compatible string
->>
->> [External]
->>
->> On 12/15/23 00:49, Krzysztof Kozlowski wrote:
->>> On 14/12/2023 15:36, Daniel Matyas wrote:
->>>> In the device ada4224 the max31827 temperature sensor will be used,
->>>> so the default values corresponding to adaq4224_temp are the same
->> for
->>>> max31827.
->>>>
->>>> Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
->>>
->>> Please use subject prefixes matching the subsystem. You can get them
->>> for example with `git log --oneline -- DIRECTORY_OR_FILE` on the
->>> directory your patch is touching.
->>>
->>>> ---
->>>>    Documentation/devicetree/bindings/hwmon/adi,max31827.yaml | 5
->> ++++-
->>>>    1 file changed, 4 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git
->>>> a/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
->>>> b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
->>>> index f60e06ab7d0a..9f3b0839aa46 100644
->>>> --- a/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
->>>> +++
->> b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
->>>> @@ -20,6 +20,7 @@ properties:
->>>>          - const: adi,max31827
->>>>          - items:
->>>>              - enum:
->>>> +              - adi,adaq4224_temp
->>>
->>> Underscores are not allowed
->>>
->>
->> That isn't the main problem with this patch.
->> https://urldefense.com/v3/__https://github.com/analogdevicesinc/linux/
->> tree/dev_adaq4224_dts__;!!A3Ni8CS0y2Y!_2D1w1DD5sjJrNyArZYZ3QW9
->> nS8URmP6X0n6R7q1sBnDB1HPL6jROhD_w9u3fJixt2hDDNtO6VpgLM1Jka
->> Q$
->> suggests that it may be a development system which utilizes the
->> max31827.
->>   From there, we can see that there is a devicetree description of a board
->> with that name which uses
->>
->>                   temperature1: temperature@5f {
->>                           compatible = "adi,adaq4224_temp";
->>                           reg = <0x5f>;
->>                           vref-supply = <&vio>;
->>
->>                           adi,comp-int;
->>                           adi,alarm-pol = <0>;
->>                           adi,fault-q = <1>;
->>                           adi,timeout-enable;
->>                   };
->>
->> That doesn't make sense to me. I don't know why they don't just
->> reference max31827.
->> I am most definitely not going to accept a driver change just to map
->> adi,adaq4224_temp (or adi,adaq4224-temp) to the actually used
->> temperature sensor chip. If we start accepting that, we'd end up with no
->> end of "<vendor>,<board_name>-{temp,voltage,current,power,...}"
->> compatibles.
->>
->> Looking more into the above mentioned repository/branch, an earlier
->> version of the dts file did reference adi,max31827 for that chip. It also
->> looks like there may be an adaq4224 ADC (per drivers/iio/adc/ad4630.c),
->> but that would be a SPI chip. It seems highly unlikely that a SPI ADC would
->> have a separate I2C interface connected to a temperature sensor.
->> Confusing.
->>
->> There is also some indication that this may some IP to be loaded into an
->> FPGA.
->> which utilizes an FPGA implementation of max31827 (or maybe connects
->> to one).
->> If that is the case, it should still be referenced as max31827.
->>
->> All that wasted time because of "let's provide as little as possible
->> information about what we are actually doing" :-(.
->>
->> Guenter
+> Interrupt is supported for the alert pin.
 > 
-> I asked around to get some more clarification on the matter. There will be a new chip released, named adaq4224. This chip will have the max31827 implemented in the silicon, so the driver used to get temperature information would be max31827.c. The chip will have spi and i2c communication too. The other driver you mentioned, the ad4630.c will communicate through spi.
+> Datasheet: https://ams.com/documents/20143/36005/AS6200_DS000449_4-00.pdf
+> Signed-off-by: Abdel Alkuor <alkuor@gmail.com>
+> ---
+> Changes in v2:
+>    - Incorporate as6200 into lm75 driver
 > 
-> Because the chip has a different name, I was asked to add a new label for the max31827, so that it will be clear for the user, that the max31827 is part of the chip.
+>   Documentation/hwmon/lm75.rst |  10 +++
+>   drivers/hwmon/lm75.c         | 132 +++++++++++++++++++++++++++++------
+>   2 files changed, 122 insertions(+), 20 deletions(-)
 > 
+> diff --git a/Documentation/hwmon/lm75.rst b/Documentation/hwmon/lm75.rst
+> index 8d0ab4ad5fb5..6adab608dd05 100644
+> --- a/Documentation/hwmon/lm75.rst
+> +++ b/Documentation/hwmon/lm75.rst
+> @@ -133,6 +133,16 @@ Supported chips:
+>   
+>                  https://www.nxp.com/docs/en/data-sheet/PCT2075.pdf
+>   
+> +  * AMS OSRAM AS6200
+> +
+> +    Prefix: 'as6200'
+> +
+> +    Addresses scanned: none
+> +
+> +    Datasheet: Publicly available at the AMS website
+> +
+> +               https://ams.com/documents/20143/36005/AS6200_DS000449_4-00.pdf
+> +
+>   Author: Frodo Looijaard <frodol@dds.nl>
+>   
+>   Description
+> diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
+> index 5b2ea05c951e..2d153f6729e0 100644
+> --- a/drivers/hwmon/lm75.c
+> +++ b/drivers/hwmon/lm75.c
+> @@ -7,6 +7,7 @@
+>   
+>   #include <linux/module.h>
+>   #include <linux/init.h>
+> +#include <linux/interrupt.h>
+>   #include <linux/slab.h>
+>   #include <linux/jiffies.h>
+>   #include <linux/i2c.h>
+> @@ -25,6 +26,7 @@
+>   
+>   enum lm75_type {		/* keep sorted in alphabetical order */
+>   	adt75,
+> +	as6200,
+>   	at30ts74,
+>   	ds1775,
+>   	ds75,
+> @@ -55,6 +57,7 @@ enum lm75_type {		/* keep sorted in alphabetical order */
+>   
+>   /**
+>    * struct lm75_params - lm75 configuration parameters.
+> + * @config_reg_16bits	Configure register size is 2 bytes.
 
-It is still a max31827 core. If there is no difference in programming
-to max31827, it can possibly be reflected in devicetree as
-"adi,adaq4224-temp", in addition to "adi,max31827". This would not
-require a change in the driver code as "adi,max31827" would still
-be mandatory.
+@config_reg_16bits:
 
-But I don't think changing the driver or device name for this purpose
-would be appropriate. We don't do that for any of the other hwmon
-drivers, and I really don't want to open a floodgate. The lm75 driver
-supports more than 20 chips from various different vendors,
-but it is still the lm75 driver. The jc42 driver supports many chips
-from different vendors, but the driver only has a single
-"jedec,jc-42.4-temp" binding, and devices are instantiated as "jc42".
-I don't see why this one should be handled differently.
+>    * @set_mask:		Bits to set in configuration register when configuring
+>    *			the chip.
+>    * @clr_mask:		Bits to clear in configuration register when configuring
+> @@ -75,17 +78,20 @@ enum lm75_type {		/* keep sorted in alphabetical order */
+>    * @sample_times:	All the possible sample times to be set. Mandatory if
+>    *			num_sample_times is larger than 1. If set, number of
+>    *			entries must match num_sample_times.
+> + * @alarm		Alarm is supported.
 
-Guenter
+@alarm:
+
+>    */
+>   
+>   struct lm75_params {
+> -	u8			set_mask;
+> -	u8			clr_mask;
+> +	bool			config_reg_16bits;
+> +	u16			set_mask;
+> +	u16			clr_mask;
+>   	u8			default_resolution;
+>   	u8			resolution_limits;
+>   	const u8		*resolutions;
+>   	unsigned int		default_sample_time;
+>   	u8			num_sample_times;
+>   	const unsigned int	*sample_times;
+> +	bool			alarm;
+>   };
+>   
+>   /* Addresses scanned */
+> @@ -104,8 +110,8 @@ struct lm75_data {
+>   	struct i2c_client		*client;
+>   	struct regmap			*regmap;
+>   	struct regulator		*vs;
+> -	u8				orig_conf;
+> -	u8				current_conf;
+> +	u16				orig_conf;
+> +	u16				current_conf;
+>   	u8				resolution;	/* In bits, 9 to 16 */
+>   	unsigned int			sample_time;	/* In ms */
+>   	enum lm75_type			kind;
+> @@ -128,6 +134,15 @@ static const struct lm75_params device_params[] = {
+>   		.default_resolution = 12,
+>   		.default_sample_time = MSEC_PER_SEC / 10,
+>   	},
+> +	[as6200] = {
+> +		.config_reg_16bits = true,
+> +		.set_mask = 0x94C0,	/* 8 sample/s, 4 CF, positive polarity */
+> +		.default_resolution = 12,
+> +		.default_sample_time = 125,
+> +		.num_sample_times = 4,
+> +		.sample_times = (unsigned int []){ 125, 250, 1000, 4000 },
+> +		.alarm = true,
+> +	},
+>   	[at30ts74] = {
+>   		.set_mask = 3 << 5,	/* 12-bit mode*/
+>   		.default_resolution = 12,
+> @@ -317,20 +332,23 @@ static inline long lm75_reg_to_mc(s16 temp, u8 resolution)
+>   	return ((temp >> (16 - resolution)) * 1000) >> (resolution - 8);
+>   }
+>   
+> -static int lm75_write_config(struct lm75_data *data, u8 set_mask,
+> -			     u8 clr_mask)
+> +static int lm75_write_config(struct lm75_data *data, u16 set_mask,
+> +			     u16 clr_mask)
+>   {
+> -	u8 value;
+> +	unsigned int value;
+>   
+> -	clr_mask |= LM75_SHUTDOWN;
+> +	clr_mask |= LM75_SHUTDOWN << (8 * data->params->config_reg_16bits);
+>   	value = data->current_conf & ~clr_mask;
+>   	value |= set_mask;
+>   
+>   	if (data->current_conf != value) {
+>   		s32 err;
+> -
+> -		err = i2c_smbus_write_byte_data(data->client, LM75_REG_CONF,
+> -						value);
+> +		if (data->params->config_reg_16bits)
+> +			err = regmap_write(data->regmap, LM75_REG_CONF, value);
+> +		else
+> +			err = i2c_smbus_write_byte_data(data->client,
+> +							LM75_REG_CONF,
+> +							value);
+>   		if (err)
+>   			return err;
+>   		data->current_conf = value;
+> @@ -338,6 +356,33 @@ static int lm75_write_config(struct lm75_data *data, u8 set_mask,
+>   	return 0;
+>   }
+>   
+> +static int lm75_read_config(struct lm75_data *data, u16 *config)
+> +{
+> +	int ret;
+> +	unsigned int status;
+> +
+> +	if (data->params->config_reg_16bits) {
+> +		ret = regmap_read(data->regmap, LM75_REG_CONF, &status);
+> +	} else {
+> +		ret = i2c_smbus_read_byte_data(data->client, LM75_REG_CONF);
+> +		status = ret;
+> +	}
+> +
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	*config = status;
+> +	return 0;
+> +}
+> +
+> +static irqreturn_t lm75_alarm_handler(int irq, void *private)
+> +{
+> +	struct device *hwmon_dev = private;
+> +
+> +	hwmon_notify_event(hwmon_dev, hwmon_temp, hwmon_temp_alarm, 0);
+> +	return IRQ_HANDLED;
+> +}
+> +
+>   static int lm75_read(struct device *dev, enum hwmon_sensor_types type,
+>   		     u32 attr, int channel, long *val)
+>   {
+> @@ -366,6 +411,9 @@ static int lm75_read(struct device *dev, enum hwmon_sensor_types type,
+>   		case hwmon_temp_max_hyst:
+>   			reg = LM75_REG_HYST;
+>   			break;
+> +		case hwmon_temp_alarm:
+> +			reg = LM75_REG_CONF;
+> +			break;
+>   		default:
+>   			return -EINVAL;
+>   		}
+> @@ -373,7 +421,17 @@ static int lm75_read(struct device *dev, enum hwmon_sensor_types type,
+>   		if (err < 0)
+>   			return err;
+>   
+> -		*val = lm75_reg_to_mc(regval, data->resolution);
+> +		if (attr == hwmon_temp_alarm) {
+> +			switch (data->kind) {
+> +			case as6200:
+> +				*val = (regval >> 5) & 0x1;
+> +				break;
+> +			default:
+> +				return -EINVAL;
+> +			}
+> +		} else {
+> +			*val = lm75_reg_to_mc(regval, data->resolution);
+> +		}
+>   		break;
+>   	default:
+>   		return -EINVAL;
+> @@ -436,6 +494,7 @@ static int lm75_update_interval(struct device *dev, long val)
+>   			data->resolution = data->params->resolutions[index];
+>   		break;
+>   	case tmp112:
+> +	case as6200:
+>   		err = regmap_read(data->regmap, LM75_REG_CONF, &reg);
+>   		if (err < 0)
+>   			return err;
+> @@ -503,6 +562,9 @@ static umode_t lm75_is_visible(const void *data, enum hwmon_sensor_types type,
+>   		case hwmon_temp_max:
+>   		case hwmon_temp_max_hyst:
+>   			return 0644;
+> +		case hwmon_temp_alarm:
+> +			if (config_data->params->alarm)
+> +				return 0444;
+
+Missing
+			break;
+
+>   		}
+>   		break;
+>   	default:
+> @@ -515,7 +577,8 @@ static const struct hwmon_channel_info * const lm75_info[] = {
+>   	HWMON_CHANNEL_INFO(chip,
+>   			   HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL),
+>   	HWMON_CHANNEL_INFO(temp,
+> -			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST),
+> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
+> +			   HWMON_T_ALARM),
+>   	NULL
+>   };
+>   
+> @@ -574,7 +637,7 @@ static int lm75_probe(struct i2c_client *client)
+>   	struct device *dev = &client->dev;
+>   	struct device *hwmon_dev;
+>   	struct lm75_data *data;
+> -	int status, err;
+> +	int err;
+>   	enum lm75_type kind;
+>   
+>   	if (client->dev.of_node)
+> @@ -623,13 +686,13 @@ static int lm75_probe(struct i2c_client *client)
+>   		return err;
+>   
+>   	/* Cache original configuration */
+> -	status = i2c_smbus_read_byte_data(client, LM75_REG_CONF);
+> -	if (status < 0) {
+> -		dev_dbg(dev, "Can't read config? %d\n", status);
+> -		return status;
+> +	err = lm75_read_config(data, &data->current_conf);
+> +	if (err) {
+> +		dev_dbg(dev, "Can't read config? %d\n", err);
+> +		return err;
+>   	}
+
+I don't think splitting the return value from the error code adds any value,
+even more so since it needs to be dereferenced below anyway. Please just keep
+the original semantics here, and have lm75_read_config() return the combined
+error code and status.
+
+> -	data->orig_conf = status;
+> -	data->current_conf = status;
+> +
+> +	data->orig_conf = data->current_conf;
+>   
+>   	err = lm75_write_config(data, data->params->set_mask,
+>   				data->params->clr_mask);
+> @@ -646,6 +709,30 @@ static int lm75_probe(struct i2c_client *client)
+>   	if (IS_ERR(hwmon_dev))
+>   		return PTR_ERR(hwmon_dev);
+>   
+> +	if (client->irq) {
+> +		if (data->params->alarm) {
+> +			err = devm_request_threaded_irq(dev,
+> +							client->irq,
+> +							NULL,
+> +							&lm75_alarm_handler,
+> +							IRQF_ONESHOT,
+> +							client->name,
+> +							hwmon_dev);
+> +			if (err)
+> +				return err;
+> +		} else {
+> +			/*
+> +			 * Currently, alarm is only supported for chips with
+> +			 * alarm bit.
+> +			 * In the future, if alarm is needed for chips with
+> +			 * no alarm bit, current temp needs to be compared
+> +			 * against the max and max hyst values to set/clear
+> +			 * the alarm state.
+
+Please don't make such suggestions. If userspace wants to compare attributes
+if there is no alarm attribute, it is free to do it. We should not even try
+to do it in the kernel.
+
+> +			 */
+> +			dev_warn(dev, "alarm interrupt is not supported\n");
+
+I think this should be an error: There should be no interrupt configured on a
+chip not supporting it.
+
+> +		}
+> +	}
+> +
+>   	dev_info(dev, "%s: sensor '%s'\n", dev_name(hwmon_dev), client->name);
+>   
+>   	return 0;
+> @@ -654,6 +741,7 @@ static int lm75_probe(struct i2c_client *client)
+>   static const struct i2c_device_id lm75_ids[] = {
+>   	{ "adt75", adt75, },
+>   	{ "at30ts74", at30ts74, },
+> +	{ "as6200", as6200, },
+
+Alphabetic order, please
+
+>   	{ "ds1775", ds1775, },
+>   	{ "ds75", ds75, },
+>   	{ "ds7505", ds7505, },
+> @@ -689,6 +777,10 @@ static const struct of_device_id __maybe_unused lm75_of_match[] = {
+>   		.compatible = "adi,adt75",
+>   		.data = (void *)adt75
+>   	},
+> +	{
+> +		.compatible = "ams,as6200",
+> +		.data = (void *)as6200
+> +	},
+>   	{
+>   		.compatible = "atmel,at30ts74",
+>   		.data = (void *)at30ts74
 
