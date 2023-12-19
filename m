@@ -1,100 +1,157 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 271131BDDE;
-	Tue, 19 Dec 2023 14:41:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D83511C68E;
+	Tue, 19 Dec 2023 15:18:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="isRyZUPq"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-40c29f7b068so51231065e9.0;
-        Tue, 19 Dec 2023 06:41:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702996878; x=1703601678; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=cGTvv5cpxM+jtyC8aw4dFZd8mhCWgM/Dn37jyMs9saM=;
-        b=isRyZUPqvR9lgtFhiy3ORNuEtnkKAa4UJO9LwkRwRdvMWpK2+dlZ5JLxNFRYINjhwW
-         7rbQa2I0clJPNOw8OkYsCEgd3F5P5cPwq/BjPnFIegZjJj+LHezkuNh8PzjSDfKXGXGC
-         MBzbX23bkAnvg92xy/kdqcR8ZKIb+7y0wbq8HcSN7IvCSapkuodDHMpJXBbOaRh6MdM/
-         pw1PhC81lRvykguzMdGiY0v7nIdbLPJFVztbQ66HalmLEgrsVRPEgXYkbFbphW6hmwSx
-         vHK0CfDzT1d3Mev0jNCkpiCSX07ep3aeYj+ugPI8HqT1BGiBLyBAVuk96h7vPosT+PU9
-         0y4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702996878; x=1703601678;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cGTvv5cpxM+jtyC8aw4dFZd8mhCWgM/Dn37jyMs9saM=;
-        b=vVm0SP2sSfRrQw6U8m/T0iXznPSOmJoqK4mSTw/GOoqSRbDj5b120AFXVUfY1mdG0N
-         /WZ3bOugjvm/IEU4ScoJbyCSKUUD102iuRJFQhFVpifk4m2q1w7OdQaYVy12JbJH13fq
-         6RHMlOyTPk62SrEqV5W3J6Pb6Ec+m9/G3IbxrY/Gspz0+9OpKZxsCHah8YJFOM4N949O
-         NPTAFhPmJTnAbYJvO0iu5WEz34mwuD/lBZ2pS1v10UXZbjCArO2zR78TqjNWwnQBErIk
-         l8fKC0zEFgwXIZkX2n0VLf5z785L4naD6KnC6Xl7Ctyr59MNCS90FHDFXvTMsQreNkt5
-         KFiw==
-X-Gm-Message-State: AOJu0YxZ2O4oY87PZtbEk6YVzzkca3pt16NDUYbdmQ37CYPGSWbaRB6+
-	V7TSPoKEzS0qMv8GKfTr2ZZRKGhwIvI=
-X-Google-Smtp-Source: AGHT+IGR+h/gTSXJexePpuLg4d1Sm4hAFYi6IJODbx0EA3QM1U3RhRpipneSrE+uDNHKAUExo3G6ng==
-X-Received: by 2002:a7b:ca54:0:b0:40b:5e59:b7b6 with SMTP id m20-20020a7bca54000000b0040b5e59b7b6mr9304466wml.147.1702996877973;
-        Tue, 19 Dec 2023 06:41:17 -0800 (PST)
-Received: from fedora.. (cable-178-148-234-71.dynamic.sbb.rs. [178.148.234.71])
-        by smtp.gmail.com with ESMTPSA id m5-20020a05600c4f4500b0040c57e4ea28sm3189788wmq.17.2023.12.19.06.41.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Dec 2023 06:41:17 -0800 (PST)
-From: Aleksa Savic <savicaleksa83@gmail.com>
-To: linux-hwmon@vger.kernel.org
-Cc: Aleksa Savic <savicaleksa83@gmail.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (gigabyte_waterforce) Mark status report as received under a spinlock
-Date: Tue, 19 Dec 2023 15:36:19 +0100
-Message-ID: <20231219143620.22179-1-savicaleksa83@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VJku28t7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C1A6C433C7;
+	Tue, 19 Dec 2023 15:18:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702999111;
+	bh=Cg5b/5tI5hGW7/qm/Gvqq5j7ejZo4mNgei7t5YpHVwY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VJku28t75geTgwb87nJfm516qgeb03gxGqykx+Ug53UD5+ZnGpYLpNofyeLcoTdxs
+	 qNT8X5bjaNvrQQRlkb5gGCDkSfeQHtHKINalhLVEMlI7a/WW9UMlQpuAfZ4zoUlY7M
+	 YtB+0wtg4Yozgxokvxy15xmsTcskzZqBpqgW1HqE75D6PRzyRfEHb+cdW0Uuow+z2e
+	 kQUy/27RqwLq6paKhlxh+RU6E+nJaSFK7rZwyneQKqb/AlL8Koky++JKGnlnFwe214
+	 EbJ/cK07hErgkRAf/jW4mxcicLw1NZmZQ3YRhlPvg/R8EDbnWPVzUk+MY7tnyWiGI2
+	 60c5+uH/T51Dw==
+Date: Tue, 19 Dec 2023 15:18:24 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Abdel Alkuor <alkuor@gmail.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: (lm75) Add AMS AS6200
+ temperature sensor
+Message-ID: <20231219-mascot-semester-7d2c492b99bc@spud>
+References: <89fb5eec30df734ee8fc58427cf5d94929076514.1702874115.git.alkuor@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="rMcjOlarOJdLELTJ"
+Content-Disposition: inline
+In-Reply-To: <89fb5eec30df734ee8fc58427cf5d94929076514.1702874115.git.alkuor@gmail.com>
 
-Through hidraw, userspace can cause a status report to be sent
-from the device. The parsing in waterforce_raw_event() may happen in
-parallel to a waterforce_get_status() call (which resets the completion
-for tracking the report) if it's running on a different CPU where
-bottom half interrupts are not disabled.
 
-Add a spinlock around the complete_all() call in waterforce_raw_event()
-to prevent race issues.
+--rMcjOlarOJdLELTJ
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: d5939a793693 ("hwmon: Add driver for Gigabyte AORUS Waterforce AIO coolers")
-Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
----
-Does the above make sense? The raw event parsing is a softirq AFAIK and
-presumably could run on a different CPU in parallel to a waterforce_get_status()
-call.
+On Sun, Dec 17, 2023 at 11:52:27PM -0500, Abdel Alkuor wrote:
+> as6200 is a temperature sensor with a range between -40=B0C to
+> 125=B0C degrees and an accuracy of =B10.4=B0C degree between 0
+> and 65=B0C and =B11=B0C for the other ranges.
+>=20
+> Signed-off-by: Abdel Alkuor <alkuor@gmail.com>
+> ---
+> Changes in v2:
+>   - Incorporate as6200 into lm75 bindings
+>=20
+>  .../devicetree/bindings/hwmon/lm75.yaml        | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/hwmon/lm75.yaml b/Document=
+ation/devicetree/bindings/hwmon/lm75.yaml
+> index 0b69897f0c63..63b85a83ac18 100644
+> --- a/Documentation/devicetree/bindings/hwmon/lm75.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/lm75.yaml
+> @@ -14,6 +14,7 @@ properties:
+>    compatible:
+>      enum:
+>        - adi,adt75
+> +      - ams,as6200
+>        - atmel,at30ts74
+>        - dallas,ds1775
+>        - dallas,ds75
+> @@ -48,6 +49,9 @@ properties:
+>    vs-supply:
+>      description: phandle to the regulator that provides the +VS supply
+> =20
+> +  interrupts:
+> +    maxItems: 1
 
-Appreciate thoughts on this.
----
- drivers/hwmon/gigabyte_waterforce.c | 2 ++
- 1 file changed, 2 insertions(+)
+Do the other devices here have interrupts? If not, you just allowed
+interrupts for them. You, at the very least, need to add something like:
 
-diff --git a/drivers/hwmon/gigabyte_waterforce.c b/drivers/hwmon/gigabyte_waterforce.c
-index 1799377fc2f1..85e523775714 100644
---- a/drivers/hwmon/gigabyte_waterforce.c
-+++ b/drivers/hwmon/gigabyte_waterforce.c
-@@ -276,8 +276,10 @@ static int waterforce_raw_event(struct hid_device *hdev, struct hid_report *repo
- 	priv->duty_input[0] = data[WATERFORCE_FAN_DUTY];
- 	priv->duty_input[1] = data[WATERFORCE_PUMP_DUTY];
- 
-+	spin_lock(&priv->status_report_request_lock);
- 	if (!completion_done(&priv->status_report_received))
- 		complete_all(&priv->status_report_received);
-+	spin_unlock(&priv->status_report_request_lock);
- 
- 	priv->updated = jiffies;
- 
--- 
-2.43.0
+diff --git a/Documentation/devicetree/bindings/hwmon/lm75.yaml b/Documentat=
+ion/devicetree/bindings/hwmon/lm75.yaml
+index 63b85a83ac18..d7ce96606400 100644
+--- a/Documentation/devicetree/bindings/hwmon/lm75.yaml
++++ b/Documentation/devicetree/bindings/hwmon/lm75.yaml
+@@ -56,6 +56,17 @@ required:
+   - compatible
+   - reg
+=20
++allOf:
++  - if:
++      not:
++        properties:
++          compatible:
++            contains:
++              const: ams,as6200
++    then:
++      properties:
++        interrupts: false
++
+ additionalProperties: false
+=20
+ examples:
 
+I had a brief look at the driver though, but I could not immediately
+tell if the interrupt was required on the ams,as6200 or if the driver
+continued on without that functionality. It seemed like an additional
+feature that the interrupt was required for, but if not you should make
+the interrupt required for the as6200.
+
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -66,3 +70,17 @@ examples:
+>          vs-supply =3D <&vs>;
+>        };
+>      };
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c {
+> +        #address-cells =3D <1>;
+> +        #size-cells =3D <0>;
+> +
+> +        temperature-sensor@48 {
+> +            compatible =3D "ams,as6200";
+> +            reg =3D <0x48>;
+> +            vs-supply =3D <&vs>;
+> +            interrupt-parent =3D <&gpio1>;
+> +            interrupts =3D <17 IRQ_TYPE_EDGE_BOTH>;
+> +        };
+> +    };
+
+Can you make the indent here match that in the other example in this
+file please?
+
+Thanks,
+Conor.
+
+--rMcjOlarOJdLELTJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZYG0QAAKCRB4tDGHoIJi
+0oE9AP9ycm0+Rys8Qk2t0D9tOjOGpCdtzTvUj/tJa/BAOWIKTgEAwFfN1T6mCAR8
+GYZEQa3F2bPm+e607/CqKVAZitrREAw=
+=JdZv
+-----END PGP SIGNATURE-----
+
+--rMcjOlarOJdLELTJ--
