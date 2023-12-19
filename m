@@ -1,87 +1,100 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3C0D134A7;
-	Tue, 19 Dec 2023 09:22:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 271131BDDE;
+	Tue, 19 Dec 2023 14:41:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VzAlkfu9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A3B5C433C7;
-	Tue, 19 Dec 2023 09:22:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702977752;
-	bh=Ku+8/L6tx5nfCW103rlyrYwhlGGJdpQu9+X71/KZcZg=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=VzAlkfu9Z3REtUNRksAUp5mq8Kx+eq8xN/cAgwUrhypFCcUL+uBOGSk7BtW1M8V3j
-	 rDqotlZGdWHGjCU1+Yk19hAyCJQTKMhFUVaV3kJQcuwvE7YKQJ6Ncqk769H4eF1kPd
-	 xp8n00F2QY2uR2DHIb38GCqlVa1tcBqifkuNjAChGh2T6RmdR7eVEGX65V+LgPaLXY
-	 oFlyqCjxQX5GGZNhTeMStBBzabNr8RK7s0xbk9GrMZh6o6bSvrZy8oghbIsQG3Qfim
-	 oKpmeaY5uEXOcD40NnROG8gn6IZG70q8Qq6NOvx++xC9/x1Rrixkz22H4QCM+iXx+t
-	 wnkp8qRObiZ4g==
-Received: (nullmailer pid 1297834 invoked by uid 1000);
-	Tue, 19 Dec 2023 09:22:29 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="isRyZUPq"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-40c29f7b068so51231065e9.0;
+        Tue, 19 Dec 2023 06:41:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702996878; x=1703601678; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cGTvv5cpxM+jtyC8aw4dFZd8mhCWgM/Dn37jyMs9saM=;
+        b=isRyZUPqvR9lgtFhiy3ORNuEtnkKAa4UJO9LwkRwRdvMWpK2+dlZ5JLxNFRYINjhwW
+         7rbQa2I0clJPNOw8OkYsCEgd3F5P5cPwq/BjPnFIegZjJj+LHezkuNh8PzjSDfKXGXGC
+         MBzbX23bkAnvg92xy/kdqcR8ZKIb+7y0wbq8HcSN7IvCSapkuodDHMpJXBbOaRh6MdM/
+         pw1PhC81lRvykguzMdGiY0v7nIdbLPJFVztbQ66HalmLEgrsVRPEgXYkbFbphW6hmwSx
+         vHK0CfDzT1d3Mev0jNCkpiCSX07ep3aeYj+ugPI8HqT1BGiBLyBAVuk96h7vPosT+PU9
+         0y4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702996878; x=1703601678;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cGTvv5cpxM+jtyC8aw4dFZd8mhCWgM/Dn37jyMs9saM=;
+        b=vVm0SP2sSfRrQw6U8m/T0iXznPSOmJoqK4mSTw/GOoqSRbDj5b120AFXVUfY1mdG0N
+         /WZ3bOugjvm/IEU4ScoJbyCSKUUD102iuRJFQhFVpifk4m2q1w7OdQaYVy12JbJH13fq
+         6RHMlOyTPk62SrEqV5W3J6Pb6Ec+m9/G3IbxrY/Gspz0+9OpKZxsCHah8YJFOM4N949O
+         NPTAFhPmJTnAbYJvO0iu5WEz34mwuD/lBZ2pS1v10UXZbjCArO2zR78TqjNWwnQBErIk
+         l8fKC0zEFgwXIZkX2n0VLf5z785L4naD6KnC6Xl7Ctyr59MNCS90FHDFXvTMsQreNkt5
+         KFiw==
+X-Gm-Message-State: AOJu0YxZ2O4oY87PZtbEk6YVzzkca3pt16NDUYbdmQ37CYPGSWbaRB6+
+	V7TSPoKEzS0qMv8GKfTr2ZZRKGhwIvI=
+X-Google-Smtp-Source: AGHT+IGR+h/gTSXJexePpuLg4d1Sm4hAFYi6IJODbx0EA3QM1U3RhRpipneSrE+uDNHKAUExo3G6ng==
+X-Received: by 2002:a7b:ca54:0:b0:40b:5e59:b7b6 with SMTP id m20-20020a7bca54000000b0040b5e59b7b6mr9304466wml.147.1702996877973;
+        Tue, 19 Dec 2023 06:41:17 -0800 (PST)
+Received: from fedora.. (cable-178-148-234-71.dynamic.sbb.rs. [178.148.234.71])
+        by smtp.gmail.com with ESMTPSA id m5-20020a05600c4f4500b0040c57e4ea28sm3189788wmq.17.2023.12.19.06.41.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Dec 2023 06:41:17 -0800 (PST)
+From: Aleksa Savic <savicaleksa83@gmail.com>
+To: linux-hwmon@vger.kernel.org
+Cc: Aleksa Savic <savicaleksa83@gmail.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (gigabyte_waterforce) Mark status report as received under a spinlock
+Date: Tue, 19 Dec 2023 15:36:19 +0100
+Message-ID: <20231219143620.22179-1-savicaleksa83@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Rob Herring <robh@kernel.org>
-To: baneric926@gmail.com
-Cc: devicetree@vger.kernel.org, corbet@lwn.net, kwliu@nuvoton.com, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, jdelvare@suse.com, kcfeng0@nuvoton.com, krzysztof.kozlowski+dt@linaro.org, linux-hwmon@vger.kernel.org, openbmc@lists.ozlabs.org, robh+dt@kernel.org, Bonnie_Lo@wiwynn.com, conor+dt@kernel.org, DELPHINE_CHIU@wiwynn.com, linux@roeck-us.net
-In-Reply-To: <20231219080021.2048889-2-kcfeng0@nuvoton.com>
-References: <20231219080021.2048889-1-kcfeng0@nuvoton.com>
- <20231219080021.2048889-2-kcfeng0@nuvoton.com>
-Message-Id: <170297774900.1297817.5593278746406765111.robh@kernel.org>
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add NCT7363Y documentation
-Date: Tue, 19 Dec 2023 03:22:29 -0600
+Content-Transfer-Encoding: 8bit
 
+Through hidraw, userspace can cause a status report to be sent
+from the device. The parsing in waterforce_raw_event() may happen in
+parallel to a waterforce_get_status() call (which resets the completion
+for tracking the report) if it's running on a different CPU where
+bottom half interrupts are not disabled.
 
-On Tue, 19 Dec 2023 16:00:20 +0800, baneric926@gmail.com wrote:
-> From: Ban Feng <kcfeng0@nuvoton.com>
-> 
-> Adding bindings for the Nuvoton NCT7363Y Fan Controller
-> 
-> Signed-off-by: Ban Feng <kcfeng0@nuvoton.com>
-> ---
->  .../bindings/hwmon/nuvoton,nct7363.yaml       | 62 +++++++++++++++++++
->  MAINTAINERS                                   |  6 ++
->  2 files changed, 68 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/nuvoton,nct7363.yaml
-> 
+Add a spinlock around the complete_all() call in waterforce_raw_event()
+to prevent race issues.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Fixes: d5939a793693 ("hwmon: Add driver for Gigabyte AORUS Waterforce AIO coolers")
+Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
+---
+Does the above make sense? The raw event parsing is a softirq AFAIK and
+presumably could run on a different CPU in parallel to a waterforce_get_status()
+call.
 
-yamllint warnings/errors:
+Appreciate thoughts on this.
+---
+ drivers/hwmon/gigabyte_waterforce.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/nuvoton,nct7363.yaml:
-Error in referenced schema matching $id: http://devicetree.org/schemas/hwmon/fan-common.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/nuvoton,nct7363.example.dtb: hwmon@22: fan-0: False schema does not allow {'pwms': [[1, 0, 50000]], 'tach-ch': ['']}
-	from schema $id: http://devicetree.org/schemas/hwmon/nuvoton,nct7363.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/nuvoton,nct7363.example.dtb: hwmon@22: fan-1: False schema does not allow {'pwms': [[1, 1, 50000]], 'tach-ch': b'\x01'}
-	from schema $id: http://devicetree.org/schemas/hwmon/nuvoton,nct7363.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/nuvoton,nct7363.example.dtb: fan-1: tach-ch: b'\x01' is not of type 'object', 'array', 'boolean', 'null'
-	from schema $id: http://devicetree.org/schemas/dt-core.yaml#
-
-doc reference errors (make refcheckdocs):
-Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/hwmon/nuvoton,nct736x.yaml
-MAINTAINERS: Documentation/devicetree/bindings/hwmon/nuvoton,nct736x.yaml
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20231219080021.2048889-2-kcfeng0@nuvoton.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+diff --git a/drivers/hwmon/gigabyte_waterforce.c b/drivers/hwmon/gigabyte_waterforce.c
+index 1799377fc2f1..85e523775714 100644
+--- a/drivers/hwmon/gigabyte_waterforce.c
++++ b/drivers/hwmon/gigabyte_waterforce.c
+@@ -276,8 +276,10 @@ static int waterforce_raw_event(struct hid_device *hdev, struct hid_report *repo
+ 	priv->duty_input[0] = data[WATERFORCE_FAN_DUTY];
+ 	priv->duty_input[1] = data[WATERFORCE_PUMP_DUTY];
+ 
++	spin_lock(&priv->status_report_request_lock);
+ 	if (!completion_done(&priv->status_report_received))
+ 		complete_all(&priv->status_report_received);
++	spin_unlock(&priv->status_report_request_lock);
+ 
+ 	priv->updated = jiffies;
+ 
+-- 
+2.43.0
 
