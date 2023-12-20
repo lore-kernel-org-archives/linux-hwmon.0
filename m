@@ -1,133 +1,119 @@
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2070.outbound.protection.outlook.com [40.107.244.70])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F195B2CCB4;
-	Wed, 20 Dec 2023 13:12:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8689D3E467;
+	Wed, 20 Dec 2023 15:10:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Aqykr9mY"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OlfatQFvJuUBQGpO7TgbBjnJuI3x5F8hOX1TSdCD8MgW4Cuk49ynOMPSXd7D3Ydku1Bd+owz7r+PRos/0E+nVdaqapWHvulXbeZKJzivWKeWyCsfChgvuDFQD77mLmYjNhnnuuUsiaCFUMNpJwn159V2azUeoZq2aK6AEORfmzuaHKlIeeEqDP17/BgFnPw2F1mbe0nqt+mB9sgHOHkh77ky7RWVp2SrK9GAX7vkNQfsH9GHCTrNAlpyMPXYosgxa66QB/aKJ/wHI6rfeZWC1TUw07b9xusPHe5IOEf0hAiVyQkvcbu3ZhHqfQEERMhON+07jbNwu5XWv9u6VX/aJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=36a0wC6j/901i+TqhCzzKRPz/x4zYo/zsmSKuo6wRKg=;
- b=NPYd5DiYQxMz3OXc58XK8tzlyttTZxx9ONIsj0KVS1lqV6kCyS9p4Wk2qbg5maxcJKMWYDnt6/eEp5k3JtUdpfyOJPgJPuGkbs4daHmkvM0UZHwb0r5G9puzkCV5VJ4fD1g4bc7aHhV39nBMWvDAGeiJx8gZIs3xyYdLBmEYmLyBkfOTsWyssDbEdCrku/uNzyyA+Oz5OvFcUtTayLlT7ddAbqteGTw+EQRWl1m+4ZdaK1ROytFdmdrmvMx162xgM23uwNxFZ4/oLn1ZtehQojXnEzFayxc3/5HRddpldDV8ZO4cpsobHX95Kv4BPCg/AWQvOPaID5ZSVOKzqw6qbw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=36a0wC6j/901i+TqhCzzKRPz/x4zYo/zsmSKuo6wRKg=;
- b=Aqykr9mYc6AksGs+MCn2m+MCCEs7KLNchZABOj0BuzrgIpB96rLEosZGxJZR58mjOHRloXquTDBZZYKMXCVZsZMiitxnoKW0lzqlLplJJi4IeTpHgt4lamMYZ3BcfufH3jO8rZN5bnYnk34BV6s0lU5OVTZJsoBlduZFgPO2W4A=
-Received: from SJ0PR05CA0097.namprd05.prod.outlook.com (2603:10b6:a03:334::12)
- by PH8PR12MB6939.namprd12.prod.outlook.com (2603:10b6:510:1be::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.38; Wed, 20 Dec
- 2023 13:12:22 +0000
-Received: from DS2PEPF0000343E.namprd02.prod.outlook.com
- (2603:10b6:a03:334:cafe::aa) by SJ0PR05CA0097.outlook.office365.com
- (2603:10b6:a03:334::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7113.18 via Frontend
- Transport; Wed, 20 Dec 2023 13:12:22 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DS2PEPF0000343E.mail.protection.outlook.com (10.167.18.41) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7113.14 via Frontend Transport; Wed, 20 Dec 2023 13:12:22 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Wed, 20 Dec
- 2023 07:12:19 -0600
-From: Michal Simek <michal.simek@amd.com>
-To: <linux-kernel@vger.kernel.org>, <monstr@monstr.eu>,
-	<michal.simek@xilinx.com>, <git@xilinx.com>
-CC: Conor Dooley <conor+dt@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>, Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-hwmon@vger.kernel.org>
-Subject: [PATCH 2/2] dt-bindings: hwmon: ina2xx: Describe #io-channel-cells property
-Date: Wed, 20 Dec 2023 14:12:14 +0100
-Message-ID: <aa303b9fe3116e7f98d6b72822f7f57694366db3.1703077926.git.michal.simek@amd.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <6f3c57d08984c1978569d3918cb38eb295c0c67d.1703077926.git.michal.simek@amd.com>
-References: <6f3c57d08984c1978569d3918cb38eb295c0c67d.1703077926.git.michal.simek@amd.com>
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="HA3rBzvq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+	t=1703084992; x=1703689792; i=w_armin@gmx.de;
+	bh=qhG3JEYtczaYqpd6vjtfBVybBteTkGpA87cR/MSHPlI=;
+	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
+	 In-Reply-To;
+	b=HA3rBzvqLE5fuosDh39Wsz650AgeWgd+EM123XUEi0rRQeCqc5IM1TFQR1fMQFEa
+	 UFGX7m8xFJyZnUhrzVZuIImkU/ZKk+7vxugaQJ1IW/lR0O9z2vojjeHc6q8PUYcOC
+	 8Yuq6FwQN3xGC1rg0bFdOCE6BWSPcpQeD93EnJmWS7sDAWI9IEPlReemA2f9xi6yM
+	 E13cKAZkNbrVln0OG9WzpO/l2UIvPkh5M6tEat6X5NaFqWsHpR9sydbfx1zzjHOmZ
+	 hbDaoggxClkEJAVTL95yh9Kr5Notd0A5t74nFDhij8Osbh2o8l7AqRnmKwPrX5uBi
+	 4onEmBXIBkSVhF+Erw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M6DWi-1rMaz237w8-006ckQ; Wed, 20
+ Dec 2023 16:09:52 +0100
+Message-ID: <d8e455b9-0a27-4361-8f92-9f1cb1fff537@gmx.de>
+Date: Wed, 20 Dec 2023 16:09:51 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1100; i=michal.simek@amd.com; h=from:subject:message-id; bh=mYIwEpNjWemfe0sYi3/Kl0a/ENCHVsvLOLesvpN3/dI=; b=owGbwMvMwCR4yjP1tKYXjyLjabUkhtSmF1pVS55cOHSP9cm3tJdT27280uO46pZxa+VHLV+p9 9Hb9qNuRywLgyATg6yYIou0zZUzeytnTBG+eFgOZg4rE8gQBi5OAZhIlxnD/Ljd4hMN9727lNwU ZsL0+td/K3bbhQxzBeJE9uYs23vwofO2A3+OCiy0OXC7FAA=
-X-Developer-Key: i=michal.simek@amd.com; a=openpgp; fpr=67350C9BF5CCEE9B5364356A377C7F21FE3D1F91
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS2PEPF0000343E:EE_|PH8PR12MB6939:EE_
-X-MS-Office365-Filtering-Correlation-Id: d6b9dbbf-30d8-40b2-b88e-08dc015d4d6a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	7rvpxOAxpnBvXSDGyijKbhaCKfigfX4FlYBDS+csGDamCOqhM8UD8V9pLnp8hjGYLI9MznkQPWQIpFiQYVLm4xgs7lTslWK5j0gbOWIrXqbn3OTCinHVB3vxntw+lBdkI4mQ0zgHajSjAFG2/LGihv4a5Xdq0plxyOKWq8Qk3qoL071ahzvbzLyBfJc1YnEpLU0ENdeoTJ17ePzJJbqnG2RKnfLYJDsqjvuuByKHmZ5QfhCGskQO2PFIdfxOMFPFbaGbBBo708tmTHBIJqkAB8EbAVq3H83KGmo5vMmAOmGqAoH2Mt9+CEsA9o+h7d3OEkw8NwIUZxk0iljKLeFBIqKJwVBNBKguRWDAHfQiqsnnoxTgPAWtar9y3PhrA6tZJ+riA+Yl587uJD8rIeKhnLfDEcfwjpKF9OTpSCzEXCONZ+3M3W97uEeSKri2efQM1rwmaATYPt0BMHd/H5iJ8VTbACP3lyLE26GD8FCOVEi4ax3B9d7mKS580JHtrE/1DgqW+bU/6dqJ26NQL3rCQDX1SoaUjurkYeCh1L7KwM7dejJkVFX8bEtOWyFao38QeJvoMUNa9dfuewPHwVCe1IqGBDAwGIKyN9Dmn+TQHu7MpyqQLaCcZ/25cbz/sQzwxohdgIKbhsU7DW3ut1PaMrh1BJSMqMwuQUefL9BGW/IDMMirAfd4HHalC5sqX/d6Byp0nPmMrjOb/pB0+yiRdmb6c7CtQ9VgT9H0FvLnyaL1IYP0qwc6Nv2nXelJIP3oMlEWAcgGHZhB1JLlBdF2sbndTm0l8q3oxu1/wFSlcxI=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(396003)(39860400002)(346002)(376002)(136003)(230922051799003)(64100799003)(82310400011)(1800799012)(451199024)(186009)(36840700001)(40470700004)(46966006)(40480700001)(6666004)(336012)(16526019)(426003)(2616005)(26005)(40460700003)(81166007)(82740400003)(356005)(36756003)(86362001)(47076005)(5660300002)(44832011)(7416002)(36860700001)(8936002)(8676002)(54906003)(70206006)(70586007)(4326008)(316002)(110136005)(41300700001)(478600001)(4744005)(2906002)(36900700001)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Dec 2023 13:12:22.1568
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d6b9dbbf-30d8-40b2-b88e-08dc015d4d6a
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DS2PEPF0000343E.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6939
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] hwmon: (acpi_power_meter) Install IPMI handler for Dell
+ systems
+To: Kai-Heng Feng <kai.heng.feng@canonical.com>, jdelvare@suse.com,
+ linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20231220051350.392350-1-kai.heng.feng@canonical.com>
+Content-Language: en-US
+From: Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <20231220051350.392350-1-kai.heng.feng@canonical.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:+uFY2EtJJvAKtG9sOckP3KeI20V3v0lxatL9nlEfHmFKY+Ukusk
+ cPvpEXgyK200UrGdWk01qIpU2D2g4dQ5a8uMOAVm8MMNI9X1iuS4JL2h/tVCw/c9/cHCAse
+ 2lWmO/WQoiG3DxaObLGcKbHsargq5XeyS8FtGYnCHfU3RXzOgMjSJBHoSeVG9kDfNcXnCOL
+ F1eyBJYmInuaKCMxWTraA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:tKS1Lk1+9CI=;yjbvVaAnZS2MS8n59Q+kv8j0bjP
+ c5UlZlTALQTLNlrooBrnnmBWSjEslLxGyqRici9Bu5rDAzVWI+kskOlGz0T1DLM5oajNJuYgL
+ vk9Vy4xry7Ig6ywzVT+jcU5/SNK9GN3VbcpEYIV78P/T5FKOlbmhUi9UblOhWAxsMSf1+JTOz
+ 0SdC9o3reqpfSRDgTVB0peMbWDpiEyc0f8fzoMTGtNBIkQNXJxszO1Q9oYGs8h/WEV42XnqBc
+ edszaYTX/JsrOGH98wk+Vib3STf1N5mpv2ZAlYZfENcBg0Zu8X6JTDdRgey8sn07LXm+zNN4r
+ dwPFZigXVYJWRamwrfSU2h9D6YERwh06Q1ugYawZ+lk4bnerHkYzUQcEmBEvu1AAH7eXbbIFe
+ jAMgJG2o/kDjxN0rw9dEgX/ggjYcICG9BKJjiJALQRsuUxXU0uMgWozIS/vUcUab7a9qoqLia
+ 32w8r6QaQgKZYWe8XaahFrfLpHXUDKUipAomS5Q65O4w6vFNIni0Uu9/Ff1Pf7riQCdU0oTrO
+ G8Nw61LTuHBHi+WgH+orz9vD+CmfsNzhxelLnvPazZmPKuJhcVxz6rzdsb5YslF6BN0mas7CU
+ 2w/LrRiON1L22AR7cFXZAMALojK+W1aAoj8zi7CTEYDk2zQoNsKHOSit2B/IhJV21afCcnDdR
+ VNQxnE4E2lKL91H+N6ZKi5/AQDs0CSMDzIhB9xI4YYq2lz8SoEUEtHSTNugJJJyXlPM8rgu55
+ QK0mah29bJ5rwglUkrP1b3na9seQ2izJu0k4W5TmWfA8EZ+m34N82tGontGyAs1fcUw3P9YDp
+ Cttz7RQVXUV/obzgK68h69YqXruPFQC04mQfSgeI2ZtKLtkJZA6DVCexeI2HyOUjYCWrFQ4CF
+ Jl3bqAzZnNEaKxoFhZehdoYh3rvYg3aWjj3nT4ixG0ETYy1CTw1nDydUlMTKGhxP6Q8xfiS+L
+ 2DVbkQSp6SfSLusb2XfMxh+x0RM=
 
-There are two drivers in the Linux kernel. One is hwmon based and second
-IIO. IIO version requires to define #io-channel-cells to operate.
+Am 20.12.23 um 06:13 schrieb Kai-Heng Feng:
 
-Signed-off-by: Michal Simek <michal.simek@amd.com>
----
+> The following error can be observed at boot:
+> [    3.717920] ACPI Error: No handler for Region [SYSI] (00000000ab9e62c=
+5) [IPMI] (20230628/evregion-130)
+> [    3.717928] ACPI Error: Region IPMI (ID=3D7) has no handler (20230628=
+/exfldio-261)
+>
+> [    3.717936] No Local Variables are initialized for Method [_GHL]
+>
+> [    3.717938] No Arguments are initialized for method [_GHL]
+>
+> [    3.717940] ACPI Error: Aborting method \_SB.PMI0._GHL due to previou=
+s error (AE_NOT_EXIST) (20230628/psparse-529)
+> [    3.717949] ACPI Error: Aborting method \_SB.PMI0._PMC due to previou=
+s error (AE_NOT_EXIST) (20230628/psparse-529)
+> [    3.717957] ACPI: \_SB_.PMI0: _PMC evaluation failed: AE_NOT_EXIST
+>
+> On Dell systems several methods of acpi_power_meter access variables in
+> IPMI region [0], so request module 'ipmi_si' which will load 'acpi_ipmi'
+> and install the region handler accordingly.
 
-zynqmp zcu102 uses this feature too.
+Hi,
 
----
- Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
+this driver should be loaded automatically if an ACPI IPMI device is prese=
+nt.
+Can you share the output of "acpidump"?
 
-diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
-index 8e5c1935b5f4..f324b627bf9c 100644
---- a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
-@@ -32,6 +32,9 @@ properties:
-   reg:
-     maxItems: 1
- 
-+  "#io-channel-cells":
-+    const: 1
-+
-   label:
-     description: A descriptive name for this device.
- 
-@@ -80,6 +83,7 @@ examples:
-         power-sensor@44 {
-             compatible = "ti,ina220";
-             reg = <0x44>;
-+            #io-channel-cells = <1>;
-             label = "vdd_3v0";
-             shunt-resistor = <1000>;
-             vs-supply = <&vdd_3v0>;
--- 
-2.36.1
+Armin Wolf
 
+> [0] https://www.dell.com/support/manuals/en-us/redhat-enterprise-linux-v=
+8.0/rhel8_rn_pub/advanced-configuration-and-power-interface-acpi-error-mes=
+sages-displayed-in-dmesg?guid=3Dguid-0d5ae482-1977-42cf-b417-3ed5c3f5ee62
+>
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> ---
+>   drivers/hwmon/acpi_power_meter.c | 2 ++
+>   1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power=
+_meter.c
+> index 703666b95bf4..b9db53166bc9 100644
+> --- a/drivers/hwmon/acpi_power_meter.c
+> +++ b/drivers/hwmon/acpi_power_meter.c
+> @@ -882,6 +882,8 @@ static int acpi_power_meter_add(struct acpi_device *=
+device)
+>   	strcpy(acpi_device_name(device), ACPI_POWER_METER_DEVICE_NAME);
+>   	strcpy(acpi_device_class(device), ACPI_POWER_METER_CLASS);
+>   	device->driver_data =3D resource;
+> +	if (dmi_match(DMI_SYS_VENDOR, "Dell Inc."))
+> +		request_module("ipmi_si");
+>
+>   	res =3D read_capabilities(resource);
+>   	if (res)
