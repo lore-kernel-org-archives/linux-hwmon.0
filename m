@@ -1,119 +1,127 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8689D3E467;
-	Wed, 20 Dec 2023 15:10:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E8F03FE32;
+	Wed, 20 Dec 2023 15:52:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="HA3rBzvq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-	t=1703084992; x=1703689792; i=w_armin@gmx.de;
-	bh=qhG3JEYtczaYqpd6vjtfBVybBteTkGpA87cR/MSHPlI=;
-	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
-	 In-Reply-To;
-	b=HA3rBzvqLE5fuosDh39Wsz650AgeWgd+EM123XUEi0rRQeCqc5IM1TFQR1fMQFEa
-	 UFGX7m8xFJyZnUhrzVZuIImkU/ZKk+7vxugaQJ1IW/lR0O9z2vojjeHc6q8PUYcOC
-	 8Yuq6FwQN3xGC1rg0bFdOCE6BWSPcpQeD93EnJmWS7sDAWI9IEPlReemA2f9xi6yM
-	 E13cKAZkNbrVln0OG9WzpO/l2UIvPkh5M6tEat6X5NaFqWsHpR9sydbfx1zzjHOmZ
-	 hbDaoggxClkEJAVTL95yh9Kr5Notd0A5t74nFDhij8Osbh2o8l7AqRnmKwPrX5uBi
-	 4onEmBXIBkSVhF+Erw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M6DWi-1rMaz237w8-006ckQ; Wed, 20
- Dec 2023 16:09:52 +0100
-Message-ID: <d8e455b9-0a27-4361-8f92-9f1cb1fff537@gmx.de>
-Date: Wed, 20 Dec 2023 16:09:51 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y5mCWkjQ"
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-6da5d410432so3855625a34.2;
+        Wed, 20 Dec 2023 07:52:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1703087528; x=1703692328; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UAcKiHpe6juqfS47pCojmHTEkJCyatRjFVyT2trlCyw=;
+        b=Y5mCWkjQDs3IJAOLdo0NEHE3Cpd7frjRuThavPcsDk9u9UhGM8nVWtSRTL++gAmTPP
+         hbL2yQJE1OuTS/ZBx1vq3eZnWdMzUSW48TeQW/dtAb4KLVB3Cp/5dTYpAKQRWK8KjBNL
+         YIj0cRJEQkkpb1Hb1GUln2K92O2dD9HqOo9xNG+wudFIxw30dxq+GEdE3VUmz7wZuQUH
+         5eLjrvkW7wh95zMprsX5eUDBPMjvEW8qx5TGDs4vWij6Kbi2hSvPcRF5FfHZHO5UC44P
+         x7fnE7TIsU8ecJwenPcZp9h5Oe1CTJahnvEaLn8JC0WUiYZskX0UBuh+WFnMInX46rSI
+         0VqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703087528; x=1703692328;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UAcKiHpe6juqfS47pCojmHTEkJCyatRjFVyT2trlCyw=;
+        b=k+7ISR0H0jGn/FxFsWiC1/dNwzKhgigZaDlUjux1nXi0fDoz39GdZEOvbrYRJu87YY
+         JgeGhWxVRWu3LuHWep5oYexCjh6DMOm9KS6sKkuaP3pfs+8xON4Gd2tZ8Fq12nTD+4vo
+         hUgWrXcCXqWvwKACPXkLA5FWru6GxiFi9CMaHYlDdT7BD/Wye3BKnx1WvMgRrRzoMhNJ
+         HgzqgFVKrrKOAkv767uboYboIly2/HgkBWxhiUWs3gFs7V0Quwz8V1kDCXHYMXeKeWlY
+         A2zsQn/e8RwRpwVqjC5/wnjG7hQtgHRhaHmX7uqxJRjxiLoeh7nDSXXDw2nBL49yOCVM
+         yx7A==
+X-Gm-Message-State: AOJu0YzCJDgvq3/hzIdZfG1h8wMWvRn20PZF/SYy9p1igmiottsGbpvS
+	5nzVegKdd6U1FgQzN2In0EY=
+X-Google-Smtp-Source: AGHT+IFLclNYyqTDtU6o+bSm9uEZVQL+q90o7t8TOZ/DDzP7tOnE73/eZg3wGAGZC6u8LmfCXj0Saw==
+X-Received: by 2002:a9d:73d1:0:b0:6db:abf8:83b3 with SMTP id m17-20020a9d73d1000000b006dbabf883b3mr1158074otk.34.1703087528256;
+        Wed, 20 Dec 2023 07:52:08 -0800 (PST)
+Received: from cosmo-ubuntu-2204.dhcpserver.bu9bmc.local (1-34-21-66.hinet-ip.hinet.net. [1.34.21.66])
+        by smtp.gmail.com with ESMTPSA id y188-20020a6364c5000000b00588e8421fa8sm4840847pgb.84.2023.12.20.07.52.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Dec 2023 07:52:07 -0800 (PST)
+From: Cosmo Chou <chou.cosmo@gmail.com>
+To: linux@roeck-us.net,
+	robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org,
+	jdelvare@suse.com,
+	corbet@lwn.net,
+	broonie@kernel.org,
+	naresh.solanki@9elements.com,
+	vincent@vtremblay.dev,
+	patrick.rudolph@9elements.com,
+	luca.ceresoli@bootlin.com,
+	bhelgaas@google.com,
+	festevam@denx.de,
+	alexander.stein@ew.tq-group.com,
+	heiko@sntech.de,
+	jernej.skrabec@gmail.com,
+	macromorgan@hotmail.com,
+	forbidden405@foxmail.com,
+	sre@kernel.org,
+	linus.walleij@linaro.org
+Cc: devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	chou.cosmo@gmail.com,
+	cosmo.chou@quantatw.com
+Subject: [PATCH v3 0/3] hwmon: Add driver for Astera Labs PT5161L retimer
+Date: Wed, 20 Dec 2023 23:51:39 +0800
+Message-Id: <20231220155142.3060255-1-chou.cosmo@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: (acpi_power_meter) Install IPMI handler for Dell
- systems
-To: Kai-Heng Feng <kai.heng.feng@canonical.com>, jdelvare@suse.com,
- linux@roeck-us.net
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20231220051350.392350-1-kai.heng.feng@canonical.com>
-Content-Language: en-US
-From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <20231220051350.392350-1-kai.heng.feng@canonical.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:+uFY2EtJJvAKtG9sOckP3KeI20V3v0lxatL9nlEfHmFKY+Ukusk
- cPvpEXgyK200UrGdWk01qIpU2D2g4dQ5a8uMOAVm8MMNI9X1iuS4JL2h/tVCw/c9/cHCAse
- 2lWmO/WQoiG3DxaObLGcKbHsargq5XeyS8FtGYnCHfU3RXzOgMjSJBHoSeVG9kDfNcXnCOL
- F1eyBJYmInuaKCMxWTraA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:tKS1Lk1+9CI=;yjbvVaAnZS2MS8n59Q+kv8j0bjP
- c5UlZlTALQTLNlrooBrnnmBWSjEslLxGyqRici9Bu5rDAzVWI+kskOlGz0T1DLM5oajNJuYgL
- vk9Vy4xry7Ig6ywzVT+jcU5/SNK9GN3VbcpEYIV78P/T5FKOlbmhUi9UblOhWAxsMSf1+JTOz
- 0SdC9o3reqpfSRDgTVB0peMbWDpiEyc0f8fzoMTGtNBIkQNXJxszO1Q9oYGs8h/WEV42XnqBc
- edszaYTX/JsrOGH98wk+Vib3STf1N5mpv2ZAlYZfENcBg0Zu8X6JTDdRgey8sn07LXm+zNN4r
- dwPFZigXVYJWRamwrfSU2h9D6YERwh06Q1ugYawZ+lk4bnerHkYzUQcEmBEvu1AAH7eXbbIFe
- jAMgJG2o/kDjxN0rw9dEgX/ggjYcICG9BKJjiJALQRsuUxXU0uMgWozIS/vUcUab7a9qoqLia
- 32w8r6QaQgKZYWe8XaahFrfLpHXUDKUipAomS5Q65O4w6vFNIni0Uu9/Ff1Pf7riQCdU0oTrO
- G8Nw61LTuHBHi+WgH+orz9vD+CmfsNzhxelLnvPazZmPKuJhcVxz6rzdsb5YslF6BN0mas7CU
- 2w/LrRiON1L22AR7cFXZAMALojK+W1aAoj8zi7CTEYDk2zQoNsKHOSit2B/IhJV21afCcnDdR
- VNQxnE4E2lKL91H+N6ZKi5/AQDs0CSMDzIhB9xI4YYq2lz8SoEUEtHSTNugJJJyXlPM8rgu55
- QK0mah29bJ5rwglUkrP1b3na9seQ2izJu0k4W5TmWfA8EZ+m34N82tGontGyAs1fcUw3P9YDp
- Cttz7RQVXUV/obzgK68h69YqXruPFQC04mQfSgeI2ZtKLtkJZA6DVCexeI2HyOUjYCWrFQ4CF
- Jl3bqAzZnNEaKxoFhZehdoYh3rvYg3aWjj3nT4ixG0ETYy1CTw1nDydUlMTKGhxP6Q8xfiS+L
- 2DVbkQSp6SfSLusb2XfMxh+x0RM=
+Content-Transfer-Encoding: 8bit
 
-Am 20.12.23 um 06:13 schrieb Kai-Heng Feng:
+This driver implements support for temperature monitoring of Astera Labs
+PT5161L series PCIe retimer chips.
 
-> The following error can be observed at boot:
-> [    3.717920] ACPI Error: No handler for Region [SYSI] (00000000ab9e62c=
-5) [IPMI] (20230628/evregion-130)
-> [    3.717928] ACPI Error: Region IPMI (ID=3D7) has no handler (20230628=
-/exfldio-261)
->
-> [    3.717936] No Local Variables are initialized for Method [_GHL]
->
-> [    3.717938] No Arguments are initialized for method [_GHL]
->
-> [    3.717940] ACPI Error: Aborting method \_SB.PMI0._GHL due to previou=
-s error (AE_NOT_EXIST) (20230628/psparse-529)
-> [    3.717949] ACPI Error: Aborting method \_SB.PMI0._PMC due to previou=
-s error (AE_NOT_EXIST) (20230628/psparse-529)
-> [    3.717957] ACPI: \_SB_.PMI0: _PMC evaluation failed: AE_NOT_EXIST
->
-> On Dell systems several methods of acpi_power_meter access variables in
-> IPMI region [0], so request module 'ipmi_si' which will load 'acpi_ipmi'
-> and install the region handler accordingly.
+LINK: [v1] https://lore.kernel.org/all/20231205074723.3546295-1-chou.cosmo@gmail.com/
 
-Hi,
+v3:
+  - Revise pt5161l.rst
+  - Revise the style of comments
+  - Remove unused pec_enable
+  - Add back safe access wide registers
+  - fix build warning
 
-this driver should be loaded automatically if an ACPI IPMI device is prese=
-nt.
-Can you share the output of "acpidump"?
+v2:
+  - Add "asteralabs,pt5161l" to trivial-devices.yaml
+  - Change naming PT516XX/pt516xx to PT5161L/pt5161l
+  - Separated debugfs files for health status
+  - Revise the style of comments
+  - Remove unused defines
+  - Remove including unused header files
+  - Remove unnecessary debugging messages
+  - Revise the data parsing for a big-endian system
+  - Use read_block_data instead of accessing wide registers
+  - Remove the debugfs files when the device is unloaded
+  - Add acpi_match_table
 
-Armin Wolf
+Cosmo Chou (3):
+  dt-bindings: vendor-prefixes: add asteralabs
+  dt-bindings: trivial-devices: add Astera Labs PT5161L
+  hwmon: Add driver for Astera Labs PT5161L retimer
 
-> [0] https://www.dell.com/support/manuals/en-us/redhat-enterprise-linux-v=
-8.0/rhel8_rn_pub/advanced-configuration-and-power-interface-acpi-error-mes=
-sages-displayed-in-dmesg?guid=3Dguid-0d5ae482-1977-42cf-b417-3ed5c3f5ee62
->
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> ---
->   drivers/hwmon/acpi_power_meter.c | 2 ++
->   1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power=
-_meter.c
-> index 703666b95bf4..b9db53166bc9 100644
-> --- a/drivers/hwmon/acpi_power_meter.c
-> +++ b/drivers/hwmon/acpi_power_meter.c
-> @@ -882,6 +882,8 @@ static int acpi_power_meter_add(struct acpi_device *=
-device)
->   	strcpy(acpi_device_name(device), ACPI_POWER_METER_DEVICE_NAME);
->   	strcpy(acpi_device_class(device), ACPI_POWER_METER_CLASS);
->   	device->driver_data =3D resource;
-> +	if (dmi_match(DMI_SYS_VENDOR, "Dell Inc."))
-> +		request_module("ipmi_si");
->
->   	res =3D read_capabilities(resource);
->   	if (res)
+ .../devicetree/bindings/trivial-devices.yaml  |   2 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ Documentation/hwmon/index.rst                 |   1 +
+ Documentation/hwmon/pt5161l.rst               |  42 ++
+ MAINTAINERS                                   |   7 +
+ drivers/hwmon/Kconfig                         |  10 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/pt5161l.c                       | 670 ++++++++++++++++++
+ 8 files changed, 735 insertions(+)
+ create mode 100644 Documentation/hwmon/pt5161l.rst
+ create mode 100644 drivers/hwmon/pt5161l.c
+
+-- 
+2.34.1
+
