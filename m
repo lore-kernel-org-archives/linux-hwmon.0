@@ -1,25 +1,49 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 728A53E477;
-	Wed, 20 Dec 2023 16:25:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CCDC46B86;
+	Wed, 20 Dec 2023 17:05:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qWhhRH8p"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07976C433C8;
-	Wed, 20 Dec 2023 16:25:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703089520;
-	bh=bqmJgdG2cQrFRj9mG3l1cGlxdLWNpRQOXnL/ygP0CQU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qWhhRH8piymkGehZFNjjk4tSaCQSFHRx/1xOJLe48nrqHkznc28ye8lh6A6gxFWD6
-	 il3/v+15Ol78BRnfRm67UQ2mxT+WEa2ftxyfE1WyTfd9xmOCSTocl8I/xNlN/e6SEz
-	 oNehzM4aFSLQRnyHywdHgrL28Ktkflq+ro+H9oS/cecXYiCTGEy+10M7uoOtUrhmYJ
-	 OYhMJQTlWgevgIWfLpM8I8V2NRZ5aNfLOY3ovjsIAAZLsMnRxOtgjSdN9rgWHICgA9
-	 46daHsWV+0RGyvnRmUbRFz3B1XAe1Dko6SdGByN4db9SlcuR7ZuR1cZhSbhcVXqbDz
-	 C+hy47ith5pvQ==
-Date: Wed, 20 Dec 2023 16:25:15 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Abdel Alkuor <alkuor@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FBICEXf0"
+Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-781120575f5so58218985a.0;
+        Wed, 20 Dec 2023 09:05:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1703091929; x=1703696729; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5puDNbS5h8yPDhnQyFTYthYdD3tPGlaiQXwUTgRM5zo=;
+        b=FBICEXf0MZJPi1HZUTYUTW+scpmErVd+rE9b+wQoQChlge1r9B/0MGYiirwyw/K+NE
+         Y9FBECXgqf4485SBQR+Nm0ww6Akb/r5O6gCIBrxhmxNtWlRwkCDAbQdVu5Z46Ife4WlH
+         ZgdjLRoaYjsf0Q/T3cd7cMVYnkZx39EwHLsiy5Wq3sW65RYcVB1B9fptGeVhFRoMHaRI
+         Usw8pmCDeWSMJa/BNV9cgwuY0OthKMWopvO9m52xzsN7HyFjdwEqVqDTHnMNNt/VSjWP
+         aWLp8Sdt5FTNAy2W7P29mK1RQpy9gtD0+U0I7RotJLjLqLn9ET3GIzxwlh9gslEzQtIc
+         5jgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703091929; x=1703696729;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5puDNbS5h8yPDhnQyFTYthYdD3tPGlaiQXwUTgRM5zo=;
+        b=nMk0zztKJ5q69wtS701lSgLL9UrGtewa7as004teFJZgps6bNlLLPXUGCe9IaLSDQI
+         2UyEUBLmAs7FEULEvW+QZJTY6QJXBFpiHRhXYA9UnlKyBoEMcQsiUlJs39oRYvNJ7A2E
+         FgM2kpK9WLR2XX6MQlERawGAfNbaMN9tM3nC/ytezbR+2dF7dLyfJX3Bd8O5e5m+0tQa
+         fBu7dBgCk3ISuck44s2NzWiGDGfqp+I/b4cFrJUM6zF2K8Yaw1jdk/j/75Gm79zHV2Wt
+         BbJrJLEMWBxFuauzzRYxMjNUibKFYLPVPCEHphF+T0EGC2zVx/uEC9SHQnya2t8iP/GB
+         aM9A==
+X-Gm-Message-State: AOJu0YyFkHeEKAhv0UVjMY00A+FtTWXSzLClGkJggfC19s3wujbuNoY6
+	m/ti2Pw3FB5pADpckCy6xt8aJm+cZb3KNw==
+X-Google-Smtp-Source: AGHT+IEWuxQbO/1DD4MjAMOm0X5S4M1feBKz+j/m/1urHbHzHcCBBjyiyMItrLamQwxZ/1+jf7mNcw==
+X-Received: by 2002:a05:620a:439f:b0:780:e283:314e with SMTP id a31-20020a05620a439f00b00780e283314emr7460463qkp.105.1703091928540;
+        Wed, 20 Dec 2023 09:05:28 -0800 (PST)
+Received: from abdel ([174.95.13.129])
+        by smtp.gmail.com with ESMTPSA id x8-20020a05620a098800b0077efd1e3e52sm64199qkx.24.2023.12.20.09.05.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Dec 2023 09:05:28 -0800 (PST)
+Date: Wed, 20 Dec 2023 12:05:17 -0500
+From: Abdel Alkuor <alkuor@gmail.com>
+To: Conor Dooley <conor@kernel.org>
 Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
 	Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -29,71 +53,38 @@ Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
 	linux-doc@vger.kernel.org
 Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: (lm75) Add AMS AS6200
  temperature sensor
-Message-ID: <20231220-gristle-renovate-557b8c330e4e@spud>
+Message-ID: <ZYMezZbvgtsCW07j@abdel>
 References: <89fb5eec30df734ee8fc58427cf5d94929076514.1702874115.git.alkuor@gmail.com>
  <20231219-mascot-semester-7d2c492b99bc@spud>
  <ZYHEcfB7b+k2g9Ge@abdel>
+ <20231220-gristle-renovate-557b8c330e4e@spud>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="TbtCuatvXTl7vKHk"
-Content-Disposition: inline
-In-Reply-To: <ZYHEcfB7b+k2g9Ge@abdel>
-
-
---TbtCuatvXTl7vKHk
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20231220-gristle-renovate-557b8c330e4e@spud>
 
-On Tue, Dec 19, 2023 at 11:27:29AM -0500, Abdel Alkuor wrote:
-> On Tue, Dec 19, 2023 at 03:18:24PM +0000, Conor Dooley wrote:
-> > On Sun, Dec 17, 2023 at 11:52:27PM -0500, Abdel Alkuor wrote:
-> >=20
-> > Do the other devices here have interrupts? If not, you just allowed
-> > interrupts for them. You, at the very least, need to add something like:
-> > diff --git a/Documentation/devicetree/bindings/hwmon/lm75.yaml b/Docume=
-ntation/devicetree/bindings/hwmon/lm75.yaml
-> > index 63b85a83ac18..d7ce96606400 100644
-> > --- a/Documentation/devicetree/bindings/hwmon/lm75.yaml
-> > +++ b/Documentation/devicetree/bindings/hwmon/lm75.yaml
-> > @@ -56,6 +56,17 @@ required:
-> >    - compatible
-> >    - reg
-> > =20
-> > +allOf:
-> > +  - if:
-> > +      not:
-> > +        properties:
-> > +          compatible:
-> > +            contains:
-> > +              const: ams,as6200
-> > +    then:
-> > +      properties:
-> > +        interrupts: false
-> > +
-> >  additionalProperties: false
-> > =20
-> No, not all of them support the interrupt. Just tmp101, tmp102, tmp112, a=
-nd as6200.
-> For now, I'll add the check for ams,as6200.
+On Wed, Dec 20, 2023 at 04:25:15PM +0000, Conor Dooley wrote:
+> On Tue, Dec 19, 2023 at 11:27:29AM -0500, Abdel Alkuor wrote:
+> > On Tue, Dec 19, 2023 at 03:18:24PM +0000, Conor Dooley wrote:
+> > > On Sun, Dec 17, 2023 at 11:52:27PM -0500, Abdel Alkuor wrote:
+> > >  
+> > No, not all of them support the interrupt. Just tmp101, tmp102, tmp112, and as6200.
+> > For now, I'll add the check for ams,as6200.
+>
+Hi Conor,
+> If multiple devices have the interrupt you should document it for all of
+> them IMO.
 
-If multiple devices have the interrupt you should document it for all of
-them IMO.
+The interrupt hasn't been implemented for tmp101, tmp102 and tmp112 yet.
+Should I still add them to the interrupt property? They might be two different
+things driver and bindings, but I just wanted to make sure.
 
---TbtCuatvXTl7vKHk
-Content-Type: application/pgp-signature; name="signature.asc"
+Thanks,
+Abdel
 
------BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZYMVawAKCRB4tDGHoIJi
-0kQTAQDGi4NWlAPFj4x2mWKYSSP+JqTTWeAi/dNz8yte/LXNAgD+NTIVMU3FTUN/
-OyJKoUAF9TrBFE5cGE90uke0b5OryQ4=
-=EULT
------END PGP SIGNATURE-----
-
---TbtCuatvXTl7vKHk--
