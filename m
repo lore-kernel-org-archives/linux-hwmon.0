@@ -1,89 +1,142 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A1EB15494;
-	Tue, 19 Dec 2023 20:25:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64DADB660;
+	Wed, 20 Dec 2023 00:19:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HayGrfPb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1703017525; x=1734553525;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=q/3HjixKss5fvVmEUClEL2EJFxrnmh9GCua2vOP2nJg=;
-  b=HayGrfPbM76TE8OKrRQBWk9/BnJ+qIFAovVm6YNituw9vHAFosYAguBr
-   do+c8YPDluVnbF56F+F8+sk4f3EHe9vV8N+etakVOfvpa8+hR7wMq7byd
-   Ash7ub/F7dyePbokt5k6CjeLGFvA6X1rnFeHD6FrNe8QxLti1hb1H7CBs
-   aZtGTqJUPE+rsWlZfbmQ/dXoU4L6ZIgH/Tv+Bdwh3PeAs6V+pB/hQ8Bkm
-   DhlXfjyeMrdnbcDJTh9Ff5oFVRJvTfhBfy4UU2C24+3bT3ed7obLbXmZ0
-   Xq74vCOb5pujYf6OkGgq5WvgQprmRIF1buMaTXRgQcBM3od+EhCrx5Ibu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="2537663"
-X-IronPort-AV: E=Sophos;i="6.04,289,1695711600"; 
-   d="scan'208";a="2537663"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2023 12:25:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="919730521"
-X-IronPort-AV: E=Sophos;i="6.04,289,1695711600"; 
-   d="scan'208";a="919730521"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 19 Dec 2023 12:25:20 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rFgeU-0005v0-07;
-	Tue, 19 Dec 2023 20:25:18 +0000
-Date: Wed, 20 Dec 2023 04:25:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: baneric926@gmail.com, jdelvare@suse.com, linux@roeck-us.net,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, corbet@lwn.net
-Cc: oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, openbmc@lists.ozlabs.org,
-	kwliu@nuvoton.com, kcfeng0@nuvoton.com, DELPHINE_CHIU@wiwynn.com,
-	Bonnie_Lo@wiwynn.com
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add NCT7363Y documentation
-Message-ID: <202312200427.FGvpu8DB-lkp@intel.com>
-References: <20231219080021.2048889-2-kcfeng0@nuvoton.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OQmCpYNm"
+Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-77fa980b50aso328010385a.3;
+        Tue, 19 Dec 2023 16:19:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1703031553; x=1703636353; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=meLKqm86U76iMcMmqxuxzpMVgH/WS4qTltle+XEqnQE=;
+        b=OQmCpYNmz0FfkOKwZcsZn5JXmQg3xso5xaV8JDgXGPPM2iOLTsHf0FcDRjH2I7Rzy2
+         lzhzE3/24Hb/QhJn6aiWIXUd98DHLRSQMZ4HY0fYGLphyGH9LA2V70vXZT2i+MGZyEkL
+         oL8ELXgvksLl38AOBfEfuoVtF34krhL6FJ9ujH8j/sjGsKXGUGPwDkTsBcZ+XIqO5nqa
+         8e3d6Ngijk9S4CqIE2OwymLpwDMPEwzK1J6CiytdUyZ77zS2N/lXvo/Oq2VPozt9QN5g
+         X/zfxBB/BQ75lXq0S0Hy6uEf7jhNmNXg2iDVHv0UkOl9/oNvyJVCWSs8vKAFGl+73m+W
+         4qJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703031553; x=1703636353;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=meLKqm86U76iMcMmqxuxzpMVgH/WS4qTltle+XEqnQE=;
+        b=J5IIebDkjMOc9rW9/C1swaH640XTA084xWXZvo2wsA0ouMstA2dzZcHF1GMACPVVgv
+         y30Qz32jIAl2niPN4kdB3r1FfFmxTh+A2ggX1Jq+Z6HBQeD0uE/PJdpJZVCw0tm+IlHc
+         UqUV7K3FOF7K+mV+2hpY5b5E+8KbuXvrQvtSTEJ3LCp6v6ChHxqCcPrALTRRLpivkBAb
+         WLbfiwoQ7CDM7G7tP8/pboi4rMv7epTLRTNi5Qlnc7QY+wPjaC88WzUsGQHdPwgk/Mvm
+         slQ6qsr2P81KkP3QpNA9f2tOTvI5M50INieZhqn2Gg5z3GKzeeUBdUdrphj3E2JBnYfu
+         bK4A==
+X-Gm-Message-State: AOJu0YyTjc5PUzK0yIxlhp1ZicD4kpbgNCOQMlvWY3mzNnq5LhmzsA0D
+	2BuO5sHuVT/QmpySfdwbNsA=
+X-Google-Smtp-Source: AGHT+IF03ORjQpot6OdjDBHZZ9wMEUcfKs6SFiHIM+pbsb3kmTs+e9FbE3Jj5SmCOl8ealfugR6mPw==
+X-Received: by 2002:ad4:594d:0:b0:67f:494b:c1f8 with SMTP id eo13-20020ad4594d000000b0067f494bc1f8mr4440459qvb.32.1703031553244;
+        Tue, 19 Dec 2023 16:19:13 -0800 (PST)
+Received: from localhost.localdomain ([174.95.13.129])
+        by smtp.gmail.com with ESMTPSA id da14-20020a05621408ce00b0067a276fd8d5sm3814094qvb.54.2023.12.19.16.19.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Dec 2023 16:19:12 -0800 (PST)
+From: Abdel Alkuor <alkuor@gmail.com>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>
+Cc: Abdel Alkuor <alkuor@gmail.com>,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: [PATCH v3 1/2] dt-bindings: hwmon: (lm75) Add AMS AS6200 temperature sensor
+Date: Tue, 19 Dec 2023 19:17:47 -0500
+Message-Id: <af834e980f57dc11d3e821c074c433cdbc6accc3.1703030297.git.alkuor@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231219080021.2048889-2-kcfeng0@nuvoton.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi,
+as6200 is a temperature sensor with a range between -40°C to
+125°C degrees and an accuracy of ±0.4°C degree between 0
+and 65°C and ±1°C for the other ranges.
 
-kernel test robot noticed the following build warnings:
+Signed-off-by: Abdel Alkuor <alkuor@gmail.com>
+---
+Changes in v3:
+  - Enable interrupt property conditionally based on the chips that
+    support it.
+  - Fix alignment for the added example
+Changes in v2:
+  - Incorporate as6200 into lm75 bindings
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.7-rc6 next-20231219]
-[cannot apply to groeck-staging/hwmon-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+ .../devicetree/bindings/hwmon/lm75.yaml       | 29 +++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/baneric926-gmail-com/dt-bindings-hwmon-Add-NCT7363Y-documentation/20231219-160534
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20231219080021.2048889-2-kcfeng0%40nuvoton.com
-patch subject: [PATCH v2 1/2] dt-bindings: hwmon: Add NCT7363Y documentation
-reproduce: (https://download.01.org/0day-ci/archive/20231220/202312200427.FGvpu8DB-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312200427.FGvpu8DB-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/hwmon/nuvoton,nct736x.yaml
-
+diff --git a/Documentation/devicetree/bindings/hwmon/lm75.yaml b/Documentation/devicetree/bindings/hwmon/lm75.yaml
+index 0b69897f0c63..c5b2ec0b2c84 100644
+--- a/Documentation/devicetree/bindings/hwmon/lm75.yaml
++++ b/Documentation/devicetree/bindings/hwmon/lm75.yaml
+@@ -14,6 +14,7 @@ properties:
+   compatible:
+     enum:
+       - adi,adt75
++      - ams,as6200
+       - atmel,at30ts74
+       - dallas,ds1775
+       - dallas,ds75
+@@ -48,10 +49,24 @@ properties:
+   vs-supply:
+     description: phandle to the regulator that provides the +VS supply
+ 
++  interrupts:
++    maxItems: 1
++
+ required:
+   - compatible
+   - reg
+ 
++allOf:
++  - if:
++      not:
++        properties:
++          compatible:
++            contains:
++              const: ams,as6200
++    then:
++      properties:
++        interrupts: false
++
+ additionalProperties: false
+ 
+ examples:
+@@ -66,3 +81,17 @@ examples:
+         vs-supply = <&vs>;
+       };
+     };
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      temperature-sensor@48 {
++        compatible = "ams,as6200";
++        reg = <0x48>;
++        vs-supply = <&vs>;
++        interrupt-parent = <&gpio1>;
++        interrupts = <17 IRQ_TYPE_EDGE_BOTH>;
++      };
++    };
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
