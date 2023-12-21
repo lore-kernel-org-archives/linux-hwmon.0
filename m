@@ -1,72 +1,99 @@
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F21978E72
-	for <linux-hwmon@vger.kernel.org>; Thu, 21 Dec 2023 22:55:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iwanders.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iwanders.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0EB97E77A;
+	Thu, 21 Dec 2023 23:19:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=iwanders.net header.i=@iwanders.net header.b="UnF8TEXi"
-Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-3b9f8c9307dso1076827b6e.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 21 Dec 2023 14:55:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=iwanders.net; s=google; t=1703199325; x=1703804125; darn=vger.kernel.org;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=wqXIOVr+zzGcBTuOnYOshrpme+1OoQLq7CD3XZTWNYk=;
-        b=UnF8TEXiS4x9F9YYTnX7J/n5HYzBqrH6eIFSrtNYm/gR1txdNnZP83Wq6Ubqg278Ap
-         zFr31wXp9hf+nAVHB75rBDkx0einNYjcg4Hp1X2HW/J1aFUHIS3Igo1/dIDHvY9lHVaC
-         gQ3IqaLmMXayimQNv2e0Jo0LrKYQ5kXsQEE8k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703199325; x=1703804125;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wqXIOVr+zzGcBTuOnYOshrpme+1OoQLq7CD3XZTWNYk=;
-        b=emh2ZuBxdlY0w22OjHYFhKSy726iwjXyhBpJAeg+ZtAeXpWf7GNG10AEKv+5VFYZLG
-         KK3Ioubd2L3WhLl0gPuKI1SZIVbqCcIX+Q/ggT7XCo3PURZvFQe0tuucFiPQd74epak2
-         4mUBWMgw7I4oCoQX0tj6hauKB2UvMt/RENYoDHjhILOOha1TvXjoTArtjEFT08p64QqP
-         oPKRohg+xPQTi0GDBMW9ZRWLZAMZBmufR4YNpJ5kuPiCpfNqUBEobDJ+fYbNXkLP3lz0
-         97q19L33ndfg1LUY8ODF50WdrX3rXIIi05nj+JdJ9ejIkwFvk8rX41FmBzLWyz5GdhVA
-         NrEQ==
-X-Gm-Message-State: AOJu0YyoCoyzpOxJCIrEu/dy7uH9F5UgIdbrdqZP5xAlmJuTY42BqM9X
-	CrjZ0C/okK3lDsHmZbgKUyCDedTL0Kg9qw==
-X-Google-Smtp-Source: AGHT+IGb5yHPr5yL48MF5WsWm9Y7cxl8mGGDhYBlsAeD26LEAwYhBDQIvfRTLO6USodEGOeVJKAM+g==
-X-Received: by 2002:a05:6808:648d:b0:3bb:8958:363e with SMTP id fh13-20020a056808648d00b003bb8958363emr178887oib.118.1703199325253;
-        Thu, 21 Dec 2023 14:55:25 -0800 (PST)
-Received: from eagle.lan (24-246-30-234.cable.teksavvy.com. [24.246.30.234])
-        by smtp.gmail.com with ESMTPSA id g20-20020ad457b4000000b0067f454b5307sm924400qvx.108.2023.12.21.14.55.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Dec 2023 14:55:24 -0800 (PST)
-From: Ivor Wanders <ivor@iwanders.net>
-To: linux@roeck-us.net
-Cc: corbet@lwn.net,
-	hdegoede@redhat.com,
-	ivor@iwanders.net,
-	jdelvare@suse.com,
-	linux-doc@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	luzmaximilian@gmail.com,
-	markgross@kernel.org
-Subject: Re: [PATCH 1/2] hwmon: add fan speed monitoring driver for Surface devices
-Date: Thu, 21 Dec 2023 17:55:21 -0500
-Message-Id: <20231221225521.11671-1-ivor@iwanders.net>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <ab8a1ff3-6d01-4331-ba5d-d677d1ad80b5@roeck-us.net>
-References: <ab8a1ff3-6d01-4331-ba5d-d677d1ad80b5@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="qCvbwfJr"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=+wOARTyaP7BC0rwifBTMwepFO+pzfmSxi/wdh59kYgA=; b=qCvbwfJrYaCuitNlvBitPhSwMx
+	0HI8bE0xCwdrbW1itCKrCbcd4hZEI8oO7+7spljr6Wcvr5LIZJWrnkhP/6+WHxCUBS4n6EXhFY8Dk
+	9NUKapsJX01K8UjcmPio+1Sq+buQSKPQJNVMZtvdsmWREiTigeAnqDi5SZbQZvTYOCpVgnOeb6EmM
+	YYlUG0ULWFQsBRRS11ZFH0WBPjNPzU9/2EjF03BLGgqf1bfNf/VCsRjh5nuqWd8bxBN5OahKOm8eE
+	1j06y4VDBarl3XXzXi36ZhF6iFOw0RE6QY5lzlCY0MIXS3ja8BdTVTRYaFsmvXxMf/r85PHgV3B/v
+	8ITikemQ==;
+Received: from [50.53.46.231] (helo=[192.168.254.15])
+	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+	id 1rGSJh-004PP0-2E;
+	Thu, 21 Dec 2023 23:19:01 +0000
+Message-ID: <40285311-8adc-4ca9-86ce-27c8b723a102@infradead.org>
+Date: Thu, 21 Dec 2023 15:19:01 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/1] hwmon: clarify intent of fan min/max
+Content-Language: en-US
+To: Ivor Wanders <ivor@iwanders.net>, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>
+Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Maximilian Luz <luzmaximilian@gmail.com>
+References: <20231221225149.11295-1-ivor@iwanders.net>
+ <20231221225149.11295-2-ivor@iwanders.net>
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20231221225149.11295-2-ivor@iwanders.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-> No, sorry. Limit attributes are supposed to be used to program limits,
-> not to report constant values to userspace
+Hi,
 
-Thank you for this feedback, I've proposed improvements to the
-documentation in [1] that clarify this. I will incorporate this feedback
-and submit a second version.
+On 12/21/23 14:51, Ivor Wanders wrote:
+> This adds a link to the hwmon sysfs attributes in the hwmon patch
+> submission bullet points. It also adds an explanation denoting the
+> intent of the fan min and max attributes.
+> 
+> Signed-off-by: Ivor Wanders <ivor@iwanders.net>
+> ---
+>  Documentation/hwmon/submitting-patches.rst |  4 +++-
+>  Documentation/hwmon/sysfs-interface.rst    | 12 +++++++++---
+>  2 files changed, 12 insertions(+), 4 deletions(-)
+> 
 
-~Ivor
 
-[1]: https://lore.kernel.org/linux-hwmon/20231221225149.11295-1-ivor@iwanders.net/T/
+> diff --git a/Documentation/hwmon/sysfs-interface.rst b/Documentation/hwmon/sysfs-interface.rst
+> index f76e9f8cc..72dd5e02d 100644
+> --- a/Documentation/hwmon/sysfs-interface.rst
+> +++ b/Documentation/hwmon/sysfs-interface.rst
+> @@ -167,13 +167,19 @@ Fans
+>  ****
+>  
+>  `fan[1-*]_min`
+> -		Fan minimum value
+> +		Fan minimum value, this is intended as a way to specify
+
+Please change the comma here to either (a) semi-colon (';') or
+(b) a period ('.') followed by a sentence beginning with a capital letter.
+
+Same for the other 2 below also.
+
+> +		the desired minimum speed to the device if the device
+> +		supports that. It is not intended for communicating
+> +		a constant that denotes the lowest possible fan speed.
+>  
+>  `fan[1-*]_max`
+> -		Fan maximum value
+> +		Fan maximum value, this is intended as a way to specify
+> +		the desired maximum speed to the device if the device
+> +		supports that. It is not intended for communicating
+> +		a constant that denotes the highest possible fan speed.
+>  
+>  `fan[1-*]_input`
+> -		Fan input value.
+> +		Fan input value, this is the fan's current speed.
+>  
+>  `fan[1-*]_div`
+>  		Fan divisor.
+
+thanks.
+-- 
+#Randy
+https://people.kernel.org/tglx/notes-about-netiquette
+https://subspace.kernel.org/etiquette.html
