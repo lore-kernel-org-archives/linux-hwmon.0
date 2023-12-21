@@ -1,49 +1,49 @@
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 502E715AFB
-	for <linux-hwmon@vger.kernel.org>; Thu, 21 Dec 2023 08:20:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92CC12031D
+	for <linux-hwmon@vger.kernel.org>; Thu, 21 Dec 2023 09:06:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MhDPG6GN"
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-50e587fb62fso772579e87.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 21 Dec 2023 00:20:50 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GmiA1a0Q"
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-54cb4fa667bso682959a12.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 21 Dec 2023 01:06:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703146848; x=1703751648; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1703149573; x=1703754373; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=r4o29WQBzTF84xFF7dpFsFiRQpl9hdgHiI7WEKT6wg8=;
-        b=MhDPG6GNbDyJnLNDq/Ke6mPPIztQBXU95wcCMWexpQxjJG+BKZxlE+w5pltQQH9oRC
-         htlkViSW8q+Mo+abzUhRpCPhmW5EJydPB3pPozyNvD5Je8wviED2l/7yGg24L73QQQRv
-         c4U3LDs5gH0MNJG7tb98XGluca1yjH5IiPvNQHfMg8Q+xCLwW3DvqSp9E+Dqq6Gpf1iL
-         HPgQ+oeQZxe8CH99T1iCUoUchk6u1fX3PKamhu8Q/BLhsHcTQlVwg3wSybKzf/iZBR9r
-         qGEYNF4I6eZwFTrRqk1oXMlkE9ERrMyQvAyq0Oz5v9Ja2bTQzfb/OrV4/HNZpaW+I3Je
-         8duA==
+        bh=lI766jzUYUWJ3P/E5rSlAvRcPNQkWVEH2r/Nzkx4/F8=;
+        b=GmiA1a0QtmgguBNgbUex+ltA5M3DZSvCyv8fPSb6KOG4PwDphIh8f6eJ/PM5AbvscB
+         tenRSVKFrArYW5gKb0KKuPmIgIycNNAUCLn1kH3iVcQQij4R3Do1cEsM874adaOYn8yp
+         1dmpcgILqaWYMsNPkesELTwn85kRWMI3lTLsfErxAnsumvIrdXPRUA+be1JTMqofN0/R
+         DhmOUw1zEwCqCqgxQPqLvmqRJqq8nK8Aiwm2MXfHZ3uFMDdplUkbzuGyys7iE3ZJWfnJ
+         LBjO7cvf6EXMpPj15ULX4ff8nllRhAePgvoAVXkf1tNtA6RSvjcPGaM38znvDwz68ZbI
+         yCNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703146848; x=1703751648;
+        d=1e100.net; s=20230601; t=1703149573; x=1703754373;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=r4o29WQBzTF84xFF7dpFsFiRQpl9hdgHiI7WEKT6wg8=;
-        b=qTWH9waEfgmIAQ8tX5DUiBwS6SW71Io7KasKcX2+cQW4jsWrtLvk8ow+vdTuSlysPA
-         tYxPStQF2gv1xayHtQpu3Vsi6oe53LAXgbWJcI6dbAIXdQqVfNUO5Evn77pvYbZssJer
-         xYttTRDqsybhP3lcabhAupIqnBk2CfDu/G6mTAoGeeMhcViCoMo6DjQlYL77zQZw+JU1
-         D64usAplMwcyZtZ07fi9P7PJUPv8zmFP0IY/jGGfVZbbfmMKodVf4BZndEifh4Nqb1oM
-         gPnQHiN4ZD3VmRmg4Fh3MV6rmaXdFNWULeQyIvb1w5aN9K00D15/UNmw1y15pqNn6oIE
-         Q/zg==
-X-Gm-Message-State: AOJu0YxxfJJcuvtS74qy8vIE3OJdrPg9OVJkOuliigSc0yw0RIXQcNF8
-	xFAGyGrlLkWb+zkIhKCP7Xh4sQ==
-X-Google-Smtp-Source: AGHT+IF6j/xEo+V+emagAgbodcosd6j6iP+7qeDzepO7VvQ7VzZtmrS4tKh4dw+s39fElkjhleZRjA==
-X-Received: by 2002:a05:6512:510:b0:50e:3221:e559 with SMTP id o16-20020a056512051000b0050e3221e559mr3614864lfb.31.1703146848408;
-        Thu, 21 Dec 2023 00:20:48 -0800 (PST)
+        bh=lI766jzUYUWJ3P/E5rSlAvRcPNQkWVEH2r/Nzkx4/F8=;
+        b=OlJX0pWFSbvj0Ut+C7uHH/rZu2rqj+4IMEvWcu23IuIhUlTn1/slvCsgfsi+l6u18z
+         2m3lQNr1Un5vRQoXslpaIvS/Yv0DdjvNhmlHVOCwdeGQfTnIwTHMjZcJMXQcL+tAdkxt
+         Lzr2HOLuY00arC9wCbMAu2rZ37U7oI+51x3j5E7Co8u9kxpSJlph2JbZSoWoVKG7Y2au
+         sfOvT7qIx37gQb2frPO6o5pODCdD0tc738AXdHMpR34APYvaf4JxnCUqyupzhXwZmz9F
+         j78ZcdG/u+XyObKNteLYqlGjjpJQIDPQS7oWqgHsI6iv+9vxYDXqpJehFvBrapXNGZGb
+         VVBQ==
+X-Gm-Message-State: AOJu0YzM59pN4cPMqmsmUxuK6J3JXsvjpALiiG2KzwmWxkM2GYF/CVBl
+	lv3L/feoASm+te8c87Yn+PxIiw==
+X-Google-Smtp-Source: AGHT+IGxx6jNlVOIn0bybhJ5v14ynu0QE7zYmiCtUwNN+dfm93hxFMGyPP23QX5YQi6JsfrY8q0oIg==
+X-Received: by 2002:a17:906:d84:b0:a1c:85bc:e9ca with SMTP id m4-20020a1709060d8400b00a1c85bce9camr11190221eji.13.1703149572749;
+        Thu, 21 Dec 2023 01:06:12 -0800 (PST)
 Received: from [192.168.0.22] ([78.10.206.178])
-        by smtp.gmail.com with ESMTPSA id n19-20020a170906689300b00a269597d17bsm686650ejr.147.2023.12.21.00.20.47
+        by smtp.gmail.com with ESMTPSA id lo27-20020a170906fa1b00b00a23365f1290sm715492ejb.218.2023.12.21.01.06.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Dec 2023 00:20:48 -0800 (PST)
-Message-ID: <9035aff7-49e6-49cf-a8f8-619d3b53c4a5@linaro.org>
-Date: Thu, 21 Dec 2023 09:20:47 +0100
+        Thu, 21 Dec 2023 01:06:12 -0800 (PST)
+Message-ID: <e5373897-b868-4b6a-a140-19f80a6cdbb3@linaro.org>
+Date: Thu, 21 Dec 2023 10:06:10 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -51,19 +51,16 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add NCT7363Y documentation
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: ina2xx: Add label property
 Content-Language: en-US
-To: Ban Feng <baneric926@gmail.com>, Rob Herring <robh@kernel.org>
-Cc: devicetree@vger.kernel.org, corbet@lwn.net, kwliu@nuvoton.com,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, jdelvare@suse.com,
- kcfeng0@nuvoton.com, krzysztof.kozlowski+dt@linaro.org,
- linux-hwmon@vger.kernel.org, openbmc@lists.ozlabs.org, robh+dt@kernel.org,
- Bonnie_Lo@wiwynn.com, conor+dt@kernel.org, DELPHINE_CHIU@wiwynn.com,
- linux@roeck-us.net
-References: <20231219080021.2048889-1-kcfeng0@nuvoton.com>
- <20231219080021.2048889-2-kcfeng0@nuvoton.com>
- <170297774900.1297817.5593278746406765111.robh@kernel.org>
- <CALz278aJ08fOU2XZMZJJ2Ocp+XwovJ0+nHK-=0dWqbXf+522OA@mail.gmail.com>
+To: Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
+ monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com
+Cc: Conor Dooley <conor+dt@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
+ Jean Delvare <jdelvare@suse.com>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+ linux-hwmon@vger.kernel.org
+References: <6f3c57d08984c1978569d3918cb38eb295c0c67d.1703077926.git.michal.simek@amd.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -109,35 +106,22 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <CALz278aJ08fOU2XZMZJJ2Ocp+XwovJ0+nHK-=0dWqbXf+522OA@mail.gmail.com>
+In-Reply-To: <6f3c57d08984c1978569d3918cb38eb295c0c67d.1703077926.git.michal.simek@amd.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 21/12/2023 01:44, Ban Feng wrote:
-> Hi Rob,
+On 20/12/2023 14:12, Michal Simek wrote:
+> Add a label property to allow a custom name to be used for identifying
+> a device on the board. This is useful when multiple devices are present on
+> the same board. Similar change was done by commit ffae65fb1ae4
+> ("dt-bindings: spi: spi-cadence: Add label property").
 > 
-> On Tue, Dec 19, 2023 at 5:22 PM Rob Herring <robh@kernel.org> wrote:
->>
->>
->> On Tue, 19 Dec 2023 16:00:20 +0800, baneric926@gmail.com wrote:
->>> From: Ban Feng <kcfeng0@nuvoton.com>
->>>
->>> Adding bindings for the Nuvoton NCT7363Y Fan Controller
->>>
->>> Signed-off-by: Ban Feng <kcfeng0@nuvoton.com>
->>> ---
->>>  .../bindings/hwmon/nuvoton,nct7363.yaml       | 62 +++++++++++++++++++
->>>  MAINTAINERS                                   |  6 ++
->>>  2 files changed, 68 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/hwmon/nuvoton,nct7363.yaml
->>>
->>
->> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
->> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> Signed-off-by: Michal Simek <michal.simek@amd.com>
+> ---
 > 
-> Our design is based on [1], and adds fan-common.yaml to
+> zcu102 is using this feature
 
-Nothing in the patch or cover letter described the dependency.
+Is the driver or driver core parsing it?
 
 Best regards,
 Krzysztof
