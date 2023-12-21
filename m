@@ -1,50 +1,49 @@
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 082396A02A
-	for <linux-hwmon@vger.kernel.org>; Thu, 21 Dec 2023 12:11:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4839C6D1BF
+	for <linux-hwmon@vger.kernel.org>; Thu, 21 Dec 2023 12:11:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YWuMrl8u"
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-50e62c1245eso351222e87.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 21 Dec 2023 04:11:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LyF65s28"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-40c3ca9472dso7802115e9.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 21 Dec 2023 04:11:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703160705; x=1703765505; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=q0goCKNN2/xMbNfwbEQGabGIKcLQR0Mj2Ch5X7CXC94=;
-        b=YWuMrl8uZSrPrtQ9TvStZ0GJ0MtKithAJdGZdub6M5meJPDyBmyS8uo1S0ZWmOFfDb
-         WKUZj6sMW/E2LJkbNk4RTQc+KU6Km3ykNFSf3lgdrkze2v33hhY+C3XZG4I8jXHnM4gD
-         stjCYP81uGgdwe2L8+E1eCNd0RoiSqse4UnHQsaelMwed2JudT0N5f7QBSoq5dsr6snu
-         NOwVabMTYbQHnsFtvH+Fsb/JcNw6BLZSogvTMqldeU6Rd6VnSxhsPp0XUV8A/oPEwiDK
-         PBePAzcqiUzgnl8FwpytEQvlbOjzOB9KgUYnw+SgE2FN/VzG3itgeAdxG7kS8x4BT5P8
-         hnsw==
+        d=linaro.org; s=google; t=1703160712; x=1703765512; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=z+uuMxsM7UtYesWjErVKFcif0zMpS8DQvy2c0DXdtA0=;
+        b=LyF65s288EbmtzeMaXRmsg/QS4jN4pHUYxD6HTJamoj5wXS02FGflwXlPq10aOMBqL
+         gaR2mgw1RGnY/RxY7/kkaMq8oajdVy98GhLJOKKwDqiygr28gR48a8p/6BNtcndeQfjJ
+         xIOJs2lanjHOmc/cQmTgi1PE4Cu0jkRgX+Ey6S0pyUxHKy7IrFdL1UyGqRs5LYl4FVh0
+         lI17x6tq0keDQpZBntvc8hc2ZxGoLWaxwzru1xd0T0CqChC890ORGkQSIm0QyKGXvChc
+         xu/SE17WLLSJnGcpxd64UKbMkfj0vZXumL2Q1pzhrO3ssuA2AdrYjMKCznPygmhbxTzc
+         4EEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703160705; x=1703765505;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=q0goCKNN2/xMbNfwbEQGabGIKcLQR0Mj2Ch5X7CXC94=;
-        b=Q1x38qEnaD2qdQu3WBuhm6duR758H3PW+fRBszlsOvniPFib3Q/Twj0RDliSOz4Kwu
-         SshDk5cFI69HcH8kIt4H0B752ViCcW5EsrTSQ1J9Yjx1oZpsRtr7voNfPUIWeD1v47nC
-         SPRs23ViaNNIfSWuM8Tn/oI54zXFKf1r7GQmzUAUkaNej5i2tSzqwpiDFNuLsyaqodXw
-         5Eg8JEM2139dnJyjEsAje8m1Dw3uv4/025vKf1swNC+u8wGdIlL8n+p5IORmSfnzdXyJ
-         v6MuaFbTk0qQa9KYt9LOFGtcPacrotkWeaSV2ua7G9wJGOgGWplg/fQojWNIQ0w+fYvD
-         rLcQ==
-X-Gm-Message-State: AOJu0Yz/OACdzHOHKzFD2l3Dv2HFWxRKikVaLpRNZuAT1kfu6d4G0klL
-	CwD5hTU/EpXV9wjP/i7EqOXqeg==
-X-Google-Smtp-Source: AGHT+IHHqli3Et4I/nxgjxmClSknYLg9NovY2mG1z4vZn6kLo9urJnLIhYk4oh1pT2YXQNW1RBZaMw==
-X-Received: by 2002:ac2:424d:0:b0:50e:6482:be34 with SMTP id m13-20020ac2424d000000b0050e6482be34mr30816lfl.124.1703160704826;
-        Thu, 21 Dec 2023 04:11:44 -0800 (PST)
+        d=1e100.net; s=20230601; t=1703160712; x=1703765512;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=z+uuMxsM7UtYesWjErVKFcif0zMpS8DQvy2c0DXdtA0=;
+        b=slxMyN7NS/2qqGFOvcqiAT6G9+hxdqrbSyFzPadjia6dE187J2Jnyym1+3M4wGmv6n
+         NKN6xnMR2pO64xrpQQuWVp3wm22BCSx+rkiXjsg8A74Ul0BCg8aU+nYpY9EDKeWz6s7F
+         X54u1kqbEnGYXBHeRAvoujxwVIJLJpevFcmdyc2bW3gOWe8FbqsoMfCLFEB1ziPQzGN8
+         YMtQvNnGJ2CFpzb3PU9x9+H8qdmOgfjdHO3mmAnbT2qTMuX/c73txLx4ceOdr6Hhd1oo
+         weOPXH942etePSxSBorueHv/S4SRtGb/S4PmsE7eLI5wwY0nZw0IX9OXaGXALcG9XL21
+         Gdkw==
+X-Gm-Message-State: AOJu0Yw53Cld7QFgQcJAL/rAscQWHhRVtI9l82eqkzaKrpNtI9BKXMz+
+	8d54jMGI74dpvZ+MPDxLcCHbgQ==
+X-Google-Smtp-Source: AGHT+IHSkqVnr1hPklLwCoqwrQkOqtvtI+FIrzELtkQCowL3AsS74oj1nldbCP9TVbZkX7z1JcgERg==
+X-Received: by 2002:a05:600c:3d0e:b0:40b:5e59:99c7 with SMTP id bh14-20020a05600c3d0e00b0040b5e5999c7mr532941wmb.231.1703160712567;
+        Thu, 21 Dec 2023 04:11:52 -0800 (PST)
 Received: from [192.168.0.22] ([78.10.206.178])
-        by smtp.gmail.com with ESMTPSA id zr16-20020a170907711000b00a26af4d96c6sm18198ejb.4.2023.12.21.04.11.42
+        by smtp.gmail.com with ESMTPSA id zr16-20020a170907711000b00a26af4d96c6sm18198ejb.4.2023.12.21.04.11.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Dec 2023 04:11:44 -0800 (PST)
-Message-ID: <3268b95b-dc1d-4711-a81b-42f39ca40f9c@linaro.org>
-Date: Thu, 21 Dec 2023 13:11:40 +0100
+        Thu, 21 Dec 2023 04:11:52 -0800 (PST)
+Message-ID: <7536c8c5-bcf3-41fe-ab39-924af87d9700@linaro.org>
+Date: Thu, 21 Dec 2023 13:11:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -53,6 +52,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 1/2] dt-bindings: hwmon: ina2xx: Add label property
+Content-Language: en-US
 To: Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
  monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com
 Cc: Conor Dooley <conor+dt@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
@@ -61,9 +61,6 @@ Cc: Conor Dooley <conor+dt@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
  Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
  linux-hwmon@vger.kernel.org
 References: <6f3c57d08984c1978569d3918cb38eb295c0c67d.1703077926.git.michal.simek@amd.com>
- <e5373897-b868-4b6a-a140-19f80a6cdbb3@linaro.org>
- <9bfb12c8-2a38-407c-b9fb-22888c5bb8b9@amd.com>
-Content-Language: en-US
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -109,36 +106,20 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <9bfb12c8-2a38-407c-b9fb-22888c5bb8b9@amd.com>
+In-Reply-To: <6f3c57d08984c1978569d3918cb38eb295c0c67d.1703077926.git.michal.simek@amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 21/12/2023 12:24, Michal Simek wrote:
+On 20/12/2023 14:12, Michal Simek wrote:
+> Add a label property to allow a custom name to be used for identifying
+> a device on the board. This is useful when multiple devices are present on
+> the same board. Similar change was done by commit ffae65fb1ae4
+> ("dt-bindings: spi: spi-cadence: Add label property").
 > 
-> 
-> On 12/21/23 10:06, Krzysztof Kozlowski wrote:
->> On 20/12/2023 14:12, Michal Simek wrote:
->>> Add a label property to allow a custom name to be used for identifying
->>> a device on the board. This is useful when multiple devices are present on
->>> the same board. Similar change was done by commit ffae65fb1ae4
->>> ("dt-bindings: spi: spi-cadence: Add label property").
->>>
->>> Signed-off-by: Michal Simek <michal.simek@amd.com>
->>> ---
->>>
->>> zcu102 is using this feature
->>
->> Is the driver or driver core parsing it?
-> 
-> I see that functions to be in hwmon and iio cores.
-> 
-> drivers/hwmon/hwmon.c:820:   err = device_property_read_string(dev, "label", 
-> &label);
-> 
-> drivers/iio/industrialio-core.c:1914:	fwnode_property_read_string(fwnode, 
-> "label", &indio_dev->label);
+> Signed-off-by: Michal Simek <michal.simek@amd.com>
+> ---
 
-I wonder why it is not in bindings/iio/common.yaml...
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
