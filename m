@@ -1,78 +1,68 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C7FC241E7;
-	Fri, 22 Dec 2023 16:15:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B47A381CB
+	for <linux-hwmon@vger.kernel.org>; Fri, 22 Dec 2023 23:17:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iwanders.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iwanders.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fqWcLSc9"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1d3cfb1568eso17463215ad.1;
-        Fri, 22 Dec 2023 08:15:03 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=iwanders.net header.i=@iwanders.net header.b="chNSw9k3"
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-7811d1e68b0so159117985a.2
+        for <linux-hwmon@vger.kernel.org>; Fri, 22 Dec 2023 15:17:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1703261703; x=1703866503; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wezpUVmeFJK413XLR6tu+q+VD09IwwwiA9OOIXNeVeo=;
-        b=fqWcLSc9Au0OYVEyveYQG4bwV9kOrHV039uik7HDUtnuOnrjeqiNDKLQ8NInG7jAnN
-         JyKGOnsPhnZpgjW83HrN2ZyooyO8s/HlaJC664SfNk5NZXgZ38qFZLWupl5+7d7tCEfh
-         91m0aR15u4z9ZDaTjaRsZ2xvW/dtkNAs3LgXTpHH90nBPlJmfu5lixA5EVUzpaJc4t9v
-         rNzJsiMJhwCz9FE46rkMGtA71s5MMjj301TN3VdHEdNH6BnjBXCzikdmUFjfaBzEvTC/
-         nrBGlFHB6tfN0umPTDeFvo1/zklWqmwgLtRXi/dbo2TB1rjpYsh8vvsMF+r0SFHDFMcW
-         pK9A==
+        d=iwanders.net; s=google; t=1703287029; x=1703891829; darn=vger.kernel.org;
+        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=7CpW3HQ3edIB3pC1X9J+ZszFBlQ3pCTa21G/iZStcgk=;
+        b=chNSw9k3tyBBgPYw368jZIK4B/DunMkafbHBcScFFElE9LbZVaHnoY6/WC1411wKc1
+         qKENLCvlnT6EwlBVRhes/VZczfvM++sNQqp4b3Bzi/Y7+XVEEPBdcLOqaN0RqovkQQtC
+         iniERB8qCeQ3xG+6mVjD2hF/2CE5XWsSPWA0g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703261703; x=1703866503;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wezpUVmeFJK413XLR6tu+q+VD09IwwwiA9OOIXNeVeo=;
-        b=RLIrC7ahYbl/0mG4qdbyZgvnGswnkIDI+kCu2HThUnnjFNkipC+cIfeguSwPgTkt6L
-         TJ88ljE7ELqgYRsacE3s+cmRUd2j/KNOJw2IJW+1Ez5dLfIee+Gf9j370GCqjCRWRBn9
-         H6nYn8zA6sAsttr9oJkOyImwuLxl3j5DcOf6aRrgJ2ncc8Knn2ru474QGOLnDTFnU46+
-         4b4OGsVGknwi/4OchTt5fuR5SwTDkCmUevg7EP4pyTMNwSQxHBzy2/bS0UzNxJ7KoRGg
-         qC7Zp77EN4VFEKKNnESRDIqCU1jU2K+spDAmFUdcmdiySjJ+tGC2luD+LzyK/ceuLkbt
-         LZ2A==
-X-Gm-Message-State: AOJu0Yy1419yIkZhh4TCBxZ1+tQzHsnyfqdeSIU0dN+WI7+Wb9OknTVb
-	+pgRNkPq8X0/XdA6tFr2DmQ=
-X-Google-Smtp-Source: AGHT+IFyiIsL7OsaU9m0+uu4lCHeaAwNpiObSOShUzPf+xU6cRAVKVAX18Z71kcES4oj2kzTH3QixQ==
-X-Received: by 2002:a17:903:24c:b0:1d3:f0c1:6ad6 with SMTP id j12-20020a170903024c00b001d3f0c16ad6mr1868085plh.18.1703261703236;
-        Fri, 22 Dec 2023 08:15:03 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d10-20020a170903230a00b001c5b8087fe5sm3629469plh.94.2023.12.22.08.15.02
+        d=1e100.net; s=20230601; t=1703287029; x=1703891829;
+        h=references:in-reply-to:message-id:date:subject:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7CpW3HQ3edIB3pC1X9J+ZszFBlQ3pCTa21G/iZStcgk=;
+        b=tUHcCxI11qL45Kyo1dLFW/2lhGhmBkkpinJnQN+3K48QexFCbLSXQfKAtvf7fgbbbs
+         CrFtKoo4k59UXzXPmQMVbsUZRoitP81BtPRwmzKlXMK0O589+IVMSXH8aKmuGkRNfAjp
+         bjvPnZUfjY0kZeC+Ba5d1/YXSlloCtTMkhMrm2RnoIsBRoAi6FLYaUWGOsTr5Qod+Fa1
+         2si4nNwIKpSxFcsQ+YwXFFOzcnBiBUrFZMXyiZZyFocgY/H+rlWhnKIg8EDTPDxdVHx8
+         qvPpxpcxaMq6kPtd2yPtwTmgBo8wDJipjWEP9Qh+czpwIvC4+/pkKFAFjFiXiZ27MTSX
+         q3jw==
+X-Gm-Message-State: AOJu0Yy7wYiFh8JjS3crNP5IwZ2TloUbX52ZKwmXoUXJCL9NbC7QsngN
+	TZ+5PLuZD9KJdwN/NnzWeqBEgus07YB3FNhLJnlX7XqZhQ4ugg==
+X-Google-Smtp-Source: AGHT+IHS2SZicxvBAydDZ0dczVgPVcMjllDPAaqVKpGvtypPcvbU5dRrD+q0Cevn+jgytzUmjAUkXw==
+X-Received: by 2002:ad4:5dc6:0:b0:67f:43ef:c8df with SMTP id m6-20020ad45dc6000000b0067f43efc8dfmr2476193qvh.98.1703287029358;
+        Fri, 22 Dec 2023 15:17:09 -0800 (PST)
+Received: from eagle.lan (24-246-30-234.cable.teksavvy.com. [24.246.30.234])
+        by smtp.gmail.com with ESMTPSA id gc7-20020a05622a59c700b004260c76e4eesm2221739qtb.27.2023.12.22.15.17.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Dec 2023 08:15:02 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 22 Dec 2023 08:15:01 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Ivor Wanders <ivor@iwanders.net>
-Cc: corbet@lwn.net, hdegoede@redhat.com, jdelvare@suse.com,
-	linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, luzmaximilian@gmail.com,
-	markgross@kernel.org
-Subject: Re: [PATCH 1/2] hwmon: add fan speed monitoring driver for Surface
- devices
-Message-ID: <759c5f4b-d3be-4614-a504-c1761554f886@roeck-us.net>
-References: <ab8a1ff3-6d01-4331-ba5d-d677d1ad80b5@roeck-us.net>
- <20231221225521.11671-1-ivor@iwanders.net>
+        Fri, 22 Dec 2023 15:17:08 -0800 (PST)
+From: Ivor Wanders <ivor@iwanders.net>
+To: linux@roeck-us.net
+Cc: corbet@lwn.net,
+	ivor@iwanders.net,
+	jdelvare@suse.com,
+	linux-doc@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	luzmaximilian@gmail.com
+Subject: Re: [PATCH 0/1] clarify intent of fan min and max attributes
+Date: Fri, 22 Dec 2023 18:17:05 -0500
+Message-Id: <20231222231705.4338-1-ivor@iwanders.net>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <ce60c838-0fad-4bb4-8af4-a94d43092d4d@roeck-us.net>
+References: <ce60c838-0fad-4bb4-8af4-a94d43092d4d@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231221225521.11671-1-ivor@iwanders.net>
 
-On Thu, Dec 21, 2023 at 05:55:21PM -0500, Ivor Wanders wrote:
-> > No, sorry. Limit attributes are supposed to be used to program limits,
-> > not to report constant values to userspace
-> 
-> Thank you for this feedback, I've proposed improvements to the
-> documentation in [1] that clarify this. I will incorporate this feedback
-> and submit a second version.
-> 
-This applies to all hwmon sysfs attributes and is already documented.
+> I do not see the point of clarifying this for individual attributes,
+> especially since that might create the impression that it would possibly
+> not apply to other attributes (for those not reading the above
+> documentation).
 
-Guenter
+Okay, fair point, I can see that lead to more confusion indeed.
+
+~Ivor
