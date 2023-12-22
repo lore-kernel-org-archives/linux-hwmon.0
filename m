@@ -1,147 +1,85 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CEB217992;
-	Fri, 22 Dec 2023 12:08:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59253249E2;
+	Fri, 22 Dec 2023 16:12:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="i+svumC3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-	t=1703246893; x=1703851693; i=w_armin@gmx.de;
-	bh=lIEDc4eP/tBcRvutzo/u5pew9rRgWJOCWE+lCcDBNOU=;
-	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
-	 In-Reply-To;
-	b=i+svumC3e4SfjQdWFbnN6tDNPORQOCSMSreAU4TlB43DzqvoBZCuFw5DkQQelvCv
-	 P0JIRPXG5AOAY5klEKty0PtkLum6kqDU+CadUxATeazWwJ3mH6UZDbxhImKk7qmyv
-	 Noi/EmAogSfR93PwrG6YS/yCujwTi/eUEYq5eXUZghk/5PuipOzo7k/f4HtwSCF3d
-	 sqpXFEmW1Vy4+1lnWDy5auPF7/cp4+PzFOEplAJANLD0WmyTfA0rs1gd51IvPDMTK
-	 xXOMBQeRM5UjTDho9ooqg+Cvnzbfg9nhqJS3SIruP8yeMamTDnSHEK5V5av1BAaws
-	 ppy7LsXMOTxcgDf5Bg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M5wPb-1rNV9L3ZZj-007RYv; Fri, 22
- Dec 2023 13:08:12 +0100
-Message-ID: <3d777aee-9ec1-4236-98d2-f56b8026b96a@gmx.de>
-Date: Fri, 22 Dec 2023 13:08:11 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GyHlWWvE"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-6d099d316a8so1950285b3a.0;
+        Fri, 22 Dec 2023 08:12:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1703261572; x=1703866372; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hSRGLKk61Gx7n2iPSV+CfABhLdXJBJYaVEf5Qmgbq2g=;
+        b=GyHlWWvEvksj81874yWgTO7rDnHHvZggLhoko1EcvtkmxuxTxY/HSuyF3Sk0VG9tqm
+         +FL1U4zV4G14+5Sep2U/1sKaGgyBZGb082GeUDBOr2GzqmFOSyJ3rB3H/De+rMTLUcxT
+         ZnEY/EOBMrI9O2PdkSikP12mihpMkOVPo7glOlcZJ5oxtvoJ2qLNolPm9AMlg8iAFZqX
+         RYcqSlgq9LPyzOnUBsRegi0kPg7ExhTjL5CMV0rUHISAQj5GlxJs2dtKrX7Ctfz1TBnN
+         q8PIDyDvVcGrNvdQ/UwZogNWgyUbXLH1ebFZeReNg2Eq5VinqSLuXwz8m5P4WGUV7ZZg
+         IXBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703261572; x=1703866372;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hSRGLKk61Gx7n2iPSV+CfABhLdXJBJYaVEf5Qmgbq2g=;
+        b=TFQBb+cfzbb42JZaxEh5ne7erS5WvqXdQQHRNn4kZ0NihzwETHItJP6cZ7Z+HPvAEp
+         V5nF24WWZAHEQpCLvnd8X6cLzJV0msvBW/cQrkSqHvZO9mF3335ZHlNB+p3bn8GxsLOW
+         QC/kbltgh3AWfuaqqJUhOfxSa4Ydul4UeWw0UHwMIsOY49cg4XzdrgBGZV/qFxcGXIQJ
+         e1W9AuBFm1AwGWjZdFH4tUkUC8Lau995sA6iIHUxRCXeTUhtOgTMCSHz9BxydiAyKSTG
+         c8k/DtywE6R7DmmHO/1+wYcIYtnpI5TxZ3t6EaJMnr+owKPde9xqhBdEWCJ1kJUyGHHW
+         Zv+g==
+X-Gm-Message-State: AOJu0YwiMPSMfwYQIsDCkkVlHHjcki7ipycQvpwmyvt+uFE35t7KfxOw
+	mcZAOe7H6Km6VtW69KE2G2h20BGFylY=
+X-Google-Smtp-Source: AGHT+IFKYhBMdHNX3T5Fp2jfNsCcmTkjMnd2Wl5BOROCq7E9ATKQiX4FxsNq1t+sQZvWeTYIUYgX2Q==
+X-Received: by 2002:a05:6a20:394e:b0:18f:ef63:7839 with SMTP id r14-20020a056a20394e00b0018fef637839mr1756269pzg.100.1703261572571;
+        Fri, 22 Dec 2023 08:12:52 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t20-20020a056a00139400b006c4d128b71esm3703714pfg.98.2023.12.22.08.12.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Dec 2023 08:12:51 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Fri, 22 Dec 2023 08:12:50 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Ivor Wanders <ivor@iwanders.net>
+Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Maximilian Luz <luzmaximilian@gmail.com>
+Subject: Re: [PATCH 0/1] clarify intent of fan min and max attributes
+Message-ID: <ce60c838-0fad-4bb4-8af4-a94d43092d4d@roeck-us.net>
+References: <20231221225149.11295-1-ivor@iwanders.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: (acpi_power_meter) Install IPMI handler for Dell
- systems
-To: Kai-Heng Feng <kai.heng.feng@canonical.com>,
- Guenter Roeck <linux@roeck-us.net>
-Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20231220051350.392350-1-kai.heng.feng@canonical.com>
- <5a81eda0-5044-4088-9aba-cf725e6fca9a@roeck-us.net>
- <CAAd53p4NNX9c5pUJgv12V=s_1YJxM3=G+OCYTgcRPqSJVbdi8w@mail.gmail.com>
-Content-Language: en-US
-From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <CAAd53p4NNX9c5pUJgv12V=s_1YJxM3=G+OCYTgcRPqSJVbdi8w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:Qq3MJFMyL2mPhYT8DMla8fOeCYwbJv/9HGLu9SfkSWNowFqtgWe
- 07/fbz07PBe0c2pRW51QNWSx9vhc7VK4Xs7vJh1PtjQ1vJ694GX29vsBQEgUuecmolYHlS9
- iL3q9zP9Ry/wS/SP1L1m1EucJ41fGKdbwjWOIRbuu2noffq9WCKcoKcZlYa/ub/lISgVQ4i
- MAv8PxBG2q3fsSqSz+Urg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:5RsHu0gclA4=;y2UR1gVUmKlLxfrJyBkfLFLGNMo
- 88cSs0CvJhubhsCZ+GwIsDDUtVu2wyLW7tmP0uqH9F9Yg1HBYYRK/b2fW3DQwy3RakIwkwwWu
- BEAcE7J+Jx5buRkhz3ec4bs9nLGJgW61cizo0U8CcWb/gOwYx3ZfJqNbjqRhsLO8PCy5CgwAp
- GBgYc8JXqpAcBqtocnjBrtu7TDPH/zwYrjltkOYyqDjJsm8Lfc3n3yd/Uk4n8G28asqRf0ALw
- 656um/xU0yHZY0x8Izu3LLIwQamSf7saga8N15gscZBf2BuLF5PP//LOHBA/2QXePfVS2rcDr
- JzipGk5Y6kSG/wxoLx1D1otk1ysYvmkhkrlphlZ9t/OSZwueSLex35Z+q3Hb7UbHm3QPLBco6
- cSXI7Rp7xQcJiB29k9aJJta090euFjB7XzqhJhaBNVZZrD7aX+sZcKcbYEXCFWekMWmILCGAI
- sd8CP+t02/Fy9EZW7pz5ExSxtrPO60EHiC3y4+UB8xaLYAg5vlG/I8YFHhLeVCoEu8yPwBd11
- xPILuEQ7XN4DyiLr40Vvs+w6LdBTMe4KLReghWDpd8Geee1AbmiOhqN7G+5IVVIjGbvAQ0YPl
- sUO+KWLTnXwJLFB0tiHPXWQ0KgeQl2jFFmle3MaDQ9XMHE06FScvlX9Ux4xkR4wJHVpeaPtzQ
- x0UCS7n9T+5ORDOpnrz9TekxdxvNkjSuMjmnh+F3v2jFpZ1KBKpFZqdhczsiK6oxQ0J8NYsga
- ti44ScB8A0qltFyIbcSeZlPtNb1bfI1Ma8lCeBz2V14UhIK6whTKYU4gKmZiTcryDeobCcSRG
- 9EIGdKVLZzLJgHJ9savcUDDCxeqMAtzHuRN/nJ6ULOPUt6XFVbGOevKXH9enHxYh9+VphV1O1
- aNqbu418IaRlKYR0HWe6OROZFtdxm+eWDuZMXqlTUjDpzMDmdvqRhHQd73rbZqC3IHUtV8WXY
- KMHz3XJ7w3J7weKHrWWUhdzQDJ8=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231221225149.11295-1-ivor@iwanders.net>
 
-Am 22.12.23 um 04:57 schrieb Kai-Heng Feng:
+On Thu, Dec 21, 2023 at 05:51:48PM -0500, Ivor Wanders wrote:
+> In [1] I got the feedback that fan min and max attributes are intended for
+> writing to the device and not merely providing constants to userspace.
+> This patch clarifies this intent in the documentation such that future
+> contributers don't make incorrect assumptions about them.
+> 
 
-> Hi Guenter,
->
-> On Thu, Dec 21, 2023 at 7:49=E2=80=AFAM Guenter Roeck <linux@roeck-us.ne=
-t> wrote:
->> On Wed, Dec 20, 2023 at 01:13:50PM +0800, Kai-Heng Feng wrote:
->>> The following error can be observed at boot:
->>> [    3.717920] ACPI Error: No handler for Region [SYSI] (00000000ab9e6=
-2c5) [IPMI] (20230628/evregion-130)
->>> [    3.717928] ACPI Error: Region IPMI (ID=3D7) has no handler (202306=
-28/exfldio-261)
->>>
->>> [    3.717936] No Local Variables are initialized for Method [_GHL]
->>>
->>> [    3.717938] No Arguments are initialized for method [_GHL]
->>>
->>> [    3.717940] ACPI Error: Aborting method \_SB.PMI0._GHL due to previ=
-ous error (AE_NOT_EXIST) (20230628/psparse-529)
->>> [    3.717949] ACPI Error: Aborting method \_SB.PMI0._PMC due to previ=
-ous error (AE_NOT_EXIST) (20230628/psparse-529)
->>> [    3.717957] ACPI: \_SB_.PMI0: _PMC evaluation failed: AE_NOT_EXIST
->>>
->>> On Dell systems several methods of acpi_power_meter access variables i=
-n
->>> IPMI region [0], so request module 'ipmi_si' which will load 'acpi_ipm=
-i'
->>> and install the region handler accordingly.
->>>
->>> [0] https://www.dell.com/support/manuals/en-us/redhat-enterprise-linux=
--v8.0/rhel8_rn_pub/advanced-configuration-and-power-interface-acpi-error-m=
-essages-displayed-in-dmesg?guid=3Dguid-0d5ae482-1977-42cf-b417-3ed5c3f5ee6=
-2
->>>
->>> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
->>> ---
->>>   drivers/hwmon/acpi_power_meter.c | 2 ++
->>>   1 file changed, 2 insertions(+)
->>>
->>> diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_pow=
-er_meter.c
->>> index 703666b95bf4..b9db53166bc9 100644
->>> --- a/drivers/hwmon/acpi_power_meter.c
->>> +++ b/drivers/hwmon/acpi_power_meter.c
->>> @@ -882,6 +882,8 @@ static int acpi_power_meter_add(struct acpi_device=
- *device)
->>>        strcpy(acpi_device_name(device), ACPI_POWER_METER_DEVICE_NAME);
->>>        strcpy(acpi_device_class(device), ACPI_POWER_METER_CLASS);
->>>        device->driver_data =3D resource;
->>> +     if (dmi_match(DMI_SYS_VENDOR, "Dell Inc."))
->>> +             request_module("ipmi_si");
->>>
->> This looks like a terrible hack to me. Is there precedent of similar ha=
-cks
->> elsewhere showing that this is the "way to go" ?
-> Yes it's ugly.
->
-> The error happens in the ACPI ASL code, so it's not possible to know
-> if any method of apci_power_meter requires IPMI region.
-> I really can't think of any better solution for it.
->
-> Kai-Heng
+Documentation/hwmon/sysfs-interface already states:
 
-Maybe we could use an ACPI scan handler for that?
-Basically we would call request_module() upon discovering an ACPI IPMI dev=
-ice,
-so that the necessary module is available for handling the IPMI opregion.
-This would also prevent any issues should other devices also require IPMI =
-access.
+"
+All entries (except name) are optional, and should only be created in a
+given driver if the chip has the feature.
+"
 
-Armin Wolf
+I do not see the point of clarifying this for individual attributes,
+especially since that might create the impression that it would possibly
+not apply to other attributes (for those not reading the above
+documentation).
 
->> Guenter
->>
->>>        res =3D read_capabilities(resource);
->>>        if (res)
->>> --
->>> 2.34.1
->>>
+Guenter
