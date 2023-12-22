@@ -1,137 +1,147 @@
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 117A18F58
-	for <linux-hwmon@vger.kernel.org>; Fri, 22 Dec 2023 03:57:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CEB217992;
+	Fri, 22 Dec 2023 12:08:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="tJ5bP7eY"
-Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com [209.85.167.199])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 9D3423F15B
-	for <linux-hwmon@vger.kernel.org>; Fri, 22 Dec 2023 03:57:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1703217458;
-	bh=JGpihFWsF9iixc5XqhLyXNHyhGttLbiIhZTaqynK7Zw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type;
-	b=tJ5bP7eYoQ117VtVyndEbn8GukW3B0j/y2LaJRvkUlfYZT8NKvDgqd8KrS6usd44e
-	 dzNLfrcxnzgCNKkKupXxMgsAoMHedS3BMQpZo1nN1fRXYeHnMHLK/KERe+mp8nzg8N
-	 vpgHxmmHWq76PvFVj1rhftGn438AWRNWRmrJrSee/hbJrFd88MIjmP7vZqrA3nlhyM
-	 t88AOpvrm1F95gRapReGoH3G1nVeHWalIUYtKkaa5TztIwgiF1S5n1QfRj1k0XX4mQ
-	 ckXCuGg3zOfl/ah8qwUX5ByQjzkoOwbf9kpYnAv/E3XQULV/0rkKn85dbJ1VvYj8A1
-	 DsnF1fzJLvbfA==
-Received: by mail-oi1-f199.google.com with SMTP id 5614622812f47-3b9f1ae85adso1575680b6e.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 21 Dec 2023 19:57:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703217457; x=1703822257;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JGpihFWsF9iixc5XqhLyXNHyhGttLbiIhZTaqynK7Zw=;
-        b=Z4UbHxbF+iuzpuQrY4zy4WzT5FI71zul/CpJ4vZWEptLyLtpu8TR2HndvhsZpZ9ZSi
-         pAVv9mXoBj52Rohgpr28Z9AfYB7r4PNeI2ZJ4namglnv48ArNPg3SMH18760aXojtn+m
-         pwfG/9sDuJ70+nP63F9XDTvGFGEoeyax33sL+4gaMY+JVA8oRixU+FjwTU7BtYz0L+yb
-         2SlIQSYg18MENdEPnfbGQ4hwmdjCt09DJzOb86x3nV0cFECGPg+wVPSeO86pkDprMJ5/
-         cHNgC1yiNIu3OzWCCuZlkB6NZbAt6ThjzfJ+vBmygGoU8QBaDgRF9wOzGJ4O1CONQjsj
-         wOcQ==
-X-Gm-Message-State: AOJu0Yzn7rXr37jbZhr9+Pqs9Utd3QFSsvCo1a8M4qV7HfBtbZATPZN8
-	0IMrf40GdfTWrX2pWxcEyf4PeFClTBcM1d/U12WkCBaHmJralUpXYzd/HiuWW4/BGW6A5rxmw0l
-	PdyMRgh6O1khLmn0L4OEUTSy/fzXkZazd7pOZN5GKgSocLfnjvrxmrktlpHfleAU=
-X-Received: by 2002:a05:6808:1247:b0:3ba:e56:4778 with SMTP id o7-20020a056808124700b003ba0e564778mr909481oiv.100.1703217457533;
-        Thu, 21 Dec 2023 19:57:37 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGWuCwzJrUmfBFQeYMoS63SIHRgDlDtFwy9F+dhAUieflfH7adkv2VUijsgb6W9cxjNlcjKYZmq0wdezwp6XHg=
-X-Received: by 2002:a05:6808:1247:b0:3ba:e56:4778 with SMTP id
- o7-20020a056808124700b003ba0e564778mr909473oiv.100.1703217457234; Thu, 21 Dec
- 2023 19:57:37 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="i+svumC3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+	t=1703246893; x=1703851693; i=w_armin@gmx.de;
+	bh=lIEDc4eP/tBcRvutzo/u5pew9rRgWJOCWE+lCcDBNOU=;
+	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
+	 In-Reply-To;
+	b=i+svumC3e4SfjQdWFbnN6tDNPORQOCSMSreAU4TlB43DzqvoBZCuFw5DkQQelvCv
+	 P0JIRPXG5AOAY5klEKty0PtkLum6kqDU+CadUxATeazWwJ3mH6UZDbxhImKk7qmyv
+	 Noi/EmAogSfR93PwrG6YS/yCujwTi/eUEYq5eXUZghk/5PuipOzo7k/f4HtwSCF3d
+	 sqpXFEmW1Vy4+1lnWDy5auPF7/cp4+PzFOEplAJANLD0WmyTfA0rs1gd51IvPDMTK
+	 xXOMBQeRM5UjTDho9ooqg+Cvnzbfg9nhqJS3SIruP8yeMamTDnSHEK5V5av1BAaws
+	 ppy7LsXMOTxcgDf5Bg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M5wPb-1rNV9L3ZZj-007RYv; Fri, 22
+ Dec 2023 13:08:12 +0100
+Message-ID: <3d777aee-9ec1-4236-98d2-f56b8026b96a@gmx.de>
+Date: Fri, 22 Dec 2023 13:08:11 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231220051350.392350-1-kai.heng.feng@canonical.com> <5a81eda0-5044-4088-9aba-cf725e6fca9a@roeck-us.net>
-In-Reply-To: <5a81eda0-5044-4088-9aba-cf725e6fca9a@roeck-us.net>
-From: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date: Fri, 22 Dec 2023 11:57:25 +0800
-Message-ID: <CAAd53p4NNX9c5pUJgv12V=s_1YJxM3=G+OCYTgcRPqSJVbdi8w@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: (acpi_power_meter) Install IPMI handler for Dell systems
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] hwmon: (acpi_power_meter) Install IPMI handler for Dell
+ systems
+To: Kai-Heng Feng <kai.heng.feng@canonical.com>,
+ Guenter Roeck <linux@roeck-us.net>
+Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20231220051350.392350-1-kai.heng.feng@canonical.com>
+ <5a81eda0-5044-4088-9aba-cf725e6fca9a@roeck-us.net>
+ <CAAd53p4NNX9c5pUJgv12V=s_1YJxM3=G+OCYTgcRPqSJVbdi8w@mail.gmail.com>
+Content-Language: en-US
+From: Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <CAAd53p4NNX9c5pUJgv12V=s_1YJxM3=G+OCYTgcRPqSJVbdi8w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Qq3MJFMyL2mPhYT8DMla8fOeCYwbJv/9HGLu9SfkSWNowFqtgWe
+ 07/fbz07PBe0c2pRW51QNWSx9vhc7VK4Xs7vJh1PtjQ1vJ694GX29vsBQEgUuecmolYHlS9
+ iL3q9zP9Ry/wS/SP1L1m1EucJ41fGKdbwjWOIRbuu2noffq9WCKcoKcZlYa/ub/lISgVQ4i
+ MAv8PxBG2q3fsSqSz+Urg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:5RsHu0gclA4=;y2UR1gVUmKlLxfrJyBkfLFLGNMo
+ 88cSs0CvJhubhsCZ+GwIsDDUtVu2wyLW7tmP0uqH9F9Yg1HBYYRK/b2fW3DQwy3RakIwkwwWu
+ BEAcE7J+Jx5buRkhz3ec4bs9nLGJgW61cizo0U8CcWb/gOwYx3ZfJqNbjqRhsLO8PCy5CgwAp
+ GBgYc8JXqpAcBqtocnjBrtu7TDPH/zwYrjltkOYyqDjJsm8Lfc3n3yd/Uk4n8G28asqRf0ALw
+ 656um/xU0yHZY0x8Izu3LLIwQamSf7saga8N15gscZBf2BuLF5PP//LOHBA/2QXePfVS2rcDr
+ JzipGk5Y6kSG/wxoLx1D1otk1ysYvmkhkrlphlZ9t/OSZwueSLex35Z+q3Hb7UbHm3QPLBco6
+ cSXI7Rp7xQcJiB29k9aJJta090euFjB7XzqhJhaBNVZZrD7aX+sZcKcbYEXCFWekMWmILCGAI
+ sd8CP+t02/Fy9EZW7pz5ExSxtrPO60EHiC3y4+UB8xaLYAg5vlG/I8YFHhLeVCoEu8yPwBd11
+ xPILuEQ7XN4DyiLr40Vvs+w6LdBTMe4KLReghWDpd8Geee1AbmiOhqN7G+5IVVIjGbvAQ0YPl
+ sUO+KWLTnXwJLFB0tiHPXWQ0KgeQl2jFFmle3MaDQ9XMHE06FScvlX9Ux4xkR4wJHVpeaPtzQ
+ x0UCS7n9T+5ORDOpnrz9TekxdxvNkjSuMjmnh+F3v2jFpZ1KBKpFZqdhczsiK6oxQ0J8NYsga
+ ti44ScB8A0qltFyIbcSeZlPtNb1bfI1Ma8lCeBz2V14UhIK6whTKYU4gKmZiTcryDeobCcSRG
+ 9EIGdKVLZzLJgHJ9savcUDDCxeqMAtzHuRN/nJ6ULOPUt6XFVbGOevKXH9enHxYh9+VphV1O1
+ aNqbu418IaRlKYR0HWe6OROZFtdxm+eWDuZMXqlTUjDpzMDmdvqRhHQd73rbZqC3IHUtV8WXY
+ KMHz3XJ7w3J7weKHrWWUhdzQDJ8=
 
-Hi Guenter,
+Am 22.12.23 um 04:57 schrieb Kai-Heng Feng:
 
-On Thu, Dec 21, 2023 at 7:49=E2=80=AFAM Guenter Roeck <linux@roeck-us.net> =
-wrote:
+> Hi Guenter,
 >
-> On Wed, Dec 20, 2023 at 01:13:50PM +0800, Kai-Heng Feng wrote:
-> > The following error can be observed at boot:
-> > [    3.717920] ACPI Error: No handler for Region [SYSI] (00000000ab9e62=
-c5) [IPMI] (20230628/evregion-130)
-> > [    3.717928] ACPI Error: Region IPMI (ID=3D7) has no handler (2023062=
-8/exfldio-261)
-> >
-> > [    3.717936] No Local Variables are initialized for Method [_GHL]
-> >
-> > [    3.717938] No Arguments are initialized for method [_GHL]
-> >
-> > [    3.717940] ACPI Error: Aborting method \_SB.PMI0._GHL due to previo=
-us error (AE_NOT_EXIST) (20230628/psparse-529)
-> > [    3.717949] ACPI Error: Aborting method \_SB.PMI0._PMC due to previo=
-us error (AE_NOT_EXIST) (20230628/psparse-529)
-> > [    3.717957] ACPI: \_SB_.PMI0: _PMC evaluation failed: AE_NOT_EXIST
-> >
-> > On Dell systems several methods of acpi_power_meter access variables in
-> > IPMI region [0], so request module 'ipmi_si' which will load 'acpi_ipmi=
-'
-> > and install the region handler accordingly.
-> >
-> > [0] https://www.dell.com/support/manuals/en-us/redhat-enterprise-linux-=
-v8.0/rhel8_rn_pub/advanced-configuration-and-power-interface-acpi-error-mes=
-sages-displayed-in-dmesg?guid=3Dguid-0d5ae482-1977-42cf-b417-3ed5c3f5ee62
-> >
-> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> > ---
-> >  drivers/hwmon/acpi_power_meter.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_powe=
-r_meter.c
-> > index 703666b95bf4..b9db53166bc9 100644
-> > --- a/drivers/hwmon/acpi_power_meter.c
-> > +++ b/drivers/hwmon/acpi_power_meter.c
-> > @@ -882,6 +882,8 @@ static int acpi_power_meter_add(struct acpi_device =
-*device)
-> >       strcpy(acpi_device_name(device), ACPI_POWER_METER_DEVICE_NAME);
-> >       strcpy(acpi_device_class(device), ACPI_POWER_METER_CLASS);
-> >       device->driver_data =3D resource;
-> > +     if (dmi_match(DMI_SYS_VENDOR, "Dell Inc."))
-> > +             request_module("ipmi_si");
-> >
+> On Thu, Dec 21, 2023 at 7:49=E2=80=AFAM Guenter Roeck <linux@roeck-us.ne=
+t> wrote:
+>> On Wed, Dec 20, 2023 at 01:13:50PM +0800, Kai-Heng Feng wrote:
+>>> The following error can be observed at boot:
+>>> [    3.717920] ACPI Error: No handler for Region [SYSI] (00000000ab9e6=
+2c5) [IPMI] (20230628/evregion-130)
+>>> [    3.717928] ACPI Error: Region IPMI (ID=3D7) has no handler (202306=
+28/exfldio-261)
+>>>
+>>> [    3.717936] No Local Variables are initialized for Method [_GHL]
+>>>
+>>> [    3.717938] No Arguments are initialized for method [_GHL]
+>>>
+>>> [    3.717940] ACPI Error: Aborting method \_SB.PMI0._GHL due to previ=
+ous error (AE_NOT_EXIST) (20230628/psparse-529)
+>>> [    3.717949] ACPI Error: Aborting method \_SB.PMI0._PMC due to previ=
+ous error (AE_NOT_EXIST) (20230628/psparse-529)
+>>> [    3.717957] ACPI: \_SB_.PMI0: _PMC evaluation failed: AE_NOT_EXIST
+>>>
+>>> On Dell systems several methods of acpi_power_meter access variables i=
+n
+>>> IPMI region [0], so request module 'ipmi_si' which will load 'acpi_ipm=
+i'
+>>> and install the region handler accordingly.
+>>>
+>>> [0] https://www.dell.com/support/manuals/en-us/redhat-enterprise-linux=
+-v8.0/rhel8_rn_pub/advanced-configuration-and-power-interface-acpi-error-m=
+essages-displayed-in-dmesg?guid=3Dguid-0d5ae482-1977-42cf-b417-3ed5c3f5ee6=
+2
+>>>
+>>> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+>>> ---
+>>>   drivers/hwmon/acpi_power_meter.c | 2 ++
+>>>   1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_pow=
+er_meter.c
+>>> index 703666b95bf4..b9db53166bc9 100644
+>>> --- a/drivers/hwmon/acpi_power_meter.c
+>>> +++ b/drivers/hwmon/acpi_power_meter.c
+>>> @@ -882,6 +882,8 @@ static int acpi_power_meter_add(struct acpi_device=
+ *device)
+>>>        strcpy(acpi_device_name(device), ACPI_POWER_METER_DEVICE_NAME);
+>>>        strcpy(acpi_device_class(device), ACPI_POWER_METER_CLASS);
+>>>        device->driver_data =3D resource;
+>>> +     if (dmi_match(DMI_SYS_VENDOR, "Dell Inc."))
+>>> +             request_module("ipmi_si");
+>>>
+>> This looks like a terrible hack to me. Is there precedent of similar ha=
+cks
+>> elsewhere showing that this is the "way to go" ?
+> Yes it's ugly.
 >
-> This looks like a terrible hack to me. Is there precedent of similar hack=
-s
-> elsewhere showing that this is the "way to go" ?
-
-Yes it's ugly.
-
-The error happens in the ACPI ASL code, so it's not possible to know
-if any method of apci_power_meter requires IPMI region.
-I really can't think of any better solution for it.
-
-Kai-Heng
-
+> The error happens in the ACPI ASL code, so it's not possible to know
+> if any method of apci_power_meter requires IPMI region.
+> I really can't think of any better solution for it.
 >
-> Guenter
->
-> >       res =3D read_capabilities(resource);
-> >       if (res)
-> > --
-> > 2.34.1
-> >
+> Kai-Heng
+
+Maybe we could use an ACPI scan handler for that?
+Basically we would call request_module() upon discovering an ACPI IPMI dev=
+ice,
+so that the necessary module is available for handling the IPMI opregion.
+This would also prevent any issues should other devices also require IPMI =
+access.
+
+Armin Wolf
+
+>> Guenter
+>>
+>>>        res =3D read_capabilities(resource);
+>>>        if (res)
+>>> --
+>>> 2.34.1
+>>>
