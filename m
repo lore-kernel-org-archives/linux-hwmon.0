@@ -1,74 +1,106 @@
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA6BF78E9D
-	for <linux-hwmon@vger.kernel.org>; Thu, 21 Dec 2023 23:47:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iwanders.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iwanders.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 711651C06;
+	Fri, 22 Dec 2023 01:27:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=iwanders.net header.i=@iwanders.net header.b="N+6XTxKl"
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-78117e97becso67134485a.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 21 Dec 2023 15:47:05 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J3ysisfb"
+Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-7ba8e33dd0cso43224939f.0;
+        Thu, 21 Dec 2023 17:27:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=iwanders.net; s=google; t=1703202425; x=1703807225; darn=vger.kernel.org;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=fsVUD3VufeS//NudK1mZpNpNjqh483A+CiJoPn/HOt0=;
-        b=N+6XTxKlaC2HK9apPi5lF5yA9U9+v9+igO+KUZKmWzb0n3Us6OAR6OM3G+JISOmwz9
-         31dKEVtXKscWJtAEgklym9CqFS23Ek/8S17VlPx3WyqrVtq6ZYEzH2+EDIPr+3SFdVGr
-         ux3u6ihviErkgeJXwFumSuIsCxF8qzfb+wwKQ=
+        d=gmail.com; s=20230601; t=1703208448; x=1703813248; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zy8g0lzs7eaKHdXsmVjSrLQ8rBtR4re0URoEliy+E2c=;
+        b=J3ysisfbARrGvLP5hd8lrZevjnmGNJwuFUmWWzxyMaT0RSs3ZZRlygfhLiwbUdJawd
+         Mjkly+AU0ksHDRLeV4psUpMJLSonLGA/cA/Z0loshvcnIfGeYrjwS++a5X9h90ZL9Hwe
+         Y2IEoYr23zPqi4d4wDEq947cFcgdsNscKtFZvuOcszlfHCXZ4hRxvuMCAdSSdgcHaQdM
+         SxaExlhGGG8xNwg+VBZBmqUSP/7Xj86jifAlOCvsRS0a3dW0NFzp6GRJF252YNSKFP4f
+         NU8JeBBPRu1v6/C3VYSIYFz8DdmohCyCJps/qNLXfGgNvRJgOxCeojx2KmncmNKr3sBv
+         36Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703202425; x=1703807225;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fsVUD3VufeS//NudK1mZpNpNjqh483A+CiJoPn/HOt0=;
-        b=TPOruer6pciZVXaDtXgI5+ek78w5ChanJM3pHQOoahjnbfc2/VNBrUW4F0z/+jIsCL
-         zbFvJ1XvbAFfUp44Ih8B57AI5CQT2wSOC4dNY9ccK9Wn2q90MaTuv5Gd2uO324yqJA+h
-         t98vrGm/p63v+R8IS7yijtcxbphPIyKwBw7Ee7Uf4hSp1Xjtz9hkZkyGGGG4IXHT+KZt
-         09od/4SU9UWBiOwXgK62tz0H+KkYDUQTIKBdS+FeyL8XzsqRNnkBv+jzNLpZrrd4yixt
-         EQObP+0igcfFRHNGcrnKE8JUzhG5Kpd68IzHT8dGhnF+lSaO7px0cnjEWvSE3r1oogA5
-         LXBQ==
-X-Gm-Message-State: AOJu0YydzYn8X0SKqyhQwsdiUUy0NW9LAPyotIMGoZhMKEP8wunewr/h
-	3CjGvvP+SL4Y5UbhFHrDKb2+k6iDots/GQ==
-X-Google-Smtp-Source: AGHT+IGgeO55s3ldTAPyX28iP11/SY4z5r1rs1DkQ2IuOS9AvdwQW3R4/9nO6dEIKqII2xWc9D4G0Q==
-X-Received: by 2002:a05:620a:2843:b0:77e:fba3:757f with SMTP id h3-20020a05620a284300b0077efba3757fmr680867qkp.119.1703202424838;
-        Thu, 21 Dec 2023 15:47:04 -0800 (PST)
-Received: from eagle.lan (24-246-30-234.cable.teksavvy.com. [24.246.30.234])
-        by smtp.gmail.com with ESMTPSA id j5-20020a05620a000500b0077d74f884d9sm993080qki.117.2023.12.21.15.47.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Dec 2023 15:47:04 -0800 (PST)
-From: Ivor Wanders <ivor@iwanders.net>
-To: rdunlap@infradead.org
-Cc: corbet@lwn.net,
-	ivor@iwanders.net,
-	jdelvare@suse.com,
-	linux-doc@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux@roeck-us.net,
-	luzmaximilian@gmail.com
-Subject: Re: [PATCH v2] hwmon: clarify intent of fan min/max
-Date: Thu, 21 Dec 2023 18:46:46 -0500
-Message-Id: <20231221234646.15776-1-ivor@iwanders.net>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <6ec27515-d2c1-48f1-8935-55f0ae48e72b@infradead.org>
-References: <6ec27515-d2c1-48f1-8935-55f0ae48e72b@infradead.org>
+        d=1e100.net; s=20230601; t=1703208448; x=1703813248;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zy8g0lzs7eaKHdXsmVjSrLQ8rBtR4re0URoEliy+E2c=;
+        b=VJPGfbMyHxPa5seI+v7n2vUKbRYM+usoJmwTykamTd1LeboZMT2ZzfQkaRl4d/ejbt
+         tMYyrgWOxk2SV0HCAGH5Jb49DZW+ljObd/N49cueoKDoxp1ZG4pHE3tdlXle/Yp9FsBG
+         aX9AktAW/eg2dX7+/UHNLc7QzZyg5uigZZeXMRfgmPqI1x6M+zuW9X86T1NzrwiCEjGi
+         a15HU6shArzd7TW0ZRxI7NzyfmacNa5QvRtjZEw+dYNHyn+gTRqniEXcfCZHlRZfIIDx
+         glCE8xcO2ANsSQshXRjOX18tPuQhzAIceFLG/Ew50MTCysk080raelsxe1T2fc6zZn2j
+         f8Tg==
+X-Gm-Message-State: AOJu0YxU671PYNq81iAY8AJz1H+I0uC4N6Hqm0mKfhyfkNJ49UFH/tkP
+	Bq80QM6uHLl0ebqnGTKu3ESyHrw/kVwopxgG1wKUEUx3aek=
+X-Google-Smtp-Source: AGHT+IENIdhp+wVXGkDYH0RYIkfdROfEfqzYbfyIxwYeq1Y0iQANbD+H6pXUx/iczB5ACQ1EdYKX3pHgiXMN2c3RPe0=
+X-Received: by 2002:a5e:da4d:0:b0:7b7:f9fb:8766 with SMTP id
+ o13-20020a5eda4d000000b007b7f9fb8766mr607985iop.14.1703208448542; Thu, 21 Dec
+ 2023 17:27:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20231219080021.2048889-1-kcfeng0@nuvoton.com> <20231219080021.2048889-2-kcfeng0@nuvoton.com>
+ <170297774900.1297817.5593278746406765111.robh@kernel.org>
+ <CALz278aJ08fOU2XZMZJJ2Ocp+XwovJ0+nHK-=0dWqbXf+522OA@mail.gmail.com> <9035aff7-49e6-49cf-a8f8-619d3b53c4a5@linaro.org>
+In-Reply-To: <9035aff7-49e6-49cf-a8f8-619d3b53c4a5@linaro.org>
+From: Ban Feng <baneric926@gmail.com>
+Date: Fri, 22 Dec 2023 09:27:17 +0800
+Message-ID: <CALz278Z-KF+NurdXhOQjoP-RMhQfrshEyU=KkumN8Peus7Wdew@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add NCT7363Y documentation
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org, corbet@lwn.net, 
+	kwliu@nuvoton.com, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	jdelvare@suse.com, kcfeng0@nuvoton.com, krzysztof.kozlowski+dt@linaro.org, 
+	linux-hwmon@vger.kernel.org, openbmc@lists.ozlabs.org, robh+dt@kernel.org, 
+	Bonnie_Lo@wiwynn.com, conor+dt@kernel.org, DELPHINE_CHIU@wiwynn.com, 
+	linux@roeck-us.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> (other than telling us what changed from v1 to v2)
+Hi Krzysztof,
 
-Appreciate the feedback! I'm new to this, so basically it means always
-use --cover-letter, I also noticed that I should have probably added some
-'to' entries, the command suggested by lore moved the original 'to' fields
-to 'cc'. I'll be more diligent with the changelog in future contributions.
+On Thu, Dec 21, 2023 at 4:20=E2=80=AFPM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 21/12/2023 01:44, Ban Feng wrote:
+> > Hi Rob,
+> >
+> > On Tue, Dec 19, 2023 at 5:22=E2=80=AFPM Rob Herring <robh@kernel.org> w=
+rote:
+> >>
+> >>
+> >> On Tue, 19 Dec 2023 16:00:20 +0800, baneric926@gmail.com wrote:
+> >>> From: Ban Feng <kcfeng0@nuvoton.com>
+> >>>
+> >>> Adding bindings for the Nuvoton NCT7363Y Fan Controller
+> >>>
+> >>> Signed-off-by: Ban Feng <kcfeng0@nuvoton.com>
+> >>> ---
+> >>>  .../bindings/hwmon/nuvoton,nct7363.yaml       | 62 +++++++++++++++++=
+++
+> >>>  MAINTAINERS                                   |  6 ++
+> >>>  2 files changed, 68 insertions(+)
+> >>>  create mode 100644 Documentation/devicetree/bindings/hwmon/nuvoton,n=
+ct7363.yaml
+> >>>
+> >>
+> >> My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_che=
+ck'
+> >> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> >
+> > Our design is based on [1], and adds fan-common.yaml to
+>
+> Nothing in the patch or cover letter described the dependency.
+>
 
-Change was incorporating the feedback from [1], changing the comma into a
-period for all three changed sysfs entries.
+ok, in v3, I'll attach a relevant patch and describe it in the cover letter=
+.
 
-~Ivor
-
-[1]: https://lore.kernel.org/linux-hwmon/40285311-8adc-4ca9-86ce-27c8b723a102@infradead.org/
+Thanks,
+Ban
