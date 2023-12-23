@@ -1,67 +1,80 @@
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A450B33CE6
-	for <linux-hwmon@vger.kernel.org>; Fri, 22 Dec 2023 23:20:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iwanders.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iwanders.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C587F8BE5
+	for <linux-hwmon@vger.kernel.org>; Sat, 23 Dec 2023 07:38:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=iwanders.net header.i=@iwanders.net header.b="HEk8CCyX"
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-42784b919b9so16904401cf.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 22 Dec 2023 15:20:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=iwanders.net; s=google; t=1703287225; x=1703892025; darn=vger.kernel.org;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7Jg7LMcYWmIaO2CCXqAm9eI5kBh+J6fmP6S0jJw0ctc=;
-        b=HEk8CCyXVpRTXfZspfj39SUyS4DU/eQMnZmT1tGeQI1AnYYGZ5io0zrwQIVezuMlsA
-         lFLn2Q6ou44DLBmfg5eS/4ioHHmqTxfW5SlSLUx0z4amDEG8U4BvXQfRp8PyS6X5ytMB
-         XZ88VD0noTiU/PKiTO06Jq/hWTTlU9i4CDu2g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703287225; x=1703892025;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7Jg7LMcYWmIaO2CCXqAm9eI5kBh+J6fmP6S0jJw0ctc=;
-        b=W7gnlTsG0bf60pQVzcbRWClB2/V27pMPrtQkZTWEaNtuZcdMuZCstd+UFFgcqe3znZ
-         AytzWfqiDwVhXvzF54+faoJs+STr7HWQLRVZJxIIhEVKiPHc4DJwhupuneXVKlcnjZ3h
-         L+qEOxwX1x0jfmVcUT8nQRyzWmh6syOkZBi+ZPdfDU5xdS1JI8iplHs9yCSgTmjOEWpx
-         9qHhFm957bldhv9xp22di7tukNub0R6dH0PbdUFewfEjfuB3uBonkKgQZqkENBCpqOyE
-         qw/scQr8ELqNRvvN7700OJ3l+QY5nrZruxzBJJfJZjI4IWzAjCMTEg9BEgIGhqZ0hdpU
-         MMPA==
-X-Gm-Message-State: AOJu0YyjorlgGDev1ghzd0gcc6tHGuVj5K8qJUBuz6KsXZ41Fo7EgfWG
-	4jFcvCnsFa9s01JRgbVkQD48M7mWckyjRTVzMUNl7enu8fyLBQ==
-X-Google-Smtp-Source: AGHT+IExPRV0xYIbsvxIADUup4X9pzFtDEINzww7SWOX1CCloC1or5IhgO/WejPOcQTfeBlzLDDffA==
-X-Received: by 2002:a05:622a:1012:b0:403:a8fa:b4f5 with SMTP id d18-20020a05622a101200b00403a8fab4f5mr2938148qte.4.1703287225620;
-        Fri, 22 Dec 2023 15:20:25 -0800 (PST)
-Received: from eagle.lan (24-246-30-234.cable.teksavvy.com. [24.246.30.234])
-        by smtp.gmail.com with ESMTPSA id df24-20020a05622a0ed800b004275e9cdf15sm2226878qtb.11.2023.12.22.15.20.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Dec 2023 15:20:25 -0800 (PST)
-From: Ivor Wanders <ivor@iwanders.net>
-To: linux@roeck-us.net
-Cc: corbet@lwn.net,
-	ivor@iwanders.net,
-	jdelvare@suse.com,
-	linux-doc@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hCdVVVuj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1703317085;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=jS5DA0VfCS3rrQPUCKDuaUeTWEviODCJRunMUgigK8Y=;
+	b=hCdVVVujye2MHR75v93W+zCaY0xk5GbIjkpf8KOwKT/ZQsqew06v5AAB7DLxw7zpHZ4WDf
+	pLImxf6qedUbp/zp5P9fvIUK312z53M30dBkE/dUqx87FjQIubanU12Kje7qfzO94rGtSk
+	CUjMDhY76cDnmo5oxcR5U+hOtNtPEyU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-379-vSLkINrfNi67vnrFMgVQ7g-1; Sat, 23 Dec 2023 02:38:03 -0500
+X-MC-Unique: vSLkINrfNi67vnrFMgVQ7g-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3705380BEC1;
+	Sat, 23 Dec 2023 07:38:03 +0000 (UTC)
+Received: from ovpn-240-2.nrt.redhat.com (unknown [10.64.240.2])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id E23C4C15A0C;
+	Sat, 23 Dec 2023 07:38:01 +0000 (UTC)
+From: Seiji Nishikawa <snishika@redhat.com>
+To: pali@kernel.org
+Cc: jdelvare@suse.com,
+	linux@roeck-us.net,
 	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	luzmaximilian@gmail.com,
-	rdunlap@infradead.org
-Subject: Re: [PATCH v2] hwmon: clarify intent of fan min/max
-Date: Fri, 22 Dec 2023 18:20:14 -0500
-Message-Id: <20231222232014.4561-1-ivor@iwanders.net>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <632bd36b-1652-4c74-9d78-ddea6ce77a00@roeck-us.net>
-References: <632bd36b-1652-4c74-9d78-ddea6ce77a00@roeck-us.net>
+	snishika@redhat.com
+Subject: [PATCH] hwmon: (dell-smm) Also add Dell Precision 7540 to fan control whitelist
+Date: Sat, 23 Dec 2023 16:36:58 +0900
+Message-Id: <20231223073658.354773-1-snishika@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
 
-> NACK, because that text would be required for _all_ hwmon sysfs
-> attributes which simply does not make sense to me.
+This patch, in addition to 95d88d054ad9 that added Dell Precision 7510 to fan
+control whitelist, also adds Precision 7540 to the whitelist, which allows manual
+PWM control on Dell Precision 7540. It has been confirmed that the same SMM
+commands work to enable/disable manual PWM control on Dell Precision 7540.
+---
+ drivers/hwmon/dell-smm-hwmon.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Fair enough, thank you for your time and comments.
+diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+index 44aaf9b9191d..f946257f72c6 100644
+--- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -1330,6 +1330,14 @@ static const struct dmi_system_id i8k_whitelist_fan_control[] __initconst = {
+ 		},
+ 		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
+ 	},
++        {
++                .ident = "Dell Precision 7540",
++                .matches = {
++                        DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
++                        DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Precision 7540"),
++                },
++                .driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
++        },
+ 	{
+ 		.ident = "Dell XPS 13 7390",
+ 		.matches = {
+-- 
+2.42.0
 
-~Ivor
