@@ -1,160 +1,110 @@
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61981522C;
-	Wed, 27 Dec 2023 04:04:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79AB246521;
+	Wed, 27 Dec 2023 17:29:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="IPDsRAUh"
-Received: from HP-EliteBook-x360-830-G8-Notebook-PC.. (unknown [10.101.196.174])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id ABE2F3F722;
-	Wed, 27 Dec 2023 04:04:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1703649848;
-	bh=m76mF9xbAsx2/TveqoahDVkZj7zH+GFIW9wWNEteV4M=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-	b=IPDsRAUh3WjnCMbM4WW6k5e7qtHi7XoquVsYApwl6XZ5TtlWlqkfEZx20tKvrk562
-	 KRuKIC0MjiPDpFtVv2RinBs1WYcIA8Td8GzepHpYkMbHGbBVN5uVyK1sr39HptFrWF
-	 aErdL3vq6R0+kZrraazNcadCg4eLa5TqwXWHZyhuIq7Ol6s/yZP+XJudoGPQMFUdtw
-	 MWaUFzW9FgICMoEqQ0OFzzsY3a90Wuu2HhCf8MenJVQWkJiKO50ErKF2N50j/lgUBf
-	 819FCss6DqjBNimwT/KmgC8MuEuovfbHM4OPVh2Zd5yjYXYUXRr5/yAO/ea/mkzKUj
-	 2ZRDvAwqkoAfw==
-From: Kai-Heng Feng <kai.heng.feng@canonical.com>
-To: jdelvare@suse.com,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S3YtY6Y9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1703698190; x=1735234190;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Aldfr7OGlFepgVjQLG4ahYMsoND2AkgxRVR/eA9MgBw=;
+  b=S3YtY6Y9+wVXd341JyxqEJTB7vYu6C3VWvWJasTU5cpuK9UIgqAEBcRw
+   F3L+wglEfRMaACA1oLCh8hBRUohjq3TI8pziX/It/gCxgzGmQvUWPX9PK
+   v9Qc1hZQ35SYhSZW6qxDEGtAvYXOiXmhxtoOakdGYqbYu8pRn2OyZb0BO
+   hb2b11Ru7MoGxb2pfgR8InLLX5hKHtXbKvqEIrJLkWPKuZlsMMUE3tcXd
+   ZTaWWt7o/yumE0KGSJD/cteOKZLVVMnvbPS/I+aJYhjFAEP3yJP3v1Wfr
+   94PnesReWbRd3MSnClHxIKH0wHRolwlGdl5CNBXn+/v5Notq60M0LEGNH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10936"; a="3770555"
+X-IronPort-AV: E=Sophos;i="6.04,309,1695711600"; 
+   d="scan'208";a="3770555"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2023 09:29:50 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10936"; a="1025435720"
+X-IronPort-AV: E=Sophos;i="6.04,309,1695711600"; 
+   d="scan'208";a="1025435720"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 27 Dec 2023 09:29:47 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rIXiz-000Fbl-11;
+	Wed, 27 Dec 2023 17:29:45 +0000
+Date: Thu, 28 Dec 2023 01:28:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kai-Heng Feng <kai.heng.feng@canonical.com>, jdelvare@suse.com,
 	linux@roeck-us.net
-Cc: Kai-Heng Feng <kai.heng.feng@canonical.com>,
+Cc: oe-kbuild-all@lists.linux.dev,
+	Kai-Heng Feng <kai.heng.feng@canonical.com>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>,
-	Robert Moore <robert.moore@intel.com>,
-	linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	acpica-devel@lists.linux.dev
-Subject: [PATCH v2] hwmon: (acpi_power_meter) Ensure IPMI space handler is ready on Dell systems
-Date: Wed, 27 Dec 2023 12:04:00 +0800
-Message-Id: <20231227040401.548977-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.34.1
+	Len Brown <lenb@kernel.org>, Robert Moore <robert.moore@intel.com>,
+	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, acpica-devel@lists.linux.dev
+Subject: Re: [PATCH v2] hwmon: (acpi_power_meter) Ensure IPMI space handler
+ is ready on Dell systems
+Message-ID: <202312280116.QtpZzDTy-lkp@intel.com>
+References: <20231227040401.548977-1-kai.heng.feng@canonical.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231227040401.548977-1-kai.heng.feng@canonical.com>
 
-The following error can be observed at boot:
-[    3.717920] ACPI Error: No handler for Region [SYSI] (00000000ab9e62c5) [IPMI] (20230628/evregion-130)
-[    3.717928] ACPI Error: Region IPMI (ID=7) has no handler (20230628/exfldio-261)
+Hi Kai-Heng,
 
-[    3.717936] No Local Variables are initialized for Method [_GHL]
+kernel test robot noticed the following build errors:
 
-[    3.717938] No Arguments are initialized for method [_GHL]
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on rafael-pm/linux-next rafael-pm/acpi-bus linus/master v6.7-rc7 next-20231222]
+[cannot apply to rafael-pm/devprop]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-[    3.717940] ACPI Error: Aborting method \_SB.PMI0._GHL due to previous error (AE_NOT_EXIST) (20230628/psparse-529)
-[    3.717949] ACPI Error: Aborting method \_SB.PMI0._PMC due to previous error (AE_NOT_EXIST) (20230628/psparse-529)
-[    3.717957] ACPI: \_SB_.PMI0: _PMC evaluation failed: AE_NOT_EXIST
+url:    https://github.com/intel-lab-lkp/linux/commits/Kai-Heng-Feng/hwmon-acpi_power_meter-Ensure-IPMI-space-handler-is-ready-on-Dell-systems/20231227-120900
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20231227040401.548977-1-kai.heng.feng%40canonical.com
+patch subject: [PATCH v2] hwmon: (acpi_power_meter) Ensure IPMI space handler is ready on Dell systems
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20231228/202312280116.QtpZzDTy-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231228/202312280116.QtpZzDTy-lkp@intel.com/reproduce)
 
-On Dell systems several methods of acpi_power_meter access variables in
-IPMI region [0], so wait until IPMI space handler is installed by
-acpi_ipmi and also wait until SMI is selected to make the space handler
-fully functional.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312280116.QtpZzDTy-lkp@intel.com/
 
-[0] https://www.dell.com/support/manuals/en-us/redhat-enterprise-linux-v8.0/rhel8_rn_pub/advanced-configuration-and-power-interface-acpi-error-messages-displayed-in-dmesg?guid=guid-0d5ae482-1977-42cf-b417-3ed5c3f5ee62
+All errors (new ones prefixed by >>):
 
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
-v2:
- - Use completion instead of request_module().
+>> drivers/acpi/acpi_ipmi.c:585:6: error: redefinition of 'wait_for_acpi_ipmi'
+     585 | void wait_for_acpi_ipmi(void)
+         |      ^~~~~~~~~~~~~~~~~~
+   In file included from include/linux/acpi.h:35,
+                    from drivers/acpi/acpi_ipmi.c:11:
+   include/acpi/acpi_bus.h:676:20: note: previous definition of 'wait_for_acpi_ipmi' with type 'void(void)'
+     676 | static inline void wait_for_acpi_ipmi(void)
+         |                    ^~~~~~~~~~~~~~~~~~
 
- drivers/acpi/acpi_ipmi.c         | 13 ++++++++++++-
- drivers/hwmon/acpi_power_meter.c |  4 ++++
- include/acpi/acpi_bus.h          |  4 ++++
- 3 files changed, 20 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/acpi/acpi_ipmi.c b/drivers/acpi/acpi_ipmi.c
-index 0555f68c2dfd..2ea8b7e6cebf 100644
---- a/drivers/acpi/acpi_ipmi.c
-+++ b/drivers/acpi/acpi_ipmi.c
-@@ -23,6 +23,8 @@ MODULE_LICENSE("GPL");
- #define IPMI_TIMEOUT			(5000)
- #define ACPI_IPMI_MAX_MSG_LENGTH	64
- 
-+static struct completion smi_selected;
-+
- struct acpi_ipmi_device {
- 	/* the device list attached to driver_data.ipmi_devices */
- 	struct list_head head;
-@@ -463,8 +465,10 @@ static void ipmi_register_bmc(int iface, struct device *dev)
- 		if (temp->handle == handle)
- 			goto err_lock;
- 	}
--	if (!driver_data.selected_smi)
-+	if (!driver_data.selected_smi) {
- 		driver_data.selected_smi = ipmi_device;
-+		complete(&smi_selected);
-+	}
- 	list_add_tail(&ipmi_device->head, &driver_data.ipmi_devices);
- 	mutex_unlock(&driver_data.ipmi_lock);
- 
-@@ -578,10 +582,17 @@ acpi_ipmi_space_handler(u32 function, acpi_physical_address address,
- 	return status;
- }
- 
-+void wait_for_acpi_ipmi(void)
-+{
-+	wait_for_completion_interruptible_timeout(&smi_selected, 2 * HZ);
-+}
-+EXPORT_SYMBOL_GPL(wait_for_acpi_ipmi);
-+
- static int __init acpi_ipmi_init(void)
- {
- 	int result;
- 	acpi_status status;
-+	init_completion(&smi_selected);
- 
- 	if (acpi_disabled)
- 		return 0;
-diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
-index 703666b95bf4..acaf1ae68dc8 100644
---- a/drivers/hwmon/acpi_power_meter.c
-+++ b/drivers/hwmon/acpi_power_meter.c
-@@ -883,6 +883,10 @@ static int acpi_power_meter_add(struct acpi_device *device)
- 	strcpy(acpi_device_class(device), ACPI_POWER_METER_CLASS);
- 	device->driver_data = resource;
- 
-+	if (dmi_match(DMI_SYS_VENDOR, "Dell Inc.") &&
-+	    acpi_dev_get_first_match_dev("IPI0001", NULL, -1))
-+		wait_for_acpi_ipmi();
-+
- 	res = read_capabilities(resource);
- 	if (res)
- 		goto exit_free;
-diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
-index 1216d72c650f..ed59fb89721e 100644
---- a/include/acpi/acpi_bus.h
-+++ b/include/acpi/acpi_bus.h
-@@ -655,6 +655,7 @@ bool acpi_device_override_status(struct acpi_device *adev, unsigned long long *s
- bool acpi_quirk_skip_acpi_ac_and_battery(void);
- int acpi_install_cmos_rtc_space_handler(acpi_handle handle);
- void acpi_remove_cmos_rtc_space_handler(acpi_handle handle);
-+void wait_for_acpi_ipmi(void);
- #else
- static inline bool acpi_device_override_status(struct acpi_device *adev,
- 					       unsigned long long *status)
-@@ -672,6 +673,9 @@ static inline int acpi_install_cmos_rtc_space_handler(acpi_handle handle)
- static inline void acpi_remove_cmos_rtc_space_handler(acpi_handle handle)
- {
- }
-+static inline void wait_for_acpi_ipmi(void)
-+{
-+}
- #endif
- 
- #if IS_ENABLED(CONFIG_X86_ANDROID_TABLETS)
+vim +/wait_for_acpi_ipmi +585 drivers/acpi/acpi_ipmi.c
+
+   584	
+ > 585	void wait_for_acpi_ipmi(void)
+   586	{
+   587		wait_for_completion_interruptible_timeout(&smi_selected, 2 * HZ);
+   588	}
+   589	EXPORT_SYMBOL_GPL(wait_for_acpi_ipmi);
+   590	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
