@@ -1,83 +1,114 @@
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B87E410A05
-	for <linux-hwmon@vger.kernel.org>; Thu, 28 Dec 2023 23:50:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iwanders.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iwanders.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D8E614F61;
+	Fri, 29 Dec 2023 22:42:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=iwanders.net header.i=@iwanders.net header.b="OajBQIF/"
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-67f91d48863so46867646d6.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 28 Dec 2023 15:50:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eOJSc5MV"
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-33686649b72so7254238f8f.3;
+        Fri, 29 Dec 2023 14:42:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=iwanders.net; s=google; t=1703807438; x=1704412238; darn=vger.kernel.org;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=9darX8R7g5MjCyzy3Z8xvlLW0J2TPRLyQHjGa081eZM=;
-        b=OajBQIF/DJsOz2h9p1hlTFLSgnN0xUGk63DuiQPswLqADAzjqPMy9RekQcRl0l9Frg
-         G+5fK6xLeOQawcOaKIXI3svM9687TszhV2C13v5dVyceScHcoF8Td76lyeiJdxNjYYhw
-         QdcmC+iPMQZwowwigRIRuK8nwETTnIj9gjVmI=
+        d=gmail.com; s=20230601; t=1703889736; x=1704494536; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=96Hd5IFgkK/TcrBu0MMVF5Mj+dQO1oOnTc+wyle0UDM=;
+        b=eOJSc5MVPYvFH0VxFK8IyUfeELDWSstJnQINHKxEMFB5Rgob3xAzoLpBP33CRL31BF
+         ihTooz0zXQDQLH2QBTkige45vXI5PZVopjyNCtK9uOk5VMrTeUuEoolgcODNkQenTLTJ
+         7rIu5kcrDgiBRZV/rBuQFhNOR23xJfO0spKt9Z5IJz2oILpYN5GgT7EwTnXobMAfPBk9
+         dLNyQki3GaNoYLDjgetIlLUUDDO7gKQvvIkmruyGHB0G2TmqiaAevqi6bCaSSrbXNfgx
+         7u2npBNFe+HagY+utz6APauLxq7Ehhj5Lhe1W2ktgQ8VeMgdzOuZbwyz8v7cPcF0RtAN
+         LICA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703807438; x=1704412238;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
+        d=1e100.net; s=20230601; t=1703889736; x=1704494536;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9darX8R7g5MjCyzy3Z8xvlLW0J2TPRLyQHjGa081eZM=;
-        b=G6+zEXY8X7++Bq0UFf2Ka82BIM0/7EvYNnME/EKQFkyhdxmrqTMCzCzFxlL7QZtJO+
-         TPcyUECw9RO2DMXIkwKaVHoAVoCxzKKAstLXpVkNj1ajdfJNe/2wqDmslOaHUJJeGl4M
-         gkQ+XxZteh9k9otkFYnjIxSp+lZkHPtBqqYFLjVEU5vAlVaSxeGylvqlmU9uo4S927Ly
-         pj6dFmtmhTmIEtoSUJs6r4e1xqPka328Tdrm+Rq68c41Vm0AZdLgTvGg1bMEtRppw1n2
-         AW2h1RvUpzOBFLN5QGdTQtXxrm5DTRxoR0Si4CJY15u9RgwIACXKZ0fruH99s+qnYxpG
-         W5tg==
-X-Gm-Message-State: AOJu0YxC2/0oOY1+HXMpgtCJ2YoOVlg1u9QZavrpkbd39AcERJ9GFdwL
-	mjH6NHEBV1pQ2X9bs2da8Dv3ubMWKepQOA==
-X-Google-Smtp-Source: AGHT+IHjiqkhhkMX4zMRUaMP5pQJBc381IH+eBRoixqDzwpcb1iMaHxZ5eMj+j5BnpC8msTJWs9Xxw==
-X-Received: by 2002:a0c:e70d:0:b0:67f:c3da:f1db with SMTP id d13-20020a0ce70d000000b0067fc3daf1dbmr9540051qvn.93.1703807438659;
-        Thu, 28 Dec 2023 15:50:38 -0800 (PST)
-Received: from eagle.lan (24-246-30-234.cable.teksavvy.com. [24.246.30.234])
-        by smtp.gmail.com with ESMTPSA id mm7-20020a0562145e8700b00680608371adsm1597663qvb.18.2023.12.28.15.50.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Dec 2023 15:50:38 -0800 (PST)
-From: Ivor Wanders <ivor@iwanders.net>
-To: w_armin@gmx.de
-Cc: corbet@lwn.net,
-	hdegoede@redhat.com,
-	ivor@iwanders.net,
-	jdelvare@suse.com,
-	linux-doc@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux@roeck-us.net,
-	luzmaximilian@gmail.com,
-	markgross@kernel.org,
-	platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] hwmon: add fan speed monitoring driver for Surface devices
-Date: Thu, 28 Dec 2023 18:50:30 -0500
-Message-Id: <20231228235030.6526-1-ivor@iwanders.net>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <764c0645-674a-4a25-9bdb-2707e9532af7@gmx.de>
-References: <764c0645-674a-4a25-9bdb-2707e9532af7@gmx.de>
+        bh=96Hd5IFgkK/TcrBu0MMVF5Mj+dQO1oOnTc+wyle0UDM=;
+        b=o0i7LwmsgUAaJ3vTJ3ZYb7SVQeVUuuOJRzYgpXIDrBlxtk6JA8lCcj9g4olqqBWD1b
+         wn24R0PI+g+z1kHAeimrTqxPfo3J+1oVDF/AXne5Y45tDbymisiN+x/GNRf6S52xCC32
+         C9sX17q7wPevDbbkQe77rInByGfIBs6p7tRa05P/CYbKa4HFJV7UWNKW1sKgQFl8IQFn
+         RQLY8tZdYAey9ceJyxSpPm/xxD3i1XyTz+rk+z+n77kN+La2kY6D9WGQiKe5WH6iqSQe
+         gCR7MzGSqnsQQnOZEfDKm96lSYaYFtV6H4K9Jf16VWGqdnHEmB+9MjnXpEVrHUjyBQyI
+         vNsw==
+X-Gm-Message-State: AOJu0Yx7NM094T0jHviqNOAI+w2jZliG+FfpHvfuh+i/ophw1KFXD6Gr
+	gA9ZO6SwNr/9DQWENlck+G8=
+X-Google-Smtp-Source: AGHT+IGs2sPUXR2Yzv7R5GGm3bHf8UgL5eF4/tABd1NZieCdZ6DQh+uyjpH/MQ8fIqXw1gkeSnHZGg==
+X-Received: by 2002:adf:d1c8:0:b0:336:f20b:4b45 with SMTP id b8-20020adfd1c8000000b00336f20b4b45mr3829021wrd.40.1703889735597;
+        Fri, 29 Dec 2023 14:42:15 -0800 (PST)
+Received: from ?IPV6:2a02:8071:b783:140:927c:82ba:d32d:99c1? ([2a02:8071:b783:140:927c:82ba:d32d:99c1])
+        by smtp.gmail.com with ESMTPSA id o10-20020adfeaca000000b0033677a4e0d6sm20078775wrn.13.2023.12.29.14.42.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Dec 2023 14:42:15 -0800 (PST)
+Message-ID: <33a556e3-a7ac-47a3-a621-4db12dbac208@gmail.com>
+Date: Fri, 29 Dec 2023 23:42:12 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/2] platform/surface: aggregator_registry: add entry
+ for fan speed
+To: Ivor Wanders <ivor@iwanders.net>, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
+ Hans de Goede <hdegoede@redhat.com>, Mark Gross <markgross@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
+References: <20231228003444.5580-1-ivor@iwanders.net>
+ <20231228003444.5580-3-ivor@iwanders.net>
+Content-Language: en-US
+From: Maximilian Luz <luzmaximilian@gmail.com>
+In-Reply-To: <20231228003444.5580-3-ivor@iwanders.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Armin, thank you for your time and comments.
+On 12/28/23 01:34, Ivor Wanders wrote:
+> Add an entry for the fan speed function.
+> Add this new entry to the Surface Pro 9 group.
+> 
+> Signed-off-by: Ivor Wanders <ivor@iwanders.net>
+> Link: https://github.com/linux-surface/kernel/pull/144
+> ---
+> Changes in v2:
+>    - No changes in this patch.
+> ---
+>   drivers/platform/surface/surface_aggregator_registry.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/platform/surface/surface_aggregator_registry.c b/drivers/platform/surface/surface_aggregator_registry.c
+> index 530db4db7..b0db25886 100644
+> --- a/drivers/platform/surface/surface_aggregator_registry.c
+> +++ b/drivers/platform/surface/surface_aggregator_registry.c
+> @@ -74,6 +74,12 @@ static const struct software_node ssam_node_tmp_pprof = {
+>   	.parent = &ssam_node_root,
+>   };
+>   
+> +/* Fan speed function. */
+> +static const struct software_node ssam_node_fan_speed = {
+> +	.name = "ssam:01:05:01:01:01",
+> +	.parent = &ssam_node_root,
+> +};
 
-> You can drop those checks, the hwmon core.
-> Maybe you could use a more unique name for the hwmon chip, like "surface_fan".
-Sure, incorporated both suggestions.
+I would prefer if we could keep the subsystem prefix for node names. So
+something like `ssam_node_tmp_fan_speed`.
 
-> Please propagate the error from __ssam_fan_rpm_get().
-Done. Currently that function can only return -EIO and 0, but indeed best to
-propagate that in case more error codes are returned in the future.
+Otherwise, this looks good to me. With that changed:
 
-> What exactly is the purpose of calling ssam_device_set_drvdata() here?
-That line was necessary when this driver also hooked into the thermal subsystem.
-Integration with the thermal subsystem was removed in downstream iterations when
-I discovered we can't directly control the fan speed, see [1] for more info.
-I've removed this line, as it no longer serves any purpose here.
+Reviewed-by: Maximilian Luz <luzmaximilian@gmail.com>
 
-~Ivor
-
-[1]: https://github.com/linux-surface/kernel/pull/144#issuecomment-1853123261
+> +
+>   /* Tablet-mode switch via KIP subsystem. */
+>   static const struct software_node ssam_node_kip_tablet_switch = {
+>   	.name = "ssam:01:0e:01:00:01",
+> @@ -319,6 +325,7 @@ static const struct software_node *ssam_node_group_sp9[] = {
+>   	&ssam_node_bat_ac,
+>   	&ssam_node_bat_main,
+>   	&ssam_node_tmp_pprof,
+> +	&ssam_node_fan_speed,
+>   	&ssam_node_pos_tablet_switch,
+>   	&ssam_node_hid_kip_keyboard,
+>   	&ssam_node_hid_kip_penstash,
