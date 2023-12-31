@@ -1,68 +1,75 @@
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99605E556
-	for <linux-hwmon@vger.kernel.org>; Sat, 30 Dec 2023 22:46:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iwanders.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iwanders.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8236F8F57;
+	Sun, 31 Dec 2023 18:11:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=iwanders.net header.i=@iwanders.net header.b="WzJblL9s"
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-680a13af19bso7744366d6.0
-        for <linux-hwmon@vger.kernel.org>; Sat, 30 Dec 2023 14:46:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WXs9Dh37"
+Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-35fd9e40039so44558075ab.1;
+        Sun, 31 Dec 2023 10:11:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=iwanders.net; s=google; t=1703976393; x=1704581193; darn=vger.kernel.org;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=fZIH0cllwWP10xEZ7qclYaGxBZpXoISgRGheC+EsW2c=;
-        b=WzJblL9s5WcFHtPruCmD8VKuI5L4zDuOBb3kc/ERqm55ISpz8zQTa3u1SWB+5TcE8P
-         hM/6Fwey6xz7cOzWUax2Z+Bggizf+mmoUH+Qv/zQyFJEQ8boZDfRUMAAkPSy4k5zG+Bz
-         9QPnpgIVcq9X2B2hPyhRMYtMTSrYiIq2eUBfo=
+        d=gmail.com; s=20230601; t=1704046278; x=1704651078; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CkS6xSdSRoL4hgkn+yQprbg+2tW+1a/M1t+s2IfgWqs=;
+        b=WXs9Dh37WpnMCuamfhLlIrZlrCMkHiIs6nEHCDgXrkZON1BYWic3OIMs0MsytqHinH
+         9WZYPc6lTrYIYdYyu8U/gPcX0I/2T2tN5jjWhGqR6MpQr+wk3YG3zuiR4eR8Tq+wbxjw
+         klxbrAXCsxvHNIYkg9pDZ2VteE+8l5RSSNA0KJ/2k8nKkcXBf8ONMkIr1uX8n/RTB800
+         25ByYo60wzb2s0v4acEGsJCfYvZ850tfELcg8goy1D1R8KSIYC8zqGgKlW9/cyGdaWvr
+         auYzhceBUW9wgmoBpZ/8Uzs7vpNl0Juejh92hN5yUGnAk4vVUYTIFC7gWDeQUzMZjmRD
+         vAiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703976393; x=1704581193;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fZIH0cllwWP10xEZ7qclYaGxBZpXoISgRGheC+EsW2c=;
-        b=WkPXRIpLbZjhf7c6mLIgHS46iFOPb3YlvK2LekRgBY9dHuZvYfoNwTeQQo1x7fvD7Y
-         0FmA9WWygtWdsU/3IvtLqUYsYVd5YywipQ8Mo7jJY2/A+gM8JN/PAXwjIIC8v+5zdzNy
-         LM52IOgjPTplt5QXZhboiZGJOioUKCgmfM18tPPLsKibXfh0bmd+Ca39Fofa0MfGxBBh
-         KJrgViBH9mDDfqXde16lBCYSChT1IIIcMytaQsg/cuFjpRmnhDw886qVYpKy4mCqaeOa
-         NaShrX8bDUXm7uvER0HO/U49gXM0Dn4MeMAP5NzmajHIV0ScgO7rxAb8JN9MRlpecWGG
-         9XCQ==
-X-Gm-Message-State: AOJu0YzeyeDRxmTFa4Dy4qpSJpluld7qn05eVhusODm/irqWPfjTgr1+
-	sc9mfIGHhpa4RMe8bTAEabinUrq+TnXzCA==
-X-Google-Smtp-Source: AGHT+IHJ9upV4SW2nHDVn+pdfd0Dmw6j+xR3o3cnnfx5doXDlyLXLFSm+v3OsxVzMPdKpASOiFCHCg==
-X-Received: by 2002:a05:6214:1110:b0:680:1099:851f with SMTP id e16-20020a056214111000b006801099851fmr11210203qvs.83.1703976393569;
-        Sat, 30 Dec 2023 14:46:33 -0800 (PST)
-Received: from eagle.lan (24-246-30-234.cable.teksavvy.com. [24.246.30.234])
-        by smtp.gmail.com with ESMTPSA id da7-20020a05621408c700b0067f2c03d4adsm8136440qvb.100.2023.12.30.14.46.31
+        d=1e100.net; s=20230601; t=1704046278; x=1704651078;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CkS6xSdSRoL4hgkn+yQprbg+2tW+1a/M1t+s2IfgWqs=;
+        b=VHaiqstYtXc+6e+G3OsHAjwPgMQ7AW4tbrz4MkYE2uhxCQstGtcOHLkDyzwRJqnfx9
+         iEO/HgkEcvCLuEONASAqjIFGTJqOYQriPnZab2VMT5UO0OTNmPzVzlkjxVeIusMbTOkw
+         9gIpXkvVEZiXwfBRJ3n/wl0U3oAm7dvDDyDosXldMRaWlbONdfxC1M8P8UW2aCe3JhVf
+         GcngMPGG4oO8ZVy8YQWjTP/DyQuQZibm911yzTy7PZAuMlZ7rWrSu/iZ+uXlwSETrTrR
+         Ijo6IDBNYcwMpSVqAgGg+j9Spazuwu4XgSzudaoGGvR5pDequif2XCfymb2TEp51lcBv
+         tNGw==
+X-Gm-Message-State: AOJu0YzuQyI2we7trcN3qsl2gv6nZFwL68xFz932qUWkzsJt6VccMzgy
+	9RffKlc7u3YqP4Myweh12y5ry0GjcNo=
+X-Google-Smtp-Source: AGHT+IHSqh/K8sz5+BHmZsyiUJDnFyUKt786+fVsFRZCRQhpZNw1JJJIN3unbvfQ0zgJOHftDGm7Lw==
+X-Received: by 2002:a05:6e02:32c5:b0:35f:ff56:c0fd with SMTP id bl5-20020a056e0232c500b0035fff56c0fdmr21977604ilb.14.1704046278522;
+        Sun, 31 Dec 2023 10:11:18 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m24-20020a170902bb9800b001d4898862cesm6971868pls.211.2023.12.31.10.11.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Dec 2023 14:46:33 -0800 (PST)
-From: Ivor Wanders <ivor@iwanders.net>
-To: luzmaximilian@gmail.com
-Cc: corbet@lwn.net,
-	hdegoede@redhat.com,
-	ivor@iwanders.net,
-	jdelvare@suse.com,
-	linux-doc@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux@roeck-us.net,
-	markgross@kernel.org,
-	platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] hwmon: add fan speed monitoring driver for Surface devices
-Date: Sat, 30 Dec 2023 17:46:30 -0500
-Message-Id: <20231230224630.12618-1-ivor@iwanders.net>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <f564b1b4-d8d1-4809-9cc0-b01aa53570a0@gmail.com>
-References: <f564b1b4-d8d1-4809-9cc0-b01aa53570a0@gmail.com>
+        Sun, 31 Dec 2023 10:11:17 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Sun, 31 Dec 2023 10:11:16 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: Jean Delvare <jdelvare@suse.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (lm75) remove now-unused include
+Message-ID: <e0aa8b5a-166f-4932-b84c-f3e901e01aca@roeck-us.net>
+References: <20231228-hwmon-cleanup-include-v1-1-e36f65aee1f0@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231228-hwmon-cleanup-include-v1-1-e36f65aee1f0@bootlin.com>
 
-> As far as I can see, linux/platform_device.h is not needed.
+On Thu, Dec 28, 2023 at 05:27:16PM +0100, Luca Ceresoli wrote:
+> Including hwmon-sysfs.h is not needed since sysfs code got removed from
+> this file in commit 08b024338166 ("hwmon: (lm75) Convert to use new hwmon
+> registration API").
+> 
+> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 
-Correct, it's no longer necessary, I've removed it, thanks!
+Applied.
 
-~Ivor
+Thanks,
+Guenter
