@@ -1,228 +1,321 @@
-Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 688FAF9C4;
-	Sun, 31 Dec 2023 18:32:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA43CD527
+	for <linux-hwmon@vger.kernel.org>; Mon,  1 Jan 2024 18:51:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iMTrr+Ib"
-Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-35fb39c9dcaso40311485ab.2;
-        Sun, 31 Dec 2023 10:32:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704047577; x=1704652377; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JPxDhV2DoSEaju0MY7mnRtbVT0XkCMWBP3dJFYBm6x8=;
-        b=iMTrr+IbNhIo6xWUfisMHm96gx6lkhFluKVusHLncsPBbvR4Km+rleJNs0wrlhxcFP
-         Qr0UXM/IBafCuuuKZeFPfeNa3QVSqSTHI3zQSMx79rbs5aF0cGfNzZCIxSr8B8bRtiFr
-         PUC/Ithgy7JdVfdCv2KX02mSvRFL0lebm/wEMYQfWMeQkqncHiZ3HQ3NJdt7K4WI0X6l
-         66gNtQBpsRwbhReZDELgUTByyaGi2XpCqkidQiI9qTpqsh8Bip4+Fcqh674c4+FFa802
-         owIQrUzhaXZrKzA0OySNyn2l3RLBOMunAUg5g9YkSbfOc8KXb7l4yOUW9n1nqDZOeiZL
-         p+zQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704047577; x=1704652377;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JPxDhV2DoSEaju0MY7mnRtbVT0XkCMWBP3dJFYBm6x8=;
-        b=JEpb8JYnIcU23WBXl+YwrTUmhLaAEfk1GatXBZH8M3Nv8ekybUJq5mEs9+BflozIkw
-         ouJnvRvWisgt3zMVYMK0oNAzmrBn6cfNGbUUWmTFRdova7Q9IGSH/YtO28aXAJZlqR/E
-         kc02mLmnfX1FN8yhsWGWAeqbSXCgYTACeJSiCItvZ0VIx6ZIUBT9C5HsNPYqmL8AOPHB
-         SjO3zTsJFl80FI3Wce9TsI73ojn38r2OkhgPmjXUt/WHJJuOi9emmFKOzJJ3akBaq6gf
-         UFDsC+pX0gyG6zVdOKF4KFFsYhYn2S5N28naIuDy1t3Fds0KfwOE5JSJ32kMnzZpEiJO
-         AVzA==
-X-Gm-Message-State: AOJu0Yz6DhRmE5OMzEipcj6cKZ0IXN93nTjdLdS3/0mF5MSf2b9g9baJ
-	qqv7aCzEILovq5DXKM8j09A=
-X-Google-Smtp-Source: AGHT+IHLkpzy9hlz0hmq8tE4by5tSjoSu5tF+z6yRAUTuN679aGgua/VuYNLhwirFxAJ9y7gTnbpsg==
-X-Received: by 2002:a05:6e02:16cf:b0:35f:f01e:bb2d with SMTP id 15-20020a056e0216cf00b0035ff01ebb2dmr24139543ilx.26.1704047577323;
-        Sun, 31 Dec 2023 10:32:57 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id iz2-20020a170902ef8200b001d49c061804sm4766204plb.202.2023.12.31.10.32.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 Dec 2023 10:32:56 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 31 Dec 2023 10:32:56 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Stefan Gloor <code@stefan-gloor.ch>
-Cc: jdelvare@suse.com, corbet@lwn.net, linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/1] hwmon: (sht3x) read out sensor serial number
-Message-ID: <4389cd48-5d61-49bc-8cb5-b337afe40c23@roeck-us.net>
-References: <20231227190036.20725-1-code@stefan-gloor.ch>
- <20231227190036.20725-2-code@stefan-gloor.ch>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bD5ndq4T"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1704135087; x=1735671087;
+  h=date:from:to:cc:subject:message-id;
+  bh=uhjgmZaKILJUXQMUfFiJjGgJr2yXl3VeuGFL0IQOyUA=;
+  b=bD5ndq4TfAr82gbso/6BYKDWkmwpk1ti48LyOKIxSVr2yly2dzvlLDJI
+   j2UupdENx5BL78Q/Ym+k45rB2n4251R4zLmFuq8ZloFuS9L9cSTjSmEVh
+   vDbDjkekWNRd42eVFPDNCKAAyxMc950eV7WAy8Ag+24HXoMUQeTTO83ex
+   NvRUcm/Q22eLgbDcW7s6RklQpFqQQCn/zupMyI892/jLzyS29qCPFnyAK
+   qjppbebZoN9MHv0cGOorjP7xpMMMjgnIfH3OvDhUpKrBMWhFlTnoSPlPC
+   ppQIOxlJSeJguKSazRl46Wiyk0cyFLnkrBNt4FGxVhb2RAY2hK5gKAeBu
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10940"; a="399580566"
+X-IronPort-AV: E=Sophos;i="6.04,322,1695711600"; 
+   d="scan'208";a="399580566"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jan 2024 10:51:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10940"; a="870041045"
+X-IronPort-AV: E=Sophos;i="6.04,322,1695711600"; 
+   d="scan'208";a="870041045"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 01 Jan 2024 10:51:25 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rKNNj-000KTh-17;
+	Mon, 01 Jan 2024 18:51:23 +0000
+Date: Tue, 02 Jan 2024 02:50:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 887599b9201a3c37d4575a8f04f581bbe79221ca
+Message-ID: <202401020244.dIsesnYg-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231227190036.20725-2-code@stefan-gloor.ch>
 
-On Wed, Dec 27, 2023 at 08:00:36PM +0100, Stefan Gloor wrote:
-> The temperature/humidity sensors of the STS3x/SHT3x family are
-> calibrated and factory-programmed with a unique serial number.
-> For some sensors, this serial number can be used to obtain a calibration
-> certificate via an API provided by the manufacturer (Sensirion).
-> Expose the serial number via debugfs.
-> 
-> Tested with: 2x STS31, 1x STS32, 1x SHT31
-> 
-> Signed-off-by: Stefan Gloor <code@stefan-gloor.ch>
-> ---
->  Documentation/hwmon/sht3x.rst | 11 +++++++
->  drivers/hwmon/sht3x.c         | 56 ++++++++++++++++++++++++++++++++++-
->  2 files changed, 66 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/hwmon/sht3x.rst b/Documentation/hwmon/sht3x.rst
-> index 957c854f5d08..9585fa7c5a5d 100644
-> --- a/Documentation/hwmon/sht3x.rst
-> +++ b/Documentation/hwmon/sht3x.rst
-> @@ -65,6 +65,10 @@ When the temperature and humidity readings move back between the hysteresis
->  values, the alert bit is set to 0 and the alert pin on the sensor is set to
->  low.
->  
-> +The serial number exposed to debugfs allows for unique identification of the
-> +sensors. For sts32, sts33 and sht33, the manufacturer provides calibration
-> +certificates through an API.
-> +
->  sysfs-Interface
->  ---------------
->  
-> @@ -99,3 +103,10 @@ repeatability:      write or read repeatability, higher repeatability means
->                          - 1: medium repeatability
->                          - 2: high repeatability
->  =================== ============================================================
-> +
-> +debugfs-Interface
-> +-----------------
-> +
-> +=================== ============================================================
-> +serial_number:      unique serial number of the sensor in decimal
-> +=================== ============================================================
-> diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
-> index 79657910b79e..e016e0d9a6c4 100644
-> --- a/drivers/hwmon/sht3x.c
-> +++ b/drivers/hwmon/sht3x.c
-> @@ -10,6 +10,7 @@
->  
->  #include <asm/page.h>
->  #include <linux/crc8.h>
-> +#include <linux/debugfs.h>
->  #include <linux/delay.h>
->  #include <linux/err.h>
->  #include <linux/hwmon.h>
-> @@ -41,6 +42,9 @@ static const unsigned char sht3x_cmd_heater_off[]              = { 0x30, 0x66 };
->  /* other commands */
->  static const unsigned char sht3x_cmd_read_status_reg[]         = { 0xf3, 0x2d };
->  static const unsigned char sht3x_cmd_clear_status_reg[]        = { 0x30, 0x41 };
-> +static const unsigned char sht3x_cmd_read_serial_number[]      = { 0x37, 0x80 };
-> +
-> +static struct dentry *debugfs;
->  
->  /* delays for single-shot mode i2c commands, both in us */
->  #define SHT3X_SINGLE_WAIT_TIME_HPM  15000
-> @@ -169,6 +173,7 @@ struct sht3x_data {
->  	u32 wait_time;			/* in us*/
->  	unsigned long last_update;	/* last update in periodic mode*/
->  	enum sht3x_repeatability repeatability;
-> +	u32 serial_number;
->  
->  	/*
->  	 * cached values for temperature and humidity and limits
-> @@ -831,6 +836,36 @@ static int sht3x_write(struct device *dev, enum hwmon_sensor_types type,
->  	}
->  }
->  
-> +static void sht3x_debugfs_init(struct sht3x_data *data)
-> +{
-> +	char name[32];
-> +	struct dentry *sensor_dir;
-> +
-> +	snprintf(name, sizeof(name), "i2c%u-%02x",
-> +		 data->client->adapter->nr, data->client->addr);
-> +	sensor_dir = debugfs_create_dir(name, debugfs);
-> +	debugfs_create_u32("serial_number", 0444,
-> +			   sensor_dir, &data->serial_number);
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 887599b9201a3c37d4575a8f04f581bbe79221ca  hwmon: (lm75) Add AMS AS6200 temperature sensor
 
-This creates i2c<bus>-<address>/serial_number when the device is instantiated.
-That debugfs entry is not removed when the device is removed, only when the
-driver is unloaded. This means that de-instantiating the device will leave
-stray debugfs directories and files behind until the driver is unloaded.
+Warning ids grouped by kconfigs:
 
-We had this before, and I understand that you claimed that this doesn't happen.
-To get me to believe you, you'll have to provide a log of
+gcc_recent_errors
+|-- csky-randconfig-r113-20240101
+|   `-- drivers-hwmon-max31827.c:sparse:sparse:dubious:x-y
+|-- microblaze-randconfig-r052-20240101
+|   `-- drivers-hwmon-pc87360.c:WARNING-opportunity-for-min()
+|-- microblaze-randconfig-r123-20240101
+|   `-- drivers-hwmon-max31827.c:sparse:sparse:dubious:x-y
+|-- nios2-randconfig-r061-20240101
+|   `-- drivers-hwmon-pc87360.c:WARNING-opportunity-for-min()
+|-- sparc-randconfig-r051-20240101
+|   `-- drivers-hwmon-pc87360.c:WARNING-opportunity-for-min()
+|-- sparc64-randconfig-r064-20240101
+|   `-- drivers-hwmon-pc87360.c:WARNING-opportunity-for-min()
+|-- sparc64-randconfig-r132-20240101
+|   `-- drivers-hwmon-max31827.c:sparse:sparse:dubious:x-y
+|-- x86_64-randconfig-122-20240101
+|   `-- drivers-hwmon-max31827.c:sparse:sparse:dubious:x-y
+|-- x86_64-randconfig-123-20240101
+|   `-- drivers-hwmon-max31827.c:sparse:sparse:dubious:x-y
+`-- xtensa-randconfig-r054-20240101
+    `-- drivers-hwmon-pc87360.c:WARNING-opportunity-for-min()
+clang_recent_errors
+|-- hexagon-randconfig-r122-20240101
+|   `-- drivers-hwmon-max31827.c:sparse:sparse:dubious:x-y
+|-- i386-randconfig-053-20240101
+|   `-- drivers-hwmon-pc87360.c:WARNING-opportunity-for-min()
+|-- i386-randconfig-062-20240101
+|   `-- drivers-hwmon-max31827.c:sparse:sparse:dubious:x-y
+|-- i386-randconfig-063-20240101
+|   `-- drivers-hwmon-max31827.c:sparse:sparse:dubious:x-y
+|-- mips-randconfig-r133-20240101
+|   `-- drivers-hwmon-max31827.c:sparse:sparse:dubious:x-y
+|-- powerpc-randconfig-r121-20240101
+|   `-- drivers-hwmon-max31827.c:sparse:sparse:dubious:x-y
+|-- powerpc64-randconfig-r111-20240101
+|   `-- drivers-hwmon-max31827.c:sparse:sparse:dubious:x-y
+|-- riscv-randconfig-r053-20240101
+|   `-- drivers-hwmon-pc87360.c:WARNING-opportunity-for-min()
+|-- x86_64-randconfig-102-20240101
+|   `-- drivers-hwmon-pc87360.c:WARNING-opportunity-for-min()
+|-- x86_64-randconfig-103-20240101
+|   `-- drivers-hwmon-pc87360.c:WARNING-opportunity-for-min()
+|-- x86_64-randconfig-104-20240101
+|   `-- drivers-hwmon-pc87360.c:WARNING-opportunity-for-min()
+`-- x86_64-randconfig-r112-20240101
+    `-- drivers-hwmon-max31827.c:sparse:sparse:dubious:x-y
 
-- instantiating the driver 
-- Showing the debufs tree
-- de-instantiating the driver
-- Showing the debugfs tree
+elapsed time: 1451m
 
-... but even then I'll want to be able to test it myself. Not sure if I
-have an eval board, but either case that will take some time. Frankly,
-I don't understand why you refuse to remove
-i2c<bus>-<address>/serial_number on device removal.
+configs tested: 206
+configs skipped: 3
 
-Guenter
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> +}
-> +
-> +static int sht3x_serial_number_read(struct sht3x_data *data)
-> +{
-> +	int ret;
-> +	char buffer[SHT3X_RESPONSE_LENGTH];
-> +	struct i2c_client *client = data->client;
-> +
-> +	ret = sht3x_read_from_command(client, data,
-> +				      sht3x_cmd_read_serial_number,
-> +				      buffer,
-> +				      SHT3X_RESPONSE_LENGTH, 0);
-> +	if (ret)
-> +		return ret;
-> +
-> +	data->serial_number = (buffer[0] << 24) | (buffer[1] << 16) |
-> +			      (buffer[3] << 8) | buffer[4];
-> +	return ret;
-> +}
-> +
->  static const struct hwmon_ops sht3x_ops = {
->  	.is_visible = sht3x_is_visible,
->  	.read = sht3x_read,
-> @@ -899,6 +934,13 @@ static int sht3x_probe(struct i2c_client *client)
->  	if (ret)
->  		return ret;
->  
-> +	ret = sht3x_serial_number_read(data);
-> +	if (ret) {
-> +		dev_dbg(dev, "unable to read serial number\n");
-> +	} else {
-> +		sht3x_debugfs_init(data);
-> +	}
-> +
->  	hwmon_dev = devm_hwmon_device_register_with_info(dev,
->  							 client->name,
->  							 data,
-> @@ -917,7 +959,19 @@ static struct i2c_driver sht3x_i2c_driver = {
->  	.id_table    = sht3x_ids,
->  };
->  
-> -module_i2c_driver(sht3x_i2c_driver);
-> +static int __init sht3x_init(void)
-> +{
-> +	debugfs = debugfs_create_dir("sht3x", NULL);
-> +	return i2c_add_driver(&sht3x_i2c_driver);
-> +}
-> +module_init(sht3x_init);
-> +
-> +static void __exit sht3x_cleanup(void)
-> +{
-> +	debugfs_remove_recursive(debugfs);
-> +	i2c_del_driver(&sht3x_i2c_driver);
-> +}
-> +module_exit(sht3x_cleanup);
->  
->  MODULE_AUTHOR("David Frey <david.frey@sensirion.com>");
->  MODULE_AUTHOR("Pascal Sachs <pascal.sachs@sensirion.com>");
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20240101   gcc  
+arc                   randconfig-002-20240101   gcc  
+arc                           tb10x_defconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   clang
+arm                        keystone_defconfig   gcc  
+arm                            mps2_defconfig   gcc  
+arm                           omap1_defconfig   clang
+arm                       omap2plus_defconfig   gcc  
+arm                         orion5x_defconfig   clang
+arm                             pxa_defconfig   gcc  
+arm                   randconfig-001-20240101   clang
+arm                   randconfig-002-20240101   clang
+arm                   randconfig-003-20240101   clang
+arm                   randconfig-004-20240101   clang
+arm                        spear6xx_defconfig   gcc  
+arm                           sunxi_defconfig   gcc  
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20240101   clang
+arm64                 randconfig-002-20240101   clang
+arm64                 randconfig-003-20240101   clang
+arm64                 randconfig-004-20240101   clang
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20240101   gcc  
+csky                  randconfig-002-20240101   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+hexagon               randconfig-001-20240101   clang
+hexagon               randconfig-002-20240101   clang
+i386                             allmodconfig   clang
+i386                              allnoconfig   clang
+i386                             allyesconfig   clang
+i386         buildonly-randconfig-001-20240101   clang
+i386         buildonly-randconfig-002-20240101   clang
+i386         buildonly-randconfig-003-20240101   clang
+i386         buildonly-randconfig-004-20240101   clang
+i386         buildonly-randconfig-005-20240101   clang
+i386         buildonly-randconfig-006-20240101   clang
+i386                                defconfig   gcc  
+i386                  randconfig-001-20240101   clang
+i386                  randconfig-002-20240101   clang
+i386                  randconfig-003-20240101   clang
+i386                  randconfig-004-20240101   clang
+i386                  randconfig-005-20240101   clang
+i386                  randconfig-006-20240101   clang
+i386                  randconfig-011-20240101   gcc  
+i386                  randconfig-012-20240101   gcc  
+i386                  randconfig-013-20240101   gcc  
+i386                  randconfig-014-20240101   gcc  
+i386                  randconfig-015-20240101   gcc  
+i386                  randconfig-016-20240101   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                        allyesconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch                 loongson3_defconfig   gcc  
+loongarch             randconfig-001-20240101   gcc  
+loongarch             randconfig-002-20240101   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                          hp300_defconfig   gcc  
+m68k                        mvme147_defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                              allnoconfig   clang
+mips                             allyesconfig   gcc  
+mips                            gpr_defconfig   gcc  
+mips                     loongson1b_defconfig   gcc  
+mips                    maltaup_xpa_defconfig   gcc  
+mips                       rbtx49xx_defconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20240101   gcc  
+nios2                 randconfig-002-20240101   gcc  
+openrisc                         allmodconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                randconfig-001-20240101   gcc  
+parisc                randconfig-002-20240101   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   clang
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc                       eiger_defconfig   gcc  
+powerpc                    klondike_defconfig   gcc  
+powerpc                     ksi8560_defconfig   gcc  
+powerpc                      makalu_defconfig   gcc  
+powerpc                 mpc8313_rdb_defconfig   clang
+powerpc                      pasemi_defconfig   gcc  
+powerpc               randconfig-001-20240101   clang
+powerpc               randconfig-002-20240101   clang
+powerpc               randconfig-003-20240101   clang
+powerpc                     sequoia_defconfig   gcc  
+powerpc                    socrates_defconfig   gcc  
+powerpc                  storcenter_defconfig   gcc  
+powerpc                     stx_gp3_defconfig   gcc  
+powerpc                     tqm5200_defconfig   clang
+powerpc                      walnut_defconfig   clang
+powerpc                 xes_mpc85xx_defconfig   gcc  
+powerpc64             randconfig-001-20240101   clang
+powerpc64             randconfig-002-20240101   clang
+powerpc64             randconfig-003-20240101   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   clang
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                 randconfig-001-20240101   clang
+riscv                 randconfig-002-20240101   clang
+riscv                          rv32_defconfig   clang
+s390                             allmodconfig   gcc  
+s390                              allnoconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                  randconfig-001-20240101   gcc  
+s390                  randconfig-002-20240101   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                ecovec24-romimage_defconfig   gcc  
+sh                        edosk7705_defconfig   gcc  
+sh                            hp6xx_defconfig   gcc  
+sh                    randconfig-001-20240101   gcc  
+sh                    randconfig-002-20240101   gcc  
+sh                          sdk7780_defconfig   gcc  
+sh                           se7751_defconfig   gcc  
+sh                   sh7724_generic_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64               randconfig-001-20240101   gcc  
+sparc64               randconfig-002-20240101   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                    randconfig-001-20240101   clang
+um                    randconfig-002-20240101   clang
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   clang
+x86_64       buildonly-randconfig-001-20240101   clang
+x86_64       buildonly-randconfig-002-20240101   clang
+x86_64       buildonly-randconfig-003-20240101   clang
+x86_64       buildonly-randconfig-004-20240101   clang
+x86_64       buildonly-randconfig-005-20240101   clang
+x86_64       buildonly-randconfig-006-20240101   clang
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                randconfig-001-20240101   gcc  
+x86_64                randconfig-002-20240101   gcc  
+x86_64                randconfig-003-20240101   gcc  
+x86_64                randconfig-004-20240101   gcc  
+x86_64                randconfig-005-20240101   gcc  
+x86_64                randconfig-006-20240101   gcc  
+x86_64                randconfig-011-20240101   clang
+x86_64                randconfig-012-20240101   clang
+x86_64                randconfig-013-20240101   clang
+x86_64                randconfig-014-20240101   clang
+x86_64                randconfig-015-20240101   clang
+x86_64                randconfig-016-20240101   clang
+x86_64                randconfig-071-20240101   clang
+x86_64                randconfig-072-20240101   clang
+x86_64                randconfig-073-20240101   clang
+x86_64                randconfig-074-20240101   clang
+x86_64                randconfig-075-20240101   clang
+x86_64                randconfig-076-20240101   clang
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                            allnoconfig   gcc  
+xtensa                           allyesconfig   gcc  
+xtensa                generic_kc705_defconfig   gcc  
+xtensa                randconfig-001-20240101   gcc  
+xtensa                randconfig-002-20240101   gcc  
+xtensa                         virt_defconfig   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
