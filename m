@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09542367;
-	Thu,  4 Jan 2024 00:15:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 501B836C;
+	Thu,  4 Jan 2024 00:21:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h/OhUouo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DD01C433C7;
-	Thu,  4 Jan 2024 00:15:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BfyobkcQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B222AC433C7;
+	Thu,  4 Jan 2024 00:21:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704327354;
-	bh=PQSQaWGIFy6CX+nXdrF2dhNFv4Stmlq/cXbCvLt/kS4=;
+	s=k20201202; t=1704327666;
+	bh=s7/tvKYtmRpQ4RGIkj3jplCs9SRygwYMY7woM5z1S2I=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=h/OhUouodemCO7MsPxXjy50JIFcBMMH1YcKMwZlznv/nNyLDcE3oWzDSFjGRv4cUi
-	 F0egIAh9maLR7HScfZipVxtc7xFow7YZA2DthHBHST0bFiWPPblLE15j5Gzlzh1eR9
-	 oZLd2dybgKlrlzb4Zs1S8/nNyi2+6x3GkiQHXtswxUUeMl2Qp0Ocv8eKlwWCncp+FM
-	 YCaa5IWeKk6/DLKo2IQ1vV0PuBD/2+uVhPJNbsz8gaI8yAyV6VV5CvY33ty0IVVsOQ
-	 nO8IVla5Ui6kdIdRlRvLPfr5ZOt/Izyr662dpdTWAnyHhFVU4Zscx1CnGv8vmFkcZo
-	 mb6o//1s3QuHA==
-Received: (nullmailer pid 2128936 invoked by uid 1000);
-	Thu, 04 Jan 2024 00:15:52 -0000
-Date: Wed, 3 Jan 2024 17:15:52 -0700
+	b=BfyobkcQk5LjTWm9KJaE0omEY1pm2n3wQPSSwQOd/xr8E6dqkT9+u3lXET6/7irZf
+	 I0813MoZr/FGZ9q2sD0yyuhsIdBxxIJR5Rph4EfRQSJ2tiyR3oAdMtMLAkznQG2+Yi
+	 Ft/F7C6FiCbSBi6aVke+IdWu8FrvEhLVwkdRdqG7gVQ5eDRcDlgW5huIlMO6HyRjnI
+	 AF5MO3O0aRSsRDR8igy1DJglmFVAjXS0jZEwrLMd5bZLOuuOsIm1vfUxueIwuPYvUS
+	 67wRNA8AeojLBsFW2L1Wb9B1/lJjPqTc/NltRTFZNSP7b6m/PLgLxD1osTV8zhnieo
+	 Gip9FH4wCIdAQ==
+Received: (nullmailer pid 2195519 invoked by uid 1000);
+	Thu, 04 Jan 2024 00:21:03 -0000
+Date: Wed, 3 Jan 2024 17:21:03 -0700
 From: Rob Herring <robh@kernel.org>
 To: baneric926@gmail.com
-Cc: jdelvare@suse.com, linux@roeck-us.net, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, corbet@lwn.net, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, openbmc@lists.ozlabs.org, kwliu@nuvoton.com, kcfeng0@nuvoton.com, DELPHINE_CHIU@wiwynn.com, Bonnie_Lo@wiwynn.com, naresh.solanki@9elements.com, billy_tsai@aspeedtech.com
-Subject: Re: [PATCH v3 1/3] dt-bindings: hwmon: fan: Add fan binding to schema
-Message-ID: <20240104001552.GA2096243-robh@kernel.org>
+Cc: conor+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, Bonnie_Lo@wiwynn.com, robh+dt@kernel.org, naresh.solanki@9elements.com, billy_tsai@aspeedtech.com, corbet@lwn.net, jdelvare@suse.com, linux-hwmon@vger.kernel.org, openbmc@lists.ozlabs.org, linux@roeck-us.net, linux-doc@vger.kernel.org, kwliu@nuvoton.com, kcfeng0@nuvoton.com, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, DELPHINE_CHIU@wiwynn.com
+Subject: Re: [PATCH v3 2/3] dt-bindings: hwmon: Add NCT7363Y documentation
+Message-ID: <170432766278.2195265.1869197055341324861.robh@kernel.org>
 References: <20231222013352.3873689-1-kcfeng0@nuvoton.com>
- <20231222013352.3873689-2-kcfeng0@nuvoton.com>
+ <20231222013352.3873689-3-kcfeng0@nuvoton.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -35,32 +35,21 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231222013352.3873689-2-kcfeng0@nuvoton.com>
+In-Reply-To: <20231222013352.3873689-3-kcfeng0@nuvoton.com>
 
-On Fri, Dec 22, 2023 at 09:33:50AM +0800, baneric926@gmail.com wrote:
-> From: Naresh Solanki <naresh.solanki@9elements.com>
+
+On Fri, 22 Dec 2023 09:33:51 +0800, baneric926@gmail.com wrote:
+> From: Ban Feng <kcfeng0@nuvoton.com>
 > 
-> Add common fan properties bindings to a schema.
+> Adding bindings for the Nuvoton NCT7363Y Fan Controller
 > 
-> Bindings for fan controllers can reference the common schema for the
-> fan
-> 
-> child nodes:
-> 
->   patternProperties:
->     "^fan@[0-2]":
->       type: object
->       $ref: fan-common.yaml#
->       unevaluatedProperties: false
-> 
-> Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
-> Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
 > Signed-off-by: Ban Feng <kcfeng0@nuvoton.com>
 > ---
->  .../devicetree/bindings/hwmon/fan-common.yaml | 76 +++++++++++++++++++
->  1 file changed, 76 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/fan-common.yaml
+>  .../bindings/hwmon/nuvoton,nct7363.yaml       | 63 +++++++++++++++++++
+>  MAINTAINERS                                   |  6 ++
+>  2 files changed, 69 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/nuvoton,nct7363.yaml
+> 
 
-Please implement my comments on v10.
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-Rob
