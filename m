@@ -1,103 +1,74 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04EBC46459
-	for <linux-hwmon@vger.kernel.org>; Mon,  8 Jan 2024 15:34:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D5C353E2A;
+	Mon,  8 Jan 2024 17:01:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LxxNTYsE"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-5ce10b5ee01so1197210a12.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 08 Jan 2024 07:34:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704728069; x=1705332869; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=agGIE3P0U9KqFwsAOiklp2qw1a2sHrZPfdbbKMZIBfw=;
-        b=LxxNTYsEfrA/IJQqNoDcYGWWzzvBJA8UoGe2R4WESXhdT07fgXc8nD2Qnp79O5LdXY
-         Bwhi7wCJIgODmLperdiuaellZY/E8F1vrZxJC3uvf/Wqfxc9oa3UqT/kytf2NMwKhd4n
-         KaWOpY3+bjQBhr5BHlblSmxADR3MhKAzGBSCBtfq+BRRQhnz5gZufcmfwhgC7I6MtK6P
-         V6QYPTOTfedBlAUDeqCXl4vtnUDKmrj6krFamXFH8aW52f1f7bo+Ik05/0dLKHY6UxC8
-         sOxiu83rU6PPlrXevnz9ZlS4VWg2nAdn5iDP7DKfDekqHEOJmb13aAaw23l8iowWY2NU
-         mR1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704728069; x=1705332869;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=agGIE3P0U9KqFwsAOiklp2qw1a2sHrZPfdbbKMZIBfw=;
-        b=a0cgb8gVujREVE5678o2Zy2o8vrq3LikctJ9sw+pIi0fQIOuPxizPYqPlYxGut/wcx
-         qBjOoaCGur5d2Jn1S9rRliClmM99STyfY7uQcch+Cx7RqKSbo3QXQRAzFPtka44Zw88I
-         /QnT20Sj843Do2LMxn+7Lu/ZB1pQUx+P4gdbFvgh3V0JNmDSSJ2iqCEM6hOcPoX5CDYC
-         x5cTh/U9fClh7J4lrcsmj3NDTK/oAnS70TEvZZeWRzGalCN1ytyYNdiIeBHSmN+Jsa7z
-         tYJOKcSa8IKt4YpCl9Aa+kOqie7LX5Vi+ntc1W+xRP0M+npnahmMT2FaDgpq26KylGAP
-         eW+Q==
-X-Gm-Message-State: AOJu0YwZHWEK2uBw4TH5WJ2Gw/lDCL7uLtAGEh/1NpmbFYYXcdkxsTS9
-	cIix56uQ2WROqX19fjSxrWA=
-X-Google-Smtp-Source: AGHT+IGrPaEJxqZsCGARIaVsQ3USfuFJrZJBo+X/NnpR408IXQyAfVRbH+B8BwIrNM4DoTrX20W8Xw==
-X-Received: by 2002:a05:6a20:104c:b0:199:8837:1a35 with SMTP id gt12-20020a056a20104c00b0019988371a35mr3307758pzc.37.1704728069152;
-        Mon, 08 Jan 2024 07:34:29 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id fa38-20020a056a002d2600b006d0a29ad0aasm13545pfb.5.2024.01.08.07.34.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jan 2024 07:34:28 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 8 Jan 2024 07:34:27 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Seiji Nishikawa <snishika@redhat.com>
-Cc: pali@kernel.org, jdelvare@suse.com, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (dell-smm) Also add Dell Precision 7540 to fan
- control whitelist
-Message-ID: <3f0d7398-401e-4e7d-9f48-0a6bc0034c28@roeck-us.net>
-References: <20231223073658.354773-1-snishika@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i5KcmNz2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEF68C433C9;
+	Mon,  8 Jan 2024 17:01:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704733276;
+	bh=v2/TiwSdHE2DinFIJYw+TSu7bM/JscJjrxVzVNK8vfE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=i5KcmNz2ENOnpeTzk/m22X5gOXVhvAWDjNQM+0UYi5EgPCenTbEq0e0iuF1V8y2fs
+	 rEwMPjk3uDtpIMVoxnn2AZm5rNblf3HZeKC8GpbLJsYP5yr+KY+FBM09MrJ/NAtfd/
+	 yAXKV83twJ3nPpudg8zU7SLglFwwqfBpnPmzv32d3MUtwRKt8sJXTKkZclPylLkLi7
+	 Sp2Z7Q3PZA4ywn+4vQcoBDUkrWsI6mXnut1dsFKejk/oNDjXL/mp6nOnSXMNVwJ5VT
+	 4A52FD7+7BQ2zEGZkIPdKmMGt7ZrMTp22F7mM3A2aOcHGjKkxQyl7sk5lxg9DNz3MC
+	 nEF2yJm0V7D8w==
+Date: Mon, 8 Jan 2024 17:01:11 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Michal Simek <michal.simek@amd.com>
+Cc: linux-kernel@vger.kernel.org, monstr@monstr.eu, michal.simek@xilinx.com,
+	git@xilinx.com, Conor Dooley <conor+dt@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
+	"open list:INA209 HARDWARE MONITOR DRIVER" <linux-hwmon@vger.kernel.org>
+Subject: Re: [PATCH] dt-bindings: hwmon: ina2xx: Describe ina260 chip
+Message-ID: <20240108-generous-expediter-1f4ed78077d8@spud>
+References: <4c82dc4d412e91d1601c1da5bca1cdf1a91cd9b8.1704724242.git.michal.simek@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="65zwX83nMVPDOCON"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20231223073658.354773-1-snishika@redhat.com>
+In-Reply-To: <4c82dc4d412e91d1601c1da5bca1cdf1a91cd9b8.1704724242.git.michal.simek@amd.com>
 
-On Sat, Dec 23, 2023 at 04:36:58PM +0900, Seiji Nishikawa wrote:
-> This patch, in addition to 95d88d054ad9 that added Dell Precision 7510 to fan
-> control whitelist, also adds Precision 7540 to the whitelist, which allows manual
 
-Use imperative mood to describe your patch.
+--65zwX83nMVPDOCON
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> PWM control on Dell Precision 7540. It has been confirmed that the same SMM
-> commands work to enable/disable manual PWM control on Dell Precision 7540.
-> Acked-by: Pali Rohár <pali@kernel.org>
-> ---
->  drivers/hwmon/dell-smm-hwmon.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> index 44aaf9b9191d..f946257f72c6 100644
-> --- a/drivers/hwmon/dell-smm-hwmon.c
-> +++ b/drivers/hwmon/dell-smm-hwmon.c
-> @@ -1330,6 +1330,14 @@ static const struct dmi_system_id i8k_whitelist_fan_control[] __initconst = {
->  		},
->  		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
->  	},
-> +        {
-> +                .ident = "Dell Precision 7540",
-> +                .matches = {
-> +                        DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> +                        DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Precision 7540"),
-> +                },
-> +                .driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
-> +        },
->  	{
->  		.ident = "Dell XPS 13 7390",
->  		.matches = {
+On Mon, Jan 08, 2024 at 03:30:51PM +0100, Michal Simek wrote:
+> Describe ina260 chip which is precision digital current and power monitor
+> with precision integrated shunt resistor.
+>=20
+> Signed-off-by: Michal Simek <michal.simek@amd.com>
 
-Patch uses spaces instead of tabs and produces lots of checkpatch warnings
-and errors. Also, Signed-off: tag is missing.
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-Overall, please read and follow Documentation/process/submitting-patches.rst.
+Cheers,
+Conor.
 
-Guenter
+
+--65zwX83nMVPDOCON
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZZwqVwAKCRB4tDGHoIJi
+0he8AQCbN5mPbIoEbzBQ7asM/7ZMjkwb6lp47o9BdzsSYkSyGAD/QXPa5TwZRbhb
+nRM6eDm54N35V7rofzPN+dbKuzk/QQo=
+=Yv7k
+-----END PGP SIGNATURE-----
+
+--65zwX83nMVPDOCON--
