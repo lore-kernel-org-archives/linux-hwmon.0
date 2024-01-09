@@ -1,100 +1,102 @@
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E2E3568B;
-	Tue,  9 Jan 2024 04:12:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DADF8250F5;
+	Tue,  9 Jan 2024 09:00:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="MQD8Opn4"
-Received: from HP-EliteBook-x360-830-G8-Notebook-PC.. (unknown [10.101.196.174])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 8C5F64211A;
-	Tue,  9 Jan 2024 04:12:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1704773549;
-	bh=D/WDV5fXgOpgS9EEKmedByWQnN4+GBubzNwhkbzIl/g=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version;
-	b=MQD8Opn4BoX1DQLdeIyZYT9H2qhb7uaZAYoX+WESIF6w57wdv/sKTYYyadV1OEbH0
-	 5Bzw5KTa7k2IIBtRum3feVZkzIc7RWNL3sTpGGHzSIxWXkigdJQ6Y1aA2z+Pjkn4bd
-	 419G7Tb2ynBbsQtQpYRYfFSSZ81G5PmXOHxvZevgjZL3YY9pkjqxURxN8fb5HoNwYz
-	 sckkvJWsGlyGaY4gYk8cXptpaoqXfp0Zua4lV14C691xHGGmSyiWHfIh1W5y8lyCt2
-	 QGLi3nXmRZxU5xsSvEFoFTtKGLneb1mnk73RlAA7rhLx60lcd0tLvcc96xNpdOY/rT
-	 9e52RZGaEkLxA==
-From: Kai-Heng Feng <kai.heng.feng@canonical.com>
-To: jdelvare@suse.com,
-	linux@roeck-us.net
-Cc: Kai-Heng Feng <kai.heng.feng@canonical.com>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 2/2] hwmon: (acpi_power_meter) Ensure IPMI space handler is ready on Dell systems
-Date: Tue,  9 Jan 2024 12:12:17 +0800
-Message-Id: <20240109041218.980674-2-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240109041218.980674-1-kai.heng.feng@canonical.com>
-References: <20240109041218.980674-1-kai.heng.feng@canonical.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pqy49XeX"
+Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-36082f3cb05so10168865ab.0;
+        Tue, 09 Jan 2024 01:00:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1704790828; x=1705395628; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KgMEw0q4WwV2JumGUYsCtc6USbd39YZOyTk5WPojixQ=;
+        b=Pqy49XeXom17JEkH7V1h7k3tO5sj9DSZD07mLb31iU5byzR/XIyekctk45nXRnKFBZ
+         7G5yKlBfpapQg8YgmSbHl+finkBNFA5qSuchDafxTkDrBZCsK6SIYBkQdZbqC/w4s6hd
+         IlkUhGKWnx30edqIe+GoQGp2+vYQvrbhAvDdPCX7PJEWKiFIS+i0n2Q4aDxYZSow2wrK
+         VgCOtfTtlrhOY9vN/esDE+SElovUEwlb7mUlBBKxOT/eVhuyFCiXmcwN2OsTfMFjprwa
+         jGiHxwFIIZy6L2X1ByV2HfbdSa3gnEeIlze1qVv1EPQ5EkBXZ3KWZpobKq+Uv8rNp8PK
+         RxAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704790828; x=1705395628;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KgMEw0q4WwV2JumGUYsCtc6USbd39YZOyTk5WPojixQ=;
+        b=ioaWL3CwbydN3dnJEVV/DQAe4aq19dl8SLTZwvmOXtkoSqOj4bSIQmDxtFpucBccI5
+         L1lyh2/Bqu3hzg6RHvm4DMYmd1PrLeSJUnUsIlDJJMpMyrShHedhPDOwc6/YaivCvA6l
+         tazmmbxk48lLadpK35/ui4LtLTxvlwvZ4QmABhd4A7cEfGAEPQMehIokiaRgJIdpE7mW
+         heYok9aZ++Kyo7nz+v1AMvOrWyXr5Aee9D3WVcIfveipcoCBn5/wMpzfFdN+rHIZDvli
+         Kdbtj6FoR3VGzIGAbZGxd0zYBkzdsE9hfN1VqYZ6ZkAxE2+LvaRfhHQ67Kz6jioQzqy/
+         ZrfA==
+X-Gm-Message-State: AOJu0YxEnm1S4/IfHDU9v08Kg7Gpx2iT2bHWN/b6o1xCRUkbnsTsGMZt
+	JJI/3bqXFHnG/yFW3uXiQStePWSOaJBZjsUtGqk=
+X-Google-Smtp-Source: AGHT+IG9rmegvlzOUYbFciwQULzLSP/qGqK+RLbjVXhQgCS8VFINLPoQ1fOr7bSQCaGxxHgwQbLcmpm6+YCoDXmC/5w=
+X-Received: by 2002:a05:6e02:2387:b0:360:7403:3cca with SMTP id
+ bq7-20020a056e02238700b0036074033ccamr6766345ilb.51.1704790827874; Tue, 09
+ Jan 2024 01:00:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20231222013352.3873689-1-kcfeng0@nuvoton.com> <20231222013352.3873689-2-kcfeng0@nuvoton.com>
+ <20240104001552.GA2096243-robh@kernel.org>
+In-Reply-To: <20240104001552.GA2096243-robh@kernel.org>
+From: Ban Feng <baneric926@gmail.com>
+Date: Tue, 9 Jan 2024 17:00:17 +0800
+Message-ID: <CALz278bzoQEUS+NMP=Xt9+4n4NovBR6bCucbvQp_FhHuMP0bnA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] dt-bindings: hwmon: fan: Add fan binding to schema
+To: Rob Herring <robh@kernel.org>
+Cc: jdelvare@suse.com, linux@roeck-us.net, krzysztof.kozlowski+dt@linaro.org, 
+	conor+dt@kernel.org, corbet@lwn.net, linux-hwmon@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, openbmc@lists.ozlabs.org, kwliu@nuvoton.com, 
+	kcfeng0@nuvoton.com, DELPHINE_CHIU@wiwynn.com, Bonnie_Lo@wiwynn.com, 
+	naresh.solanki@9elements.com, billy_tsai@aspeedtech.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The following error can be observed at boot:
-[    3.717920] ACPI Error: No handler for Region [SYSI] (00000000ab9e62c5) [IPMI] (20230628/evregion-130)
-[    3.717928] ACPI Error: Region IPMI (ID=7) has no handler (20230628/exfldio-261)
+On Thu, Jan 4, 2024 at 8:15=E2=80=AFAM Rob Herring <robh@kernel.org> wrote:
+>
+> On Fri, Dec 22, 2023 at 09:33:50AM +0800, baneric926@gmail.com wrote:
+> > From: Naresh Solanki <naresh.solanki@9elements.com>
+> >
+> > Add common fan properties bindings to a schema.
+> >
+> > Bindings for fan controllers can reference the common schema for the
+> > fan
+> >
+> > child nodes:
+> >
+> >   patternProperties:
+> >     "^fan@[0-2]":
+> >       type: object
+> >       $ref: fan-common.yaml#
+> >       unevaluatedProperties: false
+> >
+> > Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+> > Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
+> > Signed-off-by: Ban Feng <kcfeng0@nuvoton.com>
+> > ---
+> >  .../devicetree/bindings/hwmon/fan-common.yaml | 76 +++++++++++++++++++
+> >  1 file changed, 76 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/hwmon/fan-common.=
+yaml
+>
+> Please implement my comments on v10.
+>
 
-[    3.717936] No Local Variables are initialized for Method [_GHL]
+Hi Rob,
 
-[    3.717938] No Arguments are initialized for method [_GHL]
+I saw Aspeed Billy has already added enum to below patch:
+https://patchwork.kernel.org/project/linux-hwmon/patch/20240108074348.73501=
+4-2-billy_tsai@aspeedtech.com/
 
-[    3.717940] ACPI Error: Aborting method \_SB.PMI0._GHL due to previous error (AE_NOT_EXIST) (20230628/psparse-529)
-[    3.717949] ACPI Error: Aborting method \_SB.PMI0._PMC due to previous error (AE_NOT_EXIST) (20230628/psparse-529)
-[    3.717957] ACPI: \_SB_.PMI0: _PMC evaluation failed: AE_NOT_EXIST
-
-On Dell systems several methods of acpi_power_meter access variables in
-IPMI region [0], so wait until IPMI space handler is installed by
-acpi_ipmi and also wait until SMI is selected to make the space handler
-fully functional.
-
-[0] https://www.dell.com/support/manuals/en-us/redhat-enterprise-linux-v8.0/rhel8_rn_pub/advanced-configuration-and-power-interface-acpi-error-messages-displayed-in-dmesg?guid=guid-0d5ae482-1977-42cf-b417-3ed5c3f5ee62
-
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
-v4:
- - No change.
-
-v3:
- - Use helper.
- - Use return value to print warning message.
-
-v2:
- - Use completion instead of request_module().
-
- drivers/hwmon/acpi_power_meter.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
-index 703666b95bf4..33fb9626633d 100644
---- a/drivers/hwmon/acpi_power_meter.c
-+++ b/drivers/hwmon/acpi_power_meter.c
-@@ -883,6 +883,12 @@ static int acpi_power_meter_add(struct acpi_device *device)
- 	strcpy(acpi_device_class(device), ACPI_POWER_METER_CLASS);
- 	device->driver_data = resource;
- 
-+	if (dmi_match(DMI_SYS_VENDOR, "Dell Inc.") &&
-+	    acpi_dev_get_first_match_dev("IPI0001", NULL, -1)) {
-+		if (acpi_wait_for_acpi_ipmi())
-+			dev_warn(&device->dev, "Waiting for ACPI IPMI timeout");
-+	}
-+
- 	res = read_capabilities(resource);
- 	if (res)
- 		goto exit_free;
--- 
-2.34.1
-
+Thanks,
+Ban
