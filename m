@@ -1,49 +1,51 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2716339AFC
-	for <linux-hwmon@vger.kernel.org>; Tue,  9 Jan 2024 15:17:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A25039FCF;
+	Tue,  9 Jan 2024 15:23:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WZqIkWSp"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-40d8902da73so29131455e9.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 09 Jan 2024 07:17:33 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h/o/h3On"
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-5edfcba97e3so31143457b3.2;
+        Tue, 09 Jan 2024 07:23:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1704813452; x=1705418252; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1704813823; x=1705418623; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q+t2MvDTifDUi046AjiTt/a3s6JOV3dbN3004LwRA8c=;
-        b=WZqIkWSpQtw2fQoXD7iCA0qkfWlrsH9OoVzLk3PQCxh9rorYyYxlDC1o0/vGD8pDQj
-         QtzrNo0J1Bz4+Lvv/Klq70fGzoJnmNEnssguGW/L71rZzkvlJTmduP+ec3x0i6wetrz0
-         QvSN0EPTZuWn5Td6rIg2iD8Nmhgrw84KpaqIAV3y/bsnv3vGeBJZQ9IrfZ2NJ7J6g/wy
-         GfenAXgXkWxt5KYjuquLITNntwVN0JALbJvowwig+Sz5dNCwBEpRA5L0I31L0bty5Twe
-         /e9jvc8U2wmpyDC96cPO2LamiHMlS0TRfqRaEXszC8kSdTKdtx+16FT8Zz4sOPUFQOMs
-         rnLg==
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=M6T+qyZHltl9ceVjSSivwMOdZJC7T3aqQgN2Nrvf3Iw=;
+        b=h/o/h3OnlvlUczhWJ3uDZyWbbdDq7e5HGlJgBaBk5R3gmkuoBXZtssLq0wNjv92me4
+         KG/5S7AdykGXUc7SptbGZKEVWeVD4rF4qfhgykgohCvqwX+1P6wjXbLksHBSK9Yo4cG/
+         aUu1VsUouqwtPtqdNVcewnnaIBxmbOAWOATG7M5KVBGleV32dZXEhWBJFOGLsRnjpCAr
+         Cu/AMFzooptdU7GFls4cOlgGg7YUyj+10g6mrOSmkqNTtndpQ35HBSDQgrlZMdosJagI
+         1SlRBu5eKdh4ggXEp2TYLNSlnawu6dJKr1b9KpILST3PJGAhG8EzghDdabhlmCa1l+ov
+         Yw8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704813452; x=1705418252;
+        d=1e100.net; s=20230601; t=1704813823; x=1705418623;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q+t2MvDTifDUi046AjiTt/a3s6JOV3dbN3004LwRA8c=;
-        b=uUFPO7ZbzzweFi2SAlNl6dUsNBw9H3wrjs9Kb6pPokL0/vbLhtMhAxnBiM9fG2GB8i
-         sIShk2YT7wAGvsaGl4aNqqIUiVYyLoguerRn5DaLRULFcLHzRAvUE/AX67Z9bjfnSw8d
-         uqrfczcXb4+FRzNAnMvvo0Ci/XTKMfADP/zQ7ACHCIg01PNUiEcHv42eHtxkSO5kQrQw
-         bhehmmkV8/FsE+9cMMgaZ8nmSFcXJbkccALyLCnhXSQVbJtNVquZ3QvGl91c8RSO9fa3
-         HqTHJWkyvwBRp+Y5LBGTHfEDKQY/Zo2UkNGOuTpRMVq2vmGIjvXgOlig3CK/Pk/3sdcs
-         4f3w==
-X-Gm-Message-State: AOJu0Yw7dUaR5T6OQcCoKfqk/hf66S7N1yJZUQ6d+0Th0UtK5i4vWxzD
-	xAcDC8B9+kGrQYY1pI0Ji9ubYwZJPn01jk8G79SbqH3w9TE=
-X-Google-Smtp-Source: AGHT+IGf1g6r6RaoAkMuA3L3zOCJfcDNTT0RrTZbyuKfaEXIFqaTEcsV1rItOBV02ReIYQYFNCviMg==
-X-Received: by 2002:a5d:6243:0:b0:337:5a22:ee0a with SMTP id m3-20020a5d6243000000b003375a22ee0amr725967wrv.71.1704813452414;
-        Tue, 09 Jan 2024 07:17:32 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.223.112])
-        by smtp.gmail.com with ESMTPSA id h16-20020a05600004d000b003367ff4aadasm2653977wri.31.2024.01.09.07.17.30
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=M6T+qyZHltl9ceVjSSivwMOdZJC7T3aqQgN2Nrvf3Iw=;
+        b=CL/eT+rgeOQIu6KTewHNxfgFo0x/KcHdIlmPV3NHpW2Wvi01aa52aGj2bwidCm7n0H
+         tKhk3J5HVe9WpLvrL0DWgDpkEy4Wom/Fvo1MWI85Qg5v7I5GZKPZBcva2twfaTZROmET
+         r4YAqgpwC5J0HaF7aeZnjwz3fcR5f8gVpX6k8/t6WU5QDEHOk08U2nyDHBvSdvZML0JY
+         DVK2fk338WTlISYjKsO3ZZpMPDBhsXWNPdZNTJZVq5x8yr7nRyuUDikwIsbHNuF+GQ2l
+         Qp/2FTGJN4lFAUbhG/4YNLJ4pghpxGONxvikSbAx7oqnDukXUXTx5ZrNGRE2t/fw8Br4
+         UzGw==
+X-Gm-Message-State: AOJu0YxpjvL42pP+QppzYLKu9xlEmhU3ELocfLtp3wrt4+EXLfipsS7N
+	06NKCqVTNnH+z3mu3SAzHYZIjI9nW18=
+X-Google-Smtp-Source: AGHT+IGeyB68ImdwsFlXfIF8OlguvLeaa6SAtOCywDVHidMZ+fAKjMYMbxS0oGEAMHf/WC8UFXkMSg==
+X-Received: by 2002:a0d:dec6:0:b0:5e8:b86c:de2c with SMTP id h189-20020a0ddec6000000b005e8b86cde2cmr4553520ywe.89.1704813823134;
+        Tue, 09 Jan 2024 07:23:43 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s187-20020a0dd0c4000000b005e86cbd566esm840687ywd.35.2024.01.09.07.23.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jan 2024 07:17:31 -0800 (PST)
-Message-ID: <4024d6c8-503f-42da-928a-589f2025188f@linaro.org>
-Date: Tue, 9 Jan 2024 16:17:30 +0100
+        Tue, 09 Jan 2024 07:23:42 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <1b8ff82e-ff26-410e-a37e-0d818494bac3@roeck-us.net>
+Date: Tue, 9 Jan 2024 07:23:40 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -51,148 +53,138 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/3] Add support for LTC4282
+Subject: Re: [PATCH v4 2/2] hwmon: (acpi_power_meter) Ensure IPMI space
+ handler is ready on Dell systems
 Content-Language: en-US
-To: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>,
- Nuno Sa <nuno.sa@analog.com>, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org, linux-doc@vger.kernel.org
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-References: <20231218-b4-ltc4282-support-v4-0-4fc51f7d04f0@analog.com>
- <09d0ecb0460aafb3f45d3d17b1b40605d7d28b2a.camel@gmail.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <09d0ecb0460aafb3f45d3d17b1b40605d7d28b2a.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+To: Kai-Heng Feng <kai.heng.feng@canonical.com>, jdelvare@suse.com
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240109041218.980674-1-kai.heng.feng@canonical.com>
+ <20240109041218.980674-2-kai.heng.feng@canonical.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20240109041218.980674-2-kai.heng.feng@canonical.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 09/01/2024 13:19, Nuno Sá wrote:
-> On Mon, 2023-12-18 at 17:29 +0100, Nuno Sa wrote:
->> v1:
->>  *
->> https://lore.kernel.org/linux-hwmon/20231110151905.1659873-1-nuno.sa@analog.com/
->>
->> v2:
->>  *
->> https://lore.kernel.org/linux-hwmon/20231124-ltc4282-support-v2-0-952bf926f83c@analog.com
->>
->> v3:
->>  *
->> https://lore.kernel.org/r/20231205-ltc4282-support-v3-0-e0877b281bc2@analog.com
->>
->> Changes in v4:
->> - Patch 1:
->>  * New patch. Support fault attributes in voltage channels.
->> - Patch 2:
->>  * Add default values for gpios and divider properties;
->>  * Add adi,gpio3-monitor-enable property.
->> - Patch 3:
->>  - Docs:
->>   * Document that fault logs are also cleared when writing in reset_history
->>     attributes;
->>   * Document debugfs entries;
->>   * Add new in0_fault attributes and remove dropped ones.
->>  - Driver:
->>   * Add hwmon_in_fault attribute to report FET failures in VSOURCE;
->>   * Clear fault logs in reset_history;
->>   * Constify 'ltc4282_out_rates';
->>   * Add missing error check in ltc4282_cache_history();
->>   * Removed unused functions;
->>   * Renamed clk provider name so it's unique per device;
->>   * Support new adi,gpio3-monitor-enable property;
->>   * Dropped power1_good, fet_bad_fault, fet_short_fault, fault_logs_reset
->>     custom attributes. Note that only power1_good was really dropped.
->>     The other ones are supported in standard ABI.
->>   * Renamed debugfs directory for ltc4282-hwmonX;
->>   * Added in0 prefix to FET fault logs so it's clear they affect VSOURCE;
->>   * Fix in_range() condition (false means error);
->>   * Fix reset_history attributes. We should not write 0 in the lowest
->>     value. Write the theoretical max value in there. For vsource/vdd,
->>     also do it during device setup (or we would end up with 0).
->>   * Directly store the chip vdd instead of vin_mode in our device
->>     structure. Easier to handle reset_history;
->>   * Moved the vin_mode enum to reduce it's scope.
->>
->> As mentioned in v3 discussion, clearing the power bad fault log has no
->> effect but I'm still doing it for consistency and because we also allow
->> to read it in debugfs (so better allow to clear it as well)
->>
->> ---
->> Nuno Sa (3):
->>       dt-bindings: hwmon: Add LTC4282 bindings
->>       hwmon: add fault attribute for voltage channels
->>       hwmon: ltc4282: add support for the LTC4282 chip
->>
->>  Documentation/ABI/testing/sysfs-class-hwmon        |    9 +
->>  .../devicetree/bindings/hwmon/adi,ltc4282.yaml     |  159 ++
->>  Documentation/hwmon/index.rst                      |    1 +
->>  Documentation/hwmon/ltc4282.rst                    |  133 ++
->>  MAINTAINERS                                        |    8 +
->>  drivers/hwmon/Kconfig                              |   11 +
->>  drivers/hwmon/Makefile                             |    1 +
->>  drivers/hwmon/hwmon.c                              |    1 +
->>  drivers/hwmon/ltc4282.c                            | 1784
->> ++++++++++++++++++++
->>  include/linux/hwmon.h                              |    2 +
->>  10 files changed, 2109 insertions(+)
->>
->> Thanks!
->> - Nuno Sá
->>
+On 1/8/24 20:12, Kai-Heng Feng wrote:
+> The following error can be observed at boot:
+> [    3.717920] ACPI Error: No handler for Region [SYSI] (00000000ab9e62c5) [IPMI] (20230628/evregion-130)
+> [    3.717928] ACPI Error: Region IPMI (ID=7) has no handler (20230628/exfldio-261)
 > 
-> Hi Guenter,
+> [    3.717936] No Local Variables are initialized for Method [_GHL]
 > 
-> Just pinging this one. Not sure if you missed this one or just low priority in
-> your queue :)
+> [    3.717938] No Arguments are initialized for method [_GHL]
+> 
+> [    3.717940] ACPI Error: Aborting method \_SB.PMI0._GHL due to previous error (AE_NOT_EXIST) (20230628/psparse-529)
+> [    3.717949] ACPI Error: Aborting method \_SB.PMI0._PMC due to previous error (AE_NOT_EXIST) (20230628/psparse-529)
+> [    3.717957] ACPI: \_SB_.PMI0: _PMC evaluation failed: AE_NOT_EXIST
+> 
+> On Dell systems several methods of acpi_power_meter access variables in
+> IPMI region [0], so wait until IPMI space handler is installed by
+> acpi_ipmi and also wait until SMI is selected to make the space handler
+> fully functional.
+> 
+> [0] https://www.dell.com/support/manuals/en-us/redhat-enterprise-linux-v8.0/rhel8_rn_pub/advanced-configuration-and-power-interface-acpi-error-messages-displayed-in-dmesg?guid=guid-0d5ae482-1977-42cf-b417-3ed5c3f5ee62
+> 
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> ---
+> v4:
+>   - No change.
+> 
+> v3:
+>   - Use helper.
+>   - Use return value to print warning message.
+> 
+> v2:
+>   - Use completion instead of request_module().
+> 
+>   drivers/hwmon/acpi_power_meter.c | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
+> index 703666b95bf4..33fb9626633d 100644
+> --- a/drivers/hwmon/acpi_power_meter.c
+> +++ b/drivers/hwmon/acpi_power_meter.c
+> @@ -883,6 +883,12 @@ static int acpi_power_meter_add(struct acpi_device *device)
+>   	strcpy(acpi_device_class(device), ACPI_POWER_METER_CLASS);
+>   	device->driver_data = resource;
+>   
+> +	if (dmi_match(DMI_SYS_VENDOR, "Dell Inc.") &&
+> +	    acpi_dev_get_first_match_dev("IPI0001", NULL, -1)) {
+> +		if (acpi_wait_for_acpi_ipmi())
+> +			dev_warn(&device->dev, "Waiting for ACPI IPMI timeout");
+> +	}
+> +
 
-Merge window is open. Is it a critical fix? Does not look like, so don't
-ping, it's pointless and only adds unnecessary traffic.
+What a hack :-(.
 
-Best regards,
-Krzysztof
+This needs a comment in the driver explaining the rationale for this change, and
+also a comment explaining why, for example, using late_initcall() does not help.
+
+If CONFIG_IPMI_SI=n, acpi_wait_for_acpi_ipmi() will return 0, indicating success.
+I can only imagine that this will result in a failure since the whole point
+of this code is to wait until that driver is loaded. Please explain how and why
+the code works with CONFIG_IPMI_SI=n. Similar, if the function returns an error,
+I can not imagine how it would make sense to instantiate the driver. If it does
+make sense to continue in this situation, a comment is needed in the code
+describing the rationale.
+
+Third, the new symbol is declared with CONFIG_ACPI, but defined with
+CONFIG_IPMI_SI. I can not imagine how this would compile with CONFIG_ACPI=y
+and CONFIG_IPMI_SI={m,n} and/or CONFIG_ACPI_IPMI={m,n}.
+
+On top of that, IPMI_SI and ACPI_IPMI are is tristate, as is SENSORS_ACPI_POWER.
+This means that SENSORS_ACPI_POWER=y combined with CONFIG_IPMI_SI={m,n} or
+CONFIG_ACPI_IPMI={m,n} will result in a compile failure.
+
+Please make sure that this code compiles with all possible symbol combinations.
+
+Thanks,
+Guenter
+
+>   	res = read_capabilities(resource);
+>   	if (res)
+>   		goto exit_free;
 
