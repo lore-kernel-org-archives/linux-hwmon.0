@@ -1,42 +1,42 @@
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12D975695
-	for <linux-hwmon@vger.kernel.org>; Sat, 13 Jan 2024 18:33:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E0A563A7
+	for <linux-hwmon@vger.kernel.org>; Sat, 13 Jan 2024 18:33:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iwanders.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iwanders.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=iwanders.net header.i=@iwanders.net header.b="ayA3iXRA"
-Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-78350871784so48945885a.1
-        for <linux-hwmon@vger.kernel.org>; Sat, 13 Jan 2024 10:33:13 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=iwanders.net header.i=@iwanders.net header.b="VQZ0GaEy"
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-680d2ec3459so58188056d6.0
+        for <linux-hwmon@vger.kernel.org>; Sat, 13 Jan 2024 10:33:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=iwanders.net; s=google; t=1705170793; x=1705775593; darn=vger.kernel.org;
+        d=iwanders.net; s=google; t=1705170794; x=1705775594; darn=vger.kernel.org;
         h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=OvziupLQyzD7CXIhblfqO3HA/n00b86Rv0OXwbGfPwc=;
-        b=ayA3iXRAae7Qvos2nxnewcRLlz5W5eGvBkPcGRMLXMAR/G6/Dl5g3QZxwe4ImcqVaT
-         Dz8xITHPuj2ZFBxDdI1XR/Nqyh9uHZeNasswC1/fep86sQ/iyXEjMios7Ptl4rZ6Ukvq
-         t7++7MrdH+AOPQTlBXdm/FLvkU7Cju8wDi10o=
+        bh=MobW3+XlhTNNJtw8t3292CQToiQwtAZjiSF+JGIzm70=;
+        b=VQZ0GaEygBOlDvtL9W3ywKxYIL5nvpTieNMfvMPZJTQ9DGkwiLShJeFLVSiMOeov+w
+         sS8FVp7SCUHz8voV19XHHkplI4tTSxPHf+5KTKEzvXDs01NOuxGY6PjD0balwbQ7aBld
+         OvgFe9gUBu20WyT6YvYNDoaRNxSyXRnPMa0es=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705170793; x=1705775593;
+        d=1e100.net; s=20230601; t=1705170794; x=1705775594;
         h=references:in-reply-to:message-id:date:subject:cc:to:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OvziupLQyzD7CXIhblfqO3HA/n00b86Rv0OXwbGfPwc=;
-        b=LNWwHOegMRjBo4FiFfNU0WoBYCz32WKhMBKng6TL0oKPUxnlfcN7cwPVUqCJh78LcZ
-         OX6iKSpWXpvlcvWlvheZWSPiA165M1Ywx/XeBTJo+61isP9syLRFiBNwRtBcB5CGsjxR
-         4GpOAQmVOY7Wg0QsH59djVqVhO9p8J4OeWi6RDuFk2xPO1pVxHB3uKAO0aEdNvVGijeR
-         hlAlqEfw2PyzA68u5m18R5AczRVwpOnJ/yjzMlD72Vvp+nGI4Uq/W6oigBljuFMHxOju
-         sWCFviXsHu8AyfcxfP2sMERA2BvIxX0uKMqqDAHRLkN8MY5nUkcyxFqhFgxqs5Hzps6I
-         bh2w==
-X-Gm-Message-State: AOJu0YxyUBwTWFHIvd+Gi4+JNLnFQABXqWFR/SuoUBvpPSsIO8Z1Dd38
-	MGlnHi1lqDWuzGxpWhxHf3WQ2+5aO3ctvw==
-X-Google-Smtp-Source: AGHT+IFQdnDCXCdcfpK4uPkA6Gta2loKR0Z8fUh4ZmrcJurBWNwp64j+YEmBjiyiXp6ir5rk5q8ejg==
-X-Received: by 2002:a05:620a:28d3:b0:783:562e:b0fc with SMTP id l19-20020a05620a28d300b00783562eb0fcmr750374qkp.7.1705170793048;
-        Sat, 13 Jan 2024 10:33:13 -0800 (PST)
+        bh=MobW3+XlhTNNJtw8t3292CQToiQwtAZjiSF+JGIzm70=;
+        b=RAoEQHcm9NZIwxLHGOtC632TFVVWA06owkDENpdPRFoplG9JMV+yXoRWUzWpATBil/
+         UZWXqJwkamIwIChLaV9ufChoPVFP6n9a1VAsQMULn91PpG0876jXwRYgEnuFjYM19rgd
+         +6dpvzrmxj4uqIrwlYdzTa+WFa3YMALEAKCopUyDQM26uKTTaVy7Ezty1VYldhnKwLrH
+         +VwHQ99xwgIUz/foO+8gfXmnstL/mn+PS1cOttQz9bJnyRUsb62u9gRy1L3vUEPB8Dgp
+         3uyi33xuRa8Y6Y5sogDADH8P83QOagd/Hj8RjcFewa9l7e7u0BhXXJvEweOo5NxYpRTj
+         wkrw==
+X-Gm-Message-State: AOJu0YxWiEaDNG4IeQ20M1u553YsBEats2LtYOLEIOZl93zOUBNkBFXI
+	LL0Na+3X40guzrRdKfnpYpDEM8vu9Qqdmg==
+X-Google-Smtp-Source: AGHT+IHw3txeHjbrRDgvhtIgYEizVnxlux09HpN6pJbzmk20j7DYEsddOP4fh4MCX+0UCO+lIaVMGQ==
+X-Received: by 2002:a05:6214:2427:b0:681:35b:ff6f with SMTP id gy7-20020a056214242700b00681035bff6fmr4130564qvb.29.1705170794524;
+        Sat, 13 Jan 2024 10:33:14 -0800 (PST)
 Received: from eagle.lan (24-246-30-234.cable.teksavvy.com. [24.246.30.234])
-        by smtp.gmail.com with ESMTPSA id z4-20020ae9e604000000b0078162695b73sm1855853qkf.104.2024.01.13.10.33.11
+        by smtp.gmail.com with ESMTPSA id z4-20020ae9e604000000b0078162695b73sm1855853qkf.104.2024.01.13.10.33.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Jan 2024 10:33:12 -0800 (PST)
+        Sat, 13 Jan 2024 10:33:14 -0800 (PST)
 From: Ivor Wanders <ivor@iwanders.net>
 To: Jean Delvare <jdelvare@suse.com>,
 	Guenter Roeck <linux@roeck-us.net>,
@@ -49,9 +49,9 @@ Cc: linux-hwmon@vger.kernel.org,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	platform-driver-x86@vger.kernel.org
-Subject: [PATCH v3 1/2] platform/surface: aggregator_registry: add entry for fan speed
-Date: Sat, 13 Jan 2024 13:33:05 -0500
-Message-Id: <20240113183306.9566-2-ivor@iwanders.net>
+Subject: [PATCH v3 2/2] hwmon: add fan speed monitoring driver for Surface devices
+Date: Sat, 13 Jan 2024 13:33:06 -0500
+Message-Id: <20240113183306.9566-3-ivor@iwanders.net>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20240113183306.9566-1-ivor@iwanders.net>
 References: <20240113183306.9566-1-ivor@iwanders.net>
@@ -61,46 +61,230 @@ List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Add an entry for the fan speed function.
-Add this new entry to the Surface Pro 9 group.
+Adds a driver that provides read only access to the fan speed for Microsoft
+Surface Pro devices. The fan speed is always regulated by the EC and cannot
+be influenced directly.
 
 Signed-off-by: Ivor Wanders <ivor@iwanders.net>
 Link: https://github.com/linux-surface/kernel/pull/144
-Reviewed-by: Maximilian Luz <luzmaximilian@gmail.com>
 ---
 Changes in v3:
-  - No changes in this patch.
+  - Removed type and attr checks in read and is_visible.
+  - Removed assigning sdev to ssam_device drvdata.
+  - Propagate return from __ssam_fan_rpm_get.
+  - Renamed hwmon chip name from 'fan' to 'surface_fan'.
+  - Removed unnecessary platform_device header.
 Changes in v2:
-  - No changes in this patch.
+  - Removed all sysfs attributes except fan1_input. Simplified code
+    and updated documentation accordingly.
 ---
- drivers/platform/surface/surface_aggregator_registry.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ Documentation/hwmon/index.rst       |  1 +
+ Documentation/hwmon/surface_fan.rst | 25 ++++++++
+ MAINTAINERS                         |  8 +++
+ drivers/hwmon/Kconfig               | 13 ++++
+ drivers/hwmon/Makefile              |  1 +
+ drivers/hwmon/surface_fan.c         | 93 +++++++++++++++++++++++++++++
+ 6 files changed, 141 insertions(+)
+ create mode 100644 Documentation/hwmon/surface_fan.rst
+ create mode 100644 drivers/hwmon/surface_fan.c
 
-diff --git a/drivers/platform/surface/surface_aggregator_registry.c b/drivers/platform/surface/surface_aggregator_registry.c
-index 530db4db7..b0db25886 100644
---- a/drivers/platform/surface/surface_aggregator_registry.c
-+++ b/drivers/platform/surface/surface_aggregator_registry.c
-@@ -74,6 +74,12 @@ static const struct software_node ssam_node_tmp_pprof = {
- 	.parent = &ssam_node_root,
- };
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index 042e1cf95..4dfb3b9bd 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -202,6 +202,7 @@ Hardware Monitoring Kernel Drivers
+    smsc47m1
+    sparx5-temp
+    stpddc60
++   surface_fan
+    sy7636a-hwmon
+    tc654
+    tc74
+diff --git a/Documentation/hwmon/surface_fan.rst b/Documentation/hwmon/surface_fan.rst
+new file mode 100644
+index 000000000..07942574c
+--- /dev/null
++++ b/Documentation/hwmon/surface_fan.rst
+@@ -0,0 +1,25 @@
++.. SPDX-License-Identifier: GPL-2.0-or-later
++
++Kernel driver surface_fan
++=========================
++
++Supported Devices:
++
++  * Microsoft Surface Pro 9
++
++Author: Ivor Wanders <ivor@iwanders.net>
++
++Description
++-----------
++
++This provides monitoring of the fan found in some Microsoft Surface Pro devices,
++like the Surface Pro 9. The fan is always controlled by the onboard controller.
++
++Sysfs interface
++---------------
++
++======================= ======= =========================================
++Name                    Perm    Description
++======================= ======= =========================================
++``fan1_input``          RO      Current fan speed in RPM.
++======================= ======= =========================================
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 439cf523b..8e7870af3 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14078,6 +14078,14 @@ F:	Documentation/driver-api/surface_aggregator/clients/dtx.rst
+ F:	drivers/platform/surface/surface_dtx.c
+ F:	include/uapi/linux/surface_aggregator/dtx.h
  
-+/* Fan speed function. */
-+static const struct software_node ssam_node_fan_speed = {
-+	.name = "ssam:01:05:01:01:01",
-+	.parent = &ssam_node_root,
++MICROSOFT SURFACE SENSOR FAN DRIVER
++M:	Maximilian Luz <luzmaximilian@gmail.com>
++M:	Ivor Wanders <ivor@iwanders.net>
++L:	linux-hwmon@vger.kernel.org
++S:	Maintained
++F:	Documentation/hwmon/surface_fan.rst
++F:	drivers/hwmon/surface_fan.c
++
+ MICROSOFT SURFACE GPE LID SUPPORT DRIVER
+ M:	Maximilian Luz <luzmaximilian@gmail.com>
+ L:	platform-driver-x86@vger.kernel.org
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 307477b8a..4b4d999af 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -1965,6 +1965,19 @@ config SENSORS_SMM665
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called smm665.
+ 
++config SENSORS_SURFACE_FAN
++	tristate "Surface Fan Driver"
++	depends on SURFACE_AGGREGATOR
++	help
++	  Driver that provides monitoring of the fan on Surface Pro devices that
++	  have a fan, like the Surface Pro 9.
++
++	  This makes the fan's current speed accessible through the hwmon
++	  system. It does not provide control over the fan, the firmware is
++	  responsible for that, this driver merely provides monitoring.
++
++	  Select M or Y here, if you want to be able to read the fan's speed.
++
+ config SENSORS_ADC128D818
+ 	tristate "Texas Instruments ADC128D818"
+ 	depends on I2C
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index 3f4b0fda0..5ae214c06 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -198,6 +198,7 @@ obj-$(CONFIG_SENSORS_SMSC47M1)	+= smsc47m1.o
+ obj-$(CONFIG_SENSORS_SMSC47M192)+= smsc47m192.o
+ obj-$(CONFIG_SENSORS_SPARX5)	+= sparx5-temp.o
+ obj-$(CONFIG_SENSORS_STTS751)	+= stts751.o
++obj-$(CONFIG_SENSORS_SURFACE_FAN)+= surface_fan.o
+ obj-$(CONFIG_SENSORS_SY7636A)	+= sy7636a-hwmon.o
+ obj-$(CONFIG_SENSORS_AMC6821)	+= amc6821.o
+ obj-$(CONFIG_SENSORS_TC74)	+= tc74.o
+diff --git a/drivers/hwmon/surface_fan.c b/drivers/hwmon/surface_fan.c
+new file mode 100644
+index 000000000..7c2e3ae3e
+--- /dev/null
++++ b/drivers/hwmon/surface_fan.c
+@@ -0,0 +1,93 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Surface Fan driver for Surface System Aggregator Module. It provides access
++ * to the fan's rpm through the hwmon system.
++ *
++ * Copyright (C) 2023 Ivor Wanders <ivor@iwanders.net>
++ */
++
++#include <linux/hwmon.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/surface_aggregator/device.h>
++#include <linux/types.h>
++
++// SSAM
++SSAM_DEFINE_SYNC_REQUEST_CL_R(__ssam_fan_rpm_get, __le16, {
++	.target_category = SSAM_SSH_TC_FAN,
++	.command_id      = 0x01,
++});
++
++// hwmon
++umode_t surface_fan_hwmon_is_visible(const void *drvdata,
++				     enum hwmon_sensor_types type, u32 attr,
++				     int channel)
++{
++	return 0444;
++}
++
++static int surface_fan_hwmon_read(struct device *dev,
++				  enum hwmon_sensor_types type, u32 attr,
++				  int channel, long *val)
++{
++	struct ssam_device *sdev = dev_get_drvdata(dev);
++	int ret;
++	__le16 value;
++
++	ret = __ssam_fan_rpm_get(sdev, &value);
++	if (ret)
++		return ret;
++
++	*val = le16_to_cpu(value);
++
++	return ret;
++}
++
++static const struct hwmon_channel_info *const surface_fan_info[] = {
++	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT),
++	NULL
 +};
 +
- /* Tablet-mode switch via KIP subsystem. */
- static const struct software_node ssam_node_kip_tablet_switch = {
- 	.name = "ssam:01:0e:01:00:01",
-@@ -319,6 +325,7 @@ static const struct software_node *ssam_node_group_sp9[] = {
- 	&ssam_node_bat_ac,
- 	&ssam_node_bat_main,
- 	&ssam_node_tmp_pprof,
-+	&ssam_node_fan_speed,
- 	&ssam_node_pos_tablet_switch,
- 	&ssam_node_hid_kip_keyboard,
- 	&ssam_node_hid_kip_penstash,
++static const struct hwmon_ops surface_fan_hwmon_ops = {
++	.is_visible = surface_fan_hwmon_is_visible,
++	.read = surface_fan_hwmon_read,
++};
++
++static const struct hwmon_chip_info surface_fan_chip_info = {
++	.ops = &surface_fan_hwmon_ops,
++	.info = surface_fan_info,
++};
++
++static int surface_fan_probe(struct ssam_device *sdev)
++{
++	struct device *hdev;
++
++	hdev = devm_hwmon_device_register_with_info(&sdev->dev,
++						    "surface_fan", sdev,
++						    &surface_fan_chip_info,
++						    NULL);
++	if (IS_ERR(hdev))
++		return PTR_ERR(hdev);
++
++	return 0;
++}
++
++static const struct ssam_device_id ssam_fan_match[] = {
++	{ SSAM_SDEV(FAN, SAM, 0x01, 0x01) },
++	{},
++};
++MODULE_DEVICE_TABLE(ssam, ssam_fan_match);
++
++static struct ssam_device_driver surface_fan = {
++	.probe = surface_fan_probe,
++	.match_table = ssam_fan_match,
++	.driver = {
++		.name = "surface_fan",
++		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
++	},
++};
++module_ssam_device_driver(surface_fan);
++
++MODULE_AUTHOR("Ivor Wanders <ivor@iwanders.net>");
++MODULE_DESCRIPTION("Fan Driver for Surface System Aggregator Module");
++MODULE_LICENSE("GPL");
 -- 
 2.17.1
 
