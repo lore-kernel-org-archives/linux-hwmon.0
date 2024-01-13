@@ -1,89 +1,96 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B2ED7E6;
-	Sat, 13 Jan 2024 09:12:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1047566B
+	for <linux-hwmon@vger.kernel.org>; Sat, 13 Jan 2024 18:33:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iwanders.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iwanders.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hlXMkVu5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705137162; x=1736673162;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jYgbc5fUAwfcRJy9NzPZkgw65yZMb/lX/tQPegvmpU0=;
-  b=hlXMkVu5HkXk0/TgSEM5BpS9/b+GuRuQQeDTTuQ2WwNmg2M8r7jA7BVB
-   dz4OpqIYEWxRthvjz0XERrPNW3m9wMUZ52oA+m2JPZ5B6u+O0rxdmPX/A
-   Vz8/fI8Kl3lqib4w8/4f5t/5+XVceBE+9Qyh4/T2lJHjfxwo53CYX9VnC
-   J+3/BHm+oxewQfElCBaLHLK+H2EIsddQN5V/kbLMFj5AjCo4v/Je3IXfE
-   jafrzt+SrzHKkCv5xm9sipG2dlxiLXdxCIFXdatuCHTq8nzD0pkN7cBEg
-   7rR3R36endmyKLMbicSXtCTqVfdG159xEWdSTR1NVE+eBb6UMiRuBG5WK
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10951"; a="6728119"
-X-IronPort-AV: E=Sophos;i="6.04,192,1695711600"; 
-   d="scan'208";a="6728119"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2024 01:12:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10951"; a="956334466"
-X-IronPort-AV: E=Sophos;i="6.04,192,1695711600"; 
-   d="scan'208";a="956334466"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 13 Jan 2024 01:12:38 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rOa4C-000AIb-29;
-	Sat, 13 Jan 2024 09:12:36 +0000
-Date: Sat, 13 Jan 2024 17:11:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kai-Heng Feng <kai.heng.feng@canonical.com>, jdelvare@suse.com,
-	linux@roeck-us.net
-Cc: oe-kbuild-all@lists.linux.dev,
-	Kai-Heng Feng <kai.heng.feng@canonical.com>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] hwmon: (acpi_power_meter) Ensure IPMI space
- handler is ready on Dell systems
-Message-ID: <202401131750.F51XQF3H-lkp@intel.com>
-References: <20240109041218.980674-2-kai.heng.feng@canonical.com>
+	dkim=pass (1024-bit key) header.d=iwanders.net header.i=@iwanders.net header.b="IzGvbPi1"
+Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-78336bfc489so498884985a.0
+        for <linux-hwmon@vger.kernel.org>; Sat, 13 Jan 2024 10:33:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=iwanders.net; s=google; t=1705170791; x=1705775591; darn=vger.kernel.org;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rnP28VcYD/21XzdJbx62O5g05BDoOAcvEfgwp7lTOBc=;
+        b=IzGvbPi1utn5Zy9w3LfEQ3RZShgZW3ssGrGG6bjjGsdGO8SFcPgBqssB/NXomO9Gd0
+         NMsJEBUbUY/r7mO7X79QiTrgB5nFXxIF25WNlXxgwpgM4GXkhYa2PNzZHe18Lm8nGmW3
+         3xEGhFmFrK4BtuD+gqmxh8pK3L1qBtNXWZZao=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705170791; x=1705775591;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rnP28VcYD/21XzdJbx62O5g05BDoOAcvEfgwp7lTOBc=;
+        b=UwziFWN+0thpzH+MmVX1o56TC7mS6aWIPC96jPtV9nvLvQtDMV7U1xnWsaSU/8prvz
+         /x2NCeZUHPqd/HyNOL/IYDW1BfNNEVkYDpdlHUflJJgwPl791NSxdZA1eFV/CIlJ4rqq
+         +jbxnLbwfRw7TURXuih928+7wr0WwiqDI24zm05r1stgAM+CFrgvDdEffc/UTEcwv9U7
+         mRv6fu2XpsdpVAdBhgyHpetEtcJERiDxSEEMOaSJsaUZ0LNTIKpuLca+bWBnaJ9wDO/t
+         HM3Z3cHd9FD8BtU3wRZwm3Ttj5TlUe1l5pSk3gIKoKzBUVRw2N14wIk6G1l/vR/YNsJD
+         1zww==
+X-Gm-Message-State: AOJu0Yxg0NpHmHHw0lRktLBNNgTZw+e8lfPYe9zgesm6ZkO9jyguLYQ3
+	ukSoE4wKGh/z5tt/89GXczPBUupsZcretHNx4Sdm5IgK3Wag7Q==
+X-Google-Smtp-Source: AGHT+IGDIrUbMYSBIjbUHBWwUv7c9ei09luPbXHQLYP4DbBAiGgie9mpkenb7Ddg3RqcCURbhzRNIQ==
+X-Received: by 2002:a05:620a:136f:b0:783:54b4:7763 with SMTP id d15-20020a05620a136f00b0078354b47763mr923327qkl.87.1705170791562;
+        Sat, 13 Jan 2024 10:33:11 -0800 (PST)
+Received: from eagle.lan (24-246-30-234.cable.teksavvy.com. [24.246.30.234])
+        by smtp.gmail.com with ESMTPSA id z4-20020ae9e604000000b0078162695b73sm1855853qkf.104.2024.01.13.10.33.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 13 Jan 2024 10:33:11 -0800 (PST)
+From: Ivor Wanders <ivor@iwanders.net>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Maximilian Luz <luzmaximilian@gmail.com>,
+	Ivor Wanders <ivor@iwanders.net>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Mark Gross <markgross@kernel.org>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org
+Subject: [PATCH v3 0/2] Surface fan monitoring driver
+Date: Sat, 13 Jan 2024 13:33:04 -0500
+Message-Id: <20240113183306.9566-1-ivor@iwanders.net>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240109041218.980674-2-kai.heng.feng@canonical.com>
 
-Hi Kai-Heng,
+Third version of a hwmon driver to monitor the fan's rpm on Microsoft 
+Surface devices, originally submitted in [1], v2 at [2]. All changes since
+v2 are incorporating feedback, cleaning up and simplifying the module.
 
-kernel test robot noticed the following build errors:
+Changes in v3:
+  - Removed type and attr checks in read and is_visible.
+  - Removed assigning sdev to ssam_device drvdata.
+  - Propagate return from __ssam_fan_rpm_get.
+  - Renamed hwmon chip name from 'fan' to 'surface_fan'.
+  - Removed unnecessary platform_device header.
+Changes in v2:
+  - Removed all unsupported sysfs attributes from the hwmon driver, leaving
+    the fan input as the only supported attribute.
 
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on groeck-staging/hwmon-next rafael-pm/acpi-bus linus/master v6.7 next-20240112]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[1] https://lore.kernel.org/linux-hwmon/20231220234415.5219-1-ivor@iwanders.net/T/
+[2] https://lore.kernel.org/linux-hwmon/20231228003444.5580-1-ivor@iwanders.net/T/
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kai-Heng-Feng/hwmon-acpi_power_meter-Ensure-IPMI-space-handler-is-ready-on-Dell-systems/20240109-121520
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20240109041218.980674-2-kai.heng.feng%40canonical.com
-patch subject: [PATCH v4 2/2] hwmon: (acpi_power_meter) Ensure IPMI space handler is ready on Dell systems
-config: loongarch-randconfig-r112-20240113 (https://download.01.org/0day-ci/archive/20240113/202401131750.F51XQF3H-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 13.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20240113/202401131750.F51XQF3H-lkp@intel.com/reproduce)
+Ivor Wanders (2):
+  platform/surface: aggregator_registry: add entry for fan speed
+  hwmon: add fan speed monitoring driver for Surface devices
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401131750.F51XQF3H-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   loongarch64-linux-ld: drivers/hwmon/acpi_power_meter.o: in function `.L212':
->> acpi_power_meter.c:(.text+0x15c0): undefined reference to `acpi_wait_for_acpi_ipmi'
+ Documentation/hwmon/index.rst                 |  1 +
+ Documentation/hwmon/surface_fan.rst           | 25 +++++
+ MAINTAINERS                                   |  8 ++
+ drivers/hwmon/Kconfig                         | 13 +++
+ drivers/hwmon/Makefile                        |  1 +
+ drivers/hwmon/surface_fan.c                   | 93 +++++++++++++++++++
+ .../surface/surface_aggregator_registry.c     |  7 ++
+ 7 files changed, 148 insertions(+)
+ create mode 100644 Documentation/hwmon/surface_fan.rst
+ create mode 100644 drivers/hwmon/surface_fan.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.17.1
+
