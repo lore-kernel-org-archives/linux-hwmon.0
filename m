@@ -1,46 +1,46 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA8DB7E
-	for <linux-hwmon@vger.kernel.org>; Sun, 14 Jan 2024 00:29:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15718139F
+	for <linux-hwmon@vger.kernel.org>; Sun, 14 Jan 2024 00:34:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hOuD58Z6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Dy7fMiKo"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705192197; x=1736728197;
+  t=1705192497; x=1736728497;
   h=date:from:to:cc:subject:message-id;
-  bh=QHxqMg6b3G+TVP3Y8tEP6STfW1NXv7kvdR/bMdUhDhs=;
-  b=hOuD58Z6OdcWBrsrK2zskkp1Ifbw3ss53uTwxmHGrOjCoJzMjam4XSEo
-   uhy2TncRE6GZ0WwfN2hsaHIIjL3Dlkob/24hMx6ANLy19Oa5f0U/MRLjt
-   JIavXW1PivFeeaJ5jQgiukGXBYtzD82FQhO1NYXCQsyzDOld+mjuitWi1
-   beuqEiN9bGeQL/BFDDMjma8hyLs1f/GUfTXI7WgDT179Z6zIEm5mYnmI5
-   dhxBMxoXQe1i20VdF1FTEaAI43WFBGMMJjnvNIygeibcYMl+bzFc8Rm0d
-   IhLU0TS6W6LPQayQmmHZNtP3AFsE2ossMNuCZ20FjqsDjGu97h44KsAYB
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10952"; a="6174293"
+  bh=uAdF/BN3SSQpW3jqviO8tnkSN5KmobTI2KytUmMQicA=;
+  b=Dy7fMiKojxDjJ5d2A0TAu//9zFKo72YZ82pbq/d4hpIn5ZmeFzLVftOl
+   ievVAGzFbl93unuu05zIFLp9qnhA5xgxaKp+MgJe8MTOz+Dv+GJ5Dvrxc
+   NhoL70t5J982KKniFfouEZLOfPR5+7tCePwMLXmAtTzCmMyNkQbawTdBq
+   q28AGKZcfobVMXF5H1Wbre0VPxL6UON5uID/159lCjY8j/AL+R011RblL
+   rav/D/zWgOiCmCs947GXoyqlEpU8x7wddK0RwvaE1yeQDZlqrgopo3eVm
+   hGyjTUP0NRm6XQ/E8BrSI+99S+gp1xdQTCKRDOmFDnl9pnoAfBFhFfXdu
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10952"; a="6139156"
 X-IronPort-AV: E=Sophos;i="6.04,193,1695711600"; 
-   d="scan'208";a="6174293"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2024 16:29:56 -0800
+   d="scan'208";a="6139156"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2024 16:34:56 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10952"; a="759496240"
+X-IronPort-AV: E=McAfee;i="6600,9927,10952"; a="817460643"
 X-IronPort-AV: E=Sophos;i="6.04,193,1695711600"; 
-   d="scan'208";a="759496240"
+   d="scan'208";a="817460643"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 13 Jan 2024 16:29:55 -0800
+  by orsmga001.jf.intel.com with ESMTP; 13 Jan 2024 16:34:55 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rOoNs-000B2c-1k;
-	Sun, 14 Jan 2024 00:29:52 +0000
-Date: Sun, 14 Jan 2024 08:29:37 +0800
+	id 1rOoSi-000B3U-3C;
+	Sun, 14 Jan 2024 00:34:53 +0000
+Date: Sun, 14 Jan 2024 08:34:47 +0800
 From: kernel test robot <lkp@intel.com>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- f4c6556b505c04434788a5505fcc403635f2ce8d
-Message-ID: <202401140835.YPKjbNIA-lkp@intel.com>
+Subject: [groeck-staging:master] BUILD SUCCESS
+ d4f782d855447826a7c7fd744b9b57ba18dd7643
+Message-ID: <202401140845.BJDseURH-lkp@intel.com>
 User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -48,10 +48,10 @@ List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: f4c6556b505c04434788a5505fcc403635f2ce8d  hwmon: (npcm750-pwm-fan) Fix crash observed when instantiating nuvoton,npcm750-pwm-fan
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git master
+branch HEAD: d4f782d855447826a7c7fd744b9b57ba18dd7643  Revert "spi: Add multi-cs memories support in SPI core"
 
-elapsed time: 1478m
+elapsed time: 1483m
 
 configs tested: 168
 configs skipped: 1
