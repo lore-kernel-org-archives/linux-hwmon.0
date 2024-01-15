@@ -1,194 +1,167 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42C9C17C71
-	for <linux-hwmon@vger.kernel.org>; Mon, 15 Jan 2024 16:45:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C5F818E20;
+	Mon, 15 Jan 2024 20:02:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a/v+o8Zj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705337130; x=1736873130;
-  h=date:from:to:cc:subject:message-id;
-  bh=9JOQJs79Khw+FtXc6KKmjXfp8juia/6VGh7tB2vUQAA=;
-  b=a/v+o8ZjC0TV8T86K5SlQPmIJPBUjQpJe+YLyB6yLHTHVNQ5LgyQ5ILU
-   pTZ8Qa1RQuksZA/H2paq1X2g9oJvvPP12bEoCPnH3i7wDNtVogCzZPi0j
-   ojaQF0UMf80F4baCFx1nZ7cw/29UgDlL/mgvVcyYULZ2SZib2sfqU9Umd
-   eWgBrUr6mLgYu+EUrqAcFkLRqR9+xZs/j7OKKmY1VUZFot8dIHTqoKTfO
-   rIbP97V25nd2oZJXaf0efiJMudN0e1eGIV7hLZBko6thTcn53eR0bf6tF
-   7yEVYAe74sB1RTT9ll+jj+5YtrSy+TID9WJGCh7NJ74J4zNy17r3i3I7O
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10954"; a="6405996"
-X-IronPort-AV: E=Sophos;i="6.04,196,1695711600"; 
-   d="scan'208";a="6405996"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2024 08:45:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10954"; a="907097931"
-X-IronPort-AV: E=Sophos;i="6.04,196,1695711600"; 
-   d="scan'208";a="907097931"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 15 Jan 2024 08:45:28 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rPQ5V-000Cbs-2s;
-	Mon, 15 Jan 2024 16:45:25 +0000
-Date: Tue, 16 Jan 2024 00:44:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 2539b15d504c3f9fd8ca82032bf9c80c9864412c
-Message-ID: <202401160048.w6L3GnGh-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kz6qoITo"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-40e586a62f7so68316295e9.2;
+        Mon, 15 Jan 2024 12:02:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1705348944; x=1705953744; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=R7c2Oay6GZqDXqP0jwlRhkTWw64z9Y+I5NYDH+I+iMs=;
+        b=Kz6qoITo6f+GXTAKguCM5JW/aApNBe90XD0jPPeC18gfZn1AZ/ycpfgygaXJkWjOa4
+         sonfB46tEjXUGfyCWgm9UariQw7+Vck3j2WjLvVNPJwR/uiXMD4zWXyMxfQPlgsFprmD
+         u5aOZqKYXY3uNNWxlAe22vL0hg+OdsySagJ/c2Cr7VzLwavg7u1TdVhpouz9fEp9WyFx
+         ngjDRkjopPJvnmhMQMsPsVnOmtDNZVhFAjUv6jrkY/PTEW4mNos74N1pfeQFA2JsV7at
+         syG20D23ASComuliMdcJTAwUPqcqBEZ71+APnQ7JAg2bZ7/7Dzpf38+DQzymVtfP1yOk
+         xA3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705348944; x=1705953744;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=R7c2Oay6GZqDXqP0jwlRhkTWw64z9Y+I5NYDH+I+iMs=;
+        b=g10+X/4e4nXxVcXTvuUcm8T+g7WIpVBeP/82KKGBcVA/5spnVZwOl1iKFjSdMQHHes
+         Yz2qDNcreoQ3J9EuqAS83FmdZsFOMqBjTWjveRoVMi3vruUEzbGf7UgAVk5Q1yACHRRG
+         wKU6sGm7hV5MxvxsBmW4bpZIiQRbu6/op+yMsJ8H2xw1nnLouZ7yxucFWzwdGnEt+Ao8
+         B5/QHZXmy1sdutxTevgkr8jQuaajrA970SlJgSKRb8xCglh7z39yajTK7HyImtDSgcv5
+         fJJOPM0aUmcw0BkZoMMowx+huxJ0cdsUTrH4BCeKM6Hd4zuqGOUQjBsYesadeqI5Vsxk
+         0/0A==
+X-Gm-Message-State: AOJu0YydvLRKGEqLhQIRO8o8ewmIAITpuOdr+kbP6dMvyIphbLIhQfp0
+	xX9+6XQZmsHdEoF5+wqnckM=
+X-Google-Smtp-Source: AGHT+IEiTb/ZhutEctWo+bHhnsGpLsJE5X7MQpMSzLphCU+kdew5e2IRLkJ+9c6G6pWDMnBaL9TWYw==
+X-Received: by 2002:a7b:cc12:0:b0:40e:556e:5f2c with SMTP id f18-20020a7bcc12000000b0040e556e5f2cmr3604498wmh.63.1705348944450;
+        Mon, 15 Jan 2024 12:02:24 -0800 (PST)
+Received: from [127.0.1.1] (2a02-8389-41cf-e200-bf32-c470-1874-c1ad.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:bf32:c470:1874:c1ad])
+        by smtp.gmail.com with ESMTPSA id m26-20020a7bca5a000000b0040e54381a85sm16377924wml.26.2024.01.15.12.02.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Jan 2024 12:02:24 -0800 (PST)
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Subject: [PATCH v5 0/5] hwmon: Add support for Amphenol ChipCap 2
+Date: Mon, 15 Jan 2024 21:02:20 +0100
+Message-Id: <20240115-topic-chipcap2-v5-0-0cc7a15aeece@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEyPpWUC/33NSWrEMBAF0Ks0WkehVJI8ZJV7hF5oKLUL4gHJm
+ DSN7x65VyEhXv4q3v8PUSgzFfF2eYhMGxeepxrsy0WEwU03khxrFgioFSDIdV44yDDwEtyCkjB
+ 2fWeNhoCiIu8KSZ/dFIaDja6slI/Hkinx13Pp41rzwGWd8/05vKnj+u/GpiRI6FpCFY1XFN9vo
+ +PP1zCP4qja8Jxj5ckGjbZvmhT9b67Pua7ceu29BWcT/OHmnJvK295ASK5tlHY/+b7v33rrseK
+ CAQAA
+To: Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>, 
+ Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>, 
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ linux-doc@vger.kernel.org, Javier Carrasco <javier.carrasco.cruz@gmail.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Conor Dooley <conor.dooley@microchip.com>
+X-Mailer: b4 0.13-dev-4e032
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1705348943; l=4074;
+ i=javier.carrasco.cruz@gmail.com; s=20230509; h=from:subject:message-id;
+ bh=mYR8sNDnHt0dntdqvuPMWOgHUwh02hx6R3JhqMuvwwM=;
+ b=6eq52m7dd8LWQuo3LzExCqtuouPqg1APUs6wDQDRPFm0lI52evx3LhyY54c1BgLorQ5JX1E1C
+ W8K6rqoBeZwDztB/TlDbvyrefjEAq8eBrrhiu5ajyT6G5XxYmbperzY
+X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
+ pk=tIGJV7M+tCizagNijF0eGMBGcOsPD+0cWGfKjl4h6K8=
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 2539b15d504c3f9fd8ca82032bf9c80c9864412c  hwmon: (npcm750-pwm-fan) Fix crash observed when instantiating nuvoton,npcm750-pwm-fan
+This series adds support and documentation for the Amphenol ChipCap 2
+humidity and temperature sensor in its digital version.
 
-elapsed time: 1444m
+This I2C device provides 14-bit humidity and temperature measurements as
+well as low (minimum) and high (maximum) humidity alarms. A ready signal
+is also available to reduce delays while fetching data.
 
-configs tested: 128
-configs skipped: 1
+The proposed driver implements the logic to perform measurements with
+and without the ready signal, EEPROM configuration and alarm signaling.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+The features this driver does not support (I2C address and command
+window length modification) have been documented in the "Known Issues"
+section.
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                               defconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                                 defconfig   gcc  
-arc                         haps_hs_defconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                        multi_v7_defconfig   gcc  
-arm                       omap2plus_defconfig   gcc  
-arm                          pxa3xx_defconfig   gcc  
-arm                           tegra_defconfig   gcc  
-arm                         wpcm450_defconfig   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-csky                             alldefconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                                defconfig   gcc  
-hexagon                          allmodconfig   clang
-hexagon                          allyesconfig   clang
-i386                             allmodconfig   clang
-i386                              allnoconfig   clang
-i386                             allyesconfig   clang
-i386         buildonly-randconfig-001-20240115   gcc  
-i386         buildonly-randconfig-002-20240115   gcc  
-i386         buildonly-randconfig-003-20240115   gcc  
-i386         buildonly-randconfig-004-20240115   gcc  
-i386         buildonly-randconfig-005-20240115   gcc  
-i386         buildonly-randconfig-006-20240115   gcc  
-i386                  randconfig-001-20240115   gcc  
-i386                  randconfig-002-20240115   gcc  
-i386                  randconfig-003-20240115   gcc  
-i386                  randconfig-004-20240115   gcc  
-i386                  randconfig-005-20240115   gcc  
-i386                  randconfig-006-20240115   gcc  
-i386                  randconfig-011-20240115   clang
-i386                  randconfig-012-20240115   clang
-i386                  randconfig-013-20240115   clang
-i386                  randconfig-014-20240115   clang
-i386                  randconfig-015-20240115   clang
-i386                  randconfig-016-20240115   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch                 loongson3_defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                       m5249evb_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                     loongson1b_defconfig   gcc  
-mips                  maltasmvp_eva_defconfig   gcc  
-mips                         rt305x_defconfig   gcc  
-mips                        vocore2_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-openrisc                    or1ksim_defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   clang
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                      bamboo_defconfig   gcc  
-powerpc                        cell_defconfig   gcc  
-powerpc                      ep88xc_defconfig   gcc  
-powerpc                 mpc837x_rdb_defconfig   gcc  
-powerpc                      ppc6xx_defconfig   gcc  
-powerpc                     sequoia_defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                          rv32_defconfig   clang
-s390                              allnoconfig   gcc  
-s390                                defconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                                  defconfig   gcc  
-sh                   rts7751r2dplus_defconfig   gcc  
-sh                             shx3_defconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-um                               allmodconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240115   gcc  
-x86_64       buildonly-randconfig-002-20240115   gcc  
-x86_64       buildonly-randconfig-003-20240115   gcc  
-x86_64       buildonly-randconfig-004-20240115   gcc  
-x86_64       buildonly-randconfig-005-20240115   gcc  
-x86_64       buildonly-randconfig-006-20240115   gcc  
-x86_64                                  kexec   gcc  
-x86_64                randconfig-011-20240115   gcc  
-x86_64                randconfig-012-20240115   gcc  
-x86_64                randconfig-013-20240115   gcc  
-x86_64                randconfig-014-20240115   gcc  
-x86_64                randconfig-015-20240115   gcc  
-x86_64                randconfig-016-20240115   gcc  
-x86_64                randconfig-071-20240115   gcc  
-x86_64                randconfig-072-20240115   gcc  
-x86_64                randconfig-073-20240115   gcc  
-x86_64                randconfig-074-20240115   gcc  
-x86_64                randconfig-075-20240115   gcc  
-x86_64                randconfig-076-20240115   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
-xtensa                  audio_kc705_defconfig   gcc  
-xtensa                       common_defconfig   gcc  
-xtensa                  nommu_kc705_defconfig   gcc  
-xtensa                         virt_defconfig   gcc  
+The complete supported functionality has been tested with a CC2D33S
+sensor connected to a Raspberry Pi Zero 2 w.
+Different device tree node definitions (with and without ready and/or
+alarm signals) have been positively tested.
 
+Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+---
+Changes in v5:
+- dt-bindings: add "amphenol,cc2d23" to "compatible" in the example.
+- Link to v4: https://lore.kernel.org/r/20231020-topic-chipcap2-v4-0-7940cfa7613a@gmail.com
+
+Changes in v4:
+- chipcap2.c: require exclusive regulator to trigger command mode.
+- chipcap2.c: keep the device off until a measurement is required.
+  Because the device makes an automatic measurement after the power-up
+  sequence, no differentiation between sleep and non-sleep modes is
+  required anymore.
+- chipcap2.c: retrieve alarm settings from the device instead of storing
+  them locally.
+- dt-bindings: add vdd-supply to required properties.
+- dt-bindings: default to 'amphenol,cc2d23' compatible (same
+  functionality for all compatibles).
+- Link to v3: https://lore.kernel.org/r/20231020-topic-chipcap2-v3-0-5b3bb50a5f0b@gmail.com
+
+Changes in v3:
+- ABI: sysfs-class-hwmon: documented humidity min/max alarms.
+- General: reorder patches (bindings first to remove checkpatch
+  warnings).
+- General: remove part number wildcards and use real part numbers.
+- chipcap2.c: improve error path in probe function.
+- chipcap2.c: fix error handling if regulator could not be registered.
+- chipcap2.c: use absolute values for hysteresis (for both ABI
+  compatibility and simplicity).
+- chipcap2.c: minor code-style fixes and variable renaming.
+- Link to v2: https://lore.kernel.org/r/20231020-topic-chipcap2-v2-0-f5c325966fdb@gmail.com
+
+Changes in v2:
+- vendor-prefixes: full company name in the vendor description (Krzystof
+  Kozlowski)
+- chipcap2.c: proper i2c_device_id table, coding style fixes, cleaner
+  error path in the probe function (Krzystof Kozlowski)
+- dt-bindings: per-item description and lowercase names (Krzystof
+  Kozlowski)
+- MAINTAINERS: fix manufacturer name (Krzystof Kozlowski)
+- Link to v1: https://lore.kernel.org/r/20231020-topic-chipcap2-v1-0-087e21d4b1ed@gmail.com
+
+---
+Javier Carrasco (5):
+      dt-bindings: vendor-prefixes: add Amphenol
+      hwmon: (core) Add support for humidity min/max alarm
+      ABI: sysfs-class-hwmon: add descriptions for humidity min/max alarms
+      dt-bindings: hwmon: Add Amphenol ChipCap 2
+      hwmon: Add support for Amphenol ChipCap 2
+
+ Documentation/ABI/testing/sysfs-class-hwmon        |  18 +
+ .../bindings/hwmon/amphenol,chipcap2.yaml          |  77 ++
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ Documentation/hwmon/chipcap2.rst                   |  73 ++
+ Documentation/hwmon/index.rst                      |   1 +
+ MAINTAINERS                                        |   8 +
+ drivers/hwmon/Kconfig                              |  10 +
+ drivers/hwmon/Makefile                             |   1 +
+ drivers/hwmon/chipcap2.c                           | 835 +++++++++++++++++++++
+ drivers/hwmon/hwmon.c                              |   2 +
+ include/linux/hwmon.h                              |   4 +
+ 11 files changed, 1031 insertions(+)
+---
+base-commit: 0dd3ee31125508cd67f7e7172247f05b7fd1753a
+change-id: 20231020-topic-chipcap2-e2d8985430c2
+
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Javier Carrasco <javier.carrasco.cruz@gmail.com>
+
