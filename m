@@ -1,73 +1,72 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6B3B25562;
-	Wed, 17 Jan 2024 21:23:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3C952554C;
+	Wed, 17 Jan 2024 21:25:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705526606; cv=none; b=WJr+14bR/XZHzyW/KFLM5pGtIRjXFU6nnw3XKILQDdZvcaIKavrKhvV4eFZRLuJf2NukF1avihpf/9/QqzROZPmnrEr1mRcI3JVbxxCpoRrbzlxgQ2D+k6ecgtyXHVuSZgZlZ+OXupi4p8DEkc8ZPyguy2hNwVs23XdPyPEcIHo=
+	t=1705526725; cv=none; b=NyF4PRHCi4HMGvVhC/72yqVh1VYkmkBJavryDvDEj6l/XvaCzafw9cXgnmxJhS6u/xPLzboX5rbsHnvbeyNlFWWXOAdww38xaa1raBzxYHOMxL6+DnootRE2oOhaMA7+zHknHwme9BMz83Bgfwlqj3R7l6qFckjk/Vu1gCSU6XY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705526606; c=relaxed/simple;
-	bh=3AY9LGw6/TkBoROmZw0TC6yg8B3XpOWqe162rh+rYA8=;
+	s=arc-20240116; t=1705526725; c=relaxed/simple;
+	bh=arqZU/3Z0F7K9P8r+NixD5Edp8x8KPCmaUDGtcTrCis=;
 	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:Received:Sender:
 	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qj9fQV4qa3fVhAlpbXsjZ6I6ofBkXbmRnBF6ZR9cLaOmW1E8cQIPf6WbPB0kxHO9uz7jOL1dFxlUgA4C+ttig286/MXyndahBevgtLgJHMr1VRiKMkzNAu5HHltfBrYt8nm70HfGNpbjJnNFdpEhQ1J6kbZ2DR5kM9ETH1Qr2y4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OvnPzArD; arc=none smtp.client-ip=209.85.210.179
+	 Content-Type:Content-Disposition:In-Reply-To; b=WHmFNjD+JDHBHUNSZ1oqL6fLcxss6g0bdQjRE1NMd5rsP/z2IQOUSUT0/2bCLX6SBLrTax2PdecfKDky8h+GRlOy4xl3ZPmEPBF3eEcEWOVm+QgM3BdfKWEQLwE48p4TlmQVUsv7eGMfGz2DIJsZWnc/cdPRQkM+roGspjukG0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KDCryfpH; arc=none smtp.client-ip=209.85.216.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OvnPzArD"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-6daf9d5f111so9385554b3a.0;
-        Wed, 17 Jan 2024 13:23:24 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KDCryfpH"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-290004a6082so503222a91.2;
+        Wed, 17 Jan 2024 13:25:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705526604; x=1706131404; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1705526723; x=1706131523; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=bgz7MUVBcIvLhtX7IpLAmxqdvaGpE/thV4ki6p4meGA=;
-        b=OvnPzArDGHA5YfmWh0Ry9ev0JClR/bNG1qscMfFfqg0qvbiFr3zqKolm4Kz+myPslV
-         RLTIXBoluE/83bUnif5K1gDY02/+UK290MPBIUqReKiQ0TTvoftur3yUEhasyYoz+uNo
-         ZNtrAJ9GDZsFwD+U8UvtygzF8zWB1qZKMi6X4uQClkuOS0t9JwUtNm7rcsz7wIkMgzsl
-         KrvhjibwHUnsAJfkqjSNhtbcuFOwiWZs4C1Bt0HsMxDbSjDuFffV3ZVHjNqXWK0ofo7v
-         A4SSN9U9R8V4aQi+7LYuwoBKh+z0HRnewux+Y3NOjiS5m/jg9bz1jSkvNIS9TdSFYBJZ
-         6rRw==
+        bh=hxyzYcAuO/5y4DHuZHOAGASYGQy+icQxkqpjwxzSajg=;
+        b=KDCryfpHtyvSDpln4SBbKOaGmp+kCUhr4RYeUD/PKtgiEaoodhQXJTKBIHdbTJJuDE
+         gNn/y2utui9aLCTbrrysWaEIA0AtwMmwd8rhZ0hKOo15e2sqIXiyJa0tBplwITWS8KmH
+         PvPrusYWD8gKh6YlPus0WYcCuF6NtwntbRzW+WEuNQCvwAj4YJUbzVSVBo/k6OgvElM1
+         844grwKfKUA6XOtVi6wLHNl0O+JZbdZHcpjwCWtatZdjYBb7e56Z7lqFvtyypkCJP4P0
+         TJj6lqfh1Q4liM/5rS/qGcsInIQjc+KHGX+2ddqRbNLuhsG0TTkO4UiG7GKlaGJ783AW
+         3bMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705526604; x=1706131404;
+        d=1e100.net; s=20230601; t=1705526723; x=1706131523;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bgz7MUVBcIvLhtX7IpLAmxqdvaGpE/thV4ki6p4meGA=;
-        b=JN8N+yorhQcajV7bEK4DmchmCx06XB8ejYrFZZzQGdLzUetW8egPF8qRlrQGqTarm2
-         LKsd7ByQujGeYYpo0AeoY4soMLM/MUmbCMdiqkigzQKiOEUBzbEtWPsZlxYXQw1bC7og
-         G1AIjnpT7M+CrEnBj9n9JCJku/2QnqH7b1IKGuATQz5ObESqIhI28R4s02sdwZP0aXEK
-         7OJbiZTjUhvlkQtS/e8W9vnn2oMYuN32H3FBvWU4rF5btmbVlF6ZmvRIyBesa0N2cb8P
-         HEyt6a2NbfDCvKaEq8X0ZTqGQCqACPHKfUA0qquORSZXkZFYfNXvK6TFhszbnpinY59W
-         uPyw==
-X-Gm-Message-State: AOJu0YwJUYdIuYTD17nb5ywnr6ehem4aqNoTj6Kmpy70RWXY8kSTQ+pD
-	BDHYgtTB5YfGfOACKfsg7ps=
-X-Google-Smtp-Source: AGHT+IFu/ROGIs9WmjuksVHTQdsxmN8PGo5qkkiBnukl1zuTNP2GEIu8oEv30rHze7iwegJY+peXlQ==
-X-Received: by 2002:a05:6a21:329c:b0:19a:5c85:fff6 with SMTP id yt28-20020a056a21329c00b0019a5c85fff6mr9472967pzb.33.1705526604076;
-        Wed, 17 Jan 2024 13:23:24 -0800 (PST)
+        bh=hxyzYcAuO/5y4DHuZHOAGASYGQy+icQxkqpjwxzSajg=;
+        b=jTS5MXQA/eBnn+LNY10YZHePGgdcL8GI9wDlsrcl650F/J/pGBclCqXCE8dKikp68v
+         7QFA5QheOjNdDYwhOU+odDagVCh5tG59Uw713mmvB7kEjCNPE+hFHKOghtY79BWRuvGf
+         6n9lT5GiXQs/f7mvZhp8gtFUeW5p4UypRiEgjK0G+rUdyBUNnbLmDG+6fZ60LgIMuItW
+         icFPSRwNkfb0Vhv4cONUYWZ0OoS+JfEncZ6UZnPVb3TqF5prflfOdySUiZkrUrGZNlzs
+         Wo4uChfZSn3awf5+x9aj84UKKNItFkD11S1RS26OM2fJ4apf6/QzFUDeq16pKEtd12G+
+         SZQQ==
+X-Gm-Message-State: AOJu0YyGaJiGZl3aSsYVFTux+Yu6Lfbn6ppYhGViJP3MtFL7rTbC/c/7
+	mAuMlkVEIJ2OXmceLjoOAdE=
+X-Google-Smtp-Source: AGHT+IEk6HSQEc7HjBa0D/G2KtT1MGHMvB7VPCCl3epcOXmGuN/pC9G0Ra72sYRJ+AeEOwbD1/I7QQ==
+X-Received: by 2002:a17:90a:9482:b0:28e:8267:1308 with SMTP id s2-20020a17090a948200b0028e82671308mr2448844pjo.7.1705526723169;
+        Wed, 17 Jan 2024 13:25:23 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z6-20020aa785c6000000b006d9b4eda6b0sm1902967pfn.157.2024.01.17.13.23.23
+        by smtp.gmail.com with ESMTPSA id pl15-20020a17090b268f00b0028bdc73edfcsm138322pjb.12.2024.01.17.13.25.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jan 2024 13:23:23 -0800 (PST)
+        Wed, 17 Jan 2024 13:25:22 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 17 Jan 2024 13:23:22 -0800
+Date: Wed, 17 Jan 2024 13:25:21 -0800
 From: Guenter Roeck <linux@roeck-us.net>
 To: Michal Simek <michal.simek@amd.com>
 Cc: linux-kernel@vger.kernel.org, monstr@monstr.eu, michal.simek@xilinx.com,
 	git@xilinx.com, Conor Dooley <conor+dt@kernel.org>,
 	Jean Delvare <jdelvare@suse.com>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 2/2] dt-bindings: hwmon: ina2xx: Describe
- #io-channel-cells property
-Message-ID: <6d097147-0bd9-4f80-8b58-7bdb2a811acb@roeck-us.net>
-References: <6f3c57d08984c1978569d3918cb38eb295c0c67d.1703077926.git.michal.simek@amd.com>
- <aa303b9fe3116e7f98d6b72822f7f57694366db3.1703077926.git.michal.simek@amd.com>
+	Rob Herring <robh+dt@kernel.org>,
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
+	"open list:INA209 HARDWARE MONITOR DRIVER" <linux-hwmon@vger.kernel.org>
+Subject: Re: [PATCH] dt-bindings: hwmon: ina2xx: Describe ina260 chip
+Message-ID: <c0772428-1366-44f1-833c-2d343580470e@roeck-us.net>
+References: <4c82dc4d412e91d1601c1da5bca1cdf1a91cd9b8.1704724242.git.michal.simek@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -76,14 +75,14 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aa303b9fe3116e7f98d6b72822f7f57694366db3.1703077926.git.michal.simek@amd.com>
+In-Reply-To: <4c82dc4d412e91d1601c1da5bca1cdf1a91cd9b8.1704724242.git.michal.simek@amd.com>
 
-On Wed, Dec 20, 2023 at 02:12:14PM +0100, Michal Simek wrote:
-> There are two drivers in the Linux kernel. One is hwmon based and second
-> IIO. IIO version requires to define #io-channel-cells to operate.
+On Mon, Jan 08, 2024 at 03:30:51PM +0100, Michal Simek wrote:
+> Describe ina260 chip which is precision digital current and power monitor
+> with precision integrated shunt resistor.
 > 
 > Signed-off-by: Michal Simek <michal.simek@amd.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
 Applied.
 
