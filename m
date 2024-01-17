@@ -1,54 +1,53 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC0C01C69A;
-	Tue, 16 Jan 2024 16:16:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 180531DFC7
+	for <linux-hwmon@vger.kernel.org>; Wed, 17 Jan 2024 11:44:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1705491854; cv=none; b=RipcoWXetpHKc2JAo2W8MXBgz4AgEasNLzeLPhrWR4J0NtQGBIwCq8qn4z8xpgAX0v1/VscrktBndm1K8hboXa5NOaRaeEpkLiK1ggyFYFsIEPTV7cv+uSwITWo+cRVgMbqhjBHNRlXCL8SGrYgA5bgu9n6ZZHUfZafLqEebjm0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1705491854; c=relaxed/simple;
+	bh=pTfztx2ZiRJwezRcJP06laRz8Itf7QlEbx3jpyO9d20=;
+	h=DKIM-Signature:X-IronPort-AV:X-IronPort-AV:Received:X-ExtLoop1:
+	 X-IronPort-AV:Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:
+	 MIME-Version:Organization:Content-Transfer-Encoding; b=YCa/6+Yq7cqluZYHc+jwDeeKUQ1EUKKfE6if0UsyEtsLXAhRjDDKB3TNV9Gk3rZG3jgBgERNuzOI5V89+fGPEnq+1xvsb7KDYnHsdwmg39PuglefM98jAWSDy8RKcCHa+J6ZNxOGIVvFXBworZ743wLaxCCdhLflGp13a6l/oEU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HkQM+NlV; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jsuCXxpI"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1d427518d52so73161125ad.0;
-        Tue, 16 Jan 2024 08:16:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705421802; x=1706026602; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=P/cU0ufGt5VaJJABeZ5vsd8TirE4y4F9//uIian6DgY=;
-        b=jsuCXxpIqGFeH0ofnQvW3t+GnKDvasinbVLfPISzf2SjheuZcbezqad1+rhSzOix3q
-         S3j25fOH9/0+Uc0LquDtbEuUM/RlHyRlLilgRlxIe2AKTOcSibo6vpZPYD6HAVFef2dI
-         ylxrJeHr6z4CNKptcUnAdPXacUYC7OnCqycc47TU2vqA3bvZG85QBbC94ZcCX6XkPD7W
-         /5x3MdEosf57MiVmExEkNjD8laUGli+EF9ddi10Zkc/i5jWca4Rju4mJDp5OP8NK3UD5
-         Fz09I4pk/UfUSEZ2IRwH+jpLDDXgskJm/tj6YxU6IO3GnDCtI1NjwpPCb4xZV7VDvH3j
-         2TSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705421802; x=1706026602;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P/cU0ufGt5VaJJABeZ5vsd8TirE4y4F9//uIian6DgY=;
-        b=RpKpHloF2lnO0MUJ37b9XQmGo8juWJcHEZZCk6Jl6nGdIb4KDk9SNv+JRpK61y8m28
-         pDwutQ2J3LfjHLxzkPLs7/NN8IJIJzfTMX19NF0SaM3HV4UrHQJ5l0Y5vw9Ge0ILHF0N
-         4L7doGF/umuF8fdHBfmbjS32Y6H5xgjZI51NHlIXjHz/TYKsmIBTJf5hJSMNFMrUhQiQ
-         p+ZKellT8YfmdkT+RQTxTMR5C9CUpkeZ9KpKPdEz3zyezXox9bBNjcuQHdN9kzLmQpYm
-         uYGzFkApK9/qmb6YWYndIibA4kw6pOrBV8tz+tjK8iCESrMeTtAo12MLfKhPbrppvI3b
-         odcw==
-X-Gm-Message-State: AOJu0Ywmt6ACpwvjunEIBnkwMPTWE/Vjoqo64AYda5DdsxaTOuANCQHo
-	XobIxv9I8VWqzvVeKEz2ERrJEbZOsiQ=
-X-Google-Smtp-Source: AGHT+IFEyycsQ3FG5D+KcB7ALfSC1dftEKQpgC1gAHUds42MpMhf37DhkUnxJ+oIgDPcgFbSq17+UQ==
-X-Received: by 2002:a17:902:c94d:b0:1d3:d105:53a7 with SMTP id i13-20020a170902c94d00b001d3d10553a7mr11232497pla.68.1705421801855;
-        Tue, 16 Jan 2024 08:16:41 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bh10-20020a170902a98a00b001d5e5836292sm1477778plb.130.2024.01.16.08.16.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jan 2024 08:16:41 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon updates for v6.8-p2
-Date: Tue, 16 Jan 2024 08:16:39 -0800
-Message-Id: <20240116161639.1127810-1-linux@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HkQM+NlV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1705491853; x=1737027853;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=pTfztx2ZiRJwezRcJP06laRz8Itf7QlEbx3jpyO9d20=;
+  b=HkQM+NlVNJVzn0WuKSV9fCs+lLAFse+/spSnQwZPhbNhpWxE/SxjIV0u
+   5T2wyY1g7paSrUBFsazO1fqBD0eJi0QN7foUdfL2uTOm21jTg7YozZ+mg
+   7T74DJzH7+9jtRKb/qujmsYj3FRFyNNOnCQRcAH7cz/+2Hsao0zbQ9VLi
+   s4CJsdF//JeRHNmJpVYOnUvLxTvptVv14/D2fVlFXpYPuixsbG3GeEyt0
+   2/xtxHNk5lXWSVmJlHFDbw1YmFtyxpEe2Are5jv9Kw0oGRVZqrtnoUFCm
+   k9mmrJYhhGVvGqpWgG7Oa3yJI+oWPutpK7+FGqUC7kltIwr9JljNgaxkP
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10955"; a="6850992"
+X-IronPort-AV: E=Sophos;i="6.05,200,1701158400"; 
+   d="scan'208";a="6850992"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2024 03:44:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,200,1701158400"; 
+   d="scan'208";a="10890"
+Received: from msznigir-mobl.ger.corp.intel.com (HELO localhost) ([10.252.38.230])
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2024 03:44:10 -0800
+From: Jani Nikula <jani.nikula@intel.com>
+To: linux-hwmon@vger.kernel.org
+Cc: jani.nikula@intel.com,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH] hwmon: put HWMON_CHANNEL_INFO() initializers in rodata
+Date: Wed, 17 Jan 2024 13:44:05 +0200
+Message-Id: <20240117114405.1506775-1-jani.nikula@intel.com>
 X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -56,38 +55,45 @@ List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Content-Transfer-Encoding: 8bit
 
-Hi Linus,
+HWMON_CHANNEL_INFO() is supposed to be used as initializer for arrays of
+const struct hwmon_channel_info *. However, without explicit const,
+HWMON_CHANNEL_INFO() creates mutable compound literals, and the const
+pointers point at the mutable data. Add const to place the data in
+rodata.
 
-Please pull another hwmon update for Linux v6.8-p2 from signed tag:
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+---
+ include/linux/hwmon.h | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.8-p2
+diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
+index 8cd6a6b33593..c2c0da18dfa3 100644
+--- a/include/linux/hwmon.h
++++ b/include/linux/hwmon.h
+@@ -425,12 +425,12 @@ struct hwmon_channel_info {
+ 	const u32 *config;
+ };
+ 
+-#define HWMON_CHANNEL_INFO(stype, ...)	\
+-	(&(struct hwmon_channel_info) {	\
+-		.type = hwmon_##stype,	\
+-		.config = (u32 []) {	\
+-			__VA_ARGS__, 0	\
+-		}			\
++#define HWMON_CHANNEL_INFO(stype, ...)		\
++	(&(const struct hwmon_channel_info) {	\
++		.type = hwmon_##stype,		\
++		.config = (const u32 []) {	\
++			__VA_ARGS__, 0		\
++		}				\
+ 	})
+ 
+ /**
+-- 
+2.39.2
 
-Thanks,
-Guenter
-------
-
-The following changes since commit 052d534373b7ed33712a63d5e17b2b6cdbce84fd:
-
-  Merge tag 'exfat-for-6.8-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/linkinjeon/exfat (2024-01-12 18:05:56 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.8-p2
-
-for you to fetch changes up to 2539b15d504c3f9fd8ca82032bf9c80c9864412c:
-
-  hwmon: (npcm750-pwm-fan) Fix crash observed when instantiating nuvoton,npcm750-pwm-fan (2024-01-14 07:44:38 -0800)
-
-----------------------------------------------------------------
-hwmon updates for v6.8 - part 2
-
-Fix crash seen when instantiating npcm750-pwm-fan
-
-----------------------------------------------------------------
-Guenter Roeck (1):
-      hwmon: (npcm750-pwm-fan) Fix crash observed when instantiating nuvoton,npcm750-pwm-fan
-
- drivers/hwmon/npcm750-pwm-fan.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
