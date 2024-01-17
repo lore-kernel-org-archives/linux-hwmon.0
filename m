@@ -1,66 +1,68 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD593250E8
-	for <linux-hwmon@vger.kernel.org>; Wed, 17 Jan 2024 21:18:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 184F925562;
+	Wed, 17 Jan 2024 21:20:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705526334; cv=none; b=HV73/jxcsGgMw5ZHJpNaJ1o7kqq7hfklO/fSL5jgqT0J1GJ6+nFm3AtWmFYYuCC9pRgnkZi8ZUA5kpwNL3S1bDwDjkTPhKMp//0ZG5/Pa0Ew97Tc++yY84eFpGT4xB0FHuEnVQO6ysHGs4HTZK9Iy3AM5P4z33gpcQs/u7bgh/s=
+	t=1705526407; cv=none; b=ORwtVuXXHgpJtcskUrPlbfsTrJTj3yNWCZNHZbPCliioFdycIgs5IxPoRfc+EOn8a4SMrmJMs9BK5ZrleLsAw0Wzu04O57xGSgu95uBOd95s9wTfywN3+XPccoFWo7dWXH85VswQZ7Bs1wkSxMzXimXY/GLhOzEdP1wamG8vhmo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705526334; c=relaxed/simple;
-	bh=xanIe98lsUhZCnVyTs1ocpC+92TJR2DcJmA6WmVKquc=;
+	s=arc-20240116; t=1705526407; c=relaxed/simple;
+	bh=Usy1X9bR2Bsf5rq6XUwehouKg8Z5H/l9vzbpJtgQvXM=;
 	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:Received:Sender:
 	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OXeFV9TBNP2wGstG+Wuu8PVubFfvmV89RF3jYzqsg4FLirn6F/yhuYXy9N0IEwTIOK6Zy9hnf2Z1GvH9tYnsDDp1kBr6FPGV5XnpiVKfc1xVr6kDvF8AFmMK4gefwm2zU1rtrZn5JKMNF5gNqWW6YU9F6HhX2BJDCV1LBEW4SAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Pn2vdEya; arc=none smtp.client-ip=209.85.214.170
+	 Content-Type:Content-Disposition:In-Reply-To; b=rfgXHiFsSAnJHhHkldbHK3slIWkQCXUmIg/2yMPXb8DM4L1DbE8CXhnr3L6zZZyErsf7rgx6fuU2sz027FL7+W0ZlgY0W8aw9pgSzUKkmfmSpsqwcIqfZonDnEQB4ianqypMHEwLbyEdac8dTzcoqqrchfwCNMwnCAxfHhIUSd8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rx4oRFMC; arc=none smtp.client-ip=209.85.210.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pn2vdEya"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1d6ff29293dso3640605ad.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 17 Jan 2024 13:18:52 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rx4oRFMC"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6db0c49e93eso8537759b3a.1;
+        Wed, 17 Jan 2024 13:20:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705526332; x=1706131132; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1705526405; x=1706131205; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vVeRuhAA3dRFtEalw4QakO/qJAqU+EImMKJEhGEtMj4=;
-        b=Pn2vdEyakoOpsoLphHABFe4AK5fhSBcyDtR4V875QbLMz/8coESZxY9AyRZ0ZhjYEz
-         y3m/lNnZZxdRMorTLa87yyR9DsUMPl1aoHSVMKh+7kNvkMnFsAbbvZYkY/nr2T0oMfb7
-         CSev79PIMlhvzdSsSM1aPJKBYspOgrC6ZafyDJfU5E1I8TSpczYK5gZYK/KVJzsjEmUg
-         mxVKTDouASvDF31u+AfwMn2NRFDRn0JMcvwKVhMVusKJGOhQuPCdK9JpKrLvkFkw9Crx
-         RFdkzAx86TgfpUSEEl7JoqmIZ1/JB2MC6tT9JZ0FL6ODAboCTgJSQBTAvLkUYAsu78SG
-         /opg==
+        bh=OJobziSCd9q4uVk2bgj8rZ0Erm0TBOh91NVx6zlbs60=;
+        b=Rx4oRFMCNLtPFK0sQf2UKdq3pQF1IW89D/6xFjY7EnWlrKy0wClkmVCB0Oj6xGuMRc
+         1K1Y8VNTcJWt7hvrVrzvHhT3xaMgj1GjKMD5iNfH7A+KZLmt0k85Q7d/1kUruygH5WcB
+         KexSV07eiMWWjZTmEWM+ttYOJUJFPf5HiZ5ifXza3/3NdzbNIy2Quz9EDf20BFXiOvQJ
+         JQtPyRfnI4qc1A83C1G+xg40yEJ2qJ2eaxAMIkzF1eboqfPR3swV5BWQfhN7HHm4IGT6
+         72YwVyXRYgKXtio8Or7+uWfz/6/iSbUCzUGuhMGBKtgsK0PBNNMXuoglBwIXcD4cVIPc
+         dR+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705526332; x=1706131132;
+        d=1e100.net; s=20230601; t=1705526405; x=1706131205;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vVeRuhAA3dRFtEalw4QakO/qJAqU+EImMKJEhGEtMj4=;
-        b=uwJt+tVdmRV5xatBZbugyJkrPYRBQZbOgNFrP92f/kNFsVJJ+8V+TuwenVmyrsXlNv
-         Xf4X7JaLG8/O+YHSLLz4DtvF+GvmgKwZeK4s5jBRtn7pMD9xw8WWe3FLSV7EL/FdusOF
-         +Uv9Go/KOZj4yg00NQhj5CWCF8KygfYyg3Dp+2elpo2X9MG8Y2awjLAbBIf52cffUrET
-         bLjTEP+w9D0lIlJzV3r0eBHObyMhmgJs1zwvK0qefgojSnAdgyZ5nLxtN0YHdw0pmRRw
-         e0UKzinv0COJR8p+yHjNy7Cq0QxLqry3ZcbQ6rHa2I7RAiKklxMFkIMQBXyZvtfBbIu/
-         9FeA==
-X-Gm-Message-State: AOJu0YxWE3OvdziZhuDAGDR89vaP/0jnTHs+GaozQY0rXf7rlz1gtB/I
-	whJe3nVMZhb24p835wLPHic=
-X-Google-Smtp-Source: AGHT+IHwPjSI6hYApg3EVswOU0Qb0XB6CYagAwABy+hRIMfkVBsa7rbsXMy33jqFYARCeIzyLixcaA==
-X-Received: by 2002:a17:902:cecf:b0:1d3:fa3f:6688 with SMTP id d15-20020a170902cecf00b001d3fa3f6688mr7568915plg.61.1705526332052;
-        Wed, 17 Jan 2024 13:18:52 -0800 (PST)
+        bh=OJobziSCd9q4uVk2bgj8rZ0Erm0TBOh91NVx6zlbs60=;
+        b=UyNGZHo/n2PuLHWxIVVZ6FhRKFX6Q7WsMlyFnWQIunNyWWf+0z3Sm3txw406KuLD1s
+         Wr3y6fohB/wLw/ZshndKdRfhUl6bEOecv6gBhR0E7UArcLzo3ScBoeulyJpS0n5fuP29
+         +JqDnzcUEOouIT/w3hiIbd03rrDmlc7NrYLWOIrRXwmqyl6PCMTiEK+84sPbHVtw0hLJ
+         dzaOxIk3DU9KgOjp1vcmTAgFrcvJeuTIHkR3urqBlGwU4OVeMTRLdOcIo5YhINDUHowf
+         HMZocIqpuqSp3m5BIjMeEG5sP5meJ5F0sEwxlfaAl+oNagqsWXzVY+vU7kOai0b66jb6
+         iZ0A==
+X-Gm-Message-State: AOJu0YyQRehuDU+UnPSdl/EtPR09bP01nQljKaBxGZ5guXQ8KaDQmuN9
+	/tYLyqc0IMFNoeCagmRxQEo=
+X-Google-Smtp-Source: AGHT+IEKKHqMIVLugtAGMMDwvnESPwoXJpmw7xKJqOeKGPA1kqM5iNfKBxnBb817AJ/Xw836xUEd3Q==
+X-Received: by 2002:a05:6a20:12d2:b0:19a:2733:58d3 with SMTP id v18-20020a056a2012d200b0019a273358d3mr9785660pzg.85.1705526405327;
+        Wed, 17 Jan 2024 13:20:05 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v10-20020a170902d08a00b001d6e90d6b42sm102563plv.25.2024.01.17.13.18.50
+        by smtp.gmail.com with ESMTPSA id i11-20020a17090332cb00b001d414a00fd9sm101716plr.29.2024.01.17.13.20.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jan 2024 13:18:51 -0800 (PST)
+        Wed, 17 Jan 2024 13:20:04 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 17 Jan 2024 13:18:49 -0800
+Date: Wed, 17 Jan 2024 13:20:04 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Jani Nikula <jani.nikula@intel.com>
-Cc: linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH] hwmon: put HWMON_CHANNEL_INFO() initializers in rodata
-Message-ID: <6095dda1-2458-41af-a2a4-4f33b82d835e@roeck-us.net>
-References: <20240117114405.1506775-1-jani.nikula@intel.com>
+To: Forest Crossman <cyrozap@gmail.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (nct6683) Add another customer ID for MSI
+Message-ID: <d10b63fa-a459-41bf-936b-113f2b8f6b17@roeck-us.net>
+References: <CAO3ALPwot01+bBisj7Roog7SD9UwV+y4NtiakKrBDE0tPvFhbw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,18 +71,12 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240117114405.1506775-1-jani.nikula@intel.com>
+In-Reply-To: <CAO3ALPwot01+bBisj7Roog7SD9UwV+y4NtiakKrBDE0tPvFhbw@mail.gmail.com>
 
-On Wed, Jan 17, 2024 at 01:44:05PM +0200, Jani Nikula wrote:
-> HWMON_CHANNEL_INFO() is supposed to be used as initializer for arrays of
-> const struct hwmon_channel_info *. However, without explicit const,
-> HWMON_CHANNEL_INFO() creates mutable compound literals, and the const
-> pointers point at the mutable data. Add const to place the data in
-> rodata.
+On Sat, Jan 13, 2024 at 04:27:55PM -0800, Forest Crossman wrote:
+> This value was found on an MSI PRO X670-P WIFI with an NCT6687D chip.
 > 
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+> Signed-off-by: Forest Crossman <cyrozap@gmail.com>
 
 Applied.
 
