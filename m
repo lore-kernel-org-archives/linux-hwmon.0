@@ -1,60 +1,60 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 626862555E;
-	Wed, 17 Jan 2024 21:22:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6B3B25562;
+	Wed, 17 Jan 2024 21:23:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705526534; cv=none; b=oXJ2VYX/q828DKkUO0ragoGvwboomAtPwHfKXzo9IcO5TNlhGVnYEr+Ym3ZJ1c+tFVTdB/q8sQspJYq8pSVKXJU3PU0LO6T6gDAe3sG9VQV5fJxtUu7CqrIMzrkcx9DlIwpP0cyJ/UFtl7RBTjGFFzBmmZeOM5+JbVbWEln4JRA=
+	t=1705526606; cv=none; b=WJr+14bR/XZHzyW/KFLM5pGtIRjXFU6nnw3XKILQDdZvcaIKavrKhvV4eFZRLuJf2NukF1avihpf/9/QqzROZPmnrEr1mRcI3JVbxxCpoRrbzlxgQ2D+k6ecgtyXHVuSZgZlZ+OXupi4p8DEkc8ZPyguy2hNwVs23XdPyPEcIHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705526534; c=relaxed/simple;
-	bh=yMkH94Ava2a4mww+PKl7IpOY9qBSnxvwZkloI7X+mec=;
+	s=arc-20240116; t=1705526606; c=relaxed/simple;
+	bh=3AY9LGw6/TkBoROmZw0TC6yg8B3XpOWqe162rh+rYA8=;
 	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:Received:Sender:
 	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kRR012do0/rUyRB7ok4OPnzquHcKLXo7c9bqi5qXCepPNSdwZ14oN8ZcaUShshluyfmdbYS9rwESQN/Ntjxd8uiZvqcq9DoVxM5WUCh2yPHrMcWHGmEFkakbYycX1VNmhLZBlrPKEu+mp7OZuNKxHMsgH/fDqgavXvyFeuMZmG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FH3Bd3LU; arc=none smtp.client-ip=209.85.210.169
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qj9fQV4qa3fVhAlpbXsjZ6I6ofBkXbmRnBF6ZR9cLaOmW1E8cQIPf6WbPB0kxHO9uz7jOL1dFxlUgA4C+ttig286/MXyndahBevgtLgJHMr1VRiKMkzNAu5HHltfBrYt8nm70HfGNpbjJnNFdpEhQ1J6kbZ2DR5kM9ETH1Qr2y4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OvnPzArD; arc=none smtp.client-ip=209.85.210.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FH3Bd3LU"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-6db05618c1fso8531469b3a.1;
-        Wed, 17 Jan 2024 13:22:13 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OvnPzArD"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-6daf9d5f111so9385554b3a.0;
+        Wed, 17 Jan 2024 13:23:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705526532; x=1706131332; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1705526604; x=1706131404; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=tq9A9p4mjdvLUr/wyRPb+SJucP0ZkwW9g+4pOi/DUHw=;
-        b=FH3Bd3LU2FBYy8ylsB8XouDTZH7IXEzJ9x+1A9FQVvzhV16umxVaHyJGqB155P7J/p
-         /uNNO+oYGQAd8Lf1X5a84FKJAwxszHxanwgjzoX4ee6KW+etxqihYzFz47tkjoGjhNxJ
-         M84qoJQTlsfGdfnyu1pnTydRMDYnaDmDayWC8Z8+m6b8SeYuirvRYta4L8agtcRuQrq8
-         uV0sOud5CxP0/F9m1hyZvKfCmMYgkgIY5K6WnwY/rTOI6pTwEwg23b3J2lEgafNpx2XD
-         IU2BReqxrJdknUImsW/cocSD7n6uvmnz3JpiwAwfsN+psBDO2OAfe0m/Vo1Cj2MoRHmV
-         5OyQ==
+        bh=bgz7MUVBcIvLhtX7IpLAmxqdvaGpE/thV4ki6p4meGA=;
+        b=OvnPzArDGHA5YfmWh0Ry9ev0JClR/bNG1qscMfFfqg0qvbiFr3zqKolm4Kz+myPslV
+         RLTIXBoluE/83bUnif5K1gDY02/+UK290MPBIUqReKiQ0TTvoftur3yUEhasyYoz+uNo
+         ZNtrAJ9GDZsFwD+U8UvtygzF8zWB1qZKMi6X4uQClkuOS0t9JwUtNm7rcsz7wIkMgzsl
+         KrvhjibwHUnsAJfkqjSNhtbcuFOwiWZs4C1Bt0HsMxDbSjDuFffV3ZVHjNqXWK0ofo7v
+         A4SSN9U9R8V4aQi+7LYuwoBKh+z0HRnewux+Y3NOjiS5m/jg9bz1jSkvNIS9TdSFYBJZ
+         6rRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705526532; x=1706131332;
+        d=1e100.net; s=20230601; t=1705526604; x=1706131404;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tq9A9p4mjdvLUr/wyRPb+SJucP0ZkwW9g+4pOi/DUHw=;
-        b=acmAmJXkt7LSZrIJIwyx7afKxJSii+4ADFz/ArFMHpUZL/8AmY9xWIs9q7FeGtJ27Y
-         tZLi0Qqmdfhf0+Uv03GRq2UpZjhsX+PsuQAyEoEIp3o8n2zzRS1JSXDheXuYHs813Zua
-         QQC+z9h66MJP2iUxjZiFbmKYWDchRP65HnVg82QduTjFL7dlWpbo8ueZYHR4YMv8H27v
-         XyTcG1pGbZg4yEtJ414UelCtu8fWws8TtxNT5gqzA3KlVn64S3N5OrELb5NKiZV96uIL
-         dn69g/cI5NkFad4iJPxARwS7ll4WrIkIlY7fG/o5tAbDNhH/W4QU2SJVJTk2nuRLQWvN
-         fCfA==
-X-Gm-Message-State: AOJu0YzhA6mDQAh1fl4WmWAYL/Bwy7RhYy5sCUgSC2R05TzZ1gqyVIt0
-	PfOGJvX3nLwnx3vM9klWya7Hcp5uNkM=
-X-Google-Smtp-Source: AGHT+IGEssHsQ1t9F5Y149UbF51eBtJqZ30w8cNTuV8VGsjjbaZXHzf6zMxvbx8D5lVJExhWQwaMVw==
-X-Received: by 2002:a05:6a00:1a8a:b0:6d9:ecbc:14e7 with SMTP id e10-20020a056a001a8a00b006d9ecbc14e7mr12195183pfv.55.1705526532639;
-        Wed, 17 Jan 2024 13:22:12 -0800 (PST)
+        bh=bgz7MUVBcIvLhtX7IpLAmxqdvaGpE/thV4ki6p4meGA=;
+        b=JN8N+yorhQcajV7bEK4DmchmCx06XB8ejYrFZZzQGdLzUetW8egPF8qRlrQGqTarm2
+         LKsd7ByQujGeYYpo0AeoY4soMLM/MUmbCMdiqkigzQKiOEUBzbEtWPsZlxYXQw1bC7og
+         G1AIjnpT7M+CrEnBj9n9JCJku/2QnqH7b1IKGuATQz5ObESqIhI28R4s02sdwZP0aXEK
+         7OJbiZTjUhvlkQtS/e8W9vnn2oMYuN32H3FBvWU4rF5btmbVlF6ZmvRIyBesa0N2cb8P
+         HEyt6a2NbfDCvKaEq8X0ZTqGQCqACPHKfUA0qquORSZXkZFYfNXvK6TFhszbnpinY59W
+         uPyw==
+X-Gm-Message-State: AOJu0YwJUYdIuYTD17nb5ywnr6ehem4aqNoTj6Kmpy70RWXY8kSTQ+pD
+	BDHYgtTB5YfGfOACKfsg7ps=
+X-Google-Smtp-Source: AGHT+IFu/ROGIs9WmjuksVHTQdsxmN8PGo5qkkiBnukl1zuTNP2GEIu8oEv30rHze7iwegJY+peXlQ==
+X-Received: by 2002:a05:6a21:329c:b0:19a:5c85:fff6 with SMTP id yt28-20020a056a21329c00b0019a5c85fff6mr9472967pzb.33.1705526604076;
+        Wed, 17 Jan 2024 13:23:24 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b25-20020aa78719000000b006d998c11eddsm1915796pfo.62.2024.01.17.13.22.12
+        by smtp.gmail.com with ESMTPSA id z6-20020aa785c6000000b006d9b4eda6b0sm1902967pfn.157.2024.01.17.13.23.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jan 2024 13:22:12 -0800 (PST)
+        Wed, 17 Jan 2024 13:23:23 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 17 Jan 2024 13:22:11 -0800
+Date: Wed, 17 Jan 2024 13:23:22 -0800
 From: Guenter Roeck <linux@roeck-us.net>
 To: Michal Simek <michal.simek@amd.com>
 Cc: linux-kernel@vger.kernel.org, monstr@monstr.eu, michal.simek@xilinx.com,
@@ -63,9 +63,11 @@ Cc: linux-kernel@vger.kernel.org, monstr@monstr.eu, michal.simek@xilinx.com,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
 	linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: ina2xx: Add label property
-Message-ID: <8185bfe5-b660-402a-a094-69f90e02fa8f@roeck-us.net>
+Subject: Re: [PATCH 2/2] dt-bindings: hwmon: ina2xx: Describe
+ #io-channel-cells property
+Message-ID: <6d097147-0bd9-4f80-8b58-7bdb2a811acb@roeck-us.net>
 References: <6f3c57d08984c1978569d3918cb38eb295c0c67d.1703077926.git.michal.simek@amd.com>
+ <aa303b9fe3116e7f98d6b72822f7f57694366db3.1703077926.git.michal.simek@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -74,13 +76,11 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6f3c57d08984c1978569d3918cb38eb295c0c67d.1703077926.git.michal.simek@amd.com>
+In-Reply-To: <aa303b9fe3116e7f98d6b72822f7f57694366db3.1703077926.git.michal.simek@amd.com>
 
-On Wed, Dec 20, 2023 at 02:12:13PM +0100, Michal Simek wrote:
-> Add a label property to allow a custom name to be used for identifying
-> a device on the board. This is useful when multiple devices are present on
-> the same board. Similar change was done by commit ffae65fb1ae4
-> ("dt-bindings: spi: spi-cadence: Add label property").
+On Wed, Dec 20, 2023 at 02:12:14PM +0100, Michal Simek wrote:
+> There are two drivers in the Linux kernel. One is hwmon based and second
+> IIO. IIO version requires to define #io-channel-cells to operate.
 > 
 > Signed-off-by: Michal Simek <michal.simek@amd.com>
 > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
