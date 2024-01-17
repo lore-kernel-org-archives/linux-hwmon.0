@@ -1,68 +1,71 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 184F925562;
-	Wed, 17 Jan 2024 21:20:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 626862555E;
+	Wed, 17 Jan 2024 21:22:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705526407; cv=none; b=ORwtVuXXHgpJtcskUrPlbfsTrJTj3yNWCZNHZbPCliioFdycIgs5IxPoRfc+EOn8a4SMrmJMs9BK5ZrleLsAw0Wzu04O57xGSgu95uBOd95s9wTfywN3+XPccoFWo7dWXH85VswQZ7Bs1wkSxMzXimXY/GLhOzEdP1wamG8vhmo=
+	t=1705526534; cv=none; b=oXJ2VYX/q828DKkUO0ragoGvwboomAtPwHfKXzo9IcO5TNlhGVnYEr+Ym3ZJ1c+tFVTdB/q8sQspJYq8pSVKXJU3PU0LO6T6gDAe3sG9VQV5fJxtUu7CqrIMzrkcx9DlIwpP0cyJ/UFtl7RBTjGFFzBmmZeOM5+JbVbWEln4JRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705526407; c=relaxed/simple;
-	bh=Usy1X9bR2Bsf5rq6XUwehouKg8Z5H/l9vzbpJtgQvXM=;
+	s=arc-20240116; t=1705526534; c=relaxed/simple;
+	bh=yMkH94Ava2a4mww+PKl7IpOY9qBSnxvwZkloI7X+mec=;
 	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:Received:Sender:
 	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rfgXHiFsSAnJHhHkldbHK3slIWkQCXUmIg/2yMPXb8DM4L1DbE8CXhnr3L6zZZyErsf7rgx6fuU2sz027FL7+W0ZlgY0W8aw9pgSzUKkmfmSpsqwcIqfZonDnEQB4ianqypMHEwLbyEdac8dTzcoqqrchfwCNMwnCAxfHhIUSd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rx4oRFMC; arc=none smtp.client-ip=209.85.210.171
+	 Content-Type:Content-Disposition:In-Reply-To; b=kRR012do0/rUyRB7ok4OPnzquHcKLXo7c9bqi5qXCepPNSdwZ14oN8ZcaUShshluyfmdbYS9rwESQN/Ntjxd8uiZvqcq9DoVxM5WUCh2yPHrMcWHGmEFkakbYycX1VNmhLZBlrPKEu+mp7OZuNKxHMsgH/fDqgavXvyFeuMZmG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FH3Bd3LU; arc=none smtp.client-ip=209.85.210.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rx4oRFMC"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6db0c49e93eso8537759b3a.1;
-        Wed, 17 Jan 2024 13:20:05 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FH3Bd3LU"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-6db05618c1fso8531469b3a.1;
+        Wed, 17 Jan 2024 13:22:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705526405; x=1706131205; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1705526532; x=1706131332; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=OJobziSCd9q4uVk2bgj8rZ0Erm0TBOh91NVx6zlbs60=;
-        b=Rx4oRFMCNLtPFK0sQf2UKdq3pQF1IW89D/6xFjY7EnWlrKy0wClkmVCB0Oj6xGuMRc
-         1K1Y8VNTcJWt7hvrVrzvHhT3xaMgj1GjKMD5iNfH7A+KZLmt0k85Q7d/1kUruygH5WcB
-         KexSV07eiMWWjZTmEWM+ttYOJUJFPf5HiZ5ifXza3/3NdzbNIy2Quz9EDf20BFXiOvQJ
-         JQtPyRfnI4qc1A83C1G+xg40yEJ2qJ2eaxAMIkzF1eboqfPR3swV5BWQfhN7HHm4IGT6
-         72YwVyXRYgKXtio8Or7+uWfz/6/iSbUCzUGuhMGBKtgsK0PBNNMXuoglBwIXcD4cVIPc
-         dR+w==
+        bh=tq9A9p4mjdvLUr/wyRPb+SJucP0ZkwW9g+4pOi/DUHw=;
+        b=FH3Bd3LU2FBYy8ylsB8XouDTZH7IXEzJ9x+1A9FQVvzhV16umxVaHyJGqB155P7J/p
+         /uNNO+oYGQAd8Lf1X5a84FKJAwxszHxanwgjzoX4ee6KW+etxqihYzFz47tkjoGjhNxJ
+         M84qoJQTlsfGdfnyu1pnTydRMDYnaDmDayWC8Z8+m6b8SeYuirvRYta4L8agtcRuQrq8
+         uV0sOud5CxP0/F9m1hyZvKfCmMYgkgIY5K6WnwY/rTOI6pTwEwg23b3J2lEgafNpx2XD
+         IU2BReqxrJdknUImsW/cocSD7n6uvmnz3JpiwAwfsN+psBDO2OAfe0m/Vo1Cj2MoRHmV
+         5OyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705526405; x=1706131205;
+        d=1e100.net; s=20230601; t=1705526532; x=1706131332;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OJobziSCd9q4uVk2bgj8rZ0Erm0TBOh91NVx6zlbs60=;
-        b=UyNGZHo/n2PuLHWxIVVZ6FhRKFX6Q7WsMlyFnWQIunNyWWf+0z3Sm3txw406KuLD1s
-         Wr3y6fohB/wLw/ZshndKdRfhUl6bEOecv6gBhR0E7UArcLzo3ScBoeulyJpS0n5fuP29
-         +JqDnzcUEOouIT/w3hiIbd03rrDmlc7NrYLWOIrRXwmqyl6PCMTiEK+84sPbHVtw0hLJ
-         dzaOxIk3DU9KgOjp1vcmTAgFrcvJeuTIHkR3urqBlGwU4OVeMTRLdOcIo5YhINDUHowf
-         HMZocIqpuqSp3m5BIjMeEG5sP5meJ5F0sEwxlfaAl+oNagqsWXzVY+vU7kOai0b66jb6
-         iZ0A==
-X-Gm-Message-State: AOJu0YyQRehuDU+UnPSdl/EtPR09bP01nQljKaBxGZ5guXQ8KaDQmuN9
-	/tYLyqc0IMFNoeCagmRxQEo=
-X-Google-Smtp-Source: AGHT+IEKKHqMIVLugtAGMMDwvnESPwoXJpmw7xKJqOeKGPA1kqM5iNfKBxnBb817AJ/Xw836xUEd3Q==
-X-Received: by 2002:a05:6a20:12d2:b0:19a:2733:58d3 with SMTP id v18-20020a056a2012d200b0019a273358d3mr9785660pzg.85.1705526405327;
-        Wed, 17 Jan 2024 13:20:05 -0800 (PST)
+        bh=tq9A9p4mjdvLUr/wyRPb+SJucP0ZkwW9g+4pOi/DUHw=;
+        b=acmAmJXkt7LSZrIJIwyx7afKxJSii+4ADFz/ArFMHpUZL/8AmY9xWIs9q7FeGtJ27Y
+         tZLi0Qqmdfhf0+Uv03GRq2UpZjhsX+PsuQAyEoEIp3o8n2zzRS1JSXDheXuYHs813Zua
+         QQC+z9h66MJP2iUxjZiFbmKYWDchRP65HnVg82QduTjFL7dlWpbo8ueZYHR4YMv8H27v
+         XyTcG1pGbZg4yEtJ414UelCtu8fWws8TtxNT5gqzA3KlVn64S3N5OrELb5NKiZV96uIL
+         dn69g/cI5NkFad4iJPxARwS7ll4WrIkIlY7fG/o5tAbDNhH/W4QU2SJVJTk2nuRLQWvN
+         fCfA==
+X-Gm-Message-State: AOJu0YzhA6mDQAh1fl4WmWAYL/Bwy7RhYy5sCUgSC2R05TzZ1gqyVIt0
+	PfOGJvX3nLwnx3vM9klWya7Hcp5uNkM=
+X-Google-Smtp-Source: AGHT+IGEssHsQ1t9F5Y149UbF51eBtJqZ30w8cNTuV8VGsjjbaZXHzf6zMxvbx8D5lVJExhWQwaMVw==
+X-Received: by 2002:a05:6a00:1a8a:b0:6d9:ecbc:14e7 with SMTP id e10-20020a056a001a8a00b006d9ecbc14e7mr12195183pfv.55.1705526532639;
+        Wed, 17 Jan 2024 13:22:12 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i11-20020a17090332cb00b001d414a00fd9sm101716plr.29.2024.01.17.13.20.04
+        by smtp.gmail.com with ESMTPSA id b25-20020aa78719000000b006d998c11eddsm1915796pfo.62.2024.01.17.13.22.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jan 2024 13:20:04 -0800 (PST)
+        Wed, 17 Jan 2024 13:22:12 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 17 Jan 2024 13:20:04 -0800
+Date: Wed, 17 Jan 2024 13:22:11 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Forest Crossman <cyrozap@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (nct6683) Add another customer ID for MSI
-Message-ID: <d10b63fa-a459-41bf-936b-113f2b8f6b17@roeck-us.net>
-References: <CAO3ALPwot01+bBisj7Roog7SD9UwV+y4NtiakKrBDE0tPvFhbw@mail.gmail.com>
+To: Michal Simek <michal.simek@amd.com>
+Cc: linux-kernel@vger.kernel.org, monstr@monstr.eu, michal.simek@xilinx.com,
+	git@xilinx.com, Conor Dooley <conor+dt@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: ina2xx: Add label property
+Message-ID: <8185bfe5-b660-402a-a094-69f90e02fa8f@roeck-us.net>
+References: <6f3c57d08984c1978569d3918cb38eb295c0c67d.1703077926.git.michal.simek@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -71,14 +74,17 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAO3ALPwot01+bBisj7Roog7SD9UwV+y4NtiakKrBDE0tPvFhbw@mail.gmail.com>
+In-Reply-To: <6f3c57d08984c1978569d3918cb38eb295c0c67d.1703077926.git.michal.simek@amd.com>
 
-On Sat, Jan 13, 2024 at 04:27:55PM -0800, Forest Crossman wrote:
-> This value was found on an MSI PRO X670-P WIFI with an NCT6687D chip.
+On Wed, Dec 20, 2023 at 02:12:13PM +0100, Michal Simek wrote:
+> Add a label property to allow a custom name to be used for identifying
+> a device on the board. This is useful when multiple devices are present on
+> the same board. Similar change was done by commit ffae65fb1ae4
+> ("dt-bindings: spi: spi-cadence: Add label property").
 > 
-> Signed-off-by: Forest Crossman <cyrozap@gmail.com>
+> Signed-off-by: Michal Simek <michal.simek@amd.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Applied.
 
-Thanks,
 Guenter
