@@ -1,99 +1,243 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77B5E405EF;
-	Mon, 22 Jan 2024 15:50:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D00213E474;
+	Mon, 22 Jan 2024 18:15:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705938613; cv=none; b=JGPyEB9+QoNNOP/6n4FxBEGTPnpYGada7vgGo9a7mFdE/6TA/LgXbOi/J52OVLhhHSQJwKpVFHn6L/MRQWZrI2xcDOF1vnnj6o2kHHdlIAnkBAdJWqf/AujbHDOWln7ZqTlJ9FF7U4XY4bgZXiTm3yCtur3tVG5lLoIpdi5z8Do=
+	t=1705947312; cv=none; b=ox3NRb0LSUwJo308mZ6SVAp4VDGTADYU65DoMSL9fUNPPL4KSvdAyqvhuEb24MOjqxwbuvymAq4WcQX67SxWyEHINecTjCwcNTcOEJDYAjHt4FhhSC+0GWY5Fl6yekdo+OHMzZAgcJ69IO0kFf2TFmchJRQRuReTVdxC+2N9hL4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705938613; c=relaxed/simple;
-	bh=PME5bbv3asP19dSw6d/TnXvufb8ShPW1A+mWkN22bCA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SsNiSRRvkAzJ9bD0sHVlMyN8adWRWMS8uVHNv7yGYb5LKel0zzdOgvGxrKr5l9w24mu0vv1mnAQ4Zl319NOTWLQM0CSOE49XSUW6SmsVXh287jHXZ3VubBy0RB0ooOFwrhRIcCV1uG6o+TZtd1GhFC8yaK1TniSBpJIGHUrAM4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=SVg/5b11; arc=none smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	s=arc-20240116; t=1705947312; c=relaxed/simple;
+	bh=5C6exGsza/X9DUjMWBVUbMQ8kIAdM/dB4GnTMkspNvg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ABdTO+hevpqrU46SddQBuAnx/RVNeUysT7JsdgK3j+k3uq1wbR/u55iJ1zgP6dPXZCCdA/odbhbjlj6RQZwXQGbUoMjQqeRFlAn8KdSj16vjFfFkzOfwwhTG29x+GbuR8qb2pkIPaSI4gwT9Eg3qy72Uvoa5libcA3PI1y2cNnU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JFH6ERSa; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="SVg/5b11"
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 40MAY6eZ000913;
-	Mon, 22 Jan 2024 15:49:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2023-11-20; bh=6+n08baSWoKll1alAdFlutI81OxW5WoCAt0Bwt8+8Rw=;
- b=SVg/5b11X9hsfS0XxUeB8SDt9PCe6LmN+FawiYto8pm6zvpO0yxSQznPLCQXJlb8eDYq
- Em1/QIZ/ZUeoi2ZwmnbGsWjT6qb7HbfB5zuzDEO+qVUCVr53HaUuFkFBMHsK6mU/+MGU
- 6uSldCxEaaAk1Ggl3NzZPL+lCgPoncppCSPnqH6+IHnH2n5GNf2Fly9UkX7WnGrqE6g1
- 6BV6Apw39gVnvoqS8zNoDm+kkRCnSS3fmvVyGLBNGR1QcdLdrc7E0h+61h1qbAtw8TyX
- Mt3SoHb4i58e2EegnCCETUCYk3oURwHo15Cqz0zm7K9dW0t1B0NM4+Emzii++8qMJgvl ug== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3vr7cwbukn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 22 Jan 2024 15:49:57 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 40MFZV2Z039341;
-	Mon, 22 Jan 2024 15:49:56 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3vs36yun01-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 22 Jan 2024 15:49:56 +0000
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 40MFntnC001674;
-	Mon, 22 Jan 2024 15:49:55 GMT
-Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3vs36yumye-1;
-	Mon, 22 Jan 2024 15:49:55 +0000
-From: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-To: Aleksa Savic <savicaleksa83@gmail.com>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc: dan.carpenter@linaro.org, kernel-janitors@vger.kernel.org,
-        error27@gmail.com, harshit.m.mogalapalli@oracle.com
-Subject: [PATCH] hwmon: gigabyte_waterforce: Fix locking bug in waterforce_get_status()
-Date: Mon, 22 Jan 2024 07:49:52 -0800
-Message-ID: <20240122154952.2851934-1-harshit.m.mogalapalli@oracle.com>
-X-Mailer: git-send-email 2.42.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JFH6ERSa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7914C433F1;
+	Mon, 22 Jan 2024 18:15:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705947312;
+	bh=5C6exGsza/X9DUjMWBVUbMQ8kIAdM/dB4GnTMkspNvg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JFH6ERSazTj7JSLmqipaSOie1Xtw42+N/ydXvMtTYFTdI/xdEmwl8spUQrD9xEteI
+	 sJbHLiw+QOjxZU5e4ldpPhlW7guyekXTNG/U2KFDuhwUqTSoiMCAjsB1oNMenhqwG3
+	 vxAJVbKuQPkxuclBO7fm1OmmcpMAUmSB72t68Y9DpEJ/rIQrvggqjGDAR71AxjbN5W
+	 yn45wlO9Zcjv4p2RhIkV+FmCfp1I1T7qgPKngZGfM4QtJ+r5fQqbWOCPiEWz6OALVh
+	 e+wgfqn9Vr2LbO/XqpfJf0JNrl3ETT6/5usALK9UfgSatJMVABZVYyOD0GYgJ81RGA
+	 Dv8QWnwfvLxAw==
+Date: Mon, 22 Jan 2024 18:15:07 +0000
+From: Conor Dooley <conor@kernel.org>
+To: marius.cristea@microchip.com
+Cc: jic23@kernel.org, lars@metafoo.de, robh+dt@kernel.org,
+	jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] dt-bindings: iio: adc: adding support for PAC193X
+Message-ID: <20240122-fernlike-resolute-b16772806147@spud>
+References: <20240122084712.11507-1-marius.cristea@microchip.com>
+ <20240122084712.11507-2-marius.cristea@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-22_06,2024-01-22_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=999
- malwarescore=0 mlxscore=0 phishscore=0 bulkscore=0 suspectscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2401220107
-X-Proofpoint-ORIG-GUID: L-dIc_Sqd8wHUlpEMhIJdMzSKoQ6ulL-
-X-Proofpoint-GUID: L-dIc_Sqd8wHUlpEMhIJdMzSKoQ6ulL-
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="qi0TL78qGZaNp8GQ"
+Content-Disposition: inline
+In-Reply-To: <20240122084712.11507-2-marius.cristea@microchip.com>
 
-Goto 'unlock_and_return' for unlocking before returning on the error
-path.
 
-Fixes: d5939a793693 ("hwmon: Add driver for Gigabyte AORUS Waterforce AIO coolers")
-Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
----
-This is based on static analysis with smatch, only compile tested.
----
- drivers/hwmon/gigabyte_waterforce.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--qi0TL78qGZaNp8GQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/hwmon/gigabyte_waterforce.c b/drivers/hwmon/gigabyte_waterforce.c
-index 1799377fc2f1..7bccfe2eaa76 100644
---- a/drivers/hwmon/gigabyte_waterforce.c
-+++ b/drivers/hwmon/gigabyte_waterforce.c
-@@ -146,7 +146,7 @@ static int waterforce_get_status(struct waterforce_data *priv)
- 	/* Send command for getting status */
- 	ret = waterforce_write_expanded(priv, get_status_cmd, GET_STATUS_CMD_LENGTH);
- 	if (ret < 0)
--		return ret;
-+		goto unlock_and_return;
- 
- 	ret = wait_for_completion_interruptible_timeout(&priv->status_report_received,
- 							msecs_to_jiffies(STATUS_VALIDITY));
--- 
-2.39.3
+Hey Marius,
 
+On Mon, Jan 22, 2024 at 10:47:11AM +0200, marius.cristea@microchip.com wrot=
+e:
+> From: Marius Cristea <marius.cristea@microchip.com>
+>=20
+> This is the device tree schema for iio driver for
+> Microchip PAC193X series of Power Monitors with Accumulator.
+>=20
+> Signed-off-by: Marius Cristea <marius.cristea@microchip.com>
+
+I like how this is looking now. I have two minor comments that if you
+resend for some other reason you could change, but otherwise:
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+> ---
+>  .../bindings/iio/adc/microchip,pac1934.yaml   | 120 ++++++++++++++++++
+>  1 file changed, 120 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/adc/microchip,p=
+ac1934.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/iio/adc/microchip,pac1934.=
+yaml b/Documentation/devicetree/bindings/iio/adc/microchip,pac1934.yaml
+> new file mode 100644
+> index 000000000000..cd9cb2a71566
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/iio/adc/microchip,pac1934.yaml
+> @@ -0,0 +1,120 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/iio/adc/microchip,pac1934.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Microchip PAC1934 Power Monitors with Accumulator
+> +
+> +maintainers:
+> +  - Marius Cristea <marius.cristea@microchip.com>
+> +
+> +description: |
+> +  This device is part of the Microchip family of Power Monitors with
+> +  Accumulator.
+> +  The datasheet for PAC1931, PAC1932, PAC1933 and PAC1934 can be found h=
+ere:
+> +    https://ww1.microchip.com/downloads/aemDocuments/documents/OTH/Produ=
+ctDocuments/DataSheets/PAC1931-Family-Data-Sheet-DS20005850E.pdf
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - microchip,pac1931
+> +      - microchip,pac1932
+> +      - microchip,pac1933
+> +      - microchip,pac1934
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  slow-io-gpios:
+> +    description: |
+
+This...
+
+> +      A GPIO used to trigger a change is sampling rate (lowering the chi=
+p power
+> +      consumption). If configured in SLOW mode, if this pin is forced hi=
+gh,
+> +      sampling rate is forced to eight samples/second. When it is forced=
+ low,
+> +      the sampling rate is 1024 samples/second unless a different sample=
+ rate
+> +      has been programmed.
+> +
+> +patternProperties:
+> +  "^channel@[1-4]+$":
+> +    type: object
+> +    $ref: adc.yaml
+> +    description: |
+
+=2E..and this...
+
+> +        Represents the external channels which are connected to the ADC.
+> +
+> +    properties:
+> +      reg:
+> +        items:
+> +          minimum: 1
+> +          maximum: 4
+> +
+> +      shunt-resistor-micro-ohms:
+> +        description: |
+
+=2E..and this | are not needed here as you have no formatting to preserve.
+
+> +          Value in micro Ohms of the shunt resistor connected between
+> +          the SENSE+ and SENSE- inputs, across which the current is meas=
+ured.
+> +          Value is needed to compute the scaling of the measured current.
+> +
+> +    required:
+> +      - reg
+> +      - shunt-resistor-micro-ohms
+> +
+> +    unevaluatedProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - "#address-cells"
+> +  - "#size-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells =3D <1>;
+> +        #size-cells =3D <0>;
+> +
+> +        pac193x: power-monitor@10 {
+
+This "pac193x" label is not used and should be removed.
+
+Thanks,
+Conor.
+
+> +            compatible =3D "microchip,pac1934";
+> +            reg =3D <0x10>;
+> +
+> +            #address-cells =3D <1>;
+> +            #size-cells =3D <0>;
+> +
+> +            channel@1 {
+> +                reg =3D <0x1>;
+> +                shunt-resistor-micro-ohms =3D <24900000>;
+> +                label =3D "CPU";
+> +            };
+> +
+> +            channel@2 {
+> +                reg =3D <0x2>;
+> +                shunt-resistor-micro-ohms =3D <49900000>;
+> +                label =3D "GPU";
+> +            };
+> +
+> +            channel@3 {
+> +                reg =3D <0x3>;
+> +                shunt-resistor-micro-ohms =3D <75000000>;
+> +                label =3D "MEM";
+> +                bipolar;
+> +            };
+> +
+> +            channel@4 {
+> +                reg =3D <0x4>;
+> +                shunt-resistor-micro-ohms =3D <100000000>;
+> +                label =3D "NET";
+> +                bipolar;
+> +            };
+> +        };
+> +    };
+> +
+> +...
+> --=20
+> 2.34.1
+>=20
+
+--qi0TL78qGZaNp8GQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZa6wqwAKCRB4tDGHoIJi
+0q6hAP0QD1uLecPK8JtF9dahFAlvXtAIK2MF/bEG/+d2xCVPwAD+NitieK6tvevt
+VhVPZLPjU6FN4abGu0j2yODLo75rmQg=
+=CcoM
+-----END PGP SIGNATURE-----
+
+--qi0TL78qGZaNp8GQ--
