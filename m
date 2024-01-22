@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30E6051035;
-	Mon, 22 Jan 2024 15:13:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDF6514077C;
+	Mon, 22 Jan 2024 15:16:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705936433; cv=none; b=IQszeQfjWa1sUDW1JjtOO0lu5dj9f3RhB+IjlIWuUkEa3DOYjUkN8WVNXU0KM4CzH5d8pgrmAKYXiEI4CVK+8I3qEDwQsNWXwPwydoCA9uOgf4kvOl24F1qkX7Fa7E751+MjO9UY5Tp/pY/svi6UqTOjp7DDYkJlrZyt5EMJ864=
+	t=1705936566; cv=none; b=bZS2BCNeU5u3pYq316QV24C9+qme1as3UWRcoPH5PLuf6eqOZnoLJS0fZ+daM/IVc3BaOIr99x8xwHMXbfRng4Ok2Tmfyxqvxu988MSlurasVRKu9KFGTiAuFeQN1m1ewJXZdYDtCy9LrSrrZ6yWV8sywRVvMxgbncdtL2+DCzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705936433; c=relaxed/simple;
-	bh=1k1pGNrKTsklnD8BKwb6FHu8pDnA77/OUaTVe5QJaZU=;
+	s=arc-20240116; t=1705936566; c=relaxed/simple;
+	bh=i5bEYdSRw06a6/t8+Y9FAvU0Xv7Oumy6T+7uuOFPK4I=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pjEnYB2+UeiN6tQuu11s/o6Anr0z9l+OL9e3tvHXZvbBVebV2PToZS1c2R98rjRFWeuaNsR6ug8u9aBO2kL87envHfOgkA+PpnqQHRrldLTwZ0ARncDdnfplVsyJBhkdOcFkb7jtIT6fzBYAXmUHpL678tOYRswFVHBicD2KKK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CwGwIs4/; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=csKnKLCl8w5OmZL5UORdOgHk4Qq2VouR3RRPcctoo5UKnQXYuaGmZxTkAaG29/JOmM45ufg869mG/fVqK6bntHyIDAA7Rl8bqswtxtQAYIUCPs08CK9Amh1stKoDPAbMUtYF+4iy2BKYovtH5biAKjpiw10ZRAyixyc3omi9ceI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=paKKmeUC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CwGwIs4/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5035C433F1;
-	Mon, 22 Jan 2024 15:13:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="paKKmeUC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85EBEC433C7;
+	Mon, 22 Jan 2024 15:16:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705936433;
-	bh=1k1pGNrKTsklnD8BKwb6FHu8pDnA77/OUaTVe5QJaZU=;
+	s=k20201202; t=1705936566;
+	bh=i5bEYdSRw06a6/t8+Y9FAvU0Xv7Oumy6T+7uuOFPK4I=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=CwGwIs4/De0tue3O58asOkMxTKpLxHCUr+aZ4gcDMxL3XSd+SImNcCgFPHZYFoO67
-	 rhohgc6PjvHfqfn3dbDXMG15r4aDfPtUQcXZdl5P31t9Nfnyz1CQvD6ChXqTHcUjsb
-	 5GRh89ecd5L3Ck1GapaI8y18gyTSoZsaGxZdVEyZB8fp04mmz8g9BMisTTw505yTdU
-	 j75nWjDI5i4muN+OilFgCCxKzQLhW1ny1HEK1Gzx9ou9W/7kOIkjAgLXkstCxios/z
-	 BzDrSt8ozfpWVeeQsJKBdm8Wqt80maKgV4UBKEeL9JI02RB0I9BYnW+J779Ji4ak0B
-	 o/Q/Y/O/ra0jQ==
+	b=paKKmeUCGYRTPw6ikQ3VvULT4VwDqsgHYZ6uSG98juutTKe3pNGYKisxefGGmuTCV
+	 sJZYlIreGn8LrdBamsGkK8q2tt7DNh37WvIrJRT2d0qDIGsqW9TdS3KJE91YJbhljs
+	 mWXs/ZWk50LKVGUgsujOw0UhV5XWHPy6zgQV3JlY6lAmjYWYWCB+lCntv5ESd6lZjn
+	 2FGIx/y2sItDMxTGeFyQbyYq9K0WK6MOQMOJSEibzVAHA8udfGyqR9GBdsaUdyFoXV
+	 9tDsiI4gYNV/vHqy4MRw8zo3xQUhzehHUo5mJLMwzUjG443sI0V6wUA7zV5YDIOE9C
+	 lNy4hpotNDT/A==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -36,12 +36,12 @@ Cc: Kees Cook <keescook@chromium.org>,
 	linux-hwmon@vger.kernel.org,
 	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 5.15 19/35] hwmon: (pc87360) Bounds check data->innr usage
-Date: Mon, 22 Jan 2024 10:12:16 -0500
-Message-ID: <20240122151302.995456-19-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 18/28] hwmon: (pc87360) Bounds check data->innr usage
+Date: Mon, 22 Jan 2024 10:14:44 -0500
+Message-ID: <20240122151521.996443-18-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240122151302.995456-1-sashal@kernel.org>
-References: <20240122151302.995456-1-sashal@kernel.org>
+In-Reply-To: <20240122151521.996443-1-sashal@kernel.org>
+References: <20240122151521.996443-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.147
+X-stable-base: Linux 5.10.208
 Content-Transfer-Encoding: 8bit
 
 From: Kees Cook <keescook@chromium.org>
@@ -89,7 +89,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/hwmon/pc87360.c b/drivers/hwmon/pc87360.c
-index 6a9ba23cd302..3519f486f0b7 100644
+index 94f4b8b4a2ba..0cf603c8c9f9 100644
 --- a/drivers/hwmon/pc87360.c
 +++ b/drivers/hwmon/pc87360.c
 @@ -1605,7 +1605,11 @@ static struct pc87360_data *pc87360_update_device(struct device *dev)
