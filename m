@@ -1,243 +1,84 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D00213E474;
-	Mon, 22 Jan 2024 18:15:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E259C3D553;
+	Mon, 22 Jan 2024 19:28:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705947312; cv=none; b=ox3NRb0LSUwJo308mZ6SVAp4VDGTADYU65DoMSL9fUNPPL4KSvdAyqvhuEb24MOjqxwbuvymAq4WcQX67SxWyEHINecTjCwcNTcOEJDYAjHt4FhhSC+0GWY5Fl6yekdo+OHMzZAgcJ69IO0kFf2TFmchJRQRuReTVdxC+2N9hL4=
+	t=1705951738; cv=none; b=MLImWd52MicpNQwFWkESXrSfe9K+3C2p4NU/YyiYnaXqMkyxl6qHEFspUoR1VNRTRF8ySOv2xXH+jN2DCevvxr6lOOomCuK7m3yvWFTzX25NVyPXDp8eaa5E3yvJWuko95XTlu+CARKnqDaEzmkAH92h3y/Uqv/Wr7YYlpZjFpY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705947312; c=relaxed/simple;
-	bh=5C6exGsza/X9DUjMWBVUbMQ8kIAdM/dB4GnTMkspNvg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ABdTO+hevpqrU46SddQBuAnx/RVNeUysT7JsdgK3j+k3uq1wbR/u55iJ1zgP6dPXZCCdA/odbhbjlj6RQZwXQGbUoMjQqeRFlAn8KdSj16vjFfFkzOfwwhTG29x+GbuR8qb2pkIPaSI4gwT9Eg3qy72Uvoa5libcA3PI1y2cNnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JFH6ERSa; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1705951738; c=relaxed/simple;
+	bh=afe/agwweDEq5hliJJTGqCqDN6ZjHnZaGXWvzUFYsU4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=sn9X3eswyKfIDJgVnkCGzcJxm5JojVD8XM/lKR0OvC62MvBgRf/Z8ybG2xJt2Sm0KAHrv4DPbF+TCzN0uhiok62X/vJtDh05BBvkVyNMJaX+LLqwBQOJPxT/rDvdexzbvB16xyzxB9wzRK3l5vYGU97AGOq23PLYrgI3EYZia88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SBQE1dku; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JFH6ERSa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7914C433F1;
-	Mon, 22 Jan 2024 18:15:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SBQE1dku"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB792C43394;
+	Mon, 22 Jan 2024 19:28:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705947312;
-	bh=5C6exGsza/X9DUjMWBVUbMQ8kIAdM/dB4GnTMkspNvg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JFH6ERSazTj7JSLmqipaSOie1Xtw42+N/ydXvMtTYFTdI/xdEmwl8spUQrD9xEteI
-	 sJbHLiw+QOjxZU5e4ldpPhlW7guyekXTNG/U2KFDuhwUqTSoiMCAjsB1oNMenhqwG3
-	 vxAJVbKuQPkxuclBO7fm1OmmcpMAUmSB72t68Y9DpEJ/rIQrvggqjGDAR71AxjbN5W
-	 yn45wlO9Zcjv4p2RhIkV+FmCfp1I1T7qgPKngZGfM4QtJ+r5fQqbWOCPiEWz6OALVh
-	 e+wgfqn9Vr2LbO/XqpfJf0JNrl3ETT6/5usALK9UfgSatJMVABZVYyOD0GYgJ81RGA
-	 Dv8QWnwfvLxAw==
-Date: Mon, 22 Jan 2024 18:15:07 +0000
-From: Conor Dooley <conor@kernel.org>
-To: marius.cristea@microchip.com
-Cc: jic23@kernel.org, lars@metafoo.de, robh+dt@kernel.org,
-	jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] dt-bindings: iio: adc: adding support for PAC193X
-Message-ID: <20240122-fernlike-resolute-b16772806147@spud>
+	s=k20201202; t=1705951737;
+	bh=afe/agwweDEq5hliJJTGqCqDN6ZjHnZaGXWvzUFYsU4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=SBQE1dkuhEfL93TcJEEBBJ8/xouUb6xnNbHHPRX4FZpR4wORc6+Hxhwufl4uXyG9N
+	 ujO909y+zv4YV89rXPmNeoC4xFjVhav9s5WneBYLNaof0vne1fiYX0rITrjJtcl+JP
+	 ivaU+jwxkBOdBuHH5v3P3pgAd0Q1Yb+1KlSY8gqx2spd01xM1GJoQGQRwznIcfilWb
+	 Bbfrw18WipbGdoTzVwQnY/FPDTAlbxDof+tn7lG5ZOPODSUIwR/itpsqYMtvoJAEsF
+	 Yd3wHjPLZgE4QxkzF302iwZ5Ixk1ApA1Ep1c+EkNKGipVyFAR6Pnrm3vQR6kEgYIgq
+	 u0ykUxtrKq9wA==
+Date: Mon, 22 Jan 2024 19:28:44 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: marius.cristea@microchip.com, lars@metafoo.de, robh+dt@kernel.org,
+ jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 0/2] adding support for Microchip PAC193X Power
+ Monitor
+Message-ID: <20240122192844.61b370ef@jic23-huawei>
+In-Reply-To: <b7dbd5fa-b300-4d6d-b3fc-8cb8e90eefa3@roeck-us.net>
 References: <20240122084712.11507-1-marius.cristea@microchip.com>
- <20240122084712.11507-2-marius.cristea@microchip.com>
+	<b7dbd5fa-b300-4d6d-b3fc-8cb8e90eefa3@roeck-us.net>
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.40; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="qi0TL78qGZaNp8GQ"
-Content-Disposition: inline
-In-Reply-To: <20240122084712.11507-2-marius.cristea@microchip.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+
+On Mon, 22 Jan 2024 06:57:32 -0800
+Guenter Roeck <linux@roeck-us.net> wrote:
+
+> On 1/22/24 00:47, marius.cristea@microchip.com wrote:
+> > From: Marius Cristea <marius.cristea@microchip.com>
+> > 
+> > Adding support for Microchip PAC193X series of Power Monitor with
+> > Accumulator chip family. This driver covers the following part numbers:
+> >   - PAC1931, PAC1932, PAC1933 and PAC1934
+> > 
+> >    This device is at the boundary between IIO and HWMON (if you are
+> > looking just at the "shunt resistors, vsense, power, energy"). The
+> > device also has ADC internally that can measure voltages (up to 4
+> > channels) and also currents (up to 4 channels). The current is measured as
+> > voltage across the shunt_resistor.
+> > 
+> >    I have started with a simple driver (this one that is more appropriate to be
+> > a HWMON) and willing to add more functionality later (like data buffering that  
+> 
+> Not sure I understand what you are trying to say here. This is obviously an iio
+> driver, not a hwmon driver. Any hwmon related concern is irrelevant.
+
+It's a left over comment / attempt to summarise the discussion of whether IIO
+or HWMON was a better home for a driver for this device.  Based on current
+feature set that's not an obvious decision, but there are other planned features
+that fit better in IIO.
 
 
---qi0TL78qGZaNp8GQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> 
+> Guenter
+> 
 
-Hey Marius,
-
-On Mon, Jan 22, 2024 at 10:47:11AM +0200, marius.cristea@microchip.com wrot=
-e:
-> From: Marius Cristea <marius.cristea@microchip.com>
->=20
-> This is the device tree schema for iio driver for
-> Microchip PAC193X series of Power Monitors with Accumulator.
->=20
-> Signed-off-by: Marius Cristea <marius.cristea@microchip.com>
-
-I like how this is looking now. I have two minor comments that if you
-resend for some other reason you could change, but otherwise:
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-
-> ---
->  .../bindings/iio/adc/microchip,pac1934.yaml   | 120 ++++++++++++++++++
->  1 file changed, 120 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/iio/adc/microchip,p=
-ac1934.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/iio/adc/microchip,pac1934.=
-yaml b/Documentation/devicetree/bindings/iio/adc/microchip,pac1934.yaml
-> new file mode 100644
-> index 000000000000..cd9cb2a71566
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/iio/adc/microchip,pac1934.yaml
-> @@ -0,0 +1,120 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/iio/adc/microchip,pac1934.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Microchip PAC1934 Power Monitors with Accumulator
-> +
-> +maintainers:
-> +  - Marius Cristea <marius.cristea@microchip.com>
-> +
-> +description: |
-> +  This device is part of the Microchip family of Power Monitors with
-> +  Accumulator.
-> +  The datasheet for PAC1931, PAC1932, PAC1933 and PAC1934 can be found h=
-ere:
-> +    https://ww1.microchip.com/downloads/aemDocuments/documents/OTH/Produ=
-ctDocuments/DataSheets/PAC1931-Family-Data-Sheet-DS20005850E.pdf
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - microchip,pac1931
-> +      - microchip,pac1932
-> +      - microchip,pac1933
-> +      - microchip,pac1934
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 0
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  slow-io-gpios:
-> +    description: |
-
-This...
-
-> +      A GPIO used to trigger a change is sampling rate (lowering the chi=
-p power
-> +      consumption). If configured in SLOW mode, if this pin is forced hi=
-gh,
-> +      sampling rate is forced to eight samples/second. When it is forced=
- low,
-> +      the sampling rate is 1024 samples/second unless a different sample=
- rate
-> +      has been programmed.
-> +
-> +patternProperties:
-> +  "^channel@[1-4]+$":
-> +    type: object
-> +    $ref: adc.yaml
-> +    description: |
-
-=2E..and this...
-
-> +        Represents the external channels which are connected to the ADC.
-> +
-> +    properties:
-> +      reg:
-> +        items:
-> +          minimum: 1
-> +          maximum: 4
-> +
-> +      shunt-resistor-micro-ohms:
-> +        description: |
-
-=2E..and this | are not needed here as you have no formatting to preserve.
-
-> +          Value in micro Ohms of the shunt resistor connected between
-> +          the SENSE+ and SENSE- inputs, across which the current is meas=
-ured.
-> +          Value is needed to compute the scaling of the measured current.
-> +
-> +    required:
-> +      - reg
-> +      - shunt-resistor-micro-ohms
-> +
-> +    unevaluatedProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - "#address-cells"
-> +  - "#size-cells"
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells =3D <1>;
-> +        #size-cells =3D <0>;
-> +
-> +        pac193x: power-monitor@10 {
-
-This "pac193x" label is not used and should be removed.
-
-Thanks,
-Conor.
-
-> +            compatible =3D "microchip,pac1934";
-> +            reg =3D <0x10>;
-> +
-> +            #address-cells =3D <1>;
-> +            #size-cells =3D <0>;
-> +
-> +            channel@1 {
-> +                reg =3D <0x1>;
-> +                shunt-resistor-micro-ohms =3D <24900000>;
-> +                label =3D "CPU";
-> +            };
-> +
-> +            channel@2 {
-> +                reg =3D <0x2>;
-> +                shunt-resistor-micro-ohms =3D <49900000>;
-> +                label =3D "GPU";
-> +            };
-> +
-> +            channel@3 {
-> +                reg =3D <0x3>;
-> +                shunt-resistor-micro-ohms =3D <75000000>;
-> +                label =3D "MEM";
-> +                bipolar;
-> +            };
-> +
-> +            channel@4 {
-> +                reg =3D <0x4>;
-> +                shunt-resistor-micro-ohms =3D <100000000>;
-> +                label =3D "NET";
-> +                bipolar;
-> +            };
-> +        };
-> +    };
-> +
-> +...
-> --=20
-> 2.34.1
->=20
-
---qi0TL78qGZaNp8GQ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZa6wqwAKCRB4tDGHoIJi
-0q6hAP0QD1uLecPK8JtF9dahFAlvXtAIK2MF/bEG/+d2xCVPwAD+NitieK6tvevt
-VhVPZLPjU6FN4abGu0j2yODLo75rmQg=
-=CcoM
------END PGP SIGNATURE-----
-
---qi0TL78qGZaNp8GQ--
