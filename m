@@ -1,110 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E68E3151CCD;
-	Mon, 22 Jan 2024 15:18:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77B5E405EF;
+	Mon, 22 Jan 2024 15:50:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705936732; cv=none; b=qUdFAFgWi/cmjPnh6HlCkI0xHDnQ5H3xOM25xR5p0OGIR3H8omnWOVJt1XMFtGzqoE2qnev7wfAUpcmDlpJUvpHDmhTvHXtC35a5BqqRJxoeTSD1/XJDJFuG1xYaLSNhmzMkuv4Ufpq22RThCdGsm14lw8SNZgyt0XgkcLVvlm4=
+	t=1705938613; cv=none; b=JGPyEB9+QoNNOP/6n4FxBEGTPnpYGada7vgGo9a7mFdE/6TA/LgXbOi/J52OVLhhHSQJwKpVFHn6L/MRQWZrI2xcDOF1vnnj6o2kHHdlIAnkBAdJWqf/AujbHDOWln7ZqTlJ9FF7U4XY4bgZXiTm3yCtur3tVG5lLoIpdi5z8Do=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705936732; c=relaxed/simple;
-	bh=+k2vygah2BYoMsEnvJ8o9+EBu3ToXpgQXFXwdYknDb0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=X2mHddkwyUqa8r5baKcjECmfD4lFybdCdLIfezzUjkzXw+yXmnmfvSbf+K2TSZ953Th0Q3eQSnIQPOCF1RfU41fPzady7LKCrZwsaMSL3oOuKLD3oLPmQvcNQLwAKjbnPP0DUukzzn8RyLdyQt5Y9Hkh60wj69ifvwe+0hgz/Ek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mKfhZgTy; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1705938613; c=relaxed/simple;
+	bh=PME5bbv3asP19dSw6d/TnXvufb8ShPW1A+mWkN22bCA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SsNiSRRvkAzJ9bD0sHVlMyN8adWRWMS8uVHNv7yGYb5LKel0zzdOgvGxrKr5l9w24mu0vv1mnAQ4Zl319NOTWLQM0CSOE49XSUW6SmsVXh287jHXZ3VubBy0RB0ooOFwrhRIcCV1uG6o+TZtd1GhFC8yaK1TniSBpJIGHUrAM4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=SVg/5b11; arc=none smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mKfhZgTy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D901C433F1;
-	Mon, 22 Jan 2024 15:18:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705936731;
-	bh=+k2vygah2BYoMsEnvJ8o9+EBu3ToXpgQXFXwdYknDb0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mKfhZgTyqMshqj0eHxeAGLQ+tVQcEfEdiNMJhUq3AnodlE4ldf5AqsnTZ5B5QoIrh
-	 1bA5JxY/Nx1YfyyHCXryEv18Fw+JpsB2GEEITsx/seARVxh6y+L8vM8DgafW8rfvJ2
-	 sO9+L/GfFs/XpWl/Wj0ij51AtGhc4IuxECY11eE6lSVXO8RR+VwQvEhDwW/O8yJRfE
-	 7kff15RW4yAJpQ3M85WdMZNyokC1/Sag+aY92Kdlr1dlVzcy3QS/qfwSiGOpMabp7a
-	 pQxcG77ueiiLalbSP6tHqLq1CFcuH7nrsk2FXKmAN35hCATrk9YfETjsYTHNjPRVZn
-	 c6Lpy8ULaZ4Qg==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Kees Cook <keescook@chromium.org>,
-	Jim Cromie <jim.cromie@gmail.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	linux-hwmon@vger.kernel.org,
-	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
-	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.19 13/23] hwmon: (pc87360) Bounds check data->innr usage
-Date: Mon, 22 Jan 2024 10:17:53 -0500
-Message-ID: <20240122151823.997644-13-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240122151823.997644-1-sashal@kernel.org>
-References: <20240122151823.997644-1-sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="SVg/5b11"
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 40MAY6eZ000913;
+	Mon, 22 Jan 2024 15:49:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2023-11-20; bh=6+n08baSWoKll1alAdFlutI81OxW5WoCAt0Bwt8+8Rw=;
+ b=SVg/5b11X9hsfS0XxUeB8SDt9PCe6LmN+FawiYto8pm6zvpO0yxSQznPLCQXJlb8eDYq
+ Em1/QIZ/ZUeoi2ZwmnbGsWjT6qb7HbfB5zuzDEO+qVUCVr53HaUuFkFBMHsK6mU/+MGU
+ 6uSldCxEaaAk1Ggl3NzZPL+lCgPoncppCSPnqH6+IHnH2n5GNf2Fly9UkX7WnGrqE6g1
+ 6BV6Apw39gVnvoqS8zNoDm+kkRCnSS3fmvVyGLBNGR1QcdLdrc7E0h+61h1qbAtw8TyX
+ Mt3SoHb4i58e2EegnCCETUCYk3oURwHo15Cqz0zm7K9dW0t1B0NM4+Emzii++8qMJgvl ug== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3vr7cwbukn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 22 Jan 2024 15:49:57 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 40MFZV2Z039341;
+	Mon, 22 Jan 2024 15:49:56 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3vs36yun01-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 22 Jan 2024 15:49:56 +0000
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 40MFntnC001674;
+	Mon, 22 Jan 2024 15:49:55 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3vs36yumye-1;
+	Mon, 22 Jan 2024 15:49:55 +0000
+From: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+To: Aleksa Savic <savicaleksa83@gmail.com>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc: dan.carpenter@linaro.org, kernel-janitors@vger.kernel.org,
+        error27@gmail.com, harshit.m.mogalapalli@oracle.com
+Subject: [PATCH] hwmon: gigabyte_waterforce: Fix locking bug in waterforce_get_status()
+Date: Mon, 22 Jan 2024 07:49:52 -0800
+Message-ID: <20240122154952.2851934-1-harshit.m.mogalapalli@oracle.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 4.19.305
 Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-22_06,2024-01-22_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=999
+ malwarescore=0 mlxscore=0 phishscore=0 bulkscore=0 suspectscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2401220107
+X-Proofpoint-ORIG-GUID: L-dIc_Sqd8wHUlpEMhIJdMzSKoQ6ulL-
+X-Proofpoint-GUID: L-dIc_Sqd8wHUlpEMhIJdMzSKoQ6ulL-
 
-From: Kees Cook <keescook@chromium.org>
+Goto 'unlock_and_return' for unlocking before returning on the error
+path.
 
-[ Upstream commit 4265eb062a7303e537ab3792ade31f424c3c5189 ]
-
-Without visibility into the initializers for data->innr, GCC suspects
-using it as an index could walk off the end of the various 14-element
-arrays in data. Perform an explicit clamp to the array size. Silences
-the following warning with GCC 12+:
-
-../drivers/hwmon/pc87360.c: In function 'pc87360_update_device':
-../drivers/hwmon/pc87360.c:341:49: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
-  341 |                                 data->in_max[i] = pc87360_read_value(data,
-      |                                 ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
-  342 |                                                   LD_IN, i,
-      |                                                   ~~~~~~~~~
-  343 |                                                   PC87365_REG_IN_MAX);
-      |                                                   ~~~~~~~~~~~~~~~~~~~
-../drivers/hwmon/pc87360.c:209:12: note: at offset 255 into destination object 'in_max' of size 14
-  209 |         u8 in_max[14];          /* Register value */
-      |            ^~~~~~
-
-Cc: Jim Cromie <jim.cromie@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-Link: https://lore.kernel.org/r/20231130200207.work.679-kees@kernel.org
-[groeck: Added comment into code clarifying context]
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: d5939a793693 ("hwmon: Add driver for Gigabyte AORUS Waterforce AIO coolers")
+Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
 ---
- drivers/hwmon/pc87360.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+This is based on static analysis with smatch, only compile tested.
+---
+ drivers/hwmon/gigabyte_waterforce.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/pc87360.c b/drivers/hwmon/pc87360.c
-index 7e3697727537..d2b3137dccd4 100644
---- a/drivers/hwmon/pc87360.c
-+++ b/drivers/hwmon/pc87360.c
-@@ -1637,7 +1637,11 @@ static struct pc87360_data *pc87360_update_device(struct device *dev)
- 		}
+diff --git a/drivers/hwmon/gigabyte_waterforce.c b/drivers/hwmon/gigabyte_waterforce.c
+index 1799377fc2f1..7bccfe2eaa76 100644
+--- a/drivers/hwmon/gigabyte_waterforce.c
++++ b/drivers/hwmon/gigabyte_waterforce.c
+@@ -146,7 +146,7 @@ static int waterforce_get_status(struct waterforce_data *priv)
+ 	/* Send command for getting status */
+ 	ret = waterforce_write_expanded(priv, get_status_cmd, GET_STATUS_CMD_LENGTH);
+ 	if (ret < 0)
+-		return ret;
++		goto unlock_and_return;
  
- 		/* Voltages */
--		for (i = 0; i < data->innr; i++) {
-+		/*
-+		 * The min() below does not have any practical meaning and is
-+		 * only needed to silence a warning observed with gcc 12+.
-+		 */
-+		for (i = 0; i < min(data->innr, ARRAY_SIZE(data->in)); i++) {
- 			data->in_status[i] = pc87360_read_value(data, LD_IN, i,
- 					     PC87365_REG_IN_STATUS);
- 			/* Clear bits */
+ 	ret = wait_for_completion_interruptible_timeout(&priv->status_report_received,
+ 							msecs_to_jiffies(STATUS_VALIDITY));
 -- 
-2.43.0
+2.39.3
 
