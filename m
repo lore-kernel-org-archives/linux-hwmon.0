@@ -1,84 +1,278 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E259C3D553;
-	Mon, 22 Jan 2024 19:28:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA24D4BA90;
+	Mon, 22 Jan 2024 21:29:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705951738; cv=none; b=MLImWd52MicpNQwFWkESXrSfe9K+3C2p4NU/YyiYnaXqMkyxl6qHEFspUoR1VNRTRF8ySOv2xXH+jN2DCevvxr6lOOomCuK7m3yvWFTzX25NVyPXDp8eaa5E3yvJWuko95XTlu+CARKnqDaEzmkAH92h3y/Uqv/Wr7YYlpZjFpY=
+	t=1705958997; cv=none; b=j06ooZf9mYaFHiJ800Rtx1J/bmYjGND2DjlelLesodblRw61yoXZ679fFyN586XBd6QceZJVbejpz0AKs+OCSZAp+TrcAL+9jxJDI7qbqzfZFrTLVdFExgdzjrZHsZa6aUCQBckZfpPbRkrm6VifCR2/79TITuexv510K0CtPpw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705951738; c=relaxed/simple;
-	bh=afe/agwweDEq5hliJJTGqCqDN6ZjHnZaGXWvzUFYsU4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sn9X3eswyKfIDJgVnkCGzcJxm5JojVD8XM/lKR0OvC62MvBgRf/Z8ybG2xJt2Sm0KAHrv4DPbF+TCzN0uhiok62X/vJtDh05BBvkVyNMJaX+LLqwBQOJPxT/rDvdexzbvB16xyzxB9wzRK3l5vYGU97AGOq23PLYrgI3EYZia88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SBQE1dku; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1705958997; c=relaxed/simple;
+	bh=6NyN89TqUdLjq5FhaHiyBm8u6XvAMftJ4c2iTUQwAQM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=eT54n7tUhfb4sToxeVjnaOKfxVvxsVxjxPo38a/ekbSAoG0u3B1VIThTFmSOk7flLszkXONfPjn+i3hXun5NYhwXo4ci7P31tpJGZVOUMRp4BSwNVuEPif7sk0v5wu89/8nGucmzoUwdaba4Vj77fA41d3NcbZpWzT2rIn8tjwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xoufn49u; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SBQE1dku"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB792C43394;
-	Mon, 22 Jan 2024 19:28:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705951737;
-	bh=afe/agwweDEq5hliJJTGqCqDN6ZjHnZaGXWvzUFYsU4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=SBQE1dkuhEfL93TcJEEBBJ8/xouUb6xnNbHHPRX4FZpR4wORc6+Hxhwufl4uXyG9N
-	 ujO909y+zv4YV89rXPmNeoC4xFjVhav9s5WneBYLNaof0vne1fiYX0rITrjJtcl+JP
-	 ivaU+jwxkBOdBuHH5v3P3pgAd0Q1Yb+1KlSY8gqx2spd01xM1GJoQGQRwznIcfilWb
-	 Bbfrw18WipbGdoTzVwQnY/FPDTAlbxDof+tn7lG5ZOPODSUIwR/itpsqYMtvoJAEsF
-	 Yd3wHjPLZgE4QxkzF302iwZ5Ixk1ApA1Ep1c+EkNKGipVyFAR6Pnrm3vQR6kEgYIgq
-	 u0ykUxtrKq9wA==
-Date: Mon, 22 Jan 2024 19:28:44 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: marius.cristea@microchip.com, lars@metafoo.de, robh+dt@kernel.org,
- jdelvare@suse.com, linux-hwmon@vger.kernel.org,
- krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/2] adding support for Microchip PAC193X Power
- Monitor
-Message-ID: <20240122192844.61b370ef@jic23-huawei>
-In-Reply-To: <b7dbd5fa-b300-4d6d-b3fc-8cb8e90eefa3@roeck-us.net>
-References: <20240122084712.11507-1-marius.cristea@microchip.com>
-	<b7dbd5fa-b300-4d6d-b3fc-8cb8e90eefa3@roeck-us.net>
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.40; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xoufn49u"
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-55c2c90c67dso1779195a12.1;
+        Mon, 22 Jan 2024 13:29:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1705958994; x=1706563794; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AVNEcu8/KtmvdhD8Hp68PNiLA1u+xEERK9Ta2mi0Mzs=;
+        b=Xoufn49u/Jfomc4jToGHnmEUalf3uLYcS2N351LZop5sl3eqRzkMJL43OerOcNNRSp
+         gWEe0X1sX5+zDzUDr45T8vS1ViTuQH9+onG04clAgkmifKyjJi+m0D07ps/S4H9Rn/TG
+         VLyDNNBUtTfYeK+LfSBntiiHs8p2O0Qe+udm23xP5xQq7krsM/xBksKv9XT6f64CURiX
+         IdVhFJuXOQr4fcqH4FGP8UZyC/hmC+wOjRmKlGHoYhCGrqtEZOXuoJleGsKXAmFVipSY
+         JUW+wPT9jS5FP8iVCy1apjzV9bkQXaa1+SxkRT89Z2pfQwk4KZfhkQiLeFZibKAcyXRh
+         RLiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705958994; x=1706563794;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AVNEcu8/KtmvdhD8Hp68PNiLA1u+xEERK9Ta2mi0Mzs=;
+        b=r+6QdObZYwuOYBFsm5UP60Y8pcKcBpCofq0XFbWuT8JS/lPP2A7hOmEVsOZZ3B9eWm
+         lRAOq4y2T5XhYh7UvFN9qWoku3x72KJxJMZqmb9oi8KtX4dYbSM6kghW/zYrnZkJPsiV
+         EAUKliyP5qixcvgGfxrRz6fJ45yoOACRxaw7xxjO+Eok5HjOQJRzT0v0MU+u3zIb7rh7
+         UO6p/rc1+/QQrvT/Y38WMKWRn20CpS5RdvVqyMZLexxc0xHEt/fJfKj9/6ixLUMhIWst
+         iO//49xqrR7nMWE5HPCaka8lPb6hWyfgosQ53QYoolmM/ugUXxR3NJtH55vDx4iTcrEG
+         HkFw==
+X-Gm-Message-State: AOJu0Yy3jC/WE91Nnyh/xHS3aVICSxu3KwkQoJxAeq8MO3Ssuybrv2Z1
+	immCo4EuvzDIX03MyUmmK1aPpQOZrQIoLgCsT9NfKWKDfsS1PaSV
+X-Google-Smtp-Source: AGHT+IGqt/98OCeHGlibmCviwO91HkwiR+6lZjHNTFpWrYZwvjxg2aDs6ZE3nK4O+6k/6GLclNLaFQ==
+X-Received: by 2002:a17:906:d04a:b0:a2a:dba3:faac with SMTP id bo10-20020a170906d04a00b00a2adba3faacmr2165680ejb.154.1705958993919;
+        Mon, 22 Jan 2024 13:29:53 -0800 (PST)
+Received: from debian.fritz.box ([93.184.186.109])
+        by smtp.gmail.com with ESMTPSA id j25-20020a1709066dd900b00a26af4d96c6sm13823336ejt.4.2024.01.22.13.29.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Jan 2024 13:29:53 -0800 (PST)
+From: Dimitri Fedrau <dima.fedrau@gmail.com>
+To: 
+Cc: Dimitri Fedrau <dima.fedrau@gmail.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Stefan Eichenberger <eichest@gmail.com>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH v5 net-next 08/13] net: phy: marvell-88q2xxx: add support for temperature sensor
+Date: Mon, 22 Jan 2024 22:28:41 +0100
+Message-Id: <20240122212848.3645785-9-dima.fedrau@gmail.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240122212848.3645785-1-dima.fedrau@gmail.com>
+References: <20240122212848.3645785-1-dima.fedrau@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Mon, 22 Jan 2024 06:57:32 -0800
-Guenter Roeck <linux@roeck-us.net> wrote:
+Marvell 88q2xxx devices have an inbuilt temperature sensor. Add hwmon
+support for this sensor.
 
-> On 1/22/24 00:47, marius.cristea@microchip.com wrote:
-> > From: Marius Cristea <marius.cristea@microchip.com>
-> > 
-> > Adding support for Microchip PAC193X series of Power Monitor with
-> > Accumulator chip family. This driver covers the following part numbers:
-> >   - PAC1931, PAC1932, PAC1933 and PAC1934
-> > 
-> >    This device is at the boundary between IIO and HWMON (if you are
-> > looking just at the "shunt resistors, vsense, power, energy"). The
-> > device also has ADC internally that can measure voltages (up to 4
-> > channels) and also currents (up to 4 channels). The current is measured as
-> > voltage across the shunt_resistor.
-> > 
-> >    I have started with a simple driver (this one that is more appropriate to be
-> > a HWMON) and willing to add more functionality later (like data buffering that  
-> 
-> Not sure I understand what you are trying to say here. This is obviously an iio
-> driver, not a hwmon driver. Any hwmon related concern is irrelevant.
+Signed-off-by: Dimitri Fedrau <dima.fedrau@gmail.com>
+---
+ drivers/net/phy/marvell-88q2xxx.c | 152 ++++++++++++++++++++++++++++++
+ 1 file changed, 152 insertions(+)
 
-It's a left over comment / attempt to summarise the discussion of whether IIO
-or HWMON was a better home for a driver for this device.  Based on current
-feature set that's not an obvious decision, but there are other planned features
-that fit better in IIO.
-
-
-> 
-> Guenter
-> 
+diff --git a/drivers/net/phy/marvell-88q2xxx.c b/drivers/net/phy/marvell-88q2xxx.c
+index 4cb8fe524795..6900bad275d0 100644
+--- a/drivers/net/phy/marvell-88q2xxx.c
++++ b/drivers/net/phy/marvell-88q2xxx.c
+@@ -5,6 +5,7 @@
+ #include <linux/ethtool_netlink.h>
+ #include <linux/marvell_phy.h>
+ #include <linux/phy.h>
++#include <linux/hwmon.h>
+ 
+ #define PHY_ID_88Q2220_REVB0	(MARVELL_PHY_ID_88Q2220 | 0x1)
+ 
+@@ -33,6 +34,19 @@
+ #define MDIO_MMD_PCS_MV_GPIO_INT_CTRL			32787
+ #define MDIO_MMD_PCS_MV_GPIO_INT_CTRL_TRI_DIS		0x0800
+ 
++#define MDIO_MMD_PCS_MV_TEMP_SENSOR1			32833
++#define MDIO_MMD_PCS_MV_TEMP_SENSOR1_RAW_INT		0x0001
++#define MDIO_MMD_PCS_MV_TEMP_SENSOR1_INT		0x0040
++#define MDIO_MMD_PCS_MV_TEMP_SENSOR1_INT_EN		0x0080
++
++#define MDIO_MMD_PCS_MV_TEMP_SENSOR2			32834
++#define MDIO_MMD_PCS_MV_TEMP_SENSOR2_DIS_MASK		0xc000
++
++#define MDIO_MMD_PCS_MV_TEMP_SENSOR3			32835
++#define MDIO_MMD_PCS_MV_TEMP_SENSOR3_INT_THRESH_MASK	0xff00
++#define MDIO_MMD_PCS_MV_TEMP_SENSOR3_INT_THRESH_SHIFT	8
++#define MDIO_MMD_PCS_MV_TEMP_SENSOR3_MASK		0x00ff
++
+ #define MDIO_MMD_PCS_MV_100BT1_STAT1			33032
+ #define MDIO_MMD_PCS_MV_100BT1_STAT1_IDLE_ERROR		0x00ff
+ #define MDIO_MMD_PCS_MV_100BT1_STAT1_JABBER		0x0100
+@@ -488,6 +502,143 @@ static int mv88q2xxx_resume(struct phy_device *phydev)
+ 	return phy_clear_bits_mmd(phydev, MDIO_MMD_PMAPMD, MDIO_CTRL1,
+ 				  MDIO_CTRL1_LPOWER);
+ }
++#ifdef CONFIG_HWMON
++static const struct hwmon_channel_info * const mv88q2xxx_hwmon_info[] = {
++	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_ALARM),
++	NULL
++};
++
++static umode_t mv88q2xxx_hwmon_is_visible(const void *data,
++					  enum hwmon_sensor_types type,
++					  u32 attr, int channel)
++{
++	switch (attr) {
++	case hwmon_temp_input:
++		return 0444;
++	case hwmon_temp_max:
++		return 0644;
++	case hwmon_temp_alarm:
++		return 0444;
++	default:
++		return 0;
++	}
++}
++
++static int mv88q2xxx_hwmon_read(struct device *dev,
++				enum hwmon_sensor_types type,
++				u32 attr, int channel, long *val)
++{
++	struct phy_device *phydev = dev_get_drvdata(dev);
++	int ret;
++
++	switch (attr) {
++	case hwmon_temp_input:
++		ret = phy_read_mmd(phydev, MDIO_MMD_PCS,
++				   MDIO_MMD_PCS_MV_TEMP_SENSOR3);
++		if (ret < 0)
++			return ret;
++
++		*val = ((ret & MDIO_MMD_PCS_MV_TEMP_SENSOR3_MASK) - 75) * 1000;
++		return 0;
++	case hwmon_temp_max:
++		ret = phy_read_mmd(phydev, MDIO_MMD_PCS,
++				   MDIO_MMD_PCS_MV_TEMP_SENSOR3);
++		if (ret < 0)
++			return ret;
++
++		*val = (((ret & MDIO_MMD_PCS_MV_TEMP_SENSOR3_INT_THRESH_MASK) >>
++			MDIO_MMD_PCS_MV_TEMP_SENSOR3_INT_THRESH_SHIFT) - 75) *
++			1000;
++		return 0;
++	case hwmon_temp_alarm:
++		ret = phy_read_mmd(phydev, MDIO_MMD_PCS,
++				   MDIO_MMD_PCS_MV_TEMP_SENSOR1);
++		if (ret < 0)
++			return ret;
++
++		*val = !!(ret & MDIO_MMD_PCS_MV_TEMP_SENSOR1_RAW_INT);
++		return 0;
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static int mv88q2xxx_hwmon_write(struct device *dev,
++				 enum hwmon_sensor_types type, u32 attr,
++				 int channel, long val)
++{
++	struct phy_device *phydev = dev_get_drvdata(dev);
++
++	switch (attr) {
++	case hwmon_temp_max:
++		if (val < -75000 || val > 180000)
++			return -EINVAL;
++
++		val = ((val / 1000) + 75) <<
++		       MDIO_MMD_PCS_MV_TEMP_SENSOR3_INT_THRESH_SHIFT;
++		return phy_modify_mmd(phydev, MDIO_MMD_PCS,
++				      MDIO_MMD_PCS_MV_TEMP_SENSOR3,
++				      MDIO_MMD_PCS_MV_TEMP_SENSOR3_INT_THRESH_MASK,
++				      val);
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static const struct hwmon_ops mv88q2xxx_hwmon_hwmon_ops = {
++	.is_visible = mv88q2xxx_hwmon_is_visible,
++	.read = mv88q2xxx_hwmon_read,
++	.write = mv88q2xxx_hwmon_write,
++};
++
++static const struct hwmon_chip_info mv88q2xxx_hwmon_chip_info = {
++	.ops = &mv88q2xxx_hwmon_hwmon_ops,
++	.info = mv88q2xxx_hwmon_info,
++};
++
++static int mv88q2xxx_hwmon_probe(struct phy_device *phydev)
++{
++	struct device *dev = &phydev->mdio.dev;
++	struct device *hwmon;
++	char *hwmon_name;
++	int ret;
++
++	/* Enable temperature sensor interrupt */
++	ret = phy_set_bits_mmd(phydev, MDIO_MMD_PCS,
++			       MDIO_MMD_PCS_MV_TEMP_SENSOR1,
++			       MDIO_MMD_PCS_MV_TEMP_SENSOR1_INT_EN);
++	if (ret < 0)
++		return ret;
++
++	/* Enable temperature sense */
++	ret = phy_modify_mmd(phydev, MDIO_MMD_PCS, MDIO_MMD_PCS_MV_TEMP_SENSOR2,
++			     MDIO_MMD_PCS_MV_TEMP_SENSOR2_DIS_MASK, 0);
++	if (ret < 0)
++		return ret;
++
++	hwmon_name = devm_hwmon_sanitize_name(dev, dev_name(dev));
++	if (IS_ERR(hwmon_name))
++		return PTR_ERR(hwmon_name);
++
++	hwmon = devm_hwmon_device_register_with_info(dev,
++						     hwmon_name,
++						     phydev,
++						     &mv88q2xxx_hwmon_chip_info,
++						     NULL);
++
++	return PTR_ERR_OR_ZERO(hwmon);
++}
++
++#else
++static int mv88q2xxx_hwmon_probe(struct phy_device *phydev)
++{
++	return 0;
++}
++#endif
++static int mv88q2xxx_probe(struct phy_device *phydev)
++{
++	return mv88q2xxx_hwmon_probe(phydev);
++}
+ 
+ static int mv88q222x_soft_reset(struct phy_device *phydev)
+ {
+@@ -583,6 +734,7 @@ static struct phy_driver mv88q2xxx_driver[] = {
+ 	{
+ 		PHY_ID_MATCH_EXACT(PHY_ID_88Q2220_REVB0),
+ 		.name			= "mv88q2220",
++		.probe			= mv88q2xxx_probe,
+ 		.get_features		= mv88q2xxx_get_features,
+ 		.config_aneg		= mv88q222x_config_aneg,
+ 		.aneg_done		= genphy_c45_aneg_done,
+-- 
+2.39.2
 
