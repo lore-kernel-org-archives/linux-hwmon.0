@@ -1,110 +1,106 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A05A73C3F;
-	Tue, 23 Jan 2024 20:34:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76EFB63B2;
+	Tue, 23 Jan 2024 20:46:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706042058; cv=none; b=cr+DCKqgBh0AmS9sQ1isztGvf+Q4nrr096qdEV35Q/Dzam9SNR+Jb7NS1b87hvfX3yQBVyU/UkQix+q0P89hVLgEBn/RbHemxpyGPxd6VV75jVIzTlp4NR6N3C8y1VPAAlj3a++KHXU3WThZldIErbN3RAVIcuEtEJKfqYPrP0U=
+	t=1706042817; cv=none; b=nxgeZCc4x6BtYnXr8bBzJy8RkkSu/ku70+2haqpWaIpdKH4m8VE8vaLovbBJw4lkFamaoM1POJzmJTnF5J0jY6sP4G0DXH6b9k/rNaSVSM558II7jVvYdoKQ44IcVUeW1ErzJ9MqANHy9aCS1ZLSUgzGIuBqEO1Z/xUp6BkE7S8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706042058; c=relaxed/simple;
-	bh=2da1jW9KANuw6fjchfHO301yhnkSvZk1PiqeuqOnrsw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jWMx995Es63Hya9P6/s87rmYzIuyWO9kD5o571MrqERdGa/wjGOXFFM+u0PtXhca+KqDt0yydLINZIA9R6RCom5aAzDeJBDpbcEfSm7jB3YIhD/Y13YLxn3XBkehQyG8mtlnK1qbo/r3HdQQpYvQQMn62QK7JC+QYepht873ahE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q/ZA3Nxk; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1706042817; c=relaxed/simple;
+	bh=YZHodvUWAeuvnhi1pJmgPsoMYoy8W6KTZoyK3m9HKlY=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=d0drX0XGpD344KNy5p3pBiZiMCe0CQSr88a7f5nStMkrCu0eJqHbOG3JYzZ3mutrKoXLfkznRvpdzKN+pB2pTEDMwore2ZbnQ3WVHb3UxbtvCmIA8RVNr/uNlrZHdG5LY2ajp+NDIpl9YFmu47yjMnD2L/0R4FoSVg7I7HYg20U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dxuaT8JX; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q/ZA3Nxk"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1d74678df08so15731355ad.1;
-        Tue, 23 Jan 2024 12:34:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dxuaT8JX"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-40eac352733so28551265e9.0;
+        Tue, 23 Jan 2024 12:46:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706042056; x=1706646856; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2N47SUtvm3FIBug79ylcU0ZQ/mAbDc5eVHRt8/FCY1o=;
-        b=Q/ZA3NxknvE9CK3CbTEvmfPhmtMY3H9Cl5185jB3NQyzB0Q8uF85WKhI30xQtbFEQu
-         hYv+srzx83M4iHw1ikPAC3nxb5809a40YxMzfADrqfUe38kY3+shTXVXsjNm6foAE4gM
-         lTMHS+g4v4bm00EfPfwt5Xkrwuqq2kk35yb94SG32gtqBl+g3GWU6NXorVhMP7hEaEVy
-         qopC5mS6cV70gHag6iJHErxhpVGYcIESNfZXQL6VRO6iiu8iaw4JelsCmnm8AELixico
-         hrlyGgjKtPWmTpfpk0PjcrcK4+hitJ2Esh9ej5YvqmJtbQTd6HY1y9k/zogdNftHwfCw
-         payQ==
+        d=gmail.com; s=20230601; t=1706042813; x=1706647613; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:cc:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sq0tMecm3i3zHlp+86M5Zkr7Njk4ZDjptPk+ajtPCMg=;
+        b=dxuaT8JXbV6nH4lBJJqGY0PFuBpcwtyRLLHh6u1BxUR2x8H8yKQtRndmZNXP4sh+fQ
+         Swav0Cl3RcxqLuFAwIDj1epCnM9MtlUXeT2SBHA2+CIvyrCQCB9MqyOd0CDnU7b6K5VR
+         3VEKH4pYfPcRbVHQW/UFMciDV39fVubps74TFT5ovJ6hpKSlzJ+BVZsOIZIrZEW7U3DA
+         p03lAKXtIZEO8P3oJeNLTzjPEZhwK3f93DxuLcr5mkRSvN+543ATAuJSNlB1LN9O4HzN
+         peMFWFZ8ZAsPGO9z32TK1Uwl4umHB00G87P0/yLNqNE/hs4NswFA47MWo2oX4/zdKBtm
+         tEmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706042056; x=1706646856;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2N47SUtvm3FIBug79ylcU0ZQ/mAbDc5eVHRt8/FCY1o=;
-        b=FkCzxdUie715gPEB4kQ3dNP5/P0D3M3bcXEsp8lhSwIjybw8gd7KJEOI+NhnkO9s7c
-         b5YkkgcdNVAWflsLkhuicqEVrE1w+4jjKDyPak9+JbB7OoizzhLxtM4u0/D1Dv2lOW9i
-         kgZfaSQT/LlXAxCEn3cpMEOWBGCUfGZxgc31oOGMGnMHXQxAbphtgWjCa1AyT0xrRhY4
-         Si8kXgAuOYUGUcZVewuVSILWI5xa9ex1WrH2GFWK7wUPJXrkhf1u2BX6Rcd8Y34Blgbd
-         5TDLbNhzOBNpx1+O6MvhN5xIJvF0+CFO/IXQg2HNyCrrOt0BGQG3HHShp/HCzPUPz6p+
-         L75A==
-X-Gm-Message-State: AOJu0Yw1PFM6qeyAm4mvBo4LRrAzAJ7FKDl/TQ+FpIx0rXuMOy6/s+xQ
-	hF5/JVCVfqFmwyP+u4k8epbUp/TITsyyEg0GyAwUAuIXumCKk6GT
-X-Google-Smtp-Source: AGHT+IH/qCA8Hm6mMcMBTcTs1je4x5DuKNWQ8teZWyXhLTlxR9yWFwwivo9tcGy3gNJgndWnW5eZtQ==
-X-Received: by 2002:a17:902:868d:b0:1d4:4fc6:8d9 with SMTP id g13-20020a170902868d00b001d44fc608d9mr3337272plo.60.1706042055835;
-        Tue, 23 Jan 2024 12:34:15 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s13-20020a170902988d00b001d39ced922asm9180315plp.97.2024.01.23.12.34.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jan 2024 12:34:14 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 23 Jan 2024 12:34:13 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc: sudeep.holla@arm.com, cristian.marussi@arm.com, jdelvare@suse.com,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH V2] hwmon: scmi-hwmon: implement change_mode
-Message-ID: <ef92f93e-b294-4bb3-bcf4-4f674c01f729@roeck-us.net>
-References: <20240123150526.3615901-1-peng.fan@oss.nxp.com>
+        d=1e100.net; s=20230601; t=1706042813; x=1706647613;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:cc:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sq0tMecm3i3zHlp+86M5Zkr7Njk4ZDjptPk+ajtPCMg=;
+        b=BA1FS8RbBjc/NrHafkB2w0csU6XVC78iejsNQD40FTCp2FCXUpIEtUoZzBYT4Bf8Wx
+         QllWt5qtyiw4DCmY+EcvltX+vAJFmYNjdrLa98p4ts0q/16pPvkes6eHeKJbtC+pUc+6
+         MjMaML2zKi7JiSZ1wGFKSYSQj4QAHHQiBXlN8hxuWOvuB8/7Ziv94DvTF1aHPKvk84VT
+         KKDIxp9N6tjijT50wvwpZqlfo6SfZNtAMcGujPWTt++lhpX3TEftEnCmxYNIMR3BQpml
+         jUCeEWox2Q32yd8Xn2GWZrGc/1WlYAoOTAuMV1eYUGgs28JUeU9HTHgQuzM2enl0ddTi
+         QUbQ==
+X-Gm-Message-State: AOJu0YzxVApg671TffG9xWv2AF53DD2wm9o8kVMkANyayd/sHJF/hIdX
+	jCHymR+S0G2cMu8lh/Lm6zm+6JVJPbeg8VcrXb6eUcZf/D+SNvvs
+X-Google-Smtp-Source: AGHT+IGvUC5Ht5Wo8CwoFJ6X2/sTIe8RA850NVi6zqWSjYp/joLV25WudT26G53MKdSgM2/pOUDoiQ==
+X-Received: by 2002:a05:600c:538e:b0:40e:4dc1:fbc0 with SMTP id hg14-20020a05600c538e00b0040e4dc1fbc0mr517877wmb.60.1706042813473;
+        Tue, 23 Jan 2024 12:46:53 -0800 (PST)
+Received: from [192.168.0.28] (cable-178-148-234-71.dynamic.sbb.rs. [178.148.234.71])
+        by smtp.gmail.com with ESMTPSA id l34-20020a05600c1d2200b0040e89ade84bsm23386198wms.4.2024.01.23.12.46.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Jan 2024 12:46:52 -0800 (PST)
+Message-ID: <9b1d7c15-16a6-478d-975c-5c375f8674fe@gmail.com>
+Date: Tue, 23 Jan 2024 21:46:51 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240123150526.3615901-1-peng.fan@oss.nxp.com>
+User-Agent: Mozilla Thunderbird
+Cc: savicaleksa83@gmail.com, dan.carpenter@linaro.org,
+ kernel-janitors@vger.kernel.org, error27@gmail.com
+Subject: Re: [PATCH] hwmon: gigabyte_waterforce: Fix locking bug in
+ waterforce_get_status()
+To: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240122154952.2851934-1-harshit.m.mogalapalli@oracle.com>
+Content-Language: en-US
+From: Aleksa Savic <savicaleksa83@gmail.com>
+In-Reply-To: <20240122154952.2851934-1-harshit.m.mogalapalli@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Jan 23, 2024 at 11:05:26PM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+On 2024-01-22 16:49:52 GMT+01:00, Harshit Mogalapalli wrote:
+> Goto 'unlock_and_return' for unlocking before returning on the error
+> path.
 > 
-> The sensor maybe disabled before kernel boot, so add change_mode
-> to support configuring the sensor to enabled state.
+> Fixes: d5939a793693 ("hwmon: Add driver for Gigabyte AORUS Waterforce AIO coolers")
+> Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+> ---
+> This is based on static analysis with smatch, only compile tested.
+> ---
+>  drivers/hwmon/gigabyte_waterforce.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
+> diff --git a/drivers/hwmon/gigabyte_waterforce.c b/drivers/hwmon/gigabyte_waterforce.c
+> index 1799377fc2f1..7bccfe2eaa76 100644
+> --- a/drivers/hwmon/gigabyte_waterforce.c
+> +++ b/drivers/hwmon/gigabyte_waterforce.c
+> @@ -146,7 +146,7 @@ static int waterforce_get_status(struct waterforce_data *priv)
+>  	/* Send command for getting status */
+>  	ret = waterforce_write_expanded(priv, get_status_cmd, GET_STATUS_CMD_LENGTH);
+>  	if (ret < 0)
+> -		return ret;
+> +		goto unlock_and_return;
+>  
+>  	ret = wait_for_completion_interruptible_timeout(&priv->status_report_received,
+>  							msecs_to_jiffies(STATUS_VALIDITY));
 
-As mentioned by others, this will require a better explanation.
-It only affects thermal sensors, and the scope is not provided.
-Specifically, neither subject nor description explain that this
-change is primarily for thermal subsystem functionality, and the
-(non ?) impact on the hwmon device is not explained.
-
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> Reviewed-by: Cristian Marussi <cristian.marussi@arm.com>
-
-As a general comment, I have not received the original patch, and instead
-pulled it from patchwork. I also did not receive the initial version
-of this patch.
-
-Maybe it is just me, but e-mail from kernel.org has been sporadic
-in the last month or so and I have been missing various e-mails.
-I would suggest for everyone to copy me directly if a response from me
-is expected or desired.
-
-Anyway, this change looks like it enables / disables individual temperature
-sensors. What is the expected result for the hwmon device, or in other
-words what happens if a sensor is disabled through the thermal subsystem
-and the "sensors" command is executed ? The impact (or lack of it) should
-be explained.
-
-Also, if my interpretation is correct, you'll need to explain why you
-did not (also) implement the hwmon "enable" attribute for temperature
-(and possibly other) sensors.
+Reviewed-by: Aleksa Savic <savicaleksa83@gmail.com>
 
 Thanks,
-Guenter
+Aleksa
