@@ -1,171 +1,179 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2042.outbound.protection.outlook.com [40.107.8.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4668815C6
-	for <linux-hwmon@vger.kernel.org>; Tue, 23 Jan 2024 03:59:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705982364; cv=none; b=LucTBCmuaARmbAl+6atnU6xTAvqHAi7yXNkUT35bxSJt8EnZuNELN2+3k0BHJgKhajYKRoLEJdRaaFrQtsSWwowo4RArPEhZuh9BMMZo8HhclxbU2dNOz3vqwZFD/H3BEP9x3BWnkygsVMLFFZYISM7kmuBACP+pYQitDnH4asA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705982364; c=relaxed/simple;
-	bh=4SIcIUJhqVJOTtzQpFiJTdPv5EO+H7bXz4QdieOHf9M=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=P8yncWlesxVHUALPVb3IKqoK56LiJYG7RqjvDORaY5FPMTFAziKr0hBt9qJSAxIDNZJz4ZZVzjRBxZ8uGzzshjrIK7vTkPlZZDy2+hDx+bZvyFOZ5pMpsXwXkID76pPoM4ViduJ+aB4w8Z19tk00fkBY8YNFkauHjzssY1o2Owo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ivIyN2SH; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EED035F858;
+	Tue, 23 Jan 2024 15:01:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.8.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706022080; cv=fail; b=mtKvPZBbFZuFrWwZvWNkQ2mxAYjHq42KH7xtHEfQ+SiGhU0amCzHL3U3544q9ArV/LQD8cF7Z9AFmt4krzPUidOHhCixp6yTiXE4fE7qfUopjN2KId17RqAbd+1w7xC4lUPJrZAYhDUZLzj+j5AkDqomcZYmgObyCS/xMhr+X+I=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706022080; c=relaxed/simple;
+	bh=7hHhaRuwupvs3BHJ6rMwp9zwFOnT3lbO4aJmyo3JnQo=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=LkgwJ+Hb52sIiZ7q2puLxrwRrkSAWfmO9wQr/8jr5JVnf9mpgV4RS8tSv2/n3UF7XwDIA6gPj3zYSwSBotyMLJdsyCYKgoozIrbkN19HdYjdaNVP6JTleDYaYVJAbfNHk/lEF+HiSWGFzRtetsVSpk7W8/Rqn2XOBD10hXibzjQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=W0PNdcMX; arc=fail smtp.client-ip=40.107.8.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ivIyN2SH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705982362; x=1737518362;
-  h=date:from:to:cc:subject:message-id;
-  bh=4SIcIUJhqVJOTtzQpFiJTdPv5EO+H7bXz4QdieOHf9M=;
-  b=ivIyN2SHZ0zJzK4e1sMHzUx9W1FyVzTEaiW+QHJHuepQxABJG6cHuRpj
-   hoPZW25hazQ8uZcqO4oYUMo5Mu7PHwomr5t2dRs+Ef0WPBx5zqcpPQ3tU
-   pZf21TO6IQbR/5TLHbRuBdD/vggQMXTTmhEyorxBYXLyumUSdsJLtAM9h
-   w0GHuIQcalLXfRUvEruQQbPkjuYStPAoGn3YeXaNHQfPmqgOMqIDqYINS
-   K+VcwfgbPr2LAj8uhkYaQEw3afDto4nKXWWLcGA75vmU2KFJK/KpT1d0y
-   oofU3qcD6zW8ejfh6V3w83kd4tzH60g+XveqtKgD03S8mC134Ex6vcIev
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10961"; a="1262713"
-X-IronPort-AV: E=Sophos;i="6.05,213,1701158400"; 
-   d="scan'208";a="1262713"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2024 19:59:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,213,1701158400"; 
-   d="scan'208";a="27873630"
-Received: from lkp-server01.sh.intel.com (HELO 961aaaa5b03c) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 22 Jan 2024 19:59:20 -0800
-Received: from kbuild by 961aaaa5b03c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rS7wU-00079Y-1e;
-	Tue, 23 Jan 2024 03:59:18 +0000
-Date: Tue, 23 Jan 2024 11:59:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- cc85a2f966361054d32dd79a432b2fb6b54b3db8
-Message-ID: <202401231111.BsXPWTGm-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="W0PNdcMX"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ue4dMQL55S8jDHXaUiWeO5ju1SV1GspoxK19aZoDX3Vf0AmP0CIB8gXjKXlmQbEGrYM/oMqjUczKkN4e33ve6nVxhT+Y+M3RcnOyl6VRMMLgGFgjaD3CNqI7+VCuKqghiycDG5LzYDJUFiFgbEX0KWUvJdEdl1i6zOQTVt0fckt/Aaiaz2WepcaiVpuQ9uz7ASeZNxLI81tOWyOuwamk4i7Xc1DGclX/2ADCa2eiAIAH7Ys8CN3LYk3GD0q/HXeUOoLiPFAkpcsonpnYzmf4ulTqHnrusPnnwNMk+x7SLQ7SKTmI82qtwFut4Ob9E0M+mMqBIEkLT/cTMbniWpT0QQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qW/sdQzcVeDQSnN31LPu9sk0KQTieifK2+Nxq8QrttY=;
+ b=MoVIs0I+8M32UkbDTSAXywsl7OLpUV81stjYDdfZqF1UFbg3fm/4PG7rjEj6QMHRWtiaQx4txZGo8DobGzUFif8rJd9Bs8OcbH3E7mYINCwlw4TzrSoZJIHsUnkASB22pR7fdu731ihd5YHnGfVWu/HEvA31dyAkF043urU0XEbMUBPV0KC5GFg5Xy3oYn3nkr4kdgBiN0oGOZD8uNhyZQ46hksEQcolWGbqLIxSJ8YAuydgvpVTuoSOsNHNoX3RK9roxCNwnO3UQaXQnN1tioKN2XNW5WBvDJ1sncXcBK7l748rCmpH6fd6V3RlAhIql0LdmU3C+3fOY7zn6k7Pcw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qW/sdQzcVeDQSnN31LPu9sk0KQTieifK2+Nxq8QrttY=;
+ b=W0PNdcMXv0lSt12MFey9FawKLWOUkoxUjVr3Sb0VF09RjQaFh1pYDJf3msetHMuG0hjSBEmb4SaXJT8gk3clVRRT0A0IpN1rPna7XM6CRaiWyl89I1REtvOIy2J3KlzvdE1/KPfst5CRDkrMfJBE2neni/6J+URGKeMGqfrAgp0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by AS8PR04MB9206.eurprd04.prod.outlook.com (2603:10a6:20b:44d::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7202.37; Tue, 23 Jan
+ 2024 15:01:10 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::c499:8cef:9bb1:ced6]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::c499:8cef:9bb1:ced6%3]) with mapi id 15.20.7202.031; Tue, 23 Jan 2024
+ 15:01:10 +0000
+From: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To: sudeep.holla@arm.com,
+	cristian.marussi@arm.com,
+	jdelvare@suse.com,
+	linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH V2] hwmon: scmi-hwmon: implement change_mode
+Date: Tue, 23 Jan 2024 23:05:26 +0800
+Message-Id: <20240123150526.3615901-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.37.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SGXP274CA0001.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::13)
+ To DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|AS8PR04MB9206:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5c97c1a9-dd97-4610-4157-08dc1c242235
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	twLi7Ef0qEhAcIorvnhaZ9+OrepcQv9pcNQg7De5cWOZKYXJLXJeBQfLq6Yi6D+y2K07L98lOR4xlLG3JDhH99HBpnpOnA6fmEToBQfVIvCNAdTvzu98PbWGPwUeaqi7WjDFbn1JsXDNz+4/NdAwKHr268vqWfYnl4fXO9YIgd4K8ix2KwH6XCx7mmW5nKNR71A4IfjAjZ7r6Sku3mws6GJ4UfVnFghTOB4tZY8+mwqsRd6cR93fsScuT+b9DFTlrU1S6nND9ska1D48AZQFD79ea7MzeW+FZta5fYtU4tikXoOqmaE9huOW4UdUAApzB8C6gkC+O7rpeFWffRceJwS5Z558Qi+khqZij+zZXqLtG4wPfQuuyyGKRTgEN5ZwsyHLq+n8/szljj5CkNAbChsDFKhXdpdNNGGZkTPcGfWIXgglLH8g0IIMLX9rgMQDBSOTQVnwkA3TOigXgvoXqSjaU+GboWYX7o6wuAnX3ObH0HvtjbeMCXDRbwi0B0uSDSSR56ompUBqS11qtPiRiQrSr5+JdYMUhlNuFisP1yBvW7eu8jx661cnZ49LzG9XOW+U39Z6OKF2ZNC8cyKeKqihf/lFeUYvb2uhLvXbw1kvqVF6+QcFlUqMmcdE1O7e
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(346002)(376002)(136003)(396003)(39860400002)(230922051799003)(451199024)(186009)(1800799012)(64100799003)(1076003)(83380400001)(26005)(4326008)(8936002)(8676002)(5660300002)(66946007)(66556008)(66476007)(316002)(86362001)(38100700002)(478600001)(6486002)(2906002)(6512007)(2616005)(6506007)(52116002)(38350700005)(41300700001)(6666004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?CHOQqHHCr467MIRzCrR1HMLrtUXPx/5JsHA0NqDmLpeNUYtL0PwHwHBXINu8?=
+ =?us-ascii?Q?lw1K3jI1Z8jQxvy67gQw9M/u8hQSgFoXhQqzC+evw4SAHK1ofUE1BSuXy77l?=
+ =?us-ascii?Q?aAqj03HlAtyvc5MUjxAzjNMzGqSdSLf/xuqKlmXqPAc1XTg8Zr/iV+U5WS2X?=
+ =?us-ascii?Q?ILBJdoai5YspF4C3p94UgF3a0CTmzt4Hun/qXjCrY0edn3irZSnDoBrGl+Pk?=
+ =?us-ascii?Q?HE1F5YN4r8tZNTCIshk2GJe+7paZwsw8lqQf3Aw9wLIDorsPkebi4hXcBg9k?=
+ =?us-ascii?Q?07o08k1sjTQ6vh6Ch7dTdCSXSTWUh4uqlo0VNZ/la0tF1hD9H2AEFLBDUo3o?=
+ =?us-ascii?Q?GdMjt3HbnDIjiGO98S5Ac1JC2TKp+IPZCZ+RGe0OX6p8uMLIqxRoTJqFendM?=
+ =?us-ascii?Q?tdTo6hlA1e4ey7GE0JGMAQSmcw46DYasj/RtGQzMAwajQJlQ8cDRKeGmUA/k?=
+ =?us-ascii?Q?gptx9mg2RIbHwcYT2oXv1QFw8VWXjEwEvQWu3WjobYO4U7pp0loYCgGV0gsF?=
+ =?us-ascii?Q?5ymsvCLExCqUnAruKrffZQPfzMSFtispDYjC36H9y9Gy2kNXEMip6f7xf7Bn?=
+ =?us-ascii?Q?aSTuQ8bozL3BE0PGtQ/i8gC1aJYWBALVezq8Q9zEbRN0ZtwQUbo2j7CCV+HA?=
+ =?us-ascii?Q?CT1ABmRsXKVPtBDI9heybpwd2L2U5p1d78rkx2D3o/zM9wuk4u/w1UHdWW5N?=
+ =?us-ascii?Q?hP9BAJvb6y2M1oGGOg/LqdVQwYTvzztjZroWMM3+asWfqZX2xdcxPep+ZR6L?=
+ =?us-ascii?Q?b2FDMw32dNf0/MvKCC0oS5aakKr5GzVvFsyN9rEAZG0+povrd5yZfq0JIJPk?=
+ =?us-ascii?Q?kEp1i4HL89WuiMjbimnPrM7VRh/JPxcWxgFQwV6wsJJ14X947QoSJ0FatXZS?=
+ =?us-ascii?Q?GWtzhvPYbAoZHjyIwLaGvqmYpDsWPNVjKzvBOmIEju36som4f6gCHt+ac9wj?=
+ =?us-ascii?Q?iaZPVHXdgcXJ+3aue7QBFPyj21tnoDApelFy7x+/74P28fbjnbeSv0Au6MmJ?=
+ =?us-ascii?Q?eJ1Jgj9OFoCykLzFAgagYshCjVpForkfe3Hf/JBsMlMoVJgw4pZedJ8FZ0En?=
+ =?us-ascii?Q?r2mjnZZjmIxcx8Yz25FcUmtRbGc3uu0Yk7nAixT6TRccIiaJcCAMWMEzTsMv?=
+ =?us-ascii?Q?dAPKZoIQ86heiXZrAg26Gl8h/HX7dqFMezWuk9lnyDpTzVBTpjXpHDhXMlT3?=
+ =?us-ascii?Q?3FUky5snES8hk3x+IotBevQh43f1nUijcI0eYtTZvMfRn79IabMT6x3yrMeO?=
+ =?us-ascii?Q?4j5jvdaMkrCLx8agok3UPefwSi5kXzSjWdqIIRFsykvcOvW+hKJnkoZaeT6T?=
+ =?us-ascii?Q?TXBBnt6RKSxj4HKTVTGEaL+bPsRamYqVGcAI+mQ8hydsKIM1reD29Ef6U6JN?=
+ =?us-ascii?Q?OPWWCjUaUL5N1aVrKf3Na8sYBuYJeLTl8rNGyd7sjKWupRKG6kzl/TOHynam?=
+ =?us-ascii?Q?X4hUB239Kl5Y7y6hL3EYOwMuveaVTacL7O9xSYHACZBQi3cp/S/IUtQZlSdl?=
+ =?us-ascii?Q?7ST9Jz3dzV+NmCdKIiMRWsNqKZK+IkjwQiZEuLU3YTjr2Bx458TMf2X2FRPv?=
+ =?us-ascii?Q?VjWFsK1JVKPsBRsnb5k7TKLS+Imvm8mEM1VdrbZX?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5c97c1a9-dd97-4610-4157-08dc1c242235
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jan 2024 15:01:10.1689
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tmU7V+pO3neIX91TTdWnUCAu8mZfJrT3ooHXlh1DLv9qrIlaZNhwgtaOYRxjU80hZoPySRQu7ElEvf0F8qDp+w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB9206
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: cc85a2f966361054d32dd79a432b2fb6b54b3db8  dt-bindings: hwmon: ina2xx: Describe ina260 chip
+From: Peng Fan <peng.fan@nxp.com>
 
-elapsed time: 1602m
+The sensor maybe disabled before kernel boot, so add change_mode
+to support configuring the sensor to enabled state.
 
-configs tested: 98
-configs skipped: 2
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
+---
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+V2:
+ Use SCMI_SENS_CFG_IS_ENABLED & clear BIT[31:9] before update config(Thanks Cristian)
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                               defconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20240123   gcc  
-arc                   randconfig-002-20240123   gcc  
-arm                               allnoconfig   gcc  
-arm                                 defconfig   clang
-arm                   randconfig-001-20240123   gcc  
-arm                   randconfig-002-20240123   gcc  
-arm                   randconfig-003-20240123   gcc  
-arm                   randconfig-004-20240123   gcc  
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240123   gcc  
-arm64                 randconfig-002-20240123   gcc  
-arm64                 randconfig-003-20240123   gcc  
-arm64                 randconfig-004-20240123   gcc  
-csky                              allnoconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240123   gcc  
-csky                  randconfig-002-20240123   gcc  
-hexagon                           allnoconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20240123   clang
-hexagon               randconfig-002-20240123   clang
-i386                             allmodconfig   clang
-i386                              allnoconfig   clang
-i386                             allyesconfig   clang
-i386         buildonly-randconfig-001-20240122   clang
-i386         buildonly-randconfig-002-20240122   clang
-i386         buildonly-randconfig-003-20240122   clang
-i386         buildonly-randconfig-004-20240122   clang
-i386         buildonly-randconfig-005-20240122   clang
-i386         buildonly-randconfig-006-20240122   clang
-i386                                defconfig   gcc  
-i386                  randconfig-001-20240122   clang
-i386                  randconfig-002-20240122   clang
-i386                  randconfig-003-20240122   clang
-i386                  randconfig-004-20240122   clang
-i386                  randconfig-005-20240122   clang
-i386                  randconfig-006-20240122   clang
-i386                  randconfig-011-20240122   gcc  
-i386                  randconfig-012-20240122   gcc  
-i386                  randconfig-013-20240122   gcc  
-i386                  randconfig-014-20240122   gcc  
-i386                  randconfig-015-20240122   gcc  
-i386                  randconfig-016-20240122   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240123   gcc  
-loongarch             randconfig-002-20240123   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   clang
-mips                             allyesconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240123   gcc  
-nios2                 randconfig-002-20240123   gcc  
-openrisc                         allyesconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                randconfig-001-20240123   gcc  
-parisc                randconfig-002-20240123   gcc  
-powerpc                          allmodconfig   clang
-powerpc                          allyesconfig   clang
-powerpc               randconfig-001-20240123   gcc  
-powerpc               randconfig-002-20240123   gcc  
-powerpc               randconfig-003-20240123   gcc  
-powerpc64             randconfig-001-20240123   gcc  
-powerpc64             randconfig-002-20240123   gcc  
-powerpc64             randconfig-003-20240123   gcc  
-riscv                 randconfig-001-20240123   gcc  
-riscv                 randconfig-002-20240123   gcc  
-s390                  randconfig-001-20240123   clang
-s390                  randconfig-002-20240123   clang
-sh                    randconfig-001-20240123   gcc  
-sh                    randconfig-002-20240123   gcc  
-sparc64               randconfig-001-20240123   gcc  
-sparc64               randconfig-002-20240123   gcc  
-um                    randconfig-001-20240123   gcc  
-um                    randconfig-002-20240123   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   clang
-x86_64                              defconfig   gcc  
-x86_64                          rhel-8.3-rust   clang
-xtensa                randconfig-001-20240123   gcc  
-xtensa                randconfig-002-20240123   gcc  
+ drivers/hwmon/scmi-hwmon.c | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
+diff --git a/drivers/hwmon/scmi-hwmon.c b/drivers/hwmon/scmi-hwmon.c
+index 364199b332c0..913acd1b137b 100644
+--- a/drivers/hwmon/scmi-hwmon.c
++++ b/drivers/hwmon/scmi-hwmon.c
+@@ -151,7 +151,39 @@ static int scmi_hwmon_thermal_get_temp(struct thermal_zone_device *tz,
+ 	return ret;
+ }
+ 
++static int scmi_hwmon_thermal_change_mode(struct thermal_zone_device *tz,
++					  enum thermal_device_mode new_mode)
++{
++	int ret;
++	u32 config;
++	enum thermal_device_mode cur_mode = THERMAL_DEVICE_DISABLED;
++	struct scmi_thermal_sensor *th_sensor = thermal_zone_device_priv(tz);
++
++	ret = sensor_ops->config_get(th_sensor->ph, th_sensor->info->id,
++				     &config);
++	if (ret)
++		return ret;
++
++	if (SCMI_SENS_CFG_IS_ENABLED(config))
++		cur_mode = THERMAL_DEVICE_ENABLED;
++
++	if (cur_mode == new_mode)
++		return 0;
++
++	config &= ~(SCMI_SENS_CFG_UPDATE_SECS_MASK |
++		    SCMI_SENS_CFG_UPDATE_EXP_MASK |
++		    SCMI_SENS_CFG_ROUND_MASK);
++	if (new_mode == THERMAL_DEVICE_ENABLED)
++		config |= SCMI_SENS_CFG_SENSOR_ENABLED_MASK;
++	else
++		config &= ~SCMI_SENS_CFG_SENSOR_ENABLED_MASK;
++
++	return sensor_ops->config_set(th_sensor->ph, th_sensor->info->id,
++				      config);
++}
++
+ static const struct thermal_zone_device_ops scmi_hwmon_thermal_ops = {
++	.change_mode = scmi_hwmon_thermal_change_mode,
+ 	.get_temp = scmi_hwmon_thermal_get_temp,
+ };
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.37.1
+
