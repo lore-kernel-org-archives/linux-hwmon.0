@@ -1,278 +1,171 @@
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA24D4BA90;
-	Mon, 22 Jan 2024 21:29:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4668815C6
+	for <linux-hwmon@vger.kernel.org>; Tue, 23 Jan 2024 03:59:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705958997; cv=none; b=j06ooZf9mYaFHiJ800Rtx1J/bmYjGND2DjlelLesodblRw61yoXZ679fFyN586XBd6QceZJVbejpz0AKs+OCSZAp+TrcAL+9jxJDI7qbqzfZFrTLVdFExgdzjrZHsZa6aUCQBckZfpPbRkrm6VifCR2/79TITuexv510K0CtPpw=
+	t=1705982364; cv=none; b=LucTBCmuaARmbAl+6atnU6xTAvqHAi7yXNkUT35bxSJt8EnZuNELN2+3k0BHJgKhajYKRoLEJdRaaFrQtsSWwowo4RArPEhZuh9BMMZo8HhclxbU2dNOz3vqwZFD/H3BEP9x3BWnkygsVMLFFZYISM7kmuBACP+pYQitDnH4asA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705958997; c=relaxed/simple;
-	bh=6NyN89TqUdLjq5FhaHiyBm8u6XvAMftJ4c2iTUQwAQM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=eT54n7tUhfb4sToxeVjnaOKfxVvxsVxjxPo38a/ekbSAoG0u3B1VIThTFmSOk7flLszkXONfPjn+i3hXun5NYhwXo4ci7P31tpJGZVOUMRp4BSwNVuEPif7sk0v5wu89/8nGucmzoUwdaba4Vj77fA41d3NcbZpWzT2rIn8tjwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xoufn49u; arc=none smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1705982364; c=relaxed/simple;
+	bh=4SIcIUJhqVJOTtzQpFiJTdPv5EO+H7bXz4QdieOHf9M=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=P8yncWlesxVHUALPVb3IKqoK56LiJYG7RqjvDORaY5FPMTFAziKr0hBt9qJSAxIDNZJz4ZZVzjRBxZ8uGzzshjrIK7vTkPlZZDy2+hDx+bZvyFOZ5pMpsXwXkID76pPoM4ViduJ+aB4w8Z19tk00fkBY8YNFkauHjzssY1o2Owo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ivIyN2SH; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xoufn49u"
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-55c2c90c67dso1779195a12.1;
-        Mon, 22 Jan 2024 13:29:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705958994; x=1706563794; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AVNEcu8/KtmvdhD8Hp68PNiLA1u+xEERK9Ta2mi0Mzs=;
-        b=Xoufn49u/Jfomc4jToGHnmEUalf3uLYcS2N351LZop5sl3eqRzkMJL43OerOcNNRSp
-         gWEe0X1sX5+zDzUDr45T8vS1ViTuQH9+onG04clAgkmifKyjJi+m0D07ps/S4H9Rn/TG
-         VLyDNNBUtTfYeK+LfSBntiiHs8p2O0Qe+udm23xP5xQq7krsM/xBksKv9XT6f64CURiX
-         IdVhFJuXOQr4fcqH4FGP8UZyC/hmC+wOjRmKlGHoYhCGrqtEZOXuoJleGsKXAmFVipSY
-         JUW+wPT9jS5FP8iVCy1apjzV9bkQXaa1+SxkRT89Z2pfQwk4KZfhkQiLeFZibKAcyXRh
-         RLiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705958994; x=1706563794;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AVNEcu8/KtmvdhD8Hp68PNiLA1u+xEERK9Ta2mi0Mzs=;
-        b=r+6QdObZYwuOYBFsm5UP60Y8pcKcBpCofq0XFbWuT8JS/lPP2A7hOmEVsOZZ3B9eWm
-         lRAOq4y2T5XhYh7UvFN9qWoku3x72KJxJMZqmb9oi8KtX4dYbSM6kghW/zYrnZkJPsiV
-         EAUKliyP5qixcvgGfxrRz6fJ45yoOACRxaw7xxjO+Eok5HjOQJRzT0v0MU+u3zIb7rh7
-         UO6p/rc1+/QQrvT/Y38WMKWRn20CpS5RdvVqyMZLexxc0xHEt/fJfKj9/6ixLUMhIWst
-         iO//49xqrR7nMWE5HPCaka8lPb6hWyfgosQ53QYoolmM/ugUXxR3NJtH55vDx4iTcrEG
-         HkFw==
-X-Gm-Message-State: AOJu0Yy3jC/WE91Nnyh/xHS3aVICSxu3KwkQoJxAeq8MO3Ssuybrv2Z1
-	immCo4EuvzDIX03MyUmmK1aPpQOZrQIoLgCsT9NfKWKDfsS1PaSV
-X-Google-Smtp-Source: AGHT+IGqt/98OCeHGlibmCviwO91HkwiR+6lZjHNTFpWrYZwvjxg2aDs6ZE3nK4O+6k/6GLclNLaFQ==
-X-Received: by 2002:a17:906:d04a:b0:a2a:dba3:faac with SMTP id bo10-20020a170906d04a00b00a2adba3faacmr2165680ejb.154.1705958993919;
-        Mon, 22 Jan 2024 13:29:53 -0800 (PST)
-Received: from debian.fritz.box ([93.184.186.109])
-        by smtp.gmail.com with ESMTPSA id j25-20020a1709066dd900b00a26af4d96c6sm13823336ejt.4.2024.01.22.13.29.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jan 2024 13:29:53 -0800 (PST)
-From: Dimitri Fedrau <dima.fedrau@gmail.com>
-To: 
-Cc: Dimitri Fedrau <dima.fedrau@gmail.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Stefan Eichenberger <eichest@gmail.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Subject: [PATCH v5 net-next 08/13] net: phy: marvell-88q2xxx: add support for temperature sensor
-Date: Mon, 22 Jan 2024 22:28:41 +0100
-Message-Id: <20240122212848.3645785-9-dima.fedrau@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240122212848.3645785-1-dima.fedrau@gmail.com>
-References: <20240122212848.3645785-1-dima.fedrau@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ivIyN2SH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1705982362; x=1737518362;
+  h=date:from:to:cc:subject:message-id;
+  bh=4SIcIUJhqVJOTtzQpFiJTdPv5EO+H7bXz4QdieOHf9M=;
+  b=ivIyN2SHZ0zJzK4e1sMHzUx9W1FyVzTEaiW+QHJHuepQxABJG6cHuRpj
+   hoPZW25hazQ8uZcqO4oYUMo5Mu7PHwomr5t2dRs+Ef0WPBx5zqcpPQ3tU
+   pZf21TO6IQbR/5TLHbRuBdD/vggQMXTTmhEyorxBYXLyumUSdsJLtAM9h
+   w0GHuIQcalLXfRUvEruQQbPkjuYStPAoGn3YeXaNHQfPmqgOMqIDqYINS
+   K+VcwfgbPr2LAj8uhkYaQEw3afDto4nKXWWLcGA75vmU2KFJK/KpT1d0y
+   oofU3qcD6zW8ejfh6V3w83kd4tzH60g+XveqtKgD03S8mC134Ex6vcIev
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10961"; a="1262713"
+X-IronPort-AV: E=Sophos;i="6.05,213,1701158400"; 
+   d="scan'208";a="1262713"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2024 19:59:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,213,1701158400"; 
+   d="scan'208";a="27873630"
+Received: from lkp-server01.sh.intel.com (HELO 961aaaa5b03c) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 22 Jan 2024 19:59:20 -0800
+Received: from kbuild by 961aaaa5b03c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rS7wU-00079Y-1e;
+	Tue, 23 Jan 2024 03:59:18 +0000
+Date: Tue, 23 Jan 2024 11:59:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ cc85a2f966361054d32dd79a432b2fb6b54b3db8
+Message-ID: <202401231111.BsXPWTGm-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Marvell 88q2xxx devices have an inbuilt temperature sensor. Add hwmon
-support for this sensor.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: cc85a2f966361054d32dd79a432b2fb6b54b3db8  dt-bindings: hwmon: ina2xx: Describe ina260 chip
 
-Signed-off-by: Dimitri Fedrau <dima.fedrau@gmail.com>
----
- drivers/net/phy/marvell-88q2xxx.c | 152 ++++++++++++++++++++++++++++++
- 1 file changed, 152 insertions(+)
+elapsed time: 1602m
 
-diff --git a/drivers/net/phy/marvell-88q2xxx.c b/drivers/net/phy/marvell-88q2xxx.c
-index 4cb8fe524795..6900bad275d0 100644
---- a/drivers/net/phy/marvell-88q2xxx.c
-+++ b/drivers/net/phy/marvell-88q2xxx.c
-@@ -5,6 +5,7 @@
- #include <linux/ethtool_netlink.h>
- #include <linux/marvell_phy.h>
- #include <linux/phy.h>
-+#include <linux/hwmon.h>
- 
- #define PHY_ID_88Q2220_REVB0	(MARVELL_PHY_ID_88Q2220 | 0x1)
- 
-@@ -33,6 +34,19 @@
- #define MDIO_MMD_PCS_MV_GPIO_INT_CTRL			32787
- #define MDIO_MMD_PCS_MV_GPIO_INT_CTRL_TRI_DIS		0x0800
- 
-+#define MDIO_MMD_PCS_MV_TEMP_SENSOR1			32833
-+#define MDIO_MMD_PCS_MV_TEMP_SENSOR1_RAW_INT		0x0001
-+#define MDIO_MMD_PCS_MV_TEMP_SENSOR1_INT		0x0040
-+#define MDIO_MMD_PCS_MV_TEMP_SENSOR1_INT_EN		0x0080
-+
-+#define MDIO_MMD_PCS_MV_TEMP_SENSOR2			32834
-+#define MDIO_MMD_PCS_MV_TEMP_SENSOR2_DIS_MASK		0xc000
-+
-+#define MDIO_MMD_PCS_MV_TEMP_SENSOR3			32835
-+#define MDIO_MMD_PCS_MV_TEMP_SENSOR3_INT_THRESH_MASK	0xff00
-+#define MDIO_MMD_PCS_MV_TEMP_SENSOR3_INT_THRESH_SHIFT	8
-+#define MDIO_MMD_PCS_MV_TEMP_SENSOR3_MASK		0x00ff
-+
- #define MDIO_MMD_PCS_MV_100BT1_STAT1			33032
- #define MDIO_MMD_PCS_MV_100BT1_STAT1_IDLE_ERROR		0x00ff
- #define MDIO_MMD_PCS_MV_100BT1_STAT1_JABBER		0x0100
-@@ -488,6 +502,143 @@ static int mv88q2xxx_resume(struct phy_device *phydev)
- 	return phy_clear_bits_mmd(phydev, MDIO_MMD_PMAPMD, MDIO_CTRL1,
- 				  MDIO_CTRL1_LPOWER);
- }
-+#ifdef CONFIG_HWMON
-+static const struct hwmon_channel_info * const mv88q2xxx_hwmon_info[] = {
-+	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_ALARM),
-+	NULL
-+};
-+
-+static umode_t mv88q2xxx_hwmon_is_visible(const void *data,
-+					  enum hwmon_sensor_types type,
-+					  u32 attr, int channel)
-+{
-+	switch (attr) {
-+	case hwmon_temp_input:
-+		return 0444;
-+	case hwmon_temp_max:
-+		return 0644;
-+	case hwmon_temp_alarm:
-+		return 0444;
-+	default:
-+		return 0;
-+	}
-+}
-+
-+static int mv88q2xxx_hwmon_read(struct device *dev,
-+				enum hwmon_sensor_types type,
-+				u32 attr, int channel, long *val)
-+{
-+	struct phy_device *phydev = dev_get_drvdata(dev);
-+	int ret;
-+
-+	switch (attr) {
-+	case hwmon_temp_input:
-+		ret = phy_read_mmd(phydev, MDIO_MMD_PCS,
-+				   MDIO_MMD_PCS_MV_TEMP_SENSOR3);
-+		if (ret < 0)
-+			return ret;
-+
-+		*val = ((ret & MDIO_MMD_PCS_MV_TEMP_SENSOR3_MASK) - 75) * 1000;
-+		return 0;
-+	case hwmon_temp_max:
-+		ret = phy_read_mmd(phydev, MDIO_MMD_PCS,
-+				   MDIO_MMD_PCS_MV_TEMP_SENSOR3);
-+		if (ret < 0)
-+			return ret;
-+
-+		*val = (((ret & MDIO_MMD_PCS_MV_TEMP_SENSOR3_INT_THRESH_MASK) >>
-+			MDIO_MMD_PCS_MV_TEMP_SENSOR3_INT_THRESH_SHIFT) - 75) *
-+			1000;
-+		return 0;
-+	case hwmon_temp_alarm:
-+		ret = phy_read_mmd(phydev, MDIO_MMD_PCS,
-+				   MDIO_MMD_PCS_MV_TEMP_SENSOR1);
-+		if (ret < 0)
-+			return ret;
-+
-+		*val = !!(ret & MDIO_MMD_PCS_MV_TEMP_SENSOR1_RAW_INT);
-+		return 0;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int mv88q2xxx_hwmon_write(struct device *dev,
-+				 enum hwmon_sensor_types type, u32 attr,
-+				 int channel, long val)
-+{
-+	struct phy_device *phydev = dev_get_drvdata(dev);
-+
-+	switch (attr) {
-+	case hwmon_temp_max:
-+		if (val < -75000 || val > 180000)
-+			return -EINVAL;
-+
-+		val = ((val / 1000) + 75) <<
-+		       MDIO_MMD_PCS_MV_TEMP_SENSOR3_INT_THRESH_SHIFT;
-+		return phy_modify_mmd(phydev, MDIO_MMD_PCS,
-+				      MDIO_MMD_PCS_MV_TEMP_SENSOR3,
-+				      MDIO_MMD_PCS_MV_TEMP_SENSOR3_INT_THRESH_MASK,
-+				      val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static const struct hwmon_ops mv88q2xxx_hwmon_hwmon_ops = {
-+	.is_visible = mv88q2xxx_hwmon_is_visible,
-+	.read = mv88q2xxx_hwmon_read,
-+	.write = mv88q2xxx_hwmon_write,
-+};
-+
-+static const struct hwmon_chip_info mv88q2xxx_hwmon_chip_info = {
-+	.ops = &mv88q2xxx_hwmon_hwmon_ops,
-+	.info = mv88q2xxx_hwmon_info,
-+};
-+
-+static int mv88q2xxx_hwmon_probe(struct phy_device *phydev)
-+{
-+	struct device *dev = &phydev->mdio.dev;
-+	struct device *hwmon;
-+	char *hwmon_name;
-+	int ret;
-+
-+	/* Enable temperature sensor interrupt */
-+	ret = phy_set_bits_mmd(phydev, MDIO_MMD_PCS,
-+			       MDIO_MMD_PCS_MV_TEMP_SENSOR1,
-+			       MDIO_MMD_PCS_MV_TEMP_SENSOR1_INT_EN);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Enable temperature sense */
-+	ret = phy_modify_mmd(phydev, MDIO_MMD_PCS, MDIO_MMD_PCS_MV_TEMP_SENSOR2,
-+			     MDIO_MMD_PCS_MV_TEMP_SENSOR2_DIS_MASK, 0);
-+	if (ret < 0)
-+		return ret;
-+
-+	hwmon_name = devm_hwmon_sanitize_name(dev, dev_name(dev));
-+	if (IS_ERR(hwmon_name))
-+		return PTR_ERR(hwmon_name);
-+
-+	hwmon = devm_hwmon_device_register_with_info(dev,
-+						     hwmon_name,
-+						     phydev,
-+						     &mv88q2xxx_hwmon_chip_info,
-+						     NULL);
-+
-+	return PTR_ERR_OR_ZERO(hwmon);
-+}
-+
-+#else
-+static int mv88q2xxx_hwmon_probe(struct phy_device *phydev)
-+{
-+	return 0;
-+}
-+#endif
-+static int mv88q2xxx_probe(struct phy_device *phydev)
-+{
-+	return mv88q2xxx_hwmon_probe(phydev);
-+}
- 
- static int mv88q222x_soft_reset(struct phy_device *phydev)
- {
-@@ -583,6 +734,7 @@ static struct phy_driver mv88q2xxx_driver[] = {
- 	{
- 		PHY_ID_MATCH_EXACT(PHY_ID_88Q2220_REVB0),
- 		.name			= "mv88q2220",
-+		.probe			= mv88q2xxx_probe,
- 		.get_features		= mv88q2xxx_get_features,
- 		.config_aneg		= mv88q222x_config_aneg,
- 		.aneg_done		= genphy_c45_aneg_done,
+configs tested: 98
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                               defconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20240123   gcc  
+arc                   randconfig-002-20240123   gcc  
+arm                               allnoconfig   gcc  
+arm                                 defconfig   clang
+arm                   randconfig-001-20240123   gcc  
+arm                   randconfig-002-20240123   gcc  
+arm                   randconfig-003-20240123   gcc  
+arm                   randconfig-004-20240123   gcc  
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20240123   gcc  
+arm64                 randconfig-002-20240123   gcc  
+arm64                 randconfig-003-20240123   gcc  
+arm64                 randconfig-004-20240123   gcc  
+csky                              allnoconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20240123   gcc  
+csky                  randconfig-002-20240123   gcc  
+hexagon                           allnoconfig   clang
+hexagon                             defconfig   clang
+hexagon               randconfig-001-20240123   clang
+hexagon               randconfig-002-20240123   clang
+i386                             allmodconfig   clang
+i386                              allnoconfig   clang
+i386                             allyesconfig   clang
+i386         buildonly-randconfig-001-20240122   clang
+i386         buildonly-randconfig-002-20240122   clang
+i386         buildonly-randconfig-003-20240122   clang
+i386         buildonly-randconfig-004-20240122   clang
+i386         buildonly-randconfig-005-20240122   clang
+i386         buildonly-randconfig-006-20240122   clang
+i386                                defconfig   gcc  
+i386                  randconfig-001-20240122   clang
+i386                  randconfig-002-20240122   clang
+i386                  randconfig-003-20240122   clang
+i386                  randconfig-004-20240122   clang
+i386                  randconfig-005-20240122   clang
+i386                  randconfig-006-20240122   clang
+i386                  randconfig-011-20240122   gcc  
+i386                  randconfig-012-20240122   gcc  
+i386                  randconfig-013-20240122   gcc  
+i386                  randconfig-014-20240122   gcc  
+i386                  randconfig-015-20240122   gcc  
+i386                  randconfig-016-20240122   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20240123   gcc  
+loongarch             randconfig-002-20240123   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                              allnoconfig   clang
+mips                             allyesconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20240123   gcc  
+nios2                 randconfig-002-20240123   gcc  
+openrisc                         allyesconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                randconfig-001-20240123   gcc  
+parisc                randconfig-002-20240123   gcc  
+powerpc                          allmodconfig   clang
+powerpc                          allyesconfig   clang
+powerpc               randconfig-001-20240123   gcc  
+powerpc               randconfig-002-20240123   gcc  
+powerpc               randconfig-003-20240123   gcc  
+powerpc64             randconfig-001-20240123   gcc  
+powerpc64             randconfig-002-20240123   gcc  
+powerpc64             randconfig-003-20240123   gcc  
+riscv                 randconfig-001-20240123   gcc  
+riscv                 randconfig-002-20240123   gcc  
+s390                  randconfig-001-20240123   clang
+s390                  randconfig-002-20240123   clang
+sh                    randconfig-001-20240123   gcc  
+sh                    randconfig-002-20240123   gcc  
+sparc64               randconfig-001-20240123   gcc  
+sparc64               randconfig-002-20240123   gcc  
+um                    randconfig-001-20240123   gcc  
+um                    randconfig-002-20240123   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   clang
+x86_64                              defconfig   gcc  
+x86_64                          rhel-8.3-rust   clang
+xtensa                randconfig-001-20240123   gcc  
+xtensa                randconfig-002-20240123   gcc  
+
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
