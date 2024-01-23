@@ -1,31 +1,31 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E1328613A;
-	Tue, 23 Jan 2024 18:49:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3685582D9E;
+	Tue, 23 Jan 2024 18:59:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706035757; cv=none; b=Mdf3PVeBBPRID2OH3Uv20ooLJ/DHCAgXZfZMVydW/yQwI/Tgl7beSYDb+288ne1tYbfBbhgkPrK8otG8kAWliyzpe8by2cHLhVYJGUtf8cKW5xmXJe+aMtz2Qlg3f4gY984PNym9uGhAs2kfTR5cM4q5Hr/9CXM3Uch+9emuqYw=
+	t=1706036375; cv=none; b=tOuHyeQmYojiKLXHU9yA6b2CAt7cdV5uRjaryrAwJ1M7H1XDTngZ7xOz+VrwH813B1GWmmiG/m0hk7W8r6ibwDCzBgOikRuaxslLls9aLysYUtvOntP58P/uRx+ISDeA6Y1UMu1s+Cb1WahoHzeJP2o2Bdj6aOf9W0ZWZbfGsjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706035757; c=relaxed/simple;
-	bh=77rf7zCSV26/dXTTGnsJlMJepVbnzdJ7eIMFaK/mcxY=;
+	s=arc-20240116; t=1706036375; c=relaxed/simple;
+	bh=bnVw0ffKgVOq+CzE6GW0VBCiI3gY758pcaofpgNUL+E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=udQa+Q+54587vimYOalMTu8r68W6Q7jZ5O43Pnhqg7uzbc2gMW9ENQ/D4AC9936rZUO/JSgsst4hZnZZcMnLskuW7/mZA8U/ibe+hP73RYTcr5ri1SzMRXR2uYkAA0oP8YEtFflUneBadr4YSifVGn9cwetBJf+ntbgyE7Fb5E8=
+	 Content-Type:Content-Disposition:In-Reply-To; b=OI2CrDza7zsm6UehKhZeu4pth0a9f14pShvyzBAQE4bsInlsnOzF2upbRXpyJeZiv/HS+WepHrgkX9qZqSFDuCnrgRSTWlm+Ik18zZ1O8Onguxi5/u9peuTFfYndo18a6VusyWwvgdaQQtWSKTIfrOtDrwA5RaODX1cUWN6xSAY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E76361FB;
-	Tue, 23 Jan 2024 10:49:59 -0800 (PST)
-Received: from pluto (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 653FD3F762;
-	Tue, 23 Jan 2024 10:49:13 -0800 (PST)
-Date: Tue, 23 Jan 2024 18:49:10 +0000
-From: Cristian Marussi <cristian.marussi@arm.com>
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 85FEF1FB;
+	Tue, 23 Jan 2024 11:00:16 -0800 (PST)
+Received: from bogus (unknown [10.57.78.12])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A908E3F762;
+	Tue, 23 Jan 2024 10:59:29 -0800 (PST)
+Date: Tue, 23 Jan 2024 18:56:18 +0000
+From: Sudeep Holla <sudeep.holla@arm.com>
 To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc: sudeep.holla@arm.com, jdelvare@suse.com, linux@roeck-us.net,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Peng Fan <peng.fan@nxp.com>
+Cc: cristian.marussi@arm.com, jdelvare@suse.com, linux@roeck-us.net,
+	Sudeep Holla <sudeep.holla@arm.com>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
 Subject: Re: [PATCH V2] hwmon: scmi-hwmon: implement change_mode
-Message-ID: <ZbAKErJmyQY9mXMO@pluto>
+Message-ID: <20240123185618.wt4k7j662sz4gsju@bogus>
 References: <20240123150526.3615901-1-peng.fan@oss.nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -40,71 +40,25 @@ In-Reply-To: <20240123150526.3615901-1-peng.fan@oss.nxp.com>
 On Tue, Jan 23, 2024 at 11:05:26PM +0800, Peng Fan (OSS) wrote:
 > From: Peng Fan <peng.fan@nxp.com>
 > 
+
+hwmon: scmi-hwmon: implement change_mode
+
+The above subject gives me no clue as what this change wants to achieve.
+At minimum you need to mention thermal zones as HWMON supports more than
+just thermal sensors and change mode mentioned in $subject applies to
+only thermal zones.
+
 > The sensor maybe disabled before kernel boot, so add change_mode
 > to support configuring the sensor to enabled state.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
+>
 
-In general LGTM.
-It would be better clearly explaining in the commit message that this
-change is around HWMON thermal zones and also add a comment down below
-to justify why we have decided to clear out those config bits.
+Again above applies to thermal zones only in this patch. It doesn't
+cover non-thermal sensors, so prefer if you refer it as thermal zones
+instead of sensors.
 
-> 
-> V2:
->  Use SCMI_SENS_CFG_IS_ENABLED & clear BIT[31:9] before update config(Thanks Cristian)
-> 
->  drivers/hwmon/scmi-hwmon.c | 32 ++++++++++++++++++++++++++++++++
->  1 file changed, 32 insertions(+)
-> 
-> diff --git a/drivers/hwmon/scmi-hwmon.c b/drivers/hwmon/scmi-hwmon.c
-> index 364199b332c0..913acd1b137b 100644
-> --- a/drivers/hwmon/scmi-hwmon.c
-> +++ b/drivers/hwmon/scmi-hwmon.c
-> @@ -151,7 +151,39 @@ static int scmi_hwmon_thermal_get_temp(struct thermal_zone_device *tz,
->  	return ret;
->  }
->  
-> +static int scmi_hwmon_thermal_change_mode(struct thermal_zone_device *tz,
-> +					  enum thermal_device_mode new_mode)
-> +{
-> +	int ret;
-> +	u32 config;
-> +	enum thermal_device_mode cur_mode = THERMAL_DEVICE_DISABLED;
-> +	struct scmi_thermal_sensor *th_sensor = thermal_zone_device_priv(tz);
-> +
-> +	ret = sensor_ops->config_get(th_sensor->ph, th_sensor->info->id,
-> +				     &config);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (SCMI_SENS_CFG_IS_ENABLED(config))
-> +		cur_mode = THERMAL_DEVICE_ENABLED;
-> +
-> +	if (cur_mode == new_mode)
-> +		return 0;
-> +
+The change itself looks good. I will ack once you fix the subject and
+description so that Guenter can pick up the change.
 
-This config bits_clearing is worth an explanation in a comment (like we
-did in the mail thread...)
-
-> +	config &= ~(SCMI_SENS_CFG_UPDATE_SECS_MASK |
-> +		    SCMI_SENS_CFG_UPDATE_EXP_MASK |
-> +		    SCMI_SENS_CFG_ROUND_MASK);
-> +	if (new_mode == THERMAL_DEVICE_ENABLED)
-> +		config |= SCMI_SENS_CFG_SENSOR_ENABLED_MASK;
-> +	else
-> +		config &= ~SCMI_SENS_CFG_SENSOR_ENABLED_MASK;
-> +
-> +	return sensor_ops->config_set(th_sensor->ph, th_sensor->info->id,
-> +				      config);
-> +}
-> +
-
-Other than this,
-
-Reviewed-by: Cristian Marussi <cristian.marussi@arm.com>
-
-Thanks,
-Cristian
+-- 
+Regards,
+Sudeep
