@@ -1,106 +1,161 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from TWMBX02.aspeed.com (mail.aspeedtech.com [211.20.114.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76EFB63B2;
-	Tue, 23 Jan 2024 20:46:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3BADF4F3;
+	Wed, 24 Jan 2024 06:07:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.20.114.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706042817; cv=none; b=nxgeZCc4x6BtYnXr8bBzJy8RkkSu/ku70+2haqpWaIpdKH4m8VE8vaLovbBJw4lkFamaoM1POJzmJTnF5J0jY6sP4G0DXH6b9k/rNaSVSM558II7jVvYdoKQ44IcVUeW1ErzJ9MqANHy9aCS1ZLSUgzGIuBqEO1Z/xUp6BkE7S8=
+	t=1706076441; cv=none; b=LmH7wAR6s7rKKoiVGsPGQCw/jZveFZ0A+zX+Fh+rw+H9yrkEXJ/A6rj5o2zWTvcMtpJxThgl6rZoQvxKIdKrL63wH8lbQ1XmO1E+7/lqT2LUgLuB1KxmO8+XdH4NCsXXWxG9VC9qklE3II6rEwulPAYrRU2fq1Bgrc1jsH5FxEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706042817; c=relaxed/simple;
-	bh=YZHodvUWAeuvnhi1pJmgPsoMYoy8W6KTZoyK3m9HKlY=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=d0drX0XGpD344KNy5p3pBiZiMCe0CQSr88a7f5nStMkrCu0eJqHbOG3JYzZ3mutrKoXLfkznRvpdzKN+pB2pTEDMwore2ZbnQ3WVHb3UxbtvCmIA8RVNr/uNlrZHdG5LY2ajp+NDIpl9YFmu47yjMnD2L/0R4FoSVg7I7HYg20U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dxuaT8JX; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dxuaT8JX"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-40eac352733so28551265e9.0;
-        Tue, 23 Jan 2024 12:46:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706042813; x=1706647613; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:cc:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sq0tMecm3i3zHlp+86M5Zkr7Njk4ZDjptPk+ajtPCMg=;
-        b=dxuaT8JXbV6nH4lBJJqGY0PFuBpcwtyRLLHh6u1BxUR2x8H8yKQtRndmZNXP4sh+fQ
-         Swav0Cl3RcxqLuFAwIDj1epCnM9MtlUXeT2SBHA2+CIvyrCQCB9MqyOd0CDnU7b6K5VR
-         3VEKH4pYfPcRbVHQW/UFMciDV39fVubps74TFT5ovJ6hpKSlzJ+BVZsOIZIrZEW7U3DA
-         p03lAKXtIZEO8P3oJeNLTzjPEZhwK3f93DxuLcr5mkRSvN+543ATAuJSNlB1LN9O4HzN
-         peMFWFZ8ZAsPGO9z32TK1Uwl4umHB00G87P0/yLNqNE/hs4NswFA47MWo2oX4/zdKBtm
-         tEmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706042813; x=1706647613;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:cc:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sq0tMecm3i3zHlp+86M5Zkr7Njk4ZDjptPk+ajtPCMg=;
-        b=BA1FS8RbBjc/NrHafkB2w0csU6XVC78iejsNQD40FTCp2FCXUpIEtUoZzBYT4Bf8Wx
-         QllWt5qtyiw4DCmY+EcvltX+vAJFmYNjdrLa98p4ts0q/16pPvkes6eHeKJbtC+pUc+6
-         MjMaML2zKi7JiSZ1wGFKSYSQj4QAHHQiBXlN8hxuWOvuB8/7Ziv94DvTF1aHPKvk84VT
-         KKDIxp9N6tjijT50wvwpZqlfo6SfZNtAMcGujPWTt++lhpX3TEftEnCmxYNIMR3BQpml
-         jUCeEWox2Q32yd8Xn2GWZrGc/1WlYAoOTAuMV1eYUGgs28JUeU9HTHgQuzM2enl0ddTi
-         QUbQ==
-X-Gm-Message-State: AOJu0YzxVApg671TffG9xWv2AF53DD2wm9o8kVMkANyayd/sHJF/hIdX
-	jCHymR+S0G2cMu8lh/Lm6zm+6JVJPbeg8VcrXb6eUcZf/D+SNvvs
-X-Google-Smtp-Source: AGHT+IGvUC5Ht5Wo8CwoFJ6X2/sTIe8RA850NVi6zqWSjYp/joLV25WudT26G53MKdSgM2/pOUDoiQ==
-X-Received: by 2002:a05:600c:538e:b0:40e:4dc1:fbc0 with SMTP id hg14-20020a05600c538e00b0040e4dc1fbc0mr517877wmb.60.1706042813473;
-        Tue, 23 Jan 2024 12:46:53 -0800 (PST)
-Received: from [192.168.0.28] (cable-178-148-234-71.dynamic.sbb.rs. [178.148.234.71])
-        by smtp.gmail.com with ESMTPSA id l34-20020a05600c1d2200b0040e89ade84bsm23386198wms.4.2024.01.23.12.46.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Jan 2024 12:46:52 -0800 (PST)
-Message-ID: <9b1d7c15-16a6-478d-975c-5c375f8674fe@gmail.com>
-Date: Tue, 23 Jan 2024 21:46:51 +0100
+	s=arc-20240116; t=1706076441; c=relaxed/simple;
+	bh=Kc1d2j+jkCpcf2qdDVWfdgxdZfcLEBWFJISvlWZjS64=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Q3dSKrbOJo6KzVvzPw9oo4WhxV1uHgN0oC2Sowb9Qo3RP3+zn0ORgFCYBAoqvXSqVQL1kZi3narT5oMg0JqHxcQ1vEC2y8+N0QMtTszgnb+kedyz9sQ6oSzoGNYNfC2BEQkcK1+FAdP0ub1rzXw0Ko7fA2iZ0ReWWCBq7IbqDnU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; arc=none smtp.client-ip=211.20.114.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
+Received: from TWMBX03.aspeed.com (192.168.0.62) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 24 Jan
+ 2024 14:07:08 +0800
+Received: from TWMBX02.aspeed.com (192.168.0.24) by TWMBX03.aspeed.com
+ (192.168.0.62) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 24 Jan
+ 2024 14:07:34 +0800
+Received: from twmbx02.aspeed.com (192.168.10.10) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 24 Jan 2024 14:07:07 +0800
+From: Billy Tsai <billy_tsai@aspeedtech.com>
+To: <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
+	<krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>, <joel@jms.id.au>,
+	<andrew@codeconstruct.com.au>, <corbet@lwn.net>,
+	<u.kleine-koenig@pengutronix.de>, <p.zabel@pengutronix.de>,
+	<billy_tsai@aspeedtech.com>, <naresh.solanki@9elements.com>,
+	<linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-aspeed@lists.ozlabs.org>,
+	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-pwm@vger.kernel.org>, <BMC-SW@aspeedtech.com>, <patrick@stwcx.xyz>
+Subject: [PATCH v13 0/3] Support pwm/tach driver for aspeed ast26xx
+Date: Wed, 24 Jan 2024 14:07:02 +0800
+Message-ID: <20240124060705.1342461-1-billy_tsai@aspeedtech.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: savicaleksa83@gmail.com, dan.carpenter@linaro.org,
- kernel-janitors@vger.kernel.org, error27@gmail.com
-Subject: Re: [PATCH] hwmon: gigabyte_waterforce: Fix locking bug in
- waterforce_get_status()
-To: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240122154952.2851934-1-harshit.m.mogalapalli@oracle.com>
-Content-Language: en-US
-From: Aleksa Savic <savicaleksa83@gmail.com>
-In-Reply-To: <20240122154952.2851934-1-harshit.m.mogalapalli@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On 2024-01-22 16:49:52 GMT+01:00, Harshit Mogalapalli wrote:
-> Goto 'unlock_and_return' for unlocking before returning on the error
-> path.
-> 
-> Fixes: d5939a793693 ("hwmon: Add driver for Gigabyte AORUS Waterforce AIO coolers")
-> Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-> ---
-> This is based on static analysis with smatch, only compile tested.
-> ---
->  drivers/hwmon/gigabyte_waterforce.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/gigabyte_waterforce.c b/drivers/hwmon/gigabyte_waterforce.c
-> index 1799377fc2f1..7bccfe2eaa76 100644
-> --- a/drivers/hwmon/gigabyte_waterforce.c
-> +++ b/drivers/hwmon/gigabyte_waterforce.c
-> @@ -146,7 +146,7 @@ static int waterforce_get_status(struct waterforce_data *priv)
->  	/* Send command for getting status */
->  	ret = waterforce_write_expanded(priv, get_status_cmd, GET_STATUS_CMD_LENGTH);
->  	if (ret < 0)
-> -		return ret;
-> +		goto unlock_and_return;
->  
->  	ret = wait_for_completion_interruptible_timeout(&priv->status_report_received,
->  							msecs_to_jiffies(STATUS_VALIDITY));
+Unlike the old design that the register setting of the TACH should based
+on the configure of the PWM. In ast26xx, the dependency between pwm and
+tach controller is eliminated and becomes a separate hardware block. One
+is used to provide pwm output and another is used to monitor the frequency
+of the input. This driver implements them by exposing two kernel
+subsystems: PWM and HWMON. The PWM subsystem can be utilized alongside
+existing drivers for controlling elements such as fans (pwm-fan.c),
+beepers (pwm-beeper.c) and so on. Through the HWMON subsystem, the driver
+provides sysfs interfaces for fan.
 
-Reviewed-by: Aleksa Savic <savicaleksa83@gmail.com>
+Changes since v12:
+Merge the pwm-fan configure information into the fan node.
+Add the of_platform_populate function to the driver to treat the child
+node as a platform device.
 
-Thanks,
-Aleksa
+Changes since v11:
+Fix the compiler error of the driver.
+The owner member has to be moved to struct pwm_chip.
+
+Changes since v10:
+Add the enum for the 'fan-driving-mode' properties in the fan-common.yaml.
+
+Changes since v9:
+Change the type of fan-driving-mode to string
+Fix some typos and formatting issues.
+
+Changes since v8:
+Fix the fail of fan div register setting. (FIELD_GET -> FIELD_PREP)
+Change the type of tach-ch from uint32_t to uint8-array
+Add additional properties and apply constraints to certain properties.
+
+Changes since v7:
+Cherry-pick the fan-common.yaml and add the following properties:
+- min-rpm
+- div
+- mode
+- tach-ch
+Fix the warning which is reported by the kernel test robot.
+
+Changes since v6:
+Consolidate the PWM and TACH functionalities into a unified driver.
+
+Changes since v5:
+- pwm/tach:
+  - Remove the utilization of common resources from the parent node.
+  - Change the concept to 16 PWM/TACH controllers, each with one channel,
+  instead of 1 PWM/TACH controller with 16 channels.
+- dt-binding:
+  - Eliminate the usage of simple-mfd.
+
+Changes since v4:
+- pwm:
+  - Fix the return type of get_status function.
+- tach:
+  - read clk source once and re-use it
+  - Remove the constants variables
+  - Allocate tach_channel as array
+  - Use dev->parent
+- dt-binding:
+  - Fix the order of the patches
+  - Add example and description for tach child node
+  - Remove pwm extension property
+
+Changes since v3:
+- pwm:
+  - Remove unnecessary include header
+  - Fix warning Prefer "GPL" over "GPL v2"
+- tach:
+  - Remove the paremeter min_rpm and max_rpm and return the tach value 
+  directly without any polling or delay.
+  - Fix warning Prefer "GPL" over "GPL v2"
+- dt-binding:
+  - Replace underscore in node names with dashes
+  - Split per subsystem
+
+Changes since v2:
+- pwm:
+  - Use devm_* api to simplify the error cleanup
+  - Fix the multi-line alignment problem
+- tach:
+  - Add tach-aspeed-ast2600 to index.rst
+  - Fix the multi-line alignment problem
+  - Remove the tach enable/disable when read the rpm
+  - Fix some coding format issue
+
+Changes since v1:
+- tach:
+  - Add the document tach-aspeed-ast2600.rst
+  - Use devm_* api to simplify the error cleanup.
+  - Change hwmon register api to devm_hwmon_device_register_with_info
+
+Billy Tsai (2):
+  dt-bindings: hwmon: Support Aspeed g6 PWM TACH Control
+  hwmon: (aspeed-g6-pwm-tacho): Support for ASPEED g6 PWM/Fan tach
+
+Naresh Solanki (1):
+  dt-bindings: hwmon: fan: Add fan binding to schema
+
+ .../bindings/hwmon/aspeed,g6-pwm-tach.yaml    |  73 +++
+ .../devicetree/bindings/hwmon/fan-common.yaml |  79 +++
+ Documentation/hwmon/aspeed-g6-pwm-tach.rst    |  26 +
+ Documentation/hwmon/index.rst                 |   1 +
+ drivers/hwmon/Kconfig                         |  11 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/aspeed-g6-pwm-tach.c            | 540 ++++++++++++++++++
+ 7 files changed, 731 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/aspeed,g6-pwm-tach.yaml
+ create mode 100644 Documentation/devicetree/bindings/hwmon/fan-common.yaml
+ create mode 100644 Documentation/hwmon/aspeed-g6-pwm-tach.rst
+ create mode 100644 drivers/hwmon/aspeed-g6-pwm-tach.c
+
+-- 
+2.25.1
+
