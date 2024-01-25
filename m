@@ -1,60 +1,38 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49AE55C60D;
-	Thu, 25 Jan 2024 14:25:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AE8A32182;
+	Thu, 25 Jan 2024 15:19:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706192706; cv=none; b=OxjJ2NHhTDCatywo/Nw4eslkzo8boiJVty03q1eDWW2qYURJTPdIlCai4Kyiw+u/I/OFdQNJrJ7T+sBDbRw/ZAPG9SR+kd0PFRZvcL4wZy0s5XOyUObvE07WMFBqEMcfr2ghg/mX1ujeEADVEheM9Yp+XFOd8yBBGh703FLd4dM=
+	t=1706195984; cv=none; b=aC4bZ+dc+YPnYDHx9Bcn9/y9dEDT+nZ6QSLCdI9PdOVqORzBqhZVukr9hk3BBvoWHyfJxwsS8iWILVXpfn9JTaP/BH9WjlmojIort9/0zQ+XoQ/RzQg6OrAgk8BagWxkDI99k/9X+sLdGvs2bjYwkTXTi/M0C0iCcDBlIvry1P0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706192706; c=relaxed/simple;
-	bh=KGLAirHlxaxNLl6c+ud0BFq34jV/liCx9KkdTcoUurY=;
+	s=arc-20240116; t=1706195984; c=relaxed/simple;
+	bh=CkYqsdSrAMaAjob6NoWgiSmG5+C0U4CurZGk4A5ajsU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dzNg03MLdVXanoaCTq45UCXu0128WFraSeFejL2fpDwY93eSVVJ6rZCJ5DlO6LqPza/NgParQ8Pty+r9CmLSrZpxkuSVHN9cG8+32Jgg/HZpx9/gbYgBB21cEiUsO7rfmlbBvo/RRvEjIgZWDu/zEzOaPmi4BOD0/Ez5C+GXB5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b6XKEDD6; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 In-Reply-To:Content-Type; b=Wu3boAkoGQZd2oFueKYyBIl1yKu2aUaS0FEigh3zgt5+XUyRISF7PRyGD8qSW0cS+p5+8P8g8lG6b2cPTD3dov2RDijDeOayVz1ZlBnKAUA9zKWjOfbh5WV7mai+BT/gF+w7m49vM5q7+It8C2kpzWQl3M3MsWt1YQTETdSAb2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=qkG450TS; arc=none smtp.client-ip=212.227.15.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b6XKEDD6"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6ddc1b30458so1502995b3a.1;
-        Thu, 25 Jan 2024 06:25:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706192703; x=1706797503; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=zpqP5sER0oQ1ctnx/TCuLAJ16oYKTBCC8iIqh3prnGc=;
-        b=b6XKEDD69SN67Hed2HexlOwC9ZTKO96o6dB340v2gmV/BHCYH6zEHPposV3UuqN8zK
-         2Pt0aOU0ytvdqGWa0Udi3FzdsCLAiP5ljifQORgVAc7m7shtSBEJYweeHV8NBl0azQSX
-         oDIk71yjR9R/Gt5DB1HlIvMllFDD71YwYIpqm048TYvHvE98q6G4k3rxOGfv+GoaWc7e
-         FwpHzjLn3ZkPmx1KexdMxQn2dmsndfXQ3LQQDaFEZIFZHMCIrh0YKIOXJiGPqiT8UU1U
-         WA6Tp1iGKNeUFn7kWSXcP7rH1DSzwLAd28OgUUcssaBJneK7yBjhgzngWKn0N7nHhFa6
-         c+bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706192703; x=1706797503;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zpqP5sER0oQ1ctnx/TCuLAJ16oYKTBCC8iIqh3prnGc=;
-        b=AXE+0sCyXemPD6SObnBcmGqcsTIODPe6XT8PiAyV6mrRqrMHUyV0ntiCUXxPEUyps5
-         SiwoSYN50IeI6dUP2pIgSKUqFvRCjUCJn0a+aCPZSjA9W7gI+HkfrxA0A+cgkKOcGUA7
-         m4XtdeEu3KmRw+TyEx8Bl846Bc46Bh7mYYBsbk7Be3OXSoi2Whb5Ql4Syhkw94iX3Nx0
-         MfH5wnsFXZXYO/bYfLq7Pa837089aa1fX/VSCkU1YhNdWLfnAE9SN8B2ZaaOWrPM+fVi
-         egcYNqoBSRb85BAu8KPtjgEdsco4CgUrBEYOdbZtg04MAEkVwQXHrH0lQfmW+pH5ohC2
-         Doag==
-X-Gm-Message-State: AOJu0Yz9dZtoNei1iQlXKYw55Ji55vBCF1fmyAnfplgBU4lid/Yw4bEt
-	6NpyaNCnFrUQbw+IhdeSnJGLIhNfluurZC1KKCbfC5oKQ4/zdVtFLu/Whb4V
-X-Google-Smtp-Source: AGHT+IF/68mbdJO/IZ0tml4XE/SslwpBXN78B4UBKY5cRn1R2pxb7M8PCh4uzsOol7JddvlO0S+mUw==
-X-Received: by 2002:a05:6a20:43a1:b0:19a:55a8:c04a with SMTP id i33-20020a056a2043a100b0019a55a8c04amr1397836pzl.78.1706192703287;
-        Thu, 25 Jan 2024 06:25:03 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c4-20020a056a00008400b006dabe67bb85sm15856033pfj.216.2024.01.25.06.25.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Jan 2024 06:25:01 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <540cf4b3-ebf6-4a85-84c4-c012a69db416@roeck-us.net>
-Date: Thu, 25 Jan 2024 06:25:00 -0800
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="qkG450TS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+	t=1706195947; x=1706800747; i=w_armin@gmx.de;
+	bh=CkYqsdSrAMaAjob6NoWgiSmG5+C0U4CurZGk4A5ajsU=;
+	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
+	 In-Reply-To;
+	b=qkG450TSy83zYVH+I6cmKBtuEJPvQn9acf38UbY02oJ5+249NyD8ip3VffG+WQRS
+	 K62itgxH5zoWR/j8Xk2hY5wYOuPDlMTqkZtoQpnTgC6rzbE0N94OrK5sPF7dtjugY
+	 v2/FQjXLF6UXVuL8DeaoXQ/ZoRw7mwaREWs/s3JSrwAyWC8Gvz7hCcfH1RBERFrs/
+	 G4US8osszJsnxYRqYLVih8Eb2FUorxrO79pETjDLfPV6meSuSzTKPAi4Rv1AyVk1R
+	 0gXnB8a3KobKKRS1baUJwppe1hCgP+2LwM1ch2yC7L7J0Y58hym4A4Olm5ixAAR/m
+	 2MakPtYme86W4udA1w==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.2.35] ([91.137.126.34]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N63Vi-1r0Qtf2QJ6-016S0y; Thu, 25
+ Jan 2024 16:19:07 +0100
+Message-ID: <34960bb8-fb85-4cca-8b84-d99596d046e4@gmx.de>
+Date: Thu, 25 Jan 2024 16:19:03 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -62,122 +40,293 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V3] hwmon: scmi-hwmon: implement change_mode for thermal
- zones
+Subject: Re: [PATCH v3 2/2] hwmon: add fan speed monitoring driver for Surface
+ devices
+To: Ivor Wanders <ivor@iwanders.net>, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
+ Maximilian Luz <luzmaximilian@gmail.com>, Hans de Goede
+ <hdegoede@redhat.com>, Mark Gross <markgross@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
+References: <20240113183306.9566-1-ivor@iwanders.net>
+ <20240113183306.9566-3-ivor@iwanders.net>
 Content-Language: en-US
-To: Peng Fan <peng.fan@nxp.com>, "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
- "groeck7@gmail.com" <groeck7@gmail.com>,
- "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
- "cristian.marussi@arm.com" <cristian.marussi@arm.com>,
- "jdelvare@suse.com" <jdelvare@suse.com>
-Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20240125064422.347002-1-peng.fan@oss.nxp.com>
- <b839f83f-c8c7-4fa8-8597-bdde1b40168a@roeck-us.net>
- <DU0PR04MB9417DAD2DBB8820344FEFB07887A2@DU0PR04MB9417.eurprd04.prod.outlook.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <DU0PR04MB9417DAD2DBB8820344FEFB07887A2@DU0PR04MB9417.eurprd04.prod.outlook.com>
+From: Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <20240113183306.9566-3-ivor@iwanders.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:fOz4EBEugkIgALhAkTjG5E83mbP7bYE5uPTbJe+wXmU4hmygKV9
+ KQ+K+UX0/03FijFfprwm6rgV32M9m69mNJttH95NQPjBgEudH0gOmTaX3krP2dVNBRYNDSa
+ BXRd4sBU0Gmzt1dN/gG4Z1CEPogat0Xokru0g9br3gZLiGDgS63slF6qWBG29vYIfDibB+H
+ y2SQtFmbHog2Qk52n3eBA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:Vu2tusABNWk=;vJ0xUT/w7LCzstHF+LQgwFqzfRf
+ fy8GJ1Q9iEPXv34OKWNlVIGqgjahDhLgAbrDfzCMACm8UKYZg6Ddq7k1YfmEMIjzlDp2Enou5
+ hm1FjVLUkGmwUaLIIgXtRompDbeSL47s9sguLSE7hueQIuOUwxltfxTEDF6yZXzjd+VIH3TrU
+ OZv+sYSeUP8jnfwAfrryXmHXPjn3VdN/2x9qnA1zWclKPnGlPzlTctKI6pmGZBvZA1YSFWhpF
+ zepe/fwKEkvWwvm01OWBC3GzEYNAF+HZuuvhnIvYIAPqR6FHrxfz6s/WL3/sWYEDH0HSlzc5H
+ sFFyluHhd2hS3aG6JwXNBEztxkCDTPaaynV8+Nk3GxBncPtOoCwoRTJTnZsoawMy8owhBEam8
+ 2sXbk4fRdnsXuRhoSDx8kcng0onoV8LOjeusUyKGfSTBmWVWRQXchSXJKapuEQ21do344+F6w
+ TchsrZcFCF503Wew7y4430eQx2jjqrsMewdoNUGwMuZhmI724ZNzEl5u7biftlCtbVuQOiE0x
+ 5cGhJDAh2wBxW1Sk4Ab6IDvZ+tusZa3CcObMx8zgMn2bLpgtLysojXfithktZCrSruJWPtfrV
+ 583BbaK5tG/Vx+4qDgix4ifrKFhHMKHacC6HLmRZxSi/zVnoY3jPouC0/HMNHZSzJvaNDUA5B
+ O0SDqtcbM1TzF5CSHATuJkNhM+ubEvyvK2Y24sc9mjYViBAdIAHLCi+2O0BkIbgT8ba48l5nP
+ KJTMG8vIccfyzMfPYA5ihnvjgjvOe+MNHcbjNZ0XpleviFCNZKyBonnZrVI+10RXDqxQRVkUY
+ TF32gOuLdRT5NgSuhKcofDWRzNaEfOvUSailIjU6DNLQjksIi5o3CXYh0xTzCmqMo/WJ/9SIf
+ ckWj2fbvMeFL/Sd0TFEgHOXE4IgKRD+9EwywPx+ko6IhYOnjOMEkrlUClr8OjWZFXUVWDa8P+
+ 7IpP/UMMZ77CsPA+Ad2TRdoMv40=
 
-On 1/24/24 23:06, Peng Fan wrote:
-> Hi Guenter,
-> 
->> Subject: Re: [PATCH V3] hwmon: scmi-hwmon: implement change_mode for
->> thermal zones
->>
->> On 1/24/24 22:44, Peng Fan (OSS) wrote:
->>> From: Peng Fan <peng.fan@nxp.com>
->>>
->>> The thermal sensors maybe disabled before kernel boot, so add
->>> change_mode for thermal zones to support configuring the thermal
->>> sensor to enabled state. If reading the temperature when the sensor is
->>> disabled, there will be error reported.
->>>
->>> The cost is an extra config_get all to SCMI firmware to get the status
->>> of the thermal sensor. No function level impact.
->>>
->>> Reviewed-by: Cristian Marussi <cristian.marussi@arm.com>
->>> Signed-off-by: Peng Fan <peng.fan@nxp.com>
->>> ---
->>>
->>> V3:
->>>    Update commit log to show it only applys to thermal
->>>    Add comments in code
->>>    Add R-b from Cristian
->>>
->>
->> You didn't address my question regarding the behavior of hwmon attributes if
->> a sensor is disabled.
-> 
-> Would you please share a bit more on what attributes?
-> You mean the files under /sys/class/hwmon/hwmon0?
-> 
-> If the sensor is disabled, when cat temp[x]_input, it will
-> report:
-> root@imx95-19x19-lpddr5-evk:/sys/class/hwmon/hwmon0# cat temp3_input
-> cat: temp3_input: Protocol error
-> 
-> For enabled, it will report value:
-> root@imx95-19x19-lpddr5-evk:/sys/class/hwmon/hwmon0# cat temp1_input
-> 31900
-> 
+Am 13.01.24 um 19:33 schrieb Ivor Wanders:
 
-This is wrong. If the sensor is disabled, there should either be no
-sensor attribute (if the condition is permanent), or there should be
-tempX_enable attribute(s) which return the sensor status (and, if
-appropriate, permit it to be enabled). If the condition is not
-permanent, attempts to read the sensor value should return -ENODATA.
+> Adds a driver that provides read only access to the fan speed for Micros=
+oft
+> Surface Pro devices. The fan speed is always regulated by the EC and can=
+not
+> be influenced directly.
+>
+> Signed-off-by: Ivor Wanders <ivor@iwanders.net>
+> Link: https://github.com/linux-surface/kernel/pull/144
+> ---
+> Changes in v3:
+>    - Removed type and attr checks in read and is_visible.
+>    - Removed assigning sdev to ssam_device drvdata.
+>    - Propagate return from __ssam_fan_rpm_get.
+>    - Renamed hwmon chip name from 'fan' to 'surface_fan'.
+>    - Removed unnecessary platform_device header.
+> Changes in v2:
+>    - Removed all sysfs attributes except fan1_input. Simplified code
+>      and updated documentation accordingly.
+> ---
+>   Documentation/hwmon/index.rst       |  1 +
+>   Documentation/hwmon/surface_fan.rst | 25 ++++++++
+>   MAINTAINERS                         |  8 +++
+>   drivers/hwmon/Kconfig               | 13 ++++
+>   drivers/hwmon/Makefile              |  1 +
+>   drivers/hwmon/surface_fan.c         | 93 +++++++++++++++++++++++++++++
+>   6 files changed, 141 insertions(+)
+>   create mode 100644 Documentation/hwmon/surface_fan.rst
+>   create mode 100644 drivers/hwmon/surface_fan.c
+>
+> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.r=
+st
+> index 042e1cf95..4dfb3b9bd 100644
+> --- a/Documentation/hwmon/index.rst
+> +++ b/Documentation/hwmon/index.rst
+> @@ -202,6 +202,7 @@ Hardware Monitoring Kernel Drivers
+>      smsc47m1
+>      sparx5-temp
+>      stpddc60
+> +   surface_fan
+>      sy7636a-hwmon
+>      tc654
+>      tc74
+> diff --git a/Documentation/hwmon/surface_fan.rst b/Documentation/hwmon/s=
+urface_fan.rst
+> new file mode 100644
+> index 000000000..07942574c
+> --- /dev/null
+> +++ b/Documentation/hwmon/surface_fan.rst
+> @@ -0,0 +1,25 @@
+> +.. SPDX-License-Identifier: GPL-2.0-or-later
+> +
+> +Kernel driver surface_fan
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
+> +
+> +Supported Devices:
+> +
+> +  * Microsoft Surface Pro 9
+> +
+> +Author: Ivor Wanders <ivor@iwanders.net>
+> +
+> +Description
+> +-----------
+> +
+> +This provides monitoring of the fan found in some Microsoft Surface Pro=
+ devices,
+> +like the Surface Pro 9. The fan is always controlled by the onboard con=
+troller.
+> +
+> +Sysfs interface
+> +---------------
+> +
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =
+=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +Name                    Perm    Description
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =
+=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +``fan1_input``          RO      Current fan speed in RPM.
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =
+=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 439cf523b..8e7870af3 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -14078,6 +14078,14 @@ F:	Documentation/driver-api/surface_aggregator/=
+clients/dtx.rst
+>   F:	drivers/platform/surface/surface_dtx.c
+>   F:	include/uapi/linux/surface_aggregator/dtx.h
+>
+> +MICROSOFT SURFACE SENSOR FAN DRIVER
+> +M:	Maximilian Luz <luzmaximilian@gmail.com>
+> +M:	Ivor Wanders <ivor@iwanders.net>
+> +L:	linux-hwmon@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/hwmon/surface_fan.rst
+> +F:	drivers/hwmon/surface_fan.c
+> +
+>   MICROSOFT SURFACE GPE LID SUPPORT DRIVER
+>   M:	Maximilian Luz <luzmaximilian@gmail.com>
+>   L:	platform-driver-x86@vger.kernel.org
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 307477b8a..4b4d999af 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -1965,6 +1965,19 @@ config SENSORS_SMM665
+>   	  This driver can also be built as a module. If so, the module will
+>   	  be called smm665.
+>
+> +config SENSORS_SURFACE_FAN
+> +	tristate "Surface Fan Driver"
+> +	depends on SURFACE_AGGREGATOR
+> +	help
+> +	  Driver that provides monitoring of the fan on Surface Pro devices th=
+at
+> +	  have a fan, like the Surface Pro 9.
+> +
+> +	  This makes the fan's current speed accessible through the hwmon
+> +	  system. It does not provide control over the fan, the firmware is
+> +	  responsible for that, this driver merely provides monitoring.
+> +
+> +	  Select M or Y here, if you want to be able to read the fan's speed.
+> +
+>   config SENSORS_ADC128D818
+>   	tristate "Texas Instruments ADC128D818"
+>   	depends on I2C
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index 3f4b0fda0..5ae214c06 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -198,6 +198,7 @@ obj-$(CONFIG_SENSORS_SMSC47M1)	+=3D smsc47m1.o
+>   obj-$(CONFIG_SENSORS_SMSC47M192)+=3D smsc47m192.o
+>   obj-$(CONFIG_SENSORS_SPARX5)	+=3D sparx5-temp.o
+>   obj-$(CONFIG_SENSORS_STTS751)	+=3D stts751.o
+> +obj-$(CONFIG_SENSORS_SURFACE_FAN)+=3D surface_fan.o
+>   obj-$(CONFIG_SENSORS_SY7636A)	+=3D sy7636a-hwmon.o
+>   obj-$(CONFIG_SENSORS_AMC6821)	+=3D amc6821.o
+>   obj-$(CONFIG_SENSORS_TC74)	+=3D tc74.o
+> diff --git a/drivers/hwmon/surface_fan.c b/drivers/hwmon/surface_fan.c
+> new file mode 100644
+> index 000000000..7c2e3ae3e
+> --- /dev/null
+> +++ b/drivers/hwmon/surface_fan.c
+> @@ -0,0 +1,93 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Surface Fan driver for Surface System Aggregator Module. It provides=
+ access
+> + * to the fan's rpm through the hwmon system.
+> + *
+> + * Copyright (C) 2023 Ivor Wanders <ivor@iwanders.net>
+> + */
+> +
+> +#include <linux/hwmon.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/surface_aggregator/device.h>
+> +#include <linux/types.h>
+> +
+> +// SSAM
+> +SSAM_DEFINE_SYNC_REQUEST_CL_R(__ssam_fan_rpm_get, __le16, {
+> +	.target_category =3D SSAM_SSH_TC_FAN,
+> +	.command_id      =3D 0x01,
+> +});
+> +
+> +// hwmon
+> +umode_t surface_fan_hwmon_is_visible(const void *drvdata,
+> +				     enum hwmon_sensor_types type, u32 attr,
+> +				     int channel)
+> +{
+> +	return 0444;
+> +}
+> +
+> +static int surface_fan_hwmon_read(struct device *dev,
+> +				  enum hwmon_sensor_types type, u32 attr,
+> +				  int channel, long *val)
+> +{
+> +	struct ssam_device *sdev =3D dev_get_drvdata(dev);
+> +	int ret;
+> +	__le16 value;
+> +
+> +	ret =3D __ssam_fan_rpm_get(sdev, &value);
+> +	if (ret)
+> +		return ret;
+> +
+> +	*val =3D le16_to_cpu(value);
+> +
+> +	return ret;
 
-Overall, hwmon functionality is orthogonal to thermal subsystem use.
-It is not appropriate for the thermal subsystem to disable any
-temperature sensors in the hwmon subsystem because the user might
-expect to be able to read temperatures from hwmon devices even
-if sensors are not in use by the thermal subsystem.
+Hello,
 
-Thanks,
-Guenter
+maybe you can just return 0 here.
 
+> +}
+> +
+> +static const struct hwmon_channel_info *const surface_fan_info[] =3D {
+> +	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT),
+> +	NULL
+> +};
+> +
+> +static const struct hwmon_ops surface_fan_hwmon_ops =3D {
+> +	.is_visible =3D surface_fan_hwmon_is_visible,
+> +	.read =3D surface_fan_hwmon_read,
+> +};
+> +
+> +static const struct hwmon_chip_info surface_fan_chip_info =3D {
+> +	.ops =3D &surface_fan_hwmon_ops,
+> +	.info =3D surface_fan_info,
+> +};
+> +
+> +static int surface_fan_probe(struct ssam_device *sdev)
+> +{
+> +	struct device *hdev;
+> +
+> +	hdev =3D devm_hwmon_device_register_with_info(&sdev->dev,
+> +						    "surface_fan", sdev,
+> +						    &surface_fan_chip_info,
+> +						    NULL);
+> +	if (IS_ERR(hdev))
+> +		return PTR_ERR(hdev);
+> +
+> +	return 0;
+
+Maybe use PTR_ERR_OR_ZERO() here?
+
+Other than those two small things:
+
+Reviewed-by: Armin Wolf <W_Armin@gmx.de>
+
+> +}
+> +
+> +static const struct ssam_device_id ssam_fan_match[] =3D {
+> +	{ SSAM_SDEV(FAN, SAM, 0x01, 0x01) },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(ssam, ssam_fan_match);
+> +
+> +static struct ssam_device_driver surface_fan =3D {
+> +	.probe =3D surface_fan_probe,
+> +	.match_table =3D ssam_fan_match,
+> +	.driver =3D {
+> +		.name =3D "surface_fan",
+> +		.probe_type =3D PROBE_PREFER_ASYNCHRONOUS,
+> +	},
+> +};
+> +module_ssam_device_driver(surface_fan);
+> +
+> +MODULE_AUTHOR("Ivor Wanders <ivor@iwanders.net>");
+> +MODULE_DESCRIPTION("Fan Driver for Surface System Aggregator Module");
+> +MODULE_LICENSE("GPL");
