@@ -1,80 +1,157 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE56D1C6AE;
-	Thu, 25 Jan 2024 09:45:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49AE55C60D;
+	Thu, 25 Jan 2024 14:25:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706175920; cv=none; b=B/Ich17DAgWEjz7Pqpzxz2Hem/stCHcLZcOvFg8oG7TGwHAieIrg3mLPgA96o/mPYjDRcMfJ/vnQX0MDU046hzouAiBqACGrFYo+mXB817R2o9APgo2NZ8O9JNUpBemgegNLgb80FCAaNZPW+6ZcC28pjghdwLP0nCHM61YDKGA=
+	t=1706192706; cv=none; b=OxjJ2NHhTDCatywo/Nw4eslkzo8boiJVty03q1eDWW2qYURJTPdIlCai4Kyiw+u/I/OFdQNJrJ7T+sBDbRw/ZAPG9SR+kd0PFRZvcL4wZy0s5XOyUObvE07WMFBqEMcfr2ghg/mX1ujeEADVEheM9Yp+XFOd8yBBGh703FLd4dM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706175920; c=relaxed/simple;
-	bh=BBBMj/+LwJcWhyi1zR7X13yXCz0XNJvnrWKsG9hK2Bw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iZos4rospTcDewzCP9PgjsmdpxM9ZN77iTcny3yiJENYhHOzofzuqW9VprwnocJTKeHCkcl4/tGvtqLlh+qp1qe3WotLPdVEjSIk3m67n2hSvdBfY++6FAG8Wu1H6vYf4lML6cqfZ2T1wUwYRnEzwciW6DBJPeAt715PG9q6S6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BC8A3153B;
-	Thu, 25 Jan 2024 01:46:02 -0800 (PST)
-Received: from pluto (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 03AE83F73F;
-	Thu, 25 Jan 2024 01:45:16 -0800 (PST)
-Date: Thu, 25 Jan 2024 09:45:14 +0000
-From: Cristian Marussi <cristian.marussi@arm.com>
-To: Peng Fan <peng.fan@nxp.com>, Guenter Roeck <linux@roeck-us.net>
-Cc: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-	"groeck7@gmail.com" <groeck7@gmail.com>,
-	"sudeep.holla@arm.com" <sudeep.holla@arm.com>,
-	"jdelvare@suse.com" <jdelvare@suse.com>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V3] hwmon: scmi-hwmon: implement change_mode for thermal
- zones
-Message-ID: <ZbItqjt6RvCq306q@pluto>
-References: <20240125064422.347002-1-peng.fan@oss.nxp.com>
- <b839f83f-c8c7-4fa8-8597-bdde1b40168a@roeck-us.net>
- <DU0PR04MB9417DAD2DBB8820344FEFB07887A2@DU0PR04MB9417.eurprd04.prod.outlook.com>
+	s=arc-20240116; t=1706192706; c=relaxed/simple;
+	bh=KGLAirHlxaxNLl6c+ud0BFq34jV/liCx9KkdTcoUurY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dzNg03MLdVXanoaCTq45UCXu0128WFraSeFejL2fpDwY93eSVVJ6rZCJ5DlO6LqPza/NgParQ8Pty+r9CmLSrZpxkuSVHN9cG8+32Jgg/HZpx9/gbYgBB21cEiUsO7rfmlbBvo/RRvEjIgZWDu/zEzOaPmi4BOD0/Ez5C+GXB5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b6XKEDD6; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b6XKEDD6"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6ddc1b30458so1502995b3a.1;
+        Thu, 25 Jan 2024 06:25:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1706192703; x=1706797503; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=zpqP5sER0oQ1ctnx/TCuLAJ16oYKTBCC8iIqh3prnGc=;
+        b=b6XKEDD69SN67Hed2HexlOwC9ZTKO96o6dB340v2gmV/BHCYH6zEHPposV3UuqN8zK
+         2Pt0aOU0ytvdqGWa0Udi3FzdsCLAiP5ljifQORgVAc7m7shtSBEJYweeHV8NBl0azQSX
+         oDIk71yjR9R/Gt5DB1HlIvMllFDD71YwYIpqm048TYvHvE98q6G4k3rxOGfv+GoaWc7e
+         FwpHzjLn3ZkPmx1KexdMxQn2dmsndfXQ3LQQDaFEZIFZHMCIrh0YKIOXJiGPqiT8UU1U
+         WA6Tp1iGKNeUFn7kWSXcP7rH1DSzwLAd28OgUUcssaBJneK7yBjhgzngWKn0N7nHhFa6
+         c+bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706192703; x=1706797503;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zpqP5sER0oQ1ctnx/TCuLAJ16oYKTBCC8iIqh3prnGc=;
+        b=AXE+0sCyXemPD6SObnBcmGqcsTIODPe6XT8PiAyV6mrRqrMHUyV0ntiCUXxPEUyps5
+         SiwoSYN50IeI6dUP2pIgSKUqFvRCjUCJn0a+aCPZSjA9W7gI+HkfrxA0A+cgkKOcGUA7
+         m4XtdeEu3KmRw+TyEx8Bl846Bc46Bh7mYYBsbk7Be3OXSoi2Whb5Ql4Syhkw94iX3Nx0
+         MfH5wnsFXZXYO/bYfLq7Pa837089aa1fX/VSCkU1YhNdWLfnAE9SN8B2ZaaOWrPM+fVi
+         egcYNqoBSRb85BAu8KPtjgEdsco4CgUrBEYOdbZtg04MAEkVwQXHrH0lQfmW+pH5ohC2
+         Doag==
+X-Gm-Message-State: AOJu0Yz9dZtoNei1iQlXKYw55Ji55vBCF1fmyAnfplgBU4lid/Yw4bEt
+	6NpyaNCnFrUQbw+IhdeSnJGLIhNfluurZC1KKCbfC5oKQ4/zdVtFLu/Whb4V
+X-Google-Smtp-Source: AGHT+IF/68mbdJO/IZ0tml4XE/SslwpBXN78B4UBKY5cRn1R2pxb7M8PCh4uzsOol7JddvlO0S+mUw==
+X-Received: by 2002:a05:6a20:43a1:b0:19a:55a8:c04a with SMTP id i33-20020a056a2043a100b0019a55a8c04amr1397836pzl.78.1706192703287;
+        Thu, 25 Jan 2024 06:25:03 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c4-20020a056a00008400b006dabe67bb85sm15856033pfj.216.2024.01.25.06.25.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Jan 2024 06:25:01 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <540cf4b3-ebf6-4a85-84c4-c012a69db416@roeck-us.net>
+Date: Thu, 25 Jan 2024 06:25:00 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V3] hwmon: scmi-hwmon: implement change_mode for thermal
+ zones
+Content-Language: en-US
+To: Peng Fan <peng.fan@nxp.com>, "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+ "groeck7@gmail.com" <groeck7@gmail.com>,
+ "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
+ "cristian.marussi@arm.com" <cristian.marussi@arm.com>,
+ "jdelvare@suse.com" <jdelvare@suse.com>
+Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20240125064422.347002-1-peng.fan@oss.nxp.com>
+ <b839f83f-c8c7-4fa8-8597-bdde1b40168a@roeck-us.net>
+ <DU0PR04MB9417DAD2DBB8820344FEFB07887A2@DU0PR04MB9417.eurprd04.prod.outlook.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
 In-Reply-To: <DU0PR04MB9417DAD2DBB8820344FEFB07887A2@DU0PR04MB9417.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jan 25, 2024 at 07:06:25AM +0000, Peng Fan wrote:
+On 1/24/24 23:06, Peng Fan wrote:
 > Hi Guenter,
 > 
-
-Hi,
-
-> > Subject: Re: [PATCH V3] hwmon: scmi-hwmon: implement change_mode for
-> > thermal zones
-> > 
-> > On 1/24/24 22:44, Peng Fan (OSS) wrote:
-> > > From: Peng Fan <peng.fan@nxp.com>
-> > >
-> > > The thermal sensors maybe disabled before kernel boot, so add
-> > > change_mode for thermal zones to support configuring the thermal
-> > > sensor to enabled state. If reading the temperature when the sensor is
-> > > disabled, there will be error reported.
-> > >
-> > > The cost is an extra config_get all to SCMI firmware to get the status
-> > > of the thermal sensor. No function level impact.
-> > >
-> > > Reviewed-by: Cristian Marussi <cristian.marussi@arm.com>
-> > > Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> > > ---
-> > >
-> > > V3:
-> > >   Update commit log to show it only applys to thermal
-> > >   Add comments in code
-> > >   Add R-b from Cristian
-> > >
-> > 
-> > You didn't address my question regarding the behavior of hwmon attributes if
-> > a sensor is disabled.
+>> Subject: Re: [PATCH V3] hwmon: scmi-hwmon: implement change_mode for
+>> thermal zones
+>>
+>> On 1/24/24 22:44, Peng Fan (OSS) wrote:
+>>> From: Peng Fan <peng.fan@nxp.com>
+>>>
+>>> The thermal sensors maybe disabled before kernel boot, so add
+>>> change_mode for thermal zones to support configuring the thermal
+>>> sensor to enabled state. If reading the temperature when the sensor is
+>>> disabled, there will be error reported.
+>>>
+>>> The cost is an extra config_get all to SCMI firmware to get the status
+>>> of the thermal sensor. No function level impact.
+>>>
+>>> Reviewed-by: Cristian Marussi <cristian.marussi@arm.com>
+>>> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+>>> ---
+>>>
+>>> V3:
+>>>    Update commit log to show it only applys to thermal
+>>>    Add comments in code
+>>>    Add R-b from Cristian
+>>>
+>>
+>> You didn't address my question regarding the behavior of hwmon attributes if
+>> a sensor is disabled.
 > 
 > Would you please share a bit more on what attributes?
 > You mean the files under /sys/class/hwmon/hwmon0?
@@ -88,99 +165,19 @@ Hi,
 > root@imx95-19x19-lpddr5-evk:/sys/class/hwmon/hwmon0# cat temp1_input
 > 31900
 > 
-> > 
-> > >   Guenter, I Cced linux@roeck-us.net when sending V1/V2
-> > >   Let me Cc Guenter Roeck <groeck7@gmail.com> in V3, hope you not mind
-> > >
-> > This time I received it twice ;-).
-> > 
-> > > V2:
-> > >   Use SCMI_SENS_CFG_IS_ENABLED & clear BIT[31:9] before update
-> > > config(Thanks Cristian)
-> > >
-> > >   drivers/hwmon/scmi-hwmon.c | 39
-> > ++++++++++++++++++++++++++++++++++++++
-> > >   1 file changed, 39 insertions(+)
-> > >
-> > > diff --git a/drivers/hwmon/scmi-hwmon.c b/drivers/hwmon/scmi-hwmon.c
-> > > index 364199b332c0..af2267fea5f0 100644
-> > > --- a/drivers/hwmon/scmi-hwmon.c
-> > > +++ b/drivers/hwmon/scmi-hwmon.c
-> > > @@ -151,7 +151,46 @@ static int scmi_hwmon_thermal_get_temp(struct
-> > thermal_zone_device *tz,
-> > >   	return ret;
-> > >   }
-> > >
-> > > +static int scmi_hwmon_thermal_change_mode(struct
-> > thermal_zone_device *tz,
-> > > +					  enum thermal_device_mode
-> > new_mode) {
-> > > +	int ret;
-> > > +	u32 config;
-> > > +	enum thermal_device_mode cur_mode =
-> > THERMAL_DEVICE_DISABLED;
-> > > +	struct scmi_thermal_sensor *th_sensor =
-> > > +thermal_zone_device_priv(tz);
-> > > +
-> > > +	ret = sensor_ops->config_get(th_sensor->ph, th_sensor->info->id,
-> > > +				     &config);
-> > > +	if (ret)
-> > > +		return ret;
-> > > +
-> > > +	if (SCMI_SENS_CFG_IS_ENABLED(config))
-> > > +		cur_mode = THERMAL_DEVICE_ENABLED;
-> > > +
-> > > +	if (cur_mode == new_mode)
-> > > +		return 0;
-> > > +
-> > > +	/*
-> > > +	 * Per SENSOR_CONFIG_SET sensor_config description:
-> > > +	 * BIT[31:11] should be set to 0 if the sensor update interval does
-> > > +	 * not need to be updated, so clear them.
-> > > +	 * And SENSOR_CONFIG_GET does not return round up/down, so also
-> > clear
-> > > +	 * BIT[10:9] round up/down.
-> > 
-> > What does "clear" mean ? Is it going to round up ? Round down ? And why
-> > would it be necessary to clear those bits if SENSOR_CONFIG_GET does not
-> > return the current setting in the first place ?
-> 
-> This is to follow Cristian's suggestion to clear [31:9], because we only need
-> to set the sensor to enabled state, no other attributes.
-> My understanding is with BIT[31:11] set to 0, BIT[10:9] will not take effect.
-> Cristian may help comment more since he suggested to clear them in V1/V2
-> 
-> You are right, currently config_get will return [10:2] as reserved,
-> so config_set bit[10:9] no need touch. But config_get bit[10:2]
-> may update to return the value in future SCMI spec?
-> 
-> Cristian or Sudeep may help comment here.
 
-From the spec SENSOR_CONFIG_SET can also be used to set the chosen
-update-interval for the sensor and the rounding-mode, but the specified
-rounding mode refers only to the currently issued CONFIG_SET operation,
-it is not a permanent configuration for the sensor: for this reason when
-you instead issue a CONFIG_GET it does not make any sense to return the
-rounding mode, since the interval returned by the GET is the already
-(previously) rounded final value configured on the sensor.
-So the spec is right and does not need any change in these regards.
+This is wrong. If the sensor is disabled, there should either be no
+sensor attribute (if the condition is permanent), or there should be
+tempX_enable attribute(s) which return the sensor status (and, if
+appropriate, permit it to be enabled). If the condition is not
+permanent, attempts to read the sensor value should return -ENODATA.
 
-By the spec, also, if you set the update-interval to 0 in a CONFIG_SET,
-the chosen interval will remain unchanged, so the value of the ROUND bits
-is indeed irrelevant.
-
-Now, my (probably ill) advice to anyway clear also the round bits was aimed
-at using some sort of well-known value in the SET (even though ignored)
-given that the GET does specify those bits as reserved but you cannot be sure
-what the previous GET just returned from the fw-of-the-day (maybe by mistake),
-and if those bits will be effectively ignored on the SET given the
-zeroed interval value.
-
-Indeed, looking at this again, all of this is maybe just overthinking and it just
-confusing at this point to needlessly clear also those ROUNDING bits, since not
-required by the spec.
-
-Just clear the interval bits, my bad.
+Overall, hwmon functionality is orthogonal to thermal subsystem use.
+It is not appropriate for the thermal subsystem to disable any
+temperature sensors in the hwmon subsystem because the user might
+expect to be able to read temperatures from hwmon devices even
+if sensors are not in use by the thermal subsystem.
 
 Thanks,
-Cristian
+Guenter
+
