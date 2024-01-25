@@ -1,307 +1,201 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2068.outbound.protection.outlook.com [40.107.20.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92C0A131745;
-	Wed, 24 Jan 2024 18:38:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706121489; cv=none; b=fGPzRczfm5jIFT69ysQ/v8/NcuNQ903NZEd/AW7jUTNrJsdriWkiYWb2Xegh/DJO4y4FmAr3O0PnTBfD8rELufbRIFn4jYJECx9bDk0VyEVIZP+Os6FA0zMocKxWGL3vH/SEGCp8wI1w9PSa4X+cMv/Fx9evnvXMdvrkt2PxSEk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706121489; c=relaxed/simple;
-	bh=ca+fCbcTQWgE84vqH1p2Q7HrTg+ZrFTOv39C1QxwOGY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RwPKphQieVnmB/fcNCwLENGKobBZn4/YzuYRfHhHTrOCxDMRwgErXRTC6m+3bkLXcP80CQVs7f4OVhW8ZuVT7J7brj7rEN5BuBKE4fkoswvK1WS3Vns4pCetUzgKy1wOhAdbcOhnE4up3OqT9Ic8iieomiBfEfHqfMBrmC559LU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vv9IvmHa; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D574610A05;
+	Thu, 25 Jan 2024 06:40:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.68
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706164815; cv=fail; b=RGL1Tt42SYg54QKJJheGQhLh9ewCDx5rnu+wXIsZR5w5EtUDimvCC07Aj6m2kkdLw3lcRrGDk60uPu+v4+KfoJ+dOUT+nKnY4phUCmUYbcMxmNR0Gb2dSExGRcHih43/SdSoCvp5ac0udtQuhX1k8u6yZcawESJAlCzoJgekYkU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706164815; c=relaxed/simple;
+	bh=STe1zyKkOhWtMBk412IJ7sbcdLzlILOZ32EnJSoJl7A=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=WryKfa+1fDnTO8aLt/uFnYTGAzrrX4lNtngrw8DEyaOReYtLf3KFI6VqxNfGtkr9wZZp+JDuqEcCLlMPl8/VKD2EkNk5S12ibBLsVydyuJt67/KqiMWTVfU/ZcPdcZv0Rx07v17tTFXjngCvvVk3SkXcwUKP3+lq1cXD8DlDw6Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=PRu1+rnH; arc=fail smtp.client-ip=40.107.20.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vv9IvmHa"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-40ec715f1efso8451085e9.2;
-        Wed, 24 Jan 2024 10:38:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706121486; x=1706726286; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GbB1X//c8XrpsgTvSZPcfYd6FspCt9gWrgLKU+MXeTY=;
-        b=Vv9IvmHaCX7v7I7zjjruc5FFGttbiG5gV1UNJ6YRGNe0BfIAj0+T2OrtuCILWJxEh8
-         Bv57nkF4e4+H4qy0yQYM3yPqhWy838RdD8RBhUyApYc1az4vU4xKve238ZlXGjRIDs6R
-         TlaE71OoxAwwrte5qbeRQmSsbHQC63/Y3rxSnkaI6Fr77ptCDdaft4HD1g4lhdWDMTsN
-         zzpY3BNu7+sr0CafZIGb1MU18WsTdqYJWiLr6KRUA30VOvv6XCGm4AJ7BCqNISIFlNZh
-         UOYCtCRpW4O2QBjDpOuU30Ntq4Jn2zsebnhFc/Mt28RO5GBX6dL0UYuuwpBao2noOnCP
-         cHpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706121486; x=1706726286;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GbB1X//c8XrpsgTvSZPcfYd6FspCt9gWrgLKU+MXeTY=;
-        b=xU/4zW1EbiYzV4Fy6GuzJHM4qdFhVSfjK6RkvjHwXOUFUB8VR98ef0qes3hVZBO8xN
-         IvGDF35utm5wRqGgvNmplaeCw5iBrAeQiUpsfI0u2vseji7yo897LWHTUkUCWNoK8nCd
-         ms1Bo3gYcCJK997s3FUL9ECohRwn9VRJ638CnyXPT92ZWLRDSnL2oxwM8hCh5ztlfr6Z
-         QDN6fOowEf8X5SPMpuwN3aJ5dsdgCwkaBqb9tgDifchzG1gd34i68xJvPQnzMc1P1PSL
-         sYsxu+daIF+ejWr+Ahd9RJ7J3wnGLt4Ox/git73QW59jIys6LGmJ1n7ZD+BRFRtCiwKQ
-         MwbA==
-X-Gm-Message-State: AOJu0YxuMM/znN2VMxlpQXhfH/iNPrLbDpClftTV1RaksoGpWWMaJedU
-	N9mV47E36N8sKK1aWur5h/+RumscekaCTk6ZSKCtyuUYyg9n6NzE
-X-Google-Smtp-Source: AGHT+IFsaI8u7E8opq9Fs6Sb+qWWOeFxkbf1lGpvnZlWwCTfwu5JjWi5I1kIzQyshMsDrZDsuE8IPg==
-X-Received: by 2002:a05:600c:1385:b0:40e:88be:ec58 with SMTP id u5-20020a05600c138500b0040e88beec58mr1708927wmf.31.1706121485407;
-        Wed, 24 Jan 2024 10:38:05 -0800 (PST)
-Received: from ?IPV6:2a02:8071:b783:140:927c:82ba:d32d:99c1? ([2a02:8071:b783:140:927c:82ba:d32d:99c1])
-        by smtp.gmail.com with ESMTPSA id p4-20020a05600c468400b0040d8d11bf63sm455727wmo.41.2024.01.24.10.38.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Jan 2024 10:38:04 -0800 (PST)
-Message-ID: <218345e5-6634-40b6-a509-41bd4fc587c8@gmail.com>
-Date: Wed, 24 Jan 2024 19:38:03 +0100
+	dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="PRu1+rnH"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mgx5kRBRHbsCgEy7AwXA5fjCNZ2KYgMWpMxU7Ge9cdHxXlP3r2GE08dsaypav4oERJpnVPrlU8Kt81Z7y4QX6S9bXLOJXnF66GY7UKOCI0MTvjTCYE3kscHWLgiVyw4FRACQMBcELqInBw1Dx/a6T48A64N7QZ1YPzwNwdeORCUP3FwgriwVrM8MPGH1bCPBZP43Mc6Sdf84aGwqMUXjaajH3v/F30Xvy22VVJoz+EILHibEvc6ygkx0VJEBMUQHPGifZha2rKWQljLOsLnpIyirYBcRJewCGe3NKleJuv20bmXugHEPcPIyQhqEIzgSmRtek+W8ddHPdaQSgeoxHw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=00OaK2bq1ZMI6b68LEWaHw2m1PvE4QbmJ8057FbOGNs=;
+ b=Cu71lavENhhVHQgFU4Etu2WUT7egRj191uznuVJy18Abo36xzMJqn3evr++OhiBewg8ShDcN3OiQTevMaMdRspag78n5zci8BTf0sBGRqQxiSOnwt0CY0RaWKCI18hFdqAAJtZvSPo2imMZjAqYScsay/5qPx+x5NmAH3Roo5pyNgG4MoDOYRfcCQpL5prbIDgl/MrDUFpSOayZsZMz+arMxFbEbqGCcuX/gPMxNrLeIQS2ZI3u/aVh+2A+ta+QBFc0Q/Z66kcZwuYqzlRUg9T9eY3pljCiC55naAhzluivDyBWMHPGM5dDEs3JT6mAqkeuq7Dp2aY1zTJ1pb7QLEQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=00OaK2bq1ZMI6b68LEWaHw2m1PvE4QbmJ8057FbOGNs=;
+ b=PRu1+rnHu+sJNCTJqZDMMP6ydMM2qqivGDWVwoLMu3EyXExLbQ3XR1DISFEKy7bolEpjz0xV82HBVbI1Xl17kkaHYS4F/Q5BBC8cgb2//lAVIezm5p//5XIIMOX35Ny/DqPgPmrMdypuh1SEAq9p7J3vkc0NpitR8Xc/H5sANkY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by VI1PR04MB6783.eurprd04.prod.outlook.com (2603:10a6:803:130::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7228.22; Thu, 25 Jan
+ 2024 06:40:09 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::c499:8cef:9bb1:ced6]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::c499:8cef:9bb1:ced6%3]) with mapi id 15.20.7228.022; Thu, 25 Jan 2024
+ 06:40:08 +0000
+From: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To: groeck7@gmail.com,
+	sudeep.holla@arm.com,
+	cristian.marussi@arm.com,
+	jdelvare@suse.com,
+	linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH V3] hwmon: scmi-hwmon: implement change_mode for thermal zones
+Date: Thu, 25 Jan 2024 14:44:22 +0800
+Message-Id: <20240125064422.347002-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.37.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SGAP274CA0002.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b6::14)
+ To DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] hwmon: add fan speed monitoring driver for Surface
- devices
-To: Ivor Wanders <ivor@iwanders.net>, Jean Delvare <jdelvare@suse.com>,
- Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
- Hans de Goede <hdegoede@redhat.com>, Mark Gross <markgross@kernel.org>
-Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
-References: <20240113183306.9566-1-ivor@iwanders.net>
- <20240113183306.9566-3-ivor@iwanders.net>
-Content-Language: en-US
-From: Maximilian Luz <luzmaximilian@gmail.com>
-In-Reply-To: <20240113183306.9566-3-ivor@iwanders.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|VI1PR04MB6783:EE_
+X-MS-Office365-Filtering-Correlation-Id: 270879a0-c2f5-4cd0-8431-08dc1d70793a
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	6NvQUM58TC+O8z+tH55VLPMiB0+ewCKWA9x9YT2fd30qIJNWGlVFUEY3udIV72dEds7SvhOkpMjTjoAiOaNrJ2Ik0JYuesENbEMPCsQypBn1/y1g7RStrQciLHoKjBLQa75nGp+JQ6TVFQePl9CHxnTZp8wGsbXSc9xgcpwGAtPT8/npzKaU47EYLOHFS7D/hm/XGWhW5RoOmCzDlUyPuVXN2/sL74Inq1aneNPXgoyhuR+OQadb2gtI3mQBEBfzqf7e136GeCPxRlH2Ju+0aZNK4bri3CbL3nVcWntKcc+L4kTBkjNAoTaQbiN+y1oWujznjtapQrxm0ktCKGyrdAkseY3Zu/91xw20k4nheC11uomUQO/BLE1dvRdhWqLVbf0SkzsrA2Vwj+VZTdWjD4sxfm28qOx+/pmoTO48K2Ic1MnYNKIBrY8+sXAy7lAHPykaKFgmuUkXth+s9a2PWTXExLEGEQdzgv8ZTKqF00ax8MHyisHVgCkcZgnKsDDYlKTF3CarcmhRIMOI16ZrYPdk/8kpoQKP1DQ6eaurdUlxeph0sPC21KHIl7ICaDV/NHPNBeaG8jWS8Qm3kbFzzGwpiAJviTwv+HONQHS37FgwP7bWmH7zp+exjt+etqUR
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(376002)(346002)(39860400002)(136003)(396003)(230922051799003)(451199024)(64100799003)(1800799012)(186009)(4326008)(6512007)(6506007)(8676002)(8936002)(83380400001)(26005)(5660300002)(38100700002)(2906002)(66946007)(316002)(66556008)(66476007)(52116002)(6486002)(2616005)(41300700001)(478600001)(86362001)(6666004)(1076003)(38350700005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?B+f1gx3nOXmkDM6VN3WIUUtaa3tLXPMNNNMJ3EO6lHALcCQ5NIXoF43wccjA?=
+ =?us-ascii?Q?E7q4cwEhcjUiUbf0JGmi/rrAN66Afmrb/kIEGlZxnI/UnvBUkP/btR6VKw+m?=
+ =?us-ascii?Q?pYXaE4YaPPYEnqelv038ckjPF/5tF5aqJ2scyab6QC8oW9Zq9cPe2vqZ83UV?=
+ =?us-ascii?Q?tZ9tvthCbuFCVHuFWx/mt9QK8Zj2kMFKXEI+bcsQXT8QEi5nQBmPIx2Ww/Dm?=
+ =?us-ascii?Q?UeH+d+h4wGYZRz0SF4yBEsuWd0CuD7uSX3ikwgMteKhFt10l5iayKa/SEpXB?=
+ =?us-ascii?Q?MoVzuHjGRU8Cepg3nPOdAY28nHerT/UjRiDOI2VSjaIaktK3jQzk9mnVktwT?=
+ =?us-ascii?Q?9OlfeEiAIPSfk7+2NEBfpuLj4KIYtupenRbCCYW2dwU+EiDtcWwBZeds/lda?=
+ =?us-ascii?Q?ECHPJN7gSk704o+wYie/b7vIAmBaYhE2s1Up7tox3Hms6rzI3BsOXgKz4SM9?=
+ =?us-ascii?Q?+hzsNZfgly7/SmxshPrxmfuPNPKfI7E+qXwgT4llrnUzXyNGWKb/t40dLJov?=
+ =?us-ascii?Q?nUKxLj5r9wYCvAfDdC0RRE3Fc7MOQw9XLNsoqJVvGns9BVGdjEkp0toP05Sa?=
+ =?us-ascii?Q?dsZIzUX5oFIjx0b/U+0U5SiKGQKclie1WMdKjQ6x233cTnVHyVVnbUwkalN7?=
+ =?us-ascii?Q?EE6qZ7SnI1gQGwdZyqRerSFqX/g94XUvA5d3Lepc6YHKJYWP8qk9z0oMMweZ?=
+ =?us-ascii?Q?rB0RFEmUMyuB3A8yMNl+YB53KYwK8KZVzG8tnGB04LatviddgmH/+QTzS0ZJ?=
+ =?us-ascii?Q?Arr+uYhKdSubExWL2BkV4kcr/OO9rh2Se/xZI4cuWY6BEuxV5WUIg0FrO75a?=
+ =?us-ascii?Q?7NBE8w9jJAPCTpOCRsPiC62OxQWwdd5oUJOl2PP65+BLJ/I79x8U1KG5e997?=
+ =?us-ascii?Q?S7ARui5sqDfc+Q0fX8mS1dENhh6safk8kkscjlvFD1sacbLNt0MyQwBuZ9Wl?=
+ =?us-ascii?Q?r73ShrEhlj8wIGOHF+lDddVokJV+KdxWnwS8OWuQqHgnZvcZiirLfZb5dnct?=
+ =?us-ascii?Q?PkUL3+Zv1AtX4CzcUGfy1OfKP9yYr5IGNFn/KS+vXX5kes3jCAEUfdXldIOb?=
+ =?us-ascii?Q?IQUVyCrcw49fXOAMuezDVstrYO9NW03Ew93k2pYBLcvUTUXmWKxosA3X4pGx?=
+ =?us-ascii?Q?F6ErV5Yc0doyfX7XIgrdNQyAvRuTSip4kd7qXR0D7LkNLrhxstUq99EJ0y46?=
+ =?us-ascii?Q?y3kVtk5cYb0L+jD1HdAVgRuQJHUMJOR8GUqF16l5yXbm+aV7SYa+Byd4ywcW?=
+ =?us-ascii?Q?dWBXSEw9qe4Mnc1BCkz8Zvi678ea5BtQOYlFnnrCkJlGJ4Qo1UYUoVM2ywOZ?=
+ =?us-ascii?Q?y1psZcjPlZm63RVxesi4xnuU1gOYUqZdr6NukpPcjiHksjfqNhgD5CO/mR2q?=
+ =?us-ascii?Q?47SDd6GWfRecd8xTvf/YNyJgsTFR1H1eNzg84+OAci08ibMcVTg4oghsPfWD?=
+ =?us-ascii?Q?7uEt7NdzLALXXQ9spz69/dj8YaXzHTlIPAe6PKhUrLWU41cSARmq3auQcQD8?=
+ =?us-ascii?Q?nnE3T+0RFPBvhH4ouaKgtdKDliVtXo1cCDj04bWVD0Mo/+S3DcMdRNH99bmk?=
+ =?us-ascii?Q?u2556Mp9wBma6LapITBSdv5vMUoy8R1YYD4VJ5Ut?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 270879a0-c2f5-4cd0-8431-08dc1d70793a
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2024 06:40:08.9276
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FPEyyimkaWkk3SM4l4xgA6hC20SLBeF36ZFFjaTpBsv1VGaCkuOAGv+azwCdRNwjkEkGnugvk900TE4uT3yHpA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6783
 
-On 1/13/24 19:33, Ivor Wanders wrote:
-> Adds a driver that provides read only access to the fan speed for Microsoft
-> Surface Pro devices. The fan speed is always regulated by the EC and cannot
-> be influenced directly.
-> 
-> Signed-off-by: Ivor Wanders <ivor@iwanders.net>
-> Link: https://github.com/linux-surface/kernel/pull/144
+From: Peng Fan <peng.fan@nxp.com>
 
-The Surface related things look good to me. For those:
+The thermal sensors maybe disabled before kernel boot, so add change_mode
+for thermal zones to support configuring the thermal sensor to enabled
+state. If reading the temperature when the sensor is disabled, there will
+be error reported.
 
-Reviewed-by: Maximilian Luz <luzmaximilian@gmail.com>
+The cost is an extra config_get all to SCMI firmware to get the status
+of the thermal sensor. No function level impact.
 
-> ---
-> Changes in v3:
->    - Removed type and attr checks in read and is_visible.
->    - Removed assigning sdev to ssam_device drvdata.
->    - Propagate return from __ssam_fan_rpm_get.
->    - Renamed hwmon chip name from 'fan' to 'surface_fan'.
->    - Removed unnecessary platform_device header.
-> Changes in v2:
->    - Removed all sysfs attributes except fan1_input. Simplified code
->      and updated documentation accordingly.
-> ---
->   Documentation/hwmon/index.rst       |  1 +
->   Documentation/hwmon/surface_fan.rst | 25 ++++++++
->   MAINTAINERS                         |  8 +++
->   drivers/hwmon/Kconfig               | 13 ++++
->   drivers/hwmon/Makefile              |  1 +
->   drivers/hwmon/surface_fan.c         | 93 +++++++++++++++++++++++++++++
->   6 files changed, 141 insertions(+)
->   create mode 100644 Documentation/hwmon/surface_fan.rst
->   create mode 100644 drivers/hwmon/surface_fan.c
-> 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index 042e1cf95..4dfb3b9bd 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -202,6 +202,7 @@ Hardware Monitoring Kernel Drivers
->      smsc47m1
->      sparx5-temp
->      stpddc60
-> +   surface_fan
->      sy7636a-hwmon
->      tc654
->      tc74
-> diff --git a/Documentation/hwmon/surface_fan.rst b/Documentation/hwmon/surface_fan.rst
-> new file mode 100644
-> index 000000000..07942574c
-> --- /dev/null
-> +++ b/Documentation/hwmon/surface_fan.rst
-> @@ -0,0 +1,25 @@
-> +.. SPDX-License-Identifier: GPL-2.0-or-later
-> +
-> +Kernel driver surface_fan
-> +=========================
-> +
-> +Supported Devices:
-> +
-> +  * Microsoft Surface Pro 9
-> +
-> +Author: Ivor Wanders <ivor@iwanders.net>
-> +
-> +Description
-> +-----------
-> +
-> +This provides monitoring of the fan found in some Microsoft Surface Pro devices,
-> +like the Surface Pro 9. The fan is always controlled by the onboard controller.
-> +
-> +Sysfs interface
-> +---------------
-> +
-> +======================= ======= =========================================
-> +Name                    Perm    Description
-> +======================= ======= =========================================
-> +``fan1_input``          RO      Current fan speed in RPM.
-> +======================= ======= =========================================
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 439cf523b..8e7870af3 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -14078,6 +14078,14 @@ F:	Documentation/driver-api/surface_aggregator/clients/dtx.rst
->   F:	drivers/platform/surface/surface_dtx.c
->   F:	include/uapi/linux/surface_aggregator/dtx.h
->   
-> +MICROSOFT SURFACE SENSOR FAN DRIVER
-> +M:	Maximilian Luz <luzmaximilian@gmail.com>
-> +M:	Ivor Wanders <ivor@iwanders.net>
-> +L:	linux-hwmon@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/hwmon/surface_fan.rst
-> +F:	drivers/hwmon/surface_fan.c
-> +
->   MICROSOFT SURFACE GPE LID SUPPORT DRIVER
->   M:	Maximilian Luz <luzmaximilian@gmail.com>
->   L:	platform-driver-x86@vger.kernel.org
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 307477b8a..4b4d999af 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1965,6 +1965,19 @@ config SENSORS_SMM665
->   	  This driver can also be built as a module. If so, the module will
->   	  be called smm665.
->   
-> +config SENSORS_SURFACE_FAN
-> +	tristate "Surface Fan Driver"
-> +	depends on SURFACE_AGGREGATOR
-> +	help
-> +	  Driver that provides monitoring of the fan on Surface Pro devices that
-> +	  have a fan, like the Surface Pro 9.
-> +
-> +	  This makes the fan's current speed accessible through the hwmon
-> +	  system. It does not provide control over the fan, the firmware is
-> +	  responsible for that, this driver merely provides monitoring.
-> +
-> +	  Select M or Y here, if you want to be able to read the fan's speed.
-> +
->   config SENSORS_ADC128D818
->   	tristate "Texas Instruments ADC128D818"
->   	depends on I2C
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index 3f4b0fda0..5ae214c06 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -198,6 +198,7 @@ obj-$(CONFIG_SENSORS_SMSC47M1)	+= smsc47m1.o
->   obj-$(CONFIG_SENSORS_SMSC47M192)+= smsc47m192.o
->   obj-$(CONFIG_SENSORS_SPARX5)	+= sparx5-temp.o
->   obj-$(CONFIG_SENSORS_STTS751)	+= stts751.o
-> +obj-$(CONFIG_SENSORS_SURFACE_FAN)+= surface_fan.o
->   obj-$(CONFIG_SENSORS_SY7636A)	+= sy7636a-hwmon.o
->   obj-$(CONFIG_SENSORS_AMC6821)	+= amc6821.o
->   obj-$(CONFIG_SENSORS_TC74)	+= tc74.o
-> diff --git a/drivers/hwmon/surface_fan.c b/drivers/hwmon/surface_fan.c
-> new file mode 100644
-> index 000000000..7c2e3ae3e
-> --- /dev/null
-> +++ b/drivers/hwmon/surface_fan.c
-> @@ -0,0 +1,93 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Surface Fan driver for Surface System Aggregator Module. It provides access
-> + * to the fan's rpm through the hwmon system.
-> + *
-> + * Copyright (C) 2023 Ivor Wanders <ivor@iwanders.net>
-> + */
-> +
-> +#include <linux/hwmon.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/surface_aggregator/device.h>
-> +#include <linux/types.h>
-> +
-> +// SSAM
-> +SSAM_DEFINE_SYNC_REQUEST_CL_R(__ssam_fan_rpm_get, __le16, {
-> +	.target_category = SSAM_SSH_TC_FAN,
-> +	.command_id      = 0x01,
-> +});
-> +
-> +// hwmon
-> +umode_t surface_fan_hwmon_is_visible(const void *drvdata,
-> +				     enum hwmon_sensor_types type, u32 attr,
-> +				     int channel)
-> +{
-> +	return 0444;
-> +}
-> +
-> +static int surface_fan_hwmon_read(struct device *dev,
-> +				  enum hwmon_sensor_types type, u32 attr,
-> +				  int channel, long *val)
-> +{
-> +	struct ssam_device *sdev = dev_get_drvdata(dev);
-> +	int ret;
-> +	__le16 value;
-> +
-> +	ret = __ssam_fan_rpm_get(sdev, &value);
-> +	if (ret)
-> +		return ret;
-> +
-> +	*val = le16_to_cpu(value);
-> +
-> +	return ret;
-> +}
-> +
-> +static const struct hwmon_channel_info *const surface_fan_info[] = {
-> +	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT),
-> +	NULL
-> +};
-> +
-> +static const struct hwmon_ops surface_fan_hwmon_ops = {
-> +	.is_visible = surface_fan_hwmon_is_visible,
-> +	.read = surface_fan_hwmon_read,
-> +};
-> +
-> +static const struct hwmon_chip_info surface_fan_chip_info = {
-> +	.ops = &surface_fan_hwmon_ops,
-> +	.info = surface_fan_info,
-> +};
-> +
-> +static int surface_fan_probe(struct ssam_device *sdev)
-> +{
-> +	struct device *hdev;
-> +
-> +	hdev = devm_hwmon_device_register_with_info(&sdev->dev,
-> +						    "surface_fan", sdev,
-> +						    &surface_fan_chip_info,
-> +						    NULL);
-> +	if (IS_ERR(hdev))
-> +		return PTR_ERR(hdev);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct ssam_device_id ssam_fan_match[] = {
-> +	{ SSAM_SDEV(FAN, SAM, 0x01, 0x01) },
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(ssam, ssam_fan_match);
-> +
-> +static struct ssam_device_driver surface_fan = {
-> +	.probe = surface_fan_probe,
-> +	.match_table = ssam_fan_match,
-> +	.driver = {
-> +		.name = "surface_fan",
-> +		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
-> +	},
-> +};
-> +module_ssam_device_driver(surface_fan);
-> +
-> +MODULE_AUTHOR("Ivor Wanders <ivor@iwanders.net>");
-> +MODULE_DESCRIPTION("Fan Driver for Surface System Aggregator Module");
-> +MODULE_LICENSE("GPL");
+Reviewed-by: Cristian Marussi <cristian.marussi@arm.com>
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
+---
+
+V3:
+ Update commit log to show it only applys to thermal
+ Add comments in code
+ Add R-b from Cristian
+
+ Guenter, I Cced linux@roeck-us.net when sending V1/V2 
+ Let me Cc Guenter Roeck <groeck7@gmail.com> in V3, hope you not mind
+
+V2:
+ Use SCMI_SENS_CFG_IS_ENABLED & clear BIT[31:9] before update config(Thanks Cristian)
+
+ drivers/hwmon/scmi-hwmon.c | 39 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+
+diff --git a/drivers/hwmon/scmi-hwmon.c b/drivers/hwmon/scmi-hwmon.c
+index 364199b332c0..af2267fea5f0 100644
+--- a/drivers/hwmon/scmi-hwmon.c
++++ b/drivers/hwmon/scmi-hwmon.c
+@@ -151,7 +151,46 @@ static int scmi_hwmon_thermal_get_temp(struct thermal_zone_device *tz,
+ 	return ret;
+ }
+ 
++static int scmi_hwmon_thermal_change_mode(struct thermal_zone_device *tz,
++					  enum thermal_device_mode new_mode)
++{
++	int ret;
++	u32 config;
++	enum thermal_device_mode cur_mode = THERMAL_DEVICE_DISABLED;
++	struct scmi_thermal_sensor *th_sensor = thermal_zone_device_priv(tz);
++
++	ret = sensor_ops->config_get(th_sensor->ph, th_sensor->info->id,
++				     &config);
++	if (ret)
++		return ret;
++
++	if (SCMI_SENS_CFG_IS_ENABLED(config))
++		cur_mode = THERMAL_DEVICE_ENABLED;
++
++	if (cur_mode == new_mode)
++		return 0;
++
++	/*
++	 * Per SENSOR_CONFIG_SET sensor_config description:
++	 * BIT[31:11] should be set to 0 if the sensor update interval does
++	 * not need to be updated, so clear them.
++	 * And SENSOR_CONFIG_GET does not return round up/down, so also clear
++	 * BIT[10:9] round up/down.
++	 */
++	config &= ~(SCMI_SENS_CFG_UPDATE_SECS_MASK |
++		    SCMI_SENS_CFG_UPDATE_EXP_MASK |
++		    SCMI_SENS_CFG_ROUND_MASK);
++	if (new_mode == THERMAL_DEVICE_ENABLED)
++		config |= SCMI_SENS_CFG_SENSOR_ENABLED_MASK;
++	else
++		config &= ~SCMI_SENS_CFG_SENSOR_ENABLED_MASK;
++
++	return sensor_ops->config_set(th_sensor->ph, th_sensor->info->id,
++				      config);
++}
++
+ static const struct thermal_zone_device_ops scmi_hwmon_thermal_ops = {
++	.change_mode = scmi_hwmon_thermal_change_mode,
+ 	.get_temp = scmi_hwmon_thermal_get_temp,
+ };
+ 
+-- 
+2.37.1
+
