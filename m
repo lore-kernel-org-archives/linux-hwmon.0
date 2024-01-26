@@ -1,104 +1,104 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30DEA14461B;
-	Thu, 25 Jan 2024 16:57:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 178284690
+	for <linux-hwmon@vger.kernel.org>; Fri, 26 Jan 2024 02:22:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706201868; cv=none; b=ORpto0jLIsQ/QFXOSG2Ygz/hYUrdVBbl0V6MBbk1h/pFUuwNh2E68IpuWZzqsqMsn++IOantda1sToLFs8jMmEp3O7tuusgZPU/FIPp90HCmXrOg8GZF+YrZKG+E+kaOSuEMxTfFPksa7tsbQwj+dpPLDUmW2TNk1r9cf7hlwas=
+	t=1706235750; cv=none; b=iWNlH1zjZq8iWdxoNV6bGVsmRy4otqQkVOqBmMObcODBGeNvJ9u6PnHx3repj/HTEo4XyxrsjMj0YR7/5yJ/kqzY5OCtLwhFzgQQ6N2BTxykF7xL/A9IuX4q/Y3633DYAtFsJTNvAOeGEd18iUmeAIx4OcQsvGj1q0n3p5RJUZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706201868; c=relaxed/simple;
-	bh=J4RVHINTHxXCUS3FqAsSmdDYotLQ5j6o0EmlbWfe8BE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P2TkMxIGgSoSPsmJetQpyltIgboLXzo0+U8zuesJ6iMOm1FQbl8T0sioLzJH4rqn9XXo/IzkrEvIIvK0yBn8g7jM6gKgCUflKysvuu46T14fMkqmb9rW2m8rPCsoAsyv/RIX/nh6WMVnqeQmH5ZaKHxaEslARw7KVw7ecjCgFO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 026011FB;
-	Thu, 25 Jan 2024 08:58:30 -0800 (PST)
-Received: from pluto (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7407E3F73F;
-	Thu, 25 Jan 2024 08:57:44 -0800 (PST)
-Date: Thu, 25 Jan 2024 16:57:42 +0000
-From: Cristian Marussi <cristian.marussi@arm.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Peng Fan <peng.fan@nxp.com>, "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-	"groeck7@gmail.com" <groeck7@gmail.com>,
-	"sudeep.holla@arm.com" <sudeep.holla@arm.com>,
-	"jdelvare@suse.com" <jdelvare@suse.com>,
+	s=arc-20240116; t=1706235750; c=relaxed/simple;
+	bh=cgBR38TJwFWOrst3omJ+4iSijSjOLH9MK/17RMaPCGc=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=o10lGJcxn3UuPpvbN4zZ6c/uobdO0wIMiw2EgG2SR0DNN91SfgqfVnFVoyqxEgjEw6wdfjaMNGif7deXz8dxuT27aYARPZbNTyQCULUKqJpcN5RHYv2b/YgxhWyrU83vWz0kGWN1qrhEdVP7fyr+CySy0L8PxHrpDPDl/v1mbcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+Received: from svr-chch-seg1.atlnz.lc (unknown [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id EF52D2C1077;
+	Fri, 26 Jan 2024 15:22:16 +1300 (NZDT)
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B65b317580001>; Fri, 26 Jan 2024 15:22:16 +1300
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Fri, 26 Jan 2024 15:22:16 +1300
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1118.040; Fri, 26 Jan 2024 15:22:16 +1300
+From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To: Ibrahim Tilki <Ibrahim.Tilki@analog.com>, "a.zummo@towertech.it"
+	<a.zummo@towertech.it>, "alexandre.belloni@bootlin.com"
+	<alexandre.belloni@bootlin.com>, "jdelvare@suse.com" <jdelvare@suse.com>,
+	"linux@roeck-us.net" <linux@roeck-us.net>, "robh+dt@kernel.org"
+	<robh+dt@kernel.org>, "krzysztof.kozlowski+dt@linaro.org"
+	<krzysztof.kozlowski+dt@linaro.org>
+CC: "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
 	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V3] hwmon: scmi-hwmon: implement change_mode for thermal
- zones
-Message-ID: <ZbKTBmt_BP6JRLBj@pluto>
-References: <20240125064422.347002-1-peng.fan@oss.nxp.com>
- <b839f83f-c8c7-4fa8-8597-bdde1b40168a@roeck-us.net>
- <DU0PR04MB9417DAD2DBB8820344FEFB07887A2@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <540cf4b3-ebf6-4a85-84c4-c012a69db416@roeck-us.net>
- <ZbKHpFRGoaQpWX16@pluto>
- <da42560b-32b2-49c6-9aeb-b7fbd5b5577c@roeck-us.net>
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v5 0/2] drivers: rtc: add max313xx series rtc driver
+Thread-Topic: [PATCH v5 0/2] drivers: rtc: add max313xx series rtc driver
+Thread-Index: AQHaT/57pfs9+wriS028zs2/xPWJRw==
+Date: Fri, 26 Jan 2024 02:22:16 +0000
+Message-ID: <147c92f9-b42b-4a51-a6f9-2d90bfe63aa0@alliedtelesis.co.nz>
+References: <20230403154342.3108-1-Ibrahim.Tilki@analog.com>
+In-Reply-To: <20230403154342.3108-1-Ibrahim.Tilki@analog.com>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <DFAEA80C4FBAF146B167D37EF2B114EB@atlnz.lc>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <da42560b-32b2-49c6-9aeb-b7fbd5b5577c@roeck-us.net>
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=LZFCFQXi c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=dEuoMetlWLkA:10 a=QyXUC8HyAAAA:8 a=y9Ms7NjFG32jJv2empEA:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
 
-On Thu, Jan 25, 2024 at 08:16:45AM -0800, Guenter Roeck wrote:
-> On 1/25/24 08:09, Cristian Marussi wrote:
-> 
-> > Agreed, but it seems that indeed here the attempt is to make sure that
-> > an accidentally disabled sensor is turned on.
-> > 
-> 
-> From the patch:
-> 
-> +static int scmi_hwmon_thermal_change_mode(struct thermal_zone_device *tz,
-> +					  enum thermal_device_mode new_mode)
-> +{
-> ...
-> +	if (new_mode == THERMAL_DEVICE_ENABLED)
-> +		config |= SCMI_SENS_CFG_SENSOR_ENABLED_MASK;
-> +	else
-> +		config &= ~SCMI_SENS_CFG_SENSOR_ENABLED_MASK;
-> 
-> This clearly contradicts your statement. It leaves the sensor in full control
-> by the thermal subsystem. If the thermal subsystem decides to turn it off,
-> it is turned off.
-
-Yes, indeed, and this is wrong as you explained; what I meant is that it seems
-to me now after this discussion, and from the commit message, that the reason
-(and the aim of this patch) is different from how it achieves it (as a
-side effect)
-
-"The thermal sensors maybe disabled before kernel boot, so add change_mode
- for thermal zones to support configuring the thermal sensor to enabled
- state. If reading the temperature when the sensor is disabled, there will
- be error reported."
-
-So when I said:
-
-> > Agreed, but it seems that indeed here the attempt is to make sure that
-> > an accidentally disabled sensor is turned on.
-
-and
-
->> In this case seems like the sensor is NOT supposed to be ever disabled
->> (not even temporarily), it it just that you want to ensure that is
->>enabled, so I would say @Peng, should not that be done in the fw
->> SCMI server ? (i.e. to turn on, early on, all those resources that are
->>  exposed to the agent and meant to be always on)
-
-I implied to drop this patch and instead make sure the visible-and-always-enabled
-sensor is default-enabled by the SCMI server running in the firmware, given that
-there won't be any need to ever disable it, from the hwmon interface NOR from
-the thermal subsystem.
-
-Sorry if I have not been clear (but I maybe still well-wrong anyway :D)
-
-Thanks,
-Cristian
-
-
+SGkgQWxsLA0KDQpPbiA0LzA0LzIzIDAzOjQzLCBJYnJhaGltIFRpbGtpIHdyb3RlOg0KPiBjaGFu
+Z2Vsb2c6DQo+IHNpbmNlIHY1Og0KPiAgICAtIGR0LWJpbmRpbmc6IGFkZCBlbnVtIHZhbHVlICIy
+IiB0byBhdXgtdm9sdGFnZS1jaGFyZ2FibGUNCj4gICAgLSBkdC1iaW5kaW5nOiByZW1vdmUgYWRp
+LHRyaWNrbGUtZGlvZGUtZW5hYmxlDQo+ICAgIC0gZHQtYmluZGluZzogY2hhbmdlIGRlc2NyaXB0
+aW9uIG9mIHRyaWNrbGUtcmVzaXN0b3Itb2htcw0KPiAgICAtIGR0LWJpbmRpbmc6IHJlb3JkZXIg
+YXMgaW4gZXhhbXBsZSBzY2hlbWENCj4gICAgLSBwYXJzZSAid2FrZXVwLXNvdXJjZSIgd2hlbiBp
+cnEgbm90IHJlcXVlc3RlZA0KPiAgICAtIHJlbW92ZSBsaW1pdGF0aW9uIG9uIG1heDMxMzI4IGly
+cSBhbmQgY2xva291dA0KPiAgICAtIHJlbW92ZSBlcnJvciBhbmQgd2FybmluZyBtZXNzYWdlcyBk
+dXJpbmcgdHJpY2tsZSBjaGFyZ2VyIHNldHVwDQo+DQo+IHNpbmNlIHY0Og0KPiAgICAtIGR0LWJp
+bmRpbmc6IHJlbW92ZSBpbnRlcnJ1cHQgbmFtZXMuDQo+ICAgIC0gZHQtYmluZGluZzogYWRkIGRl
+c2NyaXB0aW9uIGZvciAiaW50ZXJydXB0cyIgcHJvcGVydHkNCj4gICAgLSBkdC1iaW5kaW5nOiBy
+ZXBsYWNlIGRlcHJlY2F0ZWQgcHJvcGVydHkgInRyaWNrbGUtZGlvZGUtZGlzYWJsZSINCj4gICAg
+ICAgIGJ5ICJhdXgtdm9sdGFnZS1jaGFyZ2VhYmxlIg0KPiAgICAtIGR0LWJpbmRpbmc6IGFkZCBu
+ZXcgcHJvcGVydHkgImFkaSx0cmlja2xlLWRpb2RlLWVuYWJsZSINCj4gICAgLSBkdC1iaW5kaW5n
+OiByZW1vdmUgIndha2V1cC1zb3VyY2UiDQo+ICAgIC0gdXNlIGNsZWFyX2JpdCBpbnN0ZWFkIG9m
+IF9fY2xlYXJfYml0DQo+ICAgIC0gdXNlIGRldm1fb2ZfY2xrX2FkZF9od19wcm92aWRlciBpbnN0
+ZWFkIG9mIG9mX2Nsa19hZGRfcHJvdmlkZXINCj4gICAgLSB1c2UgY2hpcF9kZXNjIHBvaW50ZXIg
+YXMgZHJpdmVyIGRhdGEgaW5zdGVhZCBvZiBlbnVtLg0KPg0KPiBzaW5jZSB2MzoNCj4gICAgLSBh
+ZGQgImJyZWFrIiB0byBmaXggd2FybmluZzogdW5hbm5vdGF0ZWQgZmFsbC10aHJvdWdoDQo+ICAg
+ICAgUmVwb3J0ZWQtYnk6IGtlcm5lbCB0ZXN0IHJvYm90IDxsa3BAaW50ZWwuY29tPg0KPg0KPiBz
+aW5jZSB2MjoNCj4gICAgLSBkdC1iaW5kaW5nOiB1cGRhdGUgdGl0bGUgYW5kIGRlc2NyaXB0aW9u
+DQo+ICAgIC0gZHQtYmluZGluZzogcmVtb3ZlIGxhc3QgZXhhbXBsZQ0KPiAgICAtIGRyb3Agd2F0
+Y2hkb2cgc3VwcG9ydA0KPiAgICAtIHN1cHBvcnQgcmVhZGluZyAxMkhyIGZvcm1hdCBpbnN0ZWFk
+IG9mIGZvcmNpbmcgMjRociBhdCBwcm9iZSB0aW1lDQo+ICAgIC0gdXNlICJ0bV95ZWFyICUgMTAw
+IiBpbnN0ZWFkIG9mIHJhbmdlIGNoZWNrDQo+ICAgIC0gcmVmYWN0b3IgbWF4MzEzeHhfaW5pdCBm
+b3IgcmVhZGFiaWxpdHkNCj4NCj4gSWJyYWhpbSBUaWxraSAoMik6DQo+ICAgIGRyaXZlcnM6IHJ0
+YzogYWRkIG1heDMxM3h4IHNlcmllcyBydGMgZHJpdmVyDQo+ICAgIGR0LWJpbmRpbmdzOiBydGM6
+IGFkZCBtYXgzMTN4eCBSVENzDQo+DQo+ICAgLi4uL2RldmljZXRyZWUvYmluZGluZ3MvcnRjL2Fk
+aSxtYXgzMTN4eC55YW1sIHwgIDE0NCArKysNCj4gICBkcml2ZXJzL3J0Yy9LY29uZmlnICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgfCAgIDExICsNCj4gICBkcml2ZXJzL3J0Yy9NYWtlZmlsZSAg
+ICAgICAgICAgICAgICAgICAgICAgICAgfCAgICAxICsNCj4gICBkcml2ZXJzL3J0Yy9ydGMtbWF4
+MzEzeHguYyAgICAgICAgICAgICAgICAgICAgfCAxMDUzICsrKysrKysrKysrKysrKysrDQo+ICAg
+NCBmaWxlcyBjaGFuZ2VkLCAxMjA5IGluc2VydGlvbnMoKykNCj4gICBjcmVhdGUgbW9kZSAxMDA2
+NDQgRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3J0Yy9hZGksbWF4MzEzeHgueWFt
+bA0KPiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL3J0Yy9ydGMtbWF4MzEzeHguYw0KDQpX
+aGF0IGhhcHBlbmVkIHRvIHRoaXMgc2VyaWVzIGluIHRoZSBlbmQ/IEl0IGtpbmQgb2Ygd2VudCBv
+ZmYgbXkgcmFkYXIgDQphbmQgSSBmb3Jnb3QgYWJvdXQgaXQuDQoNCldlJ3ZlIGJlZW4gY2Fycnlp
+bmcgYSB2ZXJzaW9uIG9mIHRoZXNlIGNoYW5nZXMgaW4gb3VyIGxvY2FsIHRyZWUgZm9yIGEgDQp3
+aGlsZSAoYW5kIHVzaW5nIGl0IHF1aXRlIGhhcHBpbHkgSSBzaG91bGQgYWRkKS4NCg0K
