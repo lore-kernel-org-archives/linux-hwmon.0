@@ -1,138 +1,159 @@
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A96B1CD34;
-	Fri, 26 Jan 2024 15:19:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ECEE1D551;
+	Fri, 26 Jan 2024 16:24:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706282373; cv=none; b=DighApd7kkOli+NJHK4D8dSEbk3T8JQO54VqnTpsSVaQUxa7Bjn1OmcpIVet0XTz/IA9oUckMI4Ta4XYjOHQ3WhVyyRq3fUe5UuoREBY0iWF9TXhCeYMTadWcMzY9Lsf68U5SUAbINIcvEzHn13UwKF0T+ebaz20waVl1EHx5ls=
+	t=1706286285; cv=none; b=oPIzWE3gZWhzVqwedFWKj+xgHDEy010cq3PJdzgZ0VvJfzxc8vs5nWd3K/bL7fjdVfCM9FC5A1w98g8AOIhZnRTvyv1xxBtLjcD7phjLlC/6ZINJu7QWkVOAj4m3N3ejrBkoeYhJral45EQJdtfJvgRTFHmaeiUAk9ZRduQ7AzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706282373; c=relaxed/simple;
-	bh=hYiazrEbt565yABrCeDAbioOA2B0ovx/3njE6OTcBxs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WHdv/+instTti9uVAH3vb307pmu9AkFvozLqNIz7oKPxaNj16pnmolH5QXxjZmhq+ymlxM1/adq5VEN11c4ikB77t65vd2e8qE5IoFiO1donmOjlw9KDsYNtJeeuWvnL8YjRslR7/zPzCV30bT3RnfMEBdeKBeD6AorEEWXzg8M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MQImG3ab; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1706286285; c=relaxed/simple;
+	bh=DoqAbsfp/jXuEtftuZQHNgaz372UxSZm/KUcTkXFdmc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=s9rWleizyDgtMP3y/mnmUU74y0Ap4eXymsdikAKPg5u84YFVTHRKRq+dWjPOusJ+LzEkn65HSwe1SQvLOIQVjAvXeHuJg2TlaYLH0NjLsz6kSqCwreb+NJf5bqDflJ+ZvajEUA9tW/eVNSNcAI+5G41ULpAEKUOHpss5iNIK420=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CnWEJMii; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MQImG3ab"
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5100c2f7a16so434874e87.1;
-        Fri, 26 Jan 2024 07:19:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706282370; x=1706887170; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=L3O5ltxOMjNOT3zVkrFdSHnL7bx4JRmZ0jGii/eg5aM=;
-        b=MQImG3abZ/PCjj2ABDAzs92mx6w0W4Da6CXDAvjG3tbDHjqdMrYHvjuXuwpJn65gIx
-         srlziuU3JfthD1WDmiPbS/4iQNSU1w5Oa/aNTIDQdPqdQfbhEhkDAamWLouOVY7IUr/m
-         IONbs56JKySDHBLdj2O7Yyje2Q+BMCfph/eOBMp71Kf71oAhUBsjpy/w9QDJlGXJai76
-         Xz2c74/a5ULKwPaeEERILV1/z/VNPll4vkE9s6/wEfzcE1zY0AoLLbRS62UrRF+YAJF2
-         c31ARDPQjsbxbOD4a5P5bFfPdzDSH9t9z8OibwaVIB8raZt44FAEzd7ISCPRMjUdbvhm
-         HF8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706282370; x=1706887170;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=L3O5ltxOMjNOT3zVkrFdSHnL7bx4JRmZ0jGii/eg5aM=;
-        b=rnNquadKaOEjeh8YLwnGUYpgT92f16NxQRB/ZGty6Zly6FXOjPIrRl/XWioqFpoV1r
-         Z84jmNcxK6RSHFfltzIlHKnqZVw/cLRC8oWJZD23Zzo8jmR07EeGbouV524CnhykaDl7
-         XntaOw+FFH0Exdc3wAR7EVtF8GjFvcb4Im4EvtgDpeYCwexdh6F63Bxp1rpDvRTIJrE3
-         PgO+KoUvrKH5pMOhhc+k2XVOmmk6I3bYWZhxonrfhSm2Ro4FrpFvR57ETQJm6O84TcRH
-         eqYYyDQLTQMVGVTosHD7U9yKj43qFHCYUmbG5G/Gdxa+wCNMKxwegutMr3drLVz7pZjq
-         iYkg==
-X-Gm-Message-State: AOJu0Yx/duE0h49HU5zIYbNF7qnWe8m7Ab46HMv2D4XXPmS6CKAtJCQb
-	JFB/hFeRuu+hIiEVJLC1v5ZHc84c3VN4v6e2lmmDPgPbaJrQgVYZ
-X-Google-Smtp-Source: AGHT+IEJ4N5LA2V09QWkMAaPosg1hrxhS92nNtqvQ/QYpz6Q5L4iwwV8CpEPgeMvZhqe6Lcn12a9DQ==
-X-Received: by 2002:a19:8c03:0:b0:510:1590:a193 with SMTP id o3-20020a198c03000000b005101590a193mr737956lfd.30.1706282369753;
-        Fri, 26 Jan 2024 07:19:29 -0800 (PST)
-Received: from PC10319.67 ([82.97.198.254])
-        by smtp.googlemail.com with ESMTPSA id j2-20020a2e8242000000b002cf46aa24e0sm186264ljh.10.2024.01.26.07.19.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jan 2024 07:19:29 -0800 (PST)
-From: Konstantin Aladyshev <aladyshev22@gmail.com>
-To: 
-Cc: aladyshev22@gmail.com,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>,
-	Naresh Solanki <Naresh.Solanki@9elements.com>,
-	Patrick Rudolph <patrick.rudolph@9elements.com>,
-	linux-hwmon@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CnWEJMii"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3A1EC433C7;
+	Fri, 26 Jan 2024 16:24:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706286284;
+	bh=DoqAbsfp/jXuEtftuZQHNgaz372UxSZm/KUcTkXFdmc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CnWEJMiilY1kj327erSSMTX/4WCpqilT3s9TKiE/MAD1m+mXQCvvMqEXWriQ3zA6K
+	 clSMRsn8kMZWChKRCG9XamxXpY4TnBJ3MgFQ4NKPv9InPA+q5sWY90FTzrDxEq2EPt
+	 9b7yshKkveUpJvF1ty3suSApmznkUd/uXXDvIlR2pQHTI8KgJyoaxBZGet693aW1V5
+	 mhb79CqUe6IegisfRzBmg8vU/BNr6Y8C9cpIcPt/Fr3ulW22lL7Hz028b8vGmrWkOf
+	 msifvxpbvKbRkgdDtxp2nLRTOKmwWHmGjUjFc0b/wU8BrxxHu5EGs/0vg3l9xhgNe2
+	 pX7VWbflp4WCQ==
+Date: Fri, 26 Jan 2024 16:24:40 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Naresh Solanki <naresh.solanki@9elements.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, mazziesaccount@gmail.com,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (pmbus/mp2975) Fix driver initialization for MP2975 device
-Date: Fri, 26 Jan 2024 18:19:19 +0300
-Message-Id: <20240126151920.288-1-aladyshev22@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Subject: Re: [PATCH] dt-bindings: hwmon: tda38640: Add interrupt & regulator
+ properties
+Message-ID: <20240126-fleshed-subdued-36bae813e2ba@spud>
+References: <20240126112945.1389573-1-naresh.solanki@9elements.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="qKb9f2iDT7+wsvKn"
+Content-Disposition: inline
+In-Reply-To: <20240126112945.1389573-1-naresh.solanki@9elements.com>
 
-The commit 1feb31e810b0 ("hwmon: (pmbus/mp2975) Simplify VOUT code")
-has introduced a bug that makes it impossible to initialize MP2975
-device:
-"""
-mp2975 5-0020: Failed to identify chip capabilities
-i2c i2c-5: new_device: Instantiated device mp2975 at 0x20
-i2c i2c-5: delete_device: Deleting device mp2975 at 0x20
-"""
-Since the 'read_byte_data' function was removed from the
-'pmbus_driver_info ' structure the driver no longer reports correctly
-that VOUT mode is direct. Therefore 'pmbus_identify_common' fails
-with error, making it impossible to initialize the device.
 
-Restore 'read_byte_data' function to fix the issue.
+--qKb9f2iDT7+wsvKn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Tested:
-- before: it is not possible to initialize MP2975 device with the
-'mp2975' driver,
-- after: 'mp2975' correctly initializes MP2975 device and all sensor
-data is correct.
+On Fri, Jan 26, 2024 at 04:59:44PM +0530, Naresh Solanki wrote:
+> Add properties for interrupt & regulator.
+> Also update example.
 
-Fixes: 1feb31e810b0 ("hwmon: (pmbus/mp2975) Simplify VOUT code")
+Feeling like a broken record, given I am leaving the same comments on
+multiple patches. The commit message needs to explain why you're doing
+something. I can read the diff and see what you did!
 
-Signed-off-by: Konstantin Aladyshev <aladyshev22@gmail.com>
----
- drivers/hwmon/pmbus/mp2975.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+>=20
+> TEST=3DRun below command & make sure there is no error.
+> make DT_CHECKER_FLAGS=3D-m dt_binding_check
 
-diff --git a/drivers/hwmon/pmbus/mp2975.c b/drivers/hwmon/pmbus/mp2975.c
-index b9bb469e2d8f..1052282427f7 100644
---- a/drivers/hwmon/pmbus/mp2975.c
-+++ b/drivers/hwmon/pmbus/mp2975.c
-@@ -126,6 +126,22 @@ static const struct regulator_desc __maybe_unused mp2975_reg_desc[] = {
- 
- #define to_mp2975_data(x)  container_of(x, struct mp2975_data, info)
- 
-+static int mp2975_read_byte_data(struct i2c_client *client, int page, int reg)
-+{
-+      switch (reg) {
-+      case PMBUS_VOUT_MODE:
-+              /*
-+               * Enforce VOUT direct format, since device allows to set the
-+               * different formats for the different rails. Conversion from
-+               * VID to direct provided by driver internally, in case it is
-+               * necessary.
-+               */
-+              return PB_VOUT_MODE_DIRECT;
-+      default:
-+              return -ENODATA;
-+      }
-+}
-+
- static int
- mp2975_read_word_helper(struct i2c_client *client, int page, int phase, u8 reg,
- 			u16 mask)
-@@ -869,6 +885,7 @@ static struct pmbus_driver_info mp2975_info = {
- 		PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
- 		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP | PMBUS_HAVE_POUT |
- 		PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT | PMBUS_PHASE_VIRTUAL,
-+	.read_byte_data = mp2975_read_byte_data,
- 	.read_word_data = mp2975_read_word_data,
- #if IS_ENABLED(CONFIG_SENSORS_MP2975_REGULATOR)
- 	.num_regulators = 1,
--- 
-2.25.1
+Same comment here as elsewhere.
 
+>=20
+> Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+> ---
+>  .../hwmon/pmbus/infineon,tda38640.yaml        | 20 +++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38=
+640.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.=
+yaml
+> index ded1c115764b..2df625a8b514 100644
+> --- a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.yaml
+> @@ -30,6 +30,15 @@ properties:
+>        unconnected(has internal pull-down).
+>      type: boolean
+> =20
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  regulators:
+> +    $ref: /schemas/regulator/regulator.yaml#
+> +    type: object
+> +    description: |
+
+The | here is not needed, there's no formatting to preserve.
+
+=46rom a quick check, most bindings with regulator subnodes restrict the
+subnode names with patternproperties. Is there a reason you have not?
+
+> +      list of regulators provided by this controller.
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -38,6 +47,7 @@ additionalProperties: false
+> =20
+>  examples:
+>    - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+>      i2c {
+>          #address-cells =3D <1>;
+>          #size-cells =3D <0>;
+> @@ -45,5 +55,15 @@ examples:
+>          tda38640@40 {
+>              compatible =3D "infineon,tda38640";
+>              reg =3D <0x40>;
+> +
+> +            //interrupt-parent =3D <&smb_pex_cpu0_event>;
+
+Why is this commented out? Please either restore it or remove it (with
+justification).
+
+Thanks
+
+Conor.
+
+> +            interrupts =3D <10 IRQ_TYPE_LEVEL_LOW>;
+
+Blank line here please.
+
+> +            regulators {
+> +                pvnn_main_cpu0: vout0 {
+> +                    regulator-compatible =3D "vout0";
+> +                    regulator-name =3D "pvnn_main_cpu0";
+> +                    regulator-enable-ramp-delay =3D <200>;
+> +                };
+> +            };
+>          };
+>      };
+>=20
+> base-commit: ecb1b8288dc7ccbdcb3b9df005fa1c0e0c0388a7
+> --=20
+> 2.42.0
+>=20
+
+--qKb9f2iDT7+wsvKn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZbPcyAAKCRB4tDGHoIJi
+0teEAQD64Q0ot/0ME0q/yFIeuCDvMzxK6MoqCM3r57v7LnmEuAEAiHZuOa/sLQC2
+SpoFQjl7IHHanVwZYyRTpwKNruahDAU=
+=ZOVp
+-----END PGP SIGNATURE-----
+
+--qKb9f2iDT7+wsvKn--
