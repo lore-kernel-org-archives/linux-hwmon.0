@@ -1,54 +1,54 @@
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E877123745;
-	Fri, 26 Jan 2024 20:45:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD3AA24A09;
+	Fri, 26 Jan 2024 20:59:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706301937; cv=none; b=EQmkyDACl6RZE9cPthYBW4e4hcIZ5OkgySKYfzSzl9U5HNI9vaQgYNNOSkZeZzmzH6H4cJnlZra0PQmLfXriPk2Hb0N+/+HfYrmlR+BbRXWcEotL12AIZ8DoNJVFTyWxX0sF/2CwvyM99rxvj+ZynTbSHKuQkrbQb0Q72y5yK1w=
+	t=1706302766; cv=none; b=WircJq/7Bi9EbEhW25crsiIwGVnjRV1uUySJTRXb0W3NXl96MA+adW75n//YWoUIBFd/4/r+MlJb4iq2nCLPtc5q0PGDMsod8ZgZA8/0huhXIOZCy1qZyXmwfcCLAwhdIPYEeBqKllE41vwrNVqFTnhe2JrePC4jls3zrU0wKmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706301937; c=relaxed/simple;
-	bh=N9k5UYEYVAF2qA6E0s7m+kIECxQo6FwY1dpU7AHZ4rA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=alqxF3q95wTNE+Lld6zVt/cTyGApCzyrptgQ9Vj/cnNT447PTArLZ4kKT3cGVunKqXqvPSEaxRX4NXFyxZfVZVctGa8TV6eXvD1CbUaQ0z0FgpD4LcfXlWZGgh8xUoZtnKlCEfPEKsg6Dsuh4+Pa5/OwFN+RTzxOpkHvDvYWnbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IP+c/NY8; arc=none smtp.client-ip=209.85.167.46
+	s=arc-20240116; t=1706302766; c=relaxed/simple;
+	bh=d5lnbFB1kRhdfOGtL24zlryF/VXTIqx8E+zK0Lfx4ts=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=QSSLF/lW5QjFD58/vKsiHoBW9v6c55EpDMLjzxIiPLiw7+DVqB5ldtCYhQ6O2IZGMfpMHdMUEvm/Mwkwa9Je2pCIbmE+K22xuRD/jJNV3S79FnY3GlJaYM65kw9YjZfQHcXZDKfg/jlCWnHhAMRd4OMCCNwlkOkqeDLmv3JAxG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e1IDWxdp; arc=none smtp.client-ip=209.85.208.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IP+c/NY8"
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-510133ed214so1381355e87.1;
-        Fri, 26 Jan 2024 12:45:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e1IDWxdp"
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2cf4a845a76so9609651fa.3;
+        Fri, 26 Jan 2024 12:59:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706301934; x=1706906734; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1706302762; x=1706907562; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DALTEEob3NFEf1MHZ96hGZRJHPJY2iufaNCe8cnrSKI=;
-        b=IP+c/NY8wOIWo+CdeQETaSrVSC2g1m1gbeSiNW6rv/5wVTMenbqmLhJqlwOA9gg9oU
-         euaWb3ZeO2jECh/bIDJlgLUAXLQn3XxaayWNInkRo7hZvfeNYLEpzaMkFcQkE/N88/55
-         pKsPlHbrosIpWY7J2up1DQHCCWaZU5/117RQfwrcXmVM6aVGMcg29yyFHqurn6JngoYp
-         9CzlWCZGWTnO4f3xaoZiXq3Iy/615nF11+EluALUZ+tR+iN0cpDj9qLWi/ctmKkOEEyJ
-         A5ms0xDc/RkWgWviav+CY8BBwHeCVBDN8DmnDpHwNwb/lwhZfHOUG5Ende766k07aVy4
-         DkpA==
+        bh=HgUr7JNxvuTwGjQqxQ6rYpOlzqBbvDPhSHnCMKxoYXc=;
+        b=e1IDWxdp3LY1beDv4Ja//6Oj0zLWzFG6A6e5Pfa5dLEZdnTYu3epyuyYO/SOE1hjZg
+         CcBVOzZFJFvMHmk0HHS9spfLSC4cR4WeE8ic0AKwf+WV+UKkx1i/dT7y2Td2eakVC6H1
+         QDn4ViakVpmEdHu7QMrFhomMJBGO0lr1OS6ApDGKShH7nqympNH0gVnEuR5mt5V316EX
+         MbNBxuvApyUc7XN1qsPdTg0at5uSTNOQ3AH5zWvHJhUdopDT5xiSaBHNZjNh7sgUQG8U
+         Msvp+h2bEIJPzRn4U9C/RgbC7VUv4zG94CG/AKhmLiw/fnbIt5HomUjbOJ9eYEPwNZWD
+         wt3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706301934; x=1706906734;
+        d=1e100.net; s=20230601; t=1706302762; x=1706907562;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=DALTEEob3NFEf1MHZ96hGZRJHPJY2iufaNCe8cnrSKI=;
-        b=tcS9oBePeXO3uBis///9+RmlCvZu3FXoB3nDHImRQZCu9h8tqRuGjPOven9DdZCAdo
-         O/duaV5Q1emZ8UwStu2GAJLQ7x2dq/yK1bCyhauJpB1GWEXcB+BdZeLmOWPTYWcb3pC5
-         44GyMQOisoC38xePdPhXQDxzMv5busK4U+rE2td8dH1Sx5e3eKXaX4Z4oGyXuT9/CTD/
-         rOqi+Yth8gVEDRvEWHkveI4YFhacTUJ+Ijkdk/JwbG0cnltyCON+nLdUQsW0QWdIdDQ1
-         F/LE3X8XVskwzhOSpYVGKjnbBDTnK9V7Kf+stb+LIB/YrQaWE+Jzi0AAHGQHMZ8MGb2c
-         emQQ==
-X-Gm-Message-State: AOJu0Yz3WrT8DU59DDLUJSov12CcDbIL/1v0p01yvCuMyWjZo4xDIrqm
-	CxNESjPP9zmgFluC37yzERFh64GXR+ZTnqoT8bu8OLNuOFm53ygS4nkeF7LlxtS1RQ==
-X-Google-Smtp-Source: AGHT+IEwSmCZ+VQmNNzz8EADju9iF85eTjukB4lNLNudL4Tp7pZ0qwkpgEwfX09Fqq60DF+BQ6QDKg==
-X-Received: by 2002:a19:ee03:0:b0:510:bba:5d1c with SMTP id g3-20020a19ee03000000b005100bba5d1cmr158724lfb.58.1706301933508;
-        Fri, 26 Jan 2024 12:45:33 -0800 (PST)
+        bh=HgUr7JNxvuTwGjQqxQ6rYpOlzqBbvDPhSHnCMKxoYXc=;
+        b=BG4kJb9Musp+obgoja5r5TnSYn/56XNs2+9nG/mnL/vKPlGCgZlWBIKOcJ5veiM/pl
+         L11vRryl398VjPGRmiYszvXERZwSxtZ2z7LCxK+Jobi1NeG6xFJOvegbG3716p4SHZBK
+         S0goFwQlRgVQcvL41z1DT4NYuGd+GWJpqvTkzhS8IoxSmMwIAHqLik5XPbDhkZ3y/RlH
+         18ZaJ/TM0mBwK6wisBPsvpw0HajUOrwOTiKWjpMS8pSxewfodd7z7bI4YMJT33lnHC1c
+         meqBuU/BOrwodFAapDTyjt+SDKkySW8mNO7eiYugMoRvs1R+Jv06GuCaVknDT/MyI8JR
+         ECbA==
+X-Gm-Message-State: AOJu0Yx7YE/N80atn/m0TJhaG1Nvj7YZqxdI1600j4r9TC4fufudMVO5
+	xr8brZOdIm5kDWmge3DkV/vfdy8t1VKShvlqK4hoSFm9kmM1EdJk
+X-Google-Smtp-Source: AGHT+IEZpV6MYS9liQqd1foY1cgs3BraQYTyZ1tQHkG/Lp8ebm3EwJzgjtDOYMCvSVAC09NOYo5W6g==
+X-Received: by 2002:a05:651c:2007:b0:2cc:e51c:4d0c with SMTP id s7-20020a05651c200700b002cce51c4d0cmr251569ljo.66.1706302762311;
+        Fri, 26 Jan 2024 12:59:22 -0800 (PST)
 Received: from localhost.localdomain (broadband-46-242-13-133.ip.moscow.rt.ru. [46.242.13.133])
-        by smtp.googlemail.com with ESMTPSA id d15-20020ac25ecf000000b005100e087c3asm275320lfq.300.2024.01.26.12.45.32
+        by smtp.googlemail.com with ESMTPSA id d9-20020a2eb049000000b002cd187bb0f1sm259458ljl.49.2024.01.26.12.59.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jan 2024 12:45:33 -0800 (PST)
+        Fri, 26 Jan 2024 12:59:22 -0800 (PST)
 From: Konstantin Aladyshev <aladyshev22@gmail.com>
 To: 
 Cc: Konstantin Aladyshev <aladyshev22@gmail.com>,
@@ -56,11 +56,11 @@ Cc: Konstantin Aladyshev <aladyshev22@gmail.com>,
 	Jean Delvare <jdelvare@suse.com>,
 	Naresh Solanki <Naresh.Solanki@9elements.com>,
 	Patrick Rudolph <patrick.rudolph@9elements.com>,
-	linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Subject: [PATCH v2] hwmon: (pmbus/mp2975) Fix driver initialization for MP2975 device
-Date: Fri, 26 Jan 2024 23:45:22 +0300
-Message-Id: <20240126204523.2211-1-aladyshev22@gmail.com>
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3] hwmon: (pmbus/mp2975) Fix driver initialization for MP2975 device
+Date: Fri, 26 Jan 2024 23:57:14 +0300
+Message-Id: <20240126205714.2363-1-aladyshev22@gmail.com>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -95,13 +95,14 @@ Fixes: 1feb31e810b0 ("hwmon: (pmbus/mp2975) Simplify VOUT code")
 
 Signed-off-by: Konstantin Aladyshev <aladyshev22@gmail.com>
 ---
+Changes in v3:
+ - Drop accidentally added file from patch
+
 Changes in v2:
  - Fix indentation issues
 
- drivers/hwmon/pmbus/mp2975.c     | 17 +++++++++++++++++
- drivers/hwmon/pmbus/mp2975.c.rej | 10 ++++++++++
- 2 files changed, 27 insertions(+)
- create mode 100644 drivers/hwmon/pmbus/mp2975.c.rej
+ drivers/hwmon/pmbus/mp2975.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
 diff --git a/drivers/hwmon/pmbus/mp2975.c b/drivers/hwmon/pmbus/mp2975.c
 index b9bb469e2d8f..5bbfdacb61a7 100644
@@ -138,22 +139,6 @@ index b9bb469e2d8f..5bbfdacb61a7 100644
  	.read_word_data = mp2975_read_word_data,
  #if IS_ENABLED(CONFIG_SENSORS_MP2975_REGULATOR)
  	.num_regulators = 1,
-diff --git a/drivers/hwmon/pmbus/mp2975.c.rej b/drivers/hwmon/pmbus/mp2975.c.rej
-new file mode 100644
-index 000000000000..8e6a54e4dbf4
---- /dev/null
-+++ b/drivers/hwmon/pmbus/mp2975.c.rej
-@@ -0,0 +1,10 @@
-+--- drivers/hwmon/pmbus/mp2975.c
-++++ drivers/hwmon/pmbus/mp2975.c
-+@@ -885,6 +901,7 @@ static struct pmbus_driver_info mp2975_info = {
-+                PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
-+                PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP | PMBUS_HAVE_POUT |
-+                PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT | PMBUS_PHASE_VIRTUAL,
-++       .read_byte_data = mp2975_read_byte_data,
-+        .read_word_data = mp2975_read_word_data,
-+ #if IS_ENABLED(CONFIG_SENSORS_MP2975_REGULATOR)
-+        .num_regulators = 1,
 -- 
 2.34.1
 
