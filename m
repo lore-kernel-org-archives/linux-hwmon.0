@@ -1,117 +1,134 @@
-Received: from mail.subdimension.ro (skycaves.subdimension.ro [172.104.132.142])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89952EAE6;
-	Fri, 26 Jan 2024 10:58:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=172.104.132.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4002F14265
+	for <linux-hwmon@vger.kernel.org>; Fri, 26 Jan 2024 11:29:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706266729; cv=none; b=U06S47q4xAhizQhzf+Ry1JJUueZLGL7mvPMRafC2v4qKQaT6TdyIrVj84YTvmlytl4aClHmtzRw3dTO3o1YoKINAZfx87k8OgSyXZbktzn1x72GVDV4tuTte0wORtqFV2994eP8n/xlU5N6v6NG7PXPyc8wwkB0pnFPUJGEesFs=
+	t=1706268601; cv=none; b=WgMVWFOKNV/qYIC/aILqBGXqCVyIjN0mLEBjsSKCeOF/G8JpoVIqMqwoSxxSUEmaHeBZWKPOi+4vcf7Bju1vwEh8IqfB2/awSmbt7gqy0NVYnl4MriDuAwCQUrMQS9ngWeH56qf8HziC9ZWgDNWVWZSqASW0Y4WN9n5oqjMOuFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706266729; c=relaxed/simple;
-	bh=3aiLAmH0RdcOP4o9+Z28MUU6iwYGmfnBmv49RlTdb8g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sA3e3C8gDO2kJ8cFoGp2ceKhN+NUP6EsNnS1yKgwbFOE2MqT41u/c4pUlCm29YiFmt3nNWEKcjPcz7pQLkKYtUrSkMEvKnodzrqPmYjNNRW8vEay8PQKGPwb6N/WzejvT1Oti1xeUNvf9BCm1meGEq6u8uaCFJV+WhONil1X9c4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=subdimension.ro; spf=pass smtp.mailfrom=subdimension.ro; dkim=pass (1024-bit key) header.d=subdimension.ro header.i=@subdimension.ro header.b=Qqb/A1Sp; arc=none smtp.client-ip=172.104.132.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=subdimension.ro
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=subdimension.ro
+	s=arc-20240116; t=1706268601; c=relaxed/simple;
+	bh=kk8TW/ENv6T0jmFy9Fe2+TbD0NwhTcZRKCATFbVXU5Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jdtCvL+hGbe+g9yYiQn86rGBPT7k7IldAjAJ2RT8iNLsDQYvm6OO7Tm+Ll/l0yUfiyfoRRpHq0apzELn86zT1s38Ljh659Ur3GzcHw5jm6R8qIFMrqtpBz94gcHm2GPfiEdNo/mgQ/aoix/iMYq7uxt0/qllItiarZzMoUpTkF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=Iv99MF2k; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=subdimension.ro header.i=@subdimension.ro header.b="Qqb/A1Sp"
-Received: from sunspire (unknown [188.24.80.170])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.subdimension.ro (Postfix) with ESMTPSA id 0761C28B531;
-	Fri, 26 Jan 2024 10:58:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=subdimension.ro;
-	s=skycaves; t=1706266725;
-	bh=3aiLAmH0RdcOP4o9+Z28MUU6iwYGmfnBmv49RlTdb8g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Qqb/A1Sp80ZO8Bj8vxbUHbeuypI8nzGATy11DJ5pmorbutNHtwlDj7cCzLEemsF+6
-	 8x50Z9Z25MR6BCCoa8xxWue1yTEnmXGhC+Jlzxc/GY0ZUj+ZQ4R9rnphobBGjXBCnp
-	 +wxwbHbTZujc3WoWmG0df3SDcIR01BQfbZctXWng=
-Date: Fri, 26 Jan 2024 12:58:43 +0200
-From: Petre Rodan <petre.rodan@subdimension.ro>
-To: marius.cristea@microchip.com
-Cc: jic23@kernel.org, lars@metafoo.de, robh+dt@kernel.org,
-	jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="Iv99MF2k"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-40e80046264so8562215e9.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 26 Jan 2024 03:29:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1706268596; x=1706873396; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4MpsuS1RISyLieZhG+nOiB9EUsr5IB8MOc8CVenn3tg=;
+        b=Iv99MF2kSSEJGJY2SZq2G/qhZ0/3ytHYOkTRoy7bzw7AkwjNpKKDqfMGQNonCVsA2X
+         RqdrvIfrbei+JIgmhpGt8y+ctkgE6mOpx7iA3VDOrH8M5pph3NGH9woIVbC1bAculiBw
+         rX9Tlhs6NW4fnNmzXcLeGP1kA1/x2/0o83h3nHrhkLnh6W4Fpf9KTuxbkFb7dUQG8FpK
+         qBXrWHV4pM0kqK30Sq8SeFSAg3lG96cvpqysCXRIQt8htqlWcGPR55MR4GqyOUr6IQSq
+         Oa53djDYl4mCUwwNOL+b82DtaQh8gjTkx0OUiys+J+knfr/HpEOGAAsN8Hp6+A/Nciv/
+         BFIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706268596; x=1706873396;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4MpsuS1RISyLieZhG+nOiB9EUsr5IB8MOc8CVenn3tg=;
+        b=cEvs0ZHD1LEwEUVk26x3PZvXmZ6KZNBXCRLfWnTyCHxhRsSDiOFuH3a7yKv2JYOtNj
+         xRHekhqd9y8+JzLsqnUW2c9TGfLU36V0tFZkMFzoJLPhIQRswIaz3o3zra7V0U4ElNrX
+         Foq3tmD430J/zhoAAMARgtPgG2dTf65F59Y343s5lwKEI975suw1Xs+uWFmq+OAkOl6z
+         0etKIyTOZ/6aVJxy8qlIiTuX2VBzT1DeGcxazwfTUJ14D/WHoJuNxwH1Zp+rHtCfoITa
+         BEYznXhI1YXj1Ekbukw3+6Q8ZappDzhAxA9/0gOG7A79pDl6WQexMbzyVOSZhwKd9h3e
+         SbkQ==
+X-Gm-Message-State: AOJu0Yw2m3HC9g+bhuUqQ/NgVYysgGmMb0iHRtnZ7pAieZqrp5BIe33c
+	jhHWJmY1gITMCdjmX1yfts/zOlSLAI4QLjbpAigSusksRypn29ufUHfwOmbr0Fo=
+X-Google-Smtp-Source: AGHT+IFZgFs4WF2KSb72kcILtaARumCAGosfYJuXqhmjqYlE1W8oA4FFNJfIo+it28R8yLf/Ude3eg==
+X-Received: by 2002:a05:600c:5247:b0:40e:44ad:4645 with SMTP id fc7-20020a05600c524700b0040e44ad4645mr810415wmb.3.1706268596440;
+        Fri, 26 Jan 2024 03:29:56 -0800 (PST)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id p13-20020a05600c468d00b0040eaebc4e8fsm5523313wmo.1.2024.01.26.03.29.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Jan 2024 03:29:56 -0800 (PST)
+From: Naresh Solanki <naresh.solanki@9elements.com>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Naresh Solanki <naresh.solanki@9elements.com>
+Cc: mazziesaccount@gmail.com,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] iio: adc: adding support for PAC193x
-Message-ID: <ZbOQY3cs5emASvzs@sunspire>
-References: <20240122084712.11507-1-marius.cristea@microchip.com>
- <20240122084712.11507-3-marius.cristea@microchip.com>
+Subject: [PATCH] dt-bindings: hwmon: tda38640: Add interrupt & regulator properties
+Date: Fri, 26 Jan 2024 16:59:44 +0530
+Message-ID: <20240126112945.1389573-1-naresh.solanki@9elements.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="j6hFgdCDz3A6ajHc"
-Content-Disposition: inline
-In-Reply-To: <20240122084712.11507-3-marius.cristea@microchip.com>
+Content-Transfer-Encoding: 8bit
 
+Add properties for interrupt & regulator.
+Also update example.
 
---j6hFgdCDz3A6ajHc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+TEST=Run below command & make sure there is no error.
+make DT_CHECKER_FLAGS=-m dt_binding_check
 
+Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+---
+ .../hwmon/pmbus/infineon,tda38640.yaml        | 20 +++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-Hello Marius,
+diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.yaml
+index ded1c115764b..2df625a8b514 100644
+--- a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.yaml
++++ b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.yaml
+@@ -30,6 +30,15 @@ properties:
+       unconnected(has internal pull-down).
+     type: boolean
+ 
++  interrupts:
++    maxItems: 1
++
++  regulators:
++    $ref: /schemas/regulator/regulator.yaml#
++    type: object
++    description: |
++      list of regulators provided by this controller.
++
+ required:
+   - compatible
+   - reg
+@@ -38,6 +47,7 @@ additionalProperties: false
+ 
+ examples:
+   - |
++    #include <dt-bindings/interrupt-controller/irq.h>
+     i2c {
+         #address-cells = <1>;
+         #size-cells = <0>;
+@@ -45,5 +55,15 @@ examples:
+         tda38640@40 {
+             compatible = "infineon,tda38640";
+             reg = <0x40>;
++
++            //interrupt-parent = <&smb_pex_cpu0_event>;
++            interrupts = <10 IRQ_TYPE_LEVEL_LOW>;
++            regulators {
++                pvnn_main_cpu0: vout0 {
++                    regulator-compatible = "vout0";
++                    regulator-name = "pvnn_main_cpu0";
++                    regulator-enable-ramp-delay = <200>;
++                };
++            };
+         };
+     };
 
-a quick static scan reported the following
+base-commit: ecb1b8288dc7ccbdcb3b9df005fa1c0e0c0388a7
+-- 
+2.42.0
 
-On Mon, Jan 22, 2024 at 10:47:12AM +0200, marius.cristea@microchip.com wrot=
-e:
-> From: Marius Cristea <marius.cristea@microchip.com>
->=20
-> This is the iio driver for Microchip
-> PAC193X series of Power Monitor with Accumulator chip family.
-
-[..]
-> +	mutex_init(&info->lock);
-> +	ret =3D devm_add_action_or_reset(&client->dev, pac1934_mutex_destroy,
-> +				       &info->lock);
-> +
-> +	/*
-> +	 * do now any chip specific initialization (e.g. read/write
-> +	 * some registers), enable/disable certain channels, change the sampling
-> +	 * rate to the requested value
-> +	 */
-> +	ret =3D pac1934_chip_configure(info);
-> +	if (ret < 0)
-> +		return ret;
-
-the previous assignation of ret is never used, so either dead code or you m=
-ight
-have wanted to return early based on it's value.
-
-cheers,
-peter
-
---=20
-petre rodan
-
---j6hFgdCDz3A6ajHc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEE2Ap/wXYVGTXsPl+pzyaZmYROfzAFAmWzkGMACgkQzyaZmYRO
-fzA8lQ/7BqVyUd2MTfT1Q7WdU8tEr0IO04T/8q8O4rLv4qn/euVY8f8zodmd916M
-aszgIBKbFQSRQgDeKDgV/k1mdozZjY650e70htkS+xyPfw4IK6GCEBkjSDDH4TDS
-f0csnQFL/CIUmriUxAA5BsEvtK1MFfOmOb3A326/rtFfM+B0dmcRTlTYFvrCp3EO
-NhO1C7UMfMclLbb6nHWs8Q+xPnjzH70JejXqL6QwOGHWvHiI/iJkT55mYuvBUdiE
-12zjuD9L8uqUWPCPAd7mpyFuKI3ilb6fwVx1nABwn+wi/m+snu4425wUDpACqofb
-Vk+MTtro82m9LjuElDYcDhRITVgj5CiRWI2X78n4h1ZfIbICVMXkNxSynce+56+X
-d6UpAKlpjoZWyBflcoudN9gEDYzc20rcZnQ/qQ5GbfoVyeM9+cOB1ymlAGR5zhWc
-wSiTnlzNEiFd4TzwXOO2aDXzwI6VJGnsXPFyyNWujn2zwFJrCK2ihZsb73jVjON6
-KYjJEtq2ZQ2qzkzESdY2AQrsnXGJBokPIJc50wMo7vzPRbEe+kancgNG1xgCeLdo
-rceiUmqOYGFVprkXw10Kh7IWZhFpSyQcAxj0gHikeYrIZkRgQf62hXjmBNieWCz5
-ZqqB4jLxNSV2FEMOKp7Bc1ONhqV8HNhjqaXewY3xya1ngPOZvYU=
-=lZiH
------END PGP SIGNATURE-----
-
---j6hFgdCDz3A6ajHc--
