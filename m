@@ -1,64 +1,65 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F101264A;
-	Sat, 27 Jan 2024 15:48:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0141F2C183;
+	Sat, 27 Jan 2024 15:49:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706370496; cv=none; b=mJhqCIgbjctkpu2WP9Njlw8vUbAzhkuiuz6U5/K8m9dRNNE2egCZqra/mLCyZ6Zgp7impcHuRdplFCz8Nu6y0a3Wcma4M5gLf10GTJAREzonjvPtzgizSOjtJEuNnd1t2FudaLUHH9soCRUl8f+062Ud5s/voWJUl85kQVy6tQM=
+	t=1706370551; cv=none; b=Y7Lz9VK+ZQ9KV1tne8xY2Ya3ppIllBm6Ej1nxFnbDMJ/46Fr2MLAYZLaFuxIQAENbWfLasYBM5ct7uUmZL20XL/NtAG77no7O+xP1Bq5k+OAFwvaxLbsHibXzyAS99bvLXD+/WmSwI55fdf0SlTyrn2VSW1hH3f7gwUseEP1HSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706370496; c=relaxed/simple;
-	bh=2vOKiEHboJdiAxvu00DPS8yzQByWuSQy2Jtnc2WdpCk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ErT1cXALlemktE6h9ZAhIrTZlTuQsRJrPTSdjf4JmW4HFwWyg8n7u4KHVUwr+4aCz/chJ3nqPT6H+qh/IQhuTPmejQqq5FcebjBclu9fzzMOa/faqUV2dlC7lBsDOKz+ZP3efNRRsPIPmQDiMhReVjofiXWNxxBoorFxeea+kR8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RCdvLyog; arc=none smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1706370551; c=relaxed/simple;
+	bh=fVSLrHEcAwLSUJFQHCdF395pr/EGK0fBJgLTSHcGQ+U=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GoGk88xdDw2U/fYzgWJZP7o9sWKDZ6feH8vKl04IW6S3nngjmkRn1PZ1yHSfxCTTJGSOr3ceLGe4N9UEFw8Qm89IE+w/rD38R/9tlhx2PSmSh6IMs32rz1VkmklIP02lD1X/APT/EKwQpPir1ouyIJlobV5tsNcOqGhw1hJag/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bb3K8Ov/; arc=none smtp.client-ip=209.85.208.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RCdvLyog"
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-5d8bc1caf00so299755a12.1;
-        Sat, 27 Jan 2024 07:48:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bb3K8Ov/"
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2cf593af2ebso2185331fa.1;
+        Sat, 27 Jan 2024 07:49:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706370493; x=1706975293; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1706370547; x=1706975347; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=6zG5dUyRrzoqOGz0xh5LGbnthlDBJBO90unNewlCsms=;
-        b=RCdvLyogbnJKQzbhXqfeKAEkGPst/sQLkArMlZY7b+V3lstkmAubTlsFM7f2n7rqAs
-         //j9WDHrLDT9eUxOKxaYfyviluUqiHarBFlSlq6Y6B4zA4DmmfyloXL8gucZULaA6CY8
-         SiCxQk0BZqq2Igk1g23L0jPbjktFj7ywGjoVFkji7x3DQU3jcyjcitvZkI46+6JbS8IQ
-         WfaYlADXGrhZe0tpwA/PPlE9HGQaMCipBOtBb1k/TJtZxIuRm8/2pJSoh47ODtt+T58k
-         sm4H7QwK/6nEKjJBWCEoFvIQ3f8D/zd1qj+6XsQaSlk4ad6sPXb/caEpXGr2vr4PnHhl
-         RSEg==
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=f9AldL2o9eKpU5JteuqfZb2W1sW+pj8HObs9uzsbe54=;
+        b=bb3K8Ov/nxcJpLb/l0D5A4yVZQ0BbK61v8sIKpmmLJjjHlUJPZ/gAsxWVlNrIbGKpG
+         9tQN4VvTvk3KI3QQZIJdPrxad3ZlmrJ7UFsAvuEC3Usx+xVIHR/hg5jkVV1UGpYuPPFx
+         WBCnPVHjdc67OAbyEMVf+RBPurKHrOQRGhXlHLWd2oYrjgeEx2aHMtFx+EMioYBUtJXH
+         utQVbxqLRLJEjON8/acmWJuFYclwJ6vcKSSo3M05tYyqQELxegqtTJ6JdCbECpgNCla3
+         sqcETM0pLlqQQEvhdpPa8Qity6hH26rZWWQzpYinoHWuQxsYDJbeLUeHmHMIjPybc+OL
+         79zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706370493; x=1706975293;
+        d=1e100.net; s=20230601; t=1706370547; x=1706975347;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6zG5dUyRrzoqOGz0xh5LGbnthlDBJBO90unNewlCsms=;
-        b=hC239wQlEeu4jqLN1Ybj5gOoY69H/TqzOiG4upOhzWFs4GvRqGlRNss/H3BWZjv8YN
-         3n0fPMq3C3Wzcjfbyejgt0f45zH9YFWVwridgD35/3Wzym84nl8BXyS3lsGl40UeEh39
-         RDJllRhaobX4ufS4FP+0ZBIhSeBTxHvdN4R9O/2oDIpHT/R2r/MRxwvw5N4XXQL+ZtxJ
-         aaACO5mvuaDQsHehXyu9SL7uoXHgfdoP37e2lN96dsgIVqcergi/Cccu064BLgvsbJT0
-         A/tdETCZZwIIx7MWeOYYWhlh+SvBQ25J3KOgEgmQitaVHcXUdIGHgS9PspxVr1eBRZlG
-         b0AA==
-X-Gm-Message-State: AOJu0YxRlIOqyUIf8m+ZeUyXEG1Gt8ekeBBoJW/Xr5XOU45GqEaeaGfH
-	E6eexUWQDyEfhoAjepmNRu0ZlItIhWmZWrgtc5qWX5lNQeolaekNppWiaiaF
-X-Google-Smtp-Source: AGHT+IEyChnUj4GgE/wXk7Y/evNbsTx4OmTWX7pm52luzrcLN7tlDPf4Pt+3I70Jmp86DIGWHLhsbQ==
-X-Received: by 2002:a05:6a20:da89:b0:19c:843d:a6e3 with SMTP id iy9-20020a056a20da8900b0019c843da6e3mr2053930pzb.18.1706370493431;
-        Sat, 27 Jan 2024 07:48:13 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j12-20020a056a00234c00b006d9b35b2602sm2892581pfj.3.2024.01.27.07.48.12
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f9AldL2o9eKpU5JteuqfZb2W1sW+pj8HObs9uzsbe54=;
+        b=ihIeGFbkl+KGmq7769T4tgJ+HtN0Aq3VwuZcqiDE4UzFONI+hbcymN2cVbgvo/cl2s
+         wv1Fw5Muob2IdOIN6b3XU1UgLTaszjyUN6zd55KN1H8BbD+9QnhHlG9jOOznwRG+GCQV
+         3K1tCoYOOYI750vU31lONvESF/9vvlh/yY8MM1ZyxgRGUZNER2QbCK158FpLr/yYArqX
+         /lo/clvJHA9onqaxg7v6D6qsaXpy6lUOLdxUkBFGx6cRpJyUrKxiDH6NbvNCJPYYvvRg
+         Xp0vSPdZHlmHDLKXx2O4k+kNOgAIxF3G5bE0DNXDFGVFJQLAJXUgKFSAxLMrFRrldOya
+         B0fg==
+X-Gm-Message-State: AOJu0YylGIsBvbibJANCUi7gxp411ejZ7Eu28fgBF3F+2ZgR2Q6lL7xG
+	eMuP7lQ8Glc2CQ+yGj9g/FVnFa4badQ1N+Hi+VJ6Bmj4v/JEpKv3dNoqGHuFlvxZfw==
+X-Google-Smtp-Source: AGHT+IGkl2ywSAGmktZZI4GcL+jTO67wm5FNXkVT328mPYu/EC+8xKiHHe5eZ8Ihxq5xL2m8yHSl9g==
+X-Received: by 2002:a2e:7a17:0:b0:2cd:4164:5d68 with SMTP id v23-20020a2e7a17000000b002cd41645d68mr1341856ljc.13.1706370547288;
+        Sat, 27 Jan 2024 07:49:07 -0800 (PST)
+Received: from localhost.localdomain (broadband-46-242-13-133.ip.moscow.rt.ru. [46.242.13.133])
+        by smtp.googlemail.com with ESMTPSA id p8-20020a2e7408000000b002cdfbbb4f8asm498657ljc.74.2024.01.27.07.49.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Jan 2024 07:48:13 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: linux-kernel@vger.kernel.org
-Cc: linux-hwmon@vger.kernel.org,
+        Sat, 27 Jan 2024 07:49:06 -0800 (PST)
+From: Konstantin Aladyshev <aladyshev22@gmail.com>
+To: 
+Cc: Konstantin Aladyshev <aladyshev22@gmail.com>,
 	Guenter Roeck <linux@roeck-us.net>,
-	Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH] MAINTAINERS: Drop entries for hwmon devices with unreachable maintainers
-Date: Sat, 27 Jan 2024 07:48:11 -0800
-Message-Id: <20240127154811.2192488-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.39.2
+	Jean Delvare <jdelvare@suse.com>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (pmbus/mp2975) Correct comment inside 'mp2975_read_byte_data'
+Date: Sat, 27 Jan 2024 18:48:44 +0300
+Message-Id: <20240127154844.989-1-aladyshev22@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -67,56 +68,34 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Drop maintainer entries for MAX31760 and MAX31827 since the e-mail
-addresses of their maintainers is no longer reachable and there is
-no known alternative means to contact them.
+The current driver code no longer perfrom internal conversion from
+VID to direct. Instead it configures READ_VOUT using MFR_DC_LOOP_CTRL.
+Correct the comment message inside the 'mp2975_read_byte_data'
+function to comply with the driver logic.
 
-HWMON drivers have a subsystem maintainer, so individual maintainer
-entries are not mandatory.
-
-Reported-by: Heiner Kallweit <hkallweit1@gmail.com>
-Cc: Heiner Kallweit <hkallweit1@gmail.com>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Konstantin Aladyshev <aladyshev22@gmail.com>
 ---
- MAINTAINERS | 18 ------------------
- 1 file changed, 18 deletions(-)
+ drivers/hwmon/pmbus/mp2975.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8d1052fa6a69..5e7239cb40ea 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1384,15 +1384,6 @@ F:	drivers/iio/amplifiers/hmc425a.c
- F:	drivers/staging/iio/*/ad*
- X:	drivers/iio/*/adjd*
- 
--ANALOG DEVICES INC MAX31760 DRIVER
--M:	Ibrahim Tilki <Ibrahim.Tilki@analog.com>
--S:	Maintained
--W:	http://wiki.analog.com/
--W:	https://ez.analog.com/linux-software-drivers
--F:	Documentation/devicetree/bindings/hwmon/adi,max31760.yaml
--F:	Documentation/hwmon/max31760.rst
--F:	drivers/hwmon/max31760.c
--
- ANALOGBITS PLL LIBRARIES
- M:	Paul Walmsley <paul.walmsley@sifive.com>
- S:	Supported
-@@ -13130,15 +13121,6 @@ F:	Documentation/userspace-api/media/drivers/max2175.rst
- F:	drivers/media/i2c/max2175*
- F:	include/uapi/linux/max2175.h
- 
--MAX31827 TEMPERATURE SWITCH DRIVER
--M:	Daniel Matyas <daniel.matyas@analog.com>
--L:	linux-hwmon@vger.kernel.org
--S:	Supported
--W:	https://ez.analog.com/linux-software-drivers
--F:	Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
--F:	Documentation/hwmon/max31827.rst
--F:	drivers/hwmon/max31827.c
--
- MAX31335 RTC DRIVER
- M:	Antoniu Miclaus <antoniu.miclaus@analog.com>
- L:	linux-rtc@vger.kernel.org
+diff --git a/drivers/hwmon/pmbus/mp2975.c b/drivers/hwmon/pmbus/mp2975.c
+index 5bbfdacb61a7..e5fa10b3b8bc 100644
+--- a/drivers/hwmon/pmbus/mp2975.c
++++ b/drivers/hwmon/pmbus/mp2975.c
+@@ -131,10 +131,9 @@ static int mp2975_read_byte_data(struct i2c_client *client, int page, int reg)
+ 	switch (reg) {
+ 	case PMBUS_VOUT_MODE:
+ 		/*
+-		 * Enforce VOUT direct format, since device allows to set the
+-		 * different formats for the different rails. Conversion from
+-		 * VID to direct provided by driver internally, in case it is
+-		 * necessary.
++		 * Report direct format as configured by MFR_DC_LOOP_CTRL.
++		 * Unlike on MP2971/MP2973 the reported VOUT_MODE isn't automatically
++		 * internally updated, but always reads as PB_VOUT_MODE_VID.
+ 		 */
+ 		return PB_VOUT_MODE_DIRECT;
+ 	default:
 -- 
-2.39.2
+2.34.1
 
