@@ -1,79 +1,93 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77D66249EA;
-	Fri, 26 Jan 2024 21:07:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8649D1DA20
+	for <linux-hwmon@vger.kernel.org>; Sat, 27 Jan 2024 08:56:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706303228; cv=none; b=WIQyj4VFuRGQgOIwKxc1fiTRUG4jYi4CitIMRxAFrkoDwurYud7/e+FLo5Tax3wNpsjOIpnIM94jd09tn/iMF/ov9K/MgEUcP+i0LE70muzXO045cem8rh5Cx5/Eg3A4cU8dknMUD0KLxoJpBvE4+YDCpxNni5VI64nl0iNgdLs=
+	t=1706345805; cv=none; b=Vxjw1CyKKKDTtdtx+LjYxGddXRJrqOr1m7986dxYq7koYyNSwouN7zZcqKRyf8zjQTPv6OjKF8XCZjsk7HD0t5obxGj4l9OIRIhfq2Cq3lFkuYtWJm9At2UJq/jxhmniII3XVfQOzp75ldDVHrtuuCIeAwERUY9KIH+eSzNPmbk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706303228; c=relaxed/simple;
-	bh=dbw4vvArXGU39B7YbeEZOM5qPS2AP0rPNYsZM5P8/DI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=unGSAoMe7GSqv416lVk4vzkVzw6XiLyIGcM9qod208tbsT615JOsoQExiRZJh28/LBvTzzn8JRWP8tvZ1/w5vZ35nryWLTt9YaybLCBUGsCGRHiLTwXfUBFC2eNJ3yFfKTDHnffxPi/SdUjJAWWZZNkeb+UFcJoiNUprGMF/kGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KFS+eycP; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1706345805; c=relaxed/simple;
+	bh=6PbkswORj7/lO4u9C3kRss/3Jn0QJMB+Xfk4KXF4b0c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SrTwtHsBoUmseijkvRwuY0/HzkeZljjYv32QV+1eotBQSjfFpubPXPMK0LeTzfA2/6/DBGG2y4CLh3p9d0xyzF/LdqgLLAhDeGGNRw7i8DKF508CJhtdIvr0hGJy5HcAuMahj5iGPSpT2q+GElEeechCWbP9tcKb0++NWVsr1wM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=QKCNbg8l; arc=none smtp.client-ip=209.85.219.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KFS+eycP"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1d71207524dso4840695ad.1;
-        Fri, 26 Jan 2024 13:07:06 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="QKCNbg8l"
+Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-dc223d20a29so1100242276.3
+        for <linux-hwmon@vger.kernel.org>; Sat, 27 Jan 2024 00:56:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706303226; x=1706908026; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XTdpuD2crIU6eganfNTvdxMFibWZIegvqQ+jXo5sH/4=;
-        b=KFS+eycPG/07JKMFZ/QWq5YXaeDFe2vIbYUlvQlA9zBqwkUatgYmZR+l+xYa2JeZk9
-         Ia05RN4LBeeGDy9dTPPq2uWsQkaSPKhHSYeceFm2Tjks2kjVfdfpWrSFL1kP4aX0Et3C
-         yNijDkyIjjFa/owL8Zl1o7xomwa6OhiZ4XUg4SLswUrsf4qzGmkf8DciTT2VQY6JEjUf
-         tmktmUQKZIaPovLVP/tFAyQ15GZKZo3mRXgoFkmslvR9oZsnTDqiJF7j8Jz/ysX3bO8L
-         S53aNXp6lgnlPIeGo/73gAzlfV0OofxooSpR9kcL25iGt5iIltsBHdNfcrFtk2hjaLhe
-         9GVA==
+        d=9elements.com; s=google; t=1706345802; x=1706950602; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=54Y5clqAOFbmhFJpHbhFLpVDYxvBPJjbvQt6nNmoiZc=;
+        b=QKCNbg8l94fpU/QwiXu6rpjAH+eTMWzRozhpSWRExlx0iWybuDQ01AkthVz8UvpbGK
+         OF0wWulYA3IKDlS8NmqyguW+sVRp1rbTTXkrYdtOPFC6bitAayKDy9qLoYyGJ8lL/07F
+         UuxKLL0opVAmw5i32t2HkAbXgSgpAdWWl2RMZPWrhploOxISEXnOzE8Ezac6PoN5XO9e
+         l0sCrAXuq6YuZ3ouKjOcDKBqUsBliNq/JoRjl7IRgw56GqtStzNCzjsiBMNEM5cCEkT0
+         7zqFdBYLU7ji5H0xSu199/8BkRNK9YPXM/p9UYqGIZgC6JRQuq0Mz5GwQSTqsT+euMNI
+         27cQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706303226; x=1706908026;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1706345802; x=1706950602;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XTdpuD2crIU6eganfNTvdxMFibWZIegvqQ+jXo5sH/4=;
-        b=DcIryBjxFW4MHRYKngowHKNEFtZuUqgaoG1ojpZJ9QrrDYlcVhJoSjpvQhSrxGVaJf
-         3R7Q5U+te+6M/B5BNseQhgiCdDqpZhHKLz8VcTwRkNbe/l51/HUIztwJ14ffTDL7x+RA
-         a3Ujwm/xwqpc8domWhHw3YsVcwV6qzlINdX9TS35IZzRyHPN6u2O/EWaFE1xH4p8VG3T
-         ibY+rxa8KMzit/vxtfSozfNT2VLsT02b3z4/fj+py5aSG6JNuddnlSieB9Wt8PB0BgcV
-         w5sz0pJedeXa/gs8uAJcjntHiVX51XW47Q5J76Q0ASwZYgbAVWQfhyeD6NkpsjuEf72G
-         37ZA==
-X-Gm-Message-State: AOJu0Yx6wJPM/SqrbimTIzPL9YJSwLY24g45Qg0fEbxsm5GyHtaObC1l
-	xuO5iuTJ1ZIKlCN5TWx2JhMHl/LstbWNRF46FIgfDrKB2uzzo6rCrcl6Vv1r
-X-Google-Smtp-Source: AGHT+IG8ow72mXXmqMAXAwHP4w7ura8bLjcOOCnNVo8Pz/dog4rC5YNHv3LEiJuJ4q/JIGr6R6KrRw==
-X-Received: by 2002:a17:902:6a84:b0:1d6:ea06:9432 with SMTP id n4-20020a1709026a8400b001d6ea069432mr563627plk.87.1706303225639;
-        Fri, 26 Jan 2024 13:07:05 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s20-20020a056a00195400b006dbe42b8f75sm1510780pfk.220.2024.01.26.13.07.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jan 2024 13:07:05 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 26 Jan 2024 13:07:03 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Konstantin Aladyshev <aladyshev22@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>,
-	Naresh Solanki <Naresh.Solanki@9elements.com>,
-	Patrick Rudolph <patrick.rudolph@9elements.com>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] hwmon: (pmbus/mp2975) Fix driver initialization for
- MP2975 device
-Message-ID: <f54a1599-13d5-4fcb-8f76-16f78d0f86a8@roeck-us.net>
-References: <20240126205714.2363-1-aladyshev22@gmail.com>
+        bh=54Y5clqAOFbmhFJpHbhFLpVDYxvBPJjbvQt6nNmoiZc=;
+        b=OKkPPwFlTwLqpgo7JWvzLeKpsDJvLbg5Fnxf3HaVw8Yeaivf8mF5gg6e1s8KuHN0ck
+         3jsXHtJwVsdrrTB3tV9N7WlOCldKQ656LOfxyJaBbvvCZ7VYqrydPx7k+fgD9MZeLw9Q
+         T6WkqTrx99Ba3ni2Bt48c+UQldoXnNDUDnv7BdVzvrVIQbbuNtSQd+oHPX2p4hR0d+mJ
+         AJPUQ+ZbXI+rqJ428wccbOHbrd/n3qLvqWhsHiMw1F296GBuR+KkhERXnW26av6yDMUa
+         Cf9fIbO0p0RUeGYFNqQB8vT8MENGpeH/l/onpaAvwfJ4lwoNr7U+mw5ixVOrH0eMD+or
+         zULA==
+X-Gm-Message-State: AOJu0Yx/96VsCQyX9dGtcYFjc5Cn9T7sebfJP9OLydgIs1IjRqvFX91i
+	Zta6jvBnzx38bPJUY4h8tu7xbz3T7PUtjLpP+u3CHsiaU5nx4xW1X3wtvdgxegBKEIBVusZM3V9
+	BcvEhIEbovzgJHRafvhBrAbbA5xir9JIjR1sPuw==
+X-Google-Smtp-Source: AGHT+IFgU61HHls57s6zMpbxJHVMRFb1SocHCcyN1ZNJqI3BER7XSkSccfXkdzAP/orWwFRBeUWCaF/ev3fhZVoE00g=
+X-Received: by 2002:a05:6902:148:b0:dc2:3ae4:2180 with SMTP id
+ p8-20020a056902014800b00dc23ae42180mr1201924ybh.129.1706345802524; Sat, 27
+ Jan 2024 00:56:42 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240126205714.2363-1-aladyshev22@gmail.com>
 In-Reply-To: <20240126205714.2363-1-aladyshev22@gmail.com>
+From: Patrick Rudolph <patrick.rudolph@9elements.com>
+Date: Sat, 27 Jan 2024 09:56:31 +0100
+Message-ID: <CALNFmy2KVbiwvuEz=qjcB1vL82OOPSsZMuYWze56siCHLQ8JgQ@mail.gmail.com>
+Subject: Re: [PATCH v3] hwmon: (pmbus/mp2975) Fix driver initialization for
+ MP2975 device
+To: Konstantin Aladyshev <aladyshev22@gmail.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>, 
+	Naresh Solanki <Naresh.Solanki@9elements.com>, linux-hwmon@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 26, 2024 at 11:57:14PM +0300, Konstantin Aladyshev wrote:
+Hi Konstantin,
+Thank you for fixing this regression.
+
+The comment is no longer true as the driver doesn't internally convert
+from VID to direct,
+but rather configures READ_VOUT using MFR_DC_LOOP_CTRL.
+
+The comment thus should read as the following:
+
+Report direct format as configured by MFR_DC_LOOP_CTRL.
+Unlike on MP2971/MP2973 the reported VOUT_MODE isn't automatically
+internally updated,
+but always reads as PB_VOUT_MODE_VID.
+
+Regards,
+Patrick
+On Fri, Jan 26, 2024 at 9:59=E2=80=AFPM Konstantin Aladyshev
+<aladyshev22@gmail.com> wrote:
+>
 > The commit 1feb31e810b0 ("hwmon: (pmbus/mp2975) Simplify VOUT code")
 > has introduced a bug that makes it impossible to initialize MP2975
 > device:
@@ -86,20 +100,72 @@ On Fri, Jan 26, 2024 at 11:57:14PM +0300, Konstantin Aladyshev wrote:
 > 'pmbus_driver_info ' structure the driver no longer reports correctly
 > that VOUT mode is direct. Therefore 'pmbus_identify_common' fails
 > with error, making it impossible to initialize the device.
-> 
+>
 > Restore 'read_byte_data' function to fix the issue.
-> 
+>
 > Tested:
 > - before: it is not possible to initialize MP2975 device with the
 > 'mp2975' driver,
 > - after: 'mp2975' correctly initializes MP2975 device and all sensor
 > data is correct.
-> 
+>
 > Fixes: 1feb31e810b0 ("hwmon: (pmbus/mp2975) Simplify VOUT code")
-> 
+>
 > Signed-off-by: Konstantin Aladyshev <aladyshev22@gmail.com>
-
-Applied.
-
-Thanks,
-Guenter
+> ---
+> Changes in v3:
+>  - Drop accidentally added file from patch
+>
+> Changes in v2:
+>  - Fix indentation issues
+>
+>  drivers/hwmon/pmbus/mp2975.c | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+>
+> diff --git a/drivers/hwmon/pmbus/mp2975.c b/drivers/hwmon/pmbus/mp2975.c
+> index b9bb469e2d8f..5bbfdacb61a7 100644
+> --- a/drivers/hwmon/pmbus/mp2975.c
+> +++ b/drivers/hwmon/pmbus/mp2975.c
+> @@ -126,6 +126,22 @@ static const struct regulator_desc __maybe_unused mp=
+2975_reg_desc[] =3D {
+>
+>  #define to_mp2975_data(x)  container_of(x, struct mp2975_data, info)
+>
+> +static int mp2975_read_byte_data(struct i2c_client *client, int page, in=
+t reg)
+> +{
+> +       switch (reg) {
+> +       case PMBUS_VOUT_MODE:
+> +               /*
+> +                * Enforce VOUT direct format, since device allows to set=
+ the
+> +                * different formats for the different rails. Conversion =
+from
+> +                * VID to direct provided by driver internally, in case i=
+t is
+> +                * necessary.
+> +                */
+> +               return PB_VOUT_MODE_DIRECT;
+> +       default:
+> +               return -ENODATA;
+> +       }
+> +}
+> +
+>  static int
+>  mp2975_read_word_helper(struct i2c_client *client, int page, int phase, =
+u8 reg,
+>                         u16 mask)
+> @@ -869,6 +885,7 @@ static struct pmbus_driver_info mp2975_info =3D {
+>                 PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT=
+ |
+>                 PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP | PMBUS_HAVE_POU=
+T |
+>                 PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT | PMBUS_PHASE_VI=
+RTUAL,
+> +       .read_byte_data =3D mp2975_read_byte_data,
+>         .read_word_data =3D mp2975_read_word_data,
+>  #if IS_ENABLED(CONFIG_SENSORS_MP2975_REGULATOR)
+>         .num_regulators =3D 1,
+> --
+> 2.34.1
+>
