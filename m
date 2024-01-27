@@ -1,106 +1,122 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C8DD2560C
-	for <linux-hwmon@vger.kernel.org>; Sat, 27 Jan 2024 15:39:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F101264A;
+	Sat, 27 Jan 2024 15:48:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706369980; cv=none; b=byKDonICQT2M0Z0u9n7QRCiBloOktcI+PpSW4Hp78yupIl/OMcifxL00MkLy4ybyEYhoEhR3ndmAW+hR15way47+73eI0jZmo/dCVL/zylI0Mq/7PhyNwic43xjv6Kz80mWnmlx7wqjCgC1cpTGdytJll1mpyJVSJLZNvA7ruEQ=
+	t=1706370496; cv=none; b=mJhqCIgbjctkpu2WP9Njlw8vUbAzhkuiuz6U5/K8m9dRNNE2egCZqra/mLCyZ6Zgp7impcHuRdplFCz8Nu6y0a3Wcma4M5gLf10GTJAREzonjvPtzgizSOjtJEuNnd1t2FudaLUHH9soCRUl8f+062Ud5s/voWJUl85kQVy6tQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706369980; c=relaxed/simple;
-	bh=M+2bH1Cc98Z9FJtoh3PefB3uhd+9VWe5ERFwZH2U4NE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=blhkeg/9ihJazaotvZLDin8xgjYKoZMOb7KVx5LlQUuJe3Sb1SYL6kyJxIMNJ1xd6FLn7HDUAn1dz2BeD+bZI2pimIISaW40whfVIHz63oUO94LGqkA3gxZ1jTN14w3ffq/xhTMpNZQPSpykwzXaBtbpTOSNrQ0gNYa3WZ8C5J8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZF+Fn7Gi; arc=none smtp.client-ip=209.85.215.171
+	s=arc-20240116; t=1706370496; c=relaxed/simple;
+	bh=2vOKiEHboJdiAxvu00DPS8yzQByWuSQy2Jtnc2WdpCk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ErT1cXALlemktE6h9ZAhIrTZlTuQsRJrPTSdjf4JmW4HFwWyg8n7u4KHVUwr+4aCz/chJ3nqPT6H+qh/IQhuTPmejQqq5FcebjBclu9fzzMOa/faqUV2dlC7lBsDOKz+ZP3efNRRsPIPmQDiMhReVjofiXWNxxBoorFxeea+kR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RCdvLyog; arc=none smtp.client-ip=209.85.215.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZF+Fn7Gi"
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-5d3907ff128so1222781a12.3
-        for <linux-hwmon@vger.kernel.org>; Sat, 27 Jan 2024 07:39:38 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RCdvLyog"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-5d8bc1caf00so299755a12.1;
+        Sat, 27 Jan 2024 07:48:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706369978; x=1706974778; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bjZr33ooT4EvX0FKkWGKRkyMS9eWd1F7Z3fpKGZwCJA=;
-        b=ZF+Fn7GitTm7KxlL/RDFRLgZ7Fd9/rfGaPLFqrzToT6h9F1AGSI9QdTFbPXEBdFJX/
-         xr4npFi3+XuqSa6yhxRjR30HX0qKTc10+ejnNhyMHg2937FWw2VWXAp95jCP/YArGqSI
-         3fmR+g2GLfCjl+/nm8nmZSmihfZFxylItcyRyDMKPO0n0n6Tqh7tY9UIycE2gfnCG2NT
-         VLHzeIT2bzYXttiRvkHl6q928u7GR5CSqgLRsZGvt4Wxre0lTeGWckR5YBBAG9KYXfnq
-         mk8ahhgTk8nAyjJ/HmBdLCcMXMW9Ed+KIrG4A5COYhwVWQpGJNR8X/b4Fn1mUNbc1B8A
-         EqKw==
+        d=gmail.com; s=20230601; t=1706370493; x=1706975293; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=6zG5dUyRrzoqOGz0xh5LGbnthlDBJBO90unNewlCsms=;
+        b=RCdvLyogbnJKQzbhXqfeKAEkGPst/sQLkArMlZY7b+V3lstkmAubTlsFM7f2n7rqAs
+         //j9WDHrLDT9eUxOKxaYfyviluUqiHarBFlSlq6Y6B4zA4DmmfyloXL8gucZULaA6CY8
+         SiCxQk0BZqq2Igk1g23L0jPbjktFj7ywGjoVFkji7x3DQU3jcyjcitvZkI46+6JbS8IQ
+         WfaYlADXGrhZe0tpwA/PPlE9HGQaMCipBOtBb1k/TJtZxIuRm8/2pJSoh47ODtt+T58k
+         sm4H7QwK/6nEKjJBWCEoFvIQ3f8D/zd1qj+6XsQaSlk4ad6sPXb/caEpXGr2vr4PnHhl
+         RSEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706369978; x=1706974778;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bjZr33ooT4EvX0FKkWGKRkyMS9eWd1F7Z3fpKGZwCJA=;
-        b=OU7+1p+6wC2+uNcl1nz/B3l8nz2eO/OHEXAOrWzz3PN9c3T+twtN+C2sDi9ElB27ix
-         gy7sfjAO+DuLRbrbeH44TYfZCG2L2eAg4LAbwMmVhI9YlR0h8zQVK0kHprgruI8Bs1rx
-         33Tic3tm9yWjBSiVdrzDQXRtoo+pUQoUpLt53aC4zKAmitrgog5ifz/u7Y6zHif21YMm
-         D6EQ23y8+SRWWNPKrCZrf+xA12cPrXIJqazK8Zz+04oanG/lKNMcX9isk/wvc1rjfZJd
-         xeTroY/UVx0Qxv7sFgLb5cNke+myoJbZ2+iDvUxb2xXH1iUvJfmVuwlTvi+Q1OkJns08
-         QNWw==
-X-Gm-Message-State: AOJu0Yx8ee62HCLjNzg7GEM22WKRpbtIdulvmu3tTpHJKVjPtqhbNt8D
-	k9o3IDrZNuLEGC4pdOn0b+2+525KR/64AxxRc8SGGXcLXOMAxrQFg+KEnX0a
-X-Google-Smtp-Source: AGHT+IGQqBo2fzH661vMoF0OihpyBwAEB8zkbOQTPVzUDa5mmXneyDp1Ar+Xc4kNw4aNsEUHZ/ALuw==
-X-Received: by 2002:a05:6a20:d388:b0:19c:9b20:c9cf with SMTP id iq8-20020a056a20d38800b0019c9b20c9cfmr1494417pzb.81.1706369978198;
-        Sat, 27 Jan 2024 07:39:38 -0800 (PST)
+        d=1e100.net; s=20230601; t=1706370493; x=1706975293;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6zG5dUyRrzoqOGz0xh5LGbnthlDBJBO90unNewlCsms=;
+        b=hC239wQlEeu4jqLN1Ybj5gOoY69H/TqzOiG4upOhzWFs4GvRqGlRNss/H3BWZjv8YN
+         3n0fPMq3C3Wzcjfbyejgt0f45zH9YFWVwridgD35/3Wzym84nl8BXyS3lsGl40UeEh39
+         RDJllRhaobX4ufS4FP+0ZBIhSeBTxHvdN4R9O/2oDIpHT/R2r/MRxwvw5N4XXQL+ZtxJ
+         aaACO5mvuaDQsHehXyu9SL7uoXHgfdoP37e2lN96dsgIVqcergi/Cccu064BLgvsbJT0
+         A/tdETCZZwIIx7MWeOYYWhlh+SvBQ25J3KOgEgmQitaVHcXUdIGHgS9PspxVr1eBRZlG
+         b0AA==
+X-Gm-Message-State: AOJu0YxRlIOqyUIf8m+ZeUyXEG1Gt8ekeBBoJW/Xr5XOU45GqEaeaGfH
+	E6eexUWQDyEfhoAjepmNRu0ZlItIhWmZWrgtc5qWX5lNQeolaekNppWiaiaF
+X-Google-Smtp-Source: AGHT+IEyChnUj4GgE/wXk7Y/evNbsTx4OmTWX7pm52luzrcLN7tlDPf4Pt+3I70Jmp86DIGWHLhsbQ==
+X-Received: by 2002:a05:6a20:da89:b0:19c:843d:a6e3 with SMTP id iy9-20020a056a20da8900b0019c843da6e3mr2053930pzb.18.1706370493431;
+        Sat, 27 Jan 2024 07:48:13 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id gx20-20020a056a001e1400b006dba11edc7csm2892440pfb.218.2024.01.27.07.39.37
+        by smtp.gmail.com with ESMTPSA id j12-20020a056a00234c00b006d9b35b2602sm2892581pfj.3.2024.01.27.07.48.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Jan 2024 07:39:37 -0800 (PST)
+        Sat, 27 Jan 2024 07:48:13 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sat, 27 Jan 2024 07:39:36 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Heiner Kallweit <hkallweit1@gmail.com>
-Cc: Michael Hennerich <Michael.Hennerich@analog.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-	Daniel Matyas <daniel.matyas@analog.com>,
-	linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: Remove I2C_CLASS_HWMON from drivers w/o detect()
- and address_list
-Message-ID: <df9fa016-413a-491d-818e-b429b854f633@roeck-us.net>
-References: <75747c6a-d414-4b07-8f66-5a5cdddc3c36@gmail.com>
+To: linux-kernel@vger.kernel.org
+Cc: linux-hwmon@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>,
+	Heiner Kallweit <hkallweit1@gmail.com>
+Subject: [PATCH] MAINTAINERS: Drop entries for hwmon devices with unreachable maintainers
+Date: Sat, 27 Jan 2024 07:48:11 -0800
+Message-Id: <20240127154811.2192488-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <75747c6a-d414-4b07-8f66-5a5cdddc3c36@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Sat, Jan 27, 2024 at 04:02:54PM +0100, Heiner Kallweit wrote:
-> Class-based I2C probing requires detect() and address_list to be
-> set in the I2C client driver, see checks in i2c_detect().
-> It's misleading to declare I2C_CLASS_HWMON support if this
-> precondition isn't met.
-> 
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-> ---
->  drivers/hwmon/adm1177.c       | 1 -
->  drivers/hwmon/ds1621.c        | 1 -
->  drivers/hwmon/ds620.c         | 1 -
->  drivers/hwmon/ina209.c        | 1 -
->  drivers/hwmon/ina238.c        | 1 -
->  drivers/hwmon/max127.c        | 1 -
->  drivers/hwmon/max31760.c      | 1 -
->  drivers/hwmon/max31790.c      | 1 -
->  drivers/hwmon/max31827.c      | 1 -
->  drivers/hwmon/max6621.c       | 1 -
->  drivers/hwmon/max6697.c       | 1 -
->  drivers/hwmon/occ/p8_i2c.c    | 1 -
->  drivers/hwmon/pmbus/ir36021.c | 1 -
->  drivers/hwmon/powr1220.c      | 1 -
->  drivers/hwmon/sbrmi.c         | 1 -
->  drivers/hwmon/sbtsi_temp.c    | 1 -
->  drivers/hwmon/w83773g.c       | 1 -
+Drop maintainer entries for MAX31760 and MAX31827 since the e-mail
+addresses of their maintainers is no longer reachable and there is
+no known alternative means to contact them.
 
-Applied.
+HWMON drivers have a subsystem maintainer, so individual maintainer
+entries are not mandatory.
 
-Thanks,
-Guenter
+Reported-by: Heiner Kallweit <hkallweit1@gmail.com>
+Cc: Heiner Kallweit <hkallweit1@gmail.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ MAINTAINERS | 18 ------------------
+ 1 file changed, 18 deletions(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8d1052fa6a69..5e7239cb40ea 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1384,15 +1384,6 @@ F:	drivers/iio/amplifiers/hmc425a.c
+ F:	drivers/staging/iio/*/ad*
+ X:	drivers/iio/*/adjd*
+ 
+-ANALOG DEVICES INC MAX31760 DRIVER
+-M:	Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+-S:	Maintained
+-W:	http://wiki.analog.com/
+-W:	https://ez.analog.com/linux-software-drivers
+-F:	Documentation/devicetree/bindings/hwmon/adi,max31760.yaml
+-F:	Documentation/hwmon/max31760.rst
+-F:	drivers/hwmon/max31760.c
+-
+ ANALOGBITS PLL LIBRARIES
+ M:	Paul Walmsley <paul.walmsley@sifive.com>
+ S:	Supported
+@@ -13130,15 +13121,6 @@ F:	Documentation/userspace-api/media/drivers/max2175.rst
+ F:	drivers/media/i2c/max2175*
+ F:	include/uapi/linux/max2175.h
+ 
+-MAX31827 TEMPERATURE SWITCH DRIVER
+-M:	Daniel Matyas <daniel.matyas@analog.com>
+-L:	linux-hwmon@vger.kernel.org
+-S:	Supported
+-W:	https://ez.analog.com/linux-software-drivers
+-F:	Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+-F:	Documentation/hwmon/max31827.rst
+-F:	drivers/hwmon/max31827.c
+-
+ MAX31335 RTC DRIVER
+ M:	Antoniu Miclaus <antoniu.miclaus@analog.com>
+ L:	linux-rtc@vger.kernel.org
+-- 
+2.39.2
+
