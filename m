@@ -1,58 +1,60 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 691EB29425
-	for <linux-hwmon@vger.kernel.org>; Sat, 27 Jan 2024 16:12:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43BDB2C86A
+	for <linux-hwmon@vger.kernel.org>; Sat, 27 Jan 2024 16:37:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706371947; cv=none; b=MmhCwymYO90AHBLJ9Tl5CFW4dL7PotlERQaHLGKeZ66y7n+OmI9RpZZWsl0RRWm/7Do5I079vVIGMtc2r9MiENS4+wNFTpWPsZfLqg8f/BXvvmy661lMC3q4dP3k01GhaWiw7kiJyHO4iE+Uf/b0m2T3s3PwSdwGewUiqQXy9K4=
+	t=1706373480; cv=none; b=PN+xHEe9N0jeP+zm0+e6a5DJ5n0ks4H5vdk6+32PScE5IKaL9JFM3qs8DH0Nzmx083A1nOoadOL712I6awYnwnjnLBoo2zqhYwZQNxx/AE+ZXrcYumx3wZqJmMmXa+DB+YoXN228EKxIpD6I+Aa9v6J7x11/2wC1L7BDn9523lM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706371947; c=relaxed/simple;
-	bh=om0PX9VUIUHBc+cTVWtsgaN2lNH6nN7RkZxQ/0FBoPQ=;
+	s=arc-20240116; t=1706373480; c=relaxed/simple;
+	bh=HV9zSslMUtvzMGRcX2dqpmGsuyijtHdwTpxTb+TjEnY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LUusPV+Kvb3V+bDuWdJKttGYxJ8XI9/oLF0L4ZQ/xF50GDOkdqCMb/OOmy93kCMgoz64JsJJk8FFseG6cQfDgx3hTKOWneyy8TSbtJegoJQr52tHDAnFB3pQrM8FD+fjad/asoholiXur7KPzNEaASupka5Ro5ECXdHjZAHNbiE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k+KwMckF; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	 In-Reply-To:Content-Type; b=HrLH8WG4VfTppQ85UfiefOf4Qj/Wz+D/ML7mfVOeDDEvnGhhKhBCvGNTbB2dzAZUNsH4qhgRa+wCG4Ca+2TbQ3JjtF/08dBFZZyLy+f69kh8NEE5nyvGr1XF3DwQJsIvCus1FKiRT1uVlsxrvMHH2RP9MJrpzbUKyggQtTEGwBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qzw+FHJO; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k+KwMckF"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-40e7065b692so20116285e9.3
-        for <linux-hwmon@vger.kernel.org>; Sat, 27 Jan 2024 08:12:25 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qzw+FHJO"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1d7858a469aso8778465ad.2
+        for <linux-hwmon@vger.kernel.org>; Sat, 27 Jan 2024 08:37:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706371943; x=1706976743; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1706373478; x=1706978278; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FNtRbVsJK6HBPMxoSGWLfBIEJJ6efo46s85P0x2rz5I=;
-        b=k+KwMckF417HkW17nW2pa+WWCN3dpRO4l3PB++3Md3VZBKSqui02ETdrXH1eD9pH3l
-         oSeTV/AiIkfxjNNC+TREiv4G00h6AN/qCN6aqLO0BjaHOTkVxDjORwkH2MwAdUOqqmgb
-         03jFA7Sd2rH5DiZ+ciZI5bpUrjX2nx6DDmw3x4CiaXGYzfebOfyW9EKAtHD8FqJOlHHh
-         ojZOeR+o3/SaRX56YBY0BP2PUmgWAfVfUqzTJnOsoxFZt2HK9oSsOZ7RpEQSHjfnCjAt
-         fRe9dJ6BaCAeLlexCcuKeZCcgJrEYTFtQPI1S4UBMRS8ejPKENnxDjZ0MwjxT/2Yae+i
-         A1+g==
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=0KCPCDrZzDh6V1Ex5IOKeE+hDLc+givC1HZARlXekFg=;
+        b=Qzw+FHJOH99Fm1V4qDvfci4XpWDH+nQ78bOyOQAJku/hqPbU3QhipqYI4eHnjDjOnh
+         92Nqzz/5HiqtrWTxTBugdfO+gWIXzr6jNUDgjLLM7anHBhfuR/9TIOqjtJkSaqvZBXiS
+         gGVIkQETIVlDkjFLQLLWc/CCx352xEySBd+0XC0wBOdA4/RLjTPYudsf5xVMyMofPVD7
+         oR7ZCf7D/50knFbitQuukHFDzaMv/mQ0U36oOBSnoX8BU/fKildTnBhSOeufqzXFacWT
+         fohRs4i5B3qLf/CqUh8DO+MYoUv16OCu2kqtgLlxewp8bdfzehfP9XRFx2ab8ZjAh+rQ
+         jE5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706371943; x=1706976743;
+        d=1e100.net; s=20230601; t=1706373478; x=1706978278;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FNtRbVsJK6HBPMxoSGWLfBIEJJ6efo46s85P0x2rz5I=;
-        b=M2PWY2lZ3UlOUxg4NzpG3GqILTcYQLFilhAum4pBcMaN5in6J+gp9sfwJfu4II8gzX
-         BoUDkac7N+WgNTF2lrANSFNUBhuinVLscYhYV5oWKe2lLhOOuTo5bYGbupXbZiG1Df40
-         USDHSXGXQeWHceDw83ekRL4rpbB3rCal0lLFcblGmqank0Pv9uhf5erdE3haTjd33yPH
-         pHUM0poO0QCrBUt7LEPs6yQMPuyDm0jg/aPS9yH7AlIdTPcRhVd7+JXIKUzurJrARihp
-         u46LTrQPOISC6avkcLycQU+zcz1lCZ2ucP1tOZIVC17k+aV7cJRd1MRkOr9HpnEsmzU+
-         42HQ==
-X-Gm-Message-State: AOJu0Yx63h/P8zJcn8+DZhSwgUxnxUmALNN19UtYQnLHx46zcHCGwdTw
-	lfEKnfrhRWcz1RTfW8zAIYLOYA3fI7sClTUgNAgzhjmkZkkdBsKo
-X-Google-Smtp-Source: AGHT+IETvx6Ji79jz8QAEeo1zesJzerovp9khdy1XldmI6KUR5GbAJmG41pDHFfjBtqTHlbkRqMKRA==
-X-Received: by 2002:a05:600c:35d1:b0:40e:6238:e9e8 with SMTP id r17-20020a05600c35d100b0040e6238e9e8mr1665351wmq.1.1706371943150;
-        Sat, 27 Jan 2024 08:12:23 -0800 (PST)
-Received: from ?IPV6:2a01:c23:b938:5400:11ba:857c:4df8:38b0? (dynamic-2a01-0c23-b938-5400-11ba-857c-4df8-38b0.c23.pool.telefonica.de. [2a01:c23:b938:5400:11ba:857c:4df8:38b0])
-        by smtp.googlemail.com with ESMTPSA id h2-20020a05600016c200b003392c1f40acsm3816171wrf.28.2024.01.27.08.12.22
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0KCPCDrZzDh6V1Ex5IOKeE+hDLc+givC1HZARlXekFg=;
+        b=ZfpY+ZE6hIq4KvMZHMlJyzr6+7/I0aERZsiweLJD5E14smvJsQo9NZ57gMKLaor+2P
+         pKPPQP50UITlgxDZSCv11vUdTMWM4tqaHsvV4o7cuF2svpGwO5HfZznorFUZPH6dG92b
+         /dtO4MYcqk8m63gDJqLJ/MwW6sEc9RmWLcJSgV/Eu1vk0r1EOTNa4uBSuczAkk6EhuSD
+         ugondI99MgEJuRZFHc7U0p8q6+0iZVZY4ZC7w0sCcfPgg/nakZwPPTtV/PRB06U5hb4F
+         cp+XbHUok6E5rFItRBjHt0KZcDlChSMFYJVCmgn6mTvWWIJOAmQz1HzWa8y4ArKHVjS2
+         tIYQ==
+X-Gm-Message-State: AOJu0YzPVSQ5+ov5QrkHo69KWiUyaV7e5Nok0Vh6620PDzhKbGFJr5SH
+	xuR5STgf83Ph/TPN3Vr8jUgZWWx+aPsF2h2g691ro/jszc2aPSGQ
+X-Google-Smtp-Source: AGHT+IHuSzmq85sVupz7GljsTm6oouAWmHIxaPOWYbNDOA/AKN2l9SpSPS9hkOevBm8sWzhriXn1GA==
+X-Received: by 2002:a17:902:ecc5:b0:1d6:f4d7:ed13 with SMTP id a5-20020a170902ecc500b001d6f4d7ed13mr1067385plh.83.1706373478288;
+        Sat, 27 Jan 2024 08:37:58 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x9-20020a170902e04900b001d6ee9d8957sm2635935plx.281.2024.01.27.08.37.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 27 Jan 2024 08:12:22 -0800 (PST)
-Message-ID: <02ab295e-0b2c-41b4-8376-569744b0ad3a@gmail.com>
-Date: Sat, 27 Jan 2024 17:12:22 +0100
+        Sat, 27 Jan 2024 08:37:57 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <e13f467e-d452-48f5-9bee-2e675ac8157f@roeck-us.net>
+Date: Sat, 27 Jan 2024 08:37:56 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,101 +65,112 @@ User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] hwmon: Remove I2C_CLASS_HWMON from drivers w/o detect()
  and address_list
 Content-Language: en-US
-To: Guenter Roeck <linux@roeck-us.net>,
+To: Heiner Kallweit <hkallweit1@gmail.com>,
  Michael Hennerich <Michael.Hennerich@analog.com>,
- Jean Delvare <jdelvare@suse.com>, Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
- Daniel Matyas <daniel.matyas@analog.com>
+ Jean Delvare <jdelvare@suse.com>
 Cc: linux-hwmon@vger.kernel.org
 References: <75747c6a-d414-4b07-8f66-5a5cdddc3c36@gmail.com>
  <a15701d4-d786-49b1-9ce2-894dff508679@roeck-us.net>
-From: Heiner Kallweit <hkallweit1@gmail.com>
-Autocrypt: addr=hkallweit1@gmail.com; keydata=
- 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
-In-Reply-To: <a15701d4-d786-49b1-9ce2-894dff508679@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
+ <02ab295e-0b2c-41b4-8376-569744b0ad3a@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
+ RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
+ nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
+ 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
+ gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
+ IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
+ kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
+ VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
+ jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
+ BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
+ ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
+ CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
+ nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
+ hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
+ c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
+ 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
+ GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
+ sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
+ Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
+ HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
+ BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
+ l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
+ 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
+ pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
+ J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
+ pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
+ 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
+ ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
+ I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
+ nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
+ HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
+ JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
+ J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
+ cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
+ wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
+ hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
+ nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
+ QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
+ trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
+ WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
+ HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <02ab295e-0b2c-41b4-8376-569744b0ad3a@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 27.01.2024 17:01, Guenter Roeck wrote:
-> On 1/27/24 07:02, Heiner Kallweit wrote:
->> Class-based I2C probing requires detect() and address_list to be
->> set in the I2C client driver, see checks in i2c_detect().
->> It's misleading to declare I2C_CLASS_HWMON support if this
->> precondition isn't met.
+On 1/27/24 08:12, Heiner Kallweit wrote:
+> On 27.01.2024 17:01, Guenter Roeck wrote:
+>> On 1/27/24 07:02, Heiner Kallweit wrote:
+>>> Class-based I2C probing requires detect() and address_list to be
+>>> set in the I2C client driver, see checks in i2c_detect().
+>>> It's misleading to declare I2C_CLASS_HWMON support if this
+>>> precondition isn't met.
+>>>
+>>> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+>>> ---
+>>>    drivers/hwmon/adm1177.c       | 1 -
+>>>    drivers/hwmon/ds1621.c        | 1 -
+>>>    drivers/hwmon/ds620.c         | 1 -
+>>>    drivers/hwmon/ina209.c        | 1 -
+>>>    drivers/hwmon/ina238.c        | 1 -
+>>>    drivers/hwmon/max127.c        | 1 -
+>>>    drivers/hwmon/max31760.c      | 1 -
+>>>    drivers/hwmon/max31790.c      | 1 -
+>>>    drivers/hwmon/max31827.c      | 1 -
+>>>    drivers/hwmon/max6621.c       | 1 -
+>>>    drivers/hwmon/max6697.c       | 1 -
+>>>    drivers/hwmon/occ/p8_i2c.c    | 1 -
+>>>    drivers/hwmon/pmbus/ir36021.c | 1 -
+>>>    drivers/hwmon/powr1220.c      | 1 -
+>>>    drivers/hwmon/sbrmi.c         | 1 -
+>>>    drivers/hwmon/sbtsi_temp.c    | 1 -
+>>>    drivers/hwmon/w83773g.c       | 1 -
 >>
->> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
->> ---
->>   drivers/hwmon/adm1177.c       | 1 -
->>   drivers/hwmon/ds1621.c        | 1 -
->>   drivers/hwmon/ds620.c         | 1 -
->>   drivers/hwmon/ina209.c        | 1 -
->>   drivers/hwmon/ina238.c        | 1 -
->>   drivers/hwmon/max127.c        | 1 -
->>   drivers/hwmon/max31760.c      | 1 -
->>   drivers/hwmon/max31790.c      | 1 -
->>   drivers/hwmon/max31827.c      | 1 -
->>   drivers/hwmon/max6621.c       | 1 -
->>   drivers/hwmon/max6697.c       | 1 -
->>   drivers/hwmon/occ/p8_i2c.c    | 1 -
->>   drivers/hwmon/pmbus/ir36021.c | 1 -
->>   drivers/hwmon/powr1220.c      | 1 -
->>   drivers/hwmon/sbrmi.c         | 1 -
->>   drivers/hwmon/sbtsi_temp.c    | 1 -
->>   drivers/hwmon/w83773g.c       | 1 -
+>> Follow-up question: You did not drop the class from drivers/hwmon/adt7410.c
+>> and drivers/hwmon/emc2305.c. Is that because of the address_list in those
+>> drivers ?
+>>
+> Yes. If address_list is set, this shows a certain intention to support
+> I2C class-based probing. Then the question is whether adding the missing
+> detect() implementation may be the more appropriate action.
 > 
-> Follow-up question: You did not drop the class from drivers/hwmon/adt7410.c
-> and drivers/hwmon/emc2305.c. Is that because of the address_list in those
-> drivers ?
-> 
-Yes. If address_list is set, this shows a certain intention to support
-I2C class-based probing. Then the question is whether adding the missing
-detect() implementation may be the more appropriate action.
 
-> As far as I can see, both address_list and I2C_CLASS_HWMON are useless
-> in those drivers and could be dropped as well. Am I missing something ?
-> 
-> Thanks,
-> Guenter
-> 
-Heiner
+My understanding is that class based auto-detection is in the process of
+being phased out. With that in mind, it would not make much sense to add
+it to existing drivers. Anyone trying to add it now would have to explain
+why it is suddenly needed but wasn't needed before. I think that train
+has left the station.
+
+On top of that, at least for adt7410/adt7420, I don't see a reliable means
+to auto-detect those chips. Trying to do so for a 10+ year old driver would
+only add (lots of) risk for little if any gain.
+
+Those two drivers actually claim in their documentation that the address
+ranges would be scanned. That should be dropped as well since it does not match
+reality.
+
+Thanks,
+Guenter
 
