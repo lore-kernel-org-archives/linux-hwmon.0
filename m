@@ -1,176 +1,724 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43BDB2C86A
-	for <linux-hwmon@vger.kernel.org>; Sat, 27 Jan 2024 16:37:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C91FE2C856;
+	Sat, 27 Jan 2024 16:48:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706373480; cv=none; b=PN+xHEe9N0jeP+zm0+e6a5DJ5n0ks4H5vdk6+32PScE5IKaL9JFM3qs8DH0Nzmx083A1nOoadOL712I6awYnwnjnLBoo2zqhYwZQNxx/AE+ZXrcYumx3wZqJmMmXa+DB+YoXN228EKxIpD6I+Aa9v6J7x11/2wC1L7BDn9523lM=
+	t=1706374084; cv=none; b=oXhzk9L2fWstZIM6k7+8DsLeTwhZnsMCWiIFxFcSB2TdcVpeLe29+FEoA0NcUXDRn38OmAV9KGNpnL4QEos0Sem813K0Pse7Obay1m7ca6sKDhpA6zyw7uzGLjIkkDU4NtBdxSTl3mD8qWF2gxqzWCmxGySyRG6qhbxQjgbQk7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706373480; c=relaxed/simple;
-	bh=HV9zSslMUtvzMGRcX2dqpmGsuyijtHdwTpxTb+TjEnY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HrLH8WG4VfTppQ85UfiefOf4Qj/Wz+D/ML7mfVOeDDEvnGhhKhBCvGNTbB2dzAZUNsH4qhgRa+wCG4Ca+2TbQ3JjtF/08dBFZZyLy+f69kh8NEE5nyvGr1XF3DwQJsIvCus1FKiRT1uVlsxrvMHH2RP9MJrpzbUKyggQtTEGwBU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qzw+FHJO; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1706374084; c=relaxed/simple;
+	bh=q/4V6+CHHEyx3qZ1nXC9RESo9GGzm7+BJdPYTep/ZPc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=QNR44HQhn2BttwvjWyUQIiXVu+CPZ4n4OM6yq+oDC+ztB1W0Pf7kmNHhQxvHZQ944bF/QAzsESrDkswZ87njCZMd6oIbak7hMFmkOrATCq7S27JEthOtKoFGQFkeFKImdHsXhDZetfLMmbF1SX2bPl0t0GRqnw/OtTh/m0ISHgM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OfMiPTPy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qzw+FHJO"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1d7858a469aso8778465ad.2
-        for <linux-hwmon@vger.kernel.org>; Sat, 27 Jan 2024 08:37:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706373478; x=1706978278; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=0KCPCDrZzDh6V1Ex5IOKeE+hDLc+givC1HZARlXekFg=;
-        b=Qzw+FHJOH99Fm1V4qDvfci4XpWDH+nQ78bOyOQAJku/hqPbU3QhipqYI4eHnjDjOnh
-         92Nqzz/5HiqtrWTxTBugdfO+gWIXzr6jNUDgjLLM7anHBhfuR/9TIOqjtJkSaqvZBXiS
-         gGVIkQETIVlDkjFLQLLWc/CCx352xEySBd+0XC0wBOdA4/RLjTPYudsf5xVMyMofPVD7
-         oR7ZCf7D/50knFbitQuukHFDzaMv/mQ0U36oOBSnoX8BU/fKildTnBhSOeufqzXFacWT
-         fohRs4i5B3qLf/CqUh8DO+MYoUv16OCu2kqtgLlxewp8bdfzehfP9XRFx2ab8ZjAh+rQ
-         jE5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706373478; x=1706978278;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0KCPCDrZzDh6V1Ex5IOKeE+hDLc+givC1HZARlXekFg=;
-        b=ZfpY+ZE6hIq4KvMZHMlJyzr6+7/I0aERZsiweLJD5E14smvJsQo9NZ57gMKLaor+2P
-         pKPPQP50UITlgxDZSCv11vUdTMWM4tqaHsvV4o7cuF2svpGwO5HfZznorFUZPH6dG92b
-         /dtO4MYcqk8m63gDJqLJ/MwW6sEc9RmWLcJSgV/Eu1vk0r1EOTNa4uBSuczAkk6EhuSD
-         ugondI99MgEJuRZFHc7U0p8q6+0iZVZY4ZC7w0sCcfPgg/nakZwPPTtV/PRB06U5hb4F
-         cp+XbHUok6E5rFItRBjHt0KZcDlChSMFYJVCmgn6mTvWWIJOAmQz1HzWa8y4ArKHVjS2
-         tIYQ==
-X-Gm-Message-State: AOJu0YzPVSQ5+ov5QrkHo69KWiUyaV7e5Nok0Vh6620PDzhKbGFJr5SH
-	xuR5STgf83Ph/TPN3Vr8jUgZWWx+aPsF2h2g691ro/jszc2aPSGQ
-X-Google-Smtp-Source: AGHT+IHuSzmq85sVupz7GljsTm6oouAWmHIxaPOWYbNDOA/AKN2l9SpSPS9hkOevBm8sWzhriXn1GA==
-X-Received: by 2002:a17:902:ecc5:b0:1d6:f4d7:ed13 with SMTP id a5-20020a170902ecc500b001d6f4d7ed13mr1067385plh.83.1706373478288;
-        Sat, 27 Jan 2024 08:37:58 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x9-20020a170902e04900b001d6ee9d8957sm2635935plx.281.2024.01.27.08.37.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 27 Jan 2024 08:37:57 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e13f467e-d452-48f5-9bee-2e675ac8157f@roeck-us.net>
-Date: Sat, 27 Jan 2024 08:37:56 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OfMiPTPy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 049D4C433F1;
+	Sat, 27 Jan 2024 16:48:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706374084;
+	bh=q/4V6+CHHEyx3qZ1nXC9RESo9GGzm7+BJdPYTep/ZPc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=OfMiPTPylcmgWGePawbGBjH9q3fKwmRPgxYOYCqu3vSjZbQXoAlwQx4Gdk2RnWbqW
+	 Ta1hE6Yaxyceip7mURiAa1orUlQuyqWFNWQuwYK06B0V8Ugpn0r9CAUu5YjvQvZb9y
+	 tz5XiRdjm4IwNtiLaZ7cdc91UpbhBSTsFPD55N/z+pFSzsSzsgGG5f/M59xFqbQ4bD
+	 KTU8FocSf1Loy4R5FaFgN6e8++yh5GvaC/z9w317r6vxwRC1v62/zD8F9+gHS9kQ7B
+	 PNp4D0VDQvof/8wKIhQtwqmkBn8tLqIYCFYkRnhV5POjek9vbhDmkGYDUe2FlcjuQJ
+	 zMTsbxjZ6s7tw==
+Date: Sat, 27 Jan 2024 16:47:49 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: <marius.cristea@microchip.com>
+Cc: <lars@metafoo.de>, <robh+dt@kernel.org>, <jdelvare@suse.com>,
+ <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>,
+ <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+ <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 2/2] iio: adc: adding support for PAC193x
+Message-ID: <20240127164749.00d97fd7@jic23-huawei>
+In-Reply-To: <20240122084712.11507-3-marius.cristea@microchip.com>
+References: <20240122084712.11507-1-marius.cristea@microchip.com>
+	<20240122084712.11507-3-marius.cristea@microchip.com>
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.40; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: Remove I2C_CLASS_HWMON from drivers w/o detect()
- and address_list
-Content-Language: en-US
-To: Heiner Kallweit <hkallweit1@gmail.com>,
- Michael Hennerich <Michael.Hennerich@analog.com>,
- Jean Delvare <jdelvare@suse.com>
-Cc: linux-hwmon@vger.kernel.org
-References: <75747c6a-d414-4b07-8f66-5a5cdddc3c36@gmail.com>
- <a15701d4-d786-49b1-9ce2-894dff508679@roeck-us.net>
- <02ab295e-0b2c-41b4-8376-569744b0ad3a@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <02ab295e-0b2c-41b4-8376-569744b0ad3a@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 1/27/24 08:12, Heiner Kallweit wrote:
-> On 27.01.2024 17:01, Guenter Roeck wrote:
->> On 1/27/24 07:02, Heiner Kallweit wrote:
->>> Class-based I2C probing requires detect() and address_list to be
->>> set in the I2C client driver, see checks in i2c_detect().
->>> It's misleading to declare I2C_CLASS_HWMON support if this
->>> precondition isn't met.
->>>
->>> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
->>> ---
->>>    drivers/hwmon/adm1177.c       | 1 -
->>>    drivers/hwmon/ds1621.c        | 1 -
->>>    drivers/hwmon/ds620.c         | 1 -
->>>    drivers/hwmon/ina209.c        | 1 -
->>>    drivers/hwmon/ina238.c        | 1 -
->>>    drivers/hwmon/max127.c        | 1 -
->>>    drivers/hwmon/max31760.c      | 1 -
->>>    drivers/hwmon/max31790.c      | 1 -
->>>    drivers/hwmon/max31827.c      | 1 -
->>>    drivers/hwmon/max6621.c       | 1 -
->>>    drivers/hwmon/max6697.c       | 1 -
->>>    drivers/hwmon/occ/p8_i2c.c    | 1 -
->>>    drivers/hwmon/pmbus/ir36021.c | 1 -
->>>    drivers/hwmon/powr1220.c      | 1 -
->>>    drivers/hwmon/sbrmi.c         | 1 -
->>>    drivers/hwmon/sbtsi_temp.c    | 1 -
->>>    drivers/hwmon/w83773g.c       | 1 -
->>
->> Follow-up question: You did not drop the class from drivers/hwmon/adt7410.c
->> and drivers/hwmon/emc2305.c. Is that because of the address_list in those
->> drivers ?
->>
-> Yes. If address_list is set, this shows a certain intention to support
-> I2C class-based probing. Then the question is whether adding the missing
-> detect() implementation may be the more appropriate action.
+On Mon, 22 Jan 2024 10:47:12 +0200
+<marius.cristea@microchip.com> wrote:
+
+> From: Marius Cristea <marius.cristea@microchip.com>
 > 
+> This is the iio driver for Microchip
+> PAC193X series of Power Monitor with Accumulator chip family.
+> 
+> Signed-off-by: Marius Cristea <marius.cristea@microchip.com>
+Hi Marius,
 
-My understanding is that class based auto-detection is in the process of
-being phased out. With that in mind, it would not make much sense to add
-it to existing drivers. Anyone trying to add it now would have to explain
-why it is suddenly needed but wasn't needed before. I think that train
-has left the station.
-
-On top of that, at least for adt7410/adt7420, I don't see a reliable means
-to auto-detect those chips. Trying to do so for a 10+ year old driver would
-only add (lots of) risk for little if any gain.
-
-Those two drivers actually claim in their documentation that the address
-ranges would be scanned. That should be dropped as well since it does not match
-reality.
+A few small things inline
 
 Thanks,
-Guenter
+
+Jonathan
+
+> ---
+>  .../ABI/testing/sysfs-bus-iio-adc-pac1934     |    9 +
+>  MAINTAINERS                                   |    7 +
+>  drivers/iio/adc/Kconfig                       |   12 +
+>  drivers/iio/adc/Makefile                      |    1 +
+>  drivers/iio/adc/pac1934.c                     | 1646 +++++++++++++++++
+>  5 files changed, 1675 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-bus-iio-adc-pac1934
+>  create mode 100644 drivers/iio/adc/pac1934.c
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-bus-iio-adc-pac1934 b/Documentation/ABI/testing/sysfs-bus-iio-adc-pac1934
+> new file mode 100644
+> index 000000000000..28a2d4283938
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-bus-iio-adc-pac1934
+> @@ -0,0 +1,9 @@
+> +What:		/sys/bus/iio/devices/iio:deviceX/in_shunt_resistor_Y
+For consistency with channels etc, I think
+in_shunt_resistorY is more consistent.
+
+> +KernelVersion:	6.7
+> +Contact:	linux-iio@vger.kernel.org
+> +Description:
+> +		The value of the shunt resistor may be known only at runtime
+> +		and set by a client application. This attribute allows to
+> +		set its value in micro-ohms. X is the IIO index of the device.
+> +		Y is the channel number. The value is used to calculate
+> +		current, power and accumulated energy.
+...
+
+> diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
+> index 3b73c509bd68..5d2d3a45a7be 100644
+> --- a/drivers/iio/adc/Kconfig
+> +++ b/drivers/iio/adc/Kconfig
+> @@ -930,6 +930,18 @@ config NPCM_ADC
+>  	  This driver can also be built as a module. If so, the module
+>  	  will be called npcm_adc.
+>  
+> +config PAC1934
+> +	tristate "Microchip Technology PAC1934 driver"
+> +	depends on I2C
+> +	depends on IIO
+
+It's in the IIO menu under an if IIO, so this should not be needed.
+
+> +	help
+> +	  Say yes here to build support for Microchip Technology's PAC1931,
+> +	  PAC1932, PAC1933, PAC1934 Single/Multi-Channel Power Monitor with
+> +	  Accumulator.
+> +
+> +	  This driver can also be built as a module. If so, the module
+> +	  will be called pac1934.
+
+> diff --git a/drivers/iio/adc/pac1934.c b/drivers/iio/adc/pac1934.c
+> new file mode 100644
+> index 000000000000..b1a6f9f87817
+> --- /dev/null
+> +++ b/drivers/iio/adc/pac1934.c
+> @@ -0,0 +1,1646 @@
+...
+
+> +
+> +#include <linux/acpi.h>
+> +#include <linux/bitfield.h>
+> +#include <linux/delay.h>
+> +#include <linux/i2c.h>
+> +#include <linux/iio/iio.h>
+> +#include <linux/iio/sysfs.h>
+> +#include <asm/unaligned.h>
+> +
+> +#include <linux/device.h>
+Why is this one not in the set above?
+It's an unusual one to pull out of the main include block.
+
+> +
+
+> +
+> +#define PAC1934_DEFAULT_CHIP_SAMP_SPEED		1024
+Small thing, but if a name like this indicates units that is always helpful to the
+reader _HZ maybe?
+
+> +/*
+> + * these indexes are exactly describing the element order within a single
+> + * PAC1934 phys channel IIO channel descriptor; see the static const struct
+> + * iio_chan_spec pac1934_single_channel[] declaration
+> + */
+> +enum pac1934_ch_idx {
+> +	IIO_EN,
+> +	IIO_POW,
+> +	IIO_VOLT,
+> +	IIO_CRT,
+> +	IIO_VOLTAVG,
+> +	IIO_CRTAVG
+Don't use an IIO prefix for these as anyone seeing them being used inline will think they
+are subsystem wise.
+PAC1934_CH_ENERGY
+etc. It's worth burning a few characters to make the code easier to understand.
+
+> +};
+
+> +
+> +static int pac1934_match_samp_rate(struct pac1934_chip_info *info, u32 new_samp_rate)
+> +{
+> +	int cnt;
+> +
+> +	for (cnt = 0; cnt < ARRAY_SIZE(samp_rate_map_tbl); cnt++) {
+> +		if (new_samp_rate == samp_rate_map_tbl[cnt]) {
+> +			info->crt_samp_spd_bitfield = cnt;
+
+Return this - don't hide away an internal state update inside a matching function.
+It's not something a reader will expect to be happening so makes review harder
+
+> +			return 0;
+> +		}
+> +	}
+> +
+> +	/* not a valid sample rate value */
+> +	return -EINVAL;
+> +}
+
+
+...
+
+> +
+> +static int pac1934_write_raw(struct iio_dev *indio_dev, struct iio_chan_spec const *chan,
+> +			     int val, int val2, long mask)
+> +{
+> +	struct pac1934_chip_info *info = iio_priv(indio_dev);
+> +	struct i2c_client *client = info->client;
+> +	int ret = -EINVAL;
+> +	s32 old_samp_rate;
+> +	u8 ctrl_reg;
+> +
+> +	switch (mask) {
+> +	case IIO_CHAN_INFO_SAMP_FREQ:
+> +		ret = pac1934_match_samp_rate(info, val);
+> +		if (ret)
+> +			return ret;
+> +
+> +		old_samp_rate = info->sample_rate_value;
+> +		info->sample_rate_value = val;
+
+Why not just update it after succeeding rather than update the cached value
+with a chance of having to revert that.  Note that you shouldn't update
+ the info->crt_samp_spd_bitfield value either until the write succeeds.
+(if it has an purpose after that - if not don't have it in info).
+
+> +
+> +		/* write the new sampling value and trigger a snapshot(incl refresh) */
+> +		scoped_guard(mutex, &info->lock) {
+> +			ctrl_reg = FIELD_PREP(PAC1934_CRTL_SAMPLE_RATE_MASK,
+> +					      info->crt_samp_spd_bitfield);
+> +			ret = i2c_smbus_write_byte_data(client, PAC1934_CTRL_REG_ADDR, ctrl_reg);
+> +			if (ret) {
+> +				dev_err(&client->dev,
+> +					"%s - can't update sample rate\n",
+> +					__func__);
+> +				info->sample_rate_value = old_samp_rate;
+> +				return ret;
+> +			}
+> +		}
+> +
+> +		/*
+> +		 * now, force a snapshot with refresh - call retrieve
+> +		 * data in order to update the refresh timer
+> +		 * alter the timestamp in order to force trigger a
+> +		 * register snapshot and a timestamp update
+> +		 */
+> +		info->tstamp -= msecs_to_jiffies(PAC1934_MIN_POLLING_TIME_MS);
+> +		ret = pac1934_retrieve_data(info, (1024 / old_samp_rate) * 1000);
+> +		if (ret < 0) {
+> +			dev_err(&client->dev,
+> +				"%s - cannot snapshot ctrl and measurement regs\n",
+> +				__func__);
+> +			return ret;
+> +		}
+> +
+> +		return 0;
+> +	case IIO_CHAN_INFO_ENABLE:
+> +		scoped_guard(mutex, &info->lock) {
+> +			info->enable_energy[chan->channel - 1] = val ? true : false;
+> +			info->chip_reg_data.energy_sec_acc[chan->channel - 1] = 0;
+> +		}
+> +
+> +		return 0;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+...
+
+> +/*
+> + * documentation related to the ACPI device definition
+> + * https://ww1.microchip.com/downloads/aemDocuments/documents/OTH/ApplicationNotes/ApplicationNotes/PAC1934-Integration-Notes-for-Microsoft-Windows-10-and-Windows-11-Driver-Support-DS00002534.pdf
+> + */
+> +static bool pac1934_acpi_parse_channel_config(struct i2c_client *client,
+> +					      struct pac1934_chip_info *info)
+> +{
+> +	acpi_handle handle;
+> +	union acpi_object *rez;
+> +	struct device *dev = &client->dev;
+> +	unsigned short bi_dir_mask;
+> +	int idx, i;
+> +	guid_t guid;
+> +	const struct acpi_device_id *id;
+> +
+> +	handle = ACPI_HANDLE(&client->dev);
+> +
+> +	id = acpi_match_device(dev->driver->acpi_match_table, dev);
+
+I'd like to see a comment on why we might fail to match here.
+(I think someone using PRP0001 is the only path I can think of).
+
+> +	if (!id)
+> +		return false;
+> +
+> +	guid_parse(PAC1934_DSM_UUID, &guid);
+> +
+> +	rez = acpi_evaluate_dsm(handle, &guid, 0, PAC1934_ACPI_GET_NAMES_AND_MOHMS_VALS, NULL);
+> +	if (!rez)
+> +		return false;
+> +
+> +	for (i = 0; i < rez->package.count; i += 2) {
+> +		idx = i / 2;
+> +		info->labels[idx] =
+> +			devm_kmemdup(&client->dev, rez->package.elements[i].string.pointer,
+> +				     (size_t)rez->package.elements[i].string.length + 1,
+> +				     GFP_KERNEL);
+> +		info->labels[idx][rez->package.elements[i].string.length] = '\0';
+> +		info->shunts[idx] =
+> +			rez->package.elements[i + 1].integer.value * 1000;
+> +		info->active_channels[idx] = (info->shunts[idx] != 0);
+> +	}
+> +
+> +	ACPI_FREE(rez);
+> +
+> +	rez = acpi_evaluate_dsm(handle, &guid, 1, PAC1934_ACPI_GET_UOHMS_VALS, NULL);
+> +	if (!rez) {
+> +		/*
+> +		 * initializing with default values
+> +		 * we assume all channels are unidirectional(the mask is zero)
+> +		 * and assign the default sampling rate
+> +		 */
+> +		info->sample_rate_value = PAC1934_DEFAULT_CHIP_SAMP_SPEED;
+> +		return true;
+> +	}
+> +
+> +	for (i = 0; i < rez->package.count; i++) {
+> +		idx = i;
+> +		info->shunts[idx] = rez->package.elements[i].integer.value;
+> +		info->active_channels[idx] = (info->shunts[idx] != 0);
+> +	}
+> +
+> +	ACPI_FREE(rez);
+> +
+> +	rez = acpi_evaluate_dsm(handle, &guid, 1, PAC1934_ACPI_GET_BIPOLAR_SETTINGS, NULL);
+> +	if (!rez)
+> +		return false;
+> +
+> +	bi_dir_mask = rez->package.elements[0].integer.value;
+> +	info->bi_dir[0] = ((bi_dir_mask & (1 << 3)) | (bi_dir_mask & (1 << 7))) != 0;
+> +	info->bi_dir[1] = ((bi_dir_mask & (1 << 2)) | (bi_dir_mask & (1 << 6))) != 0;
+> +	info->bi_dir[2] = ((bi_dir_mask & (1 << 1)) | (bi_dir_mask & (1 << 5))) != 0;
+> +	info->bi_dir[3] = ((bi_dir_mask & (1 << 0)) | (bi_dir_mask & (1 << 4))) != 0;
+> +
+> +	ACPI_FREE(rez);
+> +
+> +	rez = acpi_evaluate_dsm(handle, &guid, 1, PAC1934_ACPI_GET_SAMP, NULL);
+> +	if (!rez)
+> +		return false;
+> +
+> +	info->sample_rate_value = rez->package.elements[0].integer.value;
+> +
+> +	ACPI_FREE(rez);
+> +
+> +	return true;
+> +}
+
+> +
+> +static int pac1934_chip_configure(struct pac1934_chip_info *info)
+> +{
+> +	int cnt, ret;
+> +	struct i2c_client *client = info->client;
+> +	u8 regs[PAC1934_CTRL_STATUS_INFO_LEN], idx, ctrl_reg;
+> +	u32 wait_time;
+> +
+> +	info->chip_reg_data.num_enabled_channels = 0;
+> +	for (cnt = 0;  cnt < info->phys_channels; cnt++) {
+> +		if (info->active_channels[cnt])
+> +			info->chip_reg_data.num_enabled_channels++;
+> +	}
+> +
+> +	/*
+> +	 * read whatever information was gathered before the driver was loaded
+> +	 * establish which channels are enabled/disabled and then establish the
+> +	 * information retrieval mode (using SKIP or no).
+> +	 * Read the chip ID values
+> +	 */
+> +	ret = i2c_smbus_read_i2c_block_data(client, PAC1934_CTRL_STAT_REGS_ADDR,
+> +					    ARRAY_SIZE(regs),
+> +					    (u8 *)regs);
+> +	if (ret < 0) {
+> +		dev_err_probe(&client->dev, ret,
+> +			      "%s - cannot read regs from 0x%02X\n",
+> +			      __func__, PAC1934_CTRL_STAT_REGS_ADDR);
+> +		return ret;
+> +	}
+> +
+> +	/* write the CHANNEL_DIS and the NEG_PWR registers */
+> +	regs[PAC1934_CHANNEL_DIS_REG_OFF] =
+> +		FIELD_PREP(PAC1934_CHAN_DIS_CH1_OFF_MASK, !(info->active_channels[0])) |
+> +		FIELD_PREP(PAC1934_CHAN_DIS_CH2_OFF_MASK, !(info->active_channels[1])) |
+> +		FIELD_PREP(PAC1934_CHAN_DIS_CH3_OFF_MASK, !(info->active_channels[2])) |
+> +		FIELD_PREP(PAC1934_CHAN_DIS_CH4_OFF_MASK, !(info->active_channels[3])) |
+> +		FIELD_PREP(PAC1934_SMBUS_TIMEOUT_MASK, 0) |
+> +		FIELD_PREP(PAC1934_SMBUS_BYTECOUNT_MASK, 0) |
+> +		FIELD_PREP(PAC1934_SMBUS_NO_SKIP_MASK, 0);
+> +
+> +	regs[PAC1934_NEG_PWR_REG_OFF] =
+> +		FIELD_PREP(PAC1934_NEG_PWR_CH1_BIDI_MASK, info->bi_dir[0]) |
+> +		FIELD_PREP(PAC1934_NEG_PWR_CH2_BIDI_MASK, info->bi_dir[1]) |
+> +		FIELD_PREP(PAC1934_NEG_PWR_CH3_BIDI_MASK, info->bi_dir[2]) |
+> +		FIELD_PREP(PAC1934_NEG_PWR_CH4_BIDI_MASK, info->bi_dir[3]) |
+> +		FIELD_PREP(PAC1934_NEG_PWR_CH1_BIDV_MASK, info->bi_dir[0]) |
+> +		FIELD_PREP(PAC1934_NEG_PWR_CH2_BIDV_MASK, info->bi_dir[1]) |
+> +		FIELD_PREP(PAC1934_NEG_PWR_CH3_BIDV_MASK, info->bi_dir[2]) |
+> +		FIELD_PREP(PAC1934_NEG_PWR_CH4_BIDV_MASK, info->bi_dir[3]);
+> +
+> +	/* no SLOW triggered REFRESH, clear POR */
+> +	regs[PAC1934_SLOW_REG_OFF] = 0;
+> +
+> +	ret =  i2c_smbus_write_block_data(client, PAC1934_CTRL_STAT_REGS_ADDR,
+> +					  ARRAY_SIZE(regs), (u8 *)regs);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ctrl_reg = FIELD_PREP(PAC1934_CRTL_SAMPLE_RATE_MASK, info->crt_samp_spd_bitfield);
+> +
+> +	ret = i2c_smbus_write_byte_data(client, PAC1934_CTRL_REG_ADDR, ctrl_reg);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/*
+> +	 * send a REFRESH to the chip, so the new settings take place
+> +	 * as well as resetting the accumulators
+> +	 */
+> +	ret = i2c_smbus_write_byte(client, PAC1934_REFRESH_REG_ADDR);
+> +	if (ret) {
+> +		dev_err(&client->dev,
+> +			"%s - cannot send 0x%02X\n",
+> +			__func__, PAC1934_REFRESH_REG_ADDR);
+> +		return ret;
+> +	}
+> +
+> +	/*
+> +	 * get the current(in the chip) sampling speed and compute the
+> +	 * required timeout based on its value
+> +	 * the timeout is 1/sampling_speed
+> +	 */
+> +	idx = regs[PAC1934_CTRL_ACT_REG_OFF] >> PAC1934_SAMPLE_RATE_SHIFT;
+> +	wait_time = (1024 / samp_rate_map_tbl[idx]) * 1000;
+> +
+> +	/*
+> +	 * wait the maximum amount of time to be on the safe side
+> +	 * the maximum wait time is for 8sps
+> +	 */
+> +	usleep_range(wait_time, wait_time + 100);
+> +
+> +	INIT_DELAYED_WORK(&info->work_chip_rfsh, pac1934_work_periodic_rfsh);
+> +	/* Setup the latest moment for reading the regs before saturation */
+> +	schedule_delayed_work(&info->work_chip_rfsh,
+> +			      msecs_to_jiffies(PAC1934_MAX_RFSH_LIMIT_MS));
+> +
+> +	devm_add_action_or_reset(&client->dev, pac1934_cancel_delayed_work,
+> +				 &info->work_chip_rfsh);
+
+Can fail.  Check the return value (it's very unlikely to fail but good practice
+to check it anyway).
+
+> +
+> +	return 0;
+> +}
+> +
+> +static int pac1934_prep_iio_channels(struct pac1934_chip_info *info, struct iio_dev *indio_dev)
+> +{
+> +	struct i2c_client *client;
+> +	struct iio_chan_spec *ch_sp;
+> +	int channel_size, attribute_count, cnt;
+> +	void *dyn_ch_struct, *tmp_data;
+> +
+> +	client = info->client;
+
+Only used to get to client->dev.  A struct device *dev = &info->client.dev;
+would be more useful in making the code more readable.
+
+> +
+> +	/* find out dynamically how many IIO channels we need */
+> +	attribute_count = 0;
+> +	channel_size = 0;
+> +	for (cnt = 0; cnt < info->phys_channels; cnt++) {
+> +		if (!info->active_channels[cnt])
+> +			continue;
+> +
+> +		/* add the size of the properties of one chip physical channel */
+> +		channel_size += sizeof(pac1934_single_channel);
+> +		/* count how many enabled channels we have */
+> +		attribute_count += ARRAY_SIZE(pac1934_single_channel);
+> +		dev_info(&client->dev, ":%s: Channel %d active\n",
+> +			 __func__, cnt + 1);
+> +	}
+> +
+> +	dyn_ch_struct = devm_kzalloc(&client->dev, channel_size, GFP_KERNEL);
+> +	if (!dyn_ch_struct)
+> +		return -EINVAL;
+> +
+> +	tmp_data = dyn_ch_struct;
+> +
+> +	/* populate the dynamic channels and make all the adjustments */
+> +	for (cnt = 0; cnt < info->phys_channels; cnt++) {
+> +		if (!info->active_channels[cnt])
+> +			continue;
+> +
+> +		memcpy(tmp_data, pac1934_single_channel, sizeof(pac1934_single_channel));
+> +		ch_sp = (struct iio_chan_spec *)tmp_data;
+> +		ch_sp[IIO_EN].channel = cnt + 1;
+> +		ch_sp[IIO_EN].scan_index = cnt;
+> +		ch_sp[IIO_EN].address = cnt + PAC1934_VPOWER_ACC_1_ADDR;
+> +		ch_sp[IIO_POW].channel = cnt + 1;
+> +		ch_sp[IIO_POW].scan_index = cnt;
+> +		ch_sp[IIO_POW].address = cnt + PAC1934_VPOWER_1_ADDR;
+> +		ch_sp[IIO_VOLT].channel = cnt + 1;
+> +		ch_sp[IIO_VOLT].scan_index = cnt;
+> +		ch_sp[IIO_VOLT].address = cnt + PAC1934_VBUS_1_ADDR;
+> +		ch_sp[IIO_CRT].channel = cnt + 1;
+> +		ch_sp[IIO_CRT].scan_index = cnt;
+> +		ch_sp[IIO_CRT].address = cnt + PAC1934_VSENSE_1_ADDR;
+> +		/*
+> +		 * In order to be able to use labels for IIO_VOLT and IIO_VOLTAVG,
+> +		 * respectively IIO_CRT and IIO_CRTAVG we need to use different
+> +		 * channel numbers. We will add  +5 (+1 to maximum PAC channels).
+> +		 */
+> +		ch_sp[IIO_VOLTAVG].channel = cnt + 5;
+> +		ch_sp[IIO_VOLTAVG].scan_index = cnt;
+> +		ch_sp[IIO_VOLTAVG].address = cnt + PAC1934_VBUS_AVG_1_ADDR;
+> +		ch_sp[IIO_CRTAVG].channel = cnt + 5;
+> +		ch_sp[IIO_CRTAVG].scan_index = cnt;
+> +		ch_sp[IIO_CRTAVG].address = cnt + PAC1934_VSENSE_AVG_1_ADDR;
+> +
+> +		/*
+> +		 * now modify the parameters in all channels if the
+> +		 * whole chip rail(channel) is bi-directional
+> +		 */
+> +		if (info->bi_dir[cnt]) {
+> +			ch_sp[IIO_EN].scan_type.sign = 's';
+> +			ch_sp[IIO_EN].scan_type.realbits = 47;
+> +			ch_sp[IIO_POW].scan_type.sign = 's';
+> +			ch_sp[IIO_POW].scan_type.realbits = 27;
+> +			ch_sp[IIO_VOLT].scan_type.sign = 's';
+> +			ch_sp[IIO_VOLT].scan_type.realbits = 15;
+> +			ch_sp[IIO_CRT].scan_type.sign = 's';
+> +			ch_sp[IIO_CRT].scan_type.realbits = 15;
+> +			ch_sp[IIO_VOLTAVG].scan_type.sign = 's';
+> +			ch_sp[IIO_VOLTAVG].scan_type.realbits = 15;
+> +			ch_sp[IIO_CRTAVG].scan_type.sign = 's';
+> +			ch_sp[IIO_CRTAVG].scan_type.realbits = 15;
+> +		}
+> +		tmp_data += sizeof(pac1934_single_channel);
+> +	}
+> +
+> +	/*
+> +	 * send the updated dynamic channel structure information towards IIO
+> +	 * prepare the required field for IIO class registration
+> +	 */
+> +	indio_dev->num_channels = attribute_count;
+> +
+> +	indio_dev->channels = (const struct iio_chan_spec *)dyn_ch_struct;
+> +
+> +	if (!indio_dev->channels)
+
+How could this condition be hit?
+
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+
+...
+
+> +static void pac1934_mutex_destroy(void *data)
+> +{
+> +	struct mutex *lock = data;
+> +
+> +	mutex_destroy(lock);
+
+I'm of the school of thought that it's not worth destroying mutexes if we aren't
+dealing with a situation where we have complex lifetimes for the containing structure.
+
+I don't feel that strongly about it and would like the devm_mutex_init() proposals
+to finally go upstream but for now I'd just drop this.
+
+> +}
+> +
+> +static int pac1934_probe(struct i2c_client *client)
+> +{
+> +	struct pac1934_chip_info *info;
+> +	const struct pac1934_features *chip;
+> +	struct iio_dev *indio_dev;
+> +	int cnt, ret;
+> +	bool match = false;
+> +
+> +	indio_dev = devm_iio_device_alloc(&client->dev, sizeof(*info));
+> +	if (!indio_dev)
+> +		return -ENOMEM;
+> +
+> +	info = iio_priv(indio_dev);
+> +
+> +	i2c_set_clientdata(client, indio_dev);
+
+Why?  I don't think this is ever read back by your driver
+(I might be missing something!)
+
+
+
+> +	info->client = client;
+> +
+> +	/* always start with energy accumulation enabled */
+> +	for (cnt = 0; cnt < PAC1934_MAX_NUM_CHANNELS; cnt++)
+> +		info->enable_energy[cnt] = true;
+> +
+> +	info->crt_samp_spd_bitfield = PAC1934_SAMP_1024SPS;
+> +
+> +	ret = pac1934_chip_identify(info);
+> +	if (ret < 0) {
+> +		/*
+> +		 * If failed to identify the hardware based on internal registers,
+> +		 * try using fallback compatible in device tree to deal with some newer part number.
+
+Overly long line and it won't hurt readability to break it.
+Try to keep to 80 char limit unless there is a good reason to go longer.
+
+> +		 */
+> +		chip = i2c_get_match_data(client);
+> +		if (!chip)
+> +			return -EINVAL;
+> +
+> +		info->phys_channels = chip->phys_channels;
+> +		indio_dev->name = chip->name;
+> +	} else {
+> +		info->phys_channels = pac1934_chip_config[ret].phys_channels;
+> +		indio_dev->name = pac1934_chip_config[ret].name;
+> +	}
+> +
+> +	if (ACPI_HANDLE(&client->dev))
+
+This gets messy because of PRP0001.  In theory the of_parse routine might be
+the right one even though we have an ACPI FW.  I guess that's unlikely enough
+that we can just fail to probe if we do.
+
+> +		match = pac1934_acpi_parse_channel_config(client, info);
+> +	else
+> +		match = pac1934_of_parse_channel_config(client, info);
+> +
+> +	if (!match) {
+> +		dev_dbg(&client->dev, "parameter parsing returned an error\n");
+> +		return -EINVAL;
+I'd promote this to a
+		return dev_err_probe(&client->dev, -EINVAL, "....)
+
+> +	}
+> +
+> +	mutex_init(&info->lock);
+> +	ret = devm_add_action_or_reset(&client->dev, pac1934_mutex_destroy,
+> +				       &info->lock);
+As already noted, check ret.
+
+> +
+> +	/*
+> +	 * do now any chip specific initialization (e.g. read/write
+> +	 * some registers), enable/disable certain channels, change the sampling
+> +	 * rate to the requested value
+> +	 */
+> +	ret = pac1934_chip_configure(info);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* prepare the channel information */
+> +	ret = pac1934_prep_iio_channels(info, indio_dev);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = pac1934_prep_custom_attributes(info, indio_dev);
+> +	if (ret < 0) {
+> +		dev_err_probe(&client->dev, ret,
+> +			      "Can't configure custom attributes for PAC1934 device\n");
+> +		return ret;
+		return dev_err_probe()
+
+> +	}
+> +
+> +	info->iio_info.read_raw = pac1934_read_raw;
+> +	info->iio_info.read_avail = pac1934_read_avail;
+> +	info->iio_info.write_raw = pac1934_write_raw;
+> +	info->iio_info.read_label = pac1934_read_label;
+
+Looks const. If it is, then make it so (look at other drivers for this)
+
+> +
+> +	indio_dev->info = &info->iio_info;
+> +	indio_dev->modes = INDIO_DIRECT_MODE;
+> +
+> +	/*
+> +	 * read whatever has been accumulated in the chip so far
+> +	 * and reset the accumulators
+> +	 */
+> +	ret = pac1934_reg_snapshot(info, true, PAC1934_REFRESH_REG_ADDR,
+> +				   PAC1934_MIN_UPDATE_WAIT_TIME_US);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = devm_iio_device_register(&client->dev, indio_dev);
+> +	if (ret < 0)
+> +		dev_err_probe(&client->dev, ret,
+> +			      "Can't register IIO device\n");
+Feels odd to not return this
+		return dev_err_probe()
+
+	return 0;
+> +
+> +	return ret;
+> +}
+
+> +
+> +/* using MCHP1930 to be compatible with BIOS ACPI */
+
+That is apparent from the table. Comment doesn't add anything.
+If you have a particular bios to point at that might be useful to mention here.
+
+> +static const struct acpi_device_id pac1934_acpi_match[] = {
+> +	{ "MCHP1930", .driver_data = (kernel_ulong_t)&pac1934_chip_config[PAC1934] },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(acpi, pac1934_acpi_match);
+> +
+> +static struct i2c_driver pac1934_driver = {
+> +	.driver	 = {
+> +		.name = "pac1934",
+> +		.of_match_table = pac1934_of_match,
+> +		.acpi_match_table = pac1934_acpi_match
+> +		},
+Normal style is to align this with . above. E.g.
+	},
+
+> +	.probe = pac1934_probe,
+> +	.id_table = pac1934_id,
+> +};
 
