@@ -1,57 +1,60 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20A5B2D042;
-	Sat, 27 Jan 2024 17:45:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3875025615
+	for <linux-hwmon@vger.kernel.org>; Sat, 27 Jan 2024 17:48:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706377504; cv=none; b=VPFofnMTaV+fcGIVHYc262+OTifWnUYu6H3BpRr+Fl8YuAKtgQc8CWwig9yEugB25PohtIsco5b9dLlCTp2Fh97z4IN5QnP1MnL/JUiIeClG8KcxSvFRGWHbbnn3vRGF0+4JEFm3Cbhj/8rpGe8Z/RwmBIW0rAeI6G7w/LlmCjA=
+	t=1706377695; cv=none; b=d8mH35NQkqroWLZRzkmRxUD9zR7nJAfgRUQIIOJ6VKqJi9slxZ2892GWpxWEfCUodGJkn9MlvF4wsAKR/oNfso2N6oA5VZgqq2YcuGG6QNbj1Igv+bqFO+RXKSycWWnsmrw2MDOEUDcwNnLch6aAU6J0snXKhFuU3doaOUOXcZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706377504; c=relaxed/simple;
-	bh=eJucBB62y53/6x3b8IeytY61xG836ojNrHpvPBuocbw=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=qIXGjEhUNXBlNqMA3LnMeR/6LwajR1oXiJRIio2zwd20188ieBB39JWcdb9zi3I0BsFAb/I9B7wQZ6M140ntx3D/G5j3Dx25Af2H+6gswFOOEYNcgtUahp7JA2caO3qnKBLdATNkfb3Qv3UWI0BSEThGkM0tnn97D48TsZr9OHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cqJEuynE; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1706377695; c=relaxed/simple;
+	bh=kCyXs9HQHCTn861GQasyj9sH4dZsxbY2n9BrAASxr24=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jPUYnnZ1lGvK8DfuhrwlE61AGCqSWTv33nKaWWD61kFUigJwDD+DKURvSLXoVH/n89ajUECQ0ZV+O5GE/rFH2An98QVFe7Ga+f5nxFR0s8ACuHHeA0n8MbUY04hXUeqSNqT8hug+xvAsuVTxvBb9rMEdZ5loupIKxGihKcZNw1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BtTK3V8/; arc=none smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cqJEuynE"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-40ea5653f6bso23548615e9.3;
-        Sat, 27 Jan 2024 09:45:02 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BtTK3V8/"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-29026523507so1406163a91.0
+        for <linux-hwmon@vger.kernel.org>; Sat, 27 Jan 2024 09:48:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706377501; x=1706982301; darn=vger.kernel.org;
-        h=content-transfer-encoding:autocrypt:content-language:cc:to:subject
-         :from:user-agent:mime-version:date:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=8anKxnJbLLtWVdu6pUUU4w5pqzpUyEAuIBblrjsBQ20=;
-        b=cqJEuynEJhWn85Z44I/RxqPMITi/t9dEmuHR6Af1mJ5te90GIrrSQnRGyqOU1MYDJF
-         vnfFNg/0Yp9GTXGkRrvXZlZJXZb/Zk37nhFd352nj1IuKdiMalHtObQC60+cW1sYfNae
-         EG0Ad+QxdhwKwabnjvYBMwcG+Y/KpC7INEG/NtAZa926ix55F1x5Npg19Cn8McrTLF4a
-         iIpyvGi5EqnaXO7R57Co7jTn/AFgcm9ADVi3hJk+HoLNvRuIkSDHyG/80RuYBnjpFJ/z
-         Bk6Ecwx6Yd31IM0GAsYE1BRynzYdtCqsV9pEUGM2dhUZDVrEMTdN+A8mnxUdbq9Levg4
-         wETA==
+        d=gmail.com; s=20230601; t=1706377693; x=1706982493; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=xh72azyJ9boZ5v+hZPH/pzm0wlm8lTL9+TTT+38u0RA=;
+        b=BtTK3V8/OGTvLKzeV9GmtEqoomp6vcNEs8NXvpk0IJZ+KK1BCcRx8wKidENFtVrZSx
+         twoZYYLvyxjjnzjauzcJE4sEH8OuhKE8kBvx/3SlXIXJm7jT+knSyPsqw0t9sx4BTx7/
+         m93XPIMmcqq5MQPrPmu6YNof+SMwQW2Tz59vAQ5Hw1mhaWXh0buW23rU7biF0+4mC+qz
+         E2Z5Ems00ycseywd3mVFpDR3oo6PvfrkUtuyKxsT04QlCtgw2HcvslJyK2HXhWG7mtWU
+         Iqp1a09V9P5Heqdu8PyD77QCO1tVODSsN0ISS3+gjDBiaChfN3gS1Vy6I0T55TDxXtMA
+         hdnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706377501; x=1706982301;
-        h=content-transfer-encoding:autocrypt:content-language:cc:to:subject
-         :from:user-agent:mime-version:date:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8anKxnJbLLtWVdu6pUUU4w5pqzpUyEAuIBblrjsBQ20=;
-        b=vr1BZGDwkpLMVUOlfYI+juqyHBG85aDhJ9c7NsKgglM/4EO5XuwJxdaW1xuER/oEJX
-         o0aHyWGK0LyBEmMaysrw3yy6Y6D9T7wgm8ab5MV9MAOnlFxRIa4KEf5iqGy5LnwHnAVO
-         tT/KqfOqsxTnTu17DgcIOgMI02Lwu/fo8uOheO0v7Fo0eH4pOg6RW62Qz+o9/+d5gWb8
-         zX6lmvfUIvKclR9hHzHe3PKbZZ3Z5zt3waBVYCkeCxzeu6U4MKLe9P8aliTQZuTT9zl2
-         CrzlkNCsYeqUaxDediBpXhf+6yiNFA6qs/Ay9YdOFsweiKujSF7D2TYmqV1aOhOJyafr
-         Awaw==
-X-Gm-Message-State: AOJu0YwoylQspxTwq+GX1SDxO38Kdj6E8UeLMDoC/jS3F1I0/DzBG3F9
-	jdxWw1jkjk1HRAR9itjKoPG1Jfn5jg8Y6px+FWIPby17Q+V6IKEa
-X-Google-Smtp-Source: AGHT+IG6jGko7sEAjG+dh8v+IQYvKdvRtdk/7Erkl9hDpj34WF81qQnIevb3PbDYrghT2sFd01Ii9Q==
-X-Received: by 2002:adf:fc46:0:b0:33a:de7b:43bc with SMTP id e6-20020adffc46000000b0033ade7b43bcmr1192734wrs.130.1706377501168;
-        Sat, 27 Jan 2024 09:45:01 -0800 (PST)
-Received: from ?IPV6:2a01:c23:b938:5400:11ba:857c:4df8:38b0? (dynamic-2a01-0c23-b938-5400-11ba-857c-4df8-38b0.c23.pool.telefonica.de. [2a01:c23:b938:5400:11ba:857c:4df8:38b0])
-        by smtp.googlemail.com with ESMTPSA id ck8-20020a5d5e88000000b003392986585esm3946712wrb.41.2024.01.27.09.45.00
+        d=1e100.net; s=20230601; t=1706377693; x=1706982493;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xh72azyJ9boZ5v+hZPH/pzm0wlm8lTL9+TTT+38u0RA=;
+        b=Q26W+AeT9nI828FzMSAkJafF2EugZHbr5UTINdo9jloNnHWQcNRLA+fa9LUHXl3x8k
+         ZUPlfEKEDQoCTzaLsCKWC8hqiYIn4eBBHwba7CSTxsfs7lIMc8af84u2nOeUs+OJHTOG
+         pS0QVW0L1Tmek4EqCDGD8/wn6eP/qw3aovA2z5TQA859qFupntHgXbRXYsvzQQpfo8Ku
+         1wCdrriWPqmpRxiy1Svet2c339J+WUQQjyj01gC/HEsj2kCwr30Ckw4dTZbMLj5syM4Z
+         5Yu1f2Nt/LqA7PQXI9hdVTlGIQ3eAI9vqcY5qS8ybMS2juH7rcksN8MUP9nr1KctMdiL
+         3nIA==
+X-Gm-Message-State: AOJu0YynXGjmcvFC/c5ICcB9K9ry73zr64eY1u0cMGfPvTTtiaNChorB
+	XkLzr+2qL4Jma6c6ZeeZiSGjWi+jH0GjG4iqwdnAB2IphsLY6OPK
+X-Google-Smtp-Source: AGHT+IHZfSVr5kMd/sjsXI+LhsAy9tMoQBMQMdCbobZAw0MwMxLE0+giChpQG1TaHJ+0xaZ5ZcI5AA==
+X-Received: by 2002:a17:90a:4411:b0:290:6874:bbca with SMTP id s17-20020a17090a441100b002906874bbcamr1241627pjg.90.1706377693511;
+        Sat, 27 Jan 2024 09:48:13 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id sh9-20020a17090b524900b0028c5585fb41sm3122660pjb.45.2024.01.27.09.48.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 27 Jan 2024 09:45:00 -0800 (PST)
-Message-ID: <13ce7c11-a958-4892-ada9-faf5bfdcb89d@gmail.com>
-Date: Sat, 27 Jan 2024 18:45:00 +0100
+        Sat, 27 Jan 2024 09:48:12 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <66828d51-fe41-4b86-93e1-5ea82005d7ef@roeck-us.net>
+Date: Sat, 27 Jan 2024 09:48:11 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -59,136 +62,128 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From: Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH] hwmon: Drop non-functional I2C_CLASS_HWMON support for
- drivers w/o detect()
-To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Jonathan Corbet <corbet@lwn.net>
-Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH] hwmon: Remove I2C_CLASS_HWMON from drivers w/o detect()
+ and address_list
 Content-Language: en-US
-Autocrypt: addr=hkallweit1@gmail.com; keydata=
- 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
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: Heiner Kallweit <hkallweit1@gmail.com>,
+ Michael Hennerich <Michael.Hennerich@analog.com>,
+ Jean Delvare <jdelvare@suse.com>
+Cc: linux-hwmon@vger.kernel.org
+References: <75747c6a-d414-4b07-8f66-5a5cdddc3c36@gmail.com>
+ <a15701d4-d786-49b1-9ce2-894dff508679@roeck-us.net>
+ <02ab295e-0b2c-41b4-8376-569744b0ad3a@gmail.com>
+ <e13f467e-d452-48f5-9bee-2e675ac8157f@roeck-us.net>
+ <8140e7dd-179f-4a4f-bac1-f67930b0f05d@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <8140e7dd-179f-4a4f-bac1-f67930b0f05d@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Class-based I2C probing requires detect() and address_list both
-to be set in the I2C client driver, see checks in i2c_detect().
-It's misleading to declare I2C_CLASS_HWMON support if the driver
-doesn't implement detect().
-Class-based probing is a legacy mechanism, in addition apparently
-nobody ever noticed that class-based probing has been non-functional
-in both drivers from the very beginning. So drop the fragments of
-class-based probing support.
+On 1/27/24 09:07, Heiner Kallweit wrote:
+> On 27.01.2024 17:37, Guenter Roeck wrote:
+>> On 1/27/24 08:12, Heiner Kallweit wrote:
+>>> On 27.01.2024 17:01, Guenter Roeck wrote:
+>>>> On 1/27/24 07:02, Heiner Kallweit wrote:
+>>>>> Class-based I2C probing requires detect() and address_list to be
+>>>>> set in the I2C client driver, see checks in i2c_detect().
+>>>>> It's misleading to declare I2C_CLASS_HWMON support if this
+>>>>> precondition isn't met.
+>>>>>
+>>>>> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+>>>>> ---
+>>>>>     drivers/hwmon/adm1177.c       | 1 -
+>>>>>     drivers/hwmon/ds1621.c        | 1 -
+>>>>>     drivers/hwmon/ds620.c         | 1 -
+>>>>>     drivers/hwmon/ina209.c        | 1 -
+>>>>>     drivers/hwmon/ina238.c        | 1 -
+>>>>>     drivers/hwmon/max127.c        | 1 -
+>>>>>     drivers/hwmon/max31760.c      | 1 -
+>>>>>     drivers/hwmon/max31790.c      | 1 -
+>>>>>     drivers/hwmon/max31827.c      | 1 -
+>>>>>     drivers/hwmon/max6621.c       | 1 -
+>>>>>     drivers/hwmon/max6697.c       | 1 -
+>>>>>     drivers/hwmon/occ/p8_i2c.c    | 1 -
+>>>>>     drivers/hwmon/pmbus/ir36021.c | 1 -
+>>>>>     drivers/hwmon/powr1220.c      | 1 -
+>>>>>     drivers/hwmon/sbrmi.c         | 1 -
+>>>>>     drivers/hwmon/sbtsi_temp.c    | 1 -
+>>>>>     drivers/hwmon/w83773g.c       | 1 -
+>>>>
+>>>> Follow-up question: You did not drop the class from drivers/hwmon/adt7410.c
+>>>> and drivers/hwmon/emc2305.c. Is that because of the address_list in those
+>>>> drivers ?
+>>>>
+>>> Yes. If address_list is set, this shows a certain intention to support
+>>> I2C class-based probing. Then the question is whether adding the missing
+>>> detect() implementation may be the more appropriate action.
+>>>
+>>
+>> My understanding is that class based auto-detection is in the process of
+>> being phased out. With that in mind, it would not make much sense to add
+>> it to existing drivers. Anyone trying to add it now would have to explain
+>> why it is suddenly needed but wasn't needed before. I think that train
+>> has left the station.
+>>
+> Good, then I'll send a patch for these two drivers too.
+> 
+>> On top of that, at least for adt7410/adt7420, I don't see a reliable means
+>> to auto-detect those chips. Trying to do so for a 10+ year old driver would
+>> only add (lots of) risk for little if any gain.
+>>
+>> Those two drivers actually claim in their documentation that the address
+>> ranges would be scanned. That should be dropped as well since it does not match
+>> reality.
+>>
+> For emc2305 that's right. Documentation/hwmon/adt7410.rst however states
+> "Addresses scanned: None", so here I wouldn't see a need for a change.
+> 
 
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
----
- Documentation/hwmon/emc2305.rst | 1 -
- drivers/hwmon/adt7410.c         | 2 --
- drivers/hwmon/emc2305.c         | 5 -----
- 3 files changed, 8 deletions(-)
+Ah, yes. You are correct. I thought I saw it for both. No idea what I looked at.
 
-diff --git a/Documentation/hwmon/emc2305.rst b/Documentation/hwmon/emc2305.rst
-index 2403dbaf2..d0bfffe46 100644
---- a/Documentation/hwmon/emc2305.rst
-+++ b/Documentation/hwmon/emc2305.rst
-@@ -6,7 +6,6 @@ Kernel driver emc2305
- Supported chips:
-    Microchip EMC2305, EMC2303, EMC2302, EMC2301
- 
--   Addresses scanned: I2C 0x27, 0x2c, 0x2d, 0x2e, 0x2f, 0x4c, 0x4d
-    Prefixes: 'emc2305'
- 
-    Datasheet: Publicly available at the Microchip website :
-diff --git a/drivers/hwmon/adt7410.c b/drivers/hwmon/adt7410.c
-index 952506779..fd214d9b3 100644
---- a/drivers/hwmon/adt7410.c
-+++ b/drivers/hwmon/adt7410.c
-@@ -95,14 +95,12 @@ static const struct i2c_device_id adt7410_ids[] = {
- MODULE_DEVICE_TABLE(i2c, adt7410_ids);
- 
- static struct i2c_driver adt7410_driver = {
--	.class		= I2C_CLASS_HWMON,
- 	.driver = {
- 		.name	= "adt7410",
- 		.pm	= pm_sleep_ptr(&adt7x10_dev_pm_ops),
- 	},
- 	.probe		= adt7410_i2c_probe,
- 	.id_table	= adt7410_ids,
--	.address_list	= I2C_ADDRS(0x48, 0x49, 0x4a, 0x4b),
- };
- module_i2c_driver(adt7410_driver);
- 
-diff --git a/drivers/hwmon/emc2305.c b/drivers/hwmon/emc2305.c
-index 29f0e4945..6ef733c0b 100644
---- a/drivers/hwmon/emc2305.c
-+++ b/drivers/hwmon/emc2305.c
-@@ -12,9 +12,6 @@
- #include <linux/platform_data/emc2305.h>
- #include <linux/thermal.h>
- 
--static const unsigned short
--emc2305_normal_i2c[] = { 0x27, 0x2c, 0x2d, 0x2e, 0x2f, 0x4c, 0x4d, I2C_CLIENT_END };
--
- #define EMC2305_REG_DRIVE_FAIL_STATUS	0x27
- #define EMC2305_REG_VENDOR		0xfe
- #define EMC2305_FAN_MAX			0xff
-@@ -611,14 +608,12 @@ static void emc2305_remove(struct i2c_client *client)
- }
- 
- static struct i2c_driver emc2305_driver = {
--	.class  = I2C_CLASS_HWMON,
- 	.driver = {
- 		.name = "emc2305",
- 	},
- 	.probe = emc2305_probe,
- 	.remove	  = emc2305_remove,
- 	.id_table = emc2305_ids,
--	.address_list = emc2305_normal_i2c,
- };
- 
- module_i2c_driver(emc2305_driver);
--- 
-2.43.0
+Thanks,
+Guenter
 
 
