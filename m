@@ -1,58 +1,57 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A22482C6B8
-	for <linux-hwmon@vger.kernel.org>; Sat, 27 Jan 2024 17:07:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20A5B2D042;
+	Sat, 27 Jan 2024 17:45:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706375243; cv=none; b=hIg8lgeAiYL/4VLhrQibZVD8umlHY+BFzaiJJnUXI7m+RwGtxiWq6CRYPnKXeA17hnxiSdMRGXG8z4WD/MleugMzJHmMToyXjvzgdN1KtmVbOImwbET2d51ghvJ2tUwbLCfuSCQCd0zqaFyr4Y4M3VxMt8E2hEC2l7/AMa2OWm8=
+	t=1706377504; cv=none; b=VPFofnMTaV+fcGIVHYc262+OTifWnUYu6H3BpRr+Fl8YuAKtgQc8CWwig9yEugB25PohtIsco5b9dLlCTp2Fh97z4IN5QnP1MnL/JUiIeClG8KcxSvFRGWHbbnn3vRGF0+4JEFm3Cbhj/8rpGe8Z/RwmBIW0rAeI6G7w/LlmCjA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706375243; c=relaxed/simple;
-	bh=3jsF2A7RRkNlQnUdS0IVCIMSUulBYCx6a1AA1DTNZs4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gVcoiXbtpam68pvEHTMpiAOHaIy8pGGS/SAPJh+R7F84CiOVeUKcaQbokWSjBYIwdyeuKSn7hWJ7XiWN9fwZ4WUQgLCxUklwt8EzMwtKirmALXk+2q0ePlX5mkNFxz0BF0fLjLTd9PHFZHIozFhYj+snefYL4vX7y5gVoqvXuo4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jxsepOFm; arc=none smtp.client-ip=209.85.221.51
+	s=arc-20240116; t=1706377504; c=relaxed/simple;
+	bh=eJucBB62y53/6x3b8IeytY61xG836ojNrHpvPBuocbw=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=qIXGjEhUNXBlNqMA3LnMeR/6LwajR1oXiJRIio2zwd20188ieBB39JWcdb9zi3I0BsFAb/I9B7wQZ6M140ntx3D/G5j3Dx25Af2H+6gswFOOEYNcgtUahp7JA2caO3qnKBLdATNkfb3Qv3UWI0BSEThGkM0tnn97D48TsZr9OHg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cqJEuynE; arc=none smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jxsepOFm"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-33ae3cc8a6aso528371f8f.2
-        for <linux-hwmon@vger.kernel.org>; Sat, 27 Jan 2024 09:07:21 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cqJEuynE"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-40ea5653f6bso23548615e9.3;
+        Sat, 27 Jan 2024 09:45:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706375240; x=1706980040; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EjOge2q1fldX07fj+kE61mHXSlCQ8kO8UwNfEi9WJ6w=;
-        b=jxsepOFmqXTe5ZtkA6K3AALw0AtR4jsUVqX8+If9eONGcpVNsn5fmggU0IDU3KSXq/
-         LuSNCbIuOk++REvxF/7qvhtIRKLhDByT2STw9EU8KmWUxxLHc4sPMhFKsNM8qXkQ02Ja
-         rZcXKmhTVHk7VJoNvDDwuMNmQxBpkERqRZ6HhrKt+bB4QMooDGMEY6Ml+w+Zi9AvWafd
-         +fZrs7c6yOrgZn3b4xnbz6Mj5ryhx0gBc4qZfoiu7wR8q6VSMlc7WKiTFX6xhjnwY5NK
-         Y0hGRAJz20ST9SZjW0cR7qpQHPL0h+imSWcfQo+dTmgrPiT4NYlerXbRpiXe+9qDgCQ0
-         JuOA==
+        d=gmail.com; s=20230601; t=1706377501; x=1706982301; darn=vger.kernel.org;
+        h=content-transfer-encoding:autocrypt:content-language:cc:to:subject
+         :from:user-agent:mime-version:date:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=8anKxnJbLLtWVdu6pUUU4w5pqzpUyEAuIBblrjsBQ20=;
+        b=cqJEuynEJhWn85Z44I/RxqPMITi/t9dEmuHR6Af1mJ5te90GIrrSQnRGyqOU1MYDJF
+         vnfFNg/0Yp9GTXGkRrvXZlZJXZb/Zk37nhFd352nj1IuKdiMalHtObQC60+cW1sYfNae
+         EG0Ad+QxdhwKwabnjvYBMwcG+Y/KpC7INEG/NtAZa926ix55F1x5Npg19Cn8McrTLF4a
+         iIpyvGi5EqnaXO7R57Co7jTn/AFgcm9ADVi3hJk+HoLNvRuIkSDHyG/80RuYBnjpFJ/z
+         Bk6Ecwx6Yd31IM0GAsYE1BRynzYdtCqsV9pEUGM2dhUZDVrEMTdN+A8mnxUdbq9Levg4
+         wETA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706375240; x=1706980040;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EjOge2q1fldX07fj+kE61mHXSlCQ8kO8UwNfEi9WJ6w=;
-        b=MBjt2kPerZwsTVWPuHMeSSCUE8hHsH8bB1qqf1G+J8Sbi0NsUMs+zmEZHqV/OxC9QC
-         8dZU/0ibFHlBDGIlglCY2DCYb4yhCzBJ3NZaZgec4VgbxXDo2aQSwZaPu3vM7PGQB+43
-         jbQq9IA033uNNzhRWKULaPgtkBQ/G8suhOav3gieLPL8AMQwRm+NgxX25Vab5N0w0VBo
-         S0aW9mcdsFTvsW0gChDPi73b4APlxka/haM9reslsunJsZ+7NoUxXbfpfk/QAQD9tq0A
-         VO0PnNgy7Hk65+QOEyrJhehStl8CPrcJIl0AXjoJScsqOO22ck/1ASmd+HUU19Nv0gmp
-         sDXQ==
-X-Gm-Message-State: AOJu0Ywqc9yHeTjkwcV+14IRr2fPNT2BZeKxFS74b2zbZF9zOwOLck7E
-	z1Nw74a98ZpHWwCWiQl1ORAhyfOrNdWcov8qNcHadEsGy8pHSXjy
-X-Google-Smtp-Source: AGHT+IFQHN1Mron4NhMxZNELngGnGpQNZWyLVdzbxnNdvYNuUMUpwDEM/BFXquEMYBfpLaII0h67Zg==
-X-Received: by 2002:adf:f802:0:b0:33a:de63:8a1b with SMTP id s2-20020adff802000000b0033ade638a1bmr1474383wrp.21.1706375239572;
-        Sat, 27 Jan 2024 09:07:19 -0800 (PST)
+        d=1e100.net; s=20230601; t=1706377501; x=1706982301;
+        h=content-transfer-encoding:autocrypt:content-language:cc:to:subject
+         :from:user-agent:mime-version:date:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8anKxnJbLLtWVdu6pUUU4w5pqzpUyEAuIBblrjsBQ20=;
+        b=vr1BZGDwkpLMVUOlfYI+juqyHBG85aDhJ9c7NsKgglM/4EO5XuwJxdaW1xuER/oEJX
+         o0aHyWGK0LyBEmMaysrw3yy6Y6D9T7wgm8ab5MV9MAOnlFxRIa4KEf5iqGy5LnwHnAVO
+         tT/KqfOqsxTnTu17DgcIOgMI02Lwu/fo8uOheO0v7Fo0eH4pOg6RW62Qz+o9/+d5gWb8
+         zX6lmvfUIvKclR9hHzHe3PKbZZ3Z5zt3waBVYCkeCxzeu6U4MKLe9P8aliTQZuTT9zl2
+         CrzlkNCsYeqUaxDediBpXhf+6yiNFA6qs/Ay9YdOFsweiKujSF7D2TYmqV1aOhOJyafr
+         Awaw==
+X-Gm-Message-State: AOJu0YwoylQspxTwq+GX1SDxO38Kdj6E8UeLMDoC/jS3F1I0/DzBG3F9
+	jdxWw1jkjk1HRAR9itjKoPG1Jfn5jg8Y6px+FWIPby17Q+V6IKEa
+X-Google-Smtp-Source: AGHT+IG6jGko7sEAjG+dh8v+IQYvKdvRtdk/7Erkl9hDpj34WF81qQnIevb3PbDYrghT2sFd01Ii9Q==
+X-Received: by 2002:adf:fc46:0:b0:33a:de7b:43bc with SMTP id e6-20020adffc46000000b0033ade7b43bcmr1192734wrs.130.1706377501168;
+        Sat, 27 Jan 2024 09:45:01 -0800 (PST)
 Received: from ?IPV6:2a01:c23:b938:5400:11ba:857c:4df8:38b0? (dynamic-2a01-0c23-b938-5400-11ba-857c-4df8-38b0.c23.pool.telefonica.de. [2a01:c23:b938:5400:11ba:857c:4df8:38b0])
-        by smtp.googlemail.com with ESMTPSA id i13-20020a05600c354d00b0040e45799541sm9041400wmq.15.2024.01.27.09.07.18
+        by smtp.googlemail.com with ESMTPSA id ck8-20020a5d5e88000000b003392986585esm3946712wrb.41.2024.01.27.09.45.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 27 Jan 2024 09:07:19 -0800 (PST)
-Message-ID: <8140e7dd-179f-4a4f-bac1-f67930b0f05d@gmail.com>
-Date: Sat, 27 Jan 2024 18:07:18 +0100
+        Sat, 27 Jan 2024 09:45:00 -0800 (PST)
+Message-ID: <13ce7c11-a958-4892-ada9-faf5bfdcb89d@gmail.com>
+Date: Sat, 27 Jan 2024 18:45:00 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -60,18 +59,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: Remove I2C_CLASS_HWMON from drivers w/o detect()
- and address_list
-Content-Language: en-US
-To: Guenter Roeck <linux@roeck-us.net>,
- Michael Hennerich <Michael.Hennerich@analog.com>,
- Jean Delvare <jdelvare@suse.com>
-Cc: linux-hwmon@vger.kernel.org
-References: <75747c6a-d414-4b07-8f66-5a5cdddc3c36@gmail.com>
- <a15701d4-d786-49b1-9ce2-894dff508679@roeck-us.net>
- <02ab295e-0b2c-41b4-8376-569744b0ad3a@gmail.com>
- <e13f467e-d452-48f5-9bee-2e675ac8157f@roeck-us.net>
 From: Heiner Kallweit <hkallweit1@gmail.com>
+Subject: [PATCH] hwmon: Drop non-functional I2C_CLASS_HWMON support for
+ drivers w/o detect()
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ Jonathan Corbet <corbet@lwn.net>
+Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
+Content-Language: en-US
 Autocrypt: addr=hkallweit1@gmail.com; keydata=
  xsFNBF/0ZFUBEAC0eZyktSE7ZNO1SFXL6cQ4i4g6Ah3mOUIXSB4pCY5kQ6OLKHh0FlOD5/5/
  sY7IoIouzOjyFdFPnz4Bl3927ClT567hUJJ+SNaFEiJ9vadI6vZm2gcY4ExdIevYHWe1msJF
@@ -115,69 +109,86 @@ Autocrypt: addr=hkallweit1@gmail.com; keydata=
  H/0Z53okMykVs3a8tECPHIxnre2UxKdTbCEkjkR4V6JyplTS47oWMw3zyI7zkaadfzVFBxk2
  lo/Tny+FX1Azea3Ce7oOnRUEZtWSsUidtIjmL8YUQFZYm+JUIgfRmSpMFq8JP4VH43GXpB/S
  OCrl+/xujzvoUBFV/cHKjEQYBxo+MaiQa1U54ykM2W4DnHb1UiEf5xDkFd4=
-In-Reply-To: <e13f467e-d452-48f5-9bee-2e675ac8157f@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 27.01.2024 17:37, Guenter Roeck wrote:
-> On 1/27/24 08:12, Heiner Kallweit wrote:
->> On 27.01.2024 17:01, Guenter Roeck wrote:
->>> On 1/27/24 07:02, Heiner Kallweit wrote:
->>>> Class-based I2C probing requires detect() and address_list to be
->>>> set in the I2C client driver, see checks in i2c_detect().
->>>> It's misleading to declare I2C_CLASS_HWMON support if this
->>>> precondition isn't met.
->>>>
->>>> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
->>>> ---
->>>>    drivers/hwmon/adm1177.c       | 1 -
->>>>    drivers/hwmon/ds1621.c        | 1 -
->>>>    drivers/hwmon/ds620.c         | 1 -
->>>>    drivers/hwmon/ina209.c        | 1 -
->>>>    drivers/hwmon/ina238.c        | 1 -
->>>>    drivers/hwmon/max127.c        | 1 -
->>>>    drivers/hwmon/max31760.c      | 1 -
->>>>    drivers/hwmon/max31790.c      | 1 -
->>>>    drivers/hwmon/max31827.c      | 1 -
->>>>    drivers/hwmon/max6621.c       | 1 -
->>>>    drivers/hwmon/max6697.c       | 1 -
->>>>    drivers/hwmon/occ/p8_i2c.c    | 1 -
->>>>    drivers/hwmon/pmbus/ir36021.c | 1 -
->>>>    drivers/hwmon/powr1220.c      | 1 -
->>>>    drivers/hwmon/sbrmi.c         | 1 -
->>>>    drivers/hwmon/sbtsi_temp.c    | 1 -
->>>>    drivers/hwmon/w83773g.c       | 1 -
->>>
->>> Follow-up question: You did not drop the class from drivers/hwmon/adt7410.c
->>> and drivers/hwmon/emc2305.c. Is that because of the address_list in those
->>> drivers ?
->>>
->> Yes. If address_list is set, this shows a certain intention to support
->> I2C class-based probing. Then the question is whether adding the missing
->> detect() implementation may be the more appropriate action.
->>
-> 
-> My understanding is that class based auto-detection is in the process of
-> being phased out. With that in mind, it would not make much sense to add
-> it to existing drivers. Anyone trying to add it now would have to explain
-> why it is suddenly needed but wasn't needed before. I think that train
-> has left the station.
-> 
-Good, then I'll send a patch for these two drivers too.
+Class-based I2C probing requires detect() and address_list both
+to be set in the I2C client driver, see checks in i2c_detect().
+It's misleading to declare I2C_CLASS_HWMON support if the driver
+doesn't implement detect().
+Class-based probing is a legacy mechanism, in addition apparently
+nobody ever noticed that class-based probing has been non-functional
+in both drivers from the very beginning. So drop the fragments of
+class-based probing support.
 
-> On top of that, at least for adt7410/adt7420, I don't see a reliable means
-> to auto-detect those chips. Trying to do so for a 10+ year old driver would
-> only add (lots of) risk for little if any gain.
-> 
-> Those two drivers actually claim in their documentation that the address
-> ranges would be scanned. That should be dropped as well since it does not match
-> reality.
-> 
-For emc2305 that's right. Documentation/hwmon/adt7410.rst however states
-"Addresses scanned: None", so here I wouldn't see a need for a change.
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+---
+ Documentation/hwmon/emc2305.rst | 1 -
+ drivers/hwmon/adt7410.c         | 2 --
+ drivers/hwmon/emc2305.c         | 5 -----
+ 3 files changed, 8 deletions(-)
 
-> Thanks,
-> Guenter
-> 
-Heiner
+diff --git a/Documentation/hwmon/emc2305.rst b/Documentation/hwmon/emc2305.rst
+index 2403dbaf2..d0bfffe46 100644
+--- a/Documentation/hwmon/emc2305.rst
++++ b/Documentation/hwmon/emc2305.rst
+@@ -6,7 +6,6 @@ Kernel driver emc2305
+ Supported chips:
+    Microchip EMC2305, EMC2303, EMC2302, EMC2301
+ 
+-   Addresses scanned: I2C 0x27, 0x2c, 0x2d, 0x2e, 0x2f, 0x4c, 0x4d
+    Prefixes: 'emc2305'
+ 
+    Datasheet: Publicly available at the Microchip website :
+diff --git a/drivers/hwmon/adt7410.c b/drivers/hwmon/adt7410.c
+index 952506779..fd214d9b3 100644
+--- a/drivers/hwmon/adt7410.c
++++ b/drivers/hwmon/adt7410.c
+@@ -95,14 +95,12 @@ static const struct i2c_device_id adt7410_ids[] = {
+ MODULE_DEVICE_TABLE(i2c, adt7410_ids);
+ 
+ static struct i2c_driver adt7410_driver = {
+-	.class		= I2C_CLASS_HWMON,
+ 	.driver = {
+ 		.name	= "adt7410",
+ 		.pm	= pm_sleep_ptr(&adt7x10_dev_pm_ops),
+ 	},
+ 	.probe		= adt7410_i2c_probe,
+ 	.id_table	= adt7410_ids,
+-	.address_list	= I2C_ADDRS(0x48, 0x49, 0x4a, 0x4b),
+ };
+ module_i2c_driver(adt7410_driver);
+ 
+diff --git a/drivers/hwmon/emc2305.c b/drivers/hwmon/emc2305.c
+index 29f0e4945..6ef733c0b 100644
+--- a/drivers/hwmon/emc2305.c
++++ b/drivers/hwmon/emc2305.c
+@@ -12,9 +12,6 @@
+ #include <linux/platform_data/emc2305.h>
+ #include <linux/thermal.h>
+ 
+-static const unsigned short
+-emc2305_normal_i2c[] = { 0x27, 0x2c, 0x2d, 0x2e, 0x2f, 0x4c, 0x4d, I2C_CLIENT_END };
+-
+ #define EMC2305_REG_DRIVE_FAIL_STATUS	0x27
+ #define EMC2305_REG_VENDOR		0xfe
+ #define EMC2305_FAN_MAX			0xff
+@@ -611,14 +608,12 @@ static void emc2305_remove(struct i2c_client *client)
+ }
+ 
+ static struct i2c_driver emc2305_driver = {
+-	.class  = I2C_CLASS_HWMON,
+ 	.driver = {
+ 		.name = "emc2305",
+ 	},
+ 	.probe = emc2305_probe,
+ 	.remove	  = emc2305_remove,
+ 	.id_table = emc2305_ids,
+-	.address_list = emc2305_normal_i2c,
+ };
+ 
+ module_i2c_driver(emc2305_driver);
+-- 
+2.43.0
+
 
