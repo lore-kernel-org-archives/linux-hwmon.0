@@ -1,199 +1,167 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C663024B41;
-	Sun, 28 Jan 2024 12:06:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B442A2C68B;
+	Sun, 28 Jan 2024 17:13:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706443593; cv=none; b=GDyhbCxEj1ZOoGhmhHxclXj3RTQzLrQXQsF5K0ILshsYR5qLLH7qZ9ABZ0NxhyHpYQWOPkvX03HjFussxVvppHK0VNgQ0E0yFxGCVfCqKRutEqnRvsDaWlKt1RKv1sPISgHY9y4S0eZKei0wKsyNCdZVK0+1wvhEwGVlFmhikis=
+	t=1706461997; cv=none; b=iaIA6GivhSTajkfJVcFSdFg1hPG4gLzFhMqoHSqZwejdlKR9QhD5cVJaKCDQkNbRnEj0hh7WYbPWv9q/ojJlBnFbk+zJqLK7WWmWxR5Klq3jBM60rkH4FOb6sLNg0Kcc7bInZTYfusz9IgpP4w3Z3AoJRnA3gbzIBImiot8o/ro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706443593; c=relaxed/simple;
-	bh=5HGhh25r1BgSRoDuJplNgMobpaM/J1zwreviykkiK6A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VC0w3uX/5wvGIfNa7OaNst92H1DpG8QvAPtKdOiJv1sjHCnd+cO8r5Sr+qT0WmzaznS5gPzire4B2Qrui1AxsPRZh7H7Z3sjGIiy7qn0kRe39G3avEWDggbP3iO6e0rCUZNGzLtE8KVaa5o67Y+mvSs9bFyMAOKLYxYjo1WRFAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NCy8fSza; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1706461997; c=relaxed/simple;
+	bh=jNDfSP0iz6F45hxisn1nC9nJOoP8Llt5SFMdhiO4ow8=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Lc14tjP5VG3+E2G6bPxV/9jQxz/Qye+2cQhikwRzuvvBskFjEIGXjrHV5C3bHs4SYN7UaWgEPEZ5j2xaNtIzwVC1FhkaCtR+uzblBuQBeqqvZeZB0nY4VWuGEPaZtF3D+LZB1326BjrXokU++gzxCnGc7Mbx6EyWfGnaZ5zXQlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KY1un6OB; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NCy8fSza"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706443591; x=1737979591;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5HGhh25r1BgSRoDuJplNgMobpaM/J1zwreviykkiK6A=;
-  b=NCy8fSzaLSsp5/baf0mQiD7W23IwdOvvDhfv7skeTFyKpOo0lzL0QVnH
-   Kz62eN7K6kr34B4afaIykBhINhKZGJ8kEJl0OznOTzXp0TfRlpUB2qCrD
-   fu4RyYgxbegvb2cAqrFBz+OBdo3YC9ZUDuTgiU2MEb8PGAzqEQVMLOwAR
-   7qR6OZJ80Q9ZqrykZcKrhZQWTVyCL/TXbs+hkzFkiLrckxR0DR9TgJB2S
-   xKqJE+W0WKpADjm2qj+N4tNq5fndvq6TybGVqb9OHTLgXdNW5D7exf9Ac
-   I4mRDfi6f9kv1riurXJy3YAsnMPX5JBvmTEjTZm+7p/YqkkT5LgZTlzCR
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10966"; a="2596582"
-X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
-   d="scan'208";a="2596582"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2024 04:06:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
-   d="scan'208";a="21833555"
-Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 28 Jan 2024 04:06:26 -0800
-Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rU3vc-0003NO-0c;
-	Sun, 28 Jan 2024 12:06:24 +0000
-Date: Sun, 28 Jan 2024 20:06:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: marius.cristea@microchip.com, jic23@kernel.org, lars@metafoo.de,
-	robh+dt@kernel.org, jdelvare@suse.com, linux@roeck-us.net,
-	linux-hwmon@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, linux-iio@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	marius.cristea@microchip.com
-Subject: Re: [PATCH v4 2/2] iio: adc: adding support for PAC193x
-Message-ID: <202401281913.alVFRURI-lkp@intel.com>
-References: <20240122084712.11507-3-marius.cristea@microchip.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KY1un6OB"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1d8cec0f71aso2782435ad.1;
+        Sun, 28 Jan 2024 09:13:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1706461995; x=1707066795; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=6cDy7Rb25xoEXZNoitNmW/3Zfu/z4arLpo3N6K1MDEs=;
+        b=KY1un6OB5x0a8E+t2A1PFv6n8QmxOnuvq1EcGpWi4vNjE7ReZvrV4oeLbObwKS2osT
+         5rXQ11METOk5GfmOP8RGbOmJMWvr3Jers654XazEIHctnQ0yzXfCzqznDWbHUFX8e+H+
+         Bc+JopscQZLTBY1ysB/+UKcS697QePgGQhz9D4GLTng1hwG2UZ8Fc534oZeTrnqettfK
+         2ob3aCZ13naOqU/DM8o0HssNEHQowxx+kDRmMnkcWEzHZZjp38K+GlSEen+1y9XWndhx
+         jOBSOiv6BptI95EuWkg6ZAi+UGN2sG0RyvcnVc6Xkoyz9twFCz+Vn4t7ysBPPeggyhFh
+         /zNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706461995; x=1707066795;
+        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6cDy7Rb25xoEXZNoitNmW/3Zfu/z4arLpo3N6K1MDEs=;
+        b=I9b0h1wekW42HQNT16BVbUMDpQC5vXiWvxS2csyghqJ4YAdMJRt6R/vN4mh9MxOZTx
+         eQriFV40uD78cmg5f9ekn8woD6mrVm1+ldwU4KkyOcnZ2Om4fkks6k0BtzjUpOhNivRc
+         iFkBR+Uw/sisZcRCtESMEkh0xyuv/Q2n8s7BPRoTb7QrvLTWdBgLeeRiG8pYGkXnbg0u
+         BJGU5gCYK6EFbNWHThVuoRj3eB1G8fEXj9PopbY/vaQNyPZnpn3N52bhDy6Yl/IBY3O7
+         Dj22Vv1tqf3gZIuZRKk/6ClYDaj15hnYG+HPlGgw0ZvguymMYoBTQ2mpnpk9dAadaI9L
+         C31A==
+X-Gm-Message-State: AOJu0Yy6QbCyddPjfdiUTK9SxZ6iRiYwOwFU2pihE8SzY2pSURDTIT8s
+	VDF/0wmRedE1U4u+w3hrgTMV/mF87DnfCfFn/41PL7WM40XuJ7PH
+X-Google-Smtp-Source: AGHT+IHG4xQpWy5Yeqyu7lIOVrg/6i6qbqw0HjEhQzLzzE2jHDaUtrmZQMKIruoyu8kYli+xdFUaMw==
+X-Received: by 2002:a17:902:e84a:b0:1d8:dbd0:bb42 with SMTP id t10-20020a170902e84a00b001d8dbd0bb42mr759372plg.21.1706461994795;
+        Sun, 28 Jan 2024 09:13:14 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j71-20020a63804a000000b005d7c02994c4sm4560870pgd.60.2024.01.28.09.13.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 28 Jan 2024 09:13:13 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <cc561e9a-e493-43dd-ac9b-cf14786130ff@roeck-us.net>
+Date: Sun, 28 Jan 2024 09:13:12 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240122084712.11507-3-marius.cristea@microchip.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] hwmon: Add driver for MPS MPQ8785 Synchronous
+ Step-Down Converter
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+To: Charles Hsu <ythsu0511@gmail.com>
+Cc: jdelvare@suse.com, corbet@lwn.net, Delphine_CC_Chiu@wiwynn.com,
+ linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+ Charles.Hsu@quantatw.com
+References: <20240126075213.1707572-1-ythsu0511@gmail.com>
+ <81860c27-43ac-4e55-a653-e7f5597ffa93@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <81860c27-43ac-4e55-a653-e7f5597ffa93@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi,
+On 1/27/24 16:00, Guenter Roeck wrote:
+> On Fri, Jan 26, 2024 at 03:52:13PM +0800, Charles Hsu wrote:
+>> Add support for mpq8785 device from Monolithic Power Systems, Inc.
+>> (MPS) vendor. This is synchronous step-down controller.
+>>
+> 
+> "(MPS) vendor" above has no value.
+> 
+> I find no reference that this chip actually exists. Sorry, but I can not
+> apply such patches without confirmation that the chip actually exists.
+> 
 
-kernel test robot noticed the following build warnings:
+I since learned that the chip does exist, so this is no longer a concern.
 
-[auto build test WARNING on b1a1eaf6183697b77f7243780a25f35c7c0c8bdf]
+>> Signed-off-by: Charles Hsu <ythsu0511@gmail.com>
+>> ---
+>> Change in v1:
+>>      Initial patchset.
+> 
+> A change log or v1 tag is not needed for the first version of a patch
+> or patch series.
+> 
+>> ---
+> ...
+>> +		PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_TEMP | PMBUS_HAVE_IOUT |
+>> +		PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_TEMP,
+> 
+> I am not too happy that all those drivers claim to have no output status
+> registers. It always makes me wonder if the definitions are just copied
+> from one driver to the next.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/marius-cristea-microchip-com/dt-bindings-iio-adc-adding-support-for-PAC193X/20240122-165539
-base:   b1a1eaf6183697b77f7243780a25f35c7c0c8bdf
-patch link:    https://lore.kernel.org/r/20240122084712.11507-3-marius.cristea%40microchip.com
-patch subject: [PATCH v4 2/2] iio: adc: adding support for PAC193x
-config: x86_64-randconfig-121-20240128 (https://download.01.org/0day-ci/archive/20240128/202401281913.alVFRURI-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240128/202401281913.alVFRURI-lkp@intel.com/reproduce)
+I also learned that the chip supports additional status registers. Please
+list all supported status registers.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401281913.alVFRURI-lkp@intel.com/
+I also learned that the chips voltage output mode is configurable. As such,
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/iio/adc/pac1934.c:1265:17: sparse: sparse: dubious: x & !y
-   drivers/iio/adc/pac1934.c:1266:17: sparse: sparse: dubious: x & !y
-   drivers/iio/adc/pac1934.c:1267:17: sparse: sparse: dubious: x & !y
-   drivers/iio/adc/pac1934.c:1268:17: sparse: sparse: dubious: x & !y
++	.format[PSC_CURRENT_OUT] = direct,
 
-vim +1265 drivers/iio/adc/pac1934.c
+won't do because it cause instantiation to fail due to mode mismatch
+in pmbus_identify_common() if the mode is configured to linear or vid mode.
+This will need to be addressed.
 
-  1233	
-  1234	static int pac1934_chip_configure(struct pac1934_chip_info *info)
-  1235	{
-  1236		int cnt, ret;
-  1237		struct i2c_client *client = info->client;
-  1238		u8 regs[PAC1934_CTRL_STATUS_INFO_LEN], idx, ctrl_reg;
-  1239		u32 wait_time;
-  1240	
-  1241		info->chip_reg_data.num_enabled_channels = 0;
-  1242		for (cnt = 0;  cnt < info->phys_channels; cnt++) {
-  1243			if (info->active_channels[cnt])
-  1244				info->chip_reg_data.num_enabled_channels++;
-  1245		}
-  1246	
-  1247		/*
-  1248		 * read whatever information was gathered before the driver was loaded
-  1249		 * establish which channels are enabled/disabled and then establish the
-  1250		 * information retrieval mode (using SKIP or no).
-  1251		 * Read the chip ID values
-  1252		 */
-  1253		ret = i2c_smbus_read_i2c_block_data(client, PAC1934_CTRL_STAT_REGS_ADDR,
-  1254						    ARRAY_SIZE(regs),
-  1255						    (u8 *)regs);
-  1256		if (ret < 0) {
-  1257			dev_err_probe(&client->dev, ret,
-  1258				      "%s - cannot read regs from 0x%02X\n",
-  1259				      __func__, PAC1934_CTRL_STAT_REGS_ADDR);
-  1260			return ret;
-  1261		}
-  1262	
-  1263		/* write the CHANNEL_DIS and the NEG_PWR registers */
-  1264		regs[PAC1934_CHANNEL_DIS_REG_OFF] =
-> 1265			FIELD_PREP(PAC1934_CHAN_DIS_CH1_OFF_MASK, !(info->active_channels[0])) |
-  1266			FIELD_PREP(PAC1934_CHAN_DIS_CH2_OFF_MASK, !(info->active_channels[1])) |
-  1267			FIELD_PREP(PAC1934_CHAN_DIS_CH3_OFF_MASK, !(info->active_channels[2])) |
-  1268			FIELD_PREP(PAC1934_CHAN_DIS_CH4_OFF_MASK, !(info->active_channels[3])) |
-  1269			FIELD_PREP(PAC1934_SMBUS_TIMEOUT_MASK, 0) |
-  1270			FIELD_PREP(PAC1934_SMBUS_BYTECOUNT_MASK, 0) |
-  1271			FIELD_PREP(PAC1934_SMBUS_NO_SKIP_MASK, 0);
-  1272	
-  1273		regs[PAC1934_NEG_PWR_REG_OFF] =
-  1274			FIELD_PREP(PAC1934_NEG_PWR_CH1_BIDI_MASK, info->bi_dir[0]) |
-  1275			FIELD_PREP(PAC1934_NEG_PWR_CH2_BIDI_MASK, info->bi_dir[1]) |
-  1276			FIELD_PREP(PAC1934_NEG_PWR_CH3_BIDI_MASK, info->bi_dir[2]) |
-  1277			FIELD_PREP(PAC1934_NEG_PWR_CH4_BIDI_MASK, info->bi_dir[3]) |
-  1278			FIELD_PREP(PAC1934_NEG_PWR_CH1_BIDV_MASK, info->bi_dir[0]) |
-  1279			FIELD_PREP(PAC1934_NEG_PWR_CH2_BIDV_MASK, info->bi_dir[1]) |
-  1280			FIELD_PREP(PAC1934_NEG_PWR_CH3_BIDV_MASK, info->bi_dir[2]) |
-  1281			FIELD_PREP(PAC1934_NEG_PWR_CH4_BIDV_MASK, info->bi_dir[3]);
-  1282	
-  1283		/* no SLOW triggered REFRESH, clear POR */
-  1284		regs[PAC1934_SLOW_REG_OFF] = 0;
-  1285	
-  1286		ret =  i2c_smbus_write_block_data(client, PAC1934_CTRL_STAT_REGS_ADDR,
-  1287						  ARRAY_SIZE(regs), (u8 *)regs);
-  1288		if (ret)
-  1289			return ret;
-  1290	
-  1291		ctrl_reg = FIELD_PREP(PAC1934_CRTL_SAMPLE_RATE_MASK, info->crt_samp_spd_bitfield);
-  1292	
-  1293		ret = i2c_smbus_write_byte_data(client, PAC1934_CTRL_REG_ADDR, ctrl_reg);
-  1294		if (ret)
-  1295			return ret;
-  1296	
-  1297		/*
-  1298		 * send a REFRESH to the chip, so the new settings take place
-  1299		 * as well as resetting the accumulators
-  1300		 */
-  1301		ret = i2c_smbus_write_byte(client, PAC1934_REFRESH_REG_ADDR);
-  1302		if (ret) {
-  1303			dev_err(&client->dev,
-  1304				"%s - cannot send 0x%02X\n",
-  1305				__func__, PAC1934_REFRESH_REG_ADDR);
-  1306			return ret;
-  1307		}
-  1308	
-  1309		/*
-  1310		 * get the current(in the chip) sampling speed and compute the
-  1311		 * required timeout based on its value
-  1312		 * the timeout is 1/sampling_speed
-  1313		 */
-  1314		idx = regs[PAC1934_CTRL_ACT_REG_OFF] >> PAC1934_SAMPLE_RATE_SHIFT;
-  1315		wait_time = (1024 / samp_rate_map_tbl[idx]) * 1000;
-  1316	
-  1317		/*
-  1318		 * wait the maximum amount of time to be on the safe side
-  1319		 * the maximum wait time is for 8sps
-  1320		 */
-  1321		usleep_range(wait_time, wait_time + 100);
-  1322	
-  1323		INIT_DELAYED_WORK(&info->work_chip_rfsh, pac1934_work_periodic_rfsh);
-  1324		/* Setup the latest moment for reading the regs before saturation */
-  1325		schedule_delayed_work(&info->work_chip_rfsh,
-  1326				      msecs_to_jiffies(PAC1934_MAX_RFSH_LIMIT_MS));
-  1327	
-  1328		devm_add_action_or_reset(&client->dev, pac1934_cancel_delayed_work,
-  1329					 &info->work_chip_rfsh);
-  1330	
-  1331		return 0;
-  1332	}
-  1333	
+Thanks,
+Guenter
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
