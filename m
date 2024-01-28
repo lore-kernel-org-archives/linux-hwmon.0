@@ -1,81 +1,138 @@
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E78142E634
-	for <linux-hwmon@vger.kernel.org>; Sat, 27 Jan 2024 20:28:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 773C1241E7;
+	Sun, 28 Jan 2024 00:00:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706387315; cv=none; b=qKr0vRu0u+GEIGjW5VcqOV0qd7NaTeEPYppQoKg30+INGTFbqf6JJtlm+5oESaIlOUa5HrrqwPBsKL73e/b4Oe0+vjgy+fXjlEkhw1Tvjk0KiTCAhIIT37Xfj9mLe4G6Lb/IwKl3JYaUevg+7HGnZzw5CLNq11nS+2KzgeNpD2w=
+	t=1706400032; cv=none; b=LE9LCNyVvejcOnxre+ai5KWhWFJIjgP6q2flZyuCM/uZaqHFGZcDqDqqQc2LjSp/5u344Lhx/eX8aEUj1w5vr27d51DawUjDc4qJZemK519fHX8sVF3/H2F/nFAzoUPZAhmQ108eL7p8RGSqpzqhWX1Zgh7ibwJLUk+pDK4eZEM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706387315; c=relaxed/simple;
-	bh=LUBeGALBzMiCBd9c1SReM0q1tcU5b9jqGILvsbgJMIY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=SWJ4VIu0XRacarVkyF9VyV2qjfhy0ZueFnX4PU/Zyqt5jP8Ft/q1IUwcnltHIqDZA9yrA140ZkWj7YYT1zVeFgfWTK2lqkeRis143vp0RZ4OffEXshRIlWiEtqgG7HkRxaGzVTz3359d/WGtU07K1l6Suc6CKdTp/stRl1Yb9rI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iwanders.net; spf=pass smtp.mailfrom=iwanders.net; dkim=pass (1024-bit key) header.d=iwanders.net header.i=@iwanders.net header.b=cPiUlOQC; arc=none smtp.client-ip=209.85.222.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iwanders.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iwanders.net
+	s=arc-20240116; t=1706400032; c=relaxed/simple;
+	bh=jWFhcZWzzkHMKynjUE+bOduJBsCkVYwxGvAAyoWuIjM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dbR5xRVu8QTQax3WLZZOej5gyLvk7qo6sK6G2xFZT+snt2I+3dlNLbwfdYuCrRGGisMh5zzyzTgkCpDYmCfspp2XpoNz9W1+IVB2iJ0SUZENmITW04GkEJeQbIrWf0PrwHng6hbUDvWeDiOFQNCYIj9X1jamJY4Qw2a8tOHT5aw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LNYvBTbB; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=iwanders.net header.i=@iwanders.net header.b="cPiUlOQC"
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-783cd62f1b5so93127985a.3
-        for <linux-hwmon@vger.kernel.org>; Sat, 27 Jan 2024 12:28:33 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LNYvBTbB"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2900c648b8bso1205956a91.3;
+        Sat, 27 Jan 2024 16:00:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=iwanders.net; s=google; t=1706387312; x=1706992112; darn=vger.kernel.org;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=LUBeGALBzMiCBd9c1SReM0q1tcU5b9jqGILvsbgJMIY=;
-        b=cPiUlOQCphIO0s9NPenE2RFlAlyb8S/K+R4BYa5wtGhyJBvb2gRqVjjR8CnNDunySp
-         Xbh8vGeIFcowaaGMk7FGDYGfMGysPL9EXx+tCaH8yBW7Utj96SM82gxSduB5Z3B8CUc5
-         cjcvlVDGKD1h85A82xGLxgStlA5Srwy6Bs08E=
+        d=gmail.com; s=20230601; t=1706400028; x=1707004828; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hKBatOeFtgBc38RfQF1Wg8gY9lXRRUPPaojugjidloI=;
+        b=LNYvBTbBaqAmv6n4Qjhb7hWDcoUrIEc3CmZA735aNYCGJq+r0VRF1vbRPxPIlRqqg3
+         hFaKNwar3GB4Dk1MrnVfkolAfMwR2J0axSSloJ++BQAOKdwhgL95LJHG5mJ2TlmkWo7Z
+         kmr6fwBXLBPxIvTQel7r12/N+dguA9X71h9Qr4Uc1lyLnPqKxF5K40N1h1563m8qXZN/
+         kVTym6aQRLt40fYNLuccSPnb6axZFWtK1zaYPCdwsla9Cl7Klo8n7Pxy/RVTC79z+0+G
+         FmWTkNPvxV51FsG79s4jtZottHGZOH8JKX9pt+qfJlQ8XdVIQ6dgh7GJzGfo0huUlg5g
+         MfTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706387312; x=1706992112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LUBeGALBzMiCBd9c1SReM0q1tcU5b9jqGILvsbgJMIY=;
-        b=eEfsHuMoHneAaMElwO9IeRQypbB8i/vOdnfa4AQOPPFGL1GM3Ys5jQNpffuJUFyNUg
-         4d97fwBVONr0haL8Nu6D9tScjSD/0nQCE68cLWtrfx5YdwpwbfWiNuBYVfwq7gLAvdZT
-         cBTtNcqI2GbvxHEW84SzMPusIbPzsAPwemntH+wqMCo/S4Pw6q79itzx411NaqXYU1PV
-         QAl1o3tGKKU+IpKzT6Uxm1pRmElBvsCfL+nOzB4HQyTv1cH6l2xNwLNKZqYE6Et8l9Zq
-         /dnM0ZcPL7Bt9AbbU0jOwDBXFZNgiTTrDm9X6AFFuAyAFKk5T7R0W7ZP0/7EcdoHimzh
-         jU+g==
-X-Gm-Message-State: AOJu0YxHA4JF2uKNXCLV8YscV1oZpayMpO+ivTRjfCoF/hjdb0efCiMe
-	7cJjVmGiPZoiRYGomQB4Q8eboSpNno19vybtvS/dS/0XopVmRYOH0ISZpgN/LCw=
-X-Google-Smtp-Source: AGHT+IG6s/fHhjP8Qd7QpYh+6hTN6Y01lcMsE9p4qdH9PvkO5SB3bp0d/yDNa1i7yrGjeQoZV0xYSQ==
-X-Received: by 2002:a05:620a:22c6:b0:783:949f:cbe2 with SMTP id o6-20020a05620a22c600b00783949fcbe2mr2208737qki.150.1706387312664;
-        Sat, 27 Jan 2024 12:28:32 -0800 (PST)
-Received: from eagle.lan (24-246-30-234.cable.teksavvy.com. [24.246.30.234])
-        by smtp.gmail.com with ESMTPSA id b7-20020a05620a270700b00783e18e45desm868815qkp.104.2024.01.27.12.28.31
+        d=1e100.net; s=20230601; t=1706400028; x=1707004828;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hKBatOeFtgBc38RfQF1Wg8gY9lXRRUPPaojugjidloI=;
+        b=UbOytCSFRMAbKY4r/ifjUhmJyeKF0MoI5W0ilppAoo8tewdoUDZZXyPlPJgtrW4+Yo
+         MpyuG790l61fCXCQ9fhNlwIvbCPdhQMZSzaZ4dLoKRZzp/9YPGKJMh51bLxezv8+L9j8
+         +YHdPI9LC9J6s96Kfhm05+Xg0SFyg3ExjtrwsLMIWV89PBetf+r7tZmcElzBsATgBcdr
+         5yOIV43gBq0gv/UtrpH6b7/LTizyLWYB6axgRLJ8HIaI59npJpuKmeKMbkm8ZFwo4lcr
+         kSdq+BQH3gcZ7qkaKna/6z8llJqYkRCsE1OsyhIr+H9ZQsnDF+0bUddIHar61FXFb2e6
+         zCOQ==
+X-Gm-Message-State: AOJu0YyW5CEIP6uP2Of9zu7OFvUJfvP4ucjqGMgi/PT/gAftWZ3Sh2W0
+	4+kp9pxc4wOdQ1RRVJq3Z500n7Zc2yLQgsm1/b8IXZrlkQlTxctDG/ym/zM6
+X-Google-Smtp-Source: AGHT+IHhTflqKed6XZFpVLDivazimufb9DNDz+aAg0baqahpo1LV60a70Kfxvqc4yNysYTBTFUDz6w==
+X-Received: by 2002:a17:902:7802:b0:1d8:c875:27f7 with SMTP id p2-20020a170902780200b001d8c87527f7mr732166pll.92.1706400027760;
+        Sat, 27 Jan 2024 16:00:27 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b13-20020a170902b60d00b001d7610fdb7csm2870884pls.226.2024.01.27.16.00.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Jan 2024 12:28:32 -0800 (PST)
-From: Ivor Wanders <ivor@iwanders.net>
-To: w_armin@gmx.de
-Cc: corbet@lwn.net,
-	hdegoede@redhat.com,
-	ivor@iwanders.net,
-	jdelvare@suse.com,
-	linux-doc@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux@roeck-us.net,
-	luzmaximilian@gmail.com,
-	markgross@kernel.org,
-	platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] hwmon: add fan speed monitoring driver for Surface devices
-Date: Sat, 27 Jan 2024 15:28:28 -0500
-Message-Id: <20240127202828.11140-1-ivor@iwanders.net>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <34960bb8-fb85-4cca-8b84-d99596d046e4@gmx.de>
-References: <34960bb8-fb85-4cca-8b84-d99596d046e4@gmx.de>
+        Sat, 27 Jan 2024 16:00:26 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Sat, 27 Jan 2024 16:00:25 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Charles Hsu <ythsu0511@gmail.com>
+Cc: jdelvare@suse.com, corbet@lwn.net, Delphine_CC_Chiu@wiwynn.com,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+	Charles.Hsu@quantatw.com
+Subject: Re: [PATCH v1] hwmon: Add driver for MPS MPQ8785 Synchronous
+ Step-Down Converter
+Message-ID: <81860c27-43ac-4e55-a653-e7f5597ffa93@roeck-us.net>
+References: <20240126075213.1707572-1-ythsu0511@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240126075213.1707572-1-ythsu0511@gmail.com>
 
-Hello Armin, thank you for your second review.
+On Fri, Jan 26, 2024 at 03:52:13PM +0800, Charles Hsu wrote:
+> Add support for mpq8785 device from Monolithic Power Systems, Inc.
+> (MPS) vendor. This is synchronous step-down controller.
+> 
 
-> maybe you can just return 0 here.
-Good idea, that's indeed the only option for ret, so that makes it clearer.
+"(MPS) vendor" above has no value.
 
-> Maybe use PTR_ERR_OR_ZERO() here?
-Definitely, thanks for suggesting this; cleans it up nicely.
+I find no reference that this chip actually exists. Sorry, but I can not
+apply such patches without confirmation that the chip actually exists.
 
-~Ivor
+> Signed-off-by: Charles Hsu <ythsu0511@gmail.com>
+> ---
+> Change in v1:
+>     Initial patchset.
+
+A change log or v1 tag is not needed for the first version of a patch
+or patch series.
+
+> ---
+...
+> +		PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_TEMP | PMBUS_HAVE_IOUT |
+> +		PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_TEMP,
+
+I am not too happy that all those drivers claim to have no output status
+registers. It always makes me wonder if the definitions are just copied
+from one driver to the next.
+
+> +static const struct of_device_id __maybe_unused mpq8785_of_match[] = {
+> +	{ .compatible = "mps,mpq8785", },
+> +	{}
+
+checkpatch says:
+
+WARNING: DT compatible string "mps,mpq8785" appears un-documented -- check ./Documentation/devicetree/bindings/
+#293: FILE: drivers/hwmon/pmbus/mpq8785.c:37:
++	{ .compatible = "mps,mpq8785", },
+
+I don't care about the also missing entry in MAINTAINERS,
+but the device needs to be be documented in
+Documentation/devicetree/bindings/trivial-devices.yaml.
+
+> +};
+> +
+> +MODULE_DEVICE_TABLE(of, mpq8785_of_match);
+> +
+> +static struct i2c_driver mpq8785_driver = {
+> +	.driver = {
+> +		   .name = "mpq8785",
+> +		   .of_match_table = of_match_ptr(mpq8785_of_match),
+> +	},
+> +	.probe_new = mpq8785_probe,
+> +};
+> +
+> +module_i2c_driver(mpq8785_driver);
+> +
+> +MODULE_AUTHOR("Charles Hsu <ythsu0511@gmail.com>");
+> +MODULE_DESCRIPTION("MPQ8785 PMIC regulator driver");
+
+Is this copied from the mpq7932 driver ? This driver does not include a
+regulator component, so it is a bit misleading to label it as regulator
+driver.
+
+Guenter
