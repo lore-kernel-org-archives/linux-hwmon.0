@@ -1,183 +1,339 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0743E4F21F;
-	Mon, 29 Jan 2024 07:52:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C3D75FEED;
+	Mon, 29 Jan 2024 08:33:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706514747; cv=none; b=Qe3lW6Aj2ShkPN6Hs5fKY0xyWLc3qjWP3C5GOWrLXBlKwws332oLoDgeWCsllitozwzAGy9VYU05g2LLfK4EhWuWTwowVXWMyQP4Q6GCgtH1zdI71VYvI90JHVTn+2A1FwAsvaN4Et3rE5wOPyEbhVhIlMBRVkIMnWjes26KQFk=
+	t=1706517205; cv=none; b=UNRPObDLKEf7Yrt6S6b9c3CKXem9y5GX06iUR3LPiUCa2HIXTmtf43HpZJ7CXO1XT+YthmqiisnDYu8tPMbLBaLvSFHdB29y4lngifGvwM+OucYzRTuBvLxz3Q1ukPDkcAPb1bsO/LdIU/yZRsf7rWK8KXkXGJyJs+5zcbd4MQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706514747; c=relaxed/simple;
-	bh=pwcgZHTKUrBHMyq34U7FHOUbnpLeMk1V/mq9JGQayb0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=fPxtFIJTdXvH90yvjhG/D6+DvNHgsn9wGpoU5ji9HufV+kTPgamiRaJNd7c8gDRNfS4VGgcJcfD/+xdAdPXluUGTJ3jtoqd1MR49Jk3/WfAovM3oMnchIeCxVqqrrGcjVs8oSnowDQ/SycJdazaTddbWXIPja1NcLrnkQ/4/wng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kXy1dHJN; arc=none smtp.client-ip=209.85.218.47
+	s=arc-20240116; t=1706517205; c=relaxed/simple;
+	bh=gPpx/D0AFFX1KG5syJb7H8q92DHqMNH5spjAbdTRFKM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=QJZrAwc7N7iXgrRvMOtZGWLEZ/p8UartO1DG2i6RAszV8MI9cOd+Cvt5yUEc/y5zHJqX7at2gljjG93TRlIiYBsfokJ1rMfELgpcfFG2iWg7BOhq2/pALGaJNUD6PglzDIkfItcBkx1Y63P94uOxYBWqI5PxKMVg3bKwQP0RZH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ht43Nctn; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kXy1dHJN"
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a3510d79ae9so227839766b.0;
-        Sun, 28 Jan 2024 23:52:25 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ht43Nctn"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1d7232dcb3eso9728495ad.2;
+        Mon, 29 Jan 2024 00:33:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706514744; x=1707119544; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=pwcgZHTKUrBHMyq34U7FHOUbnpLeMk1V/mq9JGQayb0=;
-        b=kXy1dHJNzrdHnvjUyvhesU36czmyrctH6d9hpHBB5YeudP1lzPXYBlLvsqpc1yUwpm
-         i2rCaMTC7xlQmxEAHWEbD+pBFfKSFYGWEfl0O6U701FYbN/Ari6T5sfHjj0tOzfn7j3M
-         8TtGvp7Nv7AM8kGfo1O8VuSVplW1SKFqwI0OREgr1Fg8JI4ygGghFHd8pKS+VtDsdQwf
-         E5MM1NafXUrXFniqhaDhUz2JszfiqlcqDzkS/NCjDBZjEmTMyofJiUoKxCrAPGRt9OCF
-         1ACIjePlPVX/9deB9F1NICr3nAKOZpR/Zoq+pIKoBOykxrXwiMnMqMuCoDG1aszzQldt
-         IBTQ==
+        d=gmail.com; s=20230601; t=1706517202; x=1707122002; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=w8rvCs0CTengdVMrYR436oClLvAgG0ieZs9mk2u2MpA=;
+        b=Ht43NctnnNQ1xdphfGQ4jhjWoIjuz5DYoQxTfX+BinDX4v1nzzQSOv+gWaWW0JWcIX
+         ToBb9gt3RviaD/Y3h3xM7vOvVQhZl8W//5sjax45rNXX4R4bkwuaIbhymvvc45HehGuT
+         lTddrnEdwr3QdgNGqnPyQG55CXEUDwN1PU8N2kNCgbSh2USuhACV4y2jFu0Lfs5wl8lf
+         TSWweQ0fEe9ofH95GDrZOEwP21raItZdLHw89UqKq1SdT2pyGES/bkD6ul7nAQgsgqOd
+         IRAERr0ThQAuqi15yfjOvP+UWtpQur/Sz/otSn8rewP6SMuVwcnX+yJgDLJ85EzAcwD+
+         QKnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706514744; x=1707119544;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pwcgZHTKUrBHMyq34U7FHOUbnpLeMk1V/mq9JGQayb0=;
-        b=rUDydyffgEONFai4wNpzxjNUj5frwnDj9Cyld7Uc7wRYyV9zukYeGgJSbYYjcMBz+C
-         WfyG2f0gqEfiPfxt/lkqvhStom8x4NIUqh8G7XNMbqIoEcZLqfqZAaKgYZA/h36/sLgr
-         Ite9asVWsTU7qVDOT0lZ4SNuLbdnjPK/LWQYlCJfi2+FrcmWOFcuSspYFi57L2Al78TH
-         Ths9wD73e8yMuujaWqAzWRpEkRDdRXdx1vLFhojp75/Yz6tFl2Ztto05SrXHzHIGUmb1
-         /fxsjQYCd07yYwR5u92dWkxEp8cCetQkPWp3s6hSlqX45hHfdHp0mzqfnFtqs1y62Z6i
-         v16A==
-X-Gm-Message-State: AOJu0YwIHFBz/T3PWBQ5/6x0pfQFz/1KykYQAuz2dFn4ZdMcKjtx9SjL
-	MghFYKaiB7u+Z9jVfHzbo9NQ2CHl7CIXCiZUog6A/CPczY+dUcoN
-X-Google-Smtp-Source: AGHT+IGe2Xb4m5k2Ojysw6hg1OnJCFDfbQ9jmsgb0PA154Ax0tq/GjsyywhwJcluG79bj6PCz0b8kg==
-X-Received: by 2002:a17:906:f6d0:b0:a35:6a40:b4cf with SMTP id jo16-20020a170906f6d000b00a356a40b4cfmr2721797ejb.19.1706514743859;
-        Sun, 28 Jan 2024 23:52:23 -0800 (PST)
-Received: from ?IPv6:2003:f6:ef1b:2000:15d4:fc17:481e:8afe? (p200300f6ef1b200015d4fc17481e8afe.dip0.t-ipconnect.de. [2003:f6:ef1b:2000:15d4:fc17:481e:8afe])
-        by smtp.gmail.com with ESMTPSA id b12-20020a170906660c00b00a35b06fa7d0sm964940ejp.18.2024.01.28.23.52.23
+        d=1e100.net; s=20230601; t=1706517202; x=1707122002;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w8rvCs0CTengdVMrYR436oClLvAgG0ieZs9mk2u2MpA=;
+        b=wNaub1diJjE26Nbi/7G1r2PYbPSVe4cw8GhhDIgpIgzqaW+vvlCSUCcR4+A54UxzZQ
+         EWmTwfJ6IBSeTnav+bB+J60qmQYG54ye/KznbdUUFcYVniTaNPOQTk3pXm50LAiUWJ/P
+         QOBkV6Q4jdfGUboaiCaGSmUuHASA1q7cY7/FdBAaLbJryFMIlU65CmHNePxoWifAEgk0
+         px/CvaVMnnhClPtDOQWbUrXjs2A4zx2BA290gAt/eXPDPcw9K/ScuOO2Px5V+ptlfslK
+         zarDBy0V9yNVN+pjrlnxQVffyziZT+KCaI0D15qjxKSMtzD+JtdsG2+rLgbQwSXLAKyF
+         G4Yg==
+X-Gm-Message-State: AOJu0YzlAIlhEwUNqBd9Me18YIRPGVmnNi8lPfTY9iT7CwsgpR8D+WgK
+	UorR+BRxw//CBVjyJFda0VRxV11xU0R0GnhHAX/BrEgBykycDOeN
+X-Google-Smtp-Source: AGHT+IHRbMIKxO3A3x41zkurSgi/UviAUp4JFNFrOSe6P/sbdsT8o4QgZGTE3UZ9cHGnhjfJipJ7Sw==
+X-Received: by 2002:a17:902:db12:b0:1d7:44f8:4aab with SMTP id m18-20020a170902db1200b001d744f84aabmr2123516plx.25.1706517202231;
+        Mon, 29 Jan 2024 00:33:22 -0800 (PST)
+Received: from charles-System-Product-Name.dhcpserver.bu9bmc.local (1-34-21-66.hinet-ip.hinet.net. [1.34.21.66])
+        by smtp.gmail.com with ESMTPSA id v19-20020a170902d09300b001d8d0487edbsm2001878plv.223.2024.01.29.00.33.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Jan 2024 23:52:23 -0800 (PST)
-Message-ID: <84827fd6461c9650443608e33afe9eb011793656.camel@gmail.com>
-Subject: Re: [PATCH v5 0/2] drivers: rtc: add max313xx series rtc driver
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
- "a.zummo@towertech.it" <a.zummo@towertech.it>,
- "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
- "jdelvare@suse.com" <jdelvare@suse.com>,  "linux@roeck-us.net"
- <linux@roeck-us.net>, "robh+dt@kernel.org" <robh+dt@kernel.org>, 
- "krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>
-Cc: "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org"
-	 <linux-kernel@vger.kernel.org>, "linux-hwmon@vger.kernel.org"
-	 <linux-hwmon@vger.kernel.org>, "devicetree@vger.kernel.org"
-	 <devicetree@vger.kernel.org>
-Date: Mon, 29 Jan 2024 08:55:40 +0100
-In-Reply-To: <170c8d6b-3246-493f-8cd9-6ac580cabc28@alliedtelesis.co.nz>
-References: <20230403154342.3108-1-Ibrahim.Tilki@analog.com>
-	 <147c92f9-b42b-4a51-a6f9-2d90bfe63aa0@alliedtelesis.co.nz>
-	 <1b42866bb6f05b7d68e9b8304e42359fccdf2bad.camel@gmail.com>
-	 <170c8d6b-3246-493f-8cd9-6ac580cabc28@alliedtelesis.co.nz>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 
+        Mon, 29 Jan 2024 00:33:21 -0800 (PST)
+From: Charles Hsu <ythsu0511@gmail.com>
+To: robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org,
+	jdelvare@suse.com,
+	linux@roeck-us.net,
+	corbet@lwn.net,
+	Delphine_CC_Chiu@Wiwynn.com,
+	naresh.solanki@9elements.com,
+	peteryin.openbmc@gmail.com,
+	patrick.rudolph@9elements.com,
+	alexander.stein@ew.tq-group.com,
+	lakshmiy@us.ibm.com,
+	bhelgaas@google.com,
+	michal.simek@amd.com,
+	lukas@wunner.de,
+	festevam@denx.de
+Cc: devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	ytshu0511@gmail.com,
+	Charles Hsu <ythsu0511@gmail.com>
+Subject: [PATCH v2] hwmon: Add driver for MPS MPQ8785 Synchronous Step-Down Converter
+Date: Mon, 29 Jan 2024 16:31:15 +0800
+Message-Id: <20240129083115.2107466-1-ythsu0511@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Mon, 2024-01-29 at 03:28 +0000, Chris Packham wrote:
->=20
-> On 26/01/24 20:51, Nuno S=C3=A1 wrote:
-> > On Fri, 2024-01-26 at 02:22 +0000, Chris Packham wrote:
-> > > Hi All,
-> > >=20
-> > > On 4/04/23 03:43, Ibrahim Tilki wrote:
-> > > > changelog:
-> > > > since v5:
-> > > > =C2=A0=C2=A0=C2=A0 - dt-binding: add enum value "2" to aux-voltage-=
-chargable
-> > > > =C2=A0=C2=A0=C2=A0 - dt-binding: remove adi,trickle-diode-enable
-> > > > =C2=A0=C2=A0=C2=A0 - dt-binding: change description of trickle-resi=
-stor-ohms
-> > > > =C2=A0=C2=A0=C2=A0 - dt-binding: reorder as in example schema
-> > > > =C2=A0=C2=A0=C2=A0 - parse "wakeup-source" when irq not requested
-> > > > =C2=A0=C2=A0=C2=A0 - remove limitation on max31328 irq and clokout
-> > > > =C2=A0=C2=A0=C2=A0 - remove error and warning messages during trick=
-le charger setup
-> > > >=20
-> > > > since v4:
-> > > > =C2=A0=C2=A0=C2=A0 - dt-binding: remove interrupt names.
-> > > > =C2=A0=C2=A0=C2=A0 - dt-binding: add description for "interrupts" p=
-roperty
-> > > > =C2=A0=C2=A0=C2=A0 - dt-binding: replace deprecated property "trick=
-le-diode-disable"
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 by "aux-voltage-chargeab=
-le"
-> > > > =C2=A0=C2=A0=C2=A0 - dt-binding: add new property "adi,trickle-diod=
-e-enable"
-> > > > =C2=A0=C2=A0=C2=A0 - dt-binding: remove "wakeup-source"
-> > > > =C2=A0=C2=A0=C2=A0 - use clear_bit instead of __clear_bit
-> > > > =C2=A0=C2=A0=C2=A0 - use devm_of_clk_add_hw_provider instead of of_=
-clk_add_provider
-> > > > =C2=A0=C2=A0=C2=A0 - use chip_desc pointer as driver data instead o=
-f enum.
-> > > >=20
-> > > > since v3:
-> > > > =C2=A0=C2=A0=C2=A0 - add "break" to fix warning: unannotated fall-t=
-hrough
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Reported-by: kernel test robot <lkp@=
-intel.com>
-> > > >=20
-> > > > since v2:
-> > > > =C2=A0=C2=A0=C2=A0 - dt-binding: update title and description
-> > > > =C2=A0=C2=A0=C2=A0 - dt-binding: remove last example
-> > > > =C2=A0=C2=A0=C2=A0 - drop watchdog support
-> > > > =C2=A0=C2=A0=C2=A0 - support reading 12Hr format instead of forcing=
- 24hr at probe time
-> > > > =C2=A0=C2=A0=C2=A0 - use "tm_year % 100" instead of range check
-> > > > =C2=A0=C2=A0=C2=A0 - refactor max313xx_init for readability
-> > > >=20
-> > > > Ibrahim Tilki (2):
-> > > > =C2=A0=C2=A0=C2=A0 drivers: rtc: add max313xx series rtc driver
-> > > > =C2=A0=C2=A0=C2=A0 dt-bindings: rtc: add max313xx RTCs
-> > > >=20
-> > > > =C2=A0=C2=A0 .../devicetree/bindings/rtc/adi,max313xx.yaml |=C2=A0 =
-144 +++
-> > > > =C2=A0=C2=A0 drivers/rtc/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 11 +
-> > > > =C2=A0=C2=A0 drivers/rtc/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0 1 +
-> > > > =C2=A0=C2=A0 drivers/rtc/rtc-max313xx.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 | 1053
-> > > > +++++++++++++++++
-> > > > =C2=A0=C2=A0 4 files changed, 1209 insertions(+)
-> > > > =C2=A0=C2=A0 create mode 100644
-> > > > Documentation/devicetree/bindings/rtc/adi,max313xx.yaml
-> > > > =C2=A0=C2=A0 create mode 100644 drivers/rtc/rtc-max313xx.c
-> > > What happened to this series in the end? It kind of went off my radar
-> > > and I forgot about it.
-> > >=20
-> > > We've been carrying a version of these changes in our local tree for =
-a
-> > > while (and using it quite happily I should add).
-> > >=20
-> > Hi Chris,
-> >=20
-> > Also not sure.... In the meantime Ibrahim left ADI so if this is not in
-> > shape to
-> > be merged he won't be able to re-spin. If there's a need for a re-spin,
-> > please
-> > let me know so I can see internally if there's someone who can continue=
- this
-> > work. I would do it myself if I had the HW.
-> I've got a board with a max31331 so I can test that. I don't have any of=
-=20
-> the interrupts hooked up so I won't be able to test that. Looks like=20
-> there was some outstanding discussion around the trickle-charge=20
-> devicetree properties so I'd need to figure out what was wanted there.=
-=20
-> I'll try to pick up the last series from the mailing list and go from the=
-re.
+Add support for mpq8785 device from Monolithic Power Systems, Inc.
+(MPS) vendor. This is synchronous step-down controller.
 
-Thanks Chris!
+Signed-off-by: Charles Hsu <ythsu0511@gmail.com>
 
-- Nuno S=C3=A1
+---
+Change in v1:
+    Initial patchset.
+Change in v2:
+    1.Add pmbus support status registers.
+    2.Add mpq8785 in trivial-devices.yaml.
+    3.Remove format[PSC_VOLTAGE_OUT]
+    4.Fix MODULE_DESCRIPTION
+---
+ .../devicetree/bindings/trivial-devices.yaml  |  2 +
+ Documentation/hwmon/index.rst                 |  1 +
+ Documentation/hwmon/mpq8785.rst               | 94 +++++++++++++++++++
+ drivers/hwmon/pmbus/Kconfig                   |  9 ++
+ drivers/hwmon/pmbus/Makefile                  |  1 +
+ drivers/hwmon/pmbus/mpq8785.c                 | 62 ++++++++++++
+ 6 files changed, 169 insertions(+)
+ create mode 100644 Documentation/hwmon/mpq8785.rst
+ create mode 100644 drivers/hwmon/pmbus/mpq8785.c
+
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index 79dcd92c4a43..088b23ed2ae6 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -129,6 +129,8 @@ properties:
+           - mps,mp2975
+             # Monolithic Power Systems Inc. multi-phase hot-swap controller mp5990
+           - mps,mp5990
++            # Monolithic Power Systems Inc. synchronous step-down converter mpq8785
++          - mps,mpq8785
+             # Honeywell Humidicon HIH-6130 humidity/temperature sensor
+           - honeywell,hi6130
+             # IBM Common Form Factor Power Supply Versions (all versions)
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index c7ed1f73ac06..085ad6ca9b05 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -163,6 +163,7 @@ Hardware Monitoring Kernel Drivers
+    mp2975
+    mp5023
+    mp5990
++   mpq8785
+    nct6683
+    nct6775
+    nct7802
+diff --git a/Documentation/hwmon/mpq8785.rst b/Documentation/hwmon/mpq8785.rst
+new file mode 100644
+index 000000000000..bf8176b87086
+--- /dev/null
++++ b/Documentation/hwmon/mpq8785.rst
+@@ -0,0 +1,94 @@
++.. SPDX-License-Identifier: GPL-2.0-only
++
++Kernel driver mpq8785
++=======================
++
++Supported chips:
++
++  * MPS MPQ8785
++
++    Prefix: 'mpq8785'
++
++Author: Charles Hsu <ythsu0511@gmail.com>
++
++Description
++-----------
++
++The MPQ8785 is a fully integrated, PMBus-compatible, high-frequency, synchronous
++buck converter. The MPQ8785 offers a very compact solution that achieves up to
++40A output current per phase, with excellent load and line regulation over a
++wide input supply range. The MPQ8785 operates at high efficiency over a wide
++output current load range.
++
++The PMBus interface provides converter configurations and key parameters
++monitoring.
++
++The MPQ8785 adopts MPS's proprietary multi-phase digital constant-on-time (MCOT)
++control, which provides fast transient response and eases loop stabilization.
++The MCOT scheme also allows multiple MPQ8785 devices to be connected in parallel
++with excellent current sharing and phase interleaving for high-current
++applications.
++
++Fully integrated protection features include over-current protection (OCP),
++over-voltage protection (OVP), under-voltage protection (UVP), and
++over-temperature protection (OTP).
++
++The MPQ8785 requires a minimal number of readily available, standard external
++components, and is available in a TLGA (5mmx6mm) package.
++
++Device compliant with:
++
++- PMBus rev 1.3 interface.
++
++The driver exports the following attributes via the 'sysfs' files
++for input voltage:
++
++**in1_input**
++
++**in1_label**
++
++**in1_max**
++
++**in1_max_alarm**
++
++**in1_min**
++
++**in1_min_alarm**
++
++**in1_crit**
++
++**in1_crit_alarm**
++
++The driver provides the following attributes for output voltage:
++
++**in2_input**
++
++**in2_label**
++
++**in2_alarm**
++
++The driver provides the following attributes for output current:
++
++**curr1_input**
++
++**curr1_label**
++
++**curr1_max**
++
++**curr1_max_alarm**
++
++**curr1_crit**
++
++**curr1_crit_alarm**
++
++The driver provides the following attributes for temperature:
++
++**temp1_input**
++
++**temp1_max**
++
++**temp1_max_alarm**
++
++**temp1_crit**
++
++**temp1_crit_alarm**
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index 294808f5240a..557ae0c414b0 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -377,6 +377,15 @@ config SENSORS_MPQ7932
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called mpq7932.
+ 
++config SENSORS_MPQ8785
++	tristate "MPS MPQ8785"
++	help
++	  If you say yes here you get hardware monitoring functionality support
++	  for power management IC MPS MPQ8785.
++
++	  This driver can also be built as a module. If so, the module will
++	  be called mpq8785.
++
+ config SENSORS_PIM4328
+ 	tristate "Flex PIM4328 and compatibles"
+ 	help
+diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+index cf8a76744545..f14ecf03ad77 100644
+--- a/drivers/hwmon/pmbus/Makefile
++++ b/drivers/hwmon/pmbus/Makefile
+@@ -39,6 +39,7 @@ obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
+ obj-$(CONFIG_SENSORS_MP5023)	+= mp5023.o
+ obj-$(CONFIG_SENSORS_MP5990)	+= mp5990.o
+ obj-$(CONFIG_SENSORS_MPQ7932)	+= mpq7932.o
++obj-$(CONFIG_SENSORS_MPQ8785)	+= mpq8785.o
+ obj-$(CONFIG_SENSORS_PLI1209BC)	+= pli1209bc.o
+ obj-$(CONFIG_SENSORS_PM6764TR)	+= pm6764tr.o
+ obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
+diff --git a/drivers/hwmon/pmbus/mpq8785.c b/drivers/hwmon/pmbus/mpq8785.c
+new file mode 100644
+index 000000000000..52c73e5f6a3e
+--- /dev/null
++++ b/drivers/hwmon/pmbus/mpq8785.c
+@@ -0,0 +1,62 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Driver for MPS MPQ8785 Step-Down Converter
++ */
++
++#include <linux/i2c.h>
++#include <linux/module.h>
++#include <linux/of_device.h>
++#include "pmbus.h"
++
++static struct pmbus_driver_info mpq8785_info = {
++	.pages = 1,
++	.format[PSC_VOLTAGE_IN] = direct,
++	.format[PSC_CURRENT_OUT] = direct,
++	.format[PSC_TEMPERATURE] = direct,
++	.m[PSC_VOLTAGE_IN] = 4,
++	.b[PSC_VOLTAGE_IN] = 0,
++	.R[PSC_VOLTAGE_IN] = 1,
++	.m[PSC_CURRENT_OUT] = 16,
++	.b[PSC_CURRENT_OUT] = 0,
++	.R[PSC_CURRENT_OUT] = 0,
++	.m[PSC_TEMPERATURE] = 1,
++	.b[PSC_TEMPERATURE] = 0,
++	.R[PSC_TEMPERATURE] = 0,
++	.func[0] =
++		PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT |
++		PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
++		PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
++		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
++};
++
++static int mpq8785_probe(struct i2c_client *client)
++{
++	return pmbus_do_probe(client, &mpq8785_info);
++};
++
++static const struct i2c_device_id mpq8785_id[] = {
++	{ "mpq8785", 0 },
++	{ },
++};
++MODULE_DEVICE_TABLE(i2c, mpq8785_id);
++
++static const struct of_device_id __maybe_unused mpq8785_of_match[] = {
++	{ .compatible = "mps,mpq8785" },
++	{}
++};
++MODULE_DEVICE_TABLE(of, mpq8785_of_match);
++
++static struct i2c_driver mpq8785_driver = {
++	.driver = {
++		   .name = "mpq8785",
++		   .of_match_table = of_match_ptr(mpq8785_of_match),
++	},
++	.probe_new = mpq8785_probe,
++	.id_table = mpq8785_id,
++};
++
++module_i2c_driver(mpq8785_driver);
++
++MODULE_AUTHOR("Charles Hsu <ythsu0511@gmail.com>");
++MODULE_DESCRIPTION("PMBus driver for MPS MPQ8785");
++MODULE_LICENSE("GPL");
+-- 
+2.34.1
+
