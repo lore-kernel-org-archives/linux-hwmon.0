@@ -1,143 +1,85 @@
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38CF865BB9;
-	Tue, 30 Jan 2024 10:21:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2F1C67E98
+	for <linux-hwmon@vger.kernel.org>; Tue, 30 Jan 2024 11:46:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706610111; cv=none; b=t8DK+EbUIawK/tpheXEUh4DFsUhS7Ty2NUm4CIqbrLasqUOPV6zUJ97E8tudcZEDllhKgasrwxSWFMhNZZBO8MX2IWye3A7pynEMuGWdCrxYS6eOZ3CWmSeNHcG9EflsQvMOpfRdnr3EU0AKmz3cEWQoezAI3S/S9zlntYDDgE8=
+	t=1706615212; cv=none; b=rknU46dKXXZo/CGSKkNoNXBndIn8VAvJlWxvkYgIVoN7iuxOc+e/k/uqiF6Zh9VKQOvYrG2QLGyBGRLA1vtgFN5HNQMd9RsGGLPn68cZDcOu0cjjqnlaMJPKcLijsLdzmsRRlRwQV+A6Fi5nBVZKmqzU1VrpctXcwMKFw0uPU+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706610111; c=relaxed/simple;
-	bh=a2BTL8SBv7QBEt7tWzfKlIFmC4VJGefkz7RX3H6+xX0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o4+MD4WLSzHymd/K9pYKPqdSMr7tT2kJXyB1AHUGWkmUVzdzFRVQ7Derv3MWU4RKJaJjgQqKATtcbYxDwi8Lfuh66KM4FbQBzVxEbYqE7HiW0ADsk6PQVJS+gmVmXdRLX/Hcm0CTK3i2hVmvulbMdNN55j3aFUHyM4bVcNcifFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=PQtfvQ4H; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+	s=arc-20240116; t=1706615212; c=relaxed/simple;
+	bh=y5fKmR83px8Y/ZQgyh2eeFCI3oTRb5BOV/892hDJJd0=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=mXB1uEI6rlDnu8sN5Gksl++77HWpOz3FFVo1xoHX8wOFOU2ZLil9zacTjwPErQOuTRttgfAUt/t9Z7eU99BtkTguve21DR1mHcBNDEKlpdsIIf3GFnEVCsvFUn6Stg08ClOY0GTopvvdpBbGD/2MIPYSjKmrYl59cYwk1Bm+EhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nLE+5lR+; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="PQtfvQ4H"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=7X7nyoTob837kWWS4ii2spbXx6qHIsfIrrozaG7eBhw=; b=PQtfvQ4HPrhtLZf/ky6DE1d/mi
-	6rP+Gbp9/1EAYGUkkbwtIZhlLo3uejAakSHk6CQ5XHEKMmMyxahazloEQ20EE9kr9pgS1kIexNHZi
-	m9iC2HgVg9isgFgr/9myEHDJaLrZk40tsCi4Rj9RRQiNfeLqkRno8n5yAXQD8XWCkUuAnfo+v8QEK
-	k6kxpsbXuoYnCAUZf7kkwCD9JUMZ+V6vD9ONzN32HmSYdOnQ4qLmzwn/gQGlh+WajsWlWnOXO6bnK
-	gV5Biuqx40A9fITUM64AFjqn4F2CRpCgtR/KsRTT88VIcXwmXeMcaBMdH17IFtp6lg2MRlDscceiD
-	8ccWrW5w==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:50698)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1rUlF6-0001dH-2d;
-	Tue, 30 Jan 2024 10:21:25 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1rUlF1-0005Ql-Cp; Tue, 30 Jan 2024 10:21:19 +0000
-Date: Tue, 30 Jan 2024 10:21:19 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Choong Yong Liang <yong.liang.choong@linux.intel.com>
-Cc: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
-	David E Box <david.e.box@linux.intel.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Mark Gross <markgross@kernel.org>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Jose Abreu <Jose.Abreu@synopsys.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Andrew Halaney <ahalaney@redhat.com>,
-	Simon Horman <simon.horman@corigine.com>,
-	Serge Semin <fancer.lancer@gmail.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	bpf@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
-	Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
-	Lai Peter Jun Ann <jun.ann.lai@intel.com>,
-	Abdul Rahim Faizal <faizal.abdul.rahim@intel.com>
-Subject: Re: [PATCH net-next v4 06/11] net: stmmac: resetup XPCS according to
- the new interface mode
-Message-ID: <ZbjNn+C/VHegH2t7@shell.armlinux.org.uk>
-References: <20240129130253.1400707-1-yong.liang.choong@linux.intel.com>
- <20240129130253.1400707-7-yong.liang.choong@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nLE+5lR+"
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-33ae7ae1c32so1674841f8f.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 30 Jan 2024 03:46:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1706615209; x=1707220009; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=y5fKmR83px8Y/ZQgyh2eeFCI3oTRb5BOV/892hDJJd0=;
+        b=nLE+5lR++Suf3YWLZPjqFA539b5roz54NtwkMxb6v78sYwo3rwoCQq1HcGe0IVvhFS
+         0A0T2Oq3rDRZEh2VcN8pUYdLNaDg4fGfdl0Rem6tRjQ/XCB/b4oYryw7LbFtTaJJOm+y
+         GIA/IIvtwmddgSsxL7T+5HqVpp6U8ywYMY636Q5OupQ/zG1/9pmkP5TH1Yp9vjN8zxRt
+         WLVNfhUjLCZMRrnjPA9hc4cl19ULduIJJ4goxJ8ixqmB6mSOr/fqTZWhgEd1aXxXq2+X
+         53HLsLF7eztxKGe4altqXZJnVqg8cVHH5lGb78Cscb+aknVU1map1+A3zTbdMiwcRx5S
+         1Dmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706615209; x=1707220009;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=y5fKmR83px8Y/ZQgyh2eeFCI3oTRb5BOV/892hDJJd0=;
+        b=aq80zIvVsLEAXloyeIi320bXepu8MbvS0EnbCKC2mfyJWxMHh8ZGiyD1y8EUY7cWhL
+         XaK1xJ0M7jkOBqwyPl+jdmu7EO4uxxYopRcVxAH3Ff57FXUtC7zcuUVF7TVvbeWha5BF
+         FIFeTAfQorTioHevU/QaG/Ipk37WiQ7HsDkn8aYqYuT3XGXRErwTdJXt7nhmpjnS4Qhr
+         TKe5bd9yUDfx7VbIs+4b668U/+DvSHtaxYhMiamE+z9B/3mxcFGuAyOYXIXv7z43Ga9A
+         B11druzNsTF1Fbr0WKPpo0PjLd3kn4D7AOs3NckgU7+RCXXMDdd2YwO6A2BRzu6V0Jcr
+         1TPw==
+X-Gm-Message-State: AOJu0YyKc+L1VemvwSz6dboc1+1UIyl2+47aCjtsOPjy9BxD97L+iNfx
+	rUjCvQwYfydC35UuWt/mQBxnchebusYADHraEv+/aQ+bK5gD1TN+bxF6EIJkdi48lOZMql7uoj+
+	Rzq3aB8xz5iEqaIhrkXGXtV0LNR5Sf0ONW4CZdBqB2AaSJpF8Kkc=
+X-Google-Smtp-Source: AGHT+IHi+jJFXHQck7L3PXGqggm6BkPEbCGQDwK3j+agUVPV/UfUUzL8IeeC79NrzRtuqCdP5E8hX9zzcKjxJFNJioU=
+X-Received: by 2002:adf:d1e6:0:b0:33a:fd45:341 with SMTP id
+ g6-20020adfd1e6000000b0033afd450341mr688073wrd.30.1706615208973; Tue, 30 Jan
+ 2024 03:46:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240129130253.1400707-7-yong.liang.choong@linux.intel.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+From: Sahaj Sarup <sahaj.sarup@linaro.org>
+Date: Tue, 30 Jan 2024 17:16:37 +0530
+Message-ID: <CAKZ1LvMMri3dVKxGDCY5mkXKA1evkOaD4dGF02A9qYdbiWMp7Q@mail.gmail.com>
+Subject: Clarification on shunt-resistor value for ina219
+To: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Jan 29, 2024 at 09:02:48PM +0800, Choong Yong Liang wrote:
-> XPCS creation will map the configuration for the provided interface mode.
-> Then XPCS will operate according to the interface mode.
-> 
-> When the interface mode changes, XPCS is required to map the configuration
-> to the new interface mode and destroy the old interface mode where it
-> is not in use.
-> 
-> Signed-off-by: Choong Yong Liang <yong.liang.choong@linux.intel.com>
-> ---
->  drivers/net/ethernet/stmicro/stmmac/stmmac.h      |  2 +-
->  drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 13 +++++++++++--
->  drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c |  7 +++----
->  3 files changed, 15 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac.h b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
-> index f155e4841c62..886efd26991e 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac.h
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
-> @@ -357,7 +357,7 @@ enum stmmac_state {
->  int stmmac_mdio_unregister(struct net_device *ndev);
->  int stmmac_mdio_register(struct net_device *ndev);
->  int stmmac_mdio_reset(struct mii_bus *mii);
-> -int stmmac_xpcs_setup(struct mii_bus *mii);
-> +int stmmac_xpcs_setup(struct mii_bus *mii, phy_interface_t interface);
->  void stmmac_set_ethtool_ops(struct net_device *netdev);
->  
->  int stmmac_init_tstamp_counter(struct stmmac_priv *priv, u32 systime_flags);
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> index 00af5a4195fd..50429c985441 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> @@ -941,8 +941,17 @@ static struct phylink_pcs *stmmac_mac_select_pcs(struct phylink_config *config,
->  {
->  	struct stmmac_priv *priv = netdev_priv(to_net_dev(config->dev));
->  
-> -	if (priv->hw->xpcs)
-> +	if (priv->hw->xpcs) {
-> +		if (interface != PHY_INTERFACE_MODE_NA &&
-> +		    interface != priv->plat->phy_interface) {
-> +			/* When there are major changes, we reconfigure
-> +			 * the setup for xpcs according to the interface.
-> +			 */
-> +			xpcs_destroy(priv->hw->xpcs);
-> +			stmmac_xpcs_setup(priv->mii, interface);
+Hi,
 
-NAK. Absolutely not. You haven't read the phylink documentation, nor
-understood how phylink works.
+I had a quick question about the ina219 driver
 
-Since you haven't read the phylink documentation, I'm not going to
-waste any more time reviewing this series since you haven't done your
-side of the bargin here.
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+Is the devictree expecting the shunt-resistor value that is actually
+on the PCB or is it some calculation based on the calibration value
+being a static 4096?
+
+I am confused because of this comment in the driver
+
+```
+In order to keep calibration register value fixed, the product of
+current_lsb and shunt_resistor should also be fixed and equal to
+shunt_voltage_lsb = 1 / shunt_div multiplied by 10^9 in order to keep
+the scale.
+```
+
+I am seeing a bit of deviation with a 13 mOhm shunt at 12v 3A, I am
+getting a reading of 3.14 A from the ina219.
+
+Thanks,
+Sahaj
