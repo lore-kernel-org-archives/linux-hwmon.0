@@ -1,175 +1,108 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49B427D3EE;
-	Tue, 30 Jan 2024 22:00:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 439B714F78
+	for <linux-hwmon@vger.kernel.org>; Tue, 30 Jan 2024 23:07:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706652003; cv=none; b=FfnETyFYEg7DA7JjXVIa3gcEopEOLGO4OEJVVbQDTZFCLEm9XInlBnBLG5CWtrgYszJ5CBscSSEC/19u6ohvzOnIjcHB+fhMqtlU7KUMKnzY3CzEc4+hclDIm4OEe+IKhR/cqkgLTPFfJ1pRg7hhKTvZJ4rWa4ybCMQ3cvewvso=
+	t=1706656029; cv=none; b=qEYoxqSG1yr/5h3goymqSnxhrA7/VNHeXhhfa36Qt4fi3sfkDB033HPsBxqPxm1RtR9rzX6IMoCHbcwsZKKARStLFVTK1bBGYYKhP3oqvfRazWQjGD037iKGzrMVVO0LB1tjNdBigfWNvBsfDs2ObEGfTBEK22bHwfW/iOwcvvM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706652003; c=relaxed/simple;
-	bh=1CW3qMyVGvYAz2Ags8+A5XJXNqBlJu/Dw4yb/APpQuQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QdbRJ+MvkVXoT7ZpQdGcHLqBEmyS4XxpVnc53l6x9t5yOADuNgdgPOTtOME83lUQeU5hdEvNutludJ2BcoKAbA+jnCjmg8Ns2i+Op5xlK0tizPZaerAISACep9hMfJGaFePIFuWa4s/vFvxnlS+m3Py7Dp1qg2QbS8ZyySbb+qw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DqPeVdmr; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1706656029; c=relaxed/simple;
+	bh=Quzl4oZDEPNpjQL8yEy8YSM4ZcrJbwUZ4aOuRk5Xgpk=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=MutxHkAzBJVigHRcj3spW/qjkfvRFXq0KcakjKn1PBMQ5P4h4w7oR1tTRTnosq9MK9ItgnzlQwZNR3w7kgg60qSqCtFNuc8VrNYi5hFaXwMPwddgx/RZaV6pIeyN4peUZK7ZvGay0MNxWDZnvz7XxL+fyJPYoezdUmMKqcG+xYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iwanders.net; spf=pass smtp.mailfrom=iwanders.net; dkim=pass (1024-bit key) header.d=iwanders.net header.i=@iwanders.net header.b=EQKtjL97; arc=none smtp.client-ip=209.85.219.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iwanders.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iwanders.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DqPeVdmr"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1d91397bd22so7215065ad.0;
-        Tue, 30 Jan 2024 14:00:01 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=iwanders.net header.i=@iwanders.net header.b="EQKtjL97"
+Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-6818f3cf00aso37886996d6.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 30 Jan 2024 15:07:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706652000; x=1707256800; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9gsRDr5VvL9comRbizRuuGN62ar8G3zXGkqfZiAmKLE=;
-        b=DqPeVdmrV2bpMdiV5gJ5gHijtDSJZQoFKqtM4ZI0IIklYxxTO45tbDOztCD+NUptUa
-         4yEdHVwzZiK8a6u83lN7jhapG6wtBrNGf10+hYhRWwFozED6Yd7Kxhpr7u/QsVMUfPaO
-         pJAXTQQj4qtCJIzPYganX03oFPF6XLWfm8iTKBfo4FAg60jPDOlyO52Dg9wcVD1OXh9h
-         O3VwDo17GBm65Cr4OH7xxx5TDQ1SO+TcYRn4cTx5w7R+vg1XYk0sdFYbuWoRu54EedEQ
-         nnyA3/V3ea1Gn25Tg47bpzpd5Wi6avt28utYQWv3HE6jF/bZ6jhxVfflhOtvfgPnns6j
-         OZXA==
+        d=iwanders.net; s=google; t=1706656026; x=1707260826; darn=vger.kernel.org;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2Epf2KC/FEpd6pon/LPvJu29mO0Kvpnb2m/NzsfdKN4=;
+        b=EQKtjL97eC2GGb+Q4kXM/CDYwMs3dgQ0DBL7c3uZH8aTsgawm4OSRw8A/ujxmv1G1P
+         6EyzDIRiV8/NCemW5scYphWsDx1L7ZwtF28wP8syXF9JHErqKqccsn24zI6uO7o/TM9l
+         PlW7cB68QGJoE+5x/KE/ryxEWqXD1PdYtqzYE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706652000; x=1707256800;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1706656026; x=1707260826;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9gsRDr5VvL9comRbizRuuGN62ar8G3zXGkqfZiAmKLE=;
-        b=LIB3Ig8EsbYm4klYpElvKwqGslX5VCZOU++T+nTMJV7hFE7Pnu0Eqp+s//pVJbql7D
-         uUU2r2R3laAaFsj2aRrHkGJsFGZT2tGVn9oEl6fuy82zXbHmU+F88pwpnOiTplAa61Iq
-         GAuCzB6qKFQQ5m63eAxp3XDObw5y4WklX5zfrqVJ2kSr3S4oIbWirvPiNMKSnLVW4lj1
-         EA0TI5a+bj4OXWTvD+4muxSrwM4PEIpapp76u6CtCwnxGOjCVs9pvbulSSBdd5OL9RBG
-         dXdUxLJtEy30msanYZbyxpYmbz5TWW630Em1b0nH/ZrfDL1XymyzUNznB/kS6lndnIFd
-         5wdQ==
-X-Gm-Message-State: AOJu0YyS7tmq3ne1fxIQiBgeo8U8Evl5odsE8Ocmpp7JeiCytZCneFIB
-	NAQ8Exjk0c6xnW1yMQHLZGTkfacC40CNrpz0MMqXFEgYrpG4rcjK
-X-Google-Smtp-Source: AGHT+IH3yWI6AdKAlLcFmsCpgy1m/pZebQoKxre+4/5fgpML7mVHH7PSVwwJu6mXQw7vmimJ/CcW4g==
-X-Received: by 2002:a17:902:d48e:b0:1d8:c1ed:74d6 with SMTP id c14-20020a170902d48e00b001d8c1ed74d6mr907547plg.14.1706652000342;
-        Tue, 30 Jan 2024 14:00:00 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id lb3-20020a170902fa4300b001d913992d91sm1494529plb.240.2024.01.30.13.59.58
+        bh=2Epf2KC/FEpd6pon/LPvJu29mO0Kvpnb2m/NzsfdKN4=;
+        b=wWkdu4PfaEnJeq3UuV1VDzu80hQVx2/ZsZ5WJDcKAL538FZSiapa6RSOmqihdqJlY1
+         963wGUHhJwRdLmtFo9Jx+sl943bHylhRKng8jAuclOt2NqkCRslBbNDB2fiYg3pIY4Zq
+         LzXI4booIMxnFUqPOyeLUDSU9T3FMffiMh/bs43y1gNGyypKll/iTHkgjRpRwIC1ioAV
+         rK4cIpGdgI5Asqsi6HUX9Ux28rvltmoTmqcpNAmHj72vlK5NTyxKvwGHhuILuXXjvvsK
+         bjEP/WM24sgyqt9kPQq7B2bXO0tohfcWvMLsx+u5mfHt9ekhwrLeMjiMNs5WPcvdbUOJ
+         7GZw==
+X-Gm-Message-State: AOJu0YyEVKqzQuIL1qspeQUAD67/C+LZkZNSiQ4Fzp8YeZK0bZobisHp
+	T6HU5BNq776Cd+OYxTEgF0q1dtYlrT82pW8ARyZKZ7RHI7V70ZaQ3vQ8L6vGApQ=
+X-Google-Smtp-Source: AGHT+IHjoLRRl7FtA9PjjP07nRCgbztT5Y+p53GUCQOoyhIcXVUPH4zHFCSvlvg8WWGngx/oVuljCA==
+X-Received: by 2002:a05:6214:1d0a:b0:68c:360e:ca with SMTP id e10-20020a0562141d0a00b0068c360e00camr10305479qvd.57.1706656026093;
+        Tue, 30 Jan 2024 15:07:06 -0800 (PST)
+Received: from eagle.lan (24-246-30-234.cable.teksavvy.com. [24.246.30.234])
+        by smtp.gmail.com with ESMTPSA id di8-20020ad458e8000000b0068c47832171sm3081275qvb.65.2024.01.30.15.07.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jan 2024 13:59:59 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 30 Jan 2024 13:59:57 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Naresh Solanki <naresh.solanki@9elements.com>
-Cc: Jean Delvare <jdelvare@suse.com>, mazziesaccount@gmail.com,
-	Patrick Rudolph <patrick.rudolph@9elements.com>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (pmbus/mp2975) Fix IRQ masking
-Message-ID: <cd84b051-1608-48c0-8335-b038cd236f61@roeck-us.net>
-References: <20240130175140.3834889-1-naresh.solanki@9elements.com>
+        Tue, 30 Jan 2024 15:07:05 -0800 (PST)
+From: Ivor Wanders <ivor@iwanders.net>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Maximilian Luz <luzmaximilian@gmail.com>,
+	Ivor Wanders <ivor@iwanders.net>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Mark Gross <markgross@kernel.org>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org
+Subject: [PATCH v4 0/2] Surface fan monitoring driver
+Date: Tue, 30 Jan 2024 18:06:52 -0500
+Message-Id: <20240130230654.4218-1-ivor@iwanders.net>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240130175140.3834889-1-naresh.solanki@9elements.com>
 
-On Tue, Jan 30, 2024 at 11:21:39PM +0530, Naresh Solanki wrote:
-> From: Patrick Rudolph <patrick.rudolph@9elements.com>
-> 
-> The MP2971/MP2973 use a custom 16bit register format for
-> SMBALERT_MASK which doesn't follow the PMBUS specification.
-> 
-> Map the PMBUS defined bits used by the common code onto the custom
-> format used by MPS and since the SMBALERT_MASK is currently never read
-> by common code only implement the mapping for write transactions.
-> 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
-> ---
->  drivers/hwmon/pmbus/mp2975.c | 57 ++++++++++++++++++++++++++++++++++++
->  1 file changed, 57 insertions(+)
-> 
-> 
-> base-commit: 909d8d33f8b4664c9b6c7fd585114921af77fc2b
-> 
-> diff --git a/drivers/hwmon/pmbus/mp2975.c b/drivers/hwmon/pmbus/mp2975.c
-> index b9bb469e2d8f..788ec2c5a45f 100644
-> --- a/drivers/hwmon/pmbus/mp2975.c
-> +++ b/drivers/hwmon/pmbus/mp2975.c
-> @@ -377,6 +377,62 @@ static int mp2973_read_word_data(struct i2c_client *client, int page,
->  	return ret;
->  }
->  
-> +static int mp2973_write_word_data(struct i2c_client *client, int page,
-> +				  int reg, u16 word)
-> +{
-> +	u8 target, mask;
-> +	int ret;
-> +
-> +	if (reg != PMBUS_SMBALERT_MASK)
-> +		return -ENODATA;
-> +
-> +	/*
-> +	 * Vendor-specific SMBALERT_MASK register with 16 maskable bits.
-> +	 */
-> +	ret = pmbus_read_word_data(client, 0, 0, PMBUS_SMBALERT_MASK);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	target = word & 0xff;
-> +	mask = word >> 8;
-> +
-> +#define SWAP(cond, bit) (ret = (cond) ? (ret & ~BIT(bit)) : (ret | BIT(bit)))
+Fourth version of a hwmon driver to monitor the fan's rpm on Microsoft 
+Surface devices, originally submitted in [1], v2 at [2], v3 at [3]. Changes
+since v3 are two minor code changes based on feedback.
 
-This isn't really a "SWAP", but setting or clearing of bits in "ret"
-depending on a bit set in "cond". I don't have a good idea for a
-better name, but either case I think a comment describing what it
-does would be useful.
+Changes in v4:
+  - Return 0 from surface_fan_hwmon_read instead of ret.
+  - Use PTR_ERR_OR_ZERO in probe instead of if statement.
+Changes in v3:
+  - Removed type and attr checks in read and is_visible.
+  - Removed assigning sdev to ssam_device drvdata.
+  - Propagate return from __ssam_fan_rpm_get.
+  - Renamed hwmon chip name from 'fan' to 'surface_fan'.
+  - Removed unnecessary platform_device header.
+Changes in v2:
+  - Removed all unsupported sysfs attributes from the hwmon driver, leaving
+    the fan input as the only supported attribute.
 
-"ret" use is implied, but "mask" is always provided as parameter.
-Please either provide both as arguments, or make both implied.
+[1] https://lore.kernel.org/linux-hwmon/20231220234415.5219-1-ivor@iwanders.net/T/
+[2] https://lore.kernel.org/linux-hwmon/20231228003444.5580-1-ivor@iwanders.net/T/
+[3] https://lore.kernel.org/linux-hwmon/20240113183306.9566-1-ivor@iwanders.net/T/
 
-Also, the first parameter is a bit mask, while the second parameter
-is a bit position. Please used defines for the second parameter
-and make it a mask as well.
+Ivor Wanders (2):
+  platform/surface: aggregator_registry: add entry for fan speed
+  hwmon: add fan speed monitoring driver for Surface devices
 
-> +	switch (target) {
-> +	case PMBUS_STATUS_CML:
-> +		SWAP(mask & PB_CML_FAULT_INVALID_DATA, 8);
-> +		SWAP(mask & PB_CML_FAULT_INVALID_COMMAND,  9);
-> +		SWAP(mask & PB_CML_FAULT_OTHER_COMM, 5);
-> +		SWAP(mask & PB_CML_FAULT_PACKET_ERROR, 7);
-> +		break;
-> +	case PMBUS_STATUS_VOUT:
-> +		SWAP(mask & PB_VOLTAGE_UV_FAULT, 13);
-> +		SWAP(mask & PB_VOLTAGE_OV_FAULT, 14);
-> +		break;
-> +	case PMBUS_STATUS_IOUT:
-> +		SWAP(mask & PB_IOUT_OC_FAULT, 11);
-> +		SWAP(mask & PB_IOUT_OC_LV_FAULT, 10);
-> +		break;
-> +	case PMBUS_STATUS_TEMPERATURE:
-> +		SWAP(mask & PB_TEMP_OT_FAULT, 0);
-> +		break;
-> +	/*
-> +	 * Map remaining bits to MFR specific to let the PMBUS core mask
-> +	 * those bits by default.
-> +	 */
-> +	case PMBUS_STATUS_MFR_SPECIFIC:
-> +		SWAP(mask & BIT(1), 1);
-> +		SWAP(mask & BIT(3), 3);
-> +		SWAP(mask & BIT(4), 4);
-> +		SWAP(mask & BIT(6), 6);
-> +		break;
+ Documentation/hwmon/index.rst                 |  1 +
+ Documentation/hwmon/surface_fan.rst           | 25 +++++
+ MAINTAINERS                                   |  8 ++
+ drivers/hwmon/Kconfig                         | 13 +++
+ drivers/hwmon/Makefile                        |  1 +
+ drivers/hwmon/surface_fan.c                   | 91 +++++++++++++++++++
+ .../surface/surface_aggregator_registry.c     |  7 ++
+ 7 files changed, 146 insertions(+)
+ create mode 100644 Documentation/hwmon/surface_fan.rst
+ create mode 100644 drivers/hwmon/surface_fan.c
 
-Coming back to using defines for the second parameter: The
-above bit positions appear to be purely random. Having defines for
-those bits will at least explain what is being masked (and hopefully
-explain why bit 2, 12, and 15 are not covered at all).
-For example, at least one other chip from the same vendor defines
-bit 6 as CRC_ERROR, and the matching status register bit is bit
-4 (memory fault detected) in STATUS_CML. Also, it is unclear why
-the chip would not issue any alerts when warning limits are exceeded.
-Without knowing what the bits in SMBALERT_MASK mean it is impossible
-to validate if the above is correct and/or complete.
+-- 
+2.17.1
 
-Thanks,
-Guenter
