@@ -1,167 +1,185 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3226150987
-	for <linux-hwmon@vger.kernel.org>; Tue, 30 Jan 2024 17:51:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77B55762C1;
+	Tue, 30 Jan 2024 21:06:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706637111; cv=none; b=Km2oJcQOqqXWUlo3aEXSzugl6d4nxPSUSYkqnriiHUan8VJ6Jkt3SUNXyvcJpPHtJuJFsm3ptGPn7lDyxCvhMq8pe7ywePfus7xj73i3AZMdHbZBHkQrqtZgv5vdjjck7ARqpA0c8cTAGDtEgEHwdeEEfuFYekaG/b3PtX66c2A=
+	t=1706648813; cv=none; b=EttBKKuksbbHLi4IflV9fGW/YkzL1EZNnUn/3WuoqHNoZhL2KpajA0JF5iaJFJ+bum7XPzmQyLGWPrSbHr8mok8c9ixD1nfcYh8t2VaxZjaR8FkQB+laHvlnz3aH849NPxnS83yTUK70STavv1CO//f5stvNWhsRiDX/rYM4BKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706637111; c=relaxed/simple;
-	bh=E9+T3tYBO9u11qhS/NZ3oeL/SZ6kNpAatlkb1dP5uHE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aWkTTtHIb+CATLwUQCiIgMLGCD/NkHATncnCVRUQL4vBQYxhbOOA9EicXy7PZ5yxhAeCMwjOgq7yt+R4mjIqCDeTZu+wdIHj19x522hngrK6JkHEpjNcCb22IZUFVvfhzCi22/dqOoTw4npu65chlFwtR/xvNlXnr4uO38NsfnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=FXo8Lo5X; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
+	s=arc-20240116; t=1706648813; c=relaxed/simple;
+	bh=G7oKuuUl6F/NZVDaLnFrLG+cVIgz6WY292NlMMKuYrQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=cpNVkFdfP4GbVPfoDoZzLzdo0gxgwK34UzRTGvmIT0adBbv2MwwUg2kM6PM53l+mfZUpXRHdrVGe8HCU6VC5nxG7wDjw25RpOJVy4SFWU5ZZ1K/9rRHslRn2wjTb1eeapmoaMS8pdC8OymdK1KaCMkK3tvwYsXvim3xlMSbW2R0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZHaIw+OC; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="FXo8Lo5X"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-33ae6dfa923so1860766f8f.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 30 Jan 2024 09:51:48 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZHaIw+OC"
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a35e9161b8cso309418366b.3;
+        Tue, 30 Jan 2024 13:06:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1706637107; x=1707241907; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bQgZSjsUgd4Ba/M69hqq/7iyLw1vdKJRuphfN6JZy2M=;
-        b=FXo8Lo5XHFPArGH7XdNbSeG6m94wLBWkS0cMlR5Qxxztn55JwrKn8foaxG0mf1HD5E
-         FAMepnGfq7DrAGl8SaVc17bMxfQzDHytrXRhivcTGYUoUMOOVGWQoH0EEhbxgq1/JFbf
-         0IlH2aj9vQi05pPlE3tDxJrMxoKYYcSzGxk1jfsxyM/4SdpYARB11z2yNdlDlk0m81zJ
-         hFs/aGgMpoMD2e/2LqV6vROuFutevastZJ/z7bTkbflwjDi1LAkiNrBwMTj4mrJPzMoV
-         eJOeG4B3zebvl1DV2FGESTpdDmFtiapM1IclW/hPXQqqasdYXHf/gxsr6CbK+gJ1tSN4
-         nHkg==
+        d=gmail.com; s=20230601; t=1706648810; x=1707253610; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YZ8+EIN9jvWos6oJV0QHQ8FYXYo9RbLYxWqS1XhaSxU=;
+        b=ZHaIw+OCDttx+teTxkSVg8NT01pN29dQ+3HccKkvuz4ZLQZ7YChljLAPsdCwNDpszp
+         jWO0ZqcZ8dYGYMQfO7/h/EWvdSoqPDN/ChdVwHADRAv7NJwmdc4yTL/Y/FnK+eZBog3c
+         TULNo2Z/Oq9haK7WBNMFVJS0xkpRmMPvWI5tLP1KM2FQYYONGdBtaNmINCeaALKCiEwI
+         JEsmud2xUFphvanG7u+aYzJ6Si1eXjyAL29FxKczKuw4NYNqKiQHRkgjN5Kr1/Nb7e8K
+         cEn6aQkA8HZZ8l9q57pKwaaZROvs8EHvfoWyw9GzukKfHsom/GPFKN8AAQtBGLgbeKBC
+         5KHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706637107; x=1707241907;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1706648810; x=1707253610;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=bQgZSjsUgd4Ba/M69hqq/7iyLw1vdKJRuphfN6JZy2M=;
-        b=qglh955aautLe/QYlk6vDXynhLxsQ/5DdVSxkSDpozrzCg0/fOnU8XOgWliljMnNqY
-         mcAWrybXLWjoL/Z21XSPZb8MT1YqYbBMY19mlEIAlHQnD/A85L0GCPMV/jfayNHZCNDE
-         8sO/hXLetqS0iSSlEoU4iJ/epT5rwukJvctITWj6sdncBrct7i+9VUfNErn5fJ/dV/T6
-         qwjwMm+Fg78sQkws+KLqrYl6gMcp/Xo8Be4KcOqESApuuHsu9hcNZufPfk+uwRscMQdL
-         lWaObxkn8d9LS1EnUbIJhoGPLKfNUwfEI3oPII3ijqAtPDRQ2YligbhMCnBuRsnI5Edp
-         agfg==
-X-Gm-Message-State: AOJu0Yx0P6wGO8754S87bRT0sU8tdlNYAltIOxbKZkILRBBuBhNu88AG
-	bCPIdAS2yUwiIrx4AmB6xCM5xpUwCnn9YTsX0aKaEY5gRA9TQWbrybVzVIbq/Yo=
-X-Google-Smtp-Source: AGHT+IFuHR8CDZoEL30xGueEBAhVZSckp8Z0gsKYRln2n+Ntqii5asqhNsxc6awuK8cztV5qHQyEeA==
-X-Received: by 2002:a5d:6548:0:b0:33a:ff6f:744e with SMTP id z8-20020a5d6548000000b0033aff6f744emr251359wrv.18.1706637106872;
-        Tue, 30 Jan 2024 09:51:46 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCXe027gc5jc7b7mo5fZ7+wqLld2L87UtaW+lp4OjMxnTSjXWMWLUAtL5y5akavrqFrHLMXNHo2RgESd5wfzS7pimRcRYX5ia3+MwlfQwvlAljqyOvWDWzqXMapHMGZO0pKYf4gqjixpovVSPvp2lyPgPMJEdDUBo6Rq/okJ9nMVh8LtR/pqTrpXvwlvnEWuHB5pijzHIjA1WFO2GsmD86QhikLuodMROUp0Y/4zKb3VP/33VF/PAz4R2A==
-Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id fm25-20020a05600c0c1900b0040e3bdff98asm17788748wmb.23.2024.01.30.09.51.45
+        bh=YZ8+EIN9jvWos6oJV0QHQ8FYXYo9RbLYxWqS1XhaSxU=;
+        b=MBGGlBz3KABXa7xMGyrZ6D9bFLrqa+fHFhmBaqHlYSgCh7gKltrx8wmSdpp/BGvTvr
+         5MDGuPxhfxUVSWRN0dg7wVcY1IvL78unYco5Tgdl7VG0Kp1E9ADzOXv8bo79dh3oPF67
+         USuSKNZfvB8bt71nxqQckEyIsaIp4SueWfBwTxBChdlvHsfGj0T9K+sUd6iPk/XNz0Zj
+         P6yNxhqZ+tr2bXxFYzOZdYSFsqPNzvrHlo3YdTdyOLOdqc9M/MUlKwgg/sAFGxXccPNp
+         vi8WysDJ4jtGMeuRwqCF8Jwls6RCDv0473hxXfKuhe1Olkr1obILomD8FxJw9PK9jG7R
+         0++A==
+X-Gm-Message-State: AOJu0YzEMdOD+bASN7d7p/xZf4a8GCILeJ+YF4yW9R62ldaL2253fDvW
+	KmZ4sT5q7Ko21d0CxMzklfCo9mXdaKiewSXgG5Nlhkwf5qE+dIpMfTySmC2fQsJYfg==
+X-Google-Smtp-Source: AGHT+IGXu7ve4aWQ6lJGgiKjDUx3vSF47ChVsAhkYKh9f9p4hzolWAMdm/G+BjEl6t/yxqfbOVB17w==
+X-Received: by 2002:a17:906:26d6:b0:a36:239:77a with SMTP id u22-20020a17090626d600b00a360239077amr2770367ejc.23.1706648809486;
+        Tue, 30 Jan 2024 13:06:49 -0800 (PST)
+Received: from [127.0.1.1] (2a02-8389-41cf-e200-7400-ff68-7ab4-4169.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:7400:ff68:7ab4:4169])
+        by smtp.gmail.com with ESMTPSA id vv9-20020a170907a68900b00a354a5d2c39sm4177658ejc.31.2024.01.30.13.06.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jan 2024 09:51:46 -0800 (PST)
-From: Naresh Solanki <naresh.solanki@9elements.com>
-To: Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>
-Cc: mazziesaccount@gmail.com,
-	Patrick Rudolph <patrick.rudolph@9elements.com>,
-	Naresh Solanki <naresh.solanki@9elements.com>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (pmbus/mp2975) Fix IRQ masking
-Date: Tue, 30 Jan 2024 23:21:39 +0530
-Message-ID: <20240130175140.3834889-1-naresh.solanki@9elements.com>
-X-Mailer: git-send-email 2.42.0
+        Tue, 30 Jan 2024 13:06:49 -0800 (PST)
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Subject: [PATCH v6 0/5] hwmon: Add support for Amphenol ChipCap 2
+Date: Tue, 30 Jan 2024 22:06:43 +0100
+Message-Id: <20240130-topic-chipcap2-v6-0-260bea05cf9b@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAONkuWUC/33Py2oDMQwF0F8JXtfFz3lk1f8oXciynDF0HtjDk
+ BDm32sHCiWhs7wSRxfdWaYUKbPz6c4SbTHHeSqheTsxHGC6EI++ZKaE0lIowdd5ichxiAvCojg
+ p3/WdNVqgYgU5yMRdggmHykbIK6W6WBKFeH00fX6VPMS8zun2KN5knf7bsUkuuOhaUtIbJ8l/X
+ EaI3+84j6ye2tQxV4UHi1rZvmmCd89cH3NduHXaOSvABvHCzTE3hbe9ERigbaSGZ25/uRFS2hd
+ u6++ILUgLREh/+b7vP4/mg+DBAQAA
+To: Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>, 
+ Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>, 
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ linux-doc@vger.kernel.org, Javier Carrasco <javier.carrasco.cruz@gmail.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Conor Dooley <conor.dooley@microchip.com>
+X-Mailer: b4 0.13-dev-0434a
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1706648808; l=4466;
+ i=javier.carrasco.cruz@gmail.com; s=20230509; h=from:subject:message-id;
+ bh=G7oKuuUl6F/NZVDaLnFrLG+cVIgz6WY292NlMMKuYrQ=;
+ b=Zu0HFbkr9fhRhf5eAsAfsGyZWgrC0dFdTdGmMg/sUhsyI+/JE7GFuPIybm7inWX4EvJ3yvQ2U
+ 3CrMyjPSEVpCeklxe4u2h/PwPD0montaLSpJ097f0MwJ0eImP8s9IIA
+X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
+ pk=tIGJV7M+tCizagNijF0eGMBGcOsPD+0cWGfKjl4h6K8=
 
-From: Patrick Rudolph <patrick.rudolph@9elements.com>
+This series adds support and documentation for the Amphenol ChipCap 2
+humidity and temperature sensor in its digital version.
 
-The MP2971/MP2973 use a custom 16bit register format for
-SMBALERT_MASK which doesn't follow the PMBUS specification.
+The Chipcap 2 is an I2C device that provides 14-bit humidity and
+temperature measurements as well as low (minimum) and high (maximum)
+humidity alarms. A ready signal is also available to reduce delays
+while fetching data.
 
-Map the PMBUS defined bits used by the common code onto the custom
-format used by MPS and since the SMBALERT_MASK is currently never read
-by common code only implement the mapping for write transactions.
+The proposed driver implements the logic to perform measurements with
+and without ready signal, EEPROM configuration and alarm signaling.
 
-Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+The features this driver does not support (I2C address and command
+window length modification) have been documented in the "Known Issues"
+section.
+
+The complete supported functionality has been tested with a CC2D33S
+sensor connected to a Raspberry Pi Zero 2 w.
+Different device tree node definitions (with and without ready and/or
+alarm signals) have been positively tested.
+
+Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 ---
- drivers/hwmon/pmbus/mp2975.c | 57 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
+Changes in v6:
+- chipcap2.c: remove TODO about regulator delays (handled by the
+  regulator core).
+- chipcap2.c: add comment to clarify regularor enable checks (exclusive
+  regulator).
+- chipcap2.c: simplify irq handling (irqs disabled while the device is
+  switched off).
+- Link to v5: https://lore.kernel.org/r/20240115-topic-chipcap2-v5-0-0cc7a15aeece@gmail.com
 
-diff --git a/drivers/hwmon/pmbus/mp2975.c b/drivers/hwmon/pmbus/mp2975.c
-index b9bb469e2d8f..788ec2c5a45f 100644
---- a/drivers/hwmon/pmbus/mp2975.c
-+++ b/drivers/hwmon/pmbus/mp2975.c
-@@ -377,6 +377,62 @@ static int mp2973_read_word_data(struct i2c_client *client, int page,
- 	return ret;
- }
- 
-+static int mp2973_write_word_data(struct i2c_client *client, int page,
-+				  int reg, u16 word)
-+{
-+	u8 target, mask;
-+	int ret;
-+
-+	if (reg != PMBUS_SMBALERT_MASK)
-+		return -ENODATA;
-+
-+	/*
-+	 * Vendor-specific SMBALERT_MASK register with 16 maskable bits.
-+	 */
-+	ret = pmbus_read_word_data(client, 0, 0, PMBUS_SMBALERT_MASK);
-+	if (ret < 0)
-+		return ret;
-+
-+	target = word & 0xff;
-+	mask = word >> 8;
-+
-+#define SWAP(cond, bit) (ret = (cond) ? (ret & ~BIT(bit)) : (ret | BIT(bit)))
-+	switch (target) {
-+	case PMBUS_STATUS_CML:
-+		SWAP(mask & PB_CML_FAULT_INVALID_DATA, 8);
-+		SWAP(mask & PB_CML_FAULT_INVALID_COMMAND,  9);
-+		SWAP(mask & PB_CML_FAULT_OTHER_COMM, 5);
-+		SWAP(mask & PB_CML_FAULT_PACKET_ERROR, 7);
-+		break;
-+	case PMBUS_STATUS_VOUT:
-+		SWAP(mask & PB_VOLTAGE_UV_FAULT, 13);
-+		SWAP(mask & PB_VOLTAGE_OV_FAULT, 14);
-+		break;
-+	case PMBUS_STATUS_IOUT:
-+		SWAP(mask & PB_IOUT_OC_FAULT, 11);
-+		SWAP(mask & PB_IOUT_OC_LV_FAULT, 10);
-+		break;
-+	case PMBUS_STATUS_TEMPERATURE:
-+		SWAP(mask & PB_TEMP_OT_FAULT, 0);
-+		break;
-+	/*
-+	 * Map remaining bits to MFR specific to let the PMBUS core mask
-+	 * those bits by default.
-+	 */
-+	case PMBUS_STATUS_MFR_SPECIFIC:
-+		SWAP(mask & BIT(1), 1);
-+		SWAP(mask & BIT(3), 3);
-+		SWAP(mask & BIT(4), 4);
-+		SWAP(mask & BIT(6), 6);
-+		break;
-+	default:
-+		return 0;
-+	}
-+#undef SWAP
-+
-+	return pmbus_write_word_data(client, 0, PMBUS_SMBALERT_MASK, ret);
-+}
-+
- static int mp2975_read_word_data(struct i2c_client *client, int page,
- 				 int phase, int reg)
- {
-@@ -891,6 +947,7 @@ static struct pmbus_driver_info mp2973_info = {
- 		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP | PMBUS_HAVE_POUT |
- 		PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT,
- 	.read_word_data = mp2973_read_word_data,
-+	.write_word_data = mp2973_write_word_data,
- #if IS_ENABLED(CONFIG_SENSORS_MP2975_REGULATOR)
- 	.num_regulators = 1,
- 	.reg_desc = mp2975_reg_desc,
+Changes in v5:
+- dt-bindings: add "amphenol,cc2d23" to "compatible" in the example.
+- Link to v4: https://lore.kernel.org/r/20231020-topic-chipcap2-v4-0-7940cfa7613a@gmail.com
 
-base-commit: 909d8d33f8b4664c9b6c7fd585114921af77fc2b
+Changes in v4:
+- chipcap2.c: require exclusive regulator to trigger command mode.
+- chipcap2.c: keep the device off until a measurement is required.
+  Because the device makes an automatic measurement after the power-up
+  sequence, no differentiation between sleep and non-sleep modes is
+  required anymore.
+- chipcap2.c: retrieve alarm settings from the device instead of storing
+  them locally.
+- dt-bindings: add vdd-supply to required properties.
+- dt-bindings: default to 'amphenol,cc2d23' compatible (same
+  functionality for all compatibles).
+- Link to v3: https://lore.kernel.org/r/20231020-topic-chipcap2-v3-0-5b3bb50a5f0b@gmail.com
+
+Changes in v3:
+- ABI: sysfs-class-hwmon: documented humidity min/max alarms.
+- General: reorder patches (bindings first to remove checkpatch
+  warnings).
+- General: remove part number wildcards and use real part numbers.
+- chipcap2.c: improve error path in probe function.
+- chipcap2.c: fix error handling if regulator could not be registered.
+- chipcap2.c: use absolute values for hysteresis (for both ABI
+  compatibility and simplicity).
+- chipcap2.c: minor code-style fixes and variable renaming.
+- Link to v2: https://lore.kernel.org/r/20231020-topic-chipcap2-v2-0-f5c325966fdb@gmail.com
+
+Changes in v2:
+- vendor-prefixes: full company name in the vendor description (Krzystof
+  Kozlowski)
+- chipcap2.c: proper i2c_device_id table, coding style fixes, cleaner
+  error path in the probe function (Krzystof Kozlowski)
+- dt-bindings: per-item description and lowercase names (Krzystof
+  Kozlowski)
+- MAINTAINERS: fix manufacturer name (Krzystof Kozlowski)
+- Link to v1: https://lore.kernel.org/r/20231020-topic-chipcap2-v1-0-087e21d4b1ed@gmail.com
+
+---
+Javier Carrasco (5):
+      dt-bindings: vendor-prefixes: add Amphenol
+      hwmon: (core) Add support for humidity min/max alarm
+      ABI: sysfs-class-hwmon: add descriptions for humidity min/max alarms
+      dt-bindings: hwmon: Add Amphenol ChipCap 2
+      hwmon: Add support for Amphenol ChipCap 2
+
+ Documentation/ABI/testing/sysfs-class-hwmon        |  18 +
+ .../bindings/hwmon/amphenol,chipcap2.yaml          |  77 ++
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ Documentation/hwmon/chipcap2.rst                   |  73 ++
+ Documentation/hwmon/index.rst                      |   1 +
+ MAINTAINERS                                        |   8 +
+ drivers/hwmon/Kconfig                              |  10 +
+ drivers/hwmon/Makefile                             |   1 +
+ drivers/hwmon/chipcap2.c                           | 816 +++++++++++++++++++++
+ drivers/hwmon/hwmon.c                              |   2 +
+ include/linux/hwmon.h                              |   4 +
+ 11 files changed, 1012 insertions(+)
+---
+base-commit: 6613476e225e090cc9aad49be7fa504e290dd33d
+change-id: 20231020-topic-chipcap2-e2d8985430c2
+
+Best regards,
 -- 
-2.42.0
+Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
