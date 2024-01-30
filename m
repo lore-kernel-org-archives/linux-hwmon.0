@@ -1,104 +1,86 @@
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43A2D81AD5
-	for <linux-hwmon@vger.kernel.org>; Tue, 30 Jan 2024 15:29:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91EB212BF2C;
+	Tue, 30 Jan 2024 16:31:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706628551; cv=none; b=OWPU0nE9kBwp42UFTFsoWozCuyG/lQjymjxuFvE5kYh4T2OeNOAixq/K72u/sXSeOb1XtBIQGoiL2Pq0GZGrT5uMEuMDtbdzNxPTN0ggv0/Unxu71KqnJhK4/W8oE7sCSEOMT4mlggPsNb5kiEs8Uu8MbqXe/FwpncNF4qXyoRo=
+	t=1706632299; cv=none; b=AdsAYBxfdB/4MAeR1xRatgqwmPOrG1gnx8DGDfUOUGlYSH/jzUiU1YyhAEbBpS37thuqPqX0pI79d9s6VSH2hxNx0xaOw7L9tPqnsXAzia4ce9vWkDQ9va7fuC/XUlIUkAxrbuL17b/N0XDSqZ+7yyCrJuAQlM5W8bGKWN7AN70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706628551; c=relaxed/simple;
-	bh=f7vh7CU8f3xf9WNo29CQlCllyeFojlMOf302dp2eR80=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WgjwuTqaIlGjJD01RQn/Qz2LewS6nNf82cKvunY0ZbaokRiiS3jIra5Pi17DjaluKIOQUGpWiGcK4wpiwvXAhwOZAc5t4oKGF/KuBVSBog04bZ/wkJb6jRgN9TUTUStjjTGKYnhEDI/XCgjJizS/Tj0KNG1SXBpI71FBNSKdB+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=WRcDLtQo; arc=none smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
+	s=arc-20240116; t=1706632299; c=relaxed/simple;
+	bh=ROemg6+Ns9pPgrVA1K+Ft/vDAClIhd7m/s/0hgh0VYs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nvI7EBM77NyIKjKlAAPBIZevTtXKJYNNL6IGxzG9EvYMQ7GWB0TC6f2HC9/CAXsfY2CBXy6dnxdYWXYJwMXyvARxlyS25BCgQd0pWm4ySwVUN/VFJTDAW78B8l5Ph38ejCsFLYjPbOKli/mvUff4vUku4n1+AJ486PUQuE3THdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I6iLpe90; arc=none smtp.client-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="WRcDLtQo"
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-51117bfd452so2022467e87.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 30 Jan 2024 07:29:10 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I6iLpe90"
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-5d8ddbac4fbso1196416a12.0;
+        Tue, 30 Jan 2024 08:31:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1706628548; x=1707233348; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3cxab9c1GLUbr8ktMoVPuxVQEtnmwbdONtYqM9ZydT8=;
-        b=WRcDLtQo553sR4CyII+D876Z3PFwmrfLiN8TulBEQvEGMV9TZko2nQ9a2bSnCSqg4n
-         AdFweCZjmGNcHgsImZ6WRBhVy/iK0Urkk+FljHUGUcu6Nir3Ph02IBYk9j/LhPl8RXtb
-         qt2Mz7J4Wi2by1I/X/asnR16WFZ5hzDf5B/Lc/kCtA/mqdDL4wf2EbaHf8mSXPgKq1m/
-         rDxYpga6L8UJj+JVi6V2fH8m094otzru32Ud0kc6tTGdQyciE8e2VfXhaM4DFPG7v8xd
-         oPeewYoACh5o27qVlQiykeXHrZjOuuhm5lfuxQW1RpM7m6zFjBK0InqG1PgdJ2+bjmXb
-         mk8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706628548; x=1707233348;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1706632297; x=1707237097; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3cxab9c1GLUbr8ktMoVPuxVQEtnmwbdONtYqM9ZydT8=;
-        b=kI483ZbeSuc4kzLf+Owi6zyg4qdmlbRqeTo5OYfN9ZD6hA3a/wgeW3yXdq1H2kT06g
-         ynANIn9lg8IdXBAUkAPvglnoBOAicbgT/1uub+F50jlJ+b9zXPMoblyLGR3XN+oANtKP
-         +27axAGcj+NMeAalpppxzFA0KJMWLOS+5PKtxlY9cw+zE0bQgo6UeWGza+UNju95heQN
-         HT7JBuNbrM8EJPl54fOMCgDeLlA48todGcw02fh/g1lDTTyoC6lMOgv88Py/TIJAsYWC
-         8beAk7/CIMKsDLGU+RUaCcsWcSu/AGBTV0nDyhbxlmL7ACmrpyJwfcczKiIURWbVmZlK
-         hE5A==
-X-Gm-Message-State: AOJu0YyCsybzuRAJHvppC4F6z1i1TzBFG3D3jzyczBRPxXLD8uYrSWka
-	901IlNRW8PxqvuOmJvExHCJs7rlIWEbTae8v8oon4sB+Cg38DBjbRkZkfOq5p9s=
-X-Google-Smtp-Source: AGHT+IHRWWiuqSXJHYBa2mWLkoAEmi0JD/TCwrJIulgko8uqY0Cl9Ng6mMs04IFk85wfJzEcQWrnVg==
-X-Received: by 2002:ac2:5fc2:0:b0:50e:8e74:6406 with SMTP id q2-20020ac25fc2000000b0050e8e746406mr6673763lfg.36.1706628548324;
-        Tue, 30 Jan 2024 07:29:08 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCUfocgrKJv+URBYzOY4RWauWTJgEQJn237C3KiCgKl3fWxUsDDcduOSTYvhoMSfdhNqjFLGrP7He9j9Q1Wuht+bdScLyL+EqZ7EdbUw7G8US0Edc/rUXIhhQXAv+Ix8LrgRGPgigC3TEywbRftUXQCXQU5pxUE07GDfoqCOa9GXN8xopXzojLuCosi84PTS7971Hz+S7igF5wOXe5o4T5iANdbjzyA2wdChOemY2uDURi8ipQC2T3H+oA==
-Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id d4-20020a05600c34c400b0040efcf63492sm2975039wmq.18.2024.01.30.07.29.07
+        bh=+oF3cV1qV8ijwBNPsuRLVGr2oR8VMOLuQMFd6pDB7yE=;
+        b=I6iLpe90ajPbnZdC2fhjYjaBAkiSZmaOorpSx1PoOSU4kMEO1PqqY2UtVZA11NChIe
+         Y1t2T0hxTZthvJFhZkjcIKSPSINM1H5iGMiOmm7hgbudvuVY4Qa/W5vpej5pCGODvJIC
+         x4bQ9K4v86Ecmy0JxQ/t0EpoEMrS98Cl9GWEJr5cVmeZAv/0ER8zLZtjM5KdRM/waLBc
+         rbwXAvaTX4STjHuSMIHgOmbs7lVKuS+ASvNpsu3rPSH5FNjX+Wx3TFdAEt1K74GCKtK4
+         sdLd2L5mhcM9/a2qdH9adW7f4cCOTXmRVN9+DZ7gBEyYzE5gUlwJRqzK5kjhw+ESliT6
+         jUZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706632297; x=1707237097;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+oF3cV1qV8ijwBNPsuRLVGr2oR8VMOLuQMFd6pDB7yE=;
+        b=icMBFW8bTcBydq5S4/n2Wfc9iedK9tsy7hHXRshZ28AiIV2z66emB9RxHWJBal7XMZ
+         RWVbmuEeJ6kBQE/PhcrGGnqCi/7mQZJ/xFDuXlFBYpBAq208y/BquFQchLkht6Pn7nmT
+         UWbazljUAKMhgO/ApLPN7uPv2bqZ4gsP+6e0NqVj0IrlJq8y4tTjnTmqsudaoYUDgXoC
+         cRIqcobPDotICwgWdPkkAjeptS3P8OVVEEUNpkoMV9sF7V33HlIKBR85ZLgkaWN1o9aN
+         +b/8OLc1U94fkOWHsSv8HC4uJ/3Xga40/fAUEX4+Jh8meu0/Edrlk14wHMqMJ+g4H1fU
+         CnbA==
+X-Gm-Message-State: AOJu0YzgNpYSQQjaa0d+LmKXY1lwIC6H9xo2+mwN+ZI8IlgMtKXKgw+n
+	BHsPliE0XtbigGGlZH9+rc/KAAJ7usRcC9r39Ynru7wA3bhShV87
+X-Google-Smtp-Source: AGHT+IGO0qgo6TzKRGMi7+cKjrllBbWKqTNBb7K3tmTp4MRIE+Id8XpP1vDI0sH7kx4T4p6LzFSfEA==
+X-Received: by 2002:a05:6a21:99a3:b0:19c:7e6f:85f2 with SMTP id ve35-20020a056a2199a300b0019c7e6f85f2mr9168290pzb.1.1706632296801;
+        Tue, 30 Jan 2024 08:31:36 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i17-20020a63e451000000b005d8b8efac4csm6063827pgk.85.2024.01.30.08.31.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jan 2024 07:29:07 -0800 (PST)
-From: Naresh Solanki <naresh.solanki@9elements.com>
-To: Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>
-Cc: mazziesaccount@gmail.com,
+        Tue, 30 Jan 2024 08:31:36 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Tue, 30 Jan 2024 08:31:34 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Naresh Solanki <naresh.solanki@9elements.com>
+Cc: Jean Delvare <jdelvare@suse.com>, mazziesaccount@gmail.com,
 	Patrick Rudolph <patrick.rudolph@9elements.com>,
-	Naresh Solanki <naresh.solanki@9elements.com>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (pmbus_core) Allow to hook PMBUS_SMBALERT_MASK
-Date: Tue, 30 Jan 2024 20:59:03 +0530
-Message-ID: <20240130152903.3651341-1-naresh.solanki@9elements.com>
-X-Mailer: git-send-email 2.42.0
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (pmbus_core) Allow to hook PMBUS_SMBALERT_MASK
+Message-ID: <6aa79b06-ab59-4f4b-96c4-bdfb03974aec@roeck-us.net>
+References: <20240130152903.3651341-1-naresh.solanki@9elements.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240130152903.3651341-1-naresh.solanki@9elements.com>
 
-From: Patrick Rudolph <patrick.rudolph@9elements.com>
+On Tue, Jan 30, 2024 at 08:59:03PM +0530, Naresh Solanki wrote:
+> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+> 
+> Use _pmbus_write_word_data to allow intercepting writes to
+> PMBUS_SMBALERT_MASK in the custom chip specific code.
+> 
+> This is required for MP2971/MP2973 which doesn't follow the
+> PMBUS specification for PMBUS_SMBALERT_MASK.
 
-Use _pmbus_write_word_data to allow intercepting writes to
-PMBUS_SMBALERT_MASK in the custom chip specific code.
+Applied, but is there going to be a follow-up patch for those chips ?
 
-This is required for MP2971/MP2973 which doesn't follow the
-PMBUS specification for PMBUS_SMBALERT_MASK.
-
-Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
----
- drivers/hwmon/pmbus/pmbus_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 1363d9f89181..cb4c65a7f288 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -3188,7 +3188,7 @@ static int pmbus_regulator_notify(struct pmbus_data *data, int page, int event)
- 
- static int pmbus_write_smbalert_mask(struct i2c_client *client, u8 page, u8 reg, u8 val)
- {
--	return pmbus_write_word_data(client, page, PMBUS_SMBALERT_MASK, reg | (val << 8));
-+	return _pmbus_write_word_data(client, page, PMBUS_SMBALERT_MASK, reg | (val << 8));
- }
- 
- static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
-
-base-commit: 861c0981648f5b64c86fd028ee622096eb7af05a
--- 
-2.42.0
-
+Thanks,
+Guenter
