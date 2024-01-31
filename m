@@ -1,71 +1,67 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D467BB19;
-	Wed, 31 Jan 2024 13:24:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5217D7B3E3;
+	Wed, 31 Jan 2024 13:26:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706707473; cv=none; b=kD7IgaEtdQReVsSIx4Lw93DzLlSTY5ToJ0wVklrT7ZKFNoOZx4kTeV5udYa1Zf+gcqH2QTnKdJh81DaK9xKE1FP/eg/z4Kqns69C2jgs6B80nBRQMdzR3XYYxeUdSXVQWEAU+nTxlNgOiSHsvofEilwNKTMEW2lX3Cm6LH7bhHY=
+	t=1706707593; cv=none; b=fDR+8dMinQgec8ZdLY7X9VnlPyT9A7bIIvE768lWKahu6U0EZ5vYaOuS2KNJqC/ZnbFon6aBGLgs31GtmoU8C9tNBk6GNLNZde2Q6TDOgdFJMfyI/gddRNH8jyW2QuYlxHJJ4yagdZ/us1aTMxJHNbm5Epjgh6eGeEJnQuT1V6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706707473; c=relaxed/simple;
-	bh=FmKNXLkA/kr+CM40gASiK/j9SM+MckCirdBHbOT2wJE=;
+	s=arc-20240116; t=1706707593; c=relaxed/simple;
+	bh=lfOvCFrHQ69zgWnXFl1gLZxV4g1EyXYY1h7cgK9lrZ8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eKaQzRgPcsFr+kdaWX1p71hbNzD7gB/oI8G7uUQw/tWNa1TcpdJ1hQIQigIGYtWpz7T8YI830lvKquhaUYKqiAKkG4xtfHfQvxCPz+0QTY7JUonWQCKaOnTBTOASojsMjSgu/QHeRweHisKJwdkjBq4YWlY6DPYFT4NSmeQviug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HMXTCep+; arc=none smtp.client-ip=209.85.210.180
+	 Content-Type:Content-Disposition:In-Reply-To; b=OpaDGPSUo5YF9cBHNKbDu9cE8WMNChofdQ02Jb+15RXDxfPS7948kks7Z6o8io+V6jqhlo+oIUTzDEOzrG6hL/I62XPWdaW2gmL4F57YK/we4fAUjEs1Vkya/N4Pd/czSDxaiLC1uqxEVeGrRgI0zIfabIRW0xQaEhYNW6OJRXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mL+jpWWN; arc=none smtp.client-ip=209.85.161.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HMXTCep+"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6dfc321c677so593848b3a.3;
-        Wed, 31 Jan 2024 05:24:31 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mL+jpWWN"
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-59a7682486aso667569eaf.2;
+        Wed, 31 Jan 2024 05:26:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706707471; x=1707312271; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1706707591; x=1707312391; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=mIdR54PoTx04BsX44lZ3Vej1iDtysZ6kTYG9UVMC/bo=;
-        b=HMXTCep+I5/MyReAopcRT003eQ940PO71GL7qpnfqeUQ1nBKjIyUOga7z0Fwg+7Ilq
-         Po99nNEGhAP7DNyjUYHz8TM2AO/9Mcm+FA7iofPyOOHFoY2vYmMySgAwci1eZ7FeGSc0
-         nezxG+0IXF2Hs/pvMzy+0beUjfxVGheSSCR5Q2CHkqIHIXFSijOpvs6idFj+Jcn/f1yy
-         Vu/1EoHcI0C62UD44heADIl8bNEG1ZQWw38hBtG7XmcEtjqV0PkmK1Oh/tUXU261wn6j
-         TDqZsLMhlNoBpAVquniHYsU45lOMGuKL9+2f/bsixaSQnds+gtZrrMxjVg8waYhdvysn
-         ++1A==
+        bh=i1rp8HKmSXYoNC7+PpkJAkyq8m3dFpYfKxXEK7CwfrE=;
+        b=mL+jpWWNRUzdQPdzgUPOyzz6iGLIUQvUPwFdkyotvI83ZPghQgLYc5SHdDrhVnZ8iS
+         n2N1MaKUdmySdd0nKJkxiunymSNMIVPSt9EPDiS91r/qXYySBVhEL/VKEip2GKEMOxup
+         NliS+b5d5h4H+GEIKmRjHAstb076U62tl0VzNkapWvJZqzNaKug8mRJqX8ZV071tgb1k
+         bWGFrVzTVm4bhIBTzylcZi9Ib79fLNQe2anvi6jppntcCFmfj/yEh8bvG3ahgSatixXi
+         1Qnz6a4Uddh/+V2SO8cBMAJU+cS7TmXdDFTnBX8rjOSUotme3gxF9KmzxUn5QxyfZ611
+         1DmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706707471; x=1707312271;
+        d=1e100.net; s=20230601; t=1706707591; x=1707312391;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mIdR54PoTx04BsX44lZ3Vej1iDtysZ6kTYG9UVMC/bo=;
-        b=GK4UW7OKpGCO4WUyBMUdPlJr++vksefc5jEs1W5E73w9PEZScxNsuqINhNPElhhrEX
-         Ewama48jurBFUNjud5Qzid2PJGNrPqHiKonTMYe00eQGXkgriJx3OaPrf5hhTf7vk8Cr
-         Wal9jU4WTYEycQIw1i/nDcX/N8rhocAvMavePnDxsqKnZ5QRScbm9HkLwEqNgSipjey/
-         VsFgU1GFdRIpnRInS5oRwSp1bIuSCZlkCGlY1He9boWvng96jry+Hdm9hggEe46Ccumg
-         Ygpj3dxjDfiMHgwoFBtJPj+KS+cJ1TNszN18rdRBhEQ1KYcgnmHI5F0YJyHIH+x2A7KZ
-         bs6w==
-X-Gm-Message-State: AOJu0YyeoDnGdvN5ipMdsdWhbhtwgjUSmdCV0NZryxrpmsVbaMEOd5+l
-	RE3N9fPrtWPuhmOj8f5giyWtvo5aW/Wzteboowry1NG2YGpuInU/
-X-Google-Smtp-Source: AGHT+IEORJNOP8Y2doGdBQmQSDg8neCI7FRvJuiw+TokpKCUC1ZXUM0pJlOg1K4ZcPAxCx1Yh4TKXg==
-X-Received: by 2002:a05:6a00:2e8d:b0:6dd:e398:2a84 with SMTP id fd13-20020a056a002e8d00b006dde3982a84mr2216183pfb.7.1706707471354;
-        Wed, 31 Jan 2024 05:24:31 -0800 (PST)
+        bh=i1rp8HKmSXYoNC7+PpkJAkyq8m3dFpYfKxXEK7CwfrE=;
+        b=RPTwgHc5rQNEstEjUytR3O3eIMDtG8U5yLwFN4ImuXfg9eeXKae9z7e8aGQhPLFyPQ
+         sT5jrmlYHjcaWCsFyTfpVmm2CpVDVGb2tHqajd1LbU5g64e8GaPrFoPIGOhY/ClqRpav
+         0c0sKr4AkezQiz5ruTJAEfJUgVclsuo4JpCFm7GOjgJh3JMSpWdEdqbanPB1Gk7tSuXC
+         3DxD6GWT72haxMSlCcP7I3s0ELiP7WVFRyMhbYt1xNlQiMGAVoPf+ReZCKJ/4gH2OZV6
+         ax5mEuLex1iMKzX/sU+EnDQu76jKGoirw+0b4QG2PUJOqPQep+Pqz4Y/2rfLR19J3UtA
+         cpGA==
+X-Gm-Message-State: AOJu0Yx25brt/JZ1e9CzTV0RgISMweNc35b+cCD1fHMLKF/upp6GaYam
+	DX6KXvynM9MiWEmAa6TJJjav9R96qRNOyOtPLS/JvmbIljo9SsrF
+X-Google-Smtp-Source: AGHT+IEZt+D8U11+P06gzdHniW+92iEbClu62LwVc9leCBWLVDDh3ubpzHrfBIrKExvFtxnCB05q/g==
+X-Received: by 2002:a05:6358:e9c5:b0:176:d552:c681 with SMTP id hc5-20020a056358e9c500b00176d552c681mr1438991rwb.21.1706707591128;
+        Wed, 31 Jan 2024 05:26:31 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y11-20020a056a00190b00b006dde0969ce3sm9717371pfi.66.2024.01.31.05.24.30
+        by smtp.gmail.com with ESMTPSA id j2-20020a635942000000b005d5445349edsm10274977pgm.19.2024.01.31.05.26.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Jan 2024 05:24:30 -0800 (PST)
+        Wed, 31 Jan 2024 05:26:30 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 31 Jan 2024 05:24:30 -0800
+Date: Wed, 31 Jan 2024 05:26:29 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Ivor Wanders <ivor@iwanders.net>
-Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Maximilian Luz <luzmaximilian@gmail.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Mark Gross <markgross@kernel.org>, linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH v5 2/2] platform/surface: aggregator_registry: add entry
- for fan speed
-Message-ID: <7e392c1e-2cb2-43e4-804e-227551ed2dd7@roeck-us.net>
-References: <20240131005856.10180-1-ivor@iwanders.net>
- <20240131005856.10180-3-ivor@iwanders.net>
+To: Charles Hsu <ythsu0511@gmail.com>
+Cc: jdelvare@suse.com, corbet@lwn.net, Delphine_CC_Chiu@wiwynn.com,
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] dt-bindings: Add MPQ8785 voltage regulator device
+Message-ID: <d86f96ca-ec28-4524-b1e3-2e6d2e9f7c07@roeck-us.net>
+References: <20240131074822.2962078-1-ythsu0511@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -74,19 +70,15 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240131005856.10180-3-ivor@iwanders.net>
+In-Reply-To: <20240131074822.2962078-1-ythsu0511@gmail.com>
 
-On Tue, Jan 30, 2024 at 07:58:56PM -0500, Ivor Wanders wrote:
-> Add an entry for the fan speed function.
-> Add this new entry to the Surface Pro 9 group.
+On Wed, Jan 31, 2024 at 03:48:21PM +0800, Charles Hsu wrote:
+> Monolithic Power Systems, Inc. (MPS) synchronous step-down converter.
 > 
-> Signed-off-by: Ivor Wanders <ivor@iwanders.net>
-> Link: https://github.com/linux-surface/kernel/pull/144
-> Reviewed-by: Maximilian Luz <luzmaximilian@gmail.com>
+> Signed-off-by: Charles Hsu <ythsu0511@gmail.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-I wasn't sure if the Reviewed-by: tag means that I should apply the patch
-through the hwmon subsystem. If so, please let me know. For now I'll
-assume that it will be applied through a platform tree.
+Applied.
 
 Thanks,
 Guenter
