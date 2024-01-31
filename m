@@ -1,72 +1,104 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 950955A7A1;
-	Wed, 31 Jan 2024 15:17:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B76984A45;
+	Wed, 31 Jan 2024 15:41:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706714237; cv=none; b=T31uDpNzTWT3L/zW3eWwXfIwAiHrnod8E1D4vgs6kL1wmcyqDapOHFc0ctzE1sQU9+U/Wv3wXMQnuHEE5kO4BABhazKRr+88nsqZGuLA2p5cttJdPw2Qg82CIzN4aixU0u7IRl3TVDWL7fIzaOu1v3vgiyafnxanCDqK8kb+IPg=
+	t=1706715676; cv=none; b=eXwSmngMf2xxCtO0DML8LPHLi8MUiB9V9GawqILEXO6rRY9uulV0xanbcNB7i6ASOiMCcVEIQd5hHcMZxROvTkxe63PnN5RKeDigWX2g/TYlr7hXm9bMPOvQNuhJ7fNyQlDvMzPqI+OHg62XDYEYOunjo2k0rqe41ZaAffAxkYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706714237; c=relaxed/simple;
-	bh=hFGYNYSwKpaPbXeOXJB0apsWaOTWlpNeqIOPl+Y7Dds=;
+	s=arc-20240116; t=1706715676; c=relaxed/simple;
+	bh=YETHkpmr5YM40bpj6aoJ2u+DexwoDbq9X+cjJRuQMdc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZQiedav+eJlhRlkbDPBDP7ng0LkpjyN7FXnYT2RM6XjqY7g6Ji4+5JFEZMWY4duWy6HVav4euymKEAaw75b63+zJcs4ahBtvrxQTz26N+cdIcbDcqF6THji9zLPQbxf8KIXO1Qao9rELx9I/TeNPkl/hPeeJKlKAPBu0uTxPmLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=onpjRWH+; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+	 Content-Type:Content-Disposition:In-Reply-To; b=tQ8Fi5oEasvUZdytn2DmNLkRQwK6VT6wLBBz0shaFj/BAdO/77zGbPR/vqYXcke3eKFJ9fK5Tde3m7HiEd/1OGlxTZ78mTZkAcWZeAKxe+ASVBfCfjkC+zHhW08+Z63hf/kfMd1Vf7qLpywiXuxq/WMQ8+xyEunWLcqlrRXudJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OosamAdv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="onpjRWH+"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=jgq0nqHL6hJy8i/S2yhh41C+vCOE2itOZ8xdJIlt13k=; b=onpjRWH+4TyRswys1smojkLyIW
-	LGzMq2HZsiV88wa4/8WH6l+vpZxonQPmORWtIJZsfpK3SOvRZ5M1K9XLHyMNoLrDo+5AjYlbWbHXP
-	zF5UH3+0JC0bgexAQCDjzXUoxyPct1v9pz0SaQXwefirPGHfAtKT+EaAzmpfp4sybtak=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1rVCKo-006aoK-E3; Wed, 31 Jan 2024 16:17:06 +0100
-Date: Wed, 31 Jan 2024 16:17:06 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Dimitri Fedrau <dima.fedrau@gmail.com>
-Cc: Heiner Kallweit <hkallweit1@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Stefan Eichenberger <eichest@gmail.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v5 net-next 08/13] net: phy: marvell-88q2xxx: add support
- for temperature sensor
-Message-ID: <65071184-428b-4850-9e0c-baaa73513c6d@lunn.ch>
-References: <20240122212848.3645785-1-dima.fedrau@gmail.com>
- <20240122212848.3645785-9-dima.fedrau@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OosamAdv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D82A9C433C7;
+	Wed, 31 Jan 2024 15:41:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706715676;
+	bh=YETHkpmr5YM40bpj6aoJ2u+DexwoDbq9X+cjJRuQMdc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OosamAdvjDTxxfLr6wIZ01YbEV+jA1E2PcoqdcJ4ptgvD35AG4c3tXfiTdbihjwgY
+	 qiDXj+Bo5tzRPy6MJJ97yoHez7kBtPbZI/G5SWiucbIsuzuKVKfY+M1B/i9H2Sw1jk
+	 gMQbNPVbMHuDICS0Tko9R6w8xRKC9bGTvbkS8cT93lAz27avD3V8De5/eNEgKZ2AGT
+	 1BRTboEqBM+/OMbQHFfskI4k6JdwBfBauzyORLMdsUGpqUUR4iHHAHsk6pFibfNL7l
+	 fpM8edPMEoUu1RPgeTgbM3ka6Rg6IGiU+2bogCiW+ftnG1AphvT28lMzg2hdP8Y6RO
+	 N8jvFGjcajueA==
+Date: Wed, 31 Jan 2024 15:41:11 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Charles Hsu <ythsu0511@gmail.com>
+Cc: jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net,
+	Delphine_CC_Chiu@wiwynn.com, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] dt-bindings: Add MPQ8785 voltage regulator device
+Message-ID: <20240131-eraser-given-8381a44f41a4@spud>
+References: <20240131055526.2700452-1-ythsu0511@gmail.com>
+ <20240131055526.2700452-2-ythsu0511@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="m66BftHqStl+GNYh"
+Content-Disposition: inline
+In-Reply-To: <20240131055526.2700452-2-ythsu0511@gmail.com>
+
+
+--m66BftHqStl+GNYh
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240122212848.3645785-9-dima.fedrau@gmail.com>
+Content-Transfer-Encoding: quoted-printable
 
-> +static int mv88q2xxx_hwmon_probe(struct phy_device *phydev)
-> +{
-> +	struct device *dev = &phydev->mdio.dev;
-> +	struct device *hwmon;
-> +	char *hwmon_name;
-> +	int ret;
-> +
-> +	/* Enable temperature sensor interrupt */
-> +	ret = phy_set_bits_mmd(phydev, MDIO_MMD_PCS,
-> +			       MDIO_MMD_PCS_MV_TEMP_SENSOR1,
-> +			       MDIO_MMD_PCS_MV_TEMP_SENSOR1_INT_EN);
+On Wed, Jan 31, 2024 at 01:55:26PM +0800, Charles Hsu wrote:
+> Monolithic Power Systems, Inc. (MPS) synchronous step-down converter.
+>=20
+> Signed-off-by: Charles Hsu <ythsu0511@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Doc=
+umentation/devicetree/bindings/trivial-devices.yaml
+> index 79dcd92c4a43..088b23ed2ae6 100644
+> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> @@ -129,6 +129,8 @@ properties:
+>            - mps,mp2975
+>              # Monolithic Power Systems Inc. multi-phase hot-swap control=
+ler mp5990
+>            - mps,mp5990
+> +            # Monolithic Power Systems Inc. synchronous step-down conver=
+ter mpq8785
+> +          - mps,mpq8785
 
-You enable an interrupt, but i don't see any changes to the interrupt
-handler to handle any interrupts which are generated?
+q sorts before 2, otherwise
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-	Andrew
+Cheers,
+Conor.
+
+>              # Honeywell Humidicon HIH-6130 humidity/temperature sensor
+>            - honeywell,hi6130
+>              # IBM Common Form Factor Power Supply Versions (all versions)
+> --=20
+> 2.34.1
+>=20
+
+--m66BftHqStl+GNYh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZbpqFwAKCRB4tDGHoIJi
+0qYaAP4xddNh9fWSycXAJDADTsANGspUUp18ZNjQ2r8vNSx3bgD/bEkz0EmGXqsd
+94PzQ5Cx0XmBb1XNSIsXNgNymrhg4wM=
+=/LVW
+-----END PGP SIGNATURE-----
+
+--m66BftHqStl+GNYh--
