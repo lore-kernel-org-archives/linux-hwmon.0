@@ -1,73 +1,71 @@
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA81476040;
-	Wed, 31 Jan 2024 11:52:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93FAA7BAF0;
+	Wed, 31 Jan 2024 13:21:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706701937; cv=none; b=GTlWqDTNe3XTcUfnskhdLIrBNdSIIMABa975En7xvFapSRx4A9a7gQh5nxFL4/Lj0X3yQlW80Php+TmQ2JrgFpy8vIXsoAHRMcf8ncHZe8xJh2mW2mKtrwL9F5lclYP4NII53QwVGdlsmzxa5GBirNMZD4EtA1kstcmDQ/bGxYY=
+	t=1706707319; cv=none; b=Ou9B/nmCuloFFE3mNTZb+uqacBQ2zM44XeVh0C6FuN7H/qQK0JmmwobcNtOfUdCmnQnVj49prTjsutQf576ZIPKZdWOyQFWLtuqgTJpDQLx9ijtYNkLrXUhCPOp6mw3eSQ2KSpRyQ2GOPKVAB1+4D2RDan9cwzxOifwO6DoemsM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706701937; c=relaxed/simple;
-	bh=pysEqJSi12OgIxziInUigUCVr98LVwHAqnVaGuYDmmo=;
+	s=arc-20240116; t=1706707319; c=relaxed/simple;
+	bh=DytUjfJ5jVW2nE4UlpPhpkrdQVEUYqoNsNCYzBr7o9Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a8yU4w0dkwguYN1DPYRews/4uDwvz7TEq+EBeDlpA7YUgdoi+XsUPa/EsY6sdm9p2lWrbl1P7N8pWKHa66Ule9VhZsv3zYZV2FAK3zGurxH2r3GMfKq7/lpFRv1oTzmmspoToQidj6mNA63ObC4LdLZ4HymMao6dqXgw63v8l3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cLPqnYep; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=oU8JqTkIavQc3GEMSSu9tFkepOD/IFlZFbRbuBqvptOPWk37vkch+ivi2McPEhL3pdZjn1Dwzxr2Cj8hRBoK7fGMGqZPceRR5bzSqi/qg9cFyTc6HESq25UHbMDygJjHoU61iyPqfFyVw0CZtT0qLJKDI7vZHNfgcKaRFaTfr8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KZ8xGZHJ; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cLPqnYep"
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5102a877d50so5735365e87.0;
-        Wed, 31 Jan 2024 03:52:15 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KZ8xGZHJ"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1d51ba18e1bso46379215ad.0;
+        Wed, 31 Jan 2024 05:21:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706701934; x=1707306734; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1706707317; x=1707312117; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SDlah67sh5gJ9ynKDz3ysjr2o7CYUk88hIiX0azAyyc=;
-        b=cLPqnYep/jVY5WhVhBjgRJDbFZuFGyoLkPhP2RlaLMlyHLQKcwxVAU2OvLzT61xobD
-         BggAs2CeXMw+NgiEL2C1ozuROSrjQeTo4O3HyeGqDdJnbMxebusc/bOtkY6zL+aZBQPv
-         3+NXzCIVNuOOC3hAzNey00Y3Vpt9N6yYNJVaOBl7047c80eqaMgfioR7n0bulWF0Q0a5
-         N6PeSzJYW+cW61JlY2XzxBZCfKAHLUW3pqzBpt8US4TqvR5TKpZkESBVuNbJLYeLx2wH
-         z9YAWT0TEb3HQA7U3OMUjZRv6ASviG4ir+rM20jbyqrOnTiRURgXzOKRlHvUY9i34SNf
-         s4nw==
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=r3QCV4w7mbnFtziKPFuv7p4ZpguVLvSczpAls5rG8nU=;
+        b=KZ8xGZHJTx/DPynXqRNCptICRwYdv3ybqyx4svZ2k79ZXAZ2JKn41Ywebt9qzXeIg6
+         yw09rNZST/GaiVdDc3Y/CB34IsVUw8OWpDB6KEAE7BJRJLrySoN0KQ5qsr8ttWxBgnGO
+         LoMfwiBYqRtaHwRc6zi7s4v2QMLkvrP91eURHXiGpLO/cw4ycKnepKmjcasERcRZ5h6b
+         YdbEsDzsODkAwy4tzxFDNYCfqoxSpGyj5/Yo6Bqam1PCwYnDs3pdCNC97yKzu5EMvVC+
+         8XL8EWirPynzRYLi1GLGYvpVRZef+441LEyeQFCr8KNbYe0sSa0ipxtTvQfU5OCzXmhw
+         ZHbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706701934; x=1707306734;
+        d=1e100.net; s=20230601; t=1706707317; x=1707312117;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SDlah67sh5gJ9ynKDz3ysjr2o7CYUk88hIiX0azAyyc=;
-        b=grla9Ot6qFDmkZKDYLF8G37+8ZuFgQV+ON62Qaf/okJx51KMuQZVDfsObHlDiSA/Dl
-         WDiMzYWHMGC8dgq6dFU78fgdwsoxLXd3+VBuahyApS7qaWEoCKdgWVPvXnf/FfHlkiKc
-         vqOIerF2M4ym+fh8YjM+xacGgeYRmFA+ac+cN642/+taDwcvRW+5gG5a+yI12slLb2Fx
-         AQpqrD8IJxHYeZX//h3xQZsKLGYIPjcs0RWf+V04VbH4Om4TfSUxA8qGtOzPEunh3bK9
-         FcYEFLdoTQHX8FqvlXq8K4qROtsN+hXqYI5FUdyxlQYb0z5U/7foIn8ltqvcgpCPh+YF
-         uQLA==
-X-Gm-Message-State: AOJu0YxOpeLvFU6CS5tBJ0Cunpq4japTqA8ZPxKVCiDFKglu31hS3LzR
-	t+2dqIwRTb7Ml8p8sFJOJR2GbnOZWFi+hUckReMofBfYqzJ7zFCN
-X-Google-Smtp-Source: AGHT+IGT/GhBNY8zNxq8qrY/QrJrCfHAKHa2GeBrruLDDuJpKfIDSnvo8RECdhAB5l3rhzcE/mHJag==
-X-Received: by 2002:a05:6512:1095:b0:50e:a9c0:70a6 with SMTP id j21-20020a056512109500b0050ea9c070a6mr1132993lfg.43.1706701933731;
-        Wed, 31 Jan 2024 03:52:13 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCXgxSyJMXOvbCIDB0wzyLHpsYcK4/T9b5Q6W/hyvfAmUa/6cSdxDzdOolPJg5uzFBHRg4i9xC44AzQHm/Qspd2E7peB3o2PhnSnP6vZ776CrE6rJIyj7OmI2t9rAyfGN0BFUAhHXEXj6ujBvSGfMnlwfQOfOnL87du0FxciZU2T3FpJ4TQ74pXT32kWocurP4eH4jBPvr7xzkHzpy4blqOq4wrGKphewAf5X7mxq7P9OtjY9HEXjD027KFbvTWop6vvMwYGFd0nUxqEubJs7EV/P6lQj8WEukj5IDv+2H3TeN3QiDVbTBg7h1kKd7BM0LzYz66Mdg5u6HBIbyYMZIZ5wOlHx8g4vZkseq1faX49F1Zan54fI3sg1J6Tbgz86A==
-Received: from debian ([93.184.186.109])
-        by smtp.gmail.com with ESMTPSA id d15-20020adfa34f000000b0033ae9f1fb82sm8946992wrb.48.2024.01.31.03.52.12
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=r3QCV4w7mbnFtziKPFuv7p4ZpguVLvSczpAls5rG8nU=;
+        b=ZpEYSKioklgK33oucZZeqekOlz4tnrn+MC5uBW0BSuCPS8qtYA78a8nduZwtYGXPNY
+         VbvFbhbltuOIn7NlkFKxZsZ3DNkuiqU3IC0eVINOBxhUmwXx+OlW14TQ63bIAYvZKEe+
+         gqvFMD7E8VKFFdVbl6Mp9hb+0UY68mfRevPb8X8ccxljzvcTA94V0K2jsby+VzlDiyYk
+         lzFNBpbu9F35rJToFEK0jO35RaUArxxxfSimII7lxwNRvG+QihWaUc6eud6FLuZhztE0
+         ndYZu+KniKKLr7yC9DtjC9fdX98UeVFhmR0QflA/ts16ZWc5S1/non3HGQCZ2Zj+2D8E
+         vNCA==
+X-Gm-Message-State: AOJu0Yx2uX7XfMGdBEM0ThpUNuZY0DmddaXnCZ7PB9HU/UIJSuSukjTt
+	nZrIZXlI1KDMWD5oBsMpmjsPRJsprnM9O4zNnpGey2YKKw5gbhJ2
+X-Google-Smtp-Source: AGHT+IGk0XEq+z5BrreVbEFnmQtmIKOb5M482oqE5zWpil33IPIITakQmifK5o0VV07roUAtH/a7mA==
+X-Received: by 2002:a17:902:6b46:b0:1d8:e079:ce16 with SMTP id g6-20020a1709026b4600b001d8e079ce16mr1644039plt.1.1706707316589;
+        Wed, 31 Jan 2024 05:21:56 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n4-20020a170902968400b001d70ad0fe79sm9050438plp.291.2024.01.31.05.21.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Jan 2024 03:52:13 -0800 (PST)
-Date: Wed, 31 Jan 2024 12:52:11 +0100
-From: Dimitri Fedrau <dima.fedrau@gmail.com>
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc: Andrew Lunn <andrew@lunn.ch>, Heiner Kallweit <hkallweit1@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Stefan Eichenberger <eichest@gmail.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v5 net-next 08/13] net: phy: marvell-88q2xxx: add support
- for temperature sensor
-Message-ID: <20240131115211.GA111590@debian>
-References: <20240122212848.3645785-1-dima.fedrau@gmail.com>
- <20240122212848.3645785-9-dima.fedrau@gmail.com>
- <Zbi+5ymzbL9sckdi@shell.armlinux.org.uk>
+        Wed, 31 Jan 2024 05:21:56 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 31 Jan 2024 05:21:54 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Ivor Wanders <ivor@iwanders.net>
+Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Maximilian Luz <luzmaximilian@gmail.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Mark Gross <markgross@kernel.org>, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] hwmon: add fan speed monitoring driver for
+ Surface devices
+Message-ID: <3fd2f349-90c6-4445-be2f-54b6cf07dfb8@roeck-us.net>
+References: <20240131005856.10180-1-ivor@iwanders.net>
+ <20240131005856.10180-2-ivor@iwanders.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -76,75 +74,241 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Zbi+5ymzbL9sckdi@shell.armlinux.org.uk>
+In-Reply-To: <20240131005856.10180-2-ivor@iwanders.net>
 
-Am Tue, Jan 30, 2024 at 09:18:31AM +0000 schrieb Russell King (Oracle):
-> On Mon, Jan 22, 2024 at 10:28:41PM +0100, Dimitri Fedrau wrote:
+On Tue, Jan 30, 2024 at 07:58:55PM -0500, Ivor Wanders wrote:
+> Adds a driver that provides read only access to the fan speed for Microsoft
+> Surface Pro devices. The fan speed is always regulated by the EC and cannot
+> be influenced directly.
 > 
-> 	int tmp;
+> Signed-off-by: Ivor Wanders <ivor@iwanders.net>
+> Link: https://github.com/linux-surface/kernel/pull/144
+> Reviewed-by: Maximilian Luz <luzmaximilian@gmail.com>
+> Reviewed-by: Armin Wolf <W_Armin@gmx.de>
+
+Applied.
+
+Thanks,
+Guenter
+
+> ---
+> Changes in v5:
+>   - No changes in this patch.
+> Changes in v4:
+>   - Return 0 from surface_fan_hwmon_read instead of ret.
+>   - Use PTR_ERR_OR_ZERO in probe instead of if statement.
+> Changes in v3:
+>   - Removed type and attr checks in read and is_visible.
+>   - Removed assigning sdev to ssam_device drvdata.
+>   - Propagate return from __ssam_fan_rpm_get.
+>   - Renamed hwmon chip name from 'fan' to 'surface_fan'.
+>   - Removed unnecessary platform_device header.
+> Changes in v2:
+>   - Removed all sysfs attributes except fan1_input. Simplified code
+>     and updated documentation accordingly.
+> ---
+>  Documentation/hwmon/index.rst       |  1 +
+>  Documentation/hwmon/surface_fan.rst | 25 ++++++++
+>  MAINTAINERS                         |  8 +++
+>  drivers/hwmon/Kconfig               | 13 +++++
+>  drivers/hwmon/Makefile              |  1 +
+>  drivers/hwmon/surface_fan.c         | 91 +++++++++++++++++++++++++++++
+>  6 files changed, 139 insertions(+)
+>  create mode 100644 Documentation/hwmon/surface_fan.rst
+>  create mode 100644 drivers/hwmon/surface_fan.c
 > 
-> > +	switch (attr) {
-> > +	case hwmon_temp_input:
-> > +		ret = phy_read_mmd(phydev, MDIO_MMD_PCS,
-> > +				   MDIO_MMD_PCS_MV_TEMP_SENSOR3);
-> > +		if (ret < 0)
-> > +			return ret;
-> > +
-> > +		*val = ((ret & MDIO_MMD_PCS_MV_TEMP_SENSOR3_MASK) - 75) * 1000;
-> 
-> 		tmp = FIELD_GET(MDIO_MMD_PCS_MV_TEMP_SENSOR3_MASK, ret);
-> 		*val = (tmp - 75) * 1000;
-> 
-> > +		return 0;
-> > +	case hwmon_temp_max:
-> > +		ret = phy_read_mmd(phydev, MDIO_MMD_PCS,
-> > +				   MDIO_MMD_PCS_MV_TEMP_SENSOR3);
-> > +		if (ret < 0)
-> > +			return ret;
-> > +
-> > +		*val = (((ret & MDIO_MMD_PCS_MV_TEMP_SENSOR3_INT_THRESH_MASK) >>
-> > +			MDIO_MMD_PCS_MV_TEMP_SENSOR3_INT_THRESH_SHIFT) - 75) *
-> > +			1000;
-> 
-> 		tmp = FIELD_GET(MDIO_MMD_PCS_MV_TEMP_SENSOR3_INT_THRESH_MASK,
-> 				ret);
-> 		*val = (tmp - 75) * 1000;
-> 
-> > +		return 0;
-> > +	case hwmon_temp_alarm:
-> > +		ret = phy_read_mmd(phydev, MDIO_MMD_PCS,
-> > +				   MDIO_MMD_PCS_MV_TEMP_SENSOR1);
-> > +		if (ret < 0)
-> > +			return ret;
-> > +
-> > +		*val = !!(ret & MDIO_MMD_PCS_MV_TEMP_SENSOR1_RAW_INT);
-> > +		return 0;
-> > +	default:
-> > +		return -EOPNOTSUPP;
-> > +	}
-> > +}
-> > +
-> > +static int mv88q2xxx_hwmon_write(struct device *dev,
-> > +				 enum hwmon_sensor_types type, u32 attr,
-> > +				 int channel, long val)
-> > +{
-> > +	struct phy_device *phydev = dev_get_drvdata(dev);
-> > +
-> > +	switch (attr) {
-> > +	case hwmon_temp_max:
-> > +		if (val < -75000 || val > 180000)
-> > +			return -EINVAL;
-> > +
-> > +		val = ((val / 1000) + 75) <<
-> > +		       MDIO_MMD_PCS_MV_TEMP_SENSOR3_INT_THRESH_SHIFT;
-> 
-> 		val = (val / 1000) + 75;
-> 		val = FIELD_PREP(MDIO_MMD_PCS_MV_TEMP_SENSOR3_INT_THRESH_MASK,
-> 				 val);
-> 
-> ... and therefore no need for the _SHIFT constants.
->
-Will fix it.
-> -- 
-> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-> FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+> index c7ed1f73a..58be92e94 100644
+> --- a/Documentation/hwmon/index.rst
+> +++ b/Documentation/hwmon/index.rst
+> @@ -208,6 +208,7 @@ Hardware Monitoring Kernel Drivers
+>     smsc47m1
+>     sparx5-temp
+>     stpddc60
+> +   surface_fan
+>     sy7636a-hwmon
+>     tc654
+>     tc74
+> diff --git a/Documentation/hwmon/surface_fan.rst b/Documentation/hwmon/surface_fan.rst
+> new file mode 100644
+> index 000000000..07942574c
+> --- /dev/null
+> +++ b/Documentation/hwmon/surface_fan.rst
+> @@ -0,0 +1,25 @@
+> +.. SPDX-License-Identifier: GPL-2.0-or-later
+> +
+> +Kernel driver surface_fan
+> +=========================
+> +
+> +Supported Devices:
+> +
+> +  * Microsoft Surface Pro 9
+> +
+> +Author: Ivor Wanders <ivor@iwanders.net>
+> +
+> +Description
+> +-----------
+> +
+> +This provides monitoring of the fan found in some Microsoft Surface Pro devices,
+> +like the Surface Pro 9. The fan is always controlled by the onboard controller.
+> +
+> +Sysfs interface
+> +---------------
+> +
+> +======================= ======= =========================================
+> +Name                    Perm    Description
+> +======================= ======= =========================================
+> +``fan1_input``          RO      Current fan speed in RPM.
+> +======================= ======= =========================================
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index c4828ab15..2c5c4d7e5 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -14560,6 +14560,14 @@ F:	Documentation/driver-api/surface_aggregator/clients/dtx.rst
+>  F:	drivers/platform/surface/surface_dtx.c
+>  F:	include/uapi/linux/surface_aggregator/dtx.h
+>  
+> +MICROSOFT SURFACE SENSOR FAN DRIVER
+> +M:	Maximilian Luz <luzmaximilian@gmail.com>
+> +M:	Ivor Wanders <ivor@iwanders.net>
+> +L:	linux-hwmon@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/hwmon/surface_fan.rst
+> +F:	drivers/hwmon/surface_fan.c
+> +
+>  MICROSOFT SURFACE GPE LID SUPPORT DRIVER
+>  M:	Maximilian Luz <luzmaximilian@gmail.com>
+>  L:	platform-driver-x86@vger.kernel.org
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index a608264da..e762f6138 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -1994,6 +1994,19 @@ config SENSORS_SFCTEMP
+>  	  This driver can also be built as a module.  If so, the module
+>  	  will be called sfctemp.
+>  
+> +config SENSORS_SURFACE_FAN
+> +	tristate "Surface Fan Driver"
+> +	depends on SURFACE_AGGREGATOR
+> +	help
+> +	  Driver that provides monitoring of the fan on Surface Pro devices that
+> +	  have a fan, like the Surface Pro 9.
+> +
+> +	  This makes the fan's current speed accessible through the hwmon
+> +	  system. It does not provide control over the fan, the firmware is
+> +	  responsible for that, this driver merely provides monitoring.
+> +
+> +	  Select M or Y here, if you want to be able to read the fan's speed.
+> +
+>  config SENSORS_ADC128D818
+>  	tristate "Texas Instruments ADC128D818"
+>  	depends on I2C
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index 47be39af5..30cc90f40 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -201,6 +201,7 @@ obj-$(CONFIG_SENSORS_SMSC47M1)	+= smsc47m1.o
+>  obj-$(CONFIG_SENSORS_SMSC47M192)+= smsc47m192.o
+>  obj-$(CONFIG_SENSORS_SPARX5)	+= sparx5-temp.o
+>  obj-$(CONFIG_SENSORS_STTS751)	+= stts751.o
+> +obj-$(CONFIG_SENSORS_SURFACE_FAN)+= surface_fan.o
+>  obj-$(CONFIG_SENSORS_SY7636A)	+= sy7636a-hwmon.o
+>  obj-$(CONFIG_SENSORS_AMC6821)	+= amc6821.o
+>  obj-$(CONFIG_SENSORS_TC74)	+= tc74.o
+> diff --git a/drivers/hwmon/surface_fan.c b/drivers/hwmon/surface_fan.c
+> new file mode 100644
+> index 000000000..31cd5da9e
+> --- /dev/null
+> +++ b/drivers/hwmon/surface_fan.c
+> @@ -0,0 +1,91 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Surface Fan driver for Surface System Aggregator Module. It provides access
+> + * to the fan's rpm through the hwmon system.
+> + *
+> + * Copyright (C) 2023 Ivor Wanders <ivor@iwanders.net>
+> + */
+> +
+> +#include <linux/hwmon.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/surface_aggregator/device.h>
+> +#include <linux/types.h>
+> +
+> +// SSAM
+> +SSAM_DEFINE_SYNC_REQUEST_CL_R(__ssam_fan_rpm_get, __le16, {
+> +	.target_category = SSAM_SSH_TC_FAN,
+> +	.command_id      = 0x01,
+> +});
+> +
+> +// hwmon
+> +umode_t surface_fan_hwmon_is_visible(const void *drvdata,
+> +				     enum hwmon_sensor_types type, u32 attr,
+> +				     int channel)
+> +{
+> +	return 0444;
+> +}
+> +
+> +static int surface_fan_hwmon_read(struct device *dev,
+> +				  enum hwmon_sensor_types type, u32 attr,
+> +				  int channel, long *val)
+> +{
+> +	struct ssam_device *sdev = dev_get_drvdata(dev);
+> +	int ret;
+> +	__le16 value;
+> +
+> +	ret = __ssam_fan_rpm_get(sdev, &value);
+> +	if (ret)
+> +		return ret;
+> +
+> +	*val = le16_to_cpu(value);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct hwmon_channel_info *const surface_fan_info[] = {
+> +	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT),
+> +	NULL
+> +};
+> +
+> +static const struct hwmon_ops surface_fan_hwmon_ops = {
+> +	.is_visible = surface_fan_hwmon_is_visible,
+> +	.read = surface_fan_hwmon_read,
+> +};
+> +
+> +static const struct hwmon_chip_info surface_fan_chip_info = {
+> +	.ops = &surface_fan_hwmon_ops,
+> +	.info = surface_fan_info,
+> +};
+> +
+> +static int surface_fan_probe(struct ssam_device *sdev)
+> +{
+> +	struct device *hdev;
+> +
+> +	hdev = devm_hwmon_device_register_with_info(&sdev->dev,
+> +						    "surface_fan", sdev,
+> +						    &surface_fan_chip_info,
+> +						    NULL);
+> +
+> +	return PTR_ERR_OR_ZERO(hdev);
+> +}
+> +
+> +static const struct ssam_device_id ssam_fan_match[] = {
+> +	{ SSAM_SDEV(FAN, SAM, 0x01, 0x01) },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(ssam, ssam_fan_match);
+> +
+> +static struct ssam_device_driver surface_fan = {
+> +	.probe = surface_fan_probe,
+> +	.match_table = ssam_fan_match,
+> +	.driver = {
+> +		.name = "surface_fan",
+> +		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
+> +	},
+> +};
+> +module_ssam_device_driver(surface_fan);
+> +
+> +MODULE_AUTHOR("Ivor Wanders <ivor@iwanders.net>");
+> +MODULE_DESCRIPTION("Fan Driver for Surface System Aggregator Module");
+> +MODULE_LICENSE("GPL");
