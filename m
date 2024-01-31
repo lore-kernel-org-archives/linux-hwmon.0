@@ -1,69 +1,66 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 011FB7B3E3;
-	Wed, 31 Jan 2024 13:27:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 928B67BAE5;
+	Wed, 31 Jan 2024 13:28:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706707623; cv=none; b=spu5cRPsVQDhwg820NydzmxSavzHXIxpDjcny1RLSv+IcrnfGLiPWBz4jCn41F+SSvF92IGjnipL7kIpImM5mFLg9FGcZ1oKcmjbd00LTUu2O9uuCglHUd2FZcMQfFwwStfWvdTiIoOwVd9lxVuVk6AZ/SBEKwjmL594TV7AA2k=
+	t=1706707721; cv=none; b=DrT/OFYDSMl/hPWi8anPQ1gXSpGnBkODd5F4qBqsQrvTRTftZVHeOD0Qbplj5c8YnqGwmd8SMNVJR+/sxzEdjTfky7Cxh2t48wDA/awVJ5hCIOIMDkGSOXNRClECCAYRi2D3Mry/J1lVwXV3nsI9u8zif+1Q4MPMk8BIrHZyDgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706707623; c=relaxed/simple;
-	bh=omfvpfyhE2JHUeOU5bsJZgaeJu08LQaB+yaoeTyFGEs=;
+	s=arc-20240116; t=1706707721; c=relaxed/simple;
+	bh=hkrpHEcQf+TZiFzNMNM4XgtUiZ4+ysmYORrH/bHSRIc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q3hsCYMIRVl5F7Y+w/ges7n3mPmjLjVl0nAWcfdKGh8XGfzNnot2glCLQ5m/p7mlitBgjsBCNNnOgXhYQYHklno/pdQaj2jM06by4TmfPZwZNftd6aErHl8YrauAZy/W8zU5vnLG1kNoHK7R88ti0HXc5EKUtPuLQB41EOw8pH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZAmqh163; arc=none smtp.client-ip=209.85.215.179
+	 Content-Type:Content-Disposition:In-Reply-To; b=D5c1VHejNBrMOOyK3256QfbRmvjpuYiEQ1ES9Ksm21ssqBoYV2+alPzgEpTfo1MPMY5DVUvd6GYWTC0D7c953p3idNijNVfwoR98RZkJEkv2j7sVDtQ9r019D4hGNjNG/i4oVl2reFAKcKNrtKRvoDE1hkoQugEbmbhw56qyCbU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nhfw2EJv; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZAmqh163"
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-5cf2d73a183so581698a12.1;
-        Wed, 31 Jan 2024 05:27:01 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nhfw2EJv"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1d7858a469aso30272985ad.2;
+        Wed, 31 Jan 2024 05:28:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706707621; x=1707312421; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1706707719; x=1707312519; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=J6Mlm1rYpgJEjcWexOZQE2YpTdhmKOn2T1JwDr7J3Rg=;
-        b=ZAmqh163+r62E3KjFC7Ordakqtr0DuCjdpsa3Dq2tslnkpNQ/HVUHJyLoPvSZIzOgd
-         //LFMa4b7V0kgQuEaZ3zFmwNE3OB/wrQcxrRtQA9au8KOnoc5lRuSSpoHwHieiQl22aq
-         JxeC6ProP7IfOvPFIe62jJhiniCjfoM08/yZKYNLMNzG+iAzVmKn/xDgknlicDggoKtq
-         y24/zXLMeQEWyRg68f74kRUeySuLcY4bVnnj8SvJcrU1cHJC/nnT6iFnzZozl9oIaOm3
-         HVVXneyfvJblKCl+zv3ZbFcg+WECCMIVY7oRDTlKbkMTupcJuRlH0dqf95HFoMr5KA7n
-         zxAw==
+        bh=Vw4Pa1aSCj4JJ6Af9YRWdhnPQg5k2t6xiKlvAoQnHXc=;
+        b=Nhfw2EJvW05NzTTwLpZdk81mJXNRT0VOBTt8O5uGmrO1VkGEZL0E1rSZ+jsvG7lgey
+         1Ril6qU/R1YI99JxWxNokjR4niLBxkWS4dlLgkR40fLWOs6mvJo+UId8VElFCA0qXSAk
+         Ckbfl6QM0PlyJmIvZsJcS12m4C/3KPtQeiGryMly+Vnsv/+Nm8ZKtvevBUljbddMx3L4
+         B47Y4zIR43iWVDvHQ/XIfmJ/DjWfxyMCzHvIC9B3pwQEq0vJz36BrjrGymqRwsfPTJDF
+         5NvNidNVHpupxiQ7u/rOlfJxOYLHcok4t+2+TcZciQxFW2tfgCjJf3TtAG7Fjs5qqbt1
+         eZ2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706707621; x=1707312421;
+        d=1e100.net; s=20230601; t=1706707719; x=1707312519;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=J6Mlm1rYpgJEjcWexOZQE2YpTdhmKOn2T1JwDr7J3Rg=;
-        b=qtH5praGKm/l1GVU3FCpda6hMnGLT4s8F4CnKc42wamDDqCV74MoYP36rluUIJOli+
-         rkk6KgXtBYHrZCDAxfA598P0ZG6sz3x57oqr4WjI7S1xG+/jG3ZKiBpVw7UMRKq09oaj
-         /3mQDoKyum8IftsLp1UVEaZl5w1qDuNJ0BCxXXpGz9zanjEJE2cLW0qPg4kJRbJ5gwuM
-         HSkgMh6OJ/TLiFyBoQ1u+hDuKU0dn9IwKP6yqmuOiIvlUTTPKAccYLAm9DDP55hHVlAI
-         trIMhFrt+iaS9hGrkmuk3ofrXfo6fo+dHAI3FhGSci+tgJPmqUnSNPZGoCZ2bRxnYXqX
-         sqog==
-X-Gm-Message-State: AOJu0Yw0omt+hMuKN1DM0q2LEtqA5wmGPHwO4DfXKFiPP4WFowKDecjG
-	CkAli5Ov7uTC0ke+Ae1HwT3mLeVWZvst6HGXj14u5zkIi7Xkm1Pd
-X-Google-Smtp-Source: AGHT+IGSOFvdtutw5d/ymE7z7XB5saYDBdhTbsJU4Ac6nblsOGRd8PpxkWkp53bwuImqaA67HSbyug==
-X-Received: by 2002:a17:90b:1983:b0:295:d09a:107 with SMTP id mv3-20020a17090b198300b00295d09a0107mr2994750pjb.11.1706707621248;
-        Wed, 31 Jan 2024 05:27:01 -0800 (PST)
+        bh=Vw4Pa1aSCj4JJ6Af9YRWdhnPQg5k2t6xiKlvAoQnHXc=;
+        b=Z+RF0Mgzgn9xepuOZ+6klu6yGY+FZ3p9i+3r4GPC0fF46sKmAE5waCcfUqUty3zULg
+         ya03Q0xAib9k4n5aIIK8e7UihhnOef+KFg2v82a3kSggTQ3gDeJ6drq+j0SQGf12tIKb
+         rGBYsDrneYG/3o8yCvuHEsX/nsngJVsf5ZA8bUzsj3tPLqBLlgeUozbDOptG2vYlbfGX
+         dKKodm9f+TJ1PLlhUXAtYG0LZU31LKzdjJ36P4Tww1mNEfcydSCoIkuZ5E+i01wGVo6D
+         WpkGQUQhVwSq12yhze+G5M+U3BfTgOE8f2X50NkaQ4ZIxX0Z8fS18zBOqHFamrSk8k+C
+         gvFA==
+X-Gm-Message-State: AOJu0YxJUQXh9HG7boAS94uTHLe5S/vzO0mm6whG+5ILBxeXXkWTT6wJ
+	L5/bc20kvCnMdYJGNyW1yXFjgwhYQQghKUpjv+DVAtnyVqmYnxeQigf7UHgL
+X-Google-Smtp-Source: AGHT+IFlrwme4G//lNWpf2xme2mKYSFYILl4zuerc80suaE7vm0GxpIJ3PpPpLLoWyhNW7uO/7SsHQ==
+X-Received: by 2002:a17:902:ecc1:b0:1d8:da36:d084 with SMTP id a1-20020a170902ecc100b001d8da36d084mr2137989plh.66.1706707718797;
+        Wed, 31 Jan 2024 05:28:38 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y15-20020a170902b48f00b001d8921f2058sm9004443plr.205.2024.01.31.05.27.00
+        by smtp.gmail.com with ESMTPSA id w7-20020a1709029a8700b001d755acec64sm9049951plp.189.2024.01.31.05.28.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Jan 2024 05:27:00 -0800 (PST)
+        Wed, 31 Jan 2024 05:28:38 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 31 Jan 2024 05:26:59 -0800
+Date: Wed, 31 Jan 2024 05:28:37 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Charles Hsu <ythsu0511@gmail.com>
-Cc: jdelvare@suse.com, corbet@lwn.net, Delphine_CC_Chiu@wiwynn.com,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] hwmon: Add driver for MPS MPQ8785 Synchronous
- Step-Down Converter
-Message-ID: <98472af4-fd16-4bae-a7fb-0ce5719500bb@roeck-us.net>
-References: <20240131074822.2962078-1-ythsu0511@gmail.com>
- <20240131074822.2962078-2-ythsu0511@gmail.com>
+To: Stefan Gloor <code@stefan-gloor.ch>
+Cc: jdelvare@suse.com, corbet@lwn.net, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/1] hwmon: (sht3x) read out sensor serial number
+Message-ID: <6513564d-6cdb-4442-8142-ca5763b5b351@roeck-us.net>
+References: <20240131111512.25321-1-code@stefan-gloor.ch>
+ <20240131111512.25321-2-code@stefan-gloor.ch>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -72,13 +69,18 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240131074822.2962078-2-ythsu0511@gmail.com>
+In-Reply-To: <20240131111512.25321-2-code@stefan-gloor.ch>
 
-On Wed, Jan 31, 2024 at 03:48:22PM +0800, Charles Hsu wrote:
-> Add support for mpq8785 device from Monolithic Power Systems, Inc.
-> (MPS) vendor. This is synchronous step-down controller.
+On Wed, Jan 31, 2024 at 12:15:12PM +0100, Stefan Gloor wrote:
+> The temperature/humidity sensors of the STS3x/SHT3x family are
+> calibrated and factory-programmed with a unique serial number.
+> For some sensors, this serial number can be used to obtain a calibration
+> certificate via an API provided by the manufacturer (Sensirion).
+> Expose the serial number via debugfs.
 > 
-> Signed-off-by: Charles Hsu <ythsu0511@gmail.com>
+> Tested with: 2x STS31, 1x STS32, 1x SHT31
+> 
+> Signed-off-by: Stefan Gloor <code@stefan-gloor.ch>
 
 Applied.
 
