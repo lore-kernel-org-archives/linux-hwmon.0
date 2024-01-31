@@ -1,349 +1,151 @@
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A82C758207;
-	Wed, 31 Jan 2024 07:50:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFB9F5DF14
+	for <linux-hwmon@vger.kernel.org>; Wed, 31 Jan 2024 08:03:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706687432; cv=none; b=r0DaNCUUygmmjEM2gtCedQ0TcJMgM+ANHoBuLUbBB6W+fl6/YP3xSuDaTE89uDNDlQAIcGEeqnuGlKDzKPqqNfDpzx46qXYPZwl8d4uo60WhZXt7+OtPPWIL7Fs/plFgUFmi/dz+ekMI99T5maQ0H20yx8JZ/ASu31P9jwb4b3c=
+	t=1706688221; cv=none; b=ryL9ksK1243SapF/w06u6ShStT4Z2ADZR9mu2c7B7awHMqqq4BmhYl8penQ5AzuU+QKvAXj340cimTfHWUpFNqXcy2jX/+PGNpmuIu0h8TI/yifgxuAbCXBaxy/yS+aQjbxMYQ+YFjFLzDKMBSrqJXJimeWX7MA9tvzMn7RTRNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706687432; c=relaxed/simple;
-	bh=A7FxfgGUZ1Ea4HK47SATKtXknBluFNyXpleD2XD7Q1A=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Kz96xkk8e60nixXjLDJEVJBBkHgMnOpKM7lPiRwMhxMQSA2Sxyop7T1B7hpyUvkf3YXyuzT3elgg0WNdpvRAcW+LzAo6aJb09aobAA0wSAyomRze89yDtPUErotzXsrLZM77snc99e0QiL2kx/AUIdUh/X38wgJ5jGpDUEtVw9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ao1n+YSN; arc=none smtp.client-ip=209.85.161.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1706688221; c=relaxed/simple;
+	bh=opu0J9XakpfZKh/4oMykdhYwG5diaCrPXUI9ILQknxw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=Wifrb8rQoHDXXiXXS5OgLATDv4su1oZdmyRVF/U2jnNiZ9nZmWBvhfPaixKNvWWDvCci6THSe3IJNvHhSYauMapAfVngBzTyugp9P+Vd/qKuTlI+nAZjAkjRs7CbRt1oPA6jXyf45xLQZk7lP84MwLG0NXELLb0lUn5FB3FCTu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=FZEMofF/; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ao1n+YSN"
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-59a7682486aso569666eaf.2;
-        Tue, 30 Jan 2024 23:50:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FZEMofF/"
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a2f22bfb4e6so685860866b.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 31 Jan 2024 00:03:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706687429; x=1707292229; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I0xOZEV/Rr23dhKDycSh6fOgys7EP0KNcjGuQiwLIj0=;
-        b=Ao1n+YSNM1OluGQQSi6jW89LulU8xWF9w2nHsGvxXTN2W4895iXKAlmZCSijXp8/SB
-         tBQEfEQeaJJe+p4XJCr0m4YejJ7ClLtXt8XaWSdoby9d0ISOUbrMrnDNOPkpRPBLuuLE
-         zl02XtLHEopXU4GW2PXpy7E/16IaLG1ZTr2ROVfm4DDSVIKAej3EGO93WikDl+pPi8EY
-         ATtd1b5Gqa72tbiSOmXtXeN6TEE7YDDnoB+Y5M0keLX9O2QK96S6bMHzFbthoNCDgAuO
-         McJIN+ta6EbB8rnkahJ/ClWzNJANDDkLFj1NlbgAXsnZdVVznf7whlH3wshCtQhlkTO2
-         cl7Q==
+        d=linaro.org; s=google; t=1706688218; x=1707293018; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PbDmv4EAt/aQUJgtXZLESeGUGFU23aQb6H26VIwICh4=;
+        b=FZEMofF/hlGiIAMyhFki6U/yLLAIuemylujKw9ftjNBVn8IFgq5Clzzyc0LdBZFr7m
+         H9OUp7JHT4wdhr/GvSNNGYzsfH83cHLOrFgTcaqLQDT86GQpcVA51FZdpAqNFi7ul5UM
+         k8t7RstPSEIoK1w4GmNF8DW6enkWFAz7UG6xCcQH8KJNoxJ7KAjJBckifwJareXgiC2S
+         iKcn1G03rMjLMxiNOf5T04iZ+ugg3tMxmutUNrwD127ZRKDWfIiM9EprdaXVDTEcHExh
+         AwZn7ycPJ41A8CDQADX67t24+UsmoykTXkGehbn58q+5jz3jy+kHF1McsVk7ca/9WWZB
+         ITFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706687429; x=1707292229;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=I0xOZEV/Rr23dhKDycSh6fOgys7EP0KNcjGuQiwLIj0=;
-        b=qmmSWeYC7VCJGCQdIWUqOJF/rQIBI54iYqSyQKCzLAmoxlZ/LKIuoMGt7ag3RcK2BJ
-         aVbQ7Hp6Qao4D6Q+kpvU4oNbu35g3uMWSJ8oVe0eerb2bFnf04u9koS5CIXFvgwmTqj2
-         KgKUTZjOVxdDcWqYQSkvPSzNww2LXgyF4HBDjF/vkcd52HYXAVWLQz5cxBRlWPU9rOP+
-         BPonDBHUuJuKu9ilJ7gPw/xaYsoLv/3fe6voWlnMTncvKm6qBmcJDQLWrIM8y5Wly+sR
-         wVNgLK6QMKcruTNHHkF7H17AcQHCjfRH8dFmLwC2L73YEurrt6n3KJf0wy7d8K8tEe/y
-         QOxA==
-X-Gm-Message-State: AOJu0YwE7hXfb/zGabH7q5X1xBsrI5DUiFuOtfD8Yp1xcDxoNdeJqq9i
-	U5ROVhWFDG2dkjV6y2nR4yWY2yzVHKF8RURvjIKPbMQxGSE6jSRH
-X-Google-Smtp-Source: AGHT+IHabSggSc4445HO5B10knrQ2Bw3Eh0MgMVbdxAL5HEGiZjx5qzk5B6ITAaEDXj+/7L65ZhBCA==
-X-Received: by 2002:a05:6358:5912:b0:178:b0c5:25e3 with SMTP id g18-20020a056358591200b00178b0c525e3mr108865rwf.3.1706687429518;
-        Tue, 30 Jan 2024 23:50:29 -0800 (PST)
-Received: from charles-System-Product-Name.dhcpserver.bu9bmc.local (1-34-21-66.hinet-ip.hinet.net. [1.34.21.66])
-        by smtp.gmail.com with ESMTPSA id h10-20020a056a00218a00b006dde3053cdasm9164953pfi.133.2024.01.30.23.50.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jan 2024 23:50:29 -0800 (PST)
-From: Charles Hsu <ythsu0511@gmail.com>
-To: jdelvare@suse.com,
-	linux@roeck-us.net,
-	corbet@lwn.net,
-	Delphine_CC_Chiu@Wiwynn.com,
-	robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org,
-	linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Charles Hsu <ythsu0511@gmail.com>
-Subject: [PATCH v4 2/2] hwmon: Add driver for MPS MPQ8785 Synchronous Step-Down Converter
-Date: Wed, 31 Jan 2024 15:48:22 +0800
-Message-Id: <20240131074822.2962078-2-ythsu0511@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240131074822.2962078-1-ythsu0511@gmail.com>
-References: <20240131074822.2962078-1-ythsu0511@gmail.com>
+        d=1e100.net; s=20230601; t=1706688218; x=1707293018;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PbDmv4EAt/aQUJgtXZLESeGUGFU23aQb6H26VIwICh4=;
+        b=ThNFvYhtDlRLvvPulk/aNFRPRpyXsUjl3u7Y9tsfD87ZMoaXoq8WmM+kVGI4xPYN4H
+         rDg251feXwb4kPl9wrjovDgGMUNNpDBqGeHN0d1j0VNKSOl2KkLGdMOy5UDXtFTtNYoA
+         zpgEBfwFHFXwUGqprlSHfK1Y71PZvRCLD7zJSlxe7yQTVkCZQ1dSeGsly4DQBR4jBWUO
+         EoU4E9Z+Iu8/J72vCBdJyi3pDgSV7e+QT/p29KZQmynltW7XcmDLL/zRtZoX7S34wLGh
+         IQHCzVzqWwsh9XgIU4OelsX0uTkuBsHcV2cYRyxGG0EgK0uUqXGErX5+G6WF5UHD1sbp
+         HDuA==
+X-Gm-Message-State: AOJu0YyI7VUCU9930jaB45Wh44S3nfRAHi24k5fPVYUuJbtPRQdB32Ra
+	UM+8LvNqozTcMye43SYh+E1Ou0KDwO8v0fBFcv2ITzQjOK+PTf7vrLgCla2lBRI=
+X-Google-Smtp-Source: AGHT+IFm3iANxrEWin4mPuUXIiBJqx3tbNALXzivFrpJ5tW3fLwqKdVmSV4+6GNHJElC0pQWyzyRXg==
+X-Received: by 2002:a17:906:3e57:b0:a35:f446:d9bf with SMTP id t23-20020a1709063e5700b00a35f446d9bfmr559289eji.35.1706688217933;
+        Wed, 31 Jan 2024 00:03:37 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCX1KffLD0NOYwbU+/4ZLtoBW121vlQpfklNtK2hxHQBTt2U4xi3bhgqqCJ/BORCxTjSL6ATvTBhi/4K1FEy+BFdaot6bs/2DUhMGFHqIxYBiZoEy08J8Kc87BU19f1RT46PsU6LjbN+Db+zTN9/i8MwwNnv5jWdA8ql5m/230gFsgAC9IzflBrvZ3MhNpskjVwoFH24LoDwH1/DgZOZZ9zek9MGYAea2GmrU8ZpIr6jyg1X6dBhranC8jYplV/+7D15npQyYsBF03O6Ke9N4SqkhxWSxnpQ4dhXuvaLzAfTPoFKBEKXv9zE/f8vV1QJX7SR9TdHvb3lZgFBUI5FH651OdmmKDb+HpIxbO5mX7U957rYKEJxC/UQQwx5CIBTky4OV8ruXA==
+Received: from [192.168.1.20] ([178.197.222.62])
+        by smtp.gmail.com with ESMTPSA id rs28-20020a170907037c00b00a2ceaf80bcbsm5904452ejb.204.2024.01.31.00.03.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 Jan 2024 00:03:37 -0800 (PST)
+Message-ID: <6508a0fb-6b5c-44e8-bd98-2cd70ab8f6b7@linaro.org>
+Date: Wed, 31 Jan 2024 09:03:35 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/2] dt-bindings: Add MPQ8785 voltage regulator device
+Content-Language: en-US
+To: Charles Hsu <ythsu0511@gmail.com>, jdelvare@suse.com, linux@roeck-us.net,
+ corbet@lwn.net, Delphine_CC_Chiu@Wiwynn.com, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240131074822.2962078-1-ythsu0511@gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240131074822.2962078-1-ythsu0511@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add support for mpq8785 device from Monolithic Power Systems, Inc.
-(MPS) vendor. This is synchronous step-down controller.
+On 31/01/2024 08:48, Charles Hsu wrote:
+> Monolithic Power Systems, Inc. (MPS) synchronous step-down converter.
+> 
+> Signed-off-by: Charles Hsu <ythsu0511@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Signed-off-by: Charles Hsu <ythsu0511@gmail.com>
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 
 ---
-Change in v1:
-    Initial patchset.
-Change in v2:
-    1.Add pmbus support status registers.
-    2.Add mpq8785 in trivial-devices.yaml.
-    3.Remove format[PSC_VOLTAGE_OUT].
-    4.Fix MODULE_DESCRIPTION.
-Change in v3:
-    1.Identify vout_mode.
-    2.Separate dt-binding.
-Change in v4:
-    1.Return an error if reading VOUT_MODE fails.
----
- Documentation/hwmon/index.rst   |  1 +
- Documentation/hwmon/mpq8785.rst | 94 +++++++++++++++++++++++++++++++++
- drivers/hwmon/pmbus/Kconfig     |  9 ++++
- drivers/hwmon/pmbus/Makefile    |  1 +
- drivers/hwmon/pmbus/mpq8785.c   | 89 +++++++++++++++++++++++++++++++
- 5 files changed, 194 insertions(+)
- create mode 100644 Documentation/hwmon/mpq8785.rst
- create mode 100644 drivers/hwmon/pmbus/mpq8785.c
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index c7ed1f73ac06..085ad6ca9b05 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -163,6 +163,7 @@ Hardware Monitoring Kernel Drivers
-    mp2975
-    mp5023
-    mp5990
-+   mpq8785
-    nct6683
-    nct6775
-    nct7802
-diff --git a/Documentation/hwmon/mpq8785.rst b/Documentation/hwmon/mpq8785.rst
-new file mode 100644
-index 000000000000..bf8176b87086
---- /dev/null
-+++ b/Documentation/hwmon/mpq8785.rst
-@@ -0,0 +1,94 @@
-+.. SPDX-License-Identifier: GPL-2.0-only
-+
-+Kernel driver mpq8785
-+=======================
-+
-+Supported chips:
-+
-+  * MPS MPQ8785
-+
-+    Prefix: 'mpq8785'
-+
-+Author: Charles Hsu <ythsu0511@gmail.com>
-+
-+Description
-+-----------
-+
-+The MPQ8785 is a fully integrated, PMBus-compatible, high-frequency, synchronous
-+buck converter. The MPQ8785 offers a very compact solution that achieves up to
-+40A output current per phase, with excellent load and line regulation over a
-+wide input supply range. The MPQ8785 operates at high efficiency over a wide
-+output current load range.
-+
-+The PMBus interface provides converter configurations and key parameters
-+monitoring.
-+
-+The MPQ8785 adopts MPS's proprietary multi-phase digital constant-on-time (MCOT)
-+control, which provides fast transient response and eases loop stabilization.
-+The MCOT scheme also allows multiple MPQ8785 devices to be connected in parallel
-+with excellent current sharing and phase interleaving for high-current
-+applications.
-+
-+Fully integrated protection features include over-current protection (OCP),
-+over-voltage protection (OVP), under-voltage protection (UVP), and
-+over-temperature protection (OTP).
-+
-+The MPQ8785 requires a minimal number of readily available, standard external
-+components, and is available in a TLGA (5mmx6mm) package.
-+
-+Device compliant with:
-+
-+- PMBus rev 1.3 interface.
-+
-+The driver exports the following attributes via the 'sysfs' files
-+for input voltage:
-+
-+**in1_input**
-+
-+**in1_label**
-+
-+**in1_max**
-+
-+**in1_max_alarm**
-+
-+**in1_min**
-+
-+**in1_min_alarm**
-+
-+**in1_crit**
-+
-+**in1_crit_alarm**
-+
-+The driver provides the following attributes for output voltage:
-+
-+**in2_input**
-+
-+**in2_label**
-+
-+**in2_alarm**
-+
-+The driver provides the following attributes for output current:
-+
-+**curr1_input**
-+
-+**curr1_label**
-+
-+**curr1_max**
-+
-+**curr1_max_alarm**
-+
-+**curr1_crit**
-+
-+**curr1_crit_alarm**
-+
-+The driver provides the following attributes for temperature:
-+
-+**temp1_input**
-+
-+**temp1_max**
-+
-+**temp1_max_alarm**
-+
-+**temp1_crit**
-+
-+**temp1_crit_alarm**
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 294808f5240a..557ae0c414b0 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -377,6 +377,15 @@ config SENSORS_MPQ7932
- 	  This driver can also be built as a module. If so, the module will
- 	  be called mpq7932.
- 
-+config SENSORS_MPQ8785
-+	tristate "MPS MPQ8785"
-+	help
-+	  If you say yes here you get hardware monitoring functionality support
-+	  for power management IC MPS MPQ8785.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called mpq8785.
-+
- config SENSORS_PIM4328
- 	tristate "Flex PIM4328 and compatibles"
- 	help
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index cf8a76744545..f14ecf03ad77 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -39,6 +39,7 @@ obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
- obj-$(CONFIG_SENSORS_MP5023)	+= mp5023.o
- obj-$(CONFIG_SENSORS_MP5990)	+= mp5990.o
- obj-$(CONFIG_SENSORS_MPQ7932)	+= mpq7932.o
-+obj-$(CONFIG_SENSORS_MPQ8785)	+= mpq8785.o
- obj-$(CONFIG_SENSORS_PLI1209BC)	+= pli1209bc.o
- obj-$(CONFIG_SENSORS_PM6764TR)	+= pm6764tr.o
- obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
-diff --git a/drivers/hwmon/pmbus/mpq8785.c b/drivers/hwmon/pmbus/mpq8785.c
-new file mode 100644
-index 000000000000..b9405dac7b09
---- /dev/null
-+++ b/drivers/hwmon/pmbus/mpq8785.c
-@@ -0,0 +1,89 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Driver for MPS MPQ8785 Step-Down Converter
-+ */
-+
-+#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include "pmbus.h"
-+
-+static int mpq8785_identify(struct i2c_client *client,
-+			    struct pmbus_driver_info *info)
-+{
-+	int vout_mode;
-+
-+	vout_mode = pmbus_read_byte_data(client, 0, PMBUS_VOUT_MODE);
-+	if (vout_mode < 0 || vout_mode == 0xff)
-+		return vout_mode < 0 ? vout_mode : -ENODEV;
-+	switch (vout_mode >> 5) {
-+	case 0:
-+		info->format[PSC_VOLTAGE_OUT] = linear;
-+		break;
-+	case 1:
-+	case 2:
-+		info->format[PSC_VOLTAGE_OUT] = direct,
-+		info->m[PSC_VOLTAGE_OUT] = 64;
-+		info->b[PSC_VOLTAGE_OUT] = 0;
-+		info->R[PSC_VOLTAGE_OUT] = 1;
-+		break;
-+	default:
-+		return -ENODEV;
-+	}
-+
-+	return 0;
-+};
-+
-+static struct pmbus_driver_info mpq8785_info = {
-+	.pages = 1,
-+	.format[PSC_VOLTAGE_IN] = direct,
-+	.format[PSC_CURRENT_OUT] = direct,
-+	.format[PSC_TEMPERATURE] = direct,
-+	.m[PSC_VOLTAGE_IN] = 4,
-+	.b[PSC_VOLTAGE_IN] = 0,
-+	.R[PSC_VOLTAGE_IN] = 1,
-+	.m[PSC_CURRENT_OUT] = 16,
-+	.b[PSC_CURRENT_OUT] = 0,
-+	.R[PSC_CURRENT_OUT] = 0,
-+	.m[PSC_TEMPERATURE] = 1,
-+	.b[PSC_TEMPERATURE] = 0,
-+	.R[PSC_TEMPERATURE] = 0,
-+	.func[0] =
-+		PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT |
-+		PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
-+		PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
-+		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-+	.identify = mpq8785_identify,
-+};
-+
-+static int mpq8785_probe(struct i2c_client *client)
-+{
-+	return pmbus_do_probe(client, &mpq8785_info);
-+};
-+
-+static const struct i2c_device_id mpq8785_id[] = {
-+	{ "mpq8785", 0 },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(i2c, mpq8785_id);
-+
-+static const struct of_device_id __maybe_unused mpq8785_of_match[] = {
-+	{ .compatible = "mps,mpq8785" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, mpq8785_of_match);
-+
-+static struct i2c_driver mpq8785_driver = {
-+	.driver = {
-+		   .name = "mpq8785",
-+		   .of_match_table = of_match_ptr(mpq8785_of_match),
-+	},
-+	.probe_new = mpq8785_probe,
-+	.id_table = mpq8785_id,
-+};
-+
-+module_i2c_driver(mpq8785_driver);
-+
-+MODULE_AUTHOR("Charles Hsu <ythsu0511@gmail.com>");
-+MODULE_DESCRIPTION("PMBus driver for MPS MPQ8785");
-+MODULE_LICENSE("GPL");
--- 
-2.34.1
+This is an automated instruction, just in case, because many review tags
+are being ignored. If you know the process, you can skip it (please do
+not feel offended by me posting it here - no bad intentions intended).
+If you do not know the process, here is a short explanation:
+
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions, under or above your Signed-off-by tag. Tag is "received", when
+provided in a message replied to you on the mailing list. Tools like b4
+can help here. However, there's no need to repost patches *only* to add
+the tags. The upstream maintainer will do that for tags received on the
+version they apply.
+
+https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
+
+Best regards,
+Krzysztof
 
