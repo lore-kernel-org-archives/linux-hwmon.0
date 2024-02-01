@@ -1,61 +1,61 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E92084D9E9;
-	Thu,  1 Feb 2024 13:18:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3432E86621;
+	Thu,  1 Feb 2024 13:22:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706793510; cv=none; b=kwn28bZFxsUwXdKGTWtJMok95FUcO8K3PMZnSfn9/3Mdm7r//1LqYQwCVkqltr7cnqjE5r6Tb5vVMaCDo+OnI/m6djXM1Xzoxt2x1xMHTQyXPez4j9N+BtOBi2ErqqtOt+3ZUOJhwIvyhepN2IOB6u844wZrsV6dR2IUM2jF2QQ=
+	t=1706793776; cv=none; b=kbdytWw9noin1Pnvlr8yEBhlO1C+Po844yeUgwkNu5ZR4GnEAU9rXvP1cMfF9qI1sQUOPaw1e652TLn535NgaOzWm3qq/n9gsUQYD6u4nRo8NJvsXYQ6g8x3zBJqBLn7PhqX1cYhGNx7a8kkk1BQ8BjJOVnKYk6B7nTqF3M+h3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706793510; c=relaxed/simple;
-	bh=Wm7puvNOUdtZukl0ZC90LuZ809sXvQ+YUf3Z8otjBIE=;
+	s=arc-20240116; t=1706793776; c=relaxed/simple;
+	bh=vokLkeIidowuajHipMR4mkfqPi0pW5c7oROD0jamceE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OWSWvARLSqrM9Pk3COrkGM3nbNKqUhDWejGI9Qp9lIPL3hqGC8aZWkFi0V0KDBQLA9+KlCugy1m2kijjnudulms1L147YWlvBNpuqFgAQd8Cz4WFnY/dF3qsoFoMIB0O/6yvRNwXUuFmAGNUqcOsiSlDq6Zt93pfsd0RvErMfXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bi4vh7aI; arc=none smtp.client-ip=209.85.210.175
+	 In-Reply-To:Content-Type; b=MjVZztgC1l9aHiOIhtl+NvXcB8iJApLj+qaHdAoB/afd9xpZHF+yDAZOuRMZFrbQe1NpM5xzMWby1yNCd8eTb82I39ec3aNJCf/k187/F2L8k08euWTlOfWdgZyf2ZcKUNgU57m9tIvT8ZR656llNnb5w4fuoGHyOFPpWjP0Frg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SwETjeiI; arc=none smtp.client-ip=209.85.167.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bi4vh7aI"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-6de287449f1so598668b3a.2;
-        Thu, 01 Feb 2024 05:18:26 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SwETjeiI"
+Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-3bd72353d9fso727637b6e.3;
+        Thu, 01 Feb 2024 05:22:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706793506; x=1707398306; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1706793774; x=1707398574; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z+qbAAqTLIMzAo4medIpeojk88gvHdZvjy5YQAUei/s=;
-        b=Bi4vh7aIeTreaebi0E7HXYPNXZllcauYOXAxNpUcpz/GEpUP7/a/YbgGlc1ImKZXuL
-         d522dk1dtYbHM94Pa5RQmYAQJdJ44xqgDf4qpRIyGNa7pSfxR85mj87Ugxl4wYOeoQTS
-         1PVe0Ws2AYBvbMK8kMt1vVtMxEpXJkf5cUzmQJonejL5iXHdSQefzt/WGwc1H6lfnTVE
-         I9emMOeVVLTBiK1/LzLLks+PWXon2w28YUgUvb/69E0ljVhkfvL71VhzD13Bea1OsjVx
-         M4pkPGIniLCr5qTwIQSB2TEs1gUmCdS++DbNgoKGpKZKblPfpDFFyjSdL8mYwqFcw/+P
-         8hrA==
+        bh=a8m6p4R/qWa3Oc2CGmk5cl/vlFYK+h6Kdog3tpCIG6g=;
+        b=SwETjeiI4LyuJPEsepSaHp/c/xdazcIzRb0SOyPaad4KZtKHeF0D4N79lxALo1HxQ3
+         0r8gHhHBU2rM3IHJMeLHY+S4Y0wZFbKWkhLmcn+CVtT2Q++SVwtyBV4Yl8wJiIuJ9M1f
+         W3YATnztl3qi/dtny04Kter0VZvomzngXxastivowQeIbsddCpG0OGuuCmspfuFbsom9
+         NF1PWDY2zea1iL+G/+03gShnR8WF13iMVsZPRJmoVFuiRJnNOZ/oQQey4ew1hFJKFRrM
+         kX7ibXNK7Aqn7EONYHV9iSjPUuXfm/YlFgc+bTTAEC4oPHhBOyZO/NnCm5SCakJI9aHa
+         fx+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706793506; x=1707398306;
+        d=1e100.net; s=20230601; t=1706793774; x=1707398574;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Z+qbAAqTLIMzAo4medIpeojk88gvHdZvjy5YQAUei/s=;
-        b=DtuFVR0nIrPkS47oGbnFxqfo1/RGwi3nFdjomhsrOiVfHPBwf12nneI+xAKe5z5EV8
-         44/tiH3rY7O//cheyT+rY39WQYkmvjFmq3X5lE3sINlNa+/kfpchv5FDGJQSpFnsG+5Q
-         erJWaleYEvgftAFlESIy1lQhgDKPeInpGdrRjwK8vnCGcTvFNVy+oXvOyRXwjuzjOzuz
-         aR74vrQnoJTBHWu4/WahmYMPbz8BOnkyBC1KPz5hIIhruNfDfsLbTDgF+AARdyDZPXPK
-         f+OHElgcWSBvBncMsranFGOt0tWScvCV4OCDlROEzNJDtJEEh/pqP88Pv7xCcO6gCf5/
-         XyIg==
-X-Gm-Message-State: AOJu0Ywhb3rHthwR6EosXbg0X87vbx+lTdO6fciR58tZ1gEMM8I/uCU3
-	bvIIb05Ydqf/43OI7V3a1FED44Z8qeb9hKG02Zu34mJzXEZXLbGS
-X-Google-Smtp-Source: AGHT+IHfay/vXtv4N3R3RiSIuEgbVLNuNAb5ILB+QCyVzUMSlQAD81xkspKh4LaUuYKU3w//nbiFRA==
-X-Received: by 2002:aa7:8c48:0:b0:6d9:b9b4:8ca with SMTP id e8-20020aa78c48000000b006d9b9b408camr4755803pfd.28.1706793506089;
-        Thu, 01 Feb 2024 05:18:26 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCWL4ceCPiFaZMjXdAcS1JkokfmAxkjNVSD2ep+viYzOaj8Z4YH/IyA8+PkgOmRxOKLcrxU3EeBIwmTAUg8ojZhW7yfJ5QTlBprN3oMJbx0fQmZyHLJymS+6vkc8rseK8beSh+JiygnhTjKkxZhX3c9xxd6ea5f+Zd6/flH05aHx/tV+V3ZTvfWkf240NtEqeWuXp9TfWzsSGL+HS4EeJtZj30lhwHXZDMgySD5a0JP7OGCM2/7saYw2zs0U/Vq4W+Uv6s9RSgjmE/Y0RDd5KiRhab9mf6KQgkmk0Ye5gO2e4d/f5HxZZ8i/X9iJpubx2dQE2fGITt2jSTL2ZsPXEPfcdj0ddhwiu034xFUOzvpbLiMspe411WHPNjuRTtOHy/GhFg==
+        bh=a8m6p4R/qWa3Oc2CGmk5cl/vlFYK+h6Kdog3tpCIG6g=;
+        b=Mazqkex0rKOk3sYzd14a4pOwy7tqe1pkwXqAV9XAWyp0UG41cDE+GHSiDBGhDqK/3P
+         otjIiOY65XFIWlPCkoe0rOjZebR4C3ZVgSrfiM+smzmq9yLVhYK4Q7TWLMdLwPbmFn8U
+         PxCfIUISZeDpXi457sHz/L5S4nw0tr9gKbWpFwtjUwPKqM34ZuDHeAP9R2U+4j5qFUrK
+         FD5CD+CrxzA5eyJ6Ydn/6A4Lrv/S2AOg33NiennN/CCPQ/YNkkHenOBpI3SE0A+ZHb5v
+         DxVOhgZneoHcoW8Ci8B2EmZOu4dgPRvKA/vGTIrqrDVGEeR67TRdaMQtpsq2O/Gjjuso
+         /I6A==
+X-Gm-Message-State: AOJu0YxgGO4pdYIknvBIBJCmVeJjSRpm1foPtlV9CC2SvyPxPSgZY6hQ
+	BL/s4Jp0YM2XkKiInxAJawQWAjp19HCglDRzzz8EOe+XwACkfJHXsZg/O5ua
+X-Google-Smtp-Source: AGHT+IG//RlcARoXzzYrUPT30jU6og+rZzratBuOsQOc4Yw0DGpYr2z1SandCteDDuAOYFM7aIXMrQ==
+X-Received: by 2002:a05:6808:3a16:b0:3bd:1fdc:eeaa with SMTP id gr22-20020a0568083a1600b003bd1fdceeaamr6721385oib.55.1706793774133;
+        Thu, 01 Feb 2024 05:22:54 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCXQllq7NVzKCcR+kt25sXV1hJ1we+Dv2XW8zfuk/XShVOXZNbzp7Sf/KE4bNwJR/tuZqpQMlCFkRRtKJyaPqhl7pblV/CUmGnaXli5Jieff+Ice6Wv2r74uqCii2rux4sYE4WnRTFWI9S/PKB5caMumPD9WZCoLa/+iMZ4BzpA6BdPodFp2NnmV1vcPfUdDITgeNYXZB31S8+GTJoGG+6Zk3Q/9Pr5zQ7QDZfhUX/3d7j/30lu0Tfd2CB/u8IAEYA2zjfm48Qu12fekjJkgX+8ZkNtg9cMy7BbL+5qpMTLZuyXvPQMeR9RsQ/1B14+AzZcnOnd8TlVWr+8f+G6avbkjjt4=
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q6-20020aa79826000000b006d9c0dd1b26sm12163984pfl.15.2024.02.01.05.18.24
+        by smtp.gmail.com with ESMTPSA id a2-20020a654182000000b005d748902a01sm11070862pgq.43.2024.02.01.05.22.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Feb 2024 05:18:25 -0800 (PST)
+        Thu, 01 Feb 2024 05:22:53 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <88a60be9-083b-4618-845c-6983bcad3540@roeck-us.net>
-Date: Thu, 1 Feb 2024 05:18:23 -0800
+Message-ID: <22b75ad9-b702-47a3-a8df-7a207ca152c7@roeck-us.net>
+Date: Thu, 1 Feb 2024 05:22:51 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,19 +63,18 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 net-next 08/13] net: phy: marvell-88q2xxx: add support
- for temperature sensor
+Subject: Re: [PATCH v3 2/2] dt-bindings: Add MPQ8785 voltage regulator device
 Content-Language: en-US
-To: Dimitri Fedrau <dima.fedrau@gmail.com>
-Cc: Andrew Lunn <andrew@lunn.ch>, Heiner Kallweit <hkallweit1@gmail.com>,
- Russell King <linux@armlinux.org.uk>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Jean Delvare <jdelvare@suse.com>, Stefan Eichenberger <eichest@gmail.com>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org
-References: <20240122212848.3645785-1-dima.fedrau@gmail.com>
- <20240122212848.3645785-9-dima.fedrau@gmail.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Conor Dooley <conor@kernel.org>, Charles Hsu <ythsu0511@gmail.com>
+Cc: jdelvare@suse.com, corbet@lwn.net, Delphine_CC_Chiu@wiwynn.com,
+ robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240131055526.2700452-1-ythsu0511@gmail.com>
+ <20240131055526.2700452-2-ythsu0511@gmail.com>
+ <20240131-eraser-given-8381a44f41a4@spud>
+ <c67ebf90-cb40-4595-8015-45d2a86f6c7d@linaro.org>
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -120,77 +119,40 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240122212848.3645785-9-dima.fedrau@gmail.com>
+In-Reply-To: <c67ebf90-cb40-4595-8015-45d2a86f6c7d@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 1/22/24 13:28, Dimitri Fedrau wrote:
-> Marvell 88q2xxx devices have an inbuilt temperature sensor. Add hwmon
-> support for this sensor.
+On 1/31/24 23:52, Krzysztof Kozlowski wrote:
+> On 31/01/2024 16:41, Conor Dooley wrote:
+>> On Wed, Jan 31, 2024 at 01:55:26PM +0800, Charles Hsu wrote:
+>>> Monolithic Power Systems, Inc. (MPS) synchronous step-down converter.
+>>>
+>>> Signed-off-by: Charles Hsu <ythsu0511@gmail.com>
+>>> ---
+>>>   Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+>>>   1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+>>> index 79dcd92c4a43..088b23ed2ae6 100644
+>>> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+>>> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+>>> @@ -129,6 +129,8 @@ properties:
+>>>             - mps,mp2975
+>>>               # Monolithic Power Systems Inc. multi-phase hot-swap controller mp5990
+>>>             - mps,mp5990
+>>> +            # Monolithic Power Systems Inc. synchronous step-down converter mpq8785
+>>> +          - mps,mpq8785
+>>
+>> q sorts before 2, otherwise
+>> Acked-by: Conor Dooley <conor.dooley@microchip.com>
 > 
-> Signed-off-by: Dimitri Fedrau <dima.fedrau@gmail.com>
-> ---
->   drivers/net/phy/marvell-88q2xxx.c | 152 ++++++++++++++++++++++++++++++
->   1 file changed, 152 insertions(+)
+> I will sort the file and my patch should go via Rob's tree, I guess, so
+> maybe this one could go as well?
 > 
-> diff --git a/drivers/net/phy/marvell-88q2xxx.c b/drivers/net/phy/marvell-88q2xxx.c
-> index 4cb8fe524795..6900bad275d0 100644
-> --- a/drivers/net/phy/marvell-88q2xxx.c
-> +++ b/drivers/net/phy/marvell-88q2xxx.c
-> @@ -5,6 +5,7 @@
->   #include <linux/ethtool_netlink.h>
->   #include <linux/marvell_phy.h>
->   #include <linux/phy.h>
-> +#include <linux/hwmon.h>
->   
->   #define PHY_ID_88Q2220_REVB0	(MARVELL_PHY_ID_88Q2220 | 0x1)
->   
-> @@ -33,6 +34,19 @@
->   #define MDIO_MMD_PCS_MV_GPIO_INT_CTRL			32787
->   #define MDIO_MMD_PCS_MV_GPIO_INT_CTRL_TRI_DIS		0x0800
->   
-> +#define MDIO_MMD_PCS_MV_TEMP_SENSOR1			32833
-> +#define MDIO_MMD_PCS_MV_TEMP_SENSOR1_RAW_INT		0x0001
-> +#define MDIO_MMD_PCS_MV_TEMP_SENSOR1_INT		0x0040
-> +#define MDIO_MMD_PCS_MV_TEMP_SENSOR1_INT_EN		0x0080
-> +
-> +#define MDIO_MMD_PCS_MV_TEMP_SENSOR2			32834
-> +#define MDIO_MMD_PCS_MV_TEMP_SENSOR2_DIS_MASK		0xc000
-> +
-> +#define MDIO_MMD_PCS_MV_TEMP_SENSOR3			32835
-> +#define MDIO_MMD_PCS_MV_TEMP_SENSOR3_INT_THRESH_MASK	0xff00
-> +#define MDIO_MMD_PCS_MV_TEMP_SENSOR3_INT_THRESH_SHIFT	8
-> +#define MDIO_MMD_PCS_MV_TEMP_SENSOR3_MASK		0x00ff
-> +
->   #define MDIO_MMD_PCS_MV_100BT1_STAT1			33032
->   #define MDIO_MMD_PCS_MV_100BT1_STAT1_IDLE_ERROR		0x00ff
->   #define MDIO_MMD_PCS_MV_100BT1_STAT1_JABBER		0x0100
-> @@ -488,6 +502,143 @@ static int mv88q2xxx_resume(struct phy_device *phydev)
->   	return phy_clear_bits_mmd(phydev, MDIO_MMD_PMAPMD, MDIO_CTRL1,
->   				  MDIO_CTRL1_LPOWER);
->   }
-> +#ifdef CONFIG_HWMON
 
-HWMON is tristate, so this may be problematic if the driver is built
-into the kernel and hwmon is built as module.
-
-[ ... ]
-> +
-> +static int mv88q2xxx_hwmon_write(struct device *dev,
-> +				 enum hwmon_sensor_types type, u32 attr,
-> +				 int channel, long val)
-> +{
-> +	struct phy_device *phydev = dev_get_drvdata(dev);
-> +
-> +	switch (attr) {
-> +	case hwmon_temp_max:
-> +		if (val < -75000 || val > 180000)
-> +			return -EINVAL;
-> +
-
-Not that it matters much, but we typically use clamp_val() to limit
-the range of temperature limits because the valid range differs for
-each chip and is otherwise difficult to determine for the user.
+Sure, fine with me. I applied the patch to the hwmon tree, but I have no problems
+dropping it from there. Sorry, I never know if I should take .yaml patches or not.
 
 Guenter
 
