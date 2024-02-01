@@ -1,59 +1,59 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24550779F8;
-	Thu,  1 Feb 2024 18:22:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC5D612FB0E;
+	Thu,  1 Feb 2024 18:26:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706811762; cv=none; b=dBVN1r3NI1NX9jbEQnj60oZhlf3Wsg+XQE8L2fKMXjCL+4tGAtYK+oOqx5P2+cWV4liuJ8tCN9IC47gr/cpL0I1K08gpWDrfW7lwvUdSlN7dgCW1mA5OBZ0qRHNotnT/CuJWn2Bk9aUq6dXOeSEIXDZpbe+TfQJ3UQuYYTR3Z90=
+	t=1706811987; cv=none; b=mGG1kUDM2GIxQKHP2k2DWvGEuGjZBRYNkGUWfSBthZSRxbg57oQjWCVKaP1/eQmDLVjBKE2TgWcjBoYRZ86jUgysSaVltc5jm3q1/zNWhvYgsOXKv1xqrwt4fNCPV8wT9sOmQozue/QlQYmtJ+MEeHaaeJihHYUqp2Hxbx6m668=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706811762; c=relaxed/simple;
-	bh=cLSkI5IBu1sLgJ+AB7I0pNKDEEb48J57fLxzeatJ6vQ=;
+	s=arc-20240116; t=1706811987; c=relaxed/simple;
+	bh=FVTBCN2du4zlWLyaWqxrGSTkTvzubs6Y4PI45j7s9XM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=caCcSGmc5c0h2vA+8f0ZxyB+zpUVxB1xbln5BbI2bBTYj0EtjB1Tig2k8pRnWfKQ3XHa1Qi30roqU9nBdFNLKsamEhQSpwNCfKB7YotD4HNFvpu+FC4Y+5koLUpC3/wHN+lNeMStECvD/948x4ki88DaqxqRZXJJq7q/3LJiSek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ODIz70cQ; arc=none smtp.client-ip=209.85.214.175
+	 Content-Type:Content-Disposition:In-Reply-To; b=exVOkgK8RGKz2NkfUKd7ZMAGfYgscvSG8AT27+5xf74MKMMUJAwnLnBmOpd5J4rty+2ksbKulBVtqWbUIGpJqox8DdAJdxf/+41zu56sl4uJAk9mzNCkNAd7i1UL8tMN8AowHfTskUDZXKP0crLjAn7oB2uHz0O/CicpQtZEj2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eBNc7Fuw; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ODIz70cQ"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1d751bc0c15so10861095ad.2;
-        Thu, 01 Feb 2024 10:22:40 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eBNc7Fuw"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1d72f71f222so10799675ad.1;
+        Thu, 01 Feb 2024 10:26:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706811760; x=1707416560; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1706811985; x=1707416785; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=jPhuLzzBaanFkbxZrNOz+54SWmvRq/NmuPTyh/Ud9JY=;
-        b=ODIz70cQ096sIrka3M4CHxlkABBV8lMVO5rq3WEo+LZiAEI86BR9hjp6vYL3FVVj+U
-         5YJ+OhjAbe1t1fgGkZ69XQybk4e/jlZ1wQqjVutagtfEfhMGpEc2qUz8SXhZhTGRiMcA
-         C2p5sJOxSEO7cmFFiDTFXucF1AKVBLKhSTbS9U1iMYq3LZDUaiJwgsBVNoxoBzANjtyn
-         x40O1LEBblkPszZMLIlj+WRC5it7LzfOtInLv3mr9102YGKgkvbjQS8EsxabvKIEc60L
-         yPHL0EPd950Kvg04qyvJVEv7V1lfsb7vAvSDW+vr15cOmVqAb2Mhy2hiUY2lw7hs3AZ2
-         UoUw==
+        bh=hwmvsN2Ntz2KqUUIBBoM0a9JofCC8LHROVWl1waNCjg=;
+        b=eBNc7FuwzMrOkLT0kaiJQQLPA0qSIbhbk+EIRbfP0OpKGkVR5Wfgz/RD7Rp0/WPrSm
+         5Qq1zAqDgVtmOXgFuP0t6sMN7Q/rC6D2t4OJCbciRH7bhgBlYfThUjuKKVSizGqjTiHg
+         wSe+Ssnu6F/+fnxaynFVuxh9sP+L5nJQe22c04gZDqh7+MvMAHS3Q6zi/96DqfGDNthO
+         BJ7tQLG+H2J9fPh10wbYbEOEsHkAjkC4xW8z6gJbA+lYOKAjV8S/qUUl+acP442N98bB
+         EtNS70JzdMS0MwrBGS5PRlHmX04Sgz927fhlfFrl2Chnrwf84Uo9unBAoAOj5JkI6PH5
+         ZUrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706811760; x=1707416560;
+        d=1e100.net; s=20230601; t=1706811985; x=1707416785;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jPhuLzzBaanFkbxZrNOz+54SWmvRq/NmuPTyh/Ud9JY=;
-        b=we4pxHlyxXak7sxOSY6jIPWlY/dj9ugdyYBsLLHkf3rJZmhTU7wUKDctEQ4VHbkcNY
-         ryeoRv7O18d2ODzCSDOypp6JggcgYBmNqZA5tJnGqDlpaNJ+IQfv54ZmJs2uBO9TdHEG
-         nXmZ5RyMKCg/gdHvBv33WGMtqhszlrMug5EjhkoYSHt1Q2YzFpUrnK2hGluzkAHyHk7+
-         rOAmQyVLsZwPGXRISenPC+s6oTXhSboEDkUVaxV1H2VgEBdVaokC2vkVNCWMyKx9d6tl
-         lCDKPcbmke59n5Bixj9dD7DcrxXsZL4DO0aRZefuI/KouCi6zfvH047/eepJCghsZ09+
-         hqyw==
-X-Gm-Message-State: AOJu0Yxd+ANMISnXXitKZ6yoKAxC3gBAOShPiqtTtfWxc4j0Rhk4eshp
-	r/DdKf9Qxl8jSkHd3SZV5rcAp7HbpjrHD5tvTMqna7VUsGETIZoD
-X-Google-Smtp-Source: AGHT+IFeGzxHfBcXGwVjYK3ufH+44i8PF4Dp/jrC0oCoLEVT8MX9e2dDuxRGLPIbO4ofMRVQ0mtNCA==
-X-Received: by 2002:a17:902:dac4:b0:1d9:5b4d:7004 with SMTP id q4-20020a170902dac400b001d95b4d7004mr1846907plx.29.1706811760258;
-        Thu, 01 Feb 2024 10:22:40 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCU+IBY81Kz6rLwPzYCi1ipUBA536vINVT5q/KW0MHqg7zcBHVGVA+ThOaFFkztfMB8Xg44Iy2yxYQrJdpDIZkjAq8ABIQ9UdLHH4eGgRkDigdc6q7HitD8R25haOs9WJW4CmJf7iIp4Cxv4DM0k/eRDpGghZTrEDPjJZiPUfE7vKP6N/dgySzuvyvL49ugAHjywb3w01X2X1UsST/RtcetsXkAoK3f0qfhzoQVIo9JmOEmYIqSM0TKX5JR/fjlQ9sI9G6BvrR/yjnvbY+WHiyz9Cdvp5+BbH8blpqkeHmBZ06ztuMYKCvd59lDeivoGDsuKnLvq1s5Rc9ccbE6u1kR8KxnHPanfUfOVGaldB6c0KEWhaMWOirxov2cnk2acj5idvw==
+        bh=hwmvsN2Ntz2KqUUIBBoM0a9JofCC8LHROVWl1waNCjg=;
+        b=i2opzZT+M++WtoD6wOWm1X+rn6ttJenjhMExbDg4U2qrO6frMoQaLJ5xN6+2dRmmy0
+         sEN6TO0DVX9yLtmmixVljZ+Am69ixpz5EE1djkqHp869cbASjpb6fcMTwHR/XSGMywFt
+         AySfKzwwbHbv8GEN86ZYCgTmcva3pjml1vg0FlashQMarCks3kie74oGgx5JxFqZBKCo
+         o6UMlmlMaNtE/cZn42+6ztFB08ArIHz4zGk834jzMByYHyLz3oAZURwbqU1TcpmCcRzi
+         RWRO4uvC0fuxdaROrL56qpmRYact6xdvXSiddmXthb9szQIRKxXR1OyybC2PaV5W1Hih
+         1ztA==
+X-Gm-Message-State: AOJu0YzKbITNLWvJ1twFc/WVYJBosqtrKwEHgEnyspiWRpQ7CYcOUtaj
+	SODoFtI5fR5wnjV6YbRSrFSXhzdPgzQGNDMCZBtO2RR5mByX+Xr7
+X-Google-Smtp-Source: AGHT+IGfYDlPKiO2kGlPRvllIPOYXbZB9hN5jH+VTZP2buW4S8Q56DzaxHeeECZd9Qet1OzG4IecuA==
+X-Received: by 2002:a17:902:d590:b0:1d9:427a:99b with SMTP id k16-20020a170902d59000b001d9427a099bmr5910320plh.32.1706811984997;
+        Thu, 01 Feb 2024 10:26:24 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCXJt9er2Oe/D78iSMdGinSF1rdGyGo50IHP1ZZ2fCvGk6/+VT7Znkbx2lE5lFgA6SaiprC5NEbqgW9kMhJyeKZIbyakvpqM/J0TJMFhkyrfVyeB+DeUz1mRJnnBL7daAee+zjmaLrfsmJ3BA9mk2va/eC9atWlLef9U9aizsP3x0bq4LoqUEwcgmblnSe4nzbdV2tb759DWzAjY+lKVdKj3qFjPEc73FH5fgfZe+tvkcfD61q8gMM6xZJbv19aJuQYrDsBmUJQ3nQIvmnKvoUHrAmQYw0+rZXh0Fn/6qyvEjOnDACZHK61xGWxrVsPoBgYXCFvJXZnt/yBItHWainrXh1t0aJYs5L1xQHlAnSNNP6DoDmZy8460xtWScYQh9tF95A==
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f7-20020a170902ce8700b001d91849f274sm111308plg.134.2024.02.01.10.22.39
+        by smtp.gmail.com with ESMTPSA id v11-20020a170902d08b00b001d7134d149dsm112730plv.256.2024.02.01.10.26.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Feb 2024 10:22:39 -0800 (PST)
+        Thu, 01 Feb 2024 10:26:24 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 1 Feb 2024 10:22:38 -0800
+Date: Thu, 1 Feb 2024 10:26:23 -0800
 From: Guenter Roeck <linux@roeck-us.net>
 To: Dimitri Fedrau <dima.fedrau@gmail.com>
 Cc: Andrew Lunn <andrew@lunn.ch>, Heiner Kallweit <hkallweit1@gmail.com>,
@@ -66,13 +66,13 @@ Cc: Andrew Lunn <andrew@lunn.ch>, Heiner Kallweit <hkallweit1@gmail.com>,
 	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
 Subject: Re: [PATCH v5 net-next 08/13] net: phy: marvell-88q2xxx: add support
  for temperature sensor
-Message-ID: <5fdc3741-c169-4457-bffa-dab3d2ee42fe@roeck-us.net>
+Message-ID: <0f9c8083-7287-40af-a084-98c692166b40@roeck-us.net>
 References: <20240122212848.3645785-1-dima.fedrau@gmail.com>
  <20240122212848.3645785-9-dima.fedrau@gmail.com>
- <88a60be9-083b-4618-845c-6983bcad3540@roeck-us.net>
- <c9866a56-d82e-4a3d-b335-db22c0413416@lunn.ch>
- <a02c7451-8515-45d4-ae7b-9e64b03b5b38@roeck-us.net>
- <20240201162349.GC48964@debian>
+ <65071184-428b-4850-9e0c-baaa73513c6d@lunn.ch>
+ <20240201071137.GA41347@debian>
+ <5dc7d495-dd41-4b1f-b0e0-1fe512f1687c@roeck-us.net>
+ <20240201161435.GA48964@debian>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -81,36 +81,52 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240201162349.GC48964@debian>
+In-Reply-To: <20240201161435.GA48964@debian>
 
-On Thu, Feb 01, 2024 at 05:23:49PM +0100, Dimitri Fedrau wrote:
-> Am Thu, Feb 01, 2024 at 05:39:25AM -0800 schrieb Guenter Roeck:
-> > On 2/1/24 05:27, Andrew Lunn wrote:
-> > > > > +#ifdef CONFIG_HWMON
+On Thu, Feb 01, 2024 at 05:14:35PM +0100, Dimitri Fedrau wrote:
+> Am Thu, Feb 01, 2024 at 05:34:05AM -0800 schrieb Guenter Roeck:
+> > On 1/31/24 23:11, Dimitri Fedrau wrote:
+> > > Am Wed, Jan 31, 2024 at 04:17:06PM +0100 schrieb Andrew Lunn:
+> > > > > +static int mv88q2xxx_hwmon_probe(struct phy_device *phydev)
+> > > > > +{
+> > > > > +	struct device *dev = &phydev->mdio.dev;
+> > > > > +	struct device *hwmon;
+> > > > > +	char *hwmon_name;
+> > > > > +	int ret;
+> > > > > +
+> > > > > +	/* Enable temperature sensor interrupt */
+> > > > > +	ret = phy_set_bits_mmd(phydev, MDIO_MMD_PCS,
+> > > > > +			       MDIO_MMD_PCS_MV_TEMP_SENSOR1,
+> > > > > +			       MDIO_MMD_PCS_MV_TEMP_SENSOR1_INT_EN);
 > > > > 
-> > > > HWMON is tristate, so this may be problematic if the driver is built
-> > > > into the kernel and hwmon is built as module.
+> > > > You enable an interrupt, but i don't see any changes to the interrupt
+> > > > handler to handle any interrupts which are generated?
+> > > > 
+> > > Hi Andrew,
 > > > 
-> > > There should be Kconfig in addition to this, e.g.
-> > > 
-> > > config MAXLINEAR_GPHY
-> > >          tristate "Maxlinear Ethernet PHYs"
-> > >          select POLYNOMIAL if HWMON
-> > >          depends on HWMON || HWMON=n
-> > >          help
-> > >            Support for the Maxlinear GPY115, GPY211, GPY212, GPY215,
-> > >            GPY241, GPY245 PHYs.
-> > > 
-> > > So its forced to being built in, or not built at all.
+> > > you are right. Have to remove these lines. Besides enabling the interrupt
+> > > in MDIO_MMD_PCS_MV_TEMP_SENSOR1, there are two further register writes
+> > > necessary to make the interrupt propagate. I didn't want it to propagate.
+> > > Anyway it's wrong. I couldn't find a good solution to use the temperature
+> > > interrupt. Will have a look into this, and probably figuring out how to
+> > > do so. But it won't be part of this patch series.
 > > > 
 > > 
-> > Even then it should be "#if IS_ENABLED(HWMON)" in the code.
-> > 
+> > From hwmon perspective, the expected use of such an interrupt would be
+> > to call hwmon_notify_event() with the affected limit attribute as argument.
+> > This would notify the thermal subsystem if the sensor is registered with it
+> > (your patch doesn't set the necessary flag when registering the driver,
+> > so this would not happen), it will send a notification to the sysfs
+> > attribute, and generate a udev event.
 > >
-> If using "#if IS_ENABLED(HWMON)" do I have to add the dependency in
-> the KConfig file ? When looking at other PHY drivers, they do.
+> Thanks, noted it down. Didn't know about the notification to the thermal
+> subsystem and the generated udev event. :)
+> 
 
-Yes, to handle CONFIG_HWMON=m. Note that it is "IS_ENABLED(CONFIG_HWMON)"
-      				                           ^^^^^^^
+Note that you'd have to add something like
+
+	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
+
+to the code to register the sensor as thermal zone.
 
 Guenter
