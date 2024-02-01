@@ -1,124 +1,93 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80784158D7C;
-	Thu,  1 Feb 2024 08:21:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2691715A499;
+	Thu,  1 Feb 2024 08:26:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706775719; cv=none; b=BPNnyyf73lklb6e0j2Hh3dPR+Qycl6OAR0tDDq75ACqe6d0Z0GxRX+3b1eL5G6S13VR7HiZR4ceGNwwWaf2AcnKNOUtYf8lc4yTYZ24Mo+QTUIUDX7Ewz3w+WQ3WXL6kzBleKHhR4BdUz8kf3OADVeR3/l8hF4XQRjXlhUutIAo=
+	t=1706775986; cv=none; b=rJ8fChhKrZO2DgQnu7sg8Jw4qmOpIN8D1nE0LoZbd6YPS9I/8kzXaUTqC7wO51ICRLkGAO2Wv0TUQcUTNkjxxdm0yCXu4Xdoys9/NdseSHipOZkorx8Vi1K5NXaQhhP9wEvrusXmByen82SROYHiOPj1vAXNWqMp9+Jv276nE6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706775719; c=relaxed/simple;
-	bh=wfZpdZl/N31/4tOLTGcfIu3SyJ0XLAVEJXeoyLZ1J48=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HTVE30HQdO7DpvUCAS1WdhzxpaDfPPFN4Id06eXT3+rOWucjoUoDtefBLaN9FKA7Y4Rqhl8txMQJGpytUtuNf7Lrn+PH3osSqxWfeMJFUgNHAoOLLJhcE0rNbE2iDOXOxODVyVMM+MfjxNgax4lHy3iS5h3cMC/aIiLuPRQKaTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=Q/SUoU82; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	s=arc-20240116; t=1706775986; c=relaxed/simple;
+	bh=XpKiZdYw73rtXNsgKWeaOkuxm+QdTdp3TunoJ61mePs=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=uCOhOKCiXIOEd513i64cUbhJgXKqCxzY18HwtIGzv2I2kf/lX7sM88VKM8dbWnpvrkoT5/A3rbqbNOhCBq4C5Y9yZoZvh+gMVu5VuYkMgXrdObBfsSUvxrMkRM9XHDAc+RFhWbHR+JX0NnJbModFZL/ZgWgUGRc33CE0us/Wazg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nsjYj7+v; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="Q/SUoU82"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nsjYj7+v"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1706775717; x=1738311717;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wfZpdZl/N31/4tOLTGcfIu3SyJ0XLAVEJXeoyLZ1J48=;
-  b=Q/SUoU82TsjUo1XPhiuQLZtSMnq5sleLQAIgzb0p4/H0qwk0ymd52Lru
-   +BiuJ/w7lUGaFEhCJgJeQlMyh0bjBp+L7XtzOtYKpS4GLWDUqocSVl8Tx
-   1aCYmWjBpPBjgUA6zCiXFEpY0/k6SUipTci5DVxSURuSCMDinxNQsPwHD
-   NdXOKT7HGVQqS7BwFJ1k5DLAcoGY74OFPh4rc7fhvTCDP/kohIOz1sWLc
-   j1XCtYF9oh4RxWQXkP/Ct3en6DTBviLT3CQoJ6VrNliB6o+58I5v7leX4
-   0d9UKXLINgo7BkP5qdgYEFRZfJrHG3MofSwHHZYWtz+kVMSakxc9odFjY
-   w==;
-X-CSE-ConnectionGUID: xeT3MgaNR+W5qlWhP2avng==
-X-CSE-MsgGUID: hgNpKvbOS5yYpYQTXvgMYw==
-X-IronPort-AV: E=Sophos;i="6.05,234,1701154800"; 
-   d="asc'?scan'208";a="246338219"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 01 Feb 2024 01:21:54 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Thu, 1 Feb 2024 01:21:32 -0700
-Received: from wendy (10.10.85.11) by chn-vm-ex03.mchp-main.com (10.10.85.151)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
- Transport; Thu, 1 Feb 2024 01:21:30 -0700
-Date: Thu, 1 Feb 2024 08:20:51 +0000
-From: Conor Dooley <conor.dooley@microchip.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC: Guenter Roeck <linux@roeck-us.net>, Conor Dooley <conor@kernel.org>,
-	Charles Hsu <ythsu0511@gmail.com>, <jdelvare@suse.com>, <corbet@lwn.net>,
-	<Delphine_CC_Chiu@wiwynn.com>, <robh+dt@kernel.org>,
-	<krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-	<linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 2/2] dt-bindings: Add MPQ8785 voltage regulator device
-Message-ID: <20240201-professor-slobbery-a77c9c76ca82@wendy>
-References: <20240131055526.2700452-1-ythsu0511@gmail.com>
- <20240131055526.2700452-2-ythsu0511@gmail.com>
- <20240131-eraser-given-8381a44f41a4@spud>
- <d20e1f93-4e6c-4c18-b4bd-19412eb4e8da@roeck-us.net>
- <f99af7ee-1a6c-4e00-9a7d-3a1ddc9574d2@linaro.org>
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706775985; x=1738311985;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=XpKiZdYw73rtXNsgKWeaOkuxm+QdTdp3TunoJ61mePs=;
+  b=nsjYj7+vsXyNJcehqFZzk08MXS7kXSCleunOBfXkpmJ9wErSDCIGenE7
+   BunOkfqhDqDoGzlnQ/Qqetp1nkORdxEQV754aJksuhIJc32dk9wCEUoOk
+   0OUR96VaVCaSEfYDyAOUTKrxWQdyK2MfFVt7mF6YVmi0nzXL3bGbKSzMZ
+   XIc5sYRzQFYZ3ZD57mSe0XnP40xHKxicZoln9bvrlRmz61bfWelIYgRsO
+   RxSAiNbw/Gkb8qLYkPP7VH4MyBnPSdTaNojZksxWPQelb2tXusd7SYL2o
+   ljq/dy3WJUkj7tBzZaU8NYGJRFzZMnG9RecVNydbHtradBtKDbodZ85AC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="22232"
+X-IronPort-AV: E=Sophos;i="6.05,234,1701158400"; 
+   d="scan'208";a="22232"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2024 00:26:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,234,1701158400"; 
+   d="scan'208";a="24057"
+Received: from lutzwalt-mobl.ger.corp.intel.com (HELO localhost) ([10.246.33.1])
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2024 00:25:58 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Thu, 1 Feb 2024 10:25:53 +0200 (EET)
+To: Maximilian Luz <luzmaximilian@gmail.com>
+cc: Guenter Roeck <linux@roeck-us.net>, Ivor Wanders <ivor@iwanders.net>, 
+    Hans de Goede <hdegoede@redhat.com>, Jean Delvare <jdelvare@suse.com>, 
+    Jonathan Corbet <corbet@lwn.net>, Mark Gross <markgross@kernel.org>, 
+    linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
+    LKML <linux-kernel@vger.kernel.org>, platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH v5 2/2] platform/surface: aggregator_registry: add entry
+ for fan speed
+In-Reply-To: <8552a795-9ce4-417a-bc71-593571a6b363@gmail.com>
+Message-ID: <6659d49c-4a70-1a92-2a76-ce7144fed50c@linux.intel.com>
+References: <20240131005856.10180-1-ivor@iwanders.net> <20240131005856.10180-3-ivor@iwanders.net> <7e392c1e-2cb2-43e4-804e-227551ed2dd7@roeck-us.net> <8552a795-9ce4-417a-bc71-593571a6b363@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="eiYzcIx+MwHK8ugQ"
-Content-Disposition: inline
-In-Reply-To: <f99af7ee-1a6c-4e00-9a7d-3a1ddc9574d2@linaro.org>
+Content-Type: text/plain; charset=US-ASCII
 
---eiYzcIx+MwHK8ugQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed, 31 Jan 2024, Maximilian Luz wrote:
 
-On Thu, Feb 01, 2024 at 08:47:07AM +0100, Krzysztof Kozlowski wrote:
-> On 01/02/2024 01:41, Guenter Roeck wrote:
-> > On 1/31/24 07:41, Conor Dooley wrote:
-> >> On Wed, Jan 31, 2024 at 01:55:26PM +0800, Charles Hsu wrote:
-> >>> Monolithic Power Systems, Inc. (MPS) synchronous step-down converter.
-> >>>
-> >>> Signed-off-by: Charles Hsu <ythsu0511@gmail.com>
-> >>> ---
-> >>>   Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
-> >>>   1 file changed, 2 insertions(+)
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b=
-/Documentation/devicetree/bindings/trivial-devices.yaml
-> >>> index 79dcd92c4a43..088b23ed2ae6 100644
-> >>> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
-> >>> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-> >>> @@ -129,6 +129,8 @@ properties:
-> >>>             - mps,mp2975
-> >>>               # Monolithic Power Systems Inc. multi-phase hot-swap co=
-ntroller mp5990
-> >>>             - mps,mp5990
-> >>> +            # Monolithic Power Systems Inc. synchronous step-down co=
-nverter mpq8785
-> >>> +          - mps,mpq8785
-> >>
-> >> q sorts before 2, otherwise
-> >=20
-> > It does ? Not in ASCII. Am I missing something ?
->=20
-> Also `sort` agrees with q being after numbers.
+> Am 1/31/2024 um 2:24 PM schrieb Guenter Roeck:
+> > On Tue, Jan 30, 2024 at 07:58:56PM -0500, Ivor Wanders wrote:
+> > > Add an entry for the fan speed function.
+> > > Add this new entry to the Surface Pro 9 group.
+> > > 
+> > > Signed-off-by: Ivor Wanders <ivor@iwanders.net>
+> > > Link: https://github.com/linux-surface/kernel/pull/144
+> > > Reviewed-by: Maximilian Luz <luzmaximilian@gmail.com>
+> > 
+> > I wasn't sure if the Reviewed-by: tag means that I should apply the patch
+> > through the hwmon subsystem. If so, please let me know. For now I'll
+> > assume that it will be applied through a platform tree.
+> 
+> I think it would make more sense for it to go through pdx86 (as usual
+> for platform/surface). That would avoid any potential merge conflicts
+> if we get more changes to the surface_aggregator_registry later on.
+> 
+> Hans, Ilpo, could you please take this?
+> 
+> Also I just noticed that Ilpo wasn't CCd, I assume because of an older
+> MAINTAINERS list. Ivor, please add him for any next submissions to
+> platform/surface.
 
-Disregard that comment so.
+Okay, thanks for letting me know (I assumed the opposite). I'll take it 
+through pdx86.
 
---eiYzcIx+MwHK8ugQ
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+ i.
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZbtUVgAKCRB4tDGHoIJi
-0gN/AP4tg5L5FIzAL86HeXCni6iANExtZEzYQm/GuHvM/xL1AwD/SkChM5F+gynW
-lmkadnEGZQvZYnT4OxYJANK+EUVBnwA=
-=tEEr
------END PGP SIGNATURE-----
-
---eiYzcIx+MwHK8ugQ--
