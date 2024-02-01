@@ -1,253 +1,115 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66DB413ACC
-	for <linux-hwmon@vger.kernel.org>; Thu,  1 Feb 2024 02:22:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.115
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2EA8366;
+	Thu,  1 Feb 2024 05:10:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706754147; cv=none; b=tGAMFQC6qwxz7kFoH8f/YL2vtKaonsdFrDRcGsOJQullAUnWyBGDyk3jISikhXr1/7/R4JjZoscHlWxvVwNKKVoR+UMOrYQ/ZJqVOjfmW7ucnuKtakSMm6m4Bak3lsXjaBswv1rWqGbCPNjwoI+Ke49FVBBjGQhnLREKAKegdTQ=
+	t=1706764228; cv=none; b=bZ4UJngXxpOhvRMhE5iWWv8G5sqr6q9PdSkpAXz1huhJ97/0pOaDfrm2MKaykOGXQQPuY5Hr1wSgI5XdoFzqBms8Dzq1HTLuMlT4g2J8EO8xZge4aOOWtwKuF6rtDBDYi797IbD4pluxb2E2KkW/nT3+pMn5A0m5UlhdaDSsT3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706754147; c=relaxed/simple;
-	bh=TwMdxmQVA/iN3Sg00j6j0OsAMlVwo32kJeJ7xyBCbBs=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=bzLUi6I44xvnw8xLpJ8S+eb/SvJttIYdfoU+i7DewL+ve2LgmVsKyc5v7zSxOn87Hv4Gi+1vIuiB6QSOuYGxwrBStM+x6LjMswEhcn90Xc75qo5fko7lCmR5FZFecCx+6ufSWvbovh+07Vp7WHEQZ98bT/5G8kEesja5B7gGaz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AHq5Xb6f; arc=none smtp.client-ip=192.55.52.115
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1706764228; c=relaxed/simple;
+	bh=TZ4WdxaS6sBzLI6TTeW0UbEUGPpFWeuJx+KfLwa7rnQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MI9bBqsKEvkLDG+GW3ovpSt8G/XeQgoRPFsogwqojEb8QnhVLNwmqvfc6xYd2iesnF++yM6JjRH3/r4TKNizLwGDzQTTMly4TVfXCL5J/NdzS/pMRLRF82aU18EG97Agq3s43aYBq32LKlcTNbznB5RdJKI/VqjQzOODR2Iopmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Hfo0TwT4; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AHq5Xb6f"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Hfo0TwT4"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706754145; x=1738290145;
-  h=date:from:to:cc:subject:message-id;
-  bh=TwMdxmQVA/iN3Sg00j6j0OsAMlVwo32kJeJ7xyBCbBs=;
-  b=AHq5Xb6fhnOxWAMEB9IK5Rdso2R9uFzYNqSZ1IVFEUdEkBb5MGi3Eo77
-   h2PAzP6VW05cA8FzyPuOp6Hd5w6HmXhht6lvjgMHgFGioJZePsXkPY5Xb
-   0Pwx97W3PEXS2UIGkfqbcSIDBnC42IKu1q49rduPY4bWi4KR2Qord+wWH
-   NWEfVHmuTgcajnj9rxTzSi05R4ddJRX9ofi6Xt+Xop5PDT/5ewdeMFBOT
-   sHZu1gYkLPX6BrCFcdiDb6nmaKBiZAXzHslHKscVj61BwAtiXWX/jZNPC
-   nad3FOA/NGuDt1zB+UR4YpYkj311bxkLsNSEnYekTVUg9V3qKIiR9Cor1
+  t=1706764227; x=1738300227;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=TZ4WdxaS6sBzLI6TTeW0UbEUGPpFWeuJx+KfLwa7rnQ=;
+  b=Hfo0TwT4iF7pfEchdTAN09ZkgQgq0lmNmD9iBurnBCxQJ/WmXe6Oa8nB
+   b6mSUwR7Xc536bN8XV2dv2X9pUKiB6VCREYzQyD4QKHnJOtowTrx999CS
+   +Gj5K7wDVYIHSTwq74lacgxH/ZN25tjr4IVPyE3FlBCgo0QfE/E1uoxHv
+   +mKaUwrWCcIVXnQrPuOxCplwVUaZCpzgF/vnAmzNp0Z2grKFoTXzwU81W
+   Vhq9H+F+hS7a+87OUUnNqUu2tRawMh6/Bsk9USdsCdaGv4soBarPIR0fr
+   DaIDfY3wjxNouCqyFe4OKICNYGaz+/SL9sECV65IfCwINYT+dI10nK6iY
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="403402459"
-X-IronPort-AV: E=Sophos;i="6.05,233,1701158400"; 
-   d="scan'208";a="403402459"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2024 18:22:24 -0800
+X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="17196091"
+X-IronPort-AV: E=Sophos;i="6.05,234,1701158400"; 
+   d="scan'208";a="17196091"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2024 21:10:26 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="911988286"
-X-IronPort-AV: E=Sophos;i="6.05,233,1701158400"; 
-   d="scan'208";a="911988286"
-Received: from lkp-server02.sh.intel.com (HELO 59f4f4cd5935) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 31 Jan 2024 18:22:22 -0800
-Received: from kbuild by 59f4f4cd5935 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rVMia-0002Hg-1g;
-	Thu, 01 Feb 2024 02:22:20 +0000
-Date: Thu, 01 Feb 2024 10:22:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 6120fec68e78eefdf7d89325668c082a90817c75
-Message-ID: <202402011000.lrSrFnEc-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="908132348"
+X-IronPort-AV: E=Sophos;i="6.05,234,1701158400"; 
+   d="scan'208";a="908132348"
+Received: from choongyo-mobl.gar.corp.intel.com (HELO [10.247.5.230]) ([10.247.5.230])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2024 21:10:17 -0800
+Message-ID: <9e23671e-788c-4191-bdb4-94915ff7da5a@linux.intel.com>
+Date: Thu, 1 Feb 2024 13:10:05 +0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v4 06/11] net: stmmac: resetup XPCS according to
+ the new interface mode
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+ David E Box <david.e.box@linux.intel.com>,
+ Hans de Goede <hdegoede@redhat.com>, Mark Gross <markgross@kernel.org>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Jose Abreu <Jose.Abreu@synopsys.com>, "David S . Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Richard Cochran <richardcochran@gmail.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+ Heiner Kallweit <hkallweit1@gmail.com>,
+ Philipp Zabel <p.zabel@pengutronix.de>, Andrew Halaney
+ <ahalaney@redhat.com>, Simon Horman <simon.horman@corigine.com>,
+ Serge Semin <fancer.lancer@gmail.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, platform-driver-x86@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, bpf@vger.kernel.org,
+ Voon Wei Feng <weifeng.voon@intel.com>,
+ Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
+ Lai Peter Jun Ann <jun.ann.lai@intel.com>,
+ Abdul Rahim Faizal <faizal.abdul.rahim@intel.com>
+References: <20240129130253.1400707-1-yong.liang.choong@linux.intel.com>
+ <20240129130253.1400707-7-yong.liang.choong@linux.intel.com>
+ <ZbjNn+C/VHegH2t7@shell.armlinux.org.uk>
+Content-Language: en-US
+From: Choong Yong Liang <yong.liang.choong@linux.intel.com>
+In-Reply-To: <ZbjNn+C/VHegH2t7@shell.armlinux.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 6120fec68e78eefdf7d89325668c082a90817c75  hwmon: ltc4282: add support for the LTC4282 chip
 
-elapsed time: 1154m
 
-configs tested: 179
-configs skipped: 3
+On 30/1/2024 6:21 pm, Russell King (Oracle) wrote:
+> NAK. Absolutely not. You haven't read the phylink documentation, nor
+> understood how phylink works.
+> 
+> Since you haven't read the phylink documentation, I'm not going to
+> waste any more time reviewing this series since you haven't done your
+> side of the bargin here.
+> 
+Hi Russell,
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Sorry that previously I only studied the phylink based on the `phylink.h` 
+itself. I think it might not be sufficient. I did search through the 
+internet and found the phylink document from kernel.org 
+(https://docs.kernel.org/networking/sfp-phylink.html). Kindly let me know 
+if there are any other phylink documents I might have overlooked.
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                            hsdk_defconfig   gcc  
-arc                   randconfig-001-20240201   gcc  
-arc                   randconfig-002-20240201   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                         orion5x_defconfig   clang
-arm                          pxa168_defconfig   clang
-arm                   randconfig-001-20240201   gcc  
-arm                   randconfig-002-20240201   gcc  
-arm                   randconfig-003-20240201   gcc  
-arm                   randconfig-004-20240201   gcc  
-arm                        spear3xx_defconfig   clang
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240201   gcc  
-arm64                 randconfig-002-20240201   gcc  
-arm64                 randconfig-003-20240201   gcc  
-arm64                 randconfig-004-20240201   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240201   gcc  
-csky                  randconfig-002-20240201   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20240201   clang
-hexagon               randconfig-002-20240201   clang
-i386                             allmodconfig   clang
-i386                              allnoconfig   clang
-i386                             allyesconfig   clang
-i386         buildonly-randconfig-001-20240131   clang
-i386         buildonly-randconfig-002-20240131   clang
-i386         buildonly-randconfig-003-20240131   clang
-i386         buildonly-randconfig-004-20240131   clang
-i386         buildonly-randconfig-005-20240131   clang
-i386         buildonly-randconfig-006-20240131   clang
-i386                                defconfig   gcc  
-i386                  randconfig-001-20240131   clang
-i386                  randconfig-002-20240131   clang
-i386                  randconfig-003-20240131   clang
-i386                  randconfig-004-20240131   clang
-i386                  randconfig-005-20240131   clang
-i386                  randconfig-006-20240131   clang
-i386                  randconfig-011-20240131   gcc  
-i386                  randconfig-012-20240131   gcc  
-i386                  randconfig-013-20240131   gcc  
-i386                  randconfig-014-20240131   gcc  
-i386                  randconfig-015-20240131   gcc  
-i386                  randconfig-016-20240131   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240201   gcc  
-loongarch             randconfig-002-20240201   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-microblaze                      mmu_defconfig   gcc  
-mips                              allnoconfig   clang
-mips                             allyesconfig   gcc  
-nios2                         10m50_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240201   gcc  
-nios2                 randconfig-002-20240201   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240201   gcc  
-parisc                randconfig-002-20240201   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   clang
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                      arches_defconfig   gcc  
-powerpc                   currituck_defconfig   gcc  
-powerpc                    ge_imp3a_defconfig   gcc  
-powerpc                     ksi8560_defconfig   gcc  
-powerpc                 mpc8313_rdb_defconfig   clang
-powerpc                      ppc40x_defconfig   gcc  
-powerpc               randconfig-001-20240201   gcc  
-powerpc               randconfig-002-20240201   gcc  
-powerpc               randconfig-003-20240201   gcc  
-powerpc                  storcenter_defconfig   gcc  
-powerpc                        warp_defconfig   gcc  
-powerpc64             randconfig-001-20240201   gcc  
-powerpc64             randconfig-002-20240201   gcc  
-powerpc64             randconfig-003-20240201   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   clang
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                 randconfig-001-20240201   gcc  
-riscv                 randconfig-002-20240201   gcc  
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20240201   clang
-s390                  randconfig-002-20240201   clang
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                          polaris_defconfig   gcc  
-sh                          r7785rp_defconfig   gcc  
-sh                    randconfig-001-20240201   gcc  
-sh                    randconfig-002-20240201   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240201   gcc  
-sparc64               randconfig-002-20240201   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20240201   gcc  
-um                    randconfig-002-20240201   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240131   clang
-x86_64       buildonly-randconfig-002-20240131   clang
-x86_64       buildonly-randconfig-003-20240131   clang
-x86_64       buildonly-randconfig-004-20240131   clang
-x86_64       buildonly-randconfig-005-20240131   clang
-x86_64       buildonly-randconfig-006-20240131   clang
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240131   gcc  
-x86_64                randconfig-002-20240131   gcc  
-x86_64                randconfig-003-20240131   gcc  
-x86_64                randconfig-004-20240131   gcc  
-x86_64                randconfig-005-20240131   gcc  
-x86_64                randconfig-006-20240131   gcc  
-x86_64                randconfig-011-20240131   clang
-x86_64                randconfig-012-20240131   clang
-x86_64                randconfig-013-20240131   clang
-x86_64                randconfig-014-20240131   clang
-x86_64                randconfig-015-20240131   clang
-x86_64                randconfig-016-20240131   clang
-x86_64                randconfig-071-20240131   clang
-x86_64                randconfig-072-20240131   clang
-x86_64                randconfig-073-20240131   clang
-x86_64                randconfig-074-20240131   clang
-x86_64                randconfig-075-20240131   clang
-x86_64                randconfig-076-20240131   clang
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
-xtensa                randconfig-001-20240201   gcc  
-xtensa                randconfig-002-20240201   gcc  
+According to the phylink document from kernel.org, it does mention that 
+"phylink is a mechanism to support hot-pluggable networking modules 
+directly connected to a MAC without needing to re-initialise the adapter on 
+hot-plug events." I realize I should not destroy and reinitialize the PCS.
+Instead, I plan to follow the implementation in "net: macb: use 
+.mac_select_pcs() interface" 
+(https://lore.kernel.org/netdev/E1n568J-002SZX-Gr@rmk-PC.armlinux.org.uk/T/). 
+This involves initializing the required PCS during the MAC probe and 
+querying the PCS based on the interface.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kindly let me know if I've overlooked anything in this proposed solution.
