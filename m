@@ -1,81 +1,112 @@
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0378D39FE3
-	for <linux-hwmon@vger.kernel.org>; Wed, 31 Jan 2024 22:22:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C33551848;
+	Thu,  1 Feb 2024 00:34:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706739727; cv=none; b=G+pZ/NdcpSgCN9+cVs5MtGk9lwAX2ahQgCNZo/MM7hliAS3zQMetxhe2QP/hc6PhEzjUKjVTqi0CLlfRaADA11CSVUeYLU5eEDpt/eBuNhe5mwsPuQKMh/9+0Aq5WT3ecL75RAqO4aR67u0nD6NM+6VhWRAXCQxchKRwspbamU0=
+	t=1706747686; cv=none; b=r2d4tKDbA5Rfbw2U8QD/u+3wS15Vqoafswx/J5PfrnfZ6cqAgswQ551iNtQkDKdIgQS/Al/N0gqR3LELy8YOC6G6Q46mnTzdTNS40ADNe/wL4iHqEwtmuKiD77JOZ43MCpxysM+06uttixN5qG/xK03/T17TtJ+1NKEFcLQaYbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706739727; c=relaxed/simple;
-	bh=vcScM3cpdf7Pja37NGeK6Yly0/J61B5EtMzfdpq0CFg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=P7EtdQ27KDFgo1uuCLaaPcfhMTA6p0hPOFiiyzbUSxen9emb47uero/hymFuV9n55CjsOmiythWvlqDbnKRuMaVPml8j1D0s5fEP9sL7Gq7bPMmJSfOjhE1FPcJMIkXTaRhw4llICiAGMentAmlycpo+iLsvWT7Dj6+dQPzx8Mw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iwanders.net; spf=pass smtp.mailfrom=iwanders.net; dkim=pass (1024-bit key) header.d=iwanders.net header.i=@iwanders.net header.b=a0IxyXcY; arc=none smtp.client-ip=209.85.160.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iwanders.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iwanders.net
+	s=arc-20240116; t=1706747686; c=relaxed/simple;
+	bh=vnbzCB39wVKvbch2Hy3sYEt0pT2wPAKWtE3Z1mkDHbM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UAQoei38aPQ+OQtb0nlhFcWf53G1q7Uhw0e6sSBEEa7M+mL+s86CIaS+VfgF+y1cXA5Hwgn9iDtaZbznXTEAolOyG+WSbfnmsNkwHC3/pPrG/if64mETRNRKjPm1W9v83cwEqvaQ7TQv4ecmgF0plZPsngkbJiFBydhh2t/534U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AlUUzhv3; arc=none smtp.client-ip=209.85.219.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=iwanders.net header.i=@iwanders.net header.b="a0IxyXcY"
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-42a4516ec46so2270451cf.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 31 Jan 2024 14:22:05 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AlUUzhv3"
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-dc63dfe77caso311766276.3;
+        Wed, 31 Jan 2024 16:34:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=iwanders.net; s=google; t=1706739725; x=1707344525; darn=vger.kernel.org;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=vcScM3cpdf7Pja37NGeK6Yly0/J61B5EtMzfdpq0CFg=;
-        b=a0IxyXcYWUS0UrNbcJkKcy0kjVdzpNm2qnbggSJj3XN8vuN3WRoVmVp6dWoim0I08b
-         i54pYRG/sKToEfVwg2LTGWrMU8lt/YKiNTpyxZQ/dS6cw5TqmvXFVDHS6OJQL0TPJA1l
-         18nT4JpW5Hf+cNO5LPKtLHg1GVPdabkI542vY=
+        d=gmail.com; s=20230601; t=1706747683; x=1707352483; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZbOOKe7bbu6zejjiRtLrCpqVPRgcPSroTLRi0QwxwOE=;
+        b=AlUUzhv3HCyHBEj7PFOkxwFjizL9hgiQbian/h/e2YGNitZltGoRv+61M8p1TfAEtW
+         ynC5Gy1EuoV0sgi09atkR1j/kWFd2K7GP85Tc7zCtWUmruIV9BCqOqmSKrpIaup2Effd
+         vL6sJkdu+QlJ06WOPz1cJPZ2BvnMh8qJ6aClMMjzkM80El/nO3jjzjsQKDDAZ1CsDbTN
+         k2xCPb8UhwiJcWC+5mhToOtzY06eRZ3c2JhwHXj84b4m0bZ+QBkssLUayvBf+GS0ihcR
+         w5SL7Bx8GLk+6Q7d2wB/XapvVE5vDYcLo9ukC5cwhSgN65k7UePhOaC6teh4eJaaJvPe
+         KWew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706739725; x=1707344525;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vcScM3cpdf7Pja37NGeK6Yly0/J61B5EtMzfdpq0CFg=;
-        b=mW8kJOrD3aqI46srckdpltrY1KeI1i4u4vdZcWh8cNYaja+qsLFKREHbNtQGQWiQLE
-         pg2Ze8wB36wBbTj8u96X9M2W0bMYDEinsbrow+F2BTxLAr0balNqwuUHIuxV7S1lZyFJ
-         HNoCUfQH++170rABNiTVxrfnTSiEXz+8zLsONmEnuB/HcJv61B6rAz0akMXUPmWe16Wt
-         CI1nAUS/63s3SpFZu4CipRJ7pKS8KKcRR434XIwMP7IOFqkJDCPS5zx65OIpuVCo8edj
-         MQzuYTMt0F3+c5pGJv5eJrlFlCYYXfhovFmcemSRT7HwlqUGqBBfUXj2NjTkhmhUc+g0
-         ShcQ==
-X-Gm-Message-State: AOJu0YydMzehHRv2hct2UL1MF70jY/aOljuswXhBS/B4+YTrfFn1mpAo
-	PnGEEXQwB5kw9loOG9eHsd1ZZgKHqqZxB71lEsBJ8IgX0njwROZMRt8Oaaa3ziw=
-X-Google-Smtp-Source: AGHT+IHT6U2Z6r+BnwKmbGRGJKdtoLhCF94IFwTmfyoXINLyl1O7n6F0NJF3d2P84mNPLywdHvL9eg==
-X-Received: by 2002:ac8:5a04:0:b0:42a:9d70:7f58 with SMTP id n4-20020ac85a04000000b0042a9d707f58mr6949131qta.49.1706739724907;
-        Wed, 31 Jan 2024 14:22:04 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCVNPF3itdhRp04csr0g5GO3JreHvCYGEIEA/une96Tw0FryJ0AUsks6nkPc9NxQycBHkdbMDKYBVjTcz2IjRJuyJkHgxNyySC5weAtSxjO5EEaYMVghfNH7nKD4OL1lxjiGUjUEI7dg4/tfEA2tPW06FBT06l8h5qTN/ZKeRaBEiSsjKlk/w8lTGiQA7XkPmaR6priWatn7TyQuVpp3HuVi7JRILUR0tzT73HALyiZHrMrUYSL6iJ59uXeozc9BZprHUPJ3nr0SnhhiPljScq+3grTguB6aez9TEeN+149b7uSCpWNPtbIx8KEoBFtMBaboVIJrCAZbJ/hfkzNfAWBjTQ+9QfVsmuYbogN8Hz0VnU9yp7Y5/WBWK5TAX/hi841Njiv6orz8GwTLsOAH
-Received: from eagle.lan (24-246-30-234.cable.teksavvy.com. [24.246.30.234])
-        by smtp.gmail.com with ESMTPSA id ci13-20020a05622a260d00b0042a729d17dcsm1896082qtb.86.2024.01.31.14.22.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Jan 2024 14:22:04 -0800 (PST)
-From: Ivor Wanders <ivor@iwanders.net>
-To: luzmaximilian@gmail.com
-Cc: corbet@lwn.net,
-	hdegoede@redhat.com,
-	ilpo.jarvinen@linux.intel.com,
-	ivor@iwanders.net,
-	jdelvare@suse.com,
-	linux-doc@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux@roeck-us.net,
-	markgross@kernel.org,
-	platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH v5 2/2] platform/surface: aggregator_registry: add entry for fan speed
-Date: Wed, 31 Jan 2024 17:21:45 -0500
-Message-Id: <20240131222145.3320-1-ivor@iwanders.net>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <8552a795-9ce4-417a-bc71-593571a6b363@gmail.com>
-References: <8552a795-9ce4-417a-bc71-593571a6b363@gmail.com>
+        d=1e100.net; s=20230601; t=1706747683; x=1707352483;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZbOOKe7bbu6zejjiRtLrCpqVPRgcPSroTLRi0QwxwOE=;
+        b=w6IlOe9pvZyupojePmIlUOE5lXF0r8VSjlSmJvWwk/VsYdycmMTVPpBFewf68p9kgx
+         ZI1rgn0QaeWv7durdMuj4l0n6tYcTw3vk547x37tem4rqs2HS8eOwuQyAtbkJ/bLJQKN
+         k4fulxFw9LGYPLxqaqp+ZZxYDn+5k4o1fhBIEH5fYyucSdMqqdIe3VuhMlS8V7BzElY/
+         vZNwVCBpdniRvwl0ZoxMkn6h3+IyVNdaLcdSRCx92J9ftdss03IoNISXBEK8YjcS4TX6
+         Y++2UadAOyVN9En3PZY44VZBZfexe/7+5h/dotw13VvODTZNZ6XOjhe0SRBH6+Gy/tOU
+         7m1g==
+X-Gm-Message-State: AOJu0YwdIXGRkP52Ycx273bvJVQiNoMMirSShjoqPRayuv8QL9AxrlCg
+	xqgQ/93Uaeea7v1tVTXes7W1EucQG7ADP63At05JBB49GXX+C35hk3287Xt33Li14ytmRBEyN0z
+	MDJ2q5zeADqSRjDiOxnT0Zjwp0dfWbLsUbhpibg==
+X-Google-Smtp-Source: AGHT+IHW7I0Dmnn7MtcxiiH7U7ZvvzGycmS1CNoDQRvXK4YxdTMfhWwkKV/OMla8SO9nrfOLDpc9O0P42dzA4R4kIxU=
+X-Received: by 2002:a05:6902:1369:b0:dc2:252d:4773 with SMTP id
+ bt9-20020a056902136900b00dc2252d4773mr3185212ybb.61.1706747683578; Wed, 31
+ Jan 2024 16:34:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20240131055526.2700452-1-ythsu0511@gmail.com> <20240131055526.2700452-2-ythsu0511@gmail.com>
+ <20240131-eraser-given-8381a44f41a4@spud>
+In-Reply-To: <20240131-eraser-given-8381a44f41a4@spud>
+From: =?UTF-8?B?5b6Q5rC46KyE?= <ythsu0511@gmail.com>
+Date: Thu, 1 Feb 2024 08:34:32 +0800
+Message-ID: <CAE+7-j=uWxQhEVF4YhAGmyjrryzMxF2E9Qi6xgRVYwusmaZMMw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] dt-bindings: Add MPQ8785 voltage regulator device
+To: Conor Dooley <conor@kernel.org>
+Cc: jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net, 
+	Delphine_CC_Chiu@wiwynn.com, robh+dt@kernel.org, 
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> I assume because of an older MAINTAINERS list. Ivor, please add him for
-> any next submissions to platform/surface.
-
-Yes, mea culpa. Guenter also ran into trouble applying the v4 version of
-the patch yesterday. I'm sorry I didn't base this off the correct branch
-everyone, will be sure to do so in the future!
-
-~Ivor
+On Wed, Jan 31, 2024 at 11:41=E2=80=AFPM Conor Dooley <conor@kernel.org> wr=
+ote:
+>
+> On Wed, Jan 31, 2024 at 01:55:26PM +0800, Charles Hsu wrote:
+> > Monolithic Power Systems, Inc. (MPS) synchronous step-down converter.
+> >
+> > Signed-off-by: Charles Hsu <ythsu0511@gmail.com>
+> > ---
+> >  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/D=
+ocumentation/devicetree/bindings/trivial-devices.yaml
+> > index 79dcd92c4a43..088b23ed2ae6 100644
+> > --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> > +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> > @@ -129,6 +129,8 @@ properties:
+> >            - mps,mp2975
+> >              # Monolithic Power Systems Inc. multi-phase hot-swap contr=
+oller mp5990
+> >            - mps,mp5990
+> > +            # Monolithic Power Systems Inc. synchronous step-down conv=
+erter mpq8785
+> > +          - mps,mpq8785
+>
+> q sorts before 2, otherwise
+Okay, I got it.
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+>
+> Cheers,
+> Conor.
+>
+> >              # Honeywell Humidicon HIH-6130 humidity/temperature sensor
+> >            - honeywell,hi6130
+> >              # IBM Common Form Factor Power Supply Versions (all versio=
+ns)
+> > --
+> > 2.34.1
+> >
