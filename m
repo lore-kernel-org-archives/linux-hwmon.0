@@ -1,53 +1,76 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B06A2D281;
-	Thu,  1 Feb 2024 16:47:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 845306FB3;
+	Thu,  1 Feb 2024 16:52:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706806063; cv=none; b=rueT7QtDwOgs6QIHbTMj1W1XaEDc6jHAzNxjw1CD0cloUfbWB+GRArIsni3OY25kT1RSLFvdiFtcM0ZQy0cVRqtrLk6stjYU2OFWS/qE8WfrGWauxVzmbOG7nzHWdwcn96q3wZ4iRwjqPA4h1BkrkIix7sn2H0R7dpJdyWqU8qQ=
+	t=1706806347; cv=none; b=EgzK7/gt5rRYYLkvGMx8kQHbfl01fZHAjKXfHLrNii2TEJFxTxUwZ4tf5Np0lLBuR6o5j6wcUoZvguUnvelCAJBzbwiZEwp6upvpK79acOyVyjVPPQIU5TtsCquUTRpc6BgxSREIkgXOGxVhLymVdwfb5tQ4whiY6n/VdpAgj64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706806063; c=relaxed/simple;
-	bh=+K0T97CVgMNpfRwZlO4eKu8a/DzZVeS+5rFivyPss+w=;
+	s=arc-20240116; t=1706806347; c=relaxed/simple;
+	bh=vz6LudJL4eKqv3CjXYHs2B5Tec5lKHc2ygrfhj4xYF0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W+kq0HwV8lWIJKmjErXyL2mnFFlIsbhPkf/MsdobuFzdP510Q3JGaQ1MLn+JnZt/er7Szm5DG2aFcYkqHtvX75N0FBzY1Qg7UajfpQYWe5q2qpu2CmuMIAmEd+LjBsXwr+7zkgo0WonrVyuZYIjuJoAn1nZ7VC/oHCd6E3kkJW8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=XfPMOc1V; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+	 Content-Type:Content-Disposition:In-Reply-To; b=pmrfRB/s0BEQ3ASpGf18BrjiZddaBOqFTLfaHrCvsRc4llwYRPMoyANg2AVq8dQxR/+oVrUGpekDcmoGdHO+COGAhzJicjg3+RiylOtBSYQd+oiA1WynI1js+3kvy3nCzy0sYVaCLCZWLEMT7t8iknE6S99gwyfwqzaxAeFeups=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hq16+ADG; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="XfPMOc1V"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=bUN7yMh6xy2hWhvAEG7t+zJP6Ap6R4V2I56VA8W+GD8=; b=XfPMOc1Vq3U3HOb18Bz8QczK3k
-	g+LxL9dyOB95t/oGQzYWYyETjRxfv+GLcPmPfUfCFqCmGzlIEgl5v8EMON+nLJH+kRh9CMc2LknpE
-	M4fDU8lpc+Chg/33DQ935/cp4zaBrwvfIfoFPOsEDSTPmULjLXy99RDT4X2KWxL7ASpY=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1rVaDh-006hIq-0x; Thu, 01 Feb 2024 17:47:21 +0100
-Date: Thu, 1 Feb 2024 17:47:21 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Dimitri Fedrau <dima.fedrau@gmail.com>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hq16+ADG"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-40fc22e53f1so4755485e9.2;
+        Thu, 01 Feb 2024 08:52:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1706806344; x=1707411144; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=36YMN2QmFQFae2ekkCq5RQmRrLMnTH3/M270MHoKBFo=;
+        b=Hq16+ADGJeV7plohduFbAFAcY21rUaCR4aGpsIjbuBY/CG9iX4r/U+8AVNIT9yZcFx
+         73jmsKzTRIzA/N/8eeJmbR10TrmcHw+lO3e7qRr5VitEOSn3kp4sNIRD+kf+2hkOLGQC
+         KLge0cu5lujkqWHlm/VyGUk17udhIyfIWQg4vTl19z3CbLVtoD+W3G6ombK7eivDK8uF
+         ubpj0gWqFtt9EBbuD5E9yZ0HaqvLcYcawG95oPtdbsruLzv+ELqRdEf0fRR8esbozPVY
+         09VDsNnrC1H73rFeQeXRuQ6vAzy4Kycj5JriBk+b0UXvqEUUOsYdDqx86viaVbM/zV/4
+         82kA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706806344; x=1707411144;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=36YMN2QmFQFae2ekkCq5RQmRrLMnTH3/M270MHoKBFo=;
+        b=KtZDs8Uj+Cl/lXT8pitO0Nrb7LCf/pEjXrp3PdOYiD3/WtU50HXmlQlpEqfnN49p7w
+         E30VhQisZNQ5JQ4a26FBQ4TBrtfwP4Ps4VgtiUYfua8t6kJ27brwWCyWBYTHUbGpZIc5
+         Ezd+m9ePj3ZVeWjdtuhnb0GGyId04XvlHXU1rHYIqccLXDjOk9hfzInIXXDC3mXisItI
+         FUMCmPPKDqU2UA33Z1an9cDKrozZgrz9A2E1uD4oG0nqflJTeTQwotJ+m/yP1BAunmtX
+         fEHGw6zc18ISvVKKhet2FJXzZhsbqpyzZzR1fYAWBidbff8vdf3YEbJgmd+OPfn2mODH
+         HP4A==
+X-Gm-Message-State: AOJu0YzJXBfkbvJ7IBYl1P6Odk1UYk52BgRKtp6Ccd8kLE+E2Vb6mWt7
+	HBjeLif+pWlaPhipRHFBl7SnqvWO3tfoehhuy+ms6xa56rE7HQJF
+X-Google-Smtp-Source: AGHT+IG6yuiQUuYWLdX4eGgPosOUbrfcFbE8B2VVupH1TRMhah/T+64W/jSfdtRkeHK3qCQhtdCP3Q==
+X-Received: by 2002:a05:600c:3510:b0:40f:b03d:86b8 with SMTP id h16-20020a05600c351000b0040fb03d86b8mr3730677wmq.28.1706806343568;
+        Thu, 01 Feb 2024 08:52:23 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCVFQ81UwtOJOLZF1rbu9HOtiRi+P6+IFJ3wq3EdVDScvs8o9ZTWl8xgfnGgKbXPYyXsg3Nx3kMYwyEAJS7Rw4Fc4nP/w2b+PQNMByDje51OAvNSabwjGUh+N1C/SmJLq32vAL9kG05OJmSEZEj+DBpdyizcxeofgdQaGbBKzFAhvxxcWPvy9aHmiThDH4cVKlvoPsiYgKD/1fONJi///sS4KP1/qOe06RfdAzAX8Ta1NjVloXiZslBE6z3/RX7SQq3Egzb8hqDr6wkTmdY4p1CexESQ6zCImpQzrsqjv3POOXhBEh+G8RePxwwz30wDDvQpoZHmHDlnioa+DzJocUr1Sdmxv37e6sgffJoW6bmQCGD9LdPKwfrthFGNOFfoHog=
+Received: from debian ([93.184.186.109])
+        by smtp.gmail.com with ESMTPSA id p15-20020a05600c358f00b0040fafc8bb3asm135112wmq.9.2024.02.01.08.52.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Feb 2024 08:52:23 -0800 (PST)
+Date: Thu, 1 Feb 2024 17:52:21 +0100
+From: Dimitri Fedrau <dima.fedrau@gmail.com>
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: Heiner Kallweit <hkallweit1@gmail.com>,
 	Russell King <linux@armlinux.org.uk>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
 	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
 	Stefan Eichenberger <eichest@gmail.com>, netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
 Subject: Re: [PATCH v5 net-next 08/13] net: phy: marvell-88q2xxx: add support
  for temperature sensor
-Message-ID: <b4fc0bc4-1585-4ae0-a980-10814e6d9ff6@lunn.ch>
+Message-ID: <20240201165221.GD48964@debian>
 References: <20240122212848.3645785-1-dima.fedrau@gmail.com>
  <20240122212848.3645785-9-dima.fedrau@gmail.com>
- <88a60be9-083b-4618-845c-6983bcad3540@roeck-us.net>
- <c9866a56-d82e-4a3d-b335-db22c0413416@lunn.ch>
- <a02c7451-8515-45d4-ae7b-9e64b03b5b38@roeck-us.net>
- <20240201162349.GC48964@debian>
+ <65071184-428b-4850-9e0c-baaa73513c6d@lunn.ch>
+ <20240201071137.GA41347@debian>
+ <a8d7125d-156c-4c7e-a49d-d246719dcfe2@lunn.ch>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -56,36 +79,24 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240201162349.GC48964@debian>
+In-Reply-To: <a8d7125d-156c-4c7e-a49d-d246719dcfe2@lunn.ch>
 
-On Thu, Feb 01, 2024 at 05:23:49PM +0100, Dimitri Fedrau wrote:
-> Am Thu, Feb 01, 2024 at 05:39:25AM -0800 schrieb Guenter Roeck:
-> > On 2/1/24 05:27, Andrew Lunn wrote:
-> > > > > +#ifdef CONFIG_HWMON
-> > > > 
-> > > > HWMON is tristate, so this may be problematic if the driver is built
-> > > > into the kernel and hwmon is built as module.
-> > > 
-> > > There should be Kconfig in addition to this, e.g.
-> > > 
-> > > config MAXLINEAR_GPHY
-> > >          tristate "Maxlinear Ethernet PHYs"
-> > >          select POLYNOMIAL if HWMON
-> > >          depends on HWMON || HWMON=n
-> > >          help
-> > >            Support for the Maxlinear GPY115, GPY211, GPY212, GPY215,
-> > >            GPY241, GPY245 PHYs.
-> > > 
-> > > So its forced to being built in, or not built at all.
-> > > 
-> > 
-> > Even then it should be "#if IS_ENABLED(HWMON)" in the code.
-> > 
-> >
-> If using "#if IS_ENABLED(HWMON)" do I have to add the dependency in
-> the KConfig file ? When looking at other PHY drivers, they do.
-
-Please follow what other drivers do. Its easy to break the build,
-resulting is undefined symbols. What we have now works.
-
-	Andrew	  
+Am Thu, Feb 01, 2024 at 02:23:15PM +0100 schrieb Andrew Lunn:
+> > Anyway it's wrong. I couldn't find a good solution to use the temperature
+> > interrupt. Will have a look into this, and probably figuring out how to
+> > do so. But it won't be part of this patch series.
+> 
+> I don't know of any PHY driver you can follow, those that do have a
+> temperature sensor just report the temperature and don't do anything
+> in addition.
+> 
+> You might need to look at thermal zones, and indicate there has been a
+> thermal trip point. That could then be used by the thermal subsystem
+> to increase cooling via a fan, etc. In theory, you could also make the
+> PHY active to thermal pressure, by forcing the link to renegotiate to
+> a lower link speed. If you decide to go this route, please try to make
+> is generic to any PHY. But its going to be quite a disruptive thing,
+> the link will be lost of a little over a second...
+> 
+Making the PHY active to thermal pressure sounds interesting. Will look
+into this.
