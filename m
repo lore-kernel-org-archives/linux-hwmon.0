@@ -1,123 +1,135 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00F57208DD;
-	Thu,  1 Feb 2024 08:29:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E05B7158D8B;
+	Thu,  1 Feb 2024 08:38:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706776150; cv=none; b=eAfwL1PbBQLlMagX15txgcU8kJURMkURNU4iucRb3ZLNi1iyGJuO4jJbiFEFXWaIpqeWko/xScPlHeLsjlbPtEygycdx3lvrKtUZNKqsVOjIwZTUpZm1g16mrJCZmL5q0LsXEIa0AFluzBt1yn2J+45WR7CFDKod7jE+gCIxB34=
+	t=1706776719; cv=none; b=jtzKHNT5wO4yn/JZMOLmm55CHhqq3VcS4ljdlKtrWLDrzuryPnzVkEDnPTZ1WyOCX6hZhOvdbHqe8VdxZNOU8pHUvlVseg8S7dcjiysTy7vPbapXKyUnEC2uuXk2arMw3lBQTZ4lyWw8L+Ah8gNYM2VdGtRi//dcatd/CPVjHsM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706776150; c=relaxed/simple;
-	bh=aAEPwHBMhvs06qKUqIQOH0eIMJYGZLZUqs6EJXIJ6Vc=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sxI0Sx3NalBh/c4OB3Ybz0eYovLHewQQXLra5CtKOX7R0ckRNmVsuqMUPjx1a4T3k61IB3c1AFyGsXZVF5BRHAVgSFK8DdS3WVEPIGmlynUwG0qtiNA31BZj4fsKI3omimHdFnw9BdqoyvNVkw/ub0qzRNf/M2+vGImFHCyBW1k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=Dhlfos4y; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	s=arc-20240116; t=1706776719; c=relaxed/simple;
+	bh=vKbbomgjgBcY5l3J5iDAD1fwuBRayq3H73ZqACqcsOA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JHj1RG1clOWttvAAglkQk8jOB+DJjM3G2LEXJKVrcR6ry8L8eGmL9Q5bLzmIVnCewbjmz0rKt4pUBbSLvsc9Bk+zPnBtHCXEEN9lNppLse9fil4tcmEAKqQnPY3+osfWGOd0PXLZpD21KdP78RCIrY1NAXtSF9XFnjAIwiCdBS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=vUOaJTXw; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="Dhlfos4y"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1706776150; x=1738312150;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aAEPwHBMhvs06qKUqIQOH0eIMJYGZLZUqs6EJXIJ6Vc=;
-  b=Dhlfos4yUPCq4kBpD8Flx/cE5BxfdI1SinXVJJbbDPlsnI8yCKzrFULv
-   c52Jg4+YA7DHXuI5K7TLJPuvALTAxslb+6DmdVc/c9BNuZGO4Rcmp41vA
-   uIVazlvx/wXTuKR0AQkqOoI5Kqh9nqOVGyphpHBaiSf1l4wb/oeAb7Nog
-   Mcgf6T0RHOPYLRLEKzzMZ+UAtn3kiNLphUAyNjHLh9wRPXb2FP4/Bx2tZ
-   56FSO/j0tW84h32cFStsvqADynAJrVbZWHUNtXt9uZ9K71oKFADx42J50
-   XgliG1sYvDg0KJkUYJnxA9qd2xTaaMPq5Ge0StmJ6ouKB0lhRCw870v6s
-   A==;
-X-CSE-ConnectionGUID: BKt1nUV+QE+jut1LZSBZSA==
-X-CSE-MsgGUID: zGYG3IuvSuCoVTuOFUOF7A==
-X-IronPort-AV: E=Sophos;i="6.05,234,1701154800"; 
-   d="asc'?scan'208";a="15607613"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 01 Feb 2024 01:29:08 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Thu, 1 Feb 2024 01:28:45 -0700
-Received: from wendy (10.10.85.11) by chn-vm-ex02.mchp-main.com (10.10.85.144)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
- Transport; Thu, 1 Feb 2024 01:28:43 -0700
-Date: Thu, 1 Feb 2024 08:28:04 +0000
-From: Conor Dooley <conor.dooley@microchip.com>
-To: =?utf-8?B?5b6Q5rC46KyE?= <ythsu0511@gmail.com>
-CC: Conor Dooley <conor@kernel.org>, <jdelvare@suse.com>,
-	<linux@roeck-us.net>, <corbet@lwn.net>, <Delphine_CC_Chiu@wiwynn.com>,
-	<robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-	<conor+dt@kernel.org>, <linux-hwmon@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 2/2] dt-bindings: Add MPQ8785 voltage regulator device
-Message-ID: <20240201-peso-album-360208dc74c0@wendy>
-References: <20240131055526.2700452-1-ythsu0511@gmail.com>
- <20240131055526.2700452-2-ythsu0511@gmail.com>
- <20240131-eraser-given-8381a44f41a4@spud>
- <CAE+7-j=uWxQhEVF4YhAGmyjrryzMxF2E9Qi6xgRVYwusmaZMMw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="vUOaJTXw"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=rrEM/L5CNb2Siaw0EtzA1uq6MEwvjM+ooAg4sDv+6Ys=; b=vUOaJTXwWrDwPbjOYcQMYs5ISg
+	vTGHLnDbiExdxCQU4+KTNPIU0vo8RUyQ92hzTz7icFpYBaS+dkVlGJPjkk0EWKQ3HSrTFCJB++nR2
+	7Aqg2M5Ejz5EUOn9yVorOeWvzHkLg8tTSHtgvny4nV3L4Zu1aEsQsALg3kraGBvpB07iF0i2h9Ho2
+	BjBcJ9Nr6VKJvSqEu4SvgsXcX67dpfHtE1vY56zz+LBPek48+qvQ38c/NqAo26nxZczitbF9m84Tv
+	I9o63J9fpzCon81R3y7mgJvCKpSoiJ9Pqv+yR74mPmdZjG2ujzxls78qpTyAvI1sYV7rCA2INc7Tk
+	9YtOja1g==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35708)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1rVSaG-0004IS-19;
+	Thu, 01 Feb 2024 08:38:08 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1rVSa9-0007FA-KA; Thu, 01 Feb 2024 08:38:01 +0000
+Date: Thu, 1 Feb 2024 08:38:01 +0000
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: Choong Yong Liang <yong.liang.choong@linux.intel.com>
+Cc: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+	David E Box <david.e.box@linux.intel.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Mark Gross <markgross@kernel.org>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Jose Abreu <Jose.Abreu@synopsys.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Richard Cochran <richardcochran@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Andrew Halaney <ahalaney@redhat.com>,
+	Simon Horman <simon.horman@corigine.com>,
+	Serge Semin <fancer.lancer@gmail.com>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org,
+	platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	bpf@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
+	Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
+	Lai Peter Jun Ann <jun.ann.lai@intel.com>,
+	Abdul Rahim Faizal <faizal.abdul.rahim@intel.com>
+Subject: Re: [PATCH net-next v4 06/11] net: stmmac: resetup XPCS according to
+ the new interface mode
+Message-ID: <ZbtYaXkNf2ZF1prE@shell.armlinux.org.uk>
+References: <20240129130253.1400707-1-yong.liang.choong@linux.intel.com>
+ <20240129130253.1400707-7-yong.liang.choong@linux.intel.com>
+ <ZbjNn+C/VHegH2t7@shell.armlinux.org.uk>
+ <9e23671e-788c-4191-bdb4-94915ff7da5a@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="CCoDc/ir44IAA2yC"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAE+7-j=uWxQhEVF4YhAGmyjrryzMxF2E9Qi6xgRVYwusmaZMMw@mail.gmail.com>
+In-Reply-To: <9e23671e-788c-4191-bdb4-94915ff7da5a@linux.intel.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
---CCoDc/ir44IAA2yC
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, Feb 01, 2024 at 01:10:05PM +0800, Choong Yong Liang wrote:
+> 
+> 
+> On 30/1/2024 6:21 pm, Russell King (Oracle) wrote:
+> > NAK. Absolutely not. You haven't read the phylink documentation, nor
+> > understood how phylink works.
+> > 
+> > Since you haven't read the phylink documentation, I'm not going to
+> > waste any more time reviewing this series since you haven't done your
+> > side of the bargin here.
+> > 
+> Hi Russell,
+> 
+> Sorry that previously I only studied the phylink based on the `phylink.h`
+> itself.
 
-On Thu, Feb 01, 2024 at 08:34:32AM +0800, =E5=BE=90=E6=B0=B8=E8=AC=84 wrote:
-> On Wed, Jan 31, 2024 at 11:41=E2=80=AFPM Conor Dooley <conor@kernel.org> =
-wrote:
-> >
-> > On Wed, Jan 31, 2024 at 01:55:26PM +0800, Charles Hsu wrote:
-> > > Monolithic Power Systems, Inc. (MPS) synchronous step-down converter.
-> > >
-> > > Signed-off-by: Charles Hsu <ythsu0511@gmail.com>
-> > > ---
-> > >  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
-> > >  1 file changed, 2 insertions(+)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b=
-/Documentation/devicetree/bindings/trivial-devices.yaml
-> > > index 79dcd92c4a43..088b23ed2ae6 100644
-> > > --- a/Documentation/devicetree/bindings/trivial-devices.yaml
-> > > +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-> > > @@ -129,6 +129,8 @@ properties:
-> > >            - mps,mp2975
-> > >              # Monolithic Power Systems Inc. multi-phase hot-swap con=
-troller mp5990
-> > >            - mps,mp5990
-> > > +            # Monolithic Power Systems Inc. synchronous step-down co=
-nverter mpq8785
-> > > +          - mps,mpq8785
-> >
-> > q sorts before 2, otherwise
-> Okay, I got it.
+From phylink.h:
 
-Apparently I am wrong, sorry about that! Please ignore this comment.
+/**
+ * mac_select_pcs: Select a PCS for the interface mode.
+ * @config: a pointer to a &struct phylink_config.
+ * @interface: PHY interface mode for PCS
+ *
+ * Return the &struct phylink_pcs for the specified interface mode, or
+ * NULL if none is required, or an error pointer on error.
+ *
+ * This must not modify any state. It is used to query which PCS should
+ * be used. Phylink will use this during validation to ensure that the
+ * configuration is valid, and when setting a configuration to internally
+ * set the PCS that will be used.
+ */
 
-Thanks,
-Conor.
+Note the "This must not modify any state." statement. By reinitialising
+the PCS in this method, you are violating that statement.
 
---CCoDc/ir44IAA2yC
-Content-Type: application/pgp-signature; name="signature.asc"
+This requirement is because this method will be called by
+phylink_validate_mac_and_pcs() at various times, potentially for each
+and every interface that stmmac supports, which will lead to you
+reinitialising the PCS, killing the link, each time we ask the MAC for
+a PCS, whether we are going to make use of it in that mode or not.
 
------BEGIN PGP SIGNATURE-----
+You can not do this. Sorry. Hard NAK for this approach.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZbtWFAAKCRB4tDGHoIJi
-0sbKAQDIDuEx9DkoRbJqLhVfM+jO7J1InETLgtByeLSDmNDzAQEAlKELUYFDeKFJ
-4UrgmTlYHnO7hCz2iY6GhpHAfvH+oQk=
-=C6+A
------END PGP SIGNATURE-----
-
---CCoDc/ir44IAA2yC--
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
