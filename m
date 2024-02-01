@@ -1,153 +1,276 @@
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A18E0158D74
-	for <linux-hwmon@vger.kernel.org>; Thu,  1 Feb 2024 07:52:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9EE61586FA
+	for <linux-hwmon@vger.kernel.org>; Thu,  1 Feb 2024 07:58:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706773940; cv=none; b=LpCsWOu1Urh3xyGpmgeTnBIE8p4vsmEBpQIv7rRrfvxDyDj6e2Ju1ugGFOdqwPnL8M35wBRT1AXFCgWe2ztO1JcSEkRlkklN+GXpEHrd6Ture5X18da0JzYCvfsDKhRvxRLb1vgamD78r0QqE8PE+O+m2fIikRHIRjxbAxyulTQ=
+	t=1706774303; cv=none; b=rh/6uIm7nse+SBRUuImsgd7wBDCcDoURGVhDt2EmF6/AcD6kBgiifvrW3wUKvRfCz4hfYcDK0FjkY+Ys2J5xZc5dWymmGwxZvYo3eOpMpUiEQqYxTm0o3gXMVCpBr8/V7oMH+ZazKWAll03yP52W19HcoVCmIc0PwzFTiLGuOgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706773940; c=relaxed/simple;
-	bh=YTaHQlTBHQOHwhY5YplZoM9YSUIMQ8fq0DUhbgTJbXE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JQ9aj6+jsMobUuzkHc1jonqj/IzwToFturTFhr+uqhIBWrx/HqsEFI/LyAE/SoPcVk5t8QJNVG1uNckirhf/E11JLtd/6c6o05ZOq96mvuYuOk/CXIL9My6+htreBWLxD8ffSX+h/kYOANx+IEdjDmP4dDopZLL+SMv5LNWzBpw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=YFDA/0gi; arc=none smtp.client-ip=209.85.218.46
+	s=arc-20240116; t=1706774303; c=relaxed/simple;
+	bh=wQsrpi2iCXaSVmqWas5NAQRZ3c6lQifMJrV5AQVFk/M=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=HM/IRH3OU1MD+kQ6LGF6UCfex4zRHeFFCAS1bgmIs4gQGJF06IU4D/su54rtxzq/wXsDPeu17DHzwY2ahzCFjp0M0Rp8A81h/8vSXs8/KzvElAm2ZjI0zPtDoY2IB8vo2hd9LMLGV0nBpZHoFK+NKNTxkQ2KxNNLoW9Ek8+/Zfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=YB5fZFhS; arc=none smtp.client-ip=209.85.218.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YFDA/0gi"
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a3566c0309fso70260466b.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 31 Jan 2024 23:52:17 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YB5fZFhS"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a30e445602cso383656766b.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 31 Jan 2024 23:58:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706773936; x=1707378736; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=y+yW4466Fwq+cPFvacTC0lLupL3F38F7nvhDsV2cdxk=;
-        b=YFDA/0gi68oGHgYuXXKrVCEC5qaMtHuiI8+M0PfoIRI4VU4qufEZAuN0CN92FVuWe6
-         bnEQmIQfRoUc5VL0jKGevJ0lPOTs931hBtyuNOEHfhIoJG8d3M4zZgupbkIRPFQnb3md
-         l5b/myqemiZBevA8BI+g2C22O0rgTRXhskXXwoswI+1tuV8Ia+WlGcbEZ00Ku3Pyd2zr
-         EbymvLQuC2fNyiW0xYbkZQNcfsBUHAEg1TZ3sDdyqzH1JYLVMbv/nOm5fV3rbwd1lVky
-         lgGORNT1YPsFFp0UjPH9/zIycT7kAq9CGogTUS4J0R8MzcFV4HEHVFVN6aLs9jYQmtJ9
-         OkQQ==
+        d=linaro.org; s=google; t=1706774300; x=1707379100; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LduLrqiP7dtetr+KwRnIehEaoUzJG6/in4vCG2UOBPU=;
+        b=YB5fZFhSy0AKu4gfJgsEVs0buhNHfqgFYTRovtSHqvl04rfMnbms1rOBCFkGx/GBS0
+         YdGHfqVytCy9wlQP4QvF1unKRv617PA9ryHWkgSY72xB13UW1UBMn+ZH7kJqqW/GtsN6
+         9K8Ap0i0/Fgcf1OPT8RbhaYDh6uPboh/ogdwJf8EOnbhzhcLbDO9x69oScMVMpcjbeyt
+         5w0pszSrVy1sOELdAZ9RybdhkERX5rtsvjfzPrnpjoSf5+P4w3WLRS3RBfoCSUaj8NiE
+         izjGqg5cjCC2fTTphyRoJFTqnbq0QkTxbT7ZJvkkgc6niZZTnzfbQALJYsA8j9AhNg+N
+         QKPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706773936; x=1707378736;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=y+yW4466Fwq+cPFvacTC0lLupL3F38F7nvhDsV2cdxk=;
-        b=NAKoSftiJOiaM+0mFwDiYUDt5tTcKDB3BxZcqlWvMtCAfCH+W1+ipVJ0CwKKy/wye3
-         o7KVXJg7QWfQE9DK8QKzxzrxUVTvMeCk+XohBJjeqTecILOn2bvmhPLUUesBTV63CEPq
-         l7nqkf72OyKhBm6nIveHzWNQMbyrHL/H/F6CQPsH2rOoAJazFJ5j6gIaTa3EO957Vpvb
-         FRhZEazcSF6TPfQuL+2HUqVc+nrg1uuxqZ1H6xBjxb9Nb/r3pmlzUvX/Yp5jiSuQlNyc
-         4cvMSBUX3db7cAYzwdIM7bEbVKQ08/SLrTN49kjUvH40CxBX2Fwx/yo1wVhHzoEuYc1e
-         wKiA==
-X-Gm-Message-State: AOJu0Yz1+NwWAYQTTcI23ggo1UsDZRAPEePeg4Kp3uwdv5Nq+kBh6QpE
-	zJVqrg1ZZz2lvKMi1I229g2wpQ4a5edktfXdThHjWk5fpubiGdVim5MZd6yawsz6UWtLW/e8fQQ
-	s
-X-Google-Smtp-Source: AGHT+IFbWTR86WqUgqwatj4MXgXcuJ0sNgzrXhgTaUI2W5j1uDLlG/GaAl7yVm94rcPn4ZjjCUV7gA==
-X-Received: by 2002:a17:906:1d10:b0:a34:aa8b:6cb2 with SMTP id n16-20020a1709061d1000b00a34aa8b6cb2mr2477368ejh.18.1706773936366;
-        Wed, 31 Jan 2024 23:52:16 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCVQy1bOAdmsmWU5/v5/sR/B6Pvc3+se5GKIMb9aecPV5ldLWJGgEJHXG8cvptp/XsBWzDcyeNX0YyYZ/tokm9HtUi/1pwgxTioEfHuPHTlSYzowawsjgNIggCrSciTamYKGVCgiNKNAm/VMxjY6Ccl9M29wmpBrB68h/YVNEMogkJS1imqM+ftRC/IuX7sLYhKBJ9X2T6H1JbUaKK/TWXfT9sWT8Ft0fGn4/l60GmPQfcpVgcARrlyyHQLT7ZbGfXey0dkXn0HhtACmXBFQGS17OMN4YOmr7PPdWrnjUv0A2cwfB/0q1+Ks/7HJOmd9m2KSiu7PhTUuFuGjAdpN116YUOXE/jHfGVHkbOlxCUViEbn4
-Received: from [192.168.1.20] ([178.197.222.62])
-        by smtp.gmail.com with ESMTPSA id li14-20020a170907198e00b00a3667f53691sm1517095ejc.86.2024.01.31.23.52.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Jan 2024 23:52:15 -0800 (PST)
-Message-ID: <c67ebf90-cb40-4595-8015-45d2a86f6c7d@linaro.org>
-Date: Thu, 1 Feb 2024 08:52:13 +0100
+        d=1e100.net; s=20230601; t=1706774300; x=1707379100;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LduLrqiP7dtetr+KwRnIehEaoUzJG6/in4vCG2UOBPU=;
+        b=bzEdiW9Y960ZsPLvjCLZklkB3Fhk1dB3pAt8oeSwwsv9ZPwJwS90/iq7+YV8RTMDXL
+         fLj8YX3j2DKvJFoJOx3QItclCau/nxOHsvHhg70LzBUr8jIVXLvLuger6PRXtA7cYWND
+         V/p1txUaPvWJNj0Z0uND6DJ/MSXm9hizys2bnMPmuPAAPRxPdUTiwC6s+rZLGv8KjJUz
+         cE2p7CFfePqb5UusawErwWb2MvQebB5bur8laArcz5oVjTFqrgYwubEH0FayiEid5L0X
+         G2z0ijvd3gAzDXtSuEN6QNhZUekh+hGdtMt5OYsJglPu/viVHMLlGXe9m3HIEQlGzQH9
+         o8CA==
+X-Gm-Message-State: AOJu0YwtgaD5e/1DlWmPHbcN0GxulcwzrpBLSfWm2s/9HIXnEHkI7J7r
+	Y6SAV9tTfx1IJYiLOmad81zjmR5NC6XyrBdl9qhPPTDfvwDfmM19rrh3hLxWWiM=
+X-Google-Smtp-Source: AGHT+IECKYAvoDMyGIfvVLUm6LuAcfOkeMGeLZNE4ITmEfX5iF0Sq6907zXF+PsqCyodmqG2MrxPjw==
+X-Received: by 2002:a17:906:abd4:b0:a31:8944:2cf6 with SMTP id kq20-20020a170906abd400b00a3189442cf6mr4044034ejb.8.1706774300046;
+        Wed, 31 Jan 2024 23:58:20 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCVgSQ9XgRJE+RFswknpX22fCpybmWpZpJKdtYuTYPPxBN3LOWTaQbUB56Ect+Tr8YcrGGU5wQUKNuyj8QaTSokAbasE2jnYopfEfsc6T+NDzXBhcRBhwYJnq1W1hM6hamuxLfkSEdSlccZiX46xMi9hGUNmTNC4RLlvXLHyWjN95TzV/8tTiMYfz8OjNEK6uTmJa+GvTOrVzx8dPlMG7xvUnEoJ4k3ffVTyIiKAQz8I9+ZFXMIq4ugSPij6w7CuOWa8XRY=
+Received: from krzk-bin.. ([178.197.222.62])
+        by smtp.gmail.com with ESMTPSA id f16-20020a170906049000b00a3161adb239sm6963383eja.158.2024.01.31.23.58.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Jan 2024 23:58:19 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Charles Hsu <ythsu0511@gmail.com>,
+	linux-hwmon@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH] dt-bindings: trivial-devices: sort entries alphanumerically
+Date: Thu,  1 Feb 2024 08:58:05 +0100
+Message-Id: <20240201075805.7492-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] dt-bindings: Add MPQ8785 voltage regulator device
-Content-Language: en-US
-To: Conor Dooley <conor@kernel.org>, Charles Hsu <ythsu0511@gmail.com>
-Cc: jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net,
- Delphine_CC_Chiu@wiwynn.com, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240131055526.2700452-1-ythsu0511@gmail.com>
- <20240131055526.2700452-2-ythsu0511@gmail.com>
- <20240131-eraser-given-8381a44f41a4@spud>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240131-eraser-given-8381a44f41a4@spud>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 31/01/2024 16:41, Conor Dooley wrote:
-> On Wed, Jan 31, 2024 at 01:55:26PM +0800, Charles Hsu wrote:
->> Monolithic Power Systems, Inc. (MPS) synchronous step-down converter.
->>
->> Signed-off-by: Charles Hsu <ythsu0511@gmail.com>
->> ---
->>  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
->>  1 file changed, 2 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
->> index 79dcd92c4a43..088b23ed2ae6 100644
->> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
->> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
->> @@ -129,6 +129,8 @@ properties:
->>            - mps,mp2975
->>              # Monolithic Power Systems Inc. multi-phase hot-swap controller mp5990
->>            - mps,mp5990
->> +            # Monolithic Power Systems Inc. synchronous step-down converter mpq8785
->> +          - mps,mpq8785
-> 
-> q sorts before 2, otherwise
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Sort entries alphanumerically.  This was a semi manual job with help of:
 
-I will sort the file and my patch should go via Rob's tree, I guess, so
-maybe this one could go as well?
+  cat Documentation/devicetree/bindings/trivial-devices.yaml | grep '    - ' > old
+  cat old | sort -n > new
+  diff -ubB old new
 
-Best regards,
-Krzysztof
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+---
+
+Cc: Charles Hsu <ythsu0511@gmail.com>
+Cc: linux-hwmon@vger.kernel.org
+Cc: Guenter Roeck <linux@roeck-us.net>
+---
+ .../devicetree/bindings/trivial-devices.yaml  | 73 ++++++++++---------
+ 1 file changed, 37 insertions(+), 36 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index 5b52950e6bfc..41982a41398a 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -28,6 +28,7 @@ properties:
+ 
+   compatible:
+     items:
++      # Entries are sorted alphanumerically by the compatible
+       - enum:
+             # Acbel fsg032 power supply
+           - acbel,fsg032
+@@ -49,12 +50,12 @@ properties:
+           - ams,iaq-core
+             # i2c serial eeprom (24cxx)
+           - at,24c08
++            # i2c h/w elliptic curve crypto module
++          - atmel,atecc508a
+             # ATSHA204 - i2c h/w symmetric crypto module
+           - atmel,atsha204
+             # ATSHA204A - i2c h/w symmetric crypto module
+           - atmel,atsha204a
+-            # i2c h/w elliptic curve crypto module
+-          - atmel,atecc508a
+             # BPA-RS600: Power Supply
+           - blutek,bpa-rs600
+             # Bosch Sensortec pressure, temperature, humididty and VOC sensor
+@@ -115,20 +116,6 @@ properties:
+           - fsl,mpl3115
+             # MPR121: Proximity Capacitive Touch Sensor Controller
+           - fsl,mpr121
+-            # Monolithic Power Systems Inc. multi-phase controller mp2856
+-          - mps,mp2856
+-            # Monolithic Power Systems Inc. multi-phase controller mp2857
+-          - mps,mp2857
+-            # Monolithic Power Systems Inc. multi-phase controller mp2888
+-          - mps,mp2888
+-            # Monolithic Power Systems Inc. multi-phase controller mp2971
+-          - mps,mp2971
+-            # Monolithic Power Systems Inc. multi-phase controller mp2973
+-          - mps,mp2973
+-            # Monolithic Power Systems Inc. multi-phase controller mp2975
+-          - mps,mp2975
+-            # Monolithic Power Systems Inc. multi-phase hot-swap controller mp5990
+-          - mps,mp5990
+             # Honeywell Humidicon HIH-6130 humidity/temperature sensor
+           - honeywell,hi6130
+             # IBM Common Form Factor Power Supply Versions (all versions)
+@@ -197,6 +184,8 @@ properties:
+           - maxim,max1237
+             # Temperature Sensor, I2C interface
+           - maxim,max1619
++            # 3-Channel Remote Temperature Sensor
++          - maxim,max31730
+             # 10-bit 10 kOhm linear programmable voltage divider
+           - maxim,max5481
+             # 10-bit 50 kOhm linear programmable voltage divider
+@@ -209,8 +198,6 @@ properties:
+           - maxim,max6621
+             # 9-Bit/12-Bit Temperature Sensors with I²C-Compatible Serial Interface
+           - maxim,max6625
+-            # 3-Channel Remote Temperature Sensor
+-          - maxim,max31730
+             # mCube 3-axis 8-bit digital accelerometer
+           - mcube,mc3230
+             # Measurement Specialities I2C temperature and humidity sensor
+@@ -241,8 +228,6 @@ properties:
+           - memsic,mxc6655
+             # Menlo on-board CPLD trivial SPI device
+           - menlo,m53cpld
+-            # Micron SPI NOR Authenta
+-          - micron,spi-authenta
+             # Microchip differential I2C ADC, 1 Channel, 18 bit
+           - microchip,mcp3421
+             # Microchip differential I2C ADC, 2 Channel, 18 bit
+@@ -259,40 +244,56 @@ properties:
+           - microchip,mcp3427
+             # Microchip differential I2C ADC, 4 Channel, 16 bit
+           - microchip,mcp3428
+-            # Microchip 7-bit Single I2C Digital POT (5k)
+-          - microchip,mcp4017-502
+             # Microchip 7-bit Single I2C Digital POT (10k)
+           - microchip,mcp4017-103
+-            # Microchip 7-bit Single I2C Digital POT (50k)
+-          - microchip,mcp4017-503
+             # Microchip 7-bit Single I2C Digital POT (100k)
+           - microchip,mcp4017-104
+             # Microchip 7-bit Single I2C Digital POT (5k)
+-          - microchip,mcp4018-502
++          - microchip,mcp4017-502
++            # Microchip 7-bit Single I2C Digital POT (50k)
++          - microchip,mcp4017-503
+             # Microchip 7-bit Single I2C Digital POT (10k)
+           - microchip,mcp4018-103
+-            # Microchip 7-bit Single I2C Digital POT (50k)
+-          - microchip,mcp4018-503
+             # Microchip 7-bit Single I2C Digital POT (100k)
+           - microchip,mcp4018-104
+             # Microchip 7-bit Single I2C Digital POT (5k)
+-          - microchip,mcp4019-502
++          - microchip,mcp4018-502
++            # Microchip 7-bit Single I2C Digital POT (50k)
++          - microchip,mcp4018-503
+             # Microchip 7-bit Single I2C Digital POT (10k)
+           - microchip,mcp4019-103
+-            # Microchip 7-bit Single I2C Digital POT (50k)
+-          - microchip,mcp4019-503
+             # Microchip 7-bit Single I2C Digital POT (100k)
+           - microchip,mcp4019-104
++            # Microchip 7-bit Single I2C Digital POT (5k)
++          - microchip,mcp4019-502
++            # Microchip 7-bit Single I2C Digital POT (50k)
++          - microchip,mcp4019-503
+             # PWM Fan Speed Controller With Fan Fault Detection
+           - microchip,tc654
+             # PWM Fan Speed Controller With Fan Fault Detection
+           - microchip,tc655
++            # Micron SPI NOR Authenta
++          - micron,spi-authenta
+             # MiraMEMS DA226 2-axis 14-bit digital accelerometer
+           - miramems,da226
+             # MiraMEMS DA280 3-axis 14-bit digital accelerometer
+           - miramems,da280
+             # MiraMEMS DA311 3-axis 12-bit digital accelerometer
+           - miramems,da311
++            # Monolithic Power Systems Inc. multi-phase controller mp2856
++          - mps,mp2856
++            # Monolithic Power Systems Inc. multi-phase controller mp2857
++          - mps,mp2857
++            # Monolithic Power Systems Inc. multi-phase controller mp2888
++          - mps,mp2888
++            # Monolithic Power Systems Inc. multi-phase controller mp2971
++          - mps,mp2971
++            # Monolithic Power Systems Inc. multi-phase controller mp2973
++          - mps,mp2973
++            # Monolithic Power Systems Inc. multi-phase controller mp2975
++          - mps,mp2975
++            # Monolithic Power Systems Inc. multi-phase hot-swap controller mp5990
++          - mps,mp5990
+             # Temperature sensor with integrated fan control
+           - national,lm63
+             # Serial Interface ACPI-Compatible Microprocessor System Hardware Monitor
+@@ -323,12 +324,12 @@ properties:
+           - samsung,exynos-sataphy-i2c
+             # Semtech sx1301 baseband processor
+           - semtech,sx1301
+-            # Sensirion low power multi-pixel gas sensor with I2C interface
+-          - sensirion,sgpc3
+             # Sensirion multi-pixel gas sensor with I2C interface
+           - sensirion,sgp30
+             # Sensirion gas sensor with I2C interface
+           - sensirion,sgp40
++            # Sensirion low power multi-pixel gas sensor with I2C interface
++          - sensirion,sgpc3
+             # Sensirion temperature & humidity sensor with I2C interface
+           - sensirion,sht4x
+             # Sensortek 3 axis accelerometer
+@@ -374,8 +375,6 @@ properties:
+           - ti,lm74
+             # Temperature sensor with integrated fan control
+           - ti,lm96000
+-            # I2C Touch-Screen Controller
+-          - ti,tsc2003
+             # Low Power Digital Temperature Sensor with SMBUS/Two Wire Serial Interface
+           - ti,tmp103
+             # Thermometer with SPI interface
+@@ -397,10 +396,12 @@ properties:
+           - ti,tps544b25
+           - ti,tps544c20
+           - ti,tps544c25
+-            # Winbond/Nuvoton H/W Monitor
+-          - winbond,w83793
++            # I2C Touch-Screen Controller
++          - ti,tsc2003
+             # Vicor Corporation Digital Supervisor
+           - vicor,pli1209bc
++            # Winbond/Nuvoton H/W Monitor
++          - winbond,w83793
+ 
+ required:
+   - compatible
+-- 
+2.34.1
 
