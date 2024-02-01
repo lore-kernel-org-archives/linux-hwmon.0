@@ -1,93 +1,123 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2691715A499;
-	Thu,  1 Feb 2024 08:26:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00F57208DD;
+	Thu,  1 Feb 2024 08:29:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706775986; cv=none; b=rJ8fChhKrZO2DgQnu7sg8Jw4qmOpIN8D1nE0LoZbd6YPS9I/8kzXaUTqC7wO51ICRLkGAO2Wv0TUQcUTNkjxxdm0yCXu4Xdoys9/NdseSHipOZkorx8Vi1K5NXaQhhP9wEvrusXmByen82SROYHiOPj1vAXNWqMp9+Jv276nE6k=
+	t=1706776150; cv=none; b=eAfwL1PbBQLlMagX15txgcU8kJURMkURNU4iucRb3ZLNi1iyGJuO4jJbiFEFXWaIpqeWko/xScPlHeLsjlbPtEygycdx3lvrKtUZNKqsVOjIwZTUpZm1g16mrJCZmL5q0LsXEIa0AFluzBt1yn2J+45WR7CFDKod7jE+gCIxB34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706775986; c=relaxed/simple;
-	bh=XpKiZdYw73rtXNsgKWeaOkuxm+QdTdp3TunoJ61mePs=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=uCOhOKCiXIOEd513i64cUbhJgXKqCxzY18HwtIGzv2I2kf/lX7sM88VKM8dbWnpvrkoT5/A3rbqbNOhCBq4C5Y9yZoZvh+gMVu5VuYkMgXrdObBfsSUvxrMkRM9XHDAc+RFhWbHR+JX0NnJbModFZL/ZgWgUGRc33CE0us/Wazg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nsjYj7+v; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1706776150; c=relaxed/simple;
+	bh=aAEPwHBMhvs06qKUqIQOH0eIMJYGZLZUqs6EJXIJ6Vc=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sxI0Sx3NalBh/c4OB3Ybz0eYovLHewQQXLra5CtKOX7R0ckRNmVsuqMUPjx1a4T3k61IB3c1AFyGsXZVF5BRHAVgSFK8DdS3WVEPIGmlynUwG0qtiNA31BZj4fsKI3omimHdFnw9BdqoyvNVkw/ub0qzRNf/M2+vGImFHCyBW1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=Dhlfos4y; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nsjYj7+v"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="Dhlfos4y"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706775985; x=1738311985;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=XpKiZdYw73rtXNsgKWeaOkuxm+QdTdp3TunoJ61mePs=;
-  b=nsjYj7+vsXyNJcehqFZzk08MXS7kXSCleunOBfXkpmJ9wErSDCIGenE7
-   BunOkfqhDqDoGzlnQ/Qqetp1nkORdxEQV754aJksuhIJc32dk9wCEUoOk
-   0OUR96VaVCaSEfYDyAOUTKrxWQdyK2MfFVt7mF6YVmi0nzXL3bGbKSzMZ
-   XIc5sYRzQFYZ3ZD57mSe0XnP40xHKxicZoln9bvrlRmz61bfWelIYgRsO
-   RxSAiNbw/Gkb8qLYkPP7VH4MyBnPSdTaNojZksxWPQelb2tXusd7SYL2o
-   ljq/dy3WJUkj7tBzZaU8NYGJRFzZMnG9RecVNydbHtradBtKDbodZ85AC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="22232"
-X-IronPort-AV: E=Sophos;i="6.05,234,1701158400"; 
-   d="scan'208";a="22232"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2024 00:26:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,234,1701158400"; 
-   d="scan'208";a="24057"
-Received: from lutzwalt-mobl.ger.corp.intel.com (HELO localhost) ([10.246.33.1])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2024 00:25:58 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Thu, 1 Feb 2024 10:25:53 +0200 (EET)
-To: Maximilian Luz <luzmaximilian@gmail.com>
-cc: Guenter Roeck <linux@roeck-us.net>, Ivor Wanders <ivor@iwanders.net>, 
-    Hans de Goede <hdegoede@redhat.com>, Jean Delvare <jdelvare@suse.com>, 
-    Jonathan Corbet <corbet@lwn.net>, Mark Gross <markgross@kernel.org>, 
-    linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
-    LKML <linux-kernel@vger.kernel.org>, platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH v5 2/2] platform/surface: aggregator_registry: add entry
- for fan speed
-In-Reply-To: <8552a795-9ce4-417a-bc71-593571a6b363@gmail.com>
-Message-ID: <6659d49c-4a70-1a92-2a76-ce7144fed50c@linux.intel.com>
-References: <20240131005856.10180-1-ivor@iwanders.net> <20240131005856.10180-3-ivor@iwanders.net> <7e392c1e-2cb2-43e4-804e-227551ed2dd7@roeck-us.net> <8552a795-9ce4-417a-bc71-593571a6b363@gmail.com>
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1706776150; x=1738312150;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aAEPwHBMhvs06qKUqIQOH0eIMJYGZLZUqs6EJXIJ6Vc=;
+  b=Dhlfos4yUPCq4kBpD8Flx/cE5BxfdI1SinXVJJbbDPlsnI8yCKzrFULv
+   c52Jg4+YA7DHXuI5K7TLJPuvALTAxslb+6DmdVc/c9BNuZGO4Rcmp41vA
+   uIVazlvx/wXTuKR0AQkqOoI5Kqh9nqOVGyphpHBaiSf1l4wb/oeAb7Nog
+   Mcgf6T0RHOPYLRLEKzzMZ+UAtn3kiNLphUAyNjHLh9wRPXb2FP4/Bx2tZ
+   56FSO/j0tW84h32cFStsvqADynAJrVbZWHUNtXt9uZ9K71oKFADx42J50
+   XgliG1sYvDg0KJkUYJnxA9qd2xTaaMPq5Ge0StmJ6ouKB0lhRCw870v6s
+   A==;
+X-CSE-ConnectionGUID: BKt1nUV+QE+jut1LZSBZSA==
+X-CSE-MsgGUID: zGYG3IuvSuCoVTuOFUOF7A==
+X-IronPort-AV: E=Sophos;i="6.05,234,1701154800"; 
+   d="asc'?scan'208";a="15607613"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 01 Feb 2024 01:29:08 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Thu, 1 Feb 2024 01:28:45 -0700
+Received: from wendy (10.10.85.11) by chn-vm-ex02.mchp-main.com (10.10.85.144)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
+ Transport; Thu, 1 Feb 2024 01:28:43 -0700
+Date: Thu, 1 Feb 2024 08:28:04 +0000
+From: Conor Dooley <conor.dooley@microchip.com>
+To: =?utf-8?B?5b6Q5rC46KyE?= <ythsu0511@gmail.com>
+CC: Conor Dooley <conor@kernel.org>, <jdelvare@suse.com>,
+	<linux@roeck-us.net>, <corbet@lwn.net>, <Delphine_CC_Chiu@wiwynn.com>,
+	<robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+	<conor+dt@kernel.org>, <linux-hwmon@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 2/2] dt-bindings: Add MPQ8785 voltage regulator device
+Message-ID: <20240201-peso-album-360208dc74c0@wendy>
+References: <20240131055526.2700452-1-ythsu0511@gmail.com>
+ <20240131055526.2700452-2-ythsu0511@gmail.com>
+ <20240131-eraser-given-8381a44f41a4@spud>
+ <CAE+7-j=uWxQhEVF4YhAGmyjrryzMxF2E9Qi6xgRVYwusmaZMMw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="CCoDc/ir44IAA2yC"
+Content-Disposition: inline
+In-Reply-To: <CAE+7-j=uWxQhEVF4YhAGmyjrryzMxF2E9Qi6xgRVYwusmaZMMw@mail.gmail.com>
 
-On Wed, 31 Jan 2024, Maximilian Luz wrote:
+--CCoDc/ir44IAA2yC
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Am 1/31/2024 um 2:24 PM schrieb Guenter Roeck:
-> > On Tue, Jan 30, 2024 at 07:58:56PM -0500, Ivor Wanders wrote:
-> > > Add an entry for the fan speed function.
-> > > Add this new entry to the Surface Pro 9 group.
-> > > 
-> > > Signed-off-by: Ivor Wanders <ivor@iwanders.net>
-> > > Link: https://github.com/linux-surface/kernel/pull/144
-> > > Reviewed-by: Maximilian Luz <luzmaximilian@gmail.com>
-> > 
-> > I wasn't sure if the Reviewed-by: tag means that I should apply the patch
-> > through the hwmon subsystem. If so, please let me know. For now I'll
-> > assume that it will be applied through a platform tree.
-> 
-> I think it would make more sense for it to go through pdx86 (as usual
-> for platform/surface). That would avoid any potential merge conflicts
-> if we get more changes to the surface_aggregator_registry later on.
-> 
-> Hans, Ilpo, could you please take this?
-> 
-> Also I just noticed that Ilpo wasn't CCd, I assume because of an older
-> MAINTAINERS list. Ivor, please add him for any next submissions to
-> platform/surface.
+On Thu, Feb 01, 2024 at 08:34:32AM +0800, =E5=BE=90=E6=B0=B8=E8=AC=84 wrote:
+> On Wed, Jan 31, 2024 at 11:41=E2=80=AFPM Conor Dooley <conor@kernel.org> =
+wrote:
+> >
+> > On Wed, Jan 31, 2024 at 01:55:26PM +0800, Charles Hsu wrote:
+> > > Monolithic Power Systems, Inc. (MPS) synchronous step-down converter.
+> > >
+> > > Signed-off-by: Charles Hsu <ythsu0511@gmail.com>
+> > > ---
+> > >  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+> > >  1 file changed, 2 insertions(+)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b=
+/Documentation/devicetree/bindings/trivial-devices.yaml
+> > > index 79dcd92c4a43..088b23ed2ae6 100644
+> > > --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> > > +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> > > @@ -129,6 +129,8 @@ properties:
+> > >            - mps,mp2975
+> > >              # Monolithic Power Systems Inc. multi-phase hot-swap con=
+troller mp5990
+> > >            - mps,mp5990
+> > > +            # Monolithic Power Systems Inc. synchronous step-down co=
+nverter mpq8785
+> > > +          - mps,mpq8785
+> >
+> > q sorts before 2, otherwise
+> Okay, I got it.
 
-Okay, thanks for letting me know (I assumed the opposite). I'll take it 
-through pdx86.
+Apparently I am wrong, sorry about that! Please ignore this comment.
 
--- 
- i.
+Thanks,
+Conor.
 
+--CCoDc/ir44IAA2yC
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZbtWFAAKCRB4tDGHoIJi
+0sbKAQDIDuEx9DkoRbJqLhVfM+jO7J1InETLgtByeLSDmNDzAQEAlKELUYFDeKFJ
+4UrgmTlYHnO7hCz2iY6GhpHAfvH+oQk=
+=C6+A
+-----END PGP SIGNATURE-----
+
+--CCoDc/ir44IAA2yC--
