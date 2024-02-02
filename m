@@ -1,123 +1,111 @@
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06C22E55E
-	for <linux-hwmon@vger.kernel.org>; Fri,  2 Feb 2024 02:52:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24E74C2CD;
+	Fri,  2 Feb 2024 03:01:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706842374; cv=none; b=H6rSXeOmH+oD1bVoRh+X9bUV+yhF2gkTS4O+QCp+jf10uclmkdHWSejLGG5sl3Qike+KBaQfw+LZAqeDts/9gG1AzQ68K3MYAZ0PcvRhOm54qVMjcGLkH3fj0prffU9r2N14vEbDGnC9wTmZRyo+24PxgRz8b7Fi5i1yVtuf4NA=
+	t=1706842875; cv=none; b=FkHQgC7oo5vNWBsqtZf8DhEaUWYRmvNsDwd+07X8JQ18laTDqa9PVSTfi5gRzYc3Y4xY8nTXKpJPliPhMtOekE4BGvBDjKQWu1NJc9RVCegfGI2Bf7JtPHm7k5YkHMlQ327BcrF5pcHA7d9mHHtawnCAoVvvVwcd9fEIAt1sD24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706842374; c=relaxed/simple;
-	bh=FfI+psqa5rlhKOTLCfKVaPMsCPGNwBQKn4DDGo5wymk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ITp1QdPBOOuNBeGxsRjjA4FQsLIfzOCI/GqL9wU+pudIszzYFYSNICWz8259Ns/p7o7nrAfuFRMCWT+7hC/5dAD/4anmWqGrF/P4qoGfv6u0eAdLafu1KgrnVfNrmWqndSk5l4lkLSusc6MG7Uj5N8g1gMtVtKGIq6dREtOJqdg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=qe1pMcBX; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+	s=arc-20240116; t=1706842875; c=relaxed/simple;
+	bh=QphI2QaFh5i8mpq3LXJuXnOJcGXvW8OtRDIwjhj/MoM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dRpWGmIOoJnRV+FWDdiKkNv3f+pz0YjcKt/xPsLJ9NTXNPN7JFqsvZTSWhSer+tYrdLjGmg/giSxS0HwwIrAGoA+0z8RcyXGwW0iMW20VIQq510Szq7WXcXeHhGChJxNVbq9YEtirXLVshVwLLUvp4mZfUAfim+Gz9DEETdvSgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EZZiWmmc; arc=none smtp.client-ip=192.55.52.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="qe1pMcBX"
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id A8FBA2C018D;
-	Fri,  2 Feb 2024 15:52:48 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1706842368;
-	bh=unF68hkU9VlsR/Q1RG29bTiUOBUgCrxhHhvhNebROP0=;
-	h=From:To:Cc:Subject:Date:From;
-	b=qe1pMcBXMfjf7j56Vl/Fes0jHWYlZXM1t7fIOrWSSYJdQgAnvwtR8//xAauKurupx
-	 GM1PgsNQ+WIw9s9m4eGFBKGVyhDObMBkiXUweLd3/8LiWrjFIFLsgpNH0NF31drOcM
-	 o726t3CG0EWC+6nH5PpwZ2ynwwIABzFH43iWL1WeVFGlBO2sI5rYe8rFDwWgJV0EfX
-	 SlDOBZESbm1kVZgmK/uupqpEwp7TLw+XWfK0UYUcLpzMnHjy9I0KarNU0xeMtzJSD5
-	 dikiW7t3lGy7XEq5mJow4UZSKtg6Y3/p/S3oBVzvrkoZt3CsiciS3W8NOMep015uY3
-	 xqGvZlhAzpeCA==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B65bc59000000>; Fri, 02 Feb 2024 15:52:48 +1300
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-	by pat.atlnz.lc (Postfix) with ESMTP id 608D913EDA9;
-	Fri,  2 Feb 2024 15:52:48 +1300 (NZDT)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-	id 56D5D280EB5; Fri,  2 Feb 2024 15:52:48 +1300 (NZDT)
-From: Chris Packham <chris.packham@alliedtelesis.co.nz>
-To: alexandre.belloni@bootlin.com,
-	robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org,
-	jdelvare@suse.com,
-	linux@roeck-us.net,
-	antoniu.miclaus@analog.com,
-	noname.nuno@gmail.com
-Cc: linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v6 0/2] drivers: rtc: add max313xx series rtc driver
-Date: Fri,  2 Feb 2024 15:52:39 +1300
-Message-ID: <20240202025241.834283-1-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EZZiWmmc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706842873; x=1738378873;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=QphI2QaFh5i8mpq3LXJuXnOJcGXvW8OtRDIwjhj/MoM=;
+  b=EZZiWmmcBpSq9tmUcL4yWi4pqMcGsklJrCIcNQ4aY5gzu+RaPRHW2sSK
+   lKy8nTR+A/W8oZ3PyYrXetwL6sLD+DbPv5kOOKmMVhtoKcMmyiU8SCubr
+   uTClcNYMFL4AuaDx+Cq6c4/B2zFT/UQavHBmuH2nlfQMlCfsxuFCSRLBF
+   8VojYry5uGu5a8TKckVGZgAiL5blbft9eFG7omIhdLpKja6+fAeJS1ixN
+   swZ6sy+sDiiEZX8aOwLpMO5+RCgqm+vrqJvRJRvJauOmxYDDgpaC3nLA9
+   09gjNHI2h3ggZWH91XZxXGaSUguGATp2ktUuaKzU6lFrpggZzyZvnEcq9
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="401187693"
+X-IronPort-AV: E=Sophos;i="6.05,237,1701158400"; 
+   d="scan'208";a="401187693"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2024 19:01:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,237,1701158400"; 
+   d="scan'208";a="257260"
+Received: from choongyo-mobl.gar.corp.intel.com (HELO [10.247.22.55]) ([10.247.22.55])
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2024 19:01:00 -0800
+Message-ID: <2ad1f55c-f361-4439-9174-6af1bb429d55@linux.intel.com>
+Date: Fri, 2 Feb 2024 11:00:58 +0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=LZFCFQXi c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=k7vzHIieQBIA:10 a=QyXUC8HyAAAA:8 a=JN5pTWmEISIy-nGIZr8A:9
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v4 06/11] net: stmmac: resetup XPCS according to
+ the new interface mode
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+ David E Box <david.e.box@linux.intel.com>,
+ Hans de Goede <hdegoede@redhat.com>, Mark Gross <markgross@kernel.org>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Jose Abreu <Jose.Abreu@synopsys.com>, "David S . Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Richard Cochran <richardcochran@gmail.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+ Heiner Kallweit <hkallweit1@gmail.com>,
+ Philipp Zabel <p.zabel@pengutronix.de>, Andrew Halaney
+ <ahalaney@redhat.com>, Simon Horman <simon.horman@corigine.com>,
+ Serge Semin <fancer.lancer@gmail.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, platform-driver-x86@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, bpf@vger.kernel.org,
+ Voon Wei Feng <weifeng.voon@intel.com>,
+ Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
+ Lai Peter Jun Ann <jun.ann.lai@intel.com>,
+ Abdul Rahim Faizal <faizal.abdul.rahim@intel.com>
+References: <20240129130253.1400707-1-yong.liang.choong@linux.intel.com>
+ <20240129130253.1400707-7-yong.liang.choong@linux.intel.com>
+ <ZbjNn+C/VHegH2t7@shell.armlinux.org.uk>
+ <9e23671e-788c-4191-bdb4-94915ff7da5a@linux.intel.com>
+ <ZbtYaXkNf2ZF1prE@shell.armlinux.org.uk>
+Content-Language: en-US
+From: Choong Yong Liang <yong.liang.choong@linux.intel.com>
+In-Reply-To: <ZbtYaXkNf2ZF1prE@shell.armlinux.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-changelog:
-since v5:
-  - change of maintainer
-  - use adi,ti-diode property
-  - deal with oscillator fail and releasing SWRST
 
-since v4:
-  - dt-binding: add enum value "2" to aux-voltage-chargable
-  - dt-binding: remove adi,trickle-diode-enable
-  - dt-binding: change description of trickle-resistor-ohms
-  - dt-binding: reorder as in example schema
-  - parse "wakeup-source" when irq not requested
-  - remove limitation on max31328 irq and clockout
-  - remove error and warning messages during trickle charger setup
 
-since v3:
-  - dt-binding: remove interrupt names.
-  - dt-binding: add description for "interrupts" property
-  - dt-binding: replace deprecated property "trickle-diode-disable"
-      by "aux-voltage-chargeable"
-  - dt-binding: add new property "adi,trickle-diode-enable"
-  - dt-binding: remove "wakeup-source"
-  - use clear_bit instead of __clear_bit
-  - use devm_of_clk_add_hw_provider instead of of_clk_add_provider
-  - use chip_desc pointer as driver data instead of enum.
+On 1/2/2024 4:38 pm, Russell King (Oracle) wrote:
+> Note the "This must not modify any state." statement. By reinitialising
+> the PCS in this method, you are violating that statement.
+> 
+> This requirement is because this method will be called by
+> phylink_validate_mac_and_pcs() at various times, potentially for each
+> and every interface that stmmac supports, which will lead to you
+> reinitialising the PCS, killing the link, each time we ask the MAC for
+> a PCS, whether we are going to make use of it in that mode or not.
+> 
+> You can not do this. Sorry. Hard NAK for this approach.
+> 
+Thank you for taking the time to review, got your concerns, and I'll 
+address the following concerns before submitting a new patch series:
 
-since v2:
-  - add "break" to fix warning: unannotated fall-through
-    Reported-by: kernel test robot <lkp@intel.com>
+1. Remove allow_switch_interface and have the PHY driver fill in 
+phydev->possible_interfaces.
+2. Rework on the PCS to have similar implementation with the following 
+patch "net: macb: use .mac_select_pcs() interface" 
+(https://lore.kernel.org/netdev/E1n568J-002SZX-Gr@rmk-PC.armlinux.org.uk/T/).
 
-since v1:
-  - dt-binding: update title and description
-  - dt-binding: remove last example
-  - drop watchdog support
-  - support reading 12Hr format instead of forcing 24hr at probe time
-  - use "tm_year % 100" instead of range check
-  - refactor max313xx_init for readability
-
-Ibrahim Tilki (2):
-  drivers: rtc: add max313xx series rtc driver
-  dt-bindings: rtc: add max313xx RTCs
-
- .../devicetree/bindings/rtc/adi,max313xx.yaml |  145 +++
- drivers/rtc/Kconfig                           |   11 +
- drivers/rtc/Makefile                          |    1 +
- drivers/rtc/rtc-max313xx.c                    | 1098 +++++++++++++++++
- 4 files changed, 1255 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/rtc/adi,max313xx.ya=
-ml
- create mode 100644 drivers/rtc/rtc-max313xx.c
-
---=20
-2.43.0
-
+Kindly let me know if there are any additional concerns or suggestions.
