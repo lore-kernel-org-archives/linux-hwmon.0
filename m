@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 172DE2FE3F;
-	Fri,  2 Feb 2024 20:22:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 054A03CF5A;
+	Fri,  2 Feb 2024 20:37:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706905321; cv=none; b=k28n3CRAqCy52eNFOAeGR5Hpu0CZIBKIrPEFVA8p/HcIqWIwJHPdSM1FTMkBZpNSnV9VzzQS4QlTMtu7Z3JzPkAql+XNlg9izmB2gvmI6HahyfPWe7DANInEksuQzMXFt6VEOOMg1ityV+3YvWP5vlO+TzD40lr8CJ7ZmBPUQzA=
+	t=1706906274; cv=none; b=bte1ic15zOpiuq1RUYR+RUKGD9id0+DXCpADoYQUA0BaVu+FyfcSca4A+lHtXJRz5BeozQrxM7huLZ3LLgVQcTgeE6uLmDnAm7Yesq7Q7KwrtBU+uzRu9sNXs7oPn0V+15qs653OTye512aBcoVhKopWUavWbtd8O/rIr5V2IQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706905321; c=relaxed/simple;
-	bh=+l6xmMtGx88Ja2KwOafyi6g4YZxkCJK5ea96nkAej3M=;
+	s=arc-20240116; t=1706906274; c=relaxed/simple;
+	bh=DnL2BYtNo/BWxPSTLX3y8QEL2Bemtf/eP6XUte/NEzQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aT+s1UIoPpPCNjMVvPi+fEHUjcpwH7GRgLheTaenTFz6bbMUduqZIJNyohopXZK+upfbsbbaRPwvIw5dNc6+e8Ry/FFvrrClRS1puWMOiQJUx+TVLz1EyzCyzvXka1WX5fCXa2hAHXPtD7KsVLpSKCR5Z/eOLb0xBG1Pp/sxjbw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vHfONgv5; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=rHd6IEm3mJ5hY7Ha3QQZtV99EW1Q6x/eWdhfMIueB7mryE7krtdQLV/Z0Ue3mVVMDdSyDiinB3b8PlFB3Z0jOYlzDfOmm4qijvxfKIxjzWgfaaA4BAJ3tfKAiID26c5RDhpsWerkeLUpHY/q0WiZo7MpEXBFLAshmLLn/Jh1XcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L/YGcjsy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vHfONgv5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C077C43390;
-	Fri,  2 Feb 2024 20:22:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L/YGcjsy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B64EC433F1;
+	Fri,  2 Feb 2024 20:37:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706905320;
-	bh=+l6xmMtGx88Ja2KwOafyi6g4YZxkCJK5ea96nkAej3M=;
+	s=k20201202; t=1706906273;
+	bh=DnL2BYtNo/BWxPSTLX3y8QEL2Bemtf/eP6XUte/NEzQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vHfONgv5bp3nw/5BQQBxFABlpD4dswpeqWaZ9kdLpNnG25ND9Ibg1qtNTnwxNP0k+
-	 UjTINVQLu3iGG19vu3S5zvxAfpiIqRMZe15H2ktSLwiY3J9M9p/ye/AmVfAGCjHU6G
-	 UDpmWstk/3Yuh+20glbCwJOqYGQuWnxKfUqkfMZo4OR8InE2j1wMTUIqyBWGAxpNRm
-	 UAB1adOXcwtSWxPlKUX2hO6CwPUtlWl/Gs1cHYkAjJEOZw2BPS7sdYN3Zybmwza90b
-	 x7u/uahun+vLqGdLOSdo1F+fNO/EbjeRR+ddEjCQFi3KhyNnoc1/p5679HFl0tdA5o
-	 1cEWNWSfAotMw==
-Date: Fri, 2 Feb 2024 14:21:58 -0600
-From: Rob Herring <robh@kernel.org>
-To: Conor Dooley <conor@kernel.org>
+	b=L/YGcjsy9+T0hM405wkxqUVVqDv7+yW4JrrYa0UoTIsf9vWnbn02mfigqWmAEFids
+	 +KybpZVBaN1BHiqOV/Ad0K6HSjf4IRCZpqb/PyEF8Jld+VMDO+zxG86YeNXWLJhQKg
+	 TA7pVpz4ZWE6V52msvob7vF2DkJdVgIFlHG02iyAXjFiiiE7OVD0j3YJhzmRqunTLA
+	 FHUlF7ja9hub9WmlrRwJDPGPXFsKRYUE62cREYKuLroQ+cVgKsRquaGJaNBGui9wWn
+	 nTbME8ntgSBP3BJ+m0tuOerjKdp+5ek/jeQqHZTJXRIbL0KAAVcreWDBd4rUnQHtpI
+	 iWwAI3tMEEH4w==
+Date: Fri, 2 Feb 2024 20:37:49 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Rob Herring <robh@kernel.org>
 Cc: Guenter Roeck <linux@roeck-us.net>,
 	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -37,40 +37,65 @@ Cc: Guenter Roeck <linux@roeck-us.net>,
 	linux-hwmon@vger.kernel.org
 Subject: Re: [PATCH] dt-bindings: trivial-devices: sort entries
  alphanumerically
-Message-ID: <20240202202158.GA1007609-robh@kernel.org>
+Message-ID: <20240202-bully-matron-f8bc086cfc74@spud>
 References: <20240201075805.7492-1-krzysztof.kozlowski@linaro.org>
  <5461a237-1df4-4077-86ef-e9ff6ff17e27@roeck-us.net>
  <20240201-silliness-unfair-265a0d896377@spud>
+ <20240202202158.GA1007609-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="qID5frt9zuGEe04y"
+Content-Disposition: inline
+In-Reply-To: <20240202202158.GA1007609-robh@kernel.org>
+
+
+--qID5frt9zuGEe04y
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240201-silliness-unfair-265a0d896377@spud>
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 01, 2024 at 06:32:09PM +0000, Conor Dooley wrote:
-> On Thu, Feb 01, 2024 at 05:25:13AM -0800, Guenter Roeck wrote:
-> > On 1/31/24 23:58, Krzysztof Kozlowski wrote:
-> > > Sort entries alphanumerically.  This was a semi manual job with help of:
-> > > 
-> > >    cat Documentation/devicetree/bindings/trivial-devices.yaml | grep '    - ' > old
-> > >    cat old | sort -n > new
-> > >    diff -ubB old new
-> > > 
-> > > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > > 
-> > 
-> > Acked-by: Guenter Roeck <linux@roeck-us.net>
-> 
-> z sorts before a, please fix in the whole file.
+On Fri, Feb 02, 2024 at 02:21:58PM -0600, Rob Herring wrote:
+> On Thu, Feb 01, 2024 at 06:32:09PM +0000, Conor Dooley wrote:
+> > On Thu, Feb 01, 2024 at 05:25:13AM -0800, Guenter Roeck wrote:
+> > > On 1/31/24 23:58, Krzysztof Kozlowski wrote:
+> > > > Sort entries alphanumerically.  This was a semi manual job with hel=
+p of:
+> > > >=20
+> > > >    cat Documentation/devicetree/bindings/trivial-devices.yaml | gre=
+p '    - ' > old
+> > > >    cat old | sort -n > new
+> > > >    diff -ubB old new
+> > > >=20
+> > > > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > > >=20
+> > >=20
+> > > Acked-by: Guenter Roeck <linux@roeck-us.net>
+> >=20
+> > z sorts before a, please fix in the whole file.
+>=20
+> I don't follow this comment.
 
-I don't follow this comment.
+I was just taking the piss out of myself, dw bout it.
 
-> 
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> 
-> Thanks,
-> Conor.
+> > Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> >=20
+> > Thanks,
+> > Conor.
+
+--qID5frt9zuGEe04y
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZb1SnQAKCRB4tDGHoIJi
+0oWDAQDMtfrz1OyRUefGpWzVlTVAFWBhaFNc5aCVu+1RG7aIVAEA7oykg3S4shBG
+ivAEvFgW8H8WzOonxTz6i1cRuYud9wc=
+=R56H
+-----END PGP SIGNATURE-----
+
+--qID5frt9zuGEe04y--
