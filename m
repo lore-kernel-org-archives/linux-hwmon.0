@@ -1,101 +1,63 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 054A03CF5A;
-	Fri,  2 Feb 2024 20:37:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A591E83A0F;
+	Fri,  2 Feb 2024 21:00:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706906274; cv=none; b=bte1ic15zOpiuq1RUYR+RUKGD9id0+DXCpADoYQUA0BaVu+FyfcSca4A+lHtXJRz5BeozQrxM7huLZ3LLgVQcTgeE6uLmDnAm7Yesq7Q7KwrtBU+uzRu9sNXs7oPn0V+15qs653OTye512aBcoVhKopWUavWbtd8O/rIr5V2IQU=
+	t=1706907621; cv=none; b=ZCnbM+V6GOM//W+irxDUNBhxk9hf9t41T1Bai84iFgu2SEGMfUIYhA0v9NYKb9z+jMZ5qH9Le1gUqCaUbe9jgrYVIu202PzJ4fxrMK8V3/lYNlb7hPgqpWtFmRIlOa+buiQdf1uww+ByDr3p9yrMRgERBeuJsIc9f5Vfg6NYU4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706906274; c=relaxed/simple;
-	bh=DnL2BYtNo/BWxPSTLX3y8QEL2Bemtf/eP6XUte/NEzQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rHd6IEm3mJ5hY7Ha3QQZtV99EW1Q6x/eWdhfMIueB7mryE7krtdQLV/Z0Ue3mVVMDdSyDiinB3b8PlFB3Z0jOYlzDfOmm4qijvxfKIxjzWgfaaA4BAJ3tfKAiID26c5RDhpsWerkeLUpHY/q0WiZo7MpEXBFLAshmLLn/Jh1XcE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L/YGcjsy; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1706907621; c=relaxed/simple;
+	bh=QcusuvkZju3ZuWeqcFz2VxijShzSXrp5sL3xhUi9l+M=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=ukzpGXb+4j3UFARyxpIB2cQ8Bo90HTVeyg3YRtzCT/4Wbd5GG8hpon2M0IbnZza391ttHkztAY7w9E+KtkQ/qhsBQcl9bQprLA6DbHnVX53847E8wSSEZrLrFYLLw/P3gaNZNsubL/JbTN6xIAvgO0fRcgwx2uqzdqKT2SVBwg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OM4seBrR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L/YGcjsy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B64EC433F1;
-	Fri,  2 Feb 2024 20:37:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OM4seBrR"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8950FC43609;
+	Fri,  2 Feb 2024 21:00:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706906273;
-	bh=DnL2BYtNo/BWxPSTLX3y8QEL2Bemtf/eP6XUte/NEzQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=L/YGcjsy9+T0hM405wkxqUVVqDv7+yW4JrrYa0UoTIsf9vWnbn02mfigqWmAEFids
-	 +KybpZVBaN1BHiqOV/Ad0K6HSjf4IRCZpqb/PyEF8Jld+VMDO+zxG86YeNXWLJhQKg
-	 TA7pVpz4ZWE6V52msvob7vF2DkJdVgIFlHG02iyAXjFiiiE7OVD0j3YJhzmRqunTLA
-	 FHUlF7ja9hub9WmlrRwJDPGPXFsKRYUE62cREYKuLroQ+cVgKsRquaGJaNBGui9wWn
-	 nTbME8ntgSBP3BJ+m0tuOerjKdp+5ek/jeQqHZTJXRIbL0KAAVcreWDBd4rUnQHtpI
-	 iWwAI3tMEEH4w==
-Date: Fri, 2 Feb 2024 20:37:49 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Rob Herring <robh@kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Charles Hsu <ythsu0511@gmail.com>,
-	linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: trivial-devices: sort entries
- alphanumerically
-Message-ID: <20240202-bully-matron-f8bc086cfc74@spud>
-References: <20240201075805.7492-1-krzysztof.kozlowski@linaro.org>
- <5461a237-1df4-4077-86ef-e9ff6ff17e27@roeck-us.net>
- <20240201-silliness-unfair-265a0d896377@spud>
- <20240202202158.GA1007609-robh@kernel.org>
+	s=k20201202; t=1706907621;
+	bh=QcusuvkZju3ZuWeqcFz2VxijShzSXrp5sL3xhUi9l+M=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=OM4seBrRQo0QD0OO35Xe15Jkd6JO66nWDtoigYQHz+VuBFVpdQIstIPnswe2gLD06
+	 lqNe2ae/LLLpmO5RyMRN9sgAs/bGgNivC35K89ZaUbWmmNUquICb174KyqyXlvAmhw
+	 6GX+bNNexOcflKnZyUS/jbuK3m/oH2sjfOOrKNIWiPNcvsAhdM4QY0+usY596EhnfK
+	 0a3XQKN0N9BCFrn2OzCcUgXnXmct4siSccdjNpZLgoF9A7QZLyRu23r8Z53JnbjjwQ
+	 vllNsa+EQXTk+XvLWKm6G35QbezhWx7sEyFIiDzW04fgHD0zzi0MqEaNRePMZPtI2+
+	 iZpOnIDc6H1rw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7716CDC99E7;
+	Fri,  2 Feb 2024 21:00:21 +0000 (UTC)
+Subject: Re: [GIT PULL] hwmon fixes for v6.8-rc3
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20240202183012.1607147-1-linux@roeck-us.net>
+References: <20240202183012.1607147-1-linux@roeck-us.net>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20240202183012.1607147-1-linux@roeck-us.net>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.8-rc3
+X-PR-Tracked-Commit-Id: 915644189c22d9c93e9fee7c7c993b58e745bef7
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 43e7ef642ef2e3a26bf1118e27c992ebba3d2d6b
+Message-Id: <170690762148.8980.9507908163887296398.pr-tracker-bot@kernel.org>
+Date: Fri, 02 Feb 2024 21:00:21 +0000
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="qID5frt9zuGEe04y"
-Content-Disposition: inline
-In-Reply-To: <20240202202158.GA1007609-robh@kernel.org>
 
+The pull request you sent on Fri,  2 Feb 2024 10:30:12 -0800:
 
---qID5frt9zuGEe04y
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.8-rc3
 
-On Fri, Feb 02, 2024 at 02:21:58PM -0600, Rob Herring wrote:
-> On Thu, Feb 01, 2024 at 06:32:09PM +0000, Conor Dooley wrote:
-> > On Thu, Feb 01, 2024 at 05:25:13AM -0800, Guenter Roeck wrote:
-> > > On 1/31/24 23:58, Krzysztof Kozlowski wrote:
-> > > > Sort entries alphanumerically.  This was a semi manual job with hel=
-p of:
-> > > >=20
-> > > >    cat Documentation/devicetree/bindings/trivial-devices.yaml | gre=
-p '    - ' > old
-> > > >    cat old | sort -n > new
-> > > >    diff -ubB old new
-> > > >=20
-> > > > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > > >=20
-> > >=20
-> > > Acked-by: Guenter Roeck <linux@roeck-us.net>
-> >=20
-> > z sorts before a, please fix in the whole file.
->=20
-> I don't follow this comment.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/43e7ef642ef2e3a26bf1118e27c992ebba3d2d6b
 
-I was just taking the piss out of myself, dw bout it.
+Thank you!
 
-> > Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> >=20
-> > Thanks,
-> > Conor.
-
---qID5frt9zuGEe04y
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZb1SnQAKCRB4tDGHoIJi
-0oWDAQDMtfrz1OyRUefGpWzVlTVAFWBhaFNc5aCVu+1RG7aIVAEA7oykg3S4shBG
-ivAEvFgW8H8WzOonxTz6i1cRuYud9wc=
-=R56H
------END PGP SIGNATURE-----
-
---qID5frt9zuGEe04y--
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
