@@ -1,76 +1,69 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EEAE15E5C3;
-	Fri,  2 Feb 2024 19:05:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E950185949;
+	Fri,  2 Feb 2024 19:08:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706900742; cv=none; b=KFqAUkTvZ1YgCre1+AoIoFKw8oOZVeRDneMg5tOqUoiWNRe0HBVrqqSQLXOyjj4wx7P4WzKf2aL6VXGmWQeXDCUXVG5GcMMyauynD/6B18f2S1XtTej7vWU6s1jVCHaHTGyJd2kQwe/7wDfoGo5/GVj6fJMpQqbgjCDdnurB3GE=
+	t=1706900925; cv=none; b=tLCYNbCrFKNMm0EukoIKg7dWdOVxSRD6cuEIrkrOl65273WNnIkHOZlDbGPnNsnwIJNHWxIw+Ol5xPCBxQ3APD1B9M2ef71ebvMTeR0/x3gLyb2shXfkcmGKpsy4LdQa5UwuIX6EbIE3Ys190nzLIoO4fcqJcflT3K+aq7tj2GE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706900742; c=relaxed/simple;
-	bh=3dMArMIfpH+Rtl2EZxaqsebVWb3rCZhLbYA5LNUeDZk=;
+	s=arc-20240116; t=1706900925; c=relaxed/simple;
+	bh=32B//JDxJiRZBsf53iQ3isYk7MyrOdW/YuQLIRZa11g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FRBv8Y+QYeeW9SIhsZI+rFdeKNUKPtvmfMDIiCIO4Kw9DlHMqF6oIhSZ+12Cab7XvCUe+T8ckrDVnUXOfXQdPQpTJsu2YD3CXWMNWpbPpwVLaPi8PSOvk2/irasSwb7pOp1kQtWtAKRe3ZDFiACnrTasS9aGw3M96NhuOntMTB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iopLHGiz; arc=none smtp.client-ip=209.85.215.171
+	 Content-Type:Content-Disposition:In-Reply-To; b=i4DV5UWc5NhvZf/YjiYSTbjTNWLTzy6JKgDndXvDH5CQETfGtIVGFPN8GKJO1YfxWEDCAjkvFy9J07WXDcbzCoidXS+oJ92KTOZGhL4A/ozGGRPWrofE4shfkB7YEfSYKDVyNADZnCCqLNAY40cOpZh+K+CpjNvQh824vigI00o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OD+9YKOs; arc=none smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iopLHGiz"
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-5d4d15ec7c5so2257994a12.1;
-        Fri, 02 Feb 2024 11:05:41 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OD+9YKOs"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6de2735151cso1768661b3a.1;
+        Fri, 02 Feb 2024 11:08:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706900740; x=1707505540; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1706900923; x=1707505723; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ukxRtLoLemzhwimS4cpJYXTJGjmDxYbm8xsKwFLAjjI=;
-        b=iopLHGiz6YuAUQdWSD5To6EE12e5tFV3uc950kt1qeFVXBUZ2C0tvaDJDSHtLO0ei2
-         rFJfExZ5u9QCpu4IvgbyyXqnvlvrlpTmdpZ4soaHkHEeDigBZ4kx/9uNwNODme5/Gnha
-         mwDgg+ep4jAx/UgeVBcui7o3kU/Fl6T6oTcZ2BL2IXMfewRgR5MNly+unbokwe8Hhxh/
-         U4SMtEkc4ZZ6WFnYodyuRkagGV5gVLOyQvLgaslwl0cAZLvXrTMCvmoHPGD7ycMo8od+
-         ampvj73gPJ18xWoluix6sXo5jiD3Ipq9ozv+7JXWFu6qx7bCYY8dIXVie1Dq4gY21Cnj
-         ayHg==
+        bh=X2Hvb4/kWmn4mJzDVdWKR0899OF3sPbKQ4xVeSo/y6s=;
+        b=OD+9YKOsoVGroJdk8crb/770vtT+fHBt8A/k/EJpMFwKRZMH7OCa4jh7eIt2sMyUWA
+         fAbGCqskzfR07Fl0NYI/95XOHaydqe+k72hQxOjhnjy/Lb4pYqO7ArCMq8q1grsOkQaJ
+         bm05vAmqqhSaqQY9JgLspkywKvjzzinDZsJO1MTAI0ymRJ2OoJG4KJtourhJS7t7w0dp
+         XMYwAl1sYr1AqLDvR/0T4IfEMSIgWoMZXSAj2jr12G1BEIXb4ZmeE+Je0QdO1VWf0bHO
+         ngcWVZZLzwwn7TUdGYToYc7JG9KxQ+CrIa661TOLaeIR14IilyrJRn5PZhcGW7v3kVmP
+         aqhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706900740; x=1707505540;
+        d=1e100.net; s=20230601; t=1706900923; x=1707505723;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ukxRtLoLemzhwimS4cpJYXTJGjmDxYbm8xsKwFLAjjI=;
-        b=vZlz+SNhqzN+wXIwZGhoQDtP0GHgyiQY9ytBN8iBw8G8mWUgW9mMsmii+avdMsBe0Y
-         RhAu/SlO2loswPXNkH8dMtfBp1wOpKanXqZNBjp1ssqv2YHL8QYbvBVDjOMGYP5637uR
-         uQVCfSXoi3ZRHhovRPk/XVRvOCeCkkR54P7OfzmGO4RQPpDHViMTP+8G1w/JhjBF7MjJ
-         aU71qqjWrAoHioE9IvnP2IRIoAs8Ynv8wV99Ij+tKWsavgmcIffxOvBdR+N27jeqILom
-         MSNaoGbrU46IIj3EzI5HyFzzUvR8TMYlJtixnbOAGwxJ/N7wilcELlXo9QEm9aboOFYJ
-         0Nvg==
-X-Gm-Message-State: AOJu0YwHDmZ6EyVe7T2Dd3RnCwxSfOfsVnfuWZvUC1jEHjCLL0FZWQbF
-	shaDbAGaM7xxWmsgknvQ7NPqPVEEAkU52e4cDdimngHEGKyiJxtp
-X-Google-Smtp-Source: AGHT+IGmaen8ComTq/HdjMtgy5XjXjq2iwXuT68EEE79kpck2iGiRHoB9wCjjMPTkqiVPb8j9irzVw==
-X-Received: by 2002:a17:90a:d242:b0:296:2f9b:8c2f with SMTP id o2-20020a17090ad24200b002962f9b8c2fmr4187731pjw.40.1706900740497;
-        Fri, 02 Feb 2024 11:05:40 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCX3w1PsNkAwT4t7RZ6A1o96pgCOS295/958/g+cL5zFxShuJVPq4FaFWq3tHuZe8AEqylV4QmM31QSD/XGuCQx3y3OqvZvc2OgTINC4/bjBfyL8aJFHtnhSs327jMqn5o3JVDtXq3FlM73zHr8Z0SzASTaJrPFkL8hwP/hgsx2T1F4prafNtamcvRCsF1XT1VisOwiatEYwZg3Ruv+dDvhMmUhjF54vKZ1YRv/5f3DulohOxaezbA66SzATlTdy32mndNairhQqvlY2LjIwNPk9F1AYa/gZp0rH1PkIwTO7Jas3zVP73Q4iqt7NMmFORQFDSkjv0XNzNDeCk7EUQHXEjbuOiDn1TelNYkXwGfzrw0dSVyCNTEi6zAfL33tqbW0ffZj25n0TJ48ylMWXQOvpQ0iPH5/twRZB8WvyaFR3YxpTirvxEd0dSAfyoXu2ihevZzdoXF11mLTVA/m8PbVf5VsFxJGssG0piiQTSFtr7ayF2BobSLlQ46LwkPQ8Bjj9mq/MXAFfRs0WgY6XONYn3iUwn5ICYt5aZ6va2cXjXti5D2whV+Np6u3dxroFNm0md5zWh/AgfU+AMZlMxD/VN7RQws31yCokHHLS/L17p1JSCdJez3zy4spF9/AKHhun+bPE0adqqu4hpu4ouFutXkLxDeeseY+KJ3GLBFBf/Wr1bNB20/7+8UN6VcVPTxw/YnnYdlMjRdhJSFfpaqZWcOU5c/N1Baeoju2OcMeUE7JH/bRsmi3j3+gAAGIPAzhxdgOWJqY0LXuPu0OiB/AjUeqKQKtctrr068sL90KwIcBT4aOZ288=
+        bh=X2Hvb4/kWmn4mJzDVdWKR0899OF3sPbKQ4xVeSo/y6s=;
+        b=whZIEoRDOdovp7vpO+isfcOfAunlw1bXVw4CyjJpBenDY1gDR5E2Eh8XxJM7+ZB4qi
+         78EzZKhKZ0+fE3aMJBayUYq/868GvLHExFSRM4tfitYi+swFr1+Bp2UJ2q/qfcTBWHUF
+         MY233jKAryT/Q8i5fvvmljG/1+4PeH369nOE4AuZK3DlfvO/zNsTUnWS5UKKrhEIMq33
+         Jbauu2boH9+yt/Hyd+kzLgSHWO+c3LgYvEJH5Da4vx5lg6oKh8okvVMwFAfduej3342a
+         8MV2BYvAxD9xX1hDVTPAJidHPpDDNStsV7CQOfcgHCX8ZI4RrdF5WPnaJiwbW6EsidDW
+         fEQQ==
+X-Gm-Message-State: AOJu0YzLwcpOfIcesLhYP44nBgrwyn1yrDsL1gBmy+ausk7DsO0IWLwD
+	q/2sxy3G+KaJ2zuoI7+k0wOHpz1nwsm8dFUEO4U8W4UzMo1pDWAa
+X-Google-Smtp-Source: AGHT+IFCp1izFJ0G/yBcNiE8pRu44wDS+LmUg2K6xxIfEty5450/IQnZPOEPpKIS8PXNw5FC0AXbxQ==
+X-Received: by 2002:a05:6a00:1c88:b0:6dd:8992:6b26 with SMTP id y8-20020a056a001c8800b006dd89926b26mr7399021pfw.9.1706900922944;
+        Fri, 02 Feb 2024 11:08:42 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCWk1wsoWixPcNdQ/G2Jg3R+qqKLyMsrEY3xM5Boc7fMQxJknbzlOwQAVF4I8YnEOQB+rqFzgT5Qn+S/aSjplw+zhuxglpVcmOsA/Y1Oyt2wUbbghTpTaTcqhevkv5nkA9bIYakvYFHuaOXmHUXl0HlVQPPiMqK2FYT79joOvhIYg1Y7qbOX4ejP9+w4hKCauac7wp8AXEyQY5Y4zZjSTooAZTie+4J1XSeIHTXqp5Ig2OKI
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p15-20020a17090adf8f00b00295e671dfb8sm358897pjv.22.2024.02.02.11.05.39
+        by smtp.gmail.com with ESMTPSA id b28-20020aa78edc000000b006de09d94723sm2022017pfr.17.2024.02.02.11.08.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Feb 2024 11:05:40 -0800 (PST)
+        Fri, 02 Feb 2024 11:08:42 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 2 Feb 2024 11:05:39 -0800
+Date: Fri, 2 Feb 2024 11:08:41 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Cosmo Chou <chou.cosmo@gmail.com>
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, jdelvare@suse.com, corbet@lwn.net,
-	broonie@kernel.org, naresh.solanki@9elements.com,
-	vincent@vtremblay.dev, patrick.rudolph@9elements.com,
-	luca.ceresoli@bootlin.com, bhelgaas@google.com, festevam@denx.de,
-	alexander.stein@ew.tq-group.com, heiko@sntech.de,
-	jernej.skrabec@gmail.com, macromorgan@hotmail.com,
-	forbidden405@foxmail.com, sre@kernel.org, linus.walleij@linaro.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	cosmo.chou@quantatw.com
-Subject: Re: [PATCH v4 3/3] hwmon: Add driver for Astera Labs PT5161L retimer
-Message-ID: <f1e383d8-23d6-4761-894c-888ca8f7204c@roeck-us.net>
-References: <20240115100518.2887549-1-chou.cosmo@gmail.com>
- <20240115100518.2887549-4-chou.cosmo@gmail.com>
+To: Aleksa Savic <savicaleksa83@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, Jonas Malaco <jonas@protocubo.io>,
+	Yury Zhuravlev <stalkerg@gmail.com>,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: Add driver for NZXT Kraken X and Z series AIO CPU
+ coolers
+Message-ID: <c4ecb715-ec25-416e-a893-6e9eecb37409@roeck-us.net>
+References: <20240129111932.368232-1-savicaleksa83@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -79,51 +72,38 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240115100518.2887549-4-chou.cosmo@gmail.com>
+In-Reply-To: <20240129111932.368232-1-savicaleksa83@gmail.com>
 
-On Mon, Jan 15, 2024 at 06:05:18PM +0800, Cosmo Chou wrote:
-> This driver implements support for temperature monitoring of Astera Labs
-> PT5161L series PCIe retimer chips.
+On Mon, Jan 29, 2024 at 12:19:28PM +0100, Aleksa Savic wrote:
+> This driver enables hardware monitoring support for NZXT Kraken
+> X53/X63/X73 and Z53/Z63/Z73 all-in-one CPU liquid coolers.
 > 
-> This driver implementation originates from the CSDK available at
-> Link: https://github.com/facebook/openbmc/tree/helium/common/recipes-lib/retimer-v2.14
-> The communication protocol utilized is based on the I2C/SMBus standard.
+> All models expose liquid temperature and pump speed (in RPM), as well as
+> PWM control (natively only through a temp-PWM curve, but the driver also
+> emulates fixed PWM control on top of that). The Z-series models
+> additionally expose the speed and duty of an optionally connected fan,
+> with the same PWM control capabilities.
 > 
-> Signed-off-by: Cosmo Chou <chou.cosmo@gmail.com>
+> Pump and fan duty control mode can be set through pwm[1-2]_enable,
+> where 1 is for the manual control mode and 2 is for the liquid temp
+> to PWM curve mode. Writing a 0 disables control of the channel through
+> the driver after setting its duty to 100%. As it is not possible to query
+> the device for the active mode, the driver keeps track of it.
+> 
+> The temperature of the curves relates to the fixed [20-59] C range, per
+> device limitations, and correlating to the detected liquid temperature.
+> Only PWM values (ranging from 0-255) can be set.
+> 
+> The addressable RGB LEDs and LCD screen, included only on Z-series models,
+> are not supported in this driver.
+> 
+> Co-developed-by: Jonas Malaco <jonas@protocubo.io>
+> Signed-off-by: Jonas Malaco <jonas@protocubo.io>
+> Co-developed-by: Yury Zhuravlev <stalkerg@gmail.com>
+> Signed-off-by: Yury Zhuravlev <stalkerg@gmail.com>
+> Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
 
-That gives me:
-
-WARNING: Improper SPDX comment style for 'drivers/hwmon/pt5161l.c', please use '//' instead
-#237: FILE: drivers/hwmon/pt5161l.c:1:
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-
-WARNING: Missing or malformed SPDX-License-Identifier tag in line 1
-#237: FILE: drivers/hwmon/pt5161l.c:1:
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-
-CHECK: struct mutex definition without comment
-#304: FILE: drivers/hwmon/pt5161l.c:68:
-+	struct mutex lock;
-
-CHECK: Lines should not end with a '('
-#419: FILE: drivers/hwmon/pt5161l.c:183:
-+		ret = pt5161l_write_block_data(
-
-and many more of the latter. I'd fix it up if it was just one or two,
-and I don't care about the mutex definition comment, but
-
-	total: 0 errors, 2 warnings, 9 checks, 755 lines checked
-
-is just too much.
-
-From Documentation/hwmon/submitting-patches.rst:
-
-* Please run your patch through 'checkpatch --strict'. There should be no
-  errors, no warnings, and few if any check messages. If there are any
-  messages, please be prepared to explain.
-
-Please fix and resubmit. No need to resubmit the other patches in the
-series, since I already applied those.
+Applied.
 
 Thanks,
 Guenter
