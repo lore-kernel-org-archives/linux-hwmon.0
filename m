@@ -1,307 +1,149 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF82F12FB0E;
-	Thu,  1 Feb 2024 18:32:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D38210E3
+	for <linux-hwmon@vger.kernel.org>; Fri,  2 Feb 2024 00:29:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706812334; cv=none; b=ufiqQjOqCoFpw+tyousiv6HvWQSNnmoq57oQcW8vMEbQ92Cb/akqpjiDsWOJE6Khgt/ZdmtsjorfYDUl6lFCdEzeS6OfDHqZXZzkTO5hYRyJmqjou2cO7BJTecSRS8cIIEQUfFuVZfeNOMjtVPngooj57hz0Vjt++akbyphL9Os=
+	t=1706833744; cv=none; b=Hs/vJsmcuvD0sD6rH+uD6x/3dDjIbqOXhjaX8GCMWofzmtGYTWbNTp9CJzbMJA1TvxEykmVL77R9xK01GlGgyTiA7YdiEb1ZpEQzxB4j+tKOA5irjO+bunAzW5l4zXjugdA2R+G5QKTxwdC+2lYPBEgkLF4Wg5xTkhj/8QJAqls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706812334; c=relaxed/simple;
-	bh=HBONCdrxzDqsxndhvVUnYO6LFvC8ZcUi1vLplgj5IO8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K/yidI5sloCES8F70OtTEGsNmk++zngN/VDceUvMs2ljX8dzLmJVOJI9ZrHwS0e29g2uPGeUYD9DmhvqQeYpucPfqWkjvRmpmvUU1LQkt5oV+1BXR6woEjx5K/cxdBqKVw5Y7bVGteg54PmoEhUrV6322bh+BIC2wNP8ltwnwtk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gSsdxOkd; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1706833744; c=relaxed/simple;
+	bh=mpV+cPmML3Jk+/Tuf2IR1WVkBy6cc/QDf4lHr7ZmniI=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=rR3xEy33Zm9HETNTRPwQhXjGnHZytMjjRaUXd7odt84b5jL5ht7z5RP78vd7hepuSoDKZKbiF+EGcnWDi21YSewTRsTtF60DS+4ngf4JIzjCfwtPKqnB0Exl8KUVFlTPWMmromK85xBNKiine01+Kgwg8jwrBbRL9OLlLtOkT1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=YRVx3k6h; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gSsdxOkd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EF8DC433C7;
-	Thu,  1 Feb 2024 18:32:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706812334;
-	bh=HBONCdrxzDqsxndhvVUnYO6LFvC8ZcUi1vLplgj5IO8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gSsdxOkdBhbQAtPx9jBFEUfHGCwzCZ6edeHKJcNVeywrqCdY9zdUgOVZgDCnj+Z8+
-	 7GkqdwI0CTph2ii7IV8ROrZkSAVVIOYonb7Ij+kvVfiMENKSQYlakprWWFCB+t63pZ
-	 j1ZtdSPIid5DyqCluM5OBkoY1MFI6ik6QNKyT2ZaqdVa8aX1Nx92NpsIHhhQLXlXTT
-	 an00Jwx5gLXg781IrDQtS907l1GxqExYTbW5hEhdUl28Rzqojgqj/W9+u3bONiW0Oj
-	 3thn3wbo+tD9lAEZFbD/CFgCBBUi1Bqnu8+GNFKnK8TGM6atGxhKuV1rM8oIFok4eK
-	 1U7gsZzUm0BFg==
-Date: Thu, 1 Feb 2024 18:32:09 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Charles Hsu <ythsu0511@gmail.com>,
-	linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: trivial-devices: sort entries
- alphanumerically
-Message-ID: <20240201-silliness-unfair-265a0d896377@spud>
-References: <20240201075805.7492-1-krzysztof.kozlowski@linaro.org>
- <5461a237-1df4-4077-86ef-e9ff6ff17e27@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="YRVx3k6h"
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 9B3362C0362;
+	Fri,  2 Feb 2024 13:28:52 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1706833732;
+	bh=mpV+cPmML3Jk+/Tuf2IR1WVkBy6cc/QDf4lHr7ZmniI=;
+	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+	b=YRVx3k6hiE/5oHswxkWaJ2DEEXEHro9ARHiM/faZemR788Jpj7qLOIy3ZPfMilN30
+	 PwAqQ1h36a2MWycmFSBwZVQ6zNsg24ZCuV1yC5FqDcnmUoGZ8GCC3IQSPpnvff2xn2
+	 bKbhna/Lg8SMcPGp9Qc3HhCaf7PNclilVmDfhzFQzKFq9fM10NeXZHJIwo3Yj306Un
+	 IMmZgFxyl5XOaZ9lLwzEVmuI1DeyoYj/nD/bZGNQbEWdJ3AtQU9R3aaQiU6id3PCov
+	 jKoBmsU7bkeFqve+9jq0BGzEz8cd7m/iC/EJaw9bNbv7/xhIw+ZvhErAKyRb4/X58m
+	 TthxVLy2UacCw==
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B65bc37440001>; Fri, 02 Feb 2024 13:28:52 +1300
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Fri, 2 Feb 2024 13:28:52 +1300
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1118.040; Fri, 2 Feb 2024 13:28:52 +1300
+From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To: =?utf-8?B?TnVubyBTw6E=?= <noname.nuno@gmail.com>, "a.zummo@towertech.it"
+	<a.zummo@towertech.it>, "alexandre.belloni@bootlin.com"
+	<alexandre.belloni@bootlin.com>, "jdelvare@suse.com" <jdelvare@suse.com>,
+	"linux@roeck-us.net" <linux@roeck-us.net>, "robh+dt@kernel.org"
+	<robh+dt@kernel.org>, "krzysztof.kozlowski+dt@linaro.org"
+	<krzysztof.kozlowski+dt@linaro.org>, "antoniu.miclaus@analog.com"
+	<antoniu.miclaus@analog.com>
+CC: "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v5 0/2] drivers: rtc: add max313xx series rtc driver
+Thread-Topic: [PATCH v5 0/2] drivers: rtc: add max313xx series rtc driver
+Thread-Index: AQHaT/57pfs9+wriS028zs2/xPWJR7Dq3xGAgARtWACAAErGAIAFzH2A
+Date: Fri, 2 Feb 2024 00:28:52 +0000
+Message-ID: <c69ab341-468a-4bca-96b7-793342c421a7@alliedtelesis.co.nz>
+References: <20230403154342.3108-1-Ibrahim.Tilki@analog.com>
+ <147c92f9-b42b-4a51-a6f9-2d90bfe63aa0@alliedtelesis.co.nz>
+ <1b42866bb6f05b7d68e9b8304e42359fccdf2bad.camel@gmail.com>
+ <170c8d6b-3246-493f-8cd9-6ac580cabc28@alliedtelesis.co.nz>
+ <84827fd6461c9650443608e33afe9eb011793656.camel@gmail.com>
+In-Reply-To: <84827fd6461c9650443608e33afe9eb011793656.camel@gmail.com>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <97DB4FBBE2A3344DB1A6742C47561F68@atlnz.lc>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="N+zoBAHBXolU7sZ9"
-Content-Disposition: inline
-In-Reply-To: <5461a237-1df4-4077-86ef-e9ff6ff17e27@roeck-us.net>
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=LZFCFQXi c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=k7vzHIieQBIA:10 a=QyXUC8HyAAAA:8 a=npl0IYgviOQm-zOkIj0A:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
 
-
---N+zoBAHBXolU7sZ9
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Feb 01, 2024 at 05:25:13AM -0800, Guenter Roeck wrote:
-> On 1/31/24 23:58, Krzysztof Kozlowski wrote:
-> > Sort entries alphanumerically.  This was a semi manual job with help of:
-> >=20
-> >    cat Documentation/devicetree/bindings/trivial-devices.yaml | grep ' =
-   - ' > old
-> >    cat old | sort -n > new
-> >    diff -ubB old new
-> >=20
-> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >=20
->=20
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
-
-z sorts before a, please fix in the whole file.
-
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-
-Thanks,
-Conor.
-
->=20
-> > ---
-> >=20
-> > Cc: Charles Hsu <ythsu0511@gmail.com>
-> > Cc: linux-hwmon@vger.kernel.org
-> > Cc: Guenter Roeck <linux@roeck-us.net>
-> > ---
-> >   .../devicetree/bindings/trivial-devices.yaml  | 73 ++++++++++---------
-> >   1 file changed, 37 insertions(+), 36 deletions(-)
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/D=
-ocumentation/devicetree/bindings/trivial-devices.yaml
-> > index 5b52950e6bfc..41982a41398a 100644
-> > --- a/Documentation/devicetree/bindings/trivial-devices.yaml
-> > +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-> > @@ -28,6 +28,7 @@ properties:
-> >     compatible:
-> >       items:
-> > +      # Entries are sorted alphanumerically by the compatible
-> >         - enum:
-> >               # Acbel fsg032 power supply
-> >             - acbel,fsg032
-> > @@ -49,12 +50,12 @@ properties:
-> >             - ams,iaq-core
-> >               # i2c serial eeprom (24cxx)
-> >             - at,24c08
-> > +            # i2c h/w elliptic curve crypto module
-> > +          - atmel,atecc508a
-> >               # ATSHA204 - i2c h/w symmetric crypto module
-> >             - atmel,atsha204
-> >               # ATSHA204A - i2c h/w symmetric crypto module
-> >             - atmel,atsha204a
-> > -            # i2c h/w elliptic curve crypto module
-> > -          - atmel,atecc508a
-> >               # BPA-RS600: Power Supply
-> >             - blutek,bpa-rs600
-> >               # Bosch Sensortec pressure, temperature, humididty and VO=
-C sensor
-> > @@ -115,20 +116,6 @@ properties:
-> >             - fsl,mpl3115
-> >               # MPR121: Proximity Capacitive Touch Sensor Controller
-> >             - fsl,mpr121
-> > -            # Monolithic Power Systems Inc. multi-phase controller mp2=
-856
-> > -          - mps,mp2856
-> > -            # Monolithic Power Systems Inc. multi-phase controller mp2=
-857
-> > -          - mps,mp2857
-> > -            # Monolithic Power Systems Inc. multi-phase controller mp2=
-888
-> > -          - mps,mp2888
-> > -            # Monolithic Power Systems Inc. multi-phase controller mp2=
-971
-> > -          - mps,mp2971
-> > -            # Monolithic Power Systems Inc. multi-phase controller mp2=
-973
-> > -          - mps,mp2973
-> > -            # Monolithic Power Systems Inc. multi-phase controller mp2=
-975
-> > -          - mps,mp2975
-> > -            # Monolithic Power Systems Inc. multi-phase hot-swap contr=
-oller mp5990
-> > -          - mps,mp5990
-> >               # Honeywell Humidicon HIH-6130 humidity/temperature sensor
-> >             - honeywell,hi6130
-> >               # IBM Common Form Factor Power Supply Versions (all versi=
-ons)
-> > @@ -197,6 +184,8 @@ properties:
-> >             - maxim,max1237
-> >               # Temperature Sensor, I2C interface
-> >             - maxim,max1619
-> > +            # 3-Channel Remote Temperature Sensor
-> > +          - maxim,max31730
-> >               # 10-bit 10 kOhm linear programmable voltage divider
-> >             - maxim,max5481
-> >               # 10-bit 50 kOhm linear programmable voltage divider
-> > @@ -209,8 +198,6 @@ properties:
-> >             - maxim,max6621
-> >               # 9-Bit/12-Bit Temperature Sensors with I=B2C-Compatible =
-Serial Interface
-> >             - maxim,max6625
-> > -            # 3-Channel Remote Temperature Sensor
-> > -          - maxim,max31730
-> >               # mCube 3-axis 8-bit digital accelerometer
-> >             - mcube,mc3230
-> >               # Measurement Specialities I2C temperature and humidity s=
-ensor
-> > @@ -241,8 +228,6 @@ properties:
-> >             - memsic,mxc6655
-> >               # Menlo on-board CPLD trivial SPI device
-> >             - menlo,m53cpld
-> > -            # Micron SPI NOR Authenta
-> > -          - micron,spi-authenta
-> >               # Microchip differential I2C ADC, 1 Channel, 18 bit
-> >             - microchip,mcp3421
-> >               # Microchip differential I2C ADC, 2 Channel, 18 bit
-> > @@ -259,40 +244,56 @@ properties:
-> >             - microchip,mcp3427
-> >               # Microchip differential I2C ADC, 4 Channel, 16 bit
-> >             - microchip,mcp3428
-> > -            # Microchip 7-bit Single I2C Digital POT (5k)
-> > -          - microchip,mcp4017-502
-> >               # Microchip 7-bit Single I2C Digital POT (10k)
-> >             - microchip,mcp4017-103
-> > -            # Microchip 7-bit Single I2C Digital POT (50k)
-> > -          - microchip,mcp4017-503
-> >               # Microchip 7-bit Single I2C Digital POT (100k)
-> >             - microchip,mcp4017-104
-> >               # Microchip 7-bit Single I2C Digital POT (5k)
-> > -          - microchip,mcp4018-502
-> > +          - microchip,mcp4017-502
-> > +            # Microchip 7-bit Single I2C Digital POT (50k)
-> > +          - microchip,mcp4017-503
-> >               # Microchip 7-bit Single I2C Digital POT (10k)
-> >             - microchip,mcp4018-103
-> > -            # Microchip 7-bit Single I2C Digital POT (50k)
-> > -          - microchip,mcp4018-503
-> >               # Microchip 7-bit Single I2C Digital POT (100k)
-> >             - microchip,mcp4018-104
-> >               # Microchip 7-bit Single I2C Digital POT (5k)
-> > -          - microchip,mcp4019-502
-> > +          - microchip,mcp4018-502
-> > +            # Microchip 7-bit Single I2C Digital POT (50k)
-> > +          - microchip,mcp4018-503
-> >               # Microchip 7-bit Single I2C Digital POT (10k)
-> >             - microchip,mcp4019-103
-> > -            # Microchip 7-bit Single I2C Digital POT (50k)
-> > -          - microchip,mcp4019-503
-> >               # Microchip 7-bit Single I2C Digital POT (100k)
-> >             - microchip,mcp4019-104
-> > +            # Microchip 7-bit Single I2C Digital POT (5k)
-> > +          - microchip,mcp4019-502
-> > +            # Microchip 7-bit Single I2C Digital POT (50k)
-> > +          - microchip,mcp4019-503
-> >               # PWM Fan Speed Controller With Fan Fault Detection
-> >             - microchip,tc654
-> >               # PWM Fan Speed Controller With Fan Fault Detection
-> >             - microchip,tc655
-> > +            # Micron SPI NOR Authenta
-> > +          - micron,spi-authenta
-> >               # MiraMEMS DA226 2-axis 14-bit digital accelerometer
-> >             - miramems,da226
-> >               # MiraMEMS DA280 3-axis 14-bit digital accelerometer
-> >             - miramems,da280
-> >               # MiraMEMS DA311 3-axis 12-bit digital accelerometer
-> >             - miramems,da311
-> > +            # Monolithic Power Systems Inc. multi-phase controller mp2=
-856
-> > +          - mps,mp2856
-> > +            # Monolithic Power Systems Inc. multi-phase controller mp2=
-857
-> > +          - mps,mp2857
-> > +            # Monolithic Power Systems Inc. multi-phase controller mp2=
-888
-> > +          - mps,mp2888
-> > +            # Monolithic Power Systems Inc. multi-phase controller mp2=
-971
-> > +          - mps,mp2971
-> > +            # Monolithic Power Systems Inc. multi-phase controller mp2=
-973
-> > +          - mps,mp2973
-> > +            # Monolithic Power Systems Inc. multi-phase controller mp2=
-975
-> > +          - mps,mp2975
-> > +            # Monolithic Power Systems Inc. multi-phase hot-swap contr=
-oller mp5990
-> > +          - mps,mp5990
-> >               # Temperature sensor with integrated fan control
-> >             - national,lm63
-> >               # Serial Interface ACPI-Compatible Microprocessor System =
-Hardware Monitor
-> > @@ -323,12 +324,12 @@ properties:
-> >             - samsung,exynos-sataphy-i2c
-> >               # Semtech sx1301 baseband processor
-> >             - semtech,sx1301
-> > -            # Sensirion low power multi-pixel gas sensor with I2C inte=
-rface
-> > -          - sensirion,sgpc3
-> >               # Sensirion multi-pixel gas sensor with I2C interface
-> >             - sensirion,sgp30
-> >               # Sensirion gas sensor with I2C interface
-> >             - sensirion,sgp40
-> > +            # Sensirion low power multi-pixel gas sensor with I2C inte=
-rface
-> > +          - sensirion,sgpc3
-> >               # Sensirion temperature & humidity sensor with I2C interf=
-ace
-> >             - sensirion,sht4x
-> >               # Sensortek 3 axis accelerometer
-> > @@ -374,8 +375,6 @@ properties:
-> >             - ti,lm74
-> >               # Temperature sensor with integrated fan control
-> >             - ti,lm96000
-> > -            # I2C Touch-Screen Controller
-> > -          - ti,tsc2003
-> >               # Low Power Digital Temperature Sensor with SMBUS/Two Wir=
-e Serial Interface
-> >             - ti,tmp103
-> >               # Thermometer with SPI interface
-> > @@ -397,10 +396,12 @@ properties:
-> >             - ti,tps544b25
-> >             - ti,tps544c20
-> >             - ti,tps544c25
-> > -            # Winbond/Nuvoton H/W Monitor
-> > -          - winbond,w83793
-> > +            # I2C Touch-Screen Controller
-> > +          - ti,tsc2003
-> >               # Vicor Corporation Digital Supervisor
-> >             - vicor,pli1209bc
-> > +            # Winbond/Nuvoton H/W Monitor
-> > +          - winbond,w83793
-> >   required:
-> >     - compatible
->=20
-
---N+zoBAHBXolU7sZ9
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZbvjqQAKCRB4tDGHoIJi
-0pUkAQC7COG0wQHXHHVbr9oUN80S3HyMBEKEt1fd8f2t04rMUgEAxFHMu3kpe2Oi
-8v4ZZvn3JWpDH2UeG3AlDkN1ByEr0gE=
-=hyjd
------END PGP SIGNATURE-----
-
---N+zoBAHBXolU7sZ9--
+DQpPbiAyOS8wMS8yNCAyMDo1NSwgTnVubyBTw6Egd3JvdGU6DQo+IE9uIE1vbiwgMjAyNC0wMS0y
+OSBhdCAwMzoyOCArMDAwMCwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4+IE9uIDI2LzAxLzI0IDIw
+OjUxLCBOdW5vIFPDoSB3cm90ZToNCj4+PiBPbiBGcmksIDIwMjQtMDEtMjYgYXQgMDI6MjIgKzAw
+MDAsIENocmlzIFBhY2toYW0gd3JvdGU6DQo+Pj4+IEhpIEFsbCwNCj4+Pj4NCj4+Pj4gT24gNC8w
+NC8yMyAwMzo0MywgSWJyYWhpbSBUaWxraSB3cm90ZToNCj4+Pj4+IGNoYW5nZWxvZzoNCj4+Pj4+
+IHNpbmNlIHY1Og0KPj4+Pj4gIMKgwqDCoCAtIGR0LWJpbmRpbmc6IGFkZCBlbnVtIHZhbHVlICIy
+IiB0byBhdXgtdm9sdGFnZS1jaGFyZ2FibGUNCj4+Pj4+ICDCoMKgwqAgLSBkdC1iaW5kaW5nOiBy
+ZW1vdmUgYWRpLHRyaWNrbGUtZGlvZGUtZW5hYmxlDQo+Pj4+PiAgwqDCoMKgIC0gZHQtYmluZGlu
+ZzogY2hhbmdlIGRlc2NyaXB0aW9uIG9mIHRyaWNrbGUtcmVzaXN0b3Itb2htcw0KPj4+Pj4gIMKg
+wqDCoCAtIGR0LWJpbmRpbmc6IHJlb3JkZXIgYXMgaW4gZXhhbXBsZSBzY2hlbWENCj4+Pj4+ICDC
+oMKgwqAgLSBwYXJzZSAid2FrZXVwLXNvdXJjZSIgd2hlbiBpcnEgbm90IHJlcXVlc3RlZA0KPj4+
+Pj4gIMKgwqDCoCAtIHJlbW92ZSBsaW1pdGF0aW9uIG9uIG1heDMxMzI4IGlycSBhbmQgY2xva291
+dA0KPj4+Pj4gIMKgwqDCoCAtIHJlbW92ZSBlcnJvciBhbmQgd2FybmluZyBtZXNzYWdlcyBkdXJp
+bmcgdHJpY2tsZSBjaGFyZ2VyIHNldHVwDQo+Pj4+Pg0KPj4+Pj4gc2luY2UgdjQ6DQo+Pj4+PiAg
+wqDCoMKgIC0gZHQtYmluZGluZzogcmVtb3ZlIGludGVycnVwdCBuYW1lcy4NCj4+Pj4+ICDCoMKg
+wqAgLSBkdC1iaW5kaW5nOiBhZGQgZGVzY3JpcHRpb24gZm9yICJpbnRlcnJ1cHRzIiBwcm9wZXJ0
+eQ0KPj4+Pj4gIMKgwqDCoCAtIGR0LWJpbmRpbmc6IHJlcGxhY2UgZGVwcmVjYXRlZCBwcm9wZXJ0
+eSAidHJpY2tsZS1kaW9kZS1kaXNhYmxlIg0KPj4+Pj4gIMKgwqDCoMKgwqDCoMKgIGJ5ICJhdXgt
+dm9sdGFnZS1jaGFyZ2VhYmxlIg0KPj4+Pj4gIMKgwqDCoCAtIGR0LWJpbmRpbmc6IGFkZCBuZXcg
+cHJvcGVydHkgImFkaSx0cmlja2xlLWRpb2RlLWVuYWJsZSINCj4+Pj4+ICDCoMKgwqAgLSBkdC1i
+aW5kaW5nOiByZW1vdmUgIndha2V1cC1zb3VyY2UiDQo+Pj4+PiAgwqDCoMKgIC0gdXNlIGNsZWFy
+X2JpdCBpbnN0ZWFkIG9mIF9fY2xlYXJfYml0DQo+Pj4+PiAgwqDCoMKgIC0gdXNlIGRldm1fb2Zf
+Y2xrX2FkZF9od19wcm92aWRlciBpbnN0ZWFkIG9mIG9mX2Nsa19hZGRfcHJvdmlkZXINCj4+Pj4+
+ICDCoMKgwqAgLSB1c2UgY2hpcF9kZXNjIHBvaW50ZXIgYXMgZHJpdmVyIGRhdGEgaW5zdGVhZCBv
+ZiBlbnVtLg0KPj4+Pj4NCj4+Pj4+IHNpbmNlIHYzOg0KPj4+Pj4gIMKgwqDCoCAtIGFkZCAiYnJl
+YWsiIHRvIGZpeCB3YXJuaW5nOiB1bmFubm90YXRlZCBmYWxsLXRocm91Z2gNCj4+Pj4+ICDCoMKg
+wqDCoMKgIFJlcG9ydGVkLWJ5OiBrZXJuZWwgdGVzdCByb2JvdCA8bGtwQGludGVsLmNvbT4NCj4+
+Pj4+DQo+Pj4+PiBzaW5jZSB2MjoNCj4+Pj4+ICDCoMKgwqAgLSBkdC1iaW5kaW5nOiB1cGRhdGUg
+dGl0bGUgYW5kIGRlc2NyaXB0aW9uDQo+Pj4+PiAgwqDCoMKgIC0gZHQtYmluZGluZzogcmVtb3Zl
+IGxhc3QgZXhhbXBsZQ0KPj4+Pj4gIMKgwqDCoCAtIGRyb3Agd2F0Y2hkb2cgc3VwcG9ydA0KPj4+
+Pj4gIMKgwqDCoCAtIHN1cHBvcnQgcmVhZGluZyAxMkhyIGZvcm1hdCBpbnN0ZWFkIG9mIGZvcmNp
+bmcgMjRociBhdCBwcm9iZSB0aW1lDQo+Pj4+PiAgwqDCoMKgIC0gdXNlICJ0bV95ZWFyICUgMTAw
+IiBpbnN0ZWFkIG9mIHJhbmdlIGNoZWNrDQo+Pj4+PiAgwqDCoMKgIC0gcmVmYWN0b3IgbWF4MzEz
+eHhfaW5pdCBmb3IgcmVhZGFiaWxpdHkNCj4+Pj4+DQo+Pj4+PiBJYnJhaGltIFRpbGtpICgyKToN
+Cj4+Pj4+ICDCoMKgwqAgZHJpdmVyczogcnRjOiBhZGQgbWF4MzEzeHggc2VyaWVzIHJ0YyBkcml2
+ZXINCj4+Pj4+ICDCoMKgwqAgZHQtYmluZGluZ3M6IHJ0YzogYWRkIG1heDMxM3h4IFJUQ3MNCj4+
+Pj4+DQo+Pj4+PiAgwqDCoCAuLi4vZGV2aWNldHJlZS9iaW5kaW5ncy9ydGMvYWRpLG1heDMxM3h4
+LnlhbWwgfMKgIDE0NCArKysNCj4+Pj4+ICDCoMKgIGRyaXZlcnMvcnRjL0tjb25maWfCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoMKgIDExICsN
+Cj4+Pj4+ICDCoMKgIGRyaXZlcnMvcnRjL01ha2VmaWxlwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfMKgwqDCoCAxICsNCj4+Pj4+ICDCoMKgIGRyaXZl
+cnMvcnRjL3J0Yy1tYXgzMTN4eC5jwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAgfCAxMDUzDQo+Pj4+PiArKysrKysrKysrKysrKysrKw0KPj4+Pj4gIMKgwqAgNCBmaWxlcyBj
+aGFuZ2VkLCAxMjA5IGluc2VydGlvbnMoKykNCj4+Pj4+ICDCoMKgIGNyZWF0ZSBtb2RlIDEwMDY0
+NA0KPj4+Pj4gRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3J0Yy9hZGksbWF4MzEz
+eHgueWFtbA0KPj4+Pj4gIMKgwqAgY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvcnRjL3J0Yy1t
+YXgzMTN4eC5jDQo+Pj4+IFdoYXQgaGFwcGVuZWQgdG8gdGhpcyBzZXJpZXMgaW4gdGhlIGVuZD8g
+SXQga2luZCBvZiB3ZW50IG9mZiBteSByYWRhcg0KPj4+PiBhbmQgSSBmb3Jnb3QgYWJvdXQgaXQu
+DQo+Pj4+DQo+Pj4+IFdlJ3ZlIGJlZW4gY2FycnlpbmcgYSB2ZXJzaW9uIG9mIHRoZXNlIGNoYW5n
+ZXMgaW4gb3VyIGxvY2FsIHRyZWUgZm9yIGENCj4+Pj4gd2hpbGUgKGFuZCB1c2luZyBpdCBxdWl0
+ZSBoYXBwaWx5IEkgc2hvdWxkIGFkZCkuDQo+Pj4+DQo+Pj4gSGkgQ2hyaXMsDQo+Pj4NCj4+PiBB
+bHNvIG5vdCBzdXJlLi4uLiBJbiB0aGUgbWVhbnRpbWUgSWJyYWhpbSBsZWZ0IEFESSBzbyBpZiB0
+aGlzIGlzIG5vdCBpbg0KPj4+IHNoYXBlIHRvDQo+Pj4gYmUgbWVyZ2VkIGhlIHdvbid0IGJlIGFi
+bGUgdG8gcmUtc3Bpbi4gSWYgdGhlcmUncyBhIG5lZWQgZm9yIGEgcmUtc3BpbiwNCj4+PiBwbGVh
+c2UNCj4+PiBsZXQgbWUga25vdyBzbyBJIGNhbiBzZWUgaW50ZXJuYWxseSBpZiB0aGVyZSdzIHNv
+bWVvbmUgd2hvIGNhbiBjb250aW51ZSB0aGlzDQo+Pj4gd29yay4gSSB3b3VsZCBkbyBpdCBteXNl
+bGYgaWYgSSBoYWQgdGhlIEhXLg0KPj4gSSd2ZSBnb3QgYSBib2FyZCB3aXRoIGEgbWF4MzEzMzEg
+c28gSSBjYW4gdGVzdCB0aGF0LiBJIGRvbid0IGhhdmUgYW55IG9mDQo+PiB0aGUgaW50ZXJydXB0
+cyBob29rZWQgdXAgc28gSSB3b24ndCBiZSBhYmxlIHRvIHRlc3QgdGhhdC4gTG9va3MgbGlrZQ0K
+Pj4gdGhlcmUgd2FzIHNvbWUgb3V0c3RhbmRpbmcgZGlzY3Vzc2lvbiBhcm91bmQgdGhlIHRyaWNr
+bGUtY2hhcmdlDQo+PiBkZXZpY2V0cmVlIHByb3BlcnRpZXMgc28gSSdkIG5lZWQgdG8gZmlndXJl
+IG91dCB3aGF0IHdhcyB3YW50ZWQgdGhlcmUuDQo+PiBJJ2xsIHRyeSB0byBwaWNrIHVwIHRoZSBs
+YXN0IHNlcmllcyBmcm9tIHRoZSBtYWlsaW5nIGxpc3QgYW5kIGdvIGZyb20gdGhlcmUuDQoNCkkg
+c2VlIHRoYXQgaW4gdGhlIG1lYW50aW1lIEFudG9uaXUgaGFzIGxhbmRlZCBhIG1heDMxMzM1IGRy
+aXZlci4gRG9lcyANCmFueW9uZSBrbm93IG9mZi1oYW5kIGhvdyBjbG9zZSB0aGUgbWF4MzEzMzUg
+aXMgdG8gdGhlIG90aGVyIG1heDMxM3h4IA0KdmFyaWFudHM/IFNob3VsZCBJIGxlYXZlIHRoZW0g
+c2VwYXJhdGUgb3IgYXR0ZW1wdCB0byBpbnRlZ3JhdGUgdGhlIHR3by4NCg0K
