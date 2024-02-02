@@ -1,166 +1,81 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9317414A4DC;
-	Fri,  2 Feb 2024 18:15:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D62614E2C1;
+	Fri,  2 Feb 2024 18:24:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706897749; cv=none; b=rvI/00c0jrk6GMaSamX9JZA7fjvcM3Vakv0NzQyZLRpbMNgeqaWRnveVaNzdf8i3wfww0ux4cFTsTucOkku9y1BEZxM+/Hj8+Acgf0mT2RnAOyEE0gAoTwfqtQ3IgiMGBmxGYn3pavqLKasGjZYaCz19X8NluO4w0kLf5hoSUH4=
+	t=1706898297; cv=none; b=RAc/cT2j0WBVNdzDmOylAhUjYyvhd+1NbaEyMPVguHemu0Sn0xJPZu60284ChTH/rwDrgEw+x0kRBkn26T/w2hqCrRRDJ9REJyYUs9ivO8ZXy4HdedbqiPwzJqHlWhtHf7wDw5AbvTxRAkkx/c/trvkoo0R5Oq9hk8WJmfVTf3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706897749; c=relaxed/simple;
-	bh=LXwJ1i8MjSeCXb3V12RVsNU9NsdtnSXZZ9D/5oAonzs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TeIbXTQNdSTsO1BqE41lTxv9ADsed46y4R7NYAKQhmjbRnkWcuaH9jUNskoDbT+E5YS77rFwZpB9Y2U3smNCkXnMhUG5XSXWOW3XZCovjbCVIgfmdS5cNbadpr6TlX9ePK/Ymbjv+jBMaH7c6TNpkPH52+PQM23h8N1aq41Ezkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RMpK2hu+; arc=none smtp.client-ip=209.85.215.178
+	s=arc-20240116; t=1706898297; c=relaxed/simple;
+	bh=VX1jZtActYDGIG5lwScAs4SneAKQp6YFv39czrMMmS8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LXybeLKGDX63QIpGyV/z7tB/nucM2iBx4TrFhff+ioWGK1CMIhkl8+Y0XqKW9Caw5ERR5gxquMJ+2cl2Cawg4mQG8DloED5DfX0k/bu+MN3PmFRxSj/TPHq9Gom+H+usvB5LXpXZf08qYHCh/Udxrx6rY4QKs2DymhnZCuUcOok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WqF9dGZh; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RMpK2hu+"
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-517ab9a4a13so2344618a12.1;
-        Fri, 02 Feb 2024 10:15:47 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WqF9dGZh"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1d51ba18e1bso22141345ad.0;
+        Fri, 02 Feb 2024 10:24:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706897747; x=1707502547; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=RHoYzRFMU0rjqwDESRoUa3ulysl1cQUrOv2TSobXayA=;
-        b=RMpK2hu+X+00QlOmUp2la8EEiZ0pEpDjo+8Tz7UJElC7ns0aAcYsSFIU2vissTDKXp
-         VZR1z7rUveE/C+UHNS64y1fV93q2nhve9xMvdRvatcHzkW70vgsyBwiY7msAewxibsyB
-         xQkXJDIp7MjBIBSsv/woaKm+xWnNUAdsUn9G6Ny+pMvdFYUOowz5GFu4O/zUC42gBb3b
-         A4vrail/V5G0dQNkSQFNd9pahjttMxsGU+1nP3Gd0tcnVGBrTcmzFcS31qn/447fwjbF
-         M5FcMI6EEzQS+Fjzs34VVVEgbLvIwFQuhjazanjtjTSCgkiB9F9mSTBSEJjHecbcFxrC
-         6gmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706897747; x=1707502547;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1706898295; x=1707503095; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=RHoYzRFMU0rjqwDESRoUa3ulysl1cQUrOv2TSobXayA=;
-        b=IlCSFPq1/DbL8j0tVtM6gVbHq1aOkosXvX7857+pY9vMkaITuNFZmBhrODCOJSjefi
-         K989gVxzrJlpzvxJElPcfVjPr4lEWXECFqUQokckjW0bcbapbaQYpHPRSLXv1x5uo+no
-         RTLZUYraYc5VkCI/dlhmSFuDwQOCl/Sp0ASJX+k3qhF0K5bV+4avCHGGriUus/cxi9XT
-         uRmI++S789Djzb6S0RwemmhM9B1NH6yl+mxq1+KvQqQguenZ/q+OTfNjVt2VL8pVDXcV
-         cXSSd7XMBAFAU9dLHI08anMTfUi/twnJL4S6wrTBEjtrjHthdz9PboUxkktNC59DiEIw
-         EyaA==
-X-Gm-Message-State: AOJu0YxeXRrzcYhEMnZSKpulIm0lAaxn/OGnBeKFG1ofEHY3IZ4xPeIv
-	uY028YTfc8uoG4sSZ+ZBPgK1bqeIJhl73yQMhnuswfxKgkwi43PflipT8f3u
-X-Google-Smtp-Source: AGHT+IHYhl5GvP/oLiGLT7ph7hSgEZoO9KsFLLSlbgb0hISoq6uA0g1h1wtbwuwMSOMbcmiVFlohVQ==
-X-Received: by 2002:a05:6a20:d045:b0:19c:6ce1:d62b with SMTP id hv5-20020a056a20d04500b0019c6ce1d62bmr3743395pzb.9.1706897746668;
-        Fri, 02 Feb 2024 10:15:46 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCXlas4VQvq2OUr7cxkKl506TEywH9PPzMICX5JgMqIepdaVrUAXE/Oxx7fMKRaK6CNcPiY2H+5knD41uBbvpAMDDIbYyIQNaBv6l7p6ENFiUpUWP/N1O0yd8lfogzB+3GXCyQ+7R4YOLd2cTREe/vzLsCYZMw/5yFVE05A/
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s14-20020a65690e000000b005d65cdc02acsm1808790pgq.16.2024.02.02.10.15.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Feb 2024 10:15:46 -0800 (PST)
+        bh=x3+DUrka/k3FJRa3dwdH9/9lCLjbfQ72NhSQ0ErLdyQ=;
+        b=WqF9dGZhnojUj4TtqjnmH1SSJ8LL1tIKDunHR0iXkr7BSlIPmrnGGwCCJOQ/H52WZp
+         3fjyfYZkR0VItMuQY1gELeFYiDunJe8dmBiJRSTghUPGRbP+Do6hxoWeUdefb/cnCyzD
+         2HcU9TZER3uuUpHxdOA+0cjz98XW4J7WT0ABBXSk92nn7GZyme38HldfCJYgU9AwXec0
+         y7h8Q89Kc2iaWJfOmYXc3pQtz3mSjyIrqRN7utCLjs9OhZDEWM24q4tz77cGiL3xTHII
+         6LEGEqwws/teSuu48YdVW5bXuM/DhZSX4OlnTlY6CD0pfOhqxXMHL1uavNHQHj1NvH7U
+         Ta3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706898295; x=1707503095;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=x3+DUrka/k3FJRa3dwdH9/9lCLjbfQ72NhSQ0ErLdyQ=;
+        b=hfRYB+HKOLIxCeXoH1wK20UCn8oyqPD45++F/qtXA+Nh8/bOLdneKu0/c7SRsu+CGZ
+         hcCCSmizUUUDcNiuc9Pf8rDlKCK9YmCDyj/EwJpSDGtNg8eqBFefM4undQkclpW03yFR
+         0buMidvyZT04j/z9rOb4lpWyG4+f5r+PRxST1hI7O+3woVsgF8uoz6qSXgNKThEnxYi/
+         jk+CLY+8iU4BcerBWmGd88C7Uspuik56m33n3nIrDXKbBk18yLqQZ9GajbtIBWp8/4Fv
+         ux+ucS8Gbed4bEVL/QuMoa92hgPOcFSWUpjq9G+KVztsO2PrX9C/mfVcH9SN1h3xaDN1
+         tTmw==
+X-Gm-Message-State: AOJu0Ywj+tmE55miZfEU/FHSWhXIruJhR3x/Ls3LZJv7HLW5et6iuky1
+	UjxCvuOGS0+zYXDZjGu1IzHMMv/BnFzAqQxsS6U6DjusasqeyPyU
+X-Google-Smtp-Source: AGHT+IFVPXYSRJ8Qf5DHwNlXmQeiuZ4lle4IZ6zjwoeyv2tUuNskG023hQ8xJQCkry6vegligpbthg==
+X-Received: by 2002:a17:903:594:b0:1d7:b1f:be9e with SMTP id jv20-20020a170903059400b001d70b1fbe9emr2721229plb.66.1706898295311;
+        Fri, 02 Feb 2024 10:24:55 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCWHCywM81DMLQLMH9rk0oZ5wfgvX9MiTr+v37IVoxcA7FbHPPZ7WFeCy8nSlw4wdvRH2Ho58Nm9jN/KOxiQw3tgyq8lZwC0/H9IBjtUE4GV4la0YtkOVTkY+PlyhPuj6lH8KOOxiGl0RbA=
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id ix3-20020a170902f80300b001d8d7323ea2sm1914801plb.74.2024.02.02.10.24.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Feb 2024 10:24:54 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d52049ee-81f3-4338-af7a-85aadc028c31@roeck-us.net>
-Date: Fri, 2 Feb 2024 10:15:44 -0800
+Date: Fri, 2 Feb 2024 10:24:53 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Bo Liu <liubo03@inspur.com>
+Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (adt7x10) convert to use maple tree register cache
+Message-ID: <13d99f92-1a8a-4c7b-a66f-2246584046a1@roeck-us.net>
+References: <20240202071355.40666-1-liubo03@inspur.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2 00/11] hwmon: (coretemp) Fixes, improvements and
- support for large core count
-Content-Language: en-US
-To: Zhang Rui <rui.zhang@intel.com>, jdelvare@suse.com
-Cc: fenghua.yu@intel.com, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240202092144.71180-1-rui.zhang@intel.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240202092144.71180-1-rui.zhang@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240202071355.40666-1-liubo03@inspur.com>
 
-On 2/2/24 01:21, Zhang Rui wrote:
-> Patch 1/11 is a bug fix that should be considered as stable material.
-> Patch 2/11 fixes a user visible sysfs attribute name change.
-> Patch 3/11 is a quick fix to allow coretemp driver to probe more than
->             128 cores.
-> Patch 4/11 - 10/11 are a series of improvements aim to simplify the
->             code logic and remove unnecessary macros, variables and
->             structure fields, and make it easier for patch 11/11.
-> Patch 11/11 converts coretemp driver to use dynamic memory allocation
->             for core temp_data, so that it is easy to remove the
->             hardcoded core count limitation when _num_cores_per_package
->             become available and reliable, which is WIP in
->             https://lore.kernel.org/all/20240118123127.055361964@linutronix.de/
+On Fri, Feb 02, 2024 at 02:13:55AM -0500, Bo Liu wrote:
+> The maple tree register cache is based on a much more modern data structure
+> than the rbtree cache and makes optimisation choices which are probably
+> more appropriate for modern systems than those made by the rbtree cache.
 > 
-> I can split the first three patches into a separate patch set if needed.
-> 
-> Patch seris V1 has been posted at
-> https://lore.kernel.org/all/20231127131651.476795-1-rui.zhang@intel.com/
-> 
-
-Change log ?
+All patches of this series (into drivers/hwmon) applied.
 
 Guenter
-
-> thanks,
-> rui
-> 
-> ----------------------------------------------------------------
-> Zhang Rui (11):
->        hwmon: (coretemp) Fix out-of-bounds memory access in create_core_data()
->        hwmon: (coretemp) Fix bogus core to attr mapping
->        hwmon: (coretemp) Enlarge per package core count limit
->        hwmon: (coretemp) Introduce enum for attr index
->        hwmon: (coretemp) Remove unnecessary dependency of array index
->        hwmon: (coretemp) Replace sensor_device_attribute with device_attribute
->        hwmon: (coretemp) Remove redundant pdata->cpu_map[]
->        hwmon: (coretemp) Abstract core_temp helpers
->        hwmon: (coretemp) Split package temp_data and core temp_data
->        hwmon: (coretemp) Remove redundant temp_data->is_pkg_data
->        hwmon: (coretemp) Use dynamic allocated memory for core temp_data
-> 
->   drivers/hwmon/coretemp.c | 219 ++++++++++++++++++++++++++---------------------
->   1 file changed, 120 insertions(+), 99 deletions(-)
-> 
-> 
-
