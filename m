@@ -1,53 +1,53 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC5957CF07;
-	Fri,  2 Feb 2024 09:22:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6807460BBD;
+	Fri,  2 Feb 2024 09:22:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706865735; cv=none; b=A2nmTZ9VfsJdOzNOnTh2KBPn8BLovGKeJ1iHJzsTkT1EMFR2HQUuGM0a+r1Z0orzJ7oLXVniIOZUE26vJ8t/790UjruMk4tW7u8/XM4O4wDuqbvVHBrsJ4Ryw8fC3N98igidVKICc1ru5+/aO0H1UBsCXXMRTL8KNRWBt5WR7KU=
+	t=1706865740; cv=none; b=SKvKzmcwy2ao8SH3eRFZ4jykBZ8MFmcYZqE4PRp8NiGeH3Rh+F7W/Ibvn/s+sRC89jX0HUmd2zRBvHfkaghUS3/9FdjFOi5u7NoYZsnaP9/qhLPn88+ZQ9cpRLiuf5uXBfWFSFKc/OzHHjvtU/cv5rE4R7qeYEaVywP8nwl/1NY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706865735; c=relaxed/simple;
-	bh=ObzYZjjPuoaArfY2LHC47nxAkH4bnA054skyvxsUans=;
+	s=arc-20240116; t=1706865740; c=relaxed/simple;
+	bh=+0SD87OA9HiAYQsvVbd0Jkh4AKAqYERvx5zrzAeIyD4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=OBG14hfcMVr5HsWlvVX7TvKo15rjZKjPM4aNUY2wKRrOEjhFqq0wnPrRB2Sd/lyQghg0mUDBLPCcQETbCsn3raxPC14/QvEBFquSw4feFocSi6j7v0j+I3oP8md+q562iMlWCjoNSutvU9p79MfR1uArJeDUD+vOKMl9xvvHgY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YInG+27o; arc=none smtp.client-ip=198.175.65.12
+	 MIME-Version; b=LKegYpozOUMZrLK8rVwkVrmX98eywF7Jzcpe4hE9MOFNcy2cOKOQ/oGxUBle1/if1Tho7Dkpw719h5i/watm+cSVmVYah8ax+IIZRhfn7h3Aivh6agegtEllqTwzcKWb70xiTh64bfNwjMaDV8X2vL4uGfZ5byQKQgmn3Cm3RIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QBxRwzWb; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YInG+27o"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QBxRwzWb"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706865734; x=1738401734;
+  t=1706865740; x=1738401740;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ObzYZjjPuoaArfY2LHC47nxAkH4bnA054skyvxsUans=;
-  b=YInG+27oeZ8h64cMaKvryMKLqYnZ6spbGhrF0Df8YtDFMZM+Bnjua9nS
-   wKfBN8m8wewDdQcgZtPtFPczcWlqqaLDc1Wd2hSPpb0mS9QA6Ie/U6RLE
-   pUn1L71D/S1N1cg1kD6pWGdhUL6hGKZwvBFNJk1VGxgPdluEZyNTKXztm
-   BGKuSWmoG3mYdcfMdCOHF9VuaUIYLCCG428OXXnoVR53JDZSN69FqSme7
-   DFxkhTfY5QWqJFGQRAunbuW+rXzzm4eA6uyfZhfnd+FTV6Dmw5quSPc4p
-   p5XUSP35W5qDc+MxiNj3saqRromRVoa9SsyovsbBQb7p+ZZJ8Z2FGbtWC
+  bh=+0SD87OA9HiAYQsvVbd0Jkh4AKAqYERvx5zrzAeIyD4=;
+  b=QBxRwzWbvALcwlW4iTwKIs1GggEwUu3CLYumX9OtxF9mbAz7SW8r9udL
+   SRu9ElfFFmGicVqIsKP7DjEeNV7XU8lWfeyGcGP2nvlwqZclPS9xGxH7K
+   qJ6Q/NF8DGpFmOgJtokd8Ny/8LomVPhdxiZujQMgeiQRmPo0H+Mx1NByr
+   fRYLiwxh1Sj1V+9htYY/rMO1fuyWD5KRZvMSPmsdXhzYwhY8RXdevAQG3
+   evOWMPC6wmt4nI8o/nTeFII5CWISzieKJt9W0okBbm4aNQnP9QAB+QWWD
+   jSeruAmgHCBo3+kBTvSNfEUFC0EpGAbWUwnK35sl/KrlDX0PP1MzGltEo
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="11483077"
+X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="11483114"
 X-IronPort-AV: E=Sophos;i="6.05,237,1701158400"; 
-   d="scan'208";a="11483077"
+   d="scan'208";a="11483114"
 Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2024 01:22:14 -0800
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2024 01:22:19 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.05,237,1701158400"; 
-   d="scan'208";a="4639739"
+   d="scan'208";a="4639763"
 Received: from wangnin3-mobl.ccr.corp.intel.com (HELO rzhang1-mobl7.ccr.corp.intel.com) ([10.254.214.177])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2024 01:22:11 -0800
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2024 01:22:17 -0800
 From: Zhang Rui <rui.zhang@intel.com>
 To: linux@roeck-us.net,
 	jdelvare@suse.com
 Cc: fenghua.yu@intel.com,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH V2 07/11] hwmon: (coretemp) Remove redundant pdata->cpu_map[]
-Date: Fri,  2 Feb 2024 17:21:40 +0800
-Message-Id: <20240202092144.71180-8-rui.zhang@intel.com>
+Subject: [PATCH V2 09/11] hwmon: (coretemp) Split package temp_data and core temp_data
+Date: Fri,  2 Feb 2024 17:21:42 +0800
+Message-Id: <20240202092144.71180-10-rui.zhang@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240202092144.71180-1-rui.zhang@intel.com>
 References: <20240202092144.71180-1-rui.zhang@intel.com>
@@ -59,81 +59,107 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-pdata->cpu_map[] saves the mapping between cpu core id and the index in
-pdata->core_data[]. This is used to find the temp_data structure using
-cpu_core_id, by traversing the pdata->cpu_map[] array. But the same goal
-can be achieved by traversing the pdata->core_temp[] array directly.
+Saving package temp_data and core temp_data in one array with different
+offsets is fragile.
 
-Remove redundant pdata->cpu_map[].
-
-No functional change.
+Split them and clean up crabbed maths and macros. This also fixes a
+problem that pdata->core_data[0] was never used.
 
 Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 ---
- drivers/hwmon/coretemp.c | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+ drivers/hwmon/coretemp.c | 37 ++++++++++++++-----------------------
+ 1 file changed, 14 insertions(+), 23 deletions(-)
 
 diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-index cdd1e069d5c1..29ee8e0c0fe9 100644
+index a19799a302a2..1a3b5ae0baca 100644
 --- a/drivers/hwmon/coretemp.c
 +++ b/drivers/hwmon/coretemp.c
-@@ -96,7 +96,6 @@ struct temp_data {
- struct platform_data {
- 	struct device		*hwmon_dev;
+@@ -39,11 +39,8 @@ static int force_tjmax;
+ module_param_named(tjmax, force_tjmax, int, 0444);
+ MODULE_PARM_DESC(tjmax, "TjMax value in degrees Celsius");
+ 
+-#define PKG_SYSFS_ATTR_NO	1	/* Sysfs attribute for package temp */
+-#define BASE_SYSFS_ATTR_NO	2	/* Sysfs Base attr no for coretemp */
+ #define NUM_REAL_CORES		512	/* Number of Real cores per cpu */
+ #define CORETEMP_NAME_LENGTH	28	/* String Length of attrs */
+-#define MAX_CORE_DATA		(NUM_REAL_CORES + BASE_SYSFS_ATTR_NO)
+ 
+ enum coretemp_attr_index {
+ 	ATTR_LABEL,
+@@ -99,7 +96,8 @@ struct platform_data {
  	u16			pkg_id;
--	u16			cpu_map[NUM_REAL_CORES];
  	struct ida		ida;
  	struct cpumask		cpumask;
- 	struct temp_data	*core_data[MAX_CORE_DATA];
-@@ -517,7 +516,6 @@ static int create_core_data(struct platform_device *pdev, unsigned int cpu,
- 		if (index < 0)
- 			return index;
+-	struct temp_data	*core_data[MAX_CORE_DATA];
++	struct temp_data	*pkg_data;
++	struct temp_data	*core_data[NUM_REAL_CORES];
+ 	struct device_attribute name_attr;
+ };
  
--		pdata->cpu_map[index] = topology_core_id(cpu);
- 		index += BASE_SYSFS_ATTR_NO;
- 	}
- 
-@@ -696,7 +694,7 @@ static int coretemp_cpu_offline(unsigned int cpu)
- 	struct platform_device *pdev = coretemp_get_pdev(cpu);
- 	struct platform_data *pd;
+@@ -479,31 +477,21 @@ static struct temp_data *
+ init_temp_data(struct platform_data *pdata, unsigned int cpu, int pkg_flag)
+ {
  	struct temp_data *tdata;
--	int i, indx = -1, target;
-+	int i, target;
+-	int index;
  
- 	/* No need to tear down any interfaces for suspend */
- 	if (cpuhp_tasks_frozen)
-@@ -707,18 +705,16 @@ static int coretemp_cpu_offline(unsigned int cpu)
- 	if (!pd->hwmon_dev)
- 		return 0;
+ 	tdata = kzalloc(sizeof(struct temp_data), GFP_KERNEL);
+ 	if (!tdata)
+ 		return NULL;
  
--	for (i = 0; i < NUM_REAL_CORES; i++) {
--		if (pd->cpu_map[i] == topology_core_id(cpu)) {
--			indx = i + BASE_SYSFS_ATTR_NO;
-+	for (i = BASE_SYSFS_ATTR_NO; i < MAX_CORE_DATA; i++) {
-+		if (pd->core_data[i] && pd->core_data[i]->cpu_core_id == topology_core_id(cpu))
- 			break;
--		}
+-	/*
+-	 * Get the index of tdata in pdata->core_data[]
+-	 * tdata for package: pdata->core_data[1]
+-	 * tdata for core: pdata->core_data[2] .. pdata->core_data[NUM_REAL_CORES + 1]
+-	 */
+ 	if (pkg_flag) {
+-		index = PKG_SYSFS_ATTR_NO;
++		pdata->pkg_data = tdata;
+ 	} else {
+-		index = ida_alloc_max(&pdata->ida, NUM_REAL_CORES - 1, GFP_KERNEL);
+-		if (index < 0) {
++		tdata->index = ida_alloc_max(&pdata->ida, NUM_REAL_CORES - 1, GFP_KERNEL);
++		if (tdata->index < 0) {
+ 			kfree(tdata);
+ 			return NULL;
+ 		}
+-		index += BASE_SYSFS_ATTR_NO;
++		pdata->core_data[tdata->index] = tdata;
  	}
+-	/* Index in pdata->core_data[] */
+-	tdata->index = index;
+-
+-	pdata->core_data[index] = tdata;
  
- 	/* Too many cores and this core is not populated, just return */
--	if (indx < 0)
-+	if (i == MAX_CORE_DATA)
- 		return 0;
+ 	tdata->status_reg = pkg_flag ? MSR_IA32_PACKAGE_THERM_STATUS :
+ 							MSR_IA32_THERM_STATUS;
+@@ -517,9 +505,12 @@ init_temp_data(struct platform_data *pdata, unsigned int cpu, int pkg_flag)
  
--	tdata = pd->core_data[indx];
-+	tdata = pd->core_data[i];
+ static void destroy_temp_data(struct platform_data *pdata, struct temp_data *tdata)
+ {
+-	pdata->core_data[tdata->index] = NULL;
+-	if (!tdata->is_pkg_data)
+-		ida_free(&pdata->ida, tdata->index - BASE_SYSFS_ATTR_NO);
++	if (tdata->is_pkg_data) {
++		pdata->pkg_data = NULL;
++	} else {
++		pdata->core_data[tdata->index] = NULL;
++		ida_free(&pdata->ida, tdata->index);
++	}
+ 	kfree(tdata);
+ }
  
- 	cpumask_clear_cpu(cpu, &pd->cpumask);
+@@ -529,9 +520,9 @@ static struct temp_data *get_temp_data(struct platform_data *pdata, int cpu)
  
-@@ -729,7 +725,7 @@ static int coretemp_cpu_offline(unsigned int cpu)
- 	 */
- 	target = cpumask_any_and(&pd->cpumask, topology_sibling_cpumask(cpu));
- 	if (target >= nr_cpu_ids) {
--		coretemp_remove_core(pd, indx);
-+		coretemp_remove_core(pd, i);
- 	} else if (tdata && tdata->cpu == cpu) {
- 		mutex_lock(&tdata->update_lock);
- 		tdata->cpu = target;
+ 	/* cpu < 0 means get pkg temp_data */
+ 	if (cpu < 0)
+-		return pdata->core_data[PKG_SYSFS_ATTR_NO];
++		return pdata->pkg_data;
+ 
+-	for (i = BASE_SYSFS_ATTR_NO; i < MAX_CORE_DATA; i++) {
++	for (i = 0; i < NUM_REAL_CORES; i++) {
+ 		if (pdata->core_data[i] &&
+ 		    pdata->core_data[i]->cpu_core_id == topology_core_id(cpu))
+ 			return pdata->core_data[i];
 -- 
 2.34.1
 
