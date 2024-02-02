@@ -1,145 +1,166 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 825F677F06;
-	Fri,  2 Feb 2024 09:22:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9317414A4DC;
+	Fri,  2 Feb 2024 18:15:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706865745; cv=none; b=BwfV5N+pTkaKH9Q5VrwU7lek2drPLNNnBd3nMwGF9K58jMF4v/XePEWbAzZvInBchNVVxmAJD4F8V+BTvtegnqI1JIt8Quy1cJNnGmKP08nTcePTVr/e6z1x9VBZWnd2zsceT8SLdwlZiLs3+eqM25jLsxB01/bh6MpO9An9H78=
+	t=1706897749; cv=none; b=rvI/00c0jrk6GMaSamX9JZA7fjvcM3Vakv0NzQyZLRpbMNgeqaWRnveVaNzdf8i3wfww0ux4cFTsTucOkku9y1BEZxM+/Hj8+Acgf0mT2RnAOyEE0gAoTwfqtQ3IgiMGBmxGYn3pavqLKasGjZYaCz19X8NluO4w0kLf5hoSUH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706865745; c=relaxed/simple;
-	bh=lCx6WOgbhUs1ZUj/emefnBwJYwMVwVQYh3bpqoSEs1U=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=JMmGhOg5/6adr16aAmlTmBeEZJEqKHAQwEJEXNfyMBk08KaI8Gp8YjrquUb3wA6FMS3ovlDLTN51Ao7K8CfgtBZPZBzFe2D+A5AhauIqAeD1gD8pdMYnPx3W8bYnQO3eiiab4EivpbpcA7+jTIFzq2D0KSMzUCSJNG6ZlvBOBAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gJHykm0l; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1706897749; c=relaxed/simple;
+	bh=LXwJ1i8MjSeCXb3V12RVsNU9NsdtnSXZZ9D/5oAonzs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TeIbXTQNdSTsO1BqE41lTxv9ADsed46y4R7NYAKQhmjbRnkWcuaH9jUNskoDbT+E5YS77rFwZpB9Y2U3smNCkXnMhUG5XSXWOW3XZCovjbCVIgfmdS5cNbadpr6TlX9ePK/Ymbjv+jBMaH7c6TNpkPH52+PQM23h8N1aq41Ezkw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RMpK2hu+; arc=none smtp.client-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gJHykm0l"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706865744; x=1738401744;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=lCx6WOgbhUs1ZUj/emefnBwJYwMVwVQYh3bpqoSEs1U=;
-  b=gJHykm0lC8CgGZUDf6simcWAuH65M5WNuSXJUIwMYr2ftiHD1FFJbju7
-   pV9QCul7vZZLXh4/0A9f8BnvRGrh1a1yI9+HuREXjNavsvYBZqFhJtbti
-   JBsmb0WCR8rL0qR79idbXEpO/pPAY9wzhqD1wqNpBAQCLCKsUbLhkgy8f
-   dyC6ApTFOc345j4t3wMKhei0Szd8soaEOeCoqHuHBMUhdklSRFa43ANyt
-   12GTZsPYY6Pk5inQ0nnfl4w7sh8TIk1HA0husWBaRvilT2nMKGihJdA8b
-   5kQ054sCM5B5hSRk+/XtVucfbREM+mN8Waygqr2kYyohVGDHaX1E+yuTv
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="11483147"
-X-IronPort-AV: E=Sophos;i="6.05,237,1701158400"; 
-   d="scan'208";a="11483147"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2024 01:22:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,237,1701158400"; 
-   d="scan'208";a="4639785"
-Received: from wangnin3-mobl.ccr.corp.intel.com (HELO rzhang1-mobl7.ccr.corp.intel.com) ([10.254.214.177])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2024 01:22:21 -0800
-From: Zhang Rui <rui.zhang@intel.com>
-To: linux@roeck-us.net,
-	jdelvare@suse.com
-Cc: fenghua.yu@intel.com,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH V2 11/11] hwmon: (coretemp) Use dynamic allocated memory for core temp_data
-Date: Fri,  2 Feb 2024 17:21:44 +0800
-Message-Id: <20240202092144.71180-12-rui.zhang@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240202092144.71180-1-rui.zhang@intel.com>
-References: <20240202092144.71180-1-rui.zhang@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RMpK2hu+"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-517ab9a4a13so2344618a12.1;
+        Fri, 02 Feb 2024 10:15:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1706897747; x=1707502547; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=RHoYzRFMU0rjqwDESRoUa3ulysl1cQUrOv2TSobXayA=;
+        b=RMpK2hu+X+00QlOmUp2la8EEiZ0pEpDjo+8Tz7UJElC7ns0aAcYsSFIU2vissTDKXp
+         VZR1z7rUveE/C+UHNS64y1fV93q2nhve9xMvdRvatcHzkW70vgsyBwiY7msAewxibsyB
+         xQkXJDIp7MjBIBSsv/woaKm+xWnNUAdsUn9G6Ny+pMvdFYUOowz5GFu4O/zUC42gBb3b
+         A4vrail/V5G0dQNkSQFNd9pahjttMxsGU+1nP3Gd0tcnVGBrTcmzFcS31qn/447fwjbF
+         M5FcMI6EEzQS+Fjzs34VVVEgbLvIwFQuhjazanjtjTSCgkiB9F9mSTBSEJjHecbcFxrC
+         6gmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706897747; x=1707502547;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RHoYzRFMU0rjqwDESRoUa3ulysl1cQUrOv2TSobXayA=;
+        b=IlCSFPq1/DbL8j0tVtM6gVbHq1aOkosXvX7857+pY9vMkaITuNFZmBhrODCOJSjefi
+         K989gVxzrJlpzvxJElPcfVjPr4lEWXECFqUQokckjW0bcbapbaQYpHPRSLXv1x5uo+no
+         RTLZUYraYc5VkCI/dlhmSFuDwQOCl/Sp0ASJX+k3qhF0K5bV+4avCHGGriUus/cxi9XT
+         uRmI++S789Djzb6S0RwemmhM9B1NH6yl+mxq1+KvQqQguenZ/q+OTfNjVt2VL8pVDXcV
+         cXSSd7XMBAFAU9dLHI08anMTfUi/twnJL4S6wrTBEjtrjHthdz9PboUxkktNC59DiEIw
+         EyaA==
+X-Gm-Message-State: AOJu0YxeXRrzcYhEMnZSKpulIm0lAaxn/OGnBeKFG1ofEHY3IZ4xPeIv
+	uY028YTfc8uoG4sSZ+ZBPgK1bqeIJhl73yQMhnuswfxKgkwi43PflipT8f3u
+X-Google-Smtp-Source: AGHT+IHYhl5GvP/oLiGLT7ph7hSgEZoO9KsFLLSlbgb0hISoq6uA0g1h1wtbwuwMSOMbcmiVFlohVQ==
+X-Received: by 2002:a05:6a20:d045:b0:19c:6ce1:d62b with SMTP id hv5-20020a056a20d04500b0019c6ce1d62bmr3743395pzb.9.1706897746668;
+        Fri, 02 Feb 2024 10:15:46 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCXlas4VQvq2OUr7cxkKl506TEywH9PPzMICX5JgMqIepdaVrUAXE/Oxx7fMKRaK6CNcPiY2H+5knD41uBbvpAMDDIbYyIQNaBv6l7p6ENFiUpUWP/N1O0yd8lfogzB+3GXCyQ+7R4YOLd2cTREe/vzLsCYZMw/5yFVE05A/
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s14-20020a65690e000000b005d65cdc02acsm1808790pgq.16.2024.02.02.10.15.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Feb 2024 10:15:46 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <d52049ee-81f3-4338-af7a-85aadc028c31@roeck-us.net>
+Date: Fri, 2 Feb 2024 10:15:44 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V2 00/11] hwmon: (coretemp) Fixes, improvements and
+ support for large core count
+Content-Language: en-US
+To: Zhang Rui <rui.zhang@intel.com>, jdelvare@suse.com
+Cc: fenghua.yu@intel.com, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240202092144.71180-1-rui.zhang@intel.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20240202092144.71180-1-rui.zhang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The total memory needed for saving per core temperature data depends on
-the number of cores in a package. Using static allocated memory wastes
-memories on systems with low per package core count.
+On 2/2/24 01:21, Zhang Rui wrote:
+> Patch 1/11 is a bug fix that should be considered as stable material.
+> Patch 2/11 fixes a user visible sysfs attribute name change.
+> Patch 3/11 is a quick fix to allow coretemp driver to probe more than
+>             128 cores.
+> Patch 4/11 - 10/11 are a series of improvements aim to simplify the
+>             code logic and remove unnecessary macros, variables and
+>             structure fields, and make it easier for patch 11/11.
+> Patch 11/11 converts coretemp driver to use dynamic memory allocation
+>             for core temp_data, so that it is easy to remove the
+>             hardcoded core count limitation when _num_cores_per_package
+>             become available and reliable, which is WIP in
+>             https://lore.kernel.org/all/20240118123127.055361964@linutronix.de/
+> 
+> I can split the first three patches into a separate patch set if needed.
+> 
+> Patch seris V1 has been posted at
+> https://lore.kernel.org/all/20231127131651.476795-1-rui.zhang@intel.com/
+> 
 
-Improve the code to use dynamic allocated memory so that it can be
-improved further when per package core count information becomes
-available.
+Change log ?
 
-No functional change intended.
+Guenter
 
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
----
- drivers/hwmon/coretemp.c | 24 +++++++++++++++++++++---
- 1 file changed, 21 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-index e548f2145449..27c98c7faf32 100644
---- a/drivers/hwmon/coretemp.c
-+++ b/drivers/hwmon/coretemp.c
-@@ -91,10 +91,11 @@ struct temp_data {
- struct platform_data {
- 	struct device		*hwmon_dev;
- 	u16			pkg_id;
-+	int			nr_cores;
- 	struct ida		ida;
- 	struct cpumask		cpumask;
- 	struct temp_data	*pkg_data;
--	struct temp_data	*core_data[NUM_REAL_CORES];
-+	struct temp_data	**core_data;
- 	struct device_attribute name_attr;
- };
- 
-@@ -480,6 +481,20 @@ init_temp_data(struct platform_data *pdata, unsigned int cpu, int pkg_flag)
- {
- 	struct temp_data *tdata;
- 
-+	if (!pdata->core_data) {
-+		/*
-+		 * TODO:
-+		 * The information of actual possible cores in a package is broken for now.
-+		 * Will replace hardcoded NUM_REAL_CORES with actual per package core count
-+		 * when this information becomes available.
-+		 */
-+		pdata->nr_cores = NUM_REAL_CORES;
-+		pdata->core_data = kcalloc(pdata->nr_cores, sizeof(struct temp_data *),
-+						GFP_KERNEL);
-+		if (!pdata->core_data)
-+			return NULL;
-+	}
-+
- 	tdata = kzalloc(sizeof(struct temp_data), GFP_KERNEL);
- 	if (!tdata)
- 		return NULL;
-@@ -489,7 +504,7 @@ init_temp_data(struct platform_data *pdata, unsigned int cpu, int pkg_flag)
- 		/* Use tdata->index as indicator of package temp data */
- 		tdata->index = -1;
- 	} else {
--		tdata->index = ida_alloc_max(&pdata->ida, NUM_REAL_CORES - 1, GFP_KERNEL);
-+		tdata->index = ida_alloc_max(&pdata->ida, pdata->nr_cores - 1, GFP_KERNEL);
- 		if (tdata->index < 0) {
- 			kfree(tdata);
- 			return NULL;
-@@ -510,6 +525,9 @@ static void destroy_temp_data(struct platform_data *pdata, struct temp_data *tda
- {
- 	if (is_pkg_temp_data(tdata)) {
- 		pdata->pkg_data = NULL;
-+		kfree(pdata->core_data);
-+		pdata->core_data = NULL;
-+		pdata->nr_cores = 0;
- 	} else {
- 		pdata->core_data[tdata->index] = NULL;
- 		ida_free(&pdata->ida, tdata->index);
-@@ -525,7 +543,7 @@ static struct temp_data *get_temp_data(struct platform_data *pdata, int cpu)
- 	if (cpu < 0)
- 		return pdata->pkg_data;
- 
--	for (i = 0; i < NUM_REAL_CORES; i++) {
-+	for (i = 0; i < pdata->nr_cores; i++) {
- 		if (pdata->core_data[i] &&
- 		    pdata->core_data[i]->cpu_core_id == topology_core_id(cpu))
- 			return pdata->core_data[i];
--- 
-2.34.1
+> thanks,
+> rui
+> 
+> ----------------------------------------------------------------
+> Zhang Rui (11):
+>        hwmon: (coretemp) Fix out-of-bounds memory access in create_core_data()
+>        hwmon: (coretemp) Fix bogus core to attr mapping
+>        hwmon: (coretemp) Enlarge per package core count limit
+>        hwmon: (coretemp) Introduce enum for attr index
+>        hwmon: (coretemp) Remove unnecessary dependency of array index
+>        hwmon: (coretemp) Replace sensor_device_attribute with device_attribute
+>        hwmon: (coretemp) Remove redundant pdata->cpu_map[]
+>        hwmon: (coretemp) Abstract core_temp helpers
+>        hwmon: (coretemp) Split package temp_data and core temp_data
+>        hwmon: (coretemp) Remove redundant temp_data->is_pkg_data
+>        hwmon: (coretemp) Use dynamic allocated memory for core temp_data
+> 
+>   drivers/hwmon/coretemp.c | 219 ++++++++++++++++++++++++++---------------------
+>   1 file changed, 120 insertions(+), 99 deletions(-)
+> 
+> 
 
