@@ -1,47 +1,47 @@
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE0F9C130;
-	Fri,  2 Feb 2024 03:04:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13946DDCE;
+	Fri,  2 Feb 2024 03:06:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.134.136.31
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706843070; cv=none; b=bh/sFWnNheAvmPsBAoeBxDb1waaBCmUz69eDhxaDZdycYcRMH0Z9byzqi0klt2FUeVfP0MGiFvHr8Yt7v2FLURTyX9Kpku3fUyyEstELvjwFg0Traz+26XCoLdrSjvXMR4ha7OTq0HRS6qHmneRyn1p5YFSHJvY+h1TLY3c3J/M=
+	t=1706843172; cv=none; b=TLS3wNunLICxT3MkCQS6OoNoj1vy3aihsJp9LLZbXrhwn9+as6yiVqivrpGqsR/8+uMvaHPoPfaLaoCPsP6zMtc+RkkUxQLeWvIhxP8pj2UDq/r86Rdvl9Bugye6Hh+pY8P/f9vk4/qzuEv5bUFXwmcr9BIB5nOuZpe0q3utFWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706843070; c=relaxed/simple;
-	bh=l3bgt/i5okwgssxhTR2nxbBEc5VyBQCo8JSDXE2iktI=;
+	s=arc-20240116; t=1706843172; c=relaxed/simple;
+	bh=tGLiGtD2ffb0omsWaMaWz1meXi7Me/QbXHDdjQQbe+c=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=N47y6hj5bVJ9WImJEYnzIxjLp4UdGFTWRReFly7toXzUi7QdNz0kO9WrfPTsRkC9QSvolPEhpHP5P1g6j1gr8tHqQUj98lTVDZQBIOkq8uVz/quCfRzWIQX4G+q0JpjQMM+/zR/N8wP0Uzw1AZ5uDpA6786H8n8BsWaY8TgDmv8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hIY20bC+; arc=none smtp.client-ip=134.134.136.31
+	 In-Reply-To:Content-Type; b=rMWcJ/rZqe3A0EWIG509HTosLTbiG+QDth6od3zQO8upOTk2A6renaxvks4WF+YOKdmZhgREjMZWlD6gDLdT0FVO2JY51LZBrqRpsijDHmS5fSKl/WwuL330HvpxICG7ghFABgm73H43Spn7FKnIugx088WCjdjxi5gK+tLDacM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iJpo4bFC; arc=none smtp.client-ip=134.134.136.31
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hIY20bC+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iJpo4bFC"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706843067; x=1738379067;
+  t=1706843171; x=1738379171;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=l3bgt/i5okwgssxhTR2nxbBEc5VyBQCo8JSDXE2iktI=;
-  b=hIY20bC+p1dHl4QGFG3cNh0blrlM8YMk36lfbrwk11ejA4snzaL/ZxKH
-   TzKAAelZFfx88ZuWTzjMQExhKA0Ld/R0Fen5c71O0jDZ5qyZkIKgpmYzs
-   WSIQ8C/r388Q+J+BUvwSQMC6JBP45lEZFHCliOWqMjSOj62u7atoeRRIj
-   pESK233sRi6nisrSh9U7PRl0bmka5D3k6TV5uIpMundjU5cfNIzPlUVap
-   ILrXE9Zafm30uBcpwTUr5F9MN2miE0Sk+hp9nmmWgFpyFJ0Av8idgmY+5
-   l7uzcBl3vsGV8xLZLvWSfp67bBIgAkT/O0QNyH02+g9UE1NFWVDgkSmg7
+  bh=tGLiGtD2ffb0omsWaMaWz1meXi7Me/QbXHDdjQQbe+c=;
+  b=iJpo4bFChC9X7kZ6k8wND0L+OrzpKOpDgb1FBvCr+MpJwJ3AjBAiFeUf
+   /aoGNXy24ESQPoJQvWjrTbvAOJKqemsOp4IXdhiWH1uRkNUVTHozPRPOq
+   CmHBkfs0g5EHyy39wn52hRjm8ElLT7Nn4jx637IYVkIPNt3+SAODdkK2m
+   pdijyzWATzyM9lsRybBMFlsSvQC0PN4PeJALTdNOF9K7IvUtsEoZTF3g5
+   3q356Z/SmaDoF6PjVdCCGh+xUV6MA38wuq8841lqrCSyFJjQ+9uQZ5ZLD
+   +ub2KiBcnj4b/wWmA5BTyfTAgiAkjKmp35Ew6RWIfDq2391u8eL0lrwbp
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="468283605"
+X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="468283919"
 X-IronPort-AV: E=Sophos;i="6.05,237,1701158400"; 
-   d="scan'208";a="468283605"
+   d="scan'208";a="468283919"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2024 19:04:25 -0800
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2024 19:06:10 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="859304037"
+X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="859304194"
 X-IronPort-AV: E=Sophos;i="6.05,237,1701158400"; 
-   d="scan'208";a="859304037"
+   d="scan'208";a="859304194"
 Received: from choongyo-mobl.gar.corp.intel.com (HELO [10.247.22.55]) ([10.247.22.55])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2024 19:04:17 -0800
-Message-ID: <8fa87696-0c8d-405b-9e38-835d1ed65e90@linux.intel.com>
-Date: Fri, 2 Feb 2024 11:04:15 +0800
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2024 19:06:01 -0800
+Message-ID: <c0a87401-9f8b-4b60-b47d-31232873bba9@linux.intel.com>
+Date: Fri, 2 Feb 2024 11:06:01 +0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -49,8 +49,8 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v4 07/11] arch: x86: Add IPC mailbox accessor
- function and add SoC register access
+Subject: Re: [PATCH net-next v4 08/11] stmmac: intel: configure SerDes
+ according to the interface mode
 Content-Language: en-US
 To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 Cc: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
@@ -79,85 +79,56 @@ Cc: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
  Lai Peter Jun Ann <jun.ann.lai@intel.com>,
  Abdul Rahim Faizal <faizal.abdul.rahim@intel.com>
 References: <20240129130253.1400707-1-yong.liang.choong@linux.intel.com>
- <20240129130253.1400707-8-yong.liang.choong@linux.intel.com>
- <1fccbf0d-5b96-447b-80f1-19af70628edc@linux.intel.com>
+ <20240129130253.1400707-9-yong.liang.choong@linux.intel.com>
+ <99d78f25-dd2a-4a52-4c2a-b0e29505a776@linux.intel.com>
 From: Choong Yong Liang <yong.liang.choong@linux.intel.com>
-In-Reply-To: <1fccbf0d-5b96-447b-80f1-19af70628edc@linux.intel.com>
+In-Reply-To: <99d78f25-dd2a-4a52-4c2a-b0e29505a776@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 
 
-On 31/1/2024 6:54 pm, Ilpo Järvinen wrote:
+On 31/1/2024 6:58 pm, Ilpo Järvinen wrote:
 > On Mon, 29 Jan 2024, Choong Yong Liang wrote:
 > 
->> From: "David E. Box" <david.e.box@linux.intel.com>
+>> From: "Tan, Tee Min" <tee.min.tan@linux.intel.com>
 >>
->> - Exports intel_pmc_ipc() for host access to the PMC IPC mailbox
->> - Add support to use IPC command allows host to access SoC registers
->> through PMC firmware that are otherwise inaccessible to the host due to
->> security policies.
+>> Intel platform will configure the SerDes through PMC api based on the
+>> provided interface mode.
 >>
->> Signed-off-by: David E. Box <david.e.box@linux.intel.com>
->> Signed-off-by: Chao Qin <chao.qin@intel.com>
+>> This patch adds several new functions below:-
+>> - intel_tsn_interface_is_available(): This new function reads FIA lane
+>>    ownership registers and common lane registers through IPC commands
+>>    to know which lane the mGbE port is assigned to.
+>> - intel_config_serdes(): To configure the SerDes based on the assigned
+>>    lane and latest interface mode, it sends IPC command to the PMC through
+>>    PMC driver/API. The PMC acts as a proxy for R/W on behalf of the driver.
+>> - intel_set_reg_access(): Set the register access to the available TSN
+>>    interface.
+>>
+>> Signed-off-by: Tan, Tee Min <tee.min.tan@linux.intel.com>
 >> Signed-off-by: Choong Yong Liang <yong.liang.choong@linux.intel.com>
 >> ---
->>   MAINTAINERS                                   |  2 +
->>   arch/x86/Kconfig                              |  9 +++
->>   arch/x86/platform/intel/Makefile              |  1 +
->>   arch/x86/platform/intel/pmc_ipc.c             | 75 +++++++++++++++++++
->>   .../linux/platform_data/x86/intel_pmc_ipc.h   | 34 +++++++++
->>   5 files changed, 121 insertions(+)
->>   create mode 100644 arch/x86/platform/intel/pmc_ipc.c
->>   create mode 100644 include/linux/platform_data/x86/intel_pmc_ipc.h
+>>   drivers/net/ethernet/stmicro/stmmac/Kconfig   |   1 +
+>>   .../net/ethernet/stmicro/stmmac/dwmac-intel.c | 113 +++++++++++++++++-
+>>   .../net/ethernet/stmicro/stmmac/dwmac-intel.h |  75 ++++++++++++
+>>   3 files changed, 188 insertions(+), 1 deletion(-)
 >>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 8709c7cd3656..441eb921edef 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -10973,8 +10973,10 @@ M:	Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>
->>   M:	David E Box <david.e.box@intel.com>
->>   L:	platform-driver-x86@vger.kernel.org
->>   S:	Maintained
->> +F:	arch/x86/platform/intel/pmc_ipc.c
->>   F:	Documentation/ABI/testing/sysfs-platform-intel-pmc
->>   F:	drivers/platform/x86/intel/pmc/
->> +F:	linux/platform_data/x86/intel_pmc_ipc.h
->>   
->>   INTEL PMIC GPIO DRIVERS
->>   M:	Andy Shevchenko <andy@kernel.org>
->> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
->> index 5edec175b9bf..bceae28b9381 100644
->> --- a/arch/x86/Kconfig
->> +++ b/arch/x86/Kconfig
->> @@ -666,6 +666,15 @@ config X86_AMD_PLATFORM_DEVICE
->>   	  I2C and UART depend on COMMON_CLK to set clock. GPIO driver is
->>   	  implemented under PINCTRL subsystem.
->>   
->> +config INTEL_PMC_IPC
->> +	tristate "Intel Core SoC Power Management Controller IPC mailbox"
->> +	depends on ACPI
->> +	help
->> +	  This option enables sideband register access support for Intel SoC
->> +	  power management controller IPC mailbox.
->> +
->> +	  If you don't require the option or are in doubt, say N.
->> +
->>   config IOSF_MBI
->>   	tristate "Intel SoC IOSF Sideband support for SoC platforms"
->>   	depends on PCI
->> diff --git a/arch/x86/platform/intel/Makefile b/arch/x86/platform/intel/Makefile
->> index dbee3b00f9d0..470fc68de6ba 100644
->> --- a/arch/x86/platform/intel/Makefile
->> +++ b/arch/x86/platform/intel/Makefile
->> @@ -1,2 +1,3 @@
->>   # SPDX-License-Identifier: GPL-2.0-only
->>   obj-$(CONFIG_IOSF_MBI)			+= iosf_mbi.o
->> +obj-$(CONFIG_INTEL_PMC_IPC)		+= pmc_ipc.o
->> \ No newline at end of file
+>> diff --git a/drivers/net/ethernet/stmicro/stmmac/Kconfig b/drivers/net/ethernet/stmicro/stmmac/Kconfig
+>> index 85dcda51df05..be423fb2b46c 100644
+>> --- a/drivers/net/ethernet/stmicro/stmmac/Kconfig
+>> +++ b/drivers/net/ethernet/stmicro/stmmac/Kconfig
+>> @@ -273,6 +273,7 @@ config DWMAC_INTEL
+>>   	default X86
+>>   	depends on X86 && STMMAC_ETH && PCI
+>>   	depends on COMMON_CLK
+>> +	select INTEL_PMC_IPC
 > 
-> New line missing.
+> INTEL_PMC_IPC has depends on ACPI but selecting INTEL_PMC_IPC won't
+> enforce it AFAIK.
 > 
-> 
-Thank you for letting me know.
-I will fix it in the new patch series.
+Hi Ilpo,
+
+Thank you for pointing this out.
+I will check on my side too.
+Will fix it in the new patch series.
