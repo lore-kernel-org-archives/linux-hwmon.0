@@ -1,53 +1,53 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D1227D3E6;
-	Fri,  2 Feb 2024 09:22:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1704677656;
+	Fri,  2 Feb 2024 09:22:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706865741; cv=none; b=iG+g3n8xLCTG7TC0uFYOdKhglmsem9xXD70SrT2E9+oTOZbPwzqhPQ/ynX/hqx8jg+dHXM+zgnTgwUwR022cIy1AIM6VAo/wN4Ky+HWRxMLmfstWTrS2hLc81/ROdL5G6cNCD09kHbiM5UFVd6GejTCPD5VrXPd/W8iLEH1fELA=
+	t=1706865742; cv=none; b=k91K90IZrsYSX01tQG16Bt9IhaCc4759AHaWayAbiT6hJLcjUc+g+bHFaK3kl2Qmo7JCvFLQR5BcdXAJM1XhZAo2XEyCI7RuK/blnHayT+5fPQ4cN3uE3ZMuWW18/fiZeK2597HkU7XtXAROZ9kmBB9oQm82tzS5K/7rmxdNzl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706865741; c=relaxed/simple;
-	bh=ga1g5JzpiWhZ7qkFsQ1GKbvCbtBl/zg26nkpBuYMJvs=;
+	s=arc-20240116; t=1706865742; c=relaxed/simple;
+	bh=csZ3KHduA/9OB+PJyC6HR1VDQadqpILw6QFQkvTj3wY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=iT0oVCQkBgX+fm+horKQ8+97CmeO7SpFeVjxurJz7RdKBFbVGnTeQb+PD9sfJxXcyS8bMCYDj93cFzoo42F50mqlNgFf7lWy47YOt5eIvu2ZFSYXpEE2we4gW91MsLB1sR7uKjw7QA/rFPTKWa3jqX84zQ+dupN+J0WmBrUqJuE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZjxjGqe3; arc=none smtp.client-ip=198.175.65.12
+	 MIME-Version; b=pTVNYFVc/T9FIT6CHOlrrHTSnAbsrUIwfLFsWV2XbS41H1cub+1h3+9joKCvE6yOG6Lx5LqEUjGp5l/bo0EoR9SJge3Hx1nmg/dXou+YiiNrx8ywkSeJauhiMcmSRnq6N+5OiErx+nid7cXWBHmKd3UToyBEV7Ztmhcg0qPajZs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BNt2R9Kg; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZjxjGqe3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BNt2R9Kg"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706865738; x=1738401738;
+  t=1706865742; x=1738401742;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ga1g5JzpiWhZ7qkFsQ1GKbvCbtBl/zg26nkpBuYMJvs=;
-  b=ZjxjGqe3BwGc8NgGR2RQc11V0zjisTBfPUr5PjP8TpHUZ1n2Mo0BPOer
-   yEr/oyWlyMa2He8isJowryjo8rLEj7deSIVPHZxk5Z/rK7MypO7TGIv/v
-   0b5Bq4pVqXNuFN29/PWkbCB79GIzxfNjaVSrgRmVDU/BcK626h/EQwYq2
-   tEPh+XlNrTqbWfGGMdF5mke/KNDe7KUU5lAWJzCztKpdQPVj005drdwKA
-   +ZaQ5N7E1csvS+9uFfUnJ3aY/vwxEyeu+yPMaxCgQzZt5d0oc3fz8nAkL
-   9hI8qxuAcXj0EKjb4mVHZmqha3/KP3Zt59/Vhkc+sfzI9e/qB5XGyupoa
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="11483102"
+  bh=csZ3KHduA/9OB+PJyC6HR1VDQadqpILw6QFQkvTj3wY=;
+  b=BNt2R9Kg+BKEvduWJ5vUAGTnrd7S0ZDw3jBAj9vFy0RUeprsdeRL+oE4
+   TOgFfLLEhOclT8+fHUMScH/dQ95tQvmbCvCYaYoPkWbNXW7zrHjxT/7lu
+   kM6R7oYtHS2J6XfATRYgYkfXMPr5HgRS7+XDKWXRXFWdWHOOdDKqbhiVt
+   MYibqx7BTHTz9lRXxAyFrZC9eJAcNnSV8wbQId0h73BOv4bMOCT8NPZYK
+   hYNxXLN5Jj5GKro6LKyXpo5nqQbvbwms3UIykihdoMs6a+L8AkXfi7JZm
+   /8LPNhG8DmnftC9W2tTw2SOQad9RRHdNs+cWAXAtE0y3oaWNdfSE4Mj1b
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="11483126"
 X-IronPort-AV: E=Sophos;i="6.05,237,1701158400"; 
-   d="scan'208";a="11483102"
+   d="scan'208";a="11483126"
 Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2024 01:22:17 -0800
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2024 01:22:21 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.05,237,1701158400"; 
-   d="scan'208";a="4639750"
+   d="scan'208";a="4639776"
 Received: from wangnin3-mobl.ccr.corp.intel.com (HELO rzhang1-mobl7.ccr.corp.intel.com) ([10.254.214.177])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2024 01:22:14 -0800
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2024 01:22:19 -0800
 From: Zhang Rui <rui.zhang@intel.com>
 To: linux@roeck-us.net,
 	jdelvare@suse.com
 Cc: fenghua.yu@intel.com,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH V2 08/11] hwmon: (coretemp) Abstract core_temp helpers
-Date: Fri,  2 Feb 2024 17:21:41 +0800
-Message-Id: <20240202092144.71180-9-rui.zhang@intel.com>
+Subject: [PATCH V2 10/11] hwmon: (coretemp) Remove redundant temp_data->is_pkg_data
+Date: Fri,  2 Feb 2024 17:21:43 +0800
+Message-Id: <20240202092144.71180-11-rui.zhang@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240202092144.71180-1-rui.zhang@intel.com>
 References: <20240202092144.71180-1-rui.zhang@intel.com>
@@ -59,240 +59,100 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-coretemp driver has an obscure and fragile logic for handling package
-and core temperature data.
+temp_data->index saves the index in pdata->core_data[]. It is not used
+by package temp_data.
 
-Place the logic in newly introduced helpers for further optimizations.
+Use temp_data->index as the indicator of package temp_data and remove
+redundant temp_data->is_pkg_data.
 
 No functional change.
 
 Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 ---
- drivers/hwmon/coretemp.c | 118 +++++++++++++++++++++------------------
- 1 file changed, 64 insertions(+), 54 deletions(-)
+ drivers/hwmon/coretemp.c | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-index 29ee8e0c0fe9..a19799a302a2 100644
+index 1a3b5ae0baca..e548f2145449 100644
 --- a/drivers/hwmon/coretemp.c
 +++ b/drivers/hwmon/coretemp.c
-@@ -81,6 +81,7 @@ struct temp_data {
+@@ -70,19 +70,16 @@ enum coretemp_attr_index {
+  * @status_reg: One of IA32_THERM_STATUS or IA32_PACKAGE_THERM_STATUS,
+  *		from where the temperature values should be read.
+  * @attr_size:  Total number of pre-core attrs displayed in the sysfs.
+- * @is_pkg_data: If this is 1, the temp_data holds pkgtemp data.
+- *		Otherwise, temp_data holds coretemp data.
+  */
+ struct temp_data {
+ 	int temp;
  	int tjmax;
  	unsigned long last_updated;
  	unsigned int cpu;
-+	unsigned int index;
+-	unsigned int index;
++	int index;
  	u32 cpu_core_id;
  	u32 status_reg;
  	int attr_size;
-@@ -474,14 +475,36 @@ static struct platform_device *coretemp_get_pdev(unsigned int cpu)
- 	return NULL;
- }
+-	bool is_pkg_data;
+ 	struct device_attribute sd_attrs[TOTAL_ATTRS];
+ 	char attr_name[TOTAL_ATTRS][CORETEMP_NAME_LENGTH];
+ 	struct attribute *attrs[TOTAL_ATTRS + 1];
+@@ -149,6 +146,11 @@ static const struct tjmax_model tjmax_model_table[] = {
+ 				 */
+ };
  
--static struct temp_data *init_temp_data(unsigned int cpu, int pkg_flag)
-+static struct temp_data *
-+init_temp_data(struct platform_data *pdata, unsigned int cpu, int pkg_flag)
++static bool is_pkg_temp_data(struct temp_data *tdata)
++{
++	return tdata->index < 0;
++}
++
+ static int adjust_tjmax(struct cpuinfo_x86 *c, u32 id, struct device *dev)
  {
- 	struct temp_data *tdata;
-+	int index;
+ 	/* The 100C is default for both mobile and non mobile CPUs */
+@@ -341,7 +343,7 @@ static ssize_t show_label(struct device *dev,
+ 	struct platform_data *pdata = dev_get_drvdata(dev);
+ 	struct temp_data *tdata = container_of(devattr, struct temp_data, sd_attrs[ATTR_LABEL]);
  
- 	tdata = kzalloc(sizeof(struct temp_data), GFP_KERNEL);
- 	if (!tdata)
- 		return NULL;
+-	if (tdata->is_pkg_data)
++	if (is_pkg_temp_data(tdata))
+ 		return sprintf(buf, "Package id %u\n", pdata->pkg_id);
  
-+	/*
-+	 * Get the index of tdata in pdata->core_data[]
-+	 * tdata for package: pdata->core_data[1]
-+	 * tdata for core: pdata->core_data[2] .. pdata->core_data[NUM_REAL_CORES + 1]
-+	 */
-+	if (pkg_flag) {
-+		index = PKG_SYSFS_ATTR_NO;
-+	} else {
-+		index = ida_alloc_max(&pdata->ida, NUM_REAL_CORES - 1, GFP_KERNEL);
-+		if (index < 0) {
-+			kfree(tdata);
-+			return NULL;
-+		}
-+		index += BASE_SYSFS_ATTR_NO;
-+	}
-+	/* Index in pdata->core_data[] */
-+	tdata->index = index;
-+
-+	pdata->core_data[index] = tdata;
-+
+ 	return sprintf(buf, "Core %u\n", tdata->cpu_core_id);
+@@ -433,7 +435,7 @@ static int create_core_attrs(struct temp_data *tdata, struct device *dev)
+ 		 * The attr number is always core id + 2
+ 		 * The Pkgtemp will always show up as temp1_*, if available
+ 		 */
+-		int attr_no = tdata->is_pkg_data ? 1 : tdata->cpu_core_id + 2;
++		int attr_no = is_pkg_temp_data(tdata) ? 1 : tdata->cpu_core_id + 2;
+ 
+ 		snprintf(tdata->attr_name[i], CORETEMP_NAME_LENGTH,
+ 			 "temp%d_%s", attr_no, suffixes[i]);
+@@ -484,6 +486,8 @@ init_temp_data(struct platform_data *pdata, unsigned int cpu, int pkg_flag)
+ 
+ 	if (pkg_flag) {
+ 		pdata->pkg_data = tdata;
++		/* Use tdata->index as indicator of package temp data */
++		tdata->index = -1;
+ 	} else {
+ 		tdata->index = ida_alloc_max(&pdata->ida, NUM_REAL_CORES - 1, GFP_KERNEL);
+ 		if (tdata->index < 0) {
+@@ -495,7 +499,6 @@ init_temp_data(struct platform_data *pdata, unsigned int cpu, int pkg_flag)
+ 
  	tdata->status_reg = pkg_flag ? MSR_IA32_PACKAGE_THERM_STATUS :
  							MSR_IA32_THERM_STATUS;
- 	tdata->is_pkg_data = pkg_flag;
-@@ -492,6 +515,30 @@ static struct temp_data *init_temp_data(unsigned int cpu, int pkg_flag)
- 	return tdata;
- }
+-	tdata->is_pkg_data = pkg_flag;
+ 	tdata->cpu = cpu;
+ 	tdata->cpu_core_id = topology_core_id(cpu);
+ 	tdata->attr_size = MAX_CORE_ATTRS;
+@@ -505,7 +508,7 @@ init_temp_data(struct platform_data *pdata, unsigned int cpu, int pkg_flag)
  
-+static void destroy_temp_data(struct platform_data *pdata, struct temp_data *tdata)
-+{
-+	pdata->core_data[tdata->index] = NULL;
-+	if (!tdata->is_pkg_data)
-+		ida_free(&pdata->ida, tdata->index - BASE_SYSFS_ATTR_NO);
-+	kfree(tdata);
-+}
-+
-+static struct temp_data *get_temp_data(struct platform_data *pdata, int cpu)
-+{
-+	int i;
-+
-+	/* cpu < 0 means get pkg temp_data */
-+	if (cpu < 0)
-+		return pdata->core_data[PKG_SYSFS_ATTR_NO];
-+
-+	for (i = BASE_SYSFS_ATTR_NO; i < MAX_CORE_DATA; i++) {
-+		if (pdata->core_data[i] &&
-+		    pdata->core_data[i]->cpu_core_id == topology_core_id(cpu))
-+			return pdata->core_data[i];
-+	}
-+	return NULL;
-+}
-+
- static int create_core_data(struct platform_device *pdev, unsigned int cpu,
- 			    int pkg_flag)
+ static void destroy_temp_data(struct platform_data *pdata, struct temp_data *tdata)
  {
-@@ -499,36 +546,19 @@ static int create_core_data(struct platform_device *pdev, unsigned int cpu,
- 	struct platform_data *pdata = platform_get_drvdata(pdev);
- 	struct cpuinfo_x86 *c = &cpu_data(cpu);
- 	u32 eax, edx;
--	int err, index;
-+	int err;
- 
- 	if (!housekeeping_cpu(cpu, HK_TYPE_MISC))
- 		return 0;
- 
--	/*
--	 * Get the index of tdata in pdata->core_data[]
--	 * tdata for package: pdata->core_data[1]
--	 * tdata for core: pdata->core_data[2] .. pdata->core_data[NUM_REAL_CORES + 1]
--	 */
--	if (pkg_flag) {
--		index = PKG_SYSFS_ATTR_NO;
--	} else {
--		index = ida_alloc_max(&pdata->ida, NUM_REAL_CORES - 1, GFP_KERNEL);
--		if (index < 0)
--			return index;
--
--		index += BASE_SYSFS_ATTR_NO;
--	}
--
--	tdata = init_temp_data(cpu, pkg_flag);
--	if (!tdata) {
--		err = -ENOMEM;
--		goto ida_free;
--	}
-+	tdata = init_temp_data(pdata, cpu, pkg_flag);
-+	if (!tdata)
-+		return -ENOMEM;
- 
- 	/* Test if we can access the status register */
- 	err = rdmsr_safe_on_cpu(cpu, tdata->status_reg, &eax, &edx);
- 	if (err)
--		goto exit_free;
-+		goto err;
- 
- 	/* Make sure tdata->tjmax is a valid indicator for dynamic/static tjmax */
- 	get_tjmax(tdata, &pdev->dev);
-@@ -542,20 +572,15 @@ static int create_core_data(struct platform_device *pdev, unsigned int cpu,
- 		if (get_ttarget(tdata, &pdev->dev) >= 0)
- 			tdata->attr_size++;
- 
--	pdata->core_data[index] = tdata;
--
- 	/* Create sysfs interfaces */
- 	err = create_core_attrs(tdata, pdata->hwmon_dev);
- 	if (err)
--		goto exit_free;
-+		goto err;
- 
- 	return 0;
--exit_free:
--	pdata->core_data[index] = NULL;
--	kfree(tdata);
--ida_free:
--	if (!pkg_flag)
--		ida_free(&pdata->ida, index - BASE_SYSFS_ATTR_NO);
-+
-+err:
-+	destroy_temp_data(pdata, tdata);
- 	return err;
- }
- 
-@@ -566,10 +591,8 @@ coretemp_add_core(struct platform_device *pdev, unsigned int cpu, int pkg_flag)
- 		dev_err(&pdev->dev, "Adding Core %u failed\n", cpu);
- }
- 
--static void coretemp_remove_core(struct platform_data *pdata, int indx)
-+static void coretemp_remove_core(struct platform_data *pdata, struct temp_data *tdata)
- {
--	struct temp_data *tdata = pdata->core_data[indx];
--
- 	/* if we errored on add then this is already gone */
- 	if (!tdata)
- 		return;
-@@ -577,11 +600,7 @@ static void coretemp_remove_core(struct platform_data *pdata, int indx)
- 	/* Remove the sysfs attributes */
- 	sysfs_remove_group(&pdata->hwmon_dev->kobj, &tdata->attr_group);
- 
--	kfree(pdata->core_data[indx]);
--	pdata->core_data[indx] = NULL;
--
--	if (indx >= BASE_SYSFS_ATTR_NO)
--		ida_free(&pdata->ida, indx - BASE_SYSFS_ATTR_NO);
-+	destroy_temp_data(pdata, tdata);
- }
- 
- static int coretemp_device_add(int zoneid)
-@@ -694,7 +713,7 @@ static int coretemp_cpu_offline(unsigned int cpu)
- 	struct platform_device *pdev = coretemp_get_pdev(cpu);
- 	struct platform_data *pd;
- 	struct temp_data *tdata;
--	int i, target;
-+	int target;
- 
- 	/* No need to tear down any interfaces for suspend */
- 	if (cpuhp_tasks_frozen)
-@@ -705,16 +724,7 @@ static int coretemp_cpu_offline(unsigned int cpu)
- 	if (!pd->hwmon_dev)
- 		return 0;
- 
--	for (i = BASE_SYSFS_ATTR_NO; i < MAX_CORE_DATA; i++) {
--		if (pd->core_data[i] && pd->core_data[i]->cpu_core_id == topology_core_id(cpu))
--			break;
--	}
--
--	/* Too many cores and this core is not populated, just return */
--	if (i == MAX_CORE_DATA)
--		return 0;
--
--	tdata = pd->core_data[i];
-+	tdata = get_temp_data(pd, cpu);
- 
- 	cpumask_clear_cpu(cpu, &pd->cpumask);
- 
-@@ -725,7 +735,7 @@ static int coretemp_cpu_offline(unsigned int cpu)
- 	 */
- 	target = cpumask_any_and(&pd->cpumask, topology_sibling_cpumask(cpu));
- 	if (target >= nr_cpu_ids) {
--		coretemp_remove_core(pd, i);
-+		coretemp_remove_core(pd, tdata);
- 	} else if (tdata && tdata->cpu == cpu) {
- 		mutex_lock(&tdata->update_lock);
- 		tdata->cpu = target;
-@@ -735,10 +745,10 @@ static int coretemp_cpu_offline(unsigned int cpu)
- 	/*
- 	 * If all cores in this pkg are offline, remove the interface.
- 	 */
--	tdata = pd->core_data[PKG_SYSFS_ATTR_NO];
-+	tdata = get_temp_data(pd, -1);
- 	if (cpumask_empty(&pd->cpumask)) {
- 		if (tdata)
--			coretemp_remove_core(pd, PKG_SYSFS_ATTR_NO);
-+			coretemp_remove_core(pd, tdata);
- 		hwmon_device_unregister(pd->hwmon_dev);
- 		pd->hwmon_dev = NULL;
- 		return 0;
+-	if (tdata->is_pkg_data) {
++	if (is_pkg_temp_data(tdata)) {
+ 		pdata->pkg_data = NULL;
+ 	} else {
+ 		pdata->core_data[tdata->index] = NULL;
 -- 
 2.34.1
 
