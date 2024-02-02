@@ -1,128 +1,96 @@
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E650D604C1;
-	Fri,  2 Feb 2024 08:51:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B24D77F18;
+	Fri,  2 Feb 2024 09:21:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706863874; cv=none; b=hxOOagSH9RAwi933Wq5dQ282JH91OhMs9qyzEvKuFbx85x5w2ERBw7pyS4tvMr4nepqUNOtRwC4VxznVPZHOsy5Ql2RH/EArzjiSX0Pr48gw2UJSb0ZDuW6T3VFpj5jFSvHlbJHDC0HVRZy5XXTsEhEN1eUu3Q0JIxkDs5s0q5M=
+	t=1706865718; cv=none; b=j0tMhJFd5UfrTtuUdMLCj14t/TbvZw+Ovk8HH5FkN1/YAdyEiZCeuY+Zl/LVNG2CPYBBwpeDfXIRucFlRsCzbpLDTJ7laaUVowllICPsr2HuZ3OTdEQAwhndifWm5GFxa4g2Ro41RrP8c4b/bHoWcN/gteG4Ry9GI8mIJBcwoHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706863874; c=relaxed/simple;
-	bh=rPghlH4fKzDrgFUA2AU5udG4v87gHBMz2GHmtLMD1sY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uMnnW1XJ4FAnZkgHCCu7AmxtXch9Hww6k3kX97zrbXZnjBqJdyYPFgqI2aI4bpNEa4Juji/F3MJY5EK+kb+49oZ4chZWhYgHCGGHJT/I6oWM0VdSsWbX4QyOKEQNmfeQkvIFhBBkLIamfNTDzMmhfjm8OBVvU7gGUtXHjvCsc/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=GcEW7nTo; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+	s=arc-20240116; t=1706865718; c=relaxed/simple;
+	bh=9DYCxZ3oWfIeIDTmXDX6SsX1e7f5/U1YN+kxoouu4G4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=uVqjDtcCN38HeMa+lczzEtrDB/vlvYQ0uDg8S/oBYgsLBarJf/SnLAu07dLsRH9wDAfuxvLuOIogxtage/Kqy4RYYhztlEkZGkSU1zWK+pXlgOjVPYW84TH85Ltge5GMuHOUx3A56gP55FPEAtC+TjpLsQnxb3fU9DvefUolbeI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fqJa0AsQ; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="GcEW7nTo"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=zgcj+wX/L6IDdldqgziNCDsIyAb6c+kW8GcYNwM7sts=; b=GcEW7nToPq2txWV+ViSERXcFwc
-	rIIQ4n6+rou3/R+i4yGctXiLFzZv29zF/60F+jjXeE+KHkkI+HTQgFIorTtxr6i5Za45zbgiGpucj
-	p8gdiQ/Qz6wt/2SM4aIkw4zlWDE+fNPHZ2ovt3wAkQpvzQJanqF0SAHiMGwRu0K61OLmBUFMvdnzG
-	4NT4zFRK50O0q8jV7zYb1G+Dvhf+oOw/OamJj2xAG9XEZD52Lj7vD6df8J9yUZUZ/ULdzDWo6Nirg
-	26NrmJqI7PQdR8VJ1T9wQDKxln+BeKE210XOxjyZftyAu6H1aS4itKKLrMYDKPb1xVrgslxsJGmE1
-	J7sImYnQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:49854)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1rVpFx-0005e9-2k;
-	Fri, 02 Feb 2024 08:50:41 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1rVpFq-0008Bx-Er; Fri, 02 Feb 2024 08:50:34 +0000
-Date: Fri, 2 Feb 2024 08:50:34 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Choong Yong Liang <yong.liang.choong@linux.intel.com>
-Cc: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
-	David E Box <david.e.box@linux.intel.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Mark Gross <markgross@kernel.org>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Jose Abreu <Jose.Abreu@synopsys.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Andrew Halaney <ahalaney@redhat.com>,
-	Simon Horman <simon.horman@corigine.com>,
-	Serge Semin <fancer.lancer@gmail.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	bpf@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
-	Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
-	Lai Peter Jun Ann <jun.ann.lai@intel.com>,
-	Abdul Rahim Faizal <faizal.abdul.rahim@intel.com>
-Subject: Re: [PATCH net-next v4 06/11] net: stmmac: resetup XPCS according to
- the new interface mode
-Message-ID: <Zbys2orOUikYxeOm@shell.armlinux.org.uk>
-References: <20240129130253.1400707-1-yong.liang.choong@linux.intel.com>
- <20240129130253.1400707-7-yong.liang.choong@linux.intel.com>
- <ZbjNn+C/VHegH2t7@shell.armlinux.org.uk>
- <9e23671e-788c-4191-bdb4-94915ff7da5a@linux.intel.com>
- <ZbtYaXkNf2ZF1prE@shell.armlinux.org.uk>
- <2ad1f55c-f361-4439-9174-6af1bb429d55@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fqJa0AsQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706865717; x=1738401717;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9DYCxZ3oWfIeIDTmXDX6SsX1e7f5/U1YN+kxoouu4G4=;
+  b=fqJa0AsQFj88iiXCsfjCGh4PGKZi87EKBK9FVtsrvgW7i91C1WpJZKry
+   PXo0tdA1BH1R1y/+G7mHjXmYFwsrDPluyebWKK4RmAQzm/gdrxPxR4iAy
+   l8wx3Pq7wTUTVoQof/7pQplUQhBhZcDebG6p5wVlTkFQUWvpLdyu5+bwS
+   8BKJtD3rfjXMKQyO5W1+gPp+EtJpdS6+MpD394v0NKSQdkCYgx0Oatjbx
+   QDwpHYX2h1nHltIGRa5rLEOZ8MjniwlE5RDoOxm7INqv09APTu4XSBLuw
+   ynb+KTo0iKjLJ0A5HsKUFPeyBpcYu+1O9KEDSgxmffLIsvfSGMfdceWww
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="11483036"
+X-IronPort-AV: E=Sophos;i="6.05,237,1701158400"; 
+   d="scan'208";a="11483036"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2024 01:21:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,237,1701158400"; 
+   d="scan'208";a="4639672"
+Received: from wangnin3-mobl.ccr.corp.intel.com (HELO rzhang1-mobl7.ccr.corp.intel.com) ([10.254.214.177])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2024 01:21:53 -0800
+From: Zhang Rui <rui.zhang@intel.com>
+To: linux@roeck-us.net,
+	jdelvare@suse.com
+Cc: fenghua.yu@intel.com,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH V2 00/11] hwmon: (coretemp) Fixes, improvements and support for large core count
+Date: Fri,  2 Feb 2024 17:21:33 +0800
+Message-Id: <20240202092144.71180-1-rui.zhang@intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2ad1f55c-f361-4439-9174-6af1bb429d55@linux.intel.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Feb 02, 2024 at 11:00:58AM +0800, Choong Yong Liang wrote:
-> 
-> 
-> On 1/2/2024 4:38 pm, Russell King (Oracle) wrote:
-> > Note the "This must not modify any state." statement. By reinitialising
-> > the PCS in this method, you are violating that statement.
-> > 
-> > This requirement is because this method will be called by
-> > phylink_validate_mac_and_pcs() at various times, potentially for each
-> > and every interface that stmmac supports, which will lead to you
-> > reinitialising the PCS, killing the link, each time we ask the MAC for
-> > a PCS, whether we are going to make use of it in that mode or not.
-> > 
-> > You can not do this. Sorry. Hard NAK for this approach.
-> > 
-> Thank you for taking the time to review, got your concerns, and I'll address
-> the following concerns before submitting a new patch series:
-> 
-> 1. Remove allow_switch_interface and have the PHY driver fill in
-> phydev->possible_interfaces.
+Patch 1/11 is a bug fix that should be considered as stable material.
+Patch 2/11 fixes a user visible sysfs attribute name change.
+Patch 3/11 is a quick fix to allow coretemp driver to probe more than
+           128 cores.
+Patch 4/11 - 10/11 are a series of improvements aim to simplify the
+           code logic and remove unnecessary macros, variables and
+           structure fields, and make it easier for patch 11/11.
+Patch 11/11 converts coretemp driver to use dynamic memory allocation
+           for core temp_data, so that it is easy to remove the
+           hardcoded core count limitation when _num_cores_per_package
+           become available and reliable, which is WIP in
+           https://lore.kernel.org/all/20240118123127.055361964@linutronix.de/
 
-Yes please.
+I can split the first three patches into a separate patch set if needed.
 
-> 2. Rework on the PCS to have similar implementation with the following patch
-> "net: macb: use .mac_select_pcs() interface"
-> (https://lore.kernel.org/netdev/E1n568J-002SZX-Gr@rmk-PC.armlinux.org.uk/T/).
+Patch seris V1 has been posted at
+https://lore.kernel.org/all/20231127131651.476795-1-rui.zhang@intel.com/
 
-mac_select_pcs() is about returning to phylink the PCS that the MAC
-needs to use for the specified interface mode, or NULL if no PCS is
-required, nothing more, nothing less.
+thanks,
+rui
 
-Plase do not copy that mac_select_pcs() implementation - changing the
-"ops" underneath phylink is no longer permitted.
+----------------------------------------------------------------
+Zhang Rui (11):
+      hwmon: (coretemp) Fix out-of-bounds memory access in create_core_data()
+      hwmon: (coretemp) Fix bogus core to attr mapping
+      hwmon: (coretemp) Enlarge per package core count limit
+      hwmon: (coretemp) Introduce enum for attr index
+      hwmon: (coretemp) Remove unnecessary dependency of array index
+      hwmon: (coretemp) Replace sensor_device_attribute with device_attribute
+      hwmon: (coretemp) Remove redundant pdata->cpu_map[]
+      hwmon: (coretemp) Abstract core_temp helpers
+      hwmon: (coretemp) Split package temp_data and core temp_data
+      hwmon: (coretemp) Remove redundant temp_data->is_pkg_data
+      hwmon: (coretemp) Use dynamic allocated memory for core temp_data
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+ drivers/hwmon/coretemp.c | 219 ++++++++++++++++++++++++++---------------------
+ 1 file changed, 120 insertions(+), 99 deletions(-)
+
