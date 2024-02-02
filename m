@@ -1,109 +1,109 @@
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4755114E2E6;
-	Fri,  2 Feb 2024 18:30:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 872DF12F374;
+	Fri,  2 Feb 2024 18:54:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706898615; cv=none; b=Nhi6eWqOjF1j9eS9pRU9feqJ73NFrTMN0VxvIdeAbeNuhDLuT4GtP7pYE2ga91QdpJEFsceBcxYhksQZdGGA23gj2AMPU0W/NPRvqxc//WF2iplQLiBHd/A9y2IsVQU0LvRe8wQbh1sUafSGo2jL3qlKz8nyCkfKBd3pEu296vU=
+	t=1706900074; cv=none; b=dZve1ufkEvUfPXrXN/ZyeEigN/pMO9K9IvhpjkJX4Ei1lTN4kwwwTesmw5Tm9P2E704iRzy3txetyfGcemYArG1d6BiDHm0MRMJKvx47dQfTq8yKI9DLJCj3rjcCyidofOh1hTliGGHYk7BicCG4TZkSCuW0BafNNjqz6v5Zias=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706898615; c=relaxed/simple;
-	bh=HEqr0Ka0XfhTPzD0Hbv7z55pk+epJSYZPO6YlCuwLtk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JOMofc2+JxJXzQ/1HsrZaKBVtlzMwiXzWnUF/peX759zvgE73yvoBQdIVxyviRJSPTAZ4vJoFhnQoyviNE2FDulT+1JzGFzCeDasZe+OHH+nH0JFoygIFgUKYhimYz7RrESyzST/WilzRERiOLE5cqVGg2cOXdp3XxaoMSGXuVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D3LLeq3E; arc=none smtp.client-ip=209.85.215.176
+	s=arc-20240116; t=1706900074; c=relaxed/simple;
+	bh=jo+FWGe+oR7bSCoGGVbo+SEtmwAqP81B6x0dU3BHZRM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gTCkqtkFqbfo5tF8FojhI4v1u4/QkheBN/wP8bguUby8WjMUMVY9hQBzpVbhehJUyBGAlSjP2pmkHC1NbsbQtnxR0DaHGVnRTaihDSf/tVVzk+Lx0fHGJJJk+z5w0t08pySTYbmEjIaAqQmckYZtSozM9Lw9EbFV4aQUD91nN0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ro6UE5jt; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D3LLeq3E"
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-5ce2aada130so2288691a12.1;
-        Fri, 02 Feb 2024 10:30:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ro6UE5jt"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1d71cb97937so22832955ad.3;
+        Fri, 02 Feb 2024 10:54:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706898613; x=1707503413; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=1+tnDh49EEgOrgjB9N3P+ro3Ir4pX+HnP3v58dVzwIg=;
-        b=D3LLeq3EczNM1RtsNu6rxMLrsri7be8NtJ/y1gcmqE1hycFl2HSkZqUkbwM6uL369F
-         4G2b4NBgcD2pFgRZv9fvQYzBwjDtoW1wPpczmoF9xp6hb2N9nuCHtgkvLXjvItTfEpkr
-         qP+LpS55tZUAJns8XMvkQBco95zRw7qgB186BmCWiS41HtqHzdQ7Gbvmv8werCyulHKo
-         YnDzYXWU400ToSiTLjYLB6TToFcF5/MkT4ACz5cbG7cu6xt8tWrezZvbko9l8oyVbhu5
-         YPTM1dko9TdY/cXmnfqH7zRDUHFwy7fe1KKu3xhA1P+Ok60l0TVWvJJkl8nBLlAD8HW2
-         JfBw==
+        d=gmail.com; s=20230601; t=1706900072; x=1707504872; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aeSCHAy3VJzuhlqFkWOWdVVAJVTWx5SZIKFlnniBmYk=;
+        b=Ro6UE5jt152SSIvbOSzdfB4jX5QHbJdcpcj6WvhwaaypLec558pcHRyZeoDFEhEsym
+         SbQztnz76PD23hBrD2JFeGClB6FD5EZ40Lew69flxH06H/DBI388qVXqcaEMTFdjp21p
+         PJqcKfyV1Ka1QzVL60cyOK3TE0pCbQJTKrORmBct8QmrcglKv/klvpjvYdfbbf3hwCgf
+         5qROH3K5v6X0FlYQmgdvUGqHpgrpOj2+naDPdOeECDa75LtqTLswq00vZA826q3FvIxE
+         HDaCN6hLDvIuibUigW6b1mjKQchZ6IeozhDDawMFZN/eUIaKT80mnQCQFkdy/BAMw6el
+         f1Aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706898613; x=1707503413;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1+tnDh49EEgOrgjB9N3P+ro3Ir4pX+HnP3v58dVzwIg=;
-        b=n2ynrza1+MDBcEtQ6cxlfyADopJm2xRh+6li5a7xGg8Dm+jLv6WTwzMn4riH4yNjdH
-         DeNRbPWjYnNW0lPpRwtE/rcdkHJu6FuDdaLaUew7l0JUuHKVynK2LM68A0pfRs73RYcR
-         cVcyhvT/2FelPLeSDbj/FBvK/d4y7H9YZhJO5yC2510FKU8U9NWF0JJY6C0ul0nfWIVN
-         Kpg2J7WL1mOL0c9lxmTTNlFkHLxjJhWKp1CRSJMS1wUVYLEC2R9W9oaDTvovg9Mx4ZCK
-         eMec8bUXoRI4BlFNkYVx6SUtJVmz+XAvT6X1oiY6XKqAsCrci515TF7JAAEdw0eTJceA
-         41hA==
-X-Gm-Message-State: AOJu0Yyu8unR+Bs96sJMARk/sRG0KoSU4eHH5SpOfHHxvY4b395BBtq0
-	knPTqExA1QOPSRxu/D3gQvVkwJ5aBtdhiCLGuXSgi8y72rJCaXp+lAjJ+UHX
-X-Google-Smtp-Source: AGHT+IH9Cae2OPNMcOUQD5VzMSQxLhBjQF8LU4vJEzkCHDFVFVQ80oBQ7bf2/LXbx1T9uK4/E1bu6g==
-X-Received: by 2002:a17:90b:68e:b0:295:64de:c443 with SMTP id m14-20020a17090b068e00b0029564dec443mr8827745pjz.21.1706898613430;
-        Fri, 02 Feb 2024 10:30:13 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCV7WOh9S0hu5OS3MynphFWP4wJRwW87yKT6JmMesEGIPijHjAm72zZV+4dw13fbLRj8hgzDCUT0Mdry+56tjxvcQ7AzcROR091ZOLC5
+        d=1e100.net; s=20230601; t=1706900072; x=1707504872;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aeSCHAy3VJzuhlqFkWOWdVVAJVTWx5SZIKFlnniBmYk=;
+        b=WD8uD+RbSUZgnZkryNYQiR0vfVYXqeSPIpRkjyngNi47Gpbp2wH2teFi5sr65w+IbJ
+         79ibFgW1qxWO/iLmwOKMU1Y9jmQXHrQq3hez5ROyx9ry2Vsmi/qlb8LKK6FaX7Q9YA6c
+         LTTCPymJM3tNYOATYkolTqvb1dt7lU4+o+t86j279HrAIc0Yppu2Wk5Ca4CWk3c6MNSZ
+         u/buM9jzfZ4ueMvpfz92lO/9aiBb+Km2hQ1McnQCZs2DngdgdECw6nhErS8dxyTw8Qcu
+         hv+4wQppaf38+j3UEqegSiwdd0JIyYiae2rvzGLlnnHUiHB7MJrEy3RZEnzYtuX2nWGo
+         HAGQ==
+X-Gm-Message-State: AOJu0YwViKhrfSGfIt9mwK2a2Th5JQlHWUgkPIdhWREWPG1dwLcy/kSC
+	wYdQAA/YXHqh8R7PD+TSRW7Wd+/XZgftHdE7oC+24h2KV8CihSuQHHlm37up
+X-Google-Smtp-Source: AGHT+IFcZQemFSdmcEK9i4IsX7bisc15TiKjCHoB4bg5gBSwHBOW06rHkGoT8HX+PDKFtcYYd5XT3Q==
+X-Received: by 2002:a17:903:943:b0:1d9:8832:f800 with SMTP id ma3-20020a170903094300b001d98832f800mr215664plb.8.1706900071874;
+        Fri, 02 Feb 2024 10:54:31 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCXhtYm5bifoXUxUvTc+M2Vo5X4YrXPoXCmMK1UlWBscbUoGwho5tCSKPqWmg2v0D5vuQnzUsa7UlaN8MRrRTRNgF4LclPFVjub2NIflv1YziPg9KdhUYS6R3jbE1Wq96LMdZuyngHnaSLu6JB09Y0dkejvAm4PxDJ5ZT5MSYa6xc03VBhOzxdJoZoPeRMYkDugOUcfcdbrWDOt5pbfMUhdYHAR4Wa/Q0UqEttxBo3YCdBm0KNn++Ud13FoW6VFyJFmSqtSUJTrplxYj9F6IXXhJBmkD2DaNHAbEzh66J+OcTv+m/mTl0lR3j1weYAZJN5yJUX0cQuJqpva/XjawxIzyc9jAzKxKDxbeotPSz3OUDrzaT3zQ4E9VE7NhSxakiHcHGtc+wvEpF0wAPmMGfNaT/Y25JOiRdvmZ0KFrInDxiAcYWa4=
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h5-20020a17090adb8500b002904cba0ffbsm338663pjv.32.2024.02.02.10.30.12
+        by smtp.gmail.com with ESMTPSA id iz5-20020a170902ef8500b001d8f111804asm1929010plb.113.2024.02.02.10.54.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Feb 2024 10:30:13 -0800 (PST)
+        Fri, 02 Feb 2024 10:54:31 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Fri, 2 Feb 2024 10:54:29 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v6.8-rc3
-Date: Fri,  2 Feb 2024 10:30:12 -0800
-Message-Id: <20240202183012.1607147-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.39.2
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Cc: Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v6 1/5] dt-bindings: vendor-prefixes: add Amphenol
+Message-ID: <fa215ab8-0b0a-462e-b205-7b2288df263a@roeck-us.net>
+References: <20240130-topic-chipcap2-v6-0-260bea05cf9b@gmail.com>
+ <20240130-topic-chipcap2-v6-1-260bea05cf9b@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240130-topic-chipcap2-v6-1-260bea05cf9b@gmail.com>
 
-Hi Linus,
+On Tue, Jan 30, 2024 at 10:06:44PM +0100, Javier Carrasco wrote:
+> Add vendor prefix for Amphenol (https://www.amphenol-sensors.com)
+> 
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
-Please pull hwmon fixes for Linux v6.8-rc3 from signed tag:
-
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.8-rc3
+Applied.
 
 Thanks,
 Guenter
-------
 
-The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
-
-  Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.8-rc3
-
-for you to fetch changes up to 915644189c22d9c93e9fee7c7c993b58e745bef7:
-
-  hwmon: (pmbus/mp2975) Correct comment inside 'mp2975_read_byte_data' (2024-01-27 08:03:18 -0800)
-
-----------------------------------------------------------------
-hwmon fixes for v6.8-rc3
-
-- pmbus/mp2975: Fix driver initialization
-
-- gigabyte_waterforce: Add missing unlock in error handling path
-
-----------------------------------------------------------------
-Harshit Mogalapalli (1):
-      hwmon: gigabyte_waterforce: Fix locking bug in waterforce_get_status()
-
-Konstantin Aladyshev (2):
-      hwmon: (pmbus/mp2975) Fix driver initialization for MP2975 device
-      hwmon: (pmbus/mp2975) Correct comment inside 'mp2975_read_byte_data'
-
- drivers/hwmon/gigabyte_waterforce.c |  2 +-
- drivers/hwmon/pmbus/mp2975.c        | 16 ++++++++++++++++
- 2 files changed, 17 insertions(+), 1 deletion(-)
+> ---
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> index 1a0dc04f1db4..25158559471c 100644
+> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> @@ -107,6 +107,8 @@ patternProperties:
+>      description: Amlogic, Inc.
+>    "^ampere,.*":
+>      description: Ampere Computing LLC
+> +  "^amphenol,.*":
+> +    description: Amphenol Advanced Sensors
+>    "^ampire,.*":
+>      description: Ampire Co., Ltd.
+>    "^ams,.*":
