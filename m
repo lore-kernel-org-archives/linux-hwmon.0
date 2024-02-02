@@ -1,69 +1,68 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E950185949;
-	Fri,  2 Feb 2024 19:08:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB28315E5A6;
+	Fri,  2 Feb 2024 19:11:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706900925; cv=none; b=tLCYNbCrFKNMm0EukoIKg7dWdOVxSRD6cuEIrkrOl65273WNnIkHOZlDbGPnNsnwIJNHWxIw+Ol5xPCBxQ3APD1B9M2ef71ebvMTeR0/x3gLyb2shXfkcmGKpsy4LdQa5UwuIX6EbIE3Ys190nzLIoO4fcqJcflT3K+aq7tj2GE=
+	t=1706901106; cv=none; b=YBs9BG7YDRQ40Glqj993qNUoP84l0myWJmGikY56P7Up3xH0fBq8fWpcQTagCfVnSfHJ2K5S0G/7iPYZmyBIK/jv0oFgTS5r+zK8OHW5k9S3yD/cyA/h2aDVbegZOhiAr3I/kSnMdA287VnTMLo+QIjPyYbKgb9Zoh7V40ARG6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706900925; c=relaxed/simple;
-	bh=32B//JDxJiRZBsf53iQ3isYk7MyrOdW/YuQLIRZa11g=;
+	s=arc-20240116; t=1706901106; c=relaxed/simple;
+	bh=q5KNBqqcafn3ahNbkQbhyCw09Yh+OzUNGZh8tX0xvNY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i4DV5UWc5NhvZf/YjiYSTbjTNWLTzy6JKgDndXvDH5CQETfGtIVGFPN8GKJO1YfxWEDCAjkvFy9J07WXDcbzCoidXS+oJ92KTOZGhL4A/ozGGRPWrofE4shfkB7YEfSYKDVyNADZnCCqLNAY40cOpZh+K+CpjNvQh824vigI00o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OD+9YKOs; arc=none smtp.client-ip=209.85.210.181
+	 Content-Type:Content-Disposition:In-Reply-To; b=dpj6fvTGxNOE+BD4PX3k4QaB1jT7nF45fNubHSfVSiqBCY/1UbMqEQ2uCkFA5WrL+FsGSwTZ9Pn7vwZ3XmQZfMfssJ9/C3n4m0Q7OgegQs0sxucMC75MA5dqMTpwKw7z1tJ+/7DTtrigELW+xc8qZTM9mQXQLrZYae9wz9Qg/G8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GsJ8bUb7; arc=none smtp.client-ip=209.85.215.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OD+9YKOs"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6de2735151cso1768661b3a.1;
-        Fri, 02 Feb 2024 11:08:43 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GsJ8bUb7"
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-5c66b093b86so2687631a12.0;
+        Fri, 02 Feb 2024 11:11:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706900923; x=1707505723; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1706901104; x=1707505904; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=X2Hvb4/kWmn4mJzDVdWKR0899OF3sPbKQ4xVeSo/y6s=;
-        b=OD+9YKOsoVGroJdk8crb/770vtT+fHBt8A/k/EJpMFwKRZMH7OCa4jh7eIt2sMyUWA
-         fAbGCqskzfR07Fl0NYI/95XOHaydqe+k72hQxOjhnjy/Lb4pYqO7ArCMq8q1grsOkQaJ
-         bm05vAmqqhSaqQY9JgLspkywKvjzzinDZsJO1MTAI0ymRJ2OoJG4KJtourhJS7t7w0dp
-         XMYwAl1sYr1AqLDvR/0T4IfEMSIgWoMZXSAj2jr12G1BEIXb4ZmeE+Je0QdO1VWf0bHO
-         ngcWVZZLzwwn7TUdGYToYc7JG9KxQ+CrIa661TOLaeIR14IilyrJRn5PZhcGW7v3kVmP
-         aqhw==
+        bh=d8voAivQCcRHdUqrKRkKtyLZ7LbVIcLKqD0u5mJXYGk=;
+        b=GsJ8bUb7Z0pOy1VUf42JkEilttGwCPF3MDtBmEeIujKAqavTm6r9i6NcieKIAVlga+
+         +AWmhX+b9PUqAp5K1/FaSE1UCHb1pbGN0OxWnWFv+udGNnCQD0qyAfZ1Wec+jXWDMvM8
+         jU+Ry9vE1AeIxSBADPX1TszXIubo9OfTVPC9Ajvw3u2MaZPrPVJoXMgN78AldbeqKGnI
+         jYA1WvjPZ/CuEEcJOILFvuWeF+aoGjAGs7j5NxydBV7cHfqIsRm7Q5oMT6IH/DmqfBPN
+         2KV2AZAPo8WIi3UTW9d/Av4rFnpNJ/aIJ3sX7+RfAcgejwblcBxhsVJA6b7xsWV0KVWH
+         ZwnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706900923; x=1707505723;
+        d=1e100.net; s=20230601; t=1706901104; x=1707505904;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=X2Hvb4/kWmn4mJzDVdWKR0899OF3sPbKQ4xVeSo/y6s=;
-        b=whZIEoRDOdovp7vpO+isfcOfAunlw1bXVw4CyjJpBenDY1gDR5E2Eh8XxJM7+ZB4qi
-         78EzZKhKZ0+fE3aMJBayUYq/868GvLHExFSRM4tfitYi+swFr1+Bp2UJ2q/qfcTBWHUF
-         MY233jKAryT/Q8i5fvvmljG/1+4PeH369nOE4AuZK3DlfvO/zNsTUnWS5UKKrhEIMq33
-         Jbauu2boH9+yt/Hyd+kzLgSHWO+c3LgYvEJH5Da4vx5lg6oKh8okvVMwFAfduej3342a
-         8MV2BYvAxD9xX1hDVTPAJidHPpDDNStsV7CQOfcgHCX8ZI4RrdF5WPnaJiwbW6EsidDW
-         fEQQ==
-X-Gm-Message-State: AOJu0YzLwcpOfIcesLhYP44nBgrwyn1yrDsL1gBmy+ausk7DsO0IWLwD
-	q/2sxy3G+KaJ2zuoI7+k0wOHpz1nwsm8dFUEO4U8W4UzMo1pDWAa
-X-Google-Smtp-Source: AGHT+IFCp1izFJ0G/yBcNiE8pRu44wDS+LmUg2K6xxIfEty5450/IQnZPOEPpKIS8PXNw5FC0AXbxQ==
-X-Received: by 2002:a05:6a00:1c88:b0:6dd:8992:6b26 with SMTP id y8-20020a056a001c8800b006dd89926b26mr7399021pfw.9.1706900922944;
-        Fri, 02 Feb 2024 11:08:42 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCWk1wsoWixPcNdQ/G2Jg3R+qqKLyMsrEY3xM5Boc7fMQxJknbzlOwQAVF4I8YnEOQB+rqFzgT5Qn+S/aSjplw+zhuxglpVcmOsA/Y1Oyt2wUbbghTpTaTcqhevkv5nkA9bIYakvYFHuaOXmHUXl0HlVQPPiMqK2FYT79joOvhIYg1Y7qbOX4ejP9+w4hKCauac7wp8AXEyQY5Y4zZjSTooAZTie+4J1XSeIHTXqp5Ig2OKI
+        bh=d8voAivQCcRHdUqrKRkKtyLZ7LbVIcLKqD0u5mJXYGk=;
+        b=CtNhrTRkjd5RF/+GkwLy5XUNXPUP4Hpog/eATBlKpTGVB5N3A+ZMAUbqwh3NyCzMOy
+         KOYqo16RJIJuhW9QUKYfDi1vX+3bpzdq9lzrF4ZZuVdgsWISffL+NLhIeHEyC2hulQkN
+         pUkrD9R98vf4deJO3WaipapGrMrYnWiwGJobyVyskTgrIZD3EgfZcAz3Sa1QNmNzUQ2S
+         OXZ00HRqc+aSwqGCv9hj5uVpE5Pin243VgEuz1i9nnlUTsgonueQ//ca1tvKpxrYlvJb
+         mRIcGjErJZsfSyJcQglA1Ah7PsQHod6jhLEJxtSBq+AAmtl6SBM+0axH+c40B9C434Wn
+         ZaWQ==
+X-Gm-Message-State: AOJu0YwnTDoUdj6Y2m6hTgpWm9mgGndMBwpppH5avVfVEuLuzJup7upn
+	Il9SF4HOZJNhGOu7X1F6vkA8A3vOI3E8Gj98NDgyViGLXkFDDOm3
+X-Google-Smtp-Source: AGHT+IE7Y/272LUKics1gOG+Sa7eg9AZ02PIKd/Sk7i9JURQY8sh7zd4/dFrXvR6p9oipOIcFUiUeQ==
+X-Received: by 2002:a05:6a20:e607:b0:19c:9e7d:3f4e with SMTP id my7-20020a056a20e60700b0019c9e7d3f4emr4713399pzb.1.1706901104098;
+        Fri, 02 Feb 2024 11:11:44 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCXJnXZsM1mPCjRjsd+jkzFcZqyaix8Kk9oP6VrHHuYg7ykBXnlUmjp+XPLU0XnSkIjCUsA/5OWepdj+JOJzIMvAcqISesMoxMY7YUD2Vxi2mP2CRdLDRXkYgH6sKS965CpQWRY+eyqRQ75xDO9nFNmGILRfuaUCaYJzNGgfcBJEVMVTGsKCEWPFtv/oCa2YVkZMrdEQKNuFxXaCB6WNgwy+Nn4y8bDhMQ==
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b28-20020aa78edc000000b006de09d94723sm2022017pfr.17.2024.02.02.11.08.42
+        by smtp.gmail.com with ESMTPSA id g19-20020a056a0023d300b006e025030700sm292981pfc.190.2024.02.02.11.11.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Feb 2024 11:08:42 -0800 (PST)
+        Fri, 02 Feb 2024 11:11:43 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 2 Feb 2024 11:08:41 -0800
+Date: Fri, 2 Feb 2024 11:11:42 -0800
 From: Guenter Roeck <linux@roeck-us.net>
 To: Aleksa Savic <savicaleksa83@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, Jonas Malaco <jonas@protocubo.io>,
-	Yury Zhuravlev <stalkerg@gmail.com>,
+Cc: linux-hwmon@vger.kernel.org,
+	Florian Freudiger <florian.freudiger@proton.me>,
 	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
 	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: Add driver for NZXT Kraken X and Z series AIO CPU
- coolers
-Message-ID: <c4ecb715-ec25-416e-a893-6e9eecb37409@roeck-us.net>
-References: <20240129111932.368232-1-savicaleksa83@gmail.com>
+Subject: Re: [PATCH] hwmon: Add driver for ASUS ROG RYUJIN II 360 AIO cooler
+Message-ID: <903cb262-719f-46f7-9029-43dd5be5c798@roeck-us.net>
+References: <20240108094453.22986-1-savicaleksa83@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -72,35 +71,29 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240129111932.368232-1-savicaleksa83@gmail.com>
+In-Reply-To: <20240108094453.22986-1-savicaleksa83@gmail.com>
 
-On Mon, Jan 29, 2024 at 12:19:28PM +0100, Aleksa Savic wrote:
-> This driver enables hardware monitoring support for NZXT Kraken
-> X53/X63/X73 and Z53/Z63/Z73 all-in-one CPU liquid coolers.
+On Mon, Jan 08, 2024 at 10:44:50AM +0100, Aleksa Savic wrote:
+> This driver exposes hardware sensors of the ASUS ROG RYUJIN II 360
+> all-in-one CPU liquid cooler, which communicates through a proprietary
+> USB HID protocol. Report offsets were initially discovered in [1] by
+> Florian Freudiger.
 > 
-> All models expose liquid temperature and pump speed (in RPM), as well as
-> PWM control (natively only through a temp-PWM curve, but the driver also
-> emulates fixed PWM control on top of that). The Z-series models
-> additionally expose the speed and duty of an optionally connected fan,
-> with the same PWM control capabilities.
+> Available sensors are pump, internal and external
+> (controller) fan speed in RPM, their duties in PWM, as well as
+> coolant temperature.
 > 
-> Pump and fan duty control mode can be set through pwm[1-2]_enable,
-> where 1 is for the manual control mode and 2 is for the liquid temp
-> to PWM curve mode. Writing a 0 disables control of the channel through
-> the driver after setting its duty to 100%. As it is not possible to query
-> the device for the active mode, the driver keeps track of it.
+> Attaching external fans to the controller is optional and allows them
+> to be controlled from the device. If not connected, the fan-related
+> sensors will report zeroes. The controller is a separate hardware unit
+> that comes bundled with the AIO and connects to it to allow fan control.
 > 
-> The temperature of the curves relates to the fixed [20-59] C range, per
-> device limitations, and correlating to the detected liquid temperature.
-> Only PWM values (ranging from 0-255) can be set.
+> The addressable LCD screen is not supported in this
+> driver and should be controlled through userspace tools.
 > 
-> The addressable RGB LEDs and LCD screen, included only on Z-series models,
-> are not supported in this driver.
+> [1]: https://github.com/liquidctl/liquidctl/pull/653
 > 
-> Co-developed-by: Jonas Malaco <jonas@protocubo.io>
-> Signed-off-by: Jonas Malaco <jonas@protocubo.io>
-> Co-developed-by: Yury Zhuravlev <stalkerg@gmail.com>
-> Signed-off-by: Yury Zhuravlev <stalkerg@gmail.com>
+> Tested-by: Florian Freudiger <florian.freudiger@proton.me>
 > Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
 
 Applied.
