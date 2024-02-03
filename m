@@ -1,68 +1,55 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77B255F479;
-	Sat,  3 Feb 2024 15:17:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14BE617BC4
+	for <linux-hwmon@vger.kernel.org>; Sat,  3 Feb 2024 21:25:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706973473; cv=none; b=DlgAbUS3ZIj3+1r31fNcPLUm6YuFm7IKgwE+7Tn3xMlZVdpV/0KN+Ev9DRHN/qs6XgX4aRnkia0bbHFkbO7eJucmccbnkswcsXgi5U+n9zWDhZQtC9xi2UOmqVZ72ymnB0qWxpD4vd1udcMn7RcT/aZgl3iMStl4liI0sV+TYz8=
+	t=1706995541; cv=none; b=RKX0zIvN+E1OQYq/dm83EvRPV1GNjww9S1ALl83402tmXF4jBU5/tiv1iemJ7R91cqo2UhxUZWNy+75nNunt6gjiTl7+C1BomK4hW/7PX1rSgliMtgRJObgj4hBVeRwgOQr5cxD5yfFBJUG8LzNlITyWqEGtsllUyNABcFNHO2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706973473; c=relaxed/simple;
-	bh=IUlOK6oOP99wQKuMhpqLYRYSvzT4AufyHCIUW8c1v2g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s0AMhY1o1e5lUQWwvrQPT0ZzqSDLgZ2REL2gzXd48Rxh6Y4nnANL1D6laIpSjA1tHw1VoGy52SODg/U4L/VMBt+SJU67rJOTw/vRhZj/UgE4SFZxEEsLqxa54LdrlwgyJ2BNpiUMmPrOtAnvpNq2zFoSWbuPaZIam6njHGh4e2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VmviKh0M; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1706995541; c=relaxed/simple;
+	bh=anEXvHi/liQI/P/VZNOnTUNZ5Rc2871TTLyj8CFp6hY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=DrNfLH81DMskgHbQW9DKq5F2fFLOkDLeLvMvCRYE80Sztewy44Kgr/3IKnQaC+MO4ZSaUGFnAAUpLsV6OIylbP/RY56Pc6nkyTXGSl3wwqR8SXdxx0e2XvaYS3yRbjVJqaIWrjDq8qlo1d/epCIrQFBW90InErhdEUk1sEOrB3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AalGWHEL; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VmviKh0M"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1d99c5f6bfeso731325ad.1;
-        Sat, 03 Feb 2024 07:17:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706973472; x=1707578272; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2lUzUF2MBNp5VCtXVAH46rRo9sIQAjaiGzL0rWPuBxk=;
-        b=VmviKh0MkzbJHp1wgSWX2HESFAWf5e2qYLz7e7ytDtXfE9Nde8T9xU9g5UgqwHsafU
-         M2FJDCudvcrYZf4V1hU9HRPbvDRjdQtjNSPDB/PGG5nsw4B4Ke3jNe5oMhS18xU/GxT7
-         Vjp2rDTW1eHNSgAgkYtpAnSpnvt1msV3bAKOzUWA7t187yy567zZpdgsCuCf3wJ0gZqu
-         UMMpFewEI28ZuMw9N9+DoMGz9TouGXG+i581CVT1wXJAhNGtd2iTIva1aLGKNCU3rvYe
-         vXTFQUNGr+bvWjuTnhcRSvUKYfxF6Gg8STL4BQrBcGYymgb4TPg2CfrY/FcEOQHmGFvR
-         esAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706973472; x=1707578272;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2lUzUF2MBNp5VCtXVAH46rRo9sIQAjaiGzL0rWPuBxk=;
-        b=S9LvfN++dwVlvo/mJ9OAULVMoLI6khlolOHikyQO/KlLLM0iwk0vIN/0kKtl4a4nI7
-         XmcpLIkIwUJDwff/NVduc9dPQl/CjzbOvJh06xvjYBzyAootwzEww1KJt/2ri1gC9xpX
-         v5KErNRmnhfSfulETv1aFP04rz4SgVhUvVtKDAPhBX5JIMAs/QbqKFicQkD5OoQzTzE1
-         mAVLCkEwIFjXZ3k4fGdZA1Dy7t1JJ+NlSj4pgcjFgvsxR6WTh1R9I+IJ0tOXpSDnex4R
-         wjIWptjutO1On99acMpsEApheRN0geAVZGl88kZPyeQD0HA2C9SLt5PZTwbfOBldPEAB
-         /W8g==
-X-Gm-Message-State: AOJu0Yw9WkKjgd+bpOwK+vFm0wdhhTkUQ16UvvEclIO2eEe3WdCFP1qr
-	zL2cwxOtAHMKT6GDrizoNtkRLpyM+BQhwwCXr7isVigdfs2ygzM+WNB7DKo0
-X-Google-Smtp-Source: AGHT+IEW2KW4nZwiBGgCcsLxy1SbfBczTtO90qzrOeBfw49XVDCt9jvVTCQDPSOdHa1RIJKxcy+6Mg==
-X-Received: by 2002:a17:902:d2ca:b0:1d9:7814:ae3b with SMTP id n10-20020a170902d2ca00b001d97814ae3bmr2211332plc.21.1706973471785;
-        Sat, 03 Feb 2024 07:17:51 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCVF5Uh70ChZOG4rsDfNklgJXQDzdlL9/0NlTFDpm5MfSMYT9sOWuAHLoLZowXJMYfVtkN0Ib+xybTYMOl3zbDBFDfkAZOI3O0986UASbkaNDWA9OpX6skL9nt5Mc6lpyMhkWJjVwZHpsS0AhtAkAWc5eZxAEWfPvcu3ArSbYjFg
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g24-20020a1709029f9800b001d8e671e24asm3352806plq.254.2024.02.03.07.17.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Feb 2024 07:17:51 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sat, 3 Feb 2024 07:17:50 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Zhang Rui <rui.zhang@intel.com>
-Cc: jdelvare@suse.com, fenghua.yu@intel.com, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 03/11] hwmon: (coretemp) Enlarge per package core
- count limit
-Message-ID: <93654683-90b5-43b5-9bef-0427d0042c03@roeck-us.net>
-References: <20240202092144.71180-1-rui.zhang@intel.com>
- <20240202092144.71180-4-rui.zhang@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AalGWHEL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706995539; x=1738531539;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=anEXvHi/liQI/P/VZNOnTUNZ5Rc2871TTLyj8CFp6hY=;
+  b=AalGWHELZYxUdVGBWwiDLVmF9XwzJZ24IxzQyKWtTbVR3i2oFoSt+5nn
+   ntc0EfEFGR3xG+y5LEm7FEmTs6WGPzjKj5RfryNsGwskRn+qH5c32vNii
+   aXsXh6u1aPNDkcJBippIJyF6J7ahycXrtP+kyB7B77nwO8TAWiyE8xQrs
+   fDmZRawyuhVj742W/nN5RD4KXIpo9MowK2lz+R6xWJ74B4uLXEDY+ZSx7
+   xsyguEqotPG24ofaBcTW9QCsdf2Wf/pT3fh/WRe6hqoELo79s8VjvYFYx
+   IXEFiK6rYP6lHLUFRWSVv4kyxeDJN9Ts7K67fg77Jdn9GYxjB12qC6PuN
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10973"; a="22817478"
+X-IronPort-AV: E=Sophos;i="6.05,241,1701158400"; 
+   d="scan'208";a="22817478"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2024 13:25:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,241,1701158400"; 
+   d="scan'208";a="31164985"
+Received: from lkp-server02.sh.intel.com (HELO 59f4f4cd5935) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 03 Feb 2024 13:25:37 -0800
+Received: from kbuild by 59f4f4cd5935 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rWNW2-0005cw-1V;
+	Sat, 03 Feb 2024 21:25:34 +0000
+Date: Sun, 4 Feb 2024 05:25:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Aleksa Savic <savicaleksa83@gmail.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [groeck-staging:hwmon-next 34/34]
+ drivers/hwmon/asus_rog_ryujin.c:574: undefined reference to `hid_hw_close'
+Message-ID: <202402040512.f0f23Wq1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -71,22 +58,149 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240202092144.71180-4-rui.zhang@intel.com>
 
-On Fri, Feb 02, 2024 at 05:21:36PM +0800, Zhang Rui wrote:
-> Currently, coretemp driver supports only 128 cores per package.
-> This loses some core temperature information on systems that have more
-> than 128 cores per package.
->  [   58.685033] coretemp coretemp.0: Adding Core 128 failed
->  [   58.692009] coretemp coretemp.0: Adding Core 129 failed
->  ...
-> 
-> Enlarge the limitation to 512 because there are platforms with more than
-> 256 cores per package.
-> 
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+head:   57319c16d5cc3d49067c181c5f5ba49613163144
+commit: 57319c16d5cc3d49067c181c5f5ba49613163144 [34/34] hwmon: Add driver for ASUS ROG RYUJIN II 360 AIO cooler
+config: i386-randconfig-141-20240204 (https://download.01.org/0day-ci/archive/20240204/202402040512.f0f23Wq1-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240204/202402040512.f0f23Wq1-lkp@intel.com/reproduce)
 
-Applied.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402040512.f0f23Wq1-lkp@intel.com/
 
-Thanks,
-Guenter
+All errors (new ones prefixed by >>):
+
+   ld: drivers/hwmon/asus_rog_ryujin.o: in function `rog_ryujin_remove':
+>> drivers/hwmon/asus_rog_ryujin.c:574: undefined reference to `hid_hw_close'
+>> ld: drivers/hwmon/asus_rog_ryujin.c:575: undefined reference to `hid_hw_stop'
+   ld: drivers/hwmon/asus_rog_ryujin.o: in function `rog_ryujin_write_expanded':
+>> drivers/hwmon/asus_rog_ryujin.c:161: undefined reference to `hid_hw_output_report'
+   ld: drivers/hwmon/asus_rog_ryujin.o: in function `hid_parse':
+>> include/linux/hid.h:1118: undefined reference to `hid_open_report'
+   ld: drivers/hwmon/asus_rog_ryujin.o: in function `rog_ryujin_probe':
+>> drivers/hwmon/asus_rog_ryujin.c:523: undefined reference to `hid_hw_start'
+>> ld: drivers/hwmon/asus_rog_ryujin.c:529: undefined reference to `hid_hw_open'
+   ld: drivers/hwmon/asus_rog_ryujin.c:564: undefined reference to `hid_hw_stop'
+>> ld: drivers/hwmon/asus_rog_ryujin.c:562: undefined reference to `hid_hw_close'
+   ld: drivers/hwmon/asus_rog_ryujin.o: in function `rog_ryujin_exit':
+>> drivers/hwmon/asus_rog_ryujin.c:600: undefined reference to `hid_unregister_driver'
+   ld: drivers/hwmon/asus_rog_ryujin.o: in function `rog_ryujin_init':
+>> drivers/hwmon/asus_rog_ryujin.c:595: undefined reference to `__hid_register_driver'
+
+
+vim +574 drivers/hwmon/asus_rog_ryujin.c
+
+   496	
+   497	static int rog_ryujin_probe(struct hid_device *hdev, const struct hid_device_id *id)
+   498	{
+   499		struct rog_ryujin_data *priv;
+   500		int ret;
+   501	
+   502		priv = devm_kzalloc(&hdev->dev, sizeof(*priv), GFP_KERNEL);
+   503		if (!priv)
+   504			return -ENOMEM;
+   505	
+   506		priv->hdev = hdev;
+   507		hid_set_drvdata(hdev, priv);
+   508	
+   509		/*
+   510		 * Initialize priv->updated to STATUS_VALIDITY seconds in the past, making
+   511		 * the initial empty data invalid for rog_ryujin_read() without the need for
+   512		 * a special case there.
+   513		 */
+   514		priv->updated = jiffies - msecs_to_jiffies(STATUS_VALIDITY);
+   515	
+   516		ret = hid_parse(hdev);
+   517		if (ret) {
+   518			hid_err(hdev, "hid parse failed with %d\n", ret);
+   519			return ret;
+   520		}
+   521	
+   522		/* Enable hidraw so existing user-space tools can continue to work */
+ > 523		ret = hid_hw_start(hdev, HID_CONNECT_HIDRAW);
+   524		if (ret) {
+   525			hid_err(hdev, "hid hw start failed with %d\n", ret);
+   526			return ret;
+   527		}
+   528	
+ > 529		ret = hid_hw_open(hdev);
+   530		if (ret) {
+   531			hid_err(hdev, "hid hw open failed with %d\n", ret);
+   532			goto fail_and_stop;
+   533		}
+   534	
+   535		priv->buffer = devm_kzalloc(&hdev->dev, MAX_REPORT_LENGTH, GFP_KERNEL);
+   536		if (!priv->buffer) {
+   537			ret = -ENOMEM;
+   538			goto fail_and_close;
+   539		}
+   540	
+   541		mutex_init(&priv->status_report_request_mutex);
+   542		mutex_init(&priv->buffer_lock);
+   543		spin_lock_init(&priv->status_report_request_lock);
+   544		init_completion(&priv->cooler_status_received);
+   545		init_completion(&priv->controller_status_received);
+   546		init_completion(&priv->cooler_duty_received);
+   547		init_completion(&priv->controller_duty_received);
+   548		init_completion(&priv->cooler_duty_set);
+   549		init_completion(&priv->controller_duty_set);
+   550	
+   551		priv->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, "rog_ryujin",
+   552								  priv, &rog_ryujin_chip_info, NULL);
+   553		if (IS_ERR(priv->hwmon_dev)) {
+   554			ret = PTR_ERR(priv->hwmon_dev);
+   555			hid_err(hdev, "hwmon registration failed with %d\n", ret);
+   556			goto fail_and_close;
+   557		}
+   558	
+   559		return 0;
+   560	
+   561	fail_and_close:
+ > 562		hid_hw_close(hdev);
+   563	fail_and_stop:
+   564		hid_hw_stop(hdev);
+   565		return ret;
+   566	}
+   567	
+   568	static void rog_ryujin_remove(struct hid_device *hdev)
+   569	{
+   570		struct rog_ryujin_data *priv = hid_get_drvdata(hdev);
+   571	
+   572		hwmon_device_unregister(priv->hwmon_dev);
+   573	
+ > 574		hid_hw_close(hdev);
+ > 575		hid_hw_stop(hdev);
+   576	}
+   577	
+   578	static const struct hid_device_id rog_ryujin_table[] = {
+   579		{ HID_USB_DEVICE(USB_VENDOR_ID_ASUS_ROG, USB_PRODUCT_ID_RYUJIN_AIO) },
+   580		{ }
+   581	};
+   582	
+   583	MODULE_DEVICE_TABLE(hid, rog_ryujin_table);
+   584	
+   585	static struct hid_driver rog_ryujin_driver = {
+   586		.name = "rog_ryujin",
+   587		.id_table = rog_ryujin_table,
+   588		.probe = rog_ryujin_probe,
+   589		.remove = rog_ryujin_remove,
+   590		.raw_event = rog_ryujin_raw_event,
+   591	};
+   592	
+   593	static int __init rog_ryujin_init(void)
+   594	{
+ > 595		return hid_register_driver(&rog_ryujin_driver);
+   596	}
+   597	
+   598	static void __exit rog_ryujin_exit(void)
+   599	{
+ > 600		hid_unregister_driver(&rog_ryujin_driver);
+   601	}
+   602	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
