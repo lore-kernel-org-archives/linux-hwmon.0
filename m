@@ -1,68 +1,68 @@
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49DA624A0D;
-	Sun,  4 Feb 2024 14:49:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C89A81EA7C;
+	Sun,  4 Feb 2024 14:50:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707058155; cv=none; b=WWXtcRJPeN9ROt48Ll1WZxkC8sgSQnbcYabCUKtjEf2qwp/vjEnwejXZg7xDNL1pBUUDSMEHZWsL0ij5OELnYhxXHqgKOX96cRTSsKCAmXZSTMo5s/UhRYbID1YAj+6WuJBEzVk5Yh6Qk8u/nFX9GBqZ776y+HM+quIoUMZtkD8=
+	t=1707058242; cv=none; b=h8FqTqvCoT17H4dPctZSyxKfsDcmFskJTeZSavvXobkIBur58eFCgPUcOjjeddoXqHUxCl0QtPaHRIlFqimJimmFYgoSuf9eiufViGc9o37G4+uqjarze10NGui0kQ0GcKQIduzik4HpAYU6Z1BPrZYwpKBAzHortVOQIxswiRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707058155; c=relaxed/simple;
-	bh=UO2hnUkxZW3kgQmzeSCEJBa5rIWlJyB7ZWW2ErVGQsY=;
+	s=arc-20240116; t=1707058242; c=relaxed/simple;
+	bh=HT/Bk8494dHlbDrMAhPx2xWwp8+JW/84uYVqbVQcuiA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gyaDsCtY5A6u+/WjDT9etVyAvsAIm3rsG4Qb/sKcMWzmY7ttzwLE8uRbfBDtSNABqGuS8TtjznsOUMdi1N/VU8V/mg4Ho86Xorolw/X7v1STReDht1Q2p6NzJNfT5aS0quWVLkvX/BES22AMdDH2YvsHhn4ovZMKgngL29geo88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BN8bTO3Q; arc=none smtp.client-ip=209.85.166.47
+	 Content-Type:Content-Disposition:In-Reply-To; b=p8DqNyWQcxTwCSIrzLXMxO+ttb8aAeb49f45cggE+Qoixi13Dksh5YY8UHGhat+PyuvtB7Xym/HVo8cIIXmz2xnz8PiLpC9XAeU0F38fYEEXmNSnu+RvE8R5mzwLBCF1Zqbq72Y33fc5pNEG2s5q4XefSilAeTie+dCbD54cHgk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FBzPIHvb; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BN8bTO3Q"
-Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-7c00128de31so141444339f.3;
-        Sun, 04 Feb 2024 06:49:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FBzPIHvb"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-295f9a4a656so2971147a91.1;
+        Sun, 04 Feb 2024 06:50:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707058153; x=1707662953; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1707058240; x=1707663040; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=tS11s01N9W8G62GBdNlHmo/I6D3Ch5XK0GqtBFBBIZw=;
-        b=BN8bTO3QZWSVCAKOgSMyd9zLXXyi4daW8mMLeCHz5TLTCW8m5eVxYBSq0rgONmwhz7
-         02++DFtQy7rjWAfVyHpB+zKeMs3h7hvF1kmJGj45H72eBis0M6MmM3KzLkfSNvryQaVe
-         PF4wi5wfR6DHMfcBWPtjOlfiz+yh101d9IvjnqdyazsFUhl8ffrlBg8V421OuogjrNLV
-         ZmkS1K/iB74+xufCKgN1uMeYVfE7/or8pW9wu6WzlQUw0s0WqBbRiTTyBON5KZlCp35H
-         zNTrNy3PIx6iriDfv7S7KWkf36K68DI6yLTLxaiyzvoD6Q6s7VojFV/SDV21FcTMxOte
-         fYSw==
+        bh=SsZuRdx+Nr70AwdSYjYahltey3ukyaLl20XdZHsUDt8=;
+        b=FBzPIHvbOsJZs/3np3EonRdl3JRgtzdP5YuLUiNgR/0UZmjBCFP3p+GZ1WYqMKxuYo
+         WcP0tZnzTSqV1FfjNAZykw5h33AyXTwh3pXMPBIIZffdK/cHHMCZLyIN5Radn2F1np/v
+         nN1C6Ffp6jGmb13V68Xcv4OgiDf4a3kO5WPTmWtmgV0o65VKyzEjsTkOdtUv77HeHqZf
+         qbVrSTHRvyJtfBZgAJPtz2D0AV/3AcsxCApNaptqfM2PCTAYlwD4/8OE/YMeBXsw8haJ
+         cqKaG+G/HS0hkUQpqW1paSmKeEmRk+jqbmgFMNBdfVFi+l4etB8mPal7/SvP+ajVRDYy
+         +Aew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707058153; x=1707662953;
+        d=1e100.net; s=20230601; t=1707058240; x=1707663040;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tS11s01N9W8G62GBdNlHmo/I6D3Ch5XK0GqtBFBBIZw=;
-        b=s7s76PgPfm5L5FjZ94cj+uqM1uYQ6MazEZGmFhegoEb4qTDDH4tqwsKDWjdjuYfNTX
-         SocG4ofpezKSQ+O6gXj8R5g/OQ/BqVA2vn2oGaqtaDoY14uJ4f5m+4MAnoSHGTpmWmEs
-         2i68plom8Mpmp5gdZObGMB4e2zA2W6bxzwH7epc/r75WuXiMcTJgrJVQ6qvL0Brojq6M
-         5yO7Ny2Pccd98LvjwniPsddNAcoatkGBBcRc2/6afkVUJi/lkSzaxpgmim0o0fRHh1x5
-         5P+SHhFALjPDbLmr2BUgETtyyyNq7DiSBW9iEkUOfJUM7EFe/LakcBNq4TmjFjf3YEA8
-         dgSg==
-X-Gm-Message-State: AOJu0Yw6gds66Qe0UQR7+fz7lktORIKWCzQQEJvDeiJ1TLS2C+1fb2Nv
-	ihoFX+dcbU8eD8JDi4Y2r5ztB5ua9de5bbINNXPtdwllLk76uSwV
-X-Google-Smtp-Source: AGHT+IHAHAq0g3yElN1drMWzNPBVtTwD7xoJjvU4A0o9M/AjlGW9fe2k3HWc99PN5RSMqGc99ZTQzQ==
-X-Received: by 2002:a05:6e02:792:b0:363:c4ae:95c5 with SMTP id q18-20020a056e02079200b00363c4ae95c5mr2217622ils.17.1707058153219;
-        Sun, 04 Feb 2024 06:49:13 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCVvvI3nkc03G7ZmClhHUylzm3qTFHyCpmTpRfGvdVhmhrmSPfhDVCSagO3LlQszQ8GhRMhHxAjYjhAQJk0Hwklp01wTDCCPyc1XbbBHY5ICUN3S4B2PG4NUfyZKvlQD4HomfRGP5biS3EoBrEcOUkDGvWRFV/4VzO81kq7vBg4k
+        bh=SsZuRdx+Nr70AwdSYjYahltey3ukyaLl20XdZHsUDt8=;
+        b=mv2ImX7wPZg+WL3Hq/4TfhJ9Uu+5Cmp34LRtZh74enycAIwsmwfpsgMe+EeYW6J6eH
+         Jj6q9JrDW033stTVDKavlxYwyCthbtpBftZxu2pCSKPsIoO/5DfdomyVkXvbRGG9uU8g
+         20M/e7cJ4ZSSD1/n4YoL08NNMzZ0Aesor1sDCDOMEl0RVvym/gQYovG4Apb/6DGBPVm9
+         vtaVQeXiAyF1KJJY3KdvGxt9UcGI/EWtUPh8pMUHQ/3bklMDWPqgGecaJKxN+6Ld3yXx
+         dZ+BKvJt+jL22hinGNcNXwxRzeWley+mozMcfu5PwGw/KiihOQRWXVFaJEJM+Frn5z/n
+         iwCg==
+X-Gm-Message-State: AOJu0YwTqHnpsXXzMsFndW5/I8M9Djk6EQP04rRXUaZcEIhVlE6qnC2w
+	BUMTyRLd+cvlA36HOfdJiDIevwk7R8bM08JD/A9RSRsDlMFI/H/B
+X-Google-Smtp-Source: AGHT+IGXO2+mrrmOGCIZfuWVbIndTisfRXSAQ1WVjfWOplg0/Uh1Xhu6NqnyOuzxXOtB+3W6CqxS+g==
+X-Received: by 2002:a17:90a:e554:b0:296:69a:34c4 with SMTP id ei20-20020a17090ae55400b00296069a34c4mr11108671pjb.21.1707058240057;
+        Sun, 04 Feb 2024 06:50:40 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCW0/LJd5X3BlHuK5yonX7BtQSb0cG3HichPBu2V9IZ46pUiGYleeDdm/ej+wPkfxtXREwotDD4HNKXFpyqxgjZyIZM24/9v0KqqnHKiLRwX8AXdqacefvvpVPt23mLqu0v0j2vk3mzhC7oU9Altj2KF2wQ+8TR++rEvkYSCAej5
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i17-20020a63cd11000000b005c6e8fa9f24sm5267446pgg.49.2024.02.04.06.49.12
+        by smtp.gmail.com with ESMTPSA id a1-20020a17090a854100b002964ce7d420sm3189614pjw.42.2024.02.04.06.50.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Feb 2024 06:49:12 -0800 (PST)
+        Sun, 04 Feb 2024 06:50:39 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 4 Feb 2024 06:49:11 -0800
+Date: Sun, 4 Feb 2024 06:50:38 -0800
 From: Guenter Roeck <linux@roeck-us.net>
 To: Zhang Rui <rui.zhang@intel.com>
 Cc: jdelvare@suse.com, fenghua.yu@intel.com, linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 10/11] hwmon: (coretemp) Remove redundant
- temp_data->is_pkg_data
-Message-ID: <a12fdf3c-b8d6-4deb-9f02-8b34586af836@roeck-us.net>
+Subject: Re: [PATCH V2 11/11] hwmon: (coretemp) Use dynamic allocated memory
+ for core temp_data
+Message-ID: <c9589909-5c24-418b-96fd-f0fcb2be6a8f@roeck-us.net>
 References: <20240202092144.71180-1-rui.zhang@intel.com>
- <20240202092144.71180-11-rui.zhang@intel.com>
+ <20240202092144.71180-12-rui.zhang@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -71,16 +71,18 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240202092144.71180-11-rui.zhang@intel.com>
+In-Reply-To: <20240202092144.71180-12-rui.zhang@intel.com>
 
-On Fri, Feb 02, 2024 at 05:21:43PM +0800, Zhang Rui wrote:
-> temp_data->index saves the index in pdata->core_data[]. It is not used
-> by package temp_data.
+On Fri, Feb 02, 2024 at 05:21:44PM +0800, Zhang Rui wrote:
+> The total memory needed for saving per core temperature data depends on
+> the number of cores in a package. Using static allocated memory wastes
+> memories on systems with low per package core count.
 > 
-> Use temp_data->index as the indicator of package temp_data and remove
-> redundant temp_data->is_pkg_data.
+> Improve the code to use dynamic allocated memory so that it can be
+> improved further when per package core count information becomes
+> available.
 > 
-> No functional change.
+> No functional change intended.
 > 
 > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 
