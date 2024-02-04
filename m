@@ -1,65 +1,67 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AA2B10F1;
-	Sun,  4 Feb 2024 02:26:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D65F225AC;
+	Sun,  4 Feb 2024 14:45:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707013600; cv=none; b=IUllzHwjBmIfQzGRk8vvgwNmZRj0rdQ9Vo8IEgVn7OyfPUlj+OOat81hj/wyAAYIT9yzN5FS1fj2jR1q7yp0au0uSPYZQ0OJHTMyM8OIjc0lfmSAiOOSEOlqHvDUV1rfeCPEXZD3TwQO667K1ULygsYZP6QoXW2iFVa+NSsMhoQ=
+	t=1707057954; cv=none; b=XaVRqOgeHxrRFyQ2PtpUOGnlEekerdMfgC7gozYMfIOsUuJCSC3xSRR0CQxC3WUADAeePb6Bt8jUyBrNcoWpApGq5Al4KxyEPHluhgkFU4zbnCFcTTrCSUxm0MIKBibsr5hty8T1JqYExldiXE53mTWGGDk768E+GgPxSXj9TCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707013600; c=relaxed/simple;
-	bh=MZuUD704UrOLgccaN1b2cCtt8f2iQc2TlTIT1NofrqM=;
+	s=arc-20240116; t=1707057954; c=relaxed/simple;
+	bh=YenNIZwRKLKsQFgoZYIyCfXxVNYLV7RzcQTxVof1mDc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Gr5TzF2+VNaio57Y76E6TlMSzQjyhtgAj6dIARCyC6HBawrRgJ45tbBNiiJWyDigtcxuooU+iZkpMuXvnxewVSKsoM16aRvxygl3RbGNlX5SODI/+cx7zdFvN7JvGT7rYPpeAxShSF0FGTXSqkDFxF2HusY8T86iw0hlYFJF28s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OHX2fOkL; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=uiJCN1J6DxaKPBpjNrBuNdfOWMKxlSoiljmwGX6WhW6BhjWmOBkmB3gScV4UqG5CjsQnC1lzDGNfQPNffm6H448UTeNLElAXMx/o3R6ViNuCNbv1pWnNE/JLVkcfOfCDsdIruIy4BVQGLwvWupMidcPwb+IcO1QvY9CeHVYjgRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gL/2FsXc; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OHX2fOkL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707013598; x=1738549598;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MZuUD704UrOLgccaN1b2cCtt8f2iQc2TlTIT1NofrqM=;
-  b=OHX2fOkLXCW1KtVUJqoUyoN+ud+HZ5hfubYggwalRpNenq/HSoGa6cUx
-   v2T+1ij8btF/OboBCIlH1TgYkkzTAuvu8E8weiSWJpSyeMD/iFnylqnpZ
-   ieoC8R9PHGVAjeFI2Yrc3rFCIn2p+nrO04QOGk2p+/P4o+kzidgzPIytX
-   CA427PFMdcoITAbNmNHvMGTeT+5CpqlUoI6rrIQvlPjpr9GDQab+IAD/C
-   Vrk59yckSQ0vTzdkluCNyyBRdmPigSHvaF2tsAZhyoJWnnnmVrL8+65v3
-   Liyo6pzF4qzzDWSQK4to+hvcJgBJ79hHxRn9fI5UV+n2/gFQGzFzkqgFu
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10973"; a="10948395"
-X-IronPort-AV: E=Sophos;i="6.05,242,1701158400"; 
-   d="scan'208";a="10948395"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2024 18:26:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10973"; a="908957191"
-X-IronPort-AV: E=Sophos;i="6.05,242,1701158400"; 
-   d="scan'208";a="908957191"
-Received: from lkp-server02.sh.intel.com (HELO 59f4f4cd5935) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 03 Feb 2024 18:26:34 -0800
-Received: from kbuild by 59f4f4cd5935 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rWSDH-0005tm-2y;
-	Sun, 04 Feb 2024 02:26:31 +0000
-Date: Sun, 4 Feb 2024 10:25:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>,
-	alexandre.belloni@bootlin.com, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	jdelvare@suse.com, linux@roeck-us.net, antoniu.miclaus@analog.com,
-	noname.nuno@gmail.com
-Cc: oe-kbuild-all@lists.linux.dev, linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-	Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: Re: [PATCH v6 1/2] drivers: rtc: add max313xx series rtc driver
-Message-ID: <202402041027.jyioXP7e-lkp@intel.com>
-References: <20240202025241.834283-2-chris.packham@alliedtelesis.co.nz>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gL/2FsXc"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-290d59df3f0so2928700a91.2;
+        Sun, 04 Feb 2024 06:45:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1707057952; x=1707662752; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=F4Z1CvXWgSSfD9byvO9qZBZU2k8q/qLZYoBWgzMgYhQ=;
+        b=gL/2FsXcPZTplQcZpEQxupOcLY1nL6pXUT9BZ1U1Jtu1PQLXo9UTOx1DcLs/BC+FqV
+         wLbME+3jD3/X0rblST5sOdJzbUD2hiXqH/KrJHJA2KvmqhVFqsL9F0TobcqRzu89+W63
+         EbxNvpqdI1nIrEQi3T0I+E40XufmA0CqhueBZwOBSj7YWYYC3u0jb2PSys5zAFqjGl5o
+         rTozjlV2WtgppNLwU3d6/7gWZ1ror4JHE7iJzu/Kb+bHC4fLHoybBXiNiYXc6KO2iZ4D
+         zKs0WgVs3OwGbKmKJ5zKooB0hmd3O7NUkNZ4U+aWDuQEcxkxDYYpstzazsgdv1dc1iEz
+         VYbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707057952; x=1707662752;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=F4Z1CvXWgSSfD9byvO9qZBZU2k8q/qLZYoBWgzMgYhQ=;
+        b=oLrbl0ef57dZxk5QSrlZb5AYF5T/RhHbVzOt0z/ZLX3N7dE6PEzRBachwUEVSvRGkD
+         j7/4+7NFwEEcmKvk1DiO4fi2P6XgfXS+o7M+QkBFO+hOVEZBXPytjMV7DqPc7bJYBzLT
+         q3+uFTWv9OiSx0scybh+I+F0OG/uE/u94BWPbfvBREcsCGs+UzS8dorT2Ag+noyknecG
+         UusWHZm8h8cKcSlU21kresYGTDoiFe15H7G2S36LwehRvR6l10xfNrzesGpGSDRzzYuV
+         HY+7M4zq4s6JOGkiRdpFDo0sQQisNAcPfzVIo/B8wAEmUjdVazo3bMYfQE+HK+NR8DVS
+         wi6w==
+X-Gm-Message-State: AOJu0Yw5q0u+afubctmpW53D0J1oiSFsmM/Y6t7DTMITxHnM5l3gLuyf
+	Fk6AtZxSTI+YdE1Vzi036z28C6pvFYG408xS8ASA+8LGoDatlb9L
+X-Google-Smtp-Source: AGHT+IEh3XB83Xq8GlWM5Fwd+yTWJFPE3dCC+xCAr2fcdJJTD8Wj40Ybfu1fbKhs++wYUbgZH1f7vw==
+X-Received: by 2002:a17:90a:c68e:b0:296:2afe:25e with SMTP id n14-20020a17090ac68e00b002962afe025emr7848783pjt.32.1707057951780;
+        Sun, 04 Feb 2024 06:45:51 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCWPN8yL2rL7xAuqSzR26HNnATQVrhm29fnqkktKatED1KczPVSWO3hvhBcxj/8L9PKuvraojfdchrsZNl/9+gguQuofWOySqkBUIaphbQ5K8xqArfrLmY4a/b/13v6TBn5HTfNVSlzGHxM3BVFaZ5gr2Tv7HtE/6AMhE6qbTPgA
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id mi14-20020a17090b4b4e00b002963e682f6fsm3299768pjb.57.2024.02.04.06.45.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Feb 2024 06:45:51 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Sun, 4 Feb 2024 06:45:49 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Zhang Rui <rui.zhang@intel.com>
+Cc: jdelvare@suse.com, fenghua.yu@intel.com, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 04/11] hwmon: (coretemp) Introduce enum for attr index
+Message-ID: <508b0bac-daef-47fd-afe3-0eadb5e67379@roeck-us.net>
+References: <20240202092144.71180-1-rui.zhang@intel.com>
+ <20240202092144.71180-5-rui.zhang@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,39 +70,17 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240202025241.834283-2-chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <20240202092144.71180-5-rui.zhang@intel.com>
 
-Hi Chris,
+On Fri, Feb 02, 2024 at 05:21:37PM +0800, Zhang Rui wrote:
+> Introduce enum coretemp_attr_index to better describe the index of each
+> sensor attribute.
+> 
+> No functional change.
+> 
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 
-kernel test robot noticed the following build errors:
+Applied.
 
-[auto build test ERROR on abelloni/rtc-next]
-[also build test ERROR on robh/for-next linus/master v6.8-rc2 next-20240202]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Packham/drivers-rtc-add-max313xx-series-rtc-driver/20240202-105538
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
-patch link:    https://lore.kernel.org/r/20240202025241.834283-2-chris.packham%40alliedtelesis.co.nz
-patch subject: [PATCH v6 1/2] drivers: rtc: add max313xx series rtc driver
-config: parisc-randconfig-r051-20240204 (https://download.01.org/0day-ci/archive/20240204/202402041027.jyioXP7e-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240204/202402041027.jyioXP7e-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402041027.jyioXP7e-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   hppa-linux-ld: drivers/rtc/rtc-max313xx.o: in function `max313xx_probe':
->> (.text+0x16b0): undefined reference to `devm_clk_hw_register'
->> hppa-linux-ld: (.text+0x16c8): undefined reference to `devm_of_clk_add_hw_provider'
-   hppa-linux-ld: drivers/rtc/rtc-max313xx.o: in function `.LC19':
->> (.rodata.cst4+0x4): undefined reference to `of_clk_hw_simple_get'
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Guenter
