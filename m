@@ -1,173 +1,118 @@
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2096.outbound.protection.outlook.com [40.107.215.96])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 372D210965;
-	Mon,  5 Feb 2024 06:59:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.215.96
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707116381; cv=fail; b=itzn/LPXcF9dZ9MWyj6xDXbvp2YeFeiSSd62bk73g27OuxTvuIlvmnpA+bqB3VGis4lSSMleKCryebtHwRN087pGzXHiendTO7VUPuESd+6b3mynBg81Ws4eTCkec7rjx+XGyK7DpLC4ZZWt5NkX+0Wdt/PT7jt3l+cjOaPwb5w=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707116381; c=relaxed/simple;
-	bh=sYWS0kVvISurkVSYv9d6/wYFCEEfqiJHIwHI49m5a64=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=DBvgQi2yZ82dGLJ/09yDj60Hy+I8Ly2FZEtmtWmnJnY74DV4mQ4sCRMHk5yvdCLXRp6gcCK27FmlOSCon2PZnb1N9x20YZyfT98tHcBc5HdNNJ6p7V6rN9nEYl/15GvomzyPPHuwUkpxccZ/NjZFZH5Q9hADw22xYwIxETxmCis=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b=PiMuTRAK; arc=fail smtp.client-ip=40.107.215.96
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B01B11198
+	for <linux-hwmon@vger.kernel.org>; Mon,  5 Feb 2024 08:19:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707121201; cv=none; b=iBX3eIRhxF9egtlE8jBj+1Z7KRgpW2/HgU8JB30P7e+9djLSbDjqk2VVYr2Vm5cxOqkH5PfMTc00jHwesFiuGCijzUgn61r20xvQoCYFpz/bRSnkdObXjAqOlJXc8g6q1Z/OfD9P/RXKMiHXIEybci98Z236XhctFw4sByN+okg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707121201; c=relaxed/simple;
+	bh=tOqoNGXqBhxICDKxtTqYvgv3VJJEQe+9seclLdLKod4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=B4YIbUIL6+Hqkn/eRX86ZoVh1dG3Y3+6x3H+UeVSX/aOkyi/lPwTy/RM2Y+LHw0VTWPcie8+iJkEzm2X0Ja3EgEaA/PJC/1OAUgrupQO0hg9LIiKorSJxm3BcPcoTo0WJnaE6z/itoRDPqvrynGxTUT0aMp75C0eo6Iotl3kc00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I5Ouq2EE; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b="PiMuTRAK"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IosF83yMewDhmOHC/bMpG+AabNOEJmijVmuhaG9ihs3PXNm9ct1nFxH6hvOQ/ORuJkvu/0CSRjDsKRPJNeW0Bw71fdCGCEX8w1Sbf8l+ADHnv66jmpkw8YWAGE2kEXDj9eohLMlK4F4D4pPe2GbRNOT+SlCWvMScT6UBNgGfZTaM7aZK5zf8envJNnBr8sYccHb/YiKfp8CV225t6V4qGsPlCO5GmCjiBJbZIQcJeSv/Zv+aequpPbKFYMfcq7ZySIbWx/Ec43MRHGeHADei7NB+zacf/0Mq8di4HkaewzuPd1NIkaufrg4OXspUn3HLpwU2CGs5PNHnyccjBER4Rw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9tT02xkRqPxg1XRHUgKyZA8jkAcH2b2dN6YdtOzLCmU=;
- b=HTDXELqgcr1WRhhdIcAG+o2gopzBDyQrwSZBvw/NYmwNIUYKLt9AxqZrQJQcoS32M9JIWHxuAEnCmEM8HdfUVVeJ21XkRmqPV2Y2SqcCo4VFQFF1rHM/9riMZqy/Xx9gu3++sBJIUHyqisWq2V6yJr6QuMAT+NMEXzQoAI8aX1Yq3jd12zAkirihc8EOHSD8TtmspGhQpWIFN2s5Lba6Kh6QdxFBDQOLmdPhafnqIZdhJjSgNKH3v7JCY1deGNIUzZhUviVdAyVaJja2ZYq+T65r1URpRDR86xMSGwwREuaK8kyCav7mZCR3d/gqbgQ9Q0h/fCvqxLYVjBSHj8Xqwg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9tT02xkRqPxg1XRHUgKyZA8jkAcH2b2dN6YdtOzLCmU=;
- b=PiMuTRAKNB3BW2h4AvCKYO5BZlM9171dUkxEGpyves3Chf2y6JRFgKv55jqcOSAanDXsuKUbmupORPWtfQYCjcI+8dwfqaafDR7ady/4MowUKN3eqxK9maNey/OhE6sFz3+aN7T9++B8RZgusRDFk9lc9Bg/Cnz61n7pYX/MuO0lzLgeD1WkxrfMcN90N7I5oz36dKVC03BfDSI7YTSTTOrtnpC9Rzqu+0FbxXET6pkIAPgvPyGYQM+kCOX5i+piF8TJBNQbgzVtOiIpo4bHsbUzrXctc/lSFKrLci2jkC93f9hXyrON691assiYEwIzBeBpJTvmDkgNNv5plI7lzQ==
-Received: from OSQPR06MB7252.apcprd06.prod.outlook.com (2603:1096:604:29c::6)
- by SEZPR06MB5897.apcprd06.prod.outlook.com (2603:1096:101:e6::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.33; Mon, 5 Feb
- 2024 06:59:27 +0000
-Received: from OSQPR06MB7252.apcprd06.prod.outlook.com
- ([fe80::5322:42aa:bc2c:acac]) by OSQPR06MB7252.apcprd06.prod.outlook.com
- ([fe80::5322:42aa:bc2c:acac%7]) with mapi id 15.20.7249.032; Mon, 5 Feb 2024
- 06:59:27 +0000
-From: Billy Tsai <billy_tsai@aspeedtech.com>
-To: Guenter Roeck <linux@roeck-us.net>
-CC: "jdelvare@suse.com" <jdelvare@suse.com>, "robh+dt@kernel.org"
-	<robh+dt@kernel.org>, "krzysztof.kozlowski+dt@linaro.org"
-	<krzysztof.kozlowski+dt@linaro.org>, "conor+dt@kernel.org"
-	<conor+dt@kernel.org>, "joel@jms.id.au" <joel@jms.id.au>,
-	"andrew@codeconstruct.com.au" <andrew@codeconstruct.com.au>, "corbet@lwn.net"
-	<corbet@lwn.net>, "u.kleine-koenig@pengutronix.de"
-	<u.kleine-koenig@pengutronix.de>, "p.zabel@pengutronix.de"
-	<p.zabel@pengutronix.de>, "naresh.solanki@9elements.com"
-	<naresh.solanki@9elements.com>, "linux-hwmon@vger.kernel.org"
-	<linux-hwmon@vger.kernel.org>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-aspeed@lists.ozlabs.org"
-	<linux-aspeed@lists.ozlabs.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-doc@vger.kernel.org"
-	<linux-doc@vger.kernel.org>, "linux-pwm@vger.kernel.org"
-	<linux-pwm@vger.kernel.org>, BMC-SW <BMC-SW@aspeedtech.com>,
-	"patrick@stwcx.xyz" <patrick@stwcx.xyz>
-Subject: Re: [PATCH v13 1/3] dt-bindings: hwmon: fan: Add fan binding to
- schema
-Thread-Topic: [PATCH v13 1/3] dt-bindings: hwmon: fan: Add fan binding to
- schema
-Thread-Index: AQHaTouU6UuA7DszbkS0jmW8LTy9jLD4yeUAgAKZNBc=
-Date: Mon, 5 Feb 2024 06:59:27 +0000
-Message-ID:
- <OSQPR06MB72522452AF463172AD54D4EA8B472@OSQPR06MB7252.apcprd06.prod.outlook.com>
-References: <20240124060705.1342461-1-billy_tsai@aspeedtech.com>
- <20240124060705.1342461-2-billy_tsai@aspeedtech.com>
- <e1b1c69f-a2ff-4fa5-80a6-3ff0a3de6ce6@roeck-us.net>
-In-Reply-To: <e1b1c69f-a2ff-4fa5-80a6-3ff0a3de6ce6@roeck-us.net>
-Accept-Language: en-US, zh-TW
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OSQPR06MB7252:EE_|SEZPR06MB5897:EE_
-x-ms-office365-filtering-correlation-id: be3b79b4-bfe9-4a5c-4bef-08dc2617fe83
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- sIsm+N/HzTnM+AsSQhZR03nJNGvi2PyWCsAhKmAhiwjns1cef+ueQmnJ3xov0QG1eZMvb7JUOJfjo4whQv6cXbFE8oSUhDrsZ/BmPE7lSCqN65dMHnRrl8+m/y0bnle25dc+Gj/nxUKADrruonXR/MGd+mCgSMrzor+LoGO0+mCkrBn+vdTjci/Kb6WiVAG6jgtLpmCtp9JQ0SqAAIxA7uE2YLZNvE8wECuN705+nYT4SxUa4LNTIcK5an/s5JPKxjafVBM+0xq2g13TXXDBi3HA93/LaLYgSSohaJSXzOUTh+3TClnqHc8OgR8+98N+/T2g60CACFa8FC/KfOss4iafVpAZNKhgk4W58Fz0t3jPSp2R1nTHYDXvK0vn6z+2/9qwxVyIW5Y/Q+yQr6drXJsPBaFjaElsnrAX+PeAuwbwIbxgzaOx3Ngi9W3NkbXIKwI/HPIQ8Fkyh5Vg4MwMwrSOQZpbiUIsThk8mYqEIJRpJAk+mdWNbSG/rnbO1vEV2U7bWzV610JsiIy5BpP/W+75Kp5KzrQhlwVgXsoJYBo2kiBPkjdbMtOVlMw9ZHj2Ud2lxwWsKP9c05L9P0cI+8s/12/EIDomtQfCqO2tRpihjIahOaPKAP6r6/yLMfCb
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSQPR06MB7252.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(136003)(366004)(376002)(346002)(39850400004)(230922051799003)(64100799003)(1800799012)(451199024)(186009)(55016003)(33656002)(9686003)(55236004)(478600001)(38070700009)(71200400001)(41300700001)(26005)(83380400001)(122000001)(6916009)(7696005)(64756008)(4744005)(7416002)(66446008)(2906002)(66476007)(4326008)(5660300002)(66556008)(54906003)(52536014)(91956017)(66946007)(8676002)(76116006)(8936002)(38100700002)(316002)(86362001)(6506007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?z+1qTVR+hZ4ZnII1gmc/97BC62JkX8Pr8acvmOZGN+JtVP5PYrD4cQ6vF6?=
- =?iso-8859-1?Q?skHpH1+Ye0snjS6rYHyuD2ozb85b1jACWJb49QBMPznRqwK8sXkZgirZrD?=
- =?iso-8859-1?Q?LRScMUMxU9oH3hQElFgBgPos+wqgCN5yHheEQL2P5Jt9IU7ZjblUzymuhw?=
- =?iso-8859-1?Q?+RLIrGzLA6kWixBz/oi3baHS28UbX8+CAYHO6kEIDhuTvEC6k4IawsWhuv?=
- =?iso-8859-1?Q?oQjj8Ntw0IJxi0gN+zLIh8lDdxS9p5cimxRqr14iM5GB43z3kGLRR9cdBc?=
- =?iso-8859-1?Q?UwPunXvqKq4xq0EfLFq1PhfisUefZTfl2mevyxjD6+FU6OZUrmUFZ8OTeE?=
- =?iso-8859-1?Q?hVPODVv79SIkrompo+EycgIBNpVX0zpUWNIoIvwFwuVeCzyxxE0Y4qIq1J?=
- =?iso-8859-1?Q?ziAnM8n2iE1U7fchSmNAuzn5LwIv8je8+/OE1+eU/y82Bs52hmMiqekLiT?=
- =?iso-8859-1?Q?YemBgRU5MuVlRxQiG8/r9MZdoVe130LK2U9f2tgXISUeMB5ThdaN4jzgR0?=
- =?iso-8859-1?Q?Uo6gYVcz4xIp4Y+jfUYdDiMlEFwqlZa/FdfkWI2ZjX43bJfAJnaFmdE073?=
- =?iso-8859-1?Q?3NezkqVp5VehtSzKhQiiqFQtBQ6VIU6VSrXHNSDsfW4/G8sPeTzUhbW/Re?=
- =?iso-8859-1?Q?0wAtvTEfOd492BjCDqc+xrI6TkqJaq9FvM5x5SAxAS9O/0SBaUXG+DF7Fv?=
- =?iso-8859-1?Q?xJIuSRraKTYC1vtEd7mBTSdeJxoUDY5AL/LHzyqPMIpDDkjVI0kwO50DVa?=
- =?iso-8859-1?Q?5gWgUb4DQAHotNYLE5T6ATIMOCJtWP+fv2UxLkFRkotwBQgNqrgxhefuet?=
- =?iso-8859-1?Q?23RA7YuQHdKar/DmAo2Bl/sXvm+874pJFl4weURIrbi0U8elqDYKXjkzlM?=
- =?iso-8859-1?Q?UrtpRN0raD6aSQS6an+xqCF944PqqZ+pR5rVP0YI1fgb8X9T0ZtBEj8V9Y?=
- =?iso-8859-1?Q?A4hKW9stu3qpzC1Dex7e7iRKabc+uKyw1vtEyNqh9zIQYb0WAwsDC5mNEg?=
- =?iso-8859-1?Q?lOMfHkXlKVcCqEHEsPcjcUB5HRNYorepGYoxH4dcmvmWTZQJfvH96iSq1a?=
- =?iso-8859-1?Q?S+fjCaIBCGsXIrdtA31FeVA3JMB64YJMOtif044AizF1Pbnk+775qKwMXc?=
- =?iso-8859-1?Q?XP7dTqCGbYokawrIT+JxvEFqe71+Tmit3ciTf9682EFZoz+Lyn0W9Ll9WN?=
- =?iso-8859-1?Q?imwcaA8QC386r/tjnwhtatG+IEe3DkHKgibBZfz8khmNXt3WNfgfl7DWL2?=
- =?iso-8859-1?Q?gAHI2Cp40fcFk9LRJ7FTBhQOWCMomTJwjeup4Y/ywpMLJ6u9ydkdWUwruE?=
- =?iso-8859-1?Q?oR93OX5zLP1Ahyww+CIYC/eJLusAmJ4jMqbCar+V1DIS7IyVrwcWV6/eW5?=
- =?iso-8859-1?Q?xz1iWyhu5NTPLnZpmXfijSMFLuD1cfX5jUf9Q19sKaCvI8rs9BNj6XwEzR?=
- =?iso-8859-1?Q?DjZDqgTqOmCBJrwDBF3lG6WHylp7YADpgeEVyeiqupKl4d82sNiBaaEcJG?=
- =?iso-8859-1?Q?wQeEnM6U8yJIK+jIYUheqaM2lra2aT/aTykqoOIXUCQdPGiDzXfSYavjUk?=
- =?iso-8859-1?Q?ONhKg0zHV1/ciCY5WQd83NPE85mHCHo4R5+c41efYV8B/d/V1dRb9wWW5H?=
- =?iso-8859-1?Q?7i2U2Lfm3NY5G0FxThY4ukM2ROiiRMTFnd?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I5Ouq2EE"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-40fdc500bb2so3678595e9.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 05 Feb 2024 00:19:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1707121198; x=1707725998; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=n1beHwRvUo+c6suknt3Ya9p8smHFSNN3X3jkZ95cbKc=;
+        b=I5Ouq2EE48CzjGfFSDuEqc33XArSwXUXPiltTuJZE1w0XfZkbzFxvf9RPjSnXOuvxt
+         oTR8IuYx7aEvDcHtCNJ3O0LvEfku+gC4hfaZLv25vfY8zpnOg55xKWSyNLe8d4opO7DO
+         PoMgNEZ2N6mwwZyuDFe2Okbe35pyAfjEficVW3uCGcP37I9vK6idxrZZB+XxN70kFa3E
+         o5168jUHoG45SRTLM5xfRHsqAGuMddtWvbEdHg/WgETLTgBCyT3WXM9/1A/PX/hwCoK/
+         hRFbGtm/ZuEbU/tfQriqwIuvJdafgXUump7gNxHN/zfWYupSgmom2LLlYCt2xBy8Vk4k
+         LB2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707121198; x=1707725998;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=n1beHwRvUo+c6suknt3Ya9p8smHFSNN3X3jkZ95cbKc=;
+        b=CKmnrGUsNJH6y0aBt4HiR2mNk/L07H4TWgXLcOCXammHD62gTcpkdFA9gZxk8k5P0k
+         wkMG6rbQW5wCGoRVVIldOO/W+PzK4Zb1y1UYI9INUl1Q96ycsyEpKawhziH29yf5pVaB
+         kY85jZJBcoyUeq+zqc+h0ZglM/zk2qe0pnJxbClqWO+Fhd9y5Wfo1wRVa3osKSX39uOD
+         T/U1mMv7kBbTVtcBuZofmxuT+QyMcgijdhaJSqyr0JgH8PzBkHHKCu/56IIrzTVwwseJ
+         nyeKVCuInvRuWgho9jMgzJrDoIMNV/L+Vz0thOqFeCY7LvM23CDwjzrCQSNkcHMlep/G
+         tLrw==
+X-Gm-Message-State: AOJu0Yxhh5SVgshaRqK4YFYkrgpk+62jzbWg2jPK3K5f8ApfTjKGsxlh
+	PXUYMFsCN72jiX2e4f+fpA2fFA3qBgEdlINzDKHZ4Zfy9FLuAq8G
+X-Google-Smtp-Source: AGHT+IFMEgsIvheRR2q8cMYwsFwhH5zIV4/1dyYzuMJs7dEv/ET9vuLJPBAwsUT1dGndDJTsnDFmtA==
+X-Received: by 2002:a05:600c:198a:b0:40e:7232:bdf9 with SMTP id t10-20020a05600c198a00b0040e7232bdf9mr4168836wmq.16.1707121197555;
+        Mon, 05 Feb 2024 00:19:57 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCVQqal2vFNLRieBp8lW46CN/u6F4dHt0ePJ4098lQWULtkEk6GaTcoXF2FWP88yzf2YlALlqlbqjM3DtcNxzJRnDKkdAAUatT1BdqFPFNM5vhuBFVZBPbedzli4lIGTK8IiDQrpXSh2pCM4HodNASQrdviV/Xnlf609qLTTJrCG5tg7
+Received: from ?IPV6:2a02:8071:b783:140:927c:82ba:d32d:99c1? ([2a02:8071:b783:140:927c:82ba:d32d:99c1])
+        by smtp.gmail.com with ESMTPSA id o37-20020a05600c512500b0040fc5460109sm7794742wms.35.2024.02.05.00.19.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Feb 2024 00:19:57 -0800 (PST)
+Message-ID: <50af81da-779b-4782-9326-043bc204bfe6@gmail.com>
+Date: Mon, 5 Feb 2024 09:19:56 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OSQPR06MB7252.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: be3b79b4-bfe9-4a5c-4bef-08dc2617fe83
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Feb 2024 06:59:27.5693
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vEP7+YU2drOy4aGBqYmevwv0ctSAerzXPjgqRxdfeZF+2cocshSOUfPJIFn0NqoTnOvYBk0riGMYhkHmI/NhqU2lsilkkL4eoXAxYV+LHr8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB5897
+User-Agent: Mozilla Thunderbird
+Subject: Re: [groeck-staging:hwmon-next 13/34] drivers/hwmon/surface_fan.c:87:
+ undefined reference to `__ssam_device_driver_register'
+To: kernel test robot <lkp@intel.com>, Ivor Wanders <ivor@iwanders.net>
+Cc: oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
+ Guenter Roeck <linux@roeck-us.net>, Armin Wolf <W_Armin@gmx.de>
+References: <202402051456.JOjQbD3G-lkp@intel.com>
+Content-Language: en-US
+From: Maximilian Luz <luzmaximilian@gmail.com>
+In-Reply-To: <202402051456.JOjQbD3G-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-> > From: Naresh Solanki <naresh.solanki@9elements.com>=0A=
-> >=0A=
-> > Add common fan properties bindings to a schema.=0A=
-> >=0A=
-> > Bindings for fan controllers can reference the common schema for the=0A=
-> > fan=0A=
-> >=0A=
-> > child nodes:=0A=
-> >=0A=
-> >   patternProperties:=0A=
-> >     "^fan@[0-2]":=0A=
-> >       type: object=0A=
-> >       $ref: fan-common.yaml#=0A=
-> >       unevaluatedProperties: false=0A=
-> >=0A=
-> > Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>=0A=
-> > Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>=0A=
-=0A=
-> v12 of this patch got a Reviewed-by: tag from Rob.=0A=
-> The tag is gone in this version, presumably meaning that there=0A=
-> was a substantial change.=0A=
-=0A=
-> I don't normally do this, but I downloaded v12 and v13 and did not=0A=
-> find a single change. Why did you drop Rob's Reviewed-by: tag ?=0A=
-=0A=
-Hi Guenter,=0A=
-=0A=
-The fan DT-binding for version 12 is identical to that of version 13. I=0A=
-apologize for forgetting to include the 'Reviewed-by' from Rob when=0A=
-preparing version 13. I will make sure to include it when sending=0A=
-version 14.=0A=
-=0A=
-Thanks=0A=
+On 2/5/24 07:42, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+> head:   fb0833325ac45560e6b62681c77bed56bcfc20a9
+> commit: c3747f28ebcefe34d6ea2e4eb2d3bb6b9d574b5f [13/34] hwmon: add fan speed monitoring driver for Surface devices
+> config: x86_64-randconfig-121-20240205 (https://download.01.org/0day-ci/archive/20240205/202402051456.JOjQbD3G-lkp@intel.com/config)
+> compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240205/202402051456.JOjQbD3G-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202402051456.JOjQbD3G-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>     ld: drivers/hwmon/surface_fan.o: in function `surface_fan_init':
+>>> drivers/hwmon/surface_fan.c:87: undefined reference to `__ssam_device_driver_register'
+>     ld: drivers/hwmon/surface_fan.o: in function `surface_fan_exit':
+>>> drivers/hwmon/surface_fan.c:87: undefined reference to `ssam_device_driver_unregister'
+> 
+> 
+> vim +87 drivers/hwmon/surface_fan.c
+> 
+>      78	
+>      79	static struct ssam_device_driver surface_fan = {
+>      80		.probe = surface_fan_probe,
+>      81		.match_table = ssam_fan_match,
+>      82		.driver = {
+>      83			.name = "surface_fan",
+>      84			.probe_type = PROBE_PREFER_ASYNCHRONOUS,
+>      85		},
+>      86	};
+>    > 87	module_ssam_device_driver(surface_fan);
+>      88	
+
+Missing 'depends on SURFACE_AGGREGATOR' in the Kconfig. Should have
+spotted this during review, sorry.
+
+I can prepare a patch once I'm back from my day-job, unless someone else
+sent a fix by then.
+
+Regards,
+Max
