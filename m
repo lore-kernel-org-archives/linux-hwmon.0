@@ -1,68 +1,57 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C89A81EA7C;
-	Sun,  4 Feb 2024 14:50:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FF84C122
+	for <linux-hwmon@vger.kernel.org>; Mon,  5 Feb 2024 06:43:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707058242; cv=none; b=h8FqTqvCoT17H4dPctZSyxKfsDcmFskJTeZSavvXobkIBur58eFCgPUcOjjeddoXqHUxCl0QtPaHRIlFqimJimmFYgoSuf9eiufViGc9o37G4+uqjarze10NGui0kQ0GcKQIduzik4HpAYU6Z1BPrZYwpKBAzHortVOQIxswiRE=
+	t=1707115399; cv=none; b=SsTN8ae6GEaBAfcZ6ch0Lucb1SB5pDTUDdN0pyRWRkZJYxotyIn/lLlqpQOHsJIfQ1B0nbCndRXe7vXRzRGlK50NKvJ9l9pT/lUMphb6svqnSXCfqhSMSwwSpFyBU+iLbPk48VIiHDY59P4mg2LAuryl4MdZLVKRvnlzquhv1oA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707058242; c=relaxed/simple;
-	bh=HT/Bk8494dHlbDrMAhPx2xWwp8+JW/84uYVqbVQcuiA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p8DqNyWQcxTwCSIrzLXMxO+ttb8aAeb49f45cggE+Qoixi13Dksh5YY8UHGhat+PyuvtB7Xym/HVo8cIIXmz2xnz8PiLpC9XAeU0F38fYEEXmNSnu+RvE8R5mzwLBCF1Zqbq72Y33fc5pNEG2s5q4XefSilAeTie+dCbD54cHgk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FBzPIHvb; arc=none smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1707115399; c=relaxed/simple;
+	bh=HrsjW1rqWWxhvos+xn1TLrEhVexnwXxYatvIMBE02JM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=hWJ53E1c4c8VpzRQ5MFGVexJxcld8PTbqAyFF/vp5i4P3dflUHZ9uj4fmGE2gxtUNsimEVVr7UYiHAeGufT8li05rh/u2aiSpsQucztOoPI5zqRfyUQN783ep7JYjjo6e71KvtmhT+SeY9QXlRKP9UFMBnPK5JgrP/Zh6rmxITc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J7vi4185; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FBzPIHvb"
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-295f9a4a656so2971147a91.1;
-        Sun, 04 Feb 2024 06:50:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707058240; x=1707663040; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SsZuRdx+Nr70AwdSYjYahltey3ukyaLl20XdZHsUDt8=;
-        b=FBzPIHvbOsJZs/3np3EonRdl3JRgtzdP5YuLUiNgR/0UZmjBCFP3p+GZ1WYqMKxuYo
-         WcP0tZnzTSqV1FfjNAZykw5h33AyXTwh3pXMPBIIZffdK/cHHMCZLyIN5Radn2F1np/v
-         nN1C6Ffp6jGmb13V68Xcv4OgiDf4a3kO5WPTmWtmgV0o65VKyzEjsTkOdtUv77HeHqZf
-         qbVrSTHRvyJtfBZgAJPtz2D0AV/3AcsxCApNaptqfM2PCTAYlwD4/8OE/YMeBXsw8haJ
-         cqKaG+G/HS0hkUQpqW1paSmKeEmRk+jqbmgFMNBdfVFi+l4etB8mPal7/SvP+ajVRDYy
-         +Aew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707058240; x=1707663040;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SsZuRdx+Nr70AwdSYjYahltey3ukyaLl20XdZHsUDt8=;
-        b=mv2ImX7wPZg+WL3Hq/4TfhJ9Uu+5Cmp34LRtZh74enycAIwsmwfpsgMe+EeYW6J6eH
-         Jj6q9JrDW033stTVDKavlxYwyCthbtpBftZxu2pCSKPsIoO/5DfdomyVkXvbRGG9uU8g
-         20M/e7cJ4ZSSD1/n4YoL08NNMzZ0Aesor1sDCDOMEl0RVvym/gQYovG4Apb/6DGBPVm9
-         vtaVQeXiAyF1KJJY3KdvGxt9UcGI/EWtUPh8pMUHQ/3bklMDWPqgGecaJKxN+6Ld3yXx
-         dZ+BKvJt+jL22hinGNcNXwxRzeWley+mozMcfu5PwGw/KiihOQRWXVFaJEJM+Frn5z/n
-         iwCg==
-X-Gm-Message-State: AOJu0YwTqHnpsXXzMsFndW5/I8M9Djk6EQP04rRXUaZcEIhVlE6qnC2w
-	BUMTyRLd+cvlA36HOfdJiDIevwk7R8bM08JD/A9RSRsDlMFI/H/B
-X-Google-Smtp-Source: AGHT+IGXO2+mrrmOGCIZfuWVbIndTisfRXSAQ1WVjfWOplg0/Uh1Xhu6NqnyOuzxXOtB+3W6CqxS+g==
-X-Received: by 2002:a17:90a:e554:b0:296:69a:34c4 with SMTP id ei20-20020a17090ae55400b00296069a34c4mr11108671pjb.21.1707058240057;
-        Sun, 04 Feb 2024 06:50:40 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCW0/LJd5X3BlHuK5yonX7BtQSb0cG3HichPBu2V9IZ46pUiGYleeDdm/ej+wPkfxtXREwotDD4HNKXFpyqxgjZyIZM24/9v0KqqnHKiLRwX8AXdqacefvvpVPt23mLqu0v0j2vk3mzhC7oU9Altj2KF2wQ+8TR++rEvkYSCAej5
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a1-20020a17090a854100b002964ce7d420sm3189614pjw.42.2024.02.04.06.50.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Feb 2024 06:50:39 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 4 Feb 2024 06:50:38 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Zhang Rui <rui.zhang@intel.com>
-Cc: jdelvare@suse.com, fenghua.yu@intel.com, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 11/11] hwmon: (coretemp) Use dynamic allocated memory
- for core temp_data
-Message-ID: <c9589909-5c24-418b-96fd-f0fcb2be6a8f@roeck-us.net>
-References: <20240202092144.71180-1-rui.zhang@intel.com>
- <20240202092144.71180-12-rui.zhang@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J7vi4185"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707115396; x=1738651396;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=HrsjW1rqWWxhvos+xn1TLrEhVexnwXxYatvIMBE02JM=;
+  b=J7vi4185uIJTukHvgvcdD2So2ohzIXQV8q17EBKe42MAWXMTERAqrmiL
+   iUpeYejZzvN3xDf2UWnYQeDxLvoTDhH8ryG0OCFc06Bt5tX7I5NpXRrmq
+   tC6Wz/HlnfmTOY4BdLJQHfMT3MOND4+XmBnh4VSyZmEEsP1xg+uvNmGYL
+   dB7ndRXHYLaP1w/81/089MaFSSlQYDy1Yni4rKzzE3TwRzQ68+gW7RnYy
+   z2a9Ogiv9we30gZ9WDIo33D7u650Ujp/sdgHRHEPWdUsAHcLjpgPtO00h
+   kHtXw+j5+WJkDWEWlER9EpjTh/WiBlCQ7Q7Nl5MOcq0gdlaaOEP5COs99
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10974"; a="712576"
+X-IronPort-AV: E=Sophos;i="6.05,242,1701158400"; 
+   d="scan'208";a="712576"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2024 22:43:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,242,1701158400"; 
+   d="scan'208";a="5257810"
+Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 04 Feb 2024 22:43:14 -0800
+Received: from kbuild by 01f0647817ea with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rWshE-0000CO-0d;
+	Mon, 05 Feb 2024 06:43:12 +0000
+Date: Mon, 5 Feb 2024 14:42:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ivor Wanders <ivor@iwanders.net>
+Cc: oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>,
+	Maximilian Luz <luzmaximilian@gmail.com>,
+	Armin Wolf <W_Armin@gmx.de>
+Subject: [groeck-staging:hwmon-next 13/34] drivers/hwmon/surface_fan.c:87:
+ undefined reference to `__ssam_device_driver_register'
+Message-ID: <202402051456.JOjQbD3G-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -71,22 +60,41 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240202092144.71180-12-rui.zhang@intel.com>
 
-On Fri, Feb 02, 2024 at 05:21:44PM +0800, Zhang Rui wrote:
-> The total memory needed for saving per core temperature data depends on
-> the number of cores in a package. Using static allocated memory wastes
-> memories on systems with low per package core count.
-> 
-> Improve the code to use dynamic allocated memory so that it can be
-> improved further when per package core count information becomes
-> available.
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+head:   fb0833325ac45560e6b62681c77bed56bcfc20a9
+commit: c3747f28ebcefe34d6ea2e4eb2d3bb6b9d574b5f [13/34] hwmon: add fan speed monitoring driver for Surface devices
+config: x86_64-randconfig-121-20240205 (https://download.01.org/0day-ci/archive/20240205/202402051456.JOjQbD3G-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240205/202402051456.JOjQbD3G-lkp@intel.com/reproduce)
 
-Applied.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402051456.JOjQbD3G-lkp@intel.com/
 
-Thanks,
-Guenter
+All errors (new ones prefixed by >>):
+
+   ld: drivers/hwmon/surface_fan.o: in function `surface_fan_init':
+>> drivers/hwmon/surface_fan.c:87: undefined reference to `__ssam_device_driver_register'
+   ld: drivers/hwmon/surface_fan.o: in function `surface_fan_exit':
+>> drivers/hwmon/surface_fan.c:87: undefined reference to `ssam_device_driver_unregister'
+
+
+vim +87 drivers/hwmon/surface_fan.c
+
+    78	
+    79	static struct ssam_device_driver surface_fan = {
+    80		.probe = surface_fan_probe,
+    81		.match_table = ssam_fan_match,
+    82		.driver = {
+    83			.name = "surface_fan",
+    84			.probe_type = PROBE_PREFER_ASYNCHRONOUS,
+    85		},
+    86	};
+  > 87	module_ssam_device_driver(surface_fan);
+    88	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
