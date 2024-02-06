@@ -1,107 +1,143 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D8E812E1FF;
-	Tue,  6 Feb 2024 10:17:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B56A78F54;
+	Tue,  6 Feb 2024 12:54:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707214653; cv=none; b=izTueArmWkbkSs1PriPOIQXbNdcfX7R603mmxi4muacpfMdq59imdo8rPZW3zsCmz8zG46P85V0F9gLibEsCK6oFfBuCG4rUcupP2a/8LQswBu6bdIf/7K0uWzqs1Cyyvh7Al7prtr/2MnOOw2DuxNOfdnVZvC4H81eN2aPyNnA=
+	t=1707224087; cv=none; b=KwsmGRkIIt5pqVaG3hhctVb5p5ozmJCLS35/t1eH68uO5UlHkbAdsf6j4jI9mjsIkfkkfCXTsUZGaEvbU7+Acd58OFeJiAmcdh9X8wxvBKMSJc0+/7OKHUah+0X99jAbwrUNaSUKr06kwZy+vFOJMDNjLjSkLs8TS/rIPzz5zh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707214653; c=relaxed/simple;
-	bh=oFoZrkj5hSrIBFV+8cbsdJVafz0I/YimdsJSybYVGUU=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=Pp8KoKaG6zJhO8MrwN/93MUfuYTViEI8Q3xa5QOpPT0r5kQhR2QK/5pLqa5rjf7SraUGIPooTcOoEbV7L5g5PSI164cfGlgbIm7wg7mMBJahgJ1P+NN6BuNGQ5lpzGgyHe+CQZ3sYdTb4l4Vv3cvepea0KpUEA/O4Q7b9E9JF4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=arNQsvqK; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1707224087; c=relaxed/simple;
+	bh=UJK9GaRRL6kPl4S1uDuZgmL4Sfxeyuf4N9Zx7KregaQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BPKpqlyZm6r0IEoj9x/EgZewF6uc1ejcPdFKgnD0LZgJ/kqq1V04GYb+P1OboCETmg+fq0r9d2I2rYyNOPI/4WrVapRNQIAtD/BzfxJ45FXMw9CEBL2UPtWUQR4L9pEu54M8ij0utiJxJRYN+7QOI1FtIo6hLTA6EYGoajK0tjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PIZwU5YA; arc=none smtp.client-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="arNQsvqK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707214652; x=1738750652;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=oFoZrkj5hSrIBFV+8cbsdJVafz0I/YimdsJSybYVGUU=;
-  b=arNQsvqKFtxvVlGwurx9mvshXf4lynhj1u+LpJHsdQIQte900VQhzFiS
-   0gdxqJlRAne5eFpFZS77VP6j+uonyFBawMHDe8+TUEmbps8hq9GdzZ6uR
-   pLHGydRort8XimIwGWKts4z5WKnPCFMPuJvcaLR1xhLrrTdtr4fwBA1tJ
-   rseS/IVV+4v7gVSFS42VlXR58pNgu0fhy2zTn9hHdjiiea2Jqj4Ij45Fu
-   97YoWjfNSiOBNEREpvEcG/y0nQyEdkz1lYKv6jscgfzJXcLswCNAZs/x9
-   Qd3nzXjH8P9SJPzdKyyOHSik1K0kTRPC2RSojDXSwJqd9d+LAeQNpyKQy
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10975"; a="18233866"
-X-IronPort-AV: E=Sophos;i="6.05,246,1701158400"; 
-   d="scan'208";a="18233866"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 02:17:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,246,1701158400"; 
-   d="scan'208";a="976750"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.246.36.139])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 02:17:24 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Tue, 6 Feb 2024 12:17:21 +0200 (EET)
-To: Maximilian Luz <luzmaximilian@gmail.com>, Ivor Wanders <ivor@iwanders.net>
-cc: Guenter Roeck <linux@roeck-us.net>, Hans de Goede <hdegoede@redhat.com>, 
-    Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
-    Mark Gross <markgross@kernel.org>, linux-hwmon@vger.kernel.org, 
-    linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-    platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH v5 2/2] platform/surface: aggregator_registry: add entry
- for fan speed
-In-Reply-To: <6659d49c-4a70-1a92-2a76-ce7144fed50c@linux.intel.com>
-Message-ID: <f79f050d-708d-a9c3-fb6d-b06e046603c3@linux.intel.com>
-References: <20240131005856.10180-1-ivor@iwanders.net> <20240131005856.10180-3-ivor@iwanders.net> <7e392c1e-2cb2-43e4-804e-227551ed2dd7@roeck-us.net> <8552a795-9ce4-417a-bc71-593571a6b363@gmail.com> <6659d49c-4a70-1a92-2a76-ce7144fed50c@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PIZwU5YA"
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-5dc20645871so381918a12.1;
+        Tue, 06 Feb 2024 04:54:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1707224085; x=1707828885; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0eqgiERDvSpiSPKxHB5iRsf+0A8lyd+pOORVaquNyS8=;
+        b=PIZwU5YAWUy4moHX3hLNVgYEVRBma7p0s15BPWfVV9R9KBOfLWzOHeJkXUxuS+lJhm
+         ivNo4GBiofbgSG6znqTQ7SzN4zm82zu8KhnGp8O67quURPIobD8sPvDuVpIVXqa5ViQS
+         0vEpa5ZeBp+ipAS7GSLr1LVpJ8AOA7yD0DLmWAE3SGlHkriZWIFM6sbrhrK+eGCgNLlU
+         gMX2S+TNRoEPU7La4doBfhyvNSv4+J3mSpTTNTf/akIiB4OckJqh8/cgKpRb7GCYk8ay
+         uTR+hqmhoG6ox/AgCNdhdllvqlG91jSQZVFd3zOAdGDDmKaNykS7UynYxQGAZ1mYmEUe
+         08yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707224085; x=1707828885;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0eqgiERDvSpiSPKxHB5iRsf+0A8lyd+pOORVaquNyS8=;
+        b=oP7yfxRbIWD+Wb5rzhbW1/dr/Cx1wzn7ZVIgkA0aTpIpQyp2MtVslQ2dpSHEbm2zjS
+         KYbYxgueiNQ7U1Xsj8ltU+nreBmSohS4fp6wpssgjAipkgExsCFWncWnt2+yqHrizE7W
+         UiXjk/7ZUzrRAuVhD5j8V6BYQ+ZfbmcZTPnKag4aoJ6IGbC2t9UPNyOXDQ6bNenh/5iu
+         3S4znnc8hTsbtsh5oV8anXxTSRm3x6UfNTS611nMDBkI9XowLi3nGmwldomew4ej5cYa
+         1TApL/F+J9VfcfwcQUFXJvsX+0cDxXCrsiaEup5yzHwt1MWU5tHWWsWeSZwT3NYD+CC4
+         S8mg==
+X-Gm-Message-State: AOJu0YywryI0A2+AM+cYCGf8gp2LH0fL/uJr7iT2lW/Aon8mw2oo+aUN
+	HTsWp8Pows0TW4mc6EA3feYxwA4Nhy1vgFbwCeGF18R7/zmpNWMw
+X-Google-Smtp-Source: AGHT+IE6L3CJfxfSxtvuYXs2E1wg/gin9wFyGLDNWpoQxHLmvyHWnH6GtHWi4lgGQlaDgGEXHrAZAg==
+X-Received: by 2002:a62:ce0c:0:b0:6e0:44fd:687c with SMTP id y12-20020a62ce0c000000b006e044fd687cmr3697847pfg.6.1707224084394;
+        Tue, 06 Feb 2024 04:54:44 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCXR8oib6yggmJvpyZigTsA0Wi4OrDybUkU8+YBb9gaWRJXqYqywO0vE0hbEcTrPtqB5hnxTOEkqkdH37r8sle/v1RVs0JNvTf5LwFNFnyuskQ5phXZ0aHLz+UEHOF5ms7ZPOkQOoUW5p+hU/mfMudS0Ds6x/jsjLnyz1Hs6Be5XzWaNzBMgqK+yPgewtNA7iVvMasvGOeemAWXpkE7kXHS7y0V72NG8fJLyeNWfXxbGJ/8aaDI4eDE+e9JGpDuge+2YoiG3eH+sKpQLHHkn5xjuxx8l0zn4wtvI14gbNvLcMkkQYLhDKaGu2yS6qv/IT2dIy8aoZUuvOp5qy1lccW4mi3Kn+uY+OlrlTc4iyMJtKAqwXH1IA75lze43U+3991LaR7gwEp/mqK+Xq2UkXseIkbgxcWorQOgXqAGjuc/sbRwisYpCANpvr38MmabaGp3ZhSFWeoptQjnBuux3tzsckN7tTxCQ3yjVWuuEXmdm6fMRoAqb0tMmthQCIt5rCDLqAAuC2d2fm20lP1bq7Ybo7mwFG4w+2QHcIgiqsW+ry0Bp3ZSVxRP5EvZkINHoGFvXPpV/nSETb/HTu9AU8Gz24NjAa1vf7jidRaeU/0X7DskAFiIl+lysCB1h1POCPSQ9Dzppo3SkwU+cWz12oyLpPD+vQ2WSZjDzxJHqYMC2VRG4Y8rxxK4RnoDu1BaBBtrVnz98poma5JS9K9oSX1byuBO3jXuvqfZ6pYySanfeFYeb/o1/bS42fT7nRcPRNVTXrwqIDXZPv7OvhsZ7E9m/f8EH6WDWaYRppsjRNd9kYh62eMCJ0roKy26wyEnnYwYiX3B1og==
+Received: from cosmo-ubuntu-2204.dhcpserver.bu9bmc.local (1-34-21-66.hinet-ip.hinet.net. [1.34.21.66])
+        by smtp.gmail.com with ESMTPSA id f10-20020a056a001aca00b006dae568baedsm1795590pfv.24.2024.02.06.04.54.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Feb 2024 04:54:43 -0800 (PST)
+From: Cosmo Chou <chou.cosmo@gmail.com>
+To: linux@roeck-us.net,
+	robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org,
+	jdelvare@suse.com,
+	corbet@lwn.net,
+	broonie@kernel.org,
+	naresh.solanki@9elements.com,
+	vincent@vtremblay.dev,
+	patrick.rudolph@9elements.com,
+	luca.ceresoli@bootlin.com,
+	bhelgaas@google.com,
+	festevam@denx.de,
+	alexander.stein@ew.tq-group.com,
+	heiko@sntech.de,
+	jernej.skrabec@gmail.com,
+	macromorgan@hotmail.com,
+	forbidden405@foxmail.com,
+	sre@kernel.org,
+	linus.walleij@linaro.org
+Cc: devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	chou.cosmo@gmail.com,
+	cosmo.chou@quantatw.com
+Subject: [PATCH v6 0/1] hwmon: Add driver for Astera Labs PT5161L retimer
+Date: Tue,  6 Feb 2024 20:54:19 +0800
+Message-Id: <20240206125420.3884300-1-chou.cosmo@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-2118278718-1707214641=:1141"
+Content-Transfer-Encoding: 8bit
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+This driver implements support for temperature monitoring of Astera Labs
+PT5161L series PCIe retimer chips.
 
---8323328-2118278718-1707214641=:1141
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+LINK: [v1] https://lore.kernel.org/all/20231205074723.3546295-1-chou.cosmo@gmail.com/
 
-On Thu, 1 Feb 2024, Ilpo J=E4rvinen wrote:
+v6:
+  - Remove unnecessary return value checking
+  - Correct the available size for simple_read_from_buffer()
 
-> On Wed, 31 Jan 2024, Maximilian Luz wrote:
->=20
-> > Am 1/31/2024 um 2:24 PM schrieb Guenter Roeck:
-> > > On Tue, Jan 30, 2024 at 07:58:56PM -0500, Ivor Wanders wrote:
-> > > > Add an entry for the fan speed function.
-> > > > Add this new entry to the Surface Pro 9 group.
-> > > >=20
-> > > > Signed-off-by: Ivor Wanders <ivor@iwanders.net>
-> > > > Link: https://github.com/linux-surface/kernel/pull/144
-> > > > Reviewed-by: Maximilian Luz <luzmaximilian@gmail.com>
-> > >=20
-> > > I wasn't sure if the Reviewed-by: tag means that I should apply the p=
-atch
-> > > through the hwmon subsystem. If so, please let me know. For now I'll
-> > > assume that it will be applied through a platform tree.
-> >=20
-> > I think it would make more sense for it to go through pdx86 (as usual
-> > for platform/surface). That would avoid any potential merge conflicts
-> > if we get more changes to the surface_aggregator_registry later on.
-> >=20
-> > Hans, Ilpo, could you please take this?
-> >=20
-> > Also I just noticed that Ilpo wasn't CCd, I assume because of an older
-> > MAINTAINERS list. Ivor, please add him for any next submissions to
-> > platform/surface.
->=20
-> Okay, thanks for letting me know (I assumed the opposite). I'll take it=
-=20
-> through pdx86.
+v5:
+  - Fix warning and check messages of 'checkpatch --strict'
+  - Without resubmitting the applied patches
 
-Patch 2/2 applied to review-ilpo.
+v4:
+  - Rebased
 
---=20
- i.
+v3:
+  - Revise pt5161l.rst
+  - Revise the style of comments
+  - Remove unused pec_enable
+  - Add back safe access wide registers
+  - fix build warning
 
---8323328-2118278718-1707214641=:1141--
+v2:
+  - Add "asteralabs,pt5161l" to trivial-devices.yaml
+  - Change naming PT516XX/pt516xx to PT5161L/pt5161l
+  - Separated debugfs files for health status
+  - Revise the style of comments
+  - Remove unused defines
+  - Remove including unused header files
+  - Remove unnecessary debugging messages
+  - Revise the data parsing for a big-endian system
+  - Use read_block_data instead of accessing wide registers
+  - Remove the debugfs files when the device is unloaded
+  - Add acpi_match_table
+
+Cosmo Chou (1):
+  hwmon: Add driver for Astera Labs PT5161L retimer
+
+ Documentation/hwmon/index.rst   |   1 +
+ Documentation/hwmon/pt5161l.rst |  42 ++
+ MAINTAINERS                     |   7 +
+ drivers/hwmon/Kconfig           |  10 +
+ drivers/hwmon/Makefile          |   1 +
+ drivers/hwmon/pt5161l.c         | 667 ++++++++++++++++++++++++++++++++
+ 6 files changed, 728 insertions(+)
+ create mode 100644 Documentation/hwmon/pt5161l.rst
+ create mode 100644 drivers/hwmon/pt5161l.c
+
+-- 
+2.34.1
+
