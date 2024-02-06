@@ -1,156 +1,146 @@
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D381B74E06;
-	Tue,  6 Feb 2024 04:16:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AFBE7C091;
+	Tue,  6 Feb 2024 05:09:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707192998; cv=none; b=XvrylBWFfQajwLnSEwRJN/9UzQqpikSnpiyiJuwtUWOAuQCRyoiVLHJT+NkpafixZcKzjBfYrcy9kfVR4Qm+D5jnMkdMpO1LwmluUHvqOHTCBOsrLePJG8NzSN2q+Kjgg2B0bJLM1sAzisrmp1QEYlHyxH1BkX91+w5cMA8EeY4=
+	t=1707196144; cv=none; b=LxTIuh7zvrEp4TpBcVJ5Rr9elYxHkkgFgTtbPar0aDhwQHFij5BfTHf+t1qzb8b/wG3L57YMphqQaCrQcXZy8PZGZx2HZq42DfQ1Ek9aCRCE0ZA86xINncC1M9TTdx3CMJNNwub7AF7Ht4X61nIVbHpA7+4vD//0sTAGOpPAI3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707192998; c=relaxed/simple;
-	bh=od3mQFAuJO/2MVEighjBGkYYX6HuvW6cjcvOk3GB1nU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qwp2pNvmwvxmABMFfTJgbqAHp+RZvnRt6rSHt6YSBPEqBlzaOFJoEG1FjZeXpcP9jRHgWX7bakmCD9/LE64kk7KC7voM7fIhAcYvBi7yLit7KyeKHcCuvhEkvzPS6YmHoLcPomDzAiy22MVXBVa91VlVcnpboK7RA/bgr4h7sFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bjmVBov9; arc=none smtp.client-ip=209.85.208.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1707196144; c=relaxed/simple;
+	bh=ZTT5m/IX3TNbZOaxSQ+tLxdE8fI1k0j4w+WcQjlHf2U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Q/GuijQOEmLYfx0dw5rKCfVJpkBnAxUHmduOzHcziHlzKlXiPk60mogz5V57eeIbMpA8w1wsc2D1s0toy6T0ZQnAU6gTs69oIysqE5gADHNZpNNC7+mnWxLThr9CbFG3zYhJzySVgyPrT1t3aS8lLyMgPYTiP9iUG3KNR1GOhQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wuk8tsHK; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bjmVBov9"
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2cf5917f049so60550461fa.2;
-        Mon, 05 Feb 2024 20:16:36 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wuk8tsHK"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-296c58a11d0so358385a91.3;
+        Mon, 05 Feb 2024 21:09:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707192995; x=1707797795; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=k/k/Q/dPHVVGDvexiB+hS+6K0XEQOLpNCbXwWIX1VfY=;
-        b=bjmVBov9fVDf75sXUrYcQKf0UyBSPcv5LKcoP/83JIakW7bc7EXV4M4e1qUcoVK6/f
-         e2tqIKwW60vUv7MBWYYk8oin+yVHHUzrEoydm5Ss9c59r1KO9VrIuXGyD8Db23rIHXeq
-         Orlz0JGmv7bluvrL5LIxL7BX7UPQHKEANddsljs2PhOvDGuuBIJgL0H23lj3JFi+e1vy
-         bjeUfvrhb6MkR3TKGwqGR2uPgbyMxpbAQ9/FzjfE7pz0DjJQgLbkFHGW9kqStjNpa/38
-         CH88bBHMU9QZ/WGa6yTsey0iBP1daJU91RTYLO/3H070L6ruCAihzaCAiPY0JFcsekfF
-         Nqbw==
+        d=gmail.com; s=20230601; t=1707196141; x=1707800941; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=BuUyVlhbTFHxTO6HW8puQbBLaQR24GM9REYAp5aa2Eo=;
+        b=Wuk8tsHKxw9XoHg0cigJMu7i1hFY8DbV1dHV6jvKy3H9CKIG+LP0QwhJCE6fiRNmh4
+         A037gaQQsgj4itcpySRgjgIvLqz5bxKvHvvDW62CjXUrB1jc1l+vJGIChqOHEBanZOnL
+         kGQrwBAU+FFT18H8SN80aMQMjP2S6U07gM+0WiBa//DIUon3i5o47DLqUIW1aTJS713Y
+         LdNSBTBPAXHst/BIS9CzRMz+DVa/fl6BKHX849ZveoZ/YFwALoFxaDAjG96WGTzVj8tB
+         tNsZCCL3cpngfoDZc4T5B85zD/XcOWCRsjK/s6iUAt054cx4Tw3KJmG3TxoCJM2Zrb0o
+         rQUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707192995; x=1707797795;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1707196142; x=1707800942;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=k/k/Q/dPHVVGDvexiB+hS+6K0XEQOLpNCbXwWIX1VfY=;
-        b=L3TPKW5ikZnEG70u4QjfUOCJW4xMT7Zzu4MTcUKSBYCoTtiAQBUl27LztgQytPQ1g1
-         bzNVZKmBHxK+YAm1VPqk++eN7oPHaF6fwZZFDCjSMNlFaPB9SvgaCQNGdrvpNLMw0FUj
-         lD2nuEryB7L3rH7Fpluwmz/mwTeNweDBj+rrCyvsF7EvLe8WvZx88pbbdTrEe1bxs1/U
-         Sn0s84xrjHfkokFsHRygJLKqJVN5R0IqqquZRcbJdL3UOrNYIBaeWEfjvPqqEeZ8VuTB
-         twYH0QDf2c2WCMsUuTkW8Etu1L8N7w7y45SkUhy6+api2G7cC2EznPitnslR9k9o8DYD
-         i0yg==
-X-Gm-Message-State: AOJu0YxLdT+2RdPC7q6e/hhki0rtLahZFBoWpkEMDVQt0vGriyhnnwjV
-	geOJwylCu9u7titL9W5KcQhbxf4ev6RnOjEVRjiVCLjpiE5jZfJDSfjLGlSb066tpIHsJ4fSGmU
-	cTWAm0tYnztKXrIBHlLniqC6FLAA=
-X-Google-Smtp-Source: AGHT+IHPBusPewGXiD+vI/fL3BYTjXz/v4f6lkYZjQ3d8ktq42j9FXOCIsTuOvfMim6qFKzvpdOmwI1rnpKJYaORPt0=
-X-Received: by 2002:a2e:b88b:0:b0:2d0:b73d:e0c5 with SMTP id
- r11-20020a2eb88b000000b002d0b73de0c5mr910922ljp.47.1707192994648; Mon, 05 Feb
- 2024 20:16:34 -0800 (PST)
+        bh=BuUyVlhbTFHxTO6HW8puQbBLaQR24GM9REYAp5aa2Eo=;
+        b=qby+i/s/vcZ8h4ZaEva1YWzi9D6WOdsYxiZMmdMA5d0+9opXXrT2T4g7N5QYRg6nRX
+         0NvcLNZwqXyYQNG/heHbWOaMNyzHW8fmL8Q6G6kpvCDBVEgefLpnZebrxIne98i+2Fxz
+         xPeTQQL1Y1FibPEuD9oHVagbAdIY2Tiwxx9stbGCjmC4hAsI5eMAK4IHyhoJMQMyhGqj
+         Krk/xmIDdJpNxuhv03reXO3LoSnNQvD5/vOXURNqxb5SYwVMGhde+6L5gnhp2X6dUkix
+         wKEc9dqb1bLkXg6w4rzFjhr4Lf/hNLQvfP+o6EFvzt7/TSGUMsl0v6QbkBfZQTURVLG6
+         Pt4A==
+X-Gm-Message-State: AOJu0YyoVjXZKVBSyk6YMEIYI37R+yNZ+u43yIJBaV0loGemVebeDjuE
+	RdAJO/bUk2RbinvTlzUKz0yfxedhoDchlDNJvYYRuOE2OFv8ytTa
+X-Google-Smtp-Source: AGHT+IEFGg/WBad1bpM9KSiaeLqhsLZxafZH/XxyBel3KUNMY1m4GdbiZf/eu9e21OqkD0PYBpTHqg==
+X-Received: by 2002:a05:6a20:2c91:b0:19c:a696:32c8 with SMTP id g17-20020a056a202c9100b0019ca69632c8mr360860pzj.41.1707196141634;
+        Mon, 05 Feb 2024 21:09:01 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCXmGTTqpcnu8NICbLtMoSDt8orL7iH6xeIaLPFiN1/lpO3pznHqyYIvZ5ODGuXvlXBKdHvCSWb4htm/YwQZV7TmiXS6qRU+NnzNV0qVCwB32H+rm+r+gSZjVpnhTz88O4PZLDlK9cfoSZ4yhsdchqhO94R1C6b10NJnFjj4L9M3TA571U2dA44rfhpT2ksp3DMgSjEp0I3pD6JwMbmFig+e9wbGpiZG9uNsiBkhJD7RDDSNxepc00f/9Kx6qA==
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id ji9-20020a170903324900b001d5b93560c3sm806775plb.167.2024.02.05.21.09.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Feb 2024 21:09:01 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <44a3a06e-646e-4f76-b4a4-73906e22595b@roeck-us.net>
+Date: Mon, 5 Feb 2024 21:08:59 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240205152013.3833940-1-chou.cosmo@gmail.com>
- <20240205152013.3833940-2-chou.cosmo@gmail.com> <4a504043-e24d-4119-8c5d-107f0d371110@roeck-us.net>
- <CAOeEDysSZEeKt==zyexLE1GhE5ZpeDHS7sDLRfcC=4JgiogLKQ@mail.gmail.com>
- <a05ec2fe-cfe4-48d8-bff4-9f3689c585d3@roeck-us.net> <CAOeEDyscobVHaAe+72P2wEiucgWUDX=2H2W5dq0P1q8RB=7tzg@mail.gmail.com>
- <cfc51210-4ef1-4df4-bb57-499316fb18fd@roeck-us.net>
-In-Reply-To: <cfc51210-4ef1-4df4-bb57-499316fb18fd@roeck-us.net>
-From: Cosmo Chou <chou.cosmo@gmail.com>
-Date: Tue, 6 Feb 2024 12:16:23 +0800
-Message-ID: <CAOeEDyvFP1JUAxABc6kx52EX1Q6POTD1EqddYan7pRVVnh_xFw@mail.gmail.com>
-Subject: Re: [PATCH v5 1/1] hwmon: Add driver for Astera Labs PT5161L retimer
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
-	jdelvare@suse.com, corbet@lwn.net, broonie@kernel.org, 
-	naresh.solanki@9elements.com, vincent@vtremblay.dev, 
-	patrick.rudolph@9elements.com, luca.ceresoli@bootlin.com, bhelgaas@google.com, 
-	festevam@denx.de, alexander.stein@ew.tq-group.com, heiko@sntech.de, 
-	jernej.skrabec@gmail.com, macromorgan@hotmail.com, forbidden405@foxmail.com, 
-	sre@kernel.org, linus.walleij@linaro.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-doc@vger.kernel.org, cosmo.chou@quantatw.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: Tree for Feb 5 [drivers/hwmon/surface_fan.ko]
+Content-Language: en-US
+To: Randy Dunlap <rdunlap@infradead.org>,
+ Stephen Rothwell <sfr@canb.auug.org.au>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ linux-hwmon@vger.kernel.org, Maximilian Luz <luzmaximilian@gmail.com>,
+ Ivor Wanders <ivor@iwanders.net>, Jean Delvare <jdelvare@suse.com>
+References: <20240205162653.32ca0d08@canb.auug.org.au>
+ <15794bc3-7c6c-45f7-95da-a18f3d45834b@infradead.org>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <15794bc3-7c6c-45f7-95da-a18f3d45834b@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Feb 06, 2024 at 12:02 PM +0800, Guenter Roeck wrote:
->
-> On 2/5/24 19:53, Cosmo Chou wrote:
-> > On Tue, Feb 06, 2024 at 11:26 AM +0800, Guenter Roeck wrote:
-> >>
-> >> On 2/5/24 19:05, Cosmo Chou wrote:
-> >>> On Tue, Feb 06, 2024 at 3:43 AM +0800, Guenter Roeck wrote:
-> >>>>
-> >>>> On Mon, Feb 05, 2024 at 11:20:13PM +0800, Cosmo Chou wrote:
-> >>>>> This driver implements support for temperature monitoring of Astera Labs
-> >>>>> PT5161L series PCIe retimer chips.
-> >>>>>
-> >>>>> This driver implementation originates from the CSDK available at
-> >>>>> Link: https://github.com/facebook/openbmc/tree/helium/common/recipes-lib/retimer-v2.14
-> >>>>> The communication protocol utilized is based on the I2C/SMBus standard.
-> >>>>>
-> >>>>> Signed-off-by: Cosmo Chou <chou.cosmo@gmail.com>
-> >>>>> ---
-> >>>> [ ... ]
-> >>>>
-> >>>>> +static ssize_t pt5161l_debugfs_read_fw_ver(struct file *file, char __user *buf,
-> >>>>> +                                        size_t count, loff_t *ppos)
-> >>>>> +{
-> >>>>> +     struct pt5161l_data *data = file->private_data;
-> >>>>> +     int ret;
-> >>>>> +     char ver[32];
-> >>>>> +
-> >>>>> +     mutex_lock(&data->lock);
-> >>>>> +     ret = pt5161l_fwsts_check(data);
-> >>>>> +     mutex_unlock(&data->lock);
-> >>>>> +     if (ret)
-> >>>>> +             return ret;
-> >>>>> +
-> >>>>> +     ret = snprintf(ver, sizeof(ver), "%u.%u.%u\n", data->fw_ver.major,
-> >>>>> +                    data->fw_ver.minor, data->fw_ver.build);
-> >>>>> +     if (ret < 0)
-> >>>>> +             return ret;
-> >>>>> +
-> >>>>
-> >>>> You almost got me here ;-). snprintf() never returns a negative error code,
-> >>>> so checking for it is not necessary.
-> >>>>
-> >>> Oh! You're right.
-> >>>
-> >>>>> +     return simple_read_from_buffer(buf, count, ppos, ver, ret + 1);
-> >>>>
-> >>>> Number of bytes written plus 1 ? Why ?
-> >>> It's just to include the string terminator '\0'.
-> >>>
-> >>
-> >> If that was needed, it would be risky. snprintf() truncates the output
-> >> if the buffer is not large enough. You might want to consider using
-> >> scnprintf() instead. But then I am not sure if that is needed in the first
-> >> place. Almost all code I checked doesn't do that, and it seems to be likely
-> >> that the few drivers who do that are simply wrong. Can you explain why the
-> >> string terminator needs to be added to the output ?
-> >>
-> >> Thanks,
-> >> Guenter
-> >>
-> > It's just in case someone reads and prints this, but with a dirty
-> > buffer and doesn't handle the terminator.
->
-> That needs a better reason. It is not conceivable that 99% of drivers
-> don't do this but this one would need it for some reason. I am not going
-> to accept this unless you can show that debugfs files are supposed to
-> include a terminating '\0' in the response. This is like claiming that
-> printf() should include a terminating '\0' in the output just in case
-> the output is read by a broken application which needs to see the
-> terminator.
->
-> Guenter
->
-Agree. Users should handle this by themselves. I'll revise it to align
-the behavior.
+On 2/5/24 20:11, Randy Dunlap wrote:
+> 
+> 
+> On 2/4/24 21:26, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> Changes since 20240202:
+>>
+> 
+> on i386:
+> 
+> ERROR: modpost: "__ssam_device_driver_register" [drivers/hwmon/surface_fan.ko] undefined!
+> ERROR: modpost: "ssam_device_driver_unregister" [drivers/hwmon/surface_fan.ko] undefined!
+> 
+> 
+> Full randconfig file is attached.
+> 
 
-Thanks
-Cosmo
+Should (hopefully) be fixed in next-20240206. Sorry, the dependencies are
+a bit more complicated than I expected.
+
+Guenter
+
