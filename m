@@ -1,278 +1,119 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 562F3DF43
-	for <linux-hwmon@vger.kernel.org>; Tue,  6 Feb 2024 16:38:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 117141B7E3
+	for <linux-hwmon@vger.kernel.org>; Tue,  6 Feb 2024 20:21:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707237495; cv=none; b=O7wmuCfCOpbQjq0MIccTQi5QvzcBGRaqIruNQlk8zZGBSegpty60EM7/Z/03lTxPZel82V3hbKOLgSj/p/QXq7yLcO2vLVma1RvjOu7wQy2ECYktSfTgXEcMjtZaqeHUAH47GVogDAYFbjLsUQoUBjYDdWr+r/TMqYwvDFiLl2k=
+	t=1707250880; cv=none; b=UYtub5cZ7yES8C2iUgmLHiZixBDzf1pvKCvW48Mhk+T/8mghsldU3N2TeHBvY+n1yXhxMHd7JuL4MRzU5ZofLeFRSjN0o6DyGFUn3RRqEBBgJKyVZMCXzXBRLSq2zvpGDg4C+5NgdcMCefoi37onPs85bGUBHMWC9NIeb90DIHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707237495; c=relaxed/simple;
-	bh=izPg3pI1GcQldO/gkXNhBa0hFVrxbgau/Xe+bb+cTR4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=LFJbBPm3wi1vWftK0NK0YKsG0N+n0lTGf4b8ew5PkhLGsTzl8g/Dvprl74klb3FL7WxZF6XKmCYf+sPimoQY72g6pGPMUQv0xUACIy/aYcwE3advlldlJCMtp943JknnY4lGr8CFf9dIkuI3m4VVgpq9cqPOS8x3MfwvBnthyNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FhXHJ4xY; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1707250880; c=relaxed/simple;
+	bh=XcVg65BGIZYZoHoeF+lv8Ujc+NbICo71nt7G5QDW0ck=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=ahp+CsYCBM400wZguYDF0HksCrwnhcV+7wRnUI5pW1CJenVtDZG+cCGGgR86GbYO+iixWmFAv5SjrlDzf7NkhixufC16Kuv3Ho4Cvb6toWeDfig8hbuZVnef+TQYvx9FPedfM9vN4lrG1snjeLoWPVUyaaHmqbNqCC4Nhwnp/Gk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=GoqGQ/17; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FhXHJ4xY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707237493; x=1738773493;
-  h=date:from:to:cc:subject:message-id;
-  bh=izPg3pI1GcQldO/gkXNhBa0hFVrxbgau/Xe+bb+cTR4=;
-  b=FhXHJ4xYA/9lG/5rk0scOdPOpqdkUooOnByHHr2SVllqfkFbNSMwOX6f
-   VyybpNwKJCdQpLRrvxzHbNqKRvXIR3B1BJnjywPPL2/vpgb5xWne7GZcm
-   VGG+3ZwuHRb6ngwVknrnC5vufsutfejviRq/QqLWLu2LkMcGbGk8p4HMo
-   MUDSSWe1pDmf1Kh5xTBXVKDDTBpcYWMMXoVkRHrwZI0YFFKBHvIQA9QMK
-   H5ezES/P8GkWNw//pQF0U4GFKSGfvhLJAFaiDtdoXLF67giQZw7oErHY3
-   S/mw/chiMtx+9Yrbr99flROenwfgqi+zjBGtMwvxiqcrchmcOADYmMq4B
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="935041"
-X-IronPort-AV: E=Sophos;i="6.05,247,1701158400"; 
-   d="scan'208";a="935041"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 08:38:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,247,1701158400"; 
-   d="scan'208";a="1051077"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 06 Feb 2024 08:38:11 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rXOSX-0001bU-13;
-	Tue, 06 Feb 2024 16:38:09 +0000
-Date: Wed, 07 Feb 2024 00:37:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 1f1a48cb443225cb9884cdac94b28fbe72eb3874
-Message-ID: <202402070051.bWNdvUPl-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="GoqGQ/17"
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 6A3122C03C7;
+	Wed,  7 Feb 2024 09:21:15 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1707250875;
+	bh=XcVg65BGIZYZoHoeF+lv8Ujc+NbICo71nt7G5QDW0ck=;
+	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+	b=GoqGQ/17KNMGtELxfczF3LaYK4P6KN4jpT880+1YSiwINufez/YAOYqSAFZ598eCY
+	 0sUm0EqCfU6oys0pkeuFai/7UZE7GxI611iyD0LT0mdSI8egAFlkYPTTxvUeBchmTa
+	 KmBTflwW+Ua0WG+3S7Tht8nuF6GhX4ZnlQIq9v9PDBuoPLbnNIVu1f/28uzDVsPCWp
+	 n8QddB6IW5HcqyYqbsIhzsJVopxCUIf++piQXc9KYOzh/7yBKSR0J11MAD3iLasUGf
+	 5aP4QbjRkeQ3Zx9zdk6pxZrSgH/PhZonl2ZOZUXl6HVD9FizT2GClxhz8zTxXH60g6
+	 DTvLmubwbDDxw==
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B65c294bb0001>; Wed, 07 Feb 2024 09:21:15 +1300
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Wed, 7 Feb 2024 09:21:15 +1300
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1118.040; Wed, 7 Feb 2024 09:21:15 +1300
+From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	"alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+	"robh+dt@kernel.org" <robh+dt@kernel.org>,
+	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>, "jdelvare@suse.com"
+	<jdelvare@suse.com>, "linux@roeck-us.net" <linux@roeck-us.net>,
+	"antoniu.miclaus@analog.com" <antoniu.miclaus@analog.com>,
+	"noname.nuno@gmail.com" <noname.nuno@gmail.com>
+CC: "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>, Ibrahim Tilki
+	<Ibrahim.Tilki@analog.com>, Zeynep Arslanbenzer
+	<Zeynep.Arslanbenzer@analog.com>
+Subject: Re: [PATCH v6 2/2] dt-bindings: rtc: add max313xx RTCs
+Thread-Topic: [PATCH v6 2/2] dt-bindings: rtc: add max313xx RTCs
+Thread-Index: AQHaVYLoSYVIRNhkz0qX+dhUYUZib7D13rcAgAcQZQA=
+Date: Tue, 6 Feb 2024 20:21:15 +0000
+Message-ID: <948e9596-e05c-4da4-909d-355917a03407@alliedtelesis.co.nz>
+References: <20240202025241.834283-1-chris.packham@alliedtelesis.co.nz>
+ <20240202025241.834283-3-chris.packham@alliedtelesis.co.nz>
+ <aecd80a3-a017-405f-b77d-6deda67ef704@linaro.org>
+In-Reply-To: <aecd80a3-a017-405f-b77d-6deda67ef704@linaro.org>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <247FE9472555B04C8C1BF337DB0082C5@atlnz.lc>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=LZFCFQXi c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=k7vzHIieQBIA:10 a=gAnH3GRIAAAA:8 a=FK3tp2vlBLUDyu3EqQgA:9 a=QEXdDO2ut3YA:10 a=oVHKYsEdi7-vN-J5QA_j:22
+X-SEG-SpamProfiler-Score: 0
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 1f1a48cb443225cb9884cdac94b28fbe72eb3874  hwmon: (coretemp) Use dynamic allocated memory for core temp_data
-
-elapsed time: 1480m
-
-configs tested: 205
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                     haps_hs_smp_defconfig   gcc  
-arc                        nsimosci_defconfig   gcc  
-arc                   randconfig-001-20240206   gcc  
-arc                   randconfig-002-20240206   gcc  
-arc                           tb10x_defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                          collie_defconfig   gcc  
-arm                                 defconfig   clang
-arm                            mmp2_defconfig   gcc  
-arm                        mvebu_v5_defconfig   gcc  
-arm                        mvebu_v7_defconfig   clang
-arm                        neponset_defconfig   gcc  
-arm                       netwinder_defconfig   gcc  
-arm                   randconfig-002-20240206   gcc  
-arm                   randconfig-003-20240206   gcc  
-arm                           tegra_defconfig   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240206   gcc  
-arm64                 randconfig-003-20240206   gcc  
-arm64                 randconfig-004-20240206   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240206   gcc  
-csky                  randconfig-002-20240206   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240206   clang
-i386         buildonly-randconfig-002-20240206   clang
-i386         buildonly-randconfig-003-20240206   gcc  
-i386         buildonly-randconfig-004-20240206   clang
-i386         buildonly-randconfig-005-20240206   gcc  
-i386         buildonly-randconfig-006-20240206   gcc  
-i386                                defconfig   clang
-i386                  randconfig-001-20240206   clang
-i386                  randconfig-002-20240206   clang
-i386                  randconfig-003-20240206   clang
-i386                  randconfig-004-20240206   clang
-i386                  randconfig-005-20240206   clang
-i386                  randconfig-006-20240206   clang
-i386                  randconfig-011-20240206   clang
-i386                  randconfig-012-20240206   gcc  
-i386                  randconfig-013-20240206   clang
-i386                  randconfig-014-20240206   gcc  
-i386                  randconfig-015-20240206   gcc  
-i386                  randconfig-016-20240206   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240206   gcc  
-loongarch             randconfig-002-20240206   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                          atari_defconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                       m5249evb_defconfig   gcc  
-m68k                        m5407c3_defconfig   gcc  
-m68k                            mac_defconfig   gcc  
-m68k                        mvme147_defconfig   gcc  
-m68k                        mvme16x_defconfig   gcc  
-m68k                            q40_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                          malta_defconfig   gcc  
-mips                malta_qemu_32r6_defconfig   gcc  
-mips                      maltasmvp_defconfig   gcc  
-mips                    maltaup_xpa_defconfig   gcc  
-mips                           mtx1_defconfig   clang
-mips                           rs90_defconfig   gcc  
-mips                   sb1250_swarm_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240206   gcc  
-nios2                 randconfig-002-20240206   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                generic-32bit_defconfig   gcc  
-parisc                randconfig-001-20240206   gcc  
-parisc                randconfig-002-20240206   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                        cell_defconfig   gcc  
-powerpc                   currituck_defconfig   clang
-powerpc                  iss476-smp_defconfig   gcc  
-powerpc                   microwatt_defconfig   gcc  
-powerpc                 mpc832x_rdb_defconfig   gcc  
-powerpc                     powernv_defconfig   gcc  
-powerpc                     ppa8548_defconfig   gcc  
-powerpc                      ppc64e_defconfig   gcc  
-powerpc               randconfig-002-20240206   gcc  
-powerpc                    sam440ep_defconfig   gcc  
-powerpc                  storcenter_defconfig   gcc  
-powerpc                      walnut_defconfig   gcc  
-powerpc                         wii_defconfig   gcc  
-powerpc64             randconfig-001-20240206   gcc  
-powerpc64             randconfig-003-20240206   gcc  
-riscv                            alldefconfig   gcc  
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-riscv                 randconfig-001-20240206   gcc  
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-sh                               alldefconfig   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                ecovec24-romimage_defconfig   gcc  
-sh                          kfr2r09_defconfig   gcc  
-sh                    randconfig-001-20240206   gcc  
-sh                    randconfig-002-20240206   gcc  
-sh                          rsk7201_defconfig   gcc  
-sh                          sdk7780_defconfig   gcc  
-sh                          sdk7786_defconfig   gcc  
-sh                           se7722_defconfig   gcc  
-sh                        sh7763rdp_defconfig   gcc  
-sh                   sh7770_generic_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240206   gcc  
-sparc64               randconfig-002-20240206   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                    randconfig-002-20240206   gcc  
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240206   gcc  
-x86_64       buildonly-randconfig-002-20240206   clang
-x86_64       buildonly-randconfig-003-20240206   gcc  
-x86_64       buildonly-randconfig-004-20240206   gcc  
-x86_64       buildonly-randconfig-005-20240206   gcc  
-x86_64       buildonly-randconfig-006-20240206   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240206   clang
-x86_64                randconfig-002-20240206   clang
-x86_64                randconfig-003-20240206   gcc  
-x86_64                randconfig-004-20240206   gcc  
-x86_64                randconfig-005-20240206   gcc  
-x86_64                randconfig-006-20240206   clang
-x86_64                randconfig-011-20240206   gcc  
-x86_64                randconfig-012-20240206   clang
-x86_64                randconfig-013-20240206   gcc  
-x86_64                randconfig-014-20240206   clang
-x86_64                randconfig-015-20240206   gcc  
-x86_64                randconfig-016-20240206   clang
-x86_64                randconfig-071-20240206   gcc  
-x86_64                randconfig-072-20240206   gcc  
-x86_64                randconfig-073-20240206   gcc  
-x86_64                randconfig-074-20240206   gcc  
-x86_64                randconfig-075-20240206   clang
-x86_64                randconfig-076-20240206   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                           alldefconfig   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
-xtensa                randconfig-001-20240206   gcc  
-xtensa                randconfig-002-20240206   gcc  
-xtensa                         virt_defconfig   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+KHJlc2VuZCBhcyBwbGFpbiB0ZXh0LCBzb3JyeSBmb3IgdGhlIG5vaXNlKQ0KDQoNCk9uIDIvMDIv
+MjQgMjE6MjgsIEtyenlzenRvZiBLb3psb3dza2kgd3JvdGU6DQo+IE9uIDAyLzAyLzIwMjQgMDM6
+NTIsIENocmlzIFBhY2toYW0gd3JvdGU6DQo+PiBGcm9tOiBJYnJhaGltIFRpbGtpPElicmFoaW0u
+VGlsa2lAYW5hbG9nLmNvbT4NCj4+DQo+PiBEZXZpY2V0cmVlIGJpbmRpbmcgZG9jdW1lbnRhdGlv
+biBmb3IgQW5hbG9nIERldmljZXMgTUFYMzEzWFggUlRDcw0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6
+IElicmFoaW0gVGlsa2k8SWJyYWhpbS5UaWxraUBhbmFsb2cuY29tPg0KPj4gU2lnbmVkLW9mZi1i
+eTogWmV5bmVwIEFyc2xhbmJlbnplcjxaZXluZXAuQXJzbGFuYmVuemVyQGFuYWxvZy5jb20+DQo+
+PiBTaWduZWQtb2ZmLWJ5OiBDaHJpcyBQYWNraGFtPGNocmlzLnBhY2toYW1AYWxsaWVkdGVsZXNp
+cy5jby5uej4NCj4+IC0tLQ0KPiAuLi4NCj4NCj4+ICsgIGNsb2NrczoNCj4+ICsgICAgZGVzY3Jp
+cHRpb246DQo+PiArICAgICAgUlRDIHVzZXMgdGhpcyBjbG9jayBmb3IgY2xvY2sgaW5wdXQgd2hl
+biBzdXBwbGllZC4gQ2xvY2sgaGFzIHRvIHByb3ZpZGUNCj4+ICsgICAgICBvbmUgb2YgdGhlc2Ug
+Zm91ciBmcmVxdWVuY2llcyAtIDFIeiwgNTBIeiwgNjBIeiBvciAzMi43NjhrSHouDQo+PiArICAg
+IG1heEl0ZW1zOiAxDQo+PiArDQo+PiArICBhZGksdGMtZGlvZGU6DQo+PiArICAgIGRlc2NyaXB0
+aW9uOg0KPj4gKyAgICAgIFNlbGVjdCB0aGUgZGlvZGUgY29uZmlndXJhdGlvbiBmb3IgdGhlIHRy
+aWNrbGUgY2hhcmdlci4NCj4+ICsgICAgICBzY2hvdHRreSAtIFNjaG90dGt5IGRpb2RlIGluIHNl
+cmllcy4NCj4+ICsgICAgICBzdGFuZGFyZCtzY2hvdHRreSAtIHN0YW5kYXJkIGRpb2RlICsgU2No
+b3R0a3kgZGlvZGUgaW4gc2VyaWVzLg0KPj4gKyAgICBlbnVtOiBbc2Nob3R0a3ksIHN0YW5kYXJk
+K3NjaG90dGt5XQ0KPj4gKw0KPj4gKyAgdHJpY2tsZS1yZXNpc3Rvci1vaG1zOg0KPj4gKyAgICBk
+ZXNjcmlwdGlvbjogU2VsZWN0ZWQgcmVzaXN0b3IgZm9yIHRyaWNrbGUgY2hhcmdlci4NCj4+ICsg
+ICAgZW51bTogWzMwMDAsIDYwMDAsIDExMDAwXQ0KPiBQbGVhc2UgcmVtaW5kIHVzIGFuZCBkb2N1
+bWVudCBpbiBjb21taXQgbXNnLCB3aHkgdGhpcyBjYW5ub3QgYmUgcGFydCBvZg0KPiBtYXgzMTMz
+NSBiaW5kaW5nPyBMb29rcyBleGFjdGx5IHRoZSBzYW1lLg0KDQpUaGF0IGlzIGFuIGluY3JlZGli
+bHkgZ29vZCBwb2ludC4gVGhlIG1heDMxMzM1IGJpbmRpbmcgY292ZXJzIG9uZSANCnNwZWNpZmlj
+IGNoaXAuIFRoaXMgYmluZGluZyBjb3ZlcnMgbW9yZSBhbmQgd2l0aCB0aGF0IHRoZXJlIGFyZSBh
+IGZldyANCm1vcmUgcHJvcGVydGllcyB0aGF0IHRoZSBtYXgzMTMzNSBvbiBpdCdzIG93biBkb2Vz
+bid0IGhhdmUgKGUuZy4gdGhlIA0KY2xvY2sgY29uc3VtZXIsIHRoZSBhYmlsaXR5IHRvIGhhdmUg
+ZGlmZmVyZW50IGkyYyBhZGRyZXNzZXMpLiBCaW5kaW5nIA0Kd2lzZSBJIGNvdWxkIHByb2JhYmx5
+IHJvbGwgYWxsIG9mIHRoZSBtYXgzMTMzNSBpbnRvIHRoaXMgbWF4MzEzeHggYmluZGluZy4NCg0K
+RHJpdmVyIHdpc2UgdGhpbmdzIGFyZSBhIGJpdCB0cmlja2llci4gSSd2ZSBvbmx5IGdvdCBhY2Nl
+c3MgdG8gb25lIG9mIA0KdGhlIHZhcmlhbnRzIHNvIEkgYW0gaG9waW5nIHRvIGxldmVyYWdlIHRo
+ZSB3b3JrIElicmFoaW0gaGFkIGFscmVhZHkgDQpkb25lLiBJIGNvdWxkIGF0dGVtcHQgdG8gaW5j
+b3Jwb3JhdGUgbWF4MzEzMzUgc3VwcG9ydCBpbnRvIHRoZSBtYXgzMTN4eCANCmRyaXZlciBidXQg
+SSB3b3VsZG4ndCByZWFsbHkgYmUgYWJsZSB0byB0ZXN0IGl0IHByb3Blcmx5IGFuZCB0aGVyZSBp
+cyBhIA0KcmVhc29uYWJseSBoaWdoIGNoYW5jZSBvZiByZWdyZXNzaW5nIHNvbWV0aGluZy4NCg0K
+Pj4gKw0KPj4gK3JlcXVpcmVkOg0KPj4gKyAgLSBjb21wYXRpYmxlDQo+PiArICAtIHJlZw0KPiBC
+ZXN0IHJlZ2FyZHMsDQo+IEtyenlzenRvZg0KPg==
