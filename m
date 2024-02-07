@@ -1,61 +1,61 @@
-Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 591C97E77B;
-	Wed,  7 Feb 2024 15:00:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEE567F492
+	for <linux-hwmon@vger.kernel.org>; Wed,  7 Feb 2024 16:50:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707318059; cv=none; b=Jxc8ogO+AlTH1078j83ta+RpYQgE/mJtJaCMVbOxNXO+IyQcZJZHI6I7ZZ0030WOofNVmU7R2kc8PbNqcmeTFXNyXyaxKuXVmJIbgZNgswMnV3zgKho5ox4KNjkMPiWoPCqfFT/DNJ1KTuVKC4bIKMWD8zhZaPcmKCJ/ZSGNQDQ=
+	t=1707324602; cv=none; b=NBH2FH2+7wgha4lUFYAugVYD7E9w/CYnPihf+77LBP1JaVISzhgAAhedZZ/vl6DqsAlhxJYS10OECiP8ICk0ODxQvT+PIj5EGvvspXWHMx+H6Q3cNa6jX7o4vhN9thDKW4NcvbNITu/pHyXVLl28lQJKqEXjUF06xtWbRVUWLWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707318059; c=relaxed/simple;
-	bh=ARoNHjLL7llqpYFs5KYureGvLa2fiWcX06FJCHdRk3Q=;
+	s=arc-20240116; t=1707324602; c=relaxed/simple;
+	bh=4pMTPlMKTIPjkMHeduiSjdFuw22VnwT5PeKjWCj69A0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=H/msx4r9BRtT2/vRc839ZSBNrO+t1uQ1ra8VcsiIG/4Dcw5EGBuXW6XkiU/IeK7NSa2VXEaHi4SPzYbjEZQTLDdSUMWjB/q7BjIJS/YjlYhMxy0wXaMgyrVMB1jt2BHnqhaArwxo/CG2EsAPOu3SXV4hhlH00lsTq2G9P4KAUt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l/tmqBGO; arc=none smtp.client-ip=209.85.166.181
+	 In-Reply-To:Content-Type; b=aNIsHF5Ww0nlZvTnfNcmaL8LuCpVERSyoAMk2k44CwtpXQ4B7l15zYUC93OQsK5pvq7EEKam9+JmzK5rivo717X8QBABbwLPBleDLcye4OA9RrPKVrJERKlr3UKd12vkmiILhjbYQQd1fHQAbm7lcp6cbaWeyR3vXvzoFx34sa4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E9qkao8u; arc=none smtp.client-ip=209.85.216.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l/tmqBGO"
-Received: by mail-il1-f181.google.com with SMTP id e9e14a558f8ab-363dd27c082so1984755ab.0;
-        Wed, 07 Feb 2024 07:00:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E9qkao8u"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-2909a632e40so626863a91.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 07 Feb 2024 08:50:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707318056; x=1707922856; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1707324600; x=1707929400; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bf5IEcCL1X+M2EY5Ge7f4EYwZR9SnAQHYVr+IK+58ik=;
-        b=l/tmqBGOEzHtfoKLLBhZGNsXL3BsDY38V9KlXYIPR9eXGamTM8QDkgtnE0In7bSG1W
-         KunZXKUnKR7NGo27Vh9FfvQIL/cVELSX9t+6hAyJI+L7DeTGf7A72L5pavNecqvNgwsr
-         nK51UBXZpM1QO93+ul9p5RX6O75ZvYnP8dKLpAvMrxC+acY+NpeuQSGEyDLqdONm9Wd7
-         OlG0xRpL2XjcIaPwQmO82xiNmo5SQDkApSbP+QIWtv8bQ5jrvPFFM9s8xHIDRDglE9kN
-         210Iq6RsU+/beK6x1gNR0dFBp3eYarTdQfy988ZGj+7NgPRjiHFW6R8mUV7o5Je+yhu6
-         Fenw==
+        bh=ZmNZoWaSHhfjY+BBgKE9DeqCXIEBLyAoPLWFcOBJhDU=;
+        b=E9qkao8uKAsVIhFg0nBXHVRCSnmyHW1SqCxPmo/m8mTHuq8rM7TlK62zuejLSO4TR+
+         q0G4z4mCmKprkcbc8ME+/PXMiEBJhLJ2yEnJtfvoomMc7cV7+2r6YIGaqQiGNJSkF8ln
+         bs+5hXhxIq26ufETvFbjXb8a6MImBRyKQHEi7uSYDg1jREszly7WMcWSWTzf+bdK67zf
+         I8W/uql4EvhNj6EXjz85mN3L5MidKpDST+iBjQtbTpHCorE4Rc9YkFz6FmOWwuK1hsef
+         RDN6gpXYGHVl6H4xGe5sFx62ZgwlShWc7ZrvkaZcxDzow1d/EgxN2YvuX3lVA0oLNYd/
+         rUwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707318056; x=1707922856;
+        d=1e100.net; s=20230601; t=1707324600; x=1707929400;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Bf5IEcCL1X+M2EY5Ge7f4EYwZR9SnAQHYVr+IK+58ik=;
-        b=Xxg1iksbIbH0hbQqPDQHnasealX+bLqI40gYWmk0AcC4Kao8WJTcl7bPcMfse6YhzH
-         lSvQxmm3Jm4kPiXz9jDXAA+/WPuIFGvCTbcsvy7Ss8TgO9BvZ14thPWTI+45ctiU3C2p
-         MyaOfJg2Llqknf22vlN5NFaIZ5fAf62ZMZ7T3P5nPVt+Hd3mAVFkTPp73LnhML0xEAqp
-         3POL2g8jPDKtzD+0Q5sk/gWy49DL7BsMuxYq29aC3ZDFXDuqvpCMjqPX+vHhVdb76ZcM
-         yT4ilFal75owf+1gGFMLbwxoPEemx/WLHIPI3ysjXXnlDZgv9hYfIhfhQdBpgGN/QRcG
-         rtnA==
-X-Gm-Message-State: AOJu0YxKOq6q1GAvWyS6V3G3wHKPT8MxF4pyWHLW+CicwVeBo1TY4hvN
-	lbleerh4L0S4CqOKgPA47Yoa0cH4PA27ovuDjBk7FlVzXKJ8I4ke
-X-Google-Smtp-Source: AGHT+IHLjJaPoB+Qy8JIVvVtGD/IMwQBIt0g39Hr6E+SiQT9JpiOsT7w6Hubday1EjHCq3GVdm9CuA==
-X-Received: by 2002:a92:d20b:0:b0:363:c386:194a with SMTP id y11-20020a92d20b000000b00363c386194amr5260318ily.25.1707318056245;
-        Wed, 07 Feb 2024 07:00:56 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUuYuz7mtxjg/My1BjbrP08UrSgsebotpAJIEZxwvxsyRVGv3SYYq151kXn6yzdUoFIqWfI2R5lhtigxf4hw+oC7zJu1+UrJCJfj/XpQ5vlJbatKzRXy/ZbKCkVeJUXpDUTYwRU5cihFzDXqplKC1jajvotYKWBWUnbQ+9u5kYLlh5PYZK2onPa7otfjJCNoZkAL6eqEVr7jtLKVyrgwwR09kBMtlk+Ow0/jSCTbLZmTXAQub2YTLx7kiZlB9am860BBBQmUfx9vMSlLymeOV0BF0pepaIggEgBw12SjFSuFmVgByfmvp0wHODbK0hgWDiFEAuCz0q2zF9YDZeIiX5MWc3eiQBWRxNE4xrgvkdwDGo9oIIzk/a5ojPwHkxRLi0vA+Eb+GTrJcaS66DR2OcZCIndZ2t/AUFPnXfpXr3SUTZ+fU0gu5SDSbKU7+n1pajnBVk+uHMolgLWZLxtsU8ta9BY9Ct8FZ7I1xQE/KqS
+        bh=ZmNZoWaSHhfjY+BBgKE9DeqCXIEBLyAoPLWFcOBJhDU=;
+        b=MZxty3K5HU24m/vWiWZ9sVmxcRykUvbBrs0zeIIdPP801jSCa59yvGmndWlRSA+BI+
+         XtH07oAJdqAeZA14Qeo8noweZyXvxc1xYyBbEncxcLf53qoi1hQ3lXuz7SJutcgf/iy0
+         bemw9DXndkBR4/98/soRheFiZLxxKgHGsz6BpZFaRFpzWKfgdbxmzASNkI/U33bnvkvK
+         xRVYYb8SklKZc96WaRq5/yPMj5E4YVH5xSobcT6g1BoIVXD/XHeT6hIrb5oGmskqqk3j
+         MMnSiIFpyyhXSyn80rsnf3IDm6OFDXRfqP6L8xhUKYHj8QwCJ3yFrsI0O7tPOIGjCxrp
+         1m4Q==
+X-Gm-Message-State: AOJu0YxtiubWD8d0WbHNz2YNO+fC6GEM48t48EuCJgqUvJQ2sL/Nfkj5
+	TgsfXH5BiyF0jqGW+9AEIn0BONWmTE18yjO1tQjDedzj4r29YeOW
+X-Google-Smtp-Source: AGHT+IGgBILtZvRY+rKn9utRrrwMkzN3q4qe31e3DZNSzBYtKgU+vjlQ9/u4SsG/VKxw/NSXbV5/+g==
+X-Received: by 2002:a17:90a:c7c1:b0:296:d696:a5db with SMTP id gf1-20020a17090ac7c100b00296d696a5dbmr2884270pjb.41.1707324600147;
+        Wed, 07 Feb 2024 08:50:00 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWpCkt7Z+2jZrlzIfQ0LlEQ2up+K2mV0E8zvl3JEEAzw/3FfTWGoXvr8j2xJlKC3chSq3rxhc+WzGOUgSjWJQ5OOI7k/EXou6PAqr+XXKBz68EDuMNejjzW2IL+Pg==
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c126-20020a633584000000b005dc1edf7371sm1654074pga.9.2024.02.07.07.00.54
+        by smtp.gmail.com with ESMTPSA id p5-20020a170902e34500b001d94a3f3987sm1667203plc.184.2024.02.07.08.49.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Feb 2024 07:00:55 -0800 (PST)
+        Wed, 07 Feb 2024 08:49:59 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <392dbedc-6b5b-48f6-a7f2-94a2aa6bbc33@roeck-us.net>
-Date: Wed, 7 Feb 2024 07:00:53 -0800
+Message-ID: <c2c5b8b0-d3db-4212-8311-ee54119389c4@roeck-us.net>
+Date: Wed, 7 Feb 2024 08:49:57 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,31 +63,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 2/2] dt-bindings: rtc: add max313xx RTCs
+Subject: Re: [bug report] hwmon: ltc4282: add support for the LTC4282 chip
 Content-Language: en-US
-To: "Miclaus, Antoniu" <Antoniu.Miclaus@analog.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- "robh+dt@kernel.org" <robh+dt@kernel.org>,
- "krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
- "conor+dt@kernel.org" <conor+dt@kernel.org>,
- "jdelvare@suse.com" <jdelvare@suse.com>,
- "noname.nuno@gmail.com" <noname.nuno@gmail.com>,
- "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
- "Arslanbenzer, Zeynep" <Zeynep.Arslanbenzer@analog.com>
-References: <20240202025241.834283-1-chris.packham@alliedtelesis.co.nz>
- <20240202025241.834283-3-chris.packham@alliedtelesis.co.nz>
- <aecd80a3-a017-405f-b77d-6deda67ef704@linaro.org>
- <5d4b7fa1-5cc2-4a4a-8fa4-d2c7a8d070b7@alliedtelesis.co.nz>
- <20240206211237d9192660@mail.local>
- <e7a21789-9253-4185-98ed-e335d0167df4@alliedtelesis.co.nz>
- <20240206221644f524816e@mail.local>
- <CY4PR03MB3399844E78F84B6CFA18280A9B452@CY4PR03MB3399.namprd03.prod.outlook.com>
+To: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>,
+ Dan Carpenter <dan.carpenter@linaro.org>, nuno.sa@analog.com
+Cc: linux-hwmon@vger.kernel.org
+References: <b6fb236a-c3c1-4c5c-94bd-1f68b5aeac41@moroto.mountain>
+ <53e0e2c7bb9cafb4efa3748ecf3ec765c262db83.camel@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -132,29 +114,49 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <CY4PR03MB3399844E78F84B6CFA18280A9B452@CY4PR03MB3399.namprd03.prod.outlook.com>
+In-Reply-To: <53e0e2c7bb9cafb4efa3748ecf3ec765c262db83.camel@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 2/7/24 01:54, Miclaus, Antoniu wrote:
-[ ... ]
->>
->> The max31335 is not available
->>
->   
-> Indeed, the max31355 datasheet is not available yet. This is also stated in the
-> cover letter of the patch series for max31335.
+On 2/7/24 02:19, Nuno Sá wrote:
+> Hi Dan,
 > 
-> It was an urgent request from a customer to have it mainline as soon as possible.
+> On Wed, 2024-02-07 at 12:51 +0300, Dan Carpenter wrote:
+>> Hello Nuno Sa,
+>>
+>> The patch 848a5019ded5: "hwmon: ltc4282: add support for the LTC4282
+>> chip" from Jan 29, 2024 (linux-next), leads to the following Smatch
+>> static checker warning:
+>>
+>> 	drivers/hwmon/ltc4282.c:732 ltc4282_write_voltage_byte_cached()
+>> 	warn: no lower bound on 'val' rl='s64min-4294967294'
+>>
+>> drivers/hwmon/ltc4282.c
+>>      723 static int ltc4282_write_voltage_byte_cached(const struct
+>> ltc4282_state *st,
+>>      724                                              u32 reg, u32 fs, long
+>> val,
+>>      725                                              u32 *cache_raw)
+>>      726 {
+>>      727         u32 in;
+>>      728
+>>      729         if (val >= fs)
+>>      730                 in = U8_MAX;
+>>      731         else
+>> --> 732                 in = DIV_ROUND_CLOSEST(val * U8_MAX, fs);
 > 
-> If there are questions about the part functionality, I can definitely help.
+> Yeah, I guess we should likely clamp it between 0 and fs
 > 
 
-It seems to be quite common for automotive chips, though, that they are held
-tightly under wrap, making it all but impossible to properly review their drivers.
-I have observed several times now that information not available to reviewers
-resulted in bad or buggy drivers. This isn't about willingness to help, it is
-about the ability to understand chip capabilities and requirements.
+	val = clamp_val(val, 0, fs);
+	in = DIV_ROUND_CLOSEST(val * U8_MAX, fs);
+
+maybe.
+
+Should I fix that inline or do you want to send a follow-up patch ?
 
 Guenter
+
+
+
 
