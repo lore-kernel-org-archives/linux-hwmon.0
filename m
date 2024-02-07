@@ -1,143 +1,94 @@
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F6F112838C;
-	Wed,  7 Feb 2024 21:17:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B93912BEA1;
+	Wed,  7 Feb 2024 21:31:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707340636; cv=none; b=JMkty4ilNBs05Z8klKzAxxhuCGsmr5StDCLKl6kZHoIHe0f4rKSsH4bsvcBxtiqcq4QD2ciW5KLPPNgbLBBWpOGCyBKg55PWmNrP7mVDxDFUyoiKc22dgOwm6AaarWIrl8NLwE570isJL5V8KfMlpuax5FsNIi9U0LZI26qA7XA=
+	t=1707341518; cv=none; b=KYHrLZIzmsywVdZviT4MX0af80Z/k2VPDOI1vd2GmmJHNc4rYKj4RA7e3qkOzX5+F1ahIVrDMO43PJQEc2icO/dZrpwoF5dfLykn4z0NWj8dh5X7o+KQhJGOTGd86UlpadX3oVmhQ298pyqc+REqeo3rjmcr1QaAezK9VOmfm44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707340636; c=relaxed/simple;
-	bh=kR8W6XaSITp6FtKm662SPQ78CZF78Rrgzk4MuYq0O+s=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=CoynvQoVdDRX+EqTK8wLdHzyob3IEHjgQ1DYtxCrmDlflvE07pbigMlrfiKyZ8+qyGFuJX1TfarCCtVNnPDaaEJkDRM7Uw1j+V9GWX4gJOYgw3xD1XZPKYgTYi1mO13HbCHFEVpAEE5fz6XLOw4tDVU+9OXunstnKkqceyMgfT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hoKHhr7n; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1707341518; c=relaxed/simple;
+	bh=gqjZETUL6PAgOvbJQT7MF+wa+Ca8B6h5fNnUMQjtPZ0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=h8qvDEpKHjlrKUFjdz45uVTrWFx5YfxCLp+vjG4h/2bvQ5G/MC7DwTmbPj2pMgotNl2lWtG21tb2rNQFm5trpmdd3WCPdpka/GtxXBybbz43CeUFDH3MviHoQgvHzQ3cbL6AUmZUMmo/0CAGUtTdXFTzoD4MhkNNmGJetfZ3TqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rlkmi2uf; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hoKHhr7n"
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-560c696ccffso480055a12.1;
-        Wed, 07 Feb 2024 13:17:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rlkmi2uf"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1d95d67ff45so9362735ad.2;
+        Wed, 07 Feb 2024 13:31:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707340633; x=1707945433; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1707341515; x=1707946315; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=dgfzTVksahqxWw0KuisYDJC38lg+Vl3GjMkmu7mWaIo=;
-        b=hoKHhr7n0Wf76amYpGbMnzjj90asgYO4W5LZWNTdLZWRYW+gfMbdO+kqOJQByR++cr
-         mclUkGpfcm+HXMM5bGQXufYDnfx8uiO+auG/GXrCUwfb0i4inHl7CuGetpsJlIOsRffv
-         9fcr9sNn3G36eMpbEYZ2pvAq57SL27OdL38e8WMYw63v5+Plct43TK54+NxwFl8itdY7
-         GW7d6IH3fi9FY/sP5rTFcRJt113zLfkoea/6BJe7zTPFaE/o+DYjqPHadK31Y44ubgjM
-         6sKOj4hzo+Q2GlsVVMoqlIC4GF5NgrYmkF1QSAjepo/aXkzIdARAwgH26vBfkNBi/O90
-         b1dA==
+        bh=g93e1bBzvkihfZLg20AxxWUEZDEf5mUGENjPC73ozn0=;
+        b=Rlkmi2uf/6PsXi1NWrRTm9delWf6ZHl2ancW0/yTe4KMXqrY98LjRUOyPhDoTsGhSt
+         3xFDL7ieytY6rN5Tsz6uHDH5F2Xe7TJuxfJz1WzCjYcyt+7rs41I1RI6CB9n2zv+SXIi
+         +SmXylZ+Oz51PozFC4QDhlv1Ztkj+ZeYMhIVdd6w8YOwkj91Kzx52ojfAGIBQ6wvi6hB
+         SmPqLsBbxEdKXykM+IULawosM0XQPCLB9vkpHV7jbZpaO3bWJDj3l8IGt0h9ykBjx0dg
+         5fPsXy9qqb9ojOQ7IHZxU6p2wZXQjQVEiw45t9zINPWL+laW2/u8ULE/m5xLtitzHDQt
+         MLEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707340633; x=1707945433;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1707341515; x=1707946315;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dgfzTVksahqxWw0KuisYDJC38lg+Vl3GjMkmu7mWaIo=;
-        b=u2dx4fFjYgYxzT2u05LIWBJS8ZRqfN2IUBlNWGcdo+zIzSa7zoTT74vNdcnGVXHcxp
-         P9j0d+4/zX4s4iwRseqA7K8jF0hwdGKvnxtdzaYSPQfbMuiXljX0KQrWvD1PSIsOCrGU
-         eofeOGVXO22PslmMvz3XM3vf+HRYDIuEYZBunCInYLVO9A0CdUpHaZ0bqEFgims2CFvG
-         PwBpSFK8sA3cVbRHaLGXVBdMvKmZtW7WbKBLjZKvzEtsnZ5e1iSIvoGjMqoYcla5BKl9
-         f5cWj9PCs5A4Z6Dai64gMd7dlFoeGCAj0UVpeC6PQ0Q0idWCkM/sY4ug5fJywD8DVPoS
-         hT9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCX3HezlKXkzI51TdRjcsYvnfkYhukZABygFH5R4sSDynIKEsNyzd0J2FZNKkm0kcb1+9nnePDXVzcCctULbrYlYeVQniwb5ApYK5HvA
-X-Gm-Message-State: AOJu0Yyan/ifWlRwhyHrk8qLpDUVqjoFXVP+HeuriA+q97oc6eywUFgC
-	Y/zqOqUH5TdLg0rSlxN2cTY91zWh7kOdGIsXo56QOjMX3FQm8W4e
-X-Google-Smtp-Source: AGHT+IEOCU1Vxs9K3TvkuHmf4lmBc+VGVFw76bAqBnWbpns97MU1pHcqQMhdcmaMBiPx0duzyMO3IQ==
-X-Received: by 2002:a50:9fc3:0:b0:55f:e744:71fa with SMTP id c61-20020a509fc3000000b0055fe74471famr627388edf.18.1707340632686;
-        Wed, 07 Feb 2024 13:17:12 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXey/cH2FlVTD9OzfSIIRtS3+XVuhMv0EUqqeynNVYUNBqwMvjYo/s0VXIZKN/fUM7svy+/Wc4PCjsp0QN7q4oLjrCogQ797zMfF863k89tE6UXI0saUdUCYGZbYw8AXuT+ITH/wGWzZXAb2P1n+W3ef+0X2DMo1XWT3yZj889t5beWd/FiRUoKs/Y1d3YWKPZRiuLJZtXnruSt
-Received: from [127.0.1.1] (2a02-8389-41cf-e200-3314-d4ec-5095-daa3.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:3314:d4ec:5095:daa3])
-        by smtp.gmail.com with ESMTPSA id h3-20020a0564020e8300b00560622cd10fsm98362eda.68.2024.02.07.13.17.11
+        bh=g93e1bBzvkihfZLg20AxxWUEZDEf5mUGENjPC73ozn0=;
+        b=IU3GF7X+3kBrdzYtKrkbXKox/m3/p/holsag+UMmFEjqL0oGUwVqek9hHB8zD+xMEn
+         SPBBWBWw8QHr3rrinXA9D5ATejASxEtAuZrWmns+DovciYf3cNkAP5sihl0ZTX1pHonU
+         oqh1Bd3HqI+0zLUl6db3DqKrU0zcUQjWkwt8rF3lWKi6SYhaZPOMewBrqf3mnLAEI4o1
+         zjhLzMS/Oc83qPQWVA/c2M3TYDiSI+0X2JVgVNdOwG7a2C6UCHCo8HMSBKPswHC1M1PD
+         JCBCzL3C8HZP5YURS2cpSWn4Y6Pn3Lygkms9Dq8nBERjCPt/aKRijCXO5IMCIJt4HBBo
+         Eoxw==
+X-Gm-Message-State: AOJu0YyjIuiHzoWAuDD2Ig2xUbncy4vh8iXzMUTEe3V5kDIQe4I9m2BU
+	Mh7o5zkKFyVEn8WcynUlYvIU6HfqCa6tzEfg1+TzFumluAUg3fvx
+X-Google-Smtp-Source: AGHT+IFiGChlBRIhV9nBYZfP5296dQ/+pbvlrHhYAi0+PZt0oOqX4llfnT6PQPja6eBh7FBUpRMb5g==
+X-Received: by 2002:a17:90a:d790:b0:295:f9a5:f8f0 with SMTP id z16-20020a17090ad79000b00295f9a5f8f0mr3955820pju.10.1707341515533;
+        Wed, 07 Feb 2024 13:31:55 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU86gaXtfpoUq1hmDDsnfJGYAsnLrWjuN1MVjn1BvSwaDNf5X3AtUBvEvVu80JpZrgBMNyp9Q3CosaGrm/FrrmMHSqlTtxlIUNzGHpor8dnouo1clsjF5QatzOs8ZpD3pyIOpGY0GXzZpBSJc6qk3avtF60VsrdlcjVSw5VzoaRgjZGwQ==
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id kr14-20020a170903080e00b001d9537cf238sm1949141plb.295.2024.02.07.13.31.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Feb 2024 13:17:11 -0800 (PST)
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Date: Wed, 07 Feb 2024 22:17:09 +0100
-Subject: [PATCH 2/2] hwmon: chipcap2: fix return path in
- cc2_request_alarm_irqs()
+        Wed, 07 Feb 2024 13:31:54 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 7 Feb 2024 13:31:52 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Cc: Jean Delvare <jdelvare@suse.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] hwmon: chipcap2: fix uninitialized variable in
+ cc2_get_reg_val()
+Message-ID: <9d5409a6-b309-4d71-8658-52589eedb28b@roeck-us.net>
+References: <20240207-chipcap2_init_vars-v1-0-08cafe43e20e@gmail.com>
+ <20240207-chipcap2_init_vars-v1-1-08cafe43e20e@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240207-chipcap2_init_vars-v1-2-08cafe43e20e@gmail.com>
-References: <20240207-chipcap2_init_vars-v1-0-08cafe43e20e@gmail.com>
-In-Reply-To: <20240207-chipcap2_init_vars-v1-0-08cafe43e20e@gmail.com>
-To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
- Dan Carpenter <dan.carpenter@linaro.org>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Javier Carrasco <javier.carrasco.cruz@gmail.com>
-X-Mailer: b4 0.13-dev-0434a
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1707340628; l=2046;
- i=javier.carrasco.cruz@gmail.com; s=20230509; h=from:subject:message-id;
- bh=kR8W6XaSITp6FtKm662SPQ78CZF78Rrgzk4MuYq0O+s=;
- b=J1G74un+07m36ZfbGe9xs4/GVbjkUp9yXyXSWA1BAdd9FiVjUjH8AucF4kEDtDJmEGzyTeP3q
- CBKGRvsPII0DT4bqhnq0XPWVvZSwYvBcFl98kDFb80361d19ny2YjR9
-X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
- pk=tIGJV7M+tCizagNijF0eGMBGcOsPD+0cWGfKjl4h6K8=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240207-chipcap2_init_vars-v1-1-08cafe43e20e@gmail.com>
 
-The return path can be improved by returning upon first failure. The
-current implementation would try to register the second interrupt even
-if the first one failed, which is unnecessary.
+On Wed, Feb 07, 2024 at 10:17:08PM +0100, Javier Carrasco wrote:
+> The reg_val variable in cc2_get_reg_val() might be used without a known
+> value if cc2_read_reg() fails. That leads to a useless data conversion
+> because the returned error means the read operation failed and the data is
+> not relevant.
+> 
+> That makes its initial value irrelevant as well, so skip the data
+> conversion instead. If no error happens, a value is assigned to reg_val
+> and the data conversion is required.
+> 
+> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+> Closes: https://lore.kernel.org/linux-hwmon/294e4634-89d4-415e-a723-b208d8770d7c@gmail.com/T/#t
+> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
-Moreover, if no irqs are available, the return value should be zero
-(the driver supports the use case with no interrupts). Currently the
-initial value is unassigned and that may lead to returning an unknown
-value if stack variables are not automatically set to zero and no irqs
-were provided.
+Applied.
 
-Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-Closes: https://lore.kernel.org/linux-hwmon/294e4634-89d4-415e-a723-b208d8770d7c@gmail.com/T/#t
-Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
----
- drivers/hwmon/chipcap2.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/hwmon/chipcap2.c b/drivers/hwmon/chipcap2.c
-index 3b604fc5d8ae..6ccceae21f70 100644
---- a/drivers/hwmon/chipcap2.c
-+++ b/drivers/hwmon/chipcap2.c
-@@ -670,7 +670,7 @@ static int cc2_request_ready_irq(struct cc2_data *data, struct device *dev)
- 
- static int cc2_request_alarm_irqs(struct cc2_data *data, struct device *dev)
- {
--	int ret;
-+	int ret = 0;
- 
- 	data->irq_low = fwnode_irq_get_byname(dev_fwnode(dev), "low");
- 	if (data->irq_low > 0) {
-@@ -679,8 +679,10 @@ static int cc2_request_alarm_irqs(struct cc2_data *data, struct device *dev)
- 						IRQF_ONESHOT |
- 						IRQF_TRIGGER_RISING,
- 						dev_name(dev), data);
--		if (!ret)
--			data->rh_alarm.low_alarm_visible = true;
-+		if (ret)
-+			return ret;
-+
-+		data->rh_alarm.low_alarm_visible = true;
- 	}
- 
- 	data->irq_high = fwnode_irq_get_byname(dev_fwnode(dev), "high");
-@@ -690,8 +692,10 @@ static int cc2_request_alarm_irqs(struct cc2_data *data, struct device *dev)
- 						IRQF_ONESHOT |
- 						IRQF_TRIGGER_RISING,
- 						dev_name(dev), data);
--		if (!ret)
--			data->rh_alarm.high_alarm_visible = true;
-+		if (ret)
-+			return ret;
-+
-+		data->rh_alarm.high_alarm_visible = true;
- 	}
- 
- 	return ret;
-
--- 
-2.40.1
-
+Thanks,
+Guenter
