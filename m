@@ -1,61 +1,61 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEE567F492
-	for <linux-hwmon@vger.kernel.org>; Wed,  7 Feb 2024 16:50:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A857E823B7
+	for <linux-hwmon@vger.kernel.org>; Wed,  7 Feb 2024 17:04:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707324602; cv=none; b=NBH2FH2+7wgha4lUFYAugVYD7E9w/CYnPihf+77LBP1JaVISzhgAAhedZZ/vl6DqsAlhxJYS10OECiP8ICk0ODxQvT+PIj5EGvvspXWHMx+H6Q3cNa6jX7o4vhN9thDKW4NcvbNITu/pHyXVLl28lQJKqEXjUF06xtWbRVUWLWQ=
+	t=1707325468; cv=none; b=gsidqBCn2DkQ3pwSd+JIrSDHwRlb+mYhzof7vlMIIdXSi1yl3F6Q1ZbAHptB04lX3GiCOTZrv+tjqAfmEJU8vKQD/doRfCMzeNeEyIj3hzopOz4qfu+GjRNGtNITvyimJXR8eBBR2XoBoIC/ukeEaW2t45PcCIqnGrHXP9+pVzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707324602; c=relaxed/simple;
-	bh=4pMTPlMKTIPjkMHeduiSjdFuw22VnwT5PeKjWCj69A0=;
+	s=arc-20240116; t=1707325468; c=relaxed/simple;
+	bh=4qdoCKJOz/eiKRsj07jPg+cL1Anco17k4fRjIGPB8aI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aNIsHF5Ww0nlZvTnfNcmaL8LuCpVERSyoAMk2k44CwtpXQ4B7l15zYUC93OQsK5pvq7EEKam9+JmzK5rivo717X8QBABbwLPBleDLcye4OA9RrPKVrJERKlr3UKd12vkmiILhjbYQQd1fHQAbm7lcp6cbaWeyR3vXvzoFx34sa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E9qkao8u; arc=none smtp.client-ip=209.85.216.47
+	 In-Reply-To:Content-Type; b=sxLs0WHTQkPc03w35BAQ//DaLyMwiAlNOcle6uydz8Ookc2mR1JMm4RYYD3F2V48a1CbaGkx2S4oRqyoywBKxX1f50zt+lDBdCHhTMGslP9A9js2ZOaVRMpznnW1xmRep1kij4o/vaHITc2upSzTt2DvUNBHtJ766n5M6cB2arw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d2v4dPX+; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E9qkao8u"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-2909a632e40so626863a91.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 07 Feb 2024 08:50:00 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d2v4dPX+"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1d8ef977f1eso7439755ad.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 07 Feb 2024 09:04:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707324600; x=1707929400; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1707325466; x=1707930266; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZmNZoWaSHhfjY+BBgKE9DeqCXIEBLyAoPLWFcOBJhDU=;
-        b=E9qkao8uKAsVIhFg0nBXHVRCSnmyHW1SqCxPmo/m8mTHuq8rM7TlK62zuejLSO4TR+
-         q0G4z4mCmKprkcbc8ME+/PXMiEBJhLJ2yEnJtfvoomMc7cV7+2r6YIGaqQiGNJSkF8ln
-         bs+5hXhxIq26ufETvFbjXb8a6MImBRyKQHEi7uSYDg1jREszly7WMcWSWTzf+bdK67zf
-         I8W/uql4EvhNj6EXjz85mN3L5MidKpDST+iBjQtbTpHCorE4Rc9YkFz6FmOWwuK1hsef
-         RDN6gpXYGHVl6H4xGe5sFx62ZgwlShWc7ZrvkaZcxDzow1d/EgxN2YvuX3lVA0oLNYd/
-         rUwA==
+        bh=bUd6R+6Y77ov54KEXXuqZL2yeLBUdSdNB1b1hHNgV/I=;
+        b=d2v4dPX+ilUgfuVPYamd7NIclvxEZcov6NVAHuWKoumK80DrUB+1F/OHgYfdQ3UbQI
+         vyebCvpabpcqkTLFChm2EVCNB09WHYKIJlYmzSXhBz0sAb00Xeh3Uk5lB+SyBzFv+tVN
+         Kmiu14jsuecGjl79EcP/6gLADIAKFiuv0h/fwhLZgInDOntEeyp24PKiR1uJtVfu5EVZ
+         nKzYB3LxMytkMzU7lGubsV3FFk1eGOcVwME1Y9o1nnDjSXaCLgnKsjKefMrlbKaxu//s
+         iA/ptY5DLkTpR1P7EOCKeq5/HA3bf7jP/8aQ7eL85P2mEMHdfQQ3RQI6zi6eYxjf+sxJ
+         WmhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707324600; x=1707929400;
+        d=1e100.net; s=20230601; t=1707325466; x=1707930266;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ZmNZoWaSHhfjY+BBgKE9DeqCXIEBLyAoPLWFcOBJhDU=;
-        b=MZxty3K5HU24m/vWiWZ9sVmxcRykUvbBrs0zeIIdPP801jSCa59yvGmndWlRSA+BI+
-         XtH07oAJdqAeZA14Qeo8noweZyXvxc1xYyBbEncxcLf53qoi1hQ3lXuz7SJutcgf/iy0
-         bemw9DXndkBR4/98/soRheFiZLxxKgHGsz6BpZFaRFpzWKfgdbxmzASNkI/U33bnvkvK
-         xRVYYb8SklKZc96WaRq5/yPMj5E4YVH5xSobcT6g1BoIVXD/XHeT6hIrb5oGmskqqk3j
-         MMnSiIFpyyhXSyn80rsnf3IDm6OFDXRfqP6L8xhUKYHj8QwCJ3yFrsI0O7tPOIGjCxrp
-         1m4Q==
-X-Gm-Message-State: AOJu0YxtiubWD8d0WbHNz2YNO+fC6GEM48t48EuCJgqUvJQ2sL/Nfkj5
-	TgsfXH5BiyF0jqGW+9AEIn0BONWmTE18yjO1tQjDedzj4r29YeOW
-X-Google-Smtp-Source: AGHT+IGgBILtZvRY+rKn9utRrrwMkzN3q4qe31e3DZNSzBYtKgU+vjlQ9/u4SsG/VKxw/NSXbV5/+g==
-X-Received: by 2002:a17:90a:c7c1:b0:296:d696:a5db with SMTP id gf1-20020a17090ac7c100b00296d696a5dbmr2884270pjb.41.1707324600147;
-        Wed, 07 Feb 2024 08:50:00 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWpCkt7Z+2jZrlzIfQ0LlEQ2up+K2mV0E8zvl3JEEAzw/3FfTWGoXvr8j2xJlKC3chSq3rxhc+WzGOUgSjWJQ5OOI7k/EXou6PAqr+XXKBz68EDuMNejjzW2IL+Pg==
+        bh=bUd6R+6Y77ov54KEXXuqZL2yeLBUdSdNB1b1hHNgV/I=;
+        b=nQ5ZDsdWsd/tU+V11EeHwL88M5tBpDHtE451U9pEmOvKUKHPUKqnyIsjExJpqquIkx
+         8QMKX2IZzaWayJALVqXY0qKh/64yPhOi2Sov/+pSJtufKUHLPYNyfUCOLpZ+TDFDfM8J
+         jQ4TlbIqvQi5pAH/iiz2tg4KTg5Pr6X6ljZehg59HheJrc89h2Y7Kay71wyxZ0Hx5J7Y
+         kaquJrIaJKHTKOATgGUu7HG698HKEBJpctQIa7KEFR6THhGbtp5d5fmEtUiZWHmE/yj+
+         pYFNdTd+G+1h3+O4jpLlEngNbXhVzHa8NV11Ca3knWoQWvnec32xuW8xEhJAQhPWP1Qq
+         ohJA==
+X-Gm-Message-State: AOJu0Ywra1t6CdSz/iolWzQK1K1Y3qTIP1CAG1eyGzUlHFJzmonoa0t6
+	60cp8XGVAUjxWSYE696ISQXj9qMI1J2vMWT+bEoV1C1cZgmR+bLX
+X-Google-Smtp-Source: AGHT+IHBVkmOltjuz8pgdDRsKyaJ4X8WLVDR2knXqzNoTEUQKDDM4wqY3zOGmSjb8ObkDFd9880KFA==
+X-Received: by 2002:a17:902:6803:b0:1d9:66df:f7b3 with SMTP id h3-20020a170902680300b001d966dff7b3mr4707596plk.45.1707325465810;
+        Wed, 07 Feb 2024 09:04:25 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU/PpR41EaP4fc+JHTTgs5olDeGzpdyR6GIVMKKgk5Z9CC/mAmZz1lNHfqA7gmrS+diYQQj6KWd4qF05aqnbucybBMgrlyx7os=
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p5-20020a170902e34500b001d94a3f3987sm1667203plc.184.2024.02.07.08.49.58
+        by smtp.gmail.com with ESMTPSA id ku4-20020a170903288400b001d8d7323ea2sm1681086plb.74.2024.02.07.09.04.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Feb 2024 08:49:59 -0800 (PST)
+        Wed, 07 Feb 2024 09:04:25 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c2c5b8b0-d3db-4212-8311-ee54119389c4@roeck-us.net>
-Date: Wed, 7 Feb 2024 08:49:57 -0800
+Message-ID: <6b640839-545d-4230-b6f8-abe034e08aae@roeck-us.net>
+Date: Wed, 7 Feb 2024 09:04:24 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,13 +63,15 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [bug report] hwmon: ltc4282: add support for the LTC4282 chip
+Subject: Re: [bug report] hwmon: Add support for Amphenol ChipCap 2
 Content-Language: en-US
-To: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>,
- Dan Carpenter <dan.carpenter@linaro.org>, nuno.sa@analog.com
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>,
+ Dan Carpenter <dan.carpenter@linaro.org>
 Cc: linux-hwmon@vger.kernel.org
-References: <b6fb236a-c3c1-4c5c-94bd-1f68b5aeac41@moroto.mountain>
- <53e0e2c7bb9cafb4efa3748ecf3ec765c262db83.camel@gmail.com>
+References: <c61a90ff-7f63-4181-96fd-ca5a5029386d@moroto.mountain>
+ <ca9be823-8b43-4f51-9bc0-8ee5de7df4a2@gmail.com>
+ <563343c4-8893-44d8-a398-ea36a9cd396a@moroto.mountain>
+ <294e4634-89d4-415e-a723-b208d8770d7c@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -114,49 +116,38 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <53e0e2c7bb9cafb4efa3748ecf3ec765c262db83.camel@gmail.com>
+In-Reply-To: <294e4634-89d4-415e-a723-b208d8770d7c@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 2/7/24 02:19, Nuno Sá wrote:
-> Hi Dan,
+On 2/7/24 02:23, Javier Carrasco wrote:
 > 
-> On Wed, 2024-02-07 at 12:51 +0300, Dan Carpenter wrote:
->> Hello Nuno Sa,
->>
->> The patch 848a5019ded5: "hwmon: ltc4282: add support for the LTC4282
->> chip" from Jan 29, 2024 (linux-next), leads to the following Smatch
->> static checker warning:
->>
->> 	drivers/hwmon/ltc4282.c:732 ltc4282_write_voltage_byte_cached()
->> 	warn: no lower bound on 'val' rl='s64min-4294967294'
->>
->> drivers/hwmon/ltc4282.c
->>      723 static int ltc4282_write_voltage_byte_cached(const struct
->> ltc4282_state *st,
->>      724                                              u32 reg, u32 fs, long
->> val,
->>      725                                              u32 *cache_raw)
->>      726 {
->>      727         u32 in;
->>      728
->>      729         if (val >= fs)
->>      730                 in = U8_MAX;
->>      731         else
->> --> 732                 in = DIV_ROUND_CLOSEST(val * U8_MAX, fs);
 > 
-> Yeah, I guess we should likely clamp it between 0 and fs
+> On 07.02.24 11:16, Dan Carpenter wrote:
+>> On Wed, Feb 07, 2024 at 11:08:18AM +0100, Javier Carrasco wrote:
+>>>
+>>> The ret variable should be initialized to 0 because if no irqs are
+>>> defined, the function should not fail i.e. the driver supports that case.
+>>> That is probably the reason why I did not notice in my tests.
+>>
+>> These days everyone has the GCC extension to automatically zero out
+>> stack variables so it wouldn't have shown up in testing.  It's still
+>> technically a bug, but I don't know how many people it would affect in
+>> real life (probably a small number).
+>>
+>> regards,
+>> dan carpenter
+>>
+> That is right, but because a small number is greater than zero, I am
+> glad that you found this issue now before the driver is released.
+> 
+> By the way, Smatch caught this while gcc, coccinelle and the language
+> server protocol I use did not... great tool.
 > 
 
-	val = clamp_val(val, 0, fs);
-	in = DIV_ROUND_CLOSEST(val * U8_MAX, fs);
-
-maybe.
-
-Should I fix that inline or do you want to send a follow-up patch ?
+gcc is notoriously bad with finding uninitialized variable problems.
+Maybe that is because of that gcc extension, I don't know. It is
+quite annoying, though.
 
 Guenter
-
-
-
 
