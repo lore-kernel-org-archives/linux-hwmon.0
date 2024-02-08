@@ -1,61 +1,61 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ECEC763F4;
-	Thu,  8 Feb 2024 14:14:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A36EE7640C
+	for <linux-hwmon@vger.kernel.org>; Thu,  8 Feb 2024 14:19:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707401674; cv=none; b=UCQLUXyQEoYJsWReCG3uYABBF7riCegaPOGYPZ4sLG/JK9GV7FBEWC2+lyqS8Sq8EjT5voAUOLk59NLNL52c9RqthPfaIrFzsxMLTyAoQupRwQqzsUPnruTbZGeQiogW8hPP64FEC3z27aQRWNkIgK2V5gY13Ek+1dKIn90/DLA=
+	t=1707401961; cv=none; b=GIfYuZVLstLIhogqfWRkpL5+EH5AB4nqHH1GXScB4ZNqqMh3AxjLfF5ecWz93zELngpSwpqXw1R6kyucqjB8/mrMcefLzI/Cv70hiy0LABvpFt1m+Ehzf23MFepu+vWBefQ9Vi8rM2mGvkoSVbBg2oJaMmfKabeQ7LLIOzJsK1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707401674; c=relaxed/simple;
-	bh=uiBYLZn71C912vKTrlG4ZHjBTNMvmelWSNkzngeJ2cg=;
+	s=arc-20240116; t=1707401961; c=relaxed/simple;
+	bh=K2j0Eae2ptK6Yqn7/Fi+WlDc64nNiqEWYBqbGpNF48w=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rX7gnjlSsQQPr/XdYzDOgDjTKpJL85Sw/7gQp72zWfgHFmzThFm4jvOnI9wjdCtLvN5A4Zce6CMkao45XKlbUB1TAOG7lzqLVE7U8AvtxQ/doUOHixlgky+qvd8KCAF/rQdfjZ8eIcEtoohCJ3CHvmHduwqIU+NyUOP7v0VBAFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mh8QCLsI; arc=none smtp.client-ip=209.85.214.180
+	 In-Reply-To:Content-Type; b=uRaxfVd9YISGw4vKQKUn7BWFDCiVxdJXYD5uo9HMp10ondXrVeDiAMjTX7gBz4qL5JbE5zfOFbyncTcNVt/H3xzoJnEHiafU9GiO/6UrT1r7jKoQxZ+DA8n1FQrD7RxVxsFE2GlPd1ZNwLH6qbGi0zl1XenwcbiwbAy++F1/m8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A5bHwqOz; arc=none smtp.client-ip=209.85.215.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mh8QCLsI"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1d7431e702dso17376405ad.1;
-        Thu, 08 Feb 2024 06:14:32 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A5bHwqOz"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-5d8b887bb0cso1410060a12.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 08 Feb 2024 06:19:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707401672; x=1708006472; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1707401959; x=1708006759; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=SXyeGT+gH+mH78CTuKkjJZRZDJJBus+fYz/W9jL1sXU=;
-        b=mh8QCLsIMaeroFLxTE6A7HTRb40i3wBVqmZxueiR1HOYirLK1/632IkRWiPswUEv9i
-         JGHexifdPgKAdxbC26fiYorVcg7vBfYGIq6PSCNZIlFz0fPniZbx/Pa0dWmZDZfNo6K2
-         7DfQp48sxUrcZ2F8VFcD51Fwmkf6DXCDiOZQY8EDguI4q06z+EdwfiIVXTpm+fJlmdBH
-         RILbPgprwB76qudXi6GBEyhYcx0isJ0Fp2fx6uCg7Qfr6OvKWTezO1HJdM8lDcIEuYTf
-         /874jZl4Xf8KrZr2teIp/rhG7wo0Q3epYajM37YawnKacldxAz2sqgrEkOnbIc7Vpz+o
-         XcBg==
+        bh=RjGA1GO6uzECI3HIYgkv4QEkEvVEPB1LYdE94BolCVs=;
+        b=A5bHwqOzrjtPh4bSncNMu5QAyr5yX0/3fZuKFU4fZh+95KAJw07WqP18rDdaI+5St2
+         N+F69yLgwBVbvtFXaxMzkUzcSk1AR7YL/+UDr9R8/Xq9M2+S5NYh0FP4zJh0HW3dE5ee
+         +sNtH3LHUACS8NJOHFsxtVXsyZKYLgX/vIzbQreDuC1BlJvchm2ULwXftcDoQKhsItrL
+         78l1OvWvEMf0TnhLszC7Kr/d1msiGyty/LcAICTyqeXXFK1kZd7SDVBUQsTzS5oNKM5a
+         R9qmTQt/cJyAwpr07oluxM28WmwzkKDI0QjstkntUx9OZ4ndWJNiQH/yB8wUfPPtJChT
+         Csdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707401672; x=1708006472;
+        d=1e100.net; s=20230601; t=1707401959; x=1708006759;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=SXyeGT+gH+mH78CTuKkjJZRZDJJBus+fYz/W9jL1sXU=;
-        b=NpT2fMdApJcPAdQA3PvKcBxFvO1zq0dmJ3T0lEy6SMhtA3JactoeLC+FkRKvytrBRR
-         nuNWFbjHArMoxKVkHR+4vsGd0B05MjSX1sJULnk777EyX6UHqCRTwXjm8MbeX14TRi6L
-         vj9HW0NxbBpULxJLmz/Vm/v2UGhBFIAZ1rvIls1q3Exo03VFTAmDSOrHjy/5K8Hld+IW
-         xLCcVeVJxaDUnpR3ARxY/YpKsK6J0RpCdnKkkXi+786C9QsNeuJiIytrrNZaNaF5/iB6
-         Rw35sNy0BwTx/P93aGNAtUM6Ys7F5dGc50UQHeiDkzl0scS139HIaX/n7vq49FFw3JVm
-         F0Hw==
-X-Gm-Message-State: AOJu0YziJswK39ETm8cTsx3LUrFh3s9G6FToSwUZ4Cj6s10iC34CVpih
-	QDHeVqNjt/08rNzFH7oT4PYqiL65Vxef9ytD3xfbaZ3+KUp60Va2
-X-Google-Smtp-Source: AGHT+IFKGZk4ENmslw0jsLzBOdtMR18kpwbpb3WP2OiYSYSvhlX4UTwhgd3uqhnPwWJ/8zUf1rZV8g==
-X-Received: by 2002:a17:90b:1d07:b0:296:e32:bd5f with SMTP id on7-20020a17090b1d0700b002960e32bd5fmr6039011pjb.30.1707401671558;
-        Thu, 08 Feb 2024 06:14:31 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUO0S46Y2Q499c7UXohCudub7YHSC8lOQkqQS/xFux4vAYTrUvwFXMEBmq0YzaeOWCwI4pV/0LsOZylVQaV7QrieKY/iPux2JDxzQphnM4qCyb21u0kh4x2i9v81ojcVyzZpPnLKRug8XHa3p7yu8nahBVP57LAVHpZ9+dNpGSxPPif8V14WqfjoiCBavsXlRzz85YINIkV
+        bh=RjGA1GO6uzECI3HIYgkv4QEkEvVEPB1LYdE94BolCVs=;
+        b=BnlATmI4XLiAo7zsctCARB7FOUb6Ir3FaWENmsSzUs2vbvoJHa43yKyCc2Gr53f/4S
+         kIKcwSznAzNZDzLm0aUnWtM5PjGfE5NfptC/zj3TS8h0hjCtFdeEwgoKc+QCVPm4qwEX
+         Xj3A3ExIGk+f7DNX3gIwzeKwJZav5bsdyfW/3YmH9tB0T4BSJJTSD83KSIwcBaf9zWGz
+         nJA28J4BHtSD/WWcRTL+PUO3SmAYVPUu1UhtzBwW06RD8qr5UkZ6aEW6TkLqvOX5THDE
+         glAjEp18WDxenSw5pPwXLg5V9CL7hYzFm4MysOgcODg1P4+5Zgy/RkkteSOH9q8DeL6H
+         eB7A==
+X-Gm-Message-State: AOJu0YzuHXsAsW2fujtagLhmyy8W2qgzAxfBc3d7Ft0qd5KWTKIAIyxY
+	9z1xcsu8ewZKc53cI34jZeCGIxSvioJIm6xgH5NPDDJqJ5aXSjAj
+X-Google-Smtp-Source: AGHT+IEe1v+EAOEMTAeJWIlnplHsqGqgGj1PeCdbz5Nx6U9aDEz1eYWOZkWqxNGfx8n2FhjcmdQWJg==
+X-Received: by 2002:a05:6a20:d39a:b0:19e:3006:5dc5 with SMTP id iq26-20020a056a20d39a00b0019e30065dc5mr10068246pzb.3.1707401958888;
+        Thu, 08 Feb 2024 06:19:18 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXPFmR85qbVtPf90UuE2/nLp6s3fblmBQfeNZV5IIO54mpcGgSgR5RR9tTQ4iFVII1arzMEvwrWkoyDRjkg5FPL1Fd8i+bwwg9K+Jz40n+YYrKi6cR7a98ExzfRxQ==
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h7-20020a17090a604700b00296e2434e7esm1531789pjm.53.2024.02.08.06.14.30
+        by smtp.gmail.com with ESMTPSA id l4-20020a170902eb0400b001d8a5c08277sm3400967plb.260.2024.02.08.06.19.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Feb 2024 06:14:30 -0800 (PST)
+        Thu, 08 Feb 2024 06:19:18 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <2a6ab115-9775-447b-adf5-d63043548c74@roeck-us.net>
-Date: Thu, 8 Feb 2024 06:14:29 -0800
+Message-ID: <4d4e37d8-3011-4d60-b805-adcdb31ae57f@roeck-us.net>
+Date: Thu, 8 Feb 2024 06:19:17 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,14 +63,15 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Add support for Ayaneo Air Plus 7320u.
+Subject: Re: [bug report] hwmon: ltc4282: add support for the LTC4282 chip
 Content-Language: en-US
-To: Sebastian Kranz <tklightforce@googlemail.com>
-Cc: samsagax@gmail.com, derekjohn.clark@gmail.com, jdelvare@suse.com,
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240207084206.2204-1-tklightforce@googlemail.com>
- <099bc4e3-ec08-4604-90cf-5691a98441b2@roeck-us.net>
- <332FEE3F-E07C-4144-933B-E085C2CB4E57@googlemail.com>
+To: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>,
+ Dan Carpenter <dan.carpenter@linaro.org>, nuno.sa@analog.com
+Cc: linux-hwmon@vger.kernel.org
+References: <b6fb236a-c3c1-4c5c-94bd-1f68b5aeac41@moroto.mountain>
+ <53e0e2c7bb9cafb4efa3748ecf3ec765c262db83.camel@gmail.com>
+ <c2c5b8b0-d3db-4212-8311-ee54119389c4@roeck-us.net>
+ <9151c5df901325aed61e87019a5a1cffc46cf579.camel@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -115,17 +116,60 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <332FEE3F-E07C-4144-933B-E085C2CB4E57@googlemail.com>
+In-Reply-To: <9151c5df901325aed61e87019a5a1cffc46cf579.camel@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 2/8/24 04:25, Sebastian Kranz wrote:
-> Subject: [PATCH] hwmon: (oxp-sensors) Add Ayaneo Air Plus 7320u
+On 2/8/24 00:12, Nuno Sá wrote:
+> On Wed, 2024-02-07 at 08:49 -0800, Guenter Roeck wrote:
+>> On 2/7/24 02:19, Nuno Sá wrote:
+>>> Hi Dan,
+>>>
+>>> On Wed, 2024-02-07 at 12:51 +0300, Dan Carpenter wrote:
+>>>> Hello Nuno Sa,
+>>>>
+>>>> The patch 848a5019ded5: "hwmon: ltc4282: add support for the LTC4282
+>>>> chip" from Jan 29, 2024 (linux-next), leads to the following Smatch
+>>>> static checker warning:
+>>>>
+>>>> 	drivers/hwmon/ltc4282.c:732 ltc4282_write_voltage_byte_cached()
+>>>> 	warn: no lower bound on 'val' rl='s64min-4294967294'
+>>>>
+>>>> drivers/hwmon/ltc4282.c
+>>>>       723 static int ltc4282_write_voltage_byte_cached(const struct
+>>>> ltc4282_state *st,
+>>>>       724                                              u32 reg, u32 fs,
+>>>> long
+>>>> val,
+>>>>       725                                              u32 *cache_raw)
+>>>>       726 {
+>>>>       727         u32 in;
+>>>>       728
+>>>>       729         if (val >= fs)
+>>>>       730                 in = U8_MAX;
+>>>>       731         else
+>>>> --> 732                 in = DIV_ROUND_CLOSEST(val * U8_MAX, fs);
+>>>
+>>> Yeah, I guess we should likely clamp it between 0 and fs
+>>>
+>>
+>> 	val = clamp_val(val, 0, fs);
+>> 	in = DIV_ROUND_CLOSEST(val * U8_MAX, fs);
+>>
+>> maybe.
+>>
+>> Should I fix that inline or do you want to send a follow-up patch ?
+>>
+>> Guenter
+>>
+>>
+> 
+> Whatever makes your life easier... I can send a patch if that is your
+> preference.
 > 
 
-Not sure I understand what you are trying to say here. Yes, obviously
-your patch has a subject. It still needs a description. See
-"Describe your changes" in Documentation/process/submitting-patches.rst.
+I updated the original patch.
 
+Thanks,
 Guenter
 
