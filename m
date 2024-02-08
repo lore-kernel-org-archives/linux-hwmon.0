@@ -1,175 +1,113 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A36EE7640C
-	for <linux-hwmon@vger.kernel.org>; Thu,  8 Feb 2024 14:19:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D62376F082
+	for <linux-hwmon@vger.kernel.org>; Thu,  8 Feb 2024 15:19:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707401961; cv=none; b=GIfYuZVLstLIhogqfWRkpL5+EH5AB4nqHH1GXScB4ZNqqMh3AxjLfF5ecWz93zELngpSwpqXw1R6kyucqjB8/mrMcefLzI/Cv70hiy0LABvpFt1m+Ehzf23MFepu+vWBefQ9Vi8rM2mGvkoSVbBg2oJaMmfKabeQ7LLIOzJsK1Y=
+	t=1707405549; cv=none; b=dXDGH4cPf3vF8UQZtRNWAT+yp3nW/RqXXETeAyjZBOnyUhy4amJ9RY56jXb1vhG6FAXK28q4SY5njW+JGxC/pph3SV0p6725kmrhto42Meery3tsII6i/FOlo3iQ2GFLf7Ipzoi86bSZ+dHUo0hIk6MplQwefTvMvY8HHo330ic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707401961; c=relaxed/simple;
-	bh=K2j0Eae2ptK6Yqn7/Fi+WlDc64nNiqEWYBqbGpNF48w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uRaxfVd9YISGw4vKQKUn7BWFDCiVxdJXYD5uo9HMp10ondXrVeDiAMjTX7gBz4qL5JbE5zfOFbyncTcNVt/H3xzoJnEHiafU9GiO/6UrT1r7jKoQxZ+DA8n1FQrD7RxVxsFE2GlPd1ZNwLH6qbGi0zl1XenwcbiwbAy++F1/m8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A5bHwqOz; arc=none smtp.client-ip=209.85.215.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1707405549; c=relaxed/simple;
+	bh=CAEXknwGhkxyrhiDQr/janOqnbhjc11Se60GYTtkmAo=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=IlrfVsQs7jm2d3P+9R7D1Il3dYzSc5dK/iwMctlODwIkf9lGVNK8lBTJrJ0enwc96p+RPUmgNxoBdZUpi1pCLXQnt6rtEmDeJZN63a3/nzVQjJ3gXFjfpnUeKYOC6O6q4X/Y2kXgSsyo3ZcHU3OHSi8f6EHlmBxrRzrNoVHX88o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dhcZM7Hc; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A5bHwqOz"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-5d8b887bb0cso1410060a12.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 08 Feb 2024 06:19:19 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dhcZM7Hc"
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a2a17f3217aso247994266b.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 08 Feb 2024 07:19:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707401959; x=1708006759; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=RjGA1GO6uzECI3HIYgkv4QEkEvVEPB1LYdE94BolCVs=;
-        b=A5bHwqOzrjtPh4bSncNMu5QAyr5yX0/3fZuKFU4fZh+95KAJw07WqP18rDdaI+5St2
-         N+F69yLgwBVbvtFXaxMzkUzcSk1AR7YL/+UDr9R8/Xq9M2+S5NYh0FP4zJh0HW3dE5ee
-         +sNtH3LHUACS8NJOHFsxtVXsyZKYLgX/vIzbQreDuC1BlJvchm2ULwXftcDoQKhsItrL
-         78l1OvWvEMf0TnhLszC7Kr/d1msiGyty/LcAICTyqeXXFK1kZd7SDVBUQsTzS5oNKM5a
-         R9qmTQt/cJyAwpr07oluxM28WmwzkKDI0QjstkntUx9OZ4ndWJNiQH/yB8wUfPPtJChT
-         Csdg==
+        d=gmail.com; s=20230601; t=1707405546; x=1708010346; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=CAEXknwGhkxyrhiDQr/janOqnbhjc11Se60GYTtkmAo=;
+        b=dhcZM7HcnROEoFINu261WTXNtwXa6hh8svfkxkSn8fv20M+jJEKEz9OEuiHh2NRp5P
+         9OK0lQ/3fwqNGPLqUCQJJDZUjo0ewPedVlyGeyZ0FEdAxAdCup89tPd4YYq1UlXLLtIq
+         pjVqrWW3hFIbin6AElwJzKxTvV1T1cYE/G+jKfK3BD3iID0bZznT1+xtw6iODBFj/PUU
+         RaIOy5eiJsCZm4Ac8cWyzivRQQ+rDhAVBEh+AOdsUdAmyx0czQP7UpEBu7JkXih+XUs0
+         TmGxw49NuECJGfGw3buIv+QyCWIEQaKRf1zNS3om3jXlTb88G503OMJI5Poo8vny/7d9
+         BwtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707401959; x=1708006759;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RjGA1GO6uzECI3HIYgkv4QEkEvVEPB1LYdE94BolCVs=;
-        b=BnlATmI4XLiAo7zsctCARB7FOUb6Ir3FaWENmsSzUs2vbvoJHa43yKyCc2Gr53f/4S
-         kIKcwSznAzNZDzLm0aUnWtM5PjGfE5NfptC/zj3TS8h0hjCtFdeEwgoKc+QCVPm4qwEX
-         Xj3A3ExIGk+f7DNX3gIwzeKwJZav5bsdyfW/3YmH9tB0T4BSJJTSD83KSIwcBaf9zWGz
-         nJA28J4BHtSD/WWcRTL+PUO3SmAYVPUu1UhtzBwW06RD8qr5UkZ6aEW6TkLqvOX5THDE
-         glAjEp18WDxenSw5pPwXLg5V9CL7hYzFm4MysOgcODg1P4+5Zgy/RkkteSOH9q8DeL6H
-         eB7A==
-X-Gm-Message-State: AOJu0YzuHXsAsW2fujtagLhmyy8W2qgzAxfBc3d7Ft0qd5KWTKIAIyxY
-	9z1xcsu8ewZKc53cI34jZeCGIxSvioJIm6xgH5NPDDJqJ5aXSjAj
-X-Google-Smtp-Source: AGHT+IEe1v+EAOEMTAeJWIlnplHsqGqgGj1PeCdbz5Nx6U9aDEz1eYWOZkWqxNGfx8n2FhjcmdQWJg==
-X-Received: by 2002:a05:6a20:d39a:b0:19e:3006:5dc5 with SMTP id iq26-20020a056a20d39a00b0019e30065dc5mr10068246pzb.3.1707401958888;
-        Thu, 08 Feb 2024 06:19:18 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXPFmR85qbVtPf90UuE2/nLp6s3fblmBQfeNZV5IIO54mpcGgSgR5RR9tTQ4iFVII1arzMEvwrWkoyDRjkg5FPL1Fd8i+bwwg9K+Jz40n+YYrKi6cR7a98ExzfRxQ==
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l4-20020a170902eb0400b001d8a5c08277sm3400967plb.260.2024.02.08.06.19.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Feb 2024 06:19:18 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4d4e37d8-3011-4d60-b805-adcdb31ae57f@roeck-us.net>
-Date: Thu, 8 Feb 2024 06:19:17 -0800
+        d=1e100.net; s=20230601; t=1707405546; x=1708010346;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CAEXknwGhkxyrhiDQr/janOqnbhjc11Se60GYTtkmAo=;
+        b=V8sOj2P85raCeGhFX2opi9cdOTcJsOSBIwN616SrenAv4vcBaAxjc6aEJAAlZ0qVkv
+         GBJ+ayRlP+9jm35IIvmoVT2ijuEDtMNwVOZpyAow37Umanzdx/6pEwWVTMhEu/6+g74q
+         KwP8BvZ3+ZCSB3RNI08kXfMCTK/zctKzM6E1FYtzZXO/jBBNCd/oQCGXajpeNViwMB8A
+         dGD9ysEdagSRRTBCN/WkxEwbQvF6JQ/IfDaB4Ar9s3y/L2WkIlmK+xd60n/2M3qIcCCz
+         /g7qX6ttUpfMZaHCVbPjECU5pEhUIov7o4KMNS0TfVBmv9Qkq49AD3QoRu3+S4CZCTF+
+         RYDA==
+X-Gm-Message-State: AOJu0YxCvNcbbGJzg5D+T2e+NfpDBtfy0mRyoabQB28lEv3Mbxu8TkrP
+	QO2KXst+VLznPpwzzhl2HVwJ/GxuKrZ0on5rNK93+7RpMVYdwfRg
+X-Google-Smtp-Source: AGHT+IEEe6a6P6FBHbfRXhtUJZbmFKQuPMVWJyJWKew+yvdj6gCjyNdAqvZPU4IN6QHJ1UwUV/PC9w==
+X-Received: by 2002:a17:907:78d9:b0:a38:2694:46f8 with SMTP id kv25-20020a17090778d900b00a38269446f8mr5739897ejc.12.1707405545629;
+        Thu, 08 Feb 2024 07:19:05 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWyx5a48reLmeJyBHA0DhgzV5eeVe/v0nMIEj0fMybrBi2w9NWJEuaXB34ecgGMM8pNZxfXhF5eQ3ZkHh91/SL59SNUlgVs357qp0ptpObZi/2Nr07aUXItvtxuwg==
+Received: from ?IPv6:2003:f6:ef1b:2000:944c:cbc7:1e1c:2c47? (p200300f6ef1b2000944ccbc71e1c2c47.dip0.t-ipconnect.de. [2003:f6:ef1b:2000:944c:cbc7:1e1c:2c47])
+        by smtp.gmail.com with ESMTPSA id ti10-20020a170907c20a00b00a382a80b160sm152384ejc.24.2024.02.08.07.19.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Feb 2024 07:19:05 -0800 (PST)
+Message-ID: <e62ba4336a09b50549e8d32623b61d4939ae63d9.camel@gmail.com>
+Subject: Re: [bug report] hwmon: ltc4282: add support for the LTC4282 chip
+From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>, Dan Carpenter
+ <dan.carpenter@linaro.org>,  nuno.sa@analog.com
+Cc: linux-hwmon@vger.kernel.org
+Date: Thu, 08 Feb 2024 16:22:24 +0100
+In-Reply-To: <4d4e37d8-3011-4d60-b805-adcdb31ae57f@roeck-us.net>
+References: <b6fb236a-c3c1-4c5c-94bd-1f68b5aeac41@moroto.mountain>
+	 <53e0e2c7bb9cafb4efa3748ecf3ec765c262db83.camel@gmail.com>
+	 <c2c5b8b0-d3db-4212-8311-ee54119389c4@roeck-us.net>
+	 <9151c5df901325aed61e87019a5a1cffc46cf579.camel@gmail.com>
+	 <4d4e37d8-3011-4d60-b805-adcdb31ae57f@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.50.3 
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [bug report] hwmon: ltc4282: add support for the LTC4282 chip
-Content-Language: en-US
-To: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>,
- Dan Carpenter <dan.carpenter@linaro.org>, nuno.sa@analog.com
-Cc: linux-hwmon@vger.kernel.org
-References: <b6fb236a-c3c1-4c5c-94bd-1f68b5aeac41@moroto.mountain>
- <53e0e2c7bb9cafb4efa3748ecf3ec765c262db83.camel@gmail.com>
- <c2c5b8b0-d3db-4212-8311-ee54119389c4@roeck-us.net>
- <9151c5df901325aed61e87019a5a1cffc46cf579.camel@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <9151c5df901325aed61e87019a5a1cffc46cf579.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
-On 2/8/24 00:12, Nuno Sá wrote:
-> On Wed, 2024-02-07 at 08:49 -0800, Guenter Roeck wrote:
->> On 2/7/24 02:19, Nuno Sá wrote:
->>> Hi Dan,
->>>
->>> On Wed, 2024-02-07 at 12:51 +0300, Dan Carpenter wrote:
->>>> Hello Nuno Sa,
->>>>
->>>> The patch 848a5019ded5: "hwmon: ltc4282: add support for the LTC4282
->>>> chip" from Jan 29, 2024 (linux-next), leads to the following Smatch
->>>> static checker warning:
->>>>
->>>> 	drivers/hwmon/ltc4282.c:732 ltc4282_write_voltage_byte_cached()
->>>> 	warn: no lower bound on 'val' rl='s64min-4294967294'
->>>>
->>>> drivers/hwmon/ltc4282.c
->>>>       723 static int ltc4282_write_voltage_byte_cached(const struct
->>>> ltc4282_state *st,
->>>>       724                                              u32 reg, u32 fs,
->>>> long
->>>> val,
->>>>       725                                              u32 *cache_raw)
->>>>       726 {
->>>>       727         u32 in;
->>>>       728
->>>>       729         if (val >= fs)
->>>>       730                 in = U8_MAX;
->>>>       731         else
->>>> --> 732                 in = DIV_ROUND_CLOSEST(val * U8_MAX, fs);
->>>
->>> Yeah, I guess we should likely clamp it between 0 and fs
->>>
->>
->> 	val = clamp_val(val, 0, fs);
->> 	in = DIV_ROUND_CLOSEST(val * U8_MAX, fs);
->>
->> maybe.
->>
->> Should I fix that inline or do you want to send a follow-up patch ?
->>
->> Guenter
->>
->>
-> 
-> Whatever makes your life easier... I can send a patch if that is your
-> preference.
-> 
-
-I updated the original patch.
-
-Thanks,
-Guenter
+T24gVGh1LCAyMDI0LTAyLTA4IGF0IDA2OjE5IC0wODAwLCBHdWVudGVyIFJvZWNrIHdyb3RlOgo+
+IE9uIDIvOC8yNCAwMDoxMiwgTnVubyBTw6Egd3JvdGU6Cj4gPiBPbiBXZWQsIDIwMjQtMDItMDcg
+YXQgMDg6NDkgLTA4MDAsIEd1ZW50ZXIgUm9lY2sgd3JvdGU6Cj4gPiA+IE9uIDIvNy8yNCAwMjox
+OSwgTnVubyBTw6Egd3JvdGU6Cj4gPiA+ID4gSGkgRGFuLAo+ID4gPiA+IAo+ID4gPiA+IE9uIFdl
+ZCwgMjAyNC0wMi0wNyBhdCAxMjo1MSArMDMwMCwgRGFuIENhcnBlbnRlciB3cm90ZToKPiA+ID4g
+PiA+IEhlbGxvIE51bm8gU2EsCj4gPiA+ID4gPiAKPiA+ID4gPiA+IFRoZSBwYXRjaCA4NDhhNTAx
+OWRlZDU6ICJod21vbjogbHRjNDI4MjogYWRkIHN1cHBvcnQgZm9yIHRoZSBMVEM0MjgyCj4gPiA+
+ID4gPiBjaGlwIiBmcm9tIEphbiAyOSwgMjAyNCAobGludXgtbmV4dCksIGxlYWRzIHRvIHRoZSBm
+b2xsb3dpbmcgU21hdGNoCj4gPiA+ID4gPiBzdGF0aWMgY2hlY2tlciB3YXJuaW5nOgo+ID4gPiA+
+ID4gCj4gPiA+ID4gPiAJZHJpdmVycy9od21vbi9sdGM0MjgyLmM6NzMyCj4gPiA+ID4gPiBsdGM0
+MjgyX3dyaXRlX3ZvbHRhZ2VfYnl0ZV9jYWNoZWQoKQo+ID4gPiA+ID4gCXdhcm46IG5vIGxvd2Vy
+IGJvdW5kIG9uICd2YWwnIHJsPSdzNjRtaW4tNDI5NDk2NzI5NCcKPiA+ID4gPiA+IAo+ID4gPiA+
+ID4gZHJpdmVycy9od21vbi9sdGM0MjgyLmMKPiA+ID4gPiA+IMKgwqDCoMKgwqAgNzIzIHN0YXRp
+YyBpbnQgbHRjNDI4Ml93cml0ZV92b2x0YWdlX2J5dGVfY2FjaGVkKGNvbnN0IHN0cnVjdAo+ID4g
+PiA+ID4gbHRjNDI4Ml9zdGF0ZSAqc3QsCj4gPiA+ID4gPiDCoMKgwqDCoMKgIDcyNMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB1MzIgcmVnLCB1MzIKPiA+ID4gPiA+IGZzLAo+ID4g
+PiA+ID4gbG9uZwo+ID4gPiA+ID4gdmFsLAo+ID4gPiA+ID4gwqDCoMKgwqDCoCA3MjXCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgdTMyICpjYWNoZV9yYXcpCj4gPiA+ID4gPiDCoMKg
+wqDCoMKgIDcyNiB7Cj4gPiA+ID4gPiDCoMKgwqDCoMKgIDcyN8KgwqDCoMKgwqDCoMKgwqAgdTMy
+IGluOwo+ID4gPiA+ID4gwqDCoMKgwqDCoCA3MjgKPiA+ID4gPiA+IMKgwqDCoMKgwqAgNzI5wqDC
+oMKgwqDCoMKgwqDCoCBpZiAodmFsID49IGZzKQo+ID4gPiA+ID4gwqDCoMKgwqDCoCA3MzDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBpbiA9IFU4X01BWDsKPiA+ID4gPiA+IMKgwqDC
+oMKgwqAgNzMxwqDCoMKgwqDCoMKgwqDCoCBlbHNlCj4gPiA+ID4gPiAtLT4gNzMywqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgaW4gPSBESVZfUk9VTkRfQ0xPU0VTVCh2YWwgKiBVOF9N
+QVgsIGZzKTsKPiA+ID4gPiAKPiA+ID4gPiBZZWFoLCBJIGd1ZXNzIHdlIHNob3VsZCBsaWtlbHkg
+Y2xhbXAgaXQgYmV0d2VlbiAwIGFuZCBmcwo+ID4gPiA+IAo+ID4gPiAKPiA+ID4gCXZhbCA9IGNs
+YW1wX3ZhbCh2YWwsIDAsIGZzKTsKPiA+ID4gCWluID0gRElWX1JPVU5EX0NMT1NFU1QodmFsICog
+VThfTUFYLCBmcyk7Cj4gPiA+IAo+ID4gPiBtYXliZS4KPiA+ID4gCj4gPiA+IFNob3VsZCBJIGZp
+eCB0aGF0IGlubGluZSBvciBkbyB5b3Ugd2FudCB0byBzZW5kIGEgZm9sbG93LXVwIHBhdGNoID8K
+PiA+ID4gCj4gPiA+IEd1ZW50ZXIKPiA+ID4gCj4gPiA+IAo+ID4gCj4gPiBXaGF0ZXZlciBtYWtl
+cyB5b3VyIGxpZmUgZWFzaWVyLi4uIEkgY2FuIHNlbmQgYSBwYXRjaCBpZiB0aGF0IGlzIHlvdXIK
+PiA+IHByZWZlcmVuY2UuCj4gPiAKPiAKPiBJIHVwZGF0ZWQgdGhlIG9yaWdpbmFsIHBhdGNoLgo+
+IAo+IFRoYW5rcywKPiBHdWVudGVyCj4gCgpUaGFua3MhCi0gTnVubyBTw6EK
 
