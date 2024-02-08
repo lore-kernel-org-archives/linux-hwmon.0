@@ -1,135 +1,131 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC8E871B57;
-	Thu,  8 Feb 2024 12:25:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ECEC763F4;
+	Thu,  8 Feb 2024 14:14:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707395146; cv=none; b=H4jnQj+sIKh6m0hICla0Z+3QfdnZm84DqFGbuRxYHY8decXCVg7OWmS5V0rZcBqtK1v4eJ926wpuM/7JMWujxEDrKHOBr3G98VNQF6R4bgXahdFf57xCDCzo0642l1HPGEFKYSFZh3M6GZ17qSTxowZe6Xo6JOk3OQ57R6iuc/A=
+	t=1707401674; cv=none; b=UCQLUXyQEoYJsWReCG3uYABBF7riCegaPOGYPZ4sLG/JK9GV7FBEWC2+lyqS8Sq8EjT5voAUOLk59NLNL52c9RqthPfaIrFzsxMLTyAoQupRwQqzsUPnruTbZGeQiogW8hPP64FEC3z27aQRWNkIgK2V5gY13Ek+1dKIn90/DLA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707395146; c=relaxed/simple;
-	bh=ya00qK6ZrbbH8bfPz6OV3tDxIjKH3/JzCbz4vmNTj80=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=OSrxFlq6d59wFHCr7DAsshpLCIhqhCg7BxrALBPQYiuKkSHSHKIKU07VK8LgxxzwFnf/5KQ6TUl0R+iXavYaQoB9b8Mifze47F9ermLvm0TBVjXo+ICI9XfJ6tVMGzCKv/AXRjZFW/ed3HM6ze+Gsizk6sdvDbCWDkJp01vET2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=ViLUOT9J; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
+	s=arc-20240116; t=1707401674; c=relaxed/simple;
+	bh=uiBYLZn71C912vKTrlG4ZHjBTNMvmelWSNkzngeJ2cg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rX7gnjlSsQQPr/XdYzDOgDjTKpJL85Sw/7gQp72zWfgHFmzThFm4jvOnI9wjdCtLvN5A4Zce6CMkao45XKlbUB1TAOG7lzqLVE7U8AvtxQ/doUOHixlgky+qvd8KCAF/rQdfjZ8eIcEtoohCJ3CHvmHduwqIU+NyUOP7v0VBAFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mh8QCLsI; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="ViLUOT9J"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-40fc6343bd2so15224795e9.1;
-        Thu, 08 Feb 2024 04:25:44 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mh8QCLsI"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1d7431e702dso17376405ad.1;
+        Thu, 08 Feb 2024 06:14:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20230601; t=1707395143; x=1707999943; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2lk6lDhH+jNgP8E7fUtyDWqSj9xlcIvyWHBnZhCdRQI=;
-        b=ViLUOT9JQZaoqBzdu3nXPDYbfutkJN+oCD590c86Iyk/QU52uLOICqrhyitEUG8+q4
-         +TZ9znpaTo21fh34q+b1rqYxOeZqHvYHcqCZzT3DyASs/TP3r8tG/l/f6bkxw/LfA4xE
-         kttb0aH+2R7m1JcEifiSYZ7ctody8uFAd621wIxNlN48ydb1YrFa5NNecReuProfJwoS
-         EPd17k52gFBWNMH4CwEreS6cA+zJw0veNWeIUrlWaIXk4JS8vAWUkFKg6sKaxQI+G1yI
-         71T258uvGYkM8KYZeFg01ghQtd67GElPCJrCLoh6jUvF8t13a1QF+q9CYm2y0rTq2zy4
-         8k7Q==
+        d=gmail.com; s=20230601; t=1707401672; x=1708006472; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=SXyeGT+gH+mH78CTuKkjJZRZDJJBus+fYz/W9jL1sXU=;
+        b=mh8QCLsIMaeroFLxTE6A7HTRb40i3wBVqmZxueiR1HOYirLK1/632IkRWiPswUEv9i
+         JGHexifdPgKAdxbC26fiYorVcg7vBfYGIq6PSCNZIlFz0fPniZbx/Pa0dWmZDZfNo6K2
+         7DfQp48sxUrcZ2F8VFcD51Fwmkf6DXCDiOZQY8EDguI4q06z+EdwfiIVXTpm+fJlmdBH
+         RILbPgprwB76qudXi6GBEyhYcx0isJ0Fp2fx6uCg7Qfr6OvKWTezO1HJdM8lDcIEuYTf
+         /874jZl4Xf8KrZr2teIp/rhG7wo0Q3epYajM37YawnKacldxAz2sqgrEkOnbIc7Vpz+o
+         XcBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707395143; x=1707999943;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2lk6lDhH+jNgP8E7fUtyDWqSj9xlcIvyWHBnZhCdRQI=;
-        b=F17CJMB8v5EjGwpDPQVMMgiKxxatnrJ1pPp6EBdOEKiiAV8yYjRCDEM7Qn2rxw1Viu
-         nVDxGnC5TsoHIsj8OXXOOO+bKTlI5U2HHUbVwUp6Zmc9FMVV/m1qZdOgHulgDNpBE5P8
-         y0uw9HnZA35Io08+n8cxoQdnl3TmwXRaXs5q3CX34os+ZYqVaQCRO7teH6CTVx5ttqXX
-         VZr5yXUKIWile29l85iVIRnjO6Bn6FdJ4yvrCfkzce02sxBgbp2vOjUemwDwfrIi9X1E
-         DZcTV296Oh8lGciP8XOmJPfCB42zpZLAHhkYB3YHvmPELmWtnS4Rta0jWQbZ4z0gjm3l
-         0Zxw==
-X-Gm-Message-State: AOJu0Yx00xZgsdTIWCcLw9rWgM2SBb67ai4eD/riMewWFM9sULKh9Ios
-	DLg6aKPUfWjqQOwt05TbSL+w8OfuAeZi3PAV4cl0pN8=
-X-Google-Smtp-Source: AGHT+IFGH6T4iO9ag7ISjbx4h+kJpA2XiUkJ3nfZ64ZG/Vae7LcVOF2Ucgwc7VdG90/hrVU1dSD7sA==
-X-Received: by 2002:a05:600c:1e1d:b0:40f:f4b2:b26 with SMTP id ay29-20020a05600c1e1d00b0040ff4b20b26mr5693676wmb.25.1707395142880;
-        Thu, 08 Feb 2024 04:25:42 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCV5523syL23ya7l/XdgTOkpd24c+X2e1oo9RsaaVKfqzxRGvzyVjpt7TZwFOhUqQDFnelJ8oJx6vQoff8S/sC2uuW30hUh6e8kugSF0uU3jVy7NY/4cQHBAS7szwmkKXICuGeFWdfwgYr2F+xaboE/TFGbVSFABwHCcqTBCrtwCPQWlwgVoTeKFTTwaWmMd09z3uCE8TzpW
-Received: from ?IPv6:::1? (p200300c85f11e2005dd582a67e0023fd.dip0.t-ipconnect.de. [2003:c8:5f11:e200:5dd5:82a6:7e00:23fd])
-        by smtp.googlemail.com with ESMTPSA id p4-20020a05600c204400b0040fa661ee82sm1433984wmg.44.2024.02.08.04.25.42
+        d=1e100.net; s=20230601; t=1707401672; x=1708006472;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SXyeGT+gH+mH78CTuKkjJZRZDJJBus+fYz/W9jL1sXU=;
+        b=NpT2fMdApJcPAdQA3PvKcBxFvO1zq0dmJ3T0lEy6SMhtA3JactoeLC+FkRKvytrBRR
+         nuNWFbjHArMoxKVkHR+4vsGd0B05MjSX1sJULnk777EyX6UHqCRTwXjm8MbeX14TRi6L
+         vj9HW0NxbBpULxJLmz/Vm/v2UGhBFIAZ1rvIls1q3Exo03VFTAmDSOrHjy/5K8Hld+IW
+         xLCcVeVJxaDUnpR3ARxY/YpKsK6J0RpCdnKkkXi+786C9QsNeuJiIytrrNZaNaF5/iB6
+         Rw35sNy0BwTx/P93aGNAtUM6Ys7F5dGc50UQHeiDkzl0scS139HIaX/n7vq49FFw3JVm
+         F0Hw==
+X-Gm-Message-State: AOJu0YziJswK39ETm8cTsx3LUrFh3s9G6FToSwUZ4Cj6s10iC34CVpih
+	QDHeVqNjt/08rNzFH7oT4PYqiL65Vxef9ytD3xfbaZ3+KUp60Va2
+X-Google-Smtp-Source: AGHT+IFKGZk4ENmslw0jsLzBOdtMR18kpwbpb3WP2OiYSYSvhlX4UTwhgd3uqhnPwWJ/8zUf1rZV8g==
+X-Received: by 2002:a17:90b:1d07:b0:296:e32:bd5f with SMTP id on7-20020a17090b1d0700b002960e32bd5fmr6039011pjb.30.1707401671558;
+        Thu, 08 Feb 2024 06:14:31 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUO0S46Y2Q499c7UXohCudub7YHSC8lOQkqQS/xFux4vAYTrUvwFXMEBmq0YzaeOWCwI4pV/0LsOZylVQaV7QrieKY/iPux2JDxzQphnM4qCyb21u0kh4x2i9v81ojcVyzZpPnLKRug8XHa3p7yu8nahBVP57LAVHpZ9+dNpGSxPPif8V14WqfjoiCBavsXlRzz85YINIkV
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h7-20020a17090a604700b00296e2434e7esm1531789pjm.53.2024.02.08.06.14.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Feb 2024 04:25:42 -0800 (PST)
-Date: Thu, 08 Feb 2024 13:25:41 +0100
-From: Sebastian Kranz <tklightforce@googlemail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-CC: samsagax@gmail.com, derekjohn.clark@gmail.com, jdelvare@suse.com,
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Add support for Ayaneo Air Plus 7320u.
-In-Reply-To: <099bc4e3-ec08-4604-90cf-5691a98441b2@roeck-us.net>
-References: <20240207084206.2204-1-tklightforce@googlemail.com> <099bc4e3-ec08-4604-90cf-5691a98441b2@roeck-us.net>
-Message-ID: <332FEE3F-E07C-4144-933B-E085C2CB4E57@googlemail.com>
+        Thu, 08 Feb 2024 06:14:30 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <2a6ab115-9775-447b-adf5-d63043548c74@roeck-us.net>
+Date: Thu, 8 Feb 2024 06:14:29 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] Add support for Ayaneo Air Plus 7320u.
+Content-Language: en-US
+To: Sebastian Kranz <tklightforce@googlemail.com>
+Cc: samsagax@gmail.com, derekjohn.clark@gmail.com, jdelvare@suse.com,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240207084206.2204-1-tklightforce@googlemail.com>
+ <099bc4e3-ec08-4604-90cf-5691a98441b2@roeck-us.net>
+ <332FEE3F-E07C-4144-933B-E085C2CB4E57@googlemail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <332FEE3F-E07C-4144-933B-E085C2CB4E57@googlemail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Subject: [PATCH] hwmon: (oxp-sensors) Add Ayaneo Air Plus 7320u
+On 2/8/24 04:25, Sebastian Kranz wrote:
+> Subject: [PATCH] hwmon: (oxp-sensors) Add Ayaneo Air Plus 7320u
+> 
 
-Am 7=2E Februar 2024 15:55:39 MEZ schrieb Guenter Roeck <linux@roeck-us=2E=
-net>:
->On 2/7/24 00:42, Sebastian Kranz wrote:
->> ---
->
->Patch description missing=2E
->
->>   drivers/hwmon/oxp-sensors=2Ec | 10 ++++++++++
->>   1 file changed, 10 insertions(+)
->>=20
->> diff --git a/drivers/hwmon/oxp-sensors=2Ec b/drivers/hwmon/oxp-sensors=
-=2Ec
->> index ea9602063eab=2E=2E8d3b0f86cc57 100644
->> --- a/drivers/hwmon/oxp-sensors=2Ec
->> +++ b/drivers/hwmon/oxp-sensors=2Ec
->> @@ -43,6 +43,7 @@ enum oxp_board {
->>   	aok_zoe_a1 =3D 1,
->>   	aya_neo_2,
->>   	aya_neo_air,
->> +	aya_neo_air_plus_mendo,
->>   	aya_neo_air_pro,
->>   	aya_neo_geek,
->>   	oxp_mini_amd,
->> @@ -98,6 +99,13 @@ static const struct dmi_system_id dmi_table[] =3D {
->>   		},
->>   		=2Edriver_data =3D (void *)aya_neo_air,
->>   	},
->> +	{
->> +		=2Ematches =3D {
->> +			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
->> +			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AB05-Mendocino"),
->> +		},
->> +		=2Edriver_data =3D (void *)aya_neo_air_plus_mendo,
->> +	},
->>   	{
->>   		=2Ematches =3D {
->>   			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
->> @@ -332,6 +340,7 @@ static int oxp_platform_read(struct device *dev, en=
-um hwmon_sensor_types type,
->>   			switch (board) {
->>   			case aya_neo_2:
->>   			case aya_neo_air:
->> +			case aya_neo_air_plus_mendo:
->>   			case aya_neo_air_pro:
->>   			case aya_neo_geek:
->>   			case oxp_mini_amd:
->> @@ -374,6 +383,7 @@ static int oxp_platform_write(struct device *dev, e=
-num hwmon_sensor_types type,
->>   			switch (board) {
->>   			case aya_neo_2:
->>   			case aya_neo_air:
->> +			case aya_neo_air_plus_mendo:
->>   			case aya_neo_air_pro:
->>   			case aya_neo_geek:
->>   			case oxp_mini_amd:
->
+Not sure I understand what you are trying to say here. Yes, obviously
+your patch has a subject. It still needs a description. See
+"Describe your changes" in Documentation/process/submitting-patches.rst.
 
---=20
-Diese Nachricht wurde von meinem Android-Ger=C3=A4t mit K-9 Mail gesendet=
-=2E
+Guenter
+
