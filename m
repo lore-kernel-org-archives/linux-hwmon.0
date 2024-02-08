@@ -1,95 +1,105 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 474B412BEA4;
-	Wed,  7 Feb 2024 21:32:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF2076A01A
+	for <linux-hwmon@vger.kernel.org>; Thu,  8 Feb 2024 08:09:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707341547; cv=none; b=QtfG/LWwh5a9G44xFiYq2EvixZaZcTEZ7wLPmAWqXxpqf3xhufu9km9gT3ARlhmY1X0tJ+S+VPuu7LvPJFrvnBhB8JAqjyTS072Dbl2OjZCQIBZSlFvJ2rGNGIfwc7uR5P+9d1av6/Dophsd+ve+XAFDu1rZIGFauaq+1KE/7xY=
+	t=1707379784; cv=none; b=IbNzhITH87dfkEYvBLMPYwim0wLutvFo1uCXorC11gAGyuLxwYaZgovN1XyJosNzc1CAcvJl2WCUzOx6JkQ03C1QGIhYw3m1IMlQUpKCIs8JS3JW1i7lPIy3J/yz2Tvj7ZwEBwAwH3sw1BN6d0nqUXXnOMsJaDuvrWFbEGLFnZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707341547; c=relaxed/simple;
-	bh=9+hKGsDihNv76nJokNTTmBYkhDtrKwveNJLjYVSzZkk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n3ZX+ZkGhe3WnlZpqCuiJaS6ZiaDAr+v1kPxbXJhR281PNO8hFPWam7Hjs8sCVZ23p1xsL6MXZFLUEWudnxvtcV83sDa/GFyDNJoVsd5jD/9wlrXQ4MzkNq99OGk3JxERTY6lEn0zSzYFL76PkbfNLIDShBzSRJaELfRmKvPFIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YWFJeGWk; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1707379784; c=relaxed/simple;
+	bh=Jfw9rBHovERaZpsJFUP/gJUEkm3OCMeB+HZ2b+xlIsY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=FGI3pIRsxNVwaWIdXKxw17ds+P9/LHkYfhNv/iT/KW/r/CyTrUz6Ui088IuuJO+XETn3D0+OKNqdD95PxjrAawqa3yyTn6ck4r9piLvBuwW6DT4ZlAuOtHwwmTL5B+UV0j5oUblprTwyz87hvoH9tb1o8p9XU9RKjB1CzCUBuoA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KINsFmx+; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YWFJeGWk"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1d8aadc624dso9222885ad.0;
-        Wed, 07 Feb 2024 13:32:26 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KINsFmx+"
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a370e63835cso186931466b.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 08 Feb 2024 00:09:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707341545; x=1707946345; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jY7jlxemTvyAAOoBoDUnhvdei8qq3JR7h5T3KXgL/2E=;
-        b=YWFJeGWkLzNxtOnGj4OgLaHImAC2XqZ8ZcZq8+FZcfxyERqUW0pSi9GVOZw2hwgJt0
-         f+4ElotY09o8tD5NkLhypQH+IMZ0sYs6XYOn/gDqsUFtfBwU5YLx05VyWhBsqaTsuzpS
-         mEG7gudmydEdrhm66oTcVh2xx/eqDCEtjYhqjDp8eklkZLQpWIqvfpPdelC9KYJ96LoS
-         Hm9NYjuqKFL04jamLG7upflY7r86hGkeqzy8JO9yImABh+QUCPUtVb2ch2lgXJ6tEBvO
-         vJUTQiR7+jVRleJTrs9l3n5pCBs/3tRiwWieMj7ecYbxrn5NdIz4ggkwiv3j9iC7oJ3w
-         vo5w==
+        d=gmail.com; s=20230601; t=1707379781; x=1707984581; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Jfw9rBHovERaZpsJFUP/gJUEkm3OCMeB+HZ2b+xlIsY=;
+        b=KINsFmx+0fJd9HhyPQFUaHfTFmKFXX4LW1U+70TIyBGSux22lC+1/KmFaq1CfO1J8i
+         bVrOwMsuPn7Sgymtnh3BEdu10M/KJ+2OD6u+JZnN+xvt5h2F/bh0Sg4YeP/pmtVWSBmU
+         pkPd4CTtYmyr8PO7nZqFz+I0Kf/549XJPB6usi4+d0LnGC6sxyON+cDki+aYk+An3pNZ
+         iLhcnZXeVL8R3s0jucFozzKUIzavGDZ/Dk23DNSjyx7ln+qM1V3LB9q9gPnW32yDDATJ
+         bLh4s+H5fpPQfeyG12/yPCqE4+Rx++aZ8WcEjIUxvr5VBGJt9q9zcDk2UmJnZ6HImQSp
+         D2lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707341545; x=1707946345;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jY7jlxemTvyAAOoBoDUnhvdei8qq3JR7h5T3KXgL/2E=;
-        b=d9lkvQOhu8nT6AsEb45hrANytE10GtSBFiBE0IQ1rwTCc64n9B1pX3QahUNFlUSU6X
-         YCsuQh9KKGEc9/szFP9QLylqmbV/Usiip3DIV/UpQgQcEcDQfkKA8BbbRPmABVo/IByF
-         cuS7PQfwe43stDy4oWaS2oGBPco6WAGbI468WV0x2kjP1UwEACI19s7QQ3tVP1fsfg10
-         6auZZze+Qf2AjLVsEkSx2WnZATRSly/ednFrell37O8iAXCie1RyDx4CI9aaAiLyqdfn
-         ByBpw2CfBAcJqR4L/PDfNphYXq0k12CogPU+x/qLkaObiopVznO30AD+OiDtRIijt10S
-         FcHQ==
-X-Gm-Message-State: AOJu0YyW9qYzZuOzDJ4Et5hE8efNvY4dTS2YvAzOD0OEHD+sLmUyZixj
-	U8j47a9x9CjXGM1cyCE+b0wgnBi9G5Oltr56CDoBMHgC3fCNWJyBVjhsg9Ps
-X-Google-Smtp-Source: AGHT+IGCuS4PrqYfMwhdldpChinQrTWWDGzhOVUIvY1Hq4/uUHrlSTAUtUnhCoznAKenrfSvVSpiWw==
-X-Received: by 2002:a17:902:ecd1:b0:1d9:b739:a5aa with SMTP id a17-20020a170902ecd100b001d9b739a5aamr7894981plh.42.1707341545518;
-        Wed, 07 Feb 2024 13:32:25 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCV/QaLoKYQVEUZJ+d4/DtkBarJQM/cmfjbixgE5MqU2ZGTFPHg1L6NNDTMl/ybSe2s96nt7YEFjYmffpSj+k32a6Om/dPFpvxFAtNOECt2YWp0i8tu9zdnsszUz7+psCxSHSaZWNjzAuj9ucA403cKmCKTyw2+2Uz+hepsAKmSjLrCgzQ==
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h9-20020a170902f2c900b001d910f0ac3bsm1945231plc.246.2024.02.07.13.32.24
+        d=1e100.net; s=20230601; t=1707379781; x=1707984581;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Jfw9rBHovERaZpsJFUP/gJUEkm3OCMeB+HZ2b+xlIsY=;
+        b=dvzRw+BpfNhpuVKo5FGj3GnmAWj8IGME4GQpM66e4DjDLFpzYWN7nWD4E+R/pPSKLg
+         fuS2Rm4WqYE1HTxuJ1C1aUZ+Cddi6y4kMAZqbkqlhgGX1qCj8pE7z0k2+DxnAnibK5HM
+         agBymGBSBxfvSlSZsWKzvPO4L1DyaJYlm+uubBLLkz9dDSgx4sSe7SU/RTryEjxxSAOs
+         3XujMw0PUOeHeFhQnp04MFjSMFAh8GUNmZVTMdcd3cTIdPyJnHZbj+9ezqd0+3VPmeoY
+         xTnK9YJe7asrISIycNpftxHaRerVhC02PBUvxYP00HNosE9xSTP5y8QJkKJEf5/naHQ4
+         7GJQ==
+X-Gm-Message-State: AOJu0YzKM3kvgt4D9ssu25fagf/UM5ak/QLpikcnWqwqoxiPFuxNp8tt
+	31EgtNFdQfGiKmRy9U4k9zbDgiClw6Er0REB5/KjxJU9RBfOnHet
+X-Google-Smtp-Source: AGHT+IEbyX181yiqIljLujestJL9VhSdIWnlBkIO5U9cdWl1QJXkO45nAi0VfQg9Y80Jppeh881fSg==
+X-Received: by 2002:a17:907:7657:b0:a39:d261:9e21 with SMTP id kj23-20020a170907765700b00a39d2619e21mr1064940ejc.58.1707379780694;
+        Thu, 08 Feb 2024 00:09:40 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXGMxTZYFvFlGe71VvsQ/E6OabKp3sSUKw+hnhAl/4mGlvLrRkzsfgZV/juwbhtumzVvWxDNqxS5KLmfaFywfrA1tyhbcC2+EoVFPZBrZGGZcEitQoX6Etaxcwmsg==
+Received: from ?IPv6:2003:f6:ef1b:2000:15d4:fc17:481e:8afe? (p200300f6ef1b200015d4fc17481e8afe.dip0.t-ipconnect.de. [2003:f6:ef1b:2000:15d4:fc17:481e:8afe])
+        by smtp.gmail.com with ESMTPSA id ti14-20020a170907c20e00b00a36f0610088sm1645887ejc.96.2024.02.08.00.09.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Feb 2024 13:32:25 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 7 Feb 2024 13:32:24 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] hwmon: chipcap2: fix return path in
- cc2_request_alarm_irqs()
-Message-ID: <dcd18c2f-716b-4bc8-8ae9-9aa240a7e5d0@roeck-us.net>
-References: <20240207-chipcap2_init_vars-v1-0-08cafe43e20e@gmail.com>
- <20240207-chipcap2_init_vars-v1-2-08cafe43e20e@gmail.com>
+        Thu, 08 Feb 2024 00:09:40 -0800 (PST)
+Message-ID: <9151c5df901325aed61e87019a5a1cffc46cf579.camel@gmail.com>
+Subject: Re: [bug report] hwmon: ltc4282: add support for the LTC4282 chip
+From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>, Dan Carpenter
+ <dan.carpenter@linaro.org>,  nuno.sa@analog.com
+Cc: linux-hwmon@vger.kernel.org
+Date: Thu, 08 Feb 2024 09:12:59 +0100
+In-Reply-To: <c2c5b8b0-d3db-4212-8311-ee54119389c4@roeck-us.net>
+References: <b6fb236a-c3c1-4c5c-94bd-1f68b5aeac41@moroto.mountain>
+	 <53e0e2c7bb9cafb4efa3748ecf3ec765c262db83.camel@gmail.com>
+	 <c2c5b8b0-d3db-4212-8311-ee54119389c4@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.50.3 
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240207-chipcap2_init_vars-v1-2-08cafe43e20e@gmail.com>
 
-On Wed, Feb 07, 2024 at 10:17:09PM +0100, Javier Carrasco wrote:
-> The return path can be improved by returning upon first failure. The
-> current implementation would try to register the second interrupt even
-> if the first one failed, which is unnecessary.
-> 
-> Moreover, if no irqs are available, the return value should be zero
-> (the driver supports the use case with no interrupts). Currently the
-> initial value is unassigned and that may lead to returning an unknown
-> value if stack variables are not automatically set to zero and no irqs
-> were provided.
-> 
-> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-> Closes: https://lore.kernel.org/linux-hwmon/294e4634-89d4-415e-a723-b208d8770d7c@gmail.com/T/#t
-> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+T24gV2VkLCAyMDI0LTAyLTA3IGF0IDA4OjQ5IC0wODAwLCBHdWVudGVyIFJvZWNrIHdyb3RlOgo+
+IE9uIDIvNy8yNCAwMjoxOSwgTnVubyBTw6Egd3JvdGU6Cj4gPiBIaSBEYW4sCj4gPiAKPiA+IE9u
+IFdlZCwgMjAyNC0wMi0wNyBhdCAxMjo1MSArMDMwMCwgRGFuIENhcnBlbnRlciB3cm90ZToKPiA+
+ID4gSGVsbG8gTnVubyBTYSwKPiA+ID4gCj4gPiA+IFRoZSBwYXRjaCA4NDhhNTAxOWRlZDU6ICJo
+d21vbjogbHRjNDI4MjogYWRkIHN1cHBvcnQgZm9yIHRoZSBMVEM0MjgyCj4gPiA+IGNoaXAiIGZy
+b20gSmFuIDI5LCAyMDI0IChsaW51eC1uZXh0KSwgbGVhZHMgdG8gdGhlIGZvbGxvd2luZyBTbWF0
+Y2gKPiA+ID4gc3RhdGljIGNoZWNrZXIgd2FybmluZzoKPiA+ID4gCj4gPiA+IAlkcml2ZXJzL2h3
+bW9uL2x0YzQyODIuYzo3MzIgbHRjNDI4Ml93cml0ZV92b2x0YWdlX2J5dGVfY2FjaGVkKCkKPiA+
+ID4gCXdhcm46IG5vIGxvd2VyIGJvdW5kIG9uICd2YWwnIHJsPSdzNjRtaW4tNDI5NDk2NzI5NCcK
+PiA+ID4gCj4gPiA+IGRyaXZlcnMvaHdtb24vbHRjNDI4Mi5jCj4gPiA+IMKgwqDCoMKgIDcyMyBz
+dGF0aWMgaW50IGx0YzQyODJfd3JpdGVfdm9sdGFnZV9ieXRlX2NhY2hlZChjb25zdCBzdHJ1Y3QK
+PiA+ID4gbHRjNDI4Ml9zdGF0ZSAqc3QsCj4gPiA+IMKgwqDCoMKgIDcyNMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoCB1MzIgcmVnLCB1MzIgZnMsCj4gPiA+IGxvbmcKPiA+ID4gdmFs
+LAo+ID4gPiDCoMKgwqDCoCA3MjXCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgdTMy
+ICpjYWNoZV9yYXcpCj4gPiA+IMKgwqDCoMKgIDcyNiB7Cj4gPiA+IMKgwqDCoMKgIDcyN8KgwqDC
+oMKgwqDCoMKgwqAgdTMyIGluOwo+ID4gPiDCoMKgwqDCoCA3MjgKPiA+ID4gwqDCoMKgwqAgNzI5
+wqDCoMKgwqDCoMKgwqDCoCBpZiAodmFsID49IGZzKQo+ID4gPiDCoMKgwqDCoCA3MzDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBpbiA9IFU4X01BWDsKPiA+ID4gwqDCoMKgwqAgNzMx
+wqDCoMKgwqDCoMKgwqDCoCBlbHNlCj4gPiA+IC0tPiA3MzLCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoCBpbiA9IERJVl9ST1VORF9DTE9TRVNUKHZhbCAqIFU4X01BWCwgZnMpOwo+ID4g
+Cj4gPiBZZWFoLCBJIGd1ZXNzIHdlIHNob3VsZCBsaWtlbHkgY2xhbXAgaXQgYmV0d2VlbiAwIGFu
+ZCBmcwo+ID4gCj4gCj4gCXZhbCA9IGNsYW1wX3ZhbCh2YWwsIDAsIGZzKTsKPiAJaW4gPSBESVZf
+Uk9VTkRfQ0xPU0VTVCh2YWwgKiBVOF9NQVgsIGZzKTsKPiAKPiBtYXliZS4KPiAKPiBTaG91bGQg
+SSBmaXggdGhhdCBpbmxpbmUgb3IgZG8geW91IHdhbnQgdG8gc2VuZCBhIGZvbGxvdy11cCBwYXRj
+aCA/Cj4gCj4gR3VlbnRlcgo+IAo+IAoKV2hhdGV2ZXIgbWFrZXMgeW91ciBsaWZlIGVhc2llci4u
+LiBJIGNhbiBzZW5kIGEgcGF0Y2ggaWYgdGhhdCBpcyB5b3VyCnByZWZlcmVuY2UuCgotIE51bm8g
+U8OhCg==
 
-Applied.
-
-Thanks,
-Guenter
