@@ -1,90 +1,110 @@
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 402EB374CC;
-	Fri,  9 Feb 2024 15:01:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A267736B17;
+	Fri,  9 Feb 2024 15:04:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707490902; cv=none; b=hFNsi/Ao2W+huE+UbjRpN49DLiLgmJdYRUZU6AQ2H3o8KfCtMTfXY6o1sBnPufiPB5gc7FXqhYCuXZAMBqi4PmvC/kwbvNrMx4LwfiVkM3NO7regOA+WIMg8h48LLVVSRWxb8EyDmEFiGr72MwVWeEkv/bi7FM4KgQNKQbGBqo0=
+	t=1707491067; cv=none; b=h7Ki8t956V0hk0WBks3exkahRDEdEW6MsXvUx2oGgC9VfYjCOVN0Ybo0wB0fnd1GgWkZ2fijqGH2vtbw5h+1CwZwduYMtMnqiFyhZf8b4bi5SYBCRSQTB2TTp5gGb1yjN8A8eSA5yukMKemWD4UH4hLiddgcPLBckkChHXDx4EU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707490902; c=relaxed/simple;
-	bh=1O4u+GhlkOZiDsbASWskmjf2LYR3/pZHwDLQbk9WsJY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ir2lJBrLqK9t3nPEnJ71nreVFPYf2IsqKsoRbN64rE5xyZxYxJVHzJpYgZrWveHyzArcyx01wP8dIX1TeYZIBLF9xOnT0zoXExsAyCCnVG7LXCKnk78viwQr/jpojyy8lFXIe9uxNzTn3Ufr6RU1nl77PGyPnp0Ds47ijSA3IUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fRrW5yS2; arc=none smtp.client-ip=209.85.210.49
+	s=arc-20240116; t=1707491067; c=relaxed/simple;
+	bh=ZRSisilKJc76i9g2Gk5VSIp9IkLwfEK0p1NI0di/5FY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ISzQHr5UVdyKYy1Hjc8MCuog+imZPE75tUSE9wQYBfjKj7nDAkFzqfCpNG5GS/weTgk4YxeBdpj+uPa0KVG/FxZTLTBThLhxDkrTFILZy+UlAiamIef7bo95mTzW4Fm3YtsJxJ6YFounScpryS0YxrEw8vBcVqtlZMOKWZAvloA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QsUZrFYs; arc=none smtp.client-ip=209.85.161.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fRrW5yS2"
-Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-6e12d0af927so649283a34.0;
-        Fri, 09 Feb 2024 07:01:40 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QsUZrFYs"
+Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-59a58ef4a04so372832eaf.2;
+        Fri, 09 Feb 2024 07:04:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707490900; x=1708095700; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sl0iYs91RSXEkh+s6/Oc0FnKucVhPk4Z5V9OL1byHYI=;
-        b=fRrW5yS2SO3y/3M/JRzq9sRMQczuGI6G5doCr/YKraG7QJ25auSdTEqg+wQ6SCv2XG
-         pwpaSlqhaNO5D0sudeWc36qC6v199cFHfOS2v0SYCP1Z+cxPB1GWVCSlZf/qAjiVLRZE
-         SqQjvTd5pswjAzrZyKHfcaZWLvjScfUhrLCFbJPkZUgEUAj+Jty0sJM9j3UIVrqPjCST
-         t/pDk1c5WOw8vGrZRYnSpABIZg02l9mjPIT70O8mR0euGr94X0Gft1j/2frpHuikCbBT
-         ycVBDolEoDkSTptUXmuI7iFpOh6kOhBzfXxGNDb57E0CITfDBWlBxGGI9SsctG+r59Wx
-         +5Gw==
+        d=gmail.com; s=20230601; t=1707491064; x=1708095864; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=oEEKiyCy3uksk7VJQy89Cmz4Lyoddeyzzlh6/wRqFSk=;
+        b=QsUZrFYsywdckeQjAV9sLT0y6VY3ahayABd1yCVZKiL71aO3fWwfUy+Q76fDDqDvaN
+         1wq3JqElFIYJzB3fBw1x0H3bQxK09ZKZGlCJjy85YdAN4tOWKjFfRQotHn20aQgk0hHP
+         2J3WP/3+x1W07vOZy2UFWTp9ZLTCeu1JYfWXShrS7lYXcGzewUhp5kJsq2rj0qaeiZX2
+         ObAB07bQEvyWuOI/EB+tyCYkmbFfZgGG+C2OcWkwylcPe7dzIbhyyL9glTPWdeCzbJXq
+         Bb4WWe5DJQq6ayQGASyNqKZLlyb27QzBrHxrzQqI6BFs3g/19vxvgESBj9WI6czsyRZy
+         ikxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707490900; x=1708095700;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sl0iYs91RSXEkh+s6/Oc0FnKucVhPk4Z5V9OL1byHYI=;
-        b=MHqNzN9oAkh2RJ3JfNIxmnF6xMOQKFozd9wnxdZlxfSl1m2wdumnTEenBxitr1mwgt
-         lhGvT2+453mdy1ssZDobdy2oz6JK5vXXuuyI9iEDqir0/N1AVZeLpVfE1xIcUv0Lzrii
-         61/ywGZr5jcRavd3G+g4HySjsdslN/hONxSMFUW6w3HG9l6I7+yh0B9XHhiwsa8fcKiK
-         PgghuCCCyoq1uj9airSUj9GNs0/VBD7+SSvY76QVkaLi2wWRrpcieSAGSsNEouKbC2ei
-         8OoWLvdnN7JHVI91SYNwU9i0w8kYhdzUun2+9GiikYdZqNn5ZLDfMAHDPuuZe286xy5V
-         SkXQ==
-X-Gm-Message-State: AOJu0Yw03WeSWvkKixyLbnKeIbqrsEvrQWh1rMGs980oTfyYavfwYBlE
-	7zRh1tQ5BCAIq7T/lw2YDwXk8gZhYjVJhWCdCESfNF1dRboA7rwK
-X-Google-Smtp-Source: AGHT+IFBlvksWx3flEKu0PAeGVCxJokKw3Inl6JFeIQI9RaHK0Y/0Ao70cA2LGvwKmjoyDWi50WIsg==
-X-Received: by 2002:a05:6358:d38e:b0:179:272:6c5a with SMTP id mp14-20020a056358d38e00b0017902726c5amr2065308rwb.19.1707490900052;
-        Fri, 09 Feb 2024 07:01:40 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCW8fxySuPlUu4r/neWiR79OUQXDPca6Cy29IS1V/YrE2oYEHPmAsunhfNSVgFzsU1u9zxrhVjgpo0Zpevg7EnOcMOdi2pFyonEltR4G8+T/ZOrT0pQUDVV0q6M0CuR6XrSTKXFc8II9Ky54+YseOmiKD2fYZ4wxEs8Nb7mcAr+NzZv++GqDbfeHsFv3Ui28B0lfRzTZIBse
+        d=1e100.net; s=20230601; t=1707491064; x=1708095864;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oEEKiyCy3uksk7VJQy89Cmz4Lyoddeyzzlh6/wRqFSk=;
+        b=RweZkNR+E2duDspESX+8/hrXygzGerjQiG9TTDuFItWl/V8dZSnXRnVKSTLPHSXdLG
+         8/AM9Wjexs/fKTCaoVOVVK7tff0qQ7KKPFg/kbtcoOdHDszdFtfOjqWFAI36BEgmNAui
+         q3+WATFdDy3A58jOH15N5NjBYcjYyciuG76GimqowJMQ8fTT50wPFLpDwnaIeK6YOOEK
+         fpPQme7jQ/IyTHFM7esQxmJRVc/ankr4a14WYmVsENBJgeOGFQKTO52/BYiKhAcVmZOy
+         njGlbbjg8r9Bhko/Fgz8U+axpkajgEBdyI4SVgBfzOOPsAjcS4++KxjjJ5q4+4oO3A1S
+         GSoA==
+X-Gm-Message-State: AOJu0YwKze/7/NGCgyAtYi6wCtQMWXx1evC+gm5CjwD2YhyVoTeLVb/B
+	51JWSFyqGsWyfD6gB4ysts2RLS0BH+u5TiaR7ksultx/fxNOD/04DcB7s7wL
+X-Google-Smtp-Source: AGHT+IGzCxP5fmYlns2HciQeCc2tm9zi+LPxyPoweh3ez2FzylL6+vFnQDZWwgORltCMjdQzjprv5Q==
+X-Received: by 2002:a05:6359:100b:b0:176:7f72:36af with SMTP id ib11-20020a056359100b00b001767f7236afmr2284406rwb.23.1707491064543;
+        Fri, 09 Feb 2024 07:04:24 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUee3PEp0CsiUAvk4mmRwQmE92SnZt/BbnBKOmciFzc1NoSg5yMCHKKk4yj1SXTkMRVQD+nGjsvYHgagMn44ua1+67P3V2+jevwTMcw
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v16-20020aa78510000000b006d98505dacasm593735pfn.132.2024.02.09.07.01.38
+        by smtp.gmail.com with ESMTPSA id l5-20020a632505000000b005b458aa0541sm1839622pgl.15.2024.02.09.07.04.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Feb 2024 07:01:38 -0800 (PST)
+        Fri, 09 Feb 2024 07:04:24 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 9 Feb 2024 07:01:37 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Sebastian Kranz <tklightforce@googlemail.com>
-Cc: samsagax@gmail.com, derekjohn.clark@gmail.com, jdelvare@suse.com,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2] hwmon: (oxp-sensors) Add support for Ayaneo Air Plus
- 7320u.
-Message-ID: <41928b42-4272-49a7-8c10-e63059fba72c@roeck-us.net>
-References: <2a6ab115-9775-447b-adf5-d63043548c74@roeck-us.net>
- <20240209090157.3232-1-tklightforce@googlemail.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v6.8-rc4
+Date: Fri,  9 Feb 2024 07:04:23 -0800
+Message-Id: <20240209150423.1339290-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240209090157.3232-1-tklightforce@googlemail.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Feb 09, 2024 at 10:01:23AM +0100, Sebastian Kranz wrote:
-> Add support for handheld AYANEO AIR Plus with the same EC registers to add proper fan control.
-> 
+Hi Linus,
 
-checkpatch:
+Please pull hwmon fixes for Linux v6.8-rc4 from signed tag:
 
-WARNING: Prefer a maximum 75 chars per line (possible unwrapped commit description?)
-
-Also, there is no change log.
-
-I fixed up the commit message when applying the patch, so there is no need
-to resend, but please keep that in mind for future submissions.
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.8-rc4
 
 Thanks,
 Guenter
+------
+
+The following changes since commit 54be6c6c5ae8e0d93a6c4641cb7528eb0b6ba478:
+
+  Linux 6.8-rc3 (2024-02-04 12:20:36 +0000)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.8-rc4
+
+for you to fetch changes up to 34cf8c657cf0365791cdc658ddbca9cc907726ce:
+
+  hwmon: (coretemp) Enlarge per package core count limit (2024-02-04 06:43:45 -0800)
+
+----------------------------------------------------------------
+hwmon fixes for v6.8-rc4
+
+- coretemp: Various fixes, and increase number of supported CPU cores
+
+- aspeed-pwm-tacho: Add missing mutex protection
+
+----------------------------------------------------------------
+Loic Prylli (1):
+      hwmon: (aspeed-pwm-tacho) mutex for tach reading
+
+Zhang Rui (3):
+      hwmon: (coretemp) Fix out-of-bounds memory access
+      hwmon: (coretemp) Fix bogus core_id to attr name mapping
+      hwmon: (coretemp) Enlarge per package core count limit
+
+ drivers/hwmon/aspeed-pwm-tacho.c |  7 +++++++
+ drivers/hwmon/coretemp.c         | 42 +++++++++++++++++++++-------------------
+ 2 files changed, 29 insertions(+), 20 deletions(-)
