@@ -1,113 +1,143 @@
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D62376F082
-	for <linux-hwmon@vger.kernel.org>; Thu,  8 Feb 2024 15:19:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA7021103;
+	Fri,  9 Feb 2024 09:03:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707405549; cv=none; b=dXDGH4cPf3vF8UQZtRNWAT+yp3nW/RqXXETeAyjZBOnyUhy4amJ9RY56jXb1vhG6FAXK28q4SY5njW+JGxC/pph3SV0p6725kmrhto42Meery3tsII6i/FOlo3iQ2GFLf7Ipzoi86bSZ+dHUo0hIk6MplQwefTvMvY8HHo330ic=
+	t=1707469385; cv=none; b=D7cd9fXA6ccQtSB6sFb7qYxnaQB/ri5mgGHsDwyHfkDVNDwVLBW5jMqYE/8y6IVKnFN4Wqi6OVQNLBR5Y+spZKbRkXH7mnk3NIZO5GiZcRfrXzOx+Df4n5d1hjWB+9NWtihkJIR6chsTTSvAhNH9e4SGDy70lPAuFJWIJQJsq/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707405549; c=relaxed/simple;
-	bh=CAEXknwGhkxyrhiDQr/janOqnbhjc11Se60GYTtkmAo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=IlrfVsQs7jm2d3P+9R7D1Il3dYzSc5dK/iwMctlODwIkf9lGVNK8lBTJrJ0enwc96p+RPUmgNxoBdZUpi1pCLXQnt6rtEmDeJZN63a3/nzVQjJ3gXFjfpnUeKYOC6O6q4X/Y2kXgSsyo3ZcHU3OHSi8f6EHlmBxrRzrNoVHX88o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dhcZM7Hc; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1707469385; c=relaxed/simple;
+	bh=wa9bhmzOX6NTL6/0vCdL+vxvuRUW/j5gFq4FNTMI9mg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=fxY0U/nGzsxD6Eo/+Y796Eov/v7wVxH96dQqyWvgVMVnD3UT/QXWilF9XPG1QBAdyYwWtSWg7TwGUHBru+Dij7ev5fmVCfDPlF0n1b/r1kX+e1yaAfXnoVLJHD/gdIjgiYC2qPiPvntnpCd07jyZ0//FuqSHR6aNNYPjXFPkGBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=BThMWH+S; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dhcZM7Hc"
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a2a17f3217aso247994266b.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 08 Feb 2024 07:19:07 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="BThMWH+S"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-41047386d18so6076835e9.0;
+        Fri, 09 Feb 2024 01:03:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707405546; x=1708010346; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=CAEXknwGhkxyrhiDQr/janOqnbhjc11Se60GYTtkmAo=;
-        b=dhcZM7HcnROEoFINu261WTXNtwXa6hh8svfkxkSn8fv20M+jJEKEz9OEuiHh2NRp5P
-         9OK0lQ/3fwqNGPLqUCQJJDZUjo0ewPedVlyGeyZ0FEdAxAdCup89tPd4YYq1UlXLLtIq
-         pjVqrWW3hFIbin6AElwJzKxTvV1T1cYE/G+jKfK3BD3iID0bZznT1+xtw6iODBFj/PUU
-         RaIOy5eiJsCZm4Ac8cWyzivRQQ+rDhAVBEh+AOdsUdAmyx0czQP7UpEBu7JkXih+XUs0
-         TmGxw49NuECJGfGw3buIv+QyCWIEQaKRf1zNS3om3jXlTb88G503OMJI5Poo8vny/7d9
-         BwtQ==
+        d=googlemail.com; s=20230601; t=1707469382; x=1708074182; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=neBOUcNFScKRdgExDbRdoIzZzeQ/kJIcwYZHML2NDYg=;
+        b=BThMWH+Sr6MhR/ni/cd8uCA6G5abnoCHuY4AbpJFF2jsA4mqAhdWnppey8NNkhyPz3
+         ZhbK1D1pFXlwlTgiD42ERa/ZJIBnTmtUCFLazq0PzXGI9LZCvVauCiOQ0vH8pfmewlw9
+         /8vGsCkhndZ2MxqsXwCL8EdoNN+65lNpDeJiBINeZaMF10m5D4iYeO+niivtGWR8FySg
+         9CmfheOavWpq6Rt3Zt2lzfdMmq6rXV95Ulpr+rTXioqKdfoCxzeYt0uFRSv1hwJVPOwo
+         bL7lIitOb48s5+JBzAObZn7SgIGeHyZyViU2o4eeNfQeEcybErVFJn70WopcfjTqAX7X
+         fhXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707405546; x=1708010346;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CAEXknwGhkxyrhiDQr/janOqnbhjc11Se60GYTtkmAo=;
-        b=V8sOj2P85raCeGhFX2opi9cdOTcJsOSBIwN616SrenAv4vcBaAxjc6aEJAAlZ0qVkv
-         GBJ+ayRlP+9jm35IIvmoVT2ijuEDtMNwVOZpyAow37Umanzdx/6pEwWVTMhEu/6+g74q
-         KwP8BvZ3+ZCSB3RNI08kXfMCTK/zctKzM6E1FYtzZXO/jBBNCd/oQCGXajpeNViwMB8A
-         dGD9ysEdagSRRTBCN/WkxEwbQvF6JQ/IfDaB4Ar9s3y/L2WkIlmK+xd60n/2M3qIcCCz
-         /g7qX6ttUpfMZaHCVbPjECU5pEhUIov7o4KMNS0TfVBmv9Qkq49AD3QoRu3+S4CZCTF+
-         RYDA==
-X-Gm-Message-State: AOJu0YxCvNcbbGJzg5D+T2e+NfpDBtfy0mRyoabQB28lEv3Mbxu8TkrP
-	QO2KXst+VLznPpwzzhl2HVwJ/GxuKrZ0on5rNK93+7RpMVYdwfRg
-X-Google-Smtp-Source: AGHT+IEEe6a6P6FBHbfRXhtUJZbmFKQuPMVWJyJWKew+yvdj6gCjyNdAqvZPU4IN6QHJ1UwUV/PC9w==
-X-Received: by 2002:a17:907:78d9:b0:a38:2694:46f8 with SMTP id kv25-20020a17090778d900b00a38269446f8mr5739897ejc.12.1707405545629;
-        Thu, 08 Feb 2024 07:19:05 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWyx5a48reLmeJyBHA0DhgzV5eeVe/v0nMIEj0fMybrBi2w9NWJEuaXB34ecgGMM8pNZxfXhF5eQ3ZkHh91/SL59SNUlgVs357qp0ptpObZi/2Nr07aUXItvtxuwg==
-Received: from ?IPv6:2003:f6:ef1b:2000:944c:cbc7:1e1c:2c47? (p200300f6ef1b2000944ccbc71e1c2c47.dip0.t-ipconnect.de. [2003:f6:ef1b:2000:944c:cbc7:1e1c:2c47])
-        by smtp.gmail.com with ESMTPSA id ti10-20020a170907c20a00b00a382a80b160sm152384ejc.24.2024.02.08.07.19.05
+        d=1e100.net; s=20230601; t=1707469382; x=1708074182;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=neBOUcNFScKRdgExDbRdoIzZzeQ/kJIcwYZHML2NDYg=;
+        b=ktgGTMbMTCWIRwPL1r/jUM5CWLcsrAsKpWeFS5GxjphZICew3TBjO4zoKV6ZTdctqJ
+         G/7jKDlhzyi+Sbd7xdlO3ToSWu/jwUDl/znURRdFBHGdVp7TMCGxizjkeSIFcL6/8JW6
+         sPH678+qCENbkU5Bm8/iG/ngrntycxn69RNB9cTH5Y3Oko66YooeJzeRYhSGY85fcy2O
+         gsACLYftKOVW6EilpUuleUK33C9KVKGe6/WKPTpxEmos7HVDoYz71sLvmjGKRDOwB93Q
+         ioAR6mMT0QWAAwh9XDt3nphF/e0CMKwDyCHhVxA/9xaXnfVHsnrA/9uHbht1n3/NtGaC
+         KBDg==
+X-Gm-Message-State: AOJu0YyM/PNtcufyhLANKoDeSylIHabkaURrMOKsO8zbRx83N6UVu32K
+	EH6w/8i73QrgXko86GMetUd0J0qkGuTDRQfZykBEMXg=
+X-Google-Smtp-Source: AGHT+IHvmTzYBPETpQD6QUBMdFckTeTvjoS28ofCH7P+9tE3kSQXOdg2sp8J+oFWFFNiunRi7qsUDQ==
+X-Received: by 2002:a05:600c:510b:b0:40f:ddb8:c854 with SMTP id o11-20020a05600c510b00b0040fddb8c854mr747559wms.28.1707469381781;
+        Fri, 09 Feb 2024 01:03:01 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWMNNyGidvL/baPQzyxrn6Opp+D1MlhQ0Ut3yiVV44g3nxb1fg8HSmy/Xg2ph3fJb/12LRgBw0rkCroJnHV2C7vyLo+T0hxgHau/81U+2wEOG+gkAok5sxxRnVr7abVSwTrc8h8X/Ym1Oca8EsAAcUFuE3AhqlVPv3DxEzsBHA0ODVd9t4Y0Hw8ZYU08fTRc9ati81oov3AMTwbvHrzp6wA/v0FHIQP0Gjoq1scRpWBF6x8pOs=
+Received: from lightwarsArch.fritz.box (p5b067f78.dip0.t-ipconnect.de. [91.6.127.120])
+        by smtp.gmail.com with ESMTPSA id bi19-20020a05600c3d9300b004107219c664sm738486wmb.32.2024.02.09.01.03.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Feb 2024 07:19:05 -0800 (PST)
-Message-ID: <e62ba4336a09b50549e8d32623b61d4939ae63d9.camel@gmail.com>
-Subject: Re: [bug report] hwmon: ltc4282: add support for the LTC4282 chip
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>, Dan Carpenter
- <dan.carpenter@linaro.org>,  nuno.sa@analog.com
-Cc: linux-hwmon@vger.kernel.org
-Date: Thu, 08 Feb 2024 16:22:24 +0100
-In-Reply-To: <4d4e37d8-3011-4d60-b805-adcdb31ae57f@roeck-us.net>
-References: <b6fb236a-c3c1-4c5c-94bd-1f68b5aeac41@moroto.mountain>
-	 <53e0e2c7bb9cafb4efa3748ecf3ec765c262db83.camel@gmail.com>
-	 <c2c5b8b0-d3db-4212-8311-ee54119389c4@roeck-us.net>
-	 <9151c5df901325aed61e87019a5a1cffc46cf579.camel@gmail.com>
-	 <4d4e37d8-3011-4d60-b805-adcdb31ae57f@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.50.3 
+        Fri, 09 Feb 2024 01:03:01 -0800 (PST)
+From: Sebastian Kranz <tklightforce@googlemail.com>
+To: linux@roeck-us.net
+Cc: samsagax@gmail.com,
+	derekjohn.clark@gmail.com,
+	jdelvare@suse.com,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Sebastian Kranz <tklightforce@googlemail.com>
+Subject: [PATCH V2] hwmon: (oxp-sensors) Add support for Ayaneo Air Plus 7320u.
+Date: Fri,  9 Feb 2024 10:01:23 +0100
+Message-ID: <20240209090157.3232-1-tklightforce@googlemail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <2a6ab115-9775-447b-adf5-d63043548c74@roeck-us.net>
+References: <2a6ab115-9775-447b-adf5-d63043548c74@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-T24gVGh1LCAyMDI0LTAyLTA4IGF0IDA2OjE5IC0wODAwLCBHdWVudGVyIFJvZWNrIHdyb3RlOgo+
-IE9uIDIvOC8yNCAwMDoxMiwgTnVubyBTw6Egd3JvdGU6Cj4gPiBPbiBXZWQsIDIwMjQtMDItMDcg
-YXQgMDg6NDkgLTA4MDAsIEd1ZW50ZXIgUm9lY2sgd3JvdGU6Cj4gPiA+IE9uIDIvNy8yNCAwMjox
-OSwgTnVubyBTw6Egd3JvdGU6Cj4gPiA+ID4gSGkgRGFuLAo+ID4gPiA+IAo+ID4gPiA+IE9uIFdl
-ZCwgMjAyNC0wMi0wNyBhdCAxMjo1MSArMDMwMCwgRGFuIENhcnBlbnRlciB3cm90ZToKPiA+ID4g
-PiA+IEhlbGxvIE51bm8gU2EsCj4gPiA+ID4gPiAKPiA+ID4gPiA+IFRoZSBwYXRjaCA4NDhhNTAx
-OWRlZDU6ICJod21vbjogbHRjNDI4MjogYWRkIHN1cHBvcnQgZm9yIHRoZSBMVEM0MjgyCj4gPiA+
-ID4gPiBjaGlwIiBmcm9tIEphbiAyOSwgMjAyNCAobGludXgtbmV4dCksIGxlYWRzIHRvIHRoZSBm
-b2xsb3dpbmcgU21hdGNoCj4gPiA+ID4gPiBzdGF0aWMgY2hlY2tlciB3YXJuaW5nOgo+ID4gPiA+
-ID4gCj4gPiA+ID4gPiAJZHJpdmVycy9od21vbi9sdGM0MjgyLmM6NzMyCj4gPiA+ID4gPiBsdGM0
-MjgyX3dyaXRlX3ZvbHRhZ2VfYnl0ZV9jYWNoZWQoKQo+ID4gPiA+ID4gCXdhcm46IG5vIGxvd2Vy
-IGJvdW5kIG9uICd2YWwnIHJsPSdzNjRtaW4tNDI5NDk2NzI5NCcKPiA+ID4gPiA+IAo+ID4gPiA+
-ID4gZHJpdmVycy9od21vbi9sdGM0MjgyLmMKPiA+ID4gPiA+IMKgwqDCoMKgwqAgNzIzIHN0YXRp
-YyBpbnQgbHRjNDI4Ml93cml0ZV92b2x0YWdlX2J5dGVfY2FjaGVkKGNvbnN0IHN0cnVjdAo+ID4g
-PiA+ID4gbHRjNDI4Ml9zdGF0ZSAqc3QsCj4gPiA+ID4gPiDCoMKgwqDCoMKgIDcyNMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB1MzIgcmVnLCB1MzIKPiA+ID4gPiA+IGZzLAo+ID4g
-PiA+ID4gbG9uZwo+ID4gPiA+ID4gdmFsLAo+ID4gPiA+ID4gwqDCoMKgwqDCoCA3MjXCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgdTMyICpjYWNoZV9yYXcpCj4gPiA+ID4gPiDCoMKg
-wqDCoMKgIDcyNiB7Cj4gPiA+ID4gPiDCoMKgwqDCoMKgIDcyN8KgwqDCoMKgwqDCoMKgwqAgdTMy
-IGluOwo+ID4gPiA+ID4gwqDCoMKgwqDCoCA3MjgKPiA+ID4gPiA+IMKgwqDCoMKgwqAgNzI5wqDC
-oMKgwqDCoMKgwqDCoCBpZiAodmFsID49IGZzKQo+ID4gPiA+ID4gwqDCoMKgwqDCoCA3MzDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBpbiA9IFU4X01BWDsKPiA+ID4gPiA+IMKgwqDC
-oMKgwqAgNzMxwqDCoMKgwqDCoMKgwqDCoCBlbHNlCj4gPiA+ID4gPiAtLT4gNzMywqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgaW4gPSBESVZfUk9VTkRfQ0xPU0VTVCh2YWwgKiBVOF9N
-QVgsIGZzKTsKPiA+ID4gPiAKPiA+ID4gPiBZZWFoLCBJIGd1ZXNzIHdlIHNob3VsZCBsaWtlbHkg
-Y2xhbXAgaXQgYmV0d2VlbiAwIGFuZCBmcwo+ID4gPiA+IAo+ID4gPiAKPiA+ID4gCXZhbCA9IGNs
-YW1wX3ZhbCh2YWwsIDAsIGZzKTsKPiA+ID4gCWluID0gRElWX1JPVU5EX0NMT1NFU1QodmFsICog
-VThfTUFYLCBmcyk7Cj4gPiA+IAo+ID4gPiBtYXliZS4KPiA+ID4gCj4gPiA+IFNob3VsZCBJIGZp
-eCB0aGF0IGlubGluZSBvciBkbyB5b3Ugd2FudCB0byBzZW5kIGEgZm9sbG93LXVwIHBhdGNoID8K
-PiA+ID4gCj4gPiA+IEd1ZW50ZXIKPiA+ID4gCj4gPiA+IAo+ID4gCj4gPiBXaGF0ZXZlciBtYWtl
-cyB5b3VyIGxpZmUgZWFzaWVyLi4uIEkgY2FuIHNlbmQgYSBwYXRjaCBpZiB0aGF0IGlzIHlvdXIK
-PiA+IHByZWZlcmVuY2UuCj4gPiAKPiAKPiBJIHVwZGF0ZWQgdGhlIG9yaWdpbmFsIHBhdGNoLgo+
-IAo+IFRoYW5rcywKPiBHdWVudGVyCj4gCgpUaGFua3MhCi0gTnVubyBTw6EK
+Add support for handheld AYANEO AIR Plus with the same EC registers to add proper fan control.
+
+Functionality was tested successfully.
+
+Signed-off-by: Sebastian Kranz <tklightforce@googlemail.com>
+---
+ Documentation/hwmon/oxp-sensors.rst |  1 +
+ drivers/hwmon/oxp-sensors.c         | 10 ++++++++++
+ 2 files changed, 11 insertions(+)
+
+diff --git a/Documentation/hwmon/oxp-sensors.rst b/Documentation/hwmon/oxp-sensors.rst
+index 3adeb7406243..55b1ef61625e 100644
+--- a/Documentation/hwmon/oxp-sensors.rst
++++ b/Documentation/hwmon/oxp-sensors.rst
+@@ -33,6 +33,7 @@ Currently the driver supports the following handhelds:
+  - AOK ZOE A1 PRO
+  - Aya Neo 2
+  - Aya Neo AIR
++ - Aya Neo AIR Plus (Mendocino)
+  - Aya Neo AIR Pro
+  - Aya Neo Geek
+  - OneXPlayer AMD
+diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
+index ea9602063eab..8d3b0f86cc57 100644
+--- a/drivers/hwmon/oxp-sensors.c
++++ b/drivers/hwmon/oxp-sensors.c
+@@ -43,6 +43,7 @@ enum oxp_board {
+ 	aok_zoe_a1 = 1,
+ 	aya_neo_2,
+ 	aya_neo_air,
++	aya_neo_air_plus_mendo,
+ 	aya_neo_air_pro,
+ 	aya_neo_geek,
+ 	oxp_mini_amd,
+@@ -98,6 +99,13 @@ static const struct dmi_system_id dmi_table[] = {
+ 		},
+ 		.driver_data = (void *)aya_neo_air,
+ 	},
++	{
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
++			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AB05-Mendocino"),
++		},
++		.driver_data = (void *)aya_neo_air_plus_mendo,
++	},
+ 	{
+ 		.matches = {
+ 			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
+@@ -332,6 +340,7 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
+ 			switch (board) {
+ 			case aya_neo_2:
+ 			case aya_neo_air:
++			case aya_neo_air_plus_mendo:
+ 			case aya_neo_air_pro:
+ 			case aya_neo_geek:
+ 			case oxp_mini_amd:
+@@ -374,6 +383,7 @@ static int oxp_platform_write(struct device *dev, enum hwmon_sensor_types type,
+ 			switch (board) {
+ 			case aya_neo_2:
+ 			case aya_neo_air:
++			case aya_neo_air_plus_mendo:
+ 			case aya_neo_air_pro:
+ 			case aya_neo_geek:
+ 			case oxp_mini_amd:
+-- 
+2.43.0
 
