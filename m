@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC8A1537E1;
-	Tue, 13 Feb 2024 00:19:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F2286168D;
+	Tue, 13 Feb 2024 00:21:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707783563; cv=none; b=tYWMwKldaZdmxrbjjXPr8JCnAFUSV3lQ3726S7Xsggb1e7IqizQoU0h6LXXFeDr6QJoTz+lENZ6AZdadVcSLdln3/P2eevFa/LKBT7A2e3qdqVHIVQC4QYqk0OYVpI9dPZVOLsJuhBoJ4oVUZvQAtuNOe+BNrcZdnRjhSHKOSxw=
+	t=1707783690; cv=none; b=J2HrC5TRNN7kOnxrL0dFbfjGWf8fc+lw/Vm/ri9S2rAspm0ptsOJnou+I30rqgq56e7NzVME5BTjIIkt1iKONIf1MkraKPWhe0r3wQEf4elwg9ZBCTw85leLoiQuiUqNQSTcMCq8b0uwdocOZ/l4nmaeJpnGq+eTjfBbg3Nj7M0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707783563; c=relaxed/simple;
+	s=arc-20240116; t=1707783690; c=relaxed/simple;
 	bh=PnTP6vNVXkTh7mM9/5zBOhKHyxN1lHKCgKXp0guhjgM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WAqrT7apBLHe7CXeYm9Ul5T/0YaIbiKWQuskO68ihqoUh2z+mkQW7s19kzp7FOlmr0XkgFh79YtvIdzeMZ3c268fennuHdxlbUtZbPL2jnSHS1LOci77vBU9b7H1IkaxQK6gcNeMiAL5yxmC/3k9cFHYMHFxt2vFNu7KxPm17nM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D9DNwrPp; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=uPmYHU8XNL9cAH8dOxDQ1dPbuqKsxw6i3cORvS6+wJh4c8Ju929DTu6g5qjmlbzW5jlvqmQui9I7sTlJFfBz4eH+nVUhPGeu5YQ9R8afyYAFNKgAEMEI3nwEc4YpWVp7a3lR+filIfDK+hqTd4xx/1LDuzCDoXu7JeIpOymavVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uyAFaJlH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D9DNwrPp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8082C43390;
-	Tue, 13 Feb 2024 00:19:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uyAFaJlH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B741C433F1;
+	Tue, 13 Feb 2024 00:21:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707783562;
+	s=k20201202; t=1707783690;
 	bh=PnTP6vNVXkTh7mM9/5zBOhKHyxN1lHKCgKXp0guhjgM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=D9DNwrPpvOpKjipx5FgU6vyFZ+ucICpNR9QHJccCoQLWJ1FO6KLt1dnOxWffg0mhC
-	 qcZ9+F+G1plrCNIZV0yuUnE+Do9Vr7iMTzmywpkLdUjKzI0suZtPssNsFoV7fS6qI2
-	 nmIpF4lKik+6S8OYt0Idv0K9jiAb8wwC0rtKdU6JzQskfmSHqRG7zKZ1C1tLEBSilt
-	 cwdfnpD7Dw6h+xSkHz0HEceUdApoWL9OPDVmrcFIKSNxYPmPaOEYnv9JUnYVck6qD6
-	 BU2Bg7W/MBQ/+Mvdi1Tnxr/wnYlPcRCkQO2ZVvh++P59CT10TOD5xhwQXbbYEoYbR9
-	 DnaBNS7HKcHcw==
+	b=uyAFaJlHPybkkmHtA/oNbjLcFXoRlWeWI61mitidI2QKyidZUJUl9yckqjEIggJll
+	 KyfX+yTgJLYnY5SVzp+08O7xDQcemsHm6jcip5a+EejG98SXN1VgLBc5hfBIqKBm69
+	 5f5hGTskuCOSVOdsvZDTEWILvJSo78JCx1dfA4mqhGbCHwebjd+svgfcvy7rDh9qOQ
+	 ltDmbYLHUDg1gln48w22aT3uTi3s1rU+atNEYJhxgxUR3w/0I/aOk0Yef5wNbUnV43
+	 ELoJYC0EkRhHfEMQYeqklor4UUxnrK55JAzjfx0WiCmU4sQUQAON2kE6Ms4gFxHmSA
+	 XEIIK3ccnpVRw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -35,12 +35,12 @@ Cc: Zhang Rui <rui.zhang@intel.com>,
 	fenghua.yu@intel.com,
 	jdelvare@suse.com,
 	linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.7 34/58] hwmon: (coretemp) Enlarge per package core count limit
-Date: Mon, 12 Feb 2024 19:17:40 -0500
-Message-ID: <20240213001837.668862-34-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 29/51] hwmon: (coretemp) Enlarge per package core count limit
+Date: Mon, 12 Feb 2024 19:20:06 -0500
+Message-ID: <20240213002052.670571-29-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240213001837.668862-1-sashal@kernel.org>
-References: <20240213001837.668862-1-sashal@kernel.org>
+In-Reply-To: <20240213002052.670571-1-sashal@kernel.org>
+References: <20240213002052.670571-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -49,7 +49,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.7.4
+X-stable-base: Linux 6.6.16
 Content-Transfer-Encoding: 8bit
 
 From: Zhang Rui <rui.zhang@intel.com>
