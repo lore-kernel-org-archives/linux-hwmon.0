@@ -1,333 +1,205 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A882C9479
-	for <linux-hwmon@vger.kernel.org>; Tue, 13 Feb 2024 04:56:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29A145646A
+	for <linux-hwmon@vger.kernel.org>; Tue, 13 Feb 2024 13:42:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707800183; cv=none; b=huc11rHeJ8wuLm2SLnZSTK7d15PDEy7WcBGGW1O3qWBkYGPLbydXZofFdPcCghVP9gi5FN2durApOJsxBPyDzK5mjkGdbh22UYNTUymb/6zwQjznsb3cJPFidoApv82uN3cX6wUUuAij+hl3dccDnhagpd1PAA2rxepBMkJcIuE=
+	t=1707831752; cv=none; b=KB4kt9XVOj9X3rZ11YFpcGG9+sKtWqeyhVzURjeQuetY/pTkHznnoouVK5viFnaP4XE/O9I7W0i+EMRFqSqPErh75Bz9ogzpwg9Qr6MT3wTv6Kt9ea/ENWO8uEsh756icCeImctBKjcB/nSItQkevNMOZ9hAee1DFiGr5UD+VUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707800183; c=relaxed/simple;
-	bh=u94O8h9AlV7KzmGBypG6ZBBstxlnfHqe40itEux6PQU=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Tpw2DxlwNqnfGQQghnPgk3uYue7Eqv9kUHGrGffOKSCaFSyS8hbp+18tpmWQUd1XHyPVGG7vI6zDmW0QUFL0KIKlabPFFeziEUWL0ODeiboYECk08tBJUgVYLKtFyiBUFQNc0GW+N4Wmydr1WQ1FyXX22xrepI/mM38Hu9XEzdE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y/gG4wu1; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1707831752; c=relaxed/simple;
+	bh=sqU8CWBYCpCtT0WVh42NGFNjFfhjI1FgaTgBLkB7j4c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MPhDDV53Itq0KK1/sf0S22v43JeeG2/FMjvxOesKprNcDA8eJfUazH2tUGrn7kXm1sVrqxnYzyUxsMRydcb7ETdSwLMRx0HkB0GbIktit8ncczHxljMNrX4kP7D6YsdioAp5ZriCGd1+Ai140e3y0EPoENmJXSVcRKZY9uketIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=AR/DDjkn; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y/gG4wu1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707800180; x=1739336180;
-  h=date:from:to:cc:subject:message-id;
-  bh=u94O8h9AlV7KzmGBypG6ZBBstxlnfHqe40itEux6PQU=;
-  b=Y/gG4wu1/wbtwuJLE5/ldtXIkgtpftlc7pyFm8igeXUz0RgtvD45N29v
-   gi5r0Q0u3XtCPwc2VpJ4LuCgR+bOgnX+L+SeQlsb7LAjcKaCqOTvvHqYw
-   BvSpI+ytMAV6pRimkd2SIjg9mLIrCyrQ4YDCOK4pRQcG3tZ8qYQ+T4okW
-   srL2pSbp5oTHOPsFhGN/lQn8LISqHwKLNhFoZR/PNVG/rCA4Q0L8PuMRv
-   6hRKDZURXrniQnmM2POZgFTbfE2+Dk2V0Y4tI7LvmcAMoU1vksdZFer4U
-   xxgD+wL+eSsKmXGYFIgIHojSYcVR2SyYHB4GvmB5y4nnI/gDIYJAc2aIJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="1677030"
-X-IronPort-AV: E=Sophos;i="6.06,156,1705392000"; 
-   d="scan'208";a="1677030"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2024 20:56:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,156,1705392000"; 
-   d="scan'208";a="3107427"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 12 Feb 2024 20:56:19 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rZkq8-0007WY-0b;
-	Tue, 13 Feb 2024 04:56:16 +0000
-Date: Tue, 13 Feb 2024 12:55:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:testing] BUILD SUCCESS
- 6b3b464fbc8c04d459023533f880b1bbcbba0b5e
-Message-ID: <202402131237.Idr2sBR6-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="AR/DDjkn"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-296b2e44a3cso2288364a91.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 13 Feb 2024 05:42:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1707831749; x=1708436549; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wqk9RnAdmzkTU6vK/TdAMH/5ZEvIKD4DovGTx4NMMSE=;
+        b=AR/DDjknVajtlN8kWc4aBj9EnxnpFAeLFSN1eEoyd3R2CKFuPkiTdDTjwVb9plqok5
+         GhoflYKN5j8sPXMLiQEDmErlych/fbN13FcODpcrDC052ZMxULIFC3JIPKaSPWss8YAY
+         Xoij1bntO7QL61pXADBeKgg5peIyBEUae2YZhSPsyEF/lmiDdpAwAogxrHA3QPCCRMlf
+         kzb05OftOJjlDf8pbdgYXG6Eg8hLnMix30K9TP92EEyUjL3DwQL93JJ3dzO3nZx0WBbq
+         28+8g95100L4N38bJ0qrnDpykXuLiOeVIHcEyydWhlB97jEOPsPwi85HyNSQM1DLxc1Q
+         btXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707831749; x=1708436549;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Wqk9RnAdmzkTU6vK/TdAMH/5ZEvIKD4DovGTx4NMMSE=;
+        b=Edm5ExlVULgx8CcFN2ApbIVDrAP1HlWiQWen7Sl0adRFEBH+6Gc3ClhkNiqo8ShM5k
+         BYq/aFSSvRVaK0Yjux4EnSgVeDhyqKJnQDD+TQsnVpVmPtdzOW8sbJfuXiJjv2GXWVnL
+         OuGthr1UmEmzmb1vhOMGTymHZgF7xPBgIX7p53i6jbvLD3f2TMoK5445wB3uwsFrY9hz
+         TTW9KeyBdBB+t7kGCgLi9/6UPeEMBuTqVOcHlubBMTlSmkwL3gulyX1Mn7RI+0AjjVNs
+         EHmOtFlZRYYvuPPw+L0az+vE3glQfcMT+Txam6witpk6voR6eS4Vb3daoowjM4Cb0rRJ
+         BERA==
+X-Forwarded-Encrypted: i=1; AJvYcCUxk5LD77PNAwn54D4nntzMymiqy4d5LO4FLpVaE6Aoy1qvPu5TxdlWnnxV9MN242/tcwuxsUDMjdWSaBMDes1NqIxHGv8jCbjLiig=
+X-Gm-Message-State: AOJu0Yxfb3L4lHKonqbnlcN4cbfOw4aoP/id2wOLglc+4UdEhlFV8b62
+	BgE3Abl91qzeRl6EAJDkc5EgLyYJe8DJR7gEAtKlEqJsMqjpjvAVfud87sIFEGNpf1EtsMF86aX
+	yTQucO+l/F00wDIJq5CfnDizrtYFuPqP3bLxwRmPI/WJozejU40Y=
+X-Google-Smtp-Source: AGHT+IHfkgz90jq0P0pE2m4FPBNOBJy5rQ3Pwm/G10giSDI+WYnSqSkh78viB+HIrt0/DzkXiltUDZW4SKoQlUss6NM=
+X-Received: by 2002:a17:90a:db93:b0:297:fb7:fe1 with SMTP id
+ h19-20020a17090adb9300b002970fb70fe1mr5854891pjv.46.1707831749457; Tue, 13
+ Feb 2024 05:42:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20240130175140.3834889-1-naresh.solanki@9elements.com> <cd84b051-1608-48c0-8335-b038cd236f61@roeck-us.net>
+In-Reply-To: <cd84b051-1608-48c0-8335-b038cd236f61@roeck-us.net>
+From: Naresh Solanki <naresh.solanki@9elements.com>
+Date: Tue, 13 Feb 2024 19:12:19 +0530
+Message-ID: <CABqG17jbOgAHWUemV5=VFKwufuGX_xyheTDETfJtvoOO9UWjvg@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (pmbus/mp2975) Fix IRQ masking
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>, mazziesaccount@gmail.com, 
+	Patrick Rudolph <patrick.rudolph@9elements.com>, linux-hwmon@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
-branch HEAD: 6b3b464fbc8c04d459023533f880b1bbcbba0b5e  regmap: kunit: Ensure that changed bytes are actually different
+Hi Guenter,
 
-elapsed time: 1443m
 
-configs tested: 260
-configs skipped: 4
+On Wed, 31 Jan 2024 at 03:30, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Tue, Jan 30, 2024 at 11:21:39PM +0530, Naresh Solanki wrote:
+> > From: Patrick Rudolph <patrick.rudolph@9elements.com>
+> >
+> > The MP2971/MP2973 use a custom 16bit register format for
+> > SMBALERT_MASK which doesn't follow the PMBUS specification.
+> >
+> > Map the PMBUS defined bits used by the common code onto the custom
+> > format used by MPS and since the SMBALERT_MASK is currently never read
+> > by common code only implement the mapping for write transactions.
+> >
+> > Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> > Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+> > ---
+> >  drivers/hwmon/pmbus/mp2975.c | 57 ++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 57 insertions(+)
+> >
+> >
+> > base-commit: 909d8d33f8b4664c9b6c7fd585114921af77fc2b
+> >
+> > diff --git a/drivers/hwmon/pmbus/mp2975.c b/drivers/hwmon/pmbus/mp2975.c
+> > index b9bb469e2d8f..788ec2c5a45f 100644
+> > --- a/drivers/hwmon/pmbus/mp2975.c
+> > +++ b/drivers/hwmon/pmbus/mp2975.c
+> > @@ -377,6 +377,62 @@ static int mp2973_read_word_data(struct i2c_client *client, int page,
+> >       return ret;
+> >  }
+> >
+> > +static int mp2973_write_word_data(struct i2c_client *client, int page,
+> > +                               int reg, u16 word)
+> > +{
+> > +     u8 target, mask;
+> > +     int ret;
+> > +
+> > +     if (reg != PMBUS_SMBALERT_MASK)
+> > +             return -ENODATA;
+> > +
+> > +     /*
+> > +      * Vendor-specific SMBALERT_MASK register with 16 maskable bits.
+> > +      */
+> > +     ret = pmbus_read_word_data(client, 0, 0, PMBUS_SMBALERT_MASK);
+> > +     if (ret < 0)
+> > +             return ret;
+> > +
+> > +     target = word & 0xff;
+> > +     mask = word >> 8;
+> > +
+> > +#define SWAP(cond, bit) (ret = (cond) ? (ret & ~BIT(bit)) : (ret | BIT(bit)))
+>
+> This isn't really a "SWAP", but setting or clearing of bits in "ret"
+> depending on a bit set in "cond". I don't have a good idea for a
+> better name, but either case I think a comment describing what it
+> does would be useful.
+Yes. will add below comment
+/*
+ * Set/Clear 'bit' in 'ret' based on condition
+ */
+>
+> "ret" use is implied, but "mask" is always provided as parameter.
+> Please either provide both as arguments, or make both implied.
+Sure. Will update as:
+#define SWAP(cond, bit) ret = (mask & cond) ? (ret & ~BIT(bit)) : (ret
+| BIT(bit))
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+>
+> Also, the first parameter is a bit mask, while the second parameter
+> is a bit position. Please used defines for the second parameter
+> and make it a mask as well.
+Sure will be adding defines for second parameter as well.
+#define MP2973_INVALID_DATA     8
+#define MP2973_INVALID_COMMAND  9
+#define MP2973_OTHER_COMM       5
+#define MP2973_PACKET_ERROR     7
+#define MP2973_VOLTAGE_UV       13
+#define MP2973_VOLTAGE_OV       14
+#define MP2973_IOUT_OC          11
+#define MP2973_IOUT_OC_LV       10
+#define MP2973_TEMP_OT          0
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                        nsim_700_defconfig   gcc  
-arc                   randconfig-001-20240212   gcc  
-arc                   randconfig-001-20240213   gcc  
-arc                   randconfig-002-20240212   gcc  
-arc                   randconfig-002-20240213   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                            mmp2_defconfig   gcc  
-arm                          moxart_defconfig   gcc  
-arm                             mxs_defconfig   clang
-arm                       netwinder_defconfig   gcc  
-arm                           omap1_defconfig   gcc  
-arm                             pxa_defconfig   gcc  
-arm                   randconfig-001-20240212   gcc  
-arm                   randconfig-001-20240213   gcc  
-arm                   randconfig-002-20240212   clang
-arm                   randconfig-002-20240213   gcc  
-arm                   randconfig-003-20240212   clang
-arm                   randconfig-003-20240213   gcc  
-arm                   randconfig-004-20240212   clang
-arm                        shmobile_defconfig   gcc  
-arm                          sp7021_defconfig   gcc  
-arm                           sunxi_defconfig   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240212   clang
-arm64                 randconfig-001-20240213   gcc  
-arm64                 randconfig-002-20240212   clang
-arm64                 randconfig-002-20240213   gcc  
-arm64                 randconfig-003-20240212   clang
-arm64                 randconfig-003-20240213   gcc  
-arm64                 randconfig-004-20240212   clang
-arm64                 randconfig-004-20240213   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240212   gcc  
-csky                  randconfig-001-20240213   gcc  
-csky                  randconfig-002-20240212   gcc  
-csky                  randconfig-002-20240213   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20240212   clang
-hexagon               randconfig-002-20240212   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240212   clang
-i386         buildonly-randconfig-002-20240212   gcc  
-i386         buildonly-randconfig-002-20240213   gcc  
-i386         buildonly-randconfig-003-20240212   gcc  
-i386         buildonly-randconfig-003-20240213   gcc  
-i386         buildonly-randconfig-004-20240212   clang
-i386         buildonly-randconfig-005-20240212   gcc  
-i386         buildonly-randconfig-005-20240213   gcc  
-i386         buildonly-randconfig-006-20240212   clang
-i386                                defconfig   clang
-i386                  randconfig-001-20240212   gcc  
-i386                  randconfig-002-20240212   clang
-i386                  randconfig-002-20240213   gcc  
-i386                  randconfig-003-20240212   clang
-i386                  randconfig-003-20240213   gcc  
-i386                  randconfig-004-20240212   gcc  
-i386                  randconfig-005-20240212   clang
-i386                  randconfig-005-20240213   gcc  
-i386                  randconfig-006-20240212   gcc  
-i386                  randconfig-006-20240213   gcc  
-i386                  randconfig-011-20240212   gcc  
-i386                  randconfig-012-20240212   gcc  
-i386                  randconfig-012-20240213   gcc  
-i386                  randconfig-013-20240212   gcc  
-i386                  randconfig-013-20240213   gcc  
-i386                  randconfig-014-20240212   gcc  
-i386                  randconfig-014-20240213   gcc  
-i386                  randconfig-015-20240212   gcc  
-i386                  randconfig-015-20240213   gcc  
-i386                  randconfig-016-20240212   clang
-i386                  randconfig-016-20240213   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch                 loongson3_defconfig   gcc  
-loongarch             randconfig-001-20240212   gcc  
-loongarch             randconfig-001-20240213   gcc  
-loongarch             randconfig-002-20240212   gcc  
-loongarch             randconfig-002-20240213   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                       m5208evb_defconfig   gcc  
-m68k                        m5272c3_defconfig   gcc  
-m68k                            mac_defconfig   gcc  
-m68k                        mvme147_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                        bcm47xx_defconfig   clang
-mips                       bmips_be_defconfig   gcc  
-mips                      fuloong2e_defconfig   gcc  
-mips                           gcw0_defconfig   clang
-mips                           ip22_defconfig   gcc  
-mips                          rm200_defconfig   gcc  
-nios2                         10m50_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240212   gcc  
-nios2                 randconfig-001-20240213   gcc  
-nios2                 randconfig-002-20240212   gcc  
-nios2                 randconfig-002-20240213   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-openrisc                 simple_smp_defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240212   gcc  
-parisc                randconfig-001-20240213   gcc  
-parisc                randconfig-002-20240212   gcc  
-parisc                randconfig-002-20240213   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                      arches_defconfig   gcc  
-powerpc                   bluestone_defconfig   clang
-powerpc                      mgcoge_defconfig   clang
-powerpc                      pasemi_defconfig   clang
-powerpc                       ppc64_defconfig   clang
-powerpc               randconfig-001-20240212   clang
-powerpc               randconfig-002-20240212   gcc  
-powerpc               randconfig-002-20240213   gcc  
-powerpc               randconfig-003-20240212   clang
-powerpc               randconfig-003-20240213   gcc  
-powerpc                     sequoia_defconfig   clang
-powerpc                     stx_gp3_defconfig   clang
-powerpc64             randconfig-001-20240212   clang
-powerpc64             randconfig-001-20240213   gcc  
-powerpc64             randconfig-002-20240212   gcc  
-powerpc64             randconfig-002-20240213   gcc  
-powerpc64             randconfig-003-20240212   clang
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-riscv                 randconfig-001-20240212   gcc  
-riscv                 randconfig-001-20240213   gcc  
-riscv                 randconfig-002-20240212   gcc  
-riscv                 randconfig-002-20240213   gcc  
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-s390                  randconfig-001-20240212   clang
-s390                  randconfig-001-20240213   gcc  
-s390                  randconfig-002-20240212   clang
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                             espt_defconfig   gcc  
-sh                     magicpanelr2_defconfig   gcc  
-sh                    randconfig-001-20240212   gcc  
-sh                    randconfig-001-20240213   gcc  
-sh                    randconfig-002-20240212   gcc  
-sh                    randconfig-002-20240213   gcc  
-sh                          rsk7264_defconfig   gcc  
-sh                        sh7785lcr_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240212   gcc  
-sparc64               randconfig-001-20240213   gcc  
-sparc64               randconfig-002-20240212   gcc  
-sparc64               randconfig-002-20240213   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                    randconfig-001-20240212   clang
-um                    randconfig-002-20240212   clang
-um                    randconfig-002-20240213   gcc  
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240212   clang
-x86_64       buildonly-randconfig-002-20240212   clang
-x86_64       buildonly-randconfig-002-20240213   gcc  
-x86_64       buildonly-randconfig-003-20240212   clang
-x86_64       buildonly-randconfig-004-20240212   clang
-x86_64       buildonly-randconfig-004-20240213   gcc  
-x86_64       buildonly-randconfig-005-20240212   clang
-x86_64       buildonly-randconfig-005-20240213   gcc  
-x86_64       buildonly-randconfig-006-20240212   clang
-x86_64       buildonly-randconfig-006-20240213   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240212   gcc  
-x86_64                randconfig-001-20240213   gcc  
-x86_64                randconfig-002-20240212   gcc  
-x86_64                randconfig-003-20240212   gcc  
-x86_64                randconfig-004-20240212   gcc  
-x86_64                randconfig-004-20240213   gcc  
-x86_64                randconfig-005-20240212   gcc  
-x86_64                randconfig-006-20240212   gcc  
-x86_64                randconfig-011-20240212   gcc  
-x86_64                randconfig-012-20240212   gcc  
-x86_64                randconfig-013-20240212   clang
-x86_64                randconfig-014-20240212   gcc  
-x86_64                randconfig-014-20240213   gcc  
-x86_64                randconfig-015-20240212   gcc  
-x86_64                randconfig-016-20240212   clang
-x86_64                randconfig-071-20240212   gcc  
-x86_64                randconfig-071-20240213   gcc  
-x86_64                randconfig-072-20240212   gcc  
-x86_64                randconfig-072-20240213   gcc  
-x86_64                randconfig-073-20240212   clang
-x86_64                randconfig-074-20240212   gcc  
-x86_64                randconfig-074-20240213   gcc  
-x86_64                randconfig-075-20240212   gcc  
-x86_64                randconfig-075-20240213   gcc  
-x86_64                randconfig-076-20240212   gcc  
-x86_64                randconfig-076-20240213   gcc  
-x86_64                           rhel-8.3-bpf   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
-xtensa                  nommu_kc705_defconfig   gcc  
-xtensa                randconfig-001-20240212   gcc  
-xtensa                randconfig-001-20240213   gcc  
-xtensa                randconfig-002-20240212   gcc  
-xtensa                randconfig-002-20240213   gcc  
-xtensa                    smp_lx200_defconfig   gcc  
+>
+> > +     switch (target) {
+> > +     case PMBUS_STATUS_CML:
+> > +             SWAP(mask & PB_CML_FAULT_INVALID_DATA, 8);
+> > +             SWAP(mask & PB_CML_FAULT_INVALID_COMMAND,  9);
+> > +             SWAP(mask & PB_CML_FAULT_OTHER_COMM, 5);
+> > +             SWAP(mask & PB_CML_FAULT_PACKET_ERROR, 7);
+> > +             break;
+> > +     case PMBUS_STATUS_VOUT:
+> > +             SWAP(mask & PB_VOLTAGE_UV_FAULT, 13);
+> > +             SWAP(mask & PB_VOLTAGE_OV_FAULT, 14);
+> > +             break;
+> > +     case PMBUS_STATUS_IOUT:
+> > +             SWAP(mask & PB_IOUT_OC_FAULT, 11);
+> > +             SWAP(mask & PB_IOUT_OC_LV_FAULT, 10);
+> > +             break;
+> > +     case PMBUS_STATUS_TEMPERATURE:
+> > +             SWAP(mask & PB_TEMP_OT_FAULT, 0);
+> > +             break;
+> > +     /*
+> > +      * Map remaining bits to MFR specific to let the PMBUS core mask
+> > +      * those bits by default.
+> > +      */
+> > +     case PMBUS_STATUS_MFR_SPECIFIC:
+> > +             SWAP(mask & BIT(1), 1);
+> > +             SWAP(mask & BIT(3), 3);
+> > +             SWAP(mask & BIT(4), 4);
+> > +             SWAP(mask & BIT(6), 6);
+> > +             break;
+>
+> Coming back to using defines for the second parameter: The
+> above bit positions appear to be purely random. Having defines for
+> those bits will at least explain what is being masked (and hopefully
+> explain why bit 2, 12, and 15 are not covered at all).
+> For example, at least one other chip from the same vendor defines
+> bit 6 as CRC_ERROR, and the matching status register bit is bit
+> 4 (memory fault detected) in STATUS_CML. Also, it is unclear why
+> the chip would not issue any alerts when warning limits are exceeded.
+> Without knowing what the bits in SMBALERT_MASK mean it is impossible
+> to validate if the above is correct and/or complete.
+Agree. Bit 2 & 15 are reserved & will add a comment to mention that.
+For others, I will add #define as below..
+#define MP2973_VIN_UVLO         1
+#define MP2973_VIN_OVP          3
+#define MP2973_MTP_FAULT        4
+#define MP2973_MTP_BLK_TRIG     6
+#define MP2973_VOUT_MAX_MIN_WARNING 12
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+Naresh
+>
+> Thanks,
+> Guenter
