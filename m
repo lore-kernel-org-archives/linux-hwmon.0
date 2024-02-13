@@ -1,31 +1,30 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B64512C810;
-	Tue, 13 Feb 2024 00:24:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68AA512DDBC;
+	Tue, 13 Feb 2024 00:24:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707783855; cv=none; b=NlXq8tzbVPKJT2ugqmKGNSn4wZwczjd8J/c6xYpcIEKabkEYGmSawvkxMyM12EWmxeW8RWGttX/OjRFkbboR1QMhtfwWmVxRhfta5qwdvFRlFobsTUf3N0Woj/WIIME5TBRuea45ifeDBcgTf1hNWBNbZOgFIWsnUhgFF4Nmn04=
+	t=1707783863; cv=none; b=O40iH9+h7pSCIUGi9qDekwIjSyqgnzyz6CXu0I7fAGf4SgAcWa2nuBvFrHBT7RDYASL7yFptFtf0tbPDBHnMt1G2rqu5nY2Nn6HQyGBNMqhsPVn84Ozp/20sj6wzglpR/wFu60cvYBcJnpLHWNH+bSWbkwlYEwztEfQfBoRV6l0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707783855; c=relaxed/simple;
-	bh=Ezlrsu8Cpnk9jt6VCc0qt5xWi89GOLhSDzVRUGGBsD4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kn8y+dDMK98MPMFau7qbJ+3pQsWWBMMKZbWV668VIEvdhSA29GbNAK0rOEKGigOtDPq0OmU5HlkXtiXENvDrNjtegtsul7ewy+5Po5PFYWQ3govCPn/LPRJMzStpwc5IGUTY70/RQR7hFdnQGmP9sAtrItP8vf1hS/+yBxb//io=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MZoAEM37; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1707783863; c=relaxed/simple;
+	bh=OET/8XFZvUB+tdghlDcFDzOlcCZEeqpMgInensZwx5s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dny4NMZ4Y6z5pbCxRxecyYJ3Hc7KaHAwcflDSs6h1zh1yQsdmvOXCxeA49Vzvu9ulZ86eoF15LkgfxUuyafw3SgmvgyVqDwFMV1ePaO2WkPOPhVUROvzXXsAf5c6S2yb2MZ1yf7KbljiD+9yIkdMIJkeTHXc30ObFcC54PhoWO0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cQbSXo39; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MZoAEM37"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAD95C433C7;
-	Tue, 13 Feb 2024 00:24:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cQbSXo39"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDD65C433C7;
+	Tue, 13 Feb 2024 00:24:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707783854;
-	bh=Ezlrsu8Cpnk9jt6VCc0qt5xWi89GOLhSDzVRUGGBsD4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MZoAEM37rz6Grn28MiXRGAY0y2//GvRi2a6EMVWRZRlwFrGNmS9Dnv1ZIe8HT6J8Y
-	 1nJcj/I6jj2NWIyU+su5ZD65OjyZvVkJ+Mn7FQ7MU/MefzBmv7VPmhN7kRKocMi4rU
-	 +QEPt6+/UK8s+Cpy8LUWz7r1DACXX0tp333GWmG8V7eYCDpy3uMZsE+lLI/0L1PWGs
-	 l1tBj5bLsxffFUVf80ujHO6Y7FhAbJH/T3WXZNsudG1BHqz6KOF5qCXUSslT5Z/9cs
-	 1MaLKDoXP7rSu6Wi4Gl/xRiWbouNcpFUvc5jN51Eu7cCPLE8aNttU+PfTBb+BtRVSR
-	 ob6pgBrS9eLFg==
+	s=k20201202; t=1707783862;
+	bh=OET/8XFZvUB+tdghlDcFDzOlcCZEeqpMgInensZwx5s=;
+	h=From:To:Cc:Subject:Date:From;
+	b=cQbSXo39PpPvo0LXI64p4RIFyQvwwxcv+4GYmiWxM8MJl6EHiOLs2MlNXt+WPzOOc
+	 OYbFi6CcySI6Y249I3OVlmI3cdUtpqiyd2om4tGRsCsFy5fWur2rtX2yOl7RTolz7e
+	 6ktuLyLnNdE7IVWYYu+ZJ8bxem3y4iFaBVRepQEsqASG6rYGqZ2CWDKsz6SUKv8j47
+	 23qKd9N/BERnXSAJfPqkvLYosQXupx9sFQxbV9MhdFXIWGMugjVrdBl23xAAhTek8N
+	 B9nehrAzHSrCgVQa1shoz/blawUr+U43KVp3mEPBvo27l6QPvR2M8bvwHzXQejr9F8
+	 L/6HS1FYBvDOQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -35,12 +34,10 @@ Cc: Zhang Rui <rui.zhang@intel.com>,
 	fenghua.yu@intel.com,
 	jdelvare@suse.com,
 	linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 3/6] hwmon: (coretemp) Enlarge per package core count limit
-Date: Mon, 12 Feb 2024 19:24:05 -0500
-Message-ID: <20240213002409.673084-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 1/4] hwmon: (coretemp) Enlarge per package core count limit
+Date: Mon, 12 Feb 2024 19:24:16 -0500
+Message-ID: <20240213002420.673218-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240213002409.673084-1-sashal@kernel.org>
-References: <20240213002409.673084-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -49,7 +46,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.209
+X-stable-base: Linux 5.4.268
 Content-Transfer-Encoding: 8bit
 
 From: Zhang Rui <rui.zhang@intel.com>
@@ -75,7 +72,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-index 5b2057ce5a59..23b1c4c0452c 100644
+index 0eabad344961..b8d5087da65b 100644
 --- a/drivers/hwmon/coretemp.c
 +++ b/drivers/hwmon/coretemp.c
 @@ -40,7 +40,7 @@ MODULE_PARM_DESC(tjmax, "TjMax value in degrees Celsius");
