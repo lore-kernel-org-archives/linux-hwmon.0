@@ -1,152 +1,88 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B3CC13B7B5;
-	Wed, 14 Feb 2024 19:55:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54DBE127B5D
+	for <linux-hwmon@vger.kernel.org>; Wed, 14 Feb 2024 19:55:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707940532; cv=none; b=qWiyZ1Sl9oYOrS/zkrAbrp/UCfVfRFNOmr7OAM3+d70MF86fZkQYfiFFRfg2strSwaPVg1ZwopdmLVK5jwfhOtuMsO7MR1KE5dcOvtpIJi18ewGOBFUAOZKzVx22LZ2eIVo43tNYHCqrpfWCWSFD+6YEKxUoiqzYDFrhj2B7GDE=
+	t=1707940559; cv=none; b=QlMupSh0dohTP8AM6gyJVadMMsKPJ/nB6e+gNf6RjKLIJwsoRPMzlgxWkhoWBCxfpmYkpvgaO1yX74xLPDjMJYjssvrSNdBJS/Ws6UDfoe99vfIvYJhhPoyl9SFXaFIE+q4TAk04V0zm+b0FLIzzc8MDAcKxx+g+fV76zfuWoEM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707940532; c=relaxed/simple;
-	bh=aN1RQYhpuVAtEpsc/MudXniLKa3dvmAiLsNZ9i8++FQ=;
+	s=arc-20240116; t=1707940559; c=relaxed/simple;
+	bh=GCFUf/7PD75pM1uBV52uSa8lV73Lltj2GF1aZcZqCpk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TxfEQ1CGRWj7ULMDEKGQpHgVjVgdTbgQHjRtudkGWMSeo3R5ZdRcR/pZ09NaaEdjP1HfEins+osDuw+cyhbAInkw81fiPjgTU9pqc/p8Cdaf1FVl5Z+jh0Nh/tb8DqL57ChfMQgysTk0Y6vurbwLAbZSeWXHi5+dDmjzABF1ICM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BPF7r5o8; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=Wq7pfekvs6LoHaMeW4B9NEXKOtmaiSgleMZF6GooZGtmSB44kqJ25JFGxTuMU/TY18qnM4lh5Ft4xP+CQFLorPjc6KLGKHDv/29gvZvT36gcDG2vyurhqKgzzVJc9XJXIARGhuGyElHREdqi7KFAnuHw/cK9twqHN8pyVYYbyNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gnH8NqzS; arc=none smtp.client-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BPF7r5o8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82B97C433C7;
-	Wed, 14 Feb 2024 19:55:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707940531;
-	bh=aN1RQYhpuVAtEpsc/MudXniLKa3dvmAiLsNZ9i8++FQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BPF7r5o8y4H7bDrDpLcEtMHw2F5B4qUrp6FwYfjwuCg/FcXarE+YdrxY69PpTtat9
-	 JxJPI2PdTNzOC1wmE2B7cpj3GL2NmnAFGMhFQjtT4C34N4olyB5orZB7XhfHjyy5Wh
-	 scfs3njKTQZOU+LywXw1fjBRxl4IIe2dc+hoQgzwaQeN7At17fp1IMFHWQTXM1yDqj
-	 aHICeaEL/1iZQSa33XVXUSrPS4g70whSndILPuQgfT1DpOhXfzabSATDF8SBpEN2TW
-	 sDNt6VjfQ+r2A/sqMutDNkSZ0cB2cKugqhjsRFOyXyVOGwCy4TEhLQH9r8h1CGn8c9
-	 3IUomvF86kyGA==
-Date: Wed, 14 Feb 2024 19:55:27 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Naresh Solanki <naresh.solanki@9elements.com>,
-	Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, mazziesaccount@gmail.com,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] dt-bindings: hwmon: tda38640: Add interrupt &
- regulator properties
-Message-ID: <20240214-dimly-wife-5b6239d4adec@spud>
-References: <20240214092504.1237402-1-naresh.solanki@9elements.com>
- <20240214-trinity-delouse-6dcd0b046895@spud>
- <0f1665e5-bae1-4a17-a976-cc225a28dad3@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gnH8NqzS"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-5d8b887bb0cso111248a12.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 14 Feb 2024 11:55:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1707940557; x=1708545357; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gObMDxZaqlnJvLAuc5d5ePZWhYESL5mQMZPRv1KxVqE=;
+        b=gnH8NqzS7IM2/Gz78HUOYTYiVAwwC8g7vpxVMS4E/aJTvXDh53tI97Ur2KrWxd8ojv
+         BqjHw7Y7PWuQXWwnY9nbdacJKiDga66Ou4cMdISwN8URUlwWAFBhtNfj/YUeZZqbMfq8
+         oHYZmvFUrxQuc3yqba77cfAor9pZfS3/EQBzBhx24bjVQ0YANxJu2D2pe+HDZtwaP0EN
+         zsUW67B+ar14jNaG7BDvnvhFfOKgjDcYgUdaZ9kP2zOdIM7AU2YaRlwVn7cf7728APQX
+         HbPGivSjOMbmD2jnW8hkNaobA4j/n1Hc42qSDNKQyvGXyxZRG/r07cxfEs0/qiNY0LBX
+         iFQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707940557; x=1708545357;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gObMDxZaqlnJvLAuc5d5ePZWhYESL5mQMZPRv1KxVqE=;
+        b=MZGTcmxAUTAmt9yLTY/lLVIfZfWBEqAOJtjH6unXrKx3MYyEuLMMyhXofR8f4eoT91
+         AEv0gbuLa8OvkNwfAGbG89WhvulXJ9t3HiKy8TWb3yYhY3pd/cuSTOYFVBNo6uBK0qh5
+         /pPluHEgOkbNaV9kN9hqEVjn4dLWp5lDwCWY/nqCDCUlT5XvzIu7DWadsX9Rk+/I1eZ+
+         K1jWj4f4tgeuh0mVBRQen0mJtioiCJiPeITfxap0MZazn6DDzBw3XkQmOKM7Zp1txkXq
+         A0IdF8EjLFsFEAKQt3gIlQI5mO0wnhjJcvBrsBsf34dtjb+VWyHA/fvztI3cuVyt7Dx3
+         TPhA==
+X-Gm-Message-State: AOJu0Yyq52MWFQIoxdNUQX/9lc6OYewjzeqaAem0Yqfz261+vtthr1uZ
+	rJ3RDF35muZ4+XVsQalnWpmuq7U44fdN2nQJF1riWsUB159hRC2u479PP3aD
+X-Google-Smtp-Source: AGHT+IFOCJoRicf16bIaOlMdyLI7Mafu7xK+97FSDwzFhSa9VT/eYjz86ONyLXCx3e1mH+hts2xXlQ==
+X-Received: by 2002:a05:6a20:9f96:b0:1a0:6016:bf6f with SMTP id mm22-20020a056a209f9600b001a06016bf6fmr3925729pzb.29.1707940557611;
+        Wed, 14 Feb 2024 11:55:57 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVP05m+F0cuCqriWaKBMs1mCz32ohuYPs69Y1K+ln+BaDkpD86ba+LRwbWk5Uxk1ap4JgazQ7YrQLq7J9MWfB5Png==
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q23-20020a638c57000000b005d6a0b2efb3sm4639728pgn.21.2024.02.14.11.55.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Feb 2024 11:55:57 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 14 Feb 2024 11:55:56 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Nuno Sa <nuno.sa@analog.com>
+Cc: linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
+Subject: Re: [PATCH 1/3] hwmon: (axi-fan-control) Use device firmware
+ agnostic API
+Message-ID: <d6af5d87-0260-4bb6-806e-2fab83e2a3b4@roeck-us.net>
+References: <20240214-axi-fan-control-no-of-v1-0-43ca656fe2e3@analog.com>
+ <20240214-axi-fan-control-no-of-v1-1-43ca656fe2e3@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="xG+P4JTtsjcaH+61"
-Content-Disposition: inline
-In-Reply-To: <0f1665e5-bae1-4a17-a976-cc225a28dad3@roeck-us.net>
-
-
---xG+P4JTtsjcaH+61
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240214-axi-fan-control-no-of-v1-1-43ca656fe2e3@analog.com>
 
-On Wed, Feb 14, 2024 at 10:48:52AM -0800, Guenter Roeck wrote:
-> On 2/14/24 09:51, Conor Dooley wrote:
-> > On Wed, Feb 14, 2024 at 02:55:03PM +0530, Naresh Solanki wrote:
-> > > Add properties for interrupt & regulator.
-> > > Also update example.
-> >=20
-> > I feel like a broken record. Your patches need to explain _why_ you're
-> > doing what you're doing. I can read the diff and see this, but I do not
-> > know what the justification for it is.
-> >=20
-> > /30 seconds later
-> > I really am a broken record, to quote from v1:
-> > | Feeling like a broken record, given I am leaving the same comments on
-> > | multiple patches. The commit message needs to explain why you're doing
-> > | something. I can read the diff and see what you did!
-> >=20
-> > https://lore.kernel.org/all/20240126-fleshed-subdued-36bae813e2ba@spud/
-> >=20
-> > The patch itself does look better than the v1, with one minor comment
-> > below.
-> >=20
-> > Thanks,
-> > Conor.
-> >=20
-> > > Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
-> > >=20
-> > > ---
-> > > Changes in v2:
-> > > 1. Remove TEST=3D..
-> > > 2. Update regulator subnode property as vout0
-> > > 3. Restore commented line in example
-> > > 4. blank line after interrupts property in example.
-> > > ---
-> > >   .../hwmon/pmbus/infineon,tda38640.yaml        | 28 ++++++++++++++++=
-+++
-> > >   1 file changed, 28 insertions(+)
-> > >=20
-> > > diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,t=
-da38640.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38=
-640.yaml
-> > > index ded1c115764b..a93b3f86ee87 100644
-> > > --- a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640=
-=2Eyaml
-> > > +++ b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640=
-=2Eyaml
-> > > @@ -30,6 +30,23 @@ properties:
-> > >         unconnected(has internal pull-down).
-> > >       type: boolean
-> > > +  interrupts:
-> > > +    maxItems: 1
-> > > +
-> > > +  regulators:
-> > > +    type: object
-> > > +    description:
-> > > +      list of regulators provided by this controller.
-> > > +
-> > > +    properties:
-> > > +      vout0:
-> >=20
-> > Why "vout0" if there's only one output? Is it called that in the
-> > documentation? I had a quick check but only saw it called "vout".
-> > Are there other related devices that would have multiple regulators
-> > that might end up sharing the binding?
-> >=20
->=20
-> Primarily because that is what the PMBus core generates for the driver
-> because no one including me was aware that this is unacceptable
-> for single-output drivers.
+On Wed, Feb 14, 2024 at 03:36:43PM +0100, Nuno Sa wrote:
+> Don't directly use OF and use device property APIs. In addition, this
+> makes the probe() code neater and also allow us to move the
+> of_device_id table to it's natural place.
+> 
+> While at it, make sure to explicitly include mod_devicetable.h for the
+> of_device_id table.
+> 
+> Signed-off-by: Nuno Sa <nuno.sa@analog.com>
 
-Is it unacceptable? If you're implying that I am saying it is, that's
-not what I was doing here - I'm just wondering why it was chosen.
-Numbering when there's only one seems odd, so I was just looking for the
-rationale.
+Applied.
 
-> We now have commit 88b5970e92d0 ("hwmon:
-> (pmbus/core) Add helper macro to define single pmbus regulator").
-> I guess we can update the tda38640 driver to use the new macro
-> to register vout instead of vout0.
-
-
---xG+P4JTtsjcaH+61
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZc0arwAKCRB4tDGHoIJi
-0lyZAQDo72m1JTDm3RB2kzIKmBYKf7gk6P+U/7VON1Kjca7/+wD+KDyCgv+ptSlb
-2Gv/TNj8JuKGhWht70cIyT72yXA1QwI=
-=enKi
------END PGP SIGNATURE-----
-
---xG+P4JTtsjcaH+61--
+Thanks,
+Guenter
