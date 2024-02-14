@@ -1,137 +1,186 @@
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8709E61686;
-	Tue, 13 Feb 2024 22:52:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDC1F11CB1
+	for <linux-hwmon@vger.kernel.org>; Wed, 14 Feb 2024 09:20:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707864739; cv=none; b=pMyW3Psj2lbpB4tnotje4/Ji8MbaULX1LN36tWGe4+0rXN/4N8ffNRxAbtrmf8oKOOXsePyiQz525H8R9WH6N3e71xiPRWBsNpHPtFJgxj+onKaUz6T9SY11DlRiqP+cgpRP9AZYJ0UqPRHyuS+abf4O+Vhc6WKTSt9m+GvUyxo=
+	t=1707902431; cv=none; b=qZltrcZhLnRqjNWiJ7eH2/HV2GZjBFppT8zIVkgjEJ0x1+G0HiY0UQ2urBy04f8WaebkD/rch6OLK+iyS/XzbmxLnxHT9JnR//oeUMqP0WgdZCotVHNiy0xny1CpmVk6S7IoUIt9gHwNlTwzpJ6YOByappydO+NiMq13IvNKCRg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707864739; c=relaxed/simple;
-	bh=fCE38Ot/LYirlQfCii8VT6ufFOtv+sHaVcCjpCxyguk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iIeTbfNx2THCF2MRQdi+2GeeyrfM9lyjont3sk7u/u4gPV+stGlr4dOdoO6+xD4HD1R58iQloTt4lVxo/1OOGNUelW+j5N5QaKWrvPgiH4o+ORxOJQ6GsfUt52LHaDZqOHqVVvuzTajFxkp9BuBJ+l+rjfOhdnaDTQENElq7Oqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CQ4/gT4j; arc=none smtp.client-ip=209.85.160.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1707902431; c=relaxed/simple;
+	bh=0fPdwZNsLS69Huv0I8sGB5yfphGY07GmyJfHv2XPGbk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=K9sPIDR9YwniIsIiOWFQuKWZGvblN62AnD/ltAmGlx01bkEWM3Hc2SzU/i0feGWanMWXkEh80D/GtPz5dCnhcmL/sqV8p+LcJy+0bZhPT8TRo2BmCsHq6A38m5EGaGW8YusdGW2/7NMJSyPTmrIqMLuhzMnzEYbWKtxmDt1WSfA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=ZjhltYGT; arc=none smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CQ4/gT4j"
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-214def5da12so2970953fac.2;
-        Tue, 13 Feb 2024 14:52:17 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="ZjhltYGT"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-5d3907ff128so4206881a12.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 14 Feb 2024 01:20:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707864736; x=1708469536; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=beoO8TXO5tck0Ut41LsdcMam0jCDe/xp7+xH/ECCYWU=;
-        b=CQ4/gT4jGFqG4wZA0QQ1p++41N9By7/WeNgBKFij/wZ8cYgrCA9crv0aVvJ9vvTlnt
-         Ntkk/Uo6l4VXet2UYoUS/mMDu2PEFPkQQNKBwD5JwSPhcH6TCIldDhvim/Fojo1PDmK8
-         DnullwQBZyvWgXyJ2iae0VYSVhCeHQNS/5npLqn+HF12kEh2D+5Y+lMEOr3wx++bHwBm
-         Lxmj3nle2Kvcz1eDXQaJ4lhoP0ptYWNYDqodZXcOVho2Gn6oSv6deYADGZxTUOWKICHQ
-         4NXpUrSCBPUyJTyxRP49pe8AmPF0QfV3JwP6enIK2xuHTS3nvkQsh66yMYroNmxFydqu
-         xSqg==
+        d=9elements.com; s=google; t=1707902428; x=1708507228; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/19sQ4pxsIEJ7YhUTf9YS+0MW22psDvn0EMZBCLo3mk=;
+        b=ZjhltYGTVFW/g0qD2ou35mpUYmqS5TwtdloGQotPG/ilfFoKamJnKA5W8BYCXw53Z+
+         Pxf/cQtpi5i7HW23gtki9JNSZcKO8uLCaxoZPEqTHcJwVZSU8tsVTyDD03BwHscBYeiR
+         c4B37vd5FQrqrRQ2YWpeSyhP2fgSymdk+zxhSSKFqK3eGqWnxSREUSaUV1KHny7wPG5k
+         jpCyWipLW4pQlq91+CUW94WNEEguVXrXZeWs4vLfyslixbK8n7hnaDYbeCoMiiMHhVRC
+         ug+H/ESwleyOkswRjtdJ0vvhc0OGzFw7w9HOyLJQDxKAqtlYDcP6j+gozg31XvE10WWd
+         z4fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707864736; x=1708469536;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1707902428; x=1708507228;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=beoO8TXO5tck0Ut41LsdcMam0jCDe/xp7+xH/ECCYWU=;
-        b=RFWeK/nWwIMCtrLHff+XVlFO6451IU+OhNkgFd1F2t3YoUBiP5mUK+FGTbWubmJebx
-         7Y77D8e48gGk6m5MkfW1Zi2fUCyPeKpvQ6j0ZCscWUJp5oVPjATtkhGNFYlbw9hl4tR1
-         J3LxQ3svh89KFfpoMNGDrpMdH3F89tzCeiVMOYJqYTboJ737iZdNfiEM1GDIc+lEzRRk
-         i3u7O4EITIx3rzSxessk4TuKfQwiDxnnSQdu87dJS8PUPOZBDiX8Eb0SRujqsrqvEdQQ
-         JEl7yRkoHbWKzKJNITLPns/Mqo82PFPiSRWWqrbHc59Ih49SYsEnrmnVN6T+4+WM71hn
-         t25g==
-X-Forwarded-Encrypted: i=1; AJvYcCUOEM2jxmplJ7NPbnmxmh9okt1rP35u5ggOiMvZyui8GryqLCN+D6bje3wJp2aUj6g8baMpJ1nbKwsuBrsxh6WUEtqGc60GFThqc0iOcBCn9mGzH3R089WoqgZLM0sisRkGe7YHfArJuksfDlawvtIBpe0EgqTriF5F3JIrCSwwg6w=
-X-Gm-Message-State: AOJu0Yyixtry6ugCeLE8yvbdBZtQTPZpCl5sSjqoUjxPbdHBgUzmp64U
-	RlUXTFGHZ0zgI08hsYQjcBuoIv8mQF9qFaimP4DUhOOOiULZ/Dds
-X-Google-Smtp-Source: AGHT+IE78SmSSSv6Toje+QMskhxjls3wSSVJ6lrSIu4ESOTx+no684RgHO/zw0EKoYEFN4Vm0m8d4Q==
-X-Received: by 2002:a05:6870:ce48:b0:218:a29f:1f5a with SMTP id xd8-20020a056870ce4800b00218a29f1f5amr727238oab.22.1707864736488;
-        Tue, 13 Feb 2024 14:52:16 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUZkGA74aU6XkBl7/gjQG8CeT1HvpD2fmwIf6BJaLUUpr/i+5PCglnQWDyvy+u1Txhporay+6u7UTAMKpya6R/q9PZp3TCytlBJ1l+H8UG4agKllFgmhV6anoA+cI1edvGSIoEUIgsIZ/gnQSVjngeBpUoBmizQjNzvUc0drXoj+vzTz0sxj3UhEm4pj4Jj6MZrzVfBTNL2CpZQTIGKwuODRzRLgjX3dAxXN+n08DGYm+Mx/vFMF3BFzSlOGmbxC3Lmv+4Krjf2im6/A4cX8eX/TC7H46VcsbwfvLisTR0I36GY3Oo9MZxadR5efgt33sGXptXR76sHnfbf0UluaS/HJpJ6eVE/+0s9kK7xJ5OO35k5HDEE4tpKGdHGbzFMkoVgwQ==
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id cb5-20020a056a02070500b005dbf22d6e1asm2561585pgb.56.2024.02.13.14.52.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Feb 2024 14:52:15 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e278d411-6795-413b-84a9-08fc6ffb4a20@roeck-us.net>
-Date: Tue, 13 Feb 2024 14:52:14 -0800
+        bh=/19sQ4pxsIEJ7YhUTf9YS+0MW22psDvn0EMZBCLo3mk=;
+        b=Udcff7yoJKtf01TdGX7ZJ0Z2zF3mwdqpWHG1SkG9Q677mXV/5yrZLV+jzbKj9pO+8Z
+         u9YtgA71T1u2qYYwtEP6XvlHvy+/0n9jctmN1Y99lkUamD0QpMJQkYZpRHYmN8eoZ5dQ
+         SbBQxHVqxI2nrR9D/JX0qhnv/wIqjIbfZWlbS8m+BrBc0Y0GBPppodBYdLD2953US1/s
+         mLYgLHFJjnMMd/GgR5HeWQRvmBLqV4T+4WMu6yfhqn194PPYj1uZ88xmzUF7bn7ecoaa
+         /i7y7BG6UFsW03a8NoH45T1NdWgpm0l8srrdryG1Ra8IIoBfiNsc7gVQdAMdmICAnAvK
+         SN3g==
+X-Forwarded-Encrypted: i=1; AJvYcCXV+4Qh4qkeMsIA63MMz0YIZR0/yHRKz7zezQuASZrtmVc6WwLofb4sUWRAAggR/yM9xUcddoFuJfMiiG9qjYFr6OL1w9z1n0G1AmI=
+X-Gm-Message-State: AOJu0Yy+BxVH3tvXoBmBiWuL5XFssd5r5mD/5W+CKaiHOQ4nu+zNEt60
+	4DlQiQkX4LZ77VHS88nmE6sVOg57Yu6fSveI/90E+OBXY4I0tt6gsuzP6iNEKE5NlamtsMZSssy
+	QOEsw1wOInT1EmmA0+ufL48cATBwkOs+c58vfgR0HDeTP3S1Hz0NzEQ==
+X-Google-Smtp-Source: AGHT+IGDrwWoVvQYVO4/41/tvlZknFSKtr/BQBfPcXc3+069y5dQgY8zPFO+V46/qc98bY82C+ghHupMVL7+PS4S9YY=
+X-Received: by 2002:a05:6a20:4e21:b0:19e:9ae1:a2ad with SMTP id
+ gk33-20020a056a204e2100b0019e9ae1a2admr1675398pzb.60.1707902427996; Wed, 14
+ Feb 2024 01:20:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 net-next 08/14] net: phy: marvell-88q2xxx: add support
- for temperature sensor
-Content-Language: en-US
-To: Dimitri Fedrau <dima.fedrau@gmail.com>
-Cc: Andrew Lunn <andrew@lunn.ch>, Heiner Kallweit <hkallweit1@gmail.com>,
- Russell King <linux@armlinux.org.uk>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Jean Delvare <jdelvare@suse.com>, Stefan Eichenberger <eichest@gmail.com>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org
-References: <20240213213955.178762-1-dima.fedrau@gmail.com>
- <20240213213955.178762-9-dima.fedrau@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240213213955.178762-9-dima.fedrau@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240126112945.1389573-1-naresh.solanki@9elements.com> <20240126-fleshed-subdued-36bae813e2ba@spud>
+In-Reply-To: <20240126-fleshed-subdued-36bae813e2ba@spud>
+From: Naresh Solanki <naresh.solanki@9elements.com>
+Date: Wed, 14 Feb 2024 14:50:18 +0530
+Message-ID: <CABqG17injFdVVVYvbhqJNCpvBXeCKvA8OtJ+nx-0VNEi+NB=Hg@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: hwmon: tda38640: Add interrupt & regulator properties
+To: Conor Dooley <conor@kernel.org>
+Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+	Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	mazziesaccount@gmail.com, linux-hwmon@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 2/13/24 13:39, Dimitri Fedrau wrote:
-> Marvell 88q2xxx devices have an inbuilt temperature sensor. Add hwmon
-> support for this sensor.
-> 
-> Signed-off-by: Dimitri Fedrau <dima.fedrau@gmail.com>
+Hi,
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Guenter
+On Fri, 26 Jan 2024 at 21:54, Conor Dooley <conor@kernel.org> wrote:
+>
+> On Fri, Jan 26, 2024 at 04:59:44PM +0530, Naresh Solanki wrote:
+> > Add properties for interrupt & regulator.
+> > Also update example.
+>
+> Feeling like a broken record, given I am leaving the same comments on
+> multiple patches. The commit message needs to explain why you're doing
+> something. I can read the diff and see what you did!
+>
+> >
+> > TEST=Run below command & make sure there is no error.
+> > make DT_CHECKER_FLAGS=-m dt_binding_check
+>
+> Same comment here as elsewhere.
+Ack
+>
+> >
+> > Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+> > ---
+> >  .../hwmon/pmbus/infineon,tda38640.yaml        | 20 +++++++++++++++++++
+> >  1 file changed, 20 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.yaml
+> > index ded1c115764b..2df625a8b514 100644
+> > --- a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.yaml
+> > +++ b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38640.yaml
+> > @@ -30,6 +30,15 @@ properties:
+> >        unconnected(has internal pull-down).
+> >      type: boolean
+> >
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  regulators:
+> > +    $ref: /schemas/regulator/regulator.yaml#
+> > +    type: object
+> > +    description: |
+>
+> The | here is not needed, there's no formatting to preserve.
+Ack
+>
+> From a quick check, most bindings with regulator subnodes restrict the
+> subnode names with patternproperties. Is there a reason you have not?
+I have corrected it now & will push in next revision.
+regulators is expected to have subnode vout0. like below:
+  regulators:
+    type: object
+    description:
+      list of regulators provided by this controller.
 
+    properties:
+      vout0:
+        $ref: /schemas/regulator/regulator.yaml#
+        type: object
+
+        unevaluatedProperties: false
+
+    additionalProperties: false
+
+
+>
+> > +      list of regulators provided by this controller.
+> > +
+> >  required:
+> >    - compatible
+> >    - reg
+> > @@ -38,6 +47,7 @@ additionalProperties: false
+> >
+> >  examples:
+> >    - |
+> > +    #include <dt-bindings/interrupt-controller/irq.h>
+> >      i2c {
+> >          #address-cells = <1>;
+> >          #size-cells = <0>;
+> > @@ -45,5 +55,15 @@ examples:
+> >          tda38640@40 {
+> >              compatible = "infineon,tda38640";
+> >              reg = <0x40>;
+> > +
+> > +            //interrupt-parent = <&smb_pex_cpu0_event>;
+>
+> Why is this commented out? Please either restore it or remove it (with
+> justification).
+Ack. will restore it.
+>
+> Thanks
+>
+> Conor.
+>
+> > +            interrupts = <10 IRQ_TYPE_LEVEL_LOW>;
+>
+> Blank line here please.
+Ack
+
+Regards,
+Naresh
+>
+> > +            regulators {
+> > +                pvnn_main_cpu0: vout0 {
+> > +                    regulator-compatible = "vout0";
+> > +                    regulator-name = "pvnn_main_cpu0";
+> > +                    regulator-enable-ramp-delay = <200>;
+> > +                };
+> > +            };
+> >          };
+> >      };
+> >
+> > base-commit: ecb1b8288dc7ccbdcb3b9df005fa1c0e0c0388a7
+> > --
+> > 2.42.0
+> >
