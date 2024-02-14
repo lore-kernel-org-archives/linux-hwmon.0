@@ -1,66 +1,65 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B660A127B5D
-	for <linux-hwmon@vger.kernel.org>; Wed, 14 Feb 2024 19:56:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B3E5127B5D
+	for <linux-hwmon@vger.kernel.org>; Wed, 14 Feb 2024 19:57:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707940596; cv=none; b=eEXcu5AkjhhtA9AkTVoKfmbo1u8j7oAYKfuDIC0Jp11y5RrV/iHS1fV/EywH4RGY8Ldh2/NUSVmX1/SF2CLnQJJdD69OYxGQVd2E+hL2SWPEcgkQoy6Juc3dmXNB9HWQ1OaDcB+EXTYfexoeyoz9hQmIEWR+vWyoc3nHXrt2VU4=
+	t=1707940658; cv=none; b=bXQg/kI70V/EKRpyPjgSOltZ/I81N1RaUkf71BCdCckJ1m9EDgSZutvdxr9p67H3eOhC7Ekwo8KKQBcSHYdW+6cpWOJ+MJ1hVNk3oAUbnl3ndFjeAwKANGs0rD/Bhp6o1cYTSVQs1PloSPJs+aKsfYBQcRYBMva8cco8BOTZEYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707940596; c=relaxed/simple;
-	bh=LVLBgaw3mUc9LFO8JTE4DYzSSwVd6141H86hO2PNxDI=;
+	s=arc-20240116; t=1707940658; c=relaxed/simple;
+	bh=OIVir4TVc/KiE/8PF4h9kvKg/OEhYo4qNqUX9wLbsHU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m0gkXOVEpGREaQyxb36gaUMEUlSOWtox2KeLqFLAptBBdv3hBsLWHCu1T9V4OkNTvZdJgCSw3FtS6vmfcqLeCxPAtNPjdpOntmmpFrcQIwb5qVRRTCAhz3eDvdmiRbhZGo4RsvDRddyCYMAUb93xERZlVuxJsQXlj3NCgo5u9jw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aiPRfT0g; arc=none smtp.client-ip=209.85.210.182
+	 Content-Type:Content-Disposition:In-Reply-To; b=TBk1m5j9Mn9p3jKn0KxrO2XWUX9BbY0/BerFezGBS7UJxDlCaMbOMo+yHggAOamYLYpzvnv4jPD6u69/+TLREH1Bk65JRS7MZoQ3oUog9EmGo/FiWiksaHpyV50kFOIs7E+zsQDvq7kOI6TzvntQF5yG4FIzERc+qeH636tTZJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Os8LIm2P; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aiPRfT0g"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6e0eacc5078so189564b3a.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 14 Feb 2024 11:56:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Os8LIm2P"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2971562c3ceso131375a91.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 14 Feb 2024 11:57:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707940594; x=1708545394; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1707940656; x=1708545456; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=yU+DlHKYNmtvQK4f9qJHind1k0omIvjVAm0k8BPfYj4=;
-        b=aiPRfT0gw3jffKPfGBcLRAFbsyRODLBmTLp33O/XmHoN/QUvkhCaGBgv6GxQ6dDiaT
-         b+yIRgzO+Orl4qod/6RFRLgVz1PznjMRaha5pWREDB+aXt2b2UbTi1Y36mukh5GtfGg9
-         xEzygsTc9b/yQsUrZZH86GimgpdAZ+fpuWfk6134wtY3Xc2xZ3482XEZmlc6yR8sYCTA
-         rpSrqU+XBv5+Z6JNBiZk3cIHOBbSSk6/3M9er2ISSPm6otQ4JAGwiBhohIZ7XUZw7791
-         WPxZPcPq8WGoeJ1rassgNIhCkwX3jaSiHdNeYbKjGqXbe6N2CwptdXjWpEo2jhq+kd8a
-         tBQw==
+        bh=yY+1d1Z57QcjP7yYVXzQtGpUN9OQ5n/EnvpuMBGrdrI=;
+        b=Os8LIm2PRL/l//CnLx2x9RQj25wxgnwm5RSY0oymBsvj/tsuMmICCGSSLBYhgCU0Kb
+         U1JbOHMwS4eVQ1onkxskfgDQW/HNTOtVRVORVW5Eq8bmn57ReEVE4wQlD235/ajLtbTF
+         +6z+YLd75wTDXlAb/PPFOW2bb5CY7JXyQCKBrnNyX5zIIRCCjCErczjcIrGN4eNLv+4h
+         NRItTZipJES6dDV166i26MMzClfHFZSF6kY3+zyQ8utlaN2LIDti8OIAPNcZ7smt/hb9
+         LSkZA/d4Gk2NRijvA93djg/5VQP6IDIa1rXNJR3rODExwJMUlzpYgpsniKlYGnelHH27
+         wu6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707940594; x=1708545394;
+        d=1e100.net; s=20230601; t=1707940656; x=1708545456;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yU+DlHKYNmtvQK4f9qJHind1k0omIvjVAm0k8BPfYj4=;
-        b=uAeDo3+WBeahwp4te+4ywLDF/cX6NwT3J3OVzwbeUPUIKZIuF228IX6J7/r7vHM+FL
-         v3ygnr/Lh5BM5IsVLYn4AT9ub3sqsjCP6HL19lMElVahThVuY12xteGC3PdV6IMjUhCK
-         GTi2GPHOl+7yDiLVJSDn684oGBjj2LrzQM1QoLWidrBKtRbI6uQ34eRhiDFoBNMVGm36
-         UBeD0fyHcjkp02Ox3MVGscHFtmENHir8aRlB6apfg9ElKuYyByRByV4eTVYwFV6RxG+4
-         VwFU/h/QIe+GImVV4RwEDuQevhg1GulRPw657V78jbY1YACj1l3sN93n83bHq4x6SFSD
-         KiUQ==
-X-Gm-Message-State: AOJu0YyMncy1Xsz0CKSnWXxqexi7uaDJCQP0OlIcALX82qVRJuEerChV
-	bqU4ybHsDPNXim4QciAGj7DsFkxklNms8TMURHbp5BrG/7tYGk6CyY6OqtKl
-X-Google-Smtp-Source: AGHT+IGgan9LVlWp/PSWCB0acZ8ySTqjIC0OYpWHhNOByWSLw09fb9NdY2J24Sua1m0neybhpGqRFg==
-X-Received: by 2002:a05:6a00:1e02:b0:6e0:d2a9:2905 with SMTP id gx2-20020a056a001e0200b006e0d2a92905mr4009061pfb.6.1707940593940;
-        Wed, 14 Feb 2024 11:56:33 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCW7mPydaG1Jwe2eKITK9J0xLyTBW2OuNpOTtT3EtV9DztgasK/hRqsbtTzzSSJicX9QPTtlMFv29HkN64sfr/pqzw==
+        bh=yY+1d1Z57QcjP7yYVXzQtGpUN9OQ5n/EnvpuMBGrdrI=;
+        b=aYdffLGQTyovbwAM+WVNXmk31n8I0zqO7Mvw4qksHldYUtypG2jmsIbZlrEiU/QajE
+         iZmuBekZAuupB/nSyH/xE1NZr4XLHKAO6hyTuG56FY26WnSTbOnau6pnNZ64i9tOfVoc
+         6+dtGwIMscWtC3x+MK4dCxeY+dUnPy8hQqmfFNH5h96M2sf2rylcmQqAdQZH9dq3oCm1
+         ThvMz3Os6rPaiMAURL0UDEJ43sh/sGHYCXwhgHCxh+IUwv8lIfCEsr4gUA78x59KFSpD
+         hHBVSv6Hz4mYpwXy5fwCdpKXkQTe/bZVRyUr04lCRvN5eC4YOluNTod6p/aqW/WE98Zt
+         qxPA==
+X-Gm-Message-State: AOJu0Yyn490Zq4Uf2cQHtPF1fjoaojuNmy6F+3uM8W8g3UwcJuHytdwi
+	OyS136qtG5GEl/wAks+SwH9pMTHoxXeMZ3lQ1uXpPKxD8sYYQDBXXnYgzkZ8
+X-Google-Smtp-Source: AGHT+IEG+uzz4EkvZySJJNQkapMBQUgnjkYmZ2WJYVMXWW9qXYpPx6hlMGdx43Ohxuh65zZHK5Kjrg==
+X-Received: by 2002:a17:90a:1f4f:b0:298:b042:a167 with SMTP id y15-20020a17090a1f4f00b00298b042a167mr3250019pjy.49.1707940656399;
+        Wed, 14 Feb 2024 11:57:36 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q6-20020aa79826000000b006e07eb192ffsm9661926pfl.44.2024.02.14.11.56.33
+        by smtp.gmail.com with ESMTPSA id nb5-20020a17090b35c500b0029732fc0154sm1908825pjb.3.2024.02.14.11.57.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Feb 2024 11:56:33 -0800 (PST)
+        Wed, 14 Feb 2024 11:57:36 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 14 Feb 2024 11:56:32 -0800
+Date: Wed, 14 Feb 2024 11:57:35 -0800
 From: Guenter Roeck <linux@roeck-us.net>
 To: Nuno Sa <nuno.sa@analog.com>
 Cc: linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH 2/3] hwmon: (axi-fan-control) Make use of sysfs_emit()
-Message-ID: <d9991f16-b765-4951-b0c5-e01f800b21b2@roeck-us.net>
+Subject: Re: [PATCH 3/3] hwmon: (axi-fan-control) Make use of dev_err_probe()
+Message-ID: <c8198081-242c-494c-9ddd-e836fa77ab83@roeck-us.net>
 References: <20240214-axi-fan-control-no-of-v1-0-43ca656fe2e3@analog.com>
- <20240214-axi-fan-control-no-of-v1-2-43ca656fe2e3@analog.com>
+ <20240214-axi-fan-control-no-of-v1-3-43ca656fe2e3@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,10 +68,11 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240214-axi-fan-control-no-of-v1-2-43ca656fe2e3@analog.com>
+In-Reply-To: <20240214-axi-fan-control-no-of-v1-3-43ca656fe2e3@analog.com>
 
-On Wed, Feb 14, 2024 at 03:36:44PM +0100, Nuno Sa wrote:
-> Use sysfs_emit() instead of directly call sprintf().
+On Wed, Feb 14, 2024 at 03:36:45PM +0100, Nuno Sa wrote:
+> Use dev_err_probe() to slightly simplify printing errors during probe.
+> No functional changes intended.
 > 
 > Signed-off-by: Nuno Sa <nuno.sa@analog.com>
 
