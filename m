@@ -1,118 +1,148 @@
-Received: from seashell.cherry.relay.mailchannels.net (seashell.cherry.relay.mailchannels.net [23.83.223.162])
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23058132C3D
-	for <linux-hwmon@vger.kernel.org>; Thu, 15 Feb 2024 15:29:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=23.83.223.162
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708010974; cv=pass; b=Zyo9Si3o0bEjNHDTOjZq0lfd94g/snvkPOib61xUmECnPVG+pseWO4QWfw9HbmwbUo+Lhk7dAshqccihBQsyG9pNqQljZwPtVZCEhsARWu9vcxD7TFiD6fng3BYqzP7/bLtv/aB1aTlUQSZy/mW2+SuoDIC5Zp0fJ/o9JnwNc8E=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708010974; c=relaxed/simple;
-	bh=+4O3D4o5CsfHbruLVlheO0dIe4wiYNfrvNQ9FVYTaoU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AIGizwhQEtRoACV+rOqZOsQAp/KAMSy/pRiXK11ddG5iGa8DICGaz3laSxKyRD2VmtNJJhHIWrcnP4/lGubR7Zt36HLjlVn5NIG2DDwKj4Yod7uYBtttBFOU7qO7dimDCvisVvvC8ppIxTLFJEMqajLdXQT8dwYm52pv3oOmzCU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=okanakyuz.com; spf=none smtp.mailfrom=okanakyuz.com; dkim=pass (2048-bit key) header.d=okanakyuz.com header.i=@okanakyuz.com header.b=ZI5tZ5+F; arc=pass smtp.client-ip=23.83.223.162
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=okanakyuz.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=okanakyuz.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 018D513399E;
+	Thu, 15 Feb 2024 16:27:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708014447; cv=none; b=rYNlXKBL5IrnTfegumx/DLSmrDgCAYMdmY5ANZ8jXYGbEJqVB9QXOye5bJBVS+d7NgEbmlWZnW/hpg7/FCAxdMBuhOwvQIS2qgixuLlNyZm9ESvU2CYpFB05u5dUDgUCCgB7y72Bee50B/EkzBjK+0zpx+iNS6sqJBR8WfdcpE8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708014447; c=relaxed/simple;
+	bh=CyRI1uCzCoGWcjKACcwDD3OCyQCqdt4SPHYVdoOyQ1A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CI5iDFmU55BTUuyGe+7/o9kEZijUHkK3oXFhZc2ufWt0+XnSSaqIy39MiHAeSPN7LaSxZzIc9dCGlpbLSYGT0K0IYhLwA1lMTOyOCa1hichXRsPztjuRNusXFViawbycDOAEOeL5yGU8W9cjsaRcavtmOadQ0kZrNvdlBPeJppQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=O3eXekOJ; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=okanakyuz.com header.i=@okanakyuz.com header.b="ZI5tZ5+F"
-X-Sender-Id: hostingeremail|x-authuser|okanakyuz@okanakyuz.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-	by relay.mailchannels.net (Postfix) with ESMTP id 115659044AC
-	for <linux-hwmon@vger.kernel.org>; Thu, 15 Feb 2024 15:29:25 +0000 (UTC)
-Received: from uk-fast-smtpout2.hostinger.io (unknown [127.0.0.6])
-	(Authenticated sender: hostingeremail)
-	by relay.mailchannels.net (Postfix) with ESMTPA id 4B23E9026BD
-	for <linux-hwmon@vger.kernel.org>; Thu, 15 Feb 2024 15:29:24 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1708010964; a=rsa-sha256;
-	cv=none;
-	b=gMSoLyD6WtndscIgDx0ZK9Wn9tQ4HCN6KkKaaCyDLnapWYjH1fxvAx5rxB0Jr8Q6dAG2FV
-	GwZ7j3qiWkodvP0jrpPj9+dXeou0DxFiukPwv3aAWGYL3D3OURg9q5OcwhW3GW2Y1UfLsN
-	0oY9ktTNjOX1wAakp4auxCPdH07s+qmvmsUFU640hWnuRSoVHlrZboNxfJmWCSGvxSeFc6
-	cMfYqIasjMbVNZcXRChcDmTkVdk8QRSQYl5GeyINE2HscRfByGYdYdQwl+FQ/QGl2dwpO8
-	0SYU8qxk6v/3z+gX/waWxxK57ay69PH3q+A0AZ3+4pQlt6aiA+eRu9p2DSodkg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-	s=arc-2022; t=1708010964;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:dkim-signature;
-	bh=cbX2TFeKmQIH09gm5LYQHKCMm5YzJk5x0VxemUSMmNU=;
-	b=5TEn/ssRXw3vSYsobv3Xapycx62Z75055/c2oY3L5AsXp19n/bW34Mj96WGpDxujOOgKlq
-	7yQM76znlFDq6PsFCnbnAC+wDDOTTn8vO7D8YMlVuSL2dW8zloBu463dZwwPhM7FZ9klt9
-	f2TopggpMxXaW6vtEt38HKfmq8fjeVJWHF9aIfE2c9l8Xior7jn3hea1aXP5fxVLVOcbcx
-	/h3260rzbb/Uk/d0MmOqiBRj4wQHh/e/h2Q0081baf/FgyRTlnekv6f0tactgR0SMaQ8hG
-	DViL0HMJxN1CeKzFRPxLJ0c4aQs7bliCrPyzpPp7yE/zMwDdDyWyI/UiAWrkhg==
-ARC-Authentication-Results: i=1;
-	rspamd-6bdc45795d-qxbhc;
-	auth=pass smtp.auth=hostingeremail smtp.mailfrom=okanakyuz@okanakyuz.com
-X-Sender-Id: hostingeremail|x-authuser|okanakyuz@okanakyuz.com
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: hostingeremail|x-authuser|okanakyuz@okanakyuz.com
-X-MailChannels-Auth-Id: hostingeremail
-X-Language-Ski: 7616704c26aef5c3_1708010964849_4182963627
-X-MC-Loop-Signature: 1708010964849:286152529
-X-MC-Ingress-Time: 1708010964849
-Received: from uk-fast-smtpout2.hostinger.io (uk-fast-smtpout2.hostinger.io
- [31.220.23.36])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-	by 100.120.66.9 (trex/6.9.2);
-	Thu, 15 Feb 2024 15:29:24 +0000
-From: Okan Akyuz <okanakyuz@okanakyuz.com>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=okanakyuz.com;
-	s=hostingermail-a; t=1708010962;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=cbX2TFeKmQIH09gm5LYQHKCMm5YzJk5x0VxemUSMmNU=;
-	b=ZI5tZ5+FAniwcDdqXIV+E1OcmYk+pNteOtrqb7CrD/3jH70hAvQGOk8HWEBGoUpx+AzDSW
-	t5rxiA0Uewd6B0lxilNIN0DDIS842Ea1RwyEEhz1Jlokf8I5MxTiQ+PeWEw1sEcspCK44H
-	IPGoLVI8KZYprahKaPoyUEpQPARxX2zFoxANOBFf0d/5OmsEOEmetQ3NqOstl/HdU4Q/HR
-	t2s3caEKs9o6Rwkohu8/KSX5mmY5E9tV7Uf8zmMm2KP32yIaLR/6pQCU1eVrUoRtZIkxI+
-	qv05TCcKiVsA3Ja/I4PS50fugC5z+91mKMol9pFl7778HbT1btIGxwWD6GSRgQ==
-To: jdelvare@suse.com,
-	linux@roeck-us.net,
-	corbet@lwn.net
-Cc: linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="O3eXekOJ"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=EWZIyim+Tuvyt3wOnNkE0nCb5ATARobWhzBcyG/FuL0=; b=O3eXekOJVXDVMI39FdMDQkdpcQ
+	PyjL5Dp5oG/MIRx71Pmy9Oi9Hqr6Y5DXH1kPsFJECm5WupOzQxQbOVHAWtYrJvcQR6gWYx+INfcsj
+	RgJ5BhvXhBy8LpAGO6Bn9EVL+nCHFpRakzgLNGrKYS6chsqYXFfNQMp5Nd1DEibb8RGpESJD22vtb
+	mxLpMMerGDK7pWuuZvnrxKzUtE77cgbAHo+Sa3QVBQX9uYcpWwISHvv0IwKzm14Mn+ILqGbTXFctw
+	zuJqNDDoa8H2VHQp77/Mb+L9J5ruUXBZddwARnpiVsfxS6tP/jxZCuvDl3nVDDB7Iy5CRJ2DGWnBp
+	sIXX7vsQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:50496)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1raeZg-0004Qb-2H;
+	Thu, 15 Feb 2024 16:27:00 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1raeZb-0004pl-Eb; Thu, 15 Feb 2024 16:26:55 +0000
+Date: Thu, 15 Feb 2024 16:26:55 +0000
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: Choong Yong Liang <yong.liang.choong@linux.intel.com>
+Cc: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+	David E Box <david.e.box@linux.intel.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Mark Gross <markgross@kernel.org>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Jose Abreu <Jose.Abreu@synopsys.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Richard Cochran <richardcochran@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Andrew Halaney <ahalaney@redhat.com>,
+	Serge Semin <fancer.lancer@gmail.com>, netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	skhan@linuxfoundation.org,
-	okanakyuz@okanakyuz.com
-Subject: [PATCH] The datasheet URL has been changed.
-Date: Thu, 15 Feb 2024 18:19:57 +0300
-Message-ID: <20240215151957.20855-1-okanakyuz@okanakyuz.com>
-X-Mailer: git-send-email 2.43.0
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org,
+	platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	bpf@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
+	Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
+	Lai Peter Jun Ann <jun.ann.lai@intel.com>,
+	Abdul Rahim Faizal <faizal.abdul.rahim@intel.com>
+Subject: Re: [PATCH net-next v5 1/9] net: phylink: provide
+ mac_get_pcs_neg_mode() function
+Message-ID: <Zc47T/qv8Xg2SA21@shell.armlinux.org.uk>
+References: <20240215030500.3067426-1-yong.liang.choong@linux.intel.com>
+ <20240215030500.3067426-2-yong.liang.choong@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-Envelope: MS4xfELWMjXxd9QwZl2hd/DXq0dhbDsJyXzaJU1n2KAVlPPQQWWAaX4bocHs95nVwUzgkes8cSg6c3/XcyXMdZ9Ssxin/55zpWCdg+I7z41lRicNDzc99Uq3 3W0vvCsyii0gCRm7ZSp+xmVg9RNmg7CIh5E9JS0MZodQ4iW9EVXPUeZoEImWpArh64clFdpdvy0ueMiZlFLy5jj4MDCCSXSmUuGRUijxUv+rm/+3yd2a0ZJ8 Ha1SDJxk/KVBEiLAArZU+zzIUrOPk1SbXA3v2dOat5VEx0V8GFv52hlbwY6BLVddBzzMqBEaVUHI3AfzOvin/of//dE/I5wp5/RGeku8Uj74ewwjmVOrdAiP Dy+AvZBDHNrgZRRt34622uWpjltK3K1aUC3hOUEAOvi+Qg1byN+Y2v/2OiJfYkz65xnnQiQkC2rgDLK1KtZtDB9ADHrnJA==
-X-CM-Analysis: v=2.4 cv=Rp/DLjmK c=1 sm=1 tr=0 ts=65ce2dd2 a=geHYaF3j5ifCImHjKwHHfg==:117 a=geHYaF3j5ifCImHjKwHHfg==:17 a=-tA9vPf7AAAA:8 a=UXzzSC1OAAAA:8 a=gAnH3GRIAAAA:8 a=2_2egfEcOiK7PuE5XgAA:9 a=vtdtr2SZiqPAgdHKmkdM:22 a=NXyddzfXndtU_1loVILY:22 a=oVHKYsEdi7-vN-J5QA_j:22
-X-AuthUser: okanakyuz@okanakyuz.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240215030500.3067426-2-yong.liang.choong@linux.intel.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-The URL for the datasheet was not functional. It has been replaced
-with the active one from the manufacturer's website.
+On Thu, Feb 15, 2024 at 11:04:51AM +0800, Choong Yong Liang wrote:
+> Phylink invokes the 'mac_get_pcs_neg_mode' function during interface mode
+> switching and initial startup.
+> 
+> This function is optional; if 'phylink_pcs_neg_mode' fails to accurately
+> reflect the current PCS negotiation mode, the MAC driver can determine the
+> mode based on the interface mode, current link negotiation mode, and
+> advertising link mode.
+> 
+> For instance, if the interface switches from 2500baseX to SGMII mode,
+> and the current link mode is MLO_AN_PHY, calling 'phylink_pcs_neg_mode'
+> would yield PHYLINK_PCS_NEG_OUTBAND. Since the MAC and PCS driver require
+> PHYLINK_PCS_NEG_INBAND_ENABLED, the 'mac_get_pcs_neg_mode' function
+> will calculate the mode based on the interface, current link negotiation
+> mode, and advertising link mode, returning PHYLINK_PCS_NEG_OUTBAND to
+> enable the PCS to configure the correct settings.
 
-Signed-off-by: Okan Akyuz <okanakyuz@okanakyuz.com>
----
- Documentation/hwmon/max6620.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This paragraph doesn't make sense - at least to me. It first talks about
+requiring PHYLINK_PCS_NEG_INBAND_ENABLED when in SGMII mode. On this:
 
-diff --git a/Documentation/hwmon/max6620.rst b/Documentation/hwmon/max6620.rst
-index 84c1c44d3de4..d70173bf0242 100644
---- a/Documentation/hwmon/max6620.rst
-+++ b/Documentation/hwmon/max6620.rst
-@@ -11,7 +11,7 @@ Supported chips:
- 
-     Addresses scanned: none
- 
--    Datasheet: http://pdfserv.maxim-ic.com/en/ds/MAX6620.pdf
-+    Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/max6620.pdf
- 
- Authors:
-     - L\. Grunenberg <contact@lgrunenberg.de>
+1) are you sure that the hardware can't be programmed for the SGMII
+symbol repititions? 
+
+2) what happens if you're paired with a PHY (e.g. on a SFP module)
+which uses SGMII but has no capability of providing the inband data?
+(They do exist.) If your hardware truly does require inband data, it
+is going to be fundamentally inoperative with these modules.
+
+Next, you then talk about returning PHYLINK_PCS_NEG_OUTBAND for the
+"correct settings". How does this relate to the first part where you
+basically describe the problem as SGMII requring inband? Basically
+the two don't follow.
+
+How, from a design point of view, because this fundamentally allows
+drivers to change how the system behaves, it will allow radically
+different behaviours for the same parameters between different drivers.
+I am opposed to that - I want to see a situation where we have uniform
+behaviour for the same configuration, and where hardware doesn't
+support something, we have some way to indicate that via some form
+of capabilities.
+
+The issue of whether 2500base-X has inband or not is a long standing
+issue, and there are arguments (and hardware) that take totally
+opposing views on this. There is hardware where 2500base-X inband
+_must_ be used or the link doesn't come up. There is also hardware
+where 2500base-X inband is not "supported" in documentation but works
+in practice. There is also hardware where 2500base-X inband doesn't
+work. The whole thing is a total mess (thanks IEEE 802.3 for not
+getting on top of this early enough... and what's now stated in 802.3
+for 2500base-X is now irrelevant because they were too late to the
+party.)
+
+I haven't been able to look at this issue over the last few weeks
+because of being at a summit, and then suffering with flu and its
+recovery. However, I have been working on how we can identify the
+capabilities of the PCS and PHY w.r.t. inband support in various
+interface modes, and how we can handle the result. That work is
+ongoing (as and when I have a clear head from after-flu effects.)
+
 -- 
-2.43.0
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
