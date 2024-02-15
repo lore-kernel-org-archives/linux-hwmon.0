@@ -1,137 +1,97 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E74382CA4;
-	Thu, 15 Feb 2024 03:14:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F3F06A000
+	for <linux-hwmon@vger.kernel.org>; Thu, 15 Feb 2024 10:14:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=71.19.156.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707966882; cv=none; b=exu1j13ilB1YnPGUt0oidr1e0xvf0k26VolTXn4uqyOAjLASHwCE4QcYwnFP9wbqjAWM1bWxMoOMQ+LEbAGpogd6W6eFl+I+q4d9XPjZIZX0XjFjGfMxNTHYpOwL2oNB/29M2GeA8dqsGmtA7HJ/24d10ZTlpRA2rAgaHsWdCCk=
+	t=1707992081; cv=none; b=h1Gm1Na+khmQaKZ79PtSJtyVSt5fJsZ75tVYJQlhQftcRlbb1KSyydGMc/OIkz9/BepU7z2WdRL/VPMAIGlxJQUWtEyYyhtsdlNheYVgVKMiVffQyBkdv76VAYWHSM4LbzLUz8gts9qjxM9ZmyGAZ1JyT8d5OzlrkMyGGGCPz04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707966882; c=relaxed/simple;
-	bh=sLEedRMDncb0IeCD2q4hOTg4DPcXH151vX4zjRS2Q+o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ri3dVHASaTZaWYaSxfLeEiSUd7jjFEk5qbsvihorazbnYVk6hdMxRGwiqCQ0fecLM0mAz363EBPnbxf8BLqqpdKU/KPP3UU96ujRhmus0UdQYol9pXV56tIC13BSq2JYrCIEIAi4xFLDUOgRunHg1orQExqR0+/QoLouQYFM03w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KY0/JGk1; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1707992081; c=relaxed/simple;
+	bh=te7vMGEWX3i71/Obs2P3B6TyFwzd2sExaC0voNn97E4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WQYL23DtwxWqR6w0qlL7HN2OzyGoXxJCzVqTtQvktzhpxngl9CGss6QL2xtchDQh2AhyB0/LdvdXBvST/cN/wAyoNL8rlRfOsDQHEHUR+SiuvfzhwL5wQQNVfLLL0fSKgdqjDlVpbtLCkoWb7/ChrZ7C+OYug2WsPKhk4HAHD4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bewilderbeest.net; spf=pass smtp.mailfrom=bewilderbeest.net; dkim=pass (1024-bit key) header.d=bewilderbeest.net header.i=@bewilderbeest.net header.b=h2YD4aBh; arc=none smtp.client-ip=71.19.156.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bewilderbeest.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bewilderbeest.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KY0/JGk1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707966881; x=1739502881;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=sLEedRMDncb0IeCD2q4hOTg4DPcXH151vX4zjRS2Q+o=;
-  b=KY0/JGk16X+h8dtAIdWOH1qBQGZJnCVCGUvBpuI437YRwbVfCXscWzsu
-   +BzYAXGMqBfmBZ+XswbI5/ANgh4vedbO66SQSfI9cOLqfCBhVJVcHBolL
-   /UukKxpuyxJQNZCnZ4zuUbecWUeqvomfi1TTE9UXNW7BEoS2qXB2X9uu6
-   HuQR9AYZwUx6ksBhoMeXyl2OwvraKtFCFdPgjMCOk72CJHUJ1QLVS5rj7
-   bA4cTEojp91GXwy/tjcqlEsC5gOFdNuommmduY4Y2LppSYfvzEUXuke8+
-   +NIKfeYObQ2ymexRswtevifj5b3OfZiOtaFXe+c/2s21FCFrpjt7BLjWx
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10984"; a="1914711"
-X-IronPort-AV: E=Sophos;i="6.06,161,1705392000"; 
-   d="scan'208";a="1914711"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2024 19:14:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,161,1705392000"; 
-   d="scan'208";a="8056455"
-Received: from choongyo-mobl.gar.corp.intel.com (HELO [10.247.84.237]) ([10.247.84.237])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2024 19:14:30 -0800
-Message-ID: <9154ea9e-863b-49b3-8729-1ba077872bcc@linux.intel.com>
-Date: Thu, 15 Feb 2024 11:14:27 +0800
+	dkim=pass (1024-bit key) header.d=bewilderbeest.net header.i=@bewilderbeest.net header.b="h2YD4aBh"
+Received: from hatter.bewilderbeest.net (unknown [IPv6:2602:61:712b:6300::2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: zev)
+	by thorn.bewilderbeest.net (Postfix) with ESMTPSA id B394FA19;
+	Thu, 15 Feb 2024 02:14:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+	s=thorn; t=1707992078;
+	bh=MJ2U0zDwwONRn+6XArYoYh5m0x+6UNPGXPyEpUaRfPA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=h2YD4aBh04Bqne88cCCHXuix7dr1m89wJfJxzY7XeoDj+L7rDC18rz629ihvTsv1v
+	 fkFyAo71JwGp8Q+92TrCKe8VoaMBKRHM1bQmXt1aTfKU2HJMJ0eRvB9gfrCCdElbn+
+	 jweENwfJLVX9h9iBeXyRWhVA7QwqU0Sj0GkjfH1g=
+Date: Thu, 15 Feb 2024 02:14:37 -0800
+From: Zev Weiss <zev@bewilderbeest.net>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>,
+	Conor Dooley <conor@kernel.org>,
+	Naresh Solanki <naresh.solanki@9elements.com>
+Subject: Re: [PATCH 2/3] hwmon: (pmbus/lm25066) Use PMBUS_REGULATOR_ONE to
+ declare regulator
+Message-ID: <ec7914ac-64a2-445c-b896-71a0087fb33e@hatter.bewilderbeest.net>
+References: <20240214194342.3678254-1-linux@roeck-us.net>
+ <20240214194342.3678254-3-linux@roeck-us.net>
+ <8669f426-38a6-4ea8-ae4b-0d29c1d09a29@hatter.bewilderbeest.net>
+ <a3b6f833-b8a1-44af-b90b-ed7370b12815@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v4 06/11] net: stmmac: resetup XPCS according to
- the new interface mode
-Content-Language: en-US
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
- David E Box <david.e.box@linux.intel.com>,
- Hans de Goede <hdegoede@redhat.com>, Mark Gross <markgross@kernel.org>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Jose Abreu <Jose.Abreu@synopsys.com>, "David S . Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Richard Cochran <richardcochran@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
- Heiner Kallweit <hkallweit1@gmail.com>,
- Philipp Zabel <p.zabel@pengutronix.de>, Andrew Halaney
- <ahalaney@redhat.com>, Serge Semin <fancer.lancer@gmail.com>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, platform-driver-x86@vger.kernel.org,
- linux-hwmon@vger.kernel.org, bpf@vger.kernel.org,
- Voon Wei Feng <weifeng.voon@intel.com>,
- Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
- Lai Peter Jun Ann <jun.ann.lai@intel.com>,
- Abdul Rahim Faizal <faizal.abdul.rahim@intel.com>
-References: <20240129130253.1400707-1-yong.liang.choong@linux.intel.com>
- <20240129130253.1400707-7-yong.liang.choong@linux.intel.com>
- <ZbjNn+C/VHegH2t7@shell.armlinux.org.uk>
- <9e23671e-788c-4191-bdb4-94915ff7da5a@linux.intel.com>
- <ZbtYaXkNf2ZF1prE@shell.armlinux.org.uk>
- <2ad1f55c-f361-4439-9174-6af1bb429d55@linux.intel.com>
- <Zbys2orOUikYxeOm@shell.armlinux.org.uk>
-From: Choong Yong Liang <yong.liang.choong@linux.intel.com>
-In-Reply-To: <Zbys2orOUikYxeOm@shell.armlinux.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a3b6f833-b8a1-44af-b90b-ed7370b12815@roeck-us.net>
 
-
-
-On 2/2/2024 4:50 pm, Russell King (Oracle) wrote:
->> Thank you for taking the time to review, got your concerns, and I'll address
->> the following concerns before submitting a new patch series:
+On Wed, Feb 14, 2024 at 05:22:35PM PST, Guenter Roeck wrote:
+>On 2/14/24 17:04, Zev Weiss wrote:
+>>On Wed, Feb 14, 2024 at 11:43:41AM PST, Guenter Roeck wrote:
+>>>If a chip only provides a single regulator, it should be named 'vout'
+>>>and not 'vout0'. Declare regulator using PMBUS_REGULATOR_ONE() to make
+>>>that happen.
+>>>
 >>
->> 1. Remove allow_switch_interface and have the PHY driver fill in
->> phydev->possible_interfaces.
-> 
-> Yes please.
-> 
+>>Hi Guenter,
+>>
+>>This will necessitate a DTS update on at least one platform to maintain compatibility (Delta ahe50dc BMC, [1]).  I'm not sure offhand if there are process/policy rules about mixing code changes and device-tree changes in the same commit, but changing either one without the other would break things.
+>>
+>>[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm/boot/dts/aspeed/aspeed-bmc-delta-ahe50dc.dts?id=8d3dea210042f54b952b481838c1e7dfc4ec751d#n21
+>>
+>>
+>
+>Sigh. Agreed, especially since changing the dts file in the kernel
+>won't change the dtb files on actual hardware.
+>
+>I really have no good solution for this. We (Well, I) didn't realize that
+>there are regulator naming conventions/restrictions when we introduced
+>regulator support into PMBus drivers. My bad. Let's see what others say.
+>
+>Guenter
+>
 
-Hi Russell,
+Well, perhaps mitigating that slightly: I don't see any obvious cases of 
+any other platforms' device-trees having any dependencies on the 
+regulator naming that would be affected by this (judging by 'git grep 
+vout0 arch/*/boot/dts' anyway), and at least with OpenBMC on the ahe50dc 
+(the primary and AFAIK only user of that device-tree) the dtb would also 
+be updated along with any kernel update.
 
-I regret to inform you that I didn't implement everything exactly as 
-proposed in the new patch series. My intention was to simplify the series, 
-focusing solely on managing SGMII and 2500BASE-X interface mode switching. 
-The recommendation to have the PHY driver fill in 
-"phydev->possible_interfaces" will be addressed in a separate patch 
-submission. I hope this is acceptable.
-
-In the new patch series, I removed "allow_switch_interface" patches. The 
-current solution continues to work with PHYs that are C45 and follow the 
-legacy path, such as Marvell Alaska 88E2110. For the upcoming patch series, 
-I will implement "phydev->possible_interfaces" for C22 and C45 PHYs.
+So I wouldn't expect it to cause anyone any actual problems if we went 
+ahead and changed it anyway; as long as the dts & driver do stay in sync 
+with each other, maybe we could let it slide if it's otherwise a 
+desirable change to make?
 
 
->> 2. Rework on the PCS to have similar implementation with the following patch
->> "net: macb: use .mac_select_pcs() interface"
->> (https://lore.kernel.org/netdev/E1n568J-002SZX-Gr@rmk-PC.armlinux.org.uk/T/).
-> 
-> mac_select_pcs() is about returning to phylink the PCS that the MAC
-> needs to use for the specified interface mode, or NULL if no PCS is
-> required, nothing more, nothing less.
-> 
-> Plase do not copy that mac_select_pcs() implementation - changing the
-> "ops" underneath phylink is no longer permitted.
-> 
+Zev
 
-Upon further examination, I discovered that no change is required for the 
-"mac_select_pcs()" function; we can still use the same PCS. According to 
-the XPCS datasheet, a soft reset is necessary to re-initiate Clause 37 
-auto-negotiation when switching to SGMII interface mode. This is the only 
-setting required for properly configuring the SGMII interface mode, and 
-nothing extra is needed for 2500BASE-X configuration.
-
-In the new patch series, I removed "mac_select_pcs()" related patches and 
-added a "xpcs_soft_reset()" patch for the XPCS.
