@@ -1,148 +1,159 @@
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 018D513399E;
-	Thu, 15 Feb 2024 16:27:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EC61135A69;
+	Thu, 15 Feb 2024 16:52:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708014447; cv=none; b=rYNlXKBL5IrnTfegumx/DLSmrDgCAYMdmY5ANZ8jXYGbEJqVB9QXOye5bJBVS+d7NgEbmlWZnW/hpg7/FCAxdMBuhOwvQIS2qgixuLlNyZm9ESvU2CYpFB05u5dUDgUCCgB7y72Bee50B/EkzBjK+0zpx+iNS6sqJBR8WfdcpE8=
+	t=1708015959; cv=none; b=ntSoplI8ZbvLiLNj5dxpP5Q7XRJMr0ykUWScXooa6h9pWTsrMebalIVH8p0UEF8j5C8GTl0sptIAaqu41xGw19+ero2A28kBSQV7L+nr1ZCy9yw/opEjS/673OcDr/CBlipyFYeiWHXbzFAM1fMi3ZsMfpi+N5TONK7QKN2X0yQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708014447; c=relaxed/simple;
-	bh=CyRI1uCzCoGWcjKACcwDD3OCyQCqdt4SPHYVdoOyQ1A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CI5iDFmU55BTUuyGe+7/o9kEZijUHkK3oXFhZc2ufWt0+XnSSaqIy39MiHAeSPN7LaSxZzIc9dCGlpbLSYGT0K0IYhLwA1lMTOyOCa1hichXRsPztjuRNusXFViawbycDOAEOeL5yGU8W9cjsaRcavtmOadQ0kZrNvdlBPeJppQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=O3eXekOJ; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+	s=arc-20240116; t=1708015959; c=relaxed/simple;
+	bh=uz+Np8+G4qWw8PU0VSBJNfx1oM1lJAFehJiEej4mz+4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=LZOe9xyq8VaKynrlMAj0g8i7GCtf3E4Vy9M/zagA9SwUeypNyonlmmYsoXno7ErZAbTsWMujpFjFDPIM5gVBOXfLmqeyCsPoc/o0eZw4yYjxcI4zauXKcTjD5/ITS+6wvIjj24GVbk3lG+rrs+ovCP4JneLD+UtAIqTGmcRVkek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jtRPtvNb; arc=none smtp.client-ip=217.70.183.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="O3eXekOJ"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=EWZIyim+Tuvyt3wOnNkE0nCb5ATARobWhzBcyG/FuL0=; b=O3eXekOJVXDVMI39FdMDQkdpcQ
-	PyjL5Dp5oG/MIRx71Pmy9Oi9Hqr6Y5DXH1kPsFJECm5WupOzQxQbOVHAWtYrJvcQR6gWYx+INfcsj
-	RgJ5BhvXhBy8LpAGO6Bn9EVL+nCHFpRakzgLNGrKYS6chsqYXFfNQMp5Nd1DEibb8RGpESJD22vtb
-	mxLpMMerGDK7pWuuZvnrxKzUtE77cgbAHo+Sa3QVBQX9uYcpWwISHvv0IwKzm14Mn+ILqGbTXFctw
-	zuJqNDDoa8H2VHQp77/Mb+L9J5ruUXBZddwARnpiVsfxS6tP/jxZCuvDl3nVDDB7Iy5CRJ2DGWnBp
-	sIXX7vsQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:50496)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1raeZg-0004Qb-2H;
-	Thu, 15 Feb 2024 16:27:00 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1raeZb-0004pl-Eb; Thu, 15 Feb 2024 16:26:55 +0000
-Date: Thu, 15 Feb 2024 16:26:55 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Choong Yong Liang <yong.liang.choong@linux.intel.com>
-Cc: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
-	David E Box <david.e.box@linux.intel.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Mark Gross <markgross@kernel.org>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Jose Abreu <Jose.Abreu@synopsys.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Andrew Halaney <ahalaney@redhat.com>,
-	Serge Semin <fancer.lancer@gmail.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	bpf@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
-	Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
-	Lai Peter Jun Ann <jun.ann.lai@intel.com>,
-	Abdul Rahim Faizal <faizal.abdul.rahim@intel.com>
-Subject: Re: [PATCH net-next v5 1/9] net: phylink: provide
- mac_get_pcs_neg_mode() function
-Message-ID: <Zc47T/qv8Xg2SA21@shell.armlinux.org.uk>
-References: <20240215030500.3067426-1-yong.liang.choong@linux.intel.com>
- <20240215030500.3067426-2-yong.liang.choong@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jtRPtvNb"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CDF77E0011;
+	Thu, 15 Feb 2024 16:52:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1708015953;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=jQzNaC4fbX9njWrN3MZ96SWXHEvPGyukJ/MJUgb0Ufw=;
+	b=jtRPtvNbikaavwuAwhIXCTXCvi72i/3fzBPBJgxgqtcU72jRmj4Gnvu88GQzqS5ktzDtUv
+	Szm8DiTfA/Jgk2Q8EZb86VnPARemwTMraYVwkBLbfapJA9fQhOV5QIPDaVtn2LSF3k42Fn
+	JPpRIVV5cGmnmJKfdMRzurQuzVBb853IcPg03oiVTAryYNZ/p0DrgWgGaQoyiuTtH9Ir5m
+	kAtEhNWN3ap9+kCzJVnild5PYp5M974xw67+I3X25MV7QiYnUxzTmOdyJYLI5wiDq2OPha
+	lqmeQFwK0crtd7nRXenqGH4Pex8d9fqvPEYTgRyqmDuDjS+CNTQVzf69px69Iw==
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: [PATCH 00/13] Add Mobileye EyeQ5 support to the Nomadik I2C
+ controller & use hrtimers for timeouts
+Date: Thu, 15 Feb 2024 17:52:07 +0100
+Message-Id: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240215030500.3067426-2-yong.liang.choong@linux.intel.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIADhBzmUC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI2NDINbNTcqp1M00StY1TzZKS0pKMjSytExTAiovKEpNy6wAGxUdW1sLAHn
+ jwDRaAAAA
+To: Linus Walleij <linus.walleij@linaro.org>, 
+ Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-mips@vger.kernel.org, Gregory Clement <gregory.clement@bootlin.com>, 
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ linux-hwmon@vger.kernel.org
+X-Mailer: b4 0.12.4
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On Thu, Feb 15, 2024 at 11:04:51AM +0800, Choong Yong Liang wrote:
-> Phylink invokes the 'mac_get_pcs_neg_mode' function during interface mode
-> switching and initial startup.
-> 
-> This function is optional; if 'phylink_pcs_neg_mode' fails to accurately
-> reflect the current PCS negotiation mode, the MAC driver can determine the
-> mode based on the interface mode, current link negotiation mode, and
-> advertising link mode.
-> 
-> For instance, if the interface switches from 2500baseX to SGMII mode,
-> and the current link mode is MLO_AN_PHY, calling 'phylink_pcs_neg_mode'
-> would yield PHYLINK_PCS_NEG_OUTBAND. Since the MAC and PCS driver require
-> PHYLINK_PCS_NEG_INBAND_ENABLED, the 'mac_get_pcs_neg_mode' function
-> will calculate the mode based on the interface, current link negotiation
-> mode, and advertising link mode, returning PHYLINK_PCS_NEG_OUTBAND to
-> enable the PCS to configure the correct settings.
+Hi,
 
-This paragraph doesn't make sense - at least to me. It first talks about
-requiring PHYLINK_PCS_NEG_INBAND_ENABLED when in SGMII mode. On this:
+This series adds two tangent features to the Nomadik I2C controller:
 
-1) are you sure that the hardware can't be programmed for the SGMII
-symbol repititions? 
+ - Add a new compatible to support Mobileye EyeQ5 which uses the same IP
+   block as Nomadik.
 
-2) what happens if you're paired with a PHY (e.g. on a SFP module)
-which uses SGMII but has no capability of providing the inband data?
-(They do exist.) If your hardware truly does require inband data, it
-is going to be fundamentally inoperative with these modules.
+   It has two quirks to be handled:
+    - The memory bus only supports 32-bit accesses. A writeb() is used
+      which we avoid.
+    - We must write a value into a shared register region (OLB, "Other
+      Logic Block") depending on the I2C bus speed.
 
-Next, you then talk about returning PHYLINK_PCS_NEG_OUTBAND for the
-"correct settings". How does this relate to the first part where you
-basically describe the problem as SGMII requring inband? Basically
-the two don't follow.
+ - Allow xfer timeouts below one jiffy by using a workqueue and hrtimers
+   instead of a completion.
 
-How, from a design point of view, because this fundamentally allows
-drivers to change how the system behaves, it will allow radically
-different behaviours for the same parameters between different drivers.
-I am opposed to that - I want to see a situation where we have uniform
-behaviour for the same configuration, and where hardware doesn't
-support something, we have some way to indicate that via some form
-of capabilities.
+   The situation to be addressed is:
+    - Many devices on the same I2C bus.
+    - One xfer to each device is sent at regular interval.
+    - One device gets stuck and does not answer.
+    - With long timeouts, following devices won't get their message. A
+      shorter timeout ensures we can still talk to the following
+      devices.
 
-The issue of whether 2500base-X has inband or not is a long standing
-issue, and there are arguments (and hardware) that take totally
-opposing views on this. There is hardware where 2500base-X inband
-_must_ be used or the link doesn't come up. There is also hardware
-where 2500base-X inband is not "supported" in documentation but works
-in practice. There is also hardware where 2500base-X inband doesn't
-work. The whole thing is a total mess (thanks IEEE 802.3 for not
-getting on top of this early enough... and what's now stated in 802.3
-for 2500base-X is now irrelevant because they were too late to the
-party.)
+   This clashes a bit with the current i2c_adapter timeout field that
+   stores a jiffies amount. We cannot rely on it and therefore we take
+   a value from devicetree as a µs value. If the timeout is less than a
+   jiffy duration, we switch from standard jiffies timeout to
+   hrtimers.
 
-I haven't been able to look at this issue over the last few weeks
-because of being at a summit, and then suffering with flu and its
-recovery. However, I have been working on how we can identify the
-capabilities of the PCS and PHY w.r.t. inband support in various
-interface modes, and how we can handle the result. That work is
-ongoing (as and when I have a clear head from after-flu effects.)
+There is one patch targeting a hwmon dt-bindings file:
+Documentation/devicetree/bindings/hwmon/lm75.yaml. The rest is touching
+the I2C bus driver, its bindings and platform devicetrees.
 
+About dependencies:
+ - The series is based upon v6.8-rc4.
+ - For testing on EyeQ5 hardware and devicetree patches, we need the
+   base platform series from Grégory [0].
+ - The last commit (adding DT phandles for resets), we need the syscon
+   series [1] that provides the reset controller node.
+
+I think there are discussions to be had about:
+
+ - The handling of timeouts. Having a non-jiffy value is not driver
+   specific. Should this change be done at the subsystem layer? The
+   subsystem could even fetch the value from devicetree and auto-fill
+   timeout, with a default given by the driver. Not many drivers seem
+   to use the i2c_adapter timeout field from my quick grepping.
+
+ - The DT prop for timeout. I've picked "timeout-usecs". Some drivers
+   use vendor prefixes, but this is not vendor-specific and only a
+   software implementation detail.
+
+ - The shape of this series. Initially it was split in two. However I
+   brought them together as they cannot be applied independently.
+   Please tell me if a better approach is to be preferred.
+
+Those are thoughts, I'm sure people will have feedback on this.
+
+Have a nice day,
+Théo Lebrun
+
+[0]: https://lore.kernel.org/lkml/20240205153503.574468-1-gregory.clement@bootlin.com/
+[1]: https://lore.kernel.org/lkml/20240212-mbly-clk-v6-0-c46fa1f93839@bootlin.com/
+
+Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+---
+Théo Lebrun (13):
+      dt-bindings: i2c: nomadik: add timeout-usecs property bindings
+      dt-bindings: i2c: nomadik: add mobileye,eyeq5-i2c bindings and example
+      dt-bindings: hwmon: lm75: add label property
+      i2c: nomadik: rename private struct pointers from dev to priv
+      i2c: nomadik: simplify IRQ masking logic
+      i2c: nomadik: use bitops helpers
+      i2c: nomadik: support short xfer timeouts using waitqueue & hrtimer
+      i2c: nomadik: replace jiffies by ktime for FIFO flushing timeout
+      i2c: nomadik: fetch timeout-usecs property from devicetree
+      i2c: nomadik: support Mobileye EyeQ5 I2C controller
+      MIPS: mobileye: eyeq5: add 5 I2C controller nodes
+      MIPS: mobileye: eyeq5: add evaluation board I2C temp sensor
+      MIPS: mobileye: eyeq5: add resets to I2C controllers
+
+ Documentation/devicetree/bindings/hwmon/lm75.yaml  |   4 +
+ .../devicetree/bindings/i2c/st,nomadik-i2c.yaml    |  49 +-
+ arch/mips/boot/dts/mobileye/eyeq5-epm5.dts         |   8 +
+ arch/mips/boot/dts/mobileye/eyeq5.dtsi             |  75 +++
+ drivers/i2c/busses/i2c-nomadik.c                   | 710 ++++++++++++---------
+ 5 files changed, 534 insertions(+), 312 deletions(-)
+---
+base-commit: d55aa725e32849f709b61eab3b7a50b810a71a84
+change-id: 20231023-mbly-i2c-7c2fbbb1299f
+
+Best regards,
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+Théo Lebrun <theo.lebrun@bootlin.com>
+
