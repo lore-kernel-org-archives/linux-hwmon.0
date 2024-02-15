@@ -1,61 +1,60 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A783EC7;
-	Thu, 15 Feb 2024 01:17:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAA4C15A4
+	for <linux-hwmon@vger.kernel.org>; Thu, 15 Feb 2024 01:22:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707959829; cv=none; b=YxLj6wKqRY2vvTWYGp7TfLC0NbhpU+FC4Sny6KvFexFP221wmSAKGr7uOEFtVgUPT74YQpMx6pjqvhuVKl2V0kDKOHSklegWnjtiLsGyZWNUKw/J91w2wUxnmqW5YlDlyJBrD2lz7gKP4LFBr7KCCInvR9oko3KT999Q+fTrWf0=
+	t=1707960159; cv=none; b=G8ONGFoOpcQaOPW9uHVQ1y7TlfjwQzAoJp9nHk9F3vkr/lzfptUqqotNTPGUnj9rLnZiytQIeWWgjzysxG0oEIfYdoZQJpCDjOEFCuZ55OPGFH+xamozDW+o8ZKcP6lyPfPT9bVndjSGI9Qqa6iCzr5/+iGVvrwNkSXk0M0REk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707959829; c=relaxed/simple;
-	bh=B3iwHvDLy4oW+BIedwUdauX5/J6U69PVYe9x/rpbe2g=;
+	s=arc-20240116; t=1707960159; c=relaxed/simple;
+	bh=Tnx8IjKyUSSKaSihzrH1Pvns+lcHzLTQgcfAoDCX8MQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VL2A3oGrFepOBErnheQq5nRonxP+ZOr493Aoudsy7RY3HdFyOQu/Sfuj767XgtjxXxrFl+/Yp/4wXREtKVjcMsJXoqMOT6l/wY0Pzq4vhcyAKh6MIEvnFJxp6GfKiYgx16R+54JDiEkCLXnd49Tqxeob8QJpW1W97tYIMcCoB8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Euk9RmMk; arc=none smtp.client-ip=209.85.214.178
+	 In-Reply-To:Content-Type; b=F6GER7ljAJmOTL9m7hA0T6cF8ECdwhNof6Etm1C8hZpnwy5VF7VkC1nLeRHFKECaBE63llEEOyOie/rVUJlmIoQ+LOJl2Neux2MDfUx+UlsNY+CRxZldMokjZ4FqktXdsdRCkPsiEScgr2TQQDAp4Kk0E2GlgJeFdJt56QwOuh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PzB/ypYh; arc=none smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Euk9RmMk"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1db4977be03so9377595ad.1;
-        Wed, 14 Feb 2024 17:17:07 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PzB/ypYh"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6e0d085cf59so309169b3a.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 14 Feb 2024 17:22:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707959827; x=1708564627; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1707960157; x=1708564957; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=vVcstpclCxoCop2FZ79IhVaEgrNY/ZtlNdr4FrISvJ8=;
-        b=Euk9RmMkCIf8f5bsaD9knqBE8zT764oKQ2GIMPhLlX/MJV2nW41++xbrLfvAY/p7n1
-         cSTzU0DBsi+ucdLcE8Kc6j5VEo3yMlWEnCAQI/Nv64HDNYEJRFC54YZ5KxzfYWQ2b3iV
-         /jxQLkHXvdhkuA7sGpUVaYhJZSZNmgv5lfgZhVV/hwhzaGfs0eWZCx/38+a+BEkzOtLk
-         zV0TI7FLUTcAErB4ArBRyy51SqaofhFgI6G3ak/D9w57ctWoXhM5RxPCno3gjEUfZymg
-         X0I0QiunD/LmsEGLep/X6g9k0nGsHIjLM3b3coR2wpNDRt1F+LGPDzBhy08ThW67eu0L
-         LVZg==
+        bh=B0olbHSdjskXQXzhTfxwqF51zetRH+mi1HzqDpbPcPI=;
+        b=PzB/ypYhBXdY2Fcu97lcDKNnKcckrxH6qKlOHMnugowRYZV0n4uiK0CDp+KEVryp+G
+         IQHvZ7aRdC2f9zWAEe1byjXZntEvSaynXgZMcowyDu4SY9um3d9sfosjZD5fnGxXfIx/
+         RGAEtBedBYwwizwesqzUorkUDGj3LYDr+/kgZK8TVkN4KkPC2HWruJi0CoYDI7i/J7hn
+         ERzeuzf/0cuK90y2LcuYMXCtphOOAB72gol9kBxpmdqq+bwSQdo+WRrRgAvgltIonWtD
+         Elmpy6ivpfsgyb9IPYUWnnwA6zCMkKyxst/AGgMgWJFK48riqqY/v9GKIcFH6OqHiME1
+         KIxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707959827; x=1708564627;
+        d=1e100.net; s=20230601; t=1707960157; x=1708564957;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vVcstpclCxoCop2FZ79IhVaEgrNY/ZtlNdr4FrISvJ8=;
-        b=w+zhkvXm8Pyi8veFyl54of1hJH5jBKahXS+8jd6/uZDLzcFz6zJnJ8LBIxfmFeDzO0
-         Ap47IUZdjPrDw5sE4h22tj4IMKAX5jGefuo3qHrznVReXMFIJtjhAIC51WT/5f8dXfgX
-         e+p2oFbxxWYjD5YoCZbp6rFvRCqdM5MgLX1olKTtC7QVdkuNxz5w0g5Nyj5oZRmiRtYA
-         4hXavzYKjXAW7Fvo+lyoKIRyMqb8Xu047npfhewrrBxMk50gaTi4xWeH18p8MAKWkmau
-         a3p16UwmGLfYlFd2agIrpztUNLlwJ+iEJFMnSUOBZOAd0j/X9AJ7aBA95g+0Fdt5TF1r
-         3NPg==
-X-Forwarded-Encrypted: i=1; AJvYcCWrmTFoQJpolCTtV7Wh1QRl/G6PhljL2bLz8RDJDk4VWJJVOY1HapLmQXNzZLBTohCApVKewBOkRD5N2bjD/m0AMGp0+Rx/nlyVFewK+L1zy5WBjP8q9RsH1kN0XfdyDhLuRdsOfqzABgLgfGzQ2iJWg3caVXjOpdI4O/kQ1JDNZIeednu+
-X-Gm-Message-State: AOJu0Yw2FwiGIuprzyfijaY/NzSgEl/LC+ZgsRvuwaUo6duCklwO+0YY
-	lyH8nAXxaPFnH7q0m+/iuD3dqRVPHQTuKPe605uEeFr08Mr9tFaw
-X-Google-Smtp-Source: AGHT+IF4URH/58Up2Ou6NHAs5rbVJvxRGUyhz1IbfnZvEUflzYgcXLYvo4O/MWIeT3MopT//XghBjw==
-X-Received: by 2002:a17:903:453:b0:1d8:ffbe:82d9 with SMTP id iw19-20020a170903045300b001d8ffbe82d9mr368651plb.14.1707959826727;
-        Wed, 14 Feb 2024 17:17:06 -0800 (PST)
+        bh=B0olbHSdjskXQXzhTfxwqF51zetRH+mi1HzqDpbPcPI=;
+        b=eUjZKr++MAAL94t8jyZnXAxi3Fb0hZUvVOOfGuJ3kyZAaeZFYBunJ5RZ3lhqbZC/gK
+         P/HjFHyKqjV2V/oyle2kRgpQaHSVB3PruTLWay2rhsFoah/A9pvRTapK7QYuNReAe7MF
+         8bdfcYbRIvpT/OLOcHPmy+9YkGul5RCXE4x1wZKGYB0lfvLodbUaVKijLr3B+J5pIhh8
+         ufTXrtkoIdf5+qrzhbFpxH1QG0MEQXytUc4XT+K3HoVgFBXmLQ9C+UT9gKwQpHI6iyqs
+         XshsVTnnBnicr3/UeAHoKDPwPJ2ljCe9N/V95sswHqFb3kbT1NeT+mSbEsF9YVRF1BWk
+         orUA==
+X-Gm-Message-State: AOJu0Yzsu0aGY1Znic2nR2Qfca5187i5Qxtrq1XJNpQI/VXwDtcdp2cm
+	/LNAJNjVW92MZhoWMn81OH9VU/Ft6zUX5w8j8zJdAYeAHrPXXD4j
+X-Google-Smtp-Source: AGHT+IExKoS/BMFESds335HdCbhTKSCqxvAgpnB78KNUwL4OqTVY1CyrKA8zHrTC/4iip6baINDnRA==
+X-Received: by 2002:a05:6a20:ce4c:b0:19c:5523:eefe with SMTP id id12-20020a056a20ce4c00b0019c5523eefemr764938pzb.3.1707960157014;
+        Wed, 14 Feb 2024 17:22:37 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id mq7-20020a170902fd4700b001db82fdc89asm62400plb.305.2024.02.14.17.17.05
+        by smtp.gmail.com with ESMTPSA id o16-20020a056a00215000b006e0938f7c57sm86145pfk.121.2024.02.14.17.22.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Feb 2024 17:17:05 -0800 (PST)
+        Wed, 14 Feb 2024 17:22:36 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b306a27e-505e-43d4-aaf8-ab31284a3396@roeck-us.net>
-Date: Wed, 14 Feb 2024 17:17:04 -0800
+Message-ID: <a3b6f833-b8a1-44af-b90b-ed7370b12815@roeck-us.net>
+Date: Wed, 14 Feb 2024 17:22:35 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,20 +62,16 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] dt-bindings: hwmon: tda38640: Add interrupt &
- regulator properties
+Subject: Re: [PATCH 2/3] hwmon: (pmbus/lm25066) Use PMBUS_REGULATOR_ONE to
+ declare regulator
 Content-Language: en-US
-To: Conor Dooley <conor@kernel.org>
-Cc: Naresh Solanki <naresh.solanki@9elements.com>,
- Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, mazziesaccount@gmail.com,
- linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240214092504.1237402-1-naresh.solanki@9elements.com>
- <20240214-trinity-delouse-6dcd0b046895@spud>
- <0f1665e5-bae1-4a17-a976-cc225a28dad3@roeck-us.net>
- <20240214-dimly-wife-5b6239d4adec@spud>
+To: Zev Weiss <zev@bewilderbeest.net>
+Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>,
+ Conor Dooley <conor@kernel.org>,
+ Naresh Solanki <naresh.solanki@9elements.com>
+References: <20240214194342.3678254-1-linux@roeck-us.net>
+ <20240214194342.3678254-3-linux@roeck-us.net>
+ <8669f426-38a6-4ea8-ae4b-0d29c1d09a29@hatter.bewilderbeest.net>
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -121,34 +116,31 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240214-dimly-wife-5b6239d4adec@spud>
+In-Reply-To: <8669f426-38a6-4ea8-ae4b-0d29c1d09a29@hatter.bewilderbeest.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 2/14/24 11:55, Conor Dooley wrote:
-[ ... ]
->>> Why "vout0" if there's only one output? Is it called that in the
->>> documentation? I had a quick check but only saw it called "vout".
->>> Are there other related devices that would have multiple regulators
->>> that might end up sharing the binding?
->>>
+On 2/14/24 17:04, Zev Weiss wrote:
+> On Wed, Feb 14, 2024 at 11:43:41AM PST, Guenter Roeck wrote:
+>> If a chip only provides a single regulator, it should be named 'vout'
+>> and not 'vout0'. Declare regulator using PMBUS_REGULATOR_ONE() to make
+>> that happen.
 >>
->> Primarily because that is what the PMBus core generates for the driver
->> because no one including me was aware that this is unacceptable
->> for single-output drivers.
 > 
-> Is it unacceptable? If you're implying that I am saying it is, that's
-> not what I was doing here - I'm just wondering why it was chosen.
-> Numbering when there's only one seems odd, so I was just looking for the
-> rationale.
+> Hi Guenter,
+> 
+> This will necessitate a DTS update on at least one platform to maintain compatibility (Delta ahe50dc BMC, [1]).  I'm not sure offhand if there are process/policy rules about mixing code changes and device-tree changes in the same commit, but changing either one without the other would break things.
+> 
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm/boot/dts/aspeed/aspeed-bmc-delta-ahe50dc.dts?id=8d3dea210042f54b952b481838c1e7dfc4ec751d#n21
+> 
 > 
 
-Given the tendency of corporate speak (aka "this was a good attempt" for
-a complete screwup), and since this did come up before, I did interpret
-it along that line. My apologies if that was not the idea.
+Sigh. Agreed, especially since changing the dts file in the kernel
+won't change the dtb files on actual hardware.
 
-Still, I really don't know how to resolve this for existing PMBus drivers
-which do register "vout0" even if there is only a single output regulator.
+I really have no good solution for this. We (Well, I) didn't realize that
+there are regulator naming conventions/restrictions when we introduced
+regulator support into PMBus drivers. My bad. Let's see what others say.
 
 Guenter
 
