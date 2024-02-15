@@ -1,146 +1,147 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FC947869B
-	for <linux-hwmon@vger.kernel.org>; Thu, 15 Feb 2024 12:33:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D1001350D8;
+	Thu, 15 Feb 2024 14:56:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708000413; cv=none; b=oFZ0OnK9UCiGYRLr9f7F4UZnpkCNWuWTOikEMWhIAqfc0aaymheXAxatC3pFmJrWpkhFtXDmES/Cf4QhJisVhpGRBWhfU7iyaZWFvsntuFIblilO0UiIGD89K/f92LkJBfsimpujMvAiFOahre6Hct4FNIAw4CdhbLMif19McqE=
+	t=1708008991; cv=none; b=evYHqDqn6GDLpdN5zWEGa1BbpIrQcIVDwt2FqP7HYf6/x1VnObRv33oPDMMlKNgSxqg67e6v/g1uE0o6YdbQ31XLPr99bVw3VEFnpIfi4M7CTyRQ8jJiruhe0CasXB3raMhw1Ig+SJxh9PGO67Da8bF4wIaBMRFYfVEfvkrXL5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708000413; c=relaxed/simple;
-	bh=qaQ6+CEhds0Yq3NDOr6mhwnCFPmxvTUSG44mMq5NqVk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MJ2rayo0aFDS6U1Ki1OtrNfnggg8VDGZTNZx63OZIPOx30bWoVopGUf9xFtFK07YQ1NNxXOwAQS0Fm0b6yfTSvYjD/kLjXVQGzZXG/6Bb8PgTE2OA1phvohn+l43/w6xZzpSHhBC+7TKZlGPZ78wEgsGqUaLdTq5t5tAipecpp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IfKvElP8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1708008991; c=relaxed/simple;
+	bh=wHvhjq+DADKOma6GYpH33QtWj93FdrxmMVgqe5CC6ZU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UiClD3exsKNHRGTTnZucEJ5wD24ADjormG/bfpdCYqwjlXllgQeVn9ICMYTO8k5W7/Xv5lO3T+xt3ta8UMCUNkvFaunZogAL/7sXXNczZT1OzjRD4dNX7Xt2+dkTdL7Agx+4din04s5B+D0zJEpJxEsulTWZUw0K8d/Vgeub3Oo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kqR1VJGS; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IfKvElP8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D1E4C433C7;
-	Thu, 15 Feb 2024 12:33:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708000412;
-	bh=qaQ6+CEhds0Yq3NDOr6mhwnCFPmxvTUSG44mMq5NqVk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IfKvElP8NPYpZJK8UV3uamFwD9AjG98CZ9H58Sb+N7CdaePzqBP7O0uzLq2hXo+tP
-	 A4FyquUvhoRD15fPes0roB5uRQPChBJQpGkG7aG2zG5Nwz7MuRJu2vApW8rHGlqL69
-	 /JHXHRB2hhyaDg4Fis2LAyapq/3iC1MW5QdmSEvO7N06p0/SY3fWRJ6i7H2YWWq2Cc
-	 xXJF+Cu6KRJRL7lD2/2/Hd/z6YPfU6k6on1mfWsod+Y627QPn4FVtn2yIFXyjdryOE
-	 eQPV1skaaFRyRaKxYMjId5l94Ak0cZ3HDql9FKqoaLGBbvHASQFAWrm63Ms9ly/Ug0
-	 ozhO6wP0aY+8w==
-Date: Thu, 15 Feb 2024 12:33:28 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Zev Weiss <zev@bewilderbeest.net>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	Hardware Monitoring <linux-hwmon@vger.kernel.org>,
-	Naresh Solanki <naresh.solanki@9elements.com>
-Subject: Re: [PATCH 2/3] hwmon: (pmbus/lm25066) Use PMBUS_REGULATOR_ONE to
- declare regulator
-Message-ID: <20240215-doable-cackle-13c09fbd5e70@spud>
-References: <20240214194342.3678254-1-linux@roeck-us.net>
- <20240214194342.3678254-3-linux@roeck-us.net>
- <8669f426-38a6-4ea8-ae4b-0d29c1d09a29@hatter.bewilderbeest.net>
- <a3b6f833-b8a1-44af-b90b-ed7370b12815@roeck-us.net>
- <ec7914ac-64a2-445c-b896-71a0087fb33e@hatter.bewilderbeest.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kqR1VJGS"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1d780a392fdso8263765ad.3;
+        Thu, 15 Feb 2024 06:56:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1708008989; x=1708613789; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=9lqbpYH7gl5/+htoD/a8at6dHdqPe1LYKotzwXb1fBs=;
+        b=kqR1VJGSDmThtFA7zFDYg9SAh1xKdrs+DRdGtUd+TeNQc2DVANMYEkGHRRLr/G3R+G
+         rWl0j/lJypamCLc4QU3YJlw+JwJS2v0eV+k7lBB4oSleLr8lyDqyGM7pmmdQ7X8fu8bq
+         JPE5rXbxMgvUEQhs6Yvba1FxjEwIvUweF0jwCMmhxr37FGiHyFUr4Jg3Fa+6XkdmyYbD
+         kC7rlLWZ1iPelNk2Pagaoj+dwvZvCn67HQicss/4So/KqWfFn6HK9D/AsoyPLV3m6/yH
+         oSs3bv4bfXg80Uh9Bzk/PxLHlqv5RAd2ZZkNdhM3DguhsmrU+UOdfY+JaKdqn+a30v43
+         iE5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708008989; x=1708613789;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9lqbpYH7gl5/+htoD/a8at6dHdqPe1LYKotzwXb1fBs=;
+        b=r1XRK+3I6Z3hefyfnjwSSzMpPeMLW73iJBGZmSk8CRT3d+Yb+C/VXHhUgvyOJkrO16
+         871pKTt8PBE2pNiLAXSt4Atv7tncc20BKGt51lopoKGaCq69Dr+kqvWnnXOJ9uZajqzE
+         5a1YJGlZSnWmRV57I9+5Xq7f1a9HsSxPPleLQJiFaPkcQlqTv7gfIXR9qkiL7+ew10SF
+         vv3RewVFilByLuapnXXPUawFal4kdPOa3VMq4HChLJftbzJZaaSmOLkC94ybOcMzUhw7
+         b6XQk4eW7ER2AVnP9tg7Nf55KxchkMHnScYMN92hvPWAJL6OP1hXFZ1hmT6qx8k4uVFN
+         R3Ug==
+X-Forwarded-Encrypted: i=1; AJvYcCWkxYK24ChIA6pc2oczcWhLyVJ7qxJ1H5A5JWhK4Ybx7n6hXVhwoipRzBWIjBFit8LkuR20yr7QIAwvEnYQrLUnPM6ck4FpJb67ibLDFe/ubjPrLE4GxaTCBF+z4nGzrBIrK6cPildp
+X-Gm-Message-State: AOJu0YwtnwHt2NyIRKhKXusVad7GrvsYV4gG4NRmjf1jU3tTgg3kPTqW
+	XJV3rvGmfVH/lTe/I+3RSF8wP9Sxyjtv28dO8ub5q75N7COppkV5COkcpOYR
+X-Google-Smtp-Source: AGHT+IG7h7glu3h8c69izLTocGowAfwyTbIz4XJWTFCFZbh2+E5Lorpy3sNZcK/eyPpspEGOTEiDIQ==
+X-Received: by 2002:a17:902:db06:b0:1da:2a0d:feb9 with SMTP id m6-20020a170902db0600b001da2a0dfeb9mr2449656plx.60.1708008988615;
+        Thu, 15 Feb 2024 06:56:28 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j17-20020a170902f25100b001d93ba1120dsm1361045plc.200.2024.02.15.06.56.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Feb 2024 06:56:27 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <82d6c4d4-f3e8-499b-9640-127785073d51@roeck-us.net>
+Date: Thu, 15 Feb 2024 06:56:25 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="x8mGNgWAXkL45a4g"
-Content-Disposition: inline
-In-Reply-To: <ec7914ac-64a2-445c-b896-71a0087fb33e@hatter.bewilderbeest.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] The URL of the datasheet seems to have changed.
+Content-Language: en-US
+To: Okan Akyuz <okanakyuz@okanakyuz.com>, jdelvare@suse.com, corbet@lwn.net
+Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, skhan@linuxfoundation.org
+References: <20240215143429.18069-1-okanakyuz@okanakyuz.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20240215143429.18069-1-okanakyuz@okanakyuz.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 2/15/24 06:34, Okan Akyuz wrote:
+> The datasheet is not reachable. Therefore, I replaced it with another
+> one from the manufacturer's website.
+> 
+> Signed-off-by: Okan Akyuz <okanakyuz@okanakyuz.com>
 
---x8mGNgWAXkL45a4g
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Subject should describe the fix, not the problem.
 
-On Thu, Feb 15, 2024 at 02:14:37AM -0800, Zev Weiss wrote:
-> On Wed, Feb 14, 2024 at 05:22:35PM PST, Guenter Roeck wrote:
-> > On 2/14/24 17:04, Zev Weiss wrote:
-> > > On Wed, Feb 14, 2024 at 11:43:41AM PST, Guenter Roeck wrote:
-> > > > If a chip only provides a single regulator, it should be named 'vou=
-t'
-> > > > and not 'vout0'. Declare regulator using PMBUS_REGULATOR_ONE() to m=
-ake
-> > > > that happen.
-> > > >=20
-> > >=20
-> > > Hi Guenter,
-> > >=20
-> > > This will necessitate a DTS update on at least one platform to mainta=
-in compatibility (Delta ahe50dc BMC, [1]).=A0 I'm not sure offhand if there=
- are process/policy rules about mixing code changes and device-tree changes=
- in the same commit, but changing either one without the other would break =
-things.
-> > >=20
-> > > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
-t/tree/arch/arm/boot/dts/aspeed/aspeed-bmc-delta-ahe50dc.dts?id=3D8d3dea210=
-042f54b952b481838c1e7dfc4ec751d#n21
-> > >=20
-> > >=20
-> >=20
-> > Sigh. Agreed, especially since changing the dts file in the kernel
-> > won't change the dtb files on actual hardware.
-> >=20
-> > I really have no good solution for this. We (Well, I) didn't realize th=
-at
-> > there are regulator naming conventions/restrictions when we introduced
-> > regulator support into PMBus drivers. My bad. Let's see what others say.
-> >=20
-> > Guenter
-> >=20
->=20
-> Well, perhaps mitigating that slightly: I don't see any obvious cases of =
-any
-> other platforms' device-trees having any dependencies on the regulator
-> naming that would be affected by this (judging by 'git grep vout0
-> arch/*/boot/dts' anyway),
+Guenter
 
-Which is a good thing, as none of these devices' bindings actually allow
-regulator. Aspeed devicetrees are a mess of non-compliance with the
-bindings, so I suppose that this is not surprising, but somewhere in the
-wall of complaints there is a:
-aspeed-bmc-delta-ahe50dc.dtb: /ahb/apb/bus@1e78a000/i2c-bus@40/pca9541@79/i=
-2c-arb/efuse@12: failed to match any schema with compatible: ['lm25066']
+> ---
+>   Documentation/hwmon/max6620.rst | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/hwmon/max6620.rst b/Documentation/hwmon/max6620.rst
+> index 84c1c44d3de4..d70173bf0242 100644
+> --- a/Documentation/hwmon/max6620.rst
+> +++ b/Documentation/hwmon/max6620.rst
+> @@ -11,7 +11,7 @@ Supported chips:
+>   
+>       Addresses scanned: none
+>   
+> -    Datasheet: http://pdfserv.maxim-ic.com/en/ds/MAX6620.pdf
+> +    Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/max6620.pdf
+>   
+>   Authors:
+>       - L\. Grunenberg <contact@lgrunenberg.de>
 
-I mentioned this on the other thread, but I guess the kernel is actually
-using the i2c_device_ids to probe the driver and not the compatible,
-since the documented compatible and the compatibles in the driver have a
-vendor prefix?
-
-> and at least with OpenBMC on the ahe50dc (the
-> primary and AFAIK only user of that device-tree) the dtb would also be
-> updated along with any kernel update.
->=20
-> So I wouldn't expect it to cause anyone any actual problems if we went ah=
-ead
-> and changed it anyway; as long as the dts & driver do stay in sync with e=
-ach
-> other, maybe we could let it slide if it's otherwise a desirable change to
-> make?
-
-I think having "vout0" when there's nothing else looks a bit odd, but
-I'm not gonna lose sleep over "vout0" being used if its used in device
-documentation or is convention.
-
-Whatever is done, please document the regulator child node in the
-binding for this device and fix the dts to use a real compatible.
-
-Cheers,
-Conor.
-
---x8mGNgWAXkL45a4g
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZc4EmAAKCRB4tDGHoIJi
-0v6yAP9DWxriDwD/XAcLncezXrw39qdwkozz67Sta63E8ssN7AEA9U+SmJecpOyM
-+6oxC1CUOubv3qSbTmMcOGubP/2Tjww=
-=uX/N
------END PGP SIGNATURE-----
-
---x8mGNgWAXkL45a4g--
