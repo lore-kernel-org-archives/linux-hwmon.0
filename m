@@ -1,38 +1,38 @@
 Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EC61135A69;
-	Thu, 15 Feb 2024 16:52:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A9B9136641;
+	Thu, 15 Feb 2024 16:52:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708015959; cv=none; b=ntSoplI8ZbvLiLNj5dxpP5Q7XRJMr0ykUWScXooa6h9pWTsrMebalIVH8p0UEF8j5C8GTl0sptIAaqu41xGw19+ero2A28kBSQV7L+nr1ZCy9yw/opEjS/673OcDr/CBlipyFYeiWHXbzFAM1fMi3ZsMfpi+N5TONK7QKN2X0yQ=
+	t=1708015960; cv=none; b=dwJ+6MHS/206j5KcxQbaKRi9/ii58fExGbNZG2KVQ0X9nTElRtqvE0uaR58gVYH1ZIVt+D2php1VQa+7NgCdcBPobEvbpH39wh3dfA7x7w7Rw5k6VLTP/ExUyvPqDgwn7MwQAqj4ZRKoP6iYRY/mFAcEXywpn5C/AMPywuBNXMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708015959; c=relaxed/simple;
-	bh=uz+Np8+G4qWw8PU0VSBJNfx1oM1lJAFehJiEej4mz+4=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=LZOe9xyq8VaKynrlMAj0g8i7GCtf3E4Vy9M/zagA9SwUeypNyonlmmYsoXno7ErZAbTsWMujpFjFDPIM5gVBOXfLmqeyCsPoc/o0eZw4yYjxcI4zauXKcTjD5/ITS+6wvIjj24GVbk3lG+rrs+ovCP4JneLD+UtAIqTGmcRVkek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jtRPtvNb; arc=none smtp.client-ip=217.70.183.196
+	s=arc-20240116; t=1708015960; c=relaxed/simple;
+	bh=PoCHE8ou+HqKf9q62XlctFuCc6VGGNXKJurmEW+jTBE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=T685ffRVP8pGUNxmzA65RMb0JJwz7INlNMaeaAHS5GIdk2mb1hXuQ5DNB4mch7KJUGvrCG4g/ULaa2IZudvW41ZmwCIoHnAcS1T5WnuRXbcXwYsgnksq6zw4kb5umEe56R+n/LWlXqu3phbYfe10GyoRTGVk49Z0yJEGLiwEV+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=kWG7BC12; arc=none smtp.client-ip=217.70.183.196
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jtRPtvNb"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CDF77E0011;
-	Thu, 15 Feb 2024 16:52:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="kWG7BC12"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id AB00BE0008;
+	Thu, 15 Feb 2024 16:52:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1708015953;
+	t=1708015955;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=jQzNaC4fbX9njWrN3MZ96SWXHEvPGyukJ/MJUgb0Ufw=;
-	b=jtRPtvNbikaavwuAwhIXCTXCvi72i/3fzBPBJgxgqtcU72jRmj4Gnvu88GQzqS5ktzDtUv
-	Szm8DiTfA/Jgk2Q8EZb86VnPARemwTMraYVwkBLbfapJA9fQhOV5QIPDaVtn2LSF3k42Fn
-	JPpRIVV5cGmnmJKfdMRzurQuzVBb853IcPg03oiVTAryYNZ/p0DrgWgGaQoyiuTtH9Ir5m
-	kAtEhNWN3ap9+kCzJVnild5PYp5M974xw67+I3X25MV7QiYnUxzTmOdyJYLI5wiDq2OPha
-	lqmeQFwK0crtd7nRXenqGH4Pex8d9fqvPEYTgRyqmDuDjS+CNTQVzf69px69Iw==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ribMBPqXMF0NG1bmqS6MEZxQmeMHwKGVz7dwwg0eqZ0=;
+	b=kWG7BC12XnwCMtgu8iNlZZ1k883FJfp/4NLueKs5RUtF4zoIBip8jNQPyQ2nfFyywkg+Ct
+	x7u6YMzdUP7Aek/2T28DCeM7AR36ForU5LFQSzqhztJE5vpTccmvPpLiq3aB7cBPtfghEa
+	RMtYir9OIFLeCD7xfH0ZdyV1Sb5vzqaDOEpGzWBQsL4LxYQfiKaVjSie831y6qQsDCpPXj
+	hnytIyxnYl4hGDJxv9TD+WzkIgC6Du7os7sLCI0BYfGCu6VaPQnYo7qZV0Kskr98lWHwgq
+	m29O/jQMpd0C7GFvFjYv5sUqrYdqGUzuvlUsHky+YcOKJbtHhnq0bUUWksJs6g==
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: [PATCH 00/13] Add Mobileye EyeQ5 support to the Nomadik I2C
- controller & use hrtimers for timeouts
-Date: Thu, 15 Feb 2024 17:52:07 +0100
-Message-Id: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
+Date: Thu, 15 Feb 2024 17:52:10 +0100
+Subject: [PATCH 03/13] dt-bindings: hwmon: lm75: add label property
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -41,9 +41,9 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIADhBzmUC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI2NDINbNTcqp1M00StY1TzZKS0pKMjSytExTAiovKEpNy6wAGxUdW1sLAHn
- jwDRaAAAA
+Message-Id: <20240215-mbly-i2c-v1-3-19a336e91dca@bootlin.com>
+References: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
+In-Reply-To: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
 To: Linus Walleij <linus.walleij@linaro.org>, 
  Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
@@ -61,99 +61,40 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
 X-Mailer: b4 0.12.4
 X-GND-Sasl: theo.lebrun@bootlin.com
 
-Hi,
+Declare optional label devicetree property. Show usage in one example
+with dummy name.
 
-This series adds two tangent features to the Nomadik I2C controller:
-
- - Add a new compatible to support Mobileye EyeQ5 which uses the same IP
-   block as Nomadik.
-
-   It has two quirks to be handled:
-    - The memory bus only supports 32-bit accesses. A writeb() is used
-      which we avoid.
-    - We must write a value into a shared register region (OLB, "Other
-      Logic Block") depending on the I2C bus speed.
-
- - Allow xfer timeouts below one jiffy by using a workqueue and hrtimers
-   instead of a completion.
-
-   The situation to be addressed is:
-    - Many devices on the same I2C bus.
-    - One xfer to each device is sent at regular interval.
-    - One device gets stuck and does not answer.
-    - With long timeouts, following devices won't get their message. A
-      shorter timeout ensures we can still talk to the following
-      devices.
-
-   This clashes a bit with the current i2c_adapter timeout field that
-   stores a jiffies amount. We cannot rely on it and therefore we take
-   a value from devicetree as a µs value. If the timeout is less than a
-   jiffy duration, we switch from standard jiffies timeout to
-   hrtimers.
-
-There is one patch targeting a hwmon dt-bindings file:
-Documentation/devicetree/bindings/hwmon/lm75.yaml. The rest is touching
-the I2C bus driver, its bindings and platform devicetrees.
-
-About dependencies:
- - The series is based upon v6.8-rc4.
- - For testing on EyeQ5 hardware and devicetree patches, we need the
-   base platform series from Grégory [0].
- - The last commit (adding DT phandles for resets), we need the syscon
-   series [1] that provides the reset controller node.
-
-I think there are discussions to be had about:
-
- - The handling of timeouts. Having a non-jiffy value is not driver
-   specific. Should this change be done at the subsystem layer? The
-   subsystem could even fetch the value from devicetree and auto-fill
-   timeout, with a default given by the driver. Not many drivers seem
-   to use the i2c_adapter timeout field from my quick grepping.
-
- - The DT prop for timeout. I've picked "timeout-usecs". Some drivers
-   use vendor prefixes, but this is not vendor-specific and only a
-   software implementation detail.
-
- - The shape of this series. Initially it was split in two. However I
-   brought them together as they cannot be applied independently.
-   Please tell me if a better approach is to be preferred.
-
-Those are thoughts, I'm sure people will have feedback on this.
-
-Have a nice day,
-Théo Lebrun
-
-[0]: https://lore.kernel.org/lkml/20240205153503.574468-1-gregory.clement@bootlin.com/
-[1]: https://lore.kernel.org/lkml/20240212-mbly-clk-v6-0-c46fa1f93839@bootlin.com/
-
+To: Jean Delvare <jdelvare@suse.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: <linux-hwmon@vger.kernel.org>
 Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 ---
-Théo Lebrun (13):
-      dt-bindings: i2c: nomadik: add timeout-usecs property bindings
-      dt-bindings: i2c: nomadik: add mobileye,eyeq5-i2c bindings and example
-      dt-bindings: hwmon: lm75: add label property
-      i2c: nomadik: rename private struct pointers from dev to priv
-      i2c: nomadik: simplify IRQ masking logic
-      i2c: nomadik: use bitops helpers
-      i2c: nomadik: support short xfer timeouts using waitqueue & hrtimer
-      i2c: nomadik: replace jiffies by ktime for FIFO flushing timeout
-      i2c: nomadik: fetch timeout-usecs property from devicetree
-      i2c: nomadik: support Mobileye EyeQ5 I2C controller
-      MIPS: mobileye: eyeq5: add 5 I2C controller nodes
-      MIPS: mobileye: eyeq5: add evaluation board I2C temp sensor
-      MIPS: mobileye: eyeq5: add resets to I2C controllers
+ Documentation/devicetree/bindings/hwmon/lm75.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- Documentation/devicetree/bindings/hwmon/lm75.yaml  |   4 +
- .../devicetree/bindings/i2c/st,nomadik-i2c.yaml    |  49 +-
- arch/mips/boot/dts/mobileye/eyeq5-epm5.dts         |   8 +
- arch/mips/boot/dts/mobileye/eyeq5.dtsi             |  75 +++
- drivers/i2c/busses/i2c-nomadik.c                   | 710 ++++++++++++---------
- 5 files changed, 534 insertions(+), 312 deletions(-)
----
-base-commit: d55aa725e32849f709b61eab3b7a50b810a71a84
-change-id: 20231023-mbly-i2c-7c2fbbb1299f
+diff --git a/Documentation/devicetree/bindings/hwmon/lm75.yaml b/Documentation/devicetree/bindings/hwmon/lm75.yaml
+index ed269e428a3d..5ca2c83b413d 100644
+--- a/Documentation/devicetree/bindings/hwmon/lm75.yaml
++++ b/Documentation/devicetree/bindings/hwmon/lm75.yaml
+@@ -52,6 +52,9 @@ properties:
+   interrupts:
+     maxItems: 1
+ 
++  label:
++    description: user-facing name of the hardware monitor
++
+ required:
+   - compatible
+   - reg
+@@ -83,6 +86,7 @@ examples:
+         compatible = "st,stlm75";
+         reg = <0x48>;
+         vs-supply = <&vs>;
++        label = "CPU temp";
+       };
+     };
+   - |
 
-Best regards,
 -- 
-Théo Lebrun <theo.lebrun@bootlin.com>
+2.43.1
 
