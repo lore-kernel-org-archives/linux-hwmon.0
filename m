@@ -1,61 +1,61 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B296F12FB37;
-	Fri, 16 Feb 2024 14:40:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E75D130E34;
+	Fri, 16 Feb 2024 17:11:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708094449; cv=none; b=UNz3B6mj3TH8eGyoeCtr00SCmEydyXt8xV6pxArcbunCPz/agI9PfTB4aqSCSSvAGLwFbKD6vxV2eb9eYBtVvvDLk/KxKyPblmvwf57U6CIRlGdy5zcy9xchro+aVLVmeic/rEcMIQGoQMUJfrAdjrb5/uV6vhMos7unD9vdEA8=
+	t=1708103467; cv=none; b=cMGnmOD+7dSN+lX6cxWYH1o9/0kUprK4Dz5SMtR517hmfWnSFY7Adsm5Sa9Fp6xq4tzaI1JfjTn9PGrgBUNIazV7oEKJvTtwPXD8ZettHtoCoHu7LjBXgplXmxGas2xS7GZ3adrNZdpQ3yMoMdOT9fXG5FA3gUIYfdkroMb/cWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708094449; c=relaxed/simple;
-	bh=5NGq9FrcNBMYKZLlkEAx/UyXGvS55+Fgr5VvhNVrM6s=;
+	s=arc-20240116; t=1708103467; c=relaxed/simple;
+	bh=khoiFjUd4dcTUW8wesggwnEKbiZ4BO5mCPFbLHCUyGs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TpnVRdgD/J335ICUygKx2lHRBKwQHEv9H4YX5ozOWI3Rs1AD4sr2AkQ7bWhJiZGDAqkvKKmTwFx6knR02A+WG0LCsay0HLwORbbR45J2z1lFP1nv/RIaJP+yMQ5UGWAuUSJ0o3A6H+hF1soLOgpEeJQrUgqYbXmMqrCRbZR08m0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ntvq6ix2; arc=none smtp.client-ip=209.85.214.171
+	 In-Reply-To:Content-Type; b=NDvro2Q4Zpjk6Gs3fsO/VD7J1wHh2o1NghHjkWfMFBA9j8HKgQ1H0StnKeiFlkEvP9+z5zGX0ddwL0ywvuvx2yeQFcTYRSm0QGrbTvP2yPu3cTKLC1AX+DddxIMEUFfQEwBLGHIqdtMgOEUfjfxjbLaPVqEueQf1lpTEr8CUN1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ehv+7/5f; arc=none smtp.client-ip=209.85.210.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ntvq6ix2"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1d911c2103aso13983725ad.0;
-        Fri, 16 Feb 2024 06:40:47 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ehv+7/5f"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6da9c834646so2085725b3a.3;
+        Fri, 16 Feb 2024 09:11:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708094447; x=1708699247; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1708103465; x=1708708265; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=qIAK96YU7zLYgGvVOp0/LEyHOxuG7q3thhgl5y+afpk=;
-        b=Ntvq6ix2VLBaf9swuw6tRT3aM+eYaX30wNhIfs5q3pKcZIyQR3dNN1IVafbKmo3fU7
-         F2hA/DMw7zfxdvL5DpwZzp4irXgpmWOhEWbDAHaGmCvwaVBG+A909vw+pLo5SHYwYRpb
-         RAZkZS69Z8GL7kUCLsY4oLSQ+NV0GOcuPaQr9muGKBjEpyXmwEOrWL8oyRfk2AgwMAZj
-         kMjWw9Uly7T08k/sjGBTtEmJ+w19fGWaNU+y+caYrlVOgay6ijbA8Pw/QDaMRqvcqywZ
-         qFycqZy6x+CPTsG9azOCXp39/xb0HgxLUm1zi/AqH3KubO675iL0sWmLAlKV6lEYE6Be
-         yRFQ==
+        bh=kbU5Q7mwroDZ8CIL6V8jiBVhQYcx+nOogs7IaVh1Fqk=;
+        b=ehv+7/5f+8GnzROcLthPy92fL8MbBbRCo/QTEm+QbVKjv9Ek0N+twaeStL+GDfz1Fs
+         yzhK8uYnM+Qnhu+3beSXFoWLEvARUjeDUtbdPhMBqUuIONR2RvXLII9Ur6ufisAsNr2Q
+         o02dXS/A8pnEqevOmM7raKKoh0OfNKY/TCyfdYVfObgAW5wHfsqbjcfs4LfpshOberSK
+         a58En/8wfKv4Vp7fAUIeG4hj9Y3YRWqS+7P+Msx7LNWmm4ZhfUfaT0xeEEQI7eLs9DvS
+         aD/BBNZ607IGEaA3d3Jg3e390MKy4HRHStiep/VYC786KfFvn5G9gTI73dN/ioDkVTaW
+         XmOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708094447; x=1708699247;
+        d=1e100.net; s=20230601; t=1708103465; x=1708708265;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=qIAK96YU7zLYgGvVOp0/LEyHOxuG7q3thhgl5y+afpk=;
-        b=iMVvuOkFei42VGy9p4a3lJNt2wU2YziliB+H9A1q7EmGUi5ul4AQLnoqI0FcECwZfh
-         UdyWrB2bJE7AIMoRKdZUWyDnP98xa8WYMZFSOoPjJizXIqfCzbQgtA7hE782X4vsaeit
-         ZQgUvZ0Jz42kYbKGqnXwngXX0tzIb2F1Bg63+PzA7/pAOWqFl/wro55KDuBFLwNQZ1cp
-         kv7i7GiCuzWCP+9D8Qa6Ny6YCUgq5I5Zp+9npl0O9bXIXzJll/ahT4nChguxRd96hPYt
-         uBX6NPt9kS2l9s/C8oso60zjUXeRAB8MhlePOjShPTAbxRrbVtoZaj6Y5Cr2uat5XzcZ
-         DLBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX7lHTMX8BzJ7vud3bZCgFeT81+40iMLTH0jlgugyJk8UzLBxMB8+B2rnnT/WL3EmgQBFSs9mAQ4EyW0P7vcOOs7XzCE7BO/eL8UO1WX6mavjWeEr7M/SEiPseqVKEppBs6h5Rb8Z/R
-X-Gm-Message-State: AOJu0YxjiuJ+4S/WmE4pBbxmQfQPDGUvYOVG22ydnZZM2QitfrngjBah
-	SanJsdmroQICfct8ktJ7KWC/NeorCDFKuR6lV9fxPA0rBYHytcAGtV+8Dv1j
-X-Google-Smtp-Source: AGHT+IFwcMOTosjdD+7J7N0xCsPSKy/maZjf7KpN5DSvK6kE9Y8hnToG4zBNMGt58nwjBKXMKsm+1w==
-X-Received: by 2002:a17:903:950:b0:1db:b6d3:adec with SMTP id ma16-20020a170903095000b001dbb6d3adecmr821263plb.17.1708094446893;
-        Fri, 16 Feb 2024 06:40:46 -0800 (PST)
+        bh=kbU5Q7mwroDZ8CIL6V8jiBVhQYcx+nOogs7IaVh1Fqk=;
+        b=f2boUyEsgepNZubNCP+Os97fThiuk5SWd22pcaJJvilnq9z0Fvw5NHV7Xs6pM7ZkQn
+         7fvVuRXHMsz6a+hNtJeDQDuVpmOwFOC9iV8bBDEwxFEzxnguAvDeOazpOEKhYXWqwxYB
+         zx4JSBYAbV3LncaSedPCJCbVcCXuTLvf0N5ywXROrBGlFNVKa9DJPLfUZieyIALpTolA
+         afFczMX7FV6xQQGhyNIlM98pH5nzMuFiWz3tYXzhzm72Wo4fd/DXgVPMvaBScQtl5TfJ
+         eEiWbUOIopbJj1ObifiHNlu/Y0DA+Zc8q1NvkxWdQhkZ4j40Ui0c+0fSbebmMlU8jrui
+         RIXA==
+X-Forwarded-Encrypted: i=1; AJvYcCXEMnxK56GEEwLkHQD5voBOxbQ66spoREr2NK0svEllxoBykfDqIhsOSHywnEYGLqcUswMhAeO/3K1EtfbH7jbygeYeZGWtaBEaYZNovb2uuQxWS/PF2n+KMQIbyqckISws+HYFOwga5Q==
+X-Gm-Message-State: AOJu0Yzuo28PQwGQBpjMzv7vC4s3fI/OQkCrHJZ0zByNsCXtTu+hFo+9
+	TiDMDi6wgV5jQg2PFad0Oq6t0but5/U0sJykce9tDuhdo9yiCm9I+k8yFfDG
+X-Google-Smtp-Source: AGHT+IGpXPRsKXf8RvFRnaco7jjWeE++VILS9Oa+BWJuT+sagdYYoqYmeixBQxZlTq/7+f6ydqGlKQ==
+X-Received: by 2002:a05:6a21:3409:b0:19e:4ed7:127a with SMTP id yn9-20020a056a21340900b0019e4ed7127amr5997160pzb.46.1708103464655;
+        Fri, 16 Feb 2024 09:11:04 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id jz7-20020a170903430700b001dbb385cfdesm696702plb.105.2024.02.16.06.40.45
+        by smtp.gmail.com with ESMTPSA id h6-20020a63c006000000b0059b2316be86sm147382pgg.46.2024.02.16.09.11.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Feb 2024 06:40:46 -0800 (PST)
+        Fri, 16 Feb 2024 09:11:03 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c5ca9869-330c-42ae-a0a7-8367d2de0c50@roeck-us.net>
-Date: Fri, 16 Feb 2024 06:40:44 -0800
+Message-ID: <f0f523c3-7b1c-404a-89c3-0c7345001676@roeck-us.net>
+Date: Fri, 16 Feb 2024 09:11:02 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,12 +63,16 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Update broken Datasheet URL
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: add common properties with label
 Content-Language: en-US
-To: Okan Akyuz <okanakyuz@okanakyuz.com>, jdelvare@suse.com, corbet@lwn.net
-Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, skhan@linuxfoundation.org
-References: <20240216075212.69118-1-okanakyuz@okanakyuz.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
+References: <20240216-dt-bindings-hwmon-common-v1-0-3c2c24ff1260@linaro.org>
+ <20240216-dt-bindings-hwmon-common-v1-1-3c2c24ff1260@linaro.org>
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -113,34 +117,47 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240216075212.69118-1-okanakyuz@okanakyuz.com>
+In-Reply-To: <20240216-dt-bindings-hwmon-common-v1-1-3c2c24ff1260@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 2/15/24 23:52, Okan Akyuz wrote:
-> The URL for the document in version 19-4039 Rev1 has changed. Updated
-
-Update
-
-> the URL reflect the conrect location of the datasheet for the same
-
-correct
-
-> version.
+On 2/15/24 23:55, Krzysztof Kozlowski wrote:
+> Linux hwmon core code parses "label" property for each device, so add a
+> common schema for that.
 > 
-> Signed-off-by: Okan Akyuz <okanakyuz@okanakyuz.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-This is the third version of your patch, and the subject should include the
-subsystem and affected driver, such as
+ From hwmon perspective:
 
-[PATCH v3] hwmon: (max6620) Update broken Datasheet URL in driver documentation
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-You should also provide change logs.
+> ---
+>   .../devicetree/bindings/hwmon/hwmon-common.yaml          | 16 ++++++++++++++++
+>   1 file changed, 16 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/hwmon-common.yaml b/Documentation/devicetree/bindings/hwmon/hwmon-common.yaml
+> new file mode 100644
+> index 000000000000..d83f4180f622
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/hwmon-common.yaml
+> @@ -0,0 +1,16 @@
+> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/hwmon-common.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Hardware Monitoring Devices Common Properties
+> +
+> +maintainers:
+> +  - Guenter Roeck <linux@roeck-us.net>
+> +
+> +properties:
+> +  label:
+> +    description: A descriptive name for this device.
+> +
 
-I'll fix up subject and the spelling errors, but please keep that in mind
-for future submissions. Please also note that the subject prefix is subsystem
-specific. It always helps to look into other patches affecting the same file(s)
-to determine the most appropriate prefix.
+Would it make sense to also add shunt-resistor-micro-ohms ?
 
 Thanks,
 Guenter
