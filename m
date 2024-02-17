@@ -1,61 +1,61 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0DFA7A735;
-	Sat, 17 Feb 2024 15:30:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2081D7A726;
+	Sat, 17 Feb 2024 15:57:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708183840; cv=none; b=YrzFlF0ShscfGVPSp/4MrB0QIGug+0Y0e+j3+20L9Ljzm34xkHG3chGlp5mIjHhu15WJY26YX1jnHaV7dw86WXNsqaYnKHKO/Nic4Nt5DDooqSgJqOIO4tq2ojNVP4DpGoRvGNhf6/sdyKj/KZ4iBDEe4aqS6ETz9cMNBy6uZN4=
+	t=1708185468; cv=none; b=rrzd2WlJLRqCByKATXu+Xi8vEoIdG72kb/f8pTXVgLj+U7IBY99xhRJgcPQ29PwUrMvj3Y36u77Rp7ySIaBAKCAKwbXvRBY6w0XoTYeKsUg3zxddy6pdnckZZ/sGHtmWYhYE9Jbw9uXN3fg9a2XR0J/puKDxFTQCA0inLMdg2Wo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708183840; c=relaxed/simple;
-	bh=xWFXeLRYbXI1C7vjCdpGuFnAyI509AAFl9bEpkjVRHs=;
+	s=arc-20240116; t=1708185468; c=relaxed/simple;
+	bh=sJvJQ7glnVIPixzKtNg1y7ASTR+ZQ9wALqEaOySziDs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iGoDppaoqYAVxKtnWJTeZmAhDB7QpZQUZLw318O7hK1S7q5FVFMt5Uy7835xgKdrTOS2tem/vTM1f2GVpSM65H5anRTi/nT50losNDrglVskz9vt1lOxI6LVujEgRm216anygRdNyJsjN7E1b/KKWP+IN9nd3coyEvKqPeRO9DQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z9rtdNYd; arc=none smtp.client-ip=209.85.210.173
+	 In-Reply-To:Content-Type; b=jisusFMx5gBbgB6KYjXrPnrkOOKf3RTcEr/OgmsqcN2IMrtp02vgsIU5l7bREOqcOnOVG651sjxAfOGP4ZIL9qF7JG1jlGjQkBIMcGrZ5CdX8sFWORTBLVUG437+K0keQLg40MYk+Vxgqw+mS9apU6LqNPTbsQQq/NuJG40P2g0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dIbL+x5d; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z9rtdNYd"
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-6e10e50179bso2156164b3a.1;
-        Sat, 17 Feb 2024 07:30:38 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dIbL+x5d"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1dba177c596so13914535ad.0;
+        Sat, 17 Feb 2024 07:57:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708183838; x=1708788638; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1708185466; x=1708790266; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=/v4hnO8ad2NTkb2Hz0EjoGr665rx76mpWxWfADMMFXc=;
-        b=Z9rtdNYdzU6oENK1R+ft6/JSZWV95S+0T2c7PlLlm6lOxVIgOOTANVNep3mMVeMYYb
-         +AtzRWTyVdc+KDnyeSRBCP4xolCtUOZzExvrOuBYoh+ldXqMECClXIyQhRzncbkIueTB
-         Bb+Y1ysXZg50la17/g/mnrWj0gbqsB/t7XHu+D3VZSL306PgVKchk0Zh4i/rLNMf0+Ic
-         GxfPHsZSJ/OsrOU6DGxHNkgiRgTiJNh5yyjNO/wR8jfa80ncQPsd9fE/zAFch5buxtuq
-         RgAMT+ZdFDjZRYF9DcGDRml6dMdXfHsz9iQDT4piivC5bLhVU9ITbbHGAkBzce/ZWvqw
-         11mA==
+        bh=7Sa186WciMV73gYAssqnn0qnbEOPG+Q9oPUwWeX7nw8=;
+        b=dIbL+x5dFGCo09cZINrDehENk3DCjrZWPSzNBbC+8j1n+PP8TGCBk3tU78V6X/Eh6W
+         iR0yXtBjC/2/wFY9h4rS8Rz72QWrn5t53nLvcpiXufhxGw+b/C959b9eNzV3SKSZhwyW
+         ZcUqxylYE/Nnwe5jbyQtVvKs3PIETFsxkNHVJZJPu+6PepHsUtcXyJvSNH6T4Z46q7VP
+         IwkOU6MiWaG8vGPtk2Zlp9FB8eqsJjX6VEJIv3WC3UxmKtB1k0o7og6bPjKadSANiVjV
+         YZEfjeA7sveTuxsuSiVm4munQVZMDBevPll0ZElXAvkTPeUst7vi0fY3LXV/gGH8bDbV
+         PcCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708183838; x=1708788638;
+        d=1e100.net; s=20230601; t=1708185466; x=1708790266;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/v4hnO8ad2NTkb2Hz0EjoGr665rx76mpWxWfADMMFXc=;
-        b=eSqAcprZqOgdsV57hRnkZPig3eCbqfNhAkeB5FqCLrcR9GNYXb7pdAHqQsLRuw9klg
-         E0ax2GWGd+m2H/O38JiMZYSgh4oj8J0xK22jpUNlulWUlK52+ZElOIrGWv7cSiuXSEJM
-         dsQqJtzc2zkBmB76zpyxTQHx86cp3w3wqGCdiaNOhwSkEpjgH/d58NNg6jyFJQ0ViXq0
-         1bbHskimWGEospDwAuyaLOe5p4HvW3I10Waza/uvCxWmtcuI83OlJytYXwUBtGW8FmDR
-         6A8/DdXQTDXXJtR7z2CMsTmTAU3NSCImNJRG530Fb1nu+ZT1PD0kIsrWDQ7h+l7vxlx6
-         65Kg==
-X-Forwarded-Encrypted: i=1; AJvYcCWLrDEISOFfQ+jX+upCup4515CFEiBWxNIDgokC2awmxikKc2L9a+4i75vIR0lBokupQxBc1B0mx8XEP4LPcTwGIoiRP1TZxkDFGV88eGk1HuqLVKZ/w6ntHCNy28+gTwfowpE8GsnmTQ==
-X-Gm-Message-State: AOJu0Yypuck8jvHjQ025EErNJdgIDxp4bhXmYZ+1A25ch8EBjQ/gMBwC
-	0o+Y9SYX1kZqayccf6F3C+QeW5kvtqcA2WIKiE+d4N/Zi8dHTMO+CCqDKsLv
-X-Google-Smtp-Source: AGHT+IH69XRACphPV7/6YbHJMq/zbVdKzN3Qjd8Ys3Bh0mYdDKo86CXpSRI95dEZ7waIlg7J8+odIA==
-X-Received: by 2002:a05:6a00:4bb5:b0:6e0:39eb:4458 with SMTP id kt21-20020a056a004bb500b006e039eb4458mr7718253pfb.13.1708183837840;
-        Sat, 17 Feb 2024 07:30:37 -0800 (PST)
+        bh=7Sa186WciMV73gYAssqnn0qnbEOPG+Q9oPUwWeX7nw8=;
+        b=SrLu1140UF0RxtBKSnRkOtxDZBjcSMVw25/qhKKjE1lk0XhtuxujHtM9PV6sw0KI4i
+         dZ6Z251OHI8W5454aiwRBC6YSoZSHGyTj7+EHS3j6iBAbIzVb7G8y6x+hj5u1HfZRYf+
+         b8DtaO0/gc/di9Y6N3rvyJG37FD3mXPtPrbf4DTOf/hvn0f81lTsrRZlAeiSvhYX2Bt3
+         DJ5mcZgFoO9BMkH2kSGMuDOjprCruD1nBnBvlrb8KE82gYH/yakl/hMoXa6RsnSTcDWh
+         wSXiuVSBCL4uZP+j5SIonVko/CyWJYTKdTutBQ7dGdrGRICXnQAm01315jbJ4/OkLMnO
+         c/Mw==
+X-Forwarded-Encrypted: i=1; AJvYcCXJ1xt/VUg2EQmY2mW5PBuJjGYs/dp0qLQdPSqWXPhc1nIZbUBUqR0lk4rf9ta0bKU+4Yb9rQg0bFmkZfn3P4LDaq0ttN3w3fCz3/aZ4GUJxAJhGpOncxO32QCVSBF7louqWdBckLOLn0pHpkI30wXXpN5pNKSNCrk4z8fzeWmyTqZlkN/5
+X-Gm-Message-State: AOJu0YzhcmYE8uCHGty22KIBKFmIp+MLC01/zZb1lmSOfw1nASZ/VNz5
+	jdGeC9if6VFJssFnof6Y3ErW7skkdGwLzR7ljY+nwr5noNZIChgu0mYQ7pIw
+X-Google-Smtp-Source: AGHT+IFwPoTHyIrGWndglyQnnTe+dSWndXMKNjxwYEgxN+EWmafDTurRB6H8eo0a9rlTXoCecNW4pA==
+X-Received: by 2002:a17:902:d501:b0:1da:18e0:29c6 with SMTP id b1-20020a170902d50100b001da18e029c6mr11243812plg.33.1708185466261;
+        Sat, 17 Feb 2024 07:57:46 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o23-20020a056a001b5700b006e14626ee94sm1781778pfv.155.2024.02.17.07.30.36
+        by smtp.gmail.com with ESMTPSA id s4-20020a17090330c400b001db9cb62f7bsm1610809plc.153.2024.02.17.07.57.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Feb 2024 07:30:37 -0800 (PST)
+        Sat, 17 Feb 2024 07:57:45 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <85307d34-bb60-41ea-b478-c821dbd2b51b@roeck-us.net>
-Date: Sat, 17 Feb 2024 07:30:35 -0800
+Message-ID: <9cc60b90-329b-4065-a3c8-74c208964d45@roeck-us.net>
+Date: Sat, 17 Feb 2024 07:57:43 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,18 +63,22 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: add common properties with label
+Subject: Re: [PATCH v2] dt-bindings: hwmon: tda38640: Add interrupt &
+ regulator properties
 Content-Language: en-US
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
+To: Conor Dooley <conor@kernel.org>
+Cc: Naresh Solanki <naresh.solanki@9elements.com>,
+ Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
-References: <20240216-dt-bindings-hwmon-common-v1-0-3c2c24ff1260@linaro.org>
- <20240216-dt-bindings-hwmon-common-v1-1-3c2c24ff1260@linaro.org>
- <f0f523c3-7b1c-404a-89c3-0c7345001676@roeck-us.net>
- <b21d351f-68be-4bca-a327-c35591c55610@linaro.org>
+ Conor Dooley <conor+dt@kernel.org>, mazziesaccount@gmail.com,
+ linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240214092504.1237402-1-naresh.solanki@9elements.com>
+ <20240214-trinity-delouse-6dcd0b046895@spud>
+ <0f1665e5-bae1-4a17-a976-cc225a28dad3@roeck-us.net>
+ <20240214-dimly-wife-5b6239d4adec@spud>
+ <b306a27e-505e-43d4-aaf8-ab31284a3396@roeck-us.net>
+ <20240215-wildfire-dotted-a561e86a6054@spud>
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -119,60 +123,61 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <b21d351f-68be-4bca-a327-c35591c55610@linaro.org>
+In-Reply-To: <20240215-wildfire-dotted-a561e86a6054@spud>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 2/17/24 00:21, Krzysztof Kozlowski wrote:
-> On 16/02/2024 18:11, Guenter Roeck wrote:
->> On 2/15/24 23:55, Krzysztof Kozlowski wrote:
->>> Linux hwmon core code parses "label" property for each device, so add a
->>> common schema for that.
+On 2/15/24 03:48, Conor Dooley wrote:
+> On Wed, Feb 14, 2024 at 05:17:04PM -0800, Guenter Roeck wrote:
+>> On 2/14/24 11:55, Conor Dooley wrote:
+>> [ ... ]
+>>>>> Why "vout0" if there's only one output? Is it called that in the
+>>>>> documentation? I had a quick check but only saw it called "vout".
+>>>>> Are there other related devices that would have multiple regulators
+>>>>> that might end up sharing the binding?
+>>>>>
+>>>>
+>>>> Primarily because that is what the PMBus core generates for the driver
+>>>> because no one including me was aware that this is unacceptable
+>>>> for single-output drivers.
 >>>
->>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>
->>   From hwmon perspective:
->>
->> Acked-by: Guenter Roeck <linux@roeck-us.net>
->>
->>> ---
->>>    .../devicetree/bindings/hwmon/hwmon-common.yaml          | 16 ++++++++++++++++
->>>    1 file changed, 16 insertions(+)
+>>> Is it unacceptable? If you're implying that I am saying it is, that's
+>>> not what I was doing here - I'm just wondering why it was chosen.
+>>> Numbering when there's only one seems odd, so I was just looking for the
+>>> rationale.
 >>>
->>> diff --git a/Documentation/devicetree/bindings/hwmon/hwmon-common.yaml b/Documentation/devicetree/bindings/hwmon/hwmon-common.yaml
->>> new file mode 100644
->>> index 000000000000..d83f4180f622
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/hwmon/hwmon-common.yaml
->>> @@ -0,0 +1,16 @@
->>> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/hwmon/hwmon-common.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Hardware Monitoring Devices Common Properties
->>> +
->>> +maintainers:
->>> +  - Guenter Roeck <linux@roeck-us.net>
->>> +
->>> +properties:
->>> +  label:
->>> +    description: A descriptive name for this device.
->>> +
 >>
->> Would it make sense to also add shunt-resistor-micro-ohms ?
+>> Given the tendency of corporate speak (aka "this was a good attempt" for
+>> a complete screwup), and since this did come up before, I did interpret
+>> it along that line. My apologies if that was not the idea.
 > 
-> It's not present on many devices, I think, so it is also not parsed by
-> hwmon core. I plan to add above $ref to hwmon-common to each hwmon
-> binding, so this would mean all of them will get shunt-resistor. I would
-> not add it, but I also don't mind if I am overruled.
+> I'm not gonna go and decree that "vout0" is unacceptable, if it was
+> called that in documentation that I had missed or was convention, I was
+> just gonna say "okay, that sounds reasonable to me".
 > 
 
-No problem, I just don't know how such common rules are supposed
-to be understood. Thanks a lot for the clarification.
+"convention" only if lack of awareness how regulators are supposed to be named
+is a convention.
 
-Thanks,
+>> Still, I really don't know how to resolve this for existing PMBus drivers
+>> which do register "vout0" even if there is only a single output regulator.
+> 
+> I had a quick look at that series, none of the devices that I checked
+> out there seem to have documented regulators at all. Some of the devices
+> were only documented in trivial-devices.yaml. Relying on the naming of
+> undocumented child nodes is a bug in those drivers & I guess nobody cares
+> about dtbs_check complaints for those platforms. The example that was
+> linked in the other thread doesn't even use a valid compatible :(
+> 	https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm/boot/dts/aspeed/aspeed-bmc-delta-ahe50dc.dts?id=8d3dea210042f54b952b481838c1e7dfc4ec751d#n21
+> I guess it uses the i2c device ids to probe on that platform, or have
+> I missed something there?
+> 
+
+I think that is correct. If I recall correctly, the I2C subsystem no longer
+searches for compatible drivers by only looking at the device id in the
+compatible node, so I guess one has to list "lm25066" instead of "ti,lm25066"
+as compatible to get a match in the i2c subsystem. That is of course
+completely wrong.
+
 Guenter
-
 
