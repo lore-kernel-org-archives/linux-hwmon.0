@@ -1,135 +1,154 @@
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BCBD18020;
-	Sat, 17 Feb 2024 18:24:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B62F87F484;
+	Sat, 17 Feb 2024 20:30:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708194295; cv=none; b=ads6MVebHcnjB3F1gHhKgyJ6KToIrKPiT8ryBvA0wSwvXN95v5fHhF6V8LeydC8S6W5muQSgUNuRY9u0nXTU4Y6X7wAIeF9z8qnCTE06MbwEOBq6ihZLzFVQXx/U+eZ8STxUOxmRMFmUkD1mJg5452BTDBmyT+ufwhHf2kY3DcU=
+	t=1708201807; cv=none; b=tGTin1vQ4MJBE+4SEV0UqQRs3Ohagwz0FipPbicINJIiXsNh5q7tHQaz7vOrIP9FZEGjGjUcqvnI0p2d4y38Bb8j06plg0TBXv+xwGnpt6EBnT+E9RicUTb0+4mG9YYckgNFTOpCf7qMyXWC+c+GPjFayRYV230aA+toLUQoc9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708194295; c=relaxed/simple;
-	bh=a5WT5IeOuUFaQli0pcNNQu3rMzv2/AxArXbYGvAi414=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=S6NJCQwKkUPdqxX0YtndgTE8XC0WHtuGqYCBdQZWYs/NlxO+7DVYFsC333cUUnViPxDglDZpPyY0ajGwEY8BGM4SjxAAY2V9ue95qQLpfksI2f6BhBvF0ofpNoKGcBgYOGaK8nAE8T9RPQ1vBF0CEh/akL3hXJnRxiD480bwT7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W7oYL8QK; arc=none smtp.client-ip=209.85.161.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1708201807; c=relaxed/simple;
+	bh=NnCkYxT8FeGPtNSEwGVJYueBaB6b4r61V5EUsPERHmA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Huo72p7Vua/xavs455AUq8MvmoVqffa5iD/vSIaYD1Pp5SlDNUddv9IDOC2osWNkfmjXFpM9JnTeHs3LWFCLmdKlgZjMsT4/J0qfdojgjQDE5ySp61AZ1E5dcF1yyVoUkJjjmDWrIaEdAd9q7ZEwNf0pJc8szMMEQwnPup8pI+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jP09jcbj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W7oYL8QK"
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-59a8b9b327aso1053878eaf.2;
-        Sat, 17 Feb 2024 10:24:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708194292; x=1708799092; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=pLC9zRflijwVfQm/uk7oxrDMVV/Oz+zmQyj9vEq5EFA=;
-        b=W7oYL8QKKlqUmHa4ej4ddDi0WPTyRajRO+1RerOTUVFooQddFHQxC7oD++9E3OTtJF
-         eEOqohDTTSMi+/0lz7Gc4UwIRCUn9lwdL1HtzuTPApuvSZ3/FO6coXSLs5w1JrNL8Jp/
-         pRGan91ttcyVZp1ugAq974FI13C7QnevjHfYGFatn6qqEtIp2SmtME4onx7rMa+rGv1r
-         3IkFTX72YrrSzptFG/ckrpmNvNtJKcipF5N1v4HMq8QoWXzwlQXVjs98552cVynW9g9N
-         GvOW04GCXNJfIZDR5YKQp9h4T0Oy4qWWajnVpL62GPuvGkky8WsSRavdkMqTnIfnkIjr
-         HvdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708194292; x=1708799092;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pLC9zRflijwVfQm/uk7oxrDMVV/Oz+zmQyj9vEq5EFA=;
-        b=fTsAw+Uu+dGq6NXul9OdGgb5jF3WA5tVLEpi4y0ytC75f+SGRtfIhJi5VnqnpAd+lU
-         2Hg90678zFSr0nTnD9wLWI0K3IwSo7J0UFI8hfBdMlm/vTyJ8n8+MU2WI9eg6py11Q/Y
-         lst3E8l/zeGlycbPwe/L6Qhn+SxLAFh/gymEzLdKfIRG4J8rQEzYZpfAY5Up+8rGZ2Ev
-         TLnKp7htph68spkRllPzk7Xtowssuo3BCjSb3ubgZoMQ7Icsgane7xuP9iLA3vD0aG2/
-         F426zwil4Vylyh7T0hbGkN8hV1eL76juuM/a+a87Re4IWCd1JR4zqC/g9awDX6ufaLlX
-         6fdw==
-X-Forwarded-Encrypted: i=1; AJvYcCW1aVn5QjNgV396X3yuAf83IINyUDvGbrFID3BgtNeinqPG/DL7FKSt93mnK6TS1/90HRXKaYRPHl8jl0DU9IPuYz3UnFZScXsbv9N0T1EVnBqlcIYGMz7fQmMYf7SK4m4oEgwWP0bWe+8=
-X-Gm-Message-State: AOJu0YwdYN/4RxkyC19/bSal45CTUcDs1J44qmB9Ee/V9yEbJ3bd+qhV
-	KC9W5qZUvT3hMGoJGSIHIXSAuTDlSIXk2ZituktBkPp7cNiLu7vg
-X-Google-Smtp-Source: AGHT+IHV62nHA3tDgJ+tJsmk8h6u9uo7pOzTcAcpbR3XQjFBnhXLWh8fNK2kWQvL1a797/zgPLXpCg==
-X-Received: by 2002:a05:6358:8087:b0:178:7986:a586 with SMTP id a7-20020a056358808700b001787986a586mr10183644rwk.5.1708194292499;
-        Sat, 17 Feb 2024 10:24:52 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id fd3-20020a056a002e8300b006e0dd50b0d0sm1959349pfb.8.2024.02.17.10.24.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Feb 2024 10:24:51 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <718f0dd9-121a-4885-8976-aaafa7c44f2d@roeck-us.net>
-Date: Sat, 17 Feb 2024 10:24:50 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jP09jcbj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CE1EC433F1;
+	Sat, 17 Feb 2024 20:30:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708201807;
+	bh=NnCkYxT8FeGPtNSEwGVJYueBaB6b4r61V5EUsPERHmA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jP09jcbjLBGTLHHcaVM5/o3gafLIg0WDbIJxmF+p9IYlLS/7k+bLQfp1CvRwhu2IR
+	 eP+MRgKEiMBvX/P3WLvtLFjU9GCIlq63bcq2Oag2eYzwz2s6j4JNCDNetncAwSGbtW
+	 SpS+xs17G18YLTd+vSwo8vSI+IZqUHwhTwPYqonM4YIRy+Bqce0MFuGBYYKjeVuee1
+	 kKlc6zz90rshc7bGyIqyPK8/OqAf8eUhZYynb1JJJU17MUtCRZN/BPMH5eoiVjK/8D
+	 3uB3U/XfSOYlYcmPWzBwjeyXI/f2vEjoX9bFMwnDUbHx4/IMReLkYDH1wLfGszrXr5
+	 PZ3ky0VGgq1Hg==
+Date: Sat, 17 Feb 2024 20:30:03 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Naresh Solanki <naresh.solanki@9elements.com>,
+	Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, mazziesaccount@gmail.com,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] dt-bindings: hwmon: tda38640: Add interrupt &
+ regulator properties
+Message-ID: <20240217-studio-cytoplast-ca99a55e7a36@spud>
+References: <20240214092504.1237402-1-naresh.solanki@9elements.com>
+ <20240214-trinity-delouse-6dcd0b046895@spud>
+ <0f1665e5-bae1-4a17-a976-cc225a28dad3@roeck-us.net>
+ <20240214-dimly-wife-5b6239d4adec@spud>
+ <b306a27e-505e-43d4-aaf8-ab31284a3396@roeck-us.net>
+ <20240215-wildfire-dotted-a561e86a6054@spud>
+ <9cc60b90-329b-4065-a3c8-74c208964d45@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Set fan to direct PWM mode
- when writing value
-Content-Language: en-US
-To: Aleksa Savic <savicaleksa83@gmail.com>, linux-hwmon@vger.kernel.org
-Cc: Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
- linux-kernel@vger.kernel.org
-References: <20240217181536.344386-1-savicaleksa83@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240217181536.344386-1-savicaleksa83@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="D2aeU6KpYyLQU2Qj"
+Content-Disposition: inline
+In-Reply-To: <9cc60b90-329b-4065-a3c8-74c208964d45@roeck-us.net>
 
-On 2/17/24 10:15, Aleksa Savic wrote:
-> When setting a PWM value for a fan channel, ensure that the device
-> is actually in direct PWM value mode, as it could be in PID, curve or
-> fan following mode from previous user configurations. The byte
-> signifying the channel mode is just behind the offset for the value.
-> Otherwise, setting PWM speed might result in a no-op from the point
-> of the user.
-> 
 
-You can require that a device is in manual mode when setting pwm
-modes, and return an error if it isn't. However, changing the mode
-to manual automatically when a pwm value is written is not acceptable.
+--D2aeU6KpYyLQU2Qj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Guenter
+On Sat, Feb 17, 2024 at 07:57:43AM -0800, Guenter Roeck wrote:
+> On 2/15/24 03:48, Conor Dooley wrote:
+> > On Wed, Feb 14, 2024 at 05:17:04PM -0800, Guenter Roeck wrote:
+> > > On 2/14/24 11:55, Conor Dooley wrote:
+> > > [ ... ]
+> > > > > > Why "vout0" if there's only one output? Is it called that in the
+> > > > > > documentation? I had a quick check but only saw it called "vout=
+".
+> > > > > > Are there other related devices that would have multiple regula=
+tors
+> > > > > > that might end up sharing the binding?
+> > > > > >=20
+> > > > >=20
+> > > > > Primarily because that is what the PMBus core generates for the d=
+river
+> > > > > because no one including me was aware that this is unacceptable
+> > > > > for single-output drivers.
+> > > >=20
+> > > > Is it unacceptable? If you're implying that I am saying it is, that=
+'s
+> > > > not what I was doing here - I'm just wondering why it was chosen.
+> > > > Numbering when there's only one seems odd, so I was just looking fo=
+r the
+> > > > rationale.
+> > > >=20
+> > >=20
+> > > Given the tendency of corporate speak (aka "this was a good attempt" =
+for
+> > > a complete screwup), and since this did come up before, I did interpr=
+et
+> > > it along that line. My apologies if that was not the idea.
+> >=20
+> > I'm not gonna go and decree that "vout0" is unacceptable, if it was
+> > called that in documentation that I had missed or was convention, I was
+> > just gonna say "okay, that sounds reasonable to me".
+> >=20
+>=20
+> "convention" only if lack of awareness how regulators are supposed to be =
+named
+> is a convention.
 
+They're "supposed" to be named whatever the binding says they are named,
+but as we've discovered none of these devices actually have bindings
+that allow regulators in the first place. I think they should be called
+whatever they're called in the documentation for the device, which in
+this case was "vout".
+
+> > > Still, I really don't know how to resolve this for existing PMBus dri=
+vers
+> > > which do register "vout0" even if there is only a single output regul=
+ator.
+> >=20
+> > I had a quick look at that series, none of the devices that I checked
+> > out there seem to have documented regulators at all. Some of the devices
+> > were only documented in trivial-devices.yaml. Relying on the naming of
+> > undocumented child nodes is a bug in those drivers & I guess nobody car=
+es
+> > about dtbs_check complaints for those platforms. The example that was
+> > linked in the other thread doesn't even use a valid compatible :(
+> > 	https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tre=
+e/arch/arm/boot/dts/aspeed/aspeed-bmc-delta-ahe50dc.dts?id=3D8d3dea210042f5=
+4b952b481838c1e7dfc4ec751d#n21
+> > I guess it uses the i2c device ids to probe on that platform, or have
+> > I missed something there?
+> >=20
+>=20
+> I think that is correct. If I recall correctly, the I2C subsystem no long=
+er
+> searches for compatible drivers by only looking at the device id in the
+> compatible node, so I guess one has to list "lm25066" instead of "ti,lm25=
+066"
+> as compatible to get a match in the i2c subsystem. That is of course
+> completely wrong.
+
+If the driver is probing based on i2c_device_id matching, is it correct to
+use DT to probe the regulators? (I don't know, that's not some sort of
+rhetorical question).
+
+--D2aeU6KpYyLQU2Qj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZdEXSwAKCRB4tDGHoIJi
+0gOYAP9P80PNTgJyncyBUxpU84sRQkXT+6oYERv+nytj6zTs+wD9FlnhbvwEkPy6
+0gZXsU7X2UrgvG2+rck9hf5RjIvO9Q0=
+=nN+t
+-----END PGP SIGNATURE-----
+
+--D2aeU6KpYyLQU2Qj--
