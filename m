@@ -1,61 +1,58 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B8711339B8;
-	Fri, 16 Feb 2024 17:12:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52E341CD2A
+	for <linux-hwmon@vger.kernel.org>; Sat, 17 Feb 2024 08:21:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708103534; cv=none; b=P5xJvUBjqtRmz9AAHpqXzgkAOTn5b1TxtSOhu2SLjLMBLfP6uMgBJkdTrfcNeoOPHjyhtJ/TG6Mph2KrbkK3+/c2z5gUY668CHZXAXjUZ5Bh6jtuqlPPmKwNXICBkfri9cXu53v7dVdLxCh97Oc59dCUIuDfvXFcLBCEphwoN3Y=
+	t=1708158111; cv=none; b=U1FBuuRrHlCLO/w3T1AaXco5d1yISpRgBgZKim0n5HuSEXCnoKzZ7zowcMDHgYjMwhcSalcowQimp5lBkeLlryusTfmZTsTJ2oxYznMhstE6Npbpkh9eruFcSQAAzpUVNiwzZ4OudzIPpAkuE6qZhymW1yA3XAbT/NirHk8czS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708103534; c=relaxed/simple;
-	bh=GTD/C6/Rfda65Fa/q5+31kotnD4QmJ7Jubof5Txhy8k=;
+	s=arc-20240116; t=1708158111; c=relaxed/simple;
+	bh=+8tIJu/W6W8+SHTt6dYQlZODfyzp0yZovd2VchAdKs8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Jopqm3436yyZBexmwJ2VvuPFBVYiwnvcYbxUPYWvDReJWFtQ8fP5ois3lKrl6Y5/FfnXUf2fq6l0HcjDLIt9Rso3z51L2UhGIqQn+DESbx995Ey+ObThNd6Wq3IOC9E3PRESC5YaIcT1uXLFEQ8kp51eXXhNL1zrxWK9ymwbA3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YObcz6FU; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 In-Reply-To:Content-Type; b=lWb61bEm7A8iWC+iu7hAkM/vdx+qHMmW7QZoEVGYW6ugLYw/ahjPKY4l8fbd5zfl48LUJ61ZKMaNFKvPXapWHKbMzeDFUlqf6/4EHnT6bsqvcv6jb1ztaEigq46pQWnawfyAmS8nfsx4FvRMcNnXf7moCTTZsgjyuxzp8+ZmHQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=YHwZCuTb; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YObcz6FU"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6e10614c276so1593929b3a.3;
-        Fri, 16 Feb 2024 09:12:12 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YHwZCuTb"
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a3cc2f9621aso276528566b.1
+        for <linux-hwmon@vger.kernel.org>; Sat, 17 Feb 2024 00:21:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708103532; x=1708708332; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1708158107; x=1708762907; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=7r3GLAk50wnFsM71JeGV9q20exq1F4iKYFOfjruPY6k=;
-        b=YObcz6FUWiepJw5x9W/4nbmKTIf3wsLNeZwIxc2S3lpYpPkwttGoDk8rQPFqKi5qt7
-         kT5wFxHNCEtyn5Eip7pDJJx1xyz1QYdfge+O/EePcAz+viQ3gl+h1X2n4SaZ0mZTVy5Y
-         Ij8BgrZivVTQX4JALxoncdhccqjytewb5MzjPMP0rzPaOiIxW7GLpIbAKznztXnYQGRM
-         hmg+4s8rb8/lV7I/MpYLxvJRI7F1AcpDSLCEAfgMkJFcNzOxVl4Cn3cN+NIPV2qoek0l
-         zJjrrnD3KbVozc7ruXFg44uHXFwRQ7V/M9lAHyD19p+z4MiUvbIOankTwfJVRWolB2mZ
-         ZwwQ==
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uQ8qUM7TW828c6lJYuqFoH4ycgiD3nGAtO0l0ReIXyA=;
+        b=YHwZCuTb+/uKMqyTL46ViV/xDyiColSXaBQnZaFff8L4PaXhBMxGBeUH0ifBTEyJGO
+         BbfsQTBULsah+o6fCznKFqYIAr0zwPRzgq1rj3N8d2O9LBLKx59omXjHSxnmCtnnkeoO
+         L86Qmd9g5F3FGrVQwK7ihVfZUCibB1opx+KUne0Ri0uFQ3gvk73HzPRU5vsbU2fU8zR0
+         1Pm/VPMRoMhMx7lHXR8VT0syoyQo00fAPmoGW5+xPclDwmBdD0SjUeQK+25UF38HkgPc
+         bZe3ghSmjl0l99xkcyfEQ0fhEeLs95JlGDYwJuAKKh3TA+e8qczVlF58K7XCNh0hIYhZ
+         4jJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708103532; x=1708708332;
+        d=1e100.net; s=20230601; t=1708158107; x=1708762907;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7r3GLAk50wnFsM71JeGV9q20exq1F4iKYFOfjruPY6k=;
-        b=RFAS8W94ffNn1htWkKIDfz0BwAwcvvEUi1PtU29nW2TV/Qanqi1u4JL1uTQkLQ6J4s
-         l+tY60in6kUtKJE8WDVEUqcVkZL7vnO0Dtnsm1FTb+f19C10ZYHD93eRZBDp7JuNu1fr
-         7Tzr3yhJMSJxsp3LcxOzeJ520lhHs8zU06EdkjqQnwiCTWy7HrBTj0Yr42sugLpLV+tV
-         ByCCXwsl8Qien51GiUYHdF3ePNujtTy2kYoA+BuwNuJWn6Eej+SzwDZTITfl+xpj8Csf
-         NBLR1eDHELPPhbhOcbxeZ8lXDv6yJ0OADzkvEzUm1naJ7j8avWptR1ty4y09qGUI5jS5
-         dXgA==
-X-Forwarded-Encrypted: i=1; AJvYcCXRZY/+aXRZmsYqUnNQjwDo4MwUFgAeMAbgF74e73jbMUNuFYhb08RRS3MVmWi07B3kNUfBmYzb1UJ3GhlkgSqrVRtD/B6rA876+AIIuLKZds3EX2cIy5hOi+umj72XNnVv8swfUqQWuw==
-X-Gm-Message-State: AOJu0Yz88NN9DdYlZkqgzcgnwbXLPwvi+CXlgkIkgGyfbTIPO1Tf6YKs
-	0Z/3c0FQm0xG5oj0Bw9fymdDTPiN2CWWN0/5CFD93orCe9RzloPnf9QTR+Xx
-X-Google-Smtp-Source: AGHT+IGN6BHYRBd/cOqWPKP20CNFvLPflLoVyVHTRS5LFLl+YuwPokNsDKJxR8X5G3jINDy1JMmkPw==
-X-Received: by 2002:a05:6a21:9207:b0:19b:81be:34e4 with SMTP id tl7-20020a056a21920700b0019b81be34e4mr7085566pzb.50.1708103532386;
-        Fri, 16 Feb 2024 09:12:12 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h6-20020a63c006000000b0059b2316be86sm147382pgg.46.2024.02.16.09.12.10
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uQ8qUM7TW828c6lJYuqFoH4ycgiD3nGAtO0l0ReIXyA=;
+        b=gET6WKH53UCQKInPn35JAhQB2+eORi4uGfk8PQxeHahsd+1c34yX2/oAU47yjAdO41
+         jTgFAzyRaUEUJUaknRnTvGXpsGtxi0W3xcXZ7CieudDvJX0D3rf0T94kpduLOPW9Roih
+         EnGh/lFM1u/QDdDjUmy154BZddPojC/4UgWLMJHNIA8Ta7PRUS7IEq5MPkoHLw3rIMHy
+         uaA4atY6MrANxv8M7sescUAkQW/ZiO2h3WIY4SaD8V5pSDzSj+74s8PuxmH86mEyQNBG
+         g2NZZEeuqNFQFNQ2fEdJs/nj+cyZ5bltkPBKjTua28hqTt/ii00rVnYWWdsgY+RdUNg1
+         kDLw==
+X-Gm-Message-State: AOJu0YyRSiaxOI0ymwefyOPHEMFaeoyyPd81mKxE/b/YeZYtvykCaIn8
+	Y0w6zLGNEtJ83i8AKiSE23uGag6jcgIJaGcALNGz4CIym7Pyj3++oa5zOub5EB0=
+X-Google-Smtp-Source: AGHT+IFw0x90GqWPiYNblbzWp4eOaon/5Yuz23fJD+5iWuRy3pDvzLZNdcNebapJdhDnso+00t7Reg==
+X-Received: by 2002:a17:906:2450:b0:a3c:168f:8d12 with SMTP id a16-20020a170906245000b00a3c168f8d12mr4707542ejb.18.1708158107670;
+        Sat, 17 Feb 2024 00:21:47 -0800 (PST)
+Received: from [192.168.0.22] ([78.10.207.130])
+        by smtp.gmail.com with ESMTPSA id s16-20020a17090699d000b00a36f9941d6dsm754950ejn.112.2024.02.17.00.21.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Feb 2024 09:12:11 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <59421717-928b-4005-b661-e260e1f72b33@roeck-us.net>
-Date: Fri, 16 Feb 2024 09:12:10 -0800
+        Sat, 17 Feb 2024 00:21:47 -0800 (PST)
+Message-ID: <b21d351f-68be-4bca-a327-c35591c55610@linaro.org>
+Date: Sat, 17 Feb 2024 09:21:46 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,101 +60,110 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] dt-bindings: hwmon: ti,ina2xx: use common hwmon
- schema
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: add common properties with label
 Content-Language: en-US
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
+To: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>,
+ Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
  Conor Dooley <conor+dt@kernel.org>
 Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
 References: <20240216-dt-bindings-hwmon-common-v1-0-3c2c24ff1260@linaro.org>
- <20240216-dt-bindings-hwmon-common-v1-2-3c2c24ff1260@linaro.org>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240216-dt-bindings-hwmon-common-v1-2-3c2c24ff1260@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <20240216-dt-bindings-hwmon-common-v1-1-3c2c24ff1260@linaro.org>
+ <f0f523c3-7b1c-404a-89c3-0c7345001676@roeck-us.net>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <f0f523c3-7b1c-404a-89c3-0c7345001676@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 2/15/24 23:55, Krzysztof Kozlowski wrote:
-> Reference common hwmon schema which brings the "label" property.
+On 16/02/2024 18:11, Guenter Roeck wrote:
+> On 2/15/24 23:55, Krzysztof Kozlowski wrote:
+>> Linux hwmon core code parses "label" property for each device, so add a
+>> common schema for that.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>  From hwmon perspective:
+> 
+> Acked-by: Guenter Roeck <linux@roeck-us.net>
+> 
+>> ---
+>>   .../devicetree/bindings/hwmon/hwmon-common.yaml          | 16 ++++++++++++++++
+>>   1 file changed, 16 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/hwmon/hwmon-common.yaml b/Documentation/devicetree/bindings/hwmon/hwmon-common.yaml
+>> new file mode 100644
+>> index 000000000000..d83f4180f622
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/hwmon/hwmon-common.yaml
+>> @@ -0,0 +1,16 @@
+>> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/hwmon/hwmon-common.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Hardware Monitoring Devices Common Properties
+>> +
+>> +maintainers:
+>> +  - Guenter Roeck <linux@roeck-us.net>
+>> +
+>> +properties:
+>> +  label:
+>> +    description: A descriptive name for this device.
+>> +
+> 
+> Would it make sense to also add shunt-resistor-micro-ohms ?
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+It's not present on many devices, I think, so it is also not parsed by
+hwmon core. I plan to add above $ref to hwmon-common to each hwmon
+binding, so this would mean all of them will get shunt-resistor. I would
+not add it, but I also don't mind if I am overruled.
 
-> ---
->   Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
-> index a099bb71415e..df86c2c92037 100644
-> --- a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
-> @@ -36,9 +36,6 @@ properties:
->     "#io-channel-cells":
->       const: 1
->   
-> -  label:
-> -    description: A descriptive name for this device.
-> -
->     shunt-resistor:
->       description:
->         Shunt resistor value in micro-Ohm.
-> @@ -73,7 +70,10 @@ required:
->     - compatible
->     - reg
->   
-> -additionalProperties: false
-> +allOf:
-> +  - $ref: hwmon-common.yaml#
-> +
-> +unevaluatedProperties: false
->   
->   examples:
->     - |
-> 
+Best regards,
+Krzysztof
 
