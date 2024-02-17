@@ -1,63 +1,66 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87D137CF1F
-	for <linux-hwmon@vger.kernel.org>; Sat, 17 Feb 2024 16:19:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EB011BF26;
+	Sat, 17 Feb 2024 18:16:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708186784; cv=none; b=bkV/YrC26gxYtJHTAmVDdVXtYHn3iB2ngeASbjp13NFv735/oMZQYMPJSj3rVOhJ05/iqBQ5pQdnZkfOTmurMeLB2oB9khjaAW6Pwrp+lw3QtnDqBXoiuxJm4wW6T2HGhImSUdgzcxwy2o7G0r/w6/xGfh/pjFk18R5Ne8KC9+8=
+	t=1708193790; cv=none; b=ZVR3oL3nOVHTSt/Yf1iOS+B+IV3F1ZbCfaqfJyFRPtjVxAy4gdHFgUDzOAQRoPPPcuYjOYWjVe50tqUEtQdmWSBY32fxaRaN94pLKXkWz6pBnr+UHpYnAe4uksOjU3KFZCdqFhyL86Cbxwt8axihwzDUUHzJO7f7D1NweHEocw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708186784; c=relaxed/simple;
-	bh=d3uglRU/AVi2dkD5TddJRnchFyY1qmCsj9x0cUYm1xc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=EgPmUFT51rDg8W2WGjSu/SxxtHIyHAaZFFuFlC06EJdf2Hs4nijEqWUeU6FW4HXKUSybAek6DKTQ6k53m552VezONvisSUre2n/2rLQKWd1xCiSsnNsn8sPtrnJ2OKpDV++EsUG6gqgosaLGb0sgbqf9KqtELJzcWSOZB7EqgRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CVYdDMdK; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1708193790; c=relaxed/simple;
+	bh=6JaMbzvXElJKDwMGGagRTinlOMD9SEMyT0dM0G4N6hQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sDH2PhpUf9ggpR6FbYIjTBMr47a00FyMbi8dfVXde07cVuD0EhbCwemy0K3bKA7aqXfLmehHAVk1z3XBDGzFRLCLMys6vyfZ8rviqYSF2QRbUy9dUN0dY5jdz4LsiFhsH0rC7v6UU1hcZhic4AFicIfjYF2Qj3kykcUIDvKCEtQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GjYf0qo3; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CVYdDMdK"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1da0cd9c0e5so30868955ad.0
-        for <linux-hwmon@vger.kernel.org>; Sat, 17 Feb 2024 08:19:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GjYf0qo3"
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-512a9ae6c02so385591e87.2;
+        Sat, 17 Feb 2024 10:16:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708186781; x=1708791581; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1708193786; x=1708798586; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=fhvD70oWDFgCWFnekl9gKqHrpVXyiJ7wChV1vBiMebs=;
-        b=CVYdDMdKu24LXO6iYA7ogAGDq8dglQa9wdnt+LKcxxeBi9Q4XkCY5QKMo+oG1hwtBk
-         2HNqCTcwdUq7ZIsSIFsykniSQ/LV4/zfCoP3kpx8JrmsiDd28vejIAR3HLVhQBTH2Rkj
-         0Et6Pj/TgDv2mUTuv84RI8dV8xV4rL4eufWQoaCKbEuwPfqf+zxbjZ5xPp2QLYrqf1Xd
-         lQpSwL/aI59n6ZTOHNSHdh4Iuuh7H7/w+S2EzRdZKYBzPT9QjlFFsUwuHhzLzN0Nkn5I
-         liyERhx7tSoAS6PpttdS26tYTUuUMjXZ+cbCrgUVCrXNlXmZtObOwFBuifvK6z/pgy/9
-         KS7Q==
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=28MpLj21qVTEK8TjTKOL0nGG31w9h8k1TshcjliBdBE=;
+        b=GjYf0qo3L7/z2F7pLdi8RetaJM5rQlT8M/XYCU0XK1yqTWnV8UXrf1NudX0Zn4eNie
+         PbbEysebXwZZPoSUqBrkHv0h9lDjmd673oEmuE7llTKpmRUyu3IdJ9+a4CcNbc3RIwG9
+         McyEchW8IrX+hWlGf21Qi00h8KKgf01G1x4ypDy9wngeThbnatpJwc4B8vMTt08sc4yV
+         PTPRps82PtP/HMqWe03AUDUchjqTps3osOpH6Yna92uA1PMEUqkaQiXSSM3nTXTV4SWy
+         UjwMAkmXfaILWWZMwBVgOdnnsCQITtRw9nGloecD4e5oQfLZ8S5QYUX2b9fvnaOGphtE
+         pc0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708186781; x=1708791581;
+        d=1e100.net; s=20230601; t=1708193786; x=1708798586;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fhvD70oWDFgCWFnekl9gKqHrpVXyiJ7wChV1vBiMebs=;
-        b=kAV9hNH84u7i3Mba8kA5/W80ttL6M6kzTptRzFPaftXh4bUSBaI2xS7NUAAZql0Zfy
-         3XB/MQiP6xzx/8Bo8PCUrTxyOdFkmaI/4+uCyw1H3kNjv6CQQxHc6TZYpvW+Ag1lapzV
-         AGjeP6uP63qHCDvJKbhKIwUqEfta4UGOdOFZgjjgAwppadmJJaVFm748b7jWxMwyPclv
-         nalNRSmgGyBol0SrQEB75zSbCmb7dXTLvcNHua3pPGU0tCOVjryeGhSHjQw8pCt4j8qz
-         oCruRjme5VJejrzoAQpANf0ucBZUDR5kXFQo/Iwep4ZX4NZayJ8qcrOZV6IkFeVPCfo/
-         WASw==
-X-Gm-Message-State: AOJu0Yw5zKv6sMX+OTNe8HPLzSKKXL4b4kVdkys3Q7cdN32b7cPQbtPH
-	6SDEKO8Ndpa/EEHXATMzcXPaWrTMug2J3W00IYq4TDNA4kLlz6yOpaaMKA5c
-X-Google-Smtp-Source: AGHT+IF2oxplsC8cP1lB5II/uLMpmDDpFyjQjTgaAJ0ABenorOrT39T7wkcskFJOR7BnUPVtKq5C9A==
-X-Received: by 2002:a17:90b:4015:b0:299:6b6d:f4a3 with SMTP id ie21-20020a17090b401500b002996b6df4a3mr1314395pjb.9.1708186780949;
-        Sat, 17 Feb 2024 08:19:40 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b13-20020a63eb4d000000b005dc9439c56bsm1751742pgk.13.2024.02.17.08.19.40
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=28MpLj21qVTEK8TjTKOL0nGG31w9h8k1TshcjliBdBE=;
+        b=GQ7G0idwo/Gzpo9joHT22WvpnL+sQTE7ynekp0w5acXEsgapTt4mxPqinnz8d9UwPC
+         bcYWQbKWCljNtDu+AzYRmWLUylefIvYjWnC2R5xxU+039squQt2qLKMMpeyf/gasouJD
+         E4oZPw0Oj9b9sQcUiyD9kYh2wPywV6uaoqN5z9I3XQUCwEwntF0jKWE01YXKt9a02PPN
+         68K3VhVFW9TxpF6ph4U5XR+jfRDOtNhvI+AiG2cw7Lq7h0VFQs98sdvm7UZ/B75y3cyi
+         Rrb4lK4iUOn5puoWdofE7dXPuN4dGgs6vE3WEXWp/fWr0mF/6ZW/TxUpwzRh0o8M8m1F
+         7Rdw==
+X-Forwarded-Encrypted: i=1; AJvYcCXlB8K6KBOrVNBEBQ37m+QP8NuMu7FY595+bOqE5I98tstNjqA7UNG6zjWApywOOkVXlX5nmkdfu8WCStAkBNNQK6KDinDA6GQOkSym
+X-Gm-Message-State: AOJu0YzREuwX2ayyxRI7TrnyW5oBbeIOSiR0Y840sVHzu5iy6s8NvFuJ
+	w0AnJkIhtShjq4KryqqTOk4seBXqBWbBzoCW+2V63Tvu+YJLZzbH/4qBHvPFGOw=
+X-Google-Smtp-Source: AGHT+IEaOxKBNZXkZNUKkJAzouFxIWaavAx+PVrcoxuddO7HkCkEK8NjX0517n9qztZ0mKLKKz/AHg==
+X-Received: by 2002:a19:4318:0:b0:511:69b3:a47e with SMTP id q24-20020a194318000000b0051169b3a47emr4742170lfa.52.1708193785977;
+        Sat, 17 Feb 2024 10:16:25 -0800 (PST)
+Received: from fedora.. (cable-178-148-234-71.dynamic.sbb.rs. [178.148.234.71])
+        by smtp.gmail.com with ESMTPSA id fg11-20020a056402548b00b00564168e6674sm923545edb.51.2024.02.17.10.16.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Feb 2024 08:19:40 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH] MAINTAINERS: Drop redundant hwmon entries
-Date: Sat, 17 Feb 2024 08:19:34 -0800
-Message-Id: <20240217161934.2448274-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.39.2
+        Sat, 17 Feb 2024 10:16:25 -0800 (PST)
+From: Aleksa Savic <savicaleksa83@gmail.com>
+To: linux-hwmon@vger.kernel.org
+Cc: Aleksa Savic <savicaleksa83@gmail.com>,
+	Jack Doan <me@jackdoan.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (aquacomputer_d5next) Set fan to direct PWM mode when writing value
+Date: Sat, 17 Feb 2024 19:15:36 +0100
+Message-ID: <20240217181536.344386-1-savicaleksa83@gmail.com>
+X-Mailer: git-send-email 2.43.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -66,190 +69,94 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-I am listed as maintainer of several individual hardware monitoring drivers
-and for the hardware monitoring subsystem itself. That is redundant and
-just bloats the MAINTAINERS file. Drop all the redundant entries.
+When setting a PWM value for a fan channel, ensure that the device
+is actually in direct PWM value mode, as it could be in PID, curve or
+fan following mode from previous user configurations. The byte
+signifying the channel mode is just behind the offset for the value.
+Otherwise, setting PWM speed might result in a no-op from the point
+of the user.
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Fixes: 752b927951ea ("hwmon: (aquacomputer_d5next) Add support for Aquacomputer Octo")
+Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
 ---
- MAINTAINERS | 108 ----------------------------------------------------
- 1 file changed, 108 deletions(-)
+ drivers/hwmon/aquacomputer_d5next.c | 29 ++++++++++++++++++++++-------
+ 1 file changed, 22 insertions(+), 7 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index afe08a63f7a9..9c14c97d1056 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10493,22 +10493,6 @@ L:	linux-fbdev@vger.kernel.org
- S:	Orphan
- F:	drivers/video/fbdev/imsttfb.c
+diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
+index 2efe97f8d003..809fbbd087f4 100644
+--- a/drivers/hwmon/aquacomputer_d5next.c
++++ b/drivers/hwmon/aquacomputer_d5next.c
+@@ -111,6 +111,9 @@ static u8 aquaero_secondary_ctrl_report[] = {
+ #define AQC_FAN_POWER_OFFSET		0x06
+ #define AQC_FAN_SPEED_OFFSET		0x08
  
--INA209 HARDWARE MONITOR DRIVER
--M:	Guenter Roeck <linux@roeck-us.net>
--L:	linux-hwmon@vger.kernel.org
--S:	Maintained
--F:	Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
--F:	Documentation/hwmon/ina209.rst
--F:	drivers/hwmon/ina209.c
--
--INA2XX HARDWARE MONITOR DRIVER
--M:	Guenter Roeck <linux@roeck-us.net>
--L:	linux-hwmon@vger.kernel.org
--S:	Maintained
--F:	Documentation/hwmon/ina2xx.rst
--F:	drivers/hwmon/ina2xx.c
--F:	include/linux/platform_data/ina2xx.h
--
- INDEX OF FURTHER KERNEL DOCUMENTATION
- M:	Carlos Bilbao <carlos.bilbao@amd.com>
- S:	Maintained
-@@ -11484,14 +11468,6 @@ S:	Maintained
- F:	arch/x86/include/asm/jailhouse_para.h
- F:	arch/x86/kernel/jailhouse.c
++/* Report offsets for fan control */
++#define AQC_FAN_CTRL_PWM_OFFSET		1
++
+ /* Specs of the Aquaero fan controllers */
+ #define AQUAERO_SERIAL_START			0x07
+ #define AQUAERO_FIRMWARE_VERSION		0x0B
+@@ -160,7 +163,7 @@ static u16 d5next_sensor_fan_offsets[] = { D5NEXT_PUMP_OFFSET, D5NEXT_FAN_OFFSET
  
--JC42.4 TEMPERATURE SENSOR DRIVER
--M:	Guenter Roeck <linux@roeck-us.net>
--L:	linux-hwmon@vger.kernel.org
--S:	Maintained
--F:	Documentation/devicetree/bindings/hwmon/jedec,jc42.yaml
--F:	Documentation/hwmon/jc42.rst
--F:	drivers/hwmon/jc42.c
--
- JFS FILESYSTEM
- M:	Dave Kleikamp <shaggy@kernel.org>
- L:	jfs-discussion@lists.sourceforge.net
-@@ -12557,13 +12533,6 @@ F:	Documentation/hwmon/lm90.rst
- F:	drivers/hwmon/lm90.c
- F:	include/dt-bindings/thermal/lm90.h
+ /* Control report offsets for the D5 Next pump */
+ #define D5NEXT_TEMP_CTRL_OFFSET		0x2D	/* Temperature sensor offsets location */
+-static u16 d5next_ctrl_fan_offsets[] = { 0x97, 0x42 };	/* Pump and fan speed (from 0-100%) */
++static u16 d5next_ctrl_fan_offsets[] = { 0x96, 0x41 };	/* Pump and fan speed (from 0-100%) */
  
--LM95234 HARDWARE MONITOR DRIVER
--M:	Guenter Roeck <linux@roeck-us.net>
--L:	linux-hwmon@vger.kernel.org
--S:	Maintained
--F:	Documentation/hwmon/lm95234.rst
--F:	drivers/hwmon/lm95234.c
--
- LME2510 MEDIA DRIVER
- M:	Malcolm Priestley <tvboxspy@gmail.com>
- L:	linux-media@vger.kernel.org
-@@ -12767,13 +12736,6 @@ W:	https://ez.analog.com/linux-software-drivers
- F:	Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
- F:	drivers/iio/temperature/ltc2983.c
+ /* Specs of the Aquastream Ultimate pump */
+ /* Pump does not follow the standard structure, so only consider the fan */
+@@ -213,7 +216,7 @@ static u16 octo_sensor_fan_offsets[] = { 0x7D, 0x8A, 0x97, 0xA4, 0xB1, 0xBE, 0xC
+ /* Control report offsets for the Octo */
+ #define OCTO_TEMP_CTRL_OFFSET		0xA
+ /* Fan speed offsets (0-100%) */
+-static u16 octo_ctrl_fan_offsets[] = { 0x5B, 0xB0, 0x105, 0x15A, 0x1AF, 0x204, 0x259, 0x2AE };
++static u16 octo_ctrl_fan_offsets[] = { 0x5A, 0xAF, 0x104, 0x159, 0x1AE, 0x203, 0x258, 0x2AD };
  
--LTC4261 HARDWARE MONITOR DRIVER
--M:	Guenter Roeck <linux@roeck-us.net>
--L:	linux-hwmon@vger.kernel.org
--S:	Maintained
--F:	Documentation/hwmon/ltc4261.rst
--F:	drivers/hwmon/ltc4261.c
--
- LTC4282 HARDWARE MONITOR DRIVER
- M:	Nuno Sa <nuno.sa@analog.com>
- L:	linux-hwmon@vger.kernel.org
-@@ -13129,13 +13091,6 @@ S:	Maintained
- F:	Documentation/hwmon/max15301.rst
- F:	drivers/hwmon/pmbus/max15301.c
+ /* Specs of Quadro fan controller */
+ #define QUADRO_NUM_FANS			4
+@@ -232,7 +235,7 @@ static u16 quadro_sensor_fan_offsets[] = { 0x70, 0x7D, 0x8A, 0x97 };
+ /* Control report offsets for the Quadro */
+ #define QUADRO_TEMP_CTRL_OFFSET		0xA
+ #define QUADRO_FLOW_PULSES_CTRL_OFFSET	0x6
+-static u16 quadro_ctrl_fan_offsets[] = { 0x37, 0x8c, 0xe1, 0x136 }; /* Fan speed offsets (0-100%) */
++static u16 quadro_ctrl_fan_offsets[] = { 0x36, 0x8b, 0xe0, 0x135 }; /* Fan speed offsets (0-100%) */
  
--MAX16065 HARDWARE MONITOR DRIVER
--M:	Guenter Roeck <linux@roeck-us.net>
--L:	linux-hwmon@vger.kernel.org
--S:	Maintained
--F:	Documentation/hwmon/max16065.rst
--F:	drivers/hwmon/max16065.c
--
- MAX2175 SDR TUNER DRIVER
- M:	Ramesh Shanmugasundaram <rashanmu@gmail.com>
- L:	linux-media@vger.kernel.org
-@@ -13160,15 +13115,6 @@ S:	Orphan
- F:	Documentation/hwmon/max6650.rst
- F:	drivers/hwmon/max6650.c
+ /* Specs of High Flow Next flow sensor */
+ #define HIGHFLOWNEXT_NUM_SENSORS	2
+@@ -1094,8 +1097,9 @@ static int aqc_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+ 			*val = aqc_percent_to_pwm(*val);
+ 			break;
+ 		default:
+-			ret = aqc_get_ctrl_val(priv, priv->fan_ctrl_offsets[channel],
+-					       val, AQC_BE16);
++			ret = aqc_get_ctrl_val(priv,
++					       priv->fan_ctrl_offsets[channel] +
++					       AQC_FAN_CTRL_PWM_OFFSET, val, AQC_BE16);
+ 			if (ret < 0)
+ 				return ret;
  
--MAX6697 HARDWARE MONITOR DRIVER
--M:	Guenter Roeck <linux@roeck-us.net>
--L:	linux-hwmon@vger.kernel.org
--S:	Maintained
--F:	Documentation/devicetree/bindings/hwmon/max6697.txt
--F:	Documentation/hwmon/max6697.rst
--F:	drivers/hwmon/max6697.c
--F:	include/linux/platform_data/max6697.h
--
- MAX9286 QUAD GMSL DESERIALIZER DRIVER
- M:	Jacopo Mondi <jacopo+renesas@jmondi.org>
- M:	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-@@ -15075,15 +15021,6 @@ M:	Samuel Mendoza-Jonas <sam@mendozajonas.com>
- S:	Maintained
- F:	net/ncsi/
- 
--NCT6775 HARDWARE MONITOR DRIVER - CORE & PLATFORM DRIVER
--M:	Guenter Roeck <linux@roeck-us.net>
--L:	linux-hwmon@vger.kernel.org
--S:	Maintained
--F:	Documentation/hwmon/nct6775.rst
--F:	drivers/hwmon/nct6775-core.c
--F:	drivers/hwmon/nct6775-platform.c
--F:	drivers/hwmon/nct6775.h
--
- NCT6775 HARDWARE MONITOR DRIVER - I2C DRIVER
- M:	Zev Weiss <zev@bewilderbeest.net>
- L:	linux-hwmon@vger.kernel.org
-@@ -17450,35 +17387,6 @@ S:	Maintained
- F:	Documentation/hwmon/pm6764tr.rst
- F:	drivers/hwmon/pmbus/pm6764tr.c
- 
--PMBUS HARDWARE MONITORING DRIVERS
--M:	Guenter Roeck <linux@roeck-us.net>
--L:	linux-hwmon@vger.kernel.org
--S:	Maintained
--W:	http://hwmon.wiki.kernel.org/
--W:	http://www.roeck-us.net/linux/drivers/
--T:	git git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
--F:	Documentation/devicetree/bindings/hwmon/ltc2978.txt
--F:	Documentation/devicetree/bindings/hwmon/max31785.txt
--F:	Documentation/hwmon/adm1275.rst
--F:	Documentation/hwmon/ibm-cffps.rst
--F:	Documentation/hwmon/ir35221.rst
--F:	Documentation/hwmon/lm25066.rst
--F:	Documentation/hwmon/ltc2978.rst
--F:	Documentation/hwmon/ltc3815.rst
--F:	Documentation/hwmon/max16064.rst
--F:	Documentation/hwmon/max20751.rst
--F:	Documentation/hwmon/max31785.rst
--F:	Documentation/hwmon/max34440.rst
--F:	Documentation/hwmon/max8688.rst
--F:	Documentation/hwmon/pmbus-core.rst
--F:	Documentation/hwmon/pmbus.rst
--F:	Documentation/hwmon/tps40422.rst
--F:	Documentation/hwmon/ucd9000.rst
--F:	Documentation/hwmon/ucd9200.rst
--F:	Documentation/hwmon/zl6100.rst
--F:	drivers/hwmon/pmbus/
--F:	include/linux/pmbus.h
--
- PMC SIERRA MaxRAID DRIVER
- L:	linux-scsi@vger.kernel.org
- S:	Orphan
-@@ -22182,22 +22090,6 @@ F:	drivers/mmc/host/renesas_sdhi*
- F:	drivers/mmc/host/tmio_mmc*
- F:	include/linux/mfd/tmio.h
- 
--TMP401 HARDWARE MONITOR DRIVER
--M:	Guenter Roeck <linux@roeck-us.net>
--L:	linux-hwmon@vger.kernel.org
--S:	Maintained
--F:	Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
--F:	Documentation/hwmon/tmp401.rst
--F:	drivers/hwmon/tmp401.c
--
--TMP464 HARDWARE MONITOR DRIVER
--M:	Guenter Roeck <linux@roeck-us.net>
--L:	linux-hwmon@vger.kernel.org
--S:	Maintained
--F:	Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
--F:	Documentation/hwmon/tmp464.rst
--F:	drivers/hwmon/tmp464.c
--
- TMP513 HARDWARE MONITOR DRIVER
- M:	Eric Tremblay <etremblay@distech-controls.com>
- L:	linux-hwmon@vger.kernel.org
+@@ -1233,8 +1237,19 @@ static int aqc_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+ 					return ret;
+ 				break;
+ 			default:
+-				ret = aqc_set_ctrl_val(priv, priv->fan_ctrl_offsets[channel],
+-						       pwm_value, AQC_BE16);
++				/* Set fan controller to direct PWM mode */
++				ctrl_values_offsets[0] = priv->fan_ctrl_offsets[channel];
++				ctrl_values[0] = 0;	/* Use direct PWM mode */
++				ctrl_values_types[0] = AQC_8;
++
++				/* Set the PWM value */
++				ctrl_values_offsets[1] =
++				    priv->fan_ctrl_offsets[channel] + AQC_FAN_CTRL_PWM_OFFSET;
++				ctrl_values[1] = pwm_value;
++				ctrl_values_types[1] = AQC_BE16;
++
++				ret = aqc_set_ctrl_vals(priv, ctrl_values_offsets, ctrl_values,
++							ctrl_values_types, 2);
+ 				if (ret < 0)
+ 					return ret;
+ 				break;
 -- 
-2.39.2
+2.43.0
 
