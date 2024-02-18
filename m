@@ -1,288 +1,164 @@
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3E4B200AE;
-	Sun, 18 Feb 2024 07:58:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 248DE6BB4D
+	for <linux-hwmon@vger.kernel.org>; Sun, 18 Feb 2024 14:24:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708243105; cv=none; b=BXC/uYA34rkOVgFnrRTJkgRD25rT44yXRl4r/clpy3K69LgmpVkqDSb1aK+pYrjTGd8v+zIBGc1vIHW4Mu7LLnUNSDXaKEhxvUTJ/Gu1X7YCeXrAkF59dk9k+Rb+7AHZP+eHj+AAh3LjVKITF0MXLeHEQe4vreWNs8e7t1Y3w78=
+	t=1708266248; cv=none; b=GcEsumhmCB+Wu3u8wanxwti8FHiojPN+exB8d9NKzE/yofstCoTa0DIAkASjiHnLxH/qsYgTSiUXjVIWZrY7ACLu3dCjnZCuNEEW9D2Ao5dTWxrzgFgZd0K6aVyilCHMyRS0cpyaQJZ+/9TRpSZwByH/La3uhSHyYkIAHV0HOhI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708243105; c=relaxed/simple;
-	bh=LCJqQmp8EvzXP2okag81gJ1d/9Sz9Vw//mEsG+70Wkg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=oZi2uqu9BCXSRGV0R2i9diwgLdBI8AhAPMi31Ru6y9XzUwEAr89N+RmcffbgQApki5NDtIIsFSmSXD6231LOfkKccxuWVKkvivpDh4AZg6TNVfIj0Zzj5dcjdE8O1m1JAkE+POkGnSDPtW3M9vtwIhdQDVOiJKxX2ptxmENJ+z4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fr50yw7W; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1708266248; c=relaxed/simple;
+	bh=kcOZXGj5Fk2i6Oi4lKt+KAV9vWDBIDdlElD/HWHSzUE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=O8FNtv9BVSOapuScXOnRjsLQ419M0SxOh/ozwcPqJBokjqk+3aFVglje8aFjG3OG7x6Zmmfq9IEDb8ezbgoPUqsXLWghwk1w3HPVr3SkFZta66CHJY1k7Nlv5LXXkNwo+Mkw59K2jwvpfXRPoj/i8W7M9p5x7WZ6LMyIK/yGfyI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cU5dqNid; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fr50yw7W"
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5611e54a92dso4451502a12.2;
-        Sat, 17 Feb 2024 23:58:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708243102; x=1708847902; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9xvjQdKQSLTDb6d/SX3Ag359hpRipFeHv0DDcAaw9Sg=;
-        b=Fr50yw7WQiMX7LbxO1lRCrnLgEPC60k9tABP6ih8ZM4zSrFirBVVOah2xYMyQz8P7L
-         KjVjILP+PZN21q/azN6ZOccwzNW+bR5HdZIh5kB/BMI6qQN22Jkl5/jqur+Te+bZd75E
-         4u5rc5DivY8qvgTZMPXlan/Ql/OxrNhoDqXfkUZ85C5PEsSGkpIICxZAEIZy254oZwAM
-         3UuEKstAWko266bckpvY+cNHQTEMXhLmuAYHcWGbKOSiRe7pnr02Ro3hTp4uGZE+mWWj
-         TPKWP312Wcf3EcRauUcTDgcTAPFelZZ48MiK3AWghG5Dk/6FLM5PMyfuGEq7rE6PQG7t
-         lPbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708243102; x=1708847902;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9xvjQdKQSLTDb6d/SX3Ag359hpRipFeHv0DDcAaw9Sg=;
-        b=GBVdW7flRVTO1fzlmNHY8scm+GyiLKrOTWD61TEmOOjWunXoq95kmDHcHLZqOLQ3CI
-         QD5MdFixf3ZR+11TyCLBynFdkXNoVnVgkFv/z+bWhAV7blB6899N/RHgByijd75yLYsE
-         Etgz2mAwooQDx8Qkzly5JHWxAjlBewAt7upsx5t6rsFanEI1bpiynuPt1hDCMiV6HSbz
-         Yk5emFYrgQB8ghbSYFS9gLtM39y+q0Vm9htvof2ouFFJu5yYrczl3YYKMAk38djejwTa
-         O7bygjUOI9UP3geM1Peb6EJz0kg5C8x3fIN5BsNepJfbJNx/87pmqcATTGpYOFko6Y//
-         azLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU7bxYg4GDwZP9Xl4rKH9tI9QlORt/1Krd28eYB6aNupPoXxCdMriOVGRGw3owBDCHHtgsMPtReVzecUB7C15jEwZ8LyJDGyFllJCrfdzu3s256mJJEcsQW4EOSVG/IvlKBBVNVvKZPujy3wIzeWam+B2IgDNATQ8BttfHnSGx+ec0=
-X-Gm-Message-State: AOJu0Ywx2a1+5eNISJ/gbQmQqAzzeei365SzpMB90XSwJgyTh5G65itv
-	NhN6e0oSwZyW4ITBdMldQRTiJGE1qqEyuaRH+L5g14dPX8fd94gZ
-X-Google-Smtp-Source: AGHT+IHolR8m3UWhhMdTlFrzlT0ejUIXeg/98gHaJ4tjsdt1SS4ZBd1Gwlkku5RG/IPu8WTWL04DuA==
-X-Received: by 2002:a17:906:35da:b0:a3e:4baa:9ba4 with SMTP id p26-20020a17090635da00b00a3e4baa9ba4mr1239767ejb.58.1708243101828;
-        Sat, 17 Feb 2024 23:58:21 -0800 (PST)
-Received: from debian.fritz.box ([93.184.186.109])
-        by smtp.gmail.com with ESMTPSA id jj12-20020a170907984c00b00a3e64bcd2c1sm458732ejc.142.2024.02.17.23.58.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Feb 2024 23:58:21 -0800 (PST)
-From: Dimitri Fedrau <dima.fedrau@gmail.com>
-To: 
-Cc: Dimitri Fedrau <dima.fedrau@gmail.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Stefan Eichenberger <eichest@gmail.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Subject: [PATCH v7 net-next 08/14] net: phy: marvell-88q2xxx: add support for temperature sensor
-Date: Sun, 18 Feb 2024 08:57:45 +0100
-Message-Id: <20240218075753.18067-9-dima.fedrau@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240218075753.18067-1-dima.fedrau@gmail.com>
-References: <20240218075753.18067-1-dima.fedrau@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cU5dqNid"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708266246; x=1739802246;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kcOZXGj5Fk2i6Oi4lKt+KAV9vWDBIDdlElD/HWHSzUE=;
+  b=cU5dqNidqQxxIWT9Bfuww+4/VjTWoCdscmu6i0q5JvS7FlEHDiAxGDhj
+   ajr6v+ezz9pr/vbcxFMyOvlHAqeg7EXmMFgvrGSzjPyjUOU/yFIk5glxp
+   9nlB9iIWbuX2+Q5n3POKbUbH+FvOD0kwJ8Q+5GRCAZs/MjtPO6UlP5Ayx
+   38GSj/qU4nAabKYLNrz3HQmaV4Zy/c4LSXyXv8HulYCzYgoscffQgod5P
+   FGiQ4nFuzzTFaoog8/a66yFhikPnVja1FzSFl4dZd7X5oA8B9YlgaBbFv
+   pOAkZVQhdgFOqQufG6FfgE5agQgpOnZqJ/ONtL7N+b22kQhDuhLwUk5hn
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10987"; a="13745857"
+X-IronPort-AV: E=Sophos;i="6.06,168,1705392000"; 
+   d="scan'208";a="13745857"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2024 06:24:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,168,1705392000"; 
+   d="scan'208";a="8941378"
+Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
+  by orviesa005.jf.intel.com with ESMTP; 18 Feb 2024 06:24:04 -0800
+Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rbi5J-00034Y-2i;
+	Sun, 18 Feb 2024 14:24:01 +0000
+Date: Sun, 18 Feb 2024 22:23:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:testing 10/11] lib/checksum_kunit.c:512:53: sparse:
+ sparse: incorrect type in argument 5 (different base types)
+Message-ID: <202402182220.PBilO7Xm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Marvell 88q2xxx devices have an inbuilt temperature sensor. Add hwmon
-support for this sensor.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
+head:   87a37f01e744b2203a6d053322632f680f30fade
+commit: 068e2e1754d7c9e92e07c8332b2b64673b4989cc [10/11] lib: checksum: Add some corner cases to csum_ipv6_magic tests
+config: x86_64-randconfig-121-20240218 (https://download.01.org/0day-ci/archive/20240218/202402182220.PBilO7Xm-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240218/202402182220.PBilO7Xm-lkp@intel.com/reproduce)
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Dimitri Fedrau <dima.fedrau@gmail.com>
----
- drivers/net/phy/Kconfig           |   1 +
- drivers/net/phy/marvell-88q2xxx.c | 146 ++++++++++++++++++++++++++++++
- 2 files changed, 147 insertions(+)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402182220.PBilO7Xm-lkp@intel.com/
 
-diff --git a/drivers/net/phy/Kconfig b/drivers/net/phy/Kconfig
-index e261e58bf158..1df0595c5ba9 100644
---- a/drivers/net/phy/Kconfig
-+++ b/drivers/net/phy/Kconfig
-@@ -232,6 +232,7 @@ config MARVELL_10G_PHY
- 
- config MARVELL_88Q2XXX_PHY
- 	tristate "Marvell 88Q2XXX PHY"
-+	depends on HWMON || HWMON=n
- 	help
- 	  Support for the Marvell 88Q2XXX 100/1000BASE-T1 Automotive Ethernet
- 	  PHYs.
-diff --git a/drivers/net/phy/marvell-88q2xxx.c b/drivers/net/phy/marvell-88q2xxx.c
-index 8b8275552014..2ca1b47e8f8f 100644
---- a/drivers/net/phy/marvell-88q2xxx.c
-+++ b/drivers/net/phy/marvell-88q2xxx.c
-@@ -9,6 +9,7 @@
- #include <linux/ethtool_netlink.h>
- #include <linux/marvell_phy.h>
- #include <linux/phy.h>
-+#include <linux/hwmon.h>
- 
- #define PHY_ID_88Q2220_REVB0	(MARVELL_PHY_ID_88Q2220 | 0x1)
- 
-@@ -37,6 +38,18 @@
- #define MDIO_MMD_PCS_MV_GPIO_INT_CTRL			32787
- #define MDIO_MMD_PCS_MV_GPIO_INT_CTRL_TRI_DIS		0x0800
- 
-+#define MDIO_MMD_PCS_MV_TEMP_SENSOR1			32833
-+#define MDIO_MMD_PCS_MV_TEMP_SENSOR1_RAW_INT		0x0001
-+#define MDIO_MMD_PCS_MV_TEMP_SENSOR1_INT		0x0040
-+#define MDIO_MMD_PCS_MV_TEMP_SENSOR1_INT_EN		0x0080
-+
-+#define MDIO_MMD_PCS_MV_TEMP_SENSOR2			32834
-+#define MDIO_MMD_PCS_MV_TEMP_SENSOR2_DIS_MASK		0xc000
-+
-+#define MDIO_MMD_PCS_MV_TEMP_SENSOR3			32835
-+#define MDIO_MMD_PCS_MV_TEMP_SENSOR3_INT_THRESH_MASK	0xff00
-+#define MDIO_MMD_PCS_MV_TEMP_SENSOR3_MASK		0x00ff
-+
- #define MDIO_MMD_PCS_MV_100BT1_STAT1			33032
- #define MDIO_MMD_PCS_MV_100BT1_STAT1_IDLE_ERROR		0x00ff
- #define MDIO_MMD_PCS_MV_100BT1_STAT1_JABBER		0x0100
-@@ -493,6 +506,138 @@ static int mv88q2xxx_resume(struct phy_device *phydev)
- 				  MDIO_CTRL1_LPOWER);
- }
- 
-+#if IS_ENABLED(CONFIG_HWMON)
-+static const struct hwmon_channel_info * const mv88q2xxx_hwmon_info[] = {
-+	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_ALARM),
-+	NULL
-+};
-+
-+static umode_t mv88q2xxx_hwmon_is_visible(const void *data,
-+					  enum hwmon_sensor_types type,
-+					  u32 attr, int channel)
-+{
-+	switch (attr) {
-+	case hwmon_temp_input:
-+		return 0444;
-+	case hwmon_temp_max:
-+		return 0644;
-+	case hwmon_temp_alarm:
-+		return 0444;
-+	default:
-+		return 0;
-+	}
-+}
-+
-+static int mv88q2xxx_hwmon_read(struct device *dev,
-+				enum hwmon_sensor_types type,
-+				u32 attr, int channel, long *val)
-+{
-+	struct phy_device *phydev = dev_get_drvdata(dev);
-+	int ret;
-+
-+	switch (attr) {
-+	case hwmon_temp_input:
-+		ret = phy_read_mmd(phydev, MDIO_MMD_PCS,
-+				   MDIO_MMD_PCS_MV_TEMP_SENSOR3);
-+		if (ret < 0)
-+			return ret;
-+
-+		ret = FIELD_GET(MDIO_MMD_PCS_MV_TEMP_SENSOR3_MASK, ret);
-+		*val = (ret - 75) * 1000;
-+		return 0;
-+	case hwmon_temp_max:
-+		ret = phy_read_mmd(phydev, MDIO_MMD_PCS,
-+				   MDIO_MMD_PCS_MV_TEMP_SENSOR3);
-+		if (ret < 0)
-+			return ret;
-+
-+		ret = FIELD_GET(MDIO_MMD_PCS_MV_TEMP_SENSOR3_INT_THRESH_MASK,
-+				ret);
-+		*val = (ret - 75) * 1000;
-+		return 0;
-+	case hwmon_temp_alarm:
-+		ret = phy_read_mmd(phydev, MDIO_MMD_PCS,
-+				   MDIO_MMD_PCS_MV_TEMP_SENSOR1);
-+		if (ret < 0)
-+			return ret;
-+
-+		*val = !!(ret & MDIO_MMD_PCS_MV_TEMP_SENSOR1_RAW_INT);
-+		return 0;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int mv88q2xxx_hwmon_write(struct device *dev,
-+				 enum hwmon_sensor_types type, u32 attr,
-+				 int channel, long val)
-+{
-+	struct phy_device *phydev = dev_get_drvdata(dev);
-+
-+	switch (attr) {
-+	case hwmon_temp_max:
-+		clamp_val(val, -75000, 180000);
-+		val = (val / 1000) + 75;
-+		val = FIELD_PREP(MDIO_MMD_PCS_MV_TEMP_SENSOR3_INT_THRESH_MASK,
-+				 val);
-+		return phy_modify_mmd(phydev, MDIO_MMD_PCS,
-+				      MDIO_MMD_PCS_MV_TEMP_SENSOR3,
-+				      MDIO_MMD_PCS_MV_TEMP_SENSOR3_INT_THRESH_MASK,
-+				      val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static const struct hwmon_ops mv88q2xxx_hwmon_hwmon_ops = {
-+	.is_visible = mv88q2xxx_hwmon_is_visible,
-+	.read = mv88q2xxx_hwmon_read,
-+	.write = mv88q2xxx_hwmon_write,
-+};
-+
-+static const struct hwmon_chip_info mv88q2xxx_hwmon_chip_info = {
-+	.ops = &mv88q2xxx_hwmon_hwmon_ops,
-+	.info = mv88q2xxx_hwmon_info,
-+};
-+
-+static int mv88q2xxx_hwmon_probe(struct phy_device *phydev)
-+{
-+	struct device *dev = &phydev->mdio.dev;
-+	struct device *hwmon;
-+	char *hwmon_name;
-+	int ret;
-+
-+	/* Enable temperature sense */
-+	ret = phy_modify_mmd(phydev, MDIO_MMD_PCS, MDIO_MMD_PCS_MV_TEMP_SENSOR2,
-+			     MDIO_MMD_PCS_MV_TEMP_SENSOR2_DIS_MASK, 0);
-+	if (ret < 0)
-+		return ret;
-+
-+	hwmon_name = devm_hwmon_sanitize_name(dev, dev_name(dev));
-+	if (IS_ERR(hwmon_name))
-+		return PTR_ERR(hwmon_name);
-+
-+	hwmon = devm_hwmon_device_register_with_info(dev,
-+						     hwmon_name,
-+						     phydev,
-+						     &mv88q2xxx_hwmon_chip_info,
-+						     NULL);
-+
-+	return PTR_ERR_OR_ZERO(hwmon);
-+}
-+
-+#else
-+static int mv88q2xxx_hwmon_probe(struct phy_device *phydev)
-+{
-+	return 0;
-+}
-+#endif
-+
-+static int mv88q2xxx_probe(struct phy_device *phydev)
-+{
-+	return mv88q2xxx_hwmon_probe(phydev);
-+}
-+
- static int mv88q222x_soft_reset(struct phy_device *phydev)
- {
- 	int ret;
-@@ -587,6 +732,7 @@ static struct phy_driver mv88q2xxx_driver[] = {
- 	{
- 		PHY_ID_MATCH_EXACT(PHY_ID_88Q2220_REVB0),
- 		.name			= "mv88q2220",
-+		.probe			= mv88q2xxx_probe,
- 		.get_features		= mv88q2xxx_get_features,
- 		.config_aneg		= mv88q222x_config_aneg,
- 		.aneg_done		= genphy_c45_aneg_done,
+sparse warnings: (new ones prefixed by >>)
+>> lib/checksum_kunit.c:512:53: sparse: sparse: incorrect type in argument 5 (different base types) @@     expected restricted __wsum [usertype] sum @@     got unsigned int @@
+   lib/checksum_kunit.c:512:53: sparse:     expected restricted __wsum [usertype] sum
+   lib/checksum_kunit.c:512:53: sparse:     got unsigned int
+   lib/checksum_kunit.c:517:50: sparse: sparse: incorrect type in argument 5 (different base types) @@     expected restricted __wsum [usertype] sum @@     got unsigned int @@
+   lib/checksum_kunit.c:517:50: sparse:     expected restricted __wsum [usertype] sum
+   lib/checksum_kunit.c:517:50: sparse:     got unsigned int
+   lib/checksum_kunit.c:522:50: sparse: sparse: incorrect type in argument 5 (different base types) @@     expected restricted __wsum [usertype] sum @@     got unsigned int @@
+   lib/checksum_kunit.c:522:50: sparse:     expected restricted __wsum [usertype] sum
+   lib/checksum_kunit.c:522:50: sparse:     got unsigned int
+   lib/checksum_kunit.c:527:48: sparse: sparse: incorrect type in argument 5 (different base types) @@     expected restricted __wsum [usertype] sum @@     got unsigned int @@
+   lib/checksum_kunit.c:527:48: sparse:     expected restricted __wsum [usertype] sum
+   lib/checksum_kunit.c:527:48: sparse:     got unsigned int
+   lib/checksum_kunit.c:532:48: sparse: sparse: incorrect type in argument 5 (different base types) @@     expected restricted __wsum [usertype] sum @@     got unsigned int @@
+   lib/checksum_kunit.c:532:48: sparse:     expected restricted __wsum [usertype] sum
+   lib/checksum_kunit.c:532:48: sparse:     got unsigned int
+>> lib/checksum_kunit.c:542:53: sparse: sparse: incorrect type in argument 5 (different base types) @@     expected restricted __wsum [usertype] sum @@     got restricted __be32 [usertype] @@
+   lib/checksum_kunit.c:542:53: sparse:     expected restricted __wsum [usertype] sum
+   lib/checksum_kunit.c:542:53: sparse:     got restricted __be32 [usertype]
+
+vim +512 lib/checksum_kunit.c
+
+   480	
+   481	static void test_csum_ipv6_magic(struct kunit *test)
+   482	{
+   483	#if defined(CONFIG_NET)
+   484		struct csum_ipv6_magic_data {
+   485			const struct in6_addr saddr;
+   486			const struct in6_addr daddr;
+   487			__be32 len;
+   488			__wsum csum;
+   489			unsigned char proto;
+   490			unsigned char pad[3];
+   491		} *data;
+   492		__sum16 csum_result, expected;
+   493		int ipv6_num_tests = ((MAX_LEN - sizeof(struct csum_ipv6_magic_data)) / WORD_ALIGNMENT);
+   494	
+   495		for (int i = 0; i < ipv6_num_tests; i++) {
+   496			int index = i * WORD_ALIGNMENT;
+   497	
+   498			data = kmalloc(sizeof(struct csum_ipv6_magic_data), GFP_KERNEL);
+   499	
+   500			memcpy(data, random_buf + index, sizeof(struct csum_ipv6_magic_data));
+   501	
+   502			csum_result = csum_ipv6_magic(&data->saddr, &data->daddr,
+   503						      ntohl(data->len), data->proto,
+   504						      data->csum);
+   505			expected = (__force __sum16)htons(expected_csum_ipv6_magic[i]);
+   506			CHECK_EQ(csum_result, expected);
+   507		}
+   508	
+   509		/* test corner cases */
+   510		memset(tmp_buf, 0xff, sizeof(struct in6_addr));
+   511		csum_result = csum_ipv6_magic((struct in6_addr *)tmp_buf, (struct in6_addr *)tmp_buf,
+ > 512					      0xffff, 0xff, 0xffffffff);
+   513		expected = (__force __sum16)htons(expected_csum_ipv6_magic_corner[0]);
+   514		CHECK_EQ(csum_result, expected);
+   515	
+   516		csum_result = csum_ipv6_magic((struct in6_addr *)tmp_buf, (struct in6_addr *)tmp_buf,
+   517					      0xffff, 0, 0xffffffff);
+   518		expected = (__force __sum16)htons(expected_csum_ipv6_magic_corner[1]);
+   519		CHECK_EQ(csum_result, expected);
+   520	
+   521		csum_result = csum_ipv6_magic((struct in6_addr *)tmp_buf, (struct in6_addr *)tmp_buf,
+   522					      0xffff, 1, 0xffffffff);
+   523		expected = (__force __sum16)htons(expected_csum_ipv6_magic_corner[2]);
+   524		CHECK_EQ(csum_result, expected);
+   525	
+   526		csum_result = csum_ipv6_magic((struct in6_addr *)tmp_buf, (struct in6_addr *)tmp_buf,
+   527					      0, 0xff, 0xffffffff);
+   528		expected = (__force __sum16)htons(expected_csum_ipv6_magic_corner[3]);
+   529		CHECK_EQ(csum_result, expected);
+   530	
+   531		csum_result = csum_ipv6_magic((struct in6_addr *)tmp_buf, (struct in6_addr *)tmp_buf,
+   532					      1, 0xff, 0xffffffff);
+   533		expected = (__force __sum16)htons(expected_csum_ipv6_magic_corner[4]);
+   534		CHECK_EQ(csum_result, expected);
+   535	
+   536		csum_result = csum_ipv6_magic((struct in6_addr *)tmp_buf, (struct in6_addr *)tmp_buf,
+   537					      0xffff, 0xff, 0);
+   538		expected = (__force __sum16)htons(expected_csum_ipv6_magic_corner[5]);
+   539		CHECK_EQ(csum_result, expected);
+   540	
+   541		csum_result = csum_ipv6_magic((struct in6_addr *)tmp_buf, (struct in6_addr *)tmp_buf,
+ > 542					      0xffff, 0xff, htonl(1));
+   543		expected = (__force __sum16)htons(expected_csum_ipv6_magic_corner[6]);
+   544		CHECK_EQ(csum_result, expected);
+   545	
+
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
