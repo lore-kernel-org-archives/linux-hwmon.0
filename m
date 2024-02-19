@@ -1,315 +1,159 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91E1844C89
-	for <linux-hwmon@vger.kernel.org>; Mon, 19 Feb 2024 17:25:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26D0354FA2
+	for <linux-hwmon@vger.kernel.org>; Mon, 19 Feb 2024 22:18:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708363518; cv=none; b=qEz7F3+uHbPtBpqRBZjQhzMFn/cFspurGbQXna5K+cuOzqxIeTAh3fJGYpmOVG2VasDk5pOYVuBK07PrPGZW/aWKkvMHIrPRCvu7AWqkicRZtIOL+LeuzNxEESCKH0Y5bBKawzzfF9f+Vs9+vASUrPt6pf7HOGfwhVtQ21b/UoM=
+	t=1708381113; cv=none; b=k/25DJ/C8rRk3fLPXrH14JL6Y7bQCGHJeJUB6y0vDQx8+cdVwoHYRq0bU+zPh6TLrMhaqPkPnJxo3cmVPpp4HXpurThaEZE9gayLX+vHH+9GQwtumxYtrdbkaGpXfMNF81ewQx6rOYBRwS3tr6H2ZNkGxltozcPdDtVMwkhzrdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708363518; c=relaxed/simple;
-	bh=0+YNs0FonC5Gbvz1Wi4/Dzx2fgdNxGmyNNymAqkIG18=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=dJQdmYbB5l3t64uIilWntrpMw4N266YBuqwka1so6uTTjs4Cca4hw39LWUI/2/s10SHr3qsmSvwliXbl/EvzW3hutvWiYMvheVaBn1dpVyMMlNb/tpHeZ6ZcmjdTDNmvo5t4HBJrB46PqO3hU0ADh8Bhzkr5ylBVKnbmI4hCH8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g7oKy9NK; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1708381113; c=relaxed/simple;
+	bh=+Ij6kwZR+2dY9E/Lb0nEhao1ELc9Q88v/d3z6cVuWLs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Kcf67YnDmzeOYuN5G0R5oF0yn48VG/aKVE2PysLlYyavKWuXhqsoEu2AmhxWcPQJGgMwnumDpZ/AmNih9nXAVH9WVitfysmb/Fy5rMV0g3Zoh4YK8CNwXChSdMAwpKWn9I5Ajl9AHSUsD1HPb/4+8fwan/heQLBtmiDAMuC77Dw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=RBDcXqM3; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g7oKy9NK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708363516; x=1739899516;
-  h=date:from:to:cc:subject:message-id;
-  bh=0+YNs0FonC5Gbvz1Wi4/Dzx2fgdNxGmyNNymAqkIG18=;
-  b=g7oKy9NKq6cYbEPF5TYN1HUupUxVJP2Hy2eogmqtMZ8DqS327wc0tI4K
-   wZTS7rCRJAwVf9nb9uAtsg2TdVPY4qx0vbIuhwT0WnkJbLm05awkseeDN
-   aX9qCflf+LdNBtcW8Izy6BCAAO2Cqv1wRng2GuuK7a363eMsrq4qK2scg
-   0Nj9y8AYlBTFDIDCox1ceQksqy2gg/C3bNzlDoxmsu9TtVh+xb1dDbPtn
-   tAMC4DliTBN5WdFaZmgL44U5A0dMDJIcfo18IlYdWPr/C+3xjhxCN9+q2
-   814Ev3Xiv37lSVtkTNYOUu2Ol0H3y4E4shfAy885SOuLDxkpmynO3u1cX
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10989"; a="13848220"
-X-IronPort-AV: E=Sophos;i="6.06,170,1705392000"; 
-   d="scan'208";a="13848220"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2024 09:25:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,170,1705392000"; 
-   d="scan'208";a="4789838"
-Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by fmviesa006.fm.intel.com with ESMTP; 19 Feb 2024 09:25:02 -0800
-Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rc7Nw-0003xw-06;
-	Mon, 19 Feb 2024 17:24:59 +0000
-Date: Tue, 20 Feb 2024 01:23:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:testing] BUILD SUCCESS
- d877bff96ee53b59c4d34399fe0785e3eaf59cd3
-Message-ID: <202402200148.KmTRu0wq-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="RBDcXqM3"
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id C00212C01BD;
+	Tue, 20 Feb 2024 11:18:28 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1708381108;
+	bh=3dVDwJlreXWm2zRETKBpr2jnueJtS3dMPMAFBAB+1Qk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=RBDcXqM3k9+8WmJDh5IW1IgSp06S/P8YQZvY47Qi0r5VWfc8GQ2c9WWjZ4gjoVu/X
+	 Hl6r3LUE7reO8y5OxQqGxTOB6RaxlFdxwPuTYyvpF0cRmavPCRtzmHvCFz4S2M2wDk
+	 AE8wXSSkAVdj68qiUJDKIUx6/Ue9jMjmUWIWBnuKWnOVJUncO0+t68ogl1PJpvbSt2
+	 OyfgffIG/m8J+dQ732EWwe5V25ItPZzirw6vhW0cgE/RZgDaMpUiiEkV+kjcMDzyxm
+	 6vpm2w2HssJVnj90816qrEimPYzwqJG15ODuShIpm90tdsDEqPZ6oRUR4FwiC+ik0v
+	 AcFJdCunq3S5A==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B65d3d3b40000>; Tue, 20 Feb 2024 11:18:28 +1300
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+	by pat.atlnz.lc (Postfix) with ESMTP id 89E4B13EDA8;
+	Tue, 20 Feb 2024 11:18:28 +1300 (NZDT)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+	id 8357A280AA8; Tue, 20 Feb 2024 11:18:28 +1300 (NZDT)
+From: Chris Packham <chris.packham@alliedtelesis.co.nz>
+To: antoniu.miclaus@analog.com,
+	alexandre.belloni@bootlin.com,
+	robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org,
+	jdelvare@suse.com,
+	linux@roeck-us.net
+Cc: linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v7 0/2] drivers: rtc: add max313xx series rtc driver
+Date: Tue, 20 Feb 2024 11:18:22 +1300
+Message-ID: <20240219221827.3821415-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.43.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=BKkQr0QG c=1 sm=1 tr=0 ts=65d3d3b4 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=k7vzHIieQBIA:10 a=gAnH3GRIAAAA:8 a=QyXUC8HyAAAA:8 a=yHl31WW8M-5d8Fq9UaYA:9 a=3ZKOabzyN94A:10 a=oVHKYsEdi7-vN-J5QA_j:22
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
-branch HEAD: d877bff96ee53b59c4d34399fe0785e3eaf59cd3  Revert "drm/tests/drm_buddy: add alloc_contiguous test"
+Datasheets:
+  https://www.analog.com/media/en/technical-documentation/data-sheets/MAX=
+31328.pdf
+  https://www.analog.com/media/en/technical-documentation/data-sheets/MAX=
+31329.pdf
+  https://www.analog.com/media/en/technical-documentation/data-sheets/MAX=
+31331.pdf
+  https://www.analog.com/media/en/technical-documentation/data-sheets/MAX=
+31334.pdf
+  https://www.analog.com/media/en/technical-documentation/data-sheets/MAX=
+31341B-MAX31341C.pdf
+  https://www.analog.com/media/en/technical-documentation/data-sheets/MAX=
+31342.pdf
+  https://www.analog.com/media/en/technical-documentation/data-sheets/MAX=
+31343.pdf
 
-Warning ids grouped by kconfigs:
+Note that I've only got access to a MAX31334 to test with. I'm relying on=
+ the
+fact that Ibrahim would have been testing on the other variants through e=
+arlier
+iterations of this series. I've also made a best effort attempt to integr=
+ate
+the MAX31335 support with the more generic code but as the datasheet is n=
+ot
+public I can't be sure it's been done correctly and the MAX31335 has defi=
+nitely
+not been tested with this updated code (Antoniu if you could test it on y=
+our
+hardware that would really help).
 
-gcc_recent_errors
-|-- arc-randconfig-002-20240219
-|   `-- lib-checksum_kunit.c:warning:expected_csum_ipv6_magic_corner-defined-but-not-used
-|-- arm64-randconfig-001-20240219
-|   `-- lib-checksum_kunit.c:warning:expected_csum_ipv6_magic_corner-defined-but-not-used
-|-- csky-randconfig-002-20240219
-|   `-- lib-checksum_kunit.c:warning:expected_csum_ipv6_magic_corner-defined-but-not-used
-|-- i386-randconfig-061-20240219
-|   |-- lib-checksum_kunit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-restricted-__wsum-usertype-sum-got-restricted-__be32-usertype
-|   `-- lib-checksum_kunit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-restricted-__wsum-usertype-sum-got-unsigned-int
-|-- i386-randconfig-063-20240219
-|   |-- lib-checksum_kunit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-restricted-__wsum-usertype-sum-got-restricted-__be32-usertype
-|   `-- lib-checksum_kunit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-restricted-__wsum-usertype-sum-got-unsigned-int
-|-- i386-randconfig-r111-20240219
-|   |-- lib-checksum_kunit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-restricted-__wsum-usertype-sum-got-restricted-__be32-usertype
-|   `-- lib-checksum_kunit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-restricted-__wsum-usertype-sum-got-unsigned-int
-|-- parisc-randconfig-001-20240219
-|   `-- lib-checksum_kunit.c:warning:expected_csum_ipv6_magic_corner-defined-but-not-used
-`-- s390-randconfig-r121-20240219
-    `-- lib-checksum_kunit.c:warning:expected_csum_ipv6_magic_corner-defined-but-not-used
-clang_recent_errors
-|-- i386-randconfig-062-20240219
-|   |-- lib-checksum_kunit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-restricted-__wsum-usertype-sum-got-restricted-__be32-usertype
-|   `-- lib-checksum_kunit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-restricted-__wsum-usertype-sum-got-unsigned-int
-|-- powerpc-randconfig-002-20240219
-|   `-- lib-checksum_kunit.c:warning:unused-variable-expected_csum_ipv6_magic_corner
-|-- x86_64-buildonly-randconfig-005-20240219
-|   `-- lib-checksum_kunit.c:warning:unused-variable-expected_csum_ipv6_magic_corner
-`-- x86_64-buildonly-randconfig-006-20240219
-    `-- lib-checksum_kunit.c:warning:unused-variable-expected_csum_ipv6_magic_corner
+changelog:
+since v6:
+  - Roll changes into max31335 driver that was landed while this was
+    in-flight.
+  - Adjusted code order and variable names to reduce the delta with
+    the max31335
 
-elapsed time: 1446m
+since v5:
+  - change of maintainer
+  - use adi,ti-diode property
+  - deal with oscillator fail and releasing SWRST
 
-configs tested: 209
-configs skipped: 4
+since v4:
+  - dt-binding: add enum value "2" to aux-voltage-chargable
+  - dt-binding: remove adi,trickle-diode-enable
+  - dt-binding: change description of trickle-resistor-ohms
+  - dt-binding: reorder as in example schema
+  - parse "wakeup-source" when irq not requested
+  - remove limitation on max31328 irq and clockout
+  - remove error and warning messages during trickle charger setup
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+since v3:
+  - dt-binding: remove interrupt names.
+  - dt-binding: add description for "interrupts" property
+  - dt-binding: replace deprecated property "trickle-diode-disable"
+      by "aux-voltage-chargeable"
+  - dt-binding: add new property "adi,trickle-diode-enable"
+  - dt-binding: remove "wakeup-source"
+  - use clear_bit instead of __clear_bit
+  - use devm_of_clk_add_hw_provider instead of of_clk_add_provider
+  - use chip_desc pointer as driver data instead of enum.
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                      axs103_smp_defconfig   gcc  
-arc                                 defconfig   gcc  
-arc                         haps_hs_defconfig   gcc  
-arc                   randconfig-001-20240219   gcc  
-arc                   randconfig-002-20240219   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                            hisi_defconfig   gcc  
-arm                        multi_v7_defconfig   gcc  
-arm                         mv78xx0_defconfig   clang
-arm                          pxa3xx_defconfig   clang
-arm                   randconfig-001-20240219   gcc  
-arm                   randconfig-002-20240219   gcc  
-arm                   randconfig-003-20240219   gcc  
-arm                   randconfig-004-20240219   gcc  
-arm                           tegra_defconfig   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240219   gcc  
-arm64                 randconfig-002-20240219   gcc  
-arm64                 randconfig-003-20240219   clang
-arm64                 randconfig-004-20240219   clang
-csky                             alldefconfig   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240219   gcc  
-csky                  randconfig-002-20240219   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20240219   clang
-hexagon               randconfig-002-20240219   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240219   gcc  
-i386         buildonly-randconfig-002-20240219   gcc  
-i386         buildonly-randconfig-003-20240219   clang
-i386         buildonly-randconfig-004-20240219   gcc  
-i386         buildonly-randconfig-005-20240219   clang
-i386         buildonly-randconfig-006-20240219   clang
-i386                                defconfig   clang
-i386                  randconfig-001-20240219   clang
-i386                  randconfig-002-20240219   clang
-i386                  randconfig-003-20240219   clang
-i386                  randconfig-004-20240219   gcc  
-i386                  randconfig-005-20240219   clang
-i386                  randconfig-006-20240219   gcc  
-i386                  randconfig-011-20240219   gcc  
-i386                  randconfig-012-20240219   clang
-i386                  randconfig-013-20240219   gcc  
-i386                  randconfig-014-20240219   clang
-i386                  randconfig-015-20240219   gcc  
-i386                  randconfig-016-20240219   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240219   gcc  
-loongarch             randconfig-002-20240219   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                         amcore_defconfig   gcc  
-m68k                       bvme6000_defconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                        m5407c3_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                        bcm63xx_defconfig   clang
-mips                         db1xxx_defconfig   clang
-mips                           ip22_defconfig   gcc  
-mips                       lemote2f_defconfig   gcc  
-mips                     loongson2k_defconfig   gcc  
-mips                          malta_defconfig   gcc  
-mips                      maltaaprp_defconfig   clang
-mips                      maltasmvp_defconfig   gcc  
-mips                        maltaup_defconfig   clang
-mips                          rm200_defconfig   gcc  
-nios2                         10m50_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240219   gcc  
-nios2                 randconfig-002-20240219   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240219   gcc  
-parisc                randconfig-002-20240219   gcc  
-parisc64                            defconfig   gcc  
-powerpc                    adder875_defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                       holly_defconfig   clang
-powerpc                        icon_defconfig   gcc  
-powerpc                   microwatt_defconfig   gcc  
-powerpc                 mpc8313_rdb_defconfig   gcc  
-powerpc                     mpc83xx_defconfig   clang
-powerpc                      obs600_defconfig   clang
-powerpc                     powernv_defconfig   gcc  
-powerpc                      ppc6xx_defconfig   gcc  
-powerpc               randconfig-001-20240219   gcc  
-powerpc               randconfig-002-20240219   clang
-powerpc               randconfig-003-20240219   clang
-powerpc                 xes_mpc85xx_defconfig   gcc  
-powerpc64             randconfig-001-20240219   clang
-powerpc64             randconfig-002-20240219   gcc  
-powerpc64             randconfig-003-20240219   gcc  
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-riscv                    nommu_virt_defconfig   clang
-riscv                 randconfig-001-20240219   gcc  
-riscv                 randconfig-002-20240219   clang
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-s390                  randconfig-001-20240219   gcc  
-s390                  randconfig-002-20240219   clang
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                         apsh4a3a_defconfig   gcc  
-sh                                  defconfig   gcc  
-sh                             espt_defconfig   gcc  
-sh                          r7780mp_defconfig   gcc  
-sh                          r7785rp_defconfig   gcc  
-sh                    randconfig-001-20240219   gcc  
-sh                    randconfig-002-20240219   gcc  
-sh                          rsk7264_defconfig   gcc  
-sh                      rts7751r2d1_defconfig   gcc  
-sh                           se7724_defconfig   gcc  
-sh                     sh7710voipgw_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240219   gcc  
-sparc64               randconfig-002-20240219   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                    randconfig-001-20240219   clang
-um                    randconfig-002-20240219   gcc  
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240219   clang
-x86_64       buildonly-randconfig-002-20240219   clang
-x86_64       buildonly-randconfig-003-20240219   gcc  
-x86_64       buildonly-randconfig-004-20240219   clang
-x86_64       buildonly-randconfig-005-20240219   clang
-x86_64       buildonly-randconfig-006-20240219   clang
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240219   clang
-x86_64                randconfig-002-20240219   clang
-x86_64                randconfig-003-20240219   gcc  
-x86_64                randconfig-004-20240219   gcc  
-x86_64                randconfig-005-20240219   clang
-x86_64                randconfig-006-20240219   clang
-x86_64                randconfig-011-20240219   clang
-x86_64                randconfig-012-20240219   gcc  
-x86_64                randconfig-013-20240219   clang
-x86_64                randconfig-014-20240219   gcc  
-x86_64                randconfig-015-20240219   clang
-x86_64                randconfig-016-20240219   gcc  
-x86_64                randconfig-071-20240219   gcc  
-x86_64                randconfig-072-20240219   clang
-x86_64                randconfig-073-20240219   gcc  
-x86_64                randconfig-074-20240219   gcc  
-x86_64                randconfig-075-20240219   clang
-x86_64                randconfig-076-20240219   clang
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                           alldefconfig   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                randconfig-001-20240219   gcc  
-xtensa                randconfig-002-20240219   gcc  
+since v2:
+  - add "break" to fix warning: unannotated fall-through
+    Reported-by: kernel test robot <lkp@intel.com>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+since v1:
+  - dt-binding: update title and description
+  - dt-binding: remove last example
+  - drop watchdog support
+  - support reading 12Hr format instead of forcing 24hr at probe time
+  - use "tm_year % 100" instead of range check
+  - refactor max313xx_init for readability
+
+Ibrahim Tilki (2):
+  drivers: rtc: add max313xx series rtc driver
+  dt-bindings: rtc: add max313xx RTCs
+
+ .../devicetree/bindings/rtc/adi,max31335.yaml |   70 -
+ .../devicetree/bindings/rtc/adi,max313xx.yaml |  167 +++
+ drivers/rtc/Kconfig                           |    2 +-
+ drivers/rtc/rtc-max31335.c                    | 1154 +++++++++++------
+ 4 files changed, 958 insertions(+), 435 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/rtc/adi,max31335.ya=
+ml
+ create mode 100644 Documentation/devicetree/bindings/rtc/adi,max313xx.ya=
+ml
+
+--=20
+2.43.2
+
