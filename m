@@ -1,94 +1,95 @@
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0828D36B17
-	for <linux-hwmon@vger.kernel.org>; Mon, 19 Feb 2024 14:11:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A41FA381C2;
+	Mon, 19 Feb 2024 14:22:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708351888; cv=none; b=rb7jcPEqAk0khWHwnso+3/8nHWetqVkFmeNxRp8xQE2sxMjPUtRMUlhtrJ1nFrH8hFzSGHVjl5tC/qlAeSjS0lgKUqCD+kWtCH0EaQ2ZkxIwIQYktdqqEtaSwdJ92oSB+fQeYE0VWvXHa/OfGE8H+3hA039X17JZNuX1Rn9ItVY=
+	t=1708352578; cv=none; b=Fr45ECYtWfM5wfTwt1LJhkwRpcpdeOx9nwhhJJg4hVdQkhfWx9suT9tFVhf02ICaOCGeLeSbSB8RTsZm+sNAvNcUFHdQoaJVAuC5ZqBhhpbMqnewYBt75Wk/pQeRISLJQn9dyM4WsbBynukoCEFptohh06MmbAPTndLhUMSgvoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708351888; c=relaxed/simple;
-	bh=AL5wPKCohpQ2yiWdCvAfraFWUPzLoyX4xAACLyQi/3k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IPJKSGKrfFUQEQDRji2/54tUziFbeP+v/pzVkYHV3LdSAqb2q+T6fj92HRNDMy4rCyWG6lAr5YvBPQ7Q2ObPcudYRI0/oEKf3TyHpSQI7tMBruU9+Kz1SOoM+23to0RldE7Q6eHnqTc2X1UqH6rqeYY3dVVFOfNtMB7YGJMVtxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ofwXhxnc; arc=none smtp.client-ip=209.85.219.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1708352578; c=relaxed/simple;
+	bh=TgZIetNidKZZum2lofaITucvNOdC3VO2k45kly53r9g=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=GlS51P0M8WGqxrpW5nkTczX0LOskMkWeNuYtnQkc035rdcY4u62AKzTXBiocKBy/MOKp3LLxxayI8qBNRzLZfd7YqS0bbGbd1ztU1Zr60bcvlL3tjm9EWmGfH1AvUF8FSZgSBmi3ozZhRWZYuad6gw7+r5rjEdDyhEwCJQqacDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Wq4VfRRh; arc=none smtp.client-ip=217.70.183.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ofwXhxnc"
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-dc6e080c1f0so3876520276.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 19 Feb 2024 06:11:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708351886; x=1708956686; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CLWue9ycIOQi61G3VhAa/UT0phNqo7WitTTg69VFfzg=;
-        b=ofwXhxncZ+RLtd3LUTHnaNto2ucA2DnyFFN7l/uC6YZ91b8slLEVkrogxnycQAQqZY
-         QpfmhKD1ffifQAH6n+Qwnb9VZ/XQjn63tgGGfY6NEv2WDKxTTpiB9p0moMN/WIFZXQRd
-         CpEiZ1b3NaHuW57ekigQC7zuE1IhKkciUD0hDlOIHYRs5CG9uMSjskIRV3pIz6+k5TSA
-         fDeDHAR1kPQmuB3neP1C1vCKHbOX/KhoioADwRryeBp9KNDXZlsauNdZjlAQj9LAOJoZ
-         63r8wGvIyIYh7Bj8I+7SRmOs7c/6G/DVfytUhFVqIP1WhzCeYkLYJkOochOxIsHgWwxm
-         GX3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708351886; x=1708956686;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CLWue9ycIOQi61G3VhAa/UT0phNqo7WitTTg69VFfzg=;
-        b=SLOKLGJOwls3NNGFhbCsLP8g6A49UVMeej+kr1r/uN+whOojut7irhoG7w3qja01A5
-         RUVVWffbbGlXOfwAkFx6Erh8xKDI3le8dwlIVB9C7JEzLRkF0sezmP3dn7scSOAPecJl
-         ELc2sSMyJc9z4oWbAFzqmL5behPPHivAXMBbLj8peICDTvgh8LWlz2759rz5KMjerxOb
-         Q+XmHTmOvjDiiMQjigUoWA2EK4GGgfinyS93sB5uoTicxJuf4duhRpYEgl129GD2novH
-         04MOQqGxyLlTWbaCg3hjsSzMkk4xQHSyCs03Ud9fmOF5x2EWBoMpBDnX48r2pMESwJC+
-         JiUA==
-X-Forwarded-Encrypted: i=1; AJvYcCWssZQdbiSA9j8UJgDiN8P0qQfNqKepko3+XlksHQ9i6KYQy1xQMBq8wzKjnET+G26QBfPPBkDm9ihDUfVwzS9y4Rc4gh8vmYUPnLc=
-X-Gm-Message-State: AOJu0YySXKTR2yuDxg5GKUuSCbSs+7HhfUIb0K27A/rYBtp62T4JQeDy
-	gu0gLWZp8uDfUmlBZmLh4k0A4GXk8AJ8cg3zu5sBy+xNG6LeXuzzqOQSVPVx6mtNemQB91Xn9mB
-	PvzIVOZtyCQtVhO8wTY332rkor+KwVWXKQcS6mg==
-X-Google-Smtp-Source: AGHT+IEyZLci8obwFdop3kZF7Pd3UOHq57xrv0s6peR9LNlh8VjmZu/Hfi8U9om9ebeFZisu/0Ryyvpi+AcjByuGjXU=
-X-Received: by 2002:a25:4156:0:b0:dcd:49d0:eece with SMTP id
- o83-20020a254156000000b00dcd49d0eecemr10314098yba.60.1708351885246; Mon, 19
- Feb 2024 06:11:25 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Wq4VfRRh"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BAFB41BF207;
+	Mon, 19 Feb 2024 14:22:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1708352572;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yMECSj8MFsTFMbFx4UOjwlLmrEMaulzJW9DpcgMGVBY=;
+	b=Wq4VfRRh8X//3SGa71PdK5V4k51owTqe+daTj255nCc4KvEBONJNncCV7jaHHMsjWnn64W
+	wxQOgEtKPU9r6UFXfCWHit4EPPh4JrjWuGnD2wmIV9VcDbVZfP49G+usNSCdZNonlIfwck
+	jBSA00UKLkGx4LBMtReNPLL1SO7CP/c5yhN7KXDasyifdP1WlvgWqdZFKSfa2VEwfxdZ85
+	txh2NivPs1EExNpE7t8uBtqmhez8g3QwWyr4HSNmUWza8f/5cLbLJLyEiLlHKnx+EZCUDY
+	I+fP0KRn+xWEOq/ySEM1gFIg++JxPuwyGvA8ChdcTmdYn5irkJX48pvgL8j+Mg==
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
-In-Reply-To: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Mon, 19 Feb 2024 15:11:14 +0100
-Message-ID: <CACRpkdbmQLAL-W_2y_T4sBJtZN-DRXMsYhODP=sXSJ4ysUKpxQ@mail.gmail.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 19 Feb 2024 15:22:51 +0100
+Message-Id: <CZ94G0Z1KZEJ.1S56H5MK9T1RU@bootlin.com>
 Subject: Re: [PATCH 00/13] Add Mobileye EyeQ5 support to the Nomadik I2C
  controller & use hrtimers for timeouts
-To: =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-arm-kernel@lists.infradead.org, 
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
-	Gregory Clement <gregory.clement@bootlin.com>, 
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
-	Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc: "Andi Shyti" <andi.shyti@kernel.org>, "Rob Herring"
+ <robh+dt@kernel.org>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-mips@vger.kernel.org>, "Gregory Clement"
+ <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
+ <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
+ <tawfik.bayouk@mobileye.com>, "Jean Delvare" <jdelvare@suse.com>, "Guenter
+ Roeck" <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>
+To: "Linus Walleij" <linus.walleij@linaro.org>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+X-Mailer: aerc 0.15.2
+References: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
+ <CACRpkdbmQLAL-W_2y_T4sBJtZN-DRXMsYhODP=sXSJ4ysUKpxQ@mail.gmail.com>
+In-Reply-To: <CACRpkdbmQLAL-W_2y_T4sBJtZN-DRXMsYhODP=sXSJ4ysUKpxQ@mail.gmail.com>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On Thu, Feb 15, 2024 at 5:52=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@bootl=
-in.com> wrote:
+Hello,
 
->  - Add a new compatible to support Mobileye EyeQ5 which uses the same IP
->    block as Nomadik.
+On Mon Feb 19, 2024 at 3:11 PM CET, Linus Walleij wrote:
+> On Thu, Feb 15, 2024 at 5:52=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@boo=
+tlin.com> wrote:
+>
+> >  - Add a new compatible to support Mobileye EyeQ5 which uses the same I=
+P
+> >    block as Nomadik.
+>
+> Sweet! I'm amazed ST Micro licensed this "ARM PrimeCell" to Mobileye, but
+> it's a well tested IP and used in eg ST automotive SoC:s so it's a solid
+> product.
+>
+> It feels worth it for all the time I have put into maintaining it, finall=
+y some
+> real users again! :)
 
-Sweet! I'm amazed ST Micro licensed this "ARM PrimeCell" to Mobileye, but
-it's a well tested IP and used in eg ST automotive SoC:s so it's a solid
-product.
+Using the existing Nomadik drivers with the AMBA bus infrastructure on a
+non-ARM platform and having it work as-is made our day here at Bootlin.
+We are indeed grateful for your work maintaining this platform!
 
-It feels worth it for all the time I have put into maintaining it, finally =
-some
-real users again! :)
+Regards,
 
-Yours,
-Linus Walleij
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
+------------------------------------------------------------------------
+
