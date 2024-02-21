@@ -1,133 +1,101 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFAF184FAD;
-	Wed, 21 Feb 2024 18:04:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDF8A83CDF;
+	Wed, 21 Feb 2024 19:04:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708538683; cv=none; b=XfVkWY6JCBMIqDOhTe0Kmzo8G9PfiYd3BjRjK5Sx0DQKMIw4QcLriEwMOpGcyGB8KpOpvex+VjkS+V8l0txaMyKXv+m0yWKvM7USA1O8dqOhOwrx4TDjYLUtUiVU7F5LUvMgY7Y8U1Fp/d8TLt33tMIyuyJ/NoFY7nJp1nOpl5k=
+	t=1708542279; cv=none; b=uSHiqUvbv4iJiCsV6kmTVb6WOXGYm9SWNQNR2GwtleqLkn0ckndlhohoOMRcO9clYPT90BAMA8wTJeQtoC/qMLFjAbZFdfZoarDozTwsHOjHPp9X09kTyp/x+Lc6CYlwLkZUFDcy6dkdyDJ6iifOxjla/MaNMno/JSP8/qcwVx8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708538683; c=relaxed/simple;
-	bh=N3hyQeCD6IQBf8tWP+/hKiWNxUyx+FYv+Qik7aMVPn8=;
+	s=arc-20240116; t=1708542279; c=relaxed/simple;
+	bh=NJr0kU4HKd9Cq5dTKxpS+QwQd1RVnuBn72URxt0AwCw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RfVru2FI34IFWdF1gnKooEWaYgGHXIGXUV9TJ5W3heK2enSNcKFxXf2wxdLM1IEtuEgMstOrAOm3ChbLhRh7iIADikiq9gZumjXIyYXmPl6aHtvrxtPYp4LRBpWb/zQKPm6ptrcZoIbYBVNq8awPBMoBcoh2vSu9atrcAZB2cts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cQt+VtgO; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=gMKJeFDnw6A0LFye8XaGiVYKB7IYE/uMI0LjrYZ9YyNP6HQDoxzpqL2qi4qYx3welU8MQroJv51Jo3QTFBovLJ6rJc2KpZnl0x52WgeCv8fxJPTeazWfYM9KWP228Xd763FbIM9zTR+yFqVidnOEnNtrWebwJ5ZuKdrFllHrw1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jRYPf2p1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cQt+VtgO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708538682; x=1740074682;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=N3hyQeCD6IQBf8tWP+/hKiWNxUyx+FYv+Qik7aMVPn8=;
-  b=cQt+VtgOuFecBhjBLeA3z/jGGPVXZmbLde5sBJSHaaT2GciMMyexjCB+
-   QE5hqZ0mXZfuY5jJ5hX3kVqkKDPG5oDLbC7D4fMdEbYoQD1aVQFgFg7hs
-   DUdWpdmFO9MS+0/U+UInzOc72wArD2Uzzflq3ol1aU8PSrg5PBDMxFbTr
-   /AEePP6XLzsvzPLvTlnUkIYeyZhd6Sh14OZqqd5V59sb/j4pWMOnvsmw6
-   HEkoR2D4f9xcFAbDNb4A1kcb7MpsmTEZzStaSmvaCcube+GAVUuk4TKnx
-   UHcmpVVROOrPNxJ8sZiQYcK/IXe7BHNQbdYlnxTENJSByCTh6+FDfRN0s
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10991"; a="13845918"
-X-IronPort-AV: E=Sophos;i="6.06,176,1705392000"; 
-   d="scan'208";a="13845918"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2024 10:04:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,176,1705392000"; 
-   d="scan'208";a="5420455"
-Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by fmviesa006.fm.intel.com with ESMTP; 21 Feb 2024 10:04:29 -0800
-Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rcqwz-0005ZM-24;
-	Wed, 21 Feb 2024 18:04:26 +0000
-Date: Thu, 22 Feb 2024 02:04:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>,
-	antoniu.miclaus@analog.com, alexandre.belloni@bootlin.com,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, jdelvare@suse.com, linux@roeck-us.net
-Cc: oe-kbuild-all@lists.linux.dev, linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-	Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: Re: [PATCH v7 1/2] drivers: rtc: add max313xx series rtc driver
-Message-ID: <202402220139.EmXyZO4Q-lkp@intel.com>
-References: <20240219221827.3821415-2-chris.packham@alliedtelesis.co.nz>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jRYPf2p1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07104C433C7;
+	Wed, 21 Feb 2024 19:04:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708542278;
+	bh=NJr0kU4HKd9Cq5dTKxpS+QwQd1RVnuBn72URxt0AwCw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jRYPf2p1tJeQLUMXYTaypEyvaqBBZWQmXCMhlz1/QnRdZznHmPSVZhdu8LgmmygrR
+	 GqmkWycomOB+8/QB6T4cSOcRfYSIhMsvCT8TgAxhR+ksxI9vXoYCfxC4Si+HC6110w
+	 uBeqeB4mUZ1eW4Uw/dlvOn0hbgtStNKfyE65l1f3Cy7vJFuu8ofJYyKzNEIVTgnpVe
+	 vs/cMdDskjIuKbFQ6Kofhv1VDfkAN8BNmSMr+LYeULq5f6IEbW8w6/4jfyEnkIG38Y
+	 BYbZO9Wabb6uSs9kSl2Ne8hAilKOmQZe8c/kAzpmNGsVWpvvlBYXX+m+hFOR2ZHrZu
+	 dUslM4cJgD8MQ==
+Date: Wed, 21 Feb 2024 19:04:34 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, Zev Weiss <zev@bewilderbeest.net>
+Subject: Re: [PATCH] dt-bindings: hwmon: nuvoton,nct6775: Add compatible
+ value for NCT6799
+Message-ID: <20240221-profound-static-6a027433f3b1@spud>
+References: <20240221155158.2234898-1-linux@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="kQlp8ugGV5PK/iEO"
+Content-Disposition: inline
+In-Reply-To: <20240221155158.2234898-1-linux@roeck-us.net>
+
+
+--kQlp8ugGV5PK/iEO
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240219221827.3821415-2-chris.packham@alliedtelesis.co.nz>
+Content-Transfer-Encoding: quoted-printable
 
-Hi Chris,
+On Wed, Feb 21, 2024 at 07:51:58AM -0800, Guenter Roeck wrote:
+> While NCT6799 is mostly compatible to NCT6798, it needs a separate
+> compatible entry because it is not completely compatible and does
+> require chip specific code in the driver.
+>=20
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 
-kernel test robot noticed the following build warnings:
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-[auto build test WARNING on abelloni/rtc-next]
-[also build test WARNING on linus/master v6.8-rc5 next-20240221]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Cheers,
+Conor.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Packham/drivers-rtc-add-max313xx-series-rtc-driver/20240220-062057
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
-patch link:    https://lore.kernel.org/r/20240219221827.3821415-2-chris.packham%40alliedtelesis.co.nz
-patch subject: [PATCH v7 1/2] drivers: rtc: add max313xx series rtc driver
-config: x86_64-randconfig-123-20240220 (https://download.01.org/0day-ci/archive/20240222/202402220139.EmXyZO4Q-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240222/202402220139.EmXyZO4Q-lkp@intel.com/reproduce)
+> ---
+>  Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml=
+ b/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
+> index 358b262431fc..e3db642878d4 100644
+> --- a/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
+> @@ -25,6 +25,7 @@ properties:
+>        - nuvoton,nct6796
+>        - nuvoton,nct6797
+>        - nuvoton,nct6798
+> +      - nuvoton,nct6799
+> =20
+>    reg:
+>      maxItems: 1
+> --=20
+> 2.39.2
+>=20
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402220139.EmXyZO4Q-lkp@intel.com/
+--kQlp8ugGV5PK/iEO
+Content-Type: application/pgp-signature; name="signature.asc"
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/rtc/rtc-max31335.c:727:22: sparse: sparse: symbol 'max313xx_clk_init' was not declared. Should it be static?
->> drivers/rtc/rtc-max31335.c:750:21: sparse: sparse: symbol 'max313xx_nvmem_cfg' was not declared. Should it be static?
+-----BEGIN PGP SIGNATURE-----
 
-vim +/max313xx_clk_init +727 drivers/rtc/rtc-max31335.c
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZdZJQgAKCRB4tDGHoIJi
+0u83AP41nrxwD6RprpM4m8EkrzvmoWcDp7un159ipgYova/QhQEA6Il8rLcecH7f
+cu5how/Rq4vFVXEKZXF9KN3ItEigCAY=
+=7e1D
+-----END PGP SIGNATURE-----
 
-   726	
- > 727	struct clk_init_data max313xx_clk_init = {
-   728		.name = "max313xx-clkout",
-   729		.ops = &max313xx_clkout_ops,
-   730	};
-   731	
-   732	static int max313xx_nvmem_reg_read(void *priv, unsigned int offset,
-   733					   void *val, size_t bytes)
-   734	{
-   735		struct max313xx *rtc = priv;
-   736		unsigned int reg = rtc->chip->ram_reg + offset;
-   737	
-   738		return regmap_bulk_read(rtc->regmap, reg, val, bytes);
-   739	}
-   740	
-   741	static int max313xx_nvmem_reg_write(void *priv, unsigned int offset,
-   742					    void *val, size_t bytes)
-   743	{
-   744		struct max313xx *rtc = priv;
-   745		unsigned int reg = rtc->chip->ram_reg + offset;
-   746	
-   747		return regmap_bulk_write(rtc->regmap, reg, val, bytes);
-   748	}
-   749	
- > 750	struct nvmem_config max313xx_nvmem_cfg = {
-   751		.reg_read = max313xx_nvmem_reg_read,
-   752		.reg_write = max313xx_nvmem_reg_write,
-   753		.word_size = 8,
-   754	};
-   755	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--kQlp8ugGV5PK/iEO--
