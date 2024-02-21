@@ -1,64 +1,67 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 083D97BB18
-	for <linux-hwmon@vger.kernel.org>; Wed, 21 Feb 2024 14:13:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC9BE811E6;
+	Wed, 21 Feb 2024 15:52:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708524831; cv=none; b=BVaEdtL6huLf2VYbht+d56UYDsTpZz5ZTXiZtF7xlAOvsFoDi4KjwdiwFzJZoaJ/M+1ps6R/2ce8T1NtIp4l/mQv8GgAOyQ+r2ws9QiHcJ9lVGEMufnHtdpjHIYeg8dECHcs87hyiGQeAUNxl24bfrluG0KEpvpCd2lvMf8mG1U=
+	t=1708530734; cv=none; b=ikY9/mopsssQLTIT9t5ie1SVn59k58xm53Iz+CNU7goeNoGHRBQNjPP3uRlWMygR1mYGfJ5beAULgcSPqtN5HNVBBNicu0P1FYBEeVNGzhOwqDpwsEge8kPjeiqVZHYxypUSuBkdxIvZ8iz2GOxhCbfP5rAQ2TCUMboRNixPgpY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708524831; c=relaxed/simple;
-	bh=LIOKB/YJGtj8o6xyM7p5yjgt/v0kZLKlK1+qy11tDCc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=HUh9wuDcPU+yRVpDuhWaosCv7LrfudMW0T4JZsAAcxz5MrzdUPt/+siodULTgO1p/7zmGti2mJK9oVaNgmdtm0ZzzZce/srkvbRWNj74IODnMIRrZ1CDRr+5Ia47TK+xV2XC+02o6DSX2yVFBuvILA5GqmPlEi3R4yZdLuCrTFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G1ZKE/JZ; arc=none smtp.client-ip=209.85.214.181
+	s=arc-20240116; t=1708530734; c=relaxed/simple;
+	bh=Hc2gNosDH0WL3FwUMTKC6bjH3WyWXFkJYhu4PhBaqz8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=p+StxV6fTx8WushFZZuoRzIYiTG8oZLihFjPX//jaegyXrQfBUklE5XYtbjVzNwM3CRqjlUQw4PwP7dKLxei6vy6JbXODuUdTKVNaRilH7FN+GZ/E/PaHCgFbFT92NbuYCU6lNRhlvHuq4Zl7joJWp7cY/ckjN/2og6N3WY5NVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bgTGeDWD; arc=none smtp.client-ip=209.85.210.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G1ZKE/JZ"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1dc139ed11fso14354005ad.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 21 Feb 2024 06:13:49 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bgTGeDWD"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-6e4741b23d7so2144426b3a.0;
+        Wed, 21 Feb 2024 07:52:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708524829; x=1709129629; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1708530721; x=1709135521; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=mV0SUjUW8P38l0827k6CiSx1nzGj9qnrmPm+XADjmss=;
-        b=G1ZKE/JZBAihsactiarRVfU9KrUmcJwQ39E+YOpKBFPD3AlcBHXPx1c+Hra1ZGgmm0
-         hzxcKYt1mLb1A6d+BCnuU/scN9/f04B5GxVuUmtyUWLvO5C5gLlhC1IJPg0ew7d04uXN
-         DKdei89u9IYKDGeEABudaxtWzkz/LKlhfJEyRXYe6t5McMvZnNknb43ahogcXDAP0i/Q
-         Dk3DtXletrxqDPVwbrVNl70OPCh02gBaitrbjJ0ufYG2zsid/7E6DdMli6Gbd47SGUMT
-         tAgbniYks29p/3e3jSIVLkQyzPujHpx1NbKnj1KPXDyMWBnoy6akbt8I3hw6yL/FK8gg
-         XCNg==
+        bh=2xk9Gvlf2w28BmSjU5WKADzraWBiGin15NR7z07i4Zs=;
+        b=bgTGeDWD1pofMm6++dAdVixI7ThjRiEbNkeDkeQ6uT3oH30lcuwzulOlLsvKxUJ7+F
+         Wt9P9Ft9k1iXwYy5zibqlcTy/MiuwAtKxC3mrvTCImWgBHD/g7+kEBIY0E5EBinp8FOY
+         QH2fVYXYv+Hy48kH/NzdZeDFIfCwLxQ45SCvVepIoq2R3/GHdbLFWkxZYPSWDGy/jiJn
+         9DaURZPbTybezWIo9RIUpANPxfCwxsq1hZLE2NS9wIGupEcFnS2V2F0oEQ6Vyo/HG9un
+         Mj6rCoyDPUmP9VTuj2eBWw3rbJCYbUFOyMt70RrW1jxJshfI3/CLzvSV0qPlq1XRJUtC
+         Eotg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708524829; x=1709129629;
+        d=1e100.net; s=20230601; t=1708530721; x=1709135521;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mV0SUjUW8P38l0827k6CiSx1nzGj9qnrmPm+XADjmss=;
-        b=tmLnrKIm/mCDwoqgVTXI/GV86GXqy+5DjTpZBxeOZxF2+EHEg+VmJCeOMhqyOCn9Qb
-         DOL37f9xiyczfjiLAC/PtodWwHX6Zt5IQnDu0OPZ4cWh/KLiOSQ60Nd5YKNDAY5lq6sW
-         64zt3leInE7UCNMS9CcMWqxFpFCgZ78fLJN2ojq9yWnEAvlW5dbRdl0WIYSuvHnWisLc
-         HsRi1SN1kAsIaUDOkvqgqx40sUwhAnINcTcvyR6kqlz/9DkMBIkt2BMJCL6+IgfEJkB9
-         RPaHm3YfpRrHbeD6AUEpz4UfhNJlhSrVqX68qHUm0/eW8YfBc+Y4bmrxCgwJpM3Gct41
-         bDVg==
-X-Gm-Message-State: AOJu0YzYskgG3gV0H5D3ikYLWUobOMNGkp3PEEdfXfMWNAjeRPExUK5r
-	DnTgqFLyntiEeMsgT9qCwVl0VFef8ZdqdO/1hm50aaQ+pG4lLGZHlVyfTqQj
-X-Google-Smtp-Source: AGHT+IHlx1ocSrSfQC6rBvgXoD6UTBtcfEZEJLFio4hh+rDxr6jnScr4zDB4c6GhAMdPZIIAhlTMfw==
-X-Received: by 2002:a17:902:c952:b0:1db:edb8:35f6 with SMTP id i18-20020a170902c95200b001dbedb835f6mr14666807pla.5.1708524828796;
-        Wed, 21 Feb 2024 06:13:48 -0800 (PST)
+        bh=2xk9Gvlf2w28BmSjU5WKADzraWBiGin15NR7z07i4Zs=;
+        b=EYGCIpEv0j9izfJPOYwkWxqRQ6B+Agy50XfOE3bDmLU7Wkv+VQysTIPJ6ehz17Fc9r
+         XSTw7PAMUrc/rfr4iuUMxYyrO9ywLZvCjUPBsBCXJ1T21KgGwrrSVEp+Qztw6/b8+1IA
+         nOE2Zf6dOjmIvLjzXiHhqWh9/zfS+LOiDDzZe/SjM0TW6GrpF6RyXfDycnhrAeUjQprx
+         KW0AxVDgQvJrCq70UDorqopoTdTDBRdn8Xd55O9ONFnCM7LYZrvF5yH5KN591vYL7/Dz
+         leGVZLCnyEZPUEdE778VqWJeftffQb0dVjTPYe7CjRYa83Jk4YwjwQYK/xFKlnqzZ80A
+         C1Og==
+X-Forwarded-Encrypted: i=1; AJvYcCV3hUZ+aoRznyybjAOGPhFX0jtHgn0Fw/Kh9tZyQ/w0poSZDIMRb3JciEGj7sLzTMVwT1DC5Koz/V1I2qC5qTCL5pYCSw9KGF99Y0bwrZyz1DElX8Gw/Ht+5jO/2pkfrmQK7KTLxt3t
+X-Gm-Message-State: AOJu0Yw4FLFbiQeuvN55vDl7kWSdfSXXBHo1psSA9Ibqq7rcoX1lCSoK
+	HyDmbCszyPiSoCgcxDF4jRTkEI1outvraI20qVQCyIIr37rWDLl8
+X-Google-Smtp-Source: AGHT+IESlZPmZB6/4B+dz/kWbgIFk+P/yIAK0XMGtrEWa37UGlzShSisN/YO2nhOBgZoH7hUyCgSKg==
+X-Received: by 2002:a05:6a20:e68c:b0:19c:8ed6:8bb5 with SMTP id mz12-20020a056a20e68c00b0019c8ed68bb5mr17627595pzb.39.1708530721194;
+        Wed, 21 Feb 2024 07:52:01 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 6-20020a170902e9c600b001d706e373a9sm8061836plk.292.2024.02.21.06.13.47
+        by smtp.gmail.com with ESMTPSA id lp8-20020a056a003d4800b006e4c4c3d4cfsm90032pfb.207.2024.02.21.07.52.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Feb 2024 06:13:48 -0800 (PST)
+        Wed, 21 Feb 2024 07:52:00 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Erhard Furtner <erhard_f@mailbox.org>,
-	Ahmad Khalifa <ahmad@khalifa.ws>
-Subject: [PATCH] nct6775: Fix access to temperature configuration registers
-Date: Wed, 21 Feb 2024 06:13:45 -0800
-Message-Id: <20240221141345.2231350-1-linux@roeck-us.net>
+To: Rob Herring <robh+dt@kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Zev Weiss <zev@bewilderbeest.net>,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH] dt-bindings: hwmon: nuvoton,nct6775: Add compatible value for NCT6799
+Date: Wed, 21 Feb 2024 07:51:58 -0800
+Message-Id: <20240221155158.2234898-1-linux@roeck-us.net>
 X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -68,117 +71,27 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The number of temperature configuration registers does
-not always match the total number of temperature registers.
-This can result in access errors reported if KASAN is enabled.
+While NCT6799 is mostly compatible to NCT6798, it needs a separate
+compatible entry because it is not completely compatible and does
+require chip specific code in the driver.
 
-BUG: KASAN: global-out-of-bounds in nct6775_probe+0x5654/0x6fe9 nct6775_core
-
-Reported-by: Erhard Furtner <erhard_f@mailbox.org>
-Closes: https://lore.kernel.org/linux-hwmon/d51181d1-d26b-42b2-b002-3f5a4037721f@roeck-us.net/
-Fixes: 578ab5f0e4b1 ("hwmon: (nct6775) Add support for NCT6791D")
-Fixes: b7f1f7b2523a ("hwmon: (nct6775) Additional TEMP registers for nct6799")
-Cc: Ahmad Khalifa <ahmad@khalifa.ws>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
-Erhard,
+ Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-it would be great if you can test this patch on your system.
-
-Thanks,
-Guenter
-
- drivers/hwmon/nct6775-core.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/hwmon/nct6775-core.c b/drivers/hwmon/nct6775-core.c
-index 8d2ef3145bca..9fbab8f02334 100644
---- a/drivers/hwmon/nct6775-core.c
-+++ b/drivers/hwmon/nct6775-core.c
-@@ -3512,6 +3512,7 @@ int nct6775_probe(struct device *dev, struct nct6775_data *data,
- 	const u16 *reg_temp_mon, *reg_temp_alternate, *reg_temp_crit;
- 	const u16 *reg_temp_crit_l = NULL, *reg_temp_crit_h = NULL;
- 	int num_reg_temp, num_reg_temp_mon, num_reg_tsi_temp;
-+	int num_reg_temp_config;
- 	struct device *hwmon_dev;
- 	struct sensor_template_group tsi_temp_tg;
+diff --git a/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml b/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
+index 358b262431fc..e3db642878d4 100644
+--- a/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
++++ b/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
+@@ -25,6 +25,7 @@ properties:
+       - nuvoton,nct6796
+       - nuvoton,nct6797
+       - nuvoton,nct6798
++      - nuvoton,nct6799
  
-@@ -3594,6 +3595,7 @@ int nct6775_probe(struct device *dev, struct nct6775_data *data,
- 		reg_temp_over = NCT6106_REG_TEMP_OVER;
- 		reg_temp_hyst = NCT6106_REG_TEMP_HYST;
- 		reg_temp_config = NCT6106_REG_TEMP_CONFIG;
-+		num_reg_temp_config = ARRAY_SIZE(NCT6106_REG_TEMP_CONFIG);
- 		reg_temp_alternate = NCT6106_REG_TEMP_ALTERNATE;
- 		reg_temp_crit = NCT6106_REG_TEMP_CRIT;
- 		reg_temp_crit_l = NCT6106_REG_TEMP_CRIT_L;
-@@ -3669,6 +3671,7 @@ int nct6775_probe(struct device *dev, struct nct6775_data *data,
- 		reg_temp_over = NCT6106_REG_TEMP_OVER;
- 		reg_temp_hyst = NCT6106_REG_TEMP_HYST;
- 		reg_temp_config = NCT6106_REG_TEMP_CONFIG;
-+		num_reg_temp_config = ARRAY_SIZE(NCT6106_REG_TEMP_CONFIG);
- 		reg_temp_alternate = NCT6106_REG_TEMP_ALTERNATE;
- 		reg_temp_crit = NCT6106_REG_TEMP_CRIT;
- 		reg_temp_crit_l = NCT6106_REG_TEMP_CRIT_L;
-@@ -3746,6 +3749,7 @@ int nct6775_probe(struct device *dev, struct nct6775_data *data,
- 		reg_temp_over = NCT6775_REG_TEMP_OVER;
- 		reg_temp_hyst = NCT6775_REG_TEMP_HYST;
- 		reg_temp_config = NCT6775_REG_TEMP_CONFIG;
-+		num_reg_temp_config = ARRAY_SIZE(NCT6775_REG_TEMP_CONFIG);
- 		reg_temp_alternate = NCT6775_REG_TEMP_ALTERNATE;
- 		reg_temp_crit = NCT6775_REG_TEMP_CRIT;
- 
-@@ -3821,6 +3825,7 @@ int nct6775_probe(struct device *dev, struct nct6775_data *data,
- 		reg_temp_over = NCT6775_REG_TEMP_OVER;
- 		reg_temp_hyst = NCT6775_REG_TEMP_HYST;
- 		reg_temp_config = NCT6776_REG_TEMP_CONFIG;
-+		num_reg_temp_config = ARRAY_SIZE(NCT6776_REG_TEMP_CONFIG);
- 		reg_temp_alternate = NCT6776_REG_TEMP_ALTERNATE;
- 		reg_temp_crit = NCT6776_REG_TEMP_CRIT;
- 
-@@ -3900,6 +3905,7 @@ int nct6775_probe(struct device *dev, struct nct6775_data *data,
- 		reg_temp_over = NCT6779_REG_TEMP_OVER;
- 		reg_temp_hyst = NCT6779_REG_TEMP_HYST;
- 		reg_temp_config = NCT6779_REG_TEMP_CONFIG;
-+		num_reg_temp_config = ARRAY_SIZE(NCT6779_REG_TEMP_CONFIG);
- 		reg_temp_alternate = NCT6779_REG_TEMP_ALTERNATE;
- 		reg_temp_crit = NCT6779_REG_TEMP_CRIT;
- 
-@@ -4034,6 +4040,7 @@ int nct6775_probe(struct device *dev, struct nct6775_data *data,
- 		reg_temp_over = NCT6779_REG_TEMP_OVER;
- 		reg_temp_hyst = NCT6779_REG_TEMP_HYST;
- 		reg_temp_config = NCT6779_REG_TEMP_CONFIG;
-+		num_reg_temp_config = ARRAY_SIZE(NCT6779_REG_TEMP_CONFIG);
- 		reg_temp_alternate = NCT6779_REG_TEMP_ALTERNATE;
- 		reg_temp_crit = NCT6779_REG_TEMP_CRIT;
- 
-@@ -4123,6 +4130,7 @@ int nct6775_probe(struct device *dev, struct nct6775_data *data,
- 		reg_temp_over = NCT6798_REG_TEMP_OVER;
- 		reg_temp_hyst = NCT6798_REG_TEMP_HYST;
- 		reg_temp_config = NCT6779_REG_TEMP_CONFIG;
-+		num_reg_temp_config = ARRAY_SIZE(NCT6779_REG_TEMP_CONFIG);
- 		reg_temp_alternate = NCT6798_REG_TEMP_ALTERNATE;
- 		reg_temp_crit = NCT6798_REG_TEMP_CRIT;
- 
-@@ -4204,7 +4212,8 @@ int nct6775_probe(struct device *dev, struct nct6775_data *data,
- 				  = reg_temp_crit[src - 1];
- 			if (reg_temp_crit_l && reg_temp_crit_l[i])
- 				data->reg_temp[4][src - 1] = reg_temp_crit_l[i];
--			data->reg_temp_config[src - 1] = reg_temp_config[i];
-+			if (i < num_reg_temp_config)
-+				data->reg_temp_config[src - 1] = reg_temp_config[i];
- 			data->temp_src[src - 1] = src;
- 			continue;
- 		}
-@@ -4217,7 +4226,8 @@ int nct6775_probe(struct device *dev, struct nct6775_data *data,
- 		data->reg_temp[0][s] = reg_temp[i];
- 		data->reg_temp[1][s] = reg_temp_over[i];
- 		data->reg_temp[2][s] = reg_temp_hyst[i];
--		data->reg_temp_config[s] = reg_temp_config[i];
-+		if (i < num_reg_temp_config)
-+			data->reg_temp_config[s] = reg_temp_config[i];
- 		if (reg_temp_crit_h && reg_temp_crit_h[i])
- 			data->reg_temp[3][s] = reg_temp_crit_h[i];
- 		else if (reg_temp_crit[src - 1])
+   reg:
+     maxItems: 1
 -- 
 2.39.2
 
