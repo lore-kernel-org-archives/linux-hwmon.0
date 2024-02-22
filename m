@@ -1,568 +1,386 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1537A381A1;
-	Thu, 22 Feb 2024 09:48:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 469C33EA93;
+	Thu, 22 Feb 2024 10:27:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708595305; cv=none; b=iLH7D+nEYeo+nYH42epWwN+6YlDWTgG89SuJ+7IXRmnIQhrpttSLsk/1hOcMq5CpETt6zr+TyE7AL/Nqz1MPNMthERrB6aeCpz/vt4rv76uSLLNMhHjJ1VfqvVySR3+qCRhcJSVrvaZnMJZW4KJPMnps8tBFS0PS/vZ24Fu/wO8=
+	t=1708597632; cv=none; b=RD1NGqc+EhWvgP8/E1pznITf9J7WuI2cWZGnov8sjNkJo9bYG8LSxsjaBiLrNiPQhkE2v/MiKLvw4flTP1I4rnQRGTMqOrHaPtLAGgnrjTGuP+34LRAHIcc2mbhreaI52Nnh7KYqIA6RSpF8mUnmj0svVqYH3N2/T2Ru196rPGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708595305; c=relaxed/simple;
-	bh=dmUazriXwFNzM3sE1wGM7IS3zRztscYDLyUV2Em9rYo=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=VXeOaKHxRKIxbftD0WD52AKBs9kViDv9qhI649VLs3wcz69U216I87lRmMP9F3oisVqNeul0K87qhxgoI6xqzs4G2D7JydLjp11a5N0ojQOjmY/UO5OZrZ3TaOUnaYH8F2MkPOnrCYHTV7X2g0WkEdfdk+iSG2XT4hzRp3dSris=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZMiyvQZS; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1708597632; c=relaxed/simple;
+	bh=XkMmPaDJC2digdifHNHxroIc8uomG8v/u6X53OssCyU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=T1dRWy5Oik3uFhw6LKyMGCgGnrGkRw+8ym/27gk7sNPrXCduni4hXQh6DFIrllTDteLzC6nYi+alk1WCeyYMfIoB3LVEI6PkqgpT0dtwiQ8eeFM/N7GpqycVDDxJVFglzPQE1p8tp3/ae9nF00tRWWCzMhMiInGVNlB7Rqod45M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=uV+ixZ2K; arc=none smtp.client-ip=212.227.17.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZMiyvQZS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708595303; x=1740131303;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=dmUazriXwFNzM3sE1wGM7IS3zRztscYDLyUV2Em9rYo=;
-  b=ZMiyvQZSjbq9w2iFCOmBApOFSCcHyC79/O/kKzc0R/7FjLbP72BiOTlm
-   Kr+eZC5Fn4BJqDlxf1ckUTwLoS5yOKw1frriuYYOw7ojjOmwugr0RgaeG
-   x8ezoo6s2+sogMsSsPbb1MLP6BayyAnRXW4l5fLwp4HSx9HD8WrDDLmkd
-   W48rQt0z8JxXuiGtIc1U+WnMQ/lTmnhUAnvwoddFvti30p565uM3tDbJD
-   FevAI5UQB2Rp4tpEyCDO2okwoNqPe8CJEuveLpz9tmw3gNy/5RKdflGQg
-   CdPRhh28q9ijCJedxdsWiI+ZIzkm37kAVaRLQj72kKjElB2cmDRPP3rXB
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10991"; a="28250671"
-X-IronPort-AV: E=Sophos;i="6.06,177,1705392000"; 
-   d="scan'208";a="28250671"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2024 01:48:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,177,1705392000"; 
-   d="scan'208";a="5403694"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.94.249.55])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2024 01:48:19 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Thu, 22 Feb 2024 11:48:14 +0200 (EET)
-To: =?ISO-8859-2?Q?Mustafa_Ek=BAi?= <mustafa.eskieksi@gmail.com>
-cc: Hans de Goede <hdegoede@redhat.com>, LKML <linux-kernel@vger.kernel.org>, 
-    platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-    jdelvare@suse.com, linux@roeck-us.net, Pavel Machek <pavel@ucw.cz>, 
-    Lee Jones <lee@kernel.org>, Lee Jones <lee@kernel.org>
-Subject: Re: [PATCH] Add wmi driver support for Casper Excalibur laptops.
-In-Reply-To: <20240221221549.640515-1-mustafa.eskieksi@gmail.com>
-Message-ID: <2716dc6e-d091-f61c-7f77-a87215adfe19@linux.intel.com>
-References: <20240221221549.640515-1-mustafa.eskieksi@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="uV+ixZ2K"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+	t=1708597607; x=1709202407; i=w_armin@gmx.de;
+	bh=XkMmPaDJC2digdifHNHxroIc8uomG8v/u6X53OssCyU=;
+	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
+	 In-Reply-To;
+	b=uV+ixZ2KM1DsLD8tWqTjd262oHEW71A8RZxLhkYk8TO4RpfbYIj4PTcloONmnMn2
+	 OqXvs+/CQRSfQiMwz0Ja5tS97KMBswOtdYpXEokoqIPvGQmSJ16VtlkgPVGetjU15
+	 8uZffCacvByrgnHckiGrQGfZEWMT2AB3uqyy4MCe+Labr3kb0/BQZRdzwllhSwc4O
+	 2XE2uGR7JcHJxpyf5b5lJSyBNlRA/kGhgrpec1UZOjAQjD9Ea2lt37Rkqsdd2bjlf
+	 vFCEyDGxweShzuaYHjztAgMmagkjPusXxkA76XxseBOt3/9O+Res4m/4uapjiGImD
+	 NX+yNGk9UhcNMeTDQg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M4s51-1rbBHE2vDD-0021g3; Thu, 22
+ Feb 2024 11:26:47 +0100
+Message-ID: <dc966b56-9139-4e8b-b667-051c167f6bee@gmx.de>
+Date: Thu, 22 Feb 2024 11:26:45 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-1497083232-1708595294=:1961"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] Add wmi driver support for Casper Excalibur laptops.
+To: Guenter Roeck <linux@roeck-us.net>,
+ =?UTF-8?Q?Mustafa_Ek=C5=9Fi?= <mustafa.eskieksi@gmail.com>,
+ hdegoede@redhat.com, ilpo.jarvinen@linux.intel.com,
+ linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+ linux-hwmon@vger.kernel.org
+Cc: jdelvare@suse.com
+References: <20240221221549.640515-1-mustafa.eskieksi@gmail.com>
+ <042951f1-200f-4d89-b968-ea68c52ea607@roeck-us.net>
+Content-Language: en-US
+From: Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <042951f1-200f-4d89-b968-ea68c52ea607@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:knWaZkolgL2yc/3jylHCoVHz4SUk9HUeW59BpZ++qSEufRJHGfW
+ oPC87Uz+u9yrSQQMloCYAVO41oAC6WxbyK9z7Dk2LYGDshbiCRg/i9/SsDpo8MNfdPcxsL4
+ jYHp6yMC3LfmtrpBPLmbMM6Y7hSYqRT505PwSf12otze/W7YLPe9xK6YZaax5psaQ7r74vJ
+ adxV7egWu4DFdZCn5ncIA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:fnDAW7Ppfzk=;bHR985ghvZGvFDRKPrr/dVm9UYV
+ brvQAu6UDuA7R9rJQlvmoiEB8DyHs9ngtXsDFfMx2AmHc5FP3xQODDn3sngMMPzkTfOxeYgLd
+ 1QZHgx1Y/ZNJAnX1msORqkCzcYrYJs7Aax3Hh/WsZk/dwB0MT2O07VtBi8OkYxAJbm5aLEJbj
+ da42TSGrYxXFI+ZeJwFcIUSdas5KL5rnGG2/YvGxAlZDE3Q86oLug1zuLDlukmTVu0hR94whi
+ edPKJiXRMtYtgfIlQ5QEHVgmKwqBcafHYwQ94J+Gvomi1lp+M9l76P3YvLWEUG99jGHpQmJX9
+ dwo8aXWNNF/a3DUSzA5FNOqVL4Wv4hlSXDAAxox7WzZ/v8WSvJvfXNoiEZFHmudgjrgteqyiT
+ ybVeWle39oJ4hnGLeS5B7i1rXzfI8jL6j6u+b5SzyZpsZYjPmZg8ebI+abSjvTOhqAIVn2sTL
+ Z8XdwIzFbnHyeoSXFduChR2zCCLPFlGDJyYqopJqKyTLj4n9Dy1L1dUrsTnpIt75AW6H/uFhM
+ QW2GSXDS6aIf1ny3BeL6YLsCO4kb8cZ6ekRWAECcdzqo9Wq2mSnYumEhu0jbaq71Xkm8zbKFE
+ tb9BCxK+4n2ZjAUyRvNW4sMCH1a1gtCBhAsPdYjanIv5PhD2XNiZqhu0nAkR/asqEGaWny3RG
+ RoikE16MzqQaILytjhz0qT/Z/HazYN8VISDmdGMw+okhg8Emppgi9UJE6TigJ6dAw0kzQ3D5D
+ 4aQGJT6Uq2IhU9YkeSGydPwPBlV2/zGrIWTPAMyBsDEgb6bPjWZls3NWrQ7SpfgM3K6AaNiad
+ lALSxtxO4nie2VJ+o0tdPzc5IIDJG1BlLOLOCn4kN9kOY=
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323328-1497083232-1708595294=:1961
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-
-Hi,
-
-Added LED subsys people, please include them in future versions=20
-automatically.
-
-On Thu, 22 Feb 2024, Mustafa Ek=C5=9Fi wrote:
-
-> Signed-off-by: Mustafa Ek=C5=9Fi <mustafa.eskieksi@gmail.com>
-> ---
->  MAINTAINERS                       |   6 +
->  drivers/platform/x86/Kconfig      |  14 ++
->  drivers/platform/x86/Makefile     |   1 +
->  drivers/platform/x86/casper-wmi.c | 344 ++++++++++++++++++++++++++++++
->  4 files changed, 365 insertions(+)
->  create mode 100644 drivers/platform/x86/casper-wmi.c
->=20
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 9ed4d386853..d0142a75d2c 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -4723,6 +4723,12 @@ S:=09Maintained
->  W:=09https://wireless.wiki.kernel.org/en/users/Drivers/carl9170
->  F:=09drivers/net/wireless/ath/carl9170/
-> =20
-> +CASPER EXCALIBUR WMI DRIVER
-> +M:=09Mustafa Ek=C5=9Fi <mustafa.eskieksi@gmail.com>
-> +L:=09platform-driver-x86@vger.kernel.org
-> +S:=09Maintained
-> +F:=09drivers/platform/x86/casper-wmi.c
-> +
->  CAVIUM I2C DRIVER
->  M:=09Robert Richter <rric@kernel.org>
->  S:=09Odd Fixes
-> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
-> index bdd302274b9..ebef9c9dfb6 100644
-> --- a/drivers/platform/x86/Kconfig
-> +++ b/drivers/platform/x86/Kconfig
-> @@ -1127,6 +1127,20 @@ config SEL3350_PLATFORM
->  =09  To compile this driver as a module, choose M here: the module
->  =09  will be called sel3350-platform.
-> =20
-> +config CASPER_WMI
-> +=09tristate "Casper Excalibur Laptop WMI driver"
-> +=09depends on ACPI_WMI
-> +=09depends on HWMON
-> +=09select NEW_LEDS
-> +=09select LEDS_CLASS
-> +=09help
-> +=09  Say Y here if you want to support WMI-based fan speed reporting,
-> +=09  power management and keyboard backlight support on Casper Excalibur
-> +=09  Laptops.
-> +
-> +=09  To compile this driver as a module, choose M here: the module will
-> +=09  be called casper-wmi.
-> +
->  endif # X86_PLATFORM_DEVICES
-> =20
->  config P2SB
-> diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefil=
-e
-> index 1de432e8861..4b527dd44ad 100644
-> --- a/drivers/platform/x86/Makefile
-> +++ b/drivers/platform/x86/Makefile
-> @@ -14,6 +14,7 @@ obj-$(CONFIG_MXM_WMI)=09=09=09+=3D mxm-wmi.o
->  obj-$(CONFIG_NVIDIA_WMI_EC_BACKLIGHT)=09+=3D nvidia-wmi-ec-backlight.o
->  obj-$(CONFIG_XIAOMI_WMI)=09=09+=3D xiaomi-wmi.o
->  obj-$(CONFIG_GIGABYTE_WMI)=09=09+=3D gigabyte-wmi.o
-> +obj-$(CONFIG_CASPER_WMI)=09=09+=3D casper-wmi.o
-> =20
->  # Acer
->  obj-$(CONFIG_ACERHDF)=09=09+=3D acerhdf.o
-> diff --git a/drivers/platform/x86/casper-wmi.c b/drivers/platform/x86/cas=
-per-wmi.c
-> new file mode 100644
-> index 00000000000..aae08202b19
-> --- /dev/null
-> +++ b/drivers/platform/x86/casper-wmi.c
-> @@ -0,0 +1,344 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +
-> +#include <linux/acpi.h>
-> +#include <linux/leds.h>
-> +#include <linux/slab.h>
-> +#include <linux/module.h>
-> +#include <linux/wmi.h>
-> +#include <linux/device.h>
-> +#include <linux/dev_printk.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/sysfs.h>
-> +#include <linux/types.h>
-> +#include <linux/dmi.h>
-> +#include <acpi/acexcep.h>
-> +
-> +MODULE_AUTHOR("Mustafa Ek=C5=9Fi <mustafa.eskieksi@gmail.com>");
-> +MODULE_DESCRIPTION("Casper Excalibur Laptop WMI driver");
-> +MODULE_LICENSE("GPL");
-
-Put these to the end of file.
-
-> +#define CASPER_WMI_GUID "644C5791-B7B0-4123-A90B-E93876E0DAAD"
-> +
-> +#define CASPER_READ 0xfa00
-> +#define CASPER_WRITE 0xfb00
-> +#define CASPER_GET_HARDWAREINFO 0x0200
-> +#define CASPER_SET_LED 0x0100
-> +#define CASPER_POWERPLAN 0x0300
-> +
-> +#define CASPER_KEYBOARD_LED_1 0x03
-> +#define CASPER_KEYBOARD_LED_2 0x04
-> +#define CASPER_KEYBOARD_LED_3 0x05
-> +#define CASPER_ALL_KEYBOARD_LEDS 0x06
-> +#define CASPER_CORNER_LEDS 0x07
-> +
-> +struct casper_wmi_args {
-> +=09u16 a0, a1;
-> +=09u32 a2, a3, a4, a5, a6, a7, a8;
-> +};
-> +
-> +static u32 casper_last_color;
-> +static u8 casper_last_led;
-> +
-> +static acpi_status casper_set(struct wmi_device *wdev, u16 a1, u8 led_id=
-,
-> +=09=09=09      u32 data)
-> +{
-> +=09struct casper_wmi_args wmi_args =3D {
-> +=09=09.a0 =3D CASPER_WRITE,
-> +=09=09.a1 =3D a1,
-> +=09=09.a2 =3D led_id,
-> +=09=09.a3 =3D data
-> +=09};
-> +=09struct acpi_buffer input =3D {
-> +=09=09(acpi_size) sizeof(struct casper_wmi_args),
-> +=09=09&wmi_args
-> +=09};
-> +=09return wmidev_block_set(wdev, 0, &input);
-> +}
-> +
-> +static ssize_t led_control_show(struct device *dev, struct device_attrib=
-ute
-> +=09=09=09=09*attr, char *buf)
-> +{
-> +=09return sprintf("%u%08x\n", buf, casper_last_led,
-> +=09=09       casper_last_color);
-
-Fits one line. Use sysfs_emit().
-
-> +}
-> +
-> +
-> +// input is formatted as "IMARRGGBB", I: led_id, M: mode, A: brightness,=
- ...
-
-If you do things like this, please add defines for such "fields" and use=20
-FIELD_GET/PREP().
-
-Could LED subsystem folks plese check this the correct way to do RGB=20
-control? (I suspect it's not).
-
-> +static ssize_t led_control_store(struct device *dev, struct device_attri=
-bute
-> +=09=09=09=09 *attr, const char *buf, size_t count)
-> +{
-> +=09u64 tmp;
-> +=09int ret;
-> +
-> +=09ret =3D kstrtou64(buf, 16, &tmp);
-> +
-> +=09if (ret)
-> +=09=09return ret;
-
-Don't place empty line between function and its error handling. Please go=
-=20
-through the entire patch and fix all of them (I won't mark them all).
-
-> +
-> +=09u8 led_id =3D (tmp >> (8 * 4))&0xFF;
-
-FIELD_GET() + add #include for it.
-
-> +
-> +=09ret =3D
-> +=09    casper_set(to_wmi_device(dev->parent), CASPER_SET_LED, led_id,
-> +=09=09       (u32) tmp
-
-Don't call variable "tmp"!
-
-Please create a local variable for these to_wmi_device(dev->parent) to=20
-make this fit one line.
-
-> +=09    );
-> +=09if (ACPI_FAILURE(ret)) {
-> +=09=09dev_err(dev, "casper-wmi ACPI status: %d\n", ret);
-> +=09=09return ret;
-> +=09}
-> +=09if (led_id !=3D CASPER_CORNER_LEDS) {
-> +=09=09casper_last_color =3D (u32) tmp;
-> +=09=09casper_last_led =3D led_id;
-> +=09}
-> +=09return count;
-> +}
-> +
-> +static DEVICE_ATTR_RW(led_control);
-> +
-> +static struct attribute *casper_kbd_led_attrs[] =3D {
-> +=09&dev_attr_led_control.attr,
-> +=09NULL,
-> +};
-> +
-> +ATTRIBUTE_GROUPS(casper_kbd_led);
-> +
-> +static void set_casper_backlight_brightness(struct led_classdev *led_cde=
-v,
-> +=09=09=09=09=09    enum led_brightness brightness)
-> +{
-> +=09// Setting any of the keyboard leds' brightness sets brightness of al=
-l
-> +=09acpi_status ret =3D
-> +=09    casper_set(to_wmi_device(led_cdev->dev->parent), CASPER_SET_LED,
-> +=09=09       CASPER_KEYBOARD_LED_1,
-> +=09=09       (casper_last_color & 0xF0FFFFFF) |
-> +=09=09       (((u32) brightness) << 24)
-
-Use FIELD_PREP().
-
-As you need to split lines, please do the calculations in a local variable=
-=20
-beforehand and only then call.
-
-> +=09    );
-> +
-> +=09if (ret !=3D 0)
-> +=09=09dev_err(led_cdev->dev,
-> +=09=09=09"Couldn't set brightness acpi status: %d\n", ret);
-> +}
-> +
-> +static enum led_brightness get_casper_backlight_brightness(struct led_cl=
-assdev
-> +=09=09=09=09=09=09=09   *led_cdev)
-> +{
-> +=09return (casper_last_color&0x0F000000)>>24;
-
-FIELD_GET().
-
-> +}
-> +
-> +static struct led_classdev casper_kbd_led =3D {
-> +=09.name =3D "casper::kbd_backlight",
-> +=09.brightness =3D 0,
-> +=09.brightness_set =3D set_casper_backlight_brightness,
-> +=09.brightness_get =3D get_casper_backlight_brightness,
-> +=09.max_brightness =3D 2,
-> +=09.groups =3D casper_kbd_led_groups,
-> +};
-> +
-> +static acpi_status casper_query(struct wmi_device *wdev, u16 a1,
-> +=09=09=09=09struct casper_wmi_args *out)
-> +{
-> +=09struct casper_wmi_args wmi_args =3D {
-> +=09=09.a0 =3D CASPER_READ,
-> +=09=09.a1 =3D a1
-> +=09};
-> +=09struct acpi_buffer input =3D {
-> +=09=09(acpi_size) sizeof(struct casper_wmi_args),
-> +=09=09&wmi_args
-> +=09};
-> +
-> +=09acpi_status ret =3D wmidev_block_set(wdev, 0, &input);
-> +
-> +=09if (ACPI_FAILURE(ret)) {
-> +=09=09dev_err(&wdev->dev,
-> +=09=09=09"Could not query acpi status: %u", ret);
-
-One line.
-
-> +=09=09return ret;
-> +=09}
-> +
-> +=09union acpi_object *obj =3D wmidev_block_query(wdev, 0);
-> +
-> +=09if (obj =3D=3D NULL) {
-> +=09=09dev_err(&wdev->dev,
-> +=09=09=09"Could not query hardware information");
-
-Ditto.
-
-> +=09=09return AE_ERROR;
-> +=09}
-> +=09if (obj->type !=3D ACPI_TYPE_BUFFER) {
-> +=09=09dev_err(&wdev->dev, "Return type is not a buffer");
-> +=09=09return AE_TYPE;
-> +=09}
-> +
-> +=09if (obj->buffer.length !=3D 32) {
-> +=09=09dev_err(&wdev->dev, "Return buffer is not long enough");
-> +=09=09return AE_ERROR;
-> +=09}
-> +=09memcpy(out, obj->buffer.pointer, 32);
-
-32 appears at least twice here, add define for it.
-
-> +=09kfree(obj);
-> +=09return ret;
-> +}
-> +
-> +static umode_t casper_wmi_hwmon_is_visible(const void *drvdata,
-> +=09=09=09=09=09   enum hwmon_sensor_types type,
-> +=09=09=09=09=09   u32 attr, int channel)
-> +{
-> +=09switch (type) {
-> +=09case hwmon_fan:
-> +=09=09return 0444;
-> +=09case hwmon_pwm:
-> +=09=09return 0644;
-> +=09default:
-> +=09=09return 0;
-> +=09}
-> +=09return 0;
-> +}
-> +
-> +static int casper_wmi_hwmon_read(struct device *dev,
-> +=09=09=09=09 enum hwmon_sensor_types type, u32 attr,
-> +=09=09=09=09 int channel, long *val)
-> +{
-> +=09struct casper_wmi_args out =3D { 0 };
-> +
-> +=09switch (type) {
-> +=09case hwmon_fan:
-> +=09=09acpi_status ret =3D casper_query(to_wmi_device(dev->parent),
-> +=09=09=09=09=09       CASPER_GET_HARDWAREINFO, &out);
-> +
-> +=09=09if (ACPI_FAILURE(ret))
-> +=09=09=09return ret;
-
-Don't put empty line between the call and its error handling. Move=20
-the declaration of the ret variable to function level.
-
-
-> +=09=09if (channel =3D=3D 0) { // CPU fan
-> +=09=09=09u32 cpu_fanspeed =3D out.a4;
-> +
-> +=09=09=09cpu_fanspeed <<=3D 8;
-> +=09=09=09cpu_fanspeed +=3D out.a4 >> 8;
-
-Is this byteswapping? Use proper endianness helpers/types when dealing=20
-with endianness.
-
-> +=09=09=09*val =3D (long) cpu_fanspeed;
-> +=09=09} else if (channel =3D=3D 1) { // GPU fan
-> +=09=09=09u32 gpu_fanspeed =3D out.a5;
-> +
-> +=09=09=09gpu_fanspeed <<=3D 8;
-> +=09=09=09gpu_fanspeed +=3D out.a5 >> 8;
-> +=09=09=09*val =3D (long) gpu_fanspeed;
-> +=09=09}
-
-Should the other channel values return -ENODEV or -EINVAL?
-
-> +=09=09return 0;
-> +=09case hwmon_pwm:
-> +=09=09casper_query(to_wmi_device(dev->parent), CASPER_POWERPLAN,
-> +=09=09=09     &out);
-> +=09=09if (channel =3D=3D 0)
-> +=09=09=09*val =3D (long)out.a2;
-> +=09=09else
-> +=09=09=09return -EOPNOTSUPP;
-> +=09=09return 0;
-> +=09default:
-> +=09=09return -EOPNOTSUPP;
-> +=09}
-> +
-> +=09return 0;
-> +}
-> +
-> +static int casper_wmi_hwmon_read_string(struct device *dev,
-> +=09=09=09=09=09enum hwmon_sensor_types type, u32 attr,
-> +=09=09=09=09=09int channel, const char **str)
-> +{
-> +=09switch (type) {
-> +=09case hwmon_fan:
-> +=09=09switch (channel) {
-> +=09=09case 0:
-> +=09=09=09*str =3D "cpu_fan_speed";
-> +=09=09=09break;
-> +=09=09case 1:
-> +=09=09=09*str =3D "gpu_fan_speed";
-> +=09=09=09break;
-> +=09=09default:
-> +=09=09=09return -EOPNOTSUPP;
-> +=09=09}
-> +=09=09break;
-> +=09default:
-> +=09=09return -EOPNOTSUPP;
-> +=09}
-> +=09return 0;
-> +}
-> +
-> +static int casper_wmi_hwmon_write(struct device *dev,
-> +=09=09=09=09  enum hwmon_sensor_types type, u32 attr,
-> +=09=09=09=09  int channel, long val)
-> +{
-> +=09acpi_status ret;
-> +
-> +=09switch (type) {
-> +=09case hwmon_pwm:
-> +=09=09if (channel !=3D 0)
-> +=09=09=09return -EOPNOTSUPP;
-> +=09=09ret =3D
-> +=09=09    casper_set(to_wmi_device(dev->parent), CASPER_POWERPLAN,
-> +=09=09=09       val, 0);
-> +
-> +=09=09if (ACPI_FAILURE(ret)) {
-> +=09=09=09dev_err(dev, "Couldn't set power plan, acpi_status: %d",
-> +=09=09=09=09ret);
-> +=09=09=09return -EINVAL;
-> +=09=09}
-> +=09=09return 0;
-> +=09default:
-> +=09=09return -EOPNOTSUPP;
-> +=09}
-> +}
-> +
-> +static const struct hwmon_ops casper_wmi_hwmon_ops =3D {
-> +=09.is_visible =3D &casper_wmi_hwmon_is_visible,
-> +=09.read =3D &casper_wmi_hwmon_read,
-> +=09.read_string =3D &casper_wmi_hwmon_read_string,
-> +=09.write =3D &casper_wmi_hwmon_write
-> +};
-> +
-> +static const struct hwmon_channel_info *const casper_wmi_hwmon_info[] =
-=3D {
-> +=09HWMON_CHANNEL_INFO(fan,
-> +=09=09=09   HWMON_F_INPUT | HWMON_F_LABEL,
-> +=09=09=09   HWMON_F_INPUT | HWMON_F_LABEL),
-> +=09HWMON_CHANNEL_INFO(pwm, HWMON_PWM_MODE),
-> +=09NULL
-> +};
-> +
-> +static const struct hwmon_chip_info casper_wmi_hwmon_chip_info =3D {
-> +=09.ops =3D &casper_wmi_hwmon_ops,
-> +=09.info =3D casper_wmi_hwmon_info,
-> +};
-> +
-> +static int casper_wmi_probe(struct wmi_device *wdev, const void *context=
-)
-> +{
-> +=09struct device *hwmon_dev;
-> +
-> +=09// All Casper Excalibur Laptops use this GUID
-> +=09if (!wmi_has_guid(CASPER_WMI_GUID))
-> +=09=09return -ENODEV;
-> +
-> +=09hwmon_dev =3D
-> +=09    devm_hwmon_device_register_with_info(&wdev->dev, "casper_wmi", wd=
-ev,
-> +=09=09=09=09=09=09 &casper_wmi_hwmon_chip_info,
-> +=09=09=09=09=09=09 NULL);
-> +
-> +=09acpi_status result =3D led_classdev_register(&wdev->dev, &casper_kbd_=
-led);
-> +
-> +=09if (result !=3D 0)
-> +=09=09return -ENODEV;
-> +
-> +=09return PTR_ERR_OR_ZERO(hwmon_dev);
-> +=09}
-
-Misindented brace.
-
-> +
-> +static void casper_wmi_remove(struct wmi_device *wdev)
-> +{
-> +=09led_classdev_unregister(&casper_kbd_led);
-> +}
-> +
-> +static const struct wmi_device_id casper_wmi_id_table[] =3D {
-> +=09{ CASPER_WMI_GUID, NULL },
-> +=09{ }
-> +};
-> +
-> +static struct wmi_driver casper_wmi_driver =3D {
-> +=09.driver =3D {
-> +=09=09   .name =3D "casper-wmi",
-> +=09=09    },
-> +=09.id_table =3D casper_wmi_id_table,
-> +=09.probe =3D casper_wmi_probe,
-> +=09.remove =3D &casper_wmi_remove
-
-Put comma to the end of this line.
-
-> +};
-> +
-> +module_wmi_driver(casper_wmi_driver);
-> +
-> +MODULE_DEVICE_TABLE(wmi, casper_wmi_id_table);
->=20
-
---=20
- i.
-
---8323328-1497083232-1708595294=:1961--
+QW0gMjEuMDIuMjQgdW0gMjM6NTUgc2NocmllYiBHdWVudGVyIFJvZWNrOg0KDQo+IE9uIDIvMjEv
+MjQgMTQ6MTUsIE11c3RhZmEgRWvFn2kgd3JvdGU6DQo+PiBTaWduZWQtb2ZmLWJ5OiBNdXN0YWZh
+IEVrxZ9pIDxtdXN0YWZhLmVza2lla3NpQGdtYWlsLmNvbT4NCj4+IC0tLQ0KPj4gwqAgTUFJTlRB
+SU5FUlPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqDCoCA2
+ICsNCj4+IMKgIGRyaXZlcnMvcGxhdGZvcm0veDg2L0tjb25maWfCoMKgwqDCoMKgIHzCoCAxNCAr
+Kw0KPj4gwqAgZHJpdmVycy9wbGF0Zm9ybS94ODYvTWFrZWZpbGXCoMKgwqDCoCB8wqDCoCAxICsN
+Cj4+IMKgIGRyaXZlcnMvcGxhdGZvcm0veDg2L2Nhc3Blci13bWkuYyB8IDM0NCArKysrKysrKysr
+KysrKysrKysrKysrKysrKysrKysNCj4+IMKgIDQgZmlsZXMgY2hhbmdlZCwgMzY1IGluc2VydGlv
+bnMoKykNCj4+IMKgIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL3BsYXRmb3JtL3g4Ni9jYXNw
+ZXItd21pLmMNCj4+DQo+PiBkaWZmIC0tZ2l0IGEvTUFJTlRBSU5FUlMgYi9NQUlOVEFJTkVSUw0K
+Pj4gaW5kZXggOWVkNGQzODY4NTMuLmQwMTQyYTc1ZDJjIDEwMDY0NA0KPj4gLS0tIGEvTUFJTlRB
+SU5FUlMNCj4+ICsrKyBiL01BSU5UQUlORVJTDQo+PiBAQCAtNDcyMyw2ICs0NzIzLDEyIEBAIFM6
+wqDCoMKgIE1haW50YWluZWQNCj4+IMKgIFc6IGh0dHBzOi8vd2lyZWxlc3Mud2lraS5rZXJuZWwu
+b3JnL2VuL3VzZXJzL0RyaXZlcnMvY2FybDkxNzANCj4+IMKgIEY6wqDCoMKgIGRyaXZlcnMvbmV0
+L3dpcmVsZXNzL2F0aC9jYXJsOTE3MC8NCj4+IMKgICtDQVNQRVIgRVhDQUxJQlVSIFdNSSBEUklW
+RVINCj4+ICtNOsKgwqDCoCBNdXN0YWZhIEVrxZ9pIDxtdXN0YWZhLmVza2lla3NpQGdtYWlsLmNv
+bT4NCj4+ICtMOsKgwqDCoCBwbGF0Zm9ybS1kcml2ZXIteDg2QHZnZXIua2VybmVsLm9yZw0KPj4g
+K1M6wqDCoMKgIE1haW50YWluZWQNCj4+ICtGOsKgwqDCoCBkcml2ZXJzL3BsYXRmb3JtL3g4Ni9j
+YXNwZXItd21pLmMNCj4+ICsNCj4+IMKgIENBVklVTSBJMkMgRFJJVkVSDQo+PiDCoCBNOsKgwqDC
+oCBSb2JlcnQgUmljaHRlciA8cnJpY0BrZXJuZWwub3JnPg0KPj4gwqAgUzrCoMKgwqAgT2RkIEZp
+eGVzDQo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9wbGF0Zm9ybS94ODYvS2NvbmZpZyBiL2RyaXZl
+cnMvcGxhdGZvcm0veDg2L0tjb25maWcNCj4+IGluZGV4IGJkZDMwMjI3NGI5Li5lYmVmOWM5ZGZi
+NiAxMDA2NDQNCj4+IC0tLSBhL2RyaXZlcnMvcGxhdGZvcm0veDg2L0tjb25maWcNCj4+ICsrKyBi
+L2RyaXZlcnMvcGxhdGZvcm0veDg2L0tjb25maWcNCj4+IEBAIC0xMTI3LDYgKzExMjcsMjAgQEAg
+Y29uZmlnIFNFTDMzNTBfUExBVEZPUk0NCj4+IMKgwqDCoMKgwqDCoMKgIFRvIGNvbXBpbGUgdGhp
+cyBkcml2ZXIgYXMgYSBtb2R1bGUsIGNob29zZSBNIGhlcmU6IHRoZSBtb2R1bGUNCj4+IMKgwqDC
+oMKgwqDCoMKgIHdpbGwgYmUgY2FsbGVkIHNlbDMzNTAtcGxhdGZvcm0uDQo+PiDCoCArY29uZmln
+IENBU1BFUl9XTUkNCj4+ICvCoMKgwqAgdHJpc3RhdGUgIkNhc3BlciBFeGNhbGlidXIgTGFwdG9w
+IFdNSSBkcml2ZXIiDQo+PiArwqDCoMKgIGRlcGVuZHMgb24gQUNQSV9XTUkNCj4+ICvCoMKgwqAg
+ZGVwZW5kcyBvbiBIV01PTg0KPj4gK8KgwqDCoCBzZWxlY3QgTkVXX0xFRFMNCj4+ICvCoMKgwqAg
+c2VsZWN0IExFRFNfQ0xBU1MNCj4+ICvCoMKgwqAgaGVscA0KPj4gK8KgwqDCoMKgwqAgU2F5IFkg
+aGVyZSBpZiB5b3Ugd2FudCB0byBzdXBwb3J0IFdNSS1iYXNlZCBmYW4gc3BlZWQgcmVwb3J0aW5n
+LA0KPj4gK8KgwqDCoMKgwqAgcG93ZXIgbWFuYWdlbWVudCBhbmQga2V5Ym9hcmQgYmFja2xpZ2h0
+IHN1cHBvcnQgb24gQ2FzcGVyIA0KPj4gRXhjYWxpYnVyDQo+PiArwqDCoMKgwqDCoCBMYXB0b3Bz
+Lg0KPj4gKw0KPj4gK8KgwqDCoMKgwqAgVG8gY29tcGlsZSB0aGlzIGRyaXZlciBhcyBhIG1vZHVs
+ZSwgY2hvb3NlIE0gaGVyZTogdGhlIG1vZHVsZSANCj4+IHdpbGwNCj4+ICvCoMKgwqDCoMKgIGJl
+IGNhbGxlZCBjYXNwZXItd21pLg0KPj4gKw0KPj4gwqAgZW5kaWYgIyBYODZfUExBVEZPUk1fREVW
+SUNFUw0KPj4gwqAgwqAgY29uZmlnIFAyU0INCj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3BsYXRm
+b3JtL3g4Ni9NYWtlZmlsZSANCj4+IGIvZHJpdmVycy9wbGF0Zm9ybS94ODYvTWFrZWZpbGUNCj4+
+IGluZGV4IDFkZTQzMmU4ODYxLi40YjUyN2RkNDRhZCAxMDA2NDQNCj4+IC0tLSBhL2RyaXZlcnMv
+cGxhdGZvcm0veDg2L01ha2VmaWxlDQo+PiArKysgYi9kcml2ZXJzL3BsYXRmb3JtL3g4Ni9NYWtl
+ZmlsZQ0KPj4gQEAgLTE0LDYgKzE0LDcgQEAgb2JqLSQoQ09ORklHX01YTV9XTUkpwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoCArPSBteG0td21pLm8NCj4+IMKgIG9iai0kKENPTkZJR19OVklESUFfV01J
+X0VDX0JBQ0tMSUdIVCnCoMKgwqAgKz0gbnZpZGlhLXdtaS1lYy1iYWNrbGlnaHQubw0KPj4gwqAg
+b2JqLSQoQ09ORklHX1hJQU9NSV9XTUkpwqDCoMKgwqDCoMKgwqAgKz0geGlhb21pLXdtaS5vDQo+
+PiDCoCBvYmotJChDT05GSUdfR0lHQUJZVEVfV01JKcKgwqDCoMKgwqDCoMKgICs9IGdpZ2FieXRl
+LXdtaS5vDQo+PiArb2JqLSQoQ09ORklHX0NBU1BFUl9XTUkpwqDCoMKgwqDCoMKgwqAgKz0gY2Fz
+cGVyLXdtaS5vDQo+PiDCoCDCoCAjIEFjZXINCj4+IMKgIG9iai0kKENPTkZJR19BQ0VSSERGKcKg
+wqDCoMKgwqDCoMKgICs9IGFjZXJoZGYubw0KPj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvcGxhdGZv
+cm0veDg2L2Nhc3Blci13bWkuYyANCj4+IGIvZHJpdmVycy9wbGF0Zm9ybS94ODYvY2FzcGVyLXdt
+aS5jDQo+PiBuZXcgZmlsZSBtb2RlIDEwMDY0NA0KPj4gaW5kZXggMDAwMDAwMDAwMDAuLmFhZTA4
+MjAyYjE5DQo+PiAtLS0gL2Rldi9udWxsDQo+PiArKysgYi9kcml2ZXJzL3BsYXRmb3JtL3g4Ni9j
+YXNwZXItd21pLmMNCj4+IEBAIC0wLDAgKzEsMzQ0IEBADQo+PiArLy8gU1BEWC1MaWNlbnNlLUlk
+ZW50aWZpZXI6IEdQTC0yLjAtb3ItbGF0ZXINCj4+ICsNCj4+ICsjaW5jbHVkZSA8bGludXgvYWNw
+aS5oPg0KPj4gKyNpbmNsdWRlIDxsaW51eC9sZWRzLmg+DQo+PiArI2luY2x1ZGUgPGxpbnV4L3Ns
+YWIuaD4NCj4+ICsjaW5jbHVkZSA8bGludXgvbW9kdWxlLmg+DQo+PiArI2luY2x1ZGUgPGxpbnV4
+L3dtaS5oPg0KPj4gKyNpbmNsdWRlIDxsaW51eC9kZXZpY2UuaD4NCj4+ICsjaW5jbHVkZSA8bGlu
+dXgvZGV2X3ByaW50ay5oPg0KPj4gKyNpbmNsdWRlIDxsaW51eC9od21vbi5oPg0KPj4gKyNpbmNs
+dWRlIDxsaW51eC9zeXNmcy5oPg0KPj4gKyNpbmNsdWRlIDxsaW51eC90eXBlcy5oPg0KPj4gKyNp
+bmNsdWRlIDxsaW51eC9kbWkuaD4NCj4+ICsjaW5jbHVkZSA8YWNwaS9hY2V4Y2VwLmg+DQo+PiAr
+DQo+PiArTU9EVUxFX0FVVEhPUigiTXVzdGFmYSBFa8WfaSA8bXVzdGFmYS5lc2tpZWtzaUBnbWFp
+bC5jb20+Iik7DQo+PiArTU9EVUxFX0RFU0NSSVBUSU9OKCJDYXNwZXIgRXhjYWxpYnVyIExhcHRv
+cCBXTUkgZHJpdmVyIik7DQo+PiArTU9EVUxFX0xJQ0VOU0UoIkdQTCIpOw0KPj4gKw0KPj4gKyNk
+ZWZpbmUgQ0FTUEVSX1dNSV9HVUlEICI2NDRDNTc5MS1CN0IwLTQxMjMtQTkwQi1FOTM4NzZFMERB
+QUQiDQo+PiArDQo+PiArI2RlZmluZSBDQVNQRVJfUkVBRCAweGZhMDANCj4+ICsjZGVmaW5lIENB
+U1BFUl9XUklURSAweGZiMDANCj4+ICsjZGVmaW5lIENBU1BFUl9HRVRfSEFSRFdBUkVJTkZPIDB4
+MDIwMA0KPj4gKyNkZWZpbmUgQ0FTUEVSX1NFVF9MRUQgMHgwMTAwDQo+PiArI2RlZmluZSBDQVNQ
+RVJfUE9XRVJQTEFOIDB4MDMwMA0KPj4gKw0KPj4gKyNkZWZpbmUgQ0FTUEVSX0tFWUJPQVJEX0xF
+RF8xIDB4MDMNCj4+ICsjZGVmaW5lIENBU1BFUl9LRVlCT0FSRF9MRURfMiAweDA0DQo+PiArI2Rl
+ZmluZSBDQVNQRVJfS0VZQk9BUkRfTEVEXzMgMHgwNQ0KPj4gKyNkZWZpbmUgQ0FTUEVSX0FMTF9L
+RVlCT0FSRF9MRURTIDB4MDYNCj4+ICsjZGVmaW5lIENBU1BFUl9DT1JORVJfTEVEUyAweDA3DQo+
+PiArDQo+PiArc3RydWN0IGNhc3Blcl93bWlfYXJncyB7DQo+PiArwqDCoMKgIHUxNiBhMCwgYTE7
+DQo+PiArwqDCoMKgIHUzMiBhMiwgYTMsIGE0LCBhNSwgYTYsIGE3LCBhODsNCj4+ICt9Ow0KPj4g
+Kw0KPj4gK3N0YXRpYyB1MzIgY2FzcGVyX2xhc3RfY29sb3I7DQo+PiArc3RhdGljIHU4IGNhc3Bl
+cl9sYXN0X2xlZDsNCj4+ICsNCj4+ICtzdGF0aWMgYWNwaV9zdGF0dXMgY2FzcGVyX3NldChzdHJ1
+Y3Qgd21pX2RldmljZSAqd2RldiwgdTE2IGExLCB1OCANCj4+IGxlZF9pZCwNCj4+ICvCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHUzMiBkYXRhKQ0KPj4gK3sNCj4+ICvCoMKgwqAg
+c3RydWN0IGNhc3Blcl93bWlfYXJncyB3bWlfYXJncyA9IHsNCj4+ICvCoMKgwqDCoMKgwqDCoCAu
+YTAgPSBDQVNQRVJfV1JJVEUsDQo+PiArwqDCoMKgwqDCoMKgwqAgLmExID0gYTEsDQo+PiArwqDC
+oMKgwqDCoMKgwqAgLmEyID0gbGVkX2lkLA0KPj4gK8KgwqDCoMKgwqDCoMKgIC5hMyA9IGRhdGEN
+Cj4+ICvCoMKgwqAgfTsNCj4+ICvCoMKgwqAgc3RydWN0IGFjcGlfYnVmZmVyIGlucHV0ID0gew0K
+Pj4gK8KgwqDCoMKgwqDCoMKgIChhY3BpX3NpemUpIHNpemVvZihzdHJ1Y3QgY2FzcGVyX3dtaV9h
+cmdzKSwNCj4+ICvCoMKgwqDCoMKgwqDCoCAmd21pX2FyZ3MNCj4+ICvCoMKgwqAgfTsNCj4+ICvC
+oMKgwqAgcmV0dXJuIHdtaWRldl9ibG9ja19zZXQod2RldiwgMCwgJmlucHV0KTsNCj4+ICt9DQo+
+PiArDQo+PiArc3RhdGljIHNzaXplX3QgbGVkX2NvbnRyb2xfc2hvdyhzdHJ1Y3QgZGV2aWNlICpk
+ZXYsIHN0cnVjdCANCj4+IGRldmljZV9hdHRyaWJ1dGUNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAgKmF0dHIsIGNoYXIgKmJ1ZikNCj4+ICt7DQo+PiArwqDCoMKgIHJldHVybiBz
+cHJpbnRmKCIldSUwOHhcbiIsIGJ1ZiwgY2FzcGVyX2xhc3RfbGVkLA0KPj4gK8KgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqAgY2FzcGVyX2xhc3RfY29sb3IpOw0KPj4gK30NCj4+ICsNCj4+ICsN
+Cj4+ICsvLyBpbnB1dCBpcyBmb3JtYXR0ZWQgYXMgIklNQVJSR0dCQiIsIEk6IGxlZF9pZCwgTTog
+bW9kZSwgQTogDQo+PiBicmlnaHRuZXNzLCAuLi4NCj4+ICtzdGF0aWMgc3NpemVfdCBsZWRfY29u
+dHJvbF9zdG9yZShzdHJ1Y3QgZGV2aWNlICpkZXYsIHN0cnVjdCANCj4+IGRldmljZV9hdHRyaWJ1
+dGUNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqYXR0ciwgY29uc3QgY2hh
+ciAqYnVmLCBzaXplX3QgY291bnQpDQo+PiArew0KPj4gK8KgwqDCoCB1NjQgdG1wOw0KPj4gK8Kg
+wqDCoCBpbnQgcmV0Ow0KPj4gKw0KPj4gK8KgwqDCoCByZXQgPSBrc3RydG91NjQoYnVmLCAxNiwg
+JnRtcCk7DQo+DQo+IFdoYXQgZXhhdGx5IGlzIHRoZSBwb2ludCBvZiB1NjQgYW5kIGtzdHJ0b3U2
+NCgpID8NCj4NCj4+ICsNCj4+ICvCoMKgwqAgaWYgKHJldCkNCj4+ICvCoMKgwqDCoMKgwqDCoCBy
+ZXR1cm4gcmV0Ow0KPj4gKw0KPj4gK8KgwqDCoCB1OCBsZWRfaWQgPSAodG1wID4+ICg4ICogNCkp
+JjB4RkY7DQo+DQo+IFRoaXMgd2lsbCByZXN1bHQgaW4gaW50ZXJlc3RpbmcgTEVEIElEcyBiYXNl
+ZCBvbiB1NjQgaW5wdXQuIFRvIG1lIGl0IA0KPiBsb29rcw0KPiB2ZXJ5IG11Y2ggbGlrZSBhIHBv
+b3IgcmFuZG9tIG51bWJlciBnZW5lcmF0b3IuIERvZXMgdGhpcyBmb2xsb3cgd29tZSBraW5kDQo+
+IG9mIExFRCBzdWJzeXN0ZW0gQVBJID8NCj4NCj4+ICsNCj4+ICvCoMKgwqAgcmV0ID0NCj4+ICvC
+oMKgwqDCoMKgwqDCoCBjYXNwZXJfc2V0KHRvX3dtaV9kZXZpY2UoZGV2LT5wYXJlbnQpLCBDQVNQ
+RVJfU0VUX0xFRCwgbGVkX2lkLA0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKHUz
+MikgdG1wDQo+PiArwqDCoMKgwqDCoMKgwqAgKTsNCj4NCj4gT2RkIGxpbmUgYnJlYWtzLiBEb2Vz
+IHRoaXMgcGFzcyBjaGVja3BhdGNoID8NCj4NCj4+ICvCoMKgwqAgaWYgKEFDUElfRkFJTFVSRShy
+ZXQpKSB7DQo+PiArwqDCoMKgwqDCoMKgwqAgZGV2X2VycihkZXYsICJjYXNwZXItd21pIEFDUEkg
+c3RhdHVzOiAlZFxuIiwgcmV0KTsNCj4+ICvCoMKgwqDCoMKgwqDCoCByZXR1cm4gcmV0Ow0KPg0K
+PiBUaGUgZnVuY3Rpb24gcmV0dXJuIGNvZGUgaXMgc3VwcG9zZWQgdG8gYmUgYSBMaW51eCBlcnJv
+ciBjb2RlLg0KPiBBcyBmb3IgdGhlIGZ1bmN0aW9ucyBiZWxvdywgSSB3b3VsZCByZWplY3QgdGhp
+cyBwYXRjaCBkdWUgdG8gaXRzDQo+IGxvZ2dpbmcgbm9pc2UuDQo+DQo+PiArwqDCoMKgIH0NCj4+
+ICvCoMKgwqAgaWYgKGxlZF9pZCAhPSBDQVNQRVJfQ09STkVSX0xFRFMpIHsNCj4+ICvCoMKgwqDC
+oMKgwqDCoCBjYXNwZXJfbGFzdF9jb2xvciA9ICh1MzIpIHRtcDsNCj4+ICvCoMKgwqDCoMKgwqDC
+oCBjYXNwZXJfbGFzdF9sZWQgPSBsZWRfaWQ7DQo+PiArwqDCoMKgIH0NCj4+ICvCoMKgwqAgcmV0
+dXJuIGNvdW50Ow0KPj4gK30NCj4+ICsNCj4+ICtzdGF0aWMgREVWSUNFX0FUVFJfUlcobGVkX2Nv
+bnRyb2wpOw0KPj4gKw0KPj4gK3N0YXRpYyBzdHJ1Y3QgYXR0cmlidXRlICpjYXNwZXJfa2JkX2xl
+ZF9hdHRyc1tdID0gew0KPj4gK8KgwqDCoCAmZGV2X2F0dHJfbGVkX2NvbnRyb2wuYXR0ciwNCj4+
+ICvCoMKgwqAgTlVMTCwNCj4+ICt9Ow0KPj4gKw0KPj4gK0FUVFJJQlVURV9HUk9VUFMoY2FzcGVy
+X2tiZF9sZWQpOw0KPj4gKw0KPj4gK3N0YXRpYyB2b2lkIHNldF9jYXNwZXJfYmFja2xpZ2h0X2Jy
+aWdodG5lc3Moc3RydWN0IGxlZF9jbGFzc2RldiANCj4+ICpsZWRfY2RldiwNCj4+ICvCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGVudW0gbGVkX2JyaWdodG5l
+c3MgYnJpZ2h0bmVzcykNCj4+ICt7DQo+PiArwqDCoMKgIC8vIFNldHRpbmcgYW55IG9mIHRoZSBr
+ZXlib2FyZCBsZWRzJyBicmlnaHRuZXNzIHNldHMgYnJpZ2h0bmVzcyANCj4+IG9mIGFsbA0KPj4g
+K8KgwqDCoCBhY3BpX3N0YXR1cyByZXQgPQ0KPj4gK8KgwqDCoMKgwqDCoMKgIGNhc3Blcl9zZXQo
+dG9fd21pX2RldmljZShsZWRfY2Rldi0+ZGV2LT5wYXJlbnQpLCANCj4+IENBU1BFUl9TRVRfTEVE
+LA0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgQ0FTUEVSX0tFWUJPQVJEX0xFRF8x
+LA0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKGNhc3Blcl9sYXN0X2NvbG9yICYg
+MHhGMEZGRkZGRikgfA0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKCgodTMyKSBi
+cmlnaHRuZXNzKSA8PCAyNCkNCj4+ICvCoMKgwqDCoMKgwqDCoCApOw0KPj4gKw0KPj4gK8KgwqDC
+oCBpZiAocmV0ICE9IDApDQo+PiArwqDCoMKgwqDCoMKgwqAgZGV2X2VycihsZWRfY2Rldi0+ZGV2
+LA0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgIkNvdWxkbid0IHNldCBicmlnaHRuZXNzIGFj
+cGkgc3RhdHVzOiAlZFxuIiwgcmV0KTsNCj4+ICt9DQo+PiArDQo+PiArc3RhdGljIGVudW0gbGVk
+X2JyaWdodG5lc3MgZ2V0X2Nhc3Blcl9iYWNrbGlnaHRfYnJpZ2h0bmVzcyhzdHJ1Y3QgDQo+PiBs
+ZWRfY2xhc3NkZXYNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqAgKmxlZF9jZGV2KQ0KPj4gK3sNCj4+ICvCoMKgwqAgcmV0dXJu
+IChjYXNwZXJfbGFzdF9jb2xvciYweDBGMDAwMDAwKT4+MjQ7DQo+PiArfQ0KPj4gKw0KPj4gK3N0
+YXRpYyBzdHJ1Y3QgbGVkX2NsYXNzZGV2IGNhc3Blcl9rYmRfbGVkID0gew0KPj4gK8KgwqDCoCAu
+bmFtZSA9ICJjYXNwZXI6OmtiZF9iYWNrbGlnaHQiLA0KPj4gK8KgwqDCoCAuYnJpZ2h0bmVzcyA9
+IDAsDQo+PiArwqDCoMKgIC5icmlnaHRuZXNzX3NldCA9IHNldF9jYXNwZXJfYmFja2xpZ2h0X2Jy
+aWdodG5lc3MsDQo+PiArwqDCoMKgIC5icmlnaHRuZXNzX2dldCA9IGdldF9jYXNwZXJfYmFja2xp
+Z2h0X2JyaWdodG5lc3MsDQo+PiArwqDCoMKgIC5tYXhfYnJpZ2h0bmVzcyA9IDIsDQo+PiArwqDC
+oMKgIC5ncm91cHMgPSBjYXNwZXJfa2JkX2xlZF9ncm91cHMsDQo+PiArfTsNCj4+ICsNCj4+ICtz
+dGF0aWMgYWNwaV9zdGF0dXMgY2FzcGVyX3F1ZXJ5KHN0cnVjdCB3bWlfZGV2aWNlICp3ZGV2LCB1
+MTYgYTEsDQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHN0cnVjdCBjYXNwZXJf
+d21pX2FyZ3MgKm91dCkNCj4+ICt7DQo+PiArwqDCoMKgIHN0cnVjdCBjYXNwZXJfd21pX2FyZ3Mg
+d21pX2FyZ3MgPSB7DQo+PiArwqDCoMKgwqDCoMKgwqAgLmEwID0gQ0FTUEVSX1JFQUQsDQo+PiAr
+wqDCoMKgwqDCoMKgwqAgLmExID0gYTENCj4+ICvCoMKgwqAgfTsNCj4+ICvCoMKgwqAgc3RydWN0
+IGFjcGlfYnVmZmVyIGlucHV0ID0gew0KPj4gK8KgwqDCoMKgwqDCoMKgIChhY3BpX3NpemUpIHNp
+emVvZihzdHJ1Y3QgY2FzcGVyX3dtaV9hcmdzKSwNCj4+ICvCoMKgwqDCoMKgwqDCoCAmd21pX2Fy
+Z3MNCj4+ICvCoMKgwqAgfTsNCj4+ICsNCj4+ICvCoMKgwqAgYWNwaV9zdGF0dXMgcmV0ID0gd21p
+ZGV2X2Jsb2NrX3NldCh3ZGV2LCAwLCAmaW5wdXQpOw0KPj4gKw0KPj4gK8KgwqDCoCBpZiAoQUNQ
+SV9GQUlMVVJFKHJldCkpIHsNCj4+ICvCoMKgwqDCoMKgwqDCoCBkZXZfZXJyKCZ3ZGV2LT5kZXYs
+DQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAiQ291bGQgbm90IHF1ZXJ5IGFjcGkgc3RhdHVz
+OiAldSIsIHJldCk7DQo+DQo+IFRoaXMgY29kZSBnZW5lcmF0ZXMgX3dheV8gdG9vIG11Y2ggbG9n
+Z2luZyBub2lzZSBmb3IgbXkgbGlraW5nLg0KPg0KPj4gK8KgwqDCoMKgwqDCoMKgIHJldHVybiBy
+ZXQ7DQo+DQo+IElzIHRoZXJlIGFueSB2YWx1ZSBpbiBoYXZpbmcgdGhpcyBmdW5jdGlvbiByZXR1
+cm4gYWNwaSBlcnJvcg0KPiBjb2RlcyBpbnN0ZWFkIG9mIExpbnV4IGVycm9yIGNvZGVzID8NCj4N
+Cj4+ICvCoMKgwqAgfQ0KPj4gKw0KPj4gK8KgwqDCoCB1bmlvbiBhY3BpX29iamVjdCAqb2JqID0g
+d21pZGV2X2Jsb2NrX3F1ZXJ5KHdkZXYsIDApOw0KPj4gKw0KPj4gK8KgwqDCoCBpZiAob2JqID09
+IE5VTEwpIHsNCj4+ICvCoMKgwqDCoMKgwqDCoCBkZXZfZXJyKCZ3ZGV2LT5kZXYsDQo+PiArwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoCAiQ291bGQgbm90IHF1ZXJ5IGhhcmR3YXJlIGluZm9ybWF0aW9u
+Iik7DQo+PiArwqDCoMKgwqDCoMKgwqAgcmV0dXJuIEFFX0VSUk9SOw0KPj4gK8KgwqDCoCB9DQo+
+PiArwqDCoMKgIGlmIChvYmotPnR5cGUgIT0gQUNQSV9UWVBFX0JVRkZFUikgew0KPj4gK8KgwqDC
+oMKgwqDCoMKgIGRldl9lcnIoJndkZXYtPmRldiwgIlJldHVybiB0eXBlIGlzIG5vdCBhIGJ1ZmZl
+ciIpOw0KPj4gK8KgwqDCoMKgwqDCoMKgIHJldHVybiBBRV9UWVBFOw0KPj4gK8KgwqDCoCB9DQo+
+PiArDQo+PiArwqDCoMKgIGlmIChvYmotPmJ1ZmZlci5sZW5ndGggIT0gMzIpIHsNCj4+ICvCoMKg
+wqDCoMKgwqDCoCBkZXZfZXJyKCZ3ZGV2LT5kZXYsICJSZXR1cm4gYnVmZmVyIGlzIG5vdCBsb25n
+IGVub3VnaCIpOw0KPj4gK8KgwqDCoMKgwqDCoMKgIHJldHVybiBBRV9FUlJPUjsNCj4+ICvCoMKg
+wqAgfQ0KPj4gK8KgwqDCoCBtZW1jcHkob3V0LCBvYmotPmJ1ZmZlci5wb2ludGVyLCAzMik7DQo+
+PiArwqDCoMKgIGtmcmVlKG9iaik7DQo+PiArwqDCoMKgIHJldHVybiByZXQ7DQo+PiArfQ0KPj4g
+Kw0KPj4gK3N0YXRpYyB1bW9kZV90IGNhc3Blcl93bWlfaHdtb25faXNfdmlzaWJsZShjb25zdCB2
+b2lkICpkcnZkYXRhLA0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgIGVudW0gaHdtb25fc2Vuc29yX3R5cGVzIHR5cGUsDQo+PiArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgdTMyIGF0dHIsIGludCBjaGFubmVsKQ0KPj4g
+K3sNCj4+ICvCoMKgwqAgc3dpdGNoICh0eXBlKSB7DQo+PiArwqDCoMKgIGNhc2UgaHdtb25fZmFu
+Og0KPj4gK8KgwqDCoMKgwqDCoMKgIHJldHVybiAwNDQ0Ow0KPj4gK8KgwqDCoCBjYXNlIGh3bW9u
+X3B3bToNCj4+ICvCoMKgwqDCoMKgwqDCoCByZXR1cm4gMDY0NDsNCj4+ICvCoMKgwqAgZGVmYXVs
+dDoNCj4+ICvCoMKgwqDCoMKgwqDCoCByZXR1cm4gMDsNCj4+ICvCoMKgwqAgfQ0KPj4gK8KgwqDC
+oCByZXR1cm4gMDsNCj4+ICt9DQo+PiArDQo+PiArc3RhdGljIGludCBjYXNwZXJfd21pX2h3bW9u
+X3JlYWQoc3RydWN0IGRldmljZSAqZGV2LA0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgIGVudW0gaHdtb25fc2Vuc29yX3R5cGVzIHR5cGUsIHUzMiBhdHRyLA0KPj4gK8KgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGludCBjaGFubmVsLCBsb25nICp2YWwpDQo+PiAr
+ew0KPj4gK8KgwqDCoCBzdHJ1Y3QgY2FzcGVyX3dtaV9hcmdzIG91dCA9IHsgMCB9Ow0KPj4gKw0K
+Pj4gK8KgwqDCoCBzd2l0Y2ggKHR5cGUpIHsNCj4+ICvCoMKgwqAgY2FzZSBod21vbl9mYW46DQo+
+PiArwqDCoMKgwqDCoMKgwqAgYWNwaV9zdGF0dXMgcmV0ID0gY2FzcGVyX3F1ZXJ5KHRvX3dtaV9k
+ZXZpY2UoZGV2LT5wYXJlbnQpLA0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqAgQ0FTUEVSX0dFVF9IQVJEV0FSRUlORk8sICZvdXQpOw0KPj4g
+Kw0KPj4gK8KgwqDCoMKgwqDCoMKgIGlmIChBQ1BJX0ZBSUxVUkUocmV0KSkNCj4+ICvCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgIHJldHVybiByZXQ7DQo+DQo+IFRoaXMgZnVuY3Rpb24gaXMgZXhwZWN0
+ZWQgdG8gcmV0dXJuIGEgTGludXggZXJyb3IgY29kZSwgbm90IGFuIGFjcGkgDQo+IGVycm9yIGNv
+ZGUuDQo+DQo+IEFsc28sIGlmIENBU1BFUl9HRVRfSEFSRFdBUkVJTkZPIGlzIG5vdCBhbHdheXMg
+YXZhaWxhYmxlLCB0aGUgYXR0cmlidXRlcw0KPiBuZWVkaW5nIGl0IHNob3VsZCBub3QgYmUgY3Jl
+YXRlZCBpbiB0aGUgZmlyc3QgcGxhY2UuDQo+DQo+PiArDQo+PiArwqDCoMKgwqDCoMKgwqAgaWYg
+KGNoYW5uZWwgPT0gMCkgeyAvLyBDUFUgZmFuDQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB1
+MzIgY3B1X2ZhbnNwZWVkID0gb3V0LmE0Ow0KPj4gKw0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAgY3B1X2ZhbnNwZWVkIDw8PSA4Ow0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgY3B1X2Zh
+bnNwZWVkICs9IG91dC5hNCA+PiA4Ow0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKnZhbCA9
+IChsb25nKSBjcHVfZmFuc3BlZWQ7DQo+PiArwqDCoMKgwqDCoMKgwqAgfSBlbHNlIGlmIChjaGFu
+bmVsID09IDEpIHsgLy8gR1BVIGZhbg0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgdTMyIGdw
+dV9mYW5zcGVlZCA9IG91dC5hNTsNCj4+ICsNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGdw
+dV9mYW5zcGVlZCA8PD0gODsNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGdwdV9mYW5zcGVl
+ZCArPSBvdXQuYTUgPj4gODsNCj4NCj4gSSBkb24ndCBrbm93IHdoYXQgdGhpcyBpcyBzdXBwb3Nl
+ZCB0byBiZSBkb2luZywgYnV0IGl0IHdpbGwgcmV0dXJuDQo+IG9kZCB2YWx1ZXMuIEZvciBleGFt
+cGxlLCBpZiBvdXQuYTUgaXMgMHhhYmNkLCB0aGUgcmV0dXJuZWQgdmFsdWUNCj4gd2lsbCBiZSAw
+eGFiY2RhYi4gVGhhdCBzZWVtcyB0byBiZSB1bmxpa2VseSBJIHN1c3BlY3QgdGhpcyBpcyBzdXBw
+b3NlZA0KPiB0byBiZQ0KPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICp2YWwgPSAoKG91dC5hNSAm
+IDB4ZmYpIDw8IDgpIHwgKChvdXQuYTUgPj4gOCkgJiAweGZmKTsNCj4gYnV0IEkgYW0gbm90IGV2
+ZW4gc3VyZSBhYm91dCB0aGF0IGJlY2F1c2UgYTUgaXMgdTMyIGFuZCB0aGUgYWJvdmUgDQo+IHdv
+dWxkIHN1Z2dlc3QNCj4gYSAxNi1iaXQgdW5zaWduZWQgc2hvcnQgaW4gYmlnIGVuZGlhbiBmb3Jt
+YXQuIFBsZWFzZSBjaGVjayByZXR1cm4gdmFsdWVzDQo+IGFuZCBpbXBsZW1lbnQgYW55IG5lY2Vz
+c2FyeSBlbmRpYW5uZXMgY29udmVyc2lvbiBjb3JyZWN0bHkuDQo+DQo+PiArwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoCAqdmFsID0gKGxvbmcpIGdwdV9mYW5zcGVlZDsNCj4NCj4gRldJVywgdGhvc2Ug
+dHlwZSBjYXN0cyBhcmUgdW5uZWNlc3NhcnkuDQo+DQo+PiArwqDCoMKgwqDCoMKgwqAgfQ0KPj4g
+K8KgwqDCoMKgwqDCoMKgIHJldHVybiAwOw0KPj4gK8KgwqDCoCBjYXNlIGh3bW9uX3B3bToNCj4+
+ICvCoMKgwqDCoMKgwqDCoCBjYXNwZXJfcXVlcnkodG9fd21pX2RldmljZShkZXYtPnBhcmVudCks
+IENBU1BFUl9QT1dFUlBMQU4sDQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
+Jm91dCk7DQo+DQo+IFdoeSBubyBlcnJvciBjaGVjayBoZXJlID8NCj4NCj4+ICvCoMKgwqDCoMKg
+wqDCoCBpZiAoY2hhbm5lbCA9PSAwKQ0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKnZhbCA9
+IChsb25nKW91dC5hMjsNCj4+ICvCoMKgwqDCoMKgwqDCoCBlbHNlDQo+PiArwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoCByZXR1cm4gLUVPUE5PVFNVUFA7DQo+DQo+IFRoZSBjb29uZGl0aW9uYWwgYW5k
+IGVsc2UgY2FzZSBpcyB1bm5lY2Vzc2FyeSBzaW5jZSBvbmx5DQo+IGEgc2luZ2xlIHB3bSBjaGFu
+bmVsIGlzIGRlY2xhcmVkLg0KPg0KPj4gK8KgwqDCoMKgwqDCoMKgIHJldHVybiAwOw0KPj4gK8Kg
+wqDCoCBkZWZhdWx0Og0KPj4gK8KgwqDCoMKgwqDCoMKgIHJldHVybiAtRU9QTk9UU1VQUDsNCj4+
+ICvCoMKgwqAgfQ0KPj4gKw0KPj4gK8KgwqDCoCByZXR1cm4gMDsNCj4+ICt9DQo+PiArDQo+PiAr
+c3RhdGljIGludCBjYXNwZXJfd21pX2h3bW9uX3JlYWRfc3RyaW5nKHN0cnVjdCBkZXZpY2UgKmRl
+diwNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBlbnVtIGh3bW9u
+X3NlbnNvcl90eXBlcyB0eXBlLCB1MzIgYXR0ciwNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoCBpbnQgY2hhbm5lbCwgY29uc3QgY2hhciAqKnN0cikNCj4+ICt7DQo+
+PiArwqDCoMKgIHN3aXRjaCAodHlwZSkgew0KPj4gK8KgwqDCoCBjYXNlIGh3bW9uX2ZhbjoNCj4+
+ICvCoMKgwqDCoMKgwqDCoCBzd2l0Y2ggKGNoYW5uZWwpIHsNCj4+ICvCoMKgwqDCoMKgwqDCoCBj
+YXNlIDA6DQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqc3RyID0gImNwdV9mYW5fc3BlZWQi
+Ow0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgYnJlYWs7DQo+PiArwqDCoMKgwqDCoMKgwqAg
+Y2FzZSAxOg0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKnN0ciA9ICJncHVfZmFuX3NwZWVk
+IjsNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGJyZWFrOw0KPj4gK8KgwqDCoMKgwqDCoMKg
+IGRlZmF1bHQ6DQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZXR1cm4gLUVPUE5PVFNVUFA7
+DQo+PiArwqDCoMKgwqDCoMKgwqAgfQ0KPj4gK8KgwqDCoMKgwqDCoMKgIGJyZWFrOw0KPj4gK8Kg
+wqDCoCBkZWZhdWx0Og0KPj4gK8KgwqDCoMKgwqDCoMKgIHJldHVybiAtRU9QTk9UU1VQUDsNCj4+
+ICvCoMKgwqAgfQ0KPj4gK8KgwqDCoCByZXR1cm4gMDsNCj4+ICt9DQo+PiArDQo+PiArc3RhdGlj
+IGludCBjYXNwZXJfd21pX2h3bW9uX3dyaXRlKHN0cnVjdCBkZXZpY2UgKmRldiwNCj4+ICvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGVudW0gaHdtb25fc2Vuc29yX3R5cGVzIHR5
+cGUsIHUzMiBhdHRyLA0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgaW50
+IGNoYW5uZWwsIGxvbmcgdmFsKQ0KPj4gK3sNCj4+ICvCoMKgwqAgYWNwaV9zdGF0dXMgcmV0Ow0K
+Pj4gKw0KPj4gK8KgwqDCoCBzd2l0Y2ggKHR5cGUpIHsNCj4+ICvCoMKgwqAgY2FzZSBod21vbl9w
+d206DQo+PiArwqDCoMKgwqDCoMKgwqAgaWYgKGNoYW5uZWwgIT0gMCkNCj4+ICvCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgIHJldHVybiAtRU9QTk9UU1VQUDsNCj4NCj4gVGhpcyBpcyB1bm5lY2Vzc2Fy
+eS4gT25seSBhIHNpbmdsZSBwd20gY2hhbm5lbCBpcyBkZWNsYXJlZCwNCj4gc28gY2hhbm5lbCB3
+aWxsIG5ldmVyIGJlICE9IDAuDQo+DQo+PiArwqDCoMKgwqDCoMKgwqAgcmV0ID0NCj4+ICvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgIGNhc3Blcl9zZXQodG9fd21pX2RldmljZShkZXYtPnBhcmVudCks
+IENBU1BFUl9QT1dFUlBMQU4sDQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgIHZhbCwgMCk7DQo+PiArDQo+IFRoZSBmaXJzdCBsaW5lIHNwbGl0IGlzIHVubmVjZXNzYXJ5
+Lg0KPg0KPj4gK8KgwqDCoMKgwqDCoMKgIGlmIChBQ1BJX0ZBSUxVUkUocmV0KSkgew0KPj4gK8Kg
+wqDCoMKgwqDCoMKgwqDCoMKgwqAgZGV2X2VycihkZXYsICJDb3VsZG4ndCBzZXQgcG93ZXIgcGxh
+biwgYWNwaV9zdGF0dXM6ICVkIiwNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
+cmV0KTsNCj4NCj4gRHJpdmVycyBzaG91bGQgbm90IGdlbmVyYXRlIHN1Y2ggbG9nZ2luZyBub2lz
+ZSwgZXZlbiBtb3JlIHNvIGFmdGVyIA0KPiB1c2VyIGlucHV0Lg0KPiBBbHNvLCB0aGUgdmFsaWQg
+cmFuZ2UgKDAuLjI1NSkgc2hvdWxkIGJlIGNoZWNrZWQgYmVmb3JlIHRyeWluZyB0byBzZXQgaXQu
+DQo+DQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZXR1cm4gLUVJTlZBTDsNCj4+ICvCoMKg
+wqDCoMKgwqDCoCB9DQo+PiArwqDCoMKgwqDCoMKgwqAgcmV0dXJuIDA7DQo+PiArwqDCoMKgIGRl
+ZmF1bHQ6DQo+PiArwqDCoMKgwqDCoMKgwqAgcmV0dXJuIC1FT1BOT1RTVVBQOw0KPj4gK8KgwqDC
+oCB9DQo+PiArfQ0KPj4gKw0KPj4gK3N0YXRpYyBjb25zdCBzdHJ1Y3QgaHdtb25fb3BzIGNhc3Bl
+cl93bWlfaHdtb25fb3BzID0gew0KPj4gK8KgwqDCoCAuaXNfdmlzaWJsZSA9ICZjYXNwZXJfd21p
+X2h3bW9uX2lzX3Zpc2libGUsDQo+PiArwqDCoMKgIC5yZWFkID0gJmNhc3Blcl93bWlfaHdtb25f
+cmVhZCwNCj4+ICvCoMKgwqAgLnJlYWRfc3RyaW5nID0gJmNhc3Blcl93bWlfaHdtb25fcmVhZF9z
+dHJpbmcsDQo+PiArwqDCoMKgIC53cml0ZSA9ICZjYXNwZXJfd21pX2h3bW9uX3dyaXRlDQo+PiAr
+fTsNCj4+ICsNCj4+ICtzdGF0aWMgY29uc3Qgc3RydWN0IGh3bW9uX2NoYW5uZWxfaW5mbyAqY29u
+c3QgDQo+PiBjYXNwZXJfd21pX2h3bW9uX2luZm9bXSA9IHsNCj4+ICvCoMKgwqAgSFdNT05fQ0hB
+Tk5FTF9JTkZPKGZhbiwNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIEhXTU9OX0Zf
+SU5QVVQgfCBIV01PTl9GX0xBQkVMLA0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
+SFdNT05fRl9JTlBVVCB8IEhXTU9OX0ZfTEFCRUwpLA0KPj4gK8KgwqDCoCBIV01PTl9DSEFOTkVM
+X0lORk8ocHdtLCBIV01PTl9QV01fTU9ERSksDQo+PiArwqDCoMKgIE5VTEwNCj4+ICt9Ow0KPj4g
+Kw0KPj4gK3N0YXRpYyBjb25zdCBzdHJ1Y3QgaHdtb25fY2hpcF9pbmZvIGNhc3Blcl93bWlfaHdt
+b25fY2hpcF9pbmZvID0gew0KPj4gK8KgwqDCoCAub3BzID0gJmNhc3Blcl93bWlfaHdtb25fb3Bz
+LA0KPj4gK8KgwqDCoCAuaW5mbyA9IGNhc3Blcl93bWlfaHdtb25faW5mbywNCj4+ICt9Ow0KPj4g
+Kw0KPj4gK3N0YXRpYyBpbnQgY2FzcGVyX3dtaV9wcm9iZShzdHJ1Y3Qgd21pX2RldmljZSAqd2Rl
+diwgY29uc3Qgdm9pZCANCj4+ICpjb250ZXh0KQ0KPj4gK3sNCj4+ICvCoMKgwqAgc3RydWN0IGRl
+dmljZSAqaHdtb25fZGV2Ow0KPj4gKw0KPj4gK8KgwqDCoCAvLyBBbGwgQ2FzcGVyIEV4Y2FsaWJ1
+ciBMYXB0b3BzIHVzZSB0aGlzIEdVSUQNCj4+ICvCoMKgwqAgaWYgKCF3bWlfaGFzX2d1aWQoQ0FT
+UEVSX1dNSV9HVUlEKSkNCj4+ICvCoMKgwqDCoMKgwqDCoCByZXR1cm4gLUVOT0RFVjsNCj4+ICsN
+Cj4gSG93IHdvdWxkIHRoZSBkZXZpY2UgZXZlciBiZSBpbnN0YW50aWF0ZWQgd2l0aCBhIGRpZmZl
+cmVudCBHVUlELA0KPiBtYWtpbmcgdGhpcyBjaGVjayBuZWNlc3NhcnkgPw0KPg0KSGksDQoNCnRo
+aXMgaXMgaW5kZWVkIHVubmVjZXNzYXJ5LCB0aGUgV01JIGRyaXZlciBjb3JlIGFscmVhZHkgdGFr
+ZXMgY2FyZSB0aGF0IHRoZSBXTUkgZHJpdmVyIGlzDQpvbmx5IGJvdW5kIHRvIFdNSSBkZXZpY2Vz
+IHdpdGggYSBtYXRjaGluZyBHVUlELg0KDQpJIHRoaW5rIHRoaXMgd2FzIGNvcGllZCBmcm9tIHRo
+ZSBkZWxsLXdtaS1wcml2YWN5IGRyaXZlciwgaSB3aWxsIHNlbmQgYSBwYXRjaCB0byByZW1vdmUg
+dGhpcy4NCg0KQXJtaW4gV29sZg0KDQo+PiArwqDCoMKgIGh3bW9uX2RldiA9DQo+PiArwqDCoMKg
+wqDCoMKgwqAgZGV2bV9od21vbl9kZXZpY2VfcmVnaXN0ZXJfd2l0aF9pbmZvKCZ3ZGV2LT5kZXYs
+IA0KPj4gImNhc3Blcl93bWkiLCB3ZGV2LA0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAmY2FzcGVyX3dtaV9od21vbl9jaGlwX2luZm8sDQo+PiAr
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIE5VTEwpOw0K
+Pj4gKw0KPj4gK8KgwqDCoCBhY3BpX3N0YXR1cyByZXN1bHQgPSBsZWRfY2xhc3NkZXZfcmVnaXN0
+ZXIoJndkZXYtPmRldiwgDQo+PiAmY2FzcGVyX2tiZF9sZWQpOw0KPj4gKw0KPj4gK8KgwqDCoCBp
+ZiAocmVzdWx0ICE9IDApDQo+PiArwqDCoMKgwqDCoMKgwqAgcmV0dXJuIC1FTk9ERVY7DQo+PiAr
+DQo+PiArwqDCoMKgIHJldHVybiBQVFJfRVJSX09SX1pFUk8oaHdtb25fZGV2KTsNCj4NCj4gVGhp
+cyB3b3VsZCBsZWF2ZSB0aGUgTEVEIGRldmljZSByZWdpc3RlcmVkIGlmIGluc3RhbnRpYXRpbmcg
+dGhlIGh3bW9uIA0KPiBkZXZpY2UNCj4gZmFpbGVkLiBIb3dldmVyLCB0aGUgcHJvYmUgZnVuY3Rp
+b24gd291bGQgcmV0dXJuIGFuIGVycm9yLCBtZWFuaW5nIHRoZSANCj4gZHJpdmVyDQo+IGNvcmUg
+d2lsbCBiZWxpZXZlIHRoYXQgaW5zdGFudGlhdGlvbiBmYWlsZWQuIElzIHRoYXQgaW50ZW50aW9u
+YWwgPyBJIA0KPiBhbSBxdWl0ZQ0KPiBzdXJlIHRoYXQgdGhpcyB3b3VsZCByZXN1bHQgaW4gaW50
+ZXJlc3RpbmcgY3Jhc2hlcy4NCj4NCj4+ICvCoMKgwqAgfQ0KPj4gKw0KPj4gK3N0YXRpYyB2b2lk
+IGNhc3Blcl93bWlfcmVtb3ZlKHN0cnVjdCB3bWlfZGV2aWNlICp3ZGV2KQ0KPj4gK3sNCj4+ICvC
+oMKgwqAgbGVkX2NsYXNzZGV2X3VucmVnaXN0ZXIoJmNhc3Blcl9rYmRfbGVkKTsNCj4+ICt9DQo+
+PiArDQo+PiArc3RhdGljIGNvbnN0IHN0cnVjdCB3bWlfZGV2aWNlX2lkIGNhc3Blcl93bWlfaWRf
+dGFibGVbXSA9IHsNCj4+ICvCoMKgwqAgeyBDQVNQRVJfV01JX0dVSUQsIE5VTEwgfSwNCj4+ICvC
+oMKgwqAgeyB9DQo+PiArfTsNCj4+ICsNCj4+ICtzdGF0aWMgc3RydWN0IHdtaV9kcml2ZXIgY2Fz
+cGVyX3dtaV9kcml2ZXIgPSB7DQo+PiArwqDCoMKgIC5kcml2ZXIgPSB7DQo+PiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqAgLm5hbWUgPSAiY2FzcGVyLXdtaSIsDQo+PiArwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoCB9LA0KPj4gK8KgwqDCoCAuaWRfdGFibGUgPSBjYXNwZXJfd21pX2lkX3RhYmxlLA0KPj4g
+K8KgwqDCoCAucHJvYmUgPSBjYXNwZXJfd21pX3Byb2JlLA0KPj4gK8KgwqDCoCAucmVtb3ZlID0g
+JmNhc3Blcl93bWlfcmVtb3ZlDQo+PiArfTsNCj4+ICsNCj4+ICttb2R1bGVfd21pX2RyaXZlcihj
+YXNwZXJfd21pX2RyaXZlcik7DQo+PiArDQo+PiArTU9EVUxFX0RFVklDRV9UQUJMRSh3bWksIGNh
+c3Blcl93bWlfaWRfdGFibGUpOw0KPg0KPg0K
