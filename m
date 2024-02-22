@@ -1,63 +1,135 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fgw20-7.mail.saunalahti.fi (fgw20-7.mail.saunalahti.fi [62.142.5.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C097454914;
-	Thu, 22 Feb 2024 19:53:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A9B573F2D
+	for <linux-hwmon@vger.kernel.org>; Thu, 22 Feb 2024 21:42:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708631603; cv=none; b=tsaCOp1YR5rU2dzACFs4pnRlUx9R3YXzl1XJ80y4qFMCNXXDfStEZ8l+Kk5Gsw5AGm7jRGYU/LUc3Ca4Nb34WN6S2Uz6lFex8Rob4h0nlxZbdAS7bcoP8fbatMQ2VwYd4paEThC4W3BGmr6LMhLZRoUCrYTQxiWL3kNHGPZYqkY=
+	t=1708638143; cv=none; b=E6CVKT+7d7Wg+XRU4XSd/BRDdGgRvqUuPGR8Ekuuw6/4d4t88Y/KfZf5roevL0gV98sdxb9pjS2kNSEY25qi8wgGhwbAvw4ERA2yreXlaetwLVyM1e2qUu4CMEf/btGAEU3BIrnrtjDBfsqn5bhxFBZ0bSgBMRXbsbsE5LtTi7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708631603; c=relaxed/simple;
-	bh=qDXBB0ij/If0VYG0ekjLIrDHl3WNvkiffFUNpfTYhQA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t3ADtESAq4LHXxPGydQvDBeyjArrw8RgGCEsKUiFCc+Vt8UusuiI6oTvq8wh9FtkdndVU98tPRQlVvELec9k1DNQuoCY9u6fzdyrvTMlPWhbdK/oJCqmk/Fk9OFUYVcXKwGQtOqe3iIv+ovXvvrAIjYA1DQ7neiojxvzreqoc+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OQ+B4zYs; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OQ+B4zYs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61EF5C433C7;
-	Thu, 22 Feb 2024 19:53:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708631603;
-	bh=qDXBB0ij/If0VYG0ekjLIrDHl3WNvkiffFUNpfTYhQA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OQ+B4zYsFdcQTnlXnTJzTjKwxMjTba6V/pdA3mNW1UJZVdLboIrHrIPeDgwfolNk9
-	 W1+ChLdKC24pmYgf+HiJg8Xnfg4hU0nlhCNCh5arvgmTJHpX215MLOVsnHcpjRHnEH
-	 NddVjpNG3zF1puwZUIkKmTt6S8Jbgkof0hguop3mw70KYGMY5iZ0yToi4v2HPV2ABu
-	 zmU9/vjsIoHjwnxNBfwQQWdGCRdjYd+psb6feGRjKLEtVpQhd1FJKRW+FgWMSfH+3j
-	 ZddQM84ZCxc5ZUUZX0DRoYQwNl9kmOLJjTelH2h3BBen3pJdbQDVwDoFqECtOxQnMb
-	 cqMXsTgiPjauQ==
-Date: Thu, 22 Feb 2024 13:53:21 -0600
-From: Rob Herring <robh@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-	linux-kernel@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>, linux-hwmon@vger.kernel.org,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 2/2] dt-bindings: hwmon: ti,ina2xx: use common hwmon
- schema
-Message-ID: <170863160056.3749405.5990160563545861721.robh@kernel.org>
-References: <20240216-dt-bindings-hwmon-common-v1-0-3c2c24ff1260@linaro.org>
- <20240216-dt-bindings-hwmon-common-v1-2-3c2c24ff1260@linaro.org>
+	s=arc-20240116; t=1708638143; c=relaxed/simple;
+	bh=3qH6a911hvLZnHJF5DoZ8K6rR8//RgNHgPFdiHBY9tk=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HQMmeRVxdDeCinwCIaMrLVxxs22s//1MCzwGWFWgrsvnygDmvdUQio5akm9Ug2gQp/vDFfoQwB6DupIh+YxuyYhPfp1tt2/si+LihH3XOgv+Q9AwUeqnVsjhYu5DugrDK6xlFA63IXT7EQuxe4/jqxRVfKSOF5k/kESZp/i88R4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=62.142.5.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
+Received: from localhost (88-113-26-217.elisa-laajakaista.fi [88.113.26.217])
+	by fgw20.mail.saunalahti.fi (Halon) with ESMTP
+	id 3c868ecd-d1cb-11ee-b3cf-005056bd6ce9;
+	Thu, 22 Feb 2024 23:42:13 +0200 (EET)
+From: andy.shevchenko@gmail.com
+Date: Thu, 22 Feb 2024 23:42:11 +0200
+To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+	Matti Vaittinen <mazziesaccount@gmail.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Lucas De Marchi <lucas.demarchi@intel.com>,
+	Oded Gabbay <ogabbay@kernel.org>,
+	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Aleksandr Mezin <mezin.alexander@gmail.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>, Pavel Machek <pavel@ucw.cz>,
+	Lee Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-gpio@vger.kernel.org, intel-xe@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
+	linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	George Stark <gnstark@salutedevices.com>
+Subject: Re: [PATCH 1/2] devm-helpers: Add resource managed version of mutex
+ init
+Message-ID: <Zde_s8iecR2ArKjC@surfacebook.localdomain>
+References: <20240222145838.12916-1-kabel@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20240216-dt-bindings-hwmon-common-v1-2-3c2c24ff1260@linaro.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240222145838.12916-1-kabel@kernel.org>
 
-
-On Fri, 16 Feb 2024 08:55:47 +0100, Krzysztof Kozlowski wrote:
-> Reference common hwmon schema which brings the "label" property.
+Thu, Feb 22, 2024 at 03:58:37PM +0100, Marek Behún kirjoitti:
+> A few drivers are doing resource-managed mutex initialization by
+> implementing ad-hoc one-liner mutex dropping functions and using them
+> with devm_add_action_or_reset(). Help drivers avoid these repeated
+> one-liners by adding managed version of mutex initialization.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
+> Use the new function devm_mutex_init() in the following drivers:
+>   drivers/gpio/gpio-pisosr.c
+>   drivers/gpio/gpio-sim.c
+>   drivers/gpu/drm/xe/xe_hwmon.c
+>   drivers/hwmon/nzxt-smart2.c
+>   drivers/leds/leds-is31fl319x.c
+>   drivers/power/supply/mt6370-charger.c
+>   drivers/power/supply/rt9467-charger.c
 
-Acked-by: Rob Herring <robh@kernel.org>
+Pardon me, but why?
+
+https://lore.kernel.org/linux-leds/20231214173614.2820929-1-gnstark@salutedevices.com/
+
+Can you cooperate, folks, instead of doing something independently?
+
+
+> --- a/include/linux/devm-helpers.h
+> +++ b/include/linux/devm-helpers.h
+> @@ -24,6 +24,8 @@
+>   */
+>  
+>  #include <linux/device.h>
+> +#include <linux/kconfig.h>
+> +#include <linux/mutex.h>
+>  #include <linux/workqueue.h>
+>  
+>  static inline void devm_delayed_work_drop(void *res)
+> @@ -76,4 +78,34 @@ static inline int devm_work_autocancel(struct device *dev,
+>  	return devm_add_action(dev, devm_work_drop, w);
+>  }
+>  
+> +static inline void devm_mutex_drop(void *res)
+> +{
+> +	mutex_destroy(res);
+> +}
+> +
+> +/**
+> + * devm_mutex_init - Resource managed mutex initialization
+> + * @dev:	Device which lifetime mutex is bound to
+> + * @lock:	Mutex to be initialized (and automatically destroyed)
+> + *
+> + * Initialize mutex which is automatically destroyed when driver is detached.
+> + * A few drivers initialize mutexes which they want destroyed before driver is
+> + * detached, for debugging purposes.
+> + * devm_mutex_init() can be used to omit the explicit mutex_destroy() call when
+> + * driver is detached.
+> + */
+> +static inline int devm_mutex_init(struct device *dev, struct mutex *lock)
+> +{
+> +	mutex_init(lock);
+> +
+> +	/*
+> +	 * mutex_destroy() is an empty function if CONFIG_DEBUG_MUTEXES is
+> +	 * disabled. No need to allocate an action in that case.
+> +	 */
+> +	if (IS_ENABLED(CONFIG_DEBUG_MUTEXES))
+> +		return devm_add_action_or_reset(dev, devm_mutex_drop, lock);
+> +	else
+> +		return 0;
+> +}
+
+Cc: George Stark <gnstark@salutedevices.com>
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
