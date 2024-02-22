@@ -1,141 +1,143 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C8D310F9;
-	Thu, 22 Feb 2024 02:41:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1537A381A1;
+	Thu, 22 Feb 2024 09:48:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708569693; cv=none; b=IOfYQiR3rLH7eMPsYYfPMeK91e9b5Px4kQ5Hvep7kY+uMtE5t/Ml6rKmYZtqr31ofupxzP0cP6sIlDFN5bY1zISwaEHgQf7ZmoPgQEHAEIUdtUQ411HhnnYdidZ11uJzVTCYABIL/QC33Q1UvIqXPB1Vb4eAX5LurkaLqDu0D2A=
+	t=1708595305; cv=none; b=iLH7D+nEYeo+nYH42epWwN+6YlDWTgG89SuJ+7IXRmnIQhrpttSLsk/1hOcMq5CpETt6zr+TyE7AL/Nqz1MPNMthERrB6aeCpz/vt4rv76uSLLNMhHjJ1VfqvVySR3+qCRhcJSVrvaZnMJZW4KJPMnps8tBFS0PS/vZ24Fu/wO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708569693; c=relaxed/simple;
-	bh=IWBWxBYJmFyQVnGRv38FFSekIZLP2aPDTIxxaVSPYBE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mcUcR1Pmm8ef8n/qWV47Cs+7op0NWzhNvziN8jSgcA7U9A54u7mWM9HGIYfwzfJ/1WYxM6KInB0iHW/MHi67jVfsB4fb+y1kxI7xLkStYkMKhUM76bg2ZDTBFU4YUrg19zxtYBBnBWILxaS+unscxXdpoD8oz8IMhvYjLZQE8mY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WH5+Bwx0; arc=none smtp.client-ip=198.175.65.11
+	s=arc-20240116; t=1708595305; c=relaxed/simple;
+	bh=dmUazriXwFNzM3sE1wGM7IS3zRztscYDLyUV2Em9rYo=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=VXeOaKHxRKIxbftD0WD52AKBs9kViDv9qhI649VLs3wcz69U216I87lRmMP9F3oisVqNeul0K87qhxgoI6xqzs4G2D7JydLjp11a5N0ojQOjmY/UO5OZrZ3TaOUnaYH8F2MkPOnrCYHTV7X2g0WkEdfdk+iSG2XT4hzRp3dSris=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZMiyvQZS; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WH5+Bwx0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZMiyvQZS"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708569691; x=1740105691;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=IWBWxBYJmFyQVnGRv38FFSekIZLP2aPDTIxxaVSPYBE=;
-  b=WH5+Bwx0iP66SM/BRqa13OzJSK8IjUpPpHXSAqf0tTv4rfekiHi6nFu2
-   F2jq2JdqVN4LerBLxj6eSf9f5rlzgPhSxJDyUBqBzzzlmF0S9fYpWxHqK
-   HxZlayL5G2XxHXM3u9mh5/9DvYIk/Hjg6U+YsOqmQUQMvJgDvslr/Tjaz
-   My5os0LT+zBkKH0vwFnDv2x9Do4b20VqAK9UOGWrqrwa4qsU3JZRQPg+8
-   RPdJ2wT+jKFighTO9q4rJ1WrQy8j9gWsmE2JDe/WkOH7tAJco9kFSTgiP
-   8vxTEScCWBhTGjBbJKd0gJddBFYU8fTbHJyZuWNsJRTBc916mkmCfkO6a
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10991"; a="13329326"
+  t=1708595303; x=1740131303;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=dmUazriXwFNzM3sE1wGM7IS3zRztscYDLyUV2Em9rYo=;
+  b=ZMiyvQZSjbq9w2iFCOmBApOFSCcHyC79/O/kKzc0R/7FjLbP72BiOTlm
+   Kr+eZC5Fn4BJqDlxf1ckUTwLoS5yOKw1frriuYYOw7ojjOmwugr0RgaeG
+   x8ezoo6s2+sogMsSsPbb1MLP6BayyAnRXW4l5fLwp4HSx9HD8WrDDLmkd
+   W48rQt0z8JxXuiGtIc1U+WnMQ/lTmnhUAnvwoddFvti30p565uM3tDbJD
+   FevAI5UQB2Rp4tpEyCDO2okwoNqPe8CJEuveLpz9tmw3gNy/5RKdflGQg
+   CdPRhh28q9ijCJedxdsWiI+ZIzkm37kAVaRLQj72kKjElB2cmDRPP3rXB
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10991"; a="28250671"
 X-IronPort-AV: E=Sophos;i="6.06,177,1705392000"; 
-   d="scan'208";a="13329326"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2024 18:41:30 -0800
+   d="scan'208";a="28250671"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2024 01:48:22 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10991"; a="827453680"
 X-IronPort-AV: E=Sophos;i="6.06,177,1705392000"; 
-   d="scan'208";a="827453680"
-Received: from mstewart-mobl.amr.corp.intel.com (HELO [10.209.73.168]) ([10.209.73.168])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2024 18:41:30 -0800
-Message-ID: <2826ee8d-9cc9-4f24-a797-48f704f0ea84@linux.intel.com>
-Date: Wed, 21 Feb 2024 18:41:29 -0800
+   d="scan'208";a="5403694"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.94.249.55])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2024 01:48:19 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Thu, 22 Feb 2024 11:48:14 +0200 (EET)
+To: =?ISO-8859-2?Q?Mustafa_Ek=BAi?= <mustafa.eskieksi@gmail.com>
+cc: Hans de Goede <hdegoede@redhat.com>, LKML <linux-kernel@vger.kernel.org>, 
+    platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+    jdelvare@suse.com, linux@roeck-us.net, Pavel Machek <pavel@ucw.cz>, 
+    Lee Jones <lee@kernel.org>, Lee Jones <lee@kernel.org>
+Subject: Re: [PATCH] Add wmi driver support for Casper Excalibur laptops.
+In-Reply-To: <20240221221549.640515-1-mustafa.eskieksi@gmail.com>
+Message-ID: <2716dc6e-d091-f61c-7f77-a87215adfe19@linux.intel.com>
+References: <20240221221549.640515-1-mustafa.eskieksi@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Add wmi driver support for Casper Excalibur laptops.
-Content-Language: en-US
-To: =?UTF-8?Q?Mustafa_Ek=C5=9Fi?= <mustafa.eskieksi@gmail.com>,
- hdegoede@redhat.com, ilpo.jarvinen@linux.intel.com,
- linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
- linux-hwmon@vger.kernel.org
-Cc: jdelvare@suse.com, linux@roeck-us.net
-References: <20240221221549.640515-1-mustafa.eskieksi@gmail.com>
-From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20240221221549.640515-1-mustafa.eskieksi@gmail.com>
+Content-Type: multipart/mixed; boundary="8323328-1497083232-1708595294=:1961"
+
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323328-1497083232-1708595294=:1961
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
+Hi,
 
-On 2/21/24 2:15 PM, Mustafa Ekşi wrote:
-> Signed-off-by: Mustafa Ekşi <mustafa.eskieksi@gmail.com>
+Added LED subsys people, please include them in future versions=20
+automatically.
+
+On Thu, 22 Feb 2024, Mustafa Ek=C5=9Fi wrote:
+
+> Signed-off-by: Mustafa Ek=C5=9Fi <mustafa.eskieksi@gmail.com>
 > ---
-
-Please add some commit log about the driver. Like what it supports,
-who uses it , etc.
-
 >  MAINTAINERS                       |   6 +
 >  drivers/platform/x86/Kconfig      |  14 ++
 >  drivers/platform/x86/Makefile     |   1 +
 >  drivers/platform/x86/casper-wmi.c | 344 ++++++++++++++++++++++++++++++
 >  4 files changed, 365 insertions(+)
 >  create mode 100644 drivers/platform/x86/casper-wmi.c
->
+>=20
 > diff --git a/MAINTAINERS b/MAINTAINERS
 > index 9ed4d386853..d0142a75d2c 100644
 > --- a/MAINTAINERS
 > +++ b/MAINTAINERS
-> @@ -4723,6 +4723,12 @@ S:	Maintained
->  W:	https://wireless.wiki.kernel.org/en/users/Drivers/carl9170
->  F:	drivers/net/wireless/ath/carl9170/
->  
+> @@ -4723,6 +4723,12 @@ S:=09Maintained
+>  W:=09https://wireless.wiki.kernel.org/en/users/Drivers/carl9170
+>  F:=09drivers/net/wireless/ath/carl9170/
+> =20
 > +CASPER EXCALIBUR WMI DRIVER
-> +M:	Mustafa Ekşi <mustafa.eskieksi@gmail.com>
-> +L:	platform-driver-x86@vger.kernel.org
-> +S:	Maintained
-> +F:	drivers/platform/x86/casper-wmi.c
+> +M:=09Mustafa Ek=C5=9Fi <mustafa.eskieksi@gmail.com>
+> +L:=09platform-driver-x86@vger.kernel.org
+> +S:=09Maintained
+> +F:=09drivers/platform/x86/casper-wmi.c
 > +
 >  CAVIUM I2C DRIVER
->  M:	Robert Richter <rric@kernel.org>
->  S:	Odd Fixes
+>  M:=09Robert Richter <rric@kernel.org>
+>  S:=09Odd Fixes
 > diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
 > index bdd302274b9..ebef9c9dfb6 100644
 > --- a/drivers/platform/x86/Kconfig
 > +++ b/drivers/platform/x86/Kconfig
 > @@ -1127,6 +1127,20 @@ config SEL3350_PLATFORM
->  	  To compile this driver as a module, choose M here: the module
->  	  will be called sel3350-platform.
->  
+>  =09  To compile this driver as a module, choose M here: the module
+>  =09  will be called sel3350-platform.
+> =20
 > +config CASPER_WMI
-> +	tristate "Casper Excalibur Laptop WMI driver"
-> +	depends on ACPI_WMI
-> +	depends on HWMON
-> +	select NEW_LEDS
-> +	select LEDS_CLASS
-
-In commit log, add some info about why you are selecting the NEW_LEDS
-and LEDS_CLASS.
-
-> +	help
-> +	  Say Y here if you want to support WMI-based fan speed reporting,
-> +	  power management and keyboard backlight support on Casper Excalibur
-> +	  Laptops.
+> +=09tristate "Casper Excalibur Laptop WMI driver"
+> +=09depends on ACPI_WMI
+> +=09depends on HWMON
+> +=09select NEW_LEDS
+> +=09select LEDS_CLASS
+> +=09help
+> +=09  Say Y here if you want to support WMI-based fan speed reporting,
+> +=09  power management and keyboard backlight support on Casper Excalibur
+> +=09  Laptops.
 > +
-> +	  To compile this driver as a module, choose M here: the module will
-> +	  be called casper-wmi.
+> +=09  To compile this driver as a module, choose M here: the module will
+> +=09  be called casper-wmi.
 > +
 >  endif # X86_PLATFORM_DEVICES
->  
+> =20
 >  config P2SB
-> diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
+> diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefil=
+e
 > index 1de432e8861..4b527dd44ad 100644
 > --- a/drivers/platform/x86/Makefile
 > +++ b/drivers/platform/x86/Makefile
-> @@ -14,6 +14,7 @@ obj-$(CONFIG_MXM_WMI)			+= mxm-wmi.o
->  obj-$(CONFIG_NVIDIA_WMI_EC_BACKLIGHT)	+= nvidia-wmi-ec-backlight.o
->  obj-$(CONFIG_XIAOMI_WMI)		+= xiaomi-wmi.o
->  obj-$(CONFIG_GIGABYTE_WMI)		+= gigabyte-wmi.o
-> +obj-$(CONFIG_CASPER_WMI)		+= casper-wmi.o
->  
+> @@ -14,6 +14,7 @@ obj-$(CONFIG_MXM_WMI)=09=09=09+=3D mxm-wmi.o
+>  obj-$(CONFIG_NVIDIA_WMI_EC_BACKLIGHT)=09+=3D nvidia-wmi-ec-backlight.o
+>  obj-$(CONFIG_XIAOMI_WMI)=09=09+=3D xiaomi-wmi.o
+>  obj-$(CONFIG_GIGABYTE_WMI)=09=09+=3D gigabyte-wmi.o
+> +obj-$(CONFIG_CASPER_WMI)=09=09+=3D casper-wmi.o
+> =20
 >  # Acer
->  obj-$(CONFIG_ACERHDF)		+= acerhdf.o
-> diff --git a/drivers/platform/x86/casper-wmi.c b/drivers/platform/x86/casper-wmi.c
+>  obj-$(CONFIG_ACERHDF)=09=09+=3D acerhdf.o
+> diff --git a/drivers/platform/x86/casper-wmi.c b/drivers/platform/x86/cas=
+per-wmi.c
 > new file mode 100644
 > index 00000000000..aae08202b19
 > --- /dev/null
@@ -156,10 +158,12 @@ and LEDS_CLASS.
 > +#include <linux/dmi.h>
 > +#include <acpi/acexcep.h>
 > +
-> +MODULE_AUTHOR("Mustafa Ekşi <mustafa.eskieksi@gmail.com>");
+> +MODULE_AUTHOR("Mustafa Ek=C5=9Fi <mustafa.eskieksi@gmail.com>");
 > +MODULE_DESCRIPTION("Casper Excalibur Laptop WMI driver");
 > +MODULE_LICENSE("GPL");
-> +
+
+Put these to the end of file.
+
 > +#define CASPER_WMI_GUID "644C5791-B7B0-4123-A90B-E93876E0DAAD"
 > +
 > +#define CASPER_READ 0xfa00
@@ -175,324 +179,390 @@ and LEDS_CLASS.
 > +#define CASPER_CORNER_LEDS 0x07
 > +
 > +struct casper_wmi_args {
-> +	u16 a0, a1;
-> +	u32 a2, a3, a4, a5, a6, a7, a8;
+> +=09u16 a0, a1;
+> +=09u32 a2, a3, a4, a5, a6, a7, a8;
 > +};
 > +
 > +static u32 casper_last_color;
 > +static u8 casper_last_led;
 > +
-> +static acpi_status casper_set(struct wmi_device *wdev, u16 a1, u8 led_id,
-> +			      u32 data)
+> +static acpi_status casper_set(struct wmi_device *wdev, u16 a1, u8 led_id=
+,
+> +=09=09=09      u32 data)
 > +{
-> +	struct casper_wmi_args wmi_args = {
-> +		.a0 = CASPER_WRITE,
-> +		.a1 = a1,
-> +		.a2 = led_id,
-> +		.a3 = data
-> +	};
-> +	struct acpi_buffer input = {
-> +		(acpi_size) sizeof(struct casper_wmi_args),
-> +		&wmi_args
-> +	};
-> +	return wmidev_block_set(wdev, 0, &input);
+> +=09struct casper_wmi_args wmi_args =3D {
+> +=09=09.a0 =3D CASPER_WRITE,
+> +=09=09.a1 =3D a1,
+> +=09=09.a2 =3D led_id,
+> +=09=09.a3 =3D data
+> +=09};
+> +=09struct acpi_buffer input =3D {
+> +=09=09(acpi_size) sizeof(struct casper_wmi_args),
+> +=09=09&wmi_args
+> +=09};
+> +=09return wmidev_block_set(wdev, 0, &input);
 > +}
 > +
-> +static ssize_t led_control_show(struct device *dev, struct device_attribute
-> +				*attr, char *buf)
+> +static ssize_t led_control_show(struct device *dev, struct device_attrib=
+ute
+> +=09=09=09=09*attr, char *buf)
 > +{
-> +	return sprintf("%u%08x\n", buf, casper_last_led,
-> +		       casper_last_color);
+> +=09return sprintf("%u%08x\n", buf, casper_last_led,
+> +=09=09       casper_last_color);
+
+Fits one line. Use sysfs_emit().
+
 > +}
 > +
 > +
-> +// input is formatted as "IMARRGGBB", I: led_id, M: mode, A: brightness, ...
-> +static ssize_t led_control_store(struct device *dev, struct device_attribute
-> +				 *attr, const char *buf, size_t count)
+> +// input is formatted as "IMARRGGBB", I: led_id, M: mode, A: brightness,=
+ ...
+
+If you do things like this, please add defines for such "fields" and use=20
+FIELD_GET/PREP().
+
+Could LED subsystem folks plese check this the correct way to do RGB=20
+control? (I suspect it's not).
+
+> +static ssize_t led_control_store(struct device *dev, struct device_attri=
+bute
+> +=09=09=09=09 *attr, const char *buf, size_t count)
 > +{
-> +	u64 tmp;
-> +	int ret;
+> +=09u64 tmp;
+> +=09int ret;
 > +
-> +	ret = kstrtou64(buf, 16, &tmp);
+> +=09ret =3D kstrtou64(buf, 16, &tmp);
 > +
-above empty line is not needed
-> +	if (ret)
-> +		return ret;
+> +=09if (ret)
+> +=09=09return ret;
+
+Don't place empty line between function and its error handling. Please go=
+=20
+through the entire patch and fix all of them (I won't mark them all).
+
 > +
-> +	u8 led_id = (tmp >> (8 * 4))&0xFF;
-Why not 32 ?
+> +=09u8 led_id =3D (tmp >> (8 * 4))&0xFF;
+
+FIELD_GET() + add #include for it.
+
 > +
-> +	ret =
-> +	    casper_set(to_wmi_device(dev->parent), CASPER_SET_LED, led_id,
-> +		       (u32) tmp
-> +	    );
-Since it returns acpi_status, I would define a new variable to test it.
-> +	if (ACPI_FAILURE(ret)) {
-> +		dev_err(dev, "casper-wmi ACPI status: %d\n", ret);
-> +		return ret;
-> +	}
-> +	if (led_id != CASPER_CORNER_LEDS) {
-> +		casper_last_color = (u32) tmp;
-> +		casper_last_led = led_id;
-> +	}
-> +	return count;
+> +=09ret =3D
+> +=09    casper_set(to_wmi_device(dev->parent), CASPER_SET_LED, led_id,
+> +=09=09       (u32) tmp
+
+Don't call variable "tmp"!
+
+Please create a local variable for these to_wmi_device(dev->parent) to=20
+make this fit one line.
+
+> +=09    );
+> +=09if (ACPI_FAILURE(ret)) {
+> +=09=09dev_err(dev, "casper-wmi ACPI status: %d\n", ret);
+> +=09=09return ret;
+> +=09}
+> +=09if (led_id !=3D CASPER_CORNER_LEDS) {
+> +=09=09casper_last_color =3D (u32) tmp;
+> +=09=09casper_last_led =3D led_id;
+> +=09}
+> +=09return count;
 > +}
 > +
 > +static DEVICE_ATTR_RW(led_control);
 > +
-> +static struct attribute *casper_kbd_led_attrs[] = {
-> +	&dev_attr_led_control.attr,
-> +	NULL,
+> +static struct attribute *casper_kbd_led_attrs[] =3D {
+> +=09&dev_attr_led_control.attr,
+> +=09NULL,
 > +};
 > +
 > +ATTRIBUTE_GROUPS(casper_kbd_led);
 > +
-> +static void set_casper_backlight_brightness(struct led_classdev *led_cdev,
-> +					    enum led_brightness brightness)
+> +static void set_casper_backlight_brightness(struct led_classdev *led_cde=
+v,
+> +=09=09=09=09=09    enum led_brightness brightness)
 > +{
-> +	// Setting any of the keyboard leds' brightness sets brightness of all
-> +	acpi_status ret =
-> +	    casper_set(to_wmi_device(led_cdev->dev->parent), CASPER_SET_LED,
-> +		       CASPER_KEYBOARD_LED_1,
-> +		       (casper_last_color & 0xF0FFFFFF) |
-> +		       (((u32) brightness) << 24)
-> +	    );
+> +=09// Setting any of the keyboard leds' brightness sets brightness of al=
+l
+> +=09acpi_status ret =3D
+> +=09    casper_set(to_wmi_device(led_cdev->dev->parent), CASPER_SET_LED,
+> +=09=09       CASPER_KEYBOARD_LED_1,
+> +=09=09       (casper_last_color & 0xF0FFFFFF) |
+> +=09=09       (((u32) brightness) << 24)
+
+Use FIELD_PREP().
+
+As you need to split lines, please do the calculations in a local variable=
+=20
+beforehand and only then call.
+
+> +=09    );
 > +
-> +	if (ret != 0)
-> +		dev_err(led_cdev->dev,
-> +			"Couldn't set brightness acpi status: %d\n", ret);
+> +=09if (ret !=3D 0)
+> +=09=09dev_err(led_cdev->dev,
+> +=09=09=09"Couldn't set brightness acpi status: %d\n", ret);
 > +}
 > +
-> +static enum led_brightness get_casper_backlight_brightness(struct led_classdev
-> +							   *led_cdev)
+> +static enum led_brightness get_casper_backlight_brightness(struct led_cl=
+assdev
+> +=09=09=09=09=09=09=09   *led_cdev)
 > +{
-> +	return (casper_last_color&0x0F000000)>>24;
+> +=09return (casper_last_color&0x0F000000)>>24;
+
+FIELD_GET().
+
 > +}
-
-I recommend adding defines for all magic numbers you have used.
-
 > +
-> +static struct led_classdev casper_kbd_led = {
-> +	.name = "casper::kbd_backlight",
-> +	.brightness = 0,
-> +	.brightness_set = set_casper_backlight_brightness,
-> +	.brightness_get = get_casper_backlight_brightness,
-> +	.max_brightness = 2,
-> +	.groups = casper_kbd_led_groups,
+> +static struct led_classdev casper_kbd_led =3D {
+> +=09.name =3D "casper::kbd_backlight",
+> +=09.brightness =3D 0,
+> +=09.brightness_set =3D set_casper_backlight_brightness,
+> +=09.brightness_get =3D get_casper_backlight_brightness,
+> +=09.max_brightness =3D 2,
+> +=09.groups =3D casper_kbd_led_groups,
 > +};
 > +
 > +static acpi_status casper_query(struct wmi_device *wdev, u16 a1,
-> +				struct casper_wmi_args *out)
+> +=09=09=09=09struct casper_wmi_args *out)
 > +{
-> +	struct casper_wmi_args wmi_args = {
-> +		.a0 = CASPER_READ,
-> +		.a1 = a1
-> +	};
-> +	struct acpi_buffer input = {
-> +		(acpi_size) sizeof(struct casper_wmi_args),
-> +		&wmi_args
-> +	};
+> +=09struct casper_wmi_args wmi_args =3D {
+> +=09=09.a0 =3D CASPER_READ,
+> +=09=09.a1 =3D a1
+> +=09};
+> +=09struct acpi_buffer input =3D {
+> +=09=09(acpi_size) sizeof(struct casper_wmi_args),
+> +=09=09&wmi_args
+> +=09};
 > +
-> +	acpi_status ret = wmidev_block_set(wdev, 0, &input);
+> +=09acpi_status ret =3D wmidev_block_set(wdev, 0, &input);
 > +
-> +	if (ACPI_FAILURE(ret)) {
-> +		dev_err(&wdev->dev,
-> +			"Could not query acpi status: %u", ret);
-> +		return ret;
-> +	}
+> +=09if (ACPI_FAILURE(ret)) {
+> +=09=09dev_err(&wdev->dev,
+> +=09=09=09"Could not query acpi status: %u", ret);
+
+One line.
+
+> +=09=09return ret;
+> +=09}
 > +
-> +	union acpi_object *obj = wmidev_block_query(wdev, 0);
+> +=09union acpi_object *obj =3D wmidev_block_query(wdev, 0);
 > +
-> +	if (obj == NULL) {
-> +		dev_err(&wdev->dev,
-> +			"Could not query hardware information");
-> +		return AE_ERROR;
-> +	}
-> +	if (obj->type != ACPI_TYPE_BUFFER) {
-> +		dev_err(&wdev->dev, "Return type is not a buffer");
-> +		return AE_TYPE;
-> +	}
+> +=09if (obj =3D=3D NULL) {
+> +=09=09dev_err(&wdev->dev,
+> +=09=09=09"Could not query hardware information");
+
+Ditto.
+
+> +=09=09return AE_ERROR;
+> +=09}
+> +=09if (obj->type !=3D ACPI_TYPE_BUFFER) {
+> +=09=09dev_err(&wdev->dev, "Return type is not a buffer");
+> +=09=09return AE_TYPE;
+> +=09}
 > +
-> +	if (obj->buffer.length != 32) {
-> +		dev_err(&wdev->dev, "Return buffer is not long enough");
-> +		return AE_ERROR;
-> +	}
-> +	memcpy(out, obj->buffer.pointer, 32);
-> +	kfree(obj);
-> +	return ret;
+> +=09if (obj->buffer.length !=3D 32) {
+> +=09=09dev_err(&wdev->dev, "Return buffer is not long enough");
+> +=09=09return AE_ERROR;
+> +=09}
+> +=09memcpy(out, obj->buffer.pointer, 32);
+
+32 appears at least twice here, add define for it.
+
+> +=09kfree(obj);
+> +=09return ret;
 > +}
 > +
 > +static umode_t casper_wmi_hwmon_is_visible(const void *drvdata,
-> +					   enum hwmon_sensor_types type,
-> +					   u32 attr, int channel)
+> +=09=09=09=09=09   enum hwmon_sensor_types type,
+> +=09=09=09=09=09   u32 attr, int channel)
 > +{
-> +	switch (type) {
-> +	case hwmon_fan:
-> +		return 0444;
-> +	case hwmon_pwm:
-> +		return 0644;
-> +	default:
-> +		return 0;
-> +	}
-> +	return 0;
+> +=09switch (type) {
+> +=09case hwmon_fan:
+> +=09=09return 0444;
+> +=09case hwmon_pwm:
+> +=09=09return 0644;
+> +=09default:
+> +=09=09return 0;
+> +=09}
+> +=09return 0;
 > +}
 > +
 > +static int casper_wmi_hwmon_read(struct device *dev,
-> +				 enum hwmon_sensor_types type, u32 attr,
-> +				 int channel, long *val)
+> +=09=09=09=09 enum hwmon_sensor_types type, u32 attr,
+> +=09=09=09=09 int channel, long *val)
 > +{
-> +	struct casper_wmi_args out = { 0 };
+> +=09struct casper_wmi_args out =3D { 0 };
 > +
-> +	switch (type) {
-> +	case hwmon_fan:
-> +		acpi_status ret = casper_query(to_wmi_device(dev->parent),
-> +					       CASPER_GET_HARDWAREINFO, &out);
+> +=09switch (type) {
+> +=09case hwmon_fan:
+> +=09=09acpi_status ret =3D casper_query(to_wmi_device(dev->parent),
+> +=09=09=09=09=09       CASPER_GET_HARDWAREINFO, &out);
 > +
-> +		if (ACPI_FAILURE(ret))
-> +			return ret;
+> +=09=09if (ACPI_FAILURE(ret))
+> +=09=09=09return ret;
+
+Don't put empty line between the call and its error handling. Move=20
+the declaration of the ret variable to function level.
+
+
+> +=09=09if (channel =3D=3D 0) { // CPU fan
+> +=09=09=09u32 cpu_fanspeed =3D out.a4;
 > +
-> +		if (channel == 0) { // CPU fan
-> +			u32 cpu_fanspeed = out.a4;
+> +=09=09=09cpu_fanspeed <<=3D 8;
+> +=09=09=09cpu_fanspeed +=3D out.a4 >> 8;
+
+Is this byteswapping? Use proper endianness helpers/types when dealing=20
+with endianness.
+
+> +=09=09=09*val =3D (long) cpu_fanspeed;
+> +=09=09} else if (channel =3D=3D 1) { // GPU fan
+> +=09=09=09u32 gpu_fanspeed =3D out.a5;
 > +
-> +			cpu_fanspeed <<= 8;
-> +			cpu_fanspeed += out.a4 >> 8;
-> +			*val = (long) cpu_fanspeed;
-> +		} else if (channel == 1) { // GPU fan
-> +			u32 gpu_fanspeed = out.a5;
+> +=09=09=09gpu_fanspeed <<=3D 8;
+> +=09=09=09gpu_fanspeed +=3D out.a5 >> 8;
+> +=09=09=09*val =3D (long) gpu_fanspeed;
+> +=09=09}
+
+Should the other channel values return -ENODEV or -EINVAL?
+
+> +=09=09return 0;
+> +=09case hwmon_pwm:
+> +=09=09casper_query(to_wmi_device(dev->parent), CASPER_POWERPLAN,
+> +=09=09=09     &out);
+> +=09=09if (channel =3D=3D 0)
+> +=09=09=09*val =3D (long)out.a2;
+> +=09=09else
+> +=09=09=09return -EOPNOTSUPP;
+> +=09=09return 0;
+> +=09default:
+> +=09=09return -EOPNOTSUPP;
+> +=09}
 > +
-> +			gpu_fanspeed <<= 8;
-> +			gpu_fanspeed += out.a5 >> 8;
-> +			*val = (long) gpu_fanspeed;
-> +		}
-> +		return 0;
-> +	case hwmon_pwm:
-> +		casper_query(to_wmi_device(dev->parent), CASPER_POWERPLAN,
-> +			     &out);
-> +		if (channel == 0)
-> +			*val = (long)out.a2;
-> +		else
-> +			return -EOPNOTSUPP;
-> +		return 0;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	return 0;
+> +=09return 0;
 > +}
 > +
 > +static int casper_wmi_hwmon_read_string(struct device *dev,
-> +					enum hwmon_sensor_types type, u32 attr,
-> +					int channel, const char **str)
+> +=09=09=09=09=09enum hwmon_sensor_types type, u32 attr,
+> +=09=09=09=09=09int channel, const char **str)
 > +{
-> +	switch (type) {
-> +	case hwmon_fan:
-> +		switch (channel) {
-> +		case 0:
-> +			*str = "cpu_fan_speed";
-> +			break;
-> +		case 1:
-> +			*str = "gpu_fan_speed";
-> +			break;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +		break;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +	return 0;
+> +=09switch (type) {
+> +=09case hwmon_fan:
+> +=09=09switch (channel) {
+> +=09=09case 0:
+> +=09=09=09*str =3D "cpu_fan_speed";
+> +=09=09=09break;
+> +=09=09case 1:
+> +=09=09=09*str =3D "gpu_fan_speed";
+> +=09=09=09break;
+> +=09=09default:
+> +=09=09=09return -EOPNOTSUPP;
+> +=09=09}
+> +=09=09break;
+> +=09default:
+> +=09=09return -EOPNOTSUPP;
+> +=09}
+> +=09return 0;
 > +}
 > +
 > +static int casper_wmi_hwmon_write(struct device *dev,
-> +				  enum hwmon_sensor_types type, u32 attr,
-> +				  int channel, long val)
+> +=09=09=09=09  enum hwmon_sensor_types type, u32 attr,
+> +=09=09=09=09  int channel, long val)
 > +{
-> +	acpi_status ret;
+> +=09acpi_status ret;
 > +
-> +	switch (type) {
-> +	case hwmon_pwm:
-> +		if (channel != 0)
-> +			return -EOPNOTSUPP;
-> +		ret =
-> +		    casper_set(to_wmi_device(dev->parent), CASPER_POWERPLAN,
-> +			       val, 0);
+> +=09switch (type) {
+> +=09case hwmon_pwm:
+> +=09=09if (channel !=3D 0)
+> +=09=09=09return -EOPNOTSUPP;
+> +=09=09ret =3D
+> +=09=09    casper_set(to_wmi_device(dev->parent), CASPER_POWERPLAN,
+> +=09=09=09       val, 0);
 > +
-> +		if (ACPI_FAILURE(ret)) {
-> +			dev_err(dev, "Couldn't set power plan, acpi_status: %d",
-> +				ret);
-> +			return -EINVAL;
-> +		}
-> +		return 0;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
+> +=09=09if (ACPI_FAILURE(ret)) {
+> +=09=09=09dev_err(dev, "Couldn't set power plan, acpi_status: %d",
+> +=09=09=09=09ret);
+> +=09=09=09return -EINVAL;
+> +=09=09}
+> +=09=09return 0;
+> +=09default:
+> +=09=09return -EOPNOTSUPP;
+> +=09}
 > +}
 > +
-> +static const struct hwmon_ops casper_wmi_hwmon_ops = {
-> +	.is_visible = &casper_wmi_hwmon_is_visible,
-> +	.read = &casper_wmi_hwmon_read,
-> +	.read_string = &casper_wmi_hwmon_read_string,
-> +	.write = &casper_wmi_hwmon_write
+> +static const struct hwmon_ops casper_wmi_hwmon_ops =3D {
+> +=09.is_visible =3D &casper_wmi_hwmon_is_visible,
+> +=09.read =3D &casper_wmi_hwmon_read,
+> +=09.read_string =3D &casper_wmi_hwmon_read_string,
+> +=09.write =3D &casper_wmi_hwmon_write
 > +};
 > +
-> +static const struct hwmon_channel_info *const casper_wmi_hwmon_info[] = {
-> +	HWMON_CHANNEL_INFO(fan,
-> +			   HWMON_F_INPUT | HWMON_F_LABEL,
-> +			   HWMON_F_INPUT | HWMON_F_LABEL),
-> +	HWMON_CHANNEL_INFO(pwm, HWMON_PWM_MODE),
-> +	NULL
+> +static const struct hwmon_channel_info *const casper_wmi_hwmon_info[] =
+=3D {
+> +=09HWMON_CHANNEL_INFO(fan,
+> +=09=09=09   HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09=09   HWMON_F_INPUT | HWMON_F_LABEL),
+> +=09HWMON_CHANNEL_INFO(pwm, HWMON_PWM_MODE),
+> +=09NULL
 > +};
 > +
-> +static const struct hwmon_chip_info casper_wmi_hwmon_chip_info = {
-> +	.ops = &casper_wmi_hwmon_ops,
-> +	.info = casper_wmi_hwmon_info,
+> +static const struct hwmon_chip_info casper_wmi_hwmon_chip_info =3D {
+> +=09.ops =3D &casper_wmi_hwmon_ops,
+> +=09.info =3D casper_wmi_hwmon_info,
 > +};
 > +
-> +static int casper_wmi_probe(struct wmi_device *wdev, const void *context)
+> +static int casper_wmi_probe(struct wmi_device *wdev, const void *context=
+)
 > +{
-> +	struct device *hwmon_dev;
+> +=09struct device *hwmon_dev;
 > +
-> +	// All Casper Excalibur Laptops use this GUID
-> +	if (!wmi_has_guid(CASPER_WMI_GUID))
-> +		return -ENODEV;
+> +=09// All Casper Excalibur Laptops use this GUID
+> +=09if (!wmi_has_guid(CASPER_WMI_GUID))
+> +=09=09return -ENODEV;
 > +
-> +	hwmon_dev =
-> +	    devm_hwmon_device_register_with_info(&wdev->dev, "casper_wmi", wdev,
-> +						 &casper_wmi_hwmon_chip_info,
-> +						 NULL);
+> +=09hwmon_dev =3D
+> +=09    devm_hwmon_device_register_with_info(&wdev->dev, "casper_wmi", wd=
+ev,
+> +=09=09=09=09=09=09 &casper_wmi_hwmon_chip_info,
+> +=09=09=09=09=09=09 NULL);
 > +
-> +	acpi_status result = led_classdev_register(&wdev->dev, &casper_kbd_led);
+> +=09acpi_status result =3D led_classdev_register(&wdev->dev, &casper_kbd_=
+led);
 > +
-> +	if (result != 0)
-> +		return -ENODEV;
+> +=09if (result !=3D 0)
+> +=09=09return -ENODEV;
 > +
-> +	return PTR_ERR_OR_ZERO(hwmon_dev);
-> +	}
+> +=09return PTR_ERR_OR_ZERO(hwmon_dev);
+> +=09}
+
+Misindented brace.
+
 > +
 > +static void casper_wmi_remove(struct wmi_device *wdev)
 > +{
-> +	led_classdev_unregister(&casper_kbd_led);
+> +=09led_classdev_unregister(&casper_kbd_led);
 > +}
 > +
-> +static const struct wmi_device_id casper_wmi_id_table[] = {
-> +	{ CASPER_WMI_GUID, NULL },
-> +	{ }
+> +static const struct wmi_device_id casper_wmi_id_table[] =3D {
+> +=09{ CASPER_WMI_GUID, NULL },
+> +=09{ }
 > +};
 > +
-> +static struct wmi_driver casper_wmi_driver = {
-> +	.driver = {
-> +		   .name = "casper-wmi",
-> +		    },
-> +	.id_table = casper_wmi_id_table,
-> +	.probe = casper_wmi_probe,
-> +	.remove = &casper_wmi_remove
+> +static struct wmi_driver casper_wmi_driver =3D {
+> +=09.driver =3D {
+> +=09=09   .name =3D "casper-wmi",
+> +=09=09    },
+> +=09.id_table =3D casper_wmi_id_table,
+> +=09.probe =3D casper_wmi_probe,
+> +=09.remove =3D &casper_wmi_remove
+
+Put comma to the end of this line.
+
 > +};
 > +
 > +module_wmi_driver(casper_wmi_driver);
 > +
 > +MODULE_DEVICE_TABLE(wmi, casper_wmi_id_table);
+>=20
 
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+--=20
+ i.
 
+--8323328-1497083232-1708595294=:1961--
