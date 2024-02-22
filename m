@@ -1,485 +1,254 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEDDE1474AC;
-	Thu, 22 Feb 2024 15:24:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B36A1419A4
+	for <linux-hwmon@vger.kernel.org>; Thu, 22 Feb 2024 15:45:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708615496; cv=none; b=XmpYMV4PboRlktWkYtkJ/subzUXHsTmF6PQtswI9TjEdV9qeJVRA+t3+KgniTUpQReTf/28Fesr6CpYSBDbCLnhOD1sIP3DWnbRhJ7gVnymrMQPXAmFxupT/xYuOUMd2GxCo2XYjZSxg8xaAR9/nwyy/im8zbXDxsvE3lGwm+Vg=
+	t=1708616753; cv=none; b=guz3HFbNTMe07AwquYEWEAtvxDnyR4PwJ7Hq4Ia4XfhsG6OwF4hViqkJ9qlL4xc4xb+kJGqr7GspkS1L9nq4risq+E8r9ty1CjYjmVX4PI4JK6/+96N6Wp4v7rdaOr7EhXNbg5ycTc3iuPAj5Ckrs7YDlex2bca+YsXn2wtsOwQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708615496; c=relaxed/simple;
-	bh=PIuBPcgaPYP64DROgSWdjJBcFxfi8DMAGUUPjPDY8KU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uLvclCvy+teZbDuR69K9PzkpJjnrj8a3zo1m/ueY5+XliOpxWIoTV7P9UAHg1Sh9mbiT+GOQQTO2zZ902zKZx/RLicWUECMCWRy4hLvuBOnQRcIOov62u7rAQ49iYLGIT8NdzDOpLUwjIrRTfdgC2RCiepZ+4YKm3zSjoJsxEE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZCZchb6Q; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1708616753; c=relaxed/simple;
+	bh=uH8+nvIdkTPGmhuXAJnP+Ob51cgkxdZqHXdm3uaeoPA=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=S7LEe/1Vde+vePKtHxV83wyUeCkzzdIvR0FdIAcHf4OdnFo0TbA4P8lYWQSrf+LBR4QP1O/+p7a5/atLiVS9c4AZWd9AkkPuOHhrqlogBHNnK2WEOzNHVMMpe4+iKuGHqSQ32/I4kSuzcKde+SmCSfYiui1xWZkZKgwTgOyrF5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=caRPDRsa; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZCZchb6Q"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-6e3ffafa708so5249118b3a.1;
-        Thu, 22 Feb 2024 07:24:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708615494; x=1709220294; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=aXQfNeMLkgL8vNtlootrbSOlal3IIy+GDwI0MRVyyC8=;
-        b=ZCZchb6QwRsqlA09Bjp8kQCk+ufUG9+Q7TP+ksBUC0Kj6UY0+RrrL6qTRtBX+Fx9Vc
-         Jo4h+SnoKgOGzbVNdWhc4BRBO8oCmuGzVxCuDS9qUcar8pyAtPkB3H/kWL+zq7XDJNr7
-         Ubf7doBX338beOpmN5XxDuK/A1QLtWmrXaQ8iGAxJ7xg1dwwO5oUGa6jjmJJWBT3dTnq
-         mQm0mB3VwhFPUul/8StkxCjT0ABL/uaDjNFoADJGlb6K6xdVdLF49pCa1lr3KrVR/qBo
-         a0ZbqCsDz6EcjUFqSqlwoBXJHBlfkgfLWAIJcMwjfUwKa+vroPbppbmlEpmw87glennm
-         pVYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708615494; x=1709220294;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aXQfNeMLkgL8vNtlootrbSOlal3IIy+GDwI0MRVyyC8=;
-        b=mjZRZ1rm6sX8lW1twirzsCUuvdksgdvha3oAS56wcaN8jkDMd+4Ep2fOKKJmNymhR7
-         Cwp0YN3hMAvvr7dhXFGSb13phLNCUQ/SMAGp1hOVePaIKhsGqf5xknxl7yShkqT30dPW
-         xqHmnXMk6ZVz2ROmsaVtcQS/37RwM4Y1yPk3KNoovcWI4HBSZUrINfalTmKvjmQyBUnv
-         od2JDeKnGRU/pvGF1r0abZB1bjkCULxvpRCtr7MHmdQrWg57cGU/Ct3E7MeLM6b0nBNw
-         OAYhJr9D1Llk0vjMzr1hdhgykxTdvR1YlEEtQvfA7SuLU4YvwFoIR9vyJuoQbZ8WdKcV
-         /mFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXy6q+uzbA7a8luup9CwrG1D6svzy0fpZuazU46T9/EAyA3arogiQ+stuibvKE8W5KNSD6jSRYYIyRz76cj8FlqU+lFMIHWDO9wWCOQSPRdJZ/Tm4FJicrv0kuXr30XOEEh7EVGP/WBqLawEd3ikugg0ojifP8qRdhaDcW05Mp+6i7n8s3+3mnRpEnHzRfNgRkyxK/jE01uj+KYXRzv3s5iNTFqQlAHUsaIL5CkOqMyMiXo01jC/KIVuewL
-X-Gm-Message-State: AOJu0YwuQ1l4i0ecFOJ7mDz64dl3hDth0ch1mmqkG9XvOPF8xrvWWPem
-	9VB/3/DvkPY03Sq+kUIET2FVYLTi8NORE1WqvChLvn4wWeuSjCpo
-X-Google-Smtp-Source: AGHT+IFOCTi3dMlzjGviA7Kz3InAm5islYUdD+oRHJxhgo5nOUg6H4x7H8pBurwv2VMO/+nCHiFKIQ==
-X-Received: by 2002:a05:6a21:3994:b0:19c:a4d3:2041 with SMTP id ad20-20020a056a21399400b0019ca4d32041mr31039509pzc.42.1708615494137;
-        Thu, 22 Feb 2024 07:24:54 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b2-20020aa78ec2000000b006e4d2cbcac8sm998069pfr.94.2024.02.22.07.24.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Feb 2024 07:24:53 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4a545c16-7518-49d2-b158-7fcabe3508c5@roeck-us.net>
-Date: Thu, 22 Feb 2024 07:24:52 -0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="caRPDRsa"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708616749; x=1740152749;
+  h=date:from:to:cc:subject:message-id;
+  bh=uH8+nvIdkTPGmhuXAJnP+Ob51cgkxdZqHXdm3uaeoPA=;
+  b=caRPDRsaqkuxenm4iAx1sT7C1/nBU3v32EJlrPdvr1Rgb8ocghOgl8ah
+   g+2kGLJctzp0EDuFbyzy8IRfPhzAD+AaR5i9X+8M561WNaBaQ+ZO4pSRe
+   i1PAqqfNsmM6BiqLROvuXGXYHLqL6EBrk8+RH4tRCf39VBO6WXDhoI1jj
+   FnHFdNX9X1wljCEJV9XI0VrqwHv2jN4mnKLhYektDBh3F39xRhM3q83qL
+   k+i1WBP7Nmd4uwRXygZU+wRDtjXAHGIvCO3M7xYCgJb6REMNq6fdFVICd
+   Ig3u49T2btmj2urcFy/f7bd9/LLGhtxdQUfL3mFDqiWG9b5wKHXnpiUC9
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10992"; a="3346312"
+X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
+   d="scan'208";a="3346312"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2024 07:45:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
+   d="scan'208";a="10214361"
+Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
+  by orviesa003.jf.intel.com with ESMTP; 22 Feb 2024 07:45:47 -0800
+Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rdBGF-0006Ri-2P;
+	Thu, 22 Feb 2024 15:45:32 +0000
+Date: Thu, 22 Feb 2024 23:42:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon] BUILD REGRESSION
+ cf5ad17ee6a41ed51d21338d62e4654bd2198695
+Message-ID: <202402222304.lGDmbiwP-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] devm-helpers: Add resource managed version of mutex
- init
-Content-Language: en-US
-To: =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
- linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
- Matti Vaittinen <mazziesaccount@gmail.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>,
- Lucas De Marchi <lucas.demarchi@intel.com>, Oded Gabbay
- <ogabbay@kernel.org>, =?UTF-8?Q?Thomas_Hellstr=C3=B6m?=
- <thomas.hellstrom@linux.intel.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
- Aleksandr Mezin <mezin.alexander@gmail.com>, Jean Delvare
- <jdelvare@suse.com>, Pavel Machek <pavel@ucw.cz>, Lee Jones
- <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- linux-gpio@vger.kernel.org, intel-xe@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
- linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
-References: <20240222145838.12916-1-kabel@kernel.org>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240222145838.12916-1-kabel@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
-On 2/22/24 06:58, Marek Behún wrote:
-> A few drivers are doing resource-managed mutex initialization by
-> implementing ad-hoc one-liner mutex dropping functions and using them
-> with devm_add_action_or_reset(). Help drivers avoid these repeated
-> one-liners by adding managed version of mutex initialization.
-> 
-> Use the new function devm_mutex_init() in the following drivers:
->    drivers/gpio/gpio-pisosr.c
->    drivers/gpio/gpio-sim.c
->    drivers/gpu/drm/xe/xe_hwmon.c
->    drivers/hwmon/nzxt-smart2.c
->    drivers/leds/leds-is31fl319x.c
->    drivers/power/supply/mt6370-charger.c
->    drivers/power/supply/rt9467-charger.c
-> 
-> Signed-off-by: Marek Behún <kabel@kernel.org>
-> ---
->   drivers/gpio/gpio-pisosr.c            |  9 ++-----
->   drivers/gpio/gpio-sim.c               | 12 ++--------
->   drivers/gpu/drm/xe/xe_hwmon.c         | 11 ++-------
->   drivers/hwmon/nzxt-smart2.c           |  9 ++-----
->   drivers/leds/leds-is31fl319x.c        |  9 ++-----
->   drivers/power/supply/mt6370-charger.c | 11 +--------
->   drivers/power/supply/rt9467-charger.c | 34 ++++-----------------------
->   include/linux/devm-helpers.h          | 32 +++++++++++++++++++++++++
->   8 files changed, 47 insertions(+), 80 deletions(-)
-> 
-> diff --git a/drivers/gpio/gpio-pisosr.c b/drivers/gpio/gpio-pisosr.c
-> index e3013e778e15..dddbf37e855f 100644
-> --- a/drivers/gpio/gpio-pisosr.c
-> +++ b/drivers/gpio/gpio-pisosr.c
-> @@ -7,6 +7,7 @@
->   #include <linux/bitmap.h>
->   #include <linux/bitops.h>
->   #include <linux/delay.h>
-> +#include <linux/devm-helpers.h>
->   #include <linux/gpio/consumer.h>
->   #include <linux/gpio/driver.h>
->   #include <linux/module.h>
-> @@ -116,11 +117,6 @@ static const struct gpio_chip template_chip = {
->   	.can_sleep		= true,
->   };
->   
-> -static void pisosr_mutex_destroy(void *lock)
-> -{
-> -	mutex_destroy(lock);
-> -}
-> -
->   static int pisosr_gpio_probe(struct spi_device *spi)
->   {
->   	struct device *dev = &spi->dev;
-> @@ -147,8 +143,7 @@ static int pisosr_gpio_probe(struct spi_device *spi)
->   		return dev_err_probe(dev, PTR_ERR(gpio->load_gpio),
->   				     "Unable to allocate load GPIO\n");
->   
-> -	mutex_init(&gpio->lock);
-> -	ret = devm_add_action_or_reset(dev, pisosr_mutex_destroy, &gpio->lock);
-> +	ret = devm_mutex_init(dev, &gpio->lock);
->   	if (ret)
->   		return ret;
->   
-> diff --git a/drivers/gpio/gpio-sim.c b/drivers/gpio/gpio-sim.c
-> index c4106e37e6db..fcfcaa4efe70 100644
-> --- a/drivers/gpio/gpio-sim.c
-> +++ b/drivers/gpio/gpio-sim.c
-> @@ -12,6 +12,7 @@
->   #include <linux/completion.h>
->   #include <linux/configfs.h>
->   #include <linux/device.h>
-> +#include <linux/devm-helpers.h>
->   #include <linux/err.h>
->   #include <linux/gpio/consumer.h>
->   #include <linux/gpio/driver.h>
-> @@ -307,13 +308,6 @@ static ssize_t gpio_sim_sysfs_pull_store(struct device *dev,
->   	return len;
->   }
->   
-> -static void gpio_sim_mutex_destroy(void *data)
-> -{
-> -	struct mutex *lock = data;
-> -
-> -	mutex_destroy(lock);
-> -}
-> -
->   static void gpio_sim_put_device(void *data)
->   {
->   	struct device *dev = data;
-> @@ -457,9 +451,7 @@ static int gpio_sim_add_bank(struct fwnode_handle *swnode, struct device *dev)
->   	if (ret)
->   		return ret;
->   
-> -	mutex_init(&chip->lock);
-> -	ret = devm_add_action_or_reset(dev, gpio_sim_mutex_destroy,
-> -				       &chip->lock);
-> +	ret = devm_mutex_init(dev, &chip->lock);
->   	if (ret)
->   		return ret;
->   
-> diff --git a/drivers/gpu/drm/xe/xe_hwmon.c b/drivers/gpu/drm/xe/xe_hwmon.c
-> index 174ed2185481..bb88ae1c196c 100644
-> --- a/drivers/gpu/drm/xe/xe_hwmon.c
-> +++ b/drivers/gpu/drm/xe/xe_hwmon.c
-> @@ -3,6 +3,7 @@
->    * Copyright © 2023 Intel Corporation
->    */
->   
-> +#include <linux/devm-helpers.h>
->   #include <linux/hwmon-sysfs.h>
->   #include <linux/hwmon.h>
->   #include <linux/types.h>
-> @@ -729,13 +730,6 @@ xe_hwmon_get_preregistration_info(struct xe_device *xe)
->   		xe_hwmon_energy_get(hwmon, &energy);
->   }
->   
-> -static void xe_hwmon_mutex_destroy(void *arg)
-> -{
-> -	struct xe_hwmon *hwmon = arg;
-> -
-> -	mutex_destroy(&hwmon->hwmon_lock);
-> -}
-> -
->   void xe_hwmon_register(struct xe_device *xe)
->   {
->   	struct device *dev = xe->drm.dev;
-> @@ -751,8 +745,7 @@ void xe_hwmon_register(struct xe_device *xe)
->   
->   	xe->hwmon = hwmon;
->   
-> -	mutex_init(&hwmon->hwmon_lock);
-> -	if (devm_add_action_or_reset(dev, xe_hwmon_mutex_destroy, hwmon))
-> +	if (devm_mutex_init(dev, &hwmon->hwmon_lock))
->   		return;
->   
->   	/* primary GT to access device level properties */
-> diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
-> index 7aa586eb74be..00bc89607673 100644
-> --- a/drivers/hwmon/nzxt-smart2.c
-> +++ b/drivers/hwmon/nzxt-smart2.c
-> @@ -5,6 +5,7 @@
->    * Copyright (c) 2021 Aleksandr Mezin
->    */
->   
-> +#include <linux/devm-helpers.h>
->   #include <linux/hid.h>
->   #include <linux/hwmon.h>
->   #include <linux/math.h>
-> @@ -721,11 +722,6 @@ static int __maybe_unused nzxt_smart2_hid_reset_resume(struct hid_device *hdev)
->   	return init_device(drvdata, drvdata->update_interval);
->   }
->   
-> -static void mutex_fini(void *lock)
-> -{
-> -	mutex_destroy(lock);
-> -}
-> -
->   static int nzxt_smart2_hid_probe(struct hid_device *hdev,
->   				 const struct hid_device_id *id)
->   {
-> @@ -741,8 +737,7 @@ static int nzxt_smart2_hid_probe(struct hid_device *hdev,
->   
->   	init_waitqueue_head(&drvdata->wq);
->   
-> -	mutex_init(&drvdata->mutex);
-> -	ret = devm_add_action_or_reset(&hdev->dev, mutex_fini, &drvdata->mutex);
-> +	ret = devm_mutex_init(&hdev->dev, &drvdata->mutex);
->   	if (ret)
->   		return ret;
->   
-> diff --git a/drivers/leds/leds-is31fl319x.c b/drivers/leds/leds-is31fl319x.c
-> index 66c65741202e..e9d7cf6a386c 100644
-> --- a/drivers/leds/leds-is31fl319x.c
-> +++ b/drivers/leds/leds-is31fl319x.c
-> @@ -8,6 +8,7 @@
->    * effect LEDs.
->    */
->   
-> +#include <linux/devm-helpers.h>
->   #include <linux/err.h>
->   #include <linux/i2c.h>
->   #include <linux/leds.h>
-> @@ -495,11 +496,6 @@ static inline int is31fl3196_db_to_gain(u32 dezibel)
->   	return dezibel / IS31FL3196_AUDIO_GAIN_DB_STEP;
->   }
->   
-> -static void is31f1319x_mutex_destroy(void *lock)
-> -{
-> -	mutex_destroy(lock);
-> -}
-> -
->   static int is31fl319x_probe(struct i2c_client *client)
->   {
->   	struct is31fl319x_chip *is31;
-> @@ -515,8 +511,7 @@ static int is31fl319x_probe(struct i2c_client *client)
->   	if (!is31)
->   		return -ENOMEM;
->   
-> -	mutex_init(&is31->lock);
-> -	err = devm_add_action_or_reset(dev, is31f1319x_mutex_destroy, &is31->lock);
-> +	err = devm_mutex_init(dev, &is31->lock);
->   	if (err)
->   		return err;
->   
-> diff --git a/drivers/power/supply/mt6370-charger.c b/drivers/power/supply/mt6370-charger.c
-> index e24fce087d80..fa0517d0352d 100644
-> --- a/drivers/power/supply/mt6370-charger.c
-> +++ b/drivers/power/supply/mt6370-charger.c
-> @@ -766,13 +766,6 @@ static int mt6370_chg_init_psy(struct mt6370_priv *priv)
->   	return PTR_ERR_OR_ZERO(priv->psy);
->   }
->   
-> -static void mt6370_chg_destroy_attach_lock(void *data)
-> -{
-> -	struct mutex *attach_lock = data;
-> -
-> -	mutex_destroy(attach_lock);
-> -}
-> -
->   static void mt6370_chg_destroy_wq(void *data)
->   {
->   	struct workqueue_struct *wq = data;
-> @@ -900,9 +893,7 @@ static int mt6370_chg_probe(struct platform_device *pdev)
->   	if (ret)
->   		return dev_err_probe(dev, ret, "Failed to init psy\n");
->   
-> -	mutex_init(&priv->attach_lock);
-> -	ret = devm_add_action_or_reset(dev, mt6370_chg_destroy_attach_lock,
-> -				       &priv->attach_lock);
-> +	ret = devm_mutex_init(dev, &priv->attach_lock);
->   	if (ret)
->   		return dev_err_probe(dev, ret, "Failed to init attach lock\n");
->   
-> diff --git a/drivers/power/supply/rt9467-charger.c b/drivers/power/supply/rt9467-charger.c
-> index fdfdc83ab045..84f07c22077f 100644
-> --- a/drivers/power/supply/rt9467-charger.c
-> +++ b/drivers/power/supply/rt9467-charger.c
-> @@ -10,6 +10,7 @@
->   #include <linux/bitfield.h>
->   #include <linux/completion.h>
->   #include <linux/delay.h>
-> +#include <linux/devm-helpers.h>
->   #include <linux/gpio/consumer.h>
->   #include <linux/i2c.h>
->   #include <linux/interrupt.h>
-> @@ -1149,27 +1150,6 @@ static int rt9467_reset_chip(struct rt9467_chg_data *data)
->   	return regmap_field_write(data->rm_field[F_RST], 1);
->   }
->   
-> -static void rt9467_chg_destroy_adc_lock(void *data)
-> -{
-> -	struct mutex *adc_lock = data;
-> -
-> -	mutex_destroy(adc_lock);
-> -}
-> -
-> -static void rt9467_chg_destroy_attach_lock(void *data)
-> -{
-> -	struct mutex *attach_lock = data;
-> -
-> -	mutex_destroy(attach_lock);
-> -}
-> -
-> -static void rt9467_chg_destroy_ichg_ieoc_lock(void *data)
-> -{
-> -	struct mutex *ichg_ieoc_lock = data;
-> -
-> -	mutex_destroy(ichg_ieoc_lock);
-> -}
-> -
->   static void rt9467_chg_complete_aicl_done(void *data)
->   {
->   	struct completion *aicl_done = data;
-> @@ -1222,21 +1202,15 @@ static int rt9467_charger_probe(struct i2c_client *i2c)
->   	if (ret)
->   		return dev_err_probe(dev, ret, "Failed to add irq chip\n");
->   
-> -	mutex_init(&data->adc_lock);
-> -	ret = devm_add_action_or_reset(dev, rt9467_chg_destroy_adc_lock,
-> -				       &data->adc_lock);
-> +	ret = devm_mutex_init(dev, &data->adc_lock);
->   	if (ret)
->   		return dev_err_probe(dev, ret, "Failed to init ADC lock\n");
->   
-> -	mutex_init(&data->attach_lock);
-> -	ret = devm_add_action_or_reset(dev, rt9467_chg_destroy_attach_lock,
-> -				       &data->attach_lock);
-> +	ret = devm_mutex_init(dev, &data->attach_lock);
->   	if (ret)
->   		return dev_err_probe(dev, ret, "Failed to init attach lock\n");
->   
-> -	mutex_init(&data->ichg_ieoc_lock);
-> -	ret = devm_add_action_or_reset(dev, rt9467_chg_destroy_ichg_ieoc_lock,
-> -				       &data->ichg_ieoc_lock);
-> +	ret = devm_mutex_init(dev, &data->ichg_ieoc_lock);
->   	if (ret)
->   		return dev_err_probe(dev, ret, "Failed to init ICHG/IEOC lock\n");
->   
-> diff --git a/include/linux/devm-helpers.h b/include/linux/devm-helpers.h
-> index 74891802200d..70640fb96117 100644
-> --- a/include/linux/devm-helpers.h
-> +++ b/include/linux/devm-helpers.h
-> @@ -24,6 +24,8 @@
->    */
->   
->   #include <linux/device.h>
-> +#include <linux/kconfig.h>
-> +#include <linux/mutex.h>
->   #include <linux/workqueue.h>
->   
->   static inline void devm_delayed_work_drop(void *res)
-> @@ -76,4 +78,34 @@ static inline int devm_work_autocancel(struct device *dev,
->   	return devm_add_action(dev, devm_work_drop, w);
->   }
->   
-> +static inline void devm_mutex_drop(void *res)
-> +{
-> +	mutex_destroy(res);
-> +}
-> +
-> +/**
-> + * devm_mutex_init - Resource managed mutex initialization
-> + * @dev:	Device which lifetime mutex is bound to
-> + * @lock:	Mutex to be initialized (and automatically destroyed)
-> + *
-> + * Initialize mutex which is automatically destroyed when driver is detached.
-> + * A few drivers initialize mutexes which they want destroyed before driver is
-> + * detached, for debugging purposes.
-> + * devm_mutex_init() can be used to omit the explicit mutex_destroy() call when
-> + * driver is detached.
-> + */
-> +static inline int devm_mutex_init(struct device *dev, struct mutex *lock)
-> +{
-> +	mutex_init(lock);
-> +
-> +	/*
-> +	 * mutex_destroy() is an empty function if CONFIG_DEBUG_MUTEXES is
-> +	 * disabled. No need to allocate an action in that case.
-> +	 */
-> +	if (IS_ENABLED(CONFIG_DEBUG_MUTEXES))
-> +		return devm_add_action_or_reset(dev, devm_mutex_drop, lock);
-> +	else
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
+branch HEAD: cf5ad17ee6a41ed51d21338d62e4654bd2198695  hwmon: (nct6775) Fix access to temperature configuration registers
 
-else after return is unnecessary.
+Error/Warning ids grouped by kconfigs:
 
-> +		return 0;
-> +}
-> +
->   #endif
+gcc_recent_errors
+`-- sh-allmodconfig
+    `-- standard-input:Error:unknown-pseudo-op:cfi_def_
 
+elapsed time: 1452m
+
+configs tested: 178
+configs skipped: 8
+
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                        nsim_700_defconfig   gcc  
+arc                   randconfig-001-20240222   gcc  
+arc                   randconfig-002-20240222   gcc  
+arc                    vdk_hs38_smp_defconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   clang
+arm                              allyesconfig   gcc  
+arm                     am200epdkit_defconfig   gcc  
+arm                       aspeed_g5_defconfig   gcc  
+arm                                 defconfig   clang
+arm                        multi_v7_defconfig   gcc  
+arm                        neponset_defconfig   gcc  
+arm                       omap2plus_defconfig   gcc  
+arm                   randconfig-001-20240222   gcc  
+arm                   randconfig-002-20240222   gcc  
+arm                         s5pv210_defconfig   gcc  
+arm                           tegra_defconfig   gcc  
+arm                        vexpress_defconfig   gcc  
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-002-20240222   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20240222   gcc  
+csky                  randconfig-002-20240222   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20240222   gcc  
+i386         buildonly-randconfig-002-20240222   clang
+i386         buildonly-randconfig-003-20240222   clang
+i386         buildonly-randconfig-004-20240222   gcc  
+i386         buildonly-randconfig-005-20240222   clang
+i386         buildonly-randconfig-006-20240222   gcc  
+i386                                defconfig   clang
+i386                  randconfig-001-20240222   clang
+i386                  randconfig-002-20240222   clang
+i386                  randconfig-003-20240222   gcc  
+i386                  randconfig-004-20240222   clang
+i386                  randconfig-005-20240222   gcc  
+i386                  randconfig-006-20240222   clang
+i386                  randconfig-011-20240222   gcc  
+i386                  randconfig-012-20240222   clang
+i386                  randconfig-013-20240222   gcc  
+i386                  randconfig-014-20240222   gcc  
+i386                  randconfig-015-20240222   clang
+i386                  randconfig-016-20240222   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20240222   gcc  
+loongarch             randconfig-002-20240222   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                            mac_defconfig   gcc  
+m68k                          multi_defconfig   gcc  
+m68k                            q40_defconfig   gcc  
+m68k                        stmark2_defconfig   gcc  
+microblaze                       alldefconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+microblaze                      mmu_defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                           ip28_defconfig   gcc  
+mips                      malta_kvm_defconfig   gcc  
+mips                    maltaup_xpa_defconfig   gcc  
+mips                      pic32mzda_defconfig   gcc  
+nios2                         10m50_defconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20240222   gcc  
+nios2                 randconfig-002-20240222   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           alldefconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                randconfig-001-20240222   gcc  
+parisc                randconfig-002-20240222   gcc  
+parisc64                            defconfig   gcc  
+powerpc                    adder875_defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc                        cell_defconfig   gcc  
+powerpc                 mpc8313_rdb_defconfig   gcc  
+powerpc                      ppc64e_defconfig   gcc  
+powerpc                         ps3_defconfig   gcc  
+powerpc                         wii_defconfig   gcc  
+powerpc64             randconfig-003-20240222   gcc  
+riscv                            allmodconfig   clang
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   clang
+riscv                               defconfig   clang
+riscv                 randconfig-002-20240222   gcc  
+s390                             allmodconfig   clang
+s390                              allnoconfig   clang
+s390                             allyesconfig   gcc  
+s390                                defconfig   clang
+s390                  randconfig-001-20240222   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                         ap325rxa_defconfig   gcc  
+sh                                  defconfig   gcc  
+sh                 kfr2r09-romimage_defconfig   gcc  
+sh                          landisk_defconfig   gcc  
+sh                          polaris_defconfig   gcc  
+sh                    randconfig-001-20240222   gcc  
+sh                    randconfig-002-20240222   gcc  
+sh                          rsk7264_defconfig   gcc  
+sh                          sdk7780_defconfig   gcc  
+sh                           se7705_defconfig   gcc  
+sh                           se7724_defconfig   gcc  
+sh                             sh03_defconfig   gcc  
+sh                              ul2_defconfig   gcc  
+sh                          urquell_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64               randconfig-001-20240222   gcc  
+sparc64               randconfig-002-20240222   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   gcc  
+um                                  defconfig   clang
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   clang
+x86_64                           alldefconfig   gcc  
+x86_64                            allnoconfig   clang
+x86_64                           allyesconfig   clang
+x86_64       buildonly-randconfig-003-20240222   gcc  
+x86_64       buildonly-randconfig-005-20240222   gcc  
+x86_64       buildonly-randconfig-006-20240222   gcc  
+x86_64                              defconfig   gcc  
+x86_64                randconfig-005-20240222   gcc  
+x86_64                randconfig-006-20240222   gcc  
+x86_64                randconfig-012-20240222   gcc  
+x86_64                randconfig-014-20240222   gcc  
+x86_64                randconfig-074-20240222   gcc  
+x86_64                randconfig-075-20240222   gcc  
+x86_64                randconfig-076-20240222   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                            allnoconfig   gcc  
+xtensa                           allyesconfig   gcc  
+xtensa                       common_defconfig   gcc  
+xtensa                randconfig-001-20240222   gcc  
+xtensa                randconfig-002-20240222   gcc  
+xtensa                         virt_defconfig   gcc  
+xtensa                    xip_kc705_defconfig   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
