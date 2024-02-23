@@ -1,94 +1,69 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F7FE7AE78;
-	Fri, 23 Feb 2024 12:26:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22FAA7F460;
+	Fri, 23 Feb 2024 13:51:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708691213; cv=none; b=OdrTM2kuD2TxOriE+0KUooVEZoTh59RjIDk+IGLQcP9eIXzfyWuY4yUuXLEakiGuzUr+wTWzqAaGnCRiSV7TmfmsZFZukSIwLfq48DEJsdxlYPu0Og0AAMMh+NUW9uXoG5hHTC6G1/QzwNfERVlC7bhGQoWVD719r/brFM4edNQ=
+	t=1708696287; cv=none; b=LX07KT4yN5h4CqGzI4JwFqE1v8w71QJyT4MCda3qMQQ0Ey9w1Jcxv9u2z62X1IvVEoHBYMyDi5TJNe+HwcHYnv3RLRBcMYlUa4Vw9EEaNtlm2Bz9AspSfE2phZyZuoSCVIdtRnJuMQlf0Itn/AHr0Fcrrzi2Brab8q1hBwFEiKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708691213; c=relaxed/simple;
-	bh=m//cWAePIv4cTZDYri/URPe8qx3PAjrr8Fa4bEJ/jYw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tDvMr1CYg2iRmhgQQJpJsM7baarWswrpTbR6W3u+K6Wacdi2TzHaVghlyC9Z1/HfeS9LHCAthrqIyHcLbUmaqe/SgimNuz5CkyF/7axPgoN7gJag7W6F9365gyE8+q9yvVxL/23TJ3WEYVjJgJt0jmkjNeO6NzRjjJxIlWTpWIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iZSQ/HTX; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1708696287; c=relaxed/simple;
+	bh=mhwjRRk4xV74kVMVwbQeUgkmSwWD2N6U/AIZ0aFPLoc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S9gafRCyCsxrxod4DxtLKIpftcWzgPdKAnl9h263NNd45J2pvdtOlL8QEVEPRhdGFCdVIVz3Msxd1rzFaMofWwo3XfcUkuczksbrNYTwjY+/wCKtE9KDiUsjnQ8+VbvswSpRRVCE01XvltOFuVdXTL9h9g7k4X7Yv2xxQadPEZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rBbq6jL2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iZSQ/HTX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BB87C433C7;
-	Fri, 23 Feb 2024 12:26:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rBbq6jL2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 936E7C433F1;
+	Fri, 23 Feb 2024 13:51:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708691212;
-	bh=m//cWAePIv4cTZDYri/URPe8qx3PAjrr8Fa4bEJ/jYw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=iZSQ/HTX2hNdNLIy3vkQ2Mhcy7B3AcZ4GJzTIslwj7FQ9QGqb8MtlDta23N9Vwe3y
-	 lrts2nTwptGS/hOtaF7+eA6l3i8xvLLu6d2mb9F1zdiv+n1cHntDc/nedbnOWYAeuB
-	 01Ncv/gZk50JdISyyt5DYanwA69wt70ASDNE7D21By/0wkVq8FBhYVnPDaioShYGTT
-	 ln5E16eNjwSVj0tLN6ftkdewOjFQZiPXKGfRPY3lmXnP/RZL27ltagxjwOgUiJUg0D
-	 SOg1MY5nYbXlOq/NQKd0Zr7V5psWedQv0i0fHhCIfcRvzKR9DryEmp+ZWCkAftnTkP
-	 jlPDUqkd21I/w==
-Date: Fri, 23 Feb 2024 13:26:41 +0100
-From: Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To: andy.shevchenko@gmail.com, George Stark <gnstark@salutedevices.com>
-Cc: linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>, Matti
- Vaittinen <mazziesaccount@gmail.com>, Linus Walleij
- <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Lucas De
- Marchi <lucas.demarchi@intel.com>, Oded Gabbay <ogabbay@kernel.org>, Thomas
- =?UTF-8?B?SGVsbHN0csO2bQ==?= <thomas.hellstrom@linux.intel.com>, Maarten
- Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
- <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie
- <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, Aleksandr Mezin
- <mezin.alexander@gmail.com>, Jean Delvare <jdelvare@suse.com>, Guenter
- Roeck <linux@roeck-us.net>, Pavel Machek <pavel@ucw.cz>, Lee Jones
- <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>, Matthias Brugger
- <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
- <angelogioacchino.delregno@collabora.com>, linux-gpio@vger.kernel.org,
- intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
- linux-hwmon@vger.kernel.org, linux-leds@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 1/2] devm-helpers: Add resource managed version of mutex
- init
-Message-ID: <20240223132641.3e2ba16c@dellmb>
-In-Reply-To: <Zde_s8iecR2ArKjC@surfacebook.localdomain>
-References: <20240222145838.12916-1-kabel@kernel.org>
-	<Zde_s8iecR2ArKjC@surfacebook.localdomain>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.39; x86_64-pc-linux-gnu)
+	s=k20201202; t=1708696286;
+	bh=mhwjRRk4xV74kVMVwbQeUgkmSwWD2N6U/AIZ0aFPLoc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rBbq6jL2OsqWVIKa7CksYk2uhXPZGdHxBn/0ltvJIlaVANWeQ2zCwKbKhDY+seSri
+	 18pkaS/Qor++1WTn4g8FD3gO6Hn+QwWZtpIK34Yvi5cxrBdSdF45A/ga6KY3KfjI+P
+	 EiZY93ZbjnStqdyyWjZ60UDQweHJaptMMzFjNPsaGV/NipHSJwnh1xrrFRNqbA1QYk
+	 oW/jyTVht1JyFIjC4Iqua6wS80DVXepnZ0b/ABzfSn6oEmSOjxt5MrSbhPHwV900+9
+	 Rlxau8L98D/kxv/Hk+D/JvpxKWS46zSgBkTiFqzr/unwNk6nvjnfQ5TfWa1OBg53V7
+	 5VGxlrPbIlg1g==
+Date: Fri, 23 Feb 2024 06:51:24 -0700
+From: Rob Herring <robh@kernel.org>
+To: Billy Tsai <billy_tsai@aspeedtech.com>
+Cc: linux-kernel@vger.kernel.org, naresh.solanki@9elements.com,
+	BMC-SW@aspeedtech.com, jdelvare@suse.com, conor+dt@kernel.org,
+	linux-doc@vger.kernel.org, joel@jms.id.au,
+	linux-aspeed@lists.ozlabs.org, patrick@stwcx.xyz,
+	andrew@codeconstruct.com.au, u.kleine-koenig@pengutronix.de,
+	linux-arm-kernel@lists.infradead.org, p.zabel@pengutronix.de,
+	krzysztof.kozlowski+dt@linaro.org, corbet@lwn.net,
+	robh+dt@kernel.org, devicetree@vger.kernel.org, linux@roeck-us.net,
+	linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org
+Subject: Re: [PATCH v14 2/3] dt-bindings: hwmon: Support Aspeed g6 PWM TACH
+ Control
+Message-ID: <170869628286.1766501.17404664389550900332.robh@kernel.org>
+References: <20240221104025.1306227-1-billy_tsai@aspeedtech.com>
+ <20240221104025.1306227-3-billy_tsai@aspeedtech.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240221104025.1306227-3-billy_tsai@aspeedtech.com>
 
-On Thu, 22 Feb 2024 23:42:11 +0200
-andy.shevchenko@gmail.com wrote:
 
-> Thu, Feb 22, 2024 at 03:58:37PM +0100, Marek Beh=C3=BAn kirjoitti:
-> > A few drivers are doing resource-managed mutex initialization by
-> > implementing ad-hoc one-liner mutex dropping functions and using them
-> > with devm_add_action_or_reset(). Help drivers avoid these repeated
-> > one-liners by adding managed version of mutex initialization.
-> >=20
-> > Use the new function devm_mutex_init() in the following drivers:
-> >   drivers/gpio/gpio-pisosr.c
-> >   drivers/gpio/gpio-sim.c
-> >   drivers/gpu/drm/xe/xe_hwmon.c
-> >   drivers/hwmon/nzxt-smart2.c
-> >   drivers/leds/leds-is31fl319x.c
-> >   drivers/power/supply/mt6370-charger.c
-> >   drivers/power/supply/rt9467-charger.c =20
->=20
-> Pardon me, but why?
->=20
-> https://lore.kernel.org/linux-leds/20231214173614.2820929-1-gnstark@salut=
-edevices.com/
->=20
-> Can you cooperate, folks, instead of doing something independently?
+On Wed, 21 Feb 2024 18:40:24 +0800, Billy Tsai wrote:
+> Document the compatible for aspeed,ast2600-pwm-tach device, which can
+> support up to 16 PWM outputs and 16 fan tach input.
+> 
+> Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
+> ---
+>  .../bindings/hwmon/aspeed,g6-pwm-tach.yaml    | 71 +++++++++++++++++++
+>  1 file changed, 71 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/aspeed,g6-pwm-tach.yaml
+> 
 
-Thanks Andy for pointing to George's patch series.
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-I can drop the mutex_init() part and add just the debugfs part.
-
-Marek
