@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D2F612E1FC;
-	Fri, 23 Feb 2024 16:21:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 249C912E1FC;
+	Fri, 23 Feb 2024 16:21:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708705306; cv=none; b=BMx5jWSx1sq/gHyEyCQ9joUeX2CkunDlJVyIzgxA5575C7DVKMk3ne7+JRbHj2Oy7HYXEY4IpjzBTrkT7LuBT/1jSpbaRA4fXuZ1dMfsgEZXuxZJ+ZisHpy0BAb3TJN70NOjfoaAv56RNPmntbrJPFIkgdc02+Nas4hgiLSqiVU=
+	t=1708705310; cv=none; b=kCaT2ZCeSis/XTV+BY0810a3lTlWR706gABmv3RAj+No9p9LYfd9WQXqtoc/Q3OxxkWGFssHlwiNiqWb/6AJWyCwtw2Nl2SgrLc4XWjpNBILHimX+prgO1EQqKfpS93lywYOd8XMZM8GMPnRgkkYtg/RK67NDcDmuNo6d2GB2lw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708705306; c=relaxed/simple;
-	bh=xpFapP+t1GY5qR3wsOV3Nl7p1ssqEBrzSJNPZBMtc1s=;
+	s=arc-20240116; t=1708705310; c=relaxed/simple;
+	bh=jbwiQKAcTZW+OF+UocDdv05N53uW5wLX6hkKOMBTcOM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cFI/fH2J9L6lrHvDw4evAMNEStBs44EjjdJi5yEbVnVozLJWzzF0h6qIglo28+V4ozpLnnS0QP599ENMczuOr3XDGgkO+SWQn0tIGYOFqkHSgmAPb+Jp7rN+62V5UFLPIHQLgLE8YJFXqSsJTIgFrVCbZbqcHX0voChg2qj752w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nEGjQbLT; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=jUzpBxmEe0bfPxFMpVdyH7pSLDtKzzHxaYpMHFq/IUtgZ+2BuBIMprOwnKU4a6YmQLBDere7dIoQDwrGk8PDGwDJOQm0FT0sgJtfxvckhGkc8ozPCRsRct/RFGyrT8sgVuE87Bjq0lnGCMQm3EZfDZIEGzF//ZyQPs3FMSqhOxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dTIvL9xA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nEGjQbLT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5718C433C7;
-	Fri, 23 Feb 2024 16:21:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dTIvL9xA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65F04C43390;
+	Fri, 23 Feb 2024 16:21:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708705306;
-	bh=xpFapP+t1GY5qR3wsOV3Nl7p1ssqEBrzSJNPZBMtc1s=;
+	s=k20201202; t=1708705309;
+	bh=jbwiQKAcTZW+OF+UocDdv05N53uW5wLX6hkKOMBTcOM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=nEGjQbLTNrvj5xvemmvu7cU++u5DUAhThDVhFtJAbvNhZh52GS0dWxyDGbNRWF87n
-	 HUEZZ0CYQelFRrFeco9tC0pUYsbfvHrGeINupOZ4RbLwjB64cafgQK80qN2WNFRiy+
-	 LtjVnEKE08bclZyqYV7k/tE/myoP8NSF+grve0Chg0R99hyUUO+U56UQcD06eOVKeP
-	 oD9XQ4jpIrzi/VwbkEiGpJ/zCAarWralV7pF9zv8pnmG9wj7zpt9RMx+3s1vt2OOHr
-	 DjAB5xcgFcZIQ3BtK0QCN5/YZzIDwmRphV+zNXl0t+z44W1t58QtHDnHMyQipchf2q
-	 WWWXnG41ER2rw==
+	b=dTIvL9xAKYzJdtJJl+Ix/2HOVcMOsQU7G28axnq7a+CL65sIgFuZsJIlluGUeIkWM
+	 ZtpLCZJbcaMFmJgHNX3Whbu6pnP/3ophsAP2Y/82Mcnt6LfGUO7tcizXvVp4c2R5gA
+	 OQ2DryRFGSfsQWLZfJJ/DtQKHuc/aQmswPsTnlwOac/5/fNaModp2T8DBy7QXgmmQ5
+	 o/c4YRSGshfFBRoUHJh4MymSHJy1A4+qKa4d/h6E+RBTcJAyvPMEGlgfyVQS+PGq6A
+	 4Auiq06PqG9UpocQ69cVdr1gKGBo/IKIrCs87IPysVAFEPURO14EbuIeSpAHz7yN4D
+	 i7BtcwpSEjo4w==
 From: Conor Dooley <conor@kernel.org>
 To: linux@roeck-us.net
 Cc: conor@kernel.org,
@@ -44,9 +44,9 @@ Cc: conor@kernel.org,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Naresh Solanki <naresh.solanki@9elements.com>
-Subject: [PATCH v2 3/5] hwmon: (pmbus/tda38640) Use PMBUS_REGULATOR_ONE to declare regulator
-Date: Fri, 23 Feb 2024 16:21:07 +0000
-Message-ID: <20240223-catnap-companion-c42fdd8ad110@spud>
+Subject: [PATCH v2 4/5] hwmon: (pmbus/lm25066) Use PMBUS_REGULATOR_ONE to declare regulator
+Date: Fri, 23 Feb 2024 16:21:08 +0000
+Message-ID: <20240223-player-buckskin-01405c5889c4@spud>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240223-moonrise-feminist-de59b9e1b3ba@spud>
 References: <20240223-moonrise-feminist-de59b9e1b3ba@spud>
@@ -56,7 +56,7 @@ List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=927; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=1ZtfL4H/Opueo+tkLhUryZdEDy0uFp+4wOJDc4cuTnE=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDKk3jv6QmRr4IpfD1GNPlhl7Sechbpbey7VHl657v/pEP esyjUWNHaUsDGIcDLJiiiyJt/tapNb/cdnh3PMWZg4rE8gQBi5OAZjI0XqG//6vT5qbeOaEFHX0 H2d9cPjxYteDcba/Gi7dfzh33x7HgAqG/z77DgnPX/j+RRTXP/VFv3h7ui5nr7+8Nmb9S2ET/qv +h9kB
+X-Developer-Signature: v=1; a=openpgp-sha256; l=989; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=pvEzR+gA96CLf2ByeujTgLZ57PfkfC8+QPdFFNSWXgs=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDKk3jv7gz06I0cheuEdus3LXUs8VHOcbHY3E2+fbzz/8K MS5rnxSRykLgxgHg6yYIkvi7b4WqfV/XHY497yFmcPKBDKEgYtTACbCrMnI0DVRsNCUvTao7sf2 mos/klY288iwVgWHCPJfMjqwP1jtDMN/p2exUl/Z/R38lhRLrjlzI32jzbo/33cnSvKnz2Kom9H PAwA=
 X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
 Content-Transfer-Encoding: 8bit
 
@@ -68,26 +68,26 @@ that happen.
 
 Cc: Conor Dooley <conor@kernel.org>
 Cc: Naresh Solanki <naresh.solanki@9elements.com>
-Cc: Patrick Rudolph <patrick.rudolph@9elements.com>
+Cc: Zev Weiss <zev@bewilderbeest.net>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- drivers/hwmon/pmbus/tda38640.c | 2 +-
+ drivers/hwmon/pmbus/lm25066.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/pmbus/tda38640.c b/drivers/hwmon/pmbus/tda38640.c
-index 09cd114b1736..c31889a036f0 100644
---- a/drivers/hwmon/pmbus/tda38640.c
-+++ b/drivers/hwmon/pmbus/tda38640.c
-@@ -15,7 +15,7 @@
- #include "pmbus.h"
+diff --git a/drivers/hwmon/pmbus/lm25066.c b/drivers/hwmon/pmbus/lm25066.c
+index 3a20df5a43ec..cfffa4cdc0df 100644
+--- a/drivers/hwmon/pmbus/lm25066.c
++++ b/drivers/hwmon/pmbus/lm25066.c
+@@ -437,7 +437,7 @@ static int lm25066_write_word_data(struct i2c_client *client, int page, int reg,
  
- static const struct regulator_desc __maybe_unused tda38640_reg_desc[] = {
+ #if IS_ENABLED(CONFIG_SENSORS_LM25066_REGULATOR)
+ static const struct regulator_desc lm25066_reg_desc[] = {
 -	PMBUS_REGULATOR("vout", 0),
 +	PMBUS_REGULATOR_ONE("vout"),
  };
+ #endif
  
- struct tda38640_data {
 -- 
 2.43.0
 
