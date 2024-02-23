@@ -1,36 +1,36 @@
 Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B366514DFD9;
-	Fri, 23 Feb 2024 23:16:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D963814D432;
+	Fri, 23 Feb 2024 23:26:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=71.19.156.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708730196; cv=none; b=mZENTp3CPDycEQsFeDVpkCPOxGYwETaERRsZJA1+h3MlIru23c4tN3i3aITufa5sII7iXCOyzLC/HYQkcrvZWqXN9tZkznF4o9KbB91s1a5YczQO8XK8lHct7/nv5l65DXXVYiIsYhLv2oCBYcrZTe4Xsrc0kkoeLvN4G13Wil8=
+	t=1708730811; cv=none; b=Brd/weRyrSfubVyqDa/PrBXzemJUT1m2ZUQQ4oIUs3LFveoW8aBqiqd7oxcz6xFQIKgtGZngTKMT7Sl+K8ew0ZwYwbY6MbnWJ/xmnZm+mqQfgY5IYaFTFf0+1+Xo9uO9ImbJtnCI/lpMjO/TcLvBONs2OzX4/wTa23JSivbw+r8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708730196; c=relaxed/simple;
-	bh=sD5o9ytpcDH7D0YW0iwMBjx+SPKuqMrI8GiCcndNMzA=;
+	s=arc-20240116; t=1708730811; c=relaxed/simple;
+	bh=4zYtnwamesCmZ23tK3MomVr0LVGplK4mXXqNXQBE1mU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=in25oqUyZXr6yvneiujeRmyQBYilJDMpDorAV88LAufafCkFC5gq6+BBI/64Fw0ZBdr+Rg04kZAQzibi2hMbj9l+mCWMusqFpv4uRlI8X0yBPJefajFg1lxfdDjTOoDaAuJD+rfjS90yyuYKI9I/+Re9UXrhaYxCCQhkDlCovQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bewilderbeest.net; spf=pass smtp.mailfrom=bewilderbeest.net; dkim=pass (1024-bit key) header.d=bewilderbeest.net header.i=@bewilderbeest.net header.b=PG+nMijZ; arc=none smtp.client-ip=71.19.156.171
+	 Content-Type:Content-Disposition:In-Reply-To; b=fglD/UMzOIcMUtmPsrlIL4oz47ws9wHJZh/sfBmpBQTMyXc1d8WbVbO1taQjemjBHYNI0PA4S2RXyiNYtQF3jTc12Vf05pIs9zurKsNy/0+vW9vOWgRDlvLUyaZWZiL2K0o3nSgy7pzA2ABWaO9EFBSctxENsEhRF9bWCoZUB1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bewilderbeest.net; spf=pass smtp.mailfrom=bewilderbeest.net; dkim=pass (1024-bit key) header.d=bewilderbeest.net header.i=@bewilderbeest.net header.b=Cshe3ZZA; arc=none smtp.client-ip=71.19.156.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bewilderbeest.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bewilderbeest.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=bewilderbeest.net header.i=@bewilderbeest.net header.b="PG+nMijZ"
+	dkim=pass (1024-bit key) header.d=bewilderbeest.net header.i=@bewilderbeest.net header.b="Cshe3ZZA"
 Received: from hatter.bewilderbeest.net (unknown [IPv6:2602:61:712b:6300::2])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: zev)
-	by thorn.bewilderbeest.net (Postfix) with ESMTPSA id F1421432C;
-	Fri, 23 Feb 2024 15:16:27 -0800 (PST)
+	by thorn.bewilderbeest.net (Postfix) with ESMTPSA id BEDDC432C;
+	Fri, 23 Feb 2024 15:26:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-	s=thorn; t=1708730188;
-	bh=ppx1ytb4Z5XMnVomPwe/hSvw18GYGbq/qxUl7v7Ia/g=;
+	s=thorn; t=1708730809;
+	bh=F4lJYG4kSAB2qe69Q4ayANoz62/3Dr0HII+1obeivrI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PG+nMijZMei0y1HU+vJalvgYAtcV45FvoFJVUaVP3SYrst6foDMu2IPkKTv1DhJFL
-	 TZRy96Psq3i9GHxw1YpnfuG5Q9c+hvzlsEAwkIF8JuXliMVHoNpc4YwnXl/qhFDrcS
-	 WMxYPRkJEZsXgleLZm8CHNf0PbYxjFq+ynQoT/fA=
-Date: Fri, 23 Feb 2024 15:16:26 -0800
+	b=Cshe3ZZAEwvk/gnlT5/fOGTtbjtKYmxX47GEVe31kvEaHWjqpmauiCXLg0e9GHK6a
+	 jG2M+YBzL/omtWQR2S3G3FBy68HiLrIjtHqr+Vk3/kigedkvzS+ZHMbuhdha+sEBGl
+	 bXKEOZvAclzp9xbbAkI7YtL6w29iK7oH/yIgctY8=
+Date: Fri, 23 Feb 2024 15:26:47 -0800
 From: Zev Weiss <zev@bewilderbeest.net>
 To: Conor Dooley <conor@kernel.org>
 Cc: linux@roeck-us.net, Conor Dooley <conor.dooley@microchip.com>,
@@ -47,9 +47,10 @@ Cc: linux@roeck-us.net, Conor Dooley <conor.dooley@microchip.com>,
 	Naresh Solanki <naresh.solanki@9elements.com>
 Subject: Re: [PATCH v2 4/5] hwmon: (pmbus/lm25066) Use PMBUS_REGULATOR_ONE to
  declare regulator
-Message-ID: <684ee927-2287-420b-aee5-f323e05ada47@hatter.bewilderbeest.net>
+Message-ID: <2a06f633-9dd2-4ef0-8cb8-901348ef404a@hatter.bewilderbeest.net>
 References: <20240223-moonrise-feminist-de59b9e1b3ba@spud>
  <20240223-player-buckskin-01405c5889c4@spud>
+ <684ee927-2287-420b-aee5-f323e05ada47@hatter.bewilderbeest.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -58,23 +59,29 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20240223-player-buckskin-01405c5889c4@spud>
+In-Reply-To: <684ee927-2287-420b-aee5-f323e05ada47@hatter.bewilderbeest.net>
 
-On Fri, Feb 23, 2024 at 08:21:08AM PST, Conor Dooley wrote:
->From: Guenter Roeck <linux@roeck-us.net>
+On Fri, Feb 23, 2024 at 03:16:28PM PST, Zev Weiss wrote:
+>On Fri, Feb 23, 2024 at 08:21:08AM PST, Conor Dooley wrote:
+>>From: Guenter Roeck <linux@roeck-us.net>
+>>
+>>If a chip only provides a single regulator, it should be named 'vout'
+>>and not 'vout0'. Declare regulator using PMBUS_REGULATOR_ONE() to make
+>>that happen.
+>>
+
+
 >
->If a chip only provides a single regulator, it should be named 'vout'
->and not 'vout0'. Declare regulator using PMBUS_REGULATOR_ONE() to make
->that happen.
+>Given (AFAICT) the >lack of any combined dts & driver patches anywhere 
+>in the kernel git history I guess maybe doing both atomically in a 
+>single commit might not be considered kosher, but could it at least be 
+>included in the same patch series?
 >
 
-As mentioned on Guenter's v1, this change necessitates a corresponding 
-update to arch/arm/boot/dts/aspeed/aspeed-bmc-delta-ahe50dc.dts, which 
-has a dependency on the name of the regulator.  Given (AFAICT) the lack 
-of any combined dts & driver patches anywhere in the kernel git history 
-I guess maybe doing both atomically in a single commit might not be 
-considered kosher, but could it at least be included in the same patch 
-series?
+Ah, except I realize now I neglected to pass '--full-diff' to 'git log' 
+when checking that, and after fixing that I see there is in fact some 
+precedent for commits changing device-trees and driver code together, so 
+ideally that would be my preference here too.
 
 
 Thanks,
