@@ -1,267 +1,602 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4BA6134BF;
-	Fri, 23 Feb 2024 06:59:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.9
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708671548; cv=fail; b=fq9wZACCJYxZeAXoxxMCNW3GupWePsN77d+RbiM3KaASecGLZvuyHo/4qpMThYe436JI4Sz6ErvNHGMT7ccuf8//1B+cixO9Qo79txi2EGKAbfrOocfsxm/ls/zih2FA0LeNSHOP7uSabMTm5Jw9L5sQ8bgFs9JF8xKbXALcLXo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708671548; c=relaxed/simple;
-	bh=S8K7E5yjxuvvTISxTHbHgufa6hsyVOKJxVQDpyRsKJc=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=gVZG9GgsqZC+yq9izTkiY7bo3AREfEndVL1bxo9YHDCmbWFzJpColYlejdyROs5Phnncd4Hk/rHT2jWIZR4Ld8G5c9EjMug81XLWY51XDFBHnCyxvTagmzuo7B5woiFlmwWDW03TCklnp+7p8b+0kbRsUIolTYN9seUvoUARtuw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f+uOeTFm; arc=fail smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D8691642A;
+	Fri, 23 Feb 2024 10:15:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708683314; cv=none; b=Y8th7J6gtx3IdB3wKYbi0izhL8sKYQRkY1WnEBylPL+0+U4u28UzPhle1JtpLRD1acJOA6rd9niyZFsTkXSsQNwcnCfuUUgKTfqyPbL1M1JhMX/AQyZg6SUVZ1ZaC085LPxtpE7YVpa3g8XfKLuAy38PgjA8WjPZwVIkmpbVuOc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708683314; c=relaxed/simple;
+	bh=73kX+/NEuk1iaZrhUXLJKKoGJQXFowHJqhm7iiG20xc=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=iiZynykjabsjzirlMlAmErUv0leZrOli82Btcyi1npNditzPQfJ3SuOMZSCsj20A2ABRY6MAkQiop7sTLwfoJ8HUqnPwdlk+RS8FvUTET5thmcwsFyLWZgs3sQezL4S4/MOtPmHlh2nQRn/OzHqZGqskRp7bzh2rE6oBPJXJ4/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=blOER3Xm; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f+uOeTFm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="blOER3Xm"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708671546; x=1740207546;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=S8K7E5yjxuvvTISxTHbHgufa6hsyVOKJxVQDpyRsKJc=;
-  b=f+uOeTFmAx2v/RObN4iJnT1awQfSsqp4HOJ8SFz/pRDgh0hiuFxXM0D3
-   4pGu1PaLReawlaJrSBWQdgCQ/YUvub9Q8JNWyp6NGu0JrX4164NKGbqCH
-   UpbGqTGdLvulhr4Ghe8uIQumB5T9sXFR/76kL7EJQSsMeGgfvc/uPWouc
-   1IIqLnXqsHLlddpLAZAOn+Q5tdhi6xbru3SfgVSCj/6ZTW4tg63FoI2k2
-   oYWQaaXugOdQyHQfDAnxnaakAcLPVJpAdt+gKRUMX11LCqaURXWBBvD16
-   UYtCFYiHA4qT+vYtvW1yPS7P78LIFT48VKoP2TMEf/CDjdWbV720h/1gn
+  t=1708683312; x=1740219312;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=73kX+/NEuk1iaZrhUXLJKKoGJQXFowHJqhm7iiG20xc=;
+  b=blOER3Xm3gK4C8JeXnJJl4Uh3nPzonaF6yOY3Q3+gk1pCtqEOS/bT8EH
+   mW33mbj7ALvgCJYRkbyP0xSnaqp7XeOGq+V0k7xHEDMGGP4o/J2qghL7F
+   yvtfHYUh7+zvpzgjoKceMWwTB729WwVTANJ3figH+1H56tGJFrRSOIMIf
+   8jwsBQfgxxv8i4+glJcJ8n2MhRDnaoFcWPIJov35k0yWEPAvEyggCrkkb
+   SSDM4mdwlWFkPLMsyiatHPaf0wW/M3NHROxCKGnYTFcPHvs1ZTBBjGoaD
+   ht0ak+CY5578s4DXUCuoCWBYRWbXhX0Fs6i22JjC9ZB+FjOEiceTPjk77
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10992"; a="13668872"
+X-IronPort-AV: E=McAfee;i="6600,9927,10992"; a="20528324"
 X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
-   d="scan'208";a="13668872"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2024 22:59:05 -0800
+   d="scan'208";a="20528324"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2024 02:15:11 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
-   d="scan'208";a="10392652"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmviesa005.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 22 Feb 2024 22:59:05 -0800
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Thu, 22 Feb 2024 22:59:04 -0800
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Thu, 22 Feb 2024 22:59:03 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35 via Frontend Transport; Thu, 22 Feb 2024 22:59:03 -0800
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.168)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Thu, 22 Feb 2024 22:59:03 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XMD567a0Rlatz2uBNoW9VE/P9lTXdS6rrWKnYZdC823AZw2NqvEKzi4hk5RZ1BCSlGR5G1ySVRMNvu5CGAnNPy7r0S4RJvfj40IqsqSRiQ5PJjqhZA5u/QbQYsIRGV+CsRTvRYbUKSGJo7w7vPiKf+BJW4VVhayKB3hWdTRLGj9bMVALIvS9+qDvIAWDjPfQBoz0YBCKfrWz0T6kIJCh8eJm/TwfanYDT6Ugzyh63r6wQrjTaSmNNwxFA3QujiqT+f8XE1R6qJiOMnJxtq4WaT7do4LqUJ6XNOIPw7Lk4PGkioxV5viyE+//C+mloW1ZPDyLZrkJc+domXy1lw/Daw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=S8K7E5yjxuvvTISxTHbHgufa6hsyVOKJxVQDpyRsKJc=;
- b=nNlGfGw+81gBJkUOxBGhyizSWf5HYJ/9ioTPPQy71/0rK7y/b3D8W9VylNRSyskafWk3uw7IfEuVnxmK/mrc7R5jiRGSqGcJybjMi7WV0EGkZuMlUGxFaocluN7mAt/9gmzqLovuIAtVIcE9eRR/YM9opEgOJVAyA6Rfx/uidETH4NpItmTu3oz93QGxexxk2d79q7rC6+NcFvbR7a/0PThbD/F4QALWyJXQjmoQLnQRgzev07jYNOgXp6He2s2+dj25gMlFC60a/sn/DAj8ihWAI2+90nwyyLXR7isOFgCZJv5a/EbwMOnwoZHWBgn8EJhon9EVXjIvfYHaKZ7iAA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from PH7PR11MB6521.namprd11.prod.outlook.com (2603:10b6:510:213::21)
- by DM4PR11MB6357.namprd11.prod.outlook.com (2603:10b6:8:b5::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.39; Fri, 23 Feb
- 2024 06:58:56 +0000
-Received: from PH7PR11MB6521.namprd11.prod.outlook.com
- ([fe80::f188:a73d:bdb4:c93e]) by PH7PR11MB6521.namprd11.prod.outlook.com
- ([fe80::f188:a73d:bdb4:c93e%5]) with mapi id 15.20.7339.009; Fri, 23 Feb 2024
- 06:58:55 +0000
-From: "Voon, Weifeng" <weifeng.voon@intel.com>
-To: Russell King <linux@armlinux.org.uk>, Choong Yong Liang
-	<yong.liang.choong@linux.intel.com>
-CC: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>, David E Box
-	<david.e.box@linux.intel.com>, Hans de Goede <hdegoede@redhat.com>, "Mark
- Gross" <markgross@kernel.org>, Alexandre Torgue
-	<alexandre.torgue@foss.st.com>, Jose Abreu <Jose.Abreu@synopsys.com>, "David
- S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, "Jakub
- Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Maxime Coquelin
-	<mcoquelin.stm32@gmail.com>, Richard Cochran <richardcochran@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend
-	<john.fastabend@gmail.com>, Andrew Lunn <andrew@lunn.ch>, Heiner Kallweit
-	<hkallweit1@gmail.com>, Philipp Zabel <p.zabel@pengutronix.de>, "Andrew
- Halaney" <ahalaney@redhat.com>, Serge Semin <fancer.lancer@gmail.com>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-stm32@st-md-mailman.stormreply.com"
-	<linux-stm32@st-md-mailman.stormreply.com>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "platform-driver-x86@vger.kernel.org"
-	<platform-driver-x86@vger.kernel.org>, "linux-hwmon@vger.kernel.org"
-	<linux-hwmon@vger.kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"Sit, Michael Wei Hong" <michael.wei.hong.sit@intel.com>, "Lai, Peter Jun
- Ann" <peter.jun.ann.lai@intel.com>, "Abdul Rahim, Faizal"
-	<faizal.abdul.rahim@intel.com>
-Subject: RE: [PATCH net-next v5 1/9] net: phylink: provide
- mac_get_pcs_neg_mode() function
-Thread-Topic: [PATCH net-next v5 1/9] net: phylink: provide
- mac_get_pcs_neg_mode() function
-Thread-Index: AQHaX7wldK1LhNzF+keQLCZ6YcdPm7ELmBuAgAvwXwA=
-Date: Fri, 23 Feb 2024 06:58:55 +0000
-Message-ID: <PH7PR11MB65210C62342088CF5C484A2888552@PH7PR11MB6521.namprd11.prod.outlook.com>
-References: <20240215030500.3067426-1-yong.liang.choong@linux.intel.com>
- <20240215030500.3067426-2-yong.liang.choong@linux.intel.com>
- <Zc47T/qv8Xg2SA21@shell.armlinux.org.uk>
-In-Reply-To: <Zc47T/qv8Xg2SA21@shell.armlinux.org.uk>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH7PR11MB6521:EE_|DM4PR11MB6357:EE_
-x-ms-office365-filtering-correlation-id: bc331a0d-dcfc-4843-3a10-08dc343ce6e8
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: IOLdxGzOJD6ueHZoOffN8kb9tn3n2Dhvq4bGaT8G0PJ7tcvk62ymMu0W/GM2uv9JkMJ3V/2XLvq56SXs578KV0N3fEko3bBd/27ilhsdlrjwsD1j6PZQxh+MBddnDg8EHo5YXemSuDvP8DIYc1b+IQ961hUt6l/Hjnoag+hEX8V3ZC66modWrzJsDX2Y3mRHsUkXVaRn59n8L7NGmUa0h3IXl6mB2lLub3eqClz76e8I5m7hBdXHErgqD6ezKS9zQvI5cWzL90ZDlL7nCb22tfeIz1NmAvza2aWIauWk0NxZuJB3kAtXCN91/chLK5mViyRAiXdesC25FamnZVg22sbB7PWB3ybKE36nma1kybA7J7i9WldrWBViJv5pqAznDGXTE1aebXdfOPe+A3G5xsxA+retjwhiZlssS9CJ8VgwCKzGV7dHeL1l6mvVKKLgEwsYWSdnLIxt5AldFljTBoqR9P+HDcnG7adfN4IvQ7nPolvTdUbWBqTWCmfUzvpE5Y1lq3BBScEOKM2iftoS8O2hLdJOvbhI5cxkHuysgpnMzcGMNPQwEny8zEDwS6vclXlubR0EtdonFI4QYIBUPgyMA7SJjVqyhk92oXM9BMRA98BH7mqYB+/npLrd5dKA
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR11MB6521.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(38070700009);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?7/IUgbSGa0Px+952D1zU+IbdN30+Dq5euxdvhssNo3HqPkKrfjTR/p2OLtQS?=
- =?us-ascii?Q?PsN/29hEjzTerPMdl5/+MDPzEbbBJ7wmkVRLYZfEc4/WpC7qFBsAfs/KpqkG?=
- =?us-ascii?Q?7TdeVYotaEaGHIU5tgFg1zq5WSmbGdzdOV9iGwx4ZXMWyjGiEU8Kllx4oBnh?=
- =?us-ascii?Q?MPcsasAfyMv80SuWpoNPiLZqy/aZ6MnkJdzP76Tx/N45udJuj3Ygthl1vP4q?=
- =?us-ascii?Q?QWJuhaLdUzwdlr2UFJCLwbgoC6Sb6wPk/GowYxyiFfIYLg0uhDf9CJ8EA412?=
- =?us-ascii?Q?DE3UgmTu/jvW+3fBZ4GtVfSGExJpawGtz5LkRZxCG3PKJLfRKe27rFkOCd2/?=
- =?us-ascii?Q?daTXFK5AoNZ7tSxkVc0KGIaZh7D1TNmmTc3+hxOAJt4vu+izJgRgupcSE7Mb?=
- =?us-ascii?Q?mIYnZs5CGMhf+ICp1ywR8qFn/BA5xB6g0QB41Kzn2v0oTMzZCtngG3YcnVJ+?=
- =?us-ascii?Q?lAHq7ZeD6Mgyi0qSrmzCOJ77zLmWarmQnMNneCOd9N0QyMuByWFxWaKT+WKI?=
- =?us-ascii?Q?QwIGYSOOaMtihBpCbFS7AZManCCPw1muOLgXbDDZ1s0TcQi4pyXPNBIB5+0c?=
- =?us-ascii?Q?Edi4zAO1G9CZm2Vmsf4hQtenATNy0lpXo3jllDxeE0nkP/eewnDuiE6gjkBe?=
- =?us-ascii?Q?JS1wu7ouslAU1yd1GE++qqxanb4i24QdWG4M8hgO9m65qGyFPcacSmdOMeZ6?=
- =?us-ascii?Q?xbpIp8WRuEkq/NJTZDpAa7Sc4U1m6BLoetiJVTSxjvShS6CCZB4/VVALd4zg?=
- =?us-ascii?Q?RkKomiy0O7yF/OeCNMFKWCaVAuAVRhLLCNRneMCitf7cuAeqIA9bZfJDaKLz?=
- =?us-ascii?Q?n95YrStb5ZdTQ5fqRoZ691UF+AVMV0Nhc0SrB1Uxp3kBpL0vNmhIIoDDupmN?=
- =?us-ascii?Q?1KbVh+qS5t0PEwhvyn9xYmVnJg43rAn8rBFiAaSsryYAogGVWlBVvEaz2MLo?=
- =?us-ascii?Q?PxnSpqGGUBpS92H1fUe7w1RcUQAygJj3rih6Tj3REDHK+/hTGgcUR3YYFRhh?=
- =?us-ascii?Q?+Z9GvpX+DmbSkda3UOJDRwgWG935Khu9L7WW5ObKmJG3m0oHRxTSOFKJ8e1w?=
- =?us-ascii?Q?+gvUc0deQyqbdId72cLYxx4d/DNbbTrMFkTSw+wnYNEGPt5H2WW8FoK43X8P?=
- =?us-ascii?Q?2RG318d46rNI4p+eJWjjx1q7inZfLf0+T/ChdAsj1ZJCZaxJWCuCxonc3q6x?=
- =?us-ascii?Q?oh8BXtSutqGEjwY4TLsjIz+Uu189qjS0WZgUC5XVvKJaXeDbmtklEmFNScQA?=
- =?us-ascii?Q?wGJbXszJATocSYqI5wkbH0TOGmAlBxj8YUap8hfQTGKr4YjU2YlzTx2MXR1H?=
- =?us-ascii?Q?yFw7KE7FLd8b1/4S+CgZ/txwmOCpEfJ9oM+6AMMnHQxgkHh3mZVr7eENHB/B?=
- =?us-ascii?Q?WDFof+otoh+0rGsL8+AHpvXJWvCir8Yd+N1uynx+oOqHgziayteFITaUwZgK?=
- =?us-ascii?Q?FiWe92sHZxXVm7o82AnKU/HH+hIe89xE9G3zFARD2FInFFI1fAFpUkzAE3yy?=
- =?us-ascii?Q?ajPQvhpiSmz6aKMJNyXb6erVeBU3CYEEeYZomk8N/xaGr2lNohcWyjFibdFc?=
- =?us-ascii?Q?V89Pi8tsUXuktogRuYY=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+   d="scan'208";a="5748215"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.246.49.107])
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2024 02:15:08 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Fri, 23 Feb 2024 12:14:55 +0200 (EET)
+To: =?ISO-8859-2?Q?Mustafa_Ek=BAi?= <mustafa.eskieksi@gmail.com>
+cc: Hans de Goede <hdegoede@redhat.com>, LKML <linux-kernel@vger.kernel.org>, 
+    platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+    jdelvare@suse.com, linux@roeck-us.net, pavel@ucw.cz, lee@kernel.org
+Subject: Re: [PATCH v2] platform/x86: Add wmi driver for Casper Excalibur
+ laptops. Odd line breaks was because I have used scripts/Lindent without
+ checking, I'm sorry for that. And for my weird rgb led API: This kind of
+ design was also used in drivers/platform/x86/dell/alienware-wmi.c:239, but
+ mine differs as it doesn't create different attributes for different leds.
+ That is because driver doesn't know how many leds there are, to know how
+ many leds there are it should check processor information (whether it's 10th
+ gen or 11th). I don't think include/linux/mod_devicetable.h supports that.
+ If there is a way to differentiate cpus, please let me know. And even if it
+ knew how many leds there are, having different attributes can be cumbersome
+ because there's no way of reading leds. And also user can change led state
+ without notifying os (with some hotkey). But I'm open to further discussion.
+ And thanks for all of your careful reviewing. It helped me to learn more.
+In-Reply-To: <20240222214815.245280-1-mustafa.eskieksi@gmail.com>
+Message-ID: <7863fff5-4de5-4e7a-09b4-fe05ca7765d5@linux.intel.com>
+References: <20240222214815.245280-1-mustafa.eskieksi@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR11MB6521.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bc331a0d-dcfc-4843-3a10-08dc343ce6e8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Feb 2024 06:58:55.6400
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 7i6imOzmO4Fz1Y0yBHgdsGxUmWh2Jd275CNrKjy9Kfw3fleho0vCIwhssolleZM8VIBSKFtbzkfNGVB0WiVqbQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6357
-X-OriginatorOrg: intel.com
+Content-Type: multipart/mixed; BOUNDARY="8323328-1887983801-1708682173=:1148"
+Content-ID: <6e06b268-d3c5-3914-3d9c-1332eaf88164@linux.intel.com>
 
-> > For instance, if the interface switches from 2500baseX to SGMII mode,
-> > and the current link mode is MLO_AN_PHY, calling
-> 'phylink_pcs_neg_mode'
-> > would yield PHYLINK_PCS_NEG_OUTBAND. Since the MAC and PCS driver
-> > require PHYLINK_PCS_NEG_INBAND_ENABLED, the
-> 'mac_get_pcs_neg_mode'
-> > function will calculate the mode based on the interface, current link
-> > negotiation mode, and advertising link mode, returning
-> > PHYLINK_PCS_NEG_OUTBAND to enable the PCS to configure the correct
-> settings.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323328-1887983801-1708682173=:1148
+Content-Type: text/plain; CHARSET=ISO-8859-2
+Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-ID: <02356207-00da-6cd5-aa06-8e3d8b1f42f9@linux.intel.com>
+
+On Fri, 23 Feb 2024, Mustafa Ek=BAi wrote:
+
+> Adding wmi driver for Casper Excalibur Laptops:
+> This driver implements a ledclass_dev device for keyboard backlight
+> and hwmon driver to read fan speed and (also write) pwm mode. NEW_LEDS is
+> selected because this driver introduces new leds, and LEDS_CLASS is selec=
+ted
+> because this driver implements a led class device. All of Casper Excalibu=
+r
+> Laptops are supported but fan speeds has a bug for older generations.
 >=20
-> This paragraph doesn't make sense - at least to me. It first talks about
-> requiring PHYLINK_PCS_NEG_INBAND_ENABLED when in SGMII mode. On
-> this:
+> Signed-off-by: Mustafa Ek=BAi <mustafa.eskieksi@gmail.com>
+> ---
 
-The example given here is a very specific condition and that probably why t=
-here are some confusions here. Basically, this patch provides an optional f=
-unction for MAC driver to change the phy interface on-the-fly without the n=
-eed of reinitialize the Ethernet driver. As we know that the 2500base-x is =
-messy, in our case the 2500base-x does not support inband. To complete the =
-picture, we are using SGMII c37 to handle speed 10/100/1000. Hence, to enab=
-le user to switch link speed from 2500 to 1000/100/10 and vice versa on-the=
--fly, the phy interface need to be configured to inband SGMII for speed 10/=
-100/1000, and outband 2500base-x for speed 2500. Lastly, the newly introduc=
-ed "mac_get_pcs_neg_mode"callback function enables MAC driver to reconfigur=
-e pcs negotiation mode to inband or outband based on the interface mode, cu=
-rrent link negotiation mode, and advertising link mode.
+v1 -> v2 changelog is missing from here!
 
+>  MAINTAINERS                       |   6 +
+>  drivers/platform/x86/Kconfig      |  14 ++
+>  drivers/platform/x86/Makefile     |   1 +
+>  drivers/platform/x86/casper-wmi.c | 315 ++++++++++++++++++++++++++++++
+>  4 files changed, 336 insertions(+)
+>  create mode 100644 drivers/platform/x86/casper-wmi.c
 >=20
-> 1) are you sure that the hardware can't be programmed for the SGMII
-> symbol repititions?
->=20
-
-No, the HW can be program for SGMII symbol repetitions.
-
-> 2) what happens if you're paired with a PHY (e.g. on a SFP module) which
-> uses SGMII but has no capability of providing the inband data?
-> (They do exist.) If your hardware truly does require inband data, it is g=
-oing to
-> be fundamentally inoperative with these modules.
->=20
-
-Above explanation should have already cleared your doubts. Inband or outban=
-d capability is configured based on the phy interface.
-
-> Next, you then talk about returning PHYLINK_PCS_NEG_OUTBAND for the
-> "correct settings". How does this relate to the first part where you basi=
-cally
-> describe the problem as SGMII requring inband? Basically the two don't
-> follow.
-
-It should be a typo mistake. SGMII should return PHYLINK_PCS_NEG_INBAND_ENA=
-BLED.
-
->=20
-> How, from a design point of view, because this fundamentally allows drive=
-rs
-> to change how the system behaves, it will allow radically different behav=
-iours
-> for the same parameters between different drivers.
-> I am opposed to that - I want to see a situation where we have uniform
-> behaviour for the same configuration, and where hardware doesn't support
-> something, we have some way to indicate that via some form of capabilitie=
-s.
->=20
-
-Hi Russell,
-If I understand you correctly, MAC driver should not interfere with pcs neg=
-otiation mode and it should be standardized in the generic function, e.g., =
-phylink_pcs_neg_mode()?
-
-> The issue of whether 2500base-X has inband or not is a long standing issu=
-e,
-> and there are arguments (and hardware) that take totally opposing views o=
-n
-> this. There is hardware where 2500base-X inband _must_ be used or the lin=
-k
-> doesn't come up. There is also hardware where 2500base-X inband is not
-> "supported" in documentation but works in practice. There is also hardwar=
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 9ed4d386853..d0142a75d2c 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -4723,6 +4723,12 @@ S:=09Maintained
+>  W:=09https://wireless.wiki.kernel.org/en/users/Drivers/carl9170
+>  F:=09drivers/net/wireless/ath/carl9170/
+> =20
+> +CASPER EXCALIBUR WMI DRIVER
+> +M:=09Mustafa Ek=BAi <mustafa.eskieksi@gmail.com>
+> +L:=09platform-driver-x86@vger.kernel.org
+> +S:=09Maintained
+> +F:=09drivers/platform/x86/casper-wmi.c
+> +
+>  CAVIUM I2C DRIVER
+>  M:=09Robert Richter <rric@kernel.org>
+>  S:=09Odd Fixes
+> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+> index bdd302274b9..ebef9c9dfb6 100644
+> --- a/drivers/platform/x86/Kconfig
+> +++ b/drivers/platform/x86/Kconfig
+> @@ -1127,6 +1127,20 @@ config SEL3350_PLATFORM
+>  =09  To compile this driver as a module, choose M here: the module
+>  =09  will be called sel3350-platform.
+> =20
+> +config CASPER_WMI
+> +=09tristate "Casper Excalibur Laptop WMI driver"
+> +=09depends on ACPI_WMI
+> +=09depends on HWMON
+> +=09select NEW_LEDS
+> +=09select LEDS_CLASS
+> +=09help
+> +=09  Say Y here if you want to support WMI-based fan speed reporting,
+> +=09  power management and keyboard backlight support on Casper Excalibur
+> +=09  Laptops.
+> +
+> +=09  To compile this driver as a module, choose M here: the module will
+> +=09  be called casper-wmi.
+> +
+>  endif # X86_PLATFORM_DEVICES
+> =20
+>  config P2SB
+> diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefil=
 e
-> where 2500base-X inband doesn't work. The whole thing is a total mess
-> (thanks IEEE 802.3 for not getting on top of this early enough... and wha=
-t's
-> now stated in 802.3 for 2500base-X is now irrelevant because they were to=
-o
-> late to the
-> party.)
+> index 1de432e8861..4b527dd44ad 100644
+> --- a/drivers/platform/x86/Makefile
+> +++ b/drivers/platform/x86/Makefile
+> @@ -14,6 +14,7 @@ obj-$(CONFIG_MXM_WMI)=09=09=09+=3D mxm-wmi.o
+>  obj-$(CONFIG_NVIDIA_WMI_EC_BACKLIGHT)=09+=3D nvidia-wmi-ec-backlight.o
+>  obj-$(CONFIG_XIAOMI_WMI)=09=09+=3D xiaomi-wmi.o
+>  obj-$(CONFIG_GIGABYTE_WMI)=09=09+=3D gigabyte-wmi.o
+> +obj-$(CONFIG_CASPER_WMI)=09=09+=3D casper-wmi.o
+> =20
+>  # Acer
+>  obj-$(CONFIG_ACERHDF)=09=09+=3D acerhdf.o
+> diff --git a/drivers/platform/x86/casper-wmi.c b/drivers/platform/x86/cas=
+per-wmi.c
+> new file mode 100644
+> index 00000000000..012ebda195d
+> --- /dev/null
+> +++ b/drivers/platform/x86/casper-wmi.c
+> @@ -0,0 +1,315 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +#include <linux/bitops.h>
+> +#include <linux/acpi.h>
+> +#include <linux/leds.h>
+> +#include <linux/slab.h>
+> +#include <linux/module.h>
+> +#include <linux/wmi.h>
+> +#include <linux/device.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/sysfs.h>
+> +#include <linux/types.h>
+> +#include <acpi/acexcep.h>
+> +#include <linux/bitfield.h>
+> +#include <linux/sysfs.h>
+> +
+> +#define CASPER_WMI_GUID "644C5791-B7B0-4123-A90B-E93876E0DAAD"
+> +
+> +#define CASPER_READ 0xfa00
+> +#define CASPER_WRITE 0xfb00
+> +#define CASPER_GET_HARDWAREINFO 0x0200
+> +#define CASPER_SET_LED 0x0100
+> +#define CASPER_POWERPLAN 0x0300
+> +
+> +#define CASPER_KEYBOARD_LED_1 0x03
+> +#define CASPER_KEYBOARD_LED_2 0x04
+> +#define CASPER_KEYBOARD_LED_3 0x05
+> +#define CASPER_ALL_KEYBOARD_LEDS 0x06
+> +#define CASPER_CORNER_LEDS 0x07
+> +
+> +#define CASPER_LED_ID    0xF00000000
+> +#define CASPER_LED_MODE  0x0F0000000
+> +#define CASPER_LED_ALPHA 0x00F000000
+
+GENMASK()
+
+> +
+> +struct casper_wmi_args {
+> +=09u16 a0, a1;
+> +=09u32 a2, a3, a4, a5, a6, a7, a8;
+> +};
+> +
+> +static u32 casper_last_color;
+> +static u8 casper_last_led;
+> +
+> +static int casper_set(struct wmi_device *wdev, u16 a1, u8 led_id,
+> +=09=09=09      u32 data)
+> +{
+> +=09struct casper_wmi_args wmi_args =3D {
+> +=09=09.a0 =3D CASPER_WRITE,
+> +=09=09.a1 =3D a1,
+> +=09=09.a2 =3D led_id,
+> +=09=09.a3 =3D data
+> +=09};
+> +=09struct acpi_buffer input =3D {
+> +=09=09(acpi_size) sizeof(struct casper_wmi_args),
+> +=09=09&wmi_args
+> +=09};
+> +=09if (ACPI_FAILURE(wmidev_block_set(wdev, 0, &input)))
+
+=09int status;
+
+=09status =3D wmidev_block_set(wdev, 0, &input);
+=09if (ACPI_FAILURE(status))
+
+> +=09=09return -EINVAL;
+> +=09return 0;
+> +}
+> +
+> +static ssize_t led_control_show(struct device *dev, struct device_attrib=
+ute
+> +=09=09=09=09*attr, char *buf)
+> +{
+> +=09return sysfs_emit("%u%08x\n", buf, casper_last_led,
+> +=09=09       casper_last_color);
+
+I think I mentioned you should put this to one line, why you didn't follow =
+it?
+
+> +}
+> +
+> +/*
+> + * Format wanted from user is a hexadecimal 36-bit integer: most signifi=
+cant
+> + * 4 bits are led_id, next 4 bits are mode and next 4 bits are brightnes=
+s,
+> + * next 24 bits are rgb value. 64 bits
+> + * IMARRGGBB
+> + */
+> +static ssize_t led_control_store(struct device *dev, struct device_attri=
+bute
+> +=09=09=09=09 *attr, const char *buf, size_t count)
+
+Don't split argumetns like this but only at commas.
+
+> +{
+> +=09if (strlen(buf) !=3D 10)
+> +=09=09return -EINVAL;
+> +=09u64 user_input;
+
+Wrong place for declaration.
+
+> +=09/*
+> +=09 * 16-base selected for ease of writing color codes. I chose 64 bit a=
+nd
+> +=09 * kstrtou64 because format I use determined fits into 64 bit.
+> +=09 */
+> +=09int ret =3D kstrtou64(buf, 16, &user_input);
+
+Don't declare varibles in the middle of nowhere even if that is nowadays=20
+not prevented by the compiler UNLESS you're using the cleanup.h which is=20
+the reason why that is allowed at all.
+
+> +=09if (ret)
+> +=09=09return ret;
+> +=09/*
+> +=09 * led_id can't exceed 255 but it can vary among newer versions and
+> +=09 * other models.
+> +=09 */
+> +=09u8 led_id =3D FIELD_GET(CASPER_LED_ID, user_input);
+
+Add #include <linux/bitfield.h>
+
+> +=09ret =3D casper_set(to_wmi_device(dev->parent), CASPER_SET_LED,
+> +=09=09=09led_id, (u32) user_input);
+> +=09if (ret)
+> +=09=09return ret;
+> +=09if (led_id !=3D CASPER_CORNER_LEDS) {
+> +=09=09casper_last_color =3D (u32) user_input;
+> +=09=09casper_last_led =3D led_id;
+> +=09}
+> +=09return count;
+> +}
+
+So codingstylewise you should do this:
+
+static ssize_t led_control_store(struct device *dev, struct device_attribut=
+e *attr,
+=09=09=09=09 const char *buf, size_t count)
+{
+=09struct wdev =3D to_wmi_device(dev->parent);
+=09u64 user_input;
+=09u8 led_id;
+
+=09ret =3D kstrtou64(buf, 16, &user_input);
+=09if (ret)
+=09=09return ret;
+
+=09led_id =3D FIELD_GET(CASPER_LED_ID, user_input);
+=09ret =3D casper_set(wdev, CASPER_SET_LED, led_id, (u32)user_input);
+=09if (ret)
+=09=09return ret;
+
+=09if (led_id ...) {
+=09=09...
+=09}
+
+=09return 0;
+}
+
+However, I still suspect this is wrong way to do RGB leds and the multi_*=
+=20
+sysfs interface is the way you should use.
+
+> +
+> +static DEVICE_ATTR_RW(led_control);
+> +
+> +static struct attribute *casper_kbd_led_attrs[] =3D {
+> +=09&dev_attr_led_control.attr,
+> +=09NULL,
+> +};
+> +
+> +ATTRIBUTE_GROUPS(casper_kbd_led);
+> +
+> +static void set_casper_backlight_brightness(struct led_classdev *led_cde=
+v,
+> +=09=09=09=09=09    enum led_brightness brightness)
+> +{
+> +=09// Setting any of the keyboard leds' brightness sets brightness of al=
+l
+> +=09u32 bright_prep =3D FIELD_PREP(CASPER_LED_ALPHA, brightness);
+> +=09u32 color_no_alpha =3D casper_last_color&~CASPER_LED_ALPHA;
+
+Missing spaces.
+
+> +
+> +=09casper_set(to_wmi_device(led_cdev->dev->parent), CASPER_SET_LED,
+
+Create the wdev local var to avoid need to call to_wmi_device() on this=20
+line like I told you already!
+
+> +=09=09       CASPER_KEYBOARD_LED_1, color_no_alpha | bright_prep
+> +=09);
+> +}
+> +
+> +static enum led_brightness get_casper_backlight_brightness(struct led_cl=
+assdev
+> +=09=09=09=09=09=09=09   *led_cdev)
+> +{
+> +=09return FIELD_GET(CASPER_LED_ALPHA, casper_last_color);
+> +}
+> +
+> +static struct led_classdev casper_kbd_led =3D {
+> +=09.name =3D "casper::kbd_backlight",
+> +=09.brightness =3D 0,
+> +=09.brightness_set =3D set_casper_backlight_brightness,
+> +=09.brightness_get =3D get_casper_backlight_brightness,
+> +=09.max_brightness =3D 2,
+> +=09.groups =3D casper_kbd_led_groups,
+> +};
+> +
+> +static int casper_query(struct wmi_device *wdev, u16 a1,
+> +=09=09=09=09struct casper_wmi_args *out)
+> +{
+> +=09struct casper_wmi_args wmi_args =3D {
+> +=09=09.a0 =3D CASPER_READ,
+> +=09=09.a1 =3D a1
+> +=09};
+> +=09struct acpi_buffer input =3D {
+> +=09=09(acpi_size) sizeof(struct casper_wmi_args),
+> +=09=09&wmi_args
+> +=09};
+> +
+> +=09acpi_status ret =3D wmidev_block_set(wdev, 0, &input);
+
+Put the declaration separately into the declarations block:
+
+=09acpi_status ret;
+
+=09ret =3D wmidev_block_set(wdev, 0, &input);
+
+> +=09if (ACPI_FAILURE(ret))
+> +=09=09return -EIO;
+> +
+> +=09union acpi_object *obj =3D wmidev_block_query(wdev, 0);
+> +=09if (obj->type !=3D ACPI_TYPE_BUFFER) // obj will be int (0x10) on fai=
+lure
+> +=09=09return -EINVAL;
+> +=09if (obj->buffer.length !=3D 32)
+> +=09=09return -EIO;
+> +
+> +=09memcpy(out, obj->buffer.pointer, sizeof(struct casper_wmi_args));
+> +=09kfree(obj);
+> +=09return ret;
+> +}
+> +
+> +static umode_t casper_wmi_hwmon_is_visible(const void *drvdata,
+> +=09=09=09=09=09   enum hwmon_sensor_types type,
+> +=09=09=09=09=09   u32 attr, int channel)
+> +{
+> +=09switch (type) {
+> +=09case hwmon_fan:
+> +=09=09return 0444;
+> +=09case hwmon_pwm:
+> +=09=09return 0644;
+> +=09default:
+> +=09=09return 0;
+> +=09}
+> +=09return 0;
+> +}
+> +
+> +static int casper_wmi_hwmon_read(struct device *dev,
+> +=09=09=09=09 enum hwmon_sensor_types type, u32 attr,
+> +=09=09=09=09 int channel, long *val)
+> +{
+> +=09struct casper_wmi_args out =3D { 0 };
+> +=09struct wmi_device *wdev =3D to_wmi_device(dev->parent);
+> +=09int ret;
+> +
+> +=09switch (type) {
+> +=09case hwmon_fan:
+> +=09=09ret =3D casper_query(wdev, CASPER_GET_HARDWAREINFO, &out);
+> +=09=09/*
+> +=09=09 * a4 and a5 is little endian in older laptops (with 10th gen
+> +=09=09 * cpus or older) and big endian in newer ones. I don't think
+> +=09=09 * dmi has something for cpu information. Also, defining a
+> +=09=09 * dmi_list just for this seems like an overkill. This problem
+> +=09=09 * can be solved in userspace too.
+> +=09=09 */
+> +=09=09if (channel =3D=3D 0) // CPU fan
+> +=09=09=09*val =3D out.a4;
+> +=09=09else if (channel =3D=3D 1) // GPU fan
+
+Instead of comments like this, use defines so you can say:
+=09=09if (channel =3D=3D CASPER_FAN_CPU)
+=09=09=09...
+=09=09if (channel =3D=3D CASPER_FAN_GPU)
+
+> +=09=09=09*val =3D out.a5;
+> +=09=09return 0;
+> +=09case hwmon_pwm:
+> +=09=09ret =3D casper_query(wdev, CASPER_POWERPLAN, &out);
+> +=09=09if (ret) // power plan count varies generations.
+
+I fail to see how the comment relates to if (ret) at all because that=20
+looks like error handling!
+
+> +=09=09=09return ret;
+> +=09=09if (channel =3D=3D 0)
+> +=09=09=09*val =3D out.a2;
+> +=09=09return 0;
+> +=09default:
+> +=09=09return -ENODEV;
+> +=09}
+> +}
+> +
+> +static int casper_wmi_hwmon_read_string(struct device *dev,
+> +=09=09=09=09=09enum hwmon_sensor_types type, u32 attr,
+> +=09=09=09=09=09int channel, const char **str)
+> +{
+> +=09switch (type) {
+> +=09case hwmon_fan:
+> +=09=09switch (channel) {
+> +=09=09case 0:
+> +=09=09=09*str =3D "cpu_fan_speed";
+> +=09=09=09break;
+> +=09=09case 1:
+
+You can use those defines here too I think.
+
+> +=09=09=09*str =3D "gpu_fan_speed";
+> +=09=09=09break;
+> +=09=09default:
+> +=09=09=09return -ENODEV;
+> +=09=09}
+> +=09=09break;
+> +=09default:
+> +=09=09return -ENODEV;
+> +=09}
+
+Do you expect other types? If not, this would be easier to follow:
+
+
+=09if (type !=3D hwmon_fan)
+=09=09return -ENODEV;
+
+=09switch (channel) {
+=09=09...
+
+> +=09return 0;
+> +}
+> +
+> +static int casper_wmi_hwmon_write(struct device *dev,
+> +=09=09=09=09  enum hwmon_sensor_types type, u32 attr,
+> +=09=09=09=09  int channel, long val)
+> +{
+> +=09acpi_status ret;
+> +
+> +=09switch (type) {
+> +=09case hwmon_pwm:
+> +=09=09if (val > 5 || val < 0)
+
+There's in_range() which can be used.
+
+> +=09=09=09return -EINVAL;
+> +=09=09ret =3D casper_set(to_wmi_device(dev->parent),
+> +=09=09=09=09 CASPER_POWERPLAN, val, 0);
+> +=09=09if (ret)
+> +=09=09=09return ret;
+> +=09=09return 0;
+> +=09default:
+> +=09=09return -EOPNOTSUPP;
+> +=09}
+
+Similar structural comment here with if + early return as in the above=20
+function.
+
+> +}
+> +
+> +static const struct hwmon_ops casper_wmi_hwmon_ops =3D {
+> +=09.is_visible =3D &casper_wmi_hwmon_is_visible,
+> +=09.read =3D &casper_wmi_hwmon_read,
+> +=09.read_string =3D &casper_wmi_hwmon_read_string,
+> +=09.write =3D &casper_wmi_hwmon_write
+> +};
+> +
+> +static const struct hwmon_channel_info *const casper_wmi_hwmon_info[] =
+=3D {
+> +=09HWMON_CHANNEL_INFO(fan,
+> +=09=09=09   HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09=09   HWMON_F_INPUT | HWMON_F_LABEL),
+> +=09HWMON_CHANNEL_INFO(pwm, HWMON_PWM_MODE),
+> +=09NULL
+> +};
+> +
+> +static const struct hwmon_chip_info casper_wmi_hwmon_chip_info =3D {
+> +=09.ops =3D &casper_wmi_hwmon_ops,
+> +=09.info =3D casper_wmi_hwmon_info,
+> +};
+> +
+> +static int casper_wmi_probe(struct wmi_device *wdev, const void *context=
+)
+> +{
+> +=09struct device *hwmon_dev;
+> +
+> +=09if (ACPI_FAILURE(led_classdev_register(&wdev->dev, &casper_kbd_led)))
+> +=09=09return -ENODEV;
+> +=09hwmon_dev =3D devm_hwmon_device_register_with_info(&wdev->dev,
+> +=09=09=09=09=09=09"casper_wmi", wdev,
+> +=09=09=09=09=09=09&casper_wmi_hwmon_chip_info,
+> +=09=09=09=09=09=09NULL);
+> +=09return PTR_ERR_OR_ZERO(hwmon_dev);
+
+Don't you need to do rollback here for led_classdev_register() if=20
+devm_hwmon_device_register_with_info() fails?
+
+> +}
+> +
+> +static void casper_wmi_remove(struct wmi_device *wdev)
+> +{
+> +=09led_classdev_unregister(&casper_kbd_led);
+> +}
+> +
+> +static const struct wmi_device_id casper_wmi_id_table[] =3D {
+> +=09{ CASPER_WMI_GUID, NULL },
+> +=09{ }
+> +};
+> +
+> +static struct wmi_driver casper_wmi_driver =3D {
+> +=09.driver =3D {
+> +=09=09   .name =3D "casper-wmi",
+> +=09=09    },
+> +=09.id_table =3D casper_wmi_id_table,
+> +=09.probe =3D casper_wmi_probe,
+> +=09.remove =3D &casper_wmi_remove,
+> +};
+> +
+> +module_wmi_driver(casper_wmi_driver);
+> +MODULE_DEVICE_TABLE(wmi, casper_wmi_id_table);
+> +
+> +MODULE_AUTHOR("Mustafa Ek=BAi <mustafa.eskieksi@gmail.com>");
+> +MODULE_DESCRIPTION("Casper Excalibur Laptop WMI driver");
+> +MODULE_LICENSE("GPL");
 >=20
 
-Agreed. And I have also seen some of your comments regarding the 2500SGMII =
-and 2500BASEX.
-
+--=20
+ i.
+--8323328-1887983801-1708682173=:1148--
