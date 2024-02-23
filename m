@@ -1,61 +1,46 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 129E063A;
-	Fri, 23 Feb 2024 00:13:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF6371170E;
+	Fri, 23 Feb 2024 02:54:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708647208; cv=none; b=DM075wQKjM/qLAEW2cU4vCHP56DmgDVCatLwm3B0pnZEXPsOAzG5DbccKeOcCQvCebLNlwbFmqDjMN0vN5eHg3OLMSRA+APseK2LMJSQyrsvLlBmnj0SFPRlYWzAgd8eywIzhQbk/JDfs0vJL9VexRUDbOljnScFz1N/jwp/21E=
+	t=1708656862; cv=none; b=YQTwBuvjtq7hyOe/kfKBUfc4dnCH+vPRR5/No16ubzTZ4W/JUsMfq2QmqXwB1qi53iZYl7ZI4LPrWg/oUxObmDsoERHxAOgidzCFkmjNmAEzmscL2myC0AT9Piv6BX8OoOrfcTIRpywINdMYFgRSwmeed9sWYaEYDZ6kOE+uTfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708647208; c=relaxed/simple;
-	bh=Ex83ZLTQLF2ZNUcOCHWSwKKS16AtQl2Y00GyXD3BGDU=;
+	s=arc-20240116; t=1708656862; c=relaxed/simple;
+	bh=XuuoVzrhOaZuZRtv+gArnbPL0EB9aVakv8qH/P7q0iY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ibtO70bBR8Dg9xaEqj/wtiKFKFrWeRYYvCq/2uh67a4kROvUoznVxhdEwoQtiHO4TM3oVMNh7mc+YqgZrAhjZKjaO+TB3iuvyZWh9RCUmuTO+xpfKUqEXF5zPpELVoqsXqyh5KDxs1RGj9PioOmdv+1pd0/L6d20CH0N/rj77G4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ma6x9jeo; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 In-Reply-To:Content-Type; b=sXIL5lQBO85GoUO2Om5vPdThddm5K3xJl5qUNWhiFzzUoEQhEU5g7+MC7z7/lnaD1g72pk7JfSbmGfo8S+t/wjVdsfN1m8rU0KDIu/R6jzyslFR1KboKnNvio/pjOOTnijmDgfZbnOZpI3B07FlywDhXsi7r6wwSNQuMVgt0ZSI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AobUl9Ky; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ma6x9jeo"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1dc09556599so3180565ad.1;
-        Thu, 22 Feb 2024 16:13:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708647202; x=1709252002; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=L5Em3s3/q2CUyMHI5GLnC+kLTqSg16IQlFmDVQC88lk=;
-        b=ma6x9jeofXkQnL0CgeRO3Q5rhprIuVzagg+bhTiJ/gGAiJ1GWVZz+tSGzKuOznDA8X
-         hfmnhINgd1yijsOwSme+Oext7T5hZrmRV73KnY5a4llxgNe0sUTwC4T4PAvKQ0nDdEw7
-         3+YszgW6pYVZfSqj0FRsD1jVMvmFQi6wSYmFzc93413hfWSmVyYpRlHo+rZHJ6QAH2Zq
-         raFe10jxq0+f90ZtqjiyiLi66zefh96ZWX8nINN6NvFzt1+OnXB7Ynknffzf/r07Xqe8
-         wyz2hFBe7ZnbL9e+mFDyCagsKj373UQSv9C9tVHhvHyqxLBhfhMuw7V3hQO0YV+PhGGN
-         d2pA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708647202; x=1709252002;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=L5Em3s3/q2CUyMHI5GLnC+kLTqSg16IQlFmDVQC88lk=;
-        b=ucl48vQd+SHW1Vioa7dbC0+xgqaJs9d/UighBx0PAf0yTpmxUwART/xy2Ox3Wz7XMp
-         idWK3WvtnD1gov5HeUD3H5ixX8tMAZabX0yqMWZmPpIQ1KNngTZpZPKihyO6XGrL0D0K
-         h120E+38BtOJM97KYVWycrrzLX7VdnS1D6o7fv4CjzxtTlF+9XSGx6QO9SnpRqz1zzOG
-         Ai3q3CKH2lAHT6eNhMrsadJvRghcnUDrAZsrWlxrWegWYT1gsv+3jp5vVzN48cLAA+oY
-         spav01+rnmGjzoaVZi+M1aXnheoXfXRqGD54kn3FT44KgY0FpxH7NJTEtQq4u6fYbjZ8
-         SIJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUjEIPZHmC66yVP5S1158RPG/TSywQJT3Yr4QObXqMyNrdlpX3wrqhFzDAunpZkBe3XqpkpXc9obC2z1PFkvkL/5TrjDorlvx0B26l7XoxQJdWzOrJc+Fo57wdplSdF8iPOWfwpXAxA0IaHBZrEn4WshXwPd4rRllNjL8ykKoRDIO05VA+4z/6q8IKpy7CF
-X-Gm-Message-State: AOJu0YwFShQfU6gL4JK1Ziqdr4FNnlSR2DOkCu54JSGpJPZQv6XebJoS
-	2yfMgOXryLA4hMWOvuV4hKD68jReqVtZs6+VXyK0Cpq+/0gER2Vq
-X-Google-Smtp-Source: AGHT+IFv4LeO65EkNAqwadJ0BBErdtZpxveHyzBaHReS/tmrItYVzkCSWFZ1OSezKMDF+QAR4tGnaQ==
-X-Received: by 2002:a17:902:c40d:b0:1db:ed54:a726 with SMTP id k13-20020a170902c40d00b001dbed54a726mr504391plk.63.1708647202165;
-        Thu, 22 Feb 2024 16:13:22 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h7-20020a170902748700b001d9ef367c85sm10459048pll.104.2024.02.22.16.13.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Feb 2024 16:13:21 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <66fef2f4-2113-4b58-ad76-7d56cdc838ca@roeck-us.net>
-Date: Thu, 22 Feb 2024 16:13:20 -0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AobUl9Ky"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708656860; x=1740192860;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=XuuoVzrhOaZuZRtv+gArnbPL0EB9aVakv8qH/P7q0iY=;
+  b=AobUl9KyW/St/T0R0ilam7c1H+Gv8iXEthQ8zi2F/anfmLfmbohxyg3v
+   nJA73q/bqlDqJGtVHlLi1jAR+tM2ukT25KkG9GYaGC8BHsN31ccROzzvH
+   GXyTGrgw9KWZvTVNwc2RnIpvtIieO64ULdgfegFWRoiF3643xDmEN5pYj
+   YnDvE8JPvF/iO/sR+IKOokP6Fc2RnKBlZ2oXYVDxW1KhudpGvJSrnVfCI
+   GUdDSRK+131DeZgzmhXjHRno84B2g8XWUjjfG+FhSdPZdu8TRX+Smn5Y5
+   K6zziE85wm/aCGBp/d8gpcq4zV0WiIn4sjjBqa/+9AdZT4Z0gXPoTotjj
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10992"; a="3082972"
+X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
+   d="scan'208";a="3082972"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2024 18:54:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
+   d="scan'208";a="6142042"
+Received: from rdegger-desk1.amr.corp.intel.com (HELO [10.209.74.18]) ([10.209.74.18])
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2024 18:54:19 -0800
+Message-ID: <4fe0e878-11df-48da-8593-c862fd272ccd@linux.intel.com>
+Date: Thu, 22 Feb 2024 18:54:18 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -64,77 +49,315 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2] platform/x86: Add wmi driver for Casper Excalibur
- laptops. .....
+ laptops. Odd line breaks was because I have used scripts/Lindent without
+ checking, I'm sorry for that. And for my weird rgb led API: This kind of
+ design was also used in drivers/platform/x86/dell/alienware-wmi.c:239, but
+ mine differs as it doesn't create different attributes for different leds.
+ That is because driver doesn't know how many leds there are, to know how many
+ leds there are it should check processor information (whether it's 10th gen
+ or 11th). I don't think include/linux/mod_devicetable.h supports that. If
+ there is a way to differentiate cpus, please let me know. And even if it knew
+ how many leds there are, having different attributes can be cumbersome
+ because there's no way of reading leds. And also user can change led state
+ without notifying os (with some hotkey). But I'm open to further discussion.
+ And thanks for all of your careful reviewing. It helped me to learn more.
 Content-Language: en-US
 To: =?UTF-8?Q?Mustafa_Ek=C5=9Fi?= <mustafa.eskieksi@gmail.com>,
  hdegoede@redhat.com, ilpo.jarvinen@linux.intel.com,
  linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
  linux-hwmon@vger.kernel.org
-Cc: jdelvare@suse.com, pavel@ucw.cz, lee@kernel.org
+Cc: jdelvare@suse.com, linux@roeck-us.net, pavel@ucw.cz, lee@kernel.org
 References: <20240222214815.245280-1-mustafa.eskieksi@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 In-Reply-To: <20240222214815.245280-1-mustafa.eskieksi@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 2/22/24 13:48, Mustafa Ekşi wrote:
+
+On 2/22/24 1:48 PM, Mustafa Ekşi wrote:
 > Adding wmi driver for Casper Excalibur Laptops:
 > This driver implements a ledclass_dev device for keyboard backlight
 > and hwmon driver to read fan speed and (also write) pwm mode. NEW_LEDS is
 > selected because this driver introduces new leds, and LEDS_CLASS is selected
 > because this driver implements a led class device. All of Casper Excalibur
 > Laptops are supported but fan speeds has a bug for older generations.
-> 
 
-"Impressive" subject (I dropped most of it). Really, you should not do that.
+Please fix your subject line. It looks like you have included responses
+to the previous comments in the subject line. Please go through the
+https://docs.kernel.org/process/submitting-patches.html for the
+guidelines
 
-> Signed-off-by: Mustafa Ekşi <mustafa.eskieksi@gmail.com>
 >
-[ ... ]
+> Signed-off-by: Mustafa Ekşi <mustafa.eskieksi@gmail.com>
+> ---
+>  MAINTAINERS                       |   6 +
+>  drivers/platform/x86/Kconfig      |  14 ++
+>  drivers/platform/x86/Makefile     |   1 +
+>  drivers/platform/x86/casper-wmi.c | 315 ++++++++++++++++++++++++++++++
+>  4 files changed, 336 insertions(+)
+>  create mode 100644 drivers/platform/x86/casper-wmi.c
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 9ed4d386853..d0142a75d2c 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -4723,6 +4723,12 @@ S:	Maintained
+>  W:	https://wireless.wiki.kernel.org/en/users/Drivers/carl9170
+>  F:	drivers/net/wireless/ath/carl9170/
+>  
+> +CASPER EXCALIBUR WMI DRIVER
+> +M:	Mustafa Ekşi <mustafa.eskieksi@gmail.com>
+> +L:	platform-driver-x86@vger.kernel.org
+> +S:	Maintained
+> +F:	drivers/platform/x86/casper-wmi.c
+> +
+>  CAVIUM I2C DRIVER
+>  M:	Robert Richter <rric@kernel.org>
+>  S:	Odd Fixes
+> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+> index bdd302274b9..ebef9c9dfb6 100644
+> --- a/drivers/platform/x86/Kconfig
+> +++ b/drivers/platform/x86/Kconfig
+> @@ -1127,6 +1127,20 @@ config SEL3350_PLATFORM
+>  	  To compile this driver as a module, choose M here: the module
+>  	  will be called sel3350-platform.
+>  
+> +config CASPER_WMI
+> +	tristate "Casper Excalibur Laptop WMI driver"
+> +	depends on ACPI_WMI
+> +	depends on HWMON
+> +	select NEW_LEDS
+> +	select LEDS_CLASS
+> +	help
+> +	  Say Y here if you want to support WMI-based fan speed reporting,
+> +	  power management and keyboard backlight support on Casper Excalibur
+> +	  Laptops.
+> +
+> +	  To compile this driver as a module, choose M here: the module will
+> +	  be called casper-wmi.
+> +
+>  endif # X86_PLATFORM_DEVICES
+>  
+>  config P2SB
+> diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
+> index 1de432e8861..4b527dd44ad 100644
+> --- a/drivers/platform/x86/Makefile
+> +++ b/drivers/platform/x86/Makefile
+> @@ -14,6 +14,7 @@ obj-$(CONFIG_MXM_WMI)			+= mxm-wmi.o
+>  obj-$(CONFIG_NVIDIA_WMI_EC_BACKLIGHT)	+= nvidia-wmi-ec-backlight.o
+>  obj-$(CONFIG_XIAOMI_WMI)		+= xiaomi-wmi.o
+>  obj-$(CONFIG_GIGABYTE_WMI)		+= gigabyte-wmi.o
+> +obj-$(CONFIG_CASPER_WMI)		+= casper-wmi.o
+>  
+>  # Acer
+>  obj-$(CONFIG_ACERHDF)		+= acerhdf.o
+> diff --git a/drivers/platform/x86/casper-wmi.c b/drivers/platform/x86/casper-wmi.c
+> new file mode 100644
+> index 00000000000..012ebda195d
+> --- /dev/null
+> +++ b/drivers/platform/x86/casper-wmi.c
+> @@ -0,0 +1,315 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +#include <linux/bitops.h>
+> +#include <linux/acpi.h>
+> +#include <linux/leds.h>
+> +#include <linux/slab.h>
+> +#include <linux/module.h>
+> +#include <linux/wmi.h>
+> +#include <linux/device.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/sysfs.h>
+> +#include <linux/types.h>
+> +#include <acpi/acexcep.h>
+> +#include <linux/bitfield.h>
+> +#include <linux/sysfs.h>
+> +
+> +#define CASPER_WMI_GUID "644C5791-B7B0-4123-A90B-E93876E0DAAD"
+> +
+> +#define CASPER_READ 0xfa00
+> +#define CASPER_WRITE 0xfb00
+> +#define CASPER_GET_HARDWAREINFO 0x0200
+> +#define CASPER_SET_LED 0x0100
+> +#define CASPER_POWERPLAN 0x0300
+> +
+> +#define CASPER_KEYBOARD_LED_1 0x03
+> +#define CASPER_KEYBOARD_LED_2 0x04
+> +#define CASPER_KEYBOARD_LED_3 0x05
+> +#define CASPER_ALL_KEYBOARD_LEDS 0x06
+> +#define CASPER_CORNER_LEDS 0x07
+> +
+> +#define CASPER_LED_ID    0xF00000000
+> +#define CASPER_LED_MODE  0x0F0000000
+> +#define CASPER_LED_ALPHA 0x00F000000
+> +
+> +struct casper_wmi_args {
+> +	u16 a0, a1;
+> +	u32 a2, a3, a4, a5, a6, a7, a8;
+> +};
+> +
+> +static u32 casper_last_color;
+> +static u8 casper_last_led;
+> +
+> +static int casper_set(struct wmi_device *wdev, u16 a1, u8 led_id,
+> +			      u32 data)
+> +{
+> +	struct casper_wmi_args wmi_args = {
+> +		.a0 = CASPER_WRITE,
+> +		.a1 = a1,
+> +		.a2 = led_id,
+> +		.a3 = data
+> +	};
+> +	struct acpi_buffer input = {
+> +		(acpi_size) sizeof(struct casper_wmi_args),
+> +		&wmi_args
+> +	};
 
+I would add an empty line here.
+
+> +	if (ACPI_FAILURE(wmidev_block_set(wdev, 0, &input)))
+> +		return -EINVAL;
+
+Same as above.
+
+> +	return 0;
+> +}
+> +
+> +static ssize_t led_control_show(struct device *dev, struct device_attribute
+> +				*attr, char *buf)
+> +{
+> +	return sysfs_emit("%u%08x\n", buf, casper_last_led,
+> +		       casper_last_color);
+> +}
+> +
+> +/*
+> + * Format wanted from user is a hexadecimal 36-bit integer: most significant
+> + * 4 bits are led_id, next 4 bits are mode and next 4 bits are brightness,
+> + * next 24 bits are rgb value. 64 bits
+> + * IMARRGGBB
+> + */
+> +static ssize_t led_control_store(struct device *dev, struct device_attribute
+> +				 *attr, const char *buf, size_t count)
+> +{
+> +	if (strlen(buf) != 10)
+> +		return -EINVAL;
+Why 10? use a macro for it.
+> +	u64 user_input;
+
+Please declare the variable at the top of the function.
+
+> +	/*
+> +	 * 16-base selected for ease of writing color codes. I chose 64 bit and
+> +	 * kstrtou64 because format I use determined fits into 64 bit.
+> +	 */
+> +	int ret = kstrtou64(buf, 16, &user_input);
+> +	if (ret)
+> +		return ret;
+> +	/*
+> +	 * led_id can't exceed 255 but it can vary among newer versions and
+> +	 * other models.
+> +	 */
+> +	u8 led_id = FIELD_GET(CASPER_LED_ID, user_input);
+> +	ret = casper_set(to_wmi_device(dev->parent), CASPER_SET_LED,
+> +			led_id, (u32) user_input);
+> +	if (ret)
+> +		return ret;
+> +	if (led_id != CASPER_CORNER_LEDS) {
+> +		casper_last_color = (u32) user_input;
+> +		casper_last_led = led_id;
+> +	}
+> +	return count;
+> +}
+> +
+> +static DEVICE_ATTR_RW(led_control);
+> +
+> +static struct attribute *casper_kbd_led_attrs[] = {
+> +	&dev_attr_led_control.attr,
+> +	NULL,
+> +};
+> +
+> +ATTRIBUTE_GROUPS(casper_kbd_led);
+> +
+> +static void set_casper_backlight_brightness(struct led_classdev *led_cdev,
+> +					    enum led_brightness brightness)
+> +{
+> +	// Setting any of the keyboard leds' brightness sets brightness of all
+> +	u32 bright_prep = FIELD_PREP(CASPER_LED_ALPHA, brightness);
+> +	u32 color_no_alpha = casper_last_color&~CASPER_LED_ALPHA;
+> +
+> +	casper_set(to_wmi_device(led_cdev->dev->parent), CASPER_SET_LED,
+> +		       CASPER_KEYBOARD_LED_1, color_no_alpha | bright_prep
+> +	);
+> +}
+> +
+> +static enum led_brightness get_casper_backlight_brightness(struct led_classdev
+> +							   *led_cdev)
+> +{
+> +	return FIELD_GET(CASPER_LED_ALPHA, casper_last_color);
+> +}
+> +
+> +static struct led_classdev casper_kbd_led = {
+> +	.name = "casper::kbd_backlight",
+> +	.brightness = 0,
+> +	.brightness_set = set_casper_backlight_brightness,
+> +	.brightness_get = get_casper_backlight_brightness,
+> +	.max_brightness = 2,
+> +	.groups = casper_kbd_led_groups,
+> +};
+> +
+> +static int casper_query(struct wmi_device *wdev, u16 a1,
+> +				struct casper_wmi_args *out)
+> +{
+> +	struct casper_wmi_args wmi_args = {
+> +		.a0 = CASPER_READ,
+> +		.a1 = a1
+> +	};
+> +	struct acpi_buffer input = {
+> +		(acpi_size) sizeof(struct casper_wmi_args),
+> +		&wmi_args
+> +	};
+> +
+> +	acpi_status ret = wmidev_block_set(wdev, 0, &input);
+> +	if (ACPI_FAILURE(ret))
+> +		return -EIO;
+> +
+> +	union acpi_object *obj = wmidev_block_query(wdev, 0);
+> +	if (obj->type != ACPI_TYPE_BUFFER) // obj will be int (0x10) on failure
+> +		return -EINVAL;
+
+You don't need to free obj here?
+
+> +	if (obj->buffer.length != 32)
+> +		return -EIO;
+
+Please use defines for constant values.
+
+> +
+> +	memcpy(out, obj->buffer.pointer, sizeof(struct casper_wmi_args));
+> +	kfree(obj);
+Add a empty line here.
+> +	return ret;
+> +}
+> +
+> +static umode_t casper_wmi_hwmon_is_visible(const void *drvdata,
+> +					   enum hwmon_sensor_types type,
+> +					   u32 attr, int channel)
+> +{
+> +	switch (type) {
+> +	case hwmon_fan:
+> +		return 0444;
+
+How about S_IRUSR | S_IRGRP | S_IROTH ?
+
+> +	case hwmon_pwm:
+> +		return 0644;
+
+Same as above.
+
+> +	default:
+> +		return 0;
+> +	}
+> +	return 0;
+> +}
 > +
 > +static int casper_wmi_hwmon_read(struct device *dev,
 > +				 enum hwmon_sensor_types type, u32 attr,
@@ -148,7 +371,7 @@ On 2/22/24 13:48, Mustafa Ekşi wrote:
 > +	case hwmon_fan:
 > +		ret = casper_query(wdev, CASPER_GET_HARDWAREINFO, &out);
 
-Ignoring errors is unacceptable.
+Not checking the ret?
 
 > +		/*
 > +		 * a4 and a5 is little endian in older laptops (with 10th gen
@@ -161,27 +384,21 @@ Ignoring errors is unacceptable.
 > +			*val = out.a4;
 > +		else if (channel == 1) // GPU fan
 > +			*val = out.a5;
+
+empty line here
+
 > +		return 0;
 > +	case hwmon_pwm:
 > +		ret = casper_query(wdev, CASPER_POWERPLAN, &out);
 > +		if (ret) // power plan count varies generations.
-
-That comment doesn't explain anything. If it is supposed to mean that it is
-not supported on all laptop variants, the attribute should not be instantiated
-in the first place. I am sure I mentioned this before.
-
 > +			return ret;
 > +		if (channel == 0)
 > +			*val = out.a2;
-
-There is only one pwm channel. Checking the channel number is pointless.
-
-
 > +		return 0;
 > +	default:
 > +		return -ENODEV;
 
--EOPNOTSUPP
+EINVAL or ENOTSUPP?
 
 > +	}
 > +}
@@ -201,16 +418,14 @@ There is only one pwm channel. Checking the channel number is pointless.
 > +			break;
 > +		default:
 > +			return -ENODEV;
-
--EOPNOTSUPP
-
 > +		}
 > +		break;
 > +	default:
 > +		return -ENODEV;
--EOPNOTSUPP
-
 > +	}
+
+Same as above function
+
 > +	return 0;
 > +}
 > +
@@ -223,22 +438,15 @@ There is only one pwm channel. Checking the channel number is pointless.
 > +	switch (type) {
 > +	case hwmon_pwm:
 > +		if (val > 5 || val < 0)
+
+Use macro for constant values. It is not clear why you check for 0..5
+
 > +			return -EINVAL;
-
-pwm range, per ABI, is 0..255, not 0..5. It is expected to be normalized.
-
-Since you are not using the standard ABI, what are the values returned
-as fan speed ? Is that RPM or something else ?
-
-
 > +		ret = casper_set(to_wmi_device(dev->parent),
 > +				 CASPER_POWERPLAN, val, 0);
 > +		if (ret)
 > +			return ret;
 > +		return 0;
-
-		return ret;
-
 > +	default:
 > +		return -EOPNOTSUPP;
 > +	}
@@ -269,20 +477,12 @@ as fan speed ? Is that RPM or something else ?
 > +	struct device *hwmon_dev;
 > +
 > +	if (ACPI_FAILURE(led_classdev_register(&wdev->dev, &casper_kbd_led)))
-
-
-I am quite sure that led_classdev_register() doesn't return ACPI error codes.
-
 > +		return -ENODEV;
 > +	hwmon_dev = devm_hwmon_device_register_with_info(&wdev->dev,
 > +						"casper_wmi", wdev,
 > +						&casper_wmi_hwmon_chip_info,
 > +						NULL);
 > +	return PTR_ERR_OR_ZERO(hwmon_dev);
-
-Why use devm_hwmon_device_register_with_info() but not
-devm_led_classdev_register() ?
-
 > +}
 > +
 > +static void casper_wmi_remove(struct wmi_device *wdev)
@@ -310,4 +510,8 @@ devm_led_classdev_register() ?
 > +MODULE_AUTHOR("Mustafa Ekşi <mustafa.eskieksi@gmail.com>");
 > +MODULE_DESCRIPTION("Casper Excalibur Laptop WMI driver");
 > +MODULE_LICENSE("GPL");
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
 
