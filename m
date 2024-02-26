@@ -1,256 +1,147 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0B777A73D
-	for <linux-hwmon@vger.kernel.org>; Mon, 26 Feb 2024 13:09:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E085712FB39;
+	Mon, 26 Feb 2024 19:36:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708952973; cv=none; b=IUS48bdYCtLVdyUXv/gqm9D3+zafArBkuQmaRddd2vPaCMuFDP8byiGi6gw8kTc7Cun3V3eJfmF+QLFQ0K5ZvQkShRvZMsYEoHK7Sq6oD6Vms0H7UjEOyn5dfWyheARwUWj7K+t0PtptUpSZ5dCxMbmUZQy3/Ku0VtX2pz5EHG8=
+	t=1708976198; cv=none; b=A+t4+lO/2Rpm9kIWz/tE2NLHweyHXCUnApTsS5roXAj0LdKcRSRcaVm+qLwlQo1Z/XOlzSfg3e3gzWzTQDZb2Shvp9dXvjexJmGYcM2+qUUhR/BxJ5o5JWLjDhi+nHbO+f0Kr+GsIsktyAW28fR1ymSjBCmegIXlxmu+1pP2xUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708952973; c=relaxed/simple;
-	bh=Zy25gFQOkd5cog5Pqs0aiqNZW1LQH5qxkpByW/u8X4s=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=qkbi7DeByHLQLtAmdjpNqhyZWdVvlZkNCA3733bskwP7/EsxGxtb+SXBDcqFazADNXKOCL/mZuy8gcETf/DuLjuoGyXOZ0RHIbY1DPmeEtO73B75IdO/bOMiMIt1yte5LMXd9Ylb8B5CYPUWogsOXQlDMhhMJNkjoBHmgy7va10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UOk7sSy2; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1708976198; c=relaxed/simple;
+	bh=0g8oO3mZalsLQAk5UUbbYQntsgQXvTMN7AAaIaAYZDE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=t2f6baOGdfGBHOPfurnGJdWwjQmcAhMVEeH1AO/91/KnDHbzf+ezwUspXICc8482ZSCJyygkx76gnD48xPqglXsYqYI57xVPOhP/tJW0OP3XFI0wMnKMPQWAqO6xN4JOepRP/yOvGzVMpQHGWozAmkHZlfZJN889RH1DmmTUvEY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=PRXhWHtZ; arc=none smtp.client-ip=212.227.17.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UOk7sSy2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708952972; x=1740488972;
-  h=date:from:to:cc:subject:message-id;
-  bh=Zy25gFQOkd5cog5Pqs0aiqNZW1LQH5qxkpByW/u8X4s=;
-  b=UOk7sSy2yJ38QNRGyKGj/7UiAFyA79v8XBYcMYqvDcggH4rUnqEOnEJM
-   Ww/ta7sHCJJRKyz6WgnognyH79Od4M8UmAcxO0TjeOoc0FmL4smtksns6
-   ICDVJfrahDenbMjGF0rnYHidIWjGD1pGND7DNX+J/xjPx4AQGg5SuMZEH
-   LveYgFyNjkb2VZUP8bPKlqVWP4H8+oWAVYsmLuWbwDnSKgOMiWDpjOOFF
-   pH5ktGh7TsFDi2vMfI+/TCIavoItLHTjCrAyc/yvF6a7d6ZNnPw+yMC/Z
-   lp7U5CxuQ1j2LU+H7Wv2u8NdKKiM1mi7ID69ljMoDUuHT4vvocf+eqFUS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10995"; a="3379014"
-X-IronPort-AV: E=Sophos;i="6.06,185,1705392000"; 
-   d="scan'208";a="3379014"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2024 05:09:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,185,1705392000"; 
-   d="scan'208";a="6800663"
-Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 26 Feb 2024 05:09:17 -0800
-Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1reajL-000AJ5-0H;
-	Mon, 26 Feb 2024 13:09:15 +0000
-Date: Mon, 26 Feb 2024 21:09:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:testing] BUILD SUCCESS
- 8cb40ba0cf86094b0a524b06156e63c236ab1b8a
-Message-ID: <202402262109.AcUB6cZN-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="PRXhWHtZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+	t=1708976165; x=1709580965; i=w_armin@gmx.de;
+	bh=0g8oO3mZalsLQAk5UUbbYQntsgQXvTMN7AAaIaAYZDE=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+	b=PRXhWHtZWZC4UtwCXNcZbqwz8kazePWC2v3LpTUZK1QyRcYuanjtqlSaS59jQOcW
+	 RK1FO0YfD5MF3FFsSE0kMoLfOltIfTdbvv1kONbjVe1moB3IPPMB5KsnAPCqb/B3v
+	 xckAVzyfG1iRQr4eEYWqO6bqd/TEI4tEIbWQbWhFfJK5i8FMY6ofhJo+Z8c3ROdGO
+	 syLlR4lPPLPhn7CNZ2PNLwOfIDJMQ8UE6cJKBP1/YJH2kRZWT11/G2JER7JaNYyPj
+	 sdq1CYCV194gIL54HV/KMoct9Fj2+I2/li/FXywN15yLWbXeDGZiicCuY0M6Shl+8
+	 im4OHWvIXwsDbI4jGA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from mx-amd-b650.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1Mq2jC-1rAHxf2pSk-00nC39; Mon, 26 Feb 2024 20:36:05 +0100
+From: Armin Wolf <W_Armin@gmx.de>
+To: jithu.joseph@intel.com,
+	linux@weissschuh.net,
+	pali@kernel.org
+Cc: hdegoede@redhat.com,
+	ilpo.jarvinen@linux.intel.com,
+	Dell.Client.Kernel@dell.com,
+	jdelvare@suse.com,
+	linux@roeck-us.net,
+	platform-driver-x86@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] platform/x86: wmi: Ignore duplicated GUIDs in legacy matches
+Date: Mon, 26 Feb 2024 20:35:55 +0100
+Message-Id: <20240226193557.2888-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:VDydBzZvOch54Gn/Gprxj7ysOw+8qumP0PAC4sF0AkUOJA7UuVh
+ thsbrxwgKZT3rfPFCFyINQWgqp4EAB/8VIHMD0UdQ1qQ+ys3ZNfMOAhVuhgZnTNdFh3q7vv
+ 2N0ZzV8zXg+pBkXne+4ITY6Ko7leIxWr1ztA+Myg9x0kHLRrxyJBQinfq7SQQbmQjjRJtoG
+ nTwrrBGANJPo23aX6yB3A==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:WHoeCtfxej8=;zqdJaHzShJ3dljc+NoDpiSg2ldC
+ 7FDX3K9NeApx9gDDBt0wck6ATGXCGcgDoUyB89Wcpuj64g06tChlTnLjXW/j97e/EDrrMWNAh
+ 99E+QY+UaHoLQrasYkDvsPhE8UvN+RnM36M/X1JAdNae8ktWC2MOgrW+n2XksRo88JCBH5m9+
+ lvhKa/vO9Rbly1acVpt/LCI6Osz7Jp1f3Z/1oB9HPoh+oTF8TDSAXGs7Ywdg45CUMlSOCzC+g
+ 0MpwEYItrKQ3NAziYybpVH4Lgcf1DU62G37BHGGwERhGbrnYp7SoOnexd5safVJwueyKNijij
+ BGEmVarxoT8GRiG4QebKBzFNzW7P66h75T9khKgDDnn+wVmbBb5NIIbfGFIgc7QQjLA/4J1c8
+ sl2aZLXZXjP5tFZENsdsRFT9F7DHRokDf/Fq4jHZit1LBXVjmPmbPSy6kf1CS2zgqOuuOpcbK
+ 3XMav50Lvt4NnQbq1x/0YTDIXTUktTRoJp+q4v7tjfEwJKjC0XmqzTS1t6MMwHUKxbx5bbKUt
+ L1PgxKret82sh7qwOrBIV28oANDAYaUDPNMaM2/IhWC+PcejUJntslYpsDIJDb05oPBY4pP6c
+ pE6JKmveB/fEgPwqnc/y23DiS0dYtzomUHk2zs7F43E0CZP3Cxqo0sqB5Bec+yYkSCGaMXSMz
+ uJpMhCbcwr00JlOmqTcMWKoU0+B9pxFkGKqyJPghynKoVfzZltcr5JePq5To669a0mhENhYwQ
+ tF/rupeQPfz38GiWQaGS0FPxgGaPXTNN18VD8lQU4ZrIjKdupJxT84liakqT5to5wbCKRqNZo
+ LLyeMzeW+IDD6760kn67hq6hKLRBXmWo4HNtSTDE20Iw8=
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
-branch HEAD: 8cb40ba0cf86094b0a524b06156e63c236ab1b8a  mean_and_variance: Drop always failing tests
+When matching a WMI device to a GUID used by the legacy GUID-based
+API, devices with a duplicated GUID should be ignored.
 
-Warning ids grouped by kconfigs:
+Add an additional WMI device flag signaling that the GUID used by
+the WMI device is also used by another WMI device. Ignore such
+devices inside the match functions used by the legacy GUID-based API.
 
-gcc_recent_errors
-|-- csky-randconfig-002-20240226
-|   `-- lib-checksum_kunit.c:warning:expected_csum_ipv6_magic_corner-defined-but-not-used
-|-- powerpc-randconfig-002-20240226
-|   `-- lib-checksum_kunit.c:warning:expected_csum_ipv6_magic_corner-defined-but-not-used
-|-- sh-randconfig-002-20240226
-|   `-- lib-checksum_kunit.c:warning:expected_csum_ipv6_magic_corner-defined-but-not-used
-`-- sparc-randconfig-001-20240226
-    `-- lib-checksum_kunit.c:warning:expected_csum_ipv6_magic_corner-defined-but-not-used
-clang_recent_errors
-|-- hexagon-randconfig-r112-20240226
-|   |-- lib-checksum_kunit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-restricted-__wsum-usertype-csum-got-restricted-__be32-usertype
-|   `-- lib-checksum_kunit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-restricted-__wsum-usertype-csum-got-unsigned-int
-|-- i386-buildonly-randconfig-005-20240226
-|   `-- lib-checksum_kunit.c:warning:unused-variable-expected_csum_ipv6_magic_corner
-|-- powerpc64-randconfig-003-20240226
-|   `-- lib-checksum_kunit.c:warning:unused-variable-expected_csum_ipv6_magic_corner
-`-- riscv-randconfig-001-20240226
-    `-- lib-checksum_kunit.c:warning:unused-variable-expected_csum_ipv6_magic_corner
+Tested on a ASUS Prime B650-Plus.
 
-elapsed time: 760m
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ drivers/platform/x86/wmi.c | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
 
-configs tested: 161
-configs skipped: 3
+diff --git a/drivers/platform/x86/wmi.c b/drivers/platform/x86/wmi.c
+index abd0183c4107..29dfe52eb802 100644
+=2D-- a/drivers/platform/x86/wmi.c
++++ b/drivers/platform/x86/wmi.c
+@@ -57,6 +57,7 @@ static_assert(__alignof__(struct guid_block) =3D=3D 1);
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+ enum {	/* wmi_block flags */
+ 	WMI_READ_TAKES_NO_ARGS,
++	WMI_GUID_DUPLICATED,
+ 	WMI_NO_EVENT_DATA,
+ };
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20240226   gcc  
-arc                   randconfig-002-20240226   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                   randconfig-001-20240226   clang
-arm                   randconfig-002-20240226   clang
-arm                   randconfig-003-20240226   clang
-arm                   randconfig-004-20240226   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240226   gcc  
-arm64                 randconfig-002-20240226   gcc  
-arm64                 randconfig-003-20240226   gcc  
-arm64                 randconfig-004-20240226   clang
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240226   gcc  
-csky                  randconfig-002-20240226   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20240226   clang
-hexagon               randconfig-002-20240226   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240226   clang
-i386         buildonly-randconfig-002-20240226   gcc  
-i386         buildonly-randconfig-003-20240226   clang
-i386         buildonly-randconfig-004-20240226   clang
-i386         buildonly-randconfig-005-20240226   clang
-i386         buildonly-randconfig-006-20240226   clang
-i386                                defconfig   clang
-i386                  randconfig-001-20240226   clang
-i386                  randconfig-002-20240226   gcc  
-i386                  randconfig-003-20240226   clang
-i386                  randconfig-004-20240226   gcc  
-i386                  randconfig-005-20240226   clang
-i386                  randconfig-006-20240226   clang
-i386                  randconfig-011-20240226   gcc  
-i386                  randconfig-012-20240226   gcc  
-i386                  randconfig-013-20240226   gcc  
-i386                  randconfig-014-20240226   gcc  
-i386                  randconfig-015-20240226   gcc  
-i386                  randconfig-016-20240226   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240226   gcc  
-loongarch             randconfig-002-20240226   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240226   gcc  
-nios2                 randconfig-002-20240226   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240226   gcc  
-parisc                randconfig-002-20240226   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc               randconfig-001-20240226   clang
-powerpc               randconfig-002-20240226   gcc  
-powerpc               randconfig-003-20240226   clang
-powerpc64             randconfig-001-20240226   clang
-powerpc64             randconfig-002-20240226   gcc  
-powerpc64             randconfig-003-20240226   clang
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-riscv                 randconfig-001-20240226   clang
-riscv                 randconfig-002-20240226   clang
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-s390                  randconfig-001-20240226   clang
-s390                  randconfig-002-20240226   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                    randconfig-001-20240226   gcc  
-sh                    randconfig-002-20240226   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240226   gcc  
-sparc64               randconfig-002-20240226   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20240226   clang
-um                    randconfig-002-20240226   gcc  
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240226   clang
-x86_64       buildonly-randconfig-002-20240226   gcc  
-x86_64       buildonly-randconfig-003-20240226   gcc  
-x86_64       buildonly-randconfig-004-20240226   clang
-x86_64       buildonly-randconfig-005-20240226   gcc  
-x86_64       buildonly-randconfig-006-20240226   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240226   gcc  
-x86_64                randconfig-002-20240226   gcc  
-x86_64                randconfig-003-20240226   clang
-x86_64                randconfig-004-20240226   clang
-x86_64                randconfig-005-20240226   clang
-x86_64                randconfig-006-20240226   gcc  
-x86_64                randconfig-011-20240226   clang
-x86_64                randconfig-012-20240226   clang
-x86_64                randconfig-013-20240226   clang
-x86_64                randconfig-014-20240226   clang
-x86_64                randconfig-015-20240226   clang
-x86_64                randconfig-016-20240226   clang
-x86_64                randconfig-071-20240226   clang
-x86_64                randconfig-072-20240226   gcc  
-x86_64                randconfig-073-20240226   gcc  
-x86_64                randconfig-074-20240226   clang
-x86_64                randconfig-075-20240226   gcc  
-x86_64                randconfig-076-20240226   clang
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
+@@ -196,6 +197,12 @@ static int wmidev_match_guid(struct device *dev, cons=
+t void *data)
+ 	struct wmi_block *wblock =3D dev_to_wblock(dev);
+ 	const guid_t *guid =3D data;
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
++	/* Legacy GUID-based functions are restricted to only see
++	 * a single WMI device for each GUID.
++	 */
++	if (test_bit(WMI_GUID_DUPLICATED, &wblock->flags))
++		return 0;
++
+ 	if (guid_equal(guid, &wblock->gblock.guid))
+ 		return 1;
+
+@@ -207,6 +214,12 @@ static int wmidev_match_notify_id(struct device *dev,=
+ const void *data)
+ 	struct wmi_block *wblock =3D dev_to_wblock(dev);
+ 	const u32 *notify_id =3D data;
+
++	/* Legacy GUID-based functions are restricted to only see
++	 * a single WMI device for each GUID.
++	 */
++	if (test_bit(WMI_GUID_DUPLICATED, &wblock->flags))
++		return 0;
++
+ 	if (wblock->gblock.flags & ACPI_WMI_EVENT && wblock->gblock.notify_id =
+=3D=3D *notify_id)
+ 		return 1;
+
+@@ -1036,10 +1049,12 @@ static int wmi_create_device(struct device *wmi_bu=
+s_dev,
+ 	wblock->dev.dev.parent =3D wmi_bus_dev;
+
+ 	count =3D guid_count(&wblock->gblock.guid);
+-	if (count)
++	if (count) {
+ 		dev_set_name(&wblock->dev.dev, "%pUL-%d", &wblock->gblock.guid, count);
+-	else
++		set_bit(WMI_GUID_DUPLICATED, &wblock->flags);
++	} else {
+ 		dev_set_name(&wblock->dev.dev, "%pUL", &wblock->gblock.guid);
++	}
+
+ 	device_initialize(&wblock->dev.dev);
+
+=2D-
+2.39.2
+
