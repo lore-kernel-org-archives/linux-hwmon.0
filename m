@@ -1,34 +1,36 @@
 Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E085712FB39;
-	Mon, 26 Feb 2024 19:36:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1594412FF72;
+	Mon, 26 Feb 2024 19:36:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708976198; cv=none; b=A+t4+lO/2Rpm9kIWz/tE2NLHweyHXCUnApTsS5roXAj0LdKcRSRcaVm+qLwlQo1Z/XOlzSfg3e3gzWzTQDZb2Shvp9dXvjexJmGYcM2+qUUhR/BxJ5o5JWLjDhi+nHbO+f0Kr+GsIsktyAW28fR1ymSjBCmegIXlxmu+1pP2xUA=
+	t=1708976201; cv=none; b=ie91luTRM3uXrKO17vQkfzOtJEgp9/xDs1qVIuYVgtoL8WLTdmrlE1p54IpZRl7BBnDr5P5KWDKDH5j6ML/+EGPxcahLmyT69+FfsAIM8QwdDtPuiQJ30cG2JYUvtgHNyyjDg2XgesbgMKuOs5wbga3RTNWDQg2ScRbCb01WHgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708976198; c=relaxed/simple;
-	bh=0g8oO3mZalsLQAk5UUbbYQntsgQXvTMN7AAaIaAYZDE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=t2f6baOGdfGBHOPfurnGJdWwjQmcAhMVEeH1AO/91/KnDHbzf+ezwUspXICc8482ZSCJyygkx76gnD48xPqglXsYqYI57xVPOhP/tJW0OP3XFI0wMnKMPQWAqO6xN4JOepRP/yOvGzVMpQHGWozAmkHZlfZJN889RH1DmmTUvEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=PRXhWHtZ; arc=none smtp.client-ip=212.227.17.20
+	s=arc-20240116; t=1708976201; c=relaxed/simple;
+	bh=b03pH+DuQDWIC35gBC8LdNNtRJ8KK9qgtTD8+axxS7E=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=WdqviuXGWInqQdCHlB5MaB6h5j26qTh0dOs1r1pgTwPHzdC5QS03buhC7Sw9Kdl5m72FAbJu9laExtNzQvoIol4VH6Dig3u2mo5Lcvw9QfXzjNPCXVtV57rwwktQhEnoG3mG/xkNU9z7Dh4wtuFpPnLMZhkLtazCZYV7A5xBAxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=SGvkgFAv; arc=none smtp.client-ip=212.227.17.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="PRXhWHtZ"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="SGvkgFAv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-	t=1708976165; x=1709580965; i=w_armin@gmx.de;
-	bh=0g8oO3mZalsLQAk5UUbbYQntsgQXvTMN7AAaIaAYZDE=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-	b=PRXhWHtZWZC4UtwCXNcZbqwz8kazePWC2v3LpTUZK1QyRcYuanjtqlSaS59jQOcW
-	 RK1FO0YfD5MF3FFsSE0kMoLfOltIfTdbvv1kONbjVe1moB3IPPMB5KsnAPCqb/B3v
-	 xckAVzyfG1iRQr4eEYWqO6bqd/TEI4tEIbWQbWhFfJK5i8FMY6ofhJo+Z8c3ROdGO
-	 syLlR4lPPLPhn7CNZ2PNLwOfIDJMQ8UE6cJKBP1/YJH2kRZWT11/G2JER7JaNYyPj
-	 sdq1CYCV194gIL54HV/KMoct9Fj2+I2/li/FXywN15yLWbXeDGZiicCuY0M6Shl+8
-	 im4OHWvIXwsDbI4jGA==
+	t=1708976169; x=1709580969; i=w_armin@gmx.de;
+	bh=b03pH+DuQDWIC35gBC8LdNNtRJ8KK9qgtTD8+axxS7E=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:
+	 References;
+	b=SGvkgFAvlxPM/XtYmTAu2aLnE83LuJ/D1V7/hPTO80jICiLJld2ugQJg08nyhCH5
+	 eucewbtEpabOKs5e/hqKMepDbWln/XC5ey2KbnRPm6LxBTA46F2CUIDNZhMOGnuLc
+	 WMhxirUk+N+IEGNmUN7FQFZTUn5rkH141su0N8tN5xcd0xgaAXbvAJbi6UeXw9wiN
+	 HGeTyLYIXajl9tysjR4UpgznJpeabMSWYMPO5RPHhYvFybu5IdGjUEYCxUmLtA12t
+	 8GQrrPqMM8uUUTMOfnF48kfb0JcVdsiaIPXs1OCxGR5vKMlf/kN/zuEb2ubqjP0nq
+	 CaHQEjzysPGAjcPX0g==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from mx-amd-b650.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
  (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1Mq2jC-1rAHxf2pSk-00nC39; Mon, 26 Feb 2024 20:36:05 +0100
+ 1MQMyf-1rIunQ2ycz-00MHKh; Mon, 26 Feb 2024 20:36:09 +0100
 From: Armin Wolf <W_Armin@gmx.de>
 To: jithu.joseph@intel.com,
 	linux@weissschuh.net,
@@ -41,10 +43,12 @@ Cc: hdegoede@redhat.com,
 	platform-driver-x86@vger.kernel.org,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] platform/x86: wmi: Ignore duplicated GUIDs in legacy matches
-Date: Mon, 26 Feb 2024 20:35:55 +0100
-Message-Id: <20240226193557.2888-1-W_Armin@gmx.de>
+Subject: [PATCH 3/3] platform/x86: wmi: Remove obsolete duplicate GUID allowlist
+Date: Mon, 26 Feb 2024 20:35:57 +0100
+Message-Id: <20240226193557.2888-3-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240226193557.2888-1-W_Armin@gmx.de>
+References: <20240226193557.2888-1-W_Armin@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -52,96 +56,115 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:VDydBzZvOch54Gn/Gprxj7ysOw+8qumP0PAC4sF0AkUOJA7UuVh
- thsbrxwgKZT3rfPFCFyINQWgqp4EAB/8VIHMD0UdQ1qQ+ys3ZNfMOAhVuhgZnTNdFh3q7vv
- 2N0ZzV8zXg+pBkXne+4ITY6Ko7leIxWr1ztA+Myg9x0kHLRrxyJBQinfq7SQQbmQjjRJtoG
- nTwrrBGANJPo23aX6yB3A==
+X-Provags-ID: V03:K1:5KRjlReq0fUexESOICqZ+Xej/Gta7WKxFfE0Ds/Mlh22gHtyojb
+ 9VONNU70xwTckRreWpwpGXkREsMsetPt4c5tsxynAt/YcLFArqkucDCEFNHixbFNPvQapl5
+ 8TFCySMfsLjuDwggF5Diqx24p+/IZyA6pRSJ0lfRyteaB0mVFRKQbzfRyzHUSbQBMvqmMEK
+ cA5QHqGZ3xtpzSq9IwR1w==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:WHoeCtfxej8=;zqdJaHzShJ3dljc+NoDpiSg2ldC
- 7FDX3K9NeApx9gDDBt0wck6ATGXCGcgDoUyB89Wcpuj64g06tChlTnLjXW/j97e/EDrrMWNAh
- 99E+QY+UaHoLQrasYkDvsPhE8UvN+RnM36M/X1JAdNae8ktWC2MOgrW+n2XksRo88JCBH5m9+
- lvhKa/vO9Rbly1acVpt/LCI6Osz7Jp1f3Z/1oB9HPoh+oTF8TDSAXGs7Ywdg45CUMlSOCzC+g
- 0MpwEYItrKQ3NAziYybpVH4Lgcf1DU62G37BHGGwERhGbrnYp7SoOnexd5safVJwueyKNijij
- BGEmVarxoT8GRiG4QebKBzFNzW7P66h75T9khKgDDnn+wVmbBb5NIIbfGFIgc7QQjLA/4J1c8
- sl2aZLXZXjP5tFZENsdsRFT9F7DHRokDf/Fq4jHZit1LBXVjmPmbPSy6kf1CS2zgqOuuOpcbK
- 3XMav50Lvt4NnQbq1x/0YTDIXTUktTRoJp+q4v7tjfEwJKjC0XmqzTS1t6MMwHUKxbx5bbKUt
- L1PgxKret82sh7qwOrBIV28oANDAYaUDPNMaM2/IhWC+PcejUJntslYpsDIJDb05oPBY4pP6c
- pE6JKmveB/fEgPwqnc/y23DiS0dYtzomUHk2zs7F43E0CZP3Cxqo0sqB5Bec+yYkSCGaMXSMz
- uJpMhCbcwr00JlOmqTcMWKoU0+B9pxFkGKqyJPghynKoVfzZltcr5JePq5To669a0mhENhYwQ
- tF/rupeQPfz38GiWQaGS0FPxgGaPXTNN18VD8lQU4ZrIjKdupJxT84liakqT5to5wbCKRqNZo
- LLyeMzeW+IDD6760kn67hq6hKLRBXmWo4HNtSTDE20Iw8=
+UI-OutboundReport: notjunk:1;M01:P0:tRB8kEeCnaQ=;jDuuCmLA9Z3dqQrHys5c5LXJQrO
+ R5MjHi7B/aGDjLBXXPU6prifwZ+3MWKyCaSiAAZZ0M9chpR2QoJ6am5RO0bnh0Oa7fhqNXWlW
+ h/pt3i5Hoao94ZDEiK+8jzPLjRom9M9/+dXUigwUikkGFXmAIHGD9zaQD4pV+kMXzRkeM9Hfa
+ 9CA5Bn+D/vEUBKpuXNXkfGtMA6Xi+TodiESvOs9FESdsPTAOCJq7Ng7+D6YtLp9rBtAejuz0I
+ GAu6VNbY02tZMAAoxibX8rq9a4XANDWAlhZX/cqfDPSJKXgtHBVze3rFh9YnMG7CBeEKjO+nm
+ 2Tx+02GuBM4hsKRIK9qqoapSauUR3yQ7cjoKCnSH5KlLBXfj6xNQH/c+KADx1BOh5U0CbOA23
+ oG+imYSjeRWUwFtuh778IaLKX2lmprL2h53AVoen/kMZgpYBlAAcNk4LR9bpUMaU3HJoG7V8X
+ wSvJcMyFE+IgQH/k0qpSV7cb/unUH75PCHBCaw/WnwMDX5EDxFayIqeeIFiL50bJ2VgPctEVn
+ UyQyGcLjbVa7cdNsfdymP4EzVURTnh5CU/0xc9Sm6CuhHdUlLA7qdSsa+ByS4p6TjetHyJ3go
+ K03vsY+VxBvphUMmIBu+88xGf5YZteR2c3nd3MVn7CE4s/fx7WWXTf3P1ufp0zkAE1ydDPUSV
+ 3RtcSa5tKFp1asVNfhPjRo1vv4A6uxwkrY3PjDpD/cvQNIrLjHlez6GPyhrGoOZIxj38wqHIc
+ RoHoklokTu3nrSldl9OUkuJzD9OGARLoI3u9ToDGtly7BKWS9Lj1Op/wwCkRXuMgd9v304fQs
+ GVQM3hCn9NDIHBiTLCrSHSS6BN07I94hCOL9IQp02rABk=
 
-When matching a WMI device to a GUID used by the legacy GUID-based
-API, devices with a duplicated GUID should be ignored.
+The whitelist-based approach for preventing older WMI drivers from
+being instantiated multiple times has many drawbacks:
 
-Add an additional WMI device flag signaling that the GUID used by
-the WMI device is also used by another WMI device. Ignore such
-devices inside the match functions used by the legacy GUID-based API.
+- uses cannot see all available WMI devices (if not whitelisted)
+- whitelisting a WMI driver requires changes in the WMI driver core
+- maintenance burden for driver and subsystem developers
+
+Since the WMI driver core already takes care that older WMI drivers
+are not being instantiated multiple times, remove the now redundant
+whitelist.
 
 Tested on a ASUS Prime B650-Plus.
 
 Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 =2D--
- drivers/platform/x86/wmi.c | 19 +++++++++++++++++--
- 1 file changed, 17 insertions(+), 2 deletions(-)
+ drivers/platform/x86/wmi.c | 39 --------------------------------------
+ 1 file changed, 39 deletions(-)
 
 diff --git a/drivers/platform/x86/wmi.c b/drivers/platform/x86/wmi.c
-index abd0183c4107..29dfe52eb802 100644
+index 349deced87e8..1920e115da89 100644
 =2D-- a/drivers/platform/x86/wmi.c
 +++ b/drivers/platform/x86/wmi.c
-@@ -57,6 +57,7 @@ static_assert(__alignof__(struct guid_block) =3D=3D 1);
-
- enum {	/* wmi_block flags */
- 	WMI_READ_TAKES_NO_ARGS,
-+	WMI_GUID_DUPLICATED,
- 	WMI_NO_EVENT_DATA,
+@@ -90,16 +90,6 @@ static const struct acpi_device_id wmi_device_ids[] =3D=
+ {
  };
+ MODULE_DEVICE_TABLE(acpi, wmi_device_ids);
 
-@@ -196,6 +197,12 @@ static int wmidev_match_guid(struct device *dev, cons=
-t void *data)
- 	struct wmi_block *wblock =3D dev_to_wblock(dev);
- 	const guid_t *guid =3D data;
+-/* allow duplicate GUIDs as these device drivers use struct wmi_driver */
+-static const char * const allow_duplicates[] =3D {
+-	"05901221-D566-11D1-B2F0-00A0C9062910",	/* wmi-bmof */
+-	"8A42EA14-4F2A-FD45-6422-0087F7A7E608",	/* dell-wmi-ddv */
+-	"44FADEB1-B204-40F2-8581-394BBDC1B651",	/* intel-wmi-sbl-fw-update */
+-	"86CCFD48-205E-4A77-9C48-2021CBEDE341",	/* intel-wmi-thunderbolt */
+-	"F1DDEE52-063C-4784-A11E-8A06684B9B01",	/* dell-smm-hwmon */
+-	NULL
+-};
+-
+ #define dev_to_wblock(__dev)	container_of_const(__dev, struct wmi_block, =
+dev.dev)
+ #define dev_to_wdev(__dev)	container_of_const(__dev, struct wmi_device, d=
+ev)
 
-+	/* Legacy GUID-based functions are restricted to only see
-+	 * a single WMI device for each GUID.
-+	 */
-+	if (test_bit(WMI_GUID_DUPLICATED, &wblock->flags))
-+		return 0;
-+
- 	if (guid_equal(guid, &wblock->gblock.guid))
- 		return 1;
+@@ -1093,32 +1083,6 @@ static int wmi_add_device(struct platform_device *p=
+dev, struct wmi_device *wdev)
+ 	return device_add(&wdev->dev);
+ }
 
-@@ -207,6 +214,12 @@ static int wmidev_match_notify_id(struct device *dev,=
- const void *data)
- 	struct wmi_block *wblock =3D dev_to_wblock(dev);
- 	const u32 *notify_id =3D data;
+-static bool guid_already_parsed_for_legacy(struct acpi_device *device, co=
+nst guid_t *guid)
+-{
+-	struct wmi_block *wblock;
+-
+-	list_for_each_entry(wblock, &wmi_block_list, list) {
+-		/* skip warning and register if we know the driver will use struct wmi_=
+driver */
+-		for (int i =3D 0; allow_duplicates[i] !=3D NULL; i++) {
+-			if (guid_parse_and_compare(allow_duplicates[i], guid))
+-				return false;
+-		}
+-		if (guid_equal(&wblock->gblock.guid, guid)) {
+-			/*
+-			 * Because we historically didn't track the relationship
+-			 * between GUIDs and ACPI nodes, we don't know whether
+-			 * we need to suppress GUIDs that are unique on a
+-			 * given node but duplicated across nodes.
+-			 */
+-			dev_warn(&device->dev, "duplicate WMI GUID %pUL (first instance was on=
+ %s)\n",
+-				 guid, dev_name(&wblock->acpi_device->dev));
+-			return true;
+-		}
+-	}
+-
+-	return false;
+-}
+-
+ /*
+  * Parse the _WDG method for the GUID data blocks
+  */
+@@ -1157,9 +1121,6 @@ static int parse_wdg(struct device *wmi_bus_dev, str=
+uct platform_device *pdev)
+ 			continue;
+ 		}
 
-+	/* Legacy GUID-based functions are restricted to only see
-+	 * a single WMI device for each GUID.
-+	 */
-+	if (test_bit(WMI_GUID_DUPLICATED, &wblock->flags))
-+		return 0;
-+
- 	if (wblock->gblock.flags & ACPI_WMI_EVENT && wblock->gblock.notify_id =
-=3D=3D *notify_id)
- 		return 1;
-
-@@ -1036,10 +1049,12 @@ static int wmi_create_device(struct device *wmi_bu=
-s_dev,
- 	wblock->dev.dev.parent =3D wmi_bus_dev;
-
- 	count =3D guid_count(&wblock->gblock.guid);
--	if (count)
-+	if (count) {
- 		dev_set_name(&wblock->dev.dev, "%pUL-%d", &wblock->gblock.guid, count);
--	else
-+		set_bit(WMI_GUID_DUPLICATED, &wblock->flags);
-+	} else {
- 		dev_set_name(&wblock->dev.dev, "%pUL", &wblock->gblock.guid);
-+	}
-
- 	device_initialize(&wblock->dev.dev);
-
+-		if (guid_already_parsed_for_legacy(device, &gblock[i].guid))
+-			continue;
+-
+ 		wblock =3D kzalloc(sizeof(*wblock), GFP_KERNEL);
+ 		if (!wblock)
+ 			continue;
 =2D-
 2.39.2
 
