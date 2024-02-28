@@ -1,92 +1,91 @@
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51A5B7E577;
-	Wed, 28 Feb 2024 11:05:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A47E473507;
+	Wed, 28 Feb 2024 11:58:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709118311; cv=none; b=AmP/rm1NsdH9a7FDc22FHgq/JJ2A7IO1TL/BnQ/3DaTuElseFQKA0rCN+iX/DP9AY/e0pLF7tn61Fr8d/3q1QV9v/gOTwBNtPzNiHaGmyNlSxRSxvx+iXzeuD5IARP8UQ2r/3qhAucztV0dS0rPQ3kqL5lNMLOY9wY5OHukwxQg=
+	t=1709121486; cv=none; b=oLmw2MDtOeKRKpjFQGh3frp0ZL8WqBIsMf+zdHUpPff9T6ZXW/bnvSYv9UDlAjVnTApdQeHzPpO5npAzLw07JFBy4/aajtb/GjYN/ve1biGU1I/0fG4QBuCeCvJYQNLwqH21CnszJ4Tl7sHPwOM29fksmVd7hjc0HlWvNDSK6Dk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709118311; c=relaxed/simple;
-	bh=8NK4irqoUtZNeA9ilQS8XOvOEpho8tVdwBHh1QuXj1o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WkGc9mNBfRdhZtaJqOfVf/vRn5He2YXHW8VE9smjtwMM+QNqAWj+/yjuxAsORLGP1DAnhFW3nprsQDaqgGWMCB32yLEXIBDN6i77d0vdHLLi+nJJ4jV8aWnBh3TDKQOMdEqO2dOxKPWNtT79a48MRS66p/J8crBS6izhEyBWP5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from [192.168.0.53] (ip5f5aedb1.dynamic.kabel-deutschland.de [95.90.237.177])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 8347861E5FE05;
-	Wed, 28 Feb 2024 12:03:57 +0100 (CET)
-Message-ID: <e2b0b8e3-9b39-4621-9e43-d7de02286a27@molgen.mpg.de>
-Date: Wed, 28 Feb 2024 12:03:56 +0100
+	s=arc-20240116; t=1709121486; c=relaxed/simple;
+	bh=2i57F2bwd8MFtlPkyg5+cTyjkGeR5xF3YTz9mn9FMPo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mEkRUGYqOty0CYIcmOgMuMEk39oZTaMdqiyUt/ebs/5dPYzWJEVPV81RgfHJgOcvi+3pb6iFPbzCp4qT11hNeNpEeZrvLjft3ffZgkRs6oY6DxwTpBykQQDqziMvL6iusks7M97hm7uZApvg/0Bz5bL8RAdhMLv2YC151WWnAGc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gCuvCf8J; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gCuvCf8J"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81BF6C433C7;
+	Wed, 28 Feb 2024 11:58:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709121486;
+	bh=2i57F2bwd8MFtlPkyg5+cTyjkGeR5xF3YTz9mn9FMPo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gCuvCf8JLm/G3hyf82omkF/EFRSEDdsMPz+k8PJOUXPTs19x4IjEhAC7IjvarNarp
+	 f2mfRJuQBszQyCddyAoxMKEO/9uwRxfdk6t0vPR6/B77rKJ8uYagYgTj8UDlHozlPd
+	 8Hpor3xdVOWiOQ4gKx0b8I8KNTfnrdIOZ34vxV/QAc5cupuKmdFWXXDYqHSBUgLkH/
+	 9tnS4u6/BKc/7Pny26ZvnLLv3Q4dOw/mpLwnExI+DCB7ZSaQ2CAiFYxEuIDNtIIWD/
+	 rQRqY267+OLRb0coDAzBmqVFIoEfgFqLDHvjMGJbqn2heiodlXXBROnYWoaAmK43kE
+	 zgzYtrx4vvqfg==
+Date: Wed, 28 Feb 2024 11:58:01 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc: antoniu.miclaus@analog.com, alexandre.belloni@bootlin.com,
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org, jdelvare@suse.com, linux@roeck-us.net,
+	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+	Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+Subject: Re: [PATCH v8 2/2] dt-bindings: rtc: add max313xx RTCs
+Message-ID: <20240228-embark-rimmed-d81bab3d42b8@spud>
+References: <20240227010312.3305966-1-chris.packham@alliedtelesis.co.nz>
+ <20240227010312.3305966-3-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/3] hwmon: Driver for Nuvoton NCT7363Y
-Content-Language: en-US
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Ban Feng <baneric926@gmail.com>, jdelvare@suse.com, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, corbet@lwn.net,
- linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- kcfeng0@nuvoton.com, kwliu@nuvoton.com, openbmc@lists.ozlabs.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- DELPHINE_CHIU@wiwynn.com, naresh.solanki@9elements.com,
- billy_tsai@aspeedtech.com
-References: <20240227005606.1107203-1-kcfeng0@nuvoton.com>
- <20240227005606.1107203-4-kcfeng0@nuvoton.com>
- <62f38808-7d5f-4466-a65e-b6a64b2e7c01@molgen.mpg.de>
- <4b06d535-6739-47b5-ad1e-0ff94322620e@roeck-us.net>
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <4b06d535-6739-47b5-ad1e-0ff94322620e@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-
-Dear Guenter,
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="t4gB6YKl63pmWb0L"
+Content-Disposition: inline
+In-Reply-To: <20240227010312.3305966-3-chris.packham@alliedtelesis.co.nz>
 
 
-Am 28.02.24 um 10:03 schrieb Guenter Roeck:
-> On 2/27/24 23:57, Paul Menzel wrote:
+--t4gB6YKl63pmWb0L
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
->> Am 27.02.24 um 01:56 schrieb baneric926@gmail.com:
->>> From: Ban Feng <kcfeng0@nuvoton.com>
->>>
->>> NCT7363Y is an I2C based hardware monitoring chip from Nuvoton.
->>
->> Please reference the datasheet.
-> 
-> Note that something like
-> 
-> Datasheet: Available from Nuvoton upon request
-> 
-> is quite common for hardware monitoring chips and acceptable.
+On Tue, Feb 27, 2024 at 02:03:10PM +1300, Chris Packham wrote:
 
-Yes, it would be nice to document it though. (And finally for vendors to 
-just make them available for download.)
+>    interrupts:
+> +    description:
+> +      Alarm1 interrupt line of the RTC. Some of the RTCs have two interrupt
+> +      lines and alarm1 interrupt muxing depends on the clockin/clockout
+> +      configuration.
+>      maxItems: 1
 
->> Could you please give a high level description of the driver design?
-> 
-> Can you be more specific ? I didn't have time yet to look into details,
-> but at first glance this looks like a standard hardware monitoring driver.
-> One could argue that the high level design of such drivers is described
-> in Documentation/hwmon/hwmon-kernel-api.rst.
-> 
-> I don't usually ask for a additional design information for hwmon drivers
-> unless some chip interaction is unusual and needs to be explained,
-> and then I prefer to have it explained in the code. Given that, I am
-> quite curious and would like to understand what you are looking for.
-For a 10+ lines commit, in my opinion the commit message should say 
-something about the implementation. Even it is just, as you wrote, a 
-note, that it follows the standard design.
+The maxItems: 1 looks odd here when you state "some of the RTCs have two
+interrupt lines", which makes it sound as if there are actually two
+interrupts that should be exposed here. If those two interrupts get
+muxed to the same pin for output I'd suggest that you clarify that here.
 
+Otherwise, this looks good to me - although I do wonder if the
+authorship on the commit (attributed to the analog guys) is still
+accurate.
 
-Kind regards,
+Thanks,
+Conor.
 
-Paul
+--t4gB6YKl63pmWb0L
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZd8fyQAKCRB4tDGHoIJi
+0tDSAQD7rkCjY+O1QQKDOVfrzBf54VpRC0g+H4OnP8QHO8tvcAEAve/lMLAJY/bw
+qykf1vJWluXsxzAdd6/12T1WX8A94Qs=
+=7JwR
+-----END PGP SIGNATURE-----
+
+--t4gB6YKl63pmWb0L--
