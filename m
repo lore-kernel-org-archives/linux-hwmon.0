@@ -1,57 +1,148 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98A1E55C04;
-	Tue, 27 Feb 2024 22:55:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 249B5184F;
+	Wed, 28 Feb 2024 00:27:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.89.224.132
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709074503; cv=none; b=rU01x0v2AmYandSCtxJVGgyoIaGOZJO1QHfiYQEwaYZ2zFnx68TjRg3b2dMJO25IC6iEq+6EUpon5nYRdDWy4xL+MIWHR1ivSQZoYl67BSEzOsK+xjokWh6Jj3CbI9LBJ0KypN6m77Qp7E16N9E276CePSSp4M4c2Rrz0ZSxAtY=
+	t=1709080040; cv=none; b=nD+CKlV6SRuvNgTzTCASVffGHqn805ssjP7ryJ29XV8HuM4Jc8lGSjmnfpOOluy5r0Tk2wm4haq0C7LE62pupTBSfXMAAXyozsAJSWEB7pX0lBmH47pwp1NEHbzt1t2SbsoIqgN13EbRi0ktRJsKxLyJGhUU4W9vhkc2yi4R9vc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709074503; c=relaxed/simple;
-	bh=btTrB3fzkyTme293c3G3VKfFDQzh3DmsLeMJd4y07IY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EeGeDt1RJv4iEpjKxMiS/875NO90qsyZbGdetfKFrqQuYq9JgylqKYB/HXmWDWilp+0LtXqM4v8HVkNhKVMksxD96mjqVIk6Hv4Fd8ZOGh67m6QX0gmaT7pI/1kopWvbWdM7ngCpyeeqPxxS7PV3W5LKlPDmK1OoPhjD+7QmpIE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cAB8URMc; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1709080040; c=relaxed/simple;
+	bh=7XWXtmzTlOCcFSUL2YGPZAMO9WtMq3nsMLlRvvddB/4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Fuom7tO8+lyatzxzgkVoVI9wXFkgGOQoPY0h8liUo/1q/t608RJSNpWOf8+vDEgLVy+2zPY2D7qY/wOw3M4IfrnoNFzbjLbmoO+7zn43W/WRCLIv6Jw4c3PrTVw3K6a9Dlw+TnXlV431Dv5mFN0dAzg3P6Nz9bLvt0XfUWdEU5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com; spf=pass smtp.mailfrom=salutedevices.com; dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b=qLatxXAR; arc=none smtp.client-ip=45.89.224.132
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=salutedevices.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cAB8URMc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9E80C433C7;
-	Tue, 27 Feb 2024 22:55:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709074503;
-	bh=btTrB3fzkyTme293c3G3VKfFDQzh3DmsLeMJd4y07IY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cAB8URMcytIbMUACjzxEUYS9p/vZCPcg/2bJREpJx0tR+GCDuP7hLxgg8dBj+3NPM
-	 XIfSiQrWZE71npl7WS8NqRv5CuqkywDL3Fz+joxiwSDBaSCn8U2zr8A/tPuKPqZX8E
-	 bjhI5iIqySmSA/sTHcffeDFKQJjeEuLtVYeL4pSLESnRrfsgEuPYFFC28z1a4fY8Ch
-	 2jAtuXpmRKzEbnjgrEVr20YLgeHjMyIE5FIo3dX/rrUmfTXArR6Sx+HM34LhlT1gYD
-	 YXSaDUMF352W0F2w6aTxRuYy2w5IS2TZ4XpvxepMkuUmkup1cuZltFdEl8wzVuku2f
-	 rEyXnVkYoyBVA==
-Received: by pali.im (Postfix)
-	id 79894828; Tue, 27 Feb 2024 23:55:00 +0100 (CET)
-Date: Tue, 27 Feb 2024 23:55:00 +0100
-From: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To: Armin Wolf <W_Armin@gmx.de>
-Cc: jithu.joseph@intel.com, linux@weissschuh.net, hdegoede@redhat.com,
-	ilpo.jarvinen@linux.intel.com, Dell.Client.Kernel@dell.com,
-	jdelvare@suse.com, linux@roeck-us.net,
-	platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] platform/x86: wmi: Ignore duplicated GUIDs in legacy
- matches
-Message-ID: <20240227225500.mkqyzkptdvlydkx4@pali>
-References: <20240226193557.2888-1-W_Armin@gmx.de>
+	dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b="qLatxXAR"
+Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
+	by mx1.sberdevices.ru (Postfix) with ESMTP id 8814D120031;
+	Wed, 28 Feb 2024 03:27:05 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 8814D120031
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=salutedevices.com;
+	s=mail; t=1709080025;
+	bh=WFSesTI6AKgWxIyZBgA4VNH7+YIxoCmy6FNQCkaJmb8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:From;
+	b=qLatxXAR7X400BA7yaSZOrZmgm+u/ztJ9pmTDuq1aWYlIaFhx4RHUzNm34Hn6N123
+	 J5r/Yp1/TUxsLcoIts/B87901veNCOud1mqfa+skmLc2DFccMlynrXmoxMiCzjqpLt
+	 7W8GUIA3LZrvC7hvMPkaCumqFnNmXjpRez5vlLIkvS9nEdDlHx6YUwvK2Gn1nXrbHb
+	 6D7FSaAI0Cqp7qKt3ACruZAQWJFjqTnEU1yEb3fzaBl7ONsRHrfm1+SEc3pLGPor64
+	 eOQcEzSdFyXqSNArd2DPIWd72YvRUPsj/kzBKOVIq8qxYeyQFExUjB6sn9Prff3+eU
+	 bOu79fQjKuyHw==
+Received: from smtp.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx1.sberdevices.ru (Postfix) with ESMTPS;
+	Wed, 28 Feb 2024 03:27:05 +0300 (MSK)
+Received: from [192.168.1.143] (100.64.160.123) by
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Wed, 28 Feb 2024 03:27:04 +0300
+Message-ID: <4cc76f3a-dc64-4146-b8d6-761386a4abde@salutedevices.com>
+Date: Wed, 28 Feb 2024 03:27:04 +0300
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] devm-helpers: Add resource managed version of mutex
+ init
+Content-Language: en-US
+To: <andy.shevchenko@gmail.com>, =?UTF-8?Q?Marek_Beh=C3=BAn?=
+	<kabel@kernel.org>
+CC: <linux-kernel@vger.kernel.org>, Hans de Goede <hdegoede@redhat.com>, Matti
+ Vaittinen <mazziesaccount@gmail.com>, Linus Walleij
+	<linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Lucas De
+ Marchi <lucas.demarchi@intel.com>, Oded Gabbay <ogabbay@kernel.org>,
+	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, Maarten
+ Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
+	<mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie
+	<airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, Aleksandr Mezin
+	<mezin.alexander@gmail.com>, Jean Delvare <jdelvare@suse.com>, Guenter Roeck
+	<linux@roeck-us.net>, Pavel Machek <pavel@ucw.cz>, Lee Jones
+	<lee@kernel.org>, Sebastian Reichel <sre@kernel.org>, Matthias Brugger
+	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, <linux-gpio@vger.kernel.org>,
+	<intel-xe@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
+	<linux-hwmon@vger.kernel.org>, <linux-leds@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>, "kernel@salutedevices.com"
+	<kernel@salutedevices.com>
+References: <20240222145838.12916-1-kabel@kernel.org>
+ <Zde_s8iecR2ArKjC@surfacebook.localdomain> <20240223132641.3e2ba16c@dellmb>
+From: George Stark <gnstark@salutedevices.com>
+In-Reply-To: <20240223132641.3e2ba16c@dellmb>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240226193557.2888-1-W_Armin@gmx.de>
-User-Agent: NeoMutt/20180716
+X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 183791 [Feb 27 2024]
+X-KSMG-AntiSpam-Version: 6.1.0.3
+X-KSMG-AntiSpam-Envelope-From: gnstark@salutedevices.com
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 7 0.3.7 6d6bf5bd8eea7373134f756a2fd73e9456bb7d1a, {Tracking_uf_ne_domains}, {Tracking_urls_end_caps}, {Tracking_from_domain_doesnt_match_to}, d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;smtp.sberdevices.ru:5.0.1,7.1.1;100.64.160.123:7.1.2;salutedevices.com:7.1.1;lore.kernel.org:7.1.1, FromAlignment: s, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean, bases: 2024/02/27 23:49:00
+X-KSMG-LinksScanning: Clean, bases: 2024/02/27 23:49:00
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2024/02/27 18:14:00 #23853308
+X-KSMG-AntiVirus-Status: Clean, skipped
 
-I think that changes in this patch series looks good. You can add my:
 
-Acked-by: Pali Rohár <pali@kernel.org>
+On 2/23/24 15:26, Marek Behún wrote:
+> On Thu, 22 Feb 2024 23:42:11 +0200
+> andy.shevchenko@gmail.com wrote:
+> 
+>> Thu, Feb 22, 2024 at 03:58:37PM +0100, Marek Behún kirjoitti:
+>>> A few drivers are doing resource-managed mutex initialization by
+>>> implementing ad-hoc one-liner mutex dropping functions and using them
+>>> with devm_add_action_or_reset(). Help drivers avoid these repeated
+>>> one-liners by adding managed version of mutex initialization.
+>>>
+>>> Use the new function devm_mutex_init() in the following drivers:
+>>>    drivers/gpio/gpio-pisosr.c
+>>>    drivers/gpio/gpio-sim.c
+>>>    drivers/gpu/drm/xe/xe_hwmon.c
+>>>    drivers/hwmon/nzxt-smart2.c
+>>>    drivers/leds/leds-is31fl319x.c
+>>>    drivers/power/supply/mt6370-charger.c
+>>>    drivers/power/supply/rt9467-charger.c
+>>
+>> Pardon me, but why?
+>>
+>> https://lore.kernel.org/linux-leds/20231214173614.2820929-1-gnstark@salutedevices.com/
+>>
+>> Can you cooperate, folks, instead of doing something independently?
+
+Hello Andy
+
+Thanks for pointing to my patch series
+> 
+> Thanks Andy for pointing to George's patch series.
+> 
+> I can drop the mutex_init() part and add just the debugfs part.
+
+Hello Marek
+
+I started to propose devm_mutex_init in December 2023. We tried to put 
+it in devm-helpers.h firstly then we came to conclusion that 
+linux/mutex.h would be a better place for it. Now I'm waiting for this 
+series [1] to be merged because my patch depends on it. I'll let you 
+know when I have an update.
+
+[1] 
+https://lore.kernel.org/lkml/20240222150540.79981-2-longman@redhat.com/T/
+> 
+> Marek
+
+-- 
+Best regards
+George
