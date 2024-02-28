@@ -1,159 +1,115 @@
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 466F120DD5;
-	Wed, 28 Feb 2024 16:26:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3E571E861
+	for <linux-hwmon@vger.kernel.org>; Wed, 28 Feb 2024 20:21:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709137610; cv=none; b=WG1R80tsZPUrym1b77/VK0NhGVDKJMWQfYVEMAfreJ/q1/RqGMMUnYLNIKbQVnf+QE8baWyXG562gunDmKZ5lk6iWocIBX5ce1fuSiYS438bqt2eeg7PrCqsVuLVzx9USZGD1jJ1S3haoKjtzc81G0Prq/CpVHRKe1/7d3dC190=
+	t=1709151700; cv=none; b=RBR9SQEHkocIEXY33jvTK93Oj6NHt/bxmUqwrHHnT54/xLZkJfxVCVjdNhMeocYluQCIxresjApG6rD4YQ+hsap6SZAqvd7OWlEvH1ritTNpsD53RF5Yl8JxRuVp+nT6sI/hHgnf0kEtI41KfDNEF0QVhz9gWnevSKDFRNL1NEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709137610; c=relaxed/simple;
-	bh=i0uJzDDNx/9MRtcLNxLIpGvbtgkEiz4pwvdJzLFqJh8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=l51WB6c4hbQ0C5YQUL7fJFjx0wJ0n+cBM6XzQnJHloo/AGeWOtfGvcdzTEHvt/2Ph3maHuVg5e0oyiQkd99tG84ahxgYxMEGcdVl6l+QPkIBkjGSYObtQOz1G7/0aBHWvc7klqs2bd97Q88N2LGaD3RTiAyzwm5Z9H/ukMBCqZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from [192.168.0.53] (ip5f5aedb1.dynamic.kabel-deutschland.de [95.90.237.177])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id F2C2D61E5FE04;
-	Wed, 28 Feb 2024 17:25:44 +0100 (CET)
-Message-ID: <35dcecdd-ee19-40d6-80ab-5eed9718e639@molgen.mpg.de>
-Date: Wed, 28 Feb 2024 17:25:44 +0100
+	s=arc-20240116; t=1709151700; c=relaxed/simple;
+	bh=TxBC+4TssxTTp9f7D6m7kXVTU++hbQdHbjHGF5wBotw=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=ftrrMTQFk6Hv2SiY0wDSZuQ3BbETcXbsbhxMyT2FOczudYhyGNPOcdZahqQVJEjwMVek+sONhyqzBxpwA200wkktV8h7R6HyniZFo/AO6bBEowj++VUPdVcIV+FLbaPa7enU2nfTaFMY3jV6/uHtEKWJJseCxdNdOnshK514mqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=pS46KXor; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="pS46KXor"
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id CCCE22C0F4B;
+	Thu, 29 Feb 2024 09:21:35 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1709151695;
+	bh=TxBC+4TssxTTp9f7D6m7kXVTU++hbQdHbjHGF5wBotw=;
+	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+	b=pS46KXore/zJ3sM5YVVFYzpt2SlSb2DlBLls3BzuYZOHp2ZK79MtlQwIqZi7qMYCy
+	 eliAB4k5MtYpIOBHJGjuEVE/TI1Xc3BEWTS3v1tSi9ZS+1YL94P4C2wViV4Sa9BpXY
+	 rB74C5w5/+6tuiq1wAhav6/V32c0NiLLy68UM06KmbhUormTzuyvoKGf5/uZAqc1jM
+	 EYoCDx8EEvL0rFxntXmFf5Ly6t5uNh6BZOG9q5rFI9t0tfcm/RSHYx47g+P8afdnb0
+	 h8ZEIRUZw6Yog5Xgmivhf47biiLLvK9vH/dXt62VBATwaEOJJ2rHyhPq40+GbXoQnO
+	 5Itbs3PfE2Ycg==
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B65df95cf0001>; Thu, 29 Feb 2024 09:21:35 +1300
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Thu, 29 Feb 2024 09:21:35 +1300
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1118.040; Thu, 29 Feb 2024 09:21:35 +1300
+From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To: Conor Dooley <conor@kernel.org>
+CC: "antoniu.miclaus@analog.com" <antoniu.miclaus@analog.com>,
+	"alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+	"robh+dt@kernel.org" <robh+dt@kernel.org>,
+	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>, "jdelvare@suse.com"
+	<jdelvare@suse.com>, "linux@roeck-us.net" <linux@roeck-us.net>,
+	"linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>, "Zeynep
+ Arslanbenzer" <Zeynep.Arslanbenzer@analog.com>
+Subject: Re: [PATCH v8 2/2] dt-bindings: rtc: add max313xx RTCs
+Thread-Topic: [PATCH v8 2/2] dt-bindings: rtc: add max313xx RTCs
+Thread-Index: AQHaaRjAl7efaZl90kO9VhcwpC4GlbEezqKAgACMsYA=
+Date: Wed, 28 Feb 2024 20:21:35 +0000
+Message-ID: <bd43a198-6287-40b2-be15-2734c5d2742d@alliedtelesis.co.nz>
+References: <20240227010312.3305966-1-chris.packham@alliedtelesis.co.nz>
+ <20240227010312.3305966-3-chris.packham@alliedtelesis.co.nz>
+ <20240228-embark-rimmed-d81bab3d42b8@spud>
+In-Reply-To: <20240228-embark-rimmed-d81bab3d42b8@spud>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <79808D2C7F25F941B81BDA6EF24E4E81@atlnz.lc>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Commit messages (was: [PATCH v4 3/3] hwmon: Driver for Nuvoton
- NCT7363Y)
-Content-Language: en-US
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Ban Feng <baneric926@gmail.com>, jdelvare@suse.com, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, corbet@lwn.net,
- linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- kcfeng0@nuvoton.com, kwliu@nuvoton.com, openbmc@lists.ozlabs.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- DELPHINE_CHIU@wiwynn.com, naresh.solanki@9elements.com,
- billy_tsai@aspeedtech.com
-References: <20240227005606.1107203-1-kcfeng0@nuvoton.com>
- <20240227005606.1107203-4-kcfeng0@nuvoton.com>
- <62f38808-7d5f-4466-a65e-b6a64b2e7c01@molgen.mpg.de>
- <4b06d535-6739-47b5-ad1e-0ff94322620e@roeck-us.net>
- <e2b0b8e3-9b39-4621-9e43-d7de02286a27@molgen.mpg.de>
- <24ee4bf3-aa91-483d-a9be-5c47e5c37ed7@roeck-us.net>
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <24ee4bf3-aa91-483d-a9be-5c47e5c37ed7@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=BKkQr0QG c=1 sm=1 tr=0 ts=65df95cf a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=k7vzHIieQBIA:10 a=mQj2jn3d1LK7cqRs_WYA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
 
-Dear Guenter,
-
-
-Thank you for your reply.
-
-Am 28.02.24 um 17:03 schrieb Guenter Roeck:
-> On 2/28/24 03:03, Paul Menzel wrote:
-
->> Am 28.02.24 um 10:03 schrieb Guenter Roeck:
->>> On 2/27/24 23:57, Paul Menzel wrote:
->>
->>>> Am 27.02.24 um 01:56 schrieb baneric926@gmail.com:
->>>>> From: Ban Feng <kcfeng0@nuvoton.com>
->>>>>
->>>>> NCT7363Y is an I2C based hardware monitoring chip from Nuvoton.
->>>>
->>>> Please reference the datasheet.
->>>
->>> Note that something like
->>>
->>> Datasheet: Available from Nuvoton upon request
->>>
->>> is quite common for hardware monitoring chips and acceptable.
->>
->> Yes, it would be nice to document it though. (And finally for vendors 
->> to just make them available for download.)
-> 
-> Nuvoton is nice enough and commonly makes datasheets available on request.
-> The only exception I have seen so far is where they were forced into an NDA
-> by a large chip and board vendor, which prevented them from publishing a
-> specific datasheet.
-
-Nice, that they are better in this regard than others.
-
-> Others are much worse. Many PMIC vendors don't publish their datasheets at
-> all, and sometimes chips don't even officially exist (notorious for chips
-> intended for the automotive market). Just look at the whole discussion
-> around MAX31335.
-> 
-> Anyway, there are lots of examples in Documentation/hwmon/. I don't see
-> the need to add further documentation, and I specifically don't want to
-> make it official that "Datasheet not public" is acceptable as well.
-> We really don't have a choice unless we want to exclude a whole class
-> of chips from the kernel, but that doesn't make it better.
-
-I know folks figure it out eventually, but I found it helpful to have 
-the datesheet name in the commit message to know what to search for, ask 
-for, or in case of difference between datasheet revision what to compare 
-against.
-
->>>> Could you please give a high level description of the driver design?
->>>
->>> Can you be more specific ? I didn't have time yet to look into details,
->>> but at first glance this looks like a standard hardware monitoring 
->>> driver.
->>> One could argue that the high level design of such drivers is described
->>> in Documentation/hwmon/hwmon-kernel-api.rst.
->>>
->>> I don't usually ask for a additional design information for hwmon drivers
->>> unless some chip interaction is unusual and needs to be explained,
->>> and then I prefer to have it explained in the code. Given that, I am
->>> quite curious and would like to understand what you are looking for.
->> For a 10+ lines commit, in my opinion the commit message should say 
->> something about the implementation. Even it is just, as you wrote, a 
->> note, that it follows the standard design.
-> 
-> Again, I have not looked into the submission, but usually we ask for that
-> to be documented in Documentation/hwmon/. I find that much better than
-> a soon-to-be-forgotten commit message. I don't mind something like
-> "The NCT7363Y is a fan controller with up to 16 independent fan input
->   monitors and up to 16 independent PWM outputs. It also supports up
->   to 16 GPIO pins"
-> or in other words a description of the chip, not the implementation.
-> That a driver hwmon driver uses the hardware monitoring API seems to be
-> obvious to me, so I don't see the value of adding it to the commit
-> description. I would not mind having something there, but I don't
-> see it as mandatory.
-> 
-> On the  other side, granted, that is just _my_ personal opinion.
-> Do we have a common guideline for what exactly should be in commit
-> descriptions for driver submissions ? I guess I should look that up.
-
-`Documentation/hwmon/submitting-patches.rst` refers to 
-`Documentation/process/submitting-patches.rst`, and there *Describe your 
-changes* seems to have been written for documenting bug fixes or 
-enhancements and not new additions. It for example contains:
-
-> Once the problem is established, describe what you are actually doing
-> about it in technical detail.  It's important to describe the change
-> in plain English for the reviewer to verify that the code is behaving
-> as you intend it to.
-
-I agree with your description, but I am also convinced if you write 500 
-lines of code, that you can write ten lines of commit messages giving a 
-broad overview. In this case, saying that it follows the standard driver 
-model would be good enough for me.
-
-Also, at least for me, often having to bisect stuff and using `git 
-blame` to look at old commits, commit messages are very valuable to me, 
-and not “forgotten”. ;-)
-
-
-Kind regards,
-
-Paul
+DQpPbiAyOS8wMi8yNCAwMDo1OCwgQ29ub3IgRG9vbGV5IHdyb3RlOg0KPiBPbiBUdWUsIEZlYiAy
+NywgMjAyNCBhdCAwMjowMzoxMFBNICsxMzAwLCBDaHJpcyBQYWNraGFtIHdyb3RlOg0KPg0KPj4g
+ICAgIGludGVycnVwdHM6DQo+PiArICAgIGRlc2NyaXB0aW9uOg0KPj4gKyAgICAgIEFsYXJtMSBp
+bnRlcnJ1cHQgbGluZSBvZiB0aGUgUlRDLiBTb21lIG9mIHRoZSBSVENzIGhhdmUgdHdvIGludGVy
+cnVwdA0KPj4gKyAgICAgIGxpbmVzIGFuZCBhbGFybTEgaW50ZXJydXB0IG11eGluZyBkZXBlbmRz
+IG9uIHRoZSBjbG9ja2luL2Nsb2Nrb3V0DQo+PiArICAgICAgY29uZmlndXJhdGlvbi4NCj4+ICAg
+ICAgIG1heEl0ZW1zOiAxDQo+IFRoZSBtYXhJdGVtczogMSBsb29rcyBvZGQgaGVyZSB3aGVuIHlv
+dSBzdGF0ZSAic29tZSBvZiB0aGUgUlRDcyBoYXZlIHR3bw0KPiBpbnRlcnJ1cHQgbGluZXMiLCB3
+aGljaCBtYWtlcyBpdCBzb3VuZCBhcyBpZiB0aGVyZSBhcmUgYWN0dWFsbHkgdHdvDQo+IGludGVy
+cnVwdHMgdGhhdCBzaG91bGQgYmUgZXhwb3NlZCBoZXJlLiBJZiB0aG9zZSB0d28gaW50ZXJydXB0
+cyBnZXQNCj4gbXV4ZWQgdG8gdGhlIHNhbWUgcGluIGZvciBvdXRwdXQgSSdkIHN1Z2dlc3QgdGhh
+dCB5b3UgY2xhcmlmeSB0aGF0IGhlcmUuDQoNClRoaXMgbWF5IGVuZCB1cCBjaGFuZ2luZyBpZiBJ
+IGNhbiBjb21lIHVwIHdpdGggc29tZXRoaW5nIHRoYXQgQWxleGFuZHJlIA0KaXMgaGFwcHkgd2l0
+aC4gQmFzaWNhbGx5IChzb21lIG9mKSB0aGUgY2hpcHMgaGF2ZSBhIGNvbmZpZ3VyYWJsZSBwaW4g
+DQp0aGF0IGNhbiBlaXRoZXIgYmUgZGVkaWNhdGVkIHRvIHRoZSBBTEFSTTEgb3V0cHV0IChhbm5v
+eWluZ2x5IGxhYmVsbGVkIA0KYXMgSU5UQikgb3IgdG8gYSBjbG9jayBvdXRwdXQuIFRoZXJlIGlz
+IGFuIElOVEEgbGluZSB0aGF0IGhhcyBvdGhlciANCmludGVycnVwdHMgYW5kIGlmIHRoZSBjbG9j
+ayBvdXRwdXQgb3B0aW9uIGlzIHVzZWQgdGhlbiBpdCBhbHNvIGhhcyANCkFMQVJNMS4gVGhlIGRy
+aXZlciBkb2Vzbid0IGN1cnJlbnRseSBkbyBhbnl0aGluZyB3aXRoIHRoZSBvdGhlciANCmludGVy
+cnVwdCBzb3VyY2VzIHNvIGFzIHdyaXR0ZW4gdGhpcyBuZWVkcyB0byBjb3JyZXNwb25kIHRvIHdo
+aWNoZXZlciANCmludGVycnVwdCBvdXRwdXQgaXMgYXNzZXJ0ZWQgZm9yIEFMQVJNMS4NCg0KPiBP
+dGhlcndpc2UsIHRoaXMgbG9va3MgZ29vZCB0byBtZSAtIGFsdGhvdWdoIEkgZG8gd29uZGVyIGlm
+IHRoZQ0KPiBhdXRob3JzaGlwIG9uIHRoZSBjb21taXQgKGF0dHJpYnV0ZWQgdG8gdGhlIGFuYWxv
+ZyBndXlzKSBpcyBzdGlsbA0KPiBhY2N1cmF0ZS4NCg0KSSB0aGluayB0aGUgYmluZGluZyBpcyBz
+dGlsbCBwcmV0dHkgY2xvc2UgdG8gdGhlIGxhc3QgdmVyc2lvbiBzZW50IG91dCANCmJ5IHRoZSBh
+bmFsb2cgZm9sa3MuIFRoZSBkcml2ZXIgYXQgdGhpcyBwb2ludCBpcyBwcm9iYWJseSB1bnJlY29n
+bml6YWJsZSANCmV2ZW4gdGhvdWdoIEkndmUgb25seSByZWFsbHkgcmVuYW1lZCBzdHVmZiBhbmQg
+bW92ZWQgZnVuY3Rpb25zIGFyb3VuZC4NCg0KSSB3YXMga2luZCBvZiBob3BpbmcgbXkgcHJvZGRp
+bmcgd291bGQgYmUgbWV0IHdpdGggYSAib2ggd2UndmUgYWxyZWFkeSANCmRvbmUgdGhpcyBpbiBv
+dXIgU0RLLCBoZXJlJ3MgdGhlIGxhdGVzdCB2ZXJzaW9uIiBidXQgdGhhdCBoYXNuJ3QgDQpoYXBw
+ZW5lZC4gSSdtIGZhaXJseSBjbG9zZSB0byBkcm9wcGluZyBhbnl0aGluZyBpbiB0aGlzIHNlcmll
+cyB0aGF0IA0KaXNuJ3QgcmVsYXRlZCB0byB0aGUgTUFYMzEzMzQgYXMgdGhhdCBpcyB0aGUgb25s
+eSBoYXJkd2FyZSBJIGNhbiANCmFjdHVhbGx5IHRlc3QuDQoNCj4NCj4gVGhhbmtzLA0KPiBDb25v
+ci4=
