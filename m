@@ -1,119 +1,182 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2A9816062E;
-	Thu, 29 Feb 2024 18:07:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E382916062E;
+	Thu, 29 Feb 2024 18:10:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709230042; cv=none; b=EFYBPbPSvG3K7GjvgvwKIsmoi+zYz+Yz3ax8mxZChfQ5gFQ/QN3E8eK0+MPwKaVFChG5im5xCgGM/V4bQWzeULD/bJtVLwAeCScu1A3uXhdFbhFXMFxMgAIFLATZ7u6dphNvzk2v9SfOVcfs438ZNimd+V8CR/HNTuQ2A8iKUSk=
+	t=1709230257; cv=none; b=EXWqwSyLZwLLwC6gwYH2OcBAloUHSmQsdtf8zP1MkbnqvOWgt46PNSwPBdfQxm4ORXls2sb2qAXfyG8Mc8RRzonKJdoGS+mbosCpjSs0nQcMjn62bZ6s0Pgb1ph11OKkyr0528sEd8THQzMz0fA73TEjnFhhH86bN9QwFbanlCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709230042; c=relaxed/simple;
-	bh=cX2PHbRKLPBHDGWFeHshU8/kZ6O3pk6xNH+MwzuwUqI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XDRF91VtWrdFw3Be/EhCsNLyx0nhu89GPvAgLKl7OQ6V9k1SGXIEtmTlGg4Ye01RsM9GxLdgZZXYoA06BHD98GrdRQ0gwru6jy7zKB1vY/LdiYZ8yrApwoNhbvCLjM+jQhTGov3rmddB8IevNKOPIU0GbYqQ4qZyTtIhHKkEE54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cg1541hv; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1709230257; c=relaxed/simple;
+	bh=cv0qMU0e1IbKSJsngscDgbDXzFA5In+xEYRZAHVps5E=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Al7iiQcROP9Hc3KLSi38F+L6wj1EurNp38FEaPui8Stb+QD5eJHL8v2mAXMaRRdqNgZYAJoya2sBUlOP5iqD3TvdQRMBpsIbpe0rf9hyq3h4TCjo0H+txXSSvbpV1w55LZEaBCQjA022R4kz2RFGI98Xg+vzcQyTxwuIjykf9p0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Lg9clSBj; arc=none smtp.client-ip=217.70.183.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cg1541hv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EF73C433F1;
-	Thu, 29 Feb 2024 18:07:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709230042;
-	bh=cX2PHbRKLPBHDGWFeHshU8/kZ6O3pk6xNH+MwzuwUqI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Cg1541hvCxmc/49oNGiTZXi+uzcb5gnkddG0ZEFtXZNCP/xCLIo0W5wA0Y5BVSTfV
-	 1/VAdoDvJwVNAe2Rd4VXy4G/9x2zFlXw5qiMsgABhuSkNERiZHFSMjY8ZlEPhvtGUp
-	 mo1pmXwkCq9+Ufu3F9UW5CLqsFRVo1U/3t17NYnbuZIGFczMQQsZ/B9Pcpfox9Vsm7
-	 vySAGACLxG2/uFu30N9+l5YoNESW4TY8u0Q8sumLKh2mTIl27gODNBYGroxKtVDk1V
-	 2Thqv9jlex0BiX9Eqd7VngEvUFSiJRY5gscioA/zBcHMF0K34bqpFyWvUf2PUek185
-	 ZqObIVvPdA8Hg==
-Date: Thu, 29 Feb 2024 18:07:17 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc: "antoniu.miclaus@analog.com" <antoniu.miclaus@analog.com>,
-	"alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-	"robh+dt@kernel.org" <robh+dt@kernel.org>,
-	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>,
-	"jdelvare@suse.com" <jdelvare@suse.com>,
-	"linux@roeck-us.net" <linux@roeck-us.net>,
-	"linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-Subject: Re: [PATCH v8 2/2] dt-bindings: rtc: add max313xx RTCs
-Message-ID: <20240229-skeletal-ultimatum-27cd91e8d8a8@spud>
-References: <20240227010312.3305966-1-chris.packham@alliedtelesis.co.nz>
- <20240227010312.3305966-3-chris.packham@alliedtelesis.co.nz>
- <20240228-embark-rimmed-d81bab3d42b8@spud>
- <bd43a198-6287-40b2-be15-2734c5d2742d@alliedtelesis.co.nz>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Lg9clSBj"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BB11960003;
+	Thu, 29 Feb 2024 18:10:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1709230252;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=it9dSP8MCBxug4cRjAlo9cPe1vkO9FO5feH9cmIzEf8=;
+	b=Lg9clSBjE5M6cRqjxlyC4ZrnQ57mKdZjxB/5y2p9nn6pD6zHcrd6ZjauddNesbsbpELDG8
+	Pkx8i6k7UGo9STyY25ZR3sAvWEsqtUpU8Bs4u5foZFWAcL1h3jyHbWXxOdwXbMCYEShyDj
+	mPF0d+xU7ru2RT4r6+V/pka2Qjcj88Xz6p6M1KJcdME7wDVR2UvHzEBit165YuJ+rCMQuo
+	dId4K3FrbTUb7fs387HXpXV7UGuOD1F/AdRZx8KeR2HPmVCCj/DSA67EZNFt7mt2tDe3+N
+	eqtrm/ACFvUJJYM6UrUUqhTkSkS+Y54hDRT+MM5t27MCGKrK1jbvxCKrOrIQYw==
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: [PATCH v2 00/11] Add Mobileye EyeQ5 support to the Nomadik I2C
+ controller & use hrtimers for timeouts
+Date: Thu, 29 Feb 2024 19:10:48 +0100
+Message-Id: <20240229-mbly-i2c-v2-0-b32ed18c098c@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="iR98pNhTE57Kvx2v"
-Content-Disposition: inline
-In-Reply-To: <bd43a198-6287-40b2-be15-2734c5d2742d@alliedtelesis.co.nz>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAKjI4GUC/0XMPQ6DMAyG4asgz00Vm/4onXqPioEEUyxBUiUIF
+ aHcvYGlg4fX+vRskDgKJ3hUG0ReJEnwJehUgRta/2YlXWkgTTWWU5MdVyXk1N1Rb61FMqaHMv9
+ E7uV7UK+m9CBpDnE95AX3745cNOH1jyyotELT1vWNDXaufdoQ5lH82YUJmpzzD27FyPaiAAAA
+To: Linus Walleij <linus.walleij@linaro.org>, 
+ Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-mips@vger.kernel.org, Gregory Clement <gregory.clement@bootlin.com>, 
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ linux-hwmon@vger.kernel.org
+X-Mailer: b4 0.13.0
+X-GND-Sasl: theo.lebrun@bootlin.com
 
+Hi,
 
---iR98pNhTE57Kvx2v
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This series adds two tangent features to the Nomadik I2C controller:
 
-On Wed, Feb 28, 2024 at 08:21:35PM +0000, Chris Packham wrote:
->=20
-> On 29/02/24 00:58, Conor Dooley wrote:
-> > On Tue, Feb 27, 2024 at 02:03:10PM +1300, Chris Packham wrote:
-> >
-> >>     interrupts:
-> >> +    description:
-> >> +      Alarm1 interrupt line of the RTC. Some of the RTCs have two int=
-errupt
-> >> +      lines and alarm1 interrupt muxing depends on the clockin/clocko=
-ut
-> >> +      configuration.
-> >>       maxItems: 1
-> > The maxItems: 1 looks odd here when you state "some of the RTCs have two
-> > interrupt lines", which makes it sound as if there are actually two
-> > interrupts that should be exposed here. If those two interrupts get
-> > muxed to the same pin for output I'd suggest that you clarify that here.
->=20
-> This may end up changing if I can come up with something that Alexandre=
-=20
-> is happy with. Basically (some of) the chips have a configurable pin=20
-> that can either be dedicated to the ALARM1 output (annoyingly labelled=20
-> as INTB) or to a clock output. There is an INTA line that has other=20
-> interrupts and if the clock output option is used then it also has=20
-> ALARM1. The driver doesn't currently do anything with the other=20
-> interrupt sources so as written this needs to correspond to whichever=20
-> interrupt output is asserted for ALARM1.
+ - Add a new compatible to support Mobileye EyeQ5 which uses the same IP
+   block as Nomadik.
 
-So you're saying that depending on whether or not the clock output is
-used, there could be two interrupts?
+   It has two quirks to be handled:
+    - The memory bus only supports 32-bit accesses. Avoid readb() and
+      writeb() calls that might generate byte load/store instructions.
+    - We must write a value into a shared register region (OLB)
+      depending on the I2C bus speed.
 
-Without looking further, it sounds like you should be setting maxItems
-to 1 if #clock-cells is present and to 2 if it is not. Then if there are
-two interrupts provided, the driver is free to configure whatever way it
-wants. If there aren't, send everything to INTA.
+ - Allow xfer timeouts below one jiffy by using a waitqueue and hrtimers
+   instead of a completion.
 
-Am I missing something?
+   The situation to be addressed is:
+    - Many devices on the same I2C bus.
+    - One xfer to each device is sent at regular interval.
+    - One device gets stuck and does not answer.
+    - With long timeouts, following devices won't get their message. A
+      shorter timeout ensures we can still talk to the following
+      devices.
 
-Cheers,
-Conor.
+   This clashes a bit with the current i2c_adapter timeout field that
+   stores a jiffies amount. We therefore avoid it and store the value
+   in a private struct field, as a µs amount. If the timeout is less
+   than a jiffy duration, we switch from standard jiffies timeout to
+   hrtimers.
 
---iR98pNhTE57Kvx2v
-Content-Type: application/pgp-signature; name="signature.asc"
+There is one patch targeting a hwmon dt-bindings file:
+Documentation/devicetree/bindings/hwmon/lm75.yaml. The rest is touching
+the I2C bus driver, its bindings and platform devicetrees.
 
------BEGIN PGP SIGNATURE-----
+About dependencies:
+ - The series is based upon v6.8-rc6.
+ - For testing on EyeQ5 hardware and devicetree patches, we need the
+   base platform series from Grégory [0] and its dependency [1]. Both
+   in mips-next [2].
+ - Devicetree commits require the EyeQ5 syscon series [3] that provides
+   the reset controller node.
+ - The LM75 dt-bindings patch depends on the common schema
+   hwmon-common.yaml series from Krzysztof [4]. Found in hwmon-next [5].
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZeDH1QAKCRB4tDGHoIJi
-0mgUAP968MrAUrLc4/ZPgIL2M9ot1CbzwNP1m69CXgjSTaqhBAEAzgOl8/WsPk83
-fJ+Eot7rs9erOG9XK/haG0oYOJlUBww=
-=znc+
------END PGP SIGNATURE-----
+Have a nice day,
+Théo Lebrun
 
---iR98pNhTE57Kvx2v--
+[0]: https://lore.kernel.org/lkml/20240216174227.409400-1-gregory.clement@bootlin.com/
+[1]: https://lore.kernel.org/linux-mips/20240209-regname-v1-0-2125efa016ef@flygoat.com/
+[2]: https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/log/
+[3]: https://lore.kernel.org/lkml/20240227-mbly-clk-v8-0-c57fbda7664a@bootlin.com/
+[4]: https://lore.kernel.org/lkml/20240224-dt-bindings-hwmon-common-v2-0-b446eecf5480@linaro.org/
+[5]: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/log/?h=hwmon-next
+
+To: Linus Walleij <linus.walleij@linaro.org>
+To: Andi Shyti <andi.shyti@kernel.org>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To: Conor Dooley <conor+dt@kernel.org>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: <linux-arm-kernel@lists.infradead.org>
+Cc: <linux-i2c@vger.kernel.org>
+Cc: <devicetree@vger.kernel.org>
+Cc: <linux-kernel@vger.kernel.org>
+Cc: <linux-mips@vger.kernel.org>
+Cc: Gregory Clement <gregory.clement@bootlin.com>
+Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+
+Changes in v2:
+- dt-bindings: i2c: st,nomadic-i2c:
+  - Drop timeout-usecs property, rely on generic i2c-transfer-timeout-us.
+  - Use phandle to syscon with cell args; remove mobileye,id prop; move
+    mobileye,olb from if-statement to top-level.
+- dt-bindings: hwmon: lm75:
+  - Inherit from hwmon-common.yaml rather than declare generic label property.
+- i2c: nomadik: (ie driver code)
+  - Parse i2c-transfer-timeout-us rather than custom timeout-usecs property.
+  - Introduce readb/writeb helpers with fallback to readl/writel.
+  - Avoid readb() on Mobileye.
+  - Use mobileye,olb cell args to get controller index rather than mobileye,id.
+  - Take 5 Reviewed-by Linus Walleij.
+- MIPS: mobileye: (ie devicetrees)
+  - Use mobileye,olb with cell args rather than mobileye,id.
+  - Squash reset commit.
+  - Add i2c-transfer-timeout-us value of 10ms to all controllers.
+  - Rename LM75 instance from tmp112@48 to temperature-sensor@48.
+- Link to v1: https://lore.kernel.org/r/20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com
+
+---
+Théo Lebrun (11):
+      dt-bindings: i2c: nomadik: add mobileye,eyeq5-i2c bindings and example
+      dt-bindings: hwmon: lm75: use common hwmon schema
+      i2c: nomadik: rename private struct pointers from dev to priv
+      i2c: nomadik: simplify IRQ masking logic
+      i2c: nomadik: use bitops helpers
+      i2c: nomadik: support short xfer timeouts using waitqueue & hrtimer
+      i2c: nomadik: replace jiffies by ktime for FIFO flushing timeout
+      i2c: nomadik: fetch i2c-transfer-timeout-us property from devicetree
+      i2c: nomadik: support Mobileye EyeQ5 I2C controller
+      MIPS: mobileye: eyeq5: add 5 I2C controller nodes
+      MIPS: mobileye: eyeq5: add evaluation board I2C temp sensor
+
+ Documentation/devicetree/bindings/hwmon/lm75.yaml  |   3 +-
+ .../devicetree/bindings/i2c/st,nomadik-i2c.yaml    |  48 +-
+ arch/mips/boot/dts/mobileye/eyeq5-epm5.dts         |   8 +
+ arch/mips/boot/dts/mobileye/eyeq5.dtsi             |  75 +++
+ drivers/i2c/busses/i2c-nomadik.c                   | 720 ++++++++++++---------
+ 5 files changed, 541 insertions(+), 313 deletions(-)
+---
+base-commit: a6cc37d1a531e1c99e7989001a0529b443397900
+change-id: 20231023-mbly-i2c-7c2fbbb1299f
+
+Best regards,
+-- 
+Théo Lebrun <theo.lebrun@bootlin.com>
+
