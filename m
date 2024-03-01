@@ -1,134 +1,156 @@
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B82CF1428E0;
-	Thu, 29 Feb 2024 20:29:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 561C767C74
+	for <linux-hwmon@vger.kernel.org>; Fri,  1 Mar 2024 06:37:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709238576; cv=none; b=uB3Smj8D9aD5oaxwg77wbTEzugZ0ZJPA3yBt2plEFohG0BMi7qlyxIDhFYLM0ZSuxBb7irb5bzWAwTKc/dSg9ieuF+VodbM4Q4d1K1ozF3wNOtYvigesMzvQQJZAWuB1n0cZ0wNGRYkGn+w2UJv+Y3txlstCks+izfABdBMaNb4=
+	t=1709275051; cv=none; b=gZg7s+lJ3j6GwDuY00FpW+ssTIVag43Z41DodJ/o+TXeY0CKhazWbae50WLiSlIcK0KHlwftLeD1oTTGh+FSRFAGHlrZ7cu7iiVYi3NL11V0yledxG3zzyzSIN21gdgpKdH/YYcBZPAMVwkjEK8YUua7X0FAj1WGO9DumBWkD+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709238576; c=relaxed/simple;
-	bh=L/s/b9tSVs9z239pdMRuvKxK6VQN+DzuuFGrb2AJ0Ws=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DmyT7Ll6Te7b6YU0msQpfHkEuZUfxbFgr5L0UwH1UI0IrMpDY52Je7vEjfGQ5W5CNVBxP430k/1e0U1NPX6YcMIqtU5mKldWK0sap+DXWCLQVL03AGwm7Ianhvsyp9DZhzn6ISYEC/1KWRvAeOATDttfsQs1EcgsTwQs/IDNsj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=OhCzDT6d; arc=none smtp.client-ip=217.70.183.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1709275051; c=relaxed/simple;
+	bh=KR1HRc74aUbrSrpRVEfAmBIBs7yUcoa2/TqpdH+g/yw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=J8yhvvwI/i2KWFRe1bxZvTrluAtRZiruGaUmB4SSBbQDavJy/5HXEdpS0IcoCKS6CWd46j+T7l5AC89tG2cpEN/mgyyG6MRsTfD+jVDpRILdlYlAzpcsyvPEBLv9aKZvZrQRLOk7oOgYHOw/X8IADwL1FND/wQQmKrTPx/rilSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IRv798w7; arc=none smtp.client-ip=209.85.218.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="OhCzDT6d"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id EF869FF802;
-	Thu, 29 Feb 2024 20:29:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1709238570;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Xsz9d2+yFSQZeecH2hOJtT+4TSF8kgLSBhGXKWhoDpQ=;
-	b=OhCzDT6diyX9INg49zfgB6KwEWfdYjAzQMAaaMbxmHZ7yT1l6ewOG/X0HJ120MHMVo/Hw2
-	ZfOIUYhTiqAVHadjdJMmkzkbxIP3hV0y5nyrK40vRfXJfV2lRtS/dIoK5oRs3TEFYQ+FrC
-	pvDhHrPBDj6wx2nmTtjANKDIV1ovkCo5EWg+LU9ATvPEDVr6yDi19MIpYDmyBFTRIHJ2EF
-	Wgg1Cd4id6LQdh51SlsqUDlRZIgIhUDb+nEtNMFj2XOI5FAw4iVyl4vBI8ZTpYVmr8F5ZO
-	jFlEnUWaHt/p5RrZR8Mf47xH6KNbvdyJ3hb7TU0OFLOftZlrOlAXYAGlTMAKKg==
-Date: Thu, 29 Feb 2024 21:29:28 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc: Conor Dooley <conor@kernel.org>,
-	"antoniu.miclaus@analog.com" <antoniu.miclaus@analog.com>,
-	"robh+dt@kernel.org" <robh+dt@kernel.org>,
-	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>,
-	"jdelvare@suse.com" <jdelvare@suse.com>,
-	"linux@roeck-us.net" <linux@roeck-us.net>,
-	"linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-Subject: Re: [PATCH v8 2/2] dt-bindings: rtc: add max313xx RTCs
-Message-ID: <2024022920292837621a4f@mail.local>
-References: <20240227010312.3305966-1-chris.packham@alliedtelesis.co.nz>
- <20240227010312.3305966-3-chris.packham@alliedtelesis.co.nz>
- <20240228-embark-rimmed-d81bab3d42b8@spud>
- <bd43a198-6287-40b2-be15-2734c5d2742d@alliedtelesis.co.nz>
- <20240229-skeletal-ultimatum-27cd91e8d8a8@spud>
- <b2ebc2a7-0347-40a0-8302-c84ba898fd16@alliedtelesis.co.nz>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IRv798w7"
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a446478b04bso144358666b.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 29 Feb 2024 22:37:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1709275047; x=1709879847; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4M7okb8GhI4tXCoo4LKzdrfNya8nZE92SHKif4svAP8=;
+        b=IRv798w7JaikIBysTmpLndsoFifpdqj2O6LSuMONozqMKnwcsl3qHcGcOlXxjRNyTI
+         KEyiLbWOIEyhvl9TnFpDxNbVS74gF9M5rM3lnc2H7t/kd6XD2AGDNHev8tXhltkJGaeN
+         gWDcFsGdQlyyMm2dy+Ukd7WpcsYlXtju3PfiIbpkvbrJOzWPuTWy/U2l8qkOhnsYKiRG
+         VYOb6j+kpUtSHXfMCp+vkC4LRdFrZ0zA8LOtja78MZRsWPwSWTRb5/eKPCnFNkNSbATD
+         +1piTXGxKD3pcpyvcEnFlBsjyNsrX3BL+lYYLz3yXIAdfhQ4hwkAhZFWj9xy5wt1cvty
+         0mkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709275047; x=1709879847;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4M7okb8GhI4tXCoo4LKzdrfNya8nZE92SHKif4svAP8=;
+        b=bCABWoVJW6rwIC/XuVypH7INyKhLrFDKClugtqXNVKY2eDBPH0wSmh2wNCxg12lQOw
+         AQjpbTVeGDhRHdRGlJro4eNGwe/75frkpPvpMIK1tUrChoVzlz+d9POOfb9J+nRdJNqy
+         On37wT2H2fbMzWmgvmBhYmNCQuLULVscXROBhtx3gFXGesuJrHoaZr63/fV1TeIdzXjb
+         EFxOV6mL7Mc4dOUK2/bLzny0HNmqsfcsKDhoTUlLPxiHWDWxUFDlxbXLxvv3zXvsrAsK
+         w56ICpuI4iUUR4RSZyN1SSgZImOYLq+KEZt49kBVd9dpxIJWTdHw0gPanjmhZvCf8o6o
+         GbRA==
+X-Forwarded-Encrypted: i=1; AJvYcCWU5MV0SvKatWXG9YRx9as+MzQVz2TeCDX3IxxGo9+yVRAupyW6oi+P+9uteFHHEVpgYYvWkzjlu7Akb++ChUSYdONyYvK/JBjnmeg=
+X-Gm-Message-State: AOJu0Yw3lAkLkP4YYFuHy8u1sgJtZXJV1AUoBab4voDNKv9qkUCI6gre
+	4z+1De8cRLcbbYeqI+Pg9qa3RF+c2laf6K0+aAXz+vk3DyjWwo214RSnXaeVKDo=
+X-Google-Smtp-Source: AGHT+IGzybMf6/ucgzTXJE7eJ0haSUa0ZZ9JwIXeW0ITKUlQU7wWRDKOYTMucnqDAW8gmvuJCcJjDQ==
+X-Received: by 2002:a17:906:f1c9:b0:a44:4329:c091 with SMTP id gx9-20020a170906f1c900b00a444329c091mr624345ejb.74.1709275046744;
+        Thu, 29 Feb 2024 22:37:26 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.222.97])
+        by smtp.gmail.com with ESMTPSA id k3-20020a1709061c0300b00a3e0b7e7217sm1396572ejg.48.2024.02.29.22.37.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Feb 2024 22:37:26 -0800 (PST)
+Message-ID: <6749c8df-c545-4aca-bc18-4dfe9c9f15b0@linaro.org>
+Date: Fri, 1 Mar 2024 07:37:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b2ebc2a7-0347-40a0-8302-c84ba898fd16@alliedtelesis.co.nz>
-X-GND-Sasl: alexandre.belloni@bootlin.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 02/11] dt-bindings: hwmon: lm75: use common hwmon
+ schema
+Content-Language: en-US
+To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
+ Linus Walleij <linus.walleij@linaro.org>, Andi Shyti
+ <andi.shyti@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-mips@vger.kernel.org, Gregory Clement <gregory.clement@bootlin.com>,
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, Jean Delvare
+ <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ linux-hwmon@vger.kernel.org
+References: <20240229-mbly-i2c-v2-0-b32ed18c098c@bootlin.com>
+ <20240229-mbly-i2c-v2-2-b32ed18c098c@bootlin.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240229-mbly-i2c-v2-2-b32ed18c098c@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 29/02/2024 20:11:16+0000, Chris Packham wrote:
+On 29/02/2024 19:10, Théo Lebrun wrote:
+> Reference common hwmon schema which has the generic "label" property,
+> parsed by Linux hwmon subsystem.
 > 
-> On 1/03/24 07:07, Conor Dooley wrote:
-> > On Wed, Feb 28, 2024 at 08:21:35PM +0000, Chris Packham wrote:
-> >> On 29/02/24 00:58, Conor Dooley wrote:
-> >>> On Tue, Feb 27, 2024 at 02:03:10PM +1300, Chris Packham wrote:
-> >>>
-> >>>>      interrupts:
-> >>>> +    description:
-> >>>> +      Alarm1 interrupt line of the RTC. Some of the RTCs have two interrupt
-> >>>> +      lines and alarm1 interrupt muxing depends on the clockin/clockout
-> >>>> +      configuration.
-> >>>>        maxItems: 1
-> >>> The maxItems: 1 looks odd here when you state "some of the RTCs have two
-> >>> interrupt lines", which makes it sound as if there are actually two
-> >>> interrupts that should be exposed here. If those two interrupts get
-> >>> muxed to the same pin for output I'd suggest that you clarify that here.
-> >> This may end up changing if I can come up with something that Alexandre
-> >> is happy with. Basically (some of) the chips have a configurable pin
-> >> that can either be dedicated to the ALARM1 output (annoyingly labelled
-> >> as INTB) or to a clock output. There is an INTA line that has other
-> >> interrupts and if the clock output option is used then it also has
-> >> ALARM1. The driver doesn't currently do anything with the other
-> >> interrupt sources so as written this needs to correspond to whichever
-> >> interrupt output is asserted for ALARM1.
-> > So you're saying that depending on whether or not the clock output is
-> > used, there could be two interrupts?
-> Correct.
-> > Without looking further, it sounds like you should be setting maxItems
-> > to 1 if #clock-cells is present and to 2 if it is not.
-> My idea was an explicit property about the function of the INTB/CLKOUT 
-> pin. The current code does use #clock-cells as a proxy for this (and 
-> Alexandre has some concerns with how this is handled).
 
-#clock-cells must not be used for pinmuxing, I can't see how anyone
-would allow this.
+Please do not mix independent patchsets. You create unneeded
+dependencies blocking this patch. This patch depends on hwmon work, so
+it cannot go through different tree.
 
-> >   Then if there are
-> > two interrupts provided, the driver is free to configure whatever way it
-> > wants. If there aren't, send everything to INTA.
-> >
-> > Am I missing something?
-> 
-> Right now the only interrupt that the RTC cares about is for ALARM1 
-> (which moves between INTA and INTB depending on the clock config). There 
-> are other hardware events and an ALARM2 that can generate an interrupt 
-> but these are ignored. I don't think the rtc framework supports more 
-> than one alarm.
-> 
-> Binding wise I think this should take 1 or 2 interrupts. For simplicity 
-> the first interrupt should always correspond to ALARM1 (which could be 
-> INTB or INTA depending on the hardware design). The 2nd interrupt (if 
-> supplied) would be for the other events (which we don't currently do 
-> anything with).
-
-Not using an interrupt simply means the CPU doesn't care about it but
-there are other components that may care for example a PMIC. If you
-reason about what linux and the CPU it is running on can do, you will
-cripple functionality and we will have to break the devicetree binding
-later on to restore it.
-We need to be able to express all the possible pin configurations with
-the binding. I'm not sure why everyone is so resistant to use pinmuxing
-to mux pins....
+If you insist to combine independent patches, then at least clearly
+express merging strategy or dependency in patch changelog --- .
 
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> To: Jean Delvare <jdelvare@suse.com>
+> To: Guenter Roeck <linux@roeck-us.net>
+> Cc: linux-hwmon@vger.kernel.org
+> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+> ---
+
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
