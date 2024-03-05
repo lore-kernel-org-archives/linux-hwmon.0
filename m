@@ -1,61 +1,46 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3A376110;
-	Tue,  5 Mar 2024 00:49:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD1CC6FB5;
+	Tue,  5 Mar 2024 04:21:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709599772; cv=none; b=W6HRTmVEXj+mz/u98JfSs1IIuo+N2IkdZtIBSOp9wdVOxw5Bj7di2aeGRMFtAJ/w/H51JBLtYsOOdySZTi5U4MBfwVwJfRPocmM026yBOVneiCCHGXaoc9eD0X3SeBB/t0Gvvab8u46WVkPKh8gpuCQKQ5ZBZzrLCRJgysvsMd0=
+	t=1709612466; cv=none; b=pbTlOgCU/hV+GvkBjDnAY8ssQdRQIeNpzBr7zHT1TCU0fFfLm3sh1MQ+bOE5Z1mbrpuoM5Hui9iOQHZLdjNB4gj7ZHISfnnDJkNBHcgWAmI0lFARFnsOuojjOn9ZfnLiObolb8Bz7DWhAOTr4/Vnd8qstfKYuzM6sd3EgtG1cPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709599772; c=relaxed/simple;
-	bh=J4n4n3ug8xj7D+g9LkKXtQRpuTp0CSeXy7Prgd+wrxk=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=av3yceLOl34zka36LCLX12/3NvyabtcY05tnGQXIjJbfnxUO0acctrIkFV8LLXRDCrJk/+y1VPIvK4MjLxg2Ztib53tHXwDZO3wE9M5qt0BslDylddSP5why7I3BmjElfuDQ/nk8a//hARaFMAVHEekGm8+kKX4ZXsZ3xcp2JLg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O5ADGQSp; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1709612466; c=relaxed/simple;
+	bh=1WHkQK/Ja5W+APKzZ4IYM8Vsp3euVtIzyGWw7tf7y6A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JqQROgEGxcRVgaiNv4F7+9Sb+szqrp2/qJtgloNWaNcNgSuITLlWWBKnyhZXQBKBmPJfqhGNXwHQZ8NboNOFgK0UttgNTWwR7ZqHjBTQt/HSFzGtZi87oHisXs4IXY8pVeTI/wTB7JSLIZt39jV5k+MfpM54eXjiIeCTp5uZ9bY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FElsCGGa; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O5ADGQSp"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-5ce07cf1e5dso4648930a12.2;
-        Mon, 04 Mar 2024 16:49:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709599770; x=1710204570; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
-         :from:content-language:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=++8tOr68/fSpJcWWzBhYIXaEDMYMfDDTltrPw8fd4cE=;
-        b=O5ADGQSpOFgNRpo5mQ2Jgkjx2CrMegMvlUo3sF7nH+ULr2TzVVOnM4UOqZfqys1UNk
-         NKF1x2d4gV0uRGyD1bTikp4rYHt4kWZvffvU08jIyu8nrTQtdbBo3wRkSH4alvd4iXsk
-         bHr4abPPpYbnKGIsRxQJMrLKpBGnDBwk0qOTm6l/zlO7xJDQMFYXtgrdgL616+G64NCT
-         ghyW2omlRkHmNqQjvZ9bRI7xDIkVvGG4ZRU9nM7dGwypZMxXJym0dH8s7ylrK22iSFYr
-         M9o/VdKvLmi4f0vO3Te/ST0o+68XD5Zfw4M7cVB6LXm81F8oSiO1AOS9jJCwQ1PPosM2
-         Tjnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709599770; x=1710204570;
-        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
-         :from:content-language:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=++8tOr68/fSpJcWWzBhYIXaEDMYMfDDTltrPw8fd4cE=;
-        b=FwdmNKOLv/cVl3B9bU5jMf/0wEh1rOrPQuLv/eV5TF5t/HqAdE4UHq1cFjUAErpK8P
-         ARnwmaKczmZdlzvZnDPx/VXCYpn/Wcp3R+3WC+Bq8GzCme3Zj5w1CicEJxoNi17EOqO7
-         nuEBQ/NN4wcgsex1rNWrqRbZQkBlaAwktIWkYrGF++l+AcswvEXHCX+0EvR4l6qGUD0I
-         1zzg1IYUonO22wuepTnHJHy2wBIs/t8ZntmzRGXiLdI3eZQxKBS6qoU9cLtnnzhR+gtg
-         sEOckr2HVm2Pr43nK+9d8CaIlQ8t1EJJrX8Xs6gpd9M2zn6/27CIIxqQ8bKlG6i1EujZ
-         9qnA==
-X-Forwarded-Encrypted: i=1; AJvYcCVtubMx5Zj4xjtdBRsFT7SogQR3D410fuly6YPzWw3JVLc0fWGhUp6HU+oo+js1gbjTTSiEpvIHkFr7HzLm+9aYTzuMyR++y0DtBACMi5dZLO10ZkVsYE/YdXR4uQXlzoJ+EACbEoRR5SscXK87NVcFzU8J/duY1OW4OuSRW3C68+3+GWtzHaRcRRc2m6f+htJAy9d53rGYYX0Xte+jN+3X
-X-Gm-Message-State: AOJu0Yz1FF1a+kkIvyioWjD1apCM7GsexcWv+UwtA+GcAeIBmUSGOC5m
-	Gv3xMoFJeGqiM/ZNYGsPyiBKfFAi4XTBcJ0etbwoxNZ2PoWf6zLf
-X-Google-Smtp-Source: AGHT+IH5f7z8Q19BNOLE8e016EtE1ruOEMmi8zcLQWUpBERw4Pj2U1o93Uic/p8AsbOd/1jk2BeayQ==
-X-Received: by 2002:a05:6a21:3988:b0:1a1:31a0:f07a with SMTP id ad8-20020a056a21398800b001a131a0f07amr373567pzc.60.1709599769932;
-        Mon, 04 Mar 2024 16:49:29 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t9-20020a17090aae0900b0029b12d6b4a3sm7947605pjq.39.2024.03.04.16.49.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Mar 2024 16:49:29 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <03b6a094-b76d-4b4f-90d8-8b00219ec236@roeck-us.net>
-Date: Mon, 4 Mar 2024 16:49:27 -0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FElsCGGa"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709612463; x=1741148463;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=1WHkQK/Ja5W+APKzZ4IYM8Vsp3euVtIzyGWw7tf7y6A=;
+  b=FElsCGGa4+8opnGv+3B2XTWr1ARr9LwLFhe8t6sp1K2RQelQNjrnkI+C
+   nwpbbNYgFFNXSQWwTfH9eSyH1vOvKSjiUEmat4swCBeDcSSs8SvxcRezw
+   XNR4DRbptPV97nfN2l/EJzC2Cyfs9ZCMGE+xWTU4AzfpwznE/9iLCqxfl
+   ktT6dKGaKgj61JZYz2do65CqZ2Xk2wDXk1HWaPZN4bhBVxKzekjjqwOxt
+   tpgmkNyQM7A/GPUzGwB7pErEEk6RdKHYUeTpB3wHKK7T7li+u11Bt8Hz8
+   rwxixG/v6bzOk5WHYezhaFUPmH19qNU56yoT4wy+3m5dCySXO5GmoH8K0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11003"; a="4300750"
+X-IronPort-AV: E=Sophos;i="6.06,205,1705392000"; 
+   d="scan'208";a="4300750"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2024 20:21:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,205,1705392000"; 
+   d="scan'208";a="40216302"
+Received: from choongyo-mobl.gar.corp.intel.com (HELO [10.247.102.58]) ([10.247.102.58])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2024 20:20:55 -0800
+Message-ID: <6fbbd36a-20f5-43db-97fc-c8755a82a159@linux.intel.com>
+Date: Tue, 5 Mar 2024 12:20:39 +0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,100 +48,129 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/3] dt-bindings: hwmon: fan: Add fan binding to schema
+Subject: Re: [PATCH net-next v5 1/9] net: phylink: provide
+ mac_get_pcs_neg_mode() function
+To: "Voon, Weifeng" <weifeng.voon@intel.com>,
+ Russell King <linux@armlinux.org.uk>
+Cc: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+ David E Box <david.e.box@linux.intel.com>,
+ Hans de Goede <hdegoede@redhat.com>, Mark Gross <markgross@kernel.org>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Jose Abreu <Jose.Abreu@synopsys.com>, "David S . Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Richard Cochran <richardcochran@gmail.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+ Heiner Kallweit <hkallweit1@gmail.com>,
+ Philipp Zabel <p.zabel@pengutronix.de>, Andrew Halaney
+ <ahalaney@redhat.com>, Serge Semin <fancer.lancer@gmail.com>,
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-stm32@st-md-mailman.stormreply.com"
+ <linux-stm32@st-md-mailman.stormreply.com>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "platform-driver-x86@vger.kernel.org" <platform-driver-x86@vger.kernel.org>,
+ "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+ "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+ "Sit, Michael Wei Hong" <michael.wei.hong.sit@intel.com>,
+ "Lai, Peter Jun Ann" <peter.jun.ann.lai@intel.com>,
+ "Abdul Rahim, Faizal" <faizal.abdul.rahim@intel.com>
+References: <20240215030500.3067426-1-yong.liang.choong@linux.intel.com>
+ <20240215030500.3067426-2-yong.liang.choong@linux.intel.com>
+ <Zc47T/qv8Xg2SA21@shell.armlinux.org.uk>
+ <PH7PR11MB65210C62342088CF5C484A2888552@PH7PR11MB6521.namprd11.prod.outlook.com>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-To: Zev Weiss <zev@bewilderbeest.net>, baneric926@gmail.com
-Cc: jdelvare@suse.com, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- conor+dt@kernel.org, corbet@lwn.net, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org, kcfeng0@nuvoton.com, kwliu@nuvoton.com,
- openbmc@lists.ozlabs.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, DELPHINE_CHIU@wiwynn.com,
- naresh.solanki@9elements.com, billy_tsai@aspeedtech.com,
- Rob Herring <robh@kernel.org>
-References: <20240227005606.1107203-1-kcfeng0@nuvoton.com>
- <20240227005606.1107203-2-kcfeng0@nuvoton.com>
- <1cf69d3e-a8b4-49f6-ac4d-550b525e45e2@hatter.bewilderbeest.net>
- <e590e3ba-f446-4f20-9618-d4ff388586ad@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <e590e3ba-f446-4f20-9618-d4ff388586ad@roeck-us.net>
+From: Choong Yong Liang <yong.liang.choong@linux.intel.com>
+In-Reply-To: <PH7PR11MB65210C62342088CF5C484A2888552@PH7PR11MB6521.namprd11.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 3/4/24 16:41, Guenter Roeck wrote:
 
->>> +
->>> +  min-rpm:
->>> +    description:
->>> +      Min RPM supported by fan.
->>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>> +    maximum: 1000
+
+On 23/2/2024 2:58 pm, Voon, Weifeng wrote:
+>>> For instance, if the interface switches from 2500baseX to SGMII mode,
+>>> and the current link mode is MLO_AN_PHY, calling
+>> 'phylink_pcs_neg_mode'
+>>> would yield PHYLINK_PCS_NEG_OUTBAND. Since the MAC and PCS driver
+>>> require PHYLINK_PCS_NEG_INBAND_ENABLED, the
+>> 'mac_get_pcs_neg_mode'
+>>> function will calculate the mode based on the interface, current link
+>>> negotiation mode, and advertising link mode, returning
+>>> PHYLINK_PCS_NEG_OUTBAND to enable the PCS to configure the correct
+>> settings.
 >>
->> I can't say with certainty that it's not, but are we sure 1000 is low enough?  Looking at just what I've got on hand, an 80mm fan I have will run steadily at about 1500RPM, and I'd assume larger ones (e.g. 120mm) could potentially go significantly lower...
+>> This paragraph doesn't make sense - at least to me. It first talks about
+>> requiring PHYLINK_PCS_NEG_INBAND_ENABLED when in SGMII mode. On
+>> this:
+> 
+> The example given here is a very specific condition and that probably why there are some confusions here. Basically, this patch provides an optional function for MAC driver to change the phy interface on-the-fly without the need of reinitialize the Ethernet driver. As we know that the 2500base-x is messy, in our case the 2500base-x does not support inband. To complete the picture, we are using SGMII c37 to handle speed 10/100/1000. Hence, to enable user to switch link speed from 2500 to 1000/100/10 and vice versa on-the-fly, the phy interface need to be configured to inband SGMII for speed 10/100/1000, and outband 2500base-x for speed 2500. Lastly, the newly introduced "mac_get_pcs_neg_mode"callback function enables MAC driver to reconfigure pcs negotiation mode to inband or outband based on the interface mode, current link negotiation mode, and advertising link mode.
+> 
+>>
+>> 1) are you sure that the hardware can't be programmed for the SGMII
+>> symbol repititions?
 >>
 > 
-> I have seen fans which run stable at < 400rpm.
-> One of my systems right now has:
+> No, the HW can be program for SGMII symbol repetitions.
 > 
-> fan1:              732 RPM  (min =    0 RPM)
-> fan2:                0 RPM  (min =    0 RPM)
-> fan3:              586 RPM  (min =    0 RPM)
-> fan4:              472 RPM  (min =    0 RPM)
-> fan5:              480 RPM  (min =    0 RPM)
+>> 2) what happens if you're paired with a PHY (e.g. on a SFP module) which
+>> uses SGMII but has no capability of providing the inband data?
+>> (They do exist.) If your hardware truly does require inband data, it is going to
+>> be fundamentally inoperative with these modules.
+>>
 > 
-> Those are 80mm fans. A quick check shows that various Noctua fans have a
-> minimum speed of 300 rpm. So 1000 is indeed a bit high for the minimum speed.
+> Above explanation should have already cleared your doubts. Inband or outband capability is configured based on the phy interface.
 > 
+>> Next, you then talk about returning PHYLINK_PCS_NEG_OUTBAND for the
+>> "correct settings". How does this relate to the first part where you basically
+>> describe the problem as SGMII requring inband? Basically the two don't
+>> follow.
+> 
+> It should be a typo mistake. SGMII should return PHYLINK_PCS_NEG_INBAND_ENABLED.
+> 
+>>
+>> How, from a design point of view, because this fundamentally allows drivers
+>> to change how the system behaves, it will allow radically different behaviours
+>> for the same parameters between different drivers.
+>> I am opposed to that - I want to see a situation where we have uniform
+>> behaviour for the same configuration, and where hardware doesn't support
+>> something, we have some way to indicate that via some form of capabilities.
+>>
+> 
+> Hi Russell,
+> If I understand you correctly, MAC driver should not interfere with pcs negotiation mode and it should be standardized in the generic function, e.g., phylink_pcs_neg_mode()?
+> 
+>> The issue of whether 2500base-X has inband or not is a long standing issue,
+>> and there are arguments (and hardware) that take totally opposing views on
+>> this. There is hardware where 2500base-X inband _must_ be used or the link
+>> doesn't come up. There is also hardware where 2500base-X inband is not
+>> "supported" in documentation but works in practice. There is also hardware
+>> where 2500base-X inband doesn't work. The whole thing is a total mess
+>> (thanks IEEE 802.3 for not getting on top of this early enough... and what's
+>> now stated in 802.3 for 2500base-X is now irrelevant because they were too
+>> late to the
+>> party.)
+>>
+> 
+> Agreed. And I have also seen some of your comments regarding the 2500SGMII and 2500BASEX.
+> 
+Hi Russell,
 
-No, wait, that is the _maximum_ minimum speed. Got me there.
+Did the previous reply clear your doubt?
 
-So, there is Noctua's NF-A4x20 PWM with a minimum rotational speed of 1,200 RPM.
+If we understand you correctly that MAC driver should not interfere with 
+pcs negotiation mode and it should be standardized in the generic function.
+If implement what you suggested earlier that during interface mode change 
+then update the `cur_link_an_mode` but not cfg_link_an_mode: 
+https://patchwork.kernel.org/project/netdevbpf/patch/20230921121946.3025771-4-yong.liang.choong@linux.intel.com/?
 
-If I interpret
-https://www.mouser.com/datasheet/2/471/SanyoDenki_San_Ace_40LG28_E-3198440.pdf
-correctly, it lists some fans with a minimum speed of 7,500 RPM.
+Would that be a better solution?
+So that 'phylink_pcs_neg_mode' function still can serve as the generic for 
+all the drivers.
 
-Guenter
-
+Do you have anything in mind that we can handle better for this patch series?
+or the solution can be aligned with what you are going to implement in the 
+future?
