@@ -1,101 +1,105 @@
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B94645EE96;
-	Wed,  6 Mar 2024 09:34:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1886214F7F
+	for <linux-hwmon@vger.kernel.org>; Wed,  6 Mar 2024 09:50:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709717654; cv=none; b=a9SGI9mZKM0b4E4KocEjcHFpMTC+6bfucJLzWcTEXFFFQm6YoMghYVb14s+SAg8JegX4fmZu6zQP5e6uTJm5WYngrAZGyfz9OMYs0ZtacjC1fRlSw490t84UA8PMyIteo2qulc7QqdN3U4M0xnoniRy6BtSlt5O/XsOp+V/bJbM=
+	t=1709718616; cv=none; b=hrPYi6aBHHzGM2dlmPSlUBJ8gvteW3iHen/jY5lgRqsbfEj30Q0D4MCQIJQPLLHVczHoIXR8DYazNm+SfPPiibhXb/04DRb0YGe8pjcxsrPQpO8V0vb97UdQCotCIRaV0oETWpdiZk0Un/7ms6ySHpT2dCz1rCO+Gd14Iw91Vu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709717654; c=relaxed/simple;
-	bh=JinEX41/j7Pb/bWxW54bGmffaAtTNcThK8gdOptLKmY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=eF882WGEhiB5jRMSmh9kej6ISIvjqXudnfN1oQJNI0OIQL6cUh27R0qkBfSrcKwhZdUHDMt95q4od46vpDjKr4mB24Jq1VQajIl9DBbRC0WZju9RSO7Ue1wJson3YScNT72vByHxbjGPN20ZGVT5vp67a6fB6oue6Kc1wz41R2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=flWszAUC; arc=none smtp.client-ip=217.70.183.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1709718616; c=relaxed/simple;
+	bh=5wTDv8Pow3ls0hAeMHjkJghWq0FXCqANDCJJgNSwvho=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ceANhjdDOjCdFAmlHkLewrXLlO88TEk28DGKWqlJo3yaV7dv0VKXJGk+sBvV9IxtVFrXhChJywiCxjNxddFIwVPsHhnnAgqwgTbgUbaWTLp5v5yPpFPeFHi4pOJFGifK68OLPdFX9MlaF9vw7x/gzvNQ7lLlKh/2769URlipoT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=bXPN6EEK; arc=none smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="flWszAUC"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5B95DFF80A;
-	Wed,  6 Mar 2024 09:34:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1709717649;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=od4s/GMAsr52sikJcFgvSYexwtnWDcy7Z22NE3GsHO0=;
-	b=flWszAUCdRYte0IftesUvM5oIovUSfZcoWTw88vViiC3zzugdD6VABdpg/qSMIoiriNvEa
-	HwQ6CavPBKPEtMWhjiB1Jcx/h+8QmodvIi2fHXR+EHqw0knNc60bHgC9MB/4YwpsxQsc9L
-	C3Ay7A2aKHeZTAduHirmc4l7SsHzn9CiWUQXkpVsM9JP3ePCdLebbkVivyjkYGv4zw1ke8
-	+hHh9DdtCmExe4sk3tryFL2xap6DbZSDNF4cuFMZclKyl9eZQ22Nqi0Oh6HZzGGIAZmlNG
-	JH9RAXidbdI6QKlNno1AjYAmVwYjQr9rrE4mEiX+dQ682P+Hxli1IYdpqvIboA==
+	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="bXPN6EEK"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-29a6dcfdd30so534483a91.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 06 Mar 2024 01:50:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1709718614; x=1710323414; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=5wTDv8Pow3ls0hAeMHjkJghWq0FXCqANDCJJgNSwvho=;
+        b=bXPN6EEK8ROtqPXnYOisP9OZv3wXjLA9VoezLbW3CpaUU1dDVxypTELbSobzh3ISeO
+         xeeF+K748SPIMCXb59dhOMK8AOcrwAYrBhvPq0myPnega+hV0+Ig/sQcg8N030py06sk
+         uE049MOvk3W3SPtXR4IO/0+Hj631mWd8R1z3r/9ZfaUaNRgiXWbf+jjzAi09jCuQSX9k
+         4fIyoX1knONzgrM09k7oeU+5dvnWApdAWQjeiDOfqEOPsM2ZwZXs4XiEcPdbj0TeJn+i
+         fGZguCMDj+GG181gxMU3Sznje5Qmiz/t4XbK975eZUMhtA8ATFIqV/rRnjsGnaLNvqPQ
+         db2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709718614; x=1710323414;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5wTDv8Pow3ls0hAeMHjkJghWq0FXCqANDCJJgNSwvho=;
+        b=R14Tfp1byQ9HnfS259r3EWnxuyO3mM2wnZVZ9U6tbizk0KiO9mmcZD1E3ZA8bTL3UD
+         QXWLRGw7EurcsiAq8uNHu5zEEypuSU/mnQbVJ5tpJHuS1zdTs3wJWcVeFdNPSRAmAqTA
+         KjsrctP5c5r1RgFjnQy8aZBSklXQkV9KwmAxW0BrtHDTVjNV7Y1rS9g5ACOd3sZ7+8Yr
+         uAwAdQZXFs8qkVtDOhF2rMCTB2Hb59jqMXTSqRzJFoUu6halJaGWRP1t6Eh0yRrpbLSv
+         CvmT5GQ07kLdOLgDGnRDrom2PRqLHCM+rK2Dow5uNWjsxruWNNYcBectTh52PfCRz8Ge
+         GWQw==
+X-Forwarded-Encrypted: i=1; AJvYcCXxMqJK3uYWoYOGjSH6oIk7fFJyrhrwBSQHy6qOeqqy/WwuZVwnjuI7pqDbPTgfy5asQ1SAfCmjTeZEkM/BM/5nFhxpo3lwiSMqeOE=
+X-Gm-Message-State: AOJu0YxxZDwSjK+fnkdrFXYP2KZH3zps9lJQ5YKmsBgFLzD5jHqpze4c
+	4Jdr7DBnfldNnoBXVRI+yfB/u5Gxgp5xNIO+rOAR5bHDFD3VI+KTWe8AxjMBgru2BXlT/JvyFlz
+	pePf7A+6kZsrmr2JVeLNPsX7qeX+UGysf1KJYnA==
+X-Google-Smtp-Source: AGHT+IEe5ARYEUNZCsr+iHrFPzLLIKN3FTqKMUPA5r/pRjcydibLKmQbYN0Ni7yeDM2vxSQwE6cGRdoCFy2gruuS/H0=
+X-Received: by 2002:a17:90a:f490:b0:29a:6b5c:33ba with SMTP id
+ bx16-20020a17090af49000b0029a6b5c33bamr12644943pjb.5.1709718614426; Wed, 06
+ Mar 2024 01:50:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 06 Mar 2024 10:34:08 +0100
-Message-Id: <CZMKBOH0BBTH.MZH1OTAZC7HH@bootlin.com>
-Subject: Re: [PATCH v2 00/11] Add Mobileye EyeQ5 support to the Nomadik I2C
- controller & use hrtimers for timeouts
-Cc: "Linus Walleij" <linus.walleij@linaro.org>, "Rob Herring"
- <robh+dt@kernel.org>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-mips@vger.kernel.org>, "Gregory Clement"
- <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
- <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>, "Jean Delvare" <jdelvare@suse.com>, "Guenter
- Roeck" <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>
-To: "Andi Shyti" <andi.shyti@kernel.org>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-X-Mailer: aerc 0.15.2
-References: <20240229-mbly-i2c-v2-0-b32ed18c098c@bootlin.com>
- <bhiubxf3vuxfnz4rh75isgy5z5cexa6dnlw733box5ly3h7r5f@yqvzs75d3ykb>
-In-Reply-To: <bhiubxf3vuxfnz4rh75isgy5z5cexa6dnlw733box5ly3h7r5f@yqvzs75d3ykb>
-X-GND-Sasl: theo.lebrun@bootlin.com
+MIME-Version: 1.0
+References: <20240305210747.1377506-1-naresh.solanki@9elements.com> <a32a2655-7561-4339-8521-bc2558e0bdb1@linaro.org>
+In-Reply-To: <a32a2655-7561-4339-8521-bc2558e0bdb1@linaro.org>
+From: Naresh Solanki <naresh.solanki@9elements.com>
+Date: Wed, 6 Mar 2024 15:20:02 +0530
+Message-ID: <CABqG17hYK8MFMPVNXxZ6JT4TW00PPt48q1qZBzS=gJrpC--iTg@mail.gmail.com>
+Subject: Re: [PATCH v3] dt-bindings: hwmon: tda38640: Add interrupt &
+ regulator properties
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+	Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	mazziesaccount@gmail.com, linux-hwmon@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hello Andi,
+Hi Krzysztof,
 
-On Wed Mar 6, 2024 at 2:49 AM CET, Andi Shyti wrote:
-> > Th=C3=A9o Lebrun (11):
-> >       dt-bindings: i2c: nomadik: add mobileye,eyeq5-i2c bindings and ex=
-ample
-> >       dt-bindings: hwmon: lm75: use common hwmon schema
-> >       i2c: nomadik: rename private struct pointers from dev to priv
-> >       i2c: nomadik: simplify IRQ masking logic
-> >       i2c: nomadik: use bitops helpers
-> >       i2c: nomadik: support short xfer timeouts using waitqueue & hrtim=
-er
-> >       i2c: nomadik: replace jiffies by ktime for FIFO flushing timeout
-> >       i2c: nomadik: fetch i2c-transfer-timeout-us property from devicet=
-ree
-> >       i2c: nomadik: support Mobileye EyeQ5 I2C controller
-> >       MIPS: mobileye: eyeq5: add 5 I2C controller nodes
-> >       MIPS: mobileye: eyeq5: add evaluation board I2C temp sensor
+
+On Wed, 6 Mar 2024 at 12:44, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
-> what's your plan for this series? If you extract into a separate
-> series the refactoring patches that are not dependent on the
-> bindings I could queue them up for the merge window.
+> On 05/03/2024 22:07, Naresh Solanki wrote:
+> > Add properties for interrupt & regulator.
+> > Also update example.
+>
+> Nothing improved.
+Yes, Just aligned the regulator node name in this revision.
+I missed aligning the commit message.
 
-V3 is ready and will be sent today. I think we can get trailers from
-dt-bindings maintainers as the discussion has been caried out on this
-revision.
+I'll fix in next revision & update commit message as:
 
-Am I being too optimistic of seeing this series queued before the merge
-window?
+tda38640 has a single regulator output along with
+CAT_FAULT# pin to report internal events.
+Hence add properties for regulator & interrupt.
 
-Thanks Andi,
+Let me know if any others changes needed.
 
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards,
+Naresh
 
+>
+> Broken record. You got the same comment 3rd or 4th time!
+>
+> NAK
+>
+> Best regards,
+> Krzysztof
+>
