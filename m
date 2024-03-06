@@ -1,136 +1,223 @@
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E96261427E
-	for <linux-hwmon@vger.kernel.org>; Wed,  6 Mar 2024 07:14:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 040A55D48E;
+	Wed,  6 Mar 2024 07:56:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709709260; cv=none; b=uqxn9CkrZ38EkjCWYc/92SbVB9buJqcxhIdE5fUwMg1gOLR8v1JBBK2epgUi8UWbgsj+dyaBhSXDMc/MNVT1KVhA6cWOzr1ULdv8hMJyI26TRbRSkQhTtbv3NXlJumW5cyQGxqYBT+8ByxNHLh1AzEMGvIpIPj0J5e30OrLKJn4=
+	t=1709711801; cv=none; b=jI/O0rjyRl/1p50L24UDPZKB5uzMGoEYnRPjKxHX9duEEXWcBQ8R03y7Ov0j0OWAIZH1zQPPmiEozoi3WGIU1WZy1Dbxzva5O2SzdoA5McwRlQm4EzpP7swI+BbSnIkNHAooSOdsDnoiulfbHOWRXTQLvNBa6vooLICNuAVjcNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709709260; c=relaxed/simple;
-	bh=PJz5VgJhJ3QniqYbnJEMV1SdYgsk90S2IsXlezyH2ZY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iJguPNhLfY8TJMAoqLPDRtq9JmOP68cj5ID5Goby6WEx5Jgf3dvquXMVuLaQy+bYX1376biZ2jQPxTiwmObYdABAw3PeWWaZ1YDArr/djrNcJuCjMdvaOESZk3IVHJqbQ7+Ds1DyzbZt/kaxVsp4sFG0qnoitKp62M3FbN3svik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Urb0gCBJ; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1709711801; c=relaxed/simple;
+	bh=GYr7m8K6mxpIbzSAb4QoLozaKgrbAWOSyE7TrCOPgDE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=q0cxps4GbDqRSuKRjcKjn0DmoI8dvtkReJNirFCYWCsgP1HHxO/bL/6TKRYqcCZHYChB8lXdmjZPfIpyc7pXrC45fepnGqpXn6bBqR+tw5AzvILCS8ml3Deam6OqwlcTLsQzJiW4NK/W6aiFiunavaZ59MC72ATdXs7g6ZnmF6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WOkz57Wl; arc=none smtp.client-ip=209.85.166.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Urb0gCBJ"
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a44665605f3so683778866b.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 05 Mar 2024 23:14:18 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WOkz57Wl"
+Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-365fec6644fso1999485ab.0;
+        Tue, 05 Mar 2024 23:56:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1709709257; x=1710314057; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PJz5VgJhJ3QniqYbnJEMV1SdYgsk90S2IsXlezyH2ZY=;
-        b=Urb0gCBJjlbNghmhGaGHNWCZuTXVnNk+66o2+75fSVDFWaGrQusssyFFYylDjdIJ2F
-         tbnpcC270jlJxTQAtYn2V0wd26tU8bh/secKAFfcZqzuyHBNLej8TR9l0rlnpD9pqPGx
-         sXXF1+p4WSrAQVACEKcHRTY2tr7pdcHMxhAdqgei4c7tR1CVUwMXP9wYugmMhQbVuYyc
-         e9Bw+FGZvKzIqEyFxmoeowsv2eww4X5SpU+1A2XdDGiqchEPWM6YiHiYgLakYqIk/AUZ
-         QRocBvUoocFEuQS07oDeo+NXzH+DbbywLYTWlXNGPp1LQg0uOZzJskZaJS8ORX0UqWNs
-         YT3Q==
+        d=gmail.com; s=20230601; t=1709711799; x=1710316599; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jPhPQT45kHdyzdhpdUe+DVL+6CjOwhe9gLeuSsNNlCQ=;
+        b=WOkz57Wl3JT/gYcOW3RcVs2kbhgGvu18c8CELUerRDYzjGRzp700DYbTWeBQed/6o7
+         N+Oaz59ACfGkU28uep6wJ/oOAy9uRx7mXzVfREooBAWBxbtNADfHTe03LiN5Lxysx0lv
+         EchL+r+hs2W6aPREDdaYpGyelFc1XufjVy6VgjCC6koBvc9HFz25pUwheiAeoRTnn2G9
+         dujIKincWSTwWmU8ux7ivePdo6H+QfMsjaWAMTod785le/KwuAboAdiqQCl7J570Wkxj
+         1IUolWZPRtfdeymLYv0DfS8CTAUty4Xpqpcv4J+FZsMADbD15CQNrngP1xQgQP6Ygl8U
+         Ht2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709709257; x=1710314057;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PJz5VgJhJ3QniqYbnJEMV1SdYgsk90S2IsXlezyH2ZY=;
-        b=pSA0ubugrvEpEo/HF4kYtUbz20C2a0Gbt/gOXrMwYNTIOzPCx5z/2p+zalWRWiV1DJ
-         wB6nxlUBHjjNl8DLnpokjTuveKqw27GpQlOtZ7ibbmIBz3tP4Wedh9lVixJ+5S09xGhm
-         MCjGRusHlCk4d8hihyLri2z9DZqeJhLKFyuO9+GIzJz3Hon+J6Rjp1DenF/6rsC/Gojc
-         nUz+IzhVtpVwmdK6YGTCOjBt+Ek24P4A5Zoid6RBw/SoYu6cJTUuK4djIpCCKqGSUVAY
-         WLdsfd63luVihIYeEGtf9YDlHIsrWAef9yPYTlJcluaEX7b52+Q46/9A2aydE9ZAgzLl
-         tVgA==
-X-Forwarded-Encrypted: i=1; AJvYcCXlxmAr/2YS6KTLoyj7R7Ks+br2id9rqs7YfxBrQsjdjhe/cGH8ZtgaxTvST7PqqpM/T84iHz9APcouX7Hy7JyApuaswo1INtjOros=
-X-Gm-Message-State: AOJu0YzvSkoZgwU58j4ioD3DohEAmXm6vyMzS1f/ogW+J615pXgNfZJI
-	ZKtZ2zoWR496chQSWDG3yqdrDgRwiMkNepkVet9MpLLfvUnV9EciKiH2n/TPlyE=
-X-Google-Smtp-Source: AGHT+IEecCk+TqZFdqb8f1EzPLA2CdGJLn2LnM5oErrBM2/NB5iMvFeVVka3XAupTqGzHL7ZOyo0jA==
-X-Received: by 2002:a17:906:6805:b0:a45:b1e7:df8b with SMTP id k5-20020a170906680500b00a45b1e7df8bmr1561462ejr.64.1709709257349;
-        Tue, 05 Mar 2024 23:14:17 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.222.97])
-        by smtp.gmail.com with ESMTPSA id y6-20020a056402358600b005645961ad39sm6535904edc.47.2024.03.05.23.14.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Mar 2024 23:14:16 -0800 (PST)
-Message-ID: <a32a2655-7561-4339-8521-bc2558e0bdb1@linaro.org>
-Date: Wed, 6 Mar 2024 08:14:15 +0100
+        d=1e100.net; s=20230601; t=1709711799; x=1710316599;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jPhPQT45kHdyzdhpdUe+DVL+6CjOwhe9gLeuSsNNlCQ=;
+        b=Czj8mktQriwxVIqBB6XVXq0ivzzihwTScNm9kCXZHLm9BBrRTAxMrpu7/B9/wMsoAH
+         epy8OaplhUYHIuaNaIFwdOZ+vEoh5cvMVzr7QyXzHW0+ZENL94KRpvxtHnqeGTw8knfG
+         M5lygMK7qeGRQJGh+rXgaiUFqIUy5A1dB23s/UBIe+o4xh/fAm70kIYUm4SlDzb2tEOF
+         88bvIqCo7m5Eu+4RoyJGMnAC5pBpQI1FSxTEvloowjvCQWjT2gPNy9l4FuFPkMT7v9Lz
+         WopKzoDNoD0pvcSORjkT/fhkmlLg2ybSdhJHG178FzZk3gjbRTQeLx2xBtC7T9QGXfD6
+         OEkA==
+X-Forwarded-Encrypted: i=1; AJvYcCUd9ppIQ7Nl0B0gBtQi/Pm+ugz3ChgpxWOvFKS+y66wB76t+tErKnGBBPy71utwzD2ooevQbLzDwDtVwZOXKPP0XFQxWHFAhZ33H5yYBJeNhFPHcxXvOug2XJvET/qhtvuSqO/moNd4aspeluVfTfBVWSFuYbAbBMfSUOiICKGrm2cR9wk8LsshS1IFieM1rLG/HYwxs86BVO7JLJ/LOA7J
+X-Gm-Message-State: AOJu0YxPtWXK45ux+ZP+B42l9CinbChQ8YdhXT54+tIIAhw9hW8Q16MT
+	XuYmseyZTvnGjbBME/pe+vDfZ1EXe+0GXAUU7dxXORRItmEJEWDbA/Nkpl2FbyDUFqSUKBGuX4a
+	IcMLMIOXOFOqW0tK+c4upaIqv/Xk=
+X-Google-Smtp-Source: AGHT+IE58vRHwDBTTuXKHgQFQ/UJSqdO7pnSZOi6XVe91c0PQI282+bUYNvb4IHteGaUW+HdSI/Vt7sBb1zhbo8GFCs=
+X-Received: by 2002:a05:6e02:12ce:b0:365:102a:ee10 with SMTP id
+ i14-20020a056e0212ce00b00365102aee10mr4294177ilm.6.1709711799054; Tue, 05 Mar
+ 2024 23:56:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] dt-bindings: hwmon: tda38640: Add interrupt &
- regulator properties
-Content-Language: en-US
-To: Naresh Solanki <naresh.solanki@9elements.com>,
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: mazziesaccount@gmail.com, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240305210747.1377506-1-naresh.solanki@9elements.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240305210747.1377506-1-naresh.solanki@9elements.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20240227005606.1107203-1-kcfeng0@nuvoton.com> <20240227005606.1107203-3-kcfeng0@nuvoton.com>
+ <93d67381-34fc-423c-868a-565378c63e09@molgen.mpg.de>
+In-Reply-To: <93d67381-34fc-423c-868a-565378c63e09@molgen.mpg.de>
+From: Ban Feng <baneric926@gmail.com>
+Date: Wed, 6 Mar 2024 15:56:28 +0800
+Message-ID: <CALz278YF8FGz=JM83Q=6PeoQmGOJ4dfB8QTu1qbu9p4eSBHi8Q@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] dt-bindings: hwmon: Add NCT7363Y documentation
+To: Paul Menzel <pmenzel@molgen.mpg.de>
+Cc: jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org, 
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, corbet@lwn.net, 
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, kcfeng0@nuvoton.com, 
+	kwliu@nuvoton.com, openbmc@lists.ozlabs.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, DELPHINE_CHIU@wiwynn.com, 
+	naresh.solanki@9elements.com, billy_tsai@aspeedtech.com, 
+	Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 05/03/2024 22:07, Naresh Solanki wrote:
-> Add properties for interrupt & regulator.
-> Also update example.
+Hi Paul,
 
-Nothing improved.
+On Wed, Feb 28, 2024 at 3:30=E2=80=AFPM Paul Menzel <pmenzel@molgen.mpg.de>=
+ wrote:
+>
+> Dear Ban,
+>
+>
+> Thank you for your patch.
+>
+>
+> Am 27.02.24 um 01:56 schrieb baneric926@gmail.com:
+> > From: Ban Feng <kcfeng0@nuvoton.com>
+> >
+> > Adding bindings for the Nuvoton NCT7363Y Fan Controller
+>
+> s/Adding/Add/ or even Document bindings =E2=80=A6
 
-Broken record. You got the same comment 3rd or 4th time!
+ok, fix in v5
 
-NAK
+>
+> Do you have an URL to the datasheet?
 
-Best regards,
-Krzysztof
+I'll add "Datasheet: Available from Nuvoton upon request" per Guenter
+suggested in v5.
 
+>
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+> > Signed-off-by: Ban Feng <kcfeng0@nuvoton.com>
+> > ---
+> >   .../bindings/hwmon/nuvoton,nct7363.yaml       | 63 ++++++++++++++++++=
++
+> >   MAINTAINERS                                   |  6 ++
+> >   2 files changed, 69 insertions(+)
+> >   create mode 100644 Documentation/devicetree/bindings/hwmon/nuvoton,nc=
+t7363.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/hwmon/nuvoton,nct7363.ya=
+ml b/Documentation/devicetree/bindings/hwmon/nuvoton,nct7363.yaml
+> > new file mode 100644
+> > index 000000000000..1a9d9a5d614e
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/hwmon/nuvoton,nct7363.yaml
+> > @@ -0,0 +1,63 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +
+> > +$id: http://devicetree.org/schemas/hwmon/nuvoton,nct7363.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Nuvoton NCT7363Y Hardware Monitoring IC
+> > +
+> > +maintainers:
+> > +  - Ban Feng <kcfeng0@nuvoton.com>
+> > +
+> > +description: |
+> > +  The NCT7363Y is a Fan controller which provides up to 16 independent
+>
+> lowecase: fan controller?
+
+ok, fix in v5
+
+>
+> > +  FAN input monitors, and up to 16 independent PWM output with SMBus i=
+nterface.
+>
+> output*s*?
+
+ok, fix in v5
+
+Thanks,
+Ban
+
+>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - nuvoton,nct7363
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  "#pwm-cells":
+> > +    const: 2
+> > +
+> > +patternProperties:
+> > +  "^fan-[0-9]+$":
+> > +    $ref: fan-common.yaml#
+> > +    unevaluatedProperties: false
+> > +    required:
+> > +      - pwms
+> > +      - tach-ch
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - "#pwm-cells"
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    i2c {
+> > +        #address-cells =3D <1>;
+> > +        #size-cells =3D <0>;
+> > +
+> > +        hwmon: hwmon@22 {
+> > +            compatible =3D "nuvoton,nct7363";
+> > +            reg =3D <0x22>;
+> > +            #pwm-cells =3D <2>;
+> > +
+> > +            fan-0 {
+> > +                pwms =3D <&hwmon 0 50000>;
+> > +                tach-ch =3D /bits/ 8 <0x00>;
+> > +            };
+> > +            fan-1 {
+> > +                pwms =3D <&hwmon 1 50000>;
+> > +                tach-ch =3D /bits/ 8 <0x01>;
+> > +            };
+> > +        };
+> > +    };
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 2ecaaec6a6bf..7b1efefed7c4 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -15084,6 +15084,12 @@ S:   Maintained
+> >   F:  Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
+> >   F:  drivers/hwmon/nct6775-i2c.c
+> >
+> > +NCT7363 HARDWARE MONITOR DRIVER
+> > +M:   Ban Feng <kcfeng0@nuvoton.com>
+> > +L:   linux-hwmon@vger.kernel.org
+> > +S:   Maintained
+> > +F:   Documentation/devicetree/bindings/hwmon/nuvoton,nct7363.yaml
+> > +
+> >   NETDEVSIM
+> >   M:  Jakub Kicinski <kuba@kernel.org>
+> >   S:  Maintained
+>
+> Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+>
+>
+> Kind regards,
+>
+> Paul
