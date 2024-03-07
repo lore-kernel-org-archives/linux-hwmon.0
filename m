@@ -1,222 +1,108 @@
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EA8F63105;
-	Thu,  7 Mar 2024 07:42:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D02585273
+	for <linux-hwmon@vger.kernel.org>; Thu,  7 Mar 2024 10:13:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709797324; cv=none; b=RuMrO8f1VVvmMhP63acMtAvMX3K/oFT1Imk37e7im+tQozp60VAPKf/kAXLrGDID4OJ1iSY18LFgDkqNuLEBLi/6+K5dI0Hii5LY4pi23Rm6bOv0Dw9efPgGaW/nkS9m1L0ec3tqWZTGAHn/vTcur4rcOSWSwThFU6tM0wn0rEY=
+	t=1709806403; cv=none; b=Hpr+4O4vToquxa3sd3ya3NB64EqGuv5S/sgiWqAgkheDDMgl4NMrN96VvMQj4YmlC9eBms/SC/xxbEUrP5tp3g3t2/SkxTbcgS7/IxTavDMZs2tH1cl08gv48THQqiuiryT2AEZ3QkQ85gy3Zb8juWKMGOGN/QhVcqpGYV8OeR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709797324; c=relaxed/simple;
-	bh=8zkoTHrhHGCWjkGdamTPQWEi1mXkY2fTJs3Wy3G48yU=;
+	s=arc-20240116; t=1709806403; c=relaxed/simple;
+	bh=KPfbW2lQX/bJg7kEZFYwIIRBOeQ37xyQSbgAoCjTrbE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OisakHqxR1FZP774z0dCoJ3O9Swf7jJcw2jU9LpptM9MM6A77mXg4n1SKSxNOlGu3WcN/MtLw2/f07HG+f1FBBzPI/fI2SdGjHApDsMZ+VHy/tGZZDX1cg5+fyNmaxR4Sc8G+Dd0ibsWRWJalBfcG9kbjxilpVSo9j92PVZhAbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LTzJOf8s; arc=none smtp.client-ip=209.85.166.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=XxS0TGYNK3dE1T/hUk4ueif311rXauXS2NM/xq+RCLvSmGUq1I/olRQglB0h3iQ+TFF1OwvOK0MnSwne+YwDFFjdiHo/tjV4u55et/A77IyJd43atdIiZ6joO5sXifF5bt+VtWrhlA5gGbrGRGBizhZwMwxCqxrq3ez/yIz/d9k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=VLneGRlf; arc=none smtp.client-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LTzJOf8s"
-Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-7c872002187so21154839f.2;
-        Wed, 06 Mar 2024 23:42:02 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="VLneGRlf"
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-5bdbe2de25fso570918a12.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 07 Mar 2024 02:13:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709797322; x=1710402122; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B5+2SLHKHSCrTFwVgpGe2p6pLgJMincwPJKbEHmHkEw=;
-        b=LTzJOf8sQDv63ZaORfJfmgipNJpyCs4RcebQDY6KFnky51sDvrHSeNI327ZAQC/0OT
-         RTh4gqQaAReSsSLCXnFEHJ5cg7XhFBpLfHb45GCC6/6H4tsc7k2/oFDbSKingCiyEM9P
-         5j6Oo8SxB83I+kijOK7JjmBB7ICRfG3E2pBBwGZ+ti6ZXvUmT7oO3wjv7kStotDnE58T
-         gcvi0gx5kHI0V5XSbKgmZo/aelSJ1msVcyCF6XnCSU/Spp6Bd5RvV/2xvTU2mujat1a5
-         Ego13ka47YvpJ0Ea8Li9yT4602+wUnfgLF3edGfUuAvZJ6XWXnsfVk8u+Unm253qVaSa
-         dylQ==
+        d=9elements.com; s=google; t=1709806401; x=1710411201; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KPfbW2lQX/bJg7kEZFYwIIRBOeQ37xyQSbgAoCjTrbE=;
+        b=VLneGRlfQEidOvTjDa//8OrSlNr6v+E1zFDntkew+xEFl+rRX99EXZo+ew1HhJkCW+
+         cwTJOcxYSYdJNM+KVsTfu4fH0VVhwcIjAUxuC6b8CJ1VfPzs8c36DM8lp0wtvq93XNMW
+         xabAYjuxtO6DCghfy1RHAIQ+xhzOFJx70B3G76gVGFM36rjeCUx6CEy1Z1FWw1w2BfXP
+         +TsFCDIA0N+0VW1/PKfaR/vf+w8chNpxf482omt1aFxO6Xjhhqt2i50C3flz/LAtV+YN
+         yn2Bu43AJW1aITIiCVjDSkNAVeqdYrKgF1SbawXJh50XEEZO9rqkQ36EtiuCLTOa6w0w
+         WlWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709797322; x=1710402122;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=B5+2SLHKHSCrTFwVgpGe2p6pLgJMincwPJKbEHmHkEw=;
-        b=MwIeAb7KLL1uMyJCwU/k3yHHaF4CBk8DA0Q4gObbYc0Seh/v9L670/xv0OJN5JW7J+
-         X0T+XJPZFIvWQ8aqhCHriV3xMguppU3JK549OPlaOOeRjQ5e9hBDuDcUbCjcqlH+G732
-         GJzaLLtPMEQE4tzjxEAVKori5emAck6SH5w0sf5BFlP4DlAETaVM/tv1yIv5WWqVdulA
-         yvgGUzeza7FZ/Bm0ufuu6bVCy/tDu+FBa/2gNyX47paFHHZAvj0Kob16W+8Ce6uLtOjc
-         7DNTJNLFL9veUDBsfvtZPCOCZI/ytK4YR3ME8B3DngJm1ohRa5qiwnqgoMjtWGxQT4Tr
-         s04g==
-X-Forwarded-Encrypted: i=1; AJvYcCUchEW+Xqq2iXJ/iBtXfb5Vecf/BZ/i7Ej7d4mxN8jvmqryEnqeMUc/pnsLXOYiutwiyKI7liJQ11UrFc4WI2AyF8/ESFTgqDsDzY5iK5rSdSfQyKdt2TSc9/AKgN364HO5Qeb0goIhi90zLBtl36KjR3rpfhWiqMH+/AIeaQVYMlU5Fb0fueSGJ1iCuCOz2NVCgPGZKFhpP8Lz9joRBlr2
-X-Gm-Message-State: AOJu0YztYxw2acHSGFSYi8GV1kLuHEyfU+AR5Qtx/6jzjCliv1T4GKxU
-	ss1ZRZIixoKhv/4WhYaqdHGouFelMV19qBt7+Uqzf78oYFg4eF9++qvVzcdsOKv1f11y7WIhUE/
-	mSzPTMj7Tdp8nShhBBIjhrGCKg2I=
-X-Google-Smtp-Source: AGHT+IEeBR2EPDEPGv0wdG0jF+0ybHRLIfCHqc8xs55MboJMGn1dQvKiGrjW/JtCbl+vnDXrSMS9zxUAZJEr7pMVv/c=
-X-Received: by 2002:a6b:dc0d:0:b0:7c8:63dc:e9cd with SMTP id
- s13-20020a6bdc0d000000b007c863dce9cdmr9211980ioc.19.1709797322307; Wed, 06
- Mar 2024 23:42:02 -0800 (PST)
+        d=1e100.net; s=20230601; t=1709806401; x=1710411201;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KPfbW2lQX/bJg7kEZFYwIIRBOeQ37xyQSbgAoCjTrbE=;
+        b=fJHa6G+PRdBOQjJMXOhzMb3zlDpQs0rgFmYNyNq6e6NkKoiMqyqWGGkiuNh5zW4uxx
+         N6QbbAdaq89R+YihHjlwYmiv4nExTabsizj3t4SdcfnDhvMmHxifDE0wpXP/JS8sBbxo
+         PlMXhOKDacPqJiXSDNIoHgC7Hw18TTqpBHsADeqCPHOrD2BejKy6UWTl+GdIQq5kdRVz
+         Hpr9JP7/qetBtKo3wpu74NZDP+3Hu+ID8VsIHIirdHfo7xBuEC2A1UX7wkXsTr4fo6iP
+         gv7VgDmuTp/Yww7AbXwF8YKDJd5aZdaYgeBsu+MR5HCA/PdSwltlTiMBgOLybThLzyNz
+         E6Xg==
+X-Forwarded-Encrypted: i=1; AJvYcCWoFCE+/PwOq3L83eOicC3Uu8o4wnjCBymvmAB64a3ac2KSwU0uun8QueeGgK8TF8iGYJijrJi1XOKe9hQsyckHrHn3z09OFhhw4Qg=
+X-Gm-Message-State: AOJu0Yz1kFQpLlRR2mTlk2UXjzPxECcVjavvH/2UXlwt0u3cLgcSMTys
+	SJd93r4oN7ezP5WST+4PjRH/EI8iAwBdUoFh9wfVFJsErk2ITQOQRQyG/xgxKv1NNgHgyd9YR5f
+	eIVRk9GyPfOTF5Krkdjy1M6F7GPjxZ75A/nD8iw==
+X-Google-Smtp-Source: AGHT+IGTeiuRWXfAKAN+bzQz32OBrz4/khXPlf49jXRu/+k3YnYjuC0Iw+nbitbKtncVWjYgrCxnDKvNp+2E5ZP06b8=
+X-Received: by 2002:a17:90a:c7d5:b0:29b:9b4a:99b with SMTP id
+ gf21-20020a17090ac7d500b0029b9b4a099bmr364557pjb.3.1709806401537; Thu, 07 Mar
+ 2024 02:13:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240227005606.1107203-1-kcfeng0@nuvoton.com> <20240227005606.1107203-2-kcfeng0@nuvoton.com>
- <1cf69d3e-a8b4-49f6-ac4d-550b525e45e2@hatter.bewilderbeest.net>
-In-Reply-To: <1cf69d3e-a8b4-49f6-ac4d-550b525e45e2@hatter.bewilderbeest.net>
-From: Ban Feng <baneric926@gmail.com>
-Date: Thu, 7 Mar 2024 15:41:51 +0800
-Message-ID: <CALz278b_bbFB77TsVZLMKaK7kwqjjS1PzBbsB==r08R1Zkju8A@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] dt-bindings: hwmon: fan: Add fan binding to schema
-To: Zev Weiss <zev@bewilderbeest.net>
-Cc: jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org, 
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, corbet@lwn.net, 
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, kcfeng0@nuvoton.com, 
-	kwliu@nuvoton.com, openbmc@lists.ozlabs.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, DELPHINE_CHIU@wiwynn.com, 
-	naresh.solanki@9elements.com, billy_tsai@aspeedtech.com, 
-	Rob Herring <robh@kernel.org>
+References: <20240305210747.1377506-1-naresh.solanki@9elements.com>
+ <a32a2655-7561-4339-8521-bc2558e0bdb1@linaro.org> <CABqG17hYK8MFMPVNXxZ6JT4TW00PPt48q1qZBzS=gJrpC--iTg@mail.gmail.com>
+ <20240306-decay-overbid-9c8ea43a511f@spud>
+In-Reply-To: <20240306-decay-overbid-9c8ea43a511f@spud>
+From: Naresh Solanki <naresh.solanki@9elements.com>
+Date: Thu, 7 Mar 2024 15:43:09 +0530
+Message-ID: <CABqG17h5fU4nueaz235XXjJwuPJoLmjo3fs-xZ5mFjtGGYQFkA@mail.gmail.com>
+Subject: Re: [PATCH v3] dt-bindings: hwmon: tda38640: Add interrupt &
+ regulator properties
+To: Conor Dooley <conor@kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Jean Delvare <jdelvare@suse.com>, 
+	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	mazziesaccount@gmail.com, linux-hwmon@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Zev,
+Hi,
 
-This patch was suggested by reviewer and I cherry-pick from below link:
-https://patchwork.kernel.org/project/linux-hwmon/patch/20240221104025.13062=
-27-2-billy_tsai@aspeedtech.com/
 
-Because I don't know the rule about the patch with cherry-pick, maybe
-we should discuss it there?
+On Thu, 7 Mar 2024 at 00:08, Conor Dooley <conor@kernel.org> wrote:
+>
+> On Wed, Mar 06, 2024 at 03:20:02PM +0530, Naresh Solanki wrote:
+> > Hi Krzysztof,
+> >
+> >
+> > On Wed, 6 Mar 2024 at 12:44, Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> > >
+> > > On 05/03/2024 22:07, Naresh Solanki wrote:
+> > > > Add properties for interrupt & regulator.
+> > > > Also update example.
+> > >
+> > > Nothing improved.
+> > Yes, Just aligned the regulator node name in this revision.
+> > I missed aligning the commit message.
+> >
+> > I'll fix in next revision & update commit message as:
+> >
+> > tda38640 has a single regulator output along with
+> > CAT_FAULT# pin to report internal events.
+> > Hence add properties for regulator & interrupt.
+> >
+> > Let me know if any others changes needed.
+>
+> That should be fine - but your line wrapping is really odd, you can make
+> use of 72 characters but you are wrapping at ~50.
+Sure. Will push another revision with the changes.
 
-Thanks,
-Ban
-
-On Tue, Mar 5, 2024 at 8:22=E2=80=AFAM Zev Weiss <zev@bewilderbeest.net> wr=
-ote:
->
-> On Mon, Feb 26, 2024 at 04:56:04PM PST, baneric926@gmail.com wrote:
-> >From: Naresh Solanki <naresh.solanki@9elements.com>
-> >
-> >Add common fan properties bindings to a schema.
-> >
-> >Bindings for fan controllers can reference the common schema for the
-> >fan
-> >
-> >child nodes:
-> >
-> >  patternProperties:
-> >    "^fan@[0-2]":
-> >      type: object
-> >      $ref: fan-common.yaml#
-> >      unevaluatedProperties: false
-> >
-> >Reviewed-by: Rob Herring <robh@kernel.org>
-> >Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
-> >Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
-> >Signed-off-by: Ban Feng <kcfeng0@nuvoton.com>
-> >---
-> > .../devicetree/bindings/hwmon/fan-common.yaml | 78 +++++++++++++++++++
-> > 1 file changed, 78 insertions(+)
-> > create mode 100644 Documentation/devicetree/bindings/hwmon/fan-common.y=
-aml
-> >
-> >diff --git a/Documentation/devicetree/bindings/hwmon/fan-common.yaml b/D=
-ocumentation/devicetree/bindings/hwmon/fan-common.yaml
-> >new file mode 100644
-> >index 000000000000..15c591c74545
-> >--- /dev/null
-> >+++ b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
-> >@@ -0,0 +1,78 @@
-> >+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> >+%YAML 1.2
-> >+---
-> >+$id: http://devicetree.org/schemas/hwmon/fan-common.yaml#
-> >+$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >+
-> >+title: Common Fan Properties
-> >+
-> >+maintainers:
-> >+  - Naresh Solanki <naresh.solanki@9elements.com>
-> >+  - Billy Tsai <billy_tsai@aspeedtech.com>
-> >+
-> >+properties:
-> >+  max-rpm:
-> >+    description:
-> >+      Max RPM supported by fan.
-> >+    $ref: /schemas/types.yaml#/definitions/uint32
-> >+    maximum: 100000
-> >+
-> >+  min-rpm:
-> >+    description:
-> >+      Min RPM supported by fan.
-> >+    $ref: /schemas/types.yaml#/definitions/uint32
-> >+    maximum: 1000
->
-> I can't say with certainty that it's not, but are we sure 1000 is low
-> enough?  Looking at just what I've got on hand, an 80mm fan I have will
-> run steadily at about 1500RPM, and I'd assume larger ones (e.g. 120mm)
-> could potentially go significantly lower...
->
-> >+
-> >+  pulses-per-revolution:
-> >+    description:
-> >+      The number of pulse from fan sensor per revolution.
-> >+    $ref: /schemas/types.yaml#/definitions/uint32
-> >+    maximum: 4
->
-> Might we want 'default: 2' here?
->
-> >+
-> >+  tach-div:
-> >+    description:
-> >+      Divisor for the tach sampling clock, which determines the sensiti=
-vity of the tach pin.
-> >+    $ref: /schemas/types.yaml#/definitions/uint32
-> >+
-> >+  target-rpm:
-> >+    description:
-> >+      The default desired fan speed in RPM.
-> >+    $ref: /schemas/types.yaml#/definitions/uint32
-> >+
-> >+  fan-driving-mode:
-> >+    description:
-> >+      Select the driving mode of the fan.(DC, PWM and so on)
->
-> Nit: could use a space before the parenthetical.
->
-> >+    $ref: /schemas/types.yaml#/definitions/string
-> >+    enum: [ dc, pwm ]
-> >+
-> >+  pwms:
-> >+    description:
-> >+      PWM provider.
-> >+    maxItems: 1
-> >+
-> >+  "#cooling-cells":
-> >+    const: 2
-> >+
-> >+  cooling-levels:
-> >+    description:
-> >+      The control value which correspond to thermal cooling states.
-> >+    $ref: /schemas/types.yaml#/definitions/uint32-array
-> >+
-> >+  tach-ch:
-> >+    description:
-> >+      The tach channel used for the fan.
-> >+    $ref: /schemas/types.yaml#/definitions/uint8-array
->
-> Nit: s/channel/channels/ given that it's an array?
->
-> >+
-> >+  label:
-> >+    description:
-> >+      Optional fan label
-> >+
-> >+  fan-supply:
-> >+    description:
-> >+      Power supply for fan.
-> >+
-> >+  reg:
-> >+    maxItems: 1
-> >+
-> >+additionalProperties: true
-> >+
-> >--
-> >2.34.1
-> >
-> >
+Thanks & Regards,
+Naresh
