@@ -1,28 +1,28 @@
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2100.outbound.protection.outlook.com [40.107.243.100])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2133.outbound.protection.outlook.com [40.107.94.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 350333BBC6;
-	Mon, 11 Mar 2024 11:14:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB2D3D556;
+	Mon, 11 Mar 2024 11:14:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.133
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710155670; cv=fail; b=hqTmWHw9U4EeuiwAuad9PV9IPMblOJn/Co0dszaOJKM7L+lIiU8YPT6fiWM/PDD8G7+YHfVwhsU64v7dJ2+0TmdNDHq1jaZAi0YJ1ZJ+EOiMvPNkSXNnW0fOEj9rgYUoT3z1wubmxw3kZPAN8GOyckRMNooNLhH+zhdWOHx4auA=
+	t=1710155680; cv=fail; b=q3O1Tk9VsOAvcjy4fLpcx99TfuOWQJDQZ6532GZBJODsecDzScWzHNXMH1h/Sy1wVfWbktERsNFrdUzGCmOmKIa8aeKs8HfswVZQo+yLFBhnglBTip837ZCUyIsd5fDyKaPRH3IGNjrmXwc6+g+NDd/eK6vfbUgVjgM8UU7ua8k=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710155670; c=relaxed/simple;
-	bh=faaavqscr1fgG5mFidAvXhWsAJWxAtFoya+ykLN7Wzg=;
+	s=arc-20240116; t=1710155680; c=relaxed/simple;
+	bh=LqZxRBu72sZ5DtA6tqfahM0Zsk7K+kpu0T/sAawRyPA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=X59bNQ0XJNr1wy6YN+RjImxXUovHWrB2P+DhvjFNdlFLTYRLDLXdrvrnLkauwwlXYgapJU1/CCqaiRONH7snorJtF05GX2Rx8FPlFs8Jrl8GFuUjmcL8yzVuzFYXnC+WntxrGYaphXaQpxBhVzIWI7v+mIUDO4m/dkWK1yYL93c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b=OvwtgE/M; arc=fail smtp.client-ip=40.107.243.100
+	 Content-Type:MIME-Version; b=STRXfSjyZ6mx9Wgwt5sd25SOMVxc7Rb/EUO4NfandrmDjTTXrSM944TcJ7rVw0Zr3KuZG7UXbBDSjmyeGL4l2QfbDyJx3lfE3S2YS9IklBeH6+XotXJ1leX4i9ENvv9hGGgknm3prfHdNN4/5GCYApBOuQjUW/34u3jAuMEy5zo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b=k3aJhzFV; arc=fail smtp.client-ip=40.107.94.133
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=os.amperecomputing.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b="OvwtgE/M"
+	dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b="k3aJhzFV"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BneLm+wef8vK74nG51chf2E+OKdWDnWDE76cbwXtc5MzFBzMHb3XNaerN4KrK3FKGIMqguOwC0ejKpmzPwPW6E6tbkuei70Ay9kIqM/dSobRmQP0ZO0T7UEWQsfeUWE5I9lJae8jfrDTfvybNr4cBcSlhCkfeY9znMfdrtB6khPfq9qRdlWERmrMVPipTrhubbc22g5K6XTayWUSK7U09glzat1q+5ssMGDiY8s/dz3qjtDyLHacJ1d3PBWb1xXAus+TXgkgqcSixvJRMHJL8+p2jQ1zhypwK+0ZcBSlgqN6rotDG12k+ZJG/Id4dG8eniMTTcf3laYCXjJrv6rneg==
+ b=j+RALAhWGdWmtwbPJSUjeoGOKJ8p7qFSVb+SCREveH+Lk3pCkRT5eUEGvVR7rcRZ28gdTxgjdnE6lgFOfeSDZVxhtc2grojYG1ViW405nsYEqoxpPiud9Ji01PqSTPZtzrveII2yh0iLZo0kiFANkhqUedHCvDeYKy1huulJBUrFBxcT22R74YDY2wcwOJX2irtV+3hXhD9B0Zn/isBWP50CNgTBZbTlERuKCRZ97s9ZUWHMmA55HnlSYbzOEX98PF+Fax1cRjKL8tWM2dh45sGXZrhxCknU3VV67vnaMCRtMVLm/rF6dXOShrgk7RRraQOaF4ocYNdX4xQGFJpNNg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FirjTn8dY8PjxAROg4A9v8RInwdhTHfi2xbUjP6DnJY=;
- b=e39rCKqigtLBcwo4ECoa0a2hzEI+oU7B+wReGHXHpRGngYHxY1SGiHu5BY6BgUBt7nSlzAJUcuCrwgAempbIBfUDrDycUqk/3/CbT2Lt1p8hOfU5J0y80xJkauskNWH2whiszwAzCmXAprQW/jK90ww7QAGMhxt0Hxx4F/zlPVqVSp9B83CyYzjVWTIKDXXpd5/GVAxwVJ5C5EoV44jNkrdJ4KdDOxXjwxbfRVvPU+rfYXp9Z1DXiduwf490L7D08W8DgaRS1cPvxJvggMf0y/DI1zeIebzW5qpAkucfS+CQ78LfclXAq4td0fQ9Wx/sQ3zsxnKEEw0awo/u431Lpw==
+ bh=X0u40wOJfOwoU4DKcUXVHsuNz8t8DGXO0rERZzjej3E=;
+ b=PJvDroDVvrF3Mr4d2kiU9owGQkCqJG3Pk9PVEPWUyQ2disdY1cD78okH/cvdxoMAPbl8coD6QZCEKCdPPJAMWujSZ4StMYbXVhedY5kuJGo2zSwXw3Set4vUtmcOoV3Zp4b4x8EGrHqk/Wg2KZZjjVPUxSQwbKEk9XnheJMS5c6+Q3CC15VMl5viHeM7VxUPh0i120B2zItkDro+QWr1wb1lDO1uNbNaZlGWmOrh5dAzxfmrQADkNjRbO79Isb5K5STGTd9nIBIZE5AqY3zY92gs+aPogZFKZZ3BZuybssud9hGyCKMkjeu+06fpEfxN3fRI0CrkXyFl7fXRw339zA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
  header.from=os.amperecomputing.com; dkim=pass
@@ -30,18 +30,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=os.amperecomputing.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FirjTn8dY8PjxAROg4A9v8RInwdhTHfi2xbUjP6DnJY=;
- b=OvwtgE/Mb6xDimIoe7ddNwOMP2I2jCsQBSYV2Y5PaqDBxoNYC6Yxp8MIJffZ0LG6moWWnkQ+HjrR5fh4/Z6F9TmlZ9FG594PEmIIO4lG/s4MxyLRuFBVoddMCzS4hW4Bxasl/bLcYq7IwExb5d8OoVFH1G0je82Z7pvVoGMxX40=
+ bh=X0u40wOJfOwoU4DKcUXVHsuNz8t8DGXO0rERZzjej3E=;
+ b=k3aJhzFVv4h3FT0dkNfOuG9xUJPfp1JCscWRpsoh4uvJjmwvjb69BmS9iPB0Qs3CVLiaCEkJ2v4Ea8bW7KN/4Ad9DOtha7Rd9jm0RX+wu70xz7FHpZlRGtrU0Yx3RTNMOZnrngeGOERC813IHwCCHbv5Yqzrb5ldDoQuuDR6BT0=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
 Received: from DM6PR01MB5947.prod.exchangelabs.com (2603:10b6:5:1dd::12) by
  CO1PR01MB6741.prod.exchangelabs.com (2603:10b6:303:f2::16) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7362.35; Mon, 11 Mar 2024 11:14:26 +0000
+ 15.20.7362.35; Mon, 11 Mar 2024 11:14:36 +0000
 Received: from DM6PR01MB5947.prod.exchangelabs.com
  ([fe80::b557:13cd:8a29:ae08]) by DM6PR01MB5947.prod.exchangelabs.com
  ([fe80::b557:13cd:8a29:ae08%4]) with mapi id 15.20.7362.031; Mon, 11 Mar 2024
- 11:14:26 +0000
+ 11:14:36 +0000
 From: Chanh Nguyen <chanh@os.amperecomputing.com>
 To: Jean Delvare <jdelvare@suse.com>,
 	Guenter Roeck <linux@roeck-us.net>,
@@ -58,9 +58,9 @@ Cc: Phong Vo <phong@os.amperecomputing.com>,
 	Thang Nguyen <thang@os.amperecomputing.com>,
 	Quan Nguyen <quan@os.amperecomputing.com>,
 	Chanh Nguyen <chanh@os.amperecomputing.com>
-Subject: [PATCH 1/3] dt-bindings: hwmon: Add maxim max31790 driver bindings
-Date: Mon, 11 Mar 2024 18:13:45 +0700
-Message-Id: <20240311111347.23067-2-chanh@os.amperecomputing.com>
+Subject: [PATCH 2/3] hwmon: (max31790): Support config PWM output becomes TACH
+Date: Mon, 11 Mar 2024 18:13:46 +0700
+Message-Id: <20240311111347.23067-3-chanh@os.amperecomputing.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20240311111347.23067-1-chanh@os.amperecomputing.com>
 References: <20240311111347.23067-1-chanh@os.amperecomputing.com>
@@ -76,114 +76,127 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DM6PR01MB5947:EE_|CO1PR01MB6741:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7c041234-c797-45d5-96fa-08dc41bc692e
+X-MS-Office365-Filtering-Correlation-Id: da385cf0-3817-4bc1-6637-08dc41bc6fac
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	8Y/N164mImCWHocFWR/QBQpZgCRvH8DaJAy3ZxmVEZ8k+XwjXVTBHpZVlkQ6/v3TDuQLvpu3q/ZHGGFVXXa1/2aEbu91jQHhA5viAIpDP/d58w90TNgILR6KqKN0g2ikxD2Zfb9koGOe2ln+h2iNh2DYtC2kidKRlX3pCy7Eb6zWrNjqKlQT9Zl5K1WJ52X10ODr3f+6j+aH/gzA5Cx9/wliCd82klF6WfW0tyv2AVdq+Qu210/OFUvK3UZvozlqHv8+/8qdrNvRutHl2EoA/u8l6ED6H0gXvdEyhLvWoAwl47m+MsFTnq0jhGc5vhy0afDtycgoJ4FiFGQpUhqK41qDs91eiypuvNGSXMuk895GtC4Y9SC6+Is7LMbxIkVBYTY3SvRbF6nhRsOsK8bs+04VISI6soE97xRRVp+XHFkwmNH9ysOz50LZiRScVBq015hYdzlse/z5SHQ5XiYbXZazsoCl7BO9ZW7SITfiz1XVZkRXCPcDuH7eSV0v3TqcaL1s91KgX3+ciOqn0RYUanf5F3YVVoZbPfEsvCXVYkrqlR0a/dKeWTHBT+xBKiMrUEePtM9XWEx/DBUhl/UAifOzgHuxGw7/Ho0iayD76iXq49/eZgawDwW+AhzokMBAFfRNM9odE5y7nno1bmM5uANqwZZmNdhrMwaf4sFfqqso8u1XzdkidFr/7Dny57d/
+	WfsU27adHcRdXAKZcrfNjjsPccytwwdugpig6Qhy/8em//icqzmxU4Hg0z3iHK3pix1ARI+tVNpHvb+Qj8uE2QZfb77kBVOpTGcq4Dkboykgj2i8ZO98XAEagTEckAChryq7vmb56vyAP4dAua8/fyQTIr/2yQvNgjnxeZPLrcyPSF13JUAFcjKHtXLKpMZfV0WmCZAp6QNALxPvHF5prwEhRCkeJEGh9Ez9CNwcGCEf4wR9Kli8e9grTgnATdWpOAuidYTjnwFA+k3zOaefxWyzkrccSNrRJsA+Ayt5rgkBV4rpp6jVyjO/HyrHD3qohF/D6m1JldTAancuBR89IdoZ68G51xLW3qnlByaxjitYwH7w6lO8hrYmHX7t5DlfjixeKY00wn1BYrOsTb4dXu0NcMkYJiesxF1zU0jk6ymqLEnh3H/JDK9tOER9l4Dc7xcQU8ek2tivVKuDpAu8Rk4RGr0hiiaUeKjghM2JQXAc9dHLneQ09numaLFmMYuWPVj3c8tnJeM9Fjg2L8wFOGFMhjIIYIhUpYgSqCSY4Sxat78wpDutCGTDExEKEohJsWfdf3FeMlAJGDcxu5yBu/M35mhfcodh+pFy8/46s4HmUVd88vTRfDE5jJ10Lv7QH95CZvbNloW5GfvTg2u+TkU4/BASrHTB/T6HAJBdP8xRQPyxPCYt7e47lCaCnCIgHGF55zTf9qQWEv0VGu0fX77TcmZaxONJUcTahvsl8kU=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR01MB5947.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230031)(52116005)(1800799015)(376005)(7416005)(921011)(38350700005);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR01MB5947.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230031)(7416005)(376005)(1800799015)(52116005)(38350700005)(921011);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?C0FX+aaCqNGVfjDJd/tq7Tw/hR+EOpcIPZE0cAk4m4H5yPdOAJG4qpNOBzC2?=
- =?us-ascii?Q?VakL5xvyaqXQMcC4E3lmcSnsUwE2SxOrh55jVHVePXGzpvr7SiVUonJHFq2d?=
- =?us-ascii?Q?TLyd74ao8ruZaJExi63E3sqEUzpvgKi626Cp80H3JKHp1BpgYAIo43LxOeZt?=
- =?us-ascii?Q?ef7X/z2dn18S2PTltoEDnWbs0BMYk3aC/WSnhLd5vIgR3v18jszgT8YRDs6P?=
- =?us-ascii?Q?lCss7Z7Ftcqz8SMJ1mjC8HZcRgNaxl+qu/8THWrcmZPC0KKkEEXMqZGx2ABC?=
- =?us-ascii?Q?AX3+y/4XjxVBO7ixMhjZ/EYwvFAVSTGtTSTSP5PHVYf+n+NBUsBJbgGtZ41Z?=
- =?us-ascii?Q?1Ksdb6c/MkMbplYORICG6rJvMv3UASGz0TiVvlgGcDIutol5ckOZbOGkmW2P?=
- =?us-ascii?Q?OX/qujuXYNI3J1vovaChkla8hWCZxNhBi0fs/3WxhbMVHyAHLjJWM3yGra9B?=
- =?us-ascii?Q?SibulL5UP2/z5K1sVWFfE5vWqwi236djRD9zCzRRpgLLv8NZstZx0dXOnST5?=
- =?us-ascii?Q?3NeZDvFI0v9hnsjoCUM11HVmQpxF00CL23/MgS3hDesVrHCq9G3VLGE+C1eJ?=
- =?us-ascii?Q?sqWoUW2TY4xMK8WLTcxSjfn17qTppwjsCPTnglan8H0a2xaBl5572qJ8DLEN?=
- =?us-ascii?Q?ygsYI3+uZZyPkyHmWI3yUFHBsZfkJkTpsf0kaCRpSXu5C2w90wSv3ffzImyf?=
- =?us-ascii?Q?H5ejtrwT9wdZw+oHdGhiSwWzEyxiw2gsK0L9eECFQ1rtRnavERrvhRIvOcA7?=
- =?us-ascii?Q?zG83JwOnbLjH9zfhEJVXeUnsOjy9T4hWw9qJUhOMj7mrrBAXqbKpNgv0kEp5?=
- =?us-ascii?Q?RwwhOJWsIL2z0eJwLdknU7M6cDnM5ty8vZET+ZIj2y4Vuele1lFYDiAOem7F?=
- =?us-ascii?Q?liwYKRoKfm01TbfUx9mPCfFN2QmbHvBm3oYzG+ZOGjx9gbp7YxSd/vnCgKLv?=
- =?us-ascii?Q?8Nd6z3a3nZKczJJe9cqZuyBmtIHABN6XMmRXkfeF5N7towPzMzOeJ+Xv5muW?=
- =?us-ascii?Q?0hQFCutqOLh0/L44Wm1Y2FFRyYfk54b7XwyR6s6rvxLuHxJc9wSNX+CWHFy2?=
- =?us-ascii?Q?QDAwHlO6yJ7IQJdEx1SRBO0uBThbjUZXkV/sprXb5uYn4DEcxjbZl28EnLce?=
- =?us-ascii?Q?mvrgyDGTWA77c2C/kA3ukAgmWighUS5665l3YeGbBPVLfGJVFOg51HHWW6vg?=
- =?us-ascii?Q?E2dL4Y44Yq4xWF7gkCpTvyiW0ed16OGcZDA6LXJlIq/Vt1CVXKEkQ81Nskdh?=
- =?us-ascii?Q?1CaxsAeY+lNwsZRR6H+lCRsrwoQ07f8BQzl+3yEQI1nkSmAV8W+XKZA8mkYs?=
- =?us-ascii?Q?V0qJ3H/m/yiAOIezdDmILSlG52QOg4NwwEWWdV/l1SoBnM/4tgvPudj5zOIl?=
- =?us-ascii?Q?TK4a58S6VMtv0fLuMXan2ZZs7sX/NVdfcN9X7bUt2w0+EM45W5k+Q7eIxTXt?=
- =?us-ascii?Q?7mCoaujGQ0J51AOFWA5HovAPGsfaKzGwjQuNJ0t+GB0uAs1HvLjzS98sjQSL?=
- =?us-ascii?Q?SQLq1F0X1Zj4/3WQtkcvxVwk0tZOO6disFeNRY/7egW66in2dg3E8ckPnd24?=
- =?us-ascii?Q?wsk7p6bE+snGoUP2lvh0iBZpBnAHoNJt5jSqHmLXNs3L8uc/wPdUh2nqLzsu?=
- =?us-ascii?Q?36CWRSQlk1VCP+jMnFopb34=3D?=
+	=?us-ascii?Q?Tj8yy3k1htddNRIYszg9O5MvkKU5CFeYBNPlneH+ScfQAEihxgLsgsuDCuk4?=
+ =?us-ascii?Q?7soO20w7PD88KXObcwEntOX1ZWiKOxM6U9TOiEt1NUAhUMR/nWI/IpwlZarf?=
+ =?us-ascii?Q?Y/KPHuoHXbfNkc8+gLcJyJ1DY1Y9vZt8C/Rc8yAK//NTdVPo7unPOJXsI3vS?=
+ =?us-ascii?Q?inCukDh6VltWG3cc8wu+3kVYBpcNQ3eRq/QQxWV6kp4Gzor9wFj/aNe7oRqY?=
+ =?us-ascii?Q?B/WRNHGYUvDJWzhljy+ptrR8Xky/tPxjvNRXeiPFJh+9UEYWbvPBAmPC2sdp?=
+ =?us-ascii?Q?N2NhDhq3CPyvCrvc9GGjyx2SH3+WPJfMzZxYhkgY7J0IiwA9P676nMhf1UQ0?=
+ =?us-ascii?Q?Ai+J8x1bUAlijAxvDo+n1TySy7fTW6gUgvJrzyObLrfFUtOlNZFF41INAz0b?=
+ =?us-ascii?Q?WqxvvI5Np8jh46pjLDx/NxTEbXo4wW2bI6sjpKAD6yjWXCmuisjeeD6NciCY?=
+ =?us-ascii?Q?aqNSyYfJfWDG53Tcax6bHOMc0sU+uFfxRT3OL1tN9miJHb8eNWEW1sBQOVT3?=
+ =?us-ascii?Q?BhhGwL06adPuNN+XcSbJGWj8BD8WLgrT3cTUkXIvF2lActj1sonlJzb6NGBE?=
+ =?us-ascii?Q?ZJ5kw4WqT1vgWEXxusG3FmWtRJKli+CVhj1VUkP6vIE+sz6TrSyEzBtgf7IQ?=
+ =?us-ascii?Q?hvcDUlWgtz5P9drQWXAL3ENQjkyaBjKq9sGaRz6tM6akj1j+q7msPpXHSi6/?=
+ =?us-ascii?Q?YT3uS/nsSAjZewvLvub8ADlNZBuJhA+c2yZb3tbaMmZ8PqaKw/lx3iETZUr1?=
+ =?us-ascii?Q?3B8x8oJehGYZ8cFK09weL4inGkuVOwrRRWhlzqv5xn7qm9H2G9YL/UCeSQrX?=
+ =?us-ascii?Q?2tSSgT0V3QgyDnnX2PfLuIBdgrLtgM6RFneHPz5Qp5HgYxqbpcnN8hXy1R0m?=
+ =?us-ascii?Q?OAlLrIw0Y+x3jlPF5wcFDM5hVKptme955tu7zoKqOlSf7OVV5ZTHEJfR6d8O?=
+ =?us-ascii?Q?DHhEnxS9xLp3rYMUXTHBMZEG1ZiE+RDutrwqY3Ft/KbxycbfkVeCHICReFHq?=
+ =?us-ascii?Q?uNrvZD+1w7A54bD0rR+4GFaSoqsTetUFWh5MM4OSZOvdgtfrwoo1UrrHXaCd?=
+ =?us-ascii?Q?odToK9xQaoxkou+SnNWSBIE+pFRyud+r7Bq69oq0yS+YQgXsIuvaKqcmq8JL?=
+ =?us-ascii?Q?RewilZ8PwJ22U+eWalZC+juDY26UtHVUU1pTZfPqNuTRZkoQyjppLhfZfR+Z?=
+ =?us-ascii?Q?POLYEwA24xY0Fkgn7/xl/VvAGFC2h+3T/RoOY3GDiDCl/xOIfPYzdYOdd7p3?=
+ =?us-ascii?Q?GV6deHB/qYy0AL+6ljqEjzeI/syF8TKNRAT8/FUgj/Hzrt/ybb0pOrLCkeyU?=
+ =?us-ascii?Q?OIuyyL3ZGKq3bp2WnC8cySYH7yUuer7pA0LmtsP3K5C2Lxhjet2BnmrcY++A?=
+ =?us-ascii?Q?BvFoYskBpKEtUwx8Z/NIA576KGeeSoK05+rVn6oaDEl97GlLXihRFWgFx0V3?=
+ =?us-ascii?Q?Bn/RAfdwOI0y53y93oMtWLa4dYcC1cNeO65rMlmFKS6tqYuio/Fsn4X/Ton3?=
+ =?us-ascii?Q?7kqCc0pHf4BS3sWR0ZbBI9hQTa5BmkgeZtakY0Tm8uTjLlj42p8mvHvpCct4?=
+ =?us-ascii?Q?FKVRwAmOUt8LG5/xj6Gv0cAhJHhXRqF8Go1txw0UKYvBPSjQcIpli34EX9wg?=
+ =?us-ascii?Q?XW0Nke2Scrc7K8P9UYC3cXo=3D?=
 X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7c041234-c797-45d5-96fa-08dc41bc692e
+X-MS-Exchange-CrossTenant-Network-Message-Id: da385cf0-3817-4bc1-6637-08dc41bc6fac
 X-MS-Exchange-CrossTenant-AuthSource: DM6PR01MB5947.prod.exchangelabs.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2024 11:14:25.9225
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2024 11:14:36.6883
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3KdKuFf14c3H6rUGmnr5P3KbCAWVUUL9B2PczPF7VqpR4UWN0BzkJrl7PoDTTIqrcuL3p/Gq/PKUAB7ZgZIryk6ECUbpdGKBDNebsywxTsTkGBjm9jZ8t/PRoBQFu/Pc
+X-MS-Exchange-CrossTenant-UserPrincipalName: wH7hqo8vO/dENqX/ZBAiniDmvvDKl1jEYt9mXE5e6mTJTAEIfw+b9MruQMrD7Pdro36iLM4apm3p0jY2R1COiZL3No9pKzTGmXKwn+gl543GZ44QI1qahFeuZl+7I8qa
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR01MB6741
 
-Add a device tree bindings for max31790 device.
+PWMOUT pins on MAX31790 can be configured as a tachometer input pin by
+setting bit[0] in the Configuration Register. When the bit[0] of a channel
+is set, the PWMOUT pin becomes the tach input pin for the channel plus six.
+
+This commit allows the kernel to set those pins when necessary if the
+pwmout-pin-as-tach-input DT property exists.
 
 Signed-off-by: Chanh Nguyen <chanh@os.amperecomputing.com>
 ---
- .../devicetree/bindings/hwmon/max31790.yaml   | 44 +++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/max31790.yaml
+ drivers/hwmon/max31790.c | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/max31790.yaml b/Documentation/devicetree/bindings/hwmon/max31790.yaml
-new file mode 100644
-index 000000000000..5a93e6bdebda
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/max31790.yaml
-@@ -0,0 +1,44 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwmon/max31790.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
+index 3dc95196b229..33ca8d1721c0 100644
+--- a/drivers/hwmon/max31790.c
++++ b/drivers/hwmon/max31790.c
+@@ -12,6 +12,7 @@
+ #include <linux/init.h>
+ #include <linux/jiffies.h>
+ #include <linux/module.h>
++#include <linux/property.h>
+ #include <linux/slab.h>
+ 
+ /* MAX31790 registers */
+@@ -506,9 +507,12 @@ static int max31790_probe(struct i2c_client *client)
+ {
+ 	struct i2c_adapter *adapter = client->adapter;
+ 	struct device *dev = &client->dev;
++	u8 pwmout_to_tach[NR_CHANNEL];
+ 	struct max31790_data *data;
+ 	struct device *hwmon_dev;
+ 	int err;
++	u8 tmp;
++	int i;
+ 
+ 	if (!i2c_check_functionality(adapter,
+ 			I2C_FUNC_SMBUS_BYTE_DATA | I2C_FUNC_SMBUS_WORD_DATA))
+@@ -528,6 +532,33 @@ static int max31790_probe(struct i2c_client *client)
+ 	if (err)
+ 		return err;
+ 
++	if (device_property_present(dev, "pwmout-pin-as-tach-input")) {
++		err = device_property_read_u8_array(dev, "pwmout-pin-as-tach-input",
++						    pwmout_to_tach, NR_CHANNEL);
++		if (err) {
++			/* The pwmout-pin-as-tach-input is an array of six values */
++			dev_warn(dev, "The pwmout-pin-as-tach-input property exist but malform");
++		} else {
++			for (i = 0; i < NR_CHANNEL; i++) {
++				tmp = data->fan_config[i];
++				if (pwmout_to_tach[i])
++					data->fan_config[i] |= MAX31790_FAN_CFG_TACH_INPUT;
++				else
++					data->fan_config[i] &= ~(MAX31790_FAN_CFG_TACH_INPUT);
 +
-+title: The Maxim MAX31790 Fan Controller
++				if (tmp != data->fan_config[i]) {
++					err = i2c_smbus_write_byte_data(client,
++									MAX31790_REG_FAN_CONFIG(i),
++									data->fan_config[i]);
++					if (err < 0)
++						dev_warn(dev,
++							 "Fail to apply fan configuration at channel %d",
++							 i);
++				}
++			}
++		}
++	}
 +
-+maintainers:
-+  - Jean Delvare <jdelvare@suse.com>
-+  - Guenter Roeck <linux@roeck-us.net>
-+
-+description: >
-+  The MAX31790 controls the speeds of up to six fans using six
-+  independent PWM outputs. The desired fan speeds (or PWM duty cycles)
-+  are written through the I2C interface.
-+
-+  Datasheets:
-+    https://datasheets.maximintegrated.com/en/ds/MAX31790.pdf
-+
-+properties:
-+  compatible:
-+    const: maxim,max31790
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      max31790@20 {
-+        compatible = "maxim,max31790";
-+        reg = <0x20>;
-+      };
-+    };
+ 	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
+ 							 data,
+ 							 &max31790_chip_info,
 -- 
 2.17.1
 
