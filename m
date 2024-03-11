@@ -1,302 +1,291 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51A4338DED;
-	Mon, 11 Mar 2024 11:22:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E0B78460
+	for <linux-hwmon@vger.kernel.org>; Mon, 11 Mar 2024 12:41:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710156165; cv=none; b=Zlrn4nxn5WbgENtrP7sGSd7/yV0mn7LR34x0JGZxqOFOxibYhB02b87+uErbsSo6eecPVv/0U+Ekna5Vj+km0hatde3/XF/6qXEy8hZtRGGfztpKZfkIvMZt+FO1cGPgWZQzG/a2/EYZyy107qkBYgsrrjvPvI0rGlm0ks7AuTE=
+	t=1710160907; cv=none; b=bNstDWPpwW74GiUyC5sHjlLLVXWk+mEeIEj1fPicfYayymgtyTdh31HB1zUrc2H0UXHrKbalEzWzC+6/piiYadFkniv6/SbE5DJjbWgC06JoFFCdVjFaTVZqxKJqdd/BFKCmJ4MkN9P6CG4ko1CyRZTZHJvZ9G4+uWMtN7t0Tp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710156165; c=relaxed/simple;
-	bh=bzriNqhRxAw42UiGUSxczR0T+CSLZBMYiugAD4TlN7o=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=sGqVc0lYvAl60+pnx369NCI0XbU185XdClTWtw/eAUdUfOAefl4J+oM3Vc7C2+7SyyYEL5Gutf4MxzPXuoeTyguKn4D1HjAl/5w/9hLgpuedt0VhoId9crPV0pM2/1asxW4LPDJwYaUwjOZtG6M3Vw/VDNXtBdNRJdvC/9DYidE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PPxn+F6Q; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1710160907; c=relaxed/simple;
+	bh=r1gqnhVPtbx/TG/rDXGVU3YUdke9TUtcmk8VnC82KEk=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=XFKB5K0okLw9yzaw8E6kF4NxlV1MhVmE9dtkzCSWYiLy/f+q2ao5uRVUf4CnxF2vZBdVXFQL7OF9gPxM/r3Si7UDuvZUb4Q/0giDcmgtyp3UBLCF4nhhf1C1V5U5HGRMSRm+cTUHr2gWcnUJD2tvjJlYSv/OGl5dsvEPFXUkbyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Sw/L/CCD; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PPxn+F6Q"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Sw/L/CCD"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710156164; x=1741692164;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=bzriNqhRxAw42UiGUSxczR0T+CSLZBMYiugAD4TlN7o=;
-  b=PPxn+F6Qq0Z3/7vNcOHXOsD+woAZCDMaXEWSyYzb1ifgAhO0Xs8IjgMI
-   XXXMDB/kWhlTkl3LImvr6Zjit6j5sBikGQhnU7S7u9+6aSGSFFBIGmumc
-   rdAnBYTUu7DzL4X4NQSc1YW+IX7J+5z4ibDqN0I7lnFSkttD/yxBschMn
-   pMxTP6KXKgCWniFxWq2t5NKkO4aR+4eLWlwkCw1teuMBSCuWMLfUe5lmj
-   cgo+1s/+KxjMIm+3RPCRuMpgE/GFe0EITPQajrHpGRvpmQY0xr7I2gq7H
-   2N/mfKQerHjDZsfEmmCWmPn1CdlfDW60x+NZ6A/SDAcZZcg9EmDQIjvS7
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11009"; a="4734408"
+  t=1710160905; x=1741696905;
+  h=date:from:to:cc:subject:message-id;
+  bh=r1gqnhVPtbx/TG/rDXGVU3YUdke9TUtcmk8VnC82KEk=;
+  b=Sw/L/CCDVWX9l0WgakFbKK46yMQfPqUFL4ZvJD5CVBiVA/drrQjiJDT4
+   cVCLrkdNY9ik327dheYg1gUXy6NOSit8q5IfXmJAn9MuUJxNzeP4Q08kD
+   Ihj7qfQsURo/pyiVyzKQ8f12Oa7ZTqpXYpj0g55f8vl8eoe3nSuRs03fP
+   qJWxAm5nlb/6tJ4flhyqcu9fbGOpCrkOf23OdoqHUaYjHZQ+21zz8vfb0
+   VEDAEeJKtVqd7tSjQslXo0VSQnWsKNkcxBzKvEUZt/+5rh5m0dqF2rYqv
+   JctfR/BDEayNTvJkR/CoJzGdpQtJtA2waTW9M5sBhW9x9v5nvzlALPy9B
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11009"; a="4996354"
 X-IronPort-AV: E=Sophos;i="6.07,116,1708416000"; 
-   d="scan'208";a="4734408"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2024 04:22:43 -0700
+   d="scan'208";a="4996354"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2024 05:41:44 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,116,1708416000"; 
-   d="scan'208";a="11023859"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.244.201])
-  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2024 04:22:39 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Mon, 11 Mar 2024 13:22:35 +0200 (EET)
-To: mustafa <mustafa.eskieksi@gmail.com>
-cc: Hans de Goede <hdegoede@redhat.com>, jdelvare@suse.com, linux@roeck-us.net, 
-    LKML <linux-kernel@vger.kernel.org>, platform-driver-x86@vger.kernel.org, 
-    linux-hwmon@vger.kernel.org, pavel@ucw.cz, lee@kernel.org, 
-    linux-leds@vger.kernel.org, rishitbansal0@gmail.com
-Subject: Re: [PATCH v3 1/1] platform/x86: Add wmi driver for Casper Excalibur
- laptops
-In-Reply-To: <20240310181429.59451-2-mustafa.eskieksi@gmail.com>
-Message-ID: <8e46e7cc-eb3d-390d-f411-8a15b0d8d22c@linux.intel.com>
-References: <20240310181429.59451-1-mustafa.eskieksi@gmail.com> <20240310181429.59451-2-mustafa.eskieksi@gmail.com>
+   d="scan'208";a="15804032"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 11 Mar 2024 05:41:43 -0700
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rjeyK-00097N-36;
+	Mon, 11 Mar 2024 12:41:40 +0000
+Date: Mon, 11 Mar 2024 20:40:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:kunit] BUILD REGRESSION
+ 7de5e832565e4ad14ce709a13a5bad0337ea252f
+Message-ID: <202403112039.gqkpoHCK-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323328-888064519-1710155751=:1142"
-Content-ID: <a4660b43-91d8-fc1f-1ee3-eb0920241715@linux.intel.com>
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git kunit
+branch HEAD: 7de5e832565e4ad14ce709a13a5bad0337ea252f  powerpc: Add support for suppressing warning backtraces
 
---8323328-888064519-1710155751=:1142
-Content-Type: text/plain; CHARSET=ISO-8859-2
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-Content-ID: <35a12ae5-79fc-122d-7f19-32626661a30a@linux.intel.com>
+Error/Warning reports:
 
-On Sun, 10 Mar 2024, mustafa wrote:
+https://lore.kernel.org/oe-kbuild-all/202403111729.aJdD9J6c-lkp@intel.com
 
-> From: Mustafa Ek=BAi <mustafa.eskieksi@gmail.com>
->=20
-> This wmi driver supports Casper Excalibur laptops' changing keyboard
-> backlight, reading fan speeds and changing power profiles. Multicolor
-> led device is used for backlight, platform_profile for power management
-> and hwmon for fan speeds. It supports both old (10th gen or older) and
-> new (11th gen or newer) laptops. It uses x86_match_cpu to check if the
-> laptop is old or new.
-> This driver's Multicolor keyboard backlight API is very similar to Rishit
-> Bansal's proposed API.
->=20
-> Signed-off-by: Mustafa Ek=BAi <mustafa.eskieksi@gmail.com>
-> ---
-> Changes in v3:
->  - Replaced led_control attribute with multicolor led interface.
->  - Added struct led_cache, instead of storing only last color change.
->  - Added dmi list to prevent registering platform_profile driver in model=
-s
->    that doesn't have this feature.
->  - Added a x86_cpu_id to differentiate older laptops that are reporting
->    fan speeds in big-endian. Also newer laptops have a different power
->    profile scheme. I'm using x86_cpu_id because they don't have a
->    difference in model names, only in cpu generations (the official drive=
-r
->    download page makes you select your cpu's generation too).
->  - Removed hwmon_pwm device in favor of platform_profile driver. It
->    indirectly affects fans' speed but they also affect frequency and
->    power consumption as well.
->  - Replaced handwritten masks with GENMASK equivalents.
->  - Replaced led_classdev_register with
->    devm_led_classdev_multicolor_register. This should solve the bug
->    where led_classdev remains registered even if casper_wmi_probe
->    returns -ENODEV.
->  - Removed select NEW_LEDS and LEDS_CLASS, because it creates recursive
->    dependencies.
->  - And some minor changes.
-> Changes in v2:
->  - Added masks for
->  - Changed casper_set and casper_query returns Linux error code rather th=
-an
->    acpi_status.
->  - replaced complicated bit operations with FIELD_GET.
->  - Fixed some indentation and spacing.
->  - Broke fan speeds further.
->  - Moved module metadata to the end of the file.
-> ---
->  MAINTAINERS                       |   6 +
->  drivers/platform/x86/Kconfig      |  14 +
->  drivers/platform/x86/Makefile     |   1 +
->  drivers/platform/x86/casper-wmi.c | 639 ++++++++++++++++++++++++++++++
->  4 files changed, 660 insertions(+)
->  create mode 100644 drivers/platform/x86/casper-wmi.c
->=20
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 1aabf1c15bb..e4cb770c990 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -4724,6 +4724,12 @@ S:=09Maintained
->  W:=09https://wireless.wiki.kernel.org/en/users/Drivers/carl9170
->  F:=09drivers/net/wireless/ath/carl9170/
-> =20
-> +CASPER EXCALIBUR WMI DRIVER
-> +M:=09Mustafa Ek=BAi <mustafa.eskieksi@gmail.com>
-> +L:=09platform-driver-x86@vger.kernel.org
-> +S:=09Maintained
-> +F:=09drivers/platform/x86/casper-wmi.c
-> +
->  CAVIUM I2C DRIVER
->  M:=09Robert Richter <rric@kernel.org>
->  S:=09Odd Fixes
-> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
-> index bdd302274b9..4f951bcac1a 100644
-> --- a/drivers/platform/x86/Kconfig
-> +++ b/drivers/platform/x86/Kconfig
-> @@ -1127,6 +1127,20 @@ config SEL3350_PLATFORM
->  =09  To compile this driver as a module, choose M here: the module
->  =09  will be called sel3350-platform.
-> =20
-> +config CASPER_WMI
-> +=09tristate "Casper Excalibur Laptop WMI driver"
-> +=09depends on ACPI_WMI
-> +=09depends on HWMON
-> +=09depends on LEDS_CLASS_MULTICOLOR
-> +=09select ACPI_PLATFORM_PROFILE
-> +=09help
-> +=09  Say Y here if you want to support WMI-based fan speed reporting,
-> +=09  power management and keyboard backlight support on Casper Excalibur
-> +=09  Laptops.
-> +
-> +=09  To compile this driver as a module, choose M here: the module will
-> +=09  be called casper-wmi.
-> +
->  endif # X86_PLATFORM_DEVICES
-> =20
->  config P2SB
-> diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefil=
-e
-> index 1de432e8861..4b527dd44ad 100644
-> --- a/drivers/platform/x86/Makefile
-> +++ b/drivers/platform/x86/Makefile
-> @@ -14,6 +14,7 @@ obj-$(CONFIG_MXM_WMI)=09=09=09+=3D mxm-wmi.o
->  obj-$(CONFIG_NVIDIA_WMI_EC_BACKLIGHT)=09+=3D nvidia-wmi-ec-backlight.o
->  obj-$(CONFIG_XIAOMI_WMI)=09=09+=3D xiaomi-wmi.o
->  obj-$(CONFIG_GIGABYTE_WMI)=09=09+=3D gigabyte-wmi.o
-> +obj-$(CONFIG_CASPER_WMI)=09=09+=3D casper-wmi.o
-> =20
->  # Acer
->  obj-$(CONFIG_ACERHDF)=09=09+=3D acerhdf.o
-> diff --git a/drivers/platform/x86/casper-wmi.c b/drivers/platform/x86/cas=
-per-wmi.c
-> new file mode 100644
-> index 00000000000..80e1e2b16fb
-> --- /dev/null
-> +++ b/drivers/platform/x86/casper-wmi.c
-> @@ -0,0 +1,639 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +#include <linux/module.h>
-> +#include <linux/bits.h>
-> +#include <linux/bitops.h>
-> +#include <linux/acpi.h>
-> +#include <linux/leds.h>
-> +#include <linux/slab.h>
-> +#include <linux/wmi.h>
-> +#include <linux/device.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/sysfs.h>
-> +#include <linux/types.h>
-> +#include <acpi/acexcep.h>
-> +#include <linux/bitfield.h>
-> +#include <linux/sysfs.h>
-> +#include <linux/platform_profile.h>
-> +#include <linux/led-class-multicolor.h>
-> +
-> +#include <linux/dmi.h>
-> +#include <asm/cpu_device_id.h>
-> +#include <asm/intel-family.h>
-> +
-> +#define CASPER_WMI_GUID "644C5791-B7B0-4123-A90B-E93876E0DAAD"
-> +
-> +#define CASPER_READ 0xfa00
-> +#define CASPER_WRITE 0xfb00
-> +#define CASPER_GET_HARDWAREINFO 0x0200
-> +#define CASPER_SET_LED 0x0100
-> +#define CASPER_POWERPLAN 0x0300
-> +
-> +#define CASPER_KEYBOARD_LED_1 0x03
-> +#define CASPER_KEYBOARD_LED_2 0x04
-> +#define CASPER_KEYBOARD_LED_3 0x05
-> +#define CASPER_ALL_KEYBOARD_LEDS 0x06
-> +#define CASPER_CORNER_LEDS 0x07
-> +#define CASPER_LED_COUNT 4
-> +
-> +const char * const zone_names[CASPER_LED_COUNT] =3D {
-> +=09"casper::kbd_zoned_backlight-right",
-> +=09"casper::kbd_zoned_backlight-middle",
-> +=09"casper::kbd_zoned_backlight-left",
-> +=09"casper::kbd_zoned_backlight-corners",
-> +};
-> +
-> +#define CASPER_LED_ALPHA GENMASK(31, 24)
-> +#define CASPER_LED_RED=09 GENMASK(23, 16)
-> +#define CASPER_LED_GREEN GENMASK(15, 8)
-> +#define CASPER_LED_BLUE  GENMASK(7, 0)
-> +#define CASPER_DEFAULT_COLOR (CASPER_LED_RED | CASPER_LED_GREEN | \
-> +=09=09=09      CASPER_LED_BLUE)
-> +#define CASPER_FAN_CPU 0
-> +#define CASPER_FAN_GPU 1
-> +
-> +enum casper_power_profile_old {
-> +=09CASPER_HIGH_PERFORMANCE =3D 1,
-> +=09CASPER_GAMING=09=09=3D 2,
-> +=09CASPER_TEXT_MODE=09=3D 3,
-> +=09CASPER_POWERSAVE=09=3D 4
-> +};
-> +
-> +enum casper_power_profile_new {
-> +=09CASPER_NEW_HIGH_PEROFRMANCE=09=3D 0,
+Error/Warning: (recently discovered and may have been fixed)
 
-PERFORMANCE
+arch/sh/include/asm/bug.h:75:25: error: '__BUG_FUNC' undeclared (first use in this function)
 
+Error/Warning ids grouped by kconfigs:
 
-> +=09ret =3D casper_query(wdev, CASPER_GET_HARDWAREINFO, &out);
-> +=09if (ret)
-> +=09=09return ret;
-> +
-> +=09switch (channel) {
-> +=09case CASPER_FAN_CPU:
-> +=09=09if (quirk_applied->big_endian_fans)
-> +=09=09=09*val =3D be16_to_cpu((u16) out.a4);
+gcc_recent_errors
+`-- sh-randconfig-001-20240311
+    `-- arch-sh-include-asm-bug.h:error:__BUG_FUNC-undeclared-(first-use-in-this-function)
 
-So you use be16_to_cpu() but you cast the input to u16, not __be16!?!
+elapsed time: 845m
 
-Please run sparse with endianness checking enabled and make sure it won't=
-=20
-complain on these lines.
+configs tested: 207
+configs skipped: 4
 
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              alldefconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                          axs101_defconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20240311   gcc  
+arc                   randconfig-002-20240311   gcc  
+arc                    vdk_hs38_smp_defconfig   gcc  
+arm                              alldefconfig   gcc  
+arm                               allnoconfig   clang
+arm                              allyesconfig   gcc  
+arm                         assabet_defconfig   clang
+arm                                 defconfig   clang
+arm                          ep93xx_defconfig   clang
+arm                          exynos_defconfig   clang
+arm                           h3600_defconfig   gcc  
+arm                           imxrt_defconfig   clang
+arm                      integrator_defconfig   clang
+arm                        keystone_defconfig   gcc  
+arm                        neponset_defconfig   gcc  
+arm                       netwinder_defconfig   gcc  
+arm                          pxa910_defconfig   gcc  
+arm                   randconfig-001-20240311   clang
+arm                   randconfig-002-20240311   gcc  
+arm                   randconfig-003-20240311   clang
+arm                   randconfig-004-20240311   clang
+arm                        shmobile_defconfig   gcc  
+arm                       spear13xx_defconfig   gcc  
+arm                    vt8500_v6_v7_defconfig   gcc  
+arm64                            alldefconfig   gcc  
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20240311   clang
+arm64                 randconfig-002-20240311   clang
+arm64                 randconfig-003-20240311   clang
+arm64                 randconfig-004-20240311   clang
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20240311   gcc  
+csky                  randconfig-002-20240311   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+hexagon               randconfig-001-20240311   clang
+hexagon               randconfig-002-20240311   clang
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20240311   clang
+i386         buildonly-randconfig-002-20240311   clang
+i386         buildonly-randconfig-003-20240311   clang
+i386         buildonly-randconfig-004-20240311   gcc  
+i386         buildonly-randconfig-005-20240311   clang
+i386         buildonly-randconfig-006-20240311   clang
+i386                                defconfig   clang
+i386                  randconfig-001-20240311   gcc  
+i386                  randconfig-002-20240311   gcc  
+i386                  randconfig-003-20240311   clang
+i386                  randconfig-004-20240311   clang
+i386                  randconfig-005-20240311   gcc  
+i386                  randconfig-006-20240311   clang
+i386                  randconfig-011-20240311   gcc  
+i386                  randconfig-012-20240311   gcc  
+i386                  randconfig-013-20240311   clang
+i386                  randconfig-014-20240311   gcc  
+i386                  randconfig-015-20240311   clang
+i386                  randconfig-016-20240311   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                        allyesconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20240311   gcc  
+loongarch             randconfig-002-20240311   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                          amiga_defconfig   gcc  
+m68k                         apollo_defconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                          hp300_defconfig   gcc  
+m68k                          multi_defconfig   gcc  
+m68k                        stmark2_defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                     decstation_defconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20240311   gcc  
+nios2                 randconfig-002-20240311   gcc  
+openrisc                         allmodconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+openrisc                       virt_defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                randconfig-001-20240311   gcc  
+parisc                randconfig-002-20240311   gcc  
+parisc64                            defconfig   gcc  
+powerpc                      acadia_defconfig   clang
+powerpc                    adder875_defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc                     ep8248e_defconfig   gcc  
+powerpc                  iss476-smp_defconfig   gcc  
+powerpc                     powernv_defconfig   gcc  
+powerpc                     ppa8548_defconfig   gcc  
+powerpc               randconfig-001-20240311   gcc  
+powerpc               randconfig-002-20240311   clang
+powerpc               randconfig-003-20240311   gcc  
+powerpc                    sam440ep_defconfig   gcc  
+powerpc                    socrates_defconfig   gcc  
+powerpc                     tqm5200_defconfig   gcc  
+powerpc                         wii_defconfig   gcc  
+powerpc64             randconfig-001-20240311   clang
+powerpc64             randconfig-002-20240311   clang
+powerpc64             randconfig-003-20240311   gcc  
+riscv                            allmodconfig   clang
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   clang
+riscv                               defconfig   clang
+riscv                 randconfig-001-20240311   clang
+riscv                 randconfig-002-20240311   gcc  
+s390                             allmodconfig   clang
+s390                              allnoconfig   clang
+s390                             allyesconfig   gcc  
+s390                                defconfig   clang
+s390                  randconfig-001-20240311   clang
+s390                  randconfig-002-20240311   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                         apsh4a3a_defconfig   gcc  
+sh                                  defconfig   gcc  
+sh                            hp6xx_defconfig   gcc  
+sh                    randconfig-001-20240311   gcc  
+sh                    randconfig-002-20240311   gcc  
+sh                          rsk7203_defconfig   gcc  
+sh                           se7722_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64               randconfig-001-20240311   gcc  
+sparc64               randconfig-002-20240311   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   gcc  
+um                                  defconfig   clang
+um                             i386_defconfig   gcc  
+um                    randconfig-001-20240311   gcc  
+um                    randconfig-002-20240311   clang
+um                           x86_64_defconfig   clang
+x86_64                            allnoconfig   clang
+x86_64                           allyesconfig   clang
+x86_64       buildonly-randconfig-001-20240311   clang
+x86_64       buildonly-randconfig-002-20240311   clang
+x86_64       buildonly-randconfig-003-20240311   clang
+x86_64       buildonly-randconfig-004-20240311   gcc  
+x86_64       buildonly-randconfig-005-20240311   clang
+x86_64       buildonly-randconfig-006-20240311   gcc  
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20240311   clang
+x86_64                randconfig-002-20240311   clang
+x86_64                randconfig-003-20240311   gcc  
+x86_64                randconfig-004-20240311   gcc  
+x86_64                randconfig-005-20240311   gcc  
+x86_64                randconfig-006-20240311   clang
+x86_64                randconfig-011-20240311   clang
+x86_64                randconfig-012-20240311   clang
+x86_64                randconfig-013-20240311   clang
+x86_64                randconfig-014-20240311   gcc  
+x86_64                randconfig-015-20240311   clang
+x86_64                randconfig-016-20240311   gcc  
+x86_64                randconfig-071-20240311   gcc  
+x86_64                randconfig-072-20240311   clang
+x86_64                randconfig-073-20240311   clang
+x86_64                randconfig-074-20240311   gcc  
+x86_64                randconfig-075-20240311   clang
+x86_64                randconfig-076-20240311   clang
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                            allnoconfig   gcc  
+xtensa                           allyesconfig   gcc  
+xtensa                randconfig-001-20240311   gcc  
+xtensa                randconfig-002-20240311   gcc  
 
-> +=09gen_id =3D x86_match_cpu(casper_gen);
-> +=09if (!gen_id)
-> +=09=09return -ENODEV;
-> +
-> +=09quirk_applied =3D (struct casper_quirk_entry *) gen_id->driver_data;
-
-Don't leave space after casts. There could=20
-
-> +=09dmi_id =3D dmi_first_match(casper_quirks);
-> +=09if (!dmi_id)
-> +=09=09return -ENODEV;
-> +
-> +=09quirk_applied->no_power_profiles =3D ((struct casper_quirk_entry *)
-> +=09=09dmi_id->driver_data)->no_power_profiles;
-
-Please make a local variable for struct casper_quirk_entry * instead of=20
-trying to cram this into a single, multi-line statement.
-
-> +=09casper_kbd_mcled_info =3D devm_kzalloc(&wdev->dev,
-> +=09=09sizeof(*casper_kbd_mcled_info)*CASPER_LED_COUNT, GFP_KERNEL);
-
-devm_kcalloc()
-
-
-I'm yet to go through the use of multicolor led stuff (I don't have time=20
-for that now and I'm not familiar enough with it to check it quickly).=20
-But hopefully we get one of the leds people to take a look at it before I=
-=20
-do, their input would be much more valuable than my review.
-
---=20
- i.
---8323328-888064519-1710155751=:1142--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
