@@ -1,395 +1,214 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 051C711712;
-	Mon, 11 Mar 2024 15:37:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EA562AE91
+	for <linux-hwmon@vger.kernel.org>; Mon, 11 Mar 2024 16:55:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710171436; cv=none; b=glwppY/V00JYXUeVlLbLn5WJweVsrePNhGFQrnSI8yo1qZnTHNHWydir39ynYZ28M5cgWELhtrehvWNEObzG5NYDDmpncgDrtTmleIgwJTOeopRQtcJ2BnO/pUNu3CVjRheAvwi8qHlIGaEViSQXmhMJ3f8w7hK4a67TUDVyuqc=
+	t=1710176136; cv=none; b=VEooiP8KwvojjbAkaNuY6Gd6tQPqLGQOp1B0CDM0283OjRjU0NiPD7X5emMhgsQFvK9WqI1NO9I8dWLaxZG+3boZVbpEARXT12gnHJxcpfrrXwAIelX9QMfk92ynCPdAn8OQk3xZvzEuR1Fd41tRnS9gIbu+8IfFAiWBF4UfpRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710171436; c=relaxed/simple;
-	bh=cliPdiykPFBQPB8kg+98KHCWqrNa1qp0dIqnZuPxJz8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=oLyBshptwYPXWFmfThBYIYAM3r+VGYq+P7kfUn4sRMeVgmiIn3//qO71SxTIQavnXmzUSlFMp95TzIra0H2742f4sL46l/ES2519Yb+X8b9srClxzrWDHUOzZuUXBa2YuolDL69G4Rhj8ENnEkBGdElBtHgLlJLRJWVd593tKQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nAv9V3L/; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1710176136; c=relaxed/simple;
+	bh=oz2AhnMnqKeJCiy1sEwnUYrMKp52jC5sQnFpOO9Lfw4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uOfndA10AJto/QxzNaxHy7BZrI3e1oTyMhDcaf0jDgqOmrtEXtboik0kN9/ur1lT26Qgiyrq6S4PLkkxEzU3cKMoqiEZ+evWJkAwWfJKq7aoXkOIL/tiQkHrxGYAqgeODaGYMTeEBDtwm9NX6XEua64YGrn2Y7LMSHom6vJU8wU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ciMd9Sfh; arc=none smtp.client-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nAv9V3L/"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6e56787e691so3653780b3a.0;
-        Mon, 11 Mar 2024 08:37:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ciMd9Sfh"
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-513382f40e9so5448162e87.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 11 Mar 2024 09:55:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710171433; x=1710776233; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=g9x+X3NiSdQxM/kQ/xGr9qo5cclebFReU5Z734InRe8=;
-        b=nAv9V3L/neGnU0FTiFDva7EFb+e8ioi2XwJpIMbzZm+plyBtH42kxslomSzIXj2Z19
-         L5L0ySAEOewhKFtgyigqL5td7mx8FC5kzrd4cbykcrxhXkfPKl5wPUWzCnUH6XbK0kGY
-         1TgbVqTBesyQS1c14wEhBvG2im5v06YWobGU2nLqZE7RUVfURuMCX8nCIFACw0Cpffib
-         Smo1ebQ+WPyKm5WdUuaXHvKO46KXpoD04EHz+sH+KGNp8lCKBf+JBeewfT4o7Baz3nNK
-         VRRnARXTKe8GANvyTqHehtY0dUP3021U8JZaM7ehDSSIksMvjGT76I1FrAFIfIdruwyB
-         QgJg==
+        d=linaro.org; s=google; t=1710176132; x=1710780932; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QRBazjZ4ooJccMR7Nywf/WMFMtOUOpJov8lMBOj6eEA=;
+        b=ciMd9SfhdzoeyO1XAAxds4fTjmO5+JZlrqVnnb9guu+dlihPjIlcrOfe8LBOYc4Fxx
+         5ZQZttUazyE03OCVX4KBGuvMCxtrMdJ/Vl3ItUiZeULdj6P/0qd/I1AA7g9Y4BamlR5W
+         4GOhW+rrgUTVynpP3UXwI51zLaaFkpC/89Bsz0i38Of0PTNmn8ianxCwQRIQjk4IjYNG
+         VDoG48dRgQpjpiOcVa8j1VHvsb+kJ3ikUK6d59pHYyYpa6DFe5SFQAcpuRTlJsC5FaDa
+         rn2qH7etMP9NwnlBzBikt2WTF8tsJ+E7k7t9oeqv5MM9Xq8Xa79tiuKNw/Pw6ovgcZnn
+         dQ9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710171433; x=1710776233;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g9x+X3NiSdQxM/kQ/xGr9qo5cclebFReU5Z734InRe8=;
-        b=GZH7ICkkDeEahkkgNGUwUb83tE1mgIfCCL1hWHJEM8uBLVfxIGCqADcjJ4mwci8yyK
-         lxXxXOdQ2xbFRVUWbTzR/80pZ5f5MNxS4sX5JS22aXbShbm68hHt/JnE3jekUrKhg87d
-         1fi1JfrVELIYOyioAuqpSzXKaokoxMgic/MzIVs9JKNhNTD8SEG+FTby29Vjmo2TSNY3
-         v8wh0WewrvwhifDd4/CP5CRVyDeEN2i1utFmV0+4i1lckCjmqgua2ZdXwdFEtefycfrl
-         jcxHgX123HIcKvk9UBqmYM33qKDbDUxEQrR3BbhHmkX4TMP4+MucubUAy/xkrMjZ8ScH
-         /73Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXeUF7F09tS6rWuoPiVjmin6rELgALzSofHcK236L9FcM02HZJ4kSsq3KCPDQe7Zvyxb0ZKQV6D2E0VOl9Q38YHvk9ZonO/PaxENwpR
-X-Gm-Message-State: AOJu0YzfwTKKCFw3OhL7aDrXMdTOPe0iPbwZMxr4M/QMK1C3u558dqsj
-	NnWAr0LTG1eEVi/8DnvhCP/WuGFQOAyDXgNOImdIZXHizNvY7OFkewkeP8XY
-X-Google-Smtp-Source: AGHT+IFg+o+chH8Nv3KtLpomrSWBDBUqtKiDEke+ek860iDblbCcavDPnBfdI8oYmnzDDokm07pVnA==
-X-Received: by 2002:a05:6a20:3ca9:b0:1a1:491e:8aba with SMTP id b41-20020a056a203ca900b001a1491e8abamr9691506pzj.22.1710171433006;
-        Mon, 11 Mar 2024 08:37:13 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id ei4-20020a056a0080c400b006e5619b2f83sm4522089pfb.7.2024.03.11.08.37.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Mar 2024 08:37:11 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon updates for v6.9
-Date: Mon, 11 Mar 2024 08:37:10 -0700
-Message-Id: <20240311153710.3137686-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20230601; t=1710176132; x=1710780932;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QRBazjZ4ooJccMR7Nywf/WMFMtOUOpJov8lMBOj6eEA=;
+        b=bnZXgFFuDEzRa5nazJMMYUDiL5fw0cUQIpAHr7eRZRe6Mz0+4TGGTws1m/2qUAI6Zd
+         4HzwvcyhcaXY5CZIfJCWGSQaDmKYX4nL4fM8KUeKHrkpXELM3Z5XpxPhTeXxV+WcKlCx
+         +0zK3riJIPO5ebsmgmeH5pxjTG03JCRZfr8B5XBJlnTZDXtkc24imQhLIEguZIocS3Og
+         /eP2l/7/rHytRa74libTPFUkljCfKUEASOK/08XrYeROy5H77P/qhgURviazYfD7UeLb
+         4PgeFA+twl8zQA5L31j73NRTIenizkck37UgYAkz2RVdm3NKwLwMw42M1lGf+PEs7jLz
+         +rOw==
+X-Forwarded-Encrypted: i=1; AJvYcCWgXyMIaZHE4333iw3bxmkLHPZN92mpKvNWp984116f4gIjmZtHRSwuvTcuRAWB9UsLhaQMm1OimO3F7qyQxKBozRCOaDk9qZX35SA=
+X-Gm-Message-State: AOJu0YywJgQkEQJv6ARBfqHDfSdCIeR7j7CiiPp5pHDYjyXyPcda70Lk
+	5fGYSRhikAxlvSGDjQbqPyLfjQ4kTlMTnvpDXm8zX0LCB4eigqSMLTk0PX3Cig0=
+X-Google-Smtp-Source: AGHT+IGOY67IrkqCiB1cD3YKFOgbzoG+b1J/HDUBnxkdAT3fcbak6FrRlrBMpl+LnL0MgIlypybrDw==
+X-Received: by 2002:ac2:598b:0:b0:513:97e3:43cf with SMTP id w11-20020ac2598b000000b0051397e343cfmr3944161lfn.32.1710176132345;
+        Mon, 11 Mar 2024 09:55:32 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.222.97])
+        by smtp.gmail.com with ESMTPSA id z11-20020a05600c0a0b00b00412f428aedasm16278722wmp.46.2024.03.11.09.55.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Mar 2024 09:55:31 -0700 (PDT)
+Message-ID: <6fb70adb-aa85-4b9c-b093-afa4ec7ed056@linaro.org>
+Date: Mon, 11 Mar 2024 17:55:29 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] dt-bindings: hwmon: Add maxim max31790 driver
+ bindings
+Content-Language: en-US
+To: Chanh Nguyen <chanh@os.amperecomputing.com>,
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Justin Ledford
+ <justinledford@google.com>, devicetree@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+ Open Source Submission <patches@amperecomputing.com>
+Cc: Phong Vo <phong@os.amperecomputing.com>,
+ Thang Nguyen <thang@os.amperecomputing.com>,
+ Quan Nguyen <quan@os.amperecomputing.com>
+References: <20240311111347.23067-1-chanh@os.amperecomputing.com>
+ <20240311111347.23067-2-chanh@os.amperecomputing.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240311111347.23067-2-chanh@os.amperecomputing.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+
+On 11/03/2024 12:13, Chanh Nguyen wrote:
+> Add a device tree bindings for max31790 device.
+
+Subject: drop "driver", bindings are about hardware.
+
+It does not look like you tested the bindings, at least after quick
+look. Please run `make dt_binding_check` (see
+Documentation/devicetree/bindings/writing-schema.rst for instructions).
+Maybe you need to update your dtschema and yamllint.
+
+> 
+> Signed-off-by: Chanh Nguyen <chanh@os.amperecomputing.com>
+> ---
+>  .../devicetree/bindings/hwmon/max31790.yaml   | 44 +++++++++++++++++++
+>  1 file changed, 44 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/max31790.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/max31790.yaml b/Documentation/devicetree/bindings/hwmon/max31790.yaml
+> new file mode 100644
+> index 000000000000..5a93e6bdebda
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/max31790.yaml
+
+Filename like compatible.
+
+> @@ -0,0 +1,44 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/max31790.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: The Maxim MAX31790 Fan Controller
+> +
+> +maintainers:
+> +  - Jean Delvare <jdelvare@suse.com>
+> +  - Guenter Roeck <linux@roeck-us.net>
+
+You should have here someone responsible for hardware, not subsystem
+maintainers.
+
+> +
+> +description: >
+> +  The MAX31790 controls the speeds of up to six fans using six
+> +  independent PWM outputs. The desired fan speeds (or PWM duty cycles)
+> +  are written through the I2C interface.
+> +
+> +  Datasheets:
+> +    https://datasheets.maximintegrated.com/en/ds/MAX31790.pdf
+> +
+> +properties:
+> +  compatible:
+> +    const: maxim,max31790
+> +
+> +  reg:
+> +    maxItems: 1
+
+That's weirdly empty.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+
+You miss allOf: with $ref to fan controller schema.
+
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      max31790@20 {
+
+Node names should be generic. See also an explanation and list of
+examples (not exhaustive) in DT specification:
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+
+Best regards,
+Krzysztof
 
-Hi Linus,
-
-Please pull hwmon updates for Linux v6.9 from signed tag:
-
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.9
-
-Depending on who comes first, there will be a context conflict in
-
-  Documentation/devicetree/bindings/trivial-devices.yaml
-
-between commit:
-
-  7e6707f7da31 ("dt-bindings: Add MPQ8785 voltage regulator device")
-
-and commit:
-
-  6284d33d1749 ("dt-bindings: trivial-devices: sort entries alphanumerically")
-
-from the devicetree tree.
-
-Thanks,
-Guenter
-------
-
-The following changes since commit 841c35169323cd833294798e58b9bf63fa4fa1de:
-
-  Linux 6.8-rc4 (2024-02-11 12:18:13 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.9
-
-for you to fetch changes up to 8debe3c1295ef36958dae77487eed9cf6584c008:
-
-  hwmon: (dell-smm) Add XPS 9315 to fan control whitelist (2024-03-10 12:58:18 -0700)
-
-----------------------------------------------------------------
-hwmon updates for v6.9
-
-* New drivers for
-
-  - Amphenol ChipCap 2
-
-  - ASPEED g6 PWM/Fan tach
-
-  - Astera Labs PT5161L retimer
-
-  - ASUS ROG RYUJIN II 360 AIO cooler
-
-  - LTC4282
-
-  - Microsoft Surface devices
-
-  - MPS MPQ8785 Synchronous Step-Down Converter
-
-  - NZXT Kraken X and Z series AIO CPU coolers
-
-* Additional chip support in existing drivers
-
-  - Ayaneo Air Plus 7320u (oxp-sensors)
-
-  - INA260 (ina2xx)
-
-  - XPS 9315 (dell-smm)
-
-  - MSI customer ID (nct6683)
-
-* Devicetree bindings updates
-
-  - Common schema for hardware monitoring devices
-
-  - Common schema for fans
-
-  - Update chip descriptions to use common schema
-
-  - Document regulator properties in several drivers
-
-  - Explicit bindings for infineon buck converters
-
-* Other improvements
-
-  - Replaced rbtree with maple tree register cache in several drivers
-
-  - Added support for humidity min/max alarm and volatage fault attributes
-    to hwmon core
-
-  - Dropped non-functional I2C_CLASS_HWMON support for drivers w/o detect()
-
-  - Dropped obsolete and redundant entried from MAINTAINERS
-
-  - Cleaned up axi-fan-control and coretemp drivers
-
-  - Minor fixes and improvements in several other drivers
-
-----------------------------------------------------------------
-Aleksa Savic (2):
-      hwmon: Add driver for NZXT Kraken X and Z series AIO CPU coolers
-      hwmon: Add driver for ASUS ROG RYUJIN II 360 AIO cooler
-
-Armin Wolf (1):
-      hwmon: (dell-smm) Add XPS 9315 to fan control whitelist
-
-Billy Tsai (2):
-      dt-bindings: hwmon: Support Aspeed g6 PWM TACH Control
-      hwmon: (aspeed-g6-pwm-tacho): Support for ASPEED g6 PWM/Fan tach
-
-Bo Liu (9):
-      hwmon: (adt7x10) convert to use maple tree register cache
-      hwmon: (emc1403) convert to use maple tree register cache
-      hwmon: (ina3221) convert to use maple tree register cache
-      hwmon: (jc42) convert to use maple tree register cache
-      hwmon: (lm83) convert to use maple tree register cache
-      hwmon: (max31760) convert to use maple tree register cache
-      hwmon: (nct7802) convert to use maple tree register cache
-      hwmon: (sch5627) convert to use maple tree register cache
-      hwmon: (tmp401) convert to use maple tree register cache
-
-Charles Hsu (2):
-      dt-bindings: Add MPQ8785 voltage regulator device
-      hwmon: Add driver for MPS MPQ8785 Synchronous Step-Down Converter
-
-Conor Dooley (2):
-      dt-bindings: hwmon/pmbus: ti,lm25066: document regulators
-      regulator: dt-bindings: promote infineon buck converters to their own binding
-
-Cosmo Chou (3):
-      dt-bindings: vendor-prefixes: add asteralabs
-      dt-bindings: trivial-devices: add Astera Labs PT5161L
-      hwmon: Add driver for Astera Labs PT5161L retimer
-
-Forest Crossman (1):
-      hwmon: (nct6683) Add another customer ID for MSI
-
-Guenter Roeck (6):
-      MAINTAINERS: Drop entries for hwmon devices with unreachable maintainers
-      MAINTAINERS: Drop redundant hwmon entries
-      dt-bindings: hwmon: nuvoton,nct6775: Add compatible value for NCT6799
-      hwmon: (pmbus/tda38640) Use PMBUS_REGULATOR_ONE to declare regulator
-      hwmon: (pmbus/lm25066) Use PMBUS_REGULATOR_ONE to declare regulator
-      hwmon: (pmbus/ir38064) Use PMBUS_REGULATOR_ONE to declare regulator
-
-Heiner Kallweit (2):
-      hwmon: Remove I2C_CLASS_HWMON from drivers w/o detect() and address_list
-      hwmon: Drop non-functional I2C_CLASS_HWMON support for drivers w/o detect()
-
-Ivor Wanders (1):
-      hwmon: add fan speed monitoring driver for Surface devices
-
-Jani Nikula (1):
-      hwmon: put HWMON_CHANNEL_INFO() initializers in rodata
-
-Javier Carrasco (7):
-      dt-bindings: vendor-prefixes: add Amphenol
-      hwmon: (core) Add support for humidity min/max alarm
-      ABI: sysfs-class-hwmon: add descriptions for humidity min/max alarms
-      dt-bindings: hwmon: Add Amphenol ChipCap 2
-      hwmon: Add support for Amphenol ChipCap 2
-      hwmon: (chipcap2) fix uninitialized variable in cc2_get_reg_val()
-      hwmon: (chipcap2) fix return path in cc2_request_alarm_irqs()
-
-Josua Mayer (1):
-      hwmon: (amc6821) add of_match table
-
-Krzysztof Kozlowski (6):
-      dt-bindings: hwmon: add common properties
-      dt-bindings: hwmon: ti,ina2xx: use common hwmon schema
-      dt-bindings: hwmon: adi,adm1275: use common hwmon schema
-      dt-bindings: hwmon: lltc,ltc4286: use common hwmon schema
-      dt-bindings: hwmon: reference common hwmon schema
-      hwmon: (sis5595) drop unused DIV_TO_REG function
-
-Michal Simek (3):
-      dt-bindings: hwmon: ina2xx: Add label property
-      dt-bindings: hwmon: ina2xx: Describe #io-channel-cells property
-      dt-bindings: hwmon: ina2xx: Describe ina260 chip
-
-Naresh Solanki (2):
-      dt-bindings: hwmon: tda38640: Add interrupt & regulator properties
-      dt-bindings: hwmon: fan: Add fan binding to schema
-
-Nuno Sa (6):
-      dt-bindings: hwmon: Add LTC4282 bindings
-      hwmon: add fault attribute for voltage channels
-      hwmon: Add driver for LTC4282
-      hwmon: (axi-fan-control) Use device firmware agnostic API
-      hwmon: (axi-fan-control) Make use of sysfs_emit()
-      hwmon: (axi-fan-control) Make use of dev_err_probe()
-
-Okan Akyuz (1):
-      hwmon: (max6620) Update broken Datasheet URL in driver documentation
-
-Patrick Rudolph (1):
-      hwmon: (pmbus_core) Allow to hook PMBUS_SMBALERT_MASK
-
-Sebastian Kranz (1):
-      hwmon: (oxp-sensors) Add support for Ayaneo Air Plus 7320u.
-
-Stefan Gloor (1):
-      hwmon: (sht3x) read out sensor serial number
-
-Théo Lebrun (1):
-      dt-bindings: hwmon: lm75: use common hwmon schema
-
-Zhang Rui (8):
-      hwmon: (coretemp) Introduce enum for attr index
-      hwmon: (coretemp) Remove unnecessary dependency of array index
-      hwmon: (coretemp) Replace sensor_device_attribute with device_attribute
-      hwmon: (coretemp) Remove redundant pdata->cpu_map[]
-      hwmon: (coretemp) Abstract core_temp helpers
-      hwmon: (coretemp) Split package temp_data and core temp_data
-      hwmon: (coretemp) Remove redundant temp_data->is_pkg_data
-      hwmon: (coretemp) Use dynamic allocated memory for core temp_data
-
- Documentation/ABI/testing/sysfs-class-hwmon        |   27 +
- .../devicetree/bindings/hwmon/adi,adm1177.yaml     |    5 +-
- .../devicetree/bindings/hwmon/adi,adm1275.yaml     |    7 +-
- .../devicetree/bindings/hwmon/adi,ltc2945.yaml     |    5 +-
- .../devicetree/bindings/hwmon/adi,ltc4282.yaml     |  159 ++
- .../bindings/hwmon/amphenol,chipcap2.yaml          |   77 +
- .../bindings/hwmon/aspeed,g6-pwm-tach.yaml         |   71 +
- .../devicetree/bindings/hwmon/fan-common.yaml      |   79 +
- .../devicetree/bindings/hwmon/hwmon-common.yaml    |   19 +
- .../devicetree/bindings/hwmon/lltc,ltc4151.yaml    |    5 +-
- .../devicetree/bindings/hwmon/lltc,ltc4286.yaml    |    9 +-
- Documentation/devicetree/bindings/hwmon/lm75.yaml  |    3 +-
- .../devicetree/bindings/hwmon/nuvoton,nct6775.yaml |    1 +
- .../bindings/hwmon/pmbus/infineon,tda38640.yaml    |   28 +
- .../bindings/hwmon/pmbus/ti,lm25066.yaml           |   17 +-
- .../devicetree/bindings/hwmon/ti,ina2xx.yaml       |   11 +-
- .../devicetree/bindings/hwmon/ti,tmp513.yaml       |    5 +-
- .../devicetree/bindings/hwmon/ti,tps23861.yaml     |    5 +-
- .../bindings/regulator/infineon,ir38060.yaml       |   45 +
- .../devicetree/bindings/trivial-devices.yaml       |   12 +-
- .../devicetree/bindings/vendor-prefixes.yaml       |    4 +
- Documentation/hwmon/aspeed-g6-pwm-tach.rst         |   26 +
- Documentation/hwmon/asus_rog_ryujin.rst            |   47 +
- Documentation/hwmon/chipcap2.rst                   |   73 +
- Documentation/hwmon/emc2305.rst                    |    1 -
- Documentation/hwmon/index.rst                      |    8 +
- Documentation/hwmon/ltc4282.rst                    |  133 ++
- Documentation/hwmon/max6620.rst                    |    2 +-
- Documentation/hwmon/mpq8785.rst                    |   94 ++
- Documentation/hwmon/nct6683.rst                    |    1 +
- Documentation/hwmon/nzxt-kraken3.rst               |   74 +
- Documentation/hwmon/oxp-sensors.rst                |    1 +
- Documentation/hwmon/pt5161l.rst                    |   42 +
- Documentation/hwmon/sht3x.rst                      |   11 +
- Documentation/hwmon/surface_fan.rst                |   25 +
- MAINTAINERS                                        |  167 +-
- drivers/hwmon/Kconfig                              |   76 +
- drivers/hwmon/Makefile                             |    7 +
- drivers/hwmon/adm1177.c                            |    1 -
- drivers/hwmon/adt7310.c                            |    2 +-
- drivers/hwmon/adt7410.c                            |    4 +-
- drivers/hwmon/amc6821.c                            |   11 +
- drivers/hwmon/aspeed-g6-pwm-tach.c                 |  549 ++++++
- drivers/hwmon/asus_rog_ryujin.c                    |  609 +++++++
- drivers/hwmon/axi-fan-control.c                    |   73 +-
- drivers/hwmon/chipcap2.c                           |  822 +++++++++
- drivers/hwmon/coretemp.c                           |  204 +--
- drivers/hwmon/dell-smm-hwmon.c                     |   13 +
- drivers/hwmon/ds1621.c                             |    1 -
- drivers/hwmon/ds620.c                              |    1 -
- drivers/hwmon/emc1403.c                            |    2 +-
- drivers/hwmon/emc2305.c                            |    5 -
- drivers/hwmon/hwmon.c                              |    3 +
- drivers/hwmon/ina209.c                             |    1 -
- drivers/hwmon/ina238.c                             |    1 -
- drivers/hwmon/ina3221.c                            |    2 +-
- drivers/hwmon/jc42.c                               |    2 +-
- drivers/hwmon/lm83.c                               |    2 +-
- drivers/hwmon/ltc4282.c                            | 1782 ++++++++++++++++++++
- drivers/hwmon/max127.c                             |    1 -
- drivers/hwmon/max31760.c                           |    3 +-
- drivers/hwmon/max31790.c                           |    1 -
- drivers/hwmon/max31827.c                           |    1 -
- drivers/hwmon/max6621.c                            |    1 -
- drivers/hwmon/max6697.c                            |    1 -
- drivers/hwmon/nct6683.c                            |    3 +
- drivers/hwmon/nct7802.c                            |    2 +-
- drivers/hwmon/nzxt-kraken3.c                       | 1008 +++++++++++
- drivers/hwmon/occ/p8_i2c.c                         |    1 -
- drivers/hwmon/oxp-sensors.c                        |   10 +
- drivers/hwmon/pmbus/Kconfig                        |    9 +
- drivers/hwmon/pmbus/Makefile                       |    1 +
- drivers/hwmon/pmbus/ir36021.c                      |    1 -
- drivers/hwmon/pmbus/ir38064.c                      |    2 +-
- drivers/hwmon/pmbus/lm25066.c                      |    2 +-
- drivers/hwmon/pmbus/mpq8785.c                      |   90 +
- drivers/hwmon/pmbus/pmbus_core.c                   |    2 +-
- drivers/hwmon/pmbus/tda38640.c                     |    2 +-
- drivers/hwmon/powr1220.c                           |    1 -
- drivers/hwmon/pt5161l.c                            |  667 ++++++++
- drivers/hwmon/sbrmi.c                              |    1 -
- drivers/hwmon/sbtsi_temp.c                         |    1 -
- drivers/hwmon/sch5627.c                            |    2 +-
- drivers/hwmon/sht3x.c                              |   66 +-
- drivers/hwmon/sis5595.c                            |    8 +-
- drivers/hwmon/surface_fan.c                        |   91 +
- drivers/hwmon/tmp401.c                             |    2 +-
- drivers/hwmon/w83773g.c                            |    1 -
- include/linux/hwmon.h                              |   18 +-
- 89 files changed, 7136 insertions(+), 335 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/hwmon/adi,ltc4282.yaml
- create mode 100644 Documentation/devicetree/bindings/hwmon/amphenol,chipcap2.yaml
- create mode 100644 Documentation/devicetree/bindings/hwmon/aspeed,g6-pwm-tach.yaml
- create mode 100644 Documentation/devicetree/bindings/hwmon/fan-common.yaml
- create mode 100644 Documentation/devicetree/bindings/hwmon/hwmon-common.yaml
- create mode 100644 Documentation/devicetree/bindings/regulator/infineon,ir38060.yaml
- create mode 100644 Documentation/hwmon/aspeed-g6-pwm-tach.rst
- create mode 100644 Documentation/hwmon/asus_rog_ryujin.rst
- create mode 100644 Documentation/hwmon/chipcap2.rst
- create mode 100644 Documentation/hwmon/ltc4282.rst
- create mode 100644 Documentation/hwmon/mpq8785.rst
- create mode 100644 Documentation/hwmon/nzxt-kraken3.rst
- create mode 100644 Documentation/hwmon/pt5161l.rst
- create mode 100644 Documentation/hwmon/surface_fan.rst
- create mode 100644 drivers/hwmon/aspeed-g6-pwm-tach.c
- create mode 100644 drivers/hwmon/asus_rog_ryujin.c
- create mode 100644 drivers/hwmon/chipcap2.c
- create mode 100644 drivers/hwmon/ltc4282.c
- create mode 100644 drivers/hwmon/nzxt-kraken3.c
- create mode 100644 drivers/hwmon/pmbus/mpq8785.c
- create mode 100644 drivers/hwmon/pt5161l.c
- create mode 100644 drivers/hwmon/surface_fan.c
