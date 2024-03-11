@@ -1,232 +1,198 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50A5410A3D
-	for <linux-hwmon@vger.kernel.org>; Mon, 11 Mar 2024 08:11:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96ACF22F07
+	for <linux-hwmon@vger.kernel.org>; Mon, 11 Mar 2024 09:23:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710144717; cv=none; b=eJYwfJ/MapvYy1KEKPJZx1JL5KqjPLugOpzfti3GlVdT1DPQ3vHpIGYWo84uhTpV1nYLNkfQPj0y8+ivFANZgt3hzkbtqHZ9OptugqCy1F11kFcwDGGYP/2dLyL9da4zHOEjEQskTSGlIFfufw7VXa1iT0m6clNY7i61njeHeDc=
+	t=1710149012; cv=none; b=LQD+rY1ugJEA+yJeW3a4KEwHHVS8SyOnFJH1ZARnQxhtBjbTxYfrE6+hrqzcujlH2IasQkYl545OYFTj1T+J32M0oTIc5rfoUs+ojF3pGsrTFpGmlEqzrgz2cpSCz8RN7cANqVun5p/SCc6vR6Aito0CjWlXhii4LdMKfmEYQL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710144717; c=relaxed/simple;
-	bh=c0qqgzoh2emwM0Q91wdQCjfkSsWagIXoeN4dUYDYfsU=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=np42F6GOlIasSHo1RiVFzCahDPvC3bRIOHfA9MLzjKuTAyqJV23IR/jD7/J+XUzDVMn4LnvI/IckvptgfDIQPyd46GZSRvEIR/QUz/hC0KLv1KlWaDHbYc7jelx3NSEPS1tG93LwNMnsqa1j3SxUk5uxshu2dtbszEq2pp1cUpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dJ4SK8eE; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1710149012; c=relaxed/simple;
+	bh=E7XSj0pyzwRnbhEItgfs1Biw2IzEoXA27lamXCSeXf8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ktYBYv4YyagrUwtLG0LMHME6/MwoyovHPItaccXdDnC4wgVwTnnEnwyVQFWTh1KN/2RF0+q+IvWC6evQOLvCXc75lrrV44/NEkYgBagxuzn2v1aEdrr9VMo2h2LRSvKkFgaC67auDecYXinFqOrarIkBese2zh199/yP43vZlDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=RNrMsOVw; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dJ4SK8eE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710144716; x=1741680716;
-  h=date:from:to:cc:subject:message-id;
-  bh=c0qqgzoh2emwM0Q91wdQCjfkSsWagIXoeN4dUYDYfsU=;
-  b=dJ4SK8eEwD7wZr7wkPgRXr8IXH6p9q39yJCCh/OTwHTjaimxTSQxpKsC
-   MCeJTnINvS/bh7VFEjkLOr3N6RJ4qg9Yvf3DygJ4XS9b/bTiCUiftVsNj
-   6Mnpc3LvplQFPL8H8xrIlt1eCn0aGPI1snIARvcgN7sapH6Qp7DDB/JhS
-   ctBX6ZUWRoZTWlpChrp4WMdG5U0BzU+7z9LMUVKB0uUaca3glWIS/caec
-   kfRD8gtp+/rB9e5+deYKQcHzenLZagIV7o980EeR0HCBb6Rroxizf5ZqQ
-   0ucKlp+wGyYlY0SQPEU60uQs7I2tiUUYdEz21/f7z7bRek1GAMBDrfh46
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11009"; a="15432530"
-X-IronPort-AV: E=Sophos;i="6.07,116,1708416000"; 
-   d="scan'208";a="15432530"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2024 01:11:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,116,1708416000"; 
-   d="scan'208";a="34226870"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 11 Mar 2024 01:11:41 -0700
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rjakx-000907-2T;
-	Mon, 11 Mar 2024 08:11:35 +0000
-Date: Mon, 11 Mar 2024 16:11:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 8debe3c1295ef36958dae77487eed9cf6584c008
-Message-ID: <202403111626.Q3kYX6iW-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="RNrMsOVw"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-33e7946bddfso2047591f8f.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 11 Mar 2024 02:23:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1710149008; x=1710753808; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aWgXcsCIwNB8quceeSPfUi0wO64rrOVtbtRuUW+5aHM=;
+        b=RNrMsOVwayeimLU72AzysCc7zW4jVvLZeH/OClzalKduO43mU8XnMcvJXHsVjgC9CZ
+         dOTy5wNAMD5lcfs36huzqxuQJhlBV7RXgqu6r810x+8M0V6vKA6hs2EgHCQrx20aPTcV
+         MuwBrYm5AmmHYCviu37kQl+UZaFQWrbrwfyHQYdAhO91KPJVk9Yc8QfbKb51hU4BIO04
+         zrdqJZYhcewGl2/48haYC0qOk610MprOKvS1S+j4PnBlVT8KGcn3jB96OrA2LtmrTzF8
+         BfkXj8iNXgcpYAYXXhL56pcM+Jel1Je5NltljqVz+jKW0FbvwV5WRyuj4l/BrethS6N/
+         nSeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710149008; x=1710753808;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aWgXcsCIwNB8quceeSPfUi0wO64rrOVtbtRuUW+5aHM=;
+        b=JSRCN4TpWfhrefenIXxmpvqxC/xULrwBDo77fZoDIUql3ITZzdoAvBZW2pKU+K2kxj
+         txW3u0EAXIyXcO8tMpwZ66ZK391jEsDaDLxJHdBOPfaT42pQgeziTbUMUSX2zoQKH/Yk
+         YhWJEx/mpQ7tzn+LR99PgjqZ8V41H4AENlPJT5u/4cTO40SXI5BAg4K0H3k0Hyl5BIf4
+         ofP5Ugm/fu5vJzVdjdMCIQr2C3/BYwgW/s9gWMj4E1DmFygoBJJNVmGsNm/dcUu5nBCO
+         pqhWn/TSZ/N37zy+ynUMWirJ9NeMSjrBFAkvNW/+lwrCd709MdY9WkRGmvApo8yS8TiP
+         xssQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXjQsuddMF326DbVhhTb3vd6o8Q50mHKt2wkWdibWsG0UpOgdYV4N8DlxIr0vK7B2Akf8SUhdatwEXF3IzzWODL27eng5KHclfgv3E=
+X-Gm-Message-State: AOJu0Yz93qOhwQX7igDtYAV4ZAS+nNJm1l8onQ51NfA1HFGzuKwjGAuC
+	Z/HAGGmm/gtF83nty8SouDuRPg50j3ewsXqBj7b/iMW5uIH9Y/7aGH1SwFJmHVU=
+X-Google-Smtp-Source: AGHT+IEBVfmDyFFFPxjqooOh+1r0l5Xrnogd3rg+LM5RteCOwT8JZJQu9VwLkib2ZQNjIGnu5lsYuA==
+X-Received: by 2002:adf:e483:0:b0:33e:67c7:e2c0 with SMTP id i3-20020adfe483000000b0033e67c7e2c0mr3767524wrm.38.1710149007639;
+        Mon, 11 Mar 2024 02:23:27 -0700 (PDT)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id c18-20020a5d4152000000b0033e745176f5sm5912370wrq.110.2024.03.11.02.23.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Mar 2024 02:23:27 -0700 (PDT)
+From: Naresh Solanki <naresh.solanki@9elements.com>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: mazziesaccount@gmail.com,
+	Patrick Rudolph <patrick.rudolph@9elements.com>,
+	Naresh Solanki <naresh.solanki@9elements.com>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3] hwmon: (pmbus/mp2975) Fix IRQ masking
+Date: Mon, 11 Mar 2024 14:53:23 +0530
+Message-ID: <20240311092323.3606694-1-naresh.solanki@9elements.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 8debe3c1295ef36958dae77487eed9cf6584c008  hwmon: (dell-smm) Add XPS 9315 to fan control whitelist
+From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-elapsed time: 721m
+The MP2971/MP2973 use a custom 16bit register format for
+SMBALERT_MASK which doesn't follow the PMBUS specification.
 
-configs tested: 159
-configs skipped: 3
+Map the PMBUS defined bits used by the common code onto the custom
+format used by MPS and since the SMBALERT_MASK is currently never read
+by common code only implement the mapping for write transactions.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                          axs101_defconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20240311   gcc  
-arc                   randconfig-002-20240311   gcc  
-arm                              alldefconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                           imxrt_defconfig   clang
-arm                   randconfig-001-20240311   clang
-arm                   randconfig-002-20240311   gcc  
-arm                   randconfig-003-20240311   clang
-arm                   randconfig-004-20240311   clang
-arm                        shmobile_defconfig   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240311   clang
-arm64                 randconfig-002-20240311   clang
-arm64                 randconfig-003-20240311   clang
-arm64                 randconfig-004-20240311   clang
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240311   gcc  
-csky                  randconfig-002-20240311   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20240311   clang
-hexagon               randconfig-002-20240311   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386                                defconfig   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240311   gcc  
-loongarch             randconfig-002-20240311   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                         apollo_defconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                        stmark2_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240311   gcc  
-nios2                 randconfig-002-20240311   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-openrisc                       virt_defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240311   gcc  
-parisc                randconfig-002-20240311   gcc  
-parisc64                            defconfig   gcc  
-powerpc                    adder875_defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                     ep8248e_defconfig   gcc  
-powerpc                     ppa8548_defconfig   gcc  
-powerpc               randconfig-001-20240311   gcc  
-powerpc               randconfig-002-20240311   clang
-powerpc               randconfig-003-20240311   gcc  
-powerpc                    socrates_defconfig   gcc  
-powerpc                     tqm5200_defconfig   gcc  
-powerpc64             randconfig-001-20240311   clang
-powerpc64             randconfig-002-20240311   clang
-powerpc64             randconfig-003-20240311   gcc  
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-riscv                    nommu_k210_defconfig   clang
-riscv                 randconfig-001-20240311   clang
-riscv                 randconfig-002-20240311   gcc  
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-s390                  randconfig-001-20240311   clang
-s390                  randconfig-002-20240311   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                         apsh4a3a_defconfig   gcc  
-sh                                  defconfig   gcc  
-sh                    randconfig-001-20240311   gcc  
-sh                    randconfig-002-20240311   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240311   gcc  
-sparc64               randconfig-002-20240311   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20240311   gcc  
-um                    randconfig-002-20240311   clang
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240311   clang
-x86_64       buildonly-randconfig-002-20240311   clang
-x86_64       buildonly-randconfig-003-20240311   clang
-x86_64       buildonly-randconfig-004-20240311   gcc  
-x86_64       buildonly-randconfig-005-20240311   clang
-x86_64       buildonly-randconfig-006-20240311   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240311   clang
-x86_64                randconfig-002-20240311   clang
-x86_64                randconfig-003-20240311   gcc  
-x86_64                randconfig-004-20240311   gcc  
-x86_64                randconfig-005-20240311   gcc  
-x86_64                randconfig-006-20240311   clang
-x86_64                randconfig-011-20240311   clang
-x86_64                randconfig-012-20240311   clang
-x86_64                randconfig-013-20240311   clang
-x86_64                randconfig-014-20240311   gcc  
-x86_64                randconfig-015-20240311   clang
-x86_64                randconfig-016-20240311   gcc  
-x86_64                randconfig-071-20240311   gcc  
-x86_64                randconfig-072-20240311   clang
-x86_64                randconfig-073-20240311   clang
-x86_64                randconfig-074-20240311   gcc  
-x86_64                randconfig-075-20240311   clang
-x86_64                randconfig-076-20240311   clang
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
-xtensa                randconfig-001-20240311   gcc  
-xtensa                randconfig-002-20240311   gcc  
+---
 
+Changes in V3:
+1. Avoid precedence issues in Macro
+2. Optimise macro.
+
+Changes in V2:
+1. Add/Update comment
+2. Update SWAP define to include both variable.
+3. Add defines for each bits of SMBALERT mask.
+---
+ drivers/hwmon/pmbus/mp2975.c | 77 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 77 insertions(+)
+
+diff --git a/drivers/hwmon/pmbus/mp2975.c b/drivers/hwmon/pmbus/mp2975.c
+index e5fa10b3b8bc..953c02a2aeb5 100644
+--- a/drivers/hwmon/pmbus/mp2975.c
++++ b/drivers/hwmon/pmbus/mp2975.c
+@@ -392,6 +392,82 @@ static int mp2973_read_word_data(struct i2c_client *client, int page,
+ 	return ret;
+ }
+ 
++static int mp2973_write_word_data(struct i2c_client *client, int page,
++				  int reg, u16 word)
++{
++	u8 target, mask;
++	int ret;
++
++	if (reg != PMBUS_SMBALERT_MASK)
++		return -ENODATA;
++
++	/*
++	 * Vendor-specific SMBALERT_MASK register with 16 maskable bits.
++	 */
++	ret = pmbus_read_word_data(client, 0, 0, PMBUS_SMBALERT_MASK);
++	if (ret < 0)
++		return ret;
++
++	target = word & 0xff;
++	mask = word >> 8;
++
++/*
++ * Set/Clear 'bit' in 'ret' based on condition followed by define for each bit in SMBALERT_MASK.
++ * Also bit 2 & 15 are reserved.
++ */
++#define SWAP(val, mask, cond, bit) (((mask) & (cond)) ? ((val) & ~BIT(bit)) : ((val) | BIT(bit)))
++
++#define MP2973_TEMP_OT		0
++#define MP2973_VIN_UVLO		1
++#define MP2973_VIN_OVP		3
++#define MP2973_MTP_FAULT	4
++#define MP2973_OTHER_COMM	5
++#define MP2973_MTP_BLK_TRIG	6
++#define MP2973_PACKET_ERROR	7
++#define MP2973_INVALID_DATA	8
++#define MP2973_INVALID_COMMAND	9
++#define MP2973_IOUT_OC_LV	10
++#define MP2973_IOUT_OC		11
++#define MP2973_VOUT_MAX_MIN_WARNING 12
++#define MP2973_VOLTAGE_UV	13
++#define MP2973_VOLTAGE_OV	14
++
++	switch (target) {
++	case PMBUS_STATUS_CML:
++		ret = SWAP(ret, mask, PB_CML_FAULT_INVALID_DATA, MP2973_INVALID_DATA);
++		ret = SWAP(ret, mask, PB_CML_FAULT_INVALID_COMMAND,  MP2973_INVALID_COMMAND);
++		ret = SWAP(ret, mask, PB_CML_FAULT_OTHER_COMM, MP2973_OTHER_COMM);
++		ret = SWAP(ret, mask, PB_CML_FAULT_PACKET_ERROR, MP2973_PACKET_ERROR);
++		break;
++	case PMBUS_STATUS_VOUT:
++		ret = SWAP(ret, mask, PB_VOLTAGE_UV_FAULT, MP2973_VOLTAGE_UV);
++		ret = SWAP(ret, mask, PB_VOLTAGE_OV_FAULT, MP2973_VOLTAGE_OV);
++		break;
++	case PMBUS_STATUS_IOUT:
++		ret = SWAP(ret, mask, PB_IOUT_OC_FAULT, MP2973_IOUT_OC);
++		ret = SWAP(ret, mask, PB_IOUT_OC_LV_FAULT, MP2973_IOUT_OC_LV);
++		break;
++	case PMBUS_STATUS_TEMPERATURE:
++		ret = SWAP(ret, mask, PB_TEMP_OT_FAULT, MP2973_TEMP_OT);
++		break;
++	/*
++	 * Map remaining bits to MFR specific to let the PMBUS core mask
++	 * those bits by default.
++	 */
++	case PMBUS_STATUS_MFR_SPECIFIC:
++		ret = SWAP(ret, mask, BIT(1), MP2973_VIN_UVLO);
++		ret = SWAP(ret, mask, BIT(3), MP2973_VIN_OVP);
++		ret = SWAP(ret, mask, BIT(4), MP2973_MTP_FAULT);
++		ret = SWAP(ret, mask, BIT(6), MP2973_MTP_BLK_TRIG);
++		break;
++	default:
++		return 0;
++	}
++#undef SWAP
++
++	return pmbus_write_word_data(client, 0, PMBUS_SMBALERT_MASK, ret);
++}
++
+ static int mp2975_read_word_data(struct i2c_client *client, int page,
+ 				 int phase, int reg)
+ {
+@@ -907,6 +983,7 @@ static struct pmbus_driver_info mp2973_info = {
+ 		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP | PMBUS_HAVE_POUT |
+ 		PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT,
+ 	.read_word_data = mp2973_read_word_data,
++	.write_word_data = mp2973_write_word_data,
+ #if IS_ENABLED(CONFIG_SENSORS_MP2975_REGULATOR)
+ 	.num_regulators = 1,
+ 	.reg_desc = mp2975_reg_desc,
+
+base-commit: 8debe3c1295ef36958dae77487eed9cf6584c008
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.42.0
+
