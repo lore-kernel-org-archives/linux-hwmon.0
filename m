@@ -1,110 +1,282 @@
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16785182;
-	Wed, 13 Mar 2024 00:21:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=71.19.156.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDF6316428
+	for <linux-hwmon@vger.kernel.org>; Wed, 13 Mar 2024 06:24:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710289273; cv=none; b=fbSb20656YdZ3uAhXoKRYf8JtitZtuRapcxzWBcIw6CVX77t0BWyMGY3mMg3hEd3v4Pm84aRsV9BJ0cAr6yHqJK3klajnoZKDNcrgWOyLn53W+35TsQD8zTyrdADp+XOmujSRMYPbVUP+Ffs7hjsw3WnZ3ly8msgLq1N07TuMSc=
+	t=1710311101; cv=none; b=ocbsylMTOgRw7f384AC9Z2vdMSD8jZM06wxHc7SsR1uJa60mKjzzybMnoVo2o26wQTDO5sEzZX17lkJ3TEN76vMrkOBrmrxoov0Z8P5S9iz0XcLzF26s/OVE0NCCyAVbXDy6o8QcQge/PaUunemTMOJeRH7h98zj3wFcN75UJqQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710289273; c=relaxed/simple;
-	bh=h+oGPjpyxC+yBzEporjFKDQteq5fynJ48ffEoR1vIR4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TTaj+JznHMZHxlS7ch4CAPdRRBH9Jtkj+BzXi1BdMrgmBBJbKdEWoRGL85uD1xX2c59csYhR8i4P7qncQk46C00cKX2BNvUv5MohtXj3hNNYdmGBFyXk/Pk4yJo3/K3ug4S+WtGcoHRWTdatvy0zJQPxgEPpLJ9whf0jfcD5j60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bewilderbeest.net; spf=pass smtp.mailfrom=bewilderbeest.net; dkim=pass (1024-bit key) header.d=bewilderbeest.net header.i=@bewilderbeest.net header.b=f9DdHUoU; arc=none smtp.client-ip=71.19.156.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bewilderbeest.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bewilderbeest.net
+	s=arc-20240116; t=1710311101; c=relaxed/simple;
+	bh=xtoB8rbdXQhWfkrNIS7WejeYtUS9NaKHQgxM7D9UiXI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bfbUAadKqvx43a7Z/nXi+2QBvAtFseSoHoJkYliL4SOPW1XrNb36DGiRRwTazOt0L+xiu38/0dw8adaBJnUdlbEeWbvV94Oyltgfbdb/rAMEQnVopGRvQyYBQRYNu8sYseECcV92KgQrCXEk+F5ODDgTFFCFG3vcJIi3KQP0Azg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=uhFkmjt4; arc=none smtp.client-ip=185.125.188.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=bewilderbeest.net header.i=@bewilderbeest.net header.b="f9DdHUoU"
-Received: from hatter.bewilderbeest.net (unknown [IPv6:2602:61:712b:6300::2])
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="uhFkmjt4"
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	(Authenticated sender: zev)
-	by thorn.bewilderbeest.net (Postfix) with ESMTPSA id D3F332DE;
-	Tue, 12 Mar 2024 17:21:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-	s=thorn; t=1710289271;
-	bh=EY/zd3I+RDkhsnrVHS1RIaB8erXsoc+pY5+WBGfC1kg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=f9DdHUoUtrWwcxgHL4/JdBEBFZ67mPjYGk9o05HF1yu0zdlS+3LN99ssYeNyYPP0D
-	 6hRiHalXht50T7hyVNipc/S/P+wtzUBFciIctR2gYVf7WPaZFg+SUAlXhC08iddTTr
-	 R/bW6yxuBVeNIpEAGHp+U3e37eeLd08dfSSGWqEc=
-Date: Tue, 12 Mar 2024 17:21:09 -0700
-From: Zev Weiss <zev@bewilderbeest.net>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Ban Feng <baneric926@gmail.com>, jdelvare@suse.com, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	corbet@lwn.net, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, kcfeng0@nuvoton.com, kwliu@nuvoton.com,
-	openbmc@lists.ozlabs.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, DELPHINE_CHIU@wiwynn.com,
-	naresh.solanki@9elements.com, billy_tsai@aspeedtech.com
-Subject: Re: [PATCH v4 3/3] hwmon: Driver for Nuvoton NCT7363Y
-Message-ID: <a93e2971-cafc-480b-b439-f42ed0838660@hatter.bewilderbeest.net>
-References: <20240227005606.1107203-1-kcfeng0@nuvoton.com>
- <20240227005606.1107203-4-kcfeng0@nuvoton.com>
- <a90ed00c-f836-4fb6-8191-9974937e3eb7@hatter.bewilderbeest.net>
- <CALz278Zgfgob573vgWz4PgC7vb=i8xt3kC1hSjo_cQi00B0XAg@mail.gmail.com>
- <cd63bec7-01c6-466e-b772-3a3d3d90a7d5@hatter.bewilderbeest.net>
- <37e11daa-c24e-45b2-a22d-769693fd2038@roeck-us.net>
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id AC3003F6B1
+	for <linux-hwmon@vger.kernel.org>; Wed, 13 Mar 2024 06:24:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1710311090;
+	bh=gyS4CxXuiixQE46i3lf6LipxCQAyfgB5ILNmTVboYOM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type;
+	b=uhFkmjt49FzaTd98+B/LNbBoUBqm+8zYkZ9tHcYFCJUTUp3omENP8YhFVNyOQ/nHx
+	 G5g7gVv8xt/jPs2Y5ZeiOpEbA162ornvzGLjo/rgbvRU9ip2XsNGcpNn6nCDCNN+kX
+	 +6oXXMLN7wQic2xYl+/12b33ibgr2faTGMpO45T727TmmEVRsjb+K4/3IfsgIjWOX9
+	 vxwT76wbRTo0mhPqU+4h4wlP53CEkKh1BCu5OBXGw7gViED23fcjqG8aFcS1j1X6O6
+	 7hl/W5pjH74KUfrnSf/uxmWqYCn5PKO98dWmC8IZld5c8zIw7EB4vk7wIDDHa8neOn
+	 0/vm9MHIfZFzQ==
+Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-6e50831226dso4587344b3a.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 12 Mar 2024 23:24:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710311089; x=1710915889;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gyS4CxXuiixQE46i3lf6LipxCQAyfgB5ILNmTVboYOM=;
+        b=jooi04g/j/81BKmM9HFewdsQzzJYXzxyjxFptdZnT6nLGKjO58d4TOVSdNbaK59xGD
+         T/4z7StoW/kjjeVGD7NWIK2bZcXeMhT9M/jHdrelJrlmvzafwU3vS8j1xsVDa2xkk1mC
+         lRShbeOiW3HMjVvfFYiV9IrXt+eBUj/equ72zpJ51SfB6ihOVMG35OorcqGXoKGwxcua
+         Bjq+Z0sxWPADcfXixO6pdlwvdSwhgMTuh4HezmVZNXcAIqDznYbY5UA9M2zOs6DfXlhd
+         0WT71lcQKYDZLBJ+pKEjUVOJ2sjESVGG9MWtySC5Uy3WaiYqmWHtNY+lJMVokc70s72c
+         h5BA==
+X-Forwarded-Encrypted: i=1; AJvYcCVkFFTFgTxT0pkAXwmBO7vn3bEteJdGSQNntzRj8ngKJGXk13eMFkyU59wtkAr4f8Cp3GF5jhZp/BI2CULwqf10V6ybYSB3BoVkUWw=
+X-Gm-Message-State: AOJu0YzBHtMRnORRbTUrgf0hkSws9V6acAbjHFqbfReeICSuc5h+m23f
+	DnozXkTVlJ5zxeqBrWUH9KcRIoRBJ/IHznS06AvPgtWJ9fbLj+38z23a2HaKTSgkBczioBN3apW
+	tS+SwOH1nNIsh0EVYg8uhgfcYXQPXev3NJNZrAG/4EcOKessnMeI8HWzxgjY9wtQmZpVTMW27Cr
+	F9ejeROC4IIFVH2Ij1m4S7AZ4zy1onrS87EsXQPpRlfPyeHTlZKEM=
+X-Received: by 2002:a05:6a20:9382:b0:1a1:3ecb:52fe with SMTP id x2-20020a056a20938200b001a13ecb52femr9690567pzh.0.1710311089253;
+        Tue, 12 Mar 2024 23:24:49 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IG5zKpCLcd0GZpY9zwgTSGqwbNwfuarrJWlUhevzTtyHWPLaXO9KU2nDe5BMELpRKfc/a3Oov4lQ83sKz8Vq7s=
+X-Received: by 2002:a05:6a20:9382:b0:1a1:3ecb:52fe with SMTP id
+ x2-20020a056a20938200b001a13ecb52femr9690551pzh.0.1710311088814; Tue, 12 Mar
+ 2024 23:24:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <37e11daa-c24e-45b2-a22d-769693fd2038@roeck-us.net>
+References: <20240109041218.980674-1-kai.heng.feng@canonical.com>
+ <20240109041218.980674-2-kai.heng.feng@canonical.com> <1b8ff82e-ff26-410e-a37e-0d818494bac3@roeck-us.net>
+ <ZZ26ea5KV9Xg1MDc@mail.minyard.net> <e090d7f5-208a-4a4d-8162-7202ad6b0183@roeck-us.net>
+ <ZZ3cSygeCTAr35nz@mail.minyard.net>
+In-Reply-To: <ZZ3cSygeCTAr35nz@mail.minyard.net>
+From: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date: Wed, 13 Mar 2024 14:24:37 +0800
+Message-ID: <CAAd53p71sS+eV1OmPgSDrAcqu8-FJZX-9sd=3a6ZNAvaZV9jbQ@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] hwmon: (acpi_power_meter) Ensure IPMI space
+ handler is ready on Dell systems
+To: minyard@acm.org
+Cc: Guenter Roeck <linux@roeck-us.net>, jdelvare@suse.com, linux-hwmon@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 12, 2024 at 04:58:12PM PDT, Guenter Roeck wrote:
->On 3/12/24 16:18, Zev Weiss wrote:
->>On Wed, Mar 06, 2024 at 11:35:31PM PST, Ban Feng wrote:
->>>Hi Zev,
->>>
->>>On Sat, Mar 2, 2024 at 4:19 PM Zev Weiss <zev@bewilderbeest.net> wrote:
->>>>
->>>>On Mon, Feb 26, 2024 at 04:56:06PM PST, baneric926@gmail.com wrote:
->>>>>From: Ban Feng <kcfeng0@nuvoton.com>
->>>>>
->>>>>NCT7363Y is an I2C based hardware monitoring chip from Nuvoton.
->>>>>
->>>>>Signed-off-by: Ban Feng <kcfeng0@nuvoton.com>
->>>>>---
->>
->><snip>
->>
->>>>>+
->>>>>+static const struct of_device_id nct7363_of_match[] = {
->>>>>+      { .compatible = "nuvoton,nct7363" },
->>>>
->>>>As far as I can see from the code in this driver, it looks like this
->>>>driver should also be compatible with the nct7362; shall we add the ID
->>>>table entry for it now?  (Though I only have a datasheet for the
->>>>nct7362, not the nct7363, so I don't know exactly how they differ.)
->>>
->>>As far as I know, the difference between these two ICs is 0x2A~0x2C
->>>Fading LED for 7362, and 0x2A Watchdog Timer for 7363.
->>>In my v1 patch, I indeed add the nct7362 to the ID table, however,
->>>this makes it more complicated and our datasheet isn't public yet.
->>>I think maybe supporting more chips will be done in the future, but not now.
->>>
->>
->>If the only differences are in features the driver doesn't utilize, I'm not clear on how it adds any complexity.  As far as I'm aware, neither datasheet is public (NCT7363 nor NCT7362), so if we're going to have a public driver for one, why not also do so for the other?  It's a single additional line -- and furthermore, having made that change and tested it out, I can report that the driver seems to work just fine on NCT7362 hardware as well.
->>
+Hi Corey,
+
+On Wed, Jan 10, 2024 at 7:52=E2=80=AFAM Corey Minyard <minyard@acm.org> wro=
+te:
 >
->"if we're going to have a public driver for one, why not also do so for the other"
+> On Tue, Jan 09, 2024 at 02:32:41PM -0800, Guenter Roeck wrote:
+> > On 1/9/24 13:28, Corey Minyard wrote:
+> > > On Tue, Jan 09, 2024 at 07:23:40AM -0800, Guenter Roeck wrote:
+> > > > On 1/8/24 20:12, Kai-Heng Feng wrote:
+> > > > > The following error can be observed at boot:
+> > > > > [    3.717920] ACPI Error: No handler for Region [SYSI] (00000000=
+ab9e62c5) [IPMI] (20230628/evregion-130)
+> > > > > [    3.717928] ACPI Error: Region IPMI (ID=3D7) has no handler (2=
+0230628/exfldio-261)
+> > > > >
+> > > > > [    3.717936] No Local Variables are initialized for Method [_GH=
+L]
+> > > > >
+> > > > > [    3.717938] No Arguments are initialized for method [_GHL]
+> > > > >
+> > > > > [    3.717940] ACPI Error: Aborting method \_SB.PMI0._GHL due to =
+previous error (AE_NOT_EXIST) (20230628/psparse-529)
+> > > > > [    3.717949] ACPI Error: Aborting method \_SB.PMI0._PMC due to =
+previous error (AE_NOT_EXIST) (20230628/psparse-529)
+> > > > > [    3.717957] ACPI: \_SB_.PMI0: _PMC evaluation failed: AE_NOT_E=
+XIST
+> > > > >
+> > > > > On Dell systems several methods of acpi_power_meter access variab=
+les in
+> > > > > IPMI region [0], so wait until IPMI space handler is installed by
+> > > > > acpi_ipmi and also wait until SMI is selected to make the space h=
+andler
+> > > > > fully functional.
+> > > > >
+> > > > > [0] https://www.dell.com/support/manuals/en-us/redhat-enterprise-=
+linux-v8.0/rhel8_rn_pub/advanced-configuration-and-power-interface-acpi-err=
+or-messages-displayed-in-dmesg?guid=3Dguid-0d5ae482-1977-42cf-b417-3ed5c3f5=
+ee62
+> > > > >
+> > > > > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > > > > ---
+> > > > > v4:
+> > > > >    - No change.
+> > > > >
+> > > > > v3:
+> > > > >    - Use helper.
+> > > > >    - Use return value to print warning message.
+> > > > >
+> > > > > v2:
+> > > > >    - Use completion instead of request_module().
+> > > > >
+> > > > >    drivers/hwmon/acpi_power_meter.c | 6 ++++++
+> > > > >    1 file changed, 6 insertions(+)
+> > > > >
+> > > > > diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acp=
+i_power_meter.c
+> > > > > index 703666b95bf4..33fb9626633d 100644
+> > > > > --- a/drivers/hwmon/acpi_power_meter.c
+> > > > > +++ b/drivers/hwmon/acpi_power_meter.c
+> > > > > @@ -883,6 +883,12 @@ static int acpi_power_meter_add(struct acpi_=
+device *device)
+> > > > >         strcpy(acpi_device_class(device), ACPI_POWER_METER_CLASS)=
+;
+> > > > >         device->driver_data =3D resource;
+> > > > > +       if (dmi_match(DMI_SYS_VENDOR, "Dell Inc.") &&
+> > > > > +           acpi_dev_get_first_match_dev("IPI0001", NULL, -1)) {
+> > > > > +               if (acpi_wait_for_acpi_ipmi())
+> > > > > +                       dev_warn(&device->dev, "Waiting for ACPI =
+IPMI timeout");
+> > > > > +       }
+> > > > > +
+> > > >
+> > > > What a hack :-(.
+> > > >
+> > > > This needs a comment in the driver explaining the rationale for thi=
+s change, and
+> > > > also a comment explaining why, for example, using late_initcall() d=
+oes not help.
+> > > >
+> > > > If CONFIG_IPMI_SI=3Dn, acpi_wait_for_acpi_ipmi() will return 0, ind=
+icating success.
+> > > > I can only imagine that this will result in a failure since the who=
+le point
+> > > > of this code is to wait until that driver is loaded. Please explain=
+ how and why
+> > > > the code works with CONFIG_IPMI_SI=3Dn. Similar, if the function re=
+turns an error,
+> > > > I can not imagine how it would make sense to instantiate the driver=
+. If it does
+> > > > make sense to continue in this situation, a comment is needed in th=
+e code
+> > > > describing the rationale.
+> > >
+> > > I'm trying to figure out where CONFIG_IPMI_SI comes in here.  It's
+> > > nowhere in these patches or in drivers/acpi.  ACPI_IPMI depends on
+> > > IPMI_HANDLER, but that's all I found.  However, ACPI_IPMI can be "m" =
+as
+> > > you mention and SENSOR_ACPI_POWER is only under the ACPI config, whic=
+h
+> > > is a problem.
+> > >
+> >
+> > The patch above is looking for IPI0001, which is instantiated in
+> >
+> > drivers/char/ipmi/ipmi_si_platform.c:   { "IPI0001", 0 },
+> > drivers/char/ipmi/ipmi_ssif.c:  { "IPI0001", 0 },
+> >
+> > Are you saying that the above code doesn't depend on it ? In that case,
+> > why does it need to check for the IPI0001 device in the first place ?
+> >
+> > That will need another comment/explanation in the code because people
+> > (or maybe dummies) like me won't understand the non-dependency (i.e.,
+> > the need to look for IPI0001 but not requiring the associated code).
+> >
+> > More specifically, unless I really don't understand the acpi code,
+> > acpi_dev_get_first_match_dev() will return NULL if there is no matching
+> > device. In that case, the above code won't call acpi_wait_for_acpi_ipmi=
+().
+> > Fine, but why would this driver have to wait for ipmi if and only if th=
+ere
+> > is a device (and thus a driver) for IPI0001 ?
 >
->If you are trying to say that there should be two separate drivers, sorry, that
->would be absolutely unacceptable.
+> Honestly, I don't really understand the acpi code that well, either.
+> What I think it's saying is that if IPI0001 is present in the ACPI
+> tables (there is an acpi_device present), then wait for the driver to
+> get loaded.  It could be IPMI_SI or IPMI_SSIF, but there's no direct
+> connection between this code and the low-level IPMI driver.  I don't
+> think it forces the driver to load, at least not from what I can tell.
+
+The dependency isn't discoverable at software level. It's all in the BIOS' =
+ASL
+
 >
+> And another bug.  From the description of acpi_dev_get_first_match_dev():
+> The caller is responsible for invoking acpi_dev_put() on the returned dev=
+ice.
 
-Sorry if that was unclear -- it was very much *not* my intent to suggest 
-adding a separate driver, merely that we make the nct7363 driver also 
-support the nct7362.
+Sure. I'll fix it in next revision.
 
+>
+> As you said, this is a big hack.  There must be a better way.
 
-Zev
+Unfortunately I really can't find a better alternative if the
+dependency isn't declared anywhere.
 
+Kai-Heng
+
+>
+> -corey
+>
+> >
+> > Thanks,
+> > Guenter
+> >
+> > > I do think there are other issues with this patch, though.  The IPMI
+> > > handler code decouples the user from the driver from a dependency poi=
+nt
+> > > of view.  It seems to be fairly common to see IPMI_HANDLER and
+> > > ACPI_IPMI as "y" and IPMI_SI (and IPMI_SSIF, and others) as "m".  Tha=
+t
+> > > means this code will run but will wait for the IPMI device to appear,
+> > > which may not be until the module gets loaded, which may be far more
+> > > than 2 seconds later.
+> > >
+> > > I'm not quite sure how to fix this.  Really, the add call for this
+> > > driver shouldn't be called until the IPMI device is present.  Doesn't
+> > > ACPI have mechanisms to handle this sort of thing?  If so, the hack m=
+ay
+> > > need to be in the handling of that ACPI data (this field is not there
+> > > but should be), not here, which as Guenter says, is a big hack.
+> > >
+> > > -corey
+> > >
+> > > >
+> > > > Third, the new symbol is declared with CONFIG_ACPI, but defined wit=
+h
+> > > > CONFIG_IPMI_SI. I can not imagine how this would compile with CONFI=
+G_ACPI=3Dy
+> > > > and CONFIG_IPMI_SI=3D{m,n} and/or CONFIG_ACPI_IPMI=3D{m,n}.
+> > > >
+> > > > On top of that, IPMI_SI and ACPI_IPMI are is tristate, as is SENSOR=
+S_ACPI_POWER.
+> > > > This means that SENSORS_ACPI_POWER=3Dy combined with CONFIG_IPMI_SI=
+=3D{m,n} or
+> > > > CONFIG_ACPI_IPMI=3D{m,n} will result in a compile failure.
+> > > >
+> > > > Please make sure that this code compiles with all possible symbol c=
+ombinations.
+> > > >
+> > > > Thanks,
+> > > > Guenter
+> > > >
+> > > > >         res =3D read_capabilities(resource);
+> > > > >         if (res)
+> > > > >                 goto exit_free;
+> > > >
+> > > >
+> > >
+> >
+> >
