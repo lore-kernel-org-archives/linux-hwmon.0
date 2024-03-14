@@ -1,104 +1,168 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 367A9745C5;
-	Thu, 14 Mar 2024 17:14:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F39117350B;
+	Thu, 14 Mar 2024 18:32:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710436456; cv=none; b=WR0RWZJeu8tbx29D9zTaHiuPTLSeJDqKS/t1a2C/NgpU6d/IYPlhbAfh1HHdONIT+/VnjQ+S06mZCK+Zse9v5HR+Q2c7cRUM9AZJEYu+RvLG7GBHTS2Dqn/Y3IevlwfhtQRKieMMXQ3TZRoZ8sxlTmYpsVjZ23yCBhXzfSXgDBw=
+	t=1710441121; cv=none; b=EZoUVEHF++UUYYt9fb4/hpjdkwvysB7w0VUIEI9O2BDkfjP0eTCf6ipD2zul41ZM0Vay59ZbvyxbNemQA6K2KZ/JiceRnVHizaFGaAt7qQxyvwHP8orXEaXHYptopGpdU5Qq6kM/b2cyAyj/DouG1jAfxb0+2g+ND+dPzIeYFjc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710436456; c=relaxed/simple;
-	bh=sGJvpudGCcVMI/7PyVxRGt3wO6sF72dWKIY18zP13Co=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hzcnkjdx/UUsm9BNo1fkQKJAxD++THyxXwJehECEM0dN5Aggfu8mzN4FCte3tTMJuI8JV/KPh1KY9BqB/zDTEBZeBWt0Z3Bv1UOCYdV8e40XwxYi9WCiwk+oI1qWkR3vsEPcraT7dToFzlMmGTUR0JyBfM0n5leuYt/8HzW1tNM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=eWDcwD/7; arc=none smtp.client-ip=212.227.15.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="eWDcwD/7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1710436428; x=1711041228; i=w_armin@gmx.de;
-	bh=GYj30k4HHp6bCmgxsUmegwPFMsTQK+HFRzVney4N50M=;
-	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
-	 In-Reply-To;
-	b=eWDcwD/74P2frGSrxDNUBR2nDDZhzUQF01Q2XSVDPTQBvN7kp8JvQeJxP1H03fh0
-	 TrDBtkk8uiDJHT/4ELHad9cbhtkZA7/3uuk0lWFLc4r+0OHHNxbwsfck6HYz/ALzF
-	 y2+KuSR/eUjMur2P/pDiR7IZutS7NOA0CHhtg5VGsmpnJ3PEYEi8xpG8IHh94/uCC
-	 t/VsOZne/t1ZyIWVoKs6NgHy+lxYChoJ1Q3TefY0IUWQZyhw6J9r4+mkawxQu+66v
-	 zhXztt6VQFBh8RzK4/n01HCe7D3183kV6ciqGyd0RMFgtVSAJ5bb+9+xxZKLa4kKq
-	 RA22CkgvrBnkcOD4lQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MyKDe-1qt7bM0srk-00yhP7; Thu, 14
- Mar 2024 18:13:48 +0100
-Message-ID: <c8d20e7a-f772-4252-800d-c8379f5805e1@gmx.de>
-Date: Thu, 14 Mar 2024 18:13:47 +0100
+	s=arc-20240116; t=1710441121; c=relaxed/simple;
+	bh=mvdnoLfy3ROkxmfR7t2H/wROfPIdheF/nBqPtCWPX4A=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=caLa/U/pxbHZR3c2cgLYTWNfRiA+6oquCYVT0Zmwd3BR/OrkH/rbhZk1lY5pP3oWRjph2JZwAmOZLHBdGaQYp7AYEQdESRFcyNEAwWBKfS3IFbfttuB+96ugNrUdTjPMYwMOfjTBCQ7G8BRIlMWMFp5hWA2G/VbK2/563kweVw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A243FC43390;
+	Thu, 14 Mar 2024 18:31:55 +0000 (UTC)
+Date: Thu, 14 Mar 2024 14:34:06 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Alison Schofield <alison.schofield@intel.com>
+Cc: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel
+ <linux-trace-kernel@vger.kernel.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
+ linux-block@vger.kernel.org, linux-cxl@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+ intel-xe@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+ freedreno@lists.freedesktop.org, virtualization@lists.linux.dev,
+ linux-rdma@vger.kernel.org, linux-pm@vger.kernel.org,
+ iommu@lists.linux.dev, linux-tegra@vger.kernel.org, netdev@vger.kernel.org,
+ linux-hyperv@vger.kernel.org, ath10k@lists.infradead.org,
+ linux-wireless@vger.kernel.org, ath11k@lists.infradead.org,
+ ath12k@lists.infradead.org, brcm80211@lists.linux.dev,
+ brcm80211-dev-list.pdl@broadcom.com, linux-usb@vger.kernel.org,
+ linux-bcachefs@vger.kernel.org, linux-nfs@vger.kernel.org,
+ ocfs2-devel@lists.linux.dev, linux-cifs@vger.kernel.org,
+ linux-xfs@vger.kernel.org, linux-edac@vger.kernel.org,
+ selinux@vger.kernel.org, linux-btrfs@vger.kernel.org,
+ linux-erofs@lists.ozlabs.org, linux-f2fs-devel@lists.sourceforge.net,
+ linux-hwmon@vger.kernel.org, io-uring@vger.kernel.org,
+ linux-sound@vger.kernel.org, bpf@vger.kernel.org,
+ linux-wpan@vger.kernel.org, dev@openvswitch.org,
+ linux-s390@vger.kernel.org, tipc-discussion@lists.sourceforge.net, Julia
+ Lawall <Julia.Lawall@inria.fr>
+Subject: Re: [FYI][PATCH] tracing/treewide: Remove second parameter of
+ __assign_str()
+Message-ID: <20240314143406.6289a060@gandalf.local.home>
+In-Reply-To: <ZfMslbCmCtyEaEWN@aschofie-mobl2>
+References: <20240223125634.2888c973@gandalf.local.home>
+	<ZfMslbCmCtyEaEWN@aschofie-mobl2>
+X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] hwmon: (dell-smm) Add Dell G5 5505 to DMI table
-To: tjakobi@math.uni-bielefeld.de, =?UTF-8?Q?Pali_Roh=C3=A1r?=
- <pali@kernel.org>, Jean Delvare <jdelvare@suse.com>,
- Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240310220710.896230-1-tjakobi@math.uni-bielefeld.de>
-Content-Language: en-US
-From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <20240310220710.896230-1-tjakobi@math.uni-bielefeld.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:uhzFzLDV43vewGrhapfK6icS1OcmdsbKjO7Eob59C2R69247Rut
- a6E8XIt8I1naS1Kfw1vKPr2bXeLLzWnAumIRTo5neIu4jDqK6eT6RMDJlI/GO/n+ugIbAEy
- dNDeWEcVnwwT/4TfdbrZ+1ya2tRy3H5IGYN38LCKjveVr1TENpYAOcGaxAgiBMz0yOMsZgW
- /gfahaK/TzpBtLcEYIJfw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:zn93wV39iMk=;Rk1Bd/43uSiJ3agcGAZaa9ty2cg
- rpyckrHBLVTsyz0NNrhk1eCzYPuZgBErq1cOzInJ/N/MFm36/o1qvtFWkA564FNMIvTVMusrM
- l5tdO8iPJalqZCT+3+Kqk4gYIi75xDHsq2apzxf3myLL1DspccsRo0jOw3b+VyhAnuYP1BJRO
- nfWGUWu1vgeLP/fKqTCBbIRyalb+AQa0MLmM57Q6DYBLEGEJKGL8pIfXgfR64j2GdRjXAqinI
- CFaQKG/vbZXy27LJ6s/qY4557sR/9bMtR+NOKeZ0Cwok5c6w/UQcpC6uYmAeFQTFhDNAVEEr8
- kYPJ+Ha6wYTKa14of/a66kfdDCDQjg+P/Orkg0dgFNJOdtF8h7lN1XTT8mzyh/o6ZNj66Uyxa
- SDpXJQblVEBwsdHV3gF+1A7UYVxD4FjTzAUzHvyzHOEiDiAle3qJLW5QPFL2VJA65rynst6wR
- Jviij8b8bJ9vpEPlwhHhjO0xmUOk28uJLb8wY3svpxIQJZZsZqS7Bk3aoUBMmPW4OgJSMTH3v
- pkLwKOW5r986L7bn4wye/2UKhj6WpRxvNPbb5HE9WmDGkKAz493TqIDVLXSQ6C72Hv2/lLpZw
- 4uqsf60IjGsqQUJ9ndVzKrpt2UIPDutU32yPI42fSFioygJjHtEDTRviRQdMsjswz/bihMJv5
- xEHX6z0PVPH1ep4mGCPF0NZxv5WZ/wgTn2fBqrfoijzeG1DUt3RXIXCFYqdDU1xtjShXoVwi9
- lLu2IQujfl+qcaQiOSEubr/DPrSBRwlFKn+pKj+f6cdYxpVpJzn5mLbNBHiNxnPsy4vu/J1IH
- ZNcgqZ2fSfylKZNPejgXTNBCNa/oC03hAwS7H8QzY6KwI=
 
-Am 10.03.24 um 23:07 schrieb tjakobi@math.uni-bielefeld.de:
+On Thu, 14 Mar 2024 09:57:57 -0700
+Alison Schofield <alison.schofield@intel.com> wrote:
 
-> From: Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
->
-> Enables reading the speed of the CPU and GPU fan on the G5.
->
-> Signed-off-by: Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
-> ---
->   drivers/hwmon/dell-smm-hwmon.c | 7 +++++++
->   1 file changed, 7 insertions(+)
->
-> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> index 44aaf9b9191d..02405a1dd0a0 100644
-> --- a/drivers/hwmon/dell-smm-hwmon.c
-> +++ b/drivers/hwmon/dell-smm-hwmon.c
-> @@ -1096,6 +1096,13 @@ static const struct dmi_system_id i8k_dmi_table[] __initconst = {
->   			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "G5 5590"),
->   		},
->   	},
-> +	{
-> +		.ident = "Dell G5 5505",
-> +		.matches = {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> +			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "G5 5505"),
-> +		},
-> +	},
->   	{
->   		.ident = "Dell Inspiron",
->   		.matches = {
+> On Fri, Feb 23, 2024 at 12:56:34PM -0500, Steven Rostedt wrote:
+> > From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> > 
+> > [
+> >    This is a treewide change. I will likely re-create this patch again in
+> >    the second week of the merge window of v6.9 and submit it then. Hoping
+> >    to keep the conflicts that it will cause to a minimum.
+> > ]
 
-Reviewed-by: Armin Wolf <W_Armin@gmx.de>
+Note, change of plans. I plan on sending this in the next merge window, as
+this merge window I have this patch:
 
+  https://lore.kernel.org/linux-trace-kernel/20240312113002.00031668@gandalf.local.home/
+
+That will warn if the source string of __string() is different than the
+source string of __assign_str(). I want to make sure they are identical
+before just dropping one of them.
+
+
+> 
+> > diff --git a/drivers/cxl/core/trace.h b/drivers/cxl/core/trace.h
+> > index bdf117a33744..07ba4e033347 100644
+> > --- a/drivers/cxl/core/trace.h
+> > +++ b/drivers/cxl/core/trace.h  
+> 
+> snip to poison
+> 
+> > @@ -668,8 +668,8 @@ TRACE_EVENT(cxl_poison,
+> >  	    ),
+> >  
+> >  	TP_fast_assign(
+> > -		__assign_str(memdev, dev_name(&cxlmd->dev));
+> > -		__assign_str(host, dev_name(cxlmd->dev.parent));
+> > +		__assign_str(memdev);
+> > +		__assign_str(host);  
+> 
+> I think I get that the above changes work because the TP_STRUCT__entry for
+> these did:
+> 	__string(memdev, dev_name(&cxlmd->dev))
+> 	__string(host, dev_name(cxlmd->dev.parent))
+
+That's the point. They have to be identical or you will likely bug.
+
+The __string(name, src) is used to find the string length of src which
+allocates the necessary length on the ring buffer. The __assign_str(name, src)
+will copy src into the ring buffer.
+
+Similar to:
+
+	len = strlen(src);
+	buf = malloc(len);
+	strcpy(buf, str);
+
+Where __string() is strlen() and __assign_str() is strcpy(). It doesn't
+make sense to use two different strings, and if you did, it would likely be
+a bug.
+
+But the magic behind __string() does much more than just get the length of
+the string, and it could easily save the pointer to the string (along with
+its length) and have it copy that in the __assign_str() call, making the
+src parameter of __assign_str() useless.
+
+> 
+> >  		__entry->serial = cxlmd->cxlds->serial;
+> >  		__entry->overflow_ts = cxl_poison_overflow(flags, overflow_ts);
+> >  		__entry->dpa = cxl_poison_record_dpa(record);
+> > @@ -678,12 +678,12 @@ TRACE_EVENT(cxl_poison,
+> >  		__entry->trace_type = trace_type;
+> >  		__entry->flags = flags;
+> >  		if (region) {
+> > -			__assign_str(region, dev_name(&region->dev));
+> > +			__assign_str(region);
+> >  			memcpy(__entry->uuid, &region->params.uuid, 16);
+> >  			__entry->hpa = cxl_trace_hpa(region, cxlmd,
+> >  						     __entry->dpa);
+> >  		} else {
+> > -			__assign_str(region, "");
+> > +			__assign_str(region);
+> >  			memset(__entry->uuid, 0, 16);
+> >  			__entry->hpa = ULLONG_MAX;  
+> 
+> For the above 2, there was no helper in TP_STRUCT__entry. A recently
+> posted patch is fixing that up to be __string(region, NULL) See [1],
+> with the actual assignment still happening in TP_fast_assign.
+
+__string(region, NULL) doesn't make sense. It's like:
+
+	len = strlen(NULL);
+	buf = malloc(len);
+	strcpy(buf, NULL);
+
+??
+
+I'll reply to that email.
+
+-- Steve
+
+> 
+> Does that assign logic need to move to the TP_STRUCT__entry definition
+> when you merge these changes? I'm not clear how much logic is able to be
+> included, ie like 'C' style code in the TP_STRUCT__entry.
+> 
+> [1]
+> https://lore.kernel.org/linux-cxl/20240314044301.2108650-1-alison.schofield@intel.com/
