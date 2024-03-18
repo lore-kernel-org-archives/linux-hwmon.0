@@ -1,213 +1,214 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D98B57326;
-	Mon, 18 Mar 2024 20:12:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA1FF58239;
+	Mon, 18 Mar 2024 21:29:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710792738; cv=none; b=Oc0TM3vQQG4KoxqDyqabL9lYrNPEhbHgpXs3wy7LODCFy7aswwtrTZaKL4bGYfHDUrLuB0mGnimEXOrDLMcQ9L0PN9n4yKG+TBdlNN0bhXkhdCQFlLrIunZXbq5oXQgKkEuxTXmn9KIhtoLFGwp09JJb3jYHWKIus7dRS/qFYwQ=
+	t=1710797360; cv=none; b=oK3kJmx/ghIS81fsk+5LtD2g9ahADoMyYag+3SUKcRi5XziYQWYRfG3yZSb8IyUHitP1dtVyVWa9symXIuYv8us8RNenuE5ZapL3AyD50qbEVS5bmDWaGTHLnQsek17UczlscwK6HxqKawAqXRJ4DIPs14YIZFirI2bSZLA8Bwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710792738; c=relaxed/simple;
-	bh=A1hMBuNoMYPdTjyIiblF224rpNHmRnKAd9sG7OtUI+0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=QQ+Aw1giZ9mriV/w0YX5mDZHkQpzFQepKMxexP1j1SeqMqTTtyqLncmMBoVoxmFSlov09lMi11eBn6IXFHUoFiqBP0CmgNb5vR2xaBgqoSjQQIF0Dc86vvZ23slkL1pPB/QoJE+O91yBJxgMQnqyxd/ghLTJys0aRtcdsXmtZO0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SxxrF5Ug; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1710797360; c=relaxed/simple;
+	bh=gcIdQLeaNhnFtWxkw1Wh/QfYZrOV3Xkp/tjnkxtLVnQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V9mp7eDy1lbIzXngqo+oxuQh4BRJFCuKj7wdjokIdI8P5mpm+S1GrcptUoHtmcyuX/vnvDlu2/eEDApjSBIVLIXnD97GiZJPOH1L1ETJSwtSwyEf6X4yNq1fkZ6ggyLqnfuKX5IdRCAj+LUSyTp9qC72RBajkr2RIkQF97QK+UQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=apKMhkWh; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SxxrF5Ug"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-41409fd8b6eso21946555e9.2;
-        Mon, 18 Mar 2024 13:12:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710792735; x=1711397535; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+Fd9d/Eddk/+SyVZ2Xzut4rMW89ulLr6HF4jWb5kzWg=;
-        b=SxxrF5Ugz0rWX9+1eqaoysuyHD+CqWrQNE0MNVoTWLkZmTnsRMArAMEnID5nj6SMTA
-         U7p3VSOmEOptuGRHngGOjqEpbRn10h9drC5p/Ife2LEpcm2AipywVaheWEW9xjQGeZmi
-         CmBX0h2VIFcTiYhkURqdhN9dHf/+/TiKfpJC2/KRpmEJipy5p9KIHfJOEfOnaJY5fCHD
-         lM5i6/UQZIG31gbCsPvZyo7HgMA+8wKw/513ioo8koCKslY6EUnWzkPMOF/sDYilIJWu
-         IUYFyNMckqMAZiod3e5cXGsFrgHutNAZtblDNRSJ6Lbln4uN9exVGZflsYJKwjHkxquS
-         xGhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710792735; x=1711397535;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+Fd9d/Eddk/+SyVZ2Xzut4rMW89ulLr6HF4jWb5kzWg=;
-        b=AiAG3lFyB7vn3BMuigxA0gh3PUsa2D0Oe7QUe8XFTPmYCjhQcw0hAqT8yGrzAGcTRj
-         FpaPay2OE+WHRdfN3GB3315xQrqgsZ4RgRpKwwuisp3u02SG9rsmvHMQicvJbpSs3t4m
-         26WmI3QCVTpXF/TJ3I/EL2+W2LBPuvhHwnZi2I55K2+Fx2L/2zQ1+caoDL1N5Y5Fs3iq
-         j4ZoNgR7BR2fmE+ijASSm/9DMMAnI9RjPOCV+80zr/6yFVcS21hZzSJlEE1Vl5WvV/wl
-         oLY0r840L0nTwHcXbwVo1XkieSgQmvm+0OEcvaN7AIZKaOnuKm5GRAqW2D6EXCDtLK95
-         1a+g==
-X-Forwarded-Encrypted: i=1; AJvYcCWC0jwPZlQLiDGlstiF+tQTTe7CZDotsZ6GSS+gzoORTJeayH80hoBnBtk1MaSYpIfZvXTD34jaD6QQ48qYF4xHsecFxfBcKwp2n6c55V8h05f40RJHHPAsY571y90pgAEUFWmnyUWPjA==
-X-Gm-Message-State: AOJu0Yz++Es8Z9dxibZqkmYxMgQaMn4X4hHs3S+fHa6+o/jExiEm7q5T
-	zg6kY3NJ+xsTYDB5fTrVA4tnEt3pefS5n7oSjTkjnFzgSIVfiE+X
-X-Google-Smtp-Source: AGHT+IFmlNOA+miA3dz3A9/3mRjChUg1L2C0SXf2p05e4b3/0CcPqAhCWD4DaDcTLvpqUMxkAz4LQg==
-X-Received: by 2002:a05:600c:4f0d:b0:413:e19:337f with SMTP id l13-20020a05600c4f0d00b004130e19337fmr6139675wmq.22.1710792735351;
-        Mon, 18 Mar 2024 13:12:15 -0700 (PDT)
-Received: from [127.0.1.1] (2a02-8389-41cf-e200-1df2-69df-52dd-8b59.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:1df2:69df:52dd:8b59])
-        by smtp.gmail.com with ESMTPSA id n20-20020a05600c4f9400b00414610d9223sm1230492wmq.14.2024.03.18.13.12.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Mar 2024 13:12:14 -0700 (PDT)
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Date: Mon, 18 Mar 2024 21:12:06 +0100
-Subject: [PATCH] dt-bindings: hwmon: adc128d818: convert to dtschema
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="apKMhkWh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1710797358; x=1742333358;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gcIdQLeaNhnFtWxkw1Wh/QfYZrOV3Xkp/tjnkxtLVnQ=;
+  b=apKMhkWhm5KPfgL0aEBaT1IJ0pzksQ2B85QimnwIeyfDpvyIvYQPAk3T
+   ROHS/d6mDGdKtewaKiq4uDs/HVaoSTHgT67ITcnvaQZrTm+/vyLZtKgia
+   tangrg6RxXKhw5zEr4w4HnLhnWxq/1Em4EJ+FNXm0ni6FbjEP0RkIo5m3
+   dZlLPYzE7weMhwlBe2deVSh8a2qHB0WWcZUa6JAU72boj0Hj2Y59FzuTz
+   RToU+y8x39czkJOF7U9POMYtqnDx6u/U9yZvQD+XgWiux5k7QJjejNZp+
+   aG28bODWz+KzLTWdA9fmrk3568jQQta9RmE5FM1fPzNhbp0fUx/WmRF5Q
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11017"; a="9463214"
+X-IronPort-AV: E=Sophos;i="6.07,135,1708416000"; 
+   d="scan'208";a="9463214"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2024 14:29:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,135,1708416000"; 
+   d="scan'208";a="13623636"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 18 Mar 2024 14:29:15 -0700
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rmKXg-000HFj-0V;
+	Mon, 18 Mar 2024 21:29:12 +0000
+Date: Tue, 19 Mar 2024 05:28:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Radu Sabau <radu.sabau@analog.com>, Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-i2c@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 2/2] hwmon: pmbus: adp1050 : Add driver support
+Message-ID: <202403190552.U4RHYvqc-lkp@intel.com>
+References: <20240318112140.385244-3-radu.sabau@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240318-adc128d818_dtschema-v1-1-d0af2caef145@gmail.com>
-X-B4-Tracking: v=1; b=H4sIABWg+GUC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIxMDY0ML3cSUZEMjixQLQ4v4lJLi5IzU3ERdA6Mkc4u0ZCOzNDNTJaDOgqL
- UtMwKsKnRsbW1ACr7T5BlAAAA
-To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
- Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- Javier Carrasco <javier.carrasco.cruz@gmail.com>
-X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1710792734; l=4059;
- i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
- bh=A1hMBuNoMYPdTjyIiblF224rpNHmRnKAd9sG7OtUI+0=;
- b=oNAo8Pt+avXQVgB511Qmr+Mzmpm20yXdBgz8puWabhcxvWftFlM6OYIk6h+YshWaIrneKjmK9
- TpUiiMp76VeDizq/quYx2SjOmCyLmjbpLc2PvESVlzZJ+hMw35xPH+R
-X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
- pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240318112140.385244-3-radu.sabau@analog.com>
 
-Convert adc128d818 bindings to dtschema to support validation.
+Hi Radu,
 
-Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
----
- .../devicetree/bindings/hwmon/adc128d818.txt       | 38 -------------
- .../devicetree/bindings/hwmon/ti,adc128d818.yaml   | 63 ++++++++++++++++++++++
- 2 files changed, 63 insertions(+), 38 deletions(-)
+kernel test robot noticed the following build errors:
 
-diff --git a/Documentation/devicetree/bindings/hwmon/adc128d818.txt b/Documentation/devicetree/bindings/hwmon/adc128d818.txt
-deleted file mode 100644
-index d0ae46d7bac3..000000000000
---- a/Documentation/devicetree/bindings/hwmon/adc128d818.txt
-+++ /dev/null
-@@ -1,38 +0,0 @@
--TI ADC128D818 ADC System Monitor With Temperature Sensor
----------------------------------------------------------
--
--Operation modes:
--
-- - Mode 0:  7 single-ended voltage readings (IN0-IN6),
--            1 temperature reading (internal)
-- - Mode 1:  8 single-ended voltage readings (IN0-IN7),
--            no temperature
-- - Mode 2:  4 pseudo-differential voltage readings
--              (IN0-IN1, IN3-IN2, IN4-IN5, IN7-IN6),
--            1 temperature reading (internal)
-- - Mode 3:  4 single-ended voltage readings (IN0-IN3),
--            2 pseudo-differential voltage readings
--              (IN4-IN5, IN7-IN6),
--            1 temperature reading (internal)
--
--If no operation mode is configured via device tree, the driver keeps the
--currently active chip operation mode (default is mode 0).
--
--
--Required node properties:
--
-- - compatible:  must be set to "ti,adc128d818"
-- - reg:         I2C address of the device
--
--Optional node properties:
--
-- - ti,mode:     Operation mode (u8) (see above).
--
--
--Example (operation mode 2):
--
--	adc128d818@1d {
--		compatible = "ti,adc128d818";
--		reg = <0x1d>;
--		ti,mode = /bits/ 8 <2>;
--	};
-diff --git a/Documentation/devicetree/bindings/hwmon/ti,adc128d818.yaml b/Documentation/devicetree/bindings/hwmon/ti,adc128d818.yaml
-new file mode 100644
-index 000000000000..b48a9841600e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/ti,adc128d818.yaml
-@@ -0,0 +1,63 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+
-+$id: http://devicetree.org/schemas/hwmon/ti,adc128d818.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Texas Instruments ADC128D818 ADC System Monitor With Temperature Sensor
-+
-+maintainers:
-+  - Javier Carrasco <javier.carrasco.cruz@gmail.com>
-+
-+description: |
-+  The ADC128D818 is a 12-Bit, 8-Channel Analog to Digital Converter (ADC)
-+  with a temperature sensor and an I2C interface.
-+
-+  Datasheets:
-+    https://www.ti.com/product/ADC128D818
-+
-+properties:
-+  compatible:
-+    const: ti,adc128d818
-+
-+  reg:
-+    maxItems: 1
-+
-+  ti,mode:
-+    $ref: /schemas/types.yaml#/definitions/uint8
-+    description:
-+      Operation mode.
-+      Mode 0  - 7 single-ended voltage readings (IN0-IN6), 1 temperature
-+      reading (internal).
-+      Mode 1 - 8 single-ended voltage readings (IN0-IN7), no temperature.
-+      Mode 2 - 4 pseudo-differential voltage readings
-+      (IN0-IN1, IN3-IN2, IN4-IN5, IN7-IN6), 1 temperature reading (internal).
-+      Mode 3 - 4 single-ended voltage readings (IN0-IN3), 2 pseudo-differential
-+      voltage readings (IN4-IN5, IN7-IN6), 1 temperature reading (internal).
-+    default: 0
-+
-+  vref-supply:
-+    description:
-+      The regulator to use as an external reference. If it does not exist, the
-+      internal reference will be used.
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        adc@1d {
-+            compatible = "ti,adc128d818";
-+            reg = <0x1d>;
-+            vref-supply = <&vref>;
-+            ti,mode = /bits/ 8 <2>;
-+        };
-+    };
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on robh/for-next linus/master v6.8 next-20240318]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
----
-base-commit: bf3a69c6861ff4dc7892d895c87074af7bc1c400
-change-id: 20240318-adc128d818_dtschema-02b78fc26f65
+url:    https://github.com/intel-lab-lkp/linux/commits/Radu-Sabau/dt-bindings-hwmon-pmbus-adp1050-add-bindings/20240318-202619
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20240318112140.385244-3-radu.sabau%40analog.com
+patch subject: [PATCH 2/2] hwmon: pmbus: adp1050 : Add driver support
+config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20240319/202403190552.U4RHYvqc-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240319/202403190552.U4RHYvqc-lkp@intel.com/reproduce)
 
-Best regards,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403190552.U4RHYvqc-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+   drivers/hwmon/pmbus/adp1050.c: In function 'adp1050_probe':
+>> drivers/hwmon/pmbus/adp1050.c:47:45: warning: passing argument 2 of 'dev_err_probe' makes integer from pointer without a cast [-Wint-conversion]
+      47 |                 dev_err_probe(&client->dev, "Device can't be unlocked.\n");
+         |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                             |
+         |                                             char *
+   In file included from include/linux/device.h:15,
+                    from include/linux/acpi.h:14,
+                    from include/linux/i2c.h:13,
+                    from drivers/hwmon/pmbus/adp1050.c:9:
+   include/linux/dev_printk.h:277:64: note: expected 'int' but argument is of type 'char *'
+     277 | __printf(3, 4) int dev_err_probe(const struct device *dev, int err, const char *fmt, ...);
+         |                                                            ~~~~^~~
+>> drivers/hwmon/pmbus/adp1050.c:47:17: error: too few arguments to function 'dev_err_probe'
+      47 |                 dev_err_probe(&client->dev, "Device can't be unlocked.\n");
+         |                 ^~~~~~~~~~~~~
+   include/linux/dev_printk.h:277:20: note: declared here
+     277 | __printf(3, 4) int dev_err_probe(const struct device *dev, int err, const char *fmt, ...);
+         |                    ^~~~~~~~~~~~~
+   drivers/hwmon/pmbus/adp1050.c:53:45: warning: passing argument 2 of 'dev_err_probe' makes integer from pointer without a cast [-Wint-conversion]
+      53 |                 dev_err_probe(&client->dev, "Device couldn't be unlocked.\n");
+         |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                             |
+         |                                             char *
+   include/linux/dev_printk.h:277:64: note: expected 'int' but argument is of type 'char *'
+     277 | __printf(3, 4) int dev_err_probe(const struct device *dev, int err, const char *fmt, ...);
+         |                                                            ~~~~^~~
+   drivers/hwmon/pmbus/adp1050.c:53:17: error: too few arguments to function 'dev_err_probe'
+      53 |                 dev_err_probe(&client->dev, "Device couldn't be unlocked.\n");
+         |                 ^~~~~~~~~~~~~
+   include/linux/dev_printk.h:277:20: note: declared here
+     277 | __printf(3, 4) int dev_err_probe(const struct device *dev, int err, const char *fmt, ...);
+         |                    ^~~~~~~~~~~~~
+
+
+vim +/dev_err_probe +47 drivers/hwmon/pmbus/adp1050.c
+
+   > 9	#include <linux/i2c.h>
+    10	#include <linux/init.h>
+    11	#include <linux/kernel.h>
+    12	#include <linux/module.h>
+    13	#include <linux/of.h>
+    14	#include "pmbus.h"
+    15	
+    16	#define ADP1050_CHIP_PASSWORD		0xD7
+    17	
+    18	#define ADP1050_VIN_SCALE_MONITOR	0xD8
+    19	#define ADP1050_IIN_SCALE_MONITOR	0xD9
+    20	
+    21	static struct pmbus_driver_info adp1050_info = {
+    22		.pages = 1,
+    23		.format[PSC_VOLTAGE_IN] = linear,
+    24		.format[PSC_VOLTAGE_OUT] = linear,
+    25		.format[PSC_CURRENT_IN] = linear,
+    26		.format[PSC_TEMPERATURE] = linear,
+    27		.func[0] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+    28			| PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT
+    29			| PMBUS_HAVE_IIN | PMBUS_HAVE_TEMP
+    30			| PMBUS_HAVE_STATUS_TEMP,
+    31	};
+    32	
+    33	static int adp1050_probe(struct i2c_client *client)
+    34	{
+    35		u32 vin_scale_monitor, iin_scale_monitor;
+    36		int ret;
+    37	
+    38		if (!i2c_check_functionality(client->adapter,
+    39					     I2C_FUNC_SMBUS_WRITE_WORD_DATA))
+    40			return -ENODEV;
+    41	
+    42		/* Unlock CHIP's password in order to be able to read/write to it's
+    43		 * VIN_SCALE and IIN_SCALE registers.
+    44		*/
+    45		ret = i2c_smbus_write_word_data(client, ADP1050_CHIP_PASSWORD, 0xFFFF);
+    46		if (ret < 0) {
+  > 47			dev_err_probe(&client->dev, "Device can't be unlocked.\n");
+    48			return ret;
+    49		}
+    50	
+    51		ret = i2c_smbus_write_word_data(client, ADP1050_CHIP_PASSWORD, 0xFFFF);
+    52		if (ret < 0) {
+    53			dev_err_probe(&client->dev, "Device couldn't be unlocked.\n");
+    54			return ret;
+    55		}
+    56	
+    57		/* If adi,vin-scale-monitor isn't set or is set to 0 means that the
+    58		 * VIN monitor isn't used, therefore 0 is used as scale in order
+    59		 * for the readings to return 0.
+    60		*/
+    61		if (device_property_read_u32(&client->dev, "adi,vin-scale-monitor",
+    62					     &vin_scale_monitor))
+    63			vin_scale_monitor = 0;
+    64	
+    65		/* If adi,iin-scale-monitor isn't set or is set to 0 means that the
+    66		 * IIN monitor isn't used, therefore 0 is used as scale in order
+    67		 * for the readings to return 0.
+    68		*/
+    69		if (device_property_read_u32(&client->dev, "adi,iin-scale-monitor",
+    70					     &iin_scale_monitor))
+    71			iin_scale_monitor = 0;
+    72	
+    73		ret = i2c_smbus_write_word_data(client, ADP1050_VIN_SCALE_MONITOR,
+    74						vin_scale_monitor);
+    75		if (ret < 0)
+    76			return ret;
+    77	
+    78		ret = i2c_smbus_write_word_data(client, ADP1050_IIN_SCALE_MONITOR,
+    79						iin_scale_monitor);
+    80		if (ret < 0)
+    81			return ret;
+    82	
+    83		return pmbus_do_probe(client, &adp1050_info);
+    84	}
+    85	
+
 -- 
-Javier Carrasco <javier.carrasco.cruz@gmail.com>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
