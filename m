@@ -1,61 +1,61 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D8D4F1FE;
-	Mon, 18 Mar 2024 15:06:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 994114F200;
+	Mon, 18 Mar 2024 15:17:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710774417; cv=none; b=QxluAHnxm4D02rnrCqvarxBp6BfP1ycYcnlGqo55/K40h4vIYDZJlawquxlbhXCGm6s2ZiUzFlMBeU6HmLR3xpZ1gO/2GDlUTFGOG2pkpk+iq7GEycRH3kPTPiupKnVcQH1pzZG7Psvz5wu1UkViaby8dbiDi9c3Kz2LMKtdIHI=
+	t=1710775071; cv=none; b=otiYkPuemglyEqUMAy0MWZiB+BIxFBequC2fuHH3CZLVt85U4kiGCAVaBOlRNDHPYBErTD7Bmu0xEuekkxt4mlOs/Nd5sLlpx3kOpHXa2o6SLyhbxMT82Y+GvuRCRrwj6f6mdaumOwiFuNkxrnEf0DLwC5Ux1vJl1JNhlYJUYlg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710774417; c=relaxed/simple;
-	bh=SgC2mW2vxp0vFPlgZBKa13e7UqzNpkW2LvsQ116+kWs=;
+	s=arc-20240116; t=1710775071; c=relaxed/simple;
+	bh=G3yhK96jNFKWxPnTwUrPzmxhcz802a43U06AZLBU7b8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=eJXPlB3GkCOM6K1jIeS7TIfl0cuPuOQWtlrHd6XAl36FeVj9dxB0vjJBQWndBFNgPPg8NnI7TPW6V+vQXe/7CkfgAOaBy5gbp8WHTFqG1tB7BWMTH9dnoPEJ6z/lQcHuLGDZrGs57xGun1SIAjgqiekp9uoxtOBOeKqhX+KFp5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P2wOL8yA; arc=none smtp.client-ip=209.85.210.170
+	 In-Reply-To:Content-Type; b=V/AIor023GOedpfFTSxreHPm4hxwnJ9tKBa2IY0sTro+zgru1CBFJ0ZOtGiZ8SHt8NzWSf9f3/YZB0xDFRaAgpAfVDGqM+VfSW3vQnmePwqj3i4wAYifYsvlrs/MJhh+op3STFh0SgOnJjh3ZRY05jAXo3xYZh21v5NPr0Oe6bw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xrzjuy4H; arc=none smtp.client-ip=209.85.161.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P2wOL8yA"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-6e6ee9e3cffso2648632b3a.1;
-        Mon, 18 Mar 2024 08:06:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xrzjuy4H"
+Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-5a480985625so1904380eaf.0;
+        Mon, 18 Mar 2024 08:17:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710774414; x=1711379214; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1710775068; x=1711379868; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=/VvWitNIztWcjaqXApf9TAc9ZMsH6ahfMGiQBRxqCJM=;
-        b=P2wOL8yAbAG7tt8/u/YNeFvQkYTCF6V1ceLW+9TED+A1zl4ceGIYJ/mMZE4zlkReOf
-         wsKKcT66RM08hbXOVg9CEB53cXrJlliQA0SicZPVngIh6K5LWVkN20dYes7ZIYxuCRds
-         skeYeFZgJo7PNKyY0+WXozSUkLjMQrHebs75L1r0jF0ZFaqA5KVWvXdFEhRyC41gF/xv
-         AV82hiB0HCOi8uLtkaPCCUJWifKFqInCFr4MpTnxqrtyjKceNhYB/k6qL/bgrTvkAeng
-         XqzJDUy/ScZ6gmkGBbsvIJqT9c77810sli6rpYr4fDgVjWsKEcL9nmj0a+vXLnfMHOvU
-         p/xw==
+        bh=tXarof1ra1HlZEvUz3VGJibNa+StHEA4ynuHvFExBmM=;
+        b=Xrzjuy4HQkB1mKPvEabbAdw8JHCLh6dac5j23C9Q8NNSTfc/FERLzXR8iU5NAVBPtH
+         N/ys0JM0u8hdK7qlRZnIa0KLPQABiUdPKEkzrmcZ7pohN3nTVmMvRp7npjflCfAAWi1n
+         FrFef9afhwvDLysSceR8D2Bqi4PjwxPjYN8fjirQNx7oExDqxCa5Ez4+e3t6bgA6KDPW
+         J2vQwN3svgf0ZQcaaaMSCkFdaKVoapWPmprOFUh9iSuSlgwlGOAtLBY9pIryJ7w7zOuM
+         AvGGZKQ8A6DAvFZcfDAx8VrorDMesaTxHMTFN5jdVznqxAFQ3Axz8VuuHFPsYqwl7s0E
+         rHhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710774414; x=1711379214;
+        d=1e100.net; s=20230601; t=1710775068; x=1711379868;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/VvWitNIztWcjaqXApf9TAc9ZMsH6ahfMGiQBRxqCJM=;
-        b=IfOgVBIyYxuIBh0dpfZ9iIOZqLI/FKtYqMlweAKaG953YyhgkJkVPDF89x1LmdrTEK
-         FqHELZB4ExFZ73eglhqEZbqVNJ6VKxDRrosRW71jEab1vSRIn13VOlpE7L2KH4GAtNfC
-         f9jk7GJpY5y64dyHMYOeoHSlLcEhf0/SRH6MJKjMidoQUK3GtfebbZj0j50Sf5PgaLM+
-         52ny8JrkqiCrJtI4pGIvOrPE8fhfU7JG+R/LUhzdXFGEQ3aeWQYp2nTLQ5X/yqD4FYnv
-         h3BFwewDuUqono2qFTqnsN/H1rzQzAoJOYfOkQ4GmHrsMDC/CFljC5N2BQw4+HMzVQCO
-         X0kw==
-X-Forwarded-Encrypted: i=1; AJvYcCXDaooKtIh/XCX87rVDG/povdrCx0gZak5U6UUxoqWZUzvQjCOuicpEWbryVfHN0SGs2dkJQzHcWBlhNiNEOdJWV84+e5r4LYzHdx8AKFap0Vg8ENaupzv2XP/jc5w1XKqhmcFG3IHTk/dZdsrHqaRNVR7FCvX607v5DWolnvBv4pxkFQYs7Dzj3ogGj/3Jbl/4pN6rSg3wzWruAdVHFi8ZhRYZaknyLz2C+eLraMw2DryW7V5TF8ucsRqF
-X-Gm-Message-State: AOJu0Yw0O0dCv84sdyJ9mNlbRanoyPVO/E+zCMo+jqbHUw0rBLiHdK2j
-	TCE1TwWeV3WSj+x1hQ3R2+IHT7pazUg/xpfu4uhIrVbH3XcZ/LO8n8tQtyep
-X-Google-Smtp-Source: AGHT+IEZh5DK4VKGxJP7LbvfWh5bqcsV+iIJ1iWRMpK8MO74vsguPBSvmqbStW9ptmvLG4PVzh/loQ==
-X-Received: by 2002:a05:6a20:d492:b0:1a3:639a:d546 with SMTP id im18-20020a056a20d49200b001a3639ad546mr5584811pzb.7.1710774414073;
-        Mon, 18 Mar 2024 08:06:54 -0700 (PDT)
+        bh=tXarof1ra1HlZEvUz3VGJibNa+StHEA4ynuHvFExBmM=;
+        b=jx1CL21jcqdyVjwnmkphvlSoGTDxkbq/X3TruUk3N/a3RHOkW4bYWHvmIdJb3TDr53
+         LUhz1zkAvzYtapfeONzxevU7hGveBbJbihgaD3R8UVIGW1ViI6c7nG+fpI07kn6VFf46
+         LghwME9TVQLlrum5iodSb5FaCzHg38gCIBRygDjtg9BeITwFAprtkoucVlBf6vJTGf8A
+         uiYjm5GCN9WNwDU1+uTnKyHNj/iN3OooKKwx1KQJQviNLfAlmyV8yV9T0/mYd/qdNuPb
+         8MMBJZxHySlaZcGKyu3tHv4sOj6MjpADU3EzbKDBAJudscsMf+/kpOssZLJYOyKRLWvg
+         lT+w==
+X-Forwarded-Encrypted: i=1; AJvYcCVKWesZnqJ1P5pBGaLJsp0XYgxbmDrqFel0a2WNgsBc8fUwzvWdMRJ3DCE0a1dbNCnOj6Qgq/pu1/5eWSxfG5arz8SbL6y9UTsc49g376r8LLvsGhHBfuCxvUrfm/FeWhU4jbI0jm2i/g0CFa0P73/gOtwT2NN2z2DbYtp0ruI+1eA2JyxJAM0Ujdf9eVvGvTCzAScoLj3hjfxT4yYQjBNs+76P4x8x2t0oxPusAVbbqxkZZhjRsw382rlg
+X-Gm-Message-State: AOJu0YzUdn3/A+hA531kOMmXm+gDibvwGN8eLdAAstIbdijFAnUXd8v9
+	utIwA2WZhZ/mfJfOTLx4xoEdOjqYsLz42RQK0CKBNb8oFyvwHi2O
+X-Google-Smtp-Source: AGHT+IEh2egvDLm5ivK8HvPEsVDBe5K6y0cXAQQeTaBd/mBkb3A0sOYUQ1f8X2pNQwa7Uq52eFxO0w==
+X-Received: by 2002:a05:6358:e481:b0:17e:eead:e532 with SMTP id by1-20020a056358e48100b0017eeeade532mr3874970rwb.6.1710775068477;
+        Mon, 18 Mar 2024 08:17:48 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id it16-20020a056a00459000b006e5667793d4sm7992384pfb.66.2024.03.18.08.06.51
+        by smtp.gmail.com with ESMTPSA id jw2-20020a056a00928200b006e703e0e2f7sm4643032pfb.194.2024.03.18.08.17.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Mar 2024 08:06:53 -0700 (PDT)
+        Mon, 18 Mar 2024 08:17:47 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <a41480a8-057f-4865-84af-6e0e45003222@roeck-us.net>
-Date: Mon, 18 Mar 2024 08:06:51 -0700
+Message-ID: <e2caf1f3-97b8-4335-bb8c-be7fa2b40094@roeck-us.net>
+Date: Mon, 18 Mar 2024 08:17:46 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,7 +63,7 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] hwmon: pmbus: adp1050 : Add driver support
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: pmbus: adp1050 : add bindings
 Content-Language: en-US
 To: Radu Sabau <radu.sabau@analog.com>, Jean Delvare <jdelvare@suse.com>,
  Rob Herring <robh+dt@kernel.org>,
@@ -73,7 +73,7 @@ To: Radu Sabau <radu.sabau@analog.com>, Jean Delvare <jdelvare@suse.com>,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org
 References: <20240318112140.385244-1-radu.sabau@analog.com>
- <20240318112140.385244-3-radu.sabau@analog.com>
+ <20240318112140.385244-2-radu.sabau@analog.com>
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -118,264 +118,79 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240318112140.385244-3-radu.sabau@analog.com>
+In-Reply-To: <20240318112140.385244-2-radu.sabau@analog.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
 On 3/18/24 04:21, Radu Sabau wrote:
-> Add support for ADP1050 Digital Controller for Isolated Power Supplies
-> with PMBus interface Voltage, Current and Temperature Monitor.
-> 
-> The ADP1050 implements several features to enable a robust
-> system of parallel and redundant operation for customers who
-> require high availability. The device can measure voltage,
-> current and temperature that can be used in different
-> techniques to identify and safely shut down an erroneous
-> power supply in parallel operation mode.
+> Add dt-bindings for adp1050 digital controller for isolated power supply
+> with pmbus interface voltage, current and temperature monitor.
 > 
 > Signed-off-by: Radu Sabau <radu.sabau@analog.com>
 > ---
->   Documentation/hwmon/adp1050.rst |  69 ++++++++++++++++++++
->   Documentation/hwmon/index.rst   |   1 +
->   drivers/hwmon/pmbus/Kconfig     |  10 +++
->   drivers/hwmon/pmbus/Makefile    |   1 +
->   drivers/hwmon/pmbus/adp1050.c   | 111 ++++++++++++++++++++++++++++++++
->   5 files changed, 192 insertions(+)
->   create mode 100644 Documentation/hwmon/adp1050.rst
->   create mode 100644 drivers/hwmon/pmbus/adp1050.c
+>   .../bindings/hwmon/pmbus/adi,adp1050.yaml     | 65 +++++++++++++++++++
+>   MAINTAINERS                                   |  8 +++
+>   2 files changed, 73 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml
 > 
-> diff --git a/Documentation/hwmon/adp1050.rst b/Documentation/hwmon/adp1050.rst
+> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml
 > new file mode 100644
-> index 000000000000..e3e5bb650a51
+> index 000000000000..e3162d0df0e2
 > --- /dev/null
-> +++ b/Documentation/hwmon/adp1050.rst
-> @@ -0,0 +1,69 @@
-> +.. SPDX-License-Identifier: GPL-2.0
+> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml
+> @@ -0,0 +1,65 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
 > +
-> +Kernel driver adp1050
-> +=====================
+> +$id: htpps://devicetree.org/schemas/hwmon/pmbus/adi,adp1050.yaml#
+> +$schema: htpps://devicetree.org/meta-schemes/core.yaml#
 > +
-> +Supported chips:
+> +title: Analog Devices ADP1050 digital controller with PMBus interface
 > +
-> +  * Analog Devices ADP1050
-> +
-> +    Prefix: 'adp1050'
-> +
-> +    Addresses scanned: I2C 0x70 - 0x77
-> +
-> +    Datasheet: https://www.analog.com/media/en/technical-documentation/data-
-> +sheets/ADP1050.pdf
-> +
-> +Authors:
-> +
+> +maintainers:
 > +  - Radu Sabau <radu.sabau@analog.com>
 > +
+> +description: |
+> +   The ADP1050 is used to monitor system voltages, currents and temperatures.
+> +   Through the PMBus interface, the ADP1050 targets isolated power supplies
+> +   and has four individual monitors for input/output voltage, input current
+> +   and temperature.
+> +   Datasheet:
+> +     https://www.analog.com/en/products/adp1050.html
+> +properties:
+> +  compatbile:
+> +    const: adi,adp1050
 > +
-> +Description
-> +-----------
+> +  reg:
+> +    maxItems: 1
 > +
-> +This driver supprts hardware monitoring for Analog Devices ADP1050 Digital
-> +Controller for Isolated Power Supply with PMBus interface.
+> +  vcc-supply: true
 > +
-> +The ADP1050 is an advanced digital controller with a PMBus™
-> +interface targeting high density, high efficiency dc-to-dc power
-> +conversion used to monitor system temperatures, voltages and currents.
-> +Through the PMBus interface, the device can monitor input/output voltages,
-> +input current and temperature.
-> +
-> +Usage Notes
-> +-----------
-> +
-> +This driver does not auto-detect devices. You will have to instantiate
-> +the devices explicitly.
-> +Please see Documentation/i2c/instantiating-devices.rst for details.
-> +
-> +The vin scale monitor value and iin scale monitor value can be
-> +configured by a device tree property;see
-> +Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml for details
-> +
-> +Platform data support
-> +---------------------
-> +
-> +The driver supports standard PMBus driver platform data.
-> +
-> +Sysfs Attributes
-> +----------------
-> +
-> +================= ========================================
-> +in1_label         "vin"
-> +in1_input         Measured input voltage
-> +in1_alarm	  Input voltage alarm
-> +in2_label	  "vout1"
-> +in2_input	  Measured output voltage
-> +in2_crit	  Critical maximum output voltage
-> +in2_crit_alarm    Output voltage high alarm
-> +in2_lcrit	  Critical minimum output voltage
-> +in2_lcrit_alarm	  Output voltage critical low alarm
-> +curr1_label	  "iin"
-> +curr1_input	  Measured input current.
-> +curr1_alarm	  Input current alarm
-> +temp1_input       Measured temperature
-> +temp1_crit	  Critical high temperature
-> +temp1_crit_alarm  Chip temperature critical high alarm
-> +================= ========================================
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index 1ca7a4fe1f8f..9a4fd576e6f6 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -33,6 +33,7 @@ Hardware Monitoring Kernel Drivers
->      adm1266
->      adm1275
->      adm9240
-> +   adp1050
->      ads7828
->      adt7410
->      adt7411
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index 557ae0c414b0..38e794d83cc3 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -57,6 +57,16 @@ config SENSORS_ADM1275
->   	  This driver can also be built as a module. If so, the module will
->   	  be called adm1275.
->   
-> +config SENSORS_ADP1050
-> +	tristate "Analog Devices ADP1050 digital controller for Power Supplies"
-> +	help
-> +	  If you say yes here you get hardware monitoring support for Analog
-> +	  Devices ADP1050 digital controller for isolated power supply with
-> +	  PMBus interface.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called adp1050.
-> +
->   config SENSORS_BEL_PFE
->   	tristate "Bel PFE Compatible Power Supplies"
->   	help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index f14ecf03ad77..95a8dea5e5ed 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -8,6 +8,7 @@ obj-$(CONFIG_SENSORS_PMBUS)	+= pmbus.o
->   obj-$(CONFIG_SENSORS_ACBEL_FSG032) += acbel-fsg032.o
->   obj-$(CONFIG_SENSORS_ADM1266)	+= adm1266.o
->   obj-$(CONFIG_SENSORS_ADM1275)	+= adm1275.o
-> +obj-$(CONFIG_SENSORS_ADP1050)	+= adp1050.o
->   obj-$(CONFIG_SENSORS_BEL_PFE)	+= bel-pfe.o
->   obj-$(CONFIG_SENSORS_BPA_RS600)	+= bpa-rs600.o
->   obj-$(CONFIG_SENSORS_DELTA_AHE50DC_FAN) += delta-ahe50dc-fan.o
-> diff --git a/drivers/hwmon/pmbus/adp1050.c b/drivers/hwmon/pmbus/adp1050.c
-> new file mode 100644
-> index 000000000000..53198d858156
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/adp1050.c
-> @@ -0,0 +1,111 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Hardware monitoring driver for Analog Devices ADP1050
-> + *
-> + * Copyright (C) 2024 Analog Devices, Inc.
-> + */
-> +#include <linux/bits.h>
-> +#include <linux/err.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include "pmbus.h"
-> +
-> +#define ADP1050_CHIP_PASSWORD		0xD7
-> +
-> +#define ADP1050_VIN_SCALE_MONITOR	0xD8
-> +#define ADP1050_IIN_SCALE_MONITOR	0xD9
-> +
-> +static struct pmbus_driver_info adp1050_info = {
-> +	.pages = 1,
-> +	.format[PSC_VOLTAGE_IN] = linear,
-> +	.format[PSC_VOLTAGE_OUT] = linear,
-> +	.format[PSC_CURRENT_IN] = linear,
-> +	.format[PSC_TEMPERATURE] = linear,
-> +	.func[0] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-> +		| PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT
-> +		| PMBUS_HAVE_IIN | PMBUS_HAVE_TEMP
-> +		| PMBUS_HAVE_STATUS_TEMP,
-> +};
-> +
-> +static int adp1050_probe(struct i2c_client *client)
-> +{
-> +	u32 vin_scale_monitor, iin_scale_monitor;
-> +	int ret;
-> +
-> +	if (!i2c_check_functionality(client->adapter,
-> +				     I2C_FUNC_SMBUS_WRITE_WORD_DATA))
-> +		return -ENODEV;
-> +
-> +	/* Unlock CHIP's password in order to be able to read/write to it's
-> +	 * VIN_SCALE and IIN_SCALE registers.
-> +	*/
-> +	ret = i2c_smbus_write_word_data(client, ADP1050_CHIP_PASSWORD, 0xFFFF);
-> +	if (ret < 0) {
-> +		dev_err_probe(&client->dev, "Device can't be unlocked.\n");
-> +		return ret;
-> +	}
+> +  adi,vin-scale-monitor:
+> +    description:
+> +      The value of the input voltage scale used by the internal ADP1050 ADC in
+> +      order to read correct voltage values.
+> +    $ref: /schemas/typees.yaml#/definitions/uint16
+> +  adi,iin-scale-monitor:
+> +    description:
+> +      The value of the input current scale used by the internal ADP1050 ADC in
+> +      order to read carrect current values.
+> +    $ref: /schemas/typees.yaml#/definitions/uint16
 > +
 
-> +	ret = i2c_smbus_write_word_data(client, ADP1050_CHIP_PASSWORD, 0xFFFF);
-> +	if (ret < 0) {
-> +		dev_err_probe(&client->dev, "Device couldn't be unlocked.\n");
-> +		return ret;
-> +	}
-> +
+I don't see value in "-monitor" in those property names.
 
-The datasheet says that the factory default password is 0xffff. What if it isn't ?
-Refusing to instantiate the chip because it can't be unlocked seems a bit extreme.
-After all, the password _can_ be changed.
+Also, I don't see why those properties should be mandatory since the chip
+has the ability to store its configuration in eeprom.
 
-> +	/* If adi,vin-scale-monitor isn't set or is set to 0 means that the
-> +	 * VIN monitor isn't used, therefore 0 is used as scale in order
-> +	 * for the readings to return 0.
-> +	*/
-> +	if (device_property_read_u32(&client->dev, "adi,vin-scale-monitor",
-> +				     &vin_scale_monitor))
-> +		vin_scale_monitor = 0;
-> +
-> +	/* If adi,iin-scale-monitor isn't set or is set to 0 means that the
-> +	 * IIN monitor isn't used, therefore 0 is used as scale in order
-> +	 * for the readings to return 0.
-> +	*/
-> +	if (device_property_read_u32(&client->dev, "adi,iin-scale-monitor",
-> +				     &iin_scale_monitor))
-> +		iin_scale_monitor = 0;
-> +
+The proposed driver code disables vin and iin monitoring if the properties
+are set to 0 or not provided. I disagree that this should be possible in
+the first place (I don't see its value), but if disabling vin and iin
+monitoring is supported it should be documented.
 
-I don't think the "-monitor" extensions in those property names
-add any value.
-
-> +	ret = i2c_smbus_write_word_data(client, ADP1050_VIN_SCALE_MONITOR,
-> +					vin_scale_monitor);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret = i2c_smbus_write_word_data(client, ADP1050_IIN_SCALE_MONITOR,
-> +					iin_scale_monitor);
-> +	if (ret < 0)
-> +		return ret;
-> +
-
-If vin and iin monitoring is disabled on purpose, why still set
-PMBUS_HAVE_VIN and PMBUS_HAVE_IIN above ? Reporting input values as 0
-if the values are explicitly not monitored does not make sense to me.
-
-I am puzzled about this to start with. Unless I am missing something,
-the data sheet has no indication that VIN monitoring and/or IIN monitoring
-is actually turned off if iin_scale/vin_scale are set to 0. Why support
-the option to disable them ? That doesn't make sense to me. Please explain
-how/when this makes sense. Please also explain why chip support is made
-to depend on devicetree support. Register values may have been be set by
-rommon/bios or (much more likely) by manufacturing, or users could just
-want to keep the chip default. Why force-override it or even force-disable
-it ?
+Last but not least, I think those values should be abstracted with some
+scale instead of reflecting raw (and unexplained) register values.
 
 Thanks,
 Guenter
