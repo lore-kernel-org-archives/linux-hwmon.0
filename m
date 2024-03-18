@@ -1,59 +1,59 @@
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C50772DF9C
-	for <linux-hwmon@vger.kernel.org>; Mon, 18 Mar 2024 10:00:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3ADE2D61A
+	for <linux-hwmon@vger.kernel.org>; Mon, 18 Mar 2024 10:02:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710756045; cv=none; b=WHsM6fmlg+hIrlK4Qiv5ynntQbph11BVy84r+SOKpVBoxF2ejU8Y5Z/hLu76Oy+cVV2X1G1YgAN7AHIvC5JW+jpKquQarnOSl7erniZlgicqxyF6T4NEXmvpG2bFR5aWn+0v6zWmtSMfcYYOK4ISdxCgCRxNE8ijWJO5VjNczPk=
+	t=1710756173; cv=none; b=TBCL7jWhbFMgQymbcZvRVRicc9XRUckQikMIYQsoc0HI8I/2+4Hx7E1FO+n9pUFDPmXEBvcDWzHyZiGF2Xq5O6B61zBS/qxl/DqZ/aBSOzyqkLOv+dZKrqeLWQOpYYPYycr6GB9u2BQp8YaFWewc/XIxPVEa3FFo5wrh5AoLnXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710756045; c=relaxed/simple;
-	bh=Y3KPjryeBk6WAZvX4AF/DKF7icODeEyu5eeTcBvHdYI=;
+	s=arc-20240116; t=1710756173; c=relaxed/simple;
+	bh=p8oCZBJnaZY1TnhydoJkfyKUbQPqqcrKyLCf1Bp8ukE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TAsFFJhEVrr1UcvBRcAhEE8JCoazFrPECI0MGsj2dJF0QBf2S+/1XrOCsldeecnvpBJ5F+nFtbqb5l5QzBmqPOr7lWUg/7p2YcJWaoJR6owJKK9WDiRFbw5qBV8s7pUKDsP1tSNVR82dyZwkU+wM4GeC3RSVaeUE5OPO5M508oE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=A1Mj8GX5; arc=none smtp.client-ip=209.85.218.51
+	 In-Reply-To:Content-Type; b=FjJsOH7zgnzxqBs7KHkK/n7ZQjUvOaySEHQtnYfzSgRCPl1N9qxznKuDoNDcFFibTDXcMWqgnU0meVzwjBHh0eLuty1r4by/PG3aI3SUMG2UqmHIDXnS999WieOhL5Q9apf1XtHPcnTr4PrVLvHYy7eguyBZYqBq7DEkp224nIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Ll+NPcD4; arc=none smtp.client-ip=209.85.218.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="A1Mj8GX5"
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a46c35dfb5aso66774766b.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 18 Mar 2024 03:00:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Ll+NPcD4"
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a44f2d894b7so474877466b.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 18 Mar 2024 03:02:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1710756042; x=1711360842; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1710756170; x=1711360970; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=nOpVJMHZinNvbP1S4eRDyzZwVy4BvWSLo+7riRjQi6Y=;
-        b=A1Mj8GX5OMJJFuZyvq85dhWGYORsXWwLF+CJLYUwpwUbRFnYzyxvuXg4iJoVbRweI3
-         KIyyY+4mJO3igUaECeztD5K+LDWHi2v4KKyAp1FH0CwGm+aSch6Lec6zpzU5cg91ymrB
-         Ep8Z6tf74eKQEOIgkvWRPj1qMwr6YCTi/H3sBg0kuLbw654fTz6brLat3n1ia6YSPFXV
-         zgdRIKxwr5YgO595vCM2rI4h7JT+U0CASvZG5VQkcmZztiqmoWjTBb/ZVWfTyt3dYO9L
-         JhypenwJ3pDV/7bF8etn6qzMSIIKo3wk/02qG09uAOtonfJG1zgKLth7Vh0GeLyl6I7+
-         mHqA==
+        bh=xEMyQbDRzxqKimyVxa1436bQdzhWHFiC8NxOg49e5uk=;
+        b=Ll+NPcD4II5EP+nb8klOxY+A8iQ7Tu9vIzKS8vHqVSNbWUzz2ddyuEJaiO7wYKePh4
+         Xp7kr2D9nKFq4d1JYpr4pm4hXjkxMJPMqInIzDjNRRUj+iSaYXi1e16nduNB1A+VTlGJ
+         WsryCvadOE8+jTC7HLf55pfsr+AK+k3eOJj02QFxGtPWF+bj0eOTSakEBvsYnnPlHGsx
+         Dapt2AiALme14ze8x9XwF0gPZoh8qV+9UM0Jm8BPc8dmQMsq4N1kKIBQla6j32h5f02U
+         JH0mEp+xciElgbIcERkq1zs0B6X4cX2BLH/zR9L6x90rAXMzshQ41b1sEGrv41nbHk+F
+         hwiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710756042; x=1711360842;
+        d=1e100.net; s=20230601; t=1710756170; x=1711360970;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nOpVJMHZinNvbP1S4eRDyzZwVy4BvWSLo+7riRjQi6Y=;
-        b=hww1eNwY/SxSOpkXROoWSNcNfDPgJU4beRfVV7mduHDBxa3hXSFGCHyDh0mXERpur+
-         QwkakL+SLEfPvh44EVf4gq0x75lftSeRQAPNmR4r2TmTWMuzxQqPpFmccySofQ+dxVnr
-         O1N3p9ahZECAQxuwY/YesdlTUUhx2//5a/KAdFguaVOz1rv+206Sb0IgqvBXG7o6K5+s
-         hQBh6ZzbP1cijvWKnInCD3oNswUgthcoLNLJPaY4ZhxavaWJr7Y8QNc8KQzOLkO1eiKH
-         by+XuZrHdngDZx/54eNH444BQTi56+7FbU26M7tpLXvIO4m/7aiyDjsZruEwY0Ts0LuJ
-         hTVw==
-X-Forwarded-Encrypted: i=1; AJvYcCU8hzceasqMEWNdDvsYjUsT38IyGe5XrMlGig5k/Ptrw77/EhB2tVFD5QfeP5c1G7OF5IYvWam05JY8DZ12OayM5GsgZWucwg+cQGc=
-X-Gm-Message-State: AOJu0YwbBOSjVYGc+l2XH2aZFvsi6t/8e4k1IkFBSufPv9/AgLm1yxQS
-	oCvKziEIvovot7qjj1AUwttpe2TuE8wOJt3tZSbMRxt9GyWGRD4I4F8/wNBZ11E=
-X-Google-Smtp-Source: AGHT+IFNSsbnlgNB4ccb54kO8I+YBeQgxLGEB38rT+5118DAl6YF6HVXQRJYq8D8/zj+uJJ1X1jUmg==
-X-Received: by 2002:a17:907:1ca4:b0:a46:9e3c:9e62 with SMTP id nb36-20020a1709071ca400b00a469e3c9e62mr5312174ejc.13.1710756042103;
-        Mon, 18 Mar 2024 03:00:42 -0700 (PDT)
+        bh=xEMyQbDRzxqKimyVxa1436bQdzhWHFiC8NxOg49e5uk=;
+        b=rOjKIAxJnJzvuzJaGPGEmaYRhD7GgnApdGuoFDpg8AMd4Ks89+dye8XZ6WEBQ2URgN
+         AnLzWTqruhOdQsMmnqdwlTzSIQxAtMLCqsJ2bg1lGb8ypg4mB2sWlWMO/wYvc29bLkpg
+         zHhcSHvHB+SwBHguIv7vv3iV9gi4sJVhXkmgDUj94aSF58mA1odRRxMk8ka2ZF5Ckvpp
+         qKq6AJnC5LbGypF+meUXaFeN9sspAgE6wvRLM5IphwyEMtU/skiVXV0zVwf1ic+EltII
+         3gWLLRnvPYy7L3SS3YxKsMZkDOJk9TsJLhbOaiQkX9qkhqpNz/Q0UmPKtluPCX02UQ57
+         iZbA==
+X-Forwarded-Encrypted: i=1; AJvYcCWhcNixu8zbejKofcbRxTqPcwapAa07E5s/+VypyBQgDbMDg2v+pAtbVTM7FDrFdw2hx3cmm7tkGAtPx3cMu6lcBw5+jnO+sWKhZj0=
+X-Gm-Message-State: AOJu0YxUOEi0Rn6Ff0N/qOsNJvn3gB7KWw/r8p+XNgdBW0XbS8fhSJ97
+	Ck1PoNQIN5SSidw3czqmDsqM0c9uFTKchmTvk9qoXiq5ywSRl1fdJE7SD85PDzA=
+X-Google-Smtp-Source: AGHT+IESp8JqOgCMzQy4GD24NbUZR4t4iaKCi9svywrWQsXddSMIh+tmOtp/jVYc20GN2F5/dnx+cQ==
+X-Received: by 2002:a17:906:364a:b0:a46:617e:d3a7 with SMTP id r10-20020a170906364a00b00a46617ed3a7mr7368668ejb.60.1710756170266;
+        Mon, 18 Mar 2024 03:02:50 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.222.97])
-        by smtp.gmail.com with ESMTPSA id dl5-20020a170907944500b00a46ada81f1bsm1971486ejc.124.2024.03.18.03.00.40
+        by smtp.gmail.com with ESMTPSA id qa19-20020a170907869300b00a46af3d2916sm1844298ejc.168.2024.03.18.03.02.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Mar 2024 03:00:41 -0700 (PDT)
-Message-ID: <a224e752-d99b-45d3-b5db-761a698c347e@linaro.org>
-Date: Mon, 18 Mar 2024 11:00:39 +0100
+        Mon, 18 Mar 2024 03:02:49 -0700 (PDT)
+Message-ID: <7252305b-4c7c-4cec-8ef1-8bf96293b469@linaro.org>
+Date: Mon, 18 Mar 2024 11:02:47 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -61,8 +61,8 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] dt-bindings: hwmon: Add maxim max31790 driver
- bindings
+Subject: Re: [PATCH 3/3] dt-bindings: hwmon: max31790: Add
+ pwmout-pin-as-tach-input property
 Content-Language: en-US
 To: Chanh Nguyen <chanh@amperemail.onmicrosoft.com>,
  Chanh Nguyen <chanh@os.amperecomputing.com>, Jean Delvare
@@ -78,9 +78,9 @@ Cc: Phong Vo <phong@os.amperecomputing.com>,
  Thang Nguyen <thang@os.amperecomputing.com>,
  Quan Nguyen <quan@os.amperecomputing.com>
 References: <20240311111347.23067-1-chanh@os.amperecomputing.com>
- <20240311111347.23067-2-chanh@os.amperecomputing.com>
- <6fb70adb-aa85-4b9c-b093-afa4ec7ed056@linaro.org>
- <ab8b45c5-2ef0-4a87-87bf-f797954b4574@amperemail.onmicrosoft.com>
+ <20240311111347.23067-4-chanh@os.amperecomputing.com>
+ <9d1207f1-4941-4f2a-99d6-371f5b4709f5@linaro.org>
+ <f281d2b1-54ff-4e5a-83b9-5b05f18c40fb@amperemail.onmicrosoft.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -126,133 +126,62 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <ab8b45c5-2ef0-4a87-87bf-f797954b4574@amperemail.onmicrosoft.com>
+In-Reply-To: <f281d2b1-54ff-4e5a-83b9-5b05f18c40fb@amperemail.onmicrosoft.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 18/03/2024 10:51, Chanh Nguyen wrote:
+On 18/03/2024 10:48, Chanh Nguyen wrote:
 > 
->> It does not look like you tested the bindings, at least after quick
->> look. Please run `make dt_binding_check` (see
->> Documentation/devicetree/bindings/writing-schema.rst for instructions).
->> Maybe you need to update your dtschema and yamllint.
+> 
+> On 11/03/2024 23:56, Krzysztof Kozlowski wrote:
+>> On 11/03/2024 12:13, Chanh Nguyen wrote:
+>>> Add pwmout-pin-as-tach-input property.
+>>
+>> Why is this split from original binding? This does not make much
+>> sense... Add complete hardware description.
 >>
 > 
-> 
-> I tested the binding, I didn't see any warning/error log. Please review 
-> my logs as below
+> Ok Krzysztof, I will merg the "[PATCH 1/3] dt-bindings: hwmon: Add maxim 
+> max31790 driver bindings" commit and "[PATCH 3/3] dt-bindings: hwmon: 
+> max31790: Add pwmout-pin-as-tach-input property" commit.
 
-Hm, I don't remember what brought my attention to possible error. Maybe
-I mistyped my template.
+Later I checked your driver code and this explains a bit. However first
+patch should explain that instead. The split is fine, but just lack of
+rationale is confusing.
 
-> 
-> => make dt_binding_check DT_SCHEMA_FILES=/hwmon/max31790.yaml
-> make[1]: Entering directory '/DISK4T/work/community/linux/out'
->    DTEX    Documentation/devicetree/bindings/hwmon/max31790.example.dts
->    DTC_CHK Documentation/devicetree/bindings/hwmon/max31790.example.dtb
-> make[1]: Leaving directory '/DISK4T/work/community/linux/out'
+
 > 
 >>>
 >>> Signed-off-by: Chanh Nguyen <chanh@os.amperecomputing.com>
 >>> ---
->>>   .../devicetree/bindings/hwmon/max31790.yaml   | 44 +++++++++++++++++++
->>>   1 file changed, 44 insertions(+)
->>>   create mode 100644 Documentation/devicetree/bindings/hwmon/max31790.yaml
+>>>   Documentation/devicetree/bindings/hwmon/max31790.yaml | 11 +++++++++++
+>>>   1 file changed, 11 insertions(+)
 >>>
 >>> diff --git a/Documentation/devicetree/bindings/hwmon/max31790.yaml b/Documentation/devicetree/bindings/hwmon/max31790.yaml
->>> new file mode 100644
->>> index 000000000000..5a93e6bdebda
->>> --- /dev/null
+>>> index 5a93e6bdebda..447cac17053a 100644
+>>> --- a/Documentation/devicetree/bindings/hwmon/max31790.yaml
 >>> +++ b/Documentation/devicetree/bindings/hwmon/max31790.yaml
+>>> @@ -25,6 +25,16 @@ properties:
+>>>     reg:
+>>>       maxItems: 1
+>>>   
+>>> +  pwmout-pin-as-tach-input:
+>>> +    description: |
+>>> +      An array of six integers responds to six PWM channels for
+>>> +      configuring the pwm to tach mode.
+>>> +      When set to 0, the associated PWMOUT produces a PWM waveform for
+>>> +      control of fan speed. When set to 1, PWMOUT becomes a TACH input
 >>
->> Filename like compatible.
-> 
-> Yes, I'll update that in v2
-> 
->>
->>> @@ -0,0 +1,44 @@
->>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/hwmon/max31790.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: The Maxim MAX31790 Fan Controller
->>> +
->>> +maintainers:
->>> +  - Jean Delvare <jdelvare@suse.com>
->>> +  - Guenter Roeck <linux@roeck-us.net>
->>
->> You should have here someone responsible for hardware, not subsystem
->> maintainers.
+>> No vendor prefix, so generic property... but where is it defined?
 >>
 > 
-> Hi Krzysztof,
-> I checked the history of the drivers/hwmon/max31790.c and see Guenter 
-> Roeck <linux@roeck-us.net> as an important maintainer. I saw many 
-> commits from him. So, I add him to maintainer list.
+> Thank Krzysztof! It is not generic property, I'll add the vendor prefix.
+> 
+> I'll update the "pwmout-pin-as-tach-input" to 
+> "maxim,pwmout-pin-as-tach-input" at v2.
 
-OK
-
-> 
->>> +
->>> +description: >
->>> +  The MAX31790 controls the speeds of up to six fans using six
->>> +  independent PWM outputs. The desired fan speeds (or PWM duty cycles)
->>> +  are written through the I2C interface.
->>> +
->>> +  Datasheets:
->>> +    https://datasheets.maximintegrated.com/en/ds/MAX31790.pdf
->>> +
->>> +properties:
->>> +  compatible:
->>> +    const: maxim,max31790
->>> +
->>> +  reg:
->>> +    maxItems: 1
->>
->> That's weirdly empty.
->>
-> 
-> Hi Krzysztof,
-> I have not yet understood your comment here. Please help give more 
-> details for my missing! Thank Krzysztof!
-
-I expect many more properties of a fan controller. Resources (clocks,
-PWMs, supplies) and FAN specific properties.
-
-
->>> +
->>> +required:
->>> +  - compatible
->>> +  - reg
->>> +
->>
->> You miss allOf: with $ref to fan controller schema.
->>
-> 
-> Thank Krzysztof,
-> I'll add the allOf at v2.
-> 
->>> +additionalProperties: false
->>> +
->>> +examples:
->>> +  - |
->>> +    i2c {
->>> +      #address-cells = <1>;
->>> +      #size-cells = <0>;
->>> +
->>> +      max31790@20 {
->>
->> Node names should be generic. See also an explanation and list of
->> examples (not exhaustive) in DT specification:
->> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
->>
-> 
-> I suggest some node names, such as "i2c-fan" or "fan-controller" . Can 
-> you please share your ideas with me!
-
-Look at recent commits and patches for similar type of a device.
+Except that you should really look into common properties and use them.
+Or explain why do you need new property?
 
 Best regards,
 Krzysztof
