@@ -1,107 +1,139 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB36F59B60;
-	Mon, 18 Mar 2024 21:57:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7419A5A7B6;
+	Mon, 18 Mar 2024 23:04:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710799077; cv=none; b=MHaLtsIbtW2HnqKrFGqnnloF838+cGZxnsJ6Wia5avqAkaTT0vrULhxoAC7RZrt1l//mY4m0xtzJydgwyBTAGkmmPQIjZEnguCcAYJiPCTrsYVggFxDoB4T6WVG0oXhAP5OiZatQUM4DOs7HwA/AcxnDVxzcCqRY2b87lJn/U20=
+	t=1710803057; cv=none; b=l1mhmEuCJ+LtcW+hFMGoeGFWmi8/iTW0mai2OYwW115SWmbOGDdZ2mqOrEvwZabgCYYjdaHh+RnIwINayB/Ll1B6IK0xydUyP/o7iwLQN0ysj9KaTZe/uNpECnEpiTnRK+cZbM/WGAUP+m68XmIozIW6cegx+HsPYycNLj4KAdo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710799077; c=relaxed/simple;
-	bh=9dIu8AKGPW4b2LA7WMIo3j+7Gk2uQDHsDxPnjR1PEtc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=IMlH1tXAo2/Wyb2YY4f5rP5DaWA4HubE221B/VBMJfG0glIouuaUWXyezbol4At5bQBA17M1NUHFbc+SQvtKW3y5Z5FiK49rf8bfAABiT1UOGRU+Hn8e4QWUgo0MywIUDTkduIereohOQcEfc6Ucc1r+EZGQcglM2tMneJqhGAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=VPmtGMeu; arc=none smtp.client-ip=212.227.15.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	s=arc-20240116; t=1710803057; c=relaxed/simple;
+	bh=eGsUvslhaYw+yM+ZZ/EMxm+K11SBPq7cbdAEVqB6o88=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=b40mJleYhWqaxM7Y+IGwSIKWGLj2BhSFeufJwVzhxWfwERtKYS5aQhoyq/9dbO9F4NjVCBbTsIkM1JL7dmPgoOKDyl+KeRiLcXtV7oiEcG7kmCQlbXevfhMTcUc3pDXSxSegzVCjAiCnGMO7KxoeRZ68pUdyFpNR7YDAvM4iO0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RQbOEn/j; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="VPmtGMeu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1710799058; x=1711403858; i=w_armin@gmx.de;
-	bh=fmLtM0kbkB+R+fMrBFoqRkupy+V0CixAailgZ+ZySVA=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:
-	 References;
-	b=VPmtGMeuZotGIgPqLDqmZj7qLXIXqughZMvR0Hj3QOkCOMV9p2VEOmte9bBAYNcA
-	 S8UD0GFcGF/yHzy6XfILUBA0R9hBh4bJE+82U0fnsc3pVwYhEisSFZiWaWwN6AXnS
-	 T/l+FAsdqOxIAp6+3vM+I76tAPm4ILbvwRI3GojJawC1i+9g076sPpkZb3Hct76eU
-	 jRxMLJX5vxBQREL1wKQmRumcnqCbC/deAsYatxYnE9bF/dAVnldYvt+Qd53IPFM5S
-	 /mAiXjgL9kqqJ01SrsB3I6Fj4MEqHrw1gLEfbydjrZG7T+VbcdJvCr1q/kpu2omw5
-	 OdS93j4j491w/68KCw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from mx-amd-b650.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1Md6Qr-1rDpVx2riN-00aG6f; Mon, 18 Mar 2024 22:57:38 +0100
-From: Armin Wolf <W_Armin@gmx.de>
-To: james@equiv.tech
-Cc: jdelvare@suse.com,
-	linux@roeck-us.net,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 1/1] hwmon: (hp-wmi-sensors) Add missing MODULE_DEVICE_TABLE()
-Date: Mon, 18 Mar 2024 22:57:32 +0100
-Message-Id: <20240318215732.322798-2-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240318215732.322798-1-W_Armin@gmx.de>
-References: <20240318215732.322798-1-W_Armin@gmx.de>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RQbOEn/j"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1dd10a37d68so39929835ad.2;
+        Mon, 18 Mar 2024 16:04:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710803055; x=1711407855; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=VMG8bK9JHszRqVjcG6xG0bVfN3vKXTlzIQNbDmTiu+U=;
+        b=RQbOEn/jr4dnrTQUc+mjkE0CBSGCk0oiGAz9bBZznderJXob0BPfyne5DsdkJhiT0p
+         PbOO6fSn6amyma1Pcs4HgBQd0oxklOLyKaFZN3JKJJkKyZx8qIGK7IYFO4Rvh4vDOjiG
+         3ihMW6RJhhM6MJfgL/8qLofJWpywfLZ6tlVpB8dOY9Q59lgtNOe6iMSd9Fb08TIBtnTg
+         usw1/co9rYc3XENb353h9UWLmF2Rt/AGQKHGakGwZo5uqRiGkqPqbNcPEWog2bSJdvFq
+         BKfnW5c//NL7B6NQBGCDGJxBUAG5edTD3aHXGazC6bZyXYhntG+/qfC7UxvIwUU7S/VW
+         PCxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710803055; x=1711407855;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VMG8bK9JHszRqVjcG6xG0bVfN3vKXTlzIQNbDmTiu+U=;
+        b=M7yps60mb/B43r7zb7QCicNBQ/AhxyMUz4Wb838znenUAxMprc9+XND2XvAr1pAhYO
+         BWt+jJTqYPe1sXISew9Kjwg1VaMjD7TjVt7ta+glD5yzRvhtA+L0BfpCI/IcUnUDligw
+         nLJTmoDq2K88jfPT9b/sOQGADhocmDpVzh/7PUDWrJkFB9d3WNY0TxJ+ewLK+g/aG6gP
+         PuC3GJSDUuZRD9N+YG0EW5Z/FomqcQogPJZIPOx+Lta1vF00WU4Vjo6zuHzkc94JFv1S
+         Mr1XAIuExqStDrmwOBJczQ1I5BWyRu+IfA1YJsMCzmKWTX+81guhbIFOVS9Rc0dJTlTU
+         dK6A==
+X-Forwarded-Encrypted: i=1; AJvYcCXhVPbUjPPOijibzPP4qAJGRtXWsxN8K2sG/eaUz3QoDglQFLkavKbyxsWynIx9ffYbVDPd6zpwDrWepXdPhEbt3RUGYslxBwiPTTAM6mnqiRmBE4x88TixseVOCPqiXH41eAfIAgFw1S4=
+X-Gm-Message-State: AOJu0YwU31uTPAlQ6cYhCqdk6FOqwYQaab607A9WZ4rcp5T3n8VZV/g6
+	NK7YJyNAO6Cz9UOsVyQh/HZJTOXMt8u3noWcuDgKXaHeygbntzxCqzHlqgNS
+X-Google-Smtp-Source: AGHT+IG08iV06qo8R9/du0gQps+Yfe86bbBjDluM8aHwRtNVPP7KVLmyWm5NhAe3SBVeJfXxmdFvGA==
+X-Received: by 2002:a17:902:6803:b0:1e0:3df2:cc3 with SMTP id h3-20020a170902680300b001e03df20cc3mr1088116plk.55.1710803054719;
+        Mon, 18 Mar 2024 16:04:14 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s20-20020a62e714000000b006e4d8687f44sm8464256pfh.102.2024.03.18.16.04.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Mar 2024 16:04:13 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <d167915c-e55e-4c2b-b7dc-6f4bda2f3a34@roeck-us.net>
+Date: Mon, 18 Mar 2024 16:04:12 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:uu1DHhSD0VIUkaLjdx8S9P0g8QVldwlbqjhfxW8oco8AT/WB2VC
- Rj8eTa14ey9JX/K193oiiTr2GxGGdGQuxKs8jqjcXzdO34Z3guXA3NUygrjIFWS6TGo3i6C
- Gxhpqf7nl1+O8JR16khO/lvxebqxCQcxFe26iGkGpueBkVI07YiK4Uzno/MjZe24V3eft+K
- mrQEzy5OPZP+xhCKQ4WNg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:rVQB6voItLI=;gWrSyvCEQUsNciZHXapRw3fniRM
- XUTFdl3d0/V12DIX1/aliLyzVyZZufyfH2lykqU7QSe7d/XXGsb9ljtssVhnrLdB3OhR3GTe3
- 6d80u2tibAJOm7zhNgxwYA7CbR7uDSdkJBYkdW4EdAOkY9kp7kEPvzgJngXjHN1XXQNSLsZmJ
- +L7UE56eSCLlCzkAzkOIZ/DdVu7ZG1XVWiz57tplZULby2Xm5AKuNhnmiLwFvJfYqoq0JJusd
- bRZnrf95zaZB8URgKAx20eVQoBG5HZfsPYlgmxsrtAEOGefvPA8uzKQGfxVwSd8X6IfSfvx3h
- D07rHr2nxvLHvvEH2+gHUohmAXVEh9qMYKeXEgoSTnJibOgo4gWzYIm4ELUQIZXFVy8vpTech
- 6kwl90N1oy/rVOy7txyOZkBSEmP53/NCQOqEeul3mgK9+RLkWsL5xtpD+CbKn2t47gg3p23P6
- 8b2VfFtWKsh1pmrMN4suiNDQ0HFXop6P0mWOGp2wfc+ghzaWt0a3LlU7EcFCJET14FSpmrO9A
- MXRdH0SKewiz4B/IVyfrj4U+5j4UaMhf+Um2BL+yMtp+GGHmedpP3P2GIBtu1OC0yhcgBH3xy
- ALhByQj4EVv7ho2aV0INRqGx8BjTVveeQqvavowcF6omr+8FlGKAcMheKbB+KaTeSUXxskhnf
- EFuy10KG1N3Pdl5oNp0OMW43dAqbugUVvR1oNcs0QEg/u9Vjw8P8kEjjoIpgAIulZJ8wnstqg
- L2sqbT7pJY55zgPvKSRZUQ4XFp+4F0RQ7to2vDsf/vntrSVdFuMLkbN75VW0KlGAnoHrp+l25
- tRdluYXVGnt4ByrXKBO8BqtLsKfRscNeAYDmiaZekqZBY=
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC 0/1] hwmon: (hp-wmi-sensors) Support autoloading
+Content-Language: en-US
+To: Armin Wolf <W_Armin@gmx.de>, james@equiv.tech
+Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240318215732.322798-1-W_Armin@gmx.de>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
+ RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
+ nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
+ 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
+ gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
+ IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
+ kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
+ VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
+ jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
+ BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
+ ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
+ CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
+ nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
+ hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
+ c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
+ 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
+ GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
+ sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
+ Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
+ HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
+ BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
+ l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
+ 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
+ pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
+ J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
+ pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
+ 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
+ ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
+ I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
+ nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
+ HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
+ JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
+ J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
+ cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
+ wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
+ hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
+ nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
+ QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
+ trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
+ WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
+ HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20240318215732.322798-1-W_Armin@gmx.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Register the WMI id table with MODULE_DEVICE_TABLE() so that
-the driver can automatically be leaded on supported machines.
+On 3/18/24 14:57, Armin Wolf wrote:
+> Currently, the hp-wmi-sensors driver needs to be loaded manually
+> on supported machines. This however is unnecessary since the WMI
+> id table can be used to support autoloading.
+> 
+> However the driver might conflict with the hp-wmi driver since both
+> seem to use the same WMI GUID for registering notify handler.
+> 
 
-Compile-tested only.
+I have no idea how this is supposed to be handled.
+wmi_install_notify_handler() is marked as deprecated,
+suggesting that the entire driver structure may be outdated.
 
-Fixes: 23902f98f8d4 ("hwmon: add HP WMI Sensors driver")
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- drivers/hwmon/hp-wmi-sensors.c | 2 ++
- 1 file changed, 2 insertions(+)
+> I am thus submitting this patch as an RFC for now.
+> 
 
-diff --git a/drivers/hwmon/hp-wmi-sensors.c b/drivers/hwmon/hp-wmi-sensors=
-.c
-index b5325d0e72b9..493a3b3e86f3 100644
-=2D-- a/drivers/hwmon/hp-wmi-sensors.c
-+++ b/drivers/hwmon/hp-wmi-sensors.c
-@@ -25,6 +25,7 @@
- #include <linux/debugfs.h>
- #include <linux/hwmon.h>
- #include <linux/jiffies.h>
-+#include <linux/module.h>
- #include <linux/mutex.h>
- #include <linux/nls.h>
- #include <linux/units.h>
-@@ -2072,6 +2073,7 @@ static const struct wmi_device_id hp_wmi_sensors_id_=
-table[] =3D {
- 	{ HP_WMI_NUMERIC_SENSOR_GUID, NULL },
- 	{},
- };
-+MODULE_DEVICE_TABLE(wmi, hp_wmi_sensors_id_table);
+.... and, given the above, I have no idea what to do with it, sorry.
 
- static struct wmi_driver hp_wmi_sensors_driver =3D {
- 	.driver   =3D { .name =3D "hp-wmi-sensors" },
-=2D-
-2.39.2
+Guenter
 
