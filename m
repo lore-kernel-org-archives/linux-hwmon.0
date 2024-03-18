@@ -1,115 +1,148 @@
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
+Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B803E57E;
-	Mon, 18 Mar 2024 00:58:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BF1210A34;
+	Mon, 18 Mar 2024 01:02:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710723518; cv=none; b=MN20SEb3rVQtD2PxON6LkaOJGgBNJAw0islZMlxcOLLoim5BuNSKNBlBAYKJq5O2TygrQ/pvwHxhfD2xzuxLWDU/yLpFOI1H3CmUHC/96Jt1qm8yHuvo7wT/WmbZpF7kqrrWNtt1bE2fsWLA9Kxs09B2E77rHvZqGVbmZTBhA7I=
+	t=1710723776; cv=none; b=ZbO0V5my40AXe8aPhRFiEFpyUuUnSIw+eN6Orm5DTFvYLBSa5TUBzUSA9lXLu64ij32a0+7rBxkTAV048eDFwunUE7tCcKghh5BwLtfnILtaZxSXJKI2a6saLvAB+5BqQyMaU7mJ5fgV4ZrkB7Ol+UmyGIYBOm5V1340EBg6HPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710723518; c=relaxed/simple;
-	bh=AS1zYw8yLmefRgNdN6lw4wDAORpveFU4u27l0R2El44=;
+	s=arc-20240116; t=1710723776; c=relaxed/simple;
+	bh=HYnHpQ5WS0uOZQHvof4CAA2amkH1vlLsf73xj39b0HM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oZrHkP+oKIsY76E/yw1vP3YgPug+VLf/2yh20q/nIjqOy4beAL/KIn0JzyPYzuH5b9pmp1B7KOL2JP7CSeX0FVE69QHjHJIkVqYP8lWUotbiXaChS/2W7foLXO3IVGOxfHLaDSMB08k42kqDXbY9f2wQSi6elerbeL9nOy8RZ2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IhffMgr5; arc=none smtp.client-ip=209.85.166.173
+	 To:Cc:Content-Type; b=gpDfPqPVO+zo2WU3qYNHcQoQHdJiOJHD6cTS8YDxh/BZIrdUbwFERcTSKPAWvxlHonUI+MB96I7Q59hshOEv5MlwOl5SQbEwtaNpQp2i2j16puXHfFb4/5QvQaYudw+poarmfNYi5pHGSARm09A6l+7c9gQgwwlRV5rfhca9YTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cssq6esS; arc=none smtp.client-ip=209.85.166.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IhffMgr5"
-Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-366bc265e58so3978155ab.1;
-        Sun, 17 Mar 2024 17:58:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cssq6esS"
+Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-366c26bd8cbso1547505ab.3;
+        Sun, 17 Mar 2024 18:02:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710723516; x=1711328316; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1710723773; x=1711328573; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=x3gO3B8juV9rqE5CX6cYNKDzZwtkK2BD97woO9bfZ3o=;
-        b=IhffMgr5Pc3Q1yawHusERlxXen1gwWQSNIz68cTnYDXizfH3sTtwwWE+87N678bQIp
-         HqKnWrMKI7ChZWfkUJ0SZs9sj2N3dP7zYL4+OIxA5pdKkfZu8eifN6CgCeGtLi4gWE4r
-         1FvG7CzbMyCadB5jBrhNwM6fimSlOW6CauylJBo2jjeWx8wDdszzJhXVJJUzRqApnjCz
-         FY37gmrYnZY63ayPC3JzQjP5w/VF56UTnlMGLjyihjdsLa5mF4tNSWvgki4cwmxZ7bVN
-         rN8HRVOZCdtIJy08cpLBpeb5KeMhrg3+nZqK5h41OgzvjiYZTXJ0wYMKBvAQutOki/2h
-         jj4g==
+        bh=q057OV69lTu4ctPYW4hfEX8QoC9FK779RSSG++bu6xM=;
+        b=Cssq6esS1N+VWLMHk20uOXb+pF4jtsJwzHyLHWAxOvZseU/zbAa0OQtstXtgpAaw/Q
+         +/91SbV6dmANz8ekGQLb3X5mf6YsWCFtBoKSVRfA+C9yOlpnsfo6SGZWfFF4lnt7PNsn
+         JsUPMHz3gEYxDfp4/kmEGk+m7cLp0u+bTkKYeKA7Gagv3P9r3OdUSe1sFmg945Jkc8iu
+         wVbdG8VsO1h4j+SzjFRiRdjAvY/R6C629pv6c1wkIhr0JDVtb/0rZ/SCMY0xGOCCnlj9
+         vOcXyi7uVlHedbqRLOk8kOJQVpfW5fX5R4zs2NggdNIY6rW/40OHmlDzVLRbgkJOtG4F
+         hkLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710723516; x=1711328316;
+        d=1e100.net; s=20230601; t=1710723773; x=1711328573;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=x3gO3B8juV9rqE5CX6cYNKDzZwtkK2BD97woO9bfZ3o=;
-        b=C6ZTgmbNBr/zyPDt2YGdN4bWFWj78y4sgl06jm/e/FCh5ZQwJBU4I52KSVoTNIvgh6
-         OlaBvzynsc2K6NQhWnf4giohqRheryhqGAtXuYjO5mr0qklaAjcjyT9htm7ZpG+PBj0t
-         lxD66m/s6ItdB5R9hlEPJB8Ux6q3MfbLkfb66ZxcmIoYLJ7JirirgmSIQg/x6GM2sc1l
-         UAnVGNmZje3QlsP5TTYWsPX/+CXYYGPMP65omNGvlg/OjjiLnZcJYar3psYN0vM9R6HN
-         vuYHSEXge3+Eqxi8b0xR+fzRo0TmImB5YdbklYkHlXKqAUXTV4Mc/nGdZzfkQGiHr/Bp
-         iHeA==
-X-Forwarded-Encrypted: i=1; AJvYcCWPk/DnKjsRrLPxtUedx5Rjk2zSq3n+UArfSXuBFgrGzMNyn3IOreyyqAKWHmYy6wKBtTglDDBZZ1Ha+octnb4WFaBbLC+XekYyDSa7VacVekrUhOvZ9WyoCJfpQy1uAh19LFtbQJZBZ2eIcV2M3IQRqTMFnKeQsHwBg3AMsHI5tJNTXCY+eykgS2Z+4G0jSPqVbVcFmbtcBs7hvfujGmWl
-X-Gm-Message-State: AOJu0Yxe/am9djDoRTdKGNEKQUcOtmGO8MVYQyhkd5wA8sU+N39wPoRv
-	Hp8iuDb/v/Vmr2WnEUGtf864luXmVrjqPKlCInnmObCtk1m1Q5Ywp8oqP7BLWw+5252s1PQXFiE
-	yImyUMKJ/UkP/p2vfkvd5+cfTCkI=
-X-Google-Smtp-Source: AGHT+IEWUqkwZJEiSPp20ajC62MQHxGmIR1eTp3InTtHleO4oWkGUN0u7amI5MFyUz2LLxNgHP9dfiKArtIcMhyjwSM=
-X-Received: by 2002:a05:6602:1d4b:b0:7ca:f5f5:46b8 with SMTP id
- hi11-20020a0566021d4b00b007caf5f546b8mr11953675iob.11.1710723516147; Sun, 17
- Mar 2024 17:58:36 -0700 (PDT)
+        bh=q057OV69lTu4ctPYW4hfEX8QoC9FK779RSSG++bu6xM=;
+        b=efKpc/EUZBCbDSqRG9w9DbwTFkMgY15BQFmIv9OwQyh49YumljynoHGD0qAAXBBts2
+         8tNjjAtQKLm07aJk/304cUbPCDaZBwQT63c/0MQ9XTSpRWLisfEkSXGXvXmfNQs7KtLQ
+         r54g31E+CgsrNV0FOvb1a9FjocU31ZPUHoQG24N/nS7tGjovNmw1/O0AG3luiYKnppMk
+         gp9PDx+ahEs/1KpLBLBUR4+5lc433Sfi2N6PAHrmQy694mfgMubonAYJHWal/7CCgHUj
+         e1jS+fBZalblhGw8HFY+A460H+G+zsCXYU5ZmYVa9FZdlHwFhVcMF4ES3g92cHJskmtP
+         UIYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXJJaa083qH9Tafad2j/BYVtiEjWi/se37E32HSaq7P8zVvvihRu2d1O/6Y2j0YrHctOVc0wXhbQqTPhHVPxTqLFhTiGBWoIlwVYs2Q8i/SjsxvH3K0YOkYkxx9bEWIqyvzgjm8mTqCkJq2B6Pycw7jnK6PPM8/rU2rVAuZ4+0gouH6MTEhR2vM9+P+S8oyjTjE+AWwUVhINqDEcwiA80JJ
+X-Gm-Message-State: AOJu0YwZkQIhN3q/Q+oinJujzJW+VA6rBcGHXStD3xLJUUFduH7z+BHJ
+	NJB7s2xDrK2/AaORPsZ7Mb8RG6aCMf6LEsALVzex0+vrinvkb8zmPr3tcsTj3OoQlZGdxlYwF3a
+	drypsS4j0emVhbxNVM1+FGYIfiS4=
+X-Google-Smtp-Source: AGHT+IHgOcsuxrqW0t2XLKTOIxiWENVYN+gYwOfy3XkeKLpBv3+o5PftE+g10QYy+oHEGt9JsF/LRFsWvEdocg826T0=
+X-Received: by 2002:a05:6e02:11a5:b0:366:95be:fdc6 with SMTP id
+ 5-20020a056e0211a500b0036695befdc6mr9347885ilj.28.1710723773618; Sun, 17 Mar
+ 2024 18:02:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240227005606.1107203-1-kcfeng0@nuvoton.com> <20240227005606.1107203-2-kcfeng0@nuvoton.com>
- <9c92dac2-2cec-4f66-a8e1-4c0ccd5a3d0e@roeck-us.net>
-In-Reply-To: <9c92dac2-2cec-4f66-a8e1-4c0ccd5a3d0e@roeck-us.net>
+References: <20240227005606.1107203-1-kcfeng0@nuvoton.com> <20240227005606.1107203-4-kcfeng0@nuvoton.com>
+ <a90ed00c-f836-4fb6-8191-9974937e3eb7@hatter.bewilderbeest.net>
+ <CALz278Zgfgob573vgWz4PgC7vb=i8xt3kC1hSjo_cQi00B0XAg@mail.gmail.com>
+ <cd63bec7-01c6-466e-b772-3a3d3d90a7d5@hatter.bewilderbeest.net>
+ <37e11daa-c24e-45b2-a22d-769693fd2038@roeck-us.net> <a93e2971-cafc-480b-b439-f42ed0838660@hatter.bewilderbeest.net>
+In-Reply-To: <a93e2971-cafc-480b-b439-f42ed0838660@hatter.bewilderbeest.net>
 From: Ban Feng <baneric926@gmail.com>
-Date: Mon, 18 Mar 2024 08:58:24 +0800
-Message-ID: <CALz278YKxR4d0k7JApd-ojO-6jNoVG=B+SzBqt+ev9GLfWQPeQ@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] dt-bindings: hwmon: fan: Add fan binding to schema
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: jdelvare@suse.com, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
-	conor+dt@kernel.org, corbet@lwn.net, linux-hwmon@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, openbmc@lists.ozlabs.org, kwliu@nuvoton.com, 
-	kcfeng0@nuvoton.com, DELPHINE_CHIU@wiwynn.com, Bonnie_Lo@wiwynn.com, 
-	naresh.solanki@9elements.com, billy_tsai@aspeedtech.com, 
-	Rob Herring <robh@kernel.org>
+Date: Mon, 18 Mar 2024 09:02:42 +0800
+Message-ID: <CALz278b7BeGoYunqh1Rs91N81sEnU_RDox3urqTb9CFX0ic5_g@mail.gmail.com>
+Subject: Re: [PATCH v4 3/3] hwmon: Driver for Nuvoton NCT7363Y
+To: Zev Weiss <zev@bewilderbeest.net>
+Cc: Guenter Roeck <linux@roeck-us.net>, jdelvare@suse.com, robh+dt@kernel.org, 
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, corbet@lwn.net, 
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, kcfeng0@nuvoton.com, 
+	kwliu@nuvoton.com, openbmc@lists.ozlabs.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, DELPHINE_CHIU@wiwynn.com, 
+	naresh.solanki@9elements.com, billy_tsai@aspeedtech.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Guenter,
+HI Guenter and Zev,
 
-ok.
+If there's no concern about supporting nct7362 in nct7363 driver,
+I'll add it to the of_device_id and i2c_device_id table in v5.
 
 Thanks,
 Ban
 
-On Fri, Mar 8, 2024 at 2:53=E2=80=AFAM Guenter Roeck <linux@roeck-us.net> w=
+On Wed, Mar 13, 2024 at 8:21=E2=80=AFAM Zev Weiss <zev@bewilderbeest.net> w=
 rote:
 >
-> On 2/26/24 16:56, baneric926@gmail.com wrote:
-> > From: Naresh Solanki <naresh.solanki@9elements.com>
+> On Tue, Mar 12, 2024 at 04:58:12PM PDT, Guenter Roeck wrote:
+> >On 3/12/24 16:18, Zev Weiss wrote:
+> >>On Wed, Mar 06, 2024 at 11:35:31PM PST, Ban Feng wrote:
+> >>>Hi Zev,
+> >>>
+> >>>On Sat, Mar 2, 2024 at 4:19=E2=80=AFPM Zev Weiss <zev@bewilderbeest.ne=
+t> wrote:
+> >>>>
+> >>>>On Mon, Feb 26, 2024 at 04:56:06PM PST, baneric926@gmail.com wrote:
+> >>>>>From: Ban Feng <kcfeng0@nuvoton.com>
+> >>>>>
+> >>>>>NCT7363Y is an I2C based hardware monitoring chip from Nuvoton.
+> >>>>>
+> >>>>>Signed-off-by: Ban Feng <kcfeng0@nuvoton.com>
+> >>>>>---
+> >>
+> >><snip>
+> >>
+> >>>>>+
+> >>>>>+static const struct of_device_id nct7363_of_match[] =3D {
+> >>>>>+      { .compatible =3D "nuvoton,nct7363" },
+> >>>>
+> >>>>As far as I can see from the code in this driver, it looks like this
+> >>>>driver should also be compatible with the nct7362; shall we add the I=
+D
+> >>>>table entry for it now?  (Though I only have a datasheet for the
+> >>>>nct7362, not the nct7363, so I don't know exactly how they differ.)
+> >>>
+> >>>As far as I know, the difference between these two ICs is 0x2A~0x2C
+> >>>Fading LED for 7362, and 0x2A Watchdog Timer for 7363.
+> >>>In my v1 patch, I indeed add the nct7362 to the ID table, however,
+> >>>this makes it more complicated and our datasheet isn't public yet.
+> >>>I think maybe supporting more chips will be done in the future, but no=
+t now.
+> >>>
+> >>
+> >>If the only differences are in features the driver doesn't utilize, I'm=
+ not clear on how it adds any complexity.  As far as I'm aware, neither dat=
+asheet is public (NCT7363 nor NCT7362), so if we're going to have a public =
+driver for one, why not also do so for the other?  It's a single additional=
+ line -- and furthermore, having made that change and tested it out, I can =
+report that the driver seems to work just fine on NCT7362 hardware as well.
+> >>
 > >
-> > Add common fan properties bindings to a schema.
+> >"if we're going to have a public driver for one, why not also do so for =
+the other"
 > >
-> > Bindings for fan controllers can reference the common schema for the
-> > fan
+> >If you are trying to say that there should be two separate drivers, sorr=
+y, that
+> >would be absolutely unacceptable.
 > >
-> > child nodes:
-> >
-> >    patternProperties:
-> >      "^fan@[0-2]":
-> >        type: object
-> >        $ref: fan-common.yaml#
-> >        unevaluatedProperties: false
-> >
-> > Reviewed-by: Rob Herring <robh@kernel.org>
-> > Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
-> > Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
-> > Signed-off-by: Ban Feng <kcfeng0@nuvoton.com>
 >
-> This patch (through its submission with the aspeed-g6 fan driver) is now =
-in hwmon-next.
+> Sorry if that was unclear -- it was very much *not* my intent to suggest
+> adding a separate driver, merely that we make the nct7363 driver also
+> support the nct7362.
 >
-> Please do not resend. Any updates should be submitted as follow-up patche=
-s.
 >
-> Guenter
+> Zev
 >
