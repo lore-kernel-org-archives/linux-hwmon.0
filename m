@@ -1,224 +1,101 @@
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C8B6537F4
-	for <linux-hwmon@vger.kernel.org>; Mon, 18 Mar 2024 16:12:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCE4C5339F
+	for <linux-hwmon@vger.kernel.org>; Mon, 18 Mar 2024 16:28:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710778363; cv=none; b=dChQdgBcpY6E2AXK99EBZIMndgrhNV4ryBZJLGpaLhgK8NuDyD4GfFcNN8O9U6pwMcnqKlOIaVCy1qhkU16nTLJSCumb0DHtzGuctm96YLQ5eKgVzW+MBqtWisuCaaUevL5aMdI2kG3ZQwUrLY3SnrcgTEJXAMXXGGjwjAqfUcE=
+	t=1710779301; cv=none; b=E2WP+tJ7Jj623SoZlKZKoJyvxQEY0DdckY74737i6xToUQ2RsOc/0BX3ZbJA35eVXsPUbAncYnY4qIqHNOsKCrbxHTXnnU1Mox0jNMv8uANMZeoB+/qPkyp4t6oYyaBCAaC7VRAIRb6AzC7H/JEHpGd5NRPTBx0Ew/bh9waqUyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710778363; c=relaxed/simple;
-	bh=qWIWRdlhHxM2YpAOK/CdrCJzY7erfxdMa6eYTRm+3dw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=aYzd0kEQeOyZPhtt1RFGdrPy4fs6uM/OErVighx/Wu8E0R84f06ZVMrgTRPwPXVHQ6z7Lb3dR/tXBcrhD31+b3H2xi2Ac1zRSs2JkhNylMbsxrlzsYP/V9RS1IuudwSBimm0tT3wJBqCERTlUtO9InGBc0YiGI4nKUcmNZ7H6RQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RA8YGDjO; arc=none smtp.client-ip=209.85.208.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RA8YGDjO"
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2d485886545so73041491fa.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 18 Mar 2024 09:12:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1710778360; x=1711383160; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=G9oKEy66iQx7fLJGG39Ko2q9eHHj3gCyG5CIVLyLT/E=;
-        b=RA8YGDjOJMIoNz4+OUKFaBLtLr8J8Ocy3rMUGM9RIPCwSeVxIrXz8ESllrm9zZnKZv
-         jUaKcL/KWDI1tcahpkZAivgU5Lnb5TKWVO4UEJBYS4UwujTq5EUmOkp1U4YnAeGLOV3x
-         IdH6xjopRgehIVTIF1ScHzIxeCFj4ydMoRIcMdqUTgdNSxuKut6Sq42HW19sigZJyX2m
-         6PW8nn3nzX1HFZjei1Ph5BacvvozHDkiG6yvljnzKlpPBKyjK3cTjZJc/h32DaxZ68r7
-         n6Lfd5EKULExqCx5yGzQBdG4XXYDljJ4VOZUUugssf51tG3vXHzEGq13zssSGuyNagda
-         9MWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710778360; x=1711383160;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=G9oKEy66iQx7fLJGG39Ko2q9eHHj3gCyG5CIVLyLT/E=;
-        b=ghkS3xCUmV62bv55xB7bKtQljSo9YY7mIKoH/Of79WHK0AqqUBj3hqrZmverZJ7Ggf
-         AgF22FB7aD3ygoN01+jxXgrSImoMvavBu6Bh1T4Uv2QKrFYiaXIZlbgi87FOKxDjFC1f
-         0uO86njgrA86Qb9y4C8qX1c+c7xqznbAFl8Op+lhBMwPR3UwAYj6s/nB196m7bi0B2cL
-         +yALQsHRNC1xG0brvG3ycD/QYeZnl/2E0+vtwHsPx/j2CKY3a+DitStOKEqOUX4UCP+d
-         +pDgh1ri5Pq1e9a8ktyOvG3p9Xfl6gkKkRsae9IsEI+LYvRrOlEy5XFFYZf1ViTHfecj
-         Xe+w==
-X-Forwarded-Encrypted: i=1; AJvYcCUoxUf5mtHDg4qcBq9zok966u3zRJmpdIDHeMNeYkB78ZvF4g20WvA6vQpf6lOqd6ncYSFPAgUHzGTm7DBkpoeMVPgVUtIBwJwcGqE=
-X-Gm-Message-State: AOJu0YxKatqZdzBaFqj9LiGXQ05DdFGPvsEdiEdf8e/8PdUgc9Itn2Ta
-	6/K8ZHoF5tkRj43n59Px9uuTzNtaVZMtwuTdnDNfT3DRuy3Hmx1pS/hldJxm7aan+EyqsgU9ACU
-	3
-X-Google-Smtp-Source: AGHT+IHR94yES1pCaCbXUjgif8jE41k55vx1ZSsmjTkcDG0R6oz5GBnNbcczlwrVj1NsdRYJt7/t2w==
-X-Received: by 2002:a05:651c:337:b0:2d4:513d:7b34 with SMTP id b23-20020a05651c033700b002d4513d7b34mr4857648ljp.17.1710778359619;
-        Mon, 18 Mar 2024 09:12:39 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.222.97])
-        by smtp.gmail.com with ESMTPSA id e25-20020a170906845900b00a4652efd795sm5016635ejy.83.2024.03.18.09.12.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Mar 2024 09:12:39 -0700 (PDT)
-Message-ID: <04b39945-e4e1-43bd-83bf-0d7eb3730352@linaro.org>
-Date: Mon, 18 Mar 2024 17:12:37 +0100
+	s=arc-20240116; t=1710779301; c=relaxed/simple;
+	bh=0kwrQdVB9fHadW0zcs/zefkApf0unD8BGUorM1zzxmk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=U9i7ThvnvVWM4+IFLXeKxQUee5GzriX5Z+Q1y03bFMJ5pr5MYPZNy5OvwMpI+ONoU92Tx4H2uCqHhU6EC6NXLW1QjDl22RKOEFqqzN/ZKzsREt0qQYHhmrffv6NnaSphw7vWAX7pxnyBxBrIQFz6La3pYmSsRSPcYVKOMngCDNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rmFqA-0007vm-3z; Mon, 18 Mar 2024 17:27:58 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rmFq7-00771K-3i; Mon, 18 Mar 2024 17:27:55 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rmFq7-0084aB-04;
+	Mon, 18 Mar 2024 17:27:55 +0100
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Joel Stanley <joel@jms.id.au>
+Cc: Andrew Jeffery <andrew@codeconstruct.com.au>,
+	linux-hwmon@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org,
+	linux-pwm@vger.kernel.org,
+	kernel@pengutronix.de
+Subject: [PATCH 1/2] hwmon: (aspeed-g6-pwm-tacho): Make use of pwmchip_parent() accessor
+Date: Mon, 18 Mar 2024 17:09:49 +0100
+Message-ID:  <5c6a11dd10cd29e0f7bfaa1fdef145523347cb58.1710777536.git.u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <cover.1710777536.git.u.kleine-koenig@pengutronix.de>
+References: <cover.1710777536.git.u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] hwmon: pmbus: adp1050 : Add driver support
-Content-Language: en-US
-To: Radu Sabau <radu.sabau@analog.com>, Jean Delvare <jdelvare@suse.com>,
- Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org
-References: <20240318112140.385244-1-radu.sabau@analog.com>
- <20240318112140.385244-3-radu.sabau@analog.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240318112140.385244-3-radu.sabau@analog.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1715; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=0kwrQdVB9fHadW0zcs/zefkApf0unD8BGUorM1zzxmk=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBl+GdO3EeEUQ6nZ6pNdoQlPypXol9wo4WBc8brb /motAhELkWJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZfhnTgAKCRCPgPtYfRL+ TsW1B/4z18EWUeJw8wanzvuSJt/qMpj2oBXKwiEzs+LtnrnJley6qeMoySlIeJ5WW0nVSbG/J8x 49nH5bAVvuR/5lnNT5RxR95dy5lfuYeos4aUzW7/SpMgWmMOAu7XewYt5nl1EYdwFA2YweSM0l8 0VbVlsQubVnIUeb9ab19Y8u9SfvoQRQ2lGD2Ps6hFhPwRSalSVHme23YyDL3zsC0hpO7spSow/b qjCr/BoWYZ1bN8xRYQXqlhjUZF8OGinn2haV7XU7N0DIOlWl1foIDVJk94eO7ucCLQzgCqkhudF y8x+4Sd55CZSPS04U8/MZetP0J/uGr9gzp33ojHyNxVCLjJD
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
-On 18/03/2024 12:21, Radu Sabau wrote:
-> Add support for ADP1050 Digital Controller for Isolated Power Supplies
-> with PMBus interface Voltage, Current and Temperature Monitor.
-> 
+struct pwm_chip::dev is about to change. To not have to touch this
+driver in the same commit as struct pwm_chip::dev, use the accessor
+function provided for exactly this purpose.
 
-...
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/hwmon/aspeed-g6-pwm-tach.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> +static int adp1050_probe(struct i2c_client *client)
-> +{
-> +	u32 vin_scale_monitor, iin_scale_monitor;
-> +	int ret;
-> +
-> +	if (!i2c_check_functionality(client->adapter,
-> +				     I2C_FUNC_SMBUS_WRITE_WORD_DATA))
-> +		return -ENODEV;
-> +
-> +	/* Unlock CHIP's password in order to be able to read/write to it's
-> +	 * VIN_SCALE and IIN_SCALE registers.
-> +	*/
-> +	ret = i2c_smbus_write_word_data(client, ADP1050_CHIP_PASSWORD, 0xFFFF);
-> +	if (ret < 0) {
-> +		dev_err_probe(&client->dev, "Device can't be unlocked.\n");
-
-Syntax is: return dev_err_probe(). Same in other places.
-
-> +		return ret;
-> +	}
-> +
-> +	ret = i2c_smbus_write_word_data(client, ADP1050_CHIP_PASSWORD, 0xFFFF);
-> +	if (ret < 0) {
-> +		dev_err_probe(&client->dev, "Device couldn't be unlocked.\n");
-> +		return ret;
-> +	}
-> +
-> +	/* If adi,vin-scale-monitor isn't set or is set to 0 means that the
-> +	 * VIN monitor isn't used, therefore 0 is used as scale in order
-> +	 * for the readings to return 0.
-> +	*/
-
-Please use Linux coding style comments. /* and aligned */.
-
-
-> +	if (device_property_read_u32(&client->dev, "adi,vin-scale-monitor",
-> +				     &vin_scale_monitor))
-> +		vin_scale_monitor = 0;
-> +
-> +	/* If adi,iin-scale-monitor isn't set or is set to 0 means that the
-> +	 * IIN monitor isn't used, therefore 0 is used as scale in order
-> +	 * for the readings to return 0.
-> +	*/
-> +	if (device_property_read_u32(&client->dev, "adi,iin-scale-monitor",
-> +				     &iin_scale_monitor))
-> +		iin_scale_monitor = 0;
-> +
-> +	ret = i2c_smbus_write_word_data(client, ADP1050_VIN_SCALE_MONITOR,
-> +					vin_scale_monitor);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret = i2c_smbus_write_word_data(client, ADP1050_IIN_SCALE_MONITOR,
-> +					iin_scale_monitor);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return pmbus_do_probe(client, &adp1050_info);
-> +}
-> +
-> +static const struct i2c_device_id adp1050_id[] = {
-> +	{"adp1050", 0},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(i2c, adp1050_id);
-> +
-> +static const struct of_device_id adp1050_of_match[] = {
-> +	{ .compatible = "adi,adp1050"},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, adp1050_of_match);
-> +
-> +static struct i2c_driver adp1050_driver = {
-> +	.driver = {
-> +		.name = "adp1050",
-> +		.of_match_table = of_match_ptr(adp1050_of_match),
-
-Drop of_match_ptr, you will have here warnings.
-
-> +	},
-> +	.probe = adp1050_probe,
-> +	.id_table = adp1050_id,
-> +};
-> +module_i2c_driver(adp1050_driver);
-> +
-> +MODULE_AUTHOR("Radu Sabau <radu.sabau@analog.com>");
-> +MODULE_DESCRIPTION("Analog Devices ADP1050 HWMON PMBus Driver");
-> +MODULE_LICENSE("GPL");
-> +MODULE_IMPORT_NS(PMBUS);
-
-Best regards,
-Krzysztof
+diff --git a/drivers/hwmon/aspeed-g6-pwm-tach.c b/drivers/hwmon/aspeed-g6-pwm-tach.c
+index 597b3b019d49..64def5e4cdf6 100644
+--- a/drivers/hwmon/aspeed-g6-pwm-tach.c
++++ b/drivers/hwmon/aspeed-g6-pwm-tach.c
+@@ -195,7 +195,7 @@ static int aspeed_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+ 
+ 	expect_period = div64_u64(ULLONG_MAX, (u64)priv->clk_rate);
+ 	expect_period = min(expect_period, state->period);
+-	dev_dbg(chip->dev, "expect period: %lldns, duty_cycle: %lldns",
++	dev_dbg(pwmchip_parent(chip), "expect period: %lldns, duty_cycle: %lldns",
+ 		expect_period, state->duty_cycle);
+ 	/*
+ 	 * Pick the smallest value for div_h so that div_l can be the biggest
+@@ -218,12 +218,12 @@ static int aspeed_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+ 	if (div_l > 255)
+ 		div_l = 255;
+ 
+-	dev_dbg(chip->dev, "clk source: %ld div_h %lld, div_l : %lld\n",
++	dev_dbg(pwmchip_parent(chip), "clk source: %ld div_h %lld, div_l : %lld\n",
+ 		priv->clk_rate, div_h, div_l);
+ 	/* duty_pt = duty_cycle * (PERIOD + 1) / period */
+ 	duty_pt = div64_u64(state->duty_cycle * priv->clk_rate,
+ 			    (u64)NSEC_PER_SEC * (div_l + 1) << div_h);
+-	dev_dbg(chip->dev, "duty_cycle = %lld, duty_pt = %d\n",
++	dev_dbg(pwmchip_parent(chip), "duty_cycle = %lld, duty_pt = %d\n",
+ 		state->duty_cycle, duty_pt);
+ 
+ 	/*
+-- 
+2.43.0
 
