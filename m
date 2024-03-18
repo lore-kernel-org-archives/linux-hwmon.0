@@ -1,164 +1,90 @@
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2CD756449
-	for <linux-hwmon@vger.kernel.org>; Mon, 18 Mar 2024 18:00:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E597855C0E;
+	Mon, 18 Mar 2024 18:11:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710784844; cv=none; b=aeT3VVf2xNGkjfW63PUXQsoT1mYIecARfX5V4vCoo9WuEOCsg5hZISDz1g3+vw7tumOIONUqwUZaPRGwIBZysSwgI9miw6JLZTAWIVSm+tCOOEs9QHjQGWm5zHXxnLNhBOwLiqCOIGA8STSDBZFTYA4LhJmDFImEflPkmHtqH+8=
+	t=1710785493; cv=none; b=FEo0jfxvXI/TyNJg11hlL9vOB7Plb2OMMcEnHbqIPtEeGzxDUghVFCTblkYIEVxUE/bAxQ329d6c7TEY3Et8397npv3zeLgpJIuhEDiAsc/X8XFXqxvNWVqIAB0pNJlPAKWlWCCDgSUJEx50iTtlYDw3NXmoOyirGTQ8U3v3EmY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710784844; c=relaxed/simple;
-	bh=JZTERrfhGHZ98bdsXf2rYYX8wFraHwMFYnZf4nSwBO8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=BcFUSGfPoOCZkqD3qYZbGx4uzWWz8synPCeApf6Uuh31JW7YizqjTr9/lI2yJ6QN8ZBOnrpULPUDgrStSdveh0nULIsw34VAlU+GrNpuHm6m9a9ulDQFFyy4pXzunDUAbUia5StpDwWVGoV+qxT1AZcW/GohbjlmHRSOV65N4lc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=poUywc5M; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1710785493; c=relaxed/simple;
+	bh=tSZn6Ejd47KXYnMy/z4XjMIbJu1/NOUxNOUSsd7bn6w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mxRJMYt7qM01zIMN4ox/GAm58e+c1BqNmtRA4CEWhWtDVkh2i+QSn4k0iUWBk3UbQyVXzX57sNazINxB/XqaXHTt6dEU0JJ8PMjA0AoZrcVmgATktXAmnJB6EVGgj3uiZEqGGJgTW1VbwjsbGCs3CxDbK2rwPHI2in7iY9ervhg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ns2botfh; arc=none smtp.client-ip=209.85.161.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="poUywc5M"
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a46a7b8e07fso311659066b.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 18 Mar 2024 11:00:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ns2botfh"
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5a49261093cso1455257eaf.3;
+        Mon, 18 Mar 2024 11:11:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1710784841; x=1711389641; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GSD1BKkDRKT4zNl8Y1a8A4oIxqi6RhgxEsOmyYNbPCo=;
-        b=poUywc5MXljQ2hP7OarBtF/S6327rzsXvlTMN8pdPS6y0AHsyMzxk47ZvSx4tq/ErR
-         xbQFrgZOnk1PMEXjuGVSd9JdLqmiSHu4f2V3a2byAnoxA5RviP16kJJAUu/7gtCDvGsn
-         ga1Hs1AiyRvCvVdCoXY/tuCAnBzMTQUwZiCbgyNrs6RsE01bmH7Js5N8kBkrezEfUYgk
-         ajuETanJINB9SHM+AluAJRvtSnBzSksdsdrKE60a8Rd8VpOiXwrTGLS7jirx8gAQXb2G
-         tc2qarHx8spFZ9xEPzMuXx+OOw2cosg1Lzvx9rr4kneiv2bflpM6xTPndUpd4Bn/vD7L
-         tfCg==
+        d=gmail.com; s=20230601; t=1710785491; x=1711390291; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=X0VKqCIpVP/BtUvyp9zPnBwFIX1VHIioMo2d+w9H9LA=;
+        b=ns2botfhXbTfzwgFKzE/H1HfdzFk1n/dhCD7pOXLMDhJyuuzxYfm4C43rzfAOB6tuw
+         R9veQQD9Z2YmDA/5o6dMtU6XWLECTRJjhPUc0vE06vC530jsGCRhKAl7pZk1zhC8/3i9
+         qqrOZbwIYB3KWDXkg6tyiav3jtE5AL7cKBi8OHjyQQjKqR42IIr0hEjck5D/+jrGfqUe
+         dY+bxC+zd16LtN/XJGI6TGlLklpcNezMBrpfG6jaS29J0YrW+XiQUI5abH1VmG7eAE/b
+         cWt4FrhiozvHcYI+i6kC+t84q324g4Ya03vkT4vMXMBwHjiYFNJ+GDMBUr3Vgn5XLPQn
+         rhuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710784841; x=1711389641;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GSD1BKkDRKT4zNl8Y1a8A4oIxqi6RhgxEsOmyYNbPCo=;
-        b=PgfkvKcou/Z3VE7Y9LM+KFV+e8cb5+hbpKvlrzCtgG31YSJyfmbE57xnKYa2mb/KXJ
-         cR7q3gYwzX6xOgyvXeMtd9unafjUG1gKmp1w8uXjX0jpOZBp9aiL2KfjeMl1APMdf9dU
-         DD1ibWr7tIOX9LcChlxbctd8/yYmLg7P9IvInuz7ymY5aliTY0cu726heR+eGLoZi/Ur
-         du+VPmCIT8T2Y6k9LT2gmO5RYfE/uO60JapPCkz4hw1doqD9zbcMpwUpH3FQWhFgSMQy
-         DMZ6/AGvGeWEWVU43chZ0NCxC9RCxmlcMmts8zLOYoESV1qSq70dDgzFTUyX4/Z6FD8q
-         0pmg==
-X-Forwarded-Encrypted: i=1; AJvYcCWcWVEz1TCFby88DlR1fhlH/9aJiu7bMc5IVLbYSgc0haIxXXOvJr7f76QJJ0u8kduV9IZW1wfL0oPFtrm51sOo6EymvQWcmF7xXLw=
-X-Gm-Message-State: AOJu0YxVntbRpV3ut27YgYHozri5RxTJo84CMwxHfr8CuNb+axXpGJpZ
-	GD7Mf3P263juh3PtX9TMh1B+BEyjwyeDVaJzrlyXrXzsZR7CQVXZy1JnBECL7P0=
-X-Google-Smtp-Source: AGHT+IGSsuCCHT+xvdzHHjGgx7IFJRlVzUlz+T9lZi1dvi3o6LaK3eFNhUeCRsLXsrkKn/j+5UO+dw==
-X-Received: by 2002:a17:907:94d1:b0:a46:8846:5abe with SMTP id dn17-20020a17090794d100b00a4688465abemr8273080ejc.62.1710784840993;
-        Mon, 18 Mar 2024 11:00:40 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.222.97])
-        by smtp.gmail.com with ESMTPSA id jw10-20020a170906e94a00b00a46c743bc6bsm969288ejb.32.2024.03.18.11.00.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Mar 2024 11:00:40 -0700 (PDT)
-Message-ID: <ba01a372-b012-4b39-9494-f13b2a80123f@linaro.org>
-Date: Mon, 18 Mar 2024 19:00:38 +0100
+        d=1e100.net; s=20230601; t=1710785491; x=1711390291;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=X0VKqCIpVP/BtUvyp9zPnBwFIX1VHIioMo2d+w9H9LA=;
+        b=izYxnqz/dGwfKLrd+Srhw1y7hlZ815khXOTvoE3cPBhex9+fwHe2EdmrtJxLj6vJXc
+         03sgM78ErjDfTTkdD+nHQ/RzB86u47TlHdrGIEpZX0yldpYwT1a5VWYt9kce9aKudW4t
+         P5Pavtkw1+NHB9856VL2U+EMCLNyCpKGNATrlkgiVBxbe5dwIftufGCPfptTODtLkBKM
+         Rm/ioIOAYSUHsXrLJYEpXCHQtULj8wNIhPoIcAKTdcIIvAJMkTqWHXHv+riNWe/5zMrI
+         G4PJ1YWk6/wwPelC+SuTt00kUNDV7/T845rIKpjo0ypKq7xcV3Pa3q+Kk13UzSEzX/k6
+         jzQA==
+X-Forwarded-Encrypted: i=1; AJvYcCUPwr4RRycnExa3BQr5Iv8c3F7iE5/jYyzki3WucnPBgbBUCAzTmJfGECmQb158Cjaq7mNoZe2YmN9mfpjgVjvT5ThN42gEFawwdqN2X4gPTsVQlzOrkuEGLxp6z66WHzgVLXZTJE4=
+X-Gm-Message-State: AOJu0Yxe2JyWTpztQKV9msbHSlKiM1QmfArrhj2a62qT+juAD7M34/8f
+	ptszoauTa8IyfcoLM3ACm6tX//dtZ/NlBUWOoV7YnYKIOfG0wdr4qELdLL/b
+X-Google-Smtp-Source: AGHT+IEPU0++5brWJmarVPFjxJR6uw46576Yky3MEE1nT2iKYYnOieBZvcEfIWsDtDRBYexZlfip2g==
+X-Received: by 2002:a05:6359:7c20:b0:17e:76a1:4dd3 with SMTP id xm32-20020a0563597c2000b0017e76a14dd3mr17527901rwb.4.1710785490915;
+        Mon, 18 Mar 2024 11:11:30 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f5-20020a056a000b0500b006e64baac744sm8255377pfu.120.2024.03.18.11.11.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Mar 2024 11:11:30 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Mon, 18 Mar 2024 11:11:29 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Kousik Sanagavarapu <five231003@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Subject: Re: [PATCH v2 2/2] hwmon: lm70: fix links in doc and comments
+Message-ID: <6c8b2699-5488-4ae0-8d78-59bcb2030a2e@roeck-us.net>
+References: <20240318130840.74589-1-five231003@gmail.com>
+ <20240318154540.90613-1-five231003@gmail.com>
+ <20240318154540.90613-3-five231003@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] hwmon: pmbus: adp1050 : Add driver support
-Content-Language: en-US
-To: Guenter Roeck <linux@roeck-us.net>, Radu Sabau <radu.sabau@analog.com>,
- Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org
-References: <20240318112140.385244-1-radu.sabau@analog.com>
- <20240318112140.385244-3-radu.sabau@analog.com>
- <04b39945-e4e1-43bd-83bf-0d7eb3730352@linaro.org>
- <8adceac6-9b23-4457-bb9a-8f7e55a581f9@roeck-us.net>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <8adceac6-9b23-4457-bb9a-8f7e55a581f9@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240318154540.90613-3-five231003@gmail.com>
 
-On 18/03/2024 17:48, Guenter Roeck wrote:
-> On 3/18/24 09:12, Krzysztof Kozlowski wrote:
->> On 18/03/2024 12:21, Radu Sabau wrote:
->>> Add support for ADP1050 Digital Controller for Isolated Power Supplies
->>> with PMBus interface Voltage, Current and Temperature Monitor.
->>>
->>
->> ...
->>
->>> +static int adp1050_probe(struct i2c_client *client)
->>> +{
->>> +	u32 vin_scale_monitor, iin_scale_monitor;
->>> +	int ret;
->>> +
->>> +	if (!i2c_check_functionality(client->adapter,
->>> +				     I2C_FUNC_SMBUS_WRITE_WORD_DATA))
->>> +		return -ENODEV;
->>> +
->>> +	/* Unlock CHIP's password in order to be able to read/write to it's
->>> +	 * VIN_SCALE and IIN_SCALE registers.
->>> +	*/
->>> +	ret = i2c_smbus_write_word_data(client, ADP1050_CHIP_PASSWORD, 0xFFFF);
->>> +	if (ret < 0) {
->>> +		dev_err_probe(&client->dev, "Device can't be unlocked.\n");
->>
->> Syntax is: return dev_err_probe(). Same in other places.
->>
+On Mon, Mar 18, 2024 at 09:08:35PM +0530, Kousik Sanagavarapu wrote:
+> Update links in the documentation and in-code comments which point to
+> the datasheet.
 > 
-> dev_err_probe() expects the error number as second parameter, so I don't
-> really understand how the above even compiles.
+> The current links don't work because National Semiconductor (which is
+> the manufacturer of this board and lm70) has been a part of Texas
+                      ^^^^^^^^^^
 
-I did not explain the arguments, because they are obvious... but if you
-need so:
+Is this a leftover from the other patch ? The lm70 driver supports
+the LM70 chip, not a specific board.
 
-return dev_err_probe(&client->dev, ret, "Device can't be unlocked.\n");
-
-Best regards,
-Krzysztof
-
+Guenter
