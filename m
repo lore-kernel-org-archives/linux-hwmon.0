@@ -1,61 +1,61 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9726654F88;
-	Mon, 18 Mar 2024 16:45:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56FC955E55;
+	Mon, 18 Mar 2024 16:48:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710780338; cv=none; b=RcLfTdFPDhyF7EbdJq/Qme48uxJFvSoeHMyQvDG09o2eZZ1sPGj44wH3eiDR1WlPDgKDwftcxWrGQGSXI9WBY8cvC9bUoRDFHZeAzTAaF/6grvbNAQTCKfnJu9xgWIfI6WKm7236Ewr1YGvgxLhHUXGWe4r105JB8V5DaTa4suQ=
+	t=1710780517; cv=none; b=k5vkQLSu76ZdFE6S8pJEbIV2UxgSDNlHBy6PNtKiY/0WVigiL8ECiupWwEHG6CrIg6ETGp7oPf95Xk2S8J28ZIdZTwzwfnPKk82H2QzX34GzEAyudMo3yJDbc1bXesvjW91sXvACqD8pgEGOc+HfLYiGIA9L5ciBoVyB2LMKa1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710780338; c=relaxed/simple;
-	bh=sABFKBg5L4LevrgQ94GaraCqZCtwFRrk6I13qKPWYV0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=l+rVlQAUst/Uua71MsgyazSOnjOaF3NNXCeWkoxjOSEvnDdf1sB5j5wisli9LoAPkYNJQfs3xloDc44KCUk6/leR9B48bCDoOm/TBVIcI6AL7gQO2aim2q8s1xPVEf/s1dH+3XuJ2oqumYjAmBJ1UZWv2KQvI/GwvI1B1zSjFzQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OS2R7G1v; arc=none smtp.client-ip=209.85.216.48
+	s=arc-20240116; t=1710780517; c=relaxed/simple;
+	bh=lU1C7DTp85JKeNgKskraiH+mdgY/2X4yC/gVSR1xvnI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=fHZwoEY7EH7/OIXuUfUYVvTY0LU6ieuPCMdYDH5eIJS4Z07xr+OEqAzywxH1nTib8U8IPD5vl2wLizc2CjXnFNXNQlQXI5DqdJTusGKixESX7Nv1lWWkTa9ouo+7g0WtDGxbaLVW8ZQ9VdF+iXPkuBMg+mLU4c7iy1j4mKu7aUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ezgxXPKU; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OS2R7G1v"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-29fb7e52731so700852a91.2;
-        Mon, 18 Mar 2024 09:45:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ezgxXPKU"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1def142ae7bso28414725ad.3;
+        Mon, 18 Mar 2024 09:48:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710780336; x=1711385136; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20230601; t=1710780515; x=1711385315; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=RIAmxMfGxmKF/2fO5lCEP9y+H3IyDxkrQtEBRJf8D24=;
-        b=OS2R7G1vRp8szGQWT0mXZCo7Gg3QIWcVZsDRLD1sQpinFOSR+V248UtOD+Tjp3p8fs
-         67oo+ZiJNhAyhhOC7sqRf/esMIN2+cbpZIlqYGM8Kw4r+zLxzuVDC52xcmbqMpY9n78G
-         YAnecNrlvsrof4TkU5kqaTSdbrHLye0KrGUsQaCnzyM3XBVdd/OOFEyPiVArEjd3aMlI
-         w7hfNg6yMVonyctU859xzsjG1OmAw+Z44ceXZBk+on7BE4acspJXQzxIOOTjovf99XYr
-         eL0S8i5jUGkTyCsBlHi4g9RB80HJn8ZGXpFf53pIFA7MvtKY8ZJ/gt4w0/zr6ewtVFAj
-         QTvw==
+        bh=iZIqnQz5vGWxZVXKOkJZQyu5dPoIWDD5/kalhVDtvps=;
+        b=ezgxXPKUlpRyMJ4S99HXbJ5HusOPCeNyCau+6UixsrOKBru9+4JtrP9RSTw9XMSEvQ
+         /VR7JR9SRgm20Z7eQehWJNF28uOhc9kHS9nH1Bj4vEV/pVrA41o+iXTKRhElQ+UY/aRV
+         JPfnwK99nr6bY0ZNEC92nAREj+VlggvtPvm8gIZReAQ9n6fgiYFzMvo6RRuIWh/ejEye
+         tVhtPRw3d50RsxEHuHjlUE465VsqEktxKzFVwFc/bkSeXz1H/ucxoB7s2odwuGoSyHTA
+         4FRhHE+0h+w/0U3TYRChsctkSHTYIsqoyCpLwIhniAHLetz67Z3pOSVBNO1umhHgD/ZS
+         Oyxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710780336; x=1711385136;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1710780515; x=1711385315;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=RIAmxMfGxmKF/2fO5lCEP9y+H3IyDxkrQtEBRJf8D24=;
-        b=eEXnAaOtaBwk4fJSJgQlYQ6yQZcjS4cO31WG8YHizZes+l2wYyhelPQS1/JUcEW4wx
-         PjvFmG6sC+WfEZHuR542kR+UaR9P5o/Ydqn/W12dQTTDjdQHmyOeU4NoFrWXBD0XApd9
-         0ZwTR1YYWoT0SsMWKqd60UnEF+CDXe1qoz5ieKf91+2uaCwgS6CPks3AQBNbbVLxigwM
-         Vm3wLJVXWzjCoato1qQ+PEcdOqWDYkyD3UZcyw2EvJeP0nyi5G2d9gqcxMgThinbEIF5
-         E5uTQ9wRKr/rvkYzWbzD9X0Tp1kJDozu4D6wjjRjHIqYpd/SSX7YUK/PRf65sCCq+hvv
-         UYqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVG6GsDZK461mmbYlyTsH20aPK44W604Awp9Edawlec+FdWYVPKEWCyxRx7VIiBjvzcJMzSVM3CAfvTk4pZ/5klvaDkEt4yUzbIj51kE8OArzT1j+um0uctMM2+vHLhRrt8CxozHnw=
-X-Gm-Message-State: AOJu0YwBOf683Stf0upfaF50eD74mzXvN2ZLLzqOsqbvHVaxMTe/Ek1g
-	AHtK2cQMHot6qVPZ0Lv10n60kBQV1pF6ymea2LCakPvwAl49K/f+rm5RmXFa
-X-Google-Smtp-Source: AGHT+IGgowlilkJ3K7SQPHRQGwkmCkG6yPMWjsZrl6pn2FQFmDC8YkOEad9BoD7RmztczbFttM0yhg==
-X-Received: by 2002:a17:90a:8044:b0:29e:5c51:28c5 with SMTP id e4-20020a17090a804400b0029e5c5128c5mr119719pjw.44.1710780335817;
-        Mon, 18 Mar 2024 09:45:35 -0700 (PDT)
+        bh=iZIqnQz5vGWxZVXKOkJZQyu5dPoIWDD5/kalhVDtvps=;
+        b=RI1a4tSn2iL2euxP5L6JtuFZ1oFB41RvG3DYsHyxmIhaJHpXe5fozvS8FH3w8i2EEM
+         3v30QUSQtgbQ63j2gzS1+SuoNO6N/II/zSErbf/yx4UjH0XSSCwyK58e4rYgzJWXQP2N
+         oCTE04bXlkUeqxh4l4+9gnHF+wlXDYt318l3fvm1FAXVOXGrXDDtBUjupkRCdSBU8W4A
+         0IWsKHsVwm9v3vCF/ASi7mSbP9oNDYYa6llG37ubQgrY4uG6ReRF/pakdwPy1fmBtFqU
+         kBLKQy6I61FC56xlFGjCWye8YsnbbuvA0H1zyQ6FG+LXbeYH+sBc/fLo0SNQxrdKajek
+         NLow==
+X-Forwarded-Encrypted: i=1; AJvYcCU1I1czZG0fkNK1c0COwfVAiIJr3kc4FIq928lPLMIBeTuHEMiBSOpExOohYO7jnMN/40NfYEtp+WcBJI6h6z+6NO9f1rNEKbDP6gvEGZIsTHR+JvZ829TA+ooykg1AL5zqcNFgKscXdCY/9K9poxlFGjVA0eVyVgm+hR4l39Xna+6i92BZMxzb5TDtfzQMiFxL0TL3IfTpuayM3XyGKZEXVf+qaXx2e57/Tc65SvAvKODrKk4DTVFlgE/i
+X-Gm-Message-State: AOJu0Yye7uYGFfiwnEeZm/cJw5Pzlgfivqd7dVgP1537gnVo/BE+KeTc
+	FFePzdyfGQd0u4DoVCF+14f5v0uGlZaoT8MjjR0+B3V7YlIqY9Fs
+X-Google-Smtp-Source: AGHT+IG6M8/5lB2addB/juUQJBdlWWsB8Nf1BI7pBnm8QdHQjPXouIOnERH5hJQZWk8zecX3k6LseA==
+X-Received: by 2002:a17:902:d512:b0:1e0:1355:c6b9 with SMTP id b18-20020a170902d51200b001e01355c6b9mr5063253plg.32.1710780515262;
+        Mon, 18 Mar 2024 09:48:35 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r91-20020a17090a43e400b0029c14758eb4sm8859430pjg.8.2024.03.18.09.45.34
+        by smtp.gmail.com with ESMTPSA id f9-20020a170902ce8900b001d949393c50sm2984482plg.187.2024.03.18.09.48.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Mar 2024 09:45:35 -0700 (PDT)
+        Mon, 18 Mar 2024 09:48:34 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b07680fe-969a-49aa-9995-aa51261f1bee@roeck-us.net>
-Date: Mon, 18 Mar 2024 09:45:34 -0700
+Message-ID: <8adceac6-9b23-4457-bb9a-8f7e55a581f9@roeck-us.net>
+Date: Mon, 18 Mar 2024 09:48:33 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,17 +63,19 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] hwmon: (aspeed-g6-pwm-tacho): Make use of
- devm_pwmchip_alloc() function
+Subject: Re: [PATCH 2/2] hwmon: pmbus: adp1050 : Add driver support
 Content-Language: en-US
-To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
- Jean Delvare <jdelvare@suse.com>, Joel Stanley <joel@jms.id.au>
-Cc: Andrew Jeffery <andrew@codeconstruct.com.au>,
- linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-aspeed@lists.ozlabs.org, linux-pwm@vger.kernel.org,
- kernel@pengutronix.de
-References: <cover.1710777536.git.u.kleine-koenig@pengutronix.de>
- <e95e41eea5a138ae206c9116ba3cb1d9e0178284.1710777536.git.u.kleine-koenig@pengutronix.de>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Radu Sabau <radu.sabau@analog.com>, Jean Delvare <jdelvare@suse.com>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>, linux-hwmon@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org
+References: <20240318112140.385244-1-radu.sabau@analog.com>
+ <20240318112140.385244-3-radu.sabau@analog.com>
+ <04b39945-e4e1-43bd-83bf-0d7eb3730352@linaro.org>
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -118,69 +120,39 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <e95e41eea5a138ae206c9116ba3cb1d9e0178284.1710777536.git.u.kleine-koenig@pengutronix.de>
+In-Reply-To: <04b39945-e4e1-43bd-83bf-0d7eb3730352@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 3/18/24 09:09, Uwe Kleine-König wrote:
-> This prepares the aspeed-g6-pwm-tacho driver to further changes of the
-> pwm core outlined in the commit introducing devm_pwmchip_alloc(). There
-> is no intended semantical change and the driver should behave as before.
+On 3/18/24 09:12, Krzysztof Kozlowski wrote:
+> On 18/03/2024 12:21, Radu Sabau wrote:
+>> Add support for ADP1050 Digital Controller for Isolated Power Supplies
+>> with PMBus interface Voltage, Current and Temperature Monitor.
+>>
 > 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
->   drivers/hwmon/aspeed-g6-pwm-tach.c | 15 +++++++++------
->   1 file changed, 9 insertions(+), 6 deletions(-)
+> ...
 > 
-> diff --git a/drivers/hwmon/aspeed-g6-pwm-tach.c b/drivers/hwmon/aspeed-g6-pwm-tach.c
-> index 64def5e4cdf6..332c02216668 100644
-> --- a/drivers/hwmon/aspeed-g6-pwm-tach.c
-> +++ b/drivers/hwmon/aspeed-g6-pwm-tach.c
-> @@ -136,7 +136,6 @@ struct aspeed_pwm_tach_data {
->   	struct clk *clk;
->   	struct reset_control *reset;
->   	unsigned long clk_rate;
-> -	struct pwm_chip chip;
->   	bool tach_present[TACH_ASPEED_NR_TACHS];
->   	u32 tach_divisor;
->   };
-> @@ -144,7 +143,7 @@ struct aspeed_pwm_tach_data {
->   static inline struct aspeed_pwm_tach_data *
->   aspeed_pwm_chip_to_data(struct pwm_chip *chip)
->   {
-> -	return container_of(chip, struct aspeed_pwm_tach_data, chip);
-> +	return pwmchip_get_drvdata(chip);
->   }
->   
->   static int aspeed_pwm_get_state(struct pwm_chip *chip, struct pwm_device *pwm,
-> @@ -459,6 +458,7 @@ static int aspeed_pwm_tach_probe(struct platform_device *pdev)
->   	int ret;
->   	struct device_node *child;
->   	struct aspeed_pwm_tach_data *priv;
-> +	struct pwm_chip *chip;
->   
->   	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
->   	if (!priv)
-> @@ -487,11 +487,14 @@ static int aspeed_pwm_tach_probe(struct platform_device *pdev)
->   	if (ret)
->   		return ret;
->   
-> -	priv->chip.dev = dev;
-> -	priv->chip.ops = &aspeed_pwm_ops;
-> -	priv->chip.npwm = PWM_ASPEED_NR_PWMS;
-> +	chip = devm_pwmchip_alloc(dev, PWM_ASPEED_NR_PWMS, 0);
-> +	if (IS_ERR(chip))
-> +		return PTR_ERR(chip);
->   
-> -	ret = devm_pwmchip_add(dev, &priv->chip);
-> +	pwmchip_set_drvdata(chip, priv);
-> +	chip->ops = &aspeed_pwm_ops;
-> +
-> +	ret = devm_pwmchip_add(dev, chip);
->   	if (ret)
->   		return dev_err_probe(dev, ret, "Failed to add PWM chip\n");
->   
+>> +static int adp1050_probe(struct i2c_client *client)
+>> +{
+>> +	u32 vin_scale_monitor, iin_scale_monitor;
+>> +	int ret;
+>> +
+>> +	if (!i2c_check_functionality(client->adapter,
+>> +				     I2C_FUNC_SMBUS_WRITE_WORD_DATA))
+>> +		return -ENODEV;
+>> +
+>> +	/* Unlock CHIP's password in order to be able to read/write to it's
+>> +	 * VIN_SCALE and IIN_SCALE registers.
+>> +	*/
+>> +	ret = i2c_smbus_write_word_data(client, ADP1050_CHIP_PASSWORD, 0xFFFF);
+>> +	if (ret < 0) {
+>> +		dev_err_probe(&client->dev, "Device can't be unlocked.\n");
+> 
+> Syntax is: return dev_err_probe(). Same in other places.
+> 
+
+dev_err_probe() expects the error number as second parameter, so I don't
+really understand how the above even compiles.
+
+Guenter
 
