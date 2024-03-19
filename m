@@ -1,77 +1,97 @@
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from rs227.mailgun.us (rs227.mailgun.us [209.61.151.227])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8713386;
-	Tue, 19 Mar 2024 00:35:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=71.19.156.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 849543BBE6
+	for <linux-hwmon@vger.kernel.org>; Tue, 19 Mar 2024 05:47:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.61.151.227
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710808550; cv=none; b=hN4xNOXD286O8Go9n1gcIl8E3iHwKTBse3f8iVIjbh+0ZIMC7/FktejoejUc38ci4Xk7quTITdV7AkhlPGIaat3yYxzScLNUd2qBcZBUvW1qmaxspkO1AWjK1lmXXVnCyTDrNfJe+UR25iU8N9gOgdcOOtYf/q43pygXmoTPOOE=
+	t=1710827251; cv=none; b=ekFZdEQA8r7LiuYEU7w75ObjVgdPMIzWEyNmO7RuwzqHy36sAKezxPJBxDCirRCKM/lT8Gd8f/H/cHjOPsdsoyXsMCOmPIlV901s3Z7ay6KF0ltRtdM1aRymSHo9/UHg2UiFlcGUuP+A4ZlJ5Z4Ezx30fS9tsdIgCrzJb19XmDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710808550; c=relaxed/simple;
-	bh=JU1WrOgOLqarLmwt6jYWlaVvFMHVFfDyG9zmPuptmRo=;
+	s=arc-20240116; t=1710827251; c=relaxed/simple;
+	bh=2P2DwSKvdxYAbERqA7CxZKDFTzVKzDQJD7TsOPUnsmU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CAnKorb8KiIbrPjdoCbzxABrJ3+fge+pO8/9uP6eWnzQCUxFRssRtxvPrxpigVSWv/gXDdM+SeYENjQuVV8Fp74/NffOODMWz5qS/plskA7yNDlw4zhez1zDtwhqVdlRCV6ob4dICVUjyz5ZThpN2tDPFIYzcHxGJb4wgJ0Lb0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bewilderbeest.net; spf=pass smtp.mailfrom=bewilderbeest.net; dkim=pass (1024-bit key) header.d=bewilderbeest.net header.i=@bewilderbeest.net header.b=h3O++LR0; arc=none smtp.client-ip=71.19.156.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bewilderbeest.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bewilderbeest.net
+	 Content-Type:Content-Disposition:In-Reply-To; b=MJIobrwL2XWkY2nHYpASm2RPIqphwDeMZemW4KwMnX452XaatULv49j7h9+aD7nhIEGDU7tR5c+5fPrWmJIqU381hWQZ0tv9g34b4jw4xcpS/yMp4sJMiLaQSalpNym1V7c4RPBWXukW3V+2OPvaG6215bxTs7lxczhVN5ibPHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=equiv.tech; spf=pass smtp.mailfrom=equiv.tech; dkim=pass (2048-bit key) header.d=equiv.tech header.i=@equiv.tech header.b=XCkAXYYy; arc=none smtp.client-ip=209.61.151.227
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=equiv.tech
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=equiv.tech
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=bewilderbeest.net header.i=@bewilderbeest.net header.b="h3O++LR0"
-Received: from hatter.bewilderbeest.net (unknown [IPv6:2602:61:712b:6300::2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: zev)
-	by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 3335D21F0;
-	Mon, 18 Mar 2024 17:35:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-	s=thorn; t=1710808542;
-	bh=JU1WrOgOLqarLmwt6jYWlaVvFMHVFfDyG9zmPuptmRo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=h3O++LR0nVfYayQXHwhjqSaFJOeRS5w4DLYMojOoaYwjCC9wW43IgXW35qSByR1Xv
-	 68snXFKLkAWdSYYyf1ndvDTWMm+5eacAwiiv+z5Ntad1lgfS6y9rChthY5ycVvQVCv
-	 Jnxdo1sfKB96FkIZxuYwL/3ayXPhU74ls917m86U=
-Date: Mon, 18 Mar 2024 17:35:40 -0700
-From: Zev Weiss <zev@bewilderbeest.net>
-To: Ban Feng <baneric926@gmail.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, jdelvare@suse.com,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, corbet@lwn.net, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, kcfeng0@nuvoton.com, kwliu@nuvoton.com,
-	openbmc@lists.ozlabs.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, DELPHINE_CHIU@wiwynn.com,
-	naresh.solanki@9elements.com, billy_tsai@aspeedtech.com
-Subject: Re: [PATCH v4 3/3] hwmon: Driver for Nuvoton NCT7363Y
-Message-ID: <6ee65d2c-708d-4e57-97a9-a1343367cf18@hatter.bewilderbeest.net>
-References: <20240227005606.1107203-1-kcfeng0@nuvoton.com>
- <20240227005606.1107203-4-kcfeng0@nuvoton.com>
- <a90ed00c-f836-4fb6-8191-9974937e3eb7@hatter.bewilderbeest.net>
- <CALz278Zgfgob573vgWz4PgC7vb=i8xt3kC1hSjo_cQi00B0XAg@mail.gmail.com>
- <cd63bec7-01c6-466e-b772-3a3d3d90a7d5@hatter.bewilderbeest.net>
- <37e11daa-c24e-45b2-a22d-769693fd2038@roeck-us.net>
- <a93e2971-cafc-480b-b439-f42ed0838660@hatter.bewilderbeest.net>
- <CALz278b7BeGoYunqh1Rs91N81sEnU_RDox3urqTb9CFX0ic5_g@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=equiv.tech header.i=@equiv.tech header.b="XCkAXYYy"
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=equiv.tech; q=dns/txt; s=mx; t=1710827248; x=1710834448;
+ h=In-Reply-To: Content-Type: MIME-Version: References: Message-ID: Subject: Subject: Cc: To: To: From: From: Date: Sender: Sender;
+ bh=awhPCn410aSXJmB/s6Wmb5B5AXJxHHyGsZcyy9sjzsU=;
+ b=XCkAXYYyd9NGwv8zB1Rk2BrFuFti8m4HxnxLJWUqCnQ3yTsMi+mbLhT289KGa07NfwUM4dP6+HrufJPqlEMQW5rNXtGljyWSONDkkrF9h85g7zotFTeYWJ6iBWjh7lMfVIctof71avr0bX8VIkaRtFOIUfKwYtsuO913SH94j5e5FAAtUsLfcXrDkpHaxLak26zja0Bpuamh+OyHdW39+WeCCQxjKp4RdjHVC5H/yNpnjEq5oqwSJ8pb20A0MDgLfGdu4Dq+LgJL0pJr1xKqzAQQnLBjTRtO3NoqinSrV6CqzP3LlABzfFaQCWCXQytRW3iI2+SHUWhh2YmpPE2CTA==
+X-Mailgun-Sending-Ip: 209.61.151.227
+X-Mailgun-Sid: WyJkOWUwNSIsImxpbnV4LWh3bW9uQHZnZXIua2VybmVsLm9yZyIsIjkzZDVhYiJd
+Received: from mail.equiv.tech (equiv.tech [142.93.28.83]) by 569a831ee738 with SMTP id
+ 65f926f0c58633fd7aa38bdd (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 19 Mar 2024 05:47:28 GMT
+Sender: james@equiv.tech
+Date: Mon, 18 Mar 2024 22:47:27 -0700
+From: James Seo <james@equiv.tech>
+To: Armin Wolf <W_Armin@gmx.de>
+Cc: jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [RFC 0/1] hwmon: (hp-wmi-sensors) Support autoloading
+Message-ID: <Zfkm71dmnRsdmYJz@equiv.tech>
+References: <20240318215732.322798-1-W_Armin@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CALz278b7BeGoYunqh1Rs91N81sEnU_RDox3urqTb9CFX0ic5_g@mail.gmail.com>
+In-Reply-To: <20240318215732.322798-1-W_Armin@gmx.de>
 
-On Sun, Mar 17, 2024 at 06:02:42PM PDT, Ban Feng wrote:
->HI Guenter and Zev,
+On Mon, Mar 18, 2024 at 10:57:31PM +0100, Armin Wolf wrote:
+> Currently, the hp-wmi-sensors driver needs to be loaded manually
+> on supported machines. This however is unnecessary since the WMI
+> id table can be used to support autoloading.
+> 
+> However the driver might conflict with the hp-wmi driver since both
+> seem to use the same WMI GUID for registering notify handler.
+> 
+> I am thus submitting this patch as an RFC for now.
+> 
+> Armin Wolf (1):
+>   hwmon: (hp-wmi-sensors) Add missing MODULE_DEVICE_TABLE()
+> 
+>  drivers/hwmon/hp-wmi-sensors.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> --
+> 2.39.2
 >
->If there's no concern about supporting nct7362 in nct7363 driver,
->I'll add it to the of_device_id and i2c_device_id table in v5.
->
->Thanks,
->Ban
->
 
-That sounds good to me, thanks.
+Autoloading was deliberately left out for now because of the GUID
+conflict with hp-wmi's WMI notify handler.
 
+HP's GUID reuse across product lines for different types of WMI
+objects with different names and shapes means that with a patch like
+this, many systems that should only load hp-wmi-sensors but not
+hp-wmi will try to autoload both. (Perhaps all of them; I want to say
+that the GUID 5FB7F034-2C63-45e9-BE91-3D44E2C707E4, which is the
+second of the two GUIDs that hp-wmi uses to autoload, exists on every
+HP system I've examined.)
 
-Zev
+Meanwhile, hp-wmi does various other platform things, and there's so
+much hardware out there that who knows, maybe there are some systems
+that really should load both. I don't think so but I can't rule it
+out.
+
+Unlike hp-wmi-sensors, hp-wmi doesn't survive failure to install its
+notify handler, which sets up a potential race condition depending on
+when hp-wmi and hp-wmi-sensors loads on a given system.
+
+Therefore, I intended to add autoloading at the same time as
+converting hp-wmi-sensors to use the bus-based WMI interface once
+aggregate WMI devices are better supported.
+
+As you mentioned [1], I ran into issues when I tried to do the
+conversion by simply adding the GUID to struct wmi_driver.id_table.
+That resulted in two separate independent instances of hp_wmi_sensors
+being loaded, which isn't what I wanted.
+
+[1] https://lore.kernel.org/linux-hwmon/cd81a7d6-4b81-f074-1f28-6d1b5300b937@gmx.de/
 
