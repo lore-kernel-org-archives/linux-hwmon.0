@@ -1,250 +1,182 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6431025605
-	for <linux-hwmon@vger.kernel.org>; Wed, 20 Mar 2024 09:03:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88E3C3FB95;
+	Wed, 20 Mar 2024 12:59:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710925389; cv=none; b=jdSbqXMR2SLfrWdQte7xsACtPc/zJ4l5dxzZZKe6Yiuc/+rVnYr330UekFo87461Y6zN35QXAOUfEdZiV6ZxSv5/wmBGCNO8593wAH300ozf+WEfhCQp5/i1HuyfOCq0viN7BnUmHebTTH4YKxO8AFZILH53en2QCN24y0+NQw0=
+	t=1710939550; cv=none; b=fTgA7PfdVaiZ9KpKOHtMx9lp1DkHGvi9CpPObUKoIGpGoSISPurZuOuhf+0CMdj2h1o2i7AHU4tvBCEcw74BOqM40RyaxGPohqv8qfz+CZLDeBSsLXmx2dPVj/+6szQhKqD5JLyziFOe4CvxR6plpIQvaulCNfTN/anPjlkRDEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710925389; c=relaxed/simple;
-	bh=52KKlpcszjdSFs131cD3JnXuACxrfLDHjAbOk7a9moY=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=FN/KpFWiokqofqbBWBKASTohEgCGErUDEcGNFTfeFCk6sBaWT73xC/cRsN3Ar8w3fioDritGHs3Nzjc95AjXdBlGC0a/X5Lex+G9ZgOVUTcFuh1OXF7Cy7X12q5N/PNQF3iwHJV3smO3AzMywG980HH5X6iWHcW0xSTyS/TEu6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fJ5LV3md; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1710939550; c=relaxed/simple;
+	bh=3szIjYTN3iM0DfCCx1AY9klbxfdcTvCQ+thfnuGGKYU=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OL3Mzti9f/YFcCWT9dHMW3Qzf2ccI4sbqhSOwbwFka2BH41kOZZK+XLQdZN3klMY5TvkQQG0DmTIiup9tZpZ9tM9R2mdrt1VJU3OeQvUUmfTmRjt1/3rbUkbXCx0O/I9tFVmgXchJyRFI+HCdZOTEKNC6wadvqQzrbzNAhhvgWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=FQoGkTpY; arc=none smtp.client-ip=148.163.135.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fJ5LV3md"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710925387; x=1742461387;
-  h=date:from:to:cc:subject:message-id;
-  bh=52KKlpcszjdSFs131cD3JnXuACxrfLDHjAbOk7a9moY=;
-  b=fJ5LV3mdB4YcJC4Na5a8hRQEkgYHWZTW86pwaTvhE+8b5MvCACiToSBz
-   6T9Fafvu1F2FCeO0QNwgbfghcPwyZOghBiAnt3Khef1L+6w4rIMwe3WXL
-   Lg3ExIwVPBToLVNnYAo0BcD2DXkytvtcgBI+8zyZtZ4Icej4wQYkq0mUy
-   BmX6HkSutWvBA9ovWsu4sujupjc3eR3q+hoD0fOKEMB6mCShukJ0Pfs0i
-   ylIwxMml00kY9gopl3c8JP50j0pSHDPyBK4dqZfesSpNbCTG42pvp9aAg
-   1ZRubuhw5WH1wjhw5B/QEJRLtbcmCuWCVSralbasV1NBSn2G6xFFmdp3P
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11018"; a="16574381"
-X-IronPort-AV: E=Sophos;i="6.07,139,1708416000"; 
-   d="scan'208";a="16574381"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2024 02:03:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,139,1708416000"; 
-   d="scan'208";a="14164977"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 20 Mar 2024 02:03:05 -0700
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rmrqh-000IUl-11;
-	Wed, 20 Mar 2024 09:03:03 +0000
-Date: Wed, 20 Mar 2024 17:02:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:testing] BUILD SUCCESS
- 792286c254fa74c4c8c32cba82478eeac1c9a15e
-Message-ID: <202403201741.cUIv8ehN-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="FQoGkTpY"
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+	by mx0a-00128a01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42KAAnTU026429;
+	Wed, 20 Mar 2024 08:58:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=
+	from:to:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=DKIM; bh=qtT3QihMz75U
+	y3fqSwuYAon0fY2IFz2DuKRKO/YS//A=; b=FQoGkTpYnLS8SeSYcLs3uR91UsDm
+	iUr4XR7sDzIWzvaat8krBiO4PSEh3Dbixdv6A+PcQjK14O6Gh79UCepxyau6fWf0
+	63rJqvZEqAxM/IDRwlkM9GzSmxSmjTGl2AjhTAQzIfsabR3uVKIjpuMLCZ6B+F1g
+	ZaHZRLx5vP6oKxeypSNbGqNw+QkoxinxKnbmmGcc4bengH7s0araBB8ZVnFzVFkt
+	t/mKnWMv0kuoogdAL1SPTT+5kMdKUq+7gh+CdLqJY3eNCCrcQic+++mDRf+3xAZu
+	hBu89meK4y9SzVSa20J9DM1ImbwpbJJ1+wyX9LCZvQcfEHhB2NghyJnsVQ==
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3wwragnfju-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 20 Mar 2024 08:58:40 -0400 (EDT)
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+	by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 42KCwcKm003388
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Wed, 20 Mar 2024 08:58:38 -0400
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Wed, 20 Mar
+ 2024 08:58:37 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Wed, 20 Mar 2024 08:58:37 -0400
+Received: from radu.ad.analog.com ([10.48.65.243])
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 42KCwLBw020197;
+	Wed, 20 Mar 2024 08:58:24 -0400
+From: Radu Sabau <radu.sabau@analog.com>
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+        Rob
+ Herring <robh@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Delphine CC Chiu
+	<Delphine_CC_Chiu@Wiwynn.com>,
+        Radu Sabau <radu.sabau@analog.com>, <linux-hwmon@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-i2c@vger.kernel.org>
+Subject: [PATCH v3 1/2] dt-bindings: hwmon: pmbus: adp1050: add bindings
+Date: Wed, 20 Mar 2024 14:57:11 +0200
+Message-ID: <20240320125727.5615-1-radu.sabau@analog.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: 3OJN21agpgRyfoxjEGvN-yxk5VZZD0-u
+X-Proofpoint-ORIG-GUID: 3OJN21agpgRyfoxjEGvN-yxk5VZZD0-u
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-20_08,2024-03-18_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 mlxscore=0 clxscore=1015 mlxlogscore=999 malwarescore=0
+ suspectscore=0 spamscore=0 adultscore=0 phishscore=0 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2403140001 definitions=main-2403200102
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
-branch HEAD: 792286c254fa74c4c8c32cba82478eeac1c9a15e  Merge branch 'kunit' into testing
+Add dt-bindings for adp1050 digital controller for isolated power supply
+with pmbus interface voltage, current and temperature monitor.
 
-elapsed time: 1112m
+Signed-off-by: Radu Sabau <radu.sabau@analog.com>
+---
+v3:
+ *Remove extra line before '$id'.
+ *Remove 'address-cells' and 'size-cells' from adp1050 node.
+ *Rename adp1050 node to generic name.
+ *Fix typo from 'adress-cells' to 'address-cells' causing errors in the
+  dt-bindings build.
+v2:
+ *Fix identation for example.
+ *Remove 'adi,vin-scale-monitor' and 'iin-scale-monitor' since they are not used
+  anymore.
+ *Fix typo for 'compatbile' to 'compatible'.
+ *Add blank line under datasheet link.
+---
+ .../bindings/hwmon/pmbus/adi,adp1050.yaml     | 49 +++++++++++++++++++
+ MAINTAINERS                                   |  7 +++
+ 2 files changed, 56 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml
 
-configs tested: 177
-configs skipped: 6
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20240320   gcc  
-arc                   randconfig-002-20240320   gcc  
-arc                    vdk_hs38_smp_defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                         lpc18xx_defconfig   clang
-arm                         mv78xx0_defconfig   clang
-arm                          pxa910_defconfig   gcc  
-arm                   randconfig-001-20240320   gcc  
-arm                   randconfig-002-20240320   gcc  
-arm                   randconfig-003-20240320   gcc  
-arm                   randconfig-004-20240320   gcc  
-arm                         vf610m4_defconfig   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240320   clang
-arm64                 randconfig-002-20240320   gcc  
-arm64                 randconfig-003-20240320   clang
-arm64                 randconfig-004-20240320   clang
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240320   gcc  
-csky                  randconfig-002-20240320   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20240320   clang
-hexagon               randconfig-002-20240320   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240320   clang
-i386         buildonly-randconfig-002-20240320   gcc  
-i386         buildonly-randconfig-003-20240320   gcc  
-i386         buildonly-randconfig-004-20240320   clang
-i386         buildonly-randconfig-005-20240320   gcc  
-i386         buildonly-randconfig-006-20240320   gcc  
-i386                                defconfig   clang
-i386                  randconfig-001-20240320   clang
-i386                  randconfig-002-20240320   clang
-i386                  randconfig-003-20240320   clang
-i386                  randconfig-004-20240320   clang
-i386                  randconfig-005-20240320   clang
-i386                  randconfig-006-20240320   gcc  
-i386                  randconfig-011-20240320   clang
-i386                  randconfig-012-20240320   clang
-i386                  randconfig-013-20240320   clang
-i386                  randconfig-014-20240320   clang
-i386                  randconfig-015-20240320   gcc  
-i386                  randconfig-016-20240320   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240320   gcc  
-loongarch             randconfig-002-20240320   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                       m5275evb_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-microblaze                      mmu_defconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                      maltasmvp_defconfig   gcc  
-nios2                         3c120_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240320   gcc  
-nios2                 randconfig-002-20240320   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240320   gcc  
-parisc                randconfig-002-20240320   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                      chrp32_defconfig   clang
-powerpc                  iss476-smp_defconfig   gcc  
-powerpc               randconfig-001-20240320   gcc  
-powerpc               randconfig-002-20240320   clang
-powerpc               randconfig-003-20240320   gcc  
-powerpc                    sam440ep_defconfig   gcc  
-powerpc                      walnut_defconfig   gcc  
-powerpc64             randconfig-001-20240320   gcc  
-powerpc64             randconfig-002-20240320   gcc  
-powerpc64             randconfig-003-20240320   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   clang
-riscv                 randconfig-001-20240320   clang
-riscv                 randconfig-002-20240320   gcc  
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-s390                  randconfig-001-20240320   clang
-s390                  randconfig-002-20240320   clang
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                               j2_defconfig   gcc  
-sh                    randconfig-001-20240320   gcc  
-sh                    randconfig-002-20240320   gcc  
-sh                          rsk7201_defconfig   gcc  
-sh                        sh7757lcr_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240320   gcc  
-sparc64               randconfig-002-20240320   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20240320   gcc  
-um                    randconfig-002-20240320   gcc  
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240320   gcc  
-x86_64       buildonly-randconfig-002-20240320   clang
-x86_64       buildonly-randconfig-003-20240320   clang
-x86_64       buildonly-randconfig-004-20240320   clang
-x86_64       buildonly-randconfig-005-20240320   gcc  
-x86_64       buildonly-randconfig-006-20240320   clang
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240320   clang
-x86_64                randconfig-002-20240320   clang
-x86_64                randconfig-003-20240320   gcc  
-x86_64                randconfig-004-20240320   clang
-x86_64                randconfig-005-20240320   clang
-x86_64                randconfig-006-20240320   clang
-x86_64                randconfig-011-20240320   gcc  
-x86_64                randconfig-012-20240320   gcc  
-x86_64                randconfig-013-20240320   gcc  
-x86_64                randconfig-014-20240320   gcc  
-x86_64                randconfig-015-20240320   clang
-x86_64                randconfig-016-20240320   gcc  
-x86_64                randconfig-071-20240320   clang
-x86_64                randconfig-072-20240320   gcc  
-x86_64                randconfig-073-20240320   clang
-x86_64                randconfig-074-20240320   gcc  
-x86_64                randconfig-075-20240320   gcc  
-x86_64                randconfig-076-20240320   clang
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
-xtensa                       common_defconfig   gcc  
-xtensa                randconfig-001-20240320   gcc  
-xtensa                randconfig-002-20240320   gcc  
-
+diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml
+new file mode 100644
+index 000000000000..42cafd8fec25
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml
+@@ -0,0 +1,49 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: https://devicetree.org/schemas/hwmon/pmbus/adi,adp1050.yaml#
++$schema: https://devicetree.org/meta-schemes/core.yaml#
++
++title: Analog Devices ADP1050 digital controller with PMBus interface
++
++maintainers:
++  - Radu Sabau <radu.sabau@analog.com>
++
++description: |
++   The ADP1050 is used to monitor system voltages, currents and temperatures.
++   Through the PMBus interface, the ADP1050 targets isolated power supplies
++   and has four individual monitors for input/output voltage, input current
++   and temperature.
++   Datasheet:
++     https://www.analog.com/en/products/adp1050.html
++
++properties:
++  compatible:
++    const: adi,adp1050
++
++  reg:
++    maxItems: 1
++
++  vcc-supply: true
++
++required:
++  - compatible
++  - reg
++  - vcc-supply
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        clock-frequency = <100000>;
++
++        hwmon@70 {
++            compatible = "adi,adp1050";
++            reg = <0x70>;
++            vcc-supply = <&vcc>;
++        };
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 43b39956694a..b45753e94756 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -479,6 +479,13 @@ L:	linux-wireless@vger.kernel.org
+ S:	Orphan
+ F:	drivers/net/wireless/admtek/adm8211.*
+ 
++ADP1050 HARDWARE MONITOR DRIVER
++M:	Radu Sabau <radu.sabau@analog.com>
++L:	linux-hwmon@vger.kernel.org
++S:	Supported
++W:	https://ez.analog.com/linux-software-drivers
++F:	Dcumentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml
++
+ ADP1653 FLASH CONTROLLER DRIVER
+ M:	Sakari Ailus <sakari.ailus@iki.fi>
+ L:	linux-media@vger.kernel.org
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
