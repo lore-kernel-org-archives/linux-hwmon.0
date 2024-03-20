@@ -1,143 +1,171 @@
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B273C2576B
-	for <linux-hwmon@vger.kernel.org>; Wed, 20 Mar 2024 07:55:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0F6B39FEF;
+	Wed, 20 Mar 2024 08:50:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.120
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710921338; cv=none; b=X5Czjg58wXa75f/lxJKODB4Gir0pjsXrNFwbVeXqx6Xmkr5rU7nK6yHQMPFfPnTkk98QOWuc5NHGeCrkENXHPyQwwU3gws9hTLE4Y9RxNYAnhqJb3CXgpV4JORhwWrBe1mWXhPatfmVWdQ8RZr6AdKAVL95z1jKS4MzozgByPrQ=
+	t=1710924605; cv=none; b=SPrt9w+RB3F6VuTADSM0QbROmhs7vbThaZUxJVXYfsPDlUZNslE3fH8BocpIbxf7Rbp1/LZnwrwsqPSvcd+EDBoPlq/DZXznSkd6zzkEdUQVxy8SdwjZncc58s7ZpH4+y2JU6TK7in3wlcHcX44PJ1CHO28xaO9LkL6+RnTihPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710921338; c=relaxed/simple;
-	bh=1UIMis0Wk+v7MixU9IoZPauAcxNAWI1r8UEBwplLUlg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=VSswCuO2U42U4xsrwEyTAhMdSiDrs0UOzULAiD9qFBV6N9dRxpESgK/tSc6Ndo9AKFJUC+nX3MdOY+9leXCR+XD/toaZAZAl7AHu6Ay/0JY0pqxeiFfZoyG3aEtX0TCsMKaEoH1krEdGVD2d50Kbsj2+K4zpPwfSgIAxIIBkC58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=c+TpGuQ+; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1710924605; c=relaxed/simple;
+	bh=xGb4RhUYDWPElHint+HXBjgURCNEhZssnpEzWgr9f5I=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Xm7tD5oNSIdR410vNbRMMCPPOzVAvH/aCMJrc+Aao114KPqDKL/jHkWtjwyJBFypNFGjxArTMKE+ZIXCS+JqQFexniy3iAEAIIAkwssSYRmc/mm0lG+6WP5bTzvx7q3SArDQzg89FliVAc4raMNm4EK6Dhq06llg5I3Qwi7qGKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=LP11FVl/; arc=none smtp.client-ip=185.125.188.120
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="c+TpGuQ+"
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-56890b533aaso7228925a12.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 20 Mar 2024 00:55:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1710921335; x=1711526135; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=iP0euefPN+2hjNXAMEHorYJCyorOt339RNmkf/fpLlQ=;
-        b=c+TpGuQ+6qaaP/li20GqmpeynzFci319++OpMfM38zyNjg9o6G3kS4ieEuVL28e2KP
-         XOZVDuIZGtz4Rc31Rx6AMq9E9AdrFDKC+oqzBGM1vjyjlue6caME8PkUfvLfz90FUDtj
-         N5ed7NV0uKRXFwBSKDqu868xMlJZb/fD289C1e5Nnzaqn3J007CrZRKlpoqj4Z3/1EOO
-         lf8isG2j9ax9VmUMoW44DnFQ1kEy/hY/22hNMdWV8gZvwRd9ij9YwoA4eSITSpVyTaWm
-         mFh/m4EvyoN8gj1iok7/ukz0Sx0QxacHgDgEFn/vz45iP3BaaLFSdm5jP2GWVUJ+we5r
-         x27A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710921335; x=1711526135;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iP0euefPN+2hjNXAMEHorYJCyorOt339RNmkf/fpLlQ=;
-        b=t5tyQI7yksbCu7V+4I15E21arI5E3CmvuXe+J8922Dnei/i+avgsqRwzzE4xtpC10N
-         8BVSXYVYRblSPVo1S4mDtKkHTqOssQ11suUT+UAtSjA6H1h6voJXPvsaIyuaZQ4zewJP
-         irQ61pHQZJS9vliwXbGemYyCGbjvZg+XCzj8MKAva+XVSUuVmpxH3DAdnqn0/nTpYjJI
-         hMFjT6npkmyIeNmbdm/AqeDgC6qPYn9otneZ5DZrGd5ocG8+aSS8jjl+YiqOvbmR6Fq5
-         4OtB9CuFhKDFsL1tbydkW5ROUqqohC+HTcm0D7egg0ZGf6QkftuHVntQD2sq41L1Uh6a
-         mO8w==
-X-Forwarded-Encrypted: i=1; AJvYcCVHtn3ZDDbmFtsmIAVPhNKZdqgWCVsosiRCjfOQT0n9v6c2kU1b4IPKyyNttsE5U/v5xSAp7VXl67yCzRaFqAhWjhUe1mTs9N4o8bE=
-X-Gm-Message-State: AOJu0YzPe+HrBxxg6g4PcEa97YPFjfQye90vugLbf6zwMr2TS120oVI5
-	cOtCIFM/+TmZ1akGMyFjz7YnXbDlAxRZzyF356L6sdY5pjCPH8dBrBI+VMfSbLQ=
-X-Google-Smtp-Source: AGHT+IGwx2x3yazXAQNa7/GHiIgbRfhHy0J8Z9hNU1GKJJCtTjOU8829ViHgEAZ7TmagxKxutiNfyA==
-X-Received: by 2002:a05:6402:500e:b0:566:4dc1:522c with SMTP id p14-20020a056402500e00b005664dc1522cmr3792127eda.15.1710921335055;
-        Wed, 20 Mar 2024 00:55:35 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.222.97])
-        by smtp.gmail.com with ESMTPSA id d14-20020a056402400e00b0056bb1b017besm348981eda.23.2024.03.20.00.55.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Mar 2024 00:55:34 -0700 (PDT)
-Message-ID: <19d9bd34-2114-462b-b1a4-aebb65ac8c27@linaro.org>
-Date: Wed, 20 Mar 2024 08:55:32 +0100
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="LP11FVl/"
+Received: from localhost.localdomain (unknown [10.101.196.174])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id CCA2F40F3D;
+	Wed, 20 Mar 2024 08:44:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1710924249;
+	bh=+aw+nCBe+T3oJ08NUcmK8t7uBWVt6oUIlxWmPcFE1Jo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+	b=LP11FVl/yZMXhnRTXF2PkvKa6S3Dk2kwamlqfX47REpx8fr4kmO+U8NCFpjtpXML3
+	 myxDmfN4/rj5CCb80TDQqR41NDVMnyWBtiQ9WosUfAnd6VUzkuEGbehtvcEQXvWaSP
+	 hHZl82+N0tH67TmyxoneiKSS5n6qUr83yFgXmbvfAwGV+wO38cbwcgOMo9eRMB2LPe
+	 TGALCrz9NkJEs4xrWg0txyfY44sS8cO5C+SdRH/qCckqPBg+YH2VWf5kmJ/mZ/CZZL
+	 9bzZ4wtcKC7+GdtM89FDRBmGMA+Gt/6TBAXZ8KJOk6z5rL18hIawZrtIXks17ijtqN
+	 ycJPH+PkXTNpg==
+From: Kai-Heng Feng <kai.heng.feng@canonical.com>
+To: rafael@kernel.org,
+	lenb@kernel.org,
+	jdelvare@suse.com,
+	linux@roeck-us.net
+Cc: robert.moore@intel.com,
+	linux-acpi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	acpica-devel@lists.linux.dev,
+	Kai-Heng Feng <kai.heng.feng@canonical.com>,
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH v5 1/2] ACPI: IPMI: Add helper to wait for when SMI is selected
+Date: Wed, 20 Mar 2024 16:43:16 +0800
+Message-Id: <20240320084317.366853-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: pmbus: adp1050 : add bindings
-To: "Sabau, Radu bogdan" <Radu.Sabau@analog.com>,
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
- "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-References: <20240319113213.19083-1-radu.sabau@analog.com>
- <35acf78b-1a0d-49d4-b9a2-4b946508f32b@linaro.org>
- <SA1PR03MB649924961A6062A30AA47A6CF72C2@SA1PR03MB6499.namprd03.prod.outlook.com>
-Content-Language: en-US
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <SA1PR03MB649924961A6062A30AA47A6CF72C2@SA1PR03MB6499.namprd03.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 19/03/2024 13:47, Sabau, Radu bogdan wrote:
->>
->> Thank you.
-> 
-> Indeed I forgot to address few comments regarding dt-bindings
-> and I am very sorry for that, will make sure to address them
-> in the next patch.
+On Dell servers, many APCI methods of acpi_power_meter module evaluate
+variables inside IPMI region, so the region handler needs to be
+installed. In addition to that, the handler needs to be fully
+functional, and that depends on SMI being selected.
 
-Please also confirm, e.g. paste results, of binding testing.
+So add a helper to let acpi_power_meter know when the handler is
+installed and ready to be used.
 
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+v5:
+ - No change.
 
-Best regards,
-Krzysztof
+v4:
+ - Wording.
+ - Define and comment on timeout value.
+ - Move the completion to driver_data.
+ - Remove the tenary operator.
+
+v3:
+ - New patch.
+
+ drivers/acpi/acpi_ipmi.c | 23 ++++++++++++++++++++++-
+ include/acpi/acpi_bus.h  |  5 +++++
+ 2 files changed, 27 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/acpi/acpi_ipmi.c b/drivers/acpi/acpi_ipmi.c
+index 0555f68c2dfd..5fba4dab5d08 100644
+--- a/drivers/acpi/acpi_ipmi.c
++++ b/drivers/acpi/acpi_ipmi.c
+@@ -22,6 +22,8 @@ MODULE_LICENSE("GPL");
+ /* the IPMI timeout is 5s */
+ #define IPMI_TIMEOUT			(5000)
+ #define ACPI_IPMI_MAX_MSG_LENGTH	64
++/* 2s should be suffient for SMI being selected */
++#define ACPI_IPMI_SMI_SELECTION_TIMEOUT	(2 * HZ)
+ 
+ struct acpi_ipmi_device {
+ 	/* the device list attached to driver_data.ipmi_devices */
+@@ -54,6 +56,7 @@ struct ipmi_driver_data {
+ 	 * to this selected global IPMI system interface.
+ 	 */
+ 	struct acpi_ipmi_device *selected_smi;
++	struct completion smi_selection_done;
+ };
+ 
+ struct acpi_ipmi_msg {
+@@ -463,8 +466,10 @@ static void ipmi_register_bmc(int iface, struct device *dev)
+ 		if (temp->handle == handle)
+ 			goto err_lock;
+ 	}
+-	if (!driver_data.selected_smi)
++	if (!driver_data.selected_smi) {
+ 		driver_data.selected_smi = ipmi_device;
++		complete(&driver_data.smi_selection_done);
++	}
+ 	list_add_tail(&ipmi_device->head, &driver_data.ipmi_devices);
+ 	mutex_unlock(&driver_data.ipmi_lock);
+ 
+@@ -578,6 +583,20 @@ acpi_ipmi_space_handler(u32 function, acpi_physical_address address,
+ 	return status;
+ }
+ 
++int acpi_wait_for_acpi_ipmi(void)
++{
++	long ret;
++
++	ret = wait_for_completion_interruptible_timeout(&driver_data.smi_selection_done,
++							ACPI_IPMI_SMI_SELECTION_TIMEOUT);
++
++	if (ret <= 0)
++		return -ETIMEDOUT;
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(acpi_wait_for_acpi_ipmi);
++
+ static int __init acpi_ipmi_init(void)
+ {
+ 	int result;
+@@ -586,6 +605,8 @@ static int __init acpi_ipmi_init(void)
+ 	if (acpi_disabled)
+ 		return 0;
+ 
++	init_completion(&driver_data.smi_selection_done);
++
+ 	status = acpi_install_address_space_handler(ACPI_ROOT_OBJECT,
+ 						    ACPI_ADR_SPACE_IPMI,
+ 						    &acpi_ipmi_space_handler,
+diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
+index 5de954e2b18a..5a69cbd58c5e 100644
+--- a/include/acpi/acpi_bus.h
++++ b/include/acpi/acpi_bus.h
+@@ -976,11 +976,16 @@ static inline void acpi_put_acpi_dev(struct acpi_device *adev)
+ {
+ 	acpi_dev_put(adev);
+ }
++
++int acpi_wait_for_acpi_ipmi(void);
++
+ #else	/* CONFIG_ACPI */
+ 
+ static inline int register_acpi_bus_type(void *bus) { return 0; }
+ static inline int unregister_acpi_bus_type(void *bus) { return 0; }
+ 
++static inline int acpi_wait_for_acpi_ipmi(void) { return 0; }
++
+ #endif				/* CONFIG_ACPI */
+ 
+ #endif /*__ACPI_BUS_H__*/
+-- 
+2.34.1
 
