@@ -1,71 +1,68 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B0F61E49B;
-	Wed, 20 Mar 2024 17:57:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4B476A35D;
+	Wed, 20 Mar 2024 17:59:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710957460; cv=none; b=KWcly4M7ggRikmbJ9lrBwFkGr5TWsV52NaDwAlpMn647XQyKpY38QLiBzGLKLlHmFKSPeerbe5SZ6rseemsKemPYuGzS3FrJZ7cQlvyxkBi6tIMZtaC36gegnvmlGmkBdo8VjueypD41vLDZ/9XKB0SgEuS3d+SyOFrndVDsXLY=
+	t=1710957578; cv=none; b=njIDGH/KXkQAWF6FeKdymSsboG+YQCFbkB1RURdA9/4Lte+ygkOLzvhx8hkcWiRpIQ/CdIMLrllyM7p/1/w8QL6NihLy6gkrIFw1NKvMWGlQ9i0Epdj1wTH28QxGy6HCzMPWVAjzPXjsHzQYBlUJVqT43piNU4QDzfZopFYwr/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710957460; c=relaxed/simple;
-	bh=m8HMpkp3Ija5+aozkUZQ69YAEYrm43pkhpPtMTD/pi0=;
+	s=arc-20240116; t=1710957578; c=relaxed/simple;
+	bh=CKsxIN3qnQZvRKwtdHbydmzJ6EscP69AwdsUvQtKlXA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HJQbyzGmr8YV0T2jn2rF25ICA1Ll/5JjI7BL3AQ4PN0oPUGuiIDr/W5zlcqusovgiCYL8cRNCLMvGHWeGXp5Mf1DWwZYN+R+oc3tnsMx4sGAoa8DF952223lLGDL9CMvFZ4/w9DdLGVvjR6k3hpPS0oSOfwEddToeaDTOcBhYi4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cS0C06tz; arc=none smtp.client-ip=209.85.210.170
+	 Content-Type:Content-Disposition:In-Reply-To; b=Jm/Hp5c++Q2XZ2CLSTl6TfoYMYKqHgSl7nVWIn53oC5kH/I51J9/LiHMgNS847lzul/01o3cxt7ZE2uerOy1yppE37U/1WLNgBvrR/epUD+09mORR2YTVMgapi69aRfVcXpC6a+icYxqW9PG5M5ZQaVsjxceMKLH1JBTDm9ESJA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SL+4NNsQ; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cS0C06tz"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-6e74bd85f26so160029b3a.1;
-        Wed, 20 Mar 2024 10:57:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SL+4NNsQ"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1dee27acf7aso225835ad.2;
+        Wed, 20 Mar 2024 10:59:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710957458; x=1711562258; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1710957576; x=1711562376; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=SDfSPb8l7GG7oLbxOIDW4/dlXcVC3Y//bNvSJJG/gxI=;
-        b=cS0C06tzdWcO2kaG0IOTLtPBayvZKyVoDMYmC/QLrI897YudTmhDURvvocAfHXGNqN
-         bdl1aj74hFYYBVzASOadudCDq+j7YRsueghAIqu8dSgsIj4FPC/3BcIAlR/8d5nQCa5W
-         qlPDMXuot9TDdPlPyQWglQxn5uYzD1enbqPX+OpFszk2ZRhn3fSHSznBL2wafJClyv1d
-         CXrUlvepzmQBoyRzQnJUKPOUSdBXaqCzsfeFdhCOTwrqd+gRbL/301jYUABwDyfatLZi
-         6nQyPenwci4A3f5KqoshXrNHZtFolhXV0QWl2jZtp0uOpQmD6B+dgHohxFKweNkxPk/V
-         qB1g==
+        bh=5wO2woPFTP1dqOwxqifq7A1+P/J5nu7I1BzhjZG4OLA=;
+        b=SL+4NNsQZezagXpskHooqekAKzM2m0HKEeF738wL3CGaLSBVxpVJmV22nr/oNBG4be
+         Y2v55kkWYV7l9IkSLhQARrNhfDDT85cc1jEossOQTRmLdGCaFsVx2iLiEthIpFi9QW2T
+         JJ0SuyFzSE1aAwOVhnZzLB99ONnA9lW/IYGuwk2wo0NTTnjEGhYLbVjnve+FeIbMz21N
+         FRR9qu96ZDM488cWIUsqE9vEvcgH957nutDmiySLsY5u+KX0qeGAvMZpUbXXsTqlPe5A
+         NEKXa4qcV5Dj7lp1pkvdEnjMb60R9gWI0hR+HoVt36gbuY/zcaQXopvUoyfX95mSojnz
+         z2Gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710957458; x=1711562258;
+        d=1e100.net; s=20230601; t=1710957576; x=1711562376;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SDfSPb8l7GG7oLbxOIDW4/dlXcVC3Y//bNvSJJG/gxI=;
-        b=T2Fz0HiOsYUM94tQfGsXTLy3+cVjPhwxsodhVIdfA4X2S1Hg6QVqKdn+pWPfLXNZ7k
-         MoN7PM0tx9CvFLM8WfZLCaBzEvzb16fZUeINC+Gm5GvGZHKeRjUsh3+5iOyF/GBKdFZq
-         WtSrAklf3pAwYFoMqmrbOunGtg1zzXRCy79qPLfizNp5CZD64+XxZ0sEG6Z5vO93X6bI
-         /0CkVxsZSzZ3gYRayI5ernwXBZL76BWTBjCgDWXuojV3dgVZrgbJwPXIBpY9BuLzz7qd
-         xwdRq7DdyPmTzHuVANKM2KY1L1ncqhjJb91bGJ/06yEY7TYsrynCTvkqCDKm0WV1pmQl
-         31wQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW3PoLAdvKyOJdfayNK2NIB5Z3aDq8NbqlWYPzZO5NaMwTXaALESjV8FgtCeXLNGJesKcDsbo6uSS0lX5p2QeY//rYzLMEbq0NAoskh07ePZDLMUlCiavWnFHE9KyGKH0Fk4048oZI=
-X-Gm-Message-State: AOJu0YzkXI2SFy6IK/HLObv/IHqLzaKRLTrVE/kYxux8UJTiCiupMGMQ
-	tyDorma6mZovqiKWQ9KkyMJ0pwAeSYZM9B/UaccXiKFM1GHzlSnr
-X-Google-Smtp-Source: AGHT+IGUBHP10ptXH0poZtV8r4rtr/jPPrYxkkQnqC5bnL4dDK2bANsLAQ7mFcX7pDaWtd78XVwWdA==
-X-Received: by 2002:a05:6a00:398a:b0:6e6:9b50:8c73 with SMTP id fi10-20020a056a00398a00b006e69b508c73mr17212485pfb.15.1710957458498;
-        Wed, 20 Mar 2024 10:57:38 -0700 (PDT)
+        bh=5wO2woPFTP1dqOwxqifq7A1+P/J5nu7I1BzhjZG4OLA=;
+        b=tA1SsZ8ySI79k3L8QW+axBfmGHzd+WzcZ9ySlux8hXzF4bcJchZuaeiNB/Xi55DL9m
+         U9D9f8vGa0PniT0k6iPg0KAF9jK0QlhW1367M6Aw5r+x8INl2FwMWyfLTsAP8w4Y/y0R
+         F1InNHAiHTJ4FmPAk1/gIvF0Wv5Xivk69/x5oE138nhrEye6KLkWpbe3eVqnNgn8PFj7
+         qabis9HhIJhdUWYQflAir+bQprVD1DlwokLP3I9dwFe+/eDeX2dfiGr8UmdY3nH4hIrX
+         flQZ877DKiNnqGg24ZdRT8xB8XCD6ZMU1+n69328vjM5u+lD7++m9XWciQJa57wYRuX7
+         Iu8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWmOGnI0yzmHoa+ajupYXYPsdnlGViSls+jhuh73j62h+XEwv10T286FCiaWKDFbT31wZU3DB6LzF08SeekrChkZDEnu0qVNoXXxShJZbrcCGxuwC+xKJuK31WLtFSMjA5K6BI+OcI2
+X-Gm-Message-State: AOJu0YwVA6d/Pcl0bggugWVzUZvJT5xalIqS6i2k1417WCGVOjhmY+ti
+	3TggbKNfblLer/PHaoLvrP8RaRfZLwNnMvlaeH4QBbhAGDQQRz2mBSi81Txt
+X-Google-Smtp-Source: AGHT+IGhYmOXoAM/t0PVekkv1InO9r3UvXpth7X3ywfYPJ4Zg110QlCcJBzYVhNKmD9WzksHZbtDDw==
+X-Received: by 2002:a17:903:192:b0:1e0:3347:5bf with SMTP id z18-20020a170903019200b001e0334705bfmr3566800plg.37.1710957576013;
+        Wed, 20 Mar 2024 10:59:36 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 16-20020a056a00071000b006e47e57d976sm11889521pfl.166.2024.03.20.10.57.37
+        by smtp.gmail.com with ESMTPSA id t15-20020a170902e84f00b001e00d9680cesm7921669plg.130.2024.03.20.10.59.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Mar 2024 10:57:38 -0700 (PDT)
+        Wed, 20 Mar 2024 10:59:35 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 20 Mar 2024 10:57:37 -0700
+Date: Wed, 20 Mar 2024 10:59:34 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Kousik Sanagavarapu <five231003@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Subject: Re: [PATCH v2 2/2] hwmon: lm70: fix links in doc and comments
-Message-ID: <6f5f3110-355e-4933-840d-735b90d53ee6@roeck-us.net>
-References: <20240318130840.74589-1-five231003@gmail.com>
- <20240318154540.90613-1-five231003@gmail.com>
- <20240318154540.90613-3-five231003@gmail.com>
+To: David Ober <dober6023@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, jdelvare@suse.com, corbet@lwn.net,
+	dober@lenovo.com, mpearson@lenovo.com
+Subject: Re: [PATCH v4] hwmon:Add EC Chip driver for Lenovo ThinkStation
+ motherboards
+Message-ID: <f748574c-93cf-48ec-8e88-44d5b35fb107@roeck-us.net>
+References: <20240315115810.15816-1-dober6023@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -74,19 +71,16 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240318154540.90613-3-five231003@gmail.com>
+In-Reply-To: <20240315115810.15816-1-dober6023@gmail.com>
 
-On Mon, Mar 18, 2024 at 09:08:35PM +0530, Kousik Sanagavarapu wrote:
-> Update links in the documentation and in-code comments which point to
-> the datasheet.
+On Fri, Mar 15, 2024 at 07:58:10AM -0400, David Ober wrote:
+> This addition adds in the ability for the system to scan
+> the EC chip in the Lenovo ThinkStation systems to get the
+> current fan RPM speeds the Maximum speed value for each
+> fan also provides the CPU, DIMM other thermal statuses
 > 
-> The current links don't work because National Semiconductor (which is
-> the manufacturer of this board and lm70) has been a part of Texas
-> Instruments since 2011 and hence http://www.national.com/ doesn't work
-> anymore.
-> 
-> Fixes: e1a8e913f97e ("[PATCH] lm70: New hardware monitoring driver")
-> Signed-off-by: Kousik Sanagavarapu <five231003@gmail.com>
+> Signed-off-by: David Ober <dober@lenovo.com>
+> Signed-off-by: David Ober <dober6023@gmail.com>
 
 Applied to hwmon-next.
 
