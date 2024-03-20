@@ -1,67 +1,69 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4286E1EB44;
-	Wed, 20 Mar 2024 17:53:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CE4269DE4;
+	Wed, 20 Mar 2024 17:55:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710957194; cv=none; b=buckbqQI1PRuGLFeeqU8MTaipAv3gg47pEZfVqyvcxPSk5T9kECiYg/sLnsnMrwf5WozxFXXNlsydgfu1k6x4vX6KgQ1pjzzWxQp0Jn3XLyqPUKRi/n6JfnWNtuBBomjd7UWezCmddIoTA6JvEAITkb22AoF1NK/JRMUFTt/Tg8=
+	t=1710957313; cv=none; b=p9xdAINXpZlFlkHISk92BtLUqslOC/rpwFsYlTYMhJHMYjQiNlGmnealEoyI88ubP3XmG2FAySo96WSpCcrzXRaUezzQZwrPtsZy599thcw3h7IblC+14k0Ya241E0xnnP7YReHHZ/lqZeXr/dhBSfQ4fZT64INrkGsXWxoliyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710957194; c=relaxed/simple;
-	bh=U8iDRQhYcvX6/9YMs1ddaL5R1BN0NhkZr5i+4CX1juc=;
+	s=arc-20240116; t=1710957313; c=relaxed/simple;
+	bh=rCNMBMu8fQpwrXd/m9/xsyeE/QLxw3BCy3uZoZhw4vA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YcmkT3qFpghxj9pXYeozhhQuSowFGf7W7yBxdifHuhp+PRbw78LHfXfx/p6DMgWsSwBkfu/4VxkbZNwSNIE9vkAayOSfXd+GCQ7v0F4Hf5BEyNfxbmqn1osXFLWK/fmqrM9MkYlPzdCnz2QngERo/satUg0PnLA1qgyKlg8+Bfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WYEFIp5M; arc=none smtp.client-ip=209.85.214.182
+	 Content-Type:Content-Disposition:In-Reply-To; b=UYoiHhVMNyTA74uxqWxz17h0IxW3N7QBL0oIweke4R7TlMLvkuICRVnGFOnIQYVQrhCrnuWLcuWEFDTgmuk2jq3ozQG4Elu4g+/cQ8SlfVsrTHoaIknHt0DnVubcM5zzduoI2xt6B8/ghIwnPqjTUUMi3edPx32tY9/s6fkaick=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fKiTqPRU; arc=none smtp.client-ip=209.85.215.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WYEFIp5M"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1def59b537cso350155ad.2;
-        Wed, 20 Mar 2024 10:53:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fKiTqPRU"
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-5e4f79007ffso62326a12.2;
+        Wed, 20 Mar 2024 10:55:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710957192; x=1711561992; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1710957311; x=1711562111; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=RIFOXnlpQn40I+CjIMHCKge6cxVrQe5AAV9uLe3wQSs=;
-        b=WYEFIp5MytuY2OwFF31DQ4MPy+KIOyL6IAazc9WZhAOqBKtEDOPmrFaz64i/umXprw
-         ci31YyIA3fUtracE0D4E3jNdYd7s5DBOJ/hZNSRShHWvKzepHsm7IL/B9WLlB1c/hZn9
-         gbpIQKzcTqOcwPXBMBwySZYlu/A5mSekBxRwuDQ7zGQO/+n+YyKrwINuZn5WrV6ladXA
-         OCPX0reN6N/PJzexJd++1+ec8Ec+a9WWnFjSuZ5NT6o5DGgMLj6CDFu5izJRwHLKoBb5
-         Hy0xMd0UTjNYx17E7gGtbSZG096A5ACkEJy4Sj29FiJrF+KmcuqNRO7ju+OD0tIf0NaH
-         p0fw==
+        bh=Zjv8XCHpcg6s9nRJ5tVGIKCPsm+AiLcgIe4CWKl0nh0=;
+        b=fKiTqPRUHuk+SiDxkA7xE4Qbv1U+ad+uhFa6RFt0ZzV8v9JZvGZH9UAU9EfMCJlql7
+         /6kX5H+04IyOlSoXPGiBPi2G410BBMoNQ71BySdgIJWnozUuhpaSS/pPX910flMGAESN
+         kXQ9yC7pectZIZbQpOGJFhMmlEVqBr15mO4Rx5l3RLNDu6FqHpLAIjV7ZN/E6y2oFD8V
+         bABLUtqUO4+5toocYwUvsyCVeC7C5eouIWN4Nnnyko+aYHAZzuarGEZnWr2uqd7dOMlP
+         i0db0v7sCl9ZJcHf69TF3Ovzh6Nw4zxWXTHewZxIljO0/3sRHyJRluH9419kO920GaGC
+         qE5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710957192; x=1711561992;
+        d=1e100.net; s=20230601; t=1710957311; x=1711562111;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RIFOXnlpQn40I+CjIMHCKge6cxVrQe5AAV9uLe3wQSs=;
-        b=vaL1E0thrcyTcsJok1zGXhKNO3fHUFpc3CFm4JqQa4cL5fvAB8FOfGBz4+QK8sz/tx
-         eoogzRU2vHmVhSJI8gqvJtFK5UdJYxmH0Xb2vTJKUIVgkoOPL3pDqNJDvZBPMwcoKLQ2
-         gIgRXsj0iSsc/Gkx4u2/Hu7gpw55innj+PhAcph/VoCeNP5ijE3koWUf4t/rCl18zU2u
-         ywv/0CX9kJzOZ0L2a39DX1i+rKZoeQITNVmKXZ3BxYdmfjg7XsD63OmjA6UQIqpbTXe6
-         OUfRlmPomBn6fuR3+KbypTg6qbqPjh3IMkj9ISIzgA27BX/GgUnx71QysGU9jxF3qr6H
-         +xdQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVpCUEmu4XyXfu0FRXQOAC3mEzrYVqDXL8fdkeK1NUkgTznZ+5BauJqxpyk6DUtCZxQ4Z1V5FW+OfmgqkAvXGAoA92ERVHJq6fY/0Sr38O5KBg8S6BmEnDmZRzAnTmXia/JYvjgtXtSzdM=
-X-Gm-Message-State: AOJu0Yy/SvX4yTUCsfJz4yPY4DYiYU5gRIXffWKk6HOZSV4wOtR6/Puw
-	1sCHiyDyAS1WcMbjlzsqgVxvMaubDEVBlzCD6N0FpCZGYIX6opvA
-X-Google-Smtp-Source: AGHT+IEswqFoovRdTgMjCxwd02FDjhh4fjObRrM9JCNobqGafNr6RKLVaKlu+49oMsKKGN5Ux2+faA==
-X-Received: by 2002:a17:902:d507:b0:1de:f93f:4410 with SMTP id b7-20020a170902d50700b001def93f4410mr16983598plg.8.1710957192578;
-        Wed, 20 Mar 2024 10:53:12 -0700 (PDT)
+        bh=Zjv8XCHpcg6s9nRJ5tVGIKCPsm+AiLcgIe4CWKl0nh0=;
+        b=agRB/0xpgTWb5/ugv/ZIFKRgafx/CYNB1cWlb52nq+tu42BvR8e9+A6GALqCdZUlho
+         0KLJXaKdrepmjdcHRFK0eLu4K+dAoiS9daRXamFOD8c5uENKsvXRXtZ8nCvAniW00NLF
+         5uBU/pyQfSzzO5MczYxMEMzmEsRrOXdNAT7Ix6pKveb7HSSGxx5sGuS5F9IOhlQ2zFDa
+         c33AG3Ee8NvNg/r7NU3bah17psNXvQSBr+vW80DQ9aotPxpU/mhWo7TH3EEb7ahjQq59
+         7yCaB9RIGXqkCRrF4kDTYPCoU3pCIaB0V9rBK0C5oIp2WyGS1LuU2eooY4TsER3c3FWq
+         ksaw==
+X-Forwarded-Encrypted: i=1; AJvYcCVClWB6YhKeIfMMiuQXPfta9ORkW9PQVNZfKmAhsyaLH/88hQwErMh6z6kg4N0tkoLz7UbuYw3a/+OxmMdzOmv9PXX7bwqzPIH6P75oLC3dXhTedJ6nXMqKPJLY+v2KJGL/6BYV1tC/LBjUJ90Oxcna5gS9SPX4CU5mLlZkoSRy2p1qWk01
+X-Gm-Message-State: AOJu0YzDgJ2ZIjevsgDK9yfooFyMkqEUz8civ9uVd8gZNmcTYQEjN31F
+	XdPZYOGe75v9RuxsoCcBHxcxulg7qDR6t79xqMVGYFr++1d/aBQK
+X-Google-Smtp-Source: AGHT+IHI4A2ZmFJtQOglBk0ZqF74aoOeRroVRr+nrO3blb2vQiFyFuxerZbdQnLhovemIxXFf4vYNw==
+X-Received: by 2002:a17:903:2282:b0:1e0:11d8:7898 with SMTP id b2-20020a170903228200b001e011d87898mr14112565plh.47.1710957310866;
+        Wed, 20 Mar 2024 10:55:10 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y9-20020a17090264c900b001def0897284sm11758039pli.76.2024.03.20.10.53.11
+        by smtp.gmail.com with ESMTPSA id d2-20020a170903230200b001deffc90392sm9998704plh.35.2024.03.20.10.55.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Mar 2024 10:53:12 -0700 (PDT)
+        Wed, 20 Mar 2024 10:55:10 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 20 Mar 2024 10:53:11 -0700
+Date: Wed, 20 Mar 2024 10:55:09 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Naresh Solanki <naresh.solanki@9elements.com>
-Cc: Jean Delvare <jdelvare@suse.com>, mazziesaccount@gmail.com,
-	Patrick Rudolph <patrick.rudolph@9elements.com>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH v3] hwmon: (pmbus/mp2975) Fix IRQ masking
-Message-ID: <50505cde-48c8-47a4-ba0f-48b02fb1fff8@roeck-us.net>
-References: <20240318174406.3782306-1-naresh.solanki@9elements.com>
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2] dt-bindings: hwmon: adc128d818: convert to dtschema
+Message-ID: <62712a43-fadb-4a44-af6a-d863a7049ecc@roeck-us.net>
+References: <20240319-adc128d818_dtschema-v2-1-0824a6d69493@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,22 +72,15 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240318174406.3782306-1-naresh.solanki@9elements.com>
+In-Reply-To: <20240319-adc128d818_dtschema-v2-1-0824a6d69493@gmail.com>
 
-On Mon, Mar 18, 2024 at 11:14:05PM +0530, Naresh Solanki wrote:
-> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+On Tue, Mar 19, 2024 at 11:00:10AM +0100, Javier Carrasco wrote:
+> Convert adc128d818 bindings to dtschema to support validation.
 > 
-> The MP2971/MP2973 use a custom 16bit register format for
-> SMBALERT_MASK which doesn't follow the PMBUS specification.
-> 
-> Map the PMBUS defined bits used by the common code onto the custom
-> format used by MPS and since the SMBALERT_MASK is currently never read
-> by common code only implement the mapping for write transactions.
-> 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
-Applied to hwmon-next.
+Applied.
 
 Please note that I'll push the branch after the commit window closed.
 
