@@ -1,181 +1,112 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CAE04DA1A;
-	Wed, 20 Mar 2024 15:14:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B494320B;
+	Wed, 20 Mar 2024 17:05:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710947659; cv=none; b=FgtLWvRsVg7yitrnZw2x0UyIdsEv5QuSzuNRT/hw0VdbUCN+ZtFbU8UNRfRWD5OwE/y8ZmC8wF2fguHyghv904sRCCdnmZ23y+f2BP6e1hDBspr853YPigHreaO6/7/mlIk8E//s34NzAfJ/avg2ptopCNJNvfVxhoPL37DLlog=
+	t=1710954314; cv=none; b=Ofs6dwaCJir8pF05QJhSK4++OimFYvHldXKH1wE9WcnlCfhig1kHFOBT74JhMFZi44fG5Lma8wV8jsR9sux0Dc8iUOGoEn4RdLZrJR7JAnfj3u2mNs8mxmiVy5btNN0ViCITSjC06ft0rTvB6TOwUb+z3lL6oAfJ8mL91tfMJ14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710947659; c=relaxed/simple;
-	bh=kIAdFEj/7Z2kfL6RjSJnLwd4QaBMoZ7xnoSrhhA6bQQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Hp/PU7HkNMO4cGY/ZKsP8i1nRQ6fOXVzkkDQenrOp9pPLmqwo/8In9A/bLtcLeU/OqH02YgX62Z6FHF1HK7iR1Teubx5WQM7BDng3J3Zrqjl7q/mac6QwrdZ2V3SuwKKzdZBqF1s0feHH2ARj4f2yz2llWL/67eCGB/oE/onmMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=Kr4yXVly; arc=none smtp.client-ip=212.227.17.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	s=arc-20240116; t=1710954314; c=relaxed/simple;
+	bh=9eZvN2bEItXZ+IJpwOHBroGfTy95G+7wvzY/WOa+0g4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=M/OvjaGlN/ZueCbgx8bTNT6OMDmI+eM79UPCGaQWghvd8RqgZw91PQ8bl/IXd240gP9bbSwne0F9vSFe2e03/mRudDsc9cNK9UI5/tLEcl1lWbGhp7orlongZf5StCygCn/R8YkWyAXgGLbDmChBrW93a+PJ9uJAJ+x+DjawnJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EVTRH6Rs; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="Kr4yXVly"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1710947640; x=1711552440; i=w_armin@gmx.de;
-	bh=uddcCf+JvdQyj1QNEp4ag2EgQVjb12SVz6FKDooCSiQ=;
-	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
-	 In-Reply-To;
-	b=Kr4yXVlyuQy2l8PRdNtnygu5KLrObF11Gco1sXLGXSq1JIwu0FNIHUSHawqQd0GU
-	 WkLy5SJB1qpqdLdmV8HgVwaK4WXvHU4ogCreKHaoBeI+/6O4xn1ahBrtcxLDQcyT8
-	 htVHix6PFlr8LdkTOI8sXJnEIHQFEL4lzoTR74NIfZ8XrEymyvadIG2h6sYFkd4OI
-	 AmsQt64i7db4oPevPvFNwoFWDFJOMIDDgDWatsrBASg9Zj4aaQlIpu+BfKRv206iG
-	 Ao7ywxv3MbYFpU4uFG8BIvJD9d9yUy+9vismoY+6tgW4u9uAJ5ZddbDTCThBVU1Wd
-	 yL7D953tvZQFiE7hjA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N95eJ-1qjWu71J71-0169MD; Wed, 20
- Mar 2024 16:14:00 +0100
-Message-ID: <600844b1-0d62-4b74-89b7-f185a793038b@gmx.de>
-Date: Wed, 20 Mar 2024 16:13:59 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EVTRH6Rs"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a46cc947929so7661366b.1;
+        Wed, 20 Mar 2024 10:05:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710954310; x=1711559110; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dOwSR7c0Xavoru+NZvRNaLt8TtjaIKHdclHH3nj/aro=;
+        b=EVTRH6RsE+DpKxLv+K5MmdmxW5r2/wzs8I0sUn+su0072xXFpQ+aCxMTN90JLv5qpK
+         POk7qlxvM1rA168zrExsndQSiEuyL+cchQiKVG56JvJVoBdycMEAGID3DgKTj+ztKnRR
+         3dOsIBdj+kIDlw1fIyz6Bg0+rB0WLKShydfYMnnsC1kJxiDAjcKXpFN4b7LRfWwoiqwb
+         bFlPbMRshnPaO+Gd04T7DcIablstqqotkkUOEa7bqJyJt30t68ZOXlgDjvNL8P90qofx
+         2PHHqV41Oh1v1IgqoETJUnBMQ/xEXGSmrqk4cOOEAIbFTatKvcTAEIbfSQSksiyZrVUa
+         YJUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710954310; x=1711559110;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dOwSR7c0Xavoru+NZvRNaLt8TtjaIKHdclHH3nj/aro=;
+        b=dZFQtmt1zfURfW5y4/SGlY5nM0kq/smNDR9eCQUQUk7DbfyqOlPqgHgrxG1lBZLHJM
+         RQH+/LaNcm+HOnaD+EuW90o1gAO7gdbk4B8vjjIyxw9265jQ8M9HZHnXCrZpvnWgq9mu
+         7f4Uhpe0T5SawlBgPxxbsdq1kG8L9aYMQ6yN/Hbg5orygrCCKBiUkZlPqf2Va5cTte+h
+         wA0pZNLIkpaPaoQItwFsFQW0jk866fwK+q85ia3G7purfXVGXFsfUeYHx7twPRuvsQdK
+         hXSAX5Zdh1dJMlihAcueyaCTt87bpZ5LceHZS3IAD9sbpFHKBBkHuL/IEoSQyDXVSGn9
+         MTBw==
+X-Forwarded-Encrypted: i=1; AJvYcCVwlpMybwPJycSfVMsSpsp/CnMqHC6DCI3cZbFYDFLOqQ6yqEUGnq6uH7gCwQ2hXV0udW1+bfVdPUtXqIOoeiLUPZW46phOMQlO3jnTa9bB+LcU5oCKTOqjbeK8z2UIXtRigI8s2K2PMw==
+X-Gm-Message-State: AOJu0YxnZHc7BmvCaGBhVhbP2C0Dz8doeZ4MZG2UKnhBzDcGr/TsyHYw
+	fbT/LBl3d2m5cr5rOYuShvJTAMgtTqG+arZ1gcnCpQnvs4Gf0l8sU/86CeMccvrRRA==
+X-Google-Smtp-Source: AGHT+IGf3NABJBrUVvzeAzB9c4NtrSjX55A8NhYVZ1lkutEyid6v1JIrt6QbD2Sjc0Q/1Jy9wKCG3w==
+X-Received: by 2002:a17:906:6d2:b0:a46:ee3c:3574 with SMTP id v18-20020a17090606d200b00a46ee3c3574mr1656724ejb.47.1710954309924;
+        Wed, 20 Mar 2024 10:05:09 -0700 (PDT)
+Received: from [127.0.1.1] (2a02-8389-41cf-e200-3c5a-7cb4-e12c-8223.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:3c5a:7cb4:e12c:8223])
+        by smtp.gmail.com with ESMTPSA id af3-20020a170906998300b00a469604c464sm5999019ejc.160.2024.03.20.10.05.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Mar 2024 10:05:09 -0700 (PDT)
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Subject: [PATCH 0/2] dt-bindings: hwmon: convert lm87 and max6650 to
+ dtschema
+Date: Wed, 20 Mar 2024 18:04:56 +0100
+Message-Id: <20240320-hwmon_yaml-v1-0-a349ca21ccab@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC 0/1] hwmon: (hp-wmi-sensors) Support autoloading
-To: James Seo <james@equiv.tech>
-Cc: jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240318215732.322798-1-W_Armin@gmx.de>
- <Zfkm71dmnRsdmYJz@equiv.tech> <a2c2ef97-3830-4277-8560-b97cfb8eb78e@gmx.de>
- <ZfowhGaCWffQ2N1K@equiv.tech>
-Content-Language: de-DE, en-US
-From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <ZfowhGaCWffQ2N1K@equiv.tech>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:b4BdwK0mk935Kxx3xFT3KI515rjvMWHEUmrXT9womQkh9/smjvG
- SNoFM1HTpBv/6qk/nVKJ8J59fQg5TdESGQrUI9/OP7fz/QjU4asHyNe/IaUkA42y01mnb7d
- WfAcYn6xGCNLNP8XjcxG6ZqIa1kmE+g+V2DSL11O6D0dmlenBn3Bw10OMVy8NqZtpr0Yk0P
- cxGpKBx3BV8RaIIRNzKAg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:jx2zD26ey5s=;Pb+FSuA/qpDCchvNwUWwb1PaCHl
- j9Xl5uoZHMszQoA0NV+SGRiXcbVy4dX0k5zgFI6l9GfXFn8idDbzXZsbwSChEXfi4une73QSy
- 5CMP7AahtUP4cXY2tPobH95zQOvfbq4N8xZKOrM8ew3ONNd8Dl7gevUEq+rFfMAFBiB+qCIn/
- 8rZD1JTQReVj40VeVSXhx+qFGbREojvVsg2wSeW0aerzqwMad7rXvgaZG4ryw4Vt02ngWCSeK
- zvfDqTXuNbA6RZngOCqCKe9uTbMo+K+H7IY9o+iEWw1dxHoPJZ9truQ6ABcY1+YaVBv4BvdQH
- h0SDIfGK1GQevZXHcBR/fi1arrbbRn8HeQgUjBZIErPogmCqCDAmhq6z1mz6kDB0ZT2tuhtr/
- Yxv91SdXM9hz/0MoWI01kiYFXREihAn4qTVyozuV7D/2+ck43K/q66LmLaWzDGrFz7KyY881y
- aBW3OfvuJlUmDVveAPQeamdu4hIjifCP+k2De/8eIOpK9LX7tQwn3a8CR62ktPRz0eovpppvT
- D60n5NzzrVogkjrDWXlPdXj1BUzveLpD+0Dxlb9xLGXHZAp1nyEj5lUyt2l0J+qm89LRG3jYv
- BfI1crxpn+revm0iXZgAZiuKvwpuC/pl22pRJvFJSUUouTnWhy9UtWe6h7VNcih/9dnGEgznL
- 9y9nhFkT+C7XUQY9/RzqVNVmxy4GgoW62ZA3zaYq77+vl5Joonoy9xqbtED777gipDPx3zlCu
- NgkAvYE7tJEJX1WUjuq28bG7RdnvGTDAwF1v7QVchrIUr8Q3GCvkBgFvqfhEeXkmADoVSkxyr
- IHO0JuL0uRSNh+ZTQ2ey407HyNeiezfav/X+mgeFjJwns=
+X-B4-Tracking: v=1; b=H4sIADgX+2UC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDYyMD3Yzy3Py8+MrE3BxdkxRzY4tU4ySjZAsjJaCGgqLUtMwKsGHRsbW
+ 1ABdmdJRcAAAA
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, peiyu li <579lpy@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ Javier Carrasco <javier.carrasco.cruz@gmail.com>
+X-Mailer: b4 0.14-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1710954308; l=1173;
+ i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
+ bh=9eZvN2bEItXZ+IJpwOHBroGfTy95G+7wvzY/WOa+0g4=;
+ b=4edR6meyZYOANket+M/7sy7MJtAwMPv+F5wKo6KV3O+OawPpQE11KEMBCGgjJCEVUoOFLzLjz
+ h+ZnswLBqBMC2C8tB009cWQT0GKOBaNQRtpkVd99UPwIToOqEeBccQs
+X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
+ pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
 
-Am 20.03.24 um 01:40 schrieb James Seo:
+This series converts the existing lm87.txt and max6650.txt bindings to
+dtschema. Both are direct conversions with no additional properties.
 
-> On Tue, Mar 19, 2024 at 02:00:06PM +0100, Armin Wolf wrote:
->> Am 19.03.24 um 06:47 schrieb James Seo:
->>
->>> On Mon, Mar 18, 2024 at 10:57:31PM +0100, Armin Wolf wrote:
->>>> Currently, the hp-wmi-sensors driver needs to be loaded manually
->>>> on supported machines. This however is unnecessary since the WMI
->>>> id table can be used to support autoloading.
->>>>
->>>> However the driver might conflict with the hp-wmi driver since both
->>>> seem to use the same WMI GUID for registering notify handler.
->>>>
->>>> I am thus submitting this patch as an RFC for now.
->>>>
->>>> Armin Wolf (1):
->>>>     hwmon: (hp-wmi-sensors) Add missing MODULE_DEVICE_TABLE()
->>>>
->>>>    drivers/hwmon/hp-wmi-sensors.c | 2 ++
->>>>    1 file changed, 2 insertions(+)
->>>>
->>>> --
->>>> 2.39.2
->>>>
->>> Autoloading was deliberately left out for now because of the GUID
->>> conflict with hp-wmi's WMI notify handler.
->>>
->>> HP's GUID reuse across product lines for different types of WMI
->>> objects with different names and shapes means that with a patch like
->>> this, many systems that should only load hp-wmi-sensors but not
->>> hp-wmi will try to autoload both. (Perhaps all of them; I want to say
->>> that the GUID 5FB7F034-2C63-45e9-BE91-3D44E2C707E4, which is the
->>> second of the two GUIDs that hp-wmi uses to autoload, exists on every
->>> HP system I've examined.)
->>>
->>> Meanwhile, hp-wmi does various other platform things, and there's so
->>> much hardware out there that who knows, maybe there are some systems
->>> that really should load both. I don't think so but I can't rule it
->>> out.
->>>
->>> Unlike hp-wmi-sensors, hp-wmi doesn't survive failure to install its
->>> notify handler, which sets up a potential race condition depending on
->>> when hp-wmi and hp-wmi-sensors loads on a given system.
->>>
->>> Therefore, I intended to add autoloading at the same time as
->>> converting hp-wmi-sensors to use the bus-based WMI interface once
->>> aggregate WMI devices are better supported.
->>>
->>> As you mentioned [1], I ran into issues when I tried to do the
->>> conversion by simply adding the GUID to struct wmi_driver.id_table.
->>> That resulted in two separate independent instances of hp_wmi_sensors
->>> being loaded, which isn't what I wanted.
->> After taking a look at a ACPI table dump of a HP machine, i noticed that
->> HPBIOS_BIOSEvent has the GUID 2B814318-4BE8-4707-9D84-A190A859B5D0, which is
->> different than the event GUID used by hp-wmi.
->>
->> According your comment in hp_wmi_notify(), i assume that some machines have
->> mixed-up event GUIDs.
-> I investigated further. Every HP machine in the Linux Hardware Database that
-> has \\.\root\WMI\hpqBEvnt at 95F24279-4D7B-4334-9387-ACCDC67EF61C also has
-> \\.\root\WMI\HPBIOS_BIOSEvent at 2B814318-4BE8-4707-9D84-A190A859B5D0.
+There has been an attempt to convert the bindings of the lm87 before
+[1], but the author (added to recipients) has confirmed that no further
+versions will be submitted, and no acknowledgment is desired.
 
-Could it be that using 95F24279-4D7B-4334-9387-ACCDC67EF61C is a mistake?
-Or do you know of a machine which indeed uses this GUID to deliver sensor events?
-Because it not, then we can just avoid this GUID conflict entirely by using the
-other GUID.
+Link: https://lore.kernel.org/linux-hwmon/20231030125221.12974-1-579lpy@gmail.com [1]
 
->> I thing it would be best to create a separate WMI driver for the event and
->> use a notifier chain (see include/linux/notifier.h) to distribute the event data.
->>
->> In case of event GUID 95F24279-4D7B-4334-9387-ACCDC67EF61C, both hp-wmi and
->> hp-wmi-sensors can subscribe on this notifier and receive event data without
->> stepping on each other's toes.
->>
->> The same can be done for the event GUID 2B814318-4BE8-4707-9D84-A190A859B5D0,
->> with a separate notifier chain.
->>
->> This would decouple the event handling from the event data consumers, allowing
->> both hp-wmi and hp-wmi-sensors to coexist.
-> No objections from me for this specific use case to work around the GUID conflict.
-> hp-wmi-sensors should indeed subscribe on 2B814318-4BE8-4707-9D84-A190A859B5D0
-> for some of those machines.
->
-> Any ideas for getting rid of wmi_query_block() for fetching
-> \\.\root\HP\InstrumentedBIOS\HPBIOS_PlatformEvents? I know other drivers are
-> also using it for getting blocks other than their "main" GUID.
+Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+---
+Javier Carrasco (2):
+      dt-bindings: hwmon: lm87: convert to dtschema
+      dt-bindings: hwmon: max6650: convert to dtschema
 
-Good question, it seems that HPBIOS_PlatformEvents is optional, so using the component
-framework will not work.
+ Documentation/devicetree/bindings/hwmon/lm87.txt   | 30 ----------
+ .../devicetree/bindings/hwmon/max6650.txt          | 28 ---------
+ .../devicetree/bindings/hwmon/maxim,max6650.yaml   | 68 +++++++++++++++++++++
+ .../devicetree/bindings/hwmon/ti,lm87.yaml         | 69 ++++++++++++++++++++++
+ 4 files changed, 137 insertions(+), 58 deletions(-)
+---
+base-commit: a4145ce1e7bc247fd6f2846e8699473448717b37
+change-id: 20240320-hwmon_yaml-4d738e3b2c82
 
-If those WMI data blocks are always associated with the same ACPI device used by the
-sensors GUID, then maybe i could create some sort of API for checking if a given GUID
-exists the ACPI device associated with a WMI device.
+Best regards,
+-- 
+Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
-However i thing the event GUID issue is more important right now.
-
-Thanks,
-Armin Wolf
-
->> I can provide a prototype implementation, but unfortunately i have no HP machine
->> myself for testing. But i might be able to find one to test my changes.
-> Happy to test. (Also happy to try it myself, but I'd need some help.)
->
->> Thanks,
->> Armin Wolf
->>
->>> [1] https://lore.kernel.org/linux-hwmon/cd81a7d6-4b81-f074-1f28-6d1b5300b937@gmx.de/
->>>
