@@ -1,70 +1,70 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C9996A34D;
-	Wed, 20 Mar 2024 18:01:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACC47BA45;
+	Wed, 20 Mar 2024 18:03:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710957679; cv=none; b=iU+FVvNRbf3x4KKUuAIzJlqPmRJvTkFy+j2fMZwThx3VeBy5nW1EOZKyhuouusjeY+3Ul+zB+Djrnx9a5mUMnJ/RPtEO9PdbUx0+Wm6yG5Ra5ZLoiZaDLdubNnScUMKssLLLuWDvkfMQUBlyoqHP3UFPaZAGu7de0gW0YuAKNB4=
+	t=1710957812; cv=none; b=KvWuz3sRHKjBKls37AUg+Rw1J46Ai+ok5c4aiqlssz38offIVFqSGD+QiNSQesRnL3IRQroMUHuD5xiFRLYF74wSWGgIwrCGnN2Bw3aRUa6WFTT3IAtywacYa3RwRbwKU+WUlFq+bqC6HeTPtNW/2lHoMn8AHSIS6K7eF/7YBlY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710957679; c=relaxed/simple;
-	bh=ymr1f2mMkgEncrgAlT2WiV0Xxzk7YqhUaIfael4pJrw=;
+	s=arc-20240116; t=1710957812; c=relaxed/simple;
+	bh=Ed1I1kIY0Feqy3rs76Gh064Y1IF28xMwtxyZdBPm2NU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kDkw5yCizjGxSsnQsxVA+a5gmxl9mlhSOGtQqmzUVxCxIYLoPgJ87zhTJm7H+GT6OvS8bf7hpT4kDkK+/W0HrYOQHUJ9Ccoxhr0l4JbwaytnxNMwNhDVqY2+EAsZBBPk/42xo02QTbNRu4m0+EejuLdUMRwtu7sHAgECLMm+Q2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kuEoqUvI; arc=none smtp.client-ip=209.85.214.175
+	 Content-Type:Content-Disposition:In-Reply-To; b=t7015FXYR4R7s22GsIkJF3KESKUBNV03O7wITm60FcMdev9mHjimNVSLeOve6OoB8cfgm34haLlTqdQdqpjfPAIbfBBGKbr/X4Ol1gR5AJKWml+3qPuwBu/aUEcycIRGycPc5/wYB6qxUKZSTYd2zXSjvS3KTgAFqFUpzHAhYXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iP93OzJq; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kuEoqUvI"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1dd955753edso578275ad.1;
-        Wed, 20 Mar 2024 11:01:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iP93OzJq"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1dfff641d10so277945ad.2;
+        Wed, 20 Mar 2024 11:03:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710957677; x=1711562477; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1710957810; x=1711562610; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=j+EPj9HeAGH/gl0oSvfO1IUhtpAie7DUc9DIX8DS5vA=;
-        b=kuEoqUvIMVVis+xh3nFAnU0VLwysKTSOERCciUEU9D0Dy1CEsGao/FJ9JGi7JbspsD
-         uFuUAsEcXhBOGRDEKMA2x914uUQsnmwCFEarTxzcUZvj80/18wOQnRzgZPthG7aN64rX
-         BANv402shKTDngQdWb+W9jOBLY3eRSz9K3GnXOzs0b1kC3hDWrBy2WER/FzGNbmJgT87
-         lw59syFGwkF3bE8WjOX6vUFdK9jiiwYA0iYX4ucSqrIgfMfvCu4co1dT6EeHrR3y8bNq
-         hZkGva/aQHyExuBp7CHpbgp83G8/yW2xTfpC510uWz43MbrE28Tvp5cc+mM+6IRhpQlB
-         NaxQ==
+        bh=fe7+QgceZjZtuMFOC/wsDTnTO94d6hKvWRrBFM6nBWE=;
+        b=iP93OzJqSAbyYpCERL7fMvUaSRjtX+WBXCAcu5ob2NGsTq8zFGfA630NzYucvPE/ly
+         PvSyuVn5B8msv1HAs2mGtO3y3+1xd6Pi/sVnFoV09yc6Mz9YpJ5vDUOLUfZFeYLV7+Ri
+         1iiR+c2onau+EO6XqpXOVk//74G3MBM8QrqDDjaR9iBqotU+vJZpUuTUvzKxq1Hr3f6f
+         7pax4vPSUuRaRM4T5RPlwpbKCYciHdomvOVU5b8iAaM9qm8xstDfF8/NuLNe2I7ULmx4
+         qJWib01E30+LOJn4ITXCcIRy6CuzM3/Udn+59tLe+pe29WwiwTyChavVW6lNKt6ipQQ6
+         m9VQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710957677; x=1711562477;
+        d=1e100.net; s=20230601; t=1710957810; x=1711562610;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=j+EPj9HeAGH/gl0oSvfO1IUhtpAie7DUc9DIX8DS5vA=;
-        b=Ypg9GpsP8Rpo8n6ggtq2mehpT3ohE8Zi1f8eutaasdwF1EtrQWz/XqYLdVAy1/rDGn
-         by6NGx/EZ6r1kTkDclTF9EPXisNeptXO1iu0u9AauKXQtdSX5ScEr/GYBC1nsD24ZO/o
-         Rd2bJkYS2TnxFS8Jjk9rYQNJzj5/Dxd0AtWPgAoNp4PI9diE/DvZaiEmKhSe5hUqMkUM
-         gsIQYoXc+L+RD29kSj+SDBvBdyKAJZmG3Me5E9KGLWmZ9nVy6lLSsYeV56pt1Ljjyf5p
-         nkHg+N3cUcF6S6KpfsrSxr/7A0rROwJ5hl3LStkKJOcoONeRqj1Bf+573/QWQpN+D3nt
-         LvFA==
-X-Forwarded-Encrypted: i=1; AJvYcCVhMRov3l/c1IygqKQaJYYZ1451GrOxk4lDl5uZPtrlSy0ZG6TRDurv7FuEAYkqGGRVj5i0T0hDipZy8nviQlf7bd+6PCDYJasrh2bnjWjoJCMrRa7EgoPu9kWwmy6H39p7pDiMst4CMMVdGed7u3t342ZtFDsqp6/W0JF1aUFrEZxoui34
-X-Gm-Message-State: AOJu0YzBT/yniyY8O0fuQwRwHgkdse/ECQLkXadCqJQs3lfJqlv3KRli
-	2OC+QL2Y1q47jQIW6TGyuAcq+yaGe5Q3PnZKuvmBYijQsrBhSRxo
-X-Google-Smtp-Source: AGHT+IHM2XTem3JgVQP0IEX99GUflswwZbPvHTBC/KXEXyhYYIawJfvzbVQn5Y611HdY+Vb1VCov5g==
-X-Received: by 2002:a17:902:7790:b0:1dd:8daf:99b2 with SMTP id o16-20020a170902779000b001dd8daf99b2mr14382250pll.13.1710957677502;
-        Wed, 20 Mar 2024 11:01:17 -0700 (PDT)
+        bh=fe7+QgceZjZtuMFOC/wsDTnTO94d6hKvWRrBFM6nBWE=;
+        b=kLakEWZjn7/Bww7XGUewa/AZ+hzFOmlmmBIPHFY1tCxSpHstGLelW/ljWXiF9k3yL0
+         LXgC3iREgSq76RydAsw/XoyfvnuqlzX2d0lecGibW9lqwOoqXGLeP3P6s3pfwnQhgApZ
+         ocoRBUoBtdSVjF0al4TonkjLuDittee8GpY+VgJk8obAXhqlB0e3NwhuAoUxGat2lQXQ
+         uPgCPzKHsTglD2jSHQ+EmpHtTCaSJt4GoyWHu2AzkceMJYg9DTK8V/HqKTE2Fr/W8Jmb
+         RGBacgKte0oLUEa9nC60QvfDBQu8PJwlpBwaHJNcHnAeHhno113BtJZmp8ONYOSJwNvg
+         fE+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWeBADOO+TefesbYAsSqgXTe7F+HotI5Q8K9Z1fhh3d2gDqoJ56EIxJu34NWjQIExAv7aDnc5siLiEwlCNRrBCGV9FlHxypBxnbvMsSe1ugQAu9j76/qdyhylmKUudDmC4MuwWPL4ju8sUFWXatE+97p/+cLDcuLS+IxivyiWOGWdKKEzRI
+X-Gm-Message-State: AOJu0Yzpei0K1cAjXN8nA4dXeSZZ09laoaFt+qTYLqiVXvvcLvKLwx5g
+	TYEAoTf2N1zom4iaYOoA7udPCn/vqPMAKlKiMV61+Lo1IyJrM7WR
+X-Google-Smtp-Source: AGHT+IFFRnrbIv+zEXFsZYEZVqnWgrBJ55jSh4gJkPcPwRtlksgsWMna4/o7BKn9T2JkLcq5eMh0Xg==
+X-Received: by 2002:a17:902:7c87:b0:1de:eca6:483d with SMTP id y7-20020a1709027c8700b001deeca6483dmr16898141pll.27.1710957809804;
+        Wed, 20 Mar 2024 11:03:29 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id jc14-20020a17090325ce00b001dd707d5fe6sm13937024plb.158.2024.03.20.11.01.16
+        by smtp.gmail.com with ESMTPSA id u13-20020a170902e80d00b001dd95b5dd0fsm9801984plg.69.2024.03.20.11.03.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Mar 2024 11:01:17 -0700 (PDT)
+        Wed, 20 Mar 2024 11:03:29 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 20 Mar 2024 11:01:15 -0700
+Date: Wed, 20 Mar 2024 11:03:28 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc: rafael@kernel.org, lenb@kernel.org, jdelvare@suse.com,
-	robert.moore@intel.com, linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	acpica-devel@lists.linux.dev
-Subject: Re: [PATCH v5 2/2] hwmon: (acpi_power_meter) Ensure IPMI space
- handler is ready on Dell systems
-Message-ID: <9f6ee66e-f76d-46f3-8de2-516bad47311d@roeck-us.net>
-References: <20240320084317.366853-1-kai.heng.feng@canonical.com>
- <20240320084317.366853-2-kai.heng.feng@canonical.com>
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, peiyu li <579lpy@gmail.com>,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: lm87: convert to dtschema
+Message-ID: <13eff821-e800-415c-bf0c-6d9c11ece565@roeck-us.net>
+References: <20240320-hwmon_yaml-v1-0-a349ca21ccab@gmail.com>
+ <20240320-hwmon_yaml-v1-1-a349ca21ccab@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -73,32 +73,15 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240320084317.366853-2-kai.heng.feng@canonical.com>
+In-Reply-To: <20240320-hwmon_yaml-v1-1-a349ca21ccab@gmail.com>
 
-On Wed, Mar 20, 2024 at 04:43:17PM +0800, Kai-Heng Feng wrote:
-> The following error can be observed at boot:
-> [    3.717920] ACPI Error: No handler for Region [SYSI] (00000000ab9e62c5) [IPMI] (20230628/evregion-130)
-> [    3.717928] ACPI Error: Region IPMI (ID=7) has no handler (20230628/exfldio-261)
+On Wed, Mar 20, 2024 at 06:04:57PM +0100, Javier Carrasco wrote:
+> Convert existing bindings to dtschema to support validation.
 > 
-> [    3.717936] No Local Variables are initialized for Method [_GHL]
+> This is a straightforward conversion with no new properties.
 > 
-> [    3.717938] No Arguments are initialized for method [_GHL]
-> 
-> [    3.717940] ACPI Error: Aborting method \_SB.PMI0._GHL due to previous error (AE_NOT_EXIST) (20230628/psparse-529)
-> [    3.717949] ACPI Error: Aborting method \_SB.PMI0._PMC due to previous error (AE_NOT_EXIST) (20230628/psparse-529)
-> [    3.717957] ACPI: \_SB_.PMI0: _PMC evaluation failed: AE_NOT_EXIST
-> 
-> On Dell systems several methods of acpi_power_meter access variables in
-> IPMI region [0], so wait until IPMI space handler is installed by
-> acpi_ipmi and also wait until SMI is selected to make the space handler
-> fully functional.
-> 
-> Since the dependency is inside BIOS's ASL code and it's not
-> discoverable, so use this fixup is a hack to workaround BIOS issue.
-> 
-> [0] https://www.dell.com/support/manuals/en-us/redhat-enterprise-linux-v8.0/rhel8_rn_pub/advanced-configuration-and-power-interface-acpi-error-messages-displayed-in-dmesg?guid=guid-0d5ae482-1977-42cf-b417-3ed5c3f5ee62
-> 
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
 Applied to hwmon-next.
 
