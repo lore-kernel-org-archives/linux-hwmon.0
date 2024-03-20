@@ -1,82 +1,88 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EAF9524B7;
-	Wed, 20 Mar 2024 17:11:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 803221E516;
+	Wed, 20 Mar 2024 17:51:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710954665; cv=none; b=Mp2paL3fuYkeQEU4ZiI2P5Yj8v2swp336egOWPzwgQaS8vZBgKtdCk8D2c1kEPD2Xl9LdnXw/NWbgugBnufzXF7IU34zdDNYWzeuMepolW1vqMatmhBBcGQAM7f/iSXji5hetZDX5v1A3Wfi4Mhhk/1L+qu5uPRO5qAq1uasak0=
+	t=1710957082; cv=none; b=Gj2MbIVWL4a2k0ZB918x5GgF4CK0B46fm2fZ+4bTixNYQidw1ukG1kWmxjH9bJ+MNwAo6w1RwQhGkixKuPnfCdcEjyBNKUMl2VIcUgptxc9k4akzdx2TkN3iaQ/Fn0GlX5M939mJlkkjSGFlyCFtR2MV+/kC61PttXxZFNOlPEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710954665; c=relaxed/simple;
-	bh=t8CRqEP0dKoimzLH4VBkhyKPm3MjY8JUsLWFCmT0B64=;
+	s=arc-20240116; t=1710957082; c=relaxed/simple;
+	bh=HxM0U7FyRinA5IzYzu/aYxVdoZj67DjEBCsC/59T1zE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TiQpaU/awaWWjpePEAhwT5VBMoEK07ZttXgz1i8Uo6lSIyXguG85RlvAkvKnRd4WuJzg0IAhjEonIUbULy9aN+ehO8KXybASZd/cJARws81veO74rsE7mrPU+PvkeuWKOpHJoKzRJi8vtwq+g6vnPapSaJc8UgRssXV59q6/c6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YjOUzHRG; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=l9FPS25y1sWyfrzg44tEdxjgPejnx6Lx8r2cfrJL8kkc5uHb6yd4nSvhcHEWFSZV6MlcNgaw5j5HgWsnrJZZTViNxwV+ul/UicBSTHRp58aIa7pbNzieoY2L50x+ZCbKlb+5btRCTl/ZKbM9fZilwRgzF8FpZFOTSZv8EDGKUVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k8YKX0QD; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YjOUzHRG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB54BC43394;
-	Wed, 20 Mar 2024 17:11:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710954664;
-	bh=t8CRqEP0dKoimzLH4VBkhyKPm3MjY8JUsLWFCmT0B64=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YjOUzHRGqnPI6bvK+TaaBh3eyJL76RN4Cex5y9L/SCTzwq7Chid2JgBPw6pVMAdqk
-	 7aewmgpdK514n+4JF6aHy/09OQ8950ULaFHL2s7WkbJc4gkhjSs8scyFbj+aMzZdFi
-	 tXBRjfVe/twgtZ4m6Ys5j+reo99w0Ad+5bH1z0zL1wNc0UNokTip5UgnNrP0ZP5kD4
-	 V0GXMViqJChe3MEu0QyPM9EeJvPNIGi+PMLZpvPViF4QCHD37ujKERHZCTxid1gXG2
-	 iD8yDFKE36OnRb7uhwvvIajpG0ncDL1oAikEkuk1wNp2qEimpe6uGjOch745Us6kiM
-	 roXaZDHN5gWHg==
-Date: Wed, 20 Mar 2024 17:11:00 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, peiyu li <579lpy@gmail.com>,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k8YKX0QD"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-29a5f100c1aso158410a91.0;
+        Wed, 20 Mar 2024 10:51:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710957080; x=1711561880; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wcUuhuxSVebK/M2k/MuWZM4jNcLrTIAiCmUPjTXRtpg=;
+        b=k8YKX0QDn/6UeLzUiadWu1UOjj+NEytrJX/8qDhyBCRhnmdCBGXeAAk0PLsI0LgwDt
+         W30ZQvLdWc+jz5CpSjX3/7lx+2Xr/NyAu66zOfNu0XYx00eM1mMqyLRjMwJUExTLVV0l
+         BCcY81QqyFOOf+S0ajnd6MEae8Dv0BCbke0hj4sfVYCz0cH2EcuWtUP7FYUdAbwATvbT
+         AuQjDJ/laoTRiQKg6CM1F2vwAs3xghLxRJPCc2hQDx+oe+qIDYp4dG+AQmufA+BhlFLW
+         nuY/+JVzD5Q0+SDIZoyl13clS5AavwRpn+1rb3SfSSKuma/G7nzMGvdWCQoGt4yqfq9H
+         6F/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710957080; x=1711561880;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wcUuhuxSVebK/M2k/MuWZM4jNcLrTIAiCmUPjTXRtpg=;
+        b=L2+9wnN7d5gudFZGDjRzqlb9OmBgeDz4LzYTyrdl9aWwXvaBvjmMNxFSl1h53wR2JX
+         GKf0vFXWqdw8XNR/0gXc/jFswpvLAW/3enVWFW1mBPkKhc9MnZmdbejgXwo9+hO97xXL
+         fjusj4gzLF3ekB1qIyCEbodIa8pXKCwBooG8RWUdGr6ZH8ThB4zME3QYDBYq7vAZlHC/
+         BQ61+PUGsKViFMJ/r836r1JGxkr/oVLCT7nUaHPIx+nMftjAZ5zfTckOSm+1SEUZYbZ/
+         tJ2s/NZHIqykiOLku39VMffwUUnu+Ez9SP/5VI+s3IkTzLIxvEjNZEfR4fbtHjA9DOpu
+         7twQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXL+6KH2G3hSTJ2uWS1OcGeNyhPHDYjuBJzupDmgxX1nH9nmZKwvZgEdKgwEqP3LSNF5olo8QXTmKEFv8g5eS5gnUqtrv7e2Txe0O1B8SYl/ErTuwon3oJ7AscyzTRE2C/vlh/2eAG9ggA=
+X-Gm-Message-State: AOJu0YzuPVMPy2LVYF2Efglw2tmWGYfaNhgER8oYv6T/EJoIui3NfQ7Y
+	TvTj1vw3Drs2Iw30ztgGFWhPlFXc7MhBEL7SeR11oj7nqiW0Sclk
+X-Google-Smtp-Source: AGHT+IGb3EHBbz6idiwb4aNKpTCcdDPXGtm1mLxZGnzM99YTzfwFzIjs65Q+njOSKlIsRDnqdr6TCA==
+X-Received: by 2002:a17:90a:628c:b0:29b:82ee:13f with SMTP id d12-20020a17090a628c00b0029b82ee013fmr16113557pjj.11.1710957079383;
+        Wed, 20 Mar 2024 10:51:19 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o19-20020a17090aac1300b0029b59bf77b4sm1888396pjq.42.2024.03.20.10.51.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Mar 2024 10:51:18 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 20 Mar 2024 10:51:17 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: tjakobi@math.uni-bielefeld.de
+Cc: Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: lm87: convert to dtschema
-Message-ID: <20240320-espionage-shrine-ed6a5ee04259@spud>
-References: <20240320-hwmon_yaml-v1-0-a349ca21ccab@gmail.com>
- <20240320-hwmon_yaml-v1-1-a349ca21ccab@gmail.com>
+Subject: Re: [PATCH v2] hwmon: (dell-smm) Add Dell G5 5505 to DMI table
+Message-ID: <a2f16f5f-1614-425b-88ac-5e9d30266658@roeck-us.net>
+References: <20240310220710.896230-1-tjakobi@math.uni-bielefeld.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="llyvHfR3DnEXNxV9"
-Content-Disposition: inline
-In-Reply-To: <20240320-hwmon_yaml-v1-1-a349ca21ccab@gmail.com>
-
-
---llyvHfR3DnEXNxV9
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240310220710.896230-1-tjakobi@math.uni-bielefeld.de>
 
-On Wed, Mar 20, 2024 at 06:04:57PM +0100, Javier Carrasco wrote:
-> Convert existing bindings to dtschema to support validation.
->=20
-> This is a straightforward conversion with no new properties.
->=20
-> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+On Sun, Mar 10, 2024 at 11:07:09PM +0100, tjakobi@math.uni-bielefeld.de wrote:
+> From: Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
+> 
+> Enables reading the speed of the CPU and GPU fan on the G5.
+> 
+> Signed-off-by: Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
+> Reviewed-by: Armin Wolf <W_Armin@gmx.de>
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Applied to hwmon-next.
+
+Please note that I'll push the branch after the commit window closed.
 
 Thanks,
-Conor.
-
---llyvHfR3DnEXNxV9
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZfsYpAAKCRB4tDGHoIJi
-0jf/AQDehh8/jsAQ9Oniv/CHMVcLLI4/iLLzVGRj+1tdwGBDeQEAphqDoNDs4obW
-eFppL+bwhypPAft3lBwfmtgH2GxS3Qs=
-=EWMk
------END PGP SIGNATURE-----
-
---llyvHfR3DnEXNxV9--
+Guenter
