@@ -1,59 +1,59 @@
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BA6312CD8C
-	for <linux-hwmon@vger.kernel.org>; Thu, 21 Mar 2024 17:46:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF18084A28
+	for <linux-hwmon@vger.kernel.org>; Thu, 21 Mar 2024 17:47:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711043179; cv=none; b=pvT+F2VWeUvirCxYO03TuT09AfUGnQrJYdBI4vurakynYu2h1pDIjgxBg9xqq7im1UTYxtMAc3hm0A9zzD1lzHsnkM7J9nEnRn4o5sNNSF9uzGVjo09hmVTri1T/w5u/1QuRdyJjSSljmZniI1Vs+TeQFnkzU1w30XcsbKmzlTs=
+	t=1711043235; cv=none; b=AAj5jj4qAyNtt9c07NufPeEe17Sdv30YkhM5XE19/SOGeD4JcOI0nqDFhONk2h7Vnx2Alt/LVbudpfCaG8vpIXwI3fGHsQzx8pyOtZl3Cc9sUYmctXxJJw2wc04jDjg8dPwXT5fz5Id8gm1+bGPXm80jR2mmcaYVi9s8lNd8WoA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711043179; c=relaxed/simple;
-	bh=M/FF2755fkAa2/aIuZGCCr4SrdFdCOSK57hpejhxl8s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fJgOl58H5AHiIltfzNfkDQI2Hc5rWDJAWn3CKRKhS5D4LKq25Qf9O2ivi26GoPIfm4vQv4WPALU8UOu8asPz9DOk3OnUQ77hK4qD0bUYbS5wTM0gOIsc6XU/WyRVvqVd967szg3lML8i0oXCrQajuLk3Dce3alTyVfBe04zmaMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=x3OBCoSS; arc=none smtp.client-ip=209.85.208.52
+	s=arc-20240116; t=1711043235; c=relaxed/simple;
+	bh=S9oSym/qSZ42XkAV0+GSoGw4x6SeoXYbiySQVABwUDs=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=ULsNVrr7jMlyZfIuDSbimy6MK64AUZwvcDtRpB8gOLoG0Y1dPqRumx/XPhMgU4/K1d1f5KPezlgE+P3bgHIw+Cy0BedgVgJAS+1y82rEz/qh1hchH3qoTUDq+8qZ9fKIwuODF/aquhLE1Lo011oiSrRpeM9tbmUqivlLoVeYffo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BxqWj9Nd; arc=none smtp.client-ip=209.85.218.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="x3OBCoSS"
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-56b85146589so2243209a12.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 21 Mar 2024 10:46:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BxqWj9Nd"
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a466a27d30aso173328066b.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 21 Mar 2024 10:47:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711043176; x=1711647976; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=s0dOTTXFfrfq9Ues5+BMkl/QwEDK0BHkLP5toiKcXc8=;
-        b=x3OBCoSSKDQUmaDs5w+A83UFD6a//HtPRRuB7RW7aDqs5abMFqDvb1UvgUNZ5YcL0X
-         esEUViiYATp2lCL/KKLu+xdUgl+J44zik0WTDoOk2s0+pIFGEPc/cj+9XRN1NG4O3yn5
-         St8jF7plmFAK29fffDWQnu6ZHwAo7SsmsYWmDdjmmSuiEBN4ihSKM9yN1yWeHFagvktQ
-         ijodTayv1ajfOiGXeHA8M2IAMq0kWiuDHzVeDRHwNow2gpG7WmuebzZGzwviLtrKa8xx
-         R+puZGPMLatDjewS2curPY9CLfe9Vg1xURMPDPZKdu+ePlRrbiAgLj7SFYukVKsrwFwn
-         5BVQ==
+        d=linaro.org; s=google; t=1711043232; x=1711648032; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=TyD8ByCmfhEfH4mEsnzkOHa6CwjzR6nJy3ZoFzpC1YY=;
+        b=BxqWj9NdFo4IBjTZKyqBkAX2cDMJmgx5UMNOnCUqO27b1cEhNW22choHpYgNr/8+xI
+         09ZhK6xaG7pcnoAuUFhyQvwfmi9J35E7U07OpiH6yvgnlmPnGZH1swVHJj084GxcZ//r
+         QIj/H2shmuUSh1RIGDJcOLpOom5sTfOwWrL/Qkicyqf5CXTl3463Q6L3ynvdBvYBy4VR
+         y+6ttu2QWvxqyfpeccMHn+ESQuUcFFMa0n6xPM0GQsZ1EwRomQXq4ehefrhSS5j3I+Yg
+         hEQrbRRiw9PCR11bs7RUxsQwXbAgWmTQDitYe8ZhkzO75nMDOnfLFSmNaG1bMhK/UA3S
+         l47w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711043176; x=1711647976;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s0dOTTXFfrfq9Ues5+BMkl/QwEDK0BHkLP5toiKcXc8=;
-        b=oj9nG/u1fcEk26mpoLUbeyq1LGGYdCzaMmIudl+LB1cKbcTVaIAOHreY7jgVDkhy8i
-         m/YiiRUVFT88HrNDK1H71dDuk995SkMeD+O304SUjTGMJeI+5GpMwdiLZnjJK6id1DC7
-         MXs99qhD85P89kOPvNcKyheLuSoB9nOzzh6uXzfSRCm620y2ynWT9W1GyZS69Fu8PVX+
-         Os/+/8nt3xcSI2cMlHGUqYvV2qJWP2Z0SJUtPIthkJqTbDWkAEpA2lh8yn5TnssYHseA
-         vRea3C3hshSzW7zm8yrG08yKXxL1GA7zkEBeS3lNrH8IFeBAgwh1/Loi+voEyjWcB38H
-         xCXQ==
-X-Gm-Message-State: AOJu0YxdCkReSBpepJph3igGANn0MzBc+PQQ49cVLiqmlAmfZH3JcEK7
-	mRrZcFBalBF1umg4CNoNqnegIMPEn8BloUOi8PJfOZYrMOe1A3MiDL79CS9u7lI=
-X-Google-Smtp-Source: AGHT+IGAnoHF7ZnUlaDRyNuBDzwAyyxaXgrPr0oX691iRTn+TEMFGtgI0ivz96S0AbL/CAmSZ42i7w==
-X-Received: by 2002:a50:d78d:0:b0:568:c6fd:4f50 with SMTP id w13-20020a50d78d000000b00568c6fd4f50mr176577edi.7.1711043176342;
-        Thu, 21 Mar 2024 10:46:16 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1711043232; x=1711648032;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TyD8ByCmfhEfH4mEsnzkOHa6CwjzR6nJy3ZoFzpC1YY=;
+        b=cHtsj1jVpIzD6loE6XTDk3tAw+YuXqKM/ywfNW7bPpmK0VZ3m+9nAxfMx6KWaxU/GC
+         P9eu9eNmyfB5eBIpiYeoPlOGie+YJxMndQm80xoeoGCLjyunxy5/GFn3bZrpL9o6K1u0
+         DSSvpox9jB3hg82LZVTfC4fd3trNbvJQXHeUKN2tOmnGOXOyT9QW45+WAjvbjlCtMBSl
+         nP1GLkKjjeKhojkd94A+8XxvZFfA2CtwNfni560UdxmzzSX64juD1uPIv5MzGbig7yzE
+         m21K0hRhCtjnhSQxG5MZS8kqitBOXiw6Th9DKZMwdqdeidcTFJb5WPpVVEzLDh+YKfLZ
+         0puA==
+X-Gm-Message-State: AOJu0YxCv+CvyEcMsY1+6fvFYRR6pj1jrdEdec8OSLaFu7J6J6Njur6G
+	pYMoXZAurAdO8bxeyxI17NTuyXi/kLtVr0C/O0evzHPBuSr8x7wAgzLsgRVS4/E=
+X-Google-Smtp-Source: AGHT+IHyR11DZj5mOqLK2mDqet5maMSyJzcCWSbfeYEeNKGt+wrpg+t463EoLItJsPHwZqA5LXPHxA==
+X-Received: by 2002:a17:906:d0d8:b0:a46:cee9:e412 with SMTP id bq24-20020a170906d0d800b00a46cee9e412mr106518ejb.15.1711043232190;
+        Thu, 21 Mar 2024 10:47:12 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.222.97])
-        by smtp.gmail.com with ESMTPSA id cm8-20020a0564020c8800b005689f3d6936sm110773edb.53.2024.03.21.10.46.15
+        by smtp.gmail.com with ESMTPSA id a17-20020a1709065f9100b00a46478fbbbesm143207eju.153.2024.03.21.10.47.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Mar 2024 10:46:15 -0700 (PDT)
-Message-ID: <0f180f62-8782-456f-b05e-5bc0a2cb7ef2@linaro.org>
-Date: Thu, 21 Mar 2024 18:46:14 +0100
+        Thu, 21 Mar 2024 10:47:11 -0700 (PDT)
+Message-ID: <babe2744-5a7f-4e51-a313-039be5110600@linaro.org>
+Date: Thu, 21 Mar 2024 18:47:10 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -62,6 +62,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: lm87: convert to dtschema
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: Javier Carrasco <javier.carrasco.cruz@gmail.com>,
  Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
  Rob Herring <robh@kernel.org>,
@@ -71,8 +72,8 @@ Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20240321-hwmon_yaml-v2-0-74fa8eb60ec9@gmail.com>
  <20240321-hwmon_yaml-v2-1-74fa8eb60ec9@gmail.com>
+ <0f180f62-8782-456f-b05e-5bc0a2cb7ef2@linaro.org>
 Content-Language: en-US
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -117,19 +118,22 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240321-hwmon_yaml-v2-1-74fa8eb60ec9@gmail.com>
+In-Reply-To: <0f180f62-8782-456f-b05e-5bc0a2cb7ef2@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 21/03/2024 17:33, Javier Carrasco wrote:
-> Convert existing bindings to dtschema to support validation.
+On 21/03/2024 18:46, Krzysztof Kozlowski wrote:
+> On 21/03/2024 17:33, Javier Carrasco wrote:
+>> Convert existing bindings to dtschema to support validation.
+>>
+>> This is a straightforward conversion with no new properties.
+>>
+>> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+>> ---
 > 
-> This is a straightforward conversion with no new properties.
-> 
-> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-> ---
+> Please keep original Co-developed-by with SoB.
 
-Please keep original Co-developed-by with SoB.
+Ah, sorry, I missed remark in cover letter. Ignore my comment.
 
 Best regards,
 Krzysztof
