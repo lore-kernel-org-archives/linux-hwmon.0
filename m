@@ -1,203 +1,184 @@
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F03E85266;
-	Thu, 21 Mar 2024 14:18:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6634484A5A;
+	Thu, 21 Mar 2024 14:23:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711030709; cv=none; b=RARS/objt+EXKqzfVucyHq3D4nhATkLh2kTnV6zSI1ESvx36zQZTGVbWn+n7xhKY1ZRnqmtCcG4QlaFgkAznkToKy8zdB9hX6ncb4pY9aVyIzaGvfMAYxY2ntam8O86rMVghccU8vTpql8JoSSXQg2Ffhahup29KdebhDla4Gk0=
+	t=1711031009; cv=none; b=FzNlc1RA6Y7vMeWAENQfuTuZ8PyuV8gx23/jO14itO0ZXZ+TEje/67s92CYf/21R+YcOfOFlKhGL0kkGTHxgKYpV1v7pSm5M+SxdlDvj7zQsQxhMOwNvcjl5Nh3wwJiVqrSYguaWNxOWmLJbaVbg5O/b6yg55e00hN8cCYnVI6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711030709; c=relaxed/simple;
-	bh=LK9bZldvR+ngaQivv+IKBbWKyKxbTmRgd4BDWj/uL+E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jalzhoUW1Xi2kT/T97BZXFSAD1kLjMYqBXAkgl1fMl8LsBascfhtTM0QUxkN+loMsQuulxVDePowhk6eH8yxtcd2QXSNBsfNWyJogPeBaiY/LK+a9AjYeJlbH7u1ByTrn1TaHBafOvfrnwUytu1USlpARfrdWQJeTd5NALdRHoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W5tZQB+H; arc=none smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711031009; c=relaxed/simple;
+	bh=i3k8D2smcuGUV4zTuQXD6d2NhakJ/CGMge0aDELRsnE=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=etkXpkzKVeqkJLwRr50ySzB1/V7NmTtUPvZIrccWvlahZbRAMudsPHggIf3v6tZeIbjpvQ6nbNi//NVWLfUmmdp+IrqroIhA4dI71oVgVxHe94vk5lnHmRKzMz28K7hgCwJ3n0/ozv2oW8QKiFRhhQihbxF99kTFPp6coqaVH9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=FBaOWFsv; arc=none smtp.client-ip=148.163.135.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W5tZQB+H"
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-56890b533aaso1203043a12.3;
-        Thu, 21 Mar 2024 07:18:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711030705; x=1711635505; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=w/lpdfUCtz0lBv2riTPfCkmgSeNw1YenoxhxVGp5mxc=;
-        b=W5tZQB+HBV86rGfqg+L5Ty3ZsBIWL+d1VThvlUvcwIxMSCJV+O1NALi9brn/JCBR3C
-         eK9kJa9hBF1ZqtaRRK1QIAOLam+gOO59hUgwAs8hmLGhuk3CQnb/bV/uPTAaA4fD1Y2z
-         sZsgq++93Spbe5YXRPJUjt93GXUwn+EbBdhFKb1ZYKbatEQ0biYLJslbv6kZr2d8smlV
-         IkscmbYQadO56GGf0gCNVwMyuomSgyn0JEUiCs+ryowwH6Zw4bHQ9m78x40U5eP8uHE/
-         RPQIW8ptFHEo7Zei4kwjUV5NA14pes2g+Q47ggSuhOyAe//dNyfwuYu2GstnemPYebxA
-         JABw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711030705; x=1711635505;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=w/lpdfUCtz0lBv2riTPfCkmgSeNw1YenoxhxVGp5mxc=;
-        b=ZGKiW8eR835kohR/dtZKoKTsyJTEb9UnSM2cePX17P5YDE2x+MHkuM1KH0XO8DoJuq
-         Y7BbTBlggRDmcr4T3D89ZBVAP1tECL8pB3jxVbXJHJCBxg3Z0zd9Lk6ok0irwVyQdTC8
-         2ZcnitO2ANy9Oty/spb1wx7ynMnyMBf9PdrKN4MEKMoDHiOVbGyItcvK6h2koMBNWmSU
-         FLzJa1wNsdgt8J+7+FGAjyDhmkd+5i5WSL9FGhjO0S8nYOzB4P/TS3Hj7OB6ROGQYfgS
-         8kgy8BWUVuGhlWMinHkOJ5CTXj8PXrRt1D0JpZxSRHZSunIhWH9XaVhld/1B8OrPM1ab
-         T4RA==
-X-Forwarded-Encrypted: i=1; AJvYcCVjyxDn/o3dpaMiDFp/BU8ttzsxM/E+C+LT4D16G+ZqojzUZNZ/fO1xCLcVRCyyfFOJNGROKGGljXqVwDlBV7jfMr2dssRfWEHoaaXMApjIGyyMgL+C5MIaQ0lzmgTf1BaLyVjak9o2jai1N52kKh0BJjVUMfGkhr3RE3vfli3nvXOJ/ZgS
-X-Gm-Message-State: AOJu0YwlizPiHzcdCAichtoI38UjMqbBu59iTXjCxsbP33uTtSUdN++5
-	6Nc5ZM0v82XyYjmA1DszemWwtzgi3Euxslj2cN4qNwsY/dNOBNSb
-X-Google-Smtp-Source: AGHT+IEYhL+PYbacV6FuQPjcTY17ENffDRKWoIKew08brb57avG7xvZxHD8eHh2ZZskqsTGaagdBwQ==
-X-Received: by 2002:a05:6402:c4e:b0:565:59a:a103 with SMTP id cs14-20020a0564020c4e00b00565059aa103mr6534311edb.33.1711030705280;
-        Thu, 21 Mar 2024 07:18:25 -0700 (PDT)
-Received: from [10.10.12.27] (91-118-163-37.static.upcbusiness.at. [91.118.163.37])
-        by smtp.gmail.com with ESMTPSA id h3-20020a0564020e8300b0056b8dcdaca5sm3507204eda.73.2024.03.21.07.18.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Mar 2024 07:18:24 -0700 (PDT)
-Message-ID: <8d809c67-8a12-4411-86dc-4918073891dd@gmail.com>
-Date: Thu, 21 Mar 2024 15:18:23 +0100
+	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="FBaOWFsv"
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+	by mx0a-00128a01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42LDJwZD012506;
+	Thu, 21 Mar 2024 10:23:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=
+	from:to:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=DKIM; bh=Vp84VOTUBzRN
+	rg+9EBiIB86THBzBhgqxHNyRGEzeUZs=; b=FBaOWFsvHGDRDzPBqza+z9hYKXYm
+	1belL/9dwLg6HgBL3vB0QzLSv8WF/IJRYMi5v6VAAUoxHKCJqmy67P9ivX4A5MHp
+	jupkSPqJHyGzJQXkBPAy/aKVHPiSQSl9yThlHDRj9I73fip/fkVGYL3YwPveBPvv
+	XkOHsMyawINN66/Ajjlilz/30IzoOi+qx+z7T0Z38PusxlHUddBOsKUzntj5xe8M
+	lZyaOIyXY8r9N5LPNFsLKDju4H05iyXvbLfYjR6hlLxTHoZThXB829WhAV5A129a
+	oGECOT+FIH2GjGcOH+AG2N21ZkKRKsEIk3kkMtUiESRqs5JQ8g6Kk9pLVw==
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3wwr8njx1g-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 21 Mar 2024 10:23:11 -0400 (EDT)
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 42LENACi034186
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Thu, 21 Mar 2024 10:23:10 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Thu, 21 Mar
+ 2024 10:23:09 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Thu, 21 Mar 2024 10:23:09 -0400
+Received: from radu.ad.analog.com ([10.48.65.243])
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 42LEMqp8014288;
+	Thu, 21 Mar 2024 10:22:55 -0400
+From: Radu Sabau <radu.sabau@analog.com>
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+        Rob
+ Herring <robh@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Delphine CC Chiu
+	<Delphine_CC_Chiu@Wiwynn.com>,
+        Radu Sabau <radu.sabau@analog.com>, <linux-hwmon@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-i2c@vger.kernel.org>
+Subject: [PATCH v4 1/2] dt-bindings: hwmon: pmbus: adp1050: add bindings
+Date: Thu, 21 Mar 2024 16:21:42 +0200
+Message-ID: <20240321142201.10330-1-radu.sabau@analog.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] dt-bindings: hwmon: max6650: convert to dtschema
-To: Rob Herring <robh@kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, peiyu li <579lpy@gmail.com>,
- linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240320-hwmon_yaml-v1-0-a349ca21ccab@gmail.com>
- <20240320-hwmon_yaml-v1-2-a349ca21ccab@gmail.com>
- <20240321140336.GA1648289-robh@kernel.org>
-Content-Language: en-US, de-AT
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-In-Reply-To: <20240321140336.GA1648289-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-ORIG-GUID: tL-Alckf2BwH53rQv9qeyXDUN_2aMS7l
+X-Proofpoint-GUID: tL-Alckf2BwH53rQv9qeyXDUN_2aMS7l
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-21_10,2024-03-18_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 mlxscore=0 phishscore=0 priorityscore=1501 adultscore=0
+ spamscore=0 suspectscore=0 bulkscore=0 clxscore=1015 lowpriorityscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2403140001 definitions=main-2403210103
 
-On 3/21/24 15:03, Rob Herring wrote:
-> On Wed, Mar 20, 2024 at 06:04:58PM +0100, Javier Carrasco wrote:
->>  Convert existing bindings to dtschema to support validation.
->>
->>  This is a straightforward conversion with no new properties.
-> 
-> Why the indentation?
-> 
+Add dt-bindings for adp1050 digital controller for isolated power supply
+with pmbus interface voltage, current and temperature monitor.
 
-Will be fixed for v2
+Signed-off-by: Radu Sabau <radu.sabau@analog.com>
+---
+v4:
+ *Fix typo in schema link causing warnings at build.
+v3:
+ *Remove extra line before '$id'.
+ *Remove 'address-cells' and 'size-cells' from adp1050 node.
+ *Rename adp1050 node to generic name.
+ *Fix typo from 'adress-cells' to 'address-cells' causing errors in the
+  dt-bindings build.
+v2:
+ *Fix identation for example.
+ *Remove 'adi,vin-scale-monitor' and 'iin-scale-monitor' since they are not used
+  anymore.
+ *Fix typo for 'compatbile' to 'compatible'.
+ *Add blank line under datasheet link.
+---
+ .../bindings/hwmon/pmbus/adi,adp1050.yaml     | 49 +++++++++++++++++++
+ MAINTAINERS                                   |  7 +++
+ 2 files changed, 56 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml
 
->>
->> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
->> ---
->>  .../devicetree/bindings/hwmon/max6650.txt          | 28 ---------
->>  .../devicetree/bindings/hwmon/maxim,max6650.yaml   | 68 ++++++++++++++++++++++
->>  2 files changed, 68 insertions(+), 28 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/hwmon/max6650.txt b/Documentation/devicetree/bindings/hwmon/max6650.txt
->> deleted file mode 100644
->> index f6bd87d8e284..000000000000
->> --- a/Documentation/devicetree/bindings/hwmon/max6650.txt
->> +++ /dev/null
->> @@ -1,28 +0,0 @@
->> -Bindings for MAX6651 and MAX6650 I2C fan controllers
->> -
->> -Reference:
->> -[1]	https://datasheets.maximintegrated.com/en/ds/MAX6650-MAX6651.pdf
->> -
->> -Required properties:
->> -- compatible : One of "maxim,max6650" or "maxim,max6651"
->> -- reg        : I2C address, one of 0x1b, 0x1f, 0x4b, 0x48.
->> -
->> -Optional properties, default is to retain the chip's current setting:
->> -- maxim,fan-microvolt : The supply voltage of the fan, either 5000000 uV or
->> -			12000000 uV.
->> -- maxim,fan-prescale  : Pre-scaling value, as per datasheet [1]. Lower values
->> -			allow more fine-grained control of slower fans.
->> -			Valid: 1, 2, 4, 8, 16.
->> -- maxim,fan-target-rpm: Initial requested fan rotation speed. If specified, the
->> -			driver selects closed-loop mode and the requested speed.
->> -			This ensures the fan is already running before userspace
->> -			takes over.
->> -
->> -Example:
->> -	fan-max6650: max6650@1b {
->> -		reg = <0x1b>;
->> -		compatible = "maxim,max6650";
->> -		maxim,fan-microvolt = <12000000>;
->> -		maxim,fan-prescale = <4>;
->> -		maxim,fan-target-rpm = <1200>;
->> -	};
->> diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6650.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max6650.yaml
->> new file mode 100644
->> index 000000000000..1b33b5fb606d
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/hwmon/maxim,max6650.yaml
->> @@ -0,0 +1,68 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +
->> +$id: http://devicetree.org/schemas/hwmon/maxim,max6650.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Maxim MAX6650 and MAX6651 I2C Fan Controllers
->> +
->> +maintainers:
->> +  - Javier Carrasco <javier.carrasco.cruz@gmail.com>
->> +
->> +description: |
->> +  The MAX6650 and MAX6651 regulate and monitor the speed
->> +  of 5VDC/12VDC burshless fans with built-in tachometers.
->> +
->> +  Datasheets:
->> +    https://datasheets.maximintegrated.com/en/ds/MAX6650-MAX6651.pdf
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - maxim,max6650
->> +      - maxim,max6651
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  maxim,fan-microvolt:
->> +    description:
->> +      The supply voltage of the fan, either 5000000 uV or
->> +      12000000 uV.
-> 
-> Looks like constraints. Please add them.
-> 
-
-Will add enum: [5000000, 12000000]
-
->> +
->> +  maxim,fan-prescale:
->> +    description:
->> +      Pre-scaling value, as per datasheet. Lower values
->> +      allow more fine-grained control of slower fans.
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    enum: [1, 2, 4, 8, 16]
->> +
->> +  maxim,fan-target-rpm:
->> +    description:
->> +      Initial requested fan rotation speed. If specified, the
->> +      driver selects closed-loop mode and the requested speed.
->> +      This ensures the fan is already running before userspace
->> +      takes over.
->> +    $ref: /schemas/types.yaml#/definitions/uint32
-> 
-> Constraints? I'm sure no fan RPM is higher than 10000 and probably much 
-> less than that.
-> 
-> Rob
-
-According to the datasheet (page 9, table 3. Fan Speed), the highest fan
-speed that can be achieved is 30000 RPM (which does not mean that fans
-actually reach that speed). I could use that as the maximum value, though.
-
-Thanks for the review and best regards,
-Javier Carrasco
+diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml
+new file mode 100644
+index 000000000000..10c2204bc3df
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml
+@@ -0,0 +1,49 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/pmbus/adi,adp1050.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Analog Devices ADP1050 digital controller with PMBus interface
++
++maintainers:
++  - Radu Sabau <radu.sabau@analog.com>
++
++description: |
++   The ADP1050 is used to monitor system voltages, currents and temperatures.
++   Through the PMBus interface, the ADP1050 targets isolated power supplies
++   and has four individual monitors for input/output voltage, input current
++   and temperature.
++   Datasheet:
++     https://www.analog.com/en/products/adp1050.html
++
++properties:
++  compatible:
++    const: adi,adp1050
++
++  reg:
++    maxItems: 1
++
++  vcc-supply: true
++
++required:
++  - compatible
++  - reg
++  - vcc-supply
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        clock-frequency = <100000>;
++
++        hwmon@70 {
++            compatible = "adi,adp1050";
++            reg = <0x70>;
++            vcc-supply = <&vcc>;
++        };
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 43b39956694a..b45753e94756 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -479,6 +479,13 @@ L:	linux-wireless@vger.kernel.org
+ S:	Orphan
+ F:	drivers/net/wireless/admtek/adm8211.*
+ 
++ADP1050 HARDWARE MONITOR DRIVER
++M:	Radu Sabau <radu.sabau@analog.com>
++L:	linux-hwmon@vger.kernel.org
++S:	Supported
++W:	https://ez.analog.com/linux-software-drivers
++F:	Dcumentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml
++
+ ADP1653 FLASH CONTROLLER DRIVER
+ M:	Sakari Ailus <sakari.ailus@iki.fi>
+ L:	linux-media@vger.kernel.org
+-- 
+2.34.1
 
