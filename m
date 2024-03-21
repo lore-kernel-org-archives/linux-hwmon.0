@@ -1,140 +1,132 @@
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF18084A28
-	for <linux-hwmon@vger.kernel.org>; Thu, 21 Mar 2024 17:47:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00CC85CB5;
+	Thu, 21 Mar 2024 18:43:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711043235; cv=none; b=AAj5jj4qAyNtt9c07NufPeEe17Sdv30YkhM5XE19/SOGeD4JcOI0nqDFhONk2h7Vnx2Alt/LVbudpfCaG8vpIXwI3fGHsQzx8pyOtZl3Cc9sUYmctXxJJw2wc04jDjg8dPwXT5fz5Id8gm1+bGPXm80jR2mmcaYVi9s8lNd8WoA=
+	t=1711046637; cv=none; b=iNAdsJd0x1aTVDeu5LDmGFGy43CMQvc1bRR4hdGwvcIVOiq8df8QGjVR6AfkMkKgcbnEDJV21JGff68i5doNayk2iv/9onJFAPP4hzMF0AbYezIEAQGTKC2opBLrsc+TJWaDCkmp22IcdG262YWPFvDadtbE/jCuJSAO36lyzrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711043235; c=relaxed/simple;
-	bh=S9oSym/qSZ42XkAV0+GSoGw4x6SeoXYbiySQVABwUDs=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=ULsNVrr7jMlyZfIuDSbimy6MK64AUZwvcDtRpB8gOLoG0Y1dPqRumx/XPhMgU4/K1d1f5KPezlgE+P3bgHIw+Cy0BedgVgJAS+1y82rEz/qh1hchH3qoTUDq+8qZ9fKIwuODF/aquhLE1Lo011oiSrRpeM9tbmUqivlLoVeYffo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BxqWj9Nd; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1711046637; c=relaxed/simple;
+	bh=qb/Bf0zXY7etChiyat2ZjXEDTHS7YWl2pfFPxlK7XNM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=f9u2YZOoG83A+SayYhDaeCDcgpGENdjoGRXqaLRE0hTN2Dfz/ePCf+iYmapTvav5olyc+Gs29tAlsGQ3heCOF+gZ6jSxnEw6DIjfq6KuT6vCgXxDrqhOmxZpAC3d2em9UK+mSaHtByRBFzfbRFTdbt51HH/vsuUvhAnkXlRhfnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f/kBiwgh; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BxqWj9Nd"
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a466a27d30aso173328066b.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 21 Mar 2024 10:47:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f/kBiwgh"
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-56890b533aaso1584409a12.3;
+        Thu, 21 Mar 2024 11:43:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711043232; x=1711648032; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :references:cc:to:from:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=TyD8ByCmfhEfH4mEsnzkOHa6CwjzR6nJy3ZoFzpC1YY=;
-        b=BxqWj9NdFo4IBjTZKyqBkAX2cDMJmgx5UMNOnCUqO27b1cEhNW22choHpYgNr/8+xI
-         09ZhK6xaG7pcnoAuUFhyQvwfmi9J35E7U07OpiH6yvgnlmPnGZH1swVHJj084GxcZ//r
-         QIj/H2shmuUSh1RIGDJcOLpOom5sTfOwWrL/Qkicyqf5CXTl3463Q6L3ynvdBvYBy4VR
-         y+6ttu2QWvxqyfpeccMHn+ESQuUcFFMa0n6xPM0GQsZ1EwRomQXq4ehefrhSS5j3I+Yg
-         hEQrbRRiw9PCR11bs7RUxsQwXbAgWmTQDitYe8ZhkzO75nMDOnfLFSmNaG1bMhK/UA3S
-         l47w==
+        d=gmail.com; s=20230601; t=1711046634; x=1711651434; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=S3YRi7CjBRkbKzL2OgLfygDYkiVqLApDwF8CS48Fl/4=;
+        b=f/kBiwghPzQdYjipKjBp3qfA+pZj2oeiJcGtEKdK8Wp8iV+syeEuFXzcSd2CX29s8/
+         14LWCpdW+ev3yW6yqejGa4R9DdIT9jr2kG7PMQKBgrX5CBnQZmHumqZJUE4k6+A+pLao
+         Jc/rVwcUEUt3XBm6BwMzUlZJan6cfLI5uJcvBKVNQjo3PMnYTWppzwXufJaZ1M0Z3Vov
+         YfCaDo0fP27G9fX2cZgFsOAWjykZsgSpXEzw2pEdVxNaq8M6jFz1cLXTqr2Bq5Jt9isB
+         K2yFbcZIksN8bGhKIZEKQwMhtC8DBvznSuaaTauA3q9v+WBEDfafaCH1aECjtiKC5yML
+         jc5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711043232; x=1711648032;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :references:cc:to:from:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1711046634; x=1711651434;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=TyD8ByCmfhEfH4mEsnzkOHa6CwjzR6nJy3ZoFzpC1YY=;
-        b=cHtsj1jVpIzD6loE6XTDk3tAw+YuXqKM/ywfNW7bPpmK0VZ3m+9nAxfMx6KWaxU/GC
-         P9eu9eNmyfB5eBIpiYeoPlOGie+YJxMndQm80xoeoGCLjyunxy5/GFn3bZrpL9o6K1u0
-         DSSvpox9jB3hg82LZVTfC4fd3trNbvJQXHeUKN2tOmnGOXOyT9QW45+WAjvbjlCtMBSl
-         nP1GLkKjjeKhojkd94A+8XxvZFfA2CtwNfni560UdxmzzSX64juD1uPIv5MzGbig7yzE
-         m21K0hRhCtjnhSQxG5MZS8kqitBOXiw6Th9DKZMwdqdeidcTFJb5WPpVVEzLDh+YKfLZ
-         0puA==
-X-Gm-Message-State: AOJu0YxCv+CvyEcMsY1+6fvFYRR6pj1jrdEdec8OSLaFu7J6J6Njur6G
-	pYMoXZAurAdO8bxeyxI17NTuyXi/kLtVr0C/O0evzHPBuSr8x7wAgzLsgRVS4/E=
-X-Google-Smtp-Source: AGHT+IHyR11DZj5mOqLK2mDqet5maMSyJzcCWSbfeYEeNKGt+wrpg+t463EoLItJsPHwZqA5LXPHxA==
-X-Received: by 2002:a17:906:d0d8:b0:a46:cee9:e412 with SMTP id bq24-20020a170906d0d800b00a46cee9e412mr106518ejb.15.1711043232190;
-        Thu, 21 Mar 2024 10:47:12 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.222.97])
-        by smtp.gmail.com with ESMTPSA id a17-20020a1709065f9100b00a46478fbbbesm143207eju.153.2024.03.21.10.47.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Mar 2024 10:47:11 -0700 (PDT)
-Message-ID: <babe2744-5a7f-4e51-a313-039be5110600@linaro.org>
-Date: Thu, 21 Mar 2024 18:47:10 +0100
+        bh=S3YRi7CjBRkbKzL2OgLfygDYkiVqLApDwF8CS48Fl/4=;
+        b=nqqjlTT1jvRiSqrHmpDntKJNKo09l+JEhAW0/83c9dJDt1/dSpkvGaVYbgvfRrAOFW
+         aE/8N3JAaVu6cJ2uDclCFAurq1ix5AR5AILeD8HCLL7HmtAKG9wW5kgtLRsJv+gPL0JL
+         67aBew+Rqjf+1bSirgiavJDRiUPvdpj2NSTP4E6Up2q3rUloyMVmBKnouVWfatv1TgVR
+         sj0yPi8d6u5M5FSvwpuvD8VRRIhqARKD5E6SDjkBu/b8nGwEO5kc8Tsctmwk0iQdbHB7
+         KuOYOReM1350c7REzjpP7XsUv34akrXfKDKQGmbsJRq7zoIFYTNPXlAuAel6KFFRAz7R
+         ZIMA==
+X-Forwarded-Encrypted: i=1; AJvYcCWx/y16KGDHpjYOYwCre/2U85/52ULJiI3Z35xJN/xmA5opmNFe1rApV6I0Dj1ZPtVlkYc1zAbTsuChBtcqVjq3qZP/mL4nnPUmoKJrG8vz3Sd1XHqsoEjlVRX9VfsH8Zp2LrD/78h7hA==
+X-Gm-Message-State: AOJu0YyPvcgI6G9vZG92jr9TNTlz3x4jJ+M9B9rUhry+aiZHIlaa3fVF
+	fpraE/OF52G6FFA2mS97DAseFTCeYzRrnqPoveCQZLuiRKlOzrEG
+X-Google-Smtp-Source: AGHT+IEFiHREKP8OZY99MKua7vP3dIM4RLhMeHsbw+XjxbzuNF+ZCfqYHSxtkpjGdUDBwcJAT31ZEA==
+X-Received: by 2002:a17:906:b4b:b0:a46:edfb:ff68 with SMTP id v11-20020a1709060b4b00b00a46edfbff68mr195840ejg.5.1711046634142;
+        Thu, 21 Mar 2024 11:43:54 -0700 (PDT)
+Received: from [127.0.1.1] (2a02-8389-41cf-e200-7db2-5855-2c59-b89b.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:7db2:5855:2c59:b89b])
+        by smtp.gmail.com with ESMTPSA id t6-20020a17090616c600b00a4576dd5a8csm188627ejd.201.2024.03.21.11.43.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Mar 2024 11:43:53 -0700 (PDT)
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Subject: [PATCH 0/5] dt-bindings: hwmon: convert multiple devices to
+ dtschema
+Date: Thu, 21 Mar 2024 19:43:41 +0100
+Message-Id: <20240321-hwmon_dtschema-v1-0-96c3810c3930@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: lm87: convert to dtschema
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>,
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, peiyu li <579lpy@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240321-hwmon_yaml-v2-0-74fa8eb60ec9@gmail.com>
- <20240321-hwmon_yaml-v2-1-74fa8eb60ec9@gmail.com>
- <0f180f62-8782-456f-b05e-5bc0a2cb7ef2@linaro.org>
-Content-Language: en-US
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <0f180f62-8782-456f-b05e-5bc0a2cb7ef2@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAN1//GUC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDYyMD3Yzy3Py8+JSS4uSM1NxEXfM0U4s0E0tDQ4vERCWgpoKi1LTMCrC
+ B0bG1tQCDcjUqYAAAAA==
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, 
+ Nicholas Piggin <npiggin@gmail.com>, 
+ Christophe Leroy <christophe.leroy@csgroup.eu>, 
+ "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, 
+ "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+ Javier Carrasco <javier.carrasco.cruz@gmail.com>
+X-Mailer: b4 0.14-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1711046632; l=1900;
+ i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
+ bh=qb/Bf0zXY7etChiyat2ZjXEDTHS7YWl2pfFPxlK7XNM=;
+ b=LOtmOlWuGJJX1J1QTb6GMHIbOB8AUQtCR2RcGKO2IgzNuYJegE0yHi9i1d4c8pEUHYeoO5Fsk
+ Jp0xXdmoM1tARxzZhRyS8V3i+Zh/xozT+HvOd6B9c5uZUNkTIj6vQOV
+X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
+ pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
 
-On 21/03/2024 18:46, Krzysztof Kozlowski wrote:
-> On 21/03/2024 17:33, Javier Carrasco wrote:
->> Convert existing bindings to dtschema to support validation.
->>
->> This is a straightforward conversion with no new properties.
->>
->> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
->> ---
-> 
-> Please keep original Co-developed-by with SoB.
+This series converts the following existing bindings to dtschema:
 
-Ah, sorry, I missed remark in cover letter. Ignore my comment.
+- as370
+- ibmpowernv
+- stts751
+- ibm,p8-occ-hwmon (moved to trivial-devices.yaml)
+
+Additionally, pwm-fan.txt has been dropped because it was converted a
+year ago, and it is not mentioned anywhere in the tree.
+I could not find the rationale, but its current state does not seem to
+provide any valuable information.
+
+The binding of the as370 looks very simple, but given that the reg
+property is not a single address, I have written a dedicated file for
+it. If reg = <address range> is valid in trivial-devices.yaml, I have
+nothing against moving this device as well.
+
+Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+---
+Javier Carrasco (5):
+      dt-bindings: hwmon: as370: convert to dtschema
+      dt-bindings: hwmon: ibmpowernv: convert to dtschema
+      dt-bindings: hwmon: pwm-fan: drop text file
+      dt-bindings: hwmon: stts751: convert to dtschema
+      dt-bindings: hwmon: ibm,p8-occ-hwmon: move to trivial devices
+
+ Documentation/devicetree/bindings/hwmon/as370.txt  | 11 ------
+ .../devicetree/bindings/hwmon/ibm,p8-occ-hwmon.txt | 25 -------------
+ .../devicetree/bindings/hwmon/ibm,powernv.yaml     | 37 +++++++++++++++++++
+ .../devicetree/bindings/hwmon/ibmpowernv.txt       | 23 ------------
+ .../devicetree/bindings/hwmon/pwm-fan.txt          |  1 -
+ .../devicetree/bindings/hwmon/st,stts751.yaml      | 41 ++++++++++++++++++++++
+ .../devicetree/bindings/hwmon/stts751.txt          | 15 --------
+ .../devicetree/bindings/hwmon/syna,as370.yaml      | 32 +++++++++++++++++
+ .../devicetree/bindings/trivial-devices.yaml       |  2 ++
+ 9 files changed, 112 insertions(+), 75 deletions(-)
+---
+base-commit: ebc9bee8814d12ec247de117aa2f7fd39ff11127
+change-id: 20240320-hwmon_dtschema-7f58f49118aa
 
 Best regards,
-Krzysztof
+-- 
+Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
