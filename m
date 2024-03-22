@@ -1,105 +1,138 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3C21107B6
-	for <linux-hwmon@vger.kernel.org>; Fri, 22 Mar 2024 06:26:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A7ADC8E2;
+	Fri, 22 Mar 2024 06:45:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711088777; cv=none; b=KBQWY21JSGOBhlqOVT9kmwdLpe12OLbohfctJZoLtozgryXcnF27O/nx3yxm3EAThg0h9vZd6Zkm6GKh63RxVbpQeC1tlAKvra3nSRkRF60+YE49Xfmw2wXT2EK+Df9hb9nPGz8JRsvPiCmqoqdbEaYNgnXxAlqSzTbz//8P0vo=
+	t=1711089939; cv=none; b=kvfxbzTe0MxwIdNJmdeCOSf6oMPpKdFaotVeqx8JzSMlWt1aYk+p3TKFQCjoXHAn4NYNNlDLoHYmVmaa1Y9coBANMomGiNuHS62LOozb1/2qrVGP9Ay9/o7/PAmnHXil+nuxTOJVWIQ2HeGgbo1+SCnw+wyC9jyadRibQpsN9LY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711088777; c=relaxed/simple;
-	bh=4qRK6YnOIDUQk6MDQBiPsBZv3QED9ZEwnrmxCyN69oQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=sAUf81aP9C6Z8r4NJnBduM6AGrda2cpZoA44aatbrtcxOqRkP36myuXfgDCb0VxJACkQIRW/3PLQ4QugBUFYhfj67Wyu31vlLVD2l1l0lb2kNdXEZLnpKywk2L/7I/5c8bygzN9aNtDSDQLE+vX6NRjAHD9DEI7B4UilSUz8Q/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LVtPtL0u; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1711089939; c=relaxed/simple;
+	bh=/lf0tDQvXRFPt50cWid1RnW3RlMNcFsrS7mt3Xkwubw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=gYJAJzHCGLTf01FpQHiInX6S4ofWrTY94OJbdigvOfsM0DwjGnQpeJZNBkEPY/oMU0/T3tLO8BDoVd4W9Fn2dVEcM0/uckkGEbefURtznOYRlM9qpmc7WOy8NNJhq5GNa5rRg9pPruiSw3nj9amBoHEvFSUfkycVgYKpmCaoDms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZQG17hsO; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LVtPtL0u"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711088776; x=1742624776;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4qRK6YnOIDUQk6MDQBiPsBZv3QED9ZEwnrmxCyN69oQ=;
-  b=LVtPtL0uwDBY4qAhsESbO/kuTrR2Ptk+eKLyss40fJqXDpzIEvt7qamH
-   TvP0bgo0ilvioCFPMvQkpcIYPSjDkTGb7w6ydwV3U+uU8RrINn3SeQYtL
-   +L+AwUyQCYKThpKdzXpwiCbM2TCgcPFpxrpnHvCP4DgsuEvfJcJV0dZWA
-   NHMQvOkS8RyzIDLqBQ6JrjmxpJ0V26uvATLfFWdJP6elk60b4FYVQm4eo
-   1Cbtca7a+4D0JCguaREgHiRWzXaZlYDxfrlpCVm4n7c2jwXa619lfHhEt
-   IqgdI9GPvLXLR8kXZLgTYhuWZB4IoKTNbzxQ3UkolR6Oku2WsfY7PoyiX
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11020"; a="5976085"
-X-IronPort-AV: E=Sophos;i="6.07,145,1708416000"; 
-   d="scan'208";a="5976085"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2024 23:26:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,145,1708416000"; 
-   d="scan'208";a="19439666"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 21 Mar 2024 23:26:14 -0700
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rnYLz-000K5P-34;
-	Fri, 22 Mar 2024 06:26:11 +0000
-Date: Fri, 22 Mar 2024 14:25:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:testing 5/11] arch/nios2/kernel/prom.c:24:17:
- warning: unused variable 'dtb'
-Message-ID: <202403221428.i3uDsXt4-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZQG17hsO"
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a46cc947929so247641166b.1;
+        Thu, 21 Mar 2024 23:45:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711089936; x=1711694736; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ui2/86gYMRmJflyA3uO46uowsgpBJaLyEk39FOlIr+w=;
+        b=ZQG17hsOyVigXsWBn4Gakscd26vEhfyrj+rBwJOlhiOqLHV+0ykQ0RyCpPy+h6iRD6
+         gWSR5xM3sI507gFZJuGB3pyEFqHllrnp+W5Vm71lmW3fKPQjxyEXonUfgWZz605LqkwH
+         9LM+dwQ6GH+LU49aC8KhDd6k3qLdPbJW/RW9Ht/vBeVhtg66KthoCbX+rpC4lH6NFLst
+         IqnG5S6UvQM+4HH11ioA6pKhVAHJmA3ZicXbqql8HmIIimmQOOrtqZxi2hmRaJL6dGPL
+         7Yzurh7hUVugQUlJfcMvUDO3rKEJSkDzwPiODZAUWiM3YPu3+Dz8G6YA0KujmqyoGWwC
+         AOmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711089936; x=1711694736;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ui2/86gYMRmJflyA3uO46uowsgpBJaLyEk39FOlIr+w=;
+        b=R1QC0p8khCAUi53ZzpeE/SeAKXVjtb5G1r1daVl8ekcN4DJZOlWELA2WJnl863cQYP
+         FUF6sSEqhdaqL7SQRaUhHZxAjBbJR9Y4wz9T0/L1Rof81BltFGh4LRMZIiT5QTdylveq
+         yNIHvJDbSsEmouettLClUlFu01wUf9yy9GGmPIc0C1PbZoYwFH3/XDejF9JRMEE4gZX6
+         MdbSoRyeICc/TlfSUJettmPfpc/M3pVRoa2kpZUfVNcQazf8FMqwO26TeL/osfT4GQnW
+         YyWGJ0aK/IgjByDApumQG95+l21rbar+rJfpwAfzdlnB/v82qHdu35VCB4LDBDDRi6GY
+         umYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXC6o1CRtxOAhcwGsfIEC/6qXn7M6KGBKyU8GZTzPoWb/fdDzSV+fD9pTx/wODWA/ATfb0j8D/+FOnQP7UsFNQbyhOFLIvZBcTfgKuFLWLDvNI95vuL7dpWuL7OHuTmlsTrAAZdCAY3+Q==
+X-Gm-Message-State: AOJu0YxEAkkmnXyeTO+VyjzOKn72jRUWPx3vJFX+KE6wx3E8tdcQd9Xo
+	FaGQ1wgUnsmT378apV04apTHBEudIw0Ks04TCtsGoYaD2XefOrSX
+X-Google-Smtp-Source: AGHT+IGtFzN/gx9AFNKUy9rg+o03MkxUw7k8OBf076+VwdSjKPVBe2p5nZFPIt2uvPzL3RYH0jwxwA==
+X-Received: by 2002:a17:906:eb08:b0:a43:f267:789f with SMTP id mb8-20020a170906eb0800b00a43f267789fmr948688ejb.41.1711089935743;
+        Thu, 21 Mar 2024 23:45:35 -0700 (PDT)
+Received: from [127.0.1.1] ([213.208.157.67])
+        by smtp.gmail.com with ESMTPSA id e19-20020a170906375300b00a46bb8a44cdsm679694ejc.198.2024.03.21.23.45.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Mar 2024 23:45:35 -0700 (PDT)
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Subject: [PATCH v2 0/5] dt-bindings: hwmon: convert multiple devices to
+ dtschema
+Date: Fri, 22 Mar 2024 07:45:25 +0100
+Message-Id: <20240322-hwmon_dtschema-v2-0-570bee1acecb@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAUp/WUC/13M3QrCIBjG8VsZ73GGH6tcR91HjBCn84XU0GHF8
+ N6zQScd/h94fitkk9BkOHcrJFMwYwwt+K4D7VSYDcGpNXDKeyo4Je7pY7hNS9bOeEVO9iBtPzA
+ mlYJ2eiRj8bWB17G1w7zE9N78wr7rj2L/VGGEkuGohWRUi0HQy+wV3vc6ehhrrR9LIkOmrAAAA
+ A==
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, 
+ Nicholas Piggin <npiggin@gmail.com>, 
+ Christophe Leroy <christophe.leroy@csgroup.eu>, 
+ "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, 
+ "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+ Javier Carrasco <javier.carrasco.cruz@gmail.com>
+X-Mailer: b4 0.14-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1711089934; l=2069;
+ i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
+ bh=/lf0tDQvXRFPt50cWid1RnW3RlMNcFsrS7mt3Xkwubw=;
+ b=2McnvuoHUuUtyQYvJUEBSnqDqQnJ2c+n4tSid9GmqgqV0Zi9e4tkHLv2pe+8MbsJr3uSAau/w
+ yu/hjQxdwhkDr6+Iz3JBjASswg0ktvFhZOYsYhqCwUWzDO/UB4e8+YF
+X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
+ pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
-head:   fb903d9dd099da7430dc653a99670d6f2676daf6
-commit: 6e2e5d9394a30805514cd15a078ad361ac68c50b [5/11] nios2: Only use built-in devicetree blob if configured to do so
-config: nios2-allnoconfig (https://download.01.org/0day-ci/archive/20240322/202403221428.i3uDsXt4-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240322/202403221428.i3uDsXt4-lkp@intel.com/reproduce)
+This series converts the following existing bindings to dtschema:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403221428.i3uDsXt4-lkp@intel.com/
+- as370
+- ibmpowernv
+- stts751
+- ibm,p8-occ-hwmon (moved to trivial-devices.yaml)
 
-All warnings (new ones prefixed by >>):
+Additionally, pwm-fan.txt has been dropped because it was converted a
+year ago, and it is not mentioned anywhere in the tree.
+I could not find the rationale, but its current state does not seem to
+provide any valuable information.
 
-   arch/nios2/kernel/prom.c: In function 'early_init_devtree':
->> arch/nios2/kernel/prom.c:24:17: warning: unused variable 'dtb' [-Wunused-variable]
-      24 |         __be32 *dtb = (u32 *)__dtb_start;
-         |                 ^~~
+The binding of the as370 looks very simple, but given that the reg
+property is not a single address, I have written a dedicated file for
+it. If reg = <address range> is valid in trivial-devices.yaml, I have
+nothing against moving this device as well.
 
+Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+---
+Changes in v2:
+- ibmpowernv: fix compatible string in the example.
+- Link to v1: https://lore.kernel.org/r/20240321-hwmon_dtschema-v1-0-96c3810c3930@gmail.com
 
-vim +/dtb +24 arch/nios2/kernel/prom.c
+---
+Javier Carrasco (5):
+      dt-bindings: hwmon: as370: convert to dtschema
+      dt-bindings: hwmon: ibmpowernv: convert to dtschema
+      dt-bindings: hwmon: pwm-fan: drop text file
+      dt-bindings: hwmon: stts751: convert to dtschema
+      dt-bindings: hwmon: ibm,p8-occ-hwmon: move to trivial devices
 
-95acd4c7b69c9b Ley Foon Tan  2014-11-06  21  
-95acd4c7b69c9b Ley Foon Tan  2014-11-06  22  void __init early_init_devtree(void *params)
-95acd4c7b69c9b Ley Foon Tan  2014-11-06  23  {
-95acd4c7b69c9b Ley Foon Tan  2014-11-06 @24  	__be32 *dtb = (u32 *)__dtb_start;
-95acd4c7b69c9b Ley Foon Tan  2014-11-06  25  #if defined(CONFIG_NIOS2_DTB_AT_PHYS_ADDR)
-95acd4c7b69c9b Ley Foon Tan  2014-11-06  26  	if (be32_to_cpup((__be32 *)CONFIG_NIOS2_DTB_PHYS_ADDR) ==
-95acd4c7b69c9b Ley Foon Tan  2014-11-06  27  		 OF_DT_HEADER) {
-95acd4c7b69c9b Ley Foon Tan  2014-11-06  28  		params = (void *)CONFIG_NIOS2_DTB_PHYS_ADDR;
-95acd4c7b69c9b Ley Foon Tan  2014-11-06  29  		early_init_dt_scan(params);
-95acd4c7b69c9b Ley Foon Tan  2014-11-06  30  		return;
-95acd4c7b69c9b Ley Foon Tan  2014-11-06  31  	}
-95acd4c7b69c9b Ley Foon Tan  2014-11-06  32  #endif
-6e2e5d9394a308 Guenter Roeck 2024-03-21  33  
+ Documentation/devicetree/bindings/hwmon/as370.txt  | 11 ------
+ .../devicetree/bindings/hwmon/ibm,p8-occ-hwmon.txt | 25 -------------
+ .../devicetree/bindings/hwmon/ibm,powernv.yaml     | 37 +++++++++++++++++++
+ .../devicetree/bindings/hwmon/ibmpowernv.txt       | 23 ------------
+ .../devicetree/bindings/hwmon/pwm-fan.txt          |  1 -
+ .../devicetree/bindings/hwmon/st,stts751.yaml      | 41 ++++++++++++++++++++++
+ .../devicetree/bindings/hwmon/stts751.txt          | 15 --------
+ .../devicetree/bindings/hwmon/syna,as370.yaml      | 32 +++++++++++++++++
+ .../devicetree/bindings/trivial-devices.yaml       |  2 ++
+ 9 files changed, 112 insertions(+), 75 deletions(-)
+---
+base-commit: ebc9bee8814d12ec247de117aa2f7fd39ff11127
+change-id: 20240320-hwmon_dtschema-7f58f49118aa
 
-:::::: The code at line 24 was first introduced by commit
-:::::: 95acd4c7b69c9b250d901d154390ec4c8b7b51c1 nios2: Device tree support
-
-:::::: TO: Ley Foon Tan <lftan@altera.com>
-:::::: CC: Ley Foon Tan <lftan@altera.com>
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Javier Carrasco <javier.carrasco.cruz@gmail.com>
+
