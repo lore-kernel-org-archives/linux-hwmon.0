@@ -1,147 +1,192 @@
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C982171C1;
-	Fri, 22 Mar 2024 06:45:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E30E17998;
+	Fri, 22 Mar 2024 08:12:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711089949; cv=none; b=fFIavbxMEbq1h3TjzjQbAQxgKBDlRmHdZklCoSqkZKGW6Rf5IBXhPYb4EVMnJq3gQMS1TyTqqyPBs6+2/MLk055C4wrAogvnWBfEuPLJ9pvmgtgsif648hYMzOu3wvVQmpfPp2GUshQ1fEtMBbfkBYFrL98UVQSdPhcp5w8YQnE=
+	t=1711095152; cv=none; b=MTo2T7n4xZ27gYp4Ilj9UjlSjr5oEYwgfJ7eIdVX508d1QDn++9mKzPh1QMR88RgXSJRKCa3l3E4n/GQGWdoDRV1ROQQknsGiBFy/4VH6Xfd4eSgjJAeAOU3Iy4GLgNRHpw8TJFKLVpE4lZ6bAPeb9Bzc61yhbdSphd5Vk2qKbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711089949; c=relaxed/simple;
-	bh=4rUBSyPV6ao55dHemnHVuLdadgQFFoAi54Gb6HBKVTY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=WTsbVJXKar/wHmmopI4cT0G7p2NdHgmatIomEL0WQYSYzulKh5LrnrawtsoFf4g9Nu2Tgv42lrIVLc0KHbowHlFfTeN1QerX+WyHbQv3weoFyHWx6AjAR4uY+wlBzMOKHPcD70UDxkpjKiotx9bQQegYIi7xwjPbTTH6TABJdIE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kjkHHFTT; arc=none smtp.client-ip=209.85.218.43
+	s=arc-20240116; t=1711095152; c=relaxed/simple;
+	bh=301i7Aef1JYyE5/4AzGVyJQAFZDvNzA6dBmv5J5jE6g=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=ixCRkBzIIZdS0Dm8ZKJnqCI9+1hCZgrqEVAIMIhZJ25w2hRMd/5wuoE58euxHnai2Jcn1tazY0GdLQe9BbjsNxC//L6MitluAiTH3eCO+HVTI8PVD3zGN9vKqY2RbVifg/n26kJ2GskKJ8yyPOUrcOlQ/ZhhjPL7itnrlf5lSAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h0rJJiIR; arc=none smtp.client-ip=209.85.210.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kjkHHFTT"
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a44ad785a44so209611566b.3;
-        Thu, 21 Mar 2024 23:45:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h0rJJiIR"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6e6b729669bso1457265b3a.3;
+        Fri, 22 Mar 2024 01:12:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711089946; x=1711694746; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=k0ZX0mSNtR84zaDW6QrVcacYADFhCeQmdayKmvm0d6c=;
-        b=kjkHHFTTdjABgPaMb3QPIMWLfVZGR1031sE8cGw1Nlzk/Ffr/vMEYRb95mq3QPr7+k
-         wbcv6ZxfyLR41mv+hxJ4Jt/xSzB3aQVl6ioa3d0XdIJz53I0m2w+QX1MeRTh/cHfwx8s
-         n7sRlcAyA/9rnjkYXznIwCv/5zhkaq5nPJ07EBcwQP7AjzNG7o4ko4nhvL/BeMBK5xfy
-         iKn40tjWnEeMu7AzXcSGTK0XbrVwf3MkavEUbNs3VtmHYk0rdBxY3mbZxRBjfrZ2AdcZ
-         q9vzJEFVuGE8/ykHKlw3M3eMn4k5wjS+kP7RRC73Xzq/gOK6cCYzZLCnulA5CFBJK/+e
-         QIxg==
+        d=gmail.com; s=20230601; t=1711095150; x=1711699950; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=g2twXgqk/JJH1iFtYUNR8nPJ8pAL7XuG13GUJFxIX6E=;
+        b=h0rJJiIRnXUfB/epiGqhPyUtkqtywt1gfGZ5IHFcE0eZTsA3U6QEalDyedpye2LITG
+         4gbRMq1M92IP0ENRp2tIhR30r+Xix4l8hNP/bVcO2g3rHzkZdxi8ypIZuFhRaEiBrJtN
+         HUMAToQ8ict8t/C0YnZBGHSxHOuwaKevhGeNZx8yvw4V7oirQaP8L3/GSE7g2uZf2aJx
+         kzan7AKJsZHMcZ4oDB8PL6UQ45oiOve4KGxRrewEQ5d/awOFPWki+wn5bG8cnOOiiaMz
+         DoX2aEEuvpFCy5R5F3tIMxbPn3Wxejdv0SrxEHG6FtrC0ouLdr2yJKipmdeVzCxCsPRn
+         zuzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711089946; x=1711694746;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1711095150; x=1711699950;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=k0ZX0mSNtR84zaDW6QrVcacYADFhCeQmdayKmvm0d6c=;
-        b=egI5H9cWcRBjDUiPklxLL8D5hmj4m2hpe3WCeJ+rLINS2qsxmfcVwRn8s41ieDok2r
-         btqEPfyEInmB+8TUzNy0YKet97dvkoSjV40vYeeOLQiPlWWJ1ODFVBBiZq8AcLnQd2K5
-         IhHwUhu3V2aavc4CeKJWvHXXdLef6swoxdIcM7BQeBncLgZtdzOWxFbhHGibZsyiSTk7
-         93WNo7ACr0NRq1CWqn9mDf1QGpoN0rHr8Jewzze+OsjtnYxKDH8c6DWzLFy49C5r6vZO
-         6tnclcrtJjiZpZD4mvvOxWIDJssW98e5zk2LlWPIPWmgmMjC6/lgMYciolJTF4VEDiG/
-         MEnA==
-X-Forwarded-Encrypted: i=1; AJvYcCVd1P7S5u3c42MgtsSdYjyB29UNL9XdD3dgm5tI46DCtP82OSHLAfBEbVFKEvv8GM/BD+MSlgfNC27XRE7UJluB3L66tZny8A4EHF3vUfjfcQ/G5Svb6Dz44zk3R8c6HuPUT6kzQVJHPw==
-X-Gm-Message-State: AOJu0Yw8wfQ0tuCA5sXw0GcatSDCe9DpclbeX5Z8dhf+upUhZGHpWkI7
-	8ZhRVVzpbvGNzHtoqWTIlRRtjwMHfSJjD2ZWt3T1CI1sB6DOWEKx
-X-Google-Smtp-Source: AGHT+IHWTwuW8UIUUoXFTdiYrzTtIrzPGEkZkGQ8lAESE+yEAIlcPzGhuzwEM7g3eVOt5C0rx4FIKQ==
-X-Received: by 2002:a17:906:38d7:b0:a46:1d4b:d81 with SMTP id r23-20020a17090638d700b00a461d4b0d81mr1014632ejd.62.1711089945564;
-        Thu, 21 Mar 2024 23:45:45 -0700 (PDT)
-Received: from [127.0.1.1] ([213.208.157.67])
-        by smtp.gmail.com with ESMTPSA id e19-20020a170906375300b00a46bb8a44cdsm679694ejc.198.2024.03.21.23.45.44
+        bh=g2twXgqk/JJH1iFtYUNR8nPJ8pAL7XuG13GUJFxIX6E=;
+        b=MvFPhdtTHz/be5RrEph6sQzzLVbvNq0gpbhX8DxpNr0qxj0d7QF9/s0UhMIeex2dOi
+         QDiOPJPLLHgcNvmUxoDltpskAvzQP/LCdS2azNtPJ2b9I5svnerB2Pn230DYUakbbaq9
+         Dwp/g/aO6LEUBMISFARjWkCWDCltTHR/sUEBxDGrCm+o3KUSyvb+vqeoryQaJ2yUgE1U
+         LfFYQrGsQ1Y0HO5e6fvfx5mz9K0Nfec/WwxOUSA8nlMhLi00Jg+tSvlSeWD9UarUasWe
+         30cDkUs40zZXMaRxAaD9Yt7djCXLf/lgyXvHwVopwI6nKsVd/CSBSI0YfgQMSbXRTKfm
+         6Plw==
+X-Forwarded-Encrypted: i=1; AJvYcCV+rxBfHaLT5OY/BSsn3dhzFrnpTbwDJaxGOVeVxnesgGaxFhVKsHJipLvGHpCTTvK0FHoSOE/kEORgRgcBWtv7LyjnaG4YMSbou0xo0fyoVXC4YxwKdbYn1o+2JJlpKJWfz876OZKKj+z05hS3OFZ96TJkYBZOEoqvlfBcWeOdqteDmQ==
+X-Gm-Message-State: AOJu0YylRqUYjZgxTkdEGDfdnxc8l2TNY3WiY8yge82tL8z4avygIvv3
+	C3YTgBhjoZSn5GnKhrpXZqvQiqVPdykbJYRn+ccE4vttxvx8jkaig5yKX/b4J9Q=
+X-Google-Smtp-Source: AGHT+IHau1QP+QER+BhNbYRjwpexZyV9kw4kLmibA11HZHIoAFd/J+EJOM3PS5pH/y+83Y1YTec3sQ==
+X-Received: by 2002:a05:6a00:1142:b0:6e7:1b3d:4dbf with SMTP id b2-20020a056a00114200b006e71b3d4dbfmr1808324pfm.2.1711095150423;
+        Fri, 22 Mar 2024 01:12:30 -0700 (PDT)
+Received: from hcdev-d520mt2.. (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id s128-20020a625e86000000b006e749161d40sm1132564pfb.113.2024.03.22.01.12.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Mar 2024 23:45:45 -0700 (PDT)
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Date: Fri, 22 Mar 2024 07:45:30 +0100
-Subject: [PATCH v2 5/5] dt-bindings: hwmon: ibm,p8-occ-hwmon: move to
- trivial devices
+        Fri, 22 Mar 2024 01:12:30 -0700 (PDT)
+From: baneric926@gmail.com
+X-Google-Original-From: kcfeng0@nuvoton.com
+To: jdelvare@suse.com,
+	linux@roeck-us.net,
+	robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org,
+	corbet@lwn.net
+Cc: linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	openbmc@lists.ozlabs.org,
+	kwliu@nuvoton.com,
+	kcfeng0@nuvoton.com,
+	DELPHINE_CHIU@wiwynn.com,
+	Bonnie_Lo@wiwynn.com,
+	Rob Herring <robh@kernel.org>,
+	Paul Menzel <pmenzel@molgen.mpg.de>
+Subject: [PATCH v5 1/2] dt-bindings: hwmon: Add NCT7363Y documentation
+Date: Fri, 22 Mar 2024 16:11:57 +0800
+Message-Id: <20240322081158.4106326-2-kcfeng0@nuvoton.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240322081158.4106326-1-kcfeng0@nuvoton.com>
+References: <20240322081158.4106326-1-kcfeng0@nuvoton.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240322-hwmon_dtschema-v2-5-570bee1acecb@gmail.com>
-References: <20240322-hwmon_dtschema-v2-0-570bee1acecb@gmail.com>
-In-Reply-To: <20240322-hwmon_dtschema-v2-0-570bee1acecb@gmail.com>
-To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
- Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, 
- Nicholas Piggin <npiggin@gmail.com>, 
- Christophe Leroy <christophe.leroy@csgroup.eu>, 
- "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, 
- "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
- Javier Carrasco <javier.carrasco.cruz@gmail.com>
-X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1711089934; l=2051;
- i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
- bh=4rUBSyPV6ao55dHemnHVuLdadgQFFoAi54Gb6HBKVTY=;
- b=q70/gdmXCi4RvGIZ+Icn9EMX+Srdt6GnUw1wapHGSfBb5rKgsJsBrfeEQjXEbzRQpC0yBmLNL
- yBJQ7F88FHLBJrbYbGpP85x5g38ot1Fi6LVn2jSQHMJlPTSEvepiCto
-X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
- pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
+Content-Transfer-Encoding: 8bit
 
-This binding meets the requirements to be converted to dtschema
-via trivial-devices.yaml.
+From: Ban Feng <kcfeng0@nuvoton.com>
+
+Add bindings for the Nuvoton NCT7363Y Fan Controller
 
 Reviewed-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+Signed-off-by: Ban Feng <kcfeng0@nuvoton.com>
 ---
- .../devicetree/bindings/hwmon/ibm,p8-occ-hwmon.txt | 25 ----------------------
- .../devicetree/bindings/trivial-devices.yaml       |  2 ++
- 2 files changed, 2 insertions(+), 25 deletions(-)
+ .../bindings/hwmon/nuvoton,nct7363.yaml       | 66 +++++++++++++++++++
+ MAINTAINERS                                   |  6 ++
+ 2 files changed, 72 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/nuvoton,nct7363.yaml
 
-diff --git a/Documentation/devicetree/bindings/hwmon/ibm,p8-occ-hwmon.txt b/Documentation/devicetree/bindings/hwmon/ibm,p8-occ-hwmon.txt
-deleted file mode 100644
-index 5dc5d2e2573d..000000000000
---- a/Documentation/devicetree/bindings/hwmon/ibm,p8-occ-hwmon.txt
-+++ /dev/null
-@@ -1,25 +0,0 @@
--Device-tree bindings for I2C-based On-Chip Controller hwmon device
--------------------------------------------------------------------
--
--Required properties:
-- - compatible = "ibm,p8-occ-hwmon";
-- - reg = <I2C address>;			: I2C bus address
--
--Examples:
--
--    i2c-bus@100 {
--        #address-cells = <1>;
--        #size-cells = <0>;
--        clock-frequency = <100000>;
--        < more properties >
--
--        occ-hwmon@1 {
--            compatible = "ibm,p8-occ-hwmon";
--            reg = <0x50>;
--        };
--
--        occ-hwmon@2 {
--            compatible = "ibm,p8-occ-hwmon";
--            reg = <0x51>;
--        };
--    };
-diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-index e07be7bf8395..87b0dd9b0734 100644
---- a/Documentation/devicetree/bindings/trivial-devices.yaml
-+++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-@@ -126,6 +126,8 @@ properties:
-           - ibm,cffps1
-             # IBM Common Form Factor Power Supply Versions 2
-           - ibm,cffps2
-+            # IBM On-Chip Controller hwmon device
-+          - ibm,p8-occ-hwmon
-             # Infineon barometric pressure and temperature sensor
-           - infineon,dps310
-             # Infineon IR36021 digital POL buck controller
-
+diff --git a/Documentation/devicetree/bindings/hwmon/nuvoton,nct7363.yaml b/Documentation/devicetree/bindings/hwmon/nuvoton,nct7363.yaml
+new file mode 100644
+index 000000000000..c1e5dedc2f6a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/nuvoton,nct7363.yaml
+@@ -0,0 +1,66 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++
++$id: http://devicetree.org/schemas/hwmon/nuvoton,nct7363.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Nuvoton NCT7363Y Hardware Monitoring IC
++
++maintainers:
++  - Ban Feng <kcfeng0@nuvoton.com>
++
++description: |
++  The NCT7363Y is a fan controller which provides up to 16 independent
++  FAN input monitors, and up to 16 independent PWM outputs with SMBus interface.
++
++  Datasheets: Available from Nuvoton upon request
++
++properties:
++  compatible:
++    enum:
++      - nuvoton,nct7363
++      - nuvoton,nct7362
++
++  reg:
++    maxItems: 1
++
++  "#pwm-cells":
++    const: 2
++
++patternProperties:
++  "^fan-[0-9]+$":
++    $ref: fan-common.yaml#
++    unevaluatedProperties: false
++    required:
++      - pwms
++      - tach-ch
++
++required:
++  - compatible
++  - reg
++  - "#pwm-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        hwmon: hwmon@22 {
++            compatible = "nuvoton,nct7363";
++            reg = <0x22>;
++            #pwm-cells = <2>;
++
++            fan-0 {
++                pwms = <&hwmon 0 50000>;
++                tach-ch = /bits/ 8 <0x00>;
++            };
++            fan-1 {
++                pwms = <&hwmon 1 50000>;
++                tach-ch = /bits/ 8 <0x01>;
++            };
++        };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index de6a64b248ae..2705e44ffc0c 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -15216,6 +15216,12 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
+ F:	drivers/hwmon/nct6775-i2c.c
+ 
++NCT7363 HARDWARE MONITOR DRIVER
++M:	Ban Feng <kcfeng0@nuvoton.com>
++L:	linux-hwmon@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/hwmon/nuvoton,nct7363.yaml
++
+ NETDEVSIM
+ M:	Jakub Kicinski <kuba@kernel.org>
+ S:	Maintained
 -- 
-2.40.1
+2.34.1
 
