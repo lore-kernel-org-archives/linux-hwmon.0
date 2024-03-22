@@ -1,129 +1,71 @@
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87A012DF84;
-	Thu, 21 Mar 2024 20:54:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9F53FEF;
+	Fri, 22 Mar 2024 02:11:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711054471; cv=none; b=dg353gR1nR222Tkc5KbhF5DJmDU/BwVUfEL7BOUkAGoQXWIJ/JoUbwkfyRuhpmgpKP7aRLj0MWaueD8DFL6tkH3mu6wiyth13ThX30ANsJtbIstCqeaLy9pLJx71rkk9HLVhEDXnfX0BSMFCxAwx7Q7kOPciCD+q8j0GQDOAVjA=
+	t=1711073478; cv=none; b=VLsGEW2hRmOK85LApkr94j5Kgvh/U8/SmAET1SCu68znrFtuxw079iloYxp295QgXbpPZZVr+Rlyui3r9sl/Mx2pGJbLNKtTazv00g1dvxHHRI+xEjUAxvo05UvtPGJdnwlepGT/O4cUUN5PC9XU7Q4wYmXlFXIdqHErvPPBlE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711054471; c=relaxed/simple;
-	bh=mjDg7wzzBQCmz5jgRMm1V55TPwPVl9hYFeFJAZQ5Fhw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PVgqGQtYv44fowJtikN7CYVCoZotDx+FzNcW0HFMb4Aru7VgEPQ0JH6RZsZGD0lvw5Rj7iAPMatPXecn4OkXhMsks9DZssoGLGaBUsWOkn6xCcglkppAZhPLvr/gPQW6TdiipzAi/uRwSgyuUlyW5A4DZa4eZiIJLbxRABxFDw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S62aIT41; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711073478; c=relaxed/simple;
+	bh=bRUwXwcq6+UznH+399UPrJYqI6arNzHseoKpLcYfxe0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TZjuIorBCmMI6r7GsAC1A2hd7h6eEieri127ro8ujC5ef9VfLOXuZM3rAgGA2LO9VfAIfkHShVQdNjRnxjdbg5gRMkWqOYG5y1NtDvZCeNkk6o98gLSjzkcyLA8QHaIMkAVrd69gftjiyQ90m5jjJoIWQrhY6vGTlG9aC11nCfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sk+QoMQ/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S62aIT41"
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-513e89d0816so1853446e87.0;
-        Thu, 21 Mar 2024 13:54:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711054468; x=1711659268; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4dpqtSWJGyTeUnxqugJzMO94Z9iV/f5bgYjvchhbNxE=;
-        b=S62aIT41CKMejP4Jx1oxEyKBWGx6K88G0mabjcf/8nRtsOflE9Pv381ZO6LK2o6O2V
-         FtQP6HncXJjpIO4N6o4kUkYEtUH20ZhX+Q3n22b/m1kuZNouamMFBmetN6BigwJAWVVZ
-         pn3ez2uOBHmT5sOXeQUem43AgRVGfKQG8io9xkn16wFi43PPWdXd/G9cBOVChcsVIfT2
-         b6ZXhAnVv0+yhtnTEz0/1VQ6ozw5bDDQglQ1tSwF6VtNHq4Fc+JoS5B3W1Qokkk99SFQ
-         rOncIby5jc4P2htZboWDUsW4zT9SLw0MsWhyCKODK2NdEFGBMsFNV0ybfCaZNXbc5p81
-         qgfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711054468; x=1711659268;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4dpqtSWJGyTeUnxqugJzMO94Z9iV/f5bgYjvchhbNxE=;
-        b=jvWI6kfOXgWNFtP/+pL1WclsnhXebqAZohOtIiQGKUhv6a7T4R9v6SPUXzlSCJ1aCt
-         7cw22Md/wuZNwBkHaLms9D1VcewHklNlnPOKm7Seuj8UUpCD2Q810/D7J/72kLv/7ijJ
-         Kz0XjQEQJaJIZF9JSnttbJtujYileMzMHiwTwivBVtNeLiKGUBVW3A8yG8WLnU1wE8tJ
-         vJbQF0Y0KMWi6Qcl8t9R0Pw2+R1DaIHE5jheSMTxBN8pegw/PHL/o+nduHg4RFfzyLO2
-         8MZz818RWOptcpwaJ04I+qSx13vlutKc7KbUDJnMfN2XWc/kcKQ202jfL0etbtFzFKC5
-         9oCA==
-X-Forwarded-Encrypted: i=1; AJvYcCWeI8ERfbTYvDQjrJEip/ogbCDY+OJAY5ajEUcncmvov5pbQGKJDw6IBKBZLMtzt6c/45nS7FLj+kl1e2WrYbvz6fiq80L6pMHa0N672PUOB5KqL/nMVnAFhko1ihShmdJxbV+RL36uMbT9h3sAW8oOe6Bhsy1ApPk6M/JltBl0jCuSMGOt
-X-Gm-Message-State: AOJu0Yz37n4k3D/RM2R6lb5Y+DgjGPaWSZPH8pRPeu+7kpCYpUnRTIQG
-	2P3Te+NvE18TO4vrvd4M7VYBJo0MqSH1zmC5dT5SmfDIRO2sEtLe
-X-Google-Smtp-Source: AGHT+IF00jvltcjrS4QawwDsCnX+RLKRo6CEUXlNmaAZkEy6czLuI6rU56WPSUMOFR9qHZGoD99mGg==
-X-Received: by 2002:a05:6512:3051:b0:513:9e13:6403 with SMTP id b17-20020a056512305100b005139e136403mr390726lfb.21.1711054467418;
-        Thu, 21 Mar 2024 13:54:27 -0700 (PDT)
-Received: from ?IPV6:2a02:8389:41cf:e200:9fd4:5a72:5943:9800? (2a02-8389-41cf-e200-9fd4-5a72-5943-9800.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:9fd4:5a72:5943:9800])
-        by smtp.gmail.com with ESMTPSA id gt32-20020a1709072da000b00a46ee5b9aa1sm302555ejc.90.2024.03.21.13.54.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Mar 2024 13:54:27 -0700 (PDT)
-Message-ID: <469068f9-b219-4d80-bab4-cbffaa04a67d@gmail.com>
-Date: Thu, 21 Mar 2024 21:54:25 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sk+QoMQ/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1509C433C7;
+	Fri, 22 Mar 2024 02:11:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711073478;
+	bh=bRUwXwcq6+UznH+399UPrJYqI6arNzHseoKpLcYfxe0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sk+QoMQ/o/oN7+yK5p3GzogBuI4EwkmP2qoj2f+DN+Z5xODTM9DgPF4n9Os1lZTjh
+	 amV+GtKXHwvdiF82dE8cM8qjZ1f6GtWr95h9Pdna7Ln074skbhvZY6ZkneJkYdy7KK
+	 KWmZI0XYVINaOfi5ZHxZ58ZZ+wI6AcqvWLzcPutkO7pB5peg5FqnMPNYno6sd5MORI
+	 Hfd48TIpZhCL152ozoT7t4nko3jiWykPzxCyg7A2kLlZ7KzkJdgIXVmhSncHqsGP80
+	 002dQAXzprnGPhlPMBz7lssZCSPJ8sfS5WrUKA1yw6aniyTfcLdPGydVn/LYb+mHgw
+	 SyaXf7AfvxwJQ==
+Date: Thu, 21 Mar 2024 21:11:15 -0500
+From: Rob Herring <robh@kernel.org>
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Cc: Nicholas Piggin <npiggin@gmail.com>, Guenter Roeck <linux@roeck-us.net>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	devicetree@vger.kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	linux-kernel@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+	linux-hwmon@vger.kernel.org,
+	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+	linuxppc-dev@lists.ozlabs.org,
+	Michael Ellerman <mpe@ellerman.id.au>
+Subject: Re: [PATCH 1/5] dt-bindings: hwmon: as370: convert to dtschema
+Message-ID: <171107347196.3412490.13524573365195502461.robh@kernel.org>
+References: <20240321-hwmon_dtschema-v1-0-96c3810c3930@gmail.com>
+ <20240321-hwmon_dtschema-v1-1-96c3810c3930@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/5] dt-bindings: hwmon: ibmpowernv: convert to dtschema
-To: Rob Herring <robh@kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- linux-hwmon@vger.kernel.org, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
- Nicholas Piggin <npiggin@gmail.com>, Jean Delvare <jdelvare@suse.com>,
- Conor Dooley <conor+dt@kernel.org>, linuxppc-dev@lists.ozlabs.org,
- devicetree@vger.kernel.org, "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, linux-kernel@vger.kernel.org,
- Christophe Leroy <christophe.leroy@csgroup.eu>
-References: <20240321-hwmon_dtschema-v1-0-96c3810c3930@gmail.com>
- <20240321-hwmon_dtschema-v1-2-96c3810c3930@gmail.com>
- <171105391076.2619280.17497439995032037227.robh@kernel.org>
-Content-Language: en-US, de-AT
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-In-Reply-To: <171105391076.2619280.17497439995032037227.robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240321-hwmon_dtschema-v1-1-96c3810c3930@gmail.com>
 
-On 3/21/24 21:45, Rob Herring wrote:
+
+On Thu, 21 Mar 2024 19:43:42 +0100, Javier Carrasco wrote:
+> Convert existing binding to support validation.
 > 
-> On Thu, 21 Mar 2024 19:43:43 +0100, Javier Carrasco wrote:
->> Convert existing binding to support validation.
->>
->> This is a straightforward conversion with now new properties.
->>
->> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
->> ---
->>  .../devicetree/bindings/hwmon/ibm,powernv.yaml     | 37 ++++++++++++++++++++++
->>  .../devicetree/bindings/hwmon/ibmpowernv.txt       | 23 --------------
->>  2 files changed, 37 insertions(+), 23 deletions(-)
->>
+> This is a straightforward conversion with now new properties.
 > 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> Documentation/devicetree/bindings/hwmon/ibm,powernv.example.dtb: /example-0/sensor: failed to match any schema with compatible: ['st,stts751']
+> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/hwmon/as370.txt  | 11 --------
+>  .../devicetree/bindings/hwmon/syna,as370.yaml      | 32 ++++++++++++++++++++++
+>  2 files changed, 32 insertions(+), 11 deletions(-)
 > 
 
-Obvious mistake, this compatible belongs to another patch of the series.
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-Will be fixed for v2.
-
-> doc reference errors (make refcheckdocs):
-> 
-> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240321-hwmon_dtschema-v1-2-96c3810c3930@gmail.com
-> 
-> The base for the series is generally the latest rc1. A different dependency
-> should be noted in *this* patch.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit after running the above command yourself. Note
-> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-> your schema. However, it must be unset to test all examples with your schema.
-> 
-
-Best regards,
-Javier Carrasco
