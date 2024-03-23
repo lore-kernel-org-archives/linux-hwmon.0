@@ -1,73 +1,54 @@
-Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29C552AD1A;
-	Sat, 23 Mar 2024 14:21:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E3F525568
+	for <linux-hwmon@vger.kernel.org>; Sat, 23 Mar 2024 14:38:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711203673; cv=none; b=sXfogq3zIcrxfbxUBv+42jYIXBGiiw3xWldnFlj9Sd+Gd3QDTLkHASsVICA3JXlnf/LtxoJfeaL+lKJpiEY8qJIRPHm5L5aFdRKrgsjzUmomXvPftBgUjdXjYCZdN7772pJoqomph72f6GyPcCOk+g9q+nlYcoI6H8xvZ3iBX7Y=
+	t=1711204685; cv=none; b=csocbm9DvpBzTfygn7PcPdz0rQ5C/465sY7gmLytyV2n+AEEKBCt2bjNqOpMGPaD0hBq/QxBf3XA5zj5p+r9QXRclDCSMEzthXOPiMCpUs1mk3RiFehnFEDdgO+k2nWsRjB2Mj3RFaeHx9OTEeFFdKjo+T9MzdHLFOlkl8Aq6H8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711203673; c=relaxed/simple;
-	bh=LQSM7yKhUlOQk85flm8Fe9F1E4PUvVnlh+Dz78622r4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ti+QYMvyX85iVI73/3NhHECfJ8zt4Cn+kGTTkT2aLk9xR2n2Cfd1HDX3aZLegKiaf8vNfD80d/YetJF0IOPbjG2mGR0/GlVO2nr2YFjo+9K2MGv7xvaQyBKM/Up+vwzRLOWx2jJPM6eCiz8ZSMQz5ae0R/BE7UZZXkJFvknCjYk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cDYfbwsg; arc=none smtp.client-ip=209.85.166.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711204685; c=relaxed/simple;
+	bh=CLQw6/V6k3KyRL4I+lJyNuTbI0EyYEgAOGQAsThb6Tg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=cQfdnlGkr/dz/mqJ5Api2x+hTw9fAcX3jbT4Mu0XnGt7Zo7bu3TLKAHITJv9ylUhxrwj0PfAgG1cPZbNdTmt2/VFujFgicYXGpKqhsfNiDgTw0z82cIvlq/tZsW4ZewX0mbOmNYNEr5xMZXVEAVjRjFWLc0By0Xx6zLLySgvgbU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n3hnr/rH; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cDYfbwsg"
-Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-366a4bcb2a8so14261125ab.3;
-        Sat, 23 Mar 2024 07:21:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711203671; x=1711808471; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/RHXM9mG48Bs/22v7l3z5kWBGbxkBAHgIQXpP0ZgZIM=;
-        b=cDYfbwsgM3K+UfwT268jvHLNnofC/AtU0lKzwj2nWeq3jk9thmG5ktw0AvSlLVQ9vl
-         hnObjGsLqwSLXQ/R0sdDDcLzV+VN9V+BAC8iuGf81lYuDW4m6/aZRJPIUoE5dUBtkCl9
-         Qa6Nq3mWNMZtAWZYrDi3j6gOV5Kml9Ix7DkgsaU43+mxSHnyLiaEPPY2sEeVIKnSCJ2G
-         c2CRiJCwSWi792ywmeywhDq40X71G8++lRzfi8cBWZhPbxeoU6tzIe92k4sFlPGmv43d
-         xBVAtFl5zExYh7p55fbEsak4zk7Vv/MdCz7flzB6dK7dyj6EWO5QrvNa3NUDNmGPsWT8
-         K9Vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711203671; x=1711808471;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/RHXM9mG48Bs/22v7l3z5kWBGbxkBAHgIQXpP0ZgZIM=;
-        b=NKWs+piPW1DL+edy+rhfBNngMjuiU9+poWpKNF41Hwguo0dAZtLPJLUPk9gT4Ad0Bo
-         GTO11pFkwtZkbk2BZN/xAOBPuqk2fwLsu9bg6HtwGPaI5c2R1iEbbN/+cozTR/1K5x0D
-         MAE8DkHL/l1uUJKkUFEiEsKfMdHtYAdTu0Ok6jwIMMmYnSKLJ7ZjqLZhd0ovIqAmu5tH
-         QjHow/UZB6KlVo+QDA8VJ3yrCRpj3CggPuv/enPGwV+kW7Nfc7eGLQADmDcxw+Kxi3qs
-         dnPi50mcoCD135JcEL+SeRT4IzwTYV1vCJZ0dfwBJpDoP7bNbSPfPHsxIyQ92fbsb2/y
-         2YvA==
-X-Forwarded-Encrypted: i=1; AJvYcCXf7hSQhlPasNj1fpIkH67p201fdBil6b2/3XDk/3TBygCCmycS2nKdw7ln4zOopYHTaATW1qouTGjD/cScZ0x88+nNzXxyFkJJwZoKwHpvZjlClPUEstkWBxQX7MSUkXXh5v4320JtffeWrk4Zrhb4NUcA48Qxo7iJ403v96RbbHnjcETk1Oks1z7GpF9gmNoUHgHpl6rsPu5WLRC8b+n76iNEMvTtkFQ48Do/nnA/w4fKHZP69N/wZwu2
-X-Gm-Message-State: AOJu0YwoTOOwEyrg6XbI9W28IXU8sPOAh4QQ4soHyXzldgtl5fptPVoM
-	7DbHRJQbVMeCqnht7RGJJUDlNCEc2QLprxMH8H5/Awkx+SFept2s
-X-Google-Smtp-Source: AGHT+IGieyMNvkHptTNnBXY0vmfynM/4kqD++PFKUn1PsQP6D4hnpbLYIB/4XTAvfD3Ocv6HP44nNg==
-X-Received: by 2002:a92:c6ca:0:b0:366:43bd:f0f5 with SMTP id v10-20020a92c6ca000000b0036643bdf0f5mr2611079ilm.17.1711203671333;
-        Sat, 23 Mar 2024 07:21:11 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d12-20020a631d4c000000b005dcaa45d87esm3203575pgm.42.2024.03.23.07.21.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Mar 2024 07:21:10 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sat, 23 Mar 2024 07:21:10 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Radu Sabau <radu.sabau@analog.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] hwmon: pmbus: adp1050: Add driver support
-Message-ID: <884ad5e7-3cac-4589-a509-a7bb63545824@roeck-us.net>
-References: <20240321142201.10330-1-radu.sabau@analog.com>
- <20240321142201.10330-2-radu.sabau@analog.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n3hnr/rH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711204683; x=1742740683;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CLQw6/V6k3KyRL4I+lJyNuTbI0EyYEgAOGQAsThb6Tg=;
+  b=n3hnr/rHOyyz0HDIx0QkfHnqUtlbXIH00YIfZbFXddsi3v7oQQcQihWz
+   sKW8PCqhFV3eo/mWfBE1FN7hRe3KjmwBH1whvLm6q85l3Zk5I9tVJp4cx
+   lp6hZ8lyolSShm4BopYXkwoZQH+uT6n3XzVzBscuk5jY5GULuz8PG3MBc
+   gMZUDBJBm6vVBjxL9CDxACIhZNEC2KgdWSq2wo9+PzhyQs+y6K8a49a2Y
+   A8USQa6EoNUMIdouUfLfTXaPaRF9lPK9XrBf42aYGVpV83rg+WP6/jbrb
+   ktEnFVM29KIkqcFjGoS0R0qMu+041tYojQ4xxC05Wb0pMqfAv/2LEz2X+
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11021"; a="31684249"
+X-IronPort-AV: E=Sophos;i="6.07,149,1708416000"; 
+   d="scan'208";a="31684249"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2024 07:38:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,149,1708416000"; 
+   d="scan'208";a="46180018"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 23 Mar 2024 07:38:02 -0700
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ro2VT-000LER-0Y;
+	Sat, 23 Mar 2024 14:37:59 +0000
+Date: Sat, 23 Mar 2024 22:37:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:testing 10/11] arch/nios2/kernel/prom.c:24:39:
+ sparse: sparse: incorrect type in initializer (different base types)
+Message-ID: <202403232201.JtbvWJxL-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -76,24 +57,32 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240321142201.10330-2-radu.sabau@analog.com>
 
-On Thu, Mar 21, 2024 at 04:21:43PM +0200, Radu Sabau wrote:
-> Add support for ADP1050 Digital Controller for Isolated Power Supplies
-> with PMBus interface Voltage, Current and Temperature Monitor.
-> 
-> The ADP1050 implements several features to enable a robust
-> system of parallel and redundant operation for customers who
-> require high availability. The device can measure voltage,
-> current and temperature that can be used in different
-> techniques to identify and safely shut down an erroneous
-> power supply in parallel operation mode.
-> 
-> Signed-off-by: Radu Sabau <radu.sabau@analog.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
+head:   471566efaf17fc2be0b9be63bf04d2c44fbb3b20
+commit: a1f82fe941b07e2ba651fd5ace75e88209adb8ba [10/11] nios2: Only use built-in devicetree blob if configured to do so
+config: nios2-randconfig-r132-20240323 (https://download.01.org/0day-ci/archive/20240323/202403232201.JtbvWJxL-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 13.2.0
+reproduce: (https://download.01.org/0day-ci/archive/20240323/202403232201.JtbvWJxL-lkp@intel.com/reproduce)
 
-Applied to hwmon-next.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403232201.JtbvWJxL-lkp@intel.com/
 
-Please note that the branch will be pushed after the commit window closed.
+sparse warnings: (new ones prefixed by >>)
+>> arch/nios2/kernel/prom.c:24:39: sparse: sparse: incorrect type in initializer (different base types) @@     expected restricted __be32 [usertype] *[unused] dtb @@     got unsigned int [usertype] * @@
+   arch/nios2/kernel/prom.c:24:39: sparse:     expected restricted __be32 [usertype] *[unused] dtb
+   arch/nios2/kernel/prom.c:24:39: sparse:     got unsigned int [usertype] *
 
-Thanks,
-Guenter
+vim +24 arch/nios2/kernel/prom.c
+
+    21	
+    22	void __init early_init_devtree(void *params)
+    23	{
+  > 24		__be32 __maybe_unused *dtb = (u32 *)__dtb_start;
+    25	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
