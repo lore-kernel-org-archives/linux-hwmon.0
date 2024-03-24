@@ -1,59 +1,70 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AADB17BC7;
-	Sun, 24 Mar 2024 15:08:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09CD61B26E;
+	Sun, 24 Mar 2024 18:13:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711292923; cv=none; b=qGXsEdQU6nlmHKVnN5X8wSZjlqplxD2FK+vVNVoKAO1m+jJu7T9Y+i0uS8wOkXgvWXcuNqKGTYqd/GphzX9xtIbutiAVd+DnWoiyhagEPIh94l7rbW+tu9vvvMxLUXj+gz8JYrLsl+pO89kwie77OtAswFFtuq4R6TBnINpMY9M=
+	t=1711303993; cv=none; b=QQjPt4ZPauFSVtY0FYJoROXZgmmw0KZZvzdoQY0gtzv0VbCMyFmOK62dhqXn3QsFkiDcBMIYr+VHgWrnVfHohl8WMReniCseyYylHGRV3tO7dLCPZy0XuEFcLbwkTEAl2xACsBTLOdPlMKhvwK8aKseASZGb/YyObVwx9x/5/qI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711292923; c=relaxed/simple;
-	bh=jbSdBHS0w1eaicjduO3/4ltPjzKnV2+4/Gm18hBir+0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ijRQ4lNHlL173oHqBqQ71u+nL5SGXr/O+duF+MwDOia0Qu6RBmViSJOjmLidbjca2gomZpGR0c7pH1wvZQjAp+aZPP1Tb5IpTyLv9nhCQd5gS514DzTSy+NOvP4XSmL/pUxdEZhN3lsa4TWJEG0EyQ9WBT2c7flkKRhCw9bQrjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CCaqs4Q0; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711303993; c=relaxed/simple;
+	bh=XgbBGGwGXULlxO4TSzA3FNjrXTBCw9cKpRq1y707mIA=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=K9cXp4ho0DhmUUWF0Be6XEIj+TMq81cnEZMGtkJHL+oZmFN8PRlWKiSGcfEB4vsOmBvz0MlJvBl6MDvFRD7wFMR5YqIYFKMGlkZVd+CbnlFu8FKqYpIniRp9dXx9fazrV+YJJba4XTMyZb0Z+ao2D2wL4WgUiURVkbBrxDaOxRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i4dzoluR; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CCaqs4Q0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE7ADC433C7;
-	Sun, 24 Mar 2024 15:08:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711292923;
-	bh=jbSdBHS0w1eaicjduO3/4ltPjzKnV2+4/Gm18hBir+0=;
-	h=Date:From:To:List-Id:Cc:Subject:In-Reply-To:References:From;
-	b=CCaqs4Q0v54OS/qibjDzeR5rnTLCeMB5BEWL9FOQOm8nUsrsP4agxz9UeijgZT7BG
-	 4MKSbYfhrQ29CGt+4vnpliHU74QTU5qGLG+bJ0dnax0OIzumnGe5d79tXGVUDVMCwA
-	 SUnGl4wT7Kx7SgjiwWQGT8hc1XE8NU7wy5/lvXLsYw1SyVT+Lk0Y7KoBDoIr+Sq5kz
-	 G3RLG4eMVQAo0e9iXkjKdxwniW2P5X8xhO9Ro3uHGyprv5IKfuJrfyJjlUyZ06toot
-	 J/zg4uC6SCjy+mHbaghEESneDQeaLg4J7rdI5mJb4e8SPi2cU5WxgujzdHnBylvUEu
-	 2BTwaVwc1gecg==
-Date: Sun, 24 Mar 2024 16:08:28 +0100
-From: Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: Jonathan.Cameron@huawei.com, Laurent.pinchart@ideasonboard.com,
- airlied@gmail.com, andrzej.hajda@intel.com, arm@kernel.org, arnd@arndb.de,
- bamv2005@gmail.com, brgl@bgdev.pl, daniel@ffwll.ch, davem@davemloft.net,
- dianders@chromium.org, dri-devel@lists.freedesktop.org,
- eajames@linux.ibm.com, gaurav.jain@nxp.com, gregory.clement@bootlin.com,
- hdegoede@redhat.com, herbert@gondor.apana.org.au, horia.geanta@nxp.com,
- james.clark@arm.com, james@equiv.tech, jdelvare@suse.com,
- jernej.skrabec@gmail.com, jonas@kwiboo.se, linus.walleij@linaro.org,
- linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux@roeck-us.net, maarten.lankhorst@linux.intel.com,
- mazziesaccount@gmail.com, mripard@kernel.org, naresh.solanki@9elements.com,
- neil.armstrong@linaro.org, pankaj.gupta@nxp.com,
- patrick.rudolph@9elements.com, rfoss@kernel.org, soc@kernel.org,
- tzimmermann@suse.de
-Subject: Re: [PATCH v5 08/11] devm-helpers: Add resource managed version of
- debugfs directory create function
-Message-ID: <20240324160828.7f873a96@thinkpad>
-In-Reply-To: <69264f8a-a113-4d49-b8a6-fb9e858584e4@wanadoo.fr>
-References: <20240323164359.21642-1-kabel@kernel.org>
-	<20240323164359.21642-9-kabel__6885.49310886941$1711212291$gmane$org@kernel.org>
-	<f7c64a5a-2abc-4b7e-95db-7ca57b5427c0@wanadoo.fr>
-	<20240323222506.4ffbdd71@thinkpad>
-	<69264f8a-a113-4d49-b8a6-fb9e858584e4@wanadoo.fr>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.39; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i4dzoluR"
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a4a387ff7acso2152366b.2;
+        Sun, 24 Mar 2024 11:13:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711303990; x=1711908790; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Dy7ZVUlfRPULLcIJsQocCw5EkeSKRhtzYUsef6lkqKw=;
+        b=i4dzoluRABZNKAdgcyvbm2vYc3o/sHQ1eEKxrwLDwpQKqMdNb1Gtb5UeGer2soiWIN
+         vXhU7eAExLP4Wo83MFszYfmUubC4ooeXwOiPz1E/9a4Jbo4mNXA4dol/t7smW/uGfjV6
+         Mlds6tyhxWymyrf3yODuT6SD2BWZV5vg4njGaFZEwXuAYLb1DP/cOKRZm0FxtYDiYMDz
+         v7aPVblaYZu8Ur9tf7hivhtYbap/CGWE44X34vsVyO3TzzGvvZhyEZZKc4WVVjnznRBS
+         ixxtZ7dKQLWR4J+fDJHf5Zsw+391gDIUqL+cFzoIW7zWmFBFY9mQ3bw/GE0iAx8nJvG7
+         VC0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711303990; x=1711908790;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Dy7ZVUlfRPULLcIJsQocCw5EkeSKRhtzYUsef6lkqKw=;
+        b=wfkF8CT4uaPYzZAbw5fKuz2Z+/2zD0qaOH7RPwICB9GMRqWQSgQ4uBbTXvPz4pVEh1
+         Ku1v9I4U/2CryHxsTlMlRk2fc28ej8rd+7MlplMTThfoJAZRmblnckswgMHHe69QpMc/
+         wRvz5SKAYF9Nu0Ng7NuPExh1VHHgV+4D0TcyBOwrMv3Wt6K0ozaYmU9W4kZIqTv4H678
+         kqSBzVUp1kcE79fP29ag1ETMbjYRScxuTRmjVktlchakXVcxqS8E7krTJqCfwCJkVnyI
+         aZ2chwJnPzvrEfCVY7PxcmRwEzrJJSVzyLYLV2D+s8vHU13F6YZNRzcievHUe6lMqy/Q
+         Od2w==
+X-Forwarded-Encrypted: i=1; AJvYcCXa+BW5UUyWgna9fFL56V60GWv5i7ZuKcnycFR5pViXk8C6fJmHzKzne2ysRbNNbGm/p0q+epkJGmPZNkLrj9e9AeJS9LEyUCLHn16TsFn/KRvFm+cCGA2DFHYxfq941vLpgpSP8hcOg2+yXGBfcZ0F80byPbKfTXT/IhTvJCnr56bd0z+HZZ+5qvjt3MexkGH6/izBRPEv9MPxyJIf8TYAf5p6A0O+UDlwfA==
+X-Gm-Message-State: AOJu0Yz1xmAdrOTBbZpfZKRnH1WWlmqylQUjRJfntBEmcBoJ6KfvNWjE
+	2WSFOOqhc80u5r+4UoT0QZa2p557WcZdPoGZ/ZvGFUsBb2yDw35Z
+X-Google-Smtp-Source: AGHT+IHE2HZWu5qzpR+jX0UnZmejEC9L7cDk5g1U+zY+WqgnUfkf6nBAjxJl/3cYZwLBW8r1BvDgZQ==
+X-Received: by 2002:a17:906:d0d7:b0:a47:5265:9aac with SMTP id bq23-20020a170906d0d700b00a4752659aacmr1227914ejb.55.1711303989992;
+        Sun, 24 Mar 2024 11:13:09 -0700 (PDT)
+Received: from localhost.localdomain ([94.120.85.57])
+        by smtp.gmail.com with ESMTPSA id lb13-20020a170906adcd00b00a4750131edasm1085504ejb.206.2024.03.24.11.13.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Mar 2024 11:13:09 -0700 (PDT)
+From: mustafa <mustafa.eskieksi@gmail.com>
+To: hdegoede@redhat.com,
+	ilpo.jarvinen@linux.intel.com,
+	jdelvare@suse.com,
+	linux@roeck-us.net,
+	pavel@ucw.cz,
+	lee@kernel.org,
+	mustafa.eskieksi@gmail.com,
+	linux-kernel@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-leds@vger.kernel.org
+Subject: [PATCH v5 0/1] platform/x86: Add wmi driver for Casper Excalibur laptops
+Date: Sun, 24 Mar 2024 21:12:00 +0300
+Message-ID: <20240324181201.87882-1-mustafa.eskieksi@gmail.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -61,61 +72,32 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sun, 24 Mar 2024 10:21:28 +0100
-Christophe JAILLET <christophe.jaillet@wanadoo.fr> wrote:
+From: Mustafa Ekşi <mustafa.eskieksi@gmail.com>
 
-> Le 23/03/2024 =C3=A0 22:25, Marek Beh=C3=BAn a =C3=A9crit=C2=A0:
-> > On Sat, 23 Mar 2024 22:10:40 +0100
-> > Christophe JAILLET <christophe.jaillet@wanadoo.fr> wrote:
-> >  =20
->=20
-> ...
->=20
-> >>>    static int pvt_ts_dbgfs_create(struct pvt_device *pvt, struct devi=
-ce *dev)
-> >>>    {
-> >>> -	pvt->dbgfs_dir =3D debugfs_create_dir(dev_name(dev), NULL);
-> >>> +	pvt->dbgfs_dir =3D devm_debugfs_create_dir(dev, dev_name(dev), NULL=
-);
-> >>> +	if (IS_ERR(pvt->dbgfs_dir))
-> >>> +		return PTR_ERR(pvt->dbgfs_dir); =20
-> >>
-> >> Not sure if the test and error handling should be added here.
-> >> *If I'm correct*, functions related to debugfs already handle this case
-> >> and just do nothing. And failure in debugfs related code is not
-> >> considered as something that need to be reported and abort a probe fun=
-ction.
-> >>
-> >> Maybe the same other (already existing) tests in this patch should be
-> >> removed as well, in a separated patch. =20
-> >=20
-> > Functions related to debugfs maybe do, but devm_ resource management
-> > functions may fail to allocate release structure, and those errors need
-> > to be handled, AFAIK. =20
->=20
-> I would say no.
-> If this memory allocation fails, then debugfs_create_dir() will not be=20
-> called, but that's not a really big deal if the driver itself can still=20
-> run normally without it.
+Hi,
+I want to note that moving mutex_init to the bottom of the function
+crashes the driver when mutex_lock is called. I didn't investigate it
+further but I wanted to say that since Ai Chao also did it like that.
 
-debugfs_create_dir() will always be called. Resource allocation is done
-afterwards, and if it fails, then the created dir will be removed.
+Driver sets all leds to white on start. Before that, when a led's
+brightness is changed, that led's color gets set to white but others
+keep their old colors which creates a bad user experience (at least for
+me). Please inform me if this is a bad approach.
+Also, this driver still lacks support for changing modes and I seek
+advise for that.
 
-But now I don't know what to do, because yes, it seems that the debugfs
-errors are being ignored at many places...
+Mustafa Ekşi (1):
+  platform/x86: Add wmi driver for Casper Excalibur laptops
 
->=20
-> Up to you to leave it as-is or remove what I think is a useless error=20
-> handling.
-> At least, maybe it could be said in the commit log, so that maintainers=20
-> can comment on it, if they don't spot the error handling you introduce.
->=20
-> CJ
->=20
-> >=20
-> > Marek
-> >  =20
->=20
+ MAINTAINERS                       |   6 +
+ drivers/platform/x86/Kconfig      |  14 +
+ drivers/platform/x86/Makefile     |   1 +
+ drivers/platform/x86/casper-wmi.c | 641 ++++++++++++++++++++++++++++++
+ 4 files changed, 662 insertions(+)
+ create mode 100644 drivers/platform/x86/casper-wmi.c
+
+-- 
+2.44.0
 
