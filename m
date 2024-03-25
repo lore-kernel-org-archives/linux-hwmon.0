@@ -1,216 +1,117 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C5A46EB4E
-	for <linux-hwmon@vger.kernel.org>; Mon, 25 Mar 2024 18:41:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C08BD45033;
+	Mon, 25 Mar 2024 20:10:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711392087; cv=none; b=nPrA1r87qBLAsWfBpvg89UIamOjezNRmZl/Is5oLhR/uiX3agcbPSg66kAX3LWgkZ7ZTZRKL8Ukz/IdLnsQV/U5qhzTbTrNlX3wrpCdndOruI08AU3pvQ2pxukoGVmSlvbt5PfmFhIWVzREcpJihkgvGUwPACBGOVMuQlJh57+Q=
+	t=1711397458; cv=none; b=cj05Qs/7s3Eb1iaoMwmFHF4KY85M3ZwtR8tm36Y1b0NEhA/2pEdtxKp+Wj4qSHykQVsmJlAS6OlUCsnG4OIg8Y+0huclQoPLzlxPcSYvBj+Boj/LozM0sXrjUFJx1jSlxjyMUE8xwO3N24LvLTvAxCISlwz1vAuX3TSHS2mhSYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711392087; c=relaxed/simple;
-	bh=s5U7lCIPvOyqN2EYdsWdWt+/P++ksAcBsmobMticNdE=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=tQ2jMLhL/MxlN8qqNQA4zng7B5x/fR2QZaCMwgPD78UtzJY5hYC7R49sbM85hNMr8G6cJ/aSTfxdWcmRKRA6des7jioytMOZNj7pb0YMpkZGOJ8kCxbg2QMOsynoySqC0sZbp/HalevAvQPBjq7eQultZ1rCR2xwuxmfoGtZb20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RfycTrcj; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1711397458; c=relaxed/simple;
+	bh=1hS5NcLSFnVm2dCXuWF1CcXyaqi1PIrZM8H+m08BW8U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=pxVDIcnDKiK/g0BTOB/p0rk85iYNQMGUqiHgGxdryChjhz9t42oJH0mVoX3fAibmBpUT3F9gj0pxo3Pxunxfej9sQYznXTDkMnvLadtx8Uq2lq7z6vgdtklxEMz/UpeRL/nIIETZOmDAB2GOGbjylMgEEJ2EkauaNunIWK6/0Go=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=KDCS/0zr; arc=none smtp.client-ip=212.227.15.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RfycTrcj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711392085; x=1742928085;
-  h=date:from:to:cc:subject:message-id;
-  bh=s5U7lCIPvOyqN2EYdsWdWt+/P++ksAcBsmobMticNdE=;
-  b=RfycTrcjsOxX5t7U64VNRUgNd2BpW7Y77fvPVoBkHgvoaiu9alTjKVRb
-   vPU3ekfj2NN8Q/i1jMA/kiEUIUto1pbSnujZSbxfyoN7GKGvBzVqk+cGJ
-   6F3RCu4tx1dDE1wZ4AKomd3I4oeQAZ1ksYGIflZI3qLd7sPnIpuPQEpp0
-   +ZcISzS+WufXp61yWjvfPrLl1QbaCS4GbLi03+HaCPcvwhTa2KC4A0+QC
-   SKqh0MA+RwIjQJipMipFqvaFuvmhiQEryJtw+RVnNWy495hy1j9jBmMRx
-   GxozQsehrIEO23XXEerPaQBwx9LuUhPhjjLIk/8vlp0/40w0+LKbblRWu
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11024"; a="6624200"
-X-IronPort-AV: E=Sophos;i="6.07,153,1708416000"; 
-   d="scan'208";a="6624200"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2024 11:41:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,153,1708416000"; 
-   d="scan'208";a="16139469"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 25 Mar 2024 11:41:24 -0700
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ropG5-000Mla-0j;
-	Mon, 25 Mar 2024 18:41:21 +0000
-Date: Tue, 26 Mar 2024 02:40:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:kunit] BUILD SUCCESS
- 008f8a4fb1f5ce99ec5e86558ddaead707b18828
-Message-ID: <202403260243.qw1zCjDo-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="KDCS/0zr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1711397427; x=1712002227; i=w_armin@gmx.de;
+	bh=k5GImjZ67YtdbUkAgxVbsS2XJfKlz1HCv891Pa0K9js=;
+	h=X-UI-Sender-Class:Date:Subject:To:References:From:In-Reply-To;
+	b=KDCS/0zrDTxyxdvF/Hy3PacpYWCo72HItPKTv98QWlJz+1cQEWS4RTyxpj2FWDT9
+	 drdwdLQO9c/jsd2fkEnYMBMQwT4Qq4Fhm5Ek2/rZUQxJToOocIp5C+QklPgpUifdN
+	 6JxEpTQWfEDUNdb7rzKYjHxSqVNwOOX6QYAfZiog5h+FJAS0cF5kZaKCFqPDpicrN
+	 Udynh2HboSvaCvRkufE3Ke1QLWK/EOcUAU/DWr7J1FZqAE6RHr9pklp8GqgNgFTpA
+	 2rxGsE0j4Z1lKyrOW2cIk9cdlX4YogkgXblJzWbQoBGc2YifkyqEoK1iN9DmPnQqX
+	 FsXg4jOwFPFv5xu9mA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N4QwW-1spvPx0OQw-011Tra; Mon, 25
+ Mar 2024 21:10:27 +0100
+Message-ID: <19661160-76d4-43ed-987f-dbf183e891ba@gmx.de>
+Date: Mon, 25 Mar 2024 21:10:25 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 0/1] platform/x86: Add wmi driver for Casper Excalibur
+ laptops
+To: mustafa <mustafa.eskieksi@gmail.com>, hdegoede@redhat.com,
+ ilpo.jarvinen@linux.intel.com, jdelvare@suse.com, linux@roeck-us.net,
+ pavel@ucw.cz, lee@kernel.org, linux-kernel@vger.kernel.org,
+ platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-leds@vger.kernel.org
+References: <20240324181201.87882-1-mustafa.eskieksi@gmail.com>
+Content-Language: en-US
+From: Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <20240324181201.87882-1-mustafa.eskieksi@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:MzAOenI/8ST5bPq1ExjXTewiulUgJsw+eKvNeLMu9b/QqFXI+HZ
+ DDi/1ZBInrf9MDaHj+0zRFBJsC+ua38+dOLRn523wjSiDyxrkQVDsIYh/wieCdbjvFCxy2e
+ hQan7SNyErbcAZwEcUF9cudypMEch+wSOJG25OSM8PqSSAT1yBXZqBcZdy+nOJD0meWazAA
+ TCWWVyHGmNWCrujxWENyg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:4Q7DKlFfmFE=;1gutw6nxLW14lkJsyKYuM4sLje8
+ z/GVi1B240WDw392PqTI8PmIGLBIaP6em5iITJ+UL7Q+rIYiJevgcuBJ2cu0uFjwUrcoYGyXs
+ s/zKD4WK7gRXFWfWmvd3t4nGLT8p3bijTGAk3STO5TDxGfjU8vK9x/sEjcVmA5M2AwrAIgVzR
+ BNxJmpqbWStWlkBuTuJxjrSZ3PT6Izl42brBi4/z6kNBLrFXzu3E3oXLQc8MIvHFSYWb+spCC
+ XZb+yXWnZc2XSTnuRsFdqA/5g8x2vDLMxyBkqrfZ7yn4IZQoL46n/dsdVgEikTB068zmGl0/o
+ KQ3PrJ4jb+VvOd4Ohs5fzkMJlA1QpN7T5oLQgj0McqNMMhdfz1GnMWNm63jHiQNkKL5UOMP6h
+ WFacbdwoLlJNFcKcFHOHUtp8TutqM/YRAD5v+Nc07bIjelQBV+SMokkst+l7VSqoL7/f36szu
+ kvBeL2vw286XGsMWOwv0oMrnyQggLdHdVhse9NaK5PFiHCNMLAUg6ba5XcDs1TR3MbiyO+pXX
+ gq3YGulqT4AnsvN9O93y/HZIQshKjEeclZJ8WzCSImYHXBXY6b8DhRWI2hqTlbvskXRjQYbnP
+ Nj0J0HFCMyz7xdRwYu+ht/lRbn9WEBr46eWI94dtDidmFu7/YUUQqt7YncO7ZATaax4nC8/nz
+ OcU1IYjBo9+XIFba9EdJxqBZOMJWKDv1GdI1CgyVdzEyniUDtTyXyn4O+F7Vw/NegtDr6rAOJ
+ TCjfULJos8hMDcNteij1eMjoqN4mccnxAF3Ml6tyyPMnbyXnZsb42ed/Ne0+QYEooslCF+8aw
+ d5+zTZpHGYt/N4+6u2FKNQrd1/F3taRwYzruGb54CmmKU=
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git kunit
-branch HEAD: 008f8a4fb1f5ce99ec5e86558ddaead707b18828  powerpc: Add support for suppressing warning backtraces
+Am 24.03.24 um 19:12 schrieb mustafa:
 
-elapsed time: 1100m
+> From: Mustafa Ek=C5=9Fi <mustafa.eskieksi@gmail.com>
+>
+> Hi,
+> I want to note that moving mutex_init to the bottom of the function
+> crashes the driver when mutex_lock is called. I didn't investigate it
+> further but I wanted to say that since Ai Chao also did it like that.
 
-configs tested: 143
-configs skipped: 5
+You mean like the lenovo-wmi-camera driver? In this case, the driver was
+only using the mutex inside the WMI notify callback, which can only run
+once the driver has finished probing.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+In your case however, the mutex can already be used while the driver is st=
+ill
+probing, because it registers callbacks with other subsystems.
+The subsystem (maybe led?) assumes that the device is already fully operat=
+ional
+and will begin calling the callbacks immediately, causing a crash.
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                          axs101_defconfig   gcc  
-arc                          axs103_defconfig   gcc  
-arc                                 defconfig   gcc  
-arc                        nsimosci_defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                          collie_defconfig   gcc  
-arm                        multi_v5_defconfig   gcc  
-arm                       spear13xx_defconfig   gcc  
-arm                        vexpress_defconfig   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-002-20240325   gcc  
-i386         buildonly-randconfig-003-20240325   gcc  
-i386         buildonly-randconfig-004-20240325   gcc  
-i386                                defconfig   clang
-i386                  randconfig-001-20240325   gcc  
-i386                  randconfig-002-20240325   gcc  
-i386                  randconfig-004-20240325   gcc  
-i386                  randconfig-005-20240325   gcc  
-i386                  randconfig-011-20240325   gcc  
-i386                  randconfig-015-20240325   gcc  
-i386                  randconfig-016-20240325   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                         amcore_defconfig   gcc  
-m68k                          amiga_defconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                            q40_defconfig   gcc  
-m68k                           sun3_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-microblaze                      mmu_defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                      pic32mzda_defconfig   gcc  
-mips                          rm200_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                generic-32bit_defconfig   gcc  
-parisc64                         alldefconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                    amigaone_defconfig   gcc  
-powerpc                      ep88xc_defconfig   gcc  
-powerpc                        fsp2_defconfig   gcc  
-powerpc                 mpc832x_rdb_defconfig   gcc  
-powerpc                     tqm5200_defconfig   gcc  
-powerpc                      walnut_defconfig   gcc  
-powerpc                 xes_mpc85xx_defconfig   gcc  
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-sh                               alldefconfig   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                        edosk7760_defconfig   gcc  
-sh                          lboxre2_defconfig   gcc  
-sh                      rts7751r2d1_defconfig   gcc  
-sh                           se7705_defconfig   gcc  
-sh                           sh2007_defconfig   gcc  
-sh                        sh7757lcr_defconfig   gcc  
-sh                              ul2_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          alldefconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240325   clang
-x86_64       buildonly-randconfig-002-20240325   clang
-x86_64       buildonly-randconfig-003-20240325   clang
-x86_64       buildonly-randconfig-005-20240325   clang
-x86_64       buildonly-randconfig-006-20240325   clang
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240325   clang
-x86_64                randconfig-006-20240325   clang
-x86_64                randconfig-011-20240325   clang
-x86_64                randconfig-012-20240325   clang
-x86_64                randconfig-015-20240325   clang
-x86_64                randconfig-071-20240325   clang
-x86_64                randconfig-072-20240325   clang
-x86_64                randconfig-074-20240325   clang
-x86_64                randconfig-075-20240325   clang
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
+Looking at the code, it seems that you are not calling mutex_destroy() in
+casper_wmi_remove(). I suggest to use devm_add_action_or_reset() for handl=
+ing this.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Armin Wolf
+
+> Driver sets all leds to white on start. Before that, when a led's
+> brightness is changed, that led's color gets set to white but others
+> keep their old colors which creates a bad user experience (at least for
+> me). Please inform me if this is a bad approach.
+> Also, this driver still lacks support for changing modes and I seek
+> advise for that.
+>
+> Mustafa Ek=C5=9Fi (1):
+>    platform/x86: Add wmi driver for Casper Excalibur laptops
+>
+>   MAINTAINERS                       |   6 +
+>   drivers/platform/x86/Kconfig      |  14 +
+>   drivers/platform/x86/Makefile     |   1 +
+>   drivers/platform/x86/casper-wmi.c | 641 ++++++++++++++++++++++++++++++
+>   4 files changed, 662 insertions(+)
+>   create mode 100644 drivers/platform/x86/casper-wmi.c
+>
