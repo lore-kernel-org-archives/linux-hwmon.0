@@ -1,109 +1,182 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DB4C1C635B
-	for <linux-hwmon@vger.kernel.org>; Mon, 25 Mar 2024 04:59:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58AFC153580
+	for <linux-hwmon@vger.kernel.org>; Mon, 25 Mar 2024 08:32:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711342763; cv=none; b=A4dETI594xlVUvHtIDDq4P0jgnD3Pd/r1Z3we4mjrTa6IeFXnqaVUklGVXz9nVR13+4EZIc+Z8ztAl9KhiLXP35sPqLHrpdfJSA/2WdTSTn9LI9e2hryX3oDq8XHvbZT55RnlnU3j9Gv4VW25kQhIrbyVKnc4znm663spLdyLRY=
+	t=1711355531; cv=none; b=f8Lr6XM3piBSRgMy0STJDzfR7CEcU93G/D3odm6KEHI9CEolV5cz3UkMWfNIbdh4ppWaVJcXL26ggN68bCyhgBCRaDJagROziaue0fSQcNYnmaBzKwk54Hi8hzOnqAXB1fhFlZru7Tmo/8NNZv6wrkispxQBH4TAdEiG1Q7rJz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711342763; c=relaxed/simple;
-	bh=fH8B2JHmzKLUC1TNtTmp/iTbRcWg5X2GQnMAmpc5WXI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=b872c+q+sv5fzWz2e7SMtA8k6v0cv/dLvOpfxXx8V25d+PCJ3xskAAFqPnvJm71FV9IJR1veYDldhGkL6cBLRFdDBq4JAiTNoegCrMPP60ZTNeMaii3Tf/eIX/Oa0tLM7OO072PBU3YlUYhAhBs2bl4N8mG9imgOlKAb8v0xQu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FQ4INuVM; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1711355531; c=relaxed/simple;
+	bh=nUzbBSYPjv8N+H9xKIEdwIMIeUjkj38bj4UVIfyqSWw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IhMYyk7+yNQSmXFOn9GSzE3PEkTHRyUjTuZsJ9KrZRi91pm2Sb6JwgyIfW0JgziSL6F1ZVpsJdB4az3ZdUM2wUBf786TgtOGITHsGjZNzrPiZxPWoVumXG1l5ThxIDNZo5jAAkwTL5M2G7wBUaGxk+RnicAo+KTILg7enJHd/Bs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nb32IC0y; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FQ4INuVM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1711342759;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fH8B2JHmzKLUC1TNtTmp/iTbRcWg5X2GQnMAmpc5WXI=;
-	b=FQ4INuVMcZaEQLugSjiGawkRkY6m2t2TxjAC1kSDJM05SCafxb/OdOodyh62bnzA5o70ER
-	3tAeXO+nul/LKj68MfE0BesI9F+So127nBybQ/0Adl5JiFYUTWxdIPyrBBtw7DDG/6OXBB
-	gcCfXBnTxdEEAzvx1+tAon0V1Pe8HtY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-637-XHPdo7yqNCONmpFedmaPEw-1; Mon, 25 Mar 2024 00:59:16 -0400
-X-MC-Unique: XHPdo7yqNCONmpFedmaPEw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F174A85A58C;
-	Mon, 25 Mar 2024 04:59:15 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.64.240.7])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id A80F51074E;
-	Mon, 25 Mar 2024 04:59:14 +0000 (UTC)
-From: Seiji Nishikawa <snishika@redhat.com>
-To: pali@kernel.org
-Cc: jdelvare@suse.com,
-	linux@roeck-us.net,
-	linux-hwmon@vger.kernel.org,
-	snishika@redhat.com
-Subject: 'Re: [PATCH] hwmon: (dell-smm) Also add Dell Precision 7540 to fan control whitelist'
-Date: Mon, 25 Mar 2024 13:59:12 +0900
-Message-Id: <20240325045913.385853-1-snishika@redhat.com>
-In-Reply-To: <3f0d7398-401e-4e7d-9f48-0a6bc0034c28@roeck-us.net>
-References: <3f0d7398-401e-4e7d-9f48-0a6bc0034c28@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nb32IC0y"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-41485f6da87so5587605e9.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 25 Mar 2024 01:32:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1711355527; x=1711960327; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=EJVN0cgUQnfYRe9h1VVQ0MrOz9M5AG8Pfe5rJ4y9IdM=;
+        b=nb32IC0ybswF2xq74mik/4DWvgaPO2MX9Xa7eNzbz4BcqlcGebxrnY38jGEuwvohFW
+         WdHAhDU+nVvqvvaCkW8+A1o4efT8Fg4pFVFIqTzCO/Rviz7v+ParWk+ZOT4LF16CzzdD
+         ZUWEq3SGUKXsgJ7GCOuh8rkB8LWQYVRmp4XwnwpslYROTxHrbiGSSadpIH+tiEuEa0Q/
+         9qhaZ5PZr6THu8MR5R7PWuU06qTrRG3nl+ECtslP+QTV1KLUgWQCKOlxNFmyW6tB9UYv
+         H66A190RVpZo+mcnMc1+pmT9jYjF/xXhd48iHXK/r9FMlm1zgnElQHBQKIWsMRwRZTzu
+         a2dA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711355527; x=1711960327;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EJVN0cgUQnfYRe9h1VVQ0MrOz9M5AG8Pfe5rJ4y9IdM=;
+        b=pNFK53yoF7kPUx8BqHJ7W4UZBUpv1xMk/exAEJrNe19gBlaXTpPMPultZEqXEBsuD/
+         gSujp8H4yRiVErLN3y53junCjCO/UPuq7gTg3PE9yBgeOws3X9tSwmDe0kaPf7A0Pj5q
+         l+Rgyl1zAJxQHHrZDi/4JnIrTDRBElAMchUTu13h4DDLnAeHwncc01SOBcyO5YQ4Ryc/
+         E+oHQvuFOMClHWbb9SNi4G+vRd4Xi+N9ECHiYIB/4o40GZBc42k2XEBCad3s8mbNUuDe
+         D2602OAsZotFA4Hug8LFV70ZL5+VV4v2CTo8kl0OZFgxNQ6ry3BrjHPMe8qjabDlRKqq
+         4FGw==
+X-Forwarded-Encrypted: i=1; AJvYcCUb/tq224Yxg5WYu/wSND2jnQl1jIJLLneXSJzhivGBxDZ7yQ8TuHbMJ5Lepxwp0SddDu3lcqULNOGCIHnvyASnK1X707i4dbpfKFI=
+X-Gm-Message-State: AOJu0YzHsIQcMi4tlQs8OoTocQTJXlSLMFx4v90UbcBkpuc6QpMR+EnJ
+	yFtpJblCsNjukcGU7ZLXSNf6JmhTYa1tE6tjBufR/C8H/naLdZCpZPHkPsGNkW4=
+X-Google-Smtp-Source: AGHT+IEfSPV4hQK/OxtuNuY45jUFIPtq6au32J2QP9/J5O01fmDJJZnZBiQk3fcOQXpMfE0Cbkv3EQ==
+X-Received: by 2002:a05:600c:3c8c:b0:414:61d9:d1f5 with SMTP id bg12-20020a05600c3c8c00b0041461d9d1f5mr4619016wmb.10.1711355527510;
+        Mon, 25 Mar 2024 01:32:07 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.222.44])
+        by smtp.gmail.com with ESMTPSA id bn22-20020a056000061600b00341d2604a35sm379156wrb.98.2024.03.25.01.32.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Mar 2024 01:32:06 -0700 (PDT)
+Message-ID: <c3f296d2-63b0-493e-a2cd-5010dea84adb@linaro.org>
+Date: Mon, 25 Mar 2024 09:32:04 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] dt-bindings: hwmon: Add maxim max31790 driver
+ bindings
+To: Chanh Nguyen <chanh@amperemail.onmicrosoft.com>,
+ Chanh Nguyen <chanh@os.amperecomputing.com>, Jean Delvare
+ <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Justin Ledford
+ <justinledford@google.com>, devicetree@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+ Open Source Submission <patches@amperecomputing.com>
+Cc: Phong Vo <phong@os.amperecomputing.com>,
+ Thang Nguyen <thang@os.amperecomputing.com>,
+ Quan Nguyen <quan@os.amperecomputing.com>
+References: <20240311111347.23067-1-chanh@os.amperecomputing.com>
+ <20240311111347.23067-2-chanh@os.amperecomputing.com>
+ <6fb70adb-aa85-4b9c-b093-afa4ec7ed056@linaro.org>
+ <ab8b45c5-2ef0-4a87-87bf-f797954b4574@amperemail.onmicrosoft.com>
+ <a224e752-d99b-45d3-b5db-761a698c347e@linaro.org>
+ <21256600-d94d-4287-b22f-f22258121668@amperemail.onmicrosoft.com>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <21256600-d94d-4287-b22f-f22258121668@amperemail.onmicrosoft.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
+Content-Transfer-Encoding: 7bit
 
-On Tue, Jan 9, 2024 at 12:34 AM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Sat, Dec 23, 2023 at 04:36:58PM +0900, Seiji Nishikawa wrote:
-> > This patch, in addition to 95d88d054ad9 that added Dell Precision 7510 to fan
-> > control whitelist, also adds Precision 7540 to the whitelist, which allows manual
->
-> Use imperative mood to describe your patch.
+On 22/03/2024 10:53, Chanh Nguyen wrote:
+>>>>
+>>>
+>>> Hi Krzysztof,
+>>> I have not yet understood your comment here. Please help give more
+>>> details for my missing! Thank Krzysztof!
+>>
+>> I expect many more properties of a fan controller. Resources (clocks,
+>> PWMs, supplies) and FAN specific properties.
+>>
+> 
+> Hi Krzysztof,
+> 
+> I'm creating a base binding document for the max31790 driver. I'm basing 
+> it on the drivers/hwmon/max31790.c. Currently, the max31790.c driver has 
 
-Just as you pointed out.
+Binding should be based on device (e.g. its datasheet), not the driver.
 
-> > PWM control on Dell Precision 7540. It has been confirmed that the same SMM
-> > commands work to enable/disable manual PWM control on Dell Precision 7540.
-> > Acked-by: Pali Rohár <pali@kernel.org>
-> > ---
-> >  drivers/hwmon/dell-smm-hwmon.c | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> >
-> > diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> > index 44aaf9b9191d..f946257f72c6 100644
-> > --- a/drivers/hwmon/dell-smm-hwmon.c
-> > +++ b/drivers/hwmon/dell-smm-hwmon.c
-> > @@ -1330,6 +1330,14 @@ static const struct dmi_system_id i8k_whitelist_fan_control[] __initconst = {
-> >               },
-> >               .driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
-> >       },
-> > +        {
-> > +                .ident = "Dell Precision 7540",
-> > +                .matches = {
-> > +                        DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> > +                        DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Precision 7540"),
-> > +                },
-> > +                .driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
-> > +        },
-> >       {
-> >               .ident = "Dell XPS 13 7390",
-> >               .matches = {
->
-> Patch uses spaces instead of tabs and produces lots of checkpatch warnings
-> and errors. Also, Signed-off: tag is missing.
+> not yet implemented other properties, such as clocks, fan-supply, pwms, 
+> etc. So I just introduced the "compatible" and "reg" properties.
+> 
+> In the near future, if any other properties are necessary, I think we 
+> will implement them in drivers/hwmon/max31790.c then update this binding 
+> document.
 
-Apologies for the noises and the missing tag.
+Please instead read:
+Documentation/devicetree/bindings/writing-bindings.rst
 
-> Overall, please read and follow Documentation/process/submitting-patches.rst.
+> 
+> I look at other binding documents, I also see something similar. They 
+> just introduce the "compatible" and "reg" properties.
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/Documentation/devicetree/bindings/hwmon/adi,max31760.yaml 
 
-I should have done that.
+Maybe these devices are similar, maybe not. This should not be excuse to
+come with really incomplete binding.
+
+...
+
+> I think "fan-controller" is a good node name. Do you think so?
+> 
+
+Yes.
+
+Best regards,
+Krzysztof
 
