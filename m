@@ -1,99 +1,79 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF1C0CA6B;
-	Mon, 25 Mar 2024 12:09:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DDBA13E04A;
+	Mon, 25 Mar 2024 12:13:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711368600; cv=none; b=RbICcXQcqFLeV0+q1193c0of6A8+XYkpc3Bd3fHOFncLH8nPSxJVro+fzwGOU8BoC2OjgTNo5+chgshI9htEcGKy8F09BkUCfAKzJqfWU0MIo+CBwmTejPjAbIzIv57wYMVe/ovAwWhgcT4GOpRG5ksYZ8BdSicLbmn0AyxtD6Q=
+	t=1711368826; cv=none; b=QMkAtcOidKpEx9d9pzio2rEqyO0v7xcOzEkdNMPT/Y70t2FGYvTQgu8C5DFy+38DCQG5bBLDWiMpUU8/ybug53be1FJ9HVGDvvn6DIs7mHL3AosPtUu8oKilAsytQ6Cz/7a+VIW1OYyBPIc5ldjDhULOXRz0mIdn8ci0m+uzRj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711368600; c=relaxed/simple;
-	bh=0NKiHG7ZlFjs7TiosmHvTOqi/ShFoTyI/Q4Yj+MHyWo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fXBbV5dQSD+aFZeWXULUOlvDu7fjjegFobGLsQs1Ihue3a5O3Jr85+vTYYhpaK/AfxR239Yck1CYTueqfJJW5r6S8uto+B0D6HNAk+zy6ffuEh54wwW0hoLY6T82IoVQtkUb0pwW6MQtyC88yisOp72MJOhpTtQ2oJq8wzpwgx8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HBiJJ9ZB; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HBiJJ9ZB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711368599; x=1742904599;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=0NKiHG7ZlFjs7TiosmHvTOqi/ShFoTyI/Q4Yj+MHyWo=;
-  b=HBiJJ9ZBTEspO2TqR1h168O6pncSI57B6deJW7eI1ArDGifAE67itkSC
-   Qgt9ThiLLpuAT52KP0E+ObZ9sYkIRhw7780XctUCrDIBnG7J0rlo/oPQw
-   gmxHgFu76m/zB2xxhaZLXRLylBizMwLhaHy8SKURdJaZv82EsyaCXR5bl
-   CSt/gs9QqFdX6yeVKifah3E0NI7zvLXi+sxhj9bFYbYxFQVLSunRlC9QU
-   rVfRjnkEncxNhFXNUKG7E75Lzahs5K/8RiaSouxP7kTpVA7qBuxwCPVX4
-   LtMPwrfEl2JP/8C4DJ6EWUKX3jf884SUFde4LxzThHoIdE6o4JNjsofzO
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11023"; a="17757431"
+	s=arc-20240116; t=1711368826; c=relaxed/simple;
+	bh=F1i0nJhQlomLCRn3IkSGbdjRcJxAk5L3Z/oZb5ZtN5s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ck0td84FcgNsAbuBWH3VH8uoleuf55XRmLtVBhXgy/dpmE43G3ShXLwrOarS8Ecr/7XwZkm+egV2rJw3YIHOXMgpXAVAWPDOCoKiBCfaCEkeEuoLGcVGVmFodm2cgdgI80tjfiNJTKS8cIPUNCqoR4jmwqJkVH5hbyhXNuv211o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=black.fi.intel.com; spf=pass smtp.mailfrom=intel.com; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=black.fi.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+X-IronPort-AV: E=McAfee;i="6600,9927,11023"; a="17757795"
 X-IronPort-AV: E=Sophos;i="6.07,153,1708416000"; 
-   d="scan'208";a="17757431"
+   d="scan'208";a="17757795"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2024 05:09:56 -0700
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2024 05:13:43 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11023"; a="937070313"
+X-IronPort-AV: E=McAfee;i="6600,9927,11023"; a="937070315"
 X-IronPort-AV: E=Sophos;i="6.07,153,1708416000"; 
-   d="scan'208";a="937070313"
+   d="scan'208";a="937070315"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 25 Mar 2024 05:09:54 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 25 Mar 2024 05:13:41 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 0F97B2CA; Mon, 25 Mar 2024 14:09:53 +0200 (EET)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Guenter Roeck <linux@roeck-us.net>,
-	Patrick Rudolph <patrick.rudolph@9elements.com>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Jean Delvare <jdelvare@suse.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 2/3] hwmon: (pmbus/mp2975) Constify local pointers to pmbus_driver_info
-Date: Mon, 25 Mar 2024 14:07:43 +0200
-Message-ID: <20240325120952.3019767-3-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1.gbec44491f096
-In-Reply-To: <20240325120952.3019767-1-andriy.shevchenko@linux.intel.com>
-References: <20240325120952.3019767-1-andriy.shevchenko@linux.intel.com>
+	id 09B5C228; Mon, 25 Mar 2024 14:13:39 +0200 (EET)
+Date: Mon, 25 Mar 2024 14:13:39 +0200
+From: Andy Shevchenko <andy@black.fi.intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: David Ober <dober6023@gmail.com>, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	jdelvare@suse.com, corbet@lwn.net, dober@lenovo.com,
+	mpearson@lenovo.com
+Subject: Re: [PATCH v4] hwmon:Add EC Chip driver for Lenovo ThinkStation
+ motherboards
+Message-ID: <ZgFqc5Lz3P8BfPw7@black.fi.intel.com>
+References: <20240315115810.15816-1-dober6023@gmail.com>
+ <f748574c-93cf-48ec-8e88-44d5b35fb107@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f748574c-93cf-48ec-8e88-44d5b35fb107@roeck-us.net>
 
-Constify the local variables pointing to "struct pmbus_driver_info" and
-other encoding params to annotate the function is not modifying pointed
-data.
+On Wed, Mar 20, 2024 at 10:59:34AM -0700, Guenter Roeck wrote:
+> On Fri, Mar 15, 2024 at 07:58:10AM -0400, David Ober wrote:
+> > This addition adds in the ability for the system to scan
+> > the EC chip in the Lenovo ThinkStation systems to get the
+> > current fan RPM speeds the Maximum speed value for each
+> > fan also provides the CPU, DIMM other thermal statuses
+> > 
+> > Signed-off-by: David Ober <dober@lenovo.com>
+> > Signed-off-by: David Ober <dober6023@gmail.com>
+> 
+> Applied to hwmon-next.
+> 
+> Please note that I'll push the branch after the commit window closed.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/hwmon/pmbus/mp2975.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hmm... Was it even compiled?
 
-diff --git a/drivers/hwmon/pmbus/mp2975.c b/drivers/hwmon/pmbus/mp2975.c
-index af118087c4ee..bc7558dc87ee 100644
---- a/drivers/hwmon/pmbus/mp2975.c
-+++ b/drivers/hwmon/pmbus/mp2975.c
-@@ -942,7 +942,7 @@ mp2975_vout_per_rail_config_get(struct i2c_client *client,
- 	return 0;
- }
- 
--static struct pmbus_driver_info mp2975_info = {
-+static const struct pmbus_driver_info mp2975_info = {
- 	.pages = 1,
- 	.format[PSC_VOLTAGE_IN] = linear,
- 	.format[PSC_VOLTAGE_OUT] = direct,
-@@ -967,7 +967,7 @@ static struct pmbus_driver_info mp2975_info = {
- #endif
- };
- 
--static struct pmbus_driver_info mp2973_info = {
-+static const struct pmbus_driver_info mp2973_info = {
- 	.pages = 1,
- 	.format[PSC_VOLTAGE_IN] = linear,
- 	.format[PSC_VOLTAGE_OUT] = direct,
+lenovo-ec-sensors.c:154:31: error: expected '}'
+static int p8_fan_map[] = {0. 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14};
+                              ^
+lenovo-ec-sensors.c:154:27: note: to match this '{'
+static int p8_fan_map[] = {0. 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14};
+                          ^
+
 -- 
-2.43.0.rc1.1.gbec44491f096
+With Best Regards,
+Andy Shevchenko
+
 
