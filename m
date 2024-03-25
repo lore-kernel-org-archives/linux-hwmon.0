@@ -1,61 +1,61 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C001B84D16;
-	Mon, 25 Mar 2024 14:35:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7640958135;
+	Mon, 25 Mar 2024 14:40:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711377357; cv=none; b=qc6C1gSBfBiREh2NSAZDsug0pSnyYs8aF5MP8kWxptkY8IZSMbP3ZGwdHf2ZG4TKe2bZe+fvHeSYKROPoNgBsF9l86SEtEuvkvSA801YiM8tvNwTudPBG/Fy7Dz6+Ys29DKV5BjziJ9rQnLyMo4A5n4PXrwOb9Jlj5AVR//dUyY=
+	t=1711377607; cv=none; b=qm/cqhS60YkSqm84p827G7Eyg7oq/FwPY/CVccGTTFiZ5RJwZul9mMIVxcIggy9rRoZQX94HxupuQPLajUlryYYW0dLgSANvxKPcvr56X9tiGSqpoWvRP64kG3GPaMY2lsdwEBlCsMCHHuvoW7Jiepao5L2IARm0XS2cqH4A2Y8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711377357; c=relaxed/simple;
-	bh=AbHZtja0SfpTRJx+PiD9hfunyx/nel0n7RzJrByWg84=;
+	s=arc-20240116; t=1711377607; c=relaxed/simple;
+	bh=5KajiC+osgJB4I3bVGEuiXbOl9RztfBbyQcYRS3ZOGo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eHloXf3M/V5uxCJBbpWrddvOcqRxq+UH2QhjrCqHQpr0z0lcySI9XT9zGH361DDIXYIa7D/w3dSKwjMSjr9hA7/14ISefDQVHAXPl6GJCocoUgMT4hxuGygQUJgDNmz2F4uUqyJIZXXxdk61fc7N7Zp5jMrxRutl54MId9zZ6CE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YIN/Py60; arc=none smtp.client-ip=209.85.210.181
+	 In-Reply-To:Content-Type; b=KuxxDeDeUpWmfQgMl68fHL/J6CbtfxiXPf60P1P8NtoDhuehvWNmTiPpcDCSRJxJM1HWTGrfD4QctaclTOuBDJV8zvedmdHbZbvyDxLfxMb0ZA3Ei7yIY2YClvx6Buu4lQMDIIMpkI1Av6J00UCDIPDa9Xx1yFAuabT1o6F9z34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ixkd5ROS; arc=none smtp.client-ip=209.85.210.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YIN/Py60"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6e6b3dc3564so3029215b3a.2;
-        Mon, 25 Mar 2024 07:35:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ixkd5ROS"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-6e740fff1d8so3026199b3a.1;
+        Mon, 25 Mar 2024 07:40:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711377355; x=1711982155; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1711377605; x=1711982405; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=9UnRs5seYg94xdXWV3gWSOHnc92e0KgLqhx9EnRpkDY=;
-        b=YIN/Py60kXwvuQFQWvtpINuT1VsrwTIax+YuIRwcVjS+LXPKU9BVI+NSLtJRDUi6Zn
-         kxL9+PiRAiuvZyOpGEkx0tnxS8U7hgKLvO2E7ypmsTo6XKP9z1V2Sdt2blt5ZgUmGHrf
-         eo6dhf9cIFpKVdc9tpgoh4du2Nbu4/xfTbjOw43QbuQrIvfDD5HA5DvMPHUjGy/WstuL
-         2xDBH/VlLJcdiwD4xbr5diwl/VdjXN1XgwNnYiHnc4QjYUqCe+Yz0bDdplwnyoQlt/Bb
-         OLyx2PN5dYRsSta7h5VDVNQCmGxzelMIGG9clcG+NSZdL/GIsCpnSnLrBda2+j+fqZ6T
-         E03w==
+        bh=nHUz7ERnER6qEaRZS7LT8dYbIk6qkEmxqClzj66d21Y=;
+        b=ixkd5ROS2suj6Fa46TRbwLsIejv4+v+gjirA4bL04iH6vlj7M1/Uz/Tb54wjKi/WvK
+         n1Epyh+N6PFwmtR94JMIFgbEQiPv97a1jgeAE5Eq3WDrE3SJJoYM0iAAlzY+V1OCE3MS
+         9jnPr6mlI8p0ApmtaSn4rOp5aYqrJLFQmUaN2D6u9gzOJEIyQitOMRDQYxt+Xxi876wV
+         yKBJIxMmSYAGht/zzxK60Nc6gL/Q1O05bfBjCWhaj05plDuhqPGiEzM4Svtlj3/shAxm
+         VLrudLQhhCQ/AbdxJnoXU9ytU7ZZwGO3f1sRUPyKUCQ3hOaZsXvpir74qG+OZJIrZldl
+         uyZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711377355; x=1711982155;
+        d=1e100.net; s=20230601; t=1711377605; x=1711982405;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=9UnRs5seYg94xdXWV3gWSOHnc92e0KgLqhx9EnRpkDY=;
-        b=fgAzS+6vNWmQP7lHXHfPSB/MxrTF6bQ7wAeq8zU3DnarQS6wQF+6KrrNxXmsy+nCpT
-         cpvQGD199xHWf/FsB5zotqcTVM2BP9wOLdhN9dxAciKdoD7xllOaJazET7FK8IkvQWNn
-         A0e5mpEfpjBnRRk69JlxatPBeGi8LL+9nfpAXzO/Tj01+ih7v9+eCr6242aB4RY3ItyN
-         U3ZCinucrQGM61J376XLl2L1js1j7l7x8ZGzid07sHH9R9mggr2ADbMbe6e/KWOfLR0K
-         gl667FHa7vPNZxfOBt1veHa+THIUq7+/2obtj2kJ9W8NzmkCftHFDdPzphMdeJKsB/CH
-         JOqA==
-X-Forwarded-Encrypted: i=1; AJvYcCWFRZv3mnSF0KLlIr4Jg3YgduJ2VNbxg76kCD1G7yk/t/Wfy46Z913fUP/c7hMpGsFBApnlSC0fiWhzr+FUegTQPAEKI49DKr8kFPKSlB1nZFUx1cIhY298yrdFBchRF5nwDs87zAMV
-X-Gm-Message-State: AOJu0Yxo77j+sbeL1Zw6bGjwkMNxSF2KNJ+UsF5lLhdkqYGjHU7LhfHv
-	x2IJ8irk/5epkILlcpN+e70eZiE5m/jjJY4ONNJlrN+vXVFbfkJH
-X-Google-Smtp-Source: AGHT+IEa+ZkcOdbdbwJM1aEnn3Dae7WZs4v6LnFs8Lbizmo7ZGDcJGSF6PqLH+DkayLKNL4PXd6PsA==
-X-Received: by 2002:a05:6a00:938d:b0:6e6:970f:a809 with SMTP id ka13-20020a056a00938d00b006e6970fa809mr7793224pfb.20.1711377353470;
-        Mon, 25 Mar 2024 07:35:53 -0700 (PDT)
+        bh=nHUz7ERnER6qEaRZS7LT8dYbIk6qkEmxqClzj66d21Y=;
+        b=SlnNAQfsUUod8VTA7ewXr9wB3RTp2AzKFd3UhlUccnGTjw6RUlbprHm68/5FIrXnB6
+         ioTyn2DrMkY2VziQHnzEQGcXSisQ2IDcxcLGEr2EIDWqEtHebMAm0rx/iX6KVnSAzPRH
+         CgltyNe3azZ8s0NYs+cXrFN/WGZyRfYgfH0VurheDFdbZxACcsQX2tEuNEQ2nU2fJDLF
+         fxsYhPT3wiw22wPXUJ8qRNmcnn4G1f1eJ/zsiTAHK9X/KJIvVavSe6Vkh0oWRUz5UAx6
+         Q6DQ3jfYYpwa6CLMrc1fqUNfyp9cCid1ZEZjVYLnxVmm5WNixM5fXZPOqOLTkFj7Ks29
+         oBgA==
+X-Forwarded-Encrypted: i=1; AJvYcCV0Oa9HseK0F5sgd51XnLKbW62CgcCXa88/VXa8ITvS4RpmShR70/KQfFzphhSeJlKNTA6cHO7H1fie9YioXAQQRJU1Y6geFFeMZWp1ZNpOw/NAdqrpkBhgdUzYpds34wbKYw52xIgmq8xgBrHrP13hMHoQxA+oIWwRWPOo9D2snd42SaeA
+X-Gm-Message-State: AOJu0YyPJxPcDXv7NQGF9yrByJvbe1IbOfvdJ/Ev1PqaS7H6dEDi4Tw9
+	+vBb1tFpMv6C2DOluePfs6//uBDhtV5ibo+I11K4y6F7Jl4Cd3RP
+X-Google-Smtp-Source: AGHT+IFWo2GkUXJyzZ7L1+gDoUWEBuoJTbu+tdbudCIopEmOO9e2o+n2Frek215C1rwfHinDZ9dJOw==
+X-Received: by 2002:a05:6a20:1994:b0:1a1:8899:a2b0 with SMTP id bz20-20020a056a20199400b001a18899a2b0mr5577979pzb.52.1711377604778;
+        Mon, 25 Mar 2024 07:40:04 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x21-20020a056a000bd500b006ea7fbd484csm4153823pfu.192.2024.03.25.07.35.52
+        by smtp.gmail.com with ESMTPSA id q9-20020aa79829000000b006ea75a0e223sm4117349pfl.110.2024.03.25.07.40.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Mar 2024 07:35:53 -0700 (PDT)
+        Mon, 25 Mar 2024 07:40:04 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c2e64b7b-09e0-4c0b-838e-988e6a7bccbc@roeck-us.net>
-Date: Mon, 25 Mar 2024 07:35:51 -0700
+Message-ID: <4ac8a198-b0c9-418e-bcf8-1ee1a9660dad@roeck-us.net>
+Date: Mon, 25 Mar 2024 07:40:03 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,16 +63,18 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] hwmon:Add EC Chip driver for Lenovo ThinkStation
- motherboards
+Subject: Re: [PATCH v5 2/2] hwmon: (acpi_power_meter) Ensure IPMI space
+ handler is ready on Dell systems
 Content-Language: en-US
 To: Andy Shevchenko <andy@black.fi.intel.com>,
- David Ober <dober6023@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, jdelvare@suse.com, corbet@lwn.net,
- dober@lenovo.com, mpearson@lenovo.com
-References: <20240315115810.15816-1-dober6023@gmail.com>
- <ZgFuLbBe4y1OiRqY@black.fi.intel.com>
+ Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc: rafael@kernel.org, lenb@kernel.org, jdelvare@suse.com,
+ robert.moore@intel.com, linux-acpi@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ acpica-devel@lists.linux.dev
+References: <20240320084317.366853-1-kai.heng.feng@canonical.com>
+ <20240320084317.366853-2-kai.heng.feng@canonical.com>
+ <ZgFwLXzNG2aTL_BQ@black.fi.intel.com>
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -117,22 +119,57 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <ZgFuLbBe4y1OiRqY@black.fi.intel.com>
+In-Reply-To: <ZgFwLXzNG2aTL_BQ@black.fi.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/25/24 05:29, Andy Shevchenko wrote:
-> On Fri, Mar 15, 2024 at 07:58:10AM -0400, David Ober wrote:
->> This addition adds in the ability for the system to scan
->> the EC chip in the Lenovo ThinkStation systems to get the
->> current fan RPM speeds the Maximum speed value for each
->> fan also provides the CPU, DIMM other thermal statuses
+On 3/25/24 05:38, Andy Shevchenko wrote:
+> On Wed, Mar 20, 2024 at 04:43:17PM +0800, Kai-Heng Feng wrote:
+>> The following error can be observed at boot:
+>> [    3.717920] ACPI Error: No handler for Region [SYSI] (00000000ab9e62c5) [IPMI] (20230628/evregion-130)
+>> [    3.717928] ACPI Error: Region IPMI (ID=7) has no handler (20230628/exfldio-261)
+>>
+>> [    3.717936] No Local Variables are initialized for Method [_GHL]
+>>
+>> [    3.717938] No Arguments are initialized for method [_GHL]
+>>
+>> [    3.717940] ACPI Error: Aborting method \_SB.PMI0._GHL due to previous error (AE_NOT_EXIST) (20230628/psparse-529)
+>> [    3.717949] ACPI Error: Aborting method \_SB.PMI0._PMC due to previous error (AE_NOT_EXIST) (20230628/psparse-529)
+>> [    3.717957] ACPI: \_SB_.PMI0: _PMC evaluation failed: AE_NOT_EXIST
+>>
+>> On Dell systems several methods of acpi_power_meter access variables in
+>> IPMI region [0], so wait until IPMI space handler is installed by
+>> acpi_ipmi and also wait until SMI is selected to make the space handler
+>> fully functional.
+>>
+>> Since the dependency is inside BIOS's ASL code and it's not
+>> discoverable, so use this fixup is a hack to workaround BIOS issue.
 > 
-> Besides the compilation error, see other remarks below.
+> ...
+> 
+>> +	if (dmi_match(DMI_SYS_VENDOR, "Dell Inc.")) {
+>> +		ipi_device = acpi_dev_get_first_match_dev("IPI0001", NULL, -1);
+>> +
+>> +		if (ipi_device) {
+>> +			if (acpi_wait_for_acpi_ipmi())
+>> +				dev_warn(&device->dev, "Waiting for ACPI IPMI timeout");
+>> +			acpi_dev_put(ipi_device);
+>> +		}
+> 
+> Can be written as
+> 
+> 	if (dmi_match(DMI_SYS_VENDOR, "Dell Inc.")) {
+> 		ipi_device = acpi_dev_get_first_match_dev("IPI0001", NULL, -1);
+> 		if (ipi_device && acpi_wait_for_acpi_ipmi())
+> 			dev_warn(&device->dev, "Waiting for ACPI IPMI timeout");
+> 		acpi_dev_put(ipi_device);
+> 
+>> +	}
 > 
 
-Thanks a lot for the detailed review. Dropped the driver
-for now.
+Ah yes, acpi_dev_put() checks if the parameter is NULL. Good point.
+I'll make that change, no need to resend.
 
+Thanks,
 Guenter
 
