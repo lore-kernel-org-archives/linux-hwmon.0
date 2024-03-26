@@ -1,198 +1,198 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2092.outbound.protection.outlook.com [40.107.93.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFDB43F9ED
-	for <linux-hwmon@vger.kernel.org>; Tue, 26 Mar 2024 09:04:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711443896; cv=none; b=fSHXvtB0E4ibZIqZyjgtPNVmG+NmE4D3vaXTi6dGsDSS7TDoF2C8t4M775YriE17jggkCFT9/RhB3SPDV9hS1HzZrifTN7LngOE6RHMdX8uX52ONIq3cEBYqjRu9RbBTfw4ekPWUHRHG5iQ5khMBx99f5LAmyrP/4TMuGI/U2gQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711443896; c=relaxed/simple;
-	bh=HHWb1OHHS2HiGsOXCRGyie8CHr8yOIhx8x+QjhIoB3s=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=pErpblucn16Fw/FbvBQNoF2iK6d86qlUnuMuEeRJfH3CoyFQR5eaRHI4JGJZT7w0k5VJFkUqcQC5qYsg5Q5IEi/rYAY6ZzCDbpgLByaVWQGcd1/ED5/fG+vcYNZZ60ToLsQlo/dU6o65Sk32CKKkFDKo39DukBQorWJKgIbSNxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PP6FWLZv; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BE914C3DE;
+	Tue, 26 Mar 2024 10:26:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.92
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711448791; cv=fail; b=F1YXYVMckgcVnxeyxtIjnxTE84C2srUmOGuHIJOROlDfIiv9rCTL/CugE5zoID9C6ZRfnBhTMWQmtRkAoHrfU7qjLplpJ2YprnKIStI4pSo6kIHotg3VSS/kmb+Qt41GNmuO7dMwxp2JdcyeEXtHG9cZAc50yAXugu+8oa+msNg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711448791; c=relaxed/simple;
+	bh=IlIG82oDfn6tWKagYksDTdNlMgL40ZBMr9hdDq19KCY=;
+	h=Message-ID:Date:From:Subject:To:Cc:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=ly+6/P+0sfts+7VtlohO7iu2F9Rbo74oVvfmlRj4INaMBdx696RAciIugmpRQ4OOVKa0WjqlHA6UkDzHZmE3Oab06AenbOuRR2pPhPCIYi+j8V9Df1ItmtgdRBQ+DBaqKD1nWy7fQkdrlvvteNQ3Yq0xz+i490t65UWs9Eg097s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amperemail.onmicrosoft.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=fail (0-bit key) header.d=amperemail.onmicrosoft.com header.i=@amperemail.onmicrosoft.com header.b=PIQj02Tp reason="key not found in DNS"; arc=fail smtp.client-ip=40.107.93.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amperemail.onmicrosoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=os.amperecomputing.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PP6FWLZv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711443895; x=1742979895;
-  h=date:from:to:cc:subject:message-id;
-  bh=HHWb1OHHS2HiGsOXCRGyie8CHr8yOIhx8x+QjhIoB3s=;
-  b=PP6FWLZvL0IoHS7lwBUP97WasHTddbf4GqWBQ5NYJpOgtLlENX74gQX+
-   NvmRlkz4q3Q1w4pCowegmLnTLXeXxT18IOBfAfsml/TOvdalw9jdXjqLF
-   ZxE2uTmGBWN63yuDv2aczF/nSUi/rThQ2KvgwgEhkKFMlbz7AyJYKiCBC
-   d+HWQrWX2apoh4vzHimKtHFPMSeOGs863JKZCJdFNmMsoVi0N2ppn+c4Y
-   SiunvogjumDooOcQBuM+jnlkNCnrc51Gyeo6IVwlioCCLAXtjOT7ywQjH
-   1JM0V0nHLACNWd0cHonfSYrgFnQA0ck4yfkRhyrjngxC8CxjVHpXxn5LE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11024"; a="17211727"
-X-IronPort-AV: E=Sophos;i="6.07,155,1708416000"; 
-   d="scan'208";a="17211727"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 02:04:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,155,1708416000"; 
-   d="scan'208";a="15937669"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 26 Mar 2024 02:04:52 -0700
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rp2jj-000NFo-0y;
-	Tue, 26 Mar 2024 09:04:51 +0000
-Date: Tue, 26 Mar 2024 17:03:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:testing] BUILD SUCCESS
- 965abd34783aec0f25318b78728a02af011b0baf
-Message-ID: <202403261749.P5Fl5qC5-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=amperemail.onmicrosoft.com header.i=@amperemail.onmicrosoft.com header.b="PIQj02Tp"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YsZqwEzlUqJrzIitbOmcbW+k5bddbSvpESWdp10yFEIajyYUr8CymKk1X81/CXWi/IiqKuCbZf/A+sLWkTffFcOfhzB/6t7O2AwM3eY010j+IqQQfKA1Aljw37N87e4Edj2yDRY+VXeXXIOxXJUe4MJTEfc5u67i4zxl3lVXiVMeeflxz/pWhBrU7yC0J0/Z8zepiQ/PueYkoB6IHnjaBWvMjpJ83IHpHDQP1Pb8tm2AuQKmP3dW3tL+gYyH4FKnmKZKjfqwOSZOS6kCCB/txK+JmjlQaGDWXa3mqcwNWXSvBRdmVgrzLt36Hjs3srjky1inqh03NexdKCLrx26pig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YM2ke7Y57uZbVhFGImSrxWW8NEqe8lwuELwz2mDK/FU=;
+ b=aVypU5ElQabzoaPySj5EMRu6k9nTexqebdUGUfdfsv/QDL+q9IKCgcWv6rjh5nE2dkAaprz65Z3K3Kc/PBqprtefCKFIMqYgj9Ppn5c4UTOmzELWaIZiW0MsoPrOC6l4kuPelJrEBoE1mBjfdENzJzDX4cNJ+81+WbHHd8PiwCEYM/60H8VHqlWbgX4RXWvgKjsAoP2EuEpW6M2hAfuuokDDbY+r/cEZeiXOjNCJFFyPCyDilun1PU/SXAC1lUKFWDWhF0NP/XdWW+glOnnkUESh4wqfX3hmRM2fSKcSRJswHSwJqtTQCiHmXiXGN32H4SgdCqMrQm4GIrHlW53UnA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=amperemail.onmicrosoft.com; dkim=pass
+ header.d=amperemail.onmicrosoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amperemail.onmicrosoft.com; s=selector1-amperemail-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YM2ke7Y57uZbVhFGImSrxWW8NEqe8lwuELwz2mDK/FU=;
+ b=PIQj02TpA8fO4WasIaBzMeFyiTlz7vHENjfM2/AYXHsk30nIwhADkE5CG0Vf7C4yGmtdaS+r5y1Jncbs2m7XlNH2awVnYY7kcUwJBrZ4gqOKhpk5ACOVWAixhjv8MTuq1X99yRjamFdDvRdN7RALWxD0jyo32TB745+tEa+H0GE=
+Received: from DM6PR01MB5947.prod.exchangelabs.com (2603:10b6:5:1dd::12) by
+ BN0PR01MB7166.prod.exchangelabs.com (2603:10b6:408:155::20) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7409.32; Tue, 26 Mar 2024 10:26:26 +0000
+Received: from DM6PR01MB5947.prod.exchangelabs.com
+ ([fe80::b557:13cd:8a29:ae08]) by DM6PR01MB5947.prod.exchangelabs.com
+ ([fe80::b557:13cd:8a29:ae08%4]) with mapi id 15.20.7409.031; Tue, 26 Mar 2024
+ 10:26:26 +0000
+Message-ID: <4bf7984f-5f94-408d-8098-dead1987db62@amperemail.onmicrosoft.com>
+Date: Tue, 26 Mar 2024 17:26:16 +0700
+User-Agent: Mozilla Thunderbird
+From: Chanh Nguyen <chanh@amperemail.onmicrosoft.com>
+Subject: Re: [PATCH 1/3] dt-bindings: hwmon: Add maxim max31790 driver
+ bindings
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Chanh Nguyen <chanh@os.amperecomputing.com>, Jean Delvare
+ <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Justin Ledford
+ <justinledford@google.com>, devicetree@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+ Open Source Submission <patches@amperecomputing.com>
+Cc: Phong Vo <phong@os.amperecomputing.com>,
+ Thang Nguyen <thang@os.amperecomputing.com>,
+ Quan Nguyen <quan@os.amperecomputing.com>
+References: <20240311111347.23067-1-chanh@os.amperecomputing.com>
+ <20240311111347.23067-2-chanh@os.amperecomputing.com>
+ <6fb70adb-aa85-4b9c-b093-afa4ec7ed056@linaro.org>
+ <ab8b45c5-2ef0-4a87-87bf-f797954b4574@amperemail.onmicrosoft.com>
+ <a224e752-d99b-45d3-b5db-761a698c347e@linaro.org>
+ <21256600-d94d-4287-b22f-f22258121668@amperemail.onmicrosoft.com>
+ <c3f296d2-63b0-493e-a2cd-5010dea84adb@linaro.org>
+Content-Language: en-US
+In-Reply-To: <c3f296d2-63b0-493e-a2cd-5010dea84adb@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SG2PR01CA0189.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:189::15) To DM6PR01MB5947.prod.exchangelabs.com
+ (2603:10b6:5:1dd::12)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR01MB5947:EE_|BN0PR01MB7166:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	+SmfEDC1OD+hnYIe4uHz1rzuLuue3dCRIuWua5iHi23lSpmlO0vcOccFLEJL2TwgWyw3VjfNQ1MaLv6YXlnVaPLcHLRjoVK64BMzdkXKYrfeSJQ/Q6+dyhKxfQTr7AAyAfVvb0sqSON0jYOQAAj8hN2wbb3wOZ+Hp5x9WyQrKPdcjBHEGtU5nBuNq3HZANII1HlMJmm4L1RrRG7SATelwuHzzy+Bm1XXCY3giub/1MT+JYDetMGnfYuOMvEFi585BnZAkN5gfwt2UkQrLNvsoUUi3apnyg76wb+HvlQGFlICh96j285szM2ZPFqXAeumqilQULW+dhRS9/MFHxbwmLpx1MqVYEsOkSS7QzJxQ3MwhzxhpgVO8kCg7okLIX1ikS+3AGdyGcB8mDYzuLvcnLJyGkGxiYJBN0qvFLjHSwiwN6Ghu5I3dCOCofuS1fO1FQhGTCT5KeCJyydjezGlAKKOfNoc7pOWqyJKskxqQm/AGrGJzNNuULNe4iYtGVYu9L+tLheSmldNeWpbH3FxqEAZZcuH+RFfJX4z8q18i7cWIKL/60iE8qqJ4lCx7uELbdNeNpiBmESlv/apvbumaGK/kI2h/G2483v8GJ3YdcdGf1SDnzmkibxkwuE1etxapCCHl7qMPZhHW1sBcbA8vQ==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR01MB5947.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(7416005)(376005)(1800799015)(921011);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ZHpPYVNWYitzaTlyVFNFcnBxWThEc3U1KzNKOFIwZGlGY0xMZmRHdytTZzl3?=
+ =?utf-8?B?ZW5mM3EzOG1wSEs5RUcxdHl6NGk1RzVaOTZBdko5OVJDRTVBd040SGp2K21H?=
+ =?utf-8?B?LzJ0RHNMQ094cHc2eFU5MVRUanNGSWYwVmY5UkFyRWU3dWQ2amJhdktCckox?=
+ =?utf-8?B?KzhUVUsxOWVOMk9HNUhSWkU3SkdhNTdVRVNjRURvcDVJRS9Ra2hwWXlvVDFM?=
+ =?utf-8?B?WEVCUGt1bm9aRitXK3lnOFlUbHl5UzJzcWh6UDRkcWxhTUZwdlBCVExZQzEw?=
+ =?utf-8?B?bW4yRXNsN01ITGdzVTRCZzBDNVNoeURvYVNqbjBwdlBwTVhtQjJEUkdJNHA3?=
+ =?utf-8?B?NXNGQXM2eHY2OUtDQ3FhbVRlbEJqVnZ6dnpZR291b2NWdWlaVHhuR0VHemZD?=
+ =?utf-8?B?ZGFVRkVTQWNNU2k3U3krNTgxdXI1UUNzeXdqVEQvcTJ3ZGpCdlFtazlyVHlK?=
+ =?utf-8?B?ZW9OdS9XV3JxZ3E2QVhFWTBlczlucFVqUEx5eThKNEh2aHlIVXVNVFdYVXVD?=
+ =?utf-8?B?Z1JNUXIxZW5OSmY4NkFaUmU2dHA4aXlyRkxwV3B6MDNqazloZXVmbTNUU0hv?=
+ =?utf-8?B?SVMzQTZxUHZyWWdKT3FwcUlUUGJTT1NNV1FYNVRYajdab096SDgxMTE3YzNK?=
+ =?utf-8?B?Vy9iU25yRVhuZGtiakNwOXI2anEwc0xSVms4aDhCa0Y3WjVMaHY2VUswMC9S?=
+ =?utf-8?B?bVdzUkpZK0ZhYzZZdTVIb0YrU1dsaUNOWUxpYjVUWllJdjZPalA5RkZkTlpw?=
+ =?utf-8?B?UEkwdnVQSDU5aVBuNGhPRFpUZTBOZEFaZkxOdTBFeUYvYVNqckgzS0sxK0pZ?=
+ =?utf-8?B?eVBwa2xKbXNtWFRVdytoeGw1SnlrOUpHZ1Q0blJQMDZrSUVVN0p0Z1FFTGkr?=
+ =?utf-8?B?NEIzUm5PdlpETEh0ekJrZnlFak9DYjFPbGQzeFdkMDZGVHRTcnlCVHBhdUZm?=
+ =?utf-8?B?aFdNOENIWkZYcDd0R2RmUEpTNXNjU2R5dzRmczQzV01xT0NSV1p5MFYzVk5u?=
+ =?utf-8?B?NjZKYS93TnY1Wlp1SGlwSGxPUXVXYm1wMk5wUnJVTk1yL05jTlJKanU3OHFT?=
+ =?utf-8?B?ZVRIZ2tKcGZrQUk0dVJBMGVkazZTbXJWV1RXMTJaRjNSTWh2Qkt4V2JoWjg1?=
+ =?utf-8?B?V3l5OHFtK2dwQmxFcGMvRCtKOXpsaEZHWndLMG9XOFRHbEQyUGZ0Q0dqTHQ3?=
+ =?utf-8?B?Qkd5S1JJcmRHekdCVmFkZE54YXJRaE9XN1lnQ2hzODQwTTZCT0wyYVptMXg0?=
+ =?utf-8?B?eGliZFlOMHBQdk9wZk1xM2M3ekNvK0NUU21iM2UvS1VNUis1eDJVWjJHSk94?=
+ =?utf-8?B?THpJMlBGV2FSV05XQWQraWJhblhUclFYYTluMVg1Q3NHOGRQd1hZaDlENldW?=
+ =?utf-8?B?OXJ3ZDBQalBYMFNRT3hrVG12TXdQK1Y1NStEY2NUeFQ5TWZGRGJVelRpUTJG?=
+ =?utf-8?B?OU5seDJVS1ZhVktEVVlsUGZhVnUydVBRdjQ2cG0rN1NJRTdNNlRudkova3pS?=
+ =?utf-8?B?YldoS2VFMmgwbE1Va0xzbGo2WEl6QlcvVklsT2dJOHZUbzdDOStBZTNTcS9i?=
+ =?utf-8?B?US9rNEcvTU1ZUkowQndPTVNLTk9uVFJkaHZBbFR0MnV4ckxHUkhNcEJ2VStl?=
+ =?utf-8?B?anhrNlhOZkFyZG12YWUwSERMUkUzN2lqTnR6d2xISzZuQlkzR1J0aDMzTTV4?=
+ =?utf-8?B?NCttL2dYYnhWeFVJZjhZUkwxUUZyeThSMVdqWXZvVmh3R0xUQkhha29PSlFa?=
+ =?utf-8?B?V2lnWnVFWmJKVWdYaVVqZmRCRmM0Wnp6bGo5RTlKeUxLZGEzZlZVaXlMTTN3?=
+ =?utf-8?B?VzBhbEdZMW1vRjBXdVc2Tll3YUpDSXlwTm8zK3NxT1E4Z3NnVlMzWlpCMlVL?=
+ =?utf-8?B?OEhxWWdkZlR4dlkzY082c2FsaUM4NWxQMW1rcWFrRjAxdHdRMERIUVlvOXA0?=
+ =?utf-8?B?RllUZ2l0NFJBcW1JOFpzMGZMZGJ2MVFWUGtsRlRoU0FZcGt0c0RXNkNMOGlx?=
+ =?utf-8?B?L2Mzd1NqM3RmUVFvb3AyN1JXWmtkREJ3blBiS0RyTC9YL0ZaZXFhZ1EyYjhP?=
+ =?utf-8?B?WW45cXNMSFE2KytXQ24xSHJ3Y3hhVGIyY1V5OXd2Z0JGS1I0b2N3Z2NWbEJh?=
+ =?utf-8?B?RWYrVmpqVkpQcVBrZm9aYTZIQjFZK1VpVWZRY3BkM0tCbFJabk9QVmZXTndB?=
+ =?utf-8?Q?lXdpajiT0bwF6sKaKyeL/O4=3D?=
+X-OriginatorOrg: amperemail.onmicrosoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a2e8bc4c-63a5-4cab-f907-08dc4d7f30f8
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR01MB5947.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2024 10:26:26.3707
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wQChrqjp+0nmW36BQmtZTxhPBJlstBRd/GgJ5LptLOeGqHvCfEx+HZf7Ax6m++sPq8UqY/DQX0kxMGStFPjPLxSCVaJ3gQTjNHMJrAI54UBOAHYaKXyaYUv6UnXljnwn
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR01MB7166
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
-branch HEAD: 965abd34783aec0f25318b78728a02af011b0baf  Merge branch 'kunit-v2' into testing
 
-elapsed time: 1013m
 
-configs tested: 125
-configs skipped: 3
+On 25/03/2024 15:32, Krzysztof Kozlowski wrote:
+> On 22/03/2024 10:53, Chanh Nguyen wrote:
+>>>>>
+>>>>
+>>>> Hi Krzysztof,
+>>>> I have not yet understood your comment here. Please help give more
+>>>> details for my missing! Thank Krzysztof!
+>>>
+>>> I expect many more properties of a fan controller. Resources (clocks,
+>>> PWMs, supplies) and FAN specific properties.
+>>>
+>>
+>> Hi Krzysztof,
+>>
+>> I'm creating a base binding document for the max31790 driver. I'm basing
+>> it on the drivers/hwmon/max31790.c. Currently, the max31790.c driver has
+> 
+> Binding should be based on device (e.g. its datasheet), not the driver.
+> 
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Thank Krzysztof,
+I'm reading the writing-bindings.rst and I got it for now. I'll make 
+complete binding in patch v2.
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240326   gcc  
-i386         buildonly-randconfig-002-20240326   clang
-i386         buildonly-randconfig-003-20240326   clang
-i386         buildonly-randconfig-004-20240326   gcc  
-i386         buildonly-randconfig-005-20240326   gcc  
-i386         buildonly-randconfig-006-20240326   gcc  
-i386                                defconfig   clang
-i386                  randconfig-001-20240326   gcc  
-i386                  randconfig-002-20240326   gcc  
-i386                  randconfig-003-20240326   gcc  
-i386                  randconfig-004-20240326   clang
-i386                  randconfig-005-20240326   gcc  
-i386                  randconfig-006-20240326   clang
-i386                  randconfig-011-20240326   clang
-i386                  randconfig-012-20240326   gcc  
-i386                  randconfig-013-20240326   clang
-i386                  randconfig-014-20240326   clang
-i386                  randconfig-015-20240326   clang
-i386                  randconfig-016-20240326   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240326   clang
-x86_64       buildonly-randconfig-002-20240326   gcc  
-x86_64       buildonly-randconfig-003-20240326   clang
-x86_64       buildonly-randconfig-004-20240326   gcc  
-x86_64       buildonly-randconfig-005-20240326   gcc  
-x86_64       buildonly-randconfig-006-20240326   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240326   gcc  
-x86_64                randconfig-002-20240326   gcc  
-x86_64                randconfig-003-20240326   gcc  
-x86_64                randconfig-004-20240326   clang
-x86_64                randconfig-005-20240326   gcc  
-x86_64                randconfig-006-20240326   clang
-x86_64                randconfig-011-20240326   gcc  
-x86_64                randconfig-012-20240326   clang
-x86_64                randconfig-013-20240326   gcc  
-x86_64                randconfig-014-20240326   gcc  
-x86_64                randconfig-015-20240326   clang
-x86_64                randconfig-016-20240326   clang
-x86_64                randconfig-071-20240326   clang
-x86_64                randconfig-072-20240326   gcc  
-x86_64                randconfig-073-20240326   gcc  
-x86_64                randconfig-074-20240326   gcc  
-x86_64                randconfig-075-20240326   gcc  
-x86_64                randconfig-076-20240326   gcc  
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
+I am very pleased to hear your comments.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>> not yet implemented other properties, such as clocks, fan-supply, pwms,
+>> etc. So I just introduced the "compatible" and "reg" properties.
+>>
+>> In the near future, if any other properties are necessary, I think we
+>> will implement them in drivers/hwmon/max31790.c then update this binding
+>> document.
+> 
+> Please instead read:
+> Documentation/devicetree/bindings/writing-bindings.rst
+> 
+>>
+>> I look at other binding documents, I also see something similar. They
+>> just introduce the "compatible" and "reg" properties.
+>>
+>> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/Documentation/devicetree/bindings/hwmon/adi,max31760.yaml
+> 
+> Maybe these devices are similar, maybe not. This should not be excuse to
+> come with really incomplete binding.
+> 
+> ...
+> 
+>> I think "fan-controller" is a good node name. Do you think so?
+>>
+> 
+> Yes.
+> 
+> Best regards,
+> Krzysztof
+> 
