@@ -1,55 +1,57 @@
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38F21154BEA
-	for <linux-hwmon@vger.kernel.org>; Wed, 27 Mar 2024 23:19:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC5971552E9
+	for <linux-hwmon@vger.kernel.org>; Wed, 27 Mar 2024 23:19:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711581547; cv=none; b=QtzwrteEJQdwAYKz6v3GjaSr7jPI52vElJg8q6Szv0a7fDO4ytWnLa8gLKlZo8vH0hqP5M9sp9JNTk41WV5SrWOvfVNx15esqq2dFtfM00OiGjqM3C2/U0SwOKPz8VsR/WgZFi8PySA9Q9ZE/CzCaKwr9Jrkei8IkAQ1thB4T+M=
+	t=1711581549; cv=none; b=qtgLMHPifkA1A54DcSB2w3x/QgPMqLq58JSKSzDxpD/tdiOyLQeUDUNtYWb8P0YSTpMc4PTA3wZVyA44ol5Nre17Ig5yEQKzeD5TQua7+yBBzCKUZoghr6Bwt3tGNmxhsVtFWUF0UrRDLAknDmNzIBAi07NGbxu5UPVfN2Gxbn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711581547; c=relaxed/simple;
-	bh=Oin5ojSwy2humzjzfHVDPNnW4ZK/nwUgFx0t+HKuAB4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=BGCDGlzSWLzJhp1HQrPbCQDzY7HvJafbgLspAbHl96Bj95YEXI30Xcp/frSzyn/YMXOV8eWlOzmOgXeY/RQMDQ0LfZpYWVNpbe6p7dOOK84pNMO2Xqh3YjwEQsbR+CLHRlXJtAzQUlPJzSUy9pmtn3ApTJ9o5jmZw1C/FilCxp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=0ABVGfHH; arc=none smtp.client-ip=209.85.160.43
+	s=arc-20240116; t=1711581549; c=relaxed/simple;
+	bh=neFzT6HqcboqV4+7wZk9fLD3RdDZfPvFuSLluIe7M0A=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YpY1YQTO4dfx4p2qL5ARXARbU0pDYLvDO5xW1PbfxNMzUU0uDh2mFCtNRxYoDMyWrBj9UhnnPSPRPMOmuBoUQl3c4NYgmAUph8ZdpBqXTy94Wq3ijhvnaZWNOkB/bNGGv0Y66qB8ox5/GxBexfMEM6BC4Jp2Pu5gMO787LIQ5ck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=2s3jI1+/; arc=none smtp.client-ip=209.85.167.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="0ABVGfHH"
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-22215ccbafeso260657fac.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 27 Mar 2024 16:19:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="2s3jI1+/"
+Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-3c3d7e7402dso305520b6e.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 27 Mar 2024 16:19:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1711581542; x=1712186342; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pNmxlM+zWytQQYi7ZtjQVmkQiumnd7DNMgYQxgBRWM8=;
-        b=0ABVGfHHvyHnYF5hd1OqQl1iZYDFAsoTAnFoz9PQIRq/QP3Nn5kLjbP9koIqKf69et
-         BhjAm6OlMQkGbOryPs6WYrzUeqNPdYbOf0WbFbT99DvCHlwQDRnLpG8lyNXp42l778Bp
-         I3+i+Rap1zbQuxQ+uLiaD6XlVBJ6BJBonKyRM9jZSc3k8WtzomIlXGCJq44eSDRHvDgQ
-         uzXz4NaYW3l0S7fReJSm0W/iYRV7pbWxmgIKYRXJjt3ADDYsLxMoRTM84X1yD6zxRBPW
-         T7YI6wmOxIBqyTAcJlFCBcB4MRMdK4VNOZJM+FW3by4lx/R8/6VNoNblqlBuPCAB48/i
-         OdjQ==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1711581545; x=1712186345; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uDy4pTWnkpzbrflLHcGNvhZoR/MRYIqFIu3bxWkx5Ws=;
+        b=2s3jI1+/GCM9mQFPftY+sTaEasxKfga3EUkxNyQvN9MMdfwPS/IngP/TfwuOCXPybF
+         DDEJ8iKgLcWsmM4cSrdHss9GS0rcRdazB3VAUzBy2OH2o3U8aHL+0LLBk+Qp9zPw3Rs0
+         uEtsxhOsRr1EgKFVa5BKQCxkJKyckZXiwZ4WSvLOFwECuRPoOiOnG8K5hMsoSePxE2Wn
+         c+Ilaf9yTdI5Icf1VdFkKU6ex+pENSR6HVEl3TDp2Ram2tFIN0gas3q/5kGPsKQrG8o3
+         vb80700kjoRYS98SLOaeCMfKRUiDqC7D+Ijq3JAeB0KVfeyZ1MVEiz8q1XJ7d8u1YFkN
+         MtBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711581542; x=1712186342;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pNmxlM+zWytQQYi7ZtjQVmkQiumnd7DNMgYQxgBRWM8=;
-        b=dyN7+fhixnHeYFRctJ/QZdJlzLpgAQXJBLuI4T9r4Y/IQfcG8oW83zvBY/QnR5iOQh
-         jHcWzesslJyu9q8HdBkMeZJLvYdMnlbC5VrraBAIpQ5Po44UDQA6Bkia8fKPtVZhXzah
-         OJsYVCsC7sE2fzz72Hp8ceRv+22NdwTkB4IgiJHhJTrVO5ju3mNzF7P/ydyZlKUbqYzt
-         YcrX2tZeqUAqmvMctunBnNMDFN6FW59Xc3OjLO4nWbruGZHd6C+/z4qfEm85JORETH4T
-         90tmpp2mydkmSzZzh0G3tjk9vXEZqVZYxwIbOU/kjzJnFXVo15Th5JnXkrYFarQelVb5
-         6kxg==
-X-Forwarded-Encrypted: i=1; AJvYcCX8efuVt2IOGHReJBUJRkAIFjDuWYhpfZrRZeEwPIKKmfYIu845B7pkRyeeL2SGOPJOP5m0J7izR7Q7FnrlQWhrNqGWXZuwCOBS2F0=
-X-Gm-Message-State: AOJu0YyuHTTr/aR+maWurTUqU62xiYkA+ekS1a8UyLIOUWl+4ULRvLZP
-	6Fab07c1PmATemmAMoCuxBPioftLLR7g5/yQ+74opLDFC8vuxfJBy9+kl4Yl8j0=
-X-Google-Smtp-Source: AGHT+IH0jcJOIn91SYG/gvmxB532Ey13hS1+uAizEDZdhgZnM4KKp+HBnfwPVKzM9sb2VsY2xY892g==
-X-Received: by 2002:a05:6871:2b2a:b0:22a:55bd:a048 with SMTP id dr42-20020a0568712b2a00b0022a55bda048mr1167094oac.5.1711581542433;
-        Wed, 27 Mar 2024 16:19:02 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1711581545; x=1712186345;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uDy4pTWnkpzbrflLHcGNvhZoR/MRYIqFIu3bxWkx5Ws=;
+        b=l6maYHsiGXWz7OiCn2fsgGWq43JUakDoowkHwPM6y4cPFRLfKtJ3sdN77MuVdIzwrl
+         Rpkb7zAqKILIgXbhqTcBrs6Hk/O3Ws1Owy+K00bv3eR0tABD1hWgKXv6D2MKDoNUbi8Q
+         WJXv2L2f0T6iGKa78GltLu3Ak2ZjYmxxvvonqts3cueAv8J3I+UeeqtAbpSoKFlyXcf3
+         2JozLm07IhYqf2QwFp9iL1X5XBUnaBE3oG2l66/t1JTkMx3q4i2s9kOY4DiJeO/HWtAA
+         Oq59GuCQ3xqxvDkMIW9xWM/cooCgZ6oVImhUuFLm6E77q6VpWD2okZjKCHdnxDMm/JxR
+         H9Yw==
+X-Forwarded-Encrypted: i=1; AJvYcCXJYpgmnnIXmPC3+cRe8zSOl90NHxuIoQzMO78ABCjcI0a5bBk+mbcMBmXnDMYsIseHO8WjrZvkEge69j2H/azon6yXT+ud8/ohdWI=
+X-Gm-Message-State: AOJu0Yya4RVon6gUh1XRdEMVBtoqcYjLhpmH0B/mQtR2N+1gmsOoRMKE
+	4VaIaxy9vBl1vZVkEG7MZDQGPy2FiCpfc9zNEYaH/l6tBxM3RXQLpzXw1oQ8yLg=
+X-Google-Smtp-Source: AGHT+IGRFIewUZzJjdav0VooP65bH9hr9ECiT789M34rqrspoxpzTHpgVb/U1H59dfHvPYlK2YUMpA==
+X-Received: by 2002:a05:6871:29a:b0:221:b27a:2bab with SMTP id i26-20020a056871029a00b00221b27a2babmr1185697oae.55.1711581544880;
+        Wed, 27 Mar 2024 16:19:04 -0700 (PDT)
 Received: from freyr.lechnology.com (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id js3-20020a056870bac300b0022a0519183csm81381oab.2.2024.03.27.16.19.01
+        by smtp.gmail.com with ESMTPSA id js3-20020a056870bac300b0022a0519183csm81381oab.2.2024.03.27.16.19.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Mar 2024 16:19:01 -0700 (PDT)
+        Wed, 27 Mar 2024 16:19:04 -0700 (PDT)
 From: David Lechner <dlechner@baylibre.com>
 To: Jonathan Corbet <corbet@lwn.net>,
 	Liam Girdwood <lgirdwood@gmail.com>,
@@ -71,10 +73,12 @@ Cc: David Lechner <dlechner@baylibre.com>,
 	linux-iio@vger.kernel.org,
 	linux-staging@lists.linux.dev,
 	linux-input@vger.kernel.org
-Subject: [PATCH RFC 0/7] regulator: new APIs for voltage reference supplies
-Date: Wed, 27 Mar 2024 18:18:49 -0500
-Message-ID: <20240327-regulator-get-enable-get-votlage-v1-0-5f4517faa059@baylibre.com>
+Subject: [PATCH RFC 2/7] hwmon: (adc128d818) Use devm_regulator_get_optional_enable_get_voltage()
+Date: Wed, 27 Mar 2024 18:18:51 -0500
+Message-ID: <20240327-regulator-get-enable-get-votlage-v1-2-5f4517faa059@baylibre.com>
 X-Mailer: git-send-email 2.43.2
+In-Reply-To: <20240327-regulator-get-enable-get-votlage-v1-0-5f4517faa059@baylibre.com>
+References: <20240327-regulator-get-enable-get-votlage-v1-0-5f4517faa059@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -85,45 +89,148 @@ Content-Type: text/plain; charset="utf-8"
 X-Mailer: b4 0.12.4
 Content-Transfer-Encoding: 8bit
 
-In the IIO subsystem, we noticed a pattern in many drivers where we need
-to get, enable and get the voltage of a supply that provides a reference
-voltage. In these cases, we only need the voltage and not a handle to
-the regulator. Another common pattern is for chips to have an internal
-reference voltage that is used when an external reference is not
-available. There are also a few drivers outside of IIO that do the same.
+We can reduce boilerplate code and eliminate the driver remove()
+function by using devm_regulator_get_optional_enable_get_voltage().
 
-So we would like to propose a couple of new regulator consumer APIs to
-handle these specific cases to avoid repeating the same boilerplate code
-in multiple drivers.
+A new external_vref flag is added since we no longer have the handle
+to the regulator to check if it is present.
 
-As an example of how these functions are used, I have included a few
-patches to consumer drivers. But to avoid a giant patch bomb, I have
-omitted the iio/adc and iio/dac patches I have prepared from this
-series. I will send those separately but these will add 12 more users
-of devm_regulator_get_enable_get_voltage() and 24 more users of
-devm_regulator_get_optional_enable_get_voltage(). In total, this will
-eliminate nearly 1000 lines of similar code.
-
+Signed-off-by: David Lechner <dlechner@baylibre.com>
 ---
-David Lechner (7):
-      regulator: devres: add APIs for reference supplies
-      hwmon: (adc128d818) Use devm_regulator_get_optional_enable_get_voltage()
-      hwmon: (da9052) Use devm_regulator_get_enable_get_voltage()
-      iio: addac: ad74115: Use devm_regulator_get_enable_get_voltage()
-      iio: frequency: admv1013: Use devm_regulator_get_enable_get_voltage()
-      staging: iio: impedance-analyzer: admv1013: Use devm_regulator_get_enable_get_voltage()
-      Input: mpr121: Use devm_regulator_get_enable_get_voltage()
+ drivers/hwmon/adc128d818.c | 55 ++++++++++++++--------------------------------
+ 1 file changed, 17 insertions(+), 38 deletions(-)
 
- Documentation/driver-api/driver-model/devres.rst |  2 +
- drivers/hwmon/adc128d818.c                       | 55 +++++-----------
- drivers/hwmon/da9052-hwmon.c                     | 33 ++--------
- drivers/iio/addac/ad74115.c                      | 28 +-------
- drivers/iio/frequency/admv1013.c                 | 37 +++--------
- drivers/input/keyboard/mpr121_touchkey.c         | 45 +------------
- drivers/regulator/devres.c                       | 83 ++++++++++++++++++++++++
- drivers/staging/iio/impedance-analyzer/ad5933.c  | 24 +------
- include/linux/regulator/consumer.h               | 14 ++++
- 9 files changed, 138 insertions(+), 183 deletions(-)
----
-base-commit: c5b2db5859957150ac6ed305ab41a4a92ca40cfb
-change-id: 20240326-regulator-get-enable-get-votlage-5dedf40ff338
+diff --git a/drivers/hwmon/adc128d818.c b/drivers/hwmon/adc128d818.c
+index 46e3c8c50765..119e2841720f 100644
+--- a/drivers/hwmon/adc128d818.c
++++ b/drivers/hwmon/adc128d818.c
+@@ -58,7 +58,6 @@ static const u8 num_inputs[] = { 7, 8, 4, 6 };
+ 
+ struct adc128_data {
+ 	struct i2c_client *client;
+-	struct regulator *regulator;
+ 	int vref;		/* Reference voltage in mV */
+ 	struct mutex update_lock;
+ 	u8 mode;		/* Operation mode */
+@@ -389,7 +388,7 @@ static int adc128_detect(struct i2c_client *client, struct i2c_board_info *info)
+ 	return 0;
+ }
+ 
+-static int adc128_init_client(struct adc128_data *data)
++static int adc128_init_client(struct adc128_data *data, bool external_vref)
+ {
+ 	struct i2c_client *client = data->client;
+ 	int err;
+@@ -408,7 +407,7 @@ static int adc128_init_client(struct adc128_data *data)
+ 		regval |= data->mode << 1;
+ 
+ 	/* If external vref is selected, configure the chip to use it */
+-	if (data->regulator)
++	if (external_vref)
+ 		regval |= 0x01;
+ 
+ 	/* Write advanced configuration register */
+@@ -430,30 +429,25 @@ static int adc128_init_client(struct adc128_data *data)
+ static int adc128_probe(struct i2c_client *client)
+ {
+ 	struct device *dev = &client->dev;
+-	struct regulator *regulator;
+ 	struct device *hwmon_dev;
+ 	struct adc128_data *data;
+-	int err, vref;
++	bool external_vref;
++	int err;
+ 
+ 	data = devm_kzalloc(dev, sizeof(struct adc128_data), GFP_KERNEL);
+ 	if (!data)
+ 		return -ENOMEM;
+ 
+ 	/* vref is optional. If specified, is used as chip reference voltage */
+-	regulator = devm_regulator_get_optional(dev, "vref");
+-	if (!IS_ERR(regulator)) {
+-		data->regulator = regulator;
+-		err = regulator_enable(regulator);
+-		if (err < 0)
+-			return err;
+-		vref = regulator_get_voltage(regulator);
+-		if (vref < 0) {
+-			err = vref;
+-			goto error;
+-		}
+-		data->vref = DIV_ROUND_CLOSEST(vref, 1000);
+-	} else {
++	err = devm_regulator_get_optional_enable_get_voltage(dev, "vref");
++	if (err == -ENODEV) {
++		external_vref = false;
+ 		data->vref = 2560;	/* 2.56V, in mV */
++	} else if (err < 0) {
++		return err;
++	} else {
++		external_vref = true;
++		data->vref = DIV_ROUND_CLOSEST(err, 1000);
+ 	}
+ 
+ 	/* Operation mode is optional. If unspecified, keep current mode */
+@@ -461,13 +455,12 @@ static int adc128_probe(struct i2c_client *client)
+ 		if (data->mode > 3) {
+ 			dev_err(dev, "invalid operation mode %d\n",
+ 				data->mode);
+-			err = -EINVAL;
+-			goto error;
++			return -EINVAL;
+ 		}
+ 	} else {
+ 		err = i2c_smbus_read_byte_data(client, ADC128_REG_CONFIG_ADV);
+ 		if (err < 0)
+-			goto error;
++			return err;
+ 		data->mode = (err >> 1) & ADC128_REG_MASK;
+ 	}
+ 
+@@ -476,31 +469,18 @@ static int adc128_probe(struct i2c_client *client)
+ 	mutex_init(&data->update_lock);
+ 
+ 	/* Initialize the chip */
+-	err = adc128_init_client(data);
++	err = adc128_init_client(data, external_vref);
+ 	if (err < 0)
+-		goto error;
++		return err;
+ 
+ 	hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
+ 							   data, adc128_groups);
+ 	if (IS_ERR(hwmon_dev)) {
+ 		err = PTR_ERR(hwmon_dev);
+-		goto error;
++		return err;
+ 	}
+ 
+ 	return 0;
+-
+-error:
+-	if (data->regulator)
+-		regulator_disable(data->regulator);
+-	return err;
+-}
+-
+-static void adc128_remove(struct i2c_client *client)
+-{
+-	struct adc128_data *data = i2c_get_clientdata(client);
+-
+-	if (data->regulator)
+-		regulator_disable(data->regulator);
+ }
+ 
+ static const struct i2c_device_id adc128_id[] = {
+@@ -522,7 +502,6 @@ static struct i2c_driver adc128_driver = {
+ 		.of_match_table = of_match_ptr(adc128_of_match),
+ 	},
+ 	.probe		= adc128_probe,
+-	.remove		= adc128_remove,
+ 	.id_table	= adc128_id,
+ 	.detect		= adc128_detect,
+ 	.address_list	= normal_i2c,
+
+-- 
+2.43.2
+
