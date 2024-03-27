@@ -1,237 +1,256 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1067380
-	for <linux-hwmon@vger.kernel.org>; Wed, 27 Mar 2024 03:33:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE8C154C07
+	for <linux-hwmon@vger.kernel.org>; Wed, 27 Mar 2024 23:19:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711510395; cv=none; b=F44bOGEU5yAz+Ce0f2xMfb8V6pgNEeldtoyqIbSD8UikvEQJzdXZ+mmFgSKhCLkWz3dfIx/fJG4cawylEctZDTeGxwb0vqtZXJPtP3hR9YnJSa9AKAljJVemaLDtkfIRaUF074z4Qy6YUzPs7Y4+jzLnvhaKAkEzdyser3e0gBg=
+	t=1711581547; cv=none; b=MFNqNHImXARMO2fs8qUbNOzYNPF9VNq0FUiYqwcawAFmikfYur/JJ3KAbDHAH8sxVZQAe6S8BSwGOKvr+9bd1aYR+O5oUS205M8lAC4FtsvlBr7wU3WsLVN33S9xfSp+cUoXlUkfZvjtBQ+oLOswgbZ7gqiX0gFCB3qHGpokWeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711510395; c=relaxed/simple;
-	bh=dnUEnwbBHc5/xkauUCdrGnU/m25waCzMvceTgjCidAI=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=RRNbrNrF596I6eHx14y6NuPw+9Fbm9I8ChkzGvTrLgQpNyccX0NHxYPJTxLEwMhoJha0W8iGUeq49+nNac512/t5O4xajb1QBgThTPLTj+DUx1fP/dJ56sc0PKTPR8FI3olKCZjRfIvjV3WA9rpXh7/Jar3k7WT1Mg+TFIQf0xY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hif2kkY4; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1711581547; c=relaxed/simple;
+	bh=ly8n7SxGz9Lf2EUP25mArGs3mqGcGcPAZGBiTMozfFk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=n1eILeSpmkjrgwcfvrnGUsL9f/8dvCGuCIJMscDrNpsMLNn0l7oBWuTkKkXiJhdXVNZMo2jtqqXILq2kRoT+Vt3AY0YquaUWbtylNZDU8GunkCXS3sNDCVNi5N267m5Q6dvhVSiqaNfq0W5X8V+JtVKO5C6Sre9lDVc3nHHyIt8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=gdYn2HNs; arc=none smtp.client-ip=209.85.210.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hif2kkY4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711510394; x=1743046394;
-  h=date:from:to:cc:subject:message-id;
-  bh=dnUEnwbBHc5/xkauUCdrGnU/m25waCzMvceTgjCidAI=;
-  b=hif2kkY4i0Q+TQBxGP8j3XpwMLoR/56625BLHXUJ0PHI3nfE21e5PU5y
-   1NaRFOIhbciAxEFOZOS5uCU6cIb3oOZaZZR8lXYtuGJQAntRtRpYpXke7
-   ORRixGYkUkFZyRSoMazaFRBGMP/nbIFjO8LBcMVrngoNCpD5+dWb0yBN2
-   CMz4TOKqQ91lVgQ/M0O9u3i747vwduIA5G9hcaDmMbbu6WLRrYyQ06DgG
-   zjLR+xjs7HNPF8eJqrvLhWnPs8E9zMrOdSTt0a2CKMJU35E2G2P3Pgidt
-   MqoRv/PgBqt80QL+KPgayUNnPkMXowwwE/XtCitdVTnaG0u3PNDfDnbds
-   g==;
-X-CSE-ConnectionGUID: 8uK6z6OMSgGnaI4q80pflQ==
-X-CSE-MsgGUID: Rf6HXX/ZSYa/9tUQS0S6TA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="24035029"
-X-IronPort-AV: E=Sophos;i="6.07,157,1708416000"; 
-   d="scan'208";a="24035029"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 20:33:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,157,1708416000"; 
-   d="scan'208";a="20711078"
-Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 26 Mar 2024 20:33:12 -0700
-Received: from kbuild by be39aa325d23 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rpK2H-0000ho-2b;
-	Wed, 27 Mar 2024 03:33:09 +0000
-Date: Wed, 27 Mar 2024 11:33:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 826eb58fbd777f986d69da15d0f60f774470aa00
-Message-ID: <202403271159.78b5rUHe-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="gdYn2HNs"
+Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-6e695b7391dso188145a34.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 27 Mar 2024 16:19:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1711581544; x=1712186344; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PE6UqUKX3G/FV5HVYmxMOtqukpZG7UeidX96eu+NYsg=;
+        b=gdYn2HNs6K4qNEtXCegpSeDGvDV8ACFqhl6Vw7p9/9Zn5KL7U7CJyRzv4oEUP2PMR5
+         AKCmYlJhBTSAEsxYPxJ86q1ivvhTcUFZgFSuV1IOS2YTJQbS6t4gfXZsaVYvLW/gd4V3
+         +BaPLv351a9TJ3oTxqqzPeBLOMFKo/+DCu++5GtOZgLvE4O+LnX8bKtlgWbIofTNmSrR
+         WFdGNJqz2nZWysZ1zrflE6XVoa8EvSoGsQmeFNaYFRevPflnCftuprK54+Sjn4WRyxG3
+         p7QvTOg4/8kuwS5Y2OKt/x6LHKoBihgpkdzBouj2haJea7QiHmCDPVHWIBMJGbX7EyDr
+         Jy2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711581544; x=1712186344;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PE6UqUKX3G/FV5HVYmxMOtqukpZG7UeidX96eu+NYsg=;
+        b=uM4SQeMEauX6pm+AFPKT29ilOMRsaNIlC471jbezqYqusOeA3sa+U/nKxt4lAnaK+i
+         5y6Xxpy+2uCyaagJtHr8P/49L0/rvUH/gEWSHfQB5BtJtwleV5j0qFemVz0RfQuwEZKP
+         CcmCMyE1PJgD5z1zmWBv8oavc+wBpow+ishDzlDY9gLWACV21wySQ1YotoSJZvGs2+yy
+         ec9v8TFnm9NiNKNY8utWdDvPo2zh7ngP8JScdC5XKUBLzipn0jMVN0n77XlATYNSxj85
+         0WVztNQYA0uQMNsR961kZKdvi9e3AHkeZo46lTeoYi0p0ZVVLnBRra1cJWujt8BYTcIS
+         YKJw==
+X-Forwarded-Encrypted: i=1; AJvYcCXB13bDqg7I7Rh3FDoMLmfSuyMUaejac9dlK452FzqmpJqlrOu+JVMK+nutq1u9b6QkGe0dIPElANzDhFI5PnapcJBGvqoFuOTpLks=
+X-Gm-Message-State: AOJu0YycsY8UzvmpICuYYQ9gHuvESfNE3KDZZCEuk8OdPluLnYWKBi8q
+	v9xf9+QpS95iD59FsJRXb5EYlnjC+U3okWhgF8Y7GZJ4AbR0jvLlTxmeElfieZ0=
+X-Google-Smtp-Source: AGHT+IEoTHHATEQkuJa2BbeiTLbiTgSE1yaSMq5ULG3gGF3llvbq0XtMCg26/o3L5+Q/P6Gnym6iXw==
+X-Received: by 2002:a05:6870:7d19:b0:22a:5690:f056 with SMTP id os25-20020a0568707d1900b0022a5690f056mr1316238oab.44.1711581543700;
+        Wed, 27 Mar 2024 16:19:03 -0700 (PDT)
+Received: from freyr.lechnology.com (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
+        by smtp.gmail.com with ESMTPSA id js3-20020a056870bac300b0022a0519183csm81381oab.2.2024.03.27.16.19.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Mar 2024 16:19:03 -0700 (PDT)
+From: David Lechner <dlechner@baylibre.com>
+To: Jonathan Corbet <corbet@lwn.net>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Support Opensource <support.opensource@diasemi.com>,
+	Cosmin Tanislav <cosmin.tanislav@analog.com>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Antoniu Miclaus <antoniu.miclaus@analog.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: David Lechner <dlechner@baylibre.com>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-iio@vger.kernel.org,
+	linux-staging@lists.linux.dev,
+	linux-input@vger.kernel.org
+Subject: [PATCH RFC 1/7] regulator: devres: add APIs for reference supplies
+Date: Wed, 27 Mar 2024 18:18:50 -0500
+Message-ID: <20240327-regulator-get-enable-get-votlage-v1-1-5f4517faa059@baylibre.com>
+X-Mailer: git-send-email 2.43.2
+In-Reply-To: <20240327-regulator-get-enable-get-votlage-v1-0-5f4517faa059@baylibre.com>
+References: <20240327-regulator-get-enable-get-votlage-v1-0-5f4517faa059@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+X-Mailer: b4 0.12.4
+Content-Transfer-Encoding: 8bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 826eb58fbd777f986d69da15d0f60f774470aa00  hwmon: (pmbus/mp2975) Use i2c_get_match_data()
+A common use case for regulators is to supply a reference voltage to an
+analog input or output device. This adds two new devres APIs to get,
+enable, and get the voltage in a single call. This allows eliminating
+boilerplate code in drivers that use reference supplies in this way.
 
-elapsed time: 750m
+devm_regulator_get_enable_get_voltage() is intended for cases where the
+supply is required to provide an external reference voltage.
 
-configs tested: 162
-configs skipped: 3
+devm_regulator_get_optional_enable_get_voltage() is intended for cases
+where the supply is optional and device typically uses an internal
+reference voltage if the supply is not available.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Signed-off-by: David Lechner <dlechner@baylibre.com>
+---
+ Documentation/driver-api/driver-model/devres.rst |  2 +
+ drivers/regulator/devres.c                       | 83 ++++++++++++++++++++++++
+ include/linux/regulator/consumer.h               | 14 ++++
+ 3 files changed, 99 insertions(+)
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20240327   gcc  
-arc                   randconfig-002-20240327   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                   randconfig-001-20240327   clang
-arm                   randconfig-002-20240327   clang
-arm                   randconfig-003-20240327   clang
-arm                   randconfig-004-20240327   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240327   clang
-arm64                 randconfig-002-20240327   clang
-arm64                 randconfig-003-20240327   gcc  
-arm64                 randconfig-004-20240327   clang
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240327   gcc  
-csky                  randconfig-002-20240327   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20240327   clang
-hexagon               randconfig-002-20240327   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240327   gcc  
-i386         buildonly-randconfig-002-20240327   gcc  
-i386         buildonly-randconfig-003-20240327   clang
-i386         buildonly-randconfig-004-20240327   clang
-i386         buildonly-randconfig-005-20240327   clang
-i386         buildonly-randconfig-006-20240327   clang
-i386                                defconfig   clang
-i386                  randconfig-001-20240327   gcc  
-i386                  randconfig-002-20240327   gcc  
-i386                  randconfig-003-20240327   clang
-i386                  randconfig-004-20240327   gcc  
-i386                  randconfig-005-20240327   clang
-i386                  randconfig-006-20240327   gcc  
-i386                  randconfig-011-20240327   gcc  
-i386                  randconfig-012-20240327   clang
-i386                  randconfig-013-20240327   gcc  
-i386                  randconfig-014-20240327   clang
-i386                  randconfig-015-20240327   gcc  
-i386                  randconfig-016-20240327   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240327   gcc  
-loongarch             randconfig-002-20240327   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240327   gcc  
-nios2                 randconfig-002-20240327   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240327   gcc  
-parisc                randconfig-002-20240327   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc               randconfig-001-20240327   clang
-powerpc               randconfig-002-20240327   gcc  
-powerpc               randconfig-003-20240327   clang
-powerpc64             randconfig-001-20240327   clang
-powerpc64             randconfig-002-20240327   gcc  
-powerpc64             randconfig-003-20240327   gcc  
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-riscv                 randconfig-001-20240327   clang
-riscv                 randconfig-002-20240327   gcc  
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-s390                  randconfig-001-20240327   clang
-s390                  randconfig-002-20240327   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                    randconfig-001-20240327   gcc  
-sh                    randconfig-002-20240327   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240327   gcc  
-sparc64               randconfig-002-20240327   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20240327   clang
-um                    randconfig-002-20240327   clang
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240327   gcc  
-x86_64       buildonly-randconfig-002-20240327   gcc  
-x86_64       buildonly-randconfig-003-20240327   gcc  
-x86_64       buildonly-randconfig-004-20240327   clang
-x86_64       buildonly-randconfig-005-20240327   gcc  
-x86_64       buildonly-randconfig-006-20240327   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240327   clang
-x86_64                randconfig-002-20240327   gcc  
-x86_64                randconfig-003-20240327   gcc  
-x86_64                randconfig-004-20240327   gcc  
-x86_64                randconfig-005-20240327   clang
-x86_64                randconfig-006-20240327   clang
-x86_64                randconfig-011-20240327   gcc  
-x86_64                randconfig-012-20240327   clang
-x86_64                randconfig-013-20240327   clang
-x86_64                randconfig-014-20240327   clang
-x86_64                randconfig-015-20240327   clang
-x86_64                randconfig-016-20240327   clang
-x86_64                randconfig-071-20240327   gcc  
-x86_64                randconfig-072-20240327   clang
-x86_64                randconfig-073-20240327   clang
-x86_64                randconfig-074-20240327   clang
-x86_64                randconfig-075-20240327   clang
-x86_64                randconfig-076-20240327   clang
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
-xtensa                randconfig-001-20240327   gcc  
+diff --git a/Documentation/driver-api/driver-model/devres.rst b/Documentation/driver-api/driver-model/devres.rst
+index 7be8b8dd5f00..fd954d09e13c 100644
+--- a/Documentation/driver-api/driver-model/devres.rst
++++ b/Documentation/driver-api/driver-model/devres.rst
+@@ -433,9 +433,11 @@ REGULATOR
+   devm_regulator_bulk_put()
+   devm_regulator_get()
+   devm_regulator_get_enable()
++  devm_regulator_get_enable_get_voltage()
+   devm_regulator_get_enable_optional()
+   devm_regulator_get_exclusive()
+   devm_regulator_get_optional()
++  devm_regulator_get_optional_enable_get_voltage()
+   devm_regulator_irq_helper()
+   devm_regulator_put()
+   devm_regulator_register()
+diff --git a/drivers/regulator/devres.c b/drivers/regulator/devres.c
+index 90bb0d178885..e240926defc5 100644
+--- a/drivers/regulator/devres.c
++++ b/drivers/regulator/devres.c
+@@ -145,6 +145,89 @@ struct regulator *devm_regulator_get_optional(struct device *dev,
+ }
+ EXPORT_SYMBOL_GPL(devm_regulator_get_optional);
+ 
++static int _devm_regulator_get_enable_get_voltage(struct device *dev,
++						  const char *id,
++						  bool silent_enodev)
++{
++	struct regulator *r;
++	int ret;
++
++	/*
++	 * Since we need a real voltage, we use devm_regulator_get_optional()
++	 * here to avoid getting a dummy regulator if the supply is not present.
++	 */
++	r = devm_regulator_get_optional(dev, id);
++	if (silent_enodev && PTR_ERR(r) == -ENODEV)
++		return -ENODEV;
++	if (IS_ERR(r))
++		return dev_err_probe(dev, PTR_ERR(r),
++				     "failed to get regulator '%s'\n", id);
++
++	ret = regulator_enable(r);
++	if (ret)
++		return dev_err_probe(dev, ret,
++				     "failed to enable regulator '%s'\n", id);
++
++	ret = devm_add_action_or_reset(dev, regulator_action_disable, r);
++	if (ret)
++		return dev_err_probe(dev, ret,
++				     "failed to add disable action for regulator '%s'\n",
++				     id);
++
++	ret = regulator_get_voltage(r);
++	if (ret < 0)
++		return dev_err_probe(dev, ret,
++				     "failed to get voltage for regulator '%s'\n",
++				     id);
++
++	return ret;
++}
++
++/**
++ * devm_regulator_get_enable_get_voltage - Resource managed regulator get and
++ *                                         enable that returns the voltage
++ * @dev: device to supply
++ * @id:  supply name or regulator ID.
++ *
++ * Get and enable regulator for duration of the device life-time.
++ * regulator_disable() and regulator_put() are automatically called on driver
++ * detach. See regulator_get_optional(), regulator_enable(), and
++ * regulator_get_voltage() for more information.
++ *
++ * This is a convenience function for supplies that provide a reference voltage
++ * where the consumer driver just needs to know the voltage and keep the
++ * regulator enabled. Also, as a convenience, this prints error messages on
++ * failure.
++ *
++ * Returns: voltage in microvolts on success, or an error code on failure.
++ */
++int devm_regulator_get_enable_get_voltage(struct device *dev, const char *id)
++{
++	return _devm_regulator_get_enable_get_voltage(dev, id, false);
++}
++EXPORT_SYMBOL_GPL(devm_regulator_get_enable_get_voltage);
++
++/**
++ * devm_regulator_get_optional_enable_get_voltage - Resource managed regulator
++ *                                                  get and enable that returns
++ *                                                  the voltage
++ * @dev: device to supply
++ * @id:  supply name or regulator ID.
++ *
++ * This function is identical to devm_regulator_get_enable_get_voltage() except
++ * that it does not print an error message in the case of -ENODEV. Callers are
++ * expected to handle -ENODEV as a special case instead of passing it on as an
++ * error.
++ *
++ * Returns: voltage in microvolts on success, or an error code on failure.
++ */
++int devm_regulator_get_optional_enable_get_voltage(struct device *dev,
++						   const char *id)
++{
++	return _devm_regulator_get_enable_get_voltage(dev, id, true);
++}
++EXPORT_SYMBOL_GPL(devm_regulator_get_optional_enable_get_voltage);
++
+ static int devm_regulator_match(struct device *dev, void *res, void *data)
+ {
+ 	struct regulator **r = res;
+diff --git a/include/linux/regulator/consumer.h b/include/linux/regulator/consumer.h
+index 4660582a3302..35596db521a0 100644
+--- a/include/linux/regulator/consumer.h
++++ b/include/linux/regulator/consumer.h
+@@ -164,6 +164,8 @@ struct regulator *__must_check devm_regulator_get_optional(struct device *dev,
+ 							   const char *id);
+ int devm_regulator_get_enable(struct device *dev, const char *id);
+ int devm_regulator_get_enable_optional(struct device *dev, const char *id);
++int devm_regulator_get_enable_get_voltage(struct device *dev, const char *id);
++int devm_regulator_get_optional_enable_get_voltage(struct device *dev, const char *id);
+ void regulator_put(struct regulator *regulator);
+ void devm_regulator_put(struct regulator *regulator);
+ 
+@@ -329,6 +331,18 @@ static inline int devm_regulator_get_enable_optional(struct device *dev,
+ 	return -ENODEV;
+ }
+ 
++static inline int devm_regulator_get_enable_get_voltage(struct device *dev,
++							const char *id)
++{
++	return -ENODEV;
++}
++
++static inline int devm_regulator_get_optional_enable_get_voltage(struct device *dev,
++								 const char *id)
++{
++	return -ENODEV;
++}
++
+ static inline struct regulator *__must_check
+ regulator_get_optional(struct device *dev, const char *id)
+ {
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.2
+
