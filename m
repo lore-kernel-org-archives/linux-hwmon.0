@@ -1,57 +1,57 @@
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F780155391
-	for <linux-hwmon@vger.kernel.org>; Wed, 27 Mar 2024 23:19:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A41C1553AE
+	for <linux-hwmon@vger.kernel.org>; Wed, 27 Mar 2024 23:19:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711581551; cv=none; b=dGJjlXcHXKOWQwlJKtm1VCsCiX6Pkhd1+c3AshedmWsfG/Q2HpSxFn/0dSb0JsQfKdhgZO1Lca4W2V9+BboKPxnhZ9MfslHps+vlYDkVbG9C0m2d3bQwR1mIwqfkDOQplFdhwW8XItw8FtuJqeSBrBu7u3rmVFAzI7k4wr4SMMA=
+	t=1711581552; cv=none; b=QUfW2VwBLmsmPpdGblKWAEvGlthWQSepxRbRmhiqhxKbAlQnIiQBG5BYvQc0j9x+9jyemgstPuh9xFsno04jFFXzT4wQb/MZJO4F6lTbCMVYqR4w4L0cFWNTZiNX7ianEJQjG3HqaqjLRHApko6vrZYGY+QTJeImmyFhtjwAI4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711581551; c=relaxed/simple;
-	bh=m3bHOTwCtpGjb4KTDA27x15GCtpMS/P661zbUhfKKAs=;
+	s=arc-20240116; t=1711581552; c=relaxed/simple;
+	bh=sBLswoaOXaPOvtO52rKuqYQNWurR1XJ6O1U4h0zvPkM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IA/epLE3rZA/cN0DmP6E5gLUj3sqOwPKvMSXEJbnjXDNrCXnZiritiRm8AUDDCcjmpBHMl0obZ94LV3CQyGRC+QsUAAiejT3WG00DDzifg1nhFfk8kSoBE53SB2JKxVlzdu15QI3CUyvDN9bB9VuzTIQ2F6uuFlMZ2+cwdjZ504=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=3MBuSFOf; arc=none smtp.client-ip=209.85.160.54
+	 MIME-Version:Content-Type; b=T1TIw5PXi4WszMd95WA//qISRZ1bK7PJudQBmBu56QnZQfut3C53jN9UwMWkNGWGbhSWyuo6VW1x/K+2fSFeRMdW2+Iko0UkIA/3SDPsO8qYQIrptR+/HcsSfafqjyGj1GZ0dU2/NqXRR08psSF1OW4iytKRD1zhQkmcGOi+8/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=GmmK8IK0; arc=none smtp.client-ip=209.85.160.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="3MBuSFOf"
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-222c0572eedso233972fac.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 27 Mar 2024 16:19:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="GmmK8IK0"
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-22a639aedb6so212055fac.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 27 Mar 2024 16:19:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1711581547; x=1712186347; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1711581548; x=1712186348; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5hg1dHpRYZjEho4rhJz+qSTgS0nJB4BPNbR6dsgqeqo=;
-        b=3MBuSFOfpS+fPoYdwlmYLFjL8VMaVgYuenjL9Tlox/H3N8RxgoDSy3BZYC3zMKtl+1
-         RxtIb8FoS/c/4EiMMEmT4W5gZR79EzGFeQx7l/VYH00fQCeNObyjUY4IefVVL8xefach
-         x4ityzMfV/spe6lcmtLxicztH/cJi+pbgxB0MadC7xuVdvyw9zl3ffCQb4wy/frTO4ql
-         mRErsQAfWYe0D5uprmJO4RLhd83rmzbXnRehMp+LiEqeow6xyKMnNhNwUOgW+xZ1FV1U
-         0wSL5TC+B4308ishEAtcpfIiK6ffMhuwOKwwluK4hvjRUKMGrjsSjJKlHSUdCtOiKtY9
-         7n1w==
+        bh=KaNlrVh6YX+OdjnoPnmjQwMmZEJRJLFsRjLteQznSUU=;
+        b=GmmK8IK0iivL2FmUdS13hA2ENWWXIW/hTaQCILNCGBPXTotcgGrCDpOC97OcLwlTx7
+         RjCYu7tM39lZj8lveTnDWDIq7Dutz2w1TLDeBW+DbwB9uhUvdRfXEWWvPfzug7y1Ytzu
+         PTnQ2sml8lwNfbC1P17OM9gmRYaiVBtzqUdLpw+Zvt3muIbaAXtj2wGtov1D7EK3W9za
+         Yg7HqRkYl69oLtY5zMGyXTZtOMXlMCu0abdCIy9IT1SMIzgvLEHbW2tO/ynV8sYIYp5Q
+         BL6lUb3wH99jD/7VsdFRpXvkLefTGV/D29VUY0ZI6vt2PJwoAqd+n7cyJooGmG88yqXt
+         vI9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711581547; x=1712186347;
+        d=1e100.net; s=20230601; t=1711581548; x=1712186348;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5hg1dHpRYZjEho4rhJz+qSTgS0nJB4BPNbR6dsgqeqo=;
-        b=CJzF0gk0FK4Ylh4o3kJp9stnnNmAfgmcm/ABvGKYbZ4nI4CGipom9Z667OnV+OA67f
-         8JUuiyXVHw4+v5vzf+0zYzO4uTNAuT8RxVsNsuSDWy02yEUw6YniHyQBFRfDa6z2E/lH
-         b19Gjodtv4MbwSeu5ryIB4ArRYrouueNG8toqj5jp7lmE1+DfhEOn+fhpRB9+Ft+fLDY
-         ve7i0hkdA3ai7y/3y7S5eATv24A2bXJqm80gf7cJdKKfCay1RRfOabpUoLGiT/xExyYT
-         /NvcDWJ45RvaiQu3rYQdApo5lNePtByKhYf/dIUoHLy+j6xSGJG+PcqGhW8vj0mYNPyo
-         +8pw==
-X-Forwarded-Encrypted: i=1; AJvYcCUpXCcfjVpyCLfrsjjnMnV5XHAlbAQHhpUAnnxtRKTOvmfGS7oKhBw59n1ZNRXE1dCaX8w8GCLO0YfbORoM52+GTV8nCn+0wA3ySVw=
-X-Gm-Message-State: AOJu0YynYARKFs4624Ak4mii3vcyv12MZwjq5aP5JMoMDNdUdvsrGnrt
-	mkR+Lu5qsSdPzA5D/py2eGjR8PKzzeUDMjEtPx1yqWgvMVYALaGihRY/2U5QdZc=
-X-Google-Smtp-Source: AGHT+IHk3eSdmsSABjkDyaK0jauAUum2pB/dkonw6qcHUydV0+mxlwiPUnWMWCTRhHhYGOh0khoS/A==
-X-Received: by 2002:a05:6870:5cc4:b0:222:63e2:aba3 with SMTP id et4-20020a0568705cc400b0022263e2aba3mr1314518oab.8.1711581547039;
-        Wed, 27 Mar 2024 16:19:07 -0700 (PDT)
+        bh=KaNlrVh6YX+OdjnoPnmjQwMmZEJRJLFsRjLteQznSUU=;
+        b=is0e2zzfcS2/aNWxYcrk450wdDN8IYfw7u+fjEc+1Y8Y9s8abxoVvKPGTR3Qb1Wds+
+         KCWRhCGI4fCNnYfVfOqd6Bvd+WqzPtNr3i/S/AztwVc3b3Ma8OdJJUhoH4EJofszNsyI
+         FONvfLR3n8hu0LMCkas/mTKuaH2Rj3iGntxnoCFOJVML2G+0/TmKDxq7nUC890CXAEsU
+         2f1MMFNF6vtP+Qz83NHS9ZlI8n8HJG0ANUk+aBTfMgu2EQHr68cMEHLSD526K9voRz4d
+         BGINAReKrQKr0QA1po0yNK8jD17wrQhOeDdI7oYpLu+snUkDdxRWecFjMTUx9cPgmmF2
+         JLeg==
+X-Forwarded-Encrypted: i=1; AJvYcCVXIZJJPtdXWASFaaGZebTCdm4qlC53eO6ENxVoSVG2UzjXe+4zpXf3uxHHXK9mwRmbWPv8JGXxPK2HlieNhQezPuI2mYkxaxyTHqQ=
+X-Gm-Message-State: AOJu0Yy404yUzBYNBvrjw0ZznpH6DYEgdU8JSrT0ZcoKPSgExzLFBp7V
+	/jA6PkiIJCO5cxYsi27F34cVg+NG8wuEdAw04oKlaBAu3DkQeWSnbgWeIwnDVdc=
+X-Google-Smtp-Source: AGHT+IFWJbt2/BUKuKdpJqTrO3Ps0Zm4Bbiulso5ad2yHWD7/eCmYh93EbMlYQB/kOSN+Tatt1jIOQ==
+X-Received: by 2002:a05:6871:a913:b0:22a:1399:a781 with SMTP id wn19-20020a056871a91300b0022a1399a781mr1281622oab.23.1711581548121;
+        Wed, 27 Mar 2024 16:19:08 -0700 (PDT)
 Received: from freyr.lechnology.com (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id js3-20020a056870bac300b0022a0519183csm81381oab.2.2024.03.27.16.19.06
+        by smtp.gmail.com with ESMTPSA id js3-20020a056870bac300b0022a0519183csm81381oab.2.2024.03.27.16.19.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Mar 2024 16:19:06 -0700 (PDT)
+        Wed, 27 Mar 2024 16:19:07 -0700 (PDT)
 From: David Lechner <dlechner@baylibre.com>
 To: Jonathan Corbet <corbet@lwn.net>,
 	Liam Girdwood <lgirdwood@gmail.com>,
@@ -73,9 +73,9 @@ Cc: David Lechner <dlechner@baylibre.com>,
 	linux-iio@vger.kernel.org,
 	linux-staging@lists.linux.dev,
 	linux-input@vger.kernel.org
-Subject: [PATCH RFC 4/7] iio: addac: ad74115: Use devm_regulator_get_enable_get_voltage()
-Date: Wed, 27 Mar 2024 18:18:53 -0500
-Message-ID: <20240327-regulator-get-enable-get-votlage-v1-4-5f4517faa059@baylibre.com>
+Subject: [PATCH RFC 5/7] iio: frequency: admv1013: Use devm_regulator_get_enable_get_voltage()
+Date: Wed, 27 Mar 2024 18:18:54 -0500
+Message-ID: <20240327-regulator-get-enable-get-votlage-v1-5-5f4517faa059@baylibre.com>
 X-Mailer: git-send-email 2.43.2
 In-Reply-To: <20240327-regulator-get-enable-get-votlage-v1-0-5f4517faa059@baylibre.com>
 References: <20240327-regulator-get-enable-get-votlage-v1-0-5f4517faa059@baylibre.com>
@@ -92,73 +92,123 @@ Content-Transfer-Encoding: 8bit
 We can reduce boilerplate code by using
 devm_regulator_get_enable_get_voltage().
 
+The common mode voltage is now passed as a parameter in the init
+functions so we can avoid adding a state member that is only used
+during init.
+
 Signed-off-by: David Lechner <dlechner@baylibre.com>
 ---
- drivers/iio/addac/ad74115.c | 28 +++-------------------------
- 1 file changed, 3 insertions(+), 25 deletions(-)
+ drivers/iio/frequency/admv1013.c | 37 ++++++++-----------------------------
+ 1 file changed, 8 insertions(+), 29 deletions(-)
 
-diff --git a/drivers/iio/addac/ad74115.c b/drivers/iio/addac/ad74115.c
-index e6bc5eb3788d..01073d7de6aa 100644
---- a/drivers/iio/addac/ad74115.c
-+++ b/drivers/iio/addac/ad74115.c
-@@ -199,7 +199,6 @@ struct ad74115_state {
- 	struct spi_device		*spi;
- 	struct regmap			*regmap;
- 	struct iio_trigger		*trig;
--	struct regulator		*avdd;
+diff --git a/drivers/iio/frequency/admv1013.c b/drivers/iio/frequency/admv1013.c
+index 92923074f930..b0aa3cc27ea9 100644
+--- a/drivers/iio/frequency/admv1013.c
++++ b/drivers/iio/frequency/admv1013.c
+@@ -95,7 +95,6 @@ struct admv1013_state {
+ 	struct clk		*clkin;
+ 	/* Protect against concurrent accesses to the device and to data */
+ 	struct mutex		lock;
+-	struct regulator	*reg;
+ 	struct notifier_block	nb;
+ 	unsigned int		input_mode;
+ 	unsigned int		quad_se_mode;
+@@ -342,14 +341,9 @@ static int admv1013_update_quad_filters(struct admv1013_state *st)
+ 					FIELD_PREP(ADMV1013_QUAD_FILTERS_MSK, filt_raw));
+ }
  
- 	/*
- 	 * Synchronize consecutive operations when doing a one-shot
-@@ -1672,14 +1671,6 @@ static int ad74115_setup(struct iio_dev *indio_dev)
+-static int admv1013_update_mixer_vgate(struct admv1013_state *st)
++static int admv1013_update_mixer_vgate(struct admv1013_state *st, int vcm)
+ {
+ 	unsigned int mixer_vgate;
+-	int vcm;
+-
+-	vcm = regulator_get_voltage(st->reg);
+-	if (vcm < 0)
+-		return vcm;
+ 
+ 	if (vcm <= 1800000)
+ 		mixer_vgate = (2389 * vcm / 1000000 + 8100) / 100;
+@@ -443,7 +437,7 @@ static const struct iio_chan_spec admv1013_channels[] = {
+ 	ADMV1013_CHAN_CALIB(1, Q),
+ };
+ 
+-static int admv1013_init(struct admv1013_state *st)
++static int admv1013_init(struct admv1013_state *st, int vcm_uv)
+ {
+ 	int ret;
+ 	unsigned int data;
+@@ -483,7 +477,7 @@ static int admv1013_init(struct admv1013_state *st)
  	if (ret)
  		return ret;
  
--	if (val == AD74115_DIN_THRESHOLD_MODE_AVDD) {
--		ret = regulator_get_voltage(st->avdd);
--		if (ret < 0)
--			return ret;
--
--		st->avdd_mv = ret / 1000;
--	}
--
- 	st->din_threshold_mode = val;
+-	ret = admv1013_update_mixer_vgate(st);
++	ret = admv1013_update_mixer_vgate(st, vcm_uv);
+ 	if (ret)
+ 		return ret;
  
- 	ret = ad74115_apply_fw_prop(st, &ad74115_dac_bipolar_fw_prop, &val);
-@@ -1788,11 +1779,6 @@ static int ad74115_reset(struct ad74115_state *st)
- 	return 0;
+@@ -498,11 +492,6 @@ static int admv1013_init(struct admv1013_state *st)
+ 					  st->input_mode);
  }
  
--static void ad74115_regulator_disable(void *data)
+-static void admv1013_reg_disable(void *data)
 -{
 -	regulator_disable(data);
 -}
 -
- static int ad74115_setup_trigger(struct iio_dev *indio_dev)
+ static void admv1013_powerdown(void *data)
  {
- 	struct ad74115_state *st = iio_priv(indio_dev);
-@@ -1855,19 +1841,11 @@ static int ad74115_probe(struct spi_device *spi)
- 	indio_dev->modes = INDIO_DIRECT_MODE;
- 	indio_dev->info = &ad74115_info;
+ 	unsigned int enable_reg, enable_reg_msk;
+@@ -557,11 +546,6 @@ static int admv1013_properties_parse(struct admv1013_state *st)
+ 	else
+ 		return -EINVAL;
  
--	st->avdd = devm_regulator_get(dev, "avdd");
--	if (IS_ERR(st->avdd))
--		return PTR_ERR(st->avdd);
+-	st->reg = devm_regulator_get(&spi->dev, "vcm");
+-	if (IS_ERR(st->reg))
+-		return dev_err_probe(&spi->dev, PTR_ERR(st->reg),
+-				     "failed to get the common-mode voltage\n");
 -
--	ret = regulator_enable(st->avdd);
+ 	ret = devm_regulator_bulk_get_enable(&st->spi->dev,
+ 					     ARRAY_SIZE(admv1013_vcc_regs),
+ 					     admv1013_vcc_regs);
+@@ -578,7 +562,7 @@ static int admv1013_probe(struct spi_device *spi)
+ {
+ 	struct iio_dev *indio_dev;
+ 	struct admv1013_state *st;
+-	int ret;
++	int ret, vcm_uv;
+ 
+ 	indio_dev = devm_iio_device_alloc(&spi->dev, sizeof(*st));
+ 	if (!indio_dev)
+@@ -597,16 +581,11 @@ static int admv1013_probe(struct spi_device *spi)
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = regulator_enable(st->reg);
 -	if (ret) {
--		dev_err(dev, "Failed to enable avdd regulator\n");
-+	ret = devm_regulator_get_enable_get_voltage(dev, "avdd");
+-		dev_err(&spi->dev, "Failed to enable specified Common-Mode Voltage!\n");
++	ret = devm_regulator_get_enable_get_voltage(&spi->dev, "vcm");
 +	if (ret < 0)
  		return ret;
 -	}
  
--	ret = devm_add_action_or_reset(dev, ad74115_regulator_disable, st->avdd);
+-	ret = devm_add_action_or_reset(&spi->dev, admv1013_reg_disable,
+-				       st->reg);
 -	if (ret)
 -		return ret;
-+	st->avdd_mv = ret / 1000;
++	vcm_uv = ret;
  
- 	ret = devm_regulator_bulk_get_enable(dev, ARRAY_SIZE(regulator_names),
- 					     regulator_names);
+ 	st->clkin = devm_clk_get_enabled(&spi->dev, "lo_in");
+ 	if (IS_ERR(st->clkin))
+@@ -620,7 +599,7 @@ static int admv1013_probe(struct spi_device *spi)
+ 
+ 	mutex_init(&st->lock);
+ 
+-	ret = admv1013_init(st);
++	ret = admv1013_init(st, vcm_uv);
+ 	if (ret) {
+ 		dev_err(&spi->dev, "admv1013 init failed\n");
+ 		return ret;
 
 -- 
 2.43.2
