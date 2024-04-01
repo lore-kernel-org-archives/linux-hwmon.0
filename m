@@ -1,152 +1,183 @@
-Received: from bits.crawford.emu.id.au (bits.crawford.emu.id.au [203.132.92.223])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E19833F6
-	for <linux-hwmon@vger.kernel.org>; Mon,  1 Apr 2024 03:01:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.132.92.223
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 561038F51;
+	Mon,  1 Apr 2024 06:21:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711940495; cv=none; b=BeozOnSd51CQKvuvpjPtGAnjGyCLnbN4T4dWHPXm0VKZmviERPmFmmiXs8nqvOTcH3lb4DsRtOGrO4QkqSwb+DADUvCj+GfQJJ0mdO1yBIHC0RE9PfiksXqZgSg94v2sTpBL5NGWCWfpjyA7a78AiHIh32flsgd1WJPCbB+nKPI=
+	t=1711952463; cv=none; b=No6DpMZGw0PTg0rQQgPwyL9Ujdtj4az6M7bUlfFiwXjUnfqn59y2YTDfDA8iNSvvXKTS0BUooZh+LeXjuaptpGDXhuNe99kywwvrV46zTdtq6sfcA5PrHZPSWyjxIk5+esvzQp44boweiTc702qzDAM72z0FNdZB+slyfDe2Yn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711940495; c=relaxed/simple;
-	bh=x073pIytXcY6puSD7Qj//QsYJ28CrFTDN5jpp5D6vj8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YhHr+/n9MmsIVg/BuArhevp6laIX/zF+HaJNUDS+JUm62F157wMbz0NC356ac2Xm4l4WEs5f3FzYzwxgL8djnA6Lyp4EH3JOw9Kh9ZBSU3K9NMM5dhHS6p4FSvKmhVo/v2GVbaNMyrU5KgCy5YlrxvyYQLOcOzFRwT4oAQAuwbE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crawford.emu.id.au; spf=pass smtp.mailfrom=crawford.emu.id.au; dkim=pass (2048-bit key) header.d=crawford.emu.id.au header.i=@crawford.emu.id.au header.b=nazqFoht; arc=none smtp.client-ip=203.132.92.223
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crawford.emu.id.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crawford.emu.id.au
+	s=arc-20240116; t=1711952463; c=relaxed/simple;
+	bh=Lf2dD3nRXEM3QKLcinOUWGrZNiSWMEAx6xFjKwZTZuA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Unz5nQdftBROxN6QED9JnyIp85lCOsC3x2mGAcGHHyaYD3DwqX+5dexMVNEZO/QtLX0r7ScnR5NDH7FeVmHT/gB+WhkhZRM+bYEUb6dGjK1fCO7dKWdRjo+iZ9AvN8vXHGeCyqaKaayMAOp7VnDRzolYSnr/cfK5YP2mWkQ0zQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AV5u/VTT; arc=none smtp.client-ip=209.85.166.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crawford.emu.id.au header.i=@crawford.emu.id.au header.b="nazqFoht"
-Received: from agc.crawford.emu.id.au (agc.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc07])
-	(authenticated bits=0)
-	by bits.crawford.emu.id.au (8.17.2/8.17.2) with ESMTPSA id 4312uQwk871729
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-	Mon, 1 Apr 2024 13:56:38 +1100
-Authentication-Results: bits.crawford.emu.id.au; arc=none smtp.remote-ip=fdd2:7aad:d478:1::cb10:cc07
-DKIM-Filter: OpenDKIM Filter v2.11.0 bits.crawford.emu.id.au 4312uQwk871729
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crawford.emu.id.au;
-	s=s1; t=1711940198; bh=a0YV52EsZDUdvg1iL/OPQ/7Xu0bpdkRonT2rAvFRLcg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=nazqFohtHYDskluY6/00Qc3DizZhA7cPm6ODJ68+8o3V6gPUzP2eKvePvQBLxJpCr
-	 uVmSnlYPGXOc4TvCrY3aYGuoJjr8qDHUUkVOqufDsnjRXKRR7jAG4sUomY24hi5z3p
-	 aXGQYcoA3aZurzzxOY94fPKi2+yUxusZTlIcokAa9CQ8Lzlh7ObEeYcRdB6in1qcKl
-	 utLf5rl4EP8mrrhUxLZXKXpaAPqBnHyr6jh3geHC1ASrUn1PUQw0tj7WsdKQTtlg1z
-	 e034vnUD6pUGFYlACfv7D2HncKbmm/Kt8EMVyIJExX8paQw+psFyQy8bDwbx7Yr5eX
-	 a08mrJnow7HPQ==
-From: Frank Crawford <frank@crawford.emu.id.au>
-To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, Frank Crawford <frank@crawford.emu.id.au>
-Subject: [PATCH v1 1/4] hwmon (it87): Rename NOEXIT to BIOSOPEN as more descriptive of requirement
-Date: Mon,  1 Apr 2024 13:56:03 +1100
-Message-ID: <20240401025620.205068-2-frank@crawford.emu.id.au>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240401025620.205068-1-frank@crawford.emu.id.au>
-References: <20240401025620.205068-1-frank@crawford.emu.id.au>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AV5u/VTT"
+Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-7cc77e74b5cso175448239f.2;
+        Sun, 31 Mar 2024 23:21:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711952461; x=1712557261; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iMMohnAWMK6m3tG9gNhC20ZEygwyJguxL99B9xnGWG8=;
+        b=AV5u/VTTWJYcGIO3YwSyLj1AmfLeIQHcSePw9JK0F57Eorjp/XW5t9AP30djqEZ+UV
+         AG0sYnkkcD1iLRP/JSgHE2h1cMHWlmYWN1o2Fg4bB2lCBapiZfzz+5Wztmx/l3h7CFcc
+         u2eS6VI+yKDeckF/u1Ekm/u755SlTA7ZYuTuf83qNtKeaDCwEEOUVsxmIH1YI2A1ak5I
+         PEAYxcpq6xBQbAkKyJ2tiRH89ywRwpNEWveZgqxNrqei9QIwjIFK27Nsfmq96zeH3E5P
+         wvewsFOMraFQSWbvlQXj7Gz1mBRyAakknOwvo12cHbUyl0Q0H0QBE7EZcnElKh07oWYP
+         PljA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711952461; x=1712557261;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iMMohnAWMK6m3tG9gNhC20ZEygwyJguxL99B9xnGWG8=;
+        b=MTDxLaA2EVZy5e5bcSb+T5UJbR5ei4WaLNWG4DcqW7PmPyY5dwuBB4OS4fiQYhnYNy
+         Qz27vIjvxcz+HRQoQiAJaSPR71Zl99sxPM5c88JDT+MEIKUA1/r1Wf0yTu+b+v+8GicR
+         n4iJgYWidTwWsFHdGPV4WVmU6x4gFFC8GkGjV3wrSLJgN54Fnr+pF5BZhD8CwF0DuKZr
+         WiFcl87AYO8ziu75AsCJ9QAeddzJw50YVARh7Ac/NQEPH0UthmTaNuhIUbC3oFMxhuLJ
+         verNUzTGvnxJ82mYcBGRA49ChG1yc9ux4O0REHlP67k4Ng3rgaoMoHunI5ZdG6Rv4cQb
+         2zxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUny0raQFzsM8ZIcau0rbJ12NOPOlT/DXpnUGh6SEd33FoWbDwxWFad54ANBnocbRokdQu/Q7qZ9lPqxNCywDKf3lWZEklheWUcQDN5M2zE6rBCv+ATtTW+ynf1SnGAhPkFbDzB0N+UUJrJlqSY8BJPaWCLR0LiVN7rrGw/Fa/qevY+qkSwONUYoRONr0/sD51bTWK3gBUDPruedupwxPh1
+X-Gm-Message-State: AOJu0YytMbKv/InyIrF31TqP71yzcGSLXH5Z3LtBonfqyczc0QHdP4pp
+	ZIthghVLvzVdDBZ0qPHjVzjN5ssyvwXvpYy6dMr6SGnzlY1ihzCci1VQwvQasavrcome6ZxVEsj
+	m3ynYfkgBYeTUA36LUdIGDG1WNYc=
+X-Google-Smtp-Source: AGHT+IGqrP3UbKuIe1tD2jwC4HaMuI/kdKXkvDhRJ+AWyQfCT0kCIFRqJPOXLpW67XqZ5jBlSE9DEP3cTjA6OoqADbE=
+X-Received: by 2002:a5d:8986:0:b0:7cf:1c5c:681e with SMTP id
+ m6-20020a5d8986000000b007cf1c5c681emr10205960iol.17.1711952461453; Sun, 31
+ Mar 2024 23:21:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Mon, 01 Apr 2024 13:56:38 +1100 (AEDT)
-X-Virus-Scanned: clamav-milter 1.0.5 at bits.crawford.emu.id.au
-X-Virus-Status: Clean
-X-Spam-Level: *
+References: <20240322081158.4106326-1-kcfeng0@nuvoton.com> <20240322081158.4106326-2-kcfeng0@nuvoton.com>
+ <171109961635.307786.7810067768607811171.robh@kernel.org> <22fcad13-dd9b-4e9a-90aa-d20fb78e6a0d@roeck-us.net>
+ <e1102a00-0c94-4d35-8de2-1173ee417bdc@linaro.org>
+In-Reply-To: <e1102a00-0c94-4d35-8de2-1173ee417bdc@linaro.org>
+From: Ban Feng <baneric926@gmail.com>
+Date: Mon, 1 Apr 2024 14:20:50 +0800
+Message-ID: <CALz278ZdvJhtDhBaKMg_nP+sS0HQVvAjidKAGkeqG8Cu4ftb+Q@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] dt-bindings: hwmon: Add NCT7363Y documentation
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, linux-hwmon@vger.kernel.org, 
+	krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org, conor+dt@kernel.org, 
+	corbet@lwn.net, jdelvare@suse.com, kwliu@nuvoton.com, kcfeng0@nuvoton.com, 
+	Paul Menzel <pmenzel@molgen.mpg.de>, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, Bonnie_Lo@wiwynn.com, linux-doc@vger.kernel.org, 
+	DELPHINE_CHIU@wiwynn.com, openbmc@lists.ozlabs.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Rename previous definitions to match the new information that they are
-preinitialised by the BIOS and should not receive codes to enter or exit
-configuration mode.
+Hi Krzysztof,
 
-Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
----
- drivers/hwmon/it87.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+Thanks for your support.
 
-diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-index fbe86cec6055..6eeba3a01e3c 100644
---- a/drivers/hwmon/it87.c
-+++ b/drivers/hwmon/it87.c
-@@ -320,7 +320,7 @@ struct it87_devices {
-  * second SIO address. Never exit configuration mode on these
-  * chips to avoid the problem.
-  */
--#define FEAT_CONF_NOEXIT	BIT(19)	/* Chip should not exit conf mode */
-+#define FEAT_CONF_BIOSOPEN	BIT(19)	/* Chip conf mode enabled by BIOS */
- #define FEAT_FOUR_FANS		BIT(20)	/* Supports four fans */
- #define FEAT_FOUR_PWM		BIT(21)	/* Supports four fan controls */
- #define FEAT_FOUR_TEMP		BIT(22)
-@@ -452,7 +452,7 @@ static const struct it87_devices it87_devices[] = {
- 		.model = "IT8790E",
- 		.features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
- 		  | FEAT_TEMP_OFFSET | FEAT_TEMP_PECI | FEAT_IN7_INTERNAL
--		  | FEAT_PWM_FREQ2 | FEAT_FANCTL_ONOFF | FEAT_CONF_NOEXIT,
-+		  | FEAT_PWM_FREQ2 | FEAT_FANCTL_ONOFF | FEAT_CONF_BIOSOPEN,
- 		.peci_mask = 0x07,
- 	},
- 	[it8792] = {
-@@ -461,7 +461,7 @@ static const struct it87_devices it87_devices[] = {
- 		.features = FEAT_NEWER_AUTOPWM | FEAT_16BIT_FANS
- 		  | FEAT_TEMP_OFFSET | FEAT_TEMP_OLD_PECI | FEAT_TEMP_PECI
- 		  | FEAT_10_9MV_ADC | FEAT_IN7_INTERNAL | FEAT_FANCTL_ONOFF
--		  | FEAT_CONF_NOEXIT,
-+		  | FEAT_CONF_BIOSOPEN,
- 		.peci_mask = 0x07,
- 		.old_peci_mask = 0x02,	/* Actually reports PCH */
- 	},
-@@ -507,7 +507,7 @@ static const struct it87_devices it87_devices[] = {
- 		.features = FEAT_NEWER_AUTOPWM | FEAT_16BIT_FANS
- 		  | FEAT_TEMP_OFFSET | FEAT_TEMP_OLD_PECI | FEAT_TEMP_PECI
- 		  | FEAT_10_9MV_ADC | FEAT_IN7_INTERNAL | FEAT_FANCTL_ONOFF
--		  | FEAT_CONF_NOEXIT,
-+		  | FEAT_CONF_BIOSOPEN,
- 		.peci_mask = 0x07,
- 		.old_peci_mask = 0x02,	/* Actually reports PCH */
- 	},
-@@ -544,7 +544,7 @@ static const struct it87_devices it87_devices[] = {
- #define has_four_temp(data)	((data)->features & FEAT_FOUR_TEMP)
- #define has_six_temp(data)	((data)->features & FEAT_SIX_TEMP)
- #define has_vin3_5v(data)	((data)->features & FEAT_VIN3_5V)
--#define has_conf_noexit(data)	((data)->features & FEAT_CONF_NOEXIT)
-+#define has_conf_biosopen(data)	((data)->features & FEAT_CONF_BIOSOPEN)
- #define has_scaling(data)	((data)->features & (FEAT_12MV_ADC | \
- 						     FEAT_10_9MV_ADC))
- #define has_fanctl_onoff(data)	((data)->features & FEAT_FANCTL_ONOFF)
-@@ -748,7 +748,7 @@ static int smbus_disable(struct it87_data *data)
- 		superio_select(data->sioaddr, PME);
- 		superio_outb(data->sioaddr, IT87_SPECIAL_CFG_REG,
- 			     data->ec_special_config & ~data->smbus_bitmap);
--		superio_exit(data->sioaddr, has_conf_noexit(data));
-+		superio_exit(data->sioaddr, has_conf_biosopen(data));
- 	}
- 	return 0;
- }
-@@ -765,7 +765,7 @@ static int smbus_enable(struct it87_data *data)
- 		superio_select(data->sioaddr, PME);
- 		superio_outb(data->sioaddr, IT87_SPECIAL_CFG_REG,
- 			     data->ec_special_config);
--		superio_exit(data->sioaddr, has_conf_noexit(data));
-+		superio_exit(data->sioaddr, has_conf_biosopen(data));
- 	}
- 	return 0;
- }
-@@ -3143,7 +3143,7 @@ static int __init it87_find(int sioaddr, unsigned short *address,
- 	}
- 
- exit:
--	superio_exit(sioaddr, config ? has_conf_noexit(config) : false);
-+	superio_exit(sioaddr, config ? has_conf_biosopen(config) : false);
- 	return err;
- }
- 
-@@ -3540,7 +3540,7 @@ static void it87_resume_sio(struct platform_device *pdev)
- 			     reg2c);
- 	}
- 
--	superio_exit(data->sioaddr, has_conf_noexit(data));
-+	superio_exit(data->sioaddr, has_conf_biosopen(data));
- }
- 
- static int it87_resume(struct device *dev)
--- 
-2.44.0
+Best regards,
+Ban
 
+On Tue, Mar 26, 2024 at 2:29=E2=80=AFAM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 25/03/2024 18:09, Guenter Roeck wrote:
+> > On 3/22/24 02:26, Rob Herring wrote:
+> >>
+> >> On Fri, 22 Mar 2024 16:11:57 +0800, baneric926@gmail.com wrote:
+> >>> From: Ban Feng <kcfeng0@nuvoton.com>
+> >>>
+> >>> Add bindings for the Nuvoton NCT7363Y Fan Controller
+> >>>
+> >>> Reviewed-by: Rob Herring <robh@kernel.org>
+> >>> Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+> >>> Signed-off-by: Ban Feng <kcfeng0@nuvoton.com>
+> >>> ---
+> >>>   .../bindings/hwmon/nuvoton,nct7363.yaml       | 66 ++++++++++++++++=
++++
+> >>>   MAINTAINERS                                   |  6 ++
+> >>>   2 files changed, 72 insertions(+)
+> >>>   create mode 100644 Documentation/devicetree/bindings/hwmon/nuvoton,=
+nct7363.yaml
+> >>>
+> >>
+> >> My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_che=
+ck'
+> >> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> >>
+> >> yamllint warnings/errors:
+> >>
+> >> dtschema/dtc warnings/errors:
+> >> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/binding=
+s/hwmon/nuvoton,nct7363.yaml:
+> >> Error in referenced schema matching $id: http://devicetree.org/schemas=
+/hwmon/fan-common.yaml
+> >> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/binding=
+s/hwmon/nuvoton,nct7363.example.dtb: hwmon@22: fan-0: False schema does not=
+ allow {'pwms': [[1, 0, 50000]], 'tach-ch': ['']}
+> >>      from schema $id: http://devicetree.org/schemas/hwmon/nuvoton,nct7=
+363.yaml#
+> >> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/binding=
+s/hwmon/nuvoton,nct7363.example.dtb: hwmon@22: fan-0: Unevaluated propertie=
+s are not allowed ('pwms', 'tach-ch' were unexpected)
+> >>      from schema $id: http://devicetree.org/schemas/hwmon/nuvoton,nct7=
+363.yaml#
+> >> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/binding=
+s/hwmon/nuvoton,nct7363.example.dtb: hwmon@22: fan-1: False schema does not=
+ allow {'pwms': [[1, 1, 50000]], 'tach-ch': b'\x01'}
+> >>      from schema $id: http://devicetree.org/schemas/hwmon/nuvoton,nct7=
+363.yaml#
+> >> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/binding=
+s/hwmon/nuvoton,nct7363.example.dtb: hwmon@22: fan-1: Unevaluated propertie=
+s are not allowed ('pwms', 'tach-ch' were unexpected)
+> >>      from schema $id: http://devicetree.org/schemas/hwmon/nuvoton,nct7=
+363.yaml#
+> >> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/binding=
+s/hwmon/nuvoton,nct7363.example.dtb: fan-1: tach-ch: b'\x01' is not of type=
+ 'object', 'array', 'boolean', 'null'
+> >>      from schema $id: http://devicetree.org/schemas/dt-core.yaml#
+> >>
+> >> doc reference errors (make refcheckdocs):
+> >>
+> >> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/202=
+40322081158.4106326-2-kcfeng0@nuvoton.com
+> >>
+> >> The base for the series is generally the latest rc1. A different depen=
+dency
+> >> should be noted in *this* patch.
+> >>
+> >> If you already ran 'make dt_binding_check' and didn't see the above
+> >> error(s), then make sure 'yamllint' is installed and dt-schema is up t=
+o
+> >> date:
+> >>
+> >> pip3 install dtschema --upgrade
+> >>
+> >> Please check and re-submit after running the above command yourself. N=
+ote
+> >> that DT_SCHEMA_FILES can be set to your schema file to speed up checki=
+ng
+> >> your schema. However, it must be unset to test all examples with your =
+schema.
+> >>
+> >
+> > I am a bit puzzled by this one. The patch has a Reviewed-by: tag from R=
+ob,
+> > but then Rob's bot complains about errors. hat am I missing ?
+>
+> The warning is a result of missing fan-common.yaml in the tree used as a
+> base.
+>
+> I checked now and I don't see warnings on next or v6.9-rc1, so it is
+> safe for you to apply it.
+>
+> For the record:
+>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>
+> Best regards,
+> Krzysztof
+>
