@@ -1,183 +1,108 @@
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 561038F51;
-	Mon,  1 Apr 2024 06:21:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BE7711183
+	for <linux-hwmon@vger.kernel.org>; Mon,  1 Apr 2024 09:57:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711952463; cv=none; b=No6DpMZGw0PTg0rQQgPwyL9Ujdtj4az6M7bUlfFiwXjUnfqn59y2YTDfDA8iNSvvXKTS0BUooZh+LeXjuaptpGDXhuNe99kywwvrV46zTdtq6sfcA5PrHZPSWyjxIk5+esvzQp44boweiTc702qzDAM72z0FNdZB+slyfDe2Yn4=
+	t=1711965478; cv=none; b=hWRxGNWx8xCIHFoQMGC6ERtRG9CUjCJVajknhFA/QMkKhleVlI4qG3C3/1bzyJttuGMDDQTHObtB0IIhZX/naHzoV6R8Bw3Yp6XtGmcX40AYaBUq2zq8DR11uI3Z78RN+avHE08drhwKuCH5tJeFVDRCVAavufZv16k8hcLH6PI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711952463; c=relaxed/simple;
-	bh=Lf2dD3nRXEM3QKLcinOUWGrZNiSWMEAx6xFjKwZTZuA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Unz5nQdftBROxN6QED9JnyIp85lCOsC3x2mGAcGHHyaYD3DwqX+5dexMVNEZO/QtLX0r7ScnR5NDH7FeVmHT/gB+WhkhZRM+bYEUb6dGjK1fCO7dKWdRjo+iZ9AvN8vXHGeCyqaKaayMAOp7VnDRzolYSnr/cfK5YP2mWkQ0zQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AV5u/VTT; arc=none smtp.client-ip=209.85.166.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711965478; c=relaxed/simple;
+	bh=OwZ/u54Vcc/I38bMykZdqgACtIQaSu/xO2tyGnN1Mtc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=fijEQuTMPLAoTVQK4CJ5WF1jT+7U06QjqMKtacWv84lgYqL174vsN16sL9wu4jxf3oAWRIuwAI07ahtSWCkkphBqhYtnBMRqpgF3O1Tqh94UBDoNhYBHYQitAiy6ugRyPr1S4XEJo8P01lP6pJMgbusWqht9jGa55S8PfrbmtRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aXiZuMqB; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AV5u/VTT"
-Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-7cc77e74b5cso175448239f.2;
-        Sun, 31 Mar 2024 23:21:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711952461; x=1712557261; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iMMohnAWMK6m3tG9gNhC20ZEygwyJguxL99B9xnGWG8=;
-        b=AV5u/VTTWJYcGIO3YwSyLj1AmfLeIQHcSePw9JK0F57Eorjp/XW5t9AP30djqEZ+UV
-         AG0sYnkkcD1iLRP/JSgHE2h1cMHWlmYWN1o2Fg4bB2lCBapiZfzz+5Wztmx/l3h7CFcc
-         u2eS6VI+yKDeckF/u1Ekm/u755SlTA7ZYuTuf83qNtKeaDCwEEOUVsxmIH1YI2A1ak5I
-         PEAYxcpq6xBQbAkKyJ2tiRH89ywRwpNEWveZgqxNrqei9QIwjIFK27Nsfmq96zeH3E5P
-         wvewsFOMraFQSWbvlQXj7Gz1mBRyAakknOwvo12cHbUyl0Q0H0QBE7EZcnElKh07oWYP
-         PljA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711952461; x=1712557261;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iMMohnAWMK6m3tG9gNhC20ZEygwyJguxL99B9xnGWG8=;
-        b=MTDxLaA2EVZy5e5bcSb+T5UJbR5ei4WaLNWG4DcqW7PmPyY5dwuBB4OS4fiQYhnYNy
-         Qz27vIjvxcz+HRQoQiAJaSPR71Zl99sxPM5c88JDT+MEIKUA1/r1Wf0yTu+b+v+8GicR
-         n4iJgYWidTwWsFHdGPV4WVmU6x4gFFC8GkGjV3wrSLJgN54Fnr+pF5BZhD8CwF0DuKZr
-         WiFcl87AYO8ziu75AsCJ9QAeddzJw50YVARh7Ac/NQEPH0UthmTaNuhIUbC3oFMxhuLJ
-         verNUzTGvnxJ82mYcBGRA49ChG1yc9ux4O0REHlP67k4Ng3rgaoMoHunI5ZdG6Rv4cQb
-         2zxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUny0raQFzsM8ZIcau0rbJ12NOPOlT/DXpnUGh6SEd33FoWbDwxWFad54ANBnocbRokdQu/Q7qZ9lPqxNCywDKf3lWZEklheWUcQDN5M2zE6rBCv+ATtTW+ynf1SnGAhPkFbDzB0N+UUJrJlqSY8BJPaWCLR0LiVN7rrGw/Fa/qevY+qkSwONUYoRONr0/sD51bTWK3gBUDPruedupwxPh1
-X-Gm-Message-State: AOJu0YytMbKv/InyIrF31TqP71yzcGSLXH5Z3LtBonfqyczc0QHdP4pp
-	ZIthghVLvzVdDBZ0qPHjVzjN5ssyvwXvpYy6dMr6SGnzlY1ihzCci1VQwvQasavrcome6ZxVEsj
-	m3ynYfkgBYeTUA36LUdIGDG1WNYc=
-X-Google-Smtp-Source: AGHT+IGqrP3UbKuIe1tD2jwC4HaMuI/kdKXkvDhRJ+AWyQfCT0kCIFRqJPOXLpW67XqZ5jBlSE9DEP3cTjA6OoqADbE=
-X-Received: by 2002:a5d:8986:0:b0:7cf:1c5c:681e with SMTP id
- m6-20020a5d8986000000b007cf1c5c681emr10205960iol.17.1711952461453; Sun, 31
- Mar 2024 23:21:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aXiZuMqB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711965477; x=1743501477;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OwZ/u54Vcc/I38bMykZdqgACtIQaSu/xO2tyGnN1Mtc=;
+  b=aXiZuMqBF3Z2HUMhDXLmcAqfybeJDt56A+B332pxMAk9mvsI30Lp8/TM
+   O8dCwKwIR8xNME7J9q9B/jFM+V5l6Jh214m03770Ph7O4IwkxV4yaYLoo
+   2bYuNsU/TZIN761Lm1xqbssFKelO6GkwJo5KWf1Iv+sMBQu3kMHbmu94n
+   nL+ORwKeM6iXAb5TZ/VnnPfKZsPcUTGiM48nHgIdpqz6K+e1ZJEL23ofb
+   etViSh910u68PqbJ8TOcE7cGw44Y2q66m/6/Gkln+VBlwCbvr3yduHmVT
+   FziP5tLYu+gkPPDlEoHCR5q7D1IOhyc4xs0tkL1fx8PqmNl/uK7LqoF1+
+   w==;
+X-CSE-ConnectionGUID: jRdMhSiORF6tf09vDNah5g==
+X-CSE-MsgGUID: PeaVeowmRyeBA20h+BB7qQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11030"; a="10909399"
+X-IronPort-AV: E=Sophos;i="6.07,171,1708416000"; 
+   d="scan'208";a="10909399"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2024 02:57:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,171,1708416000"; 
+   d="scan'208";a="18058658"
+Received: from lkp-server02.sh.intel.com (HELO 90ee3aa53dbd) ([10.239.97.151])
+  by orviesa007.jf.intel.com with ESMTP; 01 Apr 2024 02:57:55 -0700
+Received: from kbuild by 90ee3aa53dbd with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rrEQK-0000ED-10;
+	Mon, 01 Apr 2024 09:57:52 +0000
+Date: Mon, 1 Apr 2024 17:57:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ken Raeburn <raeburn@redhat.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>,
+	Matthew Sakai <msakai@redhat.com>
+Subject: [groeck-staging:testing 2/11] drivers/md/dm-vdo/murmurhash3.c:21:31:
+ sparse: sparse: incorrect type in argument 1 (different base types)
+Message-ID: <202404011734.OlyXtb2L-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240322081158.4106326-1-kcfeng0@nuvoton.com> <20240322081158.4106326-2-kcfeng0@nuvoton.com>
- <171109961635.307786.7810067768607811171.robh@kernel.org> <22fcad13-dd9b-4e9a-90aa-d20fb78e6a0d@roeck-us.net>
- <e1102a00-0c94-4d35-8de2-1173ee417bdc@linaro.org>
-In-Reply-To: <e1102a00-0c94-4d35-8de2-1173ee417bdc@linaro.org>
-From: Ban Feng <baneric926@gmail.com>
-Date: Mon, 1 Apr 2024 14:20:50 +0800
-Message-ID: <CALz278ZdvJhtDhBaKMg_nP+sS0HQVvAjidKAGkeqG8Cu4ftb+Q@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] dt-bindings: hwmon: Add NCT7363Y documentation
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, linux-hwmon@vger.kernel.org, 
-	krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org, conor+dt@kernel.org, 
-	corbet@lwn.net, jdelvare@suse.com, kwliu@nuvoton.com, kcfeng0@nuvoton.com, 
-	Paul Menzel <pmenzel@molgen.mpg.de>, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, Bonnie_Lo@wiwynn.com, linux-doc@vger.kernel.org, 
-	DELPHINE_CHIU@wiwynn.com, openbmc@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Krzysztof,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
+head:   ad98b547d596561b6bdc5c2fdf8aa1a620c9e6fa
+commit: af76a97d146976298a6fbd154dd39b6e9e321b73 [2/11] dm vdo: use kernel byteswapping routines instead of GCC ones
+config: alpha-randconfig-r111-20240331 (https://download.01.org/0day-ci/archive/20240401/202404011734.OlyXtb2L-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 13.2.0
+reproduce: (https://download.01.org/0day-ci/archive/20240401/202404011734.OlyXtb2L-lkp@intel.com/reproduce)
 
-Thanks for your support.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404011734.OlyXtb2L-lkp@intel.com/
 
-Best regards,
-Ban
+sparse warnings: (new ones prefixed by >>)
+>> drivers/md/dm-vdo/murmurhash3.c:21:31: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __le64 const [usertype] *p @@     got unsigned long long const [usertype] * @@
+   drivers/md/dm-vdo/murmurhash3.c:21:31: sparse:     expected restricted __le64 const [usertype] *p
+   drivers/md/dm-vdo/murmurhash3.c:21:31: sparse:     got unsigned long long const [usertype] *
+>> drivers/md/dm-vdo/murmurhash3.c:21:31: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __le64 const [usertype] *p @@     got unsigned long long const [usertype] * @@
+   drivers/md/dm-vdo/murmurhash3.c:21:31: sparse:     expected restricted __le64 const [usertype] *p
+   drivers/md/dm-vdo/murmurhash3.c:21:31: sparse:     got unsigned long long const [usertype] *
+>> drivers/md/dm-vdo/murmurhash3.c:26:14: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] @@     got restricted __le64 [usertype] @@
+   drivers/md/dm-vdo/murmurhash3.c:26:14: sparse:     expected unsigned long long [usertype]
+   drivers/md/dm-vdo/murmurhash3.c:26:14: sparse:     got restricted __le64 [usertype]
+>> drivers/md/dm-vdo/murmurhash3.c:26:14: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] @@     got restricted __le64 [usertype] @@
+   drivers/md/dm-vdo/murmurhash3.c:26:14: sparse:     expected unsigned long long [usertype]
+   drivers/md/dm-vdo/murmurhash3.c:26:14: sparse:     got restricted __le64 [usertype]
 
-On Tue, Mar 26, 2024 at 2:29=E2=80=AFAM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 25/03/2024 18:09, Guenter Roeck wrote:
-> > On 3/22/24 02:26, Rob Herring wrote:
-> >>
-> >> On Fri, 22 Mar 2024 16:11:57 +0800, baneric926@gmail.com wrote:
-> >>> From: Ban Feng <kcfeng0@nuvoton.com>
-> >>>
-> >>> Add bindings for the Nuvoton NCT7363Y Fan Controller
-> >>>
-> >>> Reviewed-by: Rob Herring <robh@kernel.org>
-> >>> Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> >>> Signed-off-by: Ban Feng <kcfeng0@nuvoton.com>
-> >>> ---
-> >>>   .../bindings/hwmon/nuvoton,nct7363.yaml       | 66 ++++++++++++++++=
-+++
-> >>>   MAINTAINERS                                   |  6 ++
-> >>>   2 files changed, 72 insertions(+)
-> >>>   create mode 100644 Documentation/devicetree/bindings/hwmon/nuvoton,=
-nct7363.yaml
-> >>>
-> >>
-> >> My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_che=
-ck'
-> >> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> >>
-> >> yamllint warnings/errors:
-> >>
-> >> dtschema/dtc warnings/errors:
-> >> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/binding=
-s/hwmon/nuvoton,nct7363.yaml:
-> >> Error in referenced schema matching $id: http://devicetree.org/schemas=
-/hwmon/fan-common.yaml
-> >> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/binding=
-s/hwmon/nuvoton,nct7363.example.dtb: hwmon@22: fan-0: False schema does not=
- allow {'pwms': [[1, 0, 50000]], 'tach-ch': ['']}
-> >>      from schema $id: http://devicetree.org/schemas/hwmon/nuvoton,nct7=
-363.yaml#
-> >> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/binding=
-s/hwmon/nuvoton,nct7363.example.dtb: hwmon@22: fan-0: Unevaluated propertie=
-s are not allowed ('pwms', 'tach-ch' were unexpected)
-> >>      from schema $id: http://devicetree.org/schemas/hwmon/nuvoton,nct7=
-363.yaml#
-> >> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/binding=
-s/hwmon/nuvoton,nct7363.example.dtb: hwmon@22: fan-1: False schema does not=
- allow {'pwms': [[1, 1, 50000]], 'tach-ch': b'\x01'}
-> >>      from schema $id: http://devicetree.org/schemas/hwmon/nuvoton,nct7=
-363.yaml#
-> >> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/binding=
-s/hwmon/nuvoton,nct7363.example.dtb: hwmon@22: fan-1: Unevaluated propertie=
-s are not allowed ('pwms', 'tach-ch' were unexpected)
-> >>      from schema $id: http://devicetree.org/schemas/hwmon/nuvoton,nct7=
-363.yaml#
-> >> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/binding=
-s/hwmon/nuvoton,nct7363.example.dtb: fan-1: tach-ch: b'\x01' is not of type=
- 'object', 'array', 'boolean', 'null'
-> >>      from schema $id: http://devicetree.org/schemas/dt-core.yaml#
-> >>
-> >> doc reference errors (make refcheckdocs):
-> >>
-> >> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/202=
-40322081158.4106326-2-kcfeng0@nuvoton.com
-> >>
-> >> The base for the series is generally the latest rc1. A different depen=
-dency
-> >> should be noted in *this* patch.
-> >>
-> >> If you already ran 'make dt_binding_check' and didn't see the above
-> >> error(s), then make sure 'yamllint' is installed and dt-schema is up t=
-o
-> >> date:
-> >>
-> >> pip3 install dtschema --upgrade
-> >>
-> >> Please check and re-submit after running the above command yourself. N=
-ote
-> >> that DT_SCHEMA_FILES can be set to your schema file to speed up checki=
-ng
-> >> your schema. However, it must be unset to test all examples with your =
-schema.
-> >>
-> >
-> > I am a bit puzzled by this one. The patch has a Reviewed-by: tag from R=
-ob,
-> > but then Rob's bot complains about errors. hat am I missing ?
->
-> The warning is a result of missing fan-common.yaml in the tree used as a
-> base.
->
-> I checked now and I don't see warnings on next or v6.9-rc1, so it is
-> safe for you to apply it.
->
-> For the record:
->
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->
-> Best regards,
-> Krzysztof
->
+vim +21 drivers/md/dm-vdo/murmurhash3.c
+
+    17	
+    18	#define ROTL64(x, y) rotl64(x, y)
+    19	static __always_inline u64 getblock64(const u64 *p, int i)
+    20	{
+  > 21		return le64_to_cpup(&p[i]);
+    22	}
+    23	
+    24	static __always_inline void putblock64(u64 *p, int i, u64 value)
+    25	{
+  > 26		p[i] = cpu_to_le64(value);
+    27	}
+    28	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
