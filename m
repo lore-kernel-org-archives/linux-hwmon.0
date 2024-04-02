@@ -1,110 +1,135 @@
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 157EA15E1FD
-	for <linux-hwmon@vger.kernel.org>; Tue,  2 Apr 2024 21:58:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A7115E1FD;
+	Tue,  2 Apr 2024 22:17:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712095093; cv=none; b=tPeRkESuayspHZ/bKg/waGyiQd2Mf39LrVKaO/MGdjKqzUf6YlQh9uFelR7aOssbODKOMvZH9Xg4EFjVBlnvCA0kFXRGiLyDLtRaCtW+PqUQow1WauwVnqQ2RvbLZOtlXCNXlVSacODGPld6kT45u745rQG+3aKMbqec22Fg5W0=
+	t=1712096256; cv=none; b=ATFVV97+EXf6evbGpQHv1EQkT8Ps0TuxUuS0+zpS/UqEwLW7qJAZM2FbjeJDlnlGUUnFmby86lgK1wzd/p1ROXqy33JOVp9/FXzb+vQBOzl7lhSVl6XBlCZGK7VS2BghlyyDCMt7JqrPw9nKLOksL+nh4fzzH2w1UMg3Gd+bRcI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712095093; c=relaxed/simple;
-	bh=ho8LS5e07cVTEdtNzsdbgJ/d8Ttv+hqIl6IuPR/i25Y=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=WUOdeq6ZsWz6SZ8NKpbRrbq6NH87km20C/xA9TtL6DBDN6D6MaveD8dmasN+jOZMI5f9hzYhnQfXaK/vMgSZnBC6hZ1hjJPtBCSZk0c7Xv7mrFAJjgaqvVJ6MM1R+sw2X8nDFDQwKCmzJkOr5qxYpKc0h+yhE9msj7w6abXwGrY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=Avem7cbd; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+	s=arc-20240116; t=1712096256; c=relaxed/simple;
+	bh=I1SS2EYHeKThx7SBcEsrCukx4A/m3YQjVwFFscGKb7w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RVSbgpeBzDvx4Z0yx54sCoK/CvU9oX8Bw14yeZznt984G5xGIzgf6twhSPJ2QJBkXr0X/gv88AzBUtSl40q9tRJMhW1unh0LtySqzlkhKdLi2USH1jqJhou93e05Y8Nmna7K2cON03/mTaZydxSYo2N3EGputifIERuZJ9JcJ5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gRX11BvT; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="Avem7cbd"
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id C476B2C03B0;
-	Wed,  3 Apr 2024 10:58:07 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1712095087;
-	bh=ho8LS5e07cVTEdtNzsdbgJ/d8Ttv+hqIl6IuPR/i25Y=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=Avem7cbdxSLBd862TEerRE7JHcvdc4UhTAN5+/4XI8GbM8fyDSvQN9BaPT/gNIAP4
-	 ibYSEu3cKRyF7bT5XBskaFhjMYmvxS7DMI0yUVq0YHRP4CwGiG4GVEj6d5V60fDpFC
-	 PSxJVhdrbnG7yB2QpB8Go6aVi/XJhTNzA501paSZ6LaGcwVrLBT3QSlRZJFUpBh50v
-	 F3n03ighhx6gKBejhdsdgZEaAxbBVea/8IBch0BZR4dvkw28fsToQsXHwb9cJz1JIg
-	 QrHXeo2n9iZEA3LXAMjRfx7aPT2pawpcg6p6cHjtc+p9PAUhnf87+fPbjm2daS9XMf
-	 pquGPWUNJgrjQ==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B660c7f6f0003>; Wed, 03 Apr 2024 10:58:07 +1300
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 3 Apr 2024 10:57:44 +1300
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1544.009; Wed, 3 Apr 2024 10:57:44 +1300
-From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To: Guenter Roeck <linux@roeck-us.net>
-CC: "jdelvare@suse.com" <jdelvare@suse.com>, "linux-hwmon@vger.kernel.org"
-	<linux-hwmon@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gRX11BvT"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6e7425a6714so4720479b3a.0;
+        Tue, 02 Apr 2024 15:17:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712096254; x=1712701054; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fYOqDUYU14d+HKeuMfI8yAvYETR9CFmfgJMPALruc3M=;
+        b=gRX11BvT/ecAERBJyuaeMbAbgpxbBK0/kK9qEolhuQPWeAfuYfrMonDXFi/JT7V+eq
+         jQbNcEhPW0eBNBycOflieSKLEdZXznaPwEyOL7F506J8WEpmgp+EbMGf+N7DYH07cY//
+         TE8g7oeZQZviTk6trhSI7UJUGMepBuEmZ2ZOG67/y1Q9cxUqLFxMeKpMl5e7qdVa730w
+         hT6YVkhsCuw5z0x8ehJyD3iBLxDD3g7L87zddeKEE2UD6t7NbA6Bfi7kPtV2HZ/TWkZ1
+         ljd/C+Mw51L3L9tVKPDCUSWSdHVuzJCxruUSDmEJ6N2CPDAuNnSWpgVp9VKgD0puD1L+
+         GX8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712096254; x=1712701054;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fYOqDUYU14d+HKeuMfI8yAvYETR9CFmfgJMPALruc3M=;
+        b=mrYlop1L0egnLClFY8UWYqLpbFlTS1F8innESx9G1SsI3cS/kv3Q350g1HgGDHkFFu
+         QokgVimUDLOK2Qt4OjR/3UnPLRZlay8/M3Xz8bqe/s3+VpewaVtR3PjmgJCwqOnqKbrk
+         NM5PIrfjWECoRGkh+a+KKnNE2AAcsZMG+Up+R4KL3RGK2yh5HTaKp/6wPx/4IVWY/ZmA
+         g5V0/OD5lvZKU3S8auv4oy/NEP8svw3u9H/0fj669wqwIR0m3uzSRxhAEP4qp+A1sB5s
+         0tWT3YpWIkoej+iK9lqcePAyRym+OGCxvqtxqniC96IEnsfs2Kd92Ig6mD/g/69nVICd
+         Retw==
+X-Forwarded-Encrypted: i=1; AJvYcCXk7fjCqcH8gDItP8htoXSjLZ+hpdhh4deSeJarsuTLgOe6gkcGNgjbOBNva1n5VAhImjQbL5EqsiX0fCPvNKKloj2xAFd4xygrmAmB/ptmMT1CzbyCzjJ1r5MXWJwbjwgQdvG4eGL6GAg=
+X-Gm-Message-State: AOJu0YyaEYFGaEkGMRzQ/zy1NcPLgq4m1fLxCheXrsZgd36/1pgX4rau
+	d2trnh8wd1CSwqpGLF3i9+i111zy1uxMcXmteiHMpR7ZhToDWKxq
+X-Google-Smtp-Source: AGHT+IFUuET2kH1Eihd9g4y1585pgzr2R9iU6IYcNA4yZUeVLHoWOnLqlugXCo0lssdNEZbcxPPvRQ==
+X-Received: by 2002:a05:6a00:9295:b0:6ea:ad01:354f with SMTP id jw21-20020a056a00929500b006eaad01354fmr14121172pfb.18.1712096254022;
+        Tue, 02 Apr 2024 15:17:34 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c21-20020aa78c15000000b006ea8c030c1esm10297976pfd.211.2024.04.02.15.17.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Apr 2024 15:17:33 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Tue, 2 Apr 2024 15:17:32 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Cc: "jdelvare@suse.com" <jdelvare@suse.com>,
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Subject: Re: hwmon: label vs temp%d_label
-Thread-Topic: hwmon: label vs temp%d_label
-Thread-Index: AQHahTvINn4/LiD+qEqZV7u6Rj72trFUnPeAgAAGZwCAAAnRAA==
-Date: Tue, 2 Apr 2024 21:57:44 +0000
-Message-ID: <9f58389e-0eb6-4ff1-9152-aa38dbfc5f8b@alliedtelesis.co.nz>
+Message-ID: <2dabfc85-3f87-4dfc-a7d4-9c11bc5b357e@roeck-us.net>
 References: <9a09bf46-d097-4e5b-bdb3-cc9dc6f5d01c@alliedtelesis.co.nz>
  <fdd952dd-2f3c-4f66-8e73-68f1dadde237@roeck-us.net>
  <448b5cfb-b433-4b38-98ae-066bda44f1fd@alliedtelesis.co.nz>
-In-Reply-To: <448b5cfb-b433-4b38-98ae-066bda44f1fd@alliedtelesis.co.nz>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <60E4797FE8919541839B36BC94601FB7@atlnz.lc>
-Content-Transfer-Encoding: base64
+ <9f58389e-0eb6-4ff1-9152-aa38dbfc5f8b@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=AuZN3/9P c=1 sm=1 tr=0 ts=660c7f6f a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=X1bIBW7fO_EA:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=raytVjVEu-sA:10 a=qt3E4JZEwYn9eQaJMkwA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9f58389e-0eb6-4ff1-9152-aa38dbfc5f8b@alliedtelesis.co.nz>
 
-DQpPbiAzLzA0LzI0IDEwOjIyLCBDaHJpcyBQYWNraGFtIHdyb3RlOg0KPg0KPiBPbiAzLzA0LzI0
-IDA5OjU5LCBHdWVudGVyIFJvZWNrIHdyb3RlOg0KPj4gT24gVHVlLCBBcHIgMDIsIDIwMjQgYXQg
-MDg6MjQ6MzdQTSArMDAwMCwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4+PiBIaSBHdWVudGVyLCBK
-ZWFuLA0KPj4+DQo+Pj4gSSd2ZSBnb3QgYSByZXF1aXJlbWVudCB0byBhZGQgc29tZSBtZWFuaW5n
-ZnVsIG5hbWVzIHRvIHNvbWUgaHdtb24NCj4+PiBzZW5zb3JzIChMTTc1IHNwZWNpZmljYWxseSkg
-c28gdGhhdCB3ZSBjYW4gcHJvdmlkZSBzb21lIGluZGljYXRpb24gb2YNCj4+PiB3aGVyZSBvbiBh
-IGJvYXJkIHRoZSBzZW5zb3IgaXMgbG9jYXRlZCAoZS5nLiAiSW50YWtlIiB2cyAiRXhoYXVzdCIg
-dnMNCj4+PiAiTmVhciB0aGF0IHJlYWxseSBob3QgY2hpcCIpLg0KPj4+DQo+Pj4gSSBzZWUgdGhh
-dCB0aGUgc3lzZnMgQUJJIGRvY3VtZW50cyBib3RoICJsYWJlbCIgZm9yIHRoZSBjaGlwIGFuZA0K
-Pj4+ICJ0ZW1wWzEtKl1fbGFiZWwiIChhcyB3ZWxsIGFzIHNpbWlsYXIgZmFuIGFuZCBWaW4gYXR0
-cmlidXRlcykuIFRoZQ0KPj4+IGxhdHRlciBzZWVtIHRvIGJlIHN1cHBvcnRlZCBieSB0aGUgaHdt
-b24gY29yZSBidXQgSSBkb24ndCBzZWUgYW55dGhpbmcNCj4+PiBmb3IgdGhlIGZvcm1lciAoSSdt
-IHN0cnVnZ2xpbmcgdG8gZmluZCBhbnkgZHJpdmVyIHRoYXQgc3VwcG9ydHMgYQ0KPj4+IGNoaXAt
-d2lkZSBsYWJlbCkuDQo+Pj4NCj4+PiBBc3N1bWluZyBJIHdhbnQgdG8gaGF2ZSBhIGxhYmVsIGFk
-ZGVkIGluIHRoZSBkZXZpY2UgdHJlZSB0byBhIGxtNzUgDQo+Pj4gd291bGQNCj4+PiBzb21ldGhp
-bmcgbGlrZSB0aGUgZm9sbG93aW5nIGJlIGFjY2VwdGFibGUNCj4+Pg0KPj4+IMKgIMKgwqDCoMKg
-wqAgc2Vuc29yQDQ4IHsNCj4+PiDCoCDCoMKgwqDCoMKgwqDCoCBjb21wYXRpYmxlID0gIm5hdGlv
-bmFsLGxtNzUiOw0KPj4+IMKgIMKgwqDCoMKgwqDCoMKgIHJlZyA9IDwweDQ4PjsNCj4+PiDCoCDC
-oMKgwqDCoMKgwqDCoCBsYWJlbCA9ICJJbnRha2UiOw0KPj4+IMKgIMKgwqDCoMKgwqAgfTsNCj4+
-Pg0KPj4+IEknZCB0aGVuIHVwZGF0ZSB0aGUgbG03NSBkcml2ZXIgdG8gZ3JhYiB0aGF0IGZyb20g
-dGhlIGRldmljZXRyZWUgYW5kIA0KPj4+IHVzZQ0KPj4+IGl0IHRvIHByb3ZpZGUgdGhlIGh3bW9u
-X3RlbXBfbGFiZWwgYXR0cmlidXRlLg0KPj4+DQo+PiBIYXZlIHlvdSB0cmllZCBqdXN0IGRlY2xh
-cmluZyB0aGUgbGFiZWwgcHJvcGVydHkgYXMgeW91IHN1Z2dlc3RlZCBhYm92ZQ0KPj4gaW4geW91
-ciBzeXN0ZW0gd2l0aG91dCBkb2luZyBhbnl0aGluZyBlbHNlLCBhbmQgbG9va2VkIGF0IHRoZSBn
-ZW5lcmF0ZWQNCj4+IHN5c2ZzIGF0dHJpYnV0ZXMgPw0KPg0KPiBJIGhhdmUgbm90LiBCdXQgaW4g
-bXkgZGVmZW5zZSBJJ20gYWxzbyB1c2luZyBhbiBvbGRlciBrZXJuZWwgTFRTIHRoYXQgDQo+IGRv
-ZXNuJ3QgaGF2ZSBjb21taXQgZTFjOWQ2ZDYxZGRmICgiaHdtb246IEFkZCAibGFiZWwiIGF0dHJp
-YnV0ZSIpLiBCdXQgDQo+IG5vdyB0aGF0IEkga25vdyBpdCBleGlzdHMgSSBjYW4gY2FycnkgaXQg
-YXMgYSBsb2NhbCBwYXRjaCB1bnRpbCB3ZSANCj4gbmV4dCB1cGRhdGUuDQoNClJlbGF0ZWQgaXMg
-dGhlcmUgYW4gbG0tc2Vuc29ycyBjaGFuZ2UgdGhhdCB1c2VzIHRoaXMgYXR0cmlidXRlIGZvciAN
-CmRpc3BsYXkgcHVycG9zZXM/DQoNCkkgZG8gaGF2ZSBhIGNvdXBsZSBvZiBQUnMgb3BlbiBvbiB0
-aGUgbG0tc2Vuc29ycyBnaXRodWIgcHJvamVjdCBJJ2QgbGlrZSANCnRvIHNlZSBtZXJnZWQgYnV0
-IGdpdmVuIHJlY2VudCBldmVudHMgdGhpcyBzaG91bGQgYWJzb2x1dGVseSBub3QgYmUgDQpjb25z
-dHJ1ZWQgYXMgYSBjcml0aWNpc20gb2YgYW55b25lIG1haW50YWluaW5nIGxtLXNlbnNvcnMgbWVy
-ZWx5IGEgcXVlcnkgDQphcyB0byB3aGV0aGVyIFBScyBhcmUgdGhlIHJpZ2h0IHBhdGggZm9yIGNo
-YW5nZXMgb3IgaWYgdGhleSBzaG91bGQgYmUgDQpzZW50IHRvIGEgbWFpbGluZyBsaXN0IHNvbWV3
-aGVyZS4NCg0K
+On Tue, Apr 02, 2024 at 09:57:44PM +0000, Chris Packham wrote:
+> 
+> On 3/04/24 10:22, Chris Packham wrote:
+> >
+> > On 3/04/24 09:59, Guenter Roeck wrote:
+> >> On Tue, Apr 02, 2024 at 08:24:37PM +0000, Chris Packham wrote:
+> >>> Hi Guenter, Jean,
+> >>>
+> >>> I've got a requirement to add some meaningful names to some hwmon
+> >>> sensors (LM75 specifically) so that we can provide some indication of
+> >>> where on a board the sensor is located (e.g. "Intake" vs "Exhaust" vs
+> >>> "Near that really hot chip").
+> >>>
+> >>> I see that the sysfs ABI documents both "label" for the chip and
+> >>> "temp[1-*]_label" (as well as similar fan and Vin attributes). The
+> >>> latter seem to be supported by the hwmon core but I don't see anything
+> >>> for the former (I'm struggling to find any driver that supports a
+> >>> chip-wide label).
+> >>>
+> >>> Assuming I want to have a label added in the device tree to a lm75 
+> >>> would
+> >>> something like the following be acceptable
+> >>>
+> >>>         sensor@48 {
+> >>>           compatible = "national,lm75";
+> >>>           reg = <0x48>;
+> >>>           label = "Intake";
+> >>>         };
+> >>>
+> >>> I'd then update the lm75 driver to grab that from the devicetree and 
+> >>> use
+> >>> it to provide the hwmon_temp_label attribute.
+> >>>
+> >> Have you tried just declaring the label property as you suggested above
+> >> in your system without doing anything else, and looked at the generated
+> >> sysfs attributes ?
+> >
+> > I have not. But in my defense I'm also using an older kernel LTS that 
+> > doesn't have commit e1c9d6d61ddf ("hwmon: Add "label" attribute"). But 
+> > now that I know it exists I can carry it as a local patch until we 
+> > next update.
+> 
+> Related is there an lm-sensors change that uses this attribute for 
+> display purposes?
+> 
+Sorry, I don't know. I stopped paying attention to the lm-sensors package
+a long time ago, and I don't know its status. I just don't have the time.
+
+> I do have a couple of PRs open on the lm-sensors github project I'd like 
+> to see merged but given recent events this should absolutely not be 
+> construed as a criticism of anyone maintaining lm-sensors merely a query 
+> as to whether PRs are the right path for changes or if they should be 
+> sent to a mailing list somewhere.
+> 
+I have no idea, sorry.
+
+Guenter
