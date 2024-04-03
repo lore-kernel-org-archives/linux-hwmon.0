@@ -1,58 +1,55 @@
 Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E4EF15625C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E541156641;
 	Wed,  3 Apr 2024 20:36:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712176618; cv=none; b=UihXsl71lg/dpdK+SOvchyKrw89PfGYrG6IychRWfo0S/yKnX59lb8cPdVYoVQgH0wde1NZH3yHV/XOa8onLy6fgdGnHtxR/tG6UeP1EfDM8WA07t+aKmpLBIP3Q7G+HHlRroup6xO/NUl3xFid4ZIMQCTVSBrm6uH07KXqrmps=
+	t=1712176618; cv=none; b=POognCzb/osskSx2mwc0usCaraG+hnDBWSZ4jyU4Et1oiOaKOrzTIGV6wwtzdEyr/mthK1G/WPtmfiwDVgsHAM6NZlvezq4DZdwzCT8+S+QWXMcU5vgFkZForljF0d/fLuI7ENqkdPDY4w4vChXLKIiYatAOYgeYM9EbdYPDZdg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1712176618; c=relaxed/simple;
-	bh=YAfBzgHyxT/OlQjSIEKq5otHy5Sx3imuMxJ0Pv0RfP8=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OtnYIs/jYpTDXDexOT/VSDskWUeEOcvrP8SWt+M7VeDBVaJmRufGC56BDwaYz+jQHznOu0j4GQ3yANFFyOI3LXnYeo92EtSJ7vwBpEoDuOqIk+6nT+8rzrd6sf0l1IRLW05Nu3Ww/QNfqJ7VKnbK0kWbJ5Lz+X8Kp2u/KfX/HCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=cyw/WEH9; arc=none smtp.client-ip=198.47.23.249
+	bh=xeEjJBRwdbnoHELe+JmZTnon7hCJd2P9sODhxzR8Fnk=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=C+lLMj18pLOrB/ehoEUhZLwUUtwAQRiQT4U5bWP4G5CASqIjrc29HQJ+9bc8BIn3biy/umy2eAEOD/taJ0K6VEls1IrRNL2WD4vWSWL81fWNijSS9LYB/HkpIjfyUt1g+Bj5tw8ZRpBquOLyz0QUI4TC3viyRQFAT7tbi2U2S/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=C1/QtN1X; arc=none smtp.client-ip=198.47.23.249
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="cyw/WEH9"
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 433Kaa3G076293;
-	Wed, 3 Apr 2024 15:36:36 -0500
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="C1/QtN1X"
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 433KaZD5076287;
+	Wed, 3 Apr 2024 15:36:35 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1712176596;
-	bh=wUqUo35lVw+/wFCUc/qn97gM/nTw5m4+tR7JON2D8aY=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=cyw/WEH9SDJUigjqq4x9/wHN6TRj+ObYzjlDWzIDQkD0MMMeBA6Wfvs9BcpP6Bk4y
-	 47oQRuwUcbIVQtkSVdorHlaZEiOI4NpMYsx2vLhTnFelQEHzqIR4mwgVj5+5KcRz3S
-	 NYM7gk6dxb0aDQWp5tC7V7Zjqhl+08togu2+TDc4=
-Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
-	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 433KaaLi092348
+	s=ti-com-17Q1; t=1712176595;
+	bh=/7zAIRf6EU6IdqEwtDVY3sRloUvgBjYsBrYpheRGSSI=;
+	h=From:To:CC:Subject:Date;
+	b=C1/QtN1Xk3jOpxuH6ZXfuGnWr4L/vAUsOBlUl7NKqr2Yc/4ZbMD86bDB4y2MgGgjn
+	 0CY7+XLUCj7wmlgwT/KCFMul5Bu1sqzV0GOSRTpzsE9W5lc+xdOl7dbi7Z7xd7JTkK
+	 v1+RuGoocn/nN+aYTTaL0Nasfz2SRBVh1AhX1ZlU=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 433KaZWC000483
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Wed, 3 Apr 2024 15:36:36 -0500
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+	Wed, 3 Apr 2024 15:36:35 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 3
- Apr 2024 15:36:36 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ Apr 2024 15:36:34 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 3 Apr 2024 15:36:36 -0500
+ Frontend Transport; Wed, 3 Apr 2024 15:36:34 -0500
 Received: from fllvsmtp8.itg.ti.com ([10.249.42.149])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 433KaYFk080324;
-	Wed, 3 Apr 2024 15:36:36 -0500
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 433KaYFf080324;
+	Wed, 3 Apr 2024 15:36:34 -0500
 From: Andrew Davis <afd@ti.com>
 To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
         Juerg Haefliger <juergh@proton.me>, Riku Voipio <riku.voipio@iki.fi>
 CC: <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Andrew
  Davis <afd@ti.com>
-Subject: [PATCH 05/31] hwmon: (adt7475) Remove use of i2c_match_id()
-Date: Wed, 3 Apr 2024 15:36:07 -0500
-Message-ID: <20240403203633.914389-6-afd@ti.com>
+Subject: [PATCH 00/31] Remove use of i2c_match_id in HWMON
+Date: Wed, 3 Apr 2024 15:36:02 -0500
+Message-ID: <20240403203633.914389-1-afd@ti.com>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240403203633.914389-1-afd@ti.com>
-References: <20240403203633.914389-1-afd@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,91 +60,86 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-The function i2c_match_id() is used to fetch the matching ID from
-the i2c_device_id table. This is often used to then retrieve the
-matching driver_data. This can be done in one step with the helper
-i2c_get_match_data().
+Hello all,
 
-This helper has a couple other benefits:
- * It doesn't need the i2c_device_id passed in so we do not need
-   to have that forward declared, allowing us to remove those or
-   move the i2c_device_id table down to its more natural spot
-   with the other module info.
- * It also checks for device match data, which allows for OF and
-   ACPI based probing. That means we do not have to manually check
-   those first and can remove those checks.
+Goal here is to remove the i2c_match_id() function from all drivers.
+Using i2c_get_match_data() can simplify code and has some other
+benefits described in the patches.
 
-Signed-off-by: Andrew Davis <afd@ti.com>
----
- drivers/hwmon/adt7475.c | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+There are not many users left in kernel, most remaining users
+are here in HWMON, so let's clear those out here.
 
-diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
-index 4224ffb304832..5f78e66330187 100644
---- a/drivers/hwmon/adt7475.c
-+++ b/drivers/hwmon/adt7475.c
-@@ -1676,7 +1676,6 @@ static int adt7475_probe(struct i2c_client *client)
- 	struct device *hwmon_dev;
- 	int i, ret = 0, revision, group_num = 0;
- 	u8 config3;
--	const struct i2c_device_id *id = i2c_match_id(adt7475_id, client);
- 
- 	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
- 	if (data == NULL)
-@@ -1686,10 +1685,7 @@ static int adt7475_probe(struct i2c_client *client)
- 	data->client = client;
- 	i2c_set_clientdata(client, data);
- 
--	if (client->dev.of_node)
--		chip = (uintptr_t)of_device_get_match_data(&client->dev);
--	else
--		chip = id->driver_data;
-+	chip = (uintptr_t)i2c_get_match_data(client);
- 
- 	/* Initialize device-specific values */
- 	switch (chip) {
-@@ -1717,7 +1713,7 @@ static int adt7475_probe(struct i2c_client *client)
- 	if (!(config3 & CONFIG3_SMBALERT))
- 		data->has_pwm2 = 1;
- 	/* Meaning of this bit is inverted for the ADT7473-1 */
--	if (id->driver_data == adt7473 && revision >= 1)
-+	if (chip == adt7473 && revision >= 1)
- 		data->has_pwm2 = !data->has_pwm2;
- 
- 	data->config4 = adt7475_read(REG_CONFIG4);
-@@ -1730,12 +1726,12 @@ static int adt7475_probe(struct i2c_client *client)
- 	 * because 2 different pins (TACH4 and +2.5 Vin) can be used for
- 	 * this function
- 	 */
--	if (id->driver_data == adt7490) {
-+	if (chip == adt7490) {
- 		if ((data->config4 & CONFIG4_PINFUNC) == 0x1 &&
- 		    !(config3 & CONFIG3_THERM))
- 			data->has_fan4 = 1;
- 	}
--	if (id->driver_data == adt7476 || id->driver_data == adt7490) {
-+	if (chip == adt7476 || chip == adt7490) {
- 		if (!(config3 & CONFIG3_THERM) ||
- 		    (data->config4 & CONFIG4_PINFUNC) == 0x1)
- 			data->has_voltage |= (1 << 0);		/* in0 */
-@@ -1745,7 +1741,7 @@ static int adt7475_probe(struct i2c_client *client)
- 	 * On the ADT7476, the +12V input pin may instead be used as VID5,
- 	 * and VID pins may alternatively be used as GPIO
- 	 */
--	if (id->driver_data == adt7476) {
-+	if (chip == adt7476) {
- 		u8 vid = adt7475_read(REG_VID);
- 		if (!(vid & VID_VIDSEL))
- 			data->has_voltage |= (1 << 4);		/* in4 */
-@@ -1829,7 +1825,7 @@ static int adt7475_probe(struct i2c_client *client)
- 	}
- 
- 	dev_info(&client->dev, "%s device, revision %d\n",
--		 names[id->driver_data], revision);
-+		 names[chip], revision);
- 	if ((data->has_voltage & 0x11) || data->has_fan4 || data->has_pwm2)
- 		dev_info(&client->dev, "Optional features:%s%s%s%s%s\n",
- 			 (data->has_voltage & (1 << 0)) ? " in0" : "",
+I don't have most of this hardware, so testing is very welcome :)
+
+Thanks,
+Andrew
+
+Andrew Davis (31):
+  hwmon: (ad7418) Remove use of i2c_match_id()
+  hwmon: (adm1021) Remove use of i2c_match_id()
+  hwmon: (adm1031) Remove use of i2c_match_id()
+  hwmon: (ads7828) Remove use of i2c_match_id()
+  hwmon: (adt7475) Remove use of i2c_match_id()
+  hwmon: (aht10) Remove use of i2c_match_id()
+  hwmon: (dme1737) Remove use of i2c_match_id()
+  hwmon: (ds1621) Remove use of i2c_match_id()
+  hwmon: (f75375s) Remove use of i2c_match_id()
+  hwmon: (fschmd) Remove use of i2c_match_id()
+  hwmon: (ina2xx) Remove use of i2c_match_id()
+  hwmon: (lm63) Remove use of i2c_match_id()
+  hwmon: (lm75) Remove use of i2c_match_id()
+  hwmon: (lm78) Remove use of i2c_match_id()
+  hwmon: (lm83) Remove use of i2c_match_id()
+  hwmon: (lm85) Remove use of i2c_match_id()
+  hwmon: (lm90) Remove use of i2c_match_id()
+  hwmon: (lm95234) Remove use of i2c_match_id()
+  hwmon: (max16065) Remove use of i2c_match_id()
+  hwmon: (max1668) Remove use of i2c_match_id()
+  hwmon: (max6697) Remove use of i2c_match_id()
+  hwmon: (mcp3021) Remove use of i2c_match_id()
+  hwmon: (powr1220) Remove use of i2c_match_id()
+  hwmon: (sht3x) Remove use of i2c_match_id()
+  hwmon: (shtc1) Remove use of i2c_match_id()
+  hwmon: (thmc50) Remove use of i2c_match_id()
+  hwmon: (tmp401) Remove use of i2c_match_id()
+  hwmon: (tmp421) Remove use of i2c_match_id()
+  hwmon: (tmp464) Remove use of i2c_match_id()
+  hwmon: (w83781d) Remove use of i2c_match_id()
+  hwmon: (w83795): Remove use of i2c_match_id()
+
+ drivers/hwmon/ad7418.c   |  7 +-----
+ drivers/hwmon/adm1021.c  |  4 +---
+ drivers/hwmon/adm1031.c  |  4 +---
+ drivers/hwmon/ads7828.c  |  7 +-----
+ drivers/hwmon/adt7475.c  | 16 ++++++--------
+ drivers/hwmon/aht10.c    |  3 +--
+ drivers/hwmon/dme1737.c  |  4 +---
+ drivers/hwmon/ds1621.c   |  4 +---
+ drivers/hwmon/f75375s.c  | 46 +++++++++++++++++-----------------------
+ drivers/hwmon/fschmd.c   |  2 +-
+ drivers/hwmon/ina2xx.c   |  7 +-----
+ drivers/hwmon/lm63.c     |  5 +----
+ drivers/hwmon/lm75.c     | 10 +--------
+ drivers/hwmon/lm78.c     |  4 +---
+ drivers/hwmon/lm83.c     | 16 +++++++-------
+ drivers/hwmon/lm85.c     |  7 +-----
+ drivers/hwmon/lm90.c     |  5 +----
+ drivers/hwmon/lm95234.c  |  5 ++---
+ drivers/hwmon/max16065.c | 10 ++++-----
+ drivers/hwmon/max1668.c  |  4 +---
+ drivers/hwmon/max6697.c  |  7 +-----
+ drivers/hwmon/mcp3021.c  |  6 +++---
+ drivers/hwmon/powr1220.c |  6 +++---
+ drivers/hwmon/sht3x.c    | 20 ++++++++---------
+ drivers/hwmon/shtc1.c    |  4 +---
+ drivers/hwmon/thmc50.c   |  4 +---
+ drivers/hwmon/tmp401.c   |  2 +-
+ drivers/hwmon/tmp421.c   |  6 +-----
+ drivers/hwmon/tmp464.c   |  5 +----
+ drivers/hwmon/w83781d.c  |  4 +---
+ drivers/hwmon/w83795.c   |  4 +---
+ 31 files changed, 79 insertions(+), 159 deletions(-)
+
 -- 
 2.39.2
 
