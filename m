@@ -1,55 +1,55 @@
 Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 007851581EA;
-	Wed,  3 Apr 2024 20:37:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E66B1158212;
+	Wed,  3 Apr 2024 20:37:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712176631; cv=none; b=rZ3ZnYGSwFtSArGaln18J/DUJluRoWRCtYWrW54aDeLJfmVXNMQrHJXQXkRq4dalZ+vDYA3LXROYnnq0xInjQSwZJSsnPzUNC1k+T/uauGYLTaenkUVoqy12PuwzfYoImkIBBh+IjMMY+Y3gBM+n8nl+85sMCpMh7u3KGo5TF4M=
+	t=1712176632; cv=none; b=lJO7UBdBcFnvFCg7RhgKTG4ULBWozrAquq/543+h84WjNbsnj1Fxav3SzWHxMK6zfyOT15lGGkHa2iLLYwBbAJ9V5C1Eqeuq2z5/zyk42c1tjFXgrLAiPJA9Xel8bdqE++uG+pElSa+GnifNdpNTyv2n9SfSSQ31yvJ4A1jmODA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712176631; c=relaxed/simple;
-	bh=htYl1xEKTxhf+91LyIRRinKUV2fmdiibhEQeoLxwBaA=;
+	s=arc-20240116; t=1712176632; c=relaxed/simple;
+	bh=lRlSuZReFFYVxxcnzf1INLWR5vW9Gm8ZTWO31b/9wyU=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OGag/Q76WWdgPQwbrlGgY4OWj9EjkkJhfoNBAEoRVs8XnaBqWMocc6gHrFPBxTOXbxo6peIbW7aDQ63ItMsXmmKKZKzN+ocX4UnX5FAovG1XZk0GY+bX2MYGSPEZ7w/kpgaPE5TXRJJ6Y477Zco3cFg7R+3mqmTTpUia4bIdgOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=GAWQIJBX; arc=none smtp.client-ip=198.47.23.248
+	 MIME-Version:Content-Type; b=WyvdAaL88nzwjdkNf8gMzB/Xfe8yfGHWzeMcAjJXncnbFaFz2v/gyx2zQu2B5rUXOM/4tiAsPtk+ujgKMJyhkotgHTcdNJvC4HdOp2LTvdnyVAUUo4Jn8eYK44FyE3eF4kFq5odpyIWAVxB4kCVYbIMD/9bs3T7xRG4CihWz1Ac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=agd5KmpW; arc=none smtp.client-ip=198.47.23.248
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="GAWQIJBX"
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 433KaaZ7079571;
-	Wed, 3 Apr 2024 15:36:36 -0500
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="agd5KmpW"
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 433KafSc079584;
+	Wed, 3 Apr 2024 15:36:41 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1712176596;
-	bh=vLG7nR3cXKqdnmHs0sRyFkgQxJmyQMwMWdu+b28S8xk=;
+	s=ti-com-17Q1; t=1712176601;
+	bh=SyCQPDSspXo8h4RgWzpUdDe7FPw7TNTA1OEjLEMm17s=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=GAWQIJBXnDF3pCwa6hkTnjJgFBrxfsnxvV+X2tFZ2KzY+vWrN1PUydgAIuA51kpCt
-	 hsqeqW3d0Jmv3Ac/KGZrsO9A/fG9EOi/ObUHw8cYNlF8T2ZWX9NdvhDFc3+l0mTAsv
-	 aS5swoLdt9Pnx4uAoPmfNIJKTcDjc8AM7brWgd4Q=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 433KaaUR115231
+	b=agd5KmpWS0dAEYS6PTL/HhKax+p6+vUnLq0EfTynA0w8nyfN1m7co6BJSOv3Fv4sv
+	 gd4Z/pvvaOdXyGnT+rUYkrzHX64oNOyuOvNH6clNxDbwHZuR9hUSnTthDgZ2L3CbpO
+	 1+EpPy3eAFgcwSTs5CGHxHLxMuzaR9JcrqAHBvuw=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 433KafBb092406
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Wed, 3 Apr 2024 15:36:36 -0500
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+	Wed, 3 Apr 2024 15:36:41 -0500
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 3
- Apr 2024 15:36:35 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ Apr 2024 15:36:40 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 3 Apr 2024 15:36:35 -0500
+ Frontend Transport; Wed, 3 Apr 2024 15:36:41 -0500
 Received: from fllvsmtp8.itg.ti.com ([10.249.42.149])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 433KaYFi080324;
-	Wed, 3 Apr 2024 15:36:35 -0500
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 433KaYG0080324;
+	Wed, 3 Apr 2024 15:36:40 -0500
 From: Andrew Davis <afd@ti.com>
 To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
         Juerg Haefliger <juergh@proton.me>, Riku Voipio <riku.voipio@iki.fi>
 CC: <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Andrew
  Davis <afd@ti.com>
-Subject: [PATCH 03/31] hwmon: (adm1031) Remove use of i2c_match_id()
-Date: Wed, 3 Apr 2024 15:36:05 -0500
-Message-ID: <20240403203633.914389-4-afd@ti.com>
+Subject: [PATCH 19/31] hwmon: (max16065) Remove use of i2c_match_id()
+Date: Wed, 3 Apr 2024 15:36:21 -0500
+Message-ID: <20240403203633.914389-20-afd@ti.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240403203633.914389-1-afd@ti.com>
 References: <20240403203633.914389-1-afd@ti.com>
@@ -79,31 +79,44 @@ This helper has a couple other benefits:
 
 Signed-off-by: Andrew Davis <afd@ti.com>
 ---
- drivers/hwmon/adm1031.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/hwmon/max16065.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/hwmon/adm1031.c b/drivers/hwmon/adm1031.c
-index 88c7e0d62d089..343118532cdb4 100644
---- a/drivers/hwmon/adm1031.c
-+++ b/drivers/hwmon/adm1031.c
-@@ -1021,8 +1021,6 @@ static void adm1031_init_client(struct i2c_client *client)
- 	data->update_interval = update_intervals[i];
- }
+diff --git a/drivers/hwmon/max16065.c b/drivers/hwmon/max16065.c
+index aa38c45adc09e..7ce9a89f93a0d 100644
+--- a/drivers/hwmon/max16065.c
++++ b/drivers/hwmon/max16065.c
+@@ -493,8 +493,6 @@ static const struct attribute_group max16065_max_group = {
+ 	.is_visible = max16065_secondary_is_visible,
+ };
  
--static const struct i2c_device_id adm1031_id[];
+-static const struct i2c_device_id max16065_id[];
 -
- static int adm1031_probe(struct i2c_client *client)
+ static int max16065_probe(struct i2c_client *client)
  {
- 	struct device *dev = &client->dev;
-@@ -1035,7 +1033,7 @@ static int adm1031_probe(struct i2c_client *client)
+ 	struct i2c_adapter *adapter = client->adapter;
+@@ -505,7 +503,7 @@ static int max16065_probe(struct i2c_client *client)
+ 	bool have_secondary;		/* true if chip has secondary limits */
+ 	bool secondary_is_max = false;	/* secondary limits reflect max */
+ 	int groups = 0;
+-	const struct i2c_device_id *id = i2c_match_id(max16065_id, client);
++	enum chips chip = (uintptr_t)i2c_get_match_data(client);
  
- 	i2c_set_clientdata(client, data);
+ 	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE_DATA
+ 				     | I2C_FUNC_SMBUS_READ_WORD_DATA))
+@@ -518,9 +516,9 @@ static int max16065_probe(struct i2c_client *client)
  	data->client = client;
--	data->chip_type = i2c_match_id(adm1031_id, client)->driver_data;
-+	data->chip_type = (uintptr_t)i2c_get_match_data(client);
  	mutex_init(&data->update_lock);
  
- 	if (data->chip_type == adm1030)
+-	data->num_adc = max16065_num_adc[id->driver_data];
+-	data->have_current = max16065_have_current[id->driver_data];
+-	have_secondary = max16065_have_secondary[id->driver_data];
++	data->num_adc = max16065_num_adc[chip];
++	data->have_current = max16065_have_current[chip];
++	have_secondary = max16065_have_secondary[chip];
+ 
+ 	if (have_secondary) {
+ 		val = i2c_smbus_read_byte_data(client, MAX16065_SW_ENABLE);
 -- 
 2.39.2
 
