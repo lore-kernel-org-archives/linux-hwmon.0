@@ -1,55 +1,55 @@
 Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E283158A1E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D567D158A24;
 	Wed,  3 Apr 2024 20:37:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712176636; cv=none; b=cpFfgpQDKmxtltPECW/vBxxn3FBY0MsHDyZGrfup5L33Wuf2/mfkIIG4kzI18ujMQXKUz/CRHEdhXvqLqNdIVdmsmyZblzYorWbBKlC6nkM/dWP/cdrGmr+g2ItoN96PosEE0uf3CKL7/zIAnf0HLWMZFWlcIbgT4ogy1CsStSo=
+	t=1712176637; cv=none; b=TQlHwD4akgVc04ljXIQeR8stZo4KcQXRbhV3u0/z4Jp+79ynsKy2X3MrG+c32JDQ26+ZVrGdW6s6CU87yjmfftPpgFsKT/HqJGBKr7WNswrWkwu72WrRhjg9RT0Kezb1HmdIVtK/qTqP4eEKIAT4Q/wTYu7djb4E2XZe5EkhiHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712176636; c=relaxed/simple;
-	bh=fzyLAkMdkIrE2Q23ti0Q/YYONcNNwXtFsQNshTq6LZk=;
+	s=arc-20240116; t=1712176637; c=relaxed/simple;
+	bh=DcJqhwHAqxnaGiAFyieMHYH+qxPUuLYnJBVlpdIApVw=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Es3GiZ58x5N26/a1aiU5zJHC9XsOOmqfMNTcJiP0T8ru2/5b2lD+nNzdeWZifMZoCApeQx5uwZDl3CczdUrW1CKyn+XDwtulfFSk+g8SfQem3vFkaOeHwapyPDv93Z/oxEZUEkVyHc7o0V/r7D0atq8fEDuykbYbisikQz+vvdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=MXQFFmnY; arc=none smtp.client-ip=198.47.19.142
+	 MIME-Version:Content-Type; b=FOPhatDrj6SviuVSkV+kfNV+gcCpRaraBPKu/qhVCUZxPcls0Nz0L1DyYyKwqPfhp8C7KzYQqtGaj3qPmi5Y+yyiPInxyr3j+dGh6VlwhMpL022cKpZvk7Xp7/kiPicl1+/pkWPlnfzvcOpZkzpeKUD+PpIC8HU0sQML18qx54s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=BYHPS/q5; arc=none smtp.client-ip=198.47.19.142
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="MXQFFmnY"
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 433Kai2g038561;
-	Wed, 3 Apr 2024 15:36:44 -0500
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="BYHPS/q5"
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 433Kaavv038522;
+	Wed, 3 Apr 2024 15:36:36 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1712176604;
-	bh=jE+XpwhEwJZiBSyUsuAdan5u7cm38Ho/3/4bJnKGkAc=;
+	s=ti-com-17Q1; t=1712176596;
+	bh=vO3CrxDkXJKU7WHeaTF/07p+El0Cl3/7dNxjIIWuxBA=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=MXQFFmnY+6FLfB+5fzw+jt1gKUjpj5NXrRlq3AIb+gc36CbadS1UD+6uSUBIr6fGH
-	 ++DGdbblczRFeqRz0lHgbHb0x/y9yTwJrW3OHEy4q0HRcyQb9wLJsKzTG7loLfOg44
-	 nLIP3oknAbYq1P38PaXHhCg5GTMgMIIl/vvwH8fk=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 433KaiFo052164
+	b=BYHPS/q5eT+Ouncd/sa3IE+mkOB3vVlJ0kGb5RNgWkreWy9AnATvYgsNKhL+N26pU
+	 eqzeM2tuKkOkC5PjEzkPWXR6lVI/HjCzQKk8kJg7GhyW72/NxY2dKhXtxvIRnatJJV
+	 Yab51GiQipZPPI2dDarbZshQXkoA3iQs6j1DxE/c=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 433Kaa4K000507
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Wed, 3 Apr 2024 15:36:44 -0500
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+	Wed, 3 Apr 2024 15:36:36 -0500
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 3
- Apr 2024 15:36:43 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ Apr 2024 15:36:36 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 3 Apr 2024 15:36:43 -0500
+ Frontend Transport; Wed, 3 Apr 2024 15:36:36 -0500
 Received: from fllvsmtp8.itg.ti.com ([10.249.42.149])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 433KaYGA080324;
-	Wed, 3 Apr 2024 15:36:43 -0500
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 433KaYFj080324;
+	Wed, 3 Apr 2024 15:36:35 -0500
 From: Andrew Davis <afd@ti.com>
 To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
         Juerg Haefliger <juergh@proton.me>, Riku Voipio <riku.voipio@iki.fi>
 CC: <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Andrew
  Davis <afd@ti.com>
-Subject: [PATCH 29/31] hwmon: (tmp464) Remove use of i2c_match_id()
-Date: Wed, 3 Apr 2024 15:36:31 -0500
-Message-ID: <20240403203633.914389-30-afd@ti.com>
+Subject: [PATCH 04/31] hwmon: (ads7828) Remove use of i2c_match_id()
+Date: Wed, 3 Apr 2024 15:36:06 -0500
+Message-ID: <20240403203633.914389-5-afd@ti.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240403203633.914389-1-afd@ti.com>
 References: <20240403203633.914389-1-afd@ti.com>
@@ -79,25 +79,34 @@ This helper has a couple other benefits:
 
 Signed-off-by: Andrew Davis <afd@ti.com>
 ---
- drivers/hwmon/tmp464.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/hwmon/ads7828.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/hwmon/tmp464.c b/drivers/hwmon/tmp464.c
-index f58ca4c6acb6e..3ee1137533d63 100644
---- a/drivers/hwmon/tmp464.c
-+++ b/drivers/hwmon/tmp464.c
-@@ -666,10 +666,7 @@ static int tmp464_probe(struct i2c_client *client)
+diff --git a/drivers/hwmon/ads7828.c b/drivers/hwmon/ads7828.c
+index 809e830f52a6b..436637264056c 100644
+--- a/drivers/hwmon/ads7828.c
++++ b/drivers/hwmon/ads7828.c
+@@ -99,8 +99,6 @@ static const struct regmap_config ads2830_regmap_config = {
+ 	.val_bits = 8,
+ };
  
- 	mutex_init(&data->update_lock);
+-static const struct i2c_device_id ads7828_device_ids[];
+-
+ static int ads7828_probe(struct i2c_client *client)
+ {
+ 	struct device *dev = &client->dev;
+@@ -138,10 +136,7 @@ static int ads7828_probe(struct i2c_client *client)
+ 		}
+ 	}
  
--	if (dev->of_node)
--		data->channels = (int)(unsigned long)of_device_get_match_data(&client->dev);
+-	if (client->dev.of_node)
+-		chip = (uintptr_t)of_device_get_match_data(&client->dev);
 -	else
--		data->channels = i2c_match_id(tmp464_id, client)->driver_data;
-+	data->channels = (int)(unsigned long)i2c_get_match_data(client);
+-		chip = i2c_match_id(ads7828_device_ids, client)->driver_data;
++	chip = (uintptr_t)i2c_get_match_data(client);
  
- 	data->regmap = devm_regmap_init_i2c(client, &tmp464_regmap_config);
- 	if (IS_ERR(data->regmap))
+ 	/* Bound Vref with min/max values */
+ 	vref_mv = clamp_val(vref_mv, ADS7828_EXT_VREF_MV_MIN,
 -- 
 2.39.2
 
