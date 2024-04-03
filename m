@@ -1,45 +1,45 @@
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB7E91586E0;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE6311586EA;
 	Wed,  3 Apr 2024 20:37:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712176633; cv=none; b=Jof5x+s+r7azW3BS+7/V4vzS5ffuGXfpw5yURMM9LgSkHUjK/s8M39/zlH51I4uowyq0r4DxFA8Zpb9qnAwHQRbWsm/en238Kd6udbz7oF5/Oy2WFr3hif5H8+hQuxzanEeO8ZNcw8U7HO0NBtYeL/VgPgdZCcsrtInJjiAbm6M=
+	t=1712176633; cv=none; b=KTy8pu6KdX4UmjSYeeXORX8mr+1vBS7IEoQ52i/RUuyz3zRRNMsl/CgRS1VD+2cfzdTsiG9xmXi4MZpprumZDo0zRtn2L5Uud92IlRYrIq7r677irEjVuo/gxOI2ERM3SU1z4jCcoBPpvHT0+CY7TNNJvTBsLsDMCs+yIG7FAX4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1712176633; c=relaxed/simple;
-	bh=P02+nXdJbqfYxf4tQf2Pbpb0u9iI7e2xMOts+NOqO5w=;
+	bh=nkd6dRREHPwcpDGGNrov5m7ucRaMD8SFstXdDMojjxg=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JgrA7ML1eOYwculNoKYxCalzCVeUpcedHavQH3F4D3pXxuYuc+qQy68dMqaPkA+lJ4XZDBvWlYeLdgl4SzhFTieO0bLSjqICtaqe+UQAyDPHGGWUuwr4dxRGN3ef03Or6G7zuSmQClKuPkyuTQTaFOO76HgG8AlgEnDlODldh+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=dAfrhcC8; arc=none smtp.client-ip=198.47.19.142
+	 MIME-Version:Content-Type; b=jR7XwRfNZPYuHrEkJ1YZNbYJ9yCas6whaHOOHIJranRsxSiK0Eb4nEYMncQeye3byM0ZjZZsVTMYMLx/moDxg5Bvt+e6X9Wo/Xznqg2Nlbh2jts/mX5YoyU62nfQkR3PGRF0MH+s6Iv9S5OhTXeCEEQs8Rx6sHHc1xkPwdao+xE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=rJUoIIt0; arc=none smtp.client-ip=198.47.19.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="dAfrhcC8"
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 433KahUQ038556;
-	Wed, 3 Apr 2024 15:36:43 -0500
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="rJUoIIt0"
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 433Kagp7076410;
+	Wed, 3 Apr 2024 15:36:42 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1712176603;
-	bh=kN8uor3TFZ1XDxUmVKlBH/TOnvxRGZwHhs7wYGaT+2E=;
+	s=ti-com-17Q1; t=1712176602;
+	bh=x+NGttmZsmEmqDB8uQHkqDv87pFr7T95SquiSR8LsvI=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=dAfrhcC8JFnS+fZguTPZkrDrYSbGR3YJoHjpdrnKn96qtXo98EoHrE3cGtmV8MzNW
-	 TOAt1lj+XwLjTfT/7o21rQYmaEp6MwN1sdOZ+OmZzCkMiFeotdAgbtyhTu5ZxlKMXv
-	 tiJuaODsIiLSI95PYVZkYEVTQrBBhMLKBO/6YqmY=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 433Kahsi115311
+	b=rJUoIIt0C0VnAbG5Fw9y+lgMo7htXwZ3UZrfrn+KyJoLI2qLEIyR57TqS+uxd9n86
+	 FIKE6xGzukiYcJKly7VmQA2cSRIgc1F21rO+KekrGobrwu2NzLBTwXfT7GV0Lqk5VV
+	 N/jaWyILCfg1SuvPHl+BUNZUPyPmGQOdO9mrIvWk=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 433Kags8052137
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Wed, 3 Apr 2024 15:36:43 -0500
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+	Wed, 3 Apr 2024 15:36:42 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 3
- Apr 2024 15:36:43 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ Apr 2024 15:36:42 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 3 Apr 2024 15:36:43 -0500
+ Frontend Transport; Wed, 3 Apr 2024 15:36:42 -0500
 Received: from fllvsmtp8.itg.ti.com ([10.249.42.149])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 433KaYG7080324;
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 433KaYG5080324;
 	Wed, 3 Apr 2024 15:36:42 -0500
 From: Andrew Davis <afd@ti.com>
 To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
@@ -47,9 +47,9 @@ To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
 CC: <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Andrew
  Davis <afd@ti.com>
-Subject: [PATCH 26/31] hwmon: (thmc50) Remove use of i2c_match_id()
-Date: Wed, 3 Apr 2024 15:36:28 -0500
-Message-ID: <20240403203633.914389-27-afd@ti.com>
+Subject: [PATCH 24/31] hwmon: (sht3x) Remove use of i2c_match_id()
+Date: Wed, 3 Apr 2024 15:36:26 -0500
+Message-ID: <20240403203633.914389-25-afd@ti.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240403203633.914389-1-afd@ti.com>
 References: <20240403203633.914389-1-afd@ti.com>
@@ -79,31 +79,54 @@ This helper has a couple other benefits:
 
 Signed-off-by: Andrew Davis <afd@ti.com>
 ---
- drivers/hwmon/thmc50.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/hwmon/sht3x.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/hwmon/thmc50.c b/drivers/hwmon/thmc50.c
-index 68ba26bc90142..0cbdb91698b1f 100644
---- a/drivers/hwmon/thmc50.c
-+++ b/drivers/hwmon/thmc50.c
-@@ -377,8 +377,6 @@ static void thmc50_init_client(struct thmc50_data *data)
- 	i2c_smbus_write_byte_data(client, THMC50_REG_CONF, config);
+diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
+index c0d02fbcdb76c..650b0bcc2359e 100644
+--- a/drivers/hwmon/sht3x.c
++++ b/drivers/hwmon/sht3x.c
+@@ -882,15 +882,6 @@ static const struct hwmon_chip_info sht3x_chip_info = {
+ 	.info = sht3x_channel_info,
+ };
+ 
+-/* device ID table */
+-static const struct i2c_device_id sht3x_ids[] = {
+-	{"sht3x", sht3x},
+-	{"sts3x", sts3x},
+-	{}
+-};
+-
+-MODULE_DEVICE_TABLE(i2c, sht3x_ids);
+-
+ static int sht3x_probe(struct i2c_client *client)
+ {
+ 	int ret;
+@@ -920,7 +911,7 @@ static int sht3x_probe(struct i2c_client *client)
+ 	data->mode = 0;
+ 	data->last_update = jiffies - msecs_to_jiffies(3000);
+ 	data->client = client;
+-	data->chip_id = i2c_match_id(sht3x_ids, client)->driver_data;
++	data->chip_id = (uintptr_t)i2c_get_match_data(client);
+ 	crc8_populate_msb(sht3x_crc8_table, SHT3X_CRC8_POLYNOMIAL);
+ 
+ 	sht3x_select_command(data);
+@@ -963,6 +954,15 @@ static int sht3x_probe(struct i2c_client *client)
+ 	return PTR_ERR_OR_ZERO(hwmon_dev);
  }
  
--static const struct i2c_device_id thmc50_id[];
--
- static int thmc50_probe(struct i2c_client *client)
- {
- 	struct device *dev = &client->dev;
-@@ -391,7 +389,7 @@ static int thmc50_probe(struct i2c_client *client)
- 		return -ENOMEM;
- 
- 	data->client = client;
--	data->type = i2c_match_id(thmc50_id, client)->driver_data;
-+	data->type = (uintptr_t)i2c_get_match_data(client);
- 	mutex_init(&data->update_lock);
- 
- 	thmc50_init_client(data);
++/* device ID table */
++static const struct i2c_device_id sht3x_ids[] = {
++	{"sht3x", sht3x},
++	{"sts3x", sts3x},
++	{}
++};
++
++MODULE_DEVICE_TABLE(i2c, sht3x_ids);
++
+ static struct i2c_driver sht3x_i2c_driver = {
+ 	.driver.name = "sht3x",
+ 	.probe       = sht3x_probe,
 -- 
 2.39.2
 
