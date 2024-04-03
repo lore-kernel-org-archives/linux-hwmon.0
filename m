@@ -1,55 +1,55 @@
 Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D815B156F32;
-	Wed,  3 Apr 2024 20:37:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82D00156F45;
+	Wed,  3 Apr 2024 20:37:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712176625; cv=none; b=MrazafK7KYd9N/JVmzbtbvD6PBkK8jvInqWpKvRkRfcsCMbIglV1fmsrRdEH7xmS1QTMjRpaHl25hRvjtJeFeA3pLMvVlS/uHol1lkVVuahp4IQ+9lKjboIXWA8GdxqCipsvUmgv9QRKdgcb/6MBb4HIWfw9a1Coi3A2MrnTk9Y=
+	t=1712176625; cv=none; b=H9B3GxeZIqkmG+mCRzYU8dgD1vMkHx308zgtPLPTFMyiVllOYAbSD+M1ogst7BxZzdm0i4XHiaBiFgKQayBeckdTC2nU989kwTtWrRrWyoa6hzpjerZ4amKhbKEIIxDeE/zQ97ImmOoBayqlPAuwJzp7hkpsEN5U+2qclg1B8Ic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1712176625; c=relaxed/simple;
-	bh=vsxZuXPnc9LZp7BCFMmM+QmqhXEf9M6BtZ3xaM8AQYU=;
+	bh=dd77OrNZL5J3wZAkMZdRnvSHJ1xLyAd8ySxxVnUvM9M=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=eEhDExGvpQj2Y+09Lu115UuzVWVVLrYiMHL70RdvN3Tr1hlVK3g14BMIunWtZiN8L5TypVe+J0SaG5+RMVPFox272avZ5zeoVt247FPgHBbbxnRq6Fm2M8xRYkwXhmiEEhi93XyDLw8c3CNpIkKSOLzS7xNCfr+Z71KvPImTLgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=PhKum9/H; arc=none smtp.client-ip=198.47.23.249
+	 MIME-Version:Content-Type; b=hlRghMeqyhlnPhD6O47uZ64mnFdK+qDchcR5+VyGxm25BFMpk/F374Urr54aolvgbf/h1CbjYhDM+cMpTzhbnuvZis+JmvNHsUg0r8kZZnwNuZrILSxISS4sdF9F08Cr6kII1lAEhuYQdx7Uplps+xVJCH4hDlti9NOaQ2s71VA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=tL8k3L59; arc=none smtp.client-ip=198.47.23.249
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="PhKum9/H"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="tL8k3L59"
 Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 433Kacoo076306;
-	Wed, 3 Apr 2024 15:36:38 -0500
+	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 433Kaewl076324;
+	Wed, 3 Apr 2024 15:36:40 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1712176598;
-	bh=kfaADE72p/7wiRjfacJ24ecKgyHpfOb03uEZTqrrEyI=;
+	s=ti-com-17Q1; t=1712176600;
+	bh=6DEGN4nAIfd3RQhP5Fz/NRZUeXyTFS4FPVxxybZT31Y=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=PhKum9/HaX/Q+ZnVbMhWvJ50nDthzlGe8BHfu2nfrTZWke0xUIMAyTAZ+arUckQZU
-	 JZ0Bc7ykPDgTBHSjFj5sU0MnG68UNwwFr46/4QerZ4/KoSUCnBnw1yW3qFxzgeYf29
-	 hBmHJNWRyQy3bAc8yGSpAN3af2ucU2/aFKf3FNtU=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 433Kackn115245
+	b=tL8k3L59ZZ1D7VSEcLOL4NCYJmux4djtub4yGFuRjcY9tnfaNEwcLmGxJD+b8g2AI
+	 umXjc9WX6QfPA9Vj5fqHhA5HuMZvi7Ob1DpErhNLWj4BYFA0fiNH9cgyPUP6tB41uS
+	 0lqktePlPsiKlJK10bhfavwxwS+k1FAIw66GEag4=
+Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 433KaecH115284
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Wed, 3 Apr 2024 15:36:38 -0500
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+	Wed, 3 Apr 2024 15:36:40 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 3
- Apr 2024 15:36:37 -0500
+ Apr 2024 15:36:40 -0500
 Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE112.ent.ti.com
  (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 3 Apr 2024 15:36:37 -0500
+ Frontend Transport; Wed, 3 Apr 2024 15:36:40 -0500
 Received: from fllvsmtp8.itg.ti.com ([10.249.42.149])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 433KaYFo080324;
-	Wed, 3 Apr 2024 15:36:37 -0500
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 433KaYFx080324;
+	Wed, 3 Apr 2024 15:36:40 -0500
 From: Andrew Davis <afd@ti.com>
 To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
         Juerg Haefliger <juergh@proton.me>, Riku Voipio <riku.voipio@iki.fi>
 CC: <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Andrew
  Davis <afd@ti.com>
-Subject: [PATCH 09/31] hwmon: (f75375s) Remove use of i2c_match_id()
-Date: Wed, 3 Apr 2024 15:36:11 -0500
-Message-ID: <20240403203633.914389-10-afd@ti.com>
+Subject: [PATCH 18/31] hwmon: (lm95234) Remove use of i2c_match_id()
+Date: Wed, 3 Apr 2024 15:36:20 -0500
+Message-ID: <20240403203633.914389-19-afd@ti.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240403203633.914389-1-afd@ti.com>
 References: <20240403203633.914389-1-afd@ti.com>
@@ -79,80 +79,34 @@ This helper has a couple other benefits:
 
 Signed-off-by: Andrew Davis <afd@ti.com>
 ---
- drivers/hwmon/f75375s.c | 46 ++++++++++++++++++-----------------------
- 1 file changed, 20 insertions(+), 26 deletions(-)
+ drivers/hwmon/lm95234.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/hwmon/f75375s.c b/drivers/hwmon/f75375s.c
-index 8c572bb64f5dc..7e867f1324201 100644
---- a/drivers/hwmon/f75375s.c
-+++ b/drivers/hwmon/f75375s.c
-@@ -111,31 +111,6 @@ struct f75375_data {
- 	s8 temp_max_hyst[2];
- };
- 
--static int f75375_detect(struct i2c_client *client,
--			 struct i2c_board_info *info);
--static int f75375_probe(struct i2c_client *client);
--static void f75375_remove(struct i2c_client *client);
--
--static const struct i2c_device_id f75375_id[] = {
--	{ "f75373", f75373 },
--	{ "f75375", f75375 },
--	{ "f75387", f75387 },
--	{ }
--};
--MODULE_DEVICE_TABLE(i2c, f75375_id);
--
--static struct i2c_driver f75375_driver = {
--	.class = I2C_CLASS_HWMON,
--	.driver = {
--		.name = "f75375",
--	},
--	.probe = f75375_probe,
--	.remove = f75375_remove,
--	.id_table = f75375_id,
--	.detect = f75375_detect,
--	.address_list = normal_i2c,
--};
--
- static inline int f75375_read8(struct i2c_client *client, u8 reg)
- {
- 	return i2c_smbus_read_byte_data(client, reg);
-@@ -830,7 +805,7 @@ static int f75375_probe(struct i2c_client *client)
- 
- 	i2c_set_clientdata(client, data);
- 	mutex_init(&data->update_lock);
--	data->kind = i2c_match_id(f75375_id, client)->driver_data;
-+	data->kind = (uintptr_t)i2c_get_match_data(client);
- 
- 	err = sysfs_create_group(&client->dev.kobj, &f75375_group);
- 	if (err)
-@@ -901,6 +876,25 @@ static int f75375_detect(struct i2c_client *client,
+diff --git a/drivers/hwmon/lm95234.c b/drivers/hwmon/lm95234.c
+index 67b9d7636ee42..be00a374632d3 100644
+--- a/drivers/hwmon/lm95234.c
++++ b/drivers/hwmon/lm95234.c
+@@ -677,10 +677,9 @@ static int lm95234_init_client(struct i2c_client *client)
  	return 0;
  }
  
-+static const struct i2c_device_id f75375_id[] = {
-+	{ "f75373", f75373 },
-+	{ "f75375", f75375 },
-+	{ "f75387", f75387 },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, f75375_id);
-+
-+static struct i2c_driver f75375_driver = {
-+	.class = I2C_CLASS_HWMON,
-+	.driver = {
-+		.name = "f75375",
-+	},
-+	.probe = f75375_probe,
-+	.remove = f75375_remove,
-+	.id_table = f75375_id,
-+	.detect = f75375_detect,
-+	.address_list = normal_i2c,
-+};
- module_i2c_driver(f75375_driver);
+-static const struct i2c_device_id lm95234_id[];
+-
+ static int lm95234_probe(struct i2c_client *client)
+ {
++	enum chips type = (uintptr_t)i2c_get_match_data(client);
+ 	struct device *dev = &client->dev;
+ 	struct lm95234_data *data;
+ 	struct device *hwmon_dev;
+@@ -699,7 +698,7 @@ static int lm95234_probe(struct i2c_client *client)
+ 		return err;
  
- MODULE_AUTHOR("Riku Voipio");
+ 	data->groups[0] = &lm95234_common_group;
+-	if (i2c_match_id(lm95234_id, client)->driver_data == lm95234)
++	if (type == lm95234)
+ 		data->groups[1] = &lm95234_group;
+ 
+ 	hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
 -- 
 2.39.2
 
