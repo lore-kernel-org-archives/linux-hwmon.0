@@ -1,135 +1,109 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A7115E1FD;
-	Tue,  2 Apr 2024 22:17:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E51B15625F;
+	Wed,  3 Apr 2024 20:36:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712096256; cv=none; b=ATFVV97+EXf6evbGpQHv1EQkT8Ps0TuxUuS0+zpS/UqEwLW7qJAZM2FbjeJDlnlGUUnFmby86lgK1wzd/p1ROXqy33JOVp9/FXzb+vQBOzl7lhSVl6XBlCZGK7VS2BghlyyDCMt7JqrPw9nKLOksL+nh4fzzH2w1UMg3Gd+bRcI=
+	t=1712176618; cv=none; b=cAPkTXy7j/ed+TJMWRUzsqMj9DzlXSRccOdpSorw+uv1a8D4oL0gV/RZoXKZHOTg/EPbjGfE+bLXDwevZs7n6BK/wXPvCM35FYTiGixq7yhIerLsCqrkqT0OkRE2yIAIoUOcj0crXNwrqVkgzAdBL0W23Bqgn67NBm4Ca8cV/90=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712096256; c=relaxed/simple;
-	bh=I1SS2EYHeKThx7SBcEsrCukx4A/m3YQjVwFFscGKb7w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RVSbgpeBzDvx4Z0yx54sCoK/CvU9oX8Bw14yeZznt984G5xGIzgf6twhSPJ2QJBkXr0X/gv88AzBUtSl40q9tRJMhW1unh0LtySqzlkhKdLi2USH1jqJhou93e05Y8Nmna7K2cON03/mTaZydxSYo2N3EGputifIERuZJ9JcJ5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gRX11BvT; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1712176618; c=relaxed/simple;
+	bh=AmutkIMXoFoI+xlbdmM8YrB8Y5IthRp4+Pww6eKMnOk=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=PgvV06orn6oXVyAqPkkZhg+h39OSi9d7auL1eZiqsFNYe2u1wH3mWP880oWYfX4xrKOuXDF7PNLeICsrsDfGsAqjdyOc8oPxy4rCdGQbZdLXcoT7fZK9KzwqCvzxp9h60bTGZj36+4KdLs1hfIGO31iULqFe6awlI251VKJSrgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=vvTen/Kx; arc=none smtp.client-ip=198.47.23.249
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gRX11BvT"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6e7425a6714so4720479b3a.0;
-        Tue, 02 Apr 2024 15:17:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712096254; x=1712701054; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fYOqDUYU14d+HKeuMfI8yAvYETR9CFmfgJMPALruc3M=;
-        b=gRX11BvT/ecAERBJyuaeMbAbgpxbBK0/kK9qEolhuQPWeAfuYfrMonDXFi/JT7V+eq
-         jQbNcEhPW0eBNBycOflieSKLEdZXznaPwEyOL7F506J8WEpmgp+EbMGf+N7DYH07cY//
-         TE8g7oeZQZviTk6trhSI7UJUGMepBuEmZ2ZOG67/y1Q9cxUqLFxMeKpMl5e7qdVa730w
-         hT6YVkhsCuw5z0x8ehJyD3iBLxDD3g7L87zddeKEE2UD6t7NbA6Bfi7kPtV2HZ/TWkZ1
-         ljd/C+Mw51L3L9tVKPDCUSWSdHVuzJCxruUSDmEJ6N2CPDAuNnSWpgVp9VKgD0puD1L+
-         GX8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712096254; x=1712701054;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fYOqDUYU14d+HKeuMfI8yAvYETR9CFmfgJMPALruc3M=;
-        b=mrYlop1L0egnLClFY8UWYqLpbFlTS1F8innESx9G1SsI3cS/kv3Q350g1HgGDHkFFu
-         QokgVimUDLOK2Qt4OjR/3UnPLRZlay8/M3Xz8bqe/s3+VpewaVtR3PjmgJCwqOnqKbrk
-         NM5PIrfjWECoRGkh+a+KKnNE2AAcsZMG+Up+R4KL3RGK2yh5HTaKp/6wPx/4IVWY/ZmA
-         g5V0/OD5lvZKU3S8auv4oy/NEP8svw3u9H/0fj669wqwIR0m3uzSRxhAEP4qp+A1sB5s
-         0tWT3YpWIkoej+iK9lqcePAyRym+OGCxvqtxqniC96IEnsfs2Kd92Ig6mD/g/69nVICd
-         Retw==
-X-Forwarded-Encrypted: i=1; AJvYcCXk7fjCqcH8gDItP8htoXSjLZ+hpdhh4deSeJarsuTLgOe6gkcGNgjbOBNva1n5VAhImjQbL5EqsiX0fCPvNKKloj2xAFd4xygrmAmB/ptmMT1CzbyCzjJ1r5MXWJwbjwgQdvG4eGL6GAg=
-X-Gm-Message-State: AOJu0YyaEYFGaEkGMRzQ/zy1NcPLgq4m1fLxCheXrsZgd36/1pgX4rau
-	d2trnh8wd1CSwqpGLF3i9+i111zy1uxMcXmteiHMpR7ZhToDWKxq
-X-Google-Smtp-Source: AGHT+IFUuET2kH1Eihd9g4y1585pgzr2R9iU6IYcNA4yZUeVLHoWOnLqlugXCo0lssdNEZbcxPPvRQ==
-X-Received: by 2002:a05:6a00:9295:b0:6ea:ad01:354f with SMTP id jw21-20020a056a00929500b006eaad01354fmr14121172pfb.18.1712096254022;
-        Tue, 02 Apr 2024 15:17:34 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c21-20020aa78c15000000b006ea8c030c1esm10297976pfd.211.2024.04.02.15.17.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Apr 2024 15:17:33 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 2 Apr 2024 15:17:32 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc: "jdelvare@suse.com" <jdelvare@suse.com>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: hwmon: label vs temp%d_label
-Message-ID: <2dabfc85-3f87-4dfc-a7d4-9c11bc5b357e@roeck-us.net>
-References: <9a09bf46-d097-4e5b-bdb3-cc9dc6f5d01c@alliedtelesis.co.nz>
- <fdd952dd-2f3c-4f66-8e73-68f1dadde237@roeck-us.net>
- <448b5cfb-b433-4b38-98ae-066bda44f1fd@alliedtelesis.co.nz>
- <9f58389e-0eb6-4ff1-9152-aa38dbfc5f8b@alliedtelesis.co.nz>
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="vvTen/Kx"
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 433KaboY076297;
+	Wed, 3 Apr 2024 15:36:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1712176597;
+	bh=s0eXc4e7+KokmvhKQNCW52y6DVPW/nkE8HC0W8JHKPQ=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References;
+	b=vvTen/KxyPGjFL9as658R1PWVvcPs9oWzXISlI68wU0Ab07oVH/rhOKZO3RqBkDnX
+	 ZjCn5jC8Hf9cqfNJLyJN0FIGIT2RNGekPogARw1/IdX/ce2tGdJfZqYYoLaPf+Qg/Q
+	 LqLjep7zDyzrsgR4RxzM4/bkwn/zhNT/f//fwDnU=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 433Kabxt092362
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Wed, 3 Apr 2024 15:36:37 -0500
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 3
+ Apr 2024 15:36:37 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 3 Apr 2024 15:36:37 -0500
+Received: from fllvsmtp8.itg.ti.com ([10.249.42.149])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 433KaYFm080324;
+	Wed, 3 Apr 2024 15:36:36 -0500
+From: Andrew Davis <afd@ti.com>
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+        Juerg Haefliger <juergh@proton.me>, Riku Voipio <riku.voipio@iki.fi>
+CC: <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Andrew
+ Davis <afd@ti.com>
+Subject: [PATCH 07/31] hwmon: (dme1737) Remove use of i2c_match_id()
+Date: Wed, 3 Apr 2024 15:36:09 -0500
+Message-ID: <20240403203633.914389-8-afd@ti.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240403203633.914389-1-afd@ti.com>
+References: <20240403203633.914389-1-afd@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <9f58389e-0eb6-4ff1-9152-aa38dbfc5f8b@alliedtelesis.co.nz>
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-On Tue, Apr 02, 2024 at 09:57:44PM +0000, Chris Packham wrote:
-> 
-> On 3/04/24 10:22, Chris Packham wrote:
-> >
-> > On 3/04/24 09:59, Guenter Roeck wrote:
-> >> On Tue, Apr 02, 2024 at 08:24:37PM +0000, Chris Packham wrote:
-> >>> Hi Guenter, Jean,
-> >>>
-> >>> I've got a requirement to add some meaningful names to some hwmon
-> >>> sensors (LM75 specifically) so that we can provide some indication of
-> >>> where on a board the sensor is located (e.g. "Intake" vs "Exhaust" vs
-> >>> "Near that really hot chip").
-> >>>
-> >>> I see that the sysfs ABI documents both "label" for the chip and
-> >>> "temp[1-*]_label" (as well as similar fan and Vin attributes). The
-> >>> latter seem to be supported by the hwmon core but I don't see anything
-> >>> for the former (I'm struggling to find any driver that supports a
-> >>> chip-wide label).
-> >>>
-> >>> Assuming I want to have a label added in the device tree to a lm75 
-> >>> would
-> >>> something like the following be acceptable
-> >>>
-> >>>         sensor@48 {
-> >>>           compatible = "national,lm75";
-> >>>           reg = <0x48>;
-> >>>           label = "Intake";
-> >>>         };
-> >>>
-> >>> I'd then update the lm75 driver to grab that from the devicetree and 
-> >>> use
-> >>> it to provide the hwmon_temp_label attribute.
-> >>>
-> >> Have you tried just declaring the label property as you suggested above
-> >> in your system without doing anything else, and looked at the generated
-> >> sysfs attributes ?
-> >
-> > I have not. But in my defense I'm also using an older kernel LTS that 
-> > doesn't have commit e1c9d6d61ddf ("hwmon: Add "label" attribute"). But 
-> > now that I know it exists I can carry it as a local patch until we 
-> > next update.
-> 
-> Related is there an lm-sensors change that uses this attribute for 
-> display purposes?
-> 
-Sorry, I don't know. I stopped paying attention to the lm-sensors package
-a long time ago, and I don't know its status. I just don't have the time.
+The function i2c_match_id() is used to fetch the matching ID from
+the i2c_device_id table. This is often used to then retrieve the
+matching driver_data. This can be done in one step with the helper
+i2c_get_match_data().
 
-> I do have a couple of PRs open on the lm-sensors github project I'd like 
-> to see merged but given recent events this should absolutely not be 
-> construed as a criticism of anyone maintaining lm-sensors merely a query 
-> as to whether PRs are the right path for changes or if they should be 
-> sent to a mailing list somewhere.
-> 
-I have no idea, sorry.
+This helper has a couple other benefits:
+ * It doesn't need the i2c_device_id passed in so we do not need
+   to have that forward declared, allowing us to remove those or
+   move the i2c_device_id table down to its more natural spot
+   with the other module info.
+ * It also checks for device match data, which allows for OF and
+   ACPI based probing. That means we do not have to manually check
+   those first and can remove those checks.
 
-Guenter
+Signed-off-by: Andrew Davis <afd@ti.com>
+---
+ drivers/hwmon/dme1737.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/hwmon/dme1737.c b/drivers/hwmon/dme1737.c
+index 3dcef221041d0..1a9b28dc91e64 100644
+--- a/drivers/hwmon/dme1737.c
++++ b/drivers/hwmon/dme1737.c
+@@ -2461,8 +2461,6 @@ static int dme1737_i2c_detect(struct i2c_client *client,
+ 	return 0;
+ }
+ 
+-static const struct i2c_device_id dme1737_id[];
+-
+ static int dme1737_i2c_probe(struct i2c_client *client)
+ {
+ 	struct dme1737_data *data;
+@@ -2474,7 +2472,7 @@ static int dme1737_i2c_probe(struct i2c_client *client)
+ 		return -ENOMEM;
+ 
+ 	i2c_set_clientdata(client, data);
+-	data->type = i2c_match_id(dme1737_id, client)->driver_data;
++	data->type = (uintptr_t)i2c_get_match_data(client);
+ 	data->client = client;
+ 	data->name = client->name;
+ 	mutex_init(&data->update_lock);
+-- 
+2.39.2
+
