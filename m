@@ -1,55 +1,55 @@
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D567D158A24;
-	Wed,  3 Apr 2024 20:37:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB715158D87;
+	Wed,  3 Apr 2024 20:37:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712176637; cv=none; b=TQlHwD4akgVc04ljXIQeR8stZo4KcQXRbhV3u0/z4Jp+79ynsKy2X3MrG+c32JDQ26+ZVrGdW6s6CU87yjmfftPpgFsKT/HqJGBKr7WNswrWkwu72WrRhjg9RT0Kezb1HmdIVtK/qTqP4eEKIAT4Q/wTYu7djb4E2XZe5EkhiHQ=
+	t=1712176637; cv=none; b=U2HBZd5yJzI6fGQ82o0RVEZKz1WybijiH0x1/y5Tkh4I03OZy4NXTe9+8yysj6z5tLdx169FXaT1AnsIhOnh4ujzqRc3Bf5UzLy4+i+eEMoveE2P1oda5cSARLjjlQH4sdt7boiIfvUa86pEiu4dntF7h4WJlPphRcWu6tYA1BY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1712176637; c=relaxed/simple;
-	bh=DcJqhwHAqxnaGiAFyieMHYH+qxPUuLYnJBVlpdIApVw=;
+	bh=8ZbiHkNtTREjZIS3zJVAZlTb0yye+Fpji6a3bLedtUg=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FOPhatDrj6SviuVSkV+kfNV+gcCpRaraBPKu/qhVCUZxPcls0Nz0L1DyYyKwqPfhp8C7KzYQqtGaj3qPmi5Y+yyiPInxyr3j+dGh6VlwhMpL022cKpZvk7Xp7/kiPicl1+/pkWPlnfzvcOpZkzpeKUD+PpIC8HU0sQML18qx54s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=BYHPS/q5; arc=none smtp.client-ip=198.47.19.142
+	 MIME-Version:Content-Type; b=pTs5rAZt07zLedorNfFqq3WBuj+dzd7qWidtxD8qS5wMjdsqhU9MiGwEcPT/wg7MurwjrpvgRsZqyKSSDRS3Sls2ro/ofY03Py8qaQHs6yH8yFSEK3SSPN2AQheQtuqq21Xxbul6PuHLud+qtE5gYc4pDRMNrzpdhx+JCejqz3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=ldVQRhsg; arc=none smtp.client-ip=198.47.19.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="BYHPS/q5"
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 433Kaavv038522;
-	Wed, 3 Apr 2024 15:36:36 -0500
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="ldVQRhsg"
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 433Kad78076399;
+	Wed, 3 Apr 2024 15:36:39 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1712176596;
-	bh=vO3CrxDkXJKU7WHeaTF/07p+El0Cl3/7dNxjIIWuxBA=;
+	s=ti-com-17Q1; t=1712176599;
+	bh=FCV/jbQpi7sXWXYhHaR5JdV7Yoe0VOV9bhmOLCeXpUA=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=BYHPS/q5eT+Ouncd/sa3IE+mkOB3vVlJ0kGb5RNgWkreWy9AnATvYgsNKhL+N26pU
-	 eqzeM2tuKkOkC5PjEzkPWXR6lVI/HjCzQKk8kJg7GhyW72/NxY2dKhXtxvIRnatJJV
-	 Yab51GiQipZPPI2dDarbZshQXkoA3iQs6j1DxE/c=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 433Kaa4K000507
+	b=ldVQRhsgzIMgyomFMRaxK5n3+OxhPuTbY55tSmwnSSMf/oUDqLNVBgsOGZI+4u8vc
+	 kBGIt5oDjrwsxH/Dt1LPsq0eQJSt9ndo3sFB9tdkjQflBNa/OmXkk1FI//IP4VWCsH
+	 ilq5DmjqWxRd2zjFZ43LOZFVU2vIxQQvBiBZYq4g=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 433KadVo115271
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Wed, 3 Apr 2024 15:36:36 -0500
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+	Wed, 3 Apr 2024 15:36:39 -0500
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 3
- Apr 2024 15:36:36 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ Apr 2024 15:36:39 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 3 Apr 2024 15:36:36 -0500
+ Frontend Transport; Wed, 3 Apr 2024 15:36:39 -0500
 Received: from fllvsmtp8.itg.ti.com ([10.249.42.149])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 433KaYFj080324;
-	Wed, 3 Apr 2024 15:36:35 -0500
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 433KaYFu080324;
+	Wed, 3 Apr 2024 15:36:39 -0500
 From: Andrew Davis <afd@ti.com>
 To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
         Juerg Haefliger <juergh@proton.me>, Riku Voipio <riku.voipio@iki.fi>
 CC: <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Andrew
  Davis <afd@ti.com>
-Subject: [PATCH 04/31] hwmon: (ads7828) Remove use of i2c_match_id()
-Date: Wed, 3 Apr 2024 15:36:06 -0500
-Message-ID: <20240403203633.914389-5-afd@ti.com>
+Subject: [PATCH 15/31] hwmon: (lm83) Remove use of i2c_match_id()
+Date: Wed, 3 Apr 2024 15:36:17 -0500
+Message-ID: <20240403203633.914389-16-afd@ti.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240403203633.914389-1-afd@ti.com>
 References: <20240403203633.914389-1-afd@ti.com>
@@ -79,34 +79,50 @@ This helper has a couple other benefits:
 
 Signed-off-by: Andrew Davis <afd@ti.com>
 ---
- drivers/hwmon/ads7828.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ drivers/hwmon/lm83.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/hwmon/ads7828.c b/drivers/hwmon/ads7828.c
-index 809e830f52a6b..436637264056c 100644
---- a/drivers/hwmon/ads7828.c
-+++ b/drivers/hwmon/ads7828.c
-@@ -99,8 +99,6 @@ static const struct regmap_config ads2830_regmap_config = {
- 	.val_bits = 8,
- };
+diff --git a/drivers/hwmon/lm83.c b/drivers/hwmon/lm83.c
+index b333c9bde4e64..f800fe2ef18b8 100644
+--- a/drivers/hwmon/lm83.c
++++ b/drivers/hwmon/lm83.c
+@@ -417,13 +417,6 @@ static int lm83_detect(struct i2c_client *client,
+ 	return 0;
+ }
  
--static const struct i2c_device_id ads7828_device_ids[];
+-static const struct i2c_device_id lm83_id[] = {
+-	{ "lm83", lm83 },
+-	{ "lm82", lm82 },
+-	{ }
+-};
+-MODULE_DEVICE_TABLE(i2c, lm83_id);
 -
- static int ads7828_probe(struct i2c_client *client)
+ static int lm83_probe(struct i2c_client *client)
  {
  	struct device *dev = &client->dev;
-@@ -138,10 +136,7 @@ static int ads7828_probe(struct i2c_client *client)
- 		}
- 	}
+@@ -438,7 +431,7 @@ static int lm83_probe(struct i2c_client *client)
+ 	if (IS_ERR(data->regmap))
+ 		return PTR_ERR(data->regmap);
  
--	if (client->dev.of_node)
--		chip = (uintptr_t)of_device_get_match_data(&client->dev);
--	else
--		chip = i2c_match_id(ads7828_device_ids, client)->driver_data;
-+	chip = (uintptr_t)i2c_get_match_data(client);
+-	data->type = i2c_match_id(lm83_id, client)->driver_data;
++	data->type = (uintptr_t)i2c_get_match_data(client);
  
- 	/* Bound Vref with min/max values */
- 	vref_mv = clamp_val(vref_mv, ADS7828_EXT_VREF_MV_MIN,
+ 	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
+ 							 data, &lm83_chip_info, NULL);
+@@ -449,6 +442,13 @@ static int lm83_probe(struct i2c_client *client)
+  * Driver data (common to all clients)
+  */
+ 
++static const struct i2c_device_id lm83_id[] = {
++	{ "lm83", lm83 },
++	{ "lm82", lm82 },
++	{ }
++};
++MODULE_DEVICE_TABLE(i2c, lm83_id);
++
+ static struct i2c_driver lm83_driver = {
+ 	.class		= I2C_CLASS_HWMON,
+ 	.driver = {
 -- 
 2.39.2
 
