@@ -1,57 +1,66 @@
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB715158D87;
-	Wed,  3 Apr 2024 20:37:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FB6215667F;
+	Wed,  3 Apr 2024 21:31:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712176637; cv=none; b=U2HBZd5yJzI6fGQ82o0RVEZKz1WybijiH0x1/y5Tkh4I03OZy4NXTe9+8yysj6z5tLdx169FXaT1AnsIhOnh4ujzqRc3Bf5UzLy4+i+eEMoveE2P1oda5cSARLjjlQH4sdt7boiIfvUa86pEiu4dntF7h4WJlPphRcWu6tYA1BY=
+	t=1712179866; cv=none; b=G0OHbdUrQ/o2ZUN7FYEl3ByWZ1P6GP8poVVGjFmbDmoZZY8v1mjFhXbmqRZ0gd6tpCkALk/geuyJeN5WfRtMcRm4zcwuxHvRUw/WBPbRcYU26qvtXoyspv7eAs+Eb0sZYWHOhduaAqppVaqfuM/81/BWq9veCJCY5oNY7GRcKRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712176637; c=relaxed/simple;
-	bh=8ZbiHkNtTREjZIS3zJVAZlTb0yye+Fpji6a3bLedtUg=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pTs5rAZt07zLedorNfFqq3WBuj+dzd7qWidtxD8qS5wMjdsqhU9MiGwEcPT/wg7MurwjrpvgRsZqyKSSDRS3Sls2ro/ofY03Py8qaQHs6yH8yFSEK3SSPN2AQheQtuqq21Xxbul6PuHLud+qtE5gYc4pDRMNrzpdhx+JCejqz3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=ldVQRhsg; arc=none smtp.client-ip=198.47.19.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+	s=arc-20240116; t=1712179866; c=relaxed/simple;
+	bh=tKAe81m93DUX+Pe0O6nN/FdGfxyWXJ93yUEYPn0VMx0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XjVeEuOx0nYY5QVcMJsUPe5QyHlAo/zeBnHtLcQPtfM7Dw4/rkTLS13y0zLxSiuOWGARGRz+QAvMoW2ecMa4ORNUtJFJrJWiKrGR37/jYsWfV0Dn4SrKVxCbLLQ07OyTE4zwVjqI/brph8Exsp7qXN9yknzf2e2EkSGPSkCcU10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KRYEbEtZ; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="ldVQRhsg"
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 433Kad78076399;
-	Wed, 3 Apr 2024 15:36:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1712176599;
-	bh=FCV/jbQpi7sXWXYhHaR5JdV7Yoe0VOV9bhmOLCeXpUA=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=ldVQRhsgzIMgyomFMRaxK5n3+OxhPuTbY55tSmwnSSMf/oUDqLNVBgsOGZI+4u8vc
-	 kBGIt5oDjrwsxH/Dt1LPsq0eQJSt9ndo3sFB9tdkjQflBNa/OmXkk1FI//IP4VWCsH
-	 ilq5DmjqWxRd2zjFZ43LOZFVU2vIxQQvBiBZYq4g=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 433KadVo115271
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Wed, 3 Apr 2024 15:36:39 -0500
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 3
- Apr 2024 15:36:39 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 3 Apr 2024 15:36:39 -0500
-Received: from fllvsmtp8.itg.ti.com ([10.249.42.149])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 433KaYFu080324;
-	Wed, 3 Apr 2024 15:36:39 -0500
-From: Andrew Davis <afd@ti.com>
-To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
-        Juerg Haefliger <juergh@proton.me>, Riku Voipio <riku.voipio@iki.fi>
-CC: <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Andrew
- Davis <afd@ti.com>
-Subject: [PATCH 15/31] hwmon: (lm83) Remove use of i2c_match_id()
-Date: Wed, 3 Apr 2024 15:36:17 -0500
-Message-ID: <20240403203633.914389-16-afd@ti.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240403203633.914389-1-afd@ti.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KRYEbEtZ"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6ea8a0d1a05so997374b3a.1;
+        Wed, 03 Apr 2024 14:31:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712179864; x=1712784664; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=v+OVOftGyrkMfiseFAhySCoXpi6lnMzQVtXHkefv4+0=;
+        b=KRYEbEtZPh2lCTvtGDRUxPewQV6dQk8vfbIEObjcUvy10kTE5ld9m3UIhgQexJ6wGq
+         CN4lXDjAtOtooFwMS3xFIDZIBnY1ewBjoJJL6dGhPoRqSz3bW9bmCzlCdyDlqO3sbu7B
+         3cHU+0MMO/ndeWJ1w1dhWtQt4vgr2kwamVuovh56rgrOTToAeuv01Lzg4COTVAGrQlkv
+         21G9izoLlTDOZFb3Ea0ELoFqGYZJmRWY9C939AxQnbTE0howO5Aj6XUx8Vl9Vmj3vof3
+         1W7iY1NUdYJf7xmQy2lOU84iMNdQfbC36gGfnGudIILrHxfY82AUTyRDdswyrZUM9V/T
+         +zfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712179864; x=1712784664;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=v+OVOftGyrkMfiseFAhySCoXpi6lnMzQVtXHkefv4+0=;
+        b=SNFNzBG6cTZLKaDdy8mlTj0KSf9s365gqdJ1kOoGAwHLhofaDbWPqL2NDQc5+GscDe
+         YT4lGa1/amIwy80wF6ll9PPgokOyZjP6t20AqL38o9OOUPIbwzu+Nz9L6c9A5nEmRQ+k
+         45T7Fp6DdRufA0GCd6XoMHutUHVgX4rgvLFSUne5Tufa0ThECgNKciC5wMdIHedhBxaC
+         20N9kRObJQT/7OfVoDuKNzJowpm8BiE2B4UI77NAOyjNrwqsbTA8Uk66S/0Uo9UxpLR9
+         vAbIp3Jn+/RtzqM+bwLOuXeE6S4e7pxQ+5IE0yFEMqhd1cT+RlzxD8fVxt+J6XKqPIkr
+         fp+A==
+X-Forwarded-Encrypted: i=1; AJvYcCWS2PsYaRckDltVGfxvSXir+bfJNHZecaLOCv4LZDdnCIsaUkk+ZsYTKZ+G0gOwESnGtavI+FUPvpqhsOwbaV5HCGMchBKgiX6W7YNzE5TWBWQc7QkHdFFRYr+bq6KAabWl0WroVjAuTSw=
+X-Gm-Message-State: AOJu0Yz49H927ed303tTmdbecaJwP23n7is9XCRhe90V+x8BKWhIYb27
+	rXrieofpYVha8aJ9maNNMzIoAxlSkIw8r1gYV73dRk+e7L/yjKcW
+X-Google-Smtp-Source: AGHT+IH0CzecyhPovODsRO/XHWaimeNmFZriFnFeM28R0lcBCphA88X3csvxzy+T6N0oMiXHeYR/2w==
+X-Received: by 2002:a05:6a20:394a:b0:1a3:4bfb:2cb4 with SMTP id r10-20020a056a20394a00b001a34bfb2cb4mr1116536pzg.23.1712179862324;
+        Wed, 03 Apr 2024 14:31:02 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i21-20020aa787d5000000b006eaada3860dsm12203857pfo.200.2024.04.03.14.31.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Apr 2024 14:31:01 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 3 Apr 2024 14:30:59 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Andrew Davis <afd@ti.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Juerg Haefliger <juergh@proton.me>,
+	Riku Voipio <riku.voipio@iki.fi>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/31] Remove use of i2c_match_id in HWMON
+Message-ID: <0e43aa83-2e02-49e2-96b8-24cac0362a7b@roeck-us.net>
 References: <20240403203633.914389-1-afd@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -59,70 +68,31 @@ List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240403203633.914389-1-afd@ti.com>
 
-The function i2c_match_id() is used to fetch the matching ID from
-the i2c_device_id table. This is often used to then retrieve the
-matching driver_data. This can be done in one step with the helper
-i2c_get_match_data().
+On Wed, Apr 03, 2024 at 03:36:02PM -0500, Andrew Davis wrote:
+> Hello all,
+> 
+> Goal here is to remove the i2c_match_id() function from all drivers.
+> Using i2c_get_match_data() can simplify code and has some other
+> benefits described in the patches.
+> 
 
-This helper has a couple other benefits:
- * It doesn't need the i2c_device_id passed in so we do not need
-   to have that forward declared, allowing us to remove those or
-   move the i2c_device_id table down to its more natural spot
-   with the other module info.
- * It also checks for device match data, which allows for OF and
-   ACPI based probing. That means we do not have to manually check
-   those first and can remove those checks.
+The return value from i2c_match_id() is typically an integer (chip ID)
+starting with 0. Previously it has been claimed that this would be
+unacceptable for i2c_get_match_data(), and chip IDs were changed to start
+with 1. Commit ac0c26bae662 ("hwmon: (lm25066) Use i2c_get_match_data()")
+is an example. Either this series is wrong, or the previous claim that
+chip IDs (i.e., the content of .driver_data or .data) must not be 0 was
+wrong. Which one is it ? I find it very confusing that the chip type for
+some drivers now starts with 1 and for others with 0. Given that, I am not
+inclined to accept this series unless it is explained in detail why the
+chip type enum in, for example, drivers/hwmon/pmbus/lm25066.c has to start
+with one but is ok to start with 0 for all drivers affected by this
+series. Quite frankly, even if there is some kind of explanation, I am not
+sure if I am going to accept it because future driver developers won't
+know if they have to start chip types with 0 or 1.
 
-Signed-off-by: Andrew Davis <afd@ti.com>
----
- drivers/hwmon/lm83.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/hwmon/lm83.c b/drivers/hwmon/lm83.c
-index b333c9bde4e64..f800fe2ef18b8 100644
---- a/drivers/hwmon/lm83.c
-+++ b/drivers/hwmon/lm83.c
-@@ -417,13 +417,6 @@ static int lm83_detect(struct i2c_client *client,
- 	return 0;
- }
- 
--static const struct i2c_device_id lm83_id[] = {
--	{ "lm83", lm83 },
--	{ "lm82", lm82 },
--	{ }
--};
--MODULE_DEVICE_TABLE(i2c, lm83_id);
--
- static int lm83_probe(struct i2c_client *client)
- {
- 	struct device *dev = &client->dev;
-@@ -438,7 +431,7 @@ static int lm83_probe(struct i2c_client *client)
- 	if (IS_ERR(data->regmap))
- 		return PTR_ERR(data->regmap);
- 
--	data->type = i2c_match_id(lm83_id, client)->driver_data;
-+	data->type = (uintptr_t)i2c_get_match_data(client);
- 
- 	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
- 							 data, &lm83_chip_info, NULL);
-@@ -449,6 +442,13 @@ static int lm83_probe(struct i2c_client *client)
-  * Driver data (common to all clients)
-  */
- 
-+static const struct i2c_device_id lm83_id[] = {
-+	{ "lm83", lm83 },
-+	{ "lm82", lm82 },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, lm83_id);
-+
- static struct i2c_driver lm83_driver = {
- 	.class		= I2C_CLASS_HWMON,
- 	.driver = {
--- 
-2.39.2
-
+Guenter
