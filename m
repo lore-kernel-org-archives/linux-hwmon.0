@@ -1,272 +1,256 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 708B33D962;
-	Thu,  4 Apr 2024 12:47:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C83312D765
+	for <linux-hwmon@vger.kernel.org>; Thu,  4 Apr 2024 17:32:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712234846; cv=none; b=QN4P+TWhRfBIagIi72sG1vy9ejg9PmH+uR5C6D9LF01+Xi3h6UtHR/YtI4MmMBZ1/UD0F5vOWGVCrz+HKJ/5SlRXeZP2F1kX5QnnwKzBX4RWQ0A7bhGUuQU+VgP9e0HJm1Q+w0dcMCg1EeE0M+ZLCWeuTA0xBo+2KQHDFt96cvo=
+	t=1712251932; cv=none; b=jMIdY/oHcNmKBMzsSVFmeBWkqinuiBbkSqEWHNcbZhGkIWPVphN543mDP7az1PpPXXXt6f4EeJuGcSgYw/pMYAjL5wkz+bmHKKKcOX7J0rVL2sHIg5h+oLv9e6Wyh3iVflFnBQwsD8Hm8thHDx8qIQuROK+nlV4YSUyW633hMmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712234846; c=relaxed/simple;
-	bh=JK+SRQ7lxC4zze1xFlmhQU+Vm/XlFsu4ttkd9x9PAbk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=NpI9wVYGSwQxAzo1uua81Md5Irz5g5TRq4MXbJjtw3rlJ5m4SSxEJlEjP9psYmO2yabtR8eONRBHH54DqF4zDafAarH1QEzNPS68whFGdqffMc+Q3HhpS8HimZqEQ1PIvbN1MlJDlzNcGiL/fsMFRkbGqntHw865+g4xLyXzWAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=pj/K8K+t; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1712251932; c=relaxed/simple;
+	bh=RkIMiC/FHXUfydspC7uEssMufDnWJw/dmgJIlTmFvh4=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=BsEq5cEMRsmT3bsKyJLya4O4pa0phB1TI9QehqxmqS8gAGAUpt42eKKcahAF5dMfNMD1q31UQJXP1cihfKgApvr+WvYUO06LzmGuFYBLxs53j0UnoqqU89hhvhM+4jRh9e9vgXGnhTgdjTRkFHgzLV1VEnUMa60QmjxCzXkuHHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WbWeZ9hk; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="pj/K8K+t"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 434CaqVI003671;
-	Thu, 4 Apr 2024 12:47:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=0rr3D6Qiw+RtHa8yNHdQv3IwFyDBuayzsx/94z1LHdE=;
- b=pj/K8K+taKxMVpNgjMo95iIqBj32tyYJiYgyd69qd0Jf6Sb//SmKBLJLj4+vvPoX7d6R
- PbRV3TPPlFt/ga4lspgjCIt8jtYprWXhPdzhGQntuOA59L2Cs0voIy2Iz+1xxQ4A4JTk
- 9q9srUhbdOrfaGVQg0BYV6BMw/jbwXwq/H4edKAkWCcqbGnFoi/zcpsQwKnVG4rzmgSH
- 9MtnnQhTlTR3qHb2GZ3tXJY5y4muclM5St4Wo8ITPGXu9OodxeVmKoHjb1lRZI3rCQS8
- vJDoSUUZIZd2tvmhq1yEh0A9RN2HmXEId12A3pUhJOGOfNDMGvkCK4LoehKDVv2Mfwfh nA== 
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3x9ufbg5ek-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 04 Apr 2024 12:47:07 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 434A7DFQ003608;
-	Thu, 4 Apr 2024 12:47:06 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3x9epyc5a0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 04 Apr 2024 12:47:06 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 434Cl1mu15204748
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 4 Apr 2024 12:47:03 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2839E2004B;
-	Thu,  4 Apr 2024 12:47:01 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id EFC942005A;
-	Thu,  4 Apr 2024 12:47:00 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu,  4 Apr 2024 12:47:00 +0000 (GMT)
-From: Niklas Schnelle <schnelle@linux.ibm.com>
-To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>, linux-kernel@vger.kernel.org,
-        Niklas Schnelle <schnelle@linux.ibm.com>
-Subject: [PATCH 1/1] hwmon: add HAS_IOPORT dependencies
-Date: Thu,  4 Apr 2024 14:47:00 +0200
-Message-Id: <20240404124700.3807842-2-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20240404124700.3807842-1-schnelle@linux.ibm.com>
-References: <20240404124700.3807842-1-schnelle@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WbWeZ9hk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712251930; x=1743787930;
+  h=date:from:to:cc:subject:message-id;
+  bh=RkIMiC/FHXUfydspC7uEssMufDnWJw/dmgJIlTmFvh4=;
+  b=WbWeZ9hkyYPpLrJJAYVOJ6C6nI92g7nZ4IVGMfCEHqH+hg36fYBesRF0
+   2TiQXi5zyh7kSoM53Pqi37ajpitLNgZ9wiOnDBFccuEfPmTAPxUlhsspH
+   z69PZeDbL8aNwoSUTCLyeLuBddvMe2d1PdK9NnfRnTtwW/J0QXefSaDbE
+   BZGVEuXdYQzLq1y9IMleJoE+USaAriAA6uOnH/ZfdPGF+Q6CDt5O0NSMi
+   4iTCsg4hJ8rqWI6DoKkD7KN4LE12B7Jzu2VTypZv2o3RNy3MTt9nAEt64
+   PCuiftxAFvgReHjTpTby6duKGFh3LRkxKaOmp3/t9GlKR1RExCcJwvsRk
+   w==;
+X-CSE-ConnectionGUID: /fKDuhgASbyiPJi9eyY/3w==
+X-CSE-MsgGUID: jYaZAriHRNOBag6/HbPGZQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11034"; a="8132411"
+X-IronPort-AV: E=Sophos;i="6.07,179,1708416000"; 
+   d="scan'208";a="8132411"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2024 10:32:03 -0700
+X-CSE-ConnectionGUID: f+PffGQDQRe0s2Rfd/6m1Q==
+X-CSE-MsgGUID: JxkMx7FuS1GblT9vUiop8Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,179,1708416000"; 
+   d="scan'208";a="50098188"
+Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 04 Apr 2024 10:32:02 -0700
+Received: from kbuild by e61807b1d151 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rsQwS-0001K0-08;
+	Thu, 04 Apr 2024 17:32:00 +0000
+Date: Fri, 05 Apr 2024 01:31:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:kunit] BUILD SUCCESS
+ 6c54c26f836adc7b45e4f1a63134b41396db00c8
+Message-ID: <202404050127.5XborCEO-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: uoqSBvazmkpC5_uaMOi0eznMz4vRNVYp
-X-Proofpoint-ORIG-GUID: uoqSBvazmkpC5_uaMOi0eznMz4vRNVYp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-04_08,2024-04-04_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 suspectscore=0 spamscore=0 mlxlogscore=946 clxscore=1011
- priorityscore=1501 bulkscore=0 adultscore=0 impostorscore=0 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2404010000 definitions=main-2404040087
 
-In a future patch HAS_IOPORT=n will disable inb()/outb() and friends at
-compile time. We thus need to add HAS_IOPORT as dependency for those
-drivers using them.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git kunit
+branch HEAD: 6c54c26f836adc7b45e4f1a63134b41396db00c8  powerpc: Add support for suppressing warning backtraces
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
----
-Note: This patch does not depend any not-yet-mainline HAS_IOPORT changes
-and may be merged via subsystem specific trees at your earliest
-convenience.
+elapsed time: 1111m
 
- drivers/hwmon/Kconfig | 25 ++++++++++++++++++++-----
- 1 file changed, 20 insertions(+), 5 deletions(-)
+configs tested: 179
+configs skipped: 3
 
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 83945397b6eb..caacc4057e82 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -40,7 +40,7 @@ comment "Native drivers"
- 
- config SENSORS_ABITUGURU
- 	tristate "Abit uGuru (rev 1 & 2)"
--	depends on (X86 && DMI) || COMPILE_TEST
-+	depends on (X86 && DMI) || COMPILE_TEST && HAS_IOPORT
- 	help
- 	  If you say yes here you get support for the sensor part of the first
- 	  and second revision of the Abit uGuru chip. The voltage and frequency
-@@ -55,7 +55,7 @@ config SENSORS_ABITUGURU
- 
- config SENSORS_ABITUGURU3
- 	tristate "Abit uGuru (rev 3)"
--	depends on (X86 && DMI) || COMPILE_TEST
-+	depends on (X86 && DMI) || COMPILE_TEST && HAS_IOPORT
- 	help
- 	  If you say yes here you get support for the sensor part of the
- 	  third revision of the Abit uGuru chip. Only reading the sensors
-@@ -611,6 +611,7 @@ config SENSORS_SPARX5
- 
- config SENSORS_F71805F
- 	tristate "Fintek F71805F/FG, F71806F/FG and F71872F/FG"
-+	depends on HAS_IOPORT
- 	depends on !PPC
- 	help
- 	  If you say yes here you get support for hardware monitoring
-@@ -622,6 +623,7 @@ config SENSORS_F71805F
- 
- config SENSORS_F71882FG
- 	tristate "Fintek F71882FG and compatibles"
-+	depends on HAS_IOPORT
- 	depends on !PPC
- 	help
- 	  If you say yes here you get support for hardware monitoring
-@@ -854,6 +856,7 @@ config SENSORS_CORETEMP
- 
- config SENSORS_IT87
- 	tristate "ITE IT87xx and compatibles"
-+	depends on HAS_IOPORT
- 	depends on !PPC
- 	select HWMON_VID
- 	help
-@@ -1561,6 +1564,7 @@ config SENSORS_LM95245
- 
- config SENSORS_PC87360
- 	tristate "National Semiconductor PC87360 family"
-+	depends on HAS_IOPORT
- 	depends on !PPC
- 	select HWMON_VID
- 	help
-@@ -1575,6 +1579,7 @@ config SENSORS_PC87360
- 
- config SENSORS_PC87427
- 	tristate "National Semiconductor PC87427"
-+	depends on HAS_IOPORT
- 	depends on !PPC
- 	help
- 	  If you say yes here you get access to the hardware monitoring
-@@ -1606,6 +1611,7 @@ config SENSORS_NTC_THERMISTOR
- 
- config SENSORS_NCT6683
- 	tristate "Nuvoton NCT6683D"
-+	depends on HAS_IOPORT
- 	depends on !PPC
- 	help
- 	  If you say yes here you get support for the hardware monitoring
-@@ -1627,6 +1633,7 @@ config SENSORS_NCT6775_CORE
- 
- config SENSORS_NCT6775
- 	tristate "Platform driver for Nuvoton NCT6775F and compatibles"
-+	depends on HAS_IOPORT
- 	depends on !PPC
- 	depends on ACPI || ACPI=n
- 	select HWMON_VID
-@@ -1883,7 +1890,7 @@ config SENSORS_SHTC1
- 
- config SENSORS_SIS5595
- 	tristate "Silicon Integrated Systems Corp. SiS5595"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	help
- 	  If you say yes here you get support for the integrated sensors in
- 	  SiS5595 South Bridges.
-@@ -1903,6 +1910,7 @@ config SENSORS_SY7636A
- 
- config SENSORS_DME1737
- 	tristate "SMSC DME1737, SCH311x and compatibles"
-+	depends on HAS_IOPORT
- 	depends on I2C && !PPC
- 	select HWMON_VID
- 	help
-@@ -1959,6 +1967,7 @@ config SENSORS_EMC6W201
- 
- config SENSORS_SMSC47M1
- 	tristate "SMSC LPC47M10x and compatibles"
-+	depends on HAS_IOPORT
- 	depends on !PPC
- 	help
- 	  If you say yes here you get support for the integrated fan
-@@ -1993,6 +2002,7 @@ config SENSORS_SMSC47M192
- 
- config SENSORS_SMSC47B397
- 	tristate "SMSC LPC47B397-NC"
-+	depends on HAS_IOPORT
- 	depends on !PPC
- 	help
- 	  If you say yes here you get support for the SMSC LPC47B397-NC
-@@ -2007,6 +2017,7 @@ config SENSORS_SCH56XX_COMMON
- 
- config SENSORS_SCH5627
- 	tristate "SMSC SCH5627"
-+	depends on HAS_IOPORT
- 	depends on !PPC && WATCHDOG
- 	select SENSORS_SCH56XX_COMMON
- 	select WATCHDOG_CORE
-@@ -2020,6 +2031,7 @@ config SENSORS_SCH5627
- 
- config SENSORS_SCH5636
- 	tristate "SMSC SCH5636"
-+	depends on HAS_IOPORT
- 	depends on !PPC && WATCHDOG
- 	select SENSORS_SCH56XX_COMMON
- 	select WATCHDOG_CORE
-@@ -2272,7 +2284,7 @@ config SENSORS_VIA_CPUTEMP
- 
- config SENSORS_VIA686A
- 	tristate "VIA686A"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	help
- 	  If you say yes here you get support for the integrated sensors in
- 	  Via 686A/B South Bridges.
-@@ -2282,6 +2294,7 @@ config SENSORS_VIA686A
- 
- config SENSORS_VT1211
- 	tristate "VIA VT1211"
-+	depends on HAS_IOPORT
- 	depends on !PPC
- 	select HWMON_VID
- 	help
-@@ -2293,7 +2306,7 @@ config SENSORS_VT1211
- 
- config SENSORS_VT8231
- 	tristate "VIA VT8231"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	select HWMON_VID
- 	help
- 	  If you say yes here then you get support for the integrated sensors
-@@ -2401,6 +2414,7 @@ config SENSORS_W83L786NG
- 
- config SENSORS_W83627HF
- 	tristate "Winbond W83627HF, W83627THF, W83637HF, W83687THF, W83697HF"
-+	depends on HAS_IOPORT
- 	depends on !PPC
- 	select HWMON_VID
- 	help
-@@ -2413,6 +2427,7 @@ config SENSORS_W83627HF
- 
- config SENSORS_W83627EHF
- 	tristate "Winbond W83627EHF/EHG/DHG/UHG, W83667HG"
-+	depends on HAS_IOPORT
- 	depends on !PPC
- 	select HWMON_VID
- 	help
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20240404   gcc  
+arc                   randconfig-002-20240404   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   clang
+arm                              allyesconfig   gcc  
+arm                                 defconfig   clang
+arm                            mmp2_defconfig   gcc  
+arm                   randconfig-001-20240404   gcc  
+arm                   randconfig-002-20240404   gcc  
+arm                   randconfig-003-20240404   clang
+arm                   randconfig-004-20240404   clang
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20240404   gcc  
+arm64                 randconfig-002-20240404   gcc  
+arm64                 randconfig-003-20240404   clang
+arm64                 randconfig-004-20240404   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20240404   gcc  
+csky                  randconfig-002-20240404   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+hexagon               randconfig-001-20240404   clang
+hexagon               randconfig-002-20240404   clang
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20240404   gcc  
+i386         buildonly-randconfig-002-20240404   clang
+i386         buildonly-randconfig-003-20240404   clang
+i386         buildonly-randconfig-004-20240404   gcc  
+i386         buildonly-randconfig-005-20240404   clang
+i386         buildonly-randconfig-006-20240404   gcc  
+i386                                defconfig   clang
+i386                  randconfig-001-20240404   gcc  
+i386                  randconfig-002-20240404   clang
+i386                  randconfig-003-20240404   clang
+i386                  randconfig-004-20240404   gcc  
+i386                  randconfig-005-20240404   clang
+i386                  randconfig-006-20240404   clang
+i386                  randconfig-011-20240404   gcc  
+i386                  randconfig-012-20240404   clang
+i386                  randconfig-013-20240404   gcc  
+i386                  randconfig-014-20240404   clang
+i386                  randconfig-015-20240404   gcc  
+i386                  randconfig-016-20240404   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                        allyesconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20240404   gcc  
+loongarch             randconfig-002-20240404   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                     cu1830-neo_defconfig   gcc  
+nios2                         3c120_defconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20240404   gcc  
+nios2                 randconfig-002-20240404   gcc  
+openrisc                         allmodconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                randconfig-001-20240404   gcc  
+parisc                randconfig-002-20240404   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc                     kmeter1_defconfig   gcc  
+powerpc                         ps3_defconfig   gcc  
+powerpc               randconfig-001-20240404   gcc  
+powerpc               randconfig-002-20240404   gcc  
+powerpc               randconfig-003-20240404   clang
+powerpc                    socrates_defconfig   gcc  
+powerpc64             randconfig-001-20240404   gcc  
+powerpc64             randconfig-002-20240404   clang
+powerpc64             randconfig-003-20240404   clang
+riscv                            allmodconfig   clang
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   clang
+riscv                               defconfig   clang
+riscv                 randconfig-001-20240404   clang
+riscv                 randconfig-002-20240404   clang
+s390                             allmodconfig   clang
+s390                              allnoconfig   clang
+s390                             allyesconfig   gcc  
+s390                                defconfig   clang
+s390                  randconfig-001-20240404   gcc  
+s390                  randconfig-002-20240404   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                         apsh4a3a_defconfig   gcc  
+sh                                  defconfig   gcc  
+sh                    randconfig-001-20240404   gcc  
+sh                    randconfig-002-20240404   gcc  
+sh                          rsk7201_defconfig   gcc  
+sh                          rsk7264_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64               randconfig-001-20240404   gcc  
+sparc64               randconfig-002-20240404   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   gcc  
+um                                  defconfig   clang
+um                             i386_defconfig   gcc  
+um                    randconfig-001-20240404   clang
+um                    randconfig-002-20240404   clang
+um                           x86_64_defconfig   clang
+x86_64                            allnoconfig   clang
+x86_64                           allyesconfig   clang
+x86_64       buildonly-randconfig-001-20240404   gcc  
+x86_64       buildonly-randconfig-002-20240404   gcc  
+x86_64       buildonly-randconfig-003-20240404   gcc  
+x86_64       buildonly-randconfig-004-20240404   clang
+x86_64       buildonly-randconfig-005-20240404   clang
+x86_64       buildonly-randconfig-006-20240404   clang
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20240404   clang
+x86_64                randconfig-002-20240404   gcc  
+x86_64                randconfig-003-20240404   clang
+x86_64                randconfig-004-20240404   gcc  
+x86_64                randconfig-005-20240404   gcc  
+x86_64                randconfig-006-20240404   gcc  
+x86_64                randconfig-011-20240404   clang
+x86_64                randconfig-012-20240404   clang
+x86_64                randconfig-013-20240404   clang
+x86_64                randconfig-014-20240404   clang
+x86_64                randconfig-015-20240404   gcc  
+x86_64                randconfig-016-20240404   gcc  
+x86_64                randconfig-071-20240404   gcc  
+x86_64                randconfig-072-20240404   clang
+x86_64                randconfig-073-20240404   clang
+x86_64                randconfig-074-20240404   gcc  
+x86_64                randconfig-075-20240404   clang
+x86_64                randconfig-076-20240404   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                            allnoconfig   gcc  
+xtensa                           allyesconfig   gcc  
+xtensa                generic_kc705_defconfig   gcc  
+xtensa                randconfig-001-20240404   gcc  
+xtensa                randconfig-002-20240404   gcc  
+
 -- 
-2.40.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
