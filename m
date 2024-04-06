@@ -1,145 +1,123 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 997F8EEB3;
-	Sat,  6 Apr 2024 00:58:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 844AB374EB;
+	Sat,  6 Apr 2024 13:17:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712365097; cv=none; b=rXmNcE/SWbdeX81V+qJ754O4cYsWCRLLszTUj6V8x91lqmGm8hwPSM0yzbhgj01IjdwhLECQ0ouVA/HGyJQilaE2IVqAqnzP606Y4x5WGNLizeeFLNUmYw6w/pYc1/HfJ5yvIp/S7dpEX+75xzTbRqwomaM2XJ2/5Apeh3m0fhE=
+	t=1712409430; cv=none; b=iDY94o5Q3DHSS3SmBjMTn/aMFYmJM/tSeHF7TMno4GxhBK++DKKdd/PbyFkiixWoq/jDIz3TGyYkSR9siS09qlrcVzDgkWpcfzMmeYEa0g8T8OOWqZYGWbqQgjayqVNJLED5m7D8FJDsFQzZZ195c0Dnz7I0irArw29mHMV5Pxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712365097; c=relaxed/simple;
-	bh=LvJf7IpSrSk0ODEovUEZymwOVnvp4IWE/x7bmgvJpPE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=U+fOkC29Vuns77v3UKs5A1flwKDO/R451LNe1iPUmY5ZmkTB4oPXd+GwmC+1j9FRurTmRIi6UNZuhrjHjxM2SqjbeoANxeigV6aqXnKgosyHcxA6MVybIvNHp7bGihVaejROyUNmsVDy0iG7U8ntPiKUAe7joG0Wf6UB9XXVulI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K1yIZBdG; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1712409430; c=relaxed/simple;
+	bh=VJJCSOf/JvpxykJNws5kwPDmUfdpbC4X42YTE2K1AUE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pMcGPeJ5w8nm178ZKa2GylL3KNj5G1j4ZeBtK1Scrz4exuJC8Mw49HQNtfsuUAOSwHZBiHKq7l+IGHOyaMZUHWxTo/beSXAmRAgO1c0Vd+Zj4ilZfE6RoqE5CKAc0jRSjE8Rbcios3cmbAxBFf63upc4w9YPfxWv5z1BZ37MFnk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TOM9kjRm; arc=none smtp.client-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K1yIZBdG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712365096; x=1743901096;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=LvJf7IpSrSk0ODEovUEZymwOVnvp4IWE/x7bmgvJpPE=;
-  b=K1yIZBdG+7sjaUxlEtCVrl/Jd9PdI9efY/1LbaDTQ28msICnTRK9I3S3
-   wkE8P1uXl8h/xtSg00C8u9h75ff/cIrczBa7bE3AIYEuza5iblNGHaVQM
-   Cr6atgtxrWYPt8ceGjebeUgLVEEvkC4O93hj2VKEHQfkVfMwO0TFIEwQS
-   w3TwPvGKm9YankUjsoRJhtWJbidjiaQ6HgWOC5IZMcPTV3GrPsgVOkUyr
-   DCRIlEu1B7Ci7pOJ8Hhdgu8T6z5RXSdoUz6ipl4b1YSx6TJvUbgenSC6g
-   cfsKneobfK/2NYLhkFSZvjMg8ka2pBhqAzJBPuGXR3eZRnMgpuO/NynFx
-   w==;
-X-CSE-ConnectionGUID: /9cJtAYFSG+8mHGkSNXjRA==
-X-CSE-MsgGUID: m7LQNKegR8aYfHo8NTTxVQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11035"; a="25153884"
-X-IronPort-AV: E=Sophos;i="6.07,182,1708416000"; 
-   d="scan'208";a="25153884"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2024 17:58:12 -0700
-X-CSE-ConnectionGUID: pysUpNznTUKUAfBlXx2RyQ==
-X-CSE-MsgGUID: xTKN75TDQoyumuzIHGfrAg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,182,1708416000"; 
-   d="scan'208";a="19252369"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orviesa009.jf.intel.com with ESMTP; 05 Apr 2024 17:58:12 -0700
-From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TOM9kjRm"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2a3095907ffso1186996a91.0;
+        Sat, 06 Apr 2024 06:17:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712409428; x=1713014228; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DzKx5rEfU8Mn0ywULn1KY41VZeJws0/wMPTNdGwCnF4=;
+        b=TOM9kjRm/lmt1lD5AucveB5G83IOwHByyD8XszdjuUg0WWOnffoSc1Qj16bTZLvRQQ
+         bfQfphXoVa6FuoPY9fhoUFSF9DqXXA9J2RJ89oRuUylx/uXV7WKOg1bCKvszDtf08DFY
+         jIusal6h2lQWtsMnjSb/GGU405nZmWNlfMs3rmhaS4je0E+0CltQoiycBHjJObf5qlfk
+         LBV3R4E2G6PbA4CN4FLUq+T+BxZWbggWNpcPgvKe48H78n2nUqYULKQYAiT1KGRVjqvl
+         FHCRLoBUrYPb99+KyANUsLTik9+jFEcyc3ml/mxJik3VDL1ZSUWUeIH5QTQo8fBypB/T
+         0ZiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712409428; x=1713014228;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DzKx5rEfU8Mn0ywULn1KY41VZeJws0/wMPTNdGwCnF4=;
+        b=v2hQFUyL1VlGO6tU5tSGs6xzO8G1wzK4UA15H5hQNtzgGkNmMOnCuV55a9+UjgeuOl
+         GEVSbVLir/Ysp44J3aAwyIqUlWTuK3dUGuDK4+MvYv2ULuhUhzMsehPXoPSotBmtj/3E
+         7H+0kJ5uAFIUhJfy1bikE/C+jS+BbX/ezKJCxqA4SYkvqp5+uTwwpH2auLUxZmsG+WJI
+         9DCx44Vg/7KFKZwyByX3yo3PviepNVdS7Gf6T8kfScQT/dYIVDjH6ZR5x8Yx/ECd7xT2
+         z/ulzX99tIrdA2inDzGSfU/Rz34EgOEDbnVEsmnpT1qBBanCFgqan4pna8V9z5KnJdUg
+         i4Iw==
+X-Forwarded-Encrypted: i=1; AJvYcCWvoBImOI1MG1IEkwm6YO+IduGGHiURhI8GhvgV0z+z0O/MKUH4RE2kjwzgkNZMiy/ZL0Vze8j7B1ZgOhg4xNzVrG3wEnNDjNkXH4Z32/r80Fn5BFhl1cdeWRFlNj+plC8wCk5H7FDGAhHxcDSO9f8M+pe49ZN6NCIccqq0lHXyYu7vLg==
+X-Gm-Message-State: AOJu0Yw4zOgebtiOyN31mkvFgpSprwB0GRujmOCaKGxtl/rpCdE+Obbu
+	wVVXJBWqg1QGPpCtFRfMkVShiUVN4pIymkZFE5I12biKby/SJM4q
+X-Google-Smtp-Source: AGHT+IGtrbyINl2CLwezwEj0RKyyXObl5s3LgTlCnH0C8D9V33PuxQi7dGzGBDmI/RYzBthjjTgsTg==
+X-Received: by 2002:a17:90a:72c4:b0:2a0:3a16:7489 with SMTP id l4-20020a17090a72c400b002a03a167489mr3200611pjk.44.1712409427904;
+        Sat, 06 Apr 2024 06:17:07 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j1-20020a17090a588100b002a29e717991sm4911802pji.22.2024.04.06.06.17.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 Apr 2024 06:17:06 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Sat, 6 Apr 2024 06:17:06 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+	Zhang Rui <rui.zhang@intel.com>, Jean Delvare <jdelvare@suse.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
 	Lukasz Luba <lukasz.luba@arm.com>,
 	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	linux-pm@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Ricardo Neri <ricardo.neri@intel.com>
-Subject: [PATCH 3/3] hwmon: (coretemp) Use a model-specific bitmask to read registers
-Date: Fri,  5 Apr 2024 18:04:16 -0700
-Message-Id: <20240406010416.4821-4-ricardo.neri-calderon@linux.intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20240406010416.4821-1-ricardo.neri-calderon@linux.intel.com>
+	linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Ricardo Neri <ricardo.neri@intel.com>
+Subject: Re: [PATCH 3/3] hwmon: (coretemp) Use a model-specific bitmask to
+ read registers
+Message-ID: <f4d18a63-c348-4882-897b-dc636feb149b@roeck-us.net>
 References: <20240406010416.4821-1-ricardo.neri-calderon@linux.intel.com>
+ <20240406010416.4821-4-ricardo.neri-calderon@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240406010416.4821-4-ricardo.neri-calderon@linux.intel.com>
 
-The Intel Software Development manual defines states the temperature
-digital readout as the bits [22:16] of the IA32_[PACKAGE]_THERM_STATUS
-registers. In recent processor, however, the range is [23:16]. Use a
-model-specific bitmask to extract the temperature readout correctly.
+On Fri, Apr 05, 2024 at 06:04:16PM -0700, Ricardo Neri wrote:
+> The Intel Software Development manual defines states the temperature
+> digital readout as the bits [22:16] of the IA32_[PACKAGE]_THERM_STATUS
+> registers. In recent processor, however, the range is [23:16]. Use a
+> model-specific bitmask to extract the temperature readout correctly.
+> 
+> Instead of re-implementing model checks, extract the correct bitmask
+> using the intel_tcc library. Add an 'imply' weak reverse dependency on
+> CONFIG_INTEL_TCC. This captures the dependency and lets user to unselect
+> them if they are so inclined. In such case, the bitmask used for the
+> digital readout is [22:16] as specified in the Intel Software Developer's
+> manual.
+> 
+> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> ---
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Lukasz Luba <lukasz.luba@arm.com>
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: linux-hwmon@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: stable@vger.kernel.org # v6.7+
+> ---
+>  drivers/hwmon/Kconfig    | 1 +
+>  drivers/hwmon/coretemp.c | 6 +++++-
+>  2 files changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 83945397b6eb..11d72b3009bf 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -847,6 +847,7 @@ config SENSORS_I5500
+>  config SENSORS_CORETEMP
+>  	tristate "Intel Core/Core2/Atom temperature sensor"
+>  	depends on X86
+> +	imply INTEL_TCC
 
-Instead of re-implementing model checks, extract the correct bitmask
-using the intel_tcc library. Add an 'imply' weak reverse dependency on
-CONFIG_INTEL_TCC. This captures the dependency and lets user to unselect
-them if they are so inclined. In such case, the bitmask used for the
-digital readout is [22:16] as specified in the Intel Software Developer's
-manual.
+I do not think it is appropriate to make a hardware monitoring driver
+depend on the thermal subsystem.
 
-Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
----
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Lukasz Luba <lukasz.luba@arm.com>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: linux-hwmon@vger.kernel.org
-Cc: linux-pm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: stable@vger.kernel.org # v6.7+
----
- drivers/hwmon/Kconfig    | 1 +
- drivers/hwmon/coretemp.c | 6 +++++-
- 2 files changed, 6 insertions(+), 1 deletion(-)
+NAK in the current form.
 
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 83945397b6eb..11d72b3009bf 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -847,6 +847,7 @@ config SENSORS_I5500
- config SENSORS_CORETEMP
- 	tristate "Intel Core/Core2/Atom temperature sensor"
- 	depends on X86
-+	imply INTEL_TCC
- 	help
- 	  If you say yes here you get support for the temperature
- 	  sensor inside your CPU. Most of the family 6 CPUs
-diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-index 616bd1a5b864..5632e1b1dfb1 100644
---- a/drivers/hwmon/coretemp.c
-+++ b/drivers/hwmon/coretemp.c
-@@ -17,6 +17,7 @@
- #include <linux/sysfs.h>
- #include <linux/hwmon-sysfs.h>
- #include <linux/err.h>
-+#include <linux/intel_tcc.h>
- #include <linux/mutex.h>
- #include <linux/list.h>
- #include <linux/platform_device.h>
-@@ -404,6 +405,8 @@ static ssize_t show_temp(struct device *dev,
- 	tjmax = get_tjmax(tdata, dev);
- 	/* Check whether the time interval has elapsed */
- 	if (time_after(jiffies, tdata->last_updated + HZ)) {
-+		u32 mask = intel_tcc_get_temp_mask(is_pkg_temp_data(tdata));
-+
- 		rdmsr_on_cpu(tdata->cpu, tdata->status_reg, &eax, &edx);
- 		/*
- 		 * Ignore the valid bit. In all observed cases the register
-@@ -411,7 +414,7 @@ static ssize_t show_temp(struct device *dev,
- 		 * Return it instead of reporting an error which doesn't
- 		 * really help at all.
- 		 */
--		tdata->temp = tjmax - ((eax >> 16) & 0x7f) * 1000;
-+		tdata->temp = tjmax - ((eax >> 16) & mask) * 1000;
- 		tdata->last_updated = jiffies;
- 	}
- 
-@@ -838,4 +841,5 @@ module_exit(coretemp_exit)
- 
- MODULE_AUTHOR("Rudolf Marek <r.marek@assembler.cz>");
- MODULE_DESCRIPTION("Intel Core temperature monitor");
-+MODULE_IMPORT_NS(INTEL_TCC);
- MODULE_LICENSE("GPL");
--- 
-2.34.1
-
+Guenter
