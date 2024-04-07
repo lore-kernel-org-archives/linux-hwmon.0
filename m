@@ -1,123 +1,154 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 844AB374EB;
-	Sat,  6 Apr 2024 13:17:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9F5F81F;
+	Sun,  7 Apr 2024 01:08:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.81.211.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712409430; cv=none; b=iDY94o5Q3DHSS3SmBjMTn/aMFYmJM/tSeHF7TMno4GxhBK++DKKdd/PbyFkiixWoq/jDIz3TGyYkSR9siS09qlrcVzDgkWpcfzMmeYEa0g8T8OOWqZYGWbqQgjayqVNJLED5m7D8FJDsFQzZZ195c0Dnz7I0irArw29mHMV5Pxo=
+	t=1712452124; cv=none; b=FeZLYsjV4kTFoOCA+tu/x6cmmTNaGmKC994CFTpIfQXEnL7XffsuQgKeaoiR7A28f0e7+qko/3oeOHAI1PxSzevHbdCwCsOJ5OO920//JMwbqWR+bIMq/X9E0fUvV3/WGpbCHlCjo3uaX2Epv6taH0z+qo5OzQX7V3Q/Qxypq/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712409430; c=relaxed/simple;
-	bh=VJJCSOf/JvpxykJNws5kwPDmUfdpbC4X42YTE2K1AUE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pMcGPeJ5w8nm178ZKa2GylL3KNj5G1j4ZeBtK1Scrz4exuJC8Mw49HQNtfsuUAOSwHZBiHKq7l+IGHOyaMZUHWxTo/beSXAmRAgO1c0Vd+Zj4ilZfE6RoqE5CKAc0jRSjE8Rbcios3cmbAxBFf63upc4w9YPfxWv5z1BZ37MFnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TOM9kjRm; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1712452124; c=relaxed/simple;
+	bh=CcOjLI0GWZofIXrmTkh1+TI42ZiuHGsX7W4wxX6Rbrk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=nzf8CR81WqRnbCsyy4AqtlltfX6hUgUi/80Ew2gsAII+TEO4qmOCt3uffjw88a4Da/7CETaguZOPxXHq8EBLc74UPPUZaFUh+nhZ08N0O9Sy5n2Ds0jx7iAV2Rds60na6Ts78ijnjyX/lNTTo5p9yf4DEESEw8KbLfIk0t9Z1+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gnuweeb.org; spf=pass smtp.mailfrom=gnuweeb.org; dkim=pass (2048-bit key) header.d=gnuweeb.org header.i=@gnuweeb.org header.b=tT7beCP5; arc=none smtp.client-ip=51.81.211.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gnuweeb.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gnuweeb.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TOM9kjRm"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2a3095907ffso1186996a91.0;
-        Sat, 06 Apr 2024 06:17:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712409428; x=1713014228; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DzKx5rEfU8Mn0ywULn1KY41VZeJws0/wMPTNdGwCnF4=;
-        b=TOM9kjRm/lmt1lD5AucveB5G83IOwHByyD8XszdjuUg0WWOnffoSc1Qj16bTZLvRQQ
-         bfQfphXoVa6FuoPY9fhoUFSF9DqXXA9J2RJ89oRuUylx/uXV7WKOg1bCKvszDtf08DFY
-         jIusal6h2lQWtsMnjSb/GGU405nZmWNlfMs3rmhaS4je0E+0CltQoiycBHjJObf5qlfk
-         LBV3R4E2G6PbA4CN4FLUq+T+BxZWbggWNpcPgvKe48H78n2nUqYULKQYAiT1KGRVjqvl
-         FHCRLoBUrYPb99+KyANUsLTik9+jFEcyc3ml/mxJik3VDL1ZSUWUeIH5QTQo8fBypB/T
-         0ZiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712409428; x=1713014228;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DzKx5rEfU8Mn0ywULn1KY41VZeJws0/wMPTNdGwCnF4=;
-        b=v2hQFUyL1VlGO6tU5tSGs6xzO8G1wzK4UA15H5hQNtzgGkNmMOnCuV55a9+UjgeuOl
-         GEVSbVLir/Ysp44J3aAwyIqUlWTuK3dUGuDK4+MvYv2ULuhUhzMsehPXoPSotBmtj/3E
-         7H+0kJ5uAFIUhJfy1bikE/C+jS+BbX/ezKJCxqA4SYkvqp5+uTwwpH2auLUxZmsG+WJI
-         9DCx44Vg/7KFKZwyByX3yo3PviepNVdS7Gf6T8kfScQT/dYIVDjH6ZR5x8Yx/ECd7xT2
-         z/ulzX99tIrdA2inDzGSfU/Rz34EgOEDbnVEsmnpT1qBBanCFgqan4pna8V9z5KnJdUg
-         i4Iw==
-X-Forwarded-Encrypted: i=1; AJvYcCWvoBImOI1MG1IEkwm6YO+IduGGHiURhI8GhvgV0z+z0O/MKUH4RE2kjwzgkNZMiy/ZL0Vze8j7B1ZgOhg4xNzVrG3wEnNDjNkXH4Z32/r80Fn5BFhl1cdeWRFlNj+plC8wCk5H7FDGAhHxcDSO9f8M+pe49ZN6NCIccqq0lHXyYu7vLg==
-X-Gm-Message-State: AOJu0Yw4zOgebtiOyN31mkvFgpSprwB0GRujmOCaKGxtl/rpCdE+Obbu
-	wVVXJBWqg1QGPpCtFRfMkVShiUVN4pIymkZFE5I12biKby/SJM4q
-X-Google-Smtp-Source: AGHT+IGtrbyINl2CLwezwEj0RKyyXObl5s3LgTlCnH0C8D9V33PuxQi7dGzGBDmI/RYzBthjjTgsTg==
-X-Received: by 2002:a17:90a:72c4:b0:2a0:3a16:7489 with SMTP id l4-20020a17090a72c400b002a03a167489mr3200611pjk.44.1712409427904;
-        Sat, 06 Apr 2024 06:17:07 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j1-20020a17090a588100b002a29e717991sm4911802pji.22.2024.04.06.06.17.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 Apr 2024 06:17:06 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sat, 6 Apr 2024 06:17:06 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-	Zhang Rui <rui.zhang@intel.com>, Jean Delvare <jdelvare@suse.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Ricardo Neri <ricardo.neri@intel.com>
-Subject: Re: [PATCH 3/3] hwmon: (coretemp) Use a model-specific bitmask to
- read registers
-Message-ID: <f4d18a63-c348-4882-897b-dc636feb149b@roeck-us.net>
-References: <20240406010416.4821-1-ricardo.neri-calderon@linux.intel.com>
- <20240406010416.4821-4-ricardo.neri-calderon@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=gnuweeb.org header.i=@gnuweeb.org header.b="tT7beCP5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+	s=default; t=1712451480;
+	bh=CcOjLI0GWZofIXrmTkh1+TI42ZiuHGsX7W4wxX6Rbrk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=tT7beCP5uJdNDAwo2F8QzZhPOGKlTtYflRA0eOsZ99OWIL80ZtEK2BCjPVu7KSh1H
+	 kUgRk4SILVRQdGSP9MWM+PB5bX3u1/kRrGR8azZWzjwm3Hj+bdmYnhYO5CweG0gJ4l
+	 GEZIYaaqoCLOyLO5a9M96k3jaZMV7U3EUrmkZ+ZdCIuJCx2OksHM/IQMh3juIBeLgF
+	 9cYXFmXP3sTAMoy+T0Wv+6Uv/2UU1btEJ7kKDh1comW6jUpmwKMdHT9jXtMDNf/khv
+	 19btnxYuTXjf0pSo4FHfjfICrZPkm2fW6oqLO/3NBvMvvVQ6g646gQ21wcBK1I80Hz
+	 d7ll5nKyHfkLg==
+Received: from bloom.tail0d56f.ts.net (unknown [88.235.219.169])
+	by gnuweeb.org (Postfix) with ESMTPSA id 6ABA824AA7D;
+	Sun,  7 Apr 2024 07:57:56 +0700 (WIB)
+From: Stella Bloom <windowz414@gnuweeb.org>
+To: mustafa <mustafa.eskieksi@gmail.com>
+Cc: hdegoede@redhat.com,
+	ilpo.jarvinen@linux.intel.com,
+	jdelvare@suse.com,
+	lee@kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-leds@vger.kernel.org,
+	linux@roeck-us.net,
+	pavel@ucw.cz,
+	platform-driver-x86@vger.kernel.org,
+	Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	Stella Bloom <stelbl@elrant.team>,
+	Bedirhan KURT <bedirhan_kurt22@erdogan.edu.tr>
+Subject: [PATCH v5 0/1] platform/x86: Add wmi driver for Casper Excalibur laptops
+Date: Sun,  7 Apr 2024 03:57:44 +0300
+Message-ID: <20240407005746.412603-1-windowz414@gnuweeb.org>
+X-Mailer: git-send-email 2.44.0
+In-Reply-To: <20240324181201.87882-1-mustafa.eskieksi@gmail.com>
+References: <20240324181201.87882-1-mustafa.eskieksi@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240406010416.4821-4-ricardo.neri-calderon@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, Apr 05, 2024 at 06:04:16PM -0700, Ricardo Neri wrote:
-> The Intel Software Development manual defines states the temperature
-> digital readout as the bits [22:16] of the IA32_[PACKAGE]_THERM_STATUS
-> registers. In recent processor, however, the range is [23:16]. Use a
-> model-specific bitmask to extract the temperature readout correctly.
-> 
-> Instead of re-implementing model checks, extract the correct bitmask
-> using the intel_tcc library. Add an 'imply' weak reverse dependency on
-> CONFIG_INTEL_TCC. This captures the dependency and lets user to unselect
-> them if they are so inclined. In such case, the bitmask used for the
-> digital readout is [22:16] as specified in the Intel Software Developer's
-> manual.
-> 
-> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> ---
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Lukasz Luba <lukasz.luba@arm.com>
-> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: linux-hwmon@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: stable@vger.kernel.org # v6.7+
-> ---
->  drivers/hwmon/Kconfig    | 1 +
->  drivers/hwmon/coretemp.c | 6 +++++-
->  2 files changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 83945397b6eb..11d72b3009bf 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -847,6 +847,7 @@ config SENSORS_I5500
->  config SENSORS_CORETEMP
->  	tristate "Intel Core/Core2/Atom temperature sensor"
->  	depends on X86
-> +	imply INTEL_TCC
+> From: Mustafa Ekşi <mustafa.eskieksi@gmail.com>
+>
+> Hi,
+> I want to note that moving mutex_init to the bottom of the function
+> crashes the driver when mutex_lock is called. I didn't investigate it
+> further but I wanted to say that since Ai Chao also did it like that.
+>
+> Driver sets all leds to white on start. Before that, when a led's
+> brightness is changed, that led's color gets set to white but others
+> keep their old colors which creates a bad user experience (at least for
+> me). Please inform me if this is a bad approach.
+> Also, this driver still lacks support for changing modes and I seek
+> advise for that.
+>
+> Mustafa Ekşi (1):
+>    platform/x86: Add wmi driver for Casper Excalibur laptops
+>
+>   MAINTAINERS                       |   6 +
+>   drivers/platform/x86/Kconfig      |  14 +
+>   drivers/platform/x86/Makefile     |   1 +
+>   drivers/platform/x86/casper-wmi.c | 641 ++++++++++++++++++++++++++++++
+>   4 files changed, 662 insertions(+)
+>   create mode 100644 drivers/platform/x86/casper-wmi.c
+>
 
-I do not think it is appropriate to make a hardware monitoring driver
-depend on the thermal subsystem.
+Hi there,
 
-NAK in the current form.
+I just wanted to pitch in by testing the driver on the kernel I use
+on my Arch install on an Excalibur G770.1245, namely xdevs23's
+linux-nitrous (https://gitlab.com/xdevs23/linux-nitrous), but trying to
+compile the driver using LLVM, which is the default compilation behavior
+in this kernel's AUR package, spits out the following error;
+```
+drivers/platform/x86/casper-wmi.c:633:3: error: field designator 'no_singleton' does not refer to any field in type 'struct wmi_driver'
+  633 |         .no_singleton = true,
+      |         ~^~~~~~~~~~~~~~~~~~~
+1 error generated.
+make[5]: *** [scripts/Makefile.build:243: drivers/platform/x86/casper-wmi.o] Error 1
+make[4]: *** [scripts/Makefile.build:481: drivers/platform/x86] Error 2
+make[3]: *** [scripts/Makefile.build:481: drivers/platform] Error 2
+make[2]: *** [scripts/Makefile.build:481: drivers] Error 2
+make[1]: *** [/home/stella/.cache/yay/linux-nitrous/src/linux-nitrous/Makefile:1919: .] Error 2
+make: *** [Makefile:240: __sub-make] Error 2
+```
 
-Guenter
+I want to help debug this somehow, but I'm more of an Android custom
+ROM developer than a Linux kernel maintainer, so my knowledge on the
+programming and build system languages other than Java, Makefile, Bash,
+etc is pretty much limited if not outright non-existent.
+
+I would *love* to see this driver actually hit mainline repos, and
+eventually the upcoming kernel releases, given how much I need to use
+this laptop of mine as a computer engineering student.
+
+Asking just for the case I manage to get this driver up and going on
+my end somehow: Is there a tool made for controlling the LED colors yet?
+I can still use CLI tools much like on ASUS ROG series laptops, but it
+would be much easier and more appreciated to have a GUI provided
+Excalibur series laptops' LED lights can virtually take any color in
+the RGB space - At least that's how I interpreted with the
+configurations I used to do on mine using Excalibur Control Center
+on Windows 10/11.
+
+And as for the profiles, let me make sure we're talking about the same
+thing in this term: You're talking about the "Office", "Gaming" and
+"High Performance" modes as seen in Excalibur Control Center, right?
+If so, can this be somehow integrated into `power-profiles-daemon`
+SystemD service for easier controlling with GNOME and other DEs that
+use it? It's fine if it can't be, this was just a thought struck on my
+mind for whatever reason.
+
+Please do CC me and the people I've added to the CC list with this email
+of mine on the upcoming revisions, if any. We would love to keep track
+of this driver and I personally would love to contribute into testing
+as a power user.
+
+Cc: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+Cc: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc: GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
+
+Also adding my organizational and school email addresses to the CC list
+so I can still be notified while I stay offline on this email address.
+GNOME Evolution doesn't run in the background and periodically check
+for emails sadly, and I switch ROMs every now and then on my phone as a
+source maintainer of 3 different custom ROMs. :/
+
+Cc: Stella Bloom <stelbl@elrant.team>
+Cc: Bedirhan KURT <bedirhan_kurt22@erdogan.edu.tr>
+
+--
+Stella Bloom
