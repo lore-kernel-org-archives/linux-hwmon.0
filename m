@@ -1,129 +1,156 @@
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D92669DF5;
-	Mon,  8 Apr 2024 11:49:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEACA7BB15
+	for <linux-hwmon@vger.kernel.org>; Mon,  8 Apr 2024 13:33:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712576988; cv=none; b=AxeC4ElZjxOsgRqXZD/+oz8aFHaLf0+fBNfdgrPcOKoQM0Q3K4hHriVfu3U2GuawEtODjWBDoDT2g7Z5rGvHHcABbTxSGI+yuPPhDdu3uq9ksTyKuDkCcEPpL6eFj7bbD8Picbjz+uHrX91MD69XJ6HnAkJHuQnq1Z7C+z3evpY=
+	t=1712583183; cv=none; b=WQLX0iwLDVHIr+c697U2+kXU6SbU0Hu2V21VpHDzxb6NCzsCVRm8zKrOjCUDDom+Fl3mvUZBFwol+N484O7K7vjc7bINfCoTPCGf9t9w4LsngPnzGHoUarsosSk0Ou48IN7YMybRvgXXwjzPLaqwsPiS3VJhzluRk3iCht2mDDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712576988; c=relaxed/simple;
-	bh=t/PziARB1DDQE+QkAYx3JX2/jBRkYdtjisvnQqQaxO0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tb2asdzueIA8+DiRQMiJuT97qmYaWR/HzDsxFQ6nLZvkveFUuiL2vEBfrIiZDgWQDMWpmTJCxtDZJyGcXn1bxkuMWarl0TCaD+n+I48A0YdEKhJ37/O2EqEQ+Bslh/N+UEnnxURVlx4kr3aI5bAdwnmNdI3tzq84HwZ11BW5Noo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FaKOiWZw; arc=none smtp.client-ip=209.85.161.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1712583183; c=relaxed/simple;
+	bh=pW4t1AncsQ8tMvf/wxv5D6LUPKTSE5Rey2z/6XrH+7M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JXeVKeCtdsPuCywbXqj/P6WhMSLRU6IMJLYimgY/f1d37lxvaPco6CvNF32NkS3ZUFMdaxtTuQcPDQguVLyp64lqSTr7XE6+IOAKpdz6gC3FoDfSZmYzrlnkBMmkDnTIrb4+FxM7VA/oW/A+qnbtHCQqFrU9wj0vKHjhSjU+Ms4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZeseT6Ud; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FaKOiWZw"
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5aa26990d5aso928578eaf.1;
-        Mon, 08 Apr 2024 04:49:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712576985; x=1713181785; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cMyACkH/7gkijJXbfsrdkRAuYsDQYSZJdsM+qnK7di8=;
-        b=FaKOiWZw7sHCxVFQwnzayexd4GVpu9M7qLPDnUIMEOh7ENXrvDKBneRHHpwNgeRMeE
-         7QADzb/6CnBsKNYwddMNWkTH6lCIJNdZujF2ojbOwGjsCMXitpWyRaQY2skS9f8YqgX0
-         b4Le7CZ2zPOHnbBYkseseetRIYlJSd67gf8DOgJlBZIAKXVlP8/ckd8vrcNfmqYqpNju
-         VzxNq/fyA4HeHGi96UKi2+YcUbJsOgmpJhj6dTzo7WDQ19fqkpgkuMm/9W/jMu36rY6d
-         rgO8JFxoBaqYbFRZZCjmTdYcelo1qwqpZJy+x/VlGqI/1WGEUtK9ln/AJVQGHenl99nH
-         7fXQ==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZeseT6Ud"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1712583180;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OJUImv89Y37aG2kc0mQxy8vkhYbAZfTGFvjYeh6Mk8k=;
+	b=ZeseT6Ud5jMwMXFRHicz1bfDecAXXYFsXQYhN/fTm2lP2aJSu3HhxmuOj92AHt3g13UJrZ
+	11Bvsxeof/Pt35f6jsTFWboOm9OpgUYB413ypJWG7TznzvYx3OQ2AXfbFF+PysAotJIrIn
+	ZLiKc3iYwsjbuVnt1JuF/rYElkpVvMA=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-618-3FipTWAPPQuznv9EfwRBiw-1; Mon, 08 Apr 2024 09:32:59 -0400
+X-MC-Unique: 3FipTWAPPQuznv9EfwRBiw-1
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-a466c7b0587so277408166b.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 08 Apr 2024 06:32:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712576985; x=1713181785;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cMyACkH/7gkijJXbfsrdkRAuYsDQYSZJdsM+qnK7di8=;
-        b=Vo6zJWW7n24N7rbEB0b6N746WBqKGC9xbI2C+z4YvWaMrObgKrDEzRbV54K9JdK7Oo
-         xZsuI8FTsXzp7AK3iIfWxCr6SYSGvKGNgy6M+wJitvQTyaNVrHu9+2ORHy1vGbO4g1iv
-         j/BiS2VH3GSNn+v676bm5KnsUy2F5g5uaQuqXvpB+l+4Mo7/Nw7MRXPP+Nw6E5TZkPGR
-         LnbmPJcgu2hNnrRIPBTi+mcjGvvbJb2bdW2Szkx/e8JGAlnKI2zZ0Yf2nOVnltcWa3uj
-         G3w9HsxYYR0TGWSHmZnOeQaT4HNgDAHwxGLBf3ALyynaKGb/UqgjW9qXfE0i2URwbrae
-         8OXg==
-X-Forwarded-Encrypted: i=1; AJvYcCVAg4xsfovIA+XFkycBDuVudHYhm7LppFiNrQBr+9b63el3F4wmkmt0v2vRo5N/k6usWWkg91bxXKyY6LyIzAwY4V9MMYkZyySCZbwtCHAY1RkUQD5ezcUBU4HgK7/vZdV2nsDKAHxERI4=
-X-Gm-Message-State: AOJu0Yx3aLvudTndp94PN4CrgQk7lPm7JIFSvUh1DJy6c5wGnA1LXcwT
-	PA7zmhMbnYfwixSPR+nLT1UsGR0ZNwzE+m6vR6Rd22Oe1e2UleuD
-X-Google-Smtp-Source: AGHT+IHsTk2XQQSOsBCCV3Cm0qaZ5654TP3rnPCF174U4Rd1l53ugWvYsg0ga5Zmp8Ouu/7FUjTwpQ==
-X-Received: by 2002:a05:6358:5c16:b0:183:e337:8eb8 with SMTP id x22-20020a0563585c1600b00183e3378eb8mr10155239rwe.13.1712576985067;
-        Mon, 08 Apr 2024 04:49:45 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l23-20020a635717000000b005cd835182c5sm6341216pgb.79.2024.04.08.04.49.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Apr 2024 04:49:44 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 8 Apr 2024 04:49:43 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Andrew Davis <afd@ti.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Juerg Haefliger <juergh@proton.me>,
-	Riku Voipio <riku.voipio@iki.fi>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/31] Remove use of i2c_match_id in HWMON
-Message-ID: <fcafe904-383c-49c0-b576-81cbcde045c5@roeck-us.net>
-References: <20240403203633.914389-1-afd@ti.com>
- <0e43aa83-2e02-49e2-96b8-24cac0362a7b@roeck-us.net>
- <77b2f8ce-0b71-4a7a-81bc-a64a1af3566d@ti.com>
+        d=1e100.net; s=20230601; t=1712583178; x=1713187978;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OJUImv89Y37aG2kc0mQxy8vkhYbAZfTGFvjYeh6Mk8k=;
+        b=eWWrdeHEcILT964T2xqXUTgnsnI9uUpYZvLatFaxxHOmw3ApbnyHwWo5arCRrpI6m7
+         63/LyVNU2xpcZmcqCZ8n54c6Mnqwy1NlVRMakk2kg2WfgoVXgJ3KmGio+vggXgRT9GsO
+         HHKRZcjzx93h2IIu70+EHuAHSmqE5o7TCACqne1ayZ72Nh8iIN3CDmTxMYQceSY07bTf
+         XhiBLD3pQktZD9xKv6AZj4qCiqW+KE3UuTDbL1pHWF+VNu3XA+PBN6R9XtxjdZpq/ruu
+         5bN6IU4ZVhqPYwuObVxpF6NUkIQkV6d37LwH1/2ob/7R6mqTOAnLlIpVIbdgmyKMtQMl
+         j9gQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWeSVEMX6k5gyAfqqejQGZ+ziqanf9eXxGtv9wvI9nBvaANTNVCuxMBSjXbWYiRqozGssm9NBv5L++aFuMsIZ8LUbVP9hQsvPYX800=
+X-Gm-Message-State: AOJu0YyZi4jqyqJ5By70TAQOjlzqPpfAK74KKhiiY8mDw8sJ3k8AKgdR
+	gvCnbGUQOLFCKoN5wuEZg0B3xFvMpGIYEK055tmNt3FqZ/uW+Fn9bZMzwK4wMHsAoJVwLUPNl7M
+	0YkFeJp72ivE7p8y4kXzGXDIfZDKOWWEgjOT1Jutpm7atReyHkxn62WmUhqss
+X-Received: by 2002:a17:906:338f:b0:a51:9cce:cf6a with SMTP id v15-20020a170906338f00b00a519ccecf6amr5334597eja.53.1712583177857;
+        Mon, 08 Apr 2024 06:32:57 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IG/Kh0jumPG4b000Jp0hZYkG/hCHJH0vM+pd5NJczuFkQT1+36nYLTOYHCvrKt2qgwsMkp+4w==
+X-Received: by 2002:a17:906:338f:b0:a51:9cce:cf6a with SMTP id v15-20020a170906338f00b00a519ccecf6amr5334582eja.53.1712583177434;
+        Mon, 08 Apr 2024 06:32:57 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id p19-20020a17090635d300b00a51b78aed1csm3251761ejb.150.2024.04.08.06.32.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Apr 2024 06:32:57 -0700 (PDT)
+Message-ID: <28bd0070-28e3-40d6-845a-7ac3d3cf67f2@redhat.com>
+Date: Mon, 8 Apr 2024 15:32:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <77b2f8ce-0b71-4a7a-81bc-a64a1af3566d@ti.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] hwmon: Add thermal sensor driver for Surface
+ Aggregator Module
+To: Maximilian Luz <luzmaximilian@gmail.com>,
+ Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: Ivor Wanders <ivor@iwanders.net>, linux-kernel@vger.kernel.org,
+ platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org
+References: <20240330112409.3402943-1-luzmaximilian@gmail.com>
+ <20240330112409.3402943-2-luzmaximilian@gmail.com>
+ <d49ea735-3113-4c1f-a8dc-c6d8e821c4f1@roeck-us.net>
+ <e8ccce25-86d5-492a-8fb4-3f39036fa91a@gmail.com>
+Content-Language: en-US, nl
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <e8ccce25-86d5-492a-8fb4-3f39036fa91a@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Apr 03, 2024 at 05:06:43PM -0500, Andrew Davis wrote:
-> On 4/3/24 4:30 PM, Guenter Roeck wrote:
-> > On Wed, Apr 03, 2024 at 03:36:02PM -0500, Andrew Davis wrote:
-> > > Hello all,
-> > > 
-> > > Goal here is to remove the i2c_match_id() function from all drivers.
-> > > Using i2c_get_match_data() can simplify code and has some other
-> > > benefits described in the patches.
-> > > 
-> > 
-> > The return value from i2c_match_id() is typically an integer (chip ID)
-> > starting with 0. Previously it has been claimed that this would be
-> > unacceptable for i2c_get_match_data(), and chip IDs were changed to start
-> > with 1. Commit ac0c26bae662 ("hwmon: (lm25066) Use i2c_get_match_data()")
-> > is an example. Either this series is wrong, or the previous claim that
-> > chip IDs (i.e., the content of .driver_data or .data) must not be 0 was
-> > wrong. Which one is it ? I find it very confusing that the chip type for
-> > some drivers now starts with 1 and for others with 0. Given that, I am not
-> > inclined to accept this series unless it is explained in detail why the
-> > chip type enum in, for example, drivers/hwmon/pmbus/lm25066.c has to start
-> > with one but is ok to start with 0 for all drivers affected by this
-> > series. Quite frankly, even if there is some kind of explanation, I am not
-> > sure if I am going to accept it because future driver developers won't
-> > know if they have to start chip types with 0 or 1.
-> > 
-> 
-> i2c_get_match_data() has no issue with returning 0 when the driver_data
-> for the match is also 0 (as it will be when the chip type is 0 here).
-> 
-> The confusion might be that returning 0 is also considered a failure code.
-> This is a problem in general with returning errors in-band with data, and
-> that is nothing new as i2c_match_id() does the same thing.
-> 
-> Actually, i2c_match_id() is worse as most of these drivers take the result
-> from that and immediately dereference it. Meaning if i2c_match_id() ever did
-> failed to find a match, they would crash before this series. Luckily i2c_match_id()
-> can't fail to find a match as far as I can tell, and so for the same reason
-> neither can i2c_get_match_data(), which means if 0 is returned it is always
-> because the chip ID was actually 0.
-> 
-> At some point we should switch all the *_get_match_data() functions to
-> return an error code and put the match if found as a argument pointer.
-> Forcing everyone to changing the chip type to avoid 0 as done in
-> ac0c26bae662 is the wrong way to fix an issue like that.
-> 
+Hi,
 
-That doesn't really answer my question. It does not explain why it was
-necessary to change the chip ID base for other drivers from 0 to 1,
-but not for the drivers in this series. I fail to see the difference,
-and I have to assume that others looking into the code will have the
-same problem.
+On 3/30/24 1:58 PM, Maximilian Luz wrote:
+> On 3/30/24 12:58, Guenter Roeck wrote:
+>> On 3/30/24 04:24, Maximilian Luz wrote:
+>>> Some of the newer Microsoft Surface devices (such as the Surface Book
+>>> 3 and Pro 9) have thermal sensors connected via the Surface Aggregator
+>>> Module (the embedded controller on those devices). Add a basic driver
+>>> to read out the temperature values of those sensors.
+>>>
+>>> Link: https://github.com/linux-surface/surface-aggregator-module/issues/59
+>>> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+>>
+>> I very much dislike the idea of having multiple drivers for hardware
+>> monitoring on the same system. Please explain in detail why this and
+>> the fan driver for the same system need separate drivers.
+>>
+>> I'll also very much want to know if we will see submissions for separate
+>> voltage, current, power, energy, humidity, and/or other hardware monitoring
+>> entities for the same system later on.
+> 
+> The Surface Aggregator EC is not really a single device, but rather a
+> collection of subsystems. For example, there's one for the battery, one
+> for thermal sensors, and a separate one for the fan. Not all subsystems
+> are present on all devices with that EC, so we have modeled them as
+> separate subdevices of the parent EC controller. This makes it quite a
+> bit easier to maintain. Especially, since I haven't found any reliable
+> way to auto-detect the active/supported subsystems.
+> 
+> For example: The Surface Book 3 has thermal sensors that can be accessed
+> via this driver as well as a fan. As far as I know, however, the fan
+> subsystem has been introduced later and the Surface Book 3 doesn't
+> support that yet. So there's (as far as I know) no fan-monitoring
+> support. Trying to access that will fail with a timeout. For that reason
+> (but not specifically for that device), we have introduced the split
+> into subystem devices, which are maunally registered in
+> surface_aggregator_registry.c based on what we know the device actually
+> supports.
+> 
+> Further, the devices created for these subsystems also act as a binding
+> mechanism to the subsystem, speficying the subsystem ID/category used
+> for making requests to it. For example, this driver probes for
+> 
+>     SSAM_SDEV(TMP, SAM, 0x00, 0x02)
+> 
+> meaning it looks for a device of the TMP subsystem on the SAM target ID
+> (which can be seen as a bus number) with instance 0 and function 2. This
+> (in particular subsystem ID and target ID) are directly used when making
+> requests to the EC. So if we find out down the line that temperature
+> sensors can be accessed on target ID KIP in addition to SAM, it's as easy
+> as adding a new device match to the driver.
 
-Guenter
+<snip>
+
+Right this is all working as designed, it is just that Microsoft has
+gone a pretty custom route with the Surface devices.
+
+Guenter another way of looking at this is if there were 2 ACPI devices
+describing the fan vs the temperature monitoring capabilities that too
+would result in 2 drivers even though the underlying ACPI AML code
+might end up talking to the same monitoring-IC in the end.
+
+I'll go and merge patch 3/3 of this series. I'll leave merging
+1/3 and 2/3 up to the hwmon subsystem of course.
+
+Regards,
+
+Hans
+
+
