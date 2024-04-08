@@ -1,151 +1,143 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D57485C5D;
-	Mon,  8 Apr 2024 14:17:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90D55140E46
+	for <linux-hwmon@vger.kernel.org>; Mon,  8 Apr 2024 15:23:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712585862; cv=none; b=Tu6ROJo0KSOu2+0+iWBjupffqndsdw2ScEPC9MsF/c54SkiybJNd1Ny0shjMkTSex+7DhjK8PMdGX4Y6qIY249yket61QNk9AI0BlVTYEPbPw65EnPmfW1MZccrLVloy8MQBVj1b12sFfE1b5tz6O6sVaZ1sSXC/qJq/F1r3cdg=
+	t=1712589786; cv=none; b=fgRZaPNLOH6x/nOz83Hs9inHQYSjUdIOlgstYKCzFFllUv8V2vAPH2XkW6aJGsNtazJ+AZUPP2xts1QBNYGdlH1F0CUzZDwTzDSZ4pWgrHXL193AdmzDbSTaEemBULqRNWhJVxE2ih56q0qJ/Q/kjOjoZkpqGjgStzFKQ41rDx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712585862; c=relaxed/simple;
-	bh=xtO+UZtPh4czwtwpsw4636hm7erzTR79z/J1kew+UD0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gcS9XiPfovuhDjufv+76xoe29TVSYo5g8C7MDKSRCY720iXGiGB3bRrjuwtK6v6/rV7pHqm3FB/DzKqEtS5D6x3OO4EH1g0el64vEZixnFwAaYWc441uJ0HbPSzIP3jEDePeKzeU7VNMVCvezg//G+VEXhNq3O2UhZ5MfjkuFjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TbfgDgdU; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1712589786; c=relaxed/simple;
+	bh=bGKC8/Up8+ganbUnQQMf0gdfJM77eigF0DsnS9gdTWY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kZv9yXvIBuFwuiUNR/YxS5KzFY3feFyNUge+hamUc3EWE1WdVSwgaYxH5TcXtzR1B4e1gNKAmjskHHdwZdWJhr0o6Fue+7CdYXWQDdZIXcREX0QJFRcjp2m8qLprcB83I+AZj2OElPDwd3WMsgCqwWd5glOVURFt++msCsBJmg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Z+42KfnZ; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TbfgDgdU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712585860; x=1744121860;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=xtO+UZtPh4czwtwpsw4636hm7erzTR79z/J1kew+UD0=;
-  b=TbfgDgdUU/tq5uIBmxNKpN38YLdLjRZfSSve2yqIsOWbZOqgwevtAdhY
-   whc7k5AI2Bci1pQLqF45/PxB5jG8Rl67XP08PgUMHS/TXYysvhdcmUEPM
-   kOQedDN11HWA8ifWUv/58XxwtznIbgp5BmP1j8b3UAAXl3WsWGyQP7UQy
-   U+r3C4Z4zOq0Fz4kx/cWNNgHH72HJ4x9zEsUts70SdUEP96cDxuHVGwnP
-   BZogcjBIvF61A9uuF4h6nJ5giytxGHrEyA4OzSIny45ChtVo/mCrfMkj9
-   cS4DXADy6ehtw54MTm1ZJcOlCsoufRAdItvMrcXzab6Szybx+S0kWYZC4
-   A==;
-X-CSE-ConnectionGUID: ivye9XGxST63o2z1FifjeQ==
-X-CSE-MsgGUID: SHAp5hWxSs+T2kYy2O+IYA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="7731985"
-X-IronPort-AV: E=Sophos;i="6.07,187,1708416000"; 
-   d="scan'208";a="7731985"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 07:17:39 -0700
-X-CSE-ConnectionGUID: ILCau2wjQ6+WB29dITlcHg==
-X-CSE-MsgGUID: SgHdLwAUS9SBYniORcWUuA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,187,1708416000"; 
-   d="scan'208";a="24390367"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 07:17:39 -0700
-Date: Mon, 8 Apr 2024 07:23:43 -0700
-From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To: "Zhang, Rui" <rui.zhang@intel.com>
-Cc: "linux@roeck-us.net" <linux@roeck-us.net>,
-	"Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-	"jdelvare@suse.com" <jdelvare@suse.com>,
-	"srinivas.pandruvada@linux.intel.com" <srinivas.pandruvada@linux.intel.com>,
-	"lukasz.luba@arm.com" <lukasz.luba@arm.com>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"Neri, Ricardo" <ricardo.neri@intel.com>
-Subject: Re: [PATCH 1/3] thermal: intel: intel_tcc: Add model checks for
- temperature registers
-Message-ID: <20240408142343.GA16542@ranerica-svr.sc.intel.com>
-References: <20240406010416.4821-1-ricardo.neri-calderon@linux.intel.com>
- <20240406010416.4821-2-ricardo.neri-calderon@linux.intel.com>
- <5e86524413ec2cfeb1096f49851bf18837c7e50b.camel@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Z+42KfnZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1712589783;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=p1X6fZeFDQkaVHOCXAp3VmowI6Zes/NS81fuOoq72q8=;
+	b=Z+42KfnZYzdAkRKfZWuoy2Qplwvb97Fvf5xWvtJv2MQRpyQ5mCsvjm6FTsvrQLwhMWM4cn
+	pJd+o4Xgc5T5lnaPP+N4hes2DLtu0TvxOMD50T4ZrzXkl/h3hdE0fnz4rzvFP4BuhwzrsQ
+	/X1wQ0MckLexFKShwVr3Zfql5CqaT1o=
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
+ [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-241-LmgC9Bg4PrSv5-mBd2Q0nw-1; Mon, 08 Apr 2024 11:23:02 -0400
+X-MC-Unique: LmgC9Bg4PrSv5-mBd2Q0nw-1
+Received: by mail-lj1-f198.google.com with SMTP id 38308e7fff4ca-2d85ac0ed6fso35058081fa.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 08 Apr 2024 08:23:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712589781; x=1713194581;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=p1X6fZeFDQkaVHOCXAp3VmowI6Zes/NS81fuOoq72q8=;
+        b=l2XImTB67hmjn53sY4jBgzHPcjuUrx7G64p++DEW1lHiRSipjB8ZWSmpaetaQEQaMo
+         VskoBDB+/dA4v7fIFymPHemb+V0JIMA0qT0Vmk0aOTvqzlDZ8HiKPXv1Wz8mA83RLsOJ
+         JSolOoS0seNO6qMiFWY+3HN18c6oVjPnkyIT+Tap3zpsD835qPe9lcrkrXnj6zoUp1l6
+         gW2CKWeT/UqS2Oxihnt6+N54d6gP3ciYdCu61y/zOpBoxxobi41JY9ZoLqapN2Rc1VZp
+         oIaM2+IQTn5jv5uF3MlLYb/8DF8BjZWruUW3fYoDb8+VPCOn48bFAKPBlzmZWJbIn8nZ
+         tHZw==
+X-Forwarded-Encrypted: i=1; AJvYcCWAzfoXOSc5bq1BT/cD+0yhRiWGGkk9V5v0uuEqibssPVNW4fBfIURVvkgUXH8GSWYF8Vhb54i28mvhyLSNky10sHM0Ua9oIF8Hpwg=
+X-Gm-Message-State: AOJu0Yz1cWiIEkbgae8iAyyZB5vjk8MeYXVc9jdaO2lGPJ/sPEcOr7mU
+	uhq3aKtj+fgZd19OWpPQ4SkDuH9i1L24kg+7S7yrarDsrtKAswojbXk7H4lQeDBViwyd8nUnhEx
+	n7hPcnTjYNuBF2pciiUlZmsQlTNeuH7Eu/ckaF1aMhaVzfivPoIXvY73tT3Vs
+X-Received: by 2002:ac2:5999:0:b0:515:bf94:cd38 with SMTP id w25-20020ac25999000000b00515bf94cd38mr5843973lfn.36.1712589780791;
+        Mon, 08 Apr 2024 08:23:00 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGBRJ8DlMjO/InmEYpooBoBZApWBp5pDYwgdjZIA7BzcXKTSKEHdkJmMnKcAJ5HitTh2OMumQ==
+X-Received: by 2002:ac2:5999:0:b0:515:bf94:cd38 with SMTP id w25-20020ac25999000000b00515bf94cd38mr5843954lfn.36.1712589780284;
+        Mon, 08 Apr 2024 08:23:00 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id cz26-20020a0564021cba00b0056e3f2f3f7csm3300081edb.12.2024.04.08.08.22.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Apr 2024 08:22:59 -0700 (PDT)
+Message-ID: <1760f058-de52-4519-8d43-4395a88af4f2@redhat.com>
+Date: Mon, 8 Apr 2024 17:22:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5e86524413ec2cfeb1096f49851bf18837c7e50b.camel@intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] platform/surface: aggregator_registry: Add support
+ for thermal sensors on the Surface Pro 9
+To: Maximilian Luz <luzmaximilian@gmail.com>, Jean Delvare
+ <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: Ivor Wanders <ivor@iwanders.net>, linux-kernel@vger.kernel.org,
+ platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org
+References: <20240330112409.3402943-1-luzmaximilian@gmail.com>
+ <20240330112409.3402943-4-luzmaximilian@gmail.com>
+Content-Language: en-US, nl
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20240330112409.3402943-4-luzmaximilian@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sun, Apr 07, 2024 at 08:13:28AM +0000, Zhang, Rui wrote:
-> > +
-> > +#define TCC_FAM6_MODEL_TEMP_MASKS
+Hi,
 
-Thank your your review, Rui!
-
+On 3/30/24 12:24 PM, Maximilian Luz wrote:
+> The Surface Pro 9 has thermal sensors connected via the Surface
+> Aggregator Module. Add a device node to support those.
 > 
-> Future non FAM6 processors can still use this macro, right?
-> So I'd prefer to remove FAM6_MODEL in the macro name.
+> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
 
-Yes, it is true, FAM6_MODEL it is restrictive and also not needed here.
-I will update accodingly.
- 
-> [...]
-> > 
-> > +
-> > +/**
-> > + * get_tcc_offset_mask() - Returns the model-specific bitmask for
-> > TCC offset
-> > + *
-> > + * Get the model-specific bitmask to extract TCC_OFFSET from the
-> > MSR_TEMPERATURE_
-> > + * TARGET register. If the mask is 0, it means the processor does
-> > not support TCC offset.
-> > + *
-> > + * Return: The model-specific bitmask for TCC offset.
-> > + */
-> > +u32 get_tcc_offset_mask(void)
-> > +{
-> > +       return intel_tcc_temp_masks.tcc_offset;
-> > +}
-> > +EXPORT_SYMBOL_NS(get_tcc_offset_mask, INTEL_TCC);
-> 
-> the name is not consistent with the other intel_tcc APIs.
-> 
-> how about intel_tcc_get_offset_mask()?
+Thank you for your patch, I've applied this patch to my review-hans 
+branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
 
-Sure. I can make this change.
+Note I had to apply this manually do to a conflict with:
+3427c443a6dc platform/surface: platform_profile: add fan profile switching
 
-> 
-> [...]
-> 
-> > diff --git a/include/linux/intel_tcc.h b/include/linux/intel_tcc.h
-> > index 8ff8eabb4a98..e281cf06aeab 100644
-> > --- a/include/linux/intel_tcc.h
-> > +++ b/include/linux/intel_tcc.h
-> > @@ -14,5 +14,13 @@ int intel_tcc_get_tjmax(int cpu);
-> >  int intel_tcc_get_offset(int cpu);
-> >  int intel_tcc_set_offset(int cpu, int offset);
-> >  int intel_tcc_get_temp(int cpu, int *temp, bool pkg);
-> > +#ifdef CONFIG_INTEL_TCC
-> > +u32 get_tcc_offset_mask(void);
-> > +u32 intel_tcc_get_temp_mask(bool pkg);
-> > +#else
-> > +static inline u32 get_tcc_offset_mask(void) { return 0; }
-> > +/* Use the architectural bitmask of the temperature readout. No
-> > model checks. */
-> > +static inline u32 intel_tcc_get_temp_mask(bool pkg) { return 0x7f; }
-> > +#endif
-> 
-> for intel_tcc_get_temp_mask()
->    1. with CONFIG_INTEL_TCC
->       a) for a platform in the model list, return the hardcoded value
->       b) for a platform not in the model list, return 0xff
->    2. without CONFIG_INTEL_TCC, return 0x7f
-> 
-> This is a bit confusing. IMO, at least we should leave a comment about
-> this difference.
+which I merged into pdx86/for-next after this series was send out.
 
-If we don't do model checks, I think we should rely on what is architectural
-as per the SDM. Hence the 0x7f value.
+Please double check I resolved the conflict correct.
 
-Perhaps I can expand the comment in this hunk to detail what we do when we
-do model checks.
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
+
+Regards,
+
+Hans
+
+
+> ---
+>  drivers/platform/surface/surface_aggregator_registry.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/platform/surface/surface_aggregator_registry.c b/drivers/platform/surface/surface_aggregator_registry.c
+> index 035d6b4105cd6..c38203c00a705 100644
+> --- a/drivers/platform/surface/surface_aggregator_registry.c
+> +++ b/drivers/platform/surface/surface_aggregator_registry.c
+> @@ -74,6 +74,12 @@ static const struct software_node ssam_node_tmp_pprof = {
+>  	.parent = &ssam_node_root,
+>  };
+>  
+> +/* Thermal sensors. */
+> +static const struct software_node ssam_node_tmp_sensors = {
+> +	.name = "ssam:01:03:01:00:02",
+> +	.parent = &ssam_node_root,
+> +};
+> +
+>  /* Fan speed function. */
+>  static const struct software_node ssam_node_fan_speed = {
+>  	.name = "ssam:01:05:01:01:01",
+> @@ -311,6 +317,7 @@ static const struct software_node *ssam_node_group_sp9[] = {
+>  	&ssam_node_bat_ac,
+>  	&ssam_node_bat_main,
+>  	&ssam_node_tmp_pprof,
+> +	&ssam_node_tmp_sensors,
+>  	&ssam_node_fan_speed,
+>  	&ssam_node_pos_tablet_switch,
+>  	&ssam_node_hid_kip_keyboard,
 
