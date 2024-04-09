@@ -1,223 +1,195 @@
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E01C9145321;
-	Mon,  8 Apr 2024 19:32:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.81.211.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B997818E
+	for <linux-hwmon@vger.kernel.org>; Tue,  9 Apr 2024 00:17:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712604758; cv=none; b=BIlIjpN9FusA4dfhcAsvyKaOxjbscCO2+pSEyZIPYw2XaVGGTumfmiGW5CiUbxuz73A7q2Ups68VJWA4FMpdbqBzKAmgKys2dCMvlqnr4jnBOwmhIprXuQGjQASOIxt0bA4unmjMBzR1dDoqB5c7V8LZufSlTnzeJXBIlLOxr9c=
+	t=1712621831; cv=none; b=lnacPlpkMclgdaflazGS5F2ychd4ZNCEG5w/pZZmw01H/y1JSprvaEh8gTKsq0vn4j82J5+MnTaTHzwTWNHILl5mWBLJW/2VHSz8LR2fEdxmrVdpg3iV1nMX/FE0hYCqbIROduTN9nv6/rVfxlZSNS4B9FTNkar+bDozLxrOzQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712604758; c=relaxed/simple;
-	bh=8YLMTLDWH3NghugdmXPWJ6D2/GZYKf+qb4W4/n17nks=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YMuxPn9dei8LYvuOij0AZ0IyYxDmh36e93e1EoFhPIlVlH18Z8P7MMXCVxAc2o0BYydRMqIMZF424J8YIPUdK23bcsSJvbqGWu7R9LIZnKBTiPKh1Ran5ciSe20u3eeyc4zYR6Oook3xj7o7W3Hs/tAMBkSyKAeA50YxsnyQQkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gnuweeb.org; spf=pass smtp.mailfrom=gnuweeb.org; dkim=pass (2048-bit key) header.d=gnuweeb.org header.i=@gnuweeb.org header.b=YWn73cB4; arc=none smtp.client-ip=51.81.211.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gnuweeb.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gnuweeb.org
+	s=arc-20240116; t=1712621831; c=relaxed/simple;
+	bh=8Gz/KAyNRQV3JWxU/qQBQt9HPIl3XbcLqJwvGbEBldE=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=hQOSNktcPiBUV5UAJ2VgK3sRgHMCw9F+ag5DrufYzFPIJQqGXQeNx4SGGonzNlZyNAAYwVdggmgqdQjEtX5yrGm6Q5EvcJboxIR4QfZRkkvwtI+J85yzEAGiSyex+fk+rvJgvgv9wmRr5IrJ+qoZVt5YErwFoDQojVDVKJpYHpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ETXbUF2J; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gnuweeb.org header.i=@gnuweeb.org header.b="YWn73cB4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-	s=default; t=1712604755;
-	bh=8YLMTLDWH3NghugdmXPWJ6D2/GZYKf+qb4W4/n17nks=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=YWn73cB4vjbD3T+hykH+IJoxOsOLx1ZIxC8v9951XhambwuhlkUxI+Dmvq+f4RkJd
-	 0lWf/SqIB1Tr3AQzPf546VmzZKKR0hGKzIjnm+7XKQA2MYN4z5Yq4TB1Xtzfv5z+/D
-	 dfegL05r5wtzYNZWomePGlrGmsOg4+6RQpsrMDBAoPMa4jJFgbwN/v3+YHJ+cpyZVH
-	 T7TbFnigYoMzsjtLuxMOeAiTN0WXdoIOiYUOGCA1V6Xa2V/M+eFqBmWhO+tX3pkZla
-	 gnQ0MnlGEQDYJR+oHqikZLKRKYzJNF172v6Bmlnyrs+EUzUIdot2qfrW6+JBqjV5/y
-	 OzmdVTteKuc5g==
-Received: from bloom.tail0d56f.ts.net (unknown [88.235.219.169])
-	by gnuweeb.org (Postfix) with ESMTPSA id 4B4EC24AC60;
-	Tue,  9 Apr 2024 02:32:29 +0700 (WIB)
-From: Stella Bloom <windowz414@gnuweeb.org>
-To: Armin Wolf <w_armin@gmx.de>
-Cc: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-	Bedirhan KURT <bedirhan_kurt22@erdogan.edu.tr>,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	hdegoede@redhat.com,
-	ilpo.jarvinen@linux.intel.com,
-	jdelvare@suse.com,
-	lee@kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-leds@vger.kernel.org,
-	linux@roeck-us.net,
-	=?UTF-8?q?Mustafa=20Ek=C5=9Fi?= <mustafa.eskieksi@gmail.com>,
-	pavel@ucw.cz,
-	platform-driver-x86@vger.kernel.org,
-	Stella Bloom <stelbl@elrant.team>
-Subject: Re: [PATCH v5 0/1] platform/x86: Add wmi driver for Casper Excalibur laptops
-Date: Mon,  8 Apr 2024 22:32:22 +0300
-Message-ID: <20240408193224.476521-1-windowz414@gnuweeb.org>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <abc9f198-e61f-4116-bdea-4ace82daba10@gmx.de>
-References: <abc9f198-e61f-4116-bdea-4ace82daba10@gmx.de>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ETXbUF2J"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712621829; x=1744157829;
+  h=date:from:to:cc:subject:message-id;
+  bh=8Gz/KAyNRQV3JWxU/qQBQt9HPIl3XbcLqJwvGbEBldE=;
+  b=ETXbUF2J6oqkzoC9xnTumx4ZAW9aC28aF5KgCicnoznhAXYLgb2t4QJE
+   +ugeMDJPZ8XyI0kSNeuOuZYw1jvsWzL5ef63ETpENX7XBAXuY/DPa/abM
+   W/7TTDxTe1K5GFs+tPXdmtoOhN2a1pfVoqqQncgpCTKMpnoNqZetYUTuY
+   5Gphon3lg6A+UcJhiq/oSIf8k5a31NwSEkyDFyylCCrVyHV9GmJLTPqXi
+   o9cI0RxGrBOgEtSaIia4OzBQOrHS/I3dJ5rdB0DpG6kGvP1FQyeGHi3a4
+   EGJwc9+vt45zYUGVLBS4Z7aKNd6iiHTrK/e/LGd3ATv74TFnV9KBuU1iy
+   w==;
+X-CSE-ConnectionGUID: nlvarVQqR36cHYnOUwMUQg==
+X-CSE-MsgGUID: E6HF6/1pSQ6yS5eA9OG9xA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="19355741"
+X-IronPort-AV: E=Sophos;i="6.07,188,1708416000"; 
+   d="scan'208";a="19355741"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 17:17:08 -0700
+X-CSE-ConnectionGUID: kTFAnN/sTJWq9VMf9Y/qhw==
+X-CSE-MsgGUID: adJzm48rQDyRHy69EKtBtQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,188,1708416000"; 
+   d="scan'208";a="43230834"
+Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 08 Apr 2024 17:17:06 -0700
+Received: from kbuild by e61807b1d151 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rtzAe-0005a2-2g;
+	Tue, 09 Apr 2024 00:17:04 +0000
+Date: Tue, 09 Apr 2024 08:16:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:testing] BUILD SUCCESS
+ c24c0a0143da2ded75148cc87a83ba654fa404e0
+Message-ID: <202404090835.EiqOBfiW-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-> Am 08.04.24 um 18:13 schrieb Stella Bloom:
->
->> On Mon, 2024-04-08 at 18:23 +0300, Mustafa Ekşi wrote:
->>> On 7.04.2024 03:57, Stella Bloom wrote:
->>>>> From: Mustafa Ekşi <mustafa.eskieksi@gmail.com>
->>>>>
->>>>> Hi,
->>>>> I want to note that moving mutex_init to the bottom of the function
->>>>> crashes the driver when mutex_lock is called. I didn't investigate it
->>>>> further but I wanted to say that since Ai Chao also did it like that.
->>>>>
->>>>> Driver sets all leds to white on start. Before that, when a led's
->>>>> brightness is changed, that led's color gets set to white but others
->>>>> keep their old colors which creates a bad user experience (at least for
->>>>> me). Please inform me if this is a bad approach.
->>>>> Also, this driver still lacks support for changing modes and I seek
->>>>> advise for that.
->>>>>
->>>>> Mustafa Ekşi (1):
->>>>>     platform/x86: Add wmi driver for Casper Excalibur laptops
->>>>>
->>>>>    MAINTAINERS                       |   6 +
->>>>>    drivers/platform/x86/Kconfig      |  14 +
->>>>>    drivers/platform/x86/Makefile     |   1 +
->>>>>    drivers/platform/x86/casper-wmi.c | 641 ++++++++++++++++++++++++++++++
->>>>>    4 files changed, 662 insertions(+)
->>>>>    create mode 100644 drivers/platform/x86/casper-wmi.c
->>>>>
->>>> Hi there,
->>>>
->>>> I just wanted to pitch in by testing the driver on the kernel I use
->>>> on my Arch install on an Excalibur G770.1245, namely xdevs23's
->>>> linux-nitrous (https://gitlab.com/xdevs23/linux-nitrous), but trying to
->>>> compile the driver using LLVM, which is the default compilation behavior
->>>> in this kernel's AUR package, spits out the following error;
->>>> ```
->>>> drivers/platform/x86/casper-wmi.c:633:3: error: field designator 'no_singleton' does not refer to any field in type 'struct wmi_driver'
->>>>    633 |         .no_singleton = true,
->>>>        |         ~^~~~~~~~~~~~~~~~~~~
->>>> 1 error generated.
->>>> make[5]: *** [scripts/Makefile.build:243: drivers/platform/x86/casper-wmi.o] Error 1
->>>> make[4]: *** [scripts/Makefile.build:481: drivers/platform/x86] Error 2
->>>> make[3]: *** [scripts/Makefile.build:481: drivers/platform] Error 2
->>>> make[2]: *** [scripts/Makefile.build:481: drivers] Error 2
->>>> make[1]: *** [/home/stella/.cache/yay/linux-nitrous/src/linux-nitrous/Makefile:1919: .] Error 2
->>>> make: *** [Makefile:240: __sub-make] Error 2
->>>> ```
->>>>
->>>> I want to help debug this somehow, but I'm more of an Android custom
->>>> ROM developer than a Linux kernel maintainer, so my knowledge on the
->>>> programming and build system languages other than Java, Makefile, Bash,
->>>> etc is pretty much limited if not outright non-existent.
->>> Hi,
->>> This is because of a newly merged patch from Armin Wolf:
->>> https://lore.kernel.org/platform-driver-x86/20240226193557.2888-2-W_Armin@gmx.de/
->>> You can comment that line or apply that patch to your tree to make it
->>> compile. Also, you'll probablyneed to change the call to wmidev_block_set in
->>> casper_query function with wmi_set_block (which is now deprecated).
->> Well, I prefer not to touch the driver itself, so I already resorted to
->> picking the patch over the latest RC, which is v6.9-rc2 as of now, and
->> got onto compiling `linux-mainline` AUR package with it. It will be
->> kind of a hassle considering how I have to write systemd-boot entries
->> after the installation to get the kernel to appear (one for normal
->> initramfs and the other for fallback one) and sign the kernel image
->> using `sbctl` so I don't fail secure boot, but I'm willing to go
->> through it just for the sake of seeing this driver in action without
->> bugs related to the "backport" modifications I would do to it.
->
-> Hi,
->
-> if you use kernel 6.9-rc2, then wmidev_block_set() is already available, so you do not
-> have to change that.
->
-> You just have to comment out the line with the no_singleton flag, then the driver should
-> work.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
+branch HEAD: c24c0a0143da2ded75148cc87a83ba654fa404e0  Merge branch 'kunit-v3' into testing
 
-Hi,
+elapsed time: 728m
 
-Thanks for letting me know of that. I'm doing the change locally right away.
+configs tested: 118
+configs skipped: 3
 
-> Thanks,
-> Armin Wolf
->
->>>> I would *love* to see this driver actually hit mainline repos, and
->>>> eventually the upcoming kernel releases, given how much I need to use
->>>> this laptop of mine as a computer engineering student.
->>>>
->>>> Asking just for the case I manage to get this driver up and going on
->>>> my end somehow: Is there a tool made for controlling the LED colors yet?
->>>> I can still use CLI tools much like on ASUS ROG series laptops, but it
->>>> would be much easier and more appreciated to have a GUI provided
->>>> Excalibur series laptops' LED lights can virtually take any color in
->>>> the RGB space - At least that's how I interpreted with the
->>>> configurations I used to do on mine using Excalibur Control Center
->>>> on Windows 10/11.
->>> No, there isn't a tool yet but controlling leds via sysfs ispretty easy.
->>> For example, if you wanted to change the left led zone's color to red:
->>> ```
->>> # echo 0xff0000 > /sys/class/leds/casper\:\:kbd_zoned_backlight-left/multi_intensity
->>> ```
->> Oh so the LED zones are in different sysfs directories, that's pretty
->> good. I might code a simple Bash script to make things easier later
->> down the road.
->>> And don't forget that all leds' initial brightnesses are 0.
->> Yeah I think I read that somewhere in the initial message. Can't I
->> change the brightness of the LEDs using Fn+Space anyway if I can't find
->> the sysfs entries for that? At least it works just fine on the latest
->> stable release - v6.8.4.
->>> Also, I'm planning to add support for this API in OpenRGB.
->> That's pretty nice to hear! If you need someone to test it out on a
->> 12th gen G770, I'm more than willing to do so!
->>>> And as for the profiles, let me make sure we're talking about the same
->>>> thing in this term: You're talking about the "Office", "Gaming" and
->>>> "High Performance" modes as seen in Excalibur Control Center, right?
->>> For laptops with 11th gen processors or newer: yes.
->>> For laptops with 10th gen processors or older: no, there are 4 power
->>> profiles for these laptops (High Performance, Gaming, Text Mode andPower
->>> save).
->> Oh so that's a yes in my case as my laptop has a 12th gen processor.
->> Glad to know.
->>>> If so, can this be somehow integrated into `power-profiles-daemon`
->>>> SystemD service for easier controlling with GNOME and other DEs that
->>>> use it? It's fine if it can't be, this was just a thought struck on my
->>>> mind for whatever reason.
->>> Yes, power-profiles-daemon is already integrated with platform_profile.
->> Now that's exciting to hear. I haven't seen a laptop that has its power
->> profiles integrated into the system with a driver in terms of Linux...
->> At least on the Monster and ASUS laptops I've tried Ubuntu on IIRC.
->>>> Please do CC me and the people I've added to the CC list with this email
->>>> of mine on the upcoming revisions, if any. We would love to keep track
->>>> of this driver and I personally would love to contribute into testing
->>>> as a power user.
->>>>
->>>> Cc: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
->>>> Cc: Ammar Faizi <ammarfaizi2@gnuweeb.org>
->>>> Cc: GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
->>>>
->>>> Also adding my organizational and school email addresses to the CC list
->>>> so I can still be notified while I stay offline on this email address.
->>>> GNOME Evolution doesn't run in the background and periodically check
->>>> for emails sadly, and I switch ROMs every now and then on my phone as a
->>>> source maintainer of 3 different custom ROMs. :/
->>>>
->>>> Cc: Stella Bloom <stelbl@elrant.team>
->>>> Cc: Bedirhan KURT <bedirhan_kurt22@erdogan.edu.tr>
->>>>
->>>> -- 
->>>> Stella Bloom
->>> Thanks for your interest,
->>> Mustafa Ekşi
->> Also I apologize for the previous (empty) email. I forgot to put one
->> newline after the "Subject" line, which caused git-send-email to not
->> pick up the email content.
->>
->> -- 
->> Stella Bloom
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
---
-Stella Bloom
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20240409   gcc  
+arc                   randconfig-002-20240409   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   clang
+arm                              allyesconfig   gcc  
+arm                                 defconfig   clang
+arm                   randconfig-001-20240409   gcc  
+arm                   randconfig-002-20240409   clang
+arm                   randconfig-003-20240409   clang
+arm                   randconfig-004-20240409   gcc  
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20240409   gcc  
+arm64                 randconfig-002-20240409   gcc  
+arm64                 randconfig-003-20240409   clang
+arm64                 randconfig-004-20240409   clang
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20240409   gcc  
+csky                  randconfig-002-20240409   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+hexagon               randconfig-001-20240409   clang
+hexagon               randconfig-002-20240409   clang
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386                                defconfig   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20240409   gcc  
+loongarch             randconfig-002-20240409   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20240409   gcc  
+nios2                 randconfig-002-20240409   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                randconfig-001-20240409   gcc  
+parisc                randconfig-002-20240409   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc               randconfig-001-20240409   clang
+powerpc               randconfig-002-20240409   gcc  
+powerpc               randconfig-003-20240409   clang
+powerpc64             randconfig-001-20240409   gcc  
+powerpc64             randconfig-002-20240409   clang
+powerpc64             randconfig-003-20240409   gcc  
+riscv                            allmodconfig   clang
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   clang
+riscv                               defconfig   clang
+riscv                 randconfig-001-20240409   clang
+riscv                 randconfig-002-20240409   gcc  
+s390                             allmodconfig   clang
+s390                              allnoconfig   clang
+s390                             allyesconfig   gcc  
+s390                                defconfig   clang
+s390                  randconfig-001-20240409   gcc  
+s390                  randconfig-002-20240409   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                    randconfig-001-20240409   gcc  
+sh                    randconfig-002-20240409   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64               randconfig-001-20240409   gcc  
+sparc64               randconfig-002-20240409   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   gcc  
+um                                  defconfig   clang
+um                             i386_defconfig   gcc  
+um                    randconfig-001-20240409   clang
+um                           x86_64_defconfig   clang
+x86_64                            allnoconfig   clang
+x86_64                           allyesconfig   clang
+x86_64                              defconfig   gcc  
+x86_64                          rhel-8.3-rust   clang
+xtensa                            allnoconfig   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
