@@ -1,195 +1,119 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B997818E
-	for <linux-hwmon@vger.kernel.org>; Tue,  9 Apr 2024 00:17:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74E7F1EA90
+	for <linux-hwmon@vger.kernel.org>; Tue,  9 Apr 2024 08:56:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712621831; cv=none; b=lnacPlpkMclgdaflazGS5F2ychd4ZNCEG5w/pZZmw01H/y1JSprvaEh8gTKsq0vn4j82J5+MnTaTHzwTWNHILl5mWBLJW/2VHSz8LR2fEdxmrVdpg3iV1nMX/FE0hYCqbIROduTN9nv6/rVfxlZSNS4B9FTNkar+bDozLxrOzQs=
+	t=1712652989; cv=none; b=cInxoI5WIebFAO3VTMLHPftTFeOkMXxDPhp61xYqTLbBXhQEewFI/h64eVAFI7X1TEoK066ShjXdRUqIewiyYod5Wvucz/9/jeTM2ls1oWilIyrRZ2UwQ2Fm8xaVn7f5KEdlIblUqe8AG/xEfSBy43B0StuafhkusIfBDpuTxHk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712621831; c=relaxed/simple;
-	bh=8Gz/KAyNRQV3JWxU/qQBQt9HPIl3XbcLqJwvGbEBldE=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=hQOSNktcPiBUV5UAJ2VgK3sRgHMCw9F+ag5DrufYzFPIJQqGXQeNx4SGGonzNlZyNAAYwVdggmgqdQjEtX5yrGm6Q5EvcJboxIR4QfZRkkvwtI+J85yzEAGiSyex+fk+rvJgvgv9wmRr5IrJ+qoZVt5YErwFoDQojVDVKJpYHpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ETXbUF2J; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ETXbUF2J"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712621829; x=1744157829;
-  h=date:from:to:cc:subject:message-id;
-  bh=8Gz/KAyNRQV3JWxU/qQBQt9HPIl3XbcLqJwvGbEBldE=;
-  b=ETXbUF2J6oqkzoC9xnTumx4ZAW9aC28aF5KgCicnoznhAXYLgb2t4QJE
-   +ugeMDJPZ8XyI0kSNeuOuZYw1jvsWzL5ef63ETpENX7XBAXuY/DPa/abM
-   W/7TTDxTe1K5GFs+tPXdmtoOhN2a1pfVoqqQncgpCTKMpnoNqZetYUTuY
-   5Gphon3lg6A+UcJhiq/oSIf8k5a31NwSEkyDFyylCCrVyHV9GmJLTPqXi
-   o9cI0RxGrBOgEtSaIia4OzBQOrHS/I3dJ5rdB0DpG6kGvP1FQyeGHi3a4
-   EGJwc9+vt45zYUGVLBS4Z7aKNd6iiHTrK/e/LGd3ATv74TFnV9KBuU1iy
-   w==;
-X-CSE-ConnectionGUID: nlvarVQqR36cHYnOUwMUQg==
-X-CSE-MsgGUID: E6HF6/1pSQ6yS5eA9OG9xA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="19355741"
-X-IronPort-AV: E=Sophos;i="6.07,188,1708416000"; 
-   d="scan'208";a="19355741"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 17:17:08 -0700
-X-CSE-ConnectionGUID: kTFAnN/sTJWq9VMf9Y/qhw==
-X-CSE-MsgGUID: adJzm48rQDyRHy69EKtBtQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,188,1708416000"; 
-   d="scan'208";a="43230834"
-Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 08 Apr 2024 17:17:06 -0700
-Received: from kbuild by e61807b1d151 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rtzAe-0005a2-2g;
-	Tue, 09 Apr 2024 00:17:04 +0000
-Date: Tue, 09 Apr 2024 08:16:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:testing] BUILD SUCCESS
- c24c0a0143da2ded75148cc87a83ba654fa404e0
-Message-ID: <202404090835.EiqOBfiW-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1712652989; c=relaxed/simple;
+	bh=aHzCEVenPD6LDlpB4fQUhAUL68h+LfvzUA8jXran0Ng=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=pSoVC7JR2BQciyXqLGa7tsmfVyz+yZGodbFtp/OOz7p6RK5/bcsnqN1XlVAcRgt810+wXjAcbUSDNfZzKAdo+lS+Lxye06qks1e0ow8YQHr4MTmBWzyOIznDZyykPvPVMHThuOiLqLDr83JSc7aVDzR8jBlUKhjaFdgO4mA0GEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1ru7H0-0008Kq-EC; Tue, 09 Apr 2024 10:56:10 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1ru7Gw-00BGxQ-Ah; Tue, 09 Apr 2024 10:56:06 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1ru7Gw-00Gq4L-0l;
+	Tue, 09 Apr 2024 10:56:06 +0200
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	linux-hwmon@vger.kernel.org,
+	linux-aspeed@lists.ozlabs.org,
+	kernel@pengutronix.de,
+	Billy Tsai <billy_tsai@aspeedtech.com>
+Subject: [PATCH] hwmon: (aspeed-g6-pwm-tach) Convert to platform remove callback returning void
+Date: Tue,  9 Apr 2024 10:55:53 +0200
+Message-ID: <20240409085552.19868-2-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2265; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=aHzCEVenPD6LDlpB4fQUhAUL68h+LfvzUA8jXran0Ng=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBmFQKZL2uQsG6ftU5XCongRswdbltwSL2K/H8TR O8eBTSbgYGJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZhUCmQAKCRCPgPtYfRL+ TtyNB/sEa9UAGiJ9lPOa5Gh9NXqQgSDOd7XFXQHoz+ByOCG5V5JvBnpUjW4/f9DwsRLMcHGrVEK vRACS86djo3hz0d6upH18Lds6VMGERxLGCikhj/49bEBvnzRE1+LCGPSqL+1lyqggsEcjAnbIlo VvnHaH7VqzU3V4zh4oFutW8scsTdnsr9lFUH5z6nROdbu7qgq3PObayu28sIe0fAX7V3QNv/3Io kM2IDgOSBI0QZt0jfKKkB0jgnOBTYQUdbQWXZmtjItFldXzq1Q85Y+ErvjngNJNl8No36tjw36Q UJZNJUNIFj0eMuOZpfMMPFbZsvNysxZNoO/yA26Kroj0e3aA
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
-branch HEAD: c24c0a0143da2ded75148cc87a83ba654fa404e0  Merge branch 'kunit-v3' into testing
+The .remove() callback for a platform driver returns an int which makes
+many driver authors wrongly assume it's possible to do error handling by
+returning an error code. However the value returned is ignored (apart
+from emitting a warning) and this typically results in resource leaks.
+To improve here there is a quest to make the remove callback return
+void. In the first step of this quest all drivers are converted to
+.remove_new() which already returns void. Eventually after all drivers
+are converted, .remove_new() is renamed to .remove().
 
-elapsed time: 728m
+Trivially convert this driver from always returning zero in the remove
+callback to the void returning variant.
 
-configs tested: 118
-configs skipped: 3
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+Hello,
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+most of drivers/hwmon was already converted to struct
+platform_driver::remove_new during the v6.7 development cycle. This
+driver was added for v6.9-rc1 still using the old prototype.
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20240409   gcc  
-arc                   randconfig-002-20240409   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                   randconfig-001-20240409   gcc  
-arm                   randconfig-002-20240409   clang
-arm                   randconfig-003-20240409   clang
-arm                   randconfig-004-20240409   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240409   gcc  
-arm64                 randconfig-002-20240409   gcc  
-arm64                 randconfig-003-20240409   clang
-arm64                 randconfig-004-20240409   clang
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240409   gcc  
-csky                  randconfig-002-20240409   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20240409   clang
-hexagon               randconfig-002-20240409   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386                                defconfig   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240409   gcc  
-loongarch             randconfig-002-20240409   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240409   gcc  
-nios2                 randconfig-002-20240409   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240409   gcc  
-parisc                randconfig-002-20240409   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc               randconfig-001-20240409   clang
-powerpc               randconfig-002-20240409   gcc  
-powerpc               randconfig-003-20240409   clang
-powerpc64             randconfig-001-20240409   gcc  
-powerpc64             randconfig-002-20240409   clang
-powerpc64             randconfig-003-20240409   gcc  
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-riscv                 randconfig-001-20240409   clang
-riscv                 randconfig-002-20240409   gcc  
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-s390                  randconfig-001-20240409   gcc  
-s390                  randconfig-002-20240409   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                    randconfig-001-20240409   gcc  
-sh                    randconfig-002-20240409   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240409   gcc  
-sparc64               randconfig-002-20240409   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20240409   clang
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64                              defconfig   gcc  
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
+There are still more drivers to be converted, so there is from my side
+no need to get this into v6.9, but the next merge window would be nice.
 
+Best regards
+Uwe
+
+ drivers/hwmon/aspeed-g6-pwm-tach.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/hwmon/aspeed-g6-pwm-tach.c b/drivers/hwmon/aspeed-g6-pwm-tach.c
+index 597b3b019d49..262d46fed3aa 100644
+--- a/drivers/hwmon/aspeed-g6-pwm-tach.c
++++ b/drivers/hwmon/aspeed-g6-pwm-tach.c
+@@ -516,13 +516,11 @@ static int aspeed_pwm_tach_probe(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-static int aspeed_pwm_tach_remove(struct platform_device *pdev)
++static void aspeed_pwm_tach_remove(struct platform_device *pdev)
+ {
+ 	struct aspeed_pwm_tach_data *priv = platform_get_drvdata(pdev);
+ 
+ 	reset_control_assert(priv->reset);
+-
+-	return 0;
+ }
+ 
+ static const struct of_device_id aspeed_pwm_tach_match[] = {
+@@ -535,7 +533,7 @@ MODULE_DEVICE_TABLE(of, aspeed_pwm_tach_match);
+ 
+ static struct platform_driver aspeed_pwm_tach_driver = {
+ 	.probe = aspeed_pwm_tach_probe,
+-	.remove = aspeed_pwm_tach_remove,
++	.remove_new = aspeed_pwm_tach_remove,
+ 	.driver	= {
+ 		.name = "aspeed-g6-pwm-tach",
+ 		.of_match_table = aspeed_pwm_tach_match,
+
+base-commit: 4cece764965020c22cff7665b18a012006359095
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
