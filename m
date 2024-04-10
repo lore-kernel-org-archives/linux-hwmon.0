@@ -1,67 +1,67 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A02E16E885
-	for <linux-hwmon@vger.kernel.org>; Wed, 10 Apr 2024 15:12:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C41C1E878
+	for <linux-hwmon@vger.kernel.org>; Wed, 10 Apr 2024 15:17:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712761941; cv=none; b=YmtQBBIIHPJST9EYVvz6rFxq7CP2fF+053xFcwr18tBP9P+ILGeIr68DKSVryrjGu+QdaBrfBYc6eFjiKiBqMwJgy8fkb5BXmgWD29eoDzEKpOHAy8DkD8MW2zSDkD7O/AQWnAeP1ChRPGdj/R54LNWC09Pu0Lgm4W+xm/XS6M4=
+	t=1712762261; cv=none; b=O15IQOMw8Xavu4I4RJgkouJaZDwItnQOiPkVDYtl8JiEiilZBQ0W2AOXadR677M3e6mM1CFF34TwbGWaGAFmWtVqINUaDiVZs0Z8xIsobP3JHt+/hGwgaW0GwpBNC+3z8eDMXTmrxlQsAlSPOsrNwzg08d3nOgRboceR+j1SW6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712761941; c=relaxed/simple;
-	bh=+MCZNG+9+LLgH0OJEKK9U3AUL2h4Y3TMInN0K5mXFq8=;
+	s=arc-20240116; t=1712762261; c=relaxed/simple;
+	bh=szyCn1R8feTb56BdY3JnMBAKk7urYF2Fah0x9uGZUhU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=brrsDKjYdRG6zAyo3TgDrojiFjI18u8tGWojjZ4OKxY0S8m59/thLrIKOw04LJVIGQ5/Bk3W9PJf0fXOdQcoORijn7eFAgFa+3RprY8JghsrgpFSR+R8yPDVNFjst9wIgEL0RG2jqK+JFMElkKqVihjNQThaGK6Rl28UyYju+D8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TCV0QBJg; arc=none smtp.client-ip=209.85.214.173
+	 Content-Type:Content-Disposition:In-Reply-To; b=IG8hqkX3bW1jGWnx0dmlbzIlIehQ+4+5fO1w7CeeYFz3pFug6mKTS3eyLdvD/kLlSyG9FGcto3mqAKbQSG3ocxN6gLHC7RUEn3emtcpw2dtu1hWtpybew0SjracJ2X8etk79yPPSnBNpcnXppdbVER2ooBmvH8wiXIfM4YPHyLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lgbk8EoI; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TCV0QBJg"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1e4f341330fso5932075ad.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 10 Apr 2024 08:12:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lgbk8EoI"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-6ecf1bb7f38so4677453b3a.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 10 Apr 2024 08:17:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712761938; x=1713366738; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1712762259; x=1713367059; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=mtyD6tkEhUPZyvX91xGGz4dEOCMghtm6UOvqSZja01A=;
-        b=TCV0QBJgwWzIZ8bacuxKSDoABTsP/67cmdUKxe5UZr5UPDY2ZJqFEhscQtGWlnctsx
-         MXC86yCaEixFl/oxfLlEek4iDPduf9g8yEMizWUN0JK4kGI9DsiljSBmyMfwoIf9go4C
-         MHCvJlaPHneah5RqDDPJY9KgjC3VhK3fyDkgYuCkh1k44cTfL7eSO8E7XE5G+VnnFID9
-         KFX7hPETFc9dxPmlXnWGoqoXgHhuC8OXRw4jtwCCN1yURHGdKJRBdQUxDqyTjYvL+B+C
-         gApV5c0rEr5Th09mxvlvgM2DTyPiYzKYUzWhI0EDaIIl7n0NrlIc8uGVINA6YjhZKxtJ
-         DtVw==
+        bh=sSiMlbZG0fMpmx71qYTXcLiV/9wr5mjT5DktD/IaIvM=;
+        b=Lgbk8EoIcnxUVNO0S91r+75X0n3O37Oj8hZA5pYU/uMUHwqCI+6qRdsZNGLgURX7TS
+         JCHgITHEVHgs2CE0IQAffJurlFhqV1l99e/OsnU8mns5CRgi9gg7laVeW41kYVSypZKq
+         brDa7svidcmzdbMf9y/1fs8W0+vuPPABKha00I8w35JUy4BzpvC3fGb3cwTsw3V4SJsC
+         0hPndweYu7f30AqW9F3SFQMtuSZlrrP9DrUswAAMaxHZljZzQY5MZghfTHDlChRbymd1
+         fqwSxygC5f/IrjVnR+l4noMhjJwCQm83YLHzzQtseFYeLqlKCmpyrx7r65BMPAGRWrw5
+         dOuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712761938; x=1713366738;
+        d=1e100.net; s=20230601; t=1712762259; x=1713367059;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mtyD6tkEhUPZyvX91xGGz4dEOCMghtm6UOvqSZja01A=;
-        b=Z0I0UJDCStCmndleUlDSUmjGzN0mxwEcDYZ8UxBrclAEFj7wQ0d5vzTz5rUeaSi3w0
-         ul2pThKyihje7m1EvfTNe0zCdzSlS8T5d687kLOTKGhhvUpnv9KknDrBrVGnoPxJPgkM
-         uZkmKaetCRacZ8/f+g6CcU0+GkMFvTmYK6xVvQVhJ/GrA56AQcAmrXAccyJ73QtZSqRr
-         lAYjMODp7C3bhVgHnsVOYSAsoicfgYT4n8gCGce2mcvI5O7/P7DPSsrN2KFPUqNn8Yss
-         YVEVXwvA7uorekt0fNKzyXgcjioGVg7A7GjnSJGSEcXMlZNnY3+RqLxSfKqRDLG/xaf1
-         esIw==
-X-Forwarded-Encrypted: i=1; AJvYcCXab6S4xEefl2U5+cJ3uxWQIapYRHpZpRw1ZI1KwsvZdr6lfAWice55o8KrvoT+TYqEfCoco7BQbtsQ2Lki7T0/TfqSh8m2mdtmcG8=
-X-Gm-Message-State: AOJu0YxA2nFKEKLofd/FOM6JWJl+0cgWFd6aL5pKZ7aM1zhZECSYdXpC
-	POgw3oF/DeJRpo8o8Bb51eOom1ewHxGxRS6oXZGIe3VLPHTe0GqV
-X-Google-Smtp-Source: AGHT+IFWy4t+iq+6RxZYY4JsEOB7/ll4BMZ1iOw5bHL31toJu0TMrZSMiBykSH0rLrlP+l2+iosX8g==
-X-Received: by 2002:a17:902:6805:b0:1e2:307f:d283 with SMTP id h5-20020a170902680500b001e2307fd283mr2666104plk.1.1712761938403;
-        Wed, 10 Apr 2024 08:12:18 -0700 (PDT)
+        bh=sSiMlbZG0fMpmx71qYTXcLiV/9wr5mjT5DktD/IaIvM=;
+        b=kooKs4Tw+Q8aroCtOnPwc+ox/n6U/Ip7xd6Oao9cSToNckj+sXfE5H3px1PU3EVbMb
+         Dy4SZo+jACCXi6Xt55lNeFHZesRj49RoO13L0/NopEG5OJyCFnU9lHVlcGkcIkFqffwK
+         yC8egbmdgb4xQ67zR5a1ShG6nohCpdAF41kaNqkSpubXcFUNy4pcSYrXif406CFycPfQ
+         1VXSKQJ0kyAqGUeVQcoYCPBYeTM8d5hWFzhB06b0ptg+ogN6WC/bSa/6V4XoceKBjJZD
+         Hwsm2NpLD06z6jrPC85E3LSHQIXBl9jNLPOrRCs3W1342BIR5VwPKdz4V2Tp7AW9LylP
+         Cwwg==
+X-Forwarded-Encrypted: i=1; AJvYcCUP10dy5Cs3x+2zVuoYlY3uuS5tPYWmeHBlmHwYxJ0iiDJSm8PINR4uo7dgGXExQobsvi68aPxGHv6MjfejePHGMArUigHbwXtlQFM=
+X-Gm-Message-State: AOJu0Ywlo65z0E7a/zL55009cso8A/WVb0cSUs3tXL+macC5c+GhLmcP
+	isjTlR51pqeR+EvYrrkqhSCNJtoCzA85fPr77kplmgP6CrCpkD/i
+X-Google-Smtp-Source: AGHT+IGiOQW2yeieBNBKnkq1K61ep1Vp1guqxkEgvx8/+8BoC8m9Bz151+8wnvLRXMInQv6XGdRong==
+X-Received: by 2002:a05:6a20:96c8:b0:1a9:2365:ea2a with SMTP id hq8-20020a056a2096c800b001a92365ea2amr3186777pzc.43.1712762259399;
+        Wed, 10 Apr 2024 08:17:39 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d15-20020a170902654f00b001e0bae4490fsm11026705pln.154.2024.04.10.08.12.17
+        by smtp.gmail.com with ESMTPSA id gu11-20020a056a004e4b00b006e6cc93381esm10197996pfb.125.2024.04.10.08.17.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Apr 2024 08:12:17 -0700 (PDT)
+        Wed, 10 Apr 2024 08:17:38 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 10 Apr 2024 08:12:16 -0700
+Date: Wed, 10 Apr 2024 08:17:38 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Frank Crawford <frank@crawford.emu.id.au>
 Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v1 2/4] hwmon (it87): Do not enter configuration mode for
- some chip types
-Message-ID: <a6eb2a95-d9a9-42f0-a50d-3034c694d977@roeck-us.net>
+Subject: Re: [PATCH v1 3/4] hwmon (it87): Test for chipset before entering
+ configuration mode
+Message-ID: <0773b784-e552-4b31-b8c7-d68e058a2290@roeck-us.net>
 References: <20240401025620.205068-1-frank@crawford.emu.id.au>
- <20240401025620.205068-3-frank@crawford.emu.id.au>
+ <20240401025620.205068-4-frank@crawford.emu.id.au>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,79 +70,29 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240401025620.205068-3-frank@crawford.emu.id.au>
+In-Reply-To: <20240401025620.205068-4-frank@crawford.emu.id.au>
 
-On Mon, Apr 01, 2024 at 01:56:04PM +1100, Frank Crawford wrote:
-> Update the configuration mode entry code to allow conditional entry, and
-> apply to all calls.
+On Mon, Apr 01, 2024 at 01:56:05PM +1100, Frank Crawford wrote:
+> Major part of the change for the new method to avoid chipset issues.
+> 
+> Perform an intial test if the chip ID can be read without entering
+> configuration mode, if so, do not enter configuration mode and continue
+> as is.
+> 
+> If chip ID cannot be read, enter configuration mode, and continue with
+> previous code.
+> 
+> Also update exit code to take account of if we entered configuration
+> mode or not.
 > 
 
-This is just as wrong as the previous patch. Any such option
-would have to be board specific, not chip specific.
+You describe the changes, but you don't describe the problem you are
+trying to solve. Even if configuration mode was already entered, that
+is not a reason to keep it active. We don't _know_ what is going on
+outside the driver and can not make assumptions. For changes like this
+you really need to explain the problem you are trying to solve, and the
+reasoning behind the changes. Just assuming that a set of chips would
+have its SIO mode enabled by the BIOS is just wrong. We don't know
+what if anything the BIOS is doing.
 
 Guenter
-
-> Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
-> ---
->  drivers/hwmon/it87.c | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-> index 6eeba3a01e3c..396c2d3afbf7 100644
-> --- a/drivers/hwmon/it87.c
-> +++ b/drivers/hwmon/it87.c
-> @@ -117,7 +117,7 @@ static inline void superio_select(int ioreg, int ldn)
->  	outb(ldn, ioreg + 1);
->  }
->  
-> -static inline int superio_enter(int ioreg)
-> +static inline int superio_enter(int ioreg, bool noentry)
->  {
->  	/*
->  	 * Try to reserve ioreg and ioreg + 1 for exclusive access.
-> @@ -125,7 +125,8 @@ static inline int superio_enter(int ioreg)
->  	if (!request_muxed_region(ioreg, 2, DRVNAME))
->  		return -EBUSY;
->  
-> -	__superio_enter(ioreg);
-> +	if (!noentry)
-> +		__superio_enter(ioreg);
->  	return 0;
->  }
->  
-> @@ -742,7 +743,7 @@ static int smbus_disable(struct it87_data *data)
->  	int err;
->  
->  	if (data->smbus_bitmap) {
-> -		err = superio_enter(data->sioaddr);
-> +		err = superio_enter(data->sioaddr, has_conf_biosopen(data));
->  		if (err)
->  			return err;
->  		superio_select(data->sioaddr, PME);
-> @@ -758,7 +759,7 @@ static int smbus_enable(struct it87_data *data)
->  	int err;
->  
->  	if (data->smbus_bitmap) {
-> -		err = superio_enter(data->sioaddr);
-> +		err = superio_enter(data->sioaddr, has_conf_biosopen(data));
->  		if (err)
->  			return err;
->  
-> @@ -2674,7 +2675,7 @@ static int __init it87_find(int sioaddr, unsigned short *address,
->  	u16 chip_type;
->  	const struct it87_devices *config = NULL;
->  
-> -	err = superio_enter(sioaddr);
-> +	err = superio_enter(sioaddr, false);
->  	if (err)
->  		return err;
->  
-> @@ -3520,7 +3521,7 @@ static void it87_resume_sio(struct platform_device *pdev)
->  	if (!data->need_in7_reroute)
->  		return;
->  
-> -	err = superio_enter(data->sioaddr);
-> +	err = superio_enter(data->sioaddr, has_conf_biosopen(data));
->  	if (err) {
->  		dev_warn(&pdev->dev,
->  			 "Unable to enter Super I/O to reroute in7 (%d)",
