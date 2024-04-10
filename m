@@ -1,250 +1,241 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B94F158213;
-	Tue,  9 Apr 2024 21:33:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 510BF15E811
+	for <linux-hwmon@vger.kernel.org>; Wed, 10 Apr 2024 13:30:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712698440; cv=none; b=hsLj6JwBxfrG/zJ8MJ4cmhXHcU0h+mdPYdXy9FMLp0NoKXZycVgG7+XzzjTePjWw15caBOdYwqhokRz5fxJL/lu3NlfA3pBz8Dq6R0GpKwb8Awj8q1pCavSl6QqpDffcfrGjG8lQ5LNsnu6xqujTpzpUxil9zmZ6DtbguW5P+F8=
+	t=1712755811; cv=none; b=stFLxTUPS5xkoR3oKyvPG9p1zKyzY0pqksuudnO3sczARJnna+Q4Edl/5pTi0gdeMlRCn3b/bFG6lWiWD58RjZnoJfpOue3yha7DLVnZY31mI12feqUszvn56OXAydXcseFIhvyWyiysGCwUX9qgJ5BLqOzQJnl5BAPOJGHhGS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712698440; c=relaxed/simple;
-	bh=6GDlg+zLBx4PsLbRoItai3KSHzYY5NK1nUnquIRqNRI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=E8D05nez2smU5HLEdUzrJTMasGRyOfd48DJuWf7s+NaNbs2/crJ9TYZ5CcLT06Ke+I/ZHLZRO/0hafOQ6Ax6b1wkzlxFYYgcDCQZAoHckeMStfjqbcMi0s1J8RuA5MIyAyDJXY0b018qJb6K4cHi2c99XTMacSkJ3S3+cGom+no=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=OejyuHux; arc=none smtp.client-ip=212.227.17.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	s=arc-20240116; t=1712755811; c=relaxed/simple;
+	bh=3LwunqkoryFCl+l1Bs2/xH5FjtscrEkrsAFhqsEK5zM=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Vob9LZQI9yVzS5aTtYZd8oXjbyri0tuMHNIwFLW2HcbMPhz/kPgZ++0M7x/eiioUNTnAiUtUugYxfRomYyoGaFkQuOLqBkj1tD/s1okSYEDyg9SomFVs8nNv8JJNLZ1jNyqtc30KSfoiNP1xdl74lt718UybSLTkcZEq48CBm6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZATvL1Ec; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="OejyuHux"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1712698408; x=1713303208; i=w_armin@gmx.de;
-	bh=sjuhz+TaLmV9ixOiAi3uRJXQXF3anu1HLOApgAGNu3w=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-	b=OejyuHuxq9kd6VqEiWc4efIV7P2tLRwE60CmjTJCKvPEEeCx1wZ9StpeHtCBZkPa
-	 Urc4Gd5fK9g+l12DW/I6GEWnT4hrt4CAUJp/cvtT9K81Z9GGPbqmGKKmBRCFEfjE0
-	 OdSGdaWn9AkB9hWDAij5I/znCxnaMF3KnVCa5bK+qL/ANmnwzjh5hUdB3jeoB860f
-	 EOmdIGZwA2Jv/k5s9Ni3GsWsCFBN72rn6WAtCTuzG4xWVsouZpNMfWMKbOO2WRqFq
-	 MH3RVZ0sJOXC2ud1azJuBsjaXsjiCNxKz87+FqOud1eBU57Xh6U0K36AH3evclMPY
-	 ZfRyjtKApYwwC3DJCg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from mx-amd-b650.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1N6bfq-1sr2Xu1PAs-0181f3; Tue, 09 Apr 2024 23:33:28 +0200
-From: Armin Wolf <W_Armin@gmx.de>
-To: mlj@danelec.com,
-	rafael.j.wysocki@intel.com,
-	lenb@kernel.org
-Cc: jdelvare@suse.com,
-	linux@roeck-us.net,
-	linux@weissschuh.net,
-	ilpo.jarvinen@linux.intel.com,
-	linux-acpi@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org
-Subject: [PATCH v2] ACPI: fan: Add hwmon support
-Date: Tue,  9 Apr 2024 23:33:23 +0200
-Message-Id: <20240409213323.8031-1-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.39.2
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZATvL1Ec"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712755809; x=1744291809;
+  h=date:from:to:cc:subject:message-id;
+  bh=3LwunqkoryFCl+l1Bs2/xH5FjtscrEkrsAFhqsEK5zM=;
+  b=ZATvL1EcTjRMZTZTtwZgHsJYIP6uQwzHBuKEtidhxMVudJPm/jkCrjk+
+   yhAFU5MHxsW3grk7KPeRSu1a6MwgRGDo7WtoDB1Ad0mj8cjNCmrhV4YEi
+   F1f7lm5A96a9ravhyysVfV72e14KAeyUQwGAHgSUdMsd6FfBERcxmnyUT
+   fnfotN3evXf650xDqyPq2AmFb1ftBzVoJBaclA3wSJtxyb57IS3bdMmYa
+   gpJRJvJmdRPk2QgsFora4CjztrAZyl8qEIhAMRlpVcJ5L48/eac/MV/e4
+   Ry6MnkSqdYA9FxadYtHNDc+8Jqs00M5L2swh1V/udFE7PO9KyyE+lqmDe
+   g==;
+X-CSE-ConnectionGUID: UQ0t06r1TEmrz+0u73Q/eg==
+X-CSE-MsgGUID: 2VYen4BHRSK3Gpj6vnuGOQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="8241364"
+X-IronPort-AV: E=Sophos;i="6.07,190,1708416000"; 
+   d="scan'208";a="8241364"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2024 06:30:07 -0700
+X-CSE-ConnectionGUID: BuL3vU40QxCwQZtMWOOsOg==
+X-CSE-MsgGUID: WWKSVVQfRDqN+/FoHxQ4tg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,190,1708416000"; 
+   d="scan'208";a="20575484"
+Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 10 Apr 2024 06:30:05 -0700
+Received: from kbuild by e61807b1d151 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ruY1b-0007Ru-1P;
+	Wed, 10 Apr 2024 13:30:03 +0000
+Date: Wed, 10 Apr 2024 21:29:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:testing] BUILD SUCCESS
+ 8081f501d2b85f0cb44a7bb1e7293f1f9be09d08
+Message-ID: <202404102110.Y8y59rss-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:yYdU5SWqH/bNqNsamsZdNYjgngACK2VgYu9rtYrDw57TzVQOfzk
- nbwx7FnKGIQD4a8CQDvsHEZ/Ospk5g7w4vd5fY8vJGFGBwg7MiETD/G1gpBdl12yKFbcc2z
- A0B0HMdpaANJd+A3Ya97MirLbdVG2NtLy1UxNDhf/yeY1inuODu5Nz3awDzud4o6PG0khzh
- Cmf0GOTxKcwAgCqFJ/GtA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:wtmSOyWMUO4=;7DDBbaFiuDx6Dit4uUKw2lAzbRA
- k7pkIyPjTCgqpyjA8tgOz/neI3lGQj7fWg26E65YT+M3NP2shf5PJEX7Oqr6eeMEgmeX0mM4o
- 0M8pDyPdv3Sy5Arh30XY+Wd9PbSqxrbZet5pjcWPEm1lTZs0BbBN+GpZtbW2F1RgCC7neVtjK
- ViiyTuenqv8liQVouUHwCZKKnDcQihN3YlxNbf/E/41eLbMLlBaypRv3VumgtOtTziiI/yNyQ
- e4ju/GD0HqHBFILae98JDql4ETFH58Ht/CxXqfKZT/UVyrjSCyLHxg7CkDNx1es/mpDVPiLxX
- WygY6lpfkj+UJ9o7etf5WTRebiu+Q8U9J7VuGsVcyCdf/T+SDsCYsgibDMsh//+kVjFuod3So
- Q5PHW+mCldy9Hdq7efwz30J0ljeT2vq22SEqqMzbAq2lSYjEw7Q2+gIWl4DW2Nj1EuRhxukXc
- kC6CJSG79591XxqBilNEWavox4u3HyVaWCQxGrbnCOnj4cJ33BEboAm5aRkplldsQkx7H7gm8
- kMoGd/5s1T8rAHS833amsTd1OkyCflbjHumzsGXAtcUzWy8Ple5ZxD1v782H53gQr/Dek/EEP
- lSR0GmWKlHsR29qgyDmifLBjTFdNrNvxxSXDgU8q9UO1yx0ObiN+T7fNw6QrwfdWbO1S/RVL0
- gF0CXVlIRbyct79se4m/bVsL+DZUCr+nFZ8RMFHayA9BlbuvC1U8x2hm6LhQia/5cn3DWytaJ
- dGOcF7qn8JNCCop976XiNgLkw8GU/KprE3h45fDXGXFfNETCn7+HeAlluLez8nM+cYOaPLbhN
- YbjU5X96fOBnfdhhrmKiMWwwVG/4deimRs4Gu7ErQWSYY=
 
-Currently, the driver does only support a custom sysfs
-to allow userspace to read the fan speed.
-Add support for the standard hwmon interface so users
-can read the fan speed with standard tools like "sensors".
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
+branch HEAD: 8081f501d2b85f0cb44a7bb1e7293f1f9be09d08  Merge branch 'kunit-v4' into testing
 
-Compile-tested only.
+elapsed time: 1415m
 
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
-Changes since v1:
-- fix undefined reference error
-- fix fan speed validation
-- coding style fixes
-- clarify that the changes are compile-tested only
-- add hwmon maintainers to cc list
+configs tested: 164
+configs skipped: 3
 
-The changes will be tested by Mikael Lund Jepsen from Danelec and
-should be merged only after those tests.
-=2D--
- drivers/acpi/Makefile    |  1 +
- drivers/acpi/fan.h       |  9 +++++
- drivers/acpi/fan_core.c  |  4 ++
- drivers/acpi/fan_hwmon.c | 83 ++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 97 insertions(+)
- create mode 100644 drivers/acpi/fan_hwmon.c
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
-index d69d5444acdb..c272ab2c93b9 100644
-=2D-- a/drivers/acpi/Makefile
-+++ b/drivers/acpi/Makefile
-@@ -83,6 +83,7 @@ obj-$(CONFIG_ACPI_TINY_POWER_BUTTON)	+=3D tiny-power-but=
-ton.o
- obj-$(CONFIG_ACPI_FAN)		+=3D fan.o
- fan-objs			:=3D fan_core.o
- fan-objs			+=3D fan_attr.o
-+fan-$(CONFIG_HWMON)		+=3D fan_hwmon.o
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                          axs101_defconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20240410   gcc  
+arc                   randconfig-002-20240410   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   clang
+arm                              allyesconfig   gcc  
+arm                                 defconfig   clang
+arm                         lpc18xx_defconfig   clang
+arm                   randconfig-001-20240410   gcc  
+arm                   randconfig-002-20240410   clang
+arm                   randconfig-003-20240410   gcc  
+arm                   randconfig-004-20240410   clang
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20240410   clang
+arm64                 randconfig-002-20240410   gcc  
+arm64                 randconfig-003-20240410   gcc  
+arm64                 randconfig-004-20240410   gcc  
+csky                             alldefconfig   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20240410   gcc  
+csky                  randconfig-002-20240410   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+hexagon               randconfig-001-20240410   clang
+hexagon               randconfig-002-20240410   clang
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20240410   gcc  
+i386         buildonly-randconfig-002-20240410   clang
+i386         buildonly-randconfig-003-20240410   clang
+i386         buildonly-randconfig-004-20240410   clang
+i386         buildonly-randconfig-005-20240410   gcc  
+i386         buildonly-randconfig-006-20240410   gcc  
+i386                                defconfig   clang
+i386                  randconfig-001-20240410   clang
+i386                  randconfig-002-20240410   clang
+i386                  randconfig-003-20240410   gcc  
+i386                  randconfig-004-20240410   gcc  
+i386                  randconfig-005-20240410   gcc  
+i386                  randconfig-006-20240410   clang
+i386                  randconfig-011-20240410   clang
+i386                  randconfig-012-20240410   clang
+i386                  randconfig-013-20240410   gcc  
+i386                  randconfig-014-20240410   clang
+i386                  randconfig-015-20240410   gcc  
+i386                  randconfig-016-20240410   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20240410   gcc  
+loongarch             randconfig-002-20240410   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                           virt_defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                     loongson2k_defconfig   gcc  
+mips                    maltaup_xpa_defconfig   gcc  
+mips                          rm200_defconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20240410   gcc  
+nios2                 randconfig-002-20240410   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                randconfig-001-20240410   gcc  
+parisc                randconfig-002-20240410   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc               mpc834x_itxgp_defconfig   clang
+powerpc                      pasemi_defconfig   clang
+powerpc                      ppc40x_defconfig   clang
+powerpc               randconfig-001-20240410   gcc  
+powerpc               randconfig-002-20240410   gcc  
+powerpc               randconfig-003-20240410   gcc  
+powerpc                     redwood_defconfig   clang
+powerpc64             randconfig-001-20240410   gcc  
+powerpc64             randconfig-002-20240410   gcc  
+powerpc64             randconfig-003-20240410   clang
+riscv                            allmodconfig   clang
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   clang
+riscv                               defconfig   clang
+riscv                 randconfig-001-20240410   gcc  
+riscv                 randconfig-002-20240410   gcc  
+s390                             allmodconfig   clang
+s390                              allnoconfig   clang
+s390                             allyesconfig   gcc  
+s390                                defconfig   clang
+s390                  randconfig-001-20240410   clang
+s390                  randconfig-002-20240410   clang
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                            migor_defconfig   gcc  
+sh                    randconfig-001-20240410   gcc  
+sh                    randconfig-002-20240410   gcc  
+sh                      rts7751r2d1_defconfig   gcc  
+sh                           se7751_defconfig   gcc  
+sh                           sh2007_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                       sparc64_defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64               randconfig-001-20240410   gcc  
+sparc64               randconfig-002-20240410   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   gcc  
+um                                  defconfig   clang
+um                             i386_defconfig   gcc  
+um                    randconfig-001-20240410   clang
+um                    randconfig-002-20240410   clang
+um                           x86_64_defconfig   clang
+x86_64                            allnoconfig   clang
+x86_64                           allyesconfig   clang
+x86_64       buildonly-randconfig-001-20240410   gcc  
+x86_64       buildonly-randconfig-002-20240410   clang
+x86_64       buildonly-randconfig-003-20240410   clang
+x86_64       buildonly-randconfig-004-20240410   gcc  
+x86_64       buildonly-randconfig-005-20240410   clang
+x86_64       buildonly-randconfig-006-20240410   gcc  
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20240410   clang
+x86_64                randconfig-002-20240410   gcc  
+x86_64                          rhel-8.3-rust   clang
+xtensa                            allnoconfig   gcc  
+xtensa                  cadence_csp_defconfig   gcc  
+xtensa                randconfig-001-20240410   gcc  
+xtensa                randconfig-002-20240410   gcc  
 
- obj-$(CONFIG_ACPI_VIDEO)	+=3D video.o
- obj-$(CONFIG_ACPI_TAD)		+=3D acpi_tad.o
-diff --git a/drivers/acpi/fan.h b/drivers/acpi/fan.h
-index e7b4b4e4a55e..97863bdb6303 100644
-=2D-- a/drivers/acpi/fan.h
-+++ b/drivers/acpi/fan.h
-@@ -10,6 +10,8 @@
- #ifndef _ACPI_FAN_H_
- #define _ACPI_FAN_H_
-
-+#include <linux/kconfig.h>
-+
- #define ACPI_FAN_DEVICE_IDS	\
- 	{"INT3404", }, /* Fan */ \
- 	{"INTC1044", }, /* Fan for Tiger Lake generation */ \
-@@ -56,4 +58,11 @@ struct acpi_fan {
- int acpi_fan_get_fst(struct acpi_device *device, struct acpi_fan_fst *fst=
-);
- int acpi_fan_create_attributes(struct acpi_device *device);
- void acpi_fan_delete_attributes(struct acpi_device *device);
-+
-+#if IS_REACHABLE(CONFIG_HWMON)
-+int devm_acpi_fan_create_hwmon(struct acpi_device *device);
-+#else
-+static inline int devm_acpi_fan_create_hwmon(struct acpi_device *device) =
-{ return 0; };
-+#endif
-+
- #endif
-diff --git a/drivers/acpi/fan_core.c b/drivers/acpi/fan_core.c
-index ff72e4ef8738..7cea4495f19b 100644
-=2D-- a/drivers/acpi/fan_core.c
-+++ b/drivers/acpi/fan_core.c
-@@ -336,6 +336,10 @@ static int acpi_fan_probe(struct platform_device *pde=
-v)
- 		if (result)
- 			return result;
-
-+		result =3D devm_acpi_fan_create_hwmon(device);
-+		if (result)
-+			return result;
-+
- 		result =3D acpi_fan_create_attributes(device);
- 		if (result)
- 			return result;
-diff --git a/drivers/acpi/fan_hwmon.c b/drivers/acpi/fan_hwmon.c
-new file mode 100644
-index 000000000000..b01055432ded
-=2D-- /dev/null
-+++ b/drivers/acpi/fan_hwmon.c
-@@ -0,0 +1,83 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * fan_hwmon.c - hwmon interface for the ACPI Fan driver
-+ *
-+ * Copyright (C) 2024 Armin Wolf <W_Armin@gmx.de>
-+ */
-+
-+#include <linux/acpi.h>
-+#include <linux/hwmon.h>
-+#include <linux/limits.h>
-+
-+#include "fan.h"
-+
-+/* Returned when the ACPI fan does not support speed reporting */
-+#define FAN_SPEED_UNAVAILABLE	0xffffffff
-+
-+static umode_t acpi_fan_is_visible(const void *drvdata, enum hwmon_sensor=
-_types type, u32 attr,
-+				   int channel)
-+{
-+	return 0444;
-+}
-+
-+static int acpi_fan_read(struct device *dev, enum hwmon_sensor_types type=
-, u32 attr, int channel,
-+			 long *val)
-+{
-+	struct acpi_device *adev =3D dev_get_drvdata(dev);
-+	struct acpi_fan_fst fst;
-+	int ret;
-+
-+	switch (type) {
-+	case hwmon_fan:
-+		ret =3D acpi_fan_get_fst(adev, &fst);
-+		if (ret < 0)
-+			return ret;
-+
-+		switch (attr) {
-+		case hwmon_fan_input:
-+			if (fst.speed =3D=3D FAN_SPEED_UNAVAILABLE)
-+				return -ENODATA;
-+
-+			if (fst.speed > LONG_MAX)
-+				return -EOVERFLOW;
-+
-+			*val =3D fst.speed;
-+			return 0;
-+		case hwmon_fan_fault:
-+			*val =3D (fst.speed =3D=3D FAN_SPEED_UNAVAILABLE);
-+			return 0;
-+		default:
-+			break;
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return -EOPNOTSUPP;
-+}
-+
-+static const struct hwmon_ops acpi_fan_ops =3D {
-+	.is_visible =3D acpi_fan_is_visible,
-+	.read =3D acpi_fan_read,
-+};
-+
-+static const struct hwmon_channel_info * const acpi_fan_info[] =3D {
-+	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT | HWMON_F_FAULT),
-+	NULL
-+};
-+
-+static const struct hwmon_chip_info acpi_fan_chip_info =3D {
-+	.ops =3D &acpi_fan_ops,
-+	.info =3D acpi_fan_info,
-+};
-+
-+int devm_acpi_fan_create_hwmon(struct acpi_device *device)
-+{
-+	struct device *hdev;
-+
-+	hdev =3D devm_hwmon_device_register_with_info(&device->dev, "acpi_fan", =
-device,
-+						    &acpi_fan_chip_info, NULL);
-+
-+	return PTR_ERR_OR_ZERO(hdev);
-+}
-=2D-
-2.39.2
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
