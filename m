@@ -1,134 +1,144 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD3BC5A7AE;
-	Fri, 12 Apr 2024 13:03:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D3A914884C;
+	Fri, 12 Apr 2024 16:09:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712927009; cv=none; b=L6GJBxIPMUgb3oJ9Sv0SVXE8Nux2dXj0VHZJfhJaMWmfiJ48pUEDPhwpsgBUssDScK7XnUR19vmXURwzYvvsdzxia2/RppfQRYqeFJjBjkYQteKyU6TqlHygiqnTDPOT5KSFrZEm8/rIMW3p2VfAV64Ue0xe2iGJgzwPyLB8lwM=
+	t=1712938176; cv=none; b=nDhjCQhYmBzTcLv8HLmzjHL2dgJaU0w1mLyT813x7df3Ms+yMuhoYaCRBlZNOGFEC+z94PJ+RhXBKBNB6SOAOrBjvxaLBFxyXIMv8z5wZeDJKULBHiMflS+tqS1mqrEqq6S4XWjzokLRwP72JM7s8g3t5LnojXIskqeo+f993bc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712927009; c=relaxed/simple;
-	bh=2mfkII1UFgJ/UcAysczGES4ndZ4OYOJnqliLmLwA/ss=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nI5a2DdtJFa3H1KV+/BBoByuCniN9fKeFgt29h4pGoCj2bVR9YdTcFeVweL+bTk6qUoRJmeniMYh+t8eIdnpIocjML0FoVBHX/++iY6Ma4PnqK11by0RJ+CZ6UptWOHbl+kaFeQKbmRYwpUVFp2mILh9RTRVW5lvTmbLVBBBFwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ctdkXiC+; arc=none smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1712938176; c=relaxed/simple;
+	bh=key2rY0okj8iTY/sKjeNG8DebhT6mn/FJZAaKfGK91E=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BEXLpjz7PsJbpirgwIDmvnutxNTrRNyRPxySzKnQAr2AZlBV6aex0uthEpctalgV+KnKcP3vy8tcn1RTGUzw9xfpTy0Wb2BwFbNlVvJSpVcW46wyzLfiubF881fytnS4VykgouUZawpC0NIPMl7PzQzS3W1j3PzNMURUY+DTURg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=m/5W5Ayg; arc=none smtp.client-ip=212.227.15.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ctdkXiC+"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-6ed3cafd766so816038b3a.0;
-        Fri, 12 Apr 2024 06:03:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712927004; x=1713531804; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NIsjf3aLoig4q1mbYS+gmuEcYpav6PcrUNtXYP3Kx60=;
-        b=ctdkXiC+kUd+C/cJBEylAVhNByIzbtqFukDIeDy93YlzrLYFatfuC1yh4mXv6A8dQH
-         2lbb8TJmTNn4R75Xbw/Hnji1mgrcEQVq698/D4GeD15leKGCh1HCxRASntwMLF7Z6IBM
-         6e13lmPjMCH2BPfxhtXi8kApU8qcD5b0julAgU/KVkC/UfBIs0Apz9VdwB+cp1xut5T9
-         plqVkmo9tA7qIDSxOqRRfM2HXhdqgRNaEBj/NdEUVlVUURDOnJYn5lU0KtDsJi3CC+Eb
-         +SGd+ZuIwjAGAHk1u9YUo/o/6h9ncScEkHgwou4kpdlEfd96N99YF2RAHqVWP5iUqNX9
-         0Wtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712927004; x=1713531804;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NIsjf3aLoig4q1mbYS+gmuEcYpav6PcrUNtXYP3Kx60=;
-        b=aMH/dwowbFiw/m832m2WvJ0fGEUGvsS3T+n4wog/Yrw6agVTpps4HA/23UclC19PpL
-         iuPpF1EgBj0ri3bab5Il7Kv/ZXY4lC6uJqw61Hhsa6YDUbio7CAy3dZ9EgKpyQss8J1F
-         XNI4Lx6PfAyjJwk9KdHGz0J8fNacwspgLotkq6WL5JWIelydcdc7A5rWXbrbf2KfZhe7
-         lL2vbYR+UOzEVDMb4Uec6ftK56NnAhVITZf4LcaQNcWQJ+D+0K1mLlfnx2toKONcD99M
-         ckCxR8TyZzWNnkZuotNWCG39ZP9XVZqzGyndyyZRlt8OLnWvndBMs7wi8wuf6bqnWXPX
-         5j7A==
-X-Forwarded-Encrypted: i=1; AJvYcCUirwOa6hqA1DaUBCA3drBtfzL91smtAS1uX5hJSLRKleMoXjpEMKrhrkrEmru5UQLhai71P4EOYpoEWxSNRnx4AbmOHLJAAdAMNWFr2lDN+fj+DtOeVmeCINjehclG1TKwoqowkmkeFYk=
-X-Gm-Message-State: AOJu0YxQl7IMhY/72/cHFszerSz6fRgtrh0wTFQUbAzWXgoXtH9OUaw8
-	YCb58DtaNgLT9fHWqH9aWX1Dsya20pXzxLqOaL1cN95mE5q4zF+t30Up5Q==
-X-Google-Smtp-Source: AGHT+IF0XuluccTFbg8j3Mg7G+GD3aqe+WpyKIX9ogwEPa2Yk+UDznXRGU7eXJxACr9rZ3Av8aKPcQ==
-X-Received: by 2002:a05:6a21:1f09:b0:1a9:3ac0:f1f1 with SMTP id ry9-20020a056a211f0900b001a93ac0f1f1mr2310292pzb.34.1712927003750;
-        Fri, 12 Apr 2024 06:03:23 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m3-20020a056a00080300b006ecfc3a8d6csm2811458pfk.124.2024.04.12.06.03.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Apr 2024 06:03:23 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 12 Apr 2024 06:03:21 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
-Cc: patrick@stwcx.xyz, Jean Delvare <jdelvare@suse.com>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] hwmon: max31790: revise the scale to write pwm
-Message-ID: <d82d5585-ec6c-4611-ad33-9c2d00745176@roeck-us.net>
-References: <20240412032559.3352846-1-Delphine_CC_Chiu@wiwynn.com>
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="m/5W5Ayg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1712938143; x=1713542943; i=w_armin@gmx.de;
+	bh=GfYGlzTabZ/Md6Ur06TpQylZldL1dEkuYiWABfiFon0=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+	b=m/5W5Ayg/cLKO6mqu+hsj+RN9pqKhFwmqKRKSFCwCY0gV+qinWNOKYvpFF/lRTeR
+	 OQYLA0rpOYfYN6WvX8BajQ0+WNaDRexCLtOuK0M43KtsO6Hu6n7r+h2DfqnOiAoc3
+	 xVD6trFryUR9HyRjvEAghFYRcEo81mVmlGM945nUPH6jnaxVEUSwn80u6+MuwcGVe
+	 2y01YTIVE/Jz+sA68Q7TYbYUqcommHH56V0RTNv7lLhifG+z/jcxiB8yGjcEmIvBl
+	 B1mHlQUXTUxrM+cEgXFegxmUidPjmxRxIbgAQIk3aeassvfaXN9O8b4QKtuuCFCvK
+	 wdTTTKliQTVcI76Nag==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from mx-amd-b650.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MHXFr-1rzSKU0AOv-00Db32; Fri, 12 Apr 2024 18:09:03 +0200
+From: Armin Wolf <W_Armin@gmx.de>
+To: mlj@danelec.com,
+	rafael.j.wysocki@intel.com,
+	lenb@kernel.org
+Cc: jdelvare@suse.com,
+	linux@roeck-us.net,
+	linux@weissschuh.net,
+	ilpo.jarvinen@linux.intel.com,
+	linux-acpi@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org
+Subject: [PATCH v3 1/2] hwmon: (core) Add support for power fault attribute
+Date: Fri, 12 Apr 2024 18:08:56 +0200
+Message-Id: <20240412160857.79858-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240412032559.3352846-1-Delphine_CC_Chiu@wiwynn.com>
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:FxN8oOpXNdjbD6CD5rAKuRlwWxOj0azlCpDAY3MnyB/WSTkNHyl
+ HE/auXD4vpPP6BXM+nU9pvumVwDf4Su+KryhDAmxqJDu8yiDN65uHKbPYAw97u/FiWmko1q
+ Hho5TLZCzT0BwtE7qJV4xiv3mJ/a8nOewjXizuGz1IP0TwXpaVSPDkpdyoI8WjdMpxv/mUW
+ QAgUgReNCQyayF+gFWCyQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:14VeDLJl1bg=;KEqr7ll/Hc3qkWPfpw6n4LsbJL1
+ c8x8CgG9ChVqgozx19NjB6vtmvVcPnWUZuIkUpXd2IoU1eZxfT8st/8o4e7LzBmt2gxfCuoZJ
+ dVWm+IxbFQr74U/KExjrG3HYcg1DmvcwKFzBg5KfT9Ng4slLYwOXl+DLprnJ/4sRxjKsLgEFj
+ ca90DiwEra/KsOtbhhXRxB2GaAE3PU6pfdu7jjtWey7U/YQULXX7X4oSK2nS7prKEaVZDtYMZ
+ EmG477JPhy1mZRtXIiqebhQCEXag6gBngjcjzJetSi/R2HbbHMA7ZgKyzLppjU8JsHdyn5hUK
+ 1J5O6tE8njQN3dbBb4I4lrqy+SfDiUXyqENKxPARclE1bAq+Mtxy27ItVMUxGlFBsod4EMXoj
+ GRMBeLmJi4GRPiYl39q4C1mcK4RQ0QhJiXNR0kLbbBN0n+tAD83sn5RRtkLmNWG+//eGEAFpq
+ PQIZMrfgM2afNEdermyHaO4Yywd1PEja+zdzVMi9VtJ0b7IECl3M3nBgW+Z30AgsGhqPyXz8f
+ om6O35uDstQ9wsH5lXRSO6Z5NoKCqVbhBlWa3Mu7YdaVOxKzGw9qy+Zuj6l4sBLNYVndcURaW
+ 0XG1mKeU5NG3rJPHlfgfbWh23k0lFJIZoTHzhZQ7vnkCUDEeZx79ND6loApE1IkwDJ/eJu8hJ
+ NId6Dv2NIk55CmVKgEynArgI0MuuMkzArq4PdrmN6NXGI339DSedyIgGf6+HDob2OCR2o2KGM
+ png1ApJBjheu5hAxEnGoqcuOgCf3oxZ5rMBguz8z2/hqGT8V4aqkrWLk9URKLV2dif/6krtQx
+ lvV4hWowzBevjjmigXh0FKNSsMK53JPj75lmKMi+8/iuc=
 
-On Fri, Apr 12, 2024 at 11:25:58AM +0800, Delphine CC Chiu wrote:
-> Since the value for PWMOUT Target Duty Cycle register is a 9 bit
-> left-justified value that ranges from 0 to 511 and is contained in 2
-> bytes.
-> 
-> There is an issue that the LSB of the 9 bit would always be zero if it
-> just left shift 8 bit for the value that write to PWMOUT Target Duty
-> Cycle register.
-> 
-> Therefore, revise the scale of the value that was writen to pwm input
-> from 255 to 511 and modify the value to left-justified value.
-> 
+Power sensor driver might want to signal that the power
+value is not usable. Add a new power fault attribute to
+report such failures.
 
-The only difference is that it writes 511 instead of 510. All other
-values are the same. I am not sure if that is really worth the
-trouble. It would have made a little more sense to me if you had
-used DIV_ROUND_CLOSEST(), but you didn't do that. As it is, I really
-don't understand the point. If it is really important to write 511
-instead of 510, the commit description should explain that and not
-talk about the last bit always being zero (which it still is after
-this patch except, again, when writing 511 instead of 510).
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+Changes since v2:
+- added patch
+=2D--
+ Documentation/ABI/testing/sysfs-class-hwmon | 9 +++++++++
+ drivers/hwmon/hwmon.c                       | 1 +
+ include/linux/hwmon.h                       | 2 ++
+ 3 files changed, 12 insertions(+)
 
-Thanks,
-Guenter
+diff --git a/Documentation/ABI/testing/sysfs-class-hwmon b/Documentation/A=
+BI/testing/sysfs-class-hwmon
+index cfd0d0bab483..ed01d43d2491 100644
+=2D-- a/Documentation/ABI/testing/sysfs-class-hwmon
++++ b/Documentation/ABI/testing/sysfs-class-hwmon
+@@ -882,6 +882,15 @@ Description:
 
-> Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
-> ---
->  drivers/hwmon/max31790.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
-> index 3dc95196b229..bd201191da1c 100644
-> --- a/drivers/hwmon/max31790.c
-> +++ b/drivers/hwmon/max31790.c
-> @@ -49,6 +49,9 @@
->  
->  #define NR_CHANNEL			6
->  
-> +#define PWM_INPUT_SCALE	255
-> +#define MAX31790_REG_PWMOUT_SCALE	511
-> +
->  /*
->   * Client data (each client gets its own)
->   */
-> @@ -343,10 +346,12 @@ static int max31790_write_pwm(struct device *dev, u32 attr, int channel,
->  			err = -EINVAL;
->  			break;
->  		}
-> +
-> +		val = val * MAX31790_REG_PWMOUT_SCALE / PWM_INPUT_SCALE;
->  		data->valid = false;
->  		err = i2c_smbus_write_word_swapped(client,
->  						   MAX31790_REG_PWMOUT(channel),
-> -						   val << 8);
-> +						   val << 7);
->  		break;
->  	case hwmon_pwm_enable:
->  		fan_config = data->fan_config[channel];
-> -- 
-> 2.25.1
-> 
+ 		RW
+
++What:		/sys/class/hwmon/hwmonX/powerY_fault
++Description:
++		Reports a power sensor failure.
++
++		- 1: Failed
++		- 0: Ok
++
++		RO
++
+ What:		/sys/class/hwmon/hwmonX/powerY_rated_min
+ Description:
+ 		Minimum rated power.
+diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+index 3b259c425ab7..6150d64f5c4c 100644
+=2D-- a/drivers/hwmon/hwmon.c
++++ b/drivers/hwmon/hwmon.c
+@@ -560,6 +560,7 @@ static const char * const hwmon_power_attr_templates[]=
+ =3D {
+ 	[hwmon_power_crit] =3D "power%d_crit",
+ 	[hwmon_power_label] =3D "power%d_label",
+ 	[hwmon_power_alarm] =3D "power%d_alarm",
++	[hwmon_power_fault] =3D "power%d_fault",
+ 	[hwmon_power_cap_alarm] =3D "power%d_cap_alarm",
+ 	[hwmon_power_min_alarm] =3D "power%d_min_alarm",
+ 	[hwmon_power_max_alarm] =3D "power%d_max_alarm",
+diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
+index edf96f249eb5..00122e565dbf 100644
+=2D-- a/include/linux/hwmon.h
++++ b/include/linux/hwmon.h
+@@ -237,6 +237,7 @@ enum hwmon_power_attributes {
+ 	hwmon_power_max_alarm,
+ 	hwmon_power_lcrit_alarm,
+ 	hwmon_power_crit_alarm,
++	hwmon_power_fault,
+ 	hwmon_power_rated_min,
+ 	hwmon_power_rated_max,
+ };
+@@ -270,6 +271,7 @@ enum hwmon_power_attributes {
+ #define HWMON_P_MAX_ALARM		BIT(hwmon_power_max_alarm)
+ #define HWMON_P_LCRIT_ALARM		BIT(hwmon_power_lcrit_alarm)
+ #define HWMON_P_CRIT_ALARM		BIT(hwmon_power_crit_alarm)
++#define HWMON_P_FAULT			BIT(hwmon_power_fault)
+ #define HWMON_P_RATED_MIN		BIT(hwmon_power_rated_min)
+ #define HWMON_P_RATED_MAX		BIT(hwmon_power_rated_max)
+
+=2D-
+2.39.2
+
