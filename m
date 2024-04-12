@@ -1,95 +1,142 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2045.outbound.protection.outlook.com [40.107.117.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C13B6635;
-	Fri, 12 Apr 2024 00:57:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712883450; cv=none; b=UzAS0RBe9cKIpuEP7PcrhnBEUP3HwPC+Ou3DIYLDW3l3cukpNuRpBJd6snjxVIcrr6uCpx7f75mjUok/MKHnDQxBkZI/ZWlOLFn+2cmRbaXKa1YXmHKj3R9JeA8V3dsl1OSw5PNbUxt9C7RX7R0lx2HvtY0C9OqfgQesgDTOtbI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712883450; c=relaxed/simple;
-	bh=MIfoj+MveIgyU2tpQCyROYfjOQSPryYHNoW/UUrNq+U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J3QK4kLcccBL+J82vgqY98I5wXesFiJUXMbnmHoglwUnEDszjcWST4HLGYHSeXsvjztlL0O6WzLQSbEHZz9GrBPq2dPX/OTHyjwtBOvdqn/0WKRbt1I2oiQWMxGJBig5H74SyDkJ0m8/HXUCAoGhYCVpfWfG8BabQsAkwBxc2yI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NQoleHqJ; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75528175A7;
+	Fri, 12 Apr 2024 03:26:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.117.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712892366; cv=fail; b=kY/9I8m/oNhfDA3bC5XaealtjtprjP6NgivBrx9GXEJzYqQ/Acox0DQj8SBuLW6nRTklEB4Ifgw7l5GzSdDpbumgzAWu6frW7ZSlJ9fNcS2IRsI1V/P6Oc7L0ZkGivERLLJVvyefFiVgbcx22rA9zR2UzxAPkdfRV1Zh7vFR3Os=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712892366; c=relaxed/simple;
+	bh=4/T/NZ9d/DanJg2t/5V8EriwpovvYg+WIN+i8IDuqNw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=kAU8QEl9fJHD2mLoBFefQZpWnHIIW3lTcTsdPNupGGPVuuiCqMGcbJdTCd/rrW+4ZZj1DaVBZWZvM/+w1Cm+satBnsJ/RGGq8oJTTdjEz8P/bjfXetuQqOy0Y90ICKevH79hWW1+8Lu/o3aVeom96tFYLJ8Jc4IpSxvQJAweej4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wiwynn.com; spf=pass smtp.mailfrom=wiwynn.com; dkim=pass (2048-bit key) header.d=wiwynn.com header.i=@wiwynn.com header.b=bRQ9M8FT; arc=fail smtp.client-ip=40.107.117.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wiwynn.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wiwynn.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NQoleHqJ"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1e3ff14f249so3267795ad.1;
-        Thu, 11 Apr 2024 17:57:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712883448; x=1713488248; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DXUPX3W8MoBNn+iv4m0YCN2/u0CoFiw63dWg/F1IegM=;
-        b=NQoleHqJGXU3MW86bbZHF1rIB7ok5HnoFgNlhF/hPA2Cp93A440ZBdAC7c58DQy9BW
-         Il3SSuzMgNXoulyOWoz7MI6+EJLuQYKBkPYxJ+DV+65aihiLK0XwqtrvwKI+mstQTyaA
-         fD28RhYfCvNwpel5K8ZgB/PSrA/wvu4/JZ3OhX7o0TFNSPiypzkKPrIUyM88V5AnJZXV
-         eilXhZj8JrxeSiv15GGsMSaxoabiDBGlsSVJBq+teEWeu5vFEKG+MCb0hPY4jHjz1Zg5
-         GA5WJ3oq1hTKMhYBBJeJfCT8VPYRqnXpf+yO3Zk1VsSvz/iw1VIHn6I74mX2+UDyoMHV
-         2zRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712883448; x=1713488248;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DXUPX3W8MoBNn+iv4m0YCN2/u0CoFiw63dWg/F1IegM=;
-        b=lZGorXAv5ZZBcJVLBpGWR0/Jk5ZHhedDTr5u4t3vLqJyHXyn+uvI+3qXST5enpxMP0
-         uhY5Q+a/NfZ1/3khnAT7OrC/uwhEidKrE68vgd3rqz3YuBmBHfVJ6drG2nQzflmB70pI
-         ZjxEL1QA+X85VqjCIBFrqKI9fdq6ZCx4OC8J7yGl+bpgmhSctdUtyW/hAxy4+DmZLJb5
-         etsF/vtulvmDwGZ4aCWQzmZkvv7N5fKRSAvs/e2DH6L7E4cK9pgoyLNM3KrpNkIrU9rd
-         M+ATxj6Of1y3DtrmmcgHxvN8BE6XrLgSsY8ohoWv6X7F2oNSy4LLH/D+iGenBGF/xcsM
-         dioQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVEOtjIw9CtoAzrOBUjkALUnPwDuanFNoYHU+rXZ+qf+VuoBkKDpLFD0nFtz9PptJOyWedYMdhVIlFMrKEKpkk/W94dPSY/cmzFoA+4fFGWNyx11ni8Y+fGIrC5MI7n6EBLDEGHiwd9dBSMF4TM92zyk5kHcPDjfdTnbtslBlXKpDkSknF8MiwCe77deMRJcRoeAiQLgWB/DlhCTiWTYzDa3IYPG9DPMEBIbA==
-X-Gm-Message-State: AOJu0YxEL1bNJeXGcJuXvRjsPdrJwAv534WLL3oB8xv6HIG4pRfa8Xgb
-	y+8dsTD4IA5TePpFl5EQ4dgEB64MXN/ckHbNcMAxDB1rzOaB6xgP
-X-Google-Smtp-Source: AGHT+IF3fEVLEbfpH2K0DBl22UuXRCWrmLZcvHt+WYnbX0VMziEsqGFEm5HUu+wPYMMc+73AHxAjCg==
-X-Received: by 2002:a17:903:2303:b0:1e5:5c69:fcda with SMTP id d3-20020a170903230300b001e55c69fcdamr3572445plh.26.1712883448007;
-        Thu, 11 Apr 2024 17:57:28 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i15-20020a170902c94f00b001e25da6f2f2sm1788084pla.68.2024.04.11.17.57.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Apr 2024 17:57:26 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 11 Apr 2024 17:57:25 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Armin Wolf <W_Armin@gmx.de>
-Cc: Mikael Lund Jepsen <mlj@danelec.com>,
-	"rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
-	"lenb@kernel.org" <lenb@kernel.org>,
-	"jdelvare@suse.com" <jdelvare@suse.com>,
-	"linux@weissschuh.net" <linux@weissschuh.net>,
-	"ilpo.jarvinen@linux.intel.com" <ilpo.jarvinen@linux.intel.com>,
-	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"platform-driver-x86@vger.kernel.org" <platform-driver-x86@vger.kernel.org>
-Subject: Re: [PATCH v2] ACPI: fan: Add hwmon support
-Message-ID: <e5398618-5140-4553-8dab-6f5ad73de805@roeck-us.net>
-References: <20240409213323.8031-1-W_Armin@gmx.de>
- <AS4P189MB21333C826C173582E12FFE3EBA062@AS4P189MB2133.EURP189.PROD.OUTLOOK.COM>
- <e6798f0a-5e50-41df-ae3e-0069c16abec3@gmx.de>
- <b0899d74-79d7-459c-8f2d-17a17a0f58d7@gmx.de>
+	dkim=pass (2048-bit key) header.d=wiwynn.com header.i=@wiwynn.com header.b="bRQ9M8FT"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=U0ZmPrU/6SU+8d9gPc3xFFURwhihv6NNXmXZsQcI5Nju95NXmG9S43e9qke600y9/G9Sr0lLjpNtc/ip9WOfMPJR094fvrqQ7W40Wuc5zS5oGLawaAEXnSINhZgPD6qxPoMtUs+fQE3NemhYaHkoejiNAECGRPPiQaWyRHHcxuQ4glnNP3ny8kD1rHg9RQkbAA/W7fRDm1HK9Y4FwJIVHemrYuCSnOOz4Tj16BplnzOtNgIaHg0fwby98la98Ud0+HKPl+4H3k1lRggfBlYKWrEMm4976yxkyltGgJQH5JQOhpi9fgD2x+mV3GHW4hl+j2DCo0FMcFB+XAi3ZKfJtw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8YQ0xCloh9/5F+75o5FJlPmSjL39OwxGMYUfO14VWL8=;
+ b=Af+X96Eu4nv54HaX/BEuJRAEZfD0fn2nqx5rZ90F53w42N/31PJQnsL7eKRXVKA+/bCovOcxrX7SGQmD2WeM7CX4E9l/qBQ1pP8EV+jCt09+/ioLR+mpQpV2p//LAYvsH/WYuh69KCYeMW/R0QJeo7NzwUtIxpcaXLfxkMlU7SKZiBKqTT6yjm9JzULxpsAj/Dlvodb0oGk/JotCZxvRQGQsPO3wkl+MeOu7PBo55CbIwf63esDFm4RXQEC8s6rdcZEfRgI2i+PTNiIYxDWjAbBGCGjOSAy9wGDvCL0Nim0DNRw67NvzlhqEzDWVZPuLVe4uYit1pCI2hYvOJMZo8w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 211.20.1.79) smtp.rcpttodomain=stwcx.xyz smtp.mailfrom=wiwynn.com; dmarc=fail
+ (p=quarantine sp=quarantine pct=100) action=quarantine
+ header.from=wiwynn.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8YQ0xCloh9/5F+75o5FJlPmSjL39OwxGMYUfO14VWL8=;
+ b=bRQ9M8FTusKXm1zS/D5Va85VRpopExrdw93FJHqhvGarPmdfNcefnnlffY2LLuZtI/7ViS9ledTn53SpGq3i22iTSUMxekOZ3NNcKnawqpiKy9VHKpSJqRSZy5v37DDrG8dMjZrQmT/01Ek1koxAfIxZqfldwOrNtW+URlPnwcuvO73fhyERbRmDewmLG/GLY3GeMi7mCSVAOZUBsAeKT7NmyjHdSc1Kczsg9wlAX71YcdwwjF35IJY3M00avoE47xDF+wIC2bi2+Tzays1Ua4tWMAJx5wAnvw3AseIgfX1R8KwoI9iDusKbKV4GDZsJDhXDaiDs4WTOb4NK86m8ig==
+Received: from KL1PR01CA0125.apcprd01.prod.exchangelabs.com
+ (2603:1096:820:4::17) by SI2PR04MB5895.apcprd04.prod.outlook.com
+ (2603:1096:4:1eb::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46; Fri, 12 Apr
+ 2024 03:26:01 +0000
+Received: from HK2PEPF00006FAF.apcprd02.prod.outlook.com
+ (2603:1096:820:4:cafe::34) by KL1PR01CA0125.outlook.office365.com
+ (2603:1096:820:4::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.26 via Frontend
+ Transport; Fri, 12 Apr 2024 03:26:01 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 211.20.1.79)
+ smtp.mailfrom=wiwynn.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=quarantine header.from=wiwynn.com;
+Received-SPF: Fail (protection.outlook.com: domain of wiwynn.com does not
+ designate 211.20.1.79 as permitted sender) receiver=protection.outlook.com;
+ client-ip=211.20.1.79; helo=localhost.localdomain;
+Received: from localhost.localdomain (211.20.1.79) by
+ HK2PEPF00006FAF.mail.protection.outlook.com (10.167.8.5) with Microsoft SMTP
+ Server id 15.20.7452.22 via Frontend Transport; Fri, 12 Apr 2024 03:26:00
+ +0000
+From: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+To: patrick@stwcx.xyz,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v1] hwmon: max31790: revise the scale to write pwm
+Date: Fri, 12 Apr 2024 11:25:58 +0800
+Message-Id: <20240412032559.3352846-1-Delphine_CC_Chiu@wiwynn.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b0899d74-79d7-459c-8f2d-17a17a0f58d7@gmx.de>
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: HK2PEPF00006FAF:EE_|SI2PR04MB5895:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 72c64f69-99dd-4ad5-bc8e-08dc5aa046d8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	X5S43Aher04p03N7xfN766MtoS0JFNy6OHr5TPepQrEB4VtHlhcsbaNJ9TC/ZYOFP3cV/AfYuX15WBtk5k7+nWHIeUPH27Q/sabcu49qXb6blGpJIXOnJPmhj9OTT82N9qLQ5w1f3ZJ+ozqZHPWzyPddrSsOEKP1bNSzssurxER4q47+X3OWd4HsPZ0VdNJ6m820g6WO8DG99kwR5pNsKdfbKNKNXWZ91653e9wHONOCvr5cRtvWlfK81SxwekKF0JUsLV7n0W+g8XcwIFgVhcmUfvYFMa8tXNT7R0Z8eKF+u4//Cm7RHKCJhml8jhxqsmst71d8mjDKLkC3daUeCvbN3+xVqKaJYBo4XrZfWHwi+W9pWpGwoUtc/beWJtCedzjjNp/zhX00Rt7J7ooXVXRwxtp/GVaj596FjSYnfloeTTVeF5iGTKKGmqXEaSJp3WHeKygG1MJGhdBvUt1nlGFGRXKiLLHbmpL7UWFivejG9cwkj+CFcy/xsN66CNRmeuqZmf7LqNJ6/2NHywlnO1EN+5wetaZvu0IbSbybgYVZez99kM05zi9lcQ9aFkilsn9RCC/MSOqQgRw7/JEvqc/gFudO6O1dIj3ibUQ3rKhRDx2LlCu2vnXhISADSuxpxHIQ9X+6ogeQDYnpvJlFFE5Cld70VJ0oUCqDiGdjL5dGMP0YxnGx6OPl5KV0REfHa7Sm780VUM/BNNQlAyQ1gjnnx4KIbsGD1DXqwCLCA0ED3mK17eFxYWyC26tUWpp3
+X-Forefront-Antispam-Report:
+	CIP:211.20.1.79;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:localhost.localdomain;PTR:211-20-1-79.hinet-ip.hinet.net;CAT:NONE;SFS:(13230031)(1800799015)(36860700004)(82310400014)(376005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: wiwynn.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2024 03:26:00.8237
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 72c64f69-99dd-4ad5-bc8e-08dc5aa046d8
+X-MS-Exchange-CrossTenant-Id: da6e0628-fc83-4caf-9dd2-73061cbab167
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=da6e0628-fc83-4caf-9dd2-73061cbab167;Ip=[211.20.1.79];Helo=[localhost.localdomain]
+X-MS-Exchange-CrossTenant-AuthSource:
+	HK2PEPF00006FAF.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR04MB5895
 
-On Fri, Apr 12, 2024 at 01:38:11AM +0200, Armin Wolf wrote:
-[ .. ]
-> I just noticed that the drvdata argument of the is_visible callback is marked as const, so i cannot use dev_get_drvdata() on the resulting ACPI device.
-> Guenter, would it be ok to make drvdata non-const in a separate patch series?
-> 
+Since the value for PWMOUT Target Duty Cycle register is a 9 bit
+left-justified value that ranges from 0 to 511 and is contained in 2
+bytes.
 
-I don't know what you are trying to do (the is_visible callback
-isn't supposed to change the information passed to it), but not
-really.
+There is an issue that the LSB of the 9 bit would always be zero if it
+just left shift 8 bit for the value that write to PWMOUT Target Duty
+Cycle register.
 
-Guenter
+Therefore, revise the scale of the value that was writen to pwm input
+from 255 to 511 and modify the value to left-justified value.
+
+Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+---
+ drivers/hwmon/max31790.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
+index 3dc95196b229..bd201191da1c 100644
+--- a/drivers/hwmon/max31790.c
++++ b/drivers/hwmon/max31790.c
+@@ -49,6 +49,9 @@
+ 
+ #define NR_CHANNEL			6
+ 
++#define PWM_INPUT_SCALE	255
++#define MAX31790_REG_PWMOUT_SCALE	511
++
+ /*
+  * Client data (each client gets its own)
+  */
+@@ -343,10 +346,12 @@ static int max31790_write_pwm(struct device *dev, u32 attr, int channel,
+ 			err = -EINVAL;
+ 			break;
+ 		}
++
++		val = val * MAX31790_REG_PWMOUT_SCALE / PWM_INPUT_SCALE;
+ 		data->valid = false;
+ 		err = i2c_smbus_write_word_swapped(client,
+ 						   MAX31790_REG_PWMOUT(channel),
+-						   val << 8);
++						   val << 7);
+ 		break;
+ 	case hwmon_pwm_enable:
+ 		fan_config = data->fan_config[channel];
+-- 
+2.25.1
+
