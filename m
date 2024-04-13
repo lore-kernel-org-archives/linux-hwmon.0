@@ -1,157 +1,117 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBF07173
-	for <linux-hwmon@vger.kernel.org>; Sat, 13 Apr 2024 00:10:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ED80366
+	for <linux-hwmon@vger.kernel.org>; Sat, 13 Apr 2024 08:34:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712967041; cv=none; b=s+SzPiYqCzKsZHUmPYK5VRcLR1ayz1dUvQm2I3Yo/TtFSPz/mjU6NUSFj3vJFlWDhoa0345F5WLpGazKl+0LOotRXszEjOhUFVIaQd53MW10zfR7PTxNuGmtO/8cTDymFVfWTo30I7vFfFoe4hfNForL3vRxwp5SDTEI7e/lhjc=
+	t=1712997253; cv=none; b=Lig8JRfbP71m3l8QJS+LaqeAtTO2zd1oqTSjWougP20g60aEbZR6RPqhIaYOFKlzlFQl1ZVjMeVUEkDTlsn7IqoM81Fa1+5lg5lsuK6iVPKW7hmmQSAvEmQY7+gstpv89xp+tSxLL3nWQtcgcgoPuAHyArFmVWwl+W5fxacTB70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712967041; c=relaxed/simple;
-	bh=/XVR1cyycdWrwpz1/5ODkkkY2iGN03jrtii3lMbNI8A=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=M5F1JaQV+cH/5pd0SP0UOWJ9nIc9ZR2udxFSvicaHr3AaeEbqE+A61+Kwu1gb+Yl2urqQtJuB/6kEnVNC4mPEdZsnavgH9IrRHEH5dGNYGXtrtr8hOOoHch5NRPyTNCqXIuWPkLlDtWdpp4eW6bxOENcCRvhSCxwSmQPZiC0L3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cng+ZCd3; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cng+ZCd3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712967039; x=1744503039;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=/XVR1cyycdWrwpz1/5ODkkkY2iGN03jrtii3lMbNI8A=;
-  b=cng+ZCd30I7eNtpwm7OExyFfaDozwgeJnsK41D/JyTxUPvlRkFkj38OY
-   /MDMJqizY05/TJEmVLVi0Eo0LAMZCdvK0HN4PinZfM302CID4VMHljWqT
-   xo3Du7plT1GE5VYzimzNxrxIvJ1dIbAQy81YiQZZ9aUxOTm5G6lg1mQgb
-   3IeSUo/6Zmi7cFepV+4F1DYLQjGJU/AxxphuxVhb00KjZTQhbAru39hlK
-   w0hScB7CkujYKbXWxBohF/XUC2QmUI9/0dgQ3qNNT4Dv4kSDNGIvyQC8i
-   ah9CC0SU0An7cm/Dn0OATs3ixbLUzFKjPCk0gebJ+TjaZQGxhW0vJVDQo
-   A==;
-X-CSE-ConnectionGUID: pxHijtIiRMC1vfdYL+7QNA==
-X-CSE-MsgGUID: aiOCABK2QNaQI5MT6gDOiA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11042"; a="8308914"
-X-IronPort-AV: E=Sophos;i="6.07,197,1708416000"; 
-   d="scan'208";a="8308914"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2024 17:10:39 -0700
-X-CSE-ConnectionGUID: 43LY9+AYT1G+N8UnCqwScQ==
-X-CSE-MsgGUID: FInGVoASQjqBD7J4ByOedg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,197,1708416000"; 
-   d="scan'208";a="21356826"
-Received: from orsosgc001.jf.intel.com ([10.165.21.138])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2024 17:10:38 -0700
-From: Ashutosh Dixit <ashutosh.dixit@intel.com>
-To: intel-gfx@lists.freedesktop.org
-Cc: Badal Nilawar <badal.nilawar@intel.com>,
-	Andi Shyti <andi.shyti@intel.com>,
-	=?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= <ville.syrjala@linux.intel.com>,
-	linux-hwmon@vger.kernel.org
-Subject: [PATCH] drm/i915/hwmon: Get rid of devm
-Date: Fri, 12 Apr 2024 17:10:31 -0700
-Message-ID: <20240413001031.481961-1-ashutosh.dixit@intel.com>
-X-Mailer: git-send-email 2.41.0
+	s=arc-20240116; t=1712997253; c=relaxed/simple;
+	bh=40BAp+yZUuTRmoo80dA+61fdXD+O/yD9OHZHF03hoy8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sQ/5AvVa9r8lShYyWzSpi+L33n72GKUSUjOOZk/d0g0ZD0G8vI60Bth15nUCEFSukw9mTkH0yRCkWTjrUrjSQ3EZS75gj+Lbj9Mxb+uJ0cIY1P/z3LtI+Jt7oiQkKaCA6P+93HDZ0xtGF9pR4h7UAdbDu4ktF9XPBhGDKHhzjsw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rvYpf-0002JO-Vo; Sat, 13 Apr 2024 10:33:55 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rvYpd-00C1wL-GC; Sat, 13 Apr 2024 10:33:53 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rvYpd-000fpA-1K;
+	Sat, 13 Apr 2024 10:33:53 +0200
+Date: Sat, 13 Apr 2024 10:33:53 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+	Joel Stanley <joel@jms.id.au>
+Cc: linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org, 
+	linux-aspeed@lists.ozlabs.org, kernel@pengutronix.de, 
+	Andrew Jeffery <andrew@codeconstruct.com.au>, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 0/2] hwmon: (aspeed-g6-pwm-tacho): Prepare for further
+ pwm core changes
+Message-ID: <f43gbxbyjik76dzlwmjkcvfwdijzotctyngoidh7zb3xgog3ox@krm3avhdolhf>
+References: <cover.1710777536.git.u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="kxg3gmqzxdbzcys4"
+Content-Disposition: inline
+In-Reply-To: <cover.1710777536.git.u.kleine-koenig@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
-When both hwmon and hwmon drvdata (on which hwmon depends) are device
-managed resources, the expectation, on device unbind, is that hwmon will be
-released before the drvdata. However, it appears devres does not do this
-consistently, so that we occasionally see drvdata being released before
-hwmon itself. This results in a uaf if hwmon sysfs is accessed during
-device unbind.
 
-The only way out of this seems to be do get rid of devm_ and release/free
-everything explicitly during device unbind.
+--kxg3gmqzxdbzcys4
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/10366
-Signed-off-by: Ashutosh Dixit <ashutosh.dixit@intel.com>
----
- drivers/gpu/drm/i915/i915_hwmon.c | 46 ++++++++++++++++++++++++-------
- 1 file changed, 36 insertions(+), 10 deletions(-)
+Hello,
 
-diff --git a/drivers/gpu/drm/i915/i915_hwmon.c b/drivers/gpu/drm/i915/i915_hwmon.c
-index 8c3f443c8347..5f6022b148d7 100644
---- a/drivers/gpu/drm/i915/i915_hwmon.c
-+++ b/drivers/gpu/drm/i915/i915_hwmon.c
-@@ -792,7 +792,7 @@ void i915_hwmon_register(struct drm_i915_private *i915)
- 	if (!IS_DGFX(i915))
- 		return;
- 
--	hwmon = devm_kzalloc(dev, sizeof(*hwmon), GFP_KERNEL);
-+	hwmon = kzalloc(sizeof(*hwmon), GFP_KERNEL);
- 	if (!hwmon)
- 		return;
- 
-@@ -818,10 +818,10 @@ void i915_hwmon_register(struct drm_i915_private *i915)
- 	hwm_get_preregistration_info(i915);
- 
- 	/*  hwmon_dev points to device hwmon<i> */
--	hwmon_dev = devm_hwmon_device_register_with_info(dev, ddat->name,
--							 ddat,
--							 &hwm_chip_info,
--							 hwm_groups);
-+	hwmon_dev = hwmon_device_register_with_info(dev, ddat->name,
-+						    ddat,
-+						    &hwm_chip_info,
-+						    hwm_groups);
- 	if (IS_ERR(hwmon_dev)) {
- 		i915->hwmon = NULL;
- 		return;
-@@ -838,10 +838,10 @@ void i915_hwmon_register(struct drm_i915_private *i915)
- 		if (!hwm_gt_is_visible(ddat_gt, hwmon_energy, hwmon_energy_input, 0))
- 			continue;
- 
--		hwmon_dev = devm_hwmon_device_register_with_info(dev, ddat_gt->name,
--								 ddat_gt,
--								 &hwm_gt_chip_info,
--								 NULL);
-+		hwmon_dev = hwmon_device_register_with_info(dev, ddat_gt->name,
-+							    ddat_gt,
-+							    &hwm_gt_chip_info,
-+							    NULL);
- 		if (!IS_ERR(hwmon_dev))
- 			ddat_gt->hwmon_dev = hwmon_dev;
- 	}
-@@ -849,5 +849,31 @@ void i915_hwmon_register(struct drm_i915_private *i915)
- 
- void i915_hwmon_unregister(struct drm_i915_private *i915)
- {
--	fetch_and_zero(&i915->hwmon);
-+	struct i915_hwmon *hwmon;
-+	struct hwm_drvdata *ddat;
-+	struct intel_gt *gt;
-+	int i;
-+
-+	hwmon = fetch_and_zero(&i915->hwmon);
-+	if (!hwmon)
-+		return;
-+
-+	ddat = &hwmon->ddat;
-+
-+	for_each_gt(gt, i915, i) {
-+		struct hwm_drvdata *ddat_gt;
-+
-+		ddat_gt = hwmon->ddat_gt + i;
-+
-+		if (ddat_gt->hwmon_dev) {
-+			hwmon_device_unregister(ddat_gt->hwmon_dev);
-+			ddat_gt->hwmon_dev = NULL;
-+		}
-+	}
-+
-+	if (ddat->hwmon_dev)
-+		hwmon_device_unregister(ddat->hwmon_dev);
-+
-+	mutex_destroy(&hwmon->hwmon_lock);
-+	kfree(hwmon);
- }
--- 
-2.41.0
+On Mon, Mar 18, 2024 at 05:09:48PM +0100, Uwe Kleine-K=F6nig wrote:
+> there is a pending rework for the pwm framework[1] that requires a
+> preparatory change for all pwm drivers. When creating them I wasn't
+> aware of the aspeed-g6-pwm-tacho driver, just found this now while doing
+> build tests with my series.
+>=20
+> To not delay application of my series, I'd like to take the two patches
+> from this series via my pwm tree.
+>=20
+> To state the (maybe) obvious: This series depends on the following commit=
+s:
+>=20
+> 	7e1449cd15d1 "hwmon: (aspeed-g6-pwm-tacho): Support for ASPEED g6 PWM/Fa=
+n tach"
+> 	024913dbf99f pwm: Provide pwmchip_alloc() function and a devm variant of=
+ it
+> 	4e59267c7a20 pwm: Provide an inline function to get the parent device of=
+ a given chip
+>=20
+> The earliest commit containing all those is:
+>=20
+> 	15223fdbdf4f "Merge tag 'hwmon-for-v6.9' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/groeck/linux-staging"
 
+I applied this series with Guenter's ack to my branch at
+https://git.kernel.org/pub/scm/linux/kernel/git/ukleinek/linux.git pwm/for-=
+next
+=2E (Honestly I already did that a while ago, only noticed now that I
+didn't explicitly tell about that.)
+
+Thanks
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--kxg3gmqzxdbzcys4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmYaQ3AACgkQj4D7WH0S
+/k6p1gf/bC+XXzwCLWvjQc2AJM9nGY0a/ogPm9gQDU92NRnSV62zrm3R+3a0I1ID
+VFB01y3omfw/G/XnSAoln+OuzfgI9LqUP/e+k1RMH5a/kiSp5elCrb86frHgqcuv
+7LhSfgUgPmodytUclM3U7yLO0p8O0w2d9XwThdhEeiT96uCGrdbInaHkaDokp89v
+7AriwfntCP5jCny5UPlIT4+TNfAWSHzKUj1y+PZNVLu6bhOsMvuLaHcDlwkLjrQ9
+91jIusgrkGas/sdeHtiwucZDdfdbrB8eixUOJNNupYZwOil+Ipyyl8rITkBHMACt
+1dL7CG2q5uOVEc7W7ex1aeQrOeofQw==
+=Q+r3
+-----END PGP SIGNATURE-----
+
+--kxg3gmqzxdbzcys4--
