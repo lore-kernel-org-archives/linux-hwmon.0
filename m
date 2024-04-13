@@ -1,160 +1,197 @@
-Received: from bits.crawford.emu.id.au (bits.crawford.emu.id.au [116.255.43.97])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90DF58C15
-	for <linux-hwmon@vger.kernel.org>; Sat, 13 Apr 2024 08:47:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.255.43.97
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE15F2F873
+	for <linux-hwmon@vger.kernel.org>; Sat, 13 Apr 2024 14:44:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712998086; cv=none; b=Z11OWs6MjE4Kp4dESNAl077I5y8fd3EJ0GNdrxtV30vMrweroi/fT/sbo2zkemPem2xcU5CLN+IpU3n5AdP4ZSiGPhZ1L+rvnogpzG1eF/37amK7gEf9G2yxVgNscLhCU48jQhkjIa33NUdTIWUNmRo94yWt8Ge9cSC7DTiwKhc=
+	t=1713019447; cv=none; b=V/hG9/zukC5ezvd6jpqm1719G4Hs6U8ebW5YIbzRmUVQwN9CbpPsasCptbuVn+G9np8en4Hxql0TvvqhGTeW+++JTfEvm6jEAZJD9g0kNXgbzCwvCgoK0kv1/zNuvDiODpvtwx2/KFg0eCa0X2Q6YFaD2WofTRoBdgKiWvHGv6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712998086; c=relaxed/simple;
-	bh=lTxltq6WqMGnQwcID2A4FCHulYsljImQG8UdSk3BQz4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=eKMQSW4yEAtXaYi0lxzVRSXdEHwUmBAlcc0ApDCWnjXiDJCtS2hMoULiPnhfkx3uReUntyUTgwIjbG4rEYfqwPtB8XQfJWJy+y3ylieRQqErlWxtpjfOtQona/PuByVpZ0INzThcSfgdn+vc8Ut/Drdz1anFZvaYpyV3anxjKMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crawford.emu.id.au; spf=pass smtp.mailfrom=crawford.emu.id.au; dkim=pass (2048-bit key) header.d=crawford.emu.id.au header.i=@crawford.emu.id.au header.b=fL82ms4u; arc=none smtp.client-ip=116.255.43.97
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crawford.emu.id.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crawford.emu.id.au
+	s=arc-20240116; t=1713019447; c=relaxed/simple;
+	bh=NUdL+EQs1Io0o1CPQjQaA1cf/BK86jp7+Qv4Aa3Uphk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=txzHz47GS+w1tG6wuT+6mUGyP4ZMvJijNKQ+w+/hh7AV/18REQcccsM93cqxTpnrP6gRO/4YErCTbnI308uLp+Q22e3K1yPZnxfbKHBi0pcl3DCCixk4w80Kyn1oK5GdXesPruuwZLq4IJpOPRmBwAcPemICFMS40iRhOFaT3bI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=NIlaQVWz; arc=none smtp.client-ip=212.227.17.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crawford.emu.id.au header.i=@crawford.emu.id.au header.b="fL82ms4u"
-Received: from agc.crawford.emu.id.au (agc.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc07])
-	(authenticated bits=0)
-	by bits.crawford.emu.id.au (8.17.2/8.17.2) with ESMTPSA id 43D8lTpk2747950
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-	Sat, 13 Apr 2024 18:47:29 +1000
-Authentication-Results: bits.crawford.emu.id.au; arc=none smtp.remote-ip=fdd2:7aad:d478:1::cb10:cc07
-DKIM-Filter: OpenDKIM Filter v2.11.0 bits.crawford.emu.id.au 43D8lTpk2747950
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crawford.emu.id.au;
-	s=s1; t=1712998049; bh=3U09zviF2FKeGVDUvx7+cwoLgphXdGcAP4+n3/H80MI=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=fL82ms4uhqSFBna6o2lEgzVIpo2Vg4r5DSpAnysfDIYcQnxofAqk6WKW9pp2/Sx9/
-	 hornG8q4ZsLv3Qk72Vu4xsbs8YNpnzLopsA/zAgBy3JD6pYBER+gLyqYQnCmzTyNeO
-	 pUe45b8R2+/8XMDIaxilL4xxZZDyV3irP4jQMVFe3Y0rC2CwL0AAT8GpHwFvXDO8PN
-	 v2+3VI6OElB2qnYQuy1QtBEtIw1xfzdLphiqAm9lGqg25LVDVCtdONDvkANWm+LTrv
-	 IAC5RKNamoUob/Q2RMKymtAjySmJ9oXHHEGEhIMBx2Br9tuqQVBKAQlnzhYGmA2ivg
-	 bXz3S9sH/l5sw==
-Message-ID: <3e29a0238b6cfae2945495593b05c782793a3734.camel@crawford.emu.id.au>
-Subject: Re: [PATCH v1 3/4] hwmon (it87): Test for chipset before entering
- configuration mode
-From: Frank Crawford <frank@crawford.emu.id.au>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Date: Sat, 13 Apr 2024 18:47:29 +1000
-In-Reply-To: <78ef79b3-e5de-4b73-8588-1d29ca4dcda1@roeck-us.net>
-References: <20240401025620.205068-1-frank@crawford.emu.id.au>
-	 <20240401025620.205068-4-frank@crawford.emu.id.au>
-	 <0773b784-e552-4b31-b8c7-d68e058a2290@roeck-us.net>
-	 <bfe6323c154ae4080a38a85e3601c7fe980dc10b.camel@crawford.emu.id.au>
-	 <f9963bed-b669-4bdc-897c-3ca04d5162c0@roeck-us.net>
-	 <7234a7e75e35c580a09f8952cd35a988e2f079cb.camel@crawford.emu.id.au>
-	 <78ef79b3-e5de-4b73-8588-1d29ca4dcda1@roeck-us.net>
-Autocrypt: addr=frank@crawford.emu.id.au; prefer-encrypt=mutual;
- keydata=mQGiBD+o6joRBADBLtTRHGwkCHLbpC5qU/cJL0mHf8wDGcoiy9jSlPHrlTp8qGyxBOsus917W0fd9tm1RPRdcYffVFRqdduxBwPdpXi7vTWZgNG5CS39IXw6V//oO1hi7swPm3bNjszq3D1TxVpIpK3EuL4oNcgweLJftXuPP30Mi0gbRgMSyn9SOwCgzc/nZ4i9iPEq7Jhyu+MptuFzNqsEAJPZYUk0MDmXrJjzvcydHoOePqxp9VIqxLOf1gqxy8wXg9D9R3oTAXh94ekLkIN+GimKdB0oCZu02PF9wDnJlQqOtk0Fz4hCetwsNNBsFdbSY7gfmIEByqHE4MicQnTl97JOV/4XQgovznJJKv4OiCC6n20aIPFe2OcKHsi4NlxIA/9lKO2a4ge8f6a6sQoHgrjBe0SQJ0RimXqVUKAxac2wKeDe62J8RJhDJ+Ghnm29w5kKb3YHr2muVJEVqHxz3VYqGXG4T+tleG6T8yeic3HbTghC6+o3HYXOJchGfciIw52S08xO0w4eowNznlS5i8td+aroFF7JiomZqnmyD6oqSbQpRnJhbmsgQ3Jhd2ZvcmQgPGZyYW5rQGNyYXdmb3JkLmVtdS5pZC5hdT6IeQQTEQIAOQIXgAIeBxYhBAPV1JdGtb85KnTrWEWq0knseWomBQJigar6BQsJCAcCAyICAQYVCgkICwIEFgIDAQAKCRBFqtJJ7HlqJqFLAJ9OZPRJxlFHCfDJ6iCL8i4IpINeuACgw1znVGjRZpfNx+YRELbLYdLvZKW5AQ0EP6jqPBAEANwthQvVRnrGQBCGCXBFZ6Dum/aQWXzEovvipgLH0MrVNJy3605GJt+aLGjnzPNvhjvCYGmNtdksqPQqsg8VnE/DgvQFJr+OX/q9IWnZhzEaZ4t6Itvqv9DhtVk6tX6XUgxkBVTX0mQOSwFIPRG+XgSve9dv6xgSRTeAjXRxzbrHAAQLBAC0atcs!
- Itf9FthDk
-	6XJg9ZXtsXDctsVgV1BuSSDP/iynoMozuGpbqMkGXugBGqPmNOMHXw+XALd4yQ2/rPrznK5VFyaCupqzCgWtKfQ1zMczHUb9JvFCweP7I8ZbP2oXCvlHBySzGjVJVCNPxCYLQi0qriLv0aXmWIkHBLCpybDqYhdBBgRAgAdFiEEA9XUl0a1vzkqdOtYRarSSex5aiYFAmKBqYQACgkQRarSSex5aiYz/gCfUNAXafSyBey6z61HSG7l16anYfcAoKsrBxj7bE73wsjzjywqOWkJ9hjJ
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.4 (3.50.4-1.fc39) 
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="NIlaQVWz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1713019432; x=1713624232; i=w_armin@gmx.de;
+	bh=okYUqaoqD8t5ZTf7MMRnKc8ZwAGpmdU73/pbDYl1/xY=;
+	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
+	 In-Reply-To;
+	b=NIlaQVWzL8cDI1q+f1Wk9eJv6cUY4DMwm7oQE+x7z7+OPYqp7p01mMxLtrOGH/Ae
+	 YH0Se2wToSsMkGwDJyj1RcFA2tV84il3bGu6uAaiHqv8yd7RsJy76rkscRJu4T/Qa
+	 lx6BEk/U/rvl2x5nF5Zjrhb3IYqkaOlJlGPpeV0hDKRzqo156PTWr3lGE0/yLrUxP
+	 YwthpfBr1kTFAXsBJ1hci2yNadwy/Ne6B5mL/TE9zUOnPxtDqZMIy2P2harpeGXjT
+	 39GAyJ1z/G51GmMCPqPcs+oSUY6wmG+3OQXJm9emtTYH9Minzli14cmkJG4E4aoz8
+	 x2F8SNZ0IkEMrzpFew==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MdNcG-1sUiNM32y8-00ZP3o; Sat, 13
+ Apr 2024 16:43:52 +0200
+Message-ID: <55e00433-71a6-4b41-a65b-0a8871398cdc@gmx.de>
+Date: Sat, 13 Apr 2024 16:43:50 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Sat, 13 Apr 2024 18:47:29 +1000 (AEST)
-X-Virus-Scanned: clamav-milter 1.0.5 at bits.crawford.emu.id.au
-X-Virus-Status: Clean
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] drm/i915/hwmon: Get rid of devm
+To: Ashutosh Dixit <ashutosh.dixit@intel.com>, intel-gfx@lists.freedesktop.org
+Cc: Badal Nilawar <badal.nilawar@intel.com>, Andi Shyti
+ <andi.shyti@intel.com>, =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?=
+ <ville.syrjala@linux.intel.com>, linux-hwmon@vger.kernel.org
+References: <20240413001031.481961-1-ashutosh.dixit@intel.com>
+Content-Language: en-US
+From: Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <20240413001031.481961-1-ashutosh.dixit@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:guEmR/kHCCyycEzCbg+VHqKgqbUY5IEchqBoHzYTn8vACoeRB7z
+ O1fANTuetCdumrhy+h3bkcVP3nbf8TaU7bJhCk7FQs8kiQ25Bonyg/5Pscz4FUBqgx6S40f
+ 0qBu8TY8AqlON5vY/CzxxWJEKhaf7xmH57ikMX3+JpuGt2ihBvZ99q3hwXhA7Q8b+gR3DGw
+ kzo1p5jjXj0V5GNmig5zw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:8Wfrg2rgGLk=;obfjgpvlWuaEXGPuvktmKj0m2AX
+ XKr1XxOfWzPEh9yza/uOU2Ulkbr4L5LdV8HtqIebvkuMhUrz69fFcKAiBIHyR7PMPOd0U86RT
+ PXvo215iLs7CVbfMQZM2FSyxnDO+cFVKGUiDxfYFbMpZMZHdKi0hcZAgS2fNPlFGpl69LpdkH
+ SFmIpBuyJVlIWu5b1LQBpGpu/w7aC42Bf/k5xDQZdpKB5dnH0zWS7/xK1eDf2g8Ssj5CQdMQ5
+ yQ4Aoeqwm2/IpgYiLWWrit263djRV/6DmZ0QKNkwpF+Zgw+RelIBJNMjdVzSOrjAhEpByt9dD
+ WxRtRdcohS+uRT44FnXLD0Tqzs+7Ku5aXL4XCa28GdMQ0iwRlqmaOCGVw7ZMZAs98YL8GYprS
+ 572i1/cTtbc8GOg8puaiH1rVsAZ8LFqmoWFHa8wW1oVS5esuQEEoQgLsHh7A/Z5JorfNLTkIE
+ rL4/vl56wecC2fAlf1lil46ZctFs9QH6SuUq361HTcKF3dfGxh8Da4jFiUCwzqrs6Dj8u799l
+ VSKjQAuSVxaU24LDS+rqNKCsV5nkS1QiV2oxDhsMIBOgIDBXPpCLqEerL5d5WxzpDBq0uRAhH
+ HhJq19Gv2oYixV8Tq/FrM4wauwujFNn/sBPf1sTz1zEiCoAQqLPCfjTR1O4MsWuexP+oDzDTV
+ WuvK7l3IPHJSXkcewScQNtTd0+EjCEDRsDvLpsAUA345VPvqKdFxHoTXKGzpFCGjOd34Fzt8P
+ OvP5rR7ujEBpr6rP2tCcAytxoSAbetxBO34weCFs9N0pMRdBEm8l0jvaI8+1fP1aH7QFI1K1A
+ Og1bHKqiEGk0e4kTmUNcU4Asxno96jZY5WfINSGgz3yrE=
 
-On Fri, 2024-04-12 at 05:48 -0700, Guenter Roeck wrote:
-> On Fri, Apr 12, 2024 at 08:11:11PM +1000, Frank Crawford wrote:
-> > >=20
-> > > Not really. There is also the watchdog code which will happily
-> > > disable
-> > > SIO access after it is done, causing subsequent accesses by the
-> > > hwmon
-> > > driver to fail. The code also assumes that SIO access was not
-> > > erroneously
-> > > left enabled by some other code which we don't have any control
-> > > over.
-> >=20
-> > And unfortunately if I can't do anything about it, I can only
-> > ignore
-> > it.=A0 If something does come up we can see what can work out at the
-> > time.
-> > >=20
-> > > You assume that the hwmon driver is the only driver accessing the
-> > > chip.
-> > > That is a wrong assumption. I understand that the underlying
-> > > problem
-> > > is really that there is no SIO access infrastructure in the
-> > > kernel.
-> > > In the absence of such an infrastructure we can not make any
-> > > assumptions
-> > > about SIO access control implemented by other drivers in the
-> > > kernel,
-> > > and specifically can not assume that SIO access won't be disabled
-> > > by
-> > > other drivers just because it was enabled when the hwmon driver
-> > > probe
-> > > function was running.
-> >=20
-> > In this case the fact that it is the second chip may mean it will
-> > not
-> > come up.=A0 While I am told that the chip is fully functional with
-> > non-
-> > hwmon functions, but currently it does look like most of those
-> > aren't
-> > used.=A0 While this won't necessarily stay this way in the future, we
-> > currently cannot do anything about it.
->=20
-> This patch affects all chips, not just the second one. If any chip is
-> in configuration mode when instantiating this driver, configuration
-> mode
-> won't be enabled anymore, no matter what other drivers may or may not
-> do.
-> That includes situations where other drivers (or the BIOS)
-> erroneously
-> do not disable configuration mode.
->=20
-> I understand your reasoning about not enabling configuration mode for
-> certain chips, but that does not explain why it would be necessary
-> to do this for all chips all the time.
->=20
-> Sure, there is something we can do: Unless there is a known problem
-> that affects _all_ chips, drop this patch.
+Am 13.04.24 um 02:10 schrieb Ashutosh Dixit:
 
-Ahh, if that is the impression you have from my description, then I
-will need to improve it, as that is not the case.
+> When both hwmon and hwmon drvdata (on which hwmon depends) are device
+> managed resources, the expectation, on device unbind, is that hwmon will=
+ be
+> released before the drvdata. However, it appears devres does not do this
+> consistently, so that we occasionally see drvdata being released before
+> hwmon itself. This results in a uaf if hwmon sysfs is accessed during
+> device unbind.
+>
+> The only way out of this seems to be do get rid of devm_ and release/fre=
+e
+> everything explicitly during device unbind.
 
-The actual update does the following:
+Hi,
 
-1) Lock the memory, but does not perform a SIO entry (previously it
-would have performed an SIO entry).
+could it be that the underlying cause for this is the fact that you are us=
+ing
+devres on a DRM device?
 
-2) Attempt to read the chipID.  This should be safe no matter which
-chip we have.
+The documentation states that:
 
-3) If step (2) fails, then perform SIO entry and retry chipID read.  If
-it fails, act similarly to prior to this patch.
+	devres managed resources like devm_kmalloc() can only be used for resourc=
+es
+	directly related to the underlying hardware device, and only used in code
+	paths fully protected by drm_dev_enter() and drm_dev_exit().
 
-4) Set the sio_data->type, similar to previously.
+That said, since the i915 driver is already removing the hwmon device manu=
+ally
+with i915_hwmon_unregister(), i agree that not using devres in this case s=
+eems
+to be the solution.
 
-5) If we have not performed an SIO entry, and this is not a chip type
-with the NOCONF feature, then it will perform an SIO entry at this
-point.
+Thanks,
+Armin Wolf
 
-6) Proceed setup as prior to this patch.
-
-7) Any following access to the SIO registers will invoke the SIO entry
-and SIO exit steps unless it is a chip with the NOCONF feature set.=20
-This was set up in the previous patches in this patchset.
-
-8) There is also some minor update to the failure exit based on if it
-had performed a SIO entry or not, in addition to the previous tests.
-
->=20
-> Thanks,
-> Guenter
-
-Regards
-Frank
-
+> Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/10366
+> Signed-off-by: Ashutosh Dixit <ashutosh.dixit@intel.com>
+> ---
+>   drivers/gpu/drm/i915/i915_hwmon.c | 46 ++++++++++++++++++++++++-------
+>   1 file changed, 36 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/i915/i915_hwmon.c b/drivers/gpu/drm/i915/i9=
+15_hwmon.c
+> index 8c3f443c8347..5f6022b148d7 100644
+> --- a/drivers/gpu/drm/i915/i915_hwmon.c
+> +++ b/drivers/gpu/drm/i915/i915_hwmon.c
+> @@ -792,7 +792,7 @@ void i915_hwmon_register(struct drm_i915_private *i9=
+15)
+>   	if (!IS_DGFX(i915))
+>   		return;
+>
+> -	hwmon =3D devm_kzalloc(dev, sizeof(*hwmon), GFP_KERNEL);
+> +	hwmon =3D kzalloc(sizeof(*hwmon), GFP_KERNEL);
+>   	if (!hwmon)
+>   		return;
+>
+> @@ -818,10 +818,10 @@ void i915_hwmon_register(struct drm_i915_private *=
+i915)
+>   	hwm_get_preregistration_info(i915);
+>
+>   	/*  hwmon_dev points to device hwmon<i> */
+> -	hwmon_dev =3D devm_hwmon_device_register_with_info(dev, ddat->name,
+> -							 ddat,
+> -							 &hwm_chip_info,
+> -							 hwm_groups);
+> +	hwmon_dev =3D hwmon_device_register_with_info(dev, ddat->name,
+> +						    ddat,
+> +						    &hwm_chip_info,
+> +						    hwm_groups);
+>   	if (IS_ERR(hwmon_dev)) {
+>   		i915->hwmon =3D NULL;
+>   		return;
+> @@ -838,10 +838,10 @@ void i915_hwmon_register(struct drm_i915_private *=
+i915)
+>   		if (!hwm_gt_is_visible(ddat_gt, hwmon_energy, hwmon_energy_input, 0)=
+)
+>   			continue;
+>
+> -		hwmon_dev =3D devm_hwmon_device_register_with_info(dev, ddat_gt->name=
+,
+> -								 ddat_gt,
+> -								 &hwm_gt_chip_info,
+> -								 NULL);
+> +		hwmon_dev =3D hwmon_device_register_with_info(dev, ddat_gt->name,
+> +							    ddat_gt,
+> +							    &hwm_gt_chip_info,
+> +							    NULL);
+>   		if (!IS_ERR(hwmon_dev))
+>   			ddat_gt->hwmon_dev =3D hwmon_dev;
+>   	}
+> @@ -849,5 +849,31 @@ void i915_hwmon_register(struct drm_i915_private *i=
+915)
+>
+>   void i915_hwmon_unregister(struct drm_i915_private *i915)
+>   {
+> -	fetch_and_zero(&i915->hwmon);
+> +	struct i915_hwmon *hwmon;
+> +	struct hwm_drvdata *ddat;
+> +	struct intel_gt *gt;
+> +	int i;
+> +
+> +	hwmon =3D fetch_and_zero(&i915->hwmon);
+> +	if (!hwmon)
+> +		return;
+> +
+> +	ddat =3D &hwmon->ddat;
+> +
+> +	for_each_gt(gt, i915, i) {
+> +		struct hwm_drvdata *ddat_gt;
+> +
+> +		ddat_gt =3D hwmon->ddat_gt + i;
+> +
+> +		if (ddat_gt->hwmon_dev) {
+> +			hwmon_device_unregister(ddat_gt->hwmon_dev);
+> +			ddat_gt->hwmon_dev =3D NULL;
+> +		}
+> +	}
+> +
+> +	if (ddat->hwmon_dev)
+> +		hwmon_device_unregister(ddat->hwmon_dev);
+> +
+> +	mutex_destroy(&hwmon->hwmon_lock);
+> +	kfree(hwmon);
+>   }
