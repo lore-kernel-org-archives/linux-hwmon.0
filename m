@@ -1,96 +1,345 @@
-Received: from msa.smtpout.orange.fr (msa-215.smtpout.orange.fr [193.252.23.215])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B1BD20DE8;
-	Sun, 14 Apr 2024 08:03:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.23.215
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 336B317551;
+	Sun, 14 Apr 2024 17:48:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713081805; cv=none; b=ktvgK0SXPdPeVlrPA8bpBnet9t00/jDuesCmL2JTU2D388ycTRUk+rGFlExKzKvjWuZV82+gwEkN0wEbHWkriDXouVfghl3zO027670gRZvyFA63OEdIDrlpuyEAf8PpLgAwntuby8PQudG8gecLytH0nn7cWqLb7KwLMKy0O5k=
+	t=1713116898; cv=none; b=hosijtEUZ/4V+56LT6lvS+5KQapI9zG7vKCl7lnByw0Xcv9O+bGX66YgUwr3vlYfFVzNi95Yh1q81y/HTBL12ZcTIrsQE/Nr4AhHaM0QAutxwzTAjuJM9zjjovNcq0aK0OL36iC+SmIMjBNOPgShK1yB3CsgaGI72kzo5JbrFG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713081805; c=relaxed/simple;
-	bh=ZgdTR3mDDZBEx9fgnIcZGTrSMVKCA1raa3F6SrKzjqc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tdiTE0iZg4C+oBze/o7MMjfSJFn7KuYURILGQ7lqFNxqn26GoqvH0sYp6M+O1WO0X6KYCYEpWZ7orBnw1+sAmC8+IoTwIcpL8pZD/0QosJbWP2+pNE6Lub16DAVUXtMXBE2hmE2S66AGA2HdR8NRK1GfUEQaERKuh+33kdX1+ag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=TIReNNVB; arc=none smtp.client-ip=193.252.23.215
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+	s=arc-20240116; t=1713116898; c=relaxed/simple;
+	bh=zhVnywKsEUVVn68Ox5CjsJoC5KY2EseaaYYPUAX69wM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ZKdlmUxCchn+KB+iVFbgBdyea7D4CbPRwCP+L5Wv+zuJ73bzVsZzUG16oUP0/WKP3OPYyIwEelrp+yG56SwhuUnfK/P6c6qfcnCmOl/3rlwtd9TrTea3U3Adq+pH1jpZgpn+K6xOXHHA4YUGDlxzr1b5skVdJXdAXYkESdTSKP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=T+SGprR1; arc=none smtp.client-ip=212.227.15.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="TIReNNVB"
-Received: from [192.168.1.18] ([86.243.17.157])
-	by smtp.orange.fr with ESMTPA
-	id vupUrbnUxReGpvupUrYOs3; Sun, 14 Apr 2024 10:03:14 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1713081794;
-	bh=/EkCWI000WjErTLksVvS3KM3IgVVa6QzMO2SEgMZi3k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=TIReNNVBjOjOl2krc105GJvTnNDykkW8fVUJ7UZhaNqn9h9VtBtKHn+bw6l1hbIXI
-	 9kH+odrq6fV0aC8H03Yra4RlTUPpeJ1sqwWXj3TpaJZdRMQicnSu3vibO1YJoKhCl8
-	 xg6GJApFPfpIpUf+vbg4f2pnhSW8B/x9u8GDuHxqVOMDrQFhR5MG83/FM0/L86HXYV
-	 QQ4g5iQ5oxRfTWl2Jocg8sU85D5742BvpAs1NtSafy7QYAvpa/yICs9klSnoI8mc3R
-	 OtAgXGsIeYqBMCy/4f12ZhOPDDddLpfXMljgbxOFHGrH0JrxYEU/xyTmVdYjbXKqDv
-	 y8Le9PMhci2Zw==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 14 Apr 2024 10:03:14 +0200
-X-ME-IP: 86.243.17.157
-Message-ID: <79bef664-b191-4905-896c-afab341b982b@wanadoo.fr>
-Date: Sun, 14 Apr 2024 10:03:07 +0200
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="T+SGprR1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1713116867; x=1713721667; i=w_armin@gmx.de;
+	bh=FMQEYJPewr7GILJ3NurF0NrXO7XmqpcHPKyvchRKn38=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+	b=T+SGprR16ucGdS5+p9tfmzAWAh9dkhGfA4veeoWmwuko9/wDjtKu1yMyellNE42j
+	 m6xqD8ZZbG+4Ygl57pYW8evNBGDB2gAE8edFMy4+b2+JlNXelXuJgvYGR+y4ssrJx
+	 cB1CBUZQzbmbOgdQwnjpnfp6OqTni7Ua5KQbwwlFjLV9P74CNokz9R2SAKA37oNEQ
+	 vQPrgmUYCr2/j5B7X0FpE3THW1p7psietw9t5i9QfdWhRZSLFcZE7uhrLakFizGTR
+	 FcSxtJklfzrstPcSTwQ2C6cT8vmYascXdFZLXRkRKDEVahuwCtB82LGND354ZuYMC
+	 DYc8dsi+pP5j1Wzu5A==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from mx-amd-b650.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1M6llE-1rotkz1lQU-008LhE; Sun, 14 Apr 2024 19:47:47 +0200
+From: Armin Wolf <W_Armin@gmx.de>
+To: mlj@danelec.com,
+	rafael.j.wysocki@intel.com,
+	lenb@kernel.org
+Cc: jdelvare@suse.com,
+	linux@roeck-us.net,
+	linux@weissschuh.net,
+	ilpo.jarvinen@linux.intel.com,
+	linux-acpi@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org
+Subject: [PATCH v4] ACPI: fan: Add hwmon support
+Date: Sun, 14 Apr 2024 19:47:43 +0200
+Message-Id: <20240414174743.8575-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/3] hwmon: (max31790): Support config PWM output
- becomes TACH
-To: Chanh Nguyen <chanh@os.amperecomputing.com>,
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Justin Ledford
- <justinledford@google.com>, devicetree@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- OpenBMC Maillist <openbmc@lists.ozlabs.org>,
- Open Source Submission <patches@amperecomputing.com>
-Cc: Phong Vo <phong@os.amperecomputing.com>,
- Thang Nguyen <thang@os.amperecomputing.com>,
- Quan Nguyen <quan@os.amperecomputing.com>
-References: <20240414042246.8681-1-chanh@os.amperecomputing.com>
- <20240414042246.8681-3-chanh@os.amperecomputing.com>
-Content-Language: en-MW
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20240414042246.8681-3-chanh@os.amperecomputing.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:JTAIN1SDiJ+ioZAZSegP/Wnm7T0hGNjAXPgf9eB/nHXlRr74H6x
+ UnU5+37nwIfdBKcwXdL/Fe4llLagEnGx7ZLIRxrmSs44BTYepp7ijd+lsJs16TBnGMFQt+R
+ iw4KdrsXgWyisVqeHY+CDm066R9LTzINZq4TStrUJEfMdqNdioiVhtuYRNluVWOM5hswE7/
+ 7eowojLL4QzbEqAfSGMnA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:2eyDB5KdDLM=;P5ZRJy52lXzbxhzYa4GA1d80HDB
+ sDnk0bgWvVlxpsQTag5Q+60ysWXUkleNz1FQ/prTl9DJ0gynf8Mhh9EXOMTGlXp7d4xe3V6wZ
+ ZY5KvqZZ6+M12aAHqP3pATcgQpvMWlRLsMEf7+xNZhy92lGyUmWBanF3ptGpauD8PJlnGrRCw
+ IzJtysBAjX+RvhuR64I+wn9g/rhlhcS9+kRNu1Y7gidya4NikP7EghS5ktSRSCxJX8goWPz7o
+ +qFHryP+KDiA7QHTMEmdJQg5CqL8P52oipS7elzhIq8B4debTk4S26IY32LS4G5ok77m56AEb
+ q39yfRrIsh539QApFNPONwPDV0xZcNqFgkyU7ihOrMKjfxQ6G9TxHgsaSFOR9qHyhPfbysAN/
+ BGaK4jeTORSts9ekDGy6CP8ULOdqf0At1AbQKemogGfmTC/f4RZkVtgSF1WCWqiOfkFXhPgwM
+ krMKbi4UUxPRYulRYx7JZS1ASyVbD0pFouwlXNR6WD58ENeH3/Vtn7VnJtMunnQifk2A682hs
+ 7XDr++NUiDneL2YGeQXHB53Fa5FrmKhlSJf17Xor775Ib0vgQwmTozAWdL5/eagXmzMZT4qql
+ T+RE3Z/5kSgRtxg4MhchU8ehH/X6O+tDLSPuE2GQ81HnZ/Me7xDWlI0/uiFMvmXPS1ADw0Rnq
+ 11NOf0wW/315socfkCANrJwZt7AnFda7T6xErC4hTZ+ZVKS/xmCZ6QOHwuh/0mYTPNDxfvAMD
+ JmHO7kMZu4NRPILlNQF54lSFWYF+oUpN0SEwXDMwHBDOrvujd+IshJHEb5v/u7gEC0ifnmwRS
+ yfwsbVLWFVWjWfMCFUck+6wVq7M20oztz5+dSmXFbsHv0=
 
-Le 14/04/2024 à 06:22, Chanh Nguyen a écrit :
-> PWMOUT pins on MAX31790 can be configured as a tachometer input pin by
-> setting bit[0] in the Configuration Register. When the bit[0] of a channel
-> is set, the PWMOUT pin becomes the tach input pin for the channel plus six.
-> 
-> This commit allows the kernel to set those pins when necessary if the
-> maxim,pwmout-pin-as-tach-input DT property exists.
-> 
-> Signed-off-by: Chanh Nguyen <chanh@os.amperecomputing.com>
-> ---
-> Changes in v2:
->   - Update the vendor property name to "maxim,pwmout-pin-as-tach-input"   [Rob]
+Currently, the driver does only support a custom sysfs
+to allow userspace to read the fan speed.
+Add support for the standard hwmon interface so users
+can read the fan speed with standard tools like "sensors".
 
-...
+Compile-tested only.
 
-> @@ -528,6 +532,33 @@ static int max31790_probe(struct i2c_client *client)
->   	if (err)
->   		return err;
->   
-> +	if (device_property_present(dev, "maxim,pwmout-pin-as-tach-input")) {
-> +		err = device_property_read_u8_array(dev, "maxim,pwmout-pin-as-tach-input",
-> +						    pwmout_to_tach, NR_CHANNEL);
-> +		if (err) {
-> +			/* The maxim,pwmout-pin-as-tach-input is an array of six values */
-> +			dev_warn(dev, "The maxim,pwmout-pin-as-tach-input property exist but malform");
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+Changes since v3:
+- drop fault attrs
+- rework initialization
 
-Nit: exists
-Nit: malformed or "is malformed"
+Changes since v2:
+- add support for fanX_target and power attrs
 
-CJ
+Changes since v1:
+- fix undefined reference error
+- fix fan speed validation
+- coding style fixes
+- clarify that the changes are compile-tested only
+- add hwmon maintainers to cc list
+
+The changes will be tested by Mikael Lund Jepsen from Danelec and
+should be merged only after those tests.
+=2D--
+ drivers/acpi/Makefile    |   1 +
+ drivers/acpi/fan.h       |   9 +++
+ drivers/acpi/fan_core.c  |   4 +
+ drivers/acpi/fan_hwmon.c | 170 +++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 184 insertions(+)
+ create mode 100644 drivers/acpi/fan_hwmon.c
+
+diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
+index 39ea5cfa8326..61ca4afe83dc 100644
+=2D-- a/drivers/acpi/Makefile
++++ b/drivers/acpi/Makefile
+@@ -77,6 +77,7 @@ obj-$(CONFIG_ACPI_TINY_POWER_BUTTON)	+=3D tiny-power-but=
+ton.o
+ obj-$(CONFIG_ACPI_FAN)		+=3D fan.o
+ fan-objs			:=3D fan_core.o
+ fan-objs			+=3D fan_attr.o
++fan-$(CONFIG_HWMON)		+=3D fan_hwmon.o
+
+ obj-$(CONFIG_ACPI_VIDEO)	+=3D video.o
+ obj-$(CONFIG_ACPI_TAD)		+=3D acpi_tad.o
+diff --git a/drivers/acpi/fan.h b/drivers/acpi/fan.h
+index f89d19c922dc..db25a3898af7 100644
+=2D-- a/drivers/acpi/fan.h
++++ b/drivers/acpi/fan.h
+@@ -10,6 +10,8 @@
+ #ifndef _ACPI_FAN_H_
+ #define _ACPI_FAN_H_
+
++#include <linux/kconfig.h>
++
+ #define ACPI_FAN_DEVICE_IDS	\
+ 	{"INT3404", }, /* Fan */ \
+ 	{"INTC1044", }, /* Fan for Tiger Lake generation */ \
+@@ -57,4 +59,11 @@ struct acpi_fan {
+ int acpi_fan_get_fst(struct acpi_device *device, struct acpi_fan_fst *fst=
+);
+ int acpi_fan_create_attributes(struct acpi_device *device);
+ void acpi_fan_delete_attributes(struct acpi_device *device);
++
++#if IS_REACHABLE(CONFIG_HWMON)
++int devm_acpi_fan_create_hwmon(struct acpi_device *device);
++#else
++static inline int devm_acpi_fan_create_hwmon(struct acpi_device *device) =
+{ return 0; };
++#endif
++
+ #endif
+diff --git a/drivers/acpi/fan_core.c b/drivers/acpi/fan_core.c
+index ff72e4ef8738..7cea4495f19b 100644
+=2D-- a/drivers/acpi/fan_core.c
++++ b/drivers/acpi/fan_core.c
+@@ -336,6 +336,10 @@ static int acpi_fan_probe(struct platform_device *pde=
+v)
+ 		if (result)
+ 			return result;
+
++		result =3D devm_acpi_fan_create_hwmon(device);
++		if (result)
++			return result;
++
+ 		result =3D acpi_fan_create_attributes(device);
+ 		if (result)
+ 			return result;
+diff --git a/drivers/acpi/fan_hwmon.c b/drivers/acpi/fan_hwmon.c
+new file mode 100644
+index 000000000000..0ae9017bdbae
+=2D-- /dev/null
++++ b/drivers/acpi/fan_hwmon.c
+@@ -0,0 +1,170 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * fan_hwmon.c - hwmon interface for the ACPI Fan driver
++ *
++ * Copyright (C) 2024 Armin Wolf <W_Armin@gmx.de>
++ */
++
++#include <linux/acpi.h>
++#include <linux/hwmon.h>
++#include <linux/limits.h>
++#include <linux/units.h>
++
++#include "fan.h"
++
++/* Returned when the ACPI fan does not support speed reporting */
++#define FAN_SPEED_UNAVAILABLE	0xffffffff
++#define FAN_POWER_UNAVAILABLE	0xffffffff
++
++static struct acpi_fan_fps *acpi_fan_get_current_fps(struct acpi_fan *fan=
+, u64 control)
++{
++	int i;
++
++	for (i =3D 0; i < fan->fps_count; i++) {
++		if (fan->fps[i].control =3D=3D control)
++			return &fan->fps[i];
++	}
++
++	return NULL;
++}
++
++static umode_t acpi_fan_is_visible(const void *drvdata, enum hwmon_sensor=
+_types type, u32 attr,
++				   int channel)
++{
++	const struct acpi_fan *fan =3D drvdata;
++	int i;
++
++	switch (type) {
++	case hwmon_fan:
++		switch (attr) {
++		case hwmon_fan_input:
++			return 0444;
++		case hwmon_fan_target:
++			/* When in fine grain control mode, not every fan control value
++			 * has an associated fan performance state.
++			 */
++			if (fan->fif.fine_grain_ctrl)
++				return 0;
++
++			return 0444;
++		default:
++			break;
++		}
++		break;
++	case hwmon_power:
++		switch (attr) {
++		case hwmon_power_input:
++			/* When in fine grain control mode, not every fan control value
++			 * has an associated fan performance state.
++			 */
++			if (fan->fif.fine_grain_ctrl)
++				return 0;
++
++			/* When all fan performance states contain no valid power data,
++			 * when the associated atttribute should not be created.
++			 */
++			for (i =3D 0; i < fan->fps_count; i++) {
++				if (fan->fps[i].power !=3D FAN_POWER_UNAVAILABLE)
++					return 0444;
++			}
++
++			return 0;
++		default:
++			break;
++		}
++		break;
++	default:
++		break;
++	}
++
++	return 0;
++}
++
++static int acpi_fan_read(struct device *dev, enum hwmon_sensor_types type=
+, u32 attr, int channel,
++			 long *val)
++{
++	struct acpi_device *adev =3D to_acpi_device(dev->parent);
++	struct acpi_fan *fan =3D dev_get_drvdata(dev);
++	struct acpi_fan_fps *fps;
++	struct acpi_fan_fst fst;
++	int ret;
++
++	ret =3D acpi_fan_get_fst(adev, &fst);
++	if (ret < 0)
++		return ret;
++
++	switch (type) {
++	case hwmon_fan:
++		switch (attr) {
++		case hwmon_fan_input:
++			if (fst.speed =3D=3D FAN_SPEED_UNAVAILABLE)
++				return -ENODATA;
++
++			if (fst.speed > LONG_MAX)
++				return -EOVERFLOW;
++
++			*val =3D fst.speed;
++			return 0;
++		case hwmon_fan_target:
++			fps =3D acpi_fan_get_current_fps(fan, fst.control);
++			if (!fps)
++				return -ENODATA;
++
++			*val =3D fps->speed;
++			return 0;
++		default:
++			break;
++		}
++		break;
++	case hwmon_power:
++		switch (attr) {
++		case hwmon_power_input:
++			fps =3D acpi_fan_get_current_fps(fan, fst.control);
++			if (!fps)
++				return -ENODATA;
++
++			if (fps->power =3D=3D FAN_POWER_UNAVAILABLE)
++				return -ENODATA;
++
++			if (fps->power > LONG_MAX / MICROWATT_PER_MILLIWATT)
++				return -EOVERFLOW;
++
++			*val =3D fps->power * MICROWATT_PER_MILLIWATT;
++			return 0;
++		default:
++			break;
++		}
++		break;
++	default:
++		break;
++	}
++
++	return -EOPNOTSUPP;
++}
++
++static const struct hwmon_ops acpi_fan_ops =3D {
++	.is_visible =3D acpi_fan_is_visible,
++	.read =3D acpi_fan_read,
++};
++
++static const struct hwmon_channel_info * const acpi_fan_info[] =3D {
++	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT | HWMON_F_TARGET),
++	HWMON_CHANNEL_INFO(power, HWMON_P_INPUT),
++	NULL
++};
++
++static const struct hwmon_chip_info acpi_fan_chip_info =3D {
++	.ops =3D &acpi_fan_ops,
++	.info =3D acpi_fan_info,
++};
++
++int devm_acpi_fan_create_hwmon(struct acpi_device *device)
++{
++	struct acpi_fan *fan =3D acpi_driver_data(device);
++	struct device *hdev;
++
++	hdev =3D devm_hwmon_device_register_with_info(&device->dev, "acpi_fan", =
+fan,
++						    &acpi_fan_chip_info, NULL);
++
++	return PTR_ERR_OR_ZERO(hdev);
++}
+=2D-
+2.39.2
+
