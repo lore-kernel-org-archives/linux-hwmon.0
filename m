@@ -1,60 +1,40 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+Received: from msa.smtpout.orange.fr (msa-215.smtpout.orange.fr [193.252.23.215])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CF851BF37
-	for <linux-hwmon@vger.kernel.org>; Sun, 14 Apr 2024 06:07:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B1BD20DE8;
+	Sun, 14 Apr 2024 08:03:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.23.215
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713074835; cv=none; b=e+BMacJ9cA0RJ79lpi3ia81va9xpUW29HI0syceDuxlx6eIo2gCZaocBXjk+Y/Icu9JF8cMVuw+HxUM7XnQPfFf6s14vTG56GRiKTQmuM2NRp+QLAyj59oAnSDwILmH4RGdK48gf4mUG8b4CZhm8RzZibkYbQo4MYwlNWpDZYTw=
+	t=1713081805; cv=none; b=ktvgK0SXPdPeVlrPA8bpBnet9t00/jDuesCmL2JTU2D388ycTRUk+rGFlExKzKvjWuZV82+gwEkN0wEbHWkriDXouVfghl3zO027670gRZvyFA63OEdIDrlpuyEAf8PpLgAwntuby8PQudG8gecLytH0nn7cWqLb7KwLMKy0O5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713074835; c=relaxed/simple;
-	bh=rgUmJRNE583FfwwKk7ImcN7Q38hAoqx0XrUkO1ukD60=;
+	s=arc-20240116; t=1713081805; c=relaxed/simple;
+	bh=ZgdTR3mDDZBEx9fgnIcZGTrSMVKCA1raa3F6SrKzjqc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BiubVNtuKGXniTpaDVlUa2k7aabj2h8/AAGywQB2KkoabaBH8ppnwIVnn3TCqGuoYKRItTTYaHi99/LsoBEfFsphZMvkfmMscUSUigArcZYHFrs8snr60JkP+KlvarVoHNe4tqwVThIh/n5Qe7qn/9VU2ThqgZfdLhd87ohdsvI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dVd/1JLG; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	 In-Reply-To:Content-Type; b=tdiTE0iZg4C+oBze/o7MMjfSJFn7KuYURILGQ7lqFNxqn26GoqvH0sYp6M+O1WO0X6KYCYEpWZ7orBnw1+sAmC8+IoTwIcpL8pZD/0QosJbWP2+pNE6Lub16DAVUXtMXBE2hmE2S66AGA2HdR8NRK1GfUEQaERKuh+33kdX1+ag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=TIReNNVB; arc=none smtp.client-ip=193.252.23.215
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dVd/1JLG"
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-56e78970853so4910189a12.0
-        for <linux-hwmon@vger.kernel.org>; Sat, 13 Apr 2024 23:07:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713074831; x=1713679631; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=birczs2n38bj+qt5ct4BeQZrHZlbkYfeLVY4PLvG/PE=;
-        b=dVd/1JLGtdaSD8GeGmiy1E/j175K0CLtYCiV7+QT2d/WzCQx395lMo0Yj0avJEq/rB
-         bjUjTJKlZLSLXjWIj/YEOnSi9vK9aKUZQYwbrbqbGXJwEnXrJlQYS4KynCNfLRJf2dKu
-         DNtTSpLvPJby2YDkzNPR81cVYvojOwiNd7jtG3nqOISI57DUCazlhX/LHxWj22BZXZZl
-         N7Ka8CJz2PFmy1i/MduMezlIgW3B8gWw4+VmEKhxwn8I0vldGN78GymplTrw0cOvnnZm
-         D5f4186i6CcG/OjvK2nn4lRY6bRVYcoYXDQensvbUVJFRmadjbk+FseG+2L0cQ/ON+cU
-         9Qlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713074831; x=1713679631;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=birczs2n38bj+qt5ct4BeQZrHZlbkYfeLVY4PLvG/PE=;
-        b=UIszLi2sBYqJXe+zcqWyMJYmpLjnIkxVpLIotXMgg1Q4eYAH/+TBjOuXEKExJ3nPdP
-         iJgtMVV/v8vUXWSj5npK63+BtjdHtLpq2gvZ3ShfKJxNzWfIzfEYTqGw6deIxtPoB0VQ
-         1UfuSShuyEbJpXSxQE9c2hK82SsfFQ5Jfj2EJ3ICqd8BmexDLkX83PbUKAsIg+R3yBbE
-         QSCrF9KkCBoG5tZz/Q7bT1yhlXiRZq50H0ygXJOT57OBHVsrX/BGhdt+91Luj2ItUYat
-         UOhW79MDmuRqyapOnUdaNaty+Hf7zRlPo2x2IqyxKA8yVqQRJZcxtG2N48hzQ4SI2Ri/
-         yprA==
-X-Forwarded-Encrypted: i=1; AJvYcCX4vc1O8FybRd8Ezxa02cG6wrqKJkOKgaedMZ5lcieVobhqYbAfdQRthx8+41mo/UInCy1qdny48eQgM3eXE1/Zr0R0DqyU96fqFqw=
-X-Gm-Message-State: AOJu0YysLEX5uJ0YRmDjNSisk5WxOeD7OckyNfRlRO68++pwVhDmVJgQ
-	vV5070csgvNR/kEMMaK22KoORVhWHMkzMFJC/sH1KdUh8ddMOIQysJzsjaDju3A=
-X-Google-Smtp-Source: AGHT+IFRHLi+mC72P5wOlGYDKkwCG3kYJ/bZgR0nHp32C5KCLzYuDmgD3GZXevlyaJteLdQJXgpgpA==
-X-Received: by 2002:a17:907:72c8:b0:a52:51ce:3703 with SMTP id du8-20020a17090772c800b00a5251ce3703mr2468366ejc.2.1713074831322;
-        Sat, 13 Apr 2024 23:07:11 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.16])
-        by smtp.gmail.com with ESMTPSA id rs6-20020a170907036600b00a4e6626ae21sm3811546ejb.0.2024.04.13.23.07.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 13 Apr 2024 23:07:10 -0700 (PDT)
-Message-ID: <13b195e6-cbbd-4f74-a6fa-d874cb4aaa45@linaro.org>
-Date: Sun, 14 Apr 2024 08:07:09 +0200
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="TIReNNVB"
+Received: from [192.168.1.18] ([86.243.17.157])
+	by smtp.orange.fr with ESMTPA
+	id vupUrbnUxReGpvupUrYOs3; Sun, 14 Apr 2024 10:03:14 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1713081794;
+	bh=/EkCWI000WjErTLksVvS3KM3IgVVa6QzMO2SEgMZi3k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=TIReNNVBjOjOl2krc105GJvTnNDykkW8fVUJ7UZhaNqn9h9VtBtKHn+bw6l1hbIXI
+	 9kH+odrq6fV0aC8H03Yra4RlTUPpeJ1sqwWXj3TpaJZdRMQicnSu3vibO1YJoKhCl8
+	 xg6GJApFPfpIpUf+vbg4f2pnhSW8B/x9u8GDuHxqVOMDrQFhR5MG83/FM0/L86HXYV
+	 QQ4g5iQ5oxRfTWl2Jocg8sU85D5742BvpAs1NtSafy7QYAvpa/yICs9klSnoI8mc3R
+	 OtAgXGsIeYqBMCy/4f12ZhOPDDddLpfXMljgbxOFHGrH0JrxYEU/xyTmVdYjbXKqDv
+	 y8Le9PMhci2Zw==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 14 Apr 2024 10:03:14 +0200
+X-ME-IP: 86.243.17.157
+Message-ID: <79bef664-b191-4905-896c-afab341b982b@wanadoo.fr>
+Date: Sun, 14 Apr 2024 10:03:07 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -62,8 +42,8 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/3] dt-bindings: hwmon: max31790: Add
- maxim,pwmout-pin-as-tach-input property
+Subject: Re: [PATCH v2 2/3] hwmon: (max31790): Support config PWM output
+ becomes TACH
 To: Chanh Nguyen <chanh@os.amperecomputing.com>,
  Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
  Rob Herring <robh+dt@kernel.org>,
@@ -77,102 +57,40 @@ Cc: Phong Vo <phong@os.amperecomputing.com>,
  Thang Nguyen <thang@os.amperecomputing.com>,
  Quan Nguyen <quan@os.amperecomputing.com>
 References: <20240414042246.8681-1-chanh@os.amperecomputing.com>
- <20240414042246.8681-4-chanh@os.amperecomputing.com>
-Content-Language: en-US
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240414042246.8681-4-chanh@os.amperecomputing.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ <20240414042246.8681-3-chanh@os.amperecomputing.com>
+Content-Language: en-MW
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20240414042246.8681-3-chanh@os.amperecomputing.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 14/04/2024 06:22, Chanh Nguyen wrote:
-> The max31790 supports six pins, which are dedicated PWM outputs. Any of the
-> six PWM outputs can also be configured to serve as tachometer inputs,
-> allowing for up to 12 tachometer fans to be monitored.
+Le 14/04/2024 à 06:22, Chanh Nguyen a écrit :
+> PWMOUT pins on MAX31790 can be configured as a tachometer input pin by
+> setting bit[0] in the Configuration Register. When the bit[0] of a channel
+> is set, the PWMOUT pin becomes the tach input pin for the channel plus six.
 > 
-> Add a new vendor-specific property, 'maxim,pwmout-pin-as-tach-input',
-> to allow PWMOUT to become a TACH input.
-> 
-> An array of six integers responds to six PWM channels for configuring
-> the PWM to TACH mode. When set to 0, the associated PWMOUT produces
-> a PWM waveform for control of fan speed. When set to 1, PWMOUT becomes
-> a TACH input.
+> This commit allows the kernel to set those pins when necessary if the
+> maxim,pwmout-pin-as-tach-input DT property exists.
 > 
 > Signed-off-by: Chanh Nguyen <chanh@os.amperecomputing.com>
 > ---
 > Changes in v2:
->  - Update the vendor property name to "maxim,pwmout-pin-as-tach-input"   [Rob]
->  - Update commit message                                                 [Krzysztof]
+>   - Update the vendor property name to "maxim,pwmout-pin-as-tach-input"   [Rob]
 
-Please put binding before its user.
+...
 
-> ---
->  .../devicetree/bindings/hwmon/maxim,max31790.yaml     | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max31790.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max31790.yaml
-> index a561e5a3e9e4..2d4f50bc7c41 100644
-> --- a/Documentation/devicetree/bindings/hwmon/maxim,max31790.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/maxim,max31790.yaml
-> @@ -30,6 +30,16 @@ properties:
->    resets:
->      maxItems: 1
->  
-> +  maxim,pwmout-pin-as-tach-input:
-> +    description: |
-> +      An array of six integers responds to six PWM channels for
-> +      configuring the pwm to tach mode.
-> +      When set to 0, the associated PWMOUT produces a PWM waveform for
-> +      control of fan speed. When set to 1, PWMOUT becomes a TACH input
-> +    $ref: /schemas/types.yaml#/definitions/uint8-array
-> +    maxItems: 6
-> +    minItems: 6
+> @@ -528,6 +532,33 @@ static int max31790_probe(struct i2c_client *client)
+>   	if (err)
+>   		return err;
+>   
+> +	if (device_property_present(dev, "maxim,pwmout-pin-as-tach-input")) {
+> +		err = device_property_read_u8_array(dev, "maxim,pwmout-pin-as-tach-input",
+> +						    pwmout_to_tach, NR_CHANNEL);
+> +		if (err) {
+> +			/* The maxim,pwmout-pin-as-tach-input is an array of six values */
+> +			dev_warn(dev, "The maxim,pwmout-pin-as-tach-input property exist but malform");
 
-tach-ch solves your case. You define which inputs should be used for tach.
+Nit: exists
+Nit: malformed or "is malformed"
 
-Best regards,
-Krzysztof
-
+CJ
