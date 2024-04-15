@@ -1,153 +1,338 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3F3766B5E;
-	Mon, 15 Apr 2024 12:42:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFC2C1E535;
+	Mon, 15 Apr 2024 15:57:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713184934; cv=none; b=h7xheJlZ0dKPujUbK0fBH/AYF6v/Gf/GB5bzDlJDySZTkap0CTqjFM1M5aPwpb3qt5+NF9Nap7eSBGBDT1k+AZFnY8zB7R5DY9H39rIw0bn8DFR3CLsY61X6XxV/V4tZrTLqnLJScRtXzy7RzWEomW3Sxwm/5/beSDXKUmvHwSk=
+	t=1713196661; cv=none; b=Z5egYbub3SFkOq1bEbElVMhlp6DgI7Jb2PT4JmJHhQ9Md3mOzafrIlBBz6iFc5EOVkW/VVtEhLxd+ZgZfx3Vxvu26sFUhFtJ4rOLrcTcas2t//1lulPNzn3msrMHs1LrdY90JqI5PMRIActkB77U0O00PmLMwKFEOYAjtmGyjj8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713184934; c=relaxed/simple;
-	bh=yQhjbkjo0NZSRx3zaq2JlNEh5TJYvMzKERWxygHdDOw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hQllJKyQXEUG6w6bcQNB4HO0uSoO1xyMt8AIm2oYGFK5BebuqWacPIjbq+C2KMLBpqgyFNiC0h7B33z39LczXPHiiRfpn+BK2tmLVA4mFR0oVG7Vf9lYKp3OsnSbAdjNqI32j+lNhJ+z2u3LTTx7Ssn03/xqmniPzRzhHySkrqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nmWrVLm2; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1713196661; c=relaxed/simple;
+	bh=1VFPf/8L9loaEb3hWCEyFbiAGfd1d8Io/SEPciZW5jk=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=W3rrJxa/3HMh4pyAIkD2nmhZ70fbllg5qiDoHCUCsy32BgPPePmMxEVp59FEhusz+6dPiKGw2wiitClV2HebHsmScfJTCTM8exOO3bshu7goW9sFyPoocYILHgSNn3MtZXbBDN0P5KtR6kmhXBdZS6N1POH6J3IzKNIDSxCNpbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gHawwHEK; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nmWrVLm2"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-6eddff25e4eso2578282b3a.3;
-        Mon, 15 Apr 2024 05:42:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713184932; x=1713789732; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iuXJvJZy0hgr1HZAIhpBPUNdepR9wuSmPEwveDWvDBQ=;
-        b=nmWrVLm2EzywxctzF6ASZIqBHni3+28tRYiGVRGBQRmYKeg+Ibwf6NtOYGd0C+nML6
-         znmfNkpNeO7gmUUwUB7cW/jOMIe8DAeGyPiVf+JCc8Tav6we6YgexE3M9DYMr/KBHwcZ
-         nc4QuexXkmc3Z0KjtZoh3YcD80Osr9sJYgQsOrXTG/2V+NIghlILjBjM5/tgBlg446M2
-         V9qzaz/oBxBZvF1S357UI0reBTBnTr2yVFrbyw/Rj61lN6wTnSYeX6nGohuSFZEkTW4R
-         2v8NFLqZjbudvFzr3O1T6bzaqwLH2XsZyJFKtQYfiUsqJYLZCyCzNRDdd6DYRgbCUXl+
-         ZBzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713184932; x=1713789732;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iuXJvJZy0hgr1HZAIhpBPUNdepR9wuSmPEwveDWvDBQ=;
-        b=DElqWniOKhHDpGqan3crqA+Mppg5gl53yrFXi+v55S+PiE0D2jaeLhT6wGoSkmWx52
-         8sqQEjke4ny6X/E0K7iNdtEHXvOX0vDHPVxEzRBVJLOPbu7c99tdbZn7zbWoNB+HCGTU
-         QEt8RTBGdGptLWx6oowj7wngpItOPfU/R/rC5XxXeeg80vV9W47rUqgXlg86yzoEFfhv
-         MrgfsekKCXV6dgVVmm9IzNXE8A4MHEIdG7fvdoWhrpbtldp+Zz0b/KRPTA330vcZDmg1
-         kwravS4zwmiUs4CkC1uv1JBzCGx/4Ldjvbjx7ZmQ+315P2HqzWiDPv5EVlCFHcL89nil
-         ls1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUJ+qN8PEe3WIlxhKfGY+fhJcjJ/ui18dqmL3yH7yrPVCDUMusv2SI0fPil96WrSrDgxl1mvv4owpwN0+ZFHyyaevqap7eN5COQr8m+Ppxnquo98jmmbGqhk16lbZ65dfLN9WcsZzOzwyVqV1XC2PWxhsVfSzvL5MW7gqZESMY9V9+FRg==
-X-Gm-Message-State: AOJu0YwySBXxwGdH9/VFxtP77q/bnmcQe4y3CJNQoW0BXd+72WyAYe70
-	5AA8/2SavMi/ezt4etug9wRMXopLuWu/diNp0YewgNBpssGGJSxT
-X-Google-Smtp-Source: AGHT+IEntR9/uVd4/eIk4MWEyWZzG/S+a5yzcbYj8tQjojJKxIJo8eQ7AdW3d7el429M+y5zptlpqw==
-X-Received: by 2002:a05:6a21:6711:b0:1a9:ac49:ea94 with SMTP id wh17-20020a056a21671100b001a9ac49ea94mr6616443pzb.61.1713184931965;
-        Mon, 15 Apr 2024 05:42:11 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b12-20020a056a000a8c00b006ed64f4767asm7116905pfl.112.2024.04.15.05.42.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Apr 2024 05:42:10 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 15 Apr 2024 05:42:09 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc: "Zhang, Rui" <rui.zhang@intel.com>,
-	"Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-	"jdelvare@suse.com" <jdelvare@suse.com>,
-	"srinivas.pandruvada@linux.intel.com" <srinivas.pandruvada@linux.intel.com>,
-	"lukasz.luba@arm.com" <lukasz.luba@arm.com>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"Neri, Ricardo" <ricardo.neri@intel.com>
-Subject: Re: [PATCH 3/3] hwmon: (coretemp) Use a model-specific bitmask to
- read registers
-Message-ID: <d807bb47-7501-4423-9a8f-d51b5349c96b@roeck-us.net>
-References: <20240406010416.4821-1-ricardo.neri-calderon@linux.intel.com>
- <20240406010416.4821-4-ricardo.neri-calderon@linux.intel.com>
- <6411e721a1cd559f59aecd8ac57a941cdaa13ff1.camel@intel.com>
- <20240415011946.GA12551@ranerica-svr.sc.intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gHawwHEK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713196659; x=1744732659;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=1VFPf/8L9loaEb3hWCEyFbiAGfd1d8Io/SEPciZW5jk=;
+  b=gHawwHEKvg5I4QkDsc9nNJP/onPXwJVFOVMmTGJNof7kjJuHYPkOAae5
+   Jz28S9wgZFWCY0xP6D3z5EVe9Frr46HQU3TEboSUnK4B6jqRJVuPAtfwl
+   5krjgyU1oya0oP+QyxExdaa6rkBt8uaxGMluRlIfdHGgOAfdMo6AcRtpa
+   k8CjOu7a8u3eEoGyJLNJH4TtpU+e2f/rGK3PdPe5oC4rwL70gDub1fe5A
+   fwUwrdOQuzkrHZOPR3BHYULyufkr1VCXSEayFAAuiAIhRX+30SHT4M1ik
+   5VShHlQcMxTmZ3dLxxhnYjOAaSWqs/6PITcZue1SNyD1RwtRN4LIxYpoQ
+   w==;
+X-CSE-ConnectionGUID: kGnz1jjBTWC5AzSMa1yP5A==
+X-CSE-MsgGUID: hhZxhdf/TaO42UfTOgJ9Mg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11045"; a="19156643"
+X-IronPort-AV: E=Sophos;i="6.07,203,1708416000"; 
+   d="scan'208";a="19156643"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2024 08:57:38 -0700
+X-CSE-ConnectionGUID: JTqYNy7lR/W6ya5NtXaxrQ==
+X-CSE-MsgGUID: 1tY8o3/9QoaKdWPxehmVoA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,203,1708416000"; 
+   d="scan'208";a="22052435"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.33])
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2024 08:57:35 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Mon, 15 Apr 2024 18:57:29 +0300 (EEST)
+To: Armin Wolf <W_Armin@gmx.de>
+cc: mlj@danelec.com, rafael.j.wysocki@intel.com, lenb@kernel.org, 
+    jdelvare@suse.com, linux@roeck-us.net, linux@weissschuh.net, 
+    ilpo.jarvinen@linux.intel.com, linux-acpi@vger.kernel.org, 
+    linux-hwmon@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+    platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH v4] ACPI: fan: Add hwmon support
+In-Reply-To: <20240414174743.8575-1-W_Armin@gmx.de>
+Message-ID: <67b4faf4-eadc-3375-62b4-aaad1b3af564@linux.intel.com>
+References: <20240414174743.8575-1-W_Armin@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240415011946.GA12551@ranerica-svr.sc.intel.com>
+Content-Type: text/plain; charset=US-ASCII
 
-On Sun, Apr 14, 2024 at 06:19:46PM -0700, Ricardo Neri wrote:
-> On Sun, Apr 07, 2024 at 08:24:40AM +0000, Zhang, Rui wrote:
-> > On Fri, 2024-04-05 at 18:04 -0700, Ricardo Neri wrote:
-> > > The Intel Software Development manual defines states the temperature
-> > 
-> > I failed to parse this, is the above "states" redundant?
-> 
-> Sorry Rui! I missed this repy.
-> 
-> Ah, the commit message is wrong. I will do s/defines//
-> 
-> > 
-> > [...]
-> > 
-> > > digital readout as the bits [22:16] of the
-> > > IA32_[PACKAGE]_THERM_STATUS
-> > > registers. In recent processor, however, the range is [23:16]. Use a
-> > > model-specific bitmask to extract the temperature readout correctly.
-> > > 
-> > > diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-> > > index 616bd1a5b864..5632e1b1dfb1 100644
-> > > --- a/drivers/hwmon/coretemp.c
-> > > +++ b/drivers/hwmon/coretemp.c
-> > > @@ -17,6 +17,7 @@
-> > >  #include <linux/sysfs.h>
-> > >  #include <linux/hwmon-sysfs.h>
-> > >  #include <linux/err.h>
-> > > +#include <linux/intel_tcc.h>
-> > >  #include <linux/mutex.h>
-> > >  #include <linux/list.h>
-> > >  #include <linux/platform_device.h>
-> > > @@ -404,6 +405,8 @@ static ssize_t show_temp(struct device *dev,
-> > >         tjmax = get_tjmax(tdata, dev);
-> > >         /* Check whether the time interval has elapsed */
-> > >         if (time_after(jiffies, tdata->last_updated + HZ)) {
-> > > +               u32 mask =
-> > > intel_tcc_get_temp_mask(is_pkg_temp_data(tdata));
-> > > +
-> > >                 rdmsr_on_cpu(tdata->cpu, tdata->status_reg, &eax,
-> > > &edx);
-> > >                 /*
-> > >                  * Ignore the valid bit. In all observed cases the
-> > > register
-> > > @@ -411,7 +414,7 @@ static ssize_t show_temp(struct device *dev,
-> > >                  * Return it instead of reporting an error which
-> > > doesn't
-> > >                  * really help at all.
-> > >                  */
-> > > -               tdata->temp = tjmax - ((eax >> 16) & 0x7f) * 1000;
-> > > +               tdata->temp = tjmax - ((eax >> 16) & mask) * 1000;
-> > >                 tdata->last_updated = jiffies;
-> > >         }
-> > > 
-> > Besides this one, we can also convert to use intel_tcc_get_tjmax() in
-> > get_tjmax().
-> 
-> I thought about this, but realized that the bitmask of TjMax is always
-> [23:16]; no need for a model check. If anything, intel_tcc_get_tjmax()
-> would remove some duplicated code. But coretemp.c would need to depend
-> on INTEL_TCC, which seems to be a non-starter.
-> 
+On Sun, 14 Apr 2024, Armin Wolf wrote:
 
-Calling intel_tcc_get_temp_mask() in practice already introduces that
-dependency because it returns a fixed mask if INTEL_TCC is not enabled.
-If that doesn't matter, the dynamic mask is unnecessary to start with.
+> Currently, the driver does only support a custom sysfs
+> to allow userspace to read the fan speed.
+> Add support for the standard hwmon interface so users
+> can read the fan speed with standard tools like "sensors".
+> 
+> Compile-tested only.
+> 
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> ---
+> Changes since v3:
+> - drop fault attrs
+> - rework initialization
+> 
+> Changes since v2:
+> - add support for fanX_target and power attrs
+> 
+> Changes since v1:
+> - fix undefined reference error
+> - fix fan speed validation
+> - coding style fixes
+> - clarify that the changes are compile-tested only
+> - add hwmon maintainers to cc list
+> 
+> The changes will be tested by Mikael Lund Jepsen from Danelec and
+> should be merged only after those tests.
+> ---
+>  drivers/acpi/Makefile    |   1 +
+>  drivers/acpi/fan.h       |   9 +++
+>  drivers/acpi/fan_core.c  |   4 +
+>  drivers/acpi/fan_hwmon.c | 170 +++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 184 insertions(+)
+>  create mode 100644 drivers/acpi/fan_hwmon.c
+> 
+> diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
+> index 39ea5cfa8326..61ca4afe83dc 100644
+> --- a/drivers/acpi/Makefile
+> +++ b/drivers/acpi/Makefile
+> @@ -77,6 +77,7 @@ obj-$(CONFIG_ACPI_TINY_POWER_BUTTON)	+= tiny-power-button.o
+>  obj-$(CONFIG_ACPI_FAN)		+= fan.o
+>  fan-objs			:= fan_core.o
+>  fan-objs			+= fan_attr.o
+> +fan-$(CONFIG_HWMON)		+= fan_hwmon.o
+> 
+>  obj-$(CONFIG_ACPI_VIDEO)	+= video.o
+>  obj-$(CONFIG_ACPI_TAD)		+= acpi_tad.o
+> diff --git a/drivers/acpi/fan.h b/drivers/acpi/fan.h
+> index f89d19c922dc..db25a3898af7 100644
+> --- a/drivers/acpi/fan.h
+> +++ b/drivers/acpi/fan.h
+> @@ -10,6 +10,8 @@
+>  #ifndef _ACPI_FAN_H_
+>  #define _ACPI_FAN_H_
+> 
+> +#include <linux/kconfig.h>
+> +
+>  #define ACPI_FAN_DEVICE_IDS	\
+>  	{"INT3404", }, /* Fan */ \
+>  	{"INTC1044", }, /* Fan for Tiger Lake generation */ \
+> @@ -57,4 +59,11 @@ struct acpi_fan {
+>  int acpi_fan_get_fst(struct acpi_device *device, struct acpi_fan_fst *fst);
+>  int acpi_fan_create_attributes(struct acpi_device *device);
+>  void acpi_fan_delete_attributes(struct acpi_device *device);
+> +
+> +#if IS_REACHABLE(CONFIG_HWMON)
+> +int devm_acpi_fan_create_hwmon(struct acpi_device *device);
+> +#else
+> +static inline int devm_acpi_fan_create_hwmon(struct acpi_device *device) { return 0; };
+> +#endif
+> +
+>  #endif
+> diff --git a/drivers/acpi/fan_core.c b/drivers/acpi/fan_core.c
+> index ff72e4ef8738..7cea4495f19b 100644
+> --- a/drivers/acpi/fan_core.c
+> +++ b/drivers/acpi/fan_core.c
+> @@ -336,6 +336,10 @@ static int acpi_fan_probe(struct platform_device *pdev)
+>  		if (result)
+>  			return result;
+> 
+> +		result = devm_acpi_fan_create_hwmon(device);
+> +		if (result)
+> +			return result;
+> +
+>  		result = acpi_fan_create_attributes(device);
+>  		if (result)
+>  			return result;
+> diff --git a/drivers/acpi/fan_hwmon.c b/drivers/acpi/fan_hwmon.c
+> new file mode 100644
+> index 000000000000..0ae9017bdbae
+> --- /dev/null
+> +++ b/drivers/acpi/fan_hwmon.c
+> @@ -0,0 +1,170 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * fan_hwmon.c - hwmon interface for the ACPI Fan driver
+> + *
+> + * Copyright (C) 2024 Armin Wolf <W_Armin@gmx.de>
+> + */
+> +
+> +#include <linux/acpi.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/limits.h>
+> +#include <linux/units.h>
+> +
+> +#include "fan.h"
+> +
+> +/* Returned when the ACPI fan does not support speed reporting */
+> +#define FAN_SPEED_UNAVAILABLE	0xffffffff
+> +#define FAN_POWER_UNAVAILABLE	0xffffffff
+> +
+> +static struct acpi_fan_fps *acpi_fan_get_current_fps(struct acpi_fan *fan, u64 control)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < fan->fps_count; i++) {
+> +		if (fan->fps[i].control == control)
+> +			return &fan->fps[i];
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+> +static umode_t acpi_fan_is_visible(const void *drvdata, enum hwmon_sensor_types type, u32 attr,
+> +				   int channel)
+> +{
+> +	const struct acpi_fan *fan = drvdata;
+> +	int i;
+> +
+> +	switch (type) {
+> +	case hwmon_fan:
+> +		switch (attr) {
+> +		case hwmon_fan_input:
+> +			return 0444;
+> +		case hwmon_fan_target:
+> +			/* When in fine grain control mode, not every fan control value
+> +			 * has an associated fan performance state.
+> +			 */
+> +			if (fan->fif.fine_grain_ctrl)
+> +				return 0;
+> +
+> +			return 0444;
+> +		default:
+> +			break;
+> +		}
+> +		break;
+> +	case hwmon_power:
+> +		switch (attr) {
+> +		case hwmon_power_input:
+> +			/* When in fine grain control mode, not every fan control value
+> +			 * has an associated fan performance state.
+> +			 */
+> +			if (fan->fif.fine_grain_ctrl)
+> +				return 0;
+> +
+> +			/* When all fan performance states contain no valid power data,
+> +			 * when the associated atttribute should not be created.
 
-Guenter
+attribute
+
+-- 
+ i.
+
+
+> +			 */
+> +			for (i = 0; i < fan->fps_count; i++) {
+> +				if (fan->fps[i].power != FAN_POWER_UNAVAILABLE)
+> +					return 0444;
+> +			}
+> +
+> +			return 0;
+> +		default:
+> +			break;
+> +		}
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int acpi_fan_read(struct device *dev, enum hwmon_sensor_types type, u32 attr, int channel,
+> +			 long *val)
+> +{
+> +	struct acpi_device *adev = to_acpi_device(dev->parent);
+> +	struct acpi_fan *fan = dev_get_drvdata(dev);
+> +	struct acpi_fan_fps *fps;
+> +	struct acpi_fan_fst fst;
+> +	int ret;
+> +
+> +	ret = acpi_fan_get_fst(adev, &fst);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	switch (type) {
+> +	case hwmon_fan:
+> +		switch (attr) {
+> +		case hwmon_fan_input:
+> +			if (fst.speed == FAN_SPEED_UNAVAILABLE)
+> +				return -ENODATA;
+> +
+> +			if (fst.speed > LONG_MAX)
+> +				return -EOVERFLOW;
+> +
+> +			*val = fst.speed;
+> +			return 0;
+> +		case hwmon_fan_target:
+> +			fps = acpi_fan_get_current_fps(fan, fst.control);
+> +			if (!fps)
+> +				return -ENODATA;
+> +
+> +			*val = fps->speed;
+> +			return 0;
+> +		default:
+> +			break;
+> +		}
+> +		break;
+> +	case hwmon_power:
+> +		switch (attr) {
+> +		case hwmon_power_input:
+> +			fps = acpi_fan_get_current_fps(fan, fst.control);
+> +			if (!fps)
+> +				return -ENODATA;
+> +
+> +			if (fps->power == FAN_POWER_UNAVAILABLE)
+> +				return -ENODATA;
+> +
+> +			if (fps->power > LONG_MAX / MICROWATT_PER_MILLIWATT)
+> +				return -EOVERFLOW;
+> +
+> +			*val = fps->power * MICROWATT_PER_MILLIWATT;
+> +			return 0;
+> +		default:
+> +			break;
+> +		}
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static const struct hwmon_ops acpi_fan_ops = {
+> +	.is_visible = acpi_fan_is_visible,
+> +	.read = acpi_fan_read,
+> +};
+> +
+> +static const struct hwmon_channel_info * const acpi_fan_info[] = {
+> +	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT | HWMON_F_TARGET),
+> +	HWMON_CHANNEL_INFO(power, HWMON_P_INPUT),
+> +	NULL
+> +};
+> +
+> +static const struct hwmon_chip_info acpi_fan_chip_info = {
+> +	.ops = &acpi_fan_ops,
+> +	.info = acpi_fan_info,
+> +};
+> +
+> +int devm_acpi_fan_create_hwmon(struct acpi_device *device)
+> +{
+> +	struct acpi_fan *fan = acpi_driver_data(device);
+> +	struct device *hdev;
+> +
+> +	hdev = devm_hwmon_device_register_with_info(&device->dev, "acpi_fan", fan,
+> +						    &acpi_fan_chip_info, NULL);
+> +
+> +	return PTR_ERR_OR_ZERO(hdev);
+> +}
+> --
+> 2.39.2
+> 
