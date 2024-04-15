@@ -1,115 +1,214 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B9BF156977
-	for <linux-hwmon@vger.kernel.org>; Mon, 15 Apr 2024 23:21:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63755156225
+	for <linux-hwmon@vger.kernel.org>; Mon, 15 Apr 2024 23:35:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713223275; cv=none; b=HPaeQbZ2YJ9dOy01t5ObsAC7tFWYd34r37uGqLLRAINUjMFr4GIkmKIHWFJpauG+ODow8HG6sWmB9fIlCzRErfLxBz4PcJgMcm+FikPiGfiqOpqd8nFhasGZEilco9+fOakKmVGxq64ceRmMUGI7ewt4cuhuJwdzi9P90nknYSQ=
+	t=1713224119; cv=none; b=OQ0hSdBCNZ2q1wQ2SvlBfJfdRxHmZeMBPFLI2Ii9A/vLSRukrujFpd3TUFPYwrVesy+R0ZVdrTGgf0NotnjYWB04OPZC3lbhUkSS6vshgUU1ZEf9tSvESpZcJ6uVYiSK/Y3DxGTv/1dpkWhYo1nFmFRVRsID+YSE+TYT8MUwL6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713223275; c=relaxed/simple;
-	bh=vEvy1T8t8o8AE+PuQbApxXQ5nE1GkPEl8oDRkxqirj8=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=o+F4xECMcFbuEEgTN8RJASU/glpJK5oCH1ozLinGVrt4tHH66d7xMwXap8lHFq2nPQTzofW74lYU2qijJFszoBypv9o+wBdDf3YcHDd4ti7LnluvQurPJPCRoZbKK045iZHgXn+vQgFIQRKjrzw57quVbW1pD7CqhpV0dGdbHrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gKGqXdzt; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1713224119; c=relaxed/simple;
+	bh=JGrATeWGnGH1+JEeNSndb/eMOGAdgGpWkRFY4jxr3/Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JS8kjRNG6MoZFh5onfn3XKutKeRvZTPoQtbtsJylXeCnmS0oTIJokHfPHS/6GzsRLhFXLdCB3GnjsLmRaquy/S8LsOGUnVkkEMLk6xAb6rPZeOxEsiZ7rFK7UJtluYWGVkC3nnWHsoTojj3CxJhb5nj/+PPQ+i+m0aqSPBE023k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=W1j9IjH6; arc=none smtp.client-ip=212.227.15.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gKGqXdzt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713223274; x=1744759274;
-  h=date:message-id:from:to:cc:subject:in-reply-to:
-   references:mime-version;
-  bh=vEvy1T8t8o8AE+PuQbApxXQ5nE1GkPEl8oDRkxqirj8=;
-  b=gKGqXdztBhyoMlvVxDMz82Z51bJoy1r8OUfBEg0AeBYrS9OYMzUTimYP
-   XPgfUomH1pt+sTMcytNQqNWUCkF+Au5CTs8Dx59yLk+IzzzZKHxAbLMqh
-   oOHG1h3+V0JfFSDX1okxfxpy4ixXGFo2E4U0Lp6638gQJJpYNRd4ykTWW
-   4kQMrJi84ZbsyDzy3SM8WRt6DMQsVXiQQ60vF02ekHzfrJgzJw4bmJU4Q
-   qWX5BIGnz8PkVZsCxGX4Q+17vpQqwJjW4d9VRW+sxprQPKKD8kaJpDoiQ
-   Fc1yVi2HYDCRCOI0WZDxsIUKvhzRBjrB6wy/9dR52pjZBmhM0vyN3KYPY
-   Q==;
-X-CSE-ConnectionGUID: 44BMkjm0TD67YAMQEfbmWA==
-X-CSE-MsgGUID: nzw8eIV0TBWxt6goI6tLRA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11045"; a="8763714"
-X-IronPort-AV: E=Sophos;i="6.07,204,1708416000"; 
-   d="scan'208";a="8763714"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2024 16:21:13 -0700
-X-CSE-ConnectionGUID: p0wWK2pySZed5VZrt1d8cQ==
-X-CSE-MsgGUID: i7kkI1FESp+0rEpigfRwoA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,204,1708416000"; 
-   d="scan'208";a="26493097"
-Received: from orsosgc001.jf.intel.com (HELO orsosgc001.intel.com) ([10.165.21.138])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2024 16:21:13 -0700
-Date: Mon, 15 Apr 2024 16:21:12 -0700
-Message-ID: <85bk6atdp3.wl-ashutosh.dixit@intel.com>
-From: "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
-To: Armin Wolf <W_Armin@gmx.de>
-Cc: intel-gfx@lists.freedesktop.org, Badal Nilawar
- <badal.nilawar@intel.com>, Andi Shyti <andi.shyti@intel.com>, Ville
- =?ISO-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
- linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] drm/i915/hwmon: Get rid of devm
-In-Reply-To: <55e00433-71a6-4b41-a65b-0a8871398cdc@gmx.de>
-References: <20240413001031.481961-1-ashutosh.dixit@intel.com>	<55e00433-71a6-4b41-a65b-0a8871398cdc@gmx.de>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
- Emacs/28.2 (x86_64-redhat-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="W1j9IjH6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1713224104; x=1713828904; i=w_armin@gmx.de;
+	bh=pmyP4CEy69Uj8iXjSnZkR04t7uBjJ8fSPa2KWueQbQ4=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=W1j9IjH6rPw3vQO8G2QC+YvF7IpAOWhh/CyowQqwGUWGgcMhrcEm5ApdwwiKt+1I
+	 B+4CQYxiYB+S5ZiI4ZzgjOCYs1cH1fdcP8A9KlNV3Ry7f55C7roxyaNDs6P/twNjj
+	 T8Gx28ayYHIEgLpnugDJTOKnQqaMHAQsCrjVlZfbbGQJm0C44HpxaEKkFwYlI8OdX
+	 ou5GPQeNBCrVEGFPYp3FDW7Yz47kX3wd5vcP8e0ZMpMBXkJ1lCqzVOva4Y6idy53f
+	 rQ57YNWeX9WeydGHPC1IZEaQqOCHy/fwLlkGqPCJHRsZxDhOJfS88q7cyCG6E6fXU
+	 ZkgA4PuHcYkFDexOdw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mulm5-1snW4x1Ywt-00rs8c; Tue, 16
+ Apr 2024 01:35:04 +0200
+Message-ID: <020612d1-2e6b-4bd7-87a6-dbd31574fdd8@gmx.de>
+Date: Tue, 16 Apr 2024 01:35:02 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] drm/i915/hwmon: Get rid of devm
+To: Ashutosh Dixit <ashutosh.dixit@intel.com>, intel-gfx@lists.freedesktop.org
+Cc: Badal Nilawar <badal.nilawar@intel.com>, Andi Shyti
+ <andi.shyti@intel.com>, =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?=
+ <ville.syrjala@linux.intel.com>, linux-hwmon@vger.kernel.org,
+ dri-devel@lists.freedesktop.org
+References: <20240415223612.738535-1-ashutosh.dixit@intel.com>
+Content-Language: en-US
+From: Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <20240415223612.738535-1-ashutosh.dixit@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:GhwclRSw6uw2wiE9i9/X26NsE6ctQeALOum9cO8peT7yGbZMg0/
+ JpdGPYYjvOgyyHFWEAYlCrYuviHaIolXb1tCOHhNpevSpXk5eHbc2guPc/W2Z7A00LE/4lR
+ KBvJvRIOWkqERqBbsJyZ5EkT1FnhI7hPW73hb2ZMy8pFcGAFlsGNhk/DmZP0IfCvBoQRIC5
+ etLWABmwKUoY2sx1Tf/3w==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:39UMfrACpkQ=;Nxvl/d83CXve9SVn4lI8ejM+FCx
+ IDCTWvmOihpWpoooOYU5ed5+5XJhHlu7xM4OPN+NleSt4n1BRubRUT016ZFgDqO0EAQC8f3ig
+ 3HYJ0u9Ex01ongkbm6PKgDP/UyCOsXptjSzz243vSMg2kMXOZ4KPXyHNz85jB1dxT47TI0/sp
+ 4NV1TUK3AguiMLK/8B0/zAwKJAERykqQH7pnQr3p9EJG+F0KrBnGuC5ZIbcgwtCxZ7QBNqF7q
+ JfHR5vdgDT496mOeFWgdX1b9J8snMGrCENCJzaC5xHas/lSgYnV0BUMm1rQ0i3JL8xWUpMPOS
+ 3HErTh9omTbHDKCMOTeLylwEZ1gRa6DpvpxJznr3Lq2vQOK/wAbDjU/Msu5QAROW4meYcjIfL
+ SHGq04I2DCfkvx98okwzO7rr4pT9owKKIktxJqtBAIYu1OvGygaE+am+7nzPjaLgu9UJ1e7aC
+ jbFtn6+7jQZm/2vmTxIYftD4OR4C9Scct6kBDh0y/XykJAELgJoAcrnsun+l1nr8KIJPIE3w+
+ NjdlJRqHXdDfIgNWOQBGJDSoNtD4560clklZiM3ccitU046CTHV3APGTlK213+QOW8kyN9vvG
+ ZS+d9RgcNByqUnGT5MS93tJAtRujBSRC70YkXcPGbppfqKj6DSucaRpxFNq1NQyCg8BL8sXhr
+ BhCR8SujhXNrhpqsQpCKhtbJEKrkjkTXtg6UON8UO+xRDIkZcI8OsVyfu3Bjy3Rmonk5Qy+cK
+ tuOiEuXWIOEPXCJ/pIoBUl3JU33T5B1JNvEECkaRE8pI1fiZLzZ1t/edEcglrIhDGOmXvEuAb
+ JXJA7St151+xWeWopODEriri6PQvCIlpNBzYIaCwiEF6w=
 
-On Sat, 13 Apr 2024 07:43:50 -0700, Armin Wolf wrote:
+Am 16.04.24 um 00:36 schrieb Ashutosh Dixit:
+
+> When both hwmon and hwmon drvdata (on which hwmon depends) are device
+> managed resources, the expectation, on device unbind, is that hwmon will=
+ be
+> released before drvdata. However, in i915 there are two separate code
+> paths, which both release either drvdata or hwmon and either can be
+> released before the other. These code paths (for device unbind) are as
+> follows (see also the bug referenced below):
 >
-
-Hi Armin,
-
-> Am 13.04.24 um 02:10 schrieb Ashutosh Dixit:
+> Call Trace:
+> release_nodes+0x11/0x70
+> devres_release_group+0xb2/0x110
+> component_unbind_all+0x8d/0xa0
+> component_del+0xa5/0x140
+> intel_pxp_tee_component_fini+0x29/0x40 [i915]
+> intel_pxp_fini+0x33/0x80 [i915]
+> i915_driver_remove+0x4c/0x120 [i915]
+> i915_pci_remove+0x19/0x30 [i915]
+> pci_device_remove+0x32/0xa0
+> device_release_driver_internal+0x19c/0x200
+> unbind_store+0x9c/0xb0
 >
-> > When both hwmon and hwmon drvdata (on which hwmon depends) are device
-> > managed resources, the expectation, on device unbind, is that hwmon will be
-> > released before the drvdata. However, it appears devres does not do this
-> > consistently, so that we occasionally see drvdata being released before
-> > hwmon itself. This results in a uaf if hwmon sysfs is accessed during
-> > device unbind.
-> >
-> > The only way out of this seems to be do get rid of devm_ and release/free
-> > everything explicitly during device unbind.
+> and
 >
-> could it be that the underlying cause for this is the fact that you are using
-> devres on a DRM device?
+> Call Trace:
+> release_nodes+0x11/0x70
+> devres_release_all+0x8a/0xc0
+> device_unbind_cleanup+0x9/0x70
+> device_release_driver_internal+0x1c1/0x200
+> unbind_store+0x9c/0xb0
 >
-> The documentation states that:
+> This means that in i915, if use devm, we cannot gurantee that hwmon will
+> always be released before drvdata. Which means that we have a uaf if hwm=
+on
+> sysfs is accessed when drvdata has been released but hwmon hasn't.
 >
->	devres managed resources like devm_kmalloc() can only be used for resources
->	directly related to the underlying hardware device, and only used in code
->	paths fully protected by drm_dev_enter() and drm_dev_exit().
+> The only way out of this seems to be do get rid of devm_ and release/fre=
+e
+> everything explicitly during device unbind.
+>
+> v2: Change commit message and other minor code changes
+>
+> Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/10366
+> Signed-off-by: Ashutosh Dixit <ashutosh.dixit@intel.com>
+> ---
+>   drivers/gpu/drm/i915/i915_hwmon.c | 41 +++++++++++++++++++++++--------
+>   1 file changed, 31 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/i915/i915_hwmon.c b/drivers/gpu/drm/i915/i9=
+15_hwmon.c
+> index 8c3f443c8347..46c24b1ee6df 100644
+> --- a/drivers/gpu/drm/i915/i915_hwmon.c
+> +++ b/drivers/gpu/drm/i915/i915_hwmon.c
+> @@ -792,7 +792,7 @@ void i915_hwmon_register(struct drm_i915_private *i9=
+15)
+>   	if (!IS_DGFX(i915))
+>   		return;
+>
+> -	hwmon =3D devm_kzalloc(dev, sizeof(*hwmon), GFP_KERNEL);
+> +	hwmon =3D kzalloc(sizeof(*hwmon), GFP_KERNEL);
+>   	if (!hwmon)
+>   		return;
+>
+> @@ -818,10 +818,10 @@ void i915_hwmon_register(struct drm_i915_private *=
+i915)
+>   	hwm_get_preregistration_info(i915);
+>
+>   	/*  hwmon_dev points to device hwmon<i> */
+> -	hwmon_dev =3D devm_hwmon_device_register_with_info(dev, ddat->name,
+> -							 ddat,
+> -							 &hwm_chip_info,
+> -							 hwm_groups);
+> +	hwmon_dev =3D hwmon_device_register_with_info(dev, ddat->name,
+> +						    ddat,
+> +						    &hwm_chip_info,
+> +						    hwm_groups);
+>   	if (IS_ERR(hwmon_dev)) {
+>   		i915->hwmon =3D NULL;
 
-I just posted v2 of the patch and updated
-https://gitlab.freedesktop.org/drm/intel/-/issues/10366. The updates do
-include stack traces for two separate code paths in i915 which release
-devres.
+Hi,
 
-Actually I am not sure if this is due to using devres on a DRM device. I
-was thinking the PCI device would be more appropriate, but looks like DRM
-drivers don't have the parent PCI device available in their data structs.
+you need to free hwmon here, since it is not managed by devres anymore.
 
-> That said, since the i915 driver is already removing the hwmon device manually
-> with i915_hwmon_unregister(),
+>   		return;
+> @@ -838,10 +838,10 @@ void i915_hwmon_register(struct drm_i915_private *=
+i915)
+>   		if (!hwm_gt_is_visible(ddat_gt, hwmon_energy, hwmon_energy_input, 0)=
+)
+>   			continue;
+>
+> -		hwmon_dev =3D devm_hwmon_device_register_with_info(dev, ddat_gt->name=
+,
+> -								 ddat_gt,
+> -								 &hwm_gt_chip_info,
+> -								 NULL);
+> +		hwmon_dev =3D hwmon_device_register_with_info(dev, ddat_gt->name,
+> +							    ddat_gt,
+> +							    &hwm_gt_chip_info,
+> +							    NULL);
+>   		if (!IS_ERR(hwmon_dev))
+>   			ddat_gt->hwmon_dev =3D hwmon_dev;
+>   	}
+> @@ -849,5 +849,26 @@ void i915_hwmon_register(struct drm_i915_private *i=
+915)
+>
+>   void i915_hwmon_unregister(struct drm_i915_private *i915)
+>   {
+> -	fetch_and_zero(&i915->hwmon);
+> +	struct i915_hwmon *hwmon =3D fetch_and_zero(&i915->hwmon);
 
-Well previously i915_hwmon_unregister() was almost empty (and could
-actually be eliminated).
+Why is fetch_and_zero() necessary here?
 
-> i agree that not using devres in this case seems to be the solution.
+Thanks,
+Armin Wolf
 
-Yeah that seems to me too to be the easiest way out of this situation.
-
-Thanks.
---
-Ashutosh
+> +	struct hwm_drvdata *ddat =3D &hwmon->ddat;
+> +	struct intel_gt *gt;
+> +	int i;
+> +
+> +	if (!hwmon)
+> +		return;
+> +
+> +	for_each_gt(gt, i915, i) {
+> +		struct hwm_drvdata *ddat_gt =3D hwmon->ddat_gt + i;
+> +
+> +		if (ddat_gt->hwmon_dev) {
+> +			hwmon_device_unregister(ddat_gt->hwmon_dev);
+> +			ddat_gt->hwmon_dev =3D NULL;
+> +		}
+> +	}
+> +
+> +	if (ddat->hwmon_dev)
+> +		hwmon_device_unregister(ddat->hwmon_dev);
+> +
+> +	mutex_destroy(&hwmon->hwmon_lock);
+> +	kfree(hwmon);
+>   }
