@@ -1,261 +1,124 @@
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24C52137753;
-	Tue, 16 Apr 2024 19:00:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A306213777D
+	for <linux-hwmon@vger.kernel.org>; Tue, 16 Apr 2024 19:02:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713294012; cv=none; b=lVXDM6DrW3SJyr7/SanjBa/c1XaYmDl9+RYo7lJCrrnEAwg1lP1ceTO6OaguCrM1fQuU/C/S7txrRknbKJZVBUP1DquFjfPvgrRoBa/JINl+H4v8SpUo6PKnfvFo2pcDzQDs8dUnVMaOZO4LazNszOtGRK86AuTgwclFDSaje9Q=
+	t=1713294133; cv=none; b=NG7hvs+jCt/xCgUty0qkOU/UaGKOkewZx2NN93paIbntAEVlAasGK5jax8Fe80ebe/V45XGt1/HJt2gH90WssX3k7kWdkCJ61fwbNzw6v4c1TzR2RmnJ6RXwANO9+3b1N7RtuQjzK/VVMg5PQ+MWaZDNGTddq/BqYB2IE5ATGr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713294012; c=relaxed/simple;
-	bh=daCa0PJyCtO6OpxujUpgj/hiPPCNOkXna5kNFlTHBGc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kT44LvT6MDujXu8pw99OkDtk07JDO0FRdJ21dWuQLrJKamRPIzS2768hsH7XMRZVvV9bqnTxp+H2tcuBAdlLECVvDYGFsuCo1GFfz360/vpSsjlk4jFiypCk2d3JxYeoW9MZdmu7L27TJXJ3IJOlEFaf59Ba+KIVFO3xJ6dtiqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Iari86po; arc=none smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1713294133; c=relaxed/simple;
+	bh=cWgfFbkRRGPeHH51a6cCpYsUxCzyFOtg5Ia+0xVpfX0=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=iL7xCg2w+XXVpybLsw6ESFm5gQa2PVgyLaI9vOrBlPRBY7kYvu3F2Trqz9Kcs0g/k+aHNczH+bSVDjEg3fyGiSg4vKf0KpGkUFWdI5/X20MzOB5vYG57n0sdGBWRKH/XD67eRbaYEd6lxxuc//yTW8ZePMXw+ot3NtWBr5s9JeI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ifWzy08O; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Iari86po"
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-518a56cdbcfso5569261e87.2;
-        Tue, 16 Apr 2024 12:00:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713294009; x=1713898809; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ivM//Z6XMzCj1R+l3MkcdtO0zz8Nry3WAZHrFBc/SX0=;
-        b=Iari86poMINYH22/S8QaKhXr4tJPu7NZu91K/RX+yetKfdfXqXJPdXXkG8pOU0s7jd
-         OuLFSy1uATSzPogZ+4Sc2aY2vx34LYKEzYscd5KSd/P5kzxWKkVB80VmpaklqpoC5qOB
-         Y8O8VgY6vaUOrpxBaWSyNeEstNwU/mWb6LK5ll5tle00FbabjUnnk9dsitID0fNdDitr
-         YmIy4Z+iTxdqNWPR12sGAn78SsBkGry4PLkMaa6zRxZbYUXIZVjS7M44nJWrkvofB9Zo
-         ohAj1DMzlZTXYL3t9AR0AxXuqx7968fKZQK1TBfCOwbad8YplP7yeN+hp2YpliFY6il2
-         1SjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713294009; x=1713898809;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ivM//Z6XMzCj1R+l3MkcdtO0zz8Nry3WAZHrFBc/SX0=;
-        b=EvuYQ1qyXXPRObOfgfWeYvghAN4S5O8suR+mUUnxyOGJurnV8xbFvI8aoS6pxYjiKG
-         qWHJuvAO/19MeJQW0wjqY8/hoX4N6HpLRcxHr0NACGvyCY6b+8dxh1EJnycQfazYYlJk
-         R/gdDFpDokutM7Oc4puMUaNrb18IyoqosB4QrTgDhVk8V1iG6Scq2qyPUMSNxgPff9wn
-         A6A2+74a3PcC9VCmAKOA2r6RpjdshWLhHphbY/lHd8CZItc1cEJ8Y9/EEymiTZgW4ls9
-         LFoDpQLGWuf+R6wvm3sYwWUs+9Dz1DkdZLhxUwQdnlo9438P16/Ts3dbu0vgDS7UgVNr
-         p5wg==
-X-Forwarded-Encrypted: i=1; AJvYcCXf+x+FGVIFoeGx7DnSTJtoF38PLfUZg4d10+t2ibK9SCyw0GbxJIG2MlZLWd0brS5qElfElHo0LudwwsPvyuz40med9lFS+dg8D1/42tleNAwRSyyNPGHMWWJY6lgLBTJeoBaDpC+b1/8sO2WzINpIFM+s5+uIYhnKlOXXHv/Eao2XfFttZf3kMajzS034
-X-Gm-Message-State: AOJu0YyY/3DX7DWKhO4dBtgwzrydZLEmUFkvvFT5f0bkAseWO/GqFOCY
-	49LeH3w+LXLHDSND5pI7XbF75rNPtICMAVwVsGUlnAGCqBKDry6QV1oceA==
-X-Google-Smtp-Source: AGHT+IFlieztXDmTvRNjIAxUGa/Uy5bcOmk0sr1UEIFH0OpPH5TWSFwVNdVw5foiiWZWdUMYEMuHFQ==
-X-Received: by 2002:a19:5f1e:0:b0:516:a686:8ae1 with SMTP id t30-20020a195f1e000000b00516a6868ae1mr10754069lfb.62.1713294008825;
-        Tue, 16 Apr 2024 12:00:08 -0700 (PDT)
-Received: from ?IPV6:2a02:8071:b783:140:927c:82ba:d32d:99c1? ([2a02:8071:b783:140:927c:82ba:d32d:99c1])
-        by smtp.gmail.com with ESMTPSA id qs1-20020a170906458100b00a5227c8f0e4sm6742784ejc.89.2024.04.16.12.00.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Apr 2024 12:00:07 -0700 (PDT)
-Message-ID: <97d0f68f-63da-4f72-ae8d-89fbf9aadf62@gmail.com>
-Date: Tue, 16 Apr 2024 21:00:05 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ifWzy08O"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713294131; x=1744830131;
+  h=date:message-id:from:to:cc:subject:in-reply-to:
+   references:mime-version;
+  bh=cWgfFbkRRGPeHH51a6cCpYsUxCzyFOtg5Ia+0xVpfX0=;
+  b=ifWzy08OLBSsp+ml0IRF07sRjiSBPFvgYgtQOjuQkKYFdxL0zFMmqUC+
+   CiySaSZBU+bcLzM9V4aqAp40VskbXQnmYQKsOthzV7hqWh83VMo4R2DOH
+   pLo8rouL6Ae+6vEoVutegpgIoNJY1HZWp1vQlrhPdqXEiFZ7ZKU/DrE+L
+   2nNH8lcE8LI8PfaTfE0hoazvhUSffnWceE6rMQyroXqEjboA0IK8CkSJ2
+   dkKFDopwcbHlgUkpeu/r+oH7IGOv/Ter2LouMmkeX4OwutUhtaf/ydp3v
+   dsAI7lqH65fBt3rLGt4LvlLu8jRFLYHnG9AoecGUim/S7Pu+FWc5QkbLN
+   Q==;
+X-CSE-ConnectionGUID: z5FtQUswRASOZRE1lDPnMA==
+X-CSE-MsgGUID: HZsIpu7LQBGFfEGrcOzaGw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11046"; a="12535748"
+X-IronPort-AV: E=Sophos;i="6.07,206,1708416000"; 
+   d="scan'208";a="12535748"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 12:02:11 -0700
+X-CSE-ConnectionGUID: ft6I1Z/xR1Slpe9WbxVbwg==
+X-CSE-MsgGUID: eetmvu/LTHes6YDuDm5Zww==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,206,1708416000"; 
+   d="scan'208";a="59794531"
+Received: from orsosgc001.jf.intel.com (HELO orsosgc001.intel.com) ([10.165.21.138])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 12:02:11 -0700
+Date: Tue, 16 Apr 2024 12:02:10 -0700
+Message-ID: <85jzkxcerx.wl-ashutosh.dixit@intel.com>
+From: "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
+To: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc: intel-gfx@lists.freedesktop.org,	Badal Nilawar
+ <badal.nilawar@intel.com>,	Andi Shyti <andi.shyti@intel.com>,	Ville
+ =?ISO-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
+	linux-hwmon@vger.kernel.org,	dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2] drm/i915/hwmon: Get rid of devm
+In-Reply-To: <Zh7JmPQ8XRJwMQnQ@intel.com>
+References: <20240415223612.738535-1-ashutosh.dixit@intel.com>
+	<Zh7JmPQ8XRJwMQnQ@intel.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
+ Emacs/28.2 (x86_64-redhat-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] hwmon: surface_temp: Add support for sensor names
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Jean Delvare <jdelvare@suse.com>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Hans de Goede <hdegoede@redhat.com>, Ivor Wanders <ivor@iwanders.net>,
- linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
- linux-hwmon@vger.kernel.org
-References: <20240330112409.3402943-1-luzmaximilian@gmail.com>
- <20240330112409.3402943-3-luzmaximilian@gmail.com>
- <43908511-198f-42ee-af21-dad79bdf799a@roeck-us.net>
-Content-Language: en-US
-From: Maximilian Luz <luzmaximilian@gmail.com>
-In-Reply-To: <43908511-198f-42ee-af21-dad79bdf799a@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 
-On 4/16/24 3:30 PM, Guenter Roeck wrote:
-> On Sat, Mar 30, 2024 at 12:24:01PM +0100, Maximilian Luz wrote:
-
-[...]
-
->> +static int ssam_tmp_get_name(struct ssam_device *sdev, u8 iid, char *buf, size_t buf_len)
->> +{
->> +	struct ssam_tmp_get_name_rsp name_rsp;
->> +	int status;
->> +
->> +	status =  __ssam_tmp_get_name(sdev->ctrl, sdev->uid.target, iid, &name_rsp);
->> +	if (status)
->> +		return status;
->> +
->> +	/*
->> +	 * This should not fail unless the name in the returned struct is not
->> +	 * null-terminated or someone changed something in the struct
->> +	 * definitions above, since our buffer and struct have the same
->> +	 * capacity by design. So if this fails blow this up with a warning.
->> +	 * Since the more likely cause is that the returned string isn't
->> +	 * null-terminated, we might have received garbage (as opposed to just
->> +	 * an incomplete string), so also fail the function.
->> +	 */
->> +	status = strscpy(buf, name_rsp.name, buf_len);
->> +	WARN_ON(status < 0);
-> 
-> Not acceptable. From include/asm-generic/bug.h:
-> 
->   * Do not use these macros when checking for invalid external inputs
->   * (e.g. invalid system call arguments, or invalid data coming from
->   * network/devices), and on transient conditions like ENOMEM or EAGAIN.
->   * These macros should be used for recoverable kernel issues only.
+On Tue, 16 Apr 2024 11:55:20 -0700, Rodrigo Vivi wrote:
 >
 
-Hmm, I always interpreted that as "do not use for checking user-defined
-input", which this is not.
+Hi Rodrigo,
 
-The reason I added/requested it here was to check for "bugs" in how we
-think the interface behaves (and our definitions related to it) as the
-interface was reverse-engineered. Generally, when this fails I expect
-that we made some mistake in our code (or the things we assume about the
-interface), which likely causes us to interpret the received data as
-"garbage" (and not the EC sending corrupted data, which it is generally
-not due to CRC checking and validation in the SAM driver). Hence, I
-personally would prefer if this blows up in a big warning with a trace
-attached to it, so that an end-user can easily report this to us and
-that we can appropriately deal with it. As opposed to some one-line
-error message that will likely get overlooked or not taken as seriously.
+> > @@ -849,5 +849,26 @@ void i915_hwmon_register(struct drm_i915_private *i915)
+> >
+> >  void i915_hwmon_unregister(struct drm_i915_private *i915)
+> >  {
+> > -	fetch_and_zero(&i915->hwmon);
+> > +	struct i915_hwmon *hwmon = fetch_and_zero(&i915->hwmon);
+> > +	struct hwm_drvdata *ddat = &hwmon->ddat;
+> > +	struct intel_gt *gt;
+> > +	int i;
+> > +
+> > +	if (!hwmon)
+> > +		return;
+>
+> "that's too late", we are going to hear from static analyzer tools.
+>
+> beter to move ddat = &hwmon->ddat; after this return.
 
-If you still insist, I could change that to a dev_err() message. Or
-maybe make the comment a bit clearer.
+Yeah, I worried a lot about it :/ But then finally decided (and verified)
+that we are never actually dereferencing the (possibly NULL) pointer.
 
->> +
->> +	return status < 0 ? status : 0;
->> +}
->> +
->>   
->>   /* -- Driver.---------------------------------------------------------------- */
->>   
->>   struct ssam_temp {
->>   	struct ssam_device *sdev;
->>   	s16 sensors;
->> +	char names[SSAM_TMP_SENSOR_MAX_COUNT][SSAM_TMP_SENSOR_NAME_LENGTH];
->>   };
->>   
->>   static umode_t ssam_temp_hwmon_is_visible(const void *data,
->> @@ -83,33 +134,47 @@ static int ssam_temp_hwmon_read(struct device *dev,
->>   	return ssam_tmp_get_temperature(ssam_temp->sdev, channel + 1, value);
->>   }
->>   
->> +static int ssam_temp_hwmon_read_string(struct device *dev,
->> +				       enum hwmon_sensor_types type,
->> +				       u32 attr, int channel, const char **str)
->> +{
->> +	const struct ssam_temp *ssam_temp = dev_get_drvdata(dev);
->> +
->> +	*str = ssam_temp->names[channel];
->> +	return 0;
->> +}
->> +
->>   static const struct hwmon_channel_info * const ssam_temp_hwmon_info[] = {
->>   	HWMON_CHANNEL_INFO(chip,
->>   			   HWMON_C_REGISTER_TZ),
->> -	/* We have at most 16 thermal sensor channels. */
->> +	/*
->> +	 * We have at most SSAM_TMP_SENSOR_MAX_COUNT = 16 thermal sensor
->> +	 * channels.
->> +	 */
-> 
-> Pointless comment. Already explained above, and perfect example showing
-> why it has no value separating this and the previous patch.
+But not sure about static analyzer tools, maybe you are right, I'll move
+it.
 
-I can remove the comment.
+> with that,
+>
+> Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
 
-The reason for it being two separate patches is to retain proper
-attribution. I am sorry that this has created more work for you.
+Thanks a lot :)
 
-In short, Ivor reverse-engineered the interface calls to get the sensor
-names and wrote the vast majority of this patch (I only changed some
-smaller things and gave advice, hence the co-developed-by). Therefore I
-wanted to give proper attribution to Ivor for his work and not squash it
-into a single patch.
+Ashutosh
 
->>   	HWMON_CHANNEL_INFO(temp,
->> -			   HWMON_T_INPUT,
->> -			   HWMON_T_INPUT,
->> -			   HWMON_T_INPUT,
->> -			   HWMON_T_INPUT,
->> -			   HWMON_T_INPUT,
->> -			   HWMON_T_INPUT,
->> -			   HWMON_T_INPUT,
->> -			   HWMON_T_INPUT,
->> -			   HWMON_T_INPUT,
->> -			   HWMON_T_INPUT,
->> -			   HWMON_T_INPUT,
->> -			   HWMON_T_INPUT,
->> -			   HWMON_T_INPUT,
->> -			   HWMON_T_INPUT,
->> -			   HWMON_T_INPUT,
->> -			   HWMON_T_INPUT),
->> +			   HWMON_T_INPUT | HWMON_T_LABEL,
->> +			   HWMON_T_INPUT | HWMON_T_LABEL,
->> +			   HWMON_T_INPUT | HWMON_T_LABEL,
->> +			   HWMON_T_INPUT | HWMON_T_LABEL,
->> +			   HWMON_T_INPUT | HWMON_T_LABEL,
->> +			   HWMON_T_INPUT | HWMON_T_LABEL,
->> +			   HWMON_T_INPUT | HWMON_T_LABEL,
->> +			   HWMON_T_INPUT | HWMON_T_LABEL,
->> +			   HWMON_T_INPUT | HWMON_T_LABEL,
->> +			   HWMON_T_INPUT | HWMON_T_LABEL,
->> +			   HWMON_T_INPUT | HWMON_T_LABEL,
->> +			   HWMON_T_INPUT | HWMON_T_LABEL,
->> +			   HWMON_T_INPUT | HWMON_T_LABEL,
->> +			   HWMON_T_INPUT | HWMON_T_LABEL,
->> +			   HWMON_T_INPUT | HWMON_T_LABEL,
->> +			   HWMON_T_INPUT | HWMON_T_LABEL),
-> 
-> Another example. Why have me review the previous patch
-> just to change the code here ?
-
-See above.
-
-> 
-> [ ... ]
-> 
->> +	/* Retrieve the name for each available sensor. */
->> +	for (channel = 0; channel < SSAM_TMP_SENSOR_MAX_COUNT; channel++) {
->> +		if (!(sensors & BIT(channel)))
->> +			continue;
->> +
->> +		status = ssam_tmp_get_name(sdev, channel + 1,
->> +					   ssam_temp->names[channel],
->> +					   SSAM_TMP_SENSOR_NAME_LENGTH);
->> +		if (status)
->> +			return status;
-> 
-> Your call to fail probe in this case just because it can not find
-> a sensor name. I personally find that quite aggressive.
-
-We generally do not expect this to fail. And I think if this fails, it
-should either be something wrong with the EC communication (in a way
-that breaks other things like reading temperature values as well) or in
-our assumptions of how the interface works. So similar to above, I
-personally would prefer this to fail in a more noisy way, so that people
-are more likely to tell us about the failure.
-
-As an example: We expect sensor names and the interface for it to be
-present. However, maybe some device (either one we couldn't test or some
-future one) does not implement the interface call. Usually, an
-unsupported call results in a timeout error. So if we would just ignore
-that, the driver would load slow (as for each name it would wait for the
-timeout), but users might not notice as the temperature sensors can
-still be accessed normally after that. I do see that as an easily
-detectable bug. Letting it continue to load IMHO just creates a more
-subtle bug.
-
-As above, if you prefer I can change that. Just let me know.
-
-Thank you for your review.
-
-Best regards,
-Max
+>
+> > +
+> > +	for_each_gt(gt, i915, i) {
+> > +		struct hwm_drvdata *ddat_gt = hwmon->ddat_gt + i;
+> > +
+> > +		if (ddat_gt->hwmon_dev) {
+> > +			hwmon_device_unregister(ddat_gt->hwmon_dev);
+> > +			ddat_gt->hwmon_dev = NULL;
+> > +		}
+> > +	}
+> > +
+> > +	if (ddat->hwmon_dev)
+> > +		hwmon_device_unregister(ddat->hwmon_dev);
+> > +
+> > +	mutex_destroy(&hwmon->hwmon_lock);
+> > +	kfree(hwmon);
+> >  }
+> > --
+> > 2.41.0
+> >
