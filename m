@@ -1,67 +1,58 @@
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2074.outbound.protection.outlook.com [40.107.215.74])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B372917573;
-	Tue, 16 Apr 2024 02:22:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.215.74
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713234142; cv=fail; b=aUmdq+tJoHaMxexCv+ndczJbiRQUHt9nrykUBxliy4LLsnJwVjmtlMvyxi4ZQY9x3IDZq6Z3fvz5+USsQATk++sTF3wfHWi8lvSUeGrXY2GQUUpPRnvc0ad+YLvica+XK6LSFIamnxML/pGXe10ZDgl+7KPzFSOV5Ye7Wx/c2pQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713234142; c=relaxed/simple;
-	bh=PQDs637DkJ0XvgnVWdoTkmAByxh1JzOkkkEy25w+9IE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=Rhi9qdNKTvq/zuqisoEyBmuebuN2AFWBCBTpwg7W6nUJKk/V0MoPpr3DaSxRAH7J+/32ZhUZbCckQIJwcpf9EY7YOS/TMIJs/TqXN7Y+V7WhPFwrNoxIhoOkrW6HT0j61sV0MFNtS9EjTGOg26DSI+RgCDFPoJXTfJ51czDoQ+I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wiwynn.com; spf=pass smtp.mailfrom=wiwynn.com; dkim=pass (2048-bit key) header.d=wiwynn.com header.i=@wiwynn.com header.b=bST5UUct; arc=fail smtp.client-ip=40.107.215.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wiwynn.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wiwynn.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1402B2D60A
+	for <linux-hwmon@vger.kernel.org>; Tue, 16 Apr 2024 03:55:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1713239711; cv=none; b=liAGao6FtUXa4RNMo9n3b6yDUtlnEWBJtgnMJJ/EWR496VTysph3C1YJbULqmZi1tPgP1BXsUrho6HMTzYgKt/B+C5ghYuV5RS7f1M+6p2S5ufkd6jsskKyPrn2+MlS2bgIt12fTeQCIrk7aeEISHydRWwD/MWRv/vYmXom/tyA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1713239711; c=relaxed/simple;
+	bh=mn0gisJNrsD7GRbKuZiSaG2WypB8+MdvqgCCZc6EMbs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tVeRil0BVvwiagx7l6CfG4etnKMZiGUK4S+D6/zMo/4fyVkqg1Z/Q97b4yukKtMmwG8l2Zmna9MZ7stbmtB126d8uSC3DEesxl74b+sq08x4qn02BMwSUlxU3c37aKnvSU6mVBDzWjAUNSp64Ogpag/LF6JLBcmfAIZEGAwVLN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XyaIOlT4; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wiwynn.com header.i=@wiwynn.com header.b="bST5UUct"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CFBK53Kxfj0F74zpWCyAiS1gr5DdS8GNYHEKKKAdDB6X8ANWHBNxKb7zRYCiTR/r7QGPU3N/uD2sZQBaM1FEf14ksY81+qPI18TLN5nGJZVqM7oCwG+4uY4543YbSqOJFwLKI0fgo5cl2fV9AYl6F+IGBm0MMfbuySZq8GdU8DAM1UNI2KrwhG9bI7X0U6awbCSWeLgrFWsLhooG42eio5jPycCCEH9CAx3d0f1YFHVYU5XbCwzkz/wQDt0arbBjw1GRVmiZjRC/iwPIewPPA1sZnonttYl87x/nR4F4KPdbYrc6GDsauzEvW4DdN9DdGYblK+qVzNACnCzatmf5Dg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+6CRusoxnO+qUgpzFyJM3lu2bRTxIzxeM6ppgObmV8I=;
- b=jR2KBmAJ7t/SacAYY+5wtmLkayww89NeMzBAdpPSAoJdRKMAfCpT8GnmOv4R6U2QXEFWowTTPpG3mrdw39Wmch57V7rBUHO4B8dC0fJU8T6pAar3JHf82lpTmvWDGjmKW4PKBjfGa0IVT0otQupV60C8mWOq37qePYG27qhFsZMysrqO7S4oy+4/yi62NLbHuDF+B0mJdjJnOpar+9oeONEQkbIel//j+bXVDGnFAgQQntfRR10msiG3PIRbhxqU6CwYQq0pEUlEPLKi98p24ozGLi/rYpElv62l6zlntGW317vYDIjNdN2Mg4XvlkxzIHMVRjmiyg/JU8nf7iNZgQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 211.20.1.79) smtp.rcpttodomain=stwcx.xyz smtp.mailfrom=wiwynn.com; dmarc=fail
- (p=quarantine sp=quarantine pct=100) action=quarantine
- header.from=wiwynn.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+6CRusoxnO+qUgpzFyJM3lu2bRTxIzxeM6ppgObmV8I=;
- b=bST5UUctJEDjOUi0wGsceGaiMdpm+KBEdrsIjyia1l0lK2PchLL3D/XhFtRBFso0VZh7SVRpMhFCNdf0v31WAQwaEYHRZDr5+oLAZzN8aoAp6/T8eGAj8zlkWMUAeSSkGa2JrzGflsBnQGx5kB2SR7j91U7c39AfhSs0hX4EtV4dnoqqGU6HhG4xmpip9Gluwl19vWQj5XtGg/JkizA8pKu096cooKPQxG/foQfvrzaOGvPpf68n0+52JoSEybP3rM7s4aSWKDoeZntXT5X8aX2QDHR5uNyntbixqjCdJmMCfGsyNYQvltGoBXshEAkf47a+NQSuc4mlRz38wgU6VQ==
-Received: from SI2PR01CA0047.apcprd01.prod.exchangelabs.com
- (2603:1096:4:193::10) by TYZPR04MB7665.apcprd04.prod.outlook.com
- (2603:1096:405:45::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7452.50; Tue, 16 Apr
- 2024 02:22:15 +0000
-Received: from SG2PEPF000B66CF.apcprd03.prod.outlook.com
- (2603:1096:4:193:cafe::ae) by SI2PR01CA0047.outlook.office365.com
- (2603:1096:4:193::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.32 via Frontend
- Transport; Tue, 16 Apr 2024 02:22:15 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 211.20.1.79)
- smtp.mailfrom=wiwynn.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=quarantine header.from=wiwynn.com;
-Received-SPF: Fail (protection.outlook.com: domain of wiwynn.com does not
- designate 211.20.1.79 as permitted sender) receiver=protection.outlook.com;
- client-ip=211.20.1.79; helo=localhost.localdomain;
-Received: from localhost.localdomain (211.20.1.79) by
- SG2PEPF000B66CF.mail.protection.outlook.com (10.167.240.23) with Microsoft
- SMTP Server id 15.20.7452.22 via Frontend Transport; Tue, 16 Apr 2024
- 02:22:13 +0000
-From: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
-To: patrick@stwcx.xyz,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XyaIOlT4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713239710; x=1744775710;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=mn0gisJNrsD7GRbKuZiSaG2WypB8+MdvqgCCZc6EMbs=;
+  b=XyaIOlT45Vw4R4j0LpUISe+0RA2rNhnhduydpLcH7BcCxAUU7siZszw+
+   5gjZahK08ZlZ90cF0rG+KrBAPnhm5slwvmSOFrkisocYG+XKc5s70ArJn
+   36umlxHK+M6JJpf+Qxy7adPCom+dVJVVkyIuhstPVc0eCY03si8ihk6ol
+   EgnHSrr98x66YvzAfWz9n/xDAP71r4Idn1bh214fGTr4z/Im8amLkrMrt
+   xoQMGPdpjwkzDDhVk8R/+4iWisA6iSa8R81Wqf5hC05Ata0kdX7C5SrdS
+   akRQpM/7hwjniNygPXAm2TWtatZ9o+lWqhB6w6bDqnEFOZAKqCK6opHxv
+   A==;
+X-CSE-ConnectionGUID: NMIDoisaSmeKsF9ntOL5NQ==
+X-CSE-MsgGUID: hHmLRPC/SLGH7ACNRnKSIw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11045"; a="19260321"
+X-IronPort-AV: E=Sophos;i="6.07,204,1708416000"; 
+   d="scan'208";a="19260321"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2024 20:55:08 -0700
+X-CSE-ConnectionGUID: tMW3Qk2KRWmjrlIyQCAXjw==
+X-CSE-MsgGUID: 4CMleALOTWyOBrpC+HkLGA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,204,1708416000"; 
+   d="scan'208";a="26917438"
+Received: from orsosgc001.jf.intel.com ([10.165.21.138])
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2024 20:55:08 -0700
+From: Ashutosh Dixit <ashutosh.dixit@intel.com>
+To: intel-gfx@lists.freedesktop.org
+Cc: Badal Nilawar <badal.nilawar@intel.com>,
+	Andi Shyti <andi.shyti@intel.com>,
+	=?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= <ville.syrjala@linux.intel.com>,
 	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] hwmon: max31790: revise the scale to write pwm
-Date: Tue, 16 Apr 2024 10:22:11 +0800
-Message-Id: <20240416022211.859483-1-Delphine_CC_Chiu@wiwynn.com>
-X-Mailer: git-send-email 2.25.1
+	dri-devel@lists.freedesktop.org
+Subject: [PATCH] drm/i915/hwmon: Get rid of devm
+Date: Mon, 15 Apr 2024 20:55:01 -0700
+Message-ID: <20240416035501.755728-1-ashutosh.dixit@intel.com>
+X-Mailer: git-send-email 2.41.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,78 +60,134 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SG2PEPF000B66CF:EE_|TYZPR04MB7665:EE_
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: 46b3f515-bef2-4ef4-b334-08dc5dbc07ba
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	7vm6W+RW9uq1rV2DFLnJZb59bcSSf/PooonhEHDv1KiyzWsACD4b2snMMyM1PhCNJqyHx++x3pPLWpGM9n/2zhZ9TA3t/jZD9AhqQwGrq6YL3PNTf/zG35cqtnV+bqMHB21UvutWj2njeGcesmmzQHUV41VeSh76dlPblLjFpFM0BrQqL/up0gGHBdLtSD1xBj2i6XZyq0vwMe+hZkT4nEeqtrUpbwXfKN83Wwa/3/dxNax8YEAETeFZWw6zzaqeBsf9ae7+VN5yMUf1uc5wSktGtcoLQ8Du8mf003NGczEI8mN3Jqz3kidqBgqfa50VkxYFMqEXmL/gIY3RFgY8wQEBx8x2xEFJinKciu7IF6oB2hhFzfeL7ikg7dOjWFx6B2j1e1dEwlSavyXQdfNiZ6+ASF28n2jth/ZjPcRr66jJAEjgiLx7sG4BtXZuNePc2+6mhfTA1BHdY3N55igILOc8TkykIGGaLr35slGu5WnAjFdoG+Mzpu4J1bQ+ulVql1SWe+dcai6M/f+QdEgR6VNT94cnfYT1tIdivYnCZjyUOgfYArUy0g8FuuMvZU57y9xWYX40Chqxl4CbbgL6zorWdG5LJdUki6B2VWj855JVvBFa6cwcLP0yWFQjJJhabFVON7CTrXu9XupMEY7c5yfAjRTXZ0EUceX/K5hL8b4lS9mnmd5uC0hgsO+DyCPQGk8EwadQK5jFIjX1CGPQsbZ4kr4tb7RQJTYJLefr4b9I58sTKEzpzOOU3ONmu399
-X-Forefront-Antispam-Report:
-	CIP:211.20.1.79;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:localhost.localdomain;PTR:211-20-1-79.hinet-ip.hinet.net;CAT:NONE;SFS:(13230031)(1800799015)(36860700004)(376005)(82310400014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: wiwynn.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Apr 2024 02:22:13.9991
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 46b3f515-bef2-4ef4-b334-08dc5dbc07ba
-X-MS-Exchange-CrossTenant-Id: da6e0628-fc83-4caf-9dd2-73061cbab167
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=da6e0628-fc83-4caf-9dd2-73061cbab167;Ip=[211.20.1.79];Helo=[localhost.localdomain]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SG2PEPF000B66CF.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR04MB7665
 
-Since the value for PWMOUT Target Duty Cycle register is a 9 bit
-left-justified value that ranges from 0 to 511 and is contained in 2
-bytes.
+When both hwmon and hwmon drvdata (on which hwmon depends) are device
+managed resources, the expectation, on device unbind, is that hwmon will be
+released before drvdata. However, in i915 there are two separate code
+paths, which both release either drvdata or hwmon and either can be
+released before the other. These code paths (for device unbind) are as
+follows (see also the bug referenced below):
 
-There is an issue that the PWM signal recorded by oscilloscope would
-not be on consistently if we set PWM to 100% to the driver.
+Call Trace:
+release_nodes+0x11/0x70
+devres_release_group+0xb2/0x110
+component_unbind_all+0x8d/0xa0
+component_del+0xa5/0x140
+intel_pxp_tee_component_fini+0x29/0x40 [i915]
+intel_pxp_fini+0x33/0x80 [i915]
+i915_driver_remove+0x4c/0x120 [i915]
+i915_pci_remove+0x19/0x30 [i915]
+pci_device_remove+0x32/0xa0
+device_release_driver_internal+0x19c/0x200
+unbind_store+0x9c/0xb0
 
-It is because the LSB of the 9 bit would always be zero if it just
-left shift 8 bit for the value that write to PWMOUT Target Duty
-Cycle register.
+and
 
-Therefore, revise the scale of the value that was written to pwm input
-from 255 to 511 and modify the value to left-justified value.
+Call Trace:
+release_nodes+0x11/0x70
+devres_release_all+0x8a/0xc0
+device_unbind_cleanup+0x9/0x70
+device_release_driver_internal+0x1c1/0x200
+unbind_store+0x9c/0xb0
 
-Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+This means that in i915, if use devm, we cannot gurantee that hwmon will
+always be released before drvdata. Which means that we have a uaf if hwmon
+sysfs is accessed when drvdata has been released but hwmon hasn't.
+
+The only way out of this seems to be do get rid of devm_ and release/free
+everything explicitly during device unbind.
+
+v2: Change commit message and other minor code changes
+v3: Cleanup from i915_hwmon_register on error (Armin Wolf)
+
+Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/10366
+Signed-off-by: Ashutosh Dixit <ashutosh.dixit@intel.com>
 ---
- drivers/hwmon/max31790.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/i915/i915_hwmon.c | 54 ++++++++++++++++++++++---------
+ 1 file changed, 38 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
-index 3dc95196b229..7aa1aa63bf1b 100644
---- a/drivers/hwmon/max31790.c
-+++ b/drivers/hwmon/max31790.c
-@@ -49,6 +49,9 @@
+diff --git a/drivers/gpu/drm/i915/i915_hwmon.c b/drivers/gpu/drm/i915/i915_hwmon.c
+index b758fd110c20..8cebf6f5b101 100644
+--- a/drivers/gpu/drm/i915/i915_hwmon.c
++++ b/drivers/gpu/drm/i915/i915_hwmon.c
+@@ -793,7 +793,7 @@ void i915_hwmon_register(struct drm_i915_private *i915)
+ 	if (!IS_DGFX(i915))
+ 		return;
  
- #define NR_CHANNEL			6
+-	hwmon = devm_kzalloc(dev, sizeof(*hwmon), GFP_KERNEL);
++	hwmon = kzalloc(sizeof(*hwmon), GFP_KERNEL);
+ 	if (!hwmon)
+ 		return;
  
-+#define PWM_INPUT_SCALE	255
-+#define MAX31790_REG_PWMOUT_SCALE	511
+@@ -819,14 +819,12 @@ void i915_hwmon_register(struct drm_i915_private *i915)
+ 	hwm_get_preregistration_info(i915);
+ 
+ 	/*  hwmon_dev points to device hwmon<i> */
+-	hwmon_dev = devm_hwmon_device_register_with_info(dev, ddat->name,
+-							 ddat,
+-							 &hwm_chip_info,
+-							 hwm_groups);
+-	if (IS_ERR(hwmon_dev)) {
+-		i915->hwmon = NULL;
+-		return;
+-	}
++	hwmon_dev = hwmon_device_register_with_info(dev, ddat->name,
++						    ddat,
++						    &hwm_chip_info,
++						    hwm_groups);
++	if (IS_ERR(hwmon_dev))
++		goto err;
+ 
+ 	ddat->hwmon_dev = hwmon_dev;
+ 
+@@ -839,16 +837,40 @@ void i915_hwmon_register(struct drm_i915_private *i915)
+ 		if (!hwm_gt_is_visible(ddat_gt, hwmon_energy, hwmon_energy_input, 0))
+ 			continue;
+ 
+-		hwmon_dev = devm_hwmon_device_register_with_info(dev, ddat_gt->name,
+-								 ddat_gt,
+-								 &hwm_gt_chip_info,
+-								 NULL);
+-		if (!IS_ERR(hwmon_dev))
+-			ddat_gt->hwmon_dev = hwmon_dev;
++		hwmon_dev = hwmon_device_register_with_info(dev, ddat_gt->name,
++							    ddat_gt,
++							    &hwm_gt_chip_info,
++							    NULL);
++		if (IS_ERR(hwmon_dev))
++			goto err;
 +
- /*
-  * Client data (each client gets its own)
-  */
-@@ -343,10 +346,13 @@ static int max31790_write_pwm(struct device *dev, u32 attr, int channel,
- 			err = -EINVAL;
- 			break;
- 		}
++		ddat_gt->hwmon_dev = hwmon_dev;
+ 	}
++	return;
++err:
++	i915_hwmon_unregister(i915);
+ }
+ 
+ void i915_hwmon_unregister(struct drm_i915_private *i915)
+ {
+-	fetch_and_zero(&i915->hwmon);
++	struct i915_hwmon *hwmon = fetch_and_zero(&i915->hwmon);
++	struct hwm_drvdata *ddat = &hwmon->ddat;
++	struct intel_gt *gt;
++	int i;
 +
-+		val = DIV_ROUND_CLOSEST(val * MAX31790_REG_PWMOUT_SCALE,
-+					PWM_INPUT_SCALE);
- 		data->valid = false;
- 		err = i2c_smbus_write_word_swapped(client,
- 						   MAX31790_REG_PWMOUT(channel),
--						   val << 8);
-+						   val << 7);
- 		break;
- 	case hwmon_pwm_enable:
- 		fan_config = data->fan_config[channel];
++	if (!hwmon)
++		return;
++
++	for_each_gt(gt, i915, i) {
++		struct hwm_drvdata *ddat_gt = hwmon->ddat_gt + i;
++
++		if (ddat_gt->hwmon_dev)
++			hwmon_device_unregister(ddat_gt->hwmon_dev);
++	}
++
++	if (ddat->hwmon_dev)
++		hwmon_device_unregister(ddat->hwmon_dev);
++
++	mutex_destroy(&hwmon->hwmon_lock);
++	kfree(hwmon);
+ }
 -- 
-2.25.1
+2.41.0
 
