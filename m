@@ -1,133 +1,85 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from 18.mo584.mail-out.ovh.net (18.mo584.mail-out.ovh.net [188.165.54.143])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0052439FCF;
-	Tue, 16 Apr 2024 22:34:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C15013AD2F
+	for <linux-hwmon@vger.kernel.org>; Tue, 16 Apr 2024 22:46:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.165.54.143
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713306894; cv=none; b=LpY+7YCvRsKd6Z0jLqpwFeQulsP7IhrJZ11RH0I/HN4ekiSUpYavdz0gmBOibtAa5iFIK35UWc87uO1uyYe1VrQYznip7GYc7k27+sjeu+0mSI6KrC7gCc8/YmNrIxakhsUWOPuuDadDcAA/eUf5jbsA+QnpS2sUOhsURC2Px2E=
+	t=1713307589; cv=none; b=XoMQdu3O7UtCRvqKgafqC50Hl2fJsOwjQl4E+N8sUgt5cQkl1YOovVvzWvMG8oSofQkR2pX7g1aCwukKGDepfJz8k6UwQoRm5x4Ast6NRpSl0nHXbJhJXf92EeFMct91nZx0PGFxn2UA0q1BQntvIv0OGDSHMFtZpTSAloRJVXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713306894; c=relaxed/simple;
-	bh=TIppXwoyy7JCBAG2mGLWtbBQ6zU3Bx81FBr226GDJ+A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fmHN7sMVkPP1hbUQTtfwNBovHBtlgm7SAB2PKwhtYzywnfK269TSKuZRWCPipw5GCJcXHfip2l0hkAt/by03Y4jNoVN3V28T3yNqIVUDUPNX7o+mC5NttNUyS1pAECa3XLg9aWDVrhrsoPZE01jjnKlZy0atc50zNcwKkY/9HZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ChUkTmyH; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ChUkTmyH"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-6ee13f19e7eso3733516b3a.1;
-        Tue, 16 Apr 2024 15:34:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713306892; x=1713911692; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gYEBHSAYBc3ncttOdz1OGEIHHb3oWxG6brf944qm+EY=;
-        b=ChUkTmyHQEOT7YuOAD6yPJOBOza0sjR79JtTCqlqeQnX6cgJNdOpKDsaAcu9JseqvK
-         nnTW82Rf7+aHtWTmpK/HQWP/F9a/rfXIwX8/8QVL2gvCFCu+0NMQER/IqgsCt6G2Pyz5
-         Y7NuP8CHbYssPRmQsGIlHYRZ04Io7uab3lhM+bn2niL0XGF9HqT6E98ybydxVVpqCdcZ
-         MqZSLdpZqTcA3jLXNLv+ZKAG7igdqxyqYvvbSMB5ejviOB4QOCTvwp3axnh+GQFGeUC7
-         2hoiSt90i48vCb/ytW8Lt5a9Wv7TO2btpZ7sHGplBjJ41f2V4WZOISAKtXQKNCvEDvET
-         Pi+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713306892; x=1713911692;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gYEBHSAYBc3ncttOdz1OGEIHHb3oWxG6brf944qm+EY=;
-        b=FNp/2uKR7ZoTQCiF+ombIzjMJPjLno5RnRHmMy9NiVX/iNx31omtZ79eztPB9DDtXX
-         S0ZThRpLm8u8K/EC1KoMGR1whTU5uUn8hCzpTpvWohRvUPtLNK3VNGX7FRTdqPeEsCQo
-         ZsC4GLzgcvfZVte04lTWFN0eCufeQaa/7xS+OcJ8953g9Fh7fUd43C3fxcUar8ahCNFE
-         mB5qEZLkSAUijNDZ1rWhbeXYitSWnfpBbqio2QOJ1H7WDO+Ichk4qU3hXtmRXLEU5nki
-         x2ICBad4qU9E/ZSmzfrJmTky7+NxbR/h3nq6yJqQR7qh9TR5TQXe7uOwJUrMy2b0Mumw
-         yVyg==
-X-Forwarded-Encrypted: i=1; AJvYcCVcuE30lOc92FSaIYfumvL/CRqDFEY0roQ3biKjMKIj/MdQgZGh2QiC12rAoEXv3D0KciD1ukVwvBuWU3tk30em6dInoAErIb0gmA2wCVA9rKalNIqTWn4KhtDrzDVr2EH4Ci+YznxJ6UA=
-X-Gm-Message-State: AOJu0Yxnt5cQXs2qqjo7fLTABlVs6ECjacPum3DFJTtc6Ir3H/6kPZtb
-	AIRNEeNTfkRpjll7zSWv6+2ePI2ad2phmEb9VX28X8VxbLZUsljp
-X-Google-Smtp-Source: AGHT+IFh/zIfLrwa77zo+Wv6gz7XzJ//wE0dD/DGVm2QVPsw21WOGIkW96K3P/dBgSNVdt8rRN1gYQ==
-X-Received: by 2002:a05:6a21:498a:b0:1a7:56d2:66c1 with SMTP id ax10-20020a056a21498a00b001a756d266c1mr13935301pzc.29.1713306892189;
-        Tue, 16 Apr 2024 15:34:52 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q14-20020a62ae0e000000b006ecde91bb6esm9413744pff.183.2024.04.16.15.34.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Apr 2024 15:34:51 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 16 Apr 2024 15:34:50 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Tony Luck <tony.luck@intel.com>
-Cc: Jean Delvare <jdelvare@suse.com>,
-	Iwona Winiarska <iwona.winiarska@intel.com>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	patches@lists.linux.dev
-Subject: Re: [PATCH v3 50/74] x86/cpu/vfm: Update drivers/hwmon/peci/cputemp.c
-Message-ID: <5869d164-25c4-42e5-bf87-c4aeeac57388@roeck-us.net>
-References: <20240416211941.9369-1-tony.luck@intel.com>
- <20240416212216.9605-1-tony.luck@intel.com>
+	s=arc-20240116; t=1713307589; c=relaxed/simple;
+	bh=qjlfiV/5rAQPv2xdoYdnGIazQZt8/f6D7rMpTZzMwS8=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=TakUARfQHE/+DsgYcxgqiXqI8GEZOq7sIJiYLod1C9NgmqpUPCYxKA917YFNZziUe+qPVEkIXuxzCvoy3lOsVm7pRbs8iB3Ubz60v64WlqA+5GwEDXC6tMni9TTMlz6/d3xhDPz4PESjrH3sMOwItudB1NlDzLzByQT9u3TceHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=etezian.org; arc=none smtp.client-ip=188.165.54.143
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etezian.org
+Received: from director2.ghost.mail-out.ovh.net (unknown [10.108.17.88])
+	by mo584.mail-out.ovh.net (Postfix) with ESMTP id 4VJzfg5fSKz1Ktx
+	for <linux-hwmon@vger.kernel.org>; Tue, 16 Apr 2024 22:46:19 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-tb8qh (unknown [10.111.174.115])
+	by director2.ghost.mail-out.ovh.net (Postfix) with ESMTPS id E3DB21FD1A;
+	Tue, 16 Apr 2024 22:46:17 +0000 (UTC)
+Received: from etezian.org ([37.59.142.98])
+	by ghost-submission-6684bf9d7b-tb8qh with ESMTPSA
+	id ySEiL7n/HmbEKwAAaA9+Iw
+	(envelope-from <andi@etezian.org>); Tue, 16 Apr 2024 22:46:17 +0000
+Authentication-Results:garm.ovh; auth=pass (GARM-98R00216c54067-ef62-4a2b-ace9-7a315bec58b8,
+                    38C292890E232DD6F9946AE994780F0893807590) smtp.auth=andi@etezian.org
+X-OVh-ClientIp:89.217.109.169
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Jean Delvare <jdelvare@suse.com>, 
+ Peter Korsgaard <peter.korsgaard@barco.com>, Peter Rosin <peda@axentia.se>, 
+ Guenter Roeck <linux@roeck-us.net>, Wolfram Sang <wsa@kernel.org>, 
+ Heiner Kallweit <hkallweit1@gmail.com>
+Cc: linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org
+In-Reply-To: <90a0786f-136b-4097-9def-8d52e9e5d3cc@gmail.com>
+References: <90a0786f-136b-4097-9def-8d52e9e5d3cc@gmail.com>
+Subject: Re: (subset) [PATCH 0/4] i2c: Remove I2C_CLASS_SPD
+Message-Id: <171330757627.1978363.4012133892929034393.b4-ty@kernel.org>
+Date: Wed, 17 Apr 2024 00:46:16 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240416212216.9605-1-tony.luck@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13.0
+X-Ovh-Tracer-Id: 18427322300675852919
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudejjedgudduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvegjfhfukfffgggtgffosehtjeertdertdejnecuhfhrohhmpeetnhguihcuufhhhihtihcuoegrnhguihdrshhhhihtiheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpeffteehudffvdfhudfgffdugfejjeduheehgeefgeeuhfeiuefghffgueffvdfgfeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduvdejrddtrddtrddupdekledrvddujedruddtledrudeiledpfeejrdehledrudegvddrleeknecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpegrnhguihesvghtvgiiihgrnhdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhhfihmohhnsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehkeegpdhmohguvgepshhmthhpohhuth
 
-On Tue, Apr 16, 2024 at 02:22:16PM -0700, Tony Luck wrote:
-> New CPU #defines encode vendor and family as well as model.
+Hi
+
+On Mon, 15 Apr 2024 22:47:04 +0200, Heiner Kallweit wrote:
+> Only remaining client driver supporting I2C_CLASS_SPD is jc42. This
+> type of thermal sensor can be found on several DDR3/DDR4 modules.
+> i2c_register_spd() instantiates also such thermal sensor i2c devices.
+> Since 71b494e043d2 ("i2c: i801: Call i2c_register_spd for muxed child
+> segments") i2c_register_spd() is called also for the remaining use case,
+> systems with muxed SMBUS segments for SPD EEPROMs. i801 was the last
+> bus driver supporting I2C_CLASS_SPD.
+> Therefore I2C_CLASS_SPD class-based instantiation isn't needed any longer,
+> and we can remove it completely.
 > 
-> Signed-off-by: Tony Luck <tony.luck@intel.com>
-> ---
->  drivers/hwmon/peci/cputemp.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/hwmon/peci/cputemp.c b/drivers/hwmon/peci/cputemp.c
-> index a812c15948d9..28cec5c318d4 100644
-> --- a/drivers/hwmon/peci/cputemp.c
-> +++ b/drivers/hwmon/peci/cputemp.c
-> @@ -11,6 +11,7 @@
->  #include <linux/peci-cpu.h>
->  #include <linux/units.h>
->  
-> +#include <asm/cpu_device_id.h>
->  #include "common.h"
->  
->  #define CORE_NUMS_MAX		64
-> @@ -361,9 +362,9 @@ static int init_core_mask(struct peci_cputemp *priv)
->  
->  	/* Get the RESOLVED_CORES register value */
->  	switch (peci_dev->info.model) {
-> -	case INTEL_FAM6_ICELAKE_X:
-> -	case INTEL_FAM6_ICELAKE_D:
-> -	case INTEL_FAM6_SAPPHIRERAPIDS_X:
-> +	case VFM_MODEL(INTEL_ICELAKE_X):
-> +	case VFM_MODEL(INTEL_ICELAKE_D):
-> +	case VFM_MODEL(INTEL_SAPPHIRERAPIDS_X):
+> [...]
 
-$ git describe
-v6.9-rc4-31-g96fca68c4fbf
-$ git grep VFM_MODEL
-$
+Applied to i2c/i2c-host on
 
-So I guess this depends on some other patch ?
-That might be worth mentioning, especially since
+git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git
 
-$ git describe
-next-20240416
-$ git grep VFM_MODEL
-$
+Thank you,
+Andi
 
-doesn't find it either.
+Patches applied
+===============
+[1/4] i2c: i801: Remove usage of I2C_CLASS_SPD
+      commit: 8bae811210b77e2cd1b62d9fb20d2e6126103135
+[2/4] i2c: mux: gpio: remove support for class-based device instantiation
+      commit: 1dfb192a687fded0f5e92518024baa673c297885
+[4/4] i2c: Remove I2C_CLASS_SPD
+      commit: f7ece6320f6f028873649b9aa836c5bc5abf2cb3
 
-On top of that, it looks like
-
-#include <asm/cpu_device_id.h>
-
-introduces a dependency on X86 which is not currently the case.
-CONFIG_PECI is typically used on BMCs. Many of those do not use
-Intel CPUs. It does not seem appropriate to make support for PECI
-based hardware monitoring dependent on it running on an Intel CPU.
-
-Thanks,
-Guenter
