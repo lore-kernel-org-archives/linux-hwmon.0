@@ -1,68 +1,67 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC9C213C819;
-	Tue, 16 Apr 2024 21:23:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0A0F6BFAC;
+	Tue, 16 Apr 2024 21:25:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713302624; cv=none; b=WMIbdHZX/ZB7ZhxAc00quGwyk4zDKN5JA31wGgU+fTLYS8c7DQRCRy5uP/ex+r4JpJ2YNWhAMhg1R48OpoIwjnXAhbQ+9NyNk0JHrXKBXHNN4EnnIsuE7bzdT5eyQlEAMJv9o5KPfVHMA2fDcnQsUk2sd0Nf+w8X7xRiEieEInI=
+	t=1713302750; cv=none; b=X0MNfBGZaT63rBy33yG03Wh65kOUw0MfQpw+txJtUhxY9Jsn7UZULLKBi/DgoT8OzuQCXFL2OKI13Wxy2OYZ55vG4QUXVzP8/xBHXVtxGzJf/xAgrA2X91S8RmsQrlvENYF6p4aUHETggoyd8myNG3eD5XTky53NYVt6gnfheZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713302624; c=relaxed/simple;
-	bh=Fkt++JTyYof4Eg+DZY2XPpS8Oa6RROqr0lGhT/b1Y5k=;
+	s=arc-20240116; t=1713302750; c=relaxed/simple;
+	bh=RB4Rxo3I7P044H/tx+EKgHt+XNavBTu4zY8/fN6zuFE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VSn+w+2I2CxkEoAWoWNIjidA3JBb/4LPsnGWljfeHsY+318yfjbFOhPbPndtA6ESpAECKAK+WZq8W7uqN4Af6Oo3iICOZHPJisTAD5SMnam/Wifa6BOrWGPUNHZvGXdIhw/X+qXe30ocIunm6F0pGF7NfF9ExvQwYO9nRyzaWvU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h9vAamYM; arc=none smtp.client-ip=209.85.210.178
+	 Content-Type:Content-Disposition:In-Reply-To; b=crSvuYYgosGmChOKRwc9WqJLmkNA21sy0smuyxSUIuN+JgfcDvdpJi7iRubYr2e8Xb+PZSpr1fAdgGWuBXXkSTKwseu+pQE+nHixXye7SwskOiO9vBtU0BhBhshzcax4Yz0Cb+cjSYRhZH7Mhf4rfyMaDM+zeevJjWni+5LB75U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WeD9JxZV; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h9vAamYM"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-6ed267f2936so3900764b3a.3;
-        Tue, 16 Apr 2024 14:23:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WeD9JxZV"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-6ee0642f718so143571b3a.0;
+        Tue, 16 Apr 2024 14:25:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713302622; x=1713907422; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1713302748; x=1713907548; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Fkt++JTyYof4Eg+DZY2XPpS8Oa6RROqr0lGhT/b1Y5k=;
-        b=h9vAamYM3v/6IU8l4NX/AmREhuz7ObDmX0Nnl1fxy7cdXM3yI7n6KWhRsPAPaV9YwF
-         qd81zxEEe4+F9jJ4CcgNNCi9tUelxbnRfE2AL7baHeU0SIUuOpHGX+g9/OBjc132+NoC
-         GM5gJ+r3w5sALI35eqwpyyr8v0UFSiR1gyRXo76IxuzmwaTS7+YFRi0WTGF0kV7E1F7g
-         yKeizTSp4A/OYwHNYqfetsTIUCJ8pXAP6+b4UvWv5SnlWxI10aH9r7rhVg8IYZ3+Hb9y
-         3WdS5nn23MhXXy1oWQzRe4rYCGwjUDA5ySDzJuhqG0pW1D3axXd5sSZuuzakv8RPe/d/
-         v3Dg==
+        bh=fP5MOJtrXkNm3fcuGMZuhHc4ZbLwMwjSduM2DxDigco=;
+        b=WeD9JxZV2986QGO1rYuPOYZd+V7uLLw+76x6UxC1HODRofqwsq2RMMyWjk7qQ6Z8M1
+         JEYZTtx3fA8hYNljtS/EmT1B3IYNh3csQJAbESEV0L7WrO/xG6aZZyhU96pHTGocQRbD
+         ioTZgy31Vl/9ZnRRqCNv+duODEaxrHnRQ8UYz1xxzm9rxf+hDvwfPHmTIM+VsloHFH5P
+         iz0fj4+9neHZWHWRq2Vz8leCnNoSD+Y67IwV9cfWtlDPSHZ3H14xVWr46o1Qvo7i28ZG
+         0RDwUaRdOPEi8bnZL+KRT+nOQRJxLZysCI0cIBMg0tjbDorYHwBCUYsGypvS0Ac4rc7J
+         89TQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713302622; x=1713907422;
+        d=1e100.net; s=20230601; t=1713302748; x=1713907548;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Fkt++JTyYof4Eg+DZY2XPpS8Oa6RROqr0lGhT/b1Y5k=;
-        b=XBf0X5qrV4O/D7xS3z1+3Pk2lLqZpl6XA0yDfxxQO7q/0+Ylae1yOnvhdVVWTZy0pi
-         24Sb9AVqvoy0JqMTxbt6eeAVtSF5IBRU5YQvPY11Qn3WZJtNmdE5WmURPT88J8/4DrS+
-         9UAfStyNAZWPAegi5bjFlpoWqAjVmMqokuW7GHBlL9BjrQDE/NbHqP1lI10cuTriRwju
-         Y0kphOh9WtvSgAh6v+9qprqFdHOLdyDmTVT7VxGDvF9CT8hIJHOhZQoYxjZetex3e8L5
-         3RzJnHeTfeSCHmPQmr0j4Rhho9Bl4JV01DvkU2eBP633/ViHHkjCw8IScBvgGJL4k0yo
-         qMCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWtBcgZcfZ30sPdbI5Ml0bpyAGcvkX73hxonnc3+JL6sNTbzH96LAFYRyu2KE7qn1YzqKh/Brc8VeFhSQJNBBBtmj3I1Dxc5KHxdFiNQvnA+KuexCVqAhaH9IQkHHpyRDtjdbq9wvz8K3o=
-X-Gm-Message-State: AOJu0Yy3y6N7CMWRVDuD4l5deEJk9xN7DUbGyBs6qrvRtkX7jLJ5ism8
-	mh/BqbBpgf/UyVoUBGqLR3v7UCq4+W4kuQSiTmwJrCt61Zjyt/mz
-X-Google-Smtp-Source: AGHT+IGcoxvDo0vrG+67tAOJRqEYQZakHloelNK6PkXb17apBlJls6xveNQIjCgoKlvWQOmU9VjkBg==
-X-Received: by 2002:a05:6a21:8cca:b0:1aa:5fb4:8b14 with SMTP id ta10-20020a056a218cca00b001aa5fb48b14mr1835576pzb.52.1713302622094;
-        Tue, 16 Apr 2024 14:23:42 -0700 (PDT)
+        bh=fP5MOJtrXkNm3fcuGMZuhHc4ZbLwMwjSduM2DxDigco=;
+        b=oHW/2ly+y/Of1529X/mJNG+1w+z2DFetQT8jWm7k3Wpi7CBXHo2BKvAHdvrmErnY5u
+         usM+9fd7WbxtnzTOWbEQ9YuMkZ6mLIioxCQ2kl6j/HcrI2OjpOz6hPQFeMjdVujSNsvW
+         kEmxo1fbNxsxi47Jwdw4WaSRxWJxvbXGVHq5+b/Vh6wivMgwTflE1m4MAdb3agMOY3Qe
+         H/CNGBz9c9Ec2rnW7JFmY47RJQhtQuJINV4heyZtAx8tsAgqa80un8RsonVE/PyH+pXm
+         xo7UOaiWt5qt4dd7rk1dLRLfHR7niAhYyp9R/HyCRPsGaBDL/HxDrVIltRy6c31rqGGf
+         59Tw==
+X-Forwarded-Encrypted: i=1; AJvYcCUUtgmjHO9/DKhlp8Fw8Xj1CFkja7AExEm7e50w5nnV0HovNEGxxTIoTtgNkpZlUxq5GlDmtNa8BTXnLGOaWQdFBxDV82oJmqkNtPpKLI/ICXIMtaUNNBbF3tXhzWW6i9exWvT1oW9Q9p0=
+X-Gm-Message-State: AOJu0YyXofnSN/pEAo6tgfxuqoKx2X+isIpTONHHxK6CY50BT4qFFcxb
+	D1xakc4eY+bXtnYgd3JkvM+mi5amcflL+NgfYoVE1hfcXQ7HCzeQ
+X-Google-Smtp-Source: AGHT+IEhDhwTQnDdc0hwtRRPa0zKvBcAkWrkdpJ+nrPPjEM/bTQXfGHrNDWKJLE0uJCZDyYpfIbKCw==
+X-Received: by 2002:a05:6a21:3983:b0:1aa:6461:f6e5 with SMTP id ad3-20020a056a21398300b001aa6461f6e5mr1745736pzc.7.1713302748205;
+        Tue, 16 Apr 2024 14:25:48 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m129-20020a633f87000000b005f077dce0f6sm8177233pga.31.2024.04.16.14.23.41
+        by smtp.gmail.com with ESMTPSA id e15-20020aa798cf000000b006ea6ca5295bsm9308917pfm.164.2024.04.16.14.25.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Apr 2024 14:23:41 -0700 (PDT)
+        Tue, 16 Apr 2024 14:25:47 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 16 Apr 2024 14:23:40 -0700
+Date: Tue, 16 Apr 2024 14:25:46 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Naresh Solanki <naresh.solanki@9elements.com>
 Cc: krzysztof.kozlowski+dt@linaro.org, u.kleine-koenig@pengutronix.de,
 	Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] hwmon (max6639): Remove hwmon init with group
-Message-ID: <cd051bcc-7351-41ba-894b-b4ee26910e0b@roeck-us.net>
+Subject: Re: [PATCH 1/4] hwmon (max6639): Use regmap
+Message-ID: <65607114-89f8-4f48-83fc-b89d87fee247@roeck-us.net>
 References: <20240416171720.2875916-1-naresh.solanki@9elements.com>
- <20240416171720.2875916-4-naresh.solanki@9elements.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -71,12 +70,76 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240416171720.2875916-4-naresh.solanki@9elements.com>
+In-Reply-To: <20240416171720.2875916-1-naresh.solanki@9elements.com>
 
-On Tue, Apr 16, 2024 at 10:47:17PM +0530, Naresh Solanki wrote:
+On Tue, Apr 16, 2024 at 10:47:14PM +0530, Naresh Solanki wrote:
+> Add regmap support.
+> 
+
+Missing (and not really utilizing) the benefits of using regmap.
+
 > Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+> ---
+>  drivers/hwmon/Kconfig   |   1 +
+>  drivers/hwmon/max6639.c | 157 ++++++++++++++++++++--------------------
+>  2 files changed, 80 insertions(+), 78 deletions(-)
+> 
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index c89776d91795..257ec5360e35 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -1223,6 +1223,7 @@ config SENSORS_MAX6621
+>  config SENSORS_MAX6639
+>  	tristate "Maxim MAX6639 sensor chip"
+>  	depends on I2C
+> +	select REGMAP_I2C
+>  	help
+>  	  If you say yes here you get support for the MAX6639
+>  	  sensor chips.
+> diff --git a/drivers/hwmon/max6639.c b/drivers/hwmon/max6639.c
+> index aa7f21ab2395..1af93fc53cb5 100644
+> --- a/drivers/hwmon/max6639.c
+> +++ b/drivers/hwmon/max6639.c
+> @@ -20,6 +20,7 @@
+>  #include <linux/err.h>
+>  #include <linux/mutex.h>
+>  #include <linux/platform_data/max6639.h>
+> +#include <linux/regmap.h>
+>  
+>  /* Addresses to scan */
+>  static const unsigned short normal_i2c[] = { 0x2c, 0x2e, 0x2f, I2C_CLIENT_END };
+> @@ -57,6 +58,8 @@ static const unsigned short normal_i2c[] = { 0x2c, 0x2e, 0x2f, I2C_CLIENT_END };
+>  
+>  #define MAX6639_FAN_CONFIG3_THERM_FULL_SPEED	0x40
+>  
+> +#define MAX6639_NDEV				2
+> +
+>  static const int rpm_ranges[] = { 2000, 4000, 8000, 16000 };
+>  
+>  #define FAN_FROM_REG(val, rpm_range)	((val) == 0 || (val) == 255 ? \
+> @@ -67,7 +70,7 @@ static const int rpm_ranges[] = { 2000, 4000, 8000, 16000 };
+>   * Client data (each client gets its own)
+>   */
+>  struct max6639_data {
+> -	struct i2c_client *client;
+> +	struct regmap *regmap;
+>  	struct mutex update_lock;
+>  	bool valid;		/* true if following fields are valid */
+>  	unsigned long last_updated;	/* In jiffies */
+> @@ -95,9 +98,8 @@ struct max6639_data {
+>  static struct max6639_data *max6639_update_device(struct device *dev)
+>  {
+>  	struct max6639_data *data = dev_get_drvdata(dev);
+> -	struct i2c_client *client = data->client;
+>  	struct max6639_data *ret = data;
+> -	int i;
+> +	int i, err;
+>  	int status_reg;
+>  
+>  	mutex_lock(&data->update_lock);
+> @@ -105,39 +107,35 @@ static struct max6639_data *max6639_update_device(struct device *dev)
 
-No description, and I don't really understand why this is
-a separate patch.
+Conversions to regmap should drop all local caching and use regmap
+for caching (where appropriate) instead.
 
 Guenter
