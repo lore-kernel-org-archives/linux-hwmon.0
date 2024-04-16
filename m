@@ -1,175 +1,146 @@
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2068.outbound.protection.outlook.com [40.107.117.68])
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2074.outbound.protection.outlook.com [40.107.215.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 467124C7E;
-	Tue, 16 Apr 2024 01:48:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.117.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B372917573;
+	Tue, 16 Apr 2024 02:22:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.215.74
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713232132; cv=fail; b=kV0UqDzPArEoCL53H5aiqcJFVFUPki09IOJMsGKI1/K7EMjLkiAkpbeDlNUZ4eLYFjripxjULTiMM7fmbaIKFSu3G8Tg7bow45uZY66jE8SFllwpo9kDuULN/94WJTYMkuUtQI6VnOc5akIzRd3/fnm8PxchnhkHVeK2H3jHTLU=
+	t=1713234142; cv=fail; b=aUmdq+tJoHaMxexCv+ndczJbiRQUHt9nrykUBxliy4LLsnJwVjmtlMvyxi4ZQY9x3IDZq6Z3fvz5+USsQATk++sTF3wfHWi8lvSUeGrXY2GQUUpPRnvc0ad+YLvica+XK6LSFIamnxML/pGXe10ZDgl+7KPzFSOV5Ye7Wx/c2pQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713232132; c=relaxed/simple;
-	bh=mtcV5UWsq923Fxe2WzGnisiLmy06Hz5RGHKO+zZ4+LQ=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=ktH4twLU/ZkPnym0nVaeMgZ1NRNfPekmKaJhN3w3rjy8Azr0pvjjt7aRmKa85om9ApL7aL6cwU52JvAytAil3DHfTKbxEjDRZWegxnPDextBhw5Q74JziOcudKroMBDKDNH0dmR09R9HbfXjGtOXN6Hiy85SIUm/YG2QF7DN7Xo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wiwynn.com; spf=pass smtp.mailfrom=wiwynn.com; dkim=pass (2048-bit key) header.d=wiwynn.com header.i=@wiwynn.com header.b=pBHEJRJj; arc=fail smtp.client-ip=40.107.117.68
+	s=arc-20240116; t=1713234142; c=relaxed/simple;
+	bh=PQDs637DkJ0XvgnVWdoTkmAByxh1JzOkkkEy25w+9IE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=Rhi9qdNKTvq/zuqisoEyBmuebuN2AFWBCBTpwg7W6nUJKk/V0MoPpr3DaSxRAH7J+/32ZhUZbCckQIJwcpf9EY7YOS/TMIJs/TqXN7Y+V7WhPFwrNoxIhoOkrW6HT0j61sV0MFNtS9EjTGOg26DSI+RgCDFPoJXTfJ51czDoQ+I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wiwynn.com; spf=pass smtp.mailfrom=wiwynn.com; dkim=pass (2048-bit key) header.d=wiwynn.com header.i=@wiwynn.com header.b=bST5UUct; arc=fail smtp.client-ip=40.107.215.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wiwynn.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wiwynn.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wiwynn.com header.i=@wiwynn.com header.b="pBHEJRJj"
+	dkim=pass (2048-bit key) header.d=wiwynn.com header.i=@wiwynn.com header.b="bST5UUct"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GGeka1BjmObIg41Mdm/H7s5ltWznxmDrzyIfdhfA0O0Gc/O7cY9P6nK9PGiW43Z8etcL0Vz+J9O6drKdBjpzXLzsXYj3lLsCgdyFVK9itHc88nVoeFC7FTMtyaIgrxxV8jrjhy6MnHkgdiFzjHOz0id9FHIgzZWQAE+fIyrUqlPGSJRe7jLUnJ2hw2kboCHbKFIyUMBjBu2B8DMOqj/S37Hk7HkSmkM2LFV5DiwIKCUA1qHuK8hus8pYXpaMF+iVgvelXYN0bPFgrS0/Jc5f320WBREUIvQ1iA3Vi2MJNThHpy9V8MkPb9wsR9KPh7nlC9UWDaExtjEbW5DsxbRtnQ==
+ b=CFBK53Kxfj0F74zpWCyAiS1gr5DdS8GNYHEKKKAdDB6X8ANWHBNxKb7zRYCiTR/r7QGPU3N/uD2sZQBaM1FEf14ksY81+qPI18TLN5nGJZVqM7oCwG+4uY4543YbSqOJFwLKI0fgo5cl2fV9AYl6F+IGBm0MMfbuySZq8GdU8DAM1UNI2KrwhG9bI7X0U6awbCSWeLgrFWsLhooG42eio5jPycCCEH9CAx3d0f1YFHVYU5XbCwzkz/wQDt0arbBjw1GRVmiZjRC/iwPIewPPA1sZnonttYl87x/nR4F4KPdbYrc6GDsauzEvW4DdN9DdGYblK+qVzNACnCzatmf5Dg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hUHqNu+CIo0jYpq7+l7ljtl+KiKvOGBm4qW6O/x6sW4=;
- b=VufAc1O6w0j9Y2rAxIzG2qL1J+2smeWZVpZM3pKFE80Oz/rC0hK24iUEuAg/6dcpypP0LJp6sJaU91vRsnMLdZOgBUGnBzH/DWLzj3rsMOfSHCmMj34vB59sbBtbEbjuSt50y+CVi22o9h6sQPA+Hh9VaHLL5Mufw1NSzoWZMAKQQNwQ8pNMkDetw2ssiqK7gZhb1EdXdRrz5nhDTcLcuEyeDbc9EbUz3Jo9k7GH8zkwmawEkLb/sAr4mL95S7f/5RU4E5EE0Jkv+G173i91a+S3z1kZPmyKVzeKVG0FZa2Svkx/uMREmoqcTn9TtcWWqn/rfXJjIx0LmXl0UsHGww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wiwynn.com; dmarc=pass action=none header.from=wiwynn.com;
- dkim=pass header.d=wiwynn.com; arc=none
+ bh=+6CRusoxnO+qUgpzFyJM3lu2bRTxIzxeM6ppgObmV8I=;
+ b=jR2KBmAJ7t/SacAYY+5wtmLkayww89NeMzBAdpPSAoJdRKMAfCpT8GnmOv4R6U2QXEFWowTTPpG3mrdw39Wmch57V7rBUHO4B8dC0fJU8T6pAar3JHf82lpTmvWDGjmKW4PKBjfGa0IVT0otQupV60C8mWOq37qePYG27qhFsZMysrqO7S4oy+4/yi62NLbHuDF+B0mJdjJnOpar+9oeONEQkbIel//j+bXVDGnFAgQQntfRR10msiG3PIRbhxqU6CwYQq0pEUlEPLKi98p24ozGLi/rYpElv62l6zlntGW317vYDIjNdN2Mg4XvlkxzIHMVRjmiyg/JU8nf7iNZgQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 211.20.1.79) smtp.rcpttodomain=stwcx.xyz smtp.mailfrom=wiwynn.com; dmarc=fail
+ (p=quarantine sp=quarantine pct=100) action=quarantine
+ header.from=wiwynn.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hUHqNu+CIo0jYpq7+l7ljtl+KiKvOGBm4qW6O/x6sW4=;
- b=pBHEJRJjDtD6Z631uOW824V2IyvL/AI3vN9OSr3nuW/L1MJoyePaYMacw4YN7MhlmZ3MOmQL8vfRFzlBm43j7uIcOkPnywNPUSaoJK5t4FVn3Fm1G4HGLvanxj9gUFP6N6G1ha1TApWTKoYZrwOEfhHde+kLTAyczSfSVDo0qplBP9kgJy1nwxCpEitotyztuTUUv4osvHXXbd9d7g37akZBKEn0AfBgW4NGK5TzZtqPEQcIeLXjH7aX2aOvbbkY0DvAjGs6bNcqsR1VcV5JAggcz1Xf+ndu8gRCzQxScT0S1Gj0hsEYz9W1BfsH0+f8eHARN2+Als9/+dADNr0lYA==
-Received: from TYZPR04MB5853.apcprd04.prod.outlook.com (2603:1096:400:1f3::5)
- by PUZPR04MB6885.apcprd04.prod.outlook.com (2603:1096:301:111::11) with
- Microsoft SMTP Server (version=TLS1_2,
+ bh=+6CRusoxnO+qUgpzFyJM3lu2bRTxIzxeM6ppgObmV8I=;
+ b=bST5UUctJEDjOUi0wGsceGaiMdpm+KBEdrsIjyia1l0lK2PchLL3D/XhFtRBFso0VZh7SVRpMhFCNdf0v31WAQwaEYHRZDr5+oLAZzN8aoAp6/T8eGAj8zlkWMUAeSSkGa2JrzGflsBnQGx5kB2SR7j91U7c39AfhSs0hX4EtV4dnoqqGU6HhG4xmpip9Gluwl19vWQj5XtGg/JkizA8pKu096cooKPQxG/foQfvrzaOGvPpf68n0+52JoSEybP3rM7s4aSWKDoeZntXT5X8aX2QDHR5uNyntbixqjCdJmMCfGsyNYQvltGoBXshEAkf47a+NQSuc4mlRz38wgU6VQ==
+Received: from SI2PR01CA0047.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:193::10) by TYZPR04MB7665.apcprd04.prod.outlook.com
+ (2603:1096:405:45::9) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7452.50; Tue, 16 Apr
- 2024 01:48:45 +0000
-Received: from TYZPR04MB5853.apcprd04.prod.outlook.com
- ([fe80::9bcd:8112:b072:faca]) by TYZPR04MB5853.apcprd04.prod.outlook.com
- ([fe80::9bcd:8112:b072:faca%5]) with mapi id 15.20.7452.049; Tue, 16 Apr 2024
- 01:48:45 +0000
-From: Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>
-To: Guenter Roeck <linux@roeck-us.net>, Delphine_CC_Chiu/WYHQ/Wiwynn
-	<Delphine_CC_Chiu@wiwynn.com>
-CC: "patrick@stwcx.xyz" <patrick@stwcx.xyz>, Jean Delvare <jdelvare@suse.com>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v1] hwmon: max31790: revise the scale to write pwm
-Thread-Topic: [PATCH v1] hwmon: max31790: revise the scale to write pwm
-Thread-Index: AQHajIkmo9cWMbxIOkGH9cQc4G//sbFkmoSAgAWImEA=
-Date: Tue, 16 Apr 2024 01:48:45 +0000
-Message-ID:
- <TYZPR04MB585382F43299E49FE1D2F2D0D6082@TYZPR04MB5853.apcprd04.prod.outlook.com>
-References: <20240412032559.3352846-1-Delphine_CC_Chiu@wiwynn.com>
- <d82d5585-ec6c-4611-ad33-9c2d00745176@roeck-us.net>
-In-Reply-To: <d82d5585-ec6c-4611-ad33-9c2d00745176@roeck-us.net>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wiwynn.com;
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYZPR04MB5853:EE_|PUZPR04MB6885:EE_
-x-ms-office365-filtering-correlation-id: 6d9c031e-0daf-4f9a-d496-08dc5db75a4c
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- xQwl63vZAZBIbDA+CUlqKOHtZb38QZOLgfyoHKiqeD68tA6SHtR0O4J+f9BGXmklPowq0hTfyr80bOVRwb/4g66Id35SMM1GhvFGz8SYif024tOR38jsI8MCCItawT8RpCDHitNM7Xg6cjig/HjnwC/hWfG5gJnmJy4BYSN0doMV2wbV6jkAfHnNhDS8SHBCf+c1TfrUPNPp2BSCSs/in1BFW5SX5aVOt4l80O7G/SIAXUrXaWlGBGxn+uU6RdIJiOcdqW13m2Q97YTGvNUciWcjPYEKV1NblD6mHHvnGTA6jAiH55v9OwugoUm6bHCbtzkxINVOw1SG1LAZ7G+sWFAD+H1NkmvRdppcF2HMWRiCZHzG+a+uD/KvNygiDPevWlVMN9LQbn4RNdjIDQi5cB5VQH1rsLCDXbdWXUPcsNybGmK+IvRwMUwbYiAbc7i1Ra2uCMbVDNSsH1IMuLpXfpgLKTlIQ82xyqt7uLeh+IbziwejLaPm57OAtzzZOZuXLil1HCLaxpIUKaTMGTvrBZHbAKyvTdENxQlGzAuP7SP3FQLv2VRRPt0z5pdDwaW35Cr7QoxTmw0Vsd8YpH0GroYGY5hGjPCLrQVBbKILHO8sAMu0c93vCeL8gujFl9Evf9IwqsYCnabyPUV3iYEEPrUpeAx6A3MEzcQ+t0dkaUaKq0TZ4Yv9nmhkCUY7NKjmPg3Hyqav7p1vJvLXV+qswpZxt0isWsoc4x8ky7HYaMw=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR04MB5853.apcprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(1800799015)(376005)(38070700009);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?FkMbYOEUbbo4Shoydi2KppdX3fsxDAWqMbEK6JPK7xY5sw+dn9Yel1rgPNg7?=
- =?us-ascii?Q?k+X6vtrEp+NKCakbDQGjVstQ+WnIqYBisxSnbRv98I2OqyPCDnB1kjXq2I4Y?=
- =?us-ascii?Q?/5lZ6Ugc9QsT6HVYCd4CPomwmd3x1hk3mydxSCOx+ljbuiYGackMmjojCt8h?=
- =?us-ascii?Q?a0ieig6AQ6P+wJXRSAM909AOzUKRkxz/FuUpLh8fGn/NVzb3Un9qGJkK9yF0?=
- =?us-ascii?Q?hoiFIeu8B5l2iF/lVqRUdyGxljeIBSV7/vlAzLF8IFfriUGIRLo4vUQd0C3E?=
- =?us-ascii?Q?bM1Gh9uDrN3qnTiyWp7xEE5GO2NcFGbzemi9wocDJSJCaqe1wMHmK36NnKFq?=
- =?us-ascii?Q?Oq7hld3I4sN0WVggxvzYr59Halq9lvVWsNskfMRrBrVyfnkbi/V2+7p5DucL?=
- =?us-ascii?Q?ZWspJ04y/s8E7XEuevdrA+gch8TPnnigz1MlRhriyqb3FRxaUBUnbaIvQF4c?=
- =?us-ascii?Q?ZeZ2JkZYdqLWWHsBoIHGOAZAdyJDEIcKweov29LCtVxn297J7Wv6zTk2z+Eq?=
- =?us-ascii?Q?BF4MCbtG0qgWU43RrC4qYwKbjSnXiSK3qZtXDddAd3YQuT4bCtWIz2IfWPj0?=
- =?us-ascii?Q?Iy5ZGemkh9tnRRriVINLGVqwQF35+q52/QN+u3gp8imHo6vM+UYE9NrxZzyM?=
- =?us-ascii?Q?hZiynqyDTcQQy5E2SvTpBy4CmAOutHZvuFXNog599uAg7Kw1Hz4165JGz89S?=
- =?us-ascii?Q?DOLKpaK+YNR8ASjvgv79p+A21RjfA6UqdPokgBKAUkDW0kcGTOIuWUondZve?=
- =?us-ascii?Q?B0cNTzeo8rpeleK+Mu4THall/cwFEod4zaHSwrbP8fK8Mll3GnQzP4xqjWRE?=
- =?us-ascii?Q?9atBcUJ/OBWhJyMiAc2obeql3TsJO+Vrbll+zSPInoTq+NEwUY3jeqTjsv7Q?=
- =?us-ascii?Q?fdsJTERVB9IeiPU9n2qXpIegNces7xqro0fqjEb3BrYn+pRYWVGBsminxz76?=
- =?us-ascii?Q?hhgKdViQ7BPGBMELh4DOG9RLdexlNZ8cLjkhJd1P5kLJDUbZrA0Ls6UFQjBS?=
- =?us-ascii?Q?PKvzkXeCWApQogX08+qHG7e0PtqmngLL3siSO2MSTNznGAWdmOJplBvDt79h?=
- =?us-ascii?Q?C1yZfx/OKSnMjae3jze72lQxiRzz8YR8OV+meAGJdyQ8teKTKCunQQHe3fIU?=
- =?us-ascii?Q?UCBt4cTETC7LHMLaEzwVKx3rxfL0URfaEnPM+HI9roWcYtwR2nuGSdpS91rY?=
- =?us-ascii?Q?U+oUA7lqKbJN6uBAKMmvHK8mhii75DHz1n9jE4VgDJ/QUC4rJHeT754Opekx?=
- =?us-ascii?Q?+9M35CSg9kmK5CpT3cHOc70+L4mT9CQfhubIUrE5jbnIec+BLwtG17bWtfmH?=
- =?us-ascii?Q?zJISkdNJ1+ntgVWucnPgVldZusXDfoVM4aNIIiNMrahBbNgDGg7XgcPbf6/Z?=
- =?us-ascii?Q?C3UCcS0GX5kFQmoO212RKSH1antlO4Y9fW0pwG0NZ899dgOwO8a1adhjd5ma?=
- =?us-ascii?Q?YHWjoC7bnhK3xsycbrJ/L4aO3rDoMgSUNbFYaJrIwE2Y9htAy/kdxNH+njFv?=
- =?us-ascii?Q?E8I1cYshppkB48/k/7bMIINCkiiCs+7uYtZHuh6eAX8jxbs7iJ2kWVkpfVej?=
- =?us-ascii?Q?JL9HS/ZMMrkmOnGTrYqd1mteCa57PDdJ3lIQTnBN?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ 2024 02:22:15 +0000
+Received: from SG2PEPF000B66CF.apcprd03.prod.outlook.com
+ (2603:1096:4:193:cafe::ae) by SI2PR01CA0047.outlook.office365.com
+ (2603:1096:4:193::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.32 via Frontend
+ Transport; Tue, 16 Apr 2024 02:22:15 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 211.20.1.79)
+ smtp.mailfrom=wiwynn.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=quarantine header.from=wiwynn.com;
+Received-SPF: Fail (protection.outlook.com: domain of wiwynn.com does not
+ designate 211.20.1.79 as permitted sender) receiver=protection.outlook.com;
+ client-ip=211.20.1.79; helo=localhost.localdomain;
+Received: from localhost.localdomain (211.20.1.79) by
+ SG2PEPF000B66CF.mail.protection.outlook.com (10.167.240.23) with Microsoft
+ SMTP Server id 15.20.7452.22 via Frontend Transport; Tue, 16 Apr 2024
+ 02:22:13 +0000
+From: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+To: patrick@stwcx.xyz,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] hwmon: max31790: revise the scale to write pwm
+Date: Tue, 16 Apr 2024 10:22:11 +0800
+Message-Id: <20240416022211.859483-1-Delphine_CC_Chiu@wiwynn.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SG2PEPF000B66CF:EE_|TYZPR04MB7665:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 46b3f515-bef2-4ef4-b334-08dc5dbc07ba
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	7vm6W+RW9uq1rV2DFLnJZb59bcSSf/PooonhEHDv1KiyzWsACD4b2snMMyM1PhCNJqyHx++x3pPLWpGM9n/2zhZ9TA3t/jZD9AhqQwGrq6YL3PNTf/zG35cqtnV+bqMHB21UvutWj2njeGcesmmzQHUV41VeSh76dlPblLjFpFM0BrQqL/up0gGHBdLtSD1xBj2i6XZyq0vwMe+hZkT4nEeqtrUpbwXfKN83Wwa/3/dxNax8YEAETeFZWw6zzaqeBsf9ae7+VN5yMUf1uc5wSktGtcoLQ8Du8mf003NGczEI8mN3Jqz3kidqBgqfa50VkxYFMqEXmL/gIY3RFgY8wQEBx8x2xEFJinKciu7IF6oB2hhFzfeL7ikg7dOjWFx6B2j1e1dEwlSavyXQdfNiZ6+ASF28n2jth/ZjPcRr66jJAEjgiLx7sG4BtXZuNePc2+6mhfTA1BHdY3N55igILOc8TkykIGGaLr35slGu5WnAjFdoG+Mzpu4J1bQ+ulVql1SWe+dcai6M/f+QdEgR6VNT94cnfYT1tIdivYnCZjyUOgfYArUy0g8FuuMvZU57y9xWYX40Chqxl4CbbgL6zorWdG5LJdUki6B2VWj855JVvBFa6cwcLP0yWFQjJJhabFVON7CTrXu9XupMEY7c5yfAjRTXZ0EUceX/K5hL8b4lS9mnmd5uC0hgsO+DyCPQGk8EwadQK5jFIjX1CGPQsbZ4kr4tb7RQJTYJLefr4b9I58sTKEzpzOOU3ONmu399
+X-Forefront-Antispam-Report:
+	CIP:211.20.1.79;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:localhost.localdomain;PTR:211-20-1-79.hinet-ip.hinet.net;CAT:NONE;SFS:(13230031)(1800799015)(36860700004)(376005)(82310400014);DIR:OUT;SFP:1101;
 X-OriginatorOrg: wiwynn.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR04MB5853.apcprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6d9c031e-0daf-4f9a-d496-08dc5db75a4c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Apr 2024 01:48:45.4964
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Apr 2024 02:22:13.9991
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: da6e0628-fc83-4caf-9dd2-73061cbab167
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: aKUSf3Q4gbm7qMpzB10+ixHgwVd8p6pZ2A+wmTTIMQbCaFQpT/fOURSWgCTZriTEqYQCFIHV1xNYT45cgZhHvg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PUZPR04MB6885
+X-MS-Exchange-CrossTenant-Network-Message-Id: 46b3f515-bef2-4ef4-b334-08dc5dbc07ba
+X-MS-Exchange-CrossTenant-Id: da6e0628-fc83-4caf-9dd2-73061cbab167
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=da6e0628-fc83-4caf-9dd2-73061cbab167;Ip=[211.20.1.79];Helo=[localhost.localdomain]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SG2PEPF000B66CF.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR04MB7665
 
+Since the value for PWMOUT Target Duty Cycle register is a 9 bit
+left-justified value that ranges from 0 to 511 and is contained in 2
+bytes.
 
+There is an issue that the PWM signal recorded by oscilloscope would
+not be on consistently if we set PWM to 100% to the driver.
 
-> -----Original Message-----
-> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
-> Sent: Friday, April 12, 2024 9:03 PM
-> To: Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>
-> Cc: patrick@stwcx.xyz; Jean Delvare <jdelvare@suse.com>;
-> linux-hwmon@vger.kernel.org; linux-kernel@vger.kernel.org
-> Subject: Re: [PATCH v1] hwmon: max31790: revise the scale to write pwm
->=20
->   Security Reminder: Please be aware that this email is sent by an extern=
-al
-> sender.
->=20
-> On Fri, Apr 12, 2024 at 11:25:58AM +0800, Delphine CC Chiu wrote:
-> > Since the value for PWMOUT Target Duty Cycle register is a 9 bit
-> > left-justified value that ranges from 0 to 511 and is contained in 2
-> > bytes.
-> >
-> > There is an issue that the LSB of the 9 bit would always be zero if it
-> > just left shift 8 bit for the value that write to PWMOUT Target Duty
-> > Cycle register.
-> >
-> > Therefore, revise the scale of the value that was writen to pwm input
-> > from 255 to 511 and modify the value to left-justified value.
-> >
->=20
-> The only difference is that it writes 511 instead of 510. All other value=
-s are the
-> same. I am not sure if that is really worth the trouble. It would have ma=
-de a
-> little more sense to me if you had used DIV_ROUND_CLOSEST(), but you didn=
-'t
-> do that. As it is, I really don't understand the point. If it is really i=
-mportant to
-> write 511 instead of 510, the commit description should explain that and =
-not
-> talk about the last bit always being zero (which it still is after this p=
-atch except,
-> again, when writing 511 instead of 510).
->=20
-> Thanks,
-> Guenter
->=20
-Hi Guenter,
-Thanks for your reviewing.
-I'll revise the code to use DIV_ROUND_CLOSEST().
-The reason why we add this patch is that we saw an issue that the PWM signa=
-l we get with oscilloscope would not be on consistently if we set PWM to 10=
-0% to the driver, which would fail our hardware testing.
-I'll describe more detail in the commit message.
-Thanks.
+It is because the LSB of the 9 bit would always be zero if it just
+left shift 8 bit for the value that write to PWMOUT Target Duty
+Cycle register.
+
+Therefore, revise the scale of the value that was written to pwm input
+from 255 to 511 and modify the value to left-justified value.
+
+Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+---
+ drivers/hwmon/max31790.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
+index 3dc95196b229..7aa1aa63bf1b 100644
+--- a/drivers/hwmon/max31790.c
++++ b/drivers/hwmon/max31790.c
+@@ -49,6 +49,9 @@
+ 
+ #define NR_CHANNEL			6
+ 
++#define PWM_INPUT_SCALE	255
++#define MAX31790_REG_PWMOUT_SCALE	511
++
+ /*
+  * Client data (each client gets its own)
+  */
+@@ -343,10 +346,13 @@ static int max31790_write_pwm(struct device *dev, u32 attr, int channel,
+ 			err = -EINVAL;
+ 			break;
+ 		}
++
++		val = DIV_ROUND_CLOSEST(val * MAX31790_REG_PWMOUT_SCALE,
++					PWM_INPUT_SCALE);
+ 		data->valid = false;
+ 		err = i2c_smbus_write_word_swapped(client,
+ 						   MAX31790_REG_PWMOUT(channel),
+-						   val << 8);
++						   val << 7);
+ 		break;
+ 	case hwmon_pwm_enable:
+ 		fan_config = data->fan_config[channel];
+-- 
+2.25.1
+
