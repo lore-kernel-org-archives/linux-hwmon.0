@@ -1,40 +1,59 @@
-Received: from msa.smtpout.orange.fr (msa-215.smtpout.orange.fr [193.252.23.215])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71C59131737;
-	Tue, 16 Apr 2024 17:39:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.23.215
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D1FB13343F;
+	Tue, 16 Apr 2024 18:12:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713289164; cv=none; b=sYh1wB9eC7N/RD6fNJApGYJPlYKnEnvYyA3QthMUplxQis245pNxC+/M3jEUxfbbJa+cmSXBZv+E/hK7I1R5TCC5hFvfdCAEz0kUirUuAqVvLiNSr0Ivj/IxoV4jNnvV6abDNa1CFGwGQbtS00KqC+YXEsKToFIEmVU7Z3zIHDw=
+	t=1713291164; cv=none; b=q7EZJtaOb8pKbLLHMfVpHjIMPcsWiyzd5Zqn2iEyp5vkbrWONQJ7IDtleiYAtFVTj3jPW7H+rcvKzdhHv9Ph55dVsXsHgG3gErnvfyqLeSINJanf9PLAyfG8eSrfPaPw5w4ktKBDDYUT3StS6gynndhPU+i94fqUDb/s6UED+LE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713289164; c=relaxed/simple;
-	bh=Qll9DbzHvcRZxQAViJ3Ues+BjKsh1eoXV2v7hi7sKA8=;
+	s=arc-20240116; t=1713291164; c=relaxed/simple;
+	bh=w2WOdK+HDz1fazSED3Oxm9eq69k3yabhpN25jQHSvKA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iGd9Zantyv4A3Vw92GYa/1d4KsUHsNhVOcBlkO69ozmVMkWil00xD3JtfiD+dGnY3+YOfLTIgCG+O2cgr6SbPxVoOTfSQD27miNFe3+SHOLuea8QX2rrjmnL+kRjl7xzGa/m5WxCrdDQ5bn/O5OT8AHl1+nrVJQyj8slZG6nY3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=pf4YBwr/; arc=none smtp.client-ip=193.252.23.215
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+	 In-Reply-To:Content-Type; b=CDpQb7pMfVHw8t/uM5cgMjxda9n5Z7BKViHaGKw5AREb5Mnjjtsr25zAblcy24lxWiGzGUS+uCWQwUaAjca7VxL3IzfjzAJoaRaRAhv8tPAyajgAA2dXioi2bGz3nGcsr1KdC09ACqLZ4jCyEqUse4tgB4W+SZDOsSLVTIPSmUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VF+Shdl5; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="pf4YBwr/"
-Received: from [192.168.1.18] ([86.243.17.157])
-	by smtp.orange.fr with ESMTPA
-	id wmlzrLAy9o2EHwmlzrvVAj; Tue, 16 Apr 2024 19:39:14 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1713289154;
-	bh=U43Gs7s+4BWLSZzPuZsEnIb/F72Ohs3d3kKx1m0cYEs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=pf4YBwr/L9plZdChLf677KHCrfO7QM70lqCmEiD962iWnKgS3W0lFH8guE0o2z1G2
-	 2dBP8xxezYIK4FlsqJOjjmxSieD9h1jlb7PvWJ4sFBoEgKVry0KWZP53XSVVISS5/Z
-	 5XPJrsMXittrnTpWMrDSEdBK1fZBm6ksire+/fQLDloTcWyLDTe++Aup9vIJ5PMcmC
-	 4cGolyuFnjy9inujS47dRUzbIehOLqXWsY1vK35dX1eWU/wXGL/717QBwMgx75Rba3
-	 nX8g8Wdr+ZTMKdZoFEmFrgB/1dznRxdnuR4pzHNsa0zJ8oMjroK33EWJLcQbG+pH/S
-	 O4RQ+3NVg+BGg==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 16 Apr 2024 19:39:14 +0200
-X-ME-IP: 86.243.17.157
-Message-ID: <3a4e0543-fc40-41dc-8aaa-19811b96f1cb@wanadoo.fr>
-Date: Tue, 16 Apr 2024 19:39:09 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VF+Shdl5"
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-570441bc23bso1277774a12.0;
+        Tue, 16 Apr 2024 11:12:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713291161; x=1713895961; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+DxrBa0GRP7KC9Ck4Q7bz92lpzIac44ohmTeC1MwbNU=;
+        b=VF+Shdl5n2le2uTJdl36RR5bNLp+CkcxIvayYDceMyc9EJIUT7Hfl1NJh/NM85uVNA
+         jgBvTwbXV41UO3eIpmc3zH9430JhdoqSjontKYilq1FphhXG499naUbJ+EDGO9YOf2hp
+         3aMKR0hIUfMWUeG67KTbd4EzI+K4BOwX7H1fMz4yV2NoYqC2ipG/2oJ1pGe42P5HCB/U
+         G2LLqVmvEdujyf/5AhNHVZA4QfBk6TggK/tSvK2lJpRO3C3IT6cZinvRhzuZ62waxon2
+         BVNz0TUJe4ppOEIjMbUMR0snl4fsNejVIfPVw5IyO/hm3bKFov+ORclaelypYccO58+4
+         QHTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713291161; x=1713895961;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+DxrBa0GRP7KC9Ck4Q7bz92lpzIac44ohmTeC1MwbNU=;
+        b=aonmYTLdawPJSco9uFP+1kg0y8Q17nXoFN1Eq1Ae70SFbmNuF7aJXwPZCNxA0r0Lkp
+         mzgysVgb20vQpZ+GgE9m1jdAXzG/96nrjuCGC99dEC9kSCo1HZuxbWnPWXGzZbe9EQRm
+         GmExDOUMZ8okVVtjYGeowPiUYATHF7JDcOb4uy/lS8j/P2LCvTIWe+u0vlAiGbPA1XNH
+         CMHct8+v+gvBR39bPnTakipDgJuc5ZcMkt+d8LOS10o2xu+DugVCLcQeGx7CV5Wwb6H3
+         2qrAWzF579cDb5A03UTDMzf2dgypA1iSAxmbk0Qy4WjahHDr934W9kcTutnAeindn+h4
+         HeEg==
+X-Forwarded-Encrypted: i=1; AJvYcCWya67GB6X5riUHQXdQf0qF0yRM60dwD157FMQPG1lu08lnqCzqbC8yFonWc8pZwH6m0QsfWbNVsd9dbpBd3Vt5Vcgh2UohAryTxBKGFg1D9uqvpuO3gid7SZkUkDtQyEeu/3OPetQqQCRcM/oTlCIMMe46Kwl71XIREYsASZ8ATkkujlsS/4D4ZZE6gk9M
+X-Gm-Message-State: AOJu0YzN/7JQDFMEq69qCP9+pDjJTalGorQVSbvQgYxMjxFvEg8PZr4Z
+	J8LZF0Epx17g+lX+hYkiSpSOKg/qTuthhI99BWxIf6vBgWx5OPdN
+X-Google-Smtp-Source: AGHT+IEi27VqQOVvq3KICDHbzcbhpfiY9hUDzKEjxbQmObbqYcwoFQmAo/mQ7qL2GxHkuGyWZ+kFDA==
+X-Received: by 2002:a17:907:d2a:b0:a52:2f19:f1d7 with SMTP id gn42-20020a1709070d2a00b00a522f19f1d7mr9931916ejc.53.1713291161232;
+        Tue, 16 Apr 2024 11:12:41 -0700 (PDT)
+Received: from ?IPV6:2a02:8071:b783:140:927c:82ba:d32d:99c1? ([2a02:8071:b783:140:927c:82ba:d32d:99c1])
+        by smtp.gmail.com with ESMTPSA id lb10-20020a170906adca00b00a526fd6362asm2616106ejb.117.2024.04.16.11.12.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Apr 2024 11:12:40 -0700 (PDT)
+Message-ID: <ee8c39ab-d47a-481d-a19c-1d656519e66d@gmail.com>
+Date: Tue, 16 Apr 2024 20:12:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -42,85 +61,46 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/3] hwmon: (max31790): Support config PWM output
- becomes TACH
-To: Chanh Nguyen <chanh@amperemail.onmicrosoft.com>,
- Chanh Nguyen <chanh@os.amperecomputing.com>, Jean Delvare
- <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Justin Ledford
- <justinledford@google.com>, devicetree@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- OpenBMC Maillist <openbmc@lists.ozlabs.org>,
- Open Source Submission <patches@amperecomputing.com>
-Cc: Phong Vo <phong@os.amperecomputing.com>,
- Thang Nguyen <thang@os.amperecomputing.com>,
- Quan Nguyen <quan@os.amperecomputing.com>
-References: <20240414042246.8681-1-chanh@os.amperecomputing.com>
- <20240414042246.8681-3-chanh@os.amperecomputing.com>
- <79bef664-b191-4905-896c-afab341b982b@wanadoo.fr>
- <9bc38f67-01e0-4a38-8db8-4086a215b474@amperemail.onmicrosoft.com>
-Content-Language: en-MW
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <9bc38f67-01e0-4a38-8db8-4086a215b474@amperemail.onmicrosoft.com>
+Subject: Re: [PATCH 1/3] hwmon: Add thermal sensor driver for Surface
+ Aggregator Module
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Hans de Goede <hdegoede@redhat.com>, Ivor Wanders <ivor@iwanders.net>,
+ linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+ linux-hwmon@vger.kernel.org
+References: <20240330112409.3402943-1-luzmaximilian@gmail.com>
+ <20240330112409.3402943-2-luzmaximilian@gmail.com>
+ <7ba2554a-4f71-4ca0-ab49-59dbd03e1968@roeck-us.net>
+Content-Language: en-US
+From: Maximilian Luz <luzmaximilian@gmail.com>
+In-Reply-To: <7ba2554a-4f71-4ca0-ab49-59dbd03e1968@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-Le 16/04/2024 à 07:27, Chanh Nguyen a écrit :
-> 
-> 
-> On 14/04/2024 15:03, Christophe JAILLET wrote:
->> Le 14/04/2024 à 06:22, Chanh Nguyen a écrit :
->>> PWMOUT pins on MAX31790 can be configured as a tachometer input pin by
->>> setting bit[0] in the Configuration Register. When the bit[0] of a 
->>> channel
->>> is set, the PWMOUT pin becomes the tach input pin for the channel 
->>> plus six.
->>>
->>> This commit allows the kernel to set those pins when necessary if the
->>> maxim,pwmout-pin-as-tach-input DT property exists.
->>>
->>> Signed-off-by: Chanh Nguyen <chanh@os.amperecomputing.com>
->>> ---
->>> Changes in v2:
->>>   - Update the vendor property name to 
->>> "maxim,pwmout-pin-as-tach-input"   [Rob]
+On 4/16/24 3:27 PM, Guenter Roeck wrote:
+> On Sat, Mar 30, 2024 at 12:24:00PM +0100, Maximilian Luz wrote:
+>> Some of the newer Microsoft Surface devices (such as the Surface Book
+>> 3 and Pro 9) have thermal sensors connected via the Surface Aggregator
+>> Module (the embedded controller on those devices). Add a basic driver
+>> to read out the temperature values of those sensors.
 >>
->> ...
+>> Link: https://github.com/linux-surface/surface-aggregator-module/issues/59
+>> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+>> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+>> ---
+> [ ... ]
+>> +	hwmon_dev = devm_hwmon_device_register_with_info(&sdev->dev,
+>> +			"surface_thermal", ssam_temp, &ssam_temp_hwmon_chip_info,
+>> +			NULL);
+>> +	if (IS_ERR(hwmon_dev))
+>> +		return PTR_ERR(hwmon_dev);
+>> +
+>> +	return 0;
 > 
-> Hi CJ, what does it mean?
+> 	return PTR_ERR_OR_ZERO(hwmon_dev);
 
-Hi,
-just a shortcut of my name : Christophe Jaillet.
+ACK. Will fix this and the blank lines.
 
-CJ
-
->>
->>> @@ -528,6 +532,33 @@ static int max31790_probe(struct i2c_client 
->>> *client)
->>>       if (err)
->>>           return err;
->>> +    if (device_property_present(dev, 
->>> "maxim,pwmout-pin-as-tach-input")) {
->>> +        err = device_property_read_u8_array(dev, 
->>> "maxim,pwmout-pin-as-tach-input",
->>> +                            pwmout_to_tach, NR_CHANNEL);
->>> +        if (err) {
->>> +            /* The maxim,pwmout-pin-as-tach-input is an array of six 
->>> values */
->>> +            dev_warn(dev, "The maxim,pwmout-pin-as-tach-input 
->>> property exist but malform");
->>
->> Nit: exists
->> Nit: malformed or "is malformed"
->>
-> 
-> Thank CJ,
-> 
-> I'll update that in the patch v3
-> 
->> CJ
-> 
-> 
-
+Thanks,
+Max
