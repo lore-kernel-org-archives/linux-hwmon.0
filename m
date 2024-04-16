@@ -1,211 +1,143 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D20E137915
-	for <linux-hwmon@vger.kernel.org>; Tue, 16 Apr 2024 19:15:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.7
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713294917; cv=fail; b=oQagRNwM6C7biBBxigAKNj6SZd6wySIAYaMUfrJKeZYOHKSw8QEfc6HtvwAeDCdQFHaneMGKePprjSySc2m5uQ3/yfrzMx7pr3gOmRm6eUe2BpXPXvJd8j08yhxHNZs9vEy8VwF21w101/QDRsdKilEXxuEcEzJAVe5rMll1qaI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713294917; c=relaxed/simple;
-	bh=Yq9ryk7DooaMTsmLhWz5wAHaxgZX0qO3laTKvfZW7qU=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=DGg32bQVvkdIgVqhZfPbu5AbjA1Oex2rSCLxaFwHZP8ok0tI/MpGB3I8v66kJyuBoxLska5OE1bDB+lyquihjKha0mTteAsZJp4CVTCTI2AEqKRA9YPL1HiDFT1c4UeCYTugL33h7EP+TZjST810AIZsG3dQRzJXoUtLEuqEDGE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RP5WY1u5; arc=fail smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E61CE5A116;
+	Tue, 16 Apr 2024 21:08:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1713301694; cv=none; b=poN922tUYUOXH/xoQxdPrI2SCljLf95TQjEomVjuwWT0i3DND+M6bpSW3krpalaeyg0MgL34O7uRTbRmRAXvDV/JrYL28jwUhzy447e2r+hYz1ziEKMRB8bMTVeqyCdtASXPbMV4wakpy1FVF0L9iwnL7gCGepFCyuYKXAr0RnU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1713301694; c=relaxed/simple;
+	bh=cVRfsInjV4PY1kypj4NTkJ8QGpl3sEUZhiB9xb82I3s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fv/kCsCwcGqcluXIXguITo3vO7hb1V+EoKvHdLBrrtn1Bf8lcWjlBGwEB4FETDBsRnv/XazqMb5o+nW/DFWRWFDEFvCXYWTm0AP6cFHMnyg4L5mn11Lvevtf81spwC354Ghj2nQqcSQJKbANn7yCV7voA0uXFkrbeHZUeKfOOnY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kmcd84tO; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RP5WY1u5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713294915; x=1744830915;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=Yq9ryk7DooaMTsmLhWz5wAHaxgZX0qO3laTKvfZW7qU=;
-  b=RP5WY1u57juPG14vSO5CAY1gwDsbI1FnKSUthkcqX4BxBXePGy3jupuW
-   w9AGxUsOmYc/PAQD1zZllW3jav0PqbAri6LXEZOTFUrlLBQ+VZ5TXLPfb
-   cKFr8ONvsFo8wfKDTR6smeFtQUDtlfS1nWIS3ckVMeQfl6xJ7UinF9yXZ
-   T4sMKl2Wfy88M1hnW8k5H3ChMZRg4CzKMkyzW4/kLHhzpaTTtVAMCwCWs
-   0jB0lBzWcPJpG/XHPg+LEEGwv6kcbqnq72SDX18YtTRect6A7Uh8gLX6W
-   6UNzyZcmc0LdySTGmpsC+oHFR2qoc50NyXrfQNAxqPgNsPscKsSMNFstz
-   g==;
-X-CSE-ConnectionGUID: I/mnNg0rQRGKYj4DEQVA2A==
-X-CSE-MsgGUID: pbZMlLhCTfCtJD9X0sSP3A==
-X-IronPort-AV: E=McAfee;i="6600,9927,11046"; a="34145790"
-X-IronPort-AV: E=Sophos;i="6.07,206,1708416000"; 
-   d="scan'208";a="34145790"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 12:15:14 -0700
-X-CSE-ConnectionGUID: gBfUgT7bQuGipkx7/oUz7g==
-X-CSE-MsgGUID: 5+SdpzeMRAu66hKCD4OzCw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,206,1708416000"; 
-   d="scan'208";a="27151333"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orviesa005.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 16 Apr 2024 12:15:14 -0700
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Tue, 16 Apr 2024 12:15:12 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35 via Frontend Transport; Tue, 16 Apr 2024 12:15:12 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.170)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Tue, 16 Apr 2024 12:15:12 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RGdpiay85+/k4LD0okHWC/RTYaQd8gVQhCLNJL4R0ZZjT0f0CneedVn2otQgg0mRY9HkXPg3Idskjrwkz4NyD1yXx7F1rWa7+vVf24aB2gLhVkQ8BqV9rVfb2gILZ0uk0pVDbNpgKebD1HJ/QJAner1LBu0OjijTmTjV6Kqxd8DqJI3sFa0pkMFTlr7qFlF/jl27YOXU96WIVSUNC15gSSEUvJimGaH1GC5zAu3FrR721tPPGSpwEvRQ84AahuquEJjqzvRvTkhraM92RSKOzZ3DHkp21XtmRB4lADoraMuDy8ZW43aIrnp+kAbRHb3I2tBp1kGXbFRN0CiohVlXzQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GDYZWVAKbOulFCXqZNHZEtxXdx0ScwJgMQ3i25Jd/sM=;
- b=oGMgnDTngFsQtYp5jPyEAFCkualUN/3FvTuw/jk+BZSUazd9Dd2cw2sC9e+KBroA8w2fNopgOs4xCuy5PU14tnH5mX8Lcyjz4M/ebBSzgTVWgBT8KFIjDMKHR2/Jvu+lZf8DSEfNXQQb0wSBNZ+OiRSZBecFCy1ix65qgLsOiJrDND7Axsq1SaYO8ISz1ww0sFJvxd9xr4YYx1VVJV3Odg9AUHbjhKrnQtquqLtnVmTOeq8B1854+SlIGs1mWYejpgcvDrW1o3WGA6ozYnGomWM3fyubehH8imov7GavoKmDI5MOUqe9MItA+C6GiL8+5NzUAYtA8SYDu5s2MNzg8Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH7PR11MB6053.namprd11.prod.outlook.com (2603:10b6:510:1d1::8)
- by SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.29; Tue, 16 Apr
- 2024 19:15:10 +0000
-Received: from PH7PR11MB6053.namprd11.prod.outlook.com
- ([fe80::9461:3f2e:134a:9506]) by PH7PR11MB6053.namprd11.prod.outlook.com
- ([fe80::9461:3f2e:134a:9506%7]) with mapi id 15.20.7472.025; Tue, 16 Apr 2024
- 19:15:10 +0000
-Date: Tue, 16 Apr 2024 15:15:00 -0400
-From: Rodrigo Vivi <rodrigo.vivi@intel.com>
-To: "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
-CC: <intel-gfx@lists.freedesktop.org>, Badal Nilawar
-	<badal.nilawar@intel.com>, Andi Shyti <andi.shyti@intel.com>, Ville
- =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
-	<linux-hwmon@vger.kernel.org>, <dri-devel@lists.freedesktop.org>
-Subject: Re: [PATCH v2] drm/i915/hwmon: Get rid of devm
-Message-ID: <Zh7ONCTo8GOOC9UO@intel.com>
-References: <20240415223612.738535-1-ashutosh.dixit@intel.com>
- <Zh7JmPQ8XRJwMQnQ@intel.com>
- <85jzkxcerx.wl-ashutosh.dixit@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <85jzkxcerx.wl-ashutosh.dixit@intel.com>
-X-ClientProxiedBy: BYAPR08CA0052.namprd08.prod.outlook.com
- (2603:10b6:a03:117::29) To PH7PR11MB6053.namprd11.prod.outlook.com
- (2603:10b6:510:1d1::8)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kmcd84tO"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6ed9fc77bbfso3813279b3a.1;
+        Tue, 16 Apr 2024 14:08:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713301692; x=1713906492; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i331i1Wcy5r/lDRFeghXmoWu6lGxaTU061BqljzeiVk=;
+        b=Kmcd84tOCxod5e9zwD3Fxg+ZRIBfMn4AOBeIUt3rC0llJHcRgtcW0dWVdWVwWwd4Sg
+         JazfHbp7LrHWF3akmohcqKyv7FXonzbumCSZFvo7Udy3+ahikjxGaMdXCjTJRyb9pJWj
+         wibgo6ZUlgsTzwmpCzpAytbuBzXHUXYHxN4YGvb7TcQbobZxcZtK7Pu9BcaeKZJlcjzH
+         Dl1R2F7+sBeahSlI8/qj0x2xx+OlMKRmmuG67f78qywzeGwlG1UUK/PCsgqT8PfGh/4W
+         +AWY6ziA5AT73SEpZ0xq3WvX3RrMT7TqpoXi6DyI7uRiwlwGtvJbSSG5d1d0lvRhME6n
+         RwGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713301692; x=1713906492;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=i331i1Wcy5r/lDRFeghXmoWu6lGxaTU061BqljzeiVk=;
+        b=rkhJzLnBujUzQAFTyKF1VDaU71LHhC9JULJ2EESKYkwor4iVsH4vqjBgeOa5wSV052
+         iwQVKrlTjdpcvYRpVvFRQXZnH2/vtuSWymldSXOULXju8lHkgem4K9ht9P4Pc5LI2Rzr
+         vNS+BcLXlnfdk1JbAVMhobSJZNGpcI4/COyQNKq9Wsg/IZKvAwFYdyMab9Env8vryZ+X
+         zZ+ko5Y5XbtK14yaGQlRpfW6QbSHJgornRtqi0Cu+NBS/r4HxMACaFhoLWX3kfW11j/T
+         fXdKg+xekpUZklLk12BkKq/vXzgwVWGCKBK9y9kjiUURMWKHp7lD2rtHOCsT45pmm/2z
+         w9MQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW/yZ4qW06okP2To7YdmPPnUWzh5zdVxoKDC741llBtjrfFCUdc2802WB/sY9BU2YJxC0yvzKFN7vXf5zjIra/LDVm0vSDGh/oFKirUWxzMF+Ize0qp+M0upzE3IuxIaxPPepQO8dvmM2XdjL1dvJmPLmh9JjZaU4Y8zcbSOf8sLHNTyVAeCUPDguQBEz3/
+X-Gm-Message-State: AOJu0YxkRd6sX6FZ0nKjlqqOf7xYA5qPNdIpLnPpCWE96UWg3pyDHAUR
+	zEFLUKganSamrFn6ph2n4chglSYBS1cEjxL6r3NzKROtkrYpNUeS
+X-Google-Smtp-Source: AGHT+IHHi3KdjnjY0V9UEzcg8HtLCOxWhI6RMCOGq0dHKinG4EJl4xSHwSXlUd7jG9SeBpwVzdTetg==
+X-Received: by 2002:a05:6a21:3405:b0:1a9:f44b:98f6 with SMTP id yn5-20020a056a21340500b001a9f44b98f6mr7502419pzb.15.1713301692028;
+        Tue, 16 Apr 2024 14:08:12 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c21-20020a62e815000000b006ed0199bd57sm9734902pfi.177.2024.04.16.14.08.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Apr 2024 14:08:11 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Tue, 16 Apr 2024 14:08:09 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Maximilian Luz <luzmaximilian@gmail.com>
+Cc: Jean Delvare <jdelvare@suse.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ivor Wanders <ivor@iwanders.net>, linux-kernel@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 2/3] hwmon: surface_temp: Add support for sensor names
+Message-ID: <8d62af9d-281a-44c0-a40c-93ae76827705@roeck-us.net>
+References: <20240330112409.3402943-1-luzmaximilian@gmail.com>
+ <20240330112409.3402943-3-luzmaximilian@gmail.com>
+ <43908511-198f-42ee-af21-dad79bdf799a@roeck-us.net>
+ <97d0f68f-63da-4f72-ae8d-89fbf9aadf62@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR11MB6053:EE_|SA1PR11MB6733:EE_
-X-MS-Office365-Filtering-Correlation-Id: d610659e-f6c1-4f9b-2815-08dc5e49887e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Uztz0qh1v9N1ZY2RoFAz6Gx/GlJbjwt9vJzzNec2fcwNJ9QdPzUP74Qce0JA9A6Sq1klSCrqNbQnpTfv5pL5f/TYF5WX1v8Ah4NLWxn5iF4MxoUOhs7BTnbEq8rOyQukPC2N+hNM7xAM5qIQ+HzkEdxy4S0FgbEGOgJ4hbeE0fPkAas4t6OWOeVqTspD51OVIHhI4ykQkEh1NFprc1eG6F8iCNW2dZt6aFZ0a0BPegPAN3niXYMH4HA7wJ2Qx1JG8rsRXtiHgfjg04SGMHx12CNnfWvF1eGgmR+a4yg0REnYUX9P7qNV6Wf5J1ZW3y+QLsmKqjqH6LHHdd5g6ZvhUwQLR1qsjoelTUcsf4iVPfl7uLfj6zAAqtJFeTcIBwzqUVr3ZwXQuQo2w86ogHa984iF0uOmxeKRrbLvDJAPaOVf0WqEbMB5dDNpjUjK2DfZZc6Jl88b5v/46NAWkbe01M2iQcOi2ZR/UQd/nPzOTuYGNUW5U2VAMP+jJvYlaEXhvrk+7LYoewhMsFoA6znr+HCnAT0++JHEsunN0sSqVmE/Od/5FztJoSO3y9Zp1XrFUhuqnrj573ij0EFLXTuNO9HBNObM5yW80N9fRapYhVatcFRdRvgtlgcO+Cj/jRfbdjzI17kR+DwS49Vm1LV9NqoR/f/1TABUrbF2Pck86oc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR11MB6053.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(1800799015)(366007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Ibs/GL3n4FgXCuN+y8DV/U4C5Dm6JZOqU39gEq922xzlnfsIZI26UuxfgmhX?=
- =?us-ascii?Q?dWEYGgfnWPVy1PP3CFiLd5l1jTmS3FDXD2jNUvQyksy5Nf3bK6cBdyFsP+La?=
- =?us-ascii?Q?x2g4nMg360kehNb0Z1keOElO1/DTM3/EMi/VY1h9GC0+cNoUciHp0lx3hmyy?=
- =?us-ascii?Q?eIC5cS+qgD9g0lIeh837XhNiJoViQe5g4cvgXfkbFwmhq8q9ifEEAs8kpl93?=
- =?us-ascii?Q?7vsryKk2UyYLDjR4jVdOoupRUSURVAeNluN31RpdIZT0+NMgCKczJPBKaZbl?=
- =?us-ascii?Q?gpPYMwSRmIbJGQglsqXl5nRwiOgTGvYgyJZwyEGt6ZfYuOEllp4w6U1QBMR6?=
- =?us-ascii?Q?suGpZ8kzG3fY0WOEipvwVYKQ7dkIKrDIexn8Tuk/CqDT7hcZ46WIpnLgNjam?=
- =?us-ascii?Q?KQiQvd8CD32rLhW8iCGsW3c8dfwctae+pcLGUS5xlABneRe291OL+fbeULEB?=
- =?us-ascii?Q?7W5AwTYu4UVPMhU4ztER7FWI1jZYXcuIRPp2RvYGB4VfcPeCPyERhJiIrrAc?=
- =?us-ascii?Q?JGNiUFTD1PPri1HSKQeXsitl+GQqUgXwo5VESP6zXE9x/GlBHeG6gxsrI0sr?=
- =?us-ascii?Q?wu4nG5eEm43k6z6QsFbWdHPZP/iXsipAtz+RaAsnmKPlFlYn05UOGkM+48rJ?=
- =?us-ascii?Q?qBpyrFRYLcJhd8gVYuvO5FlzqkJ9xkWiGZrXO3XBBUtcqY8gbAwrfAE4+ggS?=
- =?us-ascii?Q?Sx5HiKUEINUp9QRfYC1lsA7H/JZTs/jXiWstChOo5TvrCzSDVcZ6sazCNndZ?=
- =?us-ascii?Q?hLzHOaQ/gcffKq9y2V1sRy6zHSjOR4ne7r7EtRU5ScT1x6KmpUdCmrLJgOvv?=
- =?us-ascii?Q?2rAQcVGm42XXBdXUk80tP38exEEhtTlL02cu0iVxy+ej0/I3qr88EUXq4jWi?=
- =?us-ascii?Q?g8qli3daUvxLNNgL66B6LVvtZDgC+hBi996s3RAor0CnqenbmfQINS/oySgZ?=
- =?us-ascii?Q?dOZNkvvO2FP/ZguUHmacfkKtbF/ifiWASxYUi1F4p02ypva+lOfW8kpf6kgU?=
- =?us-ascii?Q?XaXDooRxguXANF1ypqXCnzPB3uAcznFytk63ho8EyohT4EWPfdpJFXheNzyV?=
- =?us-ascii?Q?lWkcBzna1390qaYzFRJZcOiARCpLpR3ITgyd9+/whgkaYI1cJEB+GQ8mpIp6?=
- =?us-ascii?Q?/DWpKypQ8MaYFZo5f88HUvbvXAkACofo+7wbsyfzxbh7sLtQk5Cymr7E4ODA?=
- =?us-ascii?Q?0Yc7vuqHtiJVdnUp+hZiHdQ+DwYLS/yrP2kbzWJdwtlGYuHYWz507Y6B3cam?=
- =?us-ascii?Q?7oKuJkKS48eTou4T1CKReqpN5gkrwsvVfSM1BZ7EsC1pY47D2uiGiann9cFj?=
- =?us-ascii?Q?cZcQMF4Ln/u4eBJhwEbAqX1EY8beHnczjTUrq4GXSZaSuHPAoQWZIDKQQqOa?=
- =?us-ascii?Q?IS28Yhf9pfZEz7U865R6Pex6r3sIIBbObU5QI3gx5RhQLr8UMMr1Prt5sXYE?=
- =?us-ascii?Q?gVGytjIiWsPMfOUtIjHEYuN+9pArSkvS7a6WVESDBms6+0Ka8aO3req42+yS?=
- =?us-ascii?Q?Qv2kE/dFZyg6CU8PnRBKbdsqiW/6x/aUOYzsVTgRcbgwOjGqQd1xsdudK3Ib?=
- =?us-ascii?Q?ekCTEs5Yho2Al+A1Vv6jsIYWxtqWqiLy0w4oiQGx4qZ20mxnYOTOFCtMEjwU?=
- =?us-ascii?Q?uQ=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: d610659e-f6c1-4f9b-2815-08dc5e49887e
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR11MB6053.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Apr 2024 19:15:10.0453
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Z7r5/wKh7ZbbcRTvhD1Oo9M03obAAh4QILCEQUuxsEBGDpWEsmCkuwBoOVEvrzUkD2b66Q8nvujznrjfsZZpyQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB6733
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <97d0f68f-63da-4f72-ae8d-89fbf9aadf62@gmail.com>
 
-On Tue, Apr 16, 2024 at 12:02:10PM -0700, Dixit, Ashutosh wrote:
-> On Tue, 16 Apr 2024 11:55:20 -0700, Rodrigo Vivi wrote:
-> >
+On Tue, Apr 16, 2024 at 09:00:05PM +0200, Maximilian Luz wrote:
+> On 4/16/24 3:30 PM, Guenter Roeck wrote:
+> > On Sat, Mar 30, 2024 at 12:24:01PM +0100, Maximilian Luz wrote:
 > 
-> Hi Rodrigo,
+> [...]
 > 
-> > > @@ -849,5 +849,26 @@ void i915_hwmon_register(struct drm_i915_private *i915)
-> > >
-> > >  void i915_hwmon_unregister(struct drm_i915_private *i915)
-> > >  {
-> > > -	fetch_and_zero(&i915->hwmon);
-> > > +	struct i915_hwmon *hwmon = fetch_and_zero(&i915->hwmon);
-> > > +	struct hwm_drvdata *ddat = &hwmon->ddat;
-> > > +	struct intel_gt *gt;
-> > > +	int i;
+> > > +static int ssam_tmp_get_name(struct ssam_device *sdev, u8 iid, char *buf, size_t buf_len)
+> > > +{
+> > > +	struct ssam_tmp_get_name_rsp name_rsp;
+> > > +	int status;
 > > > +
-> > > +	if (!hwmon)
-> > > +		return;
-> >
-> > "that's too late", we are going to hear from static analyzer tools.
-> >
-> > beter to move ddat = &hwmon->ddat; after this return.
+> > > +	status =  __ssam_tmp_get_name(sdev->ctrl, sdev->uid.target, iid, &name_rsp);
+> > > +	if (status)
+> > > +		return status;
+> > > +
+> > > +	/*
+> > > +	 * This should not fail unless the name in the returned struct is not
+> > > +	 * null-terminated or someone changed something in the struct
+> > > +	 * definitions above, since our buffer and struct have the same
+> > > +	 * capacity by design. So if this fails blow this up with a warning.
+> > > +	 * Since the more likely cause is that the returned string isn't
+> > > +	 * null-terminated, we might have received garbage (as opposed to just
+> > > +	 * an incomplete string), so also fail the function.
+> > > +	 */
+> > > +	status = strscpy(buf, name_rsp.name, buf_len);
+> > > +	WARN_ON(status < 0);
+> > 
+> > Not acceptable. From include/asm-generic/bug.h:
+> > 
+> >   * Do not use these macros when checking for invalid external inputs
+> >   * (e.g. invalid system call arguments, or invalid data coming from
+> >   * network/devices), and on transient conditions like ENOMEM or EAGAIN.
+> >   * These macros should be used for recoverable kernel issues only.
+> > 
 > 
-> Yeah, I worried a lot about it :/ But then finally decided (and verified)
-> that we are never actually dereferencing the (possibly NULL) pointer.
+> Hmm, I always interpreted that as "do not use for checking user-defined
+> input", which this is not.
+> 
 
-yeap, another acceptable approach is to simply remove this check entirely.
+"invalid data coming from network/devices" is not user-defined input.
 
+> The reason I added/requested it here was to check for "bugs" in how we
+> think the interface behaves (and our definitions related to it) as the
+> interface was reverse-engineered. Generally, when this fails I expect
+> that we made some mistake in our code (or the things we assume about the
+> interface), which likely causes us to interpret the received data as
+> "garbage" (and not the EC sending corrupted data, which it is generally
+> not due to CRC checking and validation in the SAM driver). Hence, I
+> personally would prefer if this blows up in a big warning with a trace
+> attached to it, so that an end-user can easily report this to us and
+> that we can appropriately deal with it. As opposed to some one-line
+> error message that will likely get overlooked or not taken as seriously.
 > 
-> But not sure about static analyzer tools, maybe you are right, I'll move
-> it.
-> 
-> > with that,
-> >
-> > Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> 
-> Thanks a lot :)
-> 
-> Ashutosh
-> 
-> >
-> > > +
-> > > +	for_each_gt(gt, i915, i) {
-> > > +		struct hwm_drvdata *ddat_gt = hwmon->ddat_gt + i;
-> > > +
-> > > +		if (ddat_gt->hwmon_dev) {
-> > > +			hwmon_device_unregister(ddat_gt->hwmon_dev);
-> > > +			ddat_gt->hwmon_dev = NULL;
-> > > +		}
-> > > +	}
-> > > +
-> > > +	if (ddat->hwmon_dev)
-> > > +		hwmon_device_unregister(ddat->hwmon_dev);
-> > > +
-> > > +	mutex_destroy(&hwmon->hwmon_lock);
-> > > +	kfree(hwmon);
-> > >  }
-> > > --
-> > > 2.41.0
-> > >
+
+I have heard the "This backtrace is absolutely essential" argument before,
+including the "will be fixed" part. Chromebooks report more than 500,000
+warning backtraces _every single day_. None of them is getting fixed.
+
+> If you still insist, I could change that to a dev_err() message. Or
+> maybe make the comment a bit clearer.
+
+dev_err() would be acceptable. WARN() or WARN_ON() are no-go.
+
+Guenter
