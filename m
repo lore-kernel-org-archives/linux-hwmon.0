@@ -1,214 +1,175 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2068.outbound.protection.outlook.com [40.107.117.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63755156225
-	for <linux-hwmon@vger.kernel.org>; Mon, 15 Apr 2024 23:35:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713224119; cv=none; b=OQ0hSdBCNZ2q1wQ2SvlBfJfdRxHmZeMBPFLI2Ii9A/vLSRukrujFpd3TUFPYwrVesy+R0ZVdrTGgf0NotnjYWB04OPZC3lbhUkSS6vshgUU1ZEf9tSvESpZcJ6uVYiSK/Y3DxGTv/1dpkWhYo1nFmFRVRsID+YSE+TYT8MUwL6c=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713224119; c=relaxed/simple;
-	bh=JGrATeWGnGH1+JEeNSndb/eMOGAdgGpWkRFY4jxr3/Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JS8kjRNG6MoZFh5onfn3XKutKeRvZTPoQtbtsJylXeCnmS0oTIJokHfPHS/6GzsRLhFXLdCB3GnjsLmRaquy/S8LsOGUnVkkEMLk6xAb6rPZeOxEsiZ7rFK7UJtluYWGVkC3nnWHsoTojj3CxJhb5nj/+PPQ+i+m0aqSPBE023k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=W1j9IjH6; arc=none smtp.client-ip=212.227.15.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 467124C7E;
+	Tue, 16 Apr 2024 01:48:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.117.68
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1713232132; cv=fail; b=kV0UqDzPArEoCL53H5aiqcJFVFUPki09IOJMsGKI1/K7EMjLkiAkpbeDlNUZ4eLYFjripxjULTiMM7fmbaIKFSu3G8Tg7bow45uZY66jE8SFllwpo9kDuULN/94WJTYMkuUtQI6VnOc5akIzRd3/fnm8PxchnhkHVeK2H3jHTLU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1713232132; c=relaxed/simple;
+	bh=mtcV5UWsq923Fxe2WzGnisiLmy06Hz5RGHKO+zZ4+LQ=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=ktH4twLU/ZkPnym0nVaeMgZ1NRNfPekmKaJhN3w3rjy8Azr0pvjjt7aRmKa85om9ApL7aL6cwU52JvAytAil3DHfTKbxEjDRZWegxnPDextBhw5Q74JziOcudKroMBDKDNH0dmR09R9HbfXjGtOXN6Hiy85SIUm/YG2QF7DN7Xo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wiwynn.com; spf=pass smtp.mailfrom=wiwynn.com; dkim=pass (2048-bit key) header.d=wiwynn.com header.i=@wiwynn.com header.b=pBHEJRJj; arc=fail smtp.client-ip=40.107.117.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wiwynn.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wiwynn.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="W1j9IjH6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1713224104; x=1713828904; i=w_armin@gmx.de;
-	bh=pmyP4CEy69Uj8iXjSnZkR04t7uBjJ8fSPa2KWueQbQ4=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=W1j9IjH6rPw3vQO8G2QC+YvF7IpAOWhh/CyowQqwGUWGgcMhrcEm5ApdwwiKt+1I
-	 B+4CQYxiYB+S5ZiI4ZzgjOCYs1cH1fdcP8A9KlNV3Ry7f55C7roxyaNDs6P/twNjj
-	 T8Gx28ayYHIEgLpnugDJTOKnQqaMHAQsCrjVlZfbbGQJm0C44HpxaEKkFwYlI8OdX
-	 ou5GPQeNBCrVEGFPYp3FDW7Yz47kX3wd5vcP8e0ZMpMBXkJ1lCqzVOva4Y6idy53f
-	 rQ57YNWeX9WeydGHPC1IZEaQqOCHy/fwLlkGqPCJHRsZxDhOJfS88q7cyCG6E6fXU
-	 ZkgA4PuHcYkFDexOdw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mulm5-1snW4x1Ywt-00rs8c; Tue, 16
- Apr 2024 01:35:04 +0200
-Message-ID: <020612d1-2e6b-4bd7-87a6-dbd31574fdd8@gmx.de>
-Date: Tue, 16 Apr 2024 01:35:02 +0200
+	dkim=pass (2048-bit key) header.d=wiwynn.com header.i=@wiwynn.com header.b="pBHEJRJj"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GGeka1BjmObIg41Mdm/H7s5ltWznxmDrzyIfdhfA0O0Gc/O7cY9P6nK9PGiW43Z8etcL0Vz+J9O6drKdBjpzXLzsXYj3lLsCgdyFVK9itHc88nVoeFC7FTMtyaIgrxxV8jrjhy6MnHkgdiFzjHOz0id9FHIgzZWQAE+fIyrUqlPGSJRe7jLUnJ2hw2kboCHbKFIyUMBjBu2B8DMOqj/S37Hk7HkSmkM2LFV5DiwIKCUA1qHuK8hus8pYXpaMF+iVgvelXYN0bPFgrS0/Jc5f320WBREUIvQ1iA3Vi2MJNThHpy9V8MkPb9wsR9KPh7nlC9UWDaExtjEbW5DsxbRtnQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hUHqNu+CIo0jYpq7+l7ljtl+KiKvOGBm4qW6O/x6sW4=;
+ b=VufAc1O6w0j9Y2rAxIzG2qL1J+2smeWZVpZM3pKFE80Oz/rC0hK24iUEuAg/6dcpypP0LJp6sJaU91vRsnMLdZOgBUGnBzH/DWLzj3rsMOfSHCmMj34vB59sbBtbEbjuSt50y+CVi22o9h6sQPA+Hh9VaHLL5Mufw1NSzoWZMAKQQNwQ8pNMkDetw2ssiqK7gZhb1EdXdRrz5nhDTcLcuEyeDbc9EbUz3Jo9k7GH8zkwmawEkLb/sAr4mL95S7f/5RU4E5EE0Jkv+G173i91a+S3z1kZPmyKVzeKVG0FZa2Svkx/uMREmoqcTn9TtcWWqn/rfXJjIx0LmXl0UsHGww==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wiwynn.com; dmarc=pass action=none header.from=wiwynn.com;
+ dkim=pass header.d=wiwynn.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hUHqNu+CIo0jYpq7+l7ljtl+KiKvOGBm4qW6O/x6sW4=;
+ b=pBHEJRJjDtD6Z631uOW824V2IyvL/AI3vN9OSr3nuW/L1MJoyePaYMacw4YN7MhlmZ3MOmQL8vfRFzlBm43j7uIcOkPnywNPUSaoJK5t4FVn3Fm1G4HGLvanxj9gUFP6N6G1ha1TApWTKoYZrwOEfhHde+kLTAyczSfSVDo0qplBP9kgJy1nwxCpEitotyztuTUUv4osvHXXbd9d7g37akZBKEn0AfBgW4NGK5TzZtqPEQcIeLXjH7aX2aOvbbkY0DvAjGs6bNcqsR1VcV5JAggcz1Xf+ndu8gRCzQxScT0S1Gj0hsEYz9W1BfsH0+f8eHARN2+Als9/+dADNr0lYA==
+Received: from TYZPR04MB5853.apcprd04.prod.outlook.com (2603:1096:400:1f3::5)
+ by PUZPR04MB6885.apcprd04.prod.outlook.com (2603:1096:301:111::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7452.50; Tue, 16 Apr
+ 2024 01:48:45 +0000
+Received: from TYZPR04MB5853.apcprd04.prod.outlook.com
+ ([fe80::9bcd:8112:b072:faca]) by TYZPR04MB5853.apcprd04.prod.outlook.com
+ ([fe80::9bcd:8112:b072:faca%5]) with mapi id 15.20.7452.049; Tue, 16 Apr 2024
+ 01:48:45 +0000
+From: Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>
+To: Guenter Roeck <linux@roeck-us.net>, Delphine_CC_Chiu/WYHQ/Wiwynn
+	<Delphine_CC_Chiu@wiwynn.com>
+CC: "patrick@stwcx.xyz" <patrick@stwcx.xyz>, Jean Delvare <jdelvare@suse.com>,
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v1] hwmon: max31790: revise the scale to write pwm
+Thread-Topic: [PATCH v1] hwmon: max31790: revise the scale to write pwm
+Thread-Index: AQHajIkmo9cWMbxIOkGH9cQc4G//sbFkmoSAgAWImEA=
+Date: Tue, 16 Apr 2024 01:48:45 +0000
+Message-ID:
+ <TYZPR04MB585382F43299E49FE1D2F2D0D6082@TYZPR04MB5853.apcprd04.prod.outlook.com>
+References: <20240412032559.3352846-1-Delphine_CC_Chiu@wiwynn.com>
+ <d82d5585-ec6c-4611-ad33-9c2d00745176@roeck-us.net>
+In-Reply-To: <d82d5585-ec6c-4611-ad33-9c2d00745176@roeck-us.net>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wiwynn.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYZPR04MB5853:EE_|PUZPR04MB6885:EE_
+x-ms-office365-filtering-correlation-id: 6d9c031e-0daf-4f9a-d496-08dc5db75a4c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ xQwl63vZAZBIbDA+CUlqKOHtZb38QZOLgfyoHKiqeD68tA6SHtR0O4J+f9BGXmklPowq0hTfyr80bOVRwb/4g66Id35SMM1GhvFGz8SYif024tOR38jsI8MCCItawT8RpCDHitNM7Xg6cjig/HjnwC/hWfG5gJnmJy4BYSN0doMV2wbV6jkAfHnNhDS8SHBCf+c1TfrUPNPp2BSCSs/in1BFW5SX5aVOt4l80O7G/SIAXUrXaWlGBGxn+uU6RdIJiOcdqW13m2Q97YTGvNUciWcjPYEKV1NblD6mHHvnGTA6jAiH55v9OwugoUm6bHCbtzkxINVOw1SG1LAZ7G+sWFAD+H1NkmvRdppcF2HMWRiCZHzG+a+uD/KvNygiDPevWlVMN9LQbn4RNdjIDQi5cB5VQH1rsLCDXbdWXUPcsNybGmK+IvRwMUwbYiAbc7i1Ra2uCMbVDNSsH1IMuLpXfpgLKTlIQ82xyqt7uLeh+IbziwejLaPm57OAtzzZOZuXLil1HCLaxpIUKaTMGTvrBZHbAKyvTdENxQlGzAuP7SP3FQLv2VRRPt0z5pdDwaW35Cr7QoxTmw0Vsd8YpH0GroYGY5hGjPCLrQVBbKILHO8sAMu0c93vCeL8gujFl9Evf9IwqsYCnabyPUV3iYEEPrUpeAx6A3MEzcQ+t0dkaUaKq0TZ4Yv9nmhkCUY7NKjmPg3Hyqav7p1vJvLXV+qswpZxt0isWsoc4x8ky7HYaMw=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR04MB5853.apcprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(1800799015)(376005)(38070700009);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?FkMbYOEUbbo4Shoydi2KppdX3fsxDAWqMbEK6JPK7xY5sw+dn9Yel1rgPNg7?=
+ =?us-ascii?Q?k+X6vtrEp+NKCakbDQGjVstQ+WnIqYBisxSnbRv98I2OqyPCDnB1kjXq2I4Y?=
+ =?us-ascii?Q?/5lZ6Ugc9QsT6HVYCd4CPomwmd3x1hk3mydxSCOx+ljbuiYGackMmjojCt8h?=
+ =?us-ascii?Q?a0ieig6AQ6P+wJXRSAM909AOzUKRkxz/FuUpLh8fGn/NVzb3Un9qGJkK9yF0?=
+ =?us-ascii?Q?hoiFIeu8B5l2iF/lVqRUdyGxljeIBSV7/vlAzLF8IFfriUGIRLo4vUQd0C3E?=
+ =?us-ascii?Q?bM1Gh9uDrN3qnTiyWp7xEE5GO2NcFGbzemi9wocDJSJCaqe1wMHmK36NnKFq?=
+ =?us-ascii?Q?Oq7hld3I4sN0WVggxvzYr59Halq9lvVWsNskfMRrBrVyfnkbi/V2+7p5DucL?=
+ =?us-ascii?Q?ZWspJ04y/s8E7XEuevdrA+gch8TPnnigz1MlRhriyqb3FRxaUBUnbaIvQF4c?=
+ =?us-ascii?Q?ZeZ2JkZYdqLWWHsBoIHGOAZAdyJDEIcKweov29LCtVxn297J7Wv6zTk2z+Eq?=
+ =?us-ascii?Q?BF4MCbtG0qgWU43RrC4qYwKbjSnXiSK3qZtXDddAd3YQuT4bCtWIz2IfWPj0?=
+ =?us-ascii?Q?Iy5ZGemkh9tnRRriVINLGVqwQF35+q52/QN+u3gp8imHo6vM+UYE9NrxZzyM?=
+ =?us-ascii?Q?hZiynqyDTcQQy5E2SvTpBy4CmAOutHZvuFXNog599uAg7Kw1Hz4165JGz89S?=
+ =?us-ascii?Q?DOLKpaK+YNR8ASjvgv79p+A21RjfA6UqdPokgBKAUkDW0kcGTOIuWUondZve?=
+ =?us-ascii?Q?B0cNTzeo8rpeleK+Mu4THall/cwFEod4zaHSwrbP8fK8Mll3GnQzP4xqjWRE?=
+ =?us-ascii?Q?9atBcUJ/OBWhJyMiAc2obeql3TsJO+Vrbll+zSPInoTq+NEwUY3jeqTjsv7Q?=
+ =?us-ascii?Q?fdsJTERVB9IeiPU9n2qXpIegNces7xqro0fqjEb3BrYn+pRYWVGBsminxz76?=
+ =?us-ascii?Q?hhgKdViQ7BPGBMELh4DOG9RLdexlNZ8cLjkhJd1P5kLJDUbZrA0Ls6UFQjBS?=
+ =?us-ascii?Q?PKvzkXeCWApQogX08+qHG7e0PtqmngLL3siSO2MSTNznGAWdmOJplBvDt79h?=
+ =?us-ascii?Q?C1yZfx/OKSnMjae3jze72lQxiRzz8YR8OV+meAGJdyQ8teKTKCunQQHe3fIU?=
+ =?us-ascii?Q?UCBt4cTETC7LHMLaEzwVKx3rxfL0URfaEnPM+HI9roWcYtwR2nuGSdpS91rY?=
+ =?us-ascii?Q?U+oUA7lqKbJN6uBAKMmvHK8mhii75DHz1n9jE4VgDJ/QUC4rJHeT754Opekx?=
+ =?us-ascii?Q?+9M35CSg9kmK5CpT3cHOc70+L4mT9CQfhubIUrE5jbnIec+BLwtG17bWtfmH?=
+ =?us-ascii?Q?zJISkdNJ1+ntgVWucnPgVldZusXDfoVM4aNIIiNMrahBbNgDGg7XgcPbf6/Z?=
+ =?us-ascii?Q?C3UCcS0GX5kFQmoO212RKSH1antlO4Y9fW0pwG0NZ899dgOwO8a1adhjd5ma?=
+ =?us-ascii?Q?YHWjoC7bnhK3xsycbrJ/L4aO3rDoMgSUNbFYaJrIwE2Y9htAy/kdxNH+njFv?=
+ =?us-ascii?Q?E8I1cYshppkB48/k/7bMIINCkiiCs+7uYtZHuh6eAX8jxbs7iJ2kWVkpfVej?=
+ =?us-ascii?Q?JL9HS/ZMMrkmOnGTrYqd1mteCa57PDdJ3lIQTnBN?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] drm/i915/hwmon: Get rid of devm
-To: Ashutosh Dixit <ashutosh.dixit@intel.com>, intel-gfx@lists.freedesktop.org
-Cc: Badal Nilawar <badal.nilawar@intel.com>, Andi Shyti
- <andi.shyti@intel.com>, =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?=
- <ville.syrjala@linux.intel.com>, linux-hwmon@vger.kernel.org,
- dri-devel@lists.freedesktop.org
-References: <20240415223612.738535-1-ashutosh.dixit@intel.com>
-Content-Language: en-US
-From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <20240415223612.738535-1-ashutosh.dixit@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:GhwclRSw6uw2wiE9i9/X26NsE6ctQeALOum9cO8peT7yGbZMg0/
- JpdGPYYjvOgyyHFWEAYlCrYuviHaIolXb1tCOHhNpevSpXk5eHbc2guPc/W2Z7A00LE/4lR
- KBvJvRIOWkqERqBbsJyZ5EkT1FnhI7hPW73hb2ZMy8pFcGAFlsGNhk/DmZP0IfCvBoQRIC5
- etLWABmwKUoY2sx1Tf/3w==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:39UMfrACpkQ=;Nxvl/d83CXve9SVn4lI8ejM+FCx
- IDCTWvmOihpWpoooOYU5ed5+5XJhHlu7xM4OPN+NleSt4n1BRubRUT016ZFgDqO0EAQC8f3ig
- 3HYJ0u9Ex01ongkbm6PKgDP/UyCOsXptjSzz243vSMg2kMXOZ4KPXyHNz85jB1dxT47TI0/sp
- 4NV1TUK3AguiMLK/8B0/zAwKJAERykqQH7pnQr3p9EJG+F0KrBnGuC5ZIbcgwtCxZ7QBNqF7q
- JfHR5vdgDT496mOeFWgdX1b9J8snMGrCENCJzaC5xHas/lSgYnV0BUMm1rQ0i3JL8xWUpMPOS
- 3HErTh9omTbHDKCMOTeLylwEZ1gRa6DpvpxJznr3Lq2vQOK/wAbDjU/Msu5QAROW4meYcjIfL
- SHGq04I2DCfkvx98okwzO7rr4pT9owKKIktxJqtBAIYu1OvGygaE+am+7nzPjaLgu9UJ1e7aC
- jbFtn6+7jQZm/2vmTxIYftD4OR4C9Scct6kBDh0y/XykJAELgJoAcrnsun+l1nr8KIJPIE3w+
- NjdlJRqHXdDfIgNWOQBGJDSoNtD4560clklZiM3ccitU046CTHV3APGTlK213+QOW8kyN9vvG
- ZS+d9RgcNByqUnGT5MS93tJAtRujBSRC70YkXcPGbppfqKj6DSucaRpxFNq1NQyCg8BL8sXhr
- BhCR8SujhXNrhpqsQpCKhtbJEKrkjkTXtg6UON8UO+xRDIkZcI8OsVyfu3Bjy3Rmonk5Qy+cK
- tuOiEuXWIOEPXCJ/pIoBUl3JU33T5B1JNvEECkaRE8pI1fiZLzZ1t/edEcglrIhDGOmXvEuAb
- JXJA7St151+xWeWopODEriri6PQvCIlpNBzYIaCwiEF6w=
+X-OriginatorOrg: wiwynn.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR04MB5853.apcprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6d9c031e-0daf-4f9a-d496-08dc5db75a4c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Apr 2024 01:48:45.4964
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: da6e0628-fc83-4caf-9dd2-73061cbab167
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: aKUSf3Q4gbm7qMpzB10+ixHgwVd8p6pZ2A+wmTTIMQbCaFQpT/fOURSWgCTZriTEqYQCFIHV1xNYT45cgZhHvg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PUZPR04MB6885
 
-Am 16.04.24 um 00:36 schrieb Ashutosh Dixit:
 
-> When both hwmon and hwmon drvdata (on which hwmon depends) are device
-> managed resources, the expectation, on device unbind, is that hwmon will=
- be
-> released before drvdata. However, in i915 there are two separate code
-> paths, which both release either drvdata or hwmon and either can be
-> released before the other. These code paths (for device unbind) are as
-> follows (see also the bug referenced below):
->
-> Call Trace:
-> release_nodes+0x11/0x70
-> devres_release_group+0xb2/0x110
-> component_unbind_all+0x8d/0xa0
-> component_del+0xa5/0x140
-> intel_pxp_tee_component_fini+0x29/0x40 [i915]
-> intel_pxp_fini+0x33/0x80 [i915]
-> i915_driver_remove+0x4c/0x120 [i915]
-> i915_pci_remove+0x19/0x30 [i915]
-> pci_device_remove+0x32/0xa0
-> device_release_driver_internal+0x19c/0x200
-> unbind_store+0x9c/0xb0
->
-> and
->
-> Call Trace:
-> release_nodes+0x11/0x70
-> devres_release_all+0x8a/0xc0
-> device_unbind_cleanup+0x9/0x70
-> device_release_driver_internal+0x1c1/0x200
-> unbind_store+0x9c/0xb0
->
-> This means that in i915, if use devm, we cannot gurantee that hwmon will
-> always be released before drvdata. Which means that we have a uaf if hwm=
-on
-> sysfs is accessed when drvdata has been released but hwmon hasn't.
->
-> The only way out of this seems to be do get rid of devm_ and release/fre=
-e
-> everything explicitly during device unbind.
->
-> v2: Change commit message and other minor code changes
->
-> Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/10366
-> Signed-off-by: Ashutosh Dixit <ashutosh.dixit@intel.com>
-> ---
->   drivers/gpu/drm/i915/i915_hwmon.c | 41 +++++++++++++++++++++++--------
->   1 file changed, 31 insertions(+), 10 deletions(-)
->
-> diff --git a/drivers/gpu/drm/i915/i915_hwmon.c b/drivers/gpu/drm/i915/i9=
-15_hwmon.c
-> index 8c3f443c8347..46c24b1ee6df 100644
-> --- a/drivers/gpu/drm/i915/i915_hwmon.c
-> +++ b/drivers/gpu/drm/i915/i915_hwmon.c
-> @@ -792,7 +792,7 @@ void i915_hwmon_register(struct drm_i915_private *i9=
-15)
->   	if (!IS_DGFX(i915))
->   		return;
->
-> -	hwmon =3D devm_kzalloc(dev, sizeof(*hwmon), GFP_KERNEL);
-> +	hwmon =3D kzalloc(sizeof(*hwmon), GFP_KERNEL);
->   	if (!hwmon)
->   		return;
->
-> @@ -818,10 +818,10 @@ void i915_hwmon_register(struct drm_i915_private *=
-i915)
->   	hwm_get_preregistration_info(i915);
->
->   	/*  hwmon_dev points to device hwmon<i> */
-> -	hwmon_dev =3D devm_hwmon_device_register_with_info(dev, ddat->name,
-> -							 ddat,
-> -							 &hwm_chip_info,
-> -							 hwm_groups);
-> +	hwmon_dev =3D hwmon_device_register_with_info(dev, ddat->name,
-> +						    ddat,
-> +						    &hwm_chip_info,
-> +						    hwm_groups);
->   	if (IS_ERR(hwmon_dev)) {
->   		i915->hwmon =3D NULL;
 
-Hi,
-
-you need to free hwmon here, since it is not managed by devres anymore.
-
->   		return;
-> @@ -838,10 +838,10 @@ void i915_hwmon_register(struct drm_i915_private *=
-i915)
->   		if (!hwm_gt_is_visible(ddat_gt, hwmon_energy, hwmon_energy_input, 0)=
-)
->   			continue;
->
-> -		hwmon_dev =3D devm_hwmon_device_register_with_info(dev, ddat_gt->name=
-,
-> -								 ddat_gt,
-> -								 &hwm_gt_chip_info,
-> -								 NULL);
-> +		hwmon_dev =3D hwmon_device_register_with_info(dev, ddat_gt->name,
-> +							    ddat_gt,
-> +							    &hwm_gt_chip_info,
-> +							    NULL);
->   		if (!IS_ERR(hwmon_dev))
->   			ddat_gt->hwmon_dev =3D hwmon_dev;
->   	}
-> @@ -849,5 +849,26 @@ void i915_hwmon_register(struct drm_i915_private *i=
-915)
->
->   void i915_hwmon_unregister(struct drm_i915_private *i915)
->   {
-> -	fetch_and_zero(&i915->hwmon);
-> +	struct i915_hwmon *hwmon =3D fetch_and_zero(&i915->hwmon);
-
-Why is fetch_and_zero() necessary here?
-
-Thanks,
-Armin Wolf
-
-> +	struct hwm_drvdata *ddat =3D &hwmon->ddat;
-> +	struct intel_gt *gt;
-> +	int i;
-> +
-> +	if (!hwmon)
-> +		return;
-> +
-> +	for_each_gt(gt, i915, i) {
-> +		struct hwm_drvdata *ddat_gt =3D hwmon->ddat_gt + i;
-> +
-> +		if (ddat_gt->hwmon_dev) {
-> +			hwmon_device_unregister(ddat_gt->hwmon_dev);
-> +			ddat_gt->hwmon_dev =3D NULL;
-> +		}
-> +	}
-> +
-> +	if (ddat->hwmon_dev)
-> +		hwmon_device_unregister(ddat->hwmon_dev);
-> +
-> +	mutex_destroy(&hwmon->hwmon_lock);
-> +	kfree(hwmon);
->   }
+> -----Original Message-----
+> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
+> Sent: Friday, April 12, 2024 9:03 PM
+> To: Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>
+> Cc: patrick@stwcx.xyz; Jean Delvare <jdelvare@suse.com>;
+> linux-hwmon@vger.kernel.org; linux-kernel@vger.kernel.org
+> Subject: Re: [PATCH v1] hwmon: max31790: revise the scale to write pwm
+>=20
+>   Security Reminder: Please be aware that this email is sent by an extern=
+al
+> sender.
+>=20
+> On Fri, Apr 12, 2024 at 11:25:58AM +0800, Delphine CC Chiu wrote:
+> > Since the value for PWMOUT Target Duty Cycle register is a 9 bit
+> > left-justified value that ranges from 0 to 511 and is contained in 2
+> > bytes.
+> >
+> > There is an issue that the LSB of the 9 bit would always be zero if it
+> > just left shift 8 bit for the value that write to PWMOUT Target Duty
+> > Cycle register.
+> >
+> > Therefore, revise the scale of the value that was writen to pwm input
+> > from 255 to 511 and modify the value to left-justified value.
+> >
+>=20
+> The only difference is that it writes 511 instead of 510. All other value=
+s are the
+> same. I am not sure if that is really worth the trouble. It would have ma=
+de a
+> little more sense to me if you had used DIV_ROUND_CLOSEST(), but you didn=
+'t
+> do that. As it is, I really don't understand the point. If it is really i=
+mportant to
+> write 511 instead of 510, the commit description should explain that and =
+not
+> talk about the last bit always being zero (which it still is after this p=
+atch except,
+> again, when writing 511 instead of 510).
+>=20
+> Thanks,
+> Guenter
+>=20
+Hi Guenter,
+Thanks for your reviewing.
+I'll revise the code to use DIV_ROUND_CLOSEST().
+The reason why we add this patch is that we saw an issue that the PWM signa=
+l we get with oscilloscope would not be on consistently if we set PWM to 10=
+0% to the driver, which would fail our hardware testing.
+I'll describe more detail in the commit message.
+Thanks.
