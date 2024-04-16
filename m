@@ -1,139 +1,143 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4985412C522;
-	Tue, 16 Apr 2024 14:16:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A86E130AE6;
+	Tue, 16 Apr 2024 17:09:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713276986; cv=none; b=HX480LhN3VLQR3z26Ggd3Yeu4vgNzbRstn5B3UJxqWfT0dGWCu64nk8noKd5NamvhgUnYNTkix2M7vyurVVh+VibLrWS4cj0yL4bfZGeKTx9my7j0JSTyE1QyRXtMSxj/LQP/HNDAb1m2oJ4UzCGr4RN/0Cp6EKngN4leziV0To=
+	t=1713287373; cv=none; b=kkjBRdpHkFSMs6bSeVFP12pQZUiVHeP7CtvoP6dZxp7HGcBOCG4OS+en9ar73pWSa6ljb3zsbQptkWRmsXJpE14SR6E5XpIJLf3ZbUxDNVOJPTyv/QWlNx0XtRsAWlHPkuD/z/IjIt8h75EtE5412He6q2FZbhgUCKySl5tzLvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713276986; c=relaxed/simple;
-	bh=6Jaf2Kt6CfHFDNtbbwyaAm7illRxT1JxE79sD2MJt5w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ryynALZxeN5kX8OQLhn2UC3Q/e0UPpGuOasCSmbr2FCjtEBeuYyxblTQZWU1Bkk8xhN7WuX5BZJdO8Jd65leKhIXztJ52xxml68fRQ9J6lDJAHRf1Y86o2zm2ArqDV05aIJGCgLvGOlUDCzTGJ3VPr3gwEI0ValFWGMV+9MmlpM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EtL4/4Uy; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1713287373; c=relaxed/simple;
+	bh=m/Tcz8R++mISom9mrEtKMuE4r704qsJcDo93SFLFcY0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=GHY7KDnMCvyYQ2MQ+6miG04qjXSua84d7Fbvw9qKwoTJ2Zyjc8yuDgj5SUt1iXhFP06TRDIFOjBXlUctW5vfe2ToH1Iyi6rBXEr+F+++gWWXKyidVdvm1z2G+bbn3UTwhcalrRewWNOnEdrjMWPUlfuR6vbfp5r1iQKjqJQyR7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=BTFw3A44; arc=none smtp.client-ip=198.47.23.249
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EtL4/4Uy"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6ed11782727so3776100b3a.1;
-        Tue, 16 Apr 2024 07:16:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713276984; x=1713881784; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/R7TgmFidNar+edYlAImO4xkO4YUQu8Ma2Hm0LsrhDM=;
-        b=EtL4/4Uy2233xEBz6l9xQdZBJ19H6CKK4OPdmGPZCeThv/ltCo3OHeVDJTUy64a7UF
-         o44blWW7+GHWiUv5id1GbcMT/J41Ly+XcvG7VgyizQkranrsm+h/PX/8rlt0ctzdfUkB
-         g3cekeG6+VvCg9x/mfZf/y6Bx460HUd68UBNZRXglJQXni7NhHWpMaHjEo1i5yS9pZC9
-         wiBd74N+QcSoYIOqT+JvQ28aNaStXUPuyK2+1pmsXxHhwJ3BACp/Lnvx/YkZHM6iiuSP
-         /F6nQQNzD3ZBtvl+gtMi0XO+32ic6fvbZns3wj8frH8rocfkz80wEwH+W/QuFuevjV2i
-         DOuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713276984; x=1713881784;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/R7TgmFidNar+edYlAImO4xkO4YUQu8Ma2Hm0LsrhDM=;
-        b=lm97in5GOMjGFqgquszfVTwTkpno6BH+wf240oIocW4qeJMuqTdRVjNyoADHjN93PY
-         3oN7a7aGMf8Ffhc0LIqAkEtYiMZTVGWj/kqbzGyE6nXR2PBYjdS/C6oGQQI4dKkhpz99
-         jwZZ/B9fzTheXjLbwCiFwDCz8IgV2f74D0gFrVHp8oq1jYl8Z3dORCyLCsiCEmESeyXG
-         LltrvhvnoTlRXWPeZOHWGdY8u99v02Q3GKl6JZ9YE/htPmgE+CQ3BEcyj5uLB5PL12Bw
-         1SGGfuClDiEvIcOhqNCBFz9wgF+KgwJ1sY4e/7wHEThB1ykd6jEk44mm8l2idwGHaGXY
-         RENQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUxbtvyB/gZEXpi3XSj4T6rcR8+CRtlb8PrezHng/DrUQ28/fsGd3BhHa2cDsCoE1YxKNgCrqk9QLp8kOrXnCtGTzobeTh5gEIUuAPNdj03wkprMA3UuEOPd1brY7A5QJdYqb56wCfco4k=
-X-Gm-Message-State: AOJu0YzdR+ibW3r8N1MatOc41jh/Kg8Rq5meoBJGaYHb+KoEr+AWJLDx
-	QBDsh50dmoeua7qM4HAIzIKiPaPoXgxuTPwCdBZ7Tqg/euAv9ZBuUhjufw==
-X-Google-Smtp-Source: AGHT+IFutIzf1ZvInZm2HCMbqWYPLrJH7r2Y6yCZ2WK+okAAmqwcjfGGSJAdN4ydw0B/49+RosV6XA==
-X-Received: by 2002:a05:6a00:244e:b0:6e6:970f:a809 with SMTP id d14-20020a056a00244e00b006e6970fa809mr15436088pfj.20.1713276984349;
-        Tue, 16 Apr 2024 07:16:24 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id ge7-20020a056a00838700b006e567c81d14sm8956774pfb.43.2024.04.16.07.16.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Apr 2024 07:16:23 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 16 Apr 2024 07:16:22 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Andrew Davis <afd@ti.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Juerg Haefliger <juergh@proton.me>,
-	Riku Voipio <riku.voipio@iki.fi>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/31] Remove use of i2c_match_id in HWMON
-Message-ID: <cd6ae1f7-33e7-4e1b-bac8-c5566b22b392@roeck-us.net>
-References: <20240403203633.914389-1-afd@ti.com>
- <0e43aa83-2e02-49e2-96b8-24cac0362a7b@roeck-us.net>
- <77b2f8ce-0b71-4a7a-81bc-a64a1af3566d@ti.com>
- <fcafe904-383c-49c0-b576-81cbcde045c5@roeck-us.net>
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="BTFw3A44"
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 43GH8pt2048641;
+	Tue, 16 Apr 2024 12:08:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1713287331;
+	bh=g7hmgb1jOpj4IRDr/inmA1TTBWR//ZWwh/OsLMd5UZ8=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=BTFw3A44FKCKcc4mtAio6BztildVoS9yqe6eMWVDz4sb++KRfWrgX6/WIl2h7+5SQ
+	 ngzF2hmRCS0RDg6lJaugBdRNXu05zL+4/C0LsRgtjd8YAX273DzofixYxHUdmDSWRr
+	 cCjyfclJtZ5YxTnG2ApiOWfCMo86uGpiaepHNX1w=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 43GH8pk2003997
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Tue, 16 Apr 2024 12:08:51 -0500
+Received: from lewvowa01.ent.ti.com (10.180.75.79) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 16
+ Apr 2024 12:08:51 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by lewvowa01.ent.ti.com
+ (10.180.75.79) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2507.34; Tue, 16 Apr
+ 2024 12:08:51 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 16 Apr 2024 12:08:51 -0500
+Received: from [10.249.42.149] ([10.249.42.149])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 43GH8oNF012621;
+	Tue, 16 Apr 2024 12:08:50 -0500
+Message-ID: <fce93a8b-7225-4775-b265-d283a863f969@ti.com>
+Date: Tue, 16 Apr 2024 12:08:50 -0500
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fcafe904-383c-49c0-b576-81cbcde045c5@roeck-us.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/31] Remove use of i2c_match_id in HWMON
+To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>
+CC: Jean Delvare <jdelvare@suse.com>, Juerg Haefliger <juergh@proton.me>,
+        "Riku Voipio" <riku.voipio@iki.fi>, <linux-hwmon@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20240403203633.914389-1-afd@ti.com>
+ <0e43aa83-2e02-49e2-96b8-24cac0362a7b@roeck-us.net>
+ <77b2f8ce-0b71-4a7a-81bc-a64a1af3566d@ti.com>
+ <fcafe904-383c-49c0-b576-81cbcde045c5@roeck-us.net>
+ <cd6ae1f7-33e7-4e1b-bac8-c5566b22b392@roeck-us.net>
+Content-Language: en-US
+From: Andrew Davis <afd@ti.com>
+In-Reply-To: <cd6ae1f7-33e7-4e1b-bac8-c5566b22b392@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-On Mon, Apr 08, 2024 at 04:49:43AM -0700, Guenter Roeck wrote:
-> On Wed, Apr 03, 2024 at 05:06:43PM -0500, Andrew Davis wrote:
-> > On 4/3/24 4:30 PM, Guenter Roeck wrote:
-> > > On Wed, Apr 03, 2024 at 03:36:02PM -0500, Andrew Davis wrote:
-> > > > Hello all,
-> > > > 
-> > > > Goal here is to remove the i2c_match_id() function from all drivers.
-> > > > Using i2c_get_match_data() can simplify code and has some other
-> > > > benefits described in the patches.
-> > > > 
-> > > 
-> > > The return value from i2c_match_id() is typically an integer (chip ID)
-> > > starting with 0. Previously it has been claimed that this would be
-> > > unacceptable for i2c_get_match_data(), and chip IDs were changed to start
-> > > with 1. Commit ac0c26bae662 ("hwmon: (lm25066) Use i2c_get_match_data()")
-> > > is an example. Either this series is wrong, or the previous claim that
-> > > chip IDs (i.e., the content of .driver_data or .data) must not be 0 was
-> > > wrong. Which one is it ? I find it very confusing that the chip type for
-> > > some drivers now starts with 1 and for others with 0. Given that, I am not
-> > > inclined to accept this series unless it is explained in detail why the
-> > > chip type enum in, for example, drivers/hwmon/pmbus/lm25066.c has to start
-> > > with one but is ok to start with 0 for all drivers affected by this
-> > > series. Quite frankly, even if there is some kind of explanation, I am not
-> > > sure if I am going to accept it because future driver developers won't
-> > > know if they have to start chip types with 0 or 1.
-> > > 
-> > 
-> > i2c_get_match_data() has no issue with returning 0 when the driver_data
-> > for the match is also 0 (as it will be when the chip type is 0 here).
-> > 
-> > The confusion might be that returning 0 is also considered a failure code.
-> > This is a problem in general with returning errors in-band with data, and
-> > that is nothing new as i2c_match_id() does the same thing.
-> > 
-> > Actually, i2c_match_id() is worse as most of these drivers take the result
-> > from that and immediately dereference it. Meaning if i2c_match_id() ever did
-> > failed to find a match, they would crash before this series. Luckily i2c_match_id()
-> > can't fail to find a match as far as I can tell, and so for the same reason
-> > neither can i2c_get_match_data(), which means if 0 is returned it is always
-> > because the chip ID was actually 0.
-> > 
-> > At some point we should switch all the *_get_match_data() functions to
-> > return an error code and put the match if found as a argument pointer.
-> > Forcing everyone to changing the chip type to avoid 0 as done in
-> > ac0c26bae662 is the wrong way to fix an issue like that.
-> > 
+On 4/16/24 9:16 AM, Guenter Roeck wrote:
+> On Mon, Apr 08, 2024 at 04:49:43AM -0700, Guenter Roeck wrote:
+>> On Wed, Apr 03, 2024 at 05:06:43PM -0500, Andrew Davis wrote:
+>>> On 4/3/24 4:30 PM, Guenter Roeck wrote:
+>>>> On Wed, Apr 03, 2024 at 03:36:02PM -0500, Andrew Davis wrote:
+>>>>> Hello all,
+>>>>>
+>>>>> Goal here is to remove the i2c_match_id() function from all drivers.
+>>>>> Using i2c_get_match_data() can simplify code and has some other
+>>>>> benefits described in the patches.
+>>>>>
+>>>>
+>>>> The return value from i2c_match_id() is typically an integer (chip ID)
+>>>> starting with 0. Previously it has been claimed that this would be
+>>>> unacceptable for i2c_get_match_data(), and chip IDs were changed to start
+>>>> with 1. Commit ac0c26bae662 ("hwmon: (lm25066) Use i2c_get_match_data()")
+>>>> is an example. Either this series is wrong, or the previous claim that
+>>>> chip IDs (i.e., the content of .driver_data or .data) must not be 0 was
+>>>> wrong. Which one is it ? I find it very confusing that the chip type for
+>>>> some drivers now starts with 1 and for others with 0. Given that, I am not
+>>>> inclined to accept this series unless it is explained in detail why the
+>>>> chip type enum in, for example, drivers/hwmon/pmbus/lm25066.c has to start
+>>>> with one but is ok to start with 0 for all drivers affected by this
+>>>> series. Quite frankly, even if there is some kind of explanation, I am not
+>>>> sure if I am going to accept it because future driver developers won't
+>>>> know if they have to start chip types with 0 or 1.
+>>>>
+>>>
+>>> i2c_get_match_data() has no issue with returning 0 when the driver_data
+>>> for the match is also 0 (as it will be when the chip type is 0 here).
+>>>
+>>> The confusion might be that returning 0 is also considered a failure code.
+>>> This is a problem in general with returning errors in-band with data, and
+>>> that is nothing new as i2c_match_id() does the same thing.
+>>>
+>>> Actually, i2c_match_id() is worse as most of these drivers take the result
+>>> from that and immediately dereference it. Meaning if i2c_match_id() ever did
+>>> failed to find a match, they would crash before this series. Luckily i2c_match_id()
+>>> can't fail to find a match as far as I can tell, and so for the same reason
+>>> neither can i2c_get_match_data(), which means if 0 is returned it is always
+>>> because the chip ID was actually 0.
+>>>
+>>> At some point we should switch all the *_get_match_data() functions to
+>>> return an error code and put the match if found as a argument pointer.
+>>> Forcing everyone to changing the chip type to avoid 0 as done in
+>>> ac0c26bae662 is the wrong way to fix an issue like that.
+>>>
+>>
+>> That doesn't really answer my question. It does not explain why it was
+>> necessary to change the chip ID base for other drivers from 0 to 1,
+>> but not for the drivers in this series. I fail to see the difference,
+>> and I have to assume that others looking into the code will have the
+>> same problem.
+>>
 > 
-> That doesn't really answer my question. It does not explain why it was
-> necessary to change the chip ID base for other drivers from 0 to 1,
-> but not for the drivers in this series. I fail to see the difference,
-> and I have to assume that others looking into the code will have the
-> same problem.
+> Just to follow up: I am not going to apply this series until I understand
+> why the chip ID range had to be changed from 0.. to 1.. for other hardware
+> monitoring drivers (lm25066, nct6775) but not for the drivers changed
+> in this series. I have been telling people that chip IDs need to start
+> with 1 if i2c_get_match_data() is used. I'll need understand when and
+> why this is needed to be able to provide guidance to other developers.
 > 
 
-Just to follow up: I am not going to apply this series until I understand
-why the chip ID range had to be changed from 0.. to 1.. for other hardware
-monitoring drivers (lm25066, nct6775) but not for the drivers changed
-in this series. I have been telling people that chip IDs need to start
-with 1 if i2c_get_match_data() is used. I'll need understand when and 
-why this is needed to be able to provide guidance to other developers.
+I was hoping one of those patch authors that made those 0->1 changes
+would speak up (+Rob), I can't know what their thinking was, only
+offer my best guess as I did above.
 
-Guenter
+Andrew
+
+> Guenter
