@@ -1,186 +1,165 @@
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2136.outbound.protection.outlook.com [40.107.92.136])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D00558468;
-	Tue, 16 Apr 2024 05:27:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.136
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713245240; cv=fail; b=ConvZkot2XM2AtdCvmEm9CBe/02yLsZEU747pm3FoE9bIoDeR0U6/6nj1IsYJLtA7wFDT+1ad8n0KDN2GhX/WECmTB9C2CkY9pzPZA9Eh46zIbKXKIl6t6rqvwSsxNRTb6B11w8JNbALBVnL2LHI64pm/6Bu//mp1i9u1aO2LgU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713245240; c=relaxed/simple;
-	bh=pwSrR8dv7CoDbf9w162BKCl+578zLXRLWMFsBKT+iYg=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=A/mD/Ar8FxKmasm02N7oJg2dDhc6CgWDc+Gn3MZzMWY3qnLI/w7TZ7AMfaoBev2ntB5y6wPuXkQA1VJCv9bqr28znCCUZZasHIm9fXplpAyc9/j7Bw9gk7S4GJzZsujCxARFNmVnepmUMJJGToR7V3llKVuLBOuTpAjbcxAxrnQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amperemail.onmicrosoft.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=fail (0-bit key) header.d=amperemail.onmicrosoft.com header.i=@amperemail.onmicrosoft.com header.b=vGaUhvh3 reason="key not found in DNS"; arc=fail smtp.client-ip=40.107.92.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amperemail.onmicrosoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=os.amperecomputing.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA2F36F06D
+	for <linux-hwmon@vger.kernel.org>; Tue, 16 Apr 2024 07:44:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1713253461; cv=none; b=YYCYT+U3thy9QHTYc3ooR/PIFR/mELf8IgtGjaOgqBlajbwqq3sP3nc5VxTkgDk3z74NF3Eby/NEztpMsZaKHRkKLfGoogRkCwLxMNp538yFRi1MnQeOl80FJZ+TLZxKcXEc4v12vshmwL5n0XIQZK5AT5oKahd7OsWNXeJejv0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1713253461; c=relaxed/simple;
+	bh=K1q1+4LndZnbflXCqVazF7Av2lnURkJBr8LQJjdOjes=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=A8YqJkGSwpIJBnsQ2IhnVJXb6KSyYOv4kovKVzXDejEoF2styMmS2Kjk7YQLGjdRbolTKC4d/hke9VH1lCNQrijnxn2O3rm2Us3nb13iEo47vRZ3nEg1OsUWIqilu8KwRSSwu5ArPBWzTgOuND77b1LiqqagjGMzIONFqJiRGbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RmBY2CeL; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=amperemail.onmicrosoft.com header.i=@amperemail.onmicrosoft.com header.b="vGaUhvh3"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WpRrw/GxdoWqJ10FBxecEcPIcnRd9OV9FKkx2/drSGkTYJu5Tpl2aLHZO3nl4/QYWzDdgueMHAxrMHluB/vffbZcYvVxEYc6fTBhnLtuYD8gDuJ81Un01/BBDCkqVQFsTs6IuhqzPs8AK7mnVVx+jT+YB6WfLiPwHuLpLn9FZZrs1tILMYkCKEjLKVcWo+wLz7DANc86a8DKifsTZKX53wUiZTwD8tMgZgRjm9AyUGEYl0Fz8rBk2CAbTZoiR0rtCXQxHJyD+IYfd1j8z+FcwYSEeNhvMhvHG5YPzrJ5GMyQKbCBuRTgKEVWcVeIWPyN4Hqk/6ZjXUS61vTli8S1YA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7qVIdD2bQvBDcCJfiAvDy9yVXrGvZ2DHZIGsXp53+3M=;
- b=fc5qbrd3rk8vtOQrQm4Av0ItM6h4cBZylqAaXdFui9exmM5a1UWhYTiTVHbvUzWo46Wwn8qdEpjPvGJdhWbIXQ864OK61pSvK3BU1qU5Zejj/KKwCDjQE93JRlwD8q9GxdZtNh+twGpslWUHdLK8o4hF7JYYuQp7e9qLgzfxx8fabbILieSvHUo9rtxTOZq3uXzsMxH9MYPdO+Y0Z3fqcWpNXSBiG6paIcqThM00qWNbfae01vfnIA7Oc7DBugO+Ls3bt1kEyK4sJi5xJ9LD6fkL40Lubcvmp5DK3TQH0Usvv6xCvRDAU4atf+pAgXvhvZP7mBemqQ7cUhqjN5nJSg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=amperemail.onmicrosoft.com; dkim=pass
- header.d=amperemail.onmicrosoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amperemail.onmicrosoft.com; s=selector1-amperemail-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7qVIdD2bQvBDcCJfiAvDy9yVXrGvZ2DHZIGsXp53+3M=;
- b=vGaUhvh39JzM6WthBonWtwmfTGZCTI38gHegB2QX886xV5D2XRs+rFQ+qiZJKl3IRBR0zuge0Pn53YcfcfABFe5GF0fTbdh471UY3I+yjZTU4zDmGH8tGLPDE1xpFT9PdLG0xG/msKW10yhKHwmZL+9O0vUSnYBkYDP1/vCeFzY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amperemail.onmicrosoft.com;
-Received: from DM6PR01MB5947.prod.exchangelabs.com (2603:10b6:5:1dd::12) by
- DM8PR01MB7096.prod.exchangelabs.com (2603:10b6:5:315::15) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7452.50; Tue, 16 Apr 2024 05:27:12 +0000
-Received: from DM6PR01MB5947.prod.exchangelabs.com
- ([fe80::b557:13cd:8a29:ae08]) by DM6PR01MB5947.prod.exchangelabs.com
- ([fe80::b557:13cd:8a29:ae08%4]) with mapi id 15.20.7452.049; Tue, 16 Apr 2024
- 05:27:11 +0000
-Message-ID: <9bc38f67-01e0-4a38-8db8-4086a215b474@amperemail.onmicrosoft.com>
-Date: Tue, 16 Apr 2024 12:27:01 +0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/3] hwmon: (max31790): Support config PWM output
- becomes TACH
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
- Chanh Nguyen <chanh@os.amperecomputing.com>, Jean Delvare
- <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Justin Ledford
- <justinledford@google.com>, devicetree@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- OpenBMC Maillist <openbmc@lists.ozlabs.org>,
- Open Source Submission <patches@amperecomputing.com>
-Cc: Phong Vo <phong@os.amperecomputing.com>,
- Thang Nguyen <thang@os.amperecomputing.com>,
- Quan Nguyen <quan@os.amperecomputing.com>
-References: <20240414042246.8681-1-chanh@os.amperecomputing.com>
- <20240414042246.8681-3-chanh@os.amperecomputing.com>
- <79bef664-b191-4905-896c-afab341b982b@wanadoo.fr>
-Content-Language: en-US
-From: Chanh Nguyen <chanh@amperemail.onmicrosoft.com>
-In-Reply-To: <79bef664-b191-4905-896c-afab341b982b@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: CH5P220CA0008.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:610:1ef::12) To DM6PR01MB5947.prod.exchangelabs.com
- (2603:10b6:5:1dd::12)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RmBY2CeL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713253460; x=1744789460;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=K1q1+4LndZnbflXCqVazF7Av2lnURkJBr8LQJjdOjes=;
+  b=RmBY2CeL7bFnulD6F4Z+tpbYroJZ6l37Jz8UHiGH+zeUY7Wl1L5EnK8P
+   bfCX1GVWvIOi3jLkU4mdW1iC6bp7MuXnOZyFzv6Q5eTTpwYLri8FBhCVL
+   cJ4dKRpqG8sTN+BkjE4+nS+ol77ODDo5EbQatFG+xvNqssffg5/I/XPc8
+   vBuVmJCJdXqciMzYcoxNO0PX6q4xvCBra8Ie+Zs+2lfQBNhTBJ4KvGToy
+   AT4iRBk6YR+F2uP9lSDyK8Bkf1G54k7jzC5t37t+j/9pflo7F29Pqv2j1
+   JzwBG6BUEL6F2slsr0vXzD6OJty5yeJqo5Q05qMiYsch9Eu+3DVll3YKF
+   Q==;
+X-CSE-ConnectionGUID: yt4PpTp2QRm2ITdMDmnwSQ==
+X-CSE-MsgGUID: NqtYTBlUQT+y5L3wlsqVwQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11045"; a="12452331"
+X-IronPort-AV: E=Sophos;i="6.07,205,1708416000"; 
+   d="scan'208";a="12452331"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 00:44:15 -0700
+X-CSE-ConnectionGUID: 6NrNlSPoT6y8Y6E+T9WTwQ==
+X-CSE-MsgGUID: wfA0atppRRGA9vkY6ucx9A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,205,1708416000"; 
+   d="scan'208";a="22073048"
+Received: from martakit-mobl.ger.corp.intel.com (HELO localhost) ([10.252.44.100])
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 00:44:12 -0700
+From: Jani Nikula <jani.nikula@linux.intel.com>
+To: "Dixit, Ashutosh" <ashutosh.dixit@intel.com>, Armin Wolf <W_Armin@gmx.de>
+Cc: intel-gfx@lists.freedesktop.org, Badal Nilawar
+ <badal.nilawar@intel.com>, Andi Shyti <andi.shyti@intel.com>, Ville
+ =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+ linux-hwmon@vger.kernel.org,
+ dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2] drm/i915/hwmon: Get rid of devm
+In-Reply-To: <857cgyt0iv.wl-ashutosh.dixit@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20240415223612.738535-1-ashutosh.dixit@intel.com>
+ <020612d1-2e6b-4bd7-87a6-dbd31574fdd8@gmx.de>
+ <857cgyt0iv.wl-ashutosh.dixit@intel.com>
+Date: Tue, 16 Apr 2024 10:44:09 +0300
+Message-ID: <87wmoxzr92.fsf@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR01MB5947:EE_|DM8PR01MB7096:EE_
-X-MS-Office365-Filtering-Correlation-Id: 921bc17d-6f4c-4aec-02d4-08dc5dd5dde0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	dVxz5kTFlPF/gx35IxN5AR1C6sY4bZTGWh4zOoQ3tL1AALWi7Gn0KCe9cWPl2FEpBLcw5jA0vXqNpb4PjxPSz5dwRDrA2vv8YjnzBAolEZ0m+OrS4kEJxWaaDB2X8HinzLSVuwdg27IqLKDLWZWfbslD9iA3AbimkXD74NrTBzjIZC9KnsS0vgyS/7puK4FDg72y/jrF2qyft+DZEyPfBJyXK/80ADTjGE00yIRFX2RHJMpOg2YzYUnEI+XyhC25Io6RtP6/J1oohiBpkeogm8kZt4chMkyW9MeI1hqjUNS6bB8LXxhOegXQDnzphtJUqsQf06gvR6eHU+4kgl4HWhotgUNxclTeU1cuX/sPJtRvuHsFCXE1gSUUxhSvR74Gu4vqt+2CEp0TcX/y3ph43ZMLSReI4kuufaqRdhKQX4mAPlLW1i9iccLSyzOntPoHpvWVm+7deZdjaPVZ/O15+96eWGtW2ZQDkaMlWA2Bdto6PkH5kKaM6dnjI7+MgJRcMAFyoJNVnwJ43ufXyouO5gYt74ZA3Ab2zQO1RG7UmPRjPQ2fKNfCo0WqAUjTuGTPKw24nfZgTBv31AG0ITrbPFkXeQsdHQTEk3syFCtA2OYzdF/EseIz282adTEeh2rOcOG3Wvh6Jo51qXVObhUQQzB3UjfAs9XfU9/PDrOrgPDvPcCK81U44KvXs7bWiuuDDbFqMXpQ4hQ7PT+kiPV8qg==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR01MB5947.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(1800799015)(376005)(7416005)(921011);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?YlA0Q2prYjhwVE1udlk0Mkg0aUtVd3J4OXJjQlArRzJJTnJjY0c0WnZaa1Fa?=
- =?utf-8?B?VUVHUm53Nkx3aVc4NDFTZGgyOHAxRDJ2Rmw2OGVoOEl5Q3FkVWliUnN0UHdp?=
- =?utf-8?B?QU5EVVYvUnJHZjBPU1dCM0tWckpmQ3Y1aHJpNGZzU1N2N0N2RTFwa2haUHZT?=
- =?utf-8?B?K3NtWURSYW5tTlpQTCsxQ1VaYnpPVlpITWVRNTV3YXh4Z0NxZ2VQa0szZStC?=
- =?utf-8?B?SlpackpWak1MaGtRcm4yb29hSnJaNmFwdThQbkxpR2lCL3JlRGpTVDUvSnFE?=
- =?utf-8?B?QmhFWjlOdVNWb1gyYmVJL2wvRzVnak5EcHdjM1Jzc1c2VXA0dy92WGZJR2Nt?=
- =?utf-8?B?U3FncDFnRUlHb2RyazFKc21nNXQ1clcyUHdPUUlqS3gvNjVYRFFDMFAvcFpt?=
- =?utf-8?B?YkhDY0t4ZVJlaGVYdEkvMkluVVd6aUczY2dCZUxOaVc0R0tXOSs4WkdudjNv?=
- =?utf-8?B?SmRNT2l5VVZqQStBYXA5WHJCdXlnaG5Ia2tyWCsyM3MzbThKVUwxYXJqbVZY?=
- =?utf-8?B?UGZHbkM4MWFGb1pXUG5zanU5U0djVU5KTk9nb0F0alA1SEErM2RFb2kzSmFq?=
- =?utf-8?B?WExObXgrUHBGcnFEWGI1RFZFSk5zZlVHZGpnemRNNngyVDlINUkvQWZQbDJI?=
- =?utf-8?B?UHJQa0dqeVJ6M252ZDZVdUNLNnV2dFp4bStWUFp4ejk4WkxabXhNQm9RSXZw?=
- =?utf-8?B?SUJVYmJJTTJTQVFoR3dLNGtkdDJ6VGtxNlRKRWpGR1VrRUUrZkprOWh4ck0w?=
- =?utf-8?B?eS8wb3dsd09yaFpyZXgxR3BDcnliUmJBMXR3MzBjc2E2bkFOL2gzS004MS9j?=
- =?utf-8?B?Y2Y5eW10NXJPTkNSaU42YWw4bWVUb21GdHZ2RHhDdFU2UWVNSTVTS3RkdG01?=
- =?utf-8?B?SUdjSlhUVTJIK3BaeGo3MDNra1lrcXR2OWpqZDJCY1FvVnVlb0NGZy9IWEpy?=
- =?utf-8?B?Y25IRTZKdGdxU1V4elZuT0FKNEpXWTFVOEIxQk5WU3poUTI4eDZBYW9WK25s?=
- =?utf-8?B?OUFmcWpyNjk0NVhndnhaOVdrNDJ4SmwwZUxmMjlxMjl1RVh2SFlnd0s1eFRY?=
- =?utf-8?B?VGZNaE9wNFBJd0owM0xSMmltNnk4OUxuUVNNSXdOY2piWDdtbDc3bGZHellO?=
- =?utf-8?B?bjVNeHBoTHhwb0c4aXpkcUl3WExLRmtXTEFqckxONUUyZTk5ckVka3hUUDdq?=
- =?utf-8?B?R0liaGtWTnY3OVE5QVFzOHZrTG5rdjRjM1ZrMFQyQmk0WnZOKzIrZnNXdUha?=
- =?utf-8?B?SWQ1bGV5NFNxc3B1TUhlM1IwK2FEMU1OM25Gci84ZGZ1Z3loMEdPS1JqeTJI?=
- =?utf-8?B?Z0tGVTExYXFFMVVVWHpQYzBHSUdFNDJJdHMyUDEzM2hiVDNBWXRrK2p5RVp3?=
- =?utf-8?B?Zk1RZGRadlduRFJBaHpzZmQxck8zbExrOFVaQVZBMEFPVHljU0ZoN3JnRW1u?=
- =?utf-8?B?Q25IK1JTRFJhUWMzTHRxa3hyazNGK3cyNlNUcFA2d0NQbnc3OXp5Q1lTZXNx?=
- =?utf-8?B?ZFd1NkRxMGlvVEEyTGUwK2ZIVWFvNHdKSVhGazhRWS9HSVpjeFRhS1VkakFa?=
- =?utf-8?B?VXFVYVhPTkxaU0tMNjZjZ3BmVkxHZzI3YXQvbUdMTmp1eTVHTGorak10dCta?=
- =?utf-8?B?MEUwN3VmTHZtczBvem50UUtYR25TRHpqMzkySEFjTXh0VjFhRDE3cjhuZGlt?=
- =?utf-8?B?cXN0YjdyREJDZERQS3BaYzdiL2JYRllHKzJ2UG14U1hqZkd2YlJhSDZwRG5j?=
- =?utf-8?B?ZklpYlBiZzR0M3ArTE4ybHNQN0Z4UHhsQXZ5aEV2UUt5bWdiV1pNTzhaUHh3?=
- =?utf-8?B?QVcxSHlMM0VDSWYzaDJKdHVpeDdFamNHazhiUU1sNnRyejBERHNRSXBJdHFZ?=
- =?utf-8?B?VEZ4T0dhWTdKdGhraEE4cHhqZy9STHdjTHg4aUh4ZXNUY0RKc212NzRkTGtm?=
- =?utf-8?B?MzR2VUxHTkwwbGR6ekVrZVJLTmpzd0FhUDMvVDdKVllmQy9RSzcyZnhhUFVN?=
- =?utf-8?B?dEw0UnRaUC9jY2NtSWdtUG9sM3pSMXdiYjRCcnRTQTlSSFM5RzRMcUVZSTZS?=
- =?utf-8?B?Zlo4aWUwUllVK04xUzllZUhlMm82Q3NxLzIzR0RldTdwb3VqdHpXL25Gekg4?=
- =?utf-8?B?TTdaQU9iekd6aHhGT2tiVlo1RWR2aDB2bE5hbFFKclN4ay9qRGRDaitxZDVh?=
- =?utf-8?Q?+jpatPtMwwxt8sVNA1ecFtU=3D?=
-X-OriginatorOrg: amperemail.onmicrosoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 921bc17d-6f4c-4aec-02d4-08dc5dd5dde0
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR01MB5947.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Apr 2024 05:27:11.4095
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BkXFXt6Y0afNPwDnsVpdmHcUrbPwmLV1pvgOS1i7ndL0T7Szc9ss5yj0WqbdFuoczev1auyZ7TmpMy3nL6VQ+4sAaZbZ77FMvqWGhUBdAtMCP0izGQE+mDvSug2lPsgn
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR01MB7096
+Content-Type: text/plain
 
-
-
-On 14/04/2024 15:03, Christophe JAILLET wrote:
-> Le 14/04/2024 à 06:22, Chanh Nguyen a écrit :
->> PWMOUT pins on MAX31790 can be configured as a tachometer input pin by
->> setting bit[0] in the Configuration Register. When the bit[0] of a 
->> channel
->> is set, the PWMOUT pin becomes the tach input pin for the channel plus 
->> six.
+On Mon, 15 Apr 2024, "Dixit, Ashutosh" <ashutosh.dixit@intel.com> wrote:
+> On Mon, 15 Apr 2024 16:35:02 -0700, Armin Wolf wrote:
 >>
->> This commit allows the kernel to set those pins when necessary if the
->> maxim,pwmout-pin-as-tach-input DT property exists.
+>
+> Hi Armin,
+>
+>> Am 16.04.24 um 00:36 schrieb Ashutosh Dixit:
+>> > @@ -818,10 +818,10 @@ void i915_hwmon_register(struct drm_i915_private *i915)
+>> >	hwm_get_preregistration_info(i915);
+>> >
+>> >	/*  hwmon_dev points to device hwmon<i> */
+>> > -	hwmon_dev = devm_hwmon_device_register_with_info(dev, ddat->name,
+>> > -							 ddat,
+>> > -							 &hwm_chip_info,
+>> > -							 hwm_groups);
+>> > +	hwmon_dev = hwmon_device_register_with_info(dev, ddat->name,
+>> > +						    ddat,
+>> > +						    &hwm_chip_info,
+>> > +						    hwm_groups);
+>> >	if (IS_ERR(hwmon_dev)) {
+>> >		i915->hwmon = NULL;
 >>
->> Signed-off-by: Chanh Nguyen <chanh@os.amperecomputing.com>
->> ---
->> Changes in v2:
->>   - Update the vendor property name to 
->> "maxim,pwmout-pin-as-tach-input"   [Rob]
-> 
-> ...
+>> you need to free hwmon here, since it is not managed by devres anymore.
+>
+> Thanks a lot for catching this, I had missed it in v2, it's fixed in v3. I
+> am actually reusing i915_hwmon_unregister() for error unwinding in v3.
+>
+>>
+>> >		return;
+>> > @@ -838,10 +838,10 @@ void i915_hwmon_register(struct drm_i915_private *i915)
+>> >		if (!hwm_gt_is_visible(ddat_gt, hwmon_energy, hwmon_energy_input, 0))
+>> >			continue;
+>> >
+>> > -		hwmon_dev = devm_hwmon_device_register_with_info(dev, ddat_gt->name,
+>> > -								 ddat_gt,
+>> > -								 &hwm_gt_chip_info,
+>> > -								 NULL);
+>> > +		hwmon_dev = hwmon_device_register_with_info(dev, ddat_gt->name,
+>> > +							    ddat_gt,
+>> > +							    &hwm_gt_chip_info,
+>> > +							    NULL);
+>> >		if (!IS_ERR(hwmon_dev))
+>> >			ddat_gt->hwmon_dev = hwmon_dev;
+>> >	}
+>> > @@ -849,5 +849,26 @@ void i915_hwmon_register(struct drm_i915_private *i915)
+>> >
+>> >   void i915_hwmon_unregister(struct drm_i915_private *i915)
+>> >   {
+>> > -	fetch_and_zero(&i915->hwmon);
+>> > +	struct i915_hwmon *hwmon = fetch_and_zero(&i915->hwmon);
+>>
+>> Why is fetch_and_zero() necessary here?
+>
+> As mentioned, in v3 i915_hwmon_unregister() itself is used for error
+> unwinding so we need to prevent multiple device_unregister's etc. That is
+> the purpose of setting i915->hwmon to NULL. But even earlier, though it is
+> not obvious, i915_hwmon_unregister() is called multiple times. So e.g. it
+> will be called at device unbind as well as module unload. So once again we
+> prevent multiple device_unregister's by setting and checking for NULL
+> i915->hwmon.
 
-Hi CJ, what does it mean?
-> 
->> @@ -528,6 +532,33 @@ static int max31790_probe(struct i2c_client *client)
->>       if (err)
->>           return err;
->> +    if (device_property_present(dev, 
->> "maxim,pwmout-pin-as-tach-input")) {
->> +        err = device_property_read_u8_array(dev, 
->> "maxim,pwmout-pin-as-tach-input",
->> +                            pwmout_to_tach, NR_CHANNEL);
->> +        if (err) {
->> +            /* The maxim,pwmout-pin-as-tach-input is an array of six 
->> values */
->> +            dev_warn(dev, "The maxim,pwmout-pin-as-tach-input 
->> property exist but malform");
-> 
-> Nit: exists
-> Nit: malformed or "is malformed"
-> 
+IMO it's more obvious to set i915->hwmon to NULL separately.
 
-Thank CJ,
+BR,
+Jani.
 
-I'll update that in the patch v3
+>
+>>
+>> > +	struct hwm_drvdata *ddat = &hwmon->ddat;
+>> > +	struct intel_gt *gt;
+>> > +	int i;
+>> > +
+>> > +	if (!hwmon)
+>> > +		return;
+>> > +
+>> > +	for_each_gt(gt, i915, i) {
+>> > +		struct hwm_drvdata *ddat_gt = hwmon->ddat_gt + i;
+>> > +
+>> > +		if (ddat_gt->hwmon_dev) {
+>> > +			hwmon_device_unregister(ddat_gt->hwmon_dev);
+>> > +			ddat_gt->hwmon_dev = NULL;
+>> > +		}
+>> > +	}
+>> > +
+>> > +	if (ddat->hwmon_dev)
+>> > +		hwmon_device_unregister(ddat->hwmon_dev);
+>> > +
+>> > +	mutex_destroy(&hwmon->hwmon_lock);
+>> > +	kfree(hwmon);
+>> >   }
+>
+> Thanks.
+> --
+> Ashutosh
 
-> CJ
+-- 
+Jani Nikula, Intel
