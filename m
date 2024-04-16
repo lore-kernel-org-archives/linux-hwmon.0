@@ -1,102 +1,82 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB61914EC5A;
-	Tue, 16 Apr 2024 21:22:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC9C213C819;
+	Tue, 16 Apr 2024 21:23:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713302539; cv=none; b=OUcKDYyUyHVG38HpaRkvtVYl06nR5dNQjlkDJQIEzo1Za7AIG0kB/H2lQ1r/8HeP0cB5e8jXclRKSfGuYSBfmdhAqjElbQxCMr4/8Y4+sUUkbvc9epAeuJGO3+SGGqebZ8VJjo14v9+/1PqJfaGoud4jWVMuFKIBEEcXs4FbSi0=
+	t=1713302624; cv=none; b=WMIbdHZX/ZB7ZhxAc00quGwyk4zDKN5JA31wGgU+fTLYS8c7DQRCRy5uP/ex+r4JpJ2YNWhAMhg1R48OpoIwjnXAhbQ+9NyNk0JHrXKBXHNN4EnnIsuE7bzdT5eyQlEAMJv9o5KPfVHMA2fDcnQsUk2sd0Nf+w8X7xRiEieEInI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713302539; c=relaxed/simple;
-	bh=TH6/8w9pkWktCUcxRMlnQFc4unYcczUDErtWtr3bsHw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KDqv40eaNo0aM0oDwSjjrLfXTnZ+9J2Qv4MCFy8S2CL1R30MctFvOB/fvK5a95mrkGuZv7dh/gNte/xeoIdFtS9+3FsCvqwL7ntXjM48hYTsMXyx02Kr5ER++mouvPuCvxELv2jOGkSulgB88Jff1W3C/wLSHrZ2FzbJmnVZjgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Sdj/G/4D; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1713302624; c=relaxed/simple;
+	bh=Fkt++JTyYof4Eg+DZY2XPpS8Oa6RROqr0lGhT/b1Y5k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VSn+w+2I2CxkEoAWoWNIjidA3JBb/4LPsnGWljfeHsY+318yfjbFOhPbPndtA6ESpAECKAK+WZq8W7uqN4Af6Oo3iICOZHPJisTAD5SMnam/Wifa6BOrWGPUNHZvGXdIhw/X+qXe30ocIunm6F0pGF7NfF9ExvQwYO9nRyzaWvU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h9vAamYM; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Sdj/G/4D"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713302538; x=1744838538;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=TH6/8w9pkWktCUcxRMlnQFc4unYcczUDErtWtr3bsHw=;
-  b=Sdj/G/4Dxe91wesBDAj96cDVjLV04lGXFTa6RdO+nyfZh9bT2uMYVQi9
-   nUV5Qk0D0TBJEVzwsV0j9BMchal+fQ4CRRZDWV3t1Hwr2og2J9DK6Gn3m
-   DUDrmCbYmXSUq+1rSD+8VUIcmToYIM+id/LBoqLyInb13mVTaQM/O+p6M
-   0w7ZGA56NctlqW5wSmq3VaDSxzQQM2O7y7O3xDN+B5AgJlM7yp/61W8r6
-   tUoqJcsY6amjNqHEpXJbyJpof0BcbpP9Cqxplopyq7lfOa8Fkrf1151kK
-   uh15P+fweruP1B0OVI+T9LpAFq/ccFWey6hBK0Qe75Cz9mQiDfcc3Rwtt
-   g==;
-X-CSE-ConnectionGUID: JwGVbOn4TK+mvoR+2tA+WQ==
-X-CSE-MsgGUID: H9Y6s+26RzmIJ+3OIpNJ5A==
-X-IronPort-AV: E=McAfee;i="6600,9927,11046"; a="26234911"
-X-IronPort-AV: E=Sophos;i="6.07,207,1708416000"; 
-   d="scan'208";a="26234911"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 14:22:18 -0700
-X-CSE-ConnectionGUID: hTy9SK5eSamZQKFrVmcg8w==
-X-CSE-MsgGUID: 9JDhzo0QSLeGlvnVyKw/pw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,207,1708416000"; 
-   d="scan'208";a="22267083"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.105])
-  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 14:22:17 -0700
-From: Tony Luck <tony.luck@intel.com>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: Iwona Winiarska <iwona.winiarska@intel.com>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	patches@lists.linux.dev,
-	Tony Luck <tony.luck@intel.com>
-Subject: [PATCH v3 50/74] x86/cpu/vfm: Update drivers/hwmon/peci/cputemp.c
-Date: Tue, 16 Apr 2024 14:22:16 -0700
-Message-ID: <20240416212216.9605-1-tony.luck@intel.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240416211941.9369-1-tony.luck@intel.com>
-References: <20240416211941.9369-1-tony.luck@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h9vAamYM"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-6ed267f2936so3900764b3a.3;
+        Tue, 16 Apr 2024 14:23:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713302622; x=1713907422; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Fkt++JTyYof4Eg+DZY2XPpS8Oa6RROqr0lGhT/b1Y5k=;
+        b=h9vAamYM3v/6IU8l4NX/AmREhuz7ObDmX0Nnl1fxy7cdXM3yI7n6KWhRsPAPaV9YwF
+         qd81zxEEe4+F9jJ4CcgNNCi9tUelxbnRfE2AL7baHeU0SIUuOpHGX+g9/OBjc132+NoC
+         GM5gJ+r3w5sALI35eqwpyyr8v0UFSiR1gyRXo76IxuzmwaTS7+YFRi0WTGF0kV7E1F7g
+         yKeizTSp4A/OYwHNYqfetsTIUCJ8pXAP6+b4UvWv5SnlWxI10aH9r7rhVg8IYZ3+Hb9y
+         3WdS5nn23MhXXy1oWQzRe4rYCGwjUDA5ySDzJuhqG0pW1D3axXd5sSZuuzakv8RPe/d/
+         v3Dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713302622; x=1713907422;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Fkt++JTyYof4Eg+DZY2XPpS8Oa6RROqr0lGhT/b1Y5k=;
+        b=XBf0X5qrV4O/D7xS3z1+3Pk2lLqZpl6XA0yDfxxQO7q/0+Ylae1yOnvhdVVWTZy0pi
+         24Sb9AVqvoy0JqMTxbt6eeAVtSF5IBRU5YQvPY11Qn3WZJtNmdE5WmURPT88J8/4DrS+
+         9UAfStyNAZWPAegi5bjFlpoWqAjVmMqokuW7GHBlL9BjrQDE/NbHqP1lI10cuTriRwju
+         Y0kphOh9WtvSgAh6v+9qprqFdHOLdyDmTVT7VxGDvF9CT8hIJHOhZQoYxjZetex3e8L5
+         3RzJnHeTfeSCHmPQmr0j4Rhho9Bl4JV01DvkU2eBP633/ViHHkjCw8IScBvgGJL4k0yo
+         qMCQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWtBcgZcfZ30sPdbI5Ml0bpyAGcvkX73hxonnc3+JL6sNTbzH96LAFYRyu2KE7qn1YzqKh/Brc8VeFhSQJNBBBtmj3I1Dxc5KHxdFiNQvnA+KuexCVqAhaH9IQkHHpyRDtjdbq9wvz8K3o=
+X-Gm-Message-State: AOJu0Yy3y6N7CMWRVDuD4l5deEJk9xN7DUbGyBs6qrvRtkX7jLJ5ism8
+	mh/BqbBpgf/UyVoUBGqLR3v7UCq4+W4kuQSiTmwJrCt61Zjyt/mz
+X-Google-Smtp-Source: AGHT+IGcoxvDo0vrG+67tAOJRqEYQZakHloelNK6PkXb17apBlJls6xveNQIjCgoKlvWQOmU9VjkBg==
+X-Received: by 2002:a05:6a21:8cca:b0:1aa:5fb4:8b14 with SMTP id ta10-20020a056a218cca00b001aa5fb48b14mr1835576pzb.52.1713302622094;
+        Tue, 16 Apr 2024 14:23:42 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m129-20020a633f87000000b005f077dce0f6sm8177233pga.31.2024.04.16.14.23.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Apr 2024 14:23:41 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Tue, 16 Apr 2024 14:23:40 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Naresh Solanki <naresh.solanki@9elements.com>
+Cc: krzysztof.kozlowski+dt@linaro.org, u.kleine-koenig@pengutronix.de,
+	Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/4] hwmon (max6639): Remove hwmon init with group
+Message-ID: <cd051bcc-7351-41ba-894b-b4ee26910e0b@roeck-us.net>
+References: <20240416171720.2875916-1-naresh.solanki@9elements.com>
+ <20240416171720.2875916-4-naresh.solanki@9elements.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240416171720.2875916-4-naresh.solanki@9elements.com>
 
-New CPU #defines encode vendor and family as well as model.
+On Tue, Apr 16, 2024 at 10:47:17PM +0530, Naresh Solanki wrote:
+> Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
 
-Signed-off-by: Tony Luck <tony.luck@intel.com>
----
- drivers/hwmon/peci/cputemp.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+No description, and I don't really understand why this is
+a separate patch.
 
-diff --git a/drivers/hwmon/peci/cputemp.c b/drivers/hwmon/peci/cputemp.c
-index a812c15948d9..28cec5c318d4 100644
---- a/drivers/hwmon/peci/cputemp.c
-+++ b/drivers/hwmon/peci/cputemp.c
-@@ -11,6 +11,7 @@
- #include <linux/peci-cpu.h>
- #include <linux/units.h>
- 
-+#include <asm/cpu_device_id.h>
- #include "common.h"
- 
- #define CORE_NUMS_MAX		64
-@@ -361,9 +362,9 @@ static int init_core_mask(struct peci_cputemp *priv)
- 
- 	/* Get the RESOLVED_CORES register value */
- 	switch (peci_dev->info.model) {
--	case INTEL_FAM6_ICELAKE_X:
--	case INTEL_FAM6_ICELAKE_D:
--	case INTEL_FAM6_SAPPHIRERAPIDS_X:
-+	case VFM_MODEL(INTEL_ICELAKE_X):
-+	case VFM_MODEL(INTEL_ICELAKE_D):
-+	case VFM_MODEL(INTEL_SAPPHIRERAPIDS_X):
- 		ret = peci_ep_pci_local_read(peci_dev, 0, reg->bus, reg->dev,
- 					     reg->func, reg->offset + 4, &data);
- 		if (ret)
--- 
-2.44.0
-
+Guenter
