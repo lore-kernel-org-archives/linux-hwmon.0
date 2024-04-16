@@ -1,59 +1,59 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CDF612AAE7;
-	Tue, 16 Apr 2024 13:15:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7413E12A177;
+	Tue, 16 Apr 2024 13:27:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713273313; cv=none; b=KEONEKusF6/AWwFR7t5/dW15gQVa3G21ESnoUtZ8/v3KKVIBU5Tvi6GOmHb3gaEj+wBkiIYXH59MgrwqPn6i+DrJxBFD7Ouk7l5aL+53bJ1aR4IflnKTe+rqTz3BJNImF9jC3n7sQvHCJqLh9So1mohuXmV/keVddJXZUNdQwqw=
+	t=1713274047; cv=none; b=jiitbg4UC9/fWO51Wpc7sHQ0IESaAPRPtelsdZTOdzfzsn3v6l+TzW+Mnhzd+B2j3ddAMPnNUPKps/v2D8xAC5eBbXA9B8IkDIPv4juWpB/liHRrNx8nWvSNn2kO192O2uClBSyne6EvSk7T0BeN/VoCo2uQQm9DCzeUlH8VStA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713273313; c=relaxed/simple;
-	bh=95qgmgHUYZErFgMp0eZjWjn/3CMNGi8EBRcrj0SZWwU=;
+	s=arc-20240116; t=1713274047; c=relaxed/simple;
+	bh=ow2JBt0MMuxqLvHc9QBerHjRnLSOo+VKZ+by8z8sXuc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HoQpUYusibNVDm1VbV66BSgN+y5tXR9Lkmq2Hw7qSjWq7otHnWFZKJE53soHTTeXO77riN+HbIo/mtLkY9R3AfqpYhPb+eJgQyAabtL7lPr9skUhFTu9EA2Tfzt9KegOO1XD2AbZLJoYqfG+ofT3dccUdDdQQ1MiXjjTMzk+1Zw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TLYWTcLS; arc=none smtp.client-ip=209.85.210.172
+	 Content-Type:Content-Disposition:In-Reply-To; b=nuBHT3nSPQmuVFbMab8oErnWkMbBxjKhuxQ5B9u3V0obdTvnc3BPAga1cRCxCcabCX5qbXuavYuiUVKRr5C9uTl4aHsxwax2iR2QXfM04e/wQ3eM3ncMMe9myO+25skcnnKsSIUFQHUYFKwuko7P8VwMl5qgW6jMTTGrVf60QUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OCvVQ16L; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TLYWTcLS"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-6edb76d83d0so4015194b3a.0;
-        Tue, 16 Apr 2024 06:15:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OCvVQ16L"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1e2178b2cf2so40407375ad.0;
+        Tue, 16 Apr 2024 06:27:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713273311; x=1713878111; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1713274045; x=1713878845; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5Yy9XrpIiaWHQTbNCOcLKgeMrs2sYZTKB0g4eg56ddk=;
-        b=TLYWTcLSsylOwU0qjazNbnQ8xjPJzyrn1DbOixr+1SkeC+ZpaLbaRkyvAEXMJV35zp
-         qW0IQF1gcURZsTBWYXHz1HoUPUrmypgz8/n9iu/y1oAsmhA7SDcLNNOmYhQFOO9Q/XNy
-         UeGE/9tWYuicSpvMZOXAiQck+iRXcZROtnzM1VQOFnx//jTmB462nMIZvz2VTtcb/48P
-         ZgF+qGMvtRZc9kDsjKtDuNwKNfEBlVK3raGzkigwzi5FjQgWT/F+SOgy++UqH8s10g0p
-         Gp2rD442vTOe7eRyeRhufOBQDmDjda+MOXqaiNtorWah7hGyedtExqJqi+QZVpiyGOdC
-         n4yQ==
+        bh=p9NsG/h7I1qAatxqJoqHkekmP7IXYPTVQrQqbrESwUc=;
+        b=OCvVQ16LfVPBWUYTts4c0VO32t9tEzoH8PzrWX/VwShm6IyicfHBtXJVVCchvqL5EK
+         /zmliJ6GJpquXYOt3DDQx5BWUZCekRnLpC/bhWDVpc9h78Lp1s0j7gv+91HNt+uRhho7
+         CEnY6Yk50+40edxHwBNr1y+IwNGF1vutwfGYwD/6pi+d7DuOVAY5NIrh9ZqvUMLZ60bX
+         l/VMI9XJen+ZtOB8/Hs+wgETrPyu6k5IfjNNXTKlUssFjQO5MagcLccrHpS2ni7RVNKo
+         N1bwMwPhcFyFxtMr5TTgl793nFh7IqicKO78YX48wtLsOuWMHqiQ2kbTzoYtQ6H6l+4Y
+         qtzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713273311; x=1713878111;
+        d=1e100.net; s=20230601; t=1713274045; x=1713878845;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5Yy9XrpIiaWHQTbNCOcLKgeMrs2sYZTKB0g4eg56ddk=;
-        b=ZVPfGstF82x/eLqQSmM6MZv0hlvxXYGPXuyVfKDrZ3rCpoX9Oxh8z0LIpLAN0WHxIa
-         Zk4waB2dAB/+2jNcdiMxqou4KXmK6/q5DAHNFAa7AlaXNxWF265dhtjyQ+TPfU0IKTlp
-         GVteZgYlFmY1PBrY7JheaBpJ1762/zsxJ3lcBDXLxR+MXQHOuMqwd/f+LhVPMhQ6qcCD
-         3Y72Zhu8F4WcBQF7m8ndxrvSKXKJdukkVzkE92aChPDjNPJk2eFAdd8k8KvPRmfySohy
-         FNoEgXM2pBc6D7LygoLpXSf9ErSZ7u5G5RMOez1RSWj1PKbdQ39+P3EpONu0CSI7XXID
-         5D2w==
-X-Forwarded-Encrypted: i=1; AJvYcCXZD4eWIlG5JoO1xYvjpO2jb/BPww4LNe2W1yhYrUz5mmaaeGQ5IV/2ksVvNo1rmlP3ga9gOmKtANAKfLkD1wIT1OLeN4FQeYawMljHF0tczu/lsqap3PVVG1hiKRgsRYVqhfCTs3V1PJZlsuk0Nv0XZlkcixMcoKhoeVFRQ1IfHHFrRx6yD0iQXiMpQggt
-X-Gm-Message-State: AOJu0Yy6pfWui9A4Ew9gmRKdx8oJv9j/Ll+svBtsG/zyFMuC6hnjdqok
-	ylUMqEHUR59U5qGx6Kmo+w1NMNSffB+Ilw1QbnRE6F6Ikg3OUMh8
-X-Google-Smtp-Source: AGHT+IFrIWcQetiLJElYNq1t9nWc9jtfVc044PseO8FiMX3eEaHJ4Km6QvoAgH+9c+pj4eOhiQ9GeQ==
-X-Received: by 2002:a05:6a20:9794:b0:1a7:a6f3:1827 with SMTP id hx20-20020a056a20979400b001a7a6f31827mr14997105pzc.46.1713273310646;
-        Tue, 16 Apr 2024 06:15:10 -0700 (PDT)
+        bh=p9NsG/h7I1qAatxqJoqHkekmP7IXYPTVQrQqbrESwUc=;
+        b=BO2+ke+1a3FNtdS+ICpuRQb5PDFXqdau78Au0Vw35lA7B7gc+vFH8KvcZW3Tjr8Ypv
+         Ui3Fuytng05fSKv61TiKyx9go7y0cKl5ye5MyMZPaSzf4PlfkGAmfrtlx3bw20x8l8D/
+         Nrp7sY/Kj0jlWiIzK0RH9uM2rxSbx4r5SEcDqPDBaPmgiW5TSAbRST39yW2PQZ6FUfgn
+         lHUlVZarcejH8zZKqhVlFQIkOU281sAT44vetMYXnDYKqsQPkiHIRU0+QBXd6/949oGR
+         p1gfLtkdJwguIkqJXfWXxZX75sL3rs1jNlFQ0K1tdAXqYtWVD7sZnbx3hslk16/JxJpq
+         i1lw==
+X-Forwarded-Encrypted: i=1; AJvYcCUY8Uf0ckGUpnzo6lgcPLBFYy6WMrDJTSp4AQdxTtrbEkDa4TMJ7WOd+FO6hilemTZcWfnil5sOjRqxDl7zRfoYrgYvBTgBzqd3mMhjm+n/lCf/LsFlW8HYp5YHzvCgqcgbQdrKsBX3CC7JLbfV+0GhkK/BP3CS9yfWM5qWp6UzamNK79te9AXwcOZqEpFX
+X-Gm-Message-State: AOJu0YyJLaJpbqsUOsrRrXJqUCswO8LGGl8OH1NIlCAGKssJ00qzetOC
+	hF/jENRnBAJBvlDub7lIUN5WFU23qyZDxXn/UncCGwCUfQxcOt4S
+X-Google-Smtp-Source: AGHT+IGP81onBIJvH28QglUmjzIfpVxw2YNsM852qyC2z/16XKfVARYLzBRJGuaX+IsdfrPmgWbhiQ==
+X-Received: by 2002:a17:902:d481:b0:1e3:cfc5:589c with SMTP id c1-20020a170902d48100b001e3cfc5589cmr17085328plg.28.1713274044687;
+        Tue, 16 Apr 2024 06:27:24 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id gh12-20020a056a00638c00b006ecc858b67fsm9201187pfb.175.2024.04.16.06.15.08
+        by smtp.gmail.com with ESMTPSA id b10-20020a170902d50a00b001e0f5034e95sm9680933plg.288.2024.04.16.06.27.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Apr 2024 06:15:08 -0700 (PDT)
+        Tue, 16 Apr 2024 06:27:24 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 16 Apr 2024 06:15:07 -0700
+Date: Tue, 16 Apr 2024 06:27:23 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Maximilian Luz <luzmaximilian@gmail.com>
 Cc: Jean Delvare <jdelvare@suse.com>,
@@ -63,7 +63,7 @@ Cc: Jean Delvare <jdelvare@suse.com>,
 	platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org
 Subject: Re: [PATCH 1/3] hwmon: Add thermal sensor driver for Surface
  Aggregator Module
-Message-ID: <cb1599e6-635b-460c-8837-fd4d4a6e15a2@roeck-us.net>
+Message-ID: <7ba2554a-4f71-4ca0-ab49-59dbd03e1968@roeck-us.net>
 References: <20240330112409.3402943-1-luzmaximilian@gmail.com>
  <20240330112409.3402943-2-luzmaximilian@gmail.com>
 Precedence: bulk
@@ -85,22 +85,14 @@ On Sat, Mar 30, 2024 at 12:24:00PM +0100, Maximilian Luz wrote:
 > Link: https://github.com/linux-surface/surface-aggregator-module/issues/59
 > Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
 > Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> ---
+[ ... ]
+> +	hwmon_dev = devm_hwmon_device_register_with_info(&sdev->dev,
+> +			"surface_thermal", ssam_temp, &ssam_temp_hwmon_chip_info,
+> +			NULL);
+> +	if (IS_ERR(hwmon_dev))
+> +		return PTR_ERR(hwmon_dev);
+> +
+> +	return 0;
 
-CHECK: Please don't use multiple blank lines
-#189: FILE: drivers/hwmon/surface_temp.c:17:
-+
-+
-
-CHECK: Please don't use multiple blank lines
-#229: FILE: drivers/hwmon/surface_temp.c:57:
-+
-+
-
-CHECK: Alignment should match open parenthesis
-#311: FILE: drivers/hwmon/surface_temp.c:139:
-+	hwmon_dev = devm_hwmon_device_register_with_info(&sdev->dev,
-+			"surface_thermal", ssam_temp, &ssam_temp_hwmon_chip_info,
-
-Please fix.
-
-Guenter
+	return PTR_ERR_OR_ZERO(hwmon_dev);
