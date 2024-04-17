@@ -1,185 +1,238 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2106.outbound.protection.outlook.com [40.107.236.106])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57A5CEA4;
-	Wed, 17 Apr 2024 00:32:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713313970; cv=none; b=imRlNAY8vPycG8LFJ3Y34xqPawkwjBhAnzBuVB1rzEb3IFs1wqQ5WHZc/zke28ZNflajToFZuzOqU8PG9XdX76D79qHj472pNFDOdu0N5pkR1aY8mFdD/y75sxvRUemouHPvCDpOeU7hCggFzrBA02/j3TD2VNMn8eMZPHTjFnE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713313970; c=relaxed/simple;
-	bh=NvGi+FNlytUml+cmQJqRuDecT3sUWEHb8pFeNB/SQyM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T1x9l5DwmFIFKXJJbIMNQ3JMpJqdc0neI+CcqIpKcMub5B9+MtWykUs1S371y2tOKZ0tFIAsbnloBntM2vheYpJ3yFsfyk3ARJSydGO/KUoc2Ji5YSxx2+9n/r2znQvteQlQgAsqglLJOYT6cgJYMAdvxNFrCwsPvRXt8nLnaR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DvB9P4mZ; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63AE579C0;
+	Wed, 17 Apr 2024 02:54:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.106
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1713322465; cv=fail; b=ixkuBn1/Cybz6pB5ryr12OxT1v6TC+KO4K2sbTjHbBCTBdQhUUof/zzhPpU7+ssc8ijtTEUM/Uy2+gzgVKpzGS2qmYZT8Nf3b9/Iw2tH1oCGGQSYOIocfGXUAgRPV51egCiiueGWQ5OBcmJ8qz86yBjF3ebYBXmYUhqM8LSmHOs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1713322465; c=relaxed/simple;
+	bh=j2WXg8cYGwt6SVYpRKrhTkCEFojyUCdHuTKngh48yAo=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=Irh4rhRac8YfTlhdDrLmGDv22vRh66EQY7hmKFipoHU2ZzbDctvIJVK/QdZx1s1Ka77nf/lj8HmEoso38DJPRy9D6Slwnz10PoRvz8MH3iLanZ0g0vXAPDTWbeEyB8CehgWLGpEi0f4rstqiQkOcKuG+4QJqEFTCFXnF/BwT17k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amperemail.onmicrosoft.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=fail (0-bit key) header.d=amperemail.onmicrosoft.com header.i=@amperemail.onmicrosoft.com header.b=k20Cvit/ reason="key not found in DNS"; arc=fail smtp.client-ip=40.107.236.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amperemail.onmicrosoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=os.amperecomputing.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DvB9P4mZ"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6ee13f19e7eso3777579b3a.1;
-        Tue, 16 Apr 2024 17:32:49 -0700 (PDT)
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=amperemail.onmicrosoft.com header.i=@amperemail.onmicrosoft.com header.b="k20Cvit/"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=J1a/5McrpOV5lcfCB98MJ3qjQAjUZv1B8I1bZKK91og6sUrt7VIgCS7mX6lkqB83mYPo+ajmOs1kVShzQNGqmEEmZ4WDjcv+3ZYPN/Bq5osFvcrrFER8Ug3HyPu0HOfVca9w+FjHySOV7nzh+5jf0bP4RBuPYPxTDloMZXF50+I7+VJDUbVlyqK4oGdha17ZMSOEpiyLtiUfoRHk8MeJROSZBzvlBN+TFVBxnSnqiH3ARg5pspmLd4FKDqpNrmehUd1+v3zJwc0i52VS+wpP44yxpX/5PnSZ3/l6fSB3Usvd+16rs9CYo4tmS581bz4y0NExieApODHAA7O9mML81g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QvGKNw4lYWjAOSNCzGrpqOwmynRYmMy5OMgWuAWKiys=;
+ b=WI2eAxajrp39vJhm9YtCjoiNG2wWREfrPJy00ZZlKqlcwjj+yISqDKpmvezKx8AQEdYaoTPkzbLDtFGECJ716SPh4uBTksNeSXE16zkQPiXKcCwW2fShBvReRUz27kOlysDp7GuKDa5w08nGyohOtmxr0KjO1tnYq5wtawJ+n/b4DNi5XuLGzijqrr11uIoAf64ja7qQTDXoBbbQzn6PtGRlLe3UCOvN6QZOQugEy09BpRmrkTQ1aB7doswHts5LfYSp6MTn6DORQn0bNQL6EwgNyuC0UyXqOOb1KB5VX21HGpBs7EIHBVzWOzD93wwUmaSrvEGHsnlJYNDctJdffQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=amperemail.onmicrosoft.com; dkim=pass
+ header.d=amperemail.onmicrosoft.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713313968; x=1713918768; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fBLXmCe5xgYwBncJSh75UqOijAj7P8rNoETI4uyFWB4=;
-        b=DvB9P4mZwgKa0TBhpwv1aR7TapZ83d2T9jWZAbs43x0d7lVEGxswdkBKDwu6F+hae8
-         TDRFf4VQE7+UlZ+USJEezkKb+SgQvaRgi/5J5ZJUo6xjKXAkfSktOfbyWA8Egu2G7QHy
-         X54DejV4Xf7moMy1bafTYdQPQ/mf3DnfQPRbO/c9r7gpS0RgSNPSHuLfWliOLmXi2EZ0
-         hGLWtQARspZ1WQ3K5H50KDxzQgiuYlTe+pxROofMl0jLAeSdtZS0BmYyVDrvNVdhtCFh
-         8+9Qv4aNROVTMpvMTK4bVlFfxnK3vhUjisa4K1SguYN9PjtwIOFVK1CR2yaqW6LEzb2P
-         r2hA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713313968; x=1713918768;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fBLXmCe5xgYwBncJSh75UqOijAj7P8rNoETI4uyFWB4=;
-        b=uXXQbAy/CH7nJ37wcFm+bd463eF7/uUwmv+H5PIADMpVwv5v9TbcFSZgM+W7hZ+U+O
-         fBjTTZ8BI83Y3HK53cLcJiZCiF9t5Q6Oy1uFQynd3PGtGp5Rk2VMahCagxqOGxSoFH13
-         DwV6LGaNnJTty1trXbuIijFI/pGGKaND0v/zo6xOWDlDeBxUKZd/IueRDvIMm9wJWyIv
-         2m7WYyey8hv4rXZJmCIELeEb0SXm1oKeZrQ4+kwLZi9bIeI0w6IrAKkBustm4EXEOV4E
-         LAZlr9cTS50ZL9PLV9Jwx/RkezzoJJ8QFfTgQTahiC50LcHuMzBnLpO6qwcVHLrn0I0j
-         SzTw==
-X-Forwarded-Encrypted: i=1; AJvYcCWYV0z8ibHEyVxtc0do/7r8xca7Z2jh1lQet+MFgidZSP29IbIIi0R8S4R28yUFr/5rMLV69UF5RZ1dEQW3p0SaIwCvbcigTNyzQgnJhMPmOJUHT2unIi5SSyQ/ysbkeQ678QJBYpa56XACjvvrWHRuWLG4lAJ1MRKozt4vLhOhasIgA7/3CeTkcwf22Oe/s19FY+ouIm9zR1wazUq5Sw==
-X-Gm-Message-State: AOJu0Yyphdsexm/Evzv+q23xu8mRK15ZrmRe5KksrNXCIoVU8+ckVBmx
-	mocUQwjA6xYeiOw/Rjr2V3Cm2HRGXoZS+p9YTOg+gSr74tPW8kcw
-X-Google-Smtp-Source: AGHT+IFXpZgHULLuOHM11N6PHcuaja6jV0Vu39kPdBy7RbGfZrXTKlg2RMU950iDGPfOjness90bnw==
-X-Received: by 2002:a05:6a00:1902:b0:6ec:fdcd:18eb with SMTP id y2-20020a056a00190200b006ecfdcd18ebmr14704468pfi.21.1713313968475;
-        Tue, 16 Apr 2024 17:32:48 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e15-20020aa798cf000000b006ea6ca5295bsm9442494pfm.164.2024.04.16.17.32.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Apr 2024 17:32:47 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 16 Apr 2024 17:32:46 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Jose Ramon San Buenaventura <jose.sanbuenaventura@analog.com>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-i2c@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
-Subject: Re: [PATCH 2/2] hwmon: pmbus: adm1275: add adm1281 support
-Message-ID: <b36db2c0-db31-4304-8e58-aa358ab811c5@roeck-us.net>
-References: <20240417000722.919-1-jose.sanbuenaventura@analog.com>
- <20240417000722.919-3-jose.sanbuenaventura@analog.com>
+ d=amperemail.onmicrosoft.com; s=selector1-amperemail-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QvGKNw4lYWjAOSNCzGrpqOwmynRYmMy5OMgWuAWKiys=;
+ b=k20Cvit/uHLWZq7hcorEc12Bf0bXZeGbvd7JqSJtebGALWalq+YC4uV+Vc5/Kq2dzOryyZlGqwWM6u7ijqWsSIV4d7u52JQACxTFkZdkrXYpqMQ8rSNZYH8AfH2FnHjKTu10DhVpuYVBXM5SisDVLChGxQoz0t/8PSa8Pc4joPo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amperemail.onmicrosoft.com;
+Received: from BY5PR01MB5938.prod.exchangelabs.com (2603:10b6:a03:1bd::12) by
+ BN0PR01MB7168.prod.exchangelabs.com (2603:10b6:408:157::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7452.50; Wed, 17 Apr 2024 02:54:19 +0000
+Received: from BY5PR01MB5938.prod.exchangelabs.com
+ ([fe80::66a0:fe74:f7f:6baf]) by BY5PR01MB5938.prod.exchangelabs.com
+ ([fe80::66a0:fe74:f7f:6baf%4]) with mapi id 15.20.7452.049; Wed, 17 Apr 2024
+ 02:54:19 +0000
+Message-ID: <8ff7df9e-9ca7-47d3-a1b0-4997a0713341@amperemail.onmicrosoft.com>
+Date: Wed, 17 Apr 2024 09:54:03 +0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/3] hwmon: (max31790): Support config PWM output
+ becomes TACH
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+ Chanh Nguyen <chanh@os.amperecomputing.com>, Jean Delvare
+ <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Justin Ledford
+ <justinledford@google.com>, devicetree@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+ Open Source Submission <patches@amperecomputing.com>
+Cc: Phong Vo <phong@os.amperecomputing.com>,
+ Thang Nguyen <thang@os.amperecomputing.com>,
+ Quan Nguyen <quan@os.amperecomputing.com>
+References: <20240414042246.8681-1-chanh@os.amperecomputing.com>
+ <20240414042246.8681-3-chanh@os.amperecomputing.com>
+ <79bef664-b191-4905-896c-afab341b982b@wanadoo.fr>
+ <9bc38f67-01e0-4a38-8db8-4086a215b474@amperemail.onmicrosoft.com>
+ <3a4e0543-fc40-41dc-8aaa-19811b96f1cb@wanadoo.fr>
+Content-Language: en-US
+From: Chanh Nguyen <chanh@amperemail.onmicrosoft.com>
+In-Reply-To: <3a4e0543-fc40-41dc-8aaa-19811b96f1cb@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: CY8PR12CA0014.namprd12.prod.outlook.com
+ (2603:10b6:930:4e::16) To BY5PR01MB5938.prod.exchangelabs.com
+ (2603:10b6:a03:1bd::12)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240417000722.919-3-jose.sanbuenaventura@analog.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR01MB5938:EE_|BN0PR01MB7168:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7c7955e9-f49f-49db-1b39-08dc5e89abac
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?OEhEY2RuOHNPdkQzOEVMcURjT0JVaWtYQmhhS3paUGkzYUNFR2psb2YvdXlu?=
+ =?utf-8?B?azZFRlloN0VHUU5rbThCRjk3TTk0Z1g5TVV4N3ZYOHNFRkZNcTZxZytOYWtr?=
+ =?utf-8?B?SzRzMCtFWVlLa0pJNXpqWExCQzdWbFpjb3RFWnV0cVJhMnVRdEFRM2I2Mk5v?=
+ =?utf-8?B?QXdQS284aWEwZE1zdCtVR2JoRXE1WXdnbXhNZDR1NnJJR0ZrUStTTEtuekg0?=
+ =?utf-8?B?djNBaDBHOVp2RlM0RTlNUGsvMHRGNThZU1lQU0JBd0tXOHppV2ZCbUpkajlB?=
+ =?utf-8?B?MS9TWlR1V3pyK3pqdDg0b05xQjJJakJGaUVheXZmVXR4TUoxWlJzOXlwSUJY?=
+ =?utf-8?B?cDlNZVQ3eXF4WWNkWTQwZFp6WnZ4TDZjbVFpb2xvVkF1OHBGY1hNa1dnc0M4?=
+ =?utf-8?B?RnJsUEdLQmJ1L1hReWxuQ3NaK2xEc1FJWnhXbHRMdDFROGt1ZE9xenlab1dz?=
+ =?utf-8?B?eWtvZTFmVXFEQlp6TnZrVkNhZWluK0sycFpJSTZPV05nKzhQRGpTbEh5c1o1?=
+ =?utf-8?B?eE1UU1lYQWVseWtDZkkyT2lGbnVSVUVrK1BSdHBSTmFrb2pHQ2FMTlZOa0RX?=
+ =?utf-8?B?Y3NUL1U3YUx3N1ZMenQ4Nm9aNnlFWnVmZUI5WXZ6WkhEQ1ZTNng4Vyt6bWRk?=
+ =?utf-8?B?QXRvcDAxRHRodzVkbU9YT3ZzOTc0dGk1d3Rzb0NsUXNjNVJqQWpmVDZncFBy?=
+ =?utf-8?B?amg4Rkl6dERmSmovU1llZ2J6YVNPRmJOQ3lQTlVLdUVnQWlIWnhrdHQrWmhP?=
+ =?utf-8?B?QkdTT0xPMnZzYjU2aDA5RUc4UlkyNTlpNDlyOUFCcnRHa2c3Y2ZBYlJiMHF4?=
+ =?utf-8?B?bW9QQ2szb3NXWVVRWGxKTS96TFNuZjZ3T21SZmFnaWNxSEdMZ3c0U251Y3c2?=
+ =?utf-8?B?eTA5TU1mcDBvY3FGeW8xR1dpR0NDekFrcHVYOUJLenNBZXVsRnA5R2xMbk5s?=
+ =?utf-8?B?eTg5WnQvbnMvMDhwYjJETnBSc1k1QmZ3bmpNVUljV01rWDNiZy8vb2RtbXpq?=
+ =?utf-8?B?SnJSQlZENk9wN2JVY09FV2NLNkRKcklQSVBPdTQzYkRycTNUbEJGL0VDb3BV?=
+ =?utf-8?B?L0ZDbU1ZaytSaTk3akxXNzJNMVVieG9WSFk1NEh4TmhZWkUrdG14M2xMNUM1?=
+ =?utf-8?B?U0Q3RlpDQ0VCYlJFR1RkQWhPaUFwMGMvWjlHSHdVN01jL25sczk1WEM2aEJM?=
+ =?utf-8?B?T0grMGxoWmg1eU50MEdZOXQ2Y0lvalhrT3BSK0puNlphcFdreTI2WTZTZW52?=
+ =?utf-8?B?UTFGL0ZNc1N5YlNFUys3ZzdwT3ZNamhoMytmSTdWY0pNZ1ZBZjIwc0VKSUg5?=
+ =?utf-8?B?TWk1aFFQNkNVVmRlUXR4a0lwTGErbzFpbHUyMWRjNWszY0tkOFNKQ2NZMjJY?=
+ =?utf-8?B?R0dtdmQyRVUra3NranNWdVpYKzVHUmdheGVJc1RySkc5b0RHVG1FcFIrdnQ2?=
+ =?utf-8?B?ODdTY2xOMjFvcWpSTFZ5RVgybXV4Q1lYRnNSVHNKY1hjN3crMTg5dDdza1F5?=
+ =?utf-8?B?N2ZySUEvMm11b2xOdUxySXQzbHVueDZ4T2gxMTA3Uy9CQlZrUFRPNEFUZGk4?=
+ =?utf-8?B?K3R0VzVRVDNKUXBaVDhhaHROeklBQlJxWmIyRlhiZ1pTMnIvOC9NZHFITjVs?=
+ =?utf-8?B?bGJUSXExeC9LaTRtUDZ1WjVRb0tjbVIyWTVTbDZ4WitJQnM1N1FyenlEeWxz?=
+ =?utf-8?B?U2Nzd2VBUmtNWUdoRnRYNllQdk5RTHdWRzVDSW42RVVlTExCYnlrQlBqa29p?=
+ =?utf-8?Q?8FrrGs3axbu3ZL27OxhfMWgbluG/1WxNHo0gE7R?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR01MB5938.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(7416005)(366007)(1800799015)(921011);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?Vm8zUTNiOUQvZWp2U21xZXgrZXBvWEVZdklJazdlV1ZaZnJDWCtESGhUN1Rl?=
+ =?utf-8?B?aHY3ZEp1NXp4OEtFUTFtRnRQSnZwNVd3TnMwYzhEclNxQWhvRWpaZFJRQkgx?=
+ =?utf-8?B?Rm0ybGI4OVpUakpidlVQbmRVUmMweXNBdTlUK0RETXFWQlFWSzlDVUg3K3pv?=
+ =?utf-8?B?ZmNBUm04NWZkVVVuSytiUDNrcCtrS2JpaTJnQWZVaHkxSmVJVFhCenRFdHJr?=
+ =?utf-8?B?NkdVdmlrVThhWlkxcTNJbk53N1pnai9yNDMvR1pDK1BlN3prbnRDbG5HVXBB?=
+ =?utf-8?B?M202UDQrR2lyeFZTTmxpNzBQeHVONTJydFpLb2tuUmVkRFBsNkc4aWlRcXpx?=
+ =?utf-8?B?K3JPVTFGc0dsYitadkRWRTBNUlEzNnFPZ3B6MFZUNDM0cGZxcWFZbVE4OWFu?=
+ =?utf-8?B?dEppUDBCWkxZSEVhVk5YMDJ5ZWJtdmM3dUIxV2JyajhiQllVUmZwUEVaSjBs?=
+ =?utf-8?B?cUoyVmQ5SW5jRFNaYktmVGV5RER3Qy9JQkpWbWg0NzlmMlQ2UEVyOEF0UmJR?=
+ =?utf-8?B?dEdEd0lUMW1RSUhHcmJCNkhnRUswakQxUkdIWkRQMk5kZlpFNGZSbkdQZ1RK?=
+ =?utf-8?B?TDA3bmdSREEzSmFoSmI0dTJBYjVuaDI0Uk9rQWRRRGdURU80SExtZStsK3Bu?=
+ =?utf-8?B?ZysyclhZUE00aGhHZU9WOUJVOW9PTWc3d2NiTjJDejNnSWY4VE0rVXZsbG1G?=
+ =?utf-8?B?Rm9DR1pyelhMbFdFeFFINDFSMnlzNXkvYkZXNDM2RUFUeU5WeEpMNzUzb29w?=
+ =?utf-8?B?bW5UZzkwSUZxeFhSZXhQY1NIaytXa2NaS3VBVUdseDZMalFSdGl3WjFuMzNw?=
+ =?utf-8?B?aDl0dFR1MzdzWW1wazZJUVpFY3dONjBobE9oQ0NoWkxzRGdlT3hDTTFJK1Fh?=
+ =?utf-8?B?emJhQXdWMjlQWUZXNWVKL25mak9OTDJPSDduWUlqMXUwWTE5WVVWTmhiVUhj?=
+ =?utf-8?B?ajRkZTdIN0dDdGJyaFZXbDFFT21vaU9BMHlUQ0tMa3c3ZzR6UnJCaDlLTE9Q?=
+ =?utf-8?B?LzNBcm9Hd1ROVXA0ajJJa0pGOStLNml1ZDU2Sm5kYnAvTjNRQi9ieHI1SG9K?=
+ =?utf-8?B?c0VhcituNTlRWnZTWE1jVmJOelBZTVBnUkZJVWIyL0Rjcm9DbndiTyt1WnhC?=
+ =?utf-8?B?V1FQakJSOVZaYzhwb3ZUVFR4TnhsVjhDTnZJOXdLZG96cENWS1hkOWtwUXBH?=
+ =?utf-8?B?d0Q3dFJpVFZLSzBTUjcxRlhDVGlHUnVoMHYzRm8yK3gwVitJSGJEYW8waGtl?=
+ =?utf-8?B?UkVYZXV0RUlxMndkRkEwVkJaZkZGS2cyaWVqOGt1ZVlPM2c5azYwRXNkcGhY?=
+ =?utf-8?B?UHNoTm44cGcwMjhnSmFCUEplSnVsL01GSkErWjZ6UHlJZHhXdkgyclhCR1BK?=
+ =?utf-8?B?WGZ2TE5TeTdWZ1pMSEhyV1RZUVRHbzJOVEg2Z2NkMVIxNWErVnNlZjFKKzlZ?=
+ =?utf-8?B?aXlLRGQ4d0Y4bHMrWU5ZTVhMbmNKZjVBWloyWXhieUZscVdPbVNIQkk1dGVQ?=
+ =?utf-8?B?NDdJWW1LNmp1cWNWRkJYTzZHZnBmZmNWVlZJUWdQMTQ0eVY5SlFjZmFUa1VQ?=
+ =?utf-8?B?U3hGT3E3S3AvbFRqRHlFNWt5TXJ1VllHNWhRcnF3REk0ek0yUUI3TGl1Y01T?=
+ =?utf-8?B?RTFjUXhFSWFDMjExQ0JzNGViUC96WDE1TWhYdTR2RnNCR09wY2V2WTJNb25o?=
+ =?utf-8?B?TEdnZkF5L1E0d1VqMTcxa2pHTUNrb0NkTmRwUzVKeDRDYlVqS00xWFNKeHFN?=
+ =?utf-8?B?cTNseTIyWEVpQWtWYWVyZDd0cFlvaWRiVG5WS21KV2dnMXBjNUJiVG42MkRi?=
+ =?utf-8?B?cVBaeEdoNzhlSThRcFZlV3llN1pLREpxdFNaSGlVSmdKRlRFY1dFRy9EQis5?=
+ =?utf-8?B?NVZDZ21IbUhJN3FUQm5OVm5yK1Z5cEZ0ZkF4TFBPTUlDNWZuT2R6Mk9kMkpF?=
+ =?utf-8?B?K2xjT0dOVDZFRHRvTCtnaDJOT0I3dlFTR0RmUkxGdC8waUIrUnFhb0R0OUpt?=
+ =?utf-8?B?bUlsZXRXcnBqYjNPS2lhQWRnOUFhS1k4MGgzQ1RsNXg1RWlWaXp6N05HSk5l?=
+ =?utf-8?B?TjIrSHNOK0svOUdxTFJJaytlelpZbC9jYkk0T1BNUnFneFkwQ1BVQmYxNkdp?=
+ =?utf-8?B?Smp2dmdTSG9vbUZQMDd6L2RUZURxakJZeC8xSVhkOHgvbWZDcmtsL1BETXFN?=
+ =?utf-8?Q?pCm1zO85pvW9iWP/xku84gU=3D?=
+X-OriginatorOrg: amperemail.onmicrosoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7c7955e9-f49f-49db-1b39-08dc5e89abac
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR01MB5938.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2024 02:54:19.0810
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: x508rOswtbkkDVyeqcDKO5fYEWpIjkG7hwxGlB+Pinmnwrreuvvq4inf1vU//zJI3tdcKMIq/DKDwVWakyxGxWoWuK8Ifli6ytF8SE25EgWgBVBLfb+fqcb9+Zq5hWAM
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR01MB7168
 
-On Wed, Apr 17, 2024 at 08:07:22AM +0800, Jose Ramon San Buenaventura wrote:
-> Adding support for adm1281 which is similar to adm1275
-> 
-> ADM1281 has STATUS_CML read support which is also being added.
-> 
-> Signed-off-by: Jose Ramon San Buenaventura <jose.sanbuenaventura@analog.com>
-> ---
->  Documentation/hwmon/adm1275.rst | 14 +++++++++++---
->  drivers/hwmon/pmbus/Kconfig     |  4 ++--
->  drivers/hwmon/pmbus/adm1275.c   | 27 +++++++++++++++++++++++++--
->  3 files changed, 38 insertions(+), 7 deletions(-)
-> 
-> diff --git a/Documentation/hwmon/adm1275.rst b/Documentation/hwmon/adm1275.rst
-> index 804590eea..467daf8ce 100644
-> --- a/Documentation/hwmon/adm1275.rst
-> +++ b/Documentation/hwmon/adm1275.rst
-> @@ -43,6 +43,14 @@ Supported chips:
->  
->      Datasheet: www.analog.com/static/imported-files/data_sheets/ADM1278.pdf
->  
-> +  * Analog Devices ADM1281
-> +
-> +    Prefix: 'adm1281'
-> +
-> +    Addresses scanned: -
-> +
-> +    Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/adm1281.pdf
-> +
->    * Analog Devices ADM1293/ADM1294
->  
->      Prefix: 'adm1293', 'adm1294'
-> @@ -58,10 +66,10 @@ Description
->  -----------
->  
->  This driver supports hardware monitoring for Analog Devices ADM1075, ADM1272,
-> -ADM1275, ADM1276, ADM1278, ADM1293, and ADM1294 Hot-Swap Controller and
-> +ADM1275, ADM1276, ADM1278, ADM1281, ADM1293, and ADM1294 Hot-Swap Controller and
->  Digital Power Monitors.
->  
-> -ADM1075, ADM1272, ADM1275, ADM1276, ADM1278, ADM1293, and ADM1294 are hot-swap
-> +ADM1075, ADM1272, ADM1275, ADM1276, ADM1278, ADM1281, ADM1293, and ADM1294 are hot-swap
->  controllers that allow a circuit board to be removed from or inserted into
->  a live backplane. They also feature current and voltage readback via an
->  integrated 12 bit analog-to-digital converter (ADC), accessed using a
-> @@ -144,5 +152,5 @@ temp1_highest		Highest observed temperature.
->  temp1_reset_history	Write any value to reset history.
->  
->  			Temperature attributes are supported on ADM1272 and
-> -			ADM1278.
-> +			ADM1278, and ADM1281.
->  ======================= =======================================================
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index 557ae0c41..9c1d0d7d5 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -51,8 +51,8 @@ config SENSORS_ADM1275
->  	tristate "Analog Devices ADM1275 and compatibles"
->  	help
->  	  If you say yes here you get hardware monitoring support for Analog
-> -	  Devices ADM1075, ADM1272, ADM1275, ADM1276, ADM1278, ADM1293,
-> -	  and ADM1294 Hot-Swap Controller and Digital Power Monitors.
-> +	  Devices ADM1075, ADM1272, ADM1275, ADM1276, ADM1278, ADM1281,
-> +	  ADM1293, and ADM1294 Hot-Swap Controller and Digital Power Monitors.
->  
->  	  This driver can also be built as a module. If so, the module will
->  	  be called adm1275.
-> diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
-> index e2c61d6fa..6c3e8840f 100644
-> --- a/drivers/hwmon/pmbus/adm1275.c
-> +++ b/drivers/hwmon/pmbus/adm1275.c
-> @@ -18,7 +18,7 @@
->  #include <linux/log2.h>
->  #include "pmbus.h"
->  
-> -enum chips { adm1075, adm1272, adm1275, adm1276, adm1278, adm1293, adm1294 };
-> +enum chips { adm1075, adm1272, adm1275, adm1276, adm1278, adm1281, adm1293, adm1294 };
->  
->  #define ADM1275_MFR_STATUS_IOUT_WARN2	BIT(0)
->  #define ADM1293_MFR_STATUS_VAUX_UV_WARN	BIT(5)
-> @@ -101,6 +101,7 @@ struct adm1275_data {
->  	bool have_pin_max;
->  	bool have_temp_max;
->  	bool have_power_sampling;
-> +	bool have_status_cml;
->  	struct pmbus_driver_info info;
->  };
->  
-> @@ -469,6 +470,22 @@ static int adm1275_read_byte_data(struct i2c_client *client, int page, int reg)
->  				ret |= PB_VOLTAGE_UV_WARNING;
->  		}
->  		break;
-> +	case PMBUS_STATUS_CML:
-> +		if (!data->have_status_cml)
-> +			return -ENXIO;
-> +
-> +		ret = pmbus_read_byte_data(client, page, PMBUS_STATUS_BYTE);
-> +		if (ret < 0)
-> +			break;
 
-You'll have to explain why this additional status byte read
-is necessary (while it isn't necessary for all other chips supporting
-PMBUS_STATUS_CML).
 
-Thanks,
-Guenter
+On 17/04/2024 00:39, Christophe JAILLET wrote:
+> Le 16/04/2024 à 07:27, Chanh Nguyen a écrit :
+>>
+>>
+>> On 14/04/2024 15:03, Christophe JAILLET wrote:
+>>> Le 14/04/2024 à 06:22, Chanh Nguyen a écrit :
+>>>> PWMOUT pins on MAX31790 can be configured as a tachometer input pin by
+>>>> setting bit[0] in the Configuration Register. When the bit[0] of a 
+>>>> channel
+>>>> is set, the PWMOUT pin becomes the tach input pin for the channel 
+>>>> plus six.
+>>>>
+>>>> This commit allows the kernel to set those pins when necessary if the
+>>>> maxim,pwmout-pin-as-tach-input DT property exists.
+>>>>
+>>>> Signed-off-by: Chanh Nguyen <chanh@os.amperecomputing.com>
+>>>> ---
+>>>> Changes in v2:
+>>>>   - Update the vendor property name to 
+>>>> "maxim,pwmout-pin-as-tach-input"   [Rob]
+>>>
+>>> ...
+>>
+>> Hi CJ, what does it mean?
+> 
+> Hi,
+> just a shortcut of my name : Christophe Jaillet.
+> 
+
+Thank CJ! It's a pleasure to see your comments. I'm happy to meet your 
+review in the next patches.
+
+Best Regards,
+Chanh Ng
+
+> CJ
+> 
+>>>
+>>>> @@ -528,6 +532,33 @@ static int max31790_probe(struct i2c_client 
+>>>> *client)
+>>>>       if (err)
+>>>>           return err;
+>>>> +    if (device_property_present(dev, 
+>>>> "maxim,pwmout-pin-as-tach-input")) {
+>>>> +        err = device_property_read_u8_array(dev, 
+>>>> "maxim,pwmout-pin-as-tach-input",
+>>>> +                            pwmout_to_tach, NR_CHANNEL);
+>>>> +        if (err) {
+>>>> +            /* The maxim,pwmout-pin-as-tach-input is an array of 
+>>>> six values */
+>>>> +            dev_warn(dev, "The maxim,pwmout-pin-as-tach-input 
+>>>> property exist but malform");
+>>>
+>>> Nit: exists
+>>> Nit: malformed or "is malformed"
+>>>
+>>
+>> Thank CJ,
+>>
+>> I'll update that in the patch v3
+>>
+>>> CJ
+>>
+>>
+> 
