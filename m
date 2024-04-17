@@ -1,103 +1,81 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FDD2146A6C
-	for <linux-hwmon@vger.kernel.org>; Wed, 17 Apr 2024 15:01:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98ABF77F2C;
+	Wed, 17 Apr 2024 15:15:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713366067; cv=none; b=fQGJPBW3UHJM3nVCZtyJdZtxT0VwAlsdFyW30YPtflcJuKOMaipPZB8iYC47nc5rxK3HiNZ9oMsi5JlAsGeIqTG0KlpeZg9A/MjZVlD3JMds95bFzt1CBkqz7VhkWx3dFnNhEdk6/Fw3ctjs74FQrJD5tNdQ/0TTn7ZMgUFTYxQ=
+	t=1713366935; cv=none; b=LQp1dFnF/3a2ILrKiI3ujjX0qRa1ggWaPFIUYQnvhno9hmVZ3Wah5Qzh7cACxTf12bg9Ik8u1fUcZHVkPPz4WQ5zNFHYggJ1XLaVj39mRqENmU3UDcusJeRr/eneznVe95JQpGTmbXx9GxOzMVCys0g1whqZslKc/R9O1tLRSbs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713366067; c=relaxed/simple;
-	bh=2XfitDFi8joNtBN6v5pf1qqwQN4BZHQIVg7OHTwoRTc=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OmWpqHcUd+MCRyX3DIXwDP6ZpwmavQuLv/0dohymFh4Umy6h8bmnBNaIIr8yBi2If5EwsgPDrpPhBNZBb5yT1oHQCD8oWPO+bZahbNIATrQu6u2hJlkqJzXj/KDmpSMdpnaX9WTD7cnCD0N+kG+PkLDHs/wSGbBnpJs2HxkZPiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dDF/8mVt; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1713366935; c=relaxed/simple;
+	bh=kOOLX0GNiMAkD1VX/95set0np7ukVjF1pfBU3LwFRW8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mJX+MRJjScmVZA1XJl+lqMnjOFMTby5ZTWTEWURgGf58figyyR064yscCm480URMmmIDZvfvxMp3IzGd7xfc1lqP8GLpJfTNf0e747g1Y5anRj5zhVcW4SYHC/j+jJOQaqmBBMIbv/1Xkcoc896DYBFgLL4Jw/3STGeozWiQDN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QL7zJy6O; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dDF/8mVt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713366065; x=1744902065;
-  h=date:message-id:from:to:cc:subject:in-reply-to:
-   references:mime-version;
-  bh=2XfitDFi8joNtBN6v5pf1qqwQN4BZHQIVg7OHTwoRTc=;
-  b=dDF/8mVtq6WDrfeC7P8Gmei8ZIlsuy9UY1ZwXgi4OT+yUvip8M2dA+hL
-   U1P8dohaRk9cKjGAtktqb+tZeJF7GpnUXljJh6G20nNVAyuxlj1OYD9Bo
-   6BkgBvudtHIFH1V4LueRgFggM7egPZuYazxTihf+JN36lgb2zFi6t1fOF
-   LeUGL2CJJKVYx2eAV/qcNCl7E5YmTenWrTM9ZRim75Yr3T6hUzxiYLykY
-   bsEOty2F7RhoktyPILd6iPZGySPDKnl5Kw/OaRWC9d+214UEZtK4MSqgv
-   NegCwa4OrEFNPyhCEc1+z2uM6AfDl40Fxh2BxKTwKMuUIvoSLEHHoYsC2
-   Q==;
-X-CSE-ConnectionGUID: vg/D3zSpTfKYK2rDz9DNCA==
-X-CSE-MsgGUID: YkNqIagNQcyml24xlOdaPQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11046"; a="12701333"
-X-IronPort-AV: E=Sophos;i="6.07,209,1708416000"; 
-   d="scan'208";a="12701333"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2024 08:01:04 -0700
-X-CSE-ConnectionGUID: 3hSmhStwTcKRyGUb6jUo5Q==
-X-CSE-MsgGUID: lIQ6eIHtQPC39Z0nke0VeA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,209,1708416000"; 
-   d="scan'208";a="23244226"
-Received: from orsosgc001.jf.intel.com (HELO orsosgc001.intel.com) ([10.165.21.138])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2024 08:01:05 -0700
-Date: Wed, 17 Apr 2024 08:01:04 -0700
-Message-ID: <85bk68c9u7.wl-ashutosh.dixit@intel.com>
-From: "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
-To: Andi Shyti <andi.shyti@linux.intel.com>
-Cc:<intel-gfx@lists.freedesktop.org>,	Badal Nilawar
- <badal.nilawar@intel.com>,	Ville =?ISO-8859-1?Q?Syrj=E4l=E4?=
- <ville.syrjala@linux.intel.com>,	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	"Jani\ Nikula" <jani.nikula@linux.intel.com>,<linux-hwmon@vger.kernel.org>,
- <dri-devel@lists.freedesktop.org>
-Subject: Re: [PATCH v4] drm/i915/hwmon: Get rid of devm
-In-Reply-To: <Zh-IQENH0hHokBbv@ashyti-mobl2.lan>
-References: <20240417051642.788740-1-ashutosh.dixit@intel.com>
-	<Zh-IQENH0hHokBbv@ashyti-mobl2.lan>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
- Emacs/28.2 (x86_64-redhat-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QL7zJy6O"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82531C072AA;
+	Wed, 17 Apr 2024 15:15:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713366935;
+	bh=kOOLX0GNiMAkD1VX/95set0np7ukVjF1pfBU3LwFRW8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QL7zJy6OLSIs1652n7aexUDQ63cHmByQdZlKh1yLGxBuvWohHBx1/W44cUUtQPAKS
+	 44Yzv9uPuxjL0byOWhYvXMCY/w2/9N1r6+Q+VGO+MkL52eiodAPoTF3AJFL5X+RCcS
+	 AKTKKsX5qOL3tj7fcAS8HU7c9L9kdtmJZTO4SeQoUPepNar9GFBDODAGKUAaCq95Lx
+	 sawi7ORpD/qG7VqJQ1J0ghq4dl3u+VB/Zqi+qR4mYYXbRVGxs69PpCAQDr9eu9Kq/6
+	 N7hJpyYfLylOGmtYUGB+8XXgKAibTeVfo3P5vAvMLwGEkUKzQR3Cm7w1Ts0q73+3oz
+	 B7QgX3LaA9UGQ==
+Date: Wed, 17 Apr 2024 16:15:30 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Jose Ramon San Buenaventura <jose.sanbuenaventura@analog.com>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-i2c@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: adm1275: add adm1281
+Message-ID: <20240417-trailside-hardhead-ad59b591c243@spud>
+References: <20240417000722.919-1-jose.sanbuenaventura@analog.com>
+ <20240417000722.919-2-jose.sanbuenaventura@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="Dgh85Drl3KFrr/nH"
+Content-Disposition: inline
+In-Reply-To: <20240417000722.919-2-jose.sanbuenaventura@analog.com>
 
-On Wed, 17 Apr 2024 01:28:48 -0700, Andi Shyti wrote:
->
 
-Hi Andi,
+--Dgh85Drl3KFrr/nH
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > @@ -839,16 +837,38 @@ void i915_hwmon_register(struct drm_i915_private *i915)
-> >		if (!hwm_gt_is_visible(ddat_gt, hwmon_energy, hwmon_energy_input, 0))
-> >			continue;
-> >
-> > -		hwmon_dev = devm_hwmon_device_register_with_info(dev, ddat_gt->name,
-> > -								 ddat_gt,
-> > -								 &hwm_gt_chip_info,
-> > -								 NULL);
-> > -		if (!IS_ERR(hwmon_dev))
-> > -			ddat_gt->hwmon_dev = hwmon_dev;
-> > +		hwmon_dev = hwmon_device_register_with_info(dev, ddat_gt->name,
-> > +							    ddat_gt,
-> > +							    &hwm_gt_chip_info,
-> > +							    NULL);
-> > +		if (IS_ERR(hwmon_dev))
-> > +			goto err;
->
-> here the logic is changing, though. Before we were not leaving if
-> hwmon_device_register_with_info() was returning error.
->
-> Is this wanted? And why isn't it described in the log?
+On Wed, Apr 17, 2024 at 08:07:21AM +0800, Jose Ramon San Buenaventura wrote:
+> Add support for the adm1281 Hot-Swap Controller and Digital Power
+> and Energy Monitor
+>=20
+> Signed-off-by: Jose Ramon San Buenaventura <jose.sanbuenaventura@analog.c=
+om>
 
-Not sure if the previous logic was intentional or not, anyway I have
-restored it in v5 (where I once again forgot to add "PATCH v5" to the
-Subject but v5 is there in the version log :/).
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-Thanks.
---
-Ashutosh
+--Dgh85Drl3KFrr/nH
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZh/nkgAKCRB4tDGHoIJi
+0tHaAPwO3MjuuAqScqO7DvoyJX491xjsNeINbG0fUGpBnYXMMAD/WObAXpy2t01d
+d/nf/1XG6mSaiwuhUeK21kYIMThfFgw=
+=ndHo
+-----END PGP SIGNATURE-----
+
+--Dgh85Drl3KFrr/nH--
