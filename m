@@ -1,73 +1,75 @@
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 149D4165FC4;
-	Thu, 18 Apr 2024 13:42:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E8A81635C5;
+	Thu, 18 Apr 2024 13:52:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713447763; cv=none; b=fTysEiTkyQrIt4hg1opvKWTEb7oPoOYZOxGYfv/Bz56NiVyecxTK9EYJ41GtK+5r14K5Ci60mULOegtSrtGjhrh3Z6rhbjYhC91MZAi+XcngYLeFPVFBpYwveu+Y2Vl/OU/zOUdfxOEOfzjIZZEc8ZK91WRqYTqzi8sm47mDG0Y=
+	t=1713448377; cv=none; b=LG118vMstorpggci1tdeXPEFdlarn8bQB3peR7EhYFo+MeYdqTmYsPFBWlVcOuQOSozDI3YRulfQii327mmexHGd5Sa9+AxR577poIUMTLzwQRKDOVvwJimxkI65g8hn9V9gDj85dN9uJAq5SAQYY0lUYBimc0r+4lqIrkLOYlE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713447763; c=relaxed/simple;
-	bh=5R7F3f6tjT0gqEhUGUPVdLLImI03/iPgl6xs+OV1mgc=;
+	s=arc-20240116; t=1713448377; c=relaxed/simple;
+	bh=OOfclcgBJP4rjtOQmlOeafKYzgvn9V5QPUbGwmpD9H0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=clQuBd0lUDRA/R+YUx/fDhTiaNGsR/hYQivijwHhi7oxprnddQuNIc4v+RqrRNKuO6Oz8sIeA5UcdxKhIbFM+zp00MSTu7YzHl1SQqii3kgEpQqWozawx05pom1PxnGYeC5dpbGPNFPwQ8N2sqbQjFlpSTQlRWxJ0uH3YHU0DkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Px2cdxHX; arc=none smtp.client-ip=209.85.210.45
+	 Content-Type:Content-Disposition:In-Reply-To; b=Kx/jTF/ej1kG0g1NRyrf14jRUXA+iLbK6mBeop2azyaEbguPP2D+SrbISmh0t/A/9Zs4Vh6nYqK2YEcmCh0NJty82dgaoxQxX6W0ni8Fq/6MhAa8aptFxUQ9zDCPbsjNViGDxVA2g1lOBzEmp2kYzEIPqT72XVjc6U0hI0U1Ud4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AVhCXV/d; arc=none smtp.client-ip=209.85.210.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Px2cdxHX"
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-6eb848b5a2eso472562a34.3;
-        Thu, 18 Apr 2024 06:42:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AVhCXV/d"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-6f074520c8cso868763b3a.0;
+        Thu, 18 Apr 2024 06:52:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713447761; x=1714052561; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1713448376; x=1714053176; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=mwD6D1T0Raq489SMEFFgoKUcTuSJ6kvgxPfdmfdOOQw=;
-        b=Px2cdxHXgXOt6Y9NqFGhvJIS97e8ov01Tr9ZfTsjjXlA7X/lwNejrcYwir3TQV7jpn
-         L4X2mRE4iMkhzi4BD1T3yqjy4z0vq6O37ypBt+PxS/KUJfcc6Vl5RC58gylcp8axTrgO
-         RIrV9mHwPM/uQQyRnQpiPKs8EWfGz94ThjfbwFcxZkBHfyfaH8RhMs1TGKpcxopiVsb5
-         n6yaD12EIazQozknApflK4ZLdAUcTG4ScClHL58f0smC+iP7f2edh1MnXftk5fBJ9d5f
-         QxJHT3xptgLuBwSe8WTGHZCMg3GfFRK2BxQ4wrFbvAfmOKpNnLsiqdcp9TJLXsfw8xUb
-         JkkA==
+        bh=QyA3fzOku9oWwA8R0hs2Mphvf99QfjgFFiLxSpYNLQc=;
+        b=AVhCXV/dDhmFuzVqOhwIwoq/nCiyJGr5iECYptBsOBUCQ47eBZrQ4QlAJY7FQKnHHI
+         1HvCpUttn30Kq54lNnSCo8f+k+dngFDCQwpx/qhzcFm5JAvRZKDD+HJUnR8fYW8C803I
+         mtKm8RqZFZIjt3997sJHgnM58VjNm4nFEONhs4oUZfYI6USTu3Ut/HvyZc0RFxx2N2wD
+         GgArO249F93TVxxlRCCYsC3k89cvW/amqOQoFQ6pjNyRw50fXPSGudgOnhAwQBpYynr4
+         upmyaIktM6ivR+v4TSakpdUj7xiTk0rqTdeHLsrF5cDw0vP3cH/Czb0hNWtmaDwf18vQ
+         nRTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713447761; x=1714052561;
+        d=1e100.net; s=20230601; t=1713448376; x=1714053176;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mwD6D1T0Raq489SMEFFgoKUcTuSJ6kvgxPfdmfdOOQw=;
-        b=YXYXvQGQ4vjoX/xdL4uq5aeEFueHUxIDnxKsPcMlcFDxASCtVzLDtruStEp1hGE1J6
-         sLAZFcjUUUWcr3Y6XnLnj5DzztOLZwgs316wcE6dF7Zw9fFGljlBq+XrSh6QN9VAo+QE
-         8l22Q2b3Wd4PlZVW4vqniIe2luEFr/X51cS1CAPFgYnz+x3vrPHnt0yWstztyEyyUFQ5
-         gcOfl+bqbvRvXc4sMqrzfk2fzix3hRwoqyaMpD2kKVWDHZlsT4TyVEt83+0huybjwkTS
-         hRrkVBK39S5gTh/9jyvHnAfuc0er6infZISz+LOCrC/tP+noel51yve8xUIt1Q/Keil8
-         Lefw==
-X-Forwarded-Encrypted: i=1; AJvYcCX1GVeqDh7KSOJER5gMXa1kGks2qyFfaz2EZ/eFZsKfVXBRXqXJ1R+uczQPcTMeynSU+XO6uuF0A/CY0pJ1L0RgUYL6BJ7zKdZN2Frr3soMcESLuNUpCpCiB2XpyzDFA7DdOl87sp9fkrU=
-X-Gm-Message-State: AOJu0YyZRJ2XRGqwghOh55J8JuLtjYYneR8UYm6kxRWu1yUpqivfzFSN
-	TknFkqcsuZtOOgjvIhrKvnnCGDKtCMyg9rkOKHpofDfkQsQAEsdI
-X-Google-Smtp-Source: AGHT+IERDKS1ud8LvJJrYgvlREQjcZ+3AyWvA4FsaHVmRb6cWe9aSiMdn9rKGTFF+d8nbkWKZI4mMw==
-X-Received: by 2002:a05:6830:204b:b0:6eb:9497:5d46 with SMTP id f11-20020a056830204b00b006eb94975d46mr3478484otp.7.1713447761019;
-        Thu, 18 Apr 2024 06:42:41 -0700 (PDT)
+        bh=QyA3fzOku9oWwA8R0hs2Mphvf99QfjgFFiLxSpYNLQc=;
+        b=Q5xq8CCl8TKtSBNU6js68iTqkVQVXH+BfGNg3eJUoYCGYiNp5tBRErXyXntQeM84Tx
+         970DwZAP684PtvGGN6SLVJEXGYlmAvKVWLtIdHMhc1wtMaS7xHGdT8o3LN1Eg6ULwYfg
+         lCt2OJxWPiDKk9+zigOribT/IewYKyleJK1+7M5GKlVQeTE33aEfswh0UD20TTIsybmY
+         3VuLqCuld/prA/gbczZTYLZvKD4MRsyd1zeawe8EaU7fHvoaXTUfhmplOX1eyQ0pcQl+
+         ORdFSvDia4S7e1bz5NiebRs32eNQPt2E3uxbHxQTU1KtxLuEInK4IRzo1ReR5lSDGSb2
+         UyQQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUmdTtN0lVTJr6cL7oLYRXXp2Kjpk4SSaUdjQqNraL0CHEOu9tPpiX6nT6ApuqnN78dRbwJphgVC8OVIcea/JLFk9xV8TlkBVVRjQx7KJ7ZPBL3vWGSQ9k9MiLgL18xtMX3ntOcN/6Zk5Y=
+X-Gm-Message-State: AOJu0Yx5INB//ki1UFelb0uWQmNvbjkwzk2NzoQ974pfBYML4Him/aHT
+	s3Ufm9qeCyHbj4CFUg2A81BW5uS2aoa45AYXgmr5qlkLeKhUPx6c
+X-Google-Smtp-Source: AGHT+IFKjXEU0yszXeRAs3pRq6UlLYqDpFbI6NzJmKcNmljEtyYAhAhxpmnGaPhWktOFaXkyMjn/2w==
+X-Received: by 2002:a05:6a20:841b:b0:1a9:ccf8:6ea5 with SMTP id c27-20020a056a20841b00b001a9ccf86ea5mr3873023pzd.8.1713448375740;
+        Thu, 18 Apr 2024 06:52:55 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 9-20020a630b09000000b005dbed0ffb10sm1428026pgl.83.2024.04.18.06.42.40
+        by smtp.gmail.com with ESMTPSA id kg15-20020a170903060f00b001e28d7329e6sm1530208plb.91.2024.04.18.06.52.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Apr 2024 06:42:40 -0700 (PDT)
+        Thu, 18 Apr 2024 06:52:55 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 18 Apr 2024 06:42:39 -0700
+Date: Thu, 18 Apr 2024 06:52:53 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Andrew Davis <afd@ti.com>
-Cc: Rob Herring <robh@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-	Juerg Haefliger <juergh@proton.me>,
-	Riku Voipio <riku.voipio@iki.fi>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/31] Remove use of i2c_match_id in HWMON
-Message-ID: <340e8274-dd6b-49b0-906b-32da60745b22@roeck-us.net>
-References: <20240403203633.914389-1-afd@ti.com>
- <0e43aa83-2e02-49e2-96b8-24cac0362a7b@roeck-us.net>
- <77b2f8ce-0b71-4a7a-81bc-a64a1af3566d@ti.com>
- <fcafe904-383c-49c0-b576-81cbcde045c5@roeck-us.net>
- <cd6ae1f7-33e7-4e1b-bac8-c5566b22b392@roeck-us.net>
- <fce93a8b-7225-4775-b265-d283a863f969@ti.com>
+To: "Winiarska, Iwona" <iwona.winiarska@intel.com>
+Cc: "Luck, Tony" <tony.luck@intel.com>,
+	"patches@lists.linux.dev" <patches@lists.linux.dev>,
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"jdelvare@suse.com" <jdelvare@suse.com>
+Subject: Re: [PATCH v3 50/74] x86/cpu/vfm: Update drivers/hwmon/peci/cputemp.c
+Message-ID: <f1d02e4f-a947-4af1-a7c0-9f7c12c57b3e@roeck-us.net>
+References: <20240416211941.9369-1-tony.luck@intel.com>
+ <20240416212216.9605-1-tony.luck@intel.com>
+ <5869d164-25c4-42e5-bf87-c4aeeac57388@roeck-us.net>
+ <SJ1PR11MB6083D0DFBC7DE286F986A453FC082@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <8690bcea-3ff4-49f1-a671-16583b8d241e@roeck-us.net>
+ <SJ1PR11MB6083C8D12885057BF3A0A6AAFC082@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <7cb09d67409c94284928243d8ffb1f8a3128d849.camel@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -76,90 +78,36 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fce93a8b-7225-4775-b265-d283a863f969@ti.com>
+In-Reply-To: <7cb09d67409c94284928243d8ffb1f8a3128d849.camel@intel.com>
 
-On Tue, Apr 16, 2024 at 12:08:50PM -0500, Andrew Davis wrote:
-> On 4/16/24 9:16 AM, Guenter Roeck wrote:
-> > On Mon, Apr 08, 2024 at 04:49:43AM -0700, Guenter Roeck wrote:
-> > > On Wed, Apr 03, 2024 at 05:06:43PM -0500, Andrew Davis wrote:
-> > > > On 4/3/24 4:30 PM, Guenter Roeck wrote:
-> > > > > On Wed, Apr 03, 2024 at 03:36:02PM -0500, Andrew Davis wrote:
-> > > > > > Hello all,
-> > > > > > 
-> > > > > > Goal here is to remove the i2c_match_id() function from all drivers.
-> > > > > > Using i2c_get_match_data() can simplify code and has some other
-> > > > > > benefits described in the patches.
-> > > > > > 
-> > > > > 
-> > > > > The return value from i2c_match_id() is typically an integer (chip ID)
-> > > > > starting with 0. Previously it has been claimed that this would be
-> > > > > unacceptable for i2c_get_match_data(), and chip IDs were changed to start
-> > > > > with 1. Commit ac0c26bae662 ("hwmon: (lm25066) Use i2c_get_match_data()")
-> > > > > is an example. Either this series is wrong, or the previous claim that
-> > > > > chip IDs (i.e., the content of .driver_data or .data) must not be 0 was
-> > > > > wrong. Which one is it ? I find it very confusing that the chip type for
-> > > > > some drivers now starts with 1 and for others with 0. Given that, I am not
-> > > > > inclined to accept this series unless it is explained in detail why the
-> > > > > chip type enum in, for example, drivers/hwmon/pmbus/lm25066.c has to start
-> > > > > with one but is ok to start with 0 for all drivers affected by this
-> > > > > series. Quite frankly, even if there is some kind of explanation, I am not
-> > > > > sure if I am going to accept it because future driver developers won't
-> > > > > know if they have to start chip types with 0 or 1.
-> > > > > 
-> > > > 
-> > > > i2c_get_match_data() has no issue with returning 0 when the driver_data
-> > > > for the match is also 0 (as it will be when the chip type is 0 here).
-> > > > 
-> > > > The confusion might be that returning 0 is also considered a failure code.
-> > > > This is a problem in general with returning errors in-band with data, and
-> > > > that is nothing new as i2c_match_id() does the same thing.
-> > > > 
-> > > > Actually, i2c_match_id() is worse as most of these drivers take the result
-> > > > from that and immediately dereference it. Meaning if i2c_match_id() ever did
-> > > > failed to find a match, they would crash before this series. Luckily i2c_match_id()
-> > > > can't fail to find a match as far as I can tell, and so for the same reason
-> > > > neither can i2c_get_match_data(), which means if 0 is returned it is always
-> > > > because the chip ID was actually 0.
-> > > > 
-> > > > At some point we should switch all the *_get_match_data() functions to
-> > > > return an error code and put the match if found as a argument pointer.
-> > > > Forcing everyone to changing the chip type to avoid 0 as done in
-> > > > ac0c26bae662 is the wrong way to fix an issue like that.
-> > > > 
-> > > 
-> > > That doesn't really answer my question. It does not explain why it was
-> > > necessary to change the chip ID base for other drivers from 0 to 1,
-> > > but not for the drivers in this series. I fail to see the difference,
-> > > and I have to assume that others looking into the code will have the
-> > > same problem.
-> > > 
+On Thu, Apr 18, 2024 at 01:32:15PM +0000, Winiarska, Iwona wrote:
+> On Tue, 2024-04-16 at 23:57 +0000, Luck, Tony wrote:
+> > > If the CPU defines and the new macro are to be kept in architecture code,
+> > > maybe include arch/x86/include/asm/cpu_device_id.h from linux/peci.cpu.h.
+> > > That would not be worse than today's include of intel-family.h.
 > > 
-> > Just to follow up: I am not going to apply this series until I understand
-> > why the chip ID range had to be changed from 0.. to 1.. for other hardware
-> > monitoring drivers (lm25066, nct6775) but not for the drivers changed
-> > in this series. I have been telling people that chip IDs need to start
-> > with 1 if i2c_get_match_data() is used. I'll need understand when and
-> > why this is needed to be able to provide guidance to other developers.
+> > Guenter,
 > > 
+> > Looks like I did that to resolve one of the other peci problems. Because I
+> > already have:
+> > 
+> > #include "../../arch/x86/include/asm/cpu_device_id.h"
+> > #include "../../arch/x86/include/asm/intel-family.h"
+> > 
+> > in <linux/peci_cpu.h>
+> > 
+> > Simply deleting the include from cputemp.c builds OK in the
+> > context of all the other changes in my patch series.
 > 
-> I was hoping one of those patch authors that made those 0->1 changes
-> would speak up (+Rob), I can't know what their thinking was, only
-> offer my best guess as I did above.
+> Hi Tony,
+> 
+> It won't build on non-x86, as cpu_device_id.h includes <asm/intel-family.h>.
+> I think the simplest way to solve the issue is to provide a copy of VFM_* macros
+> and X86_VENDOR_INTEL in include/linux/peci-cpu.h.
 > 
 
-I can see three possibilities.
+I think the proper fix would really be to move the include files to a
+generic directory, such as include/linux/x86/ or include/linux/cpu/x86/.
+After all, they _are_ now needed in non-Intel code.
 
-- Chip IDs must start with 1 if i2c_get_match_data() is used, as I was told
-  previously. If so, this series is wrong.
-- It is ok for chip IDs to start with 0. If so, what I have been told
-  previously is wrong, and the patches changing chip IDs to start with 1
-  can and should be partially reverted to avoid confusion.
-- Chip IDs must sometimes, but not always, start with 1. If so, the
-  conditions will have to be documented to help driver developers decide
-  the valid starting value and to be able to determine if all the patches
-  in this series follow the rules.
-
-Someone will have to step up and explain to me which one it is.
-
-Thanks,
 Guenter
