@@ -1,117 +1,84 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D02613F443
-	for <linux-hwmon@vger.kernel.org>; Thu, 18 Apr 2024 21:57:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18450A55
+	for <linux-hwmon@vger.kernel.org>; Fri, 19 Apr 2024 01:05:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713477432; cv=none; b=QdHMNuN8VL4y4v3vIqN/fapU1yirGOj7iOv7JvsufkFhzGwb2B0DxjVsGAL6zwzi7yR6hVShHQra1PKoUE7F2pAtSvL6dHoEgUy0XiEWsHWgtyIaw3XHY0OlQdb5nyvbJF0bwwSvo+Qa8vPFx3V54R6tdLUX583g8/48vO+RurI=
+	t=1713488732; cv=none; b=OWKpEbsaLs7dCNDtnLeIZojoeHWqsVS5D9pO3xZ/J2FsgkkMMIm4WFxSdY6atKGCh2I7uU4p4FaNsAJNa8dqCA3fRhBJbjnueLw0L1VXBbP2/rDexwsh6kTPWaAM7X0tbTqc5N/XjK9jacc1Lt/snxVHDCpah5xkZ+y/SwBjtXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713477432; c=relaxed/simple;
-	bh=YTAwvbMycwG5cb3j7vIP93lVwZ8xj4iKyrEBeO9eL4w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cMWWai8f+Ux3Ozg0uhGkdk1dP1R6Nn6EHsqWxEF0kxnn4U5R0q1nyNPyOkEFTs7E+ngaO85o+aM7xCMjsnAmYqp3qKRLvxceeP52O25m7iLAIS/mCSU3dA3HW98CFJlj/3yhAoigsimpN07QWPfZ7fx/ueh/TVnsSAqxLmWvd9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kc2y2rwn; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1713488732; c=relaxed/simple;
+	bh=zmJIOTVSXHNG/1LS4rD4f4JmQ99V51giJdVFbZDMLj8=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=NYa5WlKbNLXDm/SG/HUZrDrip75r0HfGWAFbBDFijt8EqBnd7vGdByTuXT3A1HNIS+5XNH8URFBsrs098lO/FlopB8V4LWrf8hHKIICL9Gvd9Bzdn4zPoUWuZyeRyrLW0mNBI+j8TMc76Ad4sLuzhOHMhDMhXd5iyir7z8DRPSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=asG3HBlf; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kc2y2rwn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="asG3HBlf"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713477431; x=1745013431;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YTAwvbMycwG5cb3j7vIP93lVwZ8xj4iKyrEBeO9eL4w=;
-  b=Kc2y2rwnY8HfRxvDoj/cIjpGoRxPUisu6eBTPFvnWWjCTOpWIHRmPZ3v
-   oU+Dgbrt9jf0kBQhFVrAfRLca0qtoE8QxTHcTFdQiwtwvvJwrhLfk6pxc
-   vwu8gRh4S6z/uqXmnz5IO40of6jHhbltYK7lR+xtxgwsvu49JVVyFEDJR
-   b32FZBMhq7JKuk4JTSc8df0eVoL9IGQQ9Gf5AA/8jKGU6xnnxiLRwVNBh
-   U6f16fl2B0s0IvwvgJQAIOdpzkybk5ZjotZWYk2MfqntulYnZ645ct+K4
-   1/LmGBWjoUE/NeDthmT8t2RqxgV0NPYR68Fd1DCsRmbYViwYyBWUITHQC
+  t=1713488730; x=1745024730;
+  h=date:message-id:from:to:cc:subject:in-reply-to:
+   references:mime-version;
+  bh=zmJIOTVSXHNG/1LS4rD4f4JmQ99V51giJdVFbZDMLj8=;
+  b=asG3HBlfcM2IyKtaTlcAZOWFEk6GVta6OD1mpfW6N5/hryLe1tl/8zwD
+   HgJ7G9q6LSzfP+5v1MtlJ1R5IU0MnPcWN3DXaYlmiVVMTEB+jI9ZPSoIZ
+   0ihnaOZc7xH76kBSOFP0jWgwtP3/MMocZ7DnxASPVQokpBz5WLI2cCHCs
+   YE5NFTA+YghdDgsdvkLvANpXqi8/vCv20FEcNScXxfmQ+6rPyws7sTxZq
+   aV2drmNfIcdiY9GUEaQdnUspDf3RPRK474kuEVQACIGL8jDS5Zq0SC/eb
+   PHDuYFM/CMfC6d/n/XyDqgwkY4x2KsZg4naRXARzzNzRebv6f/2wkbHh4
    g==;
-X-CSE-ConnectionGUID: GMQUQoSOTcmXoilNp/rHfg==
-X-CSE-MsgGUID: mjdEgIgGQv2Y2tOOOAHHBg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11047"; a="19664976"
+X-CSE-ConnectionGUID: p0fsvLpAQ4Cc1lVDV/gCUg==
+X-CSE-MsgGUID: yKi0+fiHSPiwJVdkKWBZbw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11047"; a="12907673"
 X-IronPort-AV: E=Sophos;i="6.07,213,1708416000"; 
-   d="scan'208";a="19664976"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2024 14:57:10 -0700
-X-CSE-ConnectionGUID: 1BB1O1PHRtGMYYpDSinWww==
-X-CSE-MsgGUID: RtenSBPEQoaLM7kXIE5B4A==
+   d="scan'208";a="12907673"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2024 18:05:29 -0700
+X-CSE-ConnectionGUID: UHzZUvgxQsugT+iRKiDQiA==
+X-CSE-MsgGUID: IWrBIqJCTrGaQrH8u7FkEw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,213,1708416000"; 
-   d="scan'208";a="46417112"
-Received: from unknown (HELO intel.com) ([10.247.119.51])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2024 14:57:05 -0700
-Date: Thu, 18 Apr 2024 23:56:58 +0200
-From: Andi Shyti <andi.shyti@linux.intel.com>
-To: Ashutosh Dixit <ashutosh.dixit@intel.com>
-Cc: intel-gfx@lists.freedesktop.org,
-	Badal Nilawar <badal.nilawar@intel.com>,
-	Ville =?iso-8859-15?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	linux-hwmon@vger.kernel.org, dri-devel@lists.freedesktop.org
+   d="scan'208";a="23787894"
+Received: from orsosgc001.jf.intel.com (HELO orsosgc001.intel.com) ([10.165.21.138])
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2024 18:05:30 -0700
+Date: Thu, 18 Apr 2024 18:05:29 -0700
+Message-ID: <857cgucgbq.wl-ashutosh.dixit@intel.com>
+From: "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
+To: Andi Shyti <andi.shyti@linux.intel.com>
+Cc:<intel-gfx@lists.freedesktop.org>,	Badal Nilawar
+ <badal.nilawar@intel.com>,	Ville =?ISO-8859-1?Q?Syrj=E4l=E4?=
+ <ville.syrjala@linux.intel.com>,	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	"Jani\ Nikula" <jani.nikula@linux.intel.com>,<linux-hwmon@vger.kernel.org>,
+ <dri-devel@lists.freedesktop.org>
 Subject: Re: [PATCH] drm/i915/hwmon: Get rid of devm
-Message-ID: <ZiGXKrheNEJlk56X@ashyti-mobl2.lan>
+In-Reply-To: <ZiGXKrheNEJlk56X@ashyti-mobl2.lan>
 References: <20240417145646.793223-1-ashutosh.dixit@intel.com>
+	<ZiGXKrheNEJlk56X@ashyti-mobl2.lan>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
+ Emacs/28.2 (x86_64-redhat-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240417145646.793223-1-ashutosh.dixit@intel.com>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 
-Hi Ashutosh,
+On Thu, 18 Apr 2024 14:56:58 -0700, Andi Shyti wrote:
+>
+> > v2: Change commit message and other minor code changes
+> > v3: Cleanup from i915_hwmon_register on error (Armin Wolf)
+> > v4: Eliminate potential static analyzer warning (Rodrigo)
+> >     Eliminate fetch_and_zero (Jani)
+> > v5: Restore previous logic for ddat_gt->hwmon_dev error return (Andi)
+>
+> Thanks!
+>
+> Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
 
-On Wed, Apr 17, 2024 at 07:56:46AM -0700, Ashutosh Dixit wrote:
-> When both hwmon and hwmon drvdata (on which hwmon depends) are device
-> managed resources, the expectation, on device unbind, is that hwmon will be
-> released before drvdata. However, in i915 there are two separate code
-> paths, which both release either drvdata or hwmon and either can be
-> released before the other. These code paths (for device unbind) are as
-> follows (see also the bug referenced below):
-> 
-> Call Trace:
-> release_nodes+0x11/0x70
-> devres_release_group+0xb2/0x110
-> component_unbind_all+0x8d/0xa0
-> component_del+0xa5/0x140
-> intel_pxp_tee_component_fini+0x29/0x40 [i915]
-> intel_pxp_fini+0x33/0x80 [i915]
-> i915_driver_remove+0x4c/0x120 [i915]
-> i915_pci_remove+0x19/0x30 [i915]
-> pci_device_remove+0x32/0xa0
-> device_release_driver_internal+0x19c/0x200
-> unbind_store+0x9c/0xb0
-> 
-> and
-> 
-> Call Trace:
-> release_nodes+0x11/0x70
-> devres_release_all+0x8a/0xc0
-> device_unbind_cleanup+0x9/0x70
-> device_release_driver_internal+0x1c1/0x200
-> unbind_store+0x9c/0xb0
-> 
-> This means that in i915, if use devm, we cannot gurantee that hwmon will
-> always be released before drvdata. Which means that we have a uaf if hwmon
-> sysfs is accessed when drvdata has been released but hwmon hasn't.
-> 
-> The only way out of this seems to be do get rid of devm_ and release/free
-> everything explicitly during device unbind.
-> 
-> v2: Change commit message and other minor code changes
-> v3: Cleanup from i915_hwmon_register on error (Armin Wolf)
-> v4: Eliminate potential static analyzer warning (Rodrigo)
->     Eliminate fetch_and_zero (Jani)
-> v5: Restore previous logic for ddat_gt->hwmon_dev error return (Andi)
+Thanks a lot Andi, merged!
 
-Thanks!
-
-Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
-
-Andi
+Ashutosh
