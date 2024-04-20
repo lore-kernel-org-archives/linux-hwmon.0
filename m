@@ -1,89 +1,148 @@
-Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [176.9.242.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49C953B299;
-	Sat, 20 Apr 2024 20:01:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.223.78.240
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE16547F41;
+	Sat, 20 Apr 2024 20:04:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.9.242.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713643298; cv=none; b=HXR3zDGrOv3dBoHOO5eTsEe4aRLednpV1cWsPTxM/WYySkVaL74TccRtxDPPk/RItSJ9TbfLmuYC1HAydjvw2+VatgYiEg2Zat9MGkctpTqXXiKwtEbdAybdywM5TsxsdgMDFk6uSlnyc3XCyAbq1DOVGC0tw8gvDJNFIxAercs=
+	t=1713643447; cv=none; b=LzDwkP+kzujEA2gFec0PfKYuriwPsnEnD5mH3U2ZezktVGTiqollw7Cjqio2fvrgOd37XxV3bdta1u9fG31N2f+EuC6znplF5WoxesqNCyTc9WLaconojStXcGrR0zQhaIWqzN7w0Qzupc+mB1mnARZLHCYu5orKQ6PfjDcfmeo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713643298; c=relaxed/simple;
-	bh=4xgw46KEtZnT9GMEWjwss10m249evoF6JijhofbNk+0=;
-	h=Message-ID:From:Date:Subject:To:Cc; b=Z67eGNr4eGMEm2K2tzbuyzNSULCpORmXH9hP3d34hP/8JpRkd7dJ66N63V9BhRYin6Kj5TgE54h+veOjif/Fq/qREs3Fw96R9AgsRXO07cuu6Soy45HSk2ZnT/5RqCISFI5wag39h+ZNs6yVACzCV8oBQ0YhnfY6zo+HoDZh2LI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=pass smtp.mailfrom=wunner.de; arc=none smtp.client-ip=83.223.78.240
+	s=arc-20240116; t=1713643447; c=relaxed/simple;
+	bh=7otAGZc9k9MKc/6B4+yMK3GVBxObnZ7gLnUmDP9hJug=;
+	h=Message-ID:In-Reply-To:References:From:Date:Subject:To:Cc; b=fOGHHe6HUqFiQUT3QyN68Wn5laV0YCl15WziYN0wfjYq6BPDKV0tdzXfOQOEDL40lasaiMAsOh6HAX/jVHugGLeQzOyEVzxZNLAUArrswx55/bdYXKbJNXyNhbKapwrA8uQubJym0XV8XvGJ0WpehmGuYjcAe5BA6p4NdVyHTxU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=pass smtp.mailfrom=wunner.de; arc=none smtp.client-ip=176.9.242.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wunner.de
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
 	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
 	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
-	by bmailout2.hostsharing.net (Postfix) with ESMTPS id C6E382800C99F;
-	Sat, 20 Apr 2024 22:01:24 +0200 (CEST)
+	by bmailout3.hostsharing.net (Postfix) with ESMTPS id 246B71003D027;
+	Sat, 20 Apr 2024 22:03:58 +0200 (CEST)
 Received: by h08.hostsharing.net (Postfix, from userid 100393)
-	id BF393CC625; Sat, 20 Apr 2024 22:01:24 +0200 (CEST)
-Message-ID: <cover.1713608122.git.lukas@wunner.de>
+	id D4A3610C1A8; Sat, 20 Apr 2024 22:03:57 +0200 (CEST)
+Message-ID: <23c2031acaa64f1c02f00e817c3f7e4466d17ab2.1713608122.git.lukas@wunner.de>
+In-Reply-To: <cover.1713608122.git.lukas@wunner.de>
+References: <cover.1713608122.git.lukas@wunner.de>
 From: Lukas Wunner <lukas@wunner.de>
-Date: Sat, 20 Apr 2024 22:00:00 +0200
-Subject: [PATCH 0/6] Deduplicate string exposure in sysfs
+Date: Sat, 20 Apr 2024 22:00:02 +0200
+Subject: [PATCH 2/6] hwmon: Use device_show_string() helper for sysfs
+ attributes
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, linux-kernel@vger.kernel.org
-Cc: Michael Ellerman <mpe@ellerman.id.au>, linuxppc-dev@lists.ozlabs.org, Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org, Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, linux-rdma@vger.kernel.org, Shuai Xue <xueshuai@linux.alibaba.com>, Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Jonathan Cameron <jonathan.cameron@huawei.com>, Yicong Yang <yangyicong@hisilicon.com>, Jijie Shao <shaojijie@huawei.com>, Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, Khuong Dinh <khuong@os.amperecomputing.com>, linux-arm-kernel@lists.infradead.org, Corentin Chary <corentin.chary@gmail.com>, "Luke D. Jones" <luke@ljones.dev>, "Henrique de Moraes Holschuh" <hmh@hmh.eng.br>, ibm-acpi-devel@lists.sourceforge.net, Azael Avalos <coproscefalo@gmail.com>, Hans de Goede <hdegoede@redhat.com>, "Ilpo Jaervinen" <ilpo.jarvinen@linux.intel.com>, platform-driver-x86@vger.kernel.org, Anil Gurumur
- thy <anil.gurumurthy@qlogic.com>, Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>, Tyrel Datwyler <tyreld@linux.ibm.com>, Nilesh Javali <njavali@marvell.com>, GR-QLogic-Storage-Upstream@marvell.com, Don Brace <don.brace@microchip.com>, storagedev@microchip.com, "James E.J. Bottomley" <jejb@linux.ibm.com>, "Martin K. Petersen" <martin.petersen@oracle.com>, linux-scsi@vger.kernel.org
+Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Introduce a generic ->show() callback to expose a string as a device
-attribute in sysfs.  Deduplicate various identical callbacks across
-the tree.
+Deduplicate sysfs ->show() callbacks which expose a string at a static
+memory location.  Use the newly introduced device_show_string() helper
+in the driver core instead by declaring those sysfs attributes with
+DEVICE_STRING_ATTR_RO().
 
-Result:  Minus 216 LoC, minus 1576 bytes vmlinux size (x86_64 allyesconfig).
+No functional change intended.
 
-This is a byproduct of my upcoming PCI device authentication v2 patches.
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+---
+ drivers/hwmon/i5k_amb.c | 15 ++++-----------
+ drivers/hwmon/ibmpex.c  | 14 ++++----------
+ 2 files changed, 8 insertions(+), 21 deletions(-)
 
-
-Lukas Wunner (6):
-  driver core: Add device_show_string() helper for sysfs attributes
-  hwmon: Use device_show_string() helper for sysfs attributes
-  IB/qib: Use device_show_string() helper for sysfs attributes
-  perf: Use device_show_string() helper for sysfs attributes
-  platform/x86: Use device_show_string() helper for sysfs attributes
-  scsi: Use device_show_string() helper for sysfs attributes
-
- arch/powerpc/perf/hv-24x7.c              | 10 ----
- arch/x86/events/intel/core.c             | 13 ++---
- drivers/base/core.c                      |  9 ++++
- drivers/hwmon/i5k_amb.c                  | 15 ++----
- drivers/hwmon/ibmpex.c                   | 14 ++----
- drivers/infiniband/hw/qib/qib.h          |  1 -
- drivers/infiniband/hw/qib/qib_driver.c   |  6 ---
- drivers/infiniband/hw/qib/qib_sysfs.c    | 10 +---
- drivers/perf/alibaba_uncore_drw_pmu.c    | 12 +----
- drivers/perf/arm-cci.c                   | 12 +----
- drivers/perf/arm-ccn.c                   | 11 +----
- drivers/perf/arm_cspmu/arm_cspmu.c       | 10 ----
- drivers/perf/arm_cspmu/arm_cspmu.h       |  7 +--
- drivers/perf/arm_dsu_pmu.c               | 11 +----
- drivers/perf/cxl_pmu.c                   | 13 +----
- drivers/perf/hisilicon/hisi_pcie_pmu.c   | 13 +----
- drivers/perf/hisilicon/hisi_uncore_pmu.c | 14 ------
- drivers/perf/hisilicon/hisi_uncore_pmu.h |  4 +-
- drivers/perf/hisilicon/hns3_pmu.c        | 12 +----
- drivers/perf/qcom_l3_pmu.c               | 11 +----
- drivers/perf/xgene_pmu.c                 | 11 +----
- drivers/platform/x86/asus-wmi.c          | 62 ++++++------------------
- drivers/platform/x86/thinkpad_acpi.c     | 10 +---
- drivers/platform/x86/toshiba_acpi.c      |  9 +---
- drivers/scsi/bfa/bfad_attr.c             | 28 +++--------
- drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c | 11 +----
- drivers/scsi/mvsas/mv_init.c             | 10 +---
- drivers/scsi/qla2xxx/qla_attr.c          | 11 +----
- drivers/scsi/smartpqi/smartpqi_init.c    | 11 ++---
- include/linux/device.h                   | 15 ++++++
- 30 files changed, 85 insertions(+), 301 deletions(-)
-
+diff --git a/drivers/hwmon/i5k_amb.c b/drivers/hwmon/i5k_amb.c
+index ff48913fe6bf..02f5d35dd319 100644
+--- a/drivers/hwmon/i5k_amb.c
++++ b/drivers/hwmon/i5k_amb.c
+@@ -101,14 +101,7 @@ struct i5k_amb_data {
+ 	unsigned int num_attrs;
+ };
+ 
+-static ssize_t name_show(struct device *dev, struct device_attribute *devattr,
+-			 char *buf)
+-{
+-	return sprintf(buf, "%s\n", DRVNAME);
+-}
+-
+-
+-static DEVICE_ATTR_RO(name);
++static DEVICE_STRING_ATTR_RO(name, 0444, DRVNAME);
+ 
+ static struct platform_device *amb_pdev;
+ 
+@@ -373,7 +366,7 @@ static int i5k_amb_hwmon_init(struct platform_device *pdev)
+ 		}
+ 	}
+ 
+-	res = device_create_file(&pdev->dev, &dev_attr_name);
++	res = device_create_file(&pdev->dev, &dev_attr_name.attr);
+ 	if (res)
+ 		goto exit_remove;
+ 
+@@ -386,7 +379,7 @@ static int i5k_amb_hwmon_init(struct platform_device *pdev)
+ 	return res;
+ 
+ exit_remove:
+-	device_remove_file(&pdev->dev, &dev_attr_name);
++	device_remove_file(&pdev->dev, &dev_attr_name.attr);
+ 	for (i = 0; i < data->num_attrs; i++)
+ 		device_remove_file(&pdev->dev, &data->attrs[i].s_attr.dev_attr);
+ 	kfree(data->attrs);
+@@ -561,7 +554,7 @@ static void i5k_amb_remove(struct platform_device *pdev)
+ 	struct i5k_amb_data *data = platform_get_drvdata(pdev);
+ 
+ 	hwmon_device_unregister(data->hwmon_dev);
+-	device_remove_file(&pdev->dev, &dev_attr_name);
++	device_remove_file(&pdev->dev, &dev_attr_name.attr);
+ 	for (i = 0; i < data->num_attrs; i++)
+ 		device_remove_file(&pdev->dev, &data->attrs[i].s_attr.dev_attr);
+ 	kfree(data->attrs);
+diff --git a/drivers/hwmon/ibmpex.c b/drivers/hwmon/ibmpex.c
+index db066b368918..228c5f6c6f38 100644
+--- a/drivers/hwmon/ibmpex.c
++++ b/drivers/hwmon/ibmpex.c
+@@ -256,12 +256,7 @@ static struct ibmpex_bmc_data *get_bmc_data(int iface)
+ 	return NULL;
+ }
+ 
+-static ssize_t name_show(struct device *dev, struct device_attribute *devattr,
+-			 char *buf)
+-{
+-	return sprintf(buf, "%s\n", DRVNAME);
+-}
+-static SENSOR_DEVICE_ATTR_RO(name, name, 0);
++static DEVICE_STRING_ATTR_RO(name, 0444, DRVNAME);
+ 
+ static ssize_t ibmpex_show_sensor(struct device *dev,
+ 				  struct device_attribute *devattr,
+@@ -415,8 +410,7 @@ static int ibmpex_find_sensors(struct ibmpex_bmc_data *data)
+ 	if (err)
+ 		goto exit_remove;
+ 
+-	err = device_create_file(data->bmc_device,
+-			&sensor_dev_attr_name.dev_attr);
++	err = device_create_file(data->bmc_device, &dev_attr_name.attr);
+ 	if (err)
+ 		goto exit_remove;
+ 
+@@ -425,7 +419,7 @@ static int ibmpex_find_sensors(struct ibmpex_bmc_data *data)
+ exit_remove:
+ 	device_remove_file(data->bmc_device,
+ 			   &sensor_dev_attr_reset_high_low.dev_attr);
+-	device_remove_file(data->bmc_device, &sensor_dev_attr_name.dev_attr);
++	device_remove_file(data->bmc_device, &dev_attr_name.attr);
+ 	for (i = 0; i < data->num_sensors; i++)
+ 		for (j = 0; j < PEX_NUM_SENSOR_FUNCS; j++) {
+ 			if (!data->sensors[i].attr[j].dev_attr.attr.name)
+@@ -516,7 +510,7 @@ static void ibmpex_bmc_delete(struct ibmpex_bmc_data *data)
+ 
+ 	device_remove_file(data->bmc_device,
+ 			   &sensor_dev_attr_reset_high_low.dev_attr);
+-	device_remove_file(data->bmc_device, &sensor_dev_attr_name.dev_attr);
++	device_remove_file(data->bmc_device, &dev_attr_name.attr);
+ 	for (i = 0; i < data->num_sensors; i++)
+ 		for (j = 0; j < PEX_NUM_SENSOR_FUNCS; j++) {
+ 			if (!data->sensors[i].attr[j].dev_attr.attr.name)
 -- 
 2.43.0
 
