@@ -1,91 +1,89 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD9A9249F7
-	for <linux-hwmon@vger.kernel.org>; Sat, 20 Apr 2024 18:14:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49C953B299;
+	Sat, 20 Apr 2024 20:01:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.223.78.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713636851; cv=none; b=VAgpAXMxg4nGKivc4fr7/NGkYqMtXtFnzRWyfuWPO8llyMIhdQfoOaIeUBJi9kFBTuGDFw5N8bb9UbEnJLX1Wuix4RNdObZjE14/OQeBi/XGoPf7m8KXEpNVxu2KFP8tp6acL+aNWhuDXq/RejqJ76FqhMtOQ8mONEn9V5WsH4w=
+	t=1713643298; cv=none; b=HXR3zDGrOv3dBoHOO5eTsEe4aRLednpV1cWsPTxM/WYySkVaL74TccRtxDPPk/RItSJ9TbfLmuYC1HAydjvw2+VatgYiEg2Zat9MGkctpTqXXiKwtEbdAybdywM5TsxsdgMDFk6uSlnyc3XCyAbq1DOVGC0tw8gvDJNFIxAercs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713636851; c=relaxed/simple;
-	bh=lMMDQtiiSw8E9Q58ysyszT4y+zD5uoUx/bUP0jVJpxI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qDEs0o5IXWBCaX6wF/iszsbPV1deoq4/P+aV+pp12Necy3PIG43cADHp+xDvpTsuWhEPiNx4g2XpLd9yzGkbmhu3M05u6wT9oYMT1l42EH6PQLgX/1ZvVKQrOJ1X3iaugoQlbrqhvlSZcMEIo5kZEgcPV2mMfulcyaEsjwGRQi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=acsS37jt; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="acsS37jt"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-6f0aeee172dso1480208b3a.1
-        for <linux-hwmon@vger.kernel.org>; Sat, 20 Apr 2024 11:14:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713636849; x=1714241649; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CYl4EGzn1PWo5jsRNKYCdQ2KYu54krBOFHchrUfMsO0=;
-        b=acsS37jtAnHtqkTO5wsqW8STZeMQRND0OhOKMiQVhBoH2St2IMoHYH1jhFxnVL4npT
-         n8LLBDG56X2LmlcXOfVnL7MgS8J12Lg6rY/dXjWrwrnkR+fRGD3VI5RQEx8a12ZSGGlo
-         tdXOTpVosvMspiGYeXlY+Mj4UffZty5fMqdHaD4ykACy163yrBUQEouOxq5fnvXRfVEh
-         nEiX22q/81eQZGuug7Wl/0O2DAqUgGrUHnyYwn1L3LZYtR78n7y8VCJSDLg5XNZFopOI
-         9tql9ckT591msN6AY8cjgXtLVaWDMTZXaKtPO/v59pWanqq9F7gDXQCvxBtKunV1zyLy
-         BAZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713636849; x=1714241649;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CYl4EGzn1PWo5jsRNKYCdQ2KYu54krBOFHchrUfMsO0=;
-        b=sN/aUfUxpsKXKV3urbTdui87p9USycN6Ikvd5qxIupcp5qnqPaksfzLxcyo2AbRQlo
-         tTdouf7VJi/3HXA6KU4hT+bdA7fkJ//N9XeMXPl12xbl+Ovy+1t0Wadho7L93Q0HZ6OF
-         JGJa59Nq3HK02blHfOS9vA9slYy7YCUrj/WCWA6OQx4eYQMdG5RDchzX9LTZWK22tr7W
-         f0E/PHAMK33sMCud/L2zJ/s5IXNHn+TEXXMoXgjjVQa9ElMRzzlIi4wnFy0a0QAv8JTP
-         MfZRCW6bahQvOVOrr/WjgpIQ5Y8Grl/koCwZVZB7ZVKxkC8q9+tFuDiaOTdXIU8mzotk
-         GYfg==
-X-Gm-Message-State: AOJu0Yy16mu8AfyHt+AaUlUNAB9CKZUzui/QV+YDOZcFBiuBRe3GfStD
-	iAeZVkAIPUD2C/ZX7zV7Yw1KZfibhICnlyKldBc47GYUojQIalpDCbJ+xQ==
-X-Google-Smtp-Source: AGHT+IH9MvOTFfoiYO0aEooufFULE1hKOfEU1aj/6GkeNRDBnma0ZwUdRTJU8MG8CJl4DO4yXW09yA==
-X-Received: by 2002:a05:6a20:2589:b0:1a9:793c:59ec with SMTP id k9-20020a056a20258900b001a9793c59ecmr7098083pzd.13.1713636848724;
-        Sat, 20 Apr 2024 11:14:08 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a20-20020a056a0011d400b006ecec1f4b08sm5142450pfu.118.2024.04.20.11.14.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Apr 2024 11:14:07 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sat, 20 Apr 2024 11:14:06 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Aleksander Mazur <deweloper@wp.pl>
-Cc: linux-hwmon@vger.kernel.org
-Subject: Re: Regression in lm90 driver regarding GMT g781
-Message-ID: <abc624f1-e1cf-4933-b2e8-a6f3d46d38ef@roeck-us.net>
-References: <20240420183427.0d3fda27@mocarz>
+	s=arc-20240116; t=1713643298; c=relaxed/simple;
+	bh=4xgw46KEtZnT9GMEWjwss10m249evoF6JijhofbNk+0=;
+	h=Message-ID:From:Date:Subject:To:Cc; b=Z67eGNr4eGMEm2K2tzbuyzNSULCpORmXH9hP3d34hP/8JpRkd7dJ66N63V9BhRYin6Kj5TgE54h+veOjif/Fq/qREs3Fw96R9AgsRXO07cuu6Soy45HSk2ZnT/5RqCISFI5wag39h+ZNs6yVACzCV8oBQ0YhnfY6zo+HoDZh2LI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=pass smtp.mailfrom=wunner.de; arc=none smtp.client-ip=83.223.78.240
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wunner.de
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by bmailout2.hostsharing.net (Postfix) with ESMTPS id C6E382800C99F;
+	Sat, 20 Apr 2024 22:01:24 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id BF393CC625; Sat, 20 Apr 2024 22:01:24 +0200 (CEST)
+Message-ID: <cover.1713608122.git.lukas@wunner.de>
+From: Lukas Wunner <lukas@wunner.de>
+Date: Sat, 20 Apr 2024 22:00:00 +0200
+Subject: [PATCH 0/6] Deduplicate string exposure in sysfs
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, linux-kernel@vger.kernel.org
+Cc: Michael Ellerman <mpe@ellerman.id.au>, linuxppc-dev@lists.ozlabs.org, Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org, Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, linux-rdma@vger.kernel.org, Shuai Xue <xueshuai@linux.alibaba.com>, Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Jonathan Cameron <jonathan.cameron@huawei.com>, Yicong Yang <yangyicong@hisilicon.com>, Jijie Shao <shaojijie@huawei.com>, Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, Khuong Dinh <khuong@os.amperecomputing.com>, linux-arm-kernel@lists.infradead.org, Corentin Chary <corentin.chary@gmail.com>, "Luke D. Jones" <luke@ljones.dev>, "Henrique de Moraes Holschuh" <hmh@hmh.eng.br>, ibm-acpi-devel@lists.sourceforge.net, Azael Avalos <coproscefalo@gmail.com>, Hans de Goede <hdegoede@redhat.com>, "Ilpo Jaervinen" <ilpo.jarvinen@linux.intel.com>, platform-driver-x86@vger.kernel.org, Anil Gurumur
+ thy <anil.gurumurthy@qlogic.com>, Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>, Tyrel Datwyler <tyreld@linux.ibm.com>, Nilesh Javali <njavali@marvell.com>, GR-QLogic-Storage-Upstream@marvell.com, Don Brace <don.brace@microchip.com>, storagedev@microchip.com, "James E.J. Bottomley" <jejb@linux.ibm.com>, "Martin K. Petersen" <martin.petersen@oracle.com>, linux-scsi@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240420183427.0d3fda27@mocarz>
 
-On Sat, Apr 20, 2024 at 06:34:27PM +0200, Aleksander Mazur wrote:
-> Hello,
-> 
-> I have a Wyse C00X thin client which is apparently equipped with GMT g781.
-> It is (or used to be) supported by lm90 driver. (I have a log from 2020 where
-> it was simply working fine; it was kernel version 5.6.0 then.)
-> Now, with 6.8.7, I get following error:
-> 
-> > lm90 0-004c: Failed to enable regulator: -ENODEV
-> 
-> However, when I just turned this message into a warning and let the driver
-> continue, it seems to work fine, providing temp1 and temp2 as previously.
-> 
-> Do you have an idea what could cause such a regression, and if this change (I
-> mean: simply not returning error from devm_regulator_get_enable) is safe?
-> 
+Introduce a generic ->show() callback to expose a string as a device
+attribute in sysfs.  Deduplicate various identical callbacks across
+the tree.
 
-Do you have CONFIG_REGULATOR enabled in your system ?
+Result:  Minus 216 LoC, minus 1576 bytes vmlinux size (x86_64 allyesconfig).
 
-Guenter
+This is a byproduct of my upcoming PCI device authentication v2 patches.
+
+
+Lukas Wunner (6):
+  driver core: Add device_show_string() helper for sysfs attributes
+  hwmon: Use device_show_string() helper for sysfs attributes
+  IB/qib: Use device_show_string() helper for sysfs attributes
+  perf: Use device_show_string() helper for sysfs attributes
+  platform/x86: Use device_show_string() helper for sysfs attributes
+  scsi: Use device_show_string() helper for sysfs attributes
+
+ arch/powerpc/perf/hv-24x7.c              | 10 ----
+ arch/x86/events/intel/core.c             | 13 ++---
+ drivers/base/core.c                      |  9 ++++
+ drivers/hwmon/i5k_amb.c                  | 15 ++----
+ drivers/hwmon/ibmpex.c                   | 14 ++----
+ drivers/infiniband/hw/qib/qib.h          |  1 -
+ drivers/infiniband/hw/qib/qib_driver.c   |  6 ---
+ drivers/infiniband/hw/qib/qib_sysfs.c    | 10 +---
+ drivers/perf/alibaba_uncore_drw_pmu.c    | 12 +----
+ drivers/perf/arm-cci.c                   | 12 +----
+ drivers/perf/arm-ccn.c                   | 11 +----
+ drivers/perf/arm_cspmu/arm_cspmu.c       | 10 ----
+ drivers/perf/arm_cspmu/arm_cspmu.h       |  7 +--
+ drivers/perf/arm_dsu_pmu.c               | 11 +----
+ drivers/perf/cxl_pmu.c                   | 13 +----
+ drivers/perf/hisilicon/hisi_pcie_pmu.c   | 13 +----
+ drivers/perf/hisilicon/hisi_uncore_pmu.c | 14 ------
+ drivers/perf/hisilicon/hisi_uncore_pmu.h |  4 +-
+ drivers/perf/hisilicon/hns3_pmu.c        | 12 +----
+ drivers/perf/qcom_l3_pmu.c               | 11 +----
+ drivers/perf/xgene_pmu.c                 | 11 +----
+ drivers/platform/x86/asus-wmi.c          | 62 ++++++------------------
+ drivers/platform/x86/thinkpad_acpi.c     | 10 +---
+ drivers/platform/x86/toshiba_acpi.c      |  9 +---
+ drivers/scsi/bfa/bfad_attr.c             | 28 +++--------
+ drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c | 11 +----
+ drivers/scsi/mvsas/mv_init.c             | 10 +---
+ drivers/scsi/qla2xxx/qla_attr.c          | 11 +----
+ drivers/scsi/smartpqi/smartpqi_init.c    | 11 ++---
+ include/linux/device.h                   | 15 ++++++
+ 30 files changed, 85 insertions(+), 301 deletions(-)
+
+-- 
+2.43.0
+
