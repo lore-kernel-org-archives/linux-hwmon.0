@@ -1,63 +1,91 @@
-Received: from mx4.wp.pl (mx4.wp.pl [212.77.101.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40FB5DF5C
-	for <linux-hwmon@vger.kernel.org>; Sat, 20 Apr 2024 17:34:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.77.101.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD9A9249F7
+	for <linux-hwmon@vger.kernel.org>; Sat, 20 Apr 2024 18:14:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713634474; cv=none; b=A7MdQX+kXiNcRLMajf6iLotF9ZYiju3WaziQhR2ACLzAQ8OdOffhmpm3jI7rmDyVzTWR146rt6QKv1kGiiT8+XztEMqlJD6UZtg6LiD/Y351dRWKQcW03Oo7pbQL4ZgE2zHxo0I/7bKRN8b8qcNB0G5IiRE2mnDhuHGMCezInDQ=
+	t=1713636851; cv=none; b=VAgpAXMxg4nGKivc4fr7/NGkYqMtXtFnzRWyfuWPO8llyMIhdQfoOaIeUBJi9kFBTuGDFw5N8bb9UbEnJLX1Wuix4RNdObZjE14/OQeBi/XGoPf7m8KXEpNVxu2KFP8tp6acL+aNWhuDXq/RejqJ76FqhMtOQ8mONEn9V5WsH4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713634474; c=relaxed/simple;
-	bh=sgJpD6pT5euqsPS0ky2935TMJXw37YwQ8brJWgmAqR8=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type; b=RTNP4RqSlu5brw3XWE7VlVaSltkmfNfElC0LDR6ZRbvKHys2t1UmGuWgTtW9b/mr7cROUSTP4vgJG9A+qnTzL5GkR3AkAu22kmHqCVTkVVsilDHJ02v+f0R5v8BVlnKmVmIa+YnqOunxmJTjZ2I33kvG23xwyM3/X+5i6Fx1cJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl; spf=pass smtp.mailfrom=wp.pl; dkim=pass (1024-bit key) header.d=wp.pl header.i=@wp.pl header.b=OgmS0ksX; arc=none smtp.client-ip=212.77.101.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wp.pl
+	s=arc-20240116; t=1713636851; c=relaxed/simple;
+	bh=lMMDQtiiSw8E9Q58ysyszT4y+zD5uoUx/bUP0jVJpxI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qDEs0o5IXWBCaX6wF/iszsbPV1deoq4/P+aV+pp12Necy3PIG43cADHp+xDvpTsuWhEPiNx4g2XpLd9yzGkbmhu3M05u6wT9oYMT1l42EH6PQLgX/1ZvVKQrOJ1X3iaugoQlbrqhvlSZcMEIo5kZEgcPV2mMfulcyaEsjwGRQi8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=acsS37jt; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=wp.pl header.i=@wp.pl header.b="OgmS0ksX"
-Received: (wp-smtpd smtp.wp.pl 40955 invoked from network); 20 Apr 2024 18:34:28 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
-          t=1713630868; bh=s3/S2Lh+VeVaEVAYzO7EeaMpOud3W4I3j0yUVGXi/VI=;
-          h=From:To:Subject;
-          b=OgmS0ksXh5nc4VXM4U0owvoiP74PnoW5zDlfgXCCgF6lCbnz1qU0Ixw2JFlkUFLwZ
-           kKTmrA4LQN5tadgZlEzktXpCAel9i+YVTgPbg+i5QOphFmC9Lo3mp//MTMfLviWYkA
-           ip2gZWnNw10PBLG1+l3JgoGVl1uIEdVNTbSvhVeA=
-Received: from public-gprs181069.centertel.pl (HELO mocarz) (deweloper@wp.pl@[46.134.46.142])
-          (envelope-sender <deweloper@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <linux-hwmon@vger.kernel.org>; 20 Apr 2024 18:34:28 +0200
-Date: Sat, 20 Apr 2024 18:34:27 +0200
-From: Aleksander Mazur <deweloper@wp.pl>
-To: linux-hwmon@vger.kernel.org
-Subject: Regression in lm90 driver regarding GMT g781
-Message-ID: <20240420183427.0d3fda27@mocarz>
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="acsS37jt"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-6f0aeee172dso1480208b3a.1
+        for <linux-hwmon@vger.kernel.org>; Sat, 20 Apr 2024 11:14:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713636849; x=1714241649; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CYl4EGzn1PWo5jsRNKYCdQ2KYu54krBOFHchrUfMsO0=;
+        b=acsS37jtAnHtqkTO5wsqW8STZeMQRND0OhOKMiQVhBoH2St2IMoHYH1jhFxnVL4npT
+         n8LLBDG56X2LmlcXOfVnL7MgS8J12Lg6rY/dXjWrwrnkR+fRGD3VI5RQEx8a12ZSGGlo
+         tdXOTpVosvMspiGYeXlY+Mj4UffZty5fMqdHaD4ykACy163yrBUQEouOxq5fnvXRfVEh
+         nEiX22q/81eQZGuug7Wl/0O2DAqUgGrUHnyYwn1L3LZYtR78n7y8VCJSDLg5XNZFopOI
+         9tql9ckT591msN6AY8cjgXtLVaWDMTZXaKtPO/v59pWanqq9F7gDXQCvxBtKunV1zyLy
+         BAZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713636849; x=1714241649;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CYl4EGzn1PWo5jsRNKYCdQ2KYu54krBOFHchrUfMsO0=;
+        b=sN/aUfUxpsKXKV3urbTdui87p9USycN6Ikvd5qxIupcp5qnqPaksfzLxcyo2AbRQlo
+         tTdouf7VJi/3HXA6KU4hT+bdA7fkJ//N9XeMXPl12xbl+Ovy+1t0Wadho7L93Q0HZ6OF
+         JGJa59Nq3HK02blHfOS9vA9slYy7YCUrj/WCWA6OQx4eYQMdG5RDchzX9LTZWK22tr7W
+         f0E/PHAMK33sMCud/L2zJ/s5IXNHn+TEXXMoXgjjVQa9ElMRzzlIi4wnFy0a0QAv8JTP
+         MfZRCW6bahQvOVOrr/WjgpIQ5Y8Grl/koCwZVZB7ZVKxkC8q9+tFuDiaOTdXIU8mzotk
+         GYfg==
+X-Gm-Message-State: AOJu0Yy16mu8AfyHt+AaUlUNAB9CKZUzui/QV+YDOZcFBiuBRe3GfStD
+	iAeZVkAIPUD2C/ZX7zV7Yw1KZfibhICnlyKldBc47GYUojQIalpDCbJ+xQ==
+X-Google-Smtp-Source: AGHT+IH9MvOTFfoiYO0aEooufFULE1hKOfEU1aj/6GkeNRDBnma0ZwUdRTJU8MG8CJl4DO4yXW09yA==
+X-Received: by 2002:a05:6a20:2589:b0:1a9:793c:59ec with SMTP id k9-20020a056a20258900b001a9793c59ecmr7098083pzd.13.1713636848724;
+        Sat, 20 Apr 2024 11:14:08 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a20-20020a056a0011d400b006ecec1f4b08sm5142450pfu.118.2024.04.20.11.14.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 20 Apr 2024 11:14:07 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Sat, 20 Apr 2024 11:14:06 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Aleksander Mazur <deweloper@wp.pl>
+Cc: linux-hwmon@vger.kernel.org
+Subject: Re: Regression in lm90 driver regarding GMT g781
+Message-ID: <abc624f1-e1cf-4933-b2e8-a6f3d46d38ef@roeck-us.net>
+References: <20240420183427.0d3fda27@mocarz>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-WP-MailID: 27f9bef06a17bde7b44aae34760a84dd
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 0000000 [QVOk]                               
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240420183427.0d3fda27@mocarz>
 
-Hello,
+On Sat, Apr 20, 2024 at 06:34:27PM +0200, Aleksander Mazur wrote:
+> Hello,
+> 
+> I have a Wyse C00X thin client which is apparently equipped with GMT g781.
+> It is (or used to be) supported by lm90 driver. (I have a log from 2020 where
+> it was simply working fine; it was kernel version 5.6.0 then.)
+> Now, with 6.8.7, I get following error:
+> 
+> > lm90 0-004c: Failed to enable regulator: -ENODEV
+> 
+> However, when I just turned this message into a warning and let the driver
+> continue, it seems to work fine, providing temp1 and temp2 as previously.
+> 
+> Do you have an idea what could cause such a regression, and if this change (I
+> mean: simply not returning error from devm_regulator_get_enable) is safe?
+> 
 
-I have a Wyse C00X thin client which is apparently equipped with GMT g781.
-It is (or used to be) supported by lm90 driver. (I have a log from 2020 where
-it was simply working fine; it was kernel version 5.6.0 then.)
-Now, with 6.8.7, I get following error:
+Do you have CONFIG_REGULATOR enabled in your system ?
 
-> lm90 0-004c: Failed to enable regulator: -ENODEV
-
-However, when I just turned this message into a warning and let the driver
-continue, it seems to work fine, providing temp1 and temp2 as previously.
-
-Do you have an idea what could cause such a regression, and if this change (I
-mean: simply not returning error from devm_regulator_get_enable) is safe?
-
--- 
-Aleksander Mazur
+Guenter
