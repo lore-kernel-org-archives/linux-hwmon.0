@@ -1,33 +1,58 @@
-Received: from fgw20-7.mail.saunalahti.fi (fgw20-7.mail.saunalahti.fi [62.142.5.81])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B7364AEFE
-	for <linux-hwmon@vger.kernel.org>; Mon, 22 Apr 2024 07:36:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A8534AEE0;
+	Mon, 22 Apr 2024 08:00:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713771374; cv=none; b=hCb91g+2xnCSjPM82jBQRJM2Qi6yrJjnGABI5cCEejrwPmFf5yIHxoJnflAZva0JwV7DxFs6MdUqJMxyNXexaK3wVPw32cRghJOdHc77Yazd8j2z43DtleHLnS+sxnJdmOuBQWPrCxVgZ1vcjdrQJ3my0uQAv3BtbFoYEvX5jKU=
+	t=1713772812; cv=none; b=naHpINHTOw3e1u0NIWJ00b7SfWfDTv5lJSa1fJBAVNOMrX2W6rV60e2Ic/Rc27ikAcd01s08e/CaEuZu+ETWu1RwDmrL0+t7DmQ2sdRtdeMUpjjatwdnE2qqlCQ8h3HfZthSzUgDzhVJXxC/E43fRWq5OqDJkk2GOQXO+5D4bv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713771374; c=relaxed/simple;
-	bh=PgbWEJHun8Ts3a0s4MSrzmK3KsjjTkmdPjaOC8mw7eU=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z4Hmc+ib7bK4uHAKnkWqaEVPF7BPMEe35HGWIqi0Ujp8KiioiQAUsRwJoJgFniQoGEZageU8rLTUy1Ix/Hk5BUJrw5/zXh8j8M1BJWOE5pMUhl7AbP6tDMwbEwX9h2AcglpDIwp8vpsZp8YQO/UZhV4Ucok1jam3SdOj2/JLHZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=62.142.5.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
-Received: from localhost (88-113-25-208.elisa-laajakaista.fi [88.113.25.208])
-	by fgw22.mail.saunalahti.fi (Halon) with ESMTP
-	id d3ab1112-007a-11ef-a9de-005056bdf889;
-	Mon, 22 Apr 2024 10:35:02 +0300 (EEST)
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Mon, 22 Apr 2024 10:35:00 +0300
+	s=arc-20240116; t=1713772812; c=relaxed/simple;
+	bh=YUc8o0SlTToJRz8zQWrVtWGeJWmVQFUkb3cDyQnQv68=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=uSxP1Hyc52DigZj5il6GDWlaseonP0zXyQ//8bttzhpTM3PvmIIXWWdZWKNs1MQJUzyO39wagyFSClk6ungmEc3a6UgU7PiRkmc8ZzSYtu7LNeg5gT8ajW0CtovfB559iAMVHnF/YqkQeCFfJ2xPrCmsiruBEndjHdUHEjWkiLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GAnduGE+; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GAnduGE+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713772811; x=1745308811;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=YUc8o0SlTToJRz8zQWrVtWGeJWmVQFUkb3cDyQnQv68=;
+  b=GAnduGE+3812y3SfADk9e/C81hvFHH+qyqErycCR1mzE/PaUnxRunZxW
+   oBDA+SbGBBz4RhU9n/xtUlDRdhk2T9Pv355Ai4/UKt8kiwuMpZX2g6sP0
+   e8orq/L6Og0jGGvCE+UNK/cITL3okc1K3Rb9fIoE3l3QCODQr7m59CxMs
+   gRZgnrjJRC634SUHN29/1DCb5otKlvhh8aiPMv61WjJU1kzqCh7IK70kr
+   GJ6ccDmMNQ63GBmTxjFXweesMnWMGahqOjm5i+cbk+rYVrxY/UFeruq/B
+   Y4SwFvlqCHVxA9C2W9r2TIVVfwv9KkM8+c6ZNdLhV+F1wqSTLhQZYYNKg
+   w==;
+X-CSE-ConnectionGUID: Xs0YK612Rz+kGSuQUiG6QA==
+X-CSE-MsgGUID: 1KhWmkoRRiWxPBeoaQxGNA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11051"; a="19850986"
+X-IronPort-AV: E=Sophos;i="6.07,220,1708416000"; 
+   d="scan'208";a="19850986"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2024 01:00:10 -0700
+X-CSE-ConnectionGUID: rmQv94azSLSXDyaQ/KXtOQ==
+X-CSE-MsgGUID: x9s88UbbQ1+Ew+gozB0MNA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,220,1708416000"; 
+   d="scan'208";a="23914745"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.39])
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2024 01:00:07 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Mon, 22 Apr 2024 11:00:00 +0300 (EEST)
 To: Armin Wolf <W_Armin@gmx.de>
-Cc: mlj@danelec.com, rafael.j.wysocki@intel.com, lenb@kernel.org,
-	jdelvare@suse.com, linux@roeck-us.net, linux@weissschuh.net,
-	ilpo.jarvinen@linux.intel.com, linux-acpi@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org
+cc: mlj@danelec.com, rafael.j.wysocki@intel.com, lenb@kernel.org, 
+    jdelvare@suse.com, linux@roeck-us.net, linux@weissschuh.net, 
+    linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+    LKML <linux-kernel@vger.kernel.org>, platform-driver-x86@vger.kernel.org
 Subject: Re: [PATCH RESEND v5] ACPI: fan: Add hwmon support
-Message-ID: <ZiYTJOmwDVaws3lh@surfacebook.localdomain>
+In-Reply-To: <20240422060835.71708-1-W_Armin@gmx.de>
+Message-ID: <6d8c1b6a-0d6b-c54c-9417-5cfcefcce222@linux.intel.com>
 References: <20240422060835.71708-1-W_Armin@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -35,225 +60,29 @@ List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240422060835.71708-1-W_Armin@gmx.de>
+Content-Type: multipart/mixed; boundary="8323328-160052138-1713772800=:2288"
 
-Mon, Apr 22, 2024 at 08:08:35AM +0200, Armin Wolf kirjoitti:
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323328-160052138-1713772800=:2288
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: QUOTED-PRINTABLE
+
+On Mon, 22 Apr 2024, Armin Wolf wrote:
+
 > Currently, the driver does only support a custom sysfs
 > interface to allow userspace to read the fan speed.
 > Add support for the standard hwmon interface so users
 > can read the fan speed with standard tools like "sensors".
-> 
+>=20
 > Tested with a custom ACPI SSDT.
+>=20
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 
-...
+Reviewed-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
 
-> +/*
-> + * fan_hwmon.c - hwmon interface for the ACPI Fan driver
+--=20
+ i.
 
-No file name in the file, it makes an unneeded burden if file is going to be
-renamed.
-
-> + *
-> + * Copyright (C) 2024 Armin Wolf <W_Armin@gmx.de>
-> + */
-
-...
-
-> +#include <linux/acpi.h>
-> +#include <linux/hwmon.h>
-
-Please, follow IWYU pronciple, e.g., missing err.h here.
-
-> +#include <linux/limits.h>
-> +#include <linux/units.h>
-
-...
-
-> +/* Returned when the ACPI fan does not support speed reporting */
-> +#define FAN_SPEED_UNAVAILABLE	0xffffffff
-> +#define FAN_POWER_UNAVAILABLE	0xffffffff
-
-Shouldn't these be rather as ~0 of the respective types or _MAX (from limits.h)
-or something like that?
-
-...
-
-> +static struct acpi_fan_fps *acpi_fan_get_current_fps(struct acpi_fan *fan, u64 control)
-> +{
-> +	int i;
-
-unsigned
-
-> +	for (i = 0; i < fan->fps_count; i++) {
-> +		if (fan->fps[i].control == control)
-> +			return &fan->fps[i];
-> +	}
-> +
-> +	return NULL;
-> +}
-
-...
-
-> +static umode_t acpi_fan_is_visible(const void *drvdata, enum hwmon_sensor_types type, u32 attr,
-> +				   int channel)
-> +{
-> +	const struct acpi_fan *fan = drvdata;
-> +	int i;
-
-unsigned
-
-> +	switch (type) {
-> +	case hwmon_fan:
-> +		switch (attr) {
-> +		case hwmon_fan_input:
-> +			return 0444;
-> +		case hwmon_fan_target:
-> +			/* When in fine grain control mode, not every fan control value
-> +			 * has an associated fan performance state.
-> +			 */
-> +			if (fan->fif.fine_grain_ctrl)
-> +				return 0;
-> +
-> +			return 0444;
-> +		default:
-
-> +			break;
-> +		}
-> +		break;
-
-Instead of two breaks, just return 0 from 'default' case.
-
-> +	case hwmon_power:
-> +		switch (attr) {
-> +		case hwmon_power_input:
-> +			/* When in fine grain control mode, not every fan control value
-> +			 * has an associated fan performance state.
-> +			 */
-
-/*
- * Use correct style for multi-line
- * comment blocks. As in this example.
- */
-
-> +			if (fan->fif.fine_grain_ctrl)
-> +				return 0;
-> +
-> +			/* When all fan performance states contain no valid power data,
-> +			 * when the associated attribute should not be created.
-> +			 */
-> +			for (i = 0; i < fan->fps_count; i++) {
-> +				if (fan->fps[i].power != FAN_POWER_UNAVAILABLE)
-> +					return 0444;
-> +			}
-> +
-> +			return 0;
-> +		default:
-
-> +			break;
-> +		}
-> +		break;
-
-Ditto.
-
-> +	default:
-> +		break;
-> +	}
-> +
-> +	return 0;
-
-Return from the default.
-
-With the above we got rid of 2 LoCs for free.
-
-> +}
-
-...
-
-> +	switch (type) {
-> +	case hwmon_fan:
-> +		switch (attr) {
-> +		case hwmon_fan_input:
-> +			if (fst.speed == FAN_SPEED_UNAVAILABLE)
-> +				return -ENODATA;
-> +
-> +			if (fst.speed > LONG_MAX)
-> +				return -EOVERFLOW;
-> +
-> +			*val = fst.speed;
-> +			return 0;
-> +		case hwmon_fan_target:
-> +			fps = acpi_fan_get_current_fps(fan, fst.control);
-> +			if (!fps)
-> +				return -ENODATA;
-> +
-> +			if (fps->speed > LONG_MAX)
-> +				return -EOVERFLOW;
-> +
-> +			*val = fps->speed;
-> +			return 0;
-> +		default:
-
-> +			break;
-> +		}
-> +		break;
-
-As per above.
-
-> +	case hwmon_power:
-> +		switch (attr) {
-> +		case hwmon_power_input:
-> +			fps = acpi_fan_get_current_fps(fan, fst.control);
-> +			if (!fps)
-> +				return -ENODATA;
-> +
-> +			if (fps->power == FAN_POWER_UNAVAILABLE)
-> +				return -ENODATA;
-> +
-> +			if (fps->power > LONG_MAX / MICROWATT_PER_MILLIWATT)
-> +				return -EOVERFLOW;
-> +
-> +			*val = fps->power * MICROWATT_PER_MILLIWATT;
-> +			return 0;
-> +		default:
-> +			break;
-> +		}
-> +		break;
-
-Ditto.
-
-> +	default:
-> +		break;
-> +	}
-> +
-> +	return -EOPNOTSUPP;
-
-Ditto.
-
-Again, 2 LoCs less here.
-
-> +}
-
-...
-
-> +int devm_acpi_fan_create_hwmon(struct acpi_device *device)
-> +{
-> +	struct acpi_fan *fan = acpi_driver_data(device);
-> +	struct device *hdev;
-> +
-> +	hdev = devm_hwmon_device_register_with_info(&device->dev, "acpi_fan", fan,
-> +						    &acpi_fan_chip_info, NULL);
-
-> +
-
-Redundant blank line.
-
-> +	return PTR_ERR_OR_ZERO(hdev);
-> +}
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+--8323328-160052138-1713772800=:2288--
