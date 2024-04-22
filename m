@@ -1,162 +1,176 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97EBD1534E2;
-	Mon, 22 Apr 2024 16:02:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A87CF1474BA;
+	Mon, 22 Apr 2024 16:15:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713801765; cv=none; b=QHM9IIEAuC3jjW+i7drlS0hYjNUfSbCr8fGU9nkEvY/7bZiP9Ig1MndlvMxC476sNDi4bkJBFuJbJefFmHxKOyNGvYRK0ifHweV7/fhE9re6nakfdLPZBXxDZcmjJNXGizc9AauPXUjy98a97uvYy+Rn3zcJCsPDJ2PciHMMYgw=
+	t=1713802529; cv=none; b=VbXojXcs+e3efv6e/6ML9I0t3lwuaJ3fpPeUkzYrpYRMsmRZh7F7nzlO/2IgqH+4PBOxZxVlAU6wkn9pTPlnqOTix//E9mD6KhtooyyqVv0oF1UGyOSQxEBPHwFRyfsnt9YUBJ6iM0zqKEHiS9g/JIcNgY92qjOr7LxkthveBX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713801765; c=relaxed/simple;
-	bh=fHQ2PjfvnmtnCn4SOJYVSOpRHRjnKs0VuvtdROz0ds8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QRR8XZNzcZMv4KotiqZr4e78WWRqPBcedaLIXLXYKPifJ3AqzCwqujkdbd0FbhcXNPYZQszEx881w84meWJIOTWMA+Z2VfkJQTudTM5TI5UhDKqpISr1osZdIqDtkVds7aQiTl5oirf8IjKPVmMCP9o8NZe62f2w6mQGR5aojOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SSrLBgyd; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1713802529; c=relaxed/simple;
+	bh=+T7qGoJM5CptwNtRlbFQYHPrnonOpqhbu/z+ZqbwDxk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=shWMQBWlPyWrjN0wdec/lr82W8xvCVM52kSQQ83K42oufuN6Wve0PoF91YZ0SQ5+SjxD0L6uvWymkfS/WI5GPhK7NbLIOiPX/3ZEo6cW6BKTS1XCEpj1++Cx0HEoEPhVTQNJktIDjy7zHXhMq6sdHMZw+vX0u6qfjsreSOJywn0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SFfbKYoA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SSrLBgyd"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1e2c725e234so42333695ad.1;
-        Mon, 22 Apr 2024 09:02:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713801760; x=1714406560; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=a/Xu0Q9RrOQWribX03STH0Kv467oTIUzB+8PSzczaWs=;
-        b=SSrLBgydl1ucZ0S4aqQXYjj6ORsX6jngCFtt53Gt56NBg7ucFNoWFzCs3mHaHSi8nF
-         z+kV/vivOoefs0kmeqVQgnaATPSpYF+SwRmI0f093m8/aFIfgjGOSZyBhX3J/2YKkSdA
-         oSqCqLKMnZppxnGc0MzONaoQ0KilQEKYOn3F5hj1LBDu+Jysd3Ftqr99OY9IDKULv532
-         cdAjaSpzaCHJIG+dGYtbvMyLdKM7WC1K6yzHrvOXtLCN5+GkbyI9lzA/ioUFtm8hYjyr
-         ewxdQFX/8zDc28HbFbNpR+l26yy6Waeg/dlk1gzGuUVBb9jxUiyo1/lQa2MbkN/yI0/V
-         u/CQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713801760; x=1714406560;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a/Xu0Q9RrOQWribX03STH0Kv467oTIUzB+8PSzczaWs=;
-        b=G4Fsp9M4pelLIkEaBi56dr3iLNxt32F+YvezP/1y8QNv7ZhtqeBec2OG4t47wvcXOA
-         e3gQUY2IY6jczzO12613hLDiE071j8kYjz+0gLx0oVSMQo2Zn7xgAurg9sUduhS5XyrM
-         6Dv7YdpsUtvrkzI0MOpQrsIOY2YeWZNHn/Tf3SRGrxi381cJDmBVH9HiyYU+zRzXecIu
-         9AH7nuXX2m5RL26TerR4/EFTPchVnA4CBLTL4/Zk1/JVpwCC/CUTDi/357uksJDNvAIo
-         ixv8jKOs6z1y2g6fEIOOk6lsQ5ChHad4BpLGVyvC9QqFOSHPx34pcDhSCT3UctJ7spbW
-         82kA==
-X-Forwarded-Encrypted: i=1; AJvYcCWnOX/01vA21KuZdcFIWfjMUslVxSB63vuRjp0fCZHUpBuo7sD0ETGtrMPHQAiyMBJHbvRp3dOR77e/Z0BLxOYUbkV8ncgVQR7m4UHHR3vNKFJb7miBrmrVUE4udWMx84NJFPRnPBFrCT4=
-X-Gm-Message-State: AOJu0YwC0CDWcIOdglnlWBKZ0A13u/ggCKYq0mHzJgAZsjC+28R10GYq
-	BaYY4LiMfO53MS7CRuO+k+SLuzD/lfj05W9iHhYllrgrP74gWbnQ
-X-Google-Smtp-Source: AGHT+IGRH9epIL6w0KvKxIRyoJi9IsbWP+EZ5TlTARknvNflBbuqfYsqSvgHuf2Z+t+tQKiGcwMFRw==
-X-Received: by 2002:a17:902:e74a:b0:1e2:c350:b46a with SMTP id p10-20020a170902e74a00b001e2c350b46amr77571plf.27.1713801759746;
-        Mon, 22 Apr 2024 09:02:39 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id kf12-20020a17090305cc00b001e43a00ee07sm8301913plb.211.2024.04.22.09.02.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Apr 2024 09:02:39 -0700 (PDT)
-Sender: groeck7 <groeck7@gmail.com>
-Date: Mon, 22 Apr 2024 09:02:37 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Naresh Solanki <naresh.solanki@9elements.com>
-Cc: krzysztof.kozlowski+dt@linaro.org, u.kleine-koenig@pengutronix.de,
-	Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] hwmon (max6639): Use regmap
-Message-ID: <116aeea1-c648-4abe-9ab2-693bf64000fc@roeck-us.net>
-References: <20240416171720.2875916-1-naresh.solanki@9elements.com>
- <65607114-89f8-4f48-83fc-b89d87fee247@roeck-us.net>
- <CABqG17jveAdxN+tCcPq4hNqWDy1YCJ1z0+kLpM+ect0XEyqBcA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SFfbKYoA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C0BEC32783;
+	Mon, 22 Apr 2024 16:15:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713802529;
+	bh=+T7qGoJM5CptwNtRlbFQYHPrnonOpqhbu/z+ZqbwDxk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=SFfbKYoALeaHJ0fDwzw0lg1SCTCKx3hn0tFWM3d/QyrFQLf7233i9lfrySHzfQjxj
+	 2U60qOufIXMn+70hs6Uw2GYvdz0C0wGp72OWXgSZclopmLgufHn+XJ/U8RZ3SD7d/m
+	 0TKMoG0OY2vtO48ZlPPCm1tMLwswG1Vag/7gxDXYhMObsB0OQQex9zorRVA9+dXeBV
+	 qg1WtVZYFO1kKnMDBxcp8OfJXxVZTcexDXFWQwblj2d8DBIRAmKCB0PrEWJsF9hBOT
+	 0PNFoRKrLj7YdLbipK7TJ4c9MId58O8IMMSkS7US/xlr7nLbC5JXazTRLsPmKZbm0Y
+	 YHrkVYfahXsHg==
+Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-3c75145c6c4so39874b6e.0;
+        Mon, 22 Apr 2024 09:15:29 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVXRs2xKuChmGSyeczlOAtjbDo1VELDN8OHMeSFjkD3T69SzZO4ICyJdI9stJbaWsJZzHag9VbkS/NVdiDlM9WqwiQqbGPxYPeohHp+RfzaIbJM2q2xWLfLDuPyrqH7hVAsJQgBCcrJ0bhOJnNThcZNoDz2xLtV9BPZh51kjYPJe4gnacpSzBEjJ6vUfiIGGAqI9WbszI94UWFrAjb3cGawEoxiGHwAhWiYqw==
+X-Gm-Message-State: AOJu0Yy8TSTx6ypRU7TEBkEHXvg4C5rcefTMhik85C9582Qo+9WAG78O
+	P/VBPK6vd7r/uRDK4JzxRcogxDnBR7evC+bjfoBYrlWObynRxlUVOef/ohShZT3tKbZkx3Nw0v7
+	Y2aOqjf/F3+BcNllN/MWN84Cd1wg=
+X-Google-Smtp-Source: AGHT+IFuTJmoqmLpevz+uTmJX81reztBPyhbSeBbFcxUNXIQFfQPQ80CJ515TwTQNC2nE/LxIBgav9z4gMvpgI10aGQ=
+X-Received: by 2002:a05:6870:b28c:b0:22e:7cc0:ebd5 with SMTP id
+ c12-20020a056870b28c00b0022e7cc0ebd5mr12811422oao.5.1713802528328; Mon, 22
+ Apr 2024 09:15:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABqG17jveAdxN+tCcPq4hNqWDy1YCJ1z0+kLpM+ect0XEyqBcA@mail.gmail.com>
+References: <20240422060835.71708-1-W_Armin@gmx.de> <ZiYTJOmwDVaws3lh@surfacebook.localdomain>
+In-Reply-To: <ZiYTJOmwDVaws3lh@surfacebook.localdomain>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 22 Apr 2024 18:15:13 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0joULbyKQJ4suqKj7_UZwaA63M+N4AaWSm7vOdM4OZBEA@mail.gmail.com>
+Message-ID: <CAJZ5v0joULbyKQJ4suqKj7_UZwaA63M+N4AaWSm7vOdM4OZBEA@mail.gmail.com>
+Subject: Re: [PATCH RESEND v5] ACPI: fan: Add hwmon support
+To: Andy Shevchenko <andy.shevchenko@gmail.com>, Armin Wolf <w_armin@gmx.de>
+Cc: mlj@danelec.com, rafael.j.wysocki@intel.com, lenb@kernel.org, 
+	jdelvare@suse.com, linux@roeck-us.net, linux@weissschuh.net, 
+	ilpo.jarvinen@linux.intel.com, linux-acpi@vger.kernel.org, 
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	platform-driver-x86@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 22, 2024 at 04:06:16PM +0530, Naresh Solanki wrote:
-> Hi Guenter,
-> 
-> On Wed, 17 Apr 2024 at 02:55, Guenter Roeck <linux@roeck-us.net> wrote:
+On Mon, Apr 22, 2024 at 9:36=E2=80=AFAM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+>
+> Mon, Apr 22, 2024 at 08:08:35AM +0200, Armin Wolf kirjoitti:
+> > Currently, the driver does only support a custom sysfs
+> > interface to allow userspace to read the fan speed.
+> > Add support for the standard hwmon interface so users
+> > can read the fan speed with standard tools like "sensors".
 > >
-> > On Tue, Apr 16, 2024 at 10:47:14PM +0530, Naresh Solanki wrote:
-> > > Add regmap support.
-> > >
-> >
-> > Missing (and not really utilizing) the benefits of using regmap.
-> This is just replacing with regmap support
-> >
-> > > Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
-> > > ---
-> > >  drivers/hwmon/Kconfig   |   1 +
-> > >  drivers/hwmon/max6639.c | 157 ++++++++++++++++++++--------------------
-> > >  2 files changed, 80 insertions(+), 78 deletions(-)
-> > >
-> > > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> > > index c89776d91795..257ec5360e35 100644
-> > > --- a/drivers/hwmon/Kconfig
-> > > +++ b/drivers/hwmon/Kconfig
-> > > @@ -1223,6 +1223,7 @@ config SENSORS_MAX6621
-> > >  config SENSORS_MAX6639
-> > >       tristate "Maxim MAX6639 sensor chip"
-> > >       depends on I2C
-> > > +     select REGMAP_I2C
-> > >       help
-> > >         If you say yes here you get support for the MAX6639
-> > >         sensor chips.
-> > > diff --git a/drivers/hwmon/max6639.c b/drivers/hwmon/max6639.c
-> > > index aa7f21ab2395..1af93fc53cb5 100644
-> > > --- a/drivers/hwmon/max6639.c
-> > > +++ b/drivers/hwmon/max6639.c
-> > > @@ -20,6 +20,7 @@
-> > >  #include <linux/err.h>
-> > >  #include <linux/mutex.h>
-> > >  #include <linux/platform_data/max6639.h>
-> > > +#include <linux/regmap.h>
-> > >
-> > >  /* Addresses to scan */
-> > >  static const unsigned short normal_i2c[] = { 0x2c, 0x2e, 0x2f, I2C_CLIENT_END };
-> > > @@ -57,6 +58,8 @@ static const unsigned short normal_i2c[] = { 0x2c, 0x2e, 0x2f, I2C_CLIENT_END };
-> > >
-> > >  #define MAX6639_FAN_CONFIG3_THERM_FULL_SPEED 0x40
-> > >
-> > > +#define MAX6639_NDEV                         2
-> > > +
-> > >  static const int rpm_ranges[] = { 2000, 4000, 8000, 16000 };
-> > >
-> > >  #define FAN_FROM_REG(val, rpm_range) ((val) == 0 || (val) == 255 ? \
-> > > @@ -67,7 +70,7 @@ static const int rpm_ranges[] = { 2000, 4000, 8000, 16000 };
-> > >   * Client data (each client gets its own)
-> > >   */
-> > >  struct max6639_data {
-> > > -     struct i2c_client *client;
-> > > +     struct regmap *regmap;
-> > >       struct mutex update_lock;
-> > >       bool valid;             /* true if following fields are valid */
-> > >       unsigned long last_updated;     /* In jiffies */
-> > > @@ -95,9 +98,8 @@ struct max6639_data {
-> > >  static struct max6639_data *max6639_update_device(struct device *dev)
-> > >  {
-> > >       struct max6639_data *data = dev_get_drvdata(dev);
-> > > -     struct i2c_client *client = data->client;
-> > >       struct max6639_data *ret = data;
-> > > -     int i;
-> > > +     int i, err;
-> > >       int status_reg;
-> > >
-> > >       mutex_lock(&data->update_lock);
-> > > @@ -105,39 +107,35 @@ static struct max6639_data *max6639_update_device(struct device *dev)
-> >
-> > Conversions to regmap should drop all local caching and use regmap
-> > for caching (where appropriate) instead.
-> max6639_update_device deals with volatile registers & caching isn't
-> available for these.
-> 
+> > Tested with a custom ACPI SSDT.
+>
+> ...
+>
+> > +/*
+> > + * fan_hwmon.c - hwmon interface for the ACPI Fan driver
+>
+> No file name in the file, it makes an unneeded burden if file is going to=
+ be
+> renamed.
+>
+> > + *
+> > + * Copyright (C) 2024 Armin Wolf <W_Armin@gmx.de>
+> > + */
+>
+> ...
+>
+> > +#include <linux/acpi.h>
+> > +#include <linux/hwmon.h>
+>
+> Please, follow IWYU pronciple, e.g., missing err.h here.
+>
+> > +#include <linux/limits.h>
+> > +#include <linux/units.h>
+>
+> ...
+>
+> > +/* Returned when the ACPI fan does not support speed reporting */
+> > +#define FAN_SPEED_UNAVAILABLE        0xffffffff
+> > +#define FAN_POWER_UNAVAILABLE        0xffffffff
+>
+> Shouldn't these be rather as ~0 of the respective types or _MAX (from lim=
+its.h)
+> or something like that?
+>
+> ...
+>
+> > +static struct acpi_fan_fps *acpi_fan_get_current_fps(struct acpi_fan *=
+fan, u64 control)
+> > +{
+> > +     int i;
+>
+> unsigned
+>
+> > +     for (i =3D 0; i < fan->fps_count; i++) {
+> > +             if (fan->fps[i].control =3D=3D control)
+> > +                     return &fan->fps[i];
+> > +     }
+> > +
+> > +     return NULL;
+> > +}
+>
+> ...
+>
+> > +static umode_t acpi_fan_is_visible(const void *drvdata, enum hwmon_sen=
+sor_types type, u32 attr,
+> > +                                int channel)
+> > +{
+> > +     const struct acpi_fan *fan =3D drvdata;
+> > +     int i;
+>
+> unsigned
+>
+> > +     switch (type) {
+> > +     case hwmon_fan:
+> > +             switch (attr) {
+> > +             case hwmon_fan_input:
+> > +                     return 0444;
+> > +             case hwmon_fan_target:
+> > +                     /* When in fine grain control mode, not every fan=
+ control value
+> > +                      * has an associated fan performance state.
+> > +                      */
+> > +                     if (fan->fif.fine_grain_ctrl)
+> > +                             return 0;
+> > +
+> > +                     return 0444;
+> > +             default:
+>
+> > +                     break;
+> > +             }
+> > +             break;
+>
+> Instead of two breaks, just return 0 from 'default' case.
 
-So ? Unless you replace caching (and accept that volatile registers
-are not cached) I do not see the value of this patch. Replacing direct
-chip accesses with regmap should have a reason better than "because".
-Using regmap for caching would be a valid reason. At the same time,
-the value of caching volatile registers is very much questionable.
+I agree here, but for a different reason.
 
-Guenter
+If all of the other cases return from the function, the default one
+should return either unless there is a specific reason not to.  IIUC,
+there's no such reason in this case.
+
+> > +     case hwmon_power:
+> > +             switch (attr) {
+> > +             case hwmon_power_input:
+> > +                     /* When in fine grain control mode, not every fan=
+ control value
+> > +                      * has an associated fan performance state.
+> > +                      */
+>
+> /*
+>  * Use correct style for multi-line
+>  * comment blocks. As in this example.
+>  */
+
+Yes, please.
+
+Thanks!
