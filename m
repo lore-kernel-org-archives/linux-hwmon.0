@@ -1,352 +1,233 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92FE718042;
-	Mon, 22 Apr 2024 06:09:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 598A5524DF;
+	Mon, 22 Apr 2024 07:20:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713766158; cv=none; b=ArMV60QQZsyIqz0UwUhvMpHvPk/WfbsgMKU6FJD4XyZMxAbbG0xNL2uN0uoOmAqJVfZnDb4CKZ+SDo1aRrDvKvQjRYyG0rlOwF6Ws0hUBQJTeuQAD+UHm4UBxd90EPjtq1X7LiU55E8HgNRcMDSvBQKqtRIfDNYhmar5utksrhc=
+	t=1713770442; cv=none; b=oY1y3UUXrrlXVNE+ruX80ydLffnaIWk+3wKt5l4NoDXLkL2BzD8ZDdZbN9dkDLecVb70+ymBm5JzdLFcmM+QqDtSwu/yShB3b9Jlyz9qAkUKmz1iU29N8YqSd2xas/QaNQA2I7As2LVVTKNTIf5n9iyD9uSIgXG+y1PiS3Q2n2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713766158; c=relaxed/simple;
-	bh=He0zbL0PU3S3TFQfRLYChmdyE6XrqZzNgLl89NZgNZI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=n9k1ORWeENagAI1M71LSNNZ/X1WD3HOwwEhHq8mki7BTlaK/MHqR03mseEP5fTiIFx/h1/2Eok4SOflHW4FMQGbSpFwYt7rfMUHH+CO6KseDVD+Z883jIzBsPPNRoXLM0SaFFI1NHSL8ikDSkoKvrVt8Gl1bGmLvSitsR1/+21g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=Dvqp8S9J; arc=none smtp.client-ip=212.227.17.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	s=arc-20240116; t=1713770442; c=relaxed/simple;
+	bh=uPlezz2Ez9/dTrBAPaxi+db3VKiWsUtlmOPLdiTex/M=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Vjo9tTYWeb0lOtVRyMmX/HfwckFhHuZePKlvj2iuPZNWqe4P5JhH69Gm98oR1SHJEOQ0Prp+QqcG4mHxgaCy/qS+jWFjAshwHtmry3ZoA0HJPk7ZoDpNmucovc8w1FKipvU+eibB3yua6BY2JZlYhXfLBVdWUrrFS/JYBsn0MjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RG1DoltD; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="Dvqp8S9J"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1713766128; x=1714370928; i=w_armin@gmx.de;
-	bh=WEN7aBRlN37FKl+bSkFenqf1s7tCuOCXoTIAUr90SiY=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:
-	 MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=Dvqp8S9JQQVINoWKocwqKcl7/zQP5yw+GhOsXvAp6ym7oXFFD/9MClFohBFr1Jes
-	 c1rcM5khVSp3TB3WB5Voc2rcgwW8zW69GCP8KNmuEjtcZLF5aoqv3KiA5vQKDuvw8
-	 SRjLNKt9h9TKpOKQyvuS5Qmq/cro+ixONJDrRCB/q5pGcmQ0BFmsbkRPJdUZgxT5d
-	 mhLY6UxYVmhXaY6FBiOF/3brGua0PDFPK7LW9AD4SmAPJpPZ/DqBpsG/P5DeSLFB+
-	 f2lzACxtmQMlH20dec85+5kG6UdUjmWt7PeLvu2CbslM3UC/dFRBapak2RD4IaaE3
-	 ulYX48qFU7dq9mOBwA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from mx-amd-b650.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1My32F-1sv7VP04eV-00zZ98; Mon, 22 Apr 2024 08:08:48 +0200
-From: Armin Wolf <W_Armin@gmx.de>
-To: mlj@danelec.com,
-	rafael.j.wysocki@intel.com,
-	lenb@kernel.org
-Cc: jdelvare@suse.com,
-	linux@roeck-us.net,
-	linux@weissschuh.net,
-	ilpo.jarvinen@linux.intel.com,
-	linux-acpi@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org
-Subject: [PATCH RESEND v5] ACPI: fan: Add hwmon support
-Date: Mon, 22 Apr 2024 08:08:35 +0200
-Message-Id: <20240422060835.71708-1-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.39.2
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RG1DoltD"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4187c47405aso26780755e9.3;
+        Mon, 22 Apr 2024 00:20:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713770438; x=1714375238; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=6EaonTNElOrU9KYAF9Ym3jHzAyGlcNAFxjBRES5df84=;
+        b=RG1DoltDYKDfraGFQZeiHgwvAXH1JpdncXeIRIYeU5KAMfMsinmdpxfpGyxwDNCWkV
+         WjH747obLiYSnScUXyhkXzYVX2jDT90U6iNpsSdUJ/DugPQfkF2Z7Oa1mcAA8yPtMokf
+         IJSUGFcrUzVWO7oRP0I/HI/UnkegRSPkKRvP7rpbTJd1zpqpoaU9KqMFPwLzX9HRP+CJ
+         6IgUzODjYHLCxTmzbWfBMgptLsE1KjefZ0kcqaDO72QRgs1KDV+lHxscb//Y4z+r/ZgL
+         uv7hPB20OZkIZPDKHKg7Z/s4vimwLlY69foG6esmpoIM9x47D+5GapQucV4uYoB8TPJc
+         oWYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713770438; x=1714375238;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6EaonTNElOrU9KYAF9Ym3jHzAyGlcNAFxjBRES5df84=;
+        b=e75iB2kewhTelAI/MdbbYx0msB6otfKan5BIG75dZVK+mEiWBp1gpvG5zjLNA2N+HT
+         DUv44WW/tgPzeNsYMQMabgwGEvGOSuBfRKTrWG8AXUvUDVv6dp2oss79igRUrlwQOogY
+         mBdPJqTlGsWB2hdb6GVBtzizOon3rityXkecJmzKE8G7NZzlD2MOlBXgts1nQOBnTAW5
+         LxPAFi5RB1VjbbPX99R7xmud8d9m0+FameRVUGB5j5Lf8OpD8G3YR4ha1w3nV55uTVlB
+         tBKDwMYuwV7U0WlEm+OA21I4ff2cYfJwF9w0T5x6KWkXfXam4VeWe+M7tnLhUeucTKVW
+         0nTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXLD6JhrWzHpc912TaAs8M1E9LF7iXVZaJz5pkLl+3Btr9jf2pDvzAtKjSOn8V2pFra3UQod//rvQz1prBl51LwNMu/Fddalq3/7jVUz+5rFiBgsPO1eixu6ssEaqaPrUt8vBYrOOGdRFO2YaZ6nu52+IKV8C6XBvNPsEZqefDPbqs5Flgj6g40isG9CRR3HXOnqF+AaQyNjGZazXQDYqhMw0NYu+xPwqRZBOycfjFLp8ZqvtamM0Hd6eHj
+X-Gm-Message-State: AOJu0YxCRGdKCNmpbQ5DxYuLGvc4TeH9EFZ0cQ38zGVpM6kwNM4RCLR8
+	hOgujuhG6WHUV65Tvis5fh1Z9LsnsmgcSGU0GYOYXKK7uBegqYM1
+X-Google-Smtp-Source: AGHT+IG18tDEfuYY3xdQyQpAeuUl4OviaoiabRHeU6w9ApLuluqyg5EqxpUki/BSMPPsSv1FO9Eqow==
+X-Received: by 2002:a05:600c:1da3:b0:41a:3407:78f7 with SMTP id p35-20020a05600c1da300b0041a340778f7mr1872160wms.7.1713770438136;
+        Mon, 22 Apr 2024 00:20:38 -0700 (PDT)
+Received: from ?IPv6:2001:a61:3481:2201:6106:96db:d27b:d2c2? ([2001:a61:3481:2201:6106:96db:d27b:d2c2])
+        by smtp.gmail.com with ESMTPSA id m25-20020a05600c3b1900b0041816c3049csm15650842wms.11.2024.04.22.00.20.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Apr 2024 00:20:37 -0700 (PDT)
+Message-ID: <a00c375a9e96ea28f5d8cb0d0eaeb750ba462b17.camel@gmail.com>
+Subject: Re: [PATCH v2 2/2] hwmon: pmbus: adm1275: add adm1281 support
+From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To: Jose Ramon San Buenaventura <jose.sanbuenaventura@analog.com>, 
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-i2c@vger.kernel.org
+Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,  Jonathan Corbet <corbet@lwn.net>,
+ Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+Date: Mon, 22 Apr 2024 09:20:37 +0200
+In-Reply-To: <20240422025123.29770-3-jose.sanbuenaventura@analog.com>
+References: <20240422025123.29770-1-jose.sanbuenaventura@analog.com>
+	 <20240422025123.29770-3-jose.sanbuenaventura@analog.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.4 (3.50.4-1.fc39) 
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:XymzL+xZUhXnHU/30jYAXRTwXlcY46UBJQeingUz2ca1mN4C7ge
- yMxO8lRdlIDEFi1xD9ceAwgytRR8gzouN92WO0sIrVEvXqaAbg+pAOKWbIS3mOfxTxAS5Q/
- eqrHqt9ugv0G5TDYrQsddsjau41ECQvSlIT7DgDHZDA6c0eP34a5fhTfzxnlKaahRO2D7aG
- hjtbXPBGWqpuzlpRAtyJw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:BrTNafZfKhA=;hT+tE1vUPXs/Zy4yarizHRAD9NZ
- XkdR1/7Kuk6clNTwQ3PHeiLHxN730CTpDpz0Nqgd63IL5VNqBNkRpDMPLP8/SAoe9HKH9nwpv
- DupNjgVL6A/oAtBV4CFm9CK2vC7n3nLcJblQBSNmx1i0F7MU0IBe29hg2o/wd0A1CjY1mGNkj
- u+lcgSwW+qVurmyUYU/rUbghsVgTSCp16w4xl9Or6Ha8Uj3hRNA4rnHuY9Yy7iqQAxTkHvs3t
- txIq/AUEZoSavtbTteT+ImVlJVKSQE1X+T4jRK5FMjpFgET8XRqAWx1gHpUUbUASxEytxCuYp
- Afjg4g+QHs5xSMaXHFe/aSVVHe1nQve7CxRsyjoBKtgOsNTM/yPLFkoy1F3hrAKOlu91dLShA
- rRZLChlPNJXrIryeW1qMJGnepNecBc9nlXL9hmLGuxlF3hL/TMM2QfaqrXeWWmKqVfr/17lpp
- F2oPAqzpEFAnZP1lAZdp/poAOlDWi8rl0xE8c7tdpo+x6R2tpp4U/bnHg7AJJcqmnNQ44NGhE
- JLHb6AZmQNjVfM3hddwB2KnXL3EdYTG+ZCS3OSYB1vuhjgiYLTfk4N6qLEGGDQSJ338Mzjzpm
- /avQ7cZTPnLhOnNornO2i1XPTJc5xuDl2LKW07HzeuNbTolYHAne/JGgOdcAcE/0OD5AMf8ck
- Mk+7hojHiNDOK/E1xC06lsNZLPoas8NMKYCj/8eow11WbfQDMYsDaaFwrxQ97rShSDWsHcntf
- 1z14famHpHhlw1n7gw1HccEAnpWadiGxmQq2A9a0eUBy+b1XcwEldZF3lsaaxzySIjRf17Aog
- fT2RQWeQRv/KonFVAJ4Er/ZRjFnqz9kZfT+dSOlOzy8CA=
 
-Currently, the driver does only support a custom sysfs
-interface to allow userspace to read the fan speed.
-Add support for the standard hwmon interface so users
-can read the fan speed with standard tools like "sensors".
+Hi Jose,
 
-Tested with a custom ACPI SSDT.
+On Mon, 2024-04-22 at 10:51 +0800, Jose Ramon San Buenaventura wrote:
+> Adding support for adm1281 which is similar to adm1275
+>=20
+> Removed extra case for STATUS_CML in adm1275_read_byte_data function.
+>=20
 
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
-Changes since v4:
-- fix spelling issues
-- check power values for overflow condition too
+Remove the above line. As nothing to do with supporting the new device. Thi=
+s is what
+it should be in your v2 changelog :)
 
-Changes since v3:
-- drop fault attrs
-- rework initialization
+> Signed-off-by: Jose Ramon San Buenaventura <jose.sanbuenaventura@analog.c=
+om>
+> ---
+> =C2=A0Documentation/hwmon/adm1275.rst | 14 +++++++++++---
+> =C2=A0drivers/hwmon/pmbus/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 4 ++--
+> =C2=A0drivers/hwmon/pmbus/adm1275.c=C2=A0=C2=A0 | 11 +++++++++--
+> =C2=A03 files changed, 22 insertions(+), 7 deletions(-)
+>=20
+> diff --git a/Documentation/hwmon/adm1275.rst b/Documentation/hwmon/adm127=
+5.rst
+> index 804590eea..467daf8ce 100644
+> --- a/Documentation/hwmon/adm1275.rst
+> +++ b/Documentation/hwmon/adm1275.rst
+> @@ -43,6 +43,14 @@ Supported chips:
+> =C2=A0
+> =C2=A0=C2=A0=C2=A0=C2=A0 Datasheet: www.analog.com/static/imported-files/=
+data_sheets/ADM1278.pdf
+> =C2=A0
+> +=C2=A0 * Analog Devices ADM1281
+> +
+> +=C2=A0=C2=A0=C2=A0 Prefix: 'adm1281'
+> +
+> +=C2=A0=C2=A0=C2=A0 Addresses scanned: -
+> +
+> +=C2=A0=C2=A0=C2=A0 Datasheet:
+> https://www.analog.com/media/en/technical-documentation/data-sheets/adm12=
+81.pdf
+> +
+> =C2=A0=C2=A0 * Analog Devices ADM1293/ADM1294
+> =C2=A0
+> =C2=A0=C2=A0=C2=A0=C2=A0 Prefix: 'adm1293', 'adm1294'
+> @@ -58,10 +66,10 @@ Description
+> =C2=A0-----------
+> =C2=A0
+> =C2=A0This driver supports hardware monitoring for Analog Devices ADM1075=
+, ADM1272,
+> -ADM1275, ADM1276, ADM1278, ADM1293, and ADM1294 Hot-Swap Controller and
+> +ADM1275, ADM1276, ADM1278, ADM1281, ADM1293, and ADM1294 Hot-Swap Contro=
+ller and
+> =C2=A0Digital Power Monitors.
+> =C2=A0
+> -ADM1075, ADM1272, ADM1275, ADM1276, ADM1278, ADM1293, and ADM1294 are ho=
+t-swap
+> +ADM1075, ADM1272, ADM1275, ADM1276, ADM1278, ADM1281, ADM1293, and ADM12=
+94 are
+> hot-swap
+> =C2=A0controllers that allow a circuit board to be removed from or insert=
+ed into
+> =C2=A0a live backplane. They also feature current and voltage readback vi=
+a an
+> =C2=A0integrated 12 bit analog-to-digital converter (ADC), accessed using=
+ a
+> @@ -144,5 +152,5 @@ temp1_highest		Highest observed temperature.
+> =C2=A0temp1_reset_history	Write any value to reset history.
+> =C2=A0
+> =C2=A0			Temperature attributes are supported on ADM1272 and
+> -			ADM1278.
+> +			ADM1278, and ADM1281.
+> =C2=A0=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index 557ae0c41..9c1d0d7d5 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -51,8 +51,8 @@ config SENSORS_ADM1275
+> =C2=A0	tristate "Analog Devices ADM1275 and compatibles"
+> =C2=A0	help
+> =C2=A0	=C2=A0 If you say yes here you get hardware monitoring support for=
+ Analog
+> -	=C2=A0 Devices ADM1075, ADM1272, ADM1275, ADM1276, ADM1278, ADM1293,
+> -	=C2=A0 and ADM1294 Hot-Swap Controller and Digital Power Monitors.
+> +	=C2=A0 Devices ADM1075, ADM1272, ADM1275, ADM1276, ADM1278, ADM1281,
+> +	=C2=A0 ADM1293, and ADM1294 Hot-Swap Controller and Digital Power Monit=
+ors.
+> =C2=A0
+> =C2=A0	=C2=A0 This driver can also be built as a module. If so, the modul=
+e will
+> =C2=A0	=C2=A0 be called adm1275.
+> diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.=
+c
+> index e2c61d6fa..2baeee8be 100644
+> --- a/drivers/hwmon/pmbus/adm1275.c
+> +++ b/drivers/hwmon/pmbus/adm1275.c
+> @@ -18,7 +18,7 @@
+> =C2=A0#include <linux/log2.h>
+> =C2=A0#include "pmbus.h"
+> =C2=A0
+> -enum chips { adm1075, adm1272, adm1275, adm1276, adm1278, adm1293, adm12=
+94 };
+> +enum chips { adm1075, adm1272, adm1275, adm1276, adm1278, adm1281, adm12=
+93,
+> adm1294 };
+> =C2=A0
+> =C2=A0#define ADM1275_MFR_STATUS_IOUT_WARN2	BIT(0)
+> =C2=A0#define ADM1293_MFR_STATUS_VAUX_UV_WARN	BIT(5)
+> @@ -101,6 +101,7 @@ struct adm1275_data {
+> =C2=A0	bool have_pin_max;
+> =C2=A0	bool have_temp_max;
+> =C2=A0	bool have_power_sampling;
+> +	bool have_status_cml;
 
-Changes since v2:
-- add support for fanX_target and power attrs
+don't think we need this...
 
-Changes since v1:
-- fix undefined reference error
-- fix fan speed validation
-- coding style fixes
-- clarify that the changes are compile-tested only
-- add hwmon maintainers to cc list
-=2D--
- drivers/acpi/Makefile    |   1 +
- drivers/acpi/fan.h       |   9 ++
- drivers/acpi/fan_core.c  |   4 +
- drivers/acpi/fan_hwmon.c | 173 +++++++++++++++++++++++++++++++++++++++
- 4 files changed, 187 insertions(+)
- create mode 100644 drivers/acpi/fan_hwmon.c
+> =C2=A0	struct pmbus_driver_info info;
+> =C2=A0};
+> =C2=A0
+> @@ -482,6 +483,7 @@ static const struct i2c_device_id adm1275_id[] =3D {
+> =C2=A0	{ "adm1275", adm1275 },
+> =C2=A0	{ "adm1276", adm1276 },
+> =C2=A0	{ "adm1278", adm1278 },
+> +	{ "adm1281", adm1281 },
+> =C2=A0	{ "adm1293", adm1293 },
+> =C2=A0	{ "adm1294", adm1294 },
+> =C2=A0	{ }
+> @@ -555,7 +557,8 @@ static int adm1275_probe(struct i2c_client *client)
+> =C2=A0			=C2=A0=C2=A0 client->name, mid->name);
+> =C2=A0
+> =C2=A0	if (mid->driver_data =3D=3D adm1272 || mid->driver_data =3D=3D adm=
+1278 ||
+> -	=C2=A0=C2=A0=C2=A0 mid->driver_data =3D=3D adm1293 || mid->driver_data =
+=3D=3D adm1294)
+> +	=C2=A0=C2=A0=C2=A0 mid->driver_data =3D=3D adm1281 || mid->driver_data =
+=3D=3D adm1293 ||
+> +	=C2=A0=C2=A0=C2=A0 mid->driver_data =3D=3D adm1294)
+> =C2=A0		config_read_fn =3D i2c_smbus_read_word_data;
+> =C2=A0	else
+> =C2=A0		config_read_fn =3D i2c_smbus_read_byte_data;
+> @@ -703,6 +706,10 @@ static int adm1275_probe(struct i2c_client *client)
+> =C2=A0			=C2=A0 PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT;
+> =C2=A0		break;
+> =C2=A0	case adm1278:
+> +	case adm1281:
+> +		if (data->id =3D=3D adm1281)
+> +			data->have_status_cml =3D true;
+> +
 
-diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
-index 39ea5cfa8326..61ca4afe83dc 100644
-=2D-- a/drivers/acpi/Makefile
-+++ b/drivers/acpi/Makefile
-@@ -77,6 +77,7 @@ obj-$(CONFIG_ACPI_TINY_POWER_BUTTON)	+=3D tiny-power-but=
-ton.o
- obj-$(CONFIG_ACPI_FAN)		+=3D fan.o
- fan-objs			:=3D fan_core.o
- fan-objs			+=3D fan_attr.o
-+fan-$(CONFIG_HWMON)		+=3D fan_hwmon.o
+and this...
 
- obj-$(CONFIG_ACPI_VIDEO)	+=3D video.o
- obj-$(CONFIG_ACPI_TAD)		+=3D acpi_tad.o
-diff --git a/drivers/acpi/fan.h b/drivers/acpi/fan.h
-index f89d19c922dc..db25a3898af7 100644
-=2D-- a/drivers/acpi/fan.h
-+++ b/drivers/acpi/fan.h
-@@ -10,6 +10,8 @@
- #ifndef _ACPI_FAN_H_
- #define _ACPI_FAN_H_
-
-+#include <linux/kconfig.h>
-+
- #define ACPI_FAN_DEVICE_IDS	\
- 	{"INT3404", }, /* Fan */ \
- 	{"INTC1044", }, /* Fan for Tiger Lake generation */ \
-@@ -57,4 +59,11 @@ struct acpi_fan {
- int acpi_fan_get_fst(struct acpi_device *device, struct acpi_fan_fst *fst=
-);
- int acpi_fan_create_attributes(struct acpi_device *device);
- void acpi_fan_delete_attributes(struct acpi_device *device);
-+
-+#if IS_REACHABLE(CONFIG_HWMON)
-+int devm_acpi_fan_create_hwmon(struct acpi_device *device);
-+#else
-+static inline int devm_acpi_fan_create_hwmon(struct acpi_device *device) =
-{ return 0; };
-+#endif
-+
- #endif
-diff --git a/drivers/acpi/fan_core.c b/drivers/acpi/fan_core.c
-index ff72e4ef8738..7cea4495f19b 100644
-=2D-- a/drivers/acpi/fan_core.c
-+++ b/drivers/acpi/fan_core.c
-@@ -336,6 +336,10 @@ static int acpi_fan_probe(struct platform_device *pde=
-v)
- 		if (result)
- 			return result;
-
-+		result =3D devm_acpi_fan_create_hwmon(device);
-+		if (result)
-+			return result;
-+
- 		result =3D acpi_fan_create_attributes(device);
- 		if (result)
- 			return result;
-diff --git a/drivers/acpi/fan_hwmon.c b/drivers/acpi/fan_hwmon.c
-new file mode 100644
-index 000000000000..e7e5b6a29e7f
-=2D-- /dev/null
-+++ b/drivers/acpi/fan_hwmon.c
-@@ -0,0 +1,173 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * fan_hwmon.c - hwmon interface for the ACPI Fan driver
-+ *
-+ * Copyright (C) 2024 Armin Wolf <W_Armin@gmx.de>
-+ */
-+
-+#include <linux/acpi.h>
-+#include <linux/hwmon.h>
-+#include <linux/limits.h>
-+#include <linux/units.h>
-+
-+#include "fan.h"
-+
-+/* Returned when the ACPI fan does not support speed reporting */
-+#define FAN_SPEED_UNAVAILABLE	0xffffffff
-+#define FAN_POWER_UNAVAILABLE	0xffffffff
-+
-+static struct acpi_fan_fps *acpi_fan_get_current_fps(struct acpi_fan *fan=
-, u64 control)
-+{
-+	int i;
-+
-+	for (i =3D 0; i < fan->fps_count; i++) {
-+		if (fan->fps[i].control =3D=3D control)
-+			return &fan->fps[i];
-+	}
-+
-+	return NULL;
-+}
-+
-+static umode_t acpi_fan_is_visible(const void *drvdata, enum hwmon_sensor=
-_types type, u32 attr,
-+				   int channel)
-+{
-+	const struct acpi_fan *fan =3D drvdata;
-+	int i;
-+
-+	switch (type) {
-+	case hwmon_fan:
-+		switch (attr) {
-+		case hwmon_fan_input:
-+			return 0444;
-+		case hwmon_fan_target:
-+			/* When in fine grain control mode, not every fan control value
-+			 * has an associated fan performance state.
-+			 */
-+			if (fan->fif.fine_grain_ctrl)
-+				return 0;
-+
-+			return 0444;
-+		default:
-+			break;
-+		}
-+		break;
-+	case hwmon_power:
-+		switch (attr) {
-+		case hwmon_power_input:
-+			/* When in fine grain control mode, not every fan control value
-+			 * has an associated fan performance state.
-+			 */
-+			if (fan->fif.fine_grain_ctrl)
-+				return 0;
-+
-+			/* When all fan performance states contain no valid power data,
-+			 * when the associated attribute should not be created.
-+			 */
-+			for (i =3D 0; i < fan->fps_count; i++) {
-+				if (fan->fps[i].power !=3D FAN_POWER_UNAVAILABLE)
-+					return 0444;
-+			}
-+
-+			return 0;
-+		default:
-+			break;
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
-+static int acpi_fan_read(struct device *dev, enum hwmon_sensor_types type=
-, u32 attr, int channel,
-+			 long *val)
-+{
-+	struct acpi_device *adev =3D to_acpi_device(dev->parent);
-+	struct acpi_fan *fan =3D dev_get_drvdata(dev);
-+	struct acpi_fan_fps *fps;
-+	struct acpi_fan_fst fst;
-+	int ret;
-+
-+	ret =3D acpi_fan_get_fst(adev, &fst);
-+	if (ret < 0)
-+		return ret;
-+
-+	switch (type) {
-+	case hwmon_fan:
-+		switch (attr) {
-+		case hwmon_fan_input:
-+			if (fst.speed =3D=3D FAN_SPEED_UNAVAILABLE)
-+				return -ENODATA;
-+
-+			if (fst.speed > LONG_MAX)
-+				return -EOVERFLOW;
-+
-+			*val =3D fst.speed;
-+			return 0;
-+		case hwmon_fan_target:
-+			fps =3D acpi_fan_get_current_fps(fan, fst.control);
-+			if (!fps)
-+				return -ENODATA;
-+
-+			if (fps->speed > LONG_MAX)
-+				return -EOVERFLOW;
-+
-+			*val =3D fps->speed;
-+			return 0;
-+		default:
-+			break;
-+		}
-+		break;
-+	case hwmon_power:
-+		switch (attr) {
-+		case hwmon_power_input:
-+			fps =3D acpi_fan_get_current_fps(fan, fst.control);
-+			if (!fps)
-+				return -ENODATA;
-+
-+			if (fps->power =3D=3D FAN_POWER_UNAVAILABLE)
-+				return -ENODATA;
-+
-+			if (fps->power > LONG_MAX / MICROWATT_PER_MILLIWATT)
-+				return -EOVERFLOW;
-+
-+			*val =3D fps->power * MICROWATT_PER_MILLIWATT;
-+			return 0;
-+		default:
-+			break;
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return -EOPNOTSUPP;
-+}
-+
-+static const struct hwmon_ops acpi_fan_ops =3D {
-+	.is_visible =3D acpi_fan_is_visible,
-+	.read =3D acpi_fan_read,
-+};
-+
-+static const struct hwmon_channel_info * const acpi_fan_info[] =3D {
-+	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT | HWMON_F_TARGET),
-+	HWMON_CHANNEL_INFO(power, HWMON_P_INPUT),
-+	NULL
-+};
-+
-+static const struct hwmon_chip_info acpi_fan_chip_info =3D {
-+	.ops =3D &acpi_fan_ops,
-+	.info =3D acpi_fan_info,
-+};
-+
-+int devm_acpi_fan_create_hwmon(struct acpi_device *device)
-+{
-+	struct acpi_fan *fan =3D acpi_driver_data(device);
-+	struct device *hdev;
-+
-+	hdev =3D devm_hwmon_device_register_with_info(&device->dev, "acpi_fan", =
-fan,
-+						    &acpi_fan_chip_info, NULL);
-+
-+	return PTR_ERR_OR_ZERO(hdev);
-+}
-=2D-
-2.39.2
+- Nuno S=C3=A1
 
