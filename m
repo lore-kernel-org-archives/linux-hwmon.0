@@ -1,61 +1,61 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D9D915DBD3;
-	Wed, 24 Apr 2024 14:10:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2497E15E1F5;
+	Wed, 24 Apr 2024 14:12:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713967840; cv=none; b=HTxUZL7acVdqauXQKgsrOpZlijL8abfANHVgDFkK/yVILMv518UKHtzb6uU3NcZOg2ujXOsNrFGLfgnMr0bCBPNG7/XL7w5sOowkzjLg2BkHyPI4TKMGV9occLeSKKW9hVM5iB7JceRUBvHZxoSkcuhcc9AXwdX0GwvF12i0Ad8=
+	t=1713967937; cv=none; b=fMrRy7gSkaGq3/rApT0b/FXQM5wdWy4vRxBKeRaB8uVXpHw+ynE4XFC1myjo86FVC9Ibc/wHSDyL08RlOnF6DP5ZEwBsWGpmUHgzYcdPu97toc5+enZPde21r4QGlEd2shJhOi2NDjCXZt9qjAnQZ0+7hhjlhFPvjP//5Rt+JqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713967840; c=relaxed/simple;
-	bh=mIuyvzjM/zLZ2qxR32BueDm/sFzMWkiGrkkiP/nbYeE=;
+	s=arc-20240116; t=1713967937; c=relaxed/simple;
+	bh=BkoSw4tGuar7CXsLZT7eKEGFqwiIddvRL9J3/8CekEM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UxSyp6XF0vPRDORTehvBX0EMWX0QKcGWYibGjkqM/FJHm8+46w00dGVfDt5l9JSDGgqi9mXmyRbFsONuy6aH3NG/dxZOBGEXbTTE98nR7GwOuJKDrwspw05+45ZPqbkyagpmdtZ3HqQBFYH9MugQoJNynHirGGiqqyvQjSEn+/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qon5xeFp; arc=none smtp.client-ip=209.85.210.176
+	 In-Reply-To:Content-Type; b=iaojPhbx7Vs+aPFA+jbG2thYlK2hRu2Gqo/o6fTk9gMy59UGQHk3BupLCCHkJDDZuspyTxNlzQnn9u35ciMCxp/DiiaQsDX/nP8DVFJZkmeozjPj/uGkTpKMdkZRFxzazZu0cAxXpfqrOEOnEGsXiULBXGf1TZTAAlNFWykvdNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ifBkrygN; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qon5xeFp"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-6ed112c64beso6057777b3a.1;
-        Wed, 24 Apr 2024 07:10:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ifBkrygN"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1e3f17c6491so55946815ad.2;
+        Wed, 24 Apr 2024 07:12:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713967836; x=1714572636; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1713967935; x=1714572735; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=ir7o5MgLD+ZdSuKdZV5IZOaKuz3t4fLOBPu6WuGlN9Y=;
-        b=Qon5xeFpLpxojknrRW1C/OuD5kae5ZXJzC5ch2/KMF7z3s/Y/VuaBA2awjYTf3Cri2
-         7ECCa5CpfXdcLRHYINc8/YgCmEMmH3fObO0xU2/P1kSnMlKjOmAmwPQmQX6Q1sTyaaG1
-         TznYs/pt5x/ZQ/mcmcVi7YTAnmmzcbLa0pqpu3Uu51+3DFGoD0jMsYavrFsHszOwjQrc
-         n97Yk5gYf57ApcEx4v6zugr3ty1M6IY10foUkAAKv7S1MQBdelTmQBJH3sdOF0ZBwWOK
-         7lO56/lNG4EnB85RVH2PQCsNCF3pLrOku1ldHhxaScNN8mHt+H+zIK85v22Uc3qm0nfX
-         4ibQ==
+        bh=lsll10wHk4U4Q7zcObMGDIonOVp1PFgzxwRb4AuAL2k=;
+        b=ifBkrygNtB3HFBnjw2huZ2aYc/Vpd8irdiolu+asTJ2+Z+Y/a8s3dc2Dj9fmePnBHY
+         UNX9Co3uE32DFAn1faziOI9DN3UbLEgk/6ZdMRDNsYMggmoWN8vOaQuCN8oYEgJ3Hm9A
+         ffBMDjBKp4K29I4ytu+OmJIksDRt8If9f7u8OETNePRyJ8bHg+hvxUXnmt9NyKxnVSyn
+         Pfg+3noyQybizU5LhKN2qvhbfCRksoaznB/AiaYiOAorsdygwQiBebR1HZsR5DiPhJq5
+         QIpoAwcHbwnSpBzItUUuHlXXdP73ly5YXJf9m0woJlEt7jDO2rc2hP6M/BUpQlEDO4Hk
+         ukbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713967836; x=1714572636;
+        d=1e100.net; s=20230601; t=1713967935; x=1714572735;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ir7o5MgLD+ZdSuKdZV5IZOaKuz3t4fLOBPu6WuGlN9Y=;
-        b=V6QER/LrHjxwEXj8TRT/hjPL8rxgAsYMnRKKSbrSzgzJoEMJzFOnz8T9x8HWF4rbH+
-         SM9irHPnmfJ8rwlaYtb5r/V2vWxlT6IE6pjaYT5KU4nm2EhN3miX9OlHncZQl8nY2No9
-         3wKxKC+bkE+azo01A6J2T2WQs202FTm+A+YQf0IFjOxafKO6/AeLi2WzrNbYxB/ayuHu
-         vKEG6/kd7F1YIrhMKFhTbO2DnkfLp/bts3fQumxqcArKOft23t+2uwFKfCxTrRzPc+W8
-         leaNoDcXjGT+jHTFFuy9LS70BrAqLMgtbrRBUhgPjlh5bADGoOJrz7+/6OvLqaXIIZ1j
-         JuHg==
-X-Forwarded-Encrypted: i=1; AJvYcCWHcVaqcRZ5ZP77XZ5qRPAdPdHApVBHBoDoP3qJviV/nQbIW5fKmhXLoITrhUnFem9xz8j/BxCFfPQ8X/dO+lwNFQE4HpM/6xF5QT7LMmMUVX0aNmDX5/YGP9BklLokP0x2qot+wYEr
-X-Gm-Message-State: AOJu0Ywb3AGGrxTxUwhaoHM+CgIPB5ojB2hYJmEHiWff9PP4impc3HBT
-	5t5ktLN/KsWsToqNNzRmP//SXmSZ/OYkXFdivkpNqydnO325W+ss+DY6/w==
-X-Google-Smtp-Source: AGHT+IHOqD05KCYP1P9MpaZ6fWFXUFdBulaK4iYd8v2Q0doVogV4KpWagUCSL7ABHj/Eh1noUld+iQ==
-X-Received: by 2002:a05:6a00:240d:b0:6eb:40:6bff with SMTP id z13-20020a056a00240d00b006eb00406bffmr2739688pfh.14.1713967835575;
-        Wed, 24 Apr 2024 07:10:35 -0700 (PDT)
+        bh=lsll10wHk4U4Q7zcObMGDIonOVp1PFgzxwRb4AuAL2k=;
+        b=WFSGEXwUnVn6dHJjHMhtH1HApPvsjHsNyxLKGJOW0Tl3YXIA5n+FhY4zL70nUeNCPE
+         P9UPU+uC56dcGU0lmm++aG/Ve9BpnV/q5EZrs6g5NKW4j0xlldRcdjqOKt+79Kgimm4a
+         AtcO/Lpdg6StMNU/aecJVmi5ooI0PO5ItDDEKExpbmVDlvTTgAKDZk5kfPGlgJJM5jNK
+         xfjMVXgeTF+fXNYTHkusa3QQ0YWeGNhm7yHkUZBilBK9MECxHUyprLuuZ+E76phzOb+s
+         RuHVfUWjYFmC9kJ28vO0FZHK4mJu+CdeAXcymkV6g13MYKFj+P3kEN3+ubs+WRyDfVGf
+         xcww==
+X-Forwarded-Encrypted: i=1; AJvYcCWLoAX0qzganTwMRuG5CmGSiJQYcPU4jOrUO+Qi575X9VGj6x5GEGv6/lKlTwbPwNC9JhKjOUwKkLvqUC7urcymtf05KHyRPryCrZzqWl4Asf4/ASC3a15U7r/D8Hbkk1yM9sXvWc1d
+X-Gm-Message-State: AOJu0YwlxDWuijJNzqZxcvCGUWoekjs+R2w/LFxBenUUIXJwmT9L0f3p
+	0LvTm0ru97Qoj9KGnUewqp6eREydsuBirpbyDceZ4FEl2VbNBdP3eelMQw==
+X-Google-Smtp-Source: AGHT+IFWdPVchjkqrgW4fxVWp1t9FnmxxyuZwv9cRN3HitesqbC5e4SQlaKRLnOYbZSOyzqR16QSXQ==
+X-Received: by 2002:a17:903:1209:b0:1e4:471f:2fa1 with SMTP id l9-20020a170903120900b001e4471f2fa1mr2676949plh.24.1713967935268;
+        Wed, 24 Apr 2024 07:12:15 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id kr3-20020a056a004b4300b006ed26aa0ae6sm11453076pfb.54.2024.04.24.07.10.34
+        by smtp.gmail.com with ESMTPSA id y24-20020a1709027c9800b001e0d62e077esm11970291pll.247.2024.04.24.07.12.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Apr 2024 07:10:35 -0700 (PDT)
+        Wed, 24 Apr 2024 07:12:14 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <677423ba-b63d-4408-9823-7387862f1ae9@roeck-us.net>
-Date: Wed, 24 Apr 2024 07:10:33 -0700
+Message-ID: <05e5e502-f135-4fa6-b457-cdcb7b246282@roeck-us.net>
+Date: Wed, 24 Apr 2024 07:12:13 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -148,6 +148,11 @@ On 4/24/24 02:04, Peter Korsgaard wrote:
 >   
 > +	of_property_read_u32(dev->of_node, "target-pwm", &target_pwm);
 > +	if (target_pwm > (u32)MAX_PWM) {
+
+Unnecessary type cast.
+
+Guenter
+
 > +		dev_err(dev, "Invalid target-pwm: %u > %d\n", target_pwm, MAX_PWM);
 > +		return -EINVAL;
 > +	}
@@ -162,10 +167,4 @@ On 4/24/24 02:04, Peter Korsgaard wrote:
 >   	if (ret) {
 >   		dev_err(dev, "Failed to configure PWM: %d\n", ret);
 >   		return ret;
-
-A much better name would be default-pwm for the property name.
-target-pwm is misleading and doesn't really make sense because
-there is no "target", just a value that is being set.
-
-Guenter
 
