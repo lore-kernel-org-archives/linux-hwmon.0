@@ -1,61 +1,61 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2497E15E1F5;
-	Wed, 24 Apr 2024 14:12:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7426B15ECFE;
+	Wed, 24 Apr 2024 14:58:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713967937; cv=none; b=fMrRy7gSkaGq3/rApT0b/FXQM5wdWy4vRxBKeRaB8uVXpHw+ynE4XFC1myjo86FVC9Ibc/wHSDyL08RlOnF6DP5ZEwBsWGpmUHgzYcdPu97toc5+enZPde21r4QGlEd2shJhOi2NDjCXZt9qjAnQZ0+7hhjlhFPvjP//5Rt+JqE=
+	t=1713970723; cv=none; b=VZyC5Njw79pf2LrZOHggv8/MQl8StkVgXcpbo+4rBgN1Ob53YiAIE9JoHf2io/kLkTVtNqc7UWlnbkTjZ1YxXTeTFqLdGUcfI2E1FKzXmKOw5TE+uYmnf92hkrs/gyfzIKdMTfGM3PL725MfVpXfIgjj/lZsRL0fTVvpuAXbwnY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713967937; c=relaxed/simple;
-	bh=BkoSw4tGuar7CXsLZT7eKEGFqwiIddvRL9J3/8CekEM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iaojPhbx7Vs+aPFA+jbG2thYlK2hRu2Gqo/o6fTk9gMy59UGQHk3BupLCCHkJDDZuspyTxNlzQnn9u35ciMCxp/DiiaQsDX/nP8DVFJZkmeozjPj/uGkTpKMdkZRFxzazZu0cAxXpfqrOEOnEGsXiULBXGf1TZTAAlNFWykvdNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ifBkrygN; arc=none smtp.client-ip=209.85.214.171
+	s=arc-20240116; t=1713970723; c=relaxed/simple;
+	bh=wj+MmZtf5+VASW9gIjSu3qcMMHPCxn+8ARLhlwlyrFY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=ZQZEhClng0yVk0FDYI50/lWZP5EUBJb1PoE/QCPDYm0KtgouI6df34N6i1JHoFPr/NX3YJc+qaqQtNjnyKkpIn8Jx79jkj7bcCvAUAJr8EfJxoOtBr7LM5d6nzNcCBLikq0BkXXvztnsksj5LIqYd8H+hY5iTcxvtny19Md2cBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lbswhj58; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ifBkrygN"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1e3f17c6491so55946815ad.2;
-        Wed, 24 Apr 2024 07:12:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lbswhj58"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1e83a2a4f2cso40334285ad.1;
+        Wed, 24 Apr 2024 07:58:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713967935; x=1714572735; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1713970721; x=1714575521; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=lsll10wHk4U4Q7zcObMGDIonOVp1PFgzxwRb4AuAL2k=;
-        b=ifBkrygNtB3HFBnjw2huZ2aYc/Vpd8irdiolu+asTJ2+Z+Y/a8s3dc2Dj9fmePnBHY
-         UNX9Co3uE32DFAn1faziOI9DN3UbLEgk/6ZdMRDNsYMggmoWN8vOaQuCN8oYEgJ3Hm9A
-         ffBMDjBKp4K29I4ytu+OmJIksDRt8If9f7u8OETNePRyJ8bHg+hvxUXnmt9NyKxnVSyn
-         Pfg+3noyQybizU5LhKN2qvhbfCRksoaznB/AiaYiOAorsdygwQiBebR1HZsR5DiPhJq5
-         QIpoAwcHbwnSpBzItUUuHlXXdP73ly5YXJf9m0woJlEt7jDO2rc2hP6M/BUpQlEDO4Hk
-         ukbw==
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=BqCRomP2j+KXQnk5cDEaaIseDhvWGvZmbsLHr51E5oU=;
+        b=lbswhj58K38wqZPJIWbBs/CPjMY+pNmwIqUwMRcqA0VNwx+w7mydTbNkyzJwqRE56M
+         8HUOjLQgCNy9upYSTVOtaOVQiBZ9cC4Ir8hlKGzNsc9/dmXyS/W41Y83TOrMYbcZbR5N
+         T9QJ6XdgohjsCMvoMWTnUHZNOCp7YTrDAVedJCu5XqtNmhrbaaNdfOrP2oWfWpzvOjh7
+         JrabfBb1/KjPijEFiIla9nVOUFlXvGGGABPSE2XJDZnL1iR34XBI62RrBov0HBIpXxbK
+         L/Bdl56jYDwGIiYras3A5A3BYwRX9EhTZ4cpHtaFk1Qy6KojTjllSb3qUoq7wwcw4R/d
+         H+dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713967935; x=1714572735;
+        d=1e100.net; s=20230601; t=1713970721; x=1714575521;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lsll10wHk4U4Q7zcObMGDIonOVp1PFgzxwRb4AuAL2k=;
-        b=WFSGEXwUnVn6dHJjHMhtH1HApPvsjHsNyxLKGJOW0Tl3YXIA5n+FhY4zL70nUeNCPE
-         P9UPU+uC56dcGU0lmm++aG/Ve9BpnV/q5EZrs6g5NKW4j0xlldRcdjqOKt+79Kgimm4a
-         AtcO/Lpdg6StMNU/aecJVmi5ooI0PO5ItDDEKExpbmVDlvTTgAKDZk5kfPGlgJJM5jNK
-         xfjMVXgeTF+fXNYTHkusa3QQ0YWeGNhm7yHkUZBilBK9MECxHUyprLuuZ+E76phzOb+s
-         RuHVfUWjYFmC9kJ28vO0FZHK4mJu+CdeAXcymkV6g13MYKFj+P3kEN3+ubs+WRyDfVGf
-         xcww==
-X-Forwarded-Encrypted: i=1; AJvYcCWLoAX0qzganTwMRuG5CmGSiJQYcPU4jOrUO+Qi575X9VGj6x5GEGv6/lKlTwbPwNC9JhKjOUwKkLvqUC7urcymtf05KHyRPryCrZzqWl4Asf4/ASC3a15U7r/D8Hbkk1yM9sXvWc1d
-X-Gm-Message-State: AOJu0YwlxDWuijJNzqZxcvCGUWoekjs+R2w/LFxBenUUIXJwmT9L0f3p
-	0LvTm0ru97Qoj9KGnUewqp6eREydsuBirpbyDceZ4FEl2VbNBdP3eelMQw==
-X-Google-Smtp-Source: AGHT+IFWdPVchjkqrgW4fxVWp1t9FnmxxyuZwv9cRN3HitesqbC5e4SQlaKRLnOYbZSOyzqR16QSXQ==
-X-Received: by 2002:a17:903:1209:b0:1e4:471f:2fa1 with SMTP id l9-20020a170903120900b001e4471f2fa1mr2676949plh.24.1713967935268;
-        Wed, 24 Apr 2024 07:12:15 -0700 (PDT)
+        bh=BqCRomP2j+KXQnk5cDEaaIseDhvWGvZmbsLHr51E5oU=;
+        b=p8ExgPDszKwOs2Dq9HjJ/stKzOBVtUdL/NsytbyWvMYExK8qTH1zoupF90+8qkC19t
+         Wa78LljjU/0fuSypZpI9kOeQ7Q0EHwr/Vqj1NfurBkGSMM1HT/YLK4A+coTiYxoppHWN
+         a0mHqrF8R/KTu96CoSk8J7mwElS1qyAWCVpqAPgOOuqky2sH0eHV6vaPheYAMOmXedA9
+         RxOe7Rq0s1T5zTy2zzJfUBkGcDl8mf6PSgGG1Rp0MZg+bER8/umXPiucORUojXfBUs6m
+         TT+LXhrWXHwD4vG9/YofbOKDN/Ol5/6gXkRx9B/vJTZG4v4jnSlXROKJW9oaP5Vt+Egb
+         CKTw==
+X-Forwarded-Encrypted: i=1; AJvYcCWGO/o5IbamLHpJOvVhrm8FD8arOwWZnlRFlgxOk00TLf9/r36FDJRK5h7yK7o6IsZ3OOngQk134e3kSU0MFPNEy63e+baDDlgrbCCRs4/zT86daCVChI1HNqJTErFkwe7E8g3FiRk0TGoxLyHDiraiY+DY0JnwSvcicpvGWSMBwcJoUHkDfpHVLT6Dztp+librkJDiLM8NrXustbZhRP/uZQ9/twX9cEe03NGjipM5kdHwLKrJ8jh69Ww4
+X-Gm-Message-State: AOJu0YyOi1MWtX5b1HHYYjo02RSchZ48JE0sYbTNoyLBlL6Hl+QoQu4T
+	nRftRetyWMVoGW9pxVvJ3smbZYVFUqV0aaeg3DSUtrJSabdvVJdR
+X-Google-Smtp-Source: AGHT+IELqL/OYTBYFMKKpWyzTxsQH2QVHDHpPYQodRl8lZ9PEaUxgBceVpm5bknl0arSGS1Dc1h/8w==
+X-Received: by 2002:a17:902:e849:b0:1e4:32ba:1ef with SMTP id t9-20020a170902e84900b001e432ba01efmr3024385plg.13.1713970720597;
+        Wed, 24 Apr 2024 07:58:40 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y24-20020a1709027c9800b001e0d62e077esm11970291pll.247.2024.04.24.07.12.14
+        by smtp.gmail.com with ESMTPSA id n6-20020a170903110600b001e668c1060bsm11995475plh.122.2024.04.24.07.58.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Apr 2024 07:12:14 -0700 (PDT)
+        Wed, 24 Apr 2024 07:58:39 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <05e5e502-f135-4fa6-b457-cdcb7b246282@roeck-us.net>
-Date: Wed, 24 Apr 2024 07:12:13 -0700
+Message-ID: <430da9c0-f865-43e5-b9f0-935f8b68763e@roeck-us.net>
+Date: Wed, 24 Apr 2024 07:58:37 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,14 +63,20 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] hwmon: (pwm-fan): support target-pwm property to set
- default PWM value
-To: Peter Korsgaard <peter@korsgaard.com>, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>
-References: <20240424090453.2292185-1-peter@korsgaard.com>
- <20240424090453.2292185-2-peter@korsgaard.com>
+Subject: Re: [PATCH v1 1/3] hwmon: (pmbus) Add support for Infineon XDP710
+To: Peter Yin <peteryin.openbmc@gmail.com>, patrick@stwcx.xyz,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>,
+ Patrick Rudolph <patrick.rudolph@9elements.com>,
+ Michal Simek <michal.simek@amd.com>, Marek Vasut <marex@denx.de>,
+ Bjorn Helgaas <bhelgaas@google.com>, Lukas Wunner <lukas@wunner.de>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-i2c@vger.kernel.org
+References: <20240424095604.3425857-1-peteryin.openbmc@gmail.com>
+ <20240424095604.3425857-2-peteryin.openbmc@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -116,55 +122,281 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240424090453.2292185-2-peter@korsgaard.com>
+In-Reply-To: <20240424095604.3425857-2-peteryin.openbmc@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 4/24/24 02:04, Peter Korsgaard wrote:
-> For some use cases defaulting the PWM to full fan speed is not ideal
-> (noise, power consumption, ..), so support an optional target-pwm
-> property (0..255) to override the default PWM value.
+On 4/24/24 02:55, Peter Yin wrote:
+> Add support for xdp710 device from Infineon vendor.
+
+Drop "vendor". Maybe "Add support for Infineon XDP710.".
+
+> This is a Hot-Swap Controller.
 > 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: Peter Yin <peteryin.openbmc@gmail.com>
 > ---
->   drivers/hwmon/pwm-fan.c | 11 +++++++++--
->   1 file changed, 9 insertions(+), 2 deletions(-)
+>   drivers/hwmon/pmbus/Kconfig  |   9 ++
+>   drivers/hwmon/pmbus/Makefile |   1 +
+>   drivers/hwmon/pmbus/xdp710.c | 155 +++++++++++++++++++++++++++++++++++
+>   3 files changed, 165 insertions(+)
+>   create mode 100644 drivers/hwmon/pmbus/xdp710.c
 > 
-> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-> index b67bc9e833c0..ebdefbd5789c 100644
-> --- a/drivers/hwmon/pwm-fan.c
-> +++ b/drivers/hwmon/pwm-fan.c
-> @@ -482,6 +482,7 @@ static int pwm_fan_probe(struct platform_device *pdev)
->   	const struct hwmon_channel_info **channels;
->   	u32 *fan_channel_config;
->   	int channel_count = 1;	/* We always have a PWM channel. */
-> +	u32 target_pwm = MAX_PWM;
->   	int i;
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index 557ae0c414b0..d72bdecf758a 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -511,6 +511,15 @@ config SENSORS_UCD9200
+>   	  This driver can also be built as a module. If so, the module will
+>   	  be called ucd9200.
 >   
->   	ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
-> @@ -527,11 +528,17 @@ static int pwm_fan_probe(struct platform_device *pdev)
->   
->   	ctx->enable_mode = pwm_disable_reg_enable;
->   
-> +	of_property_read_u32(dev->of_node, "target-pwm", &target_pwm);
-> +	if (target_pwm > (u32)MAX_PWM) {
+> +config SENSORS_XDP710
+> +	tristate "Infineon XDP710 family"
+> +	help
+> +	  If you say yes here you get hardware monitoring support for Infineon
+> +	  XDP710 device.
+> +
+Drop "device"
+
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called xdp710.
+> +
+>   config SENSORS_XDPE152
+>   	tristate "Infineon XDPE152 family"
+>   	help
+> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> index f14ecf03ad77..4fe630793721 100644
+> --- a/drivers/hwmon/pmbus/Makefile
+> +++ b/drivers/hwmon/pmbus/Makefile
+> @@ -51,6 +51,7 @@ obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
+>   obj-$(CONFIG_SENSORS_TPS546D24)	+= tps546d24.o
+>   obj-$(CONFIG_SENSORS_UCD9000)	+= ucd9000.o
+>   obj-$(CONFIG_SENSORS_UCD9200)	+= ucd9200.o
+> +obj-$(CONFIG_SENSORS_XDP710)	+= xdp710.o
+>   obj-$(CONFIG_SENSORS_XDPE122)	+= xdpe12284.o
+>   obj-$(CONFIG_SENSORS_XDPE152)	+= xdpe152c4.o
+>   obj-$(CONFIG_SENSORS_ZL6100)	+= zl6100.o
+> diff --git a/drivers/hwmon/pmbus/xdp710.c b/drivers/hwmon/pmbus/xdp710.c
+> new file mode 100644
+> index 000000000000..3ed324bd0db6
+> --- /dev/null
+> +++ b/drivers/hwmon/pmbus/xdp710.c
+> @@ -0,0 +1,155 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Driver for Infineon XDP710 Hot-Swap Controller
+> + */
+> +
+> +#include <linux/i2c.h>
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/bitops.h>
+
+Include files in alphabetic order, please.
+
+> +#include "pmbus.h"
+> +
+> +#define XDP710_REG_CFG		(0xD3)
+> +#define XDP710_V_SNS_CFG	(0xD4)
+> +#define XDP710_CS_RNG		(0xD5)
+
+Unnecessary ( )
+
+> +
+> +struct xdp710_data {
+> +	struct pmbus_driver_info info;
+> +	u8 cs_rng;
+> +	u8 vtlm_rng;
+> +	int rsense;
+
+I don't see those values used outside the probe function,
+meaning it is unnecessary to keep them in struct xdp710_data.
+
+> +};
+> +
+> +/*
+> + * 0x00 to 0x09
+> + * 0x0A to 0x13
+> + * 0x14 to 0x1D
+> + * 0x1E to 0x27
+> + * 0x28 to 0x32
+> + * 0x33 to 0x3F
+
+Pointless comment. Who is supposed to understand what it means ?
+Besides, if it does mean what I think it is (matching lines of values
+in the array below), it is wrong and misleading. The last line in
+the array starts at index 0x32 (50) and ends at 0x3b (59).
+
+I more useful comment would be something like "table to map configuration
+register values to sense resistor values" or similar.
+
+> + */
+> +const int microOhmRsense[] = {
+> +	200, 250, 300, 330, 400, 470, 500, 600, 670, 700,
+> +	750, 800, 900, 1000, 1100, 1200, 1250, 1300, 1400, 1500,
+> +	1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500,
+> +	2600, 2700, 2800, 3000, 3100, 3200, 3300, 3400, 3500, 3600,
+> +	3800, 3900, 4000, 4200, 4300, 4500, 4700, 4800, 4900, 5000,
+> +	5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000, 9500, 10000
+
+This array has only 60 entries. The configuration register field
+is 6 bits wide. This means that configuration register values
+of 0x3c..0x3f will access values beyond the end of the array.
+
+> +};
+> +
+> +static struct pmbus_driver_info xdp710_info = {
+> +	.pages = 1,
+> +	.format[PSC_VOLTAGE_IN] = direct,
+> +	.format[PSC_VOLTAGE_OUT] = direct,
+> +	.format[PSC_CURRENT_OUT] = direct,
+> +	.format[PSC_POWER] = direct,
+> +	.format[PSC_TEMPERATURE] = direct,
+> +	.m[PSC_VOLTAGE_IN] = 4653,
+> +	.b[PSC_VOLTAGE_IN] = 0,
+> +	.R[PSC_VOLTAGE_IN] = -2,
+> +	.m[PSC_VOLTAGE_OUT] = 4653,
+> +	.b[PSC_VOLTAGE_OUT] = 0,
+> +	.R[PSC_VOLTAGE_OUT] = -2,
+> +	.m[PSC_CURRENT_OUT] = 23165,
+> +	.b[PSC_CURRENT_OUT] = 0,
+> +	.R[PSC_CURRENT_OUT] = -2,
+> +	.m[PSC_POWER] = 4211,
+> +	.b[PSC_POWER] = 0,
+> +	.R[PSC_POWER] = -2,
+> +	.m[PSC_TEMPERATURE] = 52,
+> +	.b[PSC_TEMPERATURE] = 14321,
+> +	.R[PSC_TEMPERATURE] = -1,
+> +	.func[0] =
+> +		PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_PIN |
+> +		PMBUS_HAVE_TEMP | PMBUS_HAVE_IOUT |
+> +		PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_TEMP,
+> +};
+> +
+> +static int xdp710_probe(struct i2c_client *client)
+> +{
+> +	struct pmbus_driver_info *info;
+> +	struct xdp710_data *data;
+> +	int ret;
+> +	int m = 0;
+> +
+> +	data = devm_kzalloc(&client->dev, sizeof(struct xdp710_data),
+> +			    GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	memcpy(&data->info, &xdp710_info, sizeof(*info));
+> +	info = &data->info;
+> +
+> +	/*
+> +	 * Read CS_RNG Value
+> +	 */
+
+Those comments are pointless and similar to
+
+	x = 5; /* add 5 to x */
+
+> +	ret = i2c_smbus_read_word_data(client, XDP710_CS_RNG);
+> +	if (ret < 0) {
+> +		dev_err(&client->dev,
+> +			"Can't get CS_RNG. Setting the CS_RNG to 0");
+
+If this is an error, abort the probe function and return it.
+If not, don't use dev_err().
+
+> +		ret = 0;
+> +	}
+> +	data->cs_rng = (ret >> 6) & GENMASK(1, 0);
+> +
+> +	/*
+> +	 * Read V_SNS_CFG Value
+> +	 */
+> +	ret = i2c_smbus_read_word_data(client, XDP710_V_SNS_CFG);
+> +	if (ret < 0) {
+> +		dev_err(&client->dev,
+> +			"Can't get V_SNS_CFG. Setting the V_SNS_CFG to 0");
+
+Same as above.
+
+> +		ret = 0;
+> +	}
+> +	data->vtlm_rng = ret & GENMASK(1, 0);
+> +
+> +	/*
+> +	 * Read RSNS_CFG Value
+> +	 */
+> +	ret = i2c_smbus_read_word_data(client, XDP710_REG_CFG);
+> +	if (ret < 0) {
+> +		dev_err(&client->dev,
+> +			"Can't get REG_CFG, Setting the Rsense to 0.33mohm");
+
+And again. Overall, I do think that those errors should be treated as fatal.
+I don't see a reason for ignoring them. If accessing the chip fails on that
+level, it probably fails entirely. If you want to assign defaults after
+smbus errors, please explain in detail in a comment why this makes sense
+and doesn't mean that the chip is not accessible.
+
+> +		ret = 3;
+> +	}
+> +	ret &= GENMASK(5, 0);
+> +	data->rsense = microOhmRsense[(u8)ret];
 
 Unnecessary type cast.
 
-Guenter
-
-> +		dev_err(dev, "Invalid target-pwm: %u > %d\n", target_pwm, MAX_PWM);
-> +		return -EINVAL;
-> +	}
 > +
->   	/*
-> -	 * Set duty cycle to maximum allowed and enable PWM output as well as
-> +	 * Set duty cycle to target and enable PWM output as well as
->   	 * the regulator. In case of error nothing is changed
->   	 */
-> -	ret = set_pwm(ctx, MAX_PWM);
-> +	ret = set_pwm(ctx, target_pwm);
->   	if (ret) {
->   		dev_err(dev, "Failed to configure PWM: %d\n", ret);
->   		return ret;
+> +	info->m[PSC_VOLTAGE_IN] <<= data->vtlm_rng;
+> +	info->m[PSC_VOLTAGE_OUT] <<= data->vtlm_rng;
+> +
+> +	m = info->m[PSC_CURRENT_OUT];
+> +	info->m[PSC_CURRENT_OUT] = ((m >> (data->cs_rng)) *
+> +				   (data->rsense)) / 1000;
+
+Unnecessary () around data->cs_rng and data->rsense and around
+the multiplication.
+
+	info->m[PSC_CURRENT_OUT] = (m >> data->cs_rng) * data->rsense / 1000;
+
+However, it seems to me that the right shift will result in accuracy
+loss. Something like
+	info->m[PSC_CURRENT_OUT] = ((m * rsense) >> data->cs_rng) / 1000;
+might avoid that.
+
+> +
+> +	m = info->m[PSC_POWER];
+> +	info->m[PSC_POWER] = ((m >> (data->cs_rng)) *
+> +			     (data->rsense)) / 1000;
+
+Unnecessary () around data->cs_rng and data->rsense and around
+the multiplication.
+
+Your call, but DIV_ROUND_CLOSEST() might result in better accuracy.
+
+> +
+> +	return pmbus_do_probe(client, info);
+> +}
+> +
+> +static const struct of_device_id xdp710_of_match[] = {
+> +	{ .compatible = "infineon,xdp710" },
+> +	{}
+> +};
+> +
+> +static const struct i2c_device_id xdp710_id[] = {
+> +	{"xdp710", 0},
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(i2c, xdp710_id);
+> +
+> +static struct i2c_driver xdp710_driver = {
+> +	.driver = {
+> +		   .name = "xdp710",
+> +		   .of_match_table = xdp710_of_match,
+> +	},
+> +	.probe = xdp710_probe,
+> +	.id_table = xdp710_id,
+> +};
+> +module_i2c_driver(xdp710_driver);
+> +
+> +MODULE_AUTHOR("Peter Yin <peter.yin@quantatw.com>");
+> +MODULE_DESCRIPTION("PMBus driver for XDP710 HSC");
+> +MODULE_LICENSE("GPL");
+> +MODULE_IMPORT_NS(PMBUS);
 
