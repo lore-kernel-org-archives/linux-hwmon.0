@@ -1,172 +1,112 @@
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 867EA16DEC1;
-	Wed, 24 Apr 2024 22:40:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BFF26F069;
+	Thu, 25 Apr 2024 07:10:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713998436; cv=none; b=VRsTaSmb4QDWQ7fusn2rK3eVpgLg10qrRMt4Xgg/7kMe8SCJN9sDOJ2TPn6KHhq5xyn1lxo7P0odPRqekfpKMLTADLZ2MN9u47eO5+1eG6yQz1XHUIHI8r3YSCVSOovyy94isCLaAYA1SzJOm9cLPDUpoybh/NJrqpJ1aW4BnBU=
+	t=1714029043; cv=none; b=rvBgOXRku/XWVRVWB0b6llJMCLKavZzniK6gTWhZz3XETEUkWVDl0Kp2UkDu0/3PWUU+jF5G7kHTYAqWFeAY5jxcASw8OUce0vnQpV19RlXfNMnKFbHN5ULMkLvYjmsJ0szdoHuzncM5TGa+dOZf8IkTGE4XRmitEhrFliw9rcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713998436; c=relaxed/simple;
-	bh=yWTu+Ro0Q8pXAF+ytfHMy/NERfiA3bEuy3YTsdlZPSE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Vrul4Z0oRWc5q/KbAtDDv2hQQ6E2tvrDCVZA9rZ518VAW61EUphai++03HT8c8eeutfJMVsvAqGsFZVBUW0F1QrZUICXccZSqhuQ+abiMLmh6iaMv17KAJ6tWS2Q4xqw+smTMkndEYNi6/nfHa0Xi4KweyfCcUaiMoXcEGkqWfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HJWxc5b6; arc=none smtp.client-ip=209.85.167.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1714029043; c=relaxed/simple;
+	bh=OicsjI5hve5UOp2RU+b4OIl85M9vxjPjINQgH+1vvfs=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=VCT6fVxD557HEYGtoy7F5j8/JVrTf7kA/eJ44HD/ZG3g6MZkF0i35USs1xUJKTee4Thel0Ziw3fRphTK7V70GBMELyu0Au/9c36dpHsjLn4XcN8zZKcDBL37rHRm4xtsjrlP6NE8Y1DeHPUJ2YDdRQixbWZSDB4rU6q7c1lRocM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=HwPhI3xo; arc=none smtp.client-ip=148.163.135.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HJWxc5b6"
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-3c70b652154so309327b6e.2;
-        Wed, 24 Apr 2024 15:40:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713998433; x=1714603233; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=i9ydyggHonmZTeHDmQ1TqtlgRqFlGkx0UVffasxxkZE=;
-        b=HJWxc5b6iqytC6Lz/EqFVVosVhUCZ/41ylml3lYcJ21oPUxE4d/k5zeKRZgBGvSdV1
-         rqAvAWyH6j2iz/Z0PO0ByWXSy+xOPNeg0/R5vFcqOkg97LlYLgLccO7u1oM+eXENzWTW
-         o6puj0miTH8wH07AKyF6bGu7Q3z030NN9s+9lkztcTG3xAETCEKIUaksum9JDmyd7IFe
-         m24VsUzvErOr495PZcEwZvO+fzkB8v1w5Wt8WiS7BH+UC9Shvr8PKpUYsZJn2Maeroo6
-         D2q//b4EOPIT2OUJ03oRxrX9pVKOVmbj9KrIGt6iHVa2SY/oYk74YPE4IKwYYlGu6YJb
-         qy3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713998433; x=1714603233;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i9ydyggHonmZTeHDmQ1TqtlgRqFlGkx0UVffasxxkZE=;
-        b=Rvfv8Qkc3p/hWXiYIZ7y15Px5tPoZc7VEa2tnt+q0Nn1OurmzI3sapcKQ8PRko+zD7
-         Ljttq2CFwdJn/lOSJ8NGEzDhgBxEyDiy+Zf56La/OP1wR2jugU+ijOKBCKUDSv4Omkmc
-         Qz/TkpZry/CAH/dbNapz2PP3rfqMbNPWlq72eHzDX4QZ+/XPdanqCm/3M66ace41vHPr
-         6ydQFaFpiRwAn40cCF1T4p7xnaz8A2bTpqD9RsELZIamoL7WAIDQqz7wj6S3Zqm1ZYwp
-         uSBfLX0G/yDKEdaFHm1DhyETrvW9P8j6hSS5O6f47hh1f/ZCWcY7yKGrrZY0rlJ1V+bV
-         rTwg==
-X-Forwarded-Encrypted: i=1; AJvYcCUp9Q08PTOTYclYRz9IAALiGLuaQJLCVExD4AJ43cBNGahL+Cerd0alY6WpSo93fBa+5+gQmwPThuFwDGcQPO+nDyDNEHKYHJDS+Q==
-X-Gm-Message-State: AOJu0YySsL98fgYc5N1i22bTGI/ziAd8C9N54Xz4fV+rP2JiSYbdGOeX
-	gwsn8DKtSHAh7zdtQJE1jMfRGqm/he3uJrVQRwH4hqq+qDGYeOoIAjTlNw==
-X-Google-Smtp-Source: AGHT+IFOVc8IW1H5hORIApL5jVVXT+BkCpW2raxwe+1njGBDv4NUi2qUNiDcTVh8Dbdg3IQb/9a5Cw==
-X-Received: by 2002:a05:6808:bcc:b0:3c7:351f:b3ff with SMTP id o12-20020a0568080bcc00b003c7351fb3ffmr4962364oik.14.1713998433520;
-        Wed, 24 Apr 2024 15:40:33 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 192-20020a6301c9000000b0060795a08227sm1200573pgb.37.2024.04.24.15.40.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Apr 2024 15:40:32 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b717da30-1d4c-4e09-b98c-4aa41a235234@roeck-us.net>
-Date: Wed, 24 Apr 2024 15:40:30 -0700
+	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="HwPhI3xo"
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+	by mx0a-00128a01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43P57Uvg000945;
+	Thu, 25 Apr 2024 03:10:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=DKIM; bh=8v8v9Or7KoY1
+	qlT2j9aqexZMdaKJjYew5gQOnI4G+6o=; b=HwPhI3xoRGn4tYqydhKx/VoNcvEH
+	hc55Ka9f8DL/T3rAJc202NuJCI1Of52XI6mciKPU0PJ7RYIxKA90cTJ9tyXmblPo
+	ZEhomudUgM+WHHc+YbrRZj3ZEEXw7Ccvd4suV2Gkjr9ZI9zvdlBlPIiVoosxCB9p
+	8Vrp7ABJiD9zqzxQCelslg+KhS2ftwpPyJw1nnJITmG19N0H03oWbLMXSvFR1vfg
+	WqVfw4XSTiM61IEijA7zoO/Lk7xBhpD5v553ZIk0XRHw4MOzo6srSaaHthNrkx0N
+	mRsx+PqAoBU9DZj1yn4ttrVX5EoSFuC0aM/ZXKFNyLg9dwxtTptrts8Pew==
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3xq3qmbchq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 25 Apr 2024 03:10:14 -0400 (EDT)
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 43P7AD42023009
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Thu, 25 Apr 2024 03:10:13 -0400
+Received: from ASHBCASHYB5.ad.analog.com (10.64.17.133) by
+ ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Thu, 25 Apr 2024 03:10:12 -0400
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
+ ASHBCASHYB5.ad.analog.com (10.64.17.133) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Thu, 25 Apr 2024 03:10:12 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Thu, 25 Apr 2024 03:10:12 -0400
+Received: from JSANBUEN-L01.ad.analog.com (JSANBUEN-L01.ad.analog.com [10.117.220.64])
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 43P79tHj006908;
+	Thu, 25 Apr 2024 03:09:58 -0400
+From: Jose Ramon San Buenaventura <jose.sanbuenaventura@analog.com>
+To: <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>
+CC: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+        "Rob
+ Herring" <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        "Conor
+ Dooley" <conor+dt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Delphine CC
+ Chiu" <Delphine_CC_Chiu@Wiwynn.com>
+Subject: [PATCH v3 0/2] Add adm1281 support
+Date: Thu, 25 Apr 2024 15:09:46 +0800
+Message-ID: <20240425070948.25788-1-jose.sanbuenaventura@analog.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: pwm-fan: Document target-pwm
- property
-To: Rob Herring <robh@kernel.org>, Peter Korsgaard <peter@korsgaard.com>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-References: <20240424090453.2292185-1-peter@korsgaard.com>
- <20240424220417.GA782554-robh@kernel.org>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240424220417.GA782554-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: uxnUrTglTl1R9yfRuAprsipuzKoOy6DJ
+X-Proofpoint-ORIG-GUID: uxnUrTglTl1R9yfRuAprsipuzKoOy6DJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-04-25_06,2024-04-25_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
+ lowpriorityscore=0 suspectscore=0 priorityscore=1501 malwarescore=0
+ spamscore=0 impostorscore=0 bulkscore=0 mlxscore=0 phishscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2404010003 definitions=main-2404250050
 
-On 4/24/24 15:04, Rob Herring wrote:
-> On Wed, Apr 24, 2024 at 11:04:52AM +0200, Peter Korsgaard wrote:
->> Similar to target-rpm from fan-common.yaml but for the PWM setting
->> (0..255).
-> 
-> IIRC, we have a map of RPMs to PWM duty cycle, so why can't you
-> use that plus target-rpm?
-> 
+CHANGELOG:
 
-target-rpm is the target fan speed. The property defined here
-is the default pwm to set when the device is instantiated.
+v2 -> v3:
+        - removed extra boolean member in adm1275_data structure
+        - refactored commit message        
 
-The two values are also orthogonal. The fan rpm is fan dependent.
-Each fan will require a different pwm value to reach the target speed.
-Trying to use target-rpm to set a default pwm value would really
-not make much if any sense.
+v1 -> v2:
+        - removed STATUS_CML case in read_byte_data function 
 
-Guenter
+Jose Ramon San Buenaventura (2):
+  dt-bindings: hwmon: adm1275: add adm1281
+  hwmon: pmbus: adm1275: add adm1281 support
 
-> Anything new for existing fan bindings should ideally use what
-> fan-common.yaml defined or be added to it.
-> 
->>
->> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
->> ---
->>   Documentation/devicetree/bindings/hwmon/pwm-fan.yaml | 8 ++++++++
->>   1 file changed, 8 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml b/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
->> index 4e5abf7580cc..58513ff732af 100644
->> --- a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
->> +++ b/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
->> @@ -46,6 +46,14 @@ properties:
->>   
->>     "#cooling-cells": true
->>   
->> +  target-pwm:
->> +    description:
->> +      The default desired fan PWM.
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    minimum: 0
->> +    maximum: 255
->> +    default: 255
->> +
->>   required:
->>     - compatible
->>     - pwms
->> -- 
->> 2.39.2
->>
+ .../devicetree/bindings/hwmon/adi,adm1275.yaml     |  4 +++-
+ Documentation/hwmon/adm1275.rst                    | 14 +++++++++++---
+ drivers/hwmon/pmbus/Kconfig                        |  4 ++--
+ drivers/hwmon/pmbus/adm1275.c                      |  7 +++++--
+ 4 files changed, 21 insertions(+), 8 deletions(-)
+
+
+base-commit: 96fca68c4fbf77a8185eb10f7557e23352732ea2
+-- 
+2.39.2
 
