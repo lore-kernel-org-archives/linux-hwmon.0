@@ -1,142 +1,172 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03E23134A8;
-	Thu, 25 Apr 2024 07:20:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D50ED8529B
+	for <linux-hwmon@vger.kernel.org>; Thu, 25 Apr 2024 09:50:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714029625; cv=none; b=fc552DDBp1KA9z5Aa0ORNCmfvp0ejWxU/SG7+kEclGiNMa/QYRRwIbQjPRtKCiEMgWhDrrIuW3C9JyuAO+SZfCfIx1ODK16vVuF124rEEpFDCHUJDYBjyCwmbTXCNUGsKRp+/92AVQbnkPe3jgu9OxnkN5d8PSdS5DdAsXY3ynw=
+	t=1714038648; cv=none; b=jTNruUUisND5V0jGa2z8+Uji0IQBz2cOb3JvZcYtCYQAFUriLP0ifDtQdA6wiIOoyud9PrC34P6WkfmEzRlvCYLg9u848umTj7jkDD3+qlN9CQPeHixlQkV30mwz7CBM8bcV9a6pWGiZ3oxplJvxvNnwWxkNSv7t8djhobuBMCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714029625; c=relaxed/simple;
-	bh=EbgiS937wyMUIsINg4XjAGDVFc8yWeC3ul2GhBuuGpo=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NgwAM3PoSE7u8hw1BmdxfscP+GGhEufvTY81Q+TETf9IgCvpblgGJo+DzHWZq6w0WK73IwvCPrwKT6FzB1rswSJM5GlJuI6FtgJbwVsq3rkJ730DMukGdgscfX31dy8AcIiqKfE78GxJiXZgUH5fGRHVZ8Yyal87pCFY9Sg6PiQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=ddkHlP93; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	s=arc-20240116; t=1714038648; c=relaxed/simple;
+	bh=qdRiSYw8YShEsbcnjovffFj4XN41isfrJsatmjc2y5E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Nn5xvaA/QvUxB7GSNRvhtZLKf4hWfbk0/4KRktmT+k4n/bmQiWjbQbIYmjxolEsMx+/1vBbxi8IsBj3TPO+SEIlm5yQINdlQC31XV2/AlZTo0Hb9vYVx8eSbJJj9E24aw/BIaFSZWGprUpAy2Qp+WuVYBNgxFLqEbTHa8F7k+sY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=H2pvX2M9; arc=none smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="ddkHlP93"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1714029624; x=1745565624;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EbgiS937wyMUIsINg4XjAGDVFc8yWeC3ul2GhBuuGpo=;
-  b=ddkHlP93BNxUjKlj/u1fMHmiAAWLbbUps8MtLJEOfy/EasX25tmAYe23
-   upaaQRorxjRrN60Qlfvy/hi0uZUAGz/RGAxCzDfsvM3Pi6B2HXiES6IWG
-   +lPCN9SH75t8K1/J+YKlkY9g1Y3BEZATeugTDrGBoenLswuggjXnVL5YZ
-   u+rih3BbEiH6+a6UUIf5oYhK5w6P9MXWl1XYeeK1jyRbnyYKZyY3sK3zk
-   qgBhkDpRZ6wnsKrJEuILjh238rGbwRJP6letONptJx15CX0KcxtgBvEJJ
-   YVCqfyhyWSTwK3TbnpqpfsIx26eDVf4lYJJzByUgOqsTXPF9CFT38KI1D
-   Q==;
-X-CSE-ConnectionGUID: i/f88L82RR+aDS+IUbY31w==
-X-CSE-MsgGUID: hhqBzC/qTkqNY1MvEZMB0w==
-X-IronPort-AV: E=Sophos;i="6.07,228,1708412400"; 
-   d="asc'?scan'208";a="22592482"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 25 Apr 2024 00:20:16 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Thu, 25 Apr 2024 00:20:00 -0700
-Received: from wendy (10.10.85.11) by chn-vm-ex04.mchp-main.com (10.10.85.152)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
- Transport; Thu, 25 Apr 2024 00:19:58 -0700
-Date: Thu, 25 Apr 2024 08:19:42 +0100
-From: Conor Dooley <conor.dooley@microchip.com>
-To: Jose Ramon San Buenaventura <jose.sanbuenaventura@analog.com>
-CC: <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-i2c@vger.kernel.org>, Jean Delvare <jdelvare@suse.com>, Guenter Roeck
-	<linux@roeck-us.net>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
-	<krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet
-	<corbet@lwn.net>, Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: adm1275: add adm1281
-Message-ID: <20240425-jurist-unpadded-b3cccfc23862@wendy>
-References: <20240425070948.25788-1-jose.sanbuenaventura@analog.com>
- <20240425070948.25788-2-jose.sanbuenaventura@analog.com>
+	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="H2pvX2M9"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-53fa455cd94so585100a12.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 25 Apr 2024 02:50:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1714038646; x=1714643446; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rk5LPWQLoL0mOBXdRCO3wblAuxieiGS9nszgRdpKbTE=;
+        b=H2pvX2M96rZ3oBI+OY4Pw8a3jIvv0yC+/wikhfeddZdOrykrgvCCKG826HnKq5zo0K
+         eS1ag1C3zvZEZQbcoSG3/T+64cVdSpDkPHNRSZHg/Sr57SFs42NDn3skD+McXE9znlX7
+         QFhVpHC0bBI1/zfK4y768U/CHnRCGzPoMy6qvvmq/Tt4EbafJ9bhRuhGnyE2y7kjOPrY
+         Lav4nrAMzQUScajTlJyg+9ra9OUrSAdczL1aGB/fMkH9fHFEP9Ho3b/gxXci3ssDY5eg
+         +VnTkoV30BcHHK6lYFDcQxTVtKMW5dIwt4COoPFZBsyazO93wIU7IjteaaZRn94kYnOQ
+         O3UQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714038646; x=1714643446;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rk5LPWQLoL0mOBXdRCO3wblAuxieiGS9nszgRdpKbTE=;
+        b=XGWc7i8XrVZYm+crmhWPOyuxhXc/QknDeHKfzQeB58BXSJTsKR10iKlBP47XYwzRxZ
+         bt5VwuMQk08rTuME40hPtBjmUWMtf1YZ+b/yj8UMNwmX2nNlVBzka5aO2j/AO042mQjx
+         vDb6VjvZ87MtHO7Gb4L8xf6hrCRgBreM8RA80IiN2dAkFqIbf2x38/MoKAn8id1+by1G
+         Xve1KKuNb+UuYI8DSCvwt8BgYp6Euwh8MUGln9KbWcx1pb5IbBuHUY0jC1lIc6h42Fq2
+         iFIHcYe2cejZMUTUSE/xDngqvzWxWu7miHR2lxaLS+oBhpdQfAcIU4whW6b74cmnrGen
+         H4Ug==
+X-Forwarded-Encrypted: i=1; AJvYcCX/eMaoogIIWgiiRckp8IYiSYY8dQBAi0OTmwR/NdxU06WguRgzLGav0IAfjWmM6PZsvj7QH6cWe7MdCIhp9ujj0uYWo8kr4TK74Po=
+X-Gm-Message-State: AOJu0YyLH25bZApTjhHUNVWlotaEF4gME2Kh++/k2ZtvNbk2cnjybvwJ
+	789Ciu1QH3HSPMKqdGkC0PCDvUM0bt8lbhmycy9TCr/6ihqpCHAVmKPKlBfWKTimzxK7CRmld9z
+	c/z7uZ3cG0Epm4QSkBdPKRl0IuXuAcX/4eV5kRA==
+X-Google-Smtp-Source: AGHT+IH9ZkLYCUxIVmOFgcwspasMhuq7JJpPgx+HXsloRwnu3Nya4ej9oaE/72n5CzDqvjTkH0bP+hhaGfbYey9CPc4=
+X-Received: by 2002:a17:90a:6808:b0:2a2:55de:93eb with SMTP id
+ p8-20020a17090a680800b002a255de93ebmr4873824pjj.33.1714038646123; Thu, 25 Apr
+ 2024 02:50:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="hn6R+dMae6L0t3k5"
-Content-Disposition: inline
-In-Reply-To: <20240425070948.25788-2-jose.sanbuenaventura@analog.com>
+References: <20240416171720.2875916-1-naresh.solanki@9elements.com>
+ <65607114-89f8-4f48-83fc-b89d87fee247@roeck-us.net> <CABqG17jveAdxN+tCcPq4hNqWDy1YCJ1z0+kLpM+ect0XEyqBcA@mail.gmail.com>
+ <116aeea1-c648-4abe-9ab2-693bf64000fc@roeck-us.net>
+In-Reply-To: <116aeea1-c648-4abe-9ab2-693bf64000fc@roeck-us.net>
+From: Naresh Solanki <naresh.solanki@9elements.com>
+Date: Thu, 25 Apr 2024 15:20:35 +0530
+Message-ID: <CABqG17jHYymH02hAH0z-uqk2HjemL_-aLr9EyOUNR=uQ7U_wtA@mail.gmail.com>
+Subject: Re: [PATCH 1/4] hwmon (max6639): Use regmap
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: krzysztof.kozlowski+dt@linaro.org, u.kleine-koenig@pengutronix.de, 
+	Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
---hn6R+dMae6L0t3k5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Guenter,
 
-On Thu, Apr 25, 2024 at 03:09:47PM +0800, Jose Ramon San Buenaventura wrote:
-> Add support for the adm1281 Hot-Swap Controller and Digital Power
-> and Energy Monitor
->=20
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> Signed-off-by: Jose Ramon San Buenaventura <jose.sanbuenaventura@analog.c=
-om>
 
-I acked this, but I'm having second thoughts. The 1281 follows the same
-codepaths in the driver as the 1278, why is the 1278 not used as a
-fallback compatible here?
+On Mon, 22 Apr 2024 at 21:32, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Mon, Apr 22, 2024 at 04:06:16PM +0530, Naresh Solanki wrote:
+> > Hi Guenter,
+> >
+> > On Wed, 17 Apr 2024 at 02:55, Guenter Roeck <linux@roeck-us.net> wrote:
+> > >
+> > > On Tue, Apr 16, 2024 at 10:47:14PM +0530, Naresh Solanki wrote:
+> > > > Add regmap support.
+> > > >
+> > >
+> > > Missing (and not really utilizing) the benefits of using regmap.
+> > This is just replacing with regmap support
+> > >
+> > > > Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+> > > > ---
+> > > >  drivers/hwmon/Kconfig   |   1 +
+> > > >  drivers/hwmon/max6639.c | 157 ++++++++++++++++++++--------------------
+> > > >  2 files changed, 80 insertions(+), 78 deletions(-)
+> > > >
+> > > > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> > > > index c89776d91795..257ec5360e35 100644
+> > > > --- a/drivers/hwmon/Kconfig
+> > > > +++ b/drivers/hwmon/Kconfig
+> > > > @@ -1223,6 +1223,7 @@ config SENSORS_MAX6621
+> > > >  config SENSORS_MAX6639
+> > > >       tristate "Maxim MAX6639 sensor chip"
+> > > >       depends on I2C
+> > > > +     select REGMAP_I2C
+> > > >       help
+> > > >         If you say yes here you get support for the MAX6639
+> > > >         sensor chips.
+> > > > diff --git a/drivers/hwmon/max6639.c b/drivers/hwmon/max6639.c
+> > > > index aa7f21ab2395..1af93fc53cb5 100644
+> > > > --- a/drivers/hwmon/max6639.c
+> > > > +++ b/drivers/hwmon/max6639.c
+> > > > @@ -20,6 +20,7 @@
+> > > >  #include <linux/err.h>
+> > > >  #include <linux/mutex.h>
+> > > >  #include <linux/platform_data/max6639.h>
+> > > > +#include <linux/regmap.h>
+> > > >
+> > > >  /* Addresses to scan */
+> > > >  static const unsigned short normal_i2c[] = { 0x2c, 0x2e, 0x2f, I2C_CLIENT_END };
+> > > > @@ -57,6 +58,8 @@ static const unsigned short normal_i2c[] = { 0x2c, 0x2e, 0x2f, I2C_CLIENT_END };
+> > > >
+> > > >  #define MAX6639_FAN_CONFIG3_THERM_FULL_SPEED 0x40
+> > > >
+> > > > +#define MAX6639_NDEV                         2
+> > > > +
+> > > >  static const int rpm_ranges[] = { 2000, 4000, 8000, 16000 };
+> > > >
+> > > >  #define FAN_FROM_REG(val, rpm_range) ((val) == 0 || (val) == 255 ? \
+> > > > @@ -67,7 +70,7 @@ static const int rpm_ranges[] = { 2000, 4000, 8000, 16000 };
+> > > >   * Client data (each client gets its own)
+> > > >   */
+> > > >  struct max6639_data {
+> > > > -     struct i2c_client *client;
+> > > > +     struct regmap *regmap;
+> > > >       struct mutex update_lock;
+> > > >       bool valid;             /* true if following fields are valid */
+> > > >       unsigned long last_updated;     /* In jiffies */
+> > > > @@ -95,9 +98,8 @@ struct max6639_data {
+> > > >  static struct max6639_data *max6639_update_device(struct device *dev)
+> > > >  {
+> > > >       struct max6639_data *data = dev_get_drvdata(dev);
+> > > > -     struct i2c_client *client = data->client;
+> > > >       struct max6639_data *ret = data;
+> > > > -     int i;
+> > > > +     int i, err;
+> > > >       int status_reg;
+> > > >
+> > > >       mutex_lock(&data->update_lock);
+> > > > @@ -105,39 +107,35 @@ static struct max6639_data *max6639_update_device(struct device *dev)
+> > >
+> > > Conversions to regmap should drop all local caching and use regmap
+> > > for caching (where appropriate) instead.
+> > max6639_update_device deals with volatile registers & caching isn't
+> > available for these.
+> >
+>
+> So ? Unless you replace caching (and accept that volatile registers
+> are not cached) I do not see the value of this patch. Replacing direct
+> chip accesses with regmap should have a reason better than "because".
+> Using regmap for caching would be a valid reason. At the same time,
+> the value of caching volatile registers is very much questionable.
+This driver has 27 regmap accesses. Except volatile registers, others are
+cached by regmap.
+Some function which only access volatile registers will not be able to take
+advantage of caching. This is also the case in various other drivers for similar
+devices.
+Also regmap offers bit handling which makes the code much cleaner.
 
-Thanks,
-Conor.
+Regards,
+Naresh
 
-> ---
->  Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml b/D=
-ocumentation/devicetree/bindings/hwmon/adi,adm1275.yaml
-> index b68061294..5b076d677 100644
-> --- a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
-> @@ -5,7 +5,7 @@
->  $id: http://devicetree.org/schemas/hwmon/adi,adm1275.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
-> =20
-> -title: Analog Devices ADM1075/ADM127x/ADM129x digital power monitors
-> +title: Analog Devices ADM1075/ADM127x/ADM1281/ADM129x digital power moni=
-tors
-> =20
->  maintainers:
->    - Krzysztof Kozlowski <krzk@kernel.org>
-> @@ -27,6 +27,7 @@ properties:
->        - adi,adm1275
->        - adi,adm1276
->        - adi,adm1278
-> +      - adi,adm1281
->        - adi,adm1293
->        - adi,adm1294
-> =20
-> @@ -91,6 +92,7 @@ allOf:
->            contains:
->              enum:
->                - adi,adm1278
-> +              - adi,adm1281
->                - adi,adm1293
->                - adi,adm1294
->      then:
-> --=20
-> 2.39.2
->=20
-
---hn6R+dMae6L0t3k5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZioEAwAKCRB4tDGHoIJi
-0hXiAQDo16OUHd8d+5DyJ3F4AUI0q2wMy30pQkPywBeyTSxRVAEAp1qrqN6u0noB
-vPmcl+mHtDgXjG+t2nQN2S8kAvfKhAU=
-=izMj
------END PGP SIGNATURE-----
-
---hn6R+dMae6L0t3k5--
+>
+> Guenter
