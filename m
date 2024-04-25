@@ -1,61 +1,61 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C45B3149C41;
-	Thu, 25 Apr 2024 13:34:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 810DB1494B4;
+	Thu, 25 Apr 2024 14:05:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714052100; cv=none; b=cR9BsHWHzrd0kVuUsw5jmsYSLsJyU6W6yEhpbTRFlRveyHXu7YowPlGDsaOv32DzCWIA79UODxir+Y3zXDe1Kx9rC7aKWg3rck3552jBr+GZ8ihU1KNI9vbMkin9YM2w3XJJguyU1ElHCFjvlMQs4y8Bptf6XGPDIJVOhkrQxsY=
+	t=1714053937; cv=none; b=bxVfPXKVBtUOlq2rYXAdh8dioHDj6L4JIe08evO9w98+fOrbTsUyY0wT+drhuRXyJu4ve10uwK4vKIMU4a1flyCELjLEBt7zNFhi/JV0/ckKU8VdJZ/C0pIBHustMHBXaJBJykiEE+rIoqg+mXZPtZY0gstIsc9ZuNf9v0dr5Iw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714052100; c=relaxed/simple;
-	bh=CXlvvOw7amn/D3LVjeiitwj3gydb2VmKSTC9JVNzWYw=;
+	s=arc-20240116; t=1714053937; c=relaxed/simple;
+	bh=0vqbBfgQWOvB9SnNZ1mor6HTYreVHgeMs3CGoKbk32k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Z+RGGcpIncUeS8cj/0AwGDL/hVE2BF7Y2WD8kGTspXmMhYgUXIaPLMoRqNZgBmeelH6YKe0fA+jYHLkYpBsPdzQpq3OIr9xI8mh/UyMlmHJk5xDgGpQfmgAb940Oi7IYyYjnUezMfHm5BWulpvQlPwlPVaSHuLy2VVWv9PTHzg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i4oWV0uG; arc=none smtp.client-ip=209.85.214.177
+	 In-Reply-To:Content-Type; b=CRVkANKQemrkCIXNS15dFBURlX+tNznWGV9mQPzRjtNQmz82YL4r6LJE1lQ8+b9FbU6DvGg6MzcJUN5MXm/EDNVECR8GB582q8hQ+Mk0+Cr+hWc0hZa3C4b9NsDimt/dCD50Fv6+PCbzOTpdfmmHiDktK1afIUHEgWConsEfKAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=moNxw8Nf; arc=none smtp.client-ip=209.85.210.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i4oWV0uG"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1e3ff14f249so7701675ad.1;
-        Thu, 25 Apr 2024 06:34:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="moNxw8Nf"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6ed04c91c46so1022717b3a.0;
+        Thu, 25 Apr 2024 07:05:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714052098; x=1714656898; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1714053935; x=1714658735; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=etQpEKERbtpehlxdQfBjUCZvNiR8yxK2s8OXbhNfsN8=;
-        b=i4oWV0uG8WRK48dY8/cgAMRDNplFUWFkk64B/q9ZFUFLiYYZNc7cZTIb4CJhb7RgBA
-         1CloLWLGDeBWe1f0njVnu3PsOobrUysG99cy7ahhuYvBJPaXmp80GqZkxcfu5s+Jmp6z
-         VlvDY7fKuROgo3ZtMKSdhKgBpbOtgzji2JiHnEvriEquJXAuvBHt+FmVrXGsl5At6GUb
-         /dclwfqpuUHR08zPLbKHCOKtwDXnwzYCCKj08MZ6AFntTcDWXScnBLto3QBsFk/71/k6
-         1QX9y5Zbd2eW/q2B6PG+3j2Lmk9BOONp7PYCsUFwtQtz1w/f6W7nujfcTfHNJj5Te5/2
-         wFyQ==
+        bh=S3XUJ4ZkZdcpoZK51QtoI2+/sb3WV/5m1K1ccq4PQ4Y=;
+        b=moNxw8NfnkdbWdnO2iAbB9u4YHlLwza1lul/1nfmL04wCmkdcW6Hmu1ACQpB6YN7cJ
+         yuhd2mj+cRktq0GzByHVaMHwjiGVMmI0e3oYVDEgXSrbMri+P3hDSNLMvCIOu9ERDeQ+
+         kKn6HxjCTTfdO/l4AEw3whd8Wnuz2i+2BKpK2swPFQInGRz9nX8BUUl+/YFfJ8Ai88xB
+         YaqMBgN6hmMqwHNjbFRUb89IcDcXC2AptRzuv/aNCq3xTjuGTzmddPhAPri0HwjZyCmZ
+         VdYpwUqCuVIDtXtuB1EEqpWAnQfAUp//YeLTQzauTlZokOT3xUjfubL26I9jldmp7G4O
+         QmKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714052098; x=1714656898;
+        d=1e100.net; s=20230601; t=1714053935; x=1714658735;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=etQpEKERbtpehlxdQfBjUCZvNiR8yxK2s8OXbhNfsN8=;
-        b=wfZh/3lG8GnunazCspj630AQJnBG2pEX6vSLu/PsJ4tHhohh82mcAbSZtZDPLehPtY
-         nCRQYVmJhRkDsACVvI2KJ8T9Vf4zYDztgz1YTzX8s+Y9XinpUmQIbVtKIHJVYmiyAf5X
-         xmv5XTMw6OzQP5xX2HrAcQuuU8T0gtsgql9LUGjzA9eYg7f54L7LggjkSAVl99hX6ZCb
-         wG7ucsGBX9MKzYlNNBHKlqfQROA758IKMlX2pucuOhB3YdjPKeKty+gwyPFoqEhxNJMU
-         kqc1XD9pabDsHwRe18WIvULAaDbdaLBdh1pZSQTz42rBYJ8nlYkyQeyDnm+14MSwDRwY
-         soQQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUb8Ln3bMr/k5JWxpTZq4PPHkSytxMsneXJNYnDk19A0dN1Q2MXx1VrP5ygk0rS512SfCD5PaEwATkN8PQzGw6F6tjbuxEnyQc6UJQ4tMipTkrKYw8HMfx+XxI49/pU2kb3rUnCgR42Mdof8Tnkg/p320vn6KwUCMXUO8Jd0UKfvYDztH7UBpgAAp/9Sfhkj8K5+l+8N+0OdI9IoT1VTw==
-X-Gm-Message-State: AOJu0YxdcsNcjtYDeRXnEbua6PRpPK9DIBFg0SbT2oXu83tozeYO2d5B
-	CqYH/zTuqxBbmcMGy4IrHk4brqw40UwhLc9vMauIEbIk3rIlX0At
-X-Google-Smtp-Source: AGHT+IGAGqjOdRbWxSZRzy/APPArvW2TkewoiDKGh4aC1poGNHEUg4f/AScUJv/vthv/M+u2oP0kmQ==
-X-Received: by 2002:a17:902:dac3:b0:1e4:61b:98c6 with SMTP id q3-20020a170902dac300b001e4061b98c6mr4504376plx.4.1714052097949;
-        Thu, 25 Apr 2024 06:34:57 -0700 (PDT)
+        bh=S3XUJ4ZkZdcpoZK51QtoI2+/sb3WV/5m1K1ccq4PQ4Y=;
+        b=ElHLYFLMOhL16UuyOshNql224MEZleHNFO2dW1PcsR7msrLDlpb//PKRJR2NRK24CP
+         szMilW+3b5ggHXpwUFfVIBLXhaYfW17u+Nh+bplYj3FveFamEgYpsYSMsp+6NJcMES+O
+         9nNBksTioVYIG7oCFLjSlHHLJzt4mpA5cUFWRG6Kw6JxsRDMfuHPi2TTpYaS/ACJehfw
+         nvhELqNUyuOfqTMxjQ5hIG+GBXF/Nk5WlpXyhe431y6WKsFwrI5YjqcahlU9l2rSMvgv
+         LyzJx2tTGvWASJcjsvtiY1LRxjjk2oqiD/Va/vmFFNKroKsSX8w2NKHJCvXSqvy+K28s
+         fVUg==
+X-Forwarded-Encrypted: i=1; AJvYcCUoJMA7zEjkNWJhcT/ePm5J5lDlFA1lVLRSU8fvD3UnGAma94DSQTKT2h/kvuA3Hd/flN3omF1e6Lb3de03eEHCdpmGh0+dQR1t7qm5bXfi4TEDxSEs+BHwVUy41pyKQayh/bztcMvn/DAzP68MX1Zb6JQ7oioPObFYRWVOKM/u/J8Az6mS
+X-Gm-Message-State: AOJu0YxUa6B6PVouhNhxlqx0/T51+U9/meJH4DvbBiL5VMywqLzmR3gY
+	xieHNQnfgtdOy1ORlhg+WNtukgQri1FXQRAma0SYs5wzqcZMj8AF+jZQmA==
+X-Google-Smtp-Source: AGHT+IE4RCWjv9M5BaI+OBlowRa6R/nT2SWuFZptzbIad0Jvy9Ml4EA6aIBgCoSeWh+3H1bO86q8Ew==
+X-Received: by 2002:a05:6a21:626:b0:1ad:94d6:3c38 with SMTP id ll38-20020a056a21062600b001ad94d63c38mr1971702pzb.53.1714053934719;
+        Thu, 25 Apr 2024 07:05:34 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id mq7-20020a170902fd4700b001e8415d303fsm13820762plb.257.2024.04.25.06.34.55
+        by smtp.gmail.com with ESMTPSA id r13-20020a63d90d000000b005f750c31cf4sm12999810pgg.32.2024.04.25.07.05.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Apr 2024 06:34:56 -0700 (PDT)
+        Thu, 25 Apr 2024 07:05:33 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <489ccbfd-ccf5-43fa-92a1-3accff9b7c17@roeck-us.net>
-Date: Thu, 25 Apr 2024 06:34:54 -0700
+Message-ID: <396b47f5-9604-44ab-881f-94d0664bcab8@roeck-us.net>
+Date: Thu, 25 Apr 2024 07:05:31 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,18 +63,29 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: adm1275: add adm1281
-To: Conor Dooley <conor.dooley@microchip.com>,
- Jose Ramon San Buenaventura <jose.sanbuenaventura@analog.com>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-i2c@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
-References: <20240425070948.25788-1-jose.sanbuenaventura@analog.com>
- <20240425070948.25788-2-jose.sanbuenaventura@analog.com>
- <20240425-jurist-unpadded-b3cccfc23862@wendy>
+Subject: Re: [PATCH v2 3/3] dt-bindings: hwmon: max31790: Add
+ maxim,pwmout-pin-as-tach-input property
+To: Chanh Nguyen <chanh@amperemail.onmicrosoft.com>,
+ Conor Dooley <conor@kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Chanh Nguyen <chanh@os.amperecomputing.com>, Jean Delvare
+ <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Justin Ledford
+ <justinledford@google.com>, devicetree@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+ Open Source Submission <patches@amperecomputing.com>,
+ Phong Vo <phong@os.amperecomputing.com>,
+ Thang Nguyen <thang@os.amperecomputing.com>,
+ Quan Nguyen <quan@os.amperecomputing.com>
+References: <20240414042246.8681-1-chanh@os.amperecomputing.com>
+ <20240414042246.8681-4-chanh@os.amperecomputing.com>
+ <13b195e6-cbbd-4f74-a6fa-d874cb4aaa45@linaro.org>
+ <065243cc-09cf-4087-8842-bd4394fb324f@amperemail.onmicrosoft.com>
+ <d549cf2b-a7fa-4644-8fcb-3c420503ee01@amperemail.onmicrosoft.com>
+ <20240423-gallantly-slurp-24adbfbd6f09@spud>
+ <ab5cfd8c-0e88-4194-a77e-5ffbb6890319@amperemail.onmicrosoft.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -120,28 +131,51 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240425-jurist-unpadded-b3cccfc23862@wendy>
+In-Reply-To: <ab5cfd8c-0e88-4194-a77e-5ffbb6890319@amperemail.onmicrosoft.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 4/25/24 00:19, Conor Dooley wrote:
-> On Thu, Apr 25, 2024 at 03:09:47PM +0800, Jose Ramon San Buenaventura wrote:
->> Add support for the adm1281 Hot-Swap Controller and Digital Power
->> and Energy Monitor
+On 4/25/24 03:33, Chanh Nguyen wrote:
+> 
+> 
+> On 24/04/2024 00:02, Conor Dooley wrote:
+>> [EXTERNAL EMAIL NOTICE: This email originated from an external sender. Please be mindful of safe email handling and proprietary information protection practices.]
 >>
->> Acked-by: Conor Dooley <conor.dooley@microchip.com>
->> Signed-off-by: Jose Ramon San Buenaventura <jose.sanbuenaventura@analog.com>
-> 
-> I acked this, but I'm having second thoughts. The 1281 follows the same
-> codepaths in the driver as the 1278, why is the 1278 not used as a
-> fallback compatible here?
 > 
 
-That is rare for those devices es but true in this case. Technically possible,
-though it would result in a "Device mismatch" notification by the driver
-since it compares the configured vs. actual device IDs. I would prefer to
-avoid that, if for nothing else to avoid having to deal with concerned users.
+The quote doesn't make much sense.
 
-Thanks,
+> Sorry Conor, there may be confusion here. I mean the mapping of the PWM output to the TACH input, which is on the MAX31790, and it is not sure a common feature on all fan controllers.
+> 
+
+I think the term "mapping" is a bit confusing here.
+
+tach-ch, as I understand it, is supposed to associate a tachometer input
+with a pwm output, meaning the fan speed measured with the tachometer input
+is expected to change if the pwm output changes.
+
+On MAX31790, it is possible to configure a pwm output pin as tachometer input pin.
+That is something completely different. Also, the association is fixed.
+If the first pwm channel is used as tachometer channel, it would show up as 7th
+tachometer channel. If the 6th pwm channel is configured to be used as tachometer
+input, it would show up as 12th tachometer channel.
+
+Overall, the total number of channels on MAX31790 is always 12. 6 of them
+are always tachometer inputs, the others can be configured to either be a
+pwm output or a tachometer input.
+
+pwm outputs on MAX31790 are always tied to the matching tachometer inputs
+(pwm1 <--> tach1 etc) and can not be reconfigured, meaning tach-ch for
+channel X would always be X.
+
+> I would like to open a discussion about whether we should use the tach-ch property on the fan-common.yaml
+> 
+> I'm looking forward to hearing comments from everyone. For me, both tach-ch and vendor property are good.
+> 
+
+I am not even sure how to define tach-ch to mean "use the pwm output pin
+associated with this tachometer input channel not as pwm output
+but as tachometer input". That would be a boolean, not a number.
+
 Guenter
 
