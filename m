@@ -1,180 +1,101 @@
 Received: from bits.crawford.emu.id.au (bits.crawford.emu.id.au [116.255.43.97])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12BCD43AB2
-	for <linux-hwmon@vger.kernel.org>; Sat, 27 Apr 2024 08:49:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0CAA38DD3
+	for <linux-hwmon@vger.kernel.org>; Sat, 27 Apr 2024 09:59:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.255.43.97
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714207748; cv=none; b=AgUgbElHRtG9dqWDWUxNRnGqoSv9wFYxjO4QXLcn2duhVZNZSYw+S3JWQEVZLbcthCgTLwnG8D7ht7hBmyhXbfLogLnCCUX8ckDE/zl/ernrl26pKuDlMqPRaw1tm7GaGCR2meBIVCZDUSCTP6D6CLJO+0GxjERpcf9rQZzAxVQ=
+	t=1714211958; cv=none; b=oDa8gGgMsWvbH1ltsw21T9aGBTbKc0lG47IvqKsZpktcAAn6Hyq3gRK1SVN+MyN3A7/0PR/4Nt+nKzSMotjV4HpMHY2YPCiuGaoMKgjaa7HN/y35nq5cxXc4P3LSwRi6uzEMAuECYr60qf+zO5ljYmBn1fp5a/DTCkTRHF2+uKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714207748; c=relaxed/simple;
-	bh=V1hJ145P9A31MiXlRCV54Z7KFuwszuBFhjTD5OO5foM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qVmBgCHtjNhKh3W/N0CA0L6Eu7/Ys9TRKyJRZ/i5Q6aLBXsCaGs8R8fqFQe+cXt2LAeHrVXweOkSmrtuKiNqqiRwihSjj2UpHuAuZ/eh5283plqMCUGprsTZsZ4Uo7UuN+P4JO+JeC/YnOhQUc+SDBIq/IAsSGR8ooeGsqKh0+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crawford.emu.id.au; spf=pass smtp.mailfrom=crawford.emu.id.au; dkim=pass (2048-bit key) header.d=crawford.emu.id.au header.i=@crawford.emu.id.au header.b=h7WJ8bPZ; arc=none smtp.client-ip=116.255.43.97
+	s=arc-20240116; t=1714211958; c=relaxed/simple;
+	bh=Eiidt9813FfhVTD6aoE1xn37kiI5VAqvG9mwFFOOD2M=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=sWInNnUkyv8JOCi2G6AOJyyVzQwf2KgMSeL8XX+EnolUHbnXMYpkOl6p/lWWxGp+gReWAR/H7w/NSJrlF/PuDgigfk6qzk4Awo3jBOmJFc22fwbtKuWyDSh0Q/LLz/C3UIBeF2+AN75zjc2pCV7fCRKXzJLrUP/r2oahYUtirkk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crawford.emu.id.au; spf=pass smtp.mailfrom=crawford.emu.id.au; dkim=pass (2048-bit key) header.d=crawford.emu.id.au header.i=@crawford.emu.id.au header.b=UOyZmUHs; arc=none smtp.client-ip=116.255.43.97
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crawford.emu.id.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crawford.emu.id.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crawford.emu.id.au header.i=@crawford.emu.id.au header.b="h7WJ8bPZ"
+	dkim=pass (2048-bit key) header.d=crawford.emu.id.au header.i=@crawford.emu.id.au header.b="UOyZmUHs"
 Received: from agc.crawford.emu.id.au (agc.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc07])
 	(authenticated bits=0)
-	by bits.crawford.emu.id.au (8.17.2/8.17.2) with ESMTPSA id 43R8XNSF3013858
+	by bits.crawford.emu.id.au (8.17.2/8.17.2) with ESMTPSA id 43R9wmkO3032938
 	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-	Sat, 27 Apr 2024 18:33:43 +1000
+	Sat, 27 Apr 2024 19:58:49 +1000
 Authentication-Results: bits.crawford.emu.id.au; arc=none smtp.remote-ip=fdd2:7aad:d478:1::cb10:cc07
-DKIM-Filter: OpenDKIM Filter v2.11.0 bits.crawford.emu.id.au 43R8XNSF3013858
+DKIM-Filter: OpenDKIM Filter v2.11.0 bits.crawford.emu.id.au 43R9wmkO3032938
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crawford.emu.id.au;
-	s=s1; t=1714206823; bh=R/SBQk6lnazOQ4c4X+vU30o8eLlYWj96DN4T74sF0oM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=h7WJ8bPZKe6kb6tv3LLmI2Z9oAJoyPHAHYs5lyz9GRX6wRAIROj4xGNuM6m8v5qyW
-	 43KrvZHI080x4uiYanBI6/lm/5RhpThftwLoX1bsfRucnA0BalnEMGWjs9op9D//GK
-	 DreGSnmAbu67i61ToSlFWfvxanuEvaZr7VWBNo1MXz+Lr2mzq2YU2uOgC93Jc1E2OI
-	 PnYwD3uhwekSHYuml3+5FEp/Z7eNiPlWqK2k45O2YF3za1iCN+6KOcYdteBImhQYAK
-	 IhCgJgvRjsEd/1IJZLfWuPLQo8J4n+g0cYN8wGpBhcK23DtDjbHjQoUVYTngUUPX6Y
-	 rnoS+a/1Er3zg==
+	s=s1; t=1714211929; bh=Eiidt9813FfhVTD6aoE1xn37kiI5VAqvG9mwFFOOD2M=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=UOyZmUHsSHSigegTbAkyMc43dZ1YObogvkonWroOflu1gbzPk3r9NxGbmI+BY+Sql
+	 WhS6JOy4nBg4hQjccaOM59OAv0JYDZwTdV2Si9r4U7GkVdnV+h+nc4MJmW9M0hBNYu
+	 xh3OlO+MHfWaw1sd4RaGpssNi4fLLesiQe48CZAvtZE8AOfGeG1OHUrJfjWbiCJCrq
+	 Mm3N/H6OMMBama/Xw/LOgcEPdOnhckzPQjEQ7nhhOOiF/kU4bhvKSLLS4qD/tenLLg
+	 kaPtBgjEy2aFE8N3FmrJIK75JdegDhjHsZ9czjLicSpk3uLRutlbccxdy9ij/F9inq
+	 syAoKUDZ3fZgw==
+Message-ID: <67469410c2cccaf993171bbfcae5b7f0de94d674.camel@crawford.emu.id.au>
+Subject: Re: [PATCH v2 0/4] hwmon (it87): Correct handling for configuration
+ mode
 From: Frank Crawford <frank@crawford.emu.id.au>
 To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, Frank Crawford <frank@crawford.emu.id.au>
-Subject: [PATCH v2 3/4] hwmon (it87): Test for chipset before entering configuration mode
-Date: Sat, 27 Apr 2024 18:33:04 +1000
-Message-ID: <20240427083317.2077175-4-frank@crawford.emu.id.au>
-X-Mailer: git-send-email 2.44.0
+Cc: linux-hwmon@vger.kernel.org
+Date: Sat, 27 Apr 2024 19:58:48 +1000
 In-Reply-To: <20240427083317.2077175-1-frank@crawford.emu.id.au>
 References: <20240427083317.2077175-1-frank@crawford.emu.id.au>
+Autocrypt: addr=frank@crawford.emu.id.au; prefer-encrypt=mutual;
+ keydata=mQGiBD+o6joRBADBLtTRHGwkCHLbpC5qU/cJL0mHf8wDGcoiy9jSlPHrlTp8qGyxBOsus917W0fd9tm1RPRdcYffVFRqdduxBwPdpXi7vTWZgNG5CS39IXw6V//oO1hi7swPm3bNjszq3D1TxVpIpK3EuL4oNcgweLJftXuPP30Mi0gbRgMSyn9SOwCgzc/nZ4i9iPEq7Jhyu+MptuFzNqsEAJPZYUk0MDmXrJjzvcydHoOePqxp9VIqxLOf1gqxy8wXg9D9R3oTAXh94ekLkIN+GimKdB0oCZu02PF9wDnJlQqOtk0Fz4hCetwsNNBsFdbSY7gfmIEByqHE4MicQnTl97JOV/4XQgovznJJKv4OiCC6n20aIPFe2OcKHsi4NlxIA/9lKO2a4ge8f6a6sQoHgrjBe0SQJ0RimXqVUKAxac2wKeDe62J8RJhDJ+Ghnm29w5kKb3YHr2muVJEVqHxz3VYqGXG4T+tleG6T8yeic3HbTghC6+o3HYXOJchGfciIw52S08xO0w4eowNznlS5i8td+aroFF7JiomZqnmyD6oqSbQpRnJhbmsgQ3Jhd2ZvcmQgPGZyYW5rQGNyYXdmb3JkLmVtdS5pZC5hdT6IeQQTEQIAOQIXgAIeBxYhBAPV1JdGtb85KnTrWEWq0knseWomBQJigar6BQsJCAcCAyICAQYVCgkICwIEFgIDAQAKCRBFqtJJ7HlqJqFLAJ9OZPRJxlFHCfDJ6iCL8i4IpINeuACgw1znVGjRZpfNx+YRELbLYdLvZKW5AQ0EP6jqPBAEANwthQvVRnrGQBCGCXBFZ6Dum/aQWXzEovvipgLH0MrVNJy3605GJt+aLGjnzPNvhjvCYGmNtdksqPQqsg8VnE/DgvQFJr+OX/q9IWnZhzEaZ4t6Itvqv9DhtVk6tX6XUgxkBVTX0mQOSwFIPRG+XgSve9dv6xgSRTeAjXRxzbrHAAQLBAC0atcs!
+ Itf9FthDk
+	6XJg9ZXtsXDctsVgV1BuSSDP/iynoMozuGpbqMkGXugBGqPmNOMHXw+XALd4yQ2/rPrznK5VFyaCupqzCgWtKfQ1zMczHUb9JvFCweP7I8ZbP2oXCvlHBySzGjVJVCNPxCYLQi0qriLv0aXmWIkHBLCpybDqYhdBBgRAgAdFiEEA9XUl0a1vzkqdOtYRarSSex5aiYFAmKBqYQACgkQRarSSex5aiYz/gCfUNAXafSyBey6z61HSG7l16anYfcAoKsrBxj7bE73wsjzjywqOWkJ9hjJ
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.4 (3.50.4-1.fc39) 
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Sat, 27 Apr 2024 18:33:43 +1000 (AEST)
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Sat, 27 Apr 2024 19:58:49 +1000 (AEST)
 X-Virus-Scanned: clamav-milter 1.0.5 at bits.crawford.emu.id.au
 X-Virus-Status: Clean
 
-Major part of the change for the new method to avoid chipset issues.
+On Sat, 2024-04-27 at 18:33 +1000, Frank Crawford wrote:
+> On various Gigabyte boards, incorrectly entering configuration mode
+> causes the second Super-IO chip to generate LPC bus access errors.
+> This was preivously fixed by ensuring that the second chip receives
+> the
+> code to enter configuration mode before the first chip.
+>=20
+> On discussion with people who have access to the specification
+> documents
+> it was noted that this is wrong, and you should not enter or leave
+> configuration mode for the second chip, as it is enable during
+> initialisation and should not be changed.
+>=20
+> In particular, this was found to be the case on the Gigabyte X670E
+> Aorus
+> Master board, where it was reporting a totally wrong chip ID (0x8883)
+> using the previous method.=A0 This was corrected by not entering
+> configuration mode, and this has been found to still work with older
+> boards.
+>=20
+> ---
 
-The actual update does the following:
+Sorry, I forgot to add what the changes are since v1:
 
-1) Lock the memory, but does not perform a SIO entry (previously it
-would have performed an SIO entry).
+- renamed the feature to FEAT_NOCONF and macro to has_noconf.
+- reworked patch descriptions to be more explicit about the actions and
+remove any reference to the BIOS.
 
-2) Attempt to read the chipID.  This should be safe no matter which
-chip we have.
+There is no code changes of any significance.
 
-3) If step (2) fails, then perform SIO entry and retry chipID read.  For
-older chips and on failure it acts similarly to prior to this patch.
-
-4) Set the sio_data->type, similar to previously.
-
-5) If we have not performed an SIO entry, and this is not a chip type
-with the NOCONF feature, then it will perform an SIO entry at this
-point.
-
-6) Proceed with setup as prior to this patch.
-
-7) Any following access to the SIO registers will invoke the SIO entry
-and SIO exit steps unless it is a chip with the NOCONF feature set.
-This was set up in the previous patches in this patchset.
-
-8) There is also some minor update to the failure exit based on if it
-had performed a SIO entry or not, in addition to the previous tests.
-
-Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
----
- drivers/hwmon/it87.c | 52 +++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 47 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-index 396c2d3afbf7..6a77f2f6e1e1 100644
---- a/drivers/hwmon/it87.c
-+++ b/drivers/hwmon/it87.c
-@@ -2667,6 +2667,27 @@ static const struct attribute_group it87_group_auto_pwm = {
- 	.is_visible = it87_auto_pwm_is_visible,
- };
- 
-+/*
-+ * Original explanation:
-+ * On various Gigabyte AM4 boards (AB350, AX370), the second Super-IO chip
-+ * (IT8792E) needs to be in configuration mode before accessing the first
-+ * due to a bug in IT8792E which otherwise results in LPC bus access errors.
-+ * This needs to be done before accessing the first Super-IO chip since
-+ * the second chip may have been accessed prior to loading this driver.
-+ *
-+ * The problem is also reported to affect IT8795E, which is used on X299 boards
-+ * and has the same chip ID as IT8792E (0x8733). It also appears to affect
-+ * systems with IT8790E, which is used on some Z97X-Gaming boards as well as
-+ * Z87X-OC.
-+ *
-+ * From other information supplied:
-+ * ChipIDs 0x8733, 0x8695 (early ID for IT87952E) and 0x8790 are intialised
-+ * and left in configuration mode, and entering and/or exiting configuration
-+ * mode is what causes the crash.
-+ *
-+ * The recommendation is to look up the chipID before doing any mode swap
-+ * and then act accordingly.
-+ */
- /* SuperIO detection - will change isa_address if a chip is found */
- static int __init it87_find(int sioaddr, unsigned short *address,
- 			    struct it87_sio_data *sio_data, int chip_cnt)
-@@ -2674,16 +2695,25 @@ static int __init it87_find(int sioaddr, unsigned short *address,
- 	int err;
- 	u16 chip_type;
- 	const struct it87_devices *config = NULL;
-+	bool opened = false;
- 
--	err = superio_enter(sioaddr, false);
-+	/* First step, lock memory but don't enter configuration mode */
-+	err = superio_enter(sioaddr, true);
- 	if (err)
- 		return err;
- 
- 	err = -ENODEV;
- 	chip_type = superio_inw(sioaddr, DEVID);
--	/* check first for a valid chip before forcing chip id */
--	if (chip_type == 0xffff)
--		goto exit;
-+	/* Check for a valid chip before forcing chip id */
-+	if (chip_type == 0xffff) {
-+		/* Enter configuration mode */
-+		__superio_enter(sioaddr);
-+		opened = true;
-+		/* and then try again */
-+		chip_type = superio_inw(sioaddr, DEVID);
-+		if (chip_type == 0xffff)
-+			goto exit;
-+	}
- 
- 	if (force_id_cnt == 1) {
- 		/* If only one value given use for all chips */
-@@ -2767,6 +2797,18 @@ static int __init it87_find(int sioaddr, unsigned short *address,
- 
- 	config = &it87_devices[sio_data->type];
- 
-+	/*
-+	 * If previously we didn't enter configuration mode and it isn't a
-+	 * chip we know is initialised in configuration mode, then enter
-+	 * configuration mode.
-+	 *
-+	 * I don't know if any such chips can exist but be defensive.
-+	 */
-+	if (!opened && !has_noconf(config)) {
-+		__superio_enter(sioaddr);
-+		opened = true;
-+	}
-+
- 	superio_select(sioaddr, PME);
- 	if (!(superio_inb(sioaddr, IT87_ACT_REG) & 0x01)) {
- 		pr_info("Device (chip %s ioreg 0x%x) not activated, skipping\n",
-@@ -3144,7 +3186,7 @@ static int __init it87_find(int sioaddr, unsigned short *address,
- 	}
- 
- exit:
--	superio_exit(sioaddr, config ? has_noconf(config) : false);
-+	superio_exit(sioaddr, opened && config && has_noconf(config));
- 	return err;
- }
- 
--- 
-2.44.0
-
+> Frank Crawford (4):
+> =A0 Rename FEAT_CONF_NOEXIT to FEAT_NOCONF as more descriptive of
+> requirement
+> =A0 Do not enter configuration mode for some chiptypes
+> =A0 Test for chipset before entering configuration mode
+> =A0 Remove tests nolonger required
+>=20
+> =A0drivers/hwmon/it87.c | 127 +++++++++++++++++++++--------------------
+> --
+> =A01 file changed, 61 insertions(+), 66 deletions(-)
+>=20
