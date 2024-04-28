@@ -1,98 +1,231 @@
-Received: from bits.crawford.emu.id.au (bits.crawford.emu.id.au [116.255.43.97])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA0E12AE95
-	for <linux-hwmon@vger.kernel.org>; Sun, 28 Apr 2024 07:35:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.255.43.97
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 995AA524B7
+	for <linux-hwmon@vger.kernel.org>; Sun, 28 Apr 2024 09:03:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714289752; cv=none; b=lt5tyRyhcdeiHKncwBLBvJiWneU/xaTVl8YgkbZp/r5yeerGBqgNOm4Wrv0bPG3Ca2O3RNpx6nRYAlGfq7NKtF0WT+UP3BKNNr9/MzmRWAZM6hz0VxoTYmqDmXfMVvZDplvPtOgJmglE10ckS5fGbg/ujutLHSR1g3wAvjnNeKY=
+	t=1714295005; cv=none; b=dCJ+sjC9NlZtRtoVzqAVuyOJqsZcWG0FCHyBi5edsqPJZea8u7VxNBOw1qKjjsBd3KTwRi4fv7qgQx+1Q/nI4oAJJyCZN21DBlIu++nhvzTcdhpp0U6ufTRk0ZNZvM6G1XtTvB0imSsyQxulYr4NX8PjAj+cL0phqmAjc4RPjMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714289752; c=relaxed/simple;
-	bh=By4kAc/yiE07CGrbXwFrycrRozsUafIM94w8Sn0dypU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=R1+ZA8n7U1YK/KEkemNqcPPuvlkKjENZipWPksuqnpPs8CYIyFltKbqi2Xpdb831albH3n797kavPl6pOf65vsyBILqkh/MXL2yZkfhqFCgW51RKFijodv1cjUwbyxuubyG9SlzfpPtAjCyOebfwudUwWJw/2XT1p95tVHM2Rok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crawford.emu.id.au; spf=pass smtp.mailfrom=crawford.emu.id.au; dkim=pass (2048-bit key) header.d=crawford.emu.id.au header.i=@crawford.emu.id.au header.b=Uj/zdjT4; arc=none smtp.client-ip=116.255.43.97
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crawford.emu.id.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crawford.emu.id.au
+	s=arc-20240116; t=1714295005; c=relaxed/simple;
+	bh=W6AMK/XB2Gvy2wkuuHSLV6NRFJ2njrVLZe1ons4iZyw=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=u9hm/nABKBlA0wPkbQU8PGC6AFL25eA33/Q/rzlM3oHu3B+gPay4tH/TvAf1thR0Q6zIb1itOEh67eWml5VlxcpQ9RluZhBNyVxqTpLpLQoP7ZOryhNW7HzpywGMWyxIPEpMcuAEKXuM+cLzhku0VFN3MQjdX19+IPSvOaNLzZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ConguvZ7; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crawford.emu.id.au header.i=@crawford.emu.id.au header.b="Uj/zdjT4"
-Received: from agc.crawford.emu.id.au (agc.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc07])
-	(authenticated bits=0)
-	by bits.crawford.emu.id.au (8.17.2/8.17.2) with ESMTPSA id 43S7ZOso3545667
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-	Sun, 28 Apr 2024 17:35:24 +1000
-Authentication-Results: bits.crawford.emu.id.au; arc=none smtp.remote-ip=fdd2:7aad:d478:1::cb10:cc07
-DKIM-Filter: OpenDKIM Filter v2.11.0 bits.crawford.emu.id.au 43S7ZOso3545667
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crawford.emu.id.au;
-	s=s1; t=1714289724; bh=zRkzwMCcr4MzAc1yr9y5U826f5lxBhvZ7YdFzM/TL2o=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=Uj/zdjT40tR/h2DWy6unD6erBURzW28q5sA+XBSLsS0OS1Os0NZTLY85MbyUZPzh8
-	 8qt84FRxVWuRM7/4s00LoUXHreXoNNJSaSoZA2UA2nRH6aGFVpeu24podF3ZnDWrJL
-	 G4MIig9tH1LHxFCD5BV6c/hp1BFUThzhfWwsKNuBu89o6kRHBe42smS4RnEAPxpV/r
-	 UB4uYFyLBMqjG5UoUuvSPk8ECpo4ngYnSS9Ior1rKq63/XSIjFse5qeAJBlw69x1mL
-	 7vcPBONQ5yhAFkwiTtxhuOLFbogeVa/SdiObrQojVajU9dV9oS+KHFtzvmiSuNZLn7
-	 VxztQeXzIFhXQ==
-Message-ID: <f155d740ff3def717c16d8a215359479a9fb6526.camel@crawford.emu.id.au>
-Subject: Re: [PATCH v2 3/4] hwmon (it87): Test for chipset before entering
- configuration mode
-From: Frank Crawford <frank@crawford.emu.id.au>
-To: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ConguvZ7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714295003; x=1745831003;
+  h=date:from:to:cc:subject:message-id;
+  bh=W6AMK/XB2Gvy2wkuuHSLV6NRFJ2njrVLZe1ons4iZyw=;
+  b=ConguvZ7nhU/UpWr9XRF4x2JT3TQD+ddWoUITyPclgPHrltZD5p+j0Wv
+   CBV/3eCYMY+aVqNZLlbtsBwwLnBfM5Uee6IE9ix1/mdl1yPKG7Ol6G79O
+   1BeGj7pDO65S2Kd0u7/ON0iNf2uZ5yYyBkgDCAb4jJuPEPhhfU8XkUyXb
+   3zqdI4pLRO/RGkTxHYSEuTFRkQEfRoX6Y+gZxsBeOtkLnMQqfaZbNxe46
+   xeOiR6fVWonUDPp712fsCFnqXrZxYfOWiQgmmKmMNi188+MjvT4goZGV9
+   kKc/LWTNZMHDqfVoUazavstZY4UB2AhtgmAqPFTR78Qm5vB36zolYAl6Q
+   A==;
+X-CSE-ConnectionGUID: +EsOdAdUQ4qd67/P99UaTQ==
+X-CSE-MsgGUID: p0Yozzm1QX6EfbP+bDGs4w==
+X-IronPort-AV: E=McAfee;i="6600,9927,11057"; a="13806845"
+X-IronPort-AV: E=Sophos;i="6.07,237,1708416000"; 
+   d="scan'208";a="13806845"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2024 02:03:23 -0700
+X-CSE-ConnectionGUID: urM5smpITxisgxyFa0i0sA==
+X-CSE-MsgGUID: EGkQAcucS/CqFo7pIhyq4g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,237,1708416000"; 
+   d="scan'208";a="25701260"
+Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 28 Apr 2024 02:03:22 -0700
+Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s10RL-00061w-1R;
+	Sun, 28 Apr 2024 09:03:19 +0000
+Date: Sun, 28 Apr 2024 17:02:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org
-Date: Sun, 28 Apr 2024 17:35:24 +1000
-In-Reply-To: <46cd36bc-83f1-4d4e-ac1d-1524882e9b52@roeck-us.net>
-References: <20240427083317.2077175-1-frank@crawford.emu.id.au>
-	 <20240427083317.2077175-4-frank@crawford.emu.id.au>
-	 <8d9c9f7d-8a6a-488d-814b-807060aa8336@roeck-us.net>
-	 <0886c52480f15d3b9754d43642c722fcd9b6e722.camel@crawford.emu.id.au>
-	 <8382458d-2208-41ad-a0e5-dce77c1fc286@roeck-us.net>
-	 <cbc45f7c7b55471c3c1519340c5a087f3e7af1ea.camel@crawford.emu.id.au>
-	 <46cd36bc-83f1-4d4e-ac1d-1524882e9b52@roeck-us.net>
-Autocrypt: addr=frank@crawford.emu.id.au; prefer-encrypt=mutual;
- keydata=mQGiBD+o6joRBADBLtTRHGwkCHLbpC5qU/cJL0mHf8wDGcoiy9jSlPHrlTp8qGyxBOsus917W0fd9tm1RPRdcYffVFRqdduxBwPdpXi7vTWZgNG5CS39IXw6V//oO1hi7swPm3bNjszq3D1TxVpIpK3EuL4oNcgweLJftXuPP30Mi0gbRgMSyn9SOwCgzc/nZ4i9iPEq7Jhyu+MptuFzNqsEAJPZYUk0MDmXrJjzvcydHoOePqxp9VIqxLOf1gqxy8wXg9D9R3oTAXh94ekLkIN+GimKdB0oCZu02PF9wDnJlQqOtk0Fz4hCetwsNNBsFdbSY7gfmIEByqHE4MicQnTl97JOV/4XQgovznJJKv4OiCC6n20aIPFe2OcKHsi4NlxIA/9lKO2a4ge8f6a6sQoHgrjBe0SQJ0RimXqVUKAxac2wKeDe62J8RJhDJ+Ghnm29w5kKb3YHr2muVJEVqHxz3VYqGXG4T+tleG6T8yeic3HbTghC6+o3HYXOJchGfciIw52S08xO0w4eowNznlS5i8td+aroFF7JiomZqnmyD6oqSbQpRnJhbmsgQ3Jhd2ZvcmQgPGZyYW5rQGNyYXdmb3JkLmVtdS5pZC5hdT6IeQQTEQIAOQIXgAIeBxYhBAPV1JdGtb85KnTrWEWq0knseWomBQJigar6BQsJCAcCAyICAQYVCgkICwIEFgIDAQAKCRBFqtJJ7HlqJqFLAJ9OZPRJxlFHCfDJ6iCL8i4IpINeuACgw1znVGjRZpfNx+YRELbLYdLvZKW5AQ0EP6jqPBAEANwthQvVRnrGQBCGCXBFZ6Dum/aQWXzEovvipgLH0MrVNJy3605GJt+aLGjnzPNvhjvCYGmNtdksqPQqsg8VnE/DgvQFJr+OX/q9IWnZhzEaZ4t6Itvqv9DhtVk6tX6XUgxkBVTX0mQOSwFIPRG+XgSve9dv6xgSRTeAjXRxzbrHAAQLBAC0atcs!
- Itf9FthDk
-	6XJg9ZXtsXDctsVgV1BuSSDP/iynoMozuGpbqMkGXugBGqPmNOMHXw+XALd4yQ2/rPrznK5VFyaCupqzCgWtKfQ1zMczHUb9JvFCweP7I8ZbP2oXCvlHBySzGjVJVCNPxCYLQi0qriLv0aXmWIkHBLCpybDqYhdBBgRAgAdFiEEA9XUl0a1vzkqdOtYRarSSex5aiYFAmKBqYQACgkQRarSSex5aiYz/gCfUNAXafSyBey6z61HSG7l16anYfcAoKsrBxj7bE73wsjzjywqOWkJ9hjJ
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.4 (3.50.4-1.fc39) 
+Subject: [groeck-staging:testing] BUILD SUCCESS
+ bb1d7f8fb552de2984a6a6d3eb78c78d0920db6d
+Message-ID: <202404281749.OQoJBJYx-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Sun, 28 Apr 2024 17:35:24 +1000 (AEST)
-X-Virus-Scanned: clamav-milter 1.0.5 at bits.crawford.emu.id.au
-X-Virus-Status: Clean
 
-On Sun, 2024-04-28 at 00:03 -0700, Guenter Roeck wrote:
-> On 4/27/24 21:31, Frank Crawford wrote:
-...
-> > In fact, I think in this case that entire expression can be
-> > simplified
-> > to just "!opened", as we only want to perform the exit code when
-> > the
-> > entry code was given, and it is only set to true in those cases.
-> >=20
->=20
-> Not really, because it is at least theoretically possible that it was
-> necessary to enter configuration mode to determine that the chip
-> is one of the broken ones. I'll leave that up to you to make the
-> call,
-> though.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
+branch HEAD: bb1d7f8fb552de2984a6a6d3eb78c78d0920db6d  Merge branch 'kunit-v4' into testing
 
-I guess it is theoretically possible, if some other driver has done
-something, but as well I guess this patch is different in that it
-doesn't do the second chip first, and so is still different.
+elapsed time: 1279m
 
-However, in the only chipset we have been able to reliably lock up
-lately we haven't been able to read the chipID even after trying to
-enter configuration mode, when we have locked up the chip, so I don't
-think this issue will actually happen in practice.
+configs tested: 154
+configs skipped: 5
 
-I will still try to get hold of the configuration documentation, to see
-any additional notes from the vendor.  I don't expect that soon though.
->=20
-> Guenter
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Regards
-Frank
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20240427   gcc  
+arc                   randconfig-002-20240427   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   clang
+arm                              allyesconfig   gcc  
+arm                         assabet_defconfig   clang
+arm                                 defconfig   clang
+arm                            mmp2_defconfig   gcc  
+arm                            mps2_defconfig   clang
+arm                   randconfig-001-20240427   clang
+arm                   randconfig-002-20240427   clang
+arm                   randconfig-003-20240427   gcc  
+arm                   randconfig-004-20240427   clang
+arm                         s5pv210_defconfig   gcc  
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20240427   clang
+arm64                 randconfig-002-20240427   clang
+arm64                 randconfig-003-20240427   gcc  
+arm64                 randconfig-004-20240427   clang
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20240427   gcc  
+csky                  randconfig-002-20240427   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+hexagon               randconfig-001-20240427   clang
+hexagon               randconfig-002-20240427   clang
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20240427   clang
+i386         buildonly-randconfig-002-20240427   gcc  
+i386         buildonly-randconfig-003-20240427   clang
+i386         buildonly-randconfig-004-20240427   clang
+i386         buildonly-randconfig-005-20240427   clang
+i386         buildonly-randconfig-006-20240427   gcc  
+i386                                defconfig   clang
+i386                  randconfig-001-20240427   clang
+i386                  randconfig-002-20240427   gcc  
+i386                  randconfig-003-20240427   clang
+i386                  randconfig-004-20240427   gcc  
+i386                  randconfig-005-20240427   gcc  
+i386                  randconfig-006-20240427   clang
+i386                  randconfig-011-20240427   gcc  
+i386                  randconfig-012-20240427   gcc  
+i386                  randconfig-015-20240427   gcc  
+i386                  randconfig-016-20240427   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20240427   gcc  
+loongarch             randconfig-002-20240427   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+microblaze                      mmu_defconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                      bmips_stb_defconfig   clang
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20240427   gcc  
+nios2                 randconfig-002-20240427   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                randconfig-001-20240427   gcc  
+parisc                randconfig-002-20240427   gcc  
+parisc64                            defconfig   gcc  
+powerpc                      acadia_defconfig   clang
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc               randconfig-001-20240427   clang
+powerpc               randconfig-002-20240427   clang
+powerpc               randconfig-003-20240427   clang
+powerpc                     tqm8540_defconfig   gcc  
+powerpc                 xes_mpc85xx_defconfig   gcc  
+powerpc64             randconfig-001-20240427   gcc  
+powerpc64             randconfig-002-20240427   gcc  
+powerpc64             randconfig-003-20240427   gcc  
+riscv                            allmodconfig   clang
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   clang
+riscv                               defconfig   clang
+riscv                 randconfig-001-20240427   clang
+riscv                 randconfig-002-20240427   gcc  
+s390                             allmodconfig   clang
+s390                              allnoconfig   clang
+s390                             allyesconfig   gcc  
+s390                                defconfig   clang
+s390                  randconfig-001-20240427   gcc  
+s390                  randconfig-002-20240427   gcc  
+sh                               alldefconfig   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                         ecovec24_defconfig   gcc  
+sh                          landisk_defconfig   gcc  
+sh                          lboxre2_defconfig   gcc  
+sh                            migor_defconfig   gcc  
+sh                    randconfig-001-20240427   gcc  
+sh                    randconfig-002-20240427   gcc  
+sh                          rsk7269_defconfig   gcc  
+sh                           se7343_defconfig   gcc  
+sh                        sh7763rdp_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64               randconfig-001-20240427   gcc  
+sparc64               randconfig-002-20240427   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   gcc  
+um                                  defconfig   clang
+um                             i386_defconfig   gcc  
+um                    randconfig-001-20240427   clang
+um                    randconfig-002-20240427   gcc  
+um                           x86_64_defconfig   clang
+x86_64                            allnoconfig   clang
+x86_64                           allyesconfig   clang
+x86_64                              defconfig   gcc  
+x86_64                          rhel-8.3-rust   clang
+xtensa                            allnoconfig   gcc  
+xtensa                randconfig-001-20240427   gcc  
+xtensa                randconfig-002-20240427   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
