@@ -1,180 +1,98 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bits.crawford.emu.id.au (bits.crawford.emu.id.au [116.255.43.97])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D80B4E1C9
-	for <linux-hwmon@vger.kernel.org>; Sun, 28 Apr 2024 07:03:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA0E12AE95
+	for <linux-hwmon@vger.kernel.org>; Sun, 28 Apr 2024 07:35:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.255.43.97
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714287832; cv=none; b=XVaIONjEcSaf+Wg8uyqGTd8lGI+SdtAKmadHif3SkNnz17D1yNzDiien2/DA1BXI4GLCDhrkKaCFvh2EJZQMD9eRbn1fnLDV19ck6rvch8dGe2eK/0G6P+3Ejyfs9aI+iTXaIYDbn8nwJ0UJyhC5KqQ7eBXu3RO2V1Yj34j1OGE=
+	t=1714289752; cv=none; b=lt5tyRyhcdeiHKncwBLBvJiWneU/xaTVl8YgkbZp/r5yeerGBqgNOm4Wrv0bPG3Ca2O3RNpx6nRYAlGfq7NKtF0WT+UP3BKNNr9/MzmRWAZM6hz0VxoTYmqDmXfMVvZDplvPtOgJmglE10ckS5fGbg/ujutLHSR1g3wAvjnNeKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714287832; c=relaxed/simple;
-	bh=IHFzsSHs/JsOa14+HYQaMr0cmoU40pik4F8A7z2S5pE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FRuTRQypVpf5G1i6y95Pki+AAWyjbvHUfMNPnG6oLQ1T+Xx09PLc9S0rNb/E/u0BzrsuVz3kV6aETWzCVFsc6QggjQuS2QvcqMKlr1iivOB7+JVePnVgV0KJPDe/Cr2vaMrZVuC+E2pNEu67KNXritNamHKqn/QpLcqyPifeboQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jRZ+scHP; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1714289752; c=relaxed/simple;
+	bh=By4kAc/yiE07CGrbXwFrycrRozsUafIM94w8Sn0dypU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=R1+ZA8n7U1YK/KEkemNqcPPuvlkKjENZipWPksuqnpPs8CYIyFltKbqi2Xpdb831albH3n797kavPl6pOf65vsyBILqkh/MXL2yZkfhqFCgW51RKFijodv1cjUwbyxuubyG9SlzfpPtAjCyOebfwudUwWJw/2XT1p95tVHM2Rok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crawford.emu.id.au; spf=pass smtp.mailfrom=crawford.emu.id.au; dkim=pass (2048-bit key) header.d=crawford.emu.id.au header.i=@crawford.emu.id.au header.b=Uj/zdjT4; arc=none smtp.client-ip=116.255.43.97
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crawford.emu.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crawford.emu.id.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jRZ+scHP"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6f30f69a958so3034050b3a.1
-        for <linux-hwmon@vger.kernel.org>; Sun, 28 Apr 2024 00:03:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714287831; x=1714892631; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=9P5/ix4DhGPjju8aSQ7OZ17C+yc1lCF9L1lmmGRrKuM=;
-        b=jRZ+scHPX6y0ZZDn2if/soN5lOixXA6+oObDAsDCpvdTgZiZGfufwnq5wu/9Fo+IiM
-         B3WTTsQycbOLGTAmDesb5syp9KjKzure8xfCdWzU4HADEjRUrADKM4SqURLpvMUkOc5N
-         7i5gJkGo6JSKXCo0h2PgBow7EQ0DYquxBfbUm39CAkYFLvO5U/jtiiW5yB9zrO57Ldq+
-         zDEA3+bxTFCZfirq7lwrKGsKgRt3nvaGSqEhPdsfQeKGhrIcH91o2J2nI0MRIxX5k6TA
-         jgHwIe0+dZ0ePPNw0HabBEaF5raRlKCGjsxsJbW/DP6ljlbY9u3WOxryrhlGJ9qvdm6m
-         Trbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714287831; x=1714892631;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9P5/ix4DhGPjju8aSQ7OZ17C+yc1lCF9L1lmmGRrKuM=;
-        b=eDyB0z/eKjfku5TgH/HUCr4FMNIpfQGad7aBHI/8gBVFLToHBOyQ7AE5xy3C9AG3Q0
-         UaqB1ruTpuON4qwTgEcXavKCsVl4GUC+y+Fi1rpLGwGKCE7CbCnd6i0e8y2ptfMwlXdU
-         eWiBfkY066iVySPddH5+MmxuNnarv37h5dTO7PDwCrfG0Q/5VmKyltfpDNhMfMBZJi1Z
-         s8L5wJ9uzy1j3SVu8FNuY11GMo6fdF6itIrc6/YwW8WMwsKFCR9kwCc1GZIy7+IKShHA
-         msw3Rfe7Tdun7uffljm8L3+zILKdK6GIgluRKoxsddW4Z3SMNiAvEVFy+cs0OGeFIqyJ
-         Hsxw==
-X-Gm-Message-State: AOJu0Ywrsc7l00A2v0mE/HTzMa/1uYz7bmLY6zXfRp6hhEDRPdozgYhZ
-	GEXeVIFilTJDhet3aXigDM7hS7m+T6nFDZY02Dpry1GD5Re32+KfgAFuTQ==
-X-Google-Smtp-Source: AGHT+IE9/5sy1hagfN8NwxmhfH/h0YGIrEVHWei5LFwoIHjZsng61tA32IooA+gQ28ap8yLAr1JZMg==
-X-Received: by 2002:a05:6a00:22c1:b0:6ec:fc71:3be2 with SMTP id f1-20020a056a0022c100b006ecfc713be2mr9518889pfj.21.1714287830652;
-        Sun, 28 Apr 2024 00:03:50 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b21-20020aa78715000000b006f3f062c4f4sm1826108pfo.136.2024.04.28.00.03.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 28 Apr 2024 00:03:50 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <46cd36bc-83f1-4d4e-ac1d-1524882e9b52@roeck-us.net>
-Date: Sun, 28 Apr 2024 00:03:49 -0700
+	dkim=pass (2048-bit key) header.d=crawford.emu.id.au header.i=@crawford.emu.id.au header.b="Uj/zdjT4"
+Received: from agc.crawford.emu.id.au (agc.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc07])
+	(authenticated bits=0)
+	by bits.crawford.emu.id.au (8.17.2/8.17.2) with ESMTPSA id 43S7ZOso3545667
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+	Sun, 28 Apr 2024 17:35:24 +1000
+Authentication-Results: bits.crawford.emu.id.au; arc=none smtp.remote-ip=fdd2:7aad:d478:1::cb10:cc07
+DKIM-Filter: OpenDKIM Filter v2.11.0 bits.crawford.emu.id.au 43S7ZOso3545667
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crawford.emu.id.au;
+	s=s1; t=1714289724; bh=zRkzwMCcr4MzAc1yr9y5U826f5lxBhvZ7YdFzM/TL2o=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=Uj/zdjT40tR/h2DWy6unD6erBURzW28q5sA+XBSLsS0OS1Os0NZTLY85MbyUZPzh8
+	 8qt84FRxVWuRM7/4s00LoUXHreXoNNJSaSoZA2UA2nRH6aGFVpeu24podF3ZnDWrJL
+	 G4MIig9tH1LHxFCD5BV6c/hp1BFUThzhfWwsKNuBu89o6kRHBe42smS4RnEAPxpV/r
+	 UB4uYFyLBMqjG5UoUuvSPk8ECpo4ngYnSS9Ior1rKq63/XSIjFse5qeAJBlw69x1mL
+	 7vcPBONQ5yhAFkwiTtxhuOLFbogeVa/SdiObrQojVajU9dV9oS+KHFtzvmiSuNZLn7
+	 VxztQeXzIFhXQ==
+Message-ID: <f155d740ff3def717c16d8a215359479a9fb6526.camel@crawford.emu.id.au>
+Subject: Re: [PATCH v2 3/4] hwmon (it87): Test for chipset before entering
+ configuration mode
+From: Frank Crawford <frank@crawford.emu.id.au>
+To: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>
+Cc: linux-hwmon@vger.kernel.org
+Date: Sun, 28 Apr 2024 17:35:24 +1000
+In-Reply-To: <46cd36bc-83f1-4d4e-ac1d-1524882e9b52@roeck-us.net>
+References: <20240427083317.2077175-1-frank@crawford.emu.id.au>
+	 <20240427083317.2077175-4-frank@crawford.emu.id.au>
+	 <8d9c9f7d-8a6a-488d-814b-807060aa8336@roeck-us.net>
+	 <0886c52480f15d3b9754d43642c722fcd9b6e722.camel@crawford.emu.id.au>
+	 <8382458d-2208-41ad-a0e5-dce77c1fc286@roeck-us.net>
+	 <cbc45f7c7b55471c3c1519340c5a087f3e7af1ea.camel@crawford.emu.id.au>
+	 <46cd36bc-83f1-4d4e-ac1d-1524882e9b52@roeck-us.net>
+Autocrypt: addr=frank@crawford.emu.id.au; prefer-encrypt=mutual;
+ keydata=mQGiBD+o6joRBADBLtTRHGwkCHLbpC5qU/cJL0mHf8wDGcoiy9jSlPHrlTp8qGyxBOsus917W0fd9tm1RPRdcYffVFRqdduxBwPdpXi7vTWZgNG5CS39IXw6V//oO1hi7swPm3bNjszq3D1TxVpIpK3EuL4oNcgweLJftXuPP30Mi0gbRgMSyn9SOwCgzc/nZ4i9iPEq7Jhyu+MptuFzNqsEAJPZYUk0MDmXrJjzvcydHoOePqxp9VIqxLOf1gqxy8wXg9D9R3oTAXh94ekLkIN+GimKdB0oCZu02PF9wDnJlQqOtk0Fz4hCetwsNNBsFdbSY7gfmIEByqHE4MicQnTl97JOV/4XQgovznJJKv4OiCC6n20aIPFe2OcKHsi4NlxIA/9lKO2a4ge8f6a6sQoHgrjBe0SQJ0RimXqVUKAxac2wKeDe62J8RJhDJ+Ghnm29w5kKb3YHr2muVJEVqHxz3VYqGXG4T+tleG6T8yeic3HbTghC6+o3HYXOJchGfciIw52S08xO0w4eowNznlS5i8td+aroFF7JiomZqnmyD6oqSbQpRnJhbmsgQ3Jhd2ZvcmQgPGZyYW5rQGNyYXdmb3JkLmVtdS5pZC5hdT6IeQQTEQIAOQIXgAIeBxYhBAPV1JdGtb85KnTrWEWq0knseWomBQJigar6BQsJCAcCAyICAQYVCgkICwIEFgIDAQAKCRBFqtJJ7HlqJqFLAJ9OZPRJxlFHCfDJ6iCL8i4IpINeuACgw1znVGjRZpfNx+YRELbLYdLvZKW5AQ0EP6jqPBAEANwthQvVRnrGQBCGCXBFZ6Dum/aQWXzEovvipgLH0MrVNJy3605GJt+aLGjnzPNvhjvCYGmNtdksqPQqsg8VnE/DgvQFJr+OX/q9IWnZhzEaZ4t6Itvqv9DhtVk6tX6XUgxkBVTX0mQOSwFIPRG+XgSve9dv6xgSRTeAjXRxzbrHAAQLBAC0atcs!
+ Itf9FthDk
+	6XJg9ZXtsXDctsVgV1BuSSDP/iynoMozuGpbqMkGXugBGqPmNOMHXw+XALd4yQ2/rPrznK5VFyaCupqzCgWtKfQ1zMczHUb9JvFCweP7I8ZbP2oXCvlHBySzGjVJVCNPxCYLQi0qriLv0aXmWIkHBLCpybDqYhdBBgRAgAdFiEEA9XUl0a1vzkqdOtYRarSSex5aiYFAmKBqYQACgkQRarSSex5aiYz/gCfUNAXafSyBey6z61HSG7l16anYfcAoKsrBxj7bE73wsjzjywqOWkJ9hjJ
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.4 (3.50.4-1.fc39) 
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/4] hwmon (it87): Test for chipset before entering
- configuration mode
-To: Frank Crawford <frank@crawford.emu.id.au>,
- Jean Delvare <jdelvare@suse.com>
-Cc: linux-hwmon@vger.kernel.org
-References: <20240427083317.2077175-1-frank@crawford.emu.id.au>
- <20240427083317.2077175-4-frank@crawford.emu.id.au>
- <8d9c9f7d-8a6a-488d-814b-807060aa8336@roeck-us.net>
- <0886c52480f15d3b9754d43642c722fcd9b6e722.camel@crawford.emu.id.au>
- <8382458d-2208-41ad-a0e5-dce77c1fc286@roeck-us.net>
- <cbc45f7c7b55471c3c1519340c5a087f3e7af1ea.camel@crawford.emu.id.au>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <cbc45f7c7b55471c3c1519340c5a087f3e7af1ea.camel@crawford.emu.id.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Sun, 28 Apr 2024 17:35:24 +1000 (AEST)
+X-Virus-Scanned: clamav-milter 1.0.5 at bits.crawford.emu.id.au
+X-Virus-Status: Clean
 
-On 4/27/24 21:31, Frank Crawford wrote:
-> 
-> On Sat, 2024-04-27 at 10:00 -0700, Guenter Roeck wrote:
->> On 4/27/24 04:53, Frank Crawford wrote:
->>> On Sat, 2024-04-27 at 04:11 -0700, Guenter Roeck wrote:
->>>> On 4/27/24 01:33, Frank Crawford wrote:
->>> ...
->>>>> @@ -3144,7 +3186,7 @@ static int __init it87_find(int sioaddr,
->>>>> unsigned short *address,
->>>>>      }
->>>>>     
->>>>>     exit:
->>>>> - superio_exit(sioaddr, config ? has_noconf(config) : false);
->>>>> + superio_exit(sioaddr, opened && config &&
->>>>> has_noconf(config));
->>>>
->>>> If 'opened' is false, this could be an affected chip. Are you
->>>> sure
->>>> that it makes sense to pass 'false' as parameter here in that
->>>> case ?
->>>> Doesn't that mean that the chip might be one of the affected
->>>> chips,
->>>> but the superio exit sequence would be executed anyway ?
->>>> Am I missing something ?
->>>
->>> Ohh, you may be right, I think I have got myself confused here with
->>> opened and how it is used in superio_exit.
->>>
->>
->> It took me a while to understand as well. The double negation of the
->> 'noentry' parameter makes it difficult to understand.
->>
->>> I think it should be !opened, but I will just check I still haven't
->>> messed it up.
->>>
->>
->> Maybe it should be something like
->>   !config && !opened || /* no or unknown chip, not enabled */
->>   config && has_noconf(config) /* chip known to be affected */
->>
->> which would translate "don't disable configuration mode for affected
->> chips
->> and for unknown chips if configuration mode was not enabled".
-> 
-> In fact, I think in this case that entire expression can be simplified
-> to just "!opened", as we only want to perform the exit code when the
-> entry code was given, and it is only set to true in those cases.
-> 
+On Sun, 2024-04-28 at 00:03 -0700, Guenter Roeck wrote:
+> On 4/27/24 21:31, Frank Crawford wrote:
+...
+> > In fact, I think in this case that entire expression can be
+> > simplified
+> > to just "!opened", as we only want to perform the exit code when
+> > the
+> > entry code was given, and it is only set to true in those cases.
+> >=20
+>=20
+> Not really, because it is at least theoretically possible that it was
+> necessary to enter configuration mode to determine that the chip
+> is one of the broken ones. I'll leave that up to you to make the
+> call,
+> though.
 
-Not really, because it is at least theoretically possible that it was
-necessary to enter configuration mode to determine that the chip
-is one of the broken ones. I'll leave that up to you to make the call,
-though.
+I guess it is theoretically possible, if some other driver has done
+something, but as well I guess this patch is different in that it
+doesn't do the second chip first, and so is still different.
 
-Guenter
+However, in the only chipset we have been able to reliably lock up
+lately we haven't been able to read the chipID even after trying to
+enter configuration mode, when we have locked up the chip, so I don't
+think this issue will actually happen in practice.
 
+I will still try to get hold of the configuration documentation, to see
+any additional notes from the vendor.  I don't expect that soon though.
+>=20
+> Guenter
+
+Regards
+Frank
