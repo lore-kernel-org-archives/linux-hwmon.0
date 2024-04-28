@@ -1,67 +1,66 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C43BE40854
-	for <linux-hwmon@vger.kernel.org>; Sun, 28 Apr 2024 18:07:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5A2773518
+	for <linux-hwmon@vger.kernel.org>; Sun, 28 Apr 2024 18:15:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714327678; cv=none; b=j5kHf0s+DKOqXrB15U+D/oXdJcFCOzs+T/oQ5HWi5Xrn+dcI6jQ/tumqC5tw7quNEU29hgdm7jdN8UlnoUixvy6JRz1b0GkHSxZaWrmzH31DZ9Dmq9cKcF5VyQ4tVB3bUMMJYFJ3vzKe2LB21458XzqbkpYsZWJ+OTJJnqzOsU0=
+	t=1714328107; cv=none; b=ei5LFnyNI5aQKOlCSZLQmIsae1LiVWsCMDZkWo95d0PfKk7ahsiYWJniMAz4d9S1dY3FOEWgZtWonxis3DAXWeWYGcfjvFZ+BqRvt4UpVylqxXi25728m3aMWs07U5CefnlcJ+l1N71lyBh5Rvj45/37yXN8J83uR2O3Bm3qrFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714327678; c=relaxed/simple;
-	bh=V5OrHTA2pObtJRM+omQUb1mEa8E1Exqyo5UOPI0669M=;
+	s=arc-20240116; t=1714328107; c=relaxed/simple;
+	bh=dXK6YzWyyLphWYa4+SOqXAeSBKYp3l+MtlctniXPwYQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PEDBzKeV0XMVB/XdZxtOKffaeQln3rl1SAzDp48fs46M45RkpJMj5GdjCCkgl5MGEWbcGsdyoiv1795n/2N7t5WCiO23TLQbnWQz5QFAlm1S8HDGekTosJgH+QsRoT9j6L62WAGcpVvzmo8Ry4Y6NFKw8anlIvvtujd6B88ZN6A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jrY6d06O; arc=none smtp.client-ip=209.85.215.172
+	 Content-Type:Content-Disposition:In-Reply-To; b=Nyx9vqfT01bewzKD0pFEa6dMtm6X4lctokzNCLO6tU6eaUHCUnhG2sxmtOCQTDVkv5qqLj5cPsMmMLFNIT57sTHsDFPsHZ0kjJVJp1m/sQ+ZIPoJ3IAifcGIBMVOtHyJGBUiQk0ABfEh/WeixNLhtmNmvWRDEX2d4jsmBX3bj1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MM2EcU7V; arc=none smtp.client-ip=209.85.215.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jrY6d06O"
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-6082fd3e96eso2639441a12.1
-        for <linux-hwmon@vger.kernel.org>; Sun, 28 Apr 2024 11:07:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MM2EcU7V"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-5cdbc4334edso2129692a12.3
+        for <linux-hwmon@vger.kernel.org>; Sun, 28 Apr 2024 11:15:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714327676; x=1714932476; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1714328105; x=1714932905; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=aM7RT2qY5etVj0wT1IkyN8/DbwdHoTsLhPoGcIIMDDQ=;
-        b=jrY6d06O4h60FPabdBR8CraEZ6VN1QEq4W9Z5SZwL0qS+DdxdGhd7YSbOS4CHHKUMJ
-         xwM1nr627NHvNLdS4xc7xBIn2zIHF3KcD0hXzEU8KiG7Wn4VaSuxIUIOlFT8KRR/fs6c
-         rtkYUrDvNLGYF0jcFG4BQhaqnv7uq0XMp24SXRjcvAQgjZeHk8/F1jn8C7rv+qJUniyd
-         yml09yU3ihS8gv9KQ5bU7rtTitBlliXBPJKURwgZ0vUG3t/wHQzZzisQFApFmCuM46w5
-         fP2xHZo/+puRm1XK0eJzaoPdTJ4khVNfZ6PQW6zADwzATowj9btAkMLT2fFhZl/ma2WS
-         OAUg==
+        bh=pLQddvfuR1Ar7QxoZ6g+tjYx5bDeJbkgTQsAn4EpZLA=;
+        b=MM2EcU7Vf94AUhHFtpje8WIVXfYmLBJaU6rTycpLoJRP62Wq8L23y0kOaPLAaEgIVq
+         MD5UHeLnPRD7f3HYPXD4wHvwG13Q1igqL4kGyVOUiFrjxdBcrD4dcsUPxsvRmbfW0G+r
+         cO8XJUwjdqgPlWqK6SYB98kCvshSLtiXQjDpXBPPsh0TIHvGX3j9FTBJv8ZfHiN2Nhwd
+         Cun+kcz9ebY5US8mvDYem7lPKTfl7o+LUH2MfERDlNFppJznDf/szRfC1qMktmYphkkN
+         YniV3+BeLic66T+3Xuc4kmsNY4oaL/7jwCjBljzRmVotJ+BKpzMj5CLrVhPVKcfqk8gI
+         qt2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714327676; x=1714932476;
+        d=1e100.net; s=20230601; t=1714328105; x=1714932905;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=aM7RT2qY5etVj0wT1IkyN8/DbwdHoTsLhPoGcIIMDDQ=;
-        b=Lb9x1RNKjnWhJ3TEOQFYKm0inxeJ0U1sLHynqi86wO8rEEa/7k3gHtFrH8C6pNof49
-         E9cj+pyATuiDPy2c+jvHQnLX6qlRcq9ysG0gTo7cTAOwvGEGb0jRwWWNvzXL0hsIjDur
-         cq0dSkyZnNcd9n/ph9VKTIISEI+YHQ3swefmOPLQRw/cKvLwsxasgOYtDdzsQbFbd/42
-         zxGjJeEkFlc0i5HDHjpxlzZO9Q5xDo5RYeiAiauoHFi7t5X+Gj3MVobhdtrqYwMHvfma
-         7SLoHoKZOmJZ5tCwrvjs502vt7tDLaBTroSoNU2o+OknaqH6+rjx9ZMgD5On+XQInItx
-         9H2w==
-X-Forwarded-Encrypted: i=1; AJvYcCXF6WWei0vb1pB5Gqo5t5CaihFVQez7OZXcC4sVsTRHfUNCHbbVfFzQPBDBJCaFOHLHdmKvGAN9ZNfvKFrgLoy8NHLB1C0jyC1e2Gs=
-X-Gm-Message-State: AOJu0Yw7wifjCKiw+ifAjoUk1Nt0KBJtVosc2IhuBOIzpUK1xN+3hOl8
-	YsBOUOqerLeM1tav6SC3pWGbIrdkJYtQ2jQnRjXjlira1HgqhzWp
-X-Google-Smtp-Source: AGHT+IE68ppDKhtlZtES1+eSU0cDmPr+7d+tKMt6uX9p1AHnfkxZt4hBCqaF+feKLOkpQjIuic2npw==
-X-Received: by 2002:a05:6a21:168c:b0:1ae:431b:c53b with SMTP id np12-20020a056a21168c00b001ae431bc53bmr7467026pzb.35.1714327676012;
-        Sun, 28 Apr 2024 11:07:56 -0700 (PDT)
+        bh=pLQddvfuR1Ar7QxoZ6g+tjYx5bDeJbkgTQsAn4EpZLA=;
+        b=NS4RM79gDFOydqsU3jhP0yYpgmMvKtfBiKVKh5ee9UBhMbpT7Y36AgKf6h/w2W1dbS
+         hzotnTwS1zin+OVkbQAx7k4HYXcVBI0HU/RyuY5B2N1IP5cPB4KieTdEi2cSnutn94rJ
+         X4hFuzt2cBdNNO39Oi8ik5OI9onk5j7OsCScMFgTywIA0+qZPEzrtJMBBiioBYudjy1y
+         j0FQUGwB66o3Ao7gPZamWu685J7/x0W0+O63V1fcgWr9hsURjz5yu40HnFQDFZwZOvJ1
+         OvF6RaWorC6rZvRhQVQT+8BWNuPfAbLHTXaU0k9B4nZYYxR9kh5ZRkNOKghTPEAgAlHR
+         tEww==
+X-Forwarded-Encrypted: i=1; AJvYcCXYegTBIG2cBOy6fF5/OTx/dsqTyahjNkD1Do+u6XrvoY+HuOb1V2KEENJnb5SPQ+fK8cJKiCPlr1REpNIVN/Qoo8NlAPKTvydphaM=
+X-Gm-Message-State: AOJu0Yy8L1LcMl5exx2sbGN/YEcI5wCbP8xpyE6HVXeOCnqrDaWZeAM6
+	KJZw4Jw88hzRuYafTo5Dpeh4X2aJn8/ZaWlW6etjKYt5xb/+qByK
+X-Google-Smtp-Source: AGHT+IGBvJJAD+m5jbCBB2a1S/xMAS9M65IHQqCjr+P9V/nSHZx0848Kmwxfn4Z25HVTl637D4BOFQ==
+X-Received: by 2002:a05:6a20:43a3:b0:1a3:a639:ef7c with SMTP id i35-20020a056a2043a300b001a3a639ef7cmr12107821pzl.1.1714328104944;
+        Sun, 28 Apr 2024 11:15:04 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id fq5-20020a056a0060c500b006ed2709ada6sm17850825pfb.65.2024.04.28.11.07.55
+        by smtp.gmail.com with ESMTPSA id d2-20020aa78142000000b006ed007b3596sm17929098pfn.69.2024.04.28.11.15.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Apr 2024 11:07:55 -0700 (PDT)
+        Sun, 28 Apr 2024 11:15:04 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 28 Apr 2024 11:07:54 -0700
+Date: Sun, 28 Apr 2024 11:15:03 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Lars Petter Mostad <larspm@gmail.com>
 Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
 	Lars Petter Mostad <lars.petter.mostad@appear.net>
-Subject: Re: [PATCH] hwmon: (emc1403) Decode fractional temperatures.
-Message-ID: <558708ed-4a26-44bb-85f7-eb2f2ac943be@roeck-us.net>
-References: <20240426141322.609642-1-lars.petter.mostad@appear.net>
- <56b04367-8b5a-4c73-a741-729c55daf83e@roeck-us.net>
+Subject: Re: [PATCH] hwmon: (emc1403) Add support for EMC1438.
+Message-ID: <6ea4da26-e20c-45f5-a0b4-85773ae178fa@roeck-us.net>
+References: <20240426140937.609172-1-lars.petter.mostad@appear.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,60 +69,44 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <56b04367-8b5a-4c73-a741-729c55daf83e@roeck-us.net>
+In-Reply-To: <20240426140937.609172-1-lars.petter.mostad@appear.net>
 
-On Sun, Apr 28, 2024 at 11:00:47AM -0700, Guenter Roeck wrote:
-> On Fri, Apr 26, 2024 at 04:13:22PM +0200, Lars Petter Mostad wrote:
-> > Decode all diode data low byte registers.
-> > 
-> All ?
+On Fri, Apr 26, 2024 at 04:09:37PM +0200, Lars Petter Mostad wrote:
+> EMC1438 is similar to EMC14x4, but supports four
+> more external temperature sensors.
 > 
-> > Signed-off-by: Lars Petter Mostad <lars.petter.mostad@appear.net>
-> > ---
-> >  drivers/hwmon/emc1403.c | 34 ++++++++++++++++++++++++++++++++--
-> >  1 file changed, 32 insertions(+), 2 deletions(-)
-> > 
-> > 
-> > base-commit: e723f6ca39fb54ae31f79b5af74fe8496308d4de
-> > 
-> > diff --git a/drivers/hwmon/emc1403.c b/drivers/hwmon/emc1403.c
-> > index d370efd6f986..2b14db802f96 100644
-> > --- a/drivers/hwmon/emc1403.c
-> > +++ b/drivers/hwmon/emc1403.c
-> > @@ -37,13 +37,43 @@ static ssize_t temp_show(struct device *dev, struct device_attribute *attr,
-> >  {
-> >  	struct sensor_device_attribute *sda = to_sensor_dev_attr(attr);
-> >  	struct thermal_data *data = dev_get_drvdata(dev);
-> > -	unsigned int val;
-> > +	unsigned int val, val_lowbyte;
-> 
-> FWIW, this is wrong. The upper bit of the high byte is a sign bit
-> on emc1438.
-> 
-> >  	int retval;
-> > +	int idx_lowbyte;
-> > +
-> > +	switch (sda->index) {
-> > +	case 0x00:
-> > +		idx_lowbyte = 0x29;
-> > +		break;
-> > +	case 0x01:
-> > +		idx_lowbyte = 0x10;
-> > +		break;
-> > +	case 0x23:
-> > +	case 0x2a:
-> > +	case 0x41:
-> > +	case 0x43:
-> > +	case 0x45:
-> > +	case 0x47:
-> > +		idx_lowbyte = sda->index + 1;
-> > +		break;
-> 
-> What about the following ?
-> 
-> 2c -> 2e
-> 2d -> 2f
+> Signed-off-by: Lars Petter Mostad <lars.petter.mostad@appear.net>
 
-Also all other limit registers, and for those the write part is missing.
+Conversion to the _with_info API is long overdue for this driver
+(not mandatory here but it would reduce driver size a lot).
+
+> ---
+>  drivers/hwmon/emc1403.c | 119 +++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 117 insertions(+), 2 deletions(-)
+> 
+> 
+> base-commit: e723f6ca39fb54ae31f79b5af74fe8496308d4de
+> 
+> diff --git a/drivers/hwmon/emc1403.c b/drivers/hwmon/emc1403.c
+> index d370efd6f986..1ce01baf7a1e 100644
+> --- a/drivers/hwmon/emc1403.c
+> +++ b/drivers/hwmon/emc1403.c
+> @@ -24,12 +24,12 @@
+>  #define THERMAL_SMSC_ID_REG	0xfe
+>  #define THERMAL_REVISION_REG	0xff
+>  
+> -enum emc1403_chip { emc1402, emc1403, emc1404 };
+> +enum emc1403_chip { emc1402, emc1403, emc1404, emc1408 };
+
+There is no EMC1408, and if there was it might not be compatible with
+EMC1438.
+
+The 8-channel chips (emc1428 and emc1438) suppport signed data
+and limit registers. This will need to be handled.
+
+I don't know if this also applies to any of the emc144X chips - the
+datasheets for those chips are not available to the public. AFAICS all
+other chips in the series (i.e., all chips with less than 8 channels)
+have unsigned temperature registers.
 
 Guenter
