@@ -1,67 +1,67 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EE3E6F086
-	for <linux-hwmon@vger.kernel.org>; Sun, 28 Apr 2024 17:30:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46B3671B39
+	for <linux-hwmon@vger.kernel.org>; Sun, 28 Apr 2024 17:33:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714325458; cv=none; b=tNRBMiSG4fJQpg3eC2xh+CJNqhHQyh/1fB4eoS24IEL0N5MjvKPW3cVkMgmtQ+fXubpK08KkFD8sbwj5KMNvCBkK3iAjTqLB1VwcMhcUpsJpLLDMFamMHdeIoRA/S3I/9qBAn5oGkcP7ScIdB6q/v8mVYge/EYt6TKCzyRQrd2M=
+	t=1714325595; cv=none; b=QAy6SIzUU2VQMTszk5zfi6KbfDTL2FAVXZnUswEsQf/0IziLBoGJbex0q0sOeA3xcjjzZSb/5H+vjDOp2P4FgXfoaNEh7BGErcD0iULOYIpNChQbN2TmybzgHfu5eaVbRS0BYC5+e9Rx8WRl5ki4xQowoFSgfzcFK1hiTBrRJtM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714325458; c=relaxed/simple;
-	bh=HQD4jQ5HkydKTzvnGvDeNX5QJju/FQrsqfFapqvF5Gw=;
+	s=arc-20240116; t=1714325595; c=relaxed/simple;
+	bh=De2nh2d6lPwa293ZPY3vEBgTqHdBrAuf5F4DsFYY0yA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WY60btOoEl98UyDveCDPceVIKMIa3pallW/+Jj673F/Wfkwc8q4Uv6UVsk05Vnv4G0R90Wq18R93XbGzr3fbk7If0isEZ4IRoJbd/6bDN/9HF04EZj3gzUETAzCb1JcqBaoK7Y7MfVDGwz9s+SpoR4C6XP6qyUWBlgAAOtiMqls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FZy28LBr; arc=none smtp.client-ip=209.85.214.171
+	 Content-Type:Content-Disposition:In-Reply-To; b=YhHeOlsLveFqlUKgd88oj/kSIHH/6+cBr0man4f25RxeEBXzOnkQluTHETwmyoiI0MZp47WVW5Yfvv6SSUjgMlUTW2TakE3Xu3b4dVsWQ9L6xeKCPm7YXCmek3RuO+JEZPYI8k86HHowP07o6cLRdXtbHRGws/h3Q4gt7FOiZjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K2MdOvg4; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FZy28LBr"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1e2c725e234so37053275ad.1
-        for <linux-hwmon@vger.kernel.org>; Sun, 28 Apr 2024 10:30:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K2MdOvg4"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1e3ca546d40so31111255ad.3
+        for <linux-hwmon@vger.kernel.org>; Sun, 28 Apr 2024 10:33:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714325456; x=1714930256; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1714325593; x=1714930393; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=PLTn4VRFFhj4m0CVQnrNG5MP8gB71OafDWVlE8YmKKQ=;
-        b=FZy28LBrQnchgh8zOG5PoqqPnv+Q5ugGqY8ktNP3SPsXeXh1vhTlcFtmgyiQkHbK0I
-         fn7I3DRIb/JMWd4DDmr4jYPcVa5p+X/ptOhrNg3CUPpaaUKG6ndxzgk91BN68ZX/j97A
-         4reMEE0LUMGixz+VIQDBgZB11e+vpA/bK1Aq3Rly/1b0fNcM9F1+zqG/NU/zyWNoOIw4
-         lutFGWJsq+DiC+JW8NCJ7VyW/3Soj09SZmpD3WG4SA+p2omze1Tvr/1f4+5y9kht2Jxd
-         F6q/WdzzcAtzfQk6o7ueAg7LwLInKJBVvU0gpBWUBmRdM0np7b8P8PnqOahXqNMkgrWN
-         JZkw==
+        bh=3Pb4bHWXMugcDY20lT5c+KNBtidrr/j0cUbrjDCutII=;
+        b=K2MdOvg4E4wFvhqEAqf4Pz9NNRG/+554jQl0ozEcBV17AdDypymi68C/jF+Rai7RL1
+         AgMWtCo4TTYKMDq/DY1HaLMA2hffalG+ItYf0WAyr3Ox355m/cEIIGlin4zX6zxvSkq/
+         nYR2QxXnEajblenE+CWEb6dAfyDQd9pLL4nKm1FviuH1rAP7ouRaic6Zt/vUMFmkLF1F
+         fiSuhPh0vKovApPC+8WWNuVMDJYCxUgyo3HSdGzC/DP/t0MWZicsTzmtLORE/DN/KAQ5
+         czeNXmiwbEZKdwFxux+X7akiTakdBR8uTe5XwQtKytoSMCcyp5LhOIXFezuNt02imdye
+         A5lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714325456; x=1714930256;
+        d=1e100.net; s=20230601; t=1714325593; x=1714930393;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PLTn4VRFFhj4m0CVQnrNG5MP8gB71OafDWVlE8YmKKQ=;
-        b=e/bhi+mrmhyn0O0f9bLDKyl1ak488ZmVGm/Zj6uGeR5pOuzgtjPv1dfT3sdC93p661
-         7hDiCRoVawdgp7oMkRg7t3tVKmef8Iih/YchUypD/Y7MkhfP2xOYqpC7VIFm1buUFgcd
-         HSXUlbUiEi67EJFziXN4BPUIPG7PpdamdiGTokSyvfPCwopxqFvs2Fl+0Wn8yKDN+thL
-         oYfCHLhVh5a7m333YAwcQogEaaQlyBHlGkGnmmQyGIPCyLrHbG+nU35hvjyz5Im2Ni+r
-         ASkConYwkHUPQ3PYoJjC4iOytlLgHxysAaUuB8ctVsBvJPV+X2RaEQtKJJo1mMhCXC6J
-         T8Pg==
-X-Forwarded-Encrypted: i=1; AJvYcCW2XcfwwJ5oTFO7bzYbDNInSYBSuN1vVfwDBy4eSZuNOlZntt0NjXjI2hEJ/Qcpgbdb4BP8uMRFdH5qB+McvHFF03LsSedvlTatxrQ=
-X-Gm-Message-State: AOJu0YwcYCaSd5Q0v18TjgGM1vkmhigoztFNBE9eTWG6LjXkaMTPOGKZ
-	ZAZQPycWXn7jInRJ/BLkVtKfRAYEGaYvtJxhf11kfohy7QZcO5o4X04DsQ==
-X-Google-Smtp-Source: AGHT+IFRudwifYPq51WsBV/mUyGy+/0oofsuGQ6jwPrm4WtMsByRUIi1d6KxKjJ0Up6af8orymvWGA==
-X-Received: by 2002:a17:903:228a:b0:1e0:b60f:5de3 with SMTP id b10-20020a170903228a00b001e0b60f5de3mr12144224plh.7.1714325456331;
-        Sun, 28 Apr 2024 10:30:56 -0700 (PDT)
+        bh=3Pb4bHWXMugcDY20lT5c+KNBtidrr/j0cUbrjDCutII=;
+        b=W4YMq28C1u1e+YQkT08MXBNyKRfSVqBirNMb+G0U65+KSPQk+z2YOvp4Uj1lO63oum
+         djRak/3H/1JzoA18hMrLOkkR+3I1nZwATDiBWQwchKIbHoiJizqWKlnqH0jukJVf2vKJ
+         FI5oguqWHZUVwpVgSPnggQkwFvSMSJDzMkyBM7+WYi2T5kAmgFYbokTe6ngYtXlps+Lk
+         zoxc2/bPG66QSHzrnNBANUrX7JdyvYLBAzb25dHu3dqxEJDCvk8I1ZrdXlbeCome1jdA
+         JyDlpABp3tTOiITV7MZ5PRjH2WEFHe7i86A8YMCDtZOCi6DUHJ/98hzoD1VSEcMrhzgZ
+         9cCg==
+X-Forwarded-Encrypted: i=1; AJvYcCXjY/4GMusep3YaQLerjolex434CprMLgP3o/NzwILGHDcmrXdP40lDn2iR4jDzBWjqrOKPFxKFcEB88MZmsDSxQtBqnzBXmq2Sn4o=
+X-Gm-Message-State: AOJu0YxRgCm/TR3tz9IjCIcXecw9z8B0KNMo/Wa4w1IHqKhWROSD6/zW
+	xuuUcFD4nMoRPFRuGLt3vUGyfW642LsRt7SRXrH/xWqji0NxBKbODQds+w==
+X-Google-Smtp-Source: AGHT+IH9H5pUL1lwVMHTR/An6KTOy7p/Yvn6J/l6Am4d4CfmwHuKLkCiB/xSp2UzhNJNBB0f1QDLUg==
+X-Received: by 2002:a17:903:230a:b0:1eb:22fb:6793 with SMTP id d10-20020a170903230a00b001eb22fb6793mr7547898plh.39.1714325593511;
+        Sun, 28 Apr 2024 10:33:13 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i16-20020a17090332d000b001e0c568ae8fsm18628784plr.192.2024.04.28.10.30.55
+        by smtp.gmail.com with ESMTPSA id l18-20020a170903005200b001e85cf937ffsm18671348pla.101.2024.04.28.10.33.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Apr 2024 10:30:55 -0700 (PDT)
+        Sun, 28 Apr 2024 10:33:13 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 28 Apr 2024 10:30:54 -0700
+Date: Sun, 28 Apr 2024 10:33:12 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Frank Crawford <frank@crawford.emu.id.au>
 Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3 2/4] hwmon (it87): Do not enter configuration mode for
- some chiptypes
-Message-ID: <605433a1-b88e-4c85-b855-67861efc13e9@roeck-us.net>
+Subject: Re: [PATCH v3 3/4] hwmon (it87): Test for chipset before entering
+ configuration mode
+Message-ID: <2fd2449f-89a5-47fe-8d4c-349a2bb1eb9f@roeck-us.net>
 References: <20240428060653.2425296-1-frank@crawford.emu.id.au>
- <20240428060653.2425296-3-frank@crawford.emu.id.au>
+ <20240428060653.2425296-4-frank@crawford.emu.id.au>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,14 +70,44 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240428060653.2425296-3-frank@crawford.emu.id.au>
+In-Reply-To: <20240428060653.2425296-4-frank@crawford.emu.id.au>
 
-On Sun, Apr 28, 2024 at 04:06:34PM +1000, Frank Crawford wrote:
-> Update the configuration mode entry code to allow conditional entry, and
-> apply to all calls.
+On Sun, Apr 28, 2024 at 04:06:35PM +1000, Frank Crawford wrote:
+> Major part of the change for the new method to avoid chipset issues.
+> 
+> The actual update does the following:
+> 
+> 1) Lock the memory, but does not perform a SIO entry (previously it
+> would have performed an SIO entry).
+> 
+> 2) Attempt to read the chipID.  This should be safe no matter which
+> chip we have.
+> 
+> 3) If step (2) fails, then perform SIO entry and retry chipID read.  For
+> older chips and on failure it acts similarly to prior to this patch.
+> 
+> 4) Set the sio_data->type, similar to previously.
+> 
+> 5) If we have not performed an SIO entry, and this is not a chip type
+> with the NOCONF feature, then it will perform an SIO entry at this
+> point.
+> 
+> 6) Proceed with setup as prior to this patch.
+> 
+> 7) Any following access to the SIO registers will invoke the SIO entry
+> and SIO exit steps unless it is a chip with the NOCONF feature set.
+> This was set up in the previous patches in this patchset.
+> 
+> 8) Update to the exit based on if it had performed a SIO entry or not.
 > 
 > Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
 
-Applied.
+Ah, checkpatch is useful.
 
+> + * ChipIDs 0x8733, 0x8695 (early ID for IT87952E) and 0x8790 are intialised
+                                                                    ^^^^^^^^^^
+
+No need to resend, but please run checkpatch on future patches.
+
+Thanks,
 Guenter
