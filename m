@@ -1,121 +1,254 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8DF3D515;
-	Mon, 29 Apr 2024 05:18:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F87B6FCB
+	for <linux-hwmon@vger.kernel.org>; Mon, 29 Apr 2024 06:43:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714367896; cv=none; b=Dr1Dq9UPeLUa02aXxNSd+Cwv8sHGjABsRGmgjylfLKcxWJ4C0yUPu6yKY3/77GoArHvvt5C0gilWYfz6F4Zgll7WoxGqQyzP0XR4kYgsZkAYF86kufaGsuPrLK+DTtB182wk9CcDHd70lIMk3FXK5gXxdWRj9H0IENTAvNK5FiI=
+	t=1714373014; cv=none; b=UsylCUyAq8R8TUOMOUhcT3ozJdvS2NP+ym/XPPj+0aZkgQLQsNQeHI7UJAR60Ncyy4wTsL7K9Lt/8QYvlQa+D9kkT2T68OZo+vXzTwzLHSi2hDtroFDoTyeXFFYBPeS7/kOMq6CJegEbJDbk3kzxUDf7lBGUlpuR6e6GP+N89Pw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714367896; c=relaxed/simple;
-	bh=qooaycyXcEwFMgbLaejo2Eb1UKNs1HunVbSCf0OC2Fo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rt84O9ic9r8iHaf9PuDe7lZHyixO1+y0ax+1K7bbEcpcpwxH0+5sFoVYr/PAVC3maU27mMfuxoRZxmU+9nuCLbBZvZRwVGFCMCv765b96R67fC2aeefx5CzG0xccTC5vdaoKz9/kT1+43DbogM0vNV2bJ0OQc4QZDy9jEQrG+Xo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WGwh58Gd; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1714373014; c=relaxed/simple;
+	bh=Y8xIon2ubV0sh1r3ydk041hIvjvW5CiskwvHvdLTqKY=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=bzE2BS8SSVgQiin5ovLyVN/47kJDTFmqCmB+I1c2Pmqqgxrdi9aB5n5sNUavSPRgGc4NjSV+QGXgHhHqR0iVidU1fT0B5ffpKktmU0pTtAuzSQt/fEjp9cNhxDrDAt/UcptYB2z/IksOtl91r1i7TPsxkhLFDuFGYmHhWtPUk7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kNPM36XR; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WGwh58Gd"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-344047ac7e4so2801727f8f.0;
-        Sun, 28 Apr 2024 22:18:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714367893; x=1714972693; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uwGA64C1r1xkHN72jIWxpN8Q71Ufkov+rKTRlObLNLM=;
-        b=WGwh58GdErzDEudIj3HXax5XlBlLRk9u2xqBX6eyORwfxKJDGpIZJ4sWYlr/QDIhei
-         95Cm7WvsnnokXBUc8YyiXxARr9BAaCNfX+el9v3t6t/xmUrViCHPm4O/07IpjC2aAzUl
-         +nhEF21X1gUxqZJBZukQOiPyDRkpSm4ljZgiOgpgRT05WfcMBe7gLaqN0B06Pyi5LOSV
-         xNTiKDKYdSCbqE1UQ4H41AXSzymDPapPeWDZMGk1BRaRFjLec35dMLjf/QRz4K2U4pjH
-         SPuzMhp/GBfEARRIGQTxermHnD1SO640rTgahuhBcYiN6LKcejtPPk4JgP0cCdAgtplK
-         qloA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714367893; x=1714972693;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uwGA64C1r1xkHN72jIWxpN8Q71Ufkov+rKTRlObLNLM=;
-        b=e2N/OYWKwG3HUWz09eJwavaU2VTo6kaD3+bA9QRdC06Y79PXWdpqmGOrxB7G4TpIil
-         yuKHx8nNS43nksSP+00XU5AeQvYCZY2EE+D1/oKdnEJ3YSIRyluj/eY84wOzie3D0vVj
-         dwuWdSHv3gWSh4Giq4xfOkwtLeVXnLz8NvqePxV7VO/BrNqKSSd6JFVG2otP4UdxTGDw
-         Y49NsEy0tjSdz/Ubx21Z6eNUSSq305TXAZsw2wuUDgpHClU4gfUYp9A5iiNfXdefReyt
-         qL54bwYnYkznk/xJuLMYQc1w+INWD1thLmW6hga/RujwFnSaecuKde7bEgqLrWI/6i26
-         whQw==
-X-Forwarded-Encrypted: i=1; AJvYcCWOqc4oqkX3xiH+a2OLseJ430qJbVuJVNz7wkuX66iPMKIkey6s3FoIKfyVhnQ0od4dYBdZrgkDwQmLDmO1zKuiNn/Gzz37K06S+QumPiY1Cz6UetiCvhGU/BkCvJpjU0FbyeQKizCy4looy5Zk+3enhwcRIxOXLxAhdCkOXVUjqmci92R/EbA4JzzYS1Cl5R9jNP+0SB6Y6T8NapLESopKlyyLIKQr7NkLAwkk0zzMNsnf/DjHcIgnAAx1
-X-Gm-Message-State: AOJu0Yyx7+pPXdZIxJoHdoSoe8SDlPr8pETVj67b9NC9XHqnvKKOX+1v
-	5Rl+c6xRjhn8G/fgPz0k4dCQsV1an5ILBdIKBg8JBgBL8TCQGtF89YbwtBVJ/r1bxXZSAOopnFq
-	R+yEvEHJ3uzYKEcUdlTsekPCmqEM=
-X-Google-Smtp-Source: AGHT+IEGhQp8Q/vKN8iZGdoxw5OL5JHgh7qmf1rS8+jy74QjfXfT6iSCzTaaqjQQ17BGJclMB87/EJjPCjE7hO5gNTg=
-X-Received: by 2002:a5d:6592:0:b0:34d:760:f8b3 with SMTP id
- q18-20020a5d6592000000b0034d0760f8b3mr2105140wru.10.1714367892881; Sun, 28
- Apr 2024 22:18:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kNPM36XR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714373012; x=1745909012;
+  h=date:from:to:cc:subject:message-id;
+  bh=Y8xIon2ubV0sh1r3ydk041hIvjvW5CiskwvHvdLTqKY=;
+  b=kNPM36XRCVggJjSi2L/My6maQW2uOyo7Tplpp+yomwCZEGmJuNe6wG7T
+   q7dd0y8TuWqZabUHSH1+w56S7D3rv04+ZrybOsHO5xgbmdWKNoSOTdVd/
+   +HbMCE6TwejFnpd7SHH5ZrSms1OZAPnHyP69vNoc/aNzf2LaVCUUvjyg1
+   E7y+oTrDLSamUWfeO7lNRd/qQQf0+8blV5/DRlZ8BIx9Rg0ZfjIzdTSjG
+   tVXYmfGs9cIsZ13M1YFqmI0tfLDKph3u5PJIQ47PrPX1TqQeVkEy5kMg+
+   tjZfSMn2EqwzoqoKdMs9CaPCKFyv/38pNB8Gsv3KgVl+lqjlcOH+DC6k8
+   A==;
+X-CSE-ConnectionGUID: fOhpEUKWScuTW+mnOWPY7g==
+X-CSE-MsgGUID: fz5gPIFkS2SHtVJ5LU1AzQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11057"; a="32523142"
+X-IronPort-AV: E=Sophos;i="6.07,239,1708416000"; 
+   d="scan'208";a="32523142"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2024 23:43:31 -0700
+X-CSE-ConnectionGUID: TNfaWmOzT2mf6UUyfHCWgg==
+X-CSE-MsgGUID: QVWlzmGES6uhXh0QMi+nFg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,239,1708416000"; 
+   d="scan'208";a="26118305"
+Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 28 Apr 2024 23:43:30 -0700
+Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s1KjY-00070U-1I;
+	Mon, 29 Apr 2024 06:43:28 +0000
+Date: Mon, 29 Apr 2024 14:42:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 2ba3ec0d5d4a6b380a10a295d4c83e4a9bcfc51a
+Message-ID: <202404291448.Qwlft3UV-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240429033833.895122-1-peteryin.openbmc@gmail.com> <e6ba7e83-0329-4fc8-a1d6-83a8683cc812@roeck-us.net>
-In-Reply-To: <e6ba7e83-0329-4fc8-a1d6-83a8683cc812@roeck-us.net>
-From: Peter Yin <peteryin.openbmc@gmail.com>
-Date: Mon, 29 Apr 2024 13:18:01 +0800
-Message-ID: <CAPSyxFTQw6MVSwO3ab23OQHKVYZCKm1N0k8AGQXfpXGAXDVkqw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/2] hwmon: (pmbus) Add support for Infineon XDP710
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: patrick@stwcx.xyz, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, 
-	Patrick Rudolph <patrick.rudolph@9elements.com>, Lukas Wunner <lukas@wunner.de>, 
-	Javier Carrasco <javier.carrasco.cruz@gmail.com>, Bjorn Helgaas <bhelgaas@google.com>, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Sorry, I thought it was going to be applied after I fixed it.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 2ba3ec0d5d4a6b380a10a295d4c83e4a9bcfc51a  hwmon: (nzxt-kraken3) Add support for NZXT Kraken 2023 (standard and Elite) models
 
-On Mon, Apr 29, 2024 at 1:00=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
-wrote:
->
-> On 4/28/24 20:38, Peter Yin wrote:
-> > Add support for Infineon XDP710. This is a Hot-Swap Controller.
-> >
-> > Change log:
-> >
-> > v2 -> v3
-> >      - Fixed Ack quotes
-> >      - rename "microOhmRsense" to "micro_ohm_rsense"
-> >
-> > v1 -> v2
-> >      - Merged patch 3 into patch 1.
-> >      - Modified comments.
-> >      - Fixed the microOhmRsense array.
-> >      - Improved operational accuracy.
-> >
-> > v1
-> >      - Add support for xdp710 hot-swap device from Infineon vendor
-> > ---
-> >
-> > Peter Yin (2):
-> >    hwmon: (pmbus) Add support for Infineon XDP710
-> >    dt-bindings: hwmon: Add infineon xdp710 driver bindings
-> >
-> >   .../devicetree/bindings/trivial-devices.yaml  |   2 +
-> >   Documentation/hwmon/index.rst                 |   1 +
-> >   Documentation/hwmon/xdp710.rst                |  83 +++++++++++
-> >   drivers/hwmon/pmbus/Kconfig                   |   9 ++
-> >   drivers/hwmon/pmbus/Makefile                  |   1 +
-> >   drivers/hwmon/pmbus/xdp710.c                  | 132 +++++++++++++++++=
-+
-> >   6 files changed, 228 insertions(+)
-> >   create mode 100644 Documentation/hwmon/xdp710.rst
-> >   create mode 100644 drivers/hwmon/pmbus/xdp710.c
-> >
->
-> What is the point of resending this ? I said I applied the series.
->
-> Guenter
->
+elapsed time: 720m
+
+configs tested: 177
+configs skipped: 6
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                          axs101_defconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20240429   gcc  
+arc                   randconfig-002-20240429   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   clang
+arm                              allyesconfig   gcc  
+arm                         assabet_defconfig   clang
+arm                                 defconfig   clang
+arm                            dove_defconfig   gcc  
+arm                   randconfig-001-20240429   clang
+arm                   randconfig-002-20240429   clang
+arm                   randconfig-003-20240429   clang
+arm                   randconfig-004-20240429   gcc  
+arm64                            alldefconfig   gcc  
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20240429   clang
+arm64                 randconfig-002-20240429   gcc  
+arm64                 randconfig-003-20240429   clang
+arm64                 randconfig-004-20240429   clang
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20240429   gcc  
+csky                  randconfig-002-20240429   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+hexagon               randconfig-001-20240429   clang
+hexagon               randconfig-002-20240429   clang
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-003-20240429   gcc  
+i386         buildonly-randconfig-004-20240429   clang
+i386         buildonly-randconfig-005-20240429   gcc  
+i386         buildonly-randconfig-006-20240429   clang
+i386                                defconfig   clang
+i386                  randconfig-001-20240429   clang
+i386                  randconfig-002-20240429   clang
+i386                  randconfig-003-20240429   clang
+i386                  randconfig-004-20240429   clang
+i386                  randconfig-005-20240429   gcc  
+i386                  randconfig-006-20240429   clang
+i386                  randconfig-011-20240429   gcc  
+i386                  randconfig-012-20240429   gcc  
+i386                  randconfig-013-20240429   clang
+i386                  randconfig-014-20240429   gcc  
+i386                  randconfig-015-20240429   clang
+i386                  randconfig-016-20240429   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20240429   gcc  
+loongarch             randconfig-002-20240429   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                          sun3x_defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                     loongson1c_defconfig   gcc  
+mips                      malta_kvm_defconfig   gcc  
+mips                    maltaup_xpa_defconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20240429   gcc  
+nios2                 randconfig-002-20240429   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                randconfig-001-20240429   gcc  
+parisc                randconfig-002-20240429   gcc  
+parisc64                            defconfig   gcc  
+powerpc                    adder875_defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc                 canyonlands_defconfig   clang
+powerpc                      ep88xc_defconfig   gcc  
+powerpc                     kilauea_defconfig   clang
+powerpc               mpc834x_itxgp_defconfig   clang
+powerpc                  mpc885_ads_defconfig   clang
+powerpc                         ps3_defconfig   gcc  
+powerpc               randconfig-001-20240429   gcc  
+powerpc               randconfig-002-20240429   gcc  
+powerpc               randconfig-003-20240429   gcc  
+powerpc                     tqm8541_defconfig   clang
+powerpc64             randconfig-001-20240429   clang
+powerpc64             randconfig-002-20240429   clang
+powerpc64             randconfig-003-20240429   gcc  
+riscv                            allmodconfig   clang
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   clang
+riscv                               defconfig   clang
+riscv                 randconfig-001-20240429   gcc  
+riscv                 randconfig-002-20240429   clang
+s390                             allmodconfig   clang
+s390                              allnoconfig   clang
+s390                             allyesconfig   gcc  
+s390                                defconfig   clang
+s390                  randconfig-001-20240429   gcc  
+s390                  randconfig-002-20240429   clang
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                        edosk7760_defconfig   gcc  
+sh                    randconfig-001-20240429   gcc  
+sh                    randconfig-002-20240429   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64               randconfig-001-20240429   gcc  
+sparc64               randconfig-002-20240429   gcc  
+um                                allnoconfig   clang
+um                               allyesconfig   gcc  
+um                                  defconfig   clang
+um                             i386_defconfig   gcc  
+um                    randconfig-001-20240429   gcc  
+um                    randconfig-002-20240429   gcc  
+um                           x86_64_defconfig   clang
+x86_64                            allnoconfig   clang
+x86_64                           allyesconfig   clang
+x86_64       buildonly-randconfig-001-20240429   clang
+x86_64       buildonly-randconfig-002-20240429   gcc  
+x86_64       buildonly-randconfig-003-20240429   clang
+x86_64       buildonly-randconfig-004-20240429   gcc  
+x86_64       buildonly-randconfig-005-20240429   clang
+x86_64       buildonly-randconfig-006-20240429   clang
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20240429   clang
+x86_64                randconfig-002-20240429   gcc  
+x86_64                randconfig-003-20240429   clang
+x86_64                randconfig-004-20240429   gcc  
+x86_64                randconfig-005-20240429   clang
+x86_64                randconfig-006-20240429   gcc  
+x86_64                randconfig-011-20240429   gcc  
+x86_64                randconfig-012-20240429   gcc  
+x86_64                randconfig-013-20240429   gcc  
+x86_64                randconfig-014-20240429   clang
+x86_64                randconfig-015-20240429   clang
+x86_64                randconfig-016-20240429   gcc  
+x86_64                randconfig-071-20240429   clang
+x86_64                randconfig-072-20240429   clang
+x86_64                randconfig-073-20240429   gcc  
+x86_64                randconfig-074-20240429   gcc  
+x86_64                randconfig-075-20240429   clang
+x86_64                randconfig-076-20240429   gcc  
+x86_64                          rhel-8.3-rust   clang
+xtensa                            allnoconfig   gcc  
+xtensa                randconfig-001-20240429   gcc  
+xtensa                randconfig-002-20240429   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
