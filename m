@@ -1,646 +1,666 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29164199E96;
-	Tue, 30 Apr 2024 20:14:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80E761A0B07
+	for <linux-hwmon@vger.kernel.org>; Tue, 30 Apr 2024 21:05:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714508104; cv=none; b=YsJOUvt6vV+MyuCUFV2Vx9pJAmz6Z9+ssUezQJKtMDQpKGrDTndWYp0XJguuvrltBGGaiWzpAImvaIBB2XDFDDnz6/s/2+X5/GBGF2R+cN7548vGJPSpGwrQIgpaFBeYrtfJMhIe4XCbWau4zDCXlk0L32xLJDGADZIz4/uiksQ=
+	t=1714511115; cv=none; b=OULQ06Nc82Ux1iGZ1IiBgjqtxk0NmbzIgaPErXItaFadMRH8YiYXwHRMyio05yxOv2Ym/1oMZ9dRMVoYLLbmEO6UAyuMAAo8ZTCiFlDmkLB6B3ytfAce+ZInXLz/1lP7X+renvHziKC9Sqnd+KUAIEQAXOfhQc8iYRQOYkFo2Ts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714508104; c=relaxed/simple;
-	bh=ZafLxfI+Z/GIhZZqRQsDUhDD3XnYQA1a9EWeGEFS0wg=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=ejd39rr+wI6bCS3kwdpI0PA5piPPQM3YJEaM0lCx6Xake3RPrU6/nAB06ukFR/FNjGAMHfMScBbPAsuzN37zt/efMEBFa9AxjfXQ1XOSIlF5Fft9AYwBvZrVTLc+WUEV75+VwJFcngxwcS5bS1wBJfrZ+w+i8v6EtrjhrAUDifA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n8wGtb7F; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1714511115; c=relaxed/simple;
+	bh=KLcb0NDwuIx241UKNfejyZb12C0ZDY+GzOzoqmfyoPk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XTXRAbaq9MKz0X7Zv7wAdpwKeNWoXtrqYdUK7w3gtT1/qs+w8WYzCgKGP65ybxFVCe/HEm8UwyU4jWN2v2tUoKVhMA2Nt6lMTq6mXc9catOzCdSenog8XZVqs23uZrtiWNqtf//Bl8++rAYHuPkkuVImO2EMxJyBiVgdfqgNqF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=XfOYa4oY; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n8wGtb7F"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714508100; x=1746044100;
-  h=date:from:to:cc:subject:message-id;
-  bh=ZafLxfI+Z/GIhZZqRQsDUhDD3XnYQA1a9EWeGEFS0wg=;
-  b=n8wGtb7Fo6NLJ1b8FFns9upmw71hIgtYb3esOPNVBZlGQvrGA9Z+YETE
-   vqxrneEWu2oB0zdSEPihEaVcxGG9bWm9Pgl0du6roYUssZoBINV9tcbdf
-   uIehgN04nGSqEK5u1SKdTcbNpYvtg1I8OCCGmnY7lZZsCY7nLdzoVw+VP
-   +dP8EeU92t9DhZvpGlXbj13hkpRHfgxoxvRQdqacw2FDGPrnrYnDY2erQ
-   B/MHodrKZGXprwNqtGhYBOPDjTbTsubuMXhtK9j+h1BZNJYdYEvwuFjOA
-   Sa3+yP4Or8vhlAQYAeDYDQoKTyGEm2QyKCwRmwyaCUyBsRn5iKk/Zdqyr
-   A==;
-X-CSE-ConnectionGUID: kzYi2If/Rwm6J14ZySXZ1w==
-X-CSE-MsgGUID: Efob9qktQyynrXybpz065g==
-X-IronPort-AV: E=McAfee;i="6600,9927,11060"; a="10358855"
-X-IronPort-AV: E=Sophos;i="6.07,243,1708416000"; 
-   d="scan'208";a="10358855"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2024 13:14:54 -0700
-X-CSE-ConnectionGUID: qp6YMwp+TsSexkVVR2GzOA==
-X-CSE-MsgGUID: KrZvMl4uSsiQsmyNvi+utQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,243,1708416000"; 
-   d="scan'208";a="31288691"
-Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 30 Apr 2024 13:14:47 -0700
-Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s1tsC-0008VX-1f;
-	Tue, 30 Apr 2024 20:14:44 +0000
-Date: Wed, 01 May 2024 04:14:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Linux Memory Management List <linux-mm@kvack.org>,
- acrn-dev@lists.projectacrn.org, amd-gfx@lists.freedesktop.org,
- cgroups@vger.kernel.org, dri-devel@lists.freedesktop.org,
- intel-gfx@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
- io-uring@vger.kernel.org, iommu@lists.linux.dev,
- linux-arch@vger.kernel.org, linux-bcachefs@vger.kernel.org,
- linux-block@vger.kernel.org, linux-btrfs@vger.kernel.org,
- linux-ext4@vger.kernel.org, linux-fscrypt@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-nvme@lists.infradead.org
-Subject: [linux-next:master] BUILD REGRESSION
- d04466706db5e241ee026f17b5f920e50dee26b5
-Message-ID: <202405010414.1nlkOC6t-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="XfOYa4oY"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-41b5e74fa83so41780855e9.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 30 Apr 2024 14:05:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1714511111; x=1715115911; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vdXbVOf7X2hgQ5AxJONB1g2nuUIOvffE/hB/3N0SbRs=;
+        b=XfOYa4oY1Q0HHl6Lz6UmMWJwD4/B0tuC+J5EB9y2V8H7yOfT7ybh2u1D1RBZ8OlDGB
+         Ux1NKRbbxruEl94bAtGAdJCUJTn8Nd82v0Fu9zfPir0CJhPq6cA+Vdvgspdl5zrBnhDI
+         SmTEUqgZ+PKiyKwZoFRwcsGh4ZKlYHHctDC3P2RglpevC4pHczdbjaiVl535PQM0+0ob
+         mdeT+9dFE1K6srWPTtlA5djfryFNHE9wVBAQK08AoOo2qYze0O3kksAwLsNAWgu6hIQt
+         u/PYVhmWeOM0uE33aY6CpWyM2tTDsml1tJjs2HfuqoPu0RjYnQb9+QNjpsgWMAPu9UUG
+         nbBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714511111; x=1715115911;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vdXbVOf7X2hgQ5AxJONB1g2nuUIOvffE/hB/3N0SbRs=;
+        b=tgK5jAAi8Zib/bAnUXny/SjrK9whXV+O+swNgT2Yi69UYKWQFKZor2kLo36cTa/DZ3
+         7e3MxdHSekKKXsqhO9jsdPD/f7/Tto13R1dN+/F8k2I325r65Zj+taWmpQU1acqpmSuE
+         AgigJZMCXua20pGC6ocS15gGtBEtrB5O7pk3TfWjLb+1n1S1gnjsN3/Z8Zd1AxjTnFQh
+         VqmcvOQPfplD2k5kPdEu3A5ZTRshMbQ/rGgBHZD86n6nj5Gp93pti4q9HS7e2kJrlo3N
+         rnBeKEt8046Im1tZfpD7XDyIWQZ3qoI8g9C20Tjw7r5tTPHyiWV6cSs3crpWFh5YQKR8
+         b4LA==
+X-Forwarded-Encrypted: i=1; AJvYcCUwtAewxsybYkyWcdJ3Y81wDDPng8ERv2Ba0VqJBxfjCPxbJqrpNv0y1mH2tG6Xgy9c4sm8A8Qik1BcOX+k5nENapeI08jH9wVNDIk=
+X-Gm-Message-State: AOJu0YyCOj5heG+/kGPx8uZpzD0xjzWYvlb8R+AMq1Qrf5VSxiO2PkMs
+	bnw3cDi4HXXWLDLNJX6krfOzKieUpdRCwURoPbBz8GOQf1uFM3bhYR2wJKYMXDQ=
+X-Google-Smtp-Source: AGHT+IE+7DWRjQpVtGTda+vGPW5eV5S3JzHNGr03qYh+97XaXRzClMLmgjn3RXQpZpA2WRK8ZzSAvg==
+X-Received: by 2002:a05:600c:450b:b0:41b:8660:c530 with SMTP id t11-20020a05600c450b00b0041b8660c530mr469363wmo.5.1714511110555;
+        Tue, 30 Apr 2024 14:05:10 -0700 (PDT)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id b7-20020adff907000000b0034b3394f0e1sm22414491wrr.10.2024.04.30.14.05.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Apr 2024 14:05:10 -0700 (PDT)
+From: Naresh Solanki <naresh.solanki@9elements.com>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: Naresh Solanki <naresh.solanki@9elements.com>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon (max6639): Use regmap
+Date: Wed,  1 May 2024 02:35:07 +0530
+Message-ID: <20240430210508.934882-1-naresh.solanki@9elements.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: d04466706db5e241ee026f17b5f920e50dee26b5  Add linux-next specific files for 20240430
+Add regmap support & remove local caching.
 
-Error/Warning reports:
+Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+---
+ drivers/hwmon/Kconfig   |   1 +
+ drivers/hwmon/max6639.c | 310 ++++++++++++++++++++--------------------
+ 2 files changed, 154 insertions(+), 157 deletions(-)
 
-https://lore.kernel.org/oe-kbuild-all/202404301738.J71xGyaR-lkp@intel.com
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index bafc0058c728..e14ae18a973b 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -1233,6 +1233,7 @@ config SENSORS_MAX6621
+ config SENSORS_MAX6639
+ 	tristate "Maxim MAX6639 sensor chip"
+ 	depends on I2C
++	select REGMAP_I2C
+ 	help
+ 	  If you say yes here you get support for the MAX6639
+ 	  sensor chips.
+diff --git a/drivers/hwmon/max6639.c b/drivers/hwmon/max6639.c
+index 5dd0349e8bd0..b12d2098e259 100644
+--- a/drivers/hwmon/max6639.c
++++ b/drivers/hwmon/max6639.c
+@@ -20,6 +20,7 @@
+ #include <linux/err.h>
+ #include <linux/mutex.h>
+ #include <linux/platform_data/max6639.h>
++#include <linux/regmap.h>
+ 
+ /* Addresses to scan */
+ static const unsigned short normal_i2c[] = { 0x2c, 0x2e, 0x2f, I2C_CLIENT_END };
+@@ -57,6 +58,8 @@ static const unsigned short normal_i2c[] = { 0x2c, 0x2e, 0x2f, I2C_CLIENT_END };
+ 
+ #define MAX6639_FAN_CONFIG3_THERM_FULL_SPEED	0x40
+ 
++#define MAX6639_NDEV				2
++
+ static const int rpm_ranges[] = { 2000, 4000, 8000, 16000 };
+ 
+ #define FAN_FROM_REG(val, rpm_range)	((val) == 0 || (val) == 255 ? \
+@@ -67,22 +70,11 @@ static const int rpm_ranges[] = { 2000, 4000, 8000, 16000 };
+  * Client data (each client gets its own)
+  */
+ struct max6639_data {
+-	struct i2c_client *client;
++	struct regmap *regmap;
+ 	struct mutex update_lock;
+-	bool valid;		/* true if following fields are valid */
+-	unsigned long last_updated;	/* In jiffies */
+-
+-	/* Register values sampled regularly */
+-	u16 temp[2];		/* Temperature, in 1/8 C, 0..255 C */
+-	bool temp_fault[2];	/* Detected temperature diode failure */
+-	u8 fan[2];		/* Register value: TACH count for fans >=30 */
+-	u8 status;		/* Detected channel alarms and fan failures */
+ 
+ 	/* Register values only written to */
+-	u8 pwm[2];		/* Register value: Duty cycle 0..120 */
+-	u8 temp_therm[2];	/* THERM Temperature, 0..255 C (->_max) */
+-	u8 temp_alert[2];	/* ALERT Temperature, 0..255 C (->_crit) */
+-	u8 temp_ot[2];		/* OT Temperature, 0..255 C (->_emergency) */
++	u8 pwm[MAX6639_NDEV];		/* Register value: Duty cycle 0..120 */
+ 
+ 	/* Register values initialized only once */
+ 	u8 ppr;			/* Pulses per rotation 0..3 for 1..4 ppr */
+@@ -92,90 +84,58 @@ struct max6639_data {
+ 	struct regulator *reg;
+ };
+ 
+-static struct max6639_data *max6639_update_device(struct device *dev)
+-{
+-	struct max6639_data *data = dev_get_drvdata(dev);
+-	struct i2c_client *client = data->client;
+-	struct max6639_data *ret = data;
+-	int i;
+-	int status_reg;
+-
+-	mutex_lock(&data->update_lock);
+-
+-	if (time_after(jiffies, data->last_updated + 2 * HZ) || !data->valid) {
+-		int res;
+-
+-		dev_dbg(&client->dev, "Starting max6639 update\n");
+-
+-		status_reg = i2c_smbus_read_byte_data(client,
+-						      MAX6639_REG_STATUS);
+-		if (status_reg < 0) {
+-			ret = ERR_PTR(status_reg);
+-			goto abort;
+-		}
+-
+-		data->status = status_reg;
+-
+-		for (i = 0; i < 2; i++) {
+-			res = i2c_smbus_read_byte_data(client,
+-					MAX6639_REG_FAN_CNT(i));
+-			if (res < 0) {
+-				ret = ERR_PTR(res);
+-				goto abort;
+-			}
+-			data->fan[i] = res;
+-
+-			res = i2c_smbus_read_byte_data(client,
+-					MAX6639_REG_TEMP_EXT(i));
+-			if (res < 0) {
+-				ret = ERR_PTR(res);
+-				goto abort;
+-			}
+-			data->temp[i] = res >> 5;
+-			data->temp_fault[i] = res & 0x01;
+-
+-			res = i2c_smbus_read_byte_data(client,
+-					MAX6639_REG_TEMP(i));
+-			if (res < 0) {
+-				ret = ERR_PTR(res);
+-				goto abort;
+-			}
+-			data->temp[i] |= res << 3;
+-		}
+-
+-		data->last_updated = jiffies;
+-		data->valid = true;
+-	}
+-abort:
+-	mutex_unlock(&data->update_lock);
+-
+-	return ret;
+-}
+-
+ static ssize_t temp_input_show(struct device *dev,
+ 			       struct device_attribute *dev_attr, char *buf)
+ {
+ 	long temp;
+-	struct max6639_data *data = max6639_update_device(dev);
++	struct max6639_data *data = dev_get_drvdata(dev);
+ 	struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
++	unsigned int val;
++	int res;
+ 
+ 	if (IS_ERR(data))
+ 		return PTR_ERR(data);
+ 
+-	temp = data->temp[attr->index] * 125;
++	mutex_lock(&data->update_lock);
++	res = regmap_read(data->regmap, MAX6639_REG_TEMP_EXT(attr->index), &val);
++	if (res < 0)
++		goto exit;
++
++	temp = val >> 5;
++	res = regmap_read(data->regmap, MAX6639_REG_TEMP(attr->index), &val);
++	if (res < 0)
++		goto exit;
++
++	temp |= val << 3;
++	temp *= 125;
++
++exit:
++	mutex_unlock(&data->update_lock);
++	if (res < 0)
++		return res;
++
+ 	return sprintf(buf, "%ld\n", temp);
+ }
+ 
+ static ssize_t temp_fault_show(struct device *dev,
+ 			       struct device_attribute *dev_attr, char *buf)
+ {
+-	struct max6639_data *data = max6639_update_device(dev);
++	struct max6639_data *data = dev_get_drvdata(dev);
+ 	struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
++	unsigned int val;
++	int res;
+ 
+ 	if (IS_ERR(data))
+ 		return PTR_ERR(data);
+ 
+-	return sprintf(buf, "%d\n", data->temp_fault[attr->index]);
++	mutex_lock(&data->update_lock);
++	res = regmap_read(data->regmap, MAX6639_REG_TEMP_EXT(attr->index), &val);
++	mutex_unlock(&data->update_lock);
++
++	if (res < 0)
++		return res;
++
++	return sprintf(buf, "%d\n", val & 1);
+ }
+ 
+ static ssize_t temp_max_show(struct device *dev,
+@@ -183,8 +143,17 @@ static ssize_t temp_max_show(struct device *dev,
+ {
+ 	struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
+ 	struct max6639_data *data = dev_get_drvdata(dev);
++	unsigned int val;
++	int res;
+ 
+-	return sprintf(buf, "%d\n", (data->temp_therm[attr->index] * 1000));
++	mutex_lock(&data->update_lock);
++	res = regmap_read(data->regmap, MAX6639_REG_THERM_LIMIT(attr->index), &val);
++	mutex_unlock(&data->update_lock);
++
++	if (res < 0)
++		return res;
++
++	return sprintf(buf, "%d\n", (val * 1000));
+ }
+ 
+ static ssize_t temp_max_store(struct device *dev,
+@@ -193,7 +162,6 @@ static ssize_t temp_max_store(struct device *dev,
+ {
+ 	struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
+ 	struct max6639_data *data = dev_get_drvdata(dev);
+-	struct i2c_client *client = data->client;
+ 	unsigned long val;
+ 	int res;
+ 
+@@ -202,10 +170,8 @@ static ssize_t temp_max_store(struct device *dev,
+ 		return res;
+ 
+ 	mutex_lock(&data->update_lock);
+-	data->temp_therm[attr->index] = TEMP_LIMIT_TO_REG(val);
+-	i2c_smbus_write_byte_data(client,
+-				  MAX6639_REG_THERM_LIMIT(attr->index),
+-				  data->temp_therm[attr->index]);
++	regmap_write(data->regmap, MAX6639_REG_THERM_LIMIT(attr->index),
++		     TEMP_LIMIT_TO_REG(val));
+ 	mutex_unlock(&data->update_lock);
+ 	return count;
+ }
+@@ -215,8 +181,17 @@ static ssize_t temp_crit_show(struct device *dev,
+ {
+ 	struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
+ 	struct max6639_data *data = dev_get_drvdata(dev);
++	unsigned int val;
++	int res;
++
++	mutex_lock(&data->update_lock);
++	res = regmap_read(data->regmap, MAX6639_REG_ALERT_LIMIT(attr->index), &val);
++	mutex_unlock(&data->update_lock);
+ 
+-	return sprintf(buf, "%d\n", (data->temp_alert[attr->index] * 1000));
++	if (res < 0)
++		return res;
++
++	return sprintf(buf, "%d\n", (val * 1000));
+ }
+ 
+ static ssize_t temp_crit_store(struct device *dev,
+@@ -225,7 +200,6 @@ static ssize_t temp_crit_store(struct device *dev,
+ {
+ 	struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
+ 	struct max6639_data *data = dev_get_drvdata(dev);
+-	struct i2c_client *client = data->client;
+ 	unsigned long val;
+ 	int res;
+ 
+@@ -234,10 +208,8 @@ static ssize_t temp_crit_store(struct device *dev,
+ 		return res;
+ 
+ 	mutex_lock(&data->update_lock);
+-	data->temp_alert[attr->index] = TEMP_LIMIT_TO_REG(val);
+-	i2c_smbus_write_byte_data(client,
+-				  MAX6639_REG_ALERT_LIMIT(attr->index),
+-				  data->temp_alert[attr->index]);
++	regmap_write(data->regmap, MAX6639_REG_ALERT_LIMIT(attr->index),
++		     TEMP_LIMIT_TO_REG(val));
+ 	mutex_unlock(&data->update_lock);
+ 	return count;
+ }
+@@ -248,8 +220,17 @@ static ssize_t temp_emergency_show(struct device *dev,
+ {
+ 	struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
+ 	struct max6639_data *data = dev_get_drvdata(dev);
++	unsigned int val;
++	int res;
+ 
+-	return sprintf(buf, "%d\n", (data->temp_ot[attr->index] * 1000));
++	mutex_lock(&data->update_lock);
++	res = regmap_read(data->regmap, MAX6639_REG_OT_LIMIT(attr->index), &val);
++	mutex_unlock(&data->update_lock);
++
++	if (res < 0)
++		return res;
++
++	return sprintf(buf, "%d\n", (val * 1000));
+ }
+ 
+ static ssize_t temp_emergency_store(struct device *dev,
+@@ -258,7 +239,6 @@ static ssize_t temp_emergency_store(struct device *dev,
+ {
+ 	struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
+ 	struct max6639_data *data = dev_get_drvdata(dev);
+-	struct i2c_client *client = data->client;
+ 	unsigned long val;
+ 	int res;
+ 
+@@ -267,10 +247,7 @@ static ssize_t temp_emergency_store(struct device *dev,
+ 		return res;
+ 
+ 	mutex_lock(&data->update_lock);
+-	data->temp_ot[attr->index] = TEMP_LIMIT_TO_REG(val);
+-	i2c_smbus_write_byte_data(client,
+-				  MAX6639_REG_OT_LIMIT(attr->index),
+-				  data->temp_ot[attr->index]);
++	regmap_write(data->regmap, MAX6639_REG_OT_LIMIT(attr->index), TEMP_LIMIT_TO_REG(val));
+ 	mutex_unlock(&data->update_lock);
+ 	return count;
+ }
+@@ -290,7 +267,6 @@ static ssize_t pwm_store(struct device *dev,
+ {
+ 	struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
+ 	struct max6639_data *data = dev_get_drvdata(dev);
+-	struct i2c_client *client = data->client;
+ 	unsigned long val;
+ 	int res;
+ 
+@@ -299,12 +275,9 @@ static ssize_t pwm_store(struct device *dev,
+ 		return res;
+ 
+ 	val = clamp_val(val, 0, 255);
+-
+-	mutex_lock(&data->update_lock);
+ 	data->pwm[attr->index] = (u8)(val * 120 / 255);
+-	i2c_smbus_write_byte_data(client,
+-				  MAX6639_REG_TARGTDUTY(attr->index),
+-				  data->pwm[attr->index]);
++	mutex_lock(&data->update_lock);
++	regmap_write(data->regmap, MAX6639_REG_TARGTDUTY(attr->index), data->pwm[attr->index]);
+ 	mutex_unlock(&data->update_lock);
+ 	return count;
+ }
+@@ -312,26 +285,35 @@ static ssize_t pwm_store(struct device *dev,
+ static ssize_t fan_input_show(struct device *dev,
+ 			      struct device_attribute *dev_attr, char *buf)
+ {
+-	struct max6639_data *data = max6639_update_device(dev);
++	struct max6639_data *data = dev_get_drvdata(dev);
+ 	struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
++	unsigned int val;
++	int res;
+ 
+ 	if (IS_ERR(data))
+ 		return PTR_ERR(data);
+ 
+-	return sprintf(buf, "%d\n", FAN_FROM_REG(data->fan[attr->index],
+-		       data->rpm_range));
++	res = regmap_read(data->regmap, MAX6639_REG_FAN_CNT(attr->index), &val);
++	if (res < 0)
++		return res;
++
++	return sprintf(buf, "%d\n", FAN_FROM_REG(val, data->rpm_range));
+ }
+ 
+ static ssize_t alarm_show(struct device *dev,
+ 			  struct device_attribute *dev_attr, char *buf)
+ {
+-	struct max6639_data *data = max6639_update_device(dev);
++	struct max6639_data *data = dev_get_drvdata(dev);
+ 	struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
++	unsigned int val;
++	int res;
+ 
+ 	if (IS_ERR(data))
+ 		return PTR_ERR(data);
+ 
+-	return sprintf(buf, "%d\n", !!(data->status & (1 << attr->index)));
++	res = regmap_read(data->regmap, MAX6639_REG_STATUS, &val);
++
++	return sprintf(buf, "%d\n", !!(val & (1 << attr->index)));
+ }
+ 
+ static SENSOR_DEVICE_ATTR_RO(temp1_input, temp_input, 0);
+@@ -401,6 +383,11 @@ static int rpm_range_to_reg(int range)
+ 	return 1; /* default: 4000 RPM */
+ }
+ 
++static int max6639_set_ppr(struct max6639_data *data, u8 channel, u8 ppr)
++{
++	return regmap_write(data->regmap, MAX6639_REG_FAN_PPR(channel), ppr << 6);
++}
++
+ static int max6639_init_client(struct i2c_client *client,
+ 			       struct max6639_data *data)
+ {
+@@ -408,49 +395,43 @@ static int max6639_init_client(struct i2c_client *client,
+ 		dev_get_platdata(&client->dev);
+ 	int i;
+ 	int rpm_range = 1; /* default: 4000 RPM */
+-	int err;
++	int err, ppr;
+ 
+ 	/* Reset chip to default values, see below for GCONFIG setup */
+-	err = i2c_smbus_write_byte_data(client, MAX6639_REG_GCONFIG,
+-				  MAX6639_GCONFIG_POR);
++	err = regmap_write(data->regmap, MAX6639_REG_GCONFIG, MAX6639_GCONFIG_POR);
+ 	if (err)
+ 		goto exit;
+ 
+ 	/* Fans pulse per revolution is 2 by default */
+ 	if (max6639_info && max6639_info->ppr > 0 &&
+ 			max6639_info->ppr < 5)
+-		data->ppr = max6639_info->ppr;
++		ppr = max6639_info->ppr;
+ 	else
+-		data->ppr = 2;
+-	data->ppr -= 1;
++		ppr = 2;
++	ppr -= 1;
+ 
+ 	if (max6639_info)
+ 		rpm_range = rpm_range_to_reg(max6639_info->rpm_range);
+ 	data->rpm_range = rpm_range;
+ 
+-	for (i = 0; i < 2; i++) {
++	for (i = 0; i < MAX6639_NDEV; i++) {
+ 
+ 		/* Set Fan pulse per revolution */
+-		err = i2c_smbus_write_byte_data(client,
+-				MAX6639_REG_FAN_PPR(i),
+-				data->ppr << 6);
++		err = max6639_set_ppr(data, i, ppr);
+ 		if (err)
+ 			goto exit;
+ 
+ 		/* Fans config PWM, RPM */
+-		err = i2c_smbus_write_byte_data(client,
+-			MAX6639_REG_FAN_CONFIG1(i),
+-			MAX6639_FAN_CONFIG1_PWM | rpm_range);
++		err = regmap_write(data->regmap, MAX6639_REG_FAN_CONFIG1(i),
++				   MAX6639_FAN_CONFIG1_PWM | rpm_range);
+ 		if (err)
+ 			goto exit;
+ 
+ 		/* Fans PWM polarity high by default */
+ 		if (max6639_info && max6639_info->pwm_polarity == 0)
+-			err = i2c_smbus_write_byte_data(client,
+-				MAX6639_REG_FAN_CONFIG2a(i), 0x00);
++			err = regmap_write(data->regmap, MAX6639_REG_FAN_CONFIG2a(i), 0x00);
+ 		else
+-			err = i2c_smbus_write_byte_data(client,
+-				MAX6639_REG_FAN_CONFIG2a(i), 0x02);
++			err = regmap_write(data->regmap, MAX6639_REG_FAN_CONFIG2a(i), 0x02);
+ 		if (err)
+ 			goto exit;
+ 
+@@ -458,42 +439,31 @@ static int max6639_init_client(struct i2c_client *client,
+ 		 * /THERM full speed enable,
+ 		 * PWM frequency 25kHz, see also GCONFIG below
+ 		 */
+-		err = i2c_smbus_write_byte_data(client,
+-			MAX6639_REG_FAN_CONFIG3(i),
+-			MAX6639_FAN_CONFIG3_THERM_FULL_SPEED | 0x03);
++		err = regmap_write(data->regmap, MAX6639_REG_FAN_CONFIG3(i),
++				   MAX6639_FAN_CONFIG3_THERM_FULL_SPEED | 0x03);
+ 		if (err)
+ 			goto exit;
+ 
+ 		/* Max. temp. 80C/90C/100C */
+-		data->temp_therm[i] = 80;
+-		data->temp_alert[i] = 90;
+-		data->temp_ot[i] = 100;
+-		err = i2c_smbus_write_byte_data(client,
+-				MAX6639_REG_THERM_LIMIT(i),
+-				data->temp_therm[i]);
++		err = regmap_write(data->regmap, MAX6639_REG_THERM_LIMIT(i), 80);
+ 		if (err)
+ 			goto exit;
+-		err = i2c_smbus_write_byte_data(client,
+-				MAX6639_REG_ALERT_LIMIT(i),
+-				data->temp_alert[i]);
++		err = regmap_write(data->regmap, MAX6639_REG_ALERT_LIMIT(i), 90);
+ 		if (err)
+ 			goto exit;
+-		err = i2c_smbus_write_byte_data(client,
+-				MAX6639_REG_OT_LIMIT(i), data->temp_ot[i]);
++		err = regmap_write(data->regmap, MAX6639_REG_OT_LIMIT(i), 100);
+ 		if (err)
+ 			goto exit;
+ 
+ 		/* PWM 120/120 (i.e. 100%) */
+-		data->pwm[i] = 120;
+-		err = i2c_smbus_write_byte_data(client,
+-				MAX6639_REG_TARGTDUTY(i), data->pwm[i]);
++		err = regmap_write(data->regmap, MAX6639_REG_TARGTDUTY(i), 120);
+ 		if (err)
+ 			goto exit;
+ 	}
+ 	/* Start monitoring */
+-	err = i2c_smbus_write_byte_data(client, MAX6639_REG_GCONFIG,
+-		MAX6639_GCONFIG_DISABLE_TIMEOUT | MAX6639_GCONFIG_CH2_LOCAL |
+-		MAX6639_GCONFIG_PWM_FREQ_HI);
++	err = regmap_write(data->regmap, MAX6639_REG_GCONFIG,
++			   MAX6639_GCONFIG_DISABLE_TIMEOUT | MAX6639_GCONFIG_CH2_LOCAL |
++			   MAX6639_GCONFIG_PWM_FREQ_HI);
+ exit:
+ 	return err;
+ }
+@@ -524,6 +494,30 @@ static void max6639_regulator_disable(void *data)
+ 	regulator_disable(data);
+ }
+ 
++static bool max6639_regmap_is_volatile(struct device *dev, unsigned int reg)
++{
++	switch (reg) {
++	case MAX6639_REG_TEMP(0):
++	case MAX6639_REG_TEMP_EXT(0):
++	case MAX6639_REG_TEMP(1):
++	case MAX6639_REG_TEMP_EXT(1):
++	case MAX6639_REG_STATUS:
++	case MAX6639_REG_FAN_CNT(0):
++	case MAX6639_REG_FAN_CNT(1):
++		return true;
++	default:
++		return false;
++	}
++}
++
++static const struct regmap_config max6639_regmap_config = {
++	.reg_bits = 8,
++	.val_bits = 8,
++	.max_register = MAX6639_REG_DEVREV,
++	.cache_type = REGCACHE_MAPLE,
++	.volatile_reg = max6639_regmap_is_volatile,
++};
++
+ static int max6639_probe(struct i2c_client *client)
+ {
+ 	struct device *dev = &client->dev;
+@@ -535,7 +529,11 @@ static int max6639_probe(struct i2c_client *client)
+ 	if (!data)
+ 		return -ENOMEM;
+ 
+-	data->client = client;
++	data->regmap = devm_regmap_init_i2c(client, &max6639_regmap_config);
++	if (IS_ERR(data->regmap))
++		return dev_err_probe(dev,
++				     PTR_ERR(data->regmap),
++				     "regmap initialization failed\n");
+ 
+ 	data->reg = devm_regulator_get_optional(dev, "fan");
+ 	if (IS_ERR(data->reg)) {
+@@ -573,25 +571,24 @@ static int max6639_probe(struct i2c_client *client)
+ 
+ static int max6639_suspend(struct device *dev)
+ {
+-	struct i2c_client *client = to_i2c_client(dev);
+ 	struct max6639_data *data = dev_get_drvdata(dev);
+-	int ret = i2c_smbus_read_byte_data(client, MAX6639_REG_GCONFIG);
++	int ret, err;
+ 
+-	if (ret < 0)
+-		return ret;
++	err = regmap_read(data->regmap, MAX6639_REG_GCONFIG, &ret);
++
++	if (err < 0)
++		return err;
+ 
+ 	if (data->reg)
+ 		regulator_disable(data->reg);
+ 
+-	return i2c_smbus_write_byte_data(client,
+-			MAX6639_REG_GCONFIG, ret | MAX6639_GCONFIG_STANDBY);
++	return regmap_write(data->regmap, MAX6639_REG_GCONFIG, ret | MAX6639_GCONFIG_STANDBY);
+ }
+ 
+ static int max6639_resume(struct device *dev)
+ {
+-	struct i2c_client *client = to_i2c_client(dev);
+ 	struct max6639_data *data = dev_get_drvdata(dev);
+-	int ret;
++	int ret, err;
+ 
+ 	if (data->reg) {
+ 		ret = regulator_enable(data->reg);
+@@ -601,12 +598,11 @@ static int max6639_resume(struct device *dev)
+ 		}
+ 	}
+ 
+-	ret = i2c_smbus_read_byte_data(client, MAX6639_REG_GCONFIG);
+-	if (ret < 0)
+-		return ret;
++	err = regmap_read(data->regmap, MAX6639_REG_GCONFIG, &ret);
++	if (err < 0)
++		return err;
+ 
+-	return i2c_smbus_write_byte_data(client,
+-			MAX6639_REG_GCONFIG, ret & ~MAX6639_GCONFIG_STANDBY);
++	return regmap_write(data->regmap, MAX6639_REG_GCONFIG, ret & ~MAX6639_GCONFIG_STANDBY);
+ }
+ 
+ static const struct i2c_device_id max6639_id[] = {
 
-Unverified Error/Warning (likely false positive, please contact us if interested):
-
-drivers/virt/acrn/mm.c:217 acrn_vm_ram_map() error: uninitialized symbol 'start_pfn'.
-drivers/virt/acrn/mm.c:224 acrn_vm_ram_map() error: uninitialized symbol 'ret'.
-net/ipv6/route.c:5712 rt6_fill_node() error: we previously assumed 'dst' could be null (see line 5697)
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- arc-allmodconfig
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- arc-allyesconfig
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- arc-randconfig-r121-20240430
-|   |-- drivers-hwmon-pmbus-xdp710.c:sparse:sparse:symbol-micro_ohm_rsense-was-not-declared.-Should-it-be-static
-|   |-- fs-bcachefs-btree_cache.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-struct-task_struct-got-unsigned-long
-|   `-- fs-ext4-orphan.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-__le32-_prev_-got-unsigned-long
-|-- arc-randconfig-r122-20240430
-|   |-- block-blk-mq.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-new-got-struct-request
-|   |-- block-blk-mq.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-old-got-struct-request
-|   |-- block-blk-mq.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-struct-request-got-unsigned-long
-|   |-- drivers-dma-buf-dma-fence-chain.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-new-got-struct-dma_fence-noderef-__rcu
-|   |-- drivers-dma-buf-dma-fence-chain.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-old-got-struct-dma_fence-noderef-__rcu
-|   |-- drivers-dma-buf-dma-fence-chain.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-struct-dma_fence-noderef-__rcu-got-unsigned-long
-|   |-- drivers-nvme-target-fabrics-cmd.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-new-got-struct-nvmet_ctrl
-|   |-- drivers-nvme-target-fabrics-cmd.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-old-got-struct-nvmet_ctrl
-|   |-- drivers-nvme-target-fabrics-cmd.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-struct-nvmet_ctrl-got-unsigned-long
-|   |-- fs-btrfs-raid56.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-new-got-struct-btrfs_stripe_hash_table
-|   |-- fs-btrfs-raid56.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-old-got-struct-btrfs_stripe_hash_table
-|   |-- fs-btrfs-raid56.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-struct-btrfs_stripe_hash_table-got-unsigned-long
-|   |-- fs-crypto-hooks.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-new-got-char
-|   |-- fs-crypto-hooks.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-old-got-char
-|   |-- fs-crypto-hooks.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-char-got-unsigned-long
-|   |-- fs-crypto-keysetup.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-new-got-struct-fscrypt_inode_info
-|   |-- fs-crypto-keysetup.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-old-got-struct-fscrypt_inode_info
-|   |-- fs-crypto-keysetup.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-struct-fscrypt_inode_info-got-unsigned-long
-|   |-- fs-debugfs-file.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-new-got-void
-|   |-- fs-debugfs-file.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-old-got-void
-|   |-- fs-debugfs-file.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-void-got-unsigned-long
-|   |-- fs-ext4-orphan.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-new-got-restricted-__le32-_n_
-|   |-- fs-ext4-orphan.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-old-got-restricted-__le32-_o_
-|   |-- fs-libfs.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-new-got-struct-dentry
-|   |-- fs-libfs.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-old-got-struct-dentry
-|   |-- fs-libfs.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-struct-dentry-got-unsigned-long
-|   |-- fs-locks.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-new-got-struct-file_lock_context
-|   |-- fs-locks.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-old-got-struct-file_lock_context
-|   |-- fs-locks.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-struct-file_lock_context-got-unsigned-long
-|   |-- fs-notify-mark.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-new-got-struct-fsnotify_mark_connector-noderef-__rcu
-|   |-- fs-notify-mark.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-old-got-struct-fsnotify_mark_connector-noderef-__rcu
-|   |-- fs-notify-mark.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-struct-fsnotify_mark_connector-noderef-__rcu-got-unsigned-long
-|   |-- fs-overlayfs-readdir.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-new-got-struct-file
-|   |-- fs-overlayfs-readdir.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-old-got-struct-file
-|   |-- fs-overlayfs-readdir.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-struct-file-got-unsigned-long
-|   |-- fs-posix_acl.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-new-got-struct-posix_acl
-|   |-- fs-posix_acl.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-old-got-struct-posix_acl
-|   |-- fs-posix_acl.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-struct-posix_acl-got-unsigned-long
-|   |-- fs-super.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-new-got-struct-workqueue_struct
-|   |-- fs-super.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-old-got-struct-workqueue_struct
-|   |-- fs-super.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-struct-workqueue_struct-got-unsigned-long
-|   |-- io_uring-io_uring.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-new-got-struct-llist_node
-|   |-- io_uring-io_uring.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-old-got-struct-llist_node
-|   |-- io_uring-io_uring.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-struct-llist_node-got-unsigned-long
-|   |-- kernel-locking-osq_lock.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-struct-optimistic_spin_node-got-unsigned-long
-|   |-- kernel-sched-core.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-new-got-struct-wake_q_node
-|   |-- kernel-sched-core.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-old-got-struct-wake_q_node
-|   |-- kernel-sched-core.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-struct-wake_q_node-got-unsigned-long
-|   |-- kernel-task_work.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-new-got-struct-callback_head
-|   |-- kernel-task_work.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-old-got-struct-callback_head
-|   |-- kernel-task_work.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-struct-callback_head-got-unsigned-long
-|   |-- kernel-trace-ring_buffer.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-new-got-struct-buffer_page
-|   |-- kernel-trace-ring_buffer.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-new-got-struct-list_head
-|   |-- kernel-trace-ring_buffer.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-old-got-struct-buffer_page
-|   |-- kernel-trace-ring_buffer.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-old-got-struct-list_head
-|   |-- kernel-trace-ring_buffer.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-struct-buffer_page-got-unsigned-long
-|   |-- kernel-trace-ring_buffer.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-struct-list_head-got-unsigned-long
-|   |-- lib-generic-radix-tree.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-new-got-struct-genradix_node
-|   |-- lib-generic-radix-tree.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-new-got-struct-genradix_root
-|   |-- lib-generic-radix-tree.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-old-got-struct-genradix_node
-|   |-- lib-generic-radix-tree.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-old-got-struct-genradix_root
-|   |-- lib-generic-radix-tree.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-struct-genradix_node-got-unsigned-long
-|   |-- lib-generic-radix-tree.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-struct-genradix_root-got-unsigned-long
-|   |-- lib-llist.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-new-got-struct-llist_node
-|   |-- lib-llist.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-old-got-struct-llist_node
-|   |-- lib-llist.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-struct-llist_node-got-unsigned-long
-|   |-- lib-rhashtable.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-new-got-struct-bucket_table
-|   |-- lib-rhashtable.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-new-got-union-nested_table
-|   |-- lib-rhashtable.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-old-got-struct-bucket_table
-|   |-- lib-rhashtable.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-old-got-union-nested_table
-|   |-- lib-rhashtable.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-struct-bucket_table-got-unsigned-long
-|   |-- lib-rhashtable.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-union-nested_table-got-unsigned-long
-|   |-- mm-huge_memory.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-new-got-struct-folio
-|   |-- mm-huge_memory.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-old-got-struct-folio
-|   |-- mm-huge_memory.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-struct-folio-got-unsigned-long
-|   |-- mm-memcontrol.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-struct-mem_cgroup-got-unsigned-long
-|   |-- mm-memcontrol.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-struct-obj_cgroup-got-unsigned-long
-|   |-- mm-oom_kill.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-new-got-struct-mm_struct
-|   |-- mm-oom_kill.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-usertype-old-got-struct-mm_struct
-|   `-- mm-oom_kill.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-struct-mm_struct-got-unsigned-long
-|-- arm-allmodconfig
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- arm-allyesconfig
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- arm64-defconfig
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- csky-allmodconfig
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- csky-allyesconfig
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- csky-randconfig-r053-20240430
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- i386-allmodconfig
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- i386-allyesconfig
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- i386-buildonly-randconfig-003-20240430
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- i386-randconfig-003-20240430
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- i386-randconfig-005-20240430
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- i386-randconfig-053-20240430
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- i386-randconfig-062-20240430
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- loongarch-allmodconfig
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- m68k-allmodconfig
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- m68k-allyesconfig
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- m68k-randconfig-r133-20240430
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- microblaze-allmodconfig
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- microblaze-allyesconfig
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- mips-allyesconfig
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- mips-ip27_defconfig
-|   `-- arch-mips-sgi-ip27-ip27-irq.c:warning:unused-variable-i
-|-- nios2-allmodconfig
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- nios2-allyesconfig
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- openrisc-allyesconfig
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- parisc-allmodconfig
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- parisc-allyesconfig
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- parisc-randconfig-r063-20240430
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- powerpc-allmodconfig
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- powerpc-randconfig-002-20240430
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-calcs-dcn_calc_auto.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-calcs-dcn_calc_math.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-calcs-dcn_calcs.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-dcn20-dcn20_fpu.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-dcn20-display_mode_vba_20.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-dcn20-display_mode_vba_20v2.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-dcn20-display_rq_dlg_calc_20.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-dcn20-display_rq_dlg_calc_20v2.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-dcn21-display_mode_vba_21.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-dcn21-display_rq_dlg_calc_21.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-dcn30-dcn30_fpu.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-dcn30-display_mode_vba_30.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-dcn30-display_rq_dlg_calc_30.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-dcn301-dcn301_fpu.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-dcn302-dcn302_fpu.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-dcn303-dcn303_fpu.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-dcn31-dcn31_fpu.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-dcn31-display_mode_vba_31.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-dcn31-display_rq_dlg_calc_31.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-dcn314-dcn314_fpu.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-dcn314-display_mode_vba_314.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-dcn314-display_rq_dlg_calc_314.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-dcn32-dcn32_fpu.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-dcn32-display_mode_vba_32.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-dcn32-display_mode_vba_util_32.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-dcn32-display_rq_dlg_calc_32.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-dcn321-dcn321_fpu.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-dcn35-dcn35_fpu.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-dcn351-dcn351_fpu.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-dcn401-dcn401_fpu.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-display_mode_vba.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-dml1_display_rq_dlg_calc.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml-dsc-rc_calc_fpu.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml2-display_mode_core.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml2-display_mode_util.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml2-dml21-dml21_translation_helper.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml2-dml21-dml21_utils.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml2-dml21-src-dml2_core-dml2_core_dcn4.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml2-dml21-src-dml2_core-dml2_core_dcn4_calcs.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml2-dml21-src-dml2_core-dml2_core_shared.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml2-dml21-src-dml2_dpmm-dml2_dpmm_dcn4.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml2-dml21-src-dml2_mcg-dml2_mcg_dcn4.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml2-dml21-src-dml2_pmo-dml2_pmo_dcn3.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml2-dml21-src-dml2_pmo-dml2_pmo_dcn4.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml2-dml21-src-dml2_pmo-dml2_pmo_dcn4_fams2.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml2-dml21-src-dml2_standalone_libraries-lib_float_math.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml2-dml21-src-dml2_top-dml_top_mcache.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml2-dml2_mall_phantom.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml2-dml2_policy.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml2-dml2_translation_helper.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml2-dml2_utils.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   |-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml2-dml2_wrapper.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|   `-- powerpc-linux-ld:drivers-gpu-drm-amd-display-dc-dml2-dml_display_rq_dlg_calc.o-uses-hard-float-arch-powerpc-kernel-udbg.o-uses-soft-float
-|-- powerpc-randconfig-r061-20240430
-|   `-- ERROR:drm_dsc_pps_payload_pack-drivers-gpu-drm-panel-panel-lg-sw43408.ko-undefined
-|-- riscv-randconfig-001-20240430
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- s390-allyesconfig
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- sparc-allmodconfig
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- sparc-randconfig-002-20240430
-|   `-- (.head.text):relocation-truncated-to-fit:R_SPARC_WDISP22-against-init.text
-|-- sparc-randconfig-r113-20240430
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- sparc64-allmodconfig
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- sparc64-allyesconfig
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- sparc64-randconfig-001-20240430
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- sparc64-randconfig-r131-20240430
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- um-allyesconfig
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- x86_64-randconfig-004-20240430
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- x86_64-randconfig-005-20240430
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-`-- xtensa-randconfig-001-20240430
-    `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-clang_recent_errors
-|-- arm-defconfig
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- arm-randconfig-002-20240430
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- arm-randconfig-003-20240430
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- arm64-allmodconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_drv.c:error:bitwise-operation-between-different-enumeration-types-(-enum-amd_asic_type-and-enum-amd_chip_flags-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_ras.c:error:arithmetic-between-different-enumeration-types-(-enum-amdgpu_ras_block-and-enum-amdgpu_ras_mca_block-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-drm_mm.c:error:unused-function-drm_mm_interval_tree_insert-Werror-Wunused-function
-|   |-- drivers-gpu-drm-drm_mm.c:error:unused-function-drm_mm_interval_tree_iter_next-Werror-Wunused-function
-|   |-- drivers-gpu-drm-i915-display-intel_cursor.c:error:arithmetic-between-different-enumeration-types-(-enum-pipe-and-enum-intel_display_power_domain-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_ddi.c:error:arithmetic-between-different-enumeration-types-(-enum-transcoder-and-enum-intel_display_power_domain-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_display.c:error:arithmetic-between-different-enumeration-types-(-enum-phy-and-enum-port-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_display.c:error:arithmetic-between-different-enumeration-types-(-enum-transcoder-and-enum-intel_display_power_domain-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_display_irq.c:error:arithmetic-between-different-enumeration-types-(-enum-pipe-and-enum-intel_display_power_domain-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_display_irq.c:error:arithmetic-between-different-enumeration-types-(-enum-transcoder-and-enum-intel_display_power_domain-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_dpll_mgr.c:error:arithmetic-between-different-enumeration-types-(-enum-tc_port-and-enum-intel_dpll_id-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_hotplug.c:error:arithmetic-between-different-enumeration-types-(-enum-hpd_pin-and-enum-port-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_pipe_crc.c:error:arithmetic-between-different-enumeration-types-(-enum-pipe-and-enum-intel_display_power_domain-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_tc.c:error:arithmetic-between-different-enumeration-types-(-enum-intel_display_power_domain-and-enum-tc_port-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_vdsc.c:error:arithmetic-between-different-enumeration-types-(-enum-pipe-and-enum-intel_display_power_domain-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-skl_universal_plane.c:error:arithmetic-between-different-enumeration-types-(-enum-pipe-and-enum-intel_display_power_domain-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-skl_watermark.c:error:arithmetic-between-different-enumeration-types-(-enum-pipe-and-enum-intel_display_power_domain-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-pl111-pl111_versatile.c:error:cast-to-smaller-integer-type-enum-versatile_clcd-from-const-void-Werror-Wvoid-pointer-to-enum-cast
-|   |-- drivers-gpu-drm-radeon-radeon_drv.c:error:bitwise-operation-between-different-enumeration-types-(-enum-radeon_family-and-enum-radeon_chip_flags-)-Werror-Wenum-enum-conversion
-|   |-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|   |-- include-linux-vmstat.h:error:arithmetic-between-different-enumeration-types-(-enum-node_stat_item-and-enum-lru_list-)-Werror-Wenum-enum-conversion
-|   `-- include-linux-vmstat.h:error:arithmetic-between-different-enumeration-types-(-enum-zone_stat_item-and-enum-numa_stat_item-)-Werror-Wenum-enum-conversion
-|-- hexagon-allmodconfig
-|   |-- drivers-gpu-drm-drm_mm.c:error:unused-function-drm_mm_interval_tree_insert-Werror-Wunused-function
-|   |-- drivers-gpu-drm-drm_mm.c:error:unused-function-drm_mm_interval_tree_iter_next-Werror-Wunused-function
-|   |-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|   |-- include-asm-generic-io.h:error:performing-pointer-arithmetic-on-a-null-pointer-has-undefined-behavior-Werror-Wnull-pointer-arithmetic
-|   `-- include-linux-vmstat.h:error:arithmetic-between-different-enumeration-types-(-enum-node_stat_item-and-enum-lru_list-)-Werror-Wenum-enum-conversion
-|-- hexagon-allyesconfig
-|   |-- drivers-gpu-drm-drm_mm.c:error:unused-function-drm_mm_interval_tree_insert-Werror-Wunused-function
-|   |-- drivers-gpu-drm-drm_mm.c:error:unused-function-drm_mm_interval_tree_iter_next-Werror-Wunused-function
-|   |-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|   |-- include-asm-generic-io.h:error:performing-pointer-arithmetic-on-a-null-pointer-has-undefined-behavior-Werror-Wnull-pointer-arithmetic
-|   `-- include-linux-vmstat.h:error:arithmetic-between-different-enumeration-types-(-enum-node_stat_item-and-enum-lru_list-)-Werror-Wenum-enum-conversion
-|-- i386-buildonly-randconfig-002-20240430
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- i386-randconfig-001-20240430
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- i386-randconfig-054-20240430
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- powerpc-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_drv.c:error:bitwise-operation-between-different-enumeration-types-(-enum-amd_asic_type-and-enum-amd_chip_flags-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_ras.c:error:arithmetic-between-different-enumeration-types-(-enum-amdgpu_ras_block-and-enum-amdgpu_ras_mca_block-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-drm_mm.c:error:unused-function-drm_mm_interval_tree_insert-Werror-Wunused-function
-|   |-- drivers-gpu-drm-drm_mm.c:error:unused-function-drm_mm_interval_tree_iter_next-Werror-Wunused-function
-|   |-- drivers-gpu-drm-pl111-pl111_versatile.c:error:cast-to-smaller-integer-type-enum-versatile_clcd-from-const-void-Werror-Wvoid-pointer-to-enum-cast
-|   |-- drivers-gpu-drm-radeon-radeon_drv.c:error:bitwise-operation-between-different-enumeration-types-(-enum-radeon_family-and-enum-radeon_chip_flags-)-Werror-Wenum-enum-conversion
-|   |-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|   |-- include-linux-vmstat.h:error:arithmetic-between-different-enumeration-types-(-enum-node_stat_item-and-enum-lru_list-)-Werror-Wenum-enum-conversion
-|   `-- include-linux-vmstat.h:error:arithmetic-between-different-enumeration-types-(-enum-zone_stat_item-and-enum-numa_stat_item-)-Werror-Wenum-enum-conversion
-|-- powerpc-randconfig-003-20240430
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- powerpc64-randconfig-001-20240430
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- powerpc64-randconfig-003-20240430
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- riscv-allmodconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dml2-dml21-src-dml2_dpmm-dml2_dpmm_dcn4.c:error:arithmetic-between-enumeration-type-enum-dentist_divider_range-and-floating-point-type-double-Werror-Wenum-floa
-|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_drv.c:error:bitwise-operation-between-different-enumeration-types-(-enum-amd_asic_type-and-enum-amd_chip_flags-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_ras.c:error:arithmetic-between-different-enumeration-types-(-enum-amdgpu_ras_block-and-enum-amdgpu_ras_mca_block-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-drm_mm.c:error:unused-function-drm_mm_interval_tree_insert-Werror-Wunused-function
-|   |-- drivers-gpu-drm-drm_mm.c:error:unused-function-drm_mm_interval_tree_iter_next-Werror-Wunused-function
-|   |-- drivers-gpu-drm-i915-display-intel_cursor.c:error:arithmetic-between-different-enumeration-types-(-enum-pipe-and-enum-intel_display_power_domain-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_ddi.c:error:arithmetic-between-different-enumeration-types-(-enum-transcoder-and-enum-intel_display_power_domain-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_display.c:error:arithmetic-between-different-enumeration-types-(-enum-phy-and-enum-port-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_display.c:error:arithmetic-between-different-enumeration-types-(-enum-transcoder-and-enum-intel_display_power_domain-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_display_irq.c:error:arithmetic-between-different-enumeration-types-(-enum-pipe-and-enum-intel_display_power_domain-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_display_irq.c:error:arithmetic-between-different-enumeration-types-(-enum-transcoder-and-enum-intel_display_power_domain-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_dpll_mgr.c:error:arithmetic-between-different-enumeration-types-(-enum-tc_port-and-enum-intel_dpll_id-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_hotplug.c:error:arithmetic-between-different-enumeration-types-(-enum-hpd_pin-and-enum-port-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_pipe_crc.c:error:arithmetic-between-different-enumeration-types-(-enum-pipe-and-enum-intel_display_power_domain-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_tc.c:error:arithmetic-between-different-enumeration-types-(-enum-intel_display_power_domain-and-enum-tc_port-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_vdsc.c:error:arithmetic-between-different-enumeration-types-(-enum-pipe-and-enum-intel_display_power_domain-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-skl_universal_plane.c:error:arithmetic-between-different-enumeration-types-(-enum-pipe-and-enum-intel_display_power_domain-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-skl_watermark.c:error:arithmetic-between-different-enumeration-types-(-enum-pipe-and-enum-intel_display_power_domain-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-pl111-pl111_versatile.c:error:cast-to-smaller-integer-type-enum-versatile_clcd-from-const-void-Werror-Wvoid-pointer-to-enum-cast
-|   |-- drivers-gpu-drm-radeon-radeon_drv.c:error:bitwise-operation-between-different-enumeration-types-(-enum-radeon_family-and-enum-radeon_chip_flags-)-Werror-Wenum-enum-conversion
-|   |-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|   |-- include-linux-vmstat.h:error:arithmetic-between-different-enumeration-types-(-enum-node_stat_item-and-enum-lru_list-)-Werror-Wenum-enum-conversion
-|   `-- include-linux-vmstat.h:error:arithmetic-between-different-enumeration-types-(-enum-zone_stat_item-and-enum-numa_stat_item-)-Werror-Wenum-enum-conversion
-|-- riscv-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dml2-dml21-src-dml2_dpmm-dml2_dpmm_dcn4.c:error:arithmetic-between-enumeration-type-enum-dentist_divider_range-and-floating-point-type-double-Werror-Wenum-floa
-|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_drv.c:error:bitwise-operation-between-different-enumeration-types-(-enum-amd_asic_type-and-enum-amd_chip_flags-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_ras.c:error:arithmetic-between-different-enumeration-types-(-enum-amdgpu_ras_block-and-enum-amdgpu_ras_mca_block-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-drm_mm.c:error:unused-function-drm_mm_interval_tree_insert-Werror-Wunused-function
-|   |-- drivers-gpu-drm-drm_mm.c:error:unused-function-drm_mm_interval_tree_iter_next-Werror-Wunused-function
-|   |-- drivers-gpu-drm-pl111-pl111_versatile.c:error:cast-to-smaller-integer-type-enum-versatile_clcd-from-const-void-Werror-Wvoid-pointer-to-enum-cast
-|   |-- drivers-gpu-drm-radeon-radeon_drv.c:error:bitwise-operation-between-different-enumeration-types-(-enum-radeon_family-and-enum-radeon_chip_flags-)-Werror-Wenum-enum-conversion
-|   |-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|   |-- include-linux-vmstat.h:error:arithmetic-between-different-enumeration-types-(-enum-node_stat_item-and-enum-lru_list-)-Werror-Wenum-enum-conversion
-|   `-- include-linux-vmstat.h:error:arithmetic-between-different-enumeration-types-(-enum-zone_stat_item-and-enum-numa_stat_item-)-Werror-Wenum-enum-conversion
-|-- s390-allmodconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_drv.c:error:bitwise-operation-between-different-enumeration-types-(-enum-amd_asic_type-and-enum-amd_chip_flags-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_ras.c:error:arithmetic-between-different-enumeration-types-(-enum-amdgpu_ras_block-and-enum-amdgpu_ras_mca_block-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_cursor.c:error:arithmetic-between-different-enumeration-types-(-enum-pipe-and-enum-intel_display_power_domain-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_ddi.c:error:arithmetic-between-different-enumeration-types-(-enum-transcoder-and-enum-intel_display_power_domain-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_display.c:error:arithmetic-between-different-enumeration-types-(-enum-phy-and-enum-port-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_display.c:error:arithmetic-between-different-enumeration-types-(-enum-transcoder-and-enum-intel_display_power_domain-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_display_irq.c:error:arithmetic-between-different-enumeration-types-(-enum-pipe-and-enum-intel_display_power_domain-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_display_irq.c:error:arithmetic-between-different-enumeration-types-(-enum-transcoder-and-enum-intel_display_power_domain-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_dpll_mgr.c:error:arithmetic-between-different-enumeration-types-(-enum-tc_port-and-enum-intel_dpll_id-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_hotplug.c:error:arithmetic-between-different-enumeration-types-(-enum-hpd_pin-and-enum-port-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_pipe_crc.c:error:arithmetic-between-different-enumeration-types-(-enum-pipe-and-enum-intel_display_power_domain-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_tc.c:error:arithmetic-between-different-enumeration-types-(-enum-intel_display_power_domain-and-enum-tc_port-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_vdsc.c:error:arithmetic-between-different-enumeration-types-(-enum-pipe-and-enum-intel_display_power_domain-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-skl_universal_plane.c:error:arithmetic-between-different-enumeration-types-(-enum-pipe-and-enum-intel_display_power_domain-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-skl_watermark.c:error:arithmetic-between-different-enumeration-types-(-enum-pipe-and-enum-intel_display_power_domain-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-pl111-pl111_versatile.c:error:cast-to-smaller-integer-type-enum-versatile_clcd-from-const-void-Werror-Wvoid-pointer-to-enum-cast
-|   |-- drivers-gpu-drm-radeon-radeon_drv.c:error:bitwise-operation-between-different-enumeration-types-(-enum-radeon_family-and-enum-radeon_chip_flags-)-Werror-Wenum-enum-conversion
-|   |-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|   |-- include-asm-generic-io.h:error:performing-pointer-arithmetic-on-a-null-pointer-has-undefined-behavior-Werror-Wnull-pointer-arithmetic
-|   |-- include-linux-vmstat.h:error:arithmetic-between-different-enumeration-types-(-enum-node_stat_item-and-enum-lru_list-)-Werror-Wenum-enum-conversion
-|   `-- include-linux-vmstat.h:error:arithmetic-between-different-enumeration-types-(-enum-zone_stat_item-and-enum-numa_stat_item-)-Werror-Wenum-enum-conversion
-|-- x86_64-allnoconfig
-|   |-- Warning:MAINTAINERS-references-a-file-that-doesn-t-exist:Documentation-devicetree-bindings-display-exynos
-|   |-- Warning:MAINTAINERS-references-a-file-that-doesn-t-exist:Documentation-devicetree-bindings-reserved-memory-qcom
-|   `-- net-ipv6-udp.c:trace-events-udp.h-is-included-more-than-once.
-|-- x86_64-allyesconfig
-|   |-- drivers-gpu-drm-drm_mm.c:error:unused-function-drm_mm_interval_tree_insert-Werror-Wunused-function
-|   |-- drivers-gpu-drm-drm_mm.c:error:unused-function-drm_mm_interval_tree_iter_next-Werror-Wunused-function
-|   |-- drivers-gpu-drm-pl111-pl111_versatile.c:error:cast-to-smaller-integer-type-enum-versatile_clcd-from-const-void-Werror-Wvoid-pointer-to-enum-cast
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- x86_64-buildonly-randconfig-006-20240430
-|   |-- drivers-iommu-amd-pasid.c:error:call-to-undeclared-function-mmu_notifier_register-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|   `-- drivers-iommu-amd-pasid.c:error:call-to-undeclared-function-mmu_notifier_unregister-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- x86_64-randconfig-001-20240430
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- x86_64-randconfig-002-20240430
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- x86_64-randconfig-012-20240430
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- x86_64-randconfig-014-20240430
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- x86_64-randconfig-101-20240430
-|   `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-|-- x86_64-randconfig-161-20240430
-|   |-- drivers-virt-acrn-mm.c-acrn_vm_ram_map()-error:uninitialized-symbol-ret-.
-|   |-- drivers-virt-acrn-mm.c-acrn_vm_ram_map()-error:uninitialized-symbol-start_pfn-.
-|   `-- net-ipv6-route.c-rt6_fill_node()-error:we-previously-assumed-dst-could-be-null-(see-line-)
-`-- x86_64-randconfig-r123-20240430
-    `-- drivers-usb-dwc3-core.c:warning:variable-hw_mode-set-but-not-used
-
-elapsed time: 751m
-
-configs tested: 170
-configs skipped: 4
-
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                     haps_hs_smp_defconfig   gcc  
-arc                        nsim_700_defconfig   gcc  
-arc                   randconfig-001-20240430   gcc  
-arc                   randconfig-002-20240430   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                       imx_v6_v7_defconfig   clang
-arm                            mmp2_defconfig   gcc  
-arm                       multi_v4t_defconfig   clang
-arm                        mvebu_v5_defconfig   gcc  
-arm                   randconfig-001-20240430   clang
-arm                   randconfig-002-20240430   clang
-arm                   randconfig-003-20240430   clang
-arm                   randconfig-004-20240430   clang
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240430   clang
-arm64                 randconfig-002-20240430   gcc  
-arm64                 randconfig-003-20240430   clang
-arm64                 randconfig-004-20240430   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240430   gcc  
-csky                  randconfig-002-20240430   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-002-20240430   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240430   gcc  
-i386         buildonly-randconfig-002-20240430   clang
-i386         buildonly-randconfig-003-20240430   gcc  
-i386         buildonly-randconfig-004-20240430   clang
-i386         buildonly-randconfig-005-20240430   clang
-i386         buildonly-randconfig-006-20240430   gcc  
-i386                                defconfig   clang
-i386                  randconfig-001-20240430   clang
-i386                  randconfig-002-20240430   gcc  
-i386                  randconfig-003-20240430   gcc  
-i386                  randconfig-004-20240430   gcc  
-i386                  randconfig-005-20240430   gcc  
-i386                  randconfig-006-20240430   gcc  
-i386                  randconfig-011-20240430   gcc  
-i386                  randconfig-012-20240430   clang
-i386                  randconfig-013-20240430   clang
-i386                  randconfig-014-20240430   gcc  
-i386                  randconfig-015-20240430   gcc  
-i386                  randconfig-016-20240430   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240430   gcc  
-loongarch             randconfig-002-20240430   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                           ip27_defconfig   gcc  
-mips                      malta_kvm_defconfig   gcc  
-mips                malta_qemu_32r6_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240430   gcc  
-nios2                 randconfig-002-20240430   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240430   gcc  
-parisc                randconfig-002-20240430   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                      bamboo_defconfig   clang
-powerpc                      chrp32_defconfig   clang
-powerpc                        icon_defconfig   gcc  
-powerpc                     ksi8560_defconfig   gcc  
-powerpc                   microwatt_defconfig   gcc  
-powerpc                       ppc64_defconfig   clang
-powerpc               randconfig-001-20240430   gcc  
-powerpc               randconfig-002-20240430   gcc  
-powerpc               randconfig-003-20240430   clang
-powerpc64                        alldefconfig   clang
-powerpc64             randconfig-001-20240430   clang
-powerpc64             randconfig-002-20240430   clang
-powerpc64             randconfig-003-20240430   clang
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-riscv                 randconfig-001-20240430   gcc  
-riscv                 randconfig-002-20240430   clang
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-s390                  randconfig-001-20240430   gcc  
-s390                  randconfig-002-20240430   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                    randconfig-001-20240430   gcc  
-sh                    randconfig-002-20240430   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240430   gcc  
-sparc64               randconfig-002-20240430   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20240430   clang
-um                    randconfig-002-20240430   clang
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240430   gcc  
-x86_64       buildonly-randconfig-002-20240430   clang
-x86_64       buildonly-randconfig-003-20240430   clang
-x86_64       buildonly-randconfig-004-20240430   clang
-x86_64       buildonly-randconfig-005-20240430   clang
-x86_64       buildonly-randconfig-006-20240430   clang
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240430   clang
-x86_64                randconfig-002-20240430   clang
-x86_64                randconfig-003-20240430   gcc  
-x86_64                randconfig-004-20240430   gcc  
-x86_64                randconfig-005-20240430   gcc  
-x86_64                randconfig-006-20240430   clang
-x86_64                randconfig-012-20240430   clang
-x86_64                randconfig-013-20240430   gcc  
-x86_64                randconfig-014-20240430   clang
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
-xtensa                randconfig-001-20240430   gcc  
-xtensa                randconfig-002-20240430   gcc  
-xtensa                         virt_defconfig   gcc  
-
+base-commit: 8b3aa2c488653fa1e127cf6e11499a8cbbaccad0
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.42.0
+
