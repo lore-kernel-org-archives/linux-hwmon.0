@@ -1,61 +1,61 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47BDD1527AF
-	for <linux-hwmon@vger.kernel.org>; Tue, 30 Apr 2024 15:37:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D906176FAC
+	for <linux-hwmon@vger.kernel.org>; Tue, 30 Apr 2024 15:51:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714491448; cv=none; b=TPV+Xj3L7vBvSbY67BARHByImxyJGL6X1eT3reG8RHFw5zg0Y/+YaSpVfAYjtfQCpUbhrIt/3/TPDtDOllvxumrDVYDvwokroEGE19iYjMkSepVrvq2ZxlgQ5WRSo2E2vsdzNKX+TENUsVYl+5nMaLLdwaD1lfek4HlYwbtz7I4=
+	t=1714492318; cv=none; b=bkxvdgxCOD7zYWLE0lgGpksCvw6waCukaV9YTICBpAoY6RN3l4u5jSE3lOc5cuYvEjK73U8+4hueAfoyEhn9ii2mApB2fPz1OQXlRs2XNfylo++NMgVYgmI/vHCDPzfjWCiSlmyapkTb710rH/zHiLUrBpjhwvWM2Z5649LOums=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714491448; c=relaxed/simple;
-	bh=Gm41uuNRA5c2qxZcuRUmOTrsZXk3JeH1WftTKWlTxVg=;
+	s=arc-20240116; t=1714492318; c=relaxed/simple;
+	bh=HYejc/KrKD5IprQ8OkvCAEOUSU5XG0B/gPEdgL6V0n8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rY7pCdF9MpTAykrGRreKWrh+iptCKIQiIPO0EvNIa5DtjesQ7uQEzzeLqJJG4F+5xZrRDpP4U3kaHjiAS92bDD0FA1DsyaMA7170zRRGQGcuM6CPn/z1Au8I71x1Wx9LPi5dKve0eDfpR1svOnN7QnCpxxUYIH0Mn2LmXfEzsx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I2ElEb+1; arc=none smtp.client-ip=209.85.210.181
+	 In-Reply-To:Content-Type; b=Bs5+T6FWjVXFjU+/+2Nr6muDt15HbwZBmngGNUkCAzjzZqZOVWPJNNFflrikd97JzCCIBzeYQ1F0VKobJq2REW/89oOpYBbdZdPIJoEh0Zc/WOEcXS5sDjBMuuHalGdkj5dK/IOp7/6nfVk61NT6expxGn8/BSRe7HvDvyw/Yp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hBsD8lWw; arc=none smtp.client-ip=209.85.160.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I2ElEb+1"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6f4178aec15so540143b3a.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 30 Apr 2024 08:37:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hBsD8lWw"
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-22ed075a629so2201134fac.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 30 Apr 2024 08:51:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714491445; x=1715096245; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1714492315; x=1715097115; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=lHMj/wmLnfuWHyuHkEMKTw16618M3YUTWgM/+BYtmJU=;
-        b=I2ElEb+1RpFfoCh55Bngk1eXMSOX5HRJWC+XB6XORIl/51/psrAKvR4XgIvHZkAXgO
-         3jsoOus7qrPg5ooaukifrSGWL+eOrYVP44aoYPTDS9AqG5k478EMZmV+9hzSsI3bDJid
-         r0wu1mVO+C/VZbMB1pLjgoFbUFawviceqcjWCeFmFpcRObocHh3HKJvuQPVPC+HXz+W0
-         vOgR4auma9U0mjoZvpexnPiLnVk1v3RlEaVPoyHRHVY6aRYsgEO7I9ltBI2a6mvcqKSL
-         cYRVFelscnPF9XihHi3vB62BYnhGSl0NZifXda3iQwD3bXiwIYMKJln1VXkpjo+Msuq+
-         qt1Q==
+        bh=2LFfqfkjvcSMUlwrxDJZDKzB25ALWVjQtVe7zcCyKic=;
+        b=hBsD8lWw5oFjBUGoOrUJCAlY1rr9QZ+4eQ1zqXacXmp25B/zOgxNlmuAFWdlq/sP3R
+         /red8Yw/vnUdnNv9TBU/CVNxaHg/Bt8CmXQwf+cEOCrIJDb9Lp7JEyBroTYuenkY2ZK9
+         hRrQ1s13uEUpNDMe8WHkqlSbPxc7vi0KhPMlABzyUkVuADImuxOdeZJIBe0MkuiTgNKe
+         iYIkWsUkq+5LdaH9e/uAaVVreTEWZJUZRpBADR/WXc+BR1XyfYOUYWnmoDo3S+H5FiX8
+         EalOS+iWGfBDB7IPlvm7NUkb4MoICBKGcUyacGpYnArXCj4sa1LeCzeZ21wiGr7Tsg1O
+         xOFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714491445; x=1715096245;
+        d=1e100.net; s=20230601; t=1714492315; x=1715097115;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lHMj/wmLnfuWHyuHkEMKTw16618M3YUTWgM/+BYtmJU=;
-        b=UPSCbhBKHd8vKMSgT8zfnWuGLgxQXW4xd7t7JxUlI7TuzewgZCy2HVe6OL77V6j1HH
-         u0ye1yInSij0rBatzNz+PUdTosvNm4433Ayy05KiH0eZLQ+dZpNneJ5PNBtXgRCehOip
-         EeMwGqPOeQA8XFMlhbIUiGHoan1JixeYHRWAOJfIf/Jd3Lqxo07ReIjE+dR1iDEvPu5T
-         YSK1kumi0BMXgXUKbjN7ZKR2L5dXxh7xW9v21ZvBjzOxaFCiGtBHs4I0sf3fcXnvayKv
-         4URE9kHRNyKLcyFoIyhOmHqEe2+qS0O2D4Iq1IsasZlqmvkwU8jHyU1/xWW5VtSe7xeK
-         cRTg==
-X-Forwarded-Encrypted: i=1; AJvYcCVXW3CyFijWK4L7lfyk7T4WZoZrWHnYAqa5sC9gK96YX5ZteYbD7MgEhC6jSfPtVvt4dNjXhVxCh2lDGYn/U680d0SYeYzSPVHfxFQ=
-X-Gm-Message-State: AOJu0YwsPyE1k3xbfLGV86AbW8hgrxWWj3V9+GqQ8FgTbAGNg78AYp+I
-	cidU3g78ieHajfZt1OzmU4mEH0g3fiO4ozw/Sax8eU5ldtx5Cnm5
-X-Google-Smtp-Source: AGHT+IEx2K0nCcXFo29vBRtWocWatBiUBeO/oab4mRIneFf7/HS/il2e6knZoYHVPa/8wl9o5pd6/g==
-X-Received: by 2002:a05:6a20:b811:b0:1aa:6a28:cf6e with SMTP id fi17-20020a056a20b81100b001aa6a28cf6emr154911pzb.48.1714491443415;
-        Tue, 30 Apr 2024 08:37:23 -0700 (PDT)
+        bh=2LFfqfkjvcSMUlwrxDJZDKzB25ALWVjQtVe7zcCyKic=;
+        b=CymK/xcIjE5VVevVhhOQ3PJcg1MQNQJ3gbmsQPtIYV9RZpWjurbMaiuvPNFKnyUPuY
+         P1M4KUuU3Xex1MG0sFYSLz1SKR4dGAHLlR9WfhRuitlKGt4uZ/ogQ9rIq364QEmFgtge
+         cwv72h0z0bK84iikoEjTVoNcztObslAGElKQ24saOhpHXHdDB0RRgtBpksv7A+CdU+SC
+         tSMPwrzyMVkKzsjaSGV/sDbrPhe1cp7cnqvmfe3Gz8AAsyK5JPHRPOWSSIllqQk7O9+f
+         d/mSwnlvTJoRn5d3881+0IjFYLwslrbbnIRh4Ez8EVFVCW50QGaj7L2clr3vPXi6703d
+         vfcg==
+X-Forwarded-Encrypted: i=1; AJvYcCXaVC/aLb6OVejmv3G+yWl7cgVar7RL77AacAWQp2dBvgijHAFJ1VXBFJdRL/SDwwc5xag7e/zvi7DpNyiDjd8OjS9iBhvdPScQILY=
+X-Gm-Message-State: AOJu0YyKBC9N6qEcVvY5zszNUWAGR+Vz/uQnqGj9DoNECbiiDugc5zr8
+	XUdsHics95XXuUUcT/jA3dkAi0ZJypwTnGMxPDxqq8y/4LVdicuS
+X-Google-Smtp-Source: AGHT+IG9aWIYk3zhFevZ97+o5p/zSn5c5QWqi82HyNrRsMvXzP+vljfYxkp/o3QIAvKt+ea+oersTw==
+X-Received: by 2002:a05:6870:350b:b0:222:a91e:cc1d with SMTP id k11-20020a056870350b00b00222a91ecc1dmr16608407oah.4.1714492315022;
+        Tue, 30 Apr 2024 08:51:55 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y26-20020aa7805a000000b006ea9108ec12sm577823pfm.115.2024.04.30.08.37.21
+        by smtp.gmail.com with ESMTPSA id 17-20020a056a00073100b006eadc87233dsm21217136pfm.165.2024.04.30.08.51.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Apr 2024 08:37:22 -0700 (PDT)
+        Tue, 30 Apr 2024 08:51:54 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <372d0822-2aff-4663-998a-31cd1db4ab4b@roeck-us.net>
-Date: Tue, 30 Apr 2024 08:37:20 -0700
+Message-ID: <1c2cc415-8dd5-4aa9-afbf-45e20d5295a3@roeck-us.net>
+Date: Tue, 30 Apr 2024 08:51:53 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,14 +63,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: (emc1403) Decode fractional temperatures.
+Subject: Re: [PATCH] hwmon: (emc1403) Add support for EMC1438.
 To: Lars Petter Mostad <larspm@gmail.com>
 Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
  Lars Petter Mostad <lars.petter.mostad@appear.net>
-References: <20240426141322.609642-1-lars.petter.mostad@appear.net>
- <56b04367-8b5a-4c73-a741-729c55daf83e@roeck-us.net>
- <558708ed-4a26-44bb-85f7-eb2f2ac943be@roeck-us.net>
- <CAC-Dm243rwTcRS2_p989yUoFUjDoR4p9NGE-8WwwmaA6=Ko+4w@mail.gmail.com>
+References: <20240426140937.609172-1-lars.petter.mostad@appear.net>
+ <6ea4da26-e20c-45f5-a0b4-85773ae178fa@roeck-us.net>
+ <CAC-Dm27uxQR1k0bbpCDNQLiWum8d4B-3xgFqRgSOHYnUhuovxw@mail.gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -116,89 +115,58 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <CAC-Dm243rwTcRS2_p989yUoFUjDoR4p9NGE-8WwwmaA6=Ko+4w@mail.gmail.com>
+In-Reply-To: <CAC-Dm27uxQR1k0bbpCDNQLiWum8d4B-3xgFqRgSOHYnUhuovxw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 4/30/24 04:11, Lars Petter Mostad wrote:
-> On Sun, Apr 28, 2024 at 8:07 PM Guenter Roeck <linux@roeck-us.net> wrote:
+On 4/30/24 04:10, Lars Petter Mostad wrote:
+> On Sun, Apr 28, 2024 at 8:15 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>>> -enum emc1403_chip { emc1402, emc1403, emc1404 };
+>>> +enum emc1403_chip { emc1402, emc1403, emc1404, emc1408 };
 >>
->> On Sun, Apr 28, 2024 at 11:00:47AM -0700, Guenter Roeck wrote:
->>> On Fri, Apr 26, 2024 at 04:13:22PM +0200, Lars Petter Mostad wrote:
->>>> Decode all diode data low byte registers.
->>>>
->>> All ?
+>> There is no EMC1408, and if there was it might not be compatible with
+>> EMC1438.
 > 
->>> What about the following ?
->>>
->>> 2c -> 2e
->>> 2d -> 2f
->>
->> Also all other limit registers, and for those the write part is missing.
-> 
-> Yes, my intention was only to decode the (already non-zero) data registers,
-> not the limit registers.
+> Yes, using the name of a chip that does not (yet) exist is not good. I was going
+> on the apparent pattern that the name emc140n was used for things common
+> for all emc14xn chips.
 > 
 
-We should really do all or nothing.
+I figured that much, but that should not include virtual chips.
+You might consider adding support for emc1428 as well, though; unless
+I am missing something the only difference should be the chip ID.
 
->>>> -   unsigned int val;
->>>> +   unsigned int val, val_lowbyte;
->>>
->>> FWIW, this is wrong. The upper bit of the high byte is a sign bit
->>> on emc1438.
+>> The 8-channel chips (emc1428 and emc1438) suppport signed data
+>> and limit registers. This will need to be handled.
 > 
-> Yes, I missed the sign bit in the datasheets. See my comment on patch for
-> emc1438. If I withdraw the EMC1438 patch, this will work for the current
-> chips with unsigned registers.
+> I see that my glance at the EMC14xx datasheets was way too brief. EMC1438 looked
+> like a straight extension of the currently supported chips to 8 channels.
+> I totally missed the sign bit.
 > 
+No problem; I only accidentally noticed it myself.
 
-Adding support for the new chip is desirable. Please don't drop it.
+> I guess sign_extend32 can be used to handle two's complement for signed chips.
 
->>>        retval = regmap_read(data->regmap, sda->index, &val);
->>>        if (retval < 0)
->>>                return retval;
->>> -     return sprintf(buf, "%d000\n", val);
->>> +
->>> +     if (idx_lowbyte) {
->>> +             retval = regmap_read(data->regmap, idx_lowbyte, &val_lowbyte);
->>> +             if (retval < 0)
->>> +                     val_lowbyte = 0;
->>
->> This is an error and should be handled, not ignored.
+Yes.
+
+> This I guess would mean putting some extra info into thermal_data to let the
+> show/store functions know whether they are handling a signed chip or not. This
+> might make the driver unnecessarily messy, as apparently nobody else has been
+> interested in support for the chips with signed data. If so I withdraw this
+> patch.
 > 
-> My idea here was that if for some reason it manages to read the high byte but
-> not the low byte, I don't break anything. The output will be the same as before
-> the patch.
+> Should this driver be kept unsigned only?
 > 
 
-No, you should handle the error.
+I'd prefer to have support for the 8-channel chips (and with it for signed
+temperature data) added. As mentioned in my other reply, I would suggest though
+that you convert the driver to use the with_info API. That would move a lot
+of code into the hwmon core and make it much easier to add support for additional
+chips, for signed/unsigned handling, and for handling 16 bit wide registers.
 
->>> +     return sprintf(buf, "%d\n",
->>> +                    (((val << 8) | val_lowbyte) * (u32)1000) >> 8);
->>
->> The u32 typecast is unnecessary and would interfer with negative temperatures.
-> 
-> I put the u32 typecast there on the off chance that somebody will compile
-> this with a compiler with 16-bit ints (uClinux?), as C only guarantees 16 bits
-> for unsigned int. It would of course have to change if negative values are
-> to be supported.
-
-I don't even know if such a system exists, but if it does it won't build a Linux
-kernel. It doesn't make sense to even try to support a system with 16-bit integers.
-
-> 
-> Is it acceptable to handle the low byte for data registers only?
-> 
-No, as mentioned above.
-
-> Should it be kept unsigned only (if dropping emc1438 patch)?
-> 
-
-You should not drop the emc1438 patch. What I would suggest, though,
-is to consider converting the driver to use the _with_info registration
-API. That would simplify the code a lot and make it much easier to add
-support for new chips and to add conditional support for signed temperatures.
+In this context, could you send me a register dump of emc1438 (and of any
+other chips of the chips supported by the emc1403 driver if you have access
+to them) ? I'd like to add module tests for those chips.
 
 Thanks,
 Guenter
