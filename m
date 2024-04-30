@@ -1,61 +1,61 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B0A1537E4;
-	Tue, 30 Apr 2024 16:34:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 624D71369AC;
+	Tue, 30 Apr 2024 17:33:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714494846; cv=none; b=ocNkQadNMnvOkfLxWeEfyjVBJxG6O4WnyfuyWqrbnugqXjhAJoLk9D+n1kweI3QxgkHm9mU997lkafLewDSK+eXOQRg5Kxczzx2WlsllfoCSD1dSO3qP3cA4XS6JlgHjW4SLsazM/2HYZbdJS+DnnrX4+90ISMLs4abfmRQOs2E=
+	t=1714498392; cv=none; b=rFgq/2zKtULlXFSLoLcezHMp0K9etsWbSYKv3tqPXkOj7oiISR1QR+RyOMPgtqdJPomudzt+l8xzF9/aKkt+R+Yg7OK2FNSiaMHsTdSPMFDnufqVi5SwQWvOk4m/1o7W+odJUXFnRBCLovGkCP6ftAp77zQGTwoSIfEaIeqzQRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714494846; c=relaxed/simple;
-	bh=Nmts7SGpTnSBJShEKqMgy0d0lvZ16gTsppVGUwwJsn0=;
+	s=arc-20240116; t=1714498392; c=relaxed/simple;
+	bh=TnBNsH1qoOox53D2xquim2Kd4d2fYV/Y0z/AXor4gLc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=V/Mdu6VPXMACVpBbcAieYkp7jjrei3N7u+ZYW/e5DrKcJV5Rw6OoXlimYzvH0sZrayiyEAkdD5hjrgHbmHUPKEz1bq97pa5W7WOYbAvytpS8VlftIYDor+Qg6aT/sVLeAMbkfwLUk4OphDv+xMcaKPF5brWOal8sy99SZCWk/es=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d/5iAQ1a; arc=none smtp.client-ip=209.85.210.173
+	 In-Reply-To:Content-Type; b=PKh3pD9o0SiqgXALhlxdkLkN6ep689KJ0hLvkLIAazYVSyK+Z0rmKgSuecZxXdZTxshXDJl00/kq9Fk8AaHj3BjcBWAynOOt/EPte+g0icM23jkxALuFwviJhnP59EaNnBbnOdmlTA76t8l98Xyq9EZabgPIrqRSQMsWhKCanms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KkxI4nZa; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d/5iAQ1a"
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-6f0b9f943cbso4844393b3a.0;
-        Tue, 30 Apr 2024 09:34:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KkxI4nZa"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-6edb76d83d0so5207580b3a.0;
+        Tue, 30 Apr 2024 10:33:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714494844; x=1715099644; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1714498391; x=1715103191; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=8yVh0LSF6AnP8AlfPOMnHNGqdMushJrhziYcF69ydXM=;
-        b=d/5iAQ1a3BaZ6klWiCUQAdCT9TZDQ2utu3265qtDm3iotKc6Scbey8EXj5RtA4R4//
-         bp9p/eRP5KYBKXf9M91aTjcVX/I7ctW3nVWB5CzWJvMUxTU4bpVjiZ4ezGr9mPP8sSWp
-         bGJPogJLBhr656fcB9koZV7dumpdsm2R4zYpxU9THtTTMtSHm45bG6pvhfC61BouOgt5
-         AG4yyd2t2aUQCVtH1ja4U8rpsncYg3Fw7+dhVGJECvu7bWLgEgT683kIQBVYIY359cvl
-         KXTJb2e3vNEYy0Nx8+M3x3lkeMWhqUfr0Hxy/Hisv1Jnp73rYRMRn3LKSoZfnAgP8OLQ
-         QgKg==
+        bh=/PBhkPsNiWn95+5+BFaBpB6Qi1Y6lvU8hjeywtEr7z8=;
+        b=KkxI4nZa8fCsoowkfu69K8DDhFMg+Say20E+nx0B3Cg75vNI4yr/E/jpNdFgcJtLAQ
+         wPYwnEKb98/dH7nkJBYPnkH+X6hL4vFwjt+bJKPDatCdUwnqYkFCxQM+a9IsOuJYXGX5
+         QYWrfyT0ArerzcweZj4vhLewEQhkIFXDbjWnOCvSd1IfTaYXE7s24NGJMDuKWwzbk4k5
+         ZMHpxpWXdlaHrooifAzPsFb1y6kJNTrNvDA+XANNgtGgHqsXg/myRsvmmZ7TbefIs7vE
+         eTXLhJ2Bu/dkV+vwySFusJa5/NF/KtabTldvLNWIguDL/cifBu54LPysjugB8BfirphL
+         IkMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714494844; x=1715099644;
+        d=1e100.net; s=20230601; t=1714498391; x=1715103191;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8yVh0LSF6AnP8AlfPOMnHNGqdMushJrhziYcF69ydXM=;
-        b=bjTLlhLgkJrw6EvK3YNv5RLsnd0o5SMtMALRBHsmWe22jMzLv5iw9kS6MmUDmSqlx+
-         ZqzvmqlABAwwx+7KsXwfbbWRuEClMTfC/ZBaFnNRWrMTjwbF2FRNLDKze7k/DN3msJmr
-         bT1cCvPoZcqNuLo77MuShgcy+RpfQen2xy2h0PzjG5RWvMve7uqYo7r9wOY81pNclOkv
-         2Q7W2ZH5YxUZflwpx8PSdgRy/YUMPh6JvE9m79DQSLG0U1b9RtdM6zUl82v9n0ILM9Z6
-         jFJU/dd5rracCd/pWVxMGaXkvpBoq+FYm3ipOMHQHroRKWw7sp90jN2AMAmmPqHr9uz/
-         BMSw==
-X-Forwarded-Encrypted: i=1; AJvYcCWKrrDFzVZDiLZX94YJG5uLzMt0cDCv3TyyuAP87K8gmDaa7Qob02mlCaIyih6KatSLez/4X12dFkhrSfFGsfs9omdOi3Jgz+G7RdOAaBuA2zcph586Qwr9kC9kxH6kv2ILVanPn4TZjtJuz9IReu351LYfT+XjbXpiKnKWEdWLUZbwAA84BeCfkUQstSNDq1o4rLiXxiaw/MLrRXWvJp4iUuDm6C+afk+kt0VmcGUi4qTEIkmraWHhA8DJPQ==
-X-Gm-Message-State: AOJu0YxcZN9oweX88HvDKw3Nuhb+rkBDRooLhfL0PFOaZLOWpZ22Rt2E
-	fs87G7WfdZz267WS9ElLcBRhB8YOCfmcftN7NQGVsam9L1p9pQLS
-X-Google-Smtp-Source: AGHT+IHMlRdPUV+Vp+iaQO91MrJbNZoGRQBwlMcCasW3TWZCQdK7tEfZ21nXdx7uZqOu4pSGHzepsg==
-X-Received: by 2002:a05:6a21:33a8:b0:1ac:663f:9efd with SMTP id yy40-20020a056a2133a800b001ac663f9efdmr447542pzb.19.1714494844277;
-        Tue, 30 Apr 2024 09:34:04 -0700 (PDT)
+        bh=/PBhkPsNiWn95+5+BFaBpB6Qi1Y6lvU8hjeywtEr7z8=;
+        b=tpT8zHFVMOVUFCOnxG4eacm8BzhwfXJ1hMuDJVFJHdhaWWW/XaxF6KGmgrKvLU2Bte
+         HE/LRq24Ab3/A+/B4PU+cnm1/ELWHdznbwxWPjJLs7rZ1U9iA+kzrCQvMXq7omFUrRUN
+         J3Oh/yT1LlAptZRJMoSAmREBJtva7OGTax76MRWA25J5GzkxskyUAdlR4KUWhB3wM3nK
+         hAS0dZ/SdqGIuHXCoBgzzoAQqnJM73B/kfnnk/WZWUWWMv0HNPS2ntef5PDoRKsVtUGs
+         7pRq39SjBaoby8hRRzXDJpdxAENvptGvE3gQosYYTKWq+X9Yar5aFbIm8OhVEA38PQOT
+         qiNg==
+X-Forwarded-Encrypted: i=1; AJvYcCWn2niA6fmLGJyMZgCX1X/3n1yG/huRn0FkQhIpxvs5Ik3P4l2Jl/irmQAcp3tm8T5aXGCM+9GnYYMN5Jot0TZJ6lR8c+ZUcbaYc3UICOqLaudm6CQplfeBGygi7GHwoALfYkAJGJ4Vldo=
+X-Gm-Message-State: AOJu0Yy1/eC98R3kp8xpksRBQo3DcUG0kWLrDWrdZRaBTXjr1ZSh9k0K
+	zA7XLcxFbLQiCKaDl0Og1XqjiCCzNnIImKvieHSJAD8RldAyz/VJ
+X-Google-Smtp-Source: AGHT+IEymF1cIJqn5YaAiWlf30Uf6dOwySPRj5Jy5B9mnRRCxaoB9GwxgTPvM5uUdhQXj2PXZwwKBA==
+X-Received: by 2002:a05:6a21:800f:b0:1ad:8335:1a45 with SMTP id ou15-20020a056a21800f00b001ad83351a45mr443049pzb.55.1714498390500;
+        Tue, 30 Apr 2024 10:33:10 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id st5-20020a17090b1fc500b002b29ce888fcsm1447456pjb.53.2024.04.30.09.34.02
+        by smtp.gmail.com with ESMTPSA id q4-20020a170902edc400b001e29c4b7bd2sm22683181plk.240.2024.04.30.10.33.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Apr 2024 09:34:03 -0700 (PDT)
+        Tue, 30 Apr 2024 10:33:09 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <453bb1ed-1fe5-4b2c-90a1-eb15a0086489@roeck-us.net>
-Date: Tue, 30 Apr 2024 09:34:01 -0700
+Message-ID: <2a9ce60e-1708-4ac4-9311-240a59048224@roeck-us.net>
+Date: Tue, 30 Apr 2024 10:33:07 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,24 +63,12 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/7] hwmon: (da9052) Use
- devm_regulator_get_enable_read_voltage()
-To: David Lechner <dlechner@baylibre.com>, Liam Girdwood
- <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Jean Delvare <jdelvare@suse.com>, Jonathan Cameron <jic23@kernel.org>,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: Jonathan Corbet <corbet@lwn.net>,
- Support Opensource <support.opensource@diasemi.com>,
- Cosmin Tanislav <cosmin.tanislav@analog.com>,
- Lars-Peter Clausen <lars@metafoo.de>,
- Michael Hennerich <Michael.Hennerich@analog.com>,
- Antoniu Miclaus <antoniu.miclaus@analog.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-iio@vger.kernel.org, linux-staging@lists.linux.dev,
- linux-input@vger.kernel.org, Jonathan Cameron <Jonathan.Cameron@huawei.com>
-References: <20240429-regulator-get-enable-get-votlage-v2-0-b1f11ab766c1@baylibre.com>
- <20240429-regulator-get-enable-get-votlage-v2-3-b1f11ab766c1@baylibre.com>
+Subject: Re: [PATCH][next] hwmon: Fix spelling mistake "accesssible" ->
+ "accessible"
+To: Colin Ian King <colin.i.king@gmail.com>, Jean Delvare
+ <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240429074923.1073720-1-colin.i.king@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -126,16 +114,32 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240429-regulator-get-enable-get-votlage-v2-3-b1f11ab766c1@baylibre.com>
+In-Reply-To: <20240429074923.1073720-1-colin.i.king@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 4/29/24 16:40, David Lechner wrote:
-> We can reduce boilerplate code by using
-> devm_regulator_get_enable_read_voltage().
+On 4/29/24 00:49, Colin Ian King wrote:
+> There is a spelling mistake in the module description. Fix it.
 > 
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Signed-off-by: David Lechner <dlechner@baylibre.com>
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>   drivers/hwmon/lenovo-ec-sensors.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/lenovo-ec-sensors.c b/drivers/hwmon/lenovo-ec-sensors.c
+> index 50adeb82468b..143fb79713f7 100644
+> --- a/drivers/hwmon/lenovo-ec-sensors.c
+> +++ b/drivers/hwmon/lenovo-ec-sensors.c
+> @@ -598,5 +598,5 @@ static void __exit lenovo_ec_exit(void)
+>   module_exit(lenovo_ec_exit);
+>   
+>   MODULE_AUTHOR("David Ober <dober@lenovo.com>");
+> -MODULE_DESCRIPTION("HWMON driver for sensors accesssible via EC in LENOVO motherboards");
+> +MODULE_DESCRIPTION("HWMON driver for sensors accessible via EC in LENOVO motherboards");
+>   MODULE_LICENSE("GPL");
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Squashed into original commit (I gave you credit in the description).
+
+Thanks,
+Guenter
 
