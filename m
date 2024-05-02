@@ -1,140 +1,107 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01B37171068;
-	Thu,  2 May 2024 18:22:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F4E0174EC2
+	for <linux-hwmon@vger.kernel.org>; Thu,  2 May 2024 18:34:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714674165; cv=none; b=ohX7ftqWA4dEPeWm2UoO9XYrfL4ZGyv3xdxNpsQgdqny0htgXqkx4+XDJMEDoIldp73M5ugL7UO0l3OVhNUc396Tg1NrQ6b/RFMp63DsPwn+puTJZHPq2Kf2CE/RSWNyydlUprxwPDSYOg5SXFfYNteC1bzuOzg8bNORsuNuZfg=
+	t=1714674882; cv=none; b=jShNAffYZx7GfhrHzMAFdiXHmtLhvx13gkiD1/759ZMUb0/iLZlvx9cXuEsYXia6t6ma30ywCq4ST+gzW/YplXV+7hDQo4vrOOJyLCCrGvgu1p+wfNQxpmnPF4Xf3N5wGB3EvEPYq594YnyRw7Jhng52ls/CNfN4AlDtT72X6YM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714674165; c=relaxed/simple;
-	bh=My+0Rd5lz0MXO7wxfA9MZxTeduLaR5NO1sttRqiTYzo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=X82fyPfsspspwJyhtc0bLxHrp8VRHZmrfxrIeozh/7BHtIBx46pnzjot4Db+8v91tI+IWJePFV8XuJUm+Qlf0Sj/5ezM0vmkpvpQuDPmeou0/NMWTO6poNfN/2fHu9BLM2jxT4lqT/d1+V2W0Bc0B6hUBLlJyut7FC3kb6Jz9fM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PEIYCLjg; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1714674882; c=relaxed/simple;
+	bh=hkUdLfPttpQ9Uizzjig3dHmfdmmvYzwn26n5H3T3jCw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mJ3s5BDZmP3Nxr+4jVNT1/THGS10xR+XxmWEwL3LAi7/jrXzUB1oOIPmZQ1KAKtV6Asx+q0mbnSCUiJ23H9Fz4d4+E4RR7UMSwKbmRTc6ZxvPwfEj8VrXoo3nzcF8Yyl7zLisvdhSDu2T0Vh41+Ryb1tNBLTuGKDklymFv3LWrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=CGXQvnFq; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PEIYCLjg"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1e3c3aa8938so55164125ad.1;
-        Thu, 02 May 2024 11:22:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="CGXQvnFq"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2b393d8dcbaso894361a91.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 02 May 2024 11:34:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714674163; x=1715278963; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=U+RaPVn6HkrrIM33dEK9K9ChnzChCLl6eDfX1JTLZWM=;
-        b=PEIYCLjgAhsimedo1aZw9swqsbWG1nxkfk0bSj19MDYdxy1gAoic9yYiTAt26npddZ
-         K/qrDurCWi8eUVbnuC4pfePYmH1f0kHxT05HchQwoVr/ZiYyGSHQw9ILZyE2ArOfUxDi
-         dIja5+clEZCvRUq/+oPucqSSzMwEO/NEFeTnB7uSBbaOgvbZkubaxofh7G94WGhAI1lE
-         7wokZyx/NEes54b7Qrt8O315NStWnuoQkul9+BNE865BmGCXiN6LLUrakUqnR1G9pqzH
-         tGSP2JCydn+SGlG9b1ONzV03v733XnKU3geBshE0JI40eAFi5Agdg7QO+sFljA6s7IOu
-         9AgA==
+        d=9elements.com; s=google; t=1714674880; x=1715279680; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+25HyXOoGfU3yjmqt9OUckjepNjR3C/KJDAxWQF5ZQM=;
+        b=CGXQvnFqZsvP5ZzwsDHTs5ZFXeMn7t0PGgM+nEv7urTzHdMq7FcX+6grEIM5pjPa5a
+         mPJbK6mvkArrCxE372YstWSkK3XmvGAoRdQ7wtnI2Et8sqdnkWcWhTWorweh6rv3rXLp
+         OnDsbBKYD6Nd+R1Trb4zRreMHBnLbVgMqIPUd6WX5yf7QubfrfLLMfDSdscTcoSAZFgC
+         11x89bt4AqLNhsJOXSsvIKPpwLw1nfmDXxK6t2zK47IJKmtW6dRSv84ySUeR937NUsNW
+         9JCIQQFxV0HU8h7WjV7DfwrXTfn1VIZwAlme7s0HDC7q37c9Wpsrde4gT5TOuULP9Pdx
+         ecnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714674163; x=1715278963;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U+RaPVn6HkrrIM33dEK9K9ChnzChCLl6eDfX1JTLZWM=;
-        b=PFLLTLfCbwwcwJYTlwsiM5pAJOQsa0uUW4VaBS1wMb5KR9XFf9KWB3E7pveloZdVjQ
-         Ij3fTeldWhgou33IBnQpb5tz+Nuz1yvTRerU0VrSDe1bfystn3WP4eie/Sxcju+163qz
-         kAqeZkEEbgoL+u+VFI54GPm52EJvws8k3DepF+mSgHlRWm/S/zuwUQ6nHQXu1itFxW1/
-         ZTMk+KPypVFiZ+AeBb8KBGvn7CcYOHqZF1/fIYBMG4K33bKsOSzjnzxzyMTCPbUeyvG5
-         EMW0TAj17ymmsZsia/tscuMDlg6y5Rh58K7o7VDR9P5y1/nR8wRBjg9pAMUmMrR6c/pF
-         sV0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCW8/HcAy4svEL+LQxglgJfp4w+mzi7lQmirSP5L+JY/MonPu+W5AacdDQQZ8TUYBlZZMg00ZPhcmfGdRfrZt3xns+N5+hhD0drbX3erOVRjtUOw3vVQqSEYTxBXLrmKJAPTGgya3JBI3OU=
-X-Gm-Message-State: AOJu0YxZDdKUsbVx+NdFhjQaHf6p75Uw8RmpCs2HWjA6jpSYeWIPHV8o
-	1oqXUcwH4CP5ilau30TdE+rztO8qowodIMWp6GU4pzxj3lhr3t7pPgaUQA==
-X-Google-Smtp-Source: AGHT+IFfqb3THQh8Im6TLVtP4hVs4geUtGUfk8YK7QvsOXscWObcm8rPGUYDPgUYRFInB6K5l23K5Q==
-X-Received: by 2002:a17:903:18b:b0:1ec:c6d1:8950 with SMTP id z11-20020a170903018b00b001ecc6d18950mr478825plg.63.1714674163207;
-        Thu, 02 May 2024 11:22:43 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w9-20020a1709026f0900b001e2a7ed52d0sm1651881plk.239.2024.05.02.11.22.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 May 2024 11:22:42 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <af66ac87-32ff-48a6-bf1c-d7ac578ceb4c@roeck-us.net>
-Date: Thu, 2 May 2024 11:22:40 -0700
+        d=1e100.net; s=20230601; t=1714674880; x=1715279680;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+25HyXOoGfU3yjmqt9OUckjepNjR3C/KJDAxWQF5ZQM=;
+        b=Z0TX9SxHYghiw1VU6eECAXzlprr/+PpeTP+hUfqrDagJrpziJPbgpJbvIfXwhSUL7D
+         ZpQjqjAgZRfe6f9yobpIYCv//bWNf5n69bkzokNDurhkZfX838CAPUxg+mx2Djvt7Mgx
+         VYsBvA/O0vh02LOu1nXdOthSKzlIIGykq7KG5EIAapZjUE1feWhVOG6eNqPnfAiUvyhT
+         18asnMnX7TQw/7aTY67Qn04jWlPh6o+2Y408pqYoXspntpFpfnyuBNF7oEpe1GEt4I6i
+         tX2tioQ8QXXDrTz3CJ8e46U+GvOoHXHyxrewcf8vKxd5bNfIRbuhJEp2q+JlXgTQOoFa
+         RoMg==
+X-Forwarded-Encrypted: i=1; AJvYcCXLEo63ZHXcs3OlC8c69zEybfJd1gYn2UylF46FOPrDy0vgzkjO0Uco7BaAUpxqLGBiUcQG2FvOeJiqoPkPI6VzM6rGgxGopx590Rk=
+X-Gm-Message-State: AOJu0YxGA/sIw06OmtK+5mckyf8eLE2c7+k+07Q+QbunqSbg1tLoZ7Gl
+	Depm0E0yuxuHvMBCDOQHUtFHSh3WorIP9XHWoyyuAWRPU20t2pfUbe/k+tNI7p8rkWLged2XZ+T
+	B6VPOTBEtqjHXkQsZ9yXWdBZjjxsDuimTwsHFcA==
+X-Google-Smtp-Source: AGHT+IF5E4mgToLIMVVlH/f2iwR1VecRyVXaYV+aFS7iLb6nTGbXf4HJT0JlfGzSaOychD89ASCLwngz5CgMoxT3z+E=
+X-Received: by 2002:a17:90b:4388:b0:2a6:9c5f:828e with SMTP id
+ in8-20020a17090b438800b002a69c5f828emr700244pjb.22.1714674880502; Thu, 02 May
+ 2024 11:34:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] hwmon (max6639): Use regmap
-To: Naresh Solanki <naresh.solanki@9elements.com>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
 References: <20240430210539.935040-1-naresh.solanki@9elements.com>
- <52e7692c-abaa-4201-8248-3f42bb250335@roeck-us.net>
- <CABqG17j2kMEK98T90eudb_ZWftaV2L4_MdA8ML+v_cm3MHFs1w@mail.gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <CABqG17j2kMEK98T90eudb_ZWftaV2L4_MdA8ML+v_cm3MHFs1w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ <52e7692c-abaa-4201-8248-3f42bb250335@roeck-us.net> <CABqG17j2kMEK98T90eudb_ZWftaV2L4_MdA8ML+v_cm3MHFs1w@mail.gmail.com>
+ <af66ac87-32ff-48a6-bf1c-d7ac578ceb4c@roeck-us.net>
+In-Reply-To: <af66ac87-32ff-48a6-bf1c-d7ac578ceb4c@roeck-us.net>
+From: Naresh Solanki <naresh.solanki@9elements.com>
+Date: Fri, 3 May 2024 00:04:29 +0530
+Message-ID: <CABqG17hE+2F9y1=JZFRuJtLecFtx0XJBzt-a0HSyE3VRoqdzCQ@mail.gmail.com>
+Subject: Re: [PATCH v2] hwmon (max6639): Use regmap
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 5/2/24 10:25, Naresh Solanki wrote:
-[ ... ]
+Hi Guenter,
 
->>> +     u8 pwm[MAX6639_NDEV];           /* Register value: Duty cycle 0..120 */
->>
->> pwm caching needs to be dropped as well. It is no longer initialized in
->> max6639_init_client(), but updated and later used in pwm_store() and
->> pwm_show(). Looking at the datasheet, the pwm registers are volatile
->> and should not be cached in the first place.
-> Yes. I did that but found that the register is write only. i.e.,
+On Thu, 2 May 2024 at 23:52, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 5/2/24 10:25, Naresh Solanki wrote:
+> [ ... ]
+>
+> >>> +     u8 pwm[MAX6639_NDEV];           /* Register value: Duty cycle 0..120 */
+> >>
+> >> pwm caching needs to be dropped as well. It is no longer initialized in
+> >> max6639_init_client(), but updated and later used in pwm_store() and
+> >> pwm_show(). Looking at the datasheet, the pwm registers are volatile
+> >> and should not be cached in the first place.
+> > Yes. I did that but found that the register is write only. i.e.,
+>
+> Odd. The datasheet says that it is r/w or, rather, that reading it returns
+> the _current_ pwm value and writing it sets the target pwm value in pwm mode.
+>
+> What happens when the register is read ?
+Upon revisiting the datasheet and conducting further testing, it appears that
+my previous response was inaccurate.
+After testing, it's clear that it reads what is being written & hence
+it's perfectly
+fine to remove variable pwm[] from local caching.
+Verified using below command:
+----
+i2cset -f -y 130 0x2e 0x26 0x10; i2cget -f -y 130 0x2e 0x26
+0x10
+----
 
-Odd. The datasheet says that it is r/w or, rather, that reading it returns
-the _current_ pwm value and writing it sets the target pwm value in pwm mode.
+Regards,
+Naresh
 
-What happens when the register is read ?
-
-Thanks,
-Guenter
-
+>
+> Thanks,
+> Guenter
+>
