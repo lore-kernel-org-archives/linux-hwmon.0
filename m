@@ -1,212 +1,82 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5F12155396;
-	Fri,  3 May 2024 15:43:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6750621360;
+	Fri,  3 May 2024 16:19:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714751016; cv=none; b=NCRAOxSLTuHeNxnlHbZLELXaUpxi1lUDAr3JVD3oWhzK7wHBj7dvDBnJT/o8DZtKRJePdkxCqVW/5Yrcd9I1+nrD3BcxJ4N9ftEgE7cOTN1EzaNbZ37wWto085n8icDJv/KdBAQM4B4FxL6suMgQzM4trdS4BY+MyIJ+FDuvZ+A=
+	t=1714753200; cv=none; b=I0fUljm83PejGHhkx+v4Qdf635DBdgbfDSSwt+Ip0NT3LbY0gzv1xv7hMDGj9lF/EO6QWcOwCaM68+ItEbBaZ4/CkjLEL0Wd93o0W0arWRp41WyKYpMJrzYG23bXLaiKWo1TPNz3jOxjrruKHGy1Ga+JGzjhx82qPFJhuJ3zyOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714751016; c=relaxed/simple;
-	bh=PEVfHsKVqJrLVORbYjTTPtbni+Sdp7MMEgl+6WLrZKE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=gtJzxuigRL/fbOFga07S0y8fpsYYy3skRDpbS2DqOf9tozOxHCFrtI/A1k4w2g55b9t3i21rqKCcbQM/LwEeoQIjoIS1q1rFv5ewDRK6TFNobWQnqOR0nOcoe8WkfG1OHSl0Lg5xKXUVYJnjlmbW/XxH9zRJAz1MeAB/lSz0G5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IBE/r6+H; arc=none smtp.client-ip=209.85.210.181
+	s=arc-20240116; t=1714753200; c=relaxed/simple;
+	bh=b1M06R6Oi0ov65yizrGQbpOroCfPdVghawNVfym9d5U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XxHJNZ5Fo267es554PWwPoRG9E8Vw1Bv2nKG9830AeRoX/B6YIp9JRUTQyqxF9W0zoU49+Pm1G0XLWDV+iwghhaQowRLmD1ZVhV1hifVqt8O3Eu+Rt+NYT2UEkm9degGm257Nfxl4rH8+aQvNC2xec3wITAqcadeAjVGIrvoqQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HjsYf6fQ; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IBE/r6+H"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6f44881ad9eso1048859b3a.3;
-        Fri, 03 May 2024 08:43:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HjsYf6fQ"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1eb24e3a2d9so69127565ad.1;
+        Fri, 03 May 2024 09:19:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714751013; x=1715355813; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=x46qWktsx1gk+X3hwmzwMx96hZmNS+C0rkh5a42172w=;
-        b=IBE/r6+HTvGpOfC8XKYnuiyw7lehGzyvPCOhmMTY6ImLBXaHy4a+6wcgG1E+GXqq1c
-         eHrBXSgBsW2KFLktY+PZAGJsyUE47ghuv2hHf7vkzx4VfYjNg9b6H9ljmITR/3Fd5tS3
-         403Amxu2A3yAcMi5lAGJwuRCMHYDgnwEZW0oRoF0UNLYX8748Agb3KCv4D08VPJZg5tY
-         lI4SKW/Wbvc76YHb+drviGlxhi7w7MMZ0ta0TfHdn+5nOWFknxPH4WsTS3/ITRKBPR8e
-         +gTgPdEl8FR5tbjKGcj/isy5f02M2g4vD0fKQpDMrp1uow4ZeJZ/Fm3X2+P5YXncTVOO
-         43Vg==
+        d=gmail.com; s=20230601; t=1714753199; x=1715357999; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nlUESLHZzkETNTR+DD4DAaRneRx9fqKtb5x0pcHBMnc=;
+        b=HjsYf6fQf5JkekxzCRqQRckr9CSsfU6sdg8UZe2uTL11AiBkwkCOi3Y2dRttr0IzkQ
+         S+yWFVF7YmGhF0FUtnonJwR5Ebca8qjqJwUfPk9EW6HaxyYacVeIQKzGFb2sYD0orP5a
+         IQhIkwgCX1Tynqr7rVPLs1QqXTzMqav6ogDb18wJiBTd27SPWI68gB6BxG0ZxHbXL0C8
+         tsgRwsQcOfhFf/ZM9Zld64LJqCIUSeaRas8Vn5XcoSH9D2nC/AKE2EzWDcknQe/bKQw4
+         mSVyE746YnhTwzRlWFVFjl1Q9XzL+VyCB9J5fBWOjq6uRHIV9xnIwTHMWKryjYiftrLh
+         O/EA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714751013; x=1715355813;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=x46qWktsx1gk+X3hwmzwMx96hZmNS+C0rkh5a42172w=;
-        b=pvoTeHSuRO1rZGl9jxzNBTBPZXhe+YFZ79tdGreSCGlsxD7ptDFfg7VuQarwpedOMJ
-         yctcxxBZe1vOFDrLAb/5+nbRxMGgZntoiktGf8vq5cz6XXdJfuBhltQM0I+XxmbVHqL9
-         v2GsQW+ysRq9xVhzKYkGcY5UdYBNnkhh7byPpF1CBAL6l7m5l802gpOiXiaFkZiG3UQU
-         nbd2DAVA2Ir1OJr6PUZkQQHDXIVOEXEtVLyMMAZQJz/N7Brgl2RnZOn4wJjf71EyVEy6
-         0xbf5o5fsc3Gh2yR5j7ZX73ZsWXJIFMP1NpFHuaWsEmR1WR1UNrpMDaEp+1+Dp2s4Zu6
-         c/+Q==
-X-Gm-Message-State: AOJu0YyQUhU2so83+pl8wRJVOh4rxSBiVAqDERw4DYxKzbVr7efDh0T+
-	Jt4ZYDjurxTNWQepOAfi5cN997syRpARKretKzF0ojKvJYhWVXty64xwZw==
-X-Google-Smtp-Source: AGHT+IEpxISKvKRmXyHHr0VzGaiUEkLF/5sG5HPzkwdZhXLVZYHtgzUUJ0eZifiHOzqoqZ5ocsEInw==
-X-Received: by 2002:a05:6a20:8424:b0:1a7:a3cb:7901 with SMTP id c36-20020a056a20842400b001a7a3cb7901mr3574088pzd.61.1714751012649;
-        Fri, 03 May 2024 08:43:32 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1714753199; x=1715357999;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nlUESLHZzkETNTR+DD4DAaRneRx9fqKtb5x0pcHBMnc=;
+        b=tAETrmZpANUPGqBR/5b0i/iAkxn0fjnL7Su4cR0vUxTvTEr4PLbC+OhViUyiGTDt0S
+         TkaQrF7SwhHu0+T7iAjvn0qjOlkITZYQZzWr29ZY9SksMksQZn5HWLclipmWPQZdURg9
+         BYYMEkPr9Lp19Nz2DqgyVk2FtO3TGJbAoPrWLY5w+eLvniGbmEmjy31dQJlrQaYungAN
+         c2kcoPxiQEBTN/S9kLWwPuvk3jPkKHYKE/iMOM6egW4Zg3Q/HkmL6aDpCrLRCOXIMJyb
+         xb3ku8Jf8AZyi0kFBHiIZvAHebvE/F88gxhwDXr/vClfnW27gCmPJKqKPyZ3mGcx7mBX
+         mBZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW27dzFhiYeiF6f9L6/AQP256MGHjN6wI7/+mFiciXrSf75oeNiVA9HlybXdYna+Q+1OukY136gaUHWiLGT9R5dLGuKRoLqlklM+exWQH4+bBVEOcRvwEQbajNrxZ70NXW0gpONGLYNUT8=
+X-Gm-Message-State: AOJu0YyTB5ABhdNCJ00UU59nM0PxBORhyNaxziwQNjgJ9kdMLNm7jvjp
+	0euK90KY2wsunAYou3ib40SWJ+TG6cz+BeV3PS5k9Kd7NbKryNtFsTAYSQ==
+X-Google-Smtp-Source: AGHT+IHI1lDf7Mw7VCfAkp2aw6hrM16OSSyjKp12iSWqPEWGUC5DXviqKnnnw4MlZwTfvCyytB3Y+g==
+X-Received: by 2002:a17:902:b186:b0:1e2:9066:4a8b with SMTP id s6-20020a170902b18600b001e290664a8bmr3398989plr.26.1714753198765;
+        Fri, 03 May 2024 09:19:58 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m22-20020a056a00081600b006f2e10b00d6sm3199995pfk.41.2024.05.03.08.43.31
+        by smtp.gmail.com with ESMTPSA id j1-20020a170902da8100b001e509d4d6ddsm3444220plx.1.2024.05.03.09.19.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 May 2024 08:43:32 -0700 (PDT)
+        Fri, 03 May 2024 09:19:57 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Fri, 3 May 2024 09:19:56 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: linux-hwmon@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Guenter Roeck <linux@roeck-us.net>,
-	Lars Petter Mostad <lars.petter.mostad@appear.net>
-Subject: [PATCH v2 3/3] hwmon: (emc1403) Add support for conversion interval configuration
-Date: Fri,  3 May 2024 08:43:24 -0700
-Message-Id: <20240503154324.517246-4-linux@roeck-us.net>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240503154324.517246-1-linux@roeck-us.net>
-References: <20240503154324.517246-1-linux@roeck-us.net>
+To: Naresh Solanki <naresh.solanki@9elements.com>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] hwmon (max6639): Use regmap
+Message-ID: <23dd1bc2-1dd0-48b9-969e-725a5929f9e0@roeck-us.net>
+References: <20240503120020.3450972-1-naresh.solanki@9elements.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240503120020.3450972-1-naresh.solanki@9elements.com>
 
-The chips supported by the emc1403 driver support configurable
-conversion rates. Add support for it.
+On Fri, May 03, 2024 at 05:30:19PM +0530, Naresh Solanki wrote:
+> Add regmap support & remove local caching.
+> 
+> Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
 
-Cc: Lars Petter Mostad <lars.petter.mostad@appear.net>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
-v2: Added patch
+Applied.
 
- drivers/hwmon/emc1403.c | 67 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 67 insertions(+)
-
-diff --git a/drivers/hwmon/emc1403.c b/drivers/hwmon/emc1403.c
-index e53bb4d8bc1b..43322bb9aaa1 100644
---- a/drivers/hwmon/emc1403.c
-+++ b/drivers/hwmon/emc1403.c
-@@ -19,6 +19,7 @@
- #include <linux/sysfs.h>
- #include <linux/mutex.h>
- #include <linux/regmap.h>
-+#include <linux/util_macros.h>
- 
- #define THERMAL_PID_REG		0xfd
- #define THERMAL_SMSC_ID_REG	0xfe
-@@ -333,6 +334,31 @@ static int emc1403_temp_read(struct thermal_data *data, u32 attr, int channel, l
- 	return ret;
- }
- 
-+static int emc1403_get_convrate(struct thermal_data *data, long *val)
-+{
-+	unsigned int convrate;
-+	int ret;
-+
-+	ret = regmap_read(data->regmap, 0x04, &convrate);
-+	if (ret < 0)
-+		return ret;
-+	if (convrate > 10)
-+		convrate = 4;
-+
-+	*val = 16000 >> convrate;
-+	return 0;
-+}
-+
-+static int emc1403_chip_read(struct thermal_data *data, u32 attr, long *val)
-+{
-+	switch (attr) {
-+	case hwmon_chip_update_interval:
-+		return emc1403_get_convrate(data, val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
- static int emc1403_read(struct device *dev, enum hwmon_sensor_types type,
- 			u32 attr, int channel, long *val)
- {
-@@ -341,6 +367,8 @@ static int emc1403_read(struct device *dev, enum hwmon_sensor_types type,
- 	switch (type) {
- 	case hwmon_temp:
- 		return emc1403_temp_read(data, attr, channel, val);
-+	case hwmon_chip:
-+		return emc1403_chip_read(data, attr, val);
- 	default:
- 		return -EOPNOTSUPP;
- 	}
-@@ -409,6 +437,30 @@ static int emc1403_temp_write(struct thermal_data *data, u32 attr, int channel,
- 	}
- }
- 
-+/* Lookup table for temperature conversion times in msec */
-+static const u16 ina3221_conv_time[] = {
-+	16000, 8000, 4000, 2000, 1000, 500, 250, 125, 62, 31, 16
-+};
-+
-+static int emc1403_set_convrate(struct thermal_data *data, unsigned int interval)
-+{
-+	int convrate;
-+
-+	convrate = find_closest_descending(interval, ina3221_conv_time,
-+					   ARRAY_SIZE(ina3221_conv_time));
-+	return regmap_write(data->regmap, 0x04, convrate);
-+}
-+
-+static int emc1403_chip_write(struct thermal_data *data, u32 attr, long val)
-+{
-+	switch (attr) {
-+	case hwmon_chip_update_interval:
-+		return emc1403_set_convrate(data, clamp_val(val, 0, 100000));
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
- static int emc1403_write(struct device *dev, enum hwmon_sensor_types type,
- 			 u32 attr, int channel, long val)
- {
-@@ -417,6 +469,8 @@ static int emc1403_write(struct device *dev, enum hwmon_sensor_types type,
- 	switch (type) {
- 	case hwmon_temp:
- 		return emc1403_temp_write(data, attr, channel, val);
-+	case hwmon_chip:
-+		return emc1403_chip_write(data, attr, val);
- 	default:
- 		return -EOPNOTSUPP;
- 	}
-@@ -453,18 +507,31 @@ static umode_t emc1403_temp_is_visible(const void *_data, u32 attr, int channel)
- 	}
- }
- 
-+static umode_t emc1403_chip_is_visible(const void *_data, u32 attr)
-+{
-+	switch (attr) {
-+	case hwmon_chip_update_interval:
-+		return 0644;
-+	default:
-+		return 0;
-+	}
-+}
-+
- static umode_t emc1403_is_visible(const void *data, enum hwmon_sensor_types type,
- 				  u32 attr, int channel)
- {
- 	switch (type) {
- 	case hwmon_temp:
- 		return emc1403_temp_is_visible(data, attr, channel);
-+	case hwmon_chip:
-+		return emc1403_chip_is_visible(data, attr);
- 	default:
- 		return 0;
- 	}
- }
- 
- static const struct hwmon_channel_info * const emc1403_info[] = {
-+	HWMON_CHANNEL_INFO(chip, HWMON_C_UPDATE_INTERVAL),
- 	HWMON_CHANNEL_INFO(temp,
- 			   HWMON_T_INPUT | HWMON_T_MIN | HWMON_T_MAX |
- 			   HWMON_T_CRIT | HWMON_T_MIN_HYST | HWMON_T_MAX_HYST |
--- 
-2.39.2
-
+Thanks,
+Guenter
