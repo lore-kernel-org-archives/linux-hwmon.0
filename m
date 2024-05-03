@@ -1,134 +1,91 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 654F914A4C6;
-	Fri,  3 May 2024 13:32:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F78E1509A4;
+	Fri,  3 May 2024 15:43:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714743175; cv=none; b=s4UupD9J6jJNcP3GjH1/1J8oYoyiLp+VPcdMkxOgW5O299eOTLW1tEKrSMhWcZtcjf4yCSpN0rAtbCxqp/lY3CTasTsZNSt19G+Q1+UBwOur1pEKgqCp7JHwjAYvJhRfU4AwJPPoMVQQZeXzNVJv22HocKusJxVbejURRujBhWk=
+	t=1714751010; cv=none; b=BoJnWX9EE5/m0K8EUYTYZXopNNSuYdysJp1oeLL+IIztLvo5Qhuf940pM8UszfhCAAzD+zBzUIfAJU8Vts1W7pZbl5ZgDil02NgCkKkF/x1MtEVDrMA0jYluq2OYbKGSiCXVxI5B33bBqv75Vrn9YjMqPtOjnI6wyg0dnDnXl9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714743175; c=relaxed/simple;
-	bh=g5n7QCf9+px9E+jSdSAUEDniUMyzo42eFpqV0QKekZ0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nQsuffRZMe9BvciX69YNBQMevPup3/fpdodoRNT7SK40Av6bVPrWenFxbiP6dKlY5rfAC/qO2b3/TgPDiJnzKhfXrrnKjatvZ6x/bkSPf3hUwXC1IF28lB17VJTAyWir0amnj9R5PIVZrHjHhIDSEjPO8mPvz/pfbb3K1kriz5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RzbAi4Eb; arc=none smtp.client-ip=209.85.214.180
+	s=arc-20240116; t=1714751010; c=relaxed/simple;
+	bh=liLAgj4dAWwVyJDbmVLEwRFJZEj2sBbyqcKE/mUzxig=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=nz6NiTU+lf6QHg54orLQGmn4ZIu8mPofKoUY73W2Bt8Wm7P2Ey7DIONl/NV+O39ootjxO6UOm74FHAwqnmUWTnj3Q+WRmuJBr+xgZCqMcAVA8zdX/wiHaPZDbmX9RdlG6+R6oTmNuWR8XP5vPDSSRTUwupcJl73ViG+a4wtBVDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jdzw3IAA; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RzbAi4Eb"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1e9ffd3f96eso75993405ad.3;
-        Fri, 03 May 2024 06:32:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jdzw3IAA"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-6f28bb6d747so7802232b3a.3;
+        Fri, 03 May 2024 08:43:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714743174; x=1715347974; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=R8eBo7KEbkwscKOgGEHDnJ9t9WjU5dMxa7aVsxxtx3Y=;
-        b=RzbAi4EbRja4fKAbM1mEM+/6QGkaXtewXjci4pulYuL0Ydi7ZWNFqHYqzA4Zrl2br+
-         wPvmWHGB/BgZYpS6/1n9VAkcdlOSDiqS/m2JG5yzfqX1w9vzQi7yh23+DgITJLBcor3N
-         2oC9AwhNZihDzJFCHjnDH3l1Q/3sJvI2wFnuzFPyXuPfVu3GV5/uW5H8lpZNK2UCQZD9
-         nzYpJ5nlMa8Igh3fGaDPnXAe97CAiE+kgBgjXc2AcMJp3IXZjPuB1bNIBqvXHt11YgMS
-         Ntgw4FRm8IHD/+uqZ6IrFEs5vVU66OLkbPndHDzq9fqRS9obwfvA3fZLixw66uY1XN5P
-         cyig==
+        d=gmail.com; s=20230601; t=1714751008; x=1715355808; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=rmci5WxWXCx38itxGY4xcvtGsBsErI1KmcKxvvSN1a8=;
+        b=Jdzw3IAAGY2gmY1zi+GlGRMMAImY0VafqJA4JkGJEEMM/1Cs7V93XwMCmh6uJ1dk6K
+         xfhsZ54c3r5yLGLTnxfcjlpwithAmtJ/yWyj2ksefJ8wuEGJEDO723jUpNsqqwAj3NsT
+         7pWaC9ni5wAsa+hlOYTdFzxuBPcxKi69LF9wiFV/vUpKTSbzv4/2KImULFeWr2q8qTaV
+         er3cP6OB32Q/Pz6Sqs00dxcsPej0E60dZ6U1znFMYgo5wmWJXEUi1ypVTygdLb5yyaI5
+         E1gWDObYKjnrOT/Q0FX82husrOaIdiyhZG8RVo3A/giifx+Bb/maUSYiQB09iiQJu01K
+         Tafw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714743174; x=1715347974;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1714751008; x=1715355808;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=R8eBo7KEbkwscKOgGEHDnJ9t9WjU5dMxa7aVsxxtx3Y=;
-        b=oAxhEZxPeuttUpJBi5qW7wXoSQxXilRtQXb798tWEY62ySrJCXN1xqwZ0vgrv21uuN
-         iyoYPeJWXjVwe8Y4n7kuE2HDEEWgnsk0vMc2JCdjiSGBSFVerfqokWQTtgZNAJyETwxI
-         PNidV/Ot7rgxcQJ3MAwwuLtGNPSa5tgacREz+r6WQjy4M9OauHFGNAIVZgE5RV7KXCpd
-         WhH5Ur15E2vnmCP1ZxfXxeQXE4S6Dt0nriH6P2ZriGFtnmwxSh3mq26wTFGjWADmpNsJ
-         kCfye/ow9FPR6LpX3/pjJtfFOhQZGg2HmRXUWLcbpjTWw146ybjAVeBI+78VGqQJjpf4
-         LimA==
-X-Forwarded-Encrypted: i=1; AJvYcCX9YtvtlVtaEVlBuP14tnvmWYruGs3ElDB/UipXfuvM5emJo7aONDsbVtR+D36lCd+i4+ZoLoH0dpoYxwTDOcyiyAKrZWG1/0GZUAFyqeLdvqm3zPGZVxiDGUPNHGH7C+pinLCLzhpLNMY=
-X-Gm-Message-State: AOJu0Yxz6xSVJlUGoEfGS86FMK9TSroi/CVq6vPpvGx3LPxvjEPBEKt3
-	KXlz5PS1rbybPxsqjkuZeEvJriaMS/g8IQqFbXypb8bs/FsIyx3D8xAvfw==
-X-Google-Smtp-Source: AGHT+IEhxwVUnKSTzJxiJQV1Ec91RIMddC0qhAgrXfH0BVFVt25VKe3hoStVAzDk2Elj6s14fsUdJw==
-X-Received: by 2002:a17:902:ac98:b0:1ea:274:756e with SMTP id h24-20020a170902ac9800b001ea0274756emr2491611plr.21.1714743173546;
-        Fri, 03 May 2024 06:32:53 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id kt7-20020a170903088700b001e862f0b319sm3223834plb.264.2024.05.03.06.32.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 May 2024 06:32:52 -0700 (PDT)
+        bh=rmci5WxWXCx38itxGY4xcvtGsBsErI1KmcKxvvSN1a8=;
+        b=jUGqdR89/9cxKqZqIR9VSbWfQYkoYR8PwgtrxUQe6/jP0ioFUJnRyiK8a8jSsqyNw2
+         g+KWDkKo51PGgEoR3seb9lJU+F3NiWxyZjUsTBFWeXxccUK0o6EGH5wcExlpWVTf2/6l
+         7KuhOz3UG+QXvJiwAW+2hmRKePnIYe1z8Hx+00ViKd2CHJjjq0gwhe3wi2pBQ06xWJw2
+         tyzRYYUFc7Bz9faPcCICeFK4PC0Q2KkcSnUH8/v8F0xBhjoMhLRYL6i/9JzeqRs2ig3x
+         /6U1U7EqsGxl/QT1COVolJ6sEWPGIXSMtIZW3RpZaCTF8IZW/HVm890OS5cZqeppfzK7
+         DC1A==
+X-Gm-Message-State: AOJu0YxAOchxjBv6bia9vlhIlpvF9aPXq4azy7IXyx1mbGL7DLVKZgt4
+	/aYkAYB4Csf31I0k/s9W3R5E12F5sq5SkrpcEi8aL0FT4GfCsyoQmQ26Iw==
+X-Google-Smtp-Source: AGHT+IEyCkhU1rm0nNa6B/g/QSp04EXVkIgZoEmKXEY8ETFGgz/a4SYZqF6WLGg3rBuUa9+ZlQ5Yxg==
+X-Received: by 2002:a05:6a20:5530:b0:1a9:97d2:8082 with SMTP id ko48-20020a056a20553000b001a997d28082mr2872100pzb.9.1714751008170;
+        Fri, 03 May 2024 08:43:28 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j10-20020aa7800a000000b006f447e2745asm1991335pfi.95.2024.05.03.08.43.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 May 2024 08:43:27 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <5c6a02cc-76d0-4004-ba4d-544cbe767fb1@roeck-us.net>
-Date: Fri, 3 May 2024 06:32:50 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: linux-hwmon@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v2 0/3] hwmon: (emc1403) Various improvements
+Date: Fri,  3 May 2024 08:43:21 -0700
+Message-Id: <20240503154324.517246-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RTF PATCH] hwmon: (emc1403) Convert to with_info API
-To: Lars Petter Mostad <larspm@gmail.com>
-Cc: lars.petter.mostad@appear.net, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <521c0829-95de-4cc4-894b-6167c4f943a6@roeck-us.net>
- <20240503124146.220224-1-lars.petter.mostad@appear.net>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
- nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
- hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
- c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
- 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
- GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
- sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
- Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
- HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
- BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
- l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
- J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
- cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
- wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
- hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
- nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
- QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
- trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
- WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
- HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240503124146.220224-1-lars.petter.mostad@appear.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi,
+The first patch of the series converts the driver to register with the
+hwmon subsystem using devm_hwmon_device_register_with_info() instead of
+devm_hwmon_device_register_with_groups().
 
-On 5/3/24 05:41, Lars Petter Mostad wrote:
-> I have tested this patch on EMC1438 (by extending to 8 channels and supporting
-> signed registers). This has worked fine for me.
-> 
+The second patch adds support for 11-bit sensor and limit register
+accuracy.
 
-Excellent, thanks a lot for testing. I'll send the final version (probably later
-today), reworked to simplify adding support for 11 bit accuracy, plus a second
-patch adding that support.
+The third patch adds support for update_interval attribute.
 
-Thanks,
-Guenter
+The changes were module tested with the script at
+https://github.com/groeck/module-tests/blob/master/scripts/emc1403.sh
 
+v2: Reworked first patch of the series to prepare for subsequent patches.
+    Added patch 2 and 3.
+
+----------------------------------------------------------------
+Guenter Roeck (3):
+      hwmon: (emc1403) Convert to with_info API
+      hwmon: (emc1403) Support 11 bit accuracy
+      hwmon: (emc1403) Add support for conversion interval configuration
+
+ drivers/hwmon/emc1403.c | 749 +++++++++++++++++++++++++++++-------------------
+ 1 file changed, 453 insertions(+), 296 deletions(-)
