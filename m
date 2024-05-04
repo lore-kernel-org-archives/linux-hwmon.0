@@ -1,82 +1,99 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6750621360;
-	Fri,  3 May 2024 16:19:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38D28639;
+	Sat,  4 May 2024 09:25:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714753200; cv=none; b=I0fUljm83PejGHhkx+v4Qdf635DBdgbfDSSwt+Ip0NT3LbY0gzv1xv7hMDGj9lF/EO6QWcOwCaM68+ItEbBaZ4/CkjLEL0Wd93o0W0arWRp41WyKYpMJrzYG23bXLaiKWo1TPNz3jOxjrruKHGy1Ga+JGzjhx82qPFJhuJ3zyOQ=
+	t=1714814734; cv=none; b=rs/4TQBYy0W00/ayBS1vjcasoElIWtRIP1IgUSuOf/EsTLYlCNaUB9QNuPKHSgEtyC/s9w0JBHWPZwxjqAwwdaAlfkaW2tbNirMrIo+aJ2ZlVVxvqsPXtlji6k3OOnoeq4ZKaukLC/5NTR5zSOnfJAMs5YBBtu5nfwXPGgSbBWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714753200; c=relaxed/simple;
-	bh=b1M06R6Oi0ov65yizrGQbpOroCfPdVghawNVfym9d5U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XxHJNZ5Fo267es554PWwPoRG9E8Vw1Bv2nKG9830AeRoX/B6YIp9JRUTQyqxF9W0zoU49+Pm1G0XLWDV+iwghhaQowRLmD1ZVhV1hifVqt8O3Eu+Rt+NYT2UEkm9degGm257Nfxl4rH8+aQvNC2xec3wITAqcadeAjVGIrvoqQ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HjsYf6fQ; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1714814734; c=relaxed/simple;
+	bh=vtgJi36sMoYwAKl5i4UgliExL+PqTPRhqrRJiW8nXpc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DkbbqarHcXi5kVSO2IPqWmuGKR8x8crA+w9E/fUOC8m3rMuCNGiCxgd4wJskxiarfjjCnpw9bsfDUXPWRLONEhoT0voVeEMUeGQQMR09ShaS46D8Ec1r/OStDKsjzF2ELsy04aoqzA/xao2E2iLGgpxt003Llu4dyGHfWg5TzZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EEKmw+LK; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HjsYf6fQ"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1eb24e3a2d9so69127565ad.1;
-        Fri, 03 May 2024 09:19:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EEKmw+LK"
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a5966f5a76bso419372966b.1;
+        Sat, 04 May 2024 02:25:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714753199; x=1715357999; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nlUESLHZzkETNTR+DD4DAaRneRx9fqKtb5x0pcHBMnc=;
-        b=HjsYf6fQf5JkekxzCRqQRckr9CSsfU6sdg8UZe2uTL11AiBkwkCOi3Y2dRttr0IzkQ
-         S+yWFVF7YmGhF0FUtnonJwR5Ebca8qjqJwUfPk9EW6HaxyYacVeIQKzGFb2sYD0orP5a
-         IQhIkwgCX1Tynqr7rVPLs1QqXTzMqav6ogDb18wJiBTd27SPWI68gB6BxG0ZxHbXL0C8
-         tsgRwsQcOfhFf/ZM9Zld64LJqCIUSeaRas8Vn5XcoSH9D2nC/AKE2EzWDcknQe/bKQw4
-         mSVyE746YnhTwzRlWFVFjl1Q9XzL+VyCB9J5fBWOjq6uRHIV9xnIwTHMWKryjYiftrLh
-         O/EA==
+        d=gmail.com; s=20230601; t=1714814730; x=1715419530; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=j3reEgU3owMqAQcOynJPthj/UK20sgv+opLyAsCpLeE=;
+        b=EEKmw+LKoq12537U+JVZh+RwBz/VPC2MBaE+9W3P7gofM47N9wUvVF9T89HpYhScZi
+         090hSxhbi2sPkduiPwCWmG0mgxOBm5IbF2wq98tELDO9p9lob65zrDh3wlEtYurn3+1K
+         HOVlTyLqF+1Ez38ftCLM4OH+Azi2BRIk9T4AojMEAxKWoKpNnd31H+pbBR01egQzQlBZ
+         lCaSnyrOz3gTmWx6VZC6QHtf27kfdOMYYfxBUgqdB+lK1m2Mbm81ROGr/SGDP4ID3iDJ
+         3/rNj/ctaQarjpmniwcJe06ddwEaMFhrb+ltlEFJg8vedWuLLPG5rps+Kn4x8Hc9avDd
+         J/bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714753199; x=1715357999;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nlUESLHZzkETNTR+DD4DAaRneRx9fqKtb5x0pcHBMnc=;
-        b=tAETrmZpANUPGqBR/5b0i/iAkxn0fjnL7Su4cR0vUxTvTEr4PLbC+OhViUyiGTDt0S
-         TkaQrF7SwhHu0+T7iAjvn0qjOlkITZYQZzWr29ZY9SksMksQZn5HWLclipmWPQZdURg9
-         BYYMEkPr9Lp19Nz2DqgyVk2FtO3TGJbAoPrWLY5w+eLvniGbmEmjy31dQJlrQaYungAN
-         c2kcoPxiQEBTN/S9kLWwPuvk3jPkKHYKE/iMOM6egW4Zg3Q/HkmL6aDpCrLRCOXIMJyb
-         xb3ku8Jf8AZyi0kFBHiIZvAHebvE/F88gxhwDXr/vClfnW27gCmPJKqKPyZ3mGcx7mBX
-         mBZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW27dzFhiYeiF6f9L6/AQP256MGHjN6wI7/+mFiciXrSf75oeNiVA9HlybXdYna+Q+1OukY136gaUHWiLGT9R5dLGuKRoLqlklM+exWQH4+bBVEOcRvwEQbajNrxZ70NXW0gpONGLYNUT8=
-X-Gm-Message-State: AOJu0YyTB5ABhdNCJ00UU59nM0PxBORhyNaxziwQNjgJ9kdMLNm7jvjp
-	0euK90KY2wsunAYou3ib40SWJ+TG6cz+BeV3PS5k9Kd7NbKryNtFsTAYSQ==
-X-Google-Smtp-Source: AGHT+IHI1lDf7Mw7VCfAkp2aw6hrM16OSSyjKp12iSWqPEWGUC5DXviqKnnnw4MlZwTfvCyytB3Y+g==
-X-Received: by 2002:a17:902:b186:b0:1e2:9066:4a8b with SMTP id s6-20020a170902b18600b001e290664a8bmr3398989plr.26.1714753198765;
-        Fri, 03 May 2024 09:19:58 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j1-20020a170902da8100b001e509d4d6ddsm3444220plx.1.2024.05.03.09.19.57
+        d=1e100.net; s=20230601; t=1714814730; x=1715419530;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=j3reEgU3owMqAQcOynJPthj/UK20sgv+opLyAsCpLeE=;
+        b=oON/1G3foRi513NR5yOcWPFHhUIwzV4k5Jli+Xp8Z7xvglR1yEsE0fEnL//LprgP2C
+         KQ9/53SbUdk/mYllQx+bQAqrk5IRJY/arN3kbq0MvXqeQFR2ub1JEj9Oh79DFiQPaVA/
+         0wX71pTeU8hzek3mzlHaxlmbcWtcl28wPt9L/p1GPQl0yCBqaMF1uAo1coo4TRRpHLWA
+         yAdYC5233q9gv8N0ZKA87OZCGA0L1taAkLZENvt+hHA8JBQSggID8/zPEvjazK6eQGU4
+         ewxpxhVg+j8F+W2YDmWUcby/uxF/7fMdqy2GMver9ltw+pfxXJUuSMixHElRamjWKsc1
+         iJRg==
+X-Forwarded-Encrypted: i=1; AJvYcCVtScAhcJ//YvnT5f+Smq1b7rqGEM7DLIag9ds3Eq/ndQFqBzcxwZaABXstNwMCxm9wQIXZP54SErhdHaIo8ioTfmV8s+ORFikuhao/
+X-Gm-Message-State: AOJu0YwvHoxtTJh0D8zMWLkFIGe0s/Iexjv/e9hz2oz7PaYB+0JPkF8h
+	hjaPTUhc1nxI7pp+v7S+2PyhWTJRU5+GGzxlBakxzpxegVOhhR9Ho51y3bHLn/4=
+X-Google-Smtp-Source: AGHT+IEr9QK3djS4oDr/qVZGUB3u1VG0r5Nq9vkOIWG+ZdaVLR7TOwzL5WD8u/b4GQj0RbugzgL30A==
+X-Received: by 2002:a17:906:264a:b0:a59:a7ea:dd22 with SMTP id i10-20020a170906264a00b00a59a7eadd22mr863099ejc.14.1714814730405;
+        Sat, 04 May 2024 02:25:30 -0700 (PDT)
+Received: from fedora.. (cable-178-148-234-71.dynamic.sbb.rs. [178.148.234.71])
+        by smtp.gmail.com with ESMTPSA id ce3-20020a170906b24300b00a587831c09fsm2740231ejb.186.2024.05.04.02.25.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 May 2024 09:19:57 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 3 May 2024 09:19:56 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Naresh Solanki <naresh.solanki@9elements.com>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Sat, 04 May 2024 02:25:29 -0700 (PDT)
+From: Aleksa Savic <savicaleksa83@gmail.com>
+To: linux-hwmon@vger.kernel.org
+Cc: Jonas Malaco <jonas@protocubo.io>,
+	Aleksa Savic <savicaleksa83@gmail.com>,
+	Marius Zachmann <mail@mariuszachmann.de>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] hwmon (max6639): Use regmap
-Message-ID: <23dd1bc2-1dd0-48b9-969e-725a5929f9e0@roeck-us.net>
-References: <20240503120020.3450972-1-naresh.solanki@9elements.com>
+Subject: [PATCH 0/3] hwmon: (corsair-cpro) Fix issues when hidraw is used
+Date: Sat,  4 May 2024 11:25:00 +0200
+Message-ID: <20240504092504.24158-1-savicaleksa83@gmail.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240503120020.3450972-1-naresh.solanki@9elements.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, May 03, 2024 at 05:30:19PM +0530, Naresh Solanki wrote:
-> Add regmap support & remove local caching.
-> 
-> Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+This patch series fixes the behavior of the corsair-cpro driver while
+hidraw is used from userspace.
 
-Applied.
+The first patch introduces a separate buffer for sending commands to
+the device to prevent it from being overwritten thanks to a hidraw
+userspace call.
 
-Thanks,
-Guenter
+The second patch replaces the complete() call in the raw event parsing
+function with complete_all() to signify that the completion is done
+until reinit.
+
+The third patch introduces locking for the ccp->wait_input_report
+completion as it's touched in functions that could be executing in
+parallel.
+
+Aleksa Savic (3):
+  hwmon: (corsair-cpro) Use a separate buffer for sending commands
+  hwmon: (corsair-cpro) Use complete_all() instead of complete() in
+    ccp_raw_event()
+  hwmon: (corsair-cpro) Protect ccp->wait_input_report with a spinlock
+
+ drivers/hwmon/corsair-cpro.c | 45 +++++++++++++++++++++++++-----------
+ 1 file changed, 32 insertions(+), 13 deletions(-)
+
+-- 
+2.44.0
+
