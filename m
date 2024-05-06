@@ -1,107 +1,128 @@
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EB3E155A3C
-	for <linux-hwmon@vger.kernel.org>; Mon,  6 May 2024 15:59:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 928AB15573B
+	for <linux-hwmon@vger.kernel.org>; Mon,  6 May 2024 16:10:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715011191; cv=none; b=K6+IN3CGPVqd5TfeS85CEKrCY8BmIMsgaW1G9C7gUoAd7xpfc8a+rBUZ9GBAEDjdKIYG++HW9TnyTQMQ/LEdeEK6eXQWhybxMVvwzvOBJaOSUC/TmcaEuXnurCW9jeTDJ8Cd70uIINx4FIxAPGGGZPaY2IOpvknMTHr0vze3PCk=
+	t=1715011812; cv=none; b=SjhVmKUGxFIcniKf434TtAPtYS3qgbc6/srRt3olt/8q4rvGzkGP4yfG2q07rQaUutKvS47S56PDVCl4IgXtulUWsNMWjDhXjW/LPit0xEFMkwLDDgpkd1HGUtmjcuL9OTqk5H5VhKKqVq3bmFKh96ywL7nT7I6JZMtnhdGcjDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715011191; c=relaxed/simple;
-	bh=Z4JtbWwDYUVBekkPFVCgO2D/g+JZlEmJ5TZ/YseaHn8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Zq564jHEc/ok3v7h48OD2dE110IoAB3Ek1VUCdELLPe6GG1TMQdML2ySLAJsTt/cVn7m8DqM5kRtYa4PW9OJMqjbvh7ek7Hj58knwdZ4HCuW9koWYF1+PECLHXiuDVqOA8YrlRATF9b/aU6zA39q00+LpuoLvzjrT+F1+0MG4HU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=uZNr1gnf; arc=none smtp.client-ip=209.85.160.48
+	s=arc-20240116; t=1715011812; c=relaxed/simple;
+	bh=eCmNUiiRJVnsgoDYJTjnI91mf0WYtOPxNku6ZSZtSbc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PxPtw3kZBZtlK/RHoQY9QTfyOhhmw4qNlzA3xjYe2tAxY57UlK/E4mU6CtX4moZQWCyoOIv3cIzzpEzY8y45GRG5C1fwZFC0sOUFgnK3nC3GU4oNIMQ7oGo1FDwSUetvFoOgz+qH8dbbtp55dhbzUPF/VjZdmRBQcBvmUmujTkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=JP2UrXd8; arc=none smtp.client-ip=209.85.208.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="uZNr1gnf"
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-23d621abfb7so983748fac.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 06 May 2024 08:59:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="JP2UrXd8"
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2e3737697d9so13162431fa.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 06 May 2024 09:10:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1715011187; x=1715615987; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1715011808; x=1715616608; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=B8bK6fC+/hctk+PwvfTwpigK2iNyGvKKcVfohzYbxwA=;
-        b=uZNr1gnfdcxuch5/Cxj8FV/ntFB1WnNgLWVzpmp4U64+hYMkP08FEVuroXFwMA3SFz
-         TiTH6LNd427ct88IyvjCx7wZQRDtn4RBgNZ3/VMitqeRlOKPxQvjvQvrv3QGQ1qGbygn
-         IwxA5LxNJl5c+zUxmIcP2wpRARBVUMfBFkpWVHpq6QjnOYSh/GE4LMB/nJHNG1zfxfE/
-         YtsT7PFj3HJDlsgmMQb12L9b8rQmmGjhfV7ZMlsb5lYLC4dUg2UkSMafpYWmlK3DaPtw
-         XdZ/X2JBB0/bFgWG50/DzpopPE0+y+6j2f/vUgvlfYdZzKTReL+/EhEmlzjcVJVSim6l
-         938w==
+        bh=nutCb6hy2mWUIhHOiW3+RagNvLqQap85OsgVrcHl9dk=;
+        b=JP2UrXd8oxpNA3+Wo/ajRNeWFLDxoAI08dIJh9lYrCK/2vapSeeKRitLRJzCF/el51
+         fT7RsuwoAGI5MSKkn2Int4Faf4QasgCUNEdaDTll614H0/WXmtncPeg5CCA+Ak6kimfx
+         pXI8+0u/ch7TeFcRhdqY1gJLEPI2LBKUOfgBhm8zcatTDUE/ZFhuBtKFL7/iyA6ttKkm
+         o9W2jL+3Jm8KCCJXyMZGSwWLQ6RxYcus1RqhmJOp7eWIRV9gcjO+a3weU2oVEMEJhHr1
+         2yJsDMKKiLny1lM4phNr6UbJIbTnJzoyWipPCiN3QPkwYEDsxtpZE4PlKv1OzjdmP5cV
+         8BMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715011187; x=1715615987;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1715011808; x=1715616608;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=B8bK6fC+/hctk+PwvfTwpigK2iNyGvKKcVfohzYbxwA=;
-        b=id0jmIfvVLMp1awbFi8duKrUz5UZ+DeA9g3VZ0n3VMTzHl+qnoYKDoqRl5BXR98TvU
-         2fIy2D1hbf4+8IFGTeDeN60gQXUmknrb70YwHy7XvfHb++um41hr9+LVD3jggWyqkzfu
-         /GxIA5GN+dBl5/UPfXsnW9T6q1s7UmDypvQ/f8PYPdPBOA9fSLliJUBS5PArAgCgpdjj
-         sL2F9cAsJQS6B6liNri+3s7aSsJmp1VlvdtqiofOrpcGQ+mIoN4dhqCD/Jzyg1zrwtvo
-         Uqrdl5+cvv2LbOo+MCeDBRT4QPx4Lv4xucwZF0RvI6ZNLpQR9vqKEui7yUIYqyqfLYfK
-         u6Nw==
-X-Forwarded-Encrypted: i=1; AJvYcCWf3pYo1IQDNbBbjfLfBmv/f+TnsR2/Uspv/6y4LcKH+KLQ7sKAXQ4/T0sFfX9H/NQUycU2zeb8dMAH3AE7EGqY9wIp+YZaQwxXTO0=
-X-Gm-Message-State: AOJu0Yyydkdyej52snw0JydvoI+qKG+OzXJs8r6DOOv9J3G5flEfrrbr
-	ay1sWrW6rjHbLxtOU717PFwJ0q0rKZSw98W5MPDK4x+yx3QGM8zSlVjHjj4pR4Q=
-X-Google-Smtp-Source: AGHT+IGceg5dzRVIGMGeu+y17mgOISrw/lpfzXT+ptk9o2+Vn10KZdcOhZRcjW//XSOCilsK6On4tA==
-X-Received: by 2002:a05:6871:713:b0:23f:4413:67bd with SMTP id 586e51a60fabf-240193912c8mr35622fac.6.1715011187143;
-        Mon, 06 May 2024 08:59:47 -0700 (PDT)
-Received: from freyr.lechnology.com (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id e17-20020a056870451100b0023c82e5be0fsm1955226oao.7.2024.05.06.08.59.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 May 2024 08:59:46 -0700 (PDT)
-From: David Lechner <dlechner@baylibre.com>
-To: Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>
-Cc: David Lechner <dlechner@baylibre.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Subject: [PATCH 2/2] hwmon: (adc128d818) simplify final return in probe
-Date: Mon,  6 May 2024 10:59:16 -0500
-Message-ID: <20240506-regulator-devm_regulator_get_enable_read_voltage-fixes-v1-2-356cdd152067@baylibre.com>
-X-Mailer: git-send-email 2.43.2
-In-Reply-To: <20240506-regulator-devm_regulator_get_enable_read_voltage-fixes-v1-0-356cdd152067@baylibre.com>
-References: <20240506-regulator-devm_regulator_get_enable_read_voltage-fixes-v1-0-356cdd152067@baylibre.com>
+        bh=nutCb6hy2mWUIhHOiW3+RagNvLqQap85OsgVrcHl9dk=;
+        b=IpbzZeLN6zDABnFpNZpzDvT2Z9H3pBomAyXiPUcbyVGzLKNQtP5UZp8AnCclZnJsj5
+         YRgrDH1ekIVeJdPKyQ+C0ExQSrrsch3RC8dBIRkfc4yqovYb7Ou7hw0DI7K4xpi1zYpf
+         bx3+TxHghDy6YGXeGgnTVjPbTFUB6Pv9HRVHfb1SbrDaP7Bdx0apsCyhCJzBqh5rimsT
+         7GuHZB1A1PNsIrKK4X9neDSaYE3rfeNjec1zwXz/1dJXVEiksYcZqUMVaPnE4dQL58ah
+         uwW3geCy6WnvgCam+qWpO9Jbl1U6kBqBDm6bxl//DgRe2uDJSYb1Qj6FrJ/TKtPK6ySe
+         6Yeg==
+X-Forwarded-Encrypted: i=1; AJvYcCVLfW56ogPvyT4kRE8rwhS1uwIUpVKbtinQj77QqdJq13cwGJUiWQ1AwiXjlrc1+LGzGUy6oGMNaxi+fDJlpZU/h/lVvLjGlflOgqQ=
+X-Gm-Message-State: AOJu0Yw+NbFKCzpzSbfzpIhUcXId+PXZmu47taHN9q3Nc0wJj809hvSC
+	BVH+ZqyEbrJXmKMuH7CFG0IMWXmxpdbsUitbHpn6NPdzArEKIknNESr5uHMHIewvEFPNCdNLUSW
+	0q4l2LVbXRA303+4gbzj/+OUw4WC6AQ5OqlouwA==
+X-Google-Smtp-Source: AGHT+IFxBzWxShB6K8Au7V8PY/rACcHC+u67upHljxePNYb/sfK3sX2UX+dZzknbFTW6GN7T4L5DGWVxF4IItIRQjKc=
+X-Received: by 2002:a2e:3a19:0:b0:2da:bbf4:81bb with SMTP id
+ h25-20020a2e3a19000000b002dabbf481bbmr7101049lja.2.1715011807732; Mon, 06 May
+ 2024 09:10:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Mailer: b4 0.12.4
-Content-Transfer-Encoding: 8bit
+References: <20240429-regulator-get-enable-get-votlage-v2-0-b1f11ab766c1@baylibre.com>
+ <171500756002.1968386.17290951989557329800.b4-ty@kernel.org>
+In-Reply-To: <171500756002.1968386.17290951989557329800.b4-ty@kernel.org>
+From: David Lechner <dlechner@baylibre.com>
+Date: Mon, 6 May 2024 11:09:56 -0500
+Message-ID: <CAMknhBEADE_fY+naO46Hf6gDP=H-Ap_dG6jRRzU6i7WR2J7LkQ@mail.gmail.com>
+Subject: Re: (subset) [PATCH v2 0/7] regulator: new API for voltage reference supplies
+To: Mark Brown <broonie@kernel.org>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Jean Delvare <jdelvare@suse.com>, 
+	Guenter Roeck <linux@roeck-us.net>, Jonathan Cameron <jic23@kernel.org>, 
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Support Opensource <support.opensource@diasemi.com>, 
+	Cosmin Tanislav <cosmin.tanislav@analog.com>, Lars-Peter Clausen <lars@metafoo.de>, 
+	Michael Hennerich <Michael.Hennerich@analog.com>, Antoniu Miclaus <antoniu.miclaus@analog.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-iio@vger.kernel.org, linux-staging@lists.linux.dev, 
+	linux-input@vger.kernel.org, Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The final return in adc128d818_probe() can be simplified by using
-PTR_ERR_OR_ZERO rather than an if statement.
+On Mon, May 6, 2024 at 9:59=E2=80=AFAM Mark Brown <broonie@kernel.org> wrot=
+e:
+>
+> On Mon, 29 Apr 2024 18:40:08 -0500, David Lechner wrote:
+> > In the IIO subsystem, we noticed a pattern in many drivers where we nee=
+d
+> > to get, enable and get the voltage of a supply that provides a referenc=
+e
+> > voltage. In these cases, we only need the voltage and not a handle to
+> > the regulator. Another common pattern is for chips to have an internal
+> > reference voltage that is used when an external reference is not
+> > available. There are also a few drivers outside of IIO that do the same=
+.
+> >
+> > [...]
+>
+> Applied to
+>
+>    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git =
+for-next
+>
+> Thanks!
+>
+> [1/7] regulator: devres: add API for reference voltage supplies
+>       commit: b250c20b64290808aa4b5cc6d68819a7ee28237f
+> [2/7] hwmon: (adc128d818) Use devm_regulator_get_enable_read_voltage()
+>       commit: cffb8d74bd4e9dd0653c7093c4a5164a72c52b1f
+> [3/7] hwmon: (da9052) Use devm_regulator_get_enable_read_voltage()
+>       commit: d72fd5228c9f2136a3143daf5c7822140211883a
+>
+> All being well this means that it will be integrated into the linux-next
+> tree (usually sometime in the next 24 hours) and sent to Linus during
+> the next merge window (or sooner if it is a bug fix), however if
+> problems are discovered then the patch may be dropped or reverted.
+>
+> You may get further e-mails resulting from automated or manual testing
+> and review of the tree, please engage with people reporting problems and
+> send followup patches addressing any issues that are reported if needed.
+>
+> If any updates are required or you are submitting further changes they
+> should be sent as incremental updates against current git, existing
+> patches will not be replaced.
+>
+> Please add any relevant lists and maintainers to the CCs when replying
+> to this mail.
+>
 
-Suggested-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: David Lechner <dlechner@baylibre.com>
----
- drivers/hwmon/adc128d818.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/hwmon/adc128d818.c b/drivers/hwmon/adc128d818.c
-index 2a35acb011eb..321a61977396 100644
---- a/drivers/hwmon/adc128d818.c
-+++ b/drivers/hwmon/adc128d818.c
-@@ -475,10 +475,8 @@ static int adc128_probe(struct i2c_client *client)
- 
- 	hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
- 							   data, adc128_groups);
--	if (IS_ERR(hwmon_dev))
--		return PTR_ERR(hwmon_dev);
- 
--	return 0;
-+	return PTR_ERR_OR_ZERO(hwmon_dev);
- }
- 
- static const struct i2c_device_id adc128_id[] = {
-
--- 
-2.43.2
-
+Hi Jonathan, if Mark doesn't pick up the iio patches here, I'll resend
+them after the next kernel release.
