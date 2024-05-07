@@ -1,102 +1,124 @@
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBC731514E6;
-	Tue,  7 May 2024 11:27:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A671D15E1E6;
+	Tue,  7 May 2024 13:29:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715081279; cv=none; b=QEp+lgI3QvuhPT2aFple18yIxUZBudcAuzRwzmEsMzpTRJaIckqqMmIdHTmiWXVGmiq9klGe6cTiATKzTss4BvNfjsKzTz2kewcLY+4SMEvobsGU8o6wieikC6ZPZ4HWDV7Cga2IW56Wc2K0c2VzWqUdLVtY827YKw4tIfZzWiY=
+	t=1715088586; cv=none; b=U5kT7GVfxgpiWCaFbPjH/GtZHmy1IuzJIImT9wyWo6xShFOIkqbmwOCeEWaxQ7Df2YElfBGsgT1qEFSY641otu+kxCEKOawpDXyxQcD6UhyB8nYcR+WueYTPakCE5u3Sk0c3eJu+kiQLbMxdeB8Cpb8CYTO91Oatd9q5Plexvo4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715081279; c=relaxed/simple;
-	bh=KemOQ3OEdXs4N4TiysfvGJ8uvPz0kTFQBgkdhCVp+yM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NMAfynJLxAiHymCXbr13SaTnn9c/WSXJ5qizam6sRqSNGGn2WNlrU3nwRgYD6SmwFAfgKptYxChqFfCsVzqNZoh0S94PzMtix1cYF7dreucKQ53fyzRZR61yn8rVlhOF/Cz0j98lejVRBFp53rwRbBwPgP36T5lPjal1ECMslbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MqGBT+06; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1715088586; c=relaxed/simple;
+	bh=XIDDqhsY7R4tB/pzk7W1mDLu8wlvA1ti+3tET5M5PbE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ljUehbLj37c5ZHimgzHLlHccuDjcoIOesFKSX7joEFLRFBa8eNNYCCoepa2K/vPlty+iy70FG/N8//oUbsKUcjMtJ2EtC+VrK2pe/NN4GgslPQqdWVxp2oS6414+1k2NSa9jTP/nFZJhUkz3a8q4ZuMGiTj8o9/dsnW3QDqdZSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jEBFPluU; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MqGBT+06"
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a59c448b44aso555602766b.2;
-        Tue, 07 May 2024 04:27:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jEBFPluU"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1ec486198b6so25501675ad.1;
+        Tue, 07 May 2024 06:29:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715081276; x=1715686076; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=hbVTAeRTrLCTl9qsRyOsPTqbHQbwmcvwqOAgl6yj31c=;
-        b=MqGBT+06QFWAS0rJ3du76g9VW+e9FSFFP0hNwh1JosAiEKJEpOVcKBP1X9Zp9srFqf
-         qUjuyB84xGjq2sAS7LLOa66h0JIpmQ+TyyxkHlXD1kkADb1ytjyQbD8hYtnYmGnBj+jX
-         A2a2Q4jdlGbpr2MwY7FDZAznbxBxnNzBc6vpj53kKoXMe1+mxIhInrV33o3RkRladeAl
-         r7OwDFiCqw2lFM6TCU00blic6smEL+WMY45mmZ44gS+MlgjoFUspfzI0pQlkHJBHseIb
-         CPC0Ixz2E/4EQVEoIjMka2e/iptyZsSg5mPyPH0brYZXNSLL+HNZAtNlXJpq6pUREYUb
-         Z7wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715081276; x=1715686076;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1715088584; x=1715693384; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hbVTAeRTrLCTl9qsRyOsPTqbHQbwmcvwqOAgl6yj31c=;
-        b=TZCLe/q+SI7FeKLSKvPNdZFMJkSZn8kpnTqKpH9RYWa40Ym6qm5FOIvjn2HsLwUTR1
-         29dD4UsdYH1/3Ufu2Z79AhJnqNAaDQEHRl9mMH6kRY0NQW4gFgtf1XjkuebuBnCHnaWf
-         8Z6nT2FskkidRdhZjjxXtBXLPGJyHVr25kSTwJm2P84zx+MPQnlwTooiFZYqb11lSOnV
-         Lui2JVfM4wTgjK3TIhIhihR4ucCvyojXqKrrHE9D/6DRMOtalkWr1FYoky7z45gTdpjM
-         4tFmduq9xHfFle/T8jG4nQcNol7Il/Y3R1DJseV8E825O5HVc7qg4c4UpTSXICa6nOoj
-         4Jnw==
-X-Forwarded-Encrypted: i=1; AJvYcCXO/BVRo+I2PyahS9m49EyGuHe1PktCC8589AH2LuGf5fUjX4IfuVIxKWigJcrc0dU+yposizrpXaRi8engm7Azqp1AvyP67dYgOJf8
-X-Gm-Message-State: AOJu0YzFw/cKCVWjoR5Og36RdEoWxjUiw8nLjBfczX3Qs1mRsTyhvKq1
-	Riwevrr9BwI3OLvNgfJaeSw03zvhPkQtsG2Y6lf2nwEH9RPGQ0I2tQsIu1J+qZoqjUIQafnSEu2
-	evntPQxQHwO7xGX8cDs7YhDo5z8W4OZ4d
-X-Google-Smtp-Source: AGHT+IFC2cfEQaM4xKdTt2kGk9z+vAhIvihA6thMi3zCsKLgKOVUgsSzNY5n22HGqmtSy6tS20TpI2kCpM3YBeXZbI4=
-X-Received: by 2002:a17:907:72c3:b0:a59:bdb0:e9eb with SMTP id
- du3-20020a17090772c300b00a59bdb0e9ebmr4275573ejc.77.1715081275868; Tue, 07
- May 2024 04:27:55 -0700 (PDT)
+        bh=n569n9SL+LXTTL9px6BcI0Vvwn8aUwdrawtWOOlG8Sw=;
+        b=jEBFPluUgGAeR/Pj9XEcbam5jUHmefM37mUuyiQ0nDPxOHlxZ5N9D1oj/AT++KFJYP
+         jXJEcqw4gEeLvlAODiMj5IC4TN9mq/yQOkK3ciAIQHFS1VsfjSRr3RkRDvjt8ZGfHcOf
+         MlqhJXQwOmj3uVtbT3CXcFhjD/jixh6fRYtZ/Vw0lj+n2IBel38eg8+ELrHi77eTOg+X
+         JeI/VtoWhxTyZw7EzVTpOwbckWEE7OE3lkITbkqzVJmcgsN/htsHLbpOV9qiHo560hd+
+         VMG7SHZ3XsJeCP+fo3nebpvABm9eImsPvexKj/2ofI6nvQU7DICeCdT0L1Xn4pyC/0Ii
+         wStA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715088584; x=1715693384;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=n569n9SL+LXTTL9px6BcI0Vvwn8aUwdrawtWOOlG8Sw=;
+        b=hfq9fSzW7wspFR7hBF+gB6wLBvZiLylyjwjkuOClOKwqfZb9JyjAxBsIu5TELoqs5p
+         KkYHZgxXOoOmJotIlXtcloz47fW0Ssgw6vYZa9/XR2IVYHeB2dGe3hcs2IE3FniotcnV
+         VoswZYtu2ZbgT70RF5Ogno7UmWTE1+Rbd4FvpoSrZNztBpyYbZnJzQ25Bk/hFv9EEAC6
+         T+6YVU4mDr7MzbDOaoSi56ZYFzp7z1NAx1T6hpFHADY+TuLooxrRj7xJE/LHbd/jvv8L
+         l+RS77HKcjdPabhvL9TSkKyovwAXVHxZMC5Gw9Ta+hicu0O3s1CbypVM1wDOmyS777Jr
+         Eokw==
+X-Forwarded-Encrypted: i=1; AJvYcCWimWDMGzxr+hPJKalM9D6bOvwrILlkytSxZO1AOqLlpi4kVeT3LegnSR1y5tcO6835y/AEH05NaBGjEuzSVcIsooxaglT9yaEEAPY0
+X-Gm-Message-State: AOJu0YyBno9kQrDx7p6+Ggk/ySEdhCXO8aJVnAhhXrXZtHAQKykx+089
+	QMhA1ZQ3Jc76M/8YO3y3Fjxu7KirMVXa+g9843AdoxURCVKWqATITOC8Hg==
+X-Google-Smtp-Source: AGHT+IHyh74tDDcjx/C8ZGKboiDtZYiV/c1oBGr/ChzgNcDgf+0AZAkDc7pCAWg3HQHjWuYGL9npdg==
+X-Received: by 2002:a17:902:c947:b0:1e4:a667:550e with SMTP id i7-20020a170902c94700b001e4a667550emr14988417pla.20.1715088583746;
+        Tue, 07 May 2024 06:29:43 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id lb3-20020a170902fa4300b001e49bce99d9sm10026261plb.95.2024.05.07.06.29.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 May 2024 06:29:43 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Tue, 7 May 2024 06:29:41 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Lars Petter Mostad <larspm@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] hwmon: (emc1403) Various improvements
+Message-ID: <5c3972c2-66f8-4a4d-984c-72c8f23d36d0@roeck-us.net>
+References: <20240503154324.517246-1-linux@roeck-us.net>
+ <20240506144412.139300-1-lars.petter.mostad@appear.net>
+ <f0a2ce94-5610-4f0b-91ae-2d16d1b80dff@roeck-us.net>
+ <CAC-Dm24im6hB71ijDS2rtO2W5ZEdQ=LnwGGzR0Oxir2=PA0u3Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240503154324.517246-1-linux@roeck-us.net> <20240506144412.139300-1-lars.petter.mostad@appear.net>
- <f0a2ce94-5610-4f0b-91ae-2d16d1b80dff@roeck-us.net>
-In-Reply-To: <f0a2ce94-5610-4f0b-91ae-2d16d1b80dff@roeck-us.net>
-From: Lars Petter Mostad <larspm@gmail.com>
-Date: Tue, 7 May 2024 13:27:44 +0200
-Message-ID: <CAC-Dm24im6hB71ijDS2rtO2W5ZEdQ=LnwGGzR0Oxir2=PA0u3Q@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] hwmon: (emc1403) Various improvements
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAC-Dm24im6hB71ijDS2rtO2W5ZEdQ=LnwGGzR0Oxir2=PA0u3Q@mail.gmail.com>
 
-> It would be great if you can reply to the patches with a
-> Tested-by: tag.
+Hi Lars,
 
-Tested-by: Lars Petter Mostad <lars.petter.mostad@appear.net>
+On Tue, May 07, 2024 at 01:27:44PM +0200, Lars Petter Mostad wrote:
+> > It would be great if you can reply to the patches with a
+> > Tested-by: tag.
+> 
+> Tested-by: Lars Petter Mostad <lars.petter.mostad@appear.net>
+> 
+> Of course, I had to do some light modifications to the patches to be able
+> to test on emc1438. I will post these modifications as an RFC patch once
+> the above patches are available on the hwmon-next (right?) branch.
+> 
+Yes. Patches are there now.
 
-Of course, I had to do some light modifications to the patches to be able
-to test on emc1438. I will post these modifications as an RFC patch once
-the above patches are available on the hwmon-next (right?) branch.
+> Note that checkpatch.pl --strict fails a couple of checks.
+> 
+Odd; not for me. I see a couple of CHECK messages when running it on the
+driver.
 
-Note that checkpatch.pl --strict fails a couple of checks.
+CHECK: struct mutex definition without comment
+CHECK: Alignment should match open parenthesis
 
-> Also, could you send me a register dump of emc1438 ?
-> I'd like to use a real register dump for the unit test code if possible.
+However I don't see any messages when running it on the patches.
+Please send me the log.
 
-     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
-00: 2b 2d 00 80 06 55 00 55 00 80 06 55 00 55 00 00
-10: 00 00 00 00 00 55 00 00 00 55 55 00 00 00 00 00
-20: 55 0a 70 2d 00 0d 0d 00 00 80 00 00 55 00 00 00
-30: 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-40: 00 2b 60 00 00 2e c0 00 00 00 00 00 00 00 00 00
-50: 55 00 00 00 55 00 00 00 55 00 00 00 55 00 00 00
-60: 0e 00 00 00 55 55 55 55 00 00 00 00 00 00 00 00
-70: 00 0f 0f 00 00 00 00 00 00 00 00 00 00 00 00 00
-80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-90: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-a0: 00 00 00 00 6b 60 00 00 23 00 3f 13 ad 03 20 02
-b0: 20 00 00 00 20 00 20 00 00 00 00 00 12 00 00 00
-c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-d0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-f0: 00 00 00 00 00 00 00 00 00 00 00 00 00 59 5d 00
+> > Also, could you send me a register dump of emc1438 ?
+> > I'd like to use a real register dump for the unit test code if possible.
+> 
+>      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+> 00: 2b 2d 00 80 06 55 00 55 00 80 06 55 00 55 00 00
+> 10: 00 00 00 00 00 55 00 00 00 55 55 00 00 00 00 00
+> 20: 55 0a 70 2d 00 0d 0d 00 00 80 00 00 55 00 00 00
+> 30: 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> 40: 00 2b 60 00 00 2e c0 00 00 00 00 00 00 00 00 00
+> 50: 55 00 00 00 55 00 00 00 55 00 00 00 55 00 00 00
+> 60: 0e 00 00 00 55 55 55 55 00 00 00 00 00 00 00 00
+> 70: 00 0f 0f 00 00 00 00 00 00 00 00 00 00 00 00 00
+> 80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> 90: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> a0: 00 00 00 00 6b 60 00 00 23 00 3f 13 ad 03 20 02
+> b0: 20 00 00 00 20 00 20 00 00 00 00 00 12 00 00 00
+> c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> d0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> f0: 00 00 00 00 00 00 00 00 00 00 00 00 00 59 5d 00
+> 
+Great, thanks!
 
-Regards,
-Lars Petter
+Guenter
