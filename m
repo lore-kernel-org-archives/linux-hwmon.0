@@ -1,232 +1,233 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A42F31A2C0B
-	for <linux-hwmon@vger.kernel.org>; Wed,  8 May 2024 15:01:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B76563E;
+	Wed,  8 May 2024 16:47:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715180480; cv=none; b=lw+BUekR8auaW0+MFUmBDyvgNCzJTFztBnZVbor/CylhVICFKgBrUvNUiaMVIvNY7b9VNx987THFfKqe7zJZ3aPNamUjdpoT/SxaHg3u9Wo/mVCQcoOjqs/mD2w0HTItuX8Yi36ERk86KhRYOqxxFtYMZymhLLwSwHNvviwsJ+A=
+	t=1715186862; cv=none; b=BWLpGWtXHcAKJuAc/7Q3uvz6HHcSABDovaIpxPfmpMRDZzwDGV/SHLjfILFPz/1fpNxrkJkBo/+A77NRQcIfGTgJ7gwONb1OM3MoOuDllxv46zbZcqqqbukSAsmcWv7gi9VFJQJ+4p8XpWAXjh6pXmrCC8rIGMdbQml64PvGav8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715180480; c=relaxed/simple;
-	bh=g9NoU8LHSg6SP7eoFwhLka+fwB/eev6VpSf1Jmjhras=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=BRXBMttmk1uNC9V3Z7wdxGpVcSEPcpNbgP4wt9qH99X3y4ZHxC4SH4keUBoeXYXH0b/Z9lLxVkJLXUc7xesKGK4DQz8kuChNW9Q61F1RM8i/htijEYEackejlnVU3cZY5HN5xNAOJfKSznSFRdBhPJ+khEAH1N6uZdl7P9JZ/Og=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gHXwSZPn; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1715186862; c=relaxed/simple;
+	bh=G/+RUT2k7UJ/l1fi7XiRqiYTHntagvnq92yu5KTJVrY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PicPJ1pqrfU+VoXwFKFuYuXMSDxFhwxcpI1rI/7HMOTrmf4t1f5LbXyyiRO00mmLbbawaTrvOsBXT2J8q1Lzq8u7uyPKFsBG2fwIewpCrbfjLJnBDcTwVEJC40aaHPtybO/qn76s1QEysEHU3lM0LljKdjCVFvf8OP6lgo2+KLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cehDNeeg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gHXwSZPn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715180478; x=1746716478;
-  h=date:from:to:cc:subject:message-id;
-  bh=g9NoU8LHSg6SP7eoFwhLka+fwB/eev6VpSf1Jmjhras=;
-  b=gHXwSZPnrvBbCxk4LOwppKXRaFHNWDf8DqnDnWGqD5zFeeWwr1rKpmZE
-   fVnS3/yR3XnqMonnvfbaXZii9Sw2kmmCxd8WO9HiE/sCEO67eC7KQHNlm
-   RoS6gDHk45OUQzzMkuvOQt1l/bxslbVx0U0THjY7zy01g6FzDU0SXQEUD
-   jpCTgcVAaeRu/9wQ80EckSsewIBGadWlXxm3XF1qKJGPas4irkAJ4Gd2x
-   Qs8GeuPq4grJXbFBpugssQXoTtooztpRCwXKjvFbZPSJcWM9LK0Ff+4BK
-   F7tx05S369in4ch2OCv5HlseQSdV0vEn69V5uQ+Ms6VSHYG9KiuCIufXS
-   w==;
-X-CSE-ConnectionGUID: NO/C15JARbi9QsAPDJnaBA==
-X-CSE-MsgGUID: Z+btd/GYRwqbv1yM5ZjZTA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11067"; a="11176474"
-X-IronPort-AV: E=Sophos;i="6.08,145,1712646000"; 
-   d="scan'208";a="11176474"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 08:01:18 -0700
-X-CSE-ConnectionGUID: W79diPmFQva2UEyv7GJJqA==
-X-CSE-MsgGUID: CbA7i+gbTAmiEC2+DKyPaA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,145,1712646000"; 
-   d="scan'208";a="33714311"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 08 May 2024 08:01:17 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s4inC-0003eI-2a;
-	Wed, 08 May 2024 15:01:14 +0000
-Date: Wed, 08 May 2024 23:00:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 6a8157812f5b486d1fdabeefa070d75ae49220ee
-Message-ID: <202405082345.Q8CtV3cH-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cehDNeeg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DD03C113CC;
+	Wed,  8 May 2024 16:47:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715186860;
+	bh=G/+RUT2k7UJ/l1fi7XiRqiYTHntagvnq92yu5KTJVrY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cehDNeeg9X/ZTdTbSBR2lwvZ51WhdQzmbG5tw2STpkKdvSRc0cJrhgHjXhP6Xu060
+	 /E2t9dKjv2tBkWBjNtDsIUT+WjC7ykSUYl54ZQc3+AGVxBbIl5vzxqv9Dk9Z8Au1DI
+	 oJY6j8P988d0B6O3L2gP12PLJL3CnJchiJAwI/fmNQS31azgiG4duHjizX/UJcB1Hk
+	 w8IKewoDNEzDtJTDrjFekF6Q56SSetQ0MDubEkVXLGg0NugYL0T5b269EzZdWkHcHs
+	 hb0X6bDn+F0SGTPHT2vPn1siHxsKToJruw+/9aX1vUdS2E0J44doEbIvRFUBDr/tKr
+	 6i7UqI8IHNWGg==
+Date: Wed, 8 May 2024 17:47:35 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Chanh Nguyen <chanh@amperemail.onmicrosoft.com>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Chanh Nguyen <chanh@os.amperecomputing.com>,
+	Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Justin Ledford <justinledford@google.com>,
+	devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+	Open Source Submission <patches@amperecomputing.com>,
+	Phong Vo <phong@os.amperecomputing.com>,
+	Thang Nguyen <thang@os.amperecomputing.com>,
+	Quan Nguyen <quan@os.amperecomputing.com>
+Subject: Re: [PATCH v2 3/3] dt-bindings: hwmon: max31790: Add
+ maxim,pwmout-pin-as-tach-input property
+Message-ID: <20240508-onward-sedation-621cc48fa83f@spud>
+References: <20240414042246.8681-4-chanh@os.amperecomputing.com>
+ <13b195e6-cbbd-4f74-a6fa-d874cb4aaa45@linaro.org>
+ <065243cc-09cf-4087-8842-bd4394fb324f@amperemail.onmicrosoft.com>
+ <d549cf2b-a7fa-4644-8fcb-3c420503ee01@amperemail.onmicrosoft.com>
+ <20240423-gallantly-slurp-24adbfbd6f09@spud>
+ <ab5cfd8c-0e88-4194-a77e-5ffbb6890319@amperemail.onmicrosoft.com>
+ <396b47f5-9604-44ab-881f-94d0664bcab8@roeck-us.net>
+ <0dcc8788-604a-49c1-8c6b-fdbfa9192039@amperemail.onmicrosoft.com>
+ <da94fde6-3286-44eb-a543-c2ac4d11cd32@roeck-us.net>
+ <8fb38eb3-bb94-49cc-b5bc-80989d7876b9@amperemail.onmicrosoft.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="UUlXLBmKvVSmrjpp"
+Content-Disposition: inline
+In-Reply-To: <8fb38eb3-bb94-49cc-b5bc-80989d7876b9@amperemail.onmicrosoft.com>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 6a8157812f5b486d1fdabeefa070d75ae49220ee  hwmon: (emc1403) Add support for conversion interval configuration
 
-elapsed time: 1464m
+--UUlXLBmKvVSmrjpp
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-configs tested: 155
-configs skipped: 3
+On Wed, May 08, 2024 at 10:44:34AM +0700, Chanh Nguyen wrote:
+> On 05/05/2024 22:40, Guenter Roeck wrote:
+> > On 5/5/24 03:08, Chanh Nguyen wrote:
+> > > On 25/04/2024 21:05, Guenter Roeck wrote:
+> > > > On 4/25/24 03:33, Chanh Nguyen wrote:
+> > > >=20
+> > > > pwm outputs on MAX31790 are always tied to the matching
+> > > > tachometer inputs
+> > > > (pwm1 <--> tach1 etc) and can not be reconfigured, meaning tach-ch =
+for
+> > > > channel X would always be X.
+> > > >=20
+> > > > > I would like to open a discussion about whether we should
+> > > > > use the tach-ch property on the fan-common.yaml
+> > > > >=20
+> > > > > I'm looking forward to hearing comments from everyone. For
+> > > > > me, both tach-ch and vendor property are good.
+> > > > >=20
+> > > >=20
+> > > > I am not even sure how to define tach-ch to mean "use the pwm outpu=
+t pin
+> > > > associated with this tachometer input channel not as pwm output
+> > > > but as tachometer input". That would be a boolean, not a number.
+> > > >=20
+> > >=20
+> > > Thank Guenter,
+> > >=20
+> > > I reviewed again the "tach-ch" property, which is used in the https:/=
+/elixir.bootlin.com/linux/v6.9-rc6/source/Documentation/devicetree/bindings=
+/hwmon/aspeed,g6-pwm-tach.yaml#L68
+> > > and https://elixir.bootlin.com/linux/v6.9-rc6/source/drivers/hwmon/as=
+peed-g6-pwm-tach.c#L434
+> > >=20
+> > > That is something completely different from my purpose.
+> > >=20
+> >=20
+> > Based on its definition, tach-ch is associated with fans, and it looks
+> > like the .yaml file groups multiple sets of fans into a single
+> > fan node.
+> >=20
+> > In the simple case that would be
+> >  =A0=A0=A0=A0tach-ch =3D <1>
+> > ...
+> >  =A0=A0=A0=A0tach-ch =3D <12>
+> >=20
+> > or, if all fans are controlled by a single pwm
+> >  =A0=A0=A0=A0tach-ch =3D <1 2 3 4 5 6 8 9 10 11 12>
+> >=20
+> > The existence of tachometer channel 7..12 implies that pwm channel
+> > (tachometer
+> > channel - 6) is used as tachometer channel. That should be sufficient to
+> > program
+> > the chip for that channel. All you'd have to do is to ensure that pwm
+> > channel
+> > "X" is not listed as tachometer channel "X + 6", and program pwm channel
+> > "X - 6"
+> > for tachometer channels 7..12 as tachometer channels.
+> >=20
+>=20
+> Hi Guenter,
+>=20
+> I applied the patch [2/3] in my patch series (https://lore.kernel.org/lkm=
+l/20240414042246.8681-3-chanh@os.amperecomputing.com/)
+>=20
+> My device tree is configured as below, I would like to configure PWMOUT p=
+ins
+> 5 and 6 to become the tachometer input pins.
+>=20
+>        fan-controller@20 {
+>          compatible =3D "maxim,max31790";
+>          reg =3D <0x20>;
+>          maxim,pwmout-pin-as-tach-input =3D /bits/ 8 <0 0 0 0 1 1>;
+>        };
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Why are you still operating off a binding that looks like this? I
+thought that both I and Krzysztof told you to go and take a look at how
+the aspeed,g6-pwm-tach.yaml binding looped and do something similar
+here. You'd end up with something like:
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20240508   gcc  
-arc                   randconfig-002-20240508   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                   randconfig-001-20240508   gcc  
-arm                         s3c6400_defconfig   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240508   gcc  
-arm64                 randconfig-003-20240508   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240508   gcc  
-csky                  randconfig-002-20240508   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240508   clang
-i386         buildonly-randconfig-002-20240508   clang
-i386         buildonly-randconfig-003-20240508   gcc  
-i386         buildonly-randconfig-004-20240508   gcc  
-i386         buildonly-randconfig-005-20240508   clang
-i386         buildonly-randconfig-006-20240508   gcc  
-i386                                defconfig   clang
-i386                  randconfig-001-20240508   gcc  
-i386                  randconfig-002-20240508   clang
-i386                  randconfig-003-20240508   clang
-i386                  randconfig-004-20240508   gcc  
-i386                  randconfig-005-20240508   clang
-i386                  randconfig-006-20240508   gcc  
-i386                  randconfig-011-20240508   gcc  
-i386                  randconfig-012-20240508   gcc  
-i386                  randconfig-013-20240508   clang
-i386                  randconfig-014-20240508   clang
-i386                  randconfig-015-20240508   clang
-i386                  randconfig-016-20240508   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240508   gcc  
-loongarch             randconfig-002-20240508   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                     decstation_defconfig   gcc  
-mips                           ip27_defconfig   gcc  
-mips                      loongson3_defconfig   gcc  
-mips                   sb1250_swarm_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240508   gcc  
-nios2                 randconfig-002-20240508   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240508   gcc  
-parisc                randconfig-002-20240508   gcc  
-parisc64                            defconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                        cell_defconfig   gcc  
-powerpc               randconfig-002-20240508   gcc  
-powerpc64             randconfig-001-20240508   gcc  
-powerpc64             randconfig-002-20240508   gcc  
-powerpc64             randconfig-003-20240508   gcc  
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-riscv                 randconfig-001-20240508   gcc  
-riscv                 randconfig-002-20240508   gcc  
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-s390                  randconfig-002-20240508   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                        edosk7760_defconfig   gcc  
-sh                    randconfig-001-20240508   gcc  
-sh                    randconfig-002-20240508   gcc  
-sh                           se7619_defconfig   gcc  
-sparc                            alldefconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                       sparc32_defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240508   gcc  
-sparc64               randconfig-002-20240508   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20240508   gcc  
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240508   clang
-x86_64       buildonly-randconfig-002-20240508   clang
-x86_64       buildonly-randconfig-003-20240508   clang
-x86_64       buildonly-randconfig-004-20240508   clang
-x86_64       buildonly-randconfig-006-20240508   clang
-x86_64                              defconfig   gcc  
-x86_64                randconfig-002-20240508   clang
-x86_64                randconfig-003-20240508   clang
-x86_64                randconfig-011-20240508   clang
-x86_64                randconfig-012-20240508   clang
-x86_64                randconfig-015-20240508   clang
-x86_64                randconfig-073-20240508   clang
-x86_64                randconfig-076-20240508   clang
-x86_64                           rhel-8.3-bpf   gcc  
-x86_64                          rhel-8.3-func   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
-xtensa                generic_kc705_defconfig   gcc  
-xtensa                randconfig-001-20240508   gcc  
-xtensa                randconfig-002-20240508   gcc  
+        fan-controller@20 {
+          compatible =3D "maxim,max31790";
+          reg =3D <0x20>;
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+          fan-0 {
+            pwms =3D <&pwm-provider ...>;
+            tach-ch =3D 6;
+        };
+
+          fan-1 {
+            pwms =3D <&pwm-provider ...>;
+            tach-ch =3D 7;
+        };
+};
+
+You can, as tach-ch or pwms do not need to be unique, set multiple
+channels up as using the same tachs and/or pwms.
+In the case of this particular fan controller, I think that the max31790
+is actually the pwm provider so you'd modify it something like:
+
+        pwm-provider: fan-controller@20 {
+          compatible =3D "maxim,max31790";
+          reg =3D <0x20>;
+	  #pwm-cells =3D <N>;
+
+          fan-0 {
+            pwms =3D <&pwm-provider ...>;
+            tach-ch =3D <6>;
+        };
+
+          fan-1 {
+            pwms =3D <&pwm-provider ...>;
+            tach-ch =3D <7>;
+        };
+};
+
+I just wrote this in my mail client's editor, so it may not be not
+valid, but it is how the fan bindings expect you to represent this kind
+of scenario.
+
+Cheers,
+Conor.
+
+>=20
+> The sysfs is generated by the max31790 driver are shown below. We can see
+> the PWM5 and PWM6 are not visible, and the fan11 and fan12 are visible. A=
+nd
+> all FAN devices are on my system, which worked as expected.
+>=20
+> root@my-platform:/sys/class/hwmon/hwmon14# ls
+> device       fan12_input  fan1_target  fan2_target  fan3_target fan4_targ=
+et
+> fan6_enable  of_node      pwm2         pwm4
+> fan11_fault  fan1_enable  fan2_enable  fan3_enable  fan4_enable fan5_enab=
+le
+> fan6_fault   power        pwm2_enable  pwm4_enable
+> fan11_input  fan1_fault   fan2_fault   fan3_fault   fan4_fault fan5_fault
+> fan6_input   pwm1         pwm3         subsystem
+> fan12_fault  fan1_input   fan2_input   fan3_input   fan4_input fan5_input
+> name         pwm1_enable  pwm3_enable  uevent
+>=20
+> Please share your comments!
+>=20
+> > Hope this helps,
+> > Guenter
+> >=20
+
+--UUlXLBmKvVSmrjpp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZjuspwAKCRB4tDGHoIJi
+0tPqAP98wTeQweynaGBZg9YPawUPkDkuuI83sV+oyQj48YYoIwEA5FJvt12KWF00
+iVizwm+RfmufPUV1B5XMz/CFaVou7wU=
+=wzZY
+-----END PGP SIGNATURE-----
+
+--UUlXLBmKvVSmrjpp--
