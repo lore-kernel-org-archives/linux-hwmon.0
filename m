@@ -1,97 +1,93 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5F14130A43
-	for <linux-hwmon@vger.kernel.org>; Wed,  8 May 2024 19:21:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1687F1332A0
+	for <linux-hwmon@vger.kernel.org>; Wed,  8 May 2024 21:55:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715196066; cv=none; b=TgUVG7d4dwPmGwYcK6iJYncSw7XQZ8h1qNmrVpb5O39kFa2pchX7gsYHeVycu2H0ex+mQyBjuJJ5KaF0Zm/lWWqJ1D/zqNrJWP5sOPOgA9FjwWT/JjOkXOc+5kukIJziSCOahPpvjTNSDook4Gvh13EWVVMfKLlAXGmoMyXs6iU=
+	t=1715205311; cv=none; b=t4UNNcv+iGwi1VxdoWsNdkENGgmjVOfoiz8BUIxzYSPbWzsM+vINWOuywOp0nmQ7e2VGuxu88BgOis8W+TMvLA3rqXIkum6rU8OSOMbDGOSBzturq2fiHJoY/nrO9z/x0GQBfTi3AfPmEv176QWarTIr7MkdVd/o/KnV+Q6nUUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715196066; c=relaxed/simple;
-	bh=/qza8YWWO5uoSXCRyrgSYFcV+jzxhetbdWSA03J8S8g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i8fJ10LgoNW6d8Ljmj/Juc+AVhWT2UNZbtF57sX+1weRQ/jo7VvtycXQii/D9JvGC1a7AiJ1AoKpgrTJYRZ27dDA8Y/oKQvYFHhD2aOZ2NTzqppDfDnfZEIwiZBEWukmCqlVz2OJXFzwX0Y2bkgxk+ITkTFwjMC66cHUBQyTykU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SmBHI6Fp; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1715205311; c=relaxed/simple;
+	bh=4f5DUf1pONPmn0vooSlEAH1gHVZXc7bMU1Qr2jHYsqQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YAhjMe4tNJjWTSrBqhmpZbGNiJTfzXL0viwEx3zBx6oc6Bi3c7vHBYegl/PKvSUK45PJPKh5yXoAwA9lmD0E4+MGc8px3pog0m+bxglIRV1W9B414Z67CbONWigc9iaQ1PaZrVq24i8XjO8yTtXLwT80d7CGH0gPjq4IDJ6Zt2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=ly4RhmoT; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SmBHI6Fp"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1ee38966529so9033135ad.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 08 May 2024 12:21:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715196064; x=1715800864; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mV9NJGQbCEhjeIOjYJ6S0UNLL5A2waOV96xKpnF4fik=;
-        b=SmBHI6FppqCQ6dr5QKBVXzOQ3eBJ8aVGdPmLSHBFYMrp5/ntHXGfR3Kqbr65BBWmVC
-         iFrCdRNOUa/d/oWzUhsMrYc1btipAqhag+FH0S6EgS3QZm7d2tjlYadEEKyioDuYGeVy
-         +kOjDo56IcesBk6FKiDIFWXs8A5Yn6WbXk62YSy0gSU0pkx0p6kn5PHQKI8aHftiFdsQ
-         GoD4d5kfwNXMSzzXu265rbjlPGRGzSd2PptxewXsEQvWdiM98662QgW/TAhy83NuDXe8
-         wz12AsghmLIUUuGXrus0zB9hVzdGuD0IbHGF0xrtNfPtIMc6D9IaGXfoMOHc1cVRAENK
-         n6AQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715196064; x=1715800864;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mV9NJGQbCEhjeIOjYJ6S0UNLL5A2waOV96xKpnF4fik=;
-        b=OCBVDYhICvIuBXS2xozEEjWMF9gIhSICEQ9P1Xl+oqr0/D4chcQ7oD8HUpLhSsPcil
-         EZLSDYxpWdk8UHVGc4gmbiJYJCqxpx7/g+zPmGq5bgXmnmjfjYCztqVmZjJsgX0HhxZL
-         j53P+XlqdNoCtmXe2LvYxKItVAVPD2krGiUL/Zp8r3f/X/P9g2qj7B3qSl0dHdoor8re
-         IZweUn5IKn2SfIcCmR8e0GYhiOOYVt+0eRMWJn1/rclNVUWmKh8aVetJ4e3hRFM6Qtz2
-         1EggiZGCETJeUKgEaugM0GlFUa018eqC4muG6F2cPlTO2jtk5yneCazzl3x6CG11C2X4
-         PUvQ==
-X-Gm-Message-State: AOJu0YxOdDX/y17F5Wf8IDwcmrvkafJlBKn0pqQuEMPwj4+o+GYk+trM
-	omgpEDlUJoCg0laDAsrtorzh9iqDBNzSC6ToTtwBv4JJyEXYSBMTolWnLw==
-X-Google-Smtp-Source: AGHT+IGZXYnpPxl2XocxxPbpY2qiQR3DP0v0iYJtAJcnHLo4UyXYnWJzD6N19sjwjgSjHAqWvmAWpw==
-X-Received: by 2002:a17:902:ec85:b0:1e4:1fb8:321f with SMTP id d9443c01a7336-1eefa23bddemr9464605ad.20.1715196063902;
-        Wed, 08 May 2024 12:21:03 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id ld6-20020a170902fac600b001ec552ff7e0sm12209090plb.269.2024.05.08.12.21.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 May 2024 12:21:03 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 8 May 2024 12:21:01 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Lars Petter Mostad <larspm@gmail.com>
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="ly4RhmoT"
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 9254E2C011D;
+	Thu,  9 May 2024 09:55:06 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1715205306;
+	bh=RIBsKaML1GYlJf0TYhDKn8YLY1NDU1lgKIRGtdKqthc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ly4RhmoTOvMCl37AVm/JNVjW/2WAnldu1S981IKHHoFeEob8Yuy3AyU1CE0mYqU7b
+	 a5VBp8/tNy/kHw8bPY1oOVUugDy/ArIK7C2on+72+3sZ53C+dWA3QnTEuEt4wp91eh
+	 G0NH6NsS5ISZI/awFEUb2x4tnzuD5qUHrAolgS5hKTeAXHB3ULEq9RHcaJg0FQBMLY
+	 JboETgWoUL83XirYCi6tVW5TNmqmHxYGFhaWXYmgimAuVV26cnZnsfUzfUkHtlk//8
+	 Oj9Wsn0MKDZXGPr1OTt7Amtxhnw26cm9Eq/AFJXVDXJ2XmNLx9xPO/ULyRQ/IwjkUM
+	 XFucufBuQvoEg==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B663bf4ba0000>; Thu, 09 May 2024 09:55:06 +1200
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+	by pat.atlnz.lc (Postfix) with ESMTP id 4920413EDD7;
+	Thu,  9 May 2024 09:55:06 +1200 (NZST)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+	id 44A77280483; Thu,  9 May 2024 09:55:06 +1200 (NZST)
+From: Chris Packham <chris.packham@alliedtelesis.co.nz>
+To: jdelvare@suse.com,
+	linux@roeck-us.net,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org
 Cc: linux-hwmon@vger.kernel.org,
-	Lars Petter Mostad <lars.petter.mostad@appear.net>
-Subject: Re: [PATCH v2] hwmon: (emc1403) Add support for EMC1428 and EMC1438.
-Message-ID: <3d097b41-d5a0-4717-acf2-1d1152212d96@roeck-us.net>
-References: <20240508131837.684391-1-lars.petter.mostad@appear.net>
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v2 0/2] hwmon: (adt7475) duty cycle configuration
+Date: Thu,  9 May 2024 09:55:02 +1200
+Message-ID: <20240508215504.300580-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.43.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240508131837.684391-1-lars.petter.mostad@appear.net>
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=MfrPuI/f c=1 sm=1 tr=0 ts=663bf4ba a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=TpHVaj0NuXgA:10 a=IntvOMply_uMlCww3fEA:9 a=3ZKOabzyN94A:10
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 
-On Wed, May 08, 2024 at 03:18:37PM +0200, Lars Petter Mostad wrote:
-> EMC1428 and EMC1438 are similar to EMC14xx, but have eight temperature
-> channels, as well as signed data and limit registers. Chips currently
-> supported by this driver have unsigned registers only.
-> 
-> Signed-off-by: Lars Petter Mostad <lars.petter.mostad@appear.net>
+I have a system that has very over spec'd fans so the amount of noise whe=
+n they
+run at 100% duty cycle is considerable. We have userspace monitoring tool=
+s that
+will configure appropriate fan control parameters but there is a bit of a=
+ delay
+between the kernel loading the driver and the userland tools catching up =
+to
+configure the fan control. This series adds device properties that allow =
+the
+PWM duty cycle to be specified via device properties so the PWM duty cycl=
+e can
+be reduced as soon as possible.
 
-checkpatch says:
+Apologies for sending the quick v2 but the v1 I sent was an earlier local
+iteration than what I meant to send out.
 
-WARNING: From:/Signed-off-by: email address mismatch: 'From: Lars Petter Mostad <larspm@gmail.com>' != 'Signed-off-by: Lars Petter Mostad <lars.petter.mostad@appear.net>'
+Chris Packham (2):
+  dt-bindings: hwmon: Document adt7475 PWM initial duty cycle
+  hwmon: (adt7475) Add support for configuring initial PWM duty cycle
 
-Both have to be the same. Either consistently use the gmail address,
-or (assuming you use gmail to send your e-mails) set up gmail to accept
-lars.petter.mostad@appear.net as From address.
+ .../devicetree/bindings/hwmon/adt7475.yaml    | 27 ++++++++-
+ drivers/hwmon/adt7475.c                       | 58 +++++++++++++++++++
+ 2 files changed, 84 insertions(+), 1 deletion(-)
 
-> ---
->  drivers/hwmon/emc1403.c | 121 ++++++++++++++++++++++++++++++++++++----
+--=20
+2.43.2
 
-Please also update Documentation/hwmon/emc1403.rst.
-
-Other than that, looks good. The changes pass my module test for all chips,
-so I don't expect any problems. Please submit v2 with above changes.
-
-Thanks,
-Guenter
