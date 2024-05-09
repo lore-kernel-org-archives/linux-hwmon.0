@@ -1,131 +1,94 @@
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB963770F3
-	for <linux-hwmon@vger.kernel.org>; Thu,  9 May 2024 18:19:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86E1F84FA2
+	for <linux-hwmon@vger.kernel.org>; Thu,  9 May 2024 19:56:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715278763; cv=none; b=Ey0liRjpLwJd/it+untd8ESGezB0xtL1W0f6JgobqmhMD4TqH/fEkTQD10aaB6Tv2A+vsuS/inxg644u4LDTrikKTC9zBEknVCMK0U3F3BjLMS85mhXIcSeSaPHpRmAN/B1my1XFNLpPCRwlWf9+3K8WkkSTSMAGHoRJ/gkDi4I=
+	t=1715284586; cv=none; b=G4xlA3x2ODGwXNTOk8zj1ZM9Tj/F5tiF9O0lDUHxjVcuYI30B8kb9+9nEO971FSTRwpK+WFAgOwxq0JP8Rb5gjjJSHnY5M1u7D8tRk+vL+tsupwNfApcgM5kGLnUe3yjdUw2gOyI2YSvaG5Ib9EHbEbTwPYq6HinIlrgKOO2k14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715278763; c=relaxed/simple;
-	bh=RJE7wtOGuiVA6SM4445qxe+uUKV5GXrAqRRpV1HQKLI=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=cXJe1yAHKgSfeAXW93coUXBjhI1OzMCHQV7p3CCqgn9D1SQKhKa4mXj1xQWEV5g1HUFyRbBcETv6MUnxaeNJVdi3lnauUZDTY58suHQUL7Qj6OFYmQIsamvOG/3pl8ngrkbU98i9OeBJtDdu59SbEl3cEJpQ87nc5BoqTCLuhU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=KB2e49G2; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+	s=arc-20240116; t=1715284586; c=relaxed/simple;
+	bh=Mhm0vd+DonS/ppCcdytB9Id0EIWL+7NWMI63wa4UpJ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R+CvczKhs49gY6XkvMAtOpK2M1wk/Tihp79D4K7OOFl/MXmQNhts60ez0GsdiEX1oIQ9WyyUD3VVTBAh7lVNYERopkupAtya+SbHigobAvtbWNK219s1LaVnmbe3yoh/GY7vzoQO+J3vU0nOi0Q+TLyg8NCo4di4+83toSQ+qbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZSt3aSAE; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="KB2e49G2"
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 1FED92C0BA5;
-	Fri, 10 May 2024 06:19:13 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1715278753;
-	bh=RJE7wtOGuiVA6SM4445qxe+uUKV5GXrAqRRpV1HQKLI=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=KB2e49G20LPOmo8v7NzrcDu+9gdvwkK88l08p5RK4IIuy52GACt6+qVS+gGSbmDvK
-	 ZCVgndZLRADlr9kpSYOCJxJqSMc1d75LfXbmuTkgqNKr9nkYaMpMc7NXZxRCAaVp1y
-	 YSxKdJHpcBDJh0rL7c9jzKXYb87TpBXcEQS8jCnikkWQNIS6Fr7FO//VZIEQ3FpHuq
-	 fmWQqCOqy7KH1ua8iI6xE0ofoazOjQ76yCvP6TG8k8FEw5OCNZDkXZ8oYNSEhlsH9s
-	 VB5qliUkPqkPXdBOtgL+H+qGzFvRd0ZlJC2Mxyepkg9eKdFLO5jfY/eU/aOZdnjBJg
-	 yYI719MhesGwQ==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B663d13a10000>; Fri, 10 May 2024 06:19:13 +1200
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1544.11; Fri, 10 May 2024 06:19:12 +1200
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with Microsoft
- SMTP Server (TLS) id 15.0.1497.48; Fri, 10 May 2024 06:19:12 +1200
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1544.011; Fri, 10 May 2024 06:19:12 +1200
-From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To: Krzysztof Kozlowski <krzk@kernel.org>, "jdelvare@suse.com"
-	<jdelvare@suse.com>, "linux@roeck-us.net" <linux@roeck-us.net>,
-	"robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
-	<krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>
-CC: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Document adt7475 PWM initial
- duty cycle
-Thread-Topic: [PATCH v2 1/2] dt-bindings: hwmon: Document adt7475 PWM initial
- duty cycle
-Thread-Index: AQHaoZJj5QPx6ZJTO0uIJD/DY55QH7GNspyAgAC7vYA=
-Date: Thu, 9 May 2024 18:19:12 +0000
-Message-ID: <d11093bb-230b-4918-a8cd-4f4eb760ccf3@alliedtelesis.co.nz>
-References: <20240508215504.300580-1-chris.packham@alliedtelesis.co.nz>
- <20240508215504.300580-2-chris.packham@alliedtelesis.co.nz>
- <fe5b3af9-b307-45e1-b190-ba2b3327a8df@kernel.org>
-In-Reply-To: <fe5b3af9-b307-45e1-b190-ba2b3327a8df@kernel.org>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <DDEE378BC921B04C85E523A937244128@atlnz.lc>
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZSt3aSAE"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1ec4b2400b6so11687775ad.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 09 May 2024 12:56:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1715284584; x=1715889384; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zEI0VuFmUnv+i/5TxLZ72ScjYIDqGgwTe3F+AkRggi8=;
+        b=ZSt3aSAEYSU31vuv+TLy1AcvvwnTf423QqYtmj0oYws29ykbDD+glfgXxNIbIBHcnr
+         gDBVZzXuDKklQn510HZVUiqGEp9DQpU++/kf4A069SIh403zXxw9zfdFxvpvMfBK60iO
+         O4dh8FghRsZFNraP7qJhEqUruQQREC9qotmrTTibF9QfW1jDxiIheomPAz3/xiT2EJTw
+         RU8eqm865Oz1LEQOc3x+t36zYbiqWJu/2fq2nBOnbFjuk8Ex2lhYK4ZgrPaa/qhyl8GL
+         pBK0C7rtxlaTh3npTG8+8uP95Fq5oHIrkyKI6SoaQv08+7QMtpb6NU0zCY5fR7tTgm7I
+         D6eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715284584; x=1715889384;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zEI0VuFmUnv+i/5TxLZ72ScjYIDqGgwTe3F+AkRggi8=;
+        b=GuT8nfn9D6LiqMjeNTkZ6Ne0KfOJzeZ8Yl5+/h/rbmjPkxZAiWcLtTcYQ+2j7e1g6C
+         IgGMI6lWk0TKSGbX5skyV9g3K2+3m2LvRZ/ODGyLvRKA6432bu+uzswWdOq5HK1YYmLC
+         gH+8VUlUqgG6fccTeQRUyr5VlFp2MM2mn/qfXN1hf19MxEF23xu4lnScRA0cO4uzy1u6
+         MNTZ1Fb1gyYnSM6YaJlAoblhH2o4jr8a6mpeBKBzkaeZi60k8I++4V6MKs4yvRHfq9Bl
+         LuahSPIpsycD4bCH+nIxG+uS7NV1MATEImP6q3WwVFuIks9pHbKQpSOvtShevhtGNH7+
+         u3ww==
+X-Forwarded-Encrypted: i=1; AJvYcCUl4n6A5hI9tcSFfpzgCHZGvO71u02Sop53oXCIsprV8yfCSBWlSP5awTLX/T9T0kI4MdfWrCngquXTyzTb3fIBTOeXG9Q8TSYFZeM=
+X-Gm-Message-State: AOJu0YwE1wp5SB6f14aRXIndwlE16AUTSV3KBqwQlddMJU7O0273YNBf
+	fQL+SY0S2QyoJvdi+WIDOhBunXFZ+RDOV5ST5CK1k7D2zqWDplfH
+X-Google-Smtp-Source: AGHT+IG05d8hrJf4JeaZFSazgqx1oB+RU3S9Z/AdKTFMbPMVL/36TdfAc/iSVViNUynrkKtLQ6oUog==
+X-Received: by 2002:a17:902:d2c4:b0:1ec:304e:90c4 with SMTP id d9443c01a7336-1ef43d1407dmr8202745ad.17.1715284583691;
+        Thu, 09 May 2024 12:56:23 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0bf30fc7sm18079485ad.133.2024.05.09.12.56.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 May 2024 12:56:22 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Thu, 9 May 2024 12:56:21 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: Jean Delvare <jdelvare@suse.com>,
+	Daniel Nilsson <daniel.nilsson@flex.com>,
+	linux-hwmon@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH] hwmon: Drop explicit initialization of struct
+ i2c_device_id::driver_data to 0 (part 2)
+Message-ID: <9af4c159-ee14-4f41-a6ca-72ee67deddd1@roeck-us.net>
+References: <20240508072027.2119857-2-u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=MfrPuI/f c=1 sm=1 tr=0 ts=663d13a1 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=TpHVaj0NuXgA:10 a=elF3_sayRK1upBjPgWEA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240508072027.2119857-2-u.kleine-koenig@pengutronix.de>
 
-SGkgS3J6eXN6dG9mLA0KDQpPbiA5LzA1LzI0IDE5OjA2LCBLcnp5c3p0b2YgS296bG93c2tpIHdy
-b3RlOg0KPiBPbiAwOC8wNS8yMDI0IDIzOjU1LCBDaHJpcyBQYWNraGFtIHdyb3RlOg0KPj4gQWRk
-IGRvY3VtZW50YXRpb24gZm9yIHRoZSBwd20taW5pdGlhbC1kdXR5LWN5Y2xlIGFuZA0KPj4gcHdt
-LWluaXRpYWwtZnJlcXVlbmN5IHByb3BlcnRpZXMuIFRoZXNlIGFsbG93IHRoZSBzdGFydGluZyBz
-dGF0ZSBvZiB0aGUNCj4+IFBXTSBvdXRwdXRzIHRvIGJlIHNldCB0byBjYXRlciBmb3IgaGFyZHdh
-cmUgZGVzaWducyB3aGVyZSB1bmRlc2lyYWJsZQ0KPj4gYW1vdW50cyBvZiBub2lzZSBpcyBjcmVh
-dGVkIGJ5IHRoZSBkZWZhdWx0IGhhcmR3YXJlIHN0YXRlLg0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6
-IENocmlzIFBhY2toYW0gPGNocmlzLnBhY2toYW1AYWxsaWVkdGVsZXNpcy5jby5uej4NCj4+IC0t
-LQ0KPj4NCj4+IE5vdGVzOg0KPj4gICAgICBDaGFuZ2VzIGluIHYyOg0KPj4gICAgICAtIERvY3Vt
-ZW50IDAgYXMgYSB2YWxpZCB2YWx1ZSAobGVhdmVzIGhhcmR3YXJlIGFzLWlzKQ0KPj4NCj4+ICAg
-Li4uL2RldmljZXRyZWUvYmluZGluZ3MvaHdtb24vYWR0NzQ3NS55YW1sICAgIHwgMjcgKysrKysr
-KysrKysrKysrKysrLQ0KPj4gICAxIGZpbGUgY2hhbmdlZCwgMjYgaW5zZXJ0aW9ucygrKSwgMSBk
-ZWxldGlvbigtKQ0KPj4NCj4+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUv
-YmluZGluZ3MvaHdtb24vYWR0NzQ3NS55YW1sIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2Jp
-bmRpbmdzL2h3bW9uL2FkdDc0NzUueWFtbA0KPj4gaW5kZXggMDUxYzk3NmFiNzExLi45N2RlZGEw
-ODJiNGEgMTAwNjQ0DQo+PiAtLS0gYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mv
-aHdtb24vYWR0NzQ3NS55YW1sDQo+PiArKysgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmlu
-ZGluZ3MvaHdtb24vYWR0NzQ3NS55YW1sDQo+PiBAQCAtNTEsNiArNTEsMzAgQEAgcHJvcGVydGll
-czoNCj4+ICAgICAgICAgZW51bTogWzAsIDFdDQo+PiAgICAgICAgIGRlZmF1bHQ6IDENCj4+ICAg
-DQo+PiArICBhZGkscHdtLWluaXRpYWwtZHV0eS1jeWNsZToNCj4+ICsgICAgZGVzY3JpcHRpb246
-IHwNCj4+ICsgICAgICBDb25maWd1cmVzIHRoZSBpbml0aWFsIGR1dHkgY3ljbGUgZm9yIHRoZSBQ
-V00gb3V0cHV0cy4gVGhlIGhhcmR3YXJlDQo+PiArICAgICAgZGVmYXVsdCBpcyAxMDAlIGJ1dCB0
-aGlzIG1heSBjYXVzZSB1bndhbnRlZCBmYW4gbm9pc2UgYXQgc3RhcnR1cC4gU2V0DQo+PiArICAg
-ICAgdGhpcyB0byBhIHZhbHVlIGZyb20gMCAoMCUgZHV0eSBjeWNsZSkgdG8gMjU1ICgxMDAlIGR1
-dHkgY3ljbGUpLg0KPj4gKyAgICAkcmVmOiAvc2NoZW1hcy90eXBlcy55YW1sIy9kZWZpbml0aW9u
-cy91aW50MzItYXJyYXkNCj4+ICsgICAgbWluSXRlbXM6IDMNCj4+ICsgICAgbWF4SXRlbXM6IDMN
-Cj4+ICsgICAgaXRlbXM6DQo+PiArICAgICAgbWluaW11bTogMA0KPj4gKyAgICAgIG1heGltdW06
-IDI1NQ0KPj4gKyAgICAgIGRlZmF1bHQ6IDI1NQ0KPj4gKw0KPj4gKyAgYWRpLHB3bS1pbml0aWFs
-LWZyZXF1ZW5jeToNCj4gRnJlcXVlbmN5IHVzdWFsbHkgaGFzIHNvbWUgdW5pdHMsIHNvIHVzZSBh
-cHByb3ByaWF0ZSB1bml0IHN1ZmZpeCBhbmQNCj4gZHJvcCAkcmVmLiAgTWF5YmUgdGhhdCdzIGp1
-c3QgdGFyZ2V0LXJwbSBwcm9wZXJ0eT8NCj4NCj4gQnV0IGlzbid0IHRoaXMgZHVwbGljYXRpbmcg
-cHJldmlvdXMgcHJvcGVydHk/IFRoaXMgaXMgZmFuIGNvbnRyb2xsZXIsDQo+IG5vdCBQV00gcHJv
-dmlkZXIgKGluIGFueSBjYXNlIHlvdSBtaXNzIHByb3BlciAkcmVmcyB0byBwd20ueWFtbCBvcg0K
-PiBmYW4tY29tbW9uLnlhbWwpLCBzbyB0aGUgb25seSB0aGluZyB5b3UgaW5pdGlhbGx5IHdhbnQg
-dG8gY29uZmlndXJlIGlzDQo+IHRoZSBmYW4gcm90YXRpb24sIG5vdCBzcGVjaWZpYyBQV00gd2F2
-ZWZvcm0uIElmIHlvdSB5b3Ugd2FudCB0bw0KPiBjb25maWd1cmUgc3BlY2lmaWMgUFdNIHdhdmVm
-b3JtLCB0aGVuIGl0J3MgYSBQV00gcHJvdmlkZXIuLi4gYnV0IGl0IGlzDQo+IG5vdC4uLiBDb25m
-dXNlZC4NCg0KVGhlcmUncyB0d28gdGhpbmdzIGdvaW5nIG9uIGhlcmUuIFRoZXJlJ3MgYSBQV00g
-ZHV0eSBjeWNsZSB3aGljaCBpcyANCmNvbmZpZ3VyYWJsZSBmcm9tIDAlIHRvIDEwMCUuIEl0IG1p
-Z2h0IGJlIG5pY2UgaWYgdGhpcyB3YXMgZXhwcmVzc2VkIGFzIA0KYSBwZXJjZW50YWdlIGluc3Rl
-YWQgb2YgMC0yNTUgYnV0IEkgd2VudCB3aXRoIHRoZSBsYXR0ZXIgYmVjYXVzZSB0aGF0J3MgDQpo
-b3cgdGhlIHN5c2ZzIEFCSSBmb3IgdGhlIGR1dHkgY3ljbGUgd29ya3MuDQoNClRoZSBmcmVxdWVu
-Y3kgKHdoaWNoIEknbGwgY2FsbCBhZGkscHdtLWluaXRpYWwtZnJlcXVlbmN5LWh6IGluIHYzKSAN
-CmFmZmVjdHMgaG93IHRoYXQgZHV0eSBjeWNsZSBpcyBwcmVzZW50ZWQgdG8gdGhlIGZhbnMuIFNv
-IHlvdSBjb3VsZCBzdGlsbCANCmhhdmUgYSBkdXR5IGN5Y2xlIG9mIDUwJSBhdCBhbnkgZnJlcXVl
-bmN5LiBXaGF0IGZyZXF1ZW5jeSBpcyBiZXN0IA0KZGVwZW5kcyBvbiB0aGUga2luZCBvZiBmYW5z
-IGJlaW5nIHVzZWQuIEluIG15IHBhcnRpY3VsYXIgY2FzZSB0aGUgbG93ZXIgDQpmcmVxdWVuY2ll
-cyBlbmQgdXAgd2l0aCB0aGUgZmFucyBvc2NpbGxhdGluZyBhbm5veWluZ2x5IHNvIEkgdXNlIHRo
-ZSANCmhpZ2hlc3Qgc2V0dGluZy4NCg0KPg0KPiBCZXN0IHJlZ2FyZHMsDQo+IEtyenlzenRvZg0K
-Pg==
+On Wed, May 08, 2024 at 09:20:26AM +0200, Uwe Kleine-König wrote:
+> These drivers don't use the driver_data member of struct i2c_device_id,
+> so don't explicitly initialize this member.
+> 
+> This prepares putting driver_data in an anonymous union which requires
+> either no initialization or named designators. But it's also a nice
+> cleanup on its own.
+> 
+> This is a follow up to commit d8a66f3621c2 ("hwmon: Drop explicit
+> initialization of struct i2c_device_id::driver_data to 0") which I
+> created before identifying a few corner cases in my conversion script.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+
+Applied.
+
+Thanks,
+Guenter
