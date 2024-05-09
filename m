@@ -1,196 +1,142 @@
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 015BA149DE0
-	for <linux-hwmon@vger.kernel.org>; Thu,  9 May 2024 08:29:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0C4812FF8C;
+	Thu,  9 May 2024 13:25:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715243377; cv=none; b=W5VBwWq2xEXOal0OGYfy+WyO3SBk8L7vifLDMTwpy8A8t3Ctbz2NKPdoS7T+gcabooiGyuUexpjhZOvTzqe2ncJ51LeA2fc9Q8+KcRGs9l+WXttzr7igzURw8QNeC3RcCMNWxjRL4kiyi/2iGTCTX7maQ+uqW6SJIlegQXrE9u0=
+	t=1715261111; cv=none; b=F1KnlCotcqTW3ltu1G8xeHQXFezeODQCrfFjsXTm3Vt7UXNSRopmVmZrYUdGUbaBwzRvWmWlQgNBS0yPvbBANEX0PAj7AzU05FC6OdebHTyuVbbkaxrEK/zaQX3kIf8rQDad3nzwwbJg3sD7VH7gA0uAVNKa0OtKJSG81TH4s3c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715243377; c=relaxed/simple;
-	bh=IRGjeXM1KNxqqYh4Ik3MFrABRQcli/7ofMMTYRmjaCU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kUth07tjGBkuvwgSmkL7UBEgHJitxJ8SeP00eSU0yMJRo4OXNFjjeafhr6CUrNNfJGWPcW3g70/YZi8wbPCGWY+InXAGelD9YtEPNhDnao8w0NucW0KNhR5J1a/9GUvdADpuoWpZsKxWDcruQUER8lpecvfhWlRYMDziclOig2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=h44dSdFj; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1715261111; c=relaxed/simple;
+	bh=JV649ATEV4XPPgP4HiuRDayNGxbrbAKaljGSAztjUF4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dvhElXr5drIDgVLVBlcBuuEo+PVq1ebATPb1MTcU3aCKyNK/TXHyajJdby0a2OI3FgxcxwewGxgvq6GazIh3v2C/a7iQFn6zIkXX0TILAP77WBywLt+gRXp9MK4AkbxWiLiHM84tZXpMXmWHf7vrhWhjsHfbmBW1L2YxU5MxTwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gdAm49Vp; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="h44dSdFj"
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a59e4136010so133859366b.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 09 May 2024 01:29:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gdAm49Vp"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1ec486198b6so6719955ad.1;
+        Thu, 09 May 2024 06:25:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1715243374; x=1715848174; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=hMLp8AiHMhJ0KZlIbzXsouNCXcq5N+tUnfpKJC3oGdU=;
-        b=h44dSdFjZEskNhPLk2IPSDa2UPOssm+rQU4yPG7EKBXkfcFEl3X5AHD+rl4+bIaJzk
-         ULb77x0hI0e+7VbiJ+a/R2WoPInappvUhh1yakiCpCia9NRSu3aMqOiwyxPEpK6Sas2w
-         y3xVi0Sy3RxIN9b7QshjVshncScmFTJcy42YsAcxwuRqNlRh8c/br1P3MOosJYu3SMU7
-         A6JiITP75uTQqCZrM+Fn5LZaJeCw/dr3/ZNIhUwt68G1WfSpJDKPGfWec/LfVheX2A7e
-         S54phTQN4dSSeL4jwo2t4+ceH9gyEGrF0Aht1/9S6I3PJpjfUCPPesuDdyh1QsI92znh
-         LEng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715243374; x=1715848174;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1715261109; x=1715865909; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hMLp8AiHMhJ0KZlIbzXsouNCXcq5N+tUnfpKJC3oGdU=;
-        b=iG6rXAoueOa/zmykjULNVMcxLSEFJo37qZQ9YK3q8UUvoCfFhi7T0Y0+Pazf8649Zu
-         CukyCWGhM+tg9d0HxPrc7qAYNyztNozKkzt2waArq0EVZvEKYuwfLxBlMxHRoOlaZKJI
-         tzsKrMv+KZ0TCP26345KvBk9hK7QLq7h4W9TMLpEfcPy+v+Pfo+sLVdZ2xVVBpnEES5W
-         d8yFWRnWmozb5tACDYd7CUfPss7r4P4NdM7/R+9PKQVuIsjFr0UhaKhtDOy/rHM7U8Sa
-         7/EG/mZ+sv5zZ0u6GlypYpvv7GlxOSFKss6vU7DXv/tFKj62gI6nShUrQvknIKp6DqR5
-         bV4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUGfxFjmOFeSNdZiTYn/jdoAF8SKJ9nnatQK1KtbmF2X95852+pTygq07EbUhOikidQKCzOJTkmK1Uwv4VfBGKkjFE3zLoAItg5G0s=
-X-Gm-Message-State: AOJu0YzYNIvYJouuUGAKDKWHtrlrmwJSK6jSzLpmUqUXBxo7sjHifk35
-	+TB47Rd7q6ysPp5BgkMxNxtrO5XVhNl4a6bL0doO8Rbh7Z4quwA8m+T6tQJXoNM=
-X-Google-Smtp-Source: AGHT+IG8dT/haVwP+PHSIa+dbvrLvv5s5nmQBqwoDNlyNPTU7oMINb5xzYLfMOCIvdD8UqkNZqeHWg==
-X-Received: by 2002:a17:906:714f:b0:a59:ba2b:590e with SMTP id a640c23a62f3a-a59fb9dbcb9mr285672966b.48.1715243374175;
-        Thu, 09 May 2024 01:29:34 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.206.169])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a5a179c7df7sm48748366b.111.2024.05.09.01.29.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 May 2024 01:29:33 -0700 (PDT)
-Message-ID: <a20479be-a4cf-4fb5-8d37-277d14a93224@linaro.org>
-Date: Thu, 9 May 2024 10:29:31 +0200
+        bh=gECO8dWt5ZSkQ7aTn7k2QvSXHdHQpi9kJPWdBRbodCk=;
+        b=gdAm49VpKmOlWcWA8YuTdjk6eblGB+wTSJICJgZaoob4MPcJKfnA0Oy6+BbX7BNMYf
+         R/ujAcXoyl6fQ3VYLW8WJ+V1xB1TzR6sMAqMJuFfc3EcJTz2NrpfxD3sE0jN/4cDgxVX
+         K6jPARyvMt99S1xBpjGeVPWTEMn14mH7sNkEhrUR3HF9shy8vFqK9ib33QKTtMFiyrqX
+         ia8Fy0GQX169btQRjZGfxrR+LwOK/vyDL2yjCYbgpK7hU272p9t+IqELsshN5DKgumpm
+         uMlFHUWZjk/V2H14cN0MMgqf30CUhNUXOPjZ+Rus0cA+FvajMQJ2AT+j6Ny7fgVs9uxT
+         PWpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715261109; x=1715865909;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gECO8dWt5ZSkQ7aTn7k2QvSXHdHQpi9kJPWdBRbodCk=;
+        b=NR2gipFOODdFMhza3uYOOy/e5J8lR7DwQp85WSn3pAgOm/ezgHPPYiSgHuGvaAQ3G5
+         JTeR19JqiOoZlSK7nenUk6tTY4lKQx5yLResaT9V23aWaovl8cljkBY5+XtTCjgdKaF5
+         Qb1hJW2rexSHmoUCNLRdcuz3nKGPg3ruIzTFJ8tMzDic+1dWxkS+6yNLDxKdiDDmFDSg
+         T511UfGJwdnqYFhyag9nXpxIU02eFVnK4yi0YogYB+izra6xPX51SFt9t0JtnHW9AsHc
+         ssxW99NMTE2g6ecRFr/M2A/TRbRNuDqNODpfhKABcjqQBvsx7z3YUN2tNDYeVG/pfwMP
+         0ZhQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVtWXKl6Aa8WZDgTmb7cdDl59Y37+2VPVB0B0P+OMGb2NtzNe0hWmztS1uWveyUt8BZAjbe0MfvXoCrIRfast4lU1pQBQHyJ4lT8xQzJ4VrGTlw4n0sXeJn2akjfRvyBQyv8udcAFGEPo6jIrB7wDJ329N951y5/eN/d+SrCxYSbWF1P3lY
+X-Gm-Message-State: AOJu0YwE20SD7Yb6n7G4H2BoG2fFavbPs+aI9VY/u03tTP2PBGH3qynL
+	SEDi17r2yQuuJx4wd/f8wvDJfgqvo9Ss4l/l7B7UQi628kiRyfJq
+X-Google-Smtp-Source: AGHT+IHw++13444ZKLc5laCTjSB4UZ+ilE5n+mO3jKnotLr81kt/+x48TILiKaJsCawOyI1V5Z5Pyw==
+X-Received: by 2002:a17:902:f689:b0:1e8:b715:45bc with SMTP id d9443c01a7336-1eeb059741bmr60742605ad.29.1715261109146;
+        Thu, 09 May 2024 06:25:09 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0b9d499csm14071395ad.45.2024.05.09.06.25.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 May 2024 06:25:08 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Thu, 9 May 2024 06:25:06 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>, jdelvare@suse.com,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Document adt7475 PWM initial
+ duty cycle
+Message-ID: <7ab19e2a-7360-4c38-a237-43db57dc92f9@roeck-us.net>
+References: <20240508215504.300580-1-chris.packham@alliedtelesis.co.nz>
+ <20240508215504.300580-2-chris.packham@alliedtelesis.co.nz>
+ <fe5b3af9-b307-45e1-b190-ba2b3327a8df@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/3] dt-bindings: hwmon: max31790: Add
- maxim,pwmout-pin-as-tach-input property
-To: Chanh Nguyen <chanh@amperemail.onmicrosoft.com>,
- Guenter Roeck <linux@roeck-us.net>, Conor Dooley <conor@kernel.org>
-Cc: Chanh Nguyen <chanh@os.amperecomputing.com>,
- Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Justin Ledford
- <justinledford@google.com>, devicetree@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- OpenBMC Maillist <openbmc@lists.ozlabs.org>,
- Open Source Submission <patches@amperecomputing.com>,
- Phong Vo <phong@os.amperecomputing.com>,
- Thang Nguyen <thang@os.amperecomputing.com>,
- Quan Nguyen <quan@os.amperecomputing.com>
-References: <20240414042246.8681-1-chanh@os.amperecomputing.com>
- <20240414042246.8681-4-chanh@os.amperecomputing.com>
- <13b195e6-cbbd-4f74-a6fa-d874cb4aaa45@linaro.org>
- <065243cc-09cf-4087-8842-bd4394fb324f@amperemail.onmicrosoft.com>
- <d549cf2b-a7fa-4644-8fcb-3c420503ee01@amperemail.onmicrosoft.com>
- <20240423-gallantly-slurp-24adbfbd6f09@spud>
- <ab5cfd8c-0e88-4194-a77e-5ffbb6890319@amperemail.onmicrosoft.com>
- <396b47f5-9604-44ab-881f-94d0664bcab8@roeck-us.net>
- <0dcc8788-604a-49c1-8c6b-fdbfa9192039@amperemail.onmicrosoft.com>
- <da94fde6-3286-44eb-a543-c2ac4d11cd32@roeck-us.net>
- <8fb38eb3-bb94-49cc-b5bc-80989d7876b9@amperemail.onmicrosoft.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Language: en-US
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <8fb38eb3-bb94-49cc-b5bc-80989d7876b9@amperemail.onmicrosoft.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fe5b3af9-b307-45e1-b190-ba2b3327a8df@kernel.org>
 
-On 08/05/2024 05:44, Chanh Nguyen wrote:
->>>>>
->>>>
->>>> I am not even sure how to define tach-ch to mean "use the pwm output pin
->>>> associated with this tachometer input channel not as pwm output
->>>> but as tachometer input". That would be a boolean, not a number.
->>>>
->>>
->>> Thank Guenter,
->>>
->>> I reviewed again the "tach-ch" property, which is used in the 
->>> https://elixir.bootlin.com/linux/v6.9-rc6/source/Documentation/devicetree/bindings/hwmon/aspeed,g6-pwm-tach.yaml#L68 and https://elixir.bootlin.com/linux/v6.9-rc6/source/drivers/hwmon/aspeed-g6-pwm-tach.c#L434
->>>
->>> That is something completely different from my purpose.
->>>
->>
->> Based on its definition, tach-ch is associated with fans, and it looks
->> like the .yaml file groups multiple sets of fans into a single
->> fan node.
->>
->> In the simple case that would be
->>      tach-ch = <1>
->> ...
->>      tach-ch = <12>
->>
->> or, if all fans are controlled by a single pwm
->>      tach-ch = <1 2 3 4 5 6 8 9 10 11 12>
->>
->> The existence of tachometer channel 7..12 implies that pwm channel 
->> (tachometer
->> channel - 6) is used as tachometer channel. That should be sufficient to 
->> program
->> the chip for that channel. All you'd have to do is to ensure that pwm 
->> channel
->> "X" is not listed as tachometer channel "X + 6", and program pwm channel 
->> "X - 6"
->> for tachometer channels 7..12 as tachometer channels.
->>
+On Thu, May 09, 2024 at 09:06:49AM +0200, Krzysztof Kozlowski wrote:
+> On 08/05/2024 23:55, Chris Packham wrote:
+> > Add documentation for the pwm-initial-duty-cycle and
+> > pwm-initial-frequency properties. These allow the starting state of the
+> > PWM outputs to be set to cater for hardware designs where undesirable
+> > amounts of noise is created by the default hardware state.
+> > 
+> > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> > ---
+> > 
+> > Notes:
+> >     Changes in v2:
+> >     - Document 0 as a valid value (leaves hardware as-is)
+> > 
+> >  .../devicetree/bindings/hwmon/adt7475.yaml    | 27 ++++++++++++++++++-
+> >  1 file changed, 26 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.yaml b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+> > index 051c976ab711..97deda082b4a 100644
+> > --- a/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+> > +++ b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+> > @@ -51,6 +51,30 @@ properties:
+> >        enum: [0, 1]
+> >        default: 1
+> >  
+> > +  adi,pwm-initial-duty-cycle:
+> > +    description: |
+> > +      Configures the initial duty cycle for the PWM outputs. The hardware
+> > +      default is 100% but this may cause unwanted fan noise at startup. Set
+> > +      this to a value from 0 (0% duty cycle) to 255 (100% duty cycle).
+> > +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> > +    minItems: 3
+> > +    maxItems: 3
+> > +    items:
+> > +      minimum: 0
+> > +      maximum: 255
+> > +      default: 255
+> > +
+> > +  adi,pwm-initial-frequency:
 > 
-> Hi Guenter,
+> Frequency usually has some units, so use appropriate unit suffix and
+> drop $ref.  Maybe that's just target-rpm property?
 > 
-> I applied the patch [2/3] in my patch series 
-> (https://lore.kernel.org/lkml/20240414042246.8681-3-chanh@os.amperecomputing.com/)
-> 
-> My device tree is configured as below, I would like to configure PWMOUT 
-> pins 5 and 6 to become the tachometer input pins.
+We are talking pwm here, not rpm.
+
+> But isn't this duplicating previous property? This is fan controller,
+> not PWM provider (in any case you miss proper $refs to pwm.yaml or
+> fan-common.yaml), so the only thing you initially want to configure is
+> the fan rotation, not specific PWM waveform. If you you want to
+> configure specific PWM waveform, then it's a PWM provider... but it is
+> not... Confused.
 > 
 
-And what is wrong in described common tach-ch property? I think we
-explained it three times and you did not provide any arguments, what's
-missing. Instead you say "I want something like this in DTS" which is
-not an argument and does not help discussion.
+As I have said before ... almost all fan controllers have pwm outputs to
+control the fans, because that is how fans are controlled. So, in your
+terminology, pretty much all fan controllers are also pwm providers.
 
-Best regards,
-Krzysztof
+At the same time, I resist the push to implement pwm controller code in
+fan controller drivers because that would just add a lot of code for no good
+reason other than "because". I guess we'll have to find a means to extract
+pwm related configuration data such as this one from devicetree without
+actually implementing a full blown pwm controller driver.
 
+Guenter
