@@ -1,168 +1,124 @@
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 585A413BAC8;
-	Fri, 10 May 2024 03:36:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5777712C461;
+	Fri, 10 May 2024 13:31:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715312176; cv=none; b=qtWV2YwljkJYDaWoZoMr/kbohRnwd4k0E2u9PAY9oZ5yF5fegIbcC8F+rxAcg1i6p2phZ1oednNU9C7VwVcyA//4YTVmfIb4A4sLQ1TBDihMDS23Ig/YAibeIJwyCe85n5dQZsQi6KTlKQ4AI0aXuHkA+DQ4tvPRUuuwsvd56eM=
+	t=1715347873; cv=none; b=Vqv9V5XXqCkyME12niwDGNxgL5ckXmheTOpoarbIgDRq0XKHnTMlVwpR0e04oqIFb43i/fRXoccpVWYQ2DC9O2On/lrLuXZ/taL/QJ9dQFilMmwM9jiKyhdJhuUCPKz24GxS9iosoNdrJlCoevK3o+6oMUGe/BEe8gRxsbDEHzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715312176; c=relaxed/simple;
-	bh=KOSn1hZhv1DeOtrd/XQIWrqlLlDGMSahtKxPMjKo1v4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WO1R1vLqziIlze33pUr8/L2Y8KEjxtLaPcMXwnHnfD++i6dpGtYynSDY5/LTIjGNGmUzfmjxTnT/iRYEq5XSyJRan9q7VQYz7wlfwzqgChu2UF0WfuDPXaJG5ESF7s9gM/YWacfBm2Zxz2Tqw+52LpLVPzOnixBlWvKkhDPUbx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EqLW4GmA; arc=none smtp.client-ip=209.85.215.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1715347873; c=relaxed/simple;
+	bh=PgyBavn/j3mxAvoBKUfmPryJchWsxnf16J829mjjMvk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZaAmSgDcPiSyjNw4Vu95ylHKdXNSYCJcCZGgpIgcEWXfopCraiTi5jeRp+xgSAKgZsXmvSJLQmehRljcv/oVuNiB8C+uJKhMwG4PVaEYVVIc55fhbqQJk1SIfPwQ0vCOx40xM/jtGFoZEg3UR4P1igheLkIr59LduqaBZB41O6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kOBpZjwW; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EqLW4GmA"
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-5ff57410ebbso1301587a12.1;
-        Thu, 09 May 2024 20:36:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kOBpZjwW"
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a59a352bbd9so347942366b.1;
+        Fri, 10 May 2024 06:31:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715312173; x=1715916973; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=om+gVHo+UYQCK20XV54trkvgwUZ7dLC7k9R/3N8VLiQ=;
-        b=EqLW4GmA4bZtF1KFsa9TxT5M4ieJ1Y6EO9M16RWMHtVfvXvGG3tB0T4j5vRFoPPWGy
-         w480zePmbiero3u00+O6KJ6rduFapBCQ9oOzgT5KkyhZAvdUE79+sh7gPpsdcwjn6+2X
-         E40VT19olM9fqymq6FLo4dVBDC/CoJ7Zr0h0Ua3L2QuddQcbn1Ko4VRjCpANM1iC0n7J
-         Gmh00sXkNj24PAhOlIN5A8eJv2s0SC9dWCJwdxlL69D7n76xCvEn+n2lZdNpG0ZrdhTt
-         D2uZUDWVESLaQ49+bgSYFwYdsP9DoLp03ejH5E9g3AKsCV2r2QPmEEC9ic5KpU1bXhTq
-         AqjA==
+        d=gmail.com; s=20230601; t=1715347871; x=1715952671; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PgyBavn/j3mxAvoBKUfmPryJchWsxnf16J829mjjMvk=;
+        b=kOBpZjwWXo0MWgFgxuyCWw6rTK4p2DIx2SHn/EosxP4vAZ5ZhnlUAcTtEVl/ypVGSd
+         4J4YPRMCzVxaJ+ZdEl1j0bDFur3KGE4wL1Qp7xrq1uI/rgUvlsp6qP/s9qzkNFHbmQjo
+         BHi620w0ppzOXTFVKYNYRPLxlE2efd8shEScX91bsnOPejOdvSWgH4RzsgQol+zJ/7c6
+         S6zO2m4tgbtTJ0SBrSqYjwk7PtCRCvhbZsA+bRr3wrH9EVF5H6FTTvfY+d6khIyS+klM
+         E/AbfzWET4KvHYZunT1PDj85dxCz/Gxw7WOLEHq26YUCeJqZOHNNbq/7jaYLIVgEbCaQ
+         E1AQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715312173; x=1715916973;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1715347871; x=1715952671;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=om+gVHo+UYQCK20XV54trkvgwUZ7dLC7k9R/3N8VLiQ=;
-        b=VGcA6jymm65S0RYgGWZ5uyvpMHo9f96syANhdVnUOTm6VCUFQt+0TX9kA4K5UE1mRW
-         JSH9aiXjbIEmXkDA9QPqqLi/vGnkJ1a8DUXGbKKjcou+W1/2C0F4rubrMAxhRYq1ISl1
-         gEecZgI7GUkjzNvPggOfx/VAteqPGixeJSeWaDk11BEFFsorNQZ1XCiX/TNM+IGpSWWJ
-         K7cjXwh4/AuTmAd5B27SecYKG0P5qDZmPSpBuoPMldCYPa8cueb3RqbaobIvJK6BQSId
-         d0y37Z7cMA9vYFe9kMkiDdHOuergVzLaCpnZ2eJyorgOPpFRJ7vW5IOVjFuWsvnNB/+u
-         iJbQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU92N3KrH+rfuINHMcuEzcHewO/PzoRzv5rV/vr4funPJLBczcCy6/YP/slCT6ocPED8QzqEqgTUDM45nThWXU6RxdjWxHoqVFpgaKn//m/xi1neN85+5FmJCaV0qner6KH4IpJV0Hu1sCii7cEqIiZt/YrGOXCu0BkGq2V2rVuozfEZjjR
-X-Gm-Message-State: AOJu0YzlnU/n5RUIwv+0vMngZqYFRviuFgidBAHBkKYOPFclOxerN3NY
-	O7Qzg1arDYk2Tskb4R7/BfgXhwUxIcGl7ejoY9aPsKppGNMNOdBH
-X-Google-Smtp-Source: AGHT+IE/0hqi92CFy7Q2dWIvYr/EbTY5YJEnOOZwOajGysRIZOSYsI29MBVKXbBecsK3oAg+mdknlg==
-X-Received: by 2002:a05:6a21:35c6:b0:1af:8104:46e0 with SMTP id adf61e73a8af0-1afde1b7ee1mr1601971637.49.1715312173404;
-        Thu, 09 May 2024 20:36:13 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2b67116413dsm2243612a91.13.2024.05.09.20.36.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 May 2024 20:36:12 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 9 May 2024 20:36:10 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>,
-	"jdelvare@suse.com" <jdelvare@suse.com>,
-	"robh@kernel.org" <robh@kernel.org>,
-	"krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Document adt7475 PWM initial
- duty cycle
-Message-ID: <94c843e2-4415-4786-bfd4-a77fdbbfab07@roeck-us.net>
-References: <20240508215504.300580-1-chris.packham@alliedtelesis.co.nz>
- <20240508215504.300580-2-chris.packham@alliedtelesis.co.nz>
- <fe5b3af9-b307-45e1-b190-ba2b3327a8df@kernel.org>
- <d11093bb-230b-4918-a8cd-4f4eb760ccf3@alliedtelesis.co.nz>
+        bh=PgyBavn/j3mxAvoBKUfmPryJchWsxnf16J829mjjMvk=;
+        b=GB4j0DpWHBuObBQDSVmtX145kJaic1fEZHmSpF/TiJAcEoR8iuXfFwZSSBrpC1J+fu
+         xJ7huTz/yS1u7QhUrYgB1zufsby5LiB+JBaziRpbQU/Q+2zLBGyotJ+x1kUpPg0GPe8F
+         VMTqXmkCtJbTjGbwDYDRSUB2DlJUmDnOAkpvIOkfertbGnMXDp01X6EgOXLPOoBf9WeC
+         mIK5HsECsoGFcOlxOj0k9Xg1eFrt3fm6onVRsoq4g3Qd5IyGCuHSfO0oABYAxFrQu7bd
+         U72paQKMBKGI3DR73oH6rrxcN5Un949WP9UMM99+9zzBJv8+6V1QOytkP4eNxU+5qB+G
+         PFcA==
+X-Forwarded-Encrypted: i=1; AJvYcCUOnnnyAp7jnzx7f4o8Tf7RtaGD9EdgHyjf/EQkzFTqas8Hjy1wagW+6LQ5nPyV2TiBx4fWdAgIX63oIfX1ZJqd0Z/vWekKc9erfuYlnvhqMlovs96HxlioEtktdhCGt9o/zSADjSyi0xa1/ZUwQWspLyHcp8+KaSiaZjkcunBfu1CAEJ57J0jHA0OYqZh3A4AYt+H0C5SCcJq5Wf9OQXamsjAoIjQ9vLxb4A==
+X-Gm-Message-State: AOJu0YzfMlUmwZnqJAA5QwengVv2ecjp1iYdKwbW3m1qGtjsQ5OtJWPF
+	ls7A6wsg/wv+ojLnA2P6LpR+hFitzcKv1RS9LuQEGiJ/ePsvqnCMx0HKOKct/BX6hZvPJsWo2cM
+	+7KTlpXfbYPR1C7MFmjBFldJmROE=
+X-Google-Smtp-Source: AGHT+IEEbIILPLMb9PE9NImGn83g3es9clSLPHPLOeo7rUd5AEgEyvnIKS76k3EUVXg1vR3NxbtWpoJELhzo1ohtfhg=
+X-Received: by 2002:a17:906:548:b0:a59:a01e:825f with SMTP id
+ a640c23a62f3a-a5a2d292a95mr208409266b.29.1715347870312; Fri, 10 May 2024
+ 06:31:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d11093bb-230b-4918-a8cd-4f4eb760ccf3@alliedtelesis.co.nz>
+References: <20240509221947.3118-1-W_Armin@gmx.de>
+In-Reply-To: <20240509221947.3118-1-W_Armin@gmx.de>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Fri, 10 May 2024 16:30:33 +0300
+Message-ID: <CAHp75Vd9JZxuDGYm2drSYun+h2CAU+Lb4BEFq3LnQYBKpOfyMA@mail.gmail.com>
+Subject: Re: [PATCH v7] ACPI: fan: Add hwmon support
+To: Armin Wolf <W_Armin@gmx.de>
+Cc: mlj@danelec.com, rafael.j.wysocki@intel.com, lenb@kernel.org, 
+	jdelvare@suse.com, linux@roeck-us.net, linux@weissschuh.net, 
+	ilpo.jarvinen@linux.intel.com, linux-acpi@vger.kernel.org, 
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	platform-driver-x86@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Chris,
+On Fri, May 10, 2024 at 1:19=E2=80=AFAM Armin Wolf <W_Armin@gmx.de> wrote:
+>
+> Currently, the driver does only support a custom sysfs
+> interface to allow userspace to read the fan speed.
+> Add support for the standard hwmon interface so users
+> can read the fan speed with standard tools like "sensors".
 
-On Thu, May 09, 2024 at 06:19:12PM +0000, Chris Packham wrote:
-> Hi Krzysztof,
-> 
-> On 9/05/24 19:06, Krzysztof Kozlowski wrote:
-> > On 08/05/2024 23:55, Chris Packham wrote:
-> >> Add documentation for the pwm-initial-duty-cycle and
-> >> pwm-initial-frequency properties. These allow the starting state of the
-> >> PWM outputs to be set to cater for hardware designs where undesirable
-> >> amounts of noise is created by the default hardware state.
-> >>
-> >> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> >> ---
-> >>
-> >> Notes:
-> >>      Changes in v2:
-> >>      - Document 0 as a valid value (leaves hardware as-is)
-> >>
-> >>   .../devicetree/bindings/hwmon/adt7475.yaml    | 27 ++++++++++++++++++-
-> >>   1 file changed, 26 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.yaml b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
-> >> index 051c976ab711..97deda082b4a 100644
-> >> --- a/Documentation/devicetree/bindings/hwmon/adt7475.yaml
-> >> +++ b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
-> >> @@ -51,6 +51,30 @@ properties:
-> >>         enum: [0, 1]
-> >>         default: 1
-> >>   
-> >> +  adi,pwm-initial-duty-cycle:
-> >> +    description: |
-> >> +      Configures the initial duty cycle for the PWM outputs. The hardware
-> >> +      default is 100% but this may cause unwanted fan noise at startup. Set
-> >> +      this to a value from 0 (0% duty cycle) to 255 (100% duty cycle).
-> >> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> >> +    minItems: 3
-> >> +    maxItems: 3
-> >> +    items:
-> >> +      minimum: 0
-> >> +      maximum: 255
-> >> +      default: 255
-> >> +
-> >> +  adi,pwm-initial-frequency:
-> > Frequency usually has some units, so use appropriate unit suffix and
-> > drop $ref.  Maybe that's just target-rpm property?
-> >
-> > But isn't this duplicating previous property? This is fan controller,
-> > not PWM provider (in any case you miss proper $refs to pwm.yaml or
-> > fan-common.yaml), so the only thing you initially want to configure is
-> > the fan rotation, not specific PWM waveform. If you you want to
-> > configure specific PWM waveform, then it's a PWM provider... but it is
-> > not... Confused.
-> 
-> There's two things going on here. There's a PWM duty cycle which is 
-> configurable from 0% to 100%. It might be nice if this was expressed as 
-> a percentage instead of 0-255 but I went with the latter because that's 
-> how the sysfs ABI for the duty cycle works.
-> 
-> The frequency (which I'll call adi,pwm-initial-frequency-hz in v3) 
-> affects how that duty cycle is presented to the fans. So you could still 
-> have a duty cycle of 50% at any frequency. What frequency is best 
-> depends on the kind of fans being used. In my particular case the lower 
-> frequencies end up with the fans oscillating annoyingly so I use the 
-> highest setting.
-> 
+> Tested with a custom ACPI SSDT.
 
-My udnerstanding is that we are supposed to use standard pwm provider
-properties. The property description is provider specicic, so I think
-we can pretty much just make it up.
+This most likely fits the comment/changelog area and not the commit
+message. Also would be good to put there the link to this custom SSDT
+(like one of zillion of pastebin sites, or GitHub, or ...).
 
-Essentially you'd first define a pwm provider which defines all the
-pwm parameters needed, such as pwm freqency, default duty cycle,
-and flags such as PWM_POLARITY_INVERTED. You'd then add something like
+I was under the impression that Guenter gave a tag, which is missing,
+but no, he just said it's okay to go. Guenter, maybe a formal
+Acked-by?
 
-	pwms = <&pwm index frequency duty_cycle ... flags>;
+Some cosmetic related remarks below.
 
-to the node for each fan, and be done.
+...
 
-That doesn't mean that we would actually have to register the chip
-as pwm provider with the pwm subsystem; all we would have to do is to
-interpret the property values.
+> +/*
+> + * Hwmon interface for the ACPI Fan driver.
 
-Hope thie helps,
-Guenter
+I would use hwmon (as it is an abbreviation based compound word which
+we know in small letters).
+
+> + *
+> + * Copyright (C) 2024 Armin Wolf <W_Armin@gmx.de>
+> + */
+
+...
+
+> +#include <linux/acpi.h>
+> +#include <linux/device.h>
+> +#include <linux/err.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/limits.h>
+
++ types.h
+
+> +#include <linux/units.h>
+
+...
+
+The rest LGTM, FWIW,
+Reviewed-by: Andy Shevchenko <andy@kernel.org>
+
+--=20
+With Best Regards,
+Andy Shevchenko
