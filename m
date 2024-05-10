@@ -1,124 +1,188 @@
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5777712C461;
-	Fri, 10 May 2024 13:31:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67C8F127B73
+	for <linux-hwmon@vger.kernel.org>; Fri, 10 May 2024 14:00:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715347873; cv=none; b=Vqv9V5XXqCkyME12niwDGNxgL5ckXmheTOpoarbIgDRq0XKHnTMlVwpR0e04oqIFb43i/fRXoccpVWYQ2DC9O2On/lrLuXZ/taL/QJ9dQFilMmwM9jiKyhdJhuUCPKz24GxS9iosoNdrJlCoevK3o+6oMUGe/BEe8gRxsbDEHzw=
+	t=1715349614; cv=none; b=dNEVtqHuMd7kIzU60vj3gyMhqtoXwfRZkll2usGluqW7tbRieGwuhVDb3ggq2/T6JECLa+XTZrngtQlH+lKAQ5oftR0ghDql8d02aML//n5Ez1fVxoXiWtmMuju8qsxOCifSUVY8ma8Pksi6sC9GpR2PhPwyImIBAe1PJRqbqKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715347873; c=relaxed/simple;
-	bh=PgyBavn/j3mxAvoBKUfmPryJchWsxnf16J829mjjMvk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZaAmSgDcPiSyjNw4Vu95ylHKdXNSYCJcCZGgpIgcEWXfopCraiTi5jeRp+xgSAKgZsXmvSJLQmehRljcv/oVuNiB8C+uJKhMwG4PVaEYVVIc55fhbqQJk1SIfPwQ0vCOx40xM/jtGFoZEg3UR4P1igheLkIr59LduqaBZB41O6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kOBpZjwW; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1715349614; c=relaxed/simple;
+	bh=kdDp8KIWJJWZVJzngteV0lA0nzLqJbBl3aaTr46lgPo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=uzmF1aMql6D1bQ8EV+Zvf3g7b+gztkb5N+2pQaFNg+EUJyncKlUCDRfdzJbGDy5+3/GG/zNm9mBMSUbgbae/jXGnKaPfMg011H+r0egO7m5Ch6vM5ALVhRF72cT8AXuaVV8yeVC6B5H5S6SMbeG/b5MIRVq0g506r3bQEramlEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kF76RJGb; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kOBpZjwW"
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a59a352bbd9so347942366b.1;
-        Fri, 10 May 2024 06:31:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kF76RJGb"
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a5a157a1cd1so516985666b.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 10 May 2024 07:00:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715347871; x=1715952671; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PgyBavn/j3mxAvoBKUfmPryJchWsxnf16J829mjjMvk=;
-        b=kOBpZjwWXo0MWgFgxuyCWw6rTK4p2DIx2SHn/EosxP4vAZ5ZhnlUAcTtEVl/ypVGSd
-         4J4YPRMCzVxaJ+ZdEl1j0bDFur3KGE4wL1Qp7xrq1uI/rgUvlsp6qP/s9qzkNFHbmQjo
-         BHi620w0ppzOXTFVKYNYRPLxlE2efd8shEScX91bsnOPejOdvSWgH4RzsgQol+zJ/7c6
-         S6zO2m4tgbtTJ0SBrSqYjwk7PtCRCvhbZsA+bRr3wrH9EVF5H6FTTvfY+d6khIyS+klM
-         E/AbfzWET4KvHYZunT1PDj85dxCz/Gxw7WOLEHq26YUCeJqZOHNNbq/7jaYLIVgEbCaQ
-         E1AQ==
+        d=linaro.org; s=google; t=1715349611; x=1715954411; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4ZlrmJ08xn9rS8WeTH0BsmLJblOAl7nAHbwgAShhEd0=;
+        b=kF76RJGbZDwgZOzgNrCq6iczQP/+TpZRPlHOV7gJiTzuypcx/eTWz3B2PqrnuYCTjP
+         RyyBOLW9cHc54qUEcQwVUbnihlJxQjWizFLaJEGHVJd7W6tBbALdApS19k3ybq9Ge/T7
+         nMlZY7rP8kar3J8RYVTiySS5YJNKzcRnKD2DUd84MSyvHkyM3BA88KQ2wmNIWemN+8eA
+         QsWzcYnogrVGYBj2mmIJiqypv1UnhMOubUVY0lNrsGAJQUHMtDT8/Gicv6pUknG7NNby
+         C+msa10oq8pdg6Ag3o/1W1UkM0e+aIrrMtANUcNHmWTrFHuiQyT+3M7mCLFC1EnlpLre
+         ay6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715347871; x=1715952671;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PgyBavn/j3mxAvoBKUfmPryJchWsxnf16J829mjjMvk=;
-        b=GB4j0DpWHBuObBQDSVmtX145kJaic1fEZHmSpF/TiJAcEoR8iuXfFwZSSBrpC1J+fu
-         xJ7huTz/yS1u7QhUrYgB1zufsby5LiB+JBaziRpbQU/Q+2zLBGyotJ+x1kUpPg0GPe8F
-         VMTqXmkCtJbTjGbwDYDRSUB2DlJUmDnOAkpvIOkfertbGnMXDp01X6EgOXLPOoBf9WeC
-         mIK5HsECsoGFcOlxOj0k9Xg1eFrt3fm6onVRsoq4g3Qd5IyGCuHSfO0oABYAxFrQu7bd
-         U72paQKMBKGI3DR73oH6rrxcN5Un949WP9UMM99+9zzBJv8+6V1QOytkP4eNxU+5qB+G
-         PFcA==
-X-Forwarded-Encrypted: i=1; AJvYcCUOnnnyAp7jnzx7f4o8Tf7RtaGD9EdgHyjf/EQkzFTqas8Hjy1wagW+6LQ5nPyV2TiBx4fWdAgIX63oIfX1ZJqd0Z/vWekKc9erfuYlnvhqMlovs96HxlioEtktdhCGt9o/zSADjSyi0xa1/ZUwQWspLyHcp8+KaSiaZjkcunBfu1CAEJ57J0jHA0OYqZh3A4AYt+H0C5SCcJq5Wf9OQXamsjAoIjQ9vLxb4A==
-X-Gm-Message-State: AOJu0YzfMlUmwZnqJAA5QwengVv2ecjp1iYdKwbW3m1qGtjsQ5OtJWPF
-	ls7A6wsg/wv+ojLnA2P6LpR+hFitzcKv1RS9LuQEGiJ/ePsvqnCMx0HKOKct/BX6hZvPJsWo2cM
-	+7KTlpXfbYPR1C7MFmjBFldJmROE=
-X-Google-Smtp-Source: AGHT+IEEbIILPLMb9PE9NImGn83g3es9clSLPHPLOeo7rUd5AEgEyvnIKS76k3EUVXg1vR3NxbtWpoJELhzo1ohtfhg=
-X-Received: by 2002:a17:906:548:b0:a59:a01e:825f with SMTP id
- a640c23a62f3a-a5a2d292a95mr208409266b.29.1715347870312; Fri, 10 May 2024
- 06:31:10 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1715349611; x=1715954411;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4ZlrmJ08xn9rS8WeTH0BsmLJblOAl7nAHbwgAShhEd0=;
+        b=M28oNb6p1eehkGTMEVqsWzwpvyEAljzZSBrplFxOsh1siUDgFrgMZeGnSh0qgfOoCE
+         SI/vmMBLY/c9+WcC0y+Bj/Ra21+bDcivTUSTvzU+zA7PdEWyz1xrNTzlCAILwXlOHN2F
+         DprZvdJFvi9dOgITxJyIuJEDZqNVaTHs5OMxRgfY1r6/d52mVUomJLCfmId4fwVsnB16
+         W/GjT/pf7g1vqIp48g4T38tmX6UFtj3s8Yt4S9Vl7WWubnUpeUmtZpjOnN413MsrsY9v
+         2L8Oi/k/t6EQZzsEyeSg5CzGCpc/AtQtbRVb9OsID/d0yXO7YYfYiTaWiN/jPFtDT9l1
+         lftA==
+X-Gm-Message-State: AOJu0Yxi7m3pDrCoIdTHyWgDRjMj3R9AMn4c3IzYGbtxNr795HYr2MLt
+	6WfV5ImoJ2CQaGNbWa8N7uuD+O5rGG/7gHBlpy6r8t9NIcMcKVATepAUAfK9eZVk3p5v9HXh/Jr
+	g
+X-Google-Smtp-Source: AGHT+IEzLqnCGYgsKA393227ouqeOh+KLSelLAV+I28Pm3GybyHBFZP2FWTehLW55uGWduSeyRUY+A==
+X-Received: by 2002:a17:907:3208:b0:a5a:1562:5187 with SMTP id a640c23a62f3a-a5a2d66a3a4mr215281966b.55.1715349610416;
+        Fri, 10 May 2024 07:00:10 -0700 (PDT)
+Received: from localhost ([102.222.70.76])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a5a1781cd90sm187248266b.20.2024.05.10.07.00.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 May 2024 07:00:09 -0700 (PDT)
+Date: Fri, 10 May 2024 17:00:05 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: savicaleksa83@gmail.com
+Cc: linux-hwmon@vger.kernel.org
+Subject: [bug report] hwmon: (nzxt-kraken3) Decouple device names from kinds
+Message-ID: <b1738c50-db42-40f0-a899-9c027c131ffb@moroto.mountain>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240509221947.3118-1-W_Armin@gmx.de>
-In-Reply-To: <20240509221947.3118-1-W_Armin@gmx.de>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Fri, 10 May 2024 16:30:33 +0300
-Message-ID: <CAHp75Vd9JZxuDGYm2drSYun+h2CAU+Lb4BEFq3LnQYBKpOfyMA@mail.gmail.com>
-Subject: Re: [PATCH v7] ACPI: fan: Add hwmon support
-To: Armin Wolf <W_Armin@gmx.de>
-Cc: mlj@danelec.com, rafael.j.wysocki@intel.com, lenb@kernel.org, 
-	jdelvare@suse.com, linux@roeck-us.net, linux@weissschuh.net, 
-	ilpo.jarvinen@linux.intel.com, linux-acpi@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	platform-driver-x86@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, May 10, 2024 at 1:19=E2=80=AFAM Armin Wolf <W_Armin@gmx.de> wrote:
->
-> Currently, the driver does only support a custom sysfs
-> interface to allow userspace to read the fan speed.
-> Add support for the standard hwmon interface so users
-> can read the fan speed with standard tools like "sensors".
+Hello Aleksa Savic,
 
-> Tested with a custom ACPI SSDT.
+Commit 346e147a91f2 ("hwmon: (nzxt-kraken3) Decouple device names
+from kinds") from Apr 28, 2024 (linux-next), leads to the following
+Smatch static checker warning:
 
-This most likely fits the comment/changelog area and not the commit
-message. Also would be good to put there the link to this custom SSDT
-(like one of zillion of pastebin sites, or GitHub, or ...).
+	drivers/hwmon/nzxt-kraken3.c:957 kraken3_probe()
+	error: uninitialized symbol 'device_name'.
 
-I was under the impression that Guenter gave a tag, which is missing,
-but no, he just said it's okay to go. Guenter, maybe a formal
-Acked-by?
+drivers/hwmon/nzxt-kraken3.c
+    873 static int kraken3_probe(struct hid_device *hdev, const struct hid_device_id *id)
+    874 {
+    875         struct kraken3_data *priv;
+    876         const char *device_name;
+    877         int ret;
+    878 
+    879         priv = devm_kzalloc(&hdev->dev, sizeof(*priv), GFP_KERNEL);
+    880         if (!priv)
+    881                 return -ENOMEM;
+    882 
+    883         priv->hdev = hdev;
+    884         hid_set_drvdata(hdev, priv);
+    885 
+    886         /*
+    887          * Initialize ->updated to STATUS_VALIDITY seconds in the past, making
+    888          * the initial empty data invalid for kraken3_read without the need for
+    889          * a special case there.
+    890          */
+    891         priv->updated = jiffies - msecs_to_jiffies(STATUS_VALIDITY);
+    892 
+    893         ret = hid_parse(hdev);
+    894         if (ret) {
+    895                 hid_err(hdev, "hid parse failed with %d\n", ret);
+    896                 return ret;
+    897         }
+    898 
+    899         /* Enable hidraw so existing user-space tools can continue to work */
+    900         ret = hid_hw_start(hdev, HID_CONNECT_HIDRAW);
+    901         if (ret) {
+    902                 hid_err(hdev, "hid hw start failed with %d\n", ret);
+    903                 return ret;
+    904         }
+    905 
+    906         ret = hid_hw_open(hdev);
+    907         if (ret) {
+    908                 hid_err(hdev, "hid hw open failed with %d\n", ret);
+    909                 goto fail_and_stop;
+    910         }
+    911 
+    912         switch (hdev->product) {
+    913         case USB_PRODUCT_ID_X53:
+    914         case USB_PRODUCT_ID_X53_SECOND:
+    915                 priv->kind = X53;
+    916                 device_name = "x53";
+    917                 break;
+    918         case USB_PRODUCT_ID_Z53:
+    919                 priv->kind = Z53;
+    920                 device_name = "z53";
+    921                 break;
+    922         case USB_PRODUCT_ID_KRAKEN2023:
+    923                 priv->kind = KRAKEN2023;
+    924                 device_name = "kraken2023";
+    925                 break;
+    926         case USB_PRODUCT_ID_KRAKEN2023_ELITE:
+    927                 priv->kind = KRAKEN2023;
+    928                 device_name = "kraken2023elite";
+    929                 break;
+    930         default:
+    931                 break;
 
-Some cosmetic related remarks below.
+device_name is uninitialized on this path.  Probably just error out
+here?
 
-...
+    932         }
+    933 
+    934         priv->buffer = devm_kzalloc(&hdev->dev, MAX_REPORT_LENGTH, GFP_KERNEL);
+    935         if (!priv->buffer) {
+    936                 ret = -ENOMEM;
+    937                 goto fail_and_close;
+    938         }
+    939 
+    940         mutex_init(&priv->buffer_lock);
+    941         mutex_init(&priv->z53_status_request_lock);
+    942         init_completion(&priv->fw_version_processed);
+    943         init_completion(&priv->status_report_processed);
+    944         spin_lock_init(&priv->status_completion_lock);
+    945 
+    946         hid_device_io_start(hdev);
+    947         ret = kraken3_init_device(hdev);
+    948         if (ret < 0) {
+    949                 hid_err(hdev, "device init failed with %d\n", ret);
+    950                 goto fail_and_close;
+    951         }
+    952 
+    953         ret = kraken3_get_fw_ver(hdev);
+    954         if (ret < 0)
+    955                 hid_warn(hdev, "fw version request failed with %d\n", ret);
+    956 
+--> 957         priv->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, device_name, priv,
+                                                                              ^^^^^^^^^^^
 
-> +/*
-> + * Hwmon interface for the ACPI Fan driver.
+    958                                                           &kraken3_chip_info, kraken3_groups);
+    959         if (IS_ERR(priv->hwmon_dev)) {
+    960                 ret = PTR_ERR(priv->hwmon_dev);
+    961                 hid_err(hdev, "hwmon registration failed with %d\n", ret);
+    962                 goto fail_and_close;
+    963         }
+    964 
+    965         kraken3_debugfs_init(priv, device_name);
+    966 
+    967         return 0;
+    968 
+    969 fail_and_close:
+    970         hid_hw_close(hdev);
+    971 fail_and_stop:
+    972         hid_hw_stop(hdev);
+    973         return ret;
+    974 }
 
-I would use hwmon (as it is an abbreviation based compound word which
-we know in small letters).
-
-> + *
-> + * Copyright (C) 2024 Armin Wolf <W_Armin@gmx.de>
-> + */
-
-...
-
-> +#include <linux/acpi.h>
-> +#include <linux/device.h>
-> +#include <linux/err.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/limits.h>
-
-+ types.h
-
-> +#include <linux/units.h>
-
-...
-
-The rest LGTM, FWIW,
-Reviewed-by: Andy Shevchenko <andy@kernel.org>
-
---=20
-With Best Regards,
-Andy Shevchenko
+regards,
+dan carpenter
