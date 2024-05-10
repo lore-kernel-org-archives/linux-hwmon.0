@@ -1,188 +1,345 @@
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67C8F127B73
-	for <linux-hwmon@vger.kernel.org>; Fri, 10 May 2024 14:00:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50C4D17088A
+	for <linux-hwmon@vger.kernel.org>; Fri, 10 May 2024 14:28:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715349614; cv=none; b=dNEVtqHuMd7kIzU60vj3gyMhqtoXwfRZkll2usGluqW7tbRieGwuhVDb3ggq2/T6JECLa+XTZrngtQlH+lKAQ5oftR0ghDql8d02aML//n5Ez1fVxoXiWtmMuju8qsxOCifSUVY8ma8Pksi6sC9GpR2PhPwyImIBAe1PJRqbqKg=
+	t=1715351316; cv=none; b=leHK0i0oMXqwSt+S1BhEyuVhPrwZP7RJiLddIq3XYpJu88Pe9Tjd7rOXmG5Q70INPrpVqrEB8kFZ2/EoYJzxG8b+SpZjNjThl5lVn7Ca5xKYfFNbPdlpw/hjoMtgNqGzDS1u+7ct8ly2QJxWNjGNN2Bvjk9ixYMCPhlkYNYKIdo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715349614; c=relaxed/simple;
-	bh=kdDp8KIWJJWZVJzngteV0lA0nzLqJbBl3aaTr46lgPo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=uzmF1aMql6D1bQ8EV+Zvf3g7b+gztkb5N+2pQaFNg+EUJyncKlUCDRfdzJbGDy5+3/GG/zNm9mBMSUbgbae/jXGnKaPfMg011H+r0egO7m5Ch6vM5ALVhRF72cT8AXuaVV8yeVC6B5H5S6SMbeG/b5MIRVq0g506r3bQEramlEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kF76RJGb; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1715351316; c=relaxed/simple;
+	bh=jNV78Ic1jnblHLj4PtyKc6t9dyFwqXUxynjxmMje5EM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KcgwPGY9yU4KsRnmmWDyuWWC6v32uXqud8BtonzlrWSqYUAvk2wnEPdOaZN6HLp+7nHoFCPYXx2YRBAERRFFkyrs5vusQXtTyT/hAZ8vM33/uiqHkEqfAPZILkLP9fbjlnef2nCTMRQJsLl6Sn5ecXuYMlcxof2giveQJ4oru5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=heol1Mnh; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kF76RJGb"
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a5a157a1cd1so516985666b.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 10 May 2024 07:00:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="heol1Mnh"
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-51fc01b6fe7so2207218e87.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 10 May 2024 07:28:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1715349611; x=1715954411; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4ZlrmJ08xn9rS8WeTH0BsmLJblOAl7nAHbwgAShhEd0=;
-        b=kF76RJGbZDwgZOzgNrCq6iczQP/+TpZRPlHOV7gJiTzuypcx/eTWz3B2PqrnuYCTjP
-         RyyBOLW9cHc54qUEcQwVUbnihlJxQjWizFLaJEGHVJd7W6tBbALdApS19k3ybq9Ge/T7
-         nMlZY7rP8kar3J8RYVTiySS5YJNKzcRnKD2DUd84MSyvHkyM3BA88KQ2wmNIWemN+8eA
-         QsWzcYnogrVGYBj2mmIJiqypv1UnhMOubUVY0lNrsGAJQUHMtDT8/Gicv6pUknG7NNby
-         C+msa10oq8pdg6Ag3o/1W1UkM0e+aIrrMtANUcNHmWTrFHuiQyT+3M7mCLFC1EnlpLre
-         ay6Q==
+        d=gmail.com; s=20230601; t=1715351312; x=1715956112; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IIm0d2fhrcmI99FeVnCH2yeCDgq1el/M+i/ISHOXk8s=;
+        b=heol1MnhZJ769JEZno2CdJ4lmDGSlcPPrPVAZGJYnkPt+baxWCYCjD+x3RhXk5HZtB
+         RYoFFS62m+KEB1SejF3o/rhh0r6M7sEx5fw+D4+6XF4Piaib1o1Q0tuudPUUtjWfDWdM
+         0uqB7vLbeEyQHQHl3zhhsLXx5gOD/f9HzDksE8gdwXgfDBjvYN/NEpD5BslHHcNJC6dC
+         ZWecSoMXDpVQuhGp2IO0JtJnxK+78uP6tcAYTJHJRf81cHuXkM0J5MoaWYqX5/ZKh2YC
+         VnznbdKlY0JoUuF/63sOcQq2PtYqoGcobSySriXzbR/WOoVsZobMKTAG690KRf4tOMd/
+         R77Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715349611; x=1715954411;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4ZlrmJ08xn9rS8WeTH0BsmLJblOAl7nAHbwgAShhEd0=;
-        b=M28oNb6p1eehkGTMEVqsWzwpvyEAljzZSBrplFxOsh1siUDgFrgMZeGnSh0qgfOoCE
-         SI/vmMBLY/c9+WcC0y+Bj/Ra21+bDcivTUSTvzU+zA7PdEWyz1xrNTzlCAILwXlOHN2F
-         DprZvdJFvi9dOgITxJyIuJEDZqNVaTHs5OMxRgfY1r6/d52mVUomJLCfmId4fwVsnB16
-         W/GjT/pf7g1vqIp48g4T38tmX6UFtj3s8Yt4S9Vl7WWubnUpeUmtZpjOnN413MsrsY9v
-         2L8Oi/k/t6EQZzsEyeSg5CzGCpc/AtQtbRVb9OsID/d0yXO7YYfYiTaWiN/jPFtDT9l1
-         lftA==
-X-Gm-Message-State: AOJu0Yxi7m3pDrCoIdTHyWgDRjMj3R9AMn4c3IzYGbtxNr795HYr2MLt
-	6WfV5ImoJ2CQaGNbWa8N7uuD+O5rGG/7gHBlpy6r8t9NIcMcKVATepAUAfK9eZVk3p5v9HXh/Jr
-	g
-X-Google-Smtp-Source: AGHT+IEzLqnCGYgsKA393227ouqeOh+KLSelLAV+I28Pm3GybyHBFZP2FWTehLW55uGWduSeyRUY+A==
-X-Received: by 2002:a17:907:3208:b0:a5a:1562:5187 with SMTP id a640c23a62f3a-a5a2d66a3a4mr215281966b.55.1715349610416;
-        Fri, 10 May 2024 07:00:10 -0700 (PDT)
-Received: from localhost ([102.222.70.76])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a5a1781cd90sm187248266b.20.2024.05.10.07.00.09
+        d=1e100.net; s=20230601; t=1715351312; x=1715956112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IIm0d2fhrcmI99FeVnCH2yeCDgq1el/M+i/ISHOXk8s=;
+        b=Xshd9y/p3yNlsRt+JHyHvlwtH24MvJ/JbhnVj2l+wON7+fKVg4d3A7XNtejeYbmXyp
+         ATATCUJSu/vVEJrTWppMJDes3JYRh7fe89Hw/OIEKS1g19EO2rSPUq+f00UHCN6ZJ7a3
+         ScKFdt3EjRWgc+x8QjW5QaLTmPxwMG6w0ju11ETujxH/ztSb2t4VWTbmJ1w9gB3rySNe
+         2WRBv9x7fb6CH+bzgQAok9y82jswjj7TAjLkJjwuwJENVzxsxPHm2iYmMEUK6/4SftML
+         XDAqSamQByKmErAdnqfcSw9sLxplZxcr+bL+N8WYl9JVt4FdC9awDckvBvQIl2OH4vhK
+         EDFA==
+X-Forwarded-Encrypted: i=1; AJvYcCXi8UeXXyA4P8VKHhDHRjk0GdYDU83PdfyYY6kZssYjNrYQKBOhneEJngdcjYb2bswS6IhpWRyCGQXPlIKmGdqpdAMIFYwLmxI/6K8=
+X-Gm-Message-State: AOJu0YxcKGkrl1SGRgvO4vPQsYcysThq38RegvXFeVqtny6DKZcZtFjt
+	SL06YZb5fHjQDIA2Zk6KAIt100TvpxY1Nfs/bB1U7TQr8bLb0JFV
+X-Google-Smtp-Source: AGHT+IEFEsZbBQvrHWJISepelambSbZA4QNthKOPuFJQ8VY8rp2+5bHlUV+JubeeyDmnNFgonfsSUw==
+X-Received: by 2002:a05:6512:3b07:b0:51b:de3a:33ac with SMTP id 2adb3069b0e04-5221058453amr2139592e87.59.1715351312122;
+        Fri, 10 May 2024 07:28:32 -0700 (PDT)
+Received: from lpm-pc.appeartv.lan (195-159-183-44.customer.powertech.no. [195.159.183.44])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-521f35ba694sm716493e87.73.2024.05.10.07.28.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 May 2024 07:00:09 -0700 (PDT)
-Date: Fri, 10 May 2024 17:00:05 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: savicaleksa83@gmail.com
-Cc: linux-hwmon@vger.kernel.org
-Subject: [bug report] hwmon: (nzxt-kraken3) Decouple device names from kinds
-Message-ID: <b1738c50-db42-40f0-a899-9c027c131ffb@moroto.mountain>
+        Fri, 10 May 2024 07:28:31 -0700 (PDT)
+From: Lars Petter Mostad <larspm@gmail.com>
+X-Google-Original-From: Lars Petter Mostad <lars.petter.mostad@appear.net>
+To: linux@roeck-us.net,
+	linux-hwmon@vger.kernel.org
+Cc: Lars Petter Mostad <larspm@gmail.com>
+Subject: [PATCH v2.1] hwmon: (emc1403) Add support for EMC1428 and EMC1438.
+Date: Fri, 10 May 2024 16:28:24 +0200
+Message-ID: <20240510142824.824332-1-lars.petter.mostad@appear.net>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-Hello Aleksa Savic,
+From: Lars Petter Mostad <larspm@gmail.com>
 
-Commit 346e147a91f2 ("hwmon: (nzxt-kraken3) Decouple device names
-from kinds") from Apr 28, 2024 (linux-next), leads to the following
-Smatch static checker warning:
+EMC1428 and EMC1438 are similar to EMC14xx, but have eight temperature
+channels, as well as signed data and limit registers. Chips currently
+supported by this driver have unsigned registers only.
 
-	drivers/hwmon/nzxt-kraken3.c:957 kraken3_probe()
-	error: uninitialized symbol 'device_name'.
+Signed-off-by: Lars Petter Mostad <larspm@gmail.com>
+---
+ Documentation/hwmon/emc1403.rst |  17 ++++-
+ drivers/hwmon/emc1403.c         | 121 +++++++++++++++++++++++++++++---
+ 2 files changed, 124 insertions(+), 14 deletions(-)
 
-drivers/hwmon/nzxt-kraken3.c
-    873 static int kraken3_probe(struct hid_device *hdev, const struct hid_device_id *id)
-    874 {
-    875         struct kraken3_data *priv;
-    876         const char *device_name;
-    877         int ret;
-    878 
-    879         priv = devm_kzalloc(&hdev->dev, sizeof(*priv), GFP_KERNEL);
-    880         if (!priv)
-    881                 return -ENOMEM;
-    882 
-    883         priv->hdev = hdev;
-    884         hid_set_drvdata(hdev, priv);
-    885 
-    886         /*
-    887          * Initialize ->updated to STATUS_VALIDITY seconds in the past, making
-    888          * the initial empty data invalid for kraken3_read without the need for
-    889          * a special case there.
-    890          */
-    891         priv->updated = jiffies - msecs_to_jiffies(STATUS_VALIDITY);
-    892 
-    893         ret = hid_parse(hdev);
-    894         if (ret) {
-    895                 hid_err(hdev, "hid parse failed with %d\n", ret);
-    896                 return ret;
-    897         }
-    898 
-    899         /* Enable hidraw so existing user-space tools can continue to work */
-    900         ret = hid_hw_start(hdev, HID_CONNECT_HIDRAW);
-    901         if (ret) {
-    902                 hid_err(hdev, "hid hw start failed with %d\n", ret);
-    903                 return ret;
-    904         }
-    905 
-    906         ret = hid_hw_open(hdev);
-    907         if (ret) {
-    908                 hid_err(hdev, "hid hw open failed with %d\n", ret);
-    909                 goto fail_and_stop;
-    910         }
-    911 
-    912         switch (hdev->product) {
-    913         case USB_PRODUCT_ID_X53:
-    914         case USB_PRODUCT_ID_X53_SECOND:
-    915                 priv->kind = X53;
-    916                 device_name = "x53";
-    917                 break;
-    918         case USB_PRODUCT_ID_Z53:
-    919                 priv->kind = Z53;
-    920                 device_name = "z53";
-    921                 break;
-    922         case USB_PRODUCT_ID_KRAKEN2023:
-    923                 priv->kind = KRAKEN2023;
-    924                 device_name = "kraken2023";
-    925                 break;
-    926         case USB_PRODUCT_ID_KRAKEN2023_ELITE:
-    927                 priv->kind = KRAKEN2023;
-    928                 device_name = "kraken2023elite";
-    929                 break;
-    930         default:
-    931                 break;
+diff --git a/Documentation/hwmon/emc1403.rst b/Documentation/hwmon/emc1403.rst
+index 0de9616b24ed..57f833b1a800 100644
+--- a/Documentation/hwmon/emc1403.rst
++++ b/Documentation/hwmon/emc1403.rst
+@@ -45,6 +45,17 @@ Supported chips:
+ 
+ 	- https://ww1.microchip.com/downloads/en/DeviceDoc/1423_1424.pdf
+ 
++  * SMSC / Microchip EMC1428, EMC1438
++
++    Addresses scanned: I2C 0x18, 0x4c, 0x4d
++
++    Prefix: 'emc1428', 'emc1438'
++
++    Datasheets:
++
++	- https://ww1.microchip.com/downloads/aemDocuments/documents/OTH/ProductDocuments/DataSheets/20005275A.pdf
++	- https://ww1.microchip.com/downloads/en/DeviceDoc/EMC1438%20DS%20Rev.%201.0%20(04-29-10).pdf
++
+ Author:
+     Kalhan Trisal <kalhan.trisal@intel.com
+ 
+@@ -53,10 +64,10 @@ Description
+ -----------
+ 
+ The Standard Microsystems Corporation (SMSC) / Microchip EMC14xx chips
+-contain up to four temperature sensors. EMC14x2 support two sensors
++contain up to eight temperature sensors. EMC14x2 support two sensors
+ (one internal, one external). EMC14x3 support three sensors (one internal,
+-two external), and EMC14x4 support four sensors (one internal, three
+-external).
++two external), EMC14x4 support four sensors (one internal, three external),
++and EMC14x8 support eight sensors (one internal, seven external).
+ 
+ The chips implement three limits for each sensor: low (tempX_min), high
+ (tempX_max) and critical (tempX_crit.) The chips also implement an
+diff --git a/drivers/hwmon/emc1403.c b/drivers/hwmon/emc1403.c
+index 43322bb9aaa1..eca33220d34a 100644
+--- a/drivers/hwmon/emc1403.c
++++ b/drivers/hwmon/emc1403.c
+@@ -25,7 +25,7 @@
+ #define THERMAL_SMSC_ID_REG	0xfe
+ #define THERMAL_REVISION_REG	0xff
+ 
+-enum emc1403_chip { emc1402, emc1403, emc1404 };
++enum emc1403_chip { emc1402, emc1403, emc1404, emc1428 };
+ 
+ struct thermal_data {
+ 	enum emc1403_chip chip;
+@@ -100,6 +100,12 @@ static int emc1403_detect(struct i2c_client *client,
+ 	case 0x27:
+ 		strscpy(info->type, "emc1424", I2C_NAME_SIZE);
+ 		break;
++	case 0x29:
++		strscpy(info->type, "emc1428", I2C_NAME_SIZE);
++		break;
++	case 0x59:
++		strscpy(info->type, "emc1438", I2C_NAME_SIZE);
++		break;
+ 	case 0x60:
+ 		strscpy(info->type, "emc1442", I2C_NAME_SIZE);
+ 		break;
+@@ -130,6 +136,14 @@ static bool emc1403_regmap_is_volatile(struct device *dev, unsigned int reg)
+ 	case 0x35:	/* high limit status */
+ 	case 0x36:	/* low limit status */
+ 	case 0x37:	/* therm limit status */
++	case 0x41:	/* external diode 4 high byte */
++	case 0x42:	/* external diode 4 low byte */
++	case 0x43:	/* external diode 5 high byte */
++	case 0x44:	/* external diode 5 low byte */
++	case 0x45:	/* external diode 6 high byte */
++	case 0x46:	/* external diode 6 low byte */
++	case 0x47:	/* external diode 7 high byte */
++	case 0x48:	/* external diode 7 low byte */
+ 		return true;
+ 	default:
+ 		return false;
+@@ -177,6 +191,30 @@ static u8 emc1403_temp_regs[][4] = {
+ 		[temp_crit] = 0x30,
+ 		[temp_input] = 0x2a,
+ 	},
++	[4] = {
++		[temp_min] = 0x51,
++		[temp_max] = 0x50,
++		[temp_crit] = 0x64,
++		[temp_input] = 0x41,
++	},
++	[5] = {
++		[temp_min] = 0x55,
++		[temp_max] = 0x54,
++		[temp_crit] = 0x65,
++		[temp_input] = 0x43
++	},
++	[6] = {
++		[temp_min] = 0x59,
++		[temp_max] = 0x58,
++		[temp_crit] = 0x66,
++		[temp_input] = 0x45,
++	},
++	[7] = {
++		[temp_min] = 0x5d,
++		[temp_max] = 0x5c,
++		[temp_crit] = 0x67,
++		[temp_input] = 0x47,
++	},
+ };
+ 
+ static s8 emc1403_temp_regs_low[][4] = {
+@@ -204,27 +242,56 @@ static s8 emc1403_temp_regs_low[][4] = {
+ 		[temp_crit] = -1,
+ 		[temp_input] = 0x2b,
+ 	},
++	[4] = {
++		[temp_min] = 0x53,
++		[temp_max] = 0x52,
++		[temp_crit] = -1,
++		[temp_input] = 0x42,
++	},
++	[5] = {
++		[temp_min] = 0x57,
++		[temp_max] = 0x56,
++		[temp_crit] = -1,
++		[temp_input] = 0x44,
++	},
++	[6] = {
++		[temp_min] = 0x5b,
++		[temp_max] = 0x5a,
++		[temp_crit] = -1,
++		[temp_input] = 0x46,
++	},
++	[7] = {
++		[temp_min] = 0x5f,
++		[temp_max] = 0x5e,
++		[temp_crit] = -1,
++		[temp_input] = 0x48,
++	},
+ };
+ 
+ static int __emc1403_get_temp(struct thermal_data *data, int channel,
+ 			      enum emc1403_reg_map map, long *val)
+ {
+-	unsigned int regval;
++	unsigned int regvalh;
++	unsigned int regvall = 0;
+ 	int ret;
+ 	s8 reg;
+ 
+-	ret = regmap_read(data->regmap, emc1403_temp_regs[channel][map], &regval);
++	ret = regmap_read(data->regmap, emc1403_temp_regs[channel][map], &regvalh);
+ 	if (ret < 0)
+ 		return ret;
+-	*val = regval * 1000;
+ 
+ 	reg = emc1403_temp_regs_low[channel][map];
+ 	if (reg >= 0) {
+-		ret = regmap_read(data->regmap, reg, &regval);
++		ret = regmap_read(data->regmap, reg, &regvall);
+ 		if (ret < 0)
+ 			return ret;
+-		*val += (regval >> 5) * 125;
+ 	}
++
++	if (data->chip == emc1428)
++		*val = sign_extend32((regvalh << 3) | (regvall >> 5), 10) * 125;
++	else
++		*val = ((regvalh << 3) | (regvall >> 5)) * 125;
++
+ 	return 0;
+ }
+ 
+@@ -379,7 +446,10 @@ static int emc1403_set_hyst(struct thermal_data *data, long val)
+ 	int hyst, ret;
+ 	long limit;
+ 
+-	val = clamp_val(val, 0, 255000);
++	if (data->chip == emc1428)
++		val = clamp_val(val, -128000, 127000);
++	else
++		val = clamp_val(val, 0, 255000);
+ 
+ 	mutex_lock(&data->mutex);
+ 	ret = __emc1403_get_temp(data, 0, temp_crit, &limit);
+@@ -387,7 +457,10 @@ static int emc1403_set_hyst(struct thermal_data *data, long val)
+ 		goto unlock;
+ 
+ 	hyst = limit - val;
+-	hyst = clamp_val(DIV_ROUND_CLOSEST(hyst, 1000), 0, 255);
++	if (data->chip == emc1428)
++		hyst = clamp_val(DIV_ROUND_CLOSEST(hyst, 1000), 0, 127);
++	else
++		hyst = clamp_val(DIV_ROUND_CLOSEST(hyst, 1000), 0, 255);
+ 	ret = regmap_write(data->regmap, 0x21, hyst);
+ unlock:
+ 	mutex_unlock(&data->mutex);
+@@ -407,14 +480,20 @@ static int emc1403_set_temp(struct thermal_data *data, int channel,
+ 
+ 	mutex_lock(&data->mutex);
+ 	if (regl >= 0) {
+-		val = clamp_val(val, 0, 255875);
++		if (data->chip == emc1428)
++			val = clamp_val(val, -128000, 127875);
++		else
++			val = clamp_val(val, 0, 255875);
+ 		regval = DIV_ROUND_CLOSEST(val, 125);
+-		ret = regmap_write(data->regmap, regh, regval >> 3);
++		ret = regmap_write(data->regmap, regh, (regval >> 3) & 0xff);
+ 		if (ret < 0)
+ 			goto unlock;
+ 		ret = regmap_write(data->regmap, regl, (regval & 0x07) << 5);
+ 	} else {
+-		val = clamp_val(val, 0, 255000);
++		if (data->chip == emc1428)
++			val = clamp_val(val, -128000, 127000);
++		else
++			val = clamp_val(val, 0, 255000);
+ 		regval = DIV_ROUND_CLOSEST(val, 1000);
+ 		ret = regmap_write(data->regmap, regh, regval);
+ 	}
+@@ -484,6 +563,8 @@ static umode_t emc1403_temp_is_visible(const void *_data, u32 attr, int channel)
+ 		return 0;
+ 	if (data->chip == emc1403 && channel > 2)
+ 		return 0;
++	if (data->chip != emc1428 && channel > 3)
++		return 0;
+ 
+ 	switch (attr) {
+ 	case hwmon_temp_input:
+@@ -548,6 +629,22 @@ static const struct hwmon_channel_info * const emc1403_info[] = {
+ 			   HWMON_T_INPUT | HWMON_T_MIN | HWMON_T_MAX |
+ 			   HWMON_T_CRIT | HWMON_T_MIN_HYST | HWMON_T_MAX_HYST |
+ 			   HWMON_T_CRIT_HYST | HWMON_T_MIN_ALARM |
++			   HWMON_T_MAX_ALARM | HWMON_T_CRIT_ALARM | HWMON_T_FAULT,
++			   HWMON_T_INPUT | HWMON_T_MIN | HWMON_T_MAX |
++			   HWMON_T_CRIT | HWMON_T_MIN_HYST | HWMON_T_MAX_HYST |
++			   HWMON_T_CRIT_HYST | HWMON_T_MIN_ALARM |
++			   HWMON_T_MAX_ALARM | HWMON_T_CRIT_ALARM | HWMON_T_FAULT,
++			   HWMON_T_INPUT | HWMON_T_MIN | HWMON_T_MAX |
++			   HWMON_T_CRIT | HWMON_T_MIN_HYST | HWMON_T_MAX_HYST |
++			   HWMON_T_CRIT_HYST | HWMON_T_MIN_ALARM |
++			   HWMON_T_MAX_ALARM | HWMON_T_CRIT_ALARM | HWMON_T_FAULT,
++			   HWMON_T_INPUT | HWMON_T_MIN | HWMON_T_MAX |
++			   HWMON_T_CRIT | HWMON_T_MIN_HYST | HWMON_T_MAX_HYST |
++			   HWMON_T_CRIT_HYST | HWMON_T_MIN_ALARM |
++			   HWMON_T_MAX_ALARM | HWMON_T_CRIT_ALARM | HWMON_T_FAULT,
++			   HWMON_T_INPUT | HWMON_T_MIN | HWMON_T_MAX |
++			   HWMON_T_CRIT | HWMON_T_MIN_HYST | HWMON_T_MAX_HYST |
++			   HWMON_T_CRIT_HYST | HWMON_T_MIN_ALARM |
+ 			   HWMON_T_MAX_ALARM | HWMON_T_CRIT_ALARM | HWMON_T_FAULT
+ 			   ),
+ 	NULL
+@@ -575,6 +672,8 @@ static const struct i2c_device_id emc1403_idtable[] = {
+ 	{ "emc1422", emc1402 },
+ 	{ "emc1423", emc1403 },
+ 	{ "emc1424", emc1404 },
++	{ "emc1428", emc1428 },
++	{ "emc1438", emc1428 },
+ 	{ "emc1442", emc1402 },
+ 	{ }
+ };
 
-device_name is uninitialized on this path.  Probably just error out
-here?
+base-commit: 6a8157812f5b486d1fdabeefa070d75ae49220ee
+-- 
+2.44.0
 
-    932         }
-    933 
-    934         priv->buffer = devm_kzalloc(&hdev->dev, MAX_REPORT_LENGTH, GFP_KERNEL);
-    935         if (!priv->buffer) {
-    936                 ret = -ENOMEM;
-    937                 goto fail_and_close;
-    938         }
-    939 
-    940         mutex_init(&priv->buffer_lock);
-    941         mutex_init(&priv->z53_status_request_lock);
-    942         init_completion(&priv->fw_version_processed);
-    943         init_completion(&priv->status_report_processed);
-    944         spin_lock_init(&priv->status_completion_lock);
-    945 
-    946         hid_device_io_start(hdev);
-    947         ret = kraken3_init_device(hdev);
-    948         if (ret < 0) {
-    949                 hid_err(hdev, "device init failed with %d\n", ret);
-    950                 goto fail_and_close;
-    951         }
-    952 
-    953         ret = kraken3_get_fw_ver(hdev);
-    954         if (ret < 0)
-    955                 hid_warn(hdev, "fw version request failed with %d\n", ret);
-    956 
---> 957         priv->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, device_name, priv,
-                                                                              ^^^^^^^^^^^
-
-    958                                                           &kraken3_chip_info, kraken3_groups);
-    959         if (IS_ERR(priv->hwmon_dev)) {
-    960                 ret = PTR_ERR(priv->hwmon_dev);
-    961                 hid_err(hdev, "hwmon registration failed with %d\n", ret);
-    962                 goto fail_and_close;
-    963         }
-    964 
-    965         kraken3_debugfs_init(priv, device_name);
-    966 
-    967         return 0;
-    968 
-    969 fail_and_close:
-    970         hid_hw_close(hdev);
-    971 fail_and_stop:
-    972         hid_hw_stop(hdev);
-    973         return ret;
-    974 }
-
-regards,
-dan carpenter
