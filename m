@@ -1,360 +1,168 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7905770E0;
-	Thu,  9 May 2024 22:20:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 585A413BAC8;
+	Fri, 10 May 2024 03:36:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715293227; cv=none; b=dr6Mjfd6UO2m/ZMnOCgnPb5PRvM6wURqaUvl2vL63DqBKeG6VszQQU9MpfxudFnAl/ew0iqwKxWCdGP6TO/lRW44joP2EnpFK+suQJcO07uk6Bj+YgnPs0AjYV8nES41LP0l9R3GSKzLh8SauQaqgDHLN5YNq4YWUncdbG2vqro=
+	t=1715312176; cv=none; b=qtWV2YwljkJYDaWoZoMr/kbohRnwd4k0E2u9PAY9oZ5yF5fegIbcC8F+rxAcg1i6p2phZ1oednNU9C7VwVcyA//4YTVmfIb4A4sLQ1TBDihMDS23Ig/YAibeIJwyCe85n5dQZsQi6KTlKQ4AI0aXuHkA+DQ4tvPRUuuwsvd56eM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715293227; c=relaxed/simple;
-	bh=eqJK/Rn6qanxxe4EBE/Fk3aejoZgpfMEjXIWxfjWGtY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=KuXV0RzdWrQ/QeAN9eGZliKsEL2cnEuY3Qeid13RBLYSrLqf46j0LEBIkje2mcz+s/czNwjaChG7BGDtEAjFW4uAS8ZD7oRKW/kPk9ri1C5jp25sv2lBCMuakCjRBAvo4Zf1dmmwEtXQNgzdLAWz+og8Fx5zYM+MIMbPRpSmJ4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=ZT70aRlT; arc=none smtp.client-ip=212.227.15.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	s=arc-20240116; t=1715312176; c=relaxed/simple;
+	bh=KOSn1hZhv1DeOtrd/XQIWrqlLlDGMSahtKxPMjKo1v4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WO1R1vLqziIlze33pUr8/L2Y8KEjxtLaPcMXwnHnfD++i6dpGtYynSDY5/LTIjGNGmUzfmjxTnT/iRYEq5XSyJRan9q7VQYz7wlfwzqgChu2UF0WfuDPXaJG5ESF7s9gM/YWacfBm2Zxz2Tqw+52LpLVPzOnixBlWvKkhDPUbx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EqLW4GmA; arc=none smtp.client-ip=209.85.215.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="ZT70aRlT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1715293195; x=1715897995; i=w_armin@gmx.de;
-	bh=MHd8t9IlX0+WAwv1hPyqVWDeN40kQ7ZcdSmxKIuiwjE=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:
-	 MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=ZT70aRlT959ikcadIH3YSLnmGh+qVVZ1cgqPyquw/PIZK46IH1pSz8Uzi1FlM3v3
-	 nC4Dep0Lf8s97QJYFIM4fFIiDwRiewznMT5BZR7zm8aM6QGuf8xvT03Wymqt1xjLw
-	 SNUxLGoCWjc/Fg3i+emfglbA9bQ4aGxa6UwQF0AdurSNuzelY0NpqXNlpiebBHJvk
-	 7I63xoBIbla+24QkQozRGtQ2ygjA+fu8FiwsKPHc+e2Ixnl49sQAPJKoDPi1BlCm2
-	 pokbkq0DhY5GXxFOqUvsTIjAD1GN40bkJof0UsHszgANJzJEVPxZkon7RR1BXu/1k
-	 bdg+5eG+gC+S08WVTQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from mx-amd-b650.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1N63Ra-1sghko3FFo-015HJm; Fri, 10 May 2024 00:19:54 +0200
-From: Armin Wolf <W_Armin@gmx.de>
-To: mlj@danelec.com,
-	rafael.j.wysocki@intel.com,
-	lenb@kernel.org
-Cc: jdelvare@suse.com,
-	andy.shevchenko@gmail.com,
-	linux@roeck-us.net,
-	linux@weissschuh.net,
-	ilpo.jarvinen@linux.intel.com,
-	linux-acpi@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org
-Subject: [PATCH v7] ACPI: fan: Add hwmon support
-Date: Fri, 10 May 2024 00:19:47 +0200
-Message-Id: <20240509221947.3118-1-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.39.2
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EqLW4GmA"
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-5ff57410ebbso1301587a12.1;
+        Thu, 09 May 2024 20:36:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1715312173; x=1715916973; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=om+gVHo+UYQCK20XV54trkvgwUZ7dLC7k9R/3N8VLiQ=;
+        b=EqLW4GmA4bZtF1KFsa9TxT5M4ieJ1Y6EO9M16RWMHtVfvXvGG3tB0T4j5vRFoPPWGy
+         w480zePmbiero3u00+O6KJ6rduFapBCQ9oOzgT5KkyhZAvdUE79+sh7gPpsdcwjn6+2X
+         E40VT19olM9fqymq6FLo4dVBDC/CoJ7Zr0h0Ua3L2QuddQcbn1Ko4VRjCpANM1iC0n7J
+         Gmh00sXkNj24PAhOlIN5A8eJv2s0SC9dWCJwdxlL69D7n76xCvEn+n2lZdNpG0ZrdhTt
+         D2uZUDWVESLaQ49+bgSYFwYdsP9DoLp03ejH5E9g3AKsCV2r2QPmEEC9ic5KpU1bXhTq
+         AqjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715312173; x=1715916973;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=om+gVHo+UYQCK20XV54trkvgwUZ7dLC7k9R/3N8VLiQ=;
+        b=VGcA6jymm65S0RYgGWZ5uyvpMHo9f96syANhdVnUOTm6VCUFQt+0TX9kA4K5UE1mRW
+         JSH9aiXjbIEmXkDA9QPqqLi/vGnkJ1a8DUXGbKKjcou+W1/2C0F4rubrMAxhRYq1ISl1
+         gEecZgI7GUkjzNvPggOfx/VAteqPGixeJSeWaDk11BEFFsorNQZ1XCiX/TNM+IGpSWWJ
+         K7cjXwh4/AuTmAd5B27SecYKG0P5qDZmPSpBuoPMldCYPa8cueb3RqbaobIvJK6BQSId
+         d0y37Z7cMA9vYFe9kMkiDdHOuergVzLaCpnZ2eJyorgOPpFRJ7vW5IOVjFuWsvnNB/+u
+         iJbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU92N3KrH+rfuINHMcuEzcHewO/PzoRzv5rV/vr4funPJLBczcCy6/YP/slCT6ocPED8QzqEqgTUDM45nThWXU6RxdjWxHoqVFpgaKn//m/xi1neN85+5FmJCaV0qner6KH4IpJV0Hu1sCii7cEqIiZt/YrGOXCu0BkGq2V2rVuozfEZjjR
+X-Gm-Message-State: AOJu0YzlnU/n5RUIwv+0vMngZqYFRviuFgidBAHBkKYOPFclOxerN3NY
+	O7Qzg1arDYk2Tskb4R7/BfgXhwUxIcGl7ejoY9aPsKppGNMNOdBH
+X-Google-Smtp-Source: AGHT+IE/0hqi92CFy7Q2dWIvYr/EbTY5YJEnOOZwOajGysRIZOSYsI29MBVKXbBecsK3oAg+mdknlg==
+X-Received: by 2002:a05:6a21:35c6:b0:1af:8104:46e0 with SMTP id adf61e73a8af0-1afde1b7ee1mr1601971637.49.1715312173404;
+        Thu, 09 May 2024 20:36:13 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2b67116413dsm2243612a91.13.2024.05.09.20.36.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 May 2024 20:36:12 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Thu, 9 May 2024 20:36:10 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>,
+	"jdelvare@suse.com" <jdelvare@suse.com>,
+	"robh@kernel.org" <robh@kernel.org>,
+	"krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>,
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Document adt7475 PWM initial
+ duty cycle
+Message-ID: <94c843e2-4415-4786-bfd4-a77fdbbfab07@roeck-us.net>
+References: <20240508215504.300580-1-chris.packham@alliedtelesis.co.nz>
+ <20240508215504.300580-2-chris.packham@alliedtelesis.co.nz>
+ <fe5b3af9-b307-45e1-b190-ba2b3327a8df@kernel.org>
+ <d11093bb-230b-4918-a8cd-4f4eb760ccf3@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:kGWr9AYivua3WIlxOqZJzKhqZuKoLmNEOFjE1HzE+YCKZwAr/zW
- hH8g3uN5zNpTE1R+yWnOAI2pue3u9mauL63PpvxnkzcUo/wXC+vu0fHSdqSMvr7VEm9uRKL
- 8Rh9HxEQU77s3WjhrIeConyJCO0KhOqVfXyJi5LBYxdMIBe6Uk3DgV0kS1fctpj4wV/bit/
- rhWx5sm3bezvnf30CvpIw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:zMXrHW4MwJM=;qZdCLMrpKgQ8AWWP5d925ZZunsw
- rgQNZfWBe/9+/KCTlKjPzZnCIicukNqsJ+hoQlAlrL8d6p3yENF7YWkqUdc0k+haEyaQ0rS5i
- dBnTpK3EtCYD195NmPuu4CgjxN8ZSqsAt6fICtiLJkRrkn8jEGzzdYCQVqH/n6PO8JdqyOl/y
- yxUR4aeiFfxEwPW9ZzJBPSaJ6S8V0VRuIVaYDHDUjHrtr+zJpjL6LG/E3BYVgvYjlb+g76iYl
- YMXEbDp3/XHtHi8Ft0QE1XMr+g8WC38p3rRPcCMDT4r1razZkoDX/8SfJLlVreIVbkrBScPM9
- VXPAN7Me/Z51xEcQPd+LzUqe3dZpBUywbnywYhWO47MCogHv2+YO2o2ZVj7jnxAPjcdA5X51C
- NhM/QxXqvowIa2SFRaKbnIeivOSZzvsLNWrkahz1o0132rKyAkuY30/tY3CppjpVO7zwD0b9s
- vixN0QD6Oao2LFTsJ0sNOoh7zyoXSvIVt3Oz2QSydDMsHcsn2oYd6ba92m5WSB1Gwf9BANogh
- r6GOVOwGX5juM/npVmtEBxJZWmlyGjXKerkV58BxMOAPFB882a7oPP/K2wiQHEK2luP8UjQ3C
- Y81NYMMbaduNEQWK4OhQwQRQyQ3yFjIFZASRQBCCqCim3Xbwo9QqvjQGd1tQuj+wDcyvPvOai
- pQZOLkf8pRcHMdAeyTcWsymtApQsdMuZM4Dk0UbXB2K3ep+PsFo4+5q5ocsSEHTSIdeg+nJZD
- eAzJJiNu9FjNJCWxvugLXwTshN9d8dlXGFV1dTXMD2+Qhrryk0SOg33ICShLBbyKwfD285Omx
- hmY0QNab80m7J9xr8bg8kJ6nJ8/2RgJDKdLoZqQ9LvLaY=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d11093bb-230b-4918-a8cd-4f4eb760ccf3@alliedtelesis.co.nz>
 
-Currently, the driver does only support a custom sysfs
-interface to allow userspace to read the fan speed.
-Add support for the standard hwmon interface so users
-can read the fan speed with standard tools like "sensors".
+Chris,
 
-Tested with a custom ACPI SSDT.
+On Thu, May 09, 2024 at 06:19:12PM +0000, Chris Packham wrote:
+> Hi Krzysztof,
+> 
+> On 9/05/24 19:06, Krzysztof Kozlowski wrote:
+> > On 08/05/2024 23:55, Chris Packham wrote:
+> >> Add documentation for the pwm-initial-duty-cycle and
+> >> pwm-initial-frequency properties. These allow the starting state of the
+> >> PWM outputs to be set to cater for hardware designs where undesirable
+> >> amounts of noise is created by the default hardware state.
+> >>
+> >> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> >> ---
+> >>
+> >> Notes:
+> >>      Changes in v2:
+> >>      - Document 0 as a valid value (leaves hardware as-is)
+> >>
+> >>   .../devicetree/bindings/hwmon/adt7475.yaml    | 27 ++++++++++++++++++-
+> >>   1 file changed, 26 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.yaml b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+> >> index 051c976ab711..97deda082b4a 100644
+> >> --- a/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+> >> +++ b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+> >> @@ -51,6 +51,30 @@ properties:
+> >>         enum: [0, 1]
+> >>         default: 1
+> >>   
+> >> +  adi,pwm-initial-duty-cycle:
+> >> +    description: |
+> >> +      Configures the initial duty cycle for the PWM outputs. The hardware
+> >> +      default is 100% but this may cause unwanted fan noise at startup. Set
+> >> +      this to a value from 0 (0% duty cycle) to 255 (100% duty cycle).
+> >> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> >> +    minItems: 3
+> >> +    maxItems: 3
+> >> +    items:
+> >> +      minimum: 0
+> >> +      maximum: 255
+> >> +      default: 255
+> >> +
+> >> +  adi,pwm-initial-frequency:
+> > Frequency usually has some units, so use appropriate unit suffix and
+> > drop $ref.  Maybe that's just target-rpm property?
+> >
+> > But isn't this duplicating previous property? This is fan controller,
+> > not PWM provider (in any case you miss proper $refs to pwm.yaml or
+> > fan-common.yaml), so the only thing you initially want to configure is
+> > the fan rotation, not specific PWM waveform. If you you want to
+> > configure specific PWM waveform, then it's a PWM provider... but it is
+> > not... Confused.
+> 
+> There's two things going on here. There's a PWM duty cycle which is 
+> configurable from 0% to 100%. It might be nice if this was expressed as 
+> a percentage instead of 0-255 but I went with the latter because that's 
+> how the sysfs ABI for the duty cycle works.
+> 
+> The frequency (which I'll call adi,pwm-initial-frequency-hz in v3) 
+> affects how that duty cycle is presented to the fans. So you could still 
+> have a duty cycle of 50% at any frequency. What frequency is best 
+> depends on the kind of fans being used. In my particular case the lower 
+> frequencies end up with the fans oscillating annoyingly so I use the 
+> highest setting.
+> 
 
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
-Changes since v6:
-- add "hwmon" to the names of functions and variables
-related to hwmon
-- replace -ENODATA with -EIO/-ENODEV
+My udnerstanding is that we are supposed to use standard pwm provider
+properties. The property description is provider specicic, so I think
+we can pretty much just make it up.
 
-Changes since v5:
-- fix coding style issues
-- replace double break with return
-- add missing includes
+Essentially you'd first define a pwm provider which defines all the
+pwm parameters needed, such as pwm freqency, default duty cycle,
+and flags such as PWM_POLARITY_INVERTED. You'd then add something like
 
-Changes since v4:
-- fix spelling issues
-- check power values for overflow condition too
+	pwms = <&pwm index frequency duty_cycle ... flags>;
 
-Changes since v3:
-- drop fault attrs
-- rework initialization
+to the node for each fan, and be done.
 
-Changes since v2:
-- add support for fanX_target and power attrs
+That doesn't mean that we would actually have to register the chip
+as pwm provider with the pwm subsystem; all we would have to do is to
+interpret the property values.
 
-Changes since v1:
-- fix undefined reference error
-- fix fan speed validation
-- coding style fixes
-- clarify that the changes are compile-tested only
-- add hwmon maintainers to cc list
-=2D--
- drivers/acpi/Makefile    |   1 +
- drivers/acpi/fan.h       |   9 +++
- drivers/acpi/fan_core.c  |   4 +
- drivers/acpi/fan_hwmon.c | 169 +++++++++++++++++++++++++++++++++++++++
- 4 files changed, 183 insertions(+)
- create mode 100644 drivers/acpi/fan_hwmon.c
-
-diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
-index 39ea5cfa8326..61ca4afe83dc 100644
-=2D-- a/drivers/acpi/Makefile
-+++ b/drivers/acpi/Makefile
-@@ -77,6 +77,7 @@ obj-$(CONFIG_ACPI_TINY_POWER_BUTTON)	+=3D tiny-power-but=
-ton.o
- obj-$(CONFIG_ACPI_FAN)		+=3D fan.o
- fan-objs			:=3D fan_core.o
- fan-objs			+=3D fan_attr.o
-+fan-$(CONFIG_HWMON)		+=3D fan_hwmon.o
-
- obj-$(CONFIG_ACPI_VIDEO)	+=3D video.o
- obj-$(CONFIG_ACPI_TAD)		+=3D acpi_tad.o
-diff --git a/drivers/acpi/fan.h b/drivers/acpi/fan.h
-index f89d19c922dc..db25a3898af7 100644
-=2D-- a/drivers/acpi/fan.h
-+++ b/drivers/acpi/fan.h
-@@ -10,6 +10,8 @@
- #ifndef _ACPI_FAN_H_
- #define _ACPI_FAN_H_
-
-+#include <linux/kconfig.h>
-+
- #define ACPI_FAN_DEVICE_IDS	\
- 	{"INT3404", }, /* Fan */ \
- 	{"INTC1044", }, /* Fan for Tiger Lake generation */ \
-@@ -57,4 +59,11 @@ struct acpi_fan {
- int acpi_fan_get_fst(struct acpi_device *device, struct acpi_fan_fst *fst=
-);
- int acpi_fan_create_attributes(struct acpi_device *device);
- void acpi_fan_delete_attributes(struct acpi_device *device);
-+
-+#if IS_REACHABLE(CONFIG_HWMON)
-+int devm_acpi_fan_create_hwmon(struct acpi_device *device);
-+#else
-+static inline int devm_acpi_fan_create_hwmon(struct acpi_device *device) =
-{ return 0; };
-+#endif
-+
- #endif
-diff --git a/drivers/acpi/fan_core.c b/drivers/acpi/fan_core.c
-index ff72e4ef8738..7cea4495f19b 100644
-=2D-- a/drivers/acpi/fan_core.c
-+++ b/drivers/acpi/fan_core.c
-@@ -336,6 +336,10 @@ static int acpi_fan_probe(struct platform_device *pde=
-v)
- 		if (result)
- 			return result;
-
-+		result =3D devm_acpi_fan_create_hwmon(device);
-+		if (result)
-+			return result;
-+
- 		result =3D acpi_fan_create_attributes(device);
- 		if (result)
- 			return result;
-diff --git a/drivers/acpi/fan_hwmon.c b/drivers/acpi/fan_hwmon.c
-new file mode 100644
-index 000000000000..af6365f1591a
-=2D-- /dev/null
-+++ b/drivers/acpi/fan_hwmon.c
-@@ -0,0 +1,169 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Hwmon interface for the ACPI Fan driver.
-+ *
-+ * Copyright (C) 2024 Armin Wolf <W_Armin@gmx.de>
-+ */
-+
-+#include <linux/acpi.h>
-+#include <linux/device.h>
-+#include <linux/err.h>
-+#include <linux/hwmon.h>
-+#include <linux/limits.h>
-+#include <linux/units.h>
-+
-+#include "fan.h"
-+
-+/* Returned when the ACPI fan does not support speed reporting */
-+#define FAN_SPEED_UNAVAILABLE	U32_MAX
-+#define FAN_POWER_UNAVAILABLE	U32_MAX
-+
-+static struct acpi_fan_fps *acpi_fan_get_current_fps(struct acpi_fan *fan=
-, u64 control)
-+{
-+	unsigned int i;
-+
-+	for (i =3D 0; i < fan->fps_count; i++) {
-+		if (fan->fps[i].control =3D=3D control)
-+			return &fan->fps[i];
-+	}
-+
-+	return NULL;
-+}
-+
-+static umode_t acpi_fan_hwmon_is_visible(const void *drvdata, enum hwmon_=
-sensor_types type,
-+					 u32 attr, int channel)
-+{
-+	const struct acpi_fan *fan =3D drvdata;
-+	unsigned int i;
-+
-+	switch (type) {
-+	case hwmon_fan:
-+		switch (attr) {
-+		case hwmon_fan_input:
-+			return 0444;
-+		case hwmon_fan_target:
-+			/*
-+			 * When in fine grain control mode, not every fan control value
-+			 * has an associated fan performance state.
-+			 */
-+			if (fan->fif.fine_grain_ctrl)
-+				return 0;
-+
-+			return 0444;
-+		default:
-+			return 0;
-+		}
-+	case hwmon_power:
-+		switch (attr) {
-+		case hwmon_power_input:
-+			/*
-+			 * When in fine grain control mode, not every fan control value
-+			 * has an associated fan performance state.
-+			 */
-+			if (fan->fif.fine_grain_ctrl)
-+				return 0;
-+
-+			/*
-+			 * When all fan performance states contain no valid power data,
-+			 * when the associated attribute should not be created.
-+			 */
-+			for (i =3D 0; i < fan->fps_count; i++) {
-+				if (fan->fps[i].power !=3D FAN_POWER_UNAVAILABLE)
-+					return 0444;
-+			}
-+
-+			return 0;
-+		default:
-+			return 0;
-+		}
-+	default:
-+		return 0;
-+	}
-+}
-+
-+static int acpi_fan_hwmon_read(struct device *dev, enum hwmon_sensor_type=
-s type, u32 attr,
-+			       int channel, long *val)
-+{
-+	struct acpi_device *adev =3D to_acpi_device(dev->parent);
-+	struct acpi_fan *fan =3D dev_get_drvdata(dev);
-+	struct acpi_fan_fps *fps;
-+	struct acpi_fan_fst fst;
-+	int ret;
-+
-+	ret =3D acpi_fan_get_fst(adev, &fst);
-+	if (ret < 0)
-+		return ret;
-+
-+	switch (type) {
-+	case hwmon_fan:
-+		switch (attr) {
-+		case hwmon_fan_input:
-+			if (fst.speed =3D=3D FAN_SPEED_UNAVAILABLE)
-+				return -ENODEV;
-+
-+			if (fst.speed > LONG_MAX)
-+				return -EOVERFLOW;
-+
-+			*val =3D fst.speed;
-+			return 0;
-+		case hwmon_fan_target:
-+			fps =3D acpi_fan_get_current_fps(fan, fst.control);
-+			if (!fps)
-+				return -EIO;
-+
-+			if (fps->speed > LONG_MAX)
-+				return -EOVERFLOW;
-+
-+			*val =3D fps->speed;
-+			return 0;
-+		default:
-+			return -EOPNOTSUPP;
-+		}
-+	case hwmon_power:
-+		switch (attr) {
-+		case hwmon_power_input:
-+			fps =3D acpi_fan_get_current_fps(fan, fst.control);
-+			if (!fps)
-+				return -EIO;
-+
-+			if (fps->power =3D=3D FAN_POWER_UNAVAILABLE)
-+				return -ENODEV;
-+
-+			if (fps->power > LONG_MAX / MICROWATT_PER_MILLIWATT)
-+				return -EOVERFLOW;
-+
-+			*val =3D fps->power * MICROWATT_PER_MILLIWATT;
-+			return 0;
-+		default:
-+			return -EOPNOTSUPP;
-+		}
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static const struct hwmon_ops acpi_fan_hwmon_ops =3D {
-+	.is_visible =3D acpi_fan_hwmon_is_visible,
-+	.read =3D acpi_fan_hwmon_read,
-+};
-+
-+static const struct hwmon_channel_info * const acpi_fan_hwmon_info[] =3D =
-{
-+	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT | HWMON_F_TARGET),
-+	HWMON_CHANNEL_INFO(power, HWMON_P_INPUT),
-+	NULL
-+};
-+
-+static const struct hwmon_chip_info acpi_fan_hwmon_chip_info =3D {
-+	.ops =3D &acpi_fan_hwmon_ops,
-+	.info =3D acpi_fan_hwmon_info,
-+};
-+
-+int devm_acpi_fan_create_hwmon(struct acpi_device *device)
-+{
-+	struct acpi_fan *fan =3D acpi_driver_data(device);
-+	struct device *hdev;
-+
-+	hdev =3D devm_hwmon_device_register_with_info(&device->dev, "acpi_fan", =
-fan,
-+						    &acpi_fan_hwmon_chip_info, NULL);
-+	return PTR_ERR_OR_ZERO(hdev);
-+}
-=2D-
-2.39.2
-
+Hope thie helps,
+Guenter
