@@ -1,61 +1,61 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B773636122;
-	Sun, 12 May 2024 15:20:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B265440BE3
+	for <linux-hwmon@vger.kernel.org>; Sun, 12 May 2024 16:04:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715527207; cv=none; b=YN8bfd9RgjlW8DD3oGLNpOTwCkE3w68LgICT4WXyIim3K2RXS/TQXfUwSo5pWmgE6dc+mcSWpfWzcQYIQTY+xBSPdoZ2TAwvYgL6xeDJGLY1TN/UKi5QJCOlBfSoaTtNLBPu+tbOPRpA0oDScvyyqTxPYQReaL9BARi+2+4FRNs=
+	t=1715529855; cv=none; b=qD7LPCzgmPx3SwxjKRv+AU175/XjlDk/a6RSvYHinKLdG0UkREQuOrhGvGn5+cEM7L2oWgsQ6KfDVhi697CjCKjjNYFGu3dZTUv87x8vLj153iEFIc/dqYh4Tbyru1EYkw9VhrAel+PJbi+i6I/qVXsH7NEBHq/3gsF1BDBxay0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715527207; c=relaxed/simple;
-	bh=sKz/vCxOFcJztSXUN0nrES3JoaGgin/w+NBH5KDpWD8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CvvrumdOWBs/NHqDA27P0/hm+iRy3MOxnjzBP9kUmxHYtsWZVEVUzFGD0L9SlpisToDJk66bUuieYpmcnRcsNtxXqyiFDe03cR3WV5CCuvOCvUM//t5Egp66QuIAqs+1j/aN2BwkyjZoRLNiG0t5pelfQAJCvRCs5Zcop1pH7Gw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lo1gSMre; arc=none smtp.client-ip=209.85.214.171
+	s=arc-20240116; t=1715529855; c=relaxed/simple;
+	bh=C9MgJb/xIiZQVEquIJqkkXy5fONap3p/Ly3Ar8kxXGo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=naHaDsBCXL6iGol2n2GPusJFnrtHWFILyXgMYZwXlNF6LCPE6w6e55h15IRrmqUk5kTfiwBlswc1O3vX6m1jFBerh/0dAjCEle3jksRVvhDblTyxEigY/nxRVk8uDEvYrq5sJMue1PWsmvXk5ttYeBQvppZCjYX4VJ8B2919SJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aIYnkBAo; arc=none smtp.client-ip=209.85.210.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lo1gSMre"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1ec41d82b8bso33926895ad.2;
-        Sun, 12 May 2024 08:20:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aIYnkBAo"
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-6f4603237e0so2416996b3a.0
+        for <linux-hwmon@vger.kernel.org>; Sun, 12 May 2024 09:04:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715527205; x=1716132005; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1715529853; x=1716134653; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=cIa1eL5zjqrgZiK7tQDMfCMELbeJgMi/BExOPYfa0vc=;
-        b=lo1gSMrekMPvH+qtj+VTKtABKBgKoCLCr5dli9amyx0+RDpClOdFUtzBp3qfqYn5dH
-         59CdvfMGnR2Vpn0t51NEYietGST0t5CpiiAiiHAcLvy1n3LQGakYkc7Mo8nxE7erJa/4
-         shOx014HcxmJDX8y5/57JGqB+KiesnAIptP9C7Rx/jq03OA45hdjaWZOFC7pWiBRFUHr
-         LuCi0pW0MyB/hYNoSXspWEzYobZJLu5cN8ZcXg6fvLykXy6O4lP881tR+rW9JjRMrQxJ
-         67ffFmrTl8jjnOr3P8m0wXivWn/xqzG5XK/qm1+Xo8TjRz2EZG1WHI7KOaDab8YkHAM+
-         hGng==
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=3pSGdUXRpUK06Og3UUM7dNU6MVNkXMynyUNCTF6Qs2w=;
+        b=aIYnkBAodAvMZMlHy9kp79w3lno/hV27pMKSK4jIWt4vWvQNAO1ecGYFksSP8V0Ud3
+         RDE9URpmhqNtvhWY3jwsV5qTzPAl636oaEeZdp6qgcCQYMC/W19qDkbRCVcrrgBhHSX5
+         cN+lel2thgalwGLjWilOCTzF2/KrBGbBmIAM/0mGSin3i64EXdU+8jJSEusHNjfVuh8m
+         Vl37zcvqpkPzsvAS+a01OIi1LfPyrAhMgkJzQnfT3v4D9jiRU6Ygvfu1PvFNzPoZC9IK
+         q5YeCtT9gbDofzgr9d6QCZAGn833BO8OYWqVOs0ec4FVDPk2+Xk70kgXZCTomuM+2qYL
+         z6pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715527205; x=1716132005;
+        d=1e100.net; s=20230601; t=1715529853; x=1716134653;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cIa1eL5zjqrgZiK7tQDMfCMELbeJgMi/BExOPYfa0vc=;
-        b=RrsxjG+iXKIY/O8nViS20sS8nOQRSuuomTkwM5tKxw483/sU2YIJ+8eAmDcF5Jxjbt
-         K9s4oGqWAk57b1UWrx/QLpGVRJUVSNVbZSnKVggPlYZqYpIuN8JDBPQkTSoP7tpN4M/R
-         WIW516+qHwUELVCjLMCW6m7FvHjm5V87GIWVcuNhyesdGHbXTf9r8m0fdYKnB+sBEjq+
-         k3VpTYosPlJqmqOLX4mFq11dQlccARX13jA9SKCsie1xGKfZK4fIAxdIxavKF8uwxKC9
-         0q1V4M6PVpPZHAAj2wuwtJ2MvDtfGLEFKW/fgwK6XXDNOr3SIJK40jYSUL4FqDL8jvyw
-         Nr+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXbUhUaWmSSjrWDOToisqOGbggL9IdPYCfwbDQJ2D9xPko5HbaPuUQJjvwVSC/NSNxbVBIILhqV6XyxaGcm/YEOxqeFR3BH0eVkgAaOQHi+0Le+zf7L/F+qYy3UfWR7A8REB59r7Iqc3YGzecgccfxu5DIl1nk+ZdNrkKGo13at4THv0g83ifjSZ3rqoPCxoFhmfMYoALDLsTgWuWGPDnZIExadKjCPe48N3g==
-X-Gm-Message-State: AOJu0YxebhZs6a8KL7JGQCf7MsDAIRBg1keowEGMA/T5F7ozzNO5qgF2
-	iZc1LAdH8Wz5J7ndRQoZxHutmONE66Fzc/CzbR9eRCA4hDsLNQL2
-X-Google-Smtp-Source: AGHT+IEq84hbL5SBxGGFkfTufGVxF7SnIK9nZyyyCSYzCCnVKLiyiavy7v5hrdblFYWv4sdZtmoiDQ==
-X-Received: by 2002:a17:902:ed89:b0:1de:e47e:116c with SMTP id d9443c01a7336-1ef43e26e66mr72697085ad.39.1715527204849;
-        Sun, 12 May 2024 08:20:04 -0700 (PDT)
+        bh=3pSGdUXRpUK06Og3UUM7dNU6MVNkXMynyUNCTF6Qs2w=;
+        b=P6UcBjy1NNhPBt7V2lXxVSqWVa7JrX9xllVQuI0AQUlyVNQcpsnL34HgSZw/dw/a1+
+         FW9A8ee8vU+rkJE534FbjJx4xTPi+/XrLUEMww5xy0JwBhF+fIC+JSrQHo1+81j4RgHB
+         kZSuJuPll3Zuocs45BlpdltZZQeJfCR0v0RhZg97EltgP4t5+9YwxgEAhgTUwZVYIZsW
+         r7W2N/HV9WwcxwofDhJkblLWnJrk79HMfl9D5oQpr/YZHYhfXunYZkRpfeX7Qcc615Y1
+         2COa/MFQVSi3Rc0o7yeD/P4G1kdqwVBu5KNc+H3NKFqmuie/2RHQtNAA2gtEvIA/xdqK
+         wXIw==
+X-Forwarded-Encrypted: i=1; AJvYcCXykCypssMwiciv5PTnx1Rzut99yYRPW6NoLKWC4YkDOzXgKSak4JgU9QhYnCTcH31x+T6/PBkMayaIBpRPANfEyUMvbSzOwhCbsJY=
+X-Gm-Message-State: AOJu0YyETIfPZpCFLJQEG7r4JRk4d/2+7Ru6bnkmCJvQ3gejWF3Gscr5
+	DAUoB3UOAG+OQg9J8lYC1d8FxjMFDLa0Bd3ElaGyAyNP00PUNt+yHJWg5A==
+X-Google-Smtp-Source: AGHT+IGxndUTYYX0wJzXMXdkED+zS68Egj1f9gQZoyEINQku0MqeQkbEAoRY3dP2n07uIi+6VspVYw==
+X-Received: by 2002:a05:6a21:394b:b0:1a3:a821:f297 with SMTP id adf61e73a8af0-1afde07d85bmr11996693637.2.1715529852913;
+        Sun, 12 May 2024 09:04:12 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0b9d166esm63128815ad.36.2024.05.12.08.20.02
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-6f4d2a664b2sm5850004b3a.42.2024.05.12.09.04.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 May 2024 08:20:03 -0700 (PDT)
+        Sun, 12 May 2024 09:04:11 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <9f6ed1f0-3615-43ce-8d0a-23d1f6a23669@roeck-us.net>
-Date: Sun, 12 May 2024 08:20:01 -0700
+Message-ID: <fa1d0093-6643-45de-9686-021b31d3c232@roeck-us.net>
+Date: Sun, 12 May 2024 09:04:10 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,14 +63,10 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7] ACPI: fan: Add hwmon support
-To: Andy Shevchenko <andy.shevchenko@gmail.com>, Armin Wolf <W_Armin@gmx.de>
-Cc: mlj@danelec.com, rafael.j.wysocki@intel.com, lenb@kernel.org,
- jdelvare@suse.com, linux@weissschuh.net, ilpo.jarvinen@linux.intel.com,
- linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
-References: <20240509221947.3118-1-W_Armin@gmx.de>
- <CAHp75Vd9JZxuDGYm2drSYun+h2CAU+Lb4BEFq3LnQYBKpOfyMA@mail.gmail.com>
+Subject: Re: [PATCH v2.1] hwmon: (emc1403) Add support for EMC1428 and
+ EMC1438.
+To: Lars Petter Mostad <larspm@gmail.com>, linux-hwmon@vger.kernel.org
+References: <20240510142824.824332-1-lars.petter.mostad@appear.net>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -116,37 +112,26 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <CAHp75Vd9JZxuDGYm2drSYun+h2CAU+Lb4BEFq3LnQYBKpOfyMA@mail.gmail.com>
+In-Reply-To: <20240510142824.824332-1-lars.petter.mostad@appear.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 5/10/24 06:30, Andy Shevchenko wrote:
-> On Fri, May 10, 2024 at 1:19 AM Armin Wolf <W_Armin@gmx.de> wrote:
->>
->> Currently, the driver does only support a custom sysfs
->> interface to allow userspace to read the fan speed.
->> Add support for the standard hwmon interface so users
->> can read the fan speed with standard tools like "sensors".
+On 5/10/24 07:28, Lars Petter Mostad wrote:
+> From: Lars Petter Mostad <larspm@gmail.com>
 > 
->> Tested with a custom ACPI SSDT.
+> EMC1428 and EMC1438 are similar to EMC14xx, but have eight temperature
+> channels, as well as signed data and limit registers. Chips currently
+> supported by this driver have unsigned registers only.
 > 
-> This most likely fits the comment/changelog area and not the commit
-> message. Also would be good to put there the link to this custom SSDT
-> (like one of zillion of pastebin sites, or GitHub, or ...).
-> 
-> I was under the impression that Guenter gave a tag, which is missing,
-> but no, he just said it's okay to go. Guenter, maybe a formal
-> Acked-by?
-> 
+> Signed-off-by: Lars Petter Mostad <larspm@gmail.com>
+> ---
 
-I said
+Please provide change logs with your patches. Also, there is no such thing as
+a version 2.1 of a patch series.
 
-It all seems odd, and I returning -ENODATA doesn't seem right,
-but then I don't understand the specification or the logic behind it, and
-I don't have the time to read and understand it. No objection from my side
-against moving forward.
+No need to resend, but please keep this in mind for future patches.
 
-This isn't sufficient for anything formal. Just go ahead.
+Applied.
 
 Thanks,
 Guenter
