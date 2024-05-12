@@ -1,102 +1,210 @@
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from ms-10.1blu.de (ms-10.1blu.de [178.254.4.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D119536122;
-	Sun, 12 May 2024 17:21:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B78F76FDC;
+	Sun, 12 May 2024 21:40:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.254.4.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715534511; cv=none; b=VX8932SKFSZu2joUT3GSYdkad+YEPGf8AUlKWaUKSfKZQuw5OU/oVJvwIRl16d3qoJKG+YMImPbrsVUP66S4TYDYKlYwAO2EjiLfzPU4pUDb5SBXqH529z1Dd1sUp/+9xrq6Oy4DKzVbOjgjXVmFVU6ZB7pD1vKMLOCI0Kz53fs=
+	t=1715550057; cv=none; b=u4rTD/uHQQWYh3mxwdgL7jBqtocAzhrkul6xhbZNm9LvKsRj+Xn8ZAbXjVgqxSNuAS+8aV2oEkf/4CEAXBdzOUjeSqssbcuNQW8PNLfqFy7nrw6SOpel4LeCnldpewNZYJoxx7BPTNJmh8c4XvMllGI0ao7epW+Pj1BYC9yKIFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715534511; c=relaxed/simple;
-	bh=AzTKSxgZVEnj54sywuMCGiBVCgI5nJS8dtdSqzzX/Ic=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Q6GFxWMtK/n/OKumQ4RkyUSuPMWgeCDiWEaUteIinsKoHwsK2EJoN/rfTTET8Ztp2f6XC12PleTlDdo+SYCPpm6ZNHAxCuxcXlZU1PPAs7jG0IwFW2HX/PAdMTg5WBXv0jI4OVlxGiMKaeXg12yiJP1nCt0c6tswOQZPvAMto0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=no3Kvyg1; arc=none smtp.client-ip=209.85.219.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="no3Kvyg1"
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-deb99fa47b6so4166827276.0;
-        Sun, 12 May 2024 10:21:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715534509; x=1716139309; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AzTKSxgZVEnj54sywuMCGiBVCgI5nJS8dtdSqzzX/Ic=;
-        b=no3Kvyg1CQZhWZxrgSh6Ytndmc4XJIoJSW7Yp/TrX7J06OIWAkiQlRhkS9BPvhrSdK
-         Ek8OqiCTBmmliNeS/RhrewjIQus/o4051Bbyox45mlZVms7D283QPzdV5MHSLWI2rH6m
-         7rw30FUwH8Wh9UShHhHGHLUc59dBCbLCC0AVh1IB1RV9bjR6bQtF2swiA8VlhI8+yHMC
-         hDhrPUXuel9V5K2fNmu76AM+YWOWIjVMS5EuTWJbNaXisRdyiPsb9Hwn7c+AwseU8vQ6
-         fbeBPWPrjvCCk+mn+ZEJ3c9xXZItN60zXUI6IRKXXp35olKsKqyjvsBvRD42vymqsESw
-         boHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715534509; x=1716139309;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AzTKSxgZVEnj54sywuMCGiBVCgI5nJS8dtdSqzzX/Ic=;
-        b=WAWUEYLXbAgL6YddPWhLgRzhrzQWpmVEOCV9jUpn0p7UBTp8zZwJWCIkTjvVJAcOeB
-         8qOO5wwqI7XRj/blRoRPIMxyL1qCPa11UTo1eCE5qakImOYD0cMeom13YEZbM4FrdHXO
-         xX0dwkvDYOg/ScD3FOEeASplL05kYtKl/88/WCpikpj/gWD3l1mTeAPEFHxcrTbwkClb
-         j+waVLnaS/3gEpG+NrVMEhcKYMyW7wk0KZJu+hoYpM7ZXWGmgrqm4jdcXXvyGXd76dtu
-         5ByJTtp94TCpVWZTyaLLZyZW9SUOeQ0rbpuBMW3x2XT+bEyvYqGlfBWA280GFko6GB7z
-         fU2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU2ei42BaeCukkAFeZHCEOfRW0eYyg58aadiKm5qWekoQEfJo+5Vevqb5sZt7h+xKjFcjtIWTTjfFC4TobnzkrllSbzWxc0CXveMO42Le+6Ous+qZQ5b3QFCJQt3TkESacY4iYDL9M5p32atYQolKNLcb7QCQLm5olcyT6RV32VX8yWhx/aaTKy/RdsvPGP
-X-Gm-Message-State: AOJu0YzZQW8L9B/+ALGyqqvVByMl+Sa6Gwn93BHMEiqUSff53YL2964R
-	HrsN3GMbtnTMCxlcKVsO8i3YkNcrfZIz7xog91RPoFr/kKGgxd1oPlmIsZr20rzRNXN2A9imyOx
-	I1mxomM9V4aTr+7XM6EQ4W+is2io=
-X-Google-Smtp-Source: AGHT+IE6H8iYCQF2oK1tjjJ8FOCWPzoLa8cSyA3zmCSivazmxF7tcQJ5Vfr3v/FJuQ9QClm62kvb8NcT/B+PQyThz0A=
-X-Received: by 2002:a05:690c:112:b0:618:8390:341f with SMTP id
- 00721157ae682-622aff42b9amr76381837b3.1.1715534508852; Sun, 12 May 2024
- 10:21:48 -0700 (PDT)
+	s=arc-20240116; t=1715550057; c=relaxed/simple;
+	bh=EeARFm8bOP6d++/dKVBQqGylNANAc9Nh3viD5ijSmI8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=o9IV2cE793R2BOSv4tWeCB4flEf/bjlz/O8WKOTX0UGIP83sKeuvAQl+M5qFZNOTtYx6K12YroV96E9oUM3wLgthaSp63M4i44uH0nBsO+GQ8mg9em6UabXOv1ei1KWdSRAVKw8ILFHNna+K3xSf6dfYP510KQYqA+0cooLvKFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mariuszachmann.de; spf=pass smtp.mailfrom=mariuszachmann.de; arc=none smtp.client-ip=178.254.4.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mariuszachmann.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mariuszachmann.de
+Received: from [2.211.228.80] (helo=marius.fritz.box)
+	by ms-10.1blu.de with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <mail@mariuszachmann.de>)
+	id 1s6Gw4-0053Wk-Pq;
+	Sun, 12 May 2024 23:40:48 +0200
+From: Marius Zachmann <mail@mariuszachmann.de>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Marius Zachmann <mail@mariuszachmann.de>,
+	Jean Delvare <jdelvare@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] Add firmware and bootloader information
+Date: Sun, 12 May 2024 23:40:34 +0200
+Message-ID: <20240512214035.43161-1-mail@mariuszachmann.de>
+X-Mailer: git-send-email 2.45.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20220206022023.376142-1-andrew.smirnov@gmail.com>
- <YgIu+Lrt0p85yog1@kroah.com> <CAHQ1cqE_iA0gKmqxS21JMAoFpz-ebhG+axVuUT9P62_JTB9kZQ@mail.gmail.com>
- <20240424084024.GC5670@craftyguy.net>
-In-Reply-To: <20240424084024.GC5670@craftyguy.net>
-From: Andrey Smirnov <andrew.smirnov@gmail.com>
-Date: Sun, 12 May 2024 10:21:37 -0700
-Message-ID: <CAHQ1cqEbc9kQOanHs=0Vir=yJpY_PnjUvAWV5LdeDoJn5XrXJQ@mail.gmail.com>
-Subject: Re: [PATCH] platform/x86: Add Steam Deck driver
-To: Clayton Craft <clayton@craftyguy.net>
-Cc: Greg KH <gregkh@linuxfoundation.org>, platform-driver-x86@vger.kernel.org, 
-	Hans de Goede <hdegoede@redhat.com>, Mark Gross <markgross@kernel.org>, 
-	Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
-	linux-kernel <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org, 
-	gpiccoli@igalia.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Con-Id: 241080
+X-Con-U: 0-mail
 
-On Wed, Apr 24, 2024 at 8:40=E2=80=AFAM Clayton Craft <clayton@craftyguy.ne=
-t> wrote:
->
-> On Sat, 12 Feb 2022 15:37:19 -0800 Andrey Smirnov <andrew.smirnov@gmail.c=
-om> wrote:
-> >
-> > Yeah, my bad, will add in v2.
->
-> Hi Andrey,
->
-> I want to run the latest mainline kernels on the Steam Deck and came acro=
-ss some
-> newer patches of yours (and others) in Valve's steamOS kernel that may(?)
-> replace the ones from this thread. They seem to be required for properly
-> handling input, thermals, etc on this device.
+This patch adds:
+- Reading the firmware and bootloader version of the device
+- Debugfs entries: firmware_version and bootloader_version
+- Updated documentation
 
-Thermals yes, but I don't think any of _my_ patches would be needed
-for anything input related.
+Signed-off-by: Marius Zachmann <mail@mariuszachmann.de>
+---
+ Documentation/hwmon/corsair-cpro.rst |  8 +++
+ drivers/hwmon/corsair-cpro.c         | 80 ++++++++++++++++++++++++++++
+ 2 files changed, 88 insertions(+)
 
-> I rebased and used them
-> successfully on 6.9-rc5[1], and was curious what the status is of upstrea=
-ming
-> these (e.g. as a V2 here)?
+diff --git a/Documentation/hwmon/corsair-cpro.rst b/Documentation/hwmon/corsair-cpro.rst
+index 751f95476b57..11135d7ec6b9 100644
+--- a/Documentation/hwmon/corsair-cpro.rst
++++ b/Documentation/hwmon/corsair-cpro.rst
+@@ -39,3 +39,11 @@ fan[1-6]_target		Sets fan speed target rpm.
+ pwm[1-6]		Sets the fan speed. Values from 0-255. Can only be read if pwm
+ 			was set directly.
+ ======================= =====================================================================
++
++Debugfs entries
++---------------
++
++======================= ===========================
++firmware_version	Version of the firmware
++bootloader_version	Version of the bootloader
++======================= ===========================
+diff --git a/drivers/hwmon/corsair-cpro.c b/drivers/hwmon/corsair-cpro.c
+index 3e63666a61bd..4be8a98250a9 100644
+--- a/drivers/hwmon/corsair-cpro.c
++++ b/drivers/hwmon/corsair-cpro.c
+@@ -10,11 +10,13 @@
+ 
+ #include <linux/bitops.h>
+ #include <linux/completion.h>
++#include <linux/debugfs.h>
+ #include <linux/hid.h>
+ #include <linux/hwmon.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/mutex.h>
++#include <linux/seq_file.h>
+ #include <linux/slab.h>
+ #include <linux/spinlock.h>
+ #include <linux/types.h>
+@@ -28,6 +30,8 @@
+ #define LABEL_LENGTH		11
+ #define REQ_TIMEOUT		300
+ 
++#define CTL_GET_FW_VER		0x02	/* returns the firmware version in bytes 1-3 */
++#define CTL_GET_BL_VER		0x06	/* returns the bootloader version in bytes 1-2 */
+ #define CTL_GET_TMP_CNCT	0x10	/*
+ 					 * returns in bytes 1-4 for each temp sensor:
+ 					 * 0 not connected
+@@ -78,6 +82,7 @@
+ struct ccp_device {
+ 	struct hid_device *hdev;
+ 	struct device *hwmon_dev;
++	struct dentry *debugfs;
+ 	/* For reinitializing the completion below */
+ 	spinlock_t wait_input_report_lock;
+ 	struct completion wait_input_report;
+@@ -88,6 +93,8 @@ struct ccp_device {
+ 	DECLARE_BITMAP(temp_cnct, NUM_TEMP_SENSORS);
+ 	DECLARE_BITMAP(fan_cnct, NUM_FANS);
+ 	char fan_label[6][LABEL_LENGTH];
++	u8 firmware_ver[3];
++	u8 bootloader_ver[2];
+ };
+ 
+ /* converts response error in buffer to errno */
+@@ -496,6 +503,71 @@ static int get_temp_cnct(struct ccp_device *ccp)
+ 	return 0;
+ }
+ 
++/* read firmware and bootloader version */
++static int get_fw_version(struct ccp_device *ccp)
++{
++	int ret;
++
++	ret = send_usb_cmd(ccp, CTL_GET_FW_VER, 0, 0, 0);
++	if (ret)
++		return ret;
++
++	ccp->firmware_ver[0] = ccp->buffer[1];
++	ccp->firmware_ver[1] = ccp->buffer[2];
++	ccp->firmware_ver[2] = ccp->buffer[3];
++
++	ret = send_usb_cmd(ccp, CTL_GET_BL_VER, 0, 0, 0);
++	if (ret)
++		return ret;
++
++	ccp->bootloader_ver[0] = ccp->buffer[1];
++	ccp->bootloader_ver[1] = ccp->buffer[2];
++
++	return 0;
++}
++
++#ifdef CONFIG_DEBUG_FS
++
++static int firmware_show(struct seq_file *seqf, void *unused)
++{
++	struct ccp_device *ccp = seqf->private;
++
++	seq_printf(seqf, "%d.%d.%d\n",
++		   ccp->firmware_ver[0],
++		   ccp->firmware_ver[1],
++		   ccp->firmware_ver[2]);
++
++	return 0;
++}
++DEFINE_SHOW_ATTRIBUTE(firmware);
++
++static int bootloader_show(struct seq_file *seqf, void *unused)
++{
++	struct ccp_device *ccp = seqf->private;
++
++	seq_printf(seqf, "%d.%d\n",
++		   ccp->bootloader_ver[0],
++		   ccp->bootloader_ver[1]);
++
++	return 0;
++}
++DEFINE_SHOW_ATTRIBUTE(bootloader);
++
++static void ccp_debugfs_init(struct ccp_device *ccp)
++{
++	ccp->debugfs = debugfs_create_dir("corsaircpro", NULL);
++	debugfs_create_file("firmware_version", 0444, ccp->debugfs, ccp, &firmware_fops);
++	debugfs_create_file("bootloader_version", 0444, ccp->debugfs, ccp, &bootloader_fops);
++}
++
++#else
++
++static void ccp_debugfs_init(struct ccp_device *ccp)
++{
++}
++
++#endif
++
+ static int ccp_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ {
+ 	struct ccp_device *ccp;
+@@ -542,6 +614,13 @@ static int ccp_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 	ret = get_fan_cnct(ccp);
+ 	if (ret)
+ 		goto out_hw_close;
++
++	ret = get_fw_version(ccp);
++	if (ret)
++		goto out_hw_close;
++
++	ccp_debugfs_init(ccp);
++
+ 	ccp->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, "corsaircpro",
+ 							 ccp, &ccp_chip_info, NULL);
+ 	if (IS_ERR(ccp->hwmon_dev)) {
+@@ -562,6 +641,7 @@ static void ccp_remove(struct hid_device *hdev)
+ {
+ 	struct ccp_device *ccp = hid_get_drvdata(hdev);
+ 
++	debugfs_remove_recursive(ccp->debugfs);
+ 	hwmon_device_unregister(ccp->hwmon_dev);
+ 	hid_hw_close(hdev);
+ 	hid_hw_stop(hdev);
+-- 
+2.45.0
 
-There's no particular timeline I can give you. I'll probably try to
-push a new version of the driver in the next couple of months, but
-that's as committal as I can be.
