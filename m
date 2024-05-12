@@ -1,213 +1,118 @@
-Received: from ms-10.1blu.de (ms-10.1blu.de [178.254.4.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B33242A8B;
-	Sun, 12 May 2024 22:03:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.254.4.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFDB64436B
+	for <linux-hwmon@vger.kernel.org>; Sun, 12 May 2024 22:25:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715551406; cv=none; b=mdF6764KT1zUqOfg3rlAIL7SHyTRwfXAvjxzsxNWIOPEceOwEHUpcec+/BN2gGxU166v/wCJNIf2zffUwe4SFthjTUEB1l243uE3PrllK4g9hDCn8F4B5oPYXJa+GkYBV9aVSwM24gQw1T+5zzLO39KUWtwV/MxEcNUSC8+yV+c=
+	t=1715552729; cv=none; b=qn6/oID+EiDntqvdt11m2n1uhkp26TOXvoPkMzO2JUA4NQiWYf6Wj3HlDKCWIbaVUamMeiqUjoKmrmbPwwnCykepA0vxXMD3zNfsEwtrqPSDwnFzPESWKmtjnSMdZg69fpgeQSOGYcxckxjHxi5s+YyO7rN8CMNZsjhFQDj3TUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715551406; c=relaxed/simple;
-	bh=dux3huahA1liLOpFwdmSO8xRrf6oOdxNpUOjfeKr07w=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eSYk2zMOaVGPsN0sOx2wQ6OEYm7pXa9HxGgmetveM+t33Rrxwz0x+LDGwfvt/xV3L4gp8DqG3wIrh5yu1fZM0zR1NSpBK/EACIVqqaj+bxKwla9XaLWMD4N+1xFnh+ts9e1se2aCAj9Bi2T86sz3ZlaCTZXaSTbgDPseq3zfumQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mariuszachmann.de; spf=pass smtp.mailfrom=mariuszachmann.de; arc=none smtp.client-ip=178.254.4.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mariuszachmann.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mariuszachmann.de
-Received: from [2.211.228.80] (helo=marius.fritz.box)
-	by ms-10.1blu.de with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <mail@mariuszachmann.de>)
-	id 1s6Gse-0051Ux-KH;
-	Sun, 12 May 2024 23:37:16 +0200
-From: Marius Zachmann <mail@mariuszachmann.de>
+	s=arc-20240116; t=1715552729; c=relaxed/simple;
+	bh=UkEMB8NT9K1NicA6rzxvUvopH8XM+xAARZ9Z0FSBIq4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=vFbKAmOW/jOfvX3ZZNoBHtlIOmoeqeW5VblUXAWmU+UJDvvskzjuBa8BLgxesUm5zvzn2JQF7uu3nXiTXQRvZu9aPXTGTu0DVw2GIIOiU/+9gulJoM2lCLTTaZKU8bKW5MtJK/2OtUk+hxIA5YW7WxbPzegu+JsPBq7Qkw+InB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=protocubo.io; spf=pass smtp.mailfrom=protocubo.io; dkim=pass (2048-bit key) header.d=protocubo.io header.i=@protocubo.io header.b=YFC20lEl; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=protocubo.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protocubo.io
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=protocubo.io header.i=@protocubo.io header.b="YFC20lEl"
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-53fbf2c42bfso2829675a12.3
+        for <linux-hwmon@vger.kernel.org>; Sun, 12 May 2024 15:25:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=protocubo.io; s=google; t=1715552727; x=1716157527; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=doUUsXuhC5o/Mb7W8vJ6K0DW32CM7s9amgU72ylPVXM=;
+        b=YFC20lElDjxvod1OZHsdI76Vctobu7WCDy4OeIODWQOOjcnBeanIEPljctA0QkTmxb
+         EllZmFzZx9T9lV5IX3guq79JpqqcTrquzK0ntYLMiP2BO/HL1PH2ws38krOapNmkGhiT
+         OIuhZrtoivEQSck3NyENWtYnJ7dg0jMGkLW0W2XB4Aaz1qL+5V03j9cStEje2NuBGva4
+         8Q1eSR1B+sp92s5hI3hwWMN76QP01MH1GKBy0Su83FaYiMW31yAXzgEihAWCYNiH8NFy
+         s+VbjkbiGMNBUUQzJWKuOuGLuFNbPq9YBvzEwV0xOxKAt90yg4npRcvVp0iaJLSkIaRY
+         UDxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715552727; x=1716157527;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=doUUsXuhC5o/Mb7W8vJ6K0DW32CM7s9amgU72ylPVXM=;
+        b=uY+6Fx8s7wq47kzoRlE3UB34+vp67cXBO4mHOamz2kVCZ7lRQ8oT1Cv6sadOPzgP5W
+         yidYmB3Z360xkQP8gsh3SLhXdaHdhexqg9NIeOE2HZBzfA9jiq+BByBDt+UdI4jyOQ22
+         Ik1GxN7bFfVjpbAAIq1rFF/w+gN1fwoBhZ6vNYQsCvNwrnc1KN8Ml7pkG0HDXI4Tw+B+
+         kG9L6vFEqxUIUmdEHLMjOMe7tdo5U3eSaxSni+bv6rnKWnTF+sYdQ7N4fZT1MxqJiE2m
+         TVJEGVMijy1YQ2d50PzmP/r8zk5j9XxzFniKuYdXUFpSY3GprLVaZFohFr9RDPQvv7lp
+         ZtTA==
+X-Gm-Message-State: AOJu0YyKGXPC3WmGprxpLZX/473I8fMMBd1yldM+WLFEZCXDLpfHH/0m
+	EZlhbUt+kq1fdXqHYH0MOaulCQZqeMa+4dXsStNESz6feEMC//+tqVJW5AzjX94=
+X-Google-Smtp-Source: AGHT+IHxEipmEYUokfxFAOqW9vurMJMmX1uV/1j2z6KIKke4iI8yKqUzdMuch5bRrIThRXKuFs69pw==
+X-Received: by 2002:a17:902:b20f:b0:1e3:c5d1:2324 with SMTP id d9443c01a7336-1ef43e294d7mr91662115ad.32.1715552727082;
+        Sun, 12 May 2024 15:25:27 -0700 (PDT)
+Received: from calvin.localdomain ([2804:14d:5c5e:645d::1000])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0bf32fdfsm68105635ad.129.2024.05.12.15.25.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 May 2024 15:25:26 -0700 (PDT)
+Date: Sun, 12 May 2024 19:25:22 -0300
+From: Jonas Malaco <jonas@protocubo.io>
 To: Guenter Roeck <linux@roeck-us.net>
-Cc: Marius Zachmann <mail@mariuszachmann.de>,
-	Jean Delvare <jdelvare@suse.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: 
-Date: Sun, 12 May 2024 23:33:20 +0200
-Message-ID: <20240512213320.40944-3-mail@mariuszachmann.de>
-X-Mailer: git-send-email 2.45.0
+Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>, 
+	Jean Delvare <jdelvare@suse.com>, Dan Carpenter <dan.carpenter@linaro.org>, 
+	Aleksa Savic <savicaleksa83@gmail.com>
+Subject: Re: [PATCH] hwmon: (nzxt-kraken3) Bail out for unsupported device
+ variants
+Message-ID: <jymufco6gqytdbpgw65q6gc3lllazpuo5tygwuc7tedapvq27j@picos2hefkyj>
+References: <20240512161921.850683-1-linux@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Con-Id: 241080
-X-Con-U: 0-mail
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240512161921.850683-1-linux@roeck-us.net>
 
-Date: Sun, 12 May 2024 23:15:49 +0200
-Subject: [PATCH] Add firmware and bootloader information
+On Sun, May 12, 2024 at 09:19:21AM GMT, Guenter Roeck wrote:
+> Dan Carpenter reports:
+> 
+> Commit cbeb479ff4cd ("hwmon: (nzxt-kraken3) Decouple device names
+> from kinds") from Apr 28, 2024 (linux-next), leads to the following
+> Smatch static checker warning:
+> 
+> 	drivers/hwmon/nzxt-kraken3.c:957 kraken3_probe()
+> 	error: uninitialized symbol 'device_name'.
+> 
+> Indeed, 'device_name' will be uninitizalized if an unknown product is
+> encountered. In practice this should not matter because the driver
+> should not instantiate on unknown products, but lets play safe and
+> bail out if that happens.
+> 
+> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+> Closes: https://lore.kernel.org/linux-hwmon/b1738c50-db42-40f0-a899-9c027c131ffb@moroto.mountain/
+> Cc: Jonas Malaco <jonas@protocubo.io>
+> Cc: Aleksa Savic <savicaleksa83@gmail.com>
+> Fixes: cbeb479ff4cd ("hwmon: (nzxt-kraken3) Decouple device names from kinds")
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+> I updated the SHA in Dan's report; the branch has since been rebased.
+> 
+>  drivers/hwmon/nzxt-kraken3.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/nzxt-kraken3.c b/drivers/hwmon/nzxt-kraken3.c
+> index 0b3f04c740b0..00f3ac90a290 100644
+> --- a/drivers/hwmon/nzxt-kraken3.c
+> +++ b/drivers/hwmon/nzxt-kraken3.c
+> @@ -928,7 +928,8 @@ static int kraken3_probe(struct hid_device *hdev, const struct hid_device_id *id
+>  		device_name = "kraken2023elite";
+>  		break;
+>  	default:
+> -		break;
+> +		ret = -ENODEV;
+> +		goto fail_and_close;
+>  	}
+>  
+>  	priv->buffer = devm_kzalloc(&hdev->dev, MAX_REPORT_LENGTH, GFP_KERNEL);
+> -- 
+> 2.39.2
+> 
 
-This patch adds:
-- Reading the firmware and bootloader version of the device
-- Debugfs entries: firmware_version and bootloader_version
-- Updated documentation
-
-Signed-off-by: Marius Zachmann <mail@mariuszachmann.de>
----
- Documentation/hwmon/corsair-cpro.rst |  8 +++
- drivers/hwmon/corsair-cpro.c         | 80 ++++++++++++++++++++++++++++
- 2 files changed, 88 insertions(+)
-
-diff --git a/Documentation/hwmon/corsair-cpro.rst b/Documentation/hwmon/corsair-cpro.rst
-index 751f95476b57..11135d7ec6b9 100644
---- a/Documentation/hwmon/corsair-cpro.rst
-+++ b/Documentation/hwmon/corsair-cpro.rst
-@@ -39,3 +39,11 @@ fan[1-6]_target		Sets fan speed target rpm.
- pwm[1-6]		Sets the fan speed. Values from 0-255. Can only be read if pwm
- 			was set directly.
- ======================= =====================================================================
-+
-+Debugfs entries
-+---------------
-+
-+======================= ===========================
-+firmware_version	Version of the firmware
-+bootloader_version	Version of the bootloader
-+======================= ===========================
-diff --git a/drivers/hwmon/corsair-cpro.c b/drivers/hwmon/corsair-cpro.c
-index 3e63666a61bd..4be8a98250a9 100644
---- a/drivers/hwmon/corsair-cpro.c
-+++ b/drivers/hwmon/corsair-cpro.c
-@@ -10,11 +10,13 @@
- 
- #include <linux/bitops.h>
- #include <linux/completion.h>
-+#include <linux/debugfs.h>
- #include <linux/hid.h>
- #include <linux/hwmon.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
-+#include <linux/seq_file.h>
- #include <linux/slab.h>
- #include <linux/spinlock.h>
- #include <linux/types.h>
-@@ -28,6 +30,8 @@
- #define LABEL_LENGTH		11
- #define REQ_TIMEOUT		300
- 
-+#define CTL_GET_FW_VER		0x02	/* returns the firmware version in bytes 1-3 */
-+#define CTL_GET_BL_VER		0x06	/* returns the bootloader version in bytes 1-2 */
- #define CTL_GET_TMP_CNCT	0x10	/*
- 					 * returns in bytes 1-4 for each temp sensor:
- 					 * 0 not connected
-@@ -78,6 +82,7 @@
- struct ccp_device {
- 	struct hid_device *hdev;
- 	struct device *hwmon_dev;
-+	struct dentry *debugfs;
- 	/* For reinitializing the completion below */
- 	spinlock_t wait_input_report_lock;
- 	struct completion wait_input_report;
-@@ -88,6 +93,8 @@ struct ccp_device {
- 	DECLARE_BITMAP(temp_cnct, NUM_TEMP_SENSORS);
- 	DECLARE_BITMAP(fan_cnct, NUM_FANS);
- 	char fan_label[6][LABEL_LENGTH];
-+	u8 firmware_ver[3];
-+	u8 bootloader_ver[2];
- };
- 
- /* converts response error in buffer to errno */
-@@ -496,6 +503,71 @@ static int get_temp_cnct(struct ccp_device *ccp)
- 	return 0;
- }
- 
-+/* read firmware and bootloader version */
-+static int get_fw_version(struct ccp_device *ccp)
-+{
-+	int ret;
-+
-+	ret = send_usb_cmd(ccp, CTL_GET_FW_VER, 0, 0, 0);
-+	if (ret)
-+		return ret;
-+
-+	ccp->firmware_ver[0] = ccp->buffer[1];
-+	ccp->firmware_ver[1] = ccp->buffer[2];
-+	ccp->firmware_ver[2] = ccp->buffer[3];
-+
-+	ret = send_usb_cmd(ccp, CTL_GET_BL_VER, 0, 0, 0);
-+	if (ret)
-+		return ret;
-+
-+	ccp->bootloader_ver[0] = ccp->buffer[1];
-+	ccp->bootloader_ver[1] = ccp->buffer[2];
-+
-+	return 0;
-+}
-+
-+#ifdef CONFIG_DEBUG_FS
-+
-+static int firmware_show(struct seq_file *seqf, void *unused)
-+{
-+	struct ccp_device *ccp = seqf->private;
-+
-+	seq_printf(seqf, "%d.%d.%d\n",
-+		   ccp->firmware_ver[0],
-+		   ccp->firmware_ver[1],
-+		   ccp->firmware_ver[2]);
-+
-+	return 0;
-+}
-+DEFINE_SHOW_ATTRIBUTE(firmware);
-+
-+static int bootloader_show(struct seq_file *seqf, void *unused)
-+{
-+	struct ccp_device *ccp = seqf->private;
-+
-+	seq_printf(seqf, "%d.%d\n",
-+		   ccp->bootloader_ver[0],
-+		   ccp->bootloader_ver[1]);
-+
-+	return 0;
-+}
-+DEFINE_SHOW_ATTRIBUTE(bootloader);
-+
-+static void ccp_debugfs_init(struct ccp_device *ccp)
-+{
-+	ccp->debugfs = debugfs_create_dir("corsaircpro", NULL);
-+	debugfs_create_file("firmware_version", 0444, ccp->debugfs, ccp, &firmware_fops);
-+	debugfs_create_file("bootloader_version", 0444, ccp->debugfs, ccp, &bootloader_fops);
-+}
-+
-+#else
-+
-+static void ccp_debugfs_init(struct ccp_device *ccp)
-+{
-+}
-+
-+#endif
-+
- static int ccp_probe(struct hid_device *hdev, const struct hid_device_id *id)
- {
- 	struct ccp_device *ccp;
-@@ -542,6 +614,13 @@ static int ccp_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 	ret = get_fan_cnct(ccp);
- 	if (ret)
- 		goto out_hw_close;
-+
-+	ret = get_fw_version(ccp);
-+	if (ret)
-+		goto out_hw_close;
-+
-+	ccp_debugfs_init(ccp);
-+
- 	ccp->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, "corsaircpro",
- 							 ccp, &ccp_chip_info, NULL);
- 	if (IS_ERR(ccp->hwmon_dev)) {
-@@ -562,6 +641,7 @@ static void ccp_remove(struct hid_device *hdev)
- {
- 	struct ccp_device *ccp = hid_get_drvdata(hdev);
- 
-+	debugfs_remove_recursive(ccp->debugfs);
- 	hwmon_device_unregister(ccp->hwmon_dev);
- 	hid_hw_close(hdev);
- 	hid_hw_stop(hdev);
--- 
-2.45.0
-
+Acked-by: Jonas Malaco <jonas@protocubo.io>
