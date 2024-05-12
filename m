@@ -1,138 +1,114 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B265440BE3
-	for <linux-hwmon@vger.kernel.org>; Sun, 12 May 2024 16:04:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EAAC2576E
+	for <linux-hwmon@vger.kernel.org>; Sun, 12 May 2024 16:19:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715529855; cv=none; b=qD7LPCzgmPx3SwxjKRv+AU175/XjlDk/a6RSvYHinKLdG0UkREQuOrhGvGn5+cEM7L2oWgsQ6KfDVhi697CjCKjjNYFGu3dZTUv87x8vLj153iEFIc/dqYh4Tbyru1EYkw9VhrAel+PJbi+i6I/qVXsH7NEBHq/3gsF1BDBxay0=
+	t=1715530767; cv=none; b=VWl6QfiecLafaf8mgUPFeXpkYUj839T+ZlJ5+ULuujLQOeEAK68N+DzcY8rTQzYlcqqJuY1izrViBm383OOrSeYF9SroLuEFYb9v8uaivknVr/5ZtClgIz1s4QnyR3BJax52Y/+zudWKZ7aAGj2qPEFOYctVEbidY9VoDkJgZdo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715529855; c=relaxed/simple;
-	bh=C9MgJb/xIiZQVEquIJqkkXy5fONap3p/Ly3Ar8kxXGo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=naHaDsBCXL6iGol2n2GPusJFnrtHWFILyXgMYZwXlNF6LCPE6w6e55h15IRrmqUk5kTfiwBlswc1O3vX6m1jFBerh/0dAjCEle3jksRVvhDblTyxEigY/nxRVk8uDEvYrq5sJMue1PWsmvXk5ttYeBQvppZCjYX4VJ8B2919SJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aIYnkBAo; arc=none smtp.client-ip=209.85.210.172
+	s=arc-20240116; t=1715530767; c=relaxed/simple;
+	bh=E0zCnt/pbddKHWfrkmT7Ib1ylLTxHA/ZMYNsBPOFx9A=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Qrao+Xhq9JmxUD9+1XNmO67IXKd46oEOrY7nKH4ljCwRrdgbWU9EJvZw6nL+OsScTXRNnzkkw6+D9Fl7yMqsN8uiECky/PJm1tNATrelhfFtwUhT1pVfZ36xYVgBKMfsv/FNAPdj80Qpjl2VWji6FZhUfUDQbpmw/tPLOi5i9jk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=huV49cNu; arc=none smtp.client-ip=209.85.216.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aIYnkBAo"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-6f4603237e0so2416996b3a.0
-        for <linux-hwmon@vger.kernel.org>; Sun, 12 May 2024 09:04:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="huV49cNu"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2b4348fa971so2553998a91.1
+        for <linux-hwmon@vger.kernel.org>; Sun, 12 May 2024 09:19:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715529853; x=1716134653; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=3pSGdUXRpUK06Og3UUM7dNU6MVNkXMynyUNCTF6Qs2w=;
-        b=aIYnkBAodAvMZMlHy9kp79w3lno/hV27pMKSK4jIWt4vWvQNAO1ecGYFksSP8V0Ud3
-         RDE9URpmhqNtvhWY3jwsV5qTzPAl636oaEeZdp6qgcCQYMC/W19qDkbRCVcrrgBhHSX5
-         cN+lel2thgalwGLjWilOCTzF2/KrBGbBmIAM/0mGSin3i64EXdU+8jJSEusHNjfVuh8m
-         Vl37zcvqpkPzsvAS+a01OIi1LfPyrAhMgkJzQnfT3v4D9jiRU6Ygvfu1PvFNzPoZC9IK
-         q5YeCtT9gbDofzgr9d6QCZAGn833BO8OYWqVOs0ec4FVDPk2+Xk70kgXZCTomuM+2qYL
-         z6pg==
+        d=gmail.com; s=20230601; t=1715530764; x=1716135564; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=bgQ9uIu7VTRRFfI/BcBBz7d0aZXeo4/37HYZSj4Wocs=;
+        b=huV49cNu/DW2RIyFrwdFKnYYcF+WT7n+5HkNqqZ22aiGqTANBLunbYIEyd4GIcfExd
+         9gjBCzGDzMCFSDbokzxYC7ZxwR29eLHzjXXYHYtFvtnmz8TGw8IAbGcXpXstMdmD/oHB
+         wPc/z2dEekiVZe61OvMTkCqtAZ9wqk7o6Lr/9tPxK5XBfDraOx+948GyvWsmP1NtZ/Om
+         yHymyezYzPzuw45ViA7GzcYna/ah4GNan6fDhw7t2Immzbgx0CHhXzjz/c4AkvHdPV01
+         gpD8DFSoomA068UQAeEeIP67HuZLannlOGKEuryWaG4Jcl6DrzWsxh57IBzNAFj7TSl3
+         7KPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715529853; x=1716134653;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1715530764; x=1716135564;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3pSGdUXRpUK06Og3UUM7dNU6MVNkXMynyUNCTF6Qs2w=;
-        b=P6UcBjy1NNhPBt7V2lXxVSqWVa7JrX9xllVQuI0AQUlyVNQcpsnL34HgSZw/dw/a1+
-         FW9A8ee8vU+rkJE534FbjJx4xTPi+/XrLUEMww5xy0JwBhF+fIC+JSrQHo1+81j4RgHB
-         kZSuJuPll3Zuocs45BlpdltZZQeJfCR0v0RhZg97EltgP4t5+9YwxgEAhgTUwZVYIZsW
-         r7W2N/HV9WwcxwofDhJkblLWnJrk79HMfl9D5oQpr/YZHYhfXunYZkRpfeX7Qcc615Y1
-         2COa/MFQVSi3Rc0o7yeD/P4G1kdqwVBu5KNc+H3NKFqmuie/2RHQtNAA2gtEvIA/xdqK
-         wXIw==
-X-Forwarded-Encrypted: i=1; AJvYcCXykCypssMwiciv5PTnx1Rzut99yYRPW6NoLKWC4YkDOzXgKSak4JgU9QhYnCTcH31x+T6/PBkMayaIBpRPANfEyUMvbSzOwhCbsJY=
-X-Gm-Message-State: AOJu0YyETIfPZpCFLJQEG7r4JRk4d/2+7Ru6bnkmCJvQ3gejWF3Gscr5
-	DAUoB3UOAG+OQg9J8lYC1d8FxjMFDLa0Bd3ElaGyAyNP00PUNt+yHJWg5A==
-X-Google-Smtp-Source: AGHT+IGxndUTYYX0wJzXMXdkED+zS68Egj1f9gQZoyEINQku0MqeQkbEAoRY3dP2n07uIi+6VspVYw==
-X-Received: by 2002:a05:6a21:394b:b0:1a3:a821:f297 with SMTP id adf61e73a8af0-1afde07d85bmr11996693637.2.1715529852913;
-        Sun, 12 May 2024 09:04:12 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-6f4d2a664b2sm5850004b3a.42.2024.05.12.09.04.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 May 2024 09:04:11 -0700 (PDT)
+        bh=bgQ9uIu7VTRRFfI/BcBBz7d0aZXeo4/37HYZSj4Wocs=;
+        b=ZlZ3LK9EnMhH9s7cd2Bz0E2TrepqonE1VzzGlvygE6yJAwb/cw9Xk4VqZg3/7LDxnS
+         9wG11+cSAfP4mJDAHlhkUXkR0iA0tcGx+J2OBy0WMXSlfpZOm0bZMqFUfm0IcUXOxR9Q
+         hc48ltvBFfFgDDwytmEG3lqHE2nPgmiCWJdF8GqcLS6VZPrejoN32vil1dyNmP/HOFWK
+         cpoorf+/NqL3Db/+3Eb4/ej5OOi4LqwWE8JHIGQ6hEt2Nk0ylMEF92HSpu00MzXLXkff
+         Yk+3IGEcWHXTqsPoNEjLGnX0jE5NMv+Wu3UG/FdJ1LjizK4rinDyGydGCnyJlZS3AMZi
+         0A5Q==
+X-Gm-Message-State: AOJu0YxqybHqWi3MK1LPy/ZTyRtm/cOFJ5iVhqwHnlmhPCfLLkMj/ruM
+	cUFIBw8LmfF/EvWjIjSDvWTgIsmzFvRywG/OlBxFG4ZM+rRNc6MkxwHfiA==
+X-Google-Smtp-Source: AGHT+IGU3w/mtp2JBfdpclY8P+1xFB+3b7PPLzVfuq/Wz0SNd/KbWtjshSRBdMfZSutVkVAgWdjCoA==
+X-Received: by 2002:a17:90a:4589:b0:2a5:2ef2:4ce4 with SMTP id 98e67ed59e1d1-2b6ccd85d1amr6754321a91.41.1715530764304;
+        Sun, 12 May 2024 09:19:24 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2b6288498e2sm8271219a91.13.2024.05.12.09.19.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 May 2024 09:19:23 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <fa1d0093-6643-45de-9686-021b31d3c232@roeck-us.net>
-Date: Sun, 12 May 2024 09:04:10 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Jonas Malaco <jonas@protocubo.io>,
+	Aleksa Savic <savicaleksa83@gmail.com>
+Subject: [PATCH] hwmon: (nzxt-kraken3) Bail out for unsupported device variants
+Date: Sun, 12 May 2024 09:19:21 -0700
+Message-Id: <20240512161921.850683-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2.1] hwmon: (emc1403) Add support for EMC1428 and
- EMC1438.
-To: Lars Petter Mostad <larspm@gmail.com>, linux-hwmon@vger.kernel.org
-References: <20240510142824.824332-1-lars.petter.mostad@appear.net>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240510142824.824332-1-lars.petter.mostad@appear.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 5/10/24 07:28, Lars Petter Mostad wrote:
-> From: Lars Petter Mostad <larspm@gmail.com>
-> 
-> EMC1428 and EMC1438 are similar to EMC14xx, but have eight temperature
-> channels, as well as signed data and limit registers. Chips currently
-> supported by this driver have unsigned registers only.
-> 
-> Signed-off-by: Lars Petter Mostad <larspm@gmail.com>
-> ---
+Dan Carpenter reports:
 
-Please provide change logs with your patches. Also, there is no such thing as
-a version 2.1 of a patch series.
+Commit cbeb479ff4cd ("hwmon: (nzxt-kraken3) Decouple device names
+from kinds") from Apr 28, 2024 (linux-next), leads to the following
+Smatch static checker warning:
 
-No need to resend, but please keep this in mind for future patches.
+	drivers/hwmon/nzxt-kraken3.c:957 kraken3_probe()
+	error: uninitialized symbol 'device_name'.
 
-Applied.
+Indeed, 'device_name' will be uninitizalized if an unknown product is
+encountered. In practice this should not matter because the driver
+should not instantiate on unknown products, but lets play safe and
+bail out if that happens.
 
-Thanks,
-Guenter
+Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+Closes: https://lore.kernel.org/linux-hwmon/b1738c50-db42-40f0-a899-9c027c131ffb@moroto.mountain/
+Cc: Jonas Malaco <jonas@protocubo.io>
+Cc: Aleksa Savic <savicaleksa83@gmail.com>
+Fixes: cbeb479ff4cd ("hwmon: (nzxt-kraken3) Decouple device names from kinds")
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+I updated the SHA in Dan's report; the branch has since been rebased.
+
+ drivers/hwmon/nzxt-kraken3.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/nzxt-kraken3.c b/drivers/hwmon/nzxt-kraken3.c
+index 0b3f04c740b0..00f3ac90a290 100644
+--- a/drivers/hwmon/nzxt-kraken3.c
++++ b/drivers/hwmon/nzxt-kraken3.c
+@@ -928,7 +928,8 @@ static int kraken3_probe(struct hid_device *hdev, const struct hid_device_id *id
+ 		device_name = "kraken2023elite";
+ 		break;
+ 	default:
+-		break;
++		ret = -ENODEV;
++		goto fail_and_close;
+ 	}
+ 
+ 	priv->buffer = devm_kzalloc(&hdev->dev, MAX_REPORT_LENGTH, GFP_KERNEL);
+-- 
+2.39.2
 
