@@ -1,61 +1,61 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 179B5153836;
-	Mon, 13 May 2024 14:20:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5C9F629;
+	Mon, 13 May 2024 14:30:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715610028; cv=none; b=AiL7sFS9q1fj1voYWVCzi/DZHDV6thIQ7svm7ZeW+ftSQ7wYbCIRXhvlqCzLnN/+csjYt3A2PeKRv+YeqIVFmk09is0PHb/eubjZoiUOO7/CX6OCPgSiW65DhVSFEL0rYGXQczRSmwqCNo3SaKcdlIUHOk3j7FsU9W+txrP5UUs=
+	t=1715610649; cv=none; b=PRmYtZDElFkEfVNH5xni/VM3RTFUa2ik5IzfElHbwIfSX8MxAkMcRGW/gG54yMFfcT57W/ilNqk/gzj4u7CwZyjBARWb7J/2OfAz1R6RmYs7UKY+NGHbGz64QCJCxJPj8kedNBCAMPhtbJ0j+1QgSh+9aRJZjoBmZxT7xXnAh24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715610028; c=relaxed/simple;
-	bh=zY7AxVtqHHkWgofesqGmlMb5/UqTct0b9VA3lDyEi14=;
+	s=arc-20240116; t=1715610649; c=relaxed/simple;
+	bh=YiCEVq9OKDOVSyQTIuMfnt+QYIgv/V1nyYSpr91wlVQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=I+Is1p2RMtOdooBSFC90GgBBMS/xSoridEBwZXPoy0Vmb3XV0k5UA375buBkIyywaLaKdov5e+rXLYOhEvRqWyNS5UjTx6lAXQu8DzKAhlUiMck6pi4xBwPpsHJCn9waW+2n5N5RdeQ7vJB4LQiLfXfc5gqNryJlx62aYA9GBeI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dHHQicjz; arc=none smtp.client-ip=209.85.214.178
+	 In-Reply-To:Content-Type; b=Ux6OZlJeFCHcEvRA8WTuChzs1JrS8+9nI/Yjek3KI0FoLXe3c6Knc9vjiyboFLbntS4MdJ9GhZTWfuKcMiToomEGFn4TUJMaTaQLqftcXu5bVh0Ia8vsiIjFjwBJHdAquurqJsRgLBZt+nQONbHnWT/brOYNskKcjhG3O9olQvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lmS4n1CR; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dHHQicjz"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1ed835f3c3cso38819795ad.3;
-        Mon, 13 May 2024 07:20:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lmS4n1CR"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-6f453d2c5a1so3632726b3a.2;
+        Mon, 13 May 2024 07:30:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715610025; x=1716214825; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1715610647; x=1716215447; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=oIqRz9Dt793Wqr+IfC77AHPlKEyI0hDItJOOqiwYqy0=;
-        b=dHHQicjzVusQbCpWYeTXxEoSMroBdnhsSNjRjj3OUn8Cb3X1WIomna/z7rcIyTz0vY
-         sGdVO9+iiU9we5Br21kOfsF/iH4bg/OheOWMj3sUJrXRg7KXXGoW8y5VF5Apr5kXQk4B
-         o/MSE5K5jXwv+1bC+HHZr1G22adYBNc92Qf3W4Ttwo+ivhNXfyBkIhJ/Y1Wo4WF3tjbJ
-         KNWehpKfZqcGKOcmXBFipQHYD6ZONP7t2HFtfjwU70Gcpu1tp/cd3zIsXQXWRzSD17v/
-         DwMsf19PXmaScq8oj444lcIfdDz0Ba7qvAH9lLvOMcvI97Rawd4rWbXDzt3UHXtiHuh6
-         TCbA==
+        bh=R8x3p9ghcL2ZAFQw5pRrhkcFv/xwcGjp5sS2oM9BZCc=;
+        b=lmS4n1CRSS1EDcVXGCRrMXQcX63TLpKDhzo2iqwQBn7dpq0e2Uz5foZmbkfFcIYtu9
+         bHEp1JX+hChMpwUOcTvZvhRgyF4eO3XMlMqw5pF5OYmmvAZYIPQn6W0F4LAp8J99ptrQ
+         IFWU1DIy30/RFPY3zgyaJjk+oCE6jhbBisrOnr8SOLTrirMWsiUsCmazDsaBKLEnacY5
+         b+n0haf9CaY2aMf8VQMfxkNImqdbTMTXkY8OTAK9L21a/N5K9hkd3IXiln04N639swwj
+         of1cgAXrJfMs6EM7aKx5x9YLyTzmFG39eBtqzDU4oXUEmcjZ8lqomLr1vSYBEK7eePVc
+         MSXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715610025; x=1716214825;
+        d=1e100.net; s=20230601; t=1715610647; x=1716215447;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oIqRz9Dt793Wqr+IfC77AHPlKEyI0hDItJOOqiwYqy0=;
-        b=pty4CeYnJX3zmxdx5u9pVfgnSTPO4Wx43bWWOjPxNscD4pxsiigeALhGsaP9vDixtx
-         nZ4BR/xZWwSMm7uw6aTPN2O5xgHXxWGrcFgO8hMTxclPkd7IS8HkyfSc3asy/GC2CdwV
-         YRoAxjJZeCcwC7kQZ754J13XJmAG4/8WssujuQxn4DgOILRyTKgxsscFgYnXgoTeTPs2
-         waVtkpLeNV4BPd/QwLymYUA1Fwwx/C5q80QlYPOD6SBbH+EpN3N/DZt4ZZDo2fiRIJGo
-         Gco8GF5S5+fZSlTR+HrJEkfhroXtbszoLpHOZ+tNE0TqIMHXfb7Rqx3SfmCv5b6n8ier
-         C7Wg==
-X-Forwarded-Encrypted: i=1; AJvYcCXASRihxdvmN4Mu9woBEgavS8htJYxk4QVtLjfaYVVK4r0O3DEB24mr9K3TCyIkAvLKHpWU0dWyAjs+OxGw8nXt1G5hNFo+CCfWjQLy
-X-Gm-Message-State: AOJu0YzICwUKWHQ+mJFTnjbX1tcXZJ3xo9xA+ozyF6rHXn9iE/zMKEJy
-	CT9ew9OdIzhW3hA3r3ltaX7lbnWmQwhe8d9XhXADe2NW02xnf4f9
-X-Google-Smtp-Source: AGHT+IEicrZlX8JGcvdcxhr3xdvQRafzRLvtqMsIifFcm7v26K1J3WROxryy6aeA1hl0jxpWf7bwjQ==
-X-Received: by 2002:a17:902:7c18:b0:1eb:6a67:47ea with SMTP id d9443c01a7336-1ef43e2843amr101424235ad.31.1715610025063;
-        Mon, 13 May 2024 07:20:25 -0700 (PDT)
+        bh=R8x3p9ghcL2ZAFQw5pRrhkcFv/xwcGjp5sS2oM9BZCc=;
+        b=Fyz9YhkpOHhA9ISu8MFOmOwr0/vloSJns1dJn2hBuH/uTT6j3OlbTSQ1meFh5WKX4T
+         KoPWTsVDUcJ+x4mjoInPZO2zKsAW4BNKzYZkDzBa+HBDg6pdgKnlIXsZy2ma9tvTQe5R
+         VYu/fS55DoGq5SsS3oDtwLgM3aZPSqCnl24e9/9KkOk2ruvWLYeZtqXJY7RQhWXupJiW
+         js249l/cZWPUOITb856ycjCK3tmBPsdqk5uv03U8buNazBY7MMXIf2ZPbkTrgdz0ysIg
+         Dk6gqbbMjDtn6+GeR74irEajEVA4bc3GIJF+YSwrzHeKrt1bc9ucfiCHCtypEzhLaaeO
+         1YtA==
+X-Forwarded-Encrypted: i=1; AJvYcCWPBlQDLCcAiQB7W0h4/Hats0LN5KZXrzNGVWg17ZjRUh5UqRz06a4Qpk9bOsP/3VC87ADI8vOXhKnmz0Xr2sYUHgPfrUKlloMo2Mk2
+X-Gm-Message-State: AOJu0Yxxs6deaKPVdzZ93rEXJmiMggVtcpdI8PjNPcSMScYZbKbwkST7
+	3xvT5bQgYcaNtV7zcPZCl+XiCijOv9PsgpNYrJnMQbh0rI7ZD/Tp6yrJGQ==
+X-Google-Smtp-Source: AGHT+IG/DsR7j6I3MFphRtxg7/jj9aebMQR3+4qIaBRO+IEjQFzr5zvVTl/WisXBpia7Y88xh/vPAw==
+X-Received: by 2002:a05:6a00:4f86:b0:6ec:f0e7:d942 with SMTP id d2e1a72fcca58-6f4e032358amr12956582b3a.28.1715610647147;
+        Mon, 13 May 2024 07:30:47 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0c036d47sm79483045ad.182.2024.05.13.07.20.23
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-6f4d2b02329sm7408204b3a.181.2024.05.13.07.30.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 May 2024 07:20:24 -0700 (PDT)
+        Mon, 13 May 2024 07:30:46 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <9c69d114-909d-43a8-8229-bb55b5bcc4ac@roeck-us.net>
-Date: Mon, 13 May 2024 07:20:22 -0700
+Message-ID: <eaa6ad22-18bb-479b-a4c8-77c235149314@roeck-us.net>
+Date: Mon, 13 May 2024 07:30:45 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -123,421 +123,17 @@ On 5/12/24 22:52, Noah Wang wrote:
 > from hwmon sysfs that the driver provided.
 > 
 > Signed-off-by: Noah Wang <noahwang.wang@outlook.com>
-> ---
->   Documentation/hwmon/mp2891.rst |  95 +++++++++++++++
 
-Needs to be added to index.rst.
+The chip name looked vaguely familiar, and indeed I found:
 
->   drivers/hwmon/pmbus/Kconfig    |   9 ++
->   drivers/hwmon/pmbus/Makefile   |   1 +
->   drivers/hwmon/pmbus/mp2891.c   | 210 +++++++++++++++++++++++++++++++++
->   4 files changed, 315 insertions(+)
->   create mode 100644 Documentation/hwmon/mp2891.rst
->   create mode 100644 drivers/hwmon/pmbus/mp2891.c
-> 
-> diff --git a/Documentation/hwmon/mp2891.rst b/Documentation/hwmon/mp2891.rst
-> new file mode 100644
-> index 000000000..eaf73fe60
-> --- /dev/null
-> +++ b/Documentation/hwmon/mp2891.rst
-> @@ -0,0 +1,95 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +Kernel driver mp2891
-> +====================
-> +
-> +Supported chips:
-> +
-> +  * MPS mp2891
-> +
-> +    Prefix: 'mp2891'
-> +
-> +  * Datasheet
-> +
-> +    Publicly available at the MPS website : https://www.monolithicpower.com/en/mp2891.html
+https://patchwork.kernel.org/project/linux-hwmon/patch/TYZPR03MB7130A7F41D61BFB611DDF0C7FA479@TYZPR03MB7130.apcprd03.prod.outlook.com/
 
-No, it isn't. It is not even accessible with an account (the provided "datasheet"
-is a useless one-pager).
+So this is really v2 of your patch without saying so,
+it pretty much ignores all feedback I sent as response to v1,
+and it does drop support for limit and status attributes for no
+reason.
 
-> +
-> +Author:
-> +
-> +	Noah Wang <noahwang.wang@outlook.com>
-> +
-> +Description
-> +-----------
-> +
-> +This driver implements support for Monolithic Power Systems, Inc. (MPS)
-> +MP2891 Multi-phase Digital VR Controller.
-> +
-> +Device compliant with:
-> +
-> +- PMBus rev 1.3 interface.
-> +
-> +Device supports direct and linear format for reading input voltage,
-> +output voltage, input currect, output current, input power, output
-> +power, and temperature.
-> +
-> +The driver exports the following attributes via the 'sysfs' files
-> +for input voltage:
-> +
-> +**in1_input**
-> +
-> +**in1_label**
-> +
-> +The driver provides the following attributes for output voltage:
-> +
-> +**in2_input**
-> +
-> +**in2_label**
-> +
-> +**in3_input**
-> +
-> +**in3_label**
-> +
-> +The driver provides the following attributes for input current:
-> +
-> +**curr1_input**
-> +
-> +**curr1_label**
-> +
-> +**curr2_input**
-> +
-> +**curr2_label**
-> +
-> +The driver provides the following attributes for output current:
-> +
-> +**curr3_input**
-> +
-> +**curr3_label**
-> +
-> +**curr4_input**
-> +
-> +**curr4_label**
-> +
-> +The driver provides the following attributes for input power:
-> +
-> +**power1_input**
-> +
-> +**power1_label**
-> +
-> +**power2_input**
-> +
-> +**power2_label**
-> +
-> +The driver provides the following attributes for output power:
-> +
-> +**power3_input**
-> +
-> +**power3_label**
-> +
-> +**power4_input**
-> +
-> +**power4_label**
-> +
-> +The driver provides the following attributes for temperature:
-> +
-> +**temp1_input**
-> +
-> +**temp2_input**
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index 557ae0c41..b8b6c7724 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -361,6 +361,15 @@ config SENSORS_MP5990
->   	  This driver can also be built as a module. If so, the module will
->   	  be called mp5990.
-> 
-> +config SENSORS_MP2891
-> +    tristate "MPS MP2891"
-> +    help
-> +      If you say yes here you get hardware monitoring support for MPS
-> +      MP2891 Dual Loop Digital Multi-Phase Controller.
-> +
-> +      This driver can also be built as a module. If so, the module will
-> +      be called mp2891.
-> +
->   config SENSORS_MPQ7932_REGULATOR
->   	bool "Regulator support for MPQ7932"
->   	depends on SENSORS_MPQ7932 && REGULATOR
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index f14ecf03a..57b91c20e 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -38,6 +38,7 @@ obj-$(CONFIG_SENSORS_MP2888)	+= mp2888.o
->   obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
->   obj-$(CONFIG_SENSORS_MP5023)	+= mp5023.o
->   obj-$(CONFIG_SENSORS_MP5990)	+= mp5990.o
-> +obj-$(CONFIG_SENSORS_MP2891)   += mp2891.o
->   obj-$(CONFIG_SENSORS_MPQ7932)	+= mpq7932.o
->   obj-$(CONFIG_SENSORS_MPQ8785)	+= mpq8785.o
->   obj-$(CONFIG_SENSORS_PLI1209BC)	+= pli1209bc.o
-> diff --git a/drivers/hwmon/pmbus/mp2891.c b/drivers/hwmon/pmbus/mp2891.c
-> new file mode 100644
-> index 000000000..c98d9ec6b
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/mp2891.c
-> @@ -0,0 +1,210 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Hardware monitoring driver for MPS Multi-phase Digital VR Controllers(MP2891)
-> + */
-> +
-> +#include <linux/err.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include "pmbus.h"
-> +
-> +/* Vendor specific registers, the register READ_PIN_EST(0x94),
+Please don't do that.
 
-Please use standard multi-line comments.
-
-> + * MFR_VOUT_LOOP_CTRL(0xBD) and READ_IIN_EST(0x95) redefine
-> + * the standard PMBUS register.
-
-That doesn't explain the reason for using the _EST registers
-instead of the standard registers.
-
-> + */
-> +#define MFR_VOUT_LOOP_CTRL      0xBD
-> +#define READ_PIN_EST            0x94
-> +#define READ_IIN_EST            0x95
-> +
-> +#define MP2891_PAGE_NUM			2
-> +
-> +#define MP2891_RAIL1_FUNC	(PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | \
-> +							PMBUS_HAVE_IOUT | PMBUS_HAVE_TEMP | \
-> +							PMBUS_HAVE_POUT | PMBUS_HAVE_PIN | \
-> +							PMBUS_HAVE_IIN | PMBUS_PHASE_VIRTUAL)
-> +
-> +#define MP2891_RAIL2_FUNC	(PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT | \
-> +							PMBUS_HAVE_TEMP | PMBUS_HAVE_POUT | \
-> +							PMBUS_HAVE_IIN | PMBUS_PHASE_VIRTUAL)
-
-What is the point of PMBUS_PHASE_VIRTUAL ?
-
-> +
-> +struct mp2891_data {
-> +	struct pmbus_driver_info info;
-> +};
-> +
-> +#define to_mp2891_data(x) container_of(x, struct mp2891_data, info)
-> +
-Unused.
-
-> +static int mp2891_read_byte_data(struct i2c_client *client, int page, int reg)
-> +{
-> +	int ret;
-> +
-> +	switch (reg) {
-> +	case PMBUS_VOUT_MODE:
-> +		ret = PB_VOUT_MODE_DIRECT;
-
-Needs explanation.
-
-> +		break;
-> +	default:
-> +		ret = -EINVAL;
-
-No status registers ? I do not believe this is correct.
-
-> +		break;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int mp2891_read_word_data(struct i2c_client *client, int page, int phase,
-> +			      int reg)
-> +{
-> +	int ret;
-> +
-> +	switch (reg) {
-> +	case PMBUS_READ_VIN:
-> +	case PMBUS_READ_IOUT:
-> +	case PMBUS_READ_POUT:
-> +	case PMBUS_READ_VOUT:
-> +	case PMBUS_READ_TEMPERATURE_1:
-> +		ret = pmbus_read_word_data(client, page, phase, reg);
-
-Use
-		return -ENODATA;
-instead.
-
-> +		break;
-> +	case PMBUS_READ_IIN:
-> +		ret = pmbus_read_word_data(client, page, phase, READ_IIN_EST);
-> +		break;
-> +	case PMBUS_READ_PIN:
-> +		ret = pmbus_read_word_data(client, page, phase, READ_PIN_EST);
-
-This needs an explanation. Why not use standard READ_IIN and READ_PIN ?
-
-> +		break;
-> +	default:
-> +		ret = -EINVAL;
-
-No limit registers ? That seems extremely unlikely.
-
-
-Given that you are essentially claiming that the chip would support
-almost no standard registers, I'll need to see the datasheet to confirm.
-
-> +		break;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int
-> +mp2891_identify_vout_scale(struct i2c_client *client, struct mp2891_data *data,
-> +							u32 reg, int page)
-> +{
-> +	int ret;
-> +
-> +	ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, page);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret = i2c_smbus_read_word_data(client, reg);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/*
-> +	 * Obtain vout scale from the register MFR_VOUT_LOOP_CTRL, bits 15-14,bit 13.
-> +	 * If MFR_VOUT_LOOP_CTRL[13] = 1, the vout scale is below:
-> +	 * 2.5mV/LSB
-> +	 * If MFR_VOUT_LOOP_CTRL[13] = 0, the vout scale is decided by
-> +	 * MFR_VOUT_LOOP_CTRL[15:14]:
-> +	 * 00b - 6.25mV/LSB, 01b - 5mV/LSB, 10b - 2mV/LSB, 11b - 1mV
-> +	 */
-> +	if (ret & GENMASK(13, 13)) {
-> +		data->info.m[PSC_VOLTAGE_OUT] = 4;
-> +		data->info.R[PSC_VOLTAGE_OUT] = -1;
-> +		data->info.b[PSC_VOLTAGE_OUT] = 0;
-> +	} else {
-> +		ret = (ret & GENMASK(15, 14)) >> 14;
-
-Why not FIELD_GET() ?
-
-> +		if (ret == 0) {
-> +			data->info.m[PSC_VOLTAGE_OUT] = 16;
-> +			data->info.R[PSC_VOLTAGE_OUT] = -2;
-> +			data->info.b[PSC_VOLTAGE_OUT] = 0;
-> +		} else if (ret == 1) {
-> +			data->info.m[PSC_VOLTAGE_OUT] = 2;
-> +			data->info.R[PSC_VOLTAGE_OUT] = -1;
-> +			data->info.b[PSC_VOLTAGE_OUT] = 0;
-> +		} else if (ret == 2) {
-> +			data->info.m[PSC_VOLTAGE_OUT] = 5;
-> +			data->info.R[PSC_VOLTAGE_OUT] = -1;
-> +			data->info.b[PSC_VOLTAGE_OUT] = 0;
-> +		} else {
-> +			data->info.m[PSC_VOLTAGE_OUT] = 1;
-> +			data->info.R[PSC_VOLTAGE_OUT] = 0;
-> +			data->info.b[PSC_VOLTAGE_OUT] = 0;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int
-> +mp2891_identify_rails_vout_scale(struct i2c_client *client, struct mp2891_data *data)
-> +{
-> +	int ret;
-> +
-> +	/* Identify vout scale from register  MFR_VOUT_LOOP_CTRL. */
-
-Useless comment.
-
-> +	/* Identify vout scale for rail 1. */
-> +	ret = mp2891_identify_vout_scale(client, data, MFR_VOUT_LOOP_CTRL, 0);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/* Identify vout scale for rail 2. */
-> +	ret = mp2891_identify_vout_scale(client, data, MFR_VOUT_LOOP_CTRL, 1);
-
-Passing the register to this function is useless. Just use the register directly
-in mp2891_identify_vout_scale().
-
-> +
-> +	return ret;
-> +}
-> +
-> +static struct pmbus_driver_info mp2891_info = {
-> +	.pages = MP2891_PAGE_NUM,
-> +	.format[PSC_VOLTAGE_IN] = linear,
-> +	.format[PSC_CURRENT_IN] = linear,
-> +	.format[PSC_CURRENT_OUT] = linear,
-> +	.format[PSC_TEMPERATURE] = linear,
-> +	.format[PSC_POWER] = linear,
-> +	.format[PSC_VOLTAGE_OUT] = direct,
-> +
-> +	.func[0] = MP2891_RAIL1_FUNC,
-> +	.func[1] = MP2891_RAIL2_FUNC,
-> +	.read_word_data = mp2891_read_word_data,
-> +	.read_byte_data = mp2891_read_byte_data,
-> +};
-> +
-> +static int mp2891_probe(struct i2c_client *client)
-> +{
-> +	struct pmbus_driver_info *info;
-> +	struct mp2891_data *data;
-> +	int ret;
-> +
-> +	data = devm_kzalloc(&client->dev, sizeof(struct mp2891_data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	memcpy(&data->info, &mp2891_info, sizeof(*info));
-> +	info = &data->info;
-> +
-> +	/* Identify vout scale per rail. */
-> +	ret = mp2891_identify_rails_vout_scale(client, data);
-> +	if (ret < 0)
-> +		return ret;
-> +
-
-Why not use the identify() callback instead ?
-
-> +	return pmbus_do_probe(client, info);
-> +}
-> +
-> +static const struct i2c_device_id mp2891_id[] = {
-> +	{"mp2891", 0},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(i2c, mp2891_id);
-> +
-> +static const struct of_device_id __maybe_unused mp2891_of_match[] = {
-> +	{.compatible = "mps,mp2891"},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, mp2891_of_match);
-> +
-> +static struct i2c_driver mp2891_driver = {
-> +	.driver = {
-> +		.name = "mp2891",
-> +		.of_match_table = mp2891_of_match,
-> +	},
-> +	.probe = mp2891_probe,
-> +	.id_table = mp2891_id,
-> +};
-> +
-> +module_i2c_driver(mp2891_driver);
-> +
-> +MODULE_AUTHOR("Noah Wang <noahwang.wang@outlook.com>");
-> +MODULE_DESCRIPTION("PMBus driver for MPS MP2891 device");
-
-drop "device"
-
-> +MODULE_LICENSE("GPL");
-> +MODULE_IMPORT_NS(PMBUS);
-> --
-> 2.25.1
-> 
+Guenter
 
