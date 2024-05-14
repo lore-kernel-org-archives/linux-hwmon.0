@@ -1,401 +1,230 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2059.outbound.protection.outlook.com [40.107.7.59])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6F8B82488;
-	Mon, 13 May 2024 23:08:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715641712; cv=none; b=dRx4Y7V2MGQe80suj4JZlEN1BPGN2g7ZVXhrXxJmHBDXdeBmr+Q26JkAbvt9W030ykxBq8psjC2xVi7twWhc1dqJEQ4q3xjhVs0cTvr41CuY6vu193QKf6xMN6k4+ZDMdtNuZuMj0DmIphuABE9LhQn3R3oLBmuwwBIcYTUZM0I=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715641712; c=relaxed/simple;
-	bh=1VJYHUcK3Mqg+1/KSiTo2kGolv8vt7rxABY87LG5Sqw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=cEeFlotUsDcKZ6XYhPJHwBGX4GOk+VoyyxJcOgxHzZQIo/OkdlxZC9/h5Wo8kt64zpq5gD1yQ8a6u9rDOCsYqTDh1wTC9MuPMxb/AQHduCbNpomIf4SAFXfYM2+FfONJCVf+SFJ4XXGsTtbmJcSyrlzwx6FyKcSPTIc7I43onFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aiAimj2m; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83E251CD2B;
+	Tue, 14 May 2024 02:53:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.7.59
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715655195; cv=fail; b=BB+NrZ3UBjMyo1hIE2qAWcosxQGHeONPbyT59GtqtSY0iWXyogzZqUASYOqh6AX//bWDmzI0T0DbSKwOXwM65xBvl9t5Tbtt18O8K4fONWW1yphq+xFZmLxlZw0UXVoq8qgpk5jjtjljgLeUle07ShmeoRRbv0XQu9VPmVi5x3c=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715655195; c=relaxed/simple;
+	bh=DxaPOmQqCPZ4YEkE86X3qM3J7PvJvkfckve5yw6dSXA=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=b2ZTIUnKqGrMz/3vFRzFhpt1LytSiETmzHMfWnjFURn56Igca8SjQQadJsWpCb6LiAw/jT2d2aYJeBtHg2vpKTc81sLQKZU2kl/eBXEVW0tMWg/2fcf0LEO2BdwStvSA1DwhjUlShuPikOjsO0/o/IPwFX1HVdTkumqpblFi5WM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=Z9E369+8; arc=fail smtp.client-ip=40.107.7.59
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aiAimj2m"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1eecc71311eso41804685ad.3;
-        Mon, 13 May 2024 16:08:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715641710; x=1716246510; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=leL6L1PvJa8LS0SZ4Cjn642ciWjKRXM149tAFx3jFiI=;
-        b=aiAimj2m8t9tImvOre/zZVmU07Dh7DoWNzMcDd7YFe1dqPsDxa5RjqNszAz+eQYZt3
-         1iQMWI/eHRNSdmpJJ9J2BI8PGRWNzVwhtafdjv0IZDIxm2XTPoQD2LxhhCnQCAXCMwhs
-         bgGLBgE6S8+jC2rr8yZFM8seQQrQyFmTNEKRwIF5eEPTPpux09njNexVvGOoaFjTRRkJ
-         lFbnEWZzplziC5CHqxPJkgj7r3v9wXo/c8VHUd7YdvAiYXhVbU2kXi+1PE/pw5yWMWS9
-         0u3PLZy6BQpegPRxR6B81DoYxVF/Epxretojx33tj3cKIKvHdh6PVmUNuDNA0QpvzByF
-         A4+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715641710; x=1716246510;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=leL6L1PvJa8LS0SZ4Cjn642ciWjKRXM149tAFx3jFiI=;
-        b=cmg/j0PsFjtV674ad2iHuRbLck4RhL4u+gIWr4CAg4KRDE58+v74LOF7RE0QKKwMFc
-         X+NG/qG5GPMc4fzXgrJsKjIRT1k/muFztdf19nOcM8PR45j+Om3UzTD7X0n7HIfQucSu
-         lKrMJInc9/JYB3hA4hGruCzXKcjzi+1UVCm0+IoGFEay1Yqpf948LlpQZIjcN99d7mlx
-         rmSiT5Wg6jZ2cdAFZ4d+d2/5Hqsii3YTEiYKCZtamna+uyu8sk1znXaiGc6DOpJRZnir
-         j9cXv8HeZZVdcWnCgU71RlgwHPpLRCvVOl4sLTJ35Gi89yr7H/XexMiDfITAN1Q4IGrS
-         qi4g==
-X-Forwarded-Encrypted: i=1; AJvYcCUXmE0OmrfhrOc5CGKEiMVDI3BPuBaA/EVCObgQL4yYZNjYIAzu62dJ3u44pwnwv6I1xP5Xw1ls8v+hS+0fnGiITcSZPhbU/FnXee3+
-X-Gm-Message-State: AOJu0Yyax+Q4fyzYc6y2XQtbY3+akhutheoDgdNecc4ai6eMx2bqomNt
-	Wjn2aEreGBXlvQS8uJcaXqZhpUwPFuCKYsoR0yKRyYKalWJ+aObqTPuanw==
-X-Google-Smtp-Source: AGHT+IGe4sSCg/QNS2aUTBidv9UWR1Cofd4gzR/34MBMCXI4gjTsRqYGm5/lAI5hmhIGJIhccDnW8A==
-X-Received: by 2002:a17:903:1108:b0:1ec:53de:a51d with SMTP id d9443c01a7336-1ef440585f2mr191812495ad.69.1715641709927;
-        Mon, 13 May 2024 16:08:29 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0badb959sm84816595ad.85.2024.05.13.16.08.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 May 2024 16:08:29 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon updates for v6.10
-Date: Mon, 13 May 2024 16:08:27 -0700
-Message-Id: <20240513230827.983884-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.39.2
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="Z9E369+8"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RdnujDWMbIiUEWn6VsLmje6/72psqOfnS8vpw9vJD0tMfgpsrU+3U5q7U18s2CLJWvLmq/YFW4xLsK3/6gvcQzf7Q/wQu3xhcYoGM52sy1imyPZHN1HpdZ6APz5+U0bsWlA8u3UhBJ2RbIWN+rDbuUhIa0vOgL3aJqOO1h4l65hlcTDqSpRvEoJaQ5EMehKWcSwmq+IM7kyKIc86gg+c2c7ox14SxYOX0dfxjhJdX07ybF0BnFbHdoMomAyCqmTORXo3PqAKaApXCZq5ANAhBc82Fms3DRpzfLWWCTogJPNOx09c5Ih2Tq4H+I6bYZFU0/msNoECY60g5EqwL9V5Cw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KJcT7rH+g7mFhto3uv9dw4tblF+am7as6L62JDX5NDw=;
+ b=kHDB5HjyRRy7Qn8znoNiCVsi4tZtm/y5duC72B9exDG31yUYXC/Iar8ocBdG2RjCOMi6zYmAwpO2cfKsaecPqEaQngDQLtTx+T297/DBot3pd1rbfm5TA/ijpS02IN528nyWaybGPkiyZZRFMm/ynWMTQek1vAlImhPmVk3Jivdmjd9Y8LYfGEdw5W+gXn3VTFoDWeTUt6sNup8WmLGY758TO9RuxWIBsPYQHxCxRJxSg5hoZMOAs4IxXhJm9my+RncrHR+WolDx5R+vfKKnu7NP60e6oL5L2Em7BSpy2wO1Mnxt9lRE/3D88U/t+73s/MwQNfyl9BmhEtPWjF+NKw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KJcT7rH+g7mFhto3uv9dw4tblF+am7as6L62JDX5NDw=;
+ b=Z9E369+89jD2U3ET2lRG7emNtvJnfzkExQjAh7xxeHJdXRbKWa6Lrs3J8di0GAwFIlwuzveNPjfiDv3wdFLv7RafTRyHxeOYT/XFe8vIT0h4rfkkgG7EFps3Labr9DFBGYYtR0gO08hpm2qMuBqPbvO1NLELi6tAHO4f3QoM6WQ=
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by AM9PR04MB8115.eurprd04.prod.outlook.com (2603:10a6:20b:3e8::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.55; Tue, 14 May
+ 2024 02:53:10 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::d30b:44e7:e78e:662d]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::d30b:44e7:e78e:662d%4]) with mapi id 15.20.7544.052; Tue, 14 May 2024
+ 02:53:10 +0000
+From: Peng Fan <peng.fan@nxp.com>
+To: Cristian Marussi <cristian.marussi@arm.com>, Guenter Roeck
+	<linux@roeck-us.net>
+CC: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, "groeck7@gmail.com"
+	<groeck7@gmail.com>, "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
+	"jdelvare@suse.com" <jdelvare@suse.com>, "linux-hwmon@vger.kernel.org"
+	<linux-hwmon@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH V3] hwmon: scmi-hwmon: implement change_mode for thermal
+ zones
+Thread-Topic: [PATCH V3] hwmon: scmi-hwmon: implement change_mode for thermal
+ zones
+Thread-Index:
+ AQHaT1lW79cmzSPKCUytPMAjATcCq7DqF+KAgAAAz2CAAH0qAIAAHRkAgAACIICAAAtxAICr84uw
+Date: Tue, 14 May 2024 02:53:10 +0000
+Message-ID:
+ <DU0PR04MB94172D2602D32AF757A72CAF88E32@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20240125064422.347002-1-peng.fan@oss.nxp.com>
+ <b839f83f-c8c7-4fa8-8597-bdde1b40168a@roeck-us.net>
+ <DU0PR04MB9417DAD2DBB8820344FEFB07887A2@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <540cf4b3-ebf6-4a85-84c4-c012a69db416@roeck-us.net> <ZbKHpFRGoaQpWX16@pluto>
+ <da42560b-32b2-49c6-9aeb-b7fbd5b5577c@roeck-us.net> <ZbKTBmt_BP6JRLBj@pluto>
+In-Reply-To: <ZbKTBmt_BP6JRLBj@pluto>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DU0PR04MB9417:EE_|AM9PR04MB8115:EE_
+x-ms-office365-filtering-correlation-id: 7479d026-48c6-4db6-08eb-08dc73c0fd66
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230031|366007|1800799015|376005|38070700009;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?ae028JHcNRVCmT2PfuIGt4adxukIredk1EhpHql4hNFPNjgWTprReBFadyBD?=
+ =?us-ascii?Q?YHbwXHjHt7pwesuWNjtl2AT5OFRWJch1fyqpwFLNA1A1DL2mimRHqqKokW5R?=
+ =?us-ascii?Q?2AjXRjd5Gd4mkTf6ri8LBZNi6kxC1gJnS/MvapT35W5Qxg0zezSE3eFUCKpQ?=
+ =?us-ascii?Q?9vZrByWLoBBfty5m0dJWlxLMxJ7YWdpk8QECZroOqqwHP0sz823gqpN2kB61?=
+ =?us-ascii?Q?b9S5WzU3jFDwo4NvWdydq60NsL2g6bn9xUo04SuV+h9h4ghw5VfbgTLwJNn5?=
+ =?us-ascii?Q?e8XshxkUOLkIDrXLs1JGls36OuTKMVuI32I5lEiCLIbbCGBPx/K4ravy8Vcw?=
+ =?us-ascii?Q?HfrqlGxIzoMxWtr4Po8ujhe1hv+yO+hELL79IdhDcmmNOBV1qWVz8Glugxll?=
+ =?us-ascii?Q?+Pqv2N9CYR4FVCV703I5AGQecOhTF1xo+EYxGpFMd+wJfOYNH/c55L04C6+n?=
+ =?us-ascii?Q?uI4iubde7xbrCyIoCzHEVerbD71ORbmDtVEkcl5L2VONiN2NvfSuPLeXPSVx?=
+ =?us-ascii?Q?GIPCsaBoEcTF8cnVbDGX41pD8t/rHcSW4iZMRpgp35ZOuOZKKRVpQiBWZZWC?=
+ =?us-ascii?Q?OCFA/88d9E5wA7wRpxi96MVjPzzGOX5mLzgkferYKkcGQj9+l6VBQS8w9FgD?=
+ =?us-ascii?Q?o9r2NNyjTbwPmhErDBKuJKBoLIwFNLh6bs3RxUlvtlrEYMCxQzG8LngzltLj?=
+ =?us-ascii?Q?wTiMBizi/AQgOPSsSRvc9i2l6yZwyXcME/YjTLVRUkym659+QuHMQaEJd1Fo?=
+ =?us-ascii?Q?0F2oipTHeGuBT2vC41FL6J1dqm+QvZx9HAYalilnCIvJWqje9dgscOArYq5G?=
+ =?us-ascii?Q?56leb7lGSrSAQYW6J140u1HmeUKgtNwPBxJY1ABPMTIPzKAXhQWf8Fbboqtg?=
+ =?us-ascii?Q?JLYw6/5FGEqjfhUn5Wp7vvDLvjkrkAp5kypwnRhwpFpVbVYozMdW07Z0LdTt?=
+ =?us-ascii?Q?xOpffN3rfue7QRH+rsUn4R8Wgk6GJJZLQampuJU0kl8FKVnb5YZvKzh/Wpk5?=
+ =?us-ascii?Q?jGvcruQ7KxRFt7yToLF1Hz7h/qUOH0z0CcxZiHWOfAVZxp5OdMcIicn25pmy?=
+ =?us-ascii?Q?GYwxPQ+ZBmfLK1424o5Lq5tr9wYR0LB8Aft93dk4qMiqlS34imDnZW/fcrXW?=
+ =?us-ascii?Q?qe2+aI12V+hA1YAHCod8NRDn2zRt3pHHcB+3kWx1wd05L0rYX1GPCNLDIg9Y?=
+ =?us-ascii?Q?ryFyL+VSAVjh3G5uLxjnlGhRq+I9jDF9iiqSu4ktpXheWoYUtiJWEBp1bGUb?=
+ =?us-ascii?Q?f2Zn9T0Vhw+6rOXIh0BBWIpTF/SkZ1USPgSSUUZJD6SXOE7Q1Q/4b5H40ol8?=
+ =?us-ascii?Q?vvfGse18qCdRXVmnRfQcPHKit3NJXERPdkYyZaW9BbQEtw=3D=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(1800799015)(376005)(38070700009);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?dr5PWF7yFB3+norYy849DZOhVSywvnw7E3Y7gyJfYA9qNd+NL4JUH168KFQj?=
+ =?us-ascii?Q?qCJMXzs5L2tKPya53QymOPD8sf3bbmmhSt7zmOprgFZW3dTdFPiEnOO1b/pX?=
+ =?us-ascii?Q?uRZlxQWHdS8QaGNXYDunonqGD3hnr8EHbHr3oYxQc3ViD5Tiw5VNacUEtx/T?=
+ =?us-ascii?Q?swVBgzcKGoqWvfO2MpDa6r2YBBiZT6ESdbx8c83IhJmJ+6P8Pt4PK9d+TL66?=
+ =?us-ascii?Q?Zh6KX4DBJywKFutbLdj0vG+ZC1kd7ZdEu95l4O8ZLW1LBIVFb3VZckuMSbWM?=
+ =?us-ascii?Q?Onn2rjM/QK3DtYLJDn4xi/JBvXbeqPNYgvEf1hZlkCCRG0MKdUmrmmEx47vu?=
+ =?us-ascii?Q?i+QtV036sbogPOUV2eoioJmeQc+i4CNLqvjw2+uMCk4xqI608idlEtaS0lkq?=
+ =?us-ascii?Q?iPjMOsUKUWfmVF3hYvhtOd2JPgEDqTUoUJVh2a7GeSXKt4BcwFvz+8lrgtpu?=
+ =?us-ascii?Q?J4V0ugIl2PPkckn08rkGlG1zP9XfsNSkYKEyj4DgH1u4LVeidmmV1LB2Uei3?=
+ =?us-ascii?Q?9r1gSabwOyNeD6i0W0pDwbq+Vo0gLGCftydk5UVsqJjzNG4zqMbucZKdiyCl?=
+ =?us-ascii?Q?Xn06JmA1Ril/wocO5Jn+Xha4azrWXvmh7FgwXuR1+7WuBLQsPzWQI1AT0qrf?=
+ =?us-ascii?Q?4EEop0ExY1DKU5pD5tpn3FFEbJQ59XK0CgZPwewq5RFgTHbPhxNc0bHUfc/5?=
+ =?us-ascii?Q?jJrKc7N32xUFwTVLeVbmPFJhdozJ+1msxcYVmw+/jR81Bn+5qhg3fkCwSjHK?=
+ =?us-ascii?Q?WY1aIFVBwGl5Fr56JH2//DiAZ3ZcFocHjNpAWbExJX9vF6KF2PYRFiWpUWpF?=
+ =?us-ascii?Q?HhEEKVRdwqO2gXW4kHYgAhMcamkUrkXToj1Cwh+Z6R1wQbfOclCOF7pMCYCU?=
+ =?us-ascii?Q?YaKzXG0cZNqE0e0Zp2plRj+G/aOtVVQ+d2F9bExZm8uXtWCB55VsjlJjsTcg?=
+ =?us-ascii?Q?IaZU6+nIDUOyZ0JwRU5sTrLdqmnGpLC1s/3ipVLx9ezHAsXmlWVfWOplD5Zq?=
+ =?us-ascii?Q?goZijF8etfFzHtRXKAfovTj9SQQXVZc0QtZDdXqP0VZv5mU3R1ms4UoWWH5S?=
+ =?us-ascii?Q?WUZzTwRnT0/wUa+ceAWs7BkPFkaaOTry36W4WWqjZITUx6TCCKsGAP4HAq0e?=
+ =?us-ascii?Q?Uxk6s+gFIESD5DDZrfgKYAFvhc+VZF3h89WNqcF5PIVyk0dgUekP60PyEWOK?=
+ =?us-ascii?Q?CZUWBVAGL4gFeJpuZjcOrrC8kJF5sk9BXoeI3+llxHTGudkxdVDm4tH4q+N7?=
+ =?us-ascii?Q?fM/MZgIH3n6tbah+1GyzJKLRwrSeD4VavuanC+MNTyNZhxg7baYHIWaS85oh?=
+ =?us-ascii?Q?ZHXzk52aYu/ND2QZPLpurUKyWbeYa41quFYXfILzK4/HocD+WRaoo2xldwiw?=
+ =?us-ascii?Q?D2OtA2Ll/ssEyUvK5p91zFkT44G0DljJOUx626TuAw2z6K/Wkz4kCFnuIQ+a?=
+ =?us-ascii?Q?LbCQr5ItXDZr1ESr9tMbqQyxCnsZ5cqFvONbcnVPfZormQRdZQQekx8FUx3E?=
+ =?us-ascii?Q?1JuV4N/tdOtRpuK5KL+eKNljwZ2fPLeuRAIb82kvDC5man8BYIaBRemS3vpE?=
+ =?us-ascii?Q?jZsxSUb29uUF1yerPJo=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7479d026-48c6-4db6-08eb-08dc73c0fd66
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 May 2024 02:53:10.1845
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: K2H8daHNsQyirVkACOre8I0XspZF67yAeVmCEYekue1nTXiNTXiEw50vypolpEwwacpNt6O3MnBIRP4nvNUWvg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8115
 
-Hi Linus,
+> Subject: Re: [PATCH V3] hwmon: scmi-hwmon: implement change_mode for
+> thermal zones
+>=20
+> On Thu, Jan 25, 2024 at 08:16:45AM -0800, Guenter Roeck wrote:
+> > On 1/25/24 08:09, Cristian Marussi wrote:
+> >
+> > > Agreed, but it seems that indeed here the attempt is to make sure
+> > > that an accidentally disabled sensor is turned on.
+> > >
+> >
+> > From the patch:
+> >
+> > +static int scmi_hwmon_thermal_change_mode(struct
+> thermal_zone_device *tz,
+> > +					  enum thermal_device_mode
+> new_mode) {
+> > ...
+> > +	if (new_mode =3D=3D THERMAL_DEVICE_ENABLED)
+> > +		config |=3D SCMI_SENS_CFG_SENSOR_ENABLED_MASK;
+> > +	else
+> > +		config &=3D ~SCMI_SENS_CFG_SENSOR_ENABLED_MASK;
+> >
+> > This clearly contradicts your statement. It leaves the sensor in full
+> > control by the thermal subsystem. If the thermal subsystem decides to
+> > turn it off, it is turned off.
+>=20
+> Yes, indeed, and this is wrong as you explained; what I meant is that it =
+seems
+> to me now after this discussion, and from the commit message, that the
+> reason (and the aim of this patch) is different from how it achieves it (=
+as a
+> side effect)
+>=20
+> "The thermal sensors maybe disabled before kernel boot, so add
+> change_mode  for thermal zones to support configuring the thermal sensor =
+to
+> enabled  state. If reading the temperature when the sensor is disabled, t=
+here
+> will  be error reported."
+>=20
+> So when I said:
+>=20
+> > > Agreed, but it seems that indeed here the attempt is to make sure
+> > > that an accidentally disabled sensor is turned on.
+>=20
+> and
+>=20
+> >> In this case seems like the sensor is NOT supposed to be ever
+> >>disabled  (not even temporarily), it it just that you want to ensure
+> >>that is enabled, so I would say @Peng, should not that be done in the
+> >>fw  SCMI server ? (i.e. to turn on, early on, all those resources that
+> >>are
+> >>  exposed to the agent and meant to be always on)
+>=20
+> I implied to drop this patch and instead make sure the visible-and-always=
+-
+> enabled sensor is default-enabled by the SCMI server running in the firmw=
+are,
+> given that there won't be any need to ever disable it, from the hwmon
+> interface NOR from the thermal subsystem.
+>=20
+> Sorry if I have not been clear (but I maybe still well-wrong anyway :D)
 
-Please pull hwmon updates for Linux v6.10 from signed tag:
+Sorry to bring back this old topic.
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.10
+The tempsensor is disabled at boot, I will check with FW owner to enable it
+by default. But the tempsensor will consume some power, if leaving
+it always enabled.
+
+Do we need to export a HWMON_T_ENABLE to temperature sensor if
+leaving thermal framework only reading temp?
 
 Thanks,
-Guenter
-------
+Peng.
+>=20
+> Thanks,
+> Cristian
+>=20
 
-The following changes since commit 39cd87c4eb2b893354f3b850f916353f2658ae6f:
-
-  Linux 6.9-rc2 (2024-03-31 14:32:39 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.10
-
-for you to fetch changes up to 5fbf8734fb36cf67339f599f0e51747a6aff690c:
-
-  hwmon: (nzxt-kraken3) Bail out for unsupported device variants (2024-05-12 16:50:11 -0700)
-
-----------------------------------------------------------------
-hwmon updates for v6.10
-
-* New drivers
-
-  - Infineon XDP710
-
-  - EC Chip driver for Lenovo ThinkStation motherboards
-
-  - Analog Devices ADP1050
-
-* Improved support for existing drivers
-
-  - emc1403: Convert to with_info API; Support for EMC1428 and EMC1438
-
-  - nzxt-kraken3: Support for NZXT Kraken 2023
-
-  - aquacomputer_d5next: Support for Octo flow sensors
-
-  - pmbus/adm1275: Support for ADM1281
-
-  - dell-smm: Supportt for Precision 7540 and G5 5505
-
-* Other notable cleanup
-
-  - max6639: Use regmap
-
-  - Remove unused structure fields from multiple drivers
-
-  - Drop explicit initialization of struct i2c_device_id::driver_data to 0
-
-  - Improve configuration mode handling in it87 driver
-
-  - jc42: Drop support for I2C_CLASS_SPD
-
-  - Various conversions to devicetree schema
-
-  - Add HAS_IOPORT dependencies as needed
-
-* Minor fixes and improvements to max31790, coretemp, aspeed-g6-pwm-tach,
-  pwm-fan, pmbus/mp2975, acpi_power_meter, and lm70 drivers
-
-----------------------------------------------------------------
-Aleksa Savic (4):
-      hwmon: (aquacomputer_d5next) Add support for Octo flow sensor
-      hwmon: (aquacomputer_d5next) Add support for Octo flow sensor pulses
-      hwmon: (nzxt-kraken3) Decouple device names from kinds
-      hwmon: (nzxt-kraken3) Add support for NZXT Kraken 2023 (standard and Elite) models
-
-Andy Shevchenko (6):
-      hwmon: (pmbus/adp1050) Don't use "proxy" headers
-      hwmon: (pmbus/mp2975) Replace home made version of __assign_bit()
-      hwmon: (pmbus/mp2975) Constify local pointers to pmbus_driver_info
-      hwmon: (pmbus/mp2975) Use i2c_get_match_data()
-      hwmon: (pwm-fan) Convert to use of_property_read_u32_array()
-      hwmon: (pwm-fan) Make use of device properties
-
-Christophe JAILLET (3):
-      hwmon: (stts751) Remove an unused field in struct stts751_priv
-      hwmon: (npcm750-pwm-fan) Remove an unused field in struct npcm7xx_cooling_device
-      hwmon: (npcm750-pwm-fan) Remove another unused field in struct npcm7xx_cooling_device
-
-David Ober (1):
-      hwmon: Add EC Chip driver for Lenovo ThinkStation motherboards
-
-Delphine CC Chiu (1):
-      hwmon: (max31790) revise the scale to write pwm
-
-Frank Crawford (4):
-      hwmon: (it87) Rename FEAT_CONF_NOEXIT to FEAT_NOCONF as more descriptive of requirement
-      hwmon: (it87) Do not enter configuration mode for some chiptypes
-      hwmon: (it87) Test for chipset before entering configuration mode
-      hwmon: (it87) Remove tests nolonger required
-
-Guenter Roeck (4):
-      hwmon: (emc1403) Convert to with_info API
-      hwmon: (emc1403) Support 11 bit accuracy
-      hwmon: (emc1403) Add support for conversion interval configuration
-      hwmon: (nzxt-kraken3) Bail out for unsupported device variants
-
-Heiner Kallweit (1):
-      hwmon: (jc42) Remove I2C_CLASS_SPD support
-
-Javier Carrasco (8):
-      dt-bindings: hwmon: adc128d818: convert to dtschema
-      dt-bindings: hwmon: lm87: convert to dtschema
-      dt-bindings: hwmon: max6650: convert to dtschema
-      dt-bindings: hwmon: as370: convert to dtschema
-      dt-bindings: hwmon: ibmpowernv: convert to dtschema
-      dt-bindings: hwmon: pwm-fan: drop text file
-      dt-bindings: hwmon: stts751: convert to dtschema
-      dt-bindings: hwmon: ibm,p8-occ-hwmon: move to trivial devices
-
-Jose Ramon San Buenaventura (2):
-      dt-bindings: hwmon: adm1275: add adm1281
-      hwmon: (pmbus/adm1275) add adm1281 support
-
-Kai-Heng Feng (2):
-      ACPI: IPMI: Add helper to wait for when SMI is selected
-      hwmon: (acpi_power_meter) Ensure IPMI space handler is ready on Dell systems
-
-Kousik Sanagavarapu (1):
-      hwmon: (lm70) fix links in doc and comments
-
-Lars Petter Mostad (1):
-      hwmon: (emc1403) Add support for EMC1428 and EMC1438.
-
-Lukas Bulwahn (1):
-      MAINTAINERS: repair file entry in ADP1050 HARDWARE MONITOR DRIVER
-
-Naresh Solanki (1):
-      hwmon: (max6639) Use regmap
-
-Niklas Schnelle (1):
-      hwmon: add HAS_IOPORT dependencies
-
-Patrick Rudolph (1):
-      hwmon: (pmbus/mp2975) Fix IRQ masking
-
-Peter Yin (2):
-      dt-bindings: hwmon: Add infineon xdp710 driver bindings
-      hwmon: (pmbus) Add support for Infineon XDP710
-
-Radu Sabau (2):
-      dt-bindings: hwmon: pmbus: adp1050: add bindings
-      hwmon: (pmbus) Add driver for ADP1050
-
-Ricardo Neri (1):
-      hwmon: (coretemp) Extend the bitmask to read temperature to 0xff
-
-Seiji Nishikawa (1):
-      hwmon: (dell-smm) Add Dell Precision 7540 to fan control whitelist
-
-Tobias Jakobi (1):
-      hwmon: (dell-smm) Add Dell G5 5505 to DMI table
-
-Uwe Kleine-König (3):
-      hwmon: (aspeed-g6-pwm-tach) Convert to platform remove callback returning void
-      hwmon: Drop explicit initialization of struct i2c_device_id::driver_data to 0
-      hwmon: Drop explicit initialization of struct i2c_device_id::driver_data to 0 (part 2)
-
- .../devicetree/bindings/hwmon/adc128d818.txt       |  38 -
- .../devicetree/bindings/hwmon/adi,adm1275.yaml     |   4 +-
- Documentation/devicetree/bindings/hwmon/as370.txt  |  11 -
- .../devicetree/bindings/hwmon/ibm,opal-sensor.yaml |  37 +
- .../devicetree/bindings/hwmon/ibm,p8-occ-hwmon.txt |  25 -
- .../devicetree/bindings/hwmon/ibmpowernv.txt       |  23 -
- Documentation/devicetree/bindings/hwmon/lm87.txt   |  30 -
- .../devicetree/bindings/hwmon/max6650.txt          |  28 -
- .../devicetree/bindings/hwmon/maxim,max6650.yaml   |  70 ++
- .../bindings/hwmon/pmbus/adi,adp1050.yaml          |  49 ++
- .../devicetree/bindings/hwmon/pwm-fan.txt          |   1 -
- .../devicetree/bindings/hwmon/st,stts751.yaml      |  41 +
- .../devicetree/bindings/hwmon/stts751.txt          |  15 -
- .../devicetree/bindings/hwmon/syna,as370.yaml      |  32 +
- .../devicetree/bindings/hwmon/ti,adc128d818.yaml   |  63 ++
- .../devicetree/bindings/hwmon/ti,lm87.yaml         |  69 ++
- .../devicetree/bindings/trivial-devices.yaml       |   4 +
- Documentation/hwmon/adm1275.rst                    |  14 +-
- Documentation/hwmon/adp1050.rst                    |  64 ++
- Documentation/hwmon/aquacomputer_d5next.rst        |   9 +-
- Documentation/hwmon/emc1403.rst                    |  17 +-
- Documentation/hwmon/index.rst                      |   2 +
- Documentation/hwmon/lm70.rst                       |   2 +-
- Documentation/hwmon/nzxt-kraken3.rst               |  19 +-
- Documentation/hwmon/pmbus.rst                      |   2 +-
- Documentation/hwmon/xdp710.rst                     |  83 ++
- MAINTAINERS                                        |   7 +
- drivers/acpi/acpi_ipmi.c                           |  23 +-
- drivers/hwmon/Kconfig                              |  38 +-
- drivers/hwmon/Makefile                             |   1 +
- drivers/hwmon/acpi_power_meter.c                   |  16 +
- drivers/hwmon/ad7414.c                             |   2 +-
- drivers/hwmon/adc128d818.c                         |   2 +-
- drivers/hwmon/adm1026.c                            |   2 +-
- drivers/hwmon/adm1029.c                            |   2 +-
- drivers/hwmon/adm1177.c                            |   2 +-
- drivers/hwmon/adt7410.c                            |   4 +-
- drivers/hwmon/adt7411.c                            |   2 +-
- drivers/hwmon/adt7462.c                            |   2 +-
- drivers/hwmon/adt7470.c                            |   2 +-
- drivers/hwmon/aquacomputer_d5next.c                |  51 +-
- drivers/hwmon/asb100.c                             |   2 +-
- drivers/hwmon/aspeed-g6-pwm-tach.c                 |   6 +-
- drivers/hwmon/atxp1.c                              |   2 +-
- drivers/hwmon/coretemp.c                           |   2 +-
- drivers/hwmon/dell-smm-hwmon.c                     |  15 +
- drivers/hwmon/ds620.c                              |   2 +-
- drivers/hwmon/emc1403.c                            | 846 ++++++++++++++-------
- drivers/hwmon/emc2103.c                            |   2 +-
- drivers/hwmon/emc2305.c                            |   8 +-
- drivers/hwmon/emc6w201.c                           |   2 +-
- drivers/hwmon/ftsteutates.c                        |   2 +-
- drivers/hwmon/g760a.c                              |   2 +-
- drivers/hwmon/g762.c                               |   4 +-
- drivers/hwmon/gl518sm.c                            |   2 +-
- drivers/hwmon/gl520sm.c                            |   2 +-
- drivers/hwmon/hih6130.c                            |   2 +-
- drivers/hwmon/hs3001.c                             |   2 +-
- drivers/hwmon/ina209.c                             |   2 +-
- drivers/hwmon/ina238.c                             |   2 +-
- drivers/hwmon/ina3221.c                            |   2 +-
- drivers/hwmon/it87.c                               | 127 ++--
- drivers/hwmon/jc42.c                               |   4 +-
- drivers/hwmon/lenovo-ec-sensors.c                  | 602 +++++++++++++++
- drivers/hwmon/lineage-pem.c                        |   2 +-
- drivers/hwmon/lm70.c                               |   4 +-
- drivers/hwmon/lm73.c                               |   2 +-
- drivers/hwmon/lm77.c                               |   2 +-
- drivers/hwmon/lm87.c                               |   4 +-
- drivers/hwmon/lm93.c                               |   4 +-
- drivers/hwmon/lm95241.c                            |   4 +-
- drivers/hwmon/lm95245.c                            |   4 +-
- drivers/hwmon/ltc2945.c                            |   2 +-
- drivers/hwmon/ltc2947-i2c.c                        |   2 +-
- drivers/hwmon/ltc2990.c                            |   2 +-
- drivers/hwmon/ltc2991.c                            |   2 +-
- drivers/hwmon/ltc2992.c                            |   2 +-
- drivers/hwmon/ltc4151.c                            |   2 +-
- drivers/hwmon/ltc4215.c                            |   2 +-
- drivers/hwmon/ltc4222.c                            |   2 +-
- drivers/hwmon/ltc4245.c                            |   2 +-
- drivers/hwmon/ltc4260.c                            |   2 +-
- drivers/hwmon/ltc4261.c                            |   2 +-
- drivers/hwmon/max127.c                             |   2 +-
- drivers/hwmon/max1619.c                            |   2 +-
- drivers/hwmon/max31730.c                           |   2 +-
- drivers/hwmon/max31790.c                           |  10 +-
- drivers/hwmon/max6620.c                            |   2 +-
- drivers/hwmon/max6621.c                            |   2 +-
- drivers/hwmon/max6639.c                            | 341 ++++-----
- drivers/hwmon/max6642.c                            |   2 +-
- drivers/hwmon/mc34vr500.c                          |   2 +-
- drivers/hwmon/nct7802.c                            |   2 +-
- drivers/hwmon/nct7904.c                            |   2 +-
- drivers/hwmon/npcm750-pwm-fan.c                    |   7 +-
- drivers/hwmon/nzxt-kraken3.c                       |  58 +-
- drivers/hwmon/pcf8591.c                            |   2 +-
- drivers/hwmon/pmbus/Kconfig                        |  23 +-
- drivers/hwmon/pmbus/Makefile                       |   2 +
- drivers/hwmon/pmbus/adm1266.c                      |   2 +-
- drivers/hwmon/pmbus/adm1275.c                      |   7 +-
- drivers/hwmon/pmbus/adp1050.c                      |  56 ++
- drivers/hwmon/pmbus/inspur-ipsps.c                 |   2 +-
- drivers/hwmon/pmbus/ir35221.c                      |   2 +-
- drivers/hwmon/pmbus/ir36021.c                      |   2 +-
- drivers/hwmon/pmbus/ir38064.c                      |   8 +-
- drivers/hwmon/pmbus/irps5401.c                     |   2 +-
- drivers/hwmon/pmbus/lt7182s.c                      |   2 +-
- drivers/hwmon/pmbus/ltc3815.c                      |   2 +-
- drivers/hwmon/pmbus/max15301.c                     |   4 +-
- drivers/hwmon/pmbus/max16064.c                     |   2 +-
- drivers/hwmon/pmbus/max20751.c                     |   2 +-
- drivers/hwmon/pmbus/max31785.c                     |   6 +-
- drivers/hwmon/pmbus/max8688.c                      |   2 +-
- drivers/hwmon/pmbus/mp2888.c                       |   2 +-
- drivers/hwmon/pmbus/mp2975.c                       | 136 +++-
- drivers/hwmon/pmbus/mp5990.c                       |   2 +-
- drivers/hwmon/pmbus/mpq8785.c                      |   2 +-
- drivers/hwmon/pmbus/pli1209bc.c                    |   2 +-
- drivers/hwmon/pmbus/pm6764tr.c                     |   2 +-
- drivers/hwmon/pmbus/pxe1610.c                      |   6 +-
- drivers/hwmon/pmbus/stpddc60.c                     |   4 +-
- drivers/hwmon/pmbus/tda38640.c                     |   2 +-
- drivers/hwmon/pmbus/tps40422.c                     |   2 +-
- drivers/hwmon/pmbus/tps546d24.c                    |   2 +-
- drivers/hwmon/pmbus/xdp710.c                       | 131 ++++
- drivers/hwmon/pmbus/xdpe12284.c                    |   6 +-
- drivers/hwmon/pmbus/xdpe152c4.c                    |   4 +-
- drivers/hwmon/pt5161l.c                            |   2 +-
- drivers/hwmon/pwm-fan.c                            |  45 +-
- drivers/hwmon/sbrmi.c                              |   2 +-
- drivers/hwmon/sbtsi_temp.c                         |   2 +-
- drivers/hwmon/sht21.c                              |   2 +-
- drivers/hwmon/sht4x.c                              |   2 +-
- drivers/hwmon/smsc47m192.c                         |   2 +-
- drivers/hwmon/stts751.c                            |   3 +-
- drivers/hwmon/tc654.c                              |   4 +-
- drivers/hwmon/tc74.c                               |   2 +-
- drivers/hwmon/tmp102.c                             |   2 +-
- drivers/hwmon/tmp103.c                             |   2 +-
- drivers/hwmon/tmp108.c                             |   2 +-
- drivers/hwmon/w83791d.c                            |   2 +-
- drivers/hwmon/w83792d.c                            |   2 +-
- drivers/hwmon/w83793.c                             |   2 +-
- drivers/hwmon/w83l785ts.c                          |   2 +-
- drivers/hwmon/w83l786ng.c                          |   2 +-
- include/acpi/acpi_bus.h                            |   5 +
- 147 files changed, 2582 insertions(+), 968 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/hwmon/adc128d818.txt
- delete mode 100644 Documentation/devicetree/bindings/hwmon/as370.txt
- create mode 100644 Documentation/devicetree/bindings/hwmon/ibm,opal-sensor.yaml
- delete mode 100644 Documentation/devicetree/bindings/hwmon/ibm,p8-occ-hwmon.txt
- delete mode 100644 Documentation/devicetree/bindings/hwmon/ibmpowernv.txt
- delete mode 100644 Documentation/devicetree/bindings/hwmon/lm87.txt
- delete mode 100644 Documentation/devicetree/bindings/hwmon/max6650.txt
- create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6650.yaml
- create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml
- delete mode 100644 Documentation/devicetree/bindings/hwmon/pwm-fan.txt
- create mode 100644 Documentation/devicetree/bindings/hwmon/st,stts751.yaml
- delete mode 100644 Documentation/devicetree/bindings/hwmon/stts751.txt
- create mode 100644 Documentation/devicetree/bindings/hwmon/syna,as370.yaml
- create mode 100644 Documentation/devicetree/bindings/hwmon/ti,adc128d818.yaml
- create mode 100644 Documentation/devicetree/bindings/hwmon/ti,lm87.yaml
- create mode 100644 Documentation/hwmon/adp1050.rst
- create mode 100644 Documentation/hwmon/xdp710.rst
- create mode 100644 drivers/hwmon/lenovo-ec-sensors.c
- create mode 100644 drivers/hwmon/pmbus/adp1050.c
- create mode 100644 drivers/hwmon/pmbus/xdp710.c
