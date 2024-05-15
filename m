@@ -1,167 +1,114 @@
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AD603C485
-	for <linux-hwmon@vger.kernel.org>; Wed, 15 May 2024 06:21:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFF541F60A;
+	Wed, 15 May 2024 10:32:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715754086; cv=none; b=IXYB1QVhrQSV+PUz9DKWOZ3dfmgsSPY5ZS/0DjDiuI5GW+M6QoQtdJWFTWvuysfkgr9hKr3+i3rHNryac30oI4zm7cBqnSbawJJjZSiWxE+PQ2vZOqnoow24OoJif05uA9EzGQbn95bcySK1bCAV/jOar8tTvS/c7i50g0w7YOE=
+	t=1715769143; cv=none; b=mbixqtt916gX7ZtHod4IJ+yyPR5l2DQCiU/+fMvMF0B6Tu6GUN7GqYz5HuGDyfKH83oZ1Qe5WTk72bbfSEf2iZnqy5EgDyj5Zce0Ekd8vzbI5CL0Nz0wxFtDNhH0ap66xvundxw5ag+eqz7uqFoQe5bmeAWT6/iXj+l87CcK1k8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715754086; c=relaxed/simple;
-	bh=kcQJvLCc1/I2+fl8rDk29nGaXS9kvZzyvViOdGCrMAk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=e0EZCbZZ/iENHvj9n67feHwzTfJp0QYjIYNpxoB5Hb7GlZs/3UROtx0+WnXYBEz23mhfXdtuzbY72Gul9TMKjeTeSaTpSOVUUKlRymVrvRz9TJFTNsi1U1/C/LT0FgA+0UQZ1hS27aJAs78p9MfH06cwYMhpTpnLZuaecBgHAIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b=Ao+R/+i6; arc=none smtp.client-ip=209.85.166.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
+	s=arc-20240116; t=1715769143; c=relaxed/simple;
+	bh=CvksV8oPyRrAbbl3lnhzPKbTj7UWISTUgDHLj2QHslY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=s80GZkzN0AEuj5C70Lc4a2bniUF9dPFjJW2aNxR9uxKmzU8FUXPdbKQxtd/oHLb3RnAmJ1+zmRvQ7L/Ayh4gB/DwTIBBYysvVcx/32Pr9xvKyciX+rD5ZkD5LynLFTqTkwip6nHCE1NnxuSOqaOqSrke/SESgN2mgtOVsOEkDLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IZngf6Bt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b="Ao+R/+i6"
-Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-7e1c06191d0so133780539f.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 14 May 2024 23:21:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1715754084; x=1716358884; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pewL15YSqYyntUzZ2YESL84hcx8HG85YGqfAIHHWdj8=;
-        b=Ao+R/+i6Qa7XP5HRhcm4D1cueKOHXeIy9I4EoO6b5srOFqlnJt5PQQypmSL6jqJ/BS
-         h2dJYYjDahqeUaOpqE66CVN/adaH7oLwU4M+Re6ESrrikxu/UasMYxrd8n04E+gc6ECY
-         TecwGoyeY4KSWcD1WygOmFAZnRqByaDmJHO1ycSf0Fibpk8GktwRf9QiO84LjIrCyNMD
-         pZZInTy7peah/wJQh9uMlW3mc+nsA1p+cPldMFuX1A5MpL0kyQytc6mN5O9LmExdFd/K
-         4QqvfTRuydVL0i9JR1OHzkwRlfqUbizFdF0/6ptnJJY8BnANfh3oAlPyIXIXUjeBKz7m
-         Yl6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715754084; x=1716358884;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pewL15YSqYyntUzZ2YESL84hcx8HG85YGqfAIHHWdj8=;
-        b=FDy4YzsHyaDoeMmrrBOwQ1tfWxJKFZaq/AwDix0+BS5KQALAagRZbFBa+qnAHZn/Z2
-         +A0iGxW5thzt1loXc502y2nFdzuWWHet9ZU+PrGOCvXa3SCRwQZ7wE3TtZVs6S2WvPeM
-         b3itUN/IKbDeXeW8aOPnRIjQ4kuakFexMHkGfeuGh0Aj6AZ2LI8Bj04OV20VS3ZMkfzY
-         YqsUL3jjGarK/fyokH/zoUe9yHgkYCBh04kQ7Tyr/IEBSgn3/+BvOccJzPBI7vh+gDdY
-         +zlXBhrYl7ClcRup+A7vJZJRFZK/OnbUmX8PjB3AdGGwpTjnx+lCjoabisAAnUqgIW1S
-         NrxA==
-X-Forwarded-Encrypted: i=1; AJvYcCUdmpbMhUnvHT/QXLyJZBN5sspYTqixTJkPqAXgfxf0oAbzRv3vKRRjWk7bvh43+ZjRBxqRfwQCuF7XbksfOU4WIaTlYhE7oLT29XI=
-X-Gm-Message-State: AOJu0Yy++JbzBFs8L2x1gtpm+wv1ZF6adKXLuQYbCi+Xxdp+56AvsINi
-	y+JkmRivE9G6oSgneYoWU2+3RtPsQ6JFMyHJI9SXCJmNsqZkYhMdqpMyTD3drsRqv8CdXp0YhNl
-	AM7onpKD84vVxhKxjR8/sYY/g+NCIBdnj+lQBQA==
-X-Google-Smtp-Source: AGHT+IHj1X7ctGdv9YJkalDZLMbFRUyxyYp6gndkUfhYp5Mhxyh+tcKm4XPw8K1pSADIXlV0LoBEwCYK5xLJibmm7LI=
-X-Received: by 2002:a05:6e02:b49:b0:36b:aae:613 with SMTP id
- e9e14a558f8ab-36cc1319624mr127252835ab.10.1715754084373; Tue, 14 May 2024
- 23:21:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IZngf6Bt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB446C116B1;
+	Wed, 15 May 2024 10:32:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715769142;
+	bh=CvksV8oPyRrAbbl3lnhzPKbTj7UWISTUgDHLj2QHslY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IZngf6BtwfOVumLRNhzj4zDdf6JP7oaToc1ml66LC7M+EqXdFbFLRwI0JDfCf44YH
+	 rS42jxzI9mAQy0V1Yq++D/kW6pN5iAQCQACoj3kNqssLQPRZ5EqbUVCW9Vz/Cxet1p
+	 5BavErDbxMyeeTzQBirGPAzigEOVj3YrEseKAbr6+efZXXTJw+Z98/n8UEUc1xWT7Y
+	 4a9tPFOSjfZpQyVk8wFy8Ou575nBCw1IZ6I9jIXotCWyYTWDRssqbFU3t0ybDIfLlF
+	 THIPxjUiKNTzcYQpM6R90RBO35KDAAyajTfU51c06yMOCDNaxIE5mMNHc7gZGQd5nv
+	 N4uWVSk3yVInw==
+Date: Wed, 15 May 2024 11:32:17 +0100
+From: Lee Jones <lee@kernel.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: "Chatradhi, Naveen Krishna" <naveenkrishna.chatradhi@amd.com>,
+	Naveen Krishna Chatradhi <nchatrad@amd.com>,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Akshay Gupta <Akshay.Gupta@amd.com>, arnd@arndb.de,
+	gregkh@linuxfoundation.org
+Subject: Re: [PATCH 2/2] sbrmi: Add support for APML protocols
+Message-ID: <20240515103217.GA6035@google.com>
+References: <20240502220554.2768611-1-nchatrad@amd.com>
+ <20240502220554.2768611-2-nchatrad@amd.com>
+ <dd4ef0b6-8272-40b6-9a50-edbeec14d5e4@roeck-us.net>
+ <8cf0d519-ae6c-4ed0-899e-899f67479052@amd.com>
+ <488e8eed-e0f0-4055-b43c-5422b6302632@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <PH7PR20MB4962C6D8FD6989BC79F9483FBB1D2@PH7PR20MB4962.namprd20.prod.outlook.com>
- <IA1PR20MB4953F852CB7A9C5FE45E18EBBB1D2@IA1PR20MB4953.namprd20.prod.outlook.com>
- <CAAhSdy2uSAA4TLmCvjuLsZT26wJyCQ0L61m5vg3BbBCSvHxVqg@mail.gmail.com>
-In-Reply-To: <CAAhSdy2uSAA4TLmCvjuLsZT26wJyCQ0L61m5vg3BbBCSvHxVqg@mail.gmail.com>
-From: Anup Patel <anup@brainfault.org>
-Date: Wed, 15 May 2024 11:51:12 +0530
-Message-ID: <CAAhSdy2Fsu8PJH_+cPsFWQ8HmuPr_Ym-_YjnLKWtCqBLWTZ5kA@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] dt-bindings: hwmon: Add Sophgo SG2042 external
- hardware monitor support
-To: Inochi Amaoto <inochiama@outlook.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Chen Wang <unicorn_wang@outlook.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, linux-hwmon@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <488e8eed-e0f0-4055-b43c-5422b6302632@roeck-us.net>
 
-On Wed, May 15, 2024 at 11:49=E2=80=AFAM Anup Patel <anup@brainfault.org> w=
-rote:
->
-> On Sun, May 5, 2024 at 6:48=E2=80=AFAM Inochi Amaoto <inochiama@outlook.c=
-om> wrote:
-> >
-> > Due to the design, Sophgo SG2042 use an external MCU to provide
-> > hardware information, thermal information and reset control.
-> >
-> > Add bindings for this monitor device.
-> >
-> > Signed-off-by: Inochi Amaoto <inochiama@outlook.com>
->
-> LGTM.
->
-> Reviewed-by: Anup Patel <anup@brainfault.org>
->
-> Applied this patch to the riscv/opensbi repo.
+On Tue, 14 May 2024, Guenter Roeck wrote:
 
-Sorry, for the noise. Please ignore.
+> On 5/14/24 12:15, Chatradhi, Naveen Krishna wrote:
+> > + @Misc and @MFD maintainers in CC
+> > 
+> > Hi
+> > 
+> > On 5/3/2024 3:56 AM, Guenter Roeck wrote:
+> > > Caution: This message originated from an External Source. Use proper caution when opening attachments, clicking links, or responding.
+> > > 
+> > > 
+> > > On 5/2/24 15:05, Naveen Krishna Chatradhi wrote:
+> > > > From: Naveen Krishna Chatradhi <naveenkrishna.chatradhi@amd.com>
+> > > > 
+> > > > The present sbrmi module only support reporting power. However, AMD data
+> > > > center processors support various system management functionality
+> > > > Out-of-band over Advanced Platform Management Link APML.
+> > > > 
+> > > > Register a miscdevice, which creates a device /dev/sbrmiX with an IOCTL
+> > > > interface for the user space to invoke the following protocols.
+> > > >    - Mailbox read/write (already defined in sbrmi_mailbox_xfer())
+> > > >    - CPUID read
+> > > >    - MCAMSR read
+> > > > 
+> > > 
+> > > This is not hardware monitoring functionality and would have to reside
+> > > elsewhere, outside the hwmon subsystem.
+> > 
+> > I thought as much, please provide your opinion on the following approach.
+> > 
+> > Background: Present sbrmi under hwmon subsystem is probed as an i2c driver and reports power.
+> > 
+> > However, APML interface defines few other protocols to support OOB system management functionality.
+> > 
+> > As adding the core functionality of the APML interface in drivers/hwmon/sbrmi is not the correct approach.
+> > 
+> > We would like do the following
+> > 
+> > 1. Move the i2c client probe, misc device registration and rmi_mailbox_xfer() function to a drivers/misc.
+> > 
+> > 2. Add an MFD device with a cell, which probes the hwmon/sbrmi and continues to report power using the symbols exported by the misc/sbrmi.
+> > 
+> 
+> afaik mfd API function must not be used outside drivers/mfd. The mfd maintainer
+> is (or at least used to be) pretty strict on that. The core code of a
+> multi-function device might better be implemented in drivers/mfd, with
+> drivers in drivers/misc (for the misc device) and drivers/hwmon/ (for
+> hwmon functionality). The misc and hwmon drivers could then communicate
+> with the core using regmap.
 
-Regards,
-Anup
+Yes, please only use the MFD API from drivers/mfd.
 
->
-> Thanks,
-> Anup
->
-> > ---
-> >  .../hwmon/sophgo,sg2042-hwmon-mcu.yaml        | 43 +++++++++++++++++++
-> >  1 file changed, 43 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/hwmon/sophgo,sg20=
-42-hwmon-mcu.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/hwmon/sophgo,sg2042-hwmo=
-n-mcu.yaml b/Documentation/devicetree/bindings/hwmon/sophgo,sg2042-hwmon-mc=
-u.yaml
-> > new file mode 100644
-> > index 000000000000..f0667ac41d75
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/hwmon/sophgo,sg2042-hwmon-mcu.y=
-aml
-> > @@ -0,0 +1,43 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/hwmon/sophgo,sg2042-hwmon-mcu.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Sophgo SG2042 onboard MCU support
-> > +
-> > +maintainers:
-> > +  - Inochi Amaoto <inochiama@outlook.com>
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: sophgo,sg2042-hwmon-mcu
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  "#thermal-sensor-cells":
-> > +    const: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - "#thermal-sensor-cells"
-> > +
-> > +allOf:
-> > +  - $ref: /schemas/thermal/thermal-sensor.yaml#
-> > +
-> > +unevaluatedProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    i2c {
-> > +        #address-cells =3D <1>;
-> > +        #size-cells =3D <0>;
-> > +
-> > +        hwmon@17 {
-> > +            compatible =3D "sophgo,sg2042-hwmon-mcu";
-> > +            reg =3D <0x17>;
-> > +            #thermal-sensor-cells =3D <1>;
-> > +        };
-> > +    };
-> > --
-> > 2.45.0
-> >
-> >
+There are 'offenders' that slipped by me, but in general if you need to
+create an MFD then it should be located in the MFD subsystem.
+
+> drivers/mailbox/ supports mailbox style communication. I don't know if that
+> would apply to the mailbox functionality implemented here.
+
+-- 
+Lee Jones [李琼斯]
