@@ -1,86 +1,157 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C789812FF70;
-	Tue, 14 May 2024 22:30:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0BB53B79F
+	for <linux-hwmon@vger.kernel.org>; Wed, 15 May 2024 06:20:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715725849; cv=none; b=L+ZfMAfDNPkGm+c+8kKvpq14h2rfBxWOiecVlUEbQDkb80tCWmAdFMyD7+ZNOJNn9XNEKMOEexw3OeGrh5FSzUzjs66Oc6mCrw454NeR9wfB6RDLFl0b8EZYtM/F6AGwUAEyno7lLUgQIMtF3DmOThzUlS4fHquB8PkduMgchZU=
+	t=1715754002; cv=none; b=n1DNK/xJ/yPyaqSX8kTuvFNdhpMubzdN/L7jJWwBsym6bN2lW+brU8BCdvrmOf2JZ0YO/CVaeMVuEzXaaYZP/NGtAS8qO99xmtr8Sl5XYwNCdBScibysmE4UdAk5YV/TRpnxfu2gOCYnX9eH6noXxPDQuFvSliSh9ag4hoXvlo8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715725849; c=relaxed/simple;
-	bh=qOpi7ggwkZsdcL7G7S0c1CPYC4REEazdAt/LOhQ30Mo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gtzmXrE/2HGWXnOtJpt0PktrBemiZNePaxLCuCAetpeg7QB2Yy5EjBEDlhiO9mhsJ1MNL1D+0MA1elF/VnYbGhkJEHRmzZHYxKYkWlta7kv7siDh/SbIZKVB7p5TS2qzNy6He8rZOa84jOj/6F774Gj+DlfdVcc+4VKHbvaGgaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RITVC2Es; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1715754002; c=relaxed/simple;
+	bh=UyrQgiGxpVTwgJtSrbHRBf9lE+OZP6cY2tzhDaA4YlM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fykXg9Wv3p3iJK/0PUQ3TvJi+WszaB1mMIh/NXcQxL+3zqUOjqtmiI9nBAP4msuAEfDup41PPiQGIJqhTIUSPTbUOgnmvGPxa6qeKx2klfODp9XuwxtsaA5enGpTCzUutxppkQAszt53hweUdj9EoELTFNm3f4W5vWkdrQb6LyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b=bkpscqxp; arc=none smtp.client-ip=209.85.166.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RITVC2Es"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1ec41d82b8bso58860185ad.2;
-        Tue, 14 May 2024 15:30:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b="bkpscqxp"
+Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-7e1b887c488so158318339f.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 14 May 2024 23:20:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715725847; x=1716330647; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4SACBHdf15IcuCVCJrf8bIPY7fyUCNX5JdYQkuFrZPs=;
-        b=RITVC2Es6Bzn83fjC4QeoKZN5wK/ZllG2fae+Jv+SgzcRLYIl4nz5Wx1rQGNyXT8wG
-         Uouto7rFBdjO6rqZZRHPk4bzu4iBUxBu8GKb9NPutiRZQieIqCZpIJLrbJSDmvVoyr0d
-         cE0wTNxmo8tgbdsPI3XHL6HWAWUPgq8FbUs4woC8wwVG+3gem9hlhFStoPFx8qlaFAsw
-         +Ppe3LpokSSxklQux5yJ6Atjw7Yhb8zA2Y6fHTVcVYeGgVycGZcTbGrXeMWLecQHzoAP
-         45Ea2E5ptBK3YxFeMX/scOn+xH15AKWj4EAGTDqaXRnfwYe+4Cs0eo42yWv3u1Cvs/mr
-         uOGg==
+        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1715754000; x=1716358800; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DXBk01eAYtbUsAxjAP5iGYBzxJrtGgpchSjyGGop1NU=;
+        b=bkpscqxpboI0T8i3xvZR8yiGwgMJq5IXEBKUfkc6jsgH2QQVDn7im6PXOqmyngrZme
+         8Bt8ZQ7yCgADITlNp5E9aAXPY30MFlv/wP8X5Ef8eJKuw6L7ciFuhZn9i3OBqAcWlEmc
+         2E8XdPuXfKvV8eouyH52hY/1aqpvJzYkuVm78idGZ8RQ58dvAtWWlKYP9urtSuzu+E8H
+         9YG8H8wtfQRGmEbyiuM5xHfG5Kiv11hYLyVCvLlAsxRohktKfpcnPrJb0Md7TiOzNL4E
+         5MlZxBcgPVxv6B3rl3dXFKecB1VdTs8teWzHZr+eLREVAeLceO395wiSrImmOjNe0K6W
+         H9qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715725847; x=1716330647;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1715754000; x=1716358800;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4SACBHdf15IcuCVCJrf8bIPY7fyUCNX5JdYQkuFrZPs=;
-        b=t2PvxaiTmgSs/oFpBMTaqTrGSzTqZ0qXqHRtbcR45fYwwL29f8y5X+TgPUuh2YXSTK
-         2JkQXCqMqGZtFmaYSGf/uPa304VOPzzFApwnZK+YG5SbgwSRz7S3jdAryKXScTAPBaCb
-         UXJsKg9dDJU4cXp5MQ95PKTDtE1+qYCqw26Ke3CtnM0rIosU9eR43gSzFsNiifh+MHJH
-         FTyhn3NrsfUbErO/eNBuPFAlALTMl/XAwbMfm8gYSxDXT4oUfkk6I+CGlEvyH7aVaWUJ
-         q0dQQAfOrQl9r2CAeLXdlzMhyZ0+CyNgHaTO2UoRYlDwEpHz0LoAMVuoxb6ycMCrmZ1v
-         Hrdg==
-X-Forwarded-Encrypted: i=1; AJvYcCWpuBrH5s4YJkeOiBYjdxYRsCbSY28zj9xQMSVF9gZ/GePYLm/ZYXUNeIuMj+Ni3AaIzZOyWJC4frWqajkjJ8VdTZ5ScXfLBMF45qZtmhSW+AATv6Q2EJDIrrgT57NUvS6h+CIHmC87XT0=
-X-Gm-Message-State: AOJu0YzdItQvWykQvcq/sXK2btC6GH+bGIo+AWuffUiMazy9ZgcRIW0p
-	fnj2bWYN1akZQCX4L8E2CAs346ecchKaJYgppdtGIeyri5pgHJ1H
-X-Google-Smtp-Source: AGHT+IF9ot/l6gutkdSM+HXn0G8KX7UPcFE9Kb3nr2mPscumJ3sq/Nz5xAYJuM70ibpmFiGITzuaJw==
-X-Received: by 2002:a17:902:cf07:b0:1e0:ca47:4d96 with SMTP id d9443c01a7336-1ef43d0ad15mr199793955ad.3.1715725847017;
-        Tue, 14 May 2024 15:30:47 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0badcb6esm103247185ad.93.2024.05.14.15.30.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 May 2024 15:30:46 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 14 May 2024 15:30:44 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Marius Zachmann <mail@mariuszachmann.de>
-Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] hwmon: (corsair-cpro) Add firmware and bootloader
- information
-Message-ID: <1149208f-5fd5-40e3-a116-ce85f62be7bd@roeck-us.net>
-References: <20240513194734.43040-2-mail@mariuszachmann.de>
+        bh=DXBk01eAYtbUsAxjAP5iGYBzxJrtGgpchSjyGGop1NU=;
+        b=w5UsWo58STSNTOIB0fkueDXFABcnp1KRWoImkG4f64yM3qNyntLsNsmg9wEAMkj77m
+         sGvi53QkB02j+VbxpmBvm0n9yPGGoCs63h7T1rtWQTl9cefXe7193dbCu+wm6CZvLzXf
+         DSpHb9U47iBFNl+RhWSYZA+Wdai5gpA9xOMMrZKj+Afcrk9waP5Eq/0HNUJVStFTikN9
+         V1l4rolkiZ8jI5rPKAPwn2uBbGAcMLr0XDivTBSfv37ky0FkHoC/9wYSafC5rnZ/52SZ
+         uo7zsF1utwaycDY0cE6mW7qfmYldsI2IjXM4lVJVYfvNIuiFBx53TFizpeudo9Eg10WF
+         J1SA==
+X-Forwarded-Encrypted: i=1; AJvYcCWU06jcQMb/Nd41R/EfQQupGKF5csfMQ8xXkRjhFfRivFCo5W+Yb1GQNmROOw/WfMKfHAndXacxOiOIzWVQrrDKnKEHiBAmhnH/AVc=
+X-Gm-Message-State: AOJu0YyCbdKD+P8rszerevPa3ifDj8OR5xkDhFActKLLyxhL0SG12Xpq
+	qLPAx72LBAfxCpcMihNkSOq2vdJvwjQ4+lcxpqZbCCZJQTUsi1ynqT/OPPtvJKKUpF2LTaBBRUf
+	6xMLvY+dqcWhOhP3WmAzd78Uqqi33YYEZt4e3lQ==
+X-Google-Smtp-Source: AGHT+IFkE8DQwyCj3o5jxhZZChCPfs/heM6LGJLIaFfgGkAUVO7wCCuZJPaCHqr48cEbTVMpVAMjeT1LwCMTCZfprkA=
+X-Received: by 2002:a05:6e02:1a01:b0:36b:31d2:f148 with SMTP id
+ e9e14a558f8ab-36cb7757227mr129234915ab.15.1715753999877; Tue, 14 May 2024
+ 23:19:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240513194734.43040-2-mail@mariuszachmann.de>
+References: <PH7PR20MB4962C6D8FD6989BC79F9483FBB1D2@PH7PR20MB4962.namprd20.prod.outlook.com>
+ <IA1PR20MB4953F852CB7A9C5FE45E18EBBB1D2@IA1PR20MB4953.namprd20.prod.outlook.com>
+In-Reply-To: <IA1PR20MB4953F852CB7A9C5FE45E18EBBB1D2@IA1PR20MB4953.namprd20.prod.outlook.com>
+From: Anup Patel <anup@brainfault.org>
+Date: Wed, 15 May 2024 11:49:48 +0530
+Message-ID: <CAAhSdy2uSAA4TLmCvjuLsZT26wJyCQ0L61m5vg3BbBCSvHxVqg@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] dt-bindings: hwmon: Add Sophgo SG2042 external
+ hardware monitor support
+To: Inochi Amaoto <inochiama@outlook.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Chen Wang <unicorn_wang@outlook.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, linux-hwmon@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 13, 2024 at 09:47:34PM +0200, Marius Zachmann wrote:
-> Add support for reporting firmware and bootloader version using debugfs.
-> Update documentation accordingly.
-> 
-> Signed-off-by: Marius Zachmann <mail@mariuszachmann.de>
+On Sun, May 5, 2024 at 6:48=E2=80=AFAM Inochi Amaoto <inochiama@outlook.com=
+> wrote:
+>
+> Due to the design, Sophgo SG2042 use an external MCU to provide
+> hardware information, thermal information and reset control.
+>
+> Add bindings for this monitor device.
+>
+> Signed-off-by: Inochi Amaoto <inochiama@outlook.com>
 
-Applied.
+LGTM.
 
-Note: This patch missed the commit window, so it will only show up
-in hwmon-next and in linux-next after the commit window closes.
+Reviewed-by: Anup Patel <anup@brainfault.org>
 
-Guenter
+Applied this patch to the riscv/opensbi repo.
+
+Thanks,
+Anup
+
+> ---
+>  .../hwmon/sophgo,sg2042-hwmon-mcu.yaml        | 43 +++++++++++++++++++
+>  1 file changed, 43 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/sophgo,sg2042=
+-hwmon-mcu.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/hwmon/sophgo,sg2042-hwmon-=
+mcu.yaml b/Documentation/devicetree/bindings/hwmon/sophgo,sg2042-hwmon-mcu.=
+yaml
+> new file mode 100644
+> index 000000000000..f0667ac41d75
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/sophgo,sg2042-hwmon-mcu.yam=
+l
+> @@ -0,0 +1,43 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/sophgo,sg2042-hwmon-mcu.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Sophgo SG2042 onboard MCU support
+> +
+> +maintainers:
+> +  - Inochi Amaoto <inochiama@outlook.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: sophgo,sg2042-hwmon-mcu
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  "#thermal-sensor-cells":
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - "#thermal-sensor-cells"
+> +
+> +allOf:
+> +  - $ref: /schemas/thermal/thermal-sensor.yaml#
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells =3D <1>;
+> +        #size-cells =3D <0>;
+> +
+> +        hwmon@17 {
+> +            compatible =3D "sophgo,sg2042-hwmon-mcu";
+> +            reg =3D <0x17>;
+> +            #thermal-sensor-cells =3D <1>;
+> +        };
+> +    };
+> --
+> 2.45.0
+>
+>
