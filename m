@@ -1,107 +1,93 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BFA513DDBA;
-	Fri, 17 May 2024 17:39:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D8F113E40B;
+	Fri, 17 May 2024 17:48:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715967561; cv=none; b=oreC4Lh5U28y1CCugDjwRAVx2yQedye3dA3fQalD5NT6CPgXWPCTA5jLybhQBi6ayzMq4snzWLTsL/AFvaCyARSqvHCazyYAsrlwWrCOtEC8zwG5lapIHsXVh+wM80BB/DiiOdvmzVWdD79DauBd1xEaELujDQz9ZIpb9PBTxns=
+	t=1715968094; cv=none; b=lFnKrgookhOgcn8vA4fQ/6Swm8jZydG2RzUdYhAqQcUnHKNOflsCQ3CJxyAEs2JU11qHOM+zxRO0bGVwUhWuAFepAzvB+hgmGsS2pMca59lL1RJL9zUG27FYOYdnwn+YidGMftMaO7Yz1pDdQ0jVSCFXSqFpR1JUNf09y1MhEj8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715967561; c=relaxed/simple;
-	bh=tQOjsUD1QNNPdmrsBIqeqqeA294m5b+0eJ2vo742SP0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U9xqvbC5EBpD8xzDoavmZ9EPTdEkQ3O+t0Tcpeo5oicDBU8ot5kEnPF8tzfg99ikBwqD7U8pQIbqFMZBD6Tk0EyT0MEFocQKew3H/45PRYm3Qs0A5MohX3G1gGnwGW4SjcgD2LwouvZluSoAHo7yMUQwAXsaqmdT/GRBstIN+1k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qgKkClbJ; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qgKkClbJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFD9DC2BD10;
-	Fri, 17 May 2024 17:39:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715967560;
-	bh=tQOjsUD1QNNPdmrsBIqeqqeA294m5b+0eJ2vo742SP0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qgKkClbJGWKrWh9OKsOPKK3kboH6boQ1WyzS99x6s6Ag1ExaUi5cTlR1KsA/SJRX7
-	 RkQgHw7E5mxTui9FG/Q3Air3GRYzVuAl29hahZXYsFfI0mczO++A2577yDqZp+HTv2
-	 qwGaPLfTJKijYjZpbNzZDykfJS0e/ZgwX/3tvDbIBPC/W6tTRd/b1lwdMVb7/FgIGx
-	 tL5AMkdOCVgatLR1QIl3EAe4BuV/XypFXfPVKRP5fFt/xd+yRWyU1iggVdLZ2oI8nY
-	 EMeOKBkIodjzVvhD4Lmqp+HqpI/Mj8yACd63tppRo5aFiMqhon7uSWu4biZviK1LE1
-	 KItkRwvJXMqeQ==
-Date: Fri, 17 May 2024 18:39:16 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	"jdelvare@suse.com" <jdelvare@suse.com>,
-	"robh@kernel.org" <robh@kernel.org>,
-	"krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Document adt7475 PWM initial
- duty cycle
-Message-ID: <20240517-recognize-broaden-43ba03c9f78c@spud>
-References: <20240508215504.300580-1-chris.packham@alliedtelesis.co.nz>
- <20240508215504.300580-2-chris.packham@alliedtelesis.co.nz>
- <fe5b3af9-b307-45e1-b190-ba2b3327a8df@kernel.org>
- <d11093bb-230b-4918-a8cd-4f4eb760ccf3@alliedtelesis.co.nz>
- <94c843e2-4415-4786-bfd4-a77fdbbfab07@roeck-us.net>
- <35361786-ef5f-4d81-83e8-e347f47c83ed@alliedtelesis.co.nz>
- <df40a387-37db-4a4d-b43f-ae22905789b5@roeck-us.net>
- <58fb36f5-4d4b-495b-a7cd-6129ab1ed454@alliedtelesis.co.nz>
- <20240517-pointer-cloning-3889f3d6f744@spud>
- <20240517-pellet-visa-a2d469dc5f34@spud>
+	s=arc-20240116; t=1715968094; c=relaxed/simple;
+	bh=gAAJJFKRq7ZuXBKuhjvNoKHrIa1D3KibBfY1qYrv3Ys=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YaX6YbjwexKJK35JXhMSWL4SGWOba3YpVqmK90Aprk9dIxmcCy2FA0yhv11mnkhbqAKT0UaGg9FSteQIA6eVq8tHil5EHi2L5fTYnXKlWTjEmqG5rLjnSR3h8R2uTiDVYJB/U1YRBVK2UV4mVh+OGo9EyCAeuc7V75VKBeP6XcI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 424EAC2BD10;
+	Fri, 17 May 2024 17:48:06 +0000 (UTC)
+Date: Fri, 17 May 2024 13:48:34 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: LKML <linux-kernel@vger.kernel.org>, Linux trace kernel
+ <linux-trace-kernel@vger.kernel.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
+ linux-block@vger.kernel.org, linux-cxl@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+ intel-xe@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+ freedreno@lists.freedesktop.org, virtualization@lists.linux.dev,
+ linux-rdma@vger.kernel.org, linux-pm@vger.kernel.org,
+ iommu@lists.linux.dev, linux-tegra@vger.kernel.org, netdev@vger.kernel.org,
+ linux-hyperv@vger.kernel.org, ath10k@lists.infradead.org,
+ linux-wireless@vger.kernel.org, ath11k@lists.infradead.org,
+ ath12k@lists.infradead.org, brcm80211@lists.linux.dev,
+ brcm80211-dev-list.pdl@broadcom.com, linux-usb@vger.kernel.org,
+ linux-bcachefs@vger.kernel.org, linux-nfs@vger.kernel.org,
+ ocfs2-devel@lists.linux.dev, linux-cifs@vger.kernel.org,
+ linux-xfs@vger.kernel.org, linux-edac@vger.kernel.org,
+ selinux@vger.kernel.org, linux-btrfs@vger.kernel.org,
+ linux-erofs@lists.ozlabs.org, linux-f2fs-devel@lists.sourceforge.net,
+ linux-hwmon@vger.kernel.org, io-uring@vger.kernel.org,
+ linux-sound@vger.kernel.org, bpf@vger.kernel.org,
+ linux-wpan@vger.kernel.org, dev@openvswitch.org,
+ linux-s390@vger.kernel.org, tipc-discussion@lists.sourceforge.net, Julia
+ Lawall <Julia.Lawall@inria.fr>
+Subject: Re: [PATCH] tracing/treewide: Remove second parameter of
+ __assign_str()
+Message-ID: <20240517134834.43e726dd@gandalf.local.home>
+In-Reply-To: <5080f4c5-e0b3-4c2e-9732-f673d7e6ca66@roeck-us.net>
+References: <20240516133454.681ba6a0@rorschach.local.home>
+	<5080f4c5-e0b3-4c2e-9732-f673d7e6ca66@roeck-us.net>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="fU8lYHpRVmPB+Kfl"
-Content-Disposition: inline
-In-Reply-To: <20240517-pellet-visa-a2d469dc5f34@spud>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Fri, 17 May 2024 10:36:37 -0700
+Guenter Roeck <linux@roeck-us.net> wrote:
 
---fU8lYHpRVmPB+Kfl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Building csky:allmodconfig (and others) ... failed
+> --------------
+> Error log:
+> In file included from include/trace/trace_events.h:419,
+>                  from include/trace/define_trace.h:102,
+>                  from drivers/cxl/core/trace.h:737,
+>                  from drivers/cxl/core/trace.c:8:
+> drivers/cxl/core/./trace.h:383:1: error: macro "__assign_str" passed 2 arguments, but takes just 1
+> 
+> This is with the patch applied on top of v6.9-8410-gff2632d7d08e.
+> So far that seems to be the only build failure.
+> Introduced with commit 6aec00139d3a8 ("cxl/core: Add region info to
+> cxl_general_media and cxl_dram events"). Guess we'll see more of those
+> towards the end of the commit window.
 
-On Fri, May 17, 2024 at 06:02:33PM +0100, Conor Dooley wrote:
-> On Fri, May 17, 2024 at 06:00:06PM +0100, Conor Dooley wrote:
-> > > On that point. How would I explain in the bindings that cell 2 is the=
-=20
-> > > duty cycle, cell 3 is the frequency and cell 4 is the flags?
-> >=20
-> > In the pwm-cells property in the pwm provider binding . You might want =
-to
-> > order it as <index freq flags duty> as usually that's the ordering done
-> > in most (all?) pwm provider bindings that I have seen.
-> > The pwm bindings I think are really unhelpful though - they all say "see
-> > pwm.yaml for info on the cells in #pwm-cells, but then pwm.yaml has no
-> > information. The information is actually in pwm.text, but the binding
-> > conversion did s/pwm.text/pwm.yaml/ in pwm controller bindings.
-> > I'll send a patch that fixes up pwm.yaml.
->=20
-> Possibly cell 4 should be standardised as the period for all pwm
-> providers and then all you'd have to do for your provider is set
-> #pwm-cells:
->   minItems: 4
+Looks like I made this patch just before this commit was pulled into
+Linus's tree.
 
-`const: 4`, d'oh.
+Which is why I'll apply and rerun the above again probably on Tuesday of
+next week against Linus's latest.
 
+This patch made it through both an allyesconfig and an allmodconfig, but on
+the commit I had applied it to, which was:
 
+  1b294a1f3561 ("Merge tag 'net-next-6.10' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next")
 
---fU8lYHpRVmPB+Kfl
-Content-Type: application/pgp-signature; name="signature.asc"
+I'll be compiling those two builds after I update it then.
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZkeWRAAKCRB4tDGHoIJi
-0s0VAQDSqIpwkV+XgvuoKwnRFDEwmwN4obNBWez9Gf8X0VfxpQD/cNJjz8iKe1Cx
-EBjxNXyPjLRZyHdRPUETZZRnFhkObg4=
-=GLZn
------END PGP SIGNATURE-----
-
---fU8lYHpRVmPB+Kfl--
+-- Steve
