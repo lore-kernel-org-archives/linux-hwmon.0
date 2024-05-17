@@ -1,150 +1,107 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B50213E028;
-	Fri, 17 May 2024 17:36:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BFA513DDBA;
+	Fri, 17 May 2024 17:39:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715967401; cv=none; b=VGD+W1XxUso2VlvuOvz4lxOKEOG1+CgMdYH21RRFwrGzncpE6uX2rvfoTeeEHPH29OY+v7d//yMlX7Zpm1LmdWg/0Q0Ow6NTNHQM5w2kDcyPbB/vgn1f05c54oSM9ndNq8DwMOIyRgbeC12qwPOBes4JNFpurb5I1nclEbQAOg4=
+	t=1715967561; cv=none; b=oreC4Lh5U28y1CCugDjwRAVx2yQedye3dA3fQalD5NT6CPgXWPCTA5jLybhQBi6ayzMq4snzWLTsL/AFvaCyARSqvHCazyYAsrlwWrCOtEC8zwG5lapIHsXVh+wM80BB/DiiOdvmzVWdD79DauBd1xEaELujDQz9ZIpb9PBTxns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715967401; c=relaxed/simple;
-	bh=l7K75G8hEZf6Nf3Gd+zb5LouEwarRLauIdJPMoFivlA=;
+	s=arc-20240116; t=1715967561; c=relaxed/simple;
+	bh=tQOjsUD1QNNPdmrsBIqeqqeA294m5b+0eJ2vo742SP0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HHDU2a+DAWtPRcmt4C6PNdPbseXKcMelAX2wzvQMYCRqxHPakEdRVvQff3WPguwpodBLpV7fPbdCvZ94NfW0WSvQDuc0Gmbi/M37I2hQcmH6pFp7wlAmn5n+co7hQSDkGkpVMKwa0McBxDQvO/xYNevxFiLG7sf4OWnflrwmeZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=emn3CkST; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=U9xqvbC5EBpD8xzDoavmZ9EPTdEkQ3O+t0Tcpeo5oicDBU8ot5kEnPF8tzfg99ikBwqD7U8pQIbqFMZBD6Tk0EyT0MEFocQKew3H/45PRYm3Qs0A5MohX3G1gGnwGW4SjcgD2LwouvZluSoAHo7yMUQwAXsaqmdT/GRBstIN+1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qgKkClbJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="emn3CkST"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1ee954e0aa6so16680785ad.3;
-        Fri, 17 May 2024 10:36:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715967399; x=1716572199; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rzMfxbAB8QJEcJdIySGROcUOqAKXWq8nqUdcExbi1Zk=;
-        b=emn3CkSTmGwb7Ev6REZ9Z3U3XD4Y+jPjdTTKRrd1xunPWgI+cGM6iP3TELOI5V8ATa
-         VbiGe+xcAirEDS5iorMu2B+VEBPivgYYBJAFyyk/dtcE+BdDAEcBR/OSDeMAia+M02aV
-         JtJr53ZjOlMBaf51DPBBJSXIlVEj8/ta7pTQaBfTGVSwemtnu9tMYnJUuHNl2FkBsWa2
-         RY29x4C0oql3h5xd/BScqyiM9KMAjCxcwhA5cszmGMdkeAyAQyWwOl4SEGtmK+Cfk17e
-         ZUmUwjzXpEuOreMImVvNFBtQTMD0YnZzxGLGWYMvA88gK3n/MpOcCwIl6WzZ4yooz3JS
-         JzXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715967399; x=1716572199;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rzMfxbAB8QJEcJdIySGROcUOqAKXWq8nqUdcExbi1Zk=;
-        b=tRaBInC5CBZVJiTyNhPeAMF0Mv8ZyhDngT/Ke4lsBz6dnWLTVbrxiYmDGKR3474tHa
-         Jw0S2Pd1w9vB5TttyIKUZ3vkElFqN8D82iwb6kL7vCXbWz+ZO+kOgSp2q2lMeYG13wJ3
-         Pd4jLhwNb/5j//D5V0kA6eEHTeRPM+KlHNN2ZXDOKj2sqnyMigDYM3Yyxzog0n99DW50
-         DbdwYUgj+mBGDnl1Wi3MfB/KObA9dlYM5hJ0VYDOGEqfhhsM9xkE6J3r09MMgCufkcSJ
-         MFPDLIL9Qyg8pNl52R6ymP0RQyefKT1UiQ+E7Y0jutAqKo/SZ6YeNcoI1ileC9aAa4W0
-         uyJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUeikZ+5A7mGmqeVlRxUOHe3Z4BVx7A6SdRIJ9KlcdOS9QSNvCDsre7aHGEDTt/hTkAM3qO0uM2xeP+jtEHZh5JsSeK9A/+tFrYQA1Gt+sOL3ewNO6LlYK9y7DD7mpAtqpfD7DjXB75ufvKHVU6kM3a/elOuYDfutBUvo4a9bI4BCb2VDcyzEXzDexUc9t0in/T8C2XOhPKn7wWpdtpjhPEZSUvfBbj5JIuV5SOt4ozapoAEBa6p9eoNzUqVSV+FTR0IAeRERSnOL6XqGk495fk7J/QsGArESB7IkyWGLl2UfJVr+STIxS8eHdJJiLcNAzso4UUQBPch6E8dfNENIPvXxQAsave+ZjX9aqXjIT96Hz/aHminfcbngd99gozkR8JcHcG37i5SZidszxbbVcf9ugBd6iBJBSvP3YPM6hIvwhrKlXpceN2VyhqUDGta0Y2tQ8Y92YBThBW9tUwaEcwpwLLtnkcoENUdMSzNo1PisKVaRS0s0oNoAWHaeTm033idWAzW8Z6AMcGqpdUZef30iZpnny7DOCCRdx6bdPIPfc8m8lwMbo6DXkdKIQnaqlplZsK6CLKNgppIYSJ7U793bTJTH44UOdcWLKNUTDeK1XJMU+un4iEAjTM4sbk5xfiplNYftumz3+FD+ZUcLZWXKJBMvMx7eT5NA18jT46CIW4oBwdkZsngjutYGEYxbL/3oE5mRVrHB1dgdQB0YljgIrh2vfVWMnSdGUfmhbsUn3exZybXMRR9PJNk7TMh60ZKjaGM3YyEgvEgQVWpZ4sxK1fHIUzkaJHi56sH9Vb1HRQuX6pNOHreK/nEi3g6aW7gIA7T1ww4N6bLeNtZRSJMBfQ7RJIfpa4nB66EJI9p+xXnabbY1FucmTW2fAhf83tzqzRTLEML3+RBqx6xPn5uR2l/K2m0V/YFHhfHKN5kNYIOcc0Y+KpHUPL2A==
-X-Gm-Message-State: AOJu0YyVJKJDHI54++5KLrCtRmLug9WO1yHYT9xtbae1yHeJBFY7OAOO
-	4meyTffhXTst2nI7rjVckVaPWZ7pOCdtS8zLnwvw9MCn/zh6jfsS
-X-Google-Smtp-Source: AGHT+IHJ9PZtASiLb9HJkYrHy1DRhdQlVEuKbRr0NYIRv4Tx+av91BIA0wx1gBcIQQlm9sd2COIQnQ==
-X-Received: by 2002:a17:90a:9606:b0:2b9:a299:928e with SMTP id 98e67ed59e1d1-2b9a29994c9mr10436893a91.24.1715967398710;
-        Fri, 17 May 2024 10:36:38 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2b67105666csm15749258a91.8.2024.05.17.10.36.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 May 2024 10:36:38 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 17 May 2024 10:36:37 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
-	Linux trace kernel <linux-trace-kernel@vger.kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
-	linux-block@vger.kernel.org, linux-cxl@vger.kernel.org,
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-	intel-xe@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-	freedreno@lists.freedesktop.org, virtualization@lists.linux.dev,
-	linux-rdma@vger.kernel.org, linux-pm@vger.kernel.org,
-	iommu@lists.linux.dev, linux-tegra@vger.kernel.org,
-	netdev@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
-	ath11k@lists.infradead.org, ath12k@lists.infradead.org,
-	brcm80211@lists.linux.dev, brcm80211-dev-list.pdl@broadcom.com,
-	linux-usb@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-	linux-nfs@vger.kernel.org, ocfs2-devel@lists.linux.dev,
-	linux-cifs@vger.kernel.org, linux-xfs@vger.kernel.org,
-	linux-edac@vger.kernel.org, selinux@vger.kernel.org,
-	linux-btrfs@vger.kernel.org, linux-erofs@lists.ozlabs.org,
-	linux-f2fs-devel@lists.sourceforge.net, linux-hwmon@vger.kernel.org,
-	io-uring@vger.kernel.org, linux-sound@vger.kernel.org,
-	bpf@vger.kernel.org, linux-wpan@vger.kernel.org,
-	dev@openvswitch.org, linux-s390@vger.kernel.org,
-	tipc-discussion@lists.sourceforge.net,
-	Julia Lawall <Julia.Lawall@inria.fr>
-Subject: Re: [PATCH] tracing/treewide: Remove second parameter of
- __assign_str()
-Message-ID: <5080f4c5-e0b3-4c2e-9732-f673d7e6ca66@roeck-us.net>
-References: <20240516133454.681ba6a0@rorschach.local.home>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qgKkClbJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFD9DC2BD10;
+	Fri, 17 May 2024 17:39:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715967560;
+	bh=tQOjsUD1QNNPdmrsBIqeqqeA294m5b+0eJ2vo742SP0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qgKkClbJGWKrWh9OKsOPKK3kboH6boQ1WyzS99x6s6Ag1ExaUi5cTlR1KsA/SJRX7
+	 RkQgHw7E5mxTui9FG/Q3Air3GRYzVuAl29hahZXYsFfI0mczO++A2577yDqZp+HTv2
+	 qwGaPLfTJKijYjZpbNzZDykfJS0e/ZgwX/3tvDbIBPC/W6tTRd/b1lwdMVb7/FgIGx
+	 tL5AMkdOCVgatLR1QIl3EAe4BuV/XypFXfPVKRP5fFt/xd+yRWyU1iggVdLZ2oI8nY
+	 EMeOKBkIodjzVvhD4Lmqp+HqpI/Mj8yACd63tppRo5aFiMqhon7uSWu4biZviK1LE1
+	 KItkRwvJXMqeQ==
+Date: Fri, 17 May 2024 18:39:16 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	"jdelvare@suse.com" <jdelvare@suse.com>,
+	"robh@kernel.org" <robh@kernel.org>,
+	"krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>,
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Document adt7475 PWM initial
+ duty cycle
+Message-ID: <20240517-recognize-broaden-43ba03c9f78c@spud>
+References: <20240508215504.300580-1-chris.packham@alliedtelesis.co.nz>
+ <20240508215504.300580-2-chris.packham@alliedtelesis.co.nz>
+ <fe5b3af9-b307-45e1-b190-ba2b3327a8df@kernel.org>
+ <d11093bb-230b-4918-a8cd-4f4eb760ccf3@alliedtelesis.co.nz>
+ <94c843e2-4415-4786-bfd4-a77fdbbfab07@roeck-us.net>
+ <35361786-ef5f-4d81-83e8-e347f47c83ed@alliedtelesis.co.nz>
+ <df40a387-37db-4a4d-b43f-ae22905789b5@roeck-us.net>
+ <58fb36f5-4d4b-495b-a7cd-6129ab1ed454@alliedtelesis.co.nz>
+ <20240517-pointer-cloning-3889f3d6f744@spud>
+ <20240517-pellet-visa-a2d469dc5f34@spud>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="fU8lYHpRVmPB+Kfl"
+Content-Disposition: inline
+In-Reply-To: <20240517-pellet-visa-a2d469dc5f34@spud>
+
+
+--fU8lYHpRVmPB+Kfl
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240516133454.681ba6a0@rorschach.local.home>
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 16, 2024 at 01:34:54PM -0400, Steven Rostedt wrote:
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> 
-> [
->    This is a treewide change. I will likely re-create this patch again in
->    the second week of the merge window of v6.10 and submit it then. Hoping
->    to keep the conflicts that it will cause to a minimum.
-> ]
-> 
-> With the rework of how the __string() handles dynamic strings where it
-> saves off the source string in field in the helper structure[1], the
-> assignment of that value to the trace event field is stored in the helper
-> value and does not need to be passed in again.
-> 
-> This means that with:
-> 
->   __string(field, mystring)
-> 
-> Which use to be assigned with __assign_str(field, mystring), no longer
-> needs the second parameter and it is unused. With this, __assign_str()
-> will now only get a single parameter.
-> 
-> There's over 700 users of __assign_str() and because coccinelle does not
-> handle the TRACE_EVENT() macro I ended up using the following sed script:
-> 
->   git grep -l __assign_str | while read a ; do
->       sed -e 's/\(__assign_str([^,]*[^ ,]\) *,[^;]*/\1)/' $a > /tmp/test-file;
->       mv /tmp/test-file $a;
->   done
-> 
-> I then searched for __assign_str() that did not end with ';' as those
-> were multi line assignments that the sed script above would fail to catch.
-> 
+On Fri, May 17, 2024 at 06:02:33PM +0100, Conor Dooley wrote:
+> On Fri, May 17, 2024 at 06:00:06PM +0100, Conor Dooley wrote:
+> > > On that point. How would I explain in the bindings that cell 2 is the=
+=20
+> > > duty cycle, cell 3 is the frequency and cell 4 is the flags?
+> >=20
+> > In the pwm-cells property in the pwm provider binding . You might want =
+to
+> > order it as <index freq flags duty> as usually that's the ordering done
+> > in most (all?) pwm provider bindings that I have seen.
+> > The pwm bindings I think are really unhelpful though - they all say "see
+> > pwm.yaml for info on the cells in #pwm-cells, but then pwm.yaml has no
+> > information. The information is actually in pwm.text, but the binding
+> > conversion did s/pwm.text/pwm.yaml/ in pwm controller bindings.
+> > I'll send a patch that fixes up pwm.yaml.
+>=20
+> Possibly cell 4 should be standardised as the period for all pwm
+> providers and then all you'd have to do for your provider is set
+> #pwm-cells:
+>   minItems: 4
 
-Building csky:allmodconfig (and others) ... failed
---------------
-Error log:
-In file included from include/trace/trace_events.h:419,
-                 from include/trace/define_trace.h:102,
-                 from drivers/cxl/core/trace.h:737,
-                 from drivers/cxl/core/trace.c:8:
-drivers/cxl/core/./trace.h:383:1: error: macro "__assign_str" passed 2 arguments, but takes just 1
+`const: 4`, d'oh.
 
-This is with the patch applied on top of v6.9-8410-gff2632d7d08e.
-So far that seems to be the only build failure.
-Introduced with commit 6aec00139d3a8 ("cxl/core: Add region info to
-cxl_general_media and cxl_dram events"). Guess we'll see more of those
-towards the end of the commit window.
 
-Guenter
+
+--fU8lYHpRVmPB+Kfl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZkeWRAAKCRB4tDGHoIJi
+0s0VAQDSqIpwkV+XgvuoKwnRFDEwmwN4obNBWez9Gf8X0VfxpQD/cNJjz8iKe1Cx
+EBjxNXyPjLRZyHdRPUETZZRnFhkObg4=
+=GLZn
+-----END PGP SIGNATURE-----
+
+--fU8lYHpRVmPB+Kfl--
