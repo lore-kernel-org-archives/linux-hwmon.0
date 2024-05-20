@@ -1,175 +1,169 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E46C71E878;
-	Mon, 20 May 2024 19:41:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C261168BD
+	for <linux-hwmon@vger.kernel.org>; Mon, 20 May 2024 20:55:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716234096; cv=none; b=JDgIjsIJtURyzH7Yb8tniFsVvqcdVoWYAxKp2Tm4VmtFgJMOJQEtAm5ZHGu+wpJV+zDYT6w5Ci1RxlPB/bks+ZnAS6oba9BLXP7I6YmCmkqq/9JyBoDTmqai1F+Ipp8m4gpoIj+LTCiHn22OjQDDkeDfDJvFsqQKAeMi3g+ZFH0=
+	t=1716238535; cv=none; b=pXGlFrJ3kyo+gDeeoQE5TryHdiysvFWTEiZji8H3vAEvP/VaImuYIqTdyb2Y/2ynfxFWYTi3lkSyPzUlaJIt/ABmslruRvrcT3RFqCBwF1JOqEWJMmkJDmLbhBV9g5mRqWiLNdrWw/hjnqvUPkbvzAegmNtKlSWfQ3TgWlrCU30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716234096; c=relaxed/simple;
-	bh=ad/ng2ZfVJZUt5PIHKSAUXGS1BayQ+Hcf7vtMyIKGJY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lX7NQloFx4VpAvCN4amnm3hh4McwgGAhYlhDoPXjIYjrzCH7JfG6EnjJn8ZM9qanZzZRFxioMlVa7qzztKATJ/ucW12NiN5UEJS1vCiJLR/x0Pa2eYNMUfsBeR8npIdPnCVxiY4WdQGvo8OIGaB/OZ39PMrFKtHJTSGFCH+LIHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JLA5TykB; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1716238535; c=relaxed/simple;
+	bh=FY1p/wmrA6kcXFiHpWFc6CtUYphIKLuifGfTMZ7SkxI=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=YiH16uLeZxTaBOm7NkA4XPMHWUjupBDHujO0P9xeiKLjyr0e5rSKsaqXdwbriKxd8zNNsPzAX4fgEZxeSJ1Owgnwd7Ld89+czizCON5maMzIivTvmoa49rtmN7PU2TAg9Zd0Ytv7dvIeYEoZQWpGI+VEJFlyRT2OS/fY3I7qwUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=x3QCy2/4; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JLA5TykB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E6E2C2BD10;
-	Mon, 20 May 2024 19:41:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716234095;
-	bh=ad/ng2ZfVJZUt5PIHKSAUXGS1BayQ+Hcf7vtMyIKGJY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JLA5TykBP9W7YuF4TUzV+f0T4WKzyYSwK65imF+k9wOT6AMlZmS9DqIHOJvCKREQL
-	 h54VCE50/Ljzd6xwdttjXVd7A/KlLAK/pVlCWkLCenAxGuSQdo4bxuHWqb9EMDhnmu
-	 L72ztfunxdQiF3ueYTWUSWDP6mtN1GHpOC2xX0mYE4OmEEIlkoeSCfHM3w1dbrLT/G
-	 vz5y8fXIGRmVnblqmCIDJWSUqaVGb0NH8vOyzLdIEKNJIECVa9aOuIFYKLTMt9j2DP
-	 9JRjUI0a2y28vCNTI9EFV40XErzS0L7EGfnomRUcAyQPYWYqe6E36yR0ltBvdiuEyS
-	 rVWLPkz3G2xyQ==
-Date: Mon, 20 May 2024 20:41:31 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>, jdelvare@suse.com,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	ukleinek@kernel.org, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pwm@vger.kernel.org
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="x3QCy2/4"
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 65D442C0F83;
+	Tue, 21 May 2024 08:55:28 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1716238528;
+	bh=FY1p/wmrA6kcXFiHpWFc6CtUYphIKLuifGfTMZ7SkxI=;
+	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+	b=x3QCy2/45BafBKzc35MME6kUiCmCNoPGtoAW/t7YZ+AW1C730cLnvove8ARTIueZO
+	 8A3ngtYAa5KTLH6/I60Sl+jw0gFElbQzUMh41BWV/b7uvG2FaeFu8xt1eQ/jIE7PsS
+	 p6sWZzG93TekjedeSN9VvmaaqxGP6sQZGNDYZDfJqfY0mjSEg7e8R63cZ6COzhV/6f
+	 H8qdC5HGlNHKe98oTmcoMcis6KHjaCUCEe3WM7RFwQ77qKUi+iAdA2BjfccP+54s6v
+	 8QVkffbJJKvirZgOQ89HBWE14AvXHRf/vyLBGgFMnzxi56NRb5rJWV3qWgRItLqZ+W
+	 dRzXez6EA8QyA==
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B664bb8c00001>; Tue, 21 May 2024 08:55:28 +1200
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Tue, 21 May 2024 08:55:28 +1200
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1544.011; Tue, 21 May 2024 08:55:28 +1200
+From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To: Conor Dooley <conor@kernel.org>, Guenter Roeck <linux@roeck-us.net>
+CC: "jdelvare@suse.com" <jdelvare@suse.com>, "robh@kernel.org"
+	<robh@kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>, "ukleinek@kernel.org"
+	<ukleinek@kernel.org>, "linux-hwmon@vger.kernel.org"
+	<linux-hwmon@vger.kernel.org>, "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-pwm@vger.kernel.org"
+	<linux-pwm@vger.kernel.org>
 Subject: Re: [PATCH v3 1/3] dt-bindings: hwmon: Add adt7475 fan/pwm properties
-Message-ID: <20240520-badly-islamist-dcae9fe1303b@spud>
+Thread-Topic: [PATCH v3 1/3] dt-bindings: hwmon: Add adt7475 fan/pwm
+ properties
+Thread-Index: AQHaqmJINjerzqQHjU+Bh4jVLB5aBbGfjXmAgAAldACAAAqRgIAAFKiA
+Date: Mon, 20 May 2024 20:55:27 +0000
+Message-ID: <4de798f3-069e-4028-a5b5-5e6a639277e3@alliedtelesis.co.nz>
 References: <20240520030321.3756604-1-chris.packham@alliedtelesis.co.nz>
  <20240520030321.3756604-2-chris.packham@alliedtelesis.co.nz>
  <20240520-pendant-charity-a66a8d738690@spud>
  <62c3c546-5172-4417-a15a-d13419d42be3@roeck-us.net>
+ <20240520-badly-islamist-dcae9fe1303b@spud>
+In-Reply-To: <20240520-badly-islamist-dcae9fe1303b@spud>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <BCDFF3CED3C3E240AAD9211B102C9705@atlnz.lc>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="EwebWdOmCCvPoTdW"
-Content-Disposition: inline
-In-Reply-To: <62c3c546-5172-4417-a15a-d13419d42be3@roeck-us.net>
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=F9L0dbhN c=1 sm=1 tr=0 ts=664bb8c0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=TpHVaj0NuXgA:10 a=Db2xuwfgTYU1MdicWjYA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
 
-
---EwebWdOmCCvPoTdW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, May 20, 2024 at 12:03:42PM -0700, Guenter Roeck wrote:
-> On 5/20/24 09:49, Conor Dooley wrote:
-> > On Mon, May 20, 2024 at 03:03:19PM +1200, Chris Packham wrote:
-> > > Add fan child nodes that allow describing the connections for the
-> > > ADT7475 to the fans it controls. This also allows setting some
-> > > initial values for the pwm duty cycle and frequency.
-> > >=20
-> > > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> > > ---
-> > >=20
-> > > Notes:
-> > >      Changes in v3:
-> > >      - Use the pwm provider/consumer bindings
-> > >      Changes in v2:
-> > >      - Document 0 as a valid value (leaves hardware as-is)
-> > >=20
-> > >   .../devicetree/bindings/hwmon/adt7475.yaml    | 25 ++++++++++++++++=
-++-
-> > >   1 file changed, 24 insertions(+), 1 deletion(-)
-> > >=20
-> > > diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.yaml b/D=
-ocumentation/devicetree/bindings/hwmon/adt7475.yaml
-> > > index 051c976ab711..99bd689ae0cd 100644
-> > > --- a/Documentation/devicetree/bindings/hwmon/adt7475.yaml
-> > > +++ b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
-> > > @@ -51,6 +51,15 @@ properties:
-> > >         enum: [0, 1]
-> > >         default: 1
-> > > +  "#pwm-cells":
-> > > +    const: 4
-> > > +    description: |
-> > > +      Number of cells in a PWM specifier.
-> > > +      - 0: The pwm channel
-> > > +      - 1: The pwm frequency in hertz - 0, 11, 14, 22, 29, 35, 44, 5=
-8, 88, 22500
-> >=20
-> > The standard binding is period in nanoseconds, not frequency in Hz.
-> > What's gained from deviating from that?
-> >=20
->=20
-> I'd strongly suspect that Chris didn't know and didn't expect it,
-> just like me.
-
-I did point out on v2 that the information on the standard binding was
-in pwm.txt, but I also said "order it has <index freq flags duty>" which
-likely didn't help. I did however CC you both on a patch the other day
-where I fixed pwm.yaml so that it actually contained the information on
-what the cells represented.
-> > > +      - 2: PWM flags 0 or PWM_POLARITY_INVERTED
-> > > +      - 3: The default pwm duty cycle - 0-255
-> >=20
-> > Same here I guess, why not match the units used for the period for the
-> > duty cycle?
-> >=20
->=20
-> Same here. I am used to pwm frequency in Hz and duty cycle as percentage.
-> Using the period instead is somewhat unusual, and I must admit that I
-> have never encountered it while dealing with a variety of fan controllers.
-
-If it is what makes sense to use, because it's what everyone and their
-mother documents, then sure. My rationale I suppose was threefold:
-- Consistency with the period
-- Time would be more portable between providers, if 8 bits of precision
-  is deemed insufficient for some providers.
-- Last & least, the PWM APIs in the kernel use time for the dutycycle
-
-If you're going to use percentages rather than time, would it not
-make more sense to either use percent itself with a 0-100 range or use
-basis points if percent doesn't provide sufficient granularity?
-
-I think it'd be good of Uwe chimed in, given we're discussing a PWM
-provider binding after all.
-
-> Just to make sure I understand this correctly - duty cycles would
-
-s/duty cycles/periods/
-
-> be (rounded):
->=20
-> Hz	ns
-> 11	90,909,091
-> 14	71,428,571
-> 22	45,454,545
-> 29:	34,482,759
-> 35:	28,571,429
-> 44:	22,727,273
-> 58:	17,241,379
-> 88:	11,363,636
-> 22500	44,444
->=20
-> Examples for duty cycles would be
->=20
-> 20%: 0,2s or 200,000,000
-> 50%: 0.5s or 500,000,000
-> 80%: 0.8s or 800,000,000
->=20
-> Is that correct ?
-
-Assuming a 1 second period, those look as expected.
-
-Cheers,
-Conor.
-
-
---EwebWdOmCCvPoTdW
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZkunawAKCRB4tDGHoIJi
-0teKAP9QTzAM4I9Knk/VlftfV7eyBojkQ7JhiscMPJjToa6SRwEAhBt2VrLVWnNN
-mXPi0eWlRwYyQS6o04gwdQPgcfbFjgE=
-=Mg3Z
------END PGP SIGNATURE-----
-
---EwebWdOmCCvPoTdW--
+DQpPbiAyMS8wNS8yNCAwNzo0MSwgQ29ub3IgRG9vbGV5IHdyb3RlOg0KPiBPbiBNb24sIE1heSAy
+MCwgMjAyNCBhdCAxMjowMzo0MlBNIC0wNzAwLCBHdWVudGVyIFJvZWNrIHdyb3RlOg0KPj4gT24g
+NS8yMC8yNCAwOTo0OSwgQ29ub3IgRG9vbGV5IHdyb3RlOg0KPj4+IE9uIE1vbiwgTWF5IDIwLCAy
+MDI0IGF0IDAzOjAzOjE5UE0gKzEyMDAsIENocmlzIFBhY2toYW0gd3JvdGU6DQo+Pj4+IEFkZCBm
+YW4gY2hpbGQgbm9kZXMgdGhhdCBhbGxvdyBkZXNjcmliaW5nIHRoZSBjb25uZWN0aW9ucyBmb3Ig
+dGhlDQo+Pj4+IEFEVDc0NzUgdG8gdGhlIGZhbnMgaXQgY29udHJvbHMuIFRoaXMgYWxzbyBhbGxv
+d3Mgc2V0dGluZyBzb21lDQo+Pj4+IGluaXRpYWwgdmFsdWVzIGZvciB0aGUgcHdtIGR1dHkgY3lj
+bGUgYW5kIGZyZXF1ZW5jeS4NCj4+Pj4NCj4+Pj4gU2lnbmVkLW9mZi1ieTogQ2hyaXMgUGFja2hh
+bSA8Y2hyaXMucGFja2hhbUBhbGxpZWR0ZWxlc2lzLmNvLm56Pg0KPj4+PiAtLS0NCj4+Pj4NCj4+
+Pj4gTm90ZXM6DQo+Pj4+ICAgICAgIENoYW5nZXMgaW4gdjM6DQo+Pj4+ICAgICAgIC0gVXNlIHRo
+ZSBwd20gcHJvdmlkZXIvY29uc3VtZXIgYmluZGluZ3MNCj4+Pj4gICAgICAgQ2hhbmdlcyBpbiB2
+MjoNCj4+Pj4gICAgICAgLSBEb2N1bWVudCAwIGFzIGEgdmFsaWQgdmFsdWUgKGxlYXZlcyBoYXJk
+d2FyZSBhcy1pcykNCj4+Pj4NCj4+Pj4gICAgLi4uL2RldmljZXRyZWUvYmluZGluZ3MvaHdtb24v
+YWR0NzQ3NS55YW1sICAgIHwgMjUgKysrKysrKysrKysrKysrKysrLQ0KPj4+PiAgICAxIGZpbGUg
+Y2hhbmdlZCwgMjQgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPj4+Pg0KPj4+PiBkaWZm
+IC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2h3bW9uL2FkdDc0NzUu
+eWFtbCBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9od21vbi9hZHQ3NDc1Lnlh
+bWwNCj4+Pj4gaW5kZXggMDUxYzk3NmFiNzExLi45OWJkNjg5YWUwY2QgMTAwNjQ0DQo+Pj4+IC0t
+LSBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9od21vbi9hZHQ3NDc1LnlhbWwN
+Cj4+Pj4gKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2h3bW9uL2FkdDc0
+NzUueWFtbA0KPj4+PiBAQCAtNTEsNiArNTEsMTUgQEAgcHJvcGVydGllczoNCj4+Pj4gICAgICAg
+ICAgZW51bTogWzAsIDFdDQo+Pj4+ICAgICAgICAgIGRlZmF1bHQ6IDENCj4+Pj4gKyAgIiNwd20t
+Y2VsbHMiOg0KPj4+PiArICAgIGNvbnN0OiA0DQo+Pj4+ICsgICAgZGVzY3JpcHRpb246IHwNCj4+
+Pj4gKyAgICAgIE51bWJlciBvZiBjZWxscyBpbiBhIFBXTSBzcGVjaWZpZXIuDQo+Pj4+ICsgICAg
+ICAtIDA6IFRoZSBwd20gY2hhbm5lbA0KPj4+PiArICAgICAgLSAxOiBUaGUgcHdtIGZyZXF1ZW5j
+eSBpbiBoZXJ0eiAtIDAsIDExLCAxNCwgMjIsIDI5LCAzNSwgNDQsIDU4LCA4OCwgMjI1MDANCj4+
+PiBUaGUgc3RhbmRhcmQgYmluZGluZyBpcyBwZXJpb2QgaW4gbmFub3NlY29uZHMsIG5vdCBmcmVx
+dWVuY3kgaW4gSHouDQo+Pj4gV2hhdCdzIGdhaW5lZCBmcm9tIGRldmlhdGluZyBmcm9tIHRoYXQ/
+DQo+Pj4NCj4+IEknZCBzdHJvbmdseSBzdXNwZWN0IHRoYXQgQ2hyaXMgZGlkbid0IGtub3cgYW5k
+IGRpZG4ndCBleHBlY3QgaXQsDQo+PiBqdXN0IGxpa2UgbWUuDQo+IEkgZGlkIHBvaW50IG91dCBv
+biB2MiB0aGF0IHRoZSBpbmZvcm1hdGlvbiBvbiB0aGUgc3RhbmRhcmQgYmluZGluZyB3YXMNCj4g
+aW4gcHdtLnR4dCwgYnV0IEkgYWxzbyBzYWlkICJvcmRlciBpdCBoYXMgPGluZGV4IGZyZXEgZmxh
+Z3MgZHV0eT4iIHdoaWNoDQo+IGxpa2VseSBkaWRuJ3QgaGVscC4gSSBkaWQgaG93ZXZlciBDQyB5
+b3UgYm90aCBvbiBhIHBhdGNoIHRoZSBvdGhlciBkYXkNCj4gd2hlcmUgSSBmaXhlZCBwd20ueWFt
+bCBzbyB0aGF0IGl0IGFjdHVhbGx5IGNvbnRhaW5lZCB0aGUgaW5mb3JtYXRpb24gb24NCj4gd2hh
+dCB0aGUgY2VsbHMgcmVwcmVzZW50ZWQuDQoNCkkgZGlkIHNlZSB0aGF0IHBhdGNoIHRoYW5rcy4g
+QW5kIEkgZGlkIGFkanVzdCB0aGUgb3JkZXIgb2YgdGhlIA0KcGFyYW1ldGVycyBJIGhhZCBiYXNl
+ZCBvbiBpdC4NCg0KSSBwZXJzb25hbGx5IGZvdW5kIGV4cHJlc3NpbmcgdGhlIGZyZXF1ZW5jeSBp
+biBzZWNvbmRzIGNvbmZ1c2luZyB3aGljaCANCnRoZSBpcyBtYWluIHJlYXNvbiB3aHkgSSBzdHVj
+ayB3aXRoIGhlcnR6LiBJIGFsc28gY291bGRuJ3QgZ3JvayBob3cgdG8gDQpleHByZXNzIHRoZSBk
+dXR5IGN5Y2xlIGlmIEkgZGlkIGV4cHJlc3MgdGhlIGZyZXF1ZW5jeSBpbiBuYW5vc2Vjb25kcy4g
+SSANCnRoaW5rIG1heWJlIEknbSBhIGJpdCBjb25mdXNlZCBhcyB0byBob3cgdG8gZXhwcmVzcyBh
+IGdlbmVyaWMgUFdNIHBlcmlvZCANCndoZW4gdGhlIGNvbnRyb2xsZXIgSSdtIGRlYWxpbmcgd2l0
+aCBoYXMgYSBmcmVxdWVuY3kgYW5kIGEgZHV0eSBjeWNsZS4NCg0KPj4+PiArICAgICAgLSAyOiBQ
+V00gZmxhZ3MgMCBvciBQV01fUE9MQVJJVFlfSU5WRVJURUQNCj4+Pj4gKyAgICAgIC0gMzogVGhl
+IGRlZmF1bHQgcHdtIGR1dHkgY3ljbGUgLSAwLTI1NQ0KPj4+IFNhbWUgaGVyZSBJIGd1ZXNzLCB3
+aHkgbm90IG1hdGNoIHRoZSB1bml0cyB1c2VkIGZvciB0aGUgcGVyaW9kIGZvciB0aGUNCj4+PiBk
+dXR5IGN5Y2xlPw0KPj4+DQo+PiBTYW1lIGhlcmUuIEkgYW0gdXNlZCB0byBwd20gZnJlcXVlbmN5
+IGluIEh6IGFuZCBkdXR5IGN5Y2xlIGFzIHBlcmNlbnRhZ2UuDQo+PiBVc2luZyB0aGUgcGVyaW9k
+IGluc3RlYWQgaXMgc29tZXdoYXQgdW51c3VhbCwgYW5kIEkgbXVzdCBhZG1pdCB0aGF0IEkNCj4+
+IGhhdmUgbmV2ZXIgZW5jb3VudGVyZWQgaXQgd2hpbGUgZGVhbGluZyB3aXRoIGEgdmFyaWV0eSBv
+ZiBmYW4gY29udHJvbGxlcnMuDQpNeSBleHBlY3RhdGlvbiBpcyB0aGF0IGEgZHV0eSBjeWNsZSBp
+cyBhIHBlcmNlbnRhZ2UuIFRoZSBvbmx5IHJlYXNvbiBJJ20gDQp1c2luZyAwLTI1NSBpbnN0ZWFk
+IG9mIDAtMTAwIGlzIGJlY2F1c2UgdGhhdCBtYXRjaGVzIHRoZSBzeXNmcyBBQkkuIEJ1dCANCkkn
+ZCBoYXBwaWx5IGNoYW5nZSB0byBhIHRydWUgcGVyY2VudGFnZSAoaWYgSSBjYW4gZmlndXJlIG91
+dCB0aGUgaW50ZWdlciANCm1hdGgpLCB3ZSdkIGxvc2UgYSBsaXR0bGUgYml0IG9mIHByZWNpc2lv
+biBidXQgbm90aGluZyBhbnlvbmUgd291bGQgDQpyZWFsbHkgbm90aWNlLg0KPiBJZiBpdCBpcyB3
+aGF0IG1ha2VzIHNlbnNlIHRvIHVzZSwgYmVjYXVzZSBpdCdzIHdoYXQgZXZlcnlvbmUgYW5kIHRo
+ZWlyDQo+IG1vdGhlciBkb2N1bWVudHMsIHRoZW4gc3VyZS4gTXkgcmF0aW9uYWxlIEkgc3VwcG9z
+ZSB3YXMgdGhyZWVmb2xkOg0KPiAtIENvbnNpc3RlbmN5IHdpdGggdGhlIHBlcmlvZA0KPiAtIFRp
+bWUgd291bGQgYmUgbW9yZSBwb3J0YWJsZSBiZXR3ZWVuIHByb3ZpZGVycywgaWYgOCBiaXRzIG9m
+IHByZWNpc2lvbg0KPiAgICBpcyBkZWVtZWQgaW5zdWZmaWNpZW50IGZvciBzb21lIHByb3ZpZGVy
+cy4NCj4gLSBMYXN0ICYgbGVhc3QsIHRoZSBQV00gQVBJcyBpbiB0aGUga2VybmVsIHVzZSB0aW1l
+IGZvciB0aGUgZHV0eWN5Y2xlDQo+DQo+IElmIHlvdSdyZSBnb2luZyB0byB1c2UgcGVyY2VudGFn
+ZXMgcmF0aGVyIHRoYW4gdGltZSwgd291bGQgaXQgbm90DQo+IG1ha2UgbW9yZSBzZW5zZSB0byBl
+aXRoZXIgdXNlIHBlcmNlbnQgaXRzZWxmIHdpdGggYSAwLTEwMCByYW5nZSBvciB1c2UNCj4gYmFz
+aXMgcG9pbnRzIGlmIHBlcmNlbnQgZG9lc24ndCBwcm92aWRlIHN1ZmZpY2llbnQgZ3JhbnVsYXJp
+dHk/DQo+DQo+IEkgdGhpbmsgaXQnZCBiZSBnb29kIG9mIFV3ZSBjaGltZWQgaW4sIGdpdmVuIHdl
+J3JlIGRpc2N1c3NpbmcgYSBQV00NCj4gcHJvdmlkZXIgYmluZGluZyBhZnRlciBhbGwuDQoNCkkn
+ZCBhbHNvIHBvaW50IG91dCBJJ20gbW9yZSB0aGFuIGhhcHB5IHRvIGdvIGJhY2sgdG8gbXkgdjIg
+YXBwcm9hY2ggb2YgDQphZGRpbmcgc3BlY2lmaWMgcHJvcGVydGllcyBmb3IgdGhlIGZyZXF1ZW5j
+eSBhbmQgZHV0eSBjeWNsZS4NCg0KPj4gSnVzdCB0byBtYWtlIHN1cmUgSSB1bmRlcnN0YW5kIHRo
+aXMgY29ycmVjdGx5IC0gZHV0eSBjeWNsZXMgd291bGQNCj4gcy9kdXR5IGN5Y2xlcy9wZXJpb2Rz
+Lw0KPg0KPj4gYmUgKHJvdW5kZWQpOg0KPj4NCj4+IEh6CW5zDQo+PiAxMQk5MCw5MDksMDkxDQo+
+PiAxNAk3MSw0MjgsNTcxDQo+PiAyMgk0NSw0NTQsNTQ1DQo+PiAyOToJMzQsNDgyLDc1OQ0KPj4g
+MzU6CTI4LDU3MSw0MjkNCj4+IDQ0OgkyMiw3MjcsMjczDQo+PiA1ODoJMTcsMjQxLDM3OQ0KPj4g
+ODg6CTExLDM2Myw2MzYNCj4+IDIyNTAwCTQ0LDQ0NA0KPj4NCj4+IEV4YW1wbGVzIGZvciBkdXR5
+IGN5Y2xlcyB3b3VsZCBiZQ0KPj4NCj4+IDIwJTogMCwycyBvciAyMDAsMDAwLDAwMA0KPj4gNTAl
+OiAwLjVzIG9yIDUwMCwwMDAsMDAwDQo+PiA4MCU6IDAuOHMgb3IgODAwLDAwMCwwMDANCj4+DQo+
+PiBJcyB0aGF0IGNvcnJlY3QgPw0KPiBBc3N1bWluZyBhIDEgc2Vjb25kIHBlcmlvZCwgdGhvc2Ug
+bG9vayBhcyBleHBlY3RlZC4NCg0KVG8gbWUgdGhhdCBqdXN0IG1ha2VzIHRoaW5ncyBoYXJkZXIg
+dG8gdW5kZXJzdGFuZC4gSWYgeW91IHdlcmUgcmVhZGluZyANCnRoZSBBRFQ3NDc1IGRhdGFzaGVl
+dCB5b3UnZCBzZWUgdGhpbmdzIGxpa2UgdGhlIHN1cHBvcnRlZCBmcmVxdWVuY2llcyBvZiANCjEx
+LCAxNCwgLi4uICwgODgsIDIyNTAwLiBIYXZpbmcgdG8gZXhwcmVzcyB0aGF0IGluIG5hbm9zZWNv
+bmRzIHJlcXVpcmVzIA0KbWFraW5nIGEgYml0IG9mIGEgbGVhcC4gVGhlIGR1dHkgY3ljbGUgcGVy
+Y2VudGFnZSB0byBuYW5vc2Vjb25kcyBpcyBtb3JlIA0Kc3RyYWlnaHQgZm9yd2FyZCBidXQgc2Vl
+bXMgdW5uZWNlc3NhcmlseSBvYnNjdXJlIHRvIG1lLg0KDQo+DQo+IENoZWVycywNCj4gQ29ub3Iu
+DQo+
