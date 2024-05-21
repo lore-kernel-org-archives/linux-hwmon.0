@@ -1,169 +1,102 @@
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C261168BD
-	for <linux-hwmon@vger.kernel.org>; Mon, 20 May 2024 20:55:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A7D377105;
+	Tue, 21 May 2024 18:12:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716238535; cv=none; b=pXGlFrJ3kyo+gDeeoQE5TryHdiysvFWTEiZji8H3vAEvP/VaImuYIqTdyb2Y/2ynfxFWYTi3lkSyPzUlaJIt/ABmslruRvrcT3RFqCBwF1JOqEWJMmkJDmLbhBV9g5mRqWiLNdrWw/hjnqvUPkbvzAegmNtKlSWfQ3TgWlrCU30=
+	t=1716315178; cv=none; b=LpxRu5QWQVL0Ey8m/FI8Uu05hmeE8YR+WbU0ns4OoCW2hxX07TEoQ+M0PlIV48DwcZtSwsgxH9WStEPUPyiR4im8tEpsjbJ+lLYx3Cf+gIDUeozK2QKo/PDmrwZE4JchQl/b7VDcXVthD2F23q+lAinnY/8jNlKgccZf/gtBzvk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716238535; c=relaxed/simple;
-	bh=FY1p/wmrA6kcXFiHpWFc6CtUYphIKLuifGfTMZ7SkxI=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=YiH16uLeZxTaBOm7NkA4XPMHWUjupBDHujO0P9xeiKLjyr0e5rSKsaqXdwbriKxd8zNNsPzAX4fgEZxeSJ1Owgnwd7Ld89+czizCON5maMzIivTvmoa49rtmN7PU2TAg9Zd0Ytv7dvIeYEoZQWpGI+VEJFlyRT2OS/fY3I7qwUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=x3QCy2/4; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+	s=arc-20240116; t=1716315178; c=relaxed/simple;
+	bh=pelV7Lu9uPZxQtnhuXBP31d0jEKwnjwXv+Stp9All08=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WoAb1PqwmcD6Ird2hyGSNlbAwmJqqjqDbttGou9QOCqlopVAfT2s5ZRZUIh2tKntS3BDIYIGb/QWefhfp8eid+syciamDMJBbbPu7x1H7VRxbBrK1UN7vwumJbgBmk8MOX5em45viaEsgp7t5IBiCjYX/kTVR3d94Edw0nbaWwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ek2ZomHX; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="x3QCy2/4"
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 65D442C0F83;
-	Tue, 21 May 2024 08:55:28 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1716238528;
-	bh=FY1p/wmrA6kcXFiHpWFc6CtUYphIKLuifGfTMZ7SkxI=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=x3QCy2/45BafBKzc35MME6kUiCmCNoPGtoAW/t7YZ+AW1C730cLnvove8ARTIueZO
-	 8A3ngtYAa5KTLH6/I60Sl+jw0gFElbQzUMh41BWV/b7uvG2FaeFu8xt1eQ/jIE7PsS
-	 p6sWZzG93TekjedeSN9VvmaaqxGP6sQZGNDYZDfJqfY0mjSEg7e8R63cZ6COzhV/6f
-	 H8qdC5HGlNHKe98oTmcoMcis6KHjaCUCEe3WM7RFwQ77qKUi+iAdA2BjfccP+54s6v
-	 8QVkffbJJKvirZgOQ89HBWE14AvXHRf/vyLBGgFMnzxi56NRb5rJWV3qWgRItLqZ+W
-	 dRzXez6EA8QyA==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B664bb8c00001>; Tue, 21 May 2024 08:55:28 +1200
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Tue, 21 May 2024 08:55:28 +1200
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1544.011; Tue, 21 May 2024 08:55:28 +1200
-From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To: Conor Dooley <conor@kernel.org>, Guenter Roeck <linux@roeck-us.net>
-CC: "jdelvare@suse.com" <jdelvare@suse.com>, "robh@kernel.org"
-	<robh@kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>, "ukleinek@kernel.org"
-	<ukleinek@kernel.org>, "linux-hwmon@vger.kernel.org"
-	<linux-hwmon@vger.kernel.org>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-pwm@vger.kernel.org"
-	<linux-pwm@vger.kernel.org>
-Subject: Re: [PATCH v3 1/3] dt-bindings: hwmon: Add adt7475 fan/pwm properties
-Thread-Topic: [PATCH v3 1/3] dt-bindings: hwmon: Add adt7475 fan/pwm
- properties
-Thread-Index: AQHaqmJINjerzqQHjU+Bh4jVLB5aBbGfjXmAgAAldACAAAqRgIAAFKiA
-Date: Mon, 20 May 2024 20:55:27 +0000
-Message-ID: <4de798f3-069e-4028-a5b5-5e6a639277e3@alliedtelesis.co.nz>
-References: <20240520030321.3756604-1-chris.packham@alliedtelesis.co.nz>
- <20240520030321.3756604-2-chris.packham@alliedtelesis.co.nz>
- <20240520-pendant-charity-a66a8d738690@spud>
- <62c3c546-5172-4417-a15a-d13419d42be3@roeck-us.net>
- <20240520-badly-islamist-dcae9fe1303b@spud>
-In-Reply-To: <20240520-badly-islamist-dcae9fe1303b@spud>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <BCDFF3CED3C3E240AAD9211B102C9705@atlnz.lc>
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ek2ZomHX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1716315177; x=1747851177;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=pelV7Lu9uPZxQtnhuXBP31d0jEKwnjwXv+Stp9All08=;
+  b=Ek2ZomHXvYtcUPl8jXl1WK3u/NHE12+Ct2NnBmShocrfSlpRIFgFL/E9
+   C6pFr+dd8OlSCHqKc0OnZZ4UhynMufqaPLv2/4/pu3Dv/7fn3B4pyGMfz
+   zxCiir2bE0s28dOTZRvUgxLVWf55851mv5mIkVgKl7bqQbHFLVt+DWISe
+   4ndYE0zJfAzV3WwSzcpQ3F3KQHJejEqXnAh+YZEizDwz9oCK+VAHRMZCd
+   4U9D9NrUPiMOQV2kHNlbgGnbhNqPv03jg9Q1j+r/05OFkHl88VcnD2N53
+   D4PrLwbvU3y5IUsVbZjBJTkMF46WfuxQxGa4x4kDBjOwuWbUMQ2AEb1sp
+   w==;
+X-CSE-ConnectionGUID: U0cK0063SwGpNFSz4x2SOg==
+X-CSE-MsgGUID: BAa8VR1RQm6mNW9qTD6FWA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11079"; a="12375745"
+X-IronPort-AV: E=Sophos;i="6.08,178,1712646000"; 
+   d="scan'208";a="12375745"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2024 11:12:56 -0700
+X-CSE-ConnectionGUID: k+m1RDf5RDSLbVSljkxK8g==
+X-CSE-MsgGUID: WiGwd8xFStqD93llk02bFw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,178,1712646000"; 
+   d="scan'208";a="70423956"
+Received: from sj-4150-psse-sw-opae-dev3.sj.intel.com ([10.233.115.74])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2024 11:12:55 -0700
+From: Peter Colberg <peter.colberg@intel.com>
+To: Xu Yilun <yilun.xu@intel.com>,
+	Tom Rix <trix@redhat.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Tianfei zhang <tianfei.zhang@intel.com>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Russ Weight <russ.weight@linux.dev>,
+	Marco Pagani <marpagan@redhat.com>,
+	Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+	Peter Colberg <peter.colberg@intel.com>
+Subject: [PATCH] hwmon: intel-m10-bmc-hwmon: fix multiplier for N6000 board power sensor
+Date: Tue, 21 May 2024 14:12:46 -0400
+Message-ID: <20240521181246.683833-1-peter.colberg@intel.com>
+X-Mailer: git-send-email 2.45.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=F9L0dbhN c=1 sm=1 tr=0 ts=664bb8c0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=TpHVaj0NuXgA:10 a=Db2xuwfgTYU1MdicWjYA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
+Content-Transfer-Encoding: 8bit
 
-DQpPbiAyMS8wNS8yNCAwNzo0MSwgQ29ub3IgRG9vbGV5IHdyb3RlOg0KPiBPbiBNb24sIE1heSAy
-MCwgMjAyNCBhdCAxMjowMzo0MlBNIC0wNzAwLCBHdWVudGVyIFJvZWNrIHdyb3RlOg0KPj4gT24g
-NS8yMC8yNCAwOTo0OSwgQ29ub3IgRG9vbGV5IHdyb3RlOg0KPj4+IE9uIE1vbiwgTWF5IDIwLCAy
-MDI0IGF0IDAzOjAzOjE5UE0gKzEyMDAsIENocmlzIFBhY2toYW0gd3JvdGU6DQo+Pj4+IEFkZCBm
-YW4gY2hpbGQgbm9kZXMgdGhhdCBhbGxvdyBkZXNjcmliaW5nIHRoZSBjb25uZWN0aW9ucyBmb3Ig
-dGhlDQo+Pj4+IEFEVDc0NzUgdG8gdGhlIGZhbnMgaXQgY29udHJvbHMuIFRoaXMgYWxzbyBhbGxv
-d3Mgc2V0dGluZyBzb21lDQo+Pj4+IGluaXRpYWwgdmFsdWVzIGZvciB0aGUgcHdtIGR1dHkgY3lj
-bGUgYW5kIGZyZXF1ZW5jeS4NCj4+Pj4NCj4+Pj4gU2lnbmVkLW9mZi1ieTogQ2hyaXMgUGFja2hh
-bSA8Y2hyaXMucGFja2hhbUBhbGxpZWR0ZWxlc2lzLmNvLm56Pg0KPj4+PiAtLS0NCj4+Pj4NCj4+
-Pj4gTm90ZXM6DQo+Pj4+ICAgICAgIENoYW5nZXMgaW4gdjM6DQo+Pj4+ICAgICAgIC0gVXNlIHRo
-ZSBwd20gcHJvdmlkZXIvY29uc3VtZXIgYmluZGluZ3MNCj4+Pj4gICAgICAgQ2hhbmdlcyBpbiB2
-MjoNCj4+Pj4gICAgICAgLSBEb2N1bWVudCAwIGFzIGEgdmFsaWQgdmFsdWUgKGxlYXZlcyBoYXJk
-d2FyZSBhcy1pcykNCj4+Pj4NCj4+Pj4gICAgLi4uL2RldmljZXRyZWUvYmluZGluZ3MvaHdtb24v
-YWR0NzQ3NS55YW1sICAgIHwgMjUgKysrKysrKysrKysrKysrKysrLQ0KPj4+PiAgICAxIGZpbGUg
-Y2hhbmdlZCwgMjQgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPj4+Pg0KPj4+PiBkaWZm
-IC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2h3bW9uL2FkdDc0NzUu
-eWFtbCBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9od21vbi9hZHQ3NDc1Lnlh
-bWwNCj4+Pj4gaW5kZXggMDUxYzk3NmFiNzExLi45OWJkNjg5YWUwY2QgMTAwNjQ0DQo+Pj4+IC0t
-LSBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9od21vbi9hZHQ3NDc1LnlhbWwN
-Cj4+Pj4gKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2h3bW9uL2FkdDc0
-NzUueWFtbA0KPj4+PiBAQCAtNTEsNiArNTEsMTUgQEAgcHJvcGVydGllczoNCj4+Pj4gICAgICAg
-ICAgZW51bTogWzAsIDFdDQo+Pj4+ICAgICAgICAgIGRlZmF1bHQ6IDENCj4+Pj4gKyAgIiNwd20t
-Y2VsbHMiOg0KPj4+PiArICAgIGNvbnN0OiA0DQo+Pj4+ICsgICAgZGVzY3JpcHRpb246IHwNCj4+
-Pj4gKyAgICAgIE51bWJlciBvZiBjZWxscyBpbiBhIFBXTSBzcGVjaWZpZXIuDQo+Pj4+ICsgICAg
-ICAtIDA6IFRoZSBwd20gY2hhbm5lbA0KPj4+PiArICAgICAgLSAxOiBUaGUgcHdtIGZyZXF1ZW5j
-eSBpbiBoZXJ0eiAtIDAsIDExLCAxNCwgMjIsIDI5LCAzNSwgNDQsIDU4LCA4OCwgMjI1MDANCj4+
-PiBUaGUgc3RhbmRhcmQgYmluZGluZyBpcyBwZXJpb2QgaW4gbmFub3NlY29uZHMsIG5vdCBmcmVx
-dWVuY3kgaW4gSHouDQo+Pj4gV2hhdCdzIGdhaW5lZCBmcm9tIGRldmlhdGluZyBmcm9tIHRoYXQ/
-DQo+Pj4NCj4+IEknZCBzdHJvbmdseSBzdXNwZWN0IHRoYXQgQ2hyaXMgZGlkbid0IGtub3cgYW5k
-IGRpZG4ndCBleHBlY3QgaXQsDQo+PiBqdXN0IGxpa2UgbWUuDQo+IEkgZGlkIHBvaW50IG91dCBv
-biB2MiB0aGF0IHRoZSBpbmZvcm1hdGlvbiBvbiB0aGUgc3RhbmRhcmQgYmluZGluZyB3YXMNCj4g
-aW4gcHdtLnR4dCwgYnV0IEkgYWxzbyBzYWlkICJvcmRlciBpdCBoYXMgPGluZGV4IGZyZXEgZmxh
-Z3MgZHV0eT4iIHdoaWNoDQo+IGxpa2VseSBkaWRuJ3QgaGVscC4gSSBkaWQgaG93ZXZlciBDQyB5
-b3UgYm90aCBvbiBhIHBhdGNoIHRoZSBvdGhlciBkYXkNCj4gd2hlcmUgSSBmaXhlZCBwd20ueWFt
-bCBzbyB0aGF0IGl0IGFjdHVhbGx5IGNvbnRhaW5lZCB0aGUgaW5mb3JtYXRpb24gb24NCj4gd2hh
-dCB0aGUgY2VsbHMgcmVwcmVzZW50ZWQuDQoNCkkgZGlkIHNlZSB0aGF0IHBhdGNoIHRoYW5rcy4g
-QW5kIEkgZGlkIGFkanVzdCB0aGUgb3JkZXIgb2YgdGhlIA0KcGFyYW1ldGVycyBJIGhhZCBiYXNl
-ZCBvbiBpdC4NCg0KSSBwZXJzb25hbGx5IGZvdW5kIGV4cHJlc3NpbmcgdGhlIGZyZXF1ZW5jeSBp
-biBzZWNvbmRzIGNvbmZ1c2luZyB3aGljaCANCnRoZSBpcyBtYWluIHJlYXNvbiB3aHkgSSBzdHVj
-ayB3aXRoIGhlcnR6LiBJIGFsc28gY291bGRuJ3QgZ3JvayBob3cgdG8gDQpleHByZXNzIHRoZSBk
-dXR5IGN5Y2xlIGlmIEkgZGlkIGV4cHJlc3MgdGhlIGZyZXF1ZW5jeSBpbiBuYW5vc2Vjb25kcy4g
-SSANCnRoaW5rIG1heWJlIEknbSBhIGJpdCBjb25mdXNlZCBhcyB0byBob3cgdG8gZXhwcmVzcyBh
-IGdlbmVyaWMgUFdNIHBlcmlvZCANCndoZW4gdGhlIGNvbnRyb2xsZXIgSSdtIGRlYWxpbmcgd2l0
-aCBoYXMgYSBmcmVxdWVuY3kgYW5kIGEgZHV0eSBjeWNsZS4NCg0KPj4+PiArICAgICAgLSAyOiBQ
-V00gZmxhZ3MgMCBvciBQV01fUE9MQVJJVFlfSU5WRVJURUQNCj4+Pj4gKyAgICAgIC0gMzogVGhl
-IGRlZmF1bHQgcHdtIGR1dHkgY3ljbGUgLSAwLTI1NQ0KPj4+IFNhbWUgaGVyZSBJIGd1ZXNzLCB3
-aHkgbm90IG1hdGNoIHRoZSB1bml0cyB1c2VkIGZvciB0aGUgcGVyaW9kIGZvciB0aGUNCj4+PiBk
-dXR5IGN5Y2xlPw0KPj4+DQo+PiBTYW1lIGhlcmUuIEkgYW0gdXNlZCB0byBwd20gZnJlcXVlbmN5
-IGluIEh6IGFuZCBkdXR5IGN5Y2xlIGFzIHBlcmNlbnRhZ2UuDQo+PiBVc2luZyB0aGUgcGVyaW9k
-IGluc3RlYWQgaXMgc29tZXdoYXQgdW51c3VhbCwgYW5kIEkgbXVzdCBhZG1pdCB0aGF0IEkNCj4+
-IGhhdmUgbmV2ZXIgZW5jb3VudGVyZWQgaXQgd2hpbGUgZGVhbGluZyB3aXRoIGEgdmFyaWV0eSBv
-ZiBmYW4gY29udHJvbGxlcnMuDQpNeSBleHBlY3RhdGlvbiBpcyB0aGF0IGEgZHV0eSBjeWNsZSBp
-cyBhIHBlcmNlbnRhZ2UuIFRoZSBvbmx5IHJlYXNvbiBJJ20gDQp1c2luZyAwLTI1NSBpbnN0ZWFk
-IG9mIDAtMTAwIGlzIGJlY2F1c2UgdGhhdCBtYXRjaGVzIHRoZSBzeXNmcyBBQkkuIEJ1dCANCkkn
-ZCBoYXBwaWx5IGNoYW5nZSB0byBhIHRydWUgcGVyY2VudGFnZSAoaWYgSSBjYW4gZmlndXJlIG91
-dCB0aGUgaW50ZWdlciANCm1hdGgpLCB3ZSdkIGxvc2UgYSBsaXR0bGUgYml0IG9mIHByZWNpc2lv
-biBidXQgbm90aGluZyBhbnlvbmUgd291bGQgDQpyZWFsbHkgbm90aWNlLg0KPiBJZiBpdCBpcyB3
-aGF0IG1ha2VzIHNlbnNlIHRvIHVzZSwgYmVjYXVzZSBpdCdzIHdoYXQgZXZlcnlvbmUgYW5kIHRo
-ZWlyDQo+IG1vdGhlciBkb2N1bWVudHMsIHRoZW4gc3VyZS4gTXkgcmF0aW9uYWxlIEkgc3VwcG9z
-ZSB3YXMgdGhyZWVmb2xkOg0KPiAtIENvbnNpc3RlbmN5IHdpdGggdGhlIHBlcmlvZA0KPiAtIFRp
-bWUgd291bGQgYmUgbW9yZSBwb3J0YWJsZSBiZXR3ZWVuIHByb3ZpZGVycywgaWYgOCBiaXRzIG9m
-IHByZWNpc2lvbg0KPiAgICBpcyBkZWVtZWQgaW5zdWZmaWNpZW50IGZvciBzb21lIHByb3ZpZGVy
-cy4NCj4gLSBMYXN0ICYgbGVhc3QsIHRoZSBQV00gQVBJcyBpbiB0aGUga2VybmVsIHVzZSB0aW1l
-IGZvciB0aGUgZHV0eWN5Y2xlDQo+DQo+IElmIHlvdSdyZSBnb2luZyB0byB1c2UgcGVyY2VudGFn
-ZXMgcmF0aGVyIHRoYW4gdGltZSwgd291bGQgaXQgbm90DQo+IG1ha2UgbW9yZSBzZW5zZSB0byBl
-aXRoZXIgdXNlIHBlcmNlbnQgaXRzZWxmIHdpdGggYSAwLTEwMCByYW5nZSBvciB1c2UNCj4gYmFz
-aXMgcG9pbnRzIGlmIHBlcmNlbnQgZG9lc24ndCBwcm92aWRlIHN1ZmZpY2llbnQgZ3JhbnVsYXJp
-dHk/DQo+DQo+IEkgdGhpbmsgaXQnZCBiZSBnb29kIG9mIFV3ZSBjaGltZWQgaW4sIGdpdmVuIHdl
-J3JlIGRpc2N1c3NpbmcgYSBQV00NCj4gcHJvdmlkZXIgYmluZGluZyBhZnRlciBhbGwuDQoNCkkn
-ZCBhbHNvIHBvaW50IG91dCBJJ20gbW9yZSB0aGFuIGhhcHB5IHRvIGdvIGJhY2sgdG8gbXkgdjIg
-YXBwcm9hY2ggb2YgDQphZGRpbmcgc3BlY2lmaWMgcHJvcGVydGllcyBmb3IgdGhlIGZyZXF1ZW5j
-eSBhbmQgZHV0eSBjeWNsZS4NCg0KPj4gSnVzdCB0byBtYWtlIHN1cmUgSSB1bmRlcnN0YW5kIHRo
-aXMgY29ycmVjdGx5IC0gZHV0eSBjeWNsZXMgd291bGQNCj4gcy9kdXR5IGN5Y2xlcy9wZXJpb2Rz
-Lw0KPg0KPj4gYmUgKHJvdW5kZWQpOg0KPj4NCj4+IEh6CW5zDQo+PiAxMQk5MCw5MDksMDkxDQo+
-PiAxNAk3MSw0MjgsNTcxDQo+PiAyMgk0NSw0NTQsNTQ1DQo+PiAyOToJMzQsNDgyLDc1OQ0KPj4g
-MzU6CTI4LDU3MSw0MjkNCj4+IDQ0OgkyMiw3MjcsMjczDQo+PiA1ODoJMTcsMjQxLDM3OQ0KPj4g
-ODg6CTExLDM2Myw2MzYNCj4+IDIyNTAwCTQ0LDQ0NA0KPj4NCj4+IEV4YW1wbGVzIGZvciBkdXR5
-IGN5Y2xlcyB3b3VsZCBiZQ0KPj4NCj4+IDIwJTogMCwycyBvciAyMDAsMDAwLDAwMA0KPj4gNTAl
-OiAwLjVzIG9yIDUwMCwwMDAsMDAwDQo+PiA4MCU6IDAuOHMgb3IgODAwLDAwMCwwMDANCj4+DQo+
-PiBJcyB0aGF0IGNvcnJlY3QgPw0KPiBBc3N1bWluZyBhIDEgc2Vjb25kIHBlcmlvZCwgdGhvc2Ug
-bG9vayBhcyBleHBlY3RlZC4NCg0KVG8gbWUgdGhhdCBqdXN0IG1ha2VzIHRoaW5ncyBoYXJkZXIg
-dG8gdW5kZXJzdGFuZC4gSWYgeW91IHdlcmUgcmVhZGluZyANCnRoZSBBRFQ3NDc1IGRhdGFzaGVl
-dCB5b3UnZCBzZWUgdGhpbmdzIGxpa2UgdGhlIHN1cHBvcnRlZCBmcmVxdWVuY2llcyBvZiANCjEx
-LCAxNCwgLi4uICwgODgsIDIyNTAwLiBIYXZpbmcgdG8gZXhwcmVzcyB0aGF0IGluIG5hbm9zZWNv
-bmRzIHJlcXVpcmVzIA0KbWFraW5nIGEgYml0IG9mIGEgbGVhcC4gVGhlIGR1dHkgY3ljbGUgcGVy
-Y2VudGFnZSB0byBuYW5vc2Vjb25kcyBpcyBtb3JlIA0Kc3RyYWlnaHQgZm9yd2FyZCBidXQgc2Vl
-bXMgdW5uZWNlc3NhcmlseSBvYnNjdXJlIHRvIG1lLg0KDQo+DQo+IENoZWVycywNCj4gQ29ub3Iu
-DQo+
+The Intel N6000 BMC outputs the board power value in milliwatt, whereas
+the hwmon sysfs interface must provide power values in microwatt.
+
+Fixes: e1983220ae14 ("hwmon: intel-m10-bmc-hwmon: Add N6000 sensors")
+Signed-off-by: Peter Colberg <peter.colberg@intel.com>
+Reviewed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+---
+Incorrect `sensors` output on Intel N6001 with v6.9:
+
+Board Power:                                   36.03 mW 
+
+Correct `sensors` output on Intel N6001 with v6.9 and this patch:
+
+Board Power:                                   35.79 W  
+---
+ drivers/hwmon/intel-m10-bmc-hwmon.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/intel-m10-bmc-hwmon.c b/drivers/hwmon/intel-m10-bmc-hwmon.c
+index 6500ca548f9c..ca2dff158925 100644
+--- a/drivers/hwmon/intel-m10-bmc-hwmon.c
++++ b/drivers/hwmon/intel-m10-bmc-hwmon.c
+@@ -429,7 +429,7 @@ static const struct m10bmc_sdata n6000bmc_curr_tbl[] = {
+ };
+ 
+ static const struct m10bmc_sdata n6000bmc_power_tbl[] = {
+-	{ 0x724, 0x0, 0x0, 0x0, 0x0, 1, "Board Power" },
++	{ 0x724, 0x0, 0x0, 0x0, 0x0, 1000, "Board Power" },
+ };
+ 
+ static const struct hwmon_channel_info * const n6000bmc_hinfo[] = {
+-- 
+2.45.1
+
