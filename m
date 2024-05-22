@@ -1,102 +1,120 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A7D377105;
-	Tue, 21 May 2024 18:12:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4C19282E2;
+	Wed, 22 May 2024 09:18:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716315178; cv=none; b=LpxRu5QWQVL0Ey8m/FI8Uu05hmeE8YR+WbU0ns4OoCW2hxX07TEoQ+M0PlIV48DwcZtSwsgxH9WStEPUPyiR4im8tEpsjbJ+lLYx3Cf+gIDUeozK2QKo/PDmrwZE4JchQl/b7VDcXVthD2F23q+lAinnY/8jNlKgccZf/gtBzvk=
+	t=1716369497; cv=none; b=H8M+iPau1mGG1EtYAQyUiC2HzKQKSsLVNPQ4iVPMewEsLKEHPX4VHq0E/5tLATGXbz9CxAERR11DAGGkVAT+z66IXM8WkIOWnjp9YXU7hZPWmlwsI9FJkZoBHPS1GbHVMv1gWUC6z669KXsQP3b9L362yuqh9Kw7hhV9jhpVDeY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716315178; c=relaxed/simple;
-	bh=pelV7Lu9uPZxQtnhuXBP31d0jEKwnjwXv+Stp9All08=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WoAb1PqwmcD6Ird2hyGSNlbAwmJqqjqDbttGou9QOCqlopVAfT2s5ZRZUIh2tKntS3BDIYIGb/QWefhfp8eid+syciamDMJBbbPu7x1H7VRxbBrK1UN7vwumJbgBmk8MOX5em45viaEsgp7t5IBiCjYX/kTVR3d94Edw0nbaWwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ek2ZomHX; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1716369497; c=relaxed/simple;
+	bh=Qr6USar02b6JYI0XqhLNAvs2zSTmqw+SpOFyKARZyC0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=k8GlyRuWFHiChms8wxzErDy96pwDDSgW+fNZ3ltzGGz7DdQOyL0aiOWK5+UATdSB5ySyTioWwAkJjFjK+F4YiSszOg2ARauk3nDbySwYRGsEIlCA8wsdOMPtoE7GVG4acq0US4tA9bGGcR2WX7/yu0dKRbXHN2XfFQw1P+cUMAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l5Dlvz+f; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ek2ZomHX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716315177; x=1747851177;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=pelV7Lu9uPZxQtnhuXBP31d0jEKwnjwXv+Stp9All08=;
-  b=Ek2ZomHXvYtcUPl8jXl1WK3u/NHE12+Ct2NnBmShocrfSlpRIFgFL/E9
-   C6pFr+dd8OlSCHqKc0OnZZ4UhynMufqaPLv2/4/pu3Dv/7fn3B4pyGMfz
-   zxCiir2bE0s28dOTZRvUgxLVWf55851mv5mIkVgKl7bqQbHFLVt+DWISe
-   4ndYE0zJfAzV3WwSzcpQ3F3KQHJejEqXnAh+YZEizDwz9oCK+VAHRMZCd
-   4U9D9NrUPiMOQV2kHNlbgGnbhNqPv03jg9Q1j+r/05OFkHl88VcnD2N53
-   D4PrLwbvU3y5IUsVbZjBJTkMF46WfuxQxGa4x4kDBjOwuWbUMQ2AEb1sp
-   w==;
-X-CSE-ConnectionGUID: U0cK0063SwGpNFSz4x2SOg==
-X-CSE-MsgGUID: BAa8VR1RQm6mNW9qTD6FWA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11079"; a="12375745"
-X-IronPort-AV: E=Sophos;i="6.08,178,1712646000"; 
-   d="scan'208";a="12375745"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2024 11:12:56 -0700
-X-CSE-ConnectionGUID: k+m1RDf5RDSLbVSljkxK8g==
-X-CSE-MsgGUID: WiGwd8xFStqD93llk02bFw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,178,1712646000"; 
-   d="scan'208";a="70423956"
-Received: from sj-4150-psse-sw-opae-dev3.sj.intel.com ([10.233.115.74])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2024 11:12:55 -0700
-From: Peter Colberg <peter.colberg@intel.com>
-To: Xu Yilun <yilun.xu@intel.com>,
-	Tom Rix <trix@redhat.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Tianfei zhang <tianfei.zhang@intel.com>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Russ Weight <russ.weight@linux.dev>,
-	Marco Pagani <marpagan@redhat.com>,
-	Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-	Peter Colberg <peter.colberg@intel.com>
-Subject: [PATCH] hwmon: intel-m10-bmc-hwmon: fix multiplier for N6000 board power sensor
-Date: Tue, 21 May 2024 14:12:46 -0400
-Message-ID: <20240521181246.683833-1-peter.colberg@intel.com>
-X-Mailer: git-send-email 2.45.1
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l5Dlvz+f"
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a59b81d087aso917513266b.3;
+        Wed, 22 May 2024 02:18:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1716369494; x=1716974294; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=epqJO+ERpctNPXshaXqEX2wabNsS9uehY5up2W7EJXM=;
+        b=l5Dlvz+fH33aWy94tUx/IHFrD50CHNRnNtC4+g74kdkZtuXpOvAH25C3MH2pyuaqDq
+         MPgfgMgojnW0BPstFJVB9c4gtpv/VpSOj6eM9qdTtKzRibZ6Plzqne16skhoFJR43mhk
+         PHG7sO5UCmQdFr0WTJS+FiI1fVhlnppvfvyl8r2WxFS9MZUDLRIKVlWjpcT1ZBYkezdE
+         A1EBa5Fa875/c3jtsqzaqUYqUP0a3qlTI7ZtqoN5vwk+zx8uMyAfbbHhjcPntkZxNOLO
+         FzL/UUqKK/kRr/TbqpI+omteT4eoLvSyXp6YT64vSVNifhcGH3TncN7yaVukestzOJKE
+         3w0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716369494; x=1716974294;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=epqJO+ERpctNPXshaXqEX2wabNsS9uehY5up2W7EJXM=;
+        b=vxFAse96NaELpxaOizPBKMzH1YSBa5JbMyaXPISPsLdnmHSxcGbxGEStKjQCj2KhIS
+         ER/mr/uJ9ejNp78QxGP7yCfa3r2GAQL3U5NW7dQBtwG4uBDM6l0FWIfLxnj3QMRvujTi
+         dqMcWOV4KO3OS4ljQtWG//MUGg63vY+npi8t+VxRWo8WXj011lfLo39A2XwW917eYuK1
+         tgDo7dupkpISo7kHwKy+IOzTVbpzmZLtVnM7qlokw6fPtRwGQQo2tpYixzD9J6rq2R8n
+         KdLjfcsTUNGgWcyFLuIxQGzvahVhijY/wJmsX4tZkBKozJWS9qPVXxRwZ3OmtfAPJkca
+         cHuw==
+X-Forwarded-Encrypted: i=1; AJvYcCXTg3gn/Mw7DcmTAbbnlxXUOs81lGhjM+sIYbb3wpYUlCHqQEQkwh01d6jD3gJ8xKaprNWC58Lc6VsTXD2PUxgOSjaPpuzQ+LRLIifJBGYHtvjV6DTZftVeS9OE/vGLQM50gu0yjR4jtYE=
+X-Gm-Message-State: AOJu0Yz3/tCLH7La5uea1NbOkI5S9qzZrzBU5ztsVkAdy7Vd5mPB+s18
+	AaSy+za5COy+PSuK4BBFDrIykzdInm9KUDCoZtDhp8fRdHJEeE2b
+X-Google-Smtp-Source: AGHT+IFHKz6NYWtpbZOxJZ2dVbmmDeU/KEXReIfxPv3+43K7ZjjdiDJ1Ck9ql7NsX8Lk5E5mKdnTHA==
+X-Received: by 2002:a17:906:c34d:b0:a59:ba2b:5915 with SMTP id a640c23a62f3a-a62281e11d5mr143893266b.50.1716369494032;
+        Wed, 22 May 2024 02:18:14 -0700 (PDT)
+Received: from [127.0.1.1] (91-118-163-37.static.upcbusiness.at. [91.118.163.37])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a5cec3d9b5csm836678066b.16.2024.05.22.02.18.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 May 2024 02:18:13 -0700 (PDT)
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Subject: [PATCH 0/2] device property: introduce
+ fwnode_for_each_available_child_node_scoped()
+Date: Wed, 22 May 2024 11:18:06 +0200
+Message-Id: <20240522-fwnode_for_each_available_child_node_scoped-v1-0-1188b0da12dc@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAE64TWYC/x2N0QrDIAwAf6XkeYLaDbb9yhiSxWQGRItCNyj99
+ 0ofj4O7DTo35Q7PaYPGq3atZYC7TEAJy5eNxsHgrb/am3dGfqVGDlJbYKQUcEXN+MkcKGmO4bS
+ d6sLR3MWJfcQZnSUYxaWx6P+8vd77fgDv54G6fQAAAA==
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+ Daniel Scally <djrscally@gmail.com>, 
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Antoniu Miclaus <antoniu.miclaus@analog.com>, 
+ Jonathan Cameron <jic23@kernel.org>
+Cc: linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-hwmon@vger.kernel.org, 
+ Javier Carrasco <javier.carrasco.cruz@gmail.com>
+X-Mailer: b4 0.14-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1716369492; l=1324;
+ i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
+ bh=Qr6USar02b6JYI0XqhLNAvs2zSTmqw+SpOFyKARZyC0=;
+ b=skBC7zUYZmBdaCrkmOdXDTE2PXaZlyW5JfOQ1Hg+XTKbj89cB73pX1/WLeRvLF9XxGkP6ksJt
+ l5P3CeIJplEDwPzIAUgDjPQvFfDXwvnqeKjyZpRX5uhwDc/nFvebP9g
+X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
+ pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
 
-The Intel N6000 BMC outputs the board power value in milliwatt, whereas
-the hwmon sysfs interface must provide power values in microwatt.
+The _scoped() version of the fwnode_for_each_available_child_node()
+follows the approach recently taken for other loops that handle child
+nodes like for_each_child_of_node_scoped() or
+device_for_each_child_node_scoped(), which are based on the __free()
+auto cleanup handler to remove the need for fwnode_handle_put() on
+early loop exits.
 
-Fixes: e1983220ae14 ("hwmon: intel-m10-bmc-hwmon: Add N6000 sensors")
-Signed-off-by: Peter Colberg <peter.colberg@intel.com>
-Reviewed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+This new variant has been tested with the LTC2992, which currently uses
+the non-scoped variant. There is one error path that does not decrement
+the refcount of the child node, which can be fixed by using the new
+macro. The bug was introduced in a later modification of the loop, which
+shows how useful an automatic cleanup solution can be in many uses of
+the non-scoped version.
+
+Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 ---
-Incorrect `sensors` output on Intel N6001 with v6.9:
+Javier Carrasco (2):
+      device property: introduce fwnode_for_each_available_child_node_scoped()
+      hwmon: (ltc2992) use fwnode_for_each_available_child_node_scoped()
 
-Board Power:                                   36.03 mW 
-
-Correct `sensors` output on Intel N6001 with v6.9 and this patch:
-
-Board Power:                                   35.79 W  
+ drivers/hwmon/ltc2992.c  | 11 +++--------
+ include/linux/property.h |  5 +++++
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 ---
- drivers/hwmon/intel-m10-bmc-hwmon.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+base-commit: 124cfbcd6d185d4f50be02d5f5afe61578916773
+change-id: 20240521-fwnode_for_each_available_child_node_scoped-8f1f09d3a10c
 
-diff --git a/drivers/hwmon/intel-m10-bmc-hwmon.c b/drivers/hwmon/intel-m10-bmc-hwmon.c
-index 6500ca548f9c..ca2dff158925 100644
---- a/drivers/hwmon/intel-m10-bmc-hwmon.c
-+++ b/drivers/hwmon/intel-m10-bmc-hwmon.c
-@@ -429,7 +429,7 @@ static const struct m10bmc_sdata n6000bmc_curr_tbl[] = {
- };
- 
- static const struct m10bmc_sdata n6000bmc_power_tbl[] = {
--	{ 0x724, 0x0, 0x0, 0x0, 0x0, 1, "Board Power" },
-+	{ 0x724, 0x0, 0x0, 0x0, 0x0, 1000, "Board Power" },
- };
- 
- static const struct hwmon_channel_info * const n6000bmc_hinfo[] = {
+Best regards,
 -- 
-2.45.1
+Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
