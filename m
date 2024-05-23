@@ -1,151 +1,77 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 245D33C2D;
-	Thu, 23 May 2024 09:53:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFC5A140391;
+	Thu, 23 May 2024 10:23:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716458022; cv=none; b=r5baUARFVOQir7zQhuSNvZmLbhSSAbVTU7ErWyeQr9qnCICXoa3Zmmy/az3kG6yenFNU7yfRpoet+WehQvRmkpSx5CgaAWvx4GVVpONFIbnPlEwuMW+G2lgGDbhtAf5np4nS+HZ7Uv6IJTwLrmo2CWxsSBH4ByKkZ/0wSIJh5X8=
+	t=1716459839; cv=none; b=eJgZiUkZGdGdsR0VDQgGW2b44g8YW6QhN3ptnGbkaV3JsEc0NIOVIs8oK5OcA2sWk3k/xNF1chF+cZjyDt+IS8bRi+vvHZYXwpPPB3Ihk6lMbxOgaoraSVc63gEojyZQ1J/7it8Hbc/UzIqyqFtTj0m4gIPQEZDUtTLLm7Jpo/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716458022; c=relaxed/simple;
-	bh=uquqVgjr7tYR+GJ5slv940hVub5PN471/fS5dr+jBI4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ifjQF1kl3E91dzqcZDML6xaU/46O/EVmedwghCD389Ik449YTOOKNzyygONo9M1vw70FJykxQpossiV+zVFoPCzBDEjBZxQ1siYRXS+VnQ0VEmXdQN457mM4sXCPnDjIQaUFloft2q//7L0YKXeQX41X6D9/OlQ71lqjPnVwh5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sKGOjzJ+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1716459839; c=relaxed/simple;
+	bh=YcgIXnUjA3A+yAuyQ7lW1dHLA/JXl+adaMB6ljYV6YQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mathzqrsxRnKEge3/CfCEhyglq5rUViP/Nc8OrizvLii7TZ53QjpLO6Us7qMEJIzPUx2dEe9CVV5f3OPI347XzauFDcsha/ZB5+mkWbIRmbfvJtHpne6OxY/5YRVnAHOs4q6OabKwHEPdbnJ2/qCN8d+3fK2hS373m3cO5xLpZs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lMNTzVWf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sKGOjzJ+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40F7BC2BD10;
-	Thu, 23 May 2024 09:53:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lMNTzVWf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AED6C4AF0B;
+	Thu, 23 May 2024 10:23:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716458021;
-	bh=uquqVgjr7tYR+GJ5slv940hVub5PN471/fS5dr+jBI4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=sKGOjzJ+yHJEnTUrpOS+e645mzix6+MSVIrN8b1qk7FRbC/cSqUespi3UZxXDjgQP
-	 Ujh9EuzHeEGkPpHssIIOaRZ2twSGj47qbmhyWZ8aKmVCNSGZE8j/fc13dxjVtSMhv2
-	 yelUmsPtGJcujZfzEwrIB6F4JY5LLmVcWTGzNlJ6l+2zDwItrj375OqWFOcBIieBhe
-	 QO23+12P0SAA7FoYfn5DzXkWoGNjcGAa7D3y0MtGIKbUOaQnqWSs/NPG0lKiNCQGOy
-	 kDUcyxe1+6G7LUGI2lMx0/7+vX8hqCP1pp7sLSYhvHQGi4gLoii8IPaeWLCQLmscZr
-	 n3te36Bi5PkpA==
-Message-ID: <ab6974a8-b345-4f9f-b051-0ae23a860a35@kernel.org>
-Date: Thu, 23 May 2024 11:53:36 +0200
+	s=k20201202; t=1716459839;
+	bh=YcgIXnUjA3A+yAuyQ7lW1dHLA/JXl+adaMB6ljYV6YQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=lMNTzVWfQKBowUNH7mlcQHwNvD3TG3rCRKr8XUJpPwX+niLCfJg6dPM6dkHVblvNs
+	 JxWEbbVHuHr6hdzh9zMh6eG8CCcH+ZhP0ru4vQHMc3oN+Gy2kPZaC6KcAcMRMAtHDy
+	 Agh2ozRjiKK7vem1dqBGXCJWJqL5znZdcKPi2BUEde9RjqgU8Sc1d6TCyvh6kEfRov
+	 REauqcb1Ug2+HWF7ulCKXJMIo41k7dO64SV0xqc+VkQYIN/TMJwrL/rIUfD4kBF+KI
+	 GJZmyaJZw4gwTjfVh0auMNyqNg6GMtiIqbEM9rSVqTrEDe00CejirHK7NvVS9eUq8s
+	 vkHQEj/FzzDrg==
+Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-5b27cc76e9aso398370eaf.2;
+        Thu, 23 May 2024 03:23:59 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCW75g23Dix1V6tJ5lCuzovbmj6hj2mYJ15Ua/R7L1iF369DFgJhNrl001EoEWTl5fsSFddTXIb4p6nrY2zXODSkggdwYVSCStrhByQrPxb0r+eR3BzgH5zKo1qdpyJK2cLrZM4dKTHa1HLyvp3+sQvnO1rkBVizmmwK4GRQ8DYYhx5b4GkERgYyr3po6DFc5DCWuJeIPYvNnD1fKmFhiTIsOGxYvA4/3zw9Bg==
+X-Gm-Message-State: AOJu0Yy+WdKhZoBqEuX0X8pVQ9/NHvUGnvZJ6TkCqX64NIWbRvazRxEi
+	uw4Ki26s/Glsh06H0lNR+gqCVwo+liAv8zWlYDj1ZF/7WK4tl8AIOX6YYsQGRBEB1qo2uvI3BSh
+	XqAm4p28ddPhH/sgesLbcKmQ5I0I=
+X-Google-Smtp-Source: AGHT+IGG+qfSUk1ztfEIIHV9KTP6u2pnoBFCuOj3pNpozeuvpBsumicmoBJBQMLLvEz+J+tOY+YDRkBUfpPPHSSIc9U=
+X-Received: by 2002:a05:6820:2585:b0:5b2:7d9f:e708 with SMTP id
+ 006d021491bc7-5b6a2df34f2mr5280979eaf.1.1716459838366; Thu, 23 May 2024
+ 03:23:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [v2 1/2] dt-bindings: hwmon: Add mps mp2891 driver bindings
-To: Noah Wang <noahwang.wang@outlook.com>, linux@roeck-us.net,
- jdelvare@suse.com
-Cc: robh@kernel.org, conor+dt@kernel.org, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <SEYPR04MB64828B9C1FEC5C21C60F5CE7FAF42@SEYPR04MB6482.apcprd04.prod.outlook.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <SEYPR04MB64828B9C1FEC5C21C60F5CE7FAF42@SEYPR04MB6482.apcprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20240510201242.3886-1-W_Armin@gmx.de> <9d3f6b81-c53f-4ccf-9cb7-d997ba8957c7@gmx.de>
+In-Reply-To: <9d3f6b81-c53f-4ccf-9cb7-d997ba8957c7@gmx.de>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 23 May 2024 12:23:46 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0juG+uJoE=TytF5fffWCVc8JEYi3e7E_jM+zzQVKphsdA@mail.gmail.com>
+Message-ID: <CAJZ5v0juG+uJoE=TytF5fffWCVc8JEYi3e7E_jM+zzQVKphsdA@mail.gmail.com>
+Subject: Re: [PATCH v8] ACPI: fan: Add hwmon support
+To: Armin Wolf <W_Armin@gmx.de>
+Cc: mlj@danelec.com, rafael.j.wysocki@intel.com, lenb@kernel.org, 
+	jdelvare@suse.com, andy.shevchenko@gmail.com, linux@roeck-us.net, 
+	linux@weissschuh.net, ilpo.jarvinen@linux.intel.com, 
+	linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 23/05/2024 11:33, Noah Wang wrote:
-> Add a device tree bindings for mp2891 device.
-> 
-> Signed-off-by: Noah Wang <noahwang.wang@outlook.com>
+On Wed, May 22, 2024 at 10:03=E2=80=AFPM Armin Wolf <W_Armin@gmx.de> wrote:
+>
+> Am 10.05.24 um 22:12 schrieb Armin Wolf:
+>
+> > Currently, the driver does only support a custom sysfs
+> > interface to allow userspace to read the fan speed.
+> > Add support for the standard hwmon interface so users
+> > can read the fan speed with standard tools like "sensors".
+> >
+> > Reviewed-by: Andy Shevchenko <andy@kernel.org>
+> > Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+>
+> Hi,
+>
+> what is the current status of this?
 
-A nit, subject: drop second/last, redundant "bindings". The
-"dt-bindings" prefix is already stating that these are bindings.
-See also:
-https://elixir.bootlin.com/linux/v6.7-rc8/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
-
-Subject: drop driver and describe hardware
-
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC. It might happen, that command when run on an older
-kernel, gives you outdated entries. Therefore please be sure you base
-your patches on recent Linux kernel.
-
-Tools like b4 or scripts/get_maintainer.pl provide you proper list of
-people, so fix your workflow. Tools might also fail if you work on some
-ancient tree (don't, instead use mainline), work on fork of kernel
-(don't, instead use mainline) or you ignore some maintainers (really
-don't). Just use b4 and everything should be fine, although remember
-about `b4 prep --auto-to-cc` if you added new patches to the patchset.
-
-You missed at least devicetree list (maybe more), so this won't be
-tested by automated tooling. Performing review on untested code might be
-a waste of time, thus I will skip this patch entirely till you follow
-the process allowing the patch to be tested.
-
-Please kindly resend and include all necessary To/Cc entries.
-
-
-> ---
->  .../bindings/hwmon/pmbus/mps,mp2891.yaml      | 43 +++++++++++++++++++
->  MAINTAINERS                                   |  8 ++++
->  2 files changed, 51 insertions(+)
-
-
-...
-
->  
-> +MPS MP2891 DRIVER
-> +M:	Noah Wang <noahwang.wang@outlook.com>
-> +L:	linux-hwmon@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/hwmon/mps,mp2891.yaml
-> +F:	Documentation/hwmon/mp2891.rst
-
-There is no such file.
-
-> +F:	drivers/hwmon/pmbus/mp2891.c
-
-There is no such file.
-
-Are you sure your patchset is fully bisectable (including paths here)?
-
-Best regards,
-Krzysztof
-
+6.11 candidate, but not applied yet.
