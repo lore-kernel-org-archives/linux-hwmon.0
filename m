@@ -1,46 +1,46 @@
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2067.outbound.protection.outlook.com [40.107.220.67])
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2076.outbound.protection.outlook.com [40.107.223.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10BB6839F1;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CF14839F4;
 	Thu, 23 May 2024 18:27:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.67
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.76
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716488839; cv=fail; b=QpEum1y1yZW2uhRBOClks/OJ/X+2jb3PiFwi+GSqc4zlsWV6a1LA0qRrISMFIRyNXjaItkCbFGhOZ2QRWmzbAOm4n4ehvS+1p6P4yM7G60fEvJRyzYnwoh883CAFE8u3oFOFgh4YBVjX4blmi8CE1IVB+a/g/11INwVRIRudDvY=
+	t=1716488839; cv=fail; b=lMo4XQa0LxYJVbBA3Vd3dfY6MEKRVYVP5n6LeKXRSXMMik6uHiDRq4+o6HGJvn6qTAQJGakPL7iiXGjFIZF7qbPCWdVR8n+Msoax3a8C9+Q4GXUp1NLfZllnRNoJd0zWu9+UWIsRsump10aR9OVN0OXNuo+OofofLESg/fJfieI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1716488839; c=relaxed/simple;
-	bh=2gYvUh5PKw2233MexlsVSiWRL1PGFQPAhe56WcdKUdY=;
+	bh=f6hqEN1VIsd63HVw54vGLB6GVd2Qpx/lRCj+1dUDUQc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=GXuW1O0bE0c98QzQ/rNyVRRXO5/vY7TecytSjFOl84949nb/jrnPBdFiMtAFWVjUNPtwEzmNDndB/ZhfBI9uEitw3svNIlxsoR8Rve84dQu5l1cGUWuTVwXTzmJtoAg+qkTFsX3/8TM0KlbFT7E/AmCMJnT/BZqCVC6Yrfd5kU0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=uKySHWCV; arc=fail smtp.client-ip=40.107.220.67
+	 In-Reply-To:To:CC; b=JTDQTM77KT1Llfxsxs77obtxa+egg/4FTPLpkZ5fQ0HlAlErpgFN6An1UBasCiLBfFmb80Y7KQYsWv7fEOWTh7sQmORJnxR6CC2M267oN+RhtewHv3RB1ncDj3G8y/PlgIlHaWnIsxGcIggQEmRIbLWxzqq3v3p6hc9l0ZSNLCs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=5U2ZjGoB; arc=fail smtp.client-ip=40.107.223.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="uKySHWCV"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="5U2ZjGoB"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=U6xR4SuHUprAhD9apMlrecQaP/P0xFnIQWLN7IqK1K/ge6zjL77PWoHfnm4nrfiM/xXhs8luIPkL7io0Ox10HpIz1g0+B67K1cGGxCrGlwrWPTsf6LFnGT+FhHXAZPrty2fWVCFKr66eNbELkWN+e+Ri3fUcFJcQ5dNabTP1dqttOjQM/BQ0cnLZwnSi9PHNvxzNR3C41PPY15M8gcFoQtvvczZDIk8a7Gh4yae4qGxd3VIVVZpcMmSE0SuIZt8SvhooPP/JMwK1QfuQDR9QrhhehmjePTqPmL0kyvBR1JjjyZBy6phFjWwmx6yuLP8/yW7dwS913ZQmfbg6QLuaqg==
+ b=cwcYYdHGDnDUBfxZQGccEP+iF5bV40T96yeGzvBSYtIU6JwKJeJfZevMAeRVn7iPNs7vyH0Cv862wShDjNA8hYzqBwTMy1su8Wd+0cnooy/BRrsqLAHgAGNt43qEWty3dnXZPYz0qfUOs6OK1axmc8BV60ixcrre70i51Ge+Yobks6TnCg/zmYDdfVXuwZEya1xWP1gXgkT6EC+cp2RoagK0fBv01RV69zIJFxdEZWjiIBOHE4Rl63aP9/oZFMaK9rr6JjxCCwKoRlhAz8sjYeFtVkKwrmcyuFqc/Sz8uIpU/l4obJM12jj4TN0hH4KU+vzeLP4CvyTUv7OEbBhmBg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PQMYUiQToI6bsPL5qK5LK7Ie+ErRZ5mhsBYqaRs6/bY=;
- b=M5Ym+qFZPCo0rVosB7tfNLs13W0uOAXJFNskKcdPP2uHcqtRW7QJo8cCkpP3doWbUY3cJ+VSnfVu2uomcy0WLFZcI2ubv38WgsLwXD6ezo68BYwSGgTfNHHqbDuy4uP9tJ/Xqu6C+0AAdHXoQpRU/BmrjT2gWoHAaBWOHSb5YkYm8PPXGh2ED+aU+QdxcMX6dZjJgnm3Ya2mtkptOcfurKCT4vlKXsMlgmsjmDBkdJ1uRA8VaYztjmTe7OLnlwyGT+qMRSf2CTrHv3JtD4HNMaVCMDWisdoRBa7Ur84Nx0qYo6l4CzIKTGuDsfyjuHR5KzrI1GzAKByGt94yY4sgiw==
+ bh=/bHFV0adVCqx/ezBMck7stOQmPqgwE41m48rs+rvyqc=;
+ b=U6bybkYqTQjAVn61QTWG06VvTHkMH8diMTAL12AEs/MBYUUaxRU6Q+we5rWmKx6R0j0yJUBmSSYs2+LGnrnFuRGocv+pQgi2ZPiOTalK1Uf9YtI1wL8bDVGJRs90Uawlc87yqGEWGH0WWpN6l7WHeSCGSCHt/msNbzgRIPkYDVDSqxCX9nH4UPaYlCwbaCBeqhBM30KPwJP9NXSw0aqgp7WEZKOotH7Gxys+K6DUZZU0PLb8PhW0XJbaUoNC/GmowYdIzzyX6aB5wm92KrLigmt3gKWco9h34RhKDCM3gJeMWl2u6mEsHJOTAKqEEjzcO76dXO0lrBeEU0KlgATD+g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PQMYUiQToI6bsPL5qK5LK7Ie+ErRZ5mhsBYqaRs6/bY=;
- b=uKySHWCV569z7hhXvq//seSm7VQJjGmmLcbILkHBANk3FKWI6k833SCmW78h3/c3zstApvgFs1vJR8UtPVRvKgtas83BsNRQXTVAtl45XMlCNtizLj9Q857IFmMI/nz98KMIcVHFZcgCPpGkbFZX01YsHMxfzpxnEE9MF8fYNlo=
-Received: from DS7PR03CA0247.namprd03.prod.outlook.com (2603:10b6:5:3b3::12)
- by DS0PR12MB9040.namprd12.prod.outlook.com (2603:10b6:8:f5::18) with
+ bh=/bHFV0adVCqx/ezBMck7stOQmPqgwE41m48rs+rvyqc=;
+ b=5U2ZjGoBLlmQrbded+2iiJUAisacMk9pgE+8rf3VMKH2hfEbgibwjT7Q3KHTCyidUu6UEK5aWmlPCkjJ+Yrts3jX3/Y5QnnQwBlAn4mRHsl6FDaMKVUws2Y3PMArjAQvvnpoHSw5mKZF7hIOTXkXrfmXFQODVlUgmzTKZUx7yhU=
+Received: from DS7PR03CA0266.namprd03.prod.outlook.com (2603:10b6:5:3b3::31)
+ by SJ0PR12MB7475.namprd12.prod.outlook.com (2603:10b6:a03:48d::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7587.36; Thu, 23 May
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7611.22; Thu, 23 May
  2024 18:27:15 +0000
 Received: from CH3PEPF00000011.namprd21.prod.outlook.com
- (2603:10b6:5:3b3:cafe::da) by DS7PR03CA0247.outlook.office365.com
- (2603:10b6:5:3b3::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7587.35 via Frontend
- Transport; Thu, 23 May 2024 18:27:11 +0000
+ (2603:10b6:5:3b3:cafe::79) by DS7PR03CA0266.outlook.office365.com
+ (2603:10b6:5:3b3::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7587.36 via Frontend
+ Transport; Thu, 23 May 2024 18:27:15 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -50,15 +50,15 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  CH3PEPF00000011.mail.protection.outlook.com (10.167.244.116) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7633.0 via Frontend Transport; Thu, 23 May 2024 18:27:11 +0000
+ 15.20.7633.0 via Frontend Transport; Thu, 23 May 2024 18:27:15 +0000
 Received: from quartz-7b1chost.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Thu, 23 May
- 2024 13:27:09 -0500
+ 2024 13:27:10 -0500
 From: Yazen Ghannam <yazen.ghannam@amd.com>
-Date: Thu, 23 May 2024 13:26:54 -0500
-Subject: [PATCH v3 3/8] hwmon: (k10temp) Check return value of
- amd_smn_read()
+Date: Thu, 23 May 2024 13:26:57 -0500
+Subject: [PATCH v3 6/8] hwmon: (k10temp) Reduce k10temp_get_ccd_support()
+ parameters
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -67,7 +67,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20240523-fix-smn-bad-read-v3-3-aa44c622de39@amd.com>
+Message-ID: <20240523-fix-smn-bad-read-v3-6-aa44c622de39@amd.com>
 References: <20240523-fix-smn-bad-read-v3-0-aa44c622de39@amd.com>
 In-Reply-To: <20240523-fix-smn-bad-read-v3-0-aa44c622de39@amd.com>
 To: Guenter Roeck <linux@roeck-us.net>, <x86@kernel.org>, Yazen Ghannam
@@ -80,171 +80,137 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PEPF00000011:EE_|DS0PR12MB9040:EE_
-X-MS-Office365-Filtering-Correlation-Id: 35ae8702-a0f9-4b6c-445b-08dc7b55f660
+X-MS-TrafficTypeDiagnostic: CH3PEPF00000011:EE_|SJ0PR12MB7475:EE_
+X-MS-Office365-Filtering-Correlation-Id: ec0aeeae-b846-42d4-9ea7-08dc7b55f8e1
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230031|376005|1800799015|36860700004|82310400017;
+	BCL:0;ARA:13230031|82310400017|36860700004|376005|1800799015;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?TTRQMnlQSmpmYUJQTi9tVXlUQTJLTDQ0REs0NUNkbjhsN1VDYTY4Vk83T3Zm?=
- =?utf-8?B?QXZXL2pQTE9KZHBRcjd2TzlIaStzdHpkdjRuQmtaOU0xZGloUm9nYUMvMVdS?=
- =?utf-8?B?R2VCclVrdSthNzNiSm1RNjZVa3JsSHAzYm01RW1lN2FWdmxJeU9LWk40UjVt?=
- =?utf-8?B?dnJmT1REYUl6SFNqakxzNkpsRnpUOGJHdVlEVFJHczVjT3JQbFR0NEJtL3BC?=
- =?utf-8?B?a1YrbGI5Y1pwZExlSzB4ZE5nSXVxbmRWKyt0VmswZW8yUkdZb3p2QXZWYnVN?=
- =?utf-8?B?UXBObngvbDZLRm8wdENRUC9DQ1BhVjVoOS9GZnoyTFUvWTIrSjQ3cHJCeWx5?=
- =?utf-8?B?VGtHaWxSKzlnaHBzYmpSTVVuTzNYL0ZwVEpTWFZKbUFhbFR6UVFlbUkvdFdw?=
- =?utf-8?B?anJTMXoxRU93cDRKM3FHN0xZYmo5eFR3UVRUQXQwV0xCY0ZUeUVFVkNGQUEx?=
- =?utf-8?B?VlRVQjZGVzlNaDRZR1dwMElzQUdQTVFxaUdmVjdiOFZQaTN4N2NPcFJjSi9Q?=
- =?utf-8?B?TUova1RidlBoaTl0RkJ2eGlyYUpQR1dFcnU2S3dNOEtZcW5UZ0pZRy9YZVgr?=
- =?utf-8?B?WVdHZUlGTlBQcVBTbWN4ZzF3bk4wQm1KY2dJQ0l6VlM4UnNLSzJjWEJ6SWRS?=
- =?utf-8?B?Q1ZvSm45Y2s2UytCNWdvMk15NHI1V1lnb1lxQU9FYmU3S3JMbHIyalQ5NmFY?=
- =?utf-8?B?WFBRZE1kZXNlNFIvOUJSMVF3bGJBak10ZDh1U1Nmcmx1SWZFQ3Y0a3FPYks3?=
- =?utf-8?B?QWFWRmMxek9zS2xzYVpmZ3loL3d5aVFPdTFLZ1BUcTRyQWhZQUhiZzNjM2FB?=
- =?utf-8?B?RGpSQWt5Z0piNE80ZHRsNmlSTEYxa0ZMWlBvNGE2S1JnV2dxTGRLS3VoTnUr?=
- =?utf-8?B?dHdRYkVHNGJ6enpTZWVnREhWb21McXVkRGhhd3YvRXlPVXpBMG5obnVGc29D?=
- =?utf-8?B?YkdiNi9NT0ZpNzQ5YmdFSU1lOGFmeVIzU2g5UnZZcGM0NE9YK0JJRGNVN0Q3?=
- =?utf-8?B?TjRIbDlBREo2c3ltSDRCanNBU0M5TldHOFBUczdEV01EUTVrVVpkY1hWZVdv?=
- =?utf-8?B?RFMweCtHSFBqMmZrYlZ5bG1DdHYwZnFQUXVrUnpNN3NHQm10Qnl5cUQxNjdl?=
- =?utf-8?B?K3ZjNDhMSkw1VW9BU2ZhdlVlLzBOdXJ4UEkwVnBxYTRxMHRCYld1bFZSYWlK?=
- =?utf-8?B?SDN6cmNzUHNSL2ExTVZhanAxNDFnZWpTMHltYUwrMnRyZVFkSTJvVjFFL0Zi?=
- =?utf-8?B?bHIxZjFUTkQ0RXVkVk5WTXNjN2RVRkNvZFI4YitDT3JRUGdIRi83NGMyQWxF?=
- =?utf-8?B?WlhyWGdpNURpTWtpaWNDbjZsN2VaWFF3ZmUyV3FQZ2RabEJETWZ4Szc3ZGh3?=
- =?utf-8?B?MXZjTVJGMTQ3d3Jud3dSd2E4MmI2dFc5N1Y1MXhnUStTc3JaVGJFYVRTU2VW?=
- =?utf-8?B?WHlkMmE5UHAvWmNMalQwRHd4Sk9FdkVpenBwYmhmOVpwa1N0L3phUVZCT1ZU?=
- =?utf-8?B?ZDJscnZwMU0wRGVJQy9lOW5jd0JYN0RkMnBPcUVUMFYvcURIRStDUmd5Ykxz?=
- =?utf-8?B?RngwalljU3J4NTltd0g4azgzRWFvU2VTbkxuUGl2UzduVzBaaVV6QzdXN1do?=
- =?utf-8?B?STQyWkdPaTVhaEdSM2M1a1pCa3h5cW9JWlIwSEhmTWdCdGprYzl1M3JNUDBQ?=
- =?utf-8?B?VTdJSnI1WkVWVVBJL0dmUis5bk1HNWdXa1RZOFJRYTBrZUNXa3FxWU5mdm1D?=
- =?utf-8?B?d0JkOHhWWEQrRzBtM3pzdXVUR1RhQUJoOUZINDBsd2R3d2cwUW14VUNMMGt3?=
- =?utf-8?B?dXRzU21ya1JHd3lhZjJhMmJKSlZRTEFsMXEwbmR5cFQrNnJzcERCRG1zR0J1?=
- =?utf-8?Q?6yTnNk0Ri0McS?=
+	=?utf-8?B?bUFBa1VueUxUV1g5bkdtTVRYeVFZS1BUeFFEZXdyVVpOQzdzL2QvLzRBSldW?=
+ =?utf-8?B?TjNiZWVxSmZSbWo2MHd1NytiWGcwSmhhRTVOYmx2QXFwMmJvbXlVclluQytD?=
+ =?utf-8?B?MER4a1dCUnA4RkpBaVZjSFFMVEI2Ri9paFZPcWZ2bE1jalRlYjYrRG1xOEov?=
+ =?utf-8?B?cExRKzNVSS9nSXp5eUNuTjBMaklJUXJzcTByWlFpNlFVemxlRXNyNFV3M001?=
+ =?utf-8?B?SUVCZkp6Z1c2K1h6b0hjOUJBN3BEQk1XeE05M25YYWlPVmIveDR2bHpPMUJP?=
+ =?utf-8?B?TUhJUTRpTExndmxSUDJPeWhzTVF2SGtIWGlvdGpJME9BeU5NWk5NSmRQUVlW?=
+ =?utf-8?B?M0FWMVIyTEVtVGxqZ200NGlKS1JVSkJ3bDFDam5vdVpqeGRnOFBDMmVXYk5s?=
+ =?utf-8?B?RkNYRFhNY0pQYmplSzdwNzJVanBoSDJqc0JXd3BTa2U2cWxMeWVWV1BMWi80?=
+ =?utf-8?B?bFhFR0Q3MWRscWZrQmltb0dQWXcrQmFBd2lFWjg0bmNnYWVWWnJYTVJsMCtk?=
+ =?utf-8?B?QktGVE9YbVhBdkFHS2Q1b3ROa2h0Q0p0YmQvd2EzQ3BFdGpRR1pQbVZQUk12?=
+ =?utf-8?B?VWloMWdURmErcmJXbDlaRVpUM3JZUTN2UlhId2o1TW5ON2ZPM1JmcWdUY2V4?=
+ =?utf-8?B?aG5zYlJBVEJPbzM3L3pDUlFmU1VXcUlCcHE5T0RvM1NrbndnOCtibWFFbTUz?=
+ =?utf-8?B?eEM1RnFGeXpXbFJWZytZa1JhOXFKRDZJWjNFb2hqRjZuU3ltQmhLcDMxK2sz?=
+ =?utf-8?B?NEkrWjg5T1c4bmFUbmMwQzNBYnpGbzI5Z0t4eWMzUG9JOEYyYkhPY3kvVm5y?=
+ =?utf-8?B?bDc5SlZTK0xHeU14U0tYUFppMTlmeFdRUzl2WkNMQVYzZDgrZjlUUTJCWHpu?=
+ =?utf-8?B?c28xdm9PeE9QelhLUU1sSk83aGNZTzlJVE05eWVlbmxpTEJpYk5FTzVVRy9w?=
+ =?utf-8?B?QXFiU2FwQkp6Zm42c1JveTdORTJIMHR3Uk5ZYzVyQWRzZEpqVVhNelkxVW8r?=
+ =?utf-8?B?N2huK0RJc1MvYlNPdVJDdUN2VUw0VkJEN2pmYVpsZVV4L1VvNnJVeGlxTXFu?=
+ =?utf-8?B?bU4wbzY1UjdSOXQ5eEFnb3paVDhybmlUeVIwVTI5L2wveFI4MURnNDNOWjJt?=
+ =?utf-8?B?QmFYeGdZSzFDbWF5SmtVTnJBVUpxN0p3TllqRkh3bFJWUlpPZTZXaFJGb2Ry?=
+ =?utf-8?B?SGJQR3RpcTlWMTd0UFp6RmNyMXp4bHFKS2F4UEt5RnVIUTMxYmZldkJFbStY?=
+ =?utf-8?B?MWZyYXk2NkV2cWRNdnRhaFhOZy9VMjFPOXE0YmFGZ0wyTlMyQlNYTmg3eWkr?=
+ =?utf-8?B?TlVRNTNJR1MrR1FhTXlETTdlTm0rbzM3R2NPZXY3TzhtYzMrUW5zby9CZ3Jo?=
+ =?utf-8?B?SnpBWGEyV0NhQ2x1dXdJRVNMRVZqaWRCWDJQak1PMk1seldTbFRscW5BL0dh?=
+ =?utf-8?B?NEhGWncwbHhadkV5cktjU3o1YmFZTzlDeGtqcVNVSDMrNHpDZzVPUHQrbVEw?=
+ =?utf-8?B?b2g4NzdUbUZjMXluRTgxUVhWRUJUaEhPL0pZMWNPOUhQTDZML09ub0JjNUpk?=
+ =?utf-8?B?aXVFYVpZemJvT21nckNSdXpIbUREWHdkbnZySlVNOHM1QkZxKy9kQXNtZnpl?=
+ =?utf-8?B?U0ZWUmQvYkhGWm1qWEd1TENVZm9FRThWMWV1MElFUVlWcmo2NHRINms2QVBp?=
+ =?utf-8?B?QTQvdFdxYUQ3cG05cUV2K2tUZWtVcUJ3eEw5aVpwNUhjSy9SaTFrcU9xVFlN?=
+ =?utf-8?B?VTMvUHJUc2YyUVJzNGFUa1ZmVDRIbVhkWXpoeENnVWMxcUMydU1RRmZoRHVu?=
+ =?utf-8?B?V3dhQnRFWUh3NDFIYXZXOWQyU3FxckhsdEEwZ0dPQ1dBQnNFV0JzZnA2V25M?=
+ =?utf-8?Q?M9d5PPZWBM+vm?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(376005)(1800799015)(36860700004)(82310400017);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(82310400017)(36860700004)(376005)(1800799015);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2024 18:27:11.5083
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2024 18:27:15.7115
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 35ae8702-a0f9-4b6c-445b-08dc7b55f660
+X-MS-Exchange-CrossTenant-Network-Message-Id: ec0aeeae-b846-42d4-9ea7-08dc7b55f8e1
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
 	CH3PEPF00000011.namprd21.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB9040
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB7475
 
-Check the return value of amd_smn_read() before saving a value. This
-ensures invalid values aren't saved or used.
+Currently, k10temp_get_ccd_support() takes as input "pdev" and "data".
+However, "pdev" is already included in "data". Furthermore, the "pdev"
+parameter is no longer used in k10temp_get_ccd_support(), since its use
+was moved into read_ccd_temp_reg().
 
-There are three cases here with slightly different behavior.
+Drop the "pdev" input parameter as it is no longer needed.
 
-1) read_tempreg_nb_zen():
-	This is a function pointer which does not include a return code.
-	In this case, set the register value to 0 on failure. This
-	enforces Read-as-Zero behavior.
-
-2) k10temp_read_temp():
-	This function does have return codes, so return the error code
-	from the failed register read. Continued operation is not
-	necessary, since there is no valid data from the register.
-	Furthermore, if the register value was set to 0, then the
-	following operation would underflow.
-
-3) k10temp_get_ccd_support():
-	This function reads the same register from multiple CCD
-	instances in a loop. And a bitmask is formed if a specific bit
-	is set in each register instance. The loop should continue on a
-	failed register read, skipping the bit check.
-
-Furthermore, the __must_check attribute will be added to amd_smn_read().
-Therefore, this change is required to avoid compile-time warnings.
+No functional change is intended.
 
 Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
 Acked-by: Guenter Roeck <linux@roeck-us.net>
-Cc: stable@vger.kernel.org
 ---
- drivers/hwmon/k10temp.c | 36 +++++++++++++++++++++++++++---------
- 1 file changed, 27 insertions(+), 9 deletions(-)
+ drivers/hwmon/k10temp.c | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-index 8092312c0a87..6cad35e7f182 100644
+index 315c52de6e54..6deb272c7cef 100644
 --- a/drivers/hwmon/k10temp.c
 +++ b/drivers/hwmon/k10temp.c
-@@ -153,8 +153,9 @@ static void read_tempreg_nb_f15(struct pci_dev *pdev, u32 *regval)
+@@ -385,8 +385,7 @@ static const struct hwmon_chip_info k10temp_chip_info = {
+ 	.info = k10temp_info,
+ };
  
- static void read_tempreg_nb_zen(struct pci_dev *pdev, u32 *regval)
+-static void k10temp_get_ccd_support(struct pci_dev *pdev,
+-				    struct k10temp_data *data, int limit)
++static void k10temp_get_ccd_support(struct k10temp_data *data, int limit)
  {
--	amd_smn_read(amd_pci_dev_to_node_id(pdev),
--		     ZEN_REPORTED_TEMP_CTRL_BASE, regval);
-+	if (amd_smn_read(amd_pci_dev_to_node_id(pdev),
-+			 ZEN_REPORTED_TEMP_CTRL_BASE, regval))
-+		*regval = 0;
- }
- 
- static long get_raw_temp(struct k10temp_data *data)
-@@ -205,6 +206,7 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
- 			     long *val)
- {
- 	struct k10temp_data *data = dev_get_drvdata(dev);
-+	int ret = -EOPNOTSUPP;
  	u32 regval;
- 
- 	switch (attr) {
-@@ -221,13 +223,17 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
- 				*val = 0;
- 			break;
- 		case 2 ... 13:		/* Tccd{1-12} */
--			amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
--				     ZEN_CCD_TEMP(data->ccd_offset, channel - 2),
--						  &regval);
-+			ret = amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
-+					   ZEN_CCD_TEMP(data->ccd_offset, channel - 2),
-+					   &regval);
-+
-+			if (ret)
-+				return ret;
-+
- 			*val = (regval & ZEN_CCD_TEMP_MASK) * 125 - 49000;
- 			break;
- 		default:
--			return -EOPNOTSUPP;
-+			return ret;
- 		}
- 		break;
- 	case hwmon_temp_max:
-@@ -243,7 +249,7 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
- 			- ((regval >> 24) & 0xf)) * 500 + 52000;
- 		break;
- 	default:
--		return -EOPNOTSUPP;
-+		return ret;
- 	}
- 	return 0;
- }
-@@ -381,8 +387,20 @@ static void k10temp_get_ccd_support(struct pci_dev *pdev,
  	int i;
- 
- 	for (i = 0; i < limit; i++) {
--		amd_smn_read(amd_pci_dev_to_node_id(pdev),
--			     ZEN_CCD_TEMP(data->ccd_offset, i), &regval);
-+		/*
-+		 * Ignore inaccessible CCDs.
-+		 *
-+		 * Some systems will return a register value of 0, and the TEMP_VALID
-+		 * bit check below will naturally fail.
-+		 *
-+		 * Other systems will return a PCI_ERROR_RESPONSE (0xFFFFFFFF) for
-+		 * the register value. And this will incorrectly pass the TEMP_VALID
-+		 * bit check.
-+		 */
-+		if (amd_smn_read(amd_pci_dev_to_node_id(pdev),
-+				 ZEN_CCD_TEMP(data->ccd_offset, i), &regval))
-+			continue;
-+
- 		if (regval & ZEN_CCD_TEMP_VALID)
- 			data->show_temp |= BIT(TCCD_BIT(i));
- 	}
+@@ -456,18 +455,18 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 		case 0x11:	/* Zen APU */
+ 		case 0x18:	/* Zen+ APU */
+ 			data->ccd_offset = 0x154;
+-			k10temp_get_ccd_support(pdev, data, 4);
++			k10temp_get_ccd_support(data, 4);
+ 			break;
+ 		case 0x31:	/* Zen2 Threadripper */
+ 		case 0x60:	/* Renoir */
+ 		case 0x68:	/* Lucienne */
+ 		case 0x71:	/* Zen2 */
+ 			data->ccd_offset = 0x154;
+-			k10temp_get_ccd_support(pdev, data, 8);
++			k10temp_get_ccd_support(data, 8);
+ 			break;
+ 		case 0xa0 ... 0xaf:
+ 			data->ccd_offset = 0x300;
+-			k10temp_get_ccd_support(pdev, data, 8);
++			k10temp_get_ccd_support(data, 8);
+ 			break;
+ 		}
+ 	} else if (boot_cpu_data.x86 == 0x19) {
+@@ -481,21 +480,21 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 		case 0x21:		/* Zen3 Ryzen Desktop */
+ 		case 0x50 ... 0x5f:	/* Green Sardine */
+ 			data->ccd_offset = 0x154;
+-			k10temp_get_ccd_support(pdev, data, 8);
++			k10temp_get_ccd_support(data, 8);
+ 			break;
+ 		case 0x40 ... 0x4f:	/* Yellow Carp */
+ 			data->ccd_offset = 0x300;
+-			k10temp_get_ccd_support(pdev, data, 8);
++			k10temp_get_ccd_support(data, 8);
+ 			break;
+ 		case 0x60 ... 0x6f:
+ 		case 0x70 ... 0x7f:
+ 			data->ccd_offset = 0x308;
+-			k10temp_get_ccd_support(pdev, data, 8);
++			k10temp_get_ccd_support(data, 8);
+ 			break;
+ 		case 0x10 ... 0x1f:
+ 		case 0xa0 ... 0xaf:
+ 			data->ccd_offset = 0x300;
+-			k10temp_get_ccd_support(pdev, data, 12);
++			k10temp_get_ccd_support(data, 12);
+ 			break;
+ 		}
+ 	} else if (boot_cpu_data.x86 == 0x1a) {
 
 -- 
 2.34.1
