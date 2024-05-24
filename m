@@ -1,130 +1,109 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 413F3F9CB
-	for <linux-hwmon@vger.kernel.org>; Fri, 24 May 2024 00:11:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91E214C99;
+	Fri, 24 May 2024 00:44:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716509513; cv=none; b=d5djRz+7+HRRC8Buj+beYGVPrtqhgv07xaDGNjT/sysQM4PTIKG79lStfWWfcJwz0uMjS/YVEoUCe7XOnKQjrzgnIfQb7LOHiLjhJsJodccZhsJMAEimD4bqS1VO+rr48XRnfzE+VzrMWIps+pVOR/SfrGftrPELTruUgd89n0o=
+	t=1716511471; cv=none; b=WafY8SKb0i1FnLy8Ui91FuzxV8v8wXgan89Fd5Lc1fi/mL3nZuEYf8PBT71xdkxXwuPT5DWg4GYyFx9W85Nc+1Nc3dKDmuPXaTyXjAJgtYnr6ilIpefssRuIj5iIigwZRAasyG/ACRKq782DwozuybTvmolwBKM0N2i9ozbAY9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716509513; c=relaxed/simple;
-	bh=nRc3WeVZE23gV4AdRevK9ZlxzsxL96l8XoNG0zG8duQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=p1B685cw1dMOn3ktJi+qutWV/o4t/MARazrpnWnqiRyzvh5a7sMsZQ2hX9k4Ngk3h0DuY2xTCeNo1EjnYisKwEHdTZRcyShpc46WEIbaE1lEnINlVry6c2c533NA6TQqA0Q/bL3pt90ecH1JnqJ3YN7eOZtPpH9leQD63imOdEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e8+D01h6; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1716511471; c=relaxed/simple;
+	bh=IEBRAiGiSIuPPxCV+SjW0MMvxGR/UP/23ouD481D0+0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=qiqoww36+iNaJDAWrsR0KLZa5KxhATLI0RDGxI37dD6K7kpeti1meiW/gO9L3MsJJf0PVBLYJRL6GxtR0z3xx+RK5lsu8UoNPI9NStlKVNqH7lEoqYSzy6giuFVZ3I7FwHavn5BP7xsSQ6kVVlUcD2s9fkbKPNpRZxpm9skcDeQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TvaNuc5Q; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e8+D01h6"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-6f8f34cb0beso197658b3a.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 23 May 2024 17:11:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TvaNuc5Q"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-35503846fc5so150100f8f.3;
+        Thu, 23 May 2024 17:44:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716509511; x=1717114311; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=HsYpYM6k1q9KRoo66EjHosICuhvty0UdSlCBqm1/AKo=;
-        b=e8+D01h6NzPQoKDAKZbfIJBJl6ohXU63I/zX+RQ8AktnafJEbf640dRU7WvjgwgK6U
-         tDSd0hdpC6Qpo6P8WmocU86ugUcRQHIbzD1Dr5XC3QiXkYEsxDe2OHKKFi5PP/PCESQG
-         P9/nBUkKlikAOlpLp2CIT0tFUVTBMrUGBO08cjvpTUXlrU/9AEijnqg7qRGG41LgIolb
-         nzNRiwcuYW+NuDlcjZSWCJOvULVtgkpRwAUjq9Y5yVP3PF4uPNp+EpMl5f2OjH6XrAj2
-         gDHQTeIUJJlzOImmVMXQ5uK/JAhOSp8Ji4s0JqeGeRkzTF5dNMA440BKcJKyEpgRjtro
-         NAvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716509511; x=1717114311;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1716511468; x=1717116268; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HsYpYM6k1q9KRoo66EjHosICuhvty0UdSlCBqm1/AKo=;
-        b=or0uvwXkgm6av7P3Gv9/LhRf6pjJ/x1pfu3FWspRK03wbLBRXf5fFmBwGfADkBZlnx
-         WS3do+b6up/0c+ibx2HQShjefgg1oo8ixi+CMZnxHdFrG5xpScCCaDjY8wwFDf/N6Y6m
-         GZ1PVHohTPV4dGcxB+jBsuv9GG+L6n25cZcRz1ddHgKY1BVumz0J7F78PpiIwoTcuRzZ
-         uzz1uHxH4VgdIqXA25EwUIou722gJw7S1egsi9XKtZVyp4pRK/ZTXNxKpaC4S0kXglJy
-         Sjk/KyOyUiQvymncVy0Oy3XpxtysInXv8faYRV6gG3q3rHBKPgy9njPbGni94lCdp6eB
-         67aw==
-X-Gm-Message-State: AOJu0YyYzo+yEvJgO0y5waiLh1gO8DQs1a3/g6fB6H/1IlNlkt1MkZ8y
-	QaCPOColfO7ulGT6BafKEg0/B/uaJOiuohWg2DiPy9hvjz6+plHomW7KVw==
-X-Google-Smtp-Source: AGHT+IErAnDF9xhe4FuAXv/whEJymOOqD4f9fBs+AG1d8yp+Fe2lffCWpc8HGfXmAvyEBOmu2Qxg4g==
-X-Received: by 2002:a05:6a20:6a1f:b0:1a7:590e:279e with SMTP id adf61e73a8af0-1b212ca8662mr1315648637.5.1716509511533;
-        Thu, 23 May 2024 17:11:51 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-6f8fcfe6694sm167435b3a.152.2024.05.23.17.11.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 May 2024 17:11:50 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ed3ce9d7-7f51-4c13-824a-66e90cf46dd1@roeck-us.net>
-Date: Thu, 23 May 2024 17:11:49 -0700
+        bh=yrUpC+iVM4M6Bp1+nCo25lQK7eOBGK+qm/qUXPfjAc8=;
+        b=TvaNuc5QnFJlD2JZCHPUzmbnvDxgePIIXDmi9zVeZs0X+UHcsaBuhF7gcRfLWtKMvE
+         rrmXhVL2asdqe0P1Kt6+w9Mh859twtQKT1aYEbyiU6LrcBv74R57/OSBvcD9ABO6/f1i
+         S95j642eB+Cq5xBt8wdpo3Zb4cn+dtNJMCz/wTvcDW8hqHCWNownd5ebX0k+XKsFYdrT
+         mlVkssT0K0XRUb9QPnzeCk/a3zOwwLzGa07qiAtayfz825pAEr7fS3OAxAMwgG8orlGI
+         YT2rbr1r4IoeUtkS8Ew0ccwdUXZ7pIhfTuIE7ga2SRW8uh/M0RltolLgrm6g99+4DNoN
+         LWKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716511468; x=1717116268;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yrUpC+iVM4M6Bp1+nCo25lQK7eOBGK+qm/qUXPfjAc8=;
+        b=JPcTU7YWCcSq4NnLRi5irN8G7c0Rvv2MwSwem2P8d4Dan073bhI9WJnEDEhNDEwS0P
+         KiKmZ1KYy3MJjdAklbGBXMuvjc56tBPnfJlaZDwRW2cvjquxI+fycCDWMJByM/X4iPin
+         LTcb6csg6GhTk28wYq3rQrTjCMwdlIOmmiZ/ciA9UYx/k6/bDFbRGx6qZMZutVxpXek2
+         0pmXJpUWGI1QP2BCELjbnWKvd+n0eUWvkRNEl7/j9SNjuw08sGOx98nVq5dgyXEvLySG
+         4UCdX869y4ZZ6zUSywjf6tFzTHFjG+G7fYmt6hHDt35wYLCjtNh1wG5RS7VISkiBo8E4
+         YCVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXv7WIy3ym+USjs2Fl8F0OSD8ot30SXl3zpYid/H12JhVJBuQlxL8iPER76bce0AXbc7Yeqhf38tnDm+MjqJLiHAFNT7RMy
+X-Gm-Message-State: AOJu0YzhGdtl/GJ3pFWenufLNBAYuGhb3ySF+HMVkg8hHj56ys0Yz3i3
+	QLBsaBklCWkUH31NLGlzZXCVM3QZexrHoCt2y8In9aIVl7K2n4eFk2P+u4Uy
+X-Google-Smtp-Source: AGHT+IEEtWS8nh+6AH44AR7vnAeTgthgx0z0XqEZFQ+37Gd7PAH/8hE380XNrN7dM7hJ9G9nx3VFRA==
+X-Received: by 2002:a05:600c:1d25:b0:419:f241:6336 with SMTP id 5b1f17b1804b1-421089f9e0bmr5130665e9.1.1716511467476;
+        Thu, 23 May 2024 17:44:27 -0700 (PDT)
+Received: from amezin-laptop.home.arpa ([2a01:5a8:441:c1bb:3be:e18a:7acf:52e4])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4210897c6bbsm5770335e9.27.2024.05.23.17.44.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 May 2024 17:44:27 -0700 (PDT)
+From: Aleksandr Mezin <mezin.alexander@gmail.com>
+To: linux-hwmon@vger.kernel.org
+Cc: Aleksandr Mezin <mezin.alexander@gmail.com>,
+	stable@vger.kernel.org,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v2] hwmon: (nzxt-smart2) Add support for device 1e71:2020
+Date: Fri, 24 May 2024 03:39:58 +0300
+Message-ID: <20240524004040.121044-1-mezin.alexander@gmail.com>
+X-Mailer: git-send-email 2.45.1
+In-Reply-To: <cd58922f-711e-4125-8214-57e1f83f6777@roeck-us.net>
+References: <cd58922f-711e-4125-8214-57e1f83f6777@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: (nzxt-smart2) add another USB ID
-To: Aleksandr Mezin <mezin.alexander@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
-References: <20240523203130.75681-1-mezin.alexander@gmail.com>
- <cd58922f-711e-4125-8214-57e1f83f6777@roeck-us.net>
- <CADnvcfJK7yuQvQyCu4Sjtgx4To05yanf-ibD9++DBHT+v-gDog@mail.gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <CADnvcfJK7yuQvQyCu4Sjtgx4To05yanf-ibD9++DBHT+v-gDog@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 5/23/24 16:34, Aleksandr Mezin wrote:
-> I'm sorry, I don't understand what exactly is wrong with the
-> description. Especially because patches with similar descriptions were
-> accepted before.
-> 
-See Documentation/process/submitting-patches.rst, "Describe your changes"
+Add support for device with USB ID 1e71:2020.
 
-And thanks for pointing out that I am not perfect.
+Fan speed control reported to be working with existing userspace (hidraw)
+software, so I assume it's compatible. Fan channel count is the same.
+No known differences from already supported devices, at least regarding
+fan speed control and initialization.
 
-Guenter
+Discovered in liquidctl project:
+
+https://github.com/liquidctl/liquidctl/pull/702
+
+Signed-off-by: Aleksandr Mezin <mezin.alexander@gmail.com>
+Cc: stable@vger.kernel.org  # v6.1+
+---
+v2: Improved the description, changed the subject to include device id
+(previous subject was "hwmon: (nzxt-smart2) add another USB ID").
+
+ drivers/hwmon/nzxt-smart2.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
+index 7aa586eb74be..df6fa72a6b59 100644
+--- a/drivers/hwmon/nzxt-smart2.c
++++ b/drivers/hwmon/nzxt-smart2.c
+@@ -799,6 +799,7 @@ static const struct hid_device_id nzxt_smart2_hid_id_table[] = {
+ 	{ HID_USB_DEVICE(0x1e71, 0x2010) }, /* NZXT RGB & Fan Controller */
+ 	{ HID_USB_DEVICE(0x1e71, 0x2011) }, /* NZXT RGB & Fan Controller (6 RGB) */
+ 	{ HID_USB_DEVICE(0x1e71, 0x2019) }, /* NZXT RGB & Fan Controller (6 RGB) */
++	{ HID_USB_DEVICE(0x1e71, 0x2020) }, /* NZXT RGB & Fan Controller (6 RGB) */
+ 	{},
+ };
+ 
+-- 
+2.45.1
 
