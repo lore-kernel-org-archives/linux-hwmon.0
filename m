@@ -1,534 +1,231 @@
-Received: from AUS01-ME3-obe.outbound.protection.outlook.com (mail-me3aus01olkn2168.outbound.protection.outlook.com [40.92.63.168])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94BBC2CA5;
-	Fri, 24 May 2024 23:13:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.63.168
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716592402; cv=fail; b=D/Jxs+rD1OYE/X80ckdhycX+FjWqq04lnbGqgH9pJwjvNk4IuHrVNQsaHDAyDpvijPbtI4ryHzuLNiJgfRRwqcKXhaZaVN29W+ovK4Dnf8cQufAXJ6KsSXzPSMwz3EBH0kepLrypYHyjDquf07US12fP52WScX3joZLtiVoW2PY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716592402; c=relaxed/simple;
-	bh=csAaxym4dNDNsm+zpSMT65bZPhZn7UXFByfyGDKWvZY=;
-	h=Message-ID:Date:From:Subject:To:Cc:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=JdPkPvi5Jb/uj2cjVbGC40C35HNI4HaDtrZXlj+Swu8x4tyfXU9LJs69NNmKTTMzuARmr2/ijglqGrinJCPQyl1KhIq601+VGfmgpOBicwjoX9shmS1A3J3htmw2a47TXMcJsC57OCwc7bCqPCuKudC40TXUkn1Z/sxZteoRR18=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com.au; spf=pass smtp.mailfrom=outlook.com.au; dkim=pass (2048-bit key) header.d=OUTLOOK.COM.AU header.i=@OUTLOOK.COM.AU header.b=W0Mu7I7q; arc=fail smtp.client-ip=40.92.63.168
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com.au
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DDD12BB0A;
+	Sat, 25 May 2024 10:29:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1716632966; cv=none; b=KRVEiutZlfX/159gnSJ4EINytpD8t9L6Zq9jL+scLX8UQb8qAR6AxA4gWMZ8MM1jbvooClRxOcN+mrtFQCtGhiHIGTyHTtpH2yZLSfuUUMKiF4D7a4DaGDTbgxZB27GcI+8XWyS79iEFtFizI5zdCZOKNW90UhXySes/mcHXbZU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1716632966; c=relaxed/simple;
+	bh=kBxqKZt3yNiBobYLsd+AE4sKuvGrJdLiY2b+Bt+0qno=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=KgM4R0KzgZBrDOJavWNdDDKFtr0At8wnMz4FfbVHrP0xb3tWD2k7v0zbYCZzL/yyNZLpwfy2GPBRHK+p5uohZr9fdFNL8/kAvYuU9cgO7j4mhrsOpJrxk/FKzJMQbK0xOo+qGRAomlp509S/uj8jpTu7s06F5EyDri2aNM1YhSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H+KPAZI7; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=OUTLOOK.COM.AU header.i=@OUTLOOK.COM.AU header.b="W0Mu7I7q"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZZ57MgKTdkfeKrx0RlOwuCUkrpHcqGvbsynYbd/M+nVlhjxw4vKSyzwU50dRFNQJnpzJc5+ACWgMHjx03Owvooekb8ZOMtm2IXeVHsR+zfVKb4BI9us3eInZm9d4OKX7sXy2zSjRQ3Ar1RD/F7YvPrD4YS/Gr5OAxhPP09axezXU7NJnHN6RB1c7oC0zg57X5HmGR2X6kd8exx2YvlkmydSdwu32YMptZk1WRApfH6ad4gJCnIkmmlUnQKV+i5r9cag37nBgAzyLjZnVKBIWAoO8e+KmiKliem4PqlTaE8lJP2WISgpSwhNTfAkanyFAOUNuDPuId3JvuyOtx3xpjQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6nyWITULXFAt4VCapvHEJp1UqO+1KOy0c/EFJlPx29o=;
- b=F3HTPz2UNxZ46hXXZzvRVeRDyNxvqSgtSiFygXfbRtrsifZrTGIMObRDALwLRASISXM+DB8Jh0uC6IFH3/q4F46HQPtmPjKJ5QExGFd1T67NnU1TL9/rJOXltY4dZWvPzGJU71CAgIhyblV6JyIPv/hSsC5XRKbMbt7CL6UuYl3wajbdbTum6DiJyWcbGqq75RobAXtz+20jK5ikdEtlBOYL0vDIN5K136i5eVd/DKQDss9YPN7pO4tNcE97I3WYmzD0W1a5bzHxqy+CRuHEYh/X4j63w9i5Jy3TwkUrO+lfnnphf517eYJKIsy1Xsjw0npko1bCfI86F3XUI4MkrA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=OUTLOOK.COM.AU;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6nyWITULXFAt4VCapvHEJp1UqO+1KOy0c/EFJlPx29o=;
- b=W0Mu7I7qep7PmwOFQxP9zDPaMcknxiC4A3at6oMbegUyzE7hq2cS2IO0QWQekEApRFu9uCfnxvLELtXiiqfPmlcWbuP6E6wh8pSY0oq7WEvC0sXNzO+gZrpiwhWANG/vsYwLSBogdKLfn71xoa0wGx0F2p5dpMkWk+Ct0aaiCIlRGu8qnb0vjNCTm5C4YAKqPeD8vKgmBCtLRjok6lJMuT5T1GcZafAvAjlReCJczGRokp/iS8oM5x9iVpX9QxhUQs/v+Gty+2bTCdO0mvfFV7xFduUy82Ll0MN4tXLdW89hE5mYN6NbU9VE83R2PoqdmW5Y/eexMZuEqt+/INzfuA==
-Received: from SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM (2603:10c6:10:159::9) by
- SYYP282MB1534.AUSP282.PROD.OUTLOOK.COM (2603:10c6:10:dd::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7611.22; Fri, 24 May 2024 23:13:13 +0000
-Received: from SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM
- ([fe80::37cc:3733:d1e9:d8e4]) by SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM
- ([fe80::37cc:3733:d1e9:d8e4%3]) with mapi id 15.20.7611.025; Fri, 24 May 2024
- 23:13:13 +0000
-Message-ID:
- <SY4P282MB30635BA1D4087113E79921B5C5F52@SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM>
-Date: Sat, 25 May 2024 09:13:09 +1000
-User-Agent: Mozilla Thunderbird
-From: Stephen Horvath <s.horvath@outlook.com.au>
-Subject: Re: [PATCH v2 1/2] hwmon: add ChromeOS EC driver
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Benson Leung <bleung@chromium.org>, Lee Jones <lee@kernel.org>
-Cc: Guenter Roeck <groeck@chromium.org>, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, chrome-platform@lists.linux.dev,
- Dustin Howett <dustin@howett.net>,
- Mario Limonciello <mario.limonciello@amd.com>,
- Moritz Fischer <mdf@kernel.org>
-References: <20240507-cros_ec-hwmon-v2-0-1222c5fca0f7@weissschuh.net>
- <20240507-cros_ec-hwmon-v2-1-1222c5fca0f7@weissschuh.net>
-Content-Language: en-AU, en-US, en-GB
-In-Reply-To: <20240507-cros_ec-hwmon-v2-1-1222c5fca0f7@weissschuh.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TMN:
- [8dmodNvU81XLQ/SOLpCp2nXX4mS/WQaOxdqEJhN9vpjUJfb1ZV1qcbVD/alxJRPXxUCUwsSHV7Y=]
-X-ClientProxiedBy: SY6PR01CA0079.ausprd01.prod.outlook.com
- (2603:10c6:10:110::12) To SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM
- (2603:10c6:10:159::9)
-X-Microsoft-Original-Message-ID:
- <5286705f-8e96-40de-8b2b-3cab25895fc4@outlook.com.au>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H+KPAZI7"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-351d309bbecso6866885f8f.2;
+        Sat, 25 May 2024 03:29:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1716632963; x=1717237763; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=miLZb61bb6eHKVsGFJqgSUKqREuKVQ85VCQ63BLN4t4=;
+        b=H+KPAZI7ip822Jr+4PsnRAdtTVHfwbNM5ahPkSm73HvghqcVhAaUN5hbTfiQ/kLdq+
+         gKS28yi2yqFFB8FMiGR4a/vnW6DgtLOolKCBPjubU8TXAPMo9d76qchZytw7cyVJmAAA
+         cD1mhGQ2UplxT5HIUp5OQlfnv1QsQLKd5lTWRcL7WSO3FHYv3xuWPmaQuwbSu2Z93Rk+
+         g7yx9s4brEUdwkmX+GhfI3e6O/YTviytQJLhwCsLIs5bD1qLs/zuoOwgCN2iZKXG9P8A
+         kF+TbAmAiVS8JfZOGx3I8dgnsZQwi4vjVTtmaGWABxRfDc/8/WFxD86lWNXdQJK6KP05
+         ZMCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716632963; x=1717237763;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=miLZb61bb6eHKVsGFJqgSUKqREuKVQ85VCQ63BLN4t4=;
+        b=DYq/bQdhvCg6EoH+EIiX9/lz/NZiInVae3rUz+cyGAHug+YvTYeF0Xz143BXYvvFbk
+         brIY7cKbqV/rCkZZBLMyHz4mXO4fXnTfNFCUUQxPnSH+pdm1Tg76O7HYWJWLdRdsA8wU
+         MWxOwECFHo8+u1b5W4ZMoAvJ1U6XMpw5/SpN+v08v2Rd0bD1N9/hApFePRKVUAcuqRM6
+         Ay/gzy3S8rb+6mFwZwhjiNZUeakjTFKPsXMacdk3lrAMSNsuWczkeMaiYdDacNqmaTYF
+         KuSzGP7IyL2eaR9laUA+sSMa3Fy0evFOqjePoXPayWtidRVEO23KZM3xxrSMMRZYwlFv
+         yThw==
+X-Forwarded-Encrypted: i=1; AJvYcCXdx9VHfxGhzifBjU2YAwoi5FHpyIFhhLxQHywZDler3hkSS/z8U+6nNMxr2AP5zijvwGp4meX0IcCmEp574Swtev9ttToRxF8k9nbzlTVTs2ILLelIv7UPwvMHc88XZvOaBSdR9GDCkRkejx206V+xFP7ERpDXN/jS7m/aCiN9FVrFWUgL
+X-Gm-Message-State: AOJu0YzKf/RtVEUJW4NalKNM7eVNiBIygwTyC7pIDt8KIY6nG9ruQZNz
+	pHwBwR0WZLYPf+iIe2A6iv683NwvK00Un3j/0inKqvcXro5IgXSr
+X-Google-Smtp-Source: AGHT+IFw6LxuhUxXMFjkGKrzwVqjOrq7IxQYbP/w/ZEtUm/8Af6yDC71Wcic05SYGXlh8ur6o0seXg==
+X-Received: by 2002:adf:cd8a:0:b0:354:f9b4:e9b1 with SMTP id ffacd0b85a97d-3552f4fe99amr3850617f8f.27.1716632963208;
+        Sat, 25 May 2024 03:29:23 -0700 (PDT)
+Received: from localhost.localdomain (93-34-90-105.ip49.fastwebnet.it. [93.34.90.105])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3557a1c918csm3674651f8f.77.2024.05.25.03.29.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 May 2024 03:29:22 -0700 (PDT)
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] dt-bindings: hwmon: g762: Convert to yaml schema
+Date: Sat, 25 May 2024 12:29:10 +0200
+Message-ID: <20240525102914.22634-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SY4P282MB3063:EE_|SYYP282MB1534:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5f1cfc11-6b4d-4c83-6ad8-08dc7c47160c
-X-Microsoft-Antispam: BCL:0;ARA:14566002|461199019|440099019|3412199016;
-X-Microsoft-Antispam-Message-Info:
-	QWYXT31o5S0Q04w+GbLvdvOPRmjLJUSNStCxawqc9v6d9cEsheJRKiVKeBVCQYKI89oLvruQmOL+T01diL4QBvp7c9Fv2WpOaKXx7jMg9gfP11EW5kGq4XjfM5e7TR5/28U9wPi0nlJBixuWtxY9xZtHhaF854hLzLbF6oL0xxDLmKH7MoL6rPjCmnAv2den7HNerd3xfgohEC4VwtVLrPmjM/jTmcV7MTAP2eDOjrZAGvWerZXh4uIn7UeeKArK6QEdNHnkHOxG7g/sAvZ+eqZNVOyPp7nEfhDQflNPeGWjfcd+OcNeCYjYoe85HDJo8yJC523QbjapNaa/tga/OCMxuCdb/CUh0yZHQOy51hb3pxOtkzhoTsVTdWnTRgqQQTGEvDvToweq3OXHbuWE1yncGIImMY2d7ZTO5NXmckDbds3faNA+0Uh3t3VX0Fuq4bcbxXGBNOzM5fVeIPDTQLOVQXIvOYi5nDWf9GCl3cR1HxU1X2BwBcjd7xuz801iPA3dnKogm5jMsEQmzpNqNXOjhvrWPKFTr1b+r4Nz3ZWR0P6xMDcusdI24y7FRM71
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?dFpjeTdRNy9nS0pUWllyNWVBam9zMDVHVXB0WSs4QThiZEhtWHI5aHYwdHlF?=
- =?utf-8?B?dVlWSE9jektwR21rVjNNbjAxRjVpSHMyaU5vbkFyY0dFQW5hN216b3dvVFkv?=
- =?utf-8?B?SURkT0M3WTg1MGQyc21ZTjJZM00xTm40RkFJQ2ZPV1ZCL0pnYmpMa0p2N21z?=
- =?utf-8?B?aENydE1XaTdKQ3g4ODEzTFpEcmpwZTVUdCtGZWs1cUt0Q3pCK0Y3TU5ER292?=
- =?utf-8?B?M3cwNHlMYjlia3Q0Q1NndlFXTEx1YlpyY2dIbGJPenJmKzd4WnVjRHIxL09z?=
- =?utf-8?B?VVc1TjNKcUkxR3Q3cnUyN1hRdjg4WjdMWE9HTytQRkdjWGxmY0xlTVlVYjJJ?=
- =?utf-8?B?dUFuVFkwUnVQNHcvU1N0aTRDMlArTitGSnk1eGdRWFFPdFZZS2w3Tml5V0Ru?=
- =?utf-8?B?Y2I3c3A5OUhhS25nWG9VOGxvZ09LSTNKYldJYU40b0dRbXZpdzJwMFA3SzAz?=
- =?utf-8?B?VGRnOEVBekJRd2tzVVkyWVlMT1hGKzB3MFFPZDZhT1BhSmNIWWlLSVdvd0Vo?=
- =?utf-8?B?K0ZFcFMzQ1dCSzNWNWNESlJnZjQzTHhqc1ZzcmhSeFpRTDhrV0RxSVdKckFo?=
- =?utf-8?B?QU1IekVKMjNIOHZJRWVRaUpRNHFYN1NlMEpHVDJZSXZzMmFJaXNsZGI0dFNk?=
- =?utf-8?B?K1VTYnBvenkzWFRONjRaWDVCWVB6SkpKKzZqd1F0VGZteXBsUGUxTGc1dGlD?=
- =?utf-8?B?VjFXMGx2ZGZoYk1MTG42aGhGMldkWitiRDJUbFBDb1Z6cUdSZzdYbjhzQ01r?=
- =?utf-8?B?Wm9XdVh5VENyUlo3Zk0xZXFxNXdycmpZb29vMGh1K0IwRCtoNXJlazNaVzRl?=
- =?utf-8?B?K2NpS2FtVmRKSUpqaXNra3JIU1hSWkJCMHBNaCtrQlVXN2gvQWgyK2RDUW01?=
- =?utf-8?B?Z2tNQ1h3M2R1VG00YXh3QlYrU2pBdmxrdmZpZW1CRVdqUVZKemo0MXRnRUZJ?=
- =?utf-8?B?K1hwVFVIL3NXQVp0cmdNeVZubkdhY21VMmVxc25jckZWVDd5b0ZyVW1uYzRO?=
- =?utf-8?B?ZVBuUjFURDlZQWZjQjY1QzIvUlZHZ2Y5UU1aUElINkVIUGxPRzNVQUtLQVZw?=
- =?utf-8?B?RmErUkZRRU1NYUZuTUtGd2Y4dmI3NUVYNWwwazhnZUlBQ2NId1dLUGt0Q3px?=
- =?utf-8?B?RmdRWUx1ZUNvRVRoblJBOHhjZlJqbjBZcWNNakd0Z1NJN1ZCZE5ucmVnWjVp?=
- =?utf-8?B?QS9iMjVKOUlkTUE3Q0E5U3NYTzFIUlFRbHNmOEluOGEyWFdueHBEM2tqK3Q5?=
- =?utf-8?B?eWowanJPMml4bTVHRlBhSGh2U0FzamZMSlFLWDBtOXF5b25tM09Yd0dIWkdu?=
- =?utf-8?B?NytwVFpUVXdFRUptR3FwVkR3NDFweWgzTnB1UGJPNHI0TmR6RVVIbTVKbUFs?=
- =?utf-8?B?WVM4Si9UNUVGeTJRN2FSb2lDRVA0ZDNpSUl2bVBrUVk3RWFRbmRRczdmODYz?=
- =?utf-8?B?eHVNVlZRMWhDK1ZyY0MxR05rMGVocjlsR2lHalpZS2JIUzZxRHV2STljZjVD?=
- =?utf-8?B?MmhPK2o4ZEd4U0hhMnRvdVV5eWNtaFpkMGxzMjFucm4wM2lPUW9DblFnZjN0?=
- =?utf-8?B?KzdMTEo0WWt1S2RjamV5T3lQWFdQYUJocnlJZFh3b3lvQ1BYSmRpYjFWUVNm?=
- =?utf-8?B?RmJWM29zbWtRcWdXNFkvS2VKM0ZsWkxLUk1oVGZka21OSjdqOWVIckFNeTBp?=
- =?utf-8?B?NXE4QW9jUzJ6QnZiZHVpUGQxczZMSFNUUU1jd2dZS0JzZnQ3Qm90QXdsdGN0?=
- =?utf-8?Q?7GJbX9Dq/I1pyBhZvo+49S7r0bdGSPj+Lnc5vH0?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-746f3.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5f1cfc11-6b4d-4c83-6ad8-08dc7c47160c
-X-MS-Exchange-CrossTenant-AuthSource: SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2024 23:13:13.7276
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SYYP282MB1534
+Content-Transfer-Encoding: 8bit
 
-Hi Thomas,
+Convert g762 Documentation to yaml schema.
 
-I was the one to implement fan monitoring/control into Dustin's driver, 
-and just had a quick comment for your driver:
+Since it supports various device, change the name to g76x and add the
+vendor prefix.
 
-On 8/5/24 02:29, Thomas Weißschuh wrote:
-> The ChromeOS Embedded Controller exposes fan speed and temperature
-> readings.
-> Expose this data through the hwmon subsystem.
-> 
-> The driver is designed to be probed via the cros_ec mfd device.
-> 
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> ---
->   Documentation/hwmon/cros_ec_hwmon.rst |  26 ++++
->   Documentation/hwmon/index.rst         |   1 +
->   MAINTAINERS                           |   8 +
->   drivers/hwmon/Kconfig                 |  11 ++
->   drivers/hwmon/Makefile                |   1 +
->   drivers/hwmon/cros_ec_hwmon.c         | 269 ++++++++++++++++++++++++++++++++++
->   6 files changed, 316 insertions(+)
-> 
-> diff --git a/Documentation/hwmon/cros_ec_hwmon.rst b/Documentation/hwmon/cros_ec_hwmon.rst
-> new file mode 100644
-> index 000000000000..aeb88c79d11b
-> --- /dev/null
-> +++ b/Documentation/hwmon/cros_ec_hwmon.rst
-> @@ -0,0 +1,26 @@
-> +.. SPDX-License-Identifier: GPL-2.0-or-later
-> +
-> +Kernel driver cros_ec_hwmon
-> +===========================
-> +
-> +Supported chips:
-> +
-> +  * ChromeOS embedded controllers connected via LPC
-> +
-> +    Prefix: 'cros_ec'
-> +
-> +    Addresses scanned: -
-> +
-> +Author:
-> +
-> +  - Thomas Weißschuh <linux@weissschuh.net>
-> +
-> +Description
-> +-----------
-> +
-> +This driver implements support for hardware monitoring commands exposed by the
-> +ChromeOS embedded controller used in Chromebooks and other devices.
-> +
-> +The channel labels exposed via hwmon are retrieved from the EC itself.
-> +
-> +Fan and temperature readings are supported.
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index 1ca7a4fe1f8f..355a83e66928 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -57,6 +57,7 @@ Hardware Monitoring Kernel Drivers
->      coretemp
->      corsair-cpro
->      corsair-psu
-> +   cros_ec_hwmon
->      da9052
->      da9055
->      dell-smm-hwmon
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index c23fda1aa1f0..aa5689169eca 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -4988,6 +4988,14 @@ S:	Maintained
->   F:	Documentation/devicetree/bindings/sound/google,cros-ec-codec.yaml
->   F:	sound/soc/codecs/cros_ec_codec.*
->   
-> +CHROMEOS EC HARDWARE MONITORING
-> +M:	Thomas Weißschuh <thomas@weissschuh.net>
-> +L:	chrome-platform@lists.linux.dev
-> +L:	linux-hwmon@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/hwmon/chros_ec_hwmon.rst
-> +F:	drivers/hwmon/cros_ec_hwmon.c
-> +
->   CHROMEOS EC SUBDRIVERS
->   M:	Benson Leung <bleung@chromium.org>
->   R:	Guenter Roeck <groeck@chromium.org>
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 83945397b6eb..c1284d42697f 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -506,6 +506,17 @@ config SENSORS_CORSAIR_PSU
->   	  This driver can also be built as a module. If so, the module
->   	  will be called corsair-psu.
->   
-> +config SENSORS_CROS_EC
-> +	tristate "ChromeOS Embedded Controller sensors"
-> +	depends on MFD_CROS_EC_DEV
-> +	default MFD_CROS_EC_DEV
-> +	help
-> +	  If you say yes here you get support for ChromeOS Embedded Controller
-> +	  sensors.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called cros_ec_hwmon.
-> +
->   config SENSORS_DRIVETEMP
->   	tristate "Hard disk drives with temperature sensors"
->   	depends on SCSI && ATA
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index 5c31808f6378..8519a6b36c00 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -64,6 +64,7 @@ obj-$(CONFIG_SENSORS_CHIPCAP2) += chipcap2.o
->   obj-$(CONFIG_SENSORS_CORETEMP)	+= coretemp.o
->   obj-$(CONFIG_SENSORS_CORSAIR_CPRO) += corsair-cpro.o
->   obj-$(CONFIG_SENSORS_CORSAIR_PSU) += corsair-psu.o
-> +obj-$(CONFIG_SENSORS_CROS_EC)	+= cros_ec_hwmon.o
->   obj-$(CONFIG_SENSORS_DA9052_ADC)+= da9052-hwmon.o
->   obj-$(CONFIG_SENSORS_DA9055)+= da9055-hwmon.o
->   obj-$(CONFIG_SENSORS_DELL_SMM)	+= dell-smm-hwmon.o
-> diff --git a/drivers/hwmon/cros_ec_hwmon.c b/drivers/hwmon/cros_ec_hwmon.c
-> new file mode 100644
-> index 000000000000..d59d39df2ac4
-> --- /dev/null
-> +++ b/drivers/hwmon/cros_ec_hwmon.c
-> @@ -0,0 +1,269 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + *  ChromesOS EC driver for hwmon
-> + *
-> + *  Copyright (C) 2024 Thomas Weißschuh <linux@weissschuh.net>
-> + */
-> +
-> +#include <linux/device.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/platform_data/cros_ec_commands.h>
-> +#include <linux/platform_data/cros_ec_proto.h>
-> +#include <linux/units.h>
-> +
-> +#define DRV_NAME	"cros-ec-hwmon"
-> +
-> +struct cros_ec_hwmon_priv {
-> +	struct cros_ec_device *cros_ec;
-> +	u8 thermal_version;
-> +	const char *temp_sensor_names[EC_TEMP_SENSOR_ENTRIES + EC_TEMP_SENSOR_B_ENTRIES];
-> +};
-> +
-> +static int cros_ec_hwmon_read_fan_speed(struct cros_ec_device *cros_ec, u8 index, u16 *speed)
-> +{
-> +	u16 data;
-> +	int ret;
-> +
-> +	ret = cros_ec->cmd_readmem(cros_ec, EC_MEMMAP_FAN + index * 2, 2, &data);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	data = le16_to_cpu(data);
-> +
-> +	if (data == EC_FAN_SPEED_NOT_PRESENT)
-> +		return -ENODEV;
-> +
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+---
+ .../devicetree/bindings/hwmon/g762.txt        | 47 -----------
+ .../devicetree/bindings/hwmon/gmt,g76x.yaml   | 83 +++++++++++++++++++
+ 2 files changed, 83 insertions(+), 47 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/hwmon/g762.txt
+ create mode 100644 Documentation/devicetree/bindings/hwmon/gmt,g76x.yaml
 
-Don't forget it can also return `EC_FAN_SPEED_STALLED`.
-Like Guenter, I also don't like returning `-ENODEV`, but I don't have a 
-problem with checking for `EC_FAN_SPEED_NOT_PRESENT` in case it was 
-removed since init or something.
-My approach was to return the speed as `0`, since the fan probably isn't 
-spinning, but set HWMON_F_FAULT for `EC_FAN_SPEED_NOT_PRESENT` and 
-HWMON_F_ALARM for `EC_FAN_SPEED_STALLED`.
-No idea if this is correct though.
+diff --git a/Documentation/devicetree/bindings/hwmon/g762.txt b/Documentation/devicetree/bindings/hwmon/g762.txt
+deleted file mode 100644
+index 6d154c4923de..000000000000
+--- a/Documentation/devicetree/bindings/hwmon/g762.txt
++++ /dev/null
+@@ -1,47 +0,0 @@
+-GMT G762/G763 PWM Fan controller
+-
+-Required node properties:
+-
+- - "compatible": must be either "gmt,g762" or "gmt,g763"
+- - "reg": I2C bus address of the device
+- - "clocks": a fixed clock providing input clock frequency
+-	     on CLK pin of the chip.
+-
+-Optional properties:
+-
+- - "fan_startv": fan startup voltage. Accepted values are 0, 1, 2 and 3.
+-	       The higher the more.
+-
+- - "pwm_polarity": pwm polarity. Accepted values are 0 (positive duty)
+-	       and 1 (negative duty).
+-
+- - "fan_gear_mode": fan gear mode. Supported values are 0, 1 and 2.
+-
+-If an optional property is not set in .dts file, then current value is kept
+-unmodified (e.g. u-boot installed value).
+-
+-Additional information on operational parameters for the device is available
+-in Documentation/hwmon/g762.rst. A detailed datasheet for the device is available
+-at http://natisbad.org/NAS/refs/GMT_EDS-762_763-080710-0.2.pdf.
+-
+-Example g762 node:
+-
+-   clocks {
+-	#address-cells = <1>;
+-	#size-cells = <0>;
+-
+-	g762_clk: fixedclk {
+-		 compatible = "fixed-clock";
+-		 #clock-cells = <0>;
+-		 clock-frequency = <8192>;
+-	}
+-   }
+-
+-   g762: g762@3e {
+-	compatible = "gmt,g762";
+-	reg = <0x3e>;
+-	clocks = <&g762_clk>
+-	fan_gear_mode = <0>; /* chip default */
+-	fan_startv = <1>;    /* chip default */
+-	pwm_polarity = <0>;  /* chip default */
+-   };
+diff --git a/Documentation/devicetree/bindings/hwmon/gmt,g76x.yaml b/Documentation/devicetree/bindings/hwmon/gmt,g76x.yaml
+new file mode 100644
+index 000000000000..bfefe49f54bf
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/gmt,g76x.yaml
+@@ -0,0 +1,83 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/gmt,g76x.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: GMT G762/G763 PWM Fan controller
++
++maintainers:
++  - Christian Marangi <ansuelsmth@gmail.com>
++
++description: |
++  GMT G762/G763 PWM Fan controller.
++
++  If an optional property is not set in DT, then current value is kept
++  unmodified (e.g. bootloader installed value).
++
++  Additional information on operational parameters for the device is available
++  in Documentation/hwmon/g762.rst. A detailed datasheet for the device is available
++  at http://natisbad.org/NAS/refs/GMT_EDS-762_763-080710-0.2.pdf.
++
++properties:
++  compatible:
++    enum:
++      - gmt,g762
++      - gmt,g763
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    description: a fixed clock providing input clock frequency on CLK
++      pin of the chip.
++    maxItems: 1
++
++  fan_startv:
++    description: Fan startup voltage step
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [0, 1, 2, 3]
++
++  pwm_polarity:
++    description: PWM polarity (psotivie or negative duty)
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [0, 1]
++
++  fan_gear_mode:
++    description: FAN gear mode. Configure High speed fan setting factor
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [0, 1, 2]
++
++required:
++  - compatible
++  - reg
++  - clocks
++
++additionalProperties: false
++
++examples:
++  - |
++    clocks {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        g762_clk: fixedclk {
++            compatible = "fixed-clock";
++            #clock-cells = <0>;
++            clock-frequency = <8192>;
++        };
++    };
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        g762@3e {
++            compatible = "gmt,g762";
++            reg = <0x3e>;
++            clocks = <&g762_clk>;
++            fan_gear_mode = <0>;
++            fan_startv = <1>;
++            pwm_polarity = <0>;
++        };
++    };
+-- 
+2.43.0
 
-> +	*speed = data;
-> +	return 0;
-> +}
-> +
-> +static int cros_ec_hwmon_read_temp(struct cros_ec_device *cros_ec, u8 thermal_version,
-> +				   u8 index, u8 *data)
-> +{
-> +	unsigned int offset;
-> +	int ret;
-> +
-> +	if (index < EC_TEMP_SENSOR_ENTRIES)
-> +		offset = EC_MEMMAP_TEMP_SENSOR + index;
-> +	else
-> +		offset = EC_MEMMAP_TEMP_SENSOR_B + index - EC_TEMP_SENSOR_ENTRIES;
-> +
-> +	ret = cros_ec->cmd_readmem(cros_ec, offset, 1, data);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (*data == EC_TEMP_SENSOR_NOT_PRESENT ||
-> +	    *data == EC_TEMP_SENSOR_ERROR ||
-> +	    *data == EC_TEMP_SENSOR_NOT_POWERED ||
-> +	    *data == EC_TEMP_SENSOR_NOT_CALIBRATED)
-> +		return -ENODEV;
-> +
-> +	return 0;
-> +}
-> +
-> +static int cros_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-> +			      u32 attr, int channel, long *val)
-> +{
-> +	struct cros_ec_hwmon_priv *priv = dev_get_drvdata(dev);
-> +	int ret = -ENODATA;
-> +	u16 speed;
-> +	u8 temp;
-> +
-> +	if (type == hwmon_fan) {
-> +		ret = cros_ec_hwmon_read_fan_speed(priv->cros_ec, channel, &speed);
-> +		if (ret == 0)
-> +			*val = speed;
-> +	} else if (type == hwmon_temp) {
-> +		ret = cros_ec_hwmon_read_temp(priv->cros_ec, priv->thermal_version, channel, &temp);
-> +		if (ret == 0)
-> +			*val = kelvin_to_millicelsius((((long)temp) + EC_TEMP_SENSOR_OFFSET));
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int cros_ec_hwmon_get_temp_sensor_info(struct cros_ec_device *cros_ec, u8 id,
-> +					      struct ec_response_temp_sensor_get_info *resp)
-> +{
-> +	int ret;
-> +	struct {
-> +		struct cros_ec_command msg;
-> +		union {
-> +			struct ec_params_temp_sensor_get_info req;
-> +			struct ec_response_temp_sensor_get_info resp;
-> +		} __packed data;
-> +	} __packed buf = {
-> +		.msg = {
-> +			.version = 0,
-> +			.command = EC_CMD_TEMP_SENSOR_GET_INFO,
-> +			.insize  = sizeof(buf.data.resp),
-> +			.outsize = sizeof(buf.data.req),
-> +		},
-> +		.data.req.id = id,
-> +	};
-> +
-> +	ret = cros_ec_cmd_xfer_status(cros_ec, &buf.msg);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	*resp = buf.data.resp;
-> +	return 0;
-> +}
-> +
-> +static int cros_ec_hwmon_read_string(struct device *dev, enum hwmon_sensor_types type,
-> +				     u32 attr, int channel, const char **str)
-> +{
-> +	struct cros_ec_hwmon_priv *priv = dev_get_drvdata(dev);
-> +
-> +	if (type == hwmon_temp && attr == hwmon_temp_label) {
-> +		*str = priv->temp_sensor_names[channel];
-> +		return 0;
-> +	}
-> +
-> +	return -ENODATA;
-> +}
-> +
-> +static umode_t cros_ec_hwmon_is_visible(const void *data, enum hwmon_sensor_types type,
-> +					u32 attr, int channel)
-> +{
-> +	const struct cros_ec_hwmon_priv *priv = data;
-> +	u16 speed;
-> +
-> +	if (type == hwmon_fan) {
-> +		if (cros_ec_hwmon_read_fan_speed(priv->cros_ec, channel, &speed) == 0)
-> +			return 0444;
-> +	} else if (type == hwmon_temp) {
-> +		if (priv->temp_sensor_names[channel])
-> +			return 0444;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct hwmon_channel_info * const cros_ec_hwmon_info[] = {
-> +	HWMON_CHANNEL_INFO(fan,
-> +			   HWMON_F_INPUT,
-> +			   HWMON_F_INPUT,
-> +			   HWMON_F_INPUT,
-> +			   HWMON_F_INPUT),
-> +	HWMON_CHANNEL_INFO(temp,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL),
-> +	NULL
-> +};
-> +
-> +static const struct hwmon_ops cros_ec_hwmon_ops = {
-> +	.read = cros_ec_hwmon_read,
-> +	.read_string = cros_ec_hwmon_read_string,
-> +	.is_visible = cros_ec_hwmon_is_visible,
-> +};
-> +
-> +static const struct hwmon_chip_info cros_ec_hwmon_chip_info = {
-> +	.ops = &cros_ec_hwmon_ops,
-> +	.info = cros_ec_hwmon_info,
-> +};
-> +
-> +static void cros_ec_hwmon_probe_temp_sensors(struct device *dev, struct cros_ec_hwmon_priv *priv)
-> +{
-> +	struct ec_response_temp_sensor_get_info info;
-> +	size_t candidates, i;
-> +	int ret;
-> +	u8 temp;
-> +
-> +	if (priv->thermal_version < 2)
-> +		candidates = EC_TEMP_SENSOR_ENTRIES;
-> +	else
-> +		candidates = ARRAY_SIZE(priv->temp_sensor_names);
-> +
-> +	for (i = 0; i < candidates; i++) {
-> +		if (cros_ec_hwmon_read_temp(priv->cros_ec, priv->thermal_version, i, &temp) != 0)
-> +			continue;
-> +
-> +		ret = cros_ec_hwmon_get_temp_sensor_info(priv->cros_ec, i, &info);
-> +		if (ret < 0)
-> +			continue;
-> +
-> +		priv->temp_sensor_names[i] = devm_kasprintf(dev, GFP_KERNEL, "%*s",
-> +							    (int)sizeof(info.sensor_name),
-> +							    info.sensor_name);
-> +	}
-> +}
-> +
-> +static int cros_ec_hwmon_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct cros_ec_dev *ec_dev = dev_get_drvdata(dev->parent);
-> +	struct cros_ec_device *cros_ec = ec_dev->ec_dev;
-> +	struct cros_ec_hwmon_priv *priv;
-> +	struct device *hwmon_dev;
-> +	int ret;
-> +
-> +	/* Not every platform supports direct reads */
-> +	if (!cros_ec->cmd_readmem)
-> +		return -ENODEV;
-> +
-> +	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->cros_ec = cros_ec;
-> +
-> +	ret = priv->cros_ec->cmd_readmem(cros_ec, EC_MEMMAP_THERMAL_VERSION,
-> +					 1, &priv->thermal_version);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/* Covers both fan and temp sensors */
-> +	if (!priv->thermal_version)
-> +		return -ENODEV;
-> +
-> +	cros_ec_hwmon_probe_temp_sensors(dev, priv);
-> +
-> +	hwmon_dev = devm_hwmon_device_register_with_info(dev, "cros_ec", priv,
-> +							 &cros_ec_hwmon_chip_info, NULL);
-> +
-> +	return PTR_ERR_OR_ZERO(hwmon_dev);
-> +}
-> +
-> +static const struct platform_device_id cros_ec_hwmon_id[] = {
-> +	{ DRV_NAME, 0 },
-> +	{ }
-> +};
-> +
-> +static struct platform_driver cros_ec_hwmon_driver = {
-> +	.driver.name	= DRV_NAME,
-> +	.probe		= cros_ec_hwmon_probe,
-> +	.id_table	= cros_ec_hwmon_id,
-> +};
-> +module_platform_driver(cros_ec_hwmon_driver);
-> +
-> +MODULE_DEVICE_TABLE(platform, cros_ec_hwmon_id);
-> +MODULE_DESCRIPTION("ChromeOS EC Hardware Monitoring Driver");
-> +MODULE_AUTHOR("Thomas Weißschuh <linux@weissschuh.net");
-> +MODULE_LICENSE("GPL");
-> 
-
-But feel free to ignore me if I'm completly wrong about this, since I 
-really don't have much experience with kernel dev.
-
-Thanks,
-Steve
