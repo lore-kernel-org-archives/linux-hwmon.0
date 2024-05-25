@@ -1,167 +1,85 @@
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [212.227.15.3])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98B943C08F;
-	Sat, 25 May 2024 14:57:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3382D15A4;
+	Sat, 25 May 2024 15:00:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716649034; cv=none; b=XDg+ynSB2NtJKbnxqqs7yURwveup2mQktvoULt2yZgPsqHiIhPfZqXIS+RwJiUysfGBpwuD9GSLu7oZXBE1yJ3vhPdyWhTW24yxubvumHTjhiOxQicwXH4DdtMQ7vO5vGHDmGUBGdCZmEh8iCo+eX4Ry/sGjINqrGa3u9uns/0Q=
+	t=1716649240; cv=none; b=AzNDwChtfbIPzwiUNCiQjSKIgEW3aOjcz4VOlI1Axgtff71+mcguc+zg0O1YlBT7ivVR85DJi6q+Ok0TU52n2KYwubnRSwUYmL4LM1bH+yx7JD4EYb6Ou1vhd5cA9N8kOaqS2RcmEYBdhag/bs7pLHhEp+lq4fJIkhlQ31SiqDk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716649034; c=relaxed/simple;
-	bh=QMwElAfCIaoW3VvCQJ0Aba3nXaVHbKNoj2smh37TLdM=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s9nvaCIEF/5wuyW/SUMoWwRGQ+uI+DI0p3IiAzEY+oL1Tbl3fJivKM571gRBa6xHgbnQzLMOKGHx2XFt/z6RNqyfeDAjxv4sFhLhwpKCHx+u9BbxPWqZr869D5aSaCCBnh0pr1Du9GArRh2A/5qQ13DJmdWm/6nkKiTZ+YHm+gQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W79X/mzs; arc=none smtp.client-ip=209.85.208.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1716649240; c=relaxed/simple;
+	bh=Q4pzHCy4+tG7Zfat4dTz2yoLFglRjI6sDCvu3SF13IY=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=jNLsqTa7cp53ei2U+6viGexJe8ilk0eiaEznEZKLVL+6uFvDjK9fxIPhN8nzfKmsKoeGiS/MFLNhs825+o0x9bUEZSDmChTNcUHy6bNh7wsePR2ECj8msCYNLG0MzxJYvV77W/WwfROcSAMdGB5Mgq4cHbzrJNIYRmCLzKSYC5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=sDDJuVS4; arc=none smtp.client-ip=212.227.15.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W79X/mzs"
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2e73359b8fbso72992541fa.2;
-        Sat, 25 May 2024 07:57:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716649031; x=1717253831; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=TIfet0oo2M0dTN9IioUaowhYpfdPo8hWYoxafPh4BQ4=;
-        b=W79X/mzs53RIXzLRJX8a+H6vzzp2DBCE0cjqADB/snj6fcLpoAo/6SoH2XT/dK4CFX
-         JWgiBvOm8itrcTpfShIDNLW6iYEr+U9bxhOzVXwgqRoY5MIaS2FbOrTviNrC9PcQpSz0
-         YqNZTIkT376MjGMlprgGmjB5kg1SwSm5vC28MLHieDp6EnomHXRkXoj7iJ2g/ZFmaAkP
-         9GNSG7UFK6HcNWB9TVMSmc4Oidt/W+S+Gcwi8G2R+LuwafwZOLZJCeioiKJfgXE7gXfm
-         HhI0xVaOWWeWRMetifLO6PlpeHD722ZKfiPHECrn44A9rwF8rVoZDSWis0FWvMvpvj9E
-         VmHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716649031; x=1717253831;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TIfet0oo2M0dTN9IioUaowhYpfdPo8hWYoxafPh4BQ4=;
-        b=OhKhAG+1bVTvMToCbNiUHyu7yF6PtBZ9PjcD4ArP40GVCKqOhr+vy1JQGzmMA3vaev
-         eqzL6nHcIOievugHIorqLnSWx5oz8JRREBxC0N4kPX4BbNnXMdOJNps8DwWzHA3AfYgi
-         YA+pzmGoKkw6jfHaWkJfDTSFTDk8LoFSSUi08zOfVJudcvLNneZGNEaE4Dsy66gxDvjt
-         pFzFpmI57LxwGJqGQfJjcwwIOe6FiTazDPmiwl+8PBQpSTPUrj6VcQlCYHxZEV1khbZW
-         REmNzilcSdg9ltsH9+xmiPgiZdnjHBCb/U2Wt0444zDJP/SRASL64BcfDx9hZc3HHqy+
-         f2aw==
-X-Forwarded-Encrypted: i=1; AJvYcCW+NeETzHbP99oZM/NWFZvHuymlLSbue2Oi7LtZ/pjb0zPoPns4pPbl9IlRQfycjQKf2emSG2qkVOpudSUN6TRxN+kgQgjW66rd+3KFJvfJx13vZrmRKdKs5ZkQ4S5dKiJ2TtxX0D7r8DVQNsTz6whA1FJbqE4GgEUBNUD00pmLo9COyPY9
-X-Gm-Message-State: AOJu0YxWTQ3yBWEDXIiApJXuAJBRjL3+DGyESeaDBPT3e69jOSa93SCO
-	PbMIB2TsmuyiLepAPHZ0SMQhf+PfY07xmxuNtgMTw732gevLg+uAZzOuqQ==
-X-Google-Smtp-Source: AGHT+IEQLAp42vuhTf+k4A91OUPMJVggFXAaF5UDWAZ9n2WZwj9ZRgm7etUs8D1J72fzlRAhzR0kfg==
-X-Received: by 2002:a2e:80da:0:b0:2e6:eb0f:5f59 with SMTP id 38308e7fff4ca-2e95b0977c7mr45542491fa.17.1716649030545;
-        Sat, 25 May 2024 07:57:10 -0700 (PDT)
-Received: from Ansuel-XPS. (93-34-90-105.ip49.fastwebnet.it. [93.34.90.105])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42100f1410csm83514765e9.15.2024.05.25.07.57.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 May 2024 07:57:10 -0700 (PDT)
-Message-ID: <6651fc46.050a0220.5b758.034d@mx.google.com>
-X-Google-Original-Message-ID: <ZlHHqlNtcwaOLhLx@Ansuel-XPS.>
-Date: Sat, 25 May 2024 13:12:42 +0200
-From: Christian Marangi <ansuelsmth@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] dt-bindings: hwmon: g76x: Add support for g761
-References: <20240525102914.22634-1-ansuelsmth@gmail.com>
- <20240525102914.22634-2-ansuelsmth@gmail.com>
- <22e1daf4-ffce-4fac-be4c-0e7bebd91c88@roeck-us.net>
- <6651f77a.050a0220.9b079.fbf3@mx.google.com>
- <818aacc7-5244-45e1-844d-561e8540cb46@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="sDDJuVS4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1716649214; x=1717254014; i=markus.elfring@web.de;
+	bh=Q4pzHCy4+tG7Zfat4dTz2yoLFglRjI6sDCvu3SF13IY=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=sDDJuVS4LuXtznwMdAZ99aoXYPLqs15tsCkafF698ZnL2gkw5UMNscR0AKFTtkip
+	 qK8dYmTgdSs8j2cgyDvkCJz1cJux/NVB2U6wh5ae/ebrKEXYa7aO0TH4RLMEouQvC
+	 5aXwanwKKG38ovLION3dJxURqy/hk09fXNzHbvMYvvH2jlGmT39Jc+Dcw+o/cOkeh
+	 ywgUkLFFlCNl6j88hkjXuoRkLGwwTfJ8PxboGsDYqr4A4x12HSAgnKanBn8C/Mdww
+	 Y4pP8a6kOOywKasPJU2u/GlVYTtmrLsUnZgZk6/0bdxoaF76d2t4Ed8/96Fpap3O2
+	 Rf9TlT+fEIJDrTBCng==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.83.95]) by smtp.web.de (mrweb005
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1MKMA7-1rwmVF0V7X-00SzY9; Sat, 25
+ May 2024 17:00:14 +0200
+Message-ID: <120effa0-b739-4fab-a890-559cf353c4ab@web.de>
+Date: Sat, 25 May 2024 17:00:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <818aacc7-5244-45e1-844d-561e8540cb46@roeck-us.net>
+User-Agent: Mozilla Thunderbird
+To: Yazen Ghannam <yazen.ghannam@amd.com>, linux-edac@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ x86@kernel.org, =?UTF-8?B?R8O8bnRlciBSw7Zjaw==?= <linux@roeck-us.net>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Mario Limonciello <mario.limonciello@amd.com>
+References: <20240523-fix-smn-bad-read-v3-7-aa44c622de39@amd.com>
+Subject: Re: [PATCH v3 7/8] hwmon: (k10temp) Remove unused HAVE_TDIE() macro
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20240523-fix-smn-bad-read-v3-7-aa44c622de39@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:18e4ZdRo77H94xd/yj+nZPqU3N9WiFOdAfqaQzyAZfEgBkjvxKl
+ 4izmT08RherBSjcEuZPvg27RDS7zQzB8g4JgU9UbSdTpbNiuoVTbJMJXKAREY3wtDlUYCM2
+ RZD32oD9ykjTZpajRzQZY92YO9XMh4KSN1lLKXcdZg/pf9N0bK0NJ/EzisSpZMlspc4Cqhs
+ Ek1YKAljWlEyRGfLyaxxg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:YXst0CnWAZY=;bWLS72JZhB6sGBWTU5Uum+GIYAm
+ 4rH0a+REkNHHAr2u+IVcvR/EHoB+ZwyA0AG6vqHmaDd+5+Zde/+x+uUxVCE/QaDh2Si+37Cb6
+ d0XGxNa5p91vYKiREq/kuOQXWe06k4WU9LZYCfza45OluUJT9tj/Kixy79wcAHN2zEURzAYKf
+ PuQb9piTEkG5tLE3Z/icLoiPtGDJX1QUsuHfupvQH8dTZjTmKY6ORYhMDkbNgYoNO28pE1zn5
+ f49Yr1n/HQ0x5ZEHnmZPeHwXVms3k7TWZKXqq8MUvEY5O0pwcUdlMSkia+ivWTRPsbu3ONdCY
+ FiHSzCqjvvMVM+52FquyXCtYpZYQIpwjEaO8emPu60kIjWdVrgvG7NZE5izUwB3Z4tRn2mOyt
+ UBBM3X0a4qRFIwIMzRb0Z4XNoXyJUmBH/2DCxedH3+jJzJ24ihlyTsRr8HzeieKBNSSKo0Fqo
+ gd0Trap9tteWE02mqYdcGD2vYEQd8/S9+FXRDnKeB/iKmzHJIPaLO12Q6HnPEl1iro5UEa1ft
+ WPyUXnBpetGunVyUI16+Lm/3rYjKUm0/HQZN3Obx6L6ec5DUmC42D49m8fizuwtaoFUY2X9fx
+ b68Kk3PGcmF4XjgsXWJu7z1Zz1hOzumZjQ/6cXK3Nx62Jxb9enqVBilfN0c2UkWlJFAF/Bc5W
+ 37mryidQGH20pASj5NLpbL1YSkyiJivZQT0DGnBsVF6kTAeCT9DkIBoM5GhoZp8j+pr1OK6LW
+ WHGktG7FwW7tGWVsQSZX/tKKeWnhfgH7/pp+p9Qzr5wkFTboJoFOus4sGrmKTO0WPjVmeDtdH
+ IlnN0u8ZSsk4OMiJahSltaTDDjbEJFnva287vhtRdUGBg=
 
-On Sat, May 25, 2024 at 07:53:57AM -0700, Guenter Roeck wrote:
-> On 5/25/24 03:50, Christian Marangi wrote:
-> > On Sat, May 25, 2024 at 07:32:04AM -0700, Guenter Roeck wrote:
-> > > On 5/25/24 03:29, Christian Marangi wrote:
-> > > > Add support for g761 PWM Fan controller. This is an exact copy of g763
-> > > > with the difference that it does also support an internal clock
-> > > > oscillators.
-> > > > 
-> > > > Add required logic to support this additional feature with the property
-> > > > gmt,internal-clock and reject invalid schema that define both
-> > > > internal-clock property and external clocks.
-> > > > 
-> > > > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > > > ---
-> > > >    .../devicetree/bindings/hwmon/gmt,g76x.yaml   | 43 +++++++++++++++++--
-> > > >    1 file changed, 40 insertions(+), 3 deletions(-)
-> > > > 
-> > > > diff --git a/Documentation/devicetree/bindings/hwmon/gmt,g76x.yaml b/Documentation/devicetree/bindings/hwmon/gmt,g76x.yaml
-> > > > index bfefe49f54bf..d6e80392d045 100644
-> > > > --- a/Documentation/devicetree/bindings/hwmon/gmt,g76x.yaml
-> > > > +++ b/Documentation/devicetree/bindings/hwmon/gmt,g76x.yaml
-> > > > @@ -4,13 +4,13 @@
-> > > >    $id: http://devicetree.org/schemas/hwmon/gmt,g76x.yaml#
-> > > >    $schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > -title: GMT G762/G763 PWM Fan controller
-> > > > +title: GMT G761/G762/G763 PWM Fan controller
-> > > >    maintainers:
-> > > >      - Christian Marangi <ansuelsmth@gmail.com>
-> > > >    description: |
-> > > > -  GMT G762/G763 PWM Fan controller.
-> > > > +  GMT G761/G762/G763 PWM Fan controller.
-> > > >      If an optional property is not set in DT, then current value is kept
-> > > >      unmodified (e.g. bootloader installed value).
-> > > > @@ -22,6 +22,7 @@ description: |
-> > > >    properties:
-> > > >      compatible:
-> > > >        enum:
-> > > > +      - gmt,g761
-> > > >          - gmt,g762
-> > > >          - gmt,g763
-> > > > @@ -48,10 +49,37 @@ properties:
-> > > >        $ref: /schemas/types.yaml#/definitions/uint32
-> > > >        enum: [0, 1, 2]
-> > > > +  gmt,internal-clock:
-> > > > +    description: Use the Internal clock instead of externally attached one
-> > > > +      via the CLK pin.
-> > > > +    type: boolean
-> > > > +
-> > > >    required:
-> > > >      - compatible
-> > > >      - reg
-> > > > -  - clocks
-> > > > +
-> > > > +allOf:
-> > > > +  - if:
-> > > > +      properties:
-> > > > +        compatible:
-> > > > +          contains:
-> > > > +            enum:
-> > > > +              - gmt,g762
-> > > > +              - gmt,g763
-> > > > +    then:
-> > > > +      properties:
-> > > > +        gmt,internal-clock: false
-> > > > +
-> > > > +      required:
-> > > > +        - clocks
-> > > 
-> > > Is the new property even necessary ? The absence of an external clock on G761
-> > > could be used to imply that the internal clock is used.
-> > > 
-> > 
-> > Well with how the driver works, if a property is not defined, then the
-> > value is not set and the one set by the bootloader or from device reset
-> > is keept.
-> > 
-> > This conflicts with the logic of no clock = internal.
-> > 
-> 
-> Not sure I understand the problem. It would be a simple change in the driver
-> to add "if the chip is G761 and the clock is not provided in DT, use the
-> internal clock".
+> ...to address the following warning:
 >
+> drivers/hwmon/k10temp.c:104:9:
+> warning: macro is not used [-Wunused-macros]
 
-Yes sure code wise is pretty easy, my concern is more of losing this
-info in DT. But anyway ok will drop in V2. Thanks a lot for the review!
+Can such a source code cleanup matter also for the tag =E2=80=9CFixes=E2=
+=80=9D?
 
--- 
-	Ansuel
+Regards,
+Markus
