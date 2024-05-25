@@ -1,183 +1,83 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [212.227.15.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4225A4EB51;
-	Sat, 25 May 2024 14:36:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3E0357C94;
+	Sat, 25 May 2024 14:43:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716647805; cv=none; b=Z04kAz26R4ojcqOijpFneaGaVuJIE6+jByJGsxfKj4KTAwKUGXAk3udMsN3CESZIM0DJ4dKf3zNa+QkjKeik9iJ10577lljS9gLkHQ8pr+j9oyQHTtyqRtJg+kO1BvPKujuGCaapTDiUt51rFZizucg0yT/5MIjgqjFF80Wz6ac=
+	t=1716648226; cv=none; b=gO7jKsQT+ZynBbQBb10NGJFZvtSTT+upiE6ytIhad3E/Xv1MxhPc9Lqh/5l0tSr8JCLsT2VjBm7FxTETXZstWF/9y72h0y7gMLOHLXc+agB/LS2P6Ik/QI7wy60qspYA+6GlWU4MvTUb4pyyylcNExP5h7YSTQPEaiDEGvoQU4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716647805; c=relaxed/simple;
-	bh=B22/fE5n/tUIdZkkXpOM1JOMbxjDeybFnhsg7upMGNQ=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UgWcg0yNNKuIvw1lDr2FpyVLD0srphluNV5/PmOngFVQigLLb0J0SNm5xRfl2k/3275wrL4WbyzMOVSNB1FcOk9ejnWPDaDc77ZomM/6O/UCaO5HbBpvx0W9psTiPvPFXGm9vMo+3Nv9zg3/JPKE4W0DMlJWfMrHSHeLwSv7d28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TtYvpEqo; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1716648226; c=relaxed/simple;
+	bh=fkcSscRVePBzClU/ByafnLde7oTUX6HZ++aSee07ccs=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=aK250zl1sEBPfr5oKmktA0lmnIlFLH9GWuxv2sQVaNr0yQIX7nkk3hvKp8sv4QWdfPJZ/vsDju1XKYWLKgEVE+5KEeywiW7Deq6iXAxjDzjnHUbBmne5LJJiI6tgJqOTcPzJwNTGxJ/6Q1dHuGSSbkORHLuc6AwF00B2hY75u9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=v9GRPg1K; arc=none smtp.client-ip=212.227.15.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TtYvpEqo"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-354b7d76c52so3455882f8f.3;
-        Sat, 25 May 2024 07:36:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716647802; x=1717252602; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=WjQnVpwHFdxlugRza/DesNP5iM1P3CKDJhcdhgbGcEQ=;
-        b=TtYvpEqok1QGvYV6IQBGicSMolcZ731Z7a/3zEmM7hrx4BaZt0HihyL9lP0DmKlOB9
-         vj1ofN8h86n+uBWdn7Gn3e1rWob8Ty6J0SLp5SjQ/Oao/7TeYkKVLt+Ya3bnoWnjusSH
-         uZC/idul8R+GYQhUSyQWxiiobnQQMOc7EvOeqSwcqeHGN6UVjBNjzPvtC+Oc5hftr3XW
-         uvWLaVvbEDkS2DsgKMaCzO1BaI5zQkmVpo/+xeKupP0hZ1gMHkAXcG5x1jUmuCE7PS8g
-         BTPA0FJ0Y+lM4StZncwjyfuTCF7/XfpHeR/oV15tszvFxgCLd6n/tR39KHnhUH1c+MNr
-         nb8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716647802; x=1717252602;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WjQnVpwHFdxlugRza/DesNP5iM1P3CKDJhcdhgbGcEQ=;
-        b=Wq6s0BSZzuilOfT+7zN3RnaSv2yAolZzrI4BN23FyUHd8vdHw0U/lsBcXr39lERP+C
-         paErfCmFZlPFvGItfU6eFZcTl+JnzuzEBrRhDHbEInok7SheWLAfQl2V4sbWXv/4RjFI
-         V7Z6YeHbCnK6WsVfaXYAyas6G80zQzeJ97EbPW/R7bUJjObDNJP+w7Ts4bchad3DQwhH
-         /nBJGVUOiK2QwFrb6Zo8pr8BNuI8jtiibJ6aRaFuO9dWKNs6ZOYyqUr8r3XB4lwfamN4
-         b6eH1TRYRYDcwFG3ZkJu1GnD56DO0aN8rfH2zHfznVM4XtEZZyOkzHie01Aiv/S3qd/q
-         yx6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUC0v0z7lx1ZmCVm9Ya12eN/0xc/g+kgq1FqxZbs3LoKPDsaFkv9fg7UtwL2y9v6ayQKAmVhO4/0ui81AmDZoW3eFmgqgdCD3Uh0IdcVGDJ+OgyCXWnoufKHZxzQH+SoumSZwo6h70YZ6PSUjE56bGWAHQWU+CxrlK61Vdwi3vsuXHDfw9U
-X-Gm-Message-State: AOJu0YyIlrRGiveZMqalA2lvCrVxvUQKDlZPR21K5RyoT+PscnbujrkU
-	aHkzlrIR+xcFn+Qa8Y/jNW1FIB7WRPvIuAAEOuCXr6wjfE3n/2KyFfrS0A==
-X-Google-Smtp-Source: AGHT+IFLKo1fCIS2uoQeL1/yJB4MNhgKkjHvSkY2Ov5bdH3GLXt1qoMxqEZwkrfzM756CNPUVQhXxw==
-X-Received: by 2002:a5d:6c65:0:b0:356:c47a:87d2 with SMTP id ffacd0b85a97d-356c47a8ab8mr1582952f8f.6.1716647802405;
-        Sat, 25 May 2024 07:36:42 -0700 (PDT)
-Received: from Ansuel-XPS. (93-34-90-105.ip49.fastwebnet.it. [93.34.90.105])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3557a08a8dfsm4121592f8f.30.2024.05.25.07.36.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 May 2024 07:36:42 -0700 (PDT)
-Message-ID: <6651f77a.050a0220.9b079.fbf3@mx.google.com>
-X-Google-Original-Message-ID: <ZlHCd8upWMBfbuM2@Ansuel-XPS.>
-Date: Sat, 25 May 2024 12:50:31 +0200
-From: Christian Marangi <ansuelsmth@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] dt-bindings: hwmon: g76x: Add support for g761
-References: <20240525102914.22634-1-ansuelsmth@gmail.com>
- <20240525102914.22634-2-ansuelsmth@gmail.com>
- <22e1daf4-ffce-4fac-be4c-0e7bebd91c88@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="v9GRPg1K"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1716648199; x=1717252999; i=markus.elfring@web.de;
+	bh=fkcSscRVePBzClU/ByafnLde7oTUX6HZ++aSee07ccs=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=v9GRPg1KEYYrxlY/tsE9O4exPHM5M5OvPE72/MZr+cv0S59+jLS5PcLP6YXZ9xnU
+	 zndQKjjrCl3KQMhc0INkNTjEI0KDY1YnoDn2W8UnyVZ94ghyACYIw+i0OgIi+rkwr
+	 Eu064jBbcdMMznekVEnIYk4C3xPFFy0VETsMnC6S3szMD2OTlG+lNWOZ12RxsckVc
+	 AP4s1v6oBpwXEu9DDLZWwj5eCcvN/nxcxPa1094c6ydVKuBABNBOv4a/RamzzVMfc
+	 YglqBkknmagIw/ZZFBuDGH3TWsAi4hzD2XvKi1LaLHn/w1iQQr87z9/epqW+NLSWP
+	 u/OVpGgUZXr8qahCGA==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.83.95]) by smtp.web.de (mrweb005
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1N6K1l-1sYXLq2s93-00zZ6o; Sat, 25
+ May 2024 16:43:19 +0200
+Message-ID: <cc397371-cb8a-43ba-8a63-98856b6fc0ca@web.de>
+Date: Sat, 25 May 2024 16:43:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <22e1daf4-ffce-4fac-be4c-0e7bebd91c88@roeck-us.net>
+User-Agent: Mozilla Thunderbird
+To: Yazen Ghannam <yazen.ghannam@amd.com>, linux-edac@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ x86@kernel.org, =?UTF-8?B?R8O8bnRlciBSw7Zjaw==?= <linux@roeck-us.net>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Mario Limonciello <mario.limonciello@amd.com>
+References: <20240523-fix-smn-bad-read-v3-6-aa44c622de39@amd.com>
+Subject: Re: [PATCH v3 6/8] hwmon: (k10temp) Reduce k10temp_get_ccd_support()
+ parameters
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20240523-fix-smn-bad-read-v3-6-aa44c622de39@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:8e5ILg0ccv40lWaOtqg2D8SgzVpmxsIPIOXqqOAu2EP0gVU6f5h
+ dMXEsFiyjFLeoa8OKIncw3mrV1ziT9Ioexl4PPU/UHCqytDerJ1y0n4UeFbQA7oePWkAAxs
+ H+jic0ZGoXtwfYJRmDrBRmmM38jsNHsX9aqOcGLWyfWnxFuhx8tyTjCsI7iOpESHy6aCEeT
+ PKTx1pj4UHwXXY+02MwCA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:Ull0oJpgIdY=;FurdIMuXMAktoU+xEw8OTdQmBM6
+ H4V1sd0KyLKThgT0BqjK4U4qgNJLoHXQCDN8GLrvum63kSTIFlo6ElI2R1K3gwHtcuFVI8iW+
+ iTitMPLjrb0Bq97Y3+IGhBLF+fedpGguAK/rET3ZJXi9Q74FU5GUxsamNWq2Xu2ZtBwomuLax
+ XzYFwJKjWQc7Xyk+0FwG4+cQsXphwL2sSD5KVDZ9MdFlTVb2PAVYbTnIygceQGQdVcFYy5SQZ
+ 3DuXODfb8d+x4xQyfyg9fG3SiV2K3PRr3kxeZZT2NAMeoqZ0vrTbB6OmuXwuMfIcDEJtPbQYz
+ oIJ+QLnX+BM7T7MJXSJkQW/EiCHD7inafmV8Klv2i+Y7B4CyIrFr5+ktVfXpsYEJ/rQBOq4Tt
+ QgzIRcUYdJWbzyeWXW9rCWd1nbnQn7UPwrrtCjWhyQ6+YVybEP8YlQ8gbGvvxpTYIIYN6+tV3
+ ooTANPcM5EAAVBqw3oaN1+ynYRsxtReQ8zMNv5WLt6kGMNkCNyhz/Jui4zkxNNBu14M7kkNFI
+ Gm8maROV1S0eQQvMFwshe2tikAKBhi2Om3PxYApcsyPwCE9SxQSp1oKr/btXMEF+aM5NUXYzv
+ ICRHVL9dOlDuvpI2HywASV22hYNW+UkuFt5nn3yIGoF0trtrhWbUSu0wPLCEjr3oMr2MGsQJ6
+ hr6vPkdnkIDOmvx5pjLdrrkGGHj2MJkZZC+L9yiJrflv8hePuSV98S0bH+brX8zBfK7TgLSJp
+ hqqkec4Fwbd927OCemuYrjSFOsS5dXvTyABayG0BhnxTVbPRIdf0zfH2TpxOidPNe5ufxi+iC
+ BC97E8RAwauT9GtGEarZjc/lIl+9m8tzY3tLUfofY9eB8=
 
-On Sat, May 25, 2024 at 07:32:04AM -0700, Guenter Roeck wrote:
-> On 5/25/24 03:29, Christian Marangi wrote:
-> > Add support for g761 PWM Fan controller. This is an exact copy of g763
-> > with the difference that it does also support an internal clock
-> > oscillators.
-> > 
-> > Add required logic to support this additional feature with the property
-> > gmt,internal-clock and reject invalid schema that define both
-> > internal-clock property and external clocks.
-> > 
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > ---
-> >   .../devicetree/bindings/hwmon/gmt,g76x.yaml   | 43 +++++++++++++++++--
-> >   1 file changed, 40 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/hwmon/gmt,g76x.yaml b/Documentation/devicetree/bindings/hwmon/gmt,g76x.yaml
-> > index bfefe49f54bf..d6e80392d045 100644
-> > --- a/Documentation/devicetree/bindings/hwmon/gmt,g76x.yaml
-> > +++ b/Documentation/devicetree/bindings/hwmon/gmt,g76x.yaml
-> > @@ -4,13 +4,13 @@
-> >   $id: http://devicetree.org/schemas/hwmon/gmt,g76x.yaml#
-> >   $schema: http://devicetree.org/meta-schemas/core.yaml#
-> > -title: GMT G762/G763 PWM Fan controller
-> > +title: GMT G761/G762/G763 PWM Fan controller
-> >   maintainers:
-> >     - Christian Marangi <ansuelsmth@gmail.com>
-> >   description: |
-> > -  GMT G762/G763 PWM Fan controller.
-> > +  GMT G761/G762/G763 PWM Fan controller.
-> >     If an optional property is not set in DT, then current value is kept
-> >     unmodified (e.g. bootloader installed value).
-> > @@ -22,6 +22,7 @@ description: |
-> >   properties:
-> >     compatible:
-> >       enum:
-> > +      - gmt,g761
-> >         - gmt,g762
-> >         - gmt,g763
-> > @@ -48,10 +49,37 @@ properties:
-> >       $ref: /schemas/types.yaml#/definitions/uint32
-> >       enum: [0, 1, 2]
-> > +  gmt,internal-clock:
-> > +    description: Use the Internal clock instead of externally attached one
-> > +      via the CLK pin.
-> > +    type: boolean
-> > +
-> >   required:
-> >     - compatible
-> >     - reg
-> > -  - clocks
-> > +
-> > +allOf:
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            enum:
-> > +              - gmt,g762
-> > +              - gmt,g763
-> > +    then:
-> > +      properties:
-> > +        gmt,internal-clock: false
-> > +
-> > +      required:
-> > +        - clocks
-> 
-> Is the new property even necessary ? The absence of an external clock on G761
-> could be used to imply that the internal clock is used.
->
+=E2=80=A6
+> Drop the "pdev" input parameter as it is no longer needed.
 
-Well with how the driver works, if a property is not defined, then the
-value is not set and the one set by the bootloader or from device reset
-is keept.
+Can such information be relevant for the tag =E2=80=9CFixes=E2=80=9D?
 
-This conflicts with the logic of no clock = internal.
-
-But yes if asked I can drop that, I can totally see your point since the
-clocks is a required property anyway so it's always set.
-
-> 
-> > +
-> > +  - if:
-> > +      required:
-> > +        - gmt,internal-clock
-> > +
-> > +    then:
-> > +      properties:
-> > +        clocks: false
-> >   additionalProperties: false
-> > @@ -80,4 +108,13 @@ examples:
-> >               fan_startv = <1>;
-> >               pwm_polarity = <0>;
-> >           };
-> > +
-> > +        g761@1e {
-> > +            compatible = "gmt,g761";
-> > +            reg = <0x1e>;
-> > +            gmt,internal-clock;
-> > +            fan_gear_mode = <0>;
-> > +            fan_startv = <1>;
-> > +            pwm_polarity = <0>;
-> > +        };
-> >       };
-> 
-
--- 
-	Ansuel
+Regards,
+Markus
