@@ -1,165 +1,84 @@
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [212.227.15.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44EAF2C1B8;
-	Sat, 25 May 2024 10:29:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80B4A101F4;
+	Sat, 25 May 2024 13:22:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716632968; cv=none; b=Vc0sFRegKaSsVzjXATi5YcN30gpCz6rE0vFcEVHzx+vxc+3L+HUP1f8PG3ZFmWlKYRA+MZxWmrhiaVPyIBYOxm3KxTWlsgT+mdbGtRjg8XPB4BIt2A3cbg9hKpBI9G8MRBCZS7aArKM81lXRwIviJscayjoDtXKUCqCftbRxF9Y=
+	t=1716643377; cv=none; b=T5BugqcDnB2u+5IapwJu1Am+uYjoM6Z9N5OjLLJwXc0RyJb1UT374ID40ouqt05FUYv8ZF8HyIIxDQH2NKy0taj3aJz8HKOXfBb/95BobOqDWyK8v4e3VABSDMl8cesnBWg0GDVOxlT1G13rVIGjQ5Zj8hoX1hH4j/ineZFNnzs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716632968; c=relaxed/simple;
-	bh=6OojyHEHyztqo2TUt1lhXyVgSsQ0TBRoUiEL7+DxBTU=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FcBZOXnXYlw1tD9CLmr7Dct8ojuM87YDyFZWpNnKJvA42Xa6rV4i8ciEe4KDRLRp4Fwd0pv+PuHQfHXFNJc3ck2CmmZNAn7haDoCkCnW8I4QPIGcJh2t+YAbiC5YMcRUX0gO5LG+pbN+0tXTdCMSL6qJ1LfzCOqA0t30dFF40YU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=USbCDJ+/; arc=none smtp.client-ip=209.85.208.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1716643377; c=relaxed/simple;
+	bh=twZv0XwD38Sgrc7cZswUW04/P8d8QPz8QlGCO53cniQ=;
+	h=Message-ID:Date:MIME-Version:To:References:Subject:From:Cc:
+	 In-Reply-To:Content-Type; b=Z85e7zFBUZziUjtf7QJO6iIIrK32PjvgDRXASF0Zp1EaQKdBVoWI1Wz3ZdKZRAqAhY9aiZHu7KprF+a+1Tdm7JpZDQeVsPM8clS4m/0FURY18DFS1AH6wwba2x1eJKJMrAqMhp0dRnFIDSOM9VbIE19uiZG1cWLEAan4dKnm310=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=G8dNiMUb; arc=none smtp.client-ip=212.227.15.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="USbCDJ+/"
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2e95a1f9c53so20686391fa.0;
-        Sat, 25 May 2024 03:29:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716632965; x=1717237765; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5GaCh38jQb1O6dHYQUFwk+JyFUXEH9RZyCvXnxsDzbE=;
-        b=USbCDJ+/hE39Mc55BxD6AKLSwX800hquXHyiFtjtl5rRenevZK6f2SOEgowsDvzMv9
-         cgC+zd+UQtK2WNpnZS68NSJnMBimXcS71STdSoAHhLrXDyW38J9F74iKyhsjsJ5UvQJN
-         ATFJ7VgAmVqmuu4AimMMuGAipFut0lGHxFSFMrG7eiLGsFjN0Xbjlzhulye/cMqMUjl9
-         LKun2U+FY6Ougq5OgLrS+Ub2lCnjOb1TiMU4Hfo6lFaHG+klpgtxeQ5sIr6gKxcuBdSm
-         3zEolFNRQ3QQZzWc1p0JFWM1yx5CNuAhScMJ+Pf4D8hhIGLd7ws/psSxsSjJahpDLvAJ
-         Ogtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716632965; x=1717237765;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5GaCh38jQb1O6dHYQUFwk+JyFUXEH9RZyCvXnxsDzbE=;
-        b=oLhvC3SYKZ0/9HgRm5sQPu+GG8cW3FWnV4isoFZhBmyZd5woVMLDTAMm5syYKYA4Fc
-         r5vzAQiSxzlLS+8KnNovJJ1s6MxQJdDB0xt0Wef25MXsRrUbEKUsf7tSlG9rmmB48od+
-         qYur+qzelct5xVb+drxSPrIaegDua74QBOINvP5jmIgehFJt/SG9t7MpofOoNHkZmbko
-         LPtGarFY7D1A6Qmji0GQUfEALY4iJTL+s4eAzOWZb0Kkt4UzWqt/uigvBhGJFlgcqO3F
-         OARowg623c8nRp7/6UwbZiTuWYsYndklBX4t7ycKi4gxxwLviVpDLuPhzTjz6ZVJTdSS
-         4+qQ==
-X-Forwarded-Encrypted: i=1; AJvYcCViXg1ZhM5+Nd4SompA/EiMJ5M+V54BANll1EL9Borouox6LBcj3CDl9eU19N/HDPfgov1c2J55w3L0czHjqaLHbJaFfDD0K2cl0VC367ksKRtmWpAaFzuNxJzGWbYS+xFC1nCvY1OgY0LJqSfy7KH7tD5SeNXAxBHdFjTUrdfFXPEPCfZd
-X-Gm-Message-State: AOJu0YxFvi6Q583jgau4gOiBnBArZVq7FzeEBJzwXLv1Ct5FQ0g7RCzr
-	TEfZaPQEkIExnDEFmDumOYsOcy417E/pQ8vmceuHI5OZSbLwDBGr
-X-Google-Smtp-Source: AGHT+IGMLzoCtvXN3m/fC+vUzmwyk+kFSoszTXTjtj7MW+NybH+4NmTDB2f1Knzfzc8OQwrwz5QaUw==
-X-Received: by 2002:a2e:998b:0:b0:2e1:18d:5b4f with SMTP id 38308e7fff4ca-2e95b2823e1mr28804791fa.42.1716632965244;
-        Sat, 25 May 2024 03:29:25 -0700 (PDT)
-Received: from localhost.localdomain (93-34-90-105.ip49.fastwebnet.it. [93.34.90.105])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3557a1c918csm3674651f8f.77.2024.05.25.03.29.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 May 2024 03:29:24 -0700 (PDT)
-From: Christian Marangi <ansuelsmth@gmail.com>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Christian Marangi <ansuelsmth@gmail.com>,
-	linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] hwmon: g672: add support for g761
-Date: Sat, 25 May 2024 12:29:12 +0200
-Message-ID: <20240525102914.22634-3-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240525102914.22634-1-ansuelsmth@gmail.com>
-References: <20240525102914.22634-1-ansuelsmth@gmail.com>
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="G8dNiMUb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1716643351; x=1717248151; i=markus.elfring@web.de;
+	bh=twZv0XwD38Sgrc7cZswUW04/P8d8QPz8QlGCO53cniQ=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:References:
+	 Subject:From:Cc:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=G8dNiMUbwUKjzXMaWkHcvdLfiXs3jWf45cPgiEfjG9T0zQLr4FYfz/Rp50ihAv6B
+	 BX3uWY8Frx9sfjGK5DIM06ITMTBpe7SIUfNKwWg4U4UAo3rChE27JwikO0wizsE/E
+	 H/g3L+HJ7ju0fDUj3TAeTUTMmtmCtbeXl+UebmdhsOu7fcaGVolL3hTXV/J3vQ1WJ
+	 MdQRz3Hb1CKSRC7j5ohuT6arVN9zsPQEN8mzmdwmTjSgXwoNdSQG/R9O6uqotGEZ8
+	 ot+UZHOn3bx5IV6QNc9VkGxz83Y1eCT7cgdi+SaonN00zmP3K0/hzf401e/Wbhl5A
+	 L/H7lVrArypDL3htfA==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.83.95]) by smtp.web.de (mrweb006
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1MKM5z-1rwloW2E4l-00Lxhx; Sat, 25
+ May 2024 15:22:31 +0200
+Message-ID: <e084c47b-5a14-464e-b2fd-bdfeb9fc8dc3@web.de>
+Date: Sat, 25 May 2024 15:22:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+To: Yazen Ghannam <yazen.ghannam@amd.com>, linux-edac@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ x86@kernel.org, =?UTF-8?B?R8O8bnRlciBSw7Zjaw==?= <linux@roeck-us.net>
+References: <20240523-fix-smn-bad-read-v3-2-aa44c622de39@amd.com>
+Subject: Re: [PATCH v3 2/8] EDAC/amd64: Check return value of amd_smn_read()
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Mario Limonciello <mario.limonciello@amd.com>
+In-Reply-To: <20240523-fix-smn-bad-read-v3-2-aa44c622de39@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:h9m6DHXFR84RKzbcIb+FaTFLgvibH9mmJn4paw4Qt9pUSGJ3Od1
+ nQUAbZjvazlKRaZs06sabcarChxiTkFHP/IioLOfUxtH0DRQsMRxE1yv5idWv5zrt31V5B0
+ dmKB0k7L1KBbWmV+aXsNdvQpri/fsQo5D1RhqDvhJC3m1260hp29FChdfklFTZsGls5kk1g
+ ACkGD3JXkFUoxBx9ok6DA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:HMLPTIJfApg=;xDoy1xlEVS2hpwr5HArNs8O5zrr
+ nFRNbneLkEeMvq80JZ524EbzsyU+rZCOwFK19GKTluHxPj+wsBYkA3Fje7mUyTUW7chLCvqu+
+ O7ij7zgkVJHsUGMS7H7IIwARcZ184JWr1WzEBNTiPiihC0OLG2xE/EQfSddPT8JDE2obEyAsS
+ PKsL14Omf+ykRHbNjllJwTHNdJyEY3cef2mhjvUG/4tXkdd7yFNwGqkbASxvOW5W9EskPuAxJ
+ Hi8g/6kylZXZp6/36vUpriq1+Cn6ZVOp4ZD9mj+cu00vP0Qj8khuHAdsWo6M1dJ8S9M6U+gq7
+ 50RH8XIMZOfscfQr4bmyLBdTdcP7e0Nh2l0M+FrsNXW1gIj9Rzm1Es/R8oP/bXA4xq6YW2hKE
+ iCPQudJt8TkWaHeVulvPpk5GLfqRcTdmJCaYEo1sE/BrSKwfiFnNV4rBGOLVz6cKjEueh9D15
+ pdPLGPli75AA48polfPADoRbGw7KKMUAoW2IwDzUg3/rySTTkI4X+f6mvRnyVxOVCnYpuh9JD
+ PMePvSXaEibvEQUTjFLPRX3YU/+Czbw6UmGk6lJL/x+cenMJnxxTDEe78GG3W7fMBoxt5JmV1
+ Dg3xPL8FwN4Vm4SJUz7xzw1RNrHbojLaaU/iR40KywJ3fKZNwLEcZA04exVXwup9Ld3S1EczF
+ qaVdNpweezPoTfWEfD89R0vW/Rojr60hiX/BAqPiL0CaWB1q0WmVP/WsYDmnH3oU83la3i/ss
+ h1mLED9x+wsSwJQr0JccKP3ZF9p41+SJa1aNmsXNgspYvSUMsqBZG/8SOrS89edbHzzd5/OxZ
+ NEorrtGdKE9V12OktZTdC2+NTP+mh21mlO4G/Ahnm8HDc=
 
-Add support for g761 PWM Fan Controller.
+=E2=80=A6
+> Check the return value of amd_smn_read() before saving a value.
+> This ensures invalid values aren't saved. =E2=80=A6
 
-The g761 is a copy of the g763 with the only difference of supporting
-and internal clock. This can be configured with the gmt,internal-clock
-property and in such case clock handling is skipped.
+Does such information indicate a need for the tag =E2=80=9CFixes=E2=80=9D?
 
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
- drivers/hwmon/g762.c | 23 ++++++++++++++++++++---
- 1 file changed, 20 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/hwmon/g762.c b/drivers/hwmon/g762.c
-index af1228708e25..1629a3141c11 100644
---- a/drivers/hwmon/g762.c
-+++ b/drivers/hwmon/g762.c
-@@ -69,6 +69,7 @@ enum g762_regs {
- #define G762_REG_FAN_CMD1_PWM_POLARITY  0x02 /* PWM polarity */
- #define G762_REG_FAN_CMD1_PULSE_PER_REV 0x01 /* pulse per fan revolution */
- 
-+#define G761_REG_FAN_CMD2_FAN_CLOCK     0x20 /* choose internal clock*/
- #define G762_REG_FAN_CMD2_GEAR_MODE_1   0x08 /* fan gear mode */
- #define G762_REG_FAN_CMD2_GEAR_MODE_0   0x04
- #define G762_REG_FAN_CMD2_FAN_STARTV_1  0x02 /* fan startup voltage */
-@@ -115,6 +116,7 @@ enum g762_regs {
- 
- struct g762_data {
- 	struct i2c_client *client;
-+	bool internal_clock;
- 	struct clk *clk;
- 
- 	/* update mutex */
-@@ -566,6 +568,7 @@ static int do_set_fan_startv(struct device *dev, unsigned long val)
- 
- #ifdef CONFIG_OF
- static const struct of_device_id g762_dt_match[] = {
-+	{ .compatible = "gmt,g761" },
- 	{ .compatible = "gmt,g762" },
- 	{ .compatible = "gmt,g763" },
- 	{ },
-@@ -597,6 +600,16 @@ static int g762_of_clock_enable(struct i2c_client *client)
- 	if (!client->dev.of_node)
- 		return 0;
- 
-+	data = i2c_get_clientdata(client);
-+
-+	/* Skip CLK detection and handling if we use internal clock */
-+	data->internal_clock = of_property_read_bool(client->dev.of_node,
-+						     "gmt,internal-clock");
-+	if (data->internal_clock) {
-+		do_set_clk_freq(&client->dev, 32768);
-+		return 0;
-+	}
-+
- 	clk = of_clk_get(client->dev.of_node, 0);
- 	if (IS_ERR(clk)) {
- 		dev_err(&client->dev, "failed to get clock\n");
-@@ -616,7 +629,6 @@ static int g762_of_clock_enable(struct i2c_client *client)
- 		goto clk_unprep;
- 	}
- 
--	data = i2c_get_clientdata(client);
- 	data->clk = clk;
- 
- 	ret = devm_add_action(&client->dev, g762_of_clock_disable, data);
-@@ -1029,12 +1041,17 @@ static inline int g762_fan_init(struct device *dev)
- 	if (IS_ERR(data))
- 		return PTR_ERR(data);
- 
-+	if (data->internal_clock)
-+		data->fan_cmd2 |= G761_REG_FAN_CMD2_FAN_CLOCK;
-+
- 	data->fan_cmd1 |= G762_REG_FAN_CMD1_DET_FAN_FAIL;
- 	data->fan_cmd1 |= G762_REG_FAN_CMD1_DET_FAN_OOC;
- 	data->valid = false;
- 
--	return i2c_smbus_write_byte_data(data->client, G762_REG_FAN_CMD1,
--					 data->fan_cmd1);
-+	return (i2c_smbus_write_byte_data(data->client, G762_REG_FAN_CMD1,
-+					  data->fan_cmd1) |
-+		i2c_smbus_write_byte_data(data->client, G762_REG_FAN_CMD2,
-+					  data->fan_cmd2));
- }
- 
- static int g762_probe(struct i2c_client *client)
--- 
-2.43.0
-
+Regards,
+Markus
