@@ -1,73 +1,59 @@
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2EE11DA5F;
-	Sun, 26 May 2024 18:45:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 870973B79F;
+	Mon, 27 May 2024 09:30:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716749140; cv=none; b=YKHySNcHW9LBCecFKtXn0mxYkVAocmwNsV8xbZLUa6YpAVGcJpr6cu79DJ5T2c4wOcK4D4HOu/0J0Yu6QwkZkOW1lAg3yHt+4pfQsnlSsBJ8RRp9rnuKQvVpiGkte+Y1UgO10Q5TOFi5tHvxgoSHBprE0yeWjpVtBCOR8RnMlGg=
+	t=1716802230; cv=none; b=nlOaVwRd4JYGBe/NsL7iCWh48r5LfqdsWT2wocTA845ANlPaL5zAMLRFWDepTlXzas1N0DBH+9+nVvqsKso36EKe5q7mqWbdQ/s+zkv8yOtLf7LJqmnVhmTFdVRL+pbadWG9CkWu/kilm1XBWTlOpwhVv3wj+YWA39Vp3wOUFvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716749140; c=relaxed/simple;
-	bh=DYn2aSysUxjoJXWq3Kj3csOOiFlPojw8oWHmMl9rv6w=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SpZaI4TVbNtKbV2Mf1JEg8xQqaTcwbdhxva6162Pnpu8ix7RavwfL7CxdEHd8BBIP2/iotnRJBI1tsNwdFfcBp+j2dkMp4W4Gr4SFKLn4ygi/a/TYpfP/pWImK3MHaujeNW/LMRZF2rzZnJgI3mUxw7fdvDyqHyUCEL7GejH6o4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gV4j0RmS; arc=none smtp.client-ip=209.85.208.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1716802230; c=relaxed/simple;
+	bh=j46PnwFGIjwfKrPkQohHnCw9GlnNH915/OdzLM+EKxM=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Or8htlfkpPctg3DTsd6RIemijV1Qdgz/JWci1dB2MZoPNT5SvmY6CTJngfw6zMYUen8fbVlk9qg2ZC7TGV7k7FGqA23/BZBtJlJ4LCLyLx4VhAL+7KGR7XNHBZIEDbwi78RAqLxvrNTurnNXx+YeXUc4D2I6pluZsX+pSxBkGvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=liET+FTP; arc=none smtp.client-ip=148.163.135.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gV4j0RmS"
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2e73359b8fbso81870081fa.2;
-        Sun, 26 May 2024 11:45:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716749137; x=1717353937; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K5IL9WVaL+MRAvoehS1X61pU+AcxiSLj6714R/XAATo=;
-        b=gV4j0RmS4M2R2vQdAtIfzWJxMMYTnzBFEzKJKRllk8nuiDIXVfCvug6sNyqhDYj5Kz
-         tciCJP6UxTvmOS8QluI5qBFBFF8GMviO9HmGovCa8TfteBIdtn9P6EcA6SFRqd01RUDO
-         NOWfto6EgaeBB3zAjbjK7hMaQnSAoetwtYn4dRwO75n3NIUh7dfdu/oEDn9s3vgP6y4b
-         eN4cdDHWwhQGSvyj2vnZCpPLg6C7yz3UchRoFUdh0eDB6fhWXKKCT1X9MJGH3ovcxoNe
-         nuqDH0nnWwlLcmyiFrHsnDT1vwp6JBv+zN1aMrd7dgNyrec/9dWluKGqnL76yzhsjykP
-         r+sA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716749137; x=1717353937;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=K5IL9WVaL+MRAvoehS1X61pU+AcxiSLj6714R/XAATo=;
-        b=hgvXCFgleU6cycBL5zfFLHalZnqN1SkabFNH7gzQU2PhMfwcMv1alz973zbmCfJ846
-         ldRp796r5aYohVvt/3IFWWGcadFYtxgQ4yiE8Yl+Z99RHEzqfuG5VKXRjoMh+TstdrBP
-         9ZyL45qWFxOTBzKsuSIrGh8wtIRz3Jvs5ySsCEhd+gNaC/r+4SEaN1f5vNyto+xezRDD
-         ONhqK6XqJb50hbjBiCNyVt5Rm/zf/qVwAdYXDleJIp94ZyRPipg1AH5lXkDu1uvaLU4J
-         dwFVc6MzSFourtCwtHVs2cHshrmech8wb9raeT8JWCjiLg9EB3DlLeleTBo3hmrfrSSb
-         4tOA==
-X-Forwarded-Encrypted: i=1; AJvYcCXn3bUF4qTmIdS2iUVHpNcXcgSaToiP0hevWDOdBrFxgPOKf3uZ7q8+gO1T2Vto8U7RdMFFosdyEWsAlZMIDh4CFYXA/bOuMk1vsL+Aj4Pia++/X1bFAHEnZOrT5jcC90fsJIu/lmOzsrspRdplBWK4FcH75KKWOEawPu2Sh9USWvpM5pHz
-X-Gm-Message-State: AOJu0YyMVTFCCyC8YU1fiN696OZmWry5ZFjeNJufi2QTN2OrgSi2sYIr
-	ePMJCqP0YwAkrllGQVqCZEzsQUSui/llPP56FEG5AEMVi8YoxTaM
-X-Google-Smtp-Source: AGHT+IFeY+DPFBdoClSgAlOqZo+Z5AKnX0cbUgFQyPiSnm2Mh4+flIRnbeMwzJIJb8B/uipjI9owZQ==
-X-Received: by 2002:a2e:9f0a:0:b0:2da:a3ff:5254 with SMTP id 38308e7fff4ca-2e95b042cd4mr65305581fa.1.1716749136562;
-        Sun, 26 May 2024 11:45:36 -0700 (PDT)
-Received: from localhost.localdomain (93-34-90-105.ip49.fastwebnet.it. [93.34.90.105])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-421089cc504sm84960075e9.40.2024.05.26.11.45.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 May 2024 11:45:36 -0700 (PDT)
-From: Christian Marangi <ansuelsmth@gmail.com>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Christian Marangi <ansuelsmth@gmail.com>,
-	linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] hwmon: g672: add support for g761
-Date: Sun, 26 May 2024 20:45:25 +0200
-Message-ID: <20240526184526.21010-3-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240526184526.21010-1-ansuelsmth@gmail.com>
-References: <20240526184526.21010-1-ansuelsmth@gmail.com>
+	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="liET+FTP"
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+	by mx0a-00128a01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 44R8Bsnj013587;
+	Mon, 27 May 2024 05:30:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=DKIM; bh=COaWAn4zkH3eoeXQxnwPb3tvK1q
+	yqTv7O9wQvouZ3Tk=; b=liET+FTPWoz7HwNoWYis7l8NBm5pZ19jlVBAixIJTDR
+	HUQkcHiOIgX7iqmZaDbPWySzPpCRLuXA6ELxTvY7y0qGgDczIJx3qCAnDPnog2BK
+	OomQEM79XQK4aNV3X83RI0D4mbNuRZEdV1vGjxre9eVMExkFLWjiF6AkVRw/eIqY
+	9NK/ApALsZlsVMmayb05hU5ScDtQLqvxQay7ru6r8B0i+mBkx9ASHiERwe5QxdiB
+	G6RXWr5GWqZ0NOBd8eJKe97bWXhPD66K0Bk4cg/kj5CrKU3YtAnAlEWm5XA5CcQW
+	m2SwIWCjtE42+ofSUZOztnOJUANYm/qyOgC7adqRz2g==
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3ybcw25s5t-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 27 May 2024 05:30:09 -0400 (EDT)
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 44R9U7un046826
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 27 May 2024 05:30:07 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Mon, 27 May
+ 2024 05:30:06 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Mon, 27 May 2024 05:30:06 -0400
+Received: from radu.ad.analog.com ([10.48.65.189])
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 44R9TrPZ006193;
+	Mon, 27 May 2024 05:29:56 -0400
+From: Radu Sabau <radu.sabau@analog.com>
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, <linux-hwmon@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC: Radu Sabau <radu.sabau@analog.com>
+Subject: [PATCH v4] drivers: hwmon: max31827: Add PEC support
+Date: Mon, 27 May 2024 12:29:47 +0300
+Message-ID: <20240527092947.4370-1-radu.sabau@analog.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -75,111 +61,158 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-ORIG-GUID: ylmytddwowMI5yZCFZHKo--NJNEG6diu
+X-Proofpoint-GUID: ylmytddwowMI5yZCFZHKo--NJNEG6diu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
+ definitions=2024-05-26_09,2024-05-24_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
+ suspectscore=0 mlxlogscore=999 bulkscore=0 phishscore=0 lowpriorityscore=0
+ spamscore=0 clxscore=1015 mlxscore=0 impostorscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2405170001
+ definitions=main-2405270077
 
-Add support for g761 PWM Fan Controller.
+Add support for PEC by attaching PEC attribute to the i2c device.
+Add pec_store and pec_show function for accessing the "pec" file.
 
-The g761 is a copy of the g763 with the only difference of supporting
-and internal clock. The internal clock is used if no clocks property is
-defined in device node and in such case the required bit is enabled and
-clock handling is skipped.
-
-The internal clock oscillator runs at 31KHz.
-
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+Signed-off-by: Radu Sabau <radu.sabau@analog.com>
 ---
-Changes v2:
-- Rework handling of internal clock
+Change log:
+v2:
+ *Rebase on top of v6.9
+ *Attach pec attribute only to i2c device
+ *Fix bug to attach pec attribute to i2c device if the device supports it.
+v3:
+ *Use only one variable to write PEC_EN bit in configuration register
+ *Use regmap_set_bits to set PEC_EN bit when requested instead of
+  regmap_update_bits.
+ *Fix typo in commit message.
+v4:
+ *Use regmap_clear_bits to clear PEC_EN bit when requested instead of
+  regmap_update_bits.
+---
+ Documentation/hwmon/max31827.rst | 13 +++++--
+ drivers/hwmon/max31827.c         | 62 ++++++++++++++++++++++++++++++++
+ 2 files changed, 72 insertions(+), 3 deletions(-)
 
- drivers/hwmon/g762.c | 33 ++++++++++++++++++++++++++++++---
- 1 file changed, 30 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/hwmon/g762.c b/drivers/hwmon/g762.c
-index af1228708e25..a00cf3245eec 100644
---- a/drivers/hwmon/g762.c
-+++ b/drivers/hwmon/g762.c
-@@ -69,6 +69,7 @@ enum g762_regs {
- #define G762_REG_FAN_CMD1_PWM_POLARITY  0x02 /* PWM polarity */
- #define G762_REG_FAN_CMD1_PULSE_PER_REV 0x01 /* pulse per fan revolution */
+diff --git a/Documentation/hwmon/max31827.rst b/Documentation/hwmon/max31827.rst
+index 44ab9dc064cb..9c11a9518c67 100644
+--- a/Documentation/hwmon/max31827.rst
++++ b/Documentation/hwmon/max31827.rst
+@@ -131,7 +131,14 @@ The Fault Queue bits select how many consecutive temperature faults must occur
+ before overtemperature or undertemperature faults are indicated in the
+ corresponding status bits.
  
-+#define G761_REG_FAN_CMD2_FAN_CLOCK     0x20 /* choose internal clock*/
- #define G762_REG_FAN_CMD2_GEAR_MODE_1   0x08 /* fan gear mode */
- #define G762_REG_FAN_CMD2_GEAR_MODE_0   0x04
- #define G762_REG_FAN_CMD2_FAN_STARTV_1  0x02 /* fan startup voltage */
-@@ -115,6 +116,7 @@ enum g762_regs {
- 
- struct g762_data {
- 	struct i2c_client *client;
-+	bool internal_clock;
- 	struct clk *clk;
- 
- 	/* update mutex */
-@@ -566,6 +568,7 @@ static int do_set_fan_startv(struct device *dev, unsigned long val)
- 
- #ifdef CONFIG_OF
- static const struct of_device_id g762_dt_match[] = {
-+	{ .compatible = "gmt,g761" },
- 	{ .compatible = "gmt,g762" },
- 	{ .compatible = "gmt,g763" },
- 	{ },
-@@ -597,6 +600,21 @@ static int g762_of_clock_enable(struct i2c_client *client)
- 	if (!client->dev.of_node)
- 		return 0;
- 
-+	data = i2c_get_clientdata(client);
+-Notes
+------
++PEC Support
++-----------
 +
-+	/*
-+	 * Skip CLK detection and handling if we use internal clock.
-+	 * This is only valid for g761.
-+	 */
-+	data->internal_clock = of_device_is_compatible(client->dev.of_node,
-+						       "gmt,g761") &&
-+			       !of_property_present(client->dev.of_node,
-+						    "clocks");
-+	if (data->internal_clock) {
-+		do_set_clk_freq(&client->dev, 32768);
-+		return 0;
++When reading a register value, the PEC byte is computed and sent by the chip.
++
++PEC on word data transaction respresents a signifcant increase in bandwitdh
++usage (+33% for both write and reads) in normal conditions.
+ 
+-PEC is not implemented.
++Since this operation implies there will be an extra delay to each
++transaction, PEC can be disabled or enabled through sysfs.
++Just write 1  to the "pec" file for enabling PEC and 0 for disabling it.
+diff --git a/drivers/hwmon/max31827.c b/drivers/hwmon/max31827.c
+index f8a13b30f100..c120032582ac 100644
+--- a/drivers/hwmon/max31827.c
++++ b/drivers/hwmon/max31827.c
+@@ -24,6 +24,7 @@
+ 
+ #define MAX31827_CONFIGURATION_1SHOT_MASK	BIT(0)
+ #define MAX31827_CONFIGURATION_CNV_RATE_MASK	GENMASK(3, 1)
++#define MAX31827_CONFIGURATION_PEC_EN_MASK	BIT(4)
+ #define MAX31827_CONFIGURATION_TIMEOUT_MASK	BIT(5)
+ #define MAX31827_CONFIGURATION_RESOLUTION_MASK	GENMASK(7, 6)
+ #define MAX31827_CONFIGURATION_ALRM_POL_MASK	BIT(8)
+@@ -475,6 +476,52 @@ static ssize_t temp1_resolution_store(struct device *dev,
+ 
+ static DEVICE_ATTR_RW(temp1_resolution);
+ 
++static ssize_t pec_show(struct device *dev, struct device_attribute *devattr,
++			char *buf)
++{
++	struct i2c_client *client = to_i2c_client(dev);
++
++	return scnprintf(buf, PAGE_SIZE, "%d\n", !!(client->flags & I2C_CLIENT_PEC));
++}
++
++static ssize_t pec_store(struct device *dev, struct device_attribute *devattr,
++			 const char *buf, size_t count)
++{
++	struct max31827_state *st = dev_get_drvdata(dev);
++	struct i2c_client *client = to_i2c_client(dev);
++	unsigned int val;
++	int err;
++
++	err = kstrtouint(buf, 10, &val);
++	if (err < 0)
++		return err;
++
++	switch (val) {
++	case 0:
++		err = regmap_clear_bits(st->regmap, MAX31827_CONFIGURATION_REG,
++					MAX31827_CONFIGURATION_PEC_EN_MASK);
++		if (err)
++			return err;
++
++		client->flags &= ~I2C_CLIENT_PEC;
++		break;
++	case 1:
++		err = regmap_set_bits(st->regmap, MAX31827_CONFIGURATION_REG,
++				      MAX31827_CONFIGURATION_PEC_EN_MASK);
++		if (err)
++			return err;
++
++		client->flags |= I2C_CLIENT_PEC;
++		break;
++	default:
++		return -EINVAL;
 +	}
 +
- 	clk = of_clk_get(client->dev.of_node, 0);
- 	if (IS_ERR(clk)) {
- 		dev_err(&client->dev, "failed to get clock\n");
-@@ -616,7 +634,6 @@ static int g762_of_clock_enable(struct i2c_client *client)
- 		goto clk_unprep;
- 	}
- 
--	data = i2c_get_clientdata(client);
- 	data->clk = clk;
- 
- 	ret = devm_add_action(&client->dev, g762_of_clock_disable, data);
-@@ -1025,16 +1042,26 @@ ATTRIBUTE_GROUPS(g762);
- static inline int g762_fan_init(struct device *dev)
- {
- 	struct g762_data *data = g762_update_client(dev);
-+	int ret;
- 
- 	if (IS_ERR(data))
- 		return PTR_ERR(data);
- 
-+	/* internal_clock can only be set with compatible g761 */
-+	if (data->internal_clock)
-+		data->fan_cmd2 |= G761_REG_FAN_CMD2_FAN_CLOCK;
++	return count;
++}
 +
- 	data->fan_cmd1 |= G762_REG_FAN_CMD1_DET_FAN_FAIL;
- 	data->fan_cmd1 |= G762_REG_FAN_CMD1_DET_FAN_OOC;
- 	data->valid = false;
- 
--	return i2c_smbus_write_byte_data(data->client, G762_REG_FAN_CMD1,
--					 data->fan_cmd1);
-+	ret = i2c_smbus_write_byte_data(data->client, G762_REG_FAN_CMD1,
-+					data->fan_cmd1);
-+	if (ret)
-+		return ret;
++static DEVICE_ATTR_RW(pec);
 +
-+	return i2c_smbus_write_byte_data(data->client, G762_REG_FAN_CMD2,
-+					 data->fan_cmd2);
+ static struct attribute *max31827_attrs[] = {
+ 	&dev_attr_temp1_resolution.attr,
+ 	NULL
+@@ -578,6 +625,11 @@ static int max31827_init_client(struct max31827_state *st,
+ 	return regmap_write(st->regmap, MAX31827_CONFIGURATION_REG, res);
  }
  
- static int g762_probe(struct i2c_client *client)
++static void max31827_remove_pec(void *dev)
++{
++	device_remove_file(dev, &dev_attr_pec);
++}
++
+ static const struct hwmon_channel_info *max31827_info[] = {
+ 	HWMON_CHANNEL_INFO(temp, HWMON_T_ENABLE | HWMON_T_INPUT | HWMON_T_MIN |
+ 					 HWMON_T_MIN_HYST | HWMON_T_MIN_ALARM |
+@@ -627,6 +679,16 @@ static int max31827_probe(struct i2c_client *client)
+ 	if (err)
+ 		return err;
+ 
++	if (i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_PEC)) {
++		err = device_create_file(dev, &dev_attr_pec);
++		if (err)
++			return err;
++
++		err = devm_add_action_or_reset(dev, max31827_remove_pec, dev);
++		if (err)
++			return err;
++	}
++
+ 	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name, st,
+ 							 &max31827_chip_info,
+ 							 max31827_groups);
 -- 
-2.43.0
+2.34.1
 
