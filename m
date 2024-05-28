@@ -1,102 +1,254 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D97C21E867;
-	Tue, 28 May 2024 15:20:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C49E171E4D;
+	Tue, 28 May 2024 15:50:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716909630; cv=none; b=ELZYz7SGIFWz99LJC8Jdt+dbD/09doMaLj4xajw0SwxJTkhdevvygiqwI0phTLKaMss+3c7CK0e+itjA5LwpJkLMDr5PhCPhx32+UOasmE9prKSSSB8OhAbPIIAhgj/nfL2ev9GX/KEicUWvBI/7rAsaN3iChHdaUER4SKWdBhs=
+	t=1716911454; cv=none; b=b6/vG3BIYaGF/O0U9c47A9gG+8rzBJ/u9RHmbo20zUOEYfX/nAMiSdz+4tzd4ItQMzxNPzIadBV2BdXLjgMRqzzaTCxUVGFJtrQRlfa0Vdql5+rRNBEv0MgP3tFUKrLMrlOx+vWxUb3Kt1HgwaeJKaRRqvjE7CJIVM3B11wSy2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716909630; c=relaxed/simple;
-	bh=QqDR9e2t8bWRx9dhnA1nB/3n1Rs9kv7BgeSLvf9TYFc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tl9QZFkkbvZQ3JVn5jcvP+aWy7UAKSeWI+/GtgvN9xJhNxh/uFif6RthwU8+4wUj6nF9jtHph8P+bTBa18IZFwQCdejO9Rzdj+z2OoWyPvXoD+LhBXel2XGnSd8raf9LFxsxgybRtZ4KNzWiSmk3CIQjNhQnV4xmSW7Z3ay3bd4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sEjCB5ys; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1716911454; c=relaxed/simple;
+	bh=w893qe/kealbejw9LpXOPnWIUhnLGtUJMOvyHH8ODbY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bD0NAAUlCXUiGJrcULdXVULApvWCclQyy6r3NcLqL5xj5fv8ZDY+2og0bLd3BlZUl2bSKDtUOSJiZ43oqgg0cfnt+4XGC9gnsXzS0+TR1hpDkZ01qexmrIrBfzteBo2TG6/tP2ICPcmmjQoRgBPmonOB+rJ0wu3fRCmZIdKmIbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aekQx4jR; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sEjCB5ys"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 837B2C3277B;
-	Tue, 28 May 2024 15:20:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716909629;
-	bh=QqDR9e2t8bWRx9dhnA1nB/3n1Rs9kv7BgeSLvf9TYFc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sEjCB5ysRGmNvu75KO3mEfBXhSTO9bcxQ4YAUoG1JEHdOLU9soei1/OJr+S/B4uU9
-	 CQjqQr4OfGq0+bm0qthVLI7TsbLjaxbzPxsUoNiailvWrh8uJxHe3DCVt+D1vXlw0e
-	 nPWoO2QS6hlqyg0+6itzVBzjcfVd9wYSkp4vugR+p3JnW53mNZAirxYpI+seUOws+1
-	 vAvrJxmvH9ULkWDYiTLIqPbBaXKTnQOwOMcTGa+kU9LBPKIpLRRwZ2OgQJcJyQvDQZ
-	 sJNabuQme8bSf7hZyc1QEF+g5kZTNnn2SjBvug4T8Dnxg2Ao7UwphiAgIwM1TMTl7a
-	 TcLsdbDU7XplQ==
-Date: Tue, 28 May 2024 16:20:25 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Naresh Solanki <naresh.solanki@9elements.com>,
-	Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: hwmon: Add max6639
-Message-ID: <20240528-deduct-juggle-4ff2e7fae06e@spud>
-References: <20240528125122.1129986-1-naresh.solanki@9elements.com>
- <20240528-frame-liqueur-7f37ecc0dad1@spud>
- <c11900ec-dd03-43b7-916a-dc7315bb50b5@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aekQx4jR"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1f44b4404dfso8882785ad.0;
+        Tue, 28 May 2024 08:50:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1716911452; x=1717516252; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=RPIwnjlc45VQT0mMiNcUcWFb46f4+KlFVHgSXlBA+XE=;
+        b=aekQx4jRlitH7iwD+PQ2E3FVTuev1ovyyvr9GtWmO4w7fHlyqrKnt93Y45lSqTA6Mh
+         LhH4ULsRn5he8etVdCFAG8S7kOoaZoQKtv/H2nhzq00dHmiqMHP2a35rfMQglEyuRWaA
+         PvUouDOFroGpl/2x+i3s34hWog54RakxRPEA85IJk0N6hVv9AdaOrg/wNSHuXDXsnjNj
+         LtjqPjQTmO2EPClSVHWFFLgLWkgo9OrzApG/tK0wRqPapKgvKfQFvWRcVNA4yBX6tEgB
+         4vTsXgd37k1kQ6ckEjVW4mOTBbnR64KFGTSUN13xk13ZCLlcyxBvYKYZuxh+0gSzliQK
+         JiNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716911452; x=1717516252;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RPIwnjlc45VQT0mMiNcUcWFb46f4+KlFVHgSXlBA+XE=;
+        b=gsNtSXE58KxDQWxisNROhpzawO4zU2XYnrHCbKOwpmMG2PK/yaE79DuVl+rlj3jDU/
+         g0ax2l6WSmsjnripS584fXJlwby9CgpyE6L7jvD0AvemOQpG1OLhZhoKmwh13w+IBh/y
+         Oh+qkOK1h8ovzFqu95H/kmDkLmo2+n6fr6t1nQ/XuXhAX7FbdM3aa2Gp9hG1x8BuRwZA
+         EVDWgoVABcC6nqBIkxFiLCq+CrgwH66IP0rij1FbnaioJI7kBhzmezhk5D9gmvKqcTa+
+         cmLv651umnU0gPdMsbFOnWlaigh1TToD9r7eSWwItV+X9CweOOO9HWFZ5xKXn1xvYWpF
+         /ptw==
+X-Forwarded-Encrypted: i=1; AJvYcCXn2sfmNvoCqHjLQ1qVYFawpfyGLiUIb7c/5Hz5NeZZ8lKVMIVOMhJspDStiD1O0fLPqGWDp4pQh5UdoT/8Us4OcglUCWmpP+DR9PDL/EhghKai5fYPeG+GTS8FzGDnMmfXaY132mRwvAA=
+X-Gm-Message-State: AOJu0YwgyHDL3kb3Qs8hW+Eu0e9V04xIRyKlbyK9OXXlogK5T0H2MMwB
+	1ZGgxKvGoQGhaL651E1b2J4xEe/Lquy8CF1XDPzhpjUcwiGx6tFu
+X-Google-Smtp-Source: AGHT+IFZjL+uRqFi3RQWD/opqLth7vJLT2z6vemp4GQgqzjHDTisYaBfAgZLAjFcBPqcovOh2xzOSQ==
+X-Received: by 2002:a17:902:e544:b0:1f4:aac7:ffff with SMTP id d9443c01a7336-1f4aac8035fmr51948175ad.20.1716911452471;
+        Tue, 28 May 2024 08:50:52 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f44c967a45sm81765515ad.167.2024.05.28.08.50.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 May 2024 08:50:51 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <c9b110eb-ff0e-41f2-9492-8a5d8c3c01d0@roeck-us.net>
+Date: Tue, 28 May 2024 08:50:49 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="9sDXjxEizOp8NBIa"
-Content-Disposition: inline
-In-Reply-To: <c11900ec-dd03-43b7-916a-dc7315bb50b5@roeck-us.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] hwmon: add ChromeOS EC driver
+To: Stephen Horvath <s.horvath@outlook.com.au>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: Jean Delvare <jdelvare@suse.com>, Benson Leung <bleung@chromium.org>,
+ Lee Jones <lee@kernel.org>, Guenter Roeck <groeck@chromium.org>,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ chrome-platform@lists.linux.dev, Dustin Howett <dustin@howett.net>,
+ Mario Limonciello <mario.limonciello@amd.com>,
+ Moritz Fischer <mdf@kernel.org>
+References: <20240507-cros_ec-hwmon-v2-0-1222c5fca0f7@weissschuh.net>
+ <20240507-cros_ec-hwmon-v2-1-1222c5fca0f7@weissschuh.net>
+ <SY4P282MB30635BA1D4087113E79921B5C5F52@SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM>
+ <9cf224dd-51eb-4608-abcf-06f337d08178@t-8ch.de>
+ <SY4P282MB306325BB023A95198F25A21DC5F12@SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <SY4P282MB306325BB023A95198F25A21DC5F12@SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
+On 5/27/24 17:15, Stephen Horvath wrote:
+> Hi Thomas,
+> 
+> On 28/5/24 05:24, Thomas Weißschuh wrote:
+>> Hi Stephen,
+>>
+>> On 2024-05-25 09:13:09+0000, Stephen Horvath wrote:
+>>> I was the one to implement fan monitoring/control into Dustin's driver, and
+>>> just had a quick comment for your driver:
+>>>
+>>> On 8/5/24 02:29, Thomas Weißschuh wrote:
+>>>> The ChromeOS Embedded Controller exposes fan speed and temperature
+>>>> readings.
+>>>> Expose this data through the hwmon subsystem.
+>>>>
+>>>> The driver is designed to be probed via the cros_ec mfd device.
+>>>>
+>>>> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+>>>> ---
+>>>>    Documentation/hwmon/cros_ec_hwmon.rst |  26 ++++
+>>>>    Documentation/hwmon/index.rst         |   1 +
+>>>>    MAINTAINERS                           |   8 +
+>>>>    drivers/hwmon/Kconfig                 |  11 ++
+>>>>    drivers/hwmon/Makefile                |   1 +
+>>>>    drivers/hwmon/cros_ec_hwmon.c         | 269 ++++++++++++++++++++++++++++++++++
+>>>>    6 files changed, 316 insertions(+)
+>>>>
+>>
+>> <snip>
+>>
+>>>> diff --git a/drivers/hwmon/cros_ec_hwmon.c b/drivers/hwmon/cros_ec_hwmon.c
+>>>> new file mode 100644
+>>>> index 000000000000..d59d39df2ac4
+>>>> --- /dev/null
+>>>> +++ b/drivers/hwmon/cros_ec_hwmon.c
+>>>> @@ -0,0 +1,269 @@
+>>>> +// SPDX-License-Identifier: GPL-2.0-or-later
+>>>> +/*
+>>>> + *  ChromesOS EC driver for hwmon
+>>>> + *
+>>>> + *  Copyright (C) 2024 Thomas Weißschuh <linux@weissschuh.net>
+>>>> + */
+>>>> +
+>>>> +#include <linux/device.h>
+>>>> +#include <linux/hwmon.h>
+>>>> +#include <linux/kernel.h>
+>>>> +#include <linux/mod_devicetable.h>
+>>>> +#include <linux/module.h>
+>>>> +#include <linux/platform_device.h>
+>>>> +#include <linux/platform_data/cros_ec_commands.h>
+>>>> +#include <linux/platform_data/cros_ec_proto.h>
+>>>> +#include <linux/units.h>
+>>>> +
+>>>> +#define DRV_NAME    "cros-ec-hwmon"
+>>>> +
+>>>> +struct cros_ec_hwmon_priv {
+>>>> +    struct cros_ec_device *cros_ec;
+>>>> +    u8 thermal_version;
+>>>> +    const char *temp_sensor_names[EC_TEMP_SENSOR_ENTRIES + EC_TEMP_SENSOR_B_ENTRIES];
+>>>> +};
+>>>> +
+>>>> +static int cros_ec_hwmon_read_fan_speed(struct cros_ec_device *cros_ec, u8 index, u16 *speed)
+>>>> +{
+>>>> +    u16 data;
+>>>> +    int ret;
+>>>> +
+>>>> +    ret = cros_ec->cmd_readmem(cros_ec, EC_MEMMAP_FAN + index * 2, 2, &data);
+>>>> +    if (ret < 0)
+>>>> +        return ret;
+>>>> +
+>>>> +    data = le16_to_cpu(data);
+>>>> +
+>>>> +    if (data == EC_FAN_SPEED_NOT_PRESENT)
+>>>> +        return -ENODEV;
+>>>> +
+>>>
+>>> Don't forget it can also return `EC_FAN_SPEED_STALLED`.
+>>
+>> Thanks for the hint. I'll need to think about how to handle this better.
+>>
+>>> Like Guenter, I also don't like returning `-ENODEV`, but I don't have a
+>>> problem with checking for `EC_FAN_SPEED_NOT_PRESENT` in case it was removed
+>>> since init or something.
+>>
 
---9sDXjxEizOp8NBIa
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+That won't happen. Chromebooks are not servers, where one might be able to
+replace a fan tray while the system is running.
 
-On Tue, May 28, 2024 at 07:41:58AM -0700, Guenter Roeck wrote:
-> On 5/28/24 07:26, Conor Dooley wrote:
-> > On Tue, May 28, 2024 at 06:21:21PM +0530, Naresh Solanki wrote:
-> > > Add Devicetree binding documentation for Maxim MAX6639 temperature
-> > > monitor with PWM fan-speed controller.
-> >=20
-> > Other than unneeded |s where your descriptions don't have any
-> > formatting, this patch looks fine. That said - where's your dts or your
-> > driver? A binding on its own is unusual.
-> >=20
->=20
-> The driver is drivers/hwmon/max6639.c which needs other unrelated changes/
-> cleanups. Holding those up until the bindings are accepted would not make
-> sense, so my guess is that Naresh decided to pursue the other changes for=
- now
-> and add devicetree support to the driver after the devicetree properties
-> have been approved. On the other side, adding devicetree support does dep=
-end
-> on the other changes, so trying to do that before the other changes are
-> complete would be difficult.
->=20
-> That is just my guess, though, and I am ok with it.
+>> Ok.
+>>
+>>> My approach was to return the speed as `0`, since the fan probably isn't
+>>> spinning, but set HWMON_F_FAULT for `EC_FAN_SPEED_NOT_PRESENT` and
+>>> HWMON_F_ALARM for `EC_FAN_SPEED_STALLED`.
+>>> No idea if this is correct though.
+>>
+>> I'm not a fan of returning a speed of 0 in case of errors.
+>> Rather -EIO which can't be mistaken.
+>> Maybe -EIO for both EC_FAN_SPEED_NOT_PRESENT (which should never happen)
+>> and also for EC_FAN_SPEED_STALLED.
+> 
+> Yeah, that's pretty reasonable.
+> 
 
-Well, I think the binding is fine, so it is up to you whether you want
-to merge the binding without having the driver implementation nailed
-down.
+-EIO is an i/o error. I have trouble reconciling that with
+EC_FAN_SPEED_NOT_PRESENT or EC_FAN_SPEED_STALLED.
 
-Ideally with the |s removed,
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-Thanks,
-Conor.
+Looking into the EC source code [1], I see:
 
---9sDXjxEizOp8NBIa
-Content-Type: application/pgp-signature; name="signature.asc"
+EC_FAN_SPEED_NOT_PRESENT means that the fan is not present.
+That should return -ENODEV in the above code, but only for
+the purpose of making the attribute invisible.
 
------BEGIN PGP SIGNATURE-----
+EC_FAN_SPEED_STALLED means exactly that, i.e., that the fan
+is present but not turning. The EC code does not expect that
+to happen and generates a thermal event in case it does.
+Given that, it does make sense to set the fault flag.
+The actual fan speed value should then be reported as 0 or
+possibly -ENODATA. It should _not_ generate any other error
+because that would trip up the "sensors" command for no
+good reason.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZlX2OQAKCRB4tDGHoIJi
-0uc8AQCzupW+/6KLITUMKXvrN3b4eLuQhtSXFtOOwZUsnzMPmQD+NOOPuU68KhXX
-NAzkgBAfiRBk8yNzpli2gf+Ww7QvrAw=
-=ySB5
------END PGP SIGNATURE-----
+Guenter
 
---9sDXjxEizOp8NBIa--
+---
+[1] https://chromium.googlesource.com/chromiumos/platform/ec
+
