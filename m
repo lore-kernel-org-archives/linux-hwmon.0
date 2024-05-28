@@ -1,173 +1,193 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8D3016C688;
-	Tue, 28 May 2024 16:02:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AAF816D9D2;
+	Tue, 28 May 2024 16:15:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716912173; cv=none; b=lNbW+5LXZLXcV82mUkDJgicDFLsKQ/r7xN3GWT6b9GqBl/AFlXUssYySlrOpw4jb9yCkX9OfhMfgDIa5jQOUGkQnT0DMO49E+jhDd22ya6DF5kgLCDits7DxRKOh2heTIaa6tz2TwzbL71R3ZuKi5VaVicAs5Ps5+r87oXB5IXc=
+	t=1716912964; cv=none; b=NbbRW/M/jOaD/e04SHT6uIsOkgdqgKihfb2pyfWhW7wo8qYWCQhL3WemdGJZpqXLFSfHecxOA5KQ428P/K+FdVco0IKeZjTKZl7yuL6q0cuRTIK02POcOMYYZRfaVHsZZyVyq1ynT6nrq5t8z4D3/8E1JBVMfB6K9fQDA4w6jBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716912173; c=relaxed/simple;
-	bh=pTd9+3ADyKSsLJxka8UR2Fi7CwtGAZ/fPYypqOBGFKc=;
+	s=arc-20240116; t=1716912964; c=relaxed/simple;
+	bh=l6x4ez58HU9UJM5Ps7D89/4CNRdh7IYjsMDwe693JlQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qs20/vT9OFW8PsXXROHrjIkOd2oKvqzJgyqjHJgkavnEOFm9mKa6/a/sNFv6jM7CAm2hTghOj2qr4xb/tQRfSKPefUko6EL/CipOXW5cB1jZUQH91ZE2Quj42e8QIEfQrzDj51hgHWZI8CYXkG1qNw7d8gost+131d/bRKT0+hg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=abhkWOWA; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=t2e8La/7t8uxHYT6Uh0RupVDHOqNgE6i4wl4mobqmFJ/kiGA3mL09d20xdW+kDuJEKsg8lXO3+u0YX1H5Tc1WYmpHbqy5nMpf6LOCvChbwXch0JEcPdlEQ2kXPXyCqOMjfxWLGL0vre97WSdZak8y2bXCKUZfQJjzm4Lwj9QJec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=D4wORzPO; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="abhkWOWA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716912172; x=1748448172;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pTd9+3ADyKSsLJxka8UR2Fi7CwtGAZ/fPYypqOBGFKc=;
-  b=abhkWOWAD1lxiykExf0AanWLAg6TFaYNyCFc9FvvApP3icMM+bOUapEu
-   Rr0FfW4Iemc+tSIGEWjBEb4S3O+2xdAhehDOISt2m81q0gaWL7W2mqeZN
-   aXR7diHg/Y0L96ZTalbtGwA0Kd+KUqqX55H0zmKxxcxr/pt9K2w5/allY
-   fcf58jEE1a7mAdQnBaNTVEzqY71gZumR8lYrjMZ7BB7jWxIxONxhKf5DU
-   pTQGw5fld0uP/ioxYMz/8XzUwvMWtykED5yCh7YgTmNluUsPGBf+pu/5H
-   qxYL07epgZO6NQpnXGd/Vr4Jhyvfi3WooM/taYLYQxFDxiGhDA9jBOMOg
-   A==;
-X-CSE-ConnectionGUID: 4prBDivWRuWg9mOrDuWOYA==
-X-CSE-MsgGUID: Ia+WtwlaQGOGpMUjfFaSRg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11085"; a="24685042"
-X-IronPort-AV: E=Sophos;i="6.08,195,1712646000"; 
-   d="scan'208";a="24685042"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2024 09:02:51 -0700
-X-CSE-ConnectionGUID: QSrT1CW1R4GH1zOmD3LUKQ==
-X-CSE-MsgGUID: BcsEDqCiSmGGBf/FMWktww==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,195,1712646000"; 
-   d="scan'208";a="35208558"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 28 May 2024 09:02:50 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sBzHj-000CQD-0P;
-	Tue, 28 May 2024 16:02:47 +0000
-Date: Wed, 29 May 2024 00:02:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Naresh Solanki <naresh.solanki@9elements.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Naresh Solanki <naresh.solanki@9elements.com>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: (max6639) : Update hwmon init using info
-Message-ID: <202405282323.3IOCxxpg-lkp@intel.com>
-References: <20240528091808.863702-1-naresh.solanki@9elements.com>
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="D4wORzPO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1716912956;
+	bh=l6x4ez58HU9UJM5Ps7D89/4CNRdh7IYjsMDwe693JlQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=D4wORzPO/dcNOsesBD/hol+eQeSr63q3p1WKENypCodZkC7huLrBXL1LwoSLZFbP8
+	 X13x5+BT2jwmBPLL8hPhRZhJKBf047O02c5z46EaZ8tmZDjHkQj+wVLFS2Fm6QW+m3
+	 w1k2KYckDr2N4+gVVZbDhHrTAdCA1o89KA4vF/2k=
+Date: Tue, 28 May 2024 18:15:56 +0200
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Stephen Horvath <s.horvath@outlook.com.au>, 
+	Jean Delvare <jdelvare@suse.com>, Benson Leung <bleung@chromium.org>, Lee Jones <lee@kernel.org>, 
+	Guenter Roeck <groeck@chromium.org>, linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	chrome-platform@lists.linux.dev, Dustin Howett <dustin@howett.net>, 
+	Mario Limonciello <mario.limonciello@amd.com>, Moritz Fischer <mdf@kernel.org>
+Subject: Re: [PATCH v2 1/2] hwmon: add ChromeOS EC driver
+Message-ID: <b8072b36-688f-41b8-8b32-40fc4fa4d148@t-8ch.de>
+References: <20240507-cros_ec-hwmon-v2-0-1222c5fca0f7@weissschuh.net>
+ <20240507-cros_ec-hwmon-v2-1-1222c5fca0f7@weissschuh.net>
+ <SY4P282MB30635BA1D4087113E79921B5C5F52@SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM>
+ <9cf224dd-51eb-4608-abcf-06f337d08178@t-8ch.de>
+ <SY4P282MB306325BB023A95198F25A21DC5F12@SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM>
+ <c9b110eb-ff0e-41f2-9492-8a5d8c3c01d0@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240528091808.863702-1-naresh.solanki@9elements.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c9b110eb-ff0e-41f2-9492-8a5d8c3c01d0@roeck-us.net>
 
-Hi Naresh,
+On 2024-05-28 08:50:49+0000, Guenter Roeck wrote:
+> On 5/27/24 17:15, Stephen Horvath wrote:
+> > On 28/5/24 05:24, Thomas Weißschuh wrote:
+> > > On 2024-05-25 09:13:09+0000, Stephen Horvath wrote:
+> > > > I was the one to implement fan monitoring/control into Dustin's driver, and
+> > > > just had a quick comment for your driver:
+> > > > 
+> > > > On 8/5/24 02:29, Thomas Weißschuh wrote:
+> > > > > The ChromeOS Embedded Controller exposes fan speed and temperature
+> > > > > readings.
+> > > > > Expose this data through the hwmon subsystem.
+> > > > > 
+> > > > > The driver is designed to be probed via the cros_ec mfd device.
+> > > > > 
+> > > > > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> > > > > ---
+> > > > >    Documentation/hwmon/cros_ec_hwmon.rst |  26 ++++
+> > > > >    Documentation/hwmon/index.rst         |   1 +
+> > > > >    MAINTAINERS                           |   8 +
+> > > > >    drivers/hwmon/Kconfig                 |  11 ++
+> > > > >    drivers/hwmon/Makefile                |   1 +
+> > > > >    drivers/hwmon/cros_ec_hwmon.c         | 269 ++++++++++++++++++++++++++++++++++
+> > > > >    6 files changed, 316 insertions(+)
+> > > > > 
+> > > 
+> > > <snip>
+> > > 
+> > > > > diff --git a/drivers/hwmon/cros_ec_hwmon.c b/drivers/hwmon/cros_ec_hwmon.c
+> > > > > new file mode 100644
+> > > > > index 000000000000..d59d39df2ac4
+> > > > > --- /dev/null
+> > > > > +++ b/drivers/hwmon/cros_ec_hwmon.c
+> > > > > @@ -0,0 +1,269 @@
+> > > > > +// SPDX-License-Identifier: GPL-2.0-or-later
+> > > > > +/*
+> > > > > + *  ChromesOS EC driver for hwmon
+> > > > > + *
+> > > > > + *  Copyright (C) 2024 Thomas Weißschuh <linux@weissschuh.net>
+> > > > > + */
+> > > > > +
+> > > > > +#include <linux/device.h>
+> > > > > +#include <linux/hwmon.h>
+> > > > > +#include <linux/kernel.h>
+> > > > > +#include <linux/mod_devicetable.h>
+> > > > > +#include <linux/module.h>
+> > > > > +#include <linux/platform_device.h>
+> > > > > +#include <linux/platform_data/cros_ec_commands.h>
+> > > > > +#include <linux/platform_data/cros_ec_proto.h>
+> > > > > +#include <linux/units.h>
+> > > > > +
+> > > > > +#define DRV_NAME    "cros-ec-hwmon"
+> > > > > +
+> > > > > +struct cros_ec_hwmon_priv {
+> > > > > +    struct cros_ec_device *cros_ec;
+> > > > > +    u8 thermal_version;
+> > > > > +    const char *temp_sensor_names[EC_TEMP_SENSOR_ENTRIES + EC_TEMP_SENSOR_B_ENTRIES];
+> > > > > +};
+> > > > > +
+> > > > > +static int cros_ec_hwmon_read_fan_speed(struct cros_ec_device *cros_ec, u8 index, u16 *speed)
+> > > > > +{
+> > > > > +    u16 data;
+> > > > > +    int ret;
+> > > > > +
+> > > > > +    ret = cros_ec->cmd_readmem(cros_ec, EC_MEMMAP_FAN + index * 2, 2, &data);
+> > > > > +    if (ret < 0)
+> > > > > +        return ret;
+> > > > > +
+> > > > > +    data = le16_to_cpu(data);
+> > > > > +
+> > > > > +    if (data == EC_FAN_SPEED_NOT_PRESENT)
+> > > > > +        return -ENODEV;
+> > > > > +
+> > > > 
+> > > > Don't forget it can also return `EC_FAN_SPEED_STALLED`.
+> > > 
+> > > Thanks for the hint. I'll need to think about how to handle this better.
+> > > 
+> > > > Like Guenter, I also don't like returning `-ENODEV`, but I don't have a
+> > > > problem with checking for `EC_FAN_SPEED_NOT_PRESENT` in case it was removed
+> > > > since init or something.
+> > > 
+> 
+> That won't happen. Chromebooks are not servers, where one might be able to
+> replace a fan tray while the system is running.
 
-kernel test robot noticed the following build errors:
+In one of my testruns this actually happened.
+When running on battery, one specific of the CPU sensors sporadically
+returned EC_FAN_SPEED_NOT_PRESENT.
 
-[auto build test ERROR on 5fbf8734fb36cf67339f599f0e51747a6aff690c]
+> > > Ok.
+> > > 
+> > > > My approach was to return the speed as `0`, since the fan probably isn't
+> > > > spinning, but set HWMON_F_FAULT for `EC_FAN_SPEED_NOT_PRESENT` and
+> > > > HWMON_F_ALARM for `EC_FAN_SPEED_STALLED`.
+> > > > No idea if this is correct though.
+> > > 
+> > > I'm not a fan of returning a speed of 0 in case of errors.
+> > > Rather -EIO which can't be mistaken.
+> > > Maybe -EIO for both EC_FAN_SPEED_NOT_PRESENT (which should never happen)
+> > > and also for EC_FAN_SPEED_STALLED.
+> > 
+> > Yeah, that's pretty reasonable.
+> > 
+> 
+> -EIO is an i/o error. I have trouble reconciling that with
+> EC_FAN_SPEED_NOT_PRESENT or EC_FAN_SPEED_STALLED.
+> 
+> Looking into the EC source code [1], I see:
+> 
+> EC_FAN_SPEED_NOT_PRESENT means that the fan is not present.
+> That should return -ENODEV in the above code, but only for
+> the purpose of making the attribute invisible.
+> 
+> EC_FAN_SPEED_STALLED means exactly that, i.e., that the fan
+> is present but not turning. The EC code does not expect that
+> to happen and generates a thermal event in case it does.
+> Given that, it does make sense to set the fault flag.
+> The actual fan speed value should then be reported as 0 or
+> possibly -ENODATA. It should _not_ generate any other error
+> because that would trip up the "sensors" command for no
+> good reason.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Naresh-Solanki/hwmon-max6639-Update-hwmon-init-using-info/20240528-172245
-base:   5fbf8734fb36cf67339f599f0e51747a6aff690c
-patch link:    https://lore.kernel.org/r/20240528091808.863702-1-naresh.solanki%409elements.com
-patch subject: [PATCH v2] hwmon: (max6639) : Update hwmon init using info
-config: arm64-randconfig-002-20240528 (https://download.01.org/0day-ci/archive/20240528/202405282323.3IOCxxpg-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240528/202405282323.3IOCxxpg-lkp@intel.com/reproduce)
+Ack.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405282323.3IOCxxpg-lkp@intel.com/
+Currently I have the following logic (for both fans and temp):
 
-All errors (new ones prefixed by >>):
+if NOT_PRESENT during probing:
+  make the attribute invisible.
 
->> drivers/hwmon/max6639.c:291:3: error: expected expression
-                   u8 x;
-                   ^
->> drivers/hwmon/max6639.c:296:3: error: use of undeclared identifier 'x'
-                   x = val & MAX6639_FAN_CONFIG3_FREQ_MASK;
-                   ^
-   drivers/hwmon/max6639.c:303:4: error: use of undeclared identifier 'x'
-                           x |= 0x4;
-                           ^
-   drivers/hwmon/max6639.c:304:3: error: use of undeclared identifier 'x'
-                   x &= 0x7;
-                   ^
-   drivers/hwmon/max6639.c:305:25: error: use of undeclared identifier 'x'
-                   *pwm_val = freq_table[x];
-                                         ^
-   drivers/hwmon/max6639.c:328:3: error: expected expression
-                   u8 x;
-                   ^
-   drivers/hwmon/max6639.c:332:8: error: use of undeclared identifier 'x'
-                   for (x = 0; x < sizeof(freq_table); x++)
-                        ^
-   drivers/hwmon/max6639.c:332:15: error: use of undeclared identifier 'x'
-                   for (x = 0; x < sizeof(freq_table); x++)
-                               ^
-   drivers/hwmon/max6639.c:332:39: error: use of undeclared identifier 'x'
-                   for (x = 0; x < sizeof(freq_table); x++)
-                                                       ^
-   drivers/hwmon/max6639.c:333:26: error: use of undeclared identifier 'x'
-                           if (val <= freq_table[x])
-                                                 ^
-   drivers/hwmon/max6639.c:337:38: error: use of undeclared identifier 'x'
-                                            MAX6639_FAN_CONFIG3_FREQ_MASK, x);
-                                                                           ^
-   drivers/hwmon/max6639.c:341:7: error: use of undeclared identifier 'x'
-                   if (x >> 2)
-                       ^
-   12 errors generated.
+if any error during runtime (including NOT_PRESENT):
+  return -ENODATA and a FAULT
+
+This should also handle the sporadic NOT_PRESENT failures.
+
+What do you think?
+
+Is there any other feedback to this revision or should I send the next?
 
 
-vim +291 drivers/hwmon/max6639.c
-
-   275	
-   276	static int max6639_read_pwm(struct device *dev, u32 attr, int channel,
-   277				    long *pwm_val)
-   278	{
-   279		struct max6639_data *data = dev_get_drvdata(dev);
-   280		unsigned int val, res;
-   281	
-   282		if (IS_ERR(data))
-   283			return PTR_ERR(data);
-   284	
-   285		switch (attr) {
-   286		case hwmon_pwm_input:
-   287			res = regmap_read(data->regmap, MAX6639_REG_TARGTDUTY(channel), &val);
-   288			*pwm_val = val * 255 / 120;
-   289			return 0;
-   290		case hwmon_pwm_freq:
- > 291			u8 x;
-   292	
-   293			res = regmap_read(data->regmap, MAX6639_REG_FAN_CONFIG3(channel), &val);
-   294			if (res < 0)
-   295				return res;
- > 296			x = val & MAX6639_FAN_CONFIG3_FREQ_MASK;
-   297	
-   298			res = regmap_read(data->regmap, MAX6639_REG_GCONFIG, &val);
-   299			if (res < 0)
-   300				return res;
-   301	
-   302			if (val & MAX6639_GCONFIG_PWM_FREQ_HI)
-   303				x |= 0x4;
-   304			x &= 0x7;
-   305			*pwm_val = freq_table[x];
-   306			return res;
-   307		default:
-   308			return -EOPNOTSUPP;
-   309		}
-   310	}
-   311	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Thomas
