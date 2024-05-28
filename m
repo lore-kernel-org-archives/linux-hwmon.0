@@ -1,185 +1,143 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E14DD7316E
-	for <linux-hwmon@vger.kernel.org>; Tue, 28 May 2024 12:51:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D9E416D4E1;
+	Tue, 28 May 2024 12:54:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716900696; cv=none; b=GHS8w1F/XghcmE616ejvDKYsAzffHG7eE4W2K8Mt8m1lXO2AiPE3ajxFXQxutA6onat/jr4IA/y5UZrAm5fvAq16LN/sNA3MvqVzK/1ItzqNdLn6tv+XgZqMxvLn5MSwA19kefign2Nd4kNO8V/qMEUkEBCgFUJbWjB7zrgylwM=
+	t=1716900870; cv=none; b=asNBoRVPSYm4OXIRhwLWpsg/aBHzUzXo8ZdVHeR4qTQFzt/0EyVWB3jdJAgdwDSJcDd4k9QFE91g7AjEPmkj4sVMG4LD/EQ14LtQDEeCIaEw7nnYyOshK5v1rR0UsVDxgXOMMjdLho6eD6tkNIfEl2hmp4Dq65L6LpYWutu1yVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716900696; c=relaxed/simple;
-	bh=X1owGtWYRo+/l0DSm9qoof73k9VXXMI2Bemu9W1jHHg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=L8E59ed+bR+s2V/PgFLEavSEPYhHWw7Rsso2th2woYGiadZ5UcAbfVDckSudEQXGOG05RaCE5Wdumyx53UmCVL3UBQKut3p0H4lMvb0HE9wuB5SVyEUZ8TJWe8o3qxI7T8Bit+aqqOIIpO7I/F1z6QYQ5YD32TK4e3ycXmcGpBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=Jz125kbw; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
+	s=arc-20240116; t=1716900870; c=relaxed/simple;
+	bh=zhjmPwGF/MUJ8NPPpqQPbAB7QBimAAKgje5xk8TXdTc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uDt9OCjOCJSSOMFcrT5ajrPUPLRPQraTv0DEnQOiGTpzhuikMA5o4i9T+Ri1jmtdZpVWEgDgQghLoYkNuRwBuPsY5bOmF7Zn44CCik9sCV4uxvzfD3ZrH/Cwqa7VkDbe4NjKC+sGzYo1Xzd7GqDpOIbLp3QLYCGaCruWuMhBC0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DkmElAN3; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="Jz125kbw"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-354be94c874so647706f8f.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 28 May 2024 05:51:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1716900692; x=1717505492; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=cs6twXGUnqAVWEMHCctBxuWI9JJWQsFtcp2eRMeUzcU=;
-        b=Jz125kbwQCiEM3WmY1z4kQj+jffBi324gUrk+bSSplnwz7pPJZtrr7OeMI7t7AUdRz
-         LroNrzuREva4Ov1S17tCYDgeTwTfmJOaYp5EUAFwpcNLSFK2C33RWNsPXdM1qJHALAH4
-         6Bswz9KyQd0vzNZK140lBdcze737av8aubFyKHmigyoZkf4/ApyQ6j5drDb8yrWn3zus
-         i0TT0mZTgZAmYu28ZyTT7rtx/oIhzsH1bft2go1f4CAL7RigdbngU9ncyK5HsM4tLcN6
-         132MyjYd1Kqk8dxfcGuOjAu9iSy5khVjcuilTwywoxqNVALFTkXHLBtPjO/ZGRk+y8wJ
-         n7mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716900692; x=1717505492;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cs6twXGUnqAVWEMHCctBxuWI9JJWQsFtcp2eRMeUzcU=;
-        b=U0cBLcMG9bGhKmpBHZMd6UUnU3H2XHCzsui7oAm93j6eYzXui+/xxdv2jro4Klpsr/
-         dIP89vNvaQyaeLjJILGjceR1H5u5hHG3Yicr5j399d6BdVBlheaeERQVE1bwupOKG/w2
-         d56yuPLDsTIMcBt9m/86Hnq2+iy6S0JuxuXRUsxzWjN3LdlA8fcAX1ifTqJAxqrNkRNN
-         jZjClZDIlvCq6NntMU5YcDmezfhjNNkU5nXcEe8zZMV38CGvB7qcF6VlEhQbHCJvvXDe
-         W/kF/X+V2Qg74iHb7LNF+3NuFILsM19aCbqOI2mkC75al0xV6c9zlv4hG2WRAoc3gw2M
-         pbrQ==
-X-Gm-Message-State: AOJu0YwtUIeii6YjiwUL1P0fCVA5P+KK2JDG5nwAbWQ5tkXnhts+vgfv
-	riJ2EsmB/TL9X2S1evod49rCJQEp98pXoT588+xJbcrCOVB38ipMWhKqVNItiVA=
-X-Google-Smtp-Source: AGHT+IHpozxPHqfiGrD0jGWLVOCg6j4KeSpafj5rvrpse51q0RDwAAq/3wQLYkTzuvkogcwGrwjPdA==
-X-Received: by 2002:a5d:6342:0:b0:354:c329:90d1 with SMTP id ffacd0b85a97d-3552fdefa90mr10115575f8f.63.1716900691933;
-        Tue, 28 May 2024 05:51:31 -0700 (PDT)
-Received: from stroh80.lab.9e.network (ip-078-094-000-050.um19.pools.vodafone-ip.de. [78.94.0.50])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3557a1c92e7sm11626300f8f.66.2024.05.28.05.51.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 May 2024 05:51:31 -0700 (PDT)
-From: Naresh Solanki <naresh.solanki@9elements.com>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Naresh Solanki <naresh.solanki@9elements.com>
-Cc: linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: hwmon: Add max6639
-Date: Tue, 28 May 2024 18:21:21 +0530
-Message-ID: <20240528125122.1129986-1-naresh.solanki@9elements.com>
-X-Mailer: git-send-email 2.42.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DkmElAN3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1716900868; x=1748436868;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zhjmPwGF/MUJ8NPPpqQPbAB7QBimAAKgje5xk8TXdTc=;
+  b=DkmElAN3Nm1lYTMx9PSrokKnmoIp46AXMDKJDeG19P3cp04zlPJHAfa2
+   ECUOuM7MFpRVePWFYgNV0tXpePSsUKKit7RBao1bZQ26DUZWu+pwymCvD
+   FyO+IZzjSB9YxrNnC0gOtxVMXF4xZVq7C4DxauDFuIL8WFommnVgDOrst
+   +tJXxLuP7Qx0yDmICIs0zAsr3p3BGvROG2HZQvqzrD/BMvi0B1Q85swo3
+   koFRTNpxXLTsR4dcR3oZU84ZrrUgs5PfL83kCHKAD0UKQ1oqpPd+iaX6A
+   GTUNYlZDSRw7Ec9AEG2WoavcK3pUy29gcCbbYtjxD8cOSfFme1gwtA0E1
+   g==;
+X-CSE-ConnectionGUID: vfV8GPkGQAi9R3iJlm5B1Q==
+X-CSE-MsgGUID: gC3uA4/qSpKqIuC8ioO4UQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11085"; a="38624677"
+X-IronPort-AV: E=Sophos;i="6.08,195,1712646000"; 
+   d="scan'208";a="38624677"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2024 05:54:23 -0700
+X-CSE-ConnectionGUID: e4TLYlnHQJ+cnQSAui0hEA==
+X-CSE-MsgGUID: vFAolv0hRqCm6fOxmKrqnw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,195,1712646000"; 
+   d="scan'208";a="35085290"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by fmviesa006.fm.intel.com with ESMTP; 28 May 2024 05:54:21 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sBwLL-000CCR-1P;
+	Tue, 28 May 2024 12:54:19 +0000
+Date: Tue, 28 May 2024 20:53:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Naresh Solanki <naresh.solanki@9elements.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Naresh Solanki <naresh.solanki@9elements.com>,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: (max6639) : Update hwmon init using info
+Message-ID: <202405282012.UaQ1329z-lkp@intel.com>
+References: <20240528091808.863702-1-naresh.solanki@9elements.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240528091808.863702-1-naresh.solanki@9elements.com>
 
-Add Devicetree binding documentation for Maxim MAX6639 temperature
-monitor with PWM fan-speed controller.
+Hi Naresh,
 
-Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
----
- .../bindings/hwmon/maxim,max6639.yaml         | 92 +++++++++++++++++++
- 1 file changed, 92 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+kernel test robot noticed the following build warnings:
 
-diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
-new file mode 100644
-index 000000000000..a2e37f7329b8
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
-@@ -0,0 +1,92 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+
-+$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Maxim max6639
-+
-+maintainers:
-+  - Naresh Solanki <naresh.solanki@9elements.com>
-+
-+description: |
-+  The MAX6639 is a 2-channel temperature monitor with dual, automatic, PWM
-+  fan-speed controller.  It monitors its own temperature and one external
-+  diode-connected transistor or the temperatures of two external diode-connected
-+  transistors, typically available in CPUs, FPGAs, or GPUs.
-+
-+  Datasheets:
-+    https://datasheets.maximintegrated.com/en/ds/MAX6639-MAX6639F.pdf
-+
-+properties:
-+  compatible:
-+    enum:
-+      - maxim,max6639
-+
-+  reg:
-+    maxItems: 1
-+
-+  '#address-cells':
-+    const: 1
-+
-+  '#size-cells':
-+    const: 0
-+
-+  '#pwm-cells':
-+    const: 3
-+
-+required:
-+  - compatible
-+  - reg
-+
-+patternProperties:
-+  "^fan@[0-1]$":
-+    type: object
-+    description: |
-+      Represents the two fans and their specific configuration.
-+
-+    $ref: fan-common.yaml#
-+
-+    unevaluatedProperties: false
-+
-+    properties:
-+      reg:
-+        description: |
-+          The fan number.
-+
-+    required:
-+      - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        fan1: fan-controller@10 {
-+            compatible = "maxim,max6639";
-+            reg = <0x10>;
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+            #pwm-cells = <3>;
-+
-+            fan@0 {
-+                reg = <0x0>;
-+                pulses-per-revolution = <2>;
-+                max-rpm = <4000>;
-+                target-rpm = <1000>;
-+                pwms = <&fan1 0 25000 0>;
-+            };
-+
-+            fan@1 {
-+                reg = <0x1>;
-+                pulses-per-revolution = <2>;
-+                max-rpm = <8000>;
-+                pwms = <&fan1 1 25000 0>;
-+            };
-+        };
-+    };
-+...
+[auto build test WARNING on 5fbf8734fb36cf67339f599f0e51747a6aff690c]
 
-base-commit: 5fbf8734fb36cf67339f599f0e51747a6aff690c
+url:    https://github.com/intel-lab-lkp/linux/commits/Naresh-Solanki/hwmon-max6639-Update-hwmon-init-using-info/20240528-172245
+base:   5fbf8734fb36cf67339f599f0e51747a6aff690c
+patch link:    https://lore.kernel.org/r/20240528091808.863702-1-naresh.solanki%409elements.com
+patch subject: [PATCH v2] hwmon: (max6639) : Update hwmon init using info
+config: i386-buildonly-randconfig-003-20240528 (https://download.01.org/0day-ci/archive/20240528/202405282012.UaQ1329z-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240528/202405282012.UaQ1329z-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405282012.UaQ1329z-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/hwmon/max6639.c:291:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+     291 |                 u8 x;
+         |                 ^
+   drivers/hwmon/max6639.c:328:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+     328 |                 u8 x;
+         |                 ^
+   2 warnings generated.
+
+
+vim +291 drivers/hwmon/max6639.c
+
+   275	
+   276	static int max6639_read_pwm(struct device *dev, u32 attr, int channel,
+   277				    long *pwm_val)
+   278	{
+   279		struct max6639_data *data = dev_get_drvdata(dev);
+   280		unsigned int val, res;
+   281	
+   282		if (IS_ERR(data))
+   283			return PTR_ERR(data);
+   284	
+   285		switch (attr) {
+   286		case hwmon_pwm_input:
+   287			res = regmap_read(data->regmap, MAX6639_REG_TARGTDUTY(channel), &val);
+   288			*pwm_val = val * 255 / 120;
+   289			return 0;
+   290		case hwmon_pwm_freq:
+ > 291			u8 x;
+   292	
+   293			res = regmap_read(data->regmap, MAX6639_REG_FAN_CONFIG3(channel), &val);
+   294			if (res < 0)
+   295				return res;
+   296			x = val & MAX6639_FAN_CONFIG3_FREQ_MASK;
+   297	
+   298			res = regmap_read(data->regmap, MAX6639_REG_GCONFIG, &val);
+   299			if (res < 0)
+   300				return res;
+   301	
+   302			if (val & MAX6639_GCONFIG_PWM_FREQ_HI)
+   303				x |= 0x4;
+   304			x &= 0x7;
+   305			*pwm_val = freq_table[x];
+   306			return res;
+   307		default:
+   308			return -EOPNOTSUPP;
+   309		}
+   310	}
+   311	
+
 -- 
-2.42.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
