@@ -1,233 +1,160 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8DC723BF;
-	Tue, 28 May 2024 19:52:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 264BB13E8B5
+	for <linux-hwmon@vger.kernel.org>; Tue, 28 May 2024 22:56:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716925971; cv=none; b=HehpqcypmkKEHdFEzdGSeyzZCv3dbtvRfieI/s/MfmD///iPr7QdS0o+iAOoCbOf/iBZbW+5feIlwb0MQbb6P8PHP+FZ9yKegroT/ifRfwVAATCAUWr9QaSRem9v28RIjiYYiMF2oQFGAJub4u2ciHMKbKj9TtF9GfMAZNIvtlk=
+	t=1716937007; cv=none; b=RecILO0yd5eOHb5VZ4UjN6yZD6ZyIBC4BwMJKpPUnzVZTxz8Je4aHyCRIxU8Fky4UTDJ/uptU/f8QMkNcAMWjqwtQXfZY2jt2lGtyNN/0bDQvZ/Vha2yO5KJbKpli2EdxtqfGRAj9ko7d4PL4W69SS8hYWccG/TBhXwEUPvgkT0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716925971; c=relaxed/simple;
-	bh=2rE+lKrC2cS6x32lg8GfCW7VB+hGia9MQvA1fyHT52w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Q6BdV2p0ROO2ZUjLPvO0MUF/Ty9V/Y/TI8u3G9za2hFAL2SMy64toe5wZUJv1g7MsfAw1Do1ec2p0t8hedZ+Ae48xcDT3chiAl+HEF8azOkdx0MpxRom9aypuYINPddPc8vwamWMmUn39Yw5G+ziZVJF2bpADPI22R2jKneIq/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jtvtadSa; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1716937007; c=relaxed/simple;
+	bh=mLKZ4Tk6OaRbmpp0CDtq7YLjSHV+nhJ+kV4iqYSkBW4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=g3af8A6goFOFcMWUor4nyQlRAyz6DxZmrN+FuqvGh1PPInCyXWLCd/nzZh/ING5a48NHJEAKyahoORjeBWdGeDEILWWdp2wg/KRWsWoRZfVNYvWc0Aqkc9yMU/dGbNXzdo4CLgXUlKYsyD0hKkwpJZHv4Z2j6lKCRlUNOXuyn8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=xBWDYjzI; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jtvtadSa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 622B2C4AF0D;
-	Tue, 28 May 2024 19:52:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716925970;
-	bh=2rE+lKrC2cS6x32lg8GfCW7VB+hGia9MQvA1fyHT52w=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=jtvtadSah/DUsRjW2L+ZN28387g6sHS7xxWab/j4+NLdrh21yV3GIb/lgxxx05cg+
-	 Cil9YBBxY7ZYoeIvJWp1jYldhnHuEaVRNGaQ3R41LOQYxnZgM0DZHS3dbTXacbtpeR
-	 1L2feMz6wRSACAtNAI9xcbfFa0gxyzXtzfNeETXJt+sMvTMcQLC/4LN5jK/nvzU+0z
-	 lIOnSHL8QdIPGstQmpZziQthUg668FLbGnpJaTKXBiOlTfoaCXMtD1iB0fdSIoXaSr
-	 wVv6LLEnn8BWhdGbtErOctWI9zdl1KjE49egcymHxRvWmY0L8n5aHS7ZVRbeuWhJv1
-	 61saiWnXriDWw==
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-5b96a587d79so77960eaf.0;
-        Tue, 28 May 2024 12:52:50 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUA6CAEvXDrcdawbCsqrJoWSMKmquzx40kPFAaJZTgMh3StQqicXrXEXCHSH8vd2VMg9YX59DIUxknUoi9mckNGo1/s0sBY7UTixfEundJpGt2SWc1ONWMsjWqleZrUPNxgWGVcskA3fC/2Cp4W2DF7DdDLaRZqw3CcNmJMGyEe2Qy0g5K7YJxeqV//2X1XreCT11HODO43+NFb9+EZs/Kn69dSVG36cDODpw==
-X-Gm-Message-State: AOJu0Ywfz2QqaJ2lm9inp7clhaHMV2QvJPaYoG4ZDWh+mL68E5halkGi
-	hek5Tb6p5JbWFD/zBeAAhk0xOPIm0jclg+r8BI2gKCuhm2+3/knFMQMI9rTO/pfarXx81Z4SrN+
-	cHv9YI2OyrRZfdXx0FSMd0/CKDEc=
-X-Google-Smtp-Source: AGHT+IGnYKb/NKYpWDWiLrDI+pojlbT5VGeR3HVdpe1f5QZ5p+LPLue1yFCYgOwjFvGILYE5/bLzY9T3vt5p752HIcI=
-X-Received: by 2002:a4a:4b06:0:b0:5b2:f29:93f0 with SMTP id
- 006d021491bc7-5b95cceba96mr14248384eaf.0.1716925969529; Tue, 28 May 2024
- 12:52:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="xBWDYjzI"
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id C5B872C02E0;
+	Wed, 29 May 2024 10:56:42 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1716937002;
+	bh=BRccYZsVdGxDK04PwUo4q3c1Pp+x2GNlfA7P/Dp31d8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=xBWDYjzIDFZMOkbEE+JejTtA2GMnPkC1g4jvrx4r+h1bWZhNjMEMdxofXrAusgfWO
+	 C52KaylEtX19leQ/ZJWqh1CNxHUXdHQ/3aB3oPaoEZJsMjffhHdhlj6ZINf+UaejFt
+	 7rttalJ7j8z/Fov2/YO9Sg+XYVKfzGMk3PVvA+KqaU2kWM17LTznBYJjY4qA50s6oT
+	 bf8U5u/TSGsEM22nmJMczKG6zwlPDSl1p9QE7/nG+V+SQfp+20Nx16QTiPri20Wk2A
+	 hgm1cSo/3BRvSvRLX1nMsWLWM4ZiZvfK6S7OWsD92+UjSuHWRoo32IYfUOmVQzhJds
+	 aFukd/Hs5Qt9A==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B6656612a0001>; Wed, 29 May 2024 10:56:42 +1200
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+	by pat.atlnz.lc (Postfix) with ESMTP id A8DC913EE6D;
+	Wed, 29 May 2024 10:56:42 +1200 (NZST)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+	id A47A7280048; Wed, 29 May 2024 10:56:42 +1200 (NZST)
+From: Chris Packham <chris.packham@alliedtelesis.co.nz>
+To: jdelvare@suse.com,
+	linux@roeck-us.net,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	ukleinek@kernel.org
+Cc: linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pwm@vger.kernel.org,
+	Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v4 1/3] dt-bindings: hwmon: Add adt7475 fan/pwm properties
+Date: Wed, 29 May 2024 10:56:36 +1200
+Message-ID: <20240528225638.1211676-2-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.45.1
+In-Reply-To: <20240528225638.1211676-1-chris.packham@alliedtelesis.co.nz>
+References: <20240528225638.1211676-1-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240510201242.3886-1-W_Armin@gmx.de> <CAJZ5v0gu=yvFeXH4uwHeAQZ8p1JyCs8uuiKzr6F+yNkD2E1ZAA@mail.gmail.com>
- <92415bd8-4231-4c68-8034-e4f7a0ea5651@gmx.de>
-In-Reply-To: <92415bd8-4231-4c68-8034-e4f7a0ea5651@gmx.de>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 28 May 2024 21:52:38 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iLNZT4jU1QV=HTbAv76s6Ay3tx93_K_QoM0XbvSgZF1w@mail.gmail.com>
-Message-ID: <CAJZ5v0iLNZT4jU1QV=HTbAv76s6Ay3tx93_K_QoM0XbvSgZF1w@mail.gmail.com>
-Subject: Re: [PATCH v8] ACPI: fan: Add hwmon support
-To: Armin Wolf <W_Armin@gmx.de>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, mlj@danelec.com, rafael.j.wysocki@intel.com, 
-	lenb@kernel.org, jdelvare@suse.com, andy.shevchenko@gmail.com, 
-	linux@roeck-us.net, linux@weissschuh.net, ilpo.jarvinen@linux.intel.com, 
-	linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=F9L0dbhN c=1 sm=1 tr=0 ts=6656612a a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=TpHVaj0NuXgA:10 a=nd0hpPEdzzsPhCuWCasA:9 a=3ZKOabzyN94A:10
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 
-On Tue, May 28, 2024 at 12:31=E2=80=AFAM Armin Wolf <W_Armin@gmx.de> wrote:
->
-> Am 27.05.24 um 19:29 schrieb Rafael J. Wysocki:
->
-> > On Fri, May 10, 2024 at 10:13=E2=80=AFPM Armin Wolf <W_Armin@gmx.de> wr=
-ote:
-> >> Currently, the driver does only support a custom sysfs
-> >> interface to allow userspace to read the fan speed.
-> >> Add support for the standard hwmon interface so users
-> >> can read the fan speed with standard tools like "sensors".
-> >>
-> >> Reviewed-by: Andy Shevchenko <andy@kernel.org>
-> >> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-> >> ---
-> >> Tested witha custom ACPI SSDT, available here:
-> >> https://github.com/Wer-Wolf/acpi-fan-ssdt
-> >>
-> >> Changes since v7:
-> >> - add Reviewed-by tag
-> >> - spelling fixes
-> >> - add missing types.h include
-> >>
-> >> Changes since v6:
-> >> - add "hwmon" to the names of functions and variables
-> >> related to hwmon
-> >> - replace -ENODATA with -EIO/-ENODEV
-> >>
-> >> Changes since v5:
-> >> - fix coding style issues
-> >> - replace double break with return
-> >> - add missing includes
-> >>
-> >> Changes since v4:
-> >> - fix spelling issues
-> >> - check power values for overflow condition too
-> >>
-> >> Changes since v3:
-> >> - drop fault attrs
-> >> - rework initialization
-> >>
-> >> Changes since v2:
-> >> - add support for fanX_target and power attrs
-> >>
-> >> Changes since v1:
-> >> - fix undefined reference error
-> >> - fix fan speed validation
-> >> - coding style fixes
-> >> - clarify that the changes are compile-tested only
-> >> - add hwmon maintainers to cc list
-> >> ---
-> >>   drivers/acpi/Makefile    |   1 +
-> >>   drivers/acpi/fan.h       |   9 +++
-> >>   drivers/acpi/fan_core.c  |   4 +
-> >>   drivers/acpi/fan_hwmon.c | 170 +++++++++++++++++++++++++++++++++++++=
-++
-> >>   4 files changed, 184 insertions(+)
-> >>   create mode 100644 drivers/acpi/fan_hwmon.c
-> >>
-> >> diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
-> >> index 39ea5cfa8326..61ca4afe83dc 100644
-> >> --- a/drivers/acpi/Makefile
-> >> +++ b/drivers/acpi/Makefile
-> >> @@ -77,6 +77,7 @@ obj-$(CONFIG_ACPI_TINY_POWER_BUTTON)  +=3D tiny-powe=
-r-button.o
-> >>   obj-$(CONFIG_ACPI_FAN)         +=3D fan.o
-> >>   fan-objs                       :=3D fan_core.o
-> >>   fan-objs                       +=3D fan_attr.o
-> >> +fan-$(CONFIG_HWMON)            +=3D fan_hwmon.o
-> >>
-> >>   obj-$(CONFIG_ACPI_VIDEO)       +=3D video.o
-> >>   obj-$(CONFIG_ACPI_TAD)         +=3D acpi_tad.o
-> >> diff --git a/drivers/acpi/fan.h b/drivers/acpi/fan.h
-> >> index f89d19c922dc..db25a3898af7 100644
-> >> --- a/drivers/acpi/fan.h
-> >> +++ b/drivers/acpi/fan.h
-> >> @@ -10,6 +10,8 @@
-> >>   #ifndef _ACPI_FAN_H_
-> >>   #define _ACPI_FAN_H_
-> >>
-> >> +#include <linux/kconfig.h>
-> >> +
-> >>   #define ACPI_FAN_DEVICE_IDS    \
-> >>          {"INT3404", }, /* Fan */ \
-> >>          {"INTC1044", }, /* Fan for Tiger Lake generation */ \
-> >> @@ -57,4 +59,11 @@ struct acpi_fan {
-> >>   int acpi_fan_get_fst(struct acpi_device *device, struct acpi_fan_fst=
- *fst);
-> >>   int acpi_fan_create_attributes(struct acpi_device *device);
-> >>   void acpi_fan_delete_attributes(struct acpi_device *device);
-> >> +
-> >> +#if IS_REACHABLE(CONFIG_HWMON)
-> >> +int devm_acpi_fan_create_hwmon(struct acpi_device *device);
-> >> +#else
-> >> +static inline int devm_acpi_fan_create_hwmon(struct acpi_device *devi=
-ce) { return 0; };
-> >> +#endif
-> >> +
-> >>   #endif
-> >> diff --git a/drivers/acpi/fan_core.c b/drivers/acpi/fan_core.c
-> >> index ff72e4ef8738..7cea4495f19b 100644
-> >> --- a/drivers/acpi/fan_core.c
-> >> +++ b/drivers/acpi/fan_core.c
-> >> @@ -336,6 +336,10 @@ static int acpi_fan_probe(struct platform_device =
-*pdev)
-> >>                  if (result)
-> >>                          return result;
-> >>
-> >> +               result =3D devm_acpi_fan_create_hwmon(device);
-> >> +               if (result)
-> >> +                       return result;
-> >> +
-> >>                  result =3D acpi_fan_create_attributes(device);
-> >>                  if (result)
-> >>                          return result;
-> >> diff --git a/drivers/acpi/fan_hwmon.c b/drivers/acpi/fan_hwmon.c
-> >> new file mode 100644
-> >> index 000000000000..bd0d31a398fa
-> >> --- /dev/null
-> >> +++ b/drivers/acpi/fan_hwmon.c
-> >> @@ -0,0 +1,170 @@
-> >> +// SPDX-License-Identifier: GPL-2.0-or-later
-> >> +/*
-> >> + * hwmon interface for the ACPI Fan driver.
-> >> + *
-> >> + * Copyright (C) 2024 Armin Wolf <W_Armin@gmx.de>
-> >> + */
-> >> +
-> >> +#include <linux/acpi.h>
-> >> +#include <linux/device.h>
-> >> +#include <linux/err.h>
-> >> +#include <linux/hwmon.h>
-> >> +#include <linux/limits.h>
-> >> +#include <linux/types.h>
-> >> +#include <linux/units.h>
-> >> +
-> >> +#include "fan.h"
-> >> +
-> >> +/* Returned when the ACPI fan does not support speed reporting */
-> >> +#define FAN_SPEED_UNAVAILABLE  U32_MAX
-> >> +#define FAN_POWER_UNAVAILABLE  U32_MAX
-> >> +
-> >> +static struct acpi_fan_fps *acpi_fan_get_current_fps(struct acpi_fan =
-*fan, u64 control)
-> >> +{
-> >> +       unsigned int i;
-> >> +
-> >> +       for (i =3D 0; i < fan->fps_count; i++) {
-> >> +               if (fan->fps[i].control =3D=3D control)
-> >> +                       return &fan->fps[i];
-> >> +       }
-> >> +
-> >> +       return NULL;
-> >> +}
-> >> +
-> >> +static umode_t acpi_fan_hwmon_is_visible(const void *drvdata, enum hw=
-mon_sensor_types type,
-> >> +                                        u32 attr, int channel)
-> >> +{
-> >> +       const struct acpi_fan *fan =3D drvdata;
-> >> +       unsigned int i;
-> > AFAICS, the code below can be rewritten as follows:
-> >
-> > if (fan->fif.fine_grain_ctrl)
-> >           return 0;
->
-> Hi,
->
-> this would break hwmon_fan_input.
+Add fan child nodes that allow describing the connections for the
+ADT7475 to the fans it controls. This also allows setting some
+initial values for the pwm duty cycle and frequency.
 
-Ah, I overlooked the first branch.  Fair enough.
+Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+---
 
-Applied as 6.11 material, thanks!
+Notes:
+    I realise there is still some discussion about how to express the
+    frequency and duty cycle. I have a personal preference for using hert=
+z
+    for the frequency and 0-255 for the duty cycle but if the consensus i=
+s
+    to express these things some other way I'm fine with doing some math.
+   =20
+    Changes in v4:
+    - 0 is not a valid frequency value
+    Changes in v3:
+    - Use the pwm provider/consumer bindings
+    Changes in v2:
+    - Document 0 as a valid value (leaves hardware as-is)
+
+ .../devicetree/bindings/hwmon/adt7475.yaml    | 25 ++++++++++++++++++-
+ 1 file changed, 24 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.yaml b/Docum=
+entation/devicetree/bindings/hwmon/adt7475.yaml
+index 051c976ab711..bfef4c803bf7 100644
+--- a/Documentation/devicetree/bindings/hwmon/adt7475.yaml
++++ b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+@@ -51,6 +51,15 @@ properties:
+       enum: [0, 1]
+       default: 1
+=20
++  "#pwm-cells":
++    const: 4
++    description: |
++      Number of cells in a PWM specifier.
++      - 0: The pwm channel
++      - 1: The pwm frequency in hertz - 11, 14, 22, 29, 35, 44, 58, 88, =
+22500
++      - 2: PWM flags 0 or PWM_POLARITY_INVERTED
++      - 3: The default pwm duty cycle - 0-255
++
+ patternProperties:
+   "^adi,bypass-attenuator-in[0-4]$":
+     description: |
+@@ -81,6 +90,10 @@ patternProperties:
+       - smbalert#
+       - gpio
+=20
++  "^fan-[0-9]+$":
++    $ref: fan-common.yaml#
++    unevaluatedProperties: false
++
+ required:
+   - compatible
+   - reg
+@@ -89,11 +102,12 @@ additionalProperties: false
+=20
+ examples:
+   - |
++    #include <dt-bindings/pwm/pwm.h>
+     i2c {
+       #address-cells =3D <1>;
+       #size-cells =3D <0>;
+=20
+-      hwmon@2e {
++      pwm: hwmon@2e {
+         compatible =3D "adi,adt7476";
+         reg =3D <0x2e>;
+         adi,bypass-attenuator-in0 =3D <1>;
+@@ -101,5 +115,14 @@ examples:
+         adi,pwm-active-state =3D <1 0 1>;
+         adi,pin10-function =3D "smbalert#";
+         adi,pin14-function =3D "tach4";
++        #pwm-cells =3D <4>;
++
++        fan-0 {
++          pwms =3D <&pwm 0 22500 PWM_POLARITY_INVERTED 255>;
++        };
++
++        fan-1 {
++          pwms =3D <&pwm 2 22500 PWM_POLARITY_INVERTED 255>;
++        };
+       };
+     };
+--=20
+2.45.1
+
