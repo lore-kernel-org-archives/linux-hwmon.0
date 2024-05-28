@@ -1,73 +1,112 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 461AB73164;
-	Tue, 28 May 2024 07:15:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B874D17E90E;
+	Tue, 28 May 2024 07:30:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716880530; cv=none; b=d+GFyiPTMuq18JNJB5P+yYyZMhj6hND1gVTgf/iS5uSu3cJz02//9X+IkR2rAX2nF84RFWViNdZDZybzpwCD5WbmgIPGu3A2ZGqmV4b7Y80i8SD6kNT+q5nAu7tyGluOiKTmVjkBVOA0fijBsVDZcV9iRWsgeg9VBUq8kLPLFlQ=
+	t=1716881429; cv=none; b=N1jTHAPMJeZbcw6LrF+oeodETHx5gxS+JbvfChkCByAw8zmmICkOvPWhsxxngC9fZrTFbfTZ9jobUKYF/u9JM1f3qdbYn5XXXMBHrvFG4Vxisx5bIbLD/YoZB22u+kASw53Th4ivSFTHypeIY1xH1BhoPY1H7q4QruQ6jZ/WdZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716880530; c=relaxed/simple;
-	bh=NjlB9HjaOzm7GFCCp1mog1GeOzYiA23MD7+v2ePYdq4=;
+	s=arc-20240116; t=1716881429; c=relaxed/simple;
+	bh=HVKNxMnOOTLPPnywKJaBVrnPD8jpeyqhRlQRF+IWqCQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MluGH6a+C/dD5nvfht5ooNjTH2HCwV6TdEo0x0wgstdxbxQhCor1NiLDfkbXX5VLsdMpBrJEAcuquF+lzcSfeoK0QpidF6d4n73KyTKnHavAwdO/w+BcXt9IZC8UMF+tJXoWOa+3Sn6MpO6klCWWKMirCI8Rh1fm/Y8ccPKrhiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=C4Wwmams; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	 Content-Type:Content-Disposition:In-Reply-To; b=YHSMnyCxMO3CSLW4uzM8mk242qNXvBuSMeewlNhH9ch5DXNgaGTI5cdo9YIc+Z2MV+yfz3LI/6NNeccpT0c2dJPJsvTnxCPdaD4hSiuYr8b1+SAetHz9E+LPRTvGY+k0+/xdq5se/2U26q8xN61opljGToL68O1X5Cah7/qoOsw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=slzeKu3r; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="C4Wwmams"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1716880527;
-	bh=NjlB9HjaOzm7GFCCp1mog1GeOzYiA23MD7+v2ePYdq4=;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="slzeKu3r"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28C42C3277B;
+	Tue, 28 May 2024 07:30:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716881429;
+	bh=HVKNxMnOOTLPPnywKJaBVrnPD8jpeyqhRlQRF+IWqCQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=C4Wwmams/C6BmEHgtSqsUf4ABEG3x9FouT0XOmS8ZLKOGcO1fshJdGTLGsN7Nn994
-	 Ns0lKZ5/b6w6BRZhvgQw8KotY3Q6vXQdY5EPRZmTgzVPM9Y8B+T1TAy+wkKMdlYxDk
-	 akXPVr+7UszijWMw5ZPrB3Hc613OgKLbfuHvGRW0=
-Date: Tue, 28 May 2024 09:15:27 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Tzung-Bi Shih <tzungbi@kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
-	Benson Leung <bleung@chromium.org>, Lee Jones <lee@kernel.org>, Guenter Roeck <groeck@chromium.org>, 
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, chrome-platform@lists.linux.dev, 
-	Dustin Howett <dustin@howett.net>, Mario Limonciello <mario.limonciello@amd.com>, 
-	Moritz Fischer <mdf@kernel.org>, Stephen Horvath <s.horvath@outlook.com.au>, 
+	b=slzeKu3rA2OQ+S7Ol6BehuxEeaW6kQujMgTIwYPYPCufIHM496ffuS6790dFQ5Gxd
+	 h6HGxKJVN7b5PEqJS6btS2+YocRYQlsoygUpHLN1ZJ706lLvyz9vKlOu8okxgAoOAu
+	 CLKoOFkpVoj/1Lvuaeugy+1ItDH4hurLzojaJXLpuIKj1TBLgW1t+RoB3/TKHf3Q7d
+	 UHdQ4z/0h/1MQ1wYDSdS5fUhlemxrgTKYMDzeIYHEncdkwySt3mYRCMDA3AHCWJ0Bu
+	 akHoLGqR7fNCXztLMPiHcuvbCOMVfmZNwaGGPfdTFyTzC1zwPp1XKs0U50Zu/BQOwF
+	 WO7YRJIFIr+bQ==
+Date: Tue, 28 May 2024 07:30:25 +0000
+From: Tzung-Bi Shih <tzungbi@kernel.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+	Benson Leung <bleung@chromium.org>, Lee Jones <lee@kernel.org>,
+	Guenter Roeck <groeck@chromium.org>, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, chrome-platform@lists.linux.dev,
+	Dustin Howett <dustin@howett.net>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Moritz Fischer <mdf@kernel.org>,
+	Stephen Horvath <s.horvath@outlook.com.au>,
 	Rajas Paranjpe <paranjperajas@gmail.com>
-Subject: Re: [PATCH v3 1/3] platform/chrome: cros_ec_proto: Introduce
- cros_ec_cmd_readmem()
-Message-ID: <c40d87cf-17b9-4500-ba87-35d14aeb1b4a@t-8ch.de>
+Subject: Re: [PATCH v3 2/3] hwmon: add ChromeOS EC driver
+Message-ID: <ZlWIEUv6kAG2ZO2x@google.com>
 References: <20240527-cros_ec-hwmon-v3-0-e5cd5ab5ba37@weissschuh.net>
- <20240527-cros_ec-hwmon-v3-1-e5cd5ab5ba37@weissschuh.net>
- <ZlV8Bx0-FOYeeTO7@google.com>
+ <20240527-cros_ec-hwmon-v3-2-e5cd5ab5ba37@weissschuh.net>
+ <ZlV8HWlsHfoz8QMc@google.com>
+ <3025747e-658a-47fa-8799-86e9e974b796@t-8ch.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZlV8Bx0-FOYeeTO7@google.com>
+In-Reply-To: <3025747e-658a-47fa-8799-86e9e974b796@t-8ch.de>
 
-On 2024-05-28 06:39:03+0000, Tzung-Bi Shih wrote:
-> On Mon, May 27, 2024 at 10:58:31PM +0200, Thomas WeiÃŸschuh wrote:
-> > +/**
-> > + * cros_ec_cmd_readmem - Read from EC memory.
-> > + *
-> > + * @ec_dev: EC device
-> > + * @offset: Is within EC_LPC_ADDR_MEMMAP region.
-> > + * @size: Number of bytes to read. zero means "read a string" (including
-> > + *        the trailing '\0').
+On Tue, May 28, 2024 at 09:09:28AM +0200, Thomas Weißschuh wrote:
+> On 2024-05-28 06:39:25+0000, Tzung-Bi Shih wrote:
+> > On Mon, May 27, 2024 at 10:58:32PM +0200, Thomas Weißschuh wrote:
+> > > +struct cros_ec_hwmon_priv {
+> > > +	struct cros_ec_device *cros_ec;
+> > > +	const char *temp_sensor_names[EC_TEMP_SENSOR_ENTRIES + EC_TEMP_SENSOR_B_ENTRIES];
+> > > +	u8 usable_fans;
+> > > +};
+> > > +
+> > > +static int cros_ec_hwmon_read_fan_speed(struct cros_ec_device *cros_ec, u8 index, u16 *speed)
+> > > +{
+> > > +	u16 data;
+> > > +	int ret;
+> > > +
+> > > +	ret = cros_ec_cmd_readmem(cros_ec, EC_MEMMAP_FAN + index * 2, 2, &data);
+> > > +	if (ret < 0)
+> > > +		return ret;
+> > > +
+> > > +	data = le16_to_cpu(data);
+> > > +	*speed = data;
+> > > +
+> > > +	if (data == EC_FAN_SPEED_NOT_PRESENT || data == EC_FAN_SPEED_STALLED)
+> > > +		return -EIO;
+> > 
+> > `data` could be eliminated; use `*speed` instead.
 > 
-> The behavior is cros_ec_lpc_readmem() only but not for cros_ec_cmd().
+> Then the le16 value would need to be written directly to the out
+> parameter. The current usage relies on *speed (sometimes) being set even
+> if ret != 0.
+> 
+> (See next response block)
+> 
+> > 
+> > > +static int cros_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+> > > +			      u32 attr, int channel, long *val)
+> > > +{
+> > [...]
+> > > +	u16 speed = 0;
+> > > +	u8 temp = 0;
+> > 
+> > They don't need to initialize.
+> 
+> They need to.
+> 
+> The logic
+> 
+> if (ret == -EIO && speed == EC_FAN_SPEED_STALLED)
+> 	ret = 0;
+> 
+> relies on -EIO and a write to speed from cros_ec_hwmon_read_fan_speed().
+> 
+> But if cros_ec_cmd_readmem() already returns -EIO, then speed would be
+> uninitialized.
 
-Indeed.
-I thought I checked for this specifically, but got it wrong.
-
-I'll drop the docs and add a
-
-	if (!size)
-		return -EINVAL;
-
-to make sure nobody starts relying on that behaviour when writing a
-driver against an LPC EC.
+I see.
