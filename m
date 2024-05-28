@@ -1,254 +1,173 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C49E171E4D;
-	Tue, 28 May 2024 15:50:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8D3016C688;
+	Tue, 28 May 2024 16:02:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716911454; cv=none; b=b6/vG3BIYaGF/O0U9c47A9gG+8rzBJ/u9RHmbo20zUOEYfX/nAMiSdz+4tzd4ItQMzxNPzIadBV2BdXLjgMRqzzaTCxUVGFJtrQRlfa0Vdql5+rRNBEv0MgP3tFUKrLMrlOx+vWxUb3Kt1HgwaeJKaRRqvjE7CJIVM3B11wSy2Y=
+	t=1716912173; cv=none; b=lNbW+5LXZLXcV82mUkDJgicDFLsKQ/r7xN3GWT6b9GqBl/AFlXUssYySlrOpw4jb9yCkX9OfhMfgDIa5jQOUGkQnT0DMO49E+jhDd22ya6DF5kgLCDits7DxRKOh2heTIaa6tz2TwzbL71R3ZuKi5VaVicAs5Ps5+r87oXB5IXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716911454; c=relaxed/simple;
-	bh=w893qe/kealbejw9LpXOPnWIUhnLGtUJMOvyHH8ODbY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bD0NAAUlCXUiGJrcULdXVULApvWCclQyy6r3NcLqL5xj5fv8ZDY+2og0bLd3BlZUl2bSKDtUOSJiZ43oqgg0cfnt+4XGC9gnsXzS0+TR1hpDkZ01qexmrIrBfzteBo2TG6/tP2ICPcmmjQoRgBPmonOB+rJ0wu3fRCmZIdKmIbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aekQx4jR; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1716912173; c=relaxed/simple;
+	bh=pTd9+3ADyKSsLJxka8UR2Fi7CwtGAZ/fPYypqOBGFKc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qs20/vT9OFW8PsXXROHrjIkOd2oKvqzJgyqjHJgkavnEOFm9mKa6/a/sNFv6jM7CAm2hTghOj2qr4xb/tQRfSKPefUko6EL/CipOXW5cB1jZUQH91ZE2Quj42e8QIEfQrzDj51hgHWZI8CYXkG1qNw7d8gost+131d/bRKT0+hg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=abhkWOWA; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aekQx4jR"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1f44b4404dfso8882785ad.0;
-        Tue, 28 May 2024 08:50:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716911452; x=1717516252; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=RPIwnjlc45VQT0mMiNcUcWFb46f4+KlFVHgSXlBA+XE=;
-        b=aekQx4jRlitH7iwD+PQ2E3FVTuev1ovyyvr9GtWmO4w7fHlyqrKnt93Y45lSqTA6Mh
-         LhH4ULsRn5he8etVdCFAG8S7kOoaZoQKtv/H2nhzq00dHmiqMHP2a35rfMQglEyuRWaA
-         PvUouDOFroGpl/2x+i3s34hWog54RakxRPEA85IJk0N6hVv9AdaOrg/wNSHuXDXsnjNj
-         LtjqPjQTmO2EPClSVHWFFLgLWkgo9OrzApG/tK0wRqPapKgvKfQFvWRcVNA4yBX6tEgB
-         4vTsXgd37k1kQ6ckEjVW4mOTBbnR64KFGTSUN13xk13ZCLlcyxBvYKYZuxh+0gSzliQK
-         JiNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716911452; x=1717516252;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RPIwnjlc45VQT0mMiNcUcWFb46f4+KlFVHgSXlBA+XE=;
-        b=gsNtSXE58KxDQWxisNROhpzawO4zU2XYnrHCbKOwpmMG2PK/yaE79DuVl+rlj3jDU/
-         g0ax2l6WSmsjnripS584fXJlwby9CgpyE6L7jvD0AvemOQpG1OLhZhoKmwh13w+IBh/y
-         Oh+qkOK1h8ovzFqu95H/kmDkLmo2+n6fr6t1nQ/XuXhAX7FbdM3aa2Gp9hG1x8BuRwZA
-         EVDWgoVABcC6nqBIkxFiLCq+CrgwH66IP0rij1FbnaioJI7kBhzmezhk5D9gmvKqcTa+
-         cmLv651umnU0gPdMsbFOnWlaigh1TToD9r7eSWwItV+X9CweOOO9HWFZ5xKXn1xvYWpF
-         /ptw==
-X-Forwarded-Encrypted: i=1; AJvYcCXn2sfmNvoCqHjLQ1qVYFawpfyGLiUIb7c/5Hz5NeZZ8lKVMIVOMhJspDStiD1O0fLPqGWDp4pQh5UdoT/8Us4OcglUCWmpP+DR9PDL/EhghKai5fYPeG+GTS8FzGDnMmfXaY132mRwvAA=
-X-Gm-Message-State: AOJu0YwgyHDL3kb3Qs8hW+Eu0e9V04xIRyKlbyK9OXXlogK5T0H2MMwB
-	1ZGgxKvGoQGhaL651E1b2J4xEe/Lquy8CF1XDPzhpjUcwiGx6tFu
-X-Google-Smtp-Source: AGHT+IFZjL+uRqFi3RQWD/opqLth7vJLT2z6vemp4GQgqzjHDTisYaBfAgZLAjFcBPqcovOh2xzOSQ==
-X-Received: by 2002:a17:902:e544:b0:1f4:aac7:ffff with SMTP id d9443c01a7336-1f4aac8035fmr51948175ad.20.1716911452471;
-        Tue, 28 May 2024 08:50:52 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f44c967a45sm81765515ad.167.2024.05.28.08.50.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 May 2024 08:50:51 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c9b110eb-ff0e-41f2-9492-8a5d8c3c01d0@roeck-us.net>
-Date: Tue, 28 May 2024 08:50:49 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="abhkWOWA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1716912172; x=1748448172;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pTd9+3ADyKSsLJxka8UR2Fi7CwtGAZ/fPYypqOBGFKc=;
+  b=abhkWOWAD1lxiykExf0AanWLAg6TFaYNyCFc9FvvApP3icMM+bOUapEu
+   Rr0FfW4Iemc+tSIGEWjBEb4S3O+2xdAhehDOISt2m81q0gaWL7W2mqeZN
+   aXR7diHg/Y0L96ZTalbtGwA0Kd+KUqqX55H0zmKxxcxr/pt9K2w5/allY
+   fcf58jEE1a7mAdQnBaNTVEzqY71gZumR8lYrjMZ7BB7jWxIxONxhKf5DU
+   pTQGw5fld0uP/ioxYMz/8XzUwvMWtykED5yCh7YgTmNluUsPGBf+pu/5H
+   qxYL07epgZO6NQpnXGd/Vr4Jhyvfi3WooM/taYLYQxFDxiGhDA9jBOMOg
+   A==;
+X-CSE-ConnectionGUID: 4prBDivWRuWg9mOrDuWOYA==
+X-CSE-MsgGUID: Ia+WtwlaQGOGpMUjfFaSRg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11085"; a="24685042"
+X-IronPort-AV: E=Sophos;i="6.08,195,1712646000"; 
+   d="scan'208";a="24685042"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2024 09:02:51 -0700
+X-CSE-ConnectionGUID: QSrT1CW1R4GH1zOmD3LUKQ==
+X-CSE-MsgGUID: BcsEDqCiSmGGBf/FMWktww==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,195,1712646000"; 
+   d="scan'208";a="35208558"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by fmviesa009.fm.intel.com with ESMTP; 28 May 2024 09:02:50 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sBzHj-000CQD-0P;
+	Tue, 28 May 2024 16:02:47 +0000
+Date: Wed, 29 May 2024 00:02:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Naresh Solanki <naresh.solanki@9elements.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Naresh Solanki <naresh.solanki@9elements.com>,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: (max6639) : Update hwmon init using info
+Message-ID: <202405282323.3IOCxxpg-lkp@intel.com>
+References: <20240528091808.863702-1-naresh.solanki@9elements.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] hwmon: add ChromeOS EC driver
-To: Stephen Horvath <s.horvath@outlook.com.au>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Jean Delvare <jdelvare@suse.com>, Benson Leung <bleung@chromium.org>,
- Lee Jones <lee@kernel.org>, Guenter Roeck <groeck@chromium.org>,
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
- chrome-platform@lists.linux.dev, Dustin Howett <dustin@howett.net>,
- Mario Limonciello <mario.limonciello@amd.com>,
- Moritz Fischer <mdf@kernel.org>
-References: <20240507-cros_ec-hwmon-v2-0-1222c5fca0f7@weissschuh.net>
- <20240507-cros_ec-hwmon-v2-1-1222c5fca0f7@weissschuh.net>
- <SY4P282MB30635BA1D4087113E79921B5C5F52@SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM>
- <9cf224dd-51eb-4608-abcf-06f337d08178@t-8ch.de>
- <SY4P282MB306325BB023A95198F25A21DC5F12@SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <SY4P282MB306325BB023A95198F25A21DC5F12@SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240528091808.863702-1-naresh.solanki@9elements.com>
 
-On 5/27/24 17:15, Stephen Horvath wrote:
-> Hi Thomas,
-> 
-> On 28/5/24 05:24, Thomas Weißschuh wrote:
->> Hi Stephen,
->>
->> On 2024-05-25 09:13:09+0000, Stephen Horvath wrote:
->>> I was the one to implement fan monitoring/control into Dustin's driver, and
->>> just had a quick comment for your driver:
->>>
->>> On 8/5/24 02:29, Thomas Weißschuh wrote:
->>>> The ChromeOS Embedded Controller exposes fan speed and temperature
->>>> readings.
->>>> Expose this data through the hwmon subsystem.
->>>>
->>>> The driver is designed to be probed via the cros_ec mfd device.
->>>>
->>>> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
->>>> ---
->>>>    Documentation/hwmon/cros_ec_hwmon.rst |  26 ++++
->>>>    Documentation/hwmon/index.rst         |   1 +
->>>>    MAINTAINERS                           |   8 +
->>>>    drivers/hwmon/Kconfig                 |  11 ++
->>>>    drivers/hwmon/Makefile                |   1 +
->>>>    drivers/hwmon/cros_ec_hwmon.c         | 269 ++++++++++++++++++++++++++++++++++
->>>>    6 files changed, 316 insertions(+)
->>>>
->>
->> <snip>
->>
->>>> diff --git a/drivers/hwmon/cros_ec_hwmon.c b/drivers/hwmon/cros_ec_hwmon.c
->>>> new file mode 100644
->>>> index 000000000000..d59d39df2ac4
->>>> --- /dev/null
->>>> +++ b/drivers/hwmon/cros_ec_hwmon.c
->>>> @@ -0,0 +1,269 @@
->>>> +// SPDX-License-Identifier: GPL-2.0-or-later
->>>> +/*
->>>> + *  ChromesOS EC driver for hwmon
->>>> + *
->>>> + *  Copyright (C) 2024 Thomas Weißschuh <linux@weissschuh.net>
->>>> + */
->>>> +
->>>> +#include <linux/device.h>
->>>> +#include <linux/hwmon.h>
->>>> +#include <linux/kernel.h>
->>>> +#include <linux/mod_devicetable.h>
->>>> +#include <linux/module.h>
->>>> +#include <linux/platform_device.h>
->>>> +#include <linux/platform_data/cros_ec_commands.h>
->>>> +#include <linux/platform_data/cros_ec_proto.h>
->>>> +#include <linux/units.h>
->>>> +
->>>> +#define DRV_NAME    "cros-ec-hwmon"
->>>> +
->>>> +struct cros_ec_hwmon_priv {
->>>> +    struct cros_ec_device *cros_ec;
->>>> +    u8 thermal_version;
->>>> +    const char *temp_sensor_names[EC_TEMP_SENSOR_ENTRIES + EC_TEMP_SENSOR_B_ENTRIES];
->>>> +};
->>>> +
->>>> +static int cros_ec_hwmon_read_fan_speed(struct cros_ec_device *cros_ec, u8 index, u16 *speed)
->>>> +{
->>>> +    u16 data;
->>>> +    int ret;
->>>> +
->>>> +    ret = cros_ec->cmd_readmem(cros_ec, EC_MEMMAP_FAN + index * 2, 2, &data);
->>>> +    if (ret < 0)
->>>> +        return ret;
->>>> +
->>>> +    data = le16_to_cpu(data);
->>>> +
->>>> +    if (data == EC_FAN_SPEED_NOT_PRESENT)
->>>> +        return -ENODEV;
->>>> +
->>>
->>> Don't forget it can also return `EC_FAN_SPEED_STALLED`.
->>
->> Thanks for the hint. I'll need to think about how to handle this better.
->>
->>> Like Guenter, I also don't like returning `-ENODEV`, but I don't have a
->>> problem with checking for `EC_FAN_SPEED_NOT_PRESENT` in case it was removed
->>> since init or something.
->>
+Hi Naresh,
 
-That won't happen. Chromebooks are not servers, where one might be able to
-replace a fan tray while the system is running.
+kernel test robot noticed the following build errors:
 
->> Ok.
->>
->>> My approach was to return the speed as `0`, since the fan probably isn't
->>> spinning, but set HWMON_F_FAULT for `EC_FAN_SPEED_NOT_PRESENT` and
->>> HWMON_F_ALARM for `EC_FAN_SPEED_STALLED`.
->>> No idea if this is correct though.
->>
->> I'm not a fan of returning a speed of 0 in case of errors.
->> Rather -EIO which can't be mistaken.
->> Maybe -EIO for both EC_FAN_SPEED_NOT_PRESENT (which should never happen)
->> and also for EC_FAN_SPEED_STALLED.
-> 
-> Yeah, that's pretty reasonable.
-> 
+[auto build test ERROR on 5fbf8734fb36cf67339f599f0e51747a6aff690c]
 
--EIO is an i/o error. I have trouble reconciling that with
-EC_FAN_SPEED_NOT_PRESENT or EC_FAN_SPEED_STALLED.
+url:    https://github.com/intel-lab-lkp/linux/commits/Naresh-Solanki/hwmon-max6639-Update-hwmon-init-using-info/20240528-172245
+base:   5fbf8734fb36cf67339f599f0e51747a6aff690c
+patch link:    https://lore.kernel.org/r/20240528091808.863702-1-naresh.solanki%409elements.com
+patch subject: [PATCH v2] hwmon: (max6639) : Update hwmon init using info
+config: arm64-randconfig-002-20240528 (https://download.01.org/0day-ci/archive/20240528/202405282323.3IOCxxpg-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240528/202405282323.3IOCxxpg-lkp@intel.com/reproduce)
 
-Looking into the EC source code [1], I see:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405282323.3IOCxxpg-lkp@intel.com/
 
-EC_FAN_SPEED_NOT_PRESENT means that the fan is not present.
-That should return -ENODEV in the above code, but only for
-the purpose of making the attribute invisible.
+All errors (new ones prefixed by >>):
 
-EC_FAN_SPEED_STALLED means exactly that, i.e., that the fan
-is present but not turning. The EC code does not expect that
-to happen and generates a thermal event in case it does.
-Given that, it does make sense to set the fault flag.
-The actual fan speed value should then be reported as 0 or
-possibly -ENODATA. It should _not_ generate any other error
-because that would trip up the "sensors" command for no
-good reason.
+>> drivers/hwmon/max6639.c:291:3: error: expected expression
+                   u8 x;
+                   ^
+>> drivers/hwmon/max6639.c:296:3: error: use of undeclared identifier 'x'
+                   x = val & MAX6639_FAN_CONFIG3_FREQ_MASK;
+                   ^
+   drivers/hwmon/max6639.c:303:4: error: use of undeclared identifier 'x'
+                           x |= 0x4;
+                           ^
+   drivers/hwmon/max6639.c:304:3: error: use of undeclared identifier 'x'
+                   x &= 0x7;
+                   ^
+   drivers/hwmon/max6639.c:305:25: error: use of undeclared identifier 'x'
+                   *pwm_val = freq_table[x];
+                                         ^
+   drivers/hwmon/max6639.c:328:3: error: expected expression
+                   u8 x;
+                   ^
+   drivers/hwmon/max6639.c:332:8: error: use of undeclared identifier 'x'
+                   for (x = 0; x < sizeof(freq_table); x++)
+                        ^
+   drivers/hwmon/max6639.c:332:15: error: use of undeclared identifier 'x'
+                   for (x = 0; x < sizeof(freq_table); x++)
+                               ^
+   drivers/hwmon/max6639.c:332:39: error: use of undeclared identifier 'x'
+                   for (x = 0; x < sizeof(freq_table); x++)
+                                                       ^
+   drivers/hwmon/max6639.c:333:26: error: use of undeclared identifier 'x'
+                           if (val <= freq_table[x])
+                                                 ^
+   drivers/hwmon/max6639.c:337:38: error: use of undeclared identifier 'x'
+                                            MAX6639_FAN_CONFIG3_FREQ_MASK, x);
+                                                                           ^
+   drivers/hwmon/max6639.c:341:7: error: use of undeclared identifier 'x'
+                   if (x >> 2)
+                       ^
+   12 errors generated.
 
-Guenter
 
----
-[1] https://chromium.googlesource.com/chromiumos/platform/ec
+vim +291 drivers/hwmon/max6639.c
 
+   275	
+   276	static int max6639_read_pwm(struct device *dev, u32 attr, int channel,
+   277				    long *pwm_val)
+   278	{
+   279		struct max6639_data *data = dev_get_drvdata(dev);
+   280		unsigned int val, res;
+   281	
+   282		if (IS_ERR(data))
+   283			return PTR_ERR(data);
+   284	
+   285		switch (attr) {
+   286		case hwmon_pwm_input:
+   287			res = regmap_read(data->regmap, MAX6639_REG_TARGTDUTY(channel), &val);
+   288			*pwm_val = val * 255 / 120;
+   289			return 0;
+   290		case hwmon_pwm_freq:
+ > 291			u8 x;
+   292	
+   293			res = regmap_read(data->regmap, MAX6639_REG_FAN_CONFIG3(channel), &val);
+   294			if (res < 0)
+   295				return res;
+ > 296			x = val & MAX6639_FAN_CONFIG3_FREQ_MASK;
+   297	
+   298			res = regmap_read(data->regmap, MAX6639_REG_GCONFIG, &val);
+   299			if (res < 0)
+   300				return res;
+   301	
+   302			if (val & MAX6639_GCONFIG_PWM_FREQ_HI)
+   303				x |= 0x4;
+   304			x &= 0x7;
+   305			*pwm_val = freq_table[x];
+   306			return res;
+   307		default:
+   308			return -EOPNOTSUPP;
+   309		}
+   310	}
+   311	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
