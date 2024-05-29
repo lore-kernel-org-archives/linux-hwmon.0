@@ -1,165 +1,281 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 065E2E576;
-	Wed, 29 May 2024 16:20:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9170AD52E
+	for <linux-hwmon@vger.kernel.org>; Wed, 29 May 2024 17:00:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716999612; cv=none; b=Ck6X2DX05th7l9X0LYfnwEO1aCXO79w2BqKZNOy2FjxwcPas/yX2jutGerSyWrdRfBwXEt+4OnTZlOPsmgvW9Y8naQXBGMnnJqzeF2Krxn9jkJE2DE3KIZl0zTPRWNuY7yVYxCwh7AjrGF2qCelRpUvT250WWAQPTYhMQA9h/FA=
+	t=1717002045; cv=none; b=o9D34odIWeKk9h6K4RnpkNPoIbzQs/+qqEniIISPoDQqKOzevh6Yl837MmGYITgeUmKp5PtgT+I/nhsaro8AJ4FyahXWJ3c7cNRGmiPbi9KUr/lrXfTu3s6olMgODFOhapPAkYKGwcAvvUlpYCM9Z2OCOm2BBUrAlcRipCRaaDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716999612; c=relaxed/simple;
-	bh=6zNVaT7pBxjmTO3i2MBilBBPp1dfMBnZrrUBcWnT56w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dDrt1ji5Og0JtZv6uv39DPP6xvSOU0Kk9ep+qeF3Csq2jjcVScGlsU8eX39nnDpvvFo6LSerF/t+9Pmgn7es9XiSLyCdRUgtgmN1nvAU8SW+R2Bxjncu7EE6PK6gbgN3mlscWhqzanNQ/Z8vIPCuA2UAW+drwgU1UcFUsje2PDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b16dWyMa; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1717002045; c=relaxed/simple;
+	bh=bu7NemNpKFWjO/TMFN45dKSrd4mpHQUTXoAEcBKTrDU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PNVzYRUcsF5/teh6HelmiqvJuR1Sedi6XXodwjd/q5IzBIFEec5Aqzzj0u0Ltd7RsHwLcn3Bq+2f14ZhpEBotANQeJ8HfgL9gmGB0udcEknTJQd0tkUYflLrYzpBb8nyPW2kSKT/8NGxlHfvMVPooz+OggCxpVYs+4hRyL9/FtM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MexWv8wR; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b16dWyMa"
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-6f850ff30c0so1835613b3a.0;
-        Wed, 29 May 2024 09:20:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MexWv8wR"
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-579ce5fbeb6so253a12.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 29 May 2024 10:00:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716999610; x=1717604410; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=7DIlpIcV63xQIC+uFrCIfv9uIn22GwHRD2QMx2fQXbw=;
-        b=b16dWyMalzxX47xCfv5iP8Xfp5grg9hM/WJjNgBgh9bW/iuAXPCLJ9dpIuW2Q6WuQv
-         740a2bGF3sEZVpyk19hPiUmzaz2Ko1H0pKioBxLjAN915f5DpkidHmmSjer+0N0mDBZW
-         yx9Pg7C8FADxp9RF9ju336m8BgFjNTfSiZjxkhaF6DGRX1VA0fYoC5cD8TBrqlDmnnCX
-         PGhPk+FQ57XLkyY16/GtsKP67WE0FwoAFVMB7j+LtEdHHF84wRSyWriVqeTapHTeXbzn
-         RjaRS/XEzjFNGoTD7npSVoVyThAifUC395rOVQmRNwe8Ikwz+hGS5K0LqK9nL0lLF0uD
-         rarQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716999610; x=1717604410;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1717002041; x=1717606841; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7DIlpIcV63xQIC+uFrCIfv9uIn22GwHRD2QMx2fQXbw=;
-        b=UgcZxE7dFI42I/CvMMXjS3zNxMANXKMmhbtuc54pjuI2M2aNZ+Ve+lElwvtOSiOBwt
-         FYa1m7r8m2DrnPsILQEv8WkXQFGNBsZbRyTXAIs7Id7pGi1wDTTAf94CJ1lXRT7PdGuF
-         TwCZBDpseWoNtyduYs2nbpps0OBKj8PFzSN+5wjiZy5BDBoOk2IG9JIaqGh9C22YGxoV
-         V1VAolY8oUGX/PJ8zXcO5cNwtpJK4ImwApRpjBEeDMx0FXVmsqPcuoOTX/8EtYaKqcVC
-         kX+eMHbsl+7kqPJNlJVlBqVhxMi/+8OwfMmX/PQlSToeiEPxNu7CtJB7Tho2nlLKf/sk
-         LvoQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXCd+2BydkSazKuaOgvsFSLMFZRS5B4mk5SQdUKboWXx76ofQEi2fGMYK/PXNkRqKHSJVYMP1+ZTbYRIKoDz0yQQ3H/65vO2/OQTirKhbQ0C3UAw/YG9srUQEZlLy9PvC64FF3reCOcrNOJySwNsY0YYaFFe/ItmKFbeBJ68I0rgiUUiCgb
-X-Gm-Message-State: AOJu0YzPii6eRaM5xFon8EKwZkTZriOWuSrMvdyIf/sahhqEKnw5/UMb
-	6quEwBCv9CU/BpFjhfAZUpZeut7/HJt2LX7XbwvktGJdGxbHjggMOP/KDA==
-X-Google-Smtp-Source: AGHT+IGObym2lzqymUsTK/krTJ9/MpXIkhFV1Nv+K3Beojwf7DIXXaqkvHSlqxJFg/VG8UX+2ANNkQ==
-X-Received: by 2002:a05:6a21:8193:b0:1af:ac96:f4bf with SMTP id adf61e73a8af0-1b212d1e48cmr15208604637.15.1716999610215;
-        Wed, 29 May 2024 09:20:10 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-6822198a7e3sm9311534a12.34.2024.05.29.09.20.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 May 2024 09:20:09 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f41480c8-f149-4826-aa28-549a504df181@roeck-us.net>
-Date: Wed, 29 May 2024 09:20:06 -0700
+        bh=CoiH6lwmGs4PCawaoWyQsbF1ZjB3aSEqZRmZUUflfr8=;
+        b=MexWv8wRG+kMBoVgKVpRzGNzcZndfD6xFQI8n/c+n6yi/TnJ8aRPnyi9P7rZpT7FQl
+         gsoCfHkFANgsGQobbUrhAHV15zfDkFXIDXXwpAAJvwG+ZQY/2Fz2+Pg0FXkeYZpEvENB
+         YvjEEu+1gHsyPtgvC1p3qE6bOyNf1sV6Nz0g8pNpRxJiAu3zShFMh8FiJgFIGYojun7Z
+         eOftMXuvKvAtVZRQvFyan0yzV0+wou0MJ3q3G0/I+JhPrJ7XE2uwMCQguUnCKHKO7zc7
+         Y/fpND9QkGt1vTr1dXO0WbMZ7eJwHPyTKfhLGS1siQWkg0jUD4qv/0uZTYAi6mV2yLKl
+         fAuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717002041; x=1717606841;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CoiH6lwmGs4PCawaoWyQsbF1ZjB3aSEqZRmZUUflfr8=;
+        b=NexgtiX4uxtRQ+ohXbIy3IUJQDIyOr0Qc2DrqOzz+QS64A9ujt0IAEV5hzqH9ECz9r
+         QeuNAEJqWPIzP+RHA3Yc87C7GcebRF1aAHsGd1d8lT/mhSZd13HNblvswD3vnNKzqfIP
+         qyLkw/PThDJgdU3VbcPyppzA4cqaByHzMuIu9Nk7PvXtIE3VJ1aIm09YnGl59C+oxKsQ
+         w42X7gIKcX6bQMQLoXpBaRKnZEwrcyd33Wcf06O67u03BRSp7RHQun8bIRZGYi4BDezg
+         5am1VyObhJ3ai6Hc+g+At22N6XtVZviGBcTpgYaJOSGe0XxpjW73rANpLyHs8Ik5I2VS
+         dz9A==
+X-Forwarded-Encrypted: i=1; AJvYcCUcwLAByyUSO+hQYLKFFBWDLsHd7+8mPHlT4a1Go3FrUPi5pstNOlK1d23ygKfS5mn3x6hkRGjzZxeW4t+9VCERxknQOr7+feCLb/o=
+X-Gm-Message-State: AOJu0Yy9CjHv2aO+kJjkEGHjjV2Y2k7yBsycp233WVDFQlhBfejvWA2a
+	e7ts1Tko+JMhMv3wxnpiw3pKxRooScJGmppiuHlLRhFYYOk6DlaEG1Je9o7whhSugc9VOVL9K+X
+	hyH65xqlAXgEnk61LvjSBtfIU4fnV99t+oK3t
+X-Google-Smtp-Source: AGHT+IGiepejwPJySSOJTS8Vdh/jCe6ATC7+zN+DhmTfyw6FDv0F1k25j/gWlegvODKQm49Var2SQjMrbaSqv9YkIEo=
+X-Received: by 2002:a05:6402:290f:b0:578:33c0:f00e with SMTP id
+ 4fb4d7f45d1cf-57a02fcb5dfmr233619a12.0.1717002040619; Wed, 29 May 2024
+ 10:00:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: ti,ina2xx: Add
- ti,alert-polarity property
-To: Conor Dooley <conor@kernel.org>, Amna Waseem <Amna.Waseem@axis.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>,
- linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernel@axis.com
-References: <20240529-apol-ina2xx-fix-v2-0-ee2d76142de2@axis.com>
- <20240529-apol-ina2xx-fix-v2-1-ee2d76142de2@axis.com>
- <20240529-untangled-occultist-5c9804aa9c8f@spud>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240529-untangled-occultist-5c9804aa9c8f@spud>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240507-cros_ec-hwmon-v2-0-1222c5fca0f7@weissschuh.net>
+ <20240507-cros_ec-hwmon-v2-1-1222c5fca0f7@weissschuh.net> <SY4P282MB30635BA1D4087113E79921B5C5F52@SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM>
+ <9cf224dd-51eb-4608-abcf-06f337d08178@t-8ch.de> <SY4P282MB306325BB023A95198F25A21DC5F12@SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM>
+ <c9b110eb-ff0e-41f2-9492-8a5d8c3c01d0@roeck-us.net> <b8072b36-688f-41b8-8b32-40fc4fa4d148@t-8ch.de>
+ <6824f030-92da-4439-af3b-8c2498f4382e@roeck-us.net> <SY4P282MB30638301303268093B6D1ABFC5F22@SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM>
+ <22a16af6-93c4-454c-853b-5959a5c018d3@t-8ch.de> <SY4P282MB30634D9D9873C9C8DC41D4EEC5F22@SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM>
+In-Reply-To: <SY4P282MB30634D9D9873C9C8DC41D4EEC5F22@SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM>
+From: Guenter Roeck <groeck@google.com>
+Date: Wed, 29 May 2024 10:00:27 -0700
+Message-ID: <CABXOdTcyuR-YJYoMrAh11ksYcL-6LZPFERw94Z8-mTgMUfLP3g@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] hwmon: add ChromeOS EC driver
+To: Stephen Horvath <s.horvath@outlook.com.au>
+Cc: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+	Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>, 
+	Benson Leung <bleung@chromium.org>, Lee Jones <lee@kernel.org>, 
+	Guenter Roeck <groeck@chromium.org>, linux-kernel@vger.kernel.org, 
+	linux-hwmon@vger.kernel.org, chrome-platform@lists.linux.dev, 
+	Dustin Howett <dustin@howett.net>, Mario Limonciello <mario.limonciello@amd.com>, 
+	Moritz Fischer <mdf@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 5/29/24 09:17, Conor Dooley wrote:
-> On Wed, May 29, 2024 at 11:47:44AM +0200, Amna Waseem wrote:
->> Add a property to the binding to configure the Alert Polarity.
->> Alert pin is asserted based on the value of Alert Polarity bit of
->> Mask/Enable register. It is by default 0 which means Alert pin is
->> configured to be active low open collector. Value of 1 maps to
->> Inverted (active high open collector).
->>
->> Signed-off-by: Amna Waseem <Amna.Waseem@axis.com>
->> ---
->>   Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml | 9 +++++++++
->>   1 file changed, 9 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
->> index df86c2c92037..5a16d2d94587 100644
->> --- a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
->> +++ b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
->> @@ -66,6 +66,14 @@ properties:
->>       description: phandle to the regulator that provides the VS supply typically
->>         in range from 2.7 V to 5.5 V.
->>   
->> +  ti,alert-polarity:
->> +    description: Alert polarity bit value of Mask/Enable register. Alert pin is
->> +      asserted based on the value of Alert polarity Bit. Default value is Normal
->> +      (0 which maps to active-low open collector). The other value is Inverted
->> +      (1 which maps to active-high open collector).
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    enum: [0, 1]
-> 
-> There's no need for this to have a value, it's sufficient to be a flag
-> of "ti,alert-active-high". Present would mean active-high and absent
-> active-low. This has the added benefit the devicetree node being
-> understandable to a reader.
-> 
+On Wed, May 29, 2024 at 12:40=E2=80=AFAM Stephen Horvath
+<s.horvath@outlook.com.au> wrote:
+>
+> Hi Thomas,
+>
+> On 29/5/24 16:23, Thomas Wei=C3=9Fschuh wrote:
+> > On 2024-05-29 10:58:23+0000, Stephen Horvath wrote:
+> >> On 29/5/24 09:29, Guenter Roeck wrote:
+> >>> On 5/28/24 09:15, Thomas Wei=C3=9Fschuh wrote:
+> >>>> On 2024-05-28 08:50:49+0000, Guenter Roeck wrote:
+> >>>>> On 5/27/24 17:15, Stephen Horvath wrote:
+> >>>>>> On 28/5/24 05:24, Thomas Wei=C3=9Fschuh wrote:
+> >>>>>>> On 2024-05-25 09:13:09+0000, Stephen Horvath wrote:
+> >>>>>>>> Don't forget it can also return `EC_FAN_SPEED_STALLED`.
+> >
+> > <snip>
+> >
+> >>>>>>>
+> >>>>>>> Thanks for the hint. I'll need to think about how to
+> >>>>>>> handle this better.
+> >>>>>>>
+> >>>>>>>> Like Guenter, I also don't like returning `-ENODEV`,
+> >>>>>>>> but I don't have a
+> >>>>>>>> problem with checking for `EC_FAN_SPEED_NOT_PRESENT`
+> >>>>>>>> in case it was removed
+> >>>>>>>> since init or something.
+> >>>>>>>
+> >>>>>
+> >>>>> That won't happen. Chromebooks are not servers, where one might
+> >>>>> be able to
+> >>>>> replace a fan tray while the system is running.
+> >>>>
+> >>>> In one of my testruns this actually happened.
+> >>>> When running on battery, one specific of the CPU sensors sporadicall=
+y
+> >>>> returned EC_FAN_SPEED_NOT_PRESENT.
+> >>>>
+> >>>
+> >>> What Chromebook was that ? I can't see the code path in the EC source
+> >>> that would get me there.
+> >>>
+> >>
+> >> I believe Thomas and I both have the Framework 13 AMD, the source code=
+ is
+> >> here:
+> >> https://github.com/FrameworkComputer/EmbeddedController/tree/lotus-zep=
+hyr
+> >
+> > Correct.
+> >
+> >> The organisation confuses me a little, but Dustin has previous said on=
+ the
+> >> framework forums (https://community.frame.work/t/what-ec-is-used/38574=
+/2):
+> >>
+> >> "This one is based on the Zephyr port of the ChromeOS EC, and tracks
+> >> mainline more closely. It is in the branch lotus-zephyr.
+> >> All of the model-specific code lives in zephyr/program/lotus.
+> >> The 13"-specific code lives in a few subdirectories off the main tree =
+named
+> >> azalea."
+> >
+> > The EC code is at [0]:
+> >
+> > $ ectool version
+> > RO version:    azalea_v3.4.113353-ec:b4c1fb,os
+> > RW version:    azalea_v3.4.113353-ec:b4c1fb,os
+> > Firmware copy: RO
+> > Build info:    azalea_v3.4.113353-ec:b4c1fb,os:7b88e1,cmsis:4aa3ff 2024=
+-03-26 07:10:22 lotus@ip-172-26-3-226
+> > Tool version:  0.0.1-isolate May  6 2024 none
+>
+> I can confirm mine is the same build too.
+>
+> >  From the build info I gather it should be commit b4c1fb, which is the
+> > current HEAD of the lotus-zephyr branch.
+> > Lotus is the Framework 16 AMD, which is very similar to Azalea, the
+> > Framework 13 AMD, which I tested this against.
+> > Both share the same codebase.
+> >
+> >> Also I just unplugged my fan and you are definitely correct, the EC on=
+ly
+> >> generates EC_FAN_SPEED_NOT_PRESENT for fans it does not have the capab=
+ility
+> >> to support. Even after a reboot it just returns 0 RPM for an unplugged=
+ fan.
+> >> I thought about simulating a stall too, but I was mildly scared I was =
+going
+> >> to break one of the tiny blades.
+> >
+> > I get the error when unplugging *the charger*.
+> >
+> > To be more precise:
+> >
+> > It does not happen always.
+> > It does not happen instantly on unplugging.
+> > It goes away after a few seconds/minutes.
+> > During the issue, one specific sensor reads 0xffff.
+> >
+>
+> Oh I see, I haven't played around with the temp sensors until now, but I
+> can confirm the last temp sensor (cpu@4c / temp4) will randomly (every
+> ~2-15 seconds) return EC_TEMP_SENSOR_ERROR (0xfe).
+> Unplugging the charger doesn't seem to have any impact for me.
+> The related ACPI sensor also says 180.8=C2=B0C.
+> I'll probably create an issue or something shortly.
+>
+> I was mildly confused by 'CPU sensors' and 'EC_FAN_SPEED_NOT_PRESENT' in
+> the same sentence, but I'm now assuming you mean the temp sensor?
+>
 
-Agreed, makes sense. Even better, at the same time simplifies the code.
+Same here. it might not matter as much if the values were the same,
+but EC_FAN_SPEED_NOT_PRESENT =3D=3D 0xffff,  and
+EC_TEMP_SENSOR_NOT_PRESENT=3D=3D0xff, so they must not be confused with
+each other. EC_TEMP_SENSOR_NOT_PRESENT should be static as well,
+though, and not be returned randomly.
 
 Guenter
 
-
+> >>>>>>> Ok.
+> >>>>>>>
+> >>>>>>>> My approach was to return the speed as `0`, since
+> >>>>>>>> the fan probably isn't
+> >>>>>>>> spinning, but set HWMON_F_FAULT for `EC_FAN_SPEED_NOT_PRESENT` a=
+nd
+> >>>>>>>> HWMON_F_ALARM for `EC_FAN_SPEED_STALLED`.
+> >>>>>>>> No idea if this is correct though.
+> >>>>>>>
+> >>>>>>> I'm not a fan of returning a speed of 0 in case of errors.
+> >>>>>>> Rather -EIO which can't be mistaken.
+> >>>>>>> Maybe -EIO for both EC_FAN_SPEED_NOT_PRESENT (which
+> >>>>>>> should never happen)
+> >>>>>>> and also for EC_FAN_SPEED_STALLED.
+> >>>>>>
+> >>>>>> Yeah, that's pretty reasonable.
+> >>>>>>
+> >>>>>
+> >>>>> -EIO is an i/o error. I have trouble reconciling that with
+> >>>>> EC_FAN_SPEED_NOT_PRESENT or EC_FAN_SPEED_STALLED.
+> >>>>>
+> >>>>> Looking into the EC source code [1], I see:
+> >>>>>
+> >>>>> EC_FAN_SPEED_NOT_PRESENT means that the fan is not present.
+> >>>>> That should return -ENODEV in the above code, but only for
+> >>>>> the purpose of making the attribute invisible.
+> >>>>>
+> >>>>> EC_FAN_SPEED_STALLED means exactly that, i.e., that the fan
+> >>>>> is present but not turning. The EC code does not expect that
+> >>>>> to happen and generates a thermal event in case it does.
+> >>>>> Given that, it does make sense to set the fault flag.
+> >>>>> The actual fan speed value should then be reported as 0 or
+> >>>>> possibly -ENODATA. It should _not_ generate any other error
+> >>>>> because that would trip up the "sensors" command for no
+> >>>>> good reason.
+> >>>>
+> >>>> Ack.
+> >>>>
+> >>>> Currently I have the following logic (for both fans and temp):
+> >>>>
+> >>>> if NOT_PRESENT during probing:
+> >>>>     make the attribute invisible.
+> >>>>
+> >>>> if any error during runtime (including NOT_PRESENT):
+> >>>>     return -ENODATA and a FAULT
+> >>>>
+> >>>> This should also handle the sporadic NOT_PRESENT failures.
+> >>>>
+> >>>> What do you think?
+> >>>>
+> >>>> Is there any other feedback to this revision or should I send the ne=
+xt?
+> >>>>
+> >>>
+> >>> No, except I'd really like to know which Chromebook randomly generate=
+s
+> >>> a EC_FAN_SPEED_NOT_PRESENT response because that really looks like a =
+bug.
+> >>> Also, can you reproduce the problem with the ectool command ?
+> >
+> > Yes, the ectool command reports the same issue at the same time.
+> >
+> > The fan affected was always the sensor cpu@4c, which is
+> > compatible =3D "amd,sb-tsi".
+> >
+> >> I have a feeling it was related to the concurrency problems between AC=
+PI and
+> >> the CrOS code that are being fixed in another patch by Ben Walsh, I wa=
+s also
+> >> seeing some weird behaviour sometimes but I *believe* it was fixed by =
+that.
+> >
+> > I don't think it's this issue.
+> > Ben's series at [1], is for MEC ECs which are the older Intel
+> > Frameworks, not the Framework 13 AMD.
+>
+> Yeah sorry, I saw it mentioned AMD and threw it into my kernel, I also
+> thought it stopped the 'packet too long' messages (for
+> EC_CMD_CONSOLE_SNAPSHOT) but it did not.
+>
+> Thanks,
+> Steve
