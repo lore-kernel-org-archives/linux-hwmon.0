@@ -1,139 +1,93 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDBB360B8A;
-	Wed, 29 May 2024 18:01:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4D7479F2
+	for <linux-hwmon@vger.kernel.org>; Wed, 29 May 2024 18:01:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717005683; cv=none; b=Em4nelmfmVvz7PvFKG35Qpk+KQO67d4N/y8QcmuQhh8zpNiPzn5/X+0qJQhumpzcCPL8aPoNLxh5VCC7EaNceIrvY/B65dqRXgJKKdcCfAsUnxJYg/cYtlmwLntOyg62nEpWaO2vLguG69N/57s0XNZgrvxAvkw3Wz28KBKpQbk=
+	t=1717005698; cv=none; b=ntmSzAz1ryuxrw2LjNpAG+upAZ3uv3NM1JnRMsDHfQJyB0+nSRVJJ3hLcf5NVbibunKny+A/NKrMugu+W662QSd6/zTE+sZvBg2REBMZikpO0U7n4f6rm6q2zl+UTJMHt8PvO6vESKYHHj5E+rTgfzb3m8sx84/8vnJYMngKt8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717005683; c=relaxed/simple;
-	bh=C9bv8n2Yph9zB4abb7Qhz66pPr/f91zc6NXxwuqWJOk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=t5xeiD86+Qbqw1b4vO1o3N3MCsACMxCnQOv1NPngwri+19bSKk2ifY9KOnKTJ4Fa2QBnx411LEKLQWgGMuWL9mfOLsTzWsyoS8QiL0flVvSpOkE7Ivog+86pcdw4bLGvWRt10rq98Bikjd3BPCglKfct2l9tpcTKRrnEil2kJBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a/Y5l9hS; arc=none smtp.client-ip=209.85.210.175
+	s=arc-20240116; t=1717005698; c=relaxed/simple;
+	bh=nLmSGH7BeVayZL+22XxVIFe/GjXmKV7PpKbLPvUzjx8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=LYidbhCg+JShSFmdPuejQUUWjYbZxDOHwWrJjXAg6D1RvTv18V2yyBBppugK8ZdIUzToqO1rZx92On30SHJ6l7ljAWD8UNP6kx298l26TQETIpu5k2LruTE299ZOM4+h5Gh70D3PQK2Ezsp2ojuTRJrueacD/FOaL0oyfiH+H0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jrbu8CYj; arc=none smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a/Y5l9hS"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-6f4603237e0so205859b3a.0;
-        Wed, 29 May 2024 11:01:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jrbu8CYj"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2bff7b9503aso1798977a91.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 29 May 2024 11:01:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717005681; x=1717610481; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=7v4SBxMsVcC1Y8hf6RcuPsH7ukRGgbWwv2pnXRLZ3hs=;
-        b=a/Y5l9hSCBmKVFJYF8aHn0cGT39Wfrfa8GBM74Uh+bVmpdQMIfy7DmOUcva7+XOdFX
-         mhaibzArFQGyRZoI9/SCpUhbj+UEptR0QwFRjcIcIpPDtnw/wgss2U8Q/SCwN3uviGOO
-         rLjn+Qtn1T45HGkGiwK0/s4hAZUfEfhWhDyhmniz3F7ppHJefMLCoJLSM02mBAKk4NXz
-         XSOULwswu6Z7IlP8oylKGEl1wZbDeY7iBIAxciWmZKQllabM9GSyUjb+Oduo+kTJ+D8v
-         ADcoyyYXIrqooXRFzO/T4I2fg/xIMM3rP0s8gaKjg+/jnVBR8NU35xrpac6CLu/Ujm9t
-         tfIA==
+        d=gmail.com; s=20230601; t=1717005695; x=1717610495; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=nLmSGH7BeVayZL+22XxVIFe/GjXmKV7PpKbLPvUzjx8=;
+        b=Jrbu8CYjKSqPkfrWuPR8sQCZX4Cs2u1vefEs8mD3MRA3qZfgdmdRFGf1jUGxxqSwyh
+         uytC5Zeh93BvejQGppbDdWenk4cSL8ZkDtqbMtJmmSACSh+8mR+IHd7AY9y0EcMEg3JI
+         6KMBoafKiGegxxrza4mr2mEK0dLoRojDrqNJOwpAq6QW5Mj+nezNqJXiGdno9dkd9nlz
+         KrYN27pCnbZx9rNeetHx+7S6yIvUyQx5FBywXeOWL5j9mjcnc4elAYEBCoMp675peOX5
+         c1/8pMl8uJesGZCKGMRZK04yDAxgExms0kntlbRje+gBhW7UozCbYfoK1JYHqWD6qhHR
+         d69w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717005681; x=1717610481;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1717005695; x=1717610495;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7v4SBxMsVcC1Y8hf6RcuPsH7ukRGgbWwv2pnXRLZ3hs=;
-        b=w3231HBCHfYMdhl8tvfWWBi59L1BlhoLc3YEV2i2yLJLaJBxwT3EuoINJy/tifgDXv
-         mmBfQBXL9EE3iM9w++BSKJNLA8pt0xKas5jV/9DFM+dU1aLOUaXINiO7uMSGLeMExwLV
-         IGMDVVrTADfJIHhN0YZ1VaUBqcEx8IseyZFTwchbCY+wtLzZJ9mDS8jWo4fbIr+4ogJB
-         yc3hLjs/qnWPMjgw0IyCc8FU8VZjJz8rN0ysH49XvJHeSClGFTdTD3lFExXmCSPpIsJ2
-         dfl2EslQSmzxqMRlrAB5LnVyXTSnOfE4+QYJn0RmTi4ocrh+7xPVY7MMFj3i9WLAPVE9
-         wKOA==
-X-Forwarded-Encrypted: i=1; AJvYcCV5S9eOf0gSDDVJ5HT4AZT1eoivnHf62LnnFOm4xngoCacTT+BDwFs9V91ciGczCksDNpqV+hLEE2B7kg8DDmTDCRdqcovw4xp+qjhQ3vcaSrhHSds0tLlTncYFonIi8ReVEylK6L3xD/reTCcwTeRuzR0NTvFtWFIHLlzh8WxfiUkSR8M=
-X-Gm-Message-State: AOJu0Yxval9RlKocrTb7wm1wdwnzAl6siXGRF1CXP/jWL4Zx2QtS7sj9
-	SjUePHnQXE4VGt+pvaT/wnjYb8RIRFCVRCCOlyiU2IZOJrTwCym/xnwudw==
-X-Google-Smtp-Source: AGHT+IHqiJT/ps0cD036xFv70u0VPuwVVr1EoTm+aFNcmbJuM7L4nOzLZrp+4SENo8ldRBaO9G08vA==
-X-Received: by 2002:a05:6a00:26d7:b0:702:2b15:a1f with SMTP id d2e1a72fcca58-7022b150b97mr1162617b3a.2.1717005679460;
-        Wed, 29 May 2024 11:01:19 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7022f2425e3sm55095b3a.126.2024.05.29.11.01.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 May 2024 11:01:18 -0700 (PDT)
+        bh=nLmSGH7BeVayZL+22XxVIFe/GjXmKV7PpKbLPvUzjx8=;
+        b=oKNJyZMhc+fDPHUOpLNsCdkFTztAspOBIOiDZrdl4zw7XJbwbC6HAQehpTEjkzrUn/
+         mny4X9l16Wr8kzyKJI5+4VIOLNK8FDvs2tHfP8W3ySODj9EvxA7EySpE5cGItqvKYfaL
+         Pvd89VigSwvqkv/KpMgIIjgXSht3bo35ePA4LM5Ha1pQbx9gL8a3H491unDyQAYN1q3S
+         f9Cc0J0LK7bldmswx5bVPhB0q7hRU9gfNEylbe0CPBxr4xuwfJtHEiAauVsdh1dGTA+f
+         v0W2uMx8X/YY+VFYsNwdEHQvio/WZAfI3j9kvktcdE6gPsCfyHlc0hBDfDKYi/i4xUW8
+         utQQ==
+X-Gm-Message-State: AOJu0Yzv2T66euyRP6BVL6T2MGtu5x4mC6go1Ueb3VFb/xZbIRsDC2Qv
+	b4DoEBQUzlETTV6/Oy6SoJL4UnAPoVbe0fB2+YJQWquSbUBnEvNduiEcvg==
+X-Google-Smtp-Source: AGHT+IEmCDbwHES18iNw97L9tgJv7RkMhOQRRIcM4CIyZqJUwActsXUUnrX6bF1WY83/+DtiyTPxJQ==
+X-Received: by 2002:a17:90a:ad84:b0:2b5:340d:cfcc with SMTP id 98e67ed59e1d1-2bf5e18a5ccmr14495000a91.11.1717005695333;
+        Wed, 29 May 2024 11:01:35 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c1a779d2a5sm62733a91.49.2024.05.29.11.01.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 May 2024 11:01:34 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <a3eff514-f515-41a2-bb11-603434dc38fb@roeck-us.net>
-Date: Wed, 29 May 2024 11:01:17 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: linux-hwmon@vger.kernel.org
+Cc: Radu Sabau <radu.sabau@analog.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 0/2] hwmon: Add PEC attribute support to hardware monitoring core
+Date: Wed, 29 May 2024 11:01:30 -0700
+Message-Id: <20240529180132.72350-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] drivers: hwmon: max31827: Add PEC support
-To: Radu Sabau <radu.sabau@analog.com>, Jean Delvare <jdelvare@suse.com>,
- Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240527092947.4370-1-radu.sabau@analog.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240527092947.4370-1-radu.sabau@analog.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 5/27/24 02:29, Radu Sabau wrote:
-> Add support for PEC by attaching PEC attribute to the i2c device.
-> Add pec_store and pec_show function for accessing the "pec" file.
-> 
-> Signed-off-by: Radu Sabau <radu.sabau@analog.com>
-> ---
+Several hardware monitoring chips optionally support Packet Error Checking
+(PEC). For some chips, PEC support can be enabled simply by setting
+I2C_CLIENT_PEC in the i2c client data structure. Others require chip
+specific code to enable or disable PEC support.
 
-Sorry for the trouble, but I decided to add PEC support to the
-hardware monitoring code. With those changes, the hwmon core creates
-the attribute and handles i2c client configuration. The driver only
-needs to configure the chip.
+Introduce hwmon_chip_pec and HWMON_C_PEC to simplify adding configurable
+PEC support for hardware monitoring drivers. A driver can set HWMON_C_PEC
+in its chip information data to indicate PEC support. If a chip requires
+chip specific code to enable or disable PEC support, the driver only needs
+to implement support for the hwmon_chip_pec attribute to its write
+function.
 
-I'll copy you on the patches introducing and using this functionality.
+The hardware monitoring core does not depend on the I2C subsystem after
+this change. However, the I2C subsystem needs to be reachable. This
+requires a new HWMON dependency to ensure that HWMON can only be built
+as module if I2C is built as module. This should not make a practical
+difference.
 
-Please apply the patch introducing the core changes to your system
-and rebase this patch on top of it.
+The first patch of the series introduces PEC support to the harwdare
+monitoring core. The second patch converts to lm90 driver to use the
+new infrastructure.
 
-Thanks,
-Guenter
+Tested with ADM7421A using lm90 driver and Devantech USB-ISS.
 
+---
