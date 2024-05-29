@@ -1,171 +1,107 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F8EE1A38E1
-	for <linux-hwmon@vger.kernel.org>; Wed, 29 May 2024 18:01:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A7491B960;
+	Wed, 29 May 2024 20:52:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717005701; cv=none; b=PhyDAXphSB4PtdVXC9/Qbhb+HYyW4dhWaqZazHzq0Oi79tl8an6AYqniO8REtDav1ld95JonEsfH6CSXHUnt62RJtkHtBjo9e0NglkgSrR6GuN++3dfaezMbUEhk192fMhZX4d7cW2l7X8BpdbHvL6VinGPmXYZ/fHBm5zUDo5U=
+	t=1717015932; cv=none; b=UJgG2WTLhjpLz0KFd2rNYbYgpgoHsulpUOWRlKQP27CVi81am4stnIejNPudKBkLm+5j4tC5fjrncSVXjEOinf0T3giPIQd1MW0lJh/TjgUbUijygSNTlpXMt5g3vhccivvjvaJgFjlHQp4/6Xqbl9LJXhNpkgzMKrq+ymMYDII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717005701; c=relaxed/simple;
-	bh=0dAonKCnLoNpdqdIlZhH0E1nfQ2Qxl/0zVWvKWQtWzw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=iquz11wrhYYyMdcV8uza0adjUCRg/v3hDe6Zm2SfOFCnGzpx1VyYkULLqZzHJ+qFPSbF6nP2DUd/xKTMAT5zIusJEf3tiILtuKJr+4I8IwQX7WTknAQhyJxGUbvE6MWgh0SAvYJCTx9NFZcHEppdH9/PJHV1Q3K/TSE0iPSJV7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QKrixymD; arc=none smtp.client-ip=209.85.210.173
+	s=arc-20240116; t=1717015932; c=relaxed/simple;
+	bh=zdAapd0h4mwms8TrJzC82y791SE7Yr7JRdXI76LPPaw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=dqlfsNk+G2tvSfpsFuEqFAZHauLEv2rKXtqcg0Gi2pxsFucnXdSCbizeeW8oP+gW49wVOD1eou/I3hQGg4a1f6/5fjTW1uUD2ljAPNdYJdIftC5Ntqjx/2fftdXo3/FKRjCzuWHdFhZFiZU8zl52SjA+F54mltU6cZGoy8Hdy+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cs/PXFA3; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QKrixymD"
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-6f8edddf756so10943b3a.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 29 May 2024 11:01:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cs/PXFA3"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1f44b45d6abso1475055ad.0;
+        Wed, 29 May 2024 13:52:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717005698; x=1717610498; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Me+bRRWVvbJuCB2Hi9b0qVCNt4wMDRNR1FYOxYNpvPM=;
-        b=QKrixymDpZ+Qgv556mFNOWZxBjGL/dGtxwhVVcQDye7Z5wZxoXOa8tdoUJiEO9vNE8
-         XVrS38ImqdOmpkQDFH+T4gB/aO/aaNJvIjhrFOKiXlyUv5M6E3nQ6Keqbm1MuCpQmH0l
-         XGjmsBT3i3hMVG1NSagEKRFrGW6U/b9hRqjUY7MqaL1a5013SHm3fbSPlNkfbaTPFBPX
-         FjkTrjcU1IjxQgdR8jkNqjM2HEzC46/kphvRoSrnzhgG2qONB16cvDr4IkH7MP8mZUru
-         R6nQ8Q3jNInmj7hvM+1ngbpI5D+OsLw5lzsu4T0k8sKTbbKPUSlobbwj/ekihkbMHiDv
-         MF6Q==
+        d=gmail.com; s=20230601; t=1717015928; x=1717620728; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=F6gH8nCdHmr19zHRnPBbu6WWzjKxXWVCx7ub9BRI8r8=;
+        b=Cs/PXFA3kCHBrF5uYKvcSOmxrH5hvjsoudVhXu4vTBFqIcjoWq80ebgGauv/gFSa8x
+         UJl6IdamcUsOYiT/71jOczwBGoQwbr2jGo5LdsW35Y39xC3xn5/vOdxP53DBQWCCKx5V
+         QFJar8xWjQoZb965qx0T0pcHHOnirCLr8xJb4wiBg6KPPxgFrQujBNQrKOqkF8QgsAZ3
+         BNaC8MiUP0LHl28flW6Mebz7jyvhYHKV653zJrNyCHbcKGaKDJvI/HQoh4ughhOci878
+         NXKXntSLx1976Rw5OqWO7+xqaXSTmzZnZFKhbPXaVEOiwWsmmE1/27EklUuu9A/fU84M
+         3qlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717005698; x=1717610498;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Me+bRRWVvbJuCB2Hi9b0qVCNt4wMDRNR1FYOxYNpvPM=;
-        b=ixOdvPEmfHhksPzT8smUooIdHUDAz675q9FAn999VYhX0+s84jOmVrzCjnLvzL7UbY
-         japPwr/JYERS5Ms6pVU3NHQgkyJ111NTFlzBEz42XdpKpxdVdYyvgT4wtSBtY3Py0rUT
-         lKZ+vMHM5dXHh6AJmPGsThM8JlhLJtm6ycwFHvcU9Wf+X/xhKsqQd1X4VC0DXswsR8Bz
-         5DIBwbbCXJauhO1Oe/eAGdcCHGVrqeoec4Jkgon0IphWN/5cKugpbqGyG4BZZGg80a1o
-         cEIqEXHFJQbmNmbU1WqaRVYLQIZrWMNQo/cp7ikOfQEdVYuvj1uoEfRHW+Qla2IZabBC
-         mVyw==
-X-Gm-Message-State: AOJu0YyNnS+jn8sBVBtJSIWBPqb2jahNv+ZZSplCjvBIMLVQr7njoyNX
-	DjzHAjd6N6KiE7GNZr6vz7oeVDLe5R5awrnuGdZyjsbWCO/vLx0fgVnAxQ==
-X-Google-Smtp-Source: AGHT+IFXofiOOUZnWSKr9U/kadmtdhmpkxyHiZvzXZUW+QhfVKm8vEDfaKLTRtxC1ZmfqK30x6craA==
-X-Received: by 2002:a05:6a00:301c:b0:6ec:f712:8a69 with SMTP id d2e1a72fcca58-6f8f3d6e6b3mr22121861b3a.29.1717005698406;
-        Wed, 29 May 2024 11:01:38 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1717015928; x=1717620728;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F6gH8nCdHmr19zHRnPBbu6WWzjKxXWVCx7ub9BRI8r8=;
+        b=qFsRTVNTJ0XlF/MZRzqzJS7CkhGWhlTMAWciOG4lfkF61T1uHSegR5NyRR2BWA1GIz
+         Avt2WLqQW9fmHiMMB8PRBUJIbIkudv1xJAUvNYXOOV0l5XnedAfU0W9whFbFD0+I9nSg
+         wTqNK7KC5jC0ae9/mUpSMZfPn5v2USpQMmaFzEeClZc1kVztkH0V9OgbY9OCJPbzPF0+
+         CjA8HZDMdiWEe450HlCOgp8NXjRZ5GmyaNZJSbhFDfwZR43IQWePCWjOvJgwbJWmlzx/
+         bYBY6AwaRYhcI5J6ZolWKCZM3+CvhHL8cf8F4VBqtYechX3Axr3iz0fzwr4UYnvPq2ko
+         CHeg==
+X-Forwarded-Encrypted: i=1; AJvYcCUA5p18dgTWAQStznOGUcS6NzKMFOgH7tpniqK4CKTFLqmJvWr4yypRkFeWvOzNQk7aMrWty9vBRD+bMglbMunvwqYJdZ9IyJ3Uaswip9I5HBF9l9Q4ssBmPgZvdHQTLHmLBkKmZ/0n9Q==
+X-Gm-Message-State: AOJu0Yzh4b42gzn1SbW/UgCgdWRZhHCwN15teN38gDxbPI5BEYvP8JXd
+	yGBKJUpLck6j5WLU29Jx+yRJBenUERxlXxDm+O5E43phsi2X9LikKkM99Q==
+X-Google-Smtp-Source: AGHT+IFAFmJUKQ7duvuZ/oxhR/EPzswjWuhmgum5OIHa0fwNQZnK1//Bj1N0JIUH1EohgscjN74lSA==
+X-Received: by 2002:a17:903:2301:b0:1f4:ae2a:c15c with SMTP id d9443c01a7336-1f61983aa1emr1595235ad.45.1717015928350;
+        Wed, 29 May 2024 13:52:08 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-682227f1838sm9429496a12.46.2024.05.29.11.01.37
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f4f1eb24d9sm17076705ad.88.2024.05.29.13.52.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 May 2024 11:01:37 -0700 (PDT)
+        Wed, 29 May 2024 13:52:07 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: linux-hwmon@vger.kernel.org
-Cc: Radu Sabau <radu.sabau@analog.com>,
+Cc: Hristo Venev <hristo@venev.name>,
+	=?UTF-8?q?Ren=C3=A9=20Rebe?= <rene@exactcode.de>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Radu Sabau <radu.sabau@analog.com>,
 	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 2/2] hwmon: (lm90) Convert to use PEC support from hwmon core
-Date: Wed, 29 May 2024 11:01:32 -0700
-Message-Id: <20240529180132.72350-3-linux@roeck-us.net>
+Subject: [PATCH 0/3] hwmon: Add support for SPD5118 compliant temperature sensors
+Date: Wed, 29 May 2024 13:52:01 -0700
+Message-Id: <20240529205204.81208-1-linux@roeck-us.net>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240529180132.72350-1-linux@roeck-us.net>
-References: <20240529180132.72350-1-linux@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Replace driver specific PEC handling code with hardware monitoring core
-functionality.
+Add support for SPD5118 (Jedec JESD300-5B.01) compliant temperature
+sensors. Such sensors are typically found on DDR5 memory modules.
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/lm90.c | 56 ++------------------------------------------
- 1 file changed, 2 insertions(+), 54 deletions(-)
+The first patch of the series adds SPD5118 devicetree bindings. The second
+patch adds support for SPD5118 temperature sensors. The third patch adds
+support for configuring PEC (Packet Error Checking). This patch depends
+on [1] and is untested.
 
-diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-index e0d7454a301c..40d9e21b528c 100644
---- a/drivers/hwmon/lm90.c
-+++ b/drivers/hwmon/lm90.c
-@@ -1270,42 +1270,6 @@ static int lm90_update_device(struct device *dev)
- 	return 0;
- }
- 
--/* pec used for devices with PEC support */
--static ssize_t pec_show(struct device *dev, struct device_attribute *dummy,
--			char *buf)
--{
--	struct i2c_client *client = to_i2c_client(dev);
--
--	return sprintf(buf, "%d\n", !!(client->flags & I2C_CLIENT_PEC));
--}
--
--static ssize_t pec_store(struct device *dev, struct device_attribute *dummy,
--			 const char *buf, size_t count)
--{
--	struct i2c_client *client = to_i2c_client(dev);
--	long val;
--	int err;
--
--	err = kstrtol(buf, 10, &val);
--	if (err < 0)
--		return err;
--
--	switch (val) {
--	case 0:
--		client->flags &= ~I2C_CLIENT_PEC;
--		break;
--	case 1:
--		client->flags |= I2C_CLIENT_PEC;
--		break;
--	default:
--		return -EINVAL;
--	}
--
--	return count;
--}
--
--static DEVICE_ATTR_RW(pec);
--
- static int lm90_temp_get_resolution(struct lm90_data *data, int index)
- {
- 	switch (index) {
-@@ -2659,11 +2623,6 @@ static irqreturn_t lm90_irq_thread(int irq, void *dev_id)
- 		return IRQ_NONE;
- }
- 
--static void lm90_remove_pec(void *dev)
--{
--	device_remove_file(dev, &dev_attr_pec);
--}
--
- static int lm90_probe_channel_from_dt(struct i2c_client *client,
- 				      struct device_node *child,
- 				      struct lm90_data *data)
-@@ -2802,6 +2761,8 @@ static int lm90_probe(struct i2c_client *client)
- 		data->chip_config[0] |= HWMON_C_UPDATE_INTERVAL;
- 	if (data->flags & LM90_HAVE_FAULTQUEUE)
- 		data->chip_config[0] |= HWMON_C_TEMP_SAMPLES;
-+	if (data->flags & (LM90_HAVE_PEC | LM90_HAVE_PARTIAL_PEC))
-+		data->chip_config[0] |= HWMON_C_PEC;
- 	data->info[1] = &data->temp_info;
- 
- 	info = &data->temp_info;
-@@ -2878,19 +2839,6 @@ static int lm90_probe(struct i2c_client *client)
- 		return err;
- 	}
- 
--	/*
--	 * The 'pec' attribute is attached to the i2c device and thus created
--	 * separately.
--	 */
--	if (data->flags & (LM90_HAVE_PEC | LM90_HAVE_PARTIAL_PEC)) {
--		err = device_create_file(dev, &dev_attr_pec);
--		if (err)
--			return err;
--		err = devm_add_action_or_reset(dev, lm90_remove_pec, dev);
--		if (err)
--			return err;
--	}
--
- 	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
- 							 data, &data->chip,
- 							 NULL);
--- 
-2.39.2
+Note: The driver introduced with this patch series does not currently
+support accessing the SPD5118 EEPROM, or accessing SPD5118 compatible chips
+in I3C mode.
 
+[1] https://patchwork.kernel.org/project/linux-hwmon/list/?series=857097
+
+----------------------------------------------------------------
+Guenter Roeck (3):
+      dt-bindings: hwmon: jedec,spd5118: Add bindings
+      hwmon: Add support for SPD5118 compliant temperature sensors
+      hwmon: (spd5118) Add PEC support
+
+ .../devicetree/bindings/hwmon/jedec,spd5118.yaml   |  52 +++
+ Documentation/hwmon/index.rst                      |   1 +
+ Documentation/hwmon/spd5118.rst                    |  60 +++
+ drivers/hwmon/Kconfig                              |  12 +
+ drivers/hwmon/Makefile                             |   1 +
+ drivers/hwmon/spd5118.c                            | 499 +++++++++++++++++++++
+ 6 files changed, 625 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/jedec,spd5118.yaml
+ create mode 100644 Documentation/hwmon/spd5118.rst
+ create mode 100644 drivers/hwmon/spd5118.c
