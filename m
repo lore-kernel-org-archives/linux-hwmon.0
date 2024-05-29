@@ -1,281 +1,279 @@
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9170AD52E
-	for <linux-hwmon@vger.kernel.org>; Wed, 29 May 2024 17:00:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 560E715B54B;
+	Wed, 29 May 2024 17:19:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717002045; cv=none; b=o9D34odIWeKk9h6K4RnpkNPoIbzQs/+qqEniIISPoDQqKOzevh6Yl837MmGYITgeUmKp5PtgT+I/nhsaro8AJ4FyahXWJ3c7cNRGmiPbi9KUr/lrXfTu3s6olMgODFOhapPAkYKGwcAvvUlpYCM9Z2OCOm2BBUrAlcRipCRaaDw=
+	t=1717003169; cv=none; b=oaX8nNcy9Tpj8P8Bx2PCwsz0b8S/Y3egralukCYYEWJc+xGBsujPhvUqfonndeZJi6SDHbcXWkw/N/O4pCW6KM9GWoXfObbhABi6CHOYVeajboyt7WVV4zMfd+qXfumssgxeJ8CoWWRJ8ElcQUIkIjmVJdDwck5rO91T3WO68uY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717002045; c=relaxed/simple;
-	bh=bu7NemNpKFWjO/TMFN45dKSrd4mpHQUTXoAEcBKTrDU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PNVzYRUcsF5/teh6HelmiqvJuR1Sedi6XXodwjd/q5IzBIFEec5Aqzzj0u0Ltd7RsHwLcn3Bq+2f14ZhpEBotANQeJ8HfgL9gmGB0udcEknTJQd0tkUYflLrYzpBb8nyPW2kSKT/8NGxlHfvMVPooz+OggCxpVYs+4hRyL9/FtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MexWv8wR; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1717003169; c=relaxed/simple;
+	bh=lyUdJaNno+zU58CiKeVUgESvZuoscLbK/A8CXCF0nmQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZiWfVqJ3YTaXzQO784jMAsNxo31FTD/mGPikOczLtVnBtGNFGRc99vmes0BpqdHlQm9v6xcKTB2zIicOInShTPd5hSE0STGxJKlEDef+IA0k9dq8rvLPfL+fKRr0qh+87UlEsYVWOdfugqYHwBOU1IoPHMQlEL53ma5cCi7aDMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Uc8Ifmo8; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MexWv8wR"
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-579ce5fbeb6so253a12.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 29 May 2024 10:00:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1717002041; x=1717606841; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CoiH6lwmGs4PCawaoWyQsbF1ZjB3aSEqZRmZUUflfr8=;
-        b=MexWv8wRG+kMBoVgKVpRzGNzcZndfD6xFQI8n/c+n6yi/TnJ8aRPnyi9P7rZpT7FQl
-         gsoCfHkFANgsGQobbUrhAHV15zfDkFXIDXXwpAAJvwG+ZQY/2Fz2+Pg0FXkeYZpEvENB
-         YvjEEu+1gHsyPtgvC1p3qE6bOyNf1sV6Nz0g8pNpRxJiAu3zShFMh8FiJgFIGYojun7Z
-         eOftMXuvKvAtVZRQvFyan0yzV0+wou0MJ3q3G0/I+JhPrJ7XE2uwMCQguUnCKHKO7zc7
-         Y/fpND9QkGt1vTr1dXO0WbMZ7eJwHPyTKfhLGS1siQWkg0jUD4qv/0uZTYAi6mV2yLKl
-         fAuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717002041; x=1717606841;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CoiH6lwmGs4PCawaoWyQsbF1ZjB3aSEqZRmZUUflfr8=;
-        b=NexgtiX4uxtRQ+ohXbIy3IUJQDIyOr0Qc2DrqOzz+QS64A9ujt0IAEV5hzqH9ECz9r
-         QeuNAEJqWPIzP+RHA3Yc87C7GcebRF1aAHsGd1d8lT/mhSZd13HNblvswD3vnNKzqfIP
-         qyLkw/PThDJgdU3VbcPyppzA4cqaByHzMuIu9Nk7PvXtIE3VJ1aIm09YnGl59C+oxKsQ
-         w42X7gIKcX6bQMQLoXpBaRKnZEwrcyd33Wcf06O67u03BRSp7RHQun8bIRZGYi4BDezg
-         5am1VyObhJ3ai6Hc+g+At22N6XtVZviGBcTpgYaJOSGe0XxpjW73rANpLyHs8Ik5I2VS
-         dz9A==
-X-Forwarded-Encrypted: i=1; AJvYcCUcwLAByyUSO+hQYLKFFBWDLsHd7+8mPHlT4a1Go3FrUPi5pstNOlK1d23ygKfS5mn3x6hkRGjzZxeW4t+9VCERxknQOr7+feCLb/o=
-X-Gm-Message-State: AOJu0Yy9CjHv2aO+kJjkEGHjjV2Y2k7yBsycp233WVDFQlhBfejvWA2a
-	e7ts1Tko+JMhMv3wxnpiw3pKxRooScJGmppiuHlLRhFYYOk6DlaEG1Je9o7whhSugc9VOVL9K+X
-	hyH65xqlAXgEnk61LvjSBtfIU4fnV99t+oK3t
-X-Google-Smtp-Source: AGHT+IGiepejwPJySSOJTS8Vdh/jCe6ATC7+zN+DhmTfyw6FDv0F1k25j/gWlegvODKQm49Var2SQjMrbaSqv9YkIEo=
-X-Received: by 2002:a05:6402:290f:b0:578:33c0:f00e with SMTP id
- 4fb4d7f45d1cf-57a02fcb5dfmr233619a12.0.1717002040619; Wed, 29 May 2024
- 10:00:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Uc8Ifmo8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717003168; x=1748539168;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=lyUdJaNno+zU58CiKeVUgESvZuoscLbK/A8CXCF0nmQ=;
+  b=Uc8Ifmo8fZgJMCXbCTWEoCar2t5y64HzOaribMGvRAGggxmtWLSYU4fU
+   COwO+X8ear1mrqwwPj4dthMBNVYez8nSxCePJy457cuxRJQudfagehWfg
+   Gsof7QFr8t0Tar0KOwlgtpm3bL84tbpwPoEkjcbZNo1CzjHTbZb7tuS5/
+   cyqAHV1Pq3pCHLYvRU/miAKSbDulj/F88NgMK/6pl3YoAXDzw28J4+HTC
+   0204L78StUQJkDbltMQ05vg1tt4pzioWR2Ma0HxOP3+3u3z0Hghfce6ls
+   QJ0kibZhxBtO7e+IuWXPeeu3GfQuhr2eX7U6hEvj7t2rifjVSzewbPAk2
+   g==;
+X-CSE-ConnectionGUID: wewIYwAXTFubponVJphA2w==
+X-CSE-MsgGUID: CWiFjA0fRoumGuTdV+oIZw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11087"; a="24836861"
+X-IronPort-AV: E=Sophos;i="6.08,199,1712646000"; 
+   d="scan'208";a="24836861"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2024 10:19:28 -0700
+X-CSE-ConnectionGUID: 0fP4ctFyQD+OzDmePoDbPQ==
+X-CSE-MsgGUID: pEN7A2qeQBqXSomT9p4/qQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,199,1712646000"; 
+   d="scan'208";a="40023469"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.70])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2024 10:19:28 -0700
+From: Tony Luck <tony.luck@intel.com>
+To: Iwona Winiarska <iwona.winiarska@intel.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	openbmc@lists.ozlabs.org,
+	patches@lists.linux.dev,
+	Tony Luck <tony.luck@intel.com>
+Subject: [PATCH] peci, hwmon: Switch to new Intel CPU model defines
+Date: Wed, 29 May 2024 10:19:20 -0700
+Message-ID: <20240529171920.62571-1-tony.luck@intel.com>
+X-Mailer: git-send-email 2.45.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240507-cros_ec-hwmon-v2-0-1222c5fca0f7@weissschuh.net>
- <20240507-cros_ec-hwmon-v2-1-1222c5fca0f7@weissschuh.net> <SY4P282MB30635BA1D4087113E79921B5C5F52@SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM>
- <9cf224dd-51eb-4608-abcf-06f337d08178@t-8ch.de> <SY4P282MB306325BB023A95198F25A21DC5F12@SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM>
- <c9b110eb-ff0e-41f2-9492-8a5d8c3c01d0@roeck-us.net> <b8072b36-688f-41b8-8b32-40fc4fa4d148@t-8ch.de>
- <6824f030-92da-4439-af3b-8c2498f4382e@roeck-us.net> <SY4P282MB30638301303268093B6D1ABFC5F22@SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM>
- <22a16af6-93c4-454c-853b-5959a5c018d3@t-8ch.de> <SY4P282MB30634D9D9873C9C8DC41D4EEC5F22@SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM>
-In-Reply-To: <SY4P282MB30634D9D9873C9C8DC41D4EEC5F22@SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM>
-From: Guenter Roeck <groeck@google.com>
-Date: Wed, 29 May 2024 10:00:27 -0700
-Message-ID: <CABXOdTcyuR-YJYoMrAh11ksYcL-6LZPFERw94Z8-mTgMUfLP3g@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] hwmon: add ChromeOS EC driver
-To: Stephen Horvath <s.horvath@outlook.com.au>
-Cc: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>, 
-	Benson Leung <bleung@chromium.org>, Lee Jones <lee@kernel.org>, 
-	Guenter Roeck <groeck@chromium.org>, linux-kernel@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, chrome-platform@lists.linux.dev, 
-	Dustin Howett <dustin@howett.net>, Mario Limonciello <mario.limonciello@amd.com>, 
-	Moritz Fischer <mdf@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, May 29, 2024 at 12:40=E2=80=AFAM Stephen Horvath
-<s.horvath@outlook.com.au> wrote:
->
-> Hi Thomas,
->
-> On 29/5/24 16:23, Thomas Wei=C3=9Fschuh wrote:
-> > On 2024-05-29 10:58:23+0000, Stephen Horvath wrote:
-> >> On 29/5/24 09:29, Guenter Roeck wrote:
-> >>> On 5/28/24 09:15, Thomas Wei=C3=9Fschuh wrote:
-> >>>> On 2024-05-28 08:50:49+0000, Guenter Roeck wrote:
-> >>>>> On 5/27/24 17:15, Stephen Horvath wrote:
-> >>>>>> On 28/5/24 05:24, Thomas Wei=C3=9Fschuh wrote:
-> >>>>>>> On 2024-05-25 09:13:09+0000, Stephen Horvath wrote:
-> >>>>>>>> Don't forget it can also return `EC_FAN_SPEED_STALLED`.
-> >
-> > <snip>
-> >
-> >>>>>>>
-> >>>>>>> Thanks for the hint. I'll need to think about how to
-> >>>>>>> handle this better.
-> >>>>>>>
-> >>>>>>>> Like Guenter, I also don't like returning `-ENODEV`,
-> >>>>>>>> but I don't have a
-> >>>>>>>> problem with checking for `EC_FAN_SPEED_NOT_PRESENT`
-> >>>>>>>> in case it was removed
-> >>>>>>>> since init or something.
-> >>>>>>>
-> >>>>>
-> >>>>> That won't happen. Chromebooks are not servers, where one might
-> >>>>> be able to
-> >>>>> replace a fan tray while the system is running.
-> >>>>
-> >>>> In one of my testruns this actually happened.
-> >>>> When running on battery, one specific of the CPU sensors sporadicall=
-y
-> >>>> returned EC_FAN_SPEED_NOT_PRESENT.
-> >>>>
-> >>>
-> >>> What Chromebook was that ? I can't see the code path in the EC source
-> >>> that would get me there.
-> >>>
-> >>
-> >> I believe Thomas and I both have the Framework 13 AMD, the source code=
- is
-> >> here:
-> >> https://github.com/FrameworkComputer/EmbeddedController/tree/lotus-zep=
-hyr
-> >
-> > Correct.
-> >
-> >> The organisation confuses me a little, but Dustin has previous said on=
- the
-> >> framework forums (https://community.frame.work/t/what-ec-is-used/38574=
-/2):
-> >>
-> >> "This one is based on the Zephyr port of the ChromeOS EC, and tracks
-> >> mainline more closely. It is in the branch lotus-zephyr.
-> >> All of the model-specific code lives in zephyr/program/lotus.
-> >> The 13"-specific code lives in a few subdirectories off the main tree =
-named
-> >> azalea."
-> >
-> > The EC code is at [0]:
-> >
-> > $ ectool version
-> > RO version:    azalea_v3.4.113353-ec:b4c1fb,os
-> > RW version:    azalea_v3.4.113353-ec:b4c1fb,os
-> > Firmware copy: RO
-> > Build info:    azalea_v3.4.113353-ec:b4c1fb,os:7b88e1,cmsis:4aa3ff 2024=
--03-26 07:10:22 lotus@ip-172-26-3-226
-> > Tool version:  0.0.1-isolate May  6 2024 none
->
-> I can confirm mine is the same build too.
->
-> >  From the build info I gather it should be commit b4c1fb, which is the
-> > current HEAD of the lotus-zephyr branch.
-> > Lotus is the Framework 16 AMD, which is very similar to Azalea, the
-> > Framework 13 AMD, which I tested this against.
-> > Both share the same codebase.
-> >
-> >> Also I just unplugged my fan and you are definitely correct, the EC on=
-ly
-> >> generates EC_FAN_SPEED_NOT_PRESENT for fans it does not have the capab=
-ility
-> >> to support. Even after a reboot it just returns 0 RPM for an unplugged=
- fan.
-> >> I thought about simulating a stall too, but I was mildly scared I was =
-going
-> >> to break one of the tiny blades.
-> >
-> > I get the error when unplugging *the charger*.
-> >
-> > To be more precise:
-> >
-> > It does not happen always.
-> > It does not happen instantly on unplugging.
-> > It goes away after a few seconds/minutes.
-> > During the issue, one specific sensor reads 0xffff.
-> >
->
-> Oh I see, I haven't played around with the temp sensors until now, but I
-> can confirm the last temp sensor (cpu@4c / temp4) will randomly (every
-> ~2-15 seconds) return EC_TEMP_SENSOR_ERROR (0xfe).
-> Unplugging the charger doesn't seem to have any impact for me.
-> The related ACPI sensor also says 180.8=C2=B0C.
-> I'll probably create an issue or something shortly.
->
-> I was mildly confused by 'CPU sensors' and 'EC_FAN_SPEED_NOT_PRESENT' in
-> the same sentence, but I'm now assuming you mean the temp sensor?
->
+Update peci subsystem to use the same vendor-family-model
+combined definition that core x86 code uses.
 
-Same here. it might not matter as much if the values were the same,
-but EC_FAN_SPEED_NOT_PRESENT =3D=3D 0xffff,  and
-EC_TEMP_SENSOR_NOT_PRESENT=3D=3D0xff, so they must not be confused with
-each other. EC_TEMP_SENSOR_NOT_PRESENT should be static as well,
-though, and not be returned randomly.
+Signed-off-by: Tony Luck <tony.luck@intel.com>
+---
+TIP tree applied the patches that implement the new CPU model number
+macros (and a couple of dozen patches to arch/x86/ files too). So
+v6.10-rc1 has all the necesary code to apply patches to other trees in
+this cycle.
 
-Guenter
+The previous posting of this patch[1] had a tiny bit of fuzz due to
+nearby changes in drivers/peci/internal.h. This one applies cleanly
+to v6.10-rc1.
 
-> >>>>>>> Ok.
-> >>>>>>>
-> >>>>>>>> My approach was to return the speed as `0`, since
-> >>>>>>>> the fan probably isn't
-> >>>>>>>> spinning, but set HWMON_F_FAULT for `EC_FAN_SPEED_NOT_PRESENT` a=
-nd
-> >>>>>>>> HWMON_F_ALARM for `EC_FAN_SPEED_STALLED`.
-> >>>>>>>> No idea if this is correct though.
-> >>>>>>>
-> >>>>>>> I'm not a fan of returning a speed of 0 in case of errors.
-> >>>>>>> Rather -EIO which can't be mistaken.
-> >>>>>>> Maybe -EIO for both EC_FAN_SPEED_NOT_PRESENT (which
-> >>>>>>> should never happen)
-> >>>>>>> and also for EC_FAN_SPEED_STALLED.
-> >>>>>>
-> >>>>>> Yeah, that's pretty reasonable.
-> >>>>>>
-> >>>>>
-> >>>>> -EIO is an i/o error. I have trouble reconciling that with
-> >>>>> EC_FAN_SPEED_NOT_PRESENT or EC_FAN_SPEED_STALLED.
-> >>>>>
-> >>>>> Looking into the EC source code [1], I see:
-> >>>>>
-> >>>>> EC_FAN_SPEED_NOT_PRESENT means that the fan is not present.
-> >>>>> That should return -ENODEV in the above code, but only for
-> >>>>> the purpose of making the attribute invisible.
-> >>>>>
-> >>>>> EC_FAN_SPEED_STALLED means exactly that, i.e., that the fan
-> >>>>> is present but not turning. The EC code does not expect that
-> >>>>> to happen and generates a thermal event in case it does.
-> >>>>> Given that, it does make sense to set the fault flag.
-> >>>>> The actual fan speed value should then be reported as 0 or
-> >>>>> possibly -ENODATA. It should _not_ generate any other error
-> >>>>> because that would trip up the "sensors" command for no
-> >>>>> good reason.
-> >>>>
-> >>>> Ack.
-> >>>>
-> >>>> Currently I have the following logic (for both fans and temp):
-> >>>>
-> >>>> if NOT_PRESENT during probing:
-> >>>>     make the attribute invisible.
-> >>>>
-> >>>> if any error during runtime (including NOT_PRESENT):
-> >>>>     return -ENODATA and a FAULT
-> >>>>
-> >>>> This should also handle the sporadic NOT_PRESENT failures.
-> >>>>
-> >>>> What do you think?
-> >>>>
-> >>>> Is there any other feedback to this revision or should I send the ne=
-xt?
-> >>>>
-> >>>
-> >>> No, except I'd really like to know which Chromebook randomly generate=
-s
-> >>> a EC_FAN_SPEED_NOT_PRESENT response because that really looks like a =
-bug.
-> >>> Also, can you reproduce the problem with the ectool command ?
-> >
-> > Yes, the ectool command reports the same issue at the same time.
-> >
-> > The fan affected was always the sensor cpu@4c, which is
-> > compatible =3D "amd,sb-tsi".
-> >
-> >> I have a feeling it was related to the concurrency problems between AC=
-PI and
-> >> the CrOS code that are being fixed in another patch by Ben Walsh, I wa=
-s also
-> >> seeing some weird behaviour sometimes but I *believe* it was fixed by =
-that.
-> >
-> > I don't think it's this issue.
-> > Ben's series at [1], is for MEC ECs which are the older Intel
-> > Frameworks, not the Framework 13 AMD.
->
-> Yeah sorry, I saw it mentioned AMD and threw it into my kernel, I also
-> thought it stopped the 'packet too long' messages (for
-> EC_CMD_CONSOLE_SNAPSHOT) but it did not.
->
-> Thanks,
-> Steve
+Iwona, Jean, Guenter: Can you check that it still looks good. If so
+apply it to your tree and kick the process in gear to have it appear in
+the intel-next tree with eventual merge to Linus in next merge window.
+
+Thanks
+
+-Tony
+
+[1] https://lore.kernel.org/all/20240520224620.9480-48-tony.luck@intel.com/
+
+ include/linux/peci-cpu.h     | 24 ++++++++++++++++++++++++
+ include/linux/peci.h         |  6 ++----
+ drivers/peci/internal.h      |  6 ++----
+ drivers/hwmon/peci/cputemp.c |  8 ++++----
+ drivers/peci/core.c          |  5 ++---
+ drivers/peci/cpu.c           | 21 +++++++--------------
+ drivers/peci/device.c        |  3 +--
+ 7 files changed, 42 insertions(+), 31 deletions(-)
+
+diff --git a/include/linux/peci-cpu.h b/include/linux/peci-cpu.h
+index ff8ae9c26c80..601cdd086bf6 100644
+--- a/include/linux/peci-cpu.h
++++ b/include/linux/peci-cpu.h
+@@ -6,6 +6,30 @@
+ 
+ #include <linux/types.h>
+ 
++/* Copied from x86 <asm/processor.h> */
++#define X86_VENDOR_INTEL       0
++
++/* Copied from x86 <asm/cpu_device_id.h> */
++#define VFM_MODEL_BIT	0
++#define VFM_FAMILY_BIT	8
++#define VFM_VENDOR_BIT	16
++#define VFM_RSVD_BIT	24
++
++#define	VFM_MODEL_MASK	GENMASK(VFM_FAMILY_BIT - 1, VFM_MODEL_BIT)
++#define	VFM_FAMILY_MASK	GENMASK(VFM_VENDOR_BIT - 1, VFM_FAMILY_BIT)
++#define	VFM_VENDOR_MASK	GENMASK(VFM_RSVD_BIT - 1, VFM_VENDOR_BIT)
++
++#define VFM_MODEL(vfm)	(((vfm) & VFM_MODEL_MASK) >> VFM_MODEL_BIT)
++#define VFM_FAMILY(vfm)	(((vfm) & VFM_FAMILY_MASK) >> VFM_FAMILY_BIT)
++#define VFM_VENDOR(vfm)	(((vfm) & VFM_VENDOR_MASK) >> VFM_VENDOR_BIT)
++
++#define	VFM_MAKE(_vendor, _family, _model) (	\
++	((_model) << VFM_MODEL_BIT) |		\
++	((_family) << VFM_FAMILY_BIT) |		\
++	((_vendor) << VFM_VENDOR_BIT)		\
++)
++/* End of copied code */
++
+ #include "../../arch/x86/include/asm/intel-family.h"
+ 
+ #define PECI_PCS_PKG_ID			0  /* Package Identifier Read */
+diff --git a/include/linux/peci.h b/include/linux/peci.h
+index 90e241458ef6..3e0bc37591d6 100644
+--- a/include/linux/peci.h
++++ b/include/linux/peci.h
+@@ -59,8 +59,7 @@ static inline struct peci_controller *to_peci_controller(void *d)
+  * struct peci_device - PECI device
+  * @dev: device object to register PECI device to the device model
+  * @info: PECI device characteristics
+- * @info.family: device family
+- * @info.model: device model
++ * @info.x86_vfm: device vendor-family-model
+  * @info.peci_revision: PECI revision supported by the PECI device
+  * @info.socket_id: the socket ID represented by the PECI device
+  * @addr: address used on the PECI bus connected to the parent controller
+@@ -73,8 +72,7 @@ static inline struct peci_controller *to_peci_controller(void *d)
+ struct peci_device {
+ 	struct device dev;
+ 	struct {
+-		u16 family;
+-		u8 model;
++		u32 x86_vfm;
+ 		u8 peci_revision;
+ 		u8 socket_id;
+ 	} info;
+diff --git a/drivers/peci/internal.h b/drivers/peci/internal.h
+index 506bafcccbbf..7a4f6eae2f90 100644
+--- a/drivers/peci/internal.h
++++ b/drivers/peci/internal.h
+@@ -66,13 +66,11 @@ struct peci_request *peci_xfer_ep_mmio64_readl(struct peci_device *device, u8 ba
+ /**
+  * struct peci_device_id - PECI device data to match
+  * @data: pointer to driver private data specific to device
+- * @family: device family
+- * @model: device model
++ * @x86_vfm: device vendor-family-model
+  */
+ struct peci_device_id {
+ 	const void *data;
+-	u16 family;
+-	u8 model;
++	u32 x86_vfm;
+ };
+ 
+ extern const struct device_type peci_device_type;
+diff --git a/drivers/hwmon/peci/cputemp.c b/drivers/hwmon/peci/cputemp.c
+index a812c15948d9..5a682195b98f 100644
+--- a/drivers/hwmon/peci/cputemp.c
++++ b/drivers/hwmon/peci/cputemp.c
+@@ -360,10 +360,10 @@ static int init_core_mask(struct peci_cputemp *priv)
+ 	int ret;
+ 
+ 	/* Get the RESOLVED_CORES register value */
+-	switch (peci_dev->info.model) {
+-	case INTEL_FAM6_ICELAKE_X:
+-	case INTEL_FAM6_ICELAKE_D:
+-	case INTEL_FAM6_SAPPHIRERAPIDS_X:
++	switch (peci_dev->info.x86_vfm) {
++	case INTEL_ICELAKE_X:
++	case INTEL_ICELAKE_D:
++	case INTEL_SAPPHIRERAPIDS_X:
+ 		ret = peci_ep_pci_local_read(peci_dev, 0, reg->bus, reg->dev,
+ 					     reg->func, reg->offset + 4, &data);
+ 		if (ret)
+diff --git a/drivers/peci/core.c b/drivers/peci/core.c
+index 8f8bda2f2a62..8ff3e5d225ae 100644
+--- a/drivers/peci/core.c
++++ b/drivers/peci/core.c
+@@ -163,9 +163,8 @@ EXPORT_SYMBOL_NS_GPL(devm_peci_controller_add, PECI);
+ static const struct peci_device_id *
+ peci_bus_match_device_id(const struct peci_device_id *id, struct peci_device *device)
+ {
+-	while (id->family != 0) {
+-		if (id->family == device->info.family &&
+-		    id->model == device->info.model)
++	while (id->x86_vfm != 0) {
++		if (id->x86_vfm == device->info.x86_vfm)
+ 			return id;
+ 		id++;
+ 	}
+diff --git a/drivers/peci/cpu.c b/drivers/peci/cpu.c
+index bd990acd92b8..152bbd8e717a 100644
+--- a/drivers/peci/cpu.c
++++ b/drivers/peci/cpu.c
+@@ -294,38 +294,31 @@ peci_cpu_probe(struct peci_device *device, const struct peci_device_id *id)
+ 
+ static const struct peci_device_id peci_cpu_device_ids[] = {
+ 	{ /* Haswell Xeon */
+-		.family	= 6,
+-		.model	= INTEL_FAM6_HASWELL_X,
++		.x86_vfm = INTEL_HASWELL_X,
+ 		.data	= "hsx",
+ 	},
+ 	{ /* Broadwell Xeon */
+-		.family	= 6,
+-		.model	= INTEL_FAM6_BROADWELL_X,
++		.x86_vfm = INTEL_BROADWELL_X,
+ 		.data	= "bdx",
+ 	},
+ 	{ /* Broadwell Xeon D */
+-		.family	= 6,
+-		.model	= INTEL_FAM6_BROADWELL_D,
++		.x86_vfm = INTEL_BROADWELL_D,
+ 		.data	= "bdxd",
+ 	},
+ 	{ /* Skylake Xeon */
+-		.family	= 6,
+-		.model	= INTEL_FAM6_SKYLAKE_X,
++		.x86_vfm = INTEL_SKYLAKE_X,
+ 		.data	= "skx",
+ 	},
+ 	{ /* Icelake Xeon */
+-		.family	= 6,
+-		.model	= INTEL_FAM6_ICELAKE_X,
++		.x86_vfm = INTEL_ICELAKE_X,
+ 		.data	= "icx",
+ 	},
+ 	{ /* Icelake Xeon D */
+-		.family	= 6,
+-		.model	= INTEL_FAM6_ICELAKE_D,
++		.x86_vfm = INTEL_ICELAKE_D,
+ 		.data	= "icxd",
+ 	},
+ 	{ /* Sapphire Rapids Xeon */
+-		.family	= 6,
+-		.model	= INTEL_FAM6_SAPPHIRERAPIDS_X,
++		.x86_vfm = INTEL_SAPPHIRERAPIDS_X,
+ 		.data	= "spr",
+ 	},
+ 	{ }
+diff --git a/drivers/peci/device.c b/drivers/peci/device.c
+index ee01f03c29b7..37ca7dd61807 100644
+--- a/drivers/peci/device.c
++++ b/drivers/peci/device.c
+@@ -100,8 +100,7 @@ static int peci_device_info_init(struct peci_device *device)
+ 	if (ret)
+ 		return ret;
+ 
+-	device->info.family = peci_x86_cpu_family(cpu_id);
+-	device->info.model = peci_x86_cpu_model(cpu_id);
++	device->info.x86_vfm = IFM(peci_x86_cpu_family(cpu_id), peci_x86_cpu_model(cpu_id));
+ 
+ 	ret = peci_get_revision(device, &revision);
+ 	if (ret)
+-- 
+2.45.0
+
