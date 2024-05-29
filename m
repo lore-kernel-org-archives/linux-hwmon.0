@@ -1,61 +1,61 @@
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCA6C33C0;
-	Wed, 29 May 2024 17:32:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDBB360B8A;
+	Wed, 29 May 2024 18:01:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717003939; cv=none; b=vC3nlss9Dnq7OgOWrk5j0+pqy7kUD6kiIbV0OlL6R4rF+5KPonnZgOa0UY2W1mN24lHROzf/HZtEWVBQ3/yrovn7HiUjIVB5J5HYEbVfzv0zIaAyXEWTxO7SNWFFW0vPdyovAOhug5Ch5vPb2pqpxJ5obd/OAKmhnAe05AfhHCg=
+	t=1717005683; cv=none; b=Em4nelmfmVvz7PvFKG35Qpk+KQO67d4N/y8QcmuQhh8zpNiPzn5/X+0qJQhumpzcCPL8aPoNLxh5VCC7EaNceIrvY/B65dqRXgJKKdcCfAsUnxJYg/cYtlmwLntOyg62nEpWaO2vLguG69N/57s0XNZgrvxAvkw3Wz28KBKpQbk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717003939; c=relaxed/simple;
-	bh=rekv7PEEqILoc2hOhalRjxoKsiC6iaoO9OQhozlAnKY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dVaTiZeQYTvtuI9pKnWQpwE4maU9PlQcH6EmYmPC7JHQ5WF24bqB6oaqd2HvIcOqXw/7QgX5VWoqQQI4ZTBWT3A4B9rUPnuNSDHXXcCWQyekBHv2vAxfhUBaDLXHTFmGGNFuVoRE/AJcUnJdblI62keSnmEjUzo6NnwFMvbiiRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QqX618eE; arc=none smtp.client-ip=209.85.166.182
+	s=arc-20240116; t=1717005683; c=relaxed/simple;
+	bh=C9bv8n2Yph9zB4abb7Qhz66pPr/f91zc6NXxwuqWJOk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=t5xeiD86+Qbqw1b4vO1o3N3MCsACMxCnQOv1NPngwri+19bSKk2ifY9KOnKTJ4Fa2QBnx411LEKLQWgGMuWL9mfOLsTzWsyoS8QiL0flVvSpOkE7Ivog+86pcdw4bLGvWRt10rq98Bikjd3BPCglKfct2l9tpcTKRrnEil2kJBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a/Y5l9hS; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QqX618eE"
-Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-3737ee27ccaso10084665ab.0;
-        Wed, 29 May 2024 10:32:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a/Y5l9hS"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-6f4603237e0so205859b3a.0;
+        Wed, 29 May 2024 11:01:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717003937; x=1717608737; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1717005681; x=1717610481; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=vGCacqETy/ytcR1FcRwGG31wGS7WYdUbRqMdu+Vfd6Q=;
-        b=QqX618eE/mScM0zuHX6yFXf4KGy/E4LSwZdXPl241WPs4lrzOeZCH3rka6DN/YzcVY
-         CpfT0Un+szPCGcD2mD/4Z5nLbHfsU769Aq0MgNm7vk4u5ggs6ZihFu9PpOVyyko6cAZT
-         dEKudLwuih5tNXE4HnUEHbYXMX3RSaS37IsbGiNVfhhw01Ap0oBQ8MRZMoTpcEZ4CRAh
-         3yftlc50CezthCvf5x+HONRRm3SefN5gcF2jvlL4lynF9eUlhubV24yglOw+RkycYBJg
-         1KWs7MmRkztN8JoSmp5AyWfhbaE0EgcQ49RNp2spZl9S1Wqt4pJevSZ5lyLNvq1ytx95
-         Yg3w==
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=7v4SBxMsVcC1Y8hf6RcuPsH7ukRGgbWwv2pnXRLZ3hs=;
+        b=a/Y5l9hSCBmKVFJYF8aHn0cGT39Wfrfa8GBM74Uh+bVmpdQMIfy7DmOUcva7+XOdFX
+         mhaibzArFQGyRZoI9/SCpUhbj+UEptR0QwFRjcIcIpPDtnw/wgss2U8Q/SCwN3uviGOO
+         rLjn+Qtn1T45HGkGiwK0/s4hAZUfEfhWhDyhmniz3F7ppHJefMLCoJLSM02mBAKk4NXz
+         XSOULwswu6Z7IlP8oylKGEl1wZbDeY7iBIAxciWmZKQllabM9GSyUjb+Oduo+kTJ+D8v
+         ADcoyyYXIrqooXRFzO/T4I2fg/xIMM3rP0s8gaKjg+/jnVBR8NU35xrpac6CLu/Ujm9t
+         tfIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717003937; x=1717608737;
+        d=1e100.net; s=20230601; t=1717005681; x=1717610481;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vGCacqETy/ytcR1FcRwGG31wGS7WYdUbRqMdu+Vfd6Q=;
-        b=SwC8J0qKMZWRewGV7pxxkrOwnIonAkp548osj4pZFH/xLP8CcEQM1o+9ivXHERWFi+
-         F4uT8LlnnQpRQMiOGs5deUSVTHgV/+Hb+F3U024z9abKypJWROpL2MFFr80tJmeLPl3w
-         XIEzStETrq+zfdeQuXbEP12mdnvAySsXC4cZjS8EvEycnyrEx1T+Hr5O+qk4soKnU+7z
-         dM0+uNDNP2hWStYr5grhSPjkWziJz7evkkguYotZOzY/B5EtOgo0xyRZ/hmyNxlSmNRn
-         +H/H05/jOmPOajSn+BID4DkzlRm4KrU92VKagu1w4FrL79SJD0tDoJ5x0kjO8LDfeXjW
-         AMdA==
-X-Forwarded-Encrypted: i=1; AJvYcCUln6ruwyTFSpCkoQcwIkyJfOTTZ93utzdZLt5/6wxcVtgTIYgU/rC19Rv+j8i0nVHW58yA+CSYjqCWGcCgTxi8B9fwAki0dlbSnpqw
-X-Gm-Message-State: AOJu0YyhOUwrNXBn6+JFugRD8FB+pFj/Bc248nti5JfMyH6tJGZN9Dqi
-	j+yZo8dhd3dcSJqfomw+l1OjStBRr09q3yR5d++dArx2I4q+TQ/G
-X-Google-Smtp-Source: AGHT+IG5pdNAcZ2LwJV4ikVNOhLX8ysJxpAzgV4aV0aSEeOK/I3DmZjtjJzaPJOHpcXm7lfFPWtbeQ==
-X-Received: by 2002:a05:6e02:2161:b0:36d:bb54:fd6a with SMTP id e9e14a558f8ab-3737b315d45mr172576115ab.18.1717003936719;
-        Wed, 29 May 2024 10:32:16 -0700 (PDT)
+        bh=7v4SBxMsVcC1Y8hf6RcuPsH7ukRGgbWwv2pnXRLZ3hs=;
+        b=w3231HBCHfYMdhl8tvfWWBi59L1BlhoLc3YEV2i2yLJLaJBxwT3EuoINJy/tifgDXv
+         mmBfQBXL9EE3iM9w++BSKJNLA8pt0xKas5jV/9DFM+dU1aLOUaXINiO7uMSGLeMExwLV
+         IGMDVVrTADfJIHhN0YZ1VaUBqcEx8IseyZFTwchbCY+wtLzZJ9mDS8jWo4fbIr+4ogJB
+         yc3hLjs/qnWPMjgw0IyCc8FU8VZjJz8rN0ysH49XvJHeSClGFTdTD3lFExXmCSPpIsJ2
+         dfl2EslQSmzxqMRlrAB5LnVyXTSnOfE4+QYJn0RmTi4ocrh+7xPVY7MMFj3i9WLAPVE9
+         wKOA==
+X-Forwarded-Encrypted: i=1; AJvYcCV5S9eOf0gSDDVJ5HT4AZT1eoivnHf62LnnFOm4xngoCacTT+BDwFs9V91ciGczCksDNpqV+hLEE2B7kg8DDmTDCRdqcovw4xp+qjhQ3vcaSrhHSds0tLlTncYFonIi8ReVEylK6L3xD/reTCcwTeRuzR0NTvFtWFIHLlzh8WxfiUkSR8M=
+X-Gm-Message-State: AOJu0Yxval9RlKocrTb7wm1wdwnzAl6siXGRF1CXP/jWL4Zx2QtS7sj9
+	SjUePHnQXE4VGt+pvaT/wnjYb8RIRFCVRCCOlyiU2IZOJrTwCym/xnwudw==
+X-Google-Smtp-Source: AGHT+IHqiJT/ps0cD036xFv70u0VPuwVVr1EoTm+aFNcmbJuM7L4nOzLZrp+4SENo8ldRBaO9G08vA==
+X-Received: by 2002:a05:6a00:26d7:b0:702:2b15:a1f with SMTP id d2e1a72fcca58-7022b150b97mr1162617b3a.2.1717005679460;
+        Wed, 29 May 2024 11:01:19 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-6bc02fd9926sm1084077a12.5.2024.05.29.10.32.15
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7022f2425e3sm55095b3a.126.2024.05.29.11.01.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 May 2024 10:32:15 -0700 (PDT)
+        Wed, 29 May 2024 11:01:18 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e7a8541a-ec36-495b-880a-2761ae973275@roeck-us.net>
-Date: Wed, 29 May 2024 10:32:14 -0700
+Message-ID: <a3eff514-f515-41a2-bb11-603434dc38fb@roeck-us.net>
+Date: Wed, 29 May 2024 11:01:17 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,12 +63,11 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] peci, hwmon: Switch to new Intel CPU model defines
-To: Tony Luck <tony.luck@intel.com>,
- Iwona Winiarska <iwona.winiarska@intel.com>, Jean Delvare <jdelvare@suse.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- openbmc@lists.ozlabs.org, patches@lists.linux.dev
-References: <20240529171920.62571-1-tony.luck@intel.com>
+Subject: Re: [PATCH v4] drivers: hwmon: max31827: Add PEC support
+To: Radu Sabau <radu.sabau@analog.com>, Jean Delvare <jdelvare@suse.com>,
+ Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240527092947.4370-1-radu.sabau@analog.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -114,37 +113,26 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240529171920.62571-1-tony.luck@intel.com>
+In-Reply-To: <20240527092947.4370-1-radu.sabau@analog.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 5/29/24 10:19, Tony Luck wrote:
-> Update peci subsystem to use the same vendor-family-model
-> combined definition that core x86 code uses.
+On 5/27/24 02:29, Radu Sabau wrote:
+> Add support for PEC by attaching PEC attribute to the i2c device.
+> Add pec_store and pec_show function for accessing the "pec" file.
 > 
-> Signed-off-by: Tony Luck <tony.luck@intel.com>
+> Signed-off-by: Radu Sabau <radu.sabau@analog.com>
 > ---
-> TIP tree applied the patches that implement the new CPU model number
-> macros (and a couple of dozen patches to arch/x86/ files too). So
-> v6.10-rc1 has all the necesary code to apply patches to other trees in
-> this cycle.
-> 
-> The previous posting of this patch[1] had a tiny bit of fuzz due to
-> nearby changes in drivers/peci/internal.h. This one applies cleanly
-> to v6.10-rc1.
-> 
-> Iwona, Jean, Guenter: Can you check that it still looks good. If so
-> apply it to your tree and kick the process in gear to have it appear in
-> the intel-next tree with eventual merge to Linus in next merge window.
-> 
 
-lgtm
+Sorry for the trouble, but I decided to add PEC support to the
+hardware monitoring code. With those changes, the hwmon core creates
+the attribute and handles i2c client configuration. The driver only
+needs to configure the chip.
 
-For hwmon:
+I'll copy you on the patches introducing and using this functionality.
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-
-... assuming this is going to be merged through the peci tree.
+Please apply the patch introducing the core changes to your system
+and rebase this patch on top of it.
 
 Thanks,
 Guenter
