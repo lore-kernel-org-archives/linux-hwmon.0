@@ -1,61 +1,61 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F4088D53E;
-	Wed, 29 May 2024 14:02:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 497124C83;
+	Wed, 29 May 2024 14:07:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716991323; cv=none; b=N4EPTfGtJAYJJXFpp/CdWeTvZ37NXHSCiWygz+hqN/lFJDAF8Hg+/knfHgVk+rxdgvaIFrFDTVj6l/QOEhpgpKoUkkRFGU9F7JOwlYZwIv0jmVHgXfyiWPFyJ1WH1Nz31R9UpEm8IWcYBaJbfFaO7nS1bl2WTbRrsPgUPk8NegU=
+	t=1716991641; cv=none; b=NCPvTVNhZRQ33gcSCf8cuK8GVAnetIgjBmVB3nzYp2vlzmmpz71hu1xmWkMyAH+nlkfu5sD0y7FRNuo+dKrsfnkISRZQj496X915zcPPatM734oE79d/fxAb5DaijCjH4uyGRAoVtg7VDnS21XqADLHTbaTrvhiW4eeLD1c/W2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716991323; c=relaxed/simple;
-	bh=7BvQIjtqhgsfSju2Sv+LCPz/pJQOYXEFYDdtXUzbbxU=;
+	s=arc-20240116; t=1716991641; c=relaxed/simple;
+	bh=8aAQl6vo/460yrxhxt6zDyqiOWfsxNKRVIOR41neUFs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DIzE9lexYhx/DvnghUbm0gv2mSqUDGGZMhmhY2nnIFWXp/iBNJZq4Ij4xt4FGdLtCebUc2wZTu/RBz1swglsGekgl4LdQBjr9TlTogvzWz+mnUDtLRiyMV3SMjS1yrayFqRcLVHEM855qPnVwUrXSJbSiCzdYl+fLCNE+flkklw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MOcvWy8d; arc=none smtp.client-ip=209.85.210.175
+	 In-Reply-To:Content-Type; b=tKFbqQyBudaAsZbCj8tiwpf+OQKjgqZ2THryT1I7TFVXPWbFVWMBXcpwdXeEFV9xzSb0mMAekQ18M4jagn6mAj20oiHSlIN6oOGqgpmvSyDYg2rCaPJQr7uq9HvstCnUDuE/2nQ+e39mMbU7H1hhzufSImBkbagFBzm2/Z5UwEU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vst+Qvzu; arc=none smtp.client-ip=209.85.216.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MOcvWy8d"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-7021ab0d0f5so422235b3a.2;
-        Wed, 29 May 2024 07:02:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vst+Qvzu"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2c034b016e6so478997a91.2;
+        Wed, 29 May 2024 07:07:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716991321; x=1717596121; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1716991639; x=1717596439; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=LVXZeVnLsg0ViktlE8rjdZXCIRUH3zGk7VHAnoHlLq0=;
-        b=MOcvWy8dGk6L9ypIKibvbU47w8GV6f2QvPJ4/XSQIdg1Bvl/bWWih3xDvFY9QDB+rk
-         7BPNtU+2yoid7j2C6m/jRcbTsz6w22aaWeLqOJXQyV0sxieE7GPJSIzsYSE0o9zQU1uv
-         ZoRvFB5++SzRisKpZs+Pi3TpWmpQfi4NP4P0w1jCk3IPAIkFTYFtS1iKm2aRN2pGrHFV
-         4t8CWbUzyuafQVjetmlY2L2Qht51p96978Oj/CWZLV8oSLebgTkbBE3zIJdDPe0XhvhA
-         vXF75NnxF926VcU51fvJP5+ttN1eA0yE6Bl20kNrsNx473eHU+kaSRvyEErrkqt2G3Zl
-         djRQ==
+        bh=2ZzzbwW0Sya6qTFwpCKnB6KXP4SAHrttnB1q+QFBqeU=;
+        b=Vst+QvzuJ7WQHRViSfomiloDSyU+15VUhfGtrjTHjOl2uU8prok9I7tcTLES0uAqsC
+         ktoA43Pn0rBwIdgUkz11H/DfBFc+bz/hH9u03kWUi8jwfvwM9yfUBQHrT19CB9KQTjhg
+         dHcNhNbukJRTzKKAmAUxiI10xGyGq7YgDdYSiHhQRlJBqSjWVwrg7jDpjB6SBg+HA+QT
+         17X4h3ymmQ6Q1AHMt4vnqH6Oan7lZm1Zr+QhsxMmdahKcjiZtNtZrsiibhXhxyxgPyr6
+         0FeegoMAtniray3az5cv3+SgAqalBPFOsHi0LaZxoJZFMbo4oCVGtXAl5xkUwxo9WxY4
+         tLtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716991321; x=1717596121;
+        d=1e100.net; s=20230601; t=1716991639; x=1717596439;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LVXZeVnLsg0ViktlE8rjdZXCIRUH3zGk7VHAnoHlLq0=;
-        b=Q5MP/D/Gd3Ib44hDn9kb+f8dPqos2nHV7Y6KRxTrQB/s29aem4Xcq0wXgqmJNh0Cr7
-         eRXQPA51YhrV36Eoh74prSunJ+sHTM4K78J/KOZ3RjdXyH3UKYxMnKSm+ClihPRkKkf6
-         I9m0luTT3oE4TheJsv16//5IG5Mwop9AN+whANka81vuGOFfCJIcCmt0pixJ8E6TTWSd
-         WJTz5SYjqI0ASfvSifKcUkA6JqXYiSeoIVEGxY7/Dms5OD91aG7uevTtdiSxxUs5jE3P
-         A3tl4pne5YO41ODEUrSYVSYWW+gHgWTtkcN4f+aHj+K8AQ7mqJNBh/8ujFMhC7KWUOn0
-         /xrA==
-X-Forwarded-Encrypted: i=1; AJvYcCUWSVHiqpFY9R/mbsoHIlgUciG6EplHWCCy05y9B8C7q3kurnBnmy5enXzWwzDTNNX/02H4kE36nbQl16jMreSocoQULda29/ehA0fyYrYr7DLGbhKOCVsxH9u9MYiRz36UGhIX/OvVfA==
-X-Gm-Message-State: AOJu0Yyt9F0dF1EsZVsIV00fWQHfnapgRoGnbhmXnzQaw5hknF+bhCn2
-	somPPtDCMsAAJwNorNNFXWTfUS2ASzHBei2LoqJP9wU90Ox3gnpH
-X-Google-Smtp-Source: AGHT+IH/qkoVVkCaMiE9B+4sdDu1fi4o9p4+g7nWxv1Kdcx0Gb/sL2KYxXBASZUegVJfHIWH9jbWjQ==
-X-Received: by 2002:a05:6a20:7f8d:b0:1af:e649:6f4 with SMTP id adf61e73a8af0-1b212f874d9mr16544409637.57.1716991320875;
-        Wed, 29 May 2024 07:02:00 -0700 (PDT)
+        bh=2ZzzbwW0Sya6qTFwpCKnB6KXP4SAHrttnB1q+QFBqeU=;
+        b=HYV+qCFvhotRsR5BOQVJ5a7IzrwR8ZVrLIH9T2hFwp2yPfBhk1iMgl0KLkkHGKw7EH
+         XTqN+tft3x+ExLpOilNQAZVhhMVr15WKynrnGELx3K/HAc7LkakhkDxaxfbJ/hczKeyC
+         F/l4qFKKfzVolW2LhYMUnf+DhcBCF+RPJi2GkGKnt+gtq41dsRgMvg9iOa6i2wHI/cA/
+         AG4yoz8UfCdaL8hnukOVFbaZ6A74DJRkpjh16AtXLEoqoy7eCclqhSBJuL+U7bt+ce8B
+         GEft+UFV+dEGLFtHTk0Up798EEH/3ucn5uOk14llP0ocqzhRXfRLwPNK/GMDjN2WBeuy
+         svAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUFUXoZfIK0RljAzWfSAjBPv1IDIjptXKVySqo8dMOmteXa0mahpLSTT03Zo5gikkFd64fFbHOZcsIqj6qUMQrlwvK0+lRAkqysJihuFZSPEFxsr9QamKW9yHu/U203KwGRytEX94HCYTAQg3ocrf/JpttiLeDidD59rUY06TY5V4vq1wo1
+X-Gm-Message-State: AOJu0YwNqT0XhBEJ4XhtNb7xcPT0Qbygurs2MJP+5jiYh3bg8mfpMRZK
+	/VlOiPDrvkhcreG5+rILy3aNRtQptnW0HsUpjPLxKZQ9zQpqayg+lIvTxQ==
+X-Google-Smtp-Source: AGHT+IGdlyoKbfUN7gGq/OTsQ0IM0CGrJEi+RALVM7zGBlBuxtEmE/7AkVUqfNTQ/H7mFc/ntdjQLA==
+X-Received: by 2002:a17:90b:1046:b0:2bd:d6c3:2430 with SMTP id 98e67ed59e1d1-2bf5f1081b1mr14089429a91.40.1716991639252;
+        Wed, 29 May 2024 07:07:19 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-6f8fcfdf510sm8296052b3a.143.2024.05.29.07.01.58
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2bf57720f19sm9852521a91.56.2024.05.29.07.07.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 May 2024 07:01:59 -0700 (PDT)
+        Wed, 29 May 2024 07:07:18 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <76dd5c0e-cc67-4ad1-8733-d8efdb8a172b@roeck-us.net>
-Date: Wed, 29 May 2024 07:01:57 -0700
+Message-ID: <6f2d2e7e-99b4-4f5d-a2c5-523b5534917b@roeck-us.net>
+Date: Wed, 29 May 2024 07:07:17 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,17 +63,15 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: ti,ina2xx: Add alert-polarity
- property
-To: Krzysztof Kozlowski <krzk@kernel.org>, Amna Waseem
- <Amna.Waseem@axis.com>, Jean Delvare <jdelvare@suse.com>,
+Subject: Re: [PATCH 2/2] hwmon: (ina2xx) Add device tree support to pass alert
+ polarity
+To: Amna Waseem <Amna.Waseem@axis.com>, Jean Delvare <jdelvare@suse.com>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernel@axis.com
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, linux-hwmon@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, kernel@axis.com
 References: <20240529-apol-ina2xx-fix-v1-0-77b4b382190f@axis.com>
- <20240529-apol-ina2xx-fix-v1-1-77b4b382190f@axis.com>
- <1ae97b90-ff20-4238-abe2-f2e5d87fc344@kernel.org>
+ <20240529-apol-ina2xx-fix-v1-2-77b4b382190f@axis.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -119,67 +117,86 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <1ae97b90-ff20-4238-abe2-f2e5d87fc344@kernel.org>
+In-Reply-To: <20240529-apol-ina2xx-fix-v1-2-77b4b382190f@axis.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 5/29/24 00:07, Krzysztof Kozlowski wrote:
-> On 29/05/2024 08:07, Amna Waseem wrote:
->> Add a property to the binding to configure the Alert Polarity.
->> Alert pin is asserted based on the value of Alert Polarity bit of
->> Mask/Enable register. It is by default 0 which means Alert pin is
->> configured to be active low. To configure it to active high, set
->> alert-polarity property value to 1.
->>
->> Signed-off-by: Amna Waseem <Amna.Waseem@axis.com>
->> ---
->>   Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml | 9 +++++++++
->>   1 file changed, 9 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
->> index df86c2c92037..a3f0fd71fcc6 100644
->> --- a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
->> +++ b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
->> @@ -66,6 +66,14 @@ properties:
->>       description: phandle to the regulator that provides the VS supply typically
->>         in range from 2.7 V to 5.5 V.
->>   
->> +  alert-polarity:
+On 5/28/24 23:07, Amna Waseem wrote:
+> The INA230 has an Alert pin which is asserted when the alert
+> function selected in the Mask/Enable register exceeds the
+> value programmed into the Alert Limit register. Assertion is based
+> on the Alert Polarity Bit (APOL, bit 1 of the Mask/Enable register).
+> It is default set to value 0 i.e Normal (active-low open collector).
+> However, hardware can be designed in such a way that expects Alert pin
+> to become active high if a user-defined threshold in Alert limit
+> register has been exceeded. This patch adds a way to pass alert polarity
+> value to the driver via device tree.
 > 
-> Missing vendor prefix.
+> Signed-off-by: Amna Waseem <Amna.Waseem@axis.com>
+> ---
+>   drivers/hwmon/ina2xx.c | 28 ++++++++++++++++++++++++++++
+>   1 file changed, 28 insertions(+)
 > 
+> diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
+> index d8415d1f21fc..b58e795bdc8f 100644
+> --- a/drivers/hwmon/ina2xx.c
+> +++ b/drivers/hwmon/ina2xx.c
+> @@ -73,6 +73,9 @@
+>   #define INA226_READ_AVG(reg)		(((reg) & INA226_AVG_RD_MASK) >> 9)
+>   #define INA226_SHIFT_AVG(val)		((val) << 9)
+>   
+> +#define INA226_ALERT_POLARITY_MASK		0x0002
+> +#define INA226_SHIFT_ALERT_POLARITY(val)	((val) << 1)
+> +
+>   /* bit number of alert functions in Mask/Enable Register */
+>   #define INA226_SHUNT_OVER_VOLTAGE_BIT	15
+>   #define INA226_SHUNT_UNDER_VOLTAGE_BIT	14
+> @@ -178,6 +181,23 @@ static u16 ina226_interval_to_reg(int interval)
+>   	return INA226_SHIFT_AVG(avg_bits);
+>   }
+>   
+> +static int ina2xx_set_alert_polarity(struct ina2xx_data *data,
+> +				     unsigned long val)
+> +{
+> +	int ret;
+> +
+> +	if (val > INT_MAX || !(val == 0 || val == 1))
 
-Are you sure you want a vendor prefix here ? Reason for asking is that
-many hardware monitoring chips have configurable alert or interrupt polarity,
-only the name is different. Some examples are the JC42.4 standard ("event
-polarity"), adt7410/adt7420 "interrupt polarity", MAX31827 ("alarm polarity"),
-or DS1621 ("output polarity"). We even have a vendor property, "adi,alarm-pol",
-used for MAX31827.
+	if (val != 0 && val !=1)
 
-Secondary problem is that not all chips of the series support this
-configuration. INA209 has a configurable "warning polarity", but the
-warning pin and the smbus alert pin are two different pins.
-INA219 and INA220 do not have alert or interrupt output pins.
-Only INA226, INA230, INA231, INA238, and INA260 support configurable
-alert polarity.
+would be sufficient and much easier to understand.
 
-Thanks,
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&data->config_lock);
+
+Pointless lock.
+
+> +	ret = regmap_update_bits(data->regmap, INA226_MASK_ENABLE,
+> +				 INA226_ALERT_POLARITY_MASK,
+> +				 INA226_SHIFT_ALERT_POLARITY(val));
+> +
+> +	mutex_unlock(&data->config_lock);
+> +	return ret;
+> +}
+> +
+>   /*
+>    * Calibration register is set to the best value, which eliminates
+>    * truncation errors on calculating current register in hardware.
+> @@ -659,6 +679,14 @@ static int ina2xx_probe(struct i2c_client *client)
+>   	if (ret)
+>   		return dev_err_probe(dev, ret, "failed to enable vs regulator\n");
+>   
+> +	if (!of_property_read_u32(dev->of_node, "alert-polarity", &val)) {
+> +		ret = ina2xx_set_alert_polarity(data, val);
+> +		if (ret < 0)
+> +			return dev_err_probe(
+> +				dev, ret,
+> +				"failed to set APOL bit of Enable/Mask register\n");
+> +	}
+
+INA219 and INA220 do not support alert pin configuration (or, naturally,
+the mask register in the first place). This will need to be validated.
+
 Guenter
-
->> +    description: |
-> 
-> Do not need '|' unless you need to preserve formatting.
-> 
->> +      Alert polarity bit value of Mask/Enable register. Alert pin is asserted
->> +      based on the value of Alert polarity Bit. Default value is active low.
->> +      0 selects active low, 1 selects active high.
-> 
-> Just use string, easier to read. But for sure do not introduce different
-> values than we already have - GPIO HIGH is 0, not 1.
-> 
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
 
