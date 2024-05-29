@@ -1,137 +1,186 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 728042F32;
-	Wed, 29 May 2024 07:09:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0116B1E86E;
+	Wed, 29 May 2024 07:39:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716966562; cv=none; b=Rc0LlweO9/H1XVJhVrdTMEJwmOxxgaveJ3JqspcFU5RdY/djzCTHeZ4kXeVOqVuxbi2Tm7CXvmUe0+iktxD4tV3IHQ9BrV2IihhsPqQuvKs7NIkeO7U9hO8aFhBpC62f2vjYFFbEcPhLZnUIwKf4l0tKG1s9XnE7JvL46IJFxzc=
+	t=1716968346; cv=none; b=medjl86AbOc8hCpyc7faaPrXeCpE1viqIWrdnDl+aglwiHGjBTaJsUU1pgKu2Q1j1IaT/zNyKJ+JtfyGEavSvYfQIQUcEd44UqQhvpo08DPJKuXT182OXjNKjyqYs2cCB0Fas2T5Ct7tKrouSspxmyanfRGhhJG+qVdXCSGs+Tc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716966562; c=relaxed/simple;
-	bh=f5hieK2dVR8m72dQIfBgiq+09hpzZd5FvWTa+h7XuwE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qFy7ACFv25O3oEU/81fJclTZeCrJPzq+YQHdjEmJmGcj/OT46SksrMB3ga04AMjYMLf0klrDY2PtiGbIs3w0h2BAWugHt6e5OeGft7sXVDPNg5iBDG5tWyMOWOf6ZxKyJeXOhgliEwD3eHYEVX9skHsS2QJw2hfkomiKhihb2Ac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zwtn5GH4; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1716968346; c=relaxed/simple;
+	bh=jOZf9FxB8Chj+I1FF/6xKPuMzy4ZIWetvg9cXl3DtL4=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VEMsA84IybwLt1NoJJ+7F5x72NFicyxBMl6kDTji/hM9z2NbRCD7ld+PBRaW/iNco4NyMYWrbGCdGfjYTIx0MwyWLx/o5ETxcJbsbZ0XFVk7L3ru4dBEiJitBwwRenBDeK2w1f5aXRcRFlWXFbFPkBUY2zkyVMBHDmMIOP99Ca0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=UdK0QMqj; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zwtn5GH4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1946EC32781;
-	Wed, 29 May 2024 07:09:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716966562;
-	bh=f5hieK2dVR8m72dQIfBgiq+09hpzZd5FvWTa+h7XuwE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Zwtn5GH46/BmFtgUJT0+jA7hR7JDwcnFzmA0BATIWfjv5BXGGAg/M97xp413hLwKT
-	 ukOAy06EaXNN3N8OkhoYg3jVYB1t4jLpdXiq6UuDHY5V3n44TjahRAU2qrarbPo082
-	 8TZ9B06t1rska/zP7jrW4i+Ualycb5ckwb4r+pyvwdcfQChqaPrxNQ7UCldpUiL8Hl
-	 pXrPuEEHhuXx4y2vNqhrkABsjI15C1rmKMshWdiLHONwpBiXhHtKTVA8VZU2aKWH05
-	 E55qfSlprcDD5Z74HWagCqu7WwqfgoTF4ddF5xUxNnb/5JLV7l7wd854JrjXoE57vv
-	 fMpKi1M340ybg==
-Message-ID: <3531ac76-bcee-4c4d-8396-65b5dfbd8df9@kernel.org>
-Date: Wed, 29 May 2024 09:09:17 +0200
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="UdK0QMqj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1716968344; x=1748504344;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jOZf9FxB8Chj+I1FF/6xKPuMzy4ZIWetvg9cXl3DtL4=;
+  b=UdK0QMqjLOuWQ4Ty74eJkOwkbFdcQ2tf+Fsq+CucXJ9EHDHBtWcb/hCW
+   w2dnt6mvnKyyP8wBsJMWJ4U4++kgYIJnxUdrIi2TR8zZuOL8dvj829GUB
+   h24ATH6m9eoioKugzYDighJg9BbCrLNjvX1Wiiq59yR9PryofSQOcQC6g
+   VNWFaMe9wzxyI9/sDTGAPBYpj/6/LYMKwaikP22fFCD+jfvlSRZSE/Uqs
+   n7aZHQ+jWHbD17uxTT+9VmkaRoctb6nPS6/fPEeat+KRU3rnkZQVpoKOv
+   mXC/S/MfLCO980ZK3qz2pjWXIyIZ79MERN6azBNqZ3obeOQXTQHq7Xj+9
+   A==;
+X-CSE-ConnectionGUID: ozutHQsqTHWSlsdEABSroQ==
+X-CSE-MsgGUID: DtTm/icsSPe7NZvAEAQ+mw==
+X-IronPort-AV: E=Sophos;i="6.08,197,1712646000"; 
+   d="asc'?scan'208";a="257520481"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 29 May 2024 00:39:02 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Wed, 29 May 2024 00:38:59 -0700
+Received: from wendy (10.10.85.11) by chn-vm-ex04.mchp-main.com (10.10.85.152)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
+ Transport; Wed, 29 May 2024 00:38:57 -0700
+Date: Wed, 29 May 2024 08:58:41 +0100
+From: Conor Dooley <conor.dooley@microchip.com>
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>
+CC: <jdelvare@suse.com>, <linux@roeck-us.net>, <robh@kernel.org>,
+	<krzk+dt@kernel.org>, <conor+dt@kernel.org>, <ukleinek@kernel.org>,
+	<linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-pwm@vger.kernel.org>
+Subject: Re: [PATCH v4 1/3] dt-bindings: hwmon: Add adt7475 fan/pwm properties
+Message-ID: <20240529-faucet-vending-3e330f8eb67b@wendy>
+References: <20240528225638.1211676-1-chris.packham@alliedtelesis.co.nz>
+ <20240528225638.1211676-2-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] hwmon: (ina2xx) Add device tree support to pass alert
- polarity
-To: Amna Waseem <Amna.Waseem@axis.com>, Jean Delvare <jdelvare@suse.com>,
- Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernel@axis.com
-References: <20240529-apol-ina2xx-fix-v1-0-77b4b382190f@axis.com>
- <20240529-apol-ina2xx-fix-v1-2-77b4b382190f@axis.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJgPO8PBQkUX63hAAoJEBuTQ307
- QWKbBn8P+QFxwl7pDsAKR1InemMAmuykCHl+XgC0LDqrsWhAH5TYeTVXGSyDsuZjHvj+FRP+
- gZaEIYSw2Yf0e91U9HXo3RYhEwSmxUQ4Fjhc9qAwGKVPQf6YuQ5yy6pzI8brcKmHHOGrB3tP
- /MODPt81M1zpograAC2WTDzkICfHKj8LpXp45PylD99J9q0Y+gb04CG5/wXs+1hJy/dz0tYy
- iua4nCuSRbxnSHKBS5vvjosWWjWQXsRKd+zzXp6kfRHHpzJkhRwF6ArXi4XnQ+REnoTfM5Fk
- VmVmSQ3yFKKePEzoIriT1b2sXO0g5QXOAvFqB65LZjXG9jGJoVG6ZJrUV1MVK8vamKoVbUEe
- 0NlLl/tX96HLowHHoKhxEsbFzGzKiFLh7hyboTpy2whdonkDxpnv/H8wE9M3VW/fPgnL2nPe
- xaBLqyHxy9hA9JrZvxg3IQ61x7rtBWBUQPmEaK0azW+l3ysiNpBhISkZrsW3ZUdknWu87nh6
- eTB7mR7xBcVxnomxWwJI4B0wuMwCPdgbV6YDUKCuSgRMUEiVry10xd9KLypR9Vfyn1AhROrq
- AubRPVeJBf9zR5UW1trJNfwVt3XmbHX50HCcHdEdCKiT9O+FiEcahIaWh9lihvO0ci0TtVGZ
- MCEtaCE80Q3Ma9RdHYB3uVF930jwquplFLNF+IBCn5JRzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmA872oFCRRflLYACgkQG5NDfTtBYpvScw/9GrqBrVLuJoJ52qBBKUBDo4E+5fU1bjt0
- Gv0nh/hNJuecuRY6aemU6HOPNc2t8QHMSvwbSF+Vp9ZkOvrM36yUOufctoqON+wXrliEY0J4
- ksR89ZILRRAold9Mh0YDqEJc1HmuxYLJ7lnbLYH1oui8bLbMBM8S2Uo9RKqV2GROLi44enVt
- vdrDvo+CxKj2K+d4cleCNiz5qbTxPUW/cgkwG0lJc4I4sso7l4XMDKn95c7JtNsuzqKvhEVS
- oic5by3fbUnuI0cemeizF4QdtX2uQxrP7RwHFBd+YUia7zCcz0//rv6FZmAxWZGy5arNl6Vm
- lQqNo7/Poh8WWfRS+xegBxc6hBXahpyUKphAKYkah+m+I0QToCfnGKnPqyYIMDEHCS/RfqA5
- t8F+O56+oyLBAeWX7XcmyM6TGeVfb+OZVMJnZzK0s2VYAuI0Rl87FBFYgULdgqKV7R7WHzwD
- uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
- 7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
- 5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240529-apol-ina2xx-fix-v1-2-77b4b382190f@axis.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="4wiA+HKJ9TqC3xZp"
+Content-Disposition: inline
+In-Reply-To: <20240528225638.1211676-2-chris.packham@alliedtelesis.co.nz>
 
-On 29/05/2024 08:07, Amna Waseem wrote:
->  
-> +static int ina2xx_set_alert_polarity(struct ina2xx_data *data,
-> +				     unsigned long val)
-> +{
-> +	int ret;
+--4wiA+HKJ9TqC3xZp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, May 29, 2024 at 10:56:36AM +1200, Chris Packham wrote:
+> Add fan child nodes that allow describing the connections for the
+> ADT7475 to the fans it controls. This also allows setting some
+> initial values for the pwm duty cycle and frequency.
+>=20
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> ---
+>=20
+> Notes:
+>     I realise there is still some discussion about how to express the
+>     frequency and duty cycle. I have a personal preference for using hertz
+>     for the frequency and 0-255 for the duty cycle but if the consensus is
+>     to express these things some other way I'm fine with doing some math.
+
+Probably worth carrying a link to it here:
+https://lore.kernel.org/all/4de798f3-069e-4028-a5b5-5e6a639277e3@alliedtele=
+sis.co.nz/
+
+I asked Uwe to take a look & it's on his todo list.
+
+Thanks,
+Conor.
+
+>    =20
+>     Changes in v4:
+>     - 0 is not a valid frequency value
+>     Changes in v3:
+>     - Use the pwm provider/consumer bindings
+>     Changes in v2:
+>     - Document 0 as a valid value (leaves hardware as-is)
+>=20
+>  .../devicetree/bindings/hwmon/adt7475.yaml    | 25 ++++++++++++++++++-
+>  1 file changed, 24 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.yaml b/Docum=
+entation/devicetree/bindings/hwmon/adt7475.yaml
+> index 051c976ab711..bfef4c803bf7 100644
+> --- a/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+> @@ -51,6 +51,15 @@ properties:
+>        enum: [0, 1]
+>        default: 1
+> =20
+> +  "#pwm-cells":
+> +    const: 4
+> +    description: |
+> +      Number of cells in a PWM specifier.
+> +      - 0: The pwm channel
+> +      - 1: The pwm frequency in hertz - 11, 14, 22, 29, 35, 44, 58, 88, =
+22500
+> +      - 2: PWM flags 0 or PWM_POLARITY_INVERTED
+> +      - 3: The default pwm duty cycle - 0-255
 > +
-> +	if (val > INT_MAX || !(val == 0 || val == 1))
-> +		return -EINVAL;
+>  patternProperties:
+>    "^adi,bypass-attenuator-in[0-4]$":
+>      description: |
+> @@ -81,6 +90,10 @@ patternProperties:
+>        - smbalert#
+>        - gpio
+> =20
+> +  "^fan-[0-9]+$":
+> +    $ref: fan-common.yaml#
+> +    unevaluatedProperties: false
 > +
-> +	mutex_lock(&data->config_lock);
-
-Aren't you calling it before registering sysfs interface? Why do you
-need mutex?
-
-> +	ret = regmap_update_bits(data->regmap, INA226_MASK_ENABLE,
-> +				 INA226_ALERT_POLARITY_MASK,
-> +				 INA226_SHIFT_ALERT_POLARITY(val));
+>  required:
+>    - compatible
+>    - reg
+> @@ -89,11 +102,12 @@ additionalProperties: false
+> =20
+>  examples:
+>    - |
+> +    #include <dt-bindings/pwm/pwm.h>
+>      i2c {
+>        #address-cells =3D <1>;
+>        #size-cells =3D <0>;
+> =20
+> -      hwmon@2e {
+> +      pwm: hwmon@2e {
+>          compatible =3D "adi,adt7476";
+>          reg =3D <0x2e>;
+>          adi,bypass-attenuator-in0 =3D <1>;
+> @@ -101,5 +115,14 @@ examples:
+>          adi,pwm-active-state =3D <1 0 1>;
+>          adi,pin10-function =3D "smbalert#";
+>          adi,pin14-function =3D "tach4";
+> +        #pwm-cells =3D <4>;
 > +
-> +	mutex_unlock(&data->config_lock);
-> +	return ret;
-> +}
+> +        fan-0 {
+> +          pwms =3D <&pwm 0 22500 PWM_POLARITY_INVERTED 255>;
+> +        };
 > +
->  /*
->   * Calibration register is set to the best value, which eliminates
->   * truncation errors on calculating current register in hardware.
-> @@ -659,6 +679,14 @@ static int ina2xx_probe(struct i2c_client *client)
->  	if (ret)
->  		return dev_err_probe(dev, ret, "failed to enable vs regulator\n");
->  
-> +	if (!of_property_read_u32(dev->of_node, "alert-polarity", &val)) {
-> +		ret = ina2xx_set_alert_polarity(data, val);
-> +		if (ret < 0)
-> +			return dev_err_probe(
-> +				dev, ret,
-> +				"failed to set APOL bit of Enable/Mask register\n");
+> +        fan-1 {
+> +          pwms =3D <&pwm 2 22500 PWM_POLARITY_INVERTED 255>;
+> +        };
+>        };
+>      };
+> --=20
+> 2.45.1
+>=20
 
-That's odd wrapping. Please follow Linux coding style and align these.
+--4wiA+HKJ9TqC3xZp
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Best regards,
-Krzysztof
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZlbgLAAKCRB4tDGHoIJi
+0tu6AP4/nFnJfrf121gHJBfzksW6XCKET471Txd1cGwJLuTE8QD+OUN7EKN/Vkag
+6uwCY8eQG03BAO5DRYNaweHCiQSzdgQ=
+=LSol
+-----END PGP SIGNATURE-----
+
+--4wiA+HKJ9TqC3xZp--
