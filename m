@@ -1,193 +1,113 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59C7A15B0E6;
-	Wed, 29 May 2024 22:25:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9213315B979;
+	Wed, 29 May 2024 22:31:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717021524; cv=none; b=Tfavl1Tj+So09NrPSZjyIqnWHC4M4fjE6VuRweNUDnNxTLBi5SjOaWE7YrKnppRHT3cTpiuqPS4eW4UJP5KkvqF78Dp0SdhRZaqfGIwHRFNhmEvnd6YCW6HMq/QeqIHAYFBISQiZjC8Hye9/sEFxqdZtvPBEuKCY88flfrCs/7s=
+	t=1717021893; cv=none; b=F6hXsMwXXubu0IM2eck1kIUFpEPQsN0GdLoFPgFUza6VqwM4ELDV1Vs9yjH2pExTjVzIGNBKY2NLXicvJg6cnY0gf74pLEZBSVpUwLqnMFXbXS5YFQeJCwGsXQs9Ec0v2aMkA+mlNkg4lsFq3W4Ax007rKL3VjZmZVv3fQhNlyg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717021524; c=relaxed/simple;
-	bh=L/g2EvHE8g2iyCUMGy0masnGn/k0AkwX8gaUiKjdt+s=;
+	s=arc-20240116; t=1717021893; c=relaxed/simple;
+	bh=LI6WjcMmv9OZvJURtgYXc2zS2t1HFMdN/XNg0xC1cPU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fwWNE7GzGp7Cioi0l3DdlgxTWBTAskbxCIs1PID9cMaKEjbshlKEEzV4EDKfxst5l36olJgebXh96vvc197PcMydZMy2JXkqzfN1imdd2HKJ7ZuyZ/iCUbChYxU+A3fy6jIxFUY4iYA20eHg3i2Nxr0Svs6GP/26z7O1GjftoxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XBrxKOlu; arc=none smtp.client-ip=209.85.216.53
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ri8rAD81uPXS5KlM0h3CAly1cgRS7bxUCqp1/8D7ORSrxaSXL0zpaXHBBgsTITi8bAAg+CrKrGddbHM1ZTAwdEFwW/tw3SuBPMcDjsJ0MWnLO/riw7nM0QwsFW0pathIgDre0M0mgWM2RaVXdUMgGJoZ3+jLfXE5wet4cxJKWFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bxtc0aF3; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XBrxKOlu"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2bfffa3c748so175886a91.3;
-        Wed, 29 May 2024 15:25:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bxtc0aF3"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1f47eb2354bso1983155ad.3;
+        Wed, 29 May 2024 15:31:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717021522; x=1717626322; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HZ+qSEgBrLBvhAOp1UtC+ym/4hvmQ3RllnsY91gsYcQ=;
-        b=XBrxKOluTI3fStC3cmeC0gfzfWYDs0PoDCYkqlzHaPOyd0SdBCZNqyH4Im4M1CWa/F
-         gDFsVKCDxgAL8XLu1Hb7soJkrh7Wnb7ANeW3RME7SHWzhL8qFBf3WVfvxNnlG4I2CLll
-         bwh/TL0DbEzPTomJQO3bMFkGDKzhOpea7LNuUkVzFUO4xLCBLcFQa8UmMflF5/gi2Fm8
-         dJjQjIiSV5jg68sFWfg5U2cTVkpsVoGbBUlSy8OzZamVq6OoZoNtYpY1TTJjMtsfqz7I
-         G3lGpAAstDpoCLUcZPzqid4474NqUr+Gwd8SY/PGbYPOi9ErR1Zy2iM9wbP8hA3tb1qi
-         w9IQ==
+        d=gmail.com; s=20230601; t=1717021892; x=1717626692; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ozwb9Zz4GwZFP9/Y8ej5BoQULZ82oF43cCSad5qg3Hk=;
+        b=Bxtc0aF3jPCLQQkzCI6mPG2EqIfnopsUhyOHuW3rwolBGOIqVqA0H1rvjT+EiuZfMB
+         C9jnVpaEuB1RnXqpbi51+AbuTszglroV5Kvmt4vZGsv1AnrcHVEUaEEq5JMOXMRgCN8Q
+         zztMNmQYFb+2slFvH82BLQv6euTg+uVJjo7eDYW1wETaa1HNWmVH6tzz2zlaIS2e7UJ/
+         5vk3vPIJbC2bb37VtvxTk/OpEDG2bxcOyllxeDLHERbGFrN0h4nqkit/Nfk9ZbJSEx7O
+         Ze7fFe0AA5AYtsVKlZ+V00+SvA2tAuBUUFpTWChFcx1fhG9btAFlr/6Oz92e6V77NSvj
+         iMTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717021522; x=1717626322;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HZ+qSEgBrLBvhAOp1UtC+ym/4hvmQ3RllnsY91gsYcQ=;
-        b=rEs926h1gK/dNT1YFILVBkV6gI25aSqz3yyEtnkd5tOgF+qasSRlo/rXgFzG7utpO2
-         WwASEkmxl4/T3ezLb7j0zqNH8/5MWExf2HO1cIGt8bJTgJ5NMahmuGswMMEe6vjEwqMr
-         9sDux+UTaDvWd0o5VDRgwDqt5p5UW5U+iDl3Wmk8tg5pbP4CBYpdOdAoeHYzz0+2esKj
-         6Lp0bDKuZ3qGpMbvvoBnC+m3ym3mwDJGsRC/ndWj8T1Ii8PgqAQHs5Xyn/qpUSYKlfr+
-         asFJQvphJU508mw5pRwMz4MFkj6Sp8rtvZvtH8Tf5+t9Ly5kFWtlaa9swDzgUUhD62Hy
-         UbjA==
-X-Forwarded-Encrypted: i=1; AJvYcCV29rFtIAt8j4hX44t8pCvH0yA1xdo9eaNX7L3dIbTYPslDYeG268I/6xEIxWoVjbSGvMJiT1FTlsaWbD6b59FEV4vT4yEDnCCoSa9j3ZndhfD3hzkkP8ok4cST8ysB5tKwrAn6bgummVeY69tkcRRYa4j12rSWyyYIGBxpbS9Uk1ekHyq+
-X-Gm-Message-State: AOJu0YwCaI8zS0xxzZC4FfoQsfaSUsRha3VGGw0kVGnqZ41LoZ+r/2/w
-	tkn5Fx1nFdixiPma8tUi66DwljB1JIlPnzUk8N04wRnxgkTCIwNG
-X-Google-Smtp-Source: AGHT+IFNLl8Gjlmqq+BUmjnxhyhgz+Zw/vqVkbsklBg+WD0FCkJ5yS8cue2rTR79uuAHHZmgekfafA==
-X-Received: by 2002:a17:90b:1c10:b0:2b6:2067:dd15 with SMTP id 98e67ed59e1d1-2c1abc4a29cmr454011a91.40.1717021522387;
-        Wed, 29 May 2024 15:25:22 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1717021892; x=1717626692;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ozwb9Zz4GwZFP9/Y8ej5BoQULZ82oF43cCSad5qg3Hk=;
+        b=EWmaaShK2m21uV8s2QH+5vemwOdAabbQpL0LJFeX3gtNZlQHvxvBNUMf+ij8VyBmf8
+         78fcohNj7XSRHLzZOHGYf9akN8vf2T2JwkuXFM0P3msRLx7XrhHJTlTtHwid4YcHG4GN
+         St7L0EXLecPLBXWzQxDgmS1xxAHzUWLLxfP2+StCRH9p82Gdn6mPrumS1etF8JXJBlkm
+         PbwfSgc/HOTYE0A+fl7JVA7ePeyny43e20xUEsBxe4pYZcWnz02Ai3RjUmzuX95OQlb0
+         mriUWPMgl7/n8Y4DZpRlK+epTMqZ/F8+Up7v2QiwPBCCMZlsZ5jS10qg+7p/im1Ahbqw
+         qryA==
+X-Forwarded-Encrypted: i=1; AJvYcCX99VBUk4kujPb1bUAhkHiXZOma8pRxSxftHvLlc5WY5eKOjycsFCvv8BTwJVFKS1xp73YdXxmYAD75zo3/izYV4vyN7hrqw565Eyg8URjhJS7LNp7YM63ZGNfPcDDJKEOVHoUm2XXwTbk=
+X-Gm-Message-State: AOJu0YzKb6hKroaWAuEGSD0x8cag92/XSOxcCJpvwBrfUehPemiYzF+W
+	wzdHuhlfEsQeCNOGOq8nKHpAI9x+yc/abGMKVpChrjXV8eJtyaeq
+X-Google-Smtp-Source: AGHT+IE6XFi7SxEJl+AY3m6sEU2SXq1fJ2zOEsHIeNL78sxx5pdvWOHrA3vKBDDt9c/JQzNhPoxzLA==
+X-Received: by 2002:a17:903:2306:b0:1f6:fa0:da71 with SMTP id d9443c01a7336-1f6194f91ebmr4292195ad.18.1717021891787;
+        Wed, 29 May 2024 15:31:31 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c1a7797138sm325651a91.41.2024.05.29.15.25.21
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f61961e4afsm1361015ad.132.2024.05.29.15.31.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 May 2024 15:25:21 -0700 (PDT)
+        Wed, 29 May 2024 15:31:31 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 29 May 2024 15:25:20 -0700
+Date: Wed, 29 May 2024 15:31:30 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Naresh Solanki <naresh.solanki@9elements.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: hwmon: Add max6639
-Message-ID: <ef2e8946-27e7-483c-a234-7e7a6df0b787@roeck-us.net>
-References: <20240528125122.1129986-1-naresh.solanki@9elements.com>
+To: Armin Wolf <W_Armin@gmx.de>
+Cc: pali@kernel.org, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (dell-smm) Add Dell G15 5511 to fan control
+ whitelist
+Message-ID: <1f5290f6-35f8-43b1-8cd1-f8c8a4ece8f8@roeck-us.net>
+References: <20240522210809.294488-1-W_Armin@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20240528125122.1129986-1-naresh.solanki@9elements.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240522210809.294488-1-W_Armin@gmx.de>
 
-On Tue, May 28, 2024 at 06:21:21PM +0530, Naresh Solanki wrote:
-> Add Devicetree binding documentation for Maxim MAX6639 temperature
-> monitor with PWM fan-speed controller.
+On Wed, May 22, 2024 at 11:08:09PM +0200, Armin Wolf wrote:
+> A user reported that he needs to disable BIOS fan control on his
+> Dell G15 5511 in order to be able to control the fans.
 > 
-> Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> Closes: https://github.com/Wer-Wolf/i8kutils/issues/5
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> Acked-by: Pali Rohár <pali@kernel.org>
 
-Applied (and I'll drop the '|' after description:).
+Applied.
 
 Thanks,
 Guenter
 
 > ---
->  .../bindings/hwmon/maxim,max6639.yaml         | 92 +++++++++++++++++++
->  1 file changed, 92 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>  drivers/hwmon/dell-smm-hwmon.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 > 
+> --
+> 2.39.2
 > 
-> base-commit: 5fbf8734fb36cf67339f599f0e51747a6aff690c
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
-> new file mode 100644
-> index 000000000000..a2e37f7329b8
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
-> @@ -0,0 +1,92 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +
-> +$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Maxim max6639
-> +
-> +maintainers:
-> +  - Naresh Solanki <naresh.solanki@9elements.com>
-> +
-> +description: |
-> +  The MAX6639 is a 2-channel temperature monitor with dual, automatic, PWM
-> +  fan-speed controller.  It monitors its own temperature and one external
-> +  diode-connected transistor or the temperatures of two external diode-connected
-> +  transistors, typically available in CPUs, FPGAs, or GPUs.
-> +
-> +  Datasheets:
-> +    https://datasheets.maximintegrated.com/en/ds/MAX6639-MAX6639F.pdf
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - maxim,max6639
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
-> +
-> +  '#pwm-cells':
-> +    const: 3
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +patternProperties:
-> +  "^fan@[0-1]$":
-> +    type: object
-> +    description: |
-> +      Represents the two fans and their specific configuration.
-> +
-> +    $ref: fan-common.yaml#
-> +
-> +    unevaluatedProperties: false
-> +
-> +    properties:
-> +      reg:
-> +        description: |
-> +          The fan number.
-> +
-> +    required:
-> +      - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        fan1: fan-controller@10 {
-> +            compatible = "maxim,max6639";
-> +            reg = <0x10>;
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +            #pwm-cells = <3>;
-> +
-> +            fan@0 {
-> +                reg = <0x0>;
-> +                pulses-per-revolution = <2>;
-> +                max-rpm = <4000>;
-> +                target-rpm = <1000>;
-> +                pwms = <&fan1 0 25000 0>;
-> +            };
-> +
-> +            fan@1 {
-> +                reg = <0x1>;
-> +                pulses-per-revolution = <2>;
-> +                max-rpm = <8000>;
-> +                pwms = <&fan1 1 25000 0>;
-> +            };
-> +        };
-> +    };
-> +...
+> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+> index 48a81c64f00d..942526bd4775 100644
+> --- a/drivers/hwmon/dell-smm-hwmon.c
+> +++ b/drivers/hwmon/dell-smm-hwmon.c
+> @@ -1545,6 +1545,14 @@ static const struct dmi_system_id i8k_whitelist_fan_control[] __initconst = {
+>  		},
+>  		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_30A3_31A3],
+>  	},
+> +	{
+> +		.ident = "Dell G15 5511",
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+> +			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Dell G15 5511"),
+> +		},
+> +		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_30A3_31A3],
+> +	},
+>  	{ }
+>  };
