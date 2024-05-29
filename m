@@ -1,303 +1,212 @@
-Received: from AUS01-SY4-obe.outbound.protection.outlook.com (mail-sy4aus01olkn2162.outbound.protection.outlook.com [40.92.62.162])
+Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on2085.outbound.protection.outlook.com [40.107.13.85])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A127167DAB;
-	Wed, 29 May 2024 07:40:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.62.162
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98D0716E89B;
+	Wed, 29 May 2024 09:47:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.13.85
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716968428; cv=fail; b=Lzi0OkA1MjjoHPhZQAYn1J8gZihZs8CDz+OVEiiq/B1TXAv6u6PaTQB9X5lh8draoCnMWqxx5DXdPZtmsXCGzV1mcTh0J+D5A1XYuU5Jy+lIH868rh+CU3CGS39yEtjWFN5ImSnLkTSBo5Q2I193Ai3hyL/G7n2Trn8n8Vihmrw=
+	t=1716976076; cv=fail; b=USAc/CEmfmtRhh2hftdr4V/0zDAzjHsTzFFt1m5dW//FTZsywMIf67jKw0RhY65h+CjFGtKx5bUuLKGkFgJraUYmaCqwSlfwe925okV3w7YQzSHpanPuoiQotyyON1i1+tgxykPtbO1+CKvf7gBdZns6iJ9rTtLGuLW7+frmYrY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716968428; c=relaxed/simple;
-	bh=z05svW3AQWr6HjAHcqqVA50+Ji+XIL4CC9+8JASQab4=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=cNOvJplupuwOOM97+OcFLeCmsGasstrjq/+5wRoNIC1/bmk/rNc6cQS78WCo8s113qkp/3jHDZOo6jux0jr/UeXqjbhdjHOQCCHaUP8hnkgASDbQSnS2L59lAcFn5KRN7cpvd677Lmun4nzuyLjNshvmgvHXpVlsI4CHWxB3LcI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com.au; spf=pass smtp.mailfrom=outlook.com.au; dkim=pass (2048-bit key) header.d=OUTLOOK.COM.AU header.i=@OUTLOOK.COM.AU header.b=NyqAMAie; arc=fail smtp.client-ip=40.92.62.162
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com.au
+	s=arc-20240116; t=1716976076; c=relaxed/simple;
+	bh=KPWu1TWHkt0rKiViYB8JKDO/5UTs051XhH3aPPWbMrs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
+	 In-Reply-To:To:CC; b=BrrjQONPXsieuR6YKgbvTZDTLd4kmDV3Rgbg+ysBLSpVWN8CNS76oM65aIpnnhR+movHtriDQmGMdzZDE/rs05M4vzbHcIcg8dNbrqlQX/g2Mirm8K/eRRaXxDNDUSzF1cyGXGgOZr1gnhaxF3M7dpxIyUf8G+9vMORMUy3VR50=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com; spf=pass smtp.mailfrom=axis.com; dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b=JLZy5vcV; arc=fail smtp.client-ip=40.107.13.85
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=OUTLOOK.COM.AU header.i=@OUTLOOK.COM.AU header.b="NyqAMAie"
+	dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b="JLZy5vcV"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fGmJlRO+niZzPA1/qAgB/quFU5m2hEKFm/ApkOieTmc5AA6it+pcvZxXDIVQ5btroSF9YyqwRkRe+DrDnL3tgJLJrIpY9Uzm2tD7y+Germ1EMH/wSZmjMOOfuDSRKROTkywoBm1cjP3i7Fv6Lk3EKyILIQfkX8Ov2HOnJCadYCNqaMkW2pni18jiBd18Icq3YAlyxuDcj1f9mvmySxOJ9euylvED00DSel3wqxHS4OjYA44ADf6y+MSUtMmNs0KwCh39xE9y11QbFxNLN7cDSU50U9xJyMbdgDF3IGpLMepxJPZF8Ltf9zy1r7vUs5lYl4OFUeoICkJhrIAJXVByFg==
+ b=CEPM/Ix0IrYNxZWJ/QernNEqLRPFM/WdQK92H6aAuOvLTbbsR4cKRoO0MtTBY9VpnYgSXbouX5POkyXCa+R6pnNuY/s7qVdJ5SbvS8lwdVstSfBCycwK+xETe9mMkzG2k3dLrqi06lFVwniM0P3X3X3XqLXd8ApUbJsjbnPrPcS+3QA64n/NKjRhTL6DNR9AxI5JSvsviVbmj5VtEQR78Tlpspnz16ZFnze067HFSHG3kGMza+lf9MPgNH/FQc3xzv/CZ2hD8UfBg1m7k4rQrTuWebb5CLgf+2l4/2ZDGpFgpxkIZCBoql9Bzgv/M8clLvUj5CqhNwCipOEx+aQ0Aw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MrUTTxlqPy9Sgk3B/ch+IC3JsPHAWaMQnaLMKuR7ggw=;
- b=XJqF3/0Y1oGdT0SzHHEY/c/tvr1AORwJCD17MNQK+X9zihSZbA2h+YoaHbu2x/gPyhEjlD0MYTSU2pAzhlSSPlMU6UAE6qp8pj0tjmmTsJm0fHC4L/PSXDQf8GRMoyZXJP3UXd1XOceIsIML1uiY1BNyaSRtQBHQswQ5VU2bi1pe3leEEiddr0iOUsfhrZ+hUDCJX3y7OQy3qx7lg5ljkEMhQ5/n3V930hjxipL/4Erg0yE2c4NlaF+StjnLUPHx0TxIgiaPZAupposUg39dnp5vGByBSDaC8KFmeOCIJnXSCeUX1I+8CaM/HQQKY5SdfdIPm6WXi9Riu/JwJ6mTuA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=OUTLOOK.COM.AU;
- s=selector1;
+ bh=TrLpnh9+fkESpl7UMWXjl6VDbeYtSTYo1enDU0wBgcc=;
+ b=Xwaj4TtF46+59wEY0l2RbALSvFNVvoiEj4zzqwwyamKSyt5/c2aku1zql5mlK6s9/GUhLA+/MpPKEinOSuIV5glvAJwdisJRY6fJrKt/d0zue1bxeBJa5Q53iU3Vu/YELK1y0K2LurCpzHfgEFaYUZ6WFp8auv8p+pBconaLVLnyUvE404ExqaSOb0TZPP27QAEUIzxq6jfKHjWJpsIBsR/cdbRizR+ZWds5KOjomftivsEnfth7wST8oojOURjO5+noXZaD/hZNhywmNC46upztQCNZMCf9b0XdqT9oL3VoKfJbvMWUcLtXu2lC3tbJ02MIjfNU6IgQBXhoc/7t6A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 195.60.68.100) smtp.rcpttodomain=kernel.org smtp.mailfrom=axis.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=axis.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axis.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MrUTTxlqPy9Sgk3B/ch+IC3JsPHAWaMQnaLMKuR7ggw=;
- b=NyqAMAieas15lMXZ4F3mVGduVStDgMqkgsnBgWoavYTLzSVmyLVW+v+Zcg8ehpawsA5XRcWOOlwfRjn+CuqL/uHpvbIZBNjncVyl8dlXrww3WfCbEeAHTpm4c18V/Vs1wIh4DHIKFadV/vXa4V02lukZNcdu8sGJFpTtG7Cw8nNj1yFI3hwE5+vCvqUfWooLYMBTk1bUUhmU8otde/wOFwbDzvPcSzVLFBwhhzRcSOhq0roU3RevtcOb+4x0otsiojqz+S1k6fS4KW/Tk4mfvrP0xo8ikfNat/GvU0T2ARl71ExCazIgF9JaYlKoN5b/LmahGAZ4p41W39O5sW2/8A==
-Received: from SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM (2603:10c6:10:159::9) by
- SY7P282MB5422.AUSP282.PROD.OUTLOOK.COM (2603:10c6:10:2aa::13) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7611.32; Wed, 29 May 2024 07:40:20 +0000
-Received: from SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM
- ([fe80::37cc:3733:d1e9:d8e4]) by SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM
- ([fe80::37cc:3733:d1e9:d8e4%3]) with mapi id 15.20.7633.017; Wed, 29 May 2024
- 07:40:20 +0000
-Message-ID:
- <SY4P282MB30634D9D9873C9C8DC41D4EEC5F22@SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM>
-Date: Wed, 29 May 2024 17:40:17 +1000
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] hwmon: add ChromeOS EC driver
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Guenter Roeck <linux@roeck-us.net>
-Cc: Jean Delvare <jdelvare@suse.com>, Benson Leung <bleung@chromium.org>,
- Lee Jones <lee@kernel.org>, Guenter Roeck <groeck@chromium.org>,
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
- chrome-platform@lists.linux.dev, Dustin Howett <dustin@howett.net>,
- Mario Limonciello <mario.limonciello@amd.com>,
- Moritz Fischer <mdf@kernel.org>
-References: <20240507-cros_ec-hwmon-v2-0-1222c5fca0f7@weissschuh.net>
- <20240507-cros_ec-hwmon-v2-1-1222c5fca0f7@weissschuh.net>
- <SY4P282MB30635BA1D4087113E79921B5C5F52@SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM>
- <9cf224dd-51eb-4608-abcf-06f337d08178@t-8ch.de>
- <SY4P282MB306325BB023A95198F25A21DC5F12@SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM>
- <c9b110eb-ff0e-41f2-9492-8a5d8c3c01d0@roeck-us.net>
- <b8072b36-688f-41b8-8b32-40fc4fa4d148@t-8ch.de>
- <6824f030-92da-4439-af3b-8c2498f4382e@roeck-us.net>
- <SY4P282MB30638301303268093B6D1ABFC5F22@SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM>
- <22a16af6-93c4-454c-853b-5959a5c018d3@t-8ch.de>
-Content-Language: en-AU, en-US, en-GB
-From: Stephen Horvath <s.horvath@outlook.com.au>
-In-Reply-To: <22a16af6-93c4-454c-853b-5959a5c018d3@t-8ch.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TMN:
- [PWnOvbn639UiqV6EpRMzE8ns8KSl9u7fkHKh1+9XzVbifkSxFn/HGfi0EaXTxJ9Atmi6958qNuM=]
-X-ClientProxiedBy: SYBPR01CA0099.ausprd01.prod.outlook.com
- (2603:10c6:10:1::15) To SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM
- (2603:10c6:10:159::9)
-X-Microsoft-Original-Message-ID:
- <7d54b16d-c2f5-41be-a931-a24f74916adc@outlook.com.au>
+ bh=TrLpnh9+fkESpl7UMWXjl6VDbeYtSTYo1enDU0wBgcc=;
+ b=JLZy5vcVhrQaMe0c0n2R50vmS3ieR6PUmY1a8kdl/jY/7MZA6xH4k2QRAbwhKjDanbIQqo/k8MuJaXfIsMUBanD9zL3XxVsrzC9NZ3i+qa58jsU/AaziiqFmUro8hDAUqL1rQd4pS1MJLGKplYNz+uzBzRiayghFtlBq0WvYW4c=
+Received: from AS4P250CA0003.EURP250.PROD.OUTLOOK.COM (2603:10a6:20b:5df::19)
+ by PA4PR02MB6702.eurprd02.prod.outlook.com (2603:10a6:102:fa::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7611.22; Wed, 29 May
+ 2024 09:47:51 +0000
+Received: from AM4PEPF00027A5D.eurprd04.prod.outlook.com
+ (2603:10a6:20b:5df:cafe::e2) by AS4P250CA0003.outlook.office365.com
+ (2603:10a6:20b:5df::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.19 via Frontend
+ Transport; Wed, 29 May 2024 09:47:51 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 195.60.68.100)
+ smtp.mailfrom=axis.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=axis.com;
+Received-SPF: Pass (protection.outlook.com: domain of axis.com designates
+ 195.60.68.100 as permitted sender) receiver=protection.outlook.com;
+ client-ip=195.60.68.100; helo=mail.axis.com; pr=C
+Received: from mail.axis.com (195.60.68.100) by
+ AM4PEPF00027A5D.mail.protection.outlook.com (10.167.16.69) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7633.15 via Frontend Transport; Wed, 29 May 2024 09:47:50 +0000
+Received: from se-mail02w.axis.com (10.20.40.8) by se-mail02w.axis.com
+ (10.20.40.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 29 May
+ 2024 11:47:50 +0200
+Received: from se-intmail01x.se.axis.com (10.0.5.60) by se-mail02w.axis.com
+ (10.20.40.8) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Wed, 29 May 2024 11:47:50 +0200
+Received: from lnxamnaw.se.axis.com (unknown [10.92.129.190])
+	by se-intmail01x.se.axis.com (Postfix) with ESMTP id 682E02243;
+	Wed, 29 May 2024 11:47:50 +0200 (CEST)
+Received: by lnxamnaw.se.axis.com (Postfix, from userid 12778)
+	id 638AD2069D6; Wed, 29 May 2024 11:47:45 +0200 (CEST)
+From: Amna Waseem <Amna.Waseem@axis.com>
+Date: Wed, 29 May 2024 11:47:45 +0200
+Subject: [PATCH v2 2/2] hwmon: (ina2xx) Add device tree support to pass
+ alert polarity
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20240529-apol-ina2xx-fix-v2-2-ee2d76142de2@axis.com>
+References: <20240529-apol-ina2xx-fix-v2-0-ee2d76142de2@axis.com>
+In-Reply-To: <20240529-apol-ina2xx-fix-v2-0-ee2d76142de2@axis.com>
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, "Rob
+ Herring" <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, "Conor
+ Dooley" <conor+dt@kernel.org>
+CC: Krzysztof Kozlowski <krzk@kernel.org>, <linux-hwmon@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Amna Waseem
+	<Amna.Waseem@axis.com>, <kernel@axis.com>
+X-Mailer: b4 0.13.0
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SY4P282MB3063:EE_|SY7P282MB5422:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8e657bc2-6743-4b65-08d5-08dc7fb2976e
+X-MS-TrafficTypeDiagnostic: AM4PEPF00027A5D:EE_|PA4PR02MB6702:EE_
+X-MS-Office365-Filtering-Correlation-Id: 62cdfb0d-0253-4518-43d0-08dc7fc467bc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|461199019|1602099003|3412199016|440099019;
+	BCL:0;ARA:13230031|376005|82310400017|1800799015|36860700004;
 X-Microsoft-Antispam-Message-Info:
-	Hen3c/i1itJvNLMC+FZJ8cYtuYvUZbtCDpcSPmApyK9pijMA4JskDlbHHdDVi0nWxuikoN3PiZ9VQeJOhNx2ijWK0ZiKxzxf0ERK01sae436cNB/IfH855kbeBYMlKOCtE6e+Q+DAKTlix+uc71Yi1hWvJmRUsMHT7LqtT+vdsskOz4naNQuB06Oodd/kYe3GuF/mvm1kkvGDCxRJxUPtth7hqFFIwXrYI0d9uHOxd2rYI8zLRU7NYrC/g/yfxq7n+v5g+lnqds64QKtutnyppRLrlb8NI5gOl9f8gZQ8VNYI62dW79BZh9q2OeXMtGjZeOBCsVPHqJHUGUHwNMAFlBOJOC75kOYT1en+PeXtL5uZOMRTp+Ki9aWJ6VGKiuFQFRARA7a8kxs3kKSpSk+6JRtcDrD4XuzM4LdjK8ijtgBHjKIhRcB4Fp7w+BOk3xECdh2Jgg59Nzxoplfm1xtd83ZNyaPodqXSS/3kJracBAMcArMl3saxHlY5FVI20ADbLjYx1/qBmNCBUjz9agYptau6CMQ51X/9w7+isYIYSMmpdvf8jqepkqn/4d7fU9p5vymx/ZOLx2LO2Tp7ERdnmYUTGQCkXuI6i+4lXG6fSywjj4GTjscYOxAPWuEms5ZyD0ywXXFhEIqOdRTOw+vwehmhMZQrzn2BQ3OflXXfuE=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ZHBwSXNwcDVncFI3K1h3VnNETTRPaTZOemZ4YUg0S29aQWg3QzEzNitKUjBs?=
- =?utf-8?B?ZzUzUHFwR0FGWnA2TmNIWWZsWHc5OXJxYy81UklSeWtGMUNFNU1lOXZGYTRC?=
- =?utf-8?B?aCtzZ085SFQ4SlNNeldqSVErMWVha3pCY1kxajIzbWR6N0V3M05kS2VvM0t0?=
- =?utf-8?B?SEdLMWlLL1NBVkY4VWk3R3BNT2lGQzJvNlllZ2pnT1p3emhITk95QklLMmR1?=
- =?utf-8?B?K2wza2dxKzJmMDdFM2tlSndkbkYrUmszRzNBbzlnQ212ZU8yNWVTalhDdzh2?=
- =?utf-8?B?NFNYcEwwb1lUT29DcEx5azZuenpDeXo3b25uZUgrUUNZcmxPSFhYRTVDZGdq?=
- =?utf-8?B?NnJkVUw0MnlmYjdKL05UK053bjdBM1JsdC9DMmpOeWJJTUU5VDRTbHlOemx1?=
- =?utf-8?B?WkwvUWNUeEZ2Tm9waXVvTWhZYUpvcnI5UXFmdFNFWWtRdlkwM3BhamF2dmdj?=
- =?utf-8?B?Ui9BU2NnYWxSU09XN3dZLzV3WGRITmVxSEkyY2xnT3Yvb21QeWxkQXNEcy9X?=
- =?utf-8?B?VGV3Z3dEK0tZWFRNUThlUnVrY2ljUVc1VkF2WEF1MjVFNGoySmNid2dGeFRF?=
- =?utf-8?B?NGxLWDJRdWI5VGpkRHJFaEhtRGRDSFNTK3ZoTkx5bDJDSk9VMmpidFFmNmR4?=
- =?utf-8?B?Y1YrbnNkZUZKWHI1S0xtVHYyQlJYc2xnR085ajFWQ1FVQnVOTkp6ZkZMaXRw?=
- =?utf-8?B?WVhQVk1FZDhDVkFtVEVZdkN4REFoaEtKRnMyNkNxbDdEOXNVdGp5OTJuUEV3?=
- =?utf-8?B?NW1LejRUWjNTWW5IMkhIYk1OY2JPNDVWSXpMUWJETjNsdVdxaUZLVHB0MjE5?=
- =?utf-8?B?SXlMMzlEMjZrdjhzTURuSHQxa3Y2QWRTenk5aXlqTGNnK2kvUHc0dUVIZ20w?=
- =?utf-8?B?QXNVa0pkb1FKZ1FrNityaEx3V3hlWENZL3dQeDZuV1NlbHIybHd2NzhmbnlV?=
- =?utf-8?B?Z2plNkYvR3hibmw2MVV0RmF1OHc4Mll3YnFMUXR4MEFJSXQ2bHU2cGphZzl5?=
- =?utf-8?B?TVY5akRyNmRyNDlldjROa2szUDloTDJNcTdUajFDUWNacklxcXVnQndIMlNB?=
- =?utf-8?B?QmdhMlhpZUFMS1J5NjdsYlQ2U3Vpa2k0eFIzeGFjcnJiaUJqcVlFc08rNXFO?=
- =?utf-8?B?cndlUlhyenpBZDRWV0JSeFpvRUtPdm45ZHkyNk5GaVVhQ1F5MEY0ZFFUakxp?=
- =?utf-8?B?Y2tvelIybDhJVEtzRHRPTVZOUzluY05oelNNVmg4YXI3WTNYcnB6ZW5ZZFBQ?=
- =?utf-8?B?S2hRekE5cDBuSEw5VDk0ZHZ5aGZpSFE0RUcwc2JQdldpMnpGb0xpNjk0L3lo?=
- =?utf-8?B?TVF0U05kRHRndjJENGNrbmh4c0l4dEE5NmdFWUkwZTJrTXUrM1paOGNxV0NJ?=
- =?utf-8?B?bWtaL2JmTjRHM2xmc2l1NmtnN1M2TDFwYlZlbERKc2dIdSt1RjNSNWlTTGsw?=
- =?utf-8?B?MnhMRC9MaUhrMURvay9jSGhDVERKVStUSW91aHgzRkhEOFVhNUJERldBQXky?=
- =?utf-8?B?dEFjM2p6VWlaakJxQU1mNXJEZmplclpaa1Y0L0FHOVViaDV3VE9leWl5bTJT?=
- =?utf-8?B?eHBDOEhibzFTUGErN1NUc3R6NHhPeUc1SElhUEo3U21pSWNXdTZrd2IvL2pZ?=
- =?utf-8?B?Z0N0R1kwMlM0RzM4KzVYQjRVTUthWFV6cE42S0JCdEp2b3pTWlordkZVK3dF?=
- =?utf-8?B?aVlIOG0rMFE2aXd3UHJBZjNDaDBKdEd3QXhlY0ZmZG1ST0xXUmUxTFdCelpP?=
- =?utf-8?Q?pZhCek+wistyWoZWSSmkIDIqstTDKrQaLPuA8vv?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-746f3.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8e657bc2-6743-4b65-08d5-08dc7fb2976e
-X-MS-Exchange-CrossTenant-AuthSource: SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 May 2024 07:40:20.3326
+	=?utf-8?B?cC9iV091b1dpL1NiS0VhcmdmbUpNRTBySTViOFN3U3d5NjVxcVRodmFGTXJk?=
+ =?utf-8?B?ZnJKZVc5UnF2TDJKZDJ1ZWRwZXFQeTFEcU9DMHZZbHJYZUJ1bW9PMHhVb2NV?=
+ =?utf-8?B?d2lvT1JZU2haSWgwM3h4UXc4elEvd0JmaytRY0w2NmRZZjh5Q0xmaml5VjIw?=
+ =?utf-8?B?TlI3ZGYrQzVuUVJzZEdPS2dYbnZCWFhiSUp4YmlCb2xvNE8wUTF1N2Rjdlhn?=
+ =?utf-8?B?T1pIWGJHMzBtaG5WY2JpSEkvWEpTNHpHTUVTenR1MnZlY0pzcmp1ZG5WSFh4?=
+ =?utf-8?B?ZFFXQU12ci9sV0R0RE1wRFNvRmZhR0RBQlhreVdDNUlTNHZsWDhSL1lENzVi?=
+ =?utf-8?B?R1QrOWlLQStTcHNPQ1hQZHlidzA5MkRoS0h4cm9Ed1JhMFRJZURUVnpXVm5R?=
+ =?utf-8?B?ZXY1Tm04ZkFLT2JnZHJKRHQvZk1vU0JFL3V1bXB1UTNaNTQxdys4YnFSR2U5?=
+ =?utf-8?B?WTFNY0tvdWYxU1drNmp1YjA5YlpVbWZPVGI1aVRodGlFU2FWWFBKeGRLMGxW?=
+ =?utf-8?B?TWJLcENMNU5qZHlVN0o2eFpZd3hsbll0Rnpzc25FNWFqcW8yaFRkbkw4YWNV?=
+ =?utf-8?B?elhTUzJrR1NCQmtnT1FpSzd0Vm9YbDV5WkQwQTNCbklaelI4c2VwSHZhbkJk?=
+ =?utf-8?B?Q25Eb2R4N2FaLzMyY29pdXFMS1VReVdkWGJQbUk4Um9FRDFHNVZCS3J4ckJw?=
+ =?utf-8?B?ZmlTeDFnRlo1K2VSTVd1NFFBY0xRQmduVTRrOXZmZUxJVGh5ZFZic09aYVNZ?=
+ =?utf-8?B?SldwN0hBYXJQUWh1dzlBZEh6NldGcVE2UHhCVkRvckRSWXhLem9FWWtIMmNx?=
+ =?utf-8?B?MThVcGJjYmZrNEZPKzhXYmh3MUU2KzJQRFhIYXJQU2dtOWZDV0w4eXF1UE82?=
+ =?utf-8?B?cHgyZG1CRkVaamJsSU9TTVJUTnlwbG95d3lXS1loK2diTkNqZE90dCt3YUg3?=
+ =?utf-8?B?MHg1M1UybUw3MGgrWlRxUnBlMkl0WktoTEg3Ulh1czVic1N0c2N5MDlHL3JE?=
+ =?utf-8?B?bUVoWXpsQkkvcityeE0wNXptc3Z2RFpOL0FNT3VZakhoaUYyZ3NFOExEdExx?=
+ =?utf-8?B?SEVQaDU5dGliRUxCa201TTlxV2NCWTEzSUdrV3hzaXF6NDhXVmRsSytrK3M4?=
+ =?utf-8?B?Nlg1czJzVUI2K2kwZjJhb0R2WDdWdzdsN0pnQndNemN4SjRkSFhOajFKK2Np?=
+ =?utf-8?B?bExVc0JrOXMwTE54SDJpSTZvTjZYUkdKZGNjSHliOHVQWFlmOVVDUjI1MjN0?=
+ =?utf-8?B?VmlZMU1tWHM5cHV4bGJ1QW4vTzBEd3d0UHd3U2o0YmUwVWhaemtadzR3Mmdq?=
+ =?utf-8?B?d3BEMmhZQzVwT21PdkhHOHpBdFplSStseFhqTzI0QzhiVFQxVmowVnBlNGw4?=
+ =?utf-8?B?a2lzMTJyMStKUkRVNFF4Z29oaXViT24xcFFwTGo3S3N6NUZpcWhKOHF1cW5L?=
+ =?utf-8?B?T1BiRG51YkZDMGFTYW5HMUVDZVZPK3hEakFsOThYV2g2QkNpcEZZcU1aK3M3?=
+ =?utf-8?B?UHgrNWRKeTh3NVVrMitPQkc2L1YwSFJjakVlbHRWNkZmbXZjcmdPZHpkcUNv?=
+ =?utf-8?B?QUJqWXNiY0dZMGQwVTlOQm4zYmt0ME9vRndzclNiZmQwcnI4VS83RWZTeVpt?=
+ =?utf-8?B?bUdwL1ZBNnVwdlFibW12NEN5eE5nSlBuTG9sL3JBaUQ0Q0tibDNXS3BPRFJU?=
+ =?utf-8?B?YVhKdjcyVmlsWFhqdC9WakVKcUQ1OVlwMXlMSWxzOWRQOVloVUpoMFRkWFhT?=
+ =?utf-8?B?NmRjTW5UdHU3NnZtUk5ZWnp3Z0Z3czU2Wms1VTBmSmh6eDM3Y0NuWjJmTG5F?=
+ =?utf-8?Q?vqsFn6nYB+KlsaRP9CooY/a3dKMZPPCjzeGZ0=3D?=
+X-Forefront-Antispam-Report:
+	CIP:195.60.68.100;CTRY:SE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.axis.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(376005)(82310400017)(1800799015)(36860700004);DIR:OUT;SFP:1101;
+X-OriginatorOrg: axis.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 May 2024 09:47:50.9539
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SY7P282MB5422
+X-MS-Exchange-CrossTenant-Network-Message-Id: 62cdfb0d-0253-4518-43d0-08dc7fc467bc
+X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=78703d3c-b907-432f-b066-88f7af9ca3af;Ip=[195.60.68.100];Helo=[mail.axis.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AM4PEPF00027A5D.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR02MB6702
 
-Hi Thomas,
+The INA230 has an Alert pin which is asserted when the alert
+function selected in the Mask/Enable register exceeds the
+value programmed into the Alert Limit register. Assertion is based
+on the Alert Polarity Bit (APOL, bit 1 of the Mask/Enable register).
+It is default set to value 0 i.e Normal (active-low open collector).
+However, hardware can be designed in such a way that expects Alert pin
+to become active high if a user-defined threshold in Alert limit
+register has been exceeded. This patch adds a way to pass alert polarity
+value to the driver via device tree.
 
-On 29/5/24 16:23, Thomas Weißschuh wrote:
-> On 2024-05-29 10:58:23+0000, Stephen Horvath wrote:
->> On 29/5/24 09:29, Guenter Roeck wrote:
->>> On 5/28/24 09:15, Thomas Weißschuh wrote:
->>>> On 2024-05-28 08:50:49+0000, Guenter Roeck wrote:
->>>>> On 5/27/24 17:15, Stephen Horvath wrote:
->>>>>> On 28/5/24 05:24, Thomas Weißschuh wrote:
->>>>>>> On 2024-05-25 09:13:09+0000, Stephen Horvath wrote:
->>>>>>>> Don't forget it can also return `EC_FAN_SPEED_STALLED`.
-> 
-> <snip>
-> 
->>>>>>>
->>>>>>> Thanks for the hint. I'll need to think about how to
->>>>>>> handle this better.
->>>>>>>
->>>>>>>> Like Guenter, I also don't like returning `-ENODEV`,
->>>>>>>> but I don't have a
->>>>>>>> problem with checking for `EC_FAN_SPEED_NOT_PRESENT`
->>>>>>>> in case it was removed
->>>>>>>> since init or something.
->>>>>>>
->>>>>
->>>>> That won't happen. Chromebooks are not servers, where one might
->>>>> be able to
->>>>> replace a fan tray while the system is running.
->>>>
->>>> In one of my testruns this actually happened.
->>>> When running on battery, one specific of the CPU sensors sporadically
->>>> returned EC_FAN_SPEED_NOT_PRESENT.
->>>>
->>>
->>> What Chromebook was that ? I can't see the code path in the EC source
->>> that would get me there.
->>>
->>
->> I believe Thomas and I both have the Framework 13 AMD, the source code is
->> here:
->> https://github.com/FrameworkComputer/EmbeddedController/tree/lotus-zephyr
-> 
-> Correct.
-> 
->> The organisation confuses me a little, but Dustin has previous said on the
->> framework forums (https://community.frame.work/t/what-ec-is-used/38574/2):
->>
->> "This one is based on the Zephyr port of the ChromeOS EC, and tracks
->> mainline more closely. It is in the branch lotus-zephyr.
->> All of the model-specific code lives in zephyr/program/lotus.
->> The 13"-specific code lives in a few subdirectories off the main tree named
->> azalea."
-> 
-> The EC code is at [0]:
-> 
-> $ ectool version
-> RO version:    azalea_v3.4.113353-ec:b4c1fb,os
-> RW version:    azalea_v3.4.113353-ec:b4c1fb,os
-> Firmware copy: RO
-> Build info:    azalea_v3.4.113353-ec:b4c1fb,os:7b88e1,cmsis:4aa3ff 2024-03-26 07:10:22 lotus@ip-172-26-3-226
-> Tool version:  0.0.1-isolate May  6 2024 none
+Signed-off-by: Amna Waseem <Amna.Waseem@axis.com>
+---
+ drivers/hwmon/ina2xx.c | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-I can confirm mine is the same build too.
+diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
+index d8415d1f21fc..9afaabdc367d 100644
+--- a/drivers/hwmon/ina2xx.c
++++ b/drivers/hwmon/ina2xx.c
+@@ -73,6 +73,9 @@
+ #define INA226_READ_AVG(reg)		(((reg) & INA226_AVG_RD_MASK) >> 9)
+ #define INA226_SHIFT_AVG(val)		((val) << 9)
+ 
++#define INA226_ALERT_POLARITY_MASK		0x0002
++#define INA226_SHIFT_ALERT_POLARITY(val)	((val) << 1)
++
+ /* bit number of alert functions in Mask/Enable Register */
+ #define INA226_SHUNT_OVER_VOLTAGE_BIT	15
+ #define INA226_SHUNT_UNDER_VOLTAGE_BIT	14
+@@ -178,6 +181,21 @@ static u16 ina226_interval_to_reg(int interval)
+ 	return INA226_SHIFT_AVG(avg_bits);
+ }
+ 
++static int ina2xx_set_alert_polarity(struct ina2xx_data *data,
++				     unsigned long val)
++{
++	int ret;
++
++	if (val > INT_MAX || !(val == 0 || val == 1))
++		return -EINVAL;
++
++	ret = regmap_update_bits(data->regmap, INA226_MASK_ENABLE,
++				 INA226_ALERT_POLARITY_MASK,
++				 INA226_SHIFT_ALERT_POLARITY(val));
++
++	return ret;
++}
++
+ /*
+  * Calibration register is set to the best value, which eliminates
+  * truncation errors on calculating current register in hardware.
+@@ -659,6 +677,15 @@ static int ina2xx_probe(struct i2c_client *client)
+ 	if (ret)
+ 		return dev_err_probe(dev, ret, "failed to enable vs regulator\n");
+ 
++	if (!of_property_read_u32(dev->of_node, "ti,alert-polarity", &val)) {
++		ret = ina2xx_set_alert_polarity(data, val);
++		if (ret < 0) {
++			return dev_err_probe(
++			   dev, ret,
++			   "failed to set APOL bit of Enable/Mask register\n");
++		}
++	}
++
+ 	ret = ina2xx_init(data);
+ 	if (ret < 0) {
+ 		dev_err(dev, "error configuring the device: %d\n", ret);
 
->  From the build info I gather it should be commit b4c1fb, which is the
-> current HEAD of the lotus-zephyr branch.
-> Lotus is the Framework 16 AMD, which is very similar to Azalea, the
-> Framework 13 AMD, which I tested this against.
-> Both share the same codebase.
-> 
->> Also I just unplugged my fan and you are definitely correct, the EC only
->> generates EC_FAN_SPEED_NOT_PRESENT for fans it does not have the capability
->> to support. Even after a reboot it just returns 0 RPM for an unplugged fan.
->> I thought about simulating a stall too, but I was mildly scared I was going
->> to break one of the tiny blades.
-> 
-> I get the error when unplugging *the charger*.
-> 
-> To be more precise:
-> 
-> It does not happen always.
-> It does not happen instantly on unplugging.
-> It goes away after a few seconds/minutes.
-> During the issue, one specific sensor reads 0xffff.
-> 
+-- 
+2.30.2
 
-Oh I see, I haven't played around with the temp sensors until now, but I 
-can confirm the last temp sensor (cpu@4c / temp4) will randomly (every 
-~2-15 seconds) return EC_TEMP_SENSOR_ERROR (0xfe).
-Unplugging the charger doesn't seem to have any impact for me.
-The related ACPI sensor also says 180.8°C.
-I'll probably create an issue or something shortly.
-
-I was mildly confused by 'CPU sensors' and 'EC_FAN_SPEED_NOT_PRESENT' in 
-the same sentence, but I'm now assuming you mean the temp sensor?
-
->>>>>>> Ok.
->>>>>>>
->>>>>>>> My approach was to return the speed as `0`, since
->>>>>>>> the fan probably isn't
->>>>>>>> spinning, but set HWMON_F_FAULT for `EC_FAN_SPEED_NOT_PRESENT` and
->>>>>>>> HWMON_F_ALARM for `EC_FAN_SPEED_STALLED`.
->>>>>>>> No idea if this is correct though.
->>>>>>>
->>>>>>> I'm not a fan of returning a speed of 0 in case of errors.
->>>>>>> Rather -EIO which can't be mistaken.
->>>>>>> Maybe -EIO for both EC_FAN_SPEED_NOT_PRESENT (which
->>>>>>> should never happen)
->>>>>>> and also for EC_FAN_SPEED_STALLED.
->>>>>>
->>>>>> Yeah, that's pretty reasonable.
->>>>>>
->>>>>
->>>>> -EIO is an i/o error. I have trouble reconciling that with
->>>>> EC_FAN_SPEED_NOT_PRESENT or EC_FAN_SPEED_STALLED.
->>>>>
->>>>> Looking into the EC source code [1], I see:
->>>>>
->>>>> EC_FAN_SPEED_NOT_PRESENT means that the fan is not present.
->>>>> That should return -ENODEV in the above code, but only for
->>>>> the purpose of making the attribute invisible.
->>>>>
->>>>> EC_FAN_SPEED_STALLED means exactly that, i.e., that the fan
->>>>> is present but not turning. The EC code does not expect that
->>>>> to happen and generates a thermal event in case it does.
->>>>> Given that, it does make sense to set the fault flag.
->>>>> The actual fan speed value should then be reported as 0 or
->>>>> possibly -ENODATA. It should _not_ generate any other error
->>>>> because that would trip up the "sensors" command for no
->>>>> good reason.
->>>>
->>>> Ack.
->>>>
->>>> Currently I have the following logic (for both fans and temp):
->>>>
->>>> if NOT_PRESENT during probing:
->>>>     make the attribute invisible.
->>>>
->>>> if any error during runtime (including NOT_PRESENT):
->>>>     return -ENODATA and a FAULT
->>>>
->>>> This should also handle the sporadic NOT_PRESENT failures.
->>>>
->>>> What do you think?
->>>>
->>>> Is there any other feedback to this revision or should I send the next?
->>>>
->>>
->>> No, except I'd really like to know which Chromebook randomly generates
->>> a EC_FAN_SPEED_NOT_PRESENT response because that really looks like a bug.
->>> Also, can you reproduce the problem with the ectool command ?
-> 
-> Yes, the ectool command reports the same issue at the same time.
-> 
-> The fan affected was always the sensor cpu@4c, which is
-> compatible = "amd,sb-tsi".
-> 
->> I have a feeling it was related to the concurrency problems between ACPI and
->> the CrOS code that are being fixed in another patch by Ben Walsh, I was also
->> seeing some weird behaviour sometimes but I *believe* it was fixed by that.
-> 
-> I don't think it's this issue.
-> Ben's series at [1], is for MEC ECs which are the older Intel
-> Frameworks, not the Framework 13 AMD.
-
-Yeah sorry, I saw it mentioned AMD and threw it into my kernel, I also 
-thought it stopped the 'packet too long' messages (for 
-EC_CMD_CONSOLE_SNAPSHOT) but it did not.
-
-Thanks,
-Steve
