@@ -1,160 +1,234 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04297770E2;
-	Thu, 30 May 2024 22:52:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A607B4C79;
+	Fri, 31 May 2024 00:47:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717109523; cv=none; b=ALuaCO+OBq7pR/8b1fccksvtBTXOD0cYS3M1sfJLJarP6qCLB2F0w/r37496p8miJk2DeipiJEypO9qHKIG2yng4UBQoIR5a4zN2I9fL2SsJ0ZIr9yBedoPQNGNnY9Ur84VEvJketmbn5uKaZawwzMb3wbEDVLwH/1YnC96SUFM=
+	t=1717116423; cv=none; b=h3sHjiLhkYTeoJg97E1jFI1JEoBAJw8h1+x8Fo7rDM7viPR5HmBqVTs6v4ZzDq4fXIPKLygDpk9BsEBhtrWYJkxZqh6+pdKQHm+gn9/mPssQUqgh94Jl+hZEtpHM80haKIkA6Q6exESvinz2IN9NXS5oCJ1PedRDOWYCkMvKuks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717109523; c=relaxed/simple;
-	bh=esM4Ng1cjWry7Pi6WQgc+vs4PZklIwNsf8xjapEXNYw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=A3rb3mSwbD+jJkkNRFpyUQS2NwqF5WS+gkerTqPibG4X5yZ7SyqNulG8YnjYsQ4b/UhU56qyy5h8Xuz+Ub6YJes1oCaS83jxOzeLjQoGwa31CSyKxZ0hMLt0ZbYxMLNDsyPS4qvE7QKrGpfZQxoCEKuTLekrWUtoID5gbaVURA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CHDmYdw3; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1717116423; c=relaxed/simple;
+	bh=C9HKHhNcPiAhE04fDvPduEhceu4osC2csh/3rWYlKL4=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=cnx9yqa5hN796qd+zT4QyiWzyBoMUcxOgcn0rYjgDpJ0Hw1PFFOsCW5Jr4xYVtER7GhsVznvi/33BMOt9Fh5u9JfWZD/s+ETM/twfVB1wAZMwlIJNEuQ56m+C8tVogRBntmQMre7jiu4/GHxcv7jSk0mgzXPuGvZDF7h1pvKHto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TCtfISmQ; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CHDmYdw3"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1f6134df05fso13428415ad.1;
-        Thu, 30 May 2024 15:52:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TCtfISmQ"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-354c5b7fafaso1495698f8f.3;
+        Thu, 30 May 2024 17:47:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717109520; x=1717714320; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=TfMb4eq1XqctB8Z1VY0M363Pe4OUmqZl0YWn1pmmK1g=;
-        b=CHDmYdw3y86B3/KzCC4H6Uvra3W4xlVE8kXACsNfJMFvIlTV4CZhJ09IcvTT3l3CAw
-         XY1bfpcc9jpk1IUyxz8GCKXzrSrA0DeaMXsbRZ/JgDd1GmMpSRWQagpzeWzvnNglxq4D
-         rVWIaXrvvAGSAv194BrEm9B/wG1iRPUAQd3YR35T/25VlLaRIt9rbfU0Ynj986qm72k5
-         /MnmrXIfjmGja5lVV3zJL9ncV7rxPlB25gM7mMXRK0VWC0bSL+SRQ+AcCNhBSLs16IVc
-         e4sMHYmA8pm5xttLwXsaTc6rziW3RecgN2rz+AjRPpwk+Y5EGj3H0LlOpJo63jW3Giut
-         x9vg==
+        d=gmail.com; s=20230601; t=1717116420; x=1717721220; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DQwdJntsJuVKOOqXj3GohGH9mfSc2/q6Dn87IT5t7hw=;
+        b=TCtfISmQlzgcg6AsffkAuseIEpXzYTD7pzzsmfmLaVyJeInnopIN2ouaBtdUav3Ji+
+         olxCXUcI72nh8BTJFDgzMOiNEyUjcNRwVuGw6WwvISru+S1Jr1MhzjD0CcNLDVRADQ3r
+         Sd27NHD9Evb+kf5SLPbef9zyhi3Jwa523dExhGcF1/Zw3LyTpnmrS4KMfrtCAFBu5N0c
+         I8szRv4kuBRBHH6y5Ttn8VED5PwAzWDpv07lv2UM4KHWH2B6V6vTdF+e95xJbVvcAAij
+         +UDRkmWkOlO/950tmUjY8XemHGug5HAn8uLBivcv2pxH/tUOCYo76NXc1e/XNUuKF+jq
+         KHnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717109520; x=1717714320;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TfMb4eq1XqctB8Z1VY0M363Pe4OUmqZl0YWn1pmmK1g=;
-        b=Mx/KcyW+ucyNg/Ig+tTwzx+N5F16SkU+NZ6K2aWbnZBbvekHMjOWR3QsdtsSkdP4DZ
-         4ZJTmruFJhy31TLjY9xjZCSJBMZBgEm0UayuSyEPMOOp3PztQIXutT9BGzen2eOssF4H
-         POEgjZAkkRUiR+0LiCHO788bhR9nPV12ENGJ0wYvgYhYA6DTs3CMRN86knPgwWvcbxz7
-         1v01jGZFQomWP6QZtol+HXLsN79zfKqRmP9mCPvW+EdmxFWCe2ZKoVqk5uLsXkHDtEHS
-         Ni0ymKW8e+uJBIuxvJXxJLL1zUfpnn12+2DCVL1rjKezLLMn0he+g3MlVuk/SKBzqWYL
-         AO9w==
-X-Forwarded-Encrypted: i=1; AJvYcCUaFUB6Repxo+UF8NdFVva9rlfZw+UMb/VaqYMh1bX3M9jzNjjyRlSv6haLKFUEY6jqszeslrS46Y7Ouj4HM+8H2k6/BF4n56eO7qGn
-X-Gm-Message-State: AOJu0Yxxo1GcpVxPyw/Hnzy9JIg0TO7DORLuX1XOJtm28gAcwuvR25jQ
-	eH7OVX/RMoDWwI2p/O1J5JJywkPYqXhe5KQTS/IwR/tiQ5xEn9QGQz5W2w==
-X-Google-Smtp-Source: AGHT+IGuY0I0anEJSrBNOIsJ4SaJReLMNog8bighPuGMI1Y7afrOdbsu9nz73J3wvyAkLS85wVhukw==
-X-Received: by 2002:a17:902:e5c9:b0:1f3:39f8:7e7f with SMTP id d9443c01a7336-1f636fd9c99mr2368225ad.14.1717109520431;
-        Thu, 30 May 2024 15:52:00 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f6323f8544sm3005705ad.239.2024.05.30.15.51.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 May 2024 15:51:59 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <2520ad43-59a3-4c48-a975-08d856736942@roeck-us.net>
-Date: Thu, 30 May 2024 15:51:58 -0700
+        d=1e100.net; s=20230601; t=1717116420; x=1717721220;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DQwdJntsJuVKOOqXj3GohGH9mfSc2/q6Dn87IT5t7hw=;
+        b=VTWqTUKn1ImN6XUYX6XzWK9Kt7HL/PecqyTcb971unsGLeNN3HhUvAS2DtMD7xcqZD
+         00pqhSNWnAihx7nStG1Th1miVKgl+Qx0UU/pYtSpe4vb07ZIsrLBVdXm9nVbhw+xrRQs
+         H19WXHuLZfAQeEl0+qVELzC7d3WFkFGBo5ecoPVzbIz8hFo8nBUhSvd+HW8aA9nkg68c
+         5bLjSO/Sv6v4EgildPseUMjeLc+kw9mHVmMwL0hD8v8/O6IYwVd2lBMHd25Gg1cTBcRq
+         isLm2QiX6PTA5s8BuUoZ9HZSXRmqfuLaBDUyV1ka+CRpq3N0uKCx/Co1nzf/XwgAd2ml
+         bEmg==
+X-Forwarded-Encrypted: i=1; AJvYcCWwTlCV+NmK9ZM/FrVIdFG5CQNsbtKZxIhSTVgpVSUvvtCBJKLMoz4FjxkbnqYkjhmTYMueLdjyHJpgclISm6zyyjJg3WM7drCRdc+ZOLXHnPo/SPNRYwswr+6WrNDk/H5xfR2DiiZsjeW5QhHJJ77aR1C68cs3vUfUr3+RmCOl91Xy2w3/
+X-Gm-Message-State: AOJu0YzOx1DK985cfFqUC1x9TKQJkjQnWY+ZJ+qFDLWGfqfJKbFkaWNk
+	NwBCQeTGNEE5xfVNcMWTtoksl7L30VJC6VjaDFiTXtP3h3xZxBuf
+X-Google-Smtp-Source: AGHT+IH7vSioT0lTo7FjcreH8oFTqjegQM4dz85qybyOJIoAeFjFHV9JGSFlMvZ5z1ocHw6U6zWI+Q==
+X-Received: by 2002:a5d:4acd:0:b0:34c:719e:6786 with SMTP id ffacd0b85a97d-35e0f25e733mr141753f8f.4.1717116419681;
+        Thu, 30 May 2024 17:46:59 -0700 (PDT)
+Received: from localhost.localdomain (93-34-90-105.ip49.fastwebnet.it. [93.34.90.105])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-35dd04c0e84sm608486f8f.13.2024.05.30.17.46.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 May 2024 17:46:59 -0700 (PDT)
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 1/3] dt-bindings: hwmon: g762: Convert to yaml schema
+Date: Thu, 30 May 2024 23:16:50 +0200
+Message-ID: <20240530211654.7946-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/3] hwmon: Add support for SPD5118 compliant
- temperature sensors
-To: linux-hwmon@vger.kernel.org
-Cc: devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, linux-kernel@vger.kernel.org,
- Armin Wolf <W_Armin@gmx.de>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
- <linux@weissschuh.net>, =?UTF-8?Q?Ren=C3=A9_Rebe?= <rene@exactcode.de>
-References: <20240530223939.1027659-1-linux@roeck-us.net>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240530223939.1027659-1-linux@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 5/30/24 15:39, Guenter Roeck wrote:
-> Add support for SPD5118 (Jedec JESD300-5B.01) compliant temperature
-> sensors. Such sensors are typically found on DDR5 memory modules.
-> 
-> The first patch of the series adds SPD5118 devicetree bindings. The second
-> patch adds support for SPD5118 temperature sensors. The third patch adds
-> support for suspend/resume.
-> 
-> Note: The driver introduced with this patch series does not currently
-> support accessing the SPD5118 EEPROM, or accessing SPD5118 compatible chips
-> in I3C mode.
-> 
-> v2: Drop PEC support; it only applies to I3C mode.
->      Update documentation
->      Add suspend/resume support
-> 
-> ----------------------------------------------------------------
-> Guenter Roeck (3):
->        dt-bindings: hwmon: jedec,spd5118: Add bindings
->        hwmon: Add support for SPD5118 compliant temperature sensors
->        hwmon: (spd5118) Add suspend/resume support
-> 
->   .../devicetree/bindings/hwmon/jedec,spd5118.yaml   |  48 ++
->   Documentation/hwmon/index.rst                      |   1 +
->   Documentation/hwmon/spd5118.rst                    |  56 +++
->   drivers/hwmon/Kconfig                              |  12 +
->   drivers/hwmon/Makefile                             |   1 +
->   drivers/hwmon/spd5118.c                            | 510 +++++++++++++++++++++
->   6 files changed, 628 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/hwmon/jedec,spd5118.yaml
->   create mode 100644 Documentation/hwmon/spd5118.rst
->   create mode 100644 drivers/hwmon/spd5118.c
+Convert g762 Documentation to yaml schema and port all the custom
+properties and info.
 
-Obviously this should have been patch 0/3. Sory.
+Add the vendor prefix to name to follow naming standard.
 
-Guenter
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+---
+Changes v3:
+- Rename yaml to g762 from g76x
+
+ .../devicetree/bindings/hwmon/g762.txt        | 47 -----------
+ .../devicetree/bindings/hwmon/gmt,g762.yaml   | 83 +++++++++++++++++++
+ 2 files changed, 83 insertions(+), 47 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/hwmon/g762.txt
+ create mode 100644 Documentation/devicetree/bindings/hwmon/gmt,g762.yaml
+
+diff --git a/Documentation/devicetree/bindings/hwmon/g762.txt b/Documentation/devicetree/bindings/hwmon/g762.txt
+deleted file mode 100644
+index 6d154c4923de..000000000000
+--- a/Documentation/devicetree/bindings/hwmon/g762.txt
++++ /dev/null
+@@ -1,47 +0,0 @@
+-GMT G762/G763 PWM Fan controller
+-
+-Required node properties:
+-
+- - "compatible": must be either "gmt,g762" or "gmt,g763"
+- - "reg": I2C bus address of the device
+- - "clocks": a fixed clock providing input clock frequency
+-	     on CLK pin of the chip.
+-
+-Optional properties:
+-
+- - "fan_startv": fan startup voltage. Accepted values are 0, 1, 2 and 3.
+-	       The higher the more.
+-
+- - "pwm_polarity": pwm polarity. Accepted values are 0 (positive duty)
+-	       and 1 (negative duty).
+-
+- - "fan_gear_mode": fan gear mode. Supported values are 0, 1 and 2.
+-
+-If an optional property is not set in .dts file, then current value is kept
+-unmodified (e.g. u-boot installed value).
+-
+-Additional information on operational parameters for the device is available
+-in Documentation/hwmon/g762.rst. A detailed datasheet for the device is available
+-at http://natisbad.org/NAS/refs/GMT_EDS-762_763-080710-0.2.pdf.
+-
+-Example g762 node:
+-
+-   clocks {
+-	#address-cells = <1>;
+-	#size-cells = <0>;
+-
+-	g762_clk: fixedclk {
+-		 compatible = "fixed-clock";
+-		 #clock-cells = <0>;
+-		 clock-frequency = <8192>;
+-	}
+-   }
+-
+-   g762: g762@3e {
+-	compatible = "gmt,g762";
+-	reg = <0x3e>;
+-	clocks = <&g762_clk>
+-	fan_gear_mode = <0>; /* chip default */
+-	fan_startv = <1>;    /* chip default */
+-	pwm_polarity = <0>;  /* chip default */
+-   };
+diff --git a/Documentation/devicetree/bindings/hwmon/gmt,g762.yaml b/Documentation/devicetree/bindings/hwmon/gmt,g762.yaml
+new file mode 100644
+index 000000000000..8c179cbbc65c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/gmt,g762.yaml
+@@ -0,0 +1,83 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/gmt,g762.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: GMT G762/G763 PWM Fan controller
++
++maintainers:
++  - Christian Marangi <ansuelsmth@gmail.com>
++
++description: |
++  GMT G762/G763 PWM Fan controller.
++
++  If an optional property is not set in DT, then current value is kept
++  unmodified (e.g. bootloader installed value).
++
++  Additional information on operational parameters for the device is available
++  in Documentation/hwmon/g762.rst. A detailed datasheet for the device is available
++  at http://natisbad.org/NAS/refs/GMT_EDS-762_763-080710-0.2.pdf.
++
++properties:
++  compatible:
++    enum:
++      - gmt,g762
++      - gmt,g763
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    description: a fixed clock providing input clock frequency on CLK
++      pin of the chip.
++    maxItems: 1
++
++  fan_startv:
++    description: Fan startup voltage step
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [0, 1, 2, 3]
++
++  pwm_polarity:
++    description: PWM polarity (psotivie or negative duty)
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [0, 1]
++
++  fan_gear_mode:
++    description: FAN gear mode. Configure High speed fan setting factor
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [0, 1, 2]
++
++required:
++  - compatible
++  - reg
++  - clocks
++
++additionalProperties: false
++
++examples:
++  - |
++    clocks {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        g762_clk: fixedclk {
++            compatible = "fixed-clock";
++            #clock-cells = <0>;
++            clock-frequency = <8192>;
++        };
++    };
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        g762@3e {
++            compatible = "gmt,g762";
++            reg = <0x3e>;
++            clocks = <&g762_clk>;
++            fan_gear_mode = <0>;
++            fan_startv = <1>;
++            pwm_polarity = <0>;
++        };
++    };
+-- 
+2.43.0
 
