@@ -1,61 +1,61 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77D6317F5;
-	Thu, 30 May 2024 17:33:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B244218757F;
+	Thu, 30 May 2024 17:36:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717090441; cv=none; b=nLzFYD5+8lM1+/AgJm3VE1dQujihSyFN+OjElWXzewI+tuEeAxfv4tX8reD14Zz9mFuID5SeD5sj/f2vulqiQ0G1TsHMCLyHAFUBGH4VWIm0oUcP95DM9BgSwmcb4AtYaKaiSCZtoA+EdbsJEt8xU4h1ZcDBGyq6UVfsvsLd5s0=
+	t=1717090608; cv=none; b=J0WkiycIlc2L6DdB4/XKOXWwx+ktqS6OMTU9NdT1Y0WtT348mQefiR0uhgHc6LaqI1hgyNDjodXIczpSpvae/WPZlYaty4taU1fV5b3IkjqOh9JXOJm+pzw3dwS3sH1UZawocnHyd30KZNsYYs3svYD2IHrb0RfmGPkJ/bXNpMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717090441; c=relaxed/simple;
-	bh=o2WA8Dt+5T27wsfAT64ZKn7et1NXfcL6ZG1iOLp5Kgk=;
+	s=arc-20240116; t=1717090608; c=relaxed/simple;
+	bh=CuX/2pe9cApqXm2bXTN+MVTVzW69PBsZLZPGpMZ03mA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FH4GOX6wRp4gLlXEt2E+obrYxlkdFGMFl4Hanq1PldXKka03QZVVi9nRIFeBbL4F7qofPZcwRbbyZK3G2BeaKYbqW3WFInYZhu6E1shQSZBGkaQCOlfJvRLq0Lgg3wRdyyj6Eb4eNT6dzyGYD0Bmf8c+G0a8D0/jJbcTGdLBnug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YB2JEQHH; arc=none smtp.client-ip=209.85.210.169
+	 In-Reply-To:Content-Type; b=diqUjvsFimKf+Zz/vA+5dBzT11DN4ftHSMpUCCS5EwwK5PqHm6mzcsUn8LtXf5co9fGwd8DlJPLHhdw8+Ppx2qw6CBbO5lP4eBzc0O6ta/tpRSLji7QGDJJyZjkpmxPe7IQ4ABipw7B+zFIWR6z6EO7j6nDZROCUGbLzMV4IHik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B78bPN2E; arc=none smtp.client-ip=209.85.216.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YB2JEQHH"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-70109d34a16so1061540b3a.2;
-        Thu, 30 May 2024 10:33:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B78bPN2E"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2bfff08fc29so942204a91.1;
+        Thu, 30 May 2024 10:36:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717090439; x=1717695239; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1717090606; x=1717695406; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=8cQQIq4Vk18SQ+o1x8PKCLBm75kv15P7l74WYPsGX94=;
-        b=YB2JEQHHHow0Lwia4061krdK4Dz1OTbvDLWwH4kyNsZm+bWmjAHn8nAfDFfCE7QRwF
-         sI9ypf6/48ajSnHN5D4FwDmK32Tiy+/ohd7V7GcZV3Q3L28B76jlbVWJ6uuGR+cUvKE5
-         jbBKseLoHp4JIsz+Y3l0qF2hBANP8PZFZ+cwGonenCfvW/ZP9lQN8a8JMUEIOunb3ITB
-         WR3NRYEIFTcVE+76WvME+xpiMRyMe4C0yqViDexYO6np2tb37PSisi3D3MkBpu8cwSW/
-         d6+JmaIYD2XjGoQ8HotSux8cGqErdVTjQJ4CXwluKts34/ZBebGqzGa1bytOQ+FvFhNV
-         nqpg==
+        bh=+/FMefgpt3TfnKLLfewARfo5DV/oEmmnytLZ55pc/RM=;
+        b=B78bPN2EpJxVfu9mqfoHiH72oyRIBQj9xaribZ+ONRishNCupTld/CHtH6pbbJBD2w
+         rfao1BomEI1No/tzr9RyOxdNfBBl79ufVfsj9IYcQZDb6qTI9d8Ad0lIue/uVdkWOXSy
+         8rse7YfZHNrUeGkraGb6JIv4QviX/KYU0VgZeX1TY6FR8r6bE7OVJ0B9FouC2pZMQlK5
+         lv2oPHblh7l+95cUgi+ykQw+Z/u1L5NzXM8/tHfaYzwyC4Gt7xEqb/u7fQvnqN5FRsOa
+         gwHdplLsyPvEv+UtoZK/XeTsxztaZKYM6ZozP/o/JahXemwUKxQSSXCgAQWRZvwOQPVs
+         +tbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717090439; x=1717695239;
+        d=1e100.net; s=20230601; t=1717090606; x=1717695406;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8cQQIq4Vk18SQ+o1x8PKCLBm75kv15P7l74WYPsGX94=;
-        b=qxK1CfMwVPbON8eqAVIZ+p0e3hQofgi9b/JeweTmkLqoFM93MoweEuU6EkHUNqEvqU
-         FocEo6M6OesyMndaTeHp9K4N5V8BQhLlS9/0vKdHzurJ5DWsHW2I/r/sizjQpkJMZbvb
-         WxNsGPHy+/j738WqMkc9DiMe0bdZGYhFC1irpkWZWBwa6UdgXNgG9aUVb8N4Lp1m4gK3
-         tBAkoTziqe116glAs5n5cmrSa385IfsFxwRsFEa8ntXKy9cZhrDemvxkXnEAGyYUEFuy
-         xS7xncAwamHrPjNsRW0i4ofUPs3A6JZsSPujKwq3SyAcBruxtW62wcUbwmoxS/69njHk
-         QehA==
-X-Forwarded-Encrypted: i=1; AJvYcCV4hwxqJPmAwgGyUvlPK2Puwcz8/bLCE/tlZjMS74hO588IjsM0DUJoejv//N9iLlwV3Bh+yn2fflepWClfvUyAoBY0ooo+mV9KhI6Zm4lMVotHa8v302//4IAzyy8lQ1p5KMnSts6j4IIcqo7Pp5Y9V9eH2ix+e6ksZpUrs0CUqghVaB02
-X-Gm-Message-State: AOJu0YzZmMvMJg23tH4qXViKHrwIj0hUexgtISTW7tTZi4tgT0RqGGXS
-	WYVnhb0g3aVMErBSAdsY+qTzzypCmNWJFnd7xB7cZRjmfuo0AzDe
-X-Google-Smtp-Source: AGHT+IFqJNzMpPTpe6YHSEF/XNZRQetUgRSR1utlDaXVPvHKwE3l7uRpCPKsUh1fNZwkfHXOk+Cb4w==
-X-Received: by 2002:a17:902:f2cb:b0:1f4:ac10:3ede with SMTP id d9443c01a7336-1f6195f4a9bmr19639955ad.21.1717090438497;
-        Thu, 30 May 2024 10:33:58 -0700 (PDT)
+        bh=+/FMefgpt3TfnKLLfewARfo5DV/oEmmnytLZ55pc/RM=;
+        b=Q824la1UMJEeD6cx3U5e52WCWrZHFx5Nax2wdgyQnu9yCRiO/soF5EVjRPW1/C507D
+         y4gHFeXCWuHi/ldeXFynGFZJNSAef8E0Tektj0sr/iOBzTeJ2mP2nNUkIRM75Satpryh
+         mFLzYFXN2VJ3DUTUX0utqgmvuLIchzrunhpgMISQpFiziwboAXpFKPQX93Z4fCwU4rOZ
+         39jO6anolTUQdb804CQoR2k0MibKOImL6sdHm11oDtEzwbpmRV3hDNpkCyIm82o2X9LJ
+         MlBkvmgP9YLaSkAlfniuQrXSc+dxNTJypWzRk6HwF10EM+AujUWhOnCc7kfzJ2AyTrdz
+         QuDg==
+X-Forwarded-Encrypted: i=1; AJvYcCWfs3KAW28h/edrJzU6BSwS/jH+fH41F29UAIjVACtnLK17AeQXu9O2NjBHbB2XlukFDrGtIxbuy3GmlkrLlA4VlkdJk1F8n91KcGejGZ7NJBvvi6WwIGImy8v1OVTW4M2t1UEbP7q04N9KBbAN6JrSwrOYfPNhyZa+iZuphjeNJjcT4Ru5
+X-Gm-Message-State: AOJu0Ywvd6HtSPggkC8Kvo1oqLCrfenIQ8ImlBH4NxD8lkWRRpeA6avC
+	uSPhQMe4Wq3Yl/0OKBNMh/oGMeAUy18WcEw1e1px0umOugYf1VVX
+X-Google-Smtp-Source: AGHT+IEcXZTirNtSqz6/4ItK2+CQVcicOieBc01XxfrGxwvX5ArAu7zFmCdxD5LyIhVavsW8h/ElBw==
+X-Received: by 2002:a17:90a:ad6:b0:2bf:dcba:a3c1 with SMTP id 98e67ed59e1d1-2c1abc3e316mr3493160a91.34.1717090605862;
+        Thu, 30 May 2024 10:36:45 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f6323feaa0sm404355ad.230.2024.05.30.10.33.56
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c1a777f7d8sm1788193a91.31.2024.05.30.10.36.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 May 2024 10:33:57 -0700 (PDT)
+        Thu, 30 May 2024 10:36:45 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b8aa563a-5ca1-4624-a1c7-25744f15cfa9@roeck-us.net>
-Date: Thu, 30 May 2024 10:33:55 -0700
+Message-ID: <be9a987d-9fca-4ef9-be58-58d7b4d8f26d@roeck-us.net>
+Date: Thu, 30 May 2024 10:36:43 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -121,59 +121,26 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
 In-Reply-To: <6f1ffb83-a64f-469d-b981-f0da0d2f02ac@gmx.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
 On 5/30/24 10:03, Armin Wolf wrote:
-> Am 29.05.24 um 22:52 schrieb Guenter Roeck:
-> 
 [ ... ]
-
 >> +
->> +temp1_lcrit_alarm    Temperature low critical alarm
->> +temp1_min_alarm        Temperature low alarm
->> +temp1_max_alarm        Temperature high alarm
->> +temp1_crit_alarm    Temperature critical alarm
-> 
-> Maybe it would be a good idea to tell users that the alarm attributes are sticky.
-> 
-
-The driver auto-clears them after read, so they are only sticky in the sense
-that they will remain active until read. This is quite common for hardware
-monitoring devices. However, sure, I'll add a note.
-
-[ ... ]
-
->> +static int spd5118_write_enable(struct regmap *regmap, u32 attr, long val)
->> +{
->> +    if (val && val != 1)
->> +        return -EINVAL;
 >> +
->> +    return regmap_update_bits(regmap, SPD5118_REG_TEMP_CONFIG,
->> +                  SPD5118_TS_DISABLE,
->> +                  val ? 0 : SPD5118_TS_DISABLE);
-> 
-> The spd5118 spec says that we have to wait 10ms after enabling the sensors before
-> we start reading temperature values, maybe we need a delay + locking here?
-> 
-
-I don't think that would add much if any value but a lot of complexity
-for little gain. I find it acceptable that the sensor returns 0 for a few ms
-after enabling it. Pretty much all chips have the same problem, so I am
-really not concerned about it.
-
+>> +PEC configuration
+>> +-----------------
 >> +
->> +static struct i2c_driver spd5118_driver = {
->> +    .class        = I2C_CLASS_HWMON,
->> +    .driver = {
->> +        .name    = "spd5118",
->> +        .of_match_table = spd5118_of_ids,
+>> +If the I2C/SMBus controller supports PEC, it can be enabled or disabled using
+>> +the 'pec' sysfs attribute attached to the i2c device.
+>> +
 > 
-> The driver is missing suspend support, without it hibernation/S4 sleep will cause the
-> limit and config registers to be out of sync with the regmap cache.
+> Hi,
+> 
+> the spd5118 only supports PEC when in i3c basic mode, so afaik we cannot use PEC here.
 > 
 
-Good point. Do you have a means to test this if I add suspend support ?
-I have not been able to figure out how to put my system into suspend.
+Thanks for noticing. I misread the spec and associated the note with PAR_DIS,
+not PEC_EN. I'll drop this and the PEC patch. Good that I kept it separate.
 
 Thanks,
 Guenter
