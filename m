@@ -1,58 +1,39 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 031BD6BB58
-	for <linux-hwmon@vger.kernel.org>; Thu, 30 May 2024 19:08:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 498EC142E8C;
+	Thu, 30 May 2024 20:20:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717096104; cv=none; b=SNdqmEnaIz3Hhc+8fJtcIJwoZsk6yxbzIopDUUbgAnzszSn9JMXtMLJZm0kvjvlKcCbTbi7b8u42V5fjCRMTeKck4DT1MIhs9vy+sxKthQJ4P5eX5mXYLzaGF+0PT01s7t7bJ90zD5XAAIOc6K2rkqyASkBN8ozWQ5iNo2vo/fA=
+	t=1717100442; cv=none; b=kBIPHTFWY9J0Jh3/AZwIffrWoEYmOabN7jwS8McEIrygmADZjaE94iFnFLwfozheXQETD+w7EvG9RkGuWUMnTOyt5k+XWAszSB9JrXqmeUjej++Xl9MTUExlyksa7BXBZ0hU0LAqamGpYP5Hf/7+1uAW+wi2bX4ObK9a0q22iRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717096104; c=relaxed/simple;
-	bh=gO2vWCidhSV5KLjif76Z727jWMwSKjor9N8vpz3P4GY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=vBGxAOG0ISJm5O20YwlbDCV5qWP/UE0biJBlKzYQ8a4ONY/FEVe4AIieto+8JlbCJx3B9O73Nr3YsOZmGmU8TRweJtM/OF4I/SsIqRmxtTZwSNP8DQnuj7jQop19/sfoOGpuii2fLraNG7HVl9Q2AX0VQYIWb2S4FmiVFnTlo8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mO7Fcbop; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1717100442; c=relaxed/simple;
+	bh=y6fti8cQCakDlZoQdI4Hnd2ga5rtZg6++Y1ecr+x4PU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=q9fzLU2pAv/1PtfnYgDCqcD3bR1zhyAhy+NFfa4bJ8R+id/TbHdmMQ4jGSc+Mh2oSqi3eAyel+Ght4+E3ceb38jBgY5u0Em/+FCU/LS/lE1xxQ3cPUKoPOtZqRaOgD61HCvhRt+mtf8zBGS8KCInzLMg9wCS034be1a1JYX/EUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=t-8ch.de; spf=pass smtp.mailfrom=t-8ch.de; dkim=pass (1024-bit key) header.d=t-8ch.de header.i=@t-8ch.de header.b=MvOptH8Y; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=t-8ch.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=t-8ch.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mO7Fcbop"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717096103; x=1748632103;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=gO2vWCidhSV5KLjif76Z727jWMwSKjor9N8vpz3P4GY=;
-  b=mO7Fcbopti21Vr0+E4PXWlxiCd5lvHwJOn+XjPDSYblPy0nvuh0wxf03
-   pQvVB1UynEamr8cj3LosO/n0guNwc71Zo93C8CDYonzENDJiJxl82Ar/J
-   Ub6lUbmDOZ9fnPTBZCn+M518EzP8oSByRCN+P7CQC1Q6/Jhlzo4UHIO1I
-   awOzdDJGWHp2LL5qpnUTmKnyh6xVvyw+8CksKshGFN7plBIgL+u5/O8qf
-   HuUqsi82bxpadQWhuyWcTFKf49+cBPXkU8akNS6HIel5rtbXrPcgJ8rq4
-   eObXWIfTmggMHh2mXIUBilB+3KoyRCACE2sk+f3yA2O3XkpyOkhJLOCUg
-   Q==;
-X-CSE-ConnectionGUID: enn/GrKYSL2FIVjtyNWphg==
-X-CSE-MsgGUID: ALktycrPSGaVWvj2v7s3hg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11088"; a="38999077"
-X-IronPort-AV: E=Sophos;i="6.08,202,1712646000"; 
-   d="scan'208";a="38999077"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2024 12:08:22 -0700
-X-CSE-ConnectionGUID: gxKI2LvNT5OXN4t3E97tUQ==
-X-CSE-MsgGUID: /DebC4OcRJ6nY/mMyhj0iw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,202,1712646000"; 
-   d="scan'208";a="67105271"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 30 May 2024 12:08:21 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sCl8N-000Fsb-10;
-	Thu, 30 May 2024 19:08:19 +0000
-Date: Fri, 31 May 2024 03:07:44 +0800
-From: kernel test robot <lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=t-8ch.de header.i=@t-8ch.de header.b="MvOptH8Y"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+	t=1717100438; bh=y6fti8cQCakDlZoQdI4Hnd2ga5rtZg6++Y1ecr+x4PU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MvOptH8Yqs4v/aeQheehKOxAxA07XHqfhsvNCkHuG/vo86HD8kurE7pOCG9q3d1Cz
+	 GdVUoduzH6sbBi1ZnZnONzBCCqM4U3FoYVc7Q4NQtZ5eyTPqeguNSYwZWUDFhnOtiC
+	 aIshfFYXvxO9FjyJnWzQiK75owXNNCIr6LrbzxeE=
+Date: Thu, 30 May 2024 22:20:37 +0200
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
 To: Guenter Roeck <linux@roeck-us.net>
-Cc: oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:testing 15/26] drivers/hwmon/hwmon.c:400:14: error:
- implicit declaration of function 'i2c_check_functionality'
-Message-ID: <202405310233.vhe3KdmZ-lkp@intel.com>
+Cc: linux-hwmon@vger.kernel.org, Hristo Venev <hristo@venev.name>, 
+	=?utf-8?B?UmVuw6k=?= Rebe <rene@exactcode.de>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Radu Sabau <radu.sabau@analog.com>
+Subject: Re: [PATCH 2/3] hwmon: Add support for SPD5118 compliant temperature
+ sensors
+Message-ID: <34a4292e-c4db-4b40-822e-b892e1444045@t-8ch.de>
+References: <20240529205204.81208-1-linux@roeck-us.net>
+ <20240529205204.81208-3-linux@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -61,48 +42,71 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240529205204.81208-3-linux@roeck-us.net>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
-head:   9068c716a2fe05d33b869804c6c9a5b7a6561a8b
-commit: 6e3608a4eb2b4aab2f4a22167ea141dc7efd2712 [15/26] hwmon: Add PEC attribute support to hardware monitoring core
-config: sparc-defconfig (https://download.01.org/0day-ci/archive/20240531/202405310233.vhe3KdmZ-lkp@intel.com/config)
-compiler: sparc-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240531/202405310233.vhe3KdmZ-lkp@intel.com/reproduce)
+On 2024-05-29 13:52:03+0000, Guenter Roeck wrote:
+> Add support for SPD5118 (Jedec JESD300-5B.01) compliant temperature
+> sensors. Such sensors are typically found on DDR5 memory modules.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405310233.vhe3KdmZ-lkp@intel.com/
+I can get the module to automatically probe with this change:
 
-All errors (new ones prefixed by >>):
+diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
+index 97f338b123b1..8d9218f755d7 100644
+--- a/drivers/i2c/i2c-smbus.c
++++ b/drivers/i2c/i2c-smbus.c
+@@ -382,6 +386,10 @@ void i2c_register_spd(struct i2c_adapter *adap)
+        case 0x1E:      /* LPDDR4 */
+                name = "ee1004";
+                break;
++       case 0x22:      /* DDR5 */
++       case 0x23:      /* LPDDR5 */
++               name = "spd5118";
++               break;
+        default:
+                dev_info(&adap->dev,
+                         "Memory type 0x%02x not supported yet, not instantiating SPD\n",
 
-   drivers/hwmon/hwmon.c: In function 'hwmon_pec_register':
->> drivers/hwmon/hwmon.c:400:14: error: implicit declaration of function 'i2c_check_functionality' [-Werror=implicit-function-declaration]
-     400 |             !i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_PEC))
-         |              ^~~~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+(Credits go to Paul Menzel [0])
 
+Maybe you can add that to your series.
 
-vim +/i2c_check_functionality +400 drivers/hwmon/hwmon.c
+To also work with my PIIX4 I2C bus, I also need:
 
-   393	
-   394	static int hwmon_pec_register(struct device *hdev)
-   395	{
-   396		struct i2c_client *client = i2c_verify_client(hdev->parent);
-   397		int err;
-   398	
-   399		if (!client ||
- > 400		    !i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_PEC))
-   401			return 0;
-   402	
-   403		err = device_create_file(&client->dev, &dev_attr_pec);
-   404		if (err)
-   405			return err;
-   406	
-   407		return devm_add_action_or_reset(hdev, hwmon_remove_pec, &client->dev);
-   408	}
-   409	
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index fe6e8a1bb607..ff66e883b348 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -195,6 +195,7 @@ config I2C_ISMT
+ config I2C_PIIX4
+        tristate "Intel PIIX4 and compatible (ATI/AMD/Serverworks/Broadcom/SMSC)"
+        depends on PCI && HAS_IOPORT
++       select I2C_SMBUS
+        help
+          If you say yes to this option, support will be included for the Intel
+          PIIX4 family of mainboard I2C interfaces.  Specifically, the following
+diff --git a/drivers/i2c/busses/i2c-piix4.c b/drivers/i2c/busses/i2c-piix4.c
+index 6a0392172b2f..f8d81f8c0cb3 100644
+--- a/drivers/i2c/busses/i2c-piix4.c
++++ b/drivers/i2c/busses/i2c-piix4.c
+@@ -29,6 +29,7 @@
+ #include <linux/stddef.h>
+ #include <linux/ioport.h>
+ #include <linux/i2c.h>
++#include <linux/i2c-smbus.h>
+ #include <linux/slab.h>
+ #include <linux/dmi.h>
+ #include <linux/acpi.h>
+@@ -982,6 +983,8 @@ static int piix4_add_adapter(struct pci_dev *dev, unsigned short smba,
+                return retval;
+        }
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
++       i2c_register_spd(adap);
++
+        *padap = adap;
+        return 0;
+ }
+
+Though I guess it's not the right place to call i2c_register_sdp(),
+I'll look at it some more and then submit it.
+
+[0] https://lore.kernel.org/lkml/20240530183444.9312-2-pmenzel@molgen.mpg.de/
