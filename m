@@ -1,189 +1,108 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82E9B187565;
-	Thu, 30 May 2024 22:33:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAFC04D8CF;
+	Thu, 30 May 2024 22:39:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717108419; cv=none; b=s4EEcwv9SLnlXoi19FLmalrian33I73uIP/XI0yznp8LhZwMGHCpXo9iLOZ76dZaHP7v2vvbU9cms/h/ED5Y6x+z3nhFUoIsiGsHt7+MHAcyeZwdNZHzj06fYLwhqzpnBmFrYHjS35BKGRDTFvbS+QaYuwmixNCpfkX1R8cI6pI=
+	t=1717108784; cv=none; b=f2s0STcLkZIyd7zj831VzM62OCWiPzRfKcxEVXyhpv3GQzPv/vz+Y8/HFZE+iJpa/2CfAxlS55W4Yo3KJmmqH/ZoeslRYIueY5aaBO5jRFwfQgFkCGzxFNdmQIL+JokT0Q/wvBq99GMa4Yea7j4j0JG8i9k1ZyYmIWDUX1uF7Is=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717108419; c=relaxed/simple;
-	bh=pnyPAhu+XMIegO0V2HOs9dQTBhRohAtB0UAGPQXvzF0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DvpPap5JIPrEr/HJrrO8qz0+F5qwXEpecam7LTUjnI0ZMB+qvREEOeXKUzxKHD/AVv8kycq48yHchP0CL5PT5MB6ZoKsrnmyofO3loGuxjboF2BOroghzD8zIiP4CZJZbyXXTGg65b+FPyz7NFdgy0Tj03r6n6JwfYdzzBRPF5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lfLrzeiu; arc=none smtp.client-ip=209.85.210.181
+	s=arc-20240116; t=1717108784; c=relaxed/simple;
+	bh=mXY30NJFEF6JLW93acKB5oca48AAvAuYKl2LecAnpRw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=PWk/J7Qk4BWzyfx+ij3SVMu3pelVvyUjgT+8e3yt3jZd7w7BtTNWfrsJknliHZG/VLwZ9xe5ulkxRAtznu7jwV5FWlzRhK/uDBM4Hs1bXdlZFPnXXFVZ8/s/8yU7DeO2cHTFIvvC6jySVxDrP8d/KISITJgWv5twKTI5TADxnCQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=liImEmSI; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lfLrzeiu"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6f6911d16b4so1330444b3a.3;
-        Thu, 30 May 2024 15:33:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="liImEmSI"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1f44b5b9de6so3108955ad.3;
+        Thu, 30 May 2024 15:39:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717108417; x=1717713217; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=lIRQpYJRenRcSMBxYWTgTlqhmr+SQvcds/Ik374J5Lw=;
-        b=lfLrzeiuYVHCVaDWYOm98035YOuWEDgkWSPriSCDs9AeP2L5bphe2ggLioVMPh8o1p
-         FaefUyptyABMHgWFx0L2OuK8tL94LwQqtsmHUBfh6xgCV37DTKajcXruPplGHZdG/GId
-         ypXxtvrcgrvx/c9EZJrBgT1XleYJSqysn6hh/5oJG+xsoVxULQdD+tQZocstTqrW53bh
-         Z5OOdL1fpNA2iZmlxW5vTeHNgo+WhGd2E6/9Swdmn3RdAyiurKpLOhJWtXVszch4TpH5
-         0NyuoPTUipMSdiD8fTBkyuNaBOh4M3nFnVB76hT/ruDoDtymlNwvYViOsODVhTcXMPPm
-         X9+A==
+        d=gmail.com; s=20230601; t=1717108782; x=1717713582; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=Kzk0553hUTwCCO7xot6Hyfco8XZk8QvJilIgZV2PeYU=;
+        b=liImEmSIXLkDcZYuuy+pswXM/3cNvz6sSpARAI3q6Dm0oQPMtaJknQtDSiSR1W1nku
+         5WjT0q8z8Fa0paMyKBDqV3FV1T5rdxDr8x1HotaPMKpn8/GgnK85oEuXvKUvQoZ7CUvB
+         vhNNO3k3u3MtSQJLmBtMD13AQ4lGBaplYgiFWix7gh74hHG2F7mibSV0halisfvTAP/W
+         wF1OOFzV6SQgdta4lyAa9f7qPg5SIautEyTi7+cPwxbwle9vka3XcTOUWCnXLmjMiYyX
+         bk3ZT7JaMZ8ucLVJ9E97TP3E0bqvr98sVtdY/htwW/zW8Tuz6UvU7iRuR7RhcMBzfVKn
+         3AGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717108417; x=1717713217;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1717108782; x=1717713582;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lIRQpYJRenRcSMBxYWTgTlqhmr+SQvcds/Ik374J5Lw=;
-        b=gY1mNiOYQRdaICDL3cQcqqG48CqHqpWEN6B8b9KGHsRzJEoh+ToCiBlWja1KzLFzg1
-         Y7nc7x2rgLcwX3Lt+zYn7ZY9asPJxvtr3Jx/7LgfzM1qXznArWhdKZ9HKWpxuO6d9MJA
-         OF3sh0eM11jSL0ISpcCmJ4aZglLKfN8+cDNKbtjJ9XFOroiWnk1nHJpOxYlDs7JZDuGj
-         otGuoFBEk+8vH26tv44MEqlhEIH9Y8Hj+hXswpB/Psfj0fSj+0/U5OpWJI7ik4F5m84F
-         DzKuU4qERRNtPq93o3QHSkLAuKm7jXa8DT+4pc3hKYee4vGf/fWuTYdexiX8KII3KIKP
-         d+cw==
-X-Forwarded-Encrypted: i=1; AJvYcCVUwuxVrZHvksrJHq2njABTJWh1/AP9dZYof0yKBQVHdsFYeXMdQjhIUNBZHwL9/WfBwC8sTcbm1FcvPxJLOPNKA1UOM0Gg9N4AVuv7GxIR3eFPw/bvZysK5ClX0i1EQiVabU9e2Hx7yA==
-X-Gm-Message-State: AOJu0YyH6D5rb1zIk8nzn5XS1AnI9whu+n5bBMFSQG4Y+hkhxpEnM3W1
-	7yP4aXNXO2ZVztUzNdBkwMevFdg68irHA5XXNWB24QxSSRfsr9vZzjvzJw==
-X-Google-Smtp-Source: AGHT+IFFJ4Q6B4VJOsRsydZlo9eu8c196DAkassmvdcl92hXiMT5V2mm+6YuufnyCTc+bgPe37+rAQ==
-X-Received: by 2002:a05:6a00:9294:b0:6f6:94dc:6c4 with SMTP id d2e1a72fcca58-7024781fba4mr222939b3a.20.1717108416553;
-        Thu, 30 May 2024 15:33:36 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-6c35629c3a1sm228722a12.56.2024.05.30.15.33.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 May 2024 15:33:35 -0700 (PDT)
+        bh=Kzk0553hUTwCCO7xot6Hyfco8XZk8QvJilIgZV2PeYU=;
+        b=oALFfvRF8QkQ/vRbqbDbtA0MzcKZdgiLvBxG04iztN8Ix7S9b3cm3v1l4f1JuaZ1wG
+         yB/nuYu2ec37YXVdDp/KeISOixRnByEjOIQb/d3DwxK7S9xgBfK3nxCRUYM/bQSLrSh8
+         Iv25rb9e69iFvZdeAlvAX52kR+sjMuh494QJSOGBifCMvabaLgRM4oMol//pkFWiHC87
+         iqVIsqIZ4wSHQvt/IF6JAca5UltdU17IDHUVUiFNSGpk0HPxmQdnZabkPhMHkc2vf+Ii
+         r239ZCwsNGPVhFfU5AkemHee6TQdhozVzPzhSD49iTGf7GlVSe8uacrYzCD3P5OXXSj8
+         MFpw==
+X-Forwarded-Encrypted: i=1; AJvYcCXQ9LxcSNDAt6J24EIHwqXtlGV6ONYbDB3HIP7LZKiV7XEwPumNVR7sfFCdglrjILLNB/CDrMh2+TRmuEzK/Ua26yD+WdtDc37iT+VC
+X-Gm-Message-State: AOJu0Yyhdmnv6n+eRjUYBFbR3wzOdlzGcRj0gR0rNFDrdf/HjRe+kYep
+	TzbaIrRvVeOhCVHBn14MsAb9pN5CBKRR7yyivOwNKXYCo9gbK8zj1a2E4g==
+X-Google-Smtp-Source: AGHT+IGoE7HEvJHeJSvztQlvx6a4E0Q2iVrbqT66uo9OeZXKNR+dXMcHB7UVGc6kp9jUaExXJ3ZOcg==
+X-Received: by 2002:a17:902:ce81:b0:1ea:b125:81a2 with SMTP id d9443c01a7336-1f63709c681mr1918115ad.53.1717108781515;
+        Thu, 30 May 2024 15:39:41 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f632338ddesm3018795ad.13.2024.05.30.15.39.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 May 2024 15:39:41 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ffd72953-ecd2-405a-ad6d-236143b26946@roeck-us.net>
-Date: Thu, 30 May 2024 15:33:34 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: linux-hwmon@vger.kernel.org
+Cc: devicetree@vger.kernel.org,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	Armin Wolf <W_Armin@gmx.de>,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+	=?UTF-8?q?Ren=C3=A9=20Rebe?= <rene@exactcode.de>,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v2 2/3] hwmon: Add support for SPD5118 compliant temperature sensors
+Date: Thu, 30 May 2024 15:39:36 -0700
+Message-Id: <20240530223939.1027659-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] hwmon: Add support for SPD5118 compliant temperature
- sensors
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-Cc: linux-hwmon@vger.kernel.org, Hristo Venev <hristo@venev.name>,
- =?UTF-8?Q?Ren=C3=A9_Rebe?= <rene@exactcode.de>, Rob Herring
- <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, Radu Sabau <radu.sabau@analog.com>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Paul Menzel <pmenzel@molgen.mpg.de>
-References: <20240529205204.81208-1-linux@roeck-us.net>
- <20240529205204.81208-3-linux@roeck-us.net>
- <34a4292e-c4db-4b40-822e-b892e1444045@t-8ch.de>
- <16e448f1-cfc9-4e88-b3f1-55e1856d1405@roeck-us.net>
- <0a2ed64d-06d9-45e8-a054-4ded4429f952@t-8ch.de>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
- nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
- hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
- c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
- 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
- GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
- sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
- Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
- HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
- BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
- l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
- J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
- cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
- wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
- hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
- nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
- QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
- trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
- WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
- HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <0a2ed64d-06d9-45e8-a054-4ded4429f952@t-8ch.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 5/30/24 14:02, Thomas Weißschuh wrote:
-> On 2024-05-30 13:46:48+0000, Guenter Roeck wrote:
->> On 5/30/24 13:20, Thomas Weißschuh wrote:
->>> On 2024-05-29 13:52:03+0000, Guenter Roeck wrote:
->>>> Add support for SPD5118 (Jedec JESD300-5B.01) compliant temperature
->>>> sensors. Such sensors are typically found on DDR5 memory modules.
->>>
->>> I can get the module to automatically probe with this change:
->>>
->>> diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
->>> index 97f338b123b1..8d9218f755d7 100644
->>> --- a/drivers/i2c/i2c-smbus.c
->>> +++ b/drivers/i2c/i2c-smbus.c
->>> @@ -382,6 +386,10 @@ void i2c_register_spd(struct i2c_adapter *adap)
->>>           case 0x1E:      /* LPDDR4 */
->>>                   name = "ee1004";
->>>                   break;
->>> +       case 0x22:      /* DDR5 */
->>> +       case 0x23:      /* LPDDR5 */
->>> +               name = "spd5118";
->>> +               break;
->>>           default:
->>>                   dev_info(&adap->dev,
->>>                            "Memory type 0x%02x not supported yet, not instantiating SPD\n",
->>>
->>> (Credits go to Paul Menzel [0])
->>>
->>> Maybe you can add that to your series.
->>>
->>
->> That is specifically for SPD (eeprom) support, which I didn't provide
->> in the driver. It does not register the equivalent jc42.4 temperature
->> sensor either. Given that, using the code to register a temperature
->> sensor seems inappropriate.
-> 
-> I see, I wasn't aware about the specifics of SPD.
-> 
-> It felt like a nice way to get automatic probing.
-> (I was wondering about that today before)
-> 
->> I didn't include accessing the SPD eeprom to the driver because I don't
->> have a use case. I don't mind adding it, though, if others think that it is
->> important.
-> 
-> Wolfgang seems to think it's important:
-> https://lore.kernel.org/lkml/tdia472d4pow2osabef24y2ujkkquplfajxmmtk5pnxllsdxsz@wxzynz7llasr/
-> 
+Add support for SPD5118 (Jedec JESD300-5B.01) compliant temperature
+sensors. Such sensors are typically found on DDR5 memory modules.
 
-Ok, but that doesn't explain the reason. Wolfram, Paul, why do you
-think this is needed ? Note that I am not opposed to adding spd
-eeprom support, but I'd like to know why I am doing it before
-I spend time on it.
+The first patch of the series adds SPD5118 devicetree bindings. The second
+patch adds support for SPD5118 temperature sensors. The third patch adds
+support for suspend/resume.
 
-Auto detection would be nice, though, because with that we could
-drop support for the _detect function (which is kind of risky
-on the i2c address range normally used for eeproms).
+Note: The driver introduced with this patch series does not currently
+support accessing the SPD5118 EEPROM, or accessing SPD5118 compatible chips
+in I3C mode.
 
-Thanks,
-Guenter
+v2: Drop PEC support; it only applies to I3C mode.
+    Update documentation
+    Add suspend/resume support 
 
+----------------------------------------------------------------
+Guenter Roeck (3):
+      dt-bindings: hwmon: jedec,spd5118: Add bindings
+      hwmon: Add support for SPD5118 compliant temperature sensors
+      hwmon: (spd5118) Add suspend/resume support
+
+ .../devicetree/bindings/hwmon/jedec,spd5118.yaml   |  48 ++
+ Documentation/hwmon/index.rst                      |   1 +
+ Documentation/hwmon/spd5118.rst                    |  56 +++
+ drivers/hwmon/Kconfig                              |  12 +
+ drivers/hwmon/Makefile                             |   1 +
+ drivers/hwmon/spd5118.c                            | 510 +++++++++++++++++++++
+ 6 files changed, 628 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/jedec,spd5118.yaml
+ create mode 100644 Documentation/hwmon/spd5118.rst
+ create mode 100644 drivers/hwmon/spd5118.c
