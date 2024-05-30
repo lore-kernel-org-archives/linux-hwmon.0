@@ -1,61 +1,41 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B244218757F;
-	Thu, 30 May 2024 17:36:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F61446556;
+	Thu, 30 May 2024 17:41:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717090608; cv=none; b=J0WkiycIlc2L6DdB4/XKOXWwx+ktqS6OMTU9NdT1Y0WtT348mQefiR0uhgHc6LaqI1hgyNDjodXIczpSpvae/WPZlYaty4taU1fV5b3IkjqOh9JXOJm+pzw3dwS3sH1UZawocnHyd30KZNsYYs3svYD2IHrb0RfmGPkJ/bXNpMU=
+	t=1717090895; cv=none; b=p1RgvSmqBWeYFMoXCjCfO1SJWCOiAXdlC6OvHg5Z2xrfYJywQsjrbL6a6yc2oXPoIqy+GSvksFoXDgym6X6xuD5S3SS7ZmePHNQUY0ULM1kI2mmG53voZDexafYZ0z+gRx6rBzjLgCo7wEItoReuKb5htsMIVQQEXq7AhL6Cg20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717090608; c=relaxed/simple;
-	bh=CuX/2pe9cApqXm2bXTN+MVTVzW69PBsZLZPGpMZ03mA=;
+	s=arc-20240116; t=1717090895; c=relaxed/simple;
+	bh=PN12H3vukIEUvh92k02PFG+Hv5AE+f0Wb7EmKyT6t+k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=diqUjvsFimKf+Zz/vA+5dBzT11DN4ftHSMpUCCS5EwwK5PqHm6mzcsUn8LtXf5co9fGwd8DlJPLHhdw8+Ppx2qw6CBbO5lP4eBzc0O6ta/tpRSLji7QGDJJyZjkpmxPe7IQ4ABipw7B+zFIWR6z6EO7j6nDZROCUGbLzMV4IHik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B78bPN2E; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 In-Reply-To:Content-Type; b=OJ1QpmYi8K1pHSrZw11XL4MHBBAdrPaZkKYh+fr9Vy3m7qvVPmn6OmsNBTz+3Ye1ObiLojfZWHUzFGCjVkSSDMKc8yi7I6pWGAHzy55xqQffnfOFRnzi1V+IwW1ER+JmK55JkvC9qAK2y0G/d2WM7Sl0he76YJROn1mIboXWD2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=R5oBB0t/; arc=none smtp.client-ip=212.227.15.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B78bPN2E"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2bfff08fc29so942204a91.1;
-        Thu, 30 May 2024 10:36:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717090606; x=1717695406; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=+/FMefgpt3TfnKLLfewARfo5DV/oEmmnytLZ55pc/RM=;
-        b=B78bPN2EpJxVfu9mqfoHiH72oyRIBQj9xaribZ+ONRishNCupTld/CHtH6pbbJBD2w
-         rfao1BomEI1No/tzr9RyOxdNfBBl79ufVfsj9IYcQZDb6qTI9d8Ad0lIue/uVdkWOXSy
-         8rse7YfZHNrUeGkraGb6JIv4QviX/KYU0VgZeX1TY6FR8r6bE7OVJ0B9FouC2pZMQlK5
-         lv2oPHblh7l+95cUgi+ykQw+Z/u1L5NzXM8/tHfaYzwyC4Gt7xEqb/u7fQvnqN5FRsOa
-         gwHdplLsyPvEv+UtoZK/XeTsxztaZKYM6ZozP/o/JahXemwUKxQSSXCgAQWRZvwOQPVs
-         +tbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717090606; x=1717695406;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+/FMefgpt3TfnKLLfewARfo5DV/oEmmnytLZ55pc/RM=;
-        b=Q824la1UMJEeD6cx3U5e52WCWrZHFx5Nax2wdgyQnu9yCRiO/soF5EVjRPW1/C507D
-         y4gHFeXCWuHi/ldeXFynGFZJNSAef8E0Tektj0sr/iOBzTeJ2mP2nNUkIRM75Satpryh
-         mFLzYFXN2VJ3DUTUX0utqgmvuLIchzrunhpgMISQpFiziwboAXpFKPQX93Z4fCwU4rOZ
-         39jO6anolTUQdb804CQoR2k0MibKOImL6sdHm11oDtEzwbpmRV3hDNpkCyIm82o2X9LJ
-         MlBkvmgP9YLaSkAlfniuQrXSc+dxNTJypWzRk6HwF10EM+AujUWhOnCc7kfzJ2AyTrdz
-         QuDg==
-X-Forwarded-Encrypted: i=1; AJvYcCWfs3KAW28h/edrJzU6BSwS/jH+fH41F29UAIjVACtnLK17AeQXu9O2NjBHbB2XlukFDrGtIxbuy3GmlkrLlA4VlkdJk1F8n91KcGejGZ7NJBvvi6WwIGImy8v1OVTW4M2t1UEbP7q04N9KBbAN6JrSwrOYfPNhyZa+iZuphjeNJjcT4Ru5
-X-Gm-Message-State: AOJu0Ywvd6HtSPggkC8Kvo1oqLCrfenIQ8ImlBH4NxD8lkWRRpeA6avC
-	uSPhQMe4Wq3Yl/0OKBNMh/oGMeAUy18WcEw1e1px0umOugYf1VVX
-X-Google-Smtp-Source: AGHT+IEcXZTirNtSqz6/4ItK2+CQVcicOieBc01XxfrGxwvX5ArAu7zFmCdxD5LyIhVavsW8h/ElBw==
-X-Received: by 2002:a17:90a:ad6:b0:2bf:dcba:a3c1 with SMTP id 98e67ed59e1d1-2c1abc3e316mr3493160a91.34.1717090605862;
-        Thu, 30 May 2024 10:36:45 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c1a777f7d8sm1788193a91.31.2024.05.30.10.36.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 May 2024 10:36:45 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <be9a987d-9fca-4ef9-be58-58d7b4d8f26d@roeck-us.net>
-Date: Thu, 30 May 2024 10:36:43 -0700
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="R5oBB0t/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1717090861; x=1717695661; i=w_armin@gmx.de;
+	bh=PN12H3vukIEUvh92k02PFG+Hv5AE+f0Wb7EmKyT6t+k=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=R5oBB0t//IvSpkl7HJ2NoPH46s2VOu8fbNZn2ybZ4BTCZQqAbKQuasdUd1RC3XZ6
+	 T1f/sbjSJAHaS1aMLomARyE3jZdDtyj1XDxbMwLmqNr5mityZo0WfH9EledvB4zK0
+	 1EzcB8SzafP4dyi7OcB6XMFXrHELUQtMhSNQ+RYhxU9+H47cIpP7pzJ6WSGGiZPIe
+	 0aw/8/B3QTlBZ9JNiXpF4UjRukY8A4bKMw5XAKPFctXI2K3hZn6TgZeVPRwUV6jd6
+	 zQooaxHvQ0XEFtJuT0ZkcQobcMY7tFxh1eFry2HGIj1/wdINLnlXawsATv6aNaftB
+	 tUF8RLuyUv6005hi5A==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MmlXA-1swDON03ZW-00jn0W; Thu, 30
+ May 2024 19:41:01 +0200
+Message-ID: <78c58496-78b2-48a5-b5df-74545fd58dc3@gmx.de>
+Date: Thu, 30 May 2024 19:41:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -65,7 +45,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 2/3] hwmon: Add support for SPD5118 compliant temperature
  sensors
-To: Armin Wolf <W_Armin@gmx.de>, linux-hwmon@vger.kernel.org
+To: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
 Cc: Hristo Venev <hristo@venev.name>, =?UTF-8?Q?Ren=C3=A9_Rebe?=
  <rene@exactcode.de>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
@@ -74,74 +54,107 @@ Cc: Hristo Venev <hristo@venev.name>, =?UTF-8?Q?Ren=C3=A9_Rebe?=
 References: <20240529205204.81208-1-linux@roeck-us.net>
  <20240529205204.81208-3-linux@roeck-us.net>
  <6f1ffb83-a64f-469d-b981-f0da0d2f02ac@gmx.de>
+ <b8aa563a-5ca1-4624-a1c7-25744f15cfa9@roeck-us.net>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <6f1ffb83-a64f-469d-b981-f0da0d2f02ac@gmx.de>
+From: Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <b8aa563a-5ca1-4624-a1c7-25744f15cfa9@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:50jYUZgJk05eSRj+dxdH12Nn8+NWXvjBbT/6mYeS+B5sN6BYufr
+ rIe1hkHMideIRM91OMvZX5lV2zKwvkEDEHQBc5/lmZJ2InBeakTFzxS//fBPOG68jxRBZh3
+ TKaCoVn9Jy5cZXAk0Um3VMqobFRVxJVBb67KL1WNTyOrEYu50hJjPqTnw0BZrJtrRL2xTq0
+ RuF+T3T2uaryUM9Yb+ieg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:lRtdwUgQvfo=;TKo1J+5irFvECnFjnhSYXPepOyf
+ LTJOtA+Lj+KwmxVUPzIfTkxgAqFwP8yHG8zRCBu79R9mTOb+X2/PL7E4DMTiVq6DYzrexC83y
+ eF6rpzWjz/hADw0O7zN433KD82XlZ+gm4LcGU0s3s23hu83XFKE88amr0GytEZjMQ0sxX5Knr
+ 1P1ggI4Ew72hD3pBlAuJHIuLhVnkyIuXF7jbeMRECQ5TmWDGIeXDXpVpX5Lc5Kuzo9HisJtRJ
+ eRulCFM2DHXglDizy8o3vcwzOSZO6++rG4FMAr0BwxC+R3P+/+fES/6x2pBMxqEvPM7S2qK6i
+ xF2d+mUPuloLrdwkq8lwAf82wXS8B3WxKWmomCgoYPZ28eEZXSaZo8kROsxDhcONgh/9XoW5J
+ YRO2uJnZz2IW057AjqayYPH1VgCrVIOb3gjHIyQMkx6iPCB1kOtuebOIp7Q1ZG99Y5v+L3JVe
+ jth4sIX10GCUATMUwOXqMJ4JiiicBOuuOR41hvbkoJKA/1wxq3qkpdlsUs7K7EbvY2/3cm6tT
+ ApG5bIKrGGimXdzW6QWqSG17uE4Iy2QvatgoA/snJPYtH8a/aSgNETsI7mVzV3NhHTBo7Cnbg
+ gNu12BmA7HujxUyKSAC5E367/47sDVem2Bta2lLM/0XsTpcYw1DrLhACiU4sZzLU9H0BBkVq0
+ 12HRuiA2zFhcppU7dt8LDlmJtq+g7tVJuqCgLQu4RrOQHWwNKaLIvQ8DzKWamdqkMKx+XlIZP
+ 2gdoeiEqhNbkcI0m50TPmdX2eAlMm17feLoeAPUjBR5+BEFUsvZdPQRq+sZZL+86sGwMq4u4e
+ 4Q84OS/JAQoEIjWFCYVmKZ0FGVwvAQidTIx3PWqLVaytQ=
 
-On 5/30/24 10:03, Armin Wolf wrote:
-[ ... ]
->> +
->> +
->> +PEC configuration
->> +-----------------
->> +
->> +If the I2C/SMBus controller supports PEC, it can be enabled or disabled using
->> +the 'pec' sysfs attribute attached to the i2c device.
->> +
-> 
-> Hi,
-> 
-> the spd5118 only supports PEC when in i3c basic mode, so afaik we cannot use PEC here.
-> 
+Am 30.05.24 um 19:33 schrieb Guenter Roeck:
 
-Thanks for noticing. I misread the spec and associated the note with PAR_DIS,
-not PEC_EN. I'll drop this and the PEC patch. Good that I kept it separate.
+> On 5/30/24 10:03, Armin Wolf wrote:
+>> Am 29.05.24 um 22:52 schrieb Guenter Roeck:
+>>
+> [ ... ]
+>
+>>> +
+>>> +temp1_lcrit_alarm=C2=A0=C2=A0=C2=A0 Temperature low critical alarm
+>>> +temp1_min_alarm=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Temperature=
+ low alarm
+>>> +temp1_max_alarm=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Temperature=
+ high alarm
+>>> +temp1_crit_alarm=C2=A0=C2=A0=C2=A0 Temperature critical alarm
+>>
+>> Maybe it would be a good idea to tell users that the alarm attributes
+>> are sticky.
+>>
+>
+> The driver auto-clears them after read, so they are only sticky in the
+> sense
+> that they will remain active until read. This is quite common for
+> hardware
+> monitoring devices. However, sure, I'll add a note.
+>
+> [ ... ]
+>
+>>> +static int spd5118_write_enable(struct regmap *regmap, u32 attr,
+>>> long val)
+>>> +{
+>>> +=C2=A0=C2=A0=C2=A0 if (val && val !=3D 1)
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -EINVAL;
+>>> +
+>>> +=C2=A0=C2=A0=C2=A0 return regmap_update_bits(regmap, SPD5118_REG_TEMP=
+_CONFIG,
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 SPD5118_TS_DISABLE,
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 val ? 0 : SPD5118_TS_DISABLE);
+>>
+>> The spd5118 spec says that we have to wait 10ms after enabling the
+>> sensors before
+>> we start reading temperature values, maybe we need a delay + locking
+>> here?
+>>
+>
+> I don't think that would add much if any value but a lot of complexity
+> for little gain. I find it acceptable that the sensor returns 0 for a
+> few ms
+> after enabling it. Pretty much all chips have the same problem, so I am
+> really not concerned about it.
+>
+>>> +
+>>> +static struct i2c_driver spd5118_driver =3D {
+>>> +=C2=A0=C2=A0=C2=A0 .class=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
+=3D I2C_CLASS_HWMON,
+>>> +=C2=A0=C2=A0=C2=A0 .driver =3D {
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .name=C2=A0=C2=A0=C2=A0 =
+=3D "spd5118",
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .of_match_table =3D spd511=
+8_of_ids,
+>>
+>> The driver is missing suspend support, without it hibernation/S4
+>> sleep will cause the
+>> limit and config registers to be out of sync with the regmap cache.
+>>
+>
+> Good point. Do you have a means to test this if I add suspend support ?
+> I have not been able to figure out how to put my system into suspend.
+>
+> Thanks,
+> Guenter
+>
+I think so, at least i can verify if S3 sleep works, but S4 sleep should w=
+ork fine too.
 
 Thanks,
-Guenter
+Armin Wolf
 
