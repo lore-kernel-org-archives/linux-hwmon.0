@@ -1,745 +1,233 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2075.outbound.protection.outlook.com [40.107.8.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 134A3176ABB;
-	Thu, 30 May 2024 08:09:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717056554; cv=none; b=Yszj+VSUYxK5+AWsGEKtgf8RbsiVr5sj/h9XhgI9eDXr3fKdS+EBQsovIBV6j+Bk6iPt/IpefOveZxbylvG0qGrkW5PPuzlZl+SUGxSoI8XNgTar0ht0LLrH44BYiEGpORVMj6KdQbpqihpnHWYDVgQG50H21UNKQ8usgvzAfUk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717056554; c=relaxed/simple;
-	bh=f7w3iMOvgMcHVOOsSvi9aYunUnB6km1x5VMHwTe8soU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bqfZMfGl3hcH4nEGVburkG4vA0VoCYOZCG/fvvUzZ5s0Lxn/PgL8W7bxf97aQHsLXf4YPlyDY2FYGIQWj7L3KCuqD4qJKZnC5teuiq083B/rFCHFY5JLg/t7Awmyg52w/n+iblE5+qnhh16jPSuhBWhTmiAhNKrbsldntZEV3eQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=CBxnfPbR; arc=none smtp.client-ip=212.227.17.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5D29DDA1;
+	Thu, 30 May 2024 08:18:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.8.75
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717057096; cv=fail; b=R/EyzH+69fYjCpei6gUBiTjfK5haZbrFWGM8/Hy49F3nbtUohHaRv1TaixJ+MKzkBlS0UzrUVT3fubTMVQS2vwaX2PLRDkjGzxtT7/FHcuncwSgGOEIN6+7boGo4hu4rGCHNTIWMtEWtPf9gv9MfIqe9ILLtZkR8OlWp+Foj0SE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717057096; c=relaxed/simple;
+	bh=7zQIxZJ3NCWUUlWkpYqYk5NkODFwyEUvPUHzTuJJMiU=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=ml3LIsB0uo2aPvjU+pI4rEPpJnv9kwTUBYPC/uAjE1r91V4JxN0el5Sa0o39bueYHDzLpw2m+6fETiVCPTr03Cv1dxufaklbq6zTnUv2LC4KS53FFjUFuTNiVOOncDYZkgYlMRdvdiQv+PK0Nnn8H2tA9AqslWhTQYVm/lpOf14=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com; spf=pass smtp.mailfrom=axis.com; dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b=qGFo9G7c; arc=fail smtp.client-ip=40.107.8.75
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="CBxnfPbR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1717056518; x=1717661318; i=w_armin@gmx.de;
-	bh=53mmizKieEiS/hDJnvXMCzWONSw8vI/Jx+hyT7cCWx0=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=CBxnfPbRCfzNRgR3zwI7ktQWl5ZSjDsjyxleVdJOcCsO3v0CduQpF8QzZkf8aX8+
-	 xH9qv/RKmiNZB6UL3V6s/CBl67xT+g1/4xvYWdV/gZektGejq+zD0S7a5ckqJf1+z
-	 F/LwcYaKga12wTcu3EVIheY+8Q5ZCd3ZoLQRiHBmh0OG6YUkmPizl+aW6Cw+j1Ppr
-	 Fr6cSH57u9rLk1WWePW/6sKKWqelOffYNh9iIpdWxlIkcjpsJXSgP726oO+gxY2os
-	 8+1TLN6QBMUhV4OLNxJSqrAksz5tyHB+bm4PAW1guVsaIK7FN/CmJ4c3/7wBPg8+S
-	 tSoCcoYfk0b/SvleiQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MulqN-1sVE9N1cDD-00uuWA; Thu, 30
- May 2024 10:08:38 +0200
-Message-ID: <fa79f3c2-666f-48b8-b39a-f598107b2293@gmx.de>
-Date: Thu, 30 May 2024 10:08:36 +0200
+	dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b="qGFo9G7c"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XsgsyhujJ8Xz5j96pV8s3Yc1PUtjxnQhdCasFFJEAW1agrUvc8RpGgG6QPLrN2SQdcva/5Lhof9lJlvIhhf6tikH2v1o2t3TIsnwmdTvLokJd90VuD2NZaiPHr+mHAY+nTlM8k4NxlRL5m5zmJINTf0iJfzSkr4IMRlYUtz4Y4XtxZB6Hhn/008GC2rxgbdVII/d0FHc4HeopoPxraxR25wu9TJNasnIJEGlKUm4ZGBi4+9iZIFMxYRQhaGUEh3OznqmcOgjucvtnE1OOUQeFXrbU7p3QLXHxaV7m3MWPEzuS9PomZlftdsyLUcTRx0BHvCRZ77mfxlsJIt00v9pTQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hsOdDpuDO7fgXupti3q5PdZCXWrgXoqhEH3BVQ9S2TI=;
+ b=lt9bB7fAvXXiVyYc3A/GKamZ5byPi6w8cgo/0dKEy0IKsF25JDM0aPCC0ZbL8VeDXtmg/VelTi1leB0dtH+nBKl1yZP8cBbpoeOF2wrtP0y0unoy8Xf3MGIX4HRqJN37FE7tqxC7HEEJd3hKJNQXG9/jIJslGMgeiMxPk52ST6X2jvP5W+nJalpafoYNwodNqpxhEoHGkv3OfLKUjKDZ2T+E5+pZlJ66GPHbyTHBERdbDRJaq7C20kEuwbuHa3eIrdOnu8hJZOQi6u4bfCftWGxkhAyW2nvz/xvwxqH0X8RAewanmeJv14Th57vDOXQq/qIAfqb6Lr8Le+/KE0wBPg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=axis.com; dmarc=pass action=none header.from=axis.com;
+ dkim=pass header.d=axis.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axis.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hsOdDpuDO7fgXupti3q5PdZCXWrgXoqhEH3BVQ9S2TI=;
+ b=qGFo9G7c/dtqxZbJQRmBoH3YoO78B0xiCmxDMKi3mhkcAb1fpFDM+s8QbiWHdwF9VgdGKBrZ/3BddHKRPMvLSOTQmPKj5OMTKHUCjyJHy5L4nDIYt96II/mZf5nP6TJ4aoLGbstRAlU4lOiKqE3G0I8Na4Nik0V2e3ZGsILiR0I=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=axis.com;
+Received: from DB9PR02MB9994.eurprd02.prod.outlook.com (2603:10a6:10:462::8)
+ by VI1PR02MB6109.eurprd02.prod.outlook.com (2603:10a6:800:18c::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.21; Thu, 30 May
+ 2024 08:18:10 +0000
+Received: from DB9PR02MB9994.eurprd02.prod.outlook.com
+ ([fe80::f9a2:77a1:a5aa:8f8b]) by DB9PR02MB9994.eurprd02.prod.outlook.com
+ ([fe80::f9a2:77a1:a5aa:8f8b%4]) with mapi id 15.20.7633.018; Thu, 30 May 2024
+ 08:18:10 +0000
+Message-ID: <c936db6e-58cd-4445-92a2-9d53ba7f6b8c@axis.com>
+Date: Thu, 30 May 2024 10:18:08 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: ti,ina2xx: Add alert-polarity
+ property
+To: Guenter Roeck <linux@roeck-us.net>, Krzysztof Kozlowski
+ <krzk@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel@axis.com
+References: <20240529-apol-ina2xx-fix-v1-0-77b4b382190f@axis.com>
+ <20240529-apol-ina2xx-fix-v1-1-77b4b382190f@axis.com>
+ <1ae97b90-ff20-4238-abe2-f2e5d87fc344@kernel.org>
+ <76dd5c0e-cc67-4ad1-8733-d8efdb8a172b@roeck-us.net>
+Content-Language: en-US
+From: Amna Waseem <Amna.Waseem@axis.com>
+In-Reply-To: <76dd5c0e-cc67-4ad1-8733-d8efdb8a172b@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MM0P280CA0023.SWEP280.PROD.OUTLOOK.COM (2603:10a6:190:a::9)
+ To DB9PR02MB9994.eurprd02.prod.outlook.com (2603:10a6:10:462::8)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] hwmon: Add support for SPD5118 compliant temperature
- sensors
-To: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Cc: Hristo Venev <hristo@venev.name>, =?UTF-8?Q?Ren=C3=A9_Rebe?=
- <rene@exactcode.de>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, Radu Sabau <radu.sabau@analog.com>
-References: <20240529205204.81208-1-linux@roeck-us.net>
- <20240529205204.81208-3-linux@roeck-us.net>
-Content-Language: en-US
-From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <20240529205204.81208-3-linux@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:e8E/2DuFszRcohzwqsBoWhU+JD0Iv1Xbx9u4qZfdgJj7F0obfo8
- TPahrenTyD61qn7AUP5GZPdHuDzcE/BbEZ1ldEZFoMFvrTzUJZFG6RExkoNYAbLfCVoah8+
- eCbzIP2tMRzh9hRkxEoa31iATBud/4UCSAsAbML46o7h8nUCehRNu09gwdRLE97oUmbb7Ye
- mNT6nQK3b9gXIlZolMFpw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:sV5Q+OhjaH8=;nu08ALAPt7sY8o/irAM1pzJZGHN
- tmro41szBhCWyic1A//SNHXE9NqsuSZ7idpIoZfd7AXkgs/z+EAgqu3302+8Kgf2pyApeuYrS
- dv5DJqIZEHuPW6BCRGo3M1qfpYBP3Mm7+xFOxQWikP6Onk7kMszGNXxILES78gfxT2+Ax8I2V
- XmNBRNKm72/rW8VZMmSgpxGnFAu/TEfCqZjFdJqzilVCfmU764WqU2KnhC7uOQ1YO19paegG5
- vnf49YZ6c6oHtlO0gRc5EBi2maMV6VAIbmeCEz4cO5QIY9j4fLO7+kNeh9piQGTcVwGt5Vt7B
- AlktbHyDAZK/5aFZJT9PxNQaGTDl8ZvTrdRGsT1ZGRXQspF3n6FfCIvZ05IIhrccdHy4jQDNN
- icAQB+tMETE9SD8p76H3ZAufTg5SKtWEC3kxzn4gtswyLWqLM7GA9uCl9yktv93WV2moPNAZW
- 9n3VTfImcgRomyCD+B7u2VpCvj6q1iEJbp7p6/z+Ci/pIUy7hss/uQGbwI7kkCLulTIRfK1nV
- rvvvHSJN62uT86OvkmtDUbHufpZ+1Bj7rR+/S5+YzGwgggyN5YVIkBHXBq3i6S15S4/ZeBJAD
- QytQ2y5+D17DU44+y/VNpVtF28cFR5GDeQI3habDyMuoMqm1t7GuRKBzmw4f3Y9ir7frwdORh
- 412l78qh/UaaEVQdV49pRpOY1+r+zvUBejKJf5jOTleUR3qODS5rkPrpgGRx18h2M4ZmdwYWf
- nGVGOZNW/NzHCUBdVBIQ0fUmawlFSK3NXKkENlNcNJZquFoJCBaWTcZR/j2mnklRaw85UXr8b
- MVMj8gsOmyWTwVfOiE8kz+ytTbi3bSlN2Vgp6bOWR807g=
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB9PR02MB9994:EE_|VI1PR02MB6109:EE_
+X-MS-Office365-Filtering-Correlation-Id: e25eb5b6-bd9d-4419-45e0-08dc80810b1d
+X-LD-Processed: 78703d3c-b907-432f-b066-88f7af9ca3af,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|1800799015|376005|366007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?UlNXWisvc2NSRHRHSnVNUkp6R0l1Sm84RElEUEFrY1hxZEtJT1EwaENCVzVZ?=
+ =?utf-8?B?TnAwU2hzZHdjN2NGYlVxOVpSV2lkNmpHaWhRL3poaXM2dDBWTkFCRVlUVWJy?=
+ =?utf-8?B?OWJBckFPeG93UU8wQ3QxT2Q5VThBUFl6V2oydjNPY2xLU05oMGFmaU1nSEll?=
+ =?utf-8?B?RlNVZ29PTG5BOTVvMk9KYXJ2SEtuaVhqblgwVFE4NmU5WFpYRWVITlN6ZmFs?=
+ =?utf-8?B?b2tHa1d6Y0ZQRWF5a2J4cnA2MXp2RUgycnpLd0J2TUlrNFZsZDA1TG5rSTFm?=
+ =?utf-8?B?a2NuNllDSEFPSi9yN2MyOGpxdUZtMVdLRm1Oa1pGcjVkSkErNTBCdUJrN1Nh?=
+ =?utf-8?B?L2Fhc2RxZVJ1K3ZObk0xT1plK0VsUUtKcGwvUlhYMDlTbjhKUzVZZEFLU1BG?=
+ =?utf-8?B?Y08wUVdkanFTVzY3alFkb05zRDVidUxQMWtHY1BabkVwYXI4S2c0d25tWWpT?=
+ =?utf-8?B?N1RNT0lOcHNTSFQ0cjlhSWJxOWM3ZUI3T2RyUVhUTjNranhhN3hVcCtlcjE4?=
+ =?utf-8?B?eFhHd0VBaUNnTmN2enlwVTRJd0ZYRm1BTUVCak5OZjZFSzhsV3BlRXhPaVgv?=
+ =?utf-8?B?LzFCbGJmNkVTbWdHVXZTdWNQek1nak8wS0ZQaU1QOVRtMGNxd1UzQkdHY25R?=
+ =?utf-8?B?UXZWbnJwdnQvMExKSUh6VnQ4YlFzREJjL0JWL2trbzRWQWF2SFFLQXdUbzdv?=
+ =?utf-8?B?Y002c1BlMTBDMzB5UklMWDRuRnFGTFRiNTcyc3VQeHdjdUhjWVUvU0VCVnhU?=
+ =?utf-8?B?eHh5aGNjTUd6YXdUb2owWVM0WXJXczJxcXF1QmxMZWM0TlVNcUZSSitrV3Zq?=
+ =?utf-8?B?ankwSkV1a1dWOVBWUjNhOTBDK3U5V0J1VGdoNy9POXQyYTlDemh3OFdsSmZF?=
+ =?utf-8?B?Qi9kejgwZDNaSzUvUUpoZkpBWTNmVGhOdU8xdEFwT3o5NVhyejUxQS9EcFR6?=
+ =?utf-8?B?ZWk5RHd2YzVCeFBhMGJKVlh4RTNTK1MrY1lZYzBkSVEwZGFqREtodlFDQVE2?=
+ =?utf-8?B?Rm5KTjZtUzlSak9aM1VnZGZpTDdVTG01UUhMbi8rUXhBZmdubXpGdXVHRHpJ?=
+ =?utf-8?B?UWx6ZWtGTE93SDZabUhmNTkyWkdQZFU0ZWlsVUJkYzRKNVhmRkhJZktIdGVS?=
+ =?utf-8?B?OGVaRjg1U1NocysvZVgwSlJZWEJseVFrRlgwRFRsQzgxdlMyZytOUVphVjQw?=
+ =?utf-8?B?OUJRc1RxMXBNNDZ4bDE4TkIrNnVVdmYwMkNya2tqOGhaV010aFl6Q0EwemI2?=
+ =?utf-8?B?WUJUdWJ5M0g5amMxTkZMby9hVzBlNW9KSTRlNTlVRVBteWRzNFcrRzBtZTVF?=
+ =?utf-8?B?M1FYanRKTDNiU1prR2l4Y3dzZ0NpODBhVlN2NU9hWERFb2RSZStuOE82V0k4?=
+ =?utf-8?B?UlVtYmhFVFlkOUlYR0JzZ3dneWV0T3VVM1N4Q2JPOWVZMzhweFhpR3BZS2ZJ?=
+ =?utf-8?B?WUdmSEhFZWdZYjZ6bEdoOHlvTHZyaXpqYnYrU1R0eUdNYWpHYkhjRWJjblpM?=
+ =?utf-8?B?TXVwZ3pJaDlXZFBoOWtET1g5a29pcnpBWTUrRWthSkloYUZjSlVLd3dHTHVy?=
+ =?utf-8?B?QklUaWN0UHFkRThlL0l5YmZGU2RDQ2FMUFFyeDJGRUxaWFp1anFHa3AxNzk0?=
+ =?utf-8?B?V1hTQUlOWXZ4N3ZSTWluQzhhbXltTmltTGUydVhVZGg5WWNqYUtsK2Q5R1Rp?=
+ =?utf-8?B?aURGZ1FsNGFtOUhzS2ptVzBtL0Vkbmg5NHBFcWhVQmZSQWVlMnRTMmN3PT0=?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR02MB9994.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(376005)(366007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?OEhmNXUzWjNVREViQ0RaVU4wdXdFTG9FNVFBWVQyWStnVUEzaDJhbWYrdDhj?=
+ =?utf-8?B?R0R2YWlOWlF2RnV4cG01eWo3VUZrVFVvMmZFc09sSWd3SnBYU3VqczBmOC9a?=
+ =?utf-8?B?L0JJdWxYMjhrWTNnYUQ2elplMFB5WWJFOCtoOWJJRi9iRWNxRFhEYjJqdUxE?=
+ =?utf-8?B?amR6V0c4amx4SHY1VnJXL0Q2SlhDOEdjSWk3RjhKWXhKaG1JQ2JGbmtxblhY?=
+ =?utf-8?B?VWZYZjZXajNDZk5ZWmpoeXRxRUV4VHU5Rm82d2lDSkU4bHcwY3dOWXc3TFVi?=
+ =?utf-8?B?b1RyL0pDUWFleFFRUnhEZmtnZXVXck53T0ZWUnFPWkIvc2VxVkkvSFBXNkpO?=
+ =?utf-8?B?TXBxTXQvTVVVcVlvSGRIWDJSRm1Sbm8yOEVraGZqOHI4RFpKOUlid0txTlBt?=
+ =?utf-8?B?TEUzSUIrZXc2OWFCWDF0OWVHMmJ6RlVWc3lhVEZKNWEvbWViQjN1L3FCWHVD?=
+ =?utf-8?B?TjV5amgweGNDUmVGam1SMDJNZ0lrQmxRTGR5Q1JiTkk0S2pHZUpKYzNhaVRh?=
+ =?utf-8?B?cW1yK2MzaXlaV3B1MnJSVk9LOVJqMUsrWHBCK2dtbTJWTUczUnlhMDlXZzha?=
+ =?utf-8?B?QkR6UGFZQ3Y2WVVFZkNvemt3cnhiL0NCZXF5dzMxd2xLNktWTUkzL1Q0TXNF?=
+ =?utf-8?B?VEZ2ZTZnN2EwemFNR2lCK3FaOVA2T1pUV3dYMXFXNVZ6SGtpREY4SCtvbU9C?=
+ =?utf-8?B?ZVZtak45WTkzMzVuRG9lZmJhaUpwek52dDBYNk9JaDAzQ2VaTmhzOHA1ZWZF?=
+ =?utf-8?B?dnd3anZKaUwvdGlGanJJMDdNWnE5TXdqU0Z4SHVDakErdzQrZnZ6aHo4S2dV?=
+ =?utf-8?B?VkVjdUJxcHdnYk1JdjFlaC9yR1FmRkFCN0paRjAvYlF6UFBXQzhjS2pWbUFn?=
+ =?utf-8?B?clo5dEJ2ZUxOTUt4SlY4dFZETFZPa1hkS1Rrb2hCdFgrck5EN0wxREpub2RU?=
+ =?utf-8?B?V1VQVHVESndxaG9JTjBRNVFPNUNMYk9SWDhMakVkR0hKeFRJUllGWlc0eUVN?=
+ =?utf-8?B?T3Z3NFRWbUdFMlUxTzZOOEQreVI0NDcxOE5PZ0hqdVRVVWVsYms3dFJaeXpJ?=
+ =?utf-8?B?RnRKMmJiWlVhdXZrbU5PcWhIY3EwWFNLTDdyQUNmd3FLbGxMUUFic1RoWVdR?=
+ =?utf-8?B?VVZKWi9FQ1BiS3N4Vjc0MnBNVEtSQ0RObnUwdTB1LzJsc0hSZTBRb2tabS92?=
+ =?utf-8?B?djlUQUU0RDFIVFZ1WTA0L3dnU1o1ZXpIdEVOZ0VXdEtNaU9yYzRWdmJ1UVpK?=
+ =?utf-8?B?VzlxY1lhQ1Zqcm5tb1A4cktoMWFwczRtelNuSlBDS1FPUjVMUFNubDRnaDJZ?=
+ =?utf-8?B?TlJiZDV3VnJmQThZV2dBcjkrWjlveDI0MCtEckdqdmIrV0xoS1dBam1meUg0?=
+ =?utf-8?B?Ynk4YWMrY1V4WkF1QTIvaXE0QWJlY1NPUVIxUWozbkpoSVR0MWpiQ05naVB0?=
+ =?utf-8?B?WUNTNkUvSGNPNm10OGY0cE11dlpHT3F6MElya3UrQjY3NFlBSk01WlhZTHBJ?=
+ =?utf-8?B?NHNkQUdpT1l4d3ZTcFo1UGxCU3J4SVIvVG5XQS9uWEo4UDJZeVpaaU83UUdz?=
+ =?utf-8?B?TVB3bDVpb3lrZ21MYjR1SnhWRFQrMTA5VFBqdjJTOWN6NEpidlYwWm5hTVA2?=
+ =?utf-8?B?STBLMWxqSU5qSkNuYlUrMXZ2anRRd1dyajRkb0I1MjFaSWxhQmEyZFR3eDBw?=
+ =?utf-8?B?MjkxY1JET21wMXUrRmpKOUQ3MGFYOURZdE9veGJhL2xleDEzTE9nbDBVL2pJ?=
+ =?utf-8?B?aXp6dVJuaGd5VE9TS0pTamZocUZrcWgyN1Bvc3djSDFLRzJ1bVRoY3FHKzIz?=
+ =?utf-8?B?MTJNb0RNM1NGTWNGZkllamNBcXd6d25zdUJPNExqekUzY1RkN2V0RTh6cUEw?=
+ =?utf-8?B?Z1pNTlZHSUlrdE1oUE9KVlV1L3FES0gxeVJjUUxVZEJHeVlxSmQ1ZThKRDhy?=
+ =?utf-8?B?aUwvb0ZDRjYvdjFzOGxIN0xnUFhhbUo4WTdzOUN2VEtSMmo5VzA5NkFWeGNX?=
+ =?utf-8?B?S0gyU3RuYnBCOXdnd3FWYWJYdDROVFg5RHIxZlI2WFNMOXo0MGxJQUp0WDE0?=
+ =?utf-8?B?OG1nME04NDZZMUpiMGRHVERnUkwvMXNxUUdwSmZQWHBwVy96VSswNzIwSFdi?=
+ =?utf-8?Q?003Q=3D?=
+X-OriginatorOrg: axis.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e25eb5b6-bd9d-4419-45e0-08dc80810b1d
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR02MB9994.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2024 08:18:10.6282
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AZuPRv75VxEDgF6xqQdVYHQCDwNQ44RF9kOsYo03eLhp+ygqitVEJHZpNI6VMT8p
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR02MB6109
 
-Am 29.05.24 um 22:52 schrieb Guenter Roeck:
-
-> Add support for SPD5118 (Jedec JESD300-5B.01) compliant temperature
-> sensors. Such sensors are typically found on DDR5 memory modules.
+On 5/29/24 16:01, Guenter Roeck wrote:
+> On 5/29/24 00:07, Krzysztof Kozlowski wrote:
+>> On 29/05/2024 08:07, Amna Waseem wrote:
+>>> Add a property to the binding to configure the Alert Polarity.
+>>> Alert pin is asserted based on the value of Alert Polarity bit of
+>>> Mask/Enable register. It is by default 0 which means Alert pin is
+>>> configured to be active low. To configure it to active high, set
+>>> alert-polarity property value to 1.
+>>>
+>>> Signed-off-by: Amna Waseem <Amna.Waseem@axis.com>
+>>> ---
+>>>   Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml | 9 +++++++++
+>>>   1 file changed, 9 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml 
+>>> b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
+>>> index df86c2c92037..a3f0fd71fcc6 100644
+>>> --- a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
+>>> +++ b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
+>>> @@ -66,6 +66,14 @@ properties:
+>>>       description: phandle to the regulator that provides the VS 
+>>> supply typically
+>>>         in range from 2.7 V to 5.5 V.
+>>>   +  alert-polarity:
+>>
+>> Missing vendor prefix.
+>>
 >
-> Cc: Ren=C3=A9 Rebe <rene@exactcode.de>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
-> Tested on MAG B650 TOMAHAWK WIFI with CMH32GX5M2B6000Z30
-> (Corsair Venegance DDR5).
+> Are you sure you want a vendor prefix here ? Reason for asking is that
+> many hardware monitoring chips have configurable alert or interrupt 
+> polarity,
+> only the name is different. Some examples are the JC42.4 standard ("event
+> polarity"), adt7410/adt7420 "interrupt polarity", MAX31827 ("alarm 
+> polarity"),
+> or DS1621 ("output polarity"). We even have a vendor property, 
+> "adi,alarm-pol",
+> used for MAX31827.
 >
-> Ren=C3=A9: I included you as MODULE_AUTHOR since the patch is derived fr=
-om
->        your driver. Please let me know if you prefer not to be listed as
->        author.
+> Secondary problem is that not all chips of the series support this
+> configuration. INA209 has a configurable "warning polarity", but the
+> warning pin and the smbus alert pin are two different pins.
+> INA219 and INA220 do not have alert or interrupt output pins.
+> Only INA226, INA230, INA231, INA238, and INA260 support configurable
+> alert polarity.
 >
->   Documentation/hwmon/index.rst   |   1 +
->   Documentation/hwmon/spd5118.rst |  60 ++++
->   drivers/hwmon/Kconfig           |  12 +
->   drivers/hwmon/Makefile          |   1 +
->   drivers/hwmon/spd5118.c         | 482 ++++++++++++++++++++++++++++++++
->   5 files changed, 556 insertions(+)
->   create mode 100644 Documentation/hwmon/spd5118.rst
->   create mode 100644 drivers/hwmon/spd5118.c
+> Thanks,
+> Guenter
+
+I agree with not using vendor prefix with alert-polarity property. 
+@Krzysztof Kozlowski what do you suggest?
+
+Amna
+
+>>> +    description: |
+>>
+>> Do not need '|' unless you need to preserve formatting.
+>>
+>>> +      Alert polarity bit value of Mask/Enable register. Alert pin 
+>>> is asserted
+>>> +      based on the value of Alert polarity Bit. Default value is 
+>>> active low.
+>>> +      0 selects active low, 1 selects active high.
+>>
+>> Just use string, easier to read. But for sure do not introduce different
+>> values than we already have - GPIO HIGH is 0, not 1.
+>>
+>>
+>>
+>> Best regards,
+>> Krzysztof
+>>
 >
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.r=
-st
-> index 03d313af469a..6e7b8726b60c 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -215,6 +215,7 @@ Hardware Monitoring Kernel Drivers
->      smsc47m192
->      smsc47m1
->      sparx5-temp
-> +   spd5118
->      stpddc60
->      surface_fan
->      sy7636a-hwmon
-> diff --git a/Documentation/hwmon/spd5118.rst b/Documentation/hwmon/spd51=
-18.rst
-> new file mode 100644
-> index 000000000000..67e990551a8a
-> --- /dev/null
-> +++ b/Documentation/hwmon/spd5118.rst
-> @@ -0,0 +1,60 @@
-> +.. SPDX-License-Identifier: GPL-2.0-or-later
-> +
-> +Kernel driver spd5118
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +
-> +Supported chips:
-> +
-> +  * SPD5118 (JEDEC JESD300-5B.01) compliant temperature sensor chips
-> +
-> +    JEDEC standard download:
-> +	https://www.jedec.org/standards-documents/docs/jesd300-5b01
-> +	(account required)
-> +
-> +
-> +    Prefix: 'spd5118'
-> +
-> +    Addresses scanned: I2C 0x50 - 0x57
-> +
-> +Author:
-> +	Guenter Roeck <linux@roeck-us.net>
-> +
-> +
-> +Description
-> +-----------
-> +
-> +This driver implements support for SPD5118 (JEDEC JESD300-5B.01) compli=
-ant
-> +temperature sensors, which are used on many DDR5 memory modules. Some s=
-ystems
-> +use the sensor to prevent memory overheating by automatically throttlin=
-g
-> +the memory controller.
-> +
-> +The driver auto-detects SPD5118 compliant chips, but can also be instan=
-tiated
-> +using devicetree/firmware nodes.
-> +
-> +A SPD5118 compliant chip supports a single temperature sensor. Critical=
- minimum,
-> +minimum, maximum, and critical temperature can be configured. There are=
- alarms
-> +for low critical, low, high, and critical thresholds.
-> +
-> +
-> +PEC configuration
-> +-----------------
-> +
-> +If the I2C/SMBus controller supports PEC, it can be enabled or disabled=
- using
-> +the 'pec' sysfs attribute attached to the i2c device.
-> +
-> +
-> +Hardware monitoring sysfs entries
-> +---------------------------------
-> +
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +temp1_input		Temperature (RO)
-> +temp1_lcrit		Low critical high temperature (RW)
-> +temp1_min		Minimum temperature (RW)
-> +temp1_max		Maximum temperature (RW)
-> +temp1_crit		Critical high temperature (RW)
-> +
-> +temp1_lcrit_alarm	Temperature low critical alarm
-> +temp1_min_alarm		Temperature low alarm
-> +temp1_max_alarm		Temperature high alarm
-> +temp1_crit_alarm	Temperature critical alarm
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 7f384a2494c9..111d05718b89 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -2182,6 +2182,18 @@ config SENSORS_INA3221
->   	  This driver can also be built as a module. If so, the module
->   	  will be called ina3221.
->
-> +config SENSORS_SPD5118
-> +	tristate "SPD5118 Compliant Temperature Sensors"
-> +	depends on I2C
-> +	select REGMAP_I2C
-> +	help
-> +	  If you say yes here you get support for SPD5118 (JEDEC JESD300-5B)
-> +	  compliant temperature sensors. Such sensors are found on DDR5 memory
-> +	  modules.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called spd5118.
-> +
->   config SENSORS_TC74
->   	tristate "Microchip TC74"
->   	depends on I2C
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index e3f25475d1f0..07c593fae9a3 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -207,6 +207,7 @@ obj-$(CONFIG_SENSORS_SMSC47B397)+=3D smsc47b397.o
->   obj-$(CONFIG_SENSORS_SMSC47M1)	+=3D smsc47m1.o
->   obj-$(CONFIG_SENSORS_SMSC47M192)+=3D smsc47m192.o
->   obj-$(CONFIG_SENSORS_SPARX5)	+=3D sparx5-temp.o
-> +obj-$(CONFIG_SENSORS_SPD51118)	+=3D spd5118.o
 
-Hi,
-
-thank you for working on this, i am currently testing the driver on my mac=
-hine.
-I already noticed the kconfig option is wrong, the correct one would be CO=
-NFIG_SENSORS_SPD5118.
-
-Thanks,
-Armin Wolf
-
->   obj-$(CONFIG_SENSORS_STTS751)	+=3D stts751.o
->   obj-$(CONFIG_SENSORS_SURFACE_FAN)+=3D surface_fan.o
->   obj-$(CONFIG_SENSORS_SY7636A)	+=3D sy7636a-hwmon.o
-> diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
-> new file mode 100644
-> index 000000000000..440503d09d13
-> --- /dev/null
-> +++ b/drivers/hwmon/spd5118.c
-> @@ -0,0 +1,482 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Driver for Jedec 5118 compliant temperature sensors
-> + *
-> + * Derived from https://github.com/Steve-Tech/SPD5118-DKMS
-> + * Originally from T/2 driver at https://t2sde.org/packages/linux
-> + *	Copyright (c) 2023 Ren=C3=A9 Rebe, ExactCODE GmbH; Germany.
-> + *
-> + * Copyright (c) 2024 Guenter Roeck
-> + *
-> + * Inspired by ee1004.c and jc42.c.
-> + *
-> + * SPD5118 compliant temperature sensors are typically used on DDR5
-> + * memory modules.
-> + */
-> +
-> +#include <linux/bitops.h>
-> +#include <linux/bits.h>
-> +#include <linux/err.h>
-> +#include <linux/i2c.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/module.h>
-> +#include <linux/regmap.h>
-> +#include <linux/units.h>
-> +
-> +/* Addresses to scan */
-> +static const unsigned short normal_i2c[] =3D {
-> +	0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, I2C_CLIENT_END };
-> +
-> +/* SPD5118 registers. */
-> +#define SPD5118_REG_TYPE		0x00	/* MR0:MR1 */
-> +#define SPD5118_REG_REVISION		0x02	/* MR2 */
-> +#define SPD5118_REG_VENDOR		0x03	/* MR3:MR4 */
-> +#define SPD5118_REG_CAPABILITY		0x05	/* MR5 */
-> +#define SPD5118_REG_I2C_LEGACY_MODE	0x0B	/* MR11 */
-> +#define SPD5118_REG_TEMP_CLR		0x13	/* MR19 */
-> +#define SPD5118_REG_ERROR_CLR		0x14	/* MR20 */
-> +#define SPD5118_REG_TEMP_CONFIG		0x1A	/* MR26 */
-> +#define SPD5118_REG_TEMP_MAX		0x1c	/* MR28:MR29 */
-> +#define SPD5118_REG_TEMP_MIN		0x1e	/* MR30:MR31 */
-> +#define SPD5118_REG_TEMP_CRIT		0x20	/* MR32:MR33 */
-> +#define SPD5118_REG_TEMP_LCRIT		0x22	/* MR34:MR35 */
-> +#define SPD5118_REG_TEMP		0x31	/* MR49:MR50 */
-> +#define SPD5118_REG_TEMP_STATUS		0x33	/* MR51 */
-> +
-> +#define SPD5118_TEMP_STATUS_HIGH	BIT(0)
-> +#define SPD5118_TEMP_STATUS_LOW		BIT(1)
-> +#define SPD5118_TEMP_STATUS_CRIT	BIT(2)
-> +#define SPD5118_TEMP_STATUS_LCRIT	BIT(3)
-> +
-> +#define SPD5118_CAP_TS_SUPPORT		BIT(1)	/* temperature sensor support */
-> +
-> +#define SPD5118_TS_DISABLE		BIT(0)	/* temperature sensor disable */
-> +
-> +/* Temperature unit in millicelsius */
-> +#define SPD5118_TEMP_UNIT		(MILLIDEGREE_PER_DEGREE / 4)
-> +/* Representable temperature range in millicelsius */
-> +#define SPD5118_TEMP_RANGE_MIN		-256000
-> +#define SPD5118_TEMP_RANGE_MAX		255750
-> +
-> +static int spd5118_temp_from_reg(u16 reg)
-> +{
-> +	int temp =3D sign_extend32(reg >> 2, 10);
-> +
-> +	return temp * SPD5118_TEMP_UNIT;
-> +}
-> +
-> +static u16 spd5118_temp_to_reg(long temp)
-> +{
-> +	temp =3D clamp_val(temp, SPD5118_TEMP_RANGE_MIN, SPD5118_TEMP_RANGE_MA=
-X);
-> +	return (DIV_ROUND_CLOSEST(temp, SPD5118_TEMP_UNIT) & 0x7ff) << 2;
-> +}
-> +
-> +static int spd5118_read_temp(struct regmap *regmap, u32 attr, long *val=
-)
-> +{
-> +	int reg, err;
-> +	u8 regval[2];
-> +	u16 temp;
-> +
-> +	switch (attr) {
-> +	case hwmon_temp_input:
-> +		reg =3D SPD5118_REG_TEMP;
-> +		break;
-> +	case hwmon_temp_max:
-> +		reg =3D SPD5118_REG_TEMP_MAX;
-> +		break;
-> +	case hwmon_temp_min:
-> +		reg =3D SPD5118_REG_TEMP_MIN;
-> +		break;
-> +	case hwmon_temp_crit:
-> +		reg =3D SPD5118_REG_TEMP_CRIT;
-> +		break;
-> +	case hwmon_temp_lcrit:
-> +		reg =3D SPD5118_REG_TEMP_LCRIT;
-> +		break;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	err =3D regmap_bulk_read(regmap, reg, regval, 2);
-> +	if (err)
-> +		return err;
-> +
-> +	temp =3D (regval[1] << 8) | regval[0];
-> +
-> +	*val =3D spd5118_temp_from_reg(temp);
-> +	return 0;
-> +}
-> +
-> +static int spd5118_read_alarm(struct regmap *regmap, u32 attr, long *va=
-l)
-> +{
-> +	unsigned int mask, regval;
-> +	int err;
-> +
-> +	switch (attr) {
-> +	case hwmon_temp_max_alarm:
-> +		mask =3D SPD5118_TEMP_STATUS_HIGH;
-> +		break;
-> +	case hwmon_temp_min_alarm:
-> +		mask =3D SPD5118_TEMP_STATUS_LOW;
-> +		break;
-> +	case hwmon_temp_crit_alarm:
-> +		mask =3D SPD5118_TEMP_STATUS_CRIT;
-> +		break;
-> +	case hwmon_temp_lcrit_alarm:
-> +		mask =3D SPD5118_TEMP_STATUS_LCRIT;
-> +		break;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	err =3D regmap_read(regmap, SPD5118_REG_TEMP_STATUS, &regval);
-> +	if (err < 0)
-> +		return err;
-> +	*val =3D !!(regval & mask);
-> +	if (*val)
-> +		return regmap_write(regmap, SPD5118_REG_TEMP_CLR, mask);
-> +	return 0;
-> +}
-> +
-> +static int spd5118_read_enable(struct regmap *regmap, u32 attr, long *v=
-al)
-> +{
-> +	u32 regval;
-> +	int err;
-> +
-> +	err =3D regmap_read(regmap, SPD5118_REG_TEMP_CONFIG, &regval);
-> +	if (err < 0)
-> +		return err;
-> +	*val =3D !(regval & SPD5118_TS_DISABLE);
-> +	return 0;
-> +}
-> +
-> +static int spd5118_read(struct device *dev, enum hwmon_sensor_types typ=
-e,
-> +			u32 attr, int channel, long *val)
-> +{
-> +	struct regmap *regmap =3D dev_get_drvdata(dev);
-> +
-> +	if (type !=3D hwmon_temp)
-> +		return -EOPNOTSUPP;
-> +
-> +	switch (attr) {
-> +	case hwmon_temp_input:
-> +	case hwmon_temp_max:
-> +	case hwmon_temp_min:
-> +	case hwmon_temp_crit:
-> +	case hwmon_temp_lcrit:
-> +		return spd5118_read_temp(regmap, attr, val);
-> +	case hwmon_temp_max_alarm:
-> +	case hwmon_temp_min_alarm:
-> +	case hwmon_temp_crit_alarm:
-> +	case hwmon_temp_lcrit_alarm:
-> +		return spd5118_read_alarm(regmap, attr, val);
-> +	case hwmon_temp_enable:
-> +		return spd5118_read_enable(regmap, attr, val);
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static int spd5118_write_temp(struct regmap *regmap, u32 attr, long val=
-)
-> +{
-> +	u8 regval[2];
-> +	u16 temp;
-> +	int reg;
-> +
-> +	switch (attr) {
-> +	case hwmon_temp_max:
-> +		reg =3D SPD5118_REG_TEMP_MAX;
-> +		break;
-> +	case hwmon_temp_min:
-> +		reg =3D SPD5118_REG_TEMP_MIN;
-> +		break;
-> +	case hwmon_temp_crit:
-> +		reg =3D SPD5118_REG_TEMP_CRIT;
-> +		break;
-> +	case hwmon_temp_lcrit:
-> +		reg =3D SPD5118_REG_TEMP_LCRIT;
-> +		break;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	temp =3D spd5118_temp_to_reg(val);
-> +	regval[0] =3D temp & 0xff;
-> +	regval[1] =3D temp >> 8;
-> +
-> +	return regmap_bulk_write(regmap, reg, regval, 2);
-> +}
-> +
-> +static int spd5118_write_enable(struct regmap *regmap, u32 attr, long v=
-al)
-> +{
-> +	if (val && val !=3D 1)
-> +		return -EINVAL;
-> +
-> +	return regmap_update_bits(regmap, SPD5118_REG_TEMP_CONFIG,
-> +				  SPD5118_TS_DISABLE,
-> +				  val ? 0 : SPD5118_TS_DISABLE);
-> +}
-> +
-> +static int spd5118_temp_write(struct regmap *regmap, u32 attr, long val=
-)
-> +{
-> +	switch (attr) {
-> +	case hwmon_temp_max:
-> +	case hwmon_temp_min:
-> +	case hwmon_temp_crit:
-> +	case hwmon_temp_lcrit:
-> +		return spd5118_write_temp(regmap, attr, val);
-> +	case hwmon_temp_enable:
-> +		return spd5118_write_enable(regmap, attr, val);
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static int spd5118_write(struct device *dev, enum hwmon_sensor_types ty=
-pe,
-> +			 u32 attr, int channel, long val)
-> +{
-> +	struct regmap *regmap =3D dev_get_drvdata(dev);
-> +
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		return spd5118_temp_write(regmap, attr, val);
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static umode_t spd5118_is_visible(const void *_data, enum hwmon_sensor_=
-types type,
-> +				  u32 attr, int channel)
-> +{
-> +	if (type !=3D hwmon_temp)
-> +		return 0;
-> +
-> +	switch (attr) {
-> +	case hwmon_temp_input:
-> +		return 0444;
-> +	case hwmon_temp_min:
-> +	case hwmon_temp_max:
-> +	case hwmon_temp_lcrit:
-> +	case hwmon_temp_crit:
-> +	case hwmon_temp_enable:
-> +		return 0644;
-> +	case hwmon_temp_min_alarm:
-> +	case hwmon_temp_max_alarm:
-> +	case hwmon_temp_crit_alarm:
-> +	case hwmon_temp_lcrit_alarm:
-> +		return 0444;
-> +	default:
-> +		return 0;
-> +	}
-> +}
-> +
-> +static inline bool spd5118_parity8(u8 w)
-> +{
-> +	w ^=3D w >> 4;
-> +	return (0x6996 >> (w & 0xf)) & 1;
-> +}
-> +
-> +/*
-> + * Bank and vendor id are 8-bit fields with seven data bits and odd par=
-ity.
-> + * Vendor IDs 0 and 0x7f are invalid.
-> + * See Jedec standard JEP106BJ for details and a list of assigned vendo=
-r IDs.
-> + */
-> +static bool spd5118_vendor_valid(u8 bank, u8 id)
-> +{
-> +	if (!spd5118_parity8(bank) || !spd5118_parity8(id))
-> +		return false;
-> +
-> +	id &=3D 0x7f;
-> +	return id && id !=3D 0x7f;
-> +}
-> +
-> +/* Return 0 if detection is successful, -ENODEV otherwise */
-> +static int spd5118_detect(struct i2c_client *client, struct i2c_board_i=
-nfo *info)
-> +{
-> +	struct i2c_adapter *adapter =3D client->adapter;
-> +	int regval;
-> +
-> +	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE_DATA |
-> +				     I2C_FUNC_SMBUS_WORD_DATA))
-> +		return -ENODEV;
-> +
-> +	regval =3D i2c_smbus_read_word_swapped(client, SPD5118_REG_TYPE);
-> +	if (regval !=3D 0x5118)
-> +		return -ENODEV;
-> +
-> +	regval =3D i2c_smbus_read_word_data(client, SPD5118_REG_VENDOR);
-> +	if (regval < 0 || !spd5118_vendor_valid(regval & 0xff, regval >> 8))
-> +		return -ENODEV;
-> +
-> +	regval =3D i2c_smbus_read_byte_data(client, SPD5118_REG_CAPABILITY);
-> +	if (regval < 0)
-> +		return -ENODEV;
-> +
-> +	regval =3D i2c_smbus_read_byte_data(client, SPD5118_REG_TEMP_CLR);
-> +	if (regval)
-> +		return -ENODEV;
-> +	regval =3D i2c_smbus_read_byte_data(client, SPD5118_REG_ERROR_CLR);
-> +	if (regval)
-> +		return -ENODEV;
-> +
-> +	if (!(regval & SPD5118_CAP_TS_SUPPORT) || (regval & 0xfc))
-> +		return -ENODEV;
-> +
-> +	regval =3D i2c_smbus_read_byte_data(client, SPD5118_REG_REVISION);
-> +	if (regval < 0 || (regval & 0xc1))
-> +		return -ENODEV;
-> +
-> +	regval =3D i2c_smbus_read_byte_data(client, SPD5118_REG_TEMP_CONFIG);
-> +	if (regval < 0)
-> +		return -ENODEV;
-> +	if (regval & ~SPD5118_TS_DISABLE)
-> +		return -ENODEV;
-> +
-> +	strscpy(info->type, "spd5118", I2C_NAME_SIZE);
-> +	return 0;
-> +}
-> +
-> +static const struct hwmon_channel_info *spd5118_info[] =3D {
-> +	HWMON_CHANNEL_INFO(chip,
-> +			   HWMON_C_REGISTER_TZ),
-> +	HWMON_CHANNEL_INFO(temp,
-> +			   HWMON_T_INPUT |
-> +			   HWMON_T_LCRIT | HWMON_T_LCRIT_ALARM |
-> +			   HWMON_T_MIN | HWMON_T_MIN_ALARM |
-> +			   HWMON_T_MAX | HWMON_T_MAX_ALARM |
-> +			   HWMON_T_CRIT | HWMON_T_CRIT_ALARM |
-> +			   HWMON_T_ENABLE),
-> +	NULL
-> +};
-> +
-> +static const struct hwmon_ops spd5118_hwmon_ops =3D {
-> +	.is_visible =3D spd5118_is_visible,
-> +	.read =3D spd5118_read,
-> +	.write =3D spd5118_write,
-> +};
-> +
-> +static const struct hwmon_chip_info spd5118_chip_info =3D {
-> +	.ops =3D &spd5118_hwmon_ops,
-> +	.info =3D spd5118_info,
-> +};
-> +
-> +static bool spd5118_writeable_reg(struct device *dev, unsigned int reg)
-> +{
-> +	switch (reg) {
-> +	case SPD5118_REG_TEMP_CLR:
-> +	case SPD5118_REG_TEMP_CONFIG:
-> +	case SPD5118_REG_TEMP_MAX:
-> +	case SPD5118_REG_TEMP_MAX + 1:
-> +	case SPD5118_REG_TEMP_MIN:
-> +	case SPD5118_REG_TEMP_MIN + 1:
-> +	case SPD5118_REG_TEMP_CRIT:
-> +	case SPD5118_REG_TEMP_CRIT + 1:
-> +	case SPD5118_REG_TEMP_LCRIT:
-> +	case SPD5118_REG_TEMP_LCRIT + 1:
-> +		return true;
-> +	default:
-> +		return false;
-> +	}
-> +}
-> +
-> +static bool spd5118_volatile_reg(struct device *dev, unsigned int reg)
-> +{
-> +	switch (reg) {
-> +	case SPD5118_REG_TEMP_CLR:
-> +	case SPD5118_REG_ERROR_CLR:
-> +	case SPD5118_REG_TEMP:
-> +	case SPD5118_REG_TEMP + 1:
-> +	case SPD5118_REG_TEMP_STATUS:
-> +		return true;
-> +	default:
-> +		return false;
-> +	}
-> +}
-> +
-> +static const struct regmap_config spd5118_regmap_config =3D {
-> +	.reg_bits =3D 8,
-> +	.val_bits =3D 8,
-> +	.max_register =3D SPD5118_REG_TEMP_STATUS,
-> +	.writeable_reg =3D spd5118_writeable_reg,
-> +	.volatile_reg =3D spd5118_volatile_reg,
-> +	.cache_type =3D REGCACHE_MAPLE,
-> +};
-> +
-> +static int spd5118_probe(struct i2c_client *client)
-> +{
-> +	struct device *dev =3D &client->dev;
-> +	unsigned int regval, revision, vendor, bank;
-> +	struct device *hwmon_dev;
-> +	struct regmap *regmap;
-> +	int err;
-> +
-> +	regmap =3D devm_regmap_init_i2c(client, &spd5118_regmap_config);
-> +	if (IS_ERR(regmap))
-> +		return dev_err_probe(dev, PTR_ERR(regmap), "regmap init failed\n");
-> +
-> +	err =3D regmap_read(regmap, SPD5118_REG_CAPABILITY, &regval);
-> +	if (err)
-> +		return err;
-> +	if (!(regval & SPD5118_CAP_TS_SUPPORT))
-> +		return -ENODEV;
-> +
-> +	err =3D regmap_read(regmap, SPD5118_REG_REVISION, &revision);
-> +	if (err)
-> +		return err;
-> +
-> +	err =3D regmap_read(regmap, SPD5118_REG_VENDOR, &bank);
-> +	if (err)
-> +		return err;
-> +	err =3D regmap_read(regmap, SPD5118_REG_VENDOR + 1, &vendor);
-> +	if (err)
-> +		return err;
-> +	if (!spd5118_vendor_valid(bank, vendor))
-> +		return -ENODEV;
-> +
-> +	hwmon_dev =3D devm_hwmon_device_register_with_info(dev, "spd5118",
-> +							 regmap, &spd5118_chip_info,
-> +							 NULL);
-> +	if (IS_ERR(hwmon_dev))
-> +		return PTR_ERR(hwmon_dev);
-> +
-> +	/*
-> +	 * From JESD300-5B
-> +	 *   MR2 bits [5:4]: Major revision, 1..4
-> +	 *   MR2 bits [3:1]: Minor revision, 0..8? Probably a typo, assume 1..=
-8
-> +	 */
-> +	dev_info(dev, "DDR5 temperature sensor: vendor 0x%02x:0x%02x revision =
-%d.%d\n",
-> +		 bank & 0x7f, vendor, ((revision >> 4) & 0x03) + 1, ((revision >> 1) =
-& 0x07) + 1);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct i2c_device_id spd5118_id[] =3D {
-> +	{ "spd5118", 0 },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(i2c, spd5118_id);
-> +
-> +static const struct of_device_id spd5118_of_ids[] =3D {
-> +	{ .compatible =3D "jedec,spd5118", },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, spd5118_of_ids);
-> +
-> +static struct i2c_driver spd5118_driver =3D {
-> +	.class		=3D I2C_CLASS_HWMON,
-> +	.driver =3D {
-> +		.name	=3D "spd5118",
-> +		.of_match_table =3D spd5118_of_ids,
-> +	},
-> +	.probe		=3D spd5118_probe,
-> +	.id_table	=3D spd5118_id,
-> +	.detect		=3D spd5118_detect,
-> +	.address_list	=3D normal_i2c,
-> +};
-> +
-> +module_i2c_driver(spd5118_driver);
-> +
-> +MODULE_AUTHOR("Ren=C3=A9 Rebe <rene@exactcode.de>");
-> +MODULE_AUTHOR("Guenter Roeck <linux@roeck-us.net>");
-> +MODULE_DESCRIPTION("SPD 5118 driver");
-> +MODULE_LICENSE("GPL");
