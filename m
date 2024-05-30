@@ -1,137 +1,256 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01on2084.outbound.protection.outlook.com [40.107.15.84])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 199E02B9A0
-	for <linux-hwmon@vger.kernel.org>; Thu, 30 May 2024 06:53:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717052031; cv=none; b=el/h33ER/4h2M925glYoLb6Sbu1flLQQ3avgjWQEJjLUJEJ6gZpo40a7gJUmWF1sswkVn8/JIeDdmhyrX4eV6A6DiZPPMhQ0KJ01I2p59rAZfPh8ayHFQGi/Jo0HrkVjxYzF15PI0ShzbTL64BdAWIhbxpUpNVVE8iqcqRd4dUk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717052031; c=relaxed/simple;
-	bh=nMSP1wf6CDY4ywhH9h9GzjkR0NTgug1i4YX1MvTBh8M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Wt4LFpCae7zHyJzCyg3vPr2fe+RhYB1+PalGxK/OcJDH6qyaJY0ejzr16pB1kazZhvzXYq9jgSnigYX+6cUAc8LPu3PmhplrUH5paLPpBOvwL5vw6iD4Vzl2ClspEulYL8FSxgvnusRJiXSHQknwmJxYdXLHtpUE0ry0B6or/4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NPtIVKDZ; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F4D2176AD2;
+	Thu, 30 May 2024 08:02:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.15.84
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717056139; cv=fail; b=ehEWsDZfXUe9PasBWLY5psQDzvPb/jSZSs37cHfe2DhQnxKyk5lJszysuCsETK+fVbMxwCqVwns+RaPfbmD5z7i5UFySsxS5fDL/O5QC8OvugZuu9u5l3uYy8i8li5VcM9qylvI6nqvNDhLegSuR1T1q/yDQAevrezlPziDj40M=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717056139; c=relaxed/simple;
+	bh=+TdAqR6+lFciN4LeRy9Mc+uYU6XMEMWoTRYqApA7lxI=;
+	h=Message-ID:Date:From:Subject:To:Cc:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=DiBZ25fNFtmrNhBADch8D/gTQY/FR79Js+cSE9PJPQl3wEpas5wlIpyXeYt5oak1sxUGIQ8NOLc3SopZH6+kGzvxt4//Pju/6DuAROaX2l5UfCmY6OKfwQ6ebvnQoDY/6C9DnuL0cfOjvOu663/LnfZ6JNAFmeTsDyFP/SxErX0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com; spf=pass smtp.mailfrom=axis.com; dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b=WF4zwLFu; arc=fail smtp.client-ip=40.107.15.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NPtIVKDZ"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1f62217f806so1427195ad.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 29 May 2024 23:53:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717052029; x=1717656829; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=/sgmctKrQSQlTnaFiZDis+3rSf13k/xQkAo/xHZAUr8=;
-        b=NPtIVKDZma3aeIYLPJliwRFelwvBfMEHSr1d6t3mA9XdlkLDCwY2RaNWLF8xrTOBXc
-         /fIl0VgupHvg7diIvbMa0NtD5DayZhLEL93tV3hGnDA6uxQi+37X8cjXA6Q0oM+KTLfV
-         JpYbDHTluMhqlARUec+V6/Zo+vL5oC56PSi3bSCJEbhAV4De0kzdH2OfhQfWhGWK8wpv
-         kEQ1gsQ9wDswT0mEsq2E1unQkZp84mv+Mmc8CUtYK7I9jclQWMlsjhloJDP2yJYcVuLP
-         U3XYIpsnpUSkeYkgaWorpUI7Tz5AOq57DjvzfOGPY9kIoROY2xyCFzUQ+073hDGf1fy0
-         rcnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717052029; x=1717656829;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/sgmctKrQSQlTnaFiZDis+3rSf13k/xQkAo/xHZAUr8=;
-        b=c7fKsheNRTPIHucSk0NZQWGzSVujpJB6Qh7tdPIcQs4SI0YxhXMZHjMXPMWaWgpdyy
-         jfL+4Em3FueHqzhhBwaRVLqnAP26WcVbHMLuL10ilvquvfyd3NeWIft0nAccYEVOtbuT
-         x0Bs9vZAEH6gRjnY5nd2dE+8AbzZhbZZESxe7aIqEiMqSGEsRtekb7Cw5IBXZ7ZIGv7E
-         ib+0+BRvtAZ+eiFzKYWXD8CGnCMysqUDL357NEObdoqgyrk2GToi3/CBnYTnxzOy7QrT
-         PKjoEH/XDNDuWGGwRFvqRHv0MO9m7WdlT1P0AKgPvPQKLJPCZEK2Q8LwzsJ9KLIPjYDh
-         rXlA==
-X-Forwarded-Encrypted: i=1; AJvYcCVoXSgwd8ygUD+IOjYjo4SzpQzMEKICDhpmRa8EvnOf5FNRc4+iG7A+LYYeRe3ykXHqgDqu41tDM/gA4zLoAofPCkIRgoMQURyATac=
-X-Gm-Message-State: AOJu0YwMW2BgPjEUr2l57JBB36A3qcWScyibcDYxpUYk9+K1ttSLArsM
-	QoHFMWsOu6vIQnqYcPb/GbI4UGZDPq96L6lmFE8XrVbwzPGIN6vj
-X-Google-Smtp-Source: AGHT+IGXveR8jjVBs97hcCjU4JF6JjtSLLqwXyC2VJJubDRkUL+CkSqQVTXevFGTIq1eCXJWFNRJ5A==
-X-Received: by 2002:a17:902:d2d0:b0:1f4:b18a:3f25 with SMTP id d9443c01a7336-1f61a4dbb18mr16954185ad.60.1717052029208;
-        Wed, 29 May 2024 23:53:49 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f4819346a2sm82200595ad.236.2024.05.29.23.53.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 May 2024 23:53:48 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <fe876f5c-c5c3-42ff-b45c-5c985e659ee9@roeck-us.net>
-Date: Wed, 29 May 2024 23:53:47 -0700
+	dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b="WF4zwLFu"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XwllLjwonOmvU+wLQqLyd20Ua1cVQZ+x+jxEZF3ROUotxPoFQMcO1tctQiyAQSb0kiVL0mF6PC18qcVd3T6sYYaP8++QOKYtxJ/Mzma+KInRtYLN3+8CbBRmL6pXpbxsbUeg6nWqPUHLNbCbnkUuoMZH/FaXKVeZF1i7SQ/PHpsI6u7SxaX6b0dbT6htdcSDqUcIe8q5AlxKgbrkEz49Dzr/F6yu/GAC4Or+ttBvvNi/L0QKdED5rYZ96Bxh4BHM+dZngnNzjnhR4pPFmQnkkTprHBTs0bOt/sMpc8XYRzQh8js5NJf7B6zSPdO6bRMdOnoSu0u/lLJjkkw2JF7xJA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/pSFlB2LRP3NaSkIhHiT7/OPCMmd2JZe64xv5sAdK9Y=;
+ b=i+Tud+YbMwYCzBXY1UJGgwprsXGr8/Iqh6qUo5Hlmpm+Kn86zAIxVcbV2+itzCpNk550PVHkchRpEzMdmMCIA52bbaGdEqde8z84S3HTzjlodqsnqcE+h/w+nq8SmeMfnDQuXHTHEblnAb+Py2h0VweqPBKFzPEUsRCzdrzVVfsPmDw46LIyD7IeK34SSOICjbALLXhWNf/YsvXLOXg+iV5cFzvI/DktS5nRu+1a4lqjqgluEwZcfc1uXYlK9B8IsobDHOBjH/yA9BSzZljOljyPMwhdPlZ0lWeG2Yx/q3sVeJy3ftOaJAVEUtzy3irK+oYQvcjGc26cUpYpsp0l1g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=axis.com; dmarc=pass action=none header.from=axis.com;
+ dkim=pass header.d=axis.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axis.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/pSFlB2LRP3NaSkIhHiT7/OPCMmd2JZe64xv5sAdK9Y=;
+ b=WF4zwLFu7VbqRbwgUTxeUDwbYKCIo92kJtRQmQkFVmRqckBSu5/0o2DqXIRUdstGtQBFYkLJvnsBA3VeIGCGw6zoJewwqAmWXJmewODowNP8wVNSxDBV4YVWzQ6iKqVU0GPONF0kB5GkRfPN2DJUj6FiiOB6MbAQ4eWTYv2kJLM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=axis.com;
+Received: from DB9PR02MB9994.eurprd02.prod.outlook.com (2603:10a6:10:462::8)
+ by AS2PR02MB9715.eurprd02.prod.outlook.com (2603:10a6:20b:5e8::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.17; Thu, 30 May
+ 2024 08:02:11 +0000
+Received: from DB9PR02MB9994.eurprd02.prod.outlook.com
+ ([fe80::f9a2:77a1:a5aa:8f8b]) by DB9PR02MB9994.eurprd02.prod.outlook.com
+ ([fe80::f9a2:77a1:a5aa:8f8b%4]) with mapi id 15.20.7633.018; Thu, 30 May 2024
+ 08:02:11 +0000
+Message-ID: <138a7fb9-fd69-4c41-8a55-629321a28521@axis.com>
+Date: Thu, 30 May 2024 10:02:09 +0200
+User-Agent: Mozilla Thunderbird
+From: Amna Waseem <Amna.Waseem@axis.com>
+Subject: Re: [PATCH v2 2/2] hwmon: (ina2xx) Add device tree support to pass
+ alert polarity
+To: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, linux-hwmon@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, kernel@axis.com
+References: <20240529-apol-ina2xx-fix-v2-0-ee2d76142de2@axis.com>
+ <20240529-apol-ina2xx-fix-v2-2-ee2d76142de2@axis.com>
+ <6b87136a-01e7-4b4b-b36f-632cf59b4760@roeck-us.net>
+Content-Language: en-US
+In-Reply-To: <6b87136a-01e7-4b4b-b36f-632cf59b4760@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MM0P280CA0014.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:190:a::23) To DB9PR02MB9994.eurprd02.prod.outlook.com
+ (2603:10a6:10:462::8)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] hwmon: (lm90) Convert to use PEC support from hwmon
- core
-To: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>,
- linux-hwmon@vger.kernel.org
-Cc: Radu Sabau <radu.sabau@analog.com>
-References: <20240529180132.72350-1-linux@roeck-us.net>
- <20240529180132.72350-3-linux@roeck-us.net>
- <6d6ec285c74afb68ca448b0188903cfeb375ccd1.camel@gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <6d6ec285c74afb68ca448b0188903cfeb375ccd1.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB9PR02MB9994:EE_|AS2PR02MB9715:EE_
+X-MS-Office365-Filtering-Correlation-Id: 22660e73-a293-4a94-1677-08dc807ecf3d
+X-LD-Processed: 78703d3c-b907-432f-b066-88f7af9ca3af,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|376005|366007|1800799015;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?MjFLQ3cyK0JBZzZjUjNpKytTVi9WUFVmMUprNXhhSTJFcjVrbk9HQXNOeVZa?=
+ =?utf-8?B?M2RUUU9mTVR4aHFyUW42RzVKSHhRcjkyVDJxNjR1Uzcwd1RnQmxYOG1ZTktp?=
+ =?utf-8?B?TGNTSFE1bTlyYU80VTRwNjYxanl5cndBY1JHeWUzZ0tBaGpYVHRKNjRuRkxm?=
+ =?utf-8?B?YXlmTVhVRmg0OVM2QnFYdEt1OWY5a2JMSGR1dXV4QzJQVjBUUFV2MWR2eWhP?=
+ =?utf-8?B?b085T1lTZm5ZVTNPS05mMzc5dmFQYXJHYms4WVU3cmdnM3NkaGxDRVdFak1w?=
+ =?utf-8?B?dVRmTTNCSGFNMDE3RmRUbnp1ekhqRjN2MjJjVjY1dFJEdjJtL3prRHFyNXB1?=
+ =?utf-8?B?VFFjbzlvL0owS0t1bjRkNlFyZXkxZTQ5TlpUZ1J1c0dNbDNlaE4wdkFYUEda?=
+ =?utf-8?B?K292ZE13STFXU3NRUFp0QzNtRUdvZ1RiVTA3ZnhuS0tRL2U0TDFsWWc3N3dn?=
+ =?utf-8?B?Tkc1WVcyYkN5cHJEQ1lmVzZzKzA5aFlMVFlqb2gremkwaDQzVzdMYzdiSGpK?=
+ =?utf-8?B?d3pVVUxQb0pwM3E0RjB4dU5jWFZPSGsraFVMUGxhMDhuWmR5QTFzNWYxRGN0?=
+ =?utf-8?B?eTgzNUg5U0pFOXFMb1FUZ25UdW56RnZtcGFKZXVuQ2E4UXhBQk05cVJzOGl5?=
+ =?utf-8?B?dVFHZ0dCL0RucENwTE10MytibWZYWDZkRy8rdXF0bjZxclU5SXk1cVN5UXFp?=
+ =?utf-8?B?b0l3VjgyRXI2Vmp0Sm5JSHVveGszMVhiWUtROURqK3dPbnZOenVMTHlkT1hY?=
+ =?utf-8?B?UmdlYkJvYzJTK2NCRTZ2eWVaSGFaWXJlS2s2a3BNWXZxWGxvclJtN2NDc2Zs?=
+ =?utf-8?B?KzExZlJ5dDRudUVRekVtejkxQTc2YnVNWndWRFgrcE1IOFBmL2JBYXBOS29i?=
+ =?utf-8?B?Qk4va1lXd1BsMkRYYlRIOU81amNXRzVlYUM0N1JqRGFieUl0KzZnTU1zdnZ1?=
+ =?utf-8?B?eVlVc3ZLWXdJZWdBNkZjZk5DMk12WW1RM1VkL1J3YlRSU3RYWGFKQ0tIcExS?=
+ =?utf-8?B?MzNaMUN5MWZXY2dTemlDL1ZhcWR3UHUvVFBlL3ZOSDVjVUptY01MWi9sb3JF?=
+ =?utf-8?B?Rzd1SnBEaUQ5WS9BYnJ6aG5QZ2t1VmNwTTZGT0tacG43QUcyMkhuRC9hR0FK?=
+ =?utf-8?B?emN5T0N0ZVRNZENseTQ2NUxKNWFCdEY2WVN2aW5USDFHODA2YWpET0cySHc3?=
+ =?utf-8?B?Rjg4d2V0NFErR3BDRmFuWThTNnAwbFZmZ3p3S245amZ5cWJHTEhSb2F3OWUy?=
+ =?utf-8?B?ZWxrZmZKaVR6MFJLMnh2NE0zKzBHK1Y3T0RyQkErMHg1QTlDbmJ4MVg4RSt5?=
+ =?utf-8?B?SnlxcDZWdlBLb0Uvd3NWejRpYkw5MVNtTW9xWkRaV2NjNkR2RTJORWhRYjJt?=
+ =?utf-8?B?aytiWUQzZWwrWmluQkpGL2NaMkdTVDZ3QWRGV3dWQ0RRZVk3a3dBTGpoMCtv?=
+ =?utf-8?B?aDhydm1yQzl1emVOZFhiak5nL0ZnUHBTRzBxUlpVUHpzTnFhVXRVQlVBa0l5?=
+ =?utf-8?B?RnpPcVphK1hPTHd0enFLMnFSSWVPc0s4NHd6MFoyVk8rNysvMHI1dWV2TVd0?=
+ =?utf-8?B?Nng2TUk2cTc0VmJJN0ZmbTBOL3FSRENrdERWeG1zSU5VQlZDNlJTVUtNVmIy?=
+ =?utf-8?B?OUdhMllObllsSWVjek1BYzF0QW5xbWdtYUFTajVUeW1QMmdCclJNVmRvUk5q?=
+ =?utf-8?B?M3QzNExBbDhXbm1JbjNrUklFbC9TSW5OUWlobU0yRUk4dHVZL3FpMUlnPT0=?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR02MB9994.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(366007)(1800799015);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?dk1hUE16MDE3WnZheWI4OGtmUFh5UjhOSjg4UjFCd1M3WS9FNHdwQVQ4bGlD?=
+ =?utf-8?B?dkd2ZHJQcll6c1MxZ3U2VzhuMnlSc1dZUEllUXBUK2dDTU9SUTU3V1RrSFBl?=
+ =?utf-8?B?Ly9VaThGWjNPZHdPUk9nc3p3NWRwSzdwalZkN24wTHZkVDB2T0xseWpnL1NK?=
+ =?utf-8?B?aEZXN1c3dmVpSmxYZzB5TnM2c2RudE1SUGN1NjNNOEpsNU14VzZvNlJpbjkw?=
+ =?utf-8?B?RHJtemhOT0dLRllaZUFCditjVllQbStQTVp1dC9wblV3aVZackhpVlJ0UGtL?=
+ =?utf-8?B?MFJQL2RzK2w3UEhlUTNPdm9wVk45VnAwRmR0M1FvL3AvN3d5eTFWaFNIK3By?=
+ =?utf-8?B?bVpFenVQZFpzR05ZQ3Fkb1R1WkMwZFNTbmU2U3VZeHVnVi94S2VabldremtX?=
+ =?utf-8?B?RUJ4dVNLUWJVTTMrWjRDeWZ5TVdlNVYyNG12eWpnQ0ViRmZZOFIwMndPa0dS?=
+ =?utf-8?B?dGM4SlFEa0ZocWFzVE1jYVZEVHQ4bk92M0VaU1d2V2ttSGZ3NGdOM0NiRUhU?=
+ =?utf-8?B?ZlJ3cEJrY21xTStLTFJrZXRzZEtMOXc1VUllb2h5cTRhTTZiUFRYWE1MdXlG?=
+ =?utf-8?B?UmxDb3c4TGxsN0ZLUGd3Z1czd2c2MWtWQVl0SjJyVUZzd0ZRemRuMS9FMFdP?=
+ =?utf-8?B?cXYzSkoxUnhYdUlmTGU0UFN0RXdqQWMya0EvRk5hYUpBeUVMY1lndTRqQldk?=
+ =?utf-8?B?OTVPbkxQMXczRVVXYzZDMnVIYkp0ektIdFBtQXRmM3BwZXpJNmFzK3VFVWEr?=
+ =?utf-8?B?WGxURlJ0QVZJWjh6Y0Q1bHZmZGcrVGlLN3dKenpMcTZHODBLUlJZWkEraXA5?=
+ =?utf-8?B?VjNCalIySnRNUnA5VFhXdGpFZXdMNk1adkxCWVVobDFjZDU0T29yZDhxZDlo?=
+ =?utf-8?B?VlNmOFprSXNFUExQS1o3RktvTngzNUgyVXBLa2dzL3FUNCtYdnVtT2pqbmNG?=
+ =?utf-8?B?UDNVV1dQRWlQUjR1UjhXUkRMUTNSTlE1T1RWcGdJMWRCSzZ4TWFzWXpxOFVC?=
+ =?utf-8?B?eTJJYmZWZW1kcHZVMy9Wd0IxbXplckJ4MEFaL3h0RVdIODQvVFVENHM0LzVq?=
+ =?utf-8?B?QnBYZmV1b0RIdmlMeDY0REVXaGhKWU9MaVBBTUxsbGx2R0lJNnJRVVllWThv?=
+ =?utf-8?B?a2Ztbkk3ZHU1WTNnZ0JtU2J0S0VrVWF0b0tmTXNHRUVqNm1xNGQwbWFKUnAx?=
+ =?utf-8?B?dnRHNjJLSllWUWdmZFR5N2RxUVRuakU3WEhOSXJncXdURWhWTHE3K1duYU52?=
+ =?utf-8?B?VFFtRHFUS202ZlFYVSthNlk0ODhJclRveXRVcEZxbml4bytKeXIxeGRTVWFw?=
+ =?utf-8?B?YXRKMXNqaFR1Ujc5ZmgzUXdYdmRkdCt1MnNOYjFWK3M5SHhjM0tKVDJhVjhw?=
+ =?utf-8?B?TTQwVHJpTzltRGMzQ09qK1lQcTYxeDJiTTEyNUxYaHgyRHZwd0VpNkpOMWdO?=
+ =?utf-8?B?eUtDODBwdnFNNWJmYnk5UEsyd0g2ZW5RZG9WTkNILzRGN3h4TmYrdlp6VERI?=
+ =?utf-8?B?WE1WZGp6ZXpFSkZvTDd2eXdtT1MxemRJRHFuV1hyWjQ4OGcyRXF5Y1crTWR6?=
+ =?utf-8?B?MVAyTUM4bmEwNk9IYkNDakVKREEyYnR5Q0IzZ0Nva1ljaE41V1ptVGRhdUFU?=
+ =?utf-8?B?bS8zVnFaVmNHOTVqYUZZNlV3ZS83U0RIRHdGemNTTkgzVEM3ZGZvZmxzeHM2?=
+ =?utf-8?B?WnBmd3lidHJYSGNpT1liYm82enQ3eXRUR1F3V3NCMU9hRjYrZ2hBZ0FwUFVL?=
+ =?utf-8?B?RGsvWi9LVFpvdHFNS3hrcGdiM2ZlSEo3cnREWW9wQVlqb1o3Y1BIeHJKenlE?=
+ =?utf-8?B?YjJXdlhQTE42TTA0SE9SQVRXMi8vV0ZMQlpVRWNuRWtQeVRaanV3ZFVPZHJI?=
+ =?utf-8?B?Y3pjK0I3VmJQNVZScThSblpISjc1cDBHVys5ckVSRjdZT0ZVUlhSRFB3YW42?=
+ =?utf-8?B?Q0U4MXlzb3VjbFYwVjA4L1RFd0pPOHhJWmJOYVdPbkdiOEpvUHZub1NHSmNk?=
+ =?utf-8?B?R01nUGRqOTZhNkYvcXRyRU4rTkdSTXA5QmpMYkc2YTlBZW1wc1pMNGM0dFJZ?=
+ =?utf-8?B?dU5takM0WkpDa0h6aFBzVXpCZ0IzK0pubVhwWmZnM050NnVNeWZLTm5jay9u?=
+ =?utf-8?Q?PAkM=3D?=
+X-OriginatorOrg: axis.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 22660e73-a293-4a94-1677-08dc807ecf3d
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR02MB9994.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2024 08:02:11.3265
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3kD7G5FrFHlhSNuU4g8bq6+Omrrd9+uMMWoEFZw027sdKMyRBlIUxm2lEVwzadLf
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR02MB9715
 
-On 5/29/24 23:38, Nuno Sá wrote:
-> On Wed, 2024-05-29 at 11:01 -0700, Guenter Roeck wrote:
->> Replace driver specific PEC handling code with hardware monitoring core
->> functionality.
+On 5/29/24 16:11, Guenter Roeck wrote:
+> On 5/29/24 02:47, Amna Waseem wrote:
+>> The INA230 has an Alert pin which is asserted when the alert
+>> function selected in the Mask/Enable register exceeds the
+>> value programmed into the Alert Limit register. Assertion is based
+>> on the Alert Polarity Bit (APOL, bit 1 of the Mask/Enable register).
+>> It is default set to value 0 i.e Normal (active-low open collector).
+>> However, hardware can be designed in such a way that expects Alert pin
+>> to become active high if a user-defined threshold in Alert limit
+>> register has been exceeded. This patch adds a way to pass alert polarity
+>> value to the driver via device tree.
 >>
->> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>> Signed-off-by: Amna Waseem <Amna.Waseem@axis.com>
+>
+> Please address my earlier comments, and in the future please wait a 
+> few minutes
+> before sending another version to give people time to provide feedback
+> on the earlier version(s).
+Ok.
 >> ---
-> 
-> Acked-by: Nuno Sa <nuno.sa@analog.com>
-> 
+>>   drivers/hwmon/ina2xx.c | 27 +++++++++++++++++++++++++++
+>>   1 file changed, 27 insertions(+)
+>>
+>> diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
+>> index d8415d1f21fc..9afaabdc367d 100644
+>> --- a/drivers/hwmon/ina2xx.c
+>> +++ b/drivers/hwmon/ina2xx.c
+>> @@ -73,6 +73,9 @@
+>>   #define INA226_READ_AVG(reg)        (((reg) & INA226_AVG_RD_MASK) 
+>> >> 9)
+>>   #define INA226_SHIFT_AVG(val)        ((val) << 9)
+>>   +#define INA226_ALERT_POLARITY_MASK        0x0002
+>> +#define INA226_SHIFT_ALERT_POLARITY(val)    ((val) << 1)
+>> +
+>>   /* bit number of alert functions in Mask/Enable Register */
+>>   #define INA226_SHUNT_OVER_VOLTAGE_BIT    15
+>>   #define INA226_SHUNT_UNDER_VOLTAGE_BIT    14
+>> @@ -178,6 +181,21 @@ static u16 ina226_interval_to_reg(int interval)
+>>       return INA226_SHIFT_AVG(avg_bits);
+>>   }
+>>   +static int ina2xx_set_alert_polarity(struct ina2xx_data *data,
+>> +                     unsigned long val)
+>> +{
+>> +    int ret;
+>> +
+>> +    if (val > INT_MAX || !(val == 0 || val == 1))
+>> +        return -EINVAL;
+>> +
+>> +    ret = regmap_update_bits(data->regmap, INA226_MASK_ENABLE,
+>> +                 INA226_ALERT_POLARITY_MASK,
+>> +                 INA226_SHIFT_ALERT_POLARITY(val));
+>> +
+>> +    return ret;
+>
+> ret is an unnecessary variable.
+>     return regmap_update_bits(...);
+>
+Agreed. Will do it in next patch
+>
+>> +}
+>> +
+>>   /*
+>>    * Calibration register is set to the best value, which eliminates
+>>    * truncation errors on calculating current register in hardware.
+>> @@ -659,6 +677,15 @@ static int ina2xx_probe(struct i2c_client *client)
+>>       if (ret)
+>>           return dev_err_probe(dev, ret, "failed to enable vs 
+>> regulator\n");
+>>   +    if (!of_property_read_u32(dev->of_node, "ti,alert-polarity", 
+>> &val)) {
+>> +        ret = ina2xx_set_alert_polarity(data, val);
+>> +        if (ret < 0) {
+>> +            return dev_err_probe(
+>> +               dev, ret,
+>> +               "failed to set APOL bit of Enable/Mask register\n");
+>
+> Line split is still as bad as before.
+>
+> Guenter
+>
+I have tried to apply clang-format and it still shows the line split as 
+follows:
 
-Thanks!
+     if (!of_property_read_u32(dev->of_node, "ti,alert-polarity", &val)) {
+         ret = ina2xx_set_alert_polarity(data, val);
+         if (ret < 0) {
+             return dev_err_probe(
+                 dev, ret,
+                 "failed to set APOL bit of Enable/Mask register\n");
+         }
+     }
 
-Guenter
+What format will you suggest for line split? Is there any reference you 
+can provide for splitting up the lines in Linux kernel drivers' code?
+
+Amna
 
