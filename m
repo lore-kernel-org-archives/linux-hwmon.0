@@ -1,258 +1,112 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BB411E4AD
-	for <linux-hwmon@vger.kernel.org>; Fri, 31 May 2024 17:44:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35080219FD;
+	Fri, 31 May 2024 20:33:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717177450; cv=none; b=oSgn8jRfGWA+0t/sxUcNLlL31HpQ8y0Gcr/3OgtUx8PJTlJqby1e5/ReLnC3PKU5paQJ9Jc065sBXBpAq3Ha8ifCg+Zni+cV9R3XSVlJo+RAkv9Y7AI4LEGc1X6h2dFpnPadMzRf/W3BXcSR79WMuoTpCmQVyDaDFHO9RoQpTMI=
+	t=1717187632; cv=none; b=tg+vn2yWyeuq/1E2s785QMY39zJI83NtAD16lToZfZ8M2mzQSZLl1PVEzOF/aymWaYcR5OPktpDrojzFWjvMolhE79LdsSNjpNg3jNqO6BCbhT2J/VchPL9McWfG6LMlIc2h7hPCzBBE44ALNChPQBES6/mOgmx7hn+FEltXPAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717177450; c=relaxed/simple;
-	bh=KZp4l8IIzKRjpb5tcQsWbf9Vg7fS61yKH+5lZFfvGT4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=MArENAAoSm/jsSq71fhVFj8IeWQe/6R/PCnBz8Fu9lbCKtcptQBGiBA05c3uvnovzm+hJcGNXoa45rg986aBOzaNtzqwuPCI/kl25i7YxWhfApvsW3dCwfmaZTBuTGIoNy64Dnwu6NWniqEt4aVZYvdRFmuPr/0bvqftsXvd7fI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NcMlydHy; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1717187632; c=relaxed/simple;
+	bh=165fXhoSFy7gnvxl7/fNUY60TTAeItlwLCL3gFs6htk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=a7jnw91B3efgWGTyFBvoRRfVfRgOlB9CfywRblZImfGEvZUdP/2KvTiH4xFxwMUYxAFGM9snyzP90zO7QDXtMjauFEoIQ+TUGQN5kfAhMW/Yu9/NKuMucQxXu2VS25+a3JzGgyVN46T8+1LFd9kQIwWZfd0oIwRevFumPM22TH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XU/OVnt4; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NcMlydHy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717177448; x=1748713448;
-  h=date:from:to:cc:subject:message-id;
-  bh=KZp4l8IIzKRjpb5tcQsWbf9Vg7fS61yKH+5lZFfvGT4=;
-  b=NcMlydHyjWkY+2d68B1texUesGI/QZuJZiYqvpD4eW8zDiKV9s6v2Qg2
-   /dXXnLEFFFhboR/Km2GDgUiUocW03MAcP8GOGLcivclc/krk0vqGX1YnV
-   arsz6jGDvg6xNvI0rEiOVU18EhZuTWXhhWPaQRFMoGqVlc8brSVFHq755
-   WUSg7tAKd+n2kI4htZbv1YFrWEGpbSm47gKxhKpRSFSZ6xXb+4TdlyP9N
-   fUOPpqxp9+fwSLnBE7D6SVcoh5NZxR98WkpDQHpeEgYRKwe5jAPd2IkAx
-   W0SqXG3VYznU1dXF7/epEBW0PkOdn6xTNBAfxj6JJ/+tYMfQYAmIF9k8v
-   g==;
-X-CSE-ConnectionGUID: UoS2jwyEQlm0R5AzcmJTqw==
-X-CSE-MsgGUID: iKS8Hl99QWiCAMKW2hbSDQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11089"; a="16684013"
-X-IronPort-AV: E=Sophos;i="6.08,205,1712646000"; 
-   d="scan'208";a="16684013"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2024 10:44:08 -0700
-X-CSE-ConnectionGUID: Kaq41Dy4TC+bzcskh5Ix5g==
-X-CSE-MsgGUID: 8f0hsil5TVydWfGmBeyRRA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,205,1712646000"; 
-   d="scan'208";a="36688008"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by orviesa006.jf.intel.com with ESMTP; 31 May 2024 10:44:07 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sD6IN-000Hah-2G;
-	Fri, 31 May 2024 17:44:03 +0000
-Date: Sat, 01 Jun 2024 01:43:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:fixes] BUILD SUCCESS
- 9ea60fe541a0a1d4a0c778ba6af666cc179aadea
-Message-ID: <202406010133.5JAz7OYS-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XU/OVnt4"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1f47f07acd3so22261385ad.0;
+        Fri, 31 May 2024 13:33:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1717187630; x=1717792430; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=9AQ2FmyRQaYL0b07166i1h8j3ECpFVUwMiyq+R27jwY=;
+        b=XU/OVnt4/IAQPtvKIp09r3LZQFjDCuuFzMFF7990Gxn/kx/8RLsiDPHJN8Ph0vDrFm
+         gqYRpLx28QWpPRtnxyRa29LZVB4qlYD9n7vvHcXmMz706OTfAmnodZe06rV3yk1iZA8s
+         bFm+DOhtSXU6WLNQRwSqhWX8IVB6P2FWuKe/frHTQvdCGxf0+cxMWj3CUdVbwvoLFGz3
+         Od9b61H03AsPl5oc6phAuOSSeR0nmHGGqS1On5+zPI/VXEhi4z/p25CA7tDvF/n3St5y
+         5PTTx5+M71DGQL0kCzjfMS19uIoiCOSh4pEclpoPTus7OvursHPo/Sr4w65gbTkWyK/C
+         xmeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717187630; x=1717792430;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9AQ2FmyRQaYL0b07166i1h8j3ECpFVUwMiyq+R27jwY=;
+        b=BlQ+5KRGfIJNNZfrqdxV9X9tJusfgBKX+B69SI+ghrhGD5IJnDlhoyk+T4EO8AHlLX
+         u5pgl90CMGpkUynzvMU9y3PqgCqre8PtVKX5wEFKc6sweJbpzMf8l7+jWzWplvUkFh1m
+         8Jb90GFjoY4xXEd+XElGqNaVY/xIC9CWL7KOxBedDYWqmqCNt8WRH386n1N1MilQiYhr
+         fEpB/LGhB2KISrT0iaYk9Ij7+xfx+pxoBFrdXEac8NfAYm1nM9kcJHFX+66CJ3dLcROW
+         zkQVSne92lEPEiviRazCoGcEcjdYf3NMQcDxjXMwI7QevbRxWY0QThwJnZnoOIezTJQG
+         HT4Q==
+X-Gm-Message-State: AOJu0YyZ5OkLtPbxei1VFpixg9o86i12Stz/iU0j+GNhb1obc3kXRsgC
+	WkpLvvfOByeg/RJsTqhJj1ka7tned06nIJf0c4aJBIK1NI6Cvi3RcGnLUw==
+X-Google-Smtp-Source: AGHT+IFIRN9VmRiNY9hdjCUOtQa7ygrE3U1K7TR2cmnyerWFyLEyRJkN952fhA3R7fTdIgZBz4sSiQ==
+X-Received: by 2002:a17:902:da92:b0:1f4:7ee3:704c with SMTP id d9443c01a7336-1f637019284mr34658175ad.24.1717187629888;
+        Fri, 31 May 2024 13:33:49 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f63232ddddsm21052285ad.15.2024.05.31.13.33.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 May 2024 13:33:49 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+To: linux-hwmon@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Nuno Sa <nuno.sa@analog.com>,
+	Radu Sabau <radu.sabau@analog.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v2 0/2] hwmon: Add PEC attribute support to hardware monitoring core
+Date: Fri, 31 May 2024 13:33:44 -0700
+Message-Id: <20240531203346.1396055-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git fixes
-branch HEAD: 9ea60fe541a0a1d4a0c778ba6af666cc179aadea  powerpc: Limit ARCH_HAS_KERNEL_FPU_SUPPORT to PPC64
+Several hardware monitoring chips optionally support Packet Error Checking
+(PEC). For some chips, PEC support can be enabled simply by setting
+I2C_CLIENT_PEC in the i2c client data structure. Others require chip
+specific code to enable or disable PEC support.
 
-elapsed time: 1460m
+Introduce hwmon_chip_pec and HWMON_C_PEC to simplify adding configurable
+PEC support for hardware monitoring drivers. A driver can set HWMON_C_PEC
+in its chip information data to indicate PEC support. If a chip requires
+chip specific code to enable or disable PEC support, the driver only needs
+to implement support for the hwmon_chip_pec attribute to its write
+function.
 
-configs tested: 181
-configs skipped: 3
+The code calls i2c_check_functionality() to check if PEC is supported
+by the I2C/SMBus controller. This function is only available if CONFIG_I2C
+is enabled. For this reason, the added code needs to depend on CONFIG_I2C.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Packet Error Checking is only supported for SMBus devices. HWMON_C_PEC
+must therefore only be set by a driver if the parent device is an I2C
+device. Attempts to set HWMON_C_PEC on any other device type is not
+supported and rejected.
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                          axs101_defconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20240531   gcc  
-arc                   randconfig-002-20240531   gcc  
-arm                               allnoconfig   clang
-arm                                 defconfig   clang
-arm                            mmp2_defconfig   gcc  
-arm                        multi_v5_defconfig   gcc  
-arm                           omap1_defconfig   gcc  
-arm                       omap2plus_defconfig   gcc  
-arm                   randconfig-001-20240531   clang
-arm                   randconfig-002-20240531   clang
-arm                   randconfig-003-20240531   clang
-arm                   randconfig-004-20240531   clang
-arm                        vexpress_defconfig   gcc  
-arm                         wpcm450_defconfig   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                            allyesconfig   clang
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240531   clang
-arm64                 randconfig-002-20240531   clang
-arm64                 randconfig-003-20240531   gcc  
-arm64                 randconfig-004-20240531   gcc  
-csky                              allnoconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240531   gcc  
-csky                  randconfig-002-20240531   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20240531   clang
-hexagon               randconfig-002-20240531   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240531   clang
-i386         buildonly-randconfig-002-20240531   gcc  
-i386         buildonly-randconfig-003-20240531   gcc  
-i386         buildonly-randconfig-004-20240531   clang
-i386         buildonly-randconfig-005-20240531   gcc  
-i386         buildonly-randconfig-006-20240531   clang
-i386                                defconfig   clang
-i386                  randconfig-001-20240531   gcc  
-i386                  randconfig-002-20240531   clang
-i386                  randconfig-003-20240531   clang
-i386                  randconfig-004-20240531   gcc  
-i386                  randconfig-005-20240531   clang
-i386                  randconfig-006-20240531   clang
-i386                  randconfig-011-20240531   clang
-i386                  randconfig-012-20240531   gcc  
-i386                  randconfig-013-20240531   gcc  
-i386                  randconfig-014-20240531   clang
-i386                  randconfig-015-20240531   gcc  
-i386                  randconfig-016-20240531   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240531   gcc  
-loongarch             randconfig-002-20240531   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                         amcore_defconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                  decstation_64_defconfig   gcc  
-mips                          malta_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240531   gcc  
-nios2                 randconfig-002-20240531   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                            defconfig   gcc  
-openrisc                    or1ksim_defconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240531   gcc  
-parisc                randconfig-002-20240531   gcc  
-parisc64                            defconfig   gcc  
-powerpc                    adder875_defconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                      ppc64e_defconfig   gcc  
-powerpc               randconfig-001-20240531   clang
-powerpc               randconfig-002-20240531   clang
-powerpc               randconfig-003-20240531   gcc  
-powerpc                  storcenter_defconfig   gcc  
-powerpc                     tqm8560_defconfig   gcc  
-powerpc64             randconfig-001-20240531   clang
-powerpc64             randconfig-002-20240531   clang
-powerpc64             randconfig-003-20240531   gcc  
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-riscv                 randconfig-001-20240531   clang
-riscv                 randconfig-002-20240531   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-s390                  randconfig-001-20240531   gcc  
-s390                  randconfig-002-20240531   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                          polaris_defconfig   gcc  
-sh                    randconfig-001-20240531   gcc  
-sh                    randconfig-002-20240531   gcc  
-sh                           se7343_defconfig   gcc  
-sh                   secureedge5410_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240531   gcc  
-sparc64               randconfig-002-20240531   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20240531   gcc  
-um                    randconfig-002-20240531   clang
-um                           x86_64_defconfig   clang
-x86_64                           alldefconfig   gcc  
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240531   clang
-x86_64       buildonly-randconfig-002-20240531   gcc  
-x86_64       buildonly-randconfig-003-20240531   clang
-x86_64       buildonly-randconfig-004-20240531   clang
-x86_64       buildonly-randconfig-005-20240531   gcc  
-x86_64       buildonly-randconfig-006-20240531   clang
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240531   gcc  
-x86_64                randconfig-002-20240531   clang
-x86_64                randconfig-003-20240531   gcc  
-x86_64                randconfig-004-20240531   gcc  
-x86_64                randconfig-005-20240531   gcc  
-x86_64                randconfig-006-20240531   gcc  
-x86_64                randconfig-011-20240531   clang
-x86_64                randconfig-012-20240531   gcc  
-x86_64                randconfig-013-20240531   gcc  
-x86_64                randconfig-014-20240531   clang
-x86_64                randconfig-015-20240531   gcc  
-x86_64                randconfig-016-20240531   gcc  
-x86_64                randconfig-071-20240531   clang
-x86_64                randconfig-072-20240531   gcc  
-x86_64                randconfig-073-20240531   gcc  
-x86_64                randconfig-074-20240531   gcc  
-x86_64                randconfig-075-20240531   clang
-x86_64                randconfig-076-20240531   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
-xtensa                  audio_kc705_defconfig   gcc  
-xtensa                       common_defconfig   gcc  
-xtensa                randconfig-001-20240531   gcc  
-xtensa                randconfig-002-20240531   gcc  
-xtensa                    xip_kc705_defconfig   gcc  
+The first patch of the series introduces PEC support to the harwdare
+monitoring core. The second patch converts to lm90 driver to use the
+new infrastructure.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Tested with ADM7421A using lm90 driver and Devantech USB-ISS.
+
+v2: Use sysfs_emit()
+    Return -EINVAL if the parent device is not an i2c client device
+    Added code needs to be enclosed in "#ifdef(CONFIG_I2C)"
+    Added Nuno's Acked-by: tag.
+
+----------------------------------------------------------------
+Guenter Roeck (2):
+      hwmon: Add PEC attribute support to hardware monitoring core
+      hwmon: (lm90) Convert to use PEC support from hwmon core
+
+ drivers/hwmon/Kconfig |   1 +
+ drivers/hwmon/hwmon.c | 147 ++++++++++++++++++++++++++++++++++++++++++++------
+ drivers/hwmon/lm90.c  |  56 +------------------
+ include/linux/hwmon.h |   2 +
+ 4 files changed, 136 insertions(+), 70 deletions(-)
