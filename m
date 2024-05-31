@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E952574050;
-	Fri, 31 May 2024 07:41:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B404D33993;
+	Fri, 31 May 2024 08:15:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717141276; cv=none; b=ULH+XJGclNri1YWHswhMC/JP39wN1DgLPZTmkMYkSjOsQAJdYWcmJpMsGL2yhB5cfdj2WVEznaBUnP2HWc0PBNPfD6aI5MOSIkDpi9lL/+lGLOrv1rhcY6pn9FWFQzcFgCu+VT6JwurRLb8PNhcnRPaSU7131EIJsSvPIt+Z2co=
+	t=1717143318; cv=none; b=rE61ZJ0qq56UGc7i/CHgLbnyfpYJ+cbUCN5c5bN5VtQ7qB2wNYsIT0m5g9aNXVDaGkxIdSyoGWNxiOtQBB8L2eM2A/H6fzggK3iLY3lEoiZkz/xtIZWZtfKo5yA3iJgp/iz3Tn15ocf2vrUx2A8Ol9Ms2n78eRnRGDwAnTwXuck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717141276; c=relaxed/simple;
-	bh=CYv1E7N0xGpkGQoLFOlfMMpg3+Aegsg0Tv1Ho/8YbMc=;
+	s=arc-20240116; t=1717143318; c=relaxed/simple;
+	bh=F3IjjlDQ4//tdJ+XHJcggk5tYQDT4w+/2qsPRWMJ8fk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=V3fZAkd1oFkyYvGng/bUKTm3NEPUZoaA3+SyaGDDaAYJAXILvc0wIi0mdE5avrcwpxTgeBLJVVWM8x6zE0Ifl9u4vnptY/dm9UjZimNl6y0f7xKVMNLeCYUUhODjG+GLTli3aeO5IZ3SGIgJD3nl6uivDdcgaNWUTBa6v0Zywu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FOZtrgU6; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=TMOmQRRw53NMbMkVVTioxH2iSeXc1yhEMYB0ADD8kQ1xZcDs8MUkxvC9TdwWzPj2J/i8laBQv5x7gDjEf14DsPw/9khBO1DnN4p/3gI5qpfB+VaxfLd3nCOh2u7m0iaRFC/1BlX7olVt8+lfafwcqKc+t57JDAvdTlRTkRXtfzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TblWbtdX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FOZtrgU6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D64D3C116B1;
-	Fri, 31 May 2024 07:41:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TblWbtdX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EC96C116B1;
+	Fri, 31 May 2024 08:15:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717141275;
-	bh=CYv1E7N0xGpkGQoLFOlfMMpg3+Aegsg0Tv1Ho/8YbMc=;
+	s=k20201202; t=1717143318;
+	bh=F3IjjlDQ4//tdJ+XHJcggk5tYQDT4w+/2qsPRWMJ8fk=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=FOZtrgU6yCLSA8zZutGOsRsSMsYQqv829H2Zmm6jet/7D32YLXZp3WVxEEgzVdsRl
-	 SPuxbY59h8LMINtsOKTPUF3BAvHORhRs8daUOj9nKtNTM1Ph5PSLyP8IvxzA7z5Z0T
-	 ZULl+cy10Jr7VEhGE3e3ztiEDT8dsQcwnvfVQdATg8eXm3Wdozs/sdTzfxmL/H1V2w
-	 aJZ6NW1GRfZhf3llslQrDY14xJ8WvDLy2kcd/2LzXauG3C30iFfH5nSLUqkk6/gd1k
-	 lBs3i+o8EbXzkkBHb9hyY7ca7WwwTao+QrGJRRQWH54N40EfIieRTr5MzFDi5lXpX6
-	 fJ+U0d/nfs7aQ==
-Message-ID: <3a050921-6bf6-444e-8f61-83fcb6b9f2a5@kernel.org>
-Date: Fri, 31 May 2024 09:41:10 +0200
+	b=TblWbtdXgVB0dQL3s29Ks6e4Rb+OFJmv3qJmKBhuXTVClfgiNuDbfdyvYoshYjjDx
+	 PQsmF5+sFFLEkz0ibbFh+k7QZBdo3Lm9d7A4h/9Jsb722Rr1nw45AsgQtVaVvRn3cM
+	 PLGZpfOMAqbzUR7y3DdMNqX9df1cW+g8gQGHBliafhN5xCzHPjIK/AtMjLAfi+1oCL
+	 v2eRP+ytoq/mwtOr07vB6o29Jkc7xKTOHvOF8VS5ysgZsDFzyzUgX4NufFvUoGi5El
+	 OrWcZCoxaOAkjhTYBNey8LtMtKRqEZY6tF2ujONaFtd9qb2mxUCaIF1Yey6qWXfXQy
+	 Q5rPZU9+7BE4Q==
+Message-ID: <0ee11044-8dfc-4589-96b5-fa1f906928e5@kernel.org>
+Date: Fri, 31 May 2024 10:15:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -35,17 +35,15 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: ti,ina2xx: Add alert-polarity
- property
-To: Guenter Roeck <linux@roeck-us.net>, Amna Waseem <Amna.Waseem@axis.com>,
- Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernel@axis.com
-References: <20240529-apol-ina2xx-fix-v1-0-77b4b382190f@axis.com>
- <20240529-apol-ina2xx-fix-v1-1-77b4b382190f@axis.com>
- <1ae97b90-ff20-4238-abe2-f2e5d87fc344@kernel.org>
- <76dd5c0e-cc67-4ad1-8733-d8efdb8a172b@roeck-us.net>
+Subject: Re: [PATCH v2 1/3] dt-bindings: hwmon: jedec,spd5118: Add bindings
+To: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Cc: devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, linux-kernel@vger.kernel.org,
+ Armin Wolf <W_Armin@gmx.de>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
+ <linux@weissschuh.net>, =?UTF-8?Q?Ren=C3=A9_Rebe?= <rene@exactcode.de>
+References: <20240530223939.1027659-1-linux@roeck-us.net>
+ <20240530223939.1027659-2-linux@roeck-us.net>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -91,49 +89,33 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <76dd5c0e-cc67-4ad1-8733-d8efdb8a172b@roeck-us.net>
+In-Reply-To: <20240530223939.1027659-2-linux@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 29/05/2024 16:01, Guenter Roeck wrote:
-> On 5/29/24 00:07, Krzysztof Kozlowski wrote:
->> On 29/05/2024 08:07, Amna Waseem wrote:
->>> Add a property to the binding to configure the Alert Polarity.
->>> Alert pin is asserted based on the value of Alert Polarity bit of
->>> Mask/Enable register. It is by default 0 which means Alert pin is
->>> configured to be active low. To configure it to active high, set
->>> alert-polarity property value to 1.
->>>
->>> Signed-off-by: Amna Waseem <Amna.Waseem@axis.com>
->>> ---
->>>   Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml | 9 +++++++++
->>>   1 file changed, 9 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
->>> index df86c2c92037..a3f0fd71fcc6 100644
->>> --- a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
->>> +++ b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
->>> @@ -66,6 +66,14 @@ properties:
->>>       description: phandle to the regulator that provides the VS supply typically
->>>         in range from 2.7 V to 5.5 V.
->>>   
->>> +  alert-polarity:
->>
->> Missing vendor prefix.
->>
+On 31/05/2024 00:39, Guenter Roeck wrote:
+> Add device tree bindings for the SPD hub present in DDR5 modules.
 > 
-> Are you sure you want a vendor prefix here ? Reason for asking is that
-> many hardware monitoring chips have configurable alert or interrupt polarity,
-> only the name is different. Some examples are the JC42.4 standard ("event
-> polarity"), adt7410/adt7420 "interrupt polarity", MAX31827 ("alarm polarity"),
-> or DS1621 ("output polarity"). We even have a vendor property, "adi,alarm-pol",
-> used for MAX31827.
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 
-Hm, I just checked if this is already existing property, but indeed I
-did not check other variants.
+...
 
-Indeed it could go to common properties - hwmon-common.yaml. But then
-how about using strings (as I asked before...).
+> +title: JEDEC JESD300-5B (SPD5118) compatible DDR5 SPD hub
+> +
+> +maintainers:
+> +  - Guenter Roeck <linux@roeck-us.net>
+> +
+> +description: |
+> +  JEDEC JESD300-5B.01 SPD5118 Hub and Serial Presence Detect
+> +  https://www.jedec.org/standards-documents/docs/jesd300-5b01
+> +
+> +select:
+> +  properties:
+> +    compatible:
+> +      const: jedec,spd5118
+
+Why do you need the select? This s needed for cases with multiple
+bindings using parts of compatible list. I don't see the case here so far.
 
 Best regards,
 Krzysztof
