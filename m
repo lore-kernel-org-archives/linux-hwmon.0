@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B8AB28F7;
-	Fri, 31 May 2024 07:33:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E952574050;
+	Fri, 31 May 2024 07:41:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717140784; cv=none; b=l0Qy/Kx5LoquUjsCHWWGnjrXlVKdfH0wGcD2fk7Y0GxJRBnGsJZKQv0VK/YdMlN1H4jReJbCE/vMuUq1E7EooHXHxN49qJVx5KwPeuAfKArxMCs2xQzUvhy7U7SA4uzMIpVoK0aWUqojWevD3ZxaO04RD+tnYR/qiE3RSW91cYc=
+	t=1717141276; cv=none; b=ULH+XJGclNri1YWHswhMC/JP39wN1DgLPZTmkMYkSjOsQAJdYWcmJpMsGL2yhB5cfdj2WVEznaBUnP2HWc0PBNPfD6aI5MOSIkDpi9lL/+lGLOrv1rhcY6pn9FWFQzcFgCu+VT6JwurRLb8PNhcnRPaSU7131EIJsSvPIt+Z2co=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717140784; c=relaxed/simple;
-	bh=tGywsfHjhOeu2p5n+qc/Hs4/P2i9lhTXQiq4gDX7QDg=;
+	s=arc-20240116; t=1717141276; c=relaxed/simple;
+	bh=CYv1E7N0xGpkGQoLFOlfMMpg3+Aegsg0Tv1Ho/8YbMc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZPHU6aOU6unAWQwEYQKcmaDM0gudr9TPFP1S+j4I6MZEl5NfLVDbL/abfC3cnAIYkSL49k44ZDCdCEnCX5Js3fD9PXqydzHhM6FpwcNk9rluPrJyHlu04TQV8Il85xCJubtlGaE59w24kE7XvedxPeVi5HXNJ0oW356Mq98p+hY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UBsUZAR3; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=V3fZAkd1oFkyYvGng/bUKTm3NEPUZoaA3+SyaGDDaAYJAXILvc0wIi0mdE5avrcwpxTgeBLJVVWM8x6zE0Ifl9u4vnptY/dm9UjZimNl6y0f7xKVMNLeCYUUhODjG+GLTli3aeO5IZ3SGIgJD3nl6uivDdcgaNWUTBa6v0Zywu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FOZtrgU6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UBsUZAR3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B1C4C116B1;
-	Fri, 31 May 2024 07:32:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FOZtrgU6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D64D3C116B1;
+	Fri, 31 May 2024 07:41:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717140783;
-	bh=tGywsfHjhOeu2p5n+qc/Hs4/P2i9lhTXQiq4gDX7QDg=;
+	s=k20201202; t=1717141275;
+	bh=CYv1E7N0xGpkGQoLFOlfMMpg3+Aegsg0Tv1Ho/8YbMc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=UBsUZAR3GQApsqyTrkyZ7G0d8X1h3I4LN8MPM/8K8gtxFuveVE+GY43r3elV3mW9x
-	 iAKFjNm/vKZqu74/NM9HN8BW9K+YdMyw0ThM51aV/vyO3EHAPOqEq+OCYZSDlhxtI3
-	 1pL5fjLAigtH5udzi/YlVfw80MbID751IF447Yv0RSRnPYD7HY6I9Ye2PV1tny9w1I
-	 +omCxMFbdna+Ntvx7+Hur65jrRdTtvt8KR/6oHxCBT7TgeOpPs0gFwbwqdthcZbqS3
-	 XJkcqHeZGRsUYzsOgx/WcrzwuSJuz12RSCuXDG1wIBANFSxcxLkzVpyjGIYLfx9y0j
-	 O+fZifZeMtl3g==
-Message-ID: <7789d1dc-f0e4-4529-aeb8-63b64ba6fc7d@kernel.org>
-Date: Fri, 31 May 2024 09:32:57 +0200
+	b=FOZtrgU6yCLSA8zZutGOsRsSMsYQqv829H2Zmm6jet/7D32YLXZp3WVxEEgzVdsRl
+	 SPuxbY59h8LMINtsOKTPUF3BAvHORhRs8daUOj9nKtNTM1Ph5PSLyP8IvxzA7z5Z0T
+	 ZULl+cy10Jr7VEhGE3e3ztiEDT8dsQcwnvfVQdATg8eXm3Wdozs/sdTzfxmL/H1V2w
+	 aJZ6NW1GRfZhf3llslQrDY14xJ8WvDLy2kcd/2LzXauG3C30iFfH5nSLUqkk6/gd1k
+	 lBs3i+o8EbXzkkBHb9hyY7ca7WwwTao+QrGJRRQWH54N40EfIieRTr5MzFDi5lXpX6
+	 fJ+U0d/nfs7aQ==
+Message-ID: <3a050921-6bf6-444e-8f61-83fcb6b9f2a5@kernel.org>
+Date: Fri, 31 May 2024 09:41:10 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -35,18 +35,17 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [v3,2/2] dt-bindings: hwmon: Add mps mp2891
-To: Noah Wang <noahwang.wang@outlook.com>, robh@kernel.org,
- krzk+dt@kernel.org, linux@roeck-us.net, conor+dt@kernel.org,
- jdelvare@suse.com
-Cc: corbet@lwn.net, Delphine_CC_Chiu@Wiwynn.com, peteryin.openbmc@gmail.com,
- javier.carrasco.cruz@gmail.com, patrick.rudolph@9elements.com,
- luca.ceresoli@bootlin.com, chou.cosmo@gmail.com, bhelgaas@google.com,
- lukas@wunner.de, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-i2c@vger.kernel.org
-References: <20240531072602.4806-1-noahwang.wang@outlook.com>
- <SEYPR04MB64822856CA4E461787C3593BFAFC2@SEYPR04MB6482.apcprd04.prod.outlook.com>
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: ti,ina2xx: Add alert-polarity
+ property
+To: Guenter Roeck <linux@roeck-us.net>, Amna Waseem <Amna.Waseem@axis.com>,
+ Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel@axis.com
+References: <20240529-apol-ina2xx-fix-v1-0-77b4b382190f@axis.com>
+ <20240529-apol-ina2xx-fix-v1-1-77b4b382190f@axis.com>
+ <1ae97b90-ff20-4238-abe2-f2e5d87fc344@kernel.org>
+ <76dd5c0e-cc67-4ad1-8733-d8efdb8a172b@roeck-us.net>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -92,36 +91,49 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <SEYPR04MB64822856CA4E461787C3593BFAFC2@SEYPR04MB6482.apcprd04.prod.outlook.com>
+In-Reply-To: <76dd5c0e-cc67-4ad1-8733-d8efdb8a172b@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 31/05/2024 09:26, Noah Wang wrote:
-> Add support for mps mp2891 controller
+On 29/05/2024 16:01, Guenter Roeck wrote:
+> On 5/29/24 00:07, Krzysztof Kozlowski wrote:
+>> On 29/05/2024 08:07, Amna Waseem wrote:
+>>> Add a property to the binding to configure the Alert Polarity.
+>>> Alert pin is asserted based on the value of Alert Polarity bit of
+>>> Mask/Enable register. It is by default 0 which means Alert pin is
+>>> configured to be active low. To configure it to active high, set
+>>> alert-polarity property value to 1.
+>>>
+>>> Signed-off-by: Amna Waseem <Amna.Waseem@axis.com>
+>>> ---
+>>>   Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml | 9 +++++++++
+>>>   1 file changed, 9 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
+>>> index df86c2c92037..a3f0fd71fcc6 100644
+>>> --- a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
+>>> +++ b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
+>>> @@ -66,6 +66,14 @@ properties:
+>>>       description: phandle to the regulator that provides the VS supply typically
+>>>         in range from 2.7 V to 5.5 V.
+>>>   
+>>> +  alert-polarity:
+>>
+>> Missing vendor prefix.
+>>
 > 
-> Signed-off-by: Noah Wang <noahwang.wang@outlook.com>
-> ---
-> v2 -> v3:
->     move mp2891 dt-bindings to trivial devices
-> 
-> v1 -> v2:
->     add mp2891 dt-bindings
-> 
->  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-> index 025d50454f88..dabbc4cd089e 100644
-> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
-> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-> @@ -290,6 +290,8 @@ properties:
->            - mps,mp2973
->              # Monolithic Power Systems Inc. multi-phase controller mp2975
->            - mps,mp2975
-> +            # Monolithic Power Systems Inc. multi-phase controller mp2891
-> +          - mps,mp2891
+> Are you sure you want a vendor prefix here ? Reason for asking is that
+> many hardware monitoring chips have configurable alert or interrupt polarity,
+> only the name is different. Some examples are the JC42.4 standard ("event
+> polarity"), adt7410/adt7420 "interrupt polarity", MAX31827 ("alarm polarity"),
+> or DS1621 ("output polarity"). We even have a vendor property, "adi,alarm-pol",
+> used for MAX31827.
 
-Please keep the entries sorted.
+Hm, I just checked if this is already existing property, but indeed I
+did not check other variants.
+
+Indeed it could go to common properties - hwmon-common.yaml. But then
+how about using strings (as I asked before...).
 
 Best regards,
 Krzysztof
