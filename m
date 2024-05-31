@@ -1,124 +1,91 @@
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91F62768EA
-	for <linux-hwmon@vger.kernel.org>; Fri, 31 May 2024 09:31:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CB1924B26;
+	Fri, 31 May 2024 09:45:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717147924; cv=none; b=nntb3lIKU57b9MeVqqv3EIXeReYGo8yIJrJLU6lZGGB5LfQ/BnuznyLup2HSfIG+/+z9WXKatTY0Sf95LFR6j71rL+vJ1DqnJ3TmXuFMNtdiMAPETQ/cSF2mvIwCVHAjTbe2L1kGabUVG/v6QCYNpnDK/GUkARxu3GMCrmOab84=
+	t=1717148733; cv=none; b=sWDPVEHmaImbdZXfO7wo0G1jyxXxdD4LdURkAt/kUTvJVjl8LxEbyY5w8+4eUvRSQ3GO5hyBaZ82S6HEUW0e0y1hdMTRWUoAtxukejcLPTQQR2OkfHAXXWQR7T0/UthDQkLJdpQ3/az30MG+EyFbWDXYEcmQ3TmQzsgTytMmOb4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717147924; c=relaxed/simple;
-	bh=5U7FyklsEaq5Z77Xh71GF62p+k3mhNStH7+QJ6d8CG8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T4gK0uuEJuybxrDWxSZ045rEAu3INc7pZDFpwon1nK6dORTEJRAK7UMXJd88BfZ+my5uK0JkqbbIRqTtD8Uw13fIqZDDhflYbFpWI3CNiCBAMY8t0LkRZq0SPNET2vmkfLPZBl6uRVmSBF+uZI7I64T3r/s8L/oCJBv1c2Ra3TQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=hOWHqTxx; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+	s=arc-20240116; t=1717148733; c=relaxed/simple;
+	bh=lERvVoyJAE/jeXnmH1j9lxgnxLnRxdAv4vYaPklDwFE=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=pTfUAMxGhIGUXn/RhdzSJ0M0qinT/whz0oAHdZ/RxOmhYITotIOK9g6Z9DJMKA20jQQ3B18nhuLG4Gsxf1KCRlmPC0O4RuS+YaOv+w0Pob9l1ApJbd3T7Gf31bUtYpCD7M0T0CbPYfwe1RuNn2XU8vRvw00mJPEsA3s8JUZy79w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iROFP+Am; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="hOWHqTxx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=duxs
-	2uujR9NRLXhAk81tC9D0XnsOzJhWFLu0vA/jvfo=; b=hOWHqTxxNcqGINU4ZS5V
-	8MKGNRQ1ywH86zYBzxlq9zwDNbGRiiSw5RvoUrm48F2QpF0DCXRMrgO1kjOrvHzs
-	4czC037sbomdEVd9YlqOIwXxeyhEw9stc5w2H33Wdz1y61ck7YCnA6DUZG3Nahtb
-	XNQWWa/d8HSv7t8HZv5J9/+MT9/VFmZfwwa48cmWDpIkg7TvIGzISVhjTr1XaOWz
-	27CkblNe7VFsPOMdAPFv1s9oy9EfYIKgHFXApaatbxu3BnLUYeHxS8ruz8//uZMM
-	IFXNJ4LCDGR66sMqy3QBipWsNdt2fB4qCdn/V6OfG2cnFhbkSCA45K4eYexWXN0g
-	6A==
-Received: (qmail 1124244 invoked from network); 31 May 2024 11:31:55 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 31 May 2024 11:31:55 +0200
-X-UD-Smtp-Session: l3s3148p1@C1GEp7wZ4rFehhtB
-Date: Fri, 31 May 2024 11:31:54 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>,
-	linux-hwmon@vger.kernel.org, Hristo Venev <hristo@venev.name>,
-	=?utf-8?B?UmVuw6k=?= Rebe <rene@exactcode.de>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Radu Sabau <radu.sabau@analog.com>,
-	Paul Menzel <pmenzel@molgen.mpg.de>
-Subject: Re: [PATCH 2/3] hwmon: Add support for SPD5118 compliant temperature
- sensors
-Message-ID: <20240531093154.rna2vwbfx7csu2sj@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>,
-	linux-hwmon@vger.kernel.org, Hristo Venev <hristo@venev.name>,
-	=?utf-8?B?UmVuw6k=?= Rebe <rene@exactcode.de>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Radu Sabau <radu.sabau@analog.com>,
-	Paul Menzel <pmenzel@molgen.mpg.de>
-References: <20240529205204.81208-1-linux@roeck-us.net>
- <20240529205204.81208-3-linux@roeck-us.net>
- <34a4292e-c4db-4b40-822e-b892e1444045@t-8ch.de>
- <16e448f1-cfc9-4e88-b3f1-55e1856d1405@roeck-us.net>
- <0a2ed64d-06d9-45e8-a054-4ded4429f952@t-8ch.de>
- <ffd72953-ecd2-405a-ad6d-236143b26946@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iROFP+Am"
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a59a352bbd9so292091366b.1;
+        Fri, 31 May 2024 02:45:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1717148730; x=1717753530; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:to:from:subject:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lERvVoyJAE/jeXnmH1j9lxgnxLnRxdAv4vYaPklDwFE=;
+        b=iROFP+AmyemW+k/xYH1mkWxyfFqaSyg/qMbCJQOmEYICIslZLFTXc87RVj9/0MqHdS
+         NLIaynR0Q5Bb50+CZ5wRnc2FroOis5t8LeU+Nf6kbaRXrVcB/lGMGEryUHWPLK8y0oIL
+         zxfbdAWVQogZWfy5YNzBrKN2b2XuCjT5Nx+wud6p2I4IFzFfgj8yz6JGXH0MpXiDwTZi
+         LpPgyLI2l2PRD9QMPzp9vrAV980evHYPLyZBMjxy5KK5X7VIiU+5rNYbbikpz0Xe6rhz
+         p63ckITaJz5VBv4as+K06ooLnCFu/0NW0rNYQ2cr0vc4BfEUNWU+AkeXZUMm8zztRHI6
+         5W+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717148730; x=1717753530;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:to:from:subject:message-id:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=lERvVoyJAE/jeXnmH1j9lxgnxLnRxdAv4vYaPklDwFE=;
+        b=BIx90/83KNPIkkutabrbUJLIaGPA3Y+Zjfmh4iLhNIsry6s4S4EgNmLApnQoUd/dpq
+         n3Yer/XcqQzNMSH5kAyipI1r3n0DGsRSsgV7wabJyqz4Dgi/UQ2lezb0kmpeg/F6bgkO
+         t2Z/Lj8P0SmoanvrXt03nc6csXZjX9Kb/YXfz4dmT4RD0B2dbqfWb921833lr+fSG167
+         IW7MTyV3WUavF/EkY18QSvlCb+0QBwYubogm31rsfWfP0rUV098/0WvQXrTd8H5pmIfe
+         8V2CbM9ZMyRR/WbueHa7b5glcIwL6ZMOWcd9/HPEJSdxAUeXu95Bk4gC6450U3pRIHKm
+         xegg==
+X-Forwarded-Encrypted: i=1; AJvYcCUY8rSzVMa8xRAqbMBLw2iX8UajxzZLUnVOhruEKVbJmvGenxBV3FACySGItOHGTnRYO5q1ll4fAwIRd7m5hBHRbGluPufzTm7GybZNCBXGuMSlpbDkAF1GmvVeW+zxJhmRaLazyOFpE8zMPL17nXdgH7AwKKEgHBzKa5rQCaMWEMLffO0=
+X-Gm-Message-State: AOJu0Yz/VbNSYszDvs/jyVaoVYrDdpfucQi+/z2MCuT+IvCbmtn74iJT
+	R75uHglyjscu7KqdUqIj/HtHoN3X5VPu9e17KMmaEUEFnaIg8e0KSDB1F0JfR7M=
+X-Google-Smtp-Source: AGHT+IFTFMH2jNPbQ/gcHw6Zpbe+myU3YyJ7m0d+2DIQGeRbcHm78hJ6xn84ifk1xVD6VmkTxOYzkg==
+X-Received: by 2002:a17:906:414d:b0:a59:c807:72d3 with SMTP id a640c23a62f3a-a681933565fmr134693866b.17.1717148729683;
+        Fri, 31 May 2024 02:45:29 -0700 (PDT)
+Received: from nsa.fritz.box ([2001:a61:35f9:9001:40df:88bb:5090:7ab6])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a682ea1e5c4sm50888966b.115.2024.05.31.02.45.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 May 2024 02:45:29 -0700 (PDT)
+Message-ID: <635356d36f5d402a3a921da12e352a95926ff03d.camel@gmail.com>
+Subject: Re: [PATCH v6 2/2] drivers: hwmon: max31827: Add PEC support
+From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To: Radu Sabau <radu.sabau@analog.com>, Jean Delvare <jdelvare@suse.com>, 
+ Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
+ linux-hwmon@vger.kernel.org,  linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Date: Fri, 31 May 2024 11:45:28 +0200
+In-Reply-To: <20240531084645.12935-2-radu.sabau@analog.com>
+References: <20240531084645.12935-1-radu.sabau@analog.com>
+	 <20240531084645.12935-2-radu.sabau@analog.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.1 (3.52.1-1.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="xeb7swmh4n3lar4t"
-Content-Disposition: inline
-In-Reply-To: <ffd72953-ecd2-405a-ad6d-236143b26946@roeck-us.net>
 
-
---xeb7swmh4n3lar4t
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-> > Wolfgang seems to think it's important:
-
-Wolfram, please.
-
-> > https://lore.kernel.org/lkml/tdia472d4pow2osabef24y2ujkkquplfajxmmtk5pn=
-xllsdxsz@wxzynz7llasr/
-> >=20
+On Fri, 2024-05-31 at 11:46 +0300, Radu Sabau wrote:
+> Add support for PEC by configuring the chip accordingly to the hwmon core=
+ PEC
+> attribute handling
+> Handle hwmon_chip_pec attribute writing in the max31827_write in the
+> hwmon_chip type switch case, approaching the same code structure
+> as for temp writing.
 >=20
-> Ok, but that doesn't explain the reason. Wolfram, Paul, why do you
-> think this is needed ? Note that I am not opposed to adding spd
-> eeprom support, but I'd like to know why I am doing it before
-> I spend time on it.
+> Signed-off-by: Radu Sabau <radu.sabau@analog.com>
+> ---
 
-A working eeprom driver is needed to get 'decode-dimms' from the
-i2c-tools package working. Jean reported that EEPROM access for DDR5 is
-different from DDR4, so it needs a separate driver. And
-i2c_register_spd() then needs to be updated to use the new driver for
-DDR5.
+Reviewed-by: Nuno Sa <nuno.sa@analog.com>
 
-Happy hacking,
+- Nuno S=C3=A1
+>=20
 
-   Wolfram
-
---xeb7swmh4n3lar4t
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmZZmQcACgkQFA3kzBSg
-KbYuTg/6A5ij4YXV/CfauyFRASldgEnInfw2WdYkuXzCtfXvsZCRvP15BLSBEH9K
-VKEnsN6sysLVyMnIJnfH8/hQ+6eOniAio8fcPIcxHQyWZOOZeqEa5pOyBuGoXZYS
-/5DTYEjeII6iOILpNCQa2s6gbK3IPZioCheK8WliLIiTYO5vpjg4QVjHO7R6MK6o
-u/Fp8goQNofhZRqijddVMVc1m3r8EAgfU5tb+DLgM3x9WWzl0IFWKAPbtkcyuTPs
-kVwaJj35pWJG6zAQKmu+6213QIlmFVZM8ODPtTvYD1lc9Msrnq366u+SCrWuu5vF
-zxmZkp8+C1uHq/jXroOEQaYZQJ9ncMDtZ/aDhwV7nZz0RfhPTGSq7PdTg/q5S1gW
-bQMt3uGdDaTGD70IAHoXZjKMBO6J2mDAmjvLX89krNCNpj9r3rqekJU8Rr6g7Bji
-XFpPaCvZHEC7QswW07/TIDhCF5dgTaUIQxtQvYcb1ioROTFFenqMk4LNkJ1zLGtb
-+lr4D6Fyqv2Is2ZEVSQi9Y6Xh9Q5zS4tYcbhiItsnxjOqGQfQF3aPRvreeauFEyk
-DdGuiSZWrub8Gg2EsOUAgrL6gJ55uu9s14Ke2UsxcS7/GWfDyK/tJACWzpW2Swdc
-8j5H3E1hxJFiXVloKf040i9jT0odS0H2fSXHyaWpjhJTJbc9e28=
-=gjGP
------END PGP SIGNATURE-----
-
---xeb7swmh4n3lar4t--
