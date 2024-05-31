@@ -1,185 +1,320 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB5FD4C9D;
-	Fri, 31 May 2024 00:47:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 624612110F;
+	Fri, 31 May 2024 03:16:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717116425; cv=none; b=p7YTQ3jWL47OMWElgfQ0ygXPGZ/sjIj8QtqNTfKbwMZZFaEIXiGmQJPr+UraC0sjKgMSB/vuJBUNR6WmYflT4b2hf8vB0TJPiyvSZMSNU3y9AN3CHySWcAFn1qPj8g9384EPN8iDV69U7mg1ulyrURxsGL4//0ta9dG6K4CuLzI=
+	t=1717125409; cv=none; b=dPoy0Hqp82cf0IAcpaf94WRBntgD3IQ2GoAdkJmnfgCLEp3+uPI772SkW8HY2PWy++nVOIYY89ScUnbEXuI14Stm8ReeijJyojprM/wT+AWqKh08hr3Kbq8Gu5LZ5xn9qC7ZDBZOTaxrVVvV7KbtJp53uR30S6YDd+8c3R4Wd5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717116425; c=relaxed/simple;
-	bh=DYn2aSysUxjoJXWq3Kj3csOOiFlPojw8oWHmMl9rv6w=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GwsRoAKR/cd/3mqSDuD+gEfSEeQzIuwGqnsjBDrQSaD61eyQnfQNxn1vcwUOa2RVGKxl/Rs2yUw0Q9TZkLvf8xm05A9IFfE8Ny2BPEPDu3H+BDA3AUG33jXcK0d4BpIiqb6eQq/saORx36yHE0JDlU+bKwZAZaeyckVUzItKU84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VVNSH0L5; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1717125409; c=relaxed/simple;
+	bh=iyCW7kFSKDXz/X1KwEbJdlMwEoExWyUSJt412bkH+VM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sL7s3wfrbYs6+RJJIDwuyimKW37ohWL3dI4lHzL1/UuTXQwM2uy7PPSai4ejpiVJDk8ildV9cdfb8QrF37+Dtc3p7J0m2B2yp79lUgXsH8WaIwujKAO3jjQWBCiyohL/GY0lAc6fRaE+2t9nRQ3aBmShp/nrmny+cFJoquoemMk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UmrytSbx; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VVNSH0L5"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-35dd0c06577so397562f8f.2;
-        Thu, 30 May 2024 17:47:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717116422; x=1717721222; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K5IL9WVaL+MRAvoehS1X61pU+AcxiSLj6714R/XAATo=;
-        b=VVNSH0L5vCl4nsknyOLIb2GamWuASx0CwkvOuoQDDJ+z42qaP8RKzJN/Y8WO0XKe0x
-         KDVYKcw08lDdmMN4ln3rvMRN2g48bHhUipPrXkp/ZqS+mWkvpfUwPvU408mlVDMQ2YL4
-         uYxGYKMVGo9R/jAbOhXX4Jg+8NC6dOu9SlgmyW7LPM0KWqk+XnSV4wqE92dpKBhbUj13
-         8LMdmHIYAsgUhV3pG1pL3q5cHWG/7QZiVlfEtV6shnyjYBs2gHXRoRolXgf8xVQm5iQK
-         I0g/2/4hIYJht9Zr38xEyGBaBfMN13UZVfC3iMK8LRfwD76OFIQC6AP22nr4zV6J6yjd
-         7F4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717116422; x=1717721222;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=K5IL9WVaL+MRAvoehS1X61pU+AcxiSLj6714R/XAATo=;
-        b=hirggiyuGgnJLVZ2FFV+5K94wmTodrCz8dSHzl+w/6l9NLJa7U/dDD84uNjT1Qbj48
-         shRGCxvOknGMXlIGLNyyTFUEzhv0PaeP1kyuj7bj33rN3J5Yzl8xAVwk8oqyFzFcGKTb
-         V2Ypqw+29YYIwi13wHti6E/n43DBnFxUZNu4G59vCZ0PyUaJJQfq79GrNYbVUS4Rb4nq
-         eKykoM7KnEOqTrrKVmWiF87jLkjkYaHdmxOIxtbmNAMoVTkmCrWcgZAHJj8Jf5PL7Li1
-         Gmx3UB+1yBRx3tsAXBmCJppzQOj+rwlTAiHU7pgIAyuvv+q9P6roxP+g1H+Y07CSq/FH
-         2rlw==
-X-Forwarded-Encrypted: i=1; AJvYcCWb6fNbTAI+NOm04Qxb9fIBWq9hdvQxhIqQo7+deLWoJGDbz4bQdEIevwYB+YfexZxxdK2t3DcNjXaaaqdtJK2NCar9smHbSvAhQUSXknWqQluLLkajUZqzVyOvNw13TjAUBuDXjDp6lRAP95L7TI1wFyOlwll7Uo9k5BKejn0VaClpCn61
-X-Gm-Message-State: AOJu0YwZcgu/lK/pMugNo9D8QKxmLfuVwDSNUbX859bYA2TwKKRTiqHy
-	U2Npc247AnBPFQojnOpASVXr6SoB53U7cMIsUBaaGn8SSJFRXZB8
-X-Google-Smtp-Source: AGHT+IHC6tvIUbG6ljRRlbhhuK8Cm2QRDgcr5rf3NEghDyrm7rlb/TW3ss0Ew3fkoADmXIysg3VqwQ==
-X-Received: by 2002:adf:fc4e:0:b0:354:e4e0:21dd with SMTP id ffacd0b85a97d-35e0f3162dcmr138784f8f.50.1717116421903;
-        Thu, 30 May 2024 17:47:01 -0700 (PDT)
-Received: from localhost.localdomain (93-34-90-105.ip49.fastwebnet.it. [93.34.90.105])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-35dd04c0e84sm608486f8f.13.2024.05.30.17.47.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 May 2024 17:47:01 -0700 (PDT)
-From: Christian Marangi <ansuelsmth@gmail.com>
-To: Jean Delvare <jdelvare@suse.com>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UmrytSbx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717125406; x=1748661406;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iyCW7kFSKDXz/X1KwEbJdlMwEoExWyUSJt412bkH+VM=;
+  b=UmrytSbxHO9IECaBfeKVTqU81xuxLR6XH8asFAoCZ2ZoIvLcdX2lVcPe
+   ck0PdFYVRC9+FFd3T1+Ecd77/SVQ4K9SPd2p2GN0bH62h9m10n+vsk7hc
+   CtMAApqyubM+oJ7CaslxVOyjtLBucA6L8GEyQ++PW2fRNi/iicFNh87xe
+   bJdzd7UYXa0XZihdFC1ZWxdDuS6ZD8CaYTsWN3F+45V6k4WBrwXQxhzsw
+   VG9m073K+ZmvRq7eOFJhwwnOpgkn3QQ7hEgsLSKJeLpo/MN2Pm9DSG15B
+   jdu+q7Ls/qWOLeKccLLcp9V2bEhCgF+vKSX/eM7XvYtQlhZkL6+XxuN5B
+   w==;
+X-CSE-ConnectionGUID: zGt4a10QQeOLrSE5e3aGfA==
+X-CSE-MsgGUID: GqD0dORNQKG1uyg96A/HQg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11088"; a="13879849"
+X-IronPort-AV: E=Sophos;i="6.08,203,1712646000"; 
+   d="scan'208";a="13879849"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2024 20:16:45 -0700
+X-CSE-ConnectionGUID: 7RCSr1coRSadS/8n1Im5Ww==
+X-CSE-MsgGUID: TJKVUWf4SJ6j9iBpxstteA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,203,1712646000"; 
+   d="scan'208";a="40477855"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by fmviesa003.fm.intel.com with ESMTP; 30 May 2024 20:16:42 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sCsky-000GRT-2p;
+	Fri, 31 May 2024 03:16:40 +0000
+Date: Fri, 31 May 2024 11:16:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Radu Sabau <radu.sabau@analog.com>, Jean Delvare <jdelvare@suse.com>,
 	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Christian Marangi <ansuelsmth@gmail.com>,
-	linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/3] hwmon: g672: add support for g761
-Date: Thu, 30 May 2024 23:16:52 +0200
-Message-ID: <20240530211654.7946-3-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240530211654.7946-1-ansuelsmth@gmail.com>
-References: <20240530211654.7946-1-ansuelsmth@gmail.com>
+	Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Radu Sabau <radu.sabau@analog.com>
+Subject: Re: [PATCH v5] drivers: hwmon: max31827: Add PEC support
+Message-ID: <202405311134.f2ALUwLL-lkp@intel.com>
+References: <20240530112505.14831-1-radu.sabau@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240530112505.14831-1-radu.sabau@analog.com>
 
-Add support for g761 PWM Fan Controller.
+Hi Radu,
 
-The g761 is a copy of the g763 with the only difference of supporting
-and internal clock. The internal clock is used if no clocks property is
-defined in device node and in such case the required bit is enabled and
-clock handling is skipped.
+kernel test robot noticed the following build errors:
 
-The internal clock oscillator runs at 31KHz.
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on linus/master v6.10-rc1 next-20240529]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
-Changes v2:
-- Rework handling of internal clock
+url:    https://github.com/intel-lab-lkp/linux/commits/Radu-Sabau/drivers-hwmon-max31827-Add-PEC-support/20240530-192727
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20240530112505.14831-1-radu.sabau%40analog.com
+patch subject: [PATCH v5] drivers: hwmon: max31827: Add PEC support
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240531/202405311134.f2ALUwLL-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project bafda89a0944d947fc4b3b5663185e07a397ac30)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240531/202405311134.f2ALUwLL-lkp@intel.com/reproduce)
 
- drivers/hwmon/g762.c | 33 ++++++++++++++++++++++++++++++---
- 1 file changed, 30 insertions(+), 3 deletions(-)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405311134.f2ALUwLL-lkp@intel.com/
 
-diff --git a/drivers/hwmon/g762.c b/drivers/hwmon/g762.c
-index af1228708e25..a00cf3245eec 100644
---- a/drivers/hwmon/g762.c
-+++ b/drivers/hwmon/g762.c
-@@ -69,6 +69,7 @@ enum g762_regs {
- #define G762_REG_FAN_CMD1_PWM_POLARITY  0x02 /* PWM polarity */
- #define G762_REG_FAN_CMD1_PULSE_PER_REV 0x01 /* pulse per fan revolution */
- 
-+#define G761_REG_FAN_CMD2_FAN_CLOCK     0x20 /* choose internal clock*/
- #define G762_REG_FAN_CMD2_GEAR_MODE_1   0x08 /* fan gear mode */
- #define G762_REG_FAN_CMD2_GEAR_MODE_0   0x04
- #define G762_REG_FAN_CMD2_FAN_STARTV_1  0x02 /* fan startup voltage */
-@@ -115,6 +116,7 @@ enum g762_regs {
- 
- struct g762_data {
- 	struct i2c_client *client;
-+	bool internal_clock;
- 	struct clk *clk;
- 
- 	/* update mutex */
-@@ -566,6 +568,7 @@ static int do_set_fan_startv(struct device *dev, unsigned long val)
- 
- #ifdef CONFIG_OF
- static const struct of_device_id g762_dt_match[] = {
-+	{ .compatible = "gmt,g761" },
- 	{ .compatible = "gmt,g762" },
- 	{ .compatible = "gmt,g763" },
- 	{ },
-@@ -597,6 +600,21 @@ static int g762_of_clock_enable(struct i2c_client *client)
- 	if (!client->dev.of_node)
- 		return 0;
- 
-+	data = i2c_get_clientdata(client);
-+
-+	/*
-+	 * Skip CLK detection and handling if we use internal clock.
-+	 * This is only valid for g761.
-+	 */
-+	data->internal_clock = of_device_is_compatible(client->dev.of_node,
-+						       "gmt,g761") &&
-+			       !of_property_present(client->dev.of_node,
-+						    "clocks");
-+	if (data->internal_clock) {
-+		do_set_clk_freq(&client->dev, 32768);
-+		return 0;
-+	}
-+
- 	clk = of_clk_get(client->dev.of_node, 0);
- 	if (IS_ERR(clk)) {
- 		dev_err(&client->dev, "failed to get clock\n");
-@@ -616,7 +634,6 @@ static int g762_of_clock_enable(struct i2c_client *client)
- 		goto clk_unprep;
- 	}
- 
--	data = i2c_get_clientdata(client);
- 	data->clk = clk;
- 
- 	ret = devm_add_action(&client->dev, g762_of_clock_disable, data);
-@@ -1025,16 +1042,26 @@ ATTRIBUTE_GROUPS(g762);
- static inline int g762_fan_init(struct device *dev)
- {
- 	struct g762_data *data = g762_update_client(dev);
-+	int ret;
- 
- 	if (IS_ERR(data))
- 		return PTR_ERR(data);
- 
-+	/* internal_clock can only be set with compatible g761 */
-+	if (data->internal_clock)
-+		data->fan_cmd2 |= G761_REG_FAN_CMD2_FAN_CLOCK;
-+
- 	data->fan_cmd1 |= G762_REG_FAN_CMD1_DET_FAN_FAIL;
- 	data->fan_cmd1 |= G762_REG_FAN_CMD1_DET_FAN_OOC;
- 	data->valid = false;
- 
--	return i2c_smbus_write_byte_data(data->client, G762_REG_FAN_CMD1,
--					 data->fan_cmd1);
-+	ret = i2c_smbus_write_byte_data(data->client, G762_REG_FAN_CMD1,
-+					data->fan_cmd1);
-+	if (ret)
-+		return ret;
-+
-+	return i2c_smbus_write_byte_data(data->client, G762_REG_FAN_CMD2,
-+					 data->fan_cmd2);
- }
- 
- static int g762_probe(struct i2c_client *client)
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/hwmon/max31827.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/hwmon/max31827.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/hwmon/max31827.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from drivers/hwmon/max31827.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/hwmon/max31827.c:336:32: error: declaration of anonymous struct must be a definition
+     336 | static int max31827_chip_write(struct *regmap, u32 attr, long val)
+         |                                ^
+>> drivers/hwmon/max31827.c:339:7: error: use of undeclared identifier 'hwmon_chip_pec'; did you mean 'hwmon_chip'?
+     339 |         case hwmon_chip_pec:
+         |              ^~~~~~~~~~~~~~
+         |              hwmon_chip
+   include/linux/hwmon.h:21:2: note: 'hwmon_chip' declared here
+      21 |         hwmon_chip,
+         |         ^
+>> drivers/hwmon/max31827.c:340:29: error: use of undeclared identifier 'regmap'
+     340 |                 return regmap_update_bits(regmap, MAX31827_CONFIGURATION_REG,
+         |                                           ^
+>> drivers/hwmon/max31827.c:341:8: error: use of undeclared identifier 'MAX38127_CONFIGURATION_PEC_EN_MASK'
+     341 |                                           MAX38127_CONFIGURATION_PEC_EN_MASK,
+         |                                           ^
+   drivers/hwmon/max31827.c:342:14: error: use of undeclared identifier 'MAX38127_CONFIGURATION_PEC_EN_MASK'
+     342 |                                           val ? MAX38127_CONFIGURATION_PEC_EN_MASK : 0);
+         |                                                 ^
+>> drivers/hwmon/max31827.c:357:48: error: too many arguments to function call, expected 2, have 3
+     357 |                 return max31827_chip_write(st->regmap, attr, val);
+         |                        ~~~~~~~~~~~~~~~~~~~                   ^~~
+   drivers/hwmon/max31827.c:336:12: note: 'max31827_chip_write' declared here
+     336 | static int max31827_chip_write(struct *regmap, u32 attr, long val)
+         |            ^                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hwmon/max31827.c:399:7: error: duplicate case value 'hwmon_chip'
+     399 |         case hwmon_chip:
+         |              ^
+   drivers/hwmon/max31827.c:356:7: note: previous case defined here
+     356 |         case hwmon_chip:
+         |              ^
+>> drivers/hwmon/max31827.c:601:53: error: use of undeclared identifier 'HWMON_C_PEC'
+     601 |         HWMON_CHANNEL_INFO(chip, HWMON_C_UPDATE_INTERVAL | HWMON_C_PEC),
+         |                                                            ^
+   7 warnings and 8 errors generated.
+
+
+vim +336 drivers/hwmon/max31827.c
+
+   335	
+ > 336	static int max31827_chip_write(struct *regmap, u32 attr, long val)
+   337	{
+   338		switch (attr) {
+ > 339		case hwmon_chip_pec:
+ > 340			return regmap_update_bits(regmap, MAX31827_CONFIGURATION_REG,
+ > 341						  MAX38127_CONFIGURATION_PEC_EN_MASK,
+ > 342						  val ? MAX38127_CONFIGURATION_PEC_EN_MASK : 0);
+   343		default:
+   344			return -EOPNOTSUPP;
+   345		}
+   346	}
+   347	
+   348	static int max31827_write(struct device *dev, enum hwmon_sensor_types type,
+   349				  u32 attr, int channel, long val)
+   350	{
+   351		struct max31827_state *st = dev_get_drvdata(dev);
+   352		int res = 1;
+   353		int ret;
+   354	
+   355		switch (type) {
+   356		case hwmon_chip:
+ > 357			return max31827_chip_write(st->regmap, attr, val);
+   358		case hwmon_temp:
+   359			switch (attr) {
+   360			case hwmon_temp_enable:
+   361				if (val >> 1)
+   362					return -EINVAL;
+   363	
+   364				mutex_lock(&st->lock);
+   365				/**
+   366				 * The chip should not be enabled while a conversion is
+   367				 * performed. Neither should the chip be enabled when
+   368				 * the alarm values are changed.
+   369				 */
+   370	
+   371				st->enable = val;
+   372	
+   373				ret = regmap_update_bits(st->regmap,
+   374							 MAX31827_CONFIGURATION_REG,
+   375							 MAX31827_CONFIGURATION_1SHOT_MASK |
+   376							 MAX31827_CONFIGURATION_CNV_RATE_MASK,
+   377							 MAX31827_DEVICE_ENABLE(val));
+   378	
+   379				mutex_unlock(&st->lock);
+   380	
+   381				return ret;
+   382	
+   383			case hwmon_temp_max:
+   384				return write_alarm_val(st, MAX31827_TH_REG, val);
+   385	
+   386			case hwmon_temp_max_hyst:
+   387				return write_alarm_val(st, MAX31827_TH_HYST_REG, val);
+   388	
+   389			case hwmon_temp_min:
+   390				return write_alarm_val(st, MAX31827_TL_REG, val);
+   391	
+   392			case hwmon_temp_min_hyst:
+   393				return write_alarm_val(st, MAX31827_TL_HYST_REG, val);
+   394	
+   395			default:
+   396				return -EOPNOTSUPP;
+   397			}
+   398	
+ > 399		case hwmon_chip:
+   400			if (attr == hwmon_chip_update_interval) {
+   401				if (!st->enable)
+   402					return -EINVAL;
+   403	
+   404				/*
+   405				 * Convert the desired conversion rate into register
+   406				 * bits. res is already initialized with 1.
+   407				 *
+   408				 * This was inspired by lm73 driver.
+   409				 */
+   410				while (res < ARRAY_SIZE(max31827_conversions) &&
+   411				       val < max31827_conversions[res])
+   412					res++;
+   413	
+   414				if (res == ARRAY_SIZE(max31827_conversions))
+   415					res = ARRAY_SIZE(max31827_conversions) - 1;
+   416	
+   417				res = FIELD_PREP(MAX31827_CONFIGURATION_CNV_RATE_MASK,
+   418						 res);
+   419	
+   420				ret = regmap_update_bits(st->regmap,
+   421							 MAX31827_CONFIGURATION_REG,
+   422							 MAX31827_CONFIGURATION_CNV_RATE_MASK,
+   423							 res);
+   424				if (ret)
+   425					return ret;
+   426	
+   427				st->update_interval = val;
+   428			}
+   429			break;
+   430	
+   431		default:
+   432			return -EOPNOTSUPP;
+   433		}
+   434	
+   435		return 0;
+   436	}
+   437	
+
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
