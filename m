@@ -1,87 +1,157 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4BB9155C8E;
-	Fri, 31 May 2024 10:38:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8ED8158D65;
+	Fri, 31 May 2024 13:09:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717151886; cv=none; b=lXNxXnonethysvIO/V3qYAjJu2laPlzb9Xqqt4QPUyFz4AX2bG40iE8PnQwH8ZP3XuuvnYfqAtZEGcAsaKOFwQQdz5ychDunPi6mQEfHl4t0we5Y7XDHrCGMpKwqrYvgynk3yFU1qc+2kHo8P+Kgh2ud3DxMEr6+GbAtRFc83UY=
+	t=1717160962; cv=none; b=oI+jNEafg8EG2iugHIthtvCeuxlN3TRXdS9xzIKVQIIaYon+PHLAajkAoi/b6jtq5mZs76lKzZNA0ubSF9iK4JMzOQSfBaT6H0fWKB7sEzf7YfcOyKg3eiu3v6n7Y/HYhTRU6XXneTS4wYj+8mHWtuihUlgD6o0fJc6DSIjKXyg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717151886; c=relaxed/simple;
-	bh=vGS6g45uGnxHvSSNpUZ+06i5ODxlJer7tFN7ZSsuT3o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q3Pgcc5lTEnJytAjbd87DHSVg5/wS+AX67Qlm+cIJuP5AXuavmKqS4WsSRQZwov6HxlcA2r2m4uxWr/9teIN80mBOc3GdVKCQdsjFqoQBvCCzBgCEoZWEHTw8NKcpNZ3UDPW4IUfLUApvdXKjcxyRzsBWHvaakJFm9MUjxGN5iI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=t-8ch.de; spf=pass smtp.mailfrom=t-8ch.de; dkim=pass (1024-bit key) header.d=t-8ch.de header.i=@t-8ch.de header.b=I7ohPjh1; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=t-8ch.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=t-8ch.de
+	s=arc-20240116; t=1717160962; c=relaxed/simple;
+	bh=eqt3kXyBgKx13IlxhyjFv4MvqEMrIyaxkSA4WNsVxGQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eZCaDpDc4/yR5W8BPNDKFxeDBoxftEDcmCXC0w6y0UgrPvOncRuB+TJPAqk1r6v0h2iyNjpbXRIsMYzmrnESzJ8S5TnphICstP2AFAruVgMgIUPdWZyQHjvbVgWxPbe69gb24Sn03j1VjARRzzxOZ1TpVwpAbW0GtngPphtHKh0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dof9dUSw; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=t-8ch.de header.i=@t-8ch.de header.b="I7ohPjh1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-	t=1717151875; bh=vGS6g45uGnxHvSSNpUZ+06i5ODxlJer7tFN7ZSsuT3o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=I7ohPjh1avznzAaPb8T6T7o4LUKfcwAdQet/t5H/NpzpKtL4FfFYE/P4ucUbW6j3T
-	 SVCdjqM8Wjgnc2pwGNtt1GO02xrFZlLwFVHFyxJZ+e9XpapKCWzfDo1XUUKQbyUt48
-	 AxPK4mJsasUNb4FlIbz/JCnDeDv20T49z8G9QMSQ=
-Date: Fri, 31 May 2024 12:37:54 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To: =?utf-8?B?UmVuw6k=?= Rebe <rene@exactcode.de>
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org, Hristo Venev <hristo@venev.name>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Radu Sabau <radu.sabau@analog.com>, Paul Menzel <pmenzel@molgen.mpg.de>
-Subject: Re: [PATCH 2/3] hwmon: Add support for SPD5118 compliant temperature
- sensors
-Message-ID: <2b3ca226-339e-40f3-908f-bf8adcb94504@t-8ch.de>
-References: <20240529205204.81208-1-linux@roeck-us.net>
- <20240529205204.81208-3-linux@roeck-us.net>
- <34a4292e-c4db-4b40-822e-b892e1444045@t-8ch.de>
- <16e448f1-cfc9-4e88-b3f1-55e1856d1405@roeck-us.net>
- <0a2ed64d-06d9-45e8-a054-4ded4429f952@t-8ch.de>
- <ffd72953-ecd2-405a-ad6d-236143b26946@roeck-us.net>
- <20240531093154.rna2vwbfx7csu2sj@ninjato>
- <BA0B79E0-6582-45EA-8EA9-35E278B8CC42@exactcode.de>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dof9dUSw"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1f3469382f2so14982775ad.0;
+        Fri, 31 May 2024 06:09:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1717160960; x=1717765760; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=tVm235OTCAmN49RKAWjBWC91AtK2vkpMl8EB/K7SIKs=;
+        b=dof9dUSweMXdejSM/0y06L6WR4PDMQ4y57ZoB+5HGD64/V0uRHO2RcHOdhgY6b9IV3
+         hs3dB5l6prR96TMTjnxQkqO+0upJQSdx2Lx5ji4bQXRxXK9qLX2D3Nz0hh6/b1isbohH
+         0GBZPDDyUkzkoWENVvoPUah9YKPBhv3QkMMRwHluDxcSROoCWW/6/Vuijkg1JZ1aS6oM
+         5W6MzQ/pmtzZXcVCsixhKbjXstv9GYuSJxkBEWiCRftws/ddCln+3ZGP4csLyTYrJCjr
+         gk6HmhDx83iZs2HWVanrRhFPi0aZAGzHEtlEt26rvoHQZsW1HEctqbBjQEbE4EIcXDTc
+         TT+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717160960; x=1717765760;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tVm235OTCAmN49RKAWjBWC91AtK2vkpMl8EB/K7SIKs=;
+        b=GlgfNA6xSKyAPI2Im8YCmH/+q27FcWQ5IiJWj31BaPYJEJWWcGvDTe+igi/6ZZlQkG
+         bkw5zHmjs1o8MYch7RU3nNzHeatr9Toxm6tYm6e3r6sr/ie16Ls/0hdr9CEmIrgaQlqq
+         AVM9eh3AS3xlzdGnHAOUR5tI/IkrwgEOaREJO2pPjilxdK4GNN02tPOTZ4FURcFFYEKN
+         /LGvj9+qxJ/ZHG1DJn80Aw78d/1j/yhXnmpOIB0vpVsu50q0LehgM+Pg5H1F9IC1z8O7
+         uREyAhFhA9Jng94xXquXOr0FTrfGHHK3pqoLPA7/42pNCHfF1eHJdgkeuNKhlrNNcgXX
+         itfg==
+X-Forwarded-Encrypted: i=1; AJvYcCWtw4iJuB8IKA1mk/+Sl7VyN/TZlu+6GqvsfxW+sh7ebRM8F/3g1EYBYnobCjRr3+JEXwcC6OjJhjfFbf1O0u1M2vHbxqzi+IyvUrX3SFo7ZZcb6iQP2lE5DWBTW70/kpVcqcLEZooM3sQ=
+X-Gm-Message-State: AOJu0Yy3hPWs23kJjVALlD8thZf0uz4DCj2DlJ2/msUgfrQUDJSWtA0p
+	1oEkSwFaztYrgwp59ZEAUENhsBVI/pYm0TsIPYtKn8hWkk1PcFzH
+X-Google-Smtp-Source: AGHT+IFJCQ7OE9r4J7/aU8lfm9w/sKHjDMT7vR28uo5qPn8rwTjtvmUbe/TR1dKCmEV8ILN5Bpu/jA==
+X-Received: by 2002:a17:902:f652:b0:1f6:3c4f:2927 with SMTP id d9443c01a7336-1f63c4f2cd7mr17263485ad.38.1717160958551;
+        Fri, 31 May 2024 06:09:18 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f6323eb910sm15982045ad.199.2024.05.31.06.09.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 May 2024 06:09:17 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <f53deeb2-bc08-4363-b8d0-ff3987409ca7@roeck-us.net>
+Date: Fri, 31 May 2024 06:09:16 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <BA0B79E0-6582-45EA-8EA9-35E278B8CC42@exactcode.de>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/3] dt-bindings: hwmon: jedec,spd5118: Add bindings
+To: Krzysztof Kozlowski <krzk@kernel.org>, linux-hwmon@vger.kernel.org
+Cc: devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, linux-kernel@vger.kernel.org,
+ Armin Wolf <W_Armin@gmx.de>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
+ <linux@weissschuh.net>, =?UTF-8?Q?Ren=C3=A9_Rebe?= <rene@exactcode.de>
+References: <20240530223939.1027659-1-linux@roeck-us.net>
+ <20240530223939.1027659-2-linux@roeck-us.net>
+ <0ee11044-8dfc-4589-96b5-fa1f906928e5@kernel.org>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <0ee11044-8dfc-4589-96b5-fa1f906928e5@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 2024-05-31 12:01:35+0000, René Rebe wrote:
-> On May 31, 2024, at 11:31, Wolfram Sang <wsa+renesas@sang-engineering.com> wrote:
-> >>> Wolfgang seems to think it's important:
-> > 
-> > Wolfram, please.
-
-Sorry, Wolfram.
-
-> > 
-> >>> https://lore.kernel.org/lkml/tdia472d4pow2osabef24y2ujkkquplfajxmmtk5pnxllsdxsz@wxzynz7llasr/
-> >>> 
-> >> 
-> >> Ok, but that doesn't explain the reason. Wolfram, Paul, why do you
-> >> think this is needed ? Note that I am not opposed to adding spd
-> >> eeprom support, but I'd like to know why I am doing it before
-> >> I spend time on it.
-> > 
-> > A working eeprom driver is needed to get 'decode-dimms' from the
-> > i2c-tools package working. Jean reported that EEPROM access for DDR5 is
-> > different from DDR4, so it needs a separate driver. And
-> > i2c_register_spd() then needs to be updated to use the new driver for
-> > DDR5.
+On 5/31/24 01:15, Krzysztof Kozlowski wrote:
+> On 31/05/2024 00:39, Guenter Roeck wrote:
+>> Add device tree bindings for the SPD hub present in DDR5 modules.
+>>
+>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 > 
-> Well my original downstream driver already had eeprom access:
+> ...
 > 
-> 	https://svn.exactcode.de/t2/trunk/package/kernel/linux/spd-5118.patch
+>> +title: JEDEC JESD300-5B (SPD5118) compatible DDR5 SPD hub
+>> +
+>> +maintainers:
+>> +  - Guenter Roeck <linux@roeck-us.net>
+>> +
+>> +description: |
+>> +  JEDEC JESD300-5B.01 SPD5118 Hub and Serial Presence Detect
+>> +  https://www.jedec.org/standards-documents/docs/jesd300-5b01
+>> +
+>> +select:
+>> +  properties:
+>> +    compatible:
+>> +      const: jedec,spd5118
 > 
-> Note there are some surrounding -2, and parity patches around this patch.
+> Why do you need the select? This s needed for cases with multiple
+> bindings using parts of compatible list. I don't see the case here so far.
+> 
 
-That would need to be rewritten to use the nvmem APIs though, I guess.
-If nobody wants to do it, I'm volunteering.
+Sorry, I am not a devicetree expert, I don't really know what I am doing,
+and just copied this from some other binding. I'll try to find a better
+example. Actually, I'll just add the binding to trivial devices.
 
-Thomas
+Thanks,
+Guenter
+
