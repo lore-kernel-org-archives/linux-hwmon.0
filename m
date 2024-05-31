@@ -1,120 +1,145 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B6CF1CAA6;
-	Fri, 31 May 2024 21:18:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D67182B9;
+	Fri, 31 May 2024 21:31:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717190320; cv=none; b=g+YmUoyXGZIK9KUwJtAmMDAmLNHkgOwEdVwtZ4CrBAOZoR0U1JGXHSb1w9oHBf+ezzbAcuyDWeT5kX2CHHTjZGX/H0/JuNEE1l63WtLlO8ryXzqgcvbQXen6jjfBISSCgCOFHub6/47bcihZY4jGtXcGNYYf+eMSMEeAZpt9mBw=
+	t=1717191099; cv=none; b=NWXRU5dpvFW2VTzpjUUhKAm88dL2umGwfxJ6XKgRtYrjkQ/XrO4pyYGwllv88QEaW0UKvfoAWGcU5uO+dsdIHRL8V758S8MU8/UunEtcGaL/zzVykPXV/XHkjOOpdcWzGjKyKZsjTrTxjyTTQJd5fwE9LWp3icQtvdDYoXXXvmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717190320; c=relaxed/simple;
-	bh=BhBOMOlRBLDWP/YBXKC6zqzoAkUA/qWA2XLKoJ3alxU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=EHmGDym2Y9w5GjfiNUXtMR7qco93JypYevFrLsJIvaNbGgxoipGB7/U27CMjuevU7JfTK6er7M1R5ryzJLdnW0R1vIr7jfd7cEgUzY0KgfjYqhKJVfKRx8wZmqdnyysZMIFlP+bCdYRo8Tsf8WklKpoaz4lLE0likrbBBXO8+ok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cTBfIe/t; arc=none smtp.client-ip=209.85.210.178
+	s=arc-20240116; t=1717191099; c=relaxed/simple;
+	bh=p+h+RR8Tux2ov6Q/YfGRzyN6928v4VHs7jLvp5QqIXk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VNQT4He82VrjvV37AF8S75ilZa2JeQNWVOyhYIQ/xXuhbbKDqxv9WIcX3j1f4IYOemGsGUe46as8VqidV70UDIhc1PIM0yTqXABZJQpaZMJfgOg0WEMLHIeZjY72DrvTs5GZrf9Rr2xX7ME0sBcCgmpCqrkDDCyOK1WW3qGQrwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yovvu1S7; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cTBfIe/t"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-70249faa853so988771b3a.3;
-        Fri, 31 May 2024 14:18:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yovvu1S7"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-70109d34a16so2345592b3a.2;
+        Fri, 31 May 2024 14:31:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717190318; x=1717795118; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=MaBWr+6fkh5iqMGxTtmf+W5u5Z9ZApCsEmoFL6gcvcg=;
-        b=cTBfIe/t61lk2xQTSG77NqVJ6gcYlc4rbnOVv18qUeE76rJ2CZ5YOcnicssUNinmmB
-         RiJCKlIg93eT5yTSA5ig7OJtYvi/gZx/j2Snv+CiVTlbjq8HaLeJyj4XHiCELNORU2FB
-         kOb3ghBiLCpzLbteSX5ga+L1Syhmyt8qM39BKt+SxQFjm0yrYXvP8PlJJHXEtrW3A0x8
-         36cm6z61zUwPdRSkupsj6OyPhV/sNC6guWIerMv26KDjHf1yFun9q7ZybvHVEr21YdNg
-         GKEq2fYGYwONs6EcgKjJbVF8dG/iajszBon+PFgLx6zCBhQV1aOWwJfJMIzkMWlR2+5h
-         2pFQ==
+        d=gmail.com; s=20230601; t=1717191098; x=1717795898; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=lmTK+P0aAS88cJMG+0siFJrcs9hOJ7w3yXrh727oCsA=;
+        b=Yovvu1S71iGD75DcSBcAGRqli6LBrXXcFDcVmay8WUX2Gca7CSCYCji/pCAIxd+hTi
+         cTRGmLcm+9jAszAEBC5wCOvPay0rM14+5GU3EsurKid+53hr9vy/U11tCfV2LSYo5vcZ
+         lcE3MkpwWGJsRhXABLCX2utXZVPK9I5rRadrG+Z5fLF6kPpdcgENRmDk+2vfQPjZfwpL
+         BWNJLnkWiP8WTsDD1uJCD0GZvpB1jRi1XozqhKnBMCXa+xeNq0BX3BMdf2PwKeNUpeJI
+         8DMjMuK3h9m6t4x0IzOyjomZo84aN6B9Zv67V0tRnjVpNjf4Ze2ioM57NHbCR1/BcZa1
+         85uA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717190318; x=1717795118;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1717191098; x=1717795898;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MaBWr+6fkh5iqMGxTtmf+W5u5Z9ZApCsEmoFL6gcvcg=;
-        b=T8u6mUPeoS+L4U/vAuVYMHRJ9bbdr8yYSdGxiCVBWdguGWsMoRRSpVjFthjdWuFEA4
-         jDTt1Gd7gRje252IT2OWqaMREHiALK1pMaeQAn30rim2nkc6Or8CoZw/DLOSM9WOPbL0
-         eQpCTKeUy7C/920hXHk2M8zwxTjeB2uRRv6sXU+l3Z6gKJvd0on5au4aMnC+MUUwnOqO
-         xDpAx+Gy26cwX872Q7HGOsjHAipAtAtHErXCzDWgdwrI0E6t1sm8RU8gHxndY4TLqCtZ
-         797E8yWnxFaIYd5xh18sTELnj/MR8PX3mRfIiSLO89RLm6aa6z4QsVXIEYkvLx10MGMK
-         205w==
-X-Forwarded-Encrypted: i=1; AJvYcCUMbPjw5FJxTHTQFLFXUrC30FVtkkqHk155PCAPrMsFcQd7pkgV6m9tun0yLJIFTETPEDYwGUpu5OIjfuQ0c4ZxetDS1m9QaguRLQNY
-X-Gm-Message-State: AOJu0YyStAG68b0VyWRypKjRCKEEUQamki9mSid/H8b9LKl0qhoKrmKh
-	nb7uDyjjWXS+C5N6IAHbvYvHSNUkWwqM4fK3L78aNlOckbQOagntUe1Epg==
-X-Google-Smtp-Source: AGHT+IFtFJA5qR3yNkD7xEBE4XbGvkqen1FBezmBDocw69MZvDul9M5nGW73ihK2AYRZ+tZvCJrAAw==
-X-Received: by 2002:a05:6a20:841e:b0:1b2:7004:5103 with SMTP id adf61e73a8af0-1b27004520amr3462793637.47.1717190318330;
-        Fri, 31 May 2024 14:18:38 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c1c2844133sm2057688a91.49.2024.05.31.14.18.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 May 2024 14:18:37 -0700 (PDT)
+        bh=lmTK+P0aAS88cJMG+0siFJrcs9hOJ7w3yXrh727oCsA=;
+        b=TdhklFfmI6gYfWz/8kQdJrIdMx2YZignhrqgb/UZ1hg55+Uds8IeUMEFQbqZqHQHHo
+         TNn2bsv26bX9dpEd53WSXTF1PQneShS9UE6wJVD6dPMOiQe+CVK9N5M9jNF6cJdiaEG3
+         8GOpIxY4ymDwbVbi4tLvwVloQO56Cc3a1bxGVLB9UQ1qV8AJmTN3C9fRi8AJ7OyLMbbI
+         m+3JZWM4z+cx3O4p5LvXtdh8ZTLhFj7adlAh+2prKGmb0WnW3qFqu4DE82r22RcgLO+0
+         +qXlO9odcQjdLaZXyfAQy1sE4VCBXDXni3UVtftrwRKwAlxPNZV20pkc3UXy3CHmEhHp
+         QdWw==
+X-Forwarded-Encrypted: i=1; AJvYcCV3ZZdSfZrLy5okiMtKbd3vtUMBeyqvtqpbpEwtgHF8bfAMWA8WM5GuKh3u3u5psoJWmxyVey+C2CxB9t1FY7I4c4voJnVf9pcltBXlB4jzTnoHf6uZcjGC3FUPoId46wYO3qiEqC2nl9g=
+X-Gm-Message-State: AOJu0YzS/6/SGm9XfZJLwPAgXnI8ce2Er1zZNJN8ddVLzQ0B9sJ8you0
+	DWSKCd5oRrIGhncxCDSYwqLh0pTK3OVmT5/tnasgrBbJjokekopb
+X-Google-Smtp-Source: AGHT+IFd98ETMNBo5PLkVyZ9UtPTuKfKcJyylrYvEEoGY+8NVntQAivV9DKV0ht/8tQf4PsJYyyoLQ==
+X-Received: by 2002:a05:6a00:4a05:b0:6ea:e2d8:468 with SMTP id d2e1a72fcca58-7024789b9c4mr2442492b3a.26.1717191097697;
+        Fri, 31 May 2024 14:31:37 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-6c353fffe55sm1425729a12.14.2024.05.31.14.31.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 May 2024 14:31:37 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v6.10-rc2
-Date: Fri, 31 May 2024 14:18:36 -0700
-Message-Id: <20240531211836.1399346-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.39.2
+Message-ID: <294ff393-9cd5-4e81-a8c9-955dbadc612a@roeck-us.net>
+Date: Fri, 31 May 2024 14:31:35 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/3] hwmon: add ChromeOS EC driver
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+ Jean Delvare <jdelvare@suse.com>, Benson Leung <bleung@chromium.org>,
+ Lee Jones <lee@kernel.org>, Tzung-Bi Shih <tzungbi@kernel.org>
+Cc: Guenter Roeck <groeck@chromium.org>, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, chrome-platform@lists.linux.dev,
+ Dustin Howett <dustin@howett.net>,
+ Mario Limonciello <mario.limonciello@amd.com>,
+ Moritz Fischer <mdf@kernel.org>, Stephen Horvath <s.horvath@outlook.com.au>,
+ Rajas Paranjpe <paranjperajas@gmail.com>
+References: <20240529-cros_ec-hwmon-v4-0-5cdf0c5db50a@weissschuh.net>
+ <20240529-cros_ec-hwmon-v4-2-5cdf0c5db50a@weissschuh.net>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20240529-cros_ec-hwmon-v4-2-5cdf0c5db50a@weissschuh.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Hi Linus,
+On 5/28/24 23:27, Thomas Weißschuh wrote:
+> The ChromeOS Embedded Controller exposes fan speed and temperature
+> readings.
+> Expose this data through the hwmon subsystem.
+> 
+> The driver is designed to be probed via the cros_ec mfd device.
+> 
+> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 
-Please pull hwmon fixes for Linux v6.10-rc2 from signed tag:
+I assume this patch and first patch of the series will be applied
+through the cros-ec branch.
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.10-rc2
+I don't know if Tzung-Bi has additional comments; from my perspective
+
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
 Thanks,
 Guenter
-------
 
-The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0:
-
-  Linux 6.10-rc1 (2024-05-26 15:20:12 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.10-rc2
-
-for you to fetch changes up to 52a2c70c3ec555e670a34dd1ab958986451d2dd2:
-
-  hwmon: (shtc1) Fix property misspelling (2024-05-30 09:05:19 -0700)
-
-----------------------------------------------------------------
-hwmon fixes for v6.10-rc2
-
-* sttcs: Fix property spelling
-
-* intel-m10-bmc-hwmon: Fix multiplier for N6000 board power sensor
-
-* ltc2992: Fix memory leak
-
-* dell-smm: Add Dell G15 5511 to fan control whitelist
-
-----------------------------------------------------------------
-Armin Wolf (1):
-      hwmon: (dell-smm) Add Dell G15 5511 to fan control whitelist
-
-Guenter Roeck (1):
-      hwmon: (shtc1) Fix property misspelling
-
-Javier Carrasco (1):
-      hwmon: (ltc2992) Fix memory leak in ltc2992_parse_dt()
-
-Peter Colberg (1):
-      hwmon: (intel-m10-bmc-hwmon) Fix multiplier for N6000 board power sensor
-
- drivers/hwmon/dell-smm-hwmon.c      | 8 ++++++++
- drivers/hwmon/intel-m10-bmc-hwmon.c | 2 +-
- drivers/hwmon/ltc2992.c             | 4 +++-
- drivers/hwmon/shtc1.c               | 2 +-
- 4 files changed, 13 insertions(+), 3 deletions(-)
