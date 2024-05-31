@@ -1,61 +1,61 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0887182B9;
-	Fri, 31 May 2024 21:32:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2238F81AC3;
+	Fri, 31 May 2024 21:50:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717191126; cv=none; b=Auk3ozXNB8+sgUUe0OznR0kPEsTZX4fi6tVnl7WHMpvfgCOYs6Elx0+iiNEnPLW7/6OfT/91mtwOJdHnknE4rCQilHcE1XH6SUo+Yac3DIkpVpkQiKCouftMqzsh7HOJnYWVRpTgZcHMMGPNi79g+lnb9NqW9Au/wd/QRGXty3Q=
+	t=1717192244; cv=none; b=nEiZVbTnGjWvq8gRDBuVvseXnd8yD3WnVMNj2VXZv4Yqqfzc/ZHMJBaoXPt+H779C8TH7iawAudvUH7J8UHyOvDS7ZnkGYyQ9fjxJdFFbc405Kd2DNDBajU3Tz7UsdgIA3TaBCCxZ60UokrkXw+lLGs2rF2EEiqiK97whBYjkTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717191126; c=relaxed/simple;
-	bh=8fmTdmCi8GLIo5GWFE9MCeQOetOhn91wcE1k4F9EYrM=;
+	s=arc-20240116; t=1717192244; c=relaxed/simple;
+	bh=qVjAzYJmg/3LhPTWuC3MTisC3Itt1jRkl5kv7uiZWQA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kmxIguUYsNAwP3alGVyL+TxiQDg+AZzvx8HX6JR9qTXPFvs31rXEhoE+dqyFHN709dx2n9c00w1RLndHMvEuuhTEMqQQXgsa9XnD5yz0BjsM8YlDBVzJVcK3oVUrjbtTDOP03WV8r08byPIAyURmhNKpVPgZNQx+h3eXdWvi4OQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FSTvrXZ6; arc=none smtp.client-ip=209.85.214.178
+	 In-Reply-To:Content-Type; b=BE6TlWL5oxsY86+OQWSvqXwVCAwtxDh9rdHFcPArGykvkJhq+RxzSmCPUGvKvabP92a+0D3rRzDGxt/EWbCEVtavTXFUv/ukZgBDs2PkVJ6StHx4yBLdB9Lrxk3YqK/B1h0pyWuRrIruU5IW4f/sBL1Y+sTxnsO9TRLmuAEdOSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hGbZF8e+; arc=none smtp.client-ip=209.85.210.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FSTvrXZ6"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1f6342c5fa8so10353445ad.1;
-        Fri, 31 May 2024 14:32:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hGbZF8e+"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-70234843a67so2050117b3a.1;
+        Fri, 31 May 2024 14:50:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717191124; x=1717795924; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1717192242; x=1717797042; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=zDMzjlLdFLPBXXGKesUlymEiEQwj5Uvb0CNnQKdq+OY=;
-        b=FSTvrXZ6kO+Ptmgn7DDrwZkQ2bdcGnx4VpWhTFRh53kVNF7hhu8U+53sLrBtZBCpk3
-         ntxGAnY+8DUOTWkdf7gB0NACnzOLWjFaWq8lkXnn9ciB/j53yEjyTcAm7WbtgGi0xQ0/
-         GdC6foPRB9zEtIpUY61/L+936hvQjtskr6Bancf5i2rmKCzo2ZdipB0MAczktpwUCyD9
-         aV0A/pVfy3KOUBMyiIP8usbhKRdLwSn8RFP6GnbLM9byyK3w+CbH70BkG82+V6ZhvPeP
-         Utzre4EMvIpIVbvUZpWzQrICff1Zbw1BDgnjWG5Pwq62PrtGGpOO6poGQd3p9/2oCZiQ
-         C7Sg==
+        bh=uCUM0vHfUxs5T4DYnVX7mJ8jYT5mGlx0XKmQiKJa2KM=;
+        b=hGbZF8e+Gb9b0G8CfFPCzAJBP/NfxRu9yJ4pRzOXRV5y+EkHoGLekGg+fBM8aW9fIP
+         aFUGIC6I+OP4l7heU3yIzh+f0MVwf5VvqjfzvmMvNfm0s3+whhzADJOEHmXTFMMqN8Pd
+         bBJFBFyHeZ/LFTT2y3JPFCFSqcSsjTRupHWRJUr9Ym3Tf7qyH8uFjgG+Nhx51QjOyDOb
+         XxzasSos5ZlMB6JtbX7pMWQsKygK8fUdaWH8c9Hpkx4qYU1rv7BuJE/+txsD2d2LtWr+
+         2rHTVj8PU6cwIS8Q65Oz+/PpDkTLBMDLyE9IzCcSe7T5uJq4rUNIuSBwlUFkdyt6/WmW
+         asKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717191124; x=1717795924;
+        d=1e100.net; s=20230601; t=1717192242; x=1717797042;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zDMzjlLdFLPBXXGKesUlymEiEQwj5Uvb0CNnQKdq+OY=;
-        b=R/nwcsS5vSWJo386IuabhAQMa67qtlx/irecpzYUMcEfWW+bPi15LVmsSr3bBxSfH4
-         DxXl6ar9uZEc3Z0PPKh2pHiFA7sA69aPlUiUgKvl7JGf1oYhTkdKqpkYqEVqgSnFtZ6/
-         1TjOItn3DRHU267DJ/F+ByrTdIs90z9JJX0V7jS95UKx4FgdNgPE+yh9F8uWofg7AjXL
-         VBv3Y2aG1HPDrKQdh5te4ABGJtwmIHyb8VWj0l9Kmi0swPSduu9KXuCeAJat/CT3jOy2
-         VZ+GhxxhBvHee5FAXQ3qdkkbkLgI8hwdsut/RtjjFOBtcI4xiuBQWRJQKMuhPVSeuXm5
-         loNg==
-X-Forwarded-Encrypted: i=1; AJvYcCV35THzAv+xA5n4LtGOij6bJB2QacjaV0yA6pxtqM7JbRH+Wk7Z1xmHpe4QvmhQp+OZIyvoRKXdyscBopjdgJ5rGAiN7GSRE3XOogv/sRjBPhOFewiUnCF8Hye86uQ6cwmcahORMXEYXtY=
-X-Gm-Message-State: AOJu0YzcRI0iagEJxkykueYVI6I/dBiGA8PwuH4fHmynSj4zu7Y68uTa
-	qVH6NIaUQfZ8Ar6e8rFwfq34ChdHziGy7IxPckvSoCij0iGTG/Js
-X-Google-Smtp-Source: AGHT+IGHNi1zPZrGDyrudCuWQ3XiJ3GgD4foIdRjvfZ5pwvj7IUyamOLOoKfv3m5WwcwtMRR60l+5Q==
-X-Received: by 2002:a17:902:f681:b0:1f4:9c26:d036 with SMTP id d9443c01a7336-1f636fd977dmr37635535ad.14.1717191124252;
-        Fri, 31 May 2024 14:32:04 -0700 (PDT)
+        bh=uCUM0vHfUxs5T4DYnVX7mJ8jYT5mGlx0XKmQiKJa2KM=;
+        b=j4C3hAj9kNbqSjv4ges4wW/NsQJf7davRvZIzIVV+Stlo9Rmigqq/HANabQDKnw3fS
+         CHd8R8BRZUJLz9CXF5ELawOrJVCe2AU2uzZjcBDYldS2f+j1aI+UbjgIZW0UlXeITWyQ
+         n53klqHtgzbur1JaZXuDgJXZIF4H2oW5+OfrAeslg6H/ur9tgReC3c0VzkzKX2cTXb4V
+         mj1eqCj33Wk050TyfmPO42TrjMxJk5a4DqLFqL4nMuCeuoFoXoG+95yBSwBXlkXx0zpW
+         xhYyYJwkrEo4GIbniBjUuKKtadDZTgZuFb2ax4kMeiPAVYiSR+TEYYrWuS5InDGlOt4L
+         eLCg==
+X-Forwarded-Encrypted: i=1; AJvYcCUlYN8/V0o2Mhcuig4WCIweaFCCUuNb7+fXIyROOOWN7NXubOokEgL7sUjkKctPvAWUo5DDHUqDHjxGnBAyBWEnCTg1UJmqnEpPlnQ6jElVYS9zLgIKLF+LtLD2RveBntE0M4wx9+o5wA==
+X-Gm-Message-State: AOJu0Ywv2QOmLKvOkIqdmVeW+8qniSyNtLUw3PcTggMGHm0O2CcYc4Td
+	5N+B4Ej8+QvZDqLegJyv+Gee/iXK+8sEqqMARAXTBkehTDMcp0+VUVhSGg==
+X-Google-Smtp-Source: AGHT+IF1BtbVfdSJj8l2TJeUMqufcaXX1W7IzUb+QCCW7bUTMsqSs6z4o5vumicGkTI635u6ANrKWg==
+X-Received: by 2002:a05:6a00:22cd:b0:6e5:43b5:953b with SMTP id d2e1a72fcca58-7024780448bmr3629140b3a.14.1717192242241;
+        Fri, 31 May 2024 14:50:42 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f6323dde85sm21111375ad.149.2024.05.31.14.32.03
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70242b059e0sm1877472b3a.176.2024.05.31.14.50.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 May 2024 14:32:03 -0700 (PDT)
+        Fri, 31 May 2024 14:50:41 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <142a8c0c-7ac8-4033-8c2a-5abb316870e7@roeck-us.net>
-Date: Fri, 31 May 2024 14:32:02 -0700
+Message-ID: <f96cc689-a340-4eec-8187-57e74b20c07c@roeck-us.net>
+Date: Fri, 31 May 2024 14:50:40 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,19 +63,19 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/3] platform/chrome: cros_ec_proto: Introduce
- cros_ec_cmd_readmem()
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Jean Delvare <jdelvare@suse.com>, Benson Leung <bleung@chromium.org>,
- Lee Jones <lee@kernel.org>, Tzung-Bi Shih <tzungbi@kernel.org>
-Cc: Guenter Roeck <groeck@chromium.org>, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, chrome-platform@lists.linux.dev,
- Dustin Howett <dustin@howett.net>,
- Mario Limonciello <mario.limonciello@amd.com>,
- Moritz Fischer <mdf@kernel.org>, Stephen Horvath <s.horvath@outlook.com.au>,
- Rajas Paranjpe <paranjperajas@gmail.com>
-References: <20240529-cros_ec-hwmon-v4-0-5cdf0c5db50a@weissschuh.net>
- <20240529-cros_ec-hwmon-v4-1-5cdf0c5db50a@weissschuh.net>
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: ti,ina2xx: Add alert-polarity
+ property
+To: Krzysztof Kozlowski <krzk@kernel.org>, Amna Waseem
+ <Amna.Waseem@axis.com>, Jean Delvare <jdelvare@suse.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel@axis.com
+References: <20240529-apol-ina2xx-fix-v1-0-77b4b382190f@axis.com>
+ <20240529-apol-ina2xx-fix-v1-1-77b4b382190f@axis.com>
+ <1ae97b90-ff20-4238-abe2-f2e5d87fc344@kernel.org>
+ <76dd5c0e-cc67-4ad1-8733-d8efdb8a172b@roeck-us.net>
+ <3a050921-6bf6-444e-8f61-83fcb6b9f2a5@kernel.org>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -121,19 +121,55 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240529-cros_ec-hwmon-v4-1-5cdf0c5db50a@weissschuh.net>
+In-Reply-To: <3a050921-6bf6-444e-8f61-83fcb6b9f2a5@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 5/28/24 23:27, Thomas Weißschuh wrote:
-> To read from the EC memory different mechanism are possible.
-> ECs connected via LPC expose their memory via a ->cmd_readmem operation.
-> Other protocols require the usage of EC_CMD_READ_MEMMAP, which on the
-> other hand is not implemented by LPC ECs.
+On 5/31/24 00:41, Krzysztof Kozlowski wrote:
+> On 29/05/2024 16:01, Guenter Roeck wrote:
+>> On 5/29/24 00:07, Krzysztof Kozlowski wrote:
+>>> On 29/05/2024 08:07, Amna Waseem wrote:
+>>>> Add a property to the binding to configure the Alert Polarity.
+>>>> Alert pin is asserted based on the value of Alert Polarity bit of
+>>>> Mask/Enable register. It is by default 0 which means Alert pin is
+>>>> configured to be active low. To configure it to active high, set
+>>>> alert-polarity property value to 1.
+>>>>
+>>>> Signed-off-by: Amna Waseem <Amna.Waseem@axis.com>
+>>>> ---
+>>>>    Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml | 9 +++++++++
+>>>>    1 file changed, 9 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
+>>>> index df86c2c92037..a3f0fd71fcc6 100644
+>>>> --- a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
+>>>> +++ b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
+>>>> @@ -66,6 +66,14 @@ properties:
+>>>>        description: phandle to the regulator that provides the VS supply typically
+>>>>          in range from 2.7 V to 5.5 V.
+>>>>    
+>>>> +  alert-polarity:
+>>>
+>>> Missing vendor prefix.
+>>>
+>>
+>> Are you sure you want a vendor prefix here ? Reason for asking is that
+>> many hardware monitoring chips have configurable alert or interrupt polarity,
+>> only the name is different. Some examples are the JC42.4 standard ("event
+>> polarity"), adt7410/adt7420 "interrupt polarity", MAX31827 ("alarm polarity"),
+>> or DS1621 ("output polarity"). We even have a vendor property, "adi,alarm-pol",
+>> used for MAX31827.
 > 
-> Provide a helper that automatically selects the correct mechanism.
+> Hm, I just checked if this is already existing property, but indeed I
+> did not check other variants.
 > 
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> Indeed it could go to common properties - hwmon-common.yaml. But then
+> how about using strings (as I asked before...).
+> 
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+I can't really comment on the strings; that is out of my knowledge zone.
+It might make sense to have hwmon-common.yaml, but I think that would
+require a some (read: a lot of) work.
+
+Guenter
 
