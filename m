@@ -1,167 +1,161 @@
-Received: from smtp.smtpout.orange.fr (smtp-26.smtpout.orange.fr [80.12.242.26])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9C65111AD;
-	Sat,  1 Jun 2024 08:40:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.26
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69F0D1DDEA;
+	Sat,  1 Jun 2024 10:41:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717231254; cv=none; b=j/EVCrayk0D44LngwfTJD0DZ5i8L4uoJGxcr1Sz5GxBcMS2psvHLJJsQ9FDP65IxRA2J49d7O9mO9F2Eirl35EJ4esHSVZxq/gD0r8FtQ3U2KdkrFyCEcBb8Zh9rYFNGJh3Js5ebCdIT1jqZU490UZ4bbTRFJ97oOOJgtYauZbY=
+	t=1717238474; cv=none; b=GCk35K3XoGiv0pK/B0aTYteFLlt8HLHlnVnqkF5BlfnYBBhWpb5G3fk0dleALwzyC/DxGwAmOmjt/VQ3IHouODhcrBuSNLeZ7/bz9RJVey8g6mRHx/9uPWB2SAQMqBOlPOYmmE6ogF+CJ3U9nh4HNDLbudQ05nPQk9Hw5jbeYwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717231254; c=relaxed/simple;
-	bh=sF9BOyKHST//ueP1dpjJq4rkoGLKuLDyhaBu4xILE54=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MWdYyztJ63GTq+BrUshMjSpU15IKaNNMSFEu5CK65d75GPcLdDkucQcC4TyLS+P7CelZ0p4ErCB+9EPDtihrVrT0g3e6c2XZ+SgXnjA2pIky8/biJl7oFBfuhEBqW/V+mlXP7YiB+lx5TNad+hfc5g0QPZfkpp9Nn0Oq2dCjGr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=CcxAMN5w; arc=none smtp.client-ip=80.12.242.26
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+	s=arc-20240116; t=1717238474; c=relaxed/simple;
+	bh=nyxSrVcpxbGL5iI/vXuDn01y3NgVDhxDhqhSgyZeYyI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oT6dr35MypPgcUOLMTmbmLCNcOOUS8CN/FUA0DZH+yLoYk214rz2biomFnXyBrDK8/IZRnd50NdqkX6XAZMkE5f540waxAoDwMDRsi/1+ml3cSpdzS7GJVEehvkeZx2Nxox9fY4wR9/rDWA3RYKlZ3N2XnrbQ0d53WwX2KI9lb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=gKtw9kXx; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="CcxAMN5w"
-Received: from [192.168.1.37] ([86.243.17.157])
-	by smtp.orange.fr with ESMTPA
-	id DKH2sUFIEvZ5mDKH3sPIqU; Sat, 01 Jun 2024 10:39:41 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1717231181;
-	bh=uDIWi5FqRaEs9zERfH9KwqhtLcINKRmqH7+cDO7juLM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=CcxAMN5w2n9SUWnzDnMjSIrDMG65v2mbI47yhBc7lDTBy+QT2U1zeA2Zi1+xfFA1E
-	 uovCvYQ4AVbyrGVIDqto0QFZLbqwVPyobv8ECOw9e+Qk1y/LN8ZlqLA6NRpU0Sj+sg
-	 D4jm+8QIy6/42X3QGJUj7rJHwkXYTQilB2Du8QlgWPgln7uKM9uc+vFg1+LaNERq5M
-	 Kb17JpWUQJj2K75X6Y9adyGwXBGDWQQg518Gce6Uwrfw1Eu+XC661tph7pYgrLQXNA
-	 tJC/lDguYLxMx5jvz4vYAwSb+N1RifGvitqdBNQRH2LjZQnG7dt++uCsNl1COoIKNt
-	 dlM0iW41EnxxA==
-X-ME-Helo: [192.168.1.37]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 01 Jun 2024 10:39:41 +0200
-X-ME-IP: 86.243.17.157
-Message-ID: <446b396b-753c-4114-9a8c-6f84ad3a69ba@wanadoo.fr>
-Date: Sat, 1 Jun 2024 10:39:29 +0200
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="gKtw9kXx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1717238461;
+	bh=nyxSrVcpxbGL5iI/vXuDn01y3NgVDhxDhqhSgyZeYyI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gKtw9kXxtAF3HxhCIXp/6uu0k66j2vOZJSvHgKe8M84aY8Ne5MhHy8rdUzQyTeS5h
+	 OczKrBMt5Y9jgqT66Fs6T2e3imtWc1T4kgrOYkxudkyRwoHY8KnWBrQCj9eJe/EjUS
+	 YWv5Bql1TEAQ1NoS4QsOMA13xeefRzatMxc/bPU8=
+Date: Sat, 1 Jun 2024 12:41:00 +0200
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org, Armin Wolf <W_Armin@gmx.de>, 
+	=?utf-8?B?UmVuw6k=?= Rebe <rene@exactcode.de>, Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: Re: [PATCH RFT v3 4/4] hwmon: (spd5118) Add support for reading SPD
+ data
+Message-ID: <cf9d752e-0137-4a6d-85d3-fbe69293a43e@t-8ch.de>
+References: <20240531230556.1409532-1-linux@roeck-us.net>
+ <20240531230556.1409532-5-linux@roeck-us.net>
+ <4cc979c3-3ce0-4f31-b5d0-508e1af5fdf4@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [v3,1/2] hwmon: add MP2891 driver
-To: Noah Wang <noahwang.wang@outlook.com>, robh@kernel.org,
- krzk+dt@kernel.org, linux@roeck-us.net, conor+dt@kernel.org,
- jdelvare@suse.com
-Cc: corbet@lwn.net, Delphine_CC_Chiu@Wiwynn.com, peteryin.openbmc@gmail.com,
- javier.carrasco.cruz@gmail.com, patrick.rudolph@9elements.com,
- luca.ceresoli@bootlin.com, chou.cosmo@gmail.com, bhelgaas@google.com,
- lukas@wunner.de, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-i2c@vger.kernel.org
-References: <SEYPR04MB648253BF01D42B24A72B0027FAFC2@SEYPR04MB6482.apcprd04.prod.outlook.com>
-Content-Language: en-MW, en-GB
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <SEYPR04MB648253BF01D42B24A72B0027FAFC2@SEYPR04MB6482.apcprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4cc979c3-3ce0-4f31-b5d0-508e1af5fdf4@roeck-us.net>
 
-Le 31/05/2024 à 09:26, Noah Wang a écrit :
-> Add support for MPS VR controller mp2891. This driver exposes
-> telemetry and limit value readings and writings.
+On 2024-05-31 22:42:24+0000, Guenter Roeck wrote:
+> On 5/31/24 16:05, Guenter Roeck wrote:
+> > Add support for reading SPD NVRAM data from SPD5118 (Jedec JESD300)
+> > compliant memory modules. NVRAM write operation is not supported.
+> > 
+> > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> > ---
+> > v3: New patch
+> > 
+> > RFT: I'd like to get some more test coverage before moving forward
+> >       with this patch. decode-dimms doesn't recognize the 'spd5118'
+> >       driver.
+> > 
+
+Looks good to me.
+
+Spot-checking against JSED400-5B and the embedded CRC are as expected.
+
 > 
-> Signed-off-by: Noah Wang <noahwang.wang@outlook.com>
-> ---
+> Looking for feedback:
+> 
+> [ ... ]
+> 
+> > +
+> > +	nvmem = devm_nvmem_register(dev, &nvmem_config);
+> 
+> This returns ERR_PTR(-EOPNOTSUPP) if CONFIG_NVRAM=n. We have two options:
+> 
+> - Ignore -EOPNOTSUPP and continue registering the hwmon device
+> 
+> or
+> 
+> - Add
+> 	select NVRAM
+> 	select NVRAM_SYSFS
+>   to the driver's Kconfig entry.
 
-Hi,
+s/NVRAM/NVMEM/g
 
-below a few nitpicks, if it make sense to you.
+> Any preferences ?
 
-...
+It seems reasonable to support the module without the eeprom logic.
+When used in a fixed, embedded environment, the eeprom is of limited
+value as it's known beforehand, while the hwmon functionality is still
+useful.
 
-> +++ b/drivers/hwmon/pmbus/mp2891.c
-> @@ -0,0 +1,608 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Hardware monitoring driver for MPS Multi-phase Digital VR Controllers(MP2891)
-> + */
-> +
-> +#include <linux/err.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/bitfield.h>
 
-It is usually prefered to have includes sorted.
+EEPROM dump in case anyone wants it:
 
-> +#include "pmbus.h"
-> +
-
-...
-
-> +static struct pmbus_driver_info mp2891_info = {
-
-I think this could be const.
-
-> +	.pages = MP2891_PAGE_NUM,
-> +	.format[PSC_VOLTAGE_IN] = direct,
-> +	.format[PSC_CURRENT_IN] = direct,
-> +	.format[PSC_CURRENT_OUT] = direct,
-> +	.format[PSC_TEMPERATURE] = direct,
-> +	.format[PSC_POWER] = direct,
-> +	.format[PSC_VOLTAGE_OUT] = direct,
-> +
-> +	/* set vin scale 31.25mV/Lsb */
-> +	.m[PSC_VOLTAGE_IN] = 32,
-> +	.R[PSC_VOLTAGE_IN] = 0,
-> +	.b[PSC_VOLTAGE_IN] = 0,
-> +
-> +	/* set temp scale 1000m°C/Lsb */
-> +	.m[PSC_TEMPERATURE] = 1,
-> +	.R[PSC_TEMPERATURE] = 0,
-> +	.b[PSC_TEMPERATURE] = 0,
-> +
-> +	.m[PSC_CURRENT_IN] = 1,
-> +	.R[PSC_CURRENT_IN] = 0,
-> +	.b[PSC_CURRENT_IN] = 0,
-> +
-> +	.m[PSC_CURRENT_OUT] = 1,
-> +	.R[PSC_CURRENT_OUT] = 0,
-> +	.b[PSC_CURRENT_OUT] = 0,
-> +
-> +	.m[PSC_POWER] = 1,
-> +	.R[PSC_POWER] = 0,
-> +	.b[PSC_POWER] = 0,
-> +
-> +	.m[PSC_VOLTAGE_OUT] = 1,
-> +	.R[PSC_VOLTAGE_OUT] = 3,
-> +	.b[PSC_VOLTAGE_OUT] = 0,
-> +
-> +	.func[0] = MP2891_RAIL1_FUNC,
-> +	.func[1] = MP2891_RAIL2_FUNC,
-> +	.read_word_data = mp2891_read_word_data,
-> +	.write_word_data = mp2891_write_word_data,
-> +	.read_byte_data = mp2891_read_byte_data,
-> +	.identify = mp2891_identify,
-> +};
-> +
-> +static int mp2891_probe(struct i2c_client *client)
-> +{
-> +	struct pmbus_driver_info *info;
-> +	struct mp2891_data *data;
-> +
-> +	data = devm_kzalloc(&client->dev, sizeof(struct mp2891_data), GFP_KERNEL);
-
-sizeof(*data)?
-
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	memcpy(&data->info, &mp2891_info, sizeof(*info));
-> +	info = &data->info;
-
-'info' is not really useful. It could either be dropped, or initialised 
-1 line above, so that it can be used in the memcpy().
-
-CJ
-
-> +
-> +	return pmbus_do_probe(client, info);
-> +}
-
-...
-
+00000000: 3010 1203 0400 2062 0000 0000 b212 0d00  0..... b........
+00000010: 0000 0000 6501 f203 7aaf 0000 0000 c837  ....e...z......7
+00000020: c837 c837 906f 80bb 3075 2701 a000 8200  .7.7.o..0u'.....
+00000030: 0000 0000 0000 d400 0000 d400 0000 d400  ................
+00000040: 0000 d400 0000 8813 0888 1308 204e 2010  ............ N .
+00000050: 2710 1534 2010 2710 c409 044c 1d0c 0000  '..4 .'....L....
+00000060: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000070: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000080: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000090: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+000000a0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+000000b0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+000000c0: 1000 8632 8015 8a8c 8213 0000 0000 0000  ...2............
+000000d0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+000000e0: 0000 0000 0000 0f11 0171 0822 0000 0000  .........q."....
+000000f0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000100: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000110: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000120: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000130: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000140: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000150: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000160: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000170: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000180: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000190: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+000001a0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+000001b0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+000001c0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+000001d0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+000001e0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+000001f0: 0000 0000 0000 0000 0000 0000 0000 a14d  ...............M
+00000200: 0198 0823 328e 0a9b e84b 4635 3536 5334  ...#2....KF556S4
+00000210: 302d 3332 2020 2020 2020 2020 2020 2020  0-32            
+00000220: 2020 2020 2020 2000 80ad 4100 0831 3030         ...A..100
+00000230: 3139 3738 3700 0000 0000 0000 0000 0000  19787...........
+00000240: 0000 4100 0000 0000 0001 0000 0000 0000  ..A.............
+00000250: 0100 0000 0000 0000 0000 0000 0000 0000  ................
+00000260: 0000 0001 0100 0000 0000 0000 0000 0088  ................
+00000270: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000280: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000290: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+000002a0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+000002b0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+000002c0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+000002d0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+000002e0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+000002f0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000300: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000310: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000320: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000330: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000340: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000350: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000360: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000370: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000380: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000390: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+000003a0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+000003b0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+000003c0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+000003d0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+000003e0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+000003f0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
