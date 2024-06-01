@@ -1,51 +1,51 @@
 Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 614ED4A1C
-	for <linux-hwmon@vger.kernel.org>; Sat,  1 Jun 2024 01:26:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D5004A1C
+	for <linux-hwmon@vger.kernel.org>; Sat,  1 Jun 2024 01:28:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717205221; cv=none; b=bFqMoyolTL/ofvDc2oC03Sr5JBXoislvXIZKxvR+tQmM377gYk8IszgFrC7RjOuvOVVdtKXuydU6QQJYsDLhVM8v4PGv9r019HqjF5ujbyNSwtHfojC6pB3DZyvdofGy6rOJLKNejL0Llgpg4EUqhqtk8MzTndc64Rza+/ZCZWQ=
+	t=1717205334; cv=none; b=PnOTlO3zckSGkBHKjMqJkwdb5yXepdmdx0BNQ57QBG6MI0hE6W0XoB+d7om5+/E1TZlN+5zFL1cmHe93nuHr7hDmhFcuUtxiw3Ahkg7uaVabCQhQDS140OeHK4WmDcE7n6p1XIdodj+0IKW+EtilNoeylxNdjujdkCFPe6UQsK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717205221; c=relaxed/simple;
-	bh=xhS5k1LoFw5mHk1aYTyPPiWqY8Y9sGTdnl0TTeyKosk=;
+	s=arc-20240116; t=1717205334; c=relaxed/simple;
+	bh=K0dXAdksh+i6GPoOz3SNlGeawSia8gf189LXs0UIoNo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WnoMgfJjaCNH9pk/WmVXFm9MwxR11X5WA21TeUtzNHshaWKchGB82l933IPfA4Mk5BpbTHdNql3c55mWrUh3tyPBKwKUG4abgtvPGmO3jg3DHOL2itpluWr46FdvF2dRsqDYRqxlIxgI1wDXDrbMODHpeP3L5vkVoIAqiAfQycU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=HfNgtfdm; arc=none smtp.client-ip=194.117.254.33
+	 Content-Type:Content-Disposition:In-Reply-To; b=MjsdZPy8YmhF7483DBHWj/5WVDkY6JpY/rrE0cADjTFFPkUr0AZeLiYezAOxXiqtoPC2Ib7oRnsrDiPZOigkdYVwcRZynrEAQICpoGMjp0wYH2qwudyuLTzK8QUZoNsP1+bNV/9Hw169rX1lPFvXvWrXJYQfy9hwTgQxFqvnljg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=cM6v70+J; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="HfNgtfdm"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="cM6v70+J"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=9UZT
-	vRqTSkopzoGWC2DBGKqkLzYonV3O5fndQzXH9II=; b=HfNgtfdmT4BLtLqbvTR7
-	X5CLrKaBktaR0GpVNXh3n0mMAs+lgbC8GcyljjBJ/87WEXhuQ95X+MxqcF2hep1c
-	vli23LDYKVXKtUFkxefjbKP+xFOouKXkOL02z18OpYQBSg0i/vJAJJuhyH0Fn31A
-	V04W8WEJEA2tfaMIHn5RQtFKlz9fN6bb147W0URY1GYy1aUhRz+KODbqmUpnGtRd
-	zqYTlOjn6FcIr1ooQ1jAnRmGKnux8k+hJ5HgvmJe+BkvtgNfzvxlByPCslTJM0hK
-	eY437V4Crk4wwCs4wgmqscT/2RBOfDdP1k0PH1Dxq9Wj7Vd34uusdVDaLiTvZjaY
-	vA==
-Received: (qmail 1314356 invoked from network); 1 Jun 2024 03:26:50 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 1 Jun 2024 03:26:50 +0200
-X-UD-Smtp-Session: l3s3148p1@whCN/skZrNJehhtB
-Date: Sat, 1 Jun 2024 03:26:49 +0200
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=nsyB
+	Yubvsxt79/q9f0pugqP2ozHD/6I7Jc7gSjc9vwc=; b=cM6v70+J5+d3xSQIuFZZ
+	A/3qBvufcoRaPa2nruh9GEjYW3DLtKwkSL2rBQ+1oHzsFCy0W1txS0v3zkDGUg/d
+	EAEyN6HlUTmGkvtR7DAZV8jBLs3cm/+rRfLEiKWqorrmlOEOu0kQmJEuKN++2KpH
+	Fyc8j9QVWdXKN7jZhxOy/qx9yLFMv/Mm1Vv+ng6KjI8Xh5b2gARV59csnXVHW6ca
+	J6LYX9ic/GOEP+DFKzY57xrPc91QcwvKUCFM7p8gIjpNEbxdxkzPa3n4OO7GxU+G
+	a5oUxyPOIB2ktZZjq6+j8el0Yohowaxl/1cyf+FLnPNQZRvOfLNwQhej0izb25iC
+	jA==
+Received: (qmail 1314606 invoked from network); 1 Jun 2024 03:28:50 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 1 Jun 2024 03:28:50 +0200
+X-UD-Smtp-Session: l3s3148p1@K1+wBcoZnORehhtB
+Date: Sat, 1 Jun 2024 03:28:49 +0200
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Guenter Roeck <linux@roeck-us.net>, 
-	Paul Menzel <pmenzel@molgen.mpg.de>
+To: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
 	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
 	Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org, Armin Wolf <W_Armin@gmx.de>, 
 	Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, =?utf-8?B?UmVuw6k=?= Rebe <rene@exactcode.de>
-Subject: Re: [PATCH v3 0/4] hwmon: Add support for SPD5118 compliant chips
-Message-ID: <3hkjw3r3pa7w4jgpr4hftak2lrnwbt6sgswoxwcs4oxy7ekxht@uuviup2qdr3w>
+Subject: Re: [PATCH v3 2/4] hwmon: Add support for SPD5118 compliant
+ temperature sensors
+Message-ID: <uvikiflwuoz3szchmvke7p3ymqvcngkydehk6cctdv24cxsh6r@7d5vxcvdca6l>
 Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Guenter Roeck <linux@roeck-us.net>, Paul Menzel <pmenzel@molgen.mpg.de>, linux-hwmon@vger.kernel.org, 
-	devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org, 
-	Armin Wolf <W_Armin@gmx.de>, Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	=?utf-8?B?UmVuw6k=?= Rebe <rene@exactcode.de>
+	Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org, Armin Wolf <W_Armin@gmx.de>, 
+	Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, =?utf-8?B?UmVuw6k=?= Rebe <rene@exactcode.de>
 References: <20240531230556.1409532-1-linux@roeck-us.net>
+ <20240531230556.1409532-3-linux@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -53,77 +53,82 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="u2xqz2yf5d7fs4dc"
+	protocol="application/pgp-signature"; boundary="yq7qukcenpm3ibk2"
 Content-Disposition: inline
-In-Reply-To: <20240531230556.1409532-1-linux@roeck-us.net>
+In-Reply-To: <20240531230556.1409532-3-linux@roeck-us.net>
 
 
---u2xqz2yf5d7fs4dc
+--yq7qukcenpm3ibk2
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 31, 2024 at 04:05:52PM -0700, Guenter Roeck wrote:
 
-Adding Paul to CC who is likely interested in this series.
+> +/* Return 0 if detection is successful, -ENODEV otherwise */
+> +static int spd5118_detect(struct i2c_client *client, struct i2c_board_info *info)
+> +{
+> +	struct i2c_adapter *adapter = client->adapter;
+> +	int regval;
+> +
+> +	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE_DATA |
+> +				     I2C_FUNC_SMBUS_WORD_DATA))
+> +		return -ENODEV;
+> +
+> +	regval = i2c_smbus_read_word_swapped(client, SPD5118_REG_TYPE);
+> +	if (regval != 0x5118)
+> +		return -ENODEV;
+> +
+> +	regval = i2c_smbus_read_word_data(client, SPD5118_REG_VENDOR);
+> +	if (regval < 0 || !spd5118_vendor_valid(regval & 0xff, regval >> 8))
+> +		return -ENODEV;
+> +
+> +	regval = i2c_smbus_read_byte_data(client, SPD5118_REG_CAPABILITY);
+> +	if (regval < 0)
+> +		return -ENODEV;
+> +	if (!(regval & SPD5118_CAP_TS_SUPPORT) || (regval & 0xfc))
+> +		return -ENODEV;
+> +
+> +	regval = i2c_smbus_read_byte_data(client, SPD5118_REG_TEMP_CLR);
+> +	if (regval)
+> +		return -ENODEV;
+> +	regval = i2c_smbus_read_byte_data(client, SPD5118_REG_ERROR_CLR);
+> +	if (regval)
+> +		return -ENODEV;
+> +
+> +	regval = i2c_smbus_read_byte_data(client, SPD5118_REG_REVISION);
+> +	if (regval < 0 || (regval & 0xc1))
+> +		return -ENODEV;
+> +
+> +	regval = i2c_smbus_read_byte_data(client, SPD5118_REG_TEMP_CONFIG);
+> +	if (regval < 0)
+> +		return -ENODEV;
+> +	if (regval & ~SPD5118_TS_DISABLE)
+> +		return -ENODEV;
+> +
+> +	strscpy(info->type, "spd5118", I2C_NAME_SIZE);
+> +	return 0;
+> +}
 
-> Add support for SPD5118 (Jedec JESD300) compliant chips supporting
-> a temperature sensor and SPD NVRAM. Such devices are typically found on
-> DDR5 memory modules.
->=20
-> The first patch of the series adds SPD5118 devicetree bindings. The second
-> patch adds support for SPD5118 temperature sensors. The third patch adds
-> support for suspend/resume. The last patch adds support for reading the S=
-PD
-> NVRAM.
->=20
-> Note: The driver introduced with this patch series does not currently
-> support accessing SPD5118 compliant chips in I3C mode.
->=20
-> v3: Drop explicit bindings document; add binding to trivial devices inste=
-ad
->     Add support for reading SPD NVRAM
->=20
-> v2: Drop PEC support; it only applies to I3C mode.
->     Update documentation
->     Add suspend/resume support=20
->=20
-> ----------------------------------------------------------------
-> Guenter Roeck (4):
->       dt-bindings: trivial-devices: Add jedec,spd5118
->       hwmon: Add support for SPD5118 compliant temperature sensors
->       hwmon: (spd5118) Add suspend/resume support
->       hwmon: (spd5118) Add support for reading SPD data
->=20
->  .../devicetree/bindings/trivial-devices.yaml       |   2 +
->  Documentation/hwmon/index.rst                      |   1 +
->  Documentation/hwmon/spd5118.rst                    |  56 ++
->  drivers/hwmon/Kconfig                              |  12 +
->  drivers/hwmon/Makefile                             |   1 +
->  drivers/hwmon/spd5118.c                            | 648 +++++++++++++++=
-++++++
->  6 files changed, 720 insertions(+)
->  create mode 100644 Documentation/hwmon/spd5118.rst
->  create mode 100644 drivers/hwmon/spd5118.c
+What about adding DDR5 to i2c_register_spd() and dropping this function?
 
---u2xqz2yf5d7fs4dc
+
+--yq7qukcenpm3ibk2
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmZaeNQACgkQFA3kzBSg
-KbaLtA//SZ6LH1y/YlEz9PjGHWj5toWB7vpZufcYfOpYC727e6MQq3GHSQUi0LGE
-8qCFvr1/pOdOt3sfIJOoZDbGuKV5fort56dB/QtsuhR0dq3QpMtLeBeuyU3aqBha
-UM81geIC0FOS7ivxwJ8muRHd2y7yEMEziF+CXPJM8oQ5DzPzUxkMfPhBv/HGYK+v
-GVdjPBoeaQvesIazK7ZFRPEFaxFwfbPNMtQDZBfdgQmEk1vWoZnlnFgEuyf/7Aca
-enQqIS4fq99qzbdVX+27BrtMZZ0KWBfb4N4MMoBQio8yMAsvYKm1o8XKQmCBfzEU
-ggN9n13fUw80usJ4Ko5PXPSKx4CjCog2Yk7Dwc3FgiBrFqydFCjPTdcMljc6e3/9
-i7k2QQ8KoG/QX2YNkco/lnz/Zg1pke8ntQtQsC0HNMyhTOuKOW1kgwrs1QmdNNt7
-5DPDAwywITrLzVSJBlOQCbZvksvKBzIRkKQr9yJ+Y8oKPoKBNpe5e1QcH4MGrRHw
-uPxUpJDboTRJsvZdk3zvSjHjLnOsuS0el65pkmiBlV2ndEKam0IY5CVj2SNxQ98m
-Ew4wypT6/8EC9uNRpnwoUTFsoj5CASprGkDtgi3n33nW70VSRIXHMvKPYh6I6Ify
-DQgsm3/Ig8H38no0/XbbdcA4qPVnu25mby3hTVC2xlh7s03/zUw=
-=4YsR
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmZaeVEACgkQFA3kzBSg
+KbbgyxAAqE+ScpBLU96XG/G/fwdHnYzmRzPSIDh3hS3WrGTiKbiADyZdKDv0QzI2
+ay8NiTS5Qbrhsmwym+FIlTSEGHbUeOy3tfiwHCpEb46NdWKWkVFec8KjZh03S7JW
+Krkv/V5iiyGTugcrxtzLkBQUTBZQZxped1RcfbDBX9+CjGnzNHWe3CskTU0Zk9br
+m1Xb6BRg+rEzpiaGdDbOecQJeGwgAj6x7TEo5r5qeFA6gqJzPekcfrNayrnMPDL0
+VQSpaaL73YCZwytnSroDx2qunLhbL+6QTvzNZ/1760oe+m95V7Cc2wPXbFS5X11c
+sikHnP7ZZMoKZ5ZzCceNkJdBxJqTlZTIZ3MLqtn9jZ0E5KT9yStvBdsdhE0T3t4Z
+wv4hLRzPW3NgANZu2AKki4G+ync/k4vku1kr0tPeuHCQA8OiuGQG0x3MRCst+8Uo
+odfRZwMtWJtuSEVBXfvD2QSxP9E1AYqRDt1lJQtD4zFaul/w78w9ng/uYgiyhzuY
+SS0OcpayaeobWd/rxviy3yKO3ZHwcTlr43sxiqaiOtA2Touq50cpMCa971zFkWOp
+0XrwfYbSCsUus8RDb5z7TliJA1zVhNy547ao7/uRPj+BUT1/2MCd+4bZ1j7eTami
+p01vZXUSy1Tk2LedVl4012X8LGTy0olO6ingqNsMVfOkW91Lbv4=
+=+2io
 -----END PGP SIGNATURE-----
 
---u2xqz2yf5d7fs4dc--
+--yq7qukcenpm3ibk2--
