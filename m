@@ -1,161 +1,203 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69F0D1DDEA;
-	Sat,  1 Jun 2024 10:41:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B2F114267;
+	Sat,  1 Jun 2024 13:48:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717238474; cv=none; b=GCk35K3XoGiv0pK/B0aTYteFLlt8HLHlnVnqkF5BlfnYBBhWpb5G3fk0dleALwzyC/DxGwAmOmjt/VQ3IHouODhcrBuSNLeZ7/bz9RJVey8g6mRHx/9uPWB2SAQMqBOlPOYmmE6ogF+CJ3U9nh4HNDLbudQ05nPQk9Hw5jbeYwU=
+	t=1717249714; cv=none; b=F3Ieb+BpIL2ydy+VTBGGdRyn9a3zziJnKdTCOsYcIVl7iQPnYxvh0ODhMfFPjE5/YKySYnSM8krA73FHRZjDsQ1r1RxBqW8zd2K1FutBxoHaDdMsDW9eo9kUZ2G7wda5yM4tfprFlWj6JroIMaMFbZzKrPbkYW+NlHQ9CiPn5Xw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717238474; c=relaxed/simple;
-	bh=nyxSrVcpxbGL5iI/vXuDn01y3NgVDhxDhqhSgyZeYyI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oT6dr35MypPgcUOLMTmbmLCNcOOUS8CN/FUA0DZH+yLoYk214rz2biomFnXyBrDK8/IZRnd50NdqkX6XAZMkE5f540waxAoDwMDRsi/1+ml3cSpdzS7GJVEehvkeZx2Nxox9fY4wR9/rDWA3RYKlZ3N2XnrbQ0d53WwX2KI9lb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=gKtw9kXx; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1717249714; c=relaxed/simple;
+	bh=YHM4E/Qtjr3WJltOS928HYUCDOSCEdmRJxSslboKT4A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fW/I8CBZIL6tTTYlPXdZa4DoiHvud8R0Qqe8StwgTYVsDaBJtAJrE9KdJbstLzSaT9nhte6bfyxXZL/MhlzCY5y64mHN5kKz1VZVlFPXPcp/oLZoVRR1tzuN1SxPuZQ2UoLeDsrOcP8ZpBHPiV+oBJQi4+/N6DPiETowj/I2wOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PJdUat70; arc=none smtp.client-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="gKtw9kXx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1717238461;
-	bh=nyxSrVcpxbGL5iI/vXuDn01y3NgVDhxDhqhSgyZeYyI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gKtw9kXxtAF3HxhCIXp/6uu0k66j2vOZJSvHgKe8M84aY8Ne5MhHy8rdUzQyTeS5h
-	 OczKrBMt5Y9jgqT66Fs6T2e3imtWc1T4kgrOYkxudkyRwoHY8KnWBrQCj9eJe/EjUS
-	 YWv5Bql1TEAQ1NoS4QsOMA13xeefRzatMxc/bPU8=
-Date: Sat, 1 Jun 2024 12:41:00 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org, Armin Wolf <W_Armin@gmx.de>, 
-	=?utf-8?B?UmVuw6k=?= Rebe <rene@exactcode.de>, Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: Re: [PATCH RFT v3 4/4] hwmon: (spd5118) Add support for reading SPD
- data
-Message-ID: <cf9d752e-0137-4a6d-85d3-fbe69293a43e@t-8ch.de>
-References: <20240531230556.1409532-1-linux@roeck-us.net>
- <20240531230556.1409532-5-linux@roeck-us.net>
- <4cc979c3-3ce0-4f31-b5d0-508e1af5fdf4@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PJdUat70"
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-6c9e8c0a15bso96749a12.3;
+        Sat, 01 Jun 2024 06:48:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1717249712; x=1717854512; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=QoCW09jr3jVeTddViA4yageOc6j/1e0Ds9tGi/4QtGQ=;
+        b=PJdUat70fC6VL7G5Fl4Pl38Rb1FCHfiZf8L9jy/hM4GTqoem8P7tAbGk2sAYuBWy+k
+         WjLxxuAZ+bb17zPsGi1q/LJwlejsWAz1lJ4+gsaptXVeO6v49yjsU3xprMn91v85jpSO
+         FIpc0FrxDuBZdSvTBxC8P7/8GwKPFJGPWZciJ3UDaBulTXpyYAO/hhUfErJfKRrgi41v
+         NYDSXJcX0Huyyu9ABxV65AJ1iONi2wdfI6FdkQ/nk8yusYF8tyny/P1GL+1Onxjtagl6
+         GK3IPCVsZSFIy5IIAnXQ7xV2mcUEUivoTfTZ+cjqyGL5YDkDMtbB3GH1liR8m1yzrBh2
+         Mi3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717249712; x=1717854512;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QoCW09jr3jVeTddViA4yageOc6j/1e0Ds9tGi/4QtGQ=;
+        b=oeMbEUVUqZ4Po1hH1dO7o27w//qQ0nEg/0wqQUlhynOgE8QciHGl2GymdMGe3lf5Tv
+         T2ZvOBH5EEWBJfD0sBsh+nqqoorQavLS5/dUJzSF5s5lxVn84r1XypA1H5qoRBN2FBMZ
+         hclhNiBrvNnKIzh0y4wekq5gYpQVC2vwo2e58zbx05oBmbgicPfETMIPgg4eiJgG5tg1
+         C7b4uO3V1WzckxEoM95OnbuTiiUPZR/phaNCloZX8g8e93GvXwtA7rQmUbGrrSO/HlDW
+         2U9RzkhsWTMvhE3/UsEJ1nshRU0a1vH8LlWAYwvHbtjuV4P7Aw6AkfYfpOHBmkoq0L4W
+         3X8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCW/3uZDu0zFFKAYLAiBh7hcE+ElbhHaxgKLmSHxQu80DDISn5nzGR0UHeEGC9bDHtfARJbyBxdQBZAnWoq8Zw2EScspKTaU/lzutp0VmgwSVXP2iJYpOYetmxF6uw5Z7kgBMQiznUvhJg==
+X-Gm-Message-State: AOJu0Ywk0k+Tx90hXjuemtpSSPkUqQNF+pbEmqmbCPrcKa37dViKEIbk
+	KZHgU6iR9bpIc8V8jYivL5rM35Pk1Ypu8KmYetQdR7wAvfteFpSbee7rBw==
+X-Google-Smtp-Source: AGHT+IGf5LeGcy0bARZWH+MBk+uU3Ig/G+IItEr+TD1tZ+UFFyUNmN+kRulD2hPTy8Ce7jPQN7hVJg==
+X-Received: by 2002:a05:6a20:7f89:b0:1b0:25b6:a749 with SMTP id adf61e73a8af0-1b26f275972mr4762950637.48.1717249712133;
+        Sat, 01 Jun 2024 06:48:32 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c1c6482dc7sm3082846a91.44.2024.06.01.06.48.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 01 Jun 2024 06:48:31 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <f5f28ef1-53ef-4f82-abb3-2b60dc468793@roeck-us.net>
+Date: Sat, 1 Jun 2024 06:48:29 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4cc979c3-3ce0-4f31-b5d0-508e1af5fdf4@roeck-us.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFT v3 4/4] hwmon: (spd5118) Add support for reading SPD
+ data
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org,
+ Armin Wolf <W_Armin@gmx.de>, =?UTF-8?Q?Ren=C3=A9_Rebe?= <rene@exactcode.de>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>
+References: <20240531230556.1409532-1-linux@roeck-us.net>
+ <20240531230556.1409532-5-linux@roeck-us.net>
+ <4cc979c3-3ce0-4f31-b5d0-508e1af5fdf4@roeck-us.net>
+ <cf9d752e-0137-4a6d-85d3-fbe69293a43e@t-8ch.de>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <cf9d752e-0137-4a6d-85d3-fbe69293a43e@t-8ch.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 2024-05-31 22:42:24+0000, Guenter Roeck wrote:
-> On 5/31/24 16:05, Guenter Roeck wrote:
-> > Add support for reading SPD NVRAM data from SPD5118 (Jedec JESD300)
-> > compliant memory modules. NVRAM write operation is not supported.
-> > 
-> > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> > ---
-> > v3: New patch
-> > 
-> > RFT: I'd like to get some more test coverage before moving forward
-> >       with this patch. decode-dimms doesn't recognize the 'spd5118'
-> >       driver.
-> > 
-
-Looks good to me.
-
-Spot-checking against JSED400-5B and the embedded CRC are as expected.
-
+On 6/1/24 03:41, Thomas Weißschuh wrote:
+> On 2024-05-31 22:42:24+0000, Guenter Roeck wrote:
+>> On 5/31/24 16:05, Guenter Roeck wrote:
+>>> Add support for reading SPD NVRAM data from SPD5118 (Jedec JESD300)
+>>> compliant memory modules. NVRAM write operation is not supported.
+>>>
+>>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>>> ---
+>>> v3: New patch
+>>>
+>>> RFT: I'd like to get some more test coverage before moving forward
+>>>        with this patch. decode-dimms doesn't recognize the 'spd5118'
+>>>        driver.
+>>>
 > 
-> Looking for feedback:
+> Looks good to me.
 > 
-> [ ... ]
+> Spot-checking against JSED400-5B and the embedded CRC are as expected.
 > 
-> > +
-> > +	nvmem = devm_nvmem_register(dev, &nvmem_config);
+>>
+>> Looking for feedback:
+>>
+>> [ ... ]
+>>
+>>> +
+>>> +	nvmem = devm_nvmem_register(dev, &nvmem_config);
+>>
+>> This returns ERR_PTR(-EOPNOTSUPP) if CONFIG_NVRAM=n. We have two options:
+>>
+>> - Ignore -EOPNOTSUPP and continue registering the hwmon device
+>>
+>> or
+>>
+>> - Add
+>> 	select NVRAM
+>> 	select NVRAM_SYSFS
+>>    to the driver's Kconfig entry.
 > 
-> This returns ERR_PTR(-EOPNOTSUPP) if CONFIG_NVRAM=n. We have two options:
+> s/NVRAM/NVMEM/g
 > 
-> - Ignore -EOPNOTSUPP and continue registering the hwmon device
+>> Any preferences ?
 > 
-> or
+> It seems reasonable to support the module without the eeprom logic.
+> When used in a fixed, embedded environment, the eeprom is of limited
+> value as it's known beforehand, while the hwmon functionality is still
+> useful.
 > 
-> - Add
-> 	select NVRAM
-> 	select NVRAM_SYSFS
->   to the driver's Kconfig entry.
 
-s/NVRAM/NVMEM/g
+Makes sense. Another question:
 
-> Any preferences ?
+This:
 
-It seems reasonable to support the module without the eeprom logic.
-When used in a fixed, embedded environment, the eeprom is of limited
-value as it's known beforehand, while the hwmon functionality is still
-useful.
++        struct nvmem_config nvmem_config = {
++               .type = NVMEM_TYPE_EEPROM,
++               .name = dev_name(dev),
++               .id = NVMEM_DEVID_AUTO,
 
+results in:
 
-EEPROM dump in case anyone wants it:
+$ ls /sys/bus/nvmem/devices
+0-00501  0-00512  0-00523  0-00534  cmos_nvram0
+^^^^^^^  ^^^^^^^  ^^^^^^^  ^^^^^^^
 
-00000000: 3010 1203 0400 2062 0000 0000 b212 0d00  0..... b........
-00000010: 0000 0000 6501 f203 7aaf 0000 0000 c837  ....e...z......7
-00000020: c837 c837 906f 80bb 3075 2701 a000 8200  .7.7.o..0u'.....
-00000030: 0000 0000 0000 d400 0000 d400 0000 d400  ................
-00000040: 0000 d400 0000 8813 0888 1308 204e 2010  ............ N .
-00000050: 2710 1534 2010 2710 c409 044c 1d0c 0000  '..4 .'....L....
-00000060: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-00000070: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-00000080: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-00000090: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-000000a0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-000000b0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-000000c0: 1000 8632 8015 8a8c 8213 0000 0000 0000  ...2............
-000000d0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-000000e0: 0000 0000 0000 0f11 0171 0822 0000 0000  .........q."....
-000000f0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-00000100: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-00000110: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-00000120: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-00000130: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-00000140: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-00000150: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-00000160: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-00000170: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-00000180: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-00000190: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-000001a0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-000001b0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-000001c0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-000001d0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-000001e0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-000001f0: 0000 0000 0000 0000 0000 0000 0000 a14d  ...............M
-00000200: 0198 0823 328e 0a9b e84b 4635 3536 5334  ...#2....KF556S4
-00000210: 302d 3332 2020 2020 2020 2020 2020 2020  0-32            
-00000220: 2020 2020 2020 2000 80ad 4100 0831 3030         ...A..100
-00000230: 3139 3738 3700 0000 0000 0000 0000 0000  19787...........
-00000240: 0000 4100 0000 0000 0001 0000 0000 0000  ..A.............
-00000250: 0100 0000 0000 0000 0000 0000 0000 0000  ................
-00000260: 0000 0001 0100 0000 0000 0000 0000 0088  ................
-00000270: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-00000280: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-00000290: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-000002a0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-000002b0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-000002c0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-000002d0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-000002e0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-000002f0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-00000300: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-00000310: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-00000320: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-00000330: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-00000340: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-00000350: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-00000360: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-00000370: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-00000380: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-00000390: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-000003a0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-000003b0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-000003c0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-000003d0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-000003e0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-000003f0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+which really doesn't look good. My current plan is to go with NVMEM_DEVID_NONE,
+which results in
+
+$ ls /sys/bus/nvmem/devices
+0-0050	0-0051	0-0052	0-0053	cmos_nvram0
+
+We could also used fixed strings, but "spd" results in "spd[1-4]" which
+I think would be a bit misleading since the DDR3/4 SPD data format is
+different, and "spd5118" would result in "spd5118[1-4]" which again would
+look odd. Any suggestions ?
+
+Thanks,
+Guenter
+
