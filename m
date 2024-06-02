@@ -1,240 +1,130 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADD7418026
-	for <linux-hwmon@vger.kernel.org>; Sat,  1 Jun 2024 21:28:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 763BE171D8;
+	Sun,  2 Jun 2024 07:55:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717277301; cv=none; b=oeWucvru2/O83EUJ0EIiQX7ded1wEbQqpIas4tfqSZGmLQWWR0Wf8xdSvB6OieZKEe5DUmo6SUE6EzEZ6cjG1+moXqrQ8cd/dp499D9VSkCmBeHRT3xtXtFSYhTUAhBJhbioNWgD/twJU8kNt39hoqVyO+aWtdMixSc/4XDmsOU=
+	t=1717314956; cv=none; b=HPqRIfYllzeK4UtXsw4TiH241giAAI+X0LZ/AXiXZgc3/kQZrErn0seBE1Hv9mGJGa47w8mvJjf6R/4dKeiskCJeKHksgECeCtQ1aRHJDPYNZaGgKePSTySMCBCbhRF0RJyKcD9dAi6kwrFKkR2cKUZ12+HCtdm03Wena/cA5+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717277301; c=relaxed/simple;
-	bh=WPS8UjrjRAujL82cNsBhQU5SLgyoPT5c1KvZq63aAnI=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=WFjaH+0e9P1DUQaDhkgPZleSXiXxMz5y5daVb+m8FWAZMSGLQ2HgmMkCibAnt4uuwy/cmO2bSkOoArMy22qfb9OAWGs3IFuSRiEKNsXYe/3vi9hIeaVI6XdA9m5E+3LIGXHmoLmR9WrKKHnKZqBv2VYoSN7pXdb9U1xm8iU7HYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IdD0vhiY; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1717314956; c=relaxed/simple;
+	bh=IEhOxkzhslY+vd8fhusSxnVVLFBJ94oEh/JdlsM+GZ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=D6qp4zEp9iH/XHr10+plYJizjf8akLGQi/EyqocGAzNWXR85JInE0MzQe7pBTy7hol16U2Ydn0HajWRtmiP/VifVqY7vI1rt4YIz4LkqjLfyobeA1kL4euRAyvoD8QfVqvt6FqeD+0iiz4K7EIMeBLnmUcH1jHqKqdaB6ISRP/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=fssQoigk; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IdD0vhiY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717277300; x=1748813300;
-  h=date:from:to:cc:subject:message-id;
-  bh=WPS8UjrjRAujL82cNsBhQU5SLgyoPT5c1KvZq63aAnI=;
-  b=IdD0vhiY30SmVW1QQclLWiSxgYboiyTTCSzGvcAvg7PTAo0Bc/NfhxA3
-   c2enX3gqEgBNWxQ8dCSSnvzgzL6rTu9K8vlXanqZZMaih5rsg2dX76Yw2
-   NDwYOH0gfyUsQeOL/jvMxxkFycreNc8xa+dlku1F3JpOOZ44kDUmAyFbq
-   jsCIpmFO+4MaqL6zt5/Qf/4lwavO3jl6PLF81+Emyn9mfSSNGPekq1t1T
-   K8ynJLEMX5N04xYZZLRGprVbebif4bzusCrrglF+aT7tftGA7EItxic93
-   1u/800EkIiEtlrzxQatmtGcCTXj9MRtUretcSosDS58jNHX/QASo1pgMM
-   w==;
-X-CSE-ConnectionGUID: GyT/LspDSa69u1gQ5+eeFg==
-X-CSE-MsgGUID: 5PVXAVcGR2Wfxp643sHkEg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11090"; a="24433298"
-X-IronPort-AV: E=Sophos;i="6.08,208,1712646000"; 
-   d="scan'208";a="24433298"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2024 14:28:19 -0700
-X-CSE-ConnectionGUID: FC1ALAnTQAmxS2nu1iLVzQ==
-X-CSE-MsgGUID: ffc4Y/lqSGWExEtfUGGdzA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,208,1712646000"; 
-   d="scan'208";a="41577824"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 01 Jun 2024 14:28:18 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sDWGt-000JNw-1Y;
-	Sat, 01 Jun 2024 21:28:15 +0000
-Date: Sun, 02 Jun 2024 05:21:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:testing] BUILD SUCCESS
- 9e288f49cb2b3d2250b5c178d5eb482ffb8abe07
-Message-ID: <202406020527.IGu7Nhm8-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="fssQoigk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1717314949;
+	bh=IEhOxkzhslY+vd8fhusSxnVVLFBJ94oEh/JdlsM+GZ8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fssQoigkKwjV0LLXf1MJ8g7wIBOattCTwEFx5/iZqlSBrF0WfJZkLtiP6kt2XUN+3
+	 X+dC0EDKXtHITVkuImH6d83cJEJxbGrmyEq8DYzq9PvzQhc1ous6+c37l49Zt6kqLb
+	 moNbTczo1mjIrtgIoQwtH+HcH18oz+jHhUE6WuEU=
+Date: Sun, 2 Jun 2024 09:55:48 +0200
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Armin Wolf <W_Armin@gmx.de>
+Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org, 
+	devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org, 
+	=?utf-8?B?UmVuw6k=?= Rebe <rene@exactcode.de>, Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: Re: [PATCH RFT v3 4/4] hwmon: (spd5118) Add support for reading SPD
+ data
+Message-ID: <04d55009-c4a7-49e6-b098-545f20719f83@t-8ch.de>
+References: <20240531230556.1409532-1-linux@roeck-us.net>
+ <20240531230556.1409532-5-linux@roeck-us.net>
+ <4cc979c3-3ce0-4f31-b5d0-508e1af5fdf4@roeck-us.net>
+ <cf9d752e-0137-4a6d-85d3-fbe69293a43e@t-8ch.de>
+ <f5f28ef1-53ef-4f82-abb3-2b60dc468793@roeck-us.net>
+ <4e4341e4-2165-40d4-909c-9d5164e97942@t-8ch.de>
+ <b3109c26-dde1-44cf-b431-80957c97de5f@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b3109c26-dde1-44cf-b431-80957c97de5f@gmx.de>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
-branch HEAD: 9e288f49cb2b3d2250b5c178d5eb482ffb8abe07  Merge branch 'hwmon-pec' into testing
+On 2024-06-01 21:23:24+0000, Armin Wolf wrote:
+> Am 01.06.24 um 16:08 schrieb Thomas Weißschuh:
+> 
+> > On 2024-06-01 06:48:29+0000, Guenter Roeck wrote:
+> > 
+> > <snip>
+> > 
+> > > Makes sense. Another question:
+> > > 
+> > > This:
+> > > 
+> > > +        struct nvmem_config nvmem_config = {
+> > > +               .type = NVMEM_TYPE_EEPROM,
+> > > +               .name = dev_name(dev),
+> > > +               .id = NVMEM_DEVID_AUTO,
+> > > 
+> > > results in:
+> > > 
+> > > $ ls /sys/bus/nvmem/devices
+> > > 0-00501  0-00512  0-00523  0-00534  cmos_nvram0
+> > > ^^^^^^^  ^^^^^^^  ^^^^^^^  ^^^^^^^
+> > > 
+> > > which really doesn't look good. My current plan is to go with NVMEM_DEVID_NONE,
+> > > which results in
+> > > 
+> > > $ ls /sys/bus/nvmem/devices
+> > > 0-0050	0-0051	0-0052	0-0053	cmos_nvram0
+> > > 
+> > > We could also used fixed strings, but "spd" results in "spd[1-4]" which
+> > > I think would be a bit misleading since the DDR3/4 SPD data format is
+> > > different, and "spd5118" would result in "spd5118[1-4]" which again would
+> > > look odd. Any suggestions ?
+> > In order of descending, personal preference:
+> > 
+> > * spd-ddr5-[0-3] (.id = client->address - 0x50)
+> 
+> Hi,
+> 
+> this will break as soon as more than 8 DDR5 DIMMs are installed.
 
-elapsed time: 1385m
+i2c_register_spd() only handles 8 DIMMs, too.
+JESD 300-5B.01 (section 2.6.5) also defines i2c addresses for 8 DIMMS only.
 
-configs tested: 163
-configs skipped: 3
+Outside of that range we could fall back to something else.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> > * spd-ddr5-[0-3] (NVMEM_DEVID_AUTO)
+> > * Same with only "ddr5-"
+> > * spd5118-[0-3]
+> > * Your proposal from above
+> > * nvmem[0-3] (default handling)
+> > * 0-0050-[0-3]
+> > 
+> > Also can't a user of the eeprom already figure out which kind of module
+> > it is by looking at the eeprom contents?
+> > The first few bytes used for that seem to be compatible between at least
+> > DDR4 and DDR5.
+> > 
+> > So using plain spd[1-4] could be enough.
+> 
+> This could cause problems when DDR6 arrives.
+> Personally i would prefer the spd5118-X (NVMEM_DEVID_AUTO) format.
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20240601   gcc  
-arc                   randconfig-002-20240601   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                   randconfig-001-20240601   clang
-arm                   randconfig-002-20240601   clang
-arm                   randconfig-003-20240601   gcc  
-arm                   randconfig-004-20240601   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240601   gcc  
-arm64                 randconfig-002-20240601   clang
-arm64                 randconfig-003-20240601   clang
-arm64                 randconfig-004-20240601   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240601   gcc  
-csky                  randconfig-002-20240601   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20240601   clang
-hexagon               randconfig-002-20240601   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240601   clang
-i386         buildonly-randconfig-002-20240601   gcc  
-i386         buildonly-randconfig-003-20240601   gcc  
-i386         buildonly-randconfig-004-20240601   gcc  
-i386         buildonly-randconfig-005-20240601   gcc  
-i386         buildonly-randconfig-006-20240601   clang
-i386                                defconfig   clang
-i386                  randconfig-001-20240601   clang
-i386                  randconfig-002-20240601   gcc  
-i386                  randconfig-003-20240601   clang
-i386                  randconfig-004-20240601   gcc  
-i386                  randconfig-005-20240601   clang
-i386                  randconfig-006-20240601   gcc  
-i386                  randconfig-011-20240601   gcc  
-i386                  randconfig-012-20240601   gcc  
-i386                  randconfig-013-20240601   gcc  
-i386                  randconfig-014-20240601   gcc  
-i386                  randconfig-015-20240601   clang
-i386                  randconfig-016-20240601   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240601   gcc  
-loongarch             randconfig-002-20240601   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240601   gcc  
-nios2                 randconfig-002-20240601   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240601   gcc  
-parisc                randconfig-002-20240601   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc               randconfig-001-20240601   gcc  
-powerpc               randconfig-002-20240601   gcc  
-powerpc               randconfig-003-20240601   gcc  
-powerpc64             randconfig-001-20240601   clang
-powerpc64             randconfig-002-20240601   clang
-powerpc64             randconfig-003-20240601   gcc  
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-riscv                 randconfig-001-20240601   clang
-riscv                 randconfig-002-20240601   gcc  
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-s390                  randconfig-001-20240601   gcc  
-s390                  randconfig-002-20240601   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                    randconfig-001-20240601   gcc  
-sh                    randconfig-002-20240601   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240601   gcc  
-sparc64               randconfig-002-20240601   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20240601   gcc  
-um                    randconfig-002-20240601   clang
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240601   clang
-x86_64       buildonly-randconfig-002-20240601   clang
-x86_64       buildonly-randconfig-003-20240601   gcc  
-x86_64       buildonly-randconfig-004-20240601   gcc  
-x86_64       buildonly-randconfig-005-20240601   clang
-x86_64       buildonly-randconfig-006-20240601   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240601   gcc  
-x86_64                randconfig-002-20240601   clang
-x86_64                randconfig-003-20240601   clang
-x86_64                randconfig-004-20240601   clang
-x86_64                randconfig-005-20240601   gcc  
-x86_64                randconfig-006-20240601   clang
-x86_64                randconfig-011-20240601   clang
-x86_64                randconfig-012-20240601   clang
-x86_64                randconfig-013-20240601   clang
-x86_64                randconfig-014-20240601   gcc  
-x86_64                randconfig-015-20240601   gcc  
-x86_64                randconfig-016-20240601   gcc  
-x86_64                randconfig-071-20240601   clang
-x86_64                randconfig-072-20240601   gcc  
-x86_64                randconfig-073-20240601   clang
-x86_64                randconfig-074-20240601   gcc  
-x86_64                randconfig-075-20240601   clang
-x86_64                randconfig-076-20240601   gcc  
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
-xtensa                randconfig-001-20240601   gcc  
-xtensa                randconfig-002-20240601   gcc  
+I have the impression that the eeprom layouts are designed to be
+forward and backward compatible.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If a non-DDR5-aware parser reads the contents of a DDR5 eeprom it will
+fail the CRC check, so there can be no accidental misinterpretation.
+(Because the CRC'ed area is larger and the CRC is at another location)
+
+On the other hand the first bytes of DDR4 and DDR5 are compatible, so
+even an unaware parser can recognize that a SPD eeprom is being read and
+which DIMM type and specification revision it is.
+
+This seems intentional and therefore should also hold true for DDR5 to DDR6.
+
+
+Thomas
