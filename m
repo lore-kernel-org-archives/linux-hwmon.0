@@ -1,61 +1,61 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E0C0433D8;
-	Sun,  2 Jun 2024 15:25:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 443083C2D;
+	Sun,  2 Jun 2024 16:06:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717341956; cv=none; b=iUKXxqCa1Vu0zXqgZvpVd0vrqYEAD2gV+TLsg8P8ou/EPSXdSbnPaHM+dGwoRE5M/cquGApb37Owd1c3j/WSVGWidwELOlxVnxmB3uJYShlY8ZgBHjizUx9gSkBJMvWBBvWtRFQ4wQho4HE7jlBL3I/b8xA7Z/V6oFlMNWnRJt4=
+	t=1717344369; cv=none; b=uRWbDGzKX5GcVFnq59QCkdZOWqScc1aSK64mKCmJZlr4o4nDNOhMuW4g10Yj6OeWwdlq7EnOvoD2C/9pFeUVPl+vtSwh+daTZw41VYMqaCHwqeqO0aBxkPwsvIL/6DB4tnjzFTmRItVwO7Q6cxG63O0DaGVaNipwl60Kb6A7TaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717341956; c=relaxed/simple;
-	bh=lpZusebmPPOM2E+bgMGI8hFwQqWLWhfREgwS2GZgn1o=;
+	s=arc-20240116; t=1717344369; c=relaxed/simple;
+	bh=vcRXzR+hQZspE7Eo44qlrvpNyMmPMpBFZIkJXZxD39k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PKF/W8aqNv0DSPDw6oT7XcPiIDUE0TK2YdlcCa0gBEmgznld6KueLfQXH2tU7aoAHqhZjX1GJO1ZEDMuWHbz1jaUNSh8tVyPi/ZmvhVhF+xY5mJx8WSoUKlw7jLVUyC3ULwMk1lYgsfnPQ1nfSQ/qxQpII9To0Ln3Bo9he4ndUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ipho9KgC; arc=none smtp.client-ip=209.85.216.49
+	 In-Reply-To:Content-Type; b=OOl1EfkMinZk1zk+VcWbIQcjxV5Y1+Bhf0B6TDSaekrpxOaxlKDbGBmqsBtsoCVqnyTIiNcp5HmpNvqoMrcIaHFzxuqSm0RF0Vv2FIJZcDTAiB/FgCdH7QheUupJJmACuYCP0G3e+6tgayQuCqoEpWjTQGZr7OTpYx5sLy40tBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HKQf+8O2; arc=none smtp.client-ip=209.85.215.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ipho9KgC"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2bfffa3c748so2787841a91.3;
-        Sun, 02 Jun 2024 08:25:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HKQf+8O2"
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-6c3b5c5e32cso1585292a12.1;
+        Sun, 02 Jun 2024 09:06:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717341954; x=1717946754; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1717344367; x=1717949167; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=7EvfgY6PKPV319I7n7pojRWg9bK+qmS6AU4WZVV7aVM=;
-        b=ipho9KgC1tbZVt7ZI2gRG0k/ufUPyNhVDOpVw6Fx6ESIBV9Xqs/mztFkF6za9SoQUG
-         VnR+lF0BbisG38WFjSF4bxx+0Q3Ml8pFZeqBvYtOG/7Ks74GZscbt7Q0afDpBRMGb3vS
-         fIr1rKgyhU503NmpjOZfp+K31BJq4FJEyi/YaVOP0soT8GbuqcG8NOGcSZHGjpCmpC50
-         KxFVdcSWoA0jrD3TSIrC4fZUvHTMdtF+3acaO9RS4lLsZ1vz9hOxTsXzjSBJGjeogm5d
-         RYWa4QEL/VCoPu9q6QI/W/U46e668wXNNZ3xROFo/B2ZYoFr8IlZLjTFNhTWbg5eXYyF
-         QrWg==
+        bh=sTT9rooxfo7hNxiMFndbLgwYj+ljHsqv0xSULcIN+n0=;
+        b=HKQf+8O2Tuj/H6jOw1TjkZ3a/Ok69G7zcSaLZFBDyo7K/tOT6ZzbIt+EtTThojKVOq
+         kFPy/oR2ywB/GSKiOUNqXu/87gJFz9sbtuMAvfkLKL00nFS3SeuhW8Abho2FDf3TJXT1
+         0Dh8MKPaGWRk3pI2VBFFtj0wN8gWJO6WvTjZXm7CCW1h9Hb02M6ValVFPSgHLFZ0hFND
+         RxiMea+GfA59E1aZcJa0q08KQtjnQ3Lutpv6CYElOTujooWRJQHBQbQogJru1JxCuS1E
+         BaxSlDCKSawQQ6iaMrmI6qb6L7wPPdMkqhfEM0ugEdoPt9gLvqnAbvfyIilXyOHQqVFT
+         SWEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717341954; x=1717946754;
+        d=1e100.net; s=20230601; t=1717344367; x=1717949167;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7EvfgY6PKPV319I7n7pojRWg9bK+qmS6AU4WZVV7aVM=;
-        b=Yx8KsYki8s/F0XvPRJI03gzhcaXYsO+3II3mdt2zijH1Gdb0CM7HQ87wHG5FAQ46Xa
-         f/6spyNEmZl9kv/UpoxvuRJqzi9/YnRCsP80X2xhC4TFAqMejwqZrpl5rstkuevGl+EB
-         RSeJt/UWXrZSRgQaqaw+GmWNLuYDVp7lkFPvT1jxELXqKVmonlMFwm3SNbOmQaYgvkNV
-         ZBPOVDOSJdlY5PRG9UNYXBAM1jpk20DHcWFgx/ruLZnZsXfxnxfWOn7DSx2SMKA7BeMZ
-         yo6ZdA7hWRIhUEvBw95reuUG9pxRAB9bvPi2wh5MkHF8RGBXj/U/+SwHQjSkqBM3TMOf
-         kyfA==
-X-Forwarded-Encrypted: i=1; AJvYcCV6wDAQDrF4/ZN1AZO99ScA8t7ml3inLrfA0jfKv3oVR7vwa0UN+IHGjL53wYh4M/VO2gTWtTTgnIllkSEC0YV90/s8wsarBYvyMcjwhvYebbvqZ3OFn+xPXEzuBys1ZJbeM8JwSvzcVw==
-X-Gm-Message-State: AOJu0Yw3az1RoVyUQZWSTZrmfZqdP2y4civ9K4w/yehsuQqrS3mUUcLX
-	DU7CH/GE2fltAhd09Bio2smQKhpE7tR26LdPT37Nw9DDEnvby+0y
-X-Google-Smtp-Source: AGHT+IFNFERJLu6/bVivQr8BqWc1QDkhDhgUlQXy0ugJKAZkmgT90HOsXC1orsEYDfVCS4y9r8/D/A==
-X-Received: by 2002:a17:903:187:b0:1f6:7f37:c116 with SMTP id d9443c01a7336-1f67f37c64cmr1603585ad.63.1717341954080;
-        Sun, 02 Jun 2024 08:25:54 -0700 (PDT)
+        bh=sTT9rooxfo7hNxiMFndbLgwYj+ljHsqv0xSULcIN+n0=;
+        b=uZikkwTLHO+FsZoRNAqpEaJa9hKNMjQZTTl0JqIfMOOcaVyERMYxF1czenyg8kbiPH
+         fBzGewEeT1IiiSjuU54pF6nA93gzf3L0xKKd3c+qVqYTNqg8yJuxbIHR1aD15DCANWCV
+         PB1dxOnh9FKUehmT+bVUSvROvU0ZEnBKBFBvrhMTseRW/jN9xT0FCOEu313zVRSZFR0T
+         sEZd2kQLJpAiXZ318V2cXoFT6m6RsJuIAY/WeqyXcHi+oyasN+ZjivC/IJ1Q2rjXCAyn
+         9s0ZKL6Me0+EQUJEYQrmnrt2PF7mfQsSv04LfajKmMeFEtf1+0fvSPdQv0s8p9z2+doV
+         FWLg==
+X-Forwarded-Encrypted: i=1; AJvYcCV3K6zJfPLfgCQ2uDRPQv+kRSisWREhnB9SJcppqpRSTeL5FZTLP+VC8TFk5KJ5+kAV24zPNANsLRJSgha9fmTc6l7FNnu67cU3sEaDdIfjE9qH1zrDD5WbZWzKXXvHUG+oGRgno2LMcw==
+X-Gm-Message-State: AOJu0YyQtobUgeh/4mClOL/w1KkaRA0M5EpOnINUODW7DcKTh0r0OgMe
+	RexXyo8F7QGmRJFLn65PT2r3nMhvJOXyFpMPsSUKsj5pdNiFnodV
+X-Google-Smtp-Source: AGHT+IHFZlFssgi3WakgI7YZQBH5RkfpY0NftG8NI+275JmZe23nyfqOrxLzKLEV8KwkBmPIez2y/w==
+X-Received: by 2002:a17:902:ec88:b0:1f6:6440:ca33 with SMTP id d9443c01a7336-1f66440d036mr30019295ad.40.1717344367322;
+        Sun, 02 Jun 2024 09:06:07 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f6323dda6esm48118785ad.141.2024.06.02.08.25.52
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c1a775d68dsm6398516a91.6.2024.06.02.09.06.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Jun 2024 08:25:53 -0700 (PDT)
+        Sun, 02 Jun 2024 09:06:06 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <5baf4a58-0926-4d7c-bd4b-c755aced6d50@roeck-us.net>
-Date: Sun, 2 Jun 2024 08:25:50 -0700
+Message-ID: <db92b513-47af-4665-9f31-04065e0d7de6@roeck-us.net>
+Date: Sun, 2 Jun 2024 09:06:04 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -173,80 +173,18 @@ On 6/2/24 00:55, Thomas Weißschuh wrote:
 > i2c_register_spd() only handles 8 DIMMs, too.
 > JESD 300-5B.01 (section 2.6.5) also defines i2c addresses for 8 DIMMS only.
 > 
-> Outside of that range we could fall back to something else.
-> 
->>> * spd-ddr5-[0-3] (NVMEM_DEVID_AUTO)
->>> * Same with only "ddr5-"
->>> * spd5118-[0-3]
->>> * Your proposal from above
->>> * nvmem[0-3] (default handling)
->>> * 0-0050-[0-3]
->>>
->>> Also can't a user of the eeprom already figure out which kind of module
->>> it is by looking at the eeprom contents?
->>> The first few bytes used for that seem to be compatible between at least
->>> DDR4 and DDR5.
->>>
->>> So using plain spd[1-4] could be enough.
->>
->> This could cause problems when DDR6 arrives.
->> Personally i would prefer the spd5118-X (NVMEM_DEVID_AUTO) format.
-> 
-> I have the impression that the eeprom layouts are designed to be
-> forward and backward compatible.
-> 
-> If a non-DDR5-aware parser reads the contents of a DDR5 eeprom it will
-> fail the CRC check, so there can be no accidental misinterpretation.
-> (Because the CRC'ed area is larger and the CRC is at another location)
-> 
-> On the other hand the first bytes of DDR4 and DDR5 are compatible, so
-> even an unaware parser can recognize that a SPD eeprom is being read and
-> which DIMM type and specification revision it is.
-> 
-> This seems intentional and therefore should also hold true for DDR5 to DDR6.
->
 
-Looking into how this is handled by other drivers:
+Agreed, but that doesn't mean that there must only be 8 DIMMs in the system.
+It only means that there can only be up to 8 DIMMs on a single I2C bus.
 
-- at24 generates directories named {bus}-005{0-7}X, where X is from NVMEM_DEVID_AUTO.
-   Alternatively, it uses the 'label' devicetree property. In that case, the name
-   will be <label>X, with X again determined by NVMEM_DEVID_AUTO.
-   It does that to prevent duplicate file names due to duplicate labels.
+i2c_register_spd() only exists if CONFIG_DMI is enabled. While that is supported
+for multiple architectures, it is not supported on, for example, powerpc.
+DDR5 support is not limited to systems supporting DMI, and/or to systems where
+DMI is enabled. The ee1004 driver explicitly supports more than one i2c bus, and
+I don't think it would be a good idea to limit DDR5 support to a single bus.
 
-- ee1004 does not use the nvmem subsystem, and thus there will be no
-   entries in /sys/bus/nvmem/devices/.
-
-NVMEM_DEVID_AUTO counts up from 0, and affects every nvmem device. That means
-the assigned ID is not fixed but simply reflects the n-th device using it,
-in the order of registration. Effectively this means that any fixed name
-plus NVMEM_DEVID_AUTO can not be associated with the originating device,
-and there would be no guarantee that it was static (meaning it could change
-from boot to boot). spd5118-X would not mean the Xth DIMM, it would be the
-Xth device registering with the nvmem subsystem.
-
-At the same time, something like spd5118-X, with X derived only from the
-i2c address, would not work large systems because there could be DIMMs on
-multiple I2C busses. X would have to derived from the bus number plus
-the I2C address, such as '(bus << 3) | (address & 7)'. Even that would
-not be static since the bus number could change from boot to boot
-depending on the i2c bus instantiation order. It would also require extra
-code since the name would have to be generated in the driver.
-
-In the context of at24.c not really caring and ee1004.c not even using
-the nvmem subsystem, I think it doesn't really matter how the nvmem device
-subdirectories are named as long as they are unique. decode-dimms won't
-use it, and I guess no one else really cares because, after all, ee1004
-doesn't even support /sys/bus/nvmem/ in the first place and at24 uses the
-odd/unusual form of {bus}-005{0-7}X.
-
-Given all that, I'll just stick with the simple dev_name(dev) and
-NVMEM_DEVID_NONE. That creates a clear association to i2c bus and address
-without requiring extra code or a lengthy explanation how the index is
-generated while at the same time guaranteeing uniqueness. I _could_ add
-code to use the devicetree label if provided, but that would require using
-the same mechanism as used by at24, i.e., we'd end up with {bus}-005{0-7}X
-default names (after all, someone could provide duplicate labels or labels
-such as "0-0050"). If that is deemed useful it could be added later.
+Ultimately that means that we can not rely on i2c_register_spd() for
+auto-instantiation, even after adding DDR5 support to it.
 
 Thanks,
 Guenter
