@@ -1,183 +1,228 @@
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2047.outbound.protection.outlook.com [40.107.21.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 056968060E;
-	Mon,  3 Jun 2024 10:08:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.21.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717409324; cv=fail; b=L5f9efL8HfbLH9YRwJC2yquH9QEoS8Jv07a6fc9od22R24Ntw9Y263Wo321snZUQt3nUDZ8nUpajZf2WcqbJtl17EW72jXKY9by7l4hF4AovfVOvkIEVh9o5iCbZaqCVvg3HIPcKFPk2nXEs0oZgAPbAJKBtONYlXA1J3J7QbFs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717409324; c=relaxed/simple;
-	bh=Aygr9R2mzS920fDPrA/NTOlPcNvSxjrZ/xf52JNeZeg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=mxNdiIXsSdF9e8xeUpR+93VXbUiv0QAvuTn2EJJaxlKSmRiy9J9dc64HqRhz7FM9GFqRGaVP2PAHzm5xmqPAw3r2Ipq8lqHGe2wqbLfisUTr9zP24eMwJK6pohRcMpIFZoNkAOJPzeHPzJleGZP7r71N8ji+Wzzm192qbkLDVwQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com; spf=pass smtp.mailfrom=axis.com; dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b=PebQwg5J; arc=fail smtp.client-ip=40.107.21.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axis.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 888945A4FD
+	for <linux-hwmon@vger.kernel.org>; Mon,  3 Jun 2024 10:31:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717410688; cv=none; b=AAv0ig5DHf4u9cnUzyHFZsb9x2WA0C/+jVSE6GfslBfFAxj3e7NHGl2ULK3AOeoV9gYm+pb2cOCyfhXgX71I6lirgQz4LCprXQVjhzR+Qa/XTsDieAF3fhHa2L74lPbZr6IDHzo8tUmagp8ipOwL6HUIw8iZOeuWW4buGkJRnUU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717410688; c=relaxed/simple;
+	bh=jschtwg1oUPywVWq3uuJVgwTsrIfn7Hnd/x/JMZnxxw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=P4urSGhCEn5kDrEBWGc6VfCqpZjR/Rw/oK219CZoZuEz9DRgz/ROjxEel7CzMm+fnhpGAMikYeyzduL351jDQFX1p4bKOGK0EQiwAfbLwW3KOzvifZL//1EFyV6Lqi5nX9rTB+viKrEbiSScrQAKGOuSXaoIxwtiLbnahKX59Ds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=Cr9Nt6Pe; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b="PebQwg5J"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D2aYfs0XSlK/GABIiPzAts+U2Cbc98C7a1rW7ljItiOecRxqexpyQF/aQYbyYG1h414oj7DtX2uhC4tRPbq4+IsTyPW14o5HdRwQarhbj7QwnsjEuyzOrtAFw/4eXjyGggN2rjBEmQjHTQdjQd6u7MSl/lavLtF2px3gZd68q1zLPMhshMSV+i8LQ+fjHP5kBSEKfZIo8KnhW2A4pINMlKBqfKfDoPvCQq2G1pauR32pOaJFoarnzIWQsZgt/qpPfiJ6bQxMd+aBjxxVHm9GsI/w6zu2GuPbBsSuspPt/ezCuW4wCiPis5rAeFr591zeD+5lngxdyEsgg76lM4TBlA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SnN5xWXK/p4vK+PGPC8m1Os43S1H1QsdFOPx/XaGFYI=;
- b=IvL3szioCaYFHlThmgkmQihuVCjoMx5J+8dsuXXiv05BKHMl3zNzcPk7e+1dMCYNQW9Up+eUZlK+M/se10MgK2lPSg64GUvJbPHGeUMrgPh7OL+323A++lG3wGPNQjgjUenKT0ZQhe52Djd3nHIl3ADOKy8V1LCS/MVhAm3A7cFnIQ5e5cgunWO89K24Hrk7jwoeKEIrHvgDcVTUSSizcNz9ZWhiAtW1QMnOXU88pFmbuGazswEKqGLyvkB4n+A9m7bhIyg43NBX8r6MvSyWDeNywLdwqKtgscUg0vLaCVX1d2emKit7JkJ22bdM0hhRZYnGj6+f4kB94vpXiAxKog==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 195.60.68.100) smtp.rcpttodomain=kernel.org smtp.mailfrom=axis.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=axis.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axis.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SnN5xWXK/p4vK+PGPC8m1Os43S1H1QsdFOPx/XaGFYI=;
- b=PebQwg5J9nOpzZVgQVSBwhQWqAf6X6w9ty9fiY8ZyT+3DMkua7DT0jE0e7X6djhjEj5W09A7GW4mP7KIuc1/FPHrPuc31ZdDX+XQg7yDN4KKLpiICKCB9KADZcuitoqM0qhtNgRzcc+2G+g1BpKxLM3ZtgG9ZrpihZ6HvBHk1hk=
-Received: from DBBPR09CA0003.eurprd09.prod.outlook.com (2603:10a6:10:c0::15)
- by VI1PR02MB6285.eurprd02.prod.outlook.com (2603:10a6:800:17c::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.25; Mon, 3 Jun
- 2024 10:08:38 +0000
-Received: from DB1PEPF000509E2.eurprd03.prod.outlook.com
- (2603:10a6:10:c0:cafe::7b) by DBBPR09CA0003.outlook.office365.com
- (2603:10a6:10:c0::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.29 via Frontend
- Transport; Mon, 3 Jun 2024 10:08:38 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 195.60.68.100)
- smtp.mailfrom=axis.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=axis.com;
-Received-SPF: Pass (protection.outlook.com: domain of axis.com designates
- 195.60.68.100 as permitted sender) receiver=protection.outlook.com;
- client-ip=195.60.68.100; helo=mail.axis.com; pr=C
-Received: from mail.axis.com (195.60.68.100) by
- DB1PEPF000509E2.mail.protection.outlook.com (10.167.242.52) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7633.15 via Frontend Transport; Mon, 3 Jun 2024 10:08:37 +0000
-Received: from se-mail02w.axis.com (10.20.40.8) by se-mail02w.axis.com
- (10.20.40.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 3 Jun
- 2024 12:08:37 +0200
-Received: from se-intmail01x.se.axis.com (10.0.5.60) by se-mail02w.axis.com
- (10.20.40.8) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Mon, 3 Jun 2024 12:08:37 +0200
-Received: from lnxamnaw.se.axis.com (unknown [10.92.129.190])
-	by se-intmail01x.se.axis.com (Postfix) with ESMTP id 29E132A66;
-	Mon,  3 Jun 2024 12:08:37 +0200 (CEST)
-Received: by lnxamnaw.se.axis.com (Postfix, from userid 12778)
-	id 24C84205DA9; Mon,  3 Jun 2024 12:08:37 +0200 (CEST)
-From: Amna Waseem <Amna.Waseem@axis.com>
-Date: Mon, 3 Jun 2024 12:08:34 +0200
-Subject: [PATCH v3 1/2] dt-bindings: hwmon: ti,ina2xx: Add
- ti,alert-polarity-active-high property
+	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="Cr9Nt6Pe"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-42108856c33so24140845e9.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 03 Jun 2024 03:31:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1717410684; x=1718015484; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TdKJy8/Q1hhiwzSia9kCnDlHx7ANWWXeJd2ZmaVjc7Q=;
+        b=Cr9Nt6PeOIvwJN2KYHl/fKdQ/+xisRjr/enl6A71+9yf3192KWs6UpN0AU6QjAxxUv
+         fPYHv+QQjs82TEg3/+ni2PoezXbBdQEGFhgRElNbNyMfYvY1QpfSPw2OnDHpjMuq7oYp
+         27IZovI0Ok2n2ZOzGfHljwmdhjvATjjyLF4g7fWOY/vOvvl7Mp1j+Or5dhmmk+PyvrW8
+         oZsVi2ogDojDBreFstGdfpt6e2UjtGaeLNN/tIBetRAVmgv2z/GEcK3q149pZu8l+bOW
+         61c+OI2JVOiMkpZZ2ko1rCDC0i3Z32K6xZAjQe1Q8YFTIg1NwfyO+ZiW4NQ37l2LDweB
+         AXEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717410684; x=1718015484;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TdKJy8/Q1hhiwzSia9kCnDlHx7ANWWXeJd2ZmaVjc7Q=;
+        b=NomHYJxD4PzeVYCg2nslFgPJVilCmqfXRcKs8hba+Jru9JEdo2lzy5XdfuceZHvuhH
+         ZdM6AMWAvMSAx8yMwi1+j03JDFhlhZ6GOQhRx0rFBEp/Bwq7u82vWpSMPEyZn4KiCuXI
+         /CFw+CIahwG+LgKaMa+XKrENXVqwmFLSPdpOBH4Hi+fLIbPmv4/73mmqMrwwvnBQ1lAk
+         eLIe1sRwxrBNU1ta1u7min+B8uLDtozRM1s8xJAYS/0aR/uYjqkswziCKvydwOMSOLqk
+         IZZ/7+waap6uer0cHlNay1B9BinzuMI03BuEsA0gO7oI6WdrdXOBP5ZnsDLrNKhlg5H1
+         UA5w==
+X-Forwarded-Encrypted: i=1; AJvYcCWJVsQGgozDDUdnwLgpENWhjmiWbMsaSLQBEyf9q/YpxbdEgpFDdMnjN/TE1EIUsLUk/cVcaoUguyFy8NLPq5a490THF59zpcZgu38=
+X-Gm-Message-State: AOJu0YzPkU9YrfCVMr3FqnDuKQlwBis9gdRajG/qc0HVPSAOf2oM2FtY
+	xCrAs2X3nFFb08mScIhbyuz3XETWf+LOPrXoWkT/2LP39tL8byI+5pewCNUwKNA=
+X-Google-Smtp-Source: AGHT+IGj3jtcWp3TZCEN6P22PHIyTYpsnId9SpPI58C6BWA+HuWeruCqNwtCYr7o9BTbk3VSktdaIg==
+X-Received: by 2002:a05:600c:1907:b0:421:20df:c6d7 with SMTP id 5b1f17b1804b1-4212dd3247fmr82903575e9.4.1717410684075;
+        Mon, 03 Jun 2024 03:31:24 -0700 (PDT)
+Received: from stroh80.lab.9e.network (ip-078-094-000-050.um19.pools.vodafone-ip.de. [78.94.0.50])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4213bfce44fsm40051505e9.16.2024.06.03.03.31.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jun 2024 03:31:23 -0700 (PDT)
+From: Naresh Solanki <naresh.solanki@9elements.com>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: Naresh Solanki <naresh.solanki@9elements.com>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 2/2] hwmon: (max6639) : Add hwmon attributes for fan and pwm
+Date: Mon,  3 Jun 2024 16:01:10 +0530
+Message-ID: <20240603103114.3263060-2-naresh.solanki@9elements.com>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20240603103114.3263060-1-naresh.solanki@9elements.com>
+References: <20240603103114.3263060-1-naresh.solanki@9elements.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20240603-apol-ina2xx-fix-v3-1-b9eff3158e4e@axis.com>
-References: <20240603-apol-ina2xx-fix-v3-0-b9eff3158e4e@axis.com>
-In-Reply-To: <20240603-apol-ina2xx-fix-v3-0-b9eff3158e4e@axis.com>
-To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, "Rob
- Herring" <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, "Conor
- Dooley" <conor+dt@kernel.org>
-CC: Krzysztof Kozlowski <krzk@kernel.org>, <linux-hwmon@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Amna Waseem
-	<Amna.Waseem@axis.com>, <kernel@axis.com>
-X-Mailer: b4 0.13.0
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB1PEPF000509E2:EE_|VI1PR02MB6285:EE_
-X-MS-Office365-Filtering-Correlation-Id: ebf3a412-f991-4e66-7c85-08dc83b522e1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230031|82310400017|376005|1800799015|36860700004;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?aEpVSnA4bWV4Zkx1Wm9FWWl6bFhBY3JtYWJtcXd0bGszVWhYeVc4WW5ZNEpW?=
- =?utf-8?B?Ynl3cklucHhIT0o2QjlSeGxqUUR5QkxWTFNCa2lhMTFpcnh6VE1COWtQaUV6?=
- =?utf-8?B?S3E3RTEvQ2tvVlBqUnB6N3ZUTjAwQ0dGeVZodFBpaGI1WkpCRm1MdisvQ2Va?=
- =?utf-8?B?bGNCSndlcEI5NWk2ZHhsWUtHL2NONnNOZm14RER0QlBmUlF0eG9JVWtnZlM4?=
- =?utf-8?B?dFc4S3BZb2tJSUR0NWl5aVRjVFdtS1NyaFJ5Q3ZCb28rV1FsRzVTUjByNHpK?=
- =?utf-8?B?TXVBZjZGNGNMZ3daRTZoTTY2NUVrd3pZNUZCQXlmQm45WGg1ZWxlQ21RT21P?=
- =?utf-8?B?MWRRclNQSUlsRnUybmQ5Y0NnRHd6Q2ZBdVVlTjZ2Y0E2ano2MDRta3FIM3Nr?=
- =?utf-8?B?SzYvZndtWGVGd2RQd3hYY2MvbVhIKzQ2aFlDekllWlpkcmo4Y21wKzBwVXRs?=
- =?utf-8?B?aHF4OHBmOXZaR3RiYkdteDZ3Q212cEZ3NDRlLzhKSUp5dURTblZhbm5uZWgy?=
- =?utf-8?B?MWJ1OStVMVEwR2xxOGZUeE5aVGw3VGpvZHJiTDN5ZllRbVQ5WXlsaEV1NlpI?=
- =?utf-8?B?RmNHVFM3TlI3N1FZdFFDRW9wVFd3SVY5NW1INHUvUlE2bHQ3T243c3lMczF1?=
- =?utf-8?B?YllBNUhabHBCK0ZLQlFkTUdzSHR6elNtMXZDVHMrclVEVEVEWHRKTHVRZk80?=
- =?utf-8?B?QjNsWlU1elFZZFNEOW1PdFZGTVhIbVZxMUlBWTRTWUYvMGRmaHNKK2FtVTFD?=
- =?utf-8?B?UHZvczZkdjI5OVJjVlpiRGdqT1JnTmlPdzJUTFczRVpCOFZtT1ErUlBFZEtI?=
- =?utf-8?B?U3BaYkdBdFF5Z2FNRTdDK0cwYTZSR0VpL1dHQnRZQk5FOFlzVWRKSjF1d3Rh?=
- =?utf-8?B?dXJYS29Ldm41Ti9BUllpRHhVbWtkeTRpWUhOdXBKVm8yR2JNNUtvajd3aE1w?=
- =?utf-8?B?YkNUU0FCWlhlMCt2Y3pKVm15UXhZRE85RzNpam1hKzkrelFrODA1SU1oN1l3?=
- =?utf-8?B?eW9ZT2VNVlh3LzZyek1LZkVMVmV0WFlwVEpra1lKQ3FQcHNZMmtESTlHZnYv?=
- =?utf-8?B?WGs3VEU0TG9DSytPUnE3K1UvenF4aDc2ZVpxZ09BSlFkTHJQWXltOHBuSG5j?=
- =?utf-8?B?dC9GcUhLLzBvU3FPc01WS3V2R20wOUNLMHdpbVNYM1VuUDcyYnpoZWpqRC9z?=
- =?utf-8?B?SERrVHhnM3A5U0xZMGtmZHJ1MGtxYlBGK1FjVnRRZHErUW03VVRpWTV6Zk54?=
- =?utf-8?B?K1d6OXhKeFJROG9zSlNUNDJEcDcrWitYSkYxSDA1cVhNY0U4QU95dzZtWmJG?=
- =?utf-8?B?dWNSbTdGbkMxNFFqVUU3TXVja1FJVWJFUm9IVUpDZEQ1QnlvSUZSelpNTjdT?=
- =?utf-8?B?dUJHaVJGam9SM2VHaDFRcXgwYUJ0Y25NZTFwamdLdy9LM3ZQNXJxa2lwblU4?=
- =?utf-8?B?TkJVQUdkQzYrZkdBdUJEYnZGcFl2S2lpeHFpckdvWVY4NFpnZ1VaWEQ0a3Q5?=
- =?utf-8?B?VFFya3ArSlcxdnVtSThKeUk0Y1Y3ZzRZSkJldHJPSkRuWFByLzVVTHdFNTNS?=
- =?utf-8?B?eWtaTHEwYklaM2lKQzdwUFk3dzBMWVY0SXAyTmlLdkhZZjQ2TDJpRldPWnZl?=
- =?utf-8?B?UlNMUGdJOTN4TGRaL2J3VzByNlZhQjZnelQ4UUsyZGp6d2xRbUo1OWdHYXRO?=
- =?utf-8?B?cTZEN21XU2RiSzBEeDZ6R1RkaTZ4ZnIxNy92OGhkbXIwVWFGSitkTm1xakp5?=
- =?utf-8?B?ZTcrVUJDUXVUdVUzTUFZK0ZsbllPbVhIbWVtY290WEJLUnFaT1g0Ti9tYkVn?=
- =?utf-8?B?T0hlT05QQ2lWM3l6VE04aWJja1N0QTd5REpheUtEaUZzSGw0cEFWY2VhTXJy?=
- =?utf-8?Q?rkw5PpZuHNsvi?=
-X-Forefront-Antispam-Report:
-	CIP:195.60.68.100;CTRY:SE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.axis.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(82310400017)(376005)(1800799015)(36860700004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: axis.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2024 10:08:37.6508
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ebf3a412-f991-4e66-7c85-08dc83b522e1
-X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=78703d3c-b907-432f-b066-88f7af9ca3af;Ip=[195.60.68.100];Helo=[mail.axis.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DB1PEPF000509E2.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR02MB6285
+Content-Transfer-Encoding: 8bit
 
-Add a property to the binding to configure the Alert Polarity.
-Alert pin is asserted based on the value of Alert Polarity bit of
-Mask/Enable register. It is by default 0 which means Alert pin is
-configured to be active low open collector. Value of 1 maps to
-Inverted (active high open collector).
+Add attribute for fan & pwm i.e.,
+fanY_pulse
+pwmY_freq
 
-Signed-off-by: Amna Waseem <Amna.Waseem@axis.com>
+Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
 ---
- Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/hwmon/max6639.c | 74 ++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 70 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
-index df86c2c92037..9190ef0bda54 100644
---- a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
-@@ -66,6 +66,14 @@ properties:
-     description: phandle to the regulator that provides the VS supply typically
-       in range from 2.7 V to 5.5 V.
+diff --git a/drivers/hwmon/max6639.c b/drivers/hwmon/max6639.c
+index 7fa41442165e..ea412dd44f8b 100644
+--- a/drivers/hwmon/max6639.c
++++ b/drivers/hwmon/max6639.c
+@@ -234,6 +234,9 @@ static int max6639_read_fan(struct device *dev, u32 attr, int channel,
+ 			return res;
+ 		*fan_val = !!(val & BIT(1 - channel));
+ 		return 0;
++	case hwmon_fan_pulses:
++		*fan_val = data->ppr[channel];
++		return 0;
+ 	default:
+ 		return -EOPNOTSUPP;
+ 	}
+@@ -245,6 +248,32 @@ static int max6639_set_ppr(struct max6639_data *data, int channel, u8 ppr)
+ 	return regmap_write(data->regmap, MAX6639_REG_FAN_PPR(channel), ppr-- << 6);
+ }
  
-+  ti,alert-polarity-active-high:
-+    description: Alert pin is asserted based on the value of Alert polarity Bit
-+      of Mask/Enable register. Default value is Normal (0 which maps to
-+      active-low open collector). The other value is Inverted
-+      (1 which maps to active-high open collector). Specify this property to set
-+      the alert polarity to active-high. 
-+    $ref: /schemas/types.yaml#/definitions/flag
++static int max6639_write_fan(struct device *dev, u32 attr, int channel,
++			     long val)
++{
++	struct max6639_data *data = dev_get_drvdata(dev);
++	int err;
 +
- required:
-   - compatible
-   - reg
-@@ -88,5 +96,6 @@ examples:
-             label = "vdd_3v0";
-             shunt-resistor = <1000>;
-             vs-supply = <&vdd_3v0>;
-+            ti,alert-polarity-active-high;
-         };
-     };
-
++	if (IS_ERR(data))
++		return PTR_ERR(data);
++
++	switch (attr) {
++	case hwmon_fan_pulses:
++		if (val <= 0 || val > 5)
++			return -EINVAL;
++
++		/* Set Fan pulse per revolution */
++		err = max6639_set_ppr(data, channel, val);
++		if (err < 0)
++			return err;
++
++		data->ppr[channel] = val;
++		return 0;
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
+ static umode_t max6639_fan_is_visible(const void *_data, u32 attr, int channel)
+ {
+ 	struct max6639_data *data = (struct max6639_data *)_data;
+@@ -268,6 +297,7 @@ static int max6639_read_pwm(struct device *dev, u32 attr, int channel,
+ {
+ 	struct max6639_data *data = dev_get_drvdata(dev);
+ 	unsigned int val, res;
++	u8 i;
+ 
+ 	if (IS_ERR(data))
+ 		return PTR_ERR(data);
+@@ -279,6 +309,21 @@ static int max6639_read_pwm(struct device *dev, u32 attr, int channel,
+ 			return res;
+ 		*pwm_val = val * 255 / 120;
+ 		return 0;
++	case hwmon_pwm_freq:
++		res = regmap_read(data->regmap, MAX6639_REG_FAN_CONFIG3(channel), &val);
++		if (res < 0)
++			return res;
++		i = val & MAX6639_FAN_CONFIG3_FREQ_MASK;
++
++		res = regmap_read(data->regmap, MAX6639_REG_GCONFIG, &val);
++		if (res < 0)
++			return res;
++
++		if (val & MAX6639_GCONFIG_PWM_FREQ_HI)
++			i |= 0x4;
++		i &= 0x7;
++		*pwm_val = freq_table[i];
++		return 0;
+ 	default:
+ 		return -EOPNOTSUPP;
+ 	}
+@@ -289,6 +334,7 @@ static int max6639_write_pwm(struct device *dev, u32 attr, int channel,
+ {
+ 	struct max6639_data *data = dev_get_drvdata(dev);
+ 	int err;
++	u8 i;
+ 
+ 	if (IS_ERR(data))
+ 		return PTR_ERR(data);
+@@ -299,6 +345,23 @@ static int max6639_write_pwm(struct device *dev, u32 attr, int channel,
+ 		err = regmap_write(data->regmap, MAX6639_REG_TARGTDUTY(channel),
+ 				   val * 120 / 255);
+ 		return err;
++	case hwmon_pwm_freq:
++		val = clamp_val(val, 0, 25000);
++
++		i = find_closest(val, freq_table, ARRAY_SIZE(freq_table));
++
++		err = regmap_update_bits(data->regmap, MAX6639_REG_FAN_CONFIG3(channel),
++					 MAX6639_FAN_CONFIG3_FREQ_MASK, i);
++		if (err < 0)
++			return err;
++
++		if (i >> 2)
++			err = regmap_set_bits(data->regmap, MAX6639_REG_GCONFIG,
++					      MAX6639_GCONFIG_PWM_FREQ_HI);
++		else
++			err = regmap_clear_bits(data->regmap, MAX6639_REG_GCONFIG,
++						MAX6639_GCONFIG_PWM_FREQ_HI);
++		return err;
+ 	default:
+ 		return -EOPNOTSUPP;
+ 	}
+@@ -308,6 +371,7 @@ static umode_t max6639_pwm_is_visible(const void *_data, u32 attr, int channel)
+ {
+ 	switch (attr) {
+ 	case hwmon_pwm_input:
++	case hwmon_pwm_freq:
+ 		return 0644;
+ 	default:
+ 		return 0;
+@@ -413,6 +477,8 @@ static int max6639_write(struct device *dev, enum hwmon_sensor_types type,
+ 			 u32 attr, int channel, long val)
+ {
+ 	switch (type) {
++	case hwmon_fan:
++		return max6639_write_fan(dev, attr, channel, val);
+ 	case hwmon_pwm:
+ 		return max6639_write_pwm(dev, attr, channel, val);
+ 	case hwmon_temp:
+@@ -440,11 +506,11 @@ static umode_t max6639_is_visible(const void *data,
+ 
+ static const struct hwmon_channel_info * const max6639_info[] = {
+ 	HWMON_CHANNEL_INFO(fan,
+-			   HWMON_F_INPUT | HWMON_F_FAULT,
+-			   HWMON_F_INPUT | HWMON_F_FAULT),
++			   HWMON_F_INPUT | HWMON_F_FAULT | HWMON_F_PULSES,
++			   HWMON_F_INPUT | HWMON_F_FAULT | HWMON_F_PULSES),
+ 	HWMON_CHANNEL_INFO(pwm,
+-			   HWMON_PWM_INPUT,
+-			   HWMON_PWM_INPUT),
++			   HWMON_PWM_INPUT | HWMON_PWM_FREQ,
++			   HWMON_PWM_INPUT | HWMON_PWM_FREQ),
+ 	HWMON_CHANNEL_INFO(temp,
+ 			   HWMON_T_INPUT | HWMON_T_FAULT | HWMON_T_MAX | HWMON_T_MAX_ALARM |
+ 			   HWMON_T_CRIT | HWMON_T_CRIT_ALARM | HWMON_T_EMERGENCY |
 -- 
-2.30.2
+2.42.0
 
