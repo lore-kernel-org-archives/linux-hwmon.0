@@ -1,163 +1,357 @@
-Received: from AUS01-ME3-obe.outbound.protection.outlook.com (mail-me3aus01olkn2160.outbound.protection.outlook.com [40.92.63.160])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49CB222066;
-	Tue,  4 Jun 2024 08:48:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.63.160
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717490941; cv=fail; b=ZDQ+jwYMKqT7Ua5DGl5XtWGXF/qkY5IAFjsUHW62kRHbUjo1fj68IESAF1lZVWzaLSRVgOiTRdEd1KT/c1+X5Jhxa7aF9SSFxgI5z6CcqKH8PIND8W0eAhfJ7QEMqTH1HOjnhPLXLRZw2OI1m2KcwvNryh+T4H5gqoBB5LE2CBQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717490941; c=relaxed/simple;
-	bh=sliAdc9zknd4EPTPPygv/yar1UeOf2JBmCVI2u0MuWw=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=Fx+No3+Iawh+SKGw3dFKy22TxDsuDGvjcClG3pGQdKcEes8Dcy52HaytGE04uGPm/9pIHV3vA0ObBkjO58kNjd5mcA0wpG6jov71JbY0c/hXe872evoaw1gDvhKNc6x5oPcnzwAH3PaDe7PPVQUF95kGorsfZkI8CrJg0YPkF8o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com.au; spf=pass smtp.mailfrom=outlook.com.au; dkim=pass (2048-bit key) header.d=OUTLOOK.COM.AU header.i=@OUTLOOK.COM.AU header.b=LdnxwnwP; arc=fail smtp.client-ip=40.92.63.160
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com.au
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ACE5144D21;
+	Tue,  4 Jun 2024 11:59:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717502365; cv=none; b=cn1qCmJxTtfGFE2WwHTrOw3iHWVpCseBDV+KBcLoip7IG7WEQ1qxalzrpkfeB1cTlS4DJaG8spGFKl2GktFfj2UXz0nC/qpDTu7ieP+vtEpvZF0wv35MUhFfoyCqHEKQuUjuv3nsWwJKV6ImbSPNBejTZF3kLDyReezMz74SORo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717502365; c=relaxed/simple;
+	bh=N7IccPeB7cyt8LgEFUZ+IfEq5R8RUGQ+2OrOAjj+Pw4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ugps8N5OpeqwL/SHWVkzMdwB5RjNuT/22ml2LLmTOceLzsTtUXWGHVyA03NYWA4tUV4+fBgpn00yfi5qUrJPw0/gfxEKk15IxeDDoNDppeCjR36cpjO68kNEtxJUOJqCOaCz/w+kOxAraao9ogyExXRt9FnOZo23YPnsjQSBTLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=Cnx+0caw; arc=none smtp.client-ip=212.227.17.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=OUTLOOK.COM.AU header.i=@OUTLOOK.COM.AU header.b="LdnxwnwP"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jGiZghcCPFZvL8IZggChJ6lT6bz53+rI3eGzLGAOcolF2BHJac/0h9QAPBduE/P2q2RgVQYAWzNjLPOOWiQaHy7hk3opsnS/6D5RlT3d8OS0pM5ViVKZcDcm2eC6mGUuQ1wmrFdFHy/nP+UD4n1lr8UyH2Aoiqd7WvnOhzxW1pAXR2cA25PViy+G4jWS7Eu6bwOZ2HftY8Cd1UTHD7FS8Doe52zpgiRvXKFhfhpyVPtFwYO+wp94Nmr1xwi7DvvVTIEd1rMi1QUHSdN9LSPheVWAn0GV36C5cnWOh810d84AbLIiohzynV47lUfqehEfVUypCGRhVJK/vTZpQWmPtA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gbQb2+2HmY5kY2Fdb25F8TfnULwCk59ICgHHEZ8Yr/8=;
- b=Bg5gGwPackXrTyPW2QdoREIQMo8XtW9nzFtBDR30YJjVTj0ZSySViTy1LYc4L7EUMohpQvVluMGIHxsHoRS21rjpZU76154YMK7OOVfO/jFL95A1MZHziizUORkRZd23CBiN2popS4ul3M/fFhX+e2dSnrXEZcS/wEdXRnPne+rpr7UBkh3X6QDzgRTr6cMJj4LsJ7+OQWitc5NIBCzyZJVTHm/kvzrbVAwNSJzo5qyO/3O27la+LoLsHTAOM52Dts0sbmutCa77T6UHML4vgYvkMA5U+Dh6kFFnxIUqNn2fMvreJID0AixDkSbCXEYtYuzJ1DpZPY5vWWbmFaLGQQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=OUTLOOK.COM.AU;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gbQb2+2HmY5kY2Fdb25F8TfnULwCk59ICgHHEZ8Yr/8=;
- b=LdnxwnwPW/BV/FcJfOS2ztl3ClmAa65ta2KQhHj8Tvz+L9sFPnIj/TtE1SDFGdkYm9vAMY8uWglyuwkE43BFJFOJxVPcFLtlpbJOGtx7NMPKdwB2QheB4bdIRn9iTScq1IfKb38D4y4YsVAmgBk8TVTw9yH3PHKQbjvAI3LZqhc9gdu0TLAzGEUsY1GW033lt7JRlP+Gq7CeeKZyIiYiJs6z8iQIBuy0ZFHewQbn4n52E4URWy/lZBwfpLiSD5ChgQY4M1A0MS3IxLsb6H6wPu/bkz97auZTQoYASZHIUo8aNtKyOWJ4R3dugSfIqPfZkh3Pk7MUiWMNlh7K00aClA==
-Received: from SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM (2603:10c6:10:159::9) by
- SY7P282MB4571.AUSP282.PROD.OUTLOOK.COM (2603:10c6:10:27c::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7409.15; Tue, 4 Jun 2024 08:48:55 +0000
-Received: from SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM
- ([fe80::37cc:3733:d1e9:d8e4]) by SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM
- ([fe80::37cc:3733:d1e9:d8e4%3]) with mapi id 15.20.7633.021; Tue, 4 Jun 2024
- 08:48:55 +0000
-Message-ID:
- <SY4P282MB30639393B10CC313292C936BC5F82@SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM>
-Date: Tue, 4 Jun 2024 18:48:52 +1000
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/6] hwmon: Add support for SPD5118 compliant
- temperature sensors
-To: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- =?UTF-8?Q?Ren=C3=A9_Rebe?= <rene@exactcode.de>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Armin Wolf <W_Armin@gmx.de>
-References: <20240604040237.1064024-1-linux@roeck-us.net>
- <20240604040237.1064024-3-linux@roeck-us.net>
-Content-Language: en-AU, en-US, en-GB
-From: Stephen Horvath <s.horvath@outlook.com.au>
-In-Reply-To: <20240604040237.1064024-3-linux@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TMN: [5Yp1q1fTKdMd5OIUcM9vBiS+GROZ3QAvQbsbmJ2pQHsMLvqkeKOkbqYlAVhB5Zyw]
-X-ClientProxiedBy: SY5P300CA0056.AUSP300.PROD.OUTLOOK.COM
- (2603:10c6:10:1fe::20) To SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM
- (2603:10c6:10:159::9)
-X-Microsoft-Original-Message-ID:
- <286a8879-3995-4d6c-a9cf-12c61f0bf019@outlook.com.au>
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="Cnx+0caw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1717502331; x=1718107131; i=w_armin@gmx.de;
+	bh=LbIHGM9kPAblxv6ilzi6d0XHPA+OvMGjgVh9iVCiH2k=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=Cnx+0cawS1OQyZd/kNlLgDKoHcGWq2THa+IvMmrMkGx8HaeQnAvVFYYJoqFslm8+
+	 a0JJd7noYr779VZsOVOhhvxcUczkPXKTMjCXSWkq02P3qRIItd2xt4BMwzKCOJ6VW
+	 hIJ8M6VCgBd0n3OVEwiHQmhmRkIHmi1pYfS62poun9ExhvSFLRZszcRz/mJGy8CXu
+	 zzBV8cEMNH99956eYpVFgrltGCHA1oxYD4qHKDjxnVT4NA0WH+KMNThiHPytusFUh
+	 6BCn4VOKNEvS5aDQ8SPpOoBAi0yzan3AeJvwdsKnSRC25ZMV7xtC2hb9KmpkOSzfK
+	 blH/i42dqnFT2W/i4w==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [172.16.104.27] ([141.76.182.129]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MQ5rU-1rsYCx1X3Q-00PhlC; Tue, 04
+ Jun 2024 13:58:51 +0200
+Message-ID: <4cfe1004-77d4-432b-b07e-557a2e57de58@gmx.de>
+Date: Tue, 4 Jun 2024 13:58:46 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SY4P282MB3063:EE_|SY7P282MB4571:EE_
-X-MS-Office365-Filtering-Correlation-Id: d737b2fa-72c4-4874-a2ce-08dc84732a81
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	AiCh54RhxqxUMOKz23bT/Aylu4Ljuaekor4Za8Jg+xLlvo8sCfCEDdx7rdxW25D0WGmuBm3pmbklTrrFlzCqNLUs3fpXsnE+w/y2zGjUK/0wCg5wyXYKtETox7n0f5bQIrlShcD0AckojX/OAYu91oeL3NHpYsZh3aNHBEOZR7ZhbkFwK47J7C8qqKuMgS6rfZ+l5fL7DqQmo6+lANYXy3Du90c6th6vDMeH6hS3hGIRUZbUveGrCF6tfAP6akguhNrvmltNYCCg5jIiWYHQCTI6Vj2NRLls+EZ7UgzIV8u+Yebsht/I0nXg8Rl2ZpNvw9mutPILMx8jIUu10AWhH7pF/EOqH7acBPZLbRZyQirH0VsFLUXoanySuuWsrKe588xHT6YKuafsp+AiNpC6y7mSWbVoyz8RZqIfEa45j/AVq7R22Uij7xJv2cEDWcWquSgSXoqbD2o1qCFpfE40AM/Q2B1A0zEkTtuCvEtMns4V26501WAnAP5uatTfcWCSt1MD9zwzYSkmT9MhrsNJLiBNsfkG77aMxsUI7qDUSfKH4QSVyk0c7BYjup2rmjox
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Rko2Zi9vV2ZPWFRhaEgxYVlyK1R4RDREUFBsS1pZeHBwOVBVK0FvR2kzVmRq?=
- =?utf-8?B?MVpUZmZvQlF6ZE82REJIUVdvSjhEMmFrOENlSGZGeEltcEtWSjBjaVBJclFH?=
- =?utf-8?B?U0lMME5sY200SXRTV0dtVHQ0SHo3dEd5OHpmVE85R0RycEIvOU5SN0pROGR1?=
- =?utf-8?B?SmlOTzZwVmxWMkx3VUdwVUY2d0hwWEVLc252eENXdXY3OW1pWVExdUIvUTlk?=
- =?utf-8?B?bVp2SlRSb0ZRazJheGY0aXU4YWpPdnpJazcrbkRkVUFXRCtaWldsZ2JaeWwy?=
- =?utf-8?B?aVl6MnlHQ1d0bWRETGNGZktHYzB0OTh4cHk2RHY5bVBFSXVEOTVZUllMTTE5?=
- =?utf-8?B?eGhOU3pRbFhReUh5T0Q4ZE9Fekc4U01ickZ5SUhvTEtvbXNndDEyNGhlZXBK?=
- =?utf-8?B?aEQxaGtYZHJaNmsxS2F0d08rS0s0VmV5RlcvTW9KWFV0ZVRUcEd5N0QvUUlM?=
- =?utf-8?B?eDJMYVhMVHh3RVdXNjVlRms3VmZ0R2h1RENEZEtWc1ZYVjV6R1JJd2V5YjZG?=
- =?utf-8?B?SlRmNHhUTGJYZU1VdXNzUWlrNzJIYVhrcmVTZ1VGSWlXNnR5SkxvZ3c5MFJ4?=
- =?utf-8?B?L1FZaEljVjBtOGJESjdRS2NVQWg4VUx4VElZTG9oNy9KcCtKSDlLQ0IxRE1w?=
- =?utf-8?B?TlNqbjR5KzNsTnJ4cTh0M1Aybk1rNnBoMUgzQnI5Q2xxejMyQU9GeEpRUnNu?=
- =?utf-8?B?VUgrakhqNlM1bjg0TFVSZVZZRWdvZlFEZk1ndC9KcEwweTlNRWsvd2VZanpy?=
- =?utf-8?B?QWpyL3VZajQzbzQ3S3V1WDJ3TzE5UElobUltOTVmS0hMZFQ2M1FQYStXdzh0?=
- =?utf-8?B?cC9kc0xtUUJYS0FxcGF3TTBvSTlnOHNaWnZmSFJ4VjVYQUxOSGNqYXRpdFE2?=
- =?utf-8?B?Z3kvd040eUFCczhrRFc2N0drbHd2SFluVytSMXBJOHEzOEU1TkpiVUZ3SHNY?=
- =?utf-8?B?Y3pxWFp0dWwzU1laQ3QxZk14Q1ZlQmMvUVVKWFREZ1JNRFJPR2wwREFCREdK?=
- =?utf-8?B?dEdOSHJLeHN0Y0t5dzBDaEtkQzJFczJXT1RKalpOOURON1VNRldsTkM2QVVj?=
- =?utf-8?B?OVlVT1YxbnIxMk55Z0s4M1ZBVGZOWUZIeW5hejB4dnErK1kzV2pJcnZlYUhH?=
- =?utf-8?B?VFZlU1Q1UzlnYkVTaFRUNjZMSk93R1YweUxQNTcrNnUweGNRODJjSUhRWUtW?=
- =?utf-8?B?K1ovWkovbE5TM296a0FUMkMzTENBZSsxVHEzcnVyYVZZMzhBa0FESFh0L3BL?=
- =?utf-8?B?MjVxeDNPZmVXM0hPWFRNTVF4M2x5elp4SjVOeWhWN1MyblowZ3JZV3FlY2tI?=
- =?utf-8?B?akFtQjBybzRxdDNCa2pSRFJvQ2RhbW45dFFFMnJVd24ybUFnYnBKRzhBdjA4?=
- =?utf-8?B?empleXhDU1dGVmQ0TDdjay8wOXFBU1NuazhueXNnQzcya2ZTWDNKUlRFdXhW?=
- =?utf-8?B?ZHRqSHVkVTU4YUJzdUdaSE1ZSUJIbHE0QmU4MFU3K0NxZXJrTUkycHlBVkVH?=
- =?utf-8?B?MWpXcXRwdjVud1JtMHpFQWxIZzd0bllpbCtNOXVtSEJ3ZXRVYUYxSGNJUENP?=
- =?utf-8?B?OWw2ejB4SE4yY0JVcHFoR0Q2Nzc5WnRTSUpKSkRkUjRjcUE2Z3YydHYxaWRJ?=
- =?utf-8?B?SjBoTFhpWFVzV3laREVxZHpTbUVZUHcyTjZIb1RiR2kwY21jazliWWVNVjZH?=
- =?utf-8?B?c054QWhERCtLajBmTk14bFpwblBwaCtoSlVRZjNNYkxGSEV4SGpnMWF2QnIw?=
- =?utf-8?Q?LIwlWtwOm3mmqFYYelZZmOxxaR/ZoFXsx3ByHWO?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-746f3.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: d737b2fa-72c4-4874-a2ce-08dc84732a81
-X-MS-Exchange-CrossTenant-AuthSource: SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jun 2024 08:48:55.1533
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SY7P282MB4571
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 4/6] hwmon: (spd5118) Add support for reading SPD data
+To: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ =?UTF-8?Q?Ren=C3=A9_Rebe?= <rene@exactcode.de>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+ Stephen Horvath <s.horvath@outlook.com.au>
+References: <20240604040237.1064024-1-linux@roeck-us.net>
+ <20240604040237.1064024-5-linux@roeck-us.net>
+Content-Language: en-US
+From: Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <20240604040237.1064024-5-linux@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:FaJiiqKVw6XZ0NILOzVHem6KqfsH6EAgvsyE2RdIiHsug8nG2rU
+ fL3qiYgKDT6uAADYJokfgK1EN3W7Sq4q/ZzBBDquSVBHRzdkxfIT6g+mwiziAi9TqP2PvZH
+ LekY0ZhWA98xstQYEkOElPIzJX5gS9RoLericYeei08ILsbDjn/Iv4+O9l6/dvwG7fQGKWb
+ QqUwPg+Yi9VFDMrVSA1Qg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:Vp7BnpeyFQM=;gY0ypCqZe1bxEujARkGKJck+dq7
+ zrK8xOAGsT51xBajQv6sSsO4ld1yTE0rCg//lQcD7RSk20HR89Z8KZA7QW3DdUoqFN7xZYebN
+ CmED0ftSLJf6M0UGV/wnE1tcd60hlMys/rEGOlcOQLtZI7B2v0vJaOxfbI5tfoJ16awac5xvp
+ lmqlx/CcRpC7ET3u5WQdLXwDzP8G2SqHCLJsZDc4hfCBTvPyLElP3eEbfXMtqoHOFuwdT29Xt
+ 38lD9+w1QYFKucYAtkZ+4B5kQSaTZIH/TJMLiGV6AAGDPHCf5CLunkKYidfDKx9iOKrgcLCDx
+ rcf0t64YB2DLfJh0hoJvV55a6uziMKZ/ldzaNLsq1YtS10LUmp2pyBVxmk0Xc48DTX0RyTlAL
+ Ljn08bhpQx4hMSYVtmTiX1mAkCj2MFnrEC/PdIePlT/PPAXEVq5T4DoSiGfSfsXbW3E7yM7De
+ J7Yj2HCr1ysd2jqaEOv8jBXpM19nG9v+tCmaFuW/4kaEoUE8gsKyparGBrZin9ZCIKV1FHsjP
+ r6txprkGefVdaRj0Qv9I+n1a5a9kKKiI13RJ062QkjqTQmAlNqrVZOEKT6ST06rrirwuDIh8t
+ ypgMgRkQpUzPFEUyZXxDSjiOSMmhrRfOB5G/oXJWgXOTaLQyeY832bfgIquPdE6lQwKKmr19q
+ EckdvYMVqqQ4cbFZVr+zedWqN9Ky0BDrmeUhia+8jb5ZhRlPnU/D46Grk6bUR8bOcqm6KwMrF
+ /PIiv3MCjrUAGOdUq3hyYJykkqE7P7oB745nDFnyMOX8x7GfUc3Muh2YqOKfcAIbRdKBYDRsZ
+ ROCy12x60r6CsGhgStWxVjSRO4IwsfkhPiZr4IlzQkWzY=
+
+Am 04.06.24 um 06:02 schrieb Guenter Roeck:
+
+> Add support for reading SPD NVMEM data from SPD5118 (Jedec JESD300)
+> compliant memory modules. NVMEM write operation is not supported.
+>
+> NVMEM support is optional. If CONFIG_NVMEM is disabled, the driver will
+> still instantiate but not provide NVMEM attribute files.
+>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+> v4: Use NVMEM_DEVID_NONE instead of NVMEM_DEVID_AUTO
+>      Ignore nvmem registration failure if nvmem support is disabled
+>
+> v3: New patch
+>
+>   Documentation/hwmon/spd5118.rst |   8 ++
+>   drivers/hwmon/spd5118.c         | 147 +++++++++++++++++++++++++++++++-
+>   2 files changed, 151 insertions(+), 4 deletions(-)
+>
+> diff --git a/Documentation/hwmon/spd5118.rst b/Documentation/hwmon/spd51=
+18.rst
+> index a15d75aa2066..ef7338f46575 100644
+> --- a/Documentation/hwmon/spd5118.rst
+> +++ b/Documentation/hwmon/spd5118.rst
+> @@ -53,3 +53,11 @@ temp1_crit_alarm	Temperature critical alarm
+>
+>   Alarm attributes are sticky until read and will be cleared afterwards
+>   unless the alarm condition still applies.
+> +
+> +
+> +SPD (Serial Presence Detect) support
+> +------------------------------------
+> +
+> +The driver also supports reading the SPD NVRAM on SPD5118 compatible ch=
+ips.
+> +SPD data is available from the 'eeprom' binary attribute file attached =
+to the
+> +chip's I2C device.
+> diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
+> index d55c073ff5fd..5cb5e52c0a38 100644
+> --- a/drivers/hwmon/spd5118.c
+> +++ b/drivers/hwmon/spd5118.c
+> @@ -20,6 +20,8 @@
+>   #include <linux/i2c.h>
+>   #include <linux/hwmon.h>
+>   #include <linux/module.h>
+> +#include <linux/mutex.h>
+> +#include <linux/nvmem-provider.h>
+>   #include <linux/pm.h>
+>   #include <linux/regmap.h>
+>   #include <linux/units.h>
+> @@ -53,12 +55,31 @@ static const unsigned short normal_i2c[] =3D {
+>
+>   #define SPD5118_TS_DISABLE		BIT(0)	/* temperature sensor disable */
+>
+> +#define SPD5118_LEGACY_MODE_ADDR	BIT(3)
+> +#define SPD5118_LEGACY_PAGE_MASK	GENMASK(2, 0)
+> +#define SPD5118_LEGACY_MODE_MASK	(SPD5118_LEGACY_MODE_ADDR | SPD5118_LE=
+GACY_PAGE_MASK)
+> +
+> +
+> +#define SPD5118_NUM_PAGES		8
+> +#define SPD5118_PAGE_SIZE		128
+> +#define SPD5118_PAGE_SHIFT		7
+> +#define SPD5118_PAGE_MASK		GENMASK(6, 0)
+> +#define SPD5118_EEPROM_BASE		0x80
+> +#define SPD5118_EEPROM_SIZE		(SPD5118_PAGE_SIZE * SPD5118_NUM_PAGES)
+> +
+>   /* Temperature unit in millicelsius */
+>   #define SPD5118_TEMP_UNIT		(MILLIDEGREE_PER_DEGREE / 4)
+>   /* Representable temperature range in millicelsius */
+>   #define SPD5118_TEMP_RANGE_MIN		-256000
+>   #define SPD5118_TEMP_RANGE_MAX		255750
+>
+> +struct spd5118_data {
+> +	struct regmap *regmap;
+> +	struct mutex nvmem_lock;
+> +};
+> +
+> +/* hwmon */
+> +
+>   static int spd5118_temp_from_reg(u16 reg)
+>   {
+>   	int temp =3D sign_extend32(reg >> 2, 10);
+> @@ -360,9 +381,111 @@ static const struct hwmon_chip_info spd5118_chip_i=
+nfo =3D {
+>   	.info =3D spd5118_info,
+>   };
+>
+> +/* nvmem */
+> +
+> +static int spd5118_nvmem_set_page(struct regmap *regmap, int page)
+> +{
+> +	unsigned int old_page;
+> +	int err;
+> +
+> +	err =3D regmap_read(regmap, SPD5118_REG_I2C_LEGACY_MODE, &old_page);
+> +	if (err)
+> +		return err;
+> +
+> +	if (page !=3D (old_page & SPD5118_LEGACY_MODE_MASK)) {
+> +		/* Update page and explicitly select 1-byte addressing */
+> +		err =3D regmap_update_bits(regmap, SPD5118_REG_I2C_LEGACY_MODE,
+> +					 SPD5118_LEGACY_MODE_MASK, page);
+> +		if (err)
+> +			return err;
+> +
+> +		/* Selected new NVMEM page, drop cached data */
+> +		regcache_drop_region(regmap, SPD5118_EEPROM_BASE, 0xff);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static ssize_t spd5118_nvmem_read_page(struct regmap *regmap, char *buf=
+,
+> +				       unsigned int offset, size_t count)
+> +{
+> +	int err;
+> +
+> +	err =3D spd5118_nvmem_set_page(regmap, offset >> SPD5118_PAGE_SHIFT);
+> +	if (err)
+> +		return err;
+> +
+> +	offset &=3D SPD5118_PAGE_MASK;
+> +
+> +	/* Can't cross page boundaries */
+> +	if (offset + count > SPD5118_PAGE_SIZE)
+> +		count =3D SPD5118_PAGE_SIZE - offset;
+> +
+> +	err =3D regmap_bulk_read(regmap, SPD5118_EEPROM_BASE + offset, buf, co=
+unt);
+> +	if (err)
+> +		return err;
+> +
+> +	return count;
+> +}
+> +
+> +static int spd5118_nvmem_read(void *priv, unsigned int off, void *val, =
+size_t count)
+> +{
+> +	struct spd5118_data *data =3D priv;
+> +	char *buf =3D val;
+> +	int ret;
+> +
+> +	if (unlikely(!count))
+> +		return count;
+> +
+> +	if (off + count > SPD5118_EEPROM_SIZE)
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&data->nvmem_lock);
+> +
+> +	while (count) {
+> +		ret =3D spd5118_nvmem_read_page(data->regmap, buf, off, count);
+> +		if (ret < 0) {
+> +			mutex_unlock(&data->nvmem_lock);
+> +			return ret;
+> +		}
+> +		buf +=3D ret;
+> +		off +=3D ret;
+> +		count -=3D ret;
+> +	}
+> +	mutex_unlock(&data->nvmem_lock);
+> +	return 0;
+> +}
+> +
+> +static int spd5118_nvmem_init(struct device *dev, struct spd5118_data *=
+data)
+> +{
+> +	struct nvmem_config nvmem_config =3D {
+> +		.type =3D NVMEM_TYPE_EEPROM,
+> +		.name =3D dev_name(dev),
+> +		.id =3D NVMEM_DEVID_NONE,
+> +		.dev =3D dev,
+> +		.base_dev =3D dev,
+> +		.read_only =3D true,
+> +		.root_only =3D false,
+> +		.owner =3D THIS_MODULE,
+> +		.compat =3D true,
 
 Hi,
 
-On 4/6/24 14:02, Guenter Roeck wrote:
-> Add support for SPD5118 (Jedec JESD300) compliant temperature
-> sensors. Such sensors are typically found on DDR5 memory modules.
-> 
-> Cc: René Rebe <rene@exactcode.de>
-> Cc: Thomas Weißschuh <linux@weissschuh.net>
-> Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
-> Tested-by: Thomas Weißschuh <linux@weissschuh.net>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
-> v4: No change
-> 
-> v3: Shorten JESD300-5B.01 to JESD300; 5B.01 refers to the version
->      of the standard
->      Drop unnecessary 'attr' parameter from spd5118_{read,write}_enable()
-> 
-> v2: Drop PEC property documentation
->      Add note indicating that alarm attributes are sticky until read
->      to documentation
->      Fix detect function
->      Fix misspelling in Makefile (CONFIG_SENSORS_SPD5118->CONFIG_SENSORS_SPD5118)
-> 
->   Documentation/hwmon/index.rst   |   1 +
->   Documentation/hwmon/spd5118.rst |  55 ++++
->   drivers/hwmon/Kconfig           |  12 +
->   drivers/hwmon/Makefile          |   1 +
->   drivers/hwmon/spd5118.c         | 481 ++++++++++++++++++++++++++++++++
->   5 files changed, 550 insertions(+)
->   create mode 100644 Documentation/hwmon/spd5118.rst
->   create mode 100644 drivers/hwmon/spd5118.c
-> 
+do we really need this setting here?
 
-It seems to report correct temperatures for my sticks, so I guess:
+> +		.reg_read =3D spd5118_nvmem_read,
+> +		.priv =3D data,
+> +		.stride =3D 1,
+> +		.word_size =3D 1,
+> +		.size =3D SPD5118_EEPROM_SIZE,
+> +	};
+> +	struct nvmem_device *nvmem;
+> +
+> +	nvmem =3D devm_nvmem_register(dev, &nvmem_config);
+> +	return PTR_ERR_OR_ZERO(nvmem);
+> +}
+> +
+> +/* regmap */
+> +
+>   static bool spd5118_writeable_reg(struct device *dev, unsigned int reg=
+)
+>   {
+>   	switch (reg) {
+> +	case SPD5118_REG_I2C_LEGACY_MODE:
+>   	case SPD5118_REG_TEMP_CLR:
+>   	case SPD5118_REG_TEMP_CONFIG:
+>   	case SPD5118_REG_TEMP_MAX:
+> @@ -396,7 +519,7 @@ static bool spd5118_volatile_reg(struct device *dev,=
+ unsigned int reg)
+>   static const struct regmap_config spd5118_regmap_config =3D {
+>   	.reg_bits =3D 8,
+>   	.val_bits =3D 8,
+> -	.max_register =3D SPD5118_REG_TEMP_STATUS,
+> +	.max_register =3D 0xff,
+>   	.writeable_reg =3D spd5118_writeable_reg,
+>   	.volatile_reg =3D spd5118_volatile_reg,
+>   	.cache_type =3D REGCACHE_MAPLE,
+> @@ -406,10 +529,15 @@ static int spd5118_probe(struct i2c_client *client=
+)
+>   {
+>   	struct device *dev =3D &client->dev;
+>   	unsigned int regval, revision, vendor, bank;
+> +	struct spd5118_data *data;
+>   	struct device *hwmon_dev;
+>   	struct regmap *regmap;
+>   	int err;
+>
+> +	data =3D devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+>   	regmap =3D devm_regmap_init_i2c(client, &spd5118_regmap_config);
+>   	if (IS_ERR(regmap))
+>   		return dev_err_probe(dev, PTR_ERR(regmap), "regmap init failed\n");
+> @@ -433,7 +561,16 @@ static int spd5118_probe(struct i2c_client *client)
+>   	if (!spd5118_vendor_valid(bank, vendor))
+>   		return -ENODEV;
+>
+> -	dev_set_drvdata(dev, regmap);
+> +	data->regmap =3D regmap;
+> +	mutex_init(&data->nvmem_lock);
+> +	dev_set_drvdata(dev, data);
+> +
+> +	err =3D spd5118_nvmem_init(dev, data);
+> +	/* Ignore if NVMEM support is disabled */
+> +	if (err && err !=3D -EOPNOTSUPP) {
 
-Tested-by: Stephen Horvath <s.horvath@outlook.com.au>
+Maybe we can use IS_REACHABLE(CONFIG_NVMEM) here?
 
 Thanks,
-Steve
+Armin Wolf
+
+> +		dev_err_probe(dev, err, "failed to register nvmem\n");
+> +		return err;
+> +	}
+>
+>   	hwmon_dev =3D devm_hwmon_device_register_with_info(dev, "spd5118",
+>   							 regmap, &spd5118_chip_info,
+> @@ -454,7 +591,8 @@ static int spd5118_probe(struct i2c_client *client)
+>
+>   static int spd5118_suspend(struct device *dev)
+>   {
+> -	struct regmap *regmap =3D dev_get_drvdata(dev);
+> +	struct spd5118_data *data =3D dev_get_drvdata(dev);
+> +	struct regmap *regmap =3D data->regmap;
+>   	u32 regval;
+>   	int err;
+>
+> @@ -479,7 +617,8 @@ static int spd5118_suspend(struct device *dev)
+>
+>   static int spd5118_resume(struct device *dev)
+>   {
+> -	struct regmap *regmap =3D dev_get_drvdata(dev);
+> +	struct spd5118_data *data =3D dev_get_drvdata(dev);
+> +	struct regmap *regmap =3D data->regmap;
+>
+>   	regcache_cache_only(regmap, false);
+>   	return regcache_sync(regmap);
