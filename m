@@ -1,94 +1,87 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEFDB199397;
-	Wed,  5 Jun 2024 12:03:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D34E91990B3;
+	Wed,  5 Jun 2024 12:20:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717588984; cv=none; b=GjA00wjM9353QaCBgA4mzAU4Sdy7RorAW9zIWKT7DQ9iUYoZpl0Kr1BahITI5FmPjlYpGY9qnKmAe+TXsfHFvTS3J6cllBzCunqL0gFOOg61wP501D+YbScVPMWAiVgdE/YczZfZ6OGXzNt1B43TQTJpLJhyeyDmK9IEfIg6iNk=
+	t=1717590032; cv=none; b=urG2Y2ckdHw6ZwDkZmHyAqpSTPIKzEyX8OksoU7iZIkni2JWSe52R7A7lS7yRCEPavmRKpalmjlDwZ7zlaKFCkai2twXpNwEsV8Q8A7awadnwoEdqa9KB0vDESNsL2yeLU+rp6WwXZwEBh7zJSKW+fQIYj6srLugrfwgrlqBkZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717588984; c=relaxed/simple;
-	bh=Hws0J5mHqGJewzd/hkx+aFlBWndwx/W+Wq0F05xqxQ4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SOWH8DTyK9LhqnMpAh2saY95j+2gbjubAar9w6YTvHMfop/ea4z760CPGvDJlD6LoQJnTi0CDjotF8CXgyJER4dM9jJjkI8+qCZBiTx31by36F/IUJIB7grXW70ggylpSi75Il3XlZDAGJhUfyJ4iXKgjn0EExkoIUk4iVFcwUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ua+EkKi8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1717590032; c=relaxed/simple;
+	bh=Isw1Rb90CkvWGeaWm1rp6CVK1Bn0jG3mFLlhRT69y30=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iq4xlZqHaZKqyPf4nU5wozW6pdUgoqCfwoUNlDhIuoMVqbme13TrdT1cRojFogNkxQRsz4FJOyI3TaGgXtAs/76b6+jP4vd6jlQezRt2nxN2cGszs+8Re2KvJ4n6v+88KiwLYHepOcBJ5qWM54JxCTyy/vWNL9S++XpAJ5PSHb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=jJ/YStJc; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ua+EkKi8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BD75C3277B;
-	Wed,  5 Jun 2024 12:03:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717588984;
-	bh=Hws0J5mHqGJewzd/hkx+aFlBWndwx/W+Wq0F05xqxQ4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Ua+EkKi8nTxmGXZkJNrIORN0Wij3aEZCw8uJ5yjkTrfkM1up7sdqU7wixzrBuvfTG
-	 ngyLUMP7x4UMMVtmb0razepeC/NYrr8mmsYZxj88UwiUgx6GngDfAMwuQ8tZbfQETr
-	 lkziisJ1/8IPIWr+9UBeHSQK/w6a4BF9MNmQz4CKFsTEzsB6lp1v+BHL9hRX6hF6ci
-	 Bk30jsk5w4OKUFgufqinYO1vT+End7fhj/xQyP4JUbt1OwCwYEZ3wHK41LV9XMI2ZM
-	 /wfucOCqMUjNRSWyJ/L9CWiNiEYSwLxzKu4q9ouSIXgsnczS8lq0AxqSGs1yBa1+H2
-	 iYwK1O2lI84QQ==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Armin Wolf <W_Armin@gmx.de>,
-	=?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Sasha Levin <sashal@kernel.org>,
-	jdelvare@suse.com,
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="jJ/YStJc"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id B9EC840E0177;
+	Wed,  5 Jun 2024 12:20:28 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id LbdEF1MBrpRI; Wed,  5 Jun 2024 12:20:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1717590024; bh=yyocJ68fnCk370YMJK18X98QhZWFXJTCPUx5kM8HklQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jJ/YStJc76C6zFmTFMLA7NntveyEybvDIt3XGcm7bqvijz+ErywHVoUsvCgBDkjul
+	 rzgTSmcsFGgw13rTe8gSMW1pvz+vbB5uBE/9ytg4LUpETiwak8ngocQMr0pI0VoNhJ
+	 DvIf5iuTv4Q28H8B9jqUhcxH0UerbdzHpu7aVfIql4PMaxAHC8caT8hqeTgblT4HRt
+	 XMxbF56/YB6xk9JFGbJ075b8eevc+Jh5TTjLYOrOi/l8oFnhqgNVi2c/Sytm9NQeQk
+	 YaeTiV7vGzbH/Hba9mwKTykLcoJ7DbW172DTQW9sGynijQcjXjwSNLNy8Xzi7eO3Hs
+	 Y9jDeD99FxV8KoPygWXVL2j7TohNO2VihC1o8PQ3UacLARwQITcF5lDafHGLA7oruG
+	 sWtyUXs6rZ3y03mtqvVhIb2ja+oEp4K0+gumxHITFyXckTWGH+yBRqOjhBzjN4pD3O
+	 QIZmUolHQyE/Mdjs1afgslQb3qavhaygfBPPs+nEPY0+ZB/RuTdklOKwW4USjE68pJ
+	 LU6tyLZIpZGGW30dpFid2IkSRvhnkvaln4Op8YK3lPJm+5qc5I4/WAiSIH28yJ4rqw
+	 8M/0zL2X2ED9132mFgVpSGRxrm00wUNlrQgygnl3dc6qpl2adK972lYdtO4zMvGHo9
+	 NpEW51iIvgai+J55TLPXz/BI=
+Received: from zn.tnic (p5de8ee85.dip0.t-ipconnect.de [93.232.238.133])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AD2DB40E016A;
+	Wed,  5 Jun 2024 12:20:17 +0000 (UTC)
+Date: Wed, 5 Jun 2024 14:20:12 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Yazen Ghannam <yazen.ghannam@amd.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, x86@kernel.org,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.9 22/23] hwmon: (dell-smm) Add Dell G15 5511 to fan control whitelist
-Date: Wed,  5 Jun 2024 08:02:05 -0400
-Message-ID: <20240605120220.2966127-22-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240605120220.2966127-1-sashal@kernel.org>
-References: <20240605120220.2966127-1-sashal@kernel.org>
+Subject: Re: [PATCH v3 3/8] hwmon: (k10temp) Check return value of
+ amd_smn_read()
+Message-ID: <20240605122012.GXZmBX_KFQArXB9Lar@fat_crate.local>
+References: <20240523-fix-smn-bad-read-v3-0-aa44c622de39@amd.com>
+ <20240523-fix-smn-bad-read-v3-3-aa44c622de39@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.9.3
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240523-fix-smn-bad-read-v3-3-aa44c622de39@amd.com>
 
-From: Armin Wolf <W_Armin@gmx.de>
+On Thu, May 23, 2024 at 01:26:54PM -0500, Yazen Ghannam wrote:
+> Cc: stable@vger.kernel.org
 
-[ Upstream commit fa0bc8f297b29126b5ae983406e9bc76d48a9a8e ]
+So yeah, I'll drop the CC:stable tagging in all patches unless we're
+talking about a concrete issue. You need to think about the downstream,
+distro folks who need to go through gazillion of patches and wonder
+whether they really need to backport them.
 
-A user reported that he needs to disable BIOS fan control on his
-Dell G15 5511 in order to be able to control the fans.
+And I don't think misusing the stable process like that is the right
+way.
 
-Closes: https://github.com/Wer-Wolf/i8kutils/issues/5
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-Acked-by: Pali Rohár <pali@kernel.org>
-Link: https://lore.kernel.org/r/20240522210809.294488-1-W_Armin@gmx.de
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/hwmon/dell-smm-hwmon.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Thx.
 
-diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-index efcf78673e747..b6a995c852ab4 100644
---- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -1530,6 +1530,14 @@ static const struct dmi_system_id i8k_whitelist_fan_control[] __initconst = {
- 		},
- 		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_30A3_31A3],
- 	},
-+	{
-+		.ident = "Dell G15 5511",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-+			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Dell G15 5511"),
-+		},
-+		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_30A3_31A3],
-+	},
- 	{ }
- };
- 
 -- 
-2.43.0
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
