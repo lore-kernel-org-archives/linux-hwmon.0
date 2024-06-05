@@ -1,87 +1,115 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D34E91990B3;
-	Wed,  5 Jun 2024 12:20:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF6C619A2AC;
+	Wed,  5 Jun 2024 12:22:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717590032; cv=none; b=urG2Y2ckdHw6ZwDkZmHyAqpSTPIKzEyX8OksoU7iZIkni2JWSe52R7A7lS7yRCEPavmRKpalmjlDwZ7zlaKFCkai2twXpNwEsV8Q8A7awadnwoEdqa9KB0vDESNsL2yeLU+rp6WwXZwEBh7zJSKW+fQIYj6srLugrfwgrlqBkZw=
+	t=1717590165; cv=none; b=BNCLUxjGR/A3prG7S0KDCqG0vpg8k11KhsW77YrzjUjtS+4BvZGb/JAYBNOmHus2+nPuq5Rwk2TrC6hjlHrM8yUHLUmPzKPnAwEX/j1tbc4wbAE12LbKt0KsFh8bTSyZ2yAYyzVVTbbDJJSu5yoC33KchvQPRQrw7HVWUpA4eXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717590032; c=relaxed/simple;
-	bh=Isw1Rb90CkvWGeaWm1rp6CVK1Bn0jG3mFLlhRT69y30=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iq4xlZqHaZKqyPf4nU5wozW6pdUgoqCfwoUNlDhIuoMVqbme13TrdT1cRojFogNkxQRsz4FJOyI3TaGgXtAs/76b6+jP4vd6jlQezRt2nxN2cGszs+8Re2KvJ4n6v+88KiwLYHepOcBJ5qWM54JxCTyy/vWNL9S++XpAJ5PSHb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=jJ/YStJc; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="jJ/YStJc"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id B9EC840E0177;
-	Wed,  5 Jun 2024 12:20:28 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id LbdEF1MBrpRI; Wed,  5 Jun 2024 12:20:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1717590024; bh=yyocJ68fnCk370YMJK18X98QhZWFXJTCPUx5kM8HklQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jJ/YStJc76C6zFmTFMLA7NntveyEybvDIt3XGcm7bqvijz+ErywHVoUsvCgBDkjul
-	 rzgTSmcsFGgw13rTe8gSMW1pvz+vbB5uBE/9ytg4LUpETiwak8ngocQMr0pI0VoNhJ
-	 DvIf5iuTv4Q28H8B9jqUhcxH0UerbdzHpu7aVfIql4PMaxAHC8caT8hqeTgblT4HRt
-	 XMxbF56/YB6xk9JFGbJ075b8eevc+Jh5TTjLYOrOi/l8oFnhqgNVi2c/Sytm9NQeQk
-	 YaeTiV7vGzbH/Hba9mwKTykLcoJ7DbW172DTQW9sGynijQcjXjwSNLNy8Xzi7eO3Hs
-	 Y9jDeD99FxV8KoPygWXVL2j7TohNO2VihC1o8PQ3UacLARwQITcF5lDafHGLA7oruG
-	 sWtyUXs6rZ3y03mtqvVhIb2ja+oEp4K0+gumxHITFyXckTWGH+yBRqOjhBzjN4pD3O
-	 QIZmUolHQyE/Mdjs1afgslQb3qavhaygfBPPs+nEPY0+ZB/RuTdklOKwW4USjE68pJ
-	 LU6tyLZIpZGGW30dpFid2IkSRvhnkvaln4Op8YK3lPJm+5qc5I4/WAiSIH28yJ4rqw
-	 8M/0zL2X2ED9132mFgVpSGRxrm00wUNlrQgygnl3dc6qpl2adK972lYdtO4zMvGHo9
-	 NpEW51iIvgai+J55TLPXz/BI=
-Received: from zn.tnic (p5de8ee85.dip0.t-ipconnect.de [93.232.238.133])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	s=arc-20240116; t=1717590165; c=relaxed/simple;
+	bh=hRjmhe9Ngf0wmEAJSQe3o0q7qinQYcgJZNR83dg0CPM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IVT3m58Bf/FK0HAQQZYSVSAJ/XfogoyvfMpW7E2HDjcpyLlIh/MwmShKivm01yhcDT//Q4yAm/T4Ems1+dhnnIBpny6dMwnPBDbbX1iLcE8amSk3M62Sb60T+31T0X4iu8VrSdmh8xgS7dUvBDZHSLSPs0i3MoUnhvpT1IY0KYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AD2DB40E016A;
-	Wed,  5 Jun 2024 12:20:17 +0000 (UTC)
-Date: Wed, 5 Jun 2024 14:20:12 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, x86@kernel.org,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3 3/8] hwmon: (k10temp) Check return value of
- amd_smn_read()
-Message-ID: <20240605122012.GXZmBX_KFQArXB9Lar@fat_crate.local>
-References: <20240523-fix-smn-bad-read-v3-0-aa44c622de39@amd.com>
- <20240523-fix-smn-bad-read-v3-3-aa44c622de39@amd.com>
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 91EE561E5FE05;
+	Wed,  5 Jun 2024 14:21:51 +0200 (CEST)
+Message-ID: <a5aa120d-8497-4ca8-9752-7d800240b999@molgen.mpg.de>
+Date: Wed, 5 Jun 2024 14:21:50 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240523-fix-smn-bad-read-v3-3-aa44c622de39@amd.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 5/6] i2c: smbus: Support DDR5 SPD EEPROMs
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ =?UTF-8?Q?Ren=C3=A9_Rebe?= <rene@exactcode.de>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+ Armin Wolf <W_Armin@gmx.de>, Stephen Horvath <s.horvath@outlook.com.au>
+References: <20240604040237.1064024-1-linux@roeck-us.net>
+ <20240604040237.1064024-6-linux@roeck-us.net>
+Content-Language: en-US
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20240604040237.1064024-6-linux@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, May 23, 2024 at 01:26:54PM -0500, Yazen Ghannam wrote:
-> Cc: stable@vger.kernel.org
+Dear Guenter,
 
-So yeah, I'll drop the CC:stable tagging in all patches unless we're
-talking about a concrete issue. You need to think about the downstream,
-distro folks who need to go through gazillion of patches and wonder
-whether they really need to backport them.
 
-And I don't think misusing the stable process like that is the right
-way.
+Thank you so much for taking this on.
 
-Thx.
+Am 04.06.24 um 06:02 schrieb Guenter Roeck:
+> Detect DDR5 memory and instantiate the SPD5118 driver automatically.
+> 
+> Suggested-by: Thomas Weißschuh <linux@weissschuh.net>
+> Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+> v5: New patch
+> 
+>   drivers/i2c/i2c-smbus.c | 4 ++++
+>   1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
+> index 97f338b123b1..8a0dab835761 100644
+> --- a/drivers/i2c/i2c-smbus.c
+> +++ b/drivers/i2c/i2c-smbus.c
+> @@ -382,6 +382,10 @@ void i2c_register_spd(struct i2c_adapter *adap)
+>   	case 0x1E:	/* LPDDR4 */
+>   		name = "ee1004";
+>   		break;
+> +	case 0x22:	/* DDR5 */
+> +	case 0x23:	/* LPDDR5 */
+> +		name = "spd5118";
+> +		break;
+>   	default:
+>   		dev_info(&adap->dev,
+>   			 "Memory type 0x%02x not supported yet, not instantiating SPD\n",
 
--- 
-Regards/Gruss,
-    Boris.
+Testing this on top of 6.10-rc2+ on a Supermicro X13SAE, Linux logs:
 
-https://people.kernel.org/tglx/notes-about-netiquette
+     $ dmesg | grep -e "DMI:" -e "Linux version" -e i2c-0
+     [    0.000000] Linux version 
+6.10.0-rc2.mx64.461-00036-g151dfab265df 
+(pmenzel@foreveralone.molgen.mpg.de) (gcc (GCC) 12.3.0, GNU ld (GNU 
+Binutils) 2.41) #74 SMP PREEMPT_DYNAMIC Wed Jun  5 08:24:59 CEST 2024
+     [    0.000000] DMI: Supermicro Super Server/X13SAE, BIOS 2.0 10/17/2022
+     [    0.000000] DMI: Memory slots populated: 4/4
+     [    5.434488] i2c i2c-0: Successfully instantiated SPD at 0x50
+     [    5.443848] i2c i2c-0: Successfully instantiated SPD at 0x51
+     [    5.450033] i2c i2c-0: Successfully instantiated SPD at 0x52
+     [    5.459378] i2c i2c-0: Successfully instantiated SPD at 0x53
+
+Then with `sudo modprobe at24` and `sudo modprobe ee1004`, 
+`decode-dimms` shows:
+
+     $ sudo ./eeprom/decode-dimms
+     # decode-dimms version 4.3
+
+     Memory Serial Presence Detect Decoder
+     By Philip Edelbrock, Christian Zuckschwerdt, Burkart Lingner,
+     Jean Delvare, Trent Piepho and others
+
+
+     Number of SDRAM DIMMs detected and decoded: 0
+
+This might be expected, and `decode-dimms` also needs to be updated.
+
+
+Kind regards and thank you again for these patches,
+
+Paul
