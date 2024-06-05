@@ -1,79 +1,88 @@
-Received: from mail.gtsys.com.hk (web.xit.com.hk [111.91.236.51])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBFEA225D9
-	for <linux-hwmon@vger.kernel.org>; Wed,  5 Jun 2024 06:07:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.91.236.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E6DB1946A9;
+	Wed,  5 Jun 2024 08:52:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717567660; cv=none; b=ZNw1ZhPL124Xy1JWzhD/doEGm0BucDaoUm69uVth5C6zwOHmWyzO6IYqi+S7MrLEZhcopvFis6FqhJkoawf3Vx3aAPzbn2PJpus2bEhkooc+nOUSrHIP5lmMckAO0dD4u/NW0SYw3bpfOx1tDIKG2ypBzYeCnwM5gwC1sehVZT8=
+	t=1717577524; cv=none; b=gj1oSoqtk7DlzUx+oDiE1BVWPXq579+xzm1qp0EdDMoVKQIPNaYaZ/rwx+vADW//ycP2pvMYLh40sbShUc6jZcqABQh1p5npb1FtolHvKnfdGFak5xPdQ97JkwYQXdhc1V1bUwx+C5K/v00aK+0nN6cbiX8f2BlNzm+2GMWR46g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717567660; c=relaxed/simple;
-	bh=1nSULNYTPn2630+e8sfTtann/4DHD4LOpU6ZFUJwuZw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pgTrDr41+Ta8nhU8uAijXznr8Lpbf7rsKq32ThRly36Vxt/HXlRxGgJYhTfmCy7TE9cJ85mVehj+1hegA01FTsU+LJ2fXPaGOQxhENdpnCB1CBQvlhHpJVvBksa4eaGIekGCbuO2w1tRd38R+PaL7SE6EcRn/YNQ3QS+DGJOzQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtsys.com.hk; spf=pass smtp.mailfrom=gtsys.com.hk; arc=none smtp.client-ip=111.91.236.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtsys.com.hk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gtsys.com.hk
-Received: from localhost (localhost [127.0.0.1])
-	by mail.gtsys.com.hk (Postfix) with ESMTP id 88BF814DA;
-	Wed,  5 Jun 2024 14:02:11 +0800 (HKT)
-X-Virus-Scanned: Debian amavis at gtsys.com.hk
-Received: from mail.gtsys.com.hk ([127.0.0.1])
- by localhost (mail.gtsys.com.hk [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RPQyUOry_PFQ; Wed,  5 Jun 2024 14:02:10 +0800 (HKT)
-Received: from gtsnode.virtual.gtsys.com.hk (gtsnode.virtual.gtsys.com.hk [10.128.4.2])
-	by mail.gtsys.com.hk (Postfix) with ESMTP id E773BFC7;
-	Wed,  5 Jun 2024 14:02:10 +0800 (HKT)
-Received: from [10.128.1.32] (unknown [203.145.94.17])
-	by gtsnode.virtual.gtsys.com.hk (Postfix) with ESMTPSA id AD7C1201E0;
-	Wed,  5 Jun 2024 14:02:10 +0800 (HKT)
-Message-ID: <b9342b78-2ffa-4ce1-9ffa-bfb125e9d38f@gtsys.com.hk>
-Date: Wed, 5 Jun 2024 14:02:09 +0800
+	s=arc-20240116; t=1717577524; c=relaxed/simple;
+	bh=KVo0CDA7CinqPGCJH+/lMOn6Db3ejCQh3A/WJGsD9hU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VxiWfH7dsX9fSxfJsuIM9wdluAslQi1AW7r318377TYoBna/Lh1k/7LW8N5DuuX69z9WAPOkOjJtQ206LWEIUSN33s5bBQ6LU3hfE6o/Fuvy1Yey2dydtMysOGJB25kdTCpRtNNP0XWYDwYjZQDTzMFUYP8zphkleO6DRkO5bSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=PyIjdpIi; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="PyIjdpIi"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 442BB40E016E;
+	Wed,  5 Jun 2024 08:52:00 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id mQSl4PYr5Z_z; Wed,  5 Jun 2024 08:51:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1717577515; bh=pc9sf9qZhy+fcRBG5stiu+nUi7lrBalV1BjEV7RY3dA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PyIjdpIiz6n5xuGF6CqjtbullZqVyf1/akA89RidHLs/mr9cKNVEeqklBDxhQaOxk
+	 f9a7n8EHGPrONbY8EosT3V2iM4TVPm9GFwr3lngPfvtTzbt6udbKgqtSdZv4e46d/M
+	 K6yi+q3RYhy6D1FQLXZCJK88ln6zTFSJqukyu7EyBGR4K8mAwKCoJWNL0O/8nbEu0n
+	 LQMTHtBtxiPlbi/4iBI5RbGW6QEuvRxGFfOrwvdbY8Ekunh/BkLbmJK+DzL4lp3sYw
+	 dT/c51m6ZnFMtkqdtenkdJwAmIXG4Gb2+Q11xn1sTmS1NFKnDjyDKoLvVxM31FYdMW
+	 5dB2muZys7d8QS4Yn3eb3MwXYnwrdZ0bFEPd2ENYt0s50SR5VTK54xViVti5wpKNu7
+	 yYbgD6ZYkfZJOlnB35cOTCSkKv4Q22hg2kpe6US0bWfvpUlntIijfVI8E4WZBD8P09
+	 KlFA4JuxreDI3nqwBmFzBTjpLdh0O5CK0tdXblFe7E2o5HGPAs1+tzQIh8GATZHayA
+	 3S1NHn3bi3ZBrrfVxfLZzKVA5+FkVb9XHfg+uRWNZXUymGRYRK9+Z5NUHmlYuDR5ga
+	 WIxjx7vQNRUqm0niRE3j/oubo/vIeR3fdcnbEbAI4Dj+HOMiMXjWGBIPbv2L+4w8Pn
+	 PAJotargnDxkHQtfwDgApDoY=
+Received: from zn.tnic (p5de8ee85.dip0.t-ipconnect.de [93.232.238.133])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7566640E016C;
+	Wed,  5 Jun 2024 08:51:48 +0000 (UTC)
+Date: Wed, 5 Jun 2024 10:51:42 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Yazen Ghannam <yazen.ghannam@amd.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, x86@kernel.org,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v3 1/8] EDAC/amd64: Remove unused register accesses
+Message-ID: <20240605085142.GUZmAnHiPyhceOBvWc@fat_crate.local>
+References: <20240523-fix-smn-bad-read-v3-0-aa44c622de39@amd.com>
+ <20240523-fix-smn-bad-read-v3-1-aa44c622de39@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: (shtc1) Fix property misspelling
-To: Guenter Roeck <linux@roeck-us.net>,
- Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>
-References: <20240530152311.3765049-1-linux@roeck-us.net>
-Content-Language: en-US
-From: Chris Ruehl <chris.ruehl@gtsys.com.hk>
-In-Reply-To: <20240530152311.3765049-1-linux@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240523-fix-smn-bad-read-v3-1-aa44c622de39@amd.com>
 
-On 30/5/2024 23:23, Guenter Roeck wrote:
-> The property name is "sensirion,low-precision", not
-> "sensicon,low-precision".
+On Thu, May 23, 2024 at 01:26:52PM -0500, Yazen Ghannam wrote:
+> A number of UMC registers are read only for the purpose of debug
+> printing. They are not used in any calculations. Nor do they have any
+> specific debug value.
 > 
-> Cc: Chris Ruehl <chris.ruehl@gtsys.com.hk>
-> Fixes: be7373b60df5 ("hwmon: shtc1: add support for device tree bindings")
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
->   drivers/hwmon/shtc1.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> Remove these register accesses.
 > 
-> diff --git a/drivers/hwmon/shtc1.c b/drivers/hwmon/shtc1.c
-> index 1f96e94967ee..439dd3dba5fc 100644
-> --- a/drivers/hwmon/shtc1.c
-> +++ b/drivers/hwmon/shtc1.c
-> @@ -238,7 +238,7 @@ static int shtc1_probe(struct i2c_client *client)
->   
->   	if (np) {
->   		data->setup.blocking_io = of_property_read_bool(np, "sensirion,blocking-io");
-> -		data->setup.high_precision = !of_property_read_bool(np, "sensicon,low-precision");
-> +		data->setup.high_precision = !of_property_read_bool(np, "sensirion,low-precision");
->   	} else {
->   		if (client->dev.platform_data)
->   			data->setup = *(struct shtc1_platform_data *)dev->platform_data;
+> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+> Cc: stable@vger.kernel.org
 
-Strange how that can happen!
-Thank you catch this misspelled property.
+Definitely not stable material.
 
-Reviewed-by: Chris Ruehl <chris.ruehl@gtsys.com.hk>
+With that tag dropped, applied, thx.
 
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
